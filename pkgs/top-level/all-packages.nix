@@ -7867,12 +7867,6 @@ let
       qt = qt3;
     };
 
-    kdebase = callPackage ../desktops/kde-3/kdebase {
-      stdenv = overrideGCC stdenv gcc43;
-      inherit (kde3) kdelibs;
-      qt = qt3;
-    };
-
     arts = callPackage ../development/libraries/arts {
       qt = qt3;
       inherit (gnome) glib;
