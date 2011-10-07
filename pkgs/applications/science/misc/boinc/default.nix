@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     sed -i -e s,/etc,$out/etc, client/scripts/Makefile
   '';
 
+  NIX_LDFLAGS = "-lX11";
+
   preConfigure = ''
     ./_autosetup
     configureFlags="$configureFlags --sysconfdir=$out/etc"
