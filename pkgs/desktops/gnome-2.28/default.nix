@@ -112,9 +112,9 @@ pkgs.makeOverridable
   };
 
   libgnome = import ./platform/libgnome {
-    inherit (pkgs) stdenv fetchurl pkgconfig popt zlib;
+    inherit (pkgs) stdenv fetchurl_gnome libcanberra pkgconfig popt zlib libtool;
     inherit (pkgs.gtkLibs) glib;
-    inherit intltool esound libbonobo GConf gnome_vfs ORBit2;
+    inherit intltool libbonobo GConf gnome_vfs ORBit2;
   };
 
   libgnomeui = import ./platform/libgnomeui {

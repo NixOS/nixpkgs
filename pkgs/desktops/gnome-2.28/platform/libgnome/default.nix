@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, glib, popt, zlib
-, intltool, esound, libbonobo, GConf, gnome_vfs, ORBit2}:
+{ stdenv, fetchurl_gnome, pkgconfig, glib, popt, zlib, libcanberra
+, intltool, libbonobo, GConf, gnome_vfs, ORBit2, libtool}:
 
-stdenv.mkDerivation {
-  name = "libgnome-2.28.0";
+stdenv.mkDerivation rec {
+  name = src.pkgname;
   
-  src = fetchurl {
-    url = mirror://gnome/sources/libgnome/2.28/libgnome-2.28.0.tar.bz2;
-    sha256 = "03hc1m88swxxw4cq491kz7495ksv762imamzbbvhci41bc40anwv";
+  src = fetchurl_gnome {
+    project = "libgnome";
+    major = "2"; minor = "32"; patchlevel = "1";
+    sha256 = "197pnq8y0knqjhm2fg4j6hbqqm3qfzfnd0irhwxpk1b4hqb3kimj";
   };
   
-  buildInputs = [ pkgconfig popt zlib intltool GConf gnome_vfs ];
-  propagatedBuildInputs = [ glib libbonobo esound ];
+  buildNativeInputs = [ pkgconfig ];
+  buildInputs = [ popt zlib intltool GConf gnome_vfs libcanberra libtool ];
+  propagatedBuildInputs = [ glib libbonobo ];
 }
