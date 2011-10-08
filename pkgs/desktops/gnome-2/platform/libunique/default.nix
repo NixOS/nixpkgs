@@ -1,10 +1,14 @@
-{stdenv, fetchurl, pkgconfig, gettext, gtk}:
+{stdenv, fetchurl_gnome, pkgconfig, gtk}:
 
-stdenv.mkDerivation {
-  name = "libunique-1.1.2";
-  src = fetchurl {
-    url = mirror://gnome/sources/libunique/1.1/libunique-1.1.2.tar.bz2;
-    sha256 = "0vhcbw4ccc58xhs99r6bkabrzbayyq2qk01xm8vv4hpwjl117yvk";
+stdenv.mkDerivation rec {
+  name = src.pkgname;
+
+  src = fetchurl_gnome {
+    project = "libunique";
+    major = "1"; minor = "1"; patchlevel = "6";
+    sha256 = "1fsgvmncd9caw552lyfg8swmsd6bh4ijjsph69bwacwfxwf09j75";
   };
-  buildInputs = [ pkgconfig gettext gtk ];
+
+  buildNativeInputs = [ pkgconfig ];
+  buildInputs = [ gtk ];
 }
