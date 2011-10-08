@@ -100,7 +100,7 @@ pkgs.makeOverridable
   };
 
   gnome_vfs = import ./platform/gnome-vfs {
-    inherit (pkgs) stdenv fetchurl pkgconfig libxml2 bzip2 openssl samba dbus_glib fam hal cdparanoia;
+    inherit (pkgs) stdenv fetchurl_gnome pkgconfig libxml2 bzip2 openssl samba dbus_glib fam hal cdparanoia;
     inherit (pkgs.gtkLibs) glib;
     inherit intltool GConf gnome_mime_data;
   };

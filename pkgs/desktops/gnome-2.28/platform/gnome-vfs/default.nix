@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, bzip2, openssl, samba, dbus_glib, glib, fam, hal, cdparanoia
-, intltool, GConf, gnome_mime_data}:
+{ stdenv, fetchurl_gnome, pkgconfig, libxml2, bzip2, openssl, samba, dbus_glib
+, glib, fam, hal, cdparanoia, intltool, GConf, gnome_mime_data}:
 
-stdenv.mkDerivation {
-  name = "gnome-vfs-2.24.1";
+stdenv.mkDerivation rec {
+  name = src.pkgname;
 
-  src = fetchurl {
-    url = mirror://gnome/sources/gnome-vfs/2.24/gnome-vfs-2.24.1.tar.bz2;
-    sha256 = "1dmyr8nj77717r8dhwkixpar2yp8ld3r683gp222n59v61718ndw";
+  src = fetchurl_gnome {
+    project = "gnome-vfs";
+    major = "2"; minor = "24"; patchlevel = "4";
+    sha256 = "1ajg8jb8k3snxc7rrgczlh8daxkjidmcv3zr9w809sq4p2sn9pk2";
   };
 
   buildInputs =
