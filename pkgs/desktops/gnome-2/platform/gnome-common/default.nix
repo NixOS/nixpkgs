@@ -1,14 +1,11 @@
-{stdenv, fetchgit, pkgconfig, autoconf, automake, libtool}:
+{ stdenv, fetchurl_gnome }:
 
-stdenv.mkDerivation {
-  name = "gnome-common-2.28.0";
-  src =  fetchgit {
-    url = mirror://gnome/sources/gnome-common/2.28/gnome-common-2.28.0.tar.bz2;
-    sha256 = "18dnx5hndl19lpk6i3ybfsssfasma5wi7p9mqw05sx137l81fj6x";
+stdenv.mkDerivation rec {
+  name = src.pkgname;
+
+  src = fetchurl_gnome {
+    project = "gnome-common";
+    major = "2"; minor = "34"; patchlevel = "0";
+    sha256 = "1pz13mpp09q5s3bikm8ml92s1g0scihsm4iipqv1ql3mp6d4z73s";
   };
-  buildInputs = [ pkgconfig automake autoconf libtool
-    ];
-  preConfigure = ''
-    ./autogen.sh
-  '';
 }
