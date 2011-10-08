@@ -2,7 +2,7 @@
 , gnomeSupport ? false # build support for Gnome(gnome-vfs)
 , stdenv, fetchurl, pkgconfig
 , gtkmm, gsasl, gtksourceview, libxmlxx, libinfinity, intltool
-, gnomevfs ? null}:
+, gnome_vfs ? null}:
 
 let
   libinf = libinfinity.override { gtkWidgets = true; inherit avahiSupport; };
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig gtkmm gsasl gtksourceview libxmlxx libinf intltool ]
-    ++ stdenv.lib.optional gnomeSupport gnomevfs;
+    ++ stdenv.lib.optional gnomeSupport gnome_vfs;
   
   configureFlags = ''
   '';

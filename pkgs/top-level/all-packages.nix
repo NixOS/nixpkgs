@@ -1237,7 +1237,7 @@ let
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
 
   relfs = callPackage ../tools/filesystems/relfs {
-    inherit (gnome) gnomevfs GConf;
+    inherit (gnome) gnome_vfs GConf;
   };
 
   remind = callPackage ../tools/misc/remind { };
@@ -2667,7 +2667,7 @@ let
 
   guileGnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome.GConf;
-    inherit (gnome) glib gnomevfs gtk libglade libgnome libgnomecanvas
+    inherit (gnome) glib gnome_vfs gtk libglade libgnome libgnomecanvas
       libgnomeui pango;
   };
 
@@ -3879,7 +3879,7 @@ let
   libspectre = callPackage ../development/libraries/libspectre { };
 
   libgsf = callPackage ../development/libraries/libgsf {
-    inherit (gnome) glib gnomevfs libbonobo;
+    inherit (gnome) glib gnome_vfs libbonobo;
   };
 
   libiconv = callPackage ../development/libraries/libiconv { };
@@ -6765,7 +6765,7 @@ let
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
-    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
@@ -6775,7 +6775,7 @@ let
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
-    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
@@ -6791,7 +6791,7 @@ let
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
-    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
@@ -6801,7 +6801,7 @@ let
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
-    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
@@ -6964,7 +6964,7 @@ let
   mmex = callPackage ../applications/office/mmex { };
 
   monodevelop = callPackage ../applications/editors/monodevelop {
-    inherit (gnome) gnomevfs libbonobo libglade libgnome GConf glib gtk;
+    inherit (gnome) gnome_vfs libbonobo libglade libgnome GConf glib gtk;
     mozilla = firefox;
     gtksharp = gtksharp2;
   };

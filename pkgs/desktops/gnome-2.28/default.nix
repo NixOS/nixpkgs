@@ -6,7 +6,6 @@ pkgs.makeOverridable
   inherit (pkgs.gtkLibs) glib pango atk gtk gtkmm;
 
   # Backward compatibility.
-  gnomevfs = gnome_vfs;
   startupnotification = startup_notification;
   gnomedocutils = gnome_doc_utils;
   gnomeicontheme = gnome_icon_theme;

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, xz, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs, alsaLib
-, libnotify, gnomevfs, libgnomeui
+, libnotify, gnome_vfs, libgnomeui
 , freetype, fontconfig, wirelesstools ? null, pixman
 , application ? "browser" }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ xz libgnomeui libnotify gnomevfs alsaLib
+    [ xz libgnomeui libnotify gnome_vfs alsaLib
       pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2 pixman
       python ply dbus dbus_glib pango freetype fontconfig
       xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
