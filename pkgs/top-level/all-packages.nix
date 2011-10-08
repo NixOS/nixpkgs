@@ -4544,7 +4544,7 @@ let
 
   webkit =
     builderDefsPackage ../development/libraries/webkit {
-      inherit (gnome28) gtkdoc libsoup;
+      inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
         libjpeg libtiff libpng libxml2 libxslt sqlite
@@ -4558,7 +4558,7 @@ let
 
   webkitSVN =
     builderDefsPackage ../development/libraries/webkit/svn.nix {
-      inherit (gnome28) gtkdoc libsoup;
+      inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
         libjpeg libtiff libpng libxml2 libxslt sqlite
@@ -6952,7 +6952,7 @@ let
       which gettext makeWrapper file libidn sqlite docutils libnotify
       vala dbus_glib;
     inherit (gtkLibs) gtk glib;
-    inherit (gnome28) gtksourceview;
+    inherit (gnome) gtksourceview;
     inherit (webkit.passthru.args) libsoup;
     inherit (xlibs) kbproto xproto libXScrnSaver scrnsaverproto;
   };
@@ -7280,7 +7280,7 @@ let
 
   surf = callPackage ../applications/misc/surf {
     inherit (gtkLibs) gtk glib;
-    libsoup = gnome28.libsoup;
+    libsoup = gnome.libsoup;
   };
 
   svk = perlPackages.SVK;
@@ -7359,7 +7359,7 @@ let
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libX11 kbproto;
-    inherit (gnome28) glib_networking libsoup;
+    inherit (gnome) glib_networking libsoup;
   };
 
   valknut = callPackage ../applications/networking/p2p/valknut {
@@ -7856,9 +7856,12 @@ let
   #   import ../desktops/e17 { inherit callPackage pkgs; }
   # );
 
-  gnome28 = recurseIntoAttrs (import ../desktops/gnome-2.28 pkgs);
+  gnome2 = (callPackage ../desktops/gnome-2 {
+    callPackage = pkgs.newScope pkgs.gnome2;
+    self = pkgs.gnome2;
+  }  // pkgs.gtkLibs);
 
-  gnome = gnome28;
+  gnome = recurseIntoAttrs gnome2;
 
   kde3 = recurseIntoAttrs {
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, libxml2, libxslt, libxklavier, hal, cairo, popt, which, python
+{ stdenv, fetchurl, pkgconfig, dbus_glib, libxml2Python, libxslt, libxklavier, hal, cairo, popt, which, python
 , shared_mime_info, desktop_file_utils, libunique, libtool, bzip2
 , glib, gtk, pango, atk, gnome_doc_utils, intltool, GConf, libglade, libgnome, libgnomeui, libgnomekbd
 , librsvg, gnome_menus, gnome_desktop, gnome_panel, metacity, gnome_settings_daemon
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     url = mirror://gnome/sources/gnome-control-center/2.28/gnome-control-center-2.28.0.tar.bz2;
     sha256 = "0m0z7dn5qzl63cpc8ivagm4yfsfgigfawl5v3df3pw3z4jk2bsfp";
   };
-  buildInputs = [ pkgconfig dbus_glib libxml2 libxslt libxklavier hal popt which python shared_mime_info desktop_file_utils
+  buildInputs = [ pkgconfig dbus_glib libxml2Python libxslt libxklavier hal popt which python shared_mime_info desktop_file_utils
                   gtk gnome_doc_utils intltool GConf libglade libgnomekbd libunique libtool bzip2 
                   libgnomeui librsvg gnome_menus gnome_desktop gnome_panel metacity gnome_settings_daemon ];
   configureFlags = "--disable-scrollkeeper";

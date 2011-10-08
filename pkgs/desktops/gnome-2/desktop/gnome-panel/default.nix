@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, dbus, cairo, popt, which, libxml2, libxslt, bzip2, python
+{ stdenv, fetchurl, pkgconfig, dbus_glib, dbus, cairo, popt, which, libxml2Python, libxslt, bzip2, python
 , glib, gtk, pango, atk, libXau
 , intltool, ORBit2, libglade, libgnome, libgnomeui, libbonobo, libbonoboui, GConf, gnome_menus, gnome_desktop
 , libwnck, librsvg, libgweather, gnome_doc_utils, libgnomecanvas, libart_lgpl, libtasn1}:
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     url = mirror://gnome/sources/gnome-panel/2.28/gnome-panel-2.28.0.tar.bz2;
     sha256 = "0rc4f6vmyrm3s8ncbll0a1ik2j1gg068fq3xal120sc4iw68q5n1";
   };
-  buildInputs = [ pkgconfig gtk dbus_glib popt which libxml2 libxslt bzip2 python libXau
+  buildInputs = [ pkgconfig gtk dbus_glib popt which libxml2Python libxslt bzip2 python libXau
                   intltool ORBit2 libglade libgnome libgnomeui libbonobo libbonoboui GConf gnome_menus gnome_desktop 
 		  libwnck librsvg libgweather gnome_doc_utils libtasn1 ];
   configureFlags = "--disable-scrollkeeper";

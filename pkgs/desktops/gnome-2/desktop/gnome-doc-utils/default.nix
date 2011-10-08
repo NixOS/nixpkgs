@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, pkgconfig, libxml2, libxslt, intltool, scrollkeeper,
+{stdenv, fetchurl, python, pkgconfig, libxml2Python, libxslt, intltool, scrollkeeper,
   makeWrapper}:
 
 stdenv.mkDerivation {
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1937zr088vn7vhy9rwfc021ih21hhf700c3m4ria8mlcpcvh1380";
   };
   configureFlags = "--disable-scrollkeeper";
-  buildInputs = [ python pkgconfig libxml2 libxslt intltool scrollkeeper 
+  buildInputs = [ python pkgconfig libxml2Python libxslt intltool scrollkeeper 
     makeWrapper ];
   postInstall = ''
     wrapProgram $out/bin/xml2po --prefix PYTHONPATH : $(toPythonPath $out) \
