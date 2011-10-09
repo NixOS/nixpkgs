@@ -1,13 +1,14 @@
-{stdenv, fetchurl, pkgconfig, glib, libIDL}:
+{stdenv, fetchurl_gnome, pkgconfig, glib, libIDL}:
 
-stdenv.mkDerivation {
-  name = "ORBit2-2.14.17";
+stdenv.mkDerivation rec {
+  name = src.pkgname;
   
-  src = fetchurl {
-    url = mirror://gnome/sources/ORBit2/2.14/ORBit2-2.14.17.tar.bz2;
-    sha256 = "0k4px2f949ac7vmj7b155g1rpf7pmvl48sbnkjhlg4wgcwzwxgv2";
+  src = fetchurl_gnome {
+    project = "ORBit2";
+    major = "2"; minor = "14"; patchlevel = "19";
+    sha256 = "0l3mhpyym9m5iz09fz0rgiqxl2ym6kpkwpsp1xrr4aa80nlh1jam";
   };
-  
-  buildInputs = [ pkgconfig ];
+
+  buildNativeInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libIDL ];
 }

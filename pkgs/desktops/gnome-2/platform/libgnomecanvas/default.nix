@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, gtk, intltool, libart_lgpl, libglade }:
+{ stdenv, fetchurl_gnome, pkgconfig, gtk, intltool, libart_lgpl, libglade }:
 
-stdenv.mkDerivation {
-  name = "libgnomecanvas-2.26.0";
+stdenv.mkDerivation rec {
+  name = src.pkgname;
   
-  src = fetchurl {
-    url = mirror://gnome/sources/libgnomecanvas/2.26/libgnomecanvas-2.26.0.tar.bz2;
-    sha256 = "13f5rf5pkp9hnyxzvssrxnlykjaixa7vrig9a7v06wrxqfn81d40";
+  src = fetchurl_gnome {
+    project = "libgnomecanvas";
+    major = "2"; minor = "30"; patchlevel = "3";
+    sha256 = "0h6xvswbqspdifnyh5pm2pqq55yp3kn6yrswq7ay9z49hkh7i6w5";
   };
   
-  buildInputs = [ pkgconfig intltool libglade ];
-
+  buildInputs = [ libglade ];
+  buildNativeInputs = [ pkgconfig intltool ];
   propagatedBuildInputs = [ libart_lgpl gtk ];
 }

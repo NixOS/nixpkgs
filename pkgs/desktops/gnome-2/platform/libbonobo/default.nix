@@ -1,13 +1,17 @@
-{stdenv, fetchurl, flex, bison, pkgconfig, glib, dbus_glib, libxml2, popt, intltool, ORBit2}:
+{ stdenv, fetchurl_gnome, flex, bison, pkgconfig, glib, dbus_glib, libxml2, popt
+, intltool, ORBit2, procps }:
 
-stdenv.mkDerivation {
-  name = "libbonobo-2.24.2";
+stdenv.mkDerivation rec {
+  name = src.pkgname;
   
-  src = fetchurl {
-    url = mirror://gnome/sources/libbonobo/2.24/libbonobo-2.24.2.tar.bz2;
-    sha256 = "1gr85amd271z0lbr68crcsc24rx1pa5k20f67y3y2mx664527h4m";
+  src = fetchurl_gnome {
+    project = "libbonobo";
+    major = "2"; minor = "32"; patchlevel = "1";
+    sha256 = "0swp4kk6x7hy1rvd1f9jba31lvfc6qvafkvbpg9h0r34fzrd8q4i";
   };
-  
-  buildInputs = [ flex bison pkgconfig dbus_glib libxml2 intltool ];
+
+  preConfigure = "export USER=`whoami`";
+  buildNativeInputs = [ flex bison pkgconfig intltool procps ];
+  buildInputs = [ libxml2 ];
   propagatedBuildInputs = [ popt glib ORBit2 ];
 }
