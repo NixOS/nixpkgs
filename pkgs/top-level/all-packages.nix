@@ -1065,6 +1065,8 @@ let
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
 
+  odt2txt = callPackage ../tools/text/odt2txt { };
+
   offlineimap = callPackage ../tools/networking/offlineimap {
     ssl = pythonPackages.ssl;
   };
