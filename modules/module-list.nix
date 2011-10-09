@@ -127,6 +127,7 @@
   ./services/networking/sabnzbd.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
+  ./services/networking/cntlm.nix
   ./services/networking/tftpd.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wakeonlan.nix
