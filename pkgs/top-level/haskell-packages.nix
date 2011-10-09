@@ -1177,6 +1177,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   text_0_11_1_5 = callPackage ../development/libraries/haskell/text/0.11.1.5.nix {};
   text = self.text_0_11_1_5;
 
+  thespian = callPackage ../development/libraries/haskell/thespian {};
+
   thLift = callPackage ../development/libraries/haskell/th-lift {};
 
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
