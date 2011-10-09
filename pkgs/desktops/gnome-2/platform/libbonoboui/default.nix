@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, bison, pkgconfig, popt, libxml2, gtk
+{ stdenv, fetchurl_gnome, bison, pkgconfig, popt, libxml2, gtk, libtool
 , intltool, libbonobo, GConf, libgnomecanvas, libgnome, libglade }:
 
-stdenv.mkDerivation {
-  name = "libbonoboui-2.24.2";
+stdenv.mkDerivation rec {
+  name = src.pkgname;
   
-  src = fetchurl {
-    url = mirror://gnome/sources/libbonoboui/2.24/libbonoboui-2.24.2.tar.bz2;
-    sha256 = "005ypnzb3mfsb0k0aa3h77vwc4ifjq6r4d11msqllvx7avfgkg5f";
+  src = fetchurl_gnome {
+    project = "libbonoboui";
+    major = "2"; minor = "24"; patchlevel = "5";
+    sha256 = "1kbgqh7bw0fdx4f1a1aqwpff7gp5mwhbaz60c6c98bc4djng5dgs";
   };
-  
-  buildInputs = [ bison pkgconfig popt gtk libxml2 intltool GConf libglade ];
+
+  buildNativeInputs = [ pkgconfig intltool ];
+  buildInputs = [ bison popt gtk libxml2 GConf libglade libtool ];
   propagatedBuildInputs = [ libbonobo libgnomecanvas libgnome ];
 }
