@@ -1,10 +1,15 @@
-{stdenv, fetchurl, flex, bison, pkgconfig, glib, gettext ? null}:
+{stdenv, fetchurl_gnome, flex, bison, pkgconfig, glib, gettext}:
 
-stdenv.mkDerivation {
-  name = "libIDL-0.8.13";
-  src = fetchurl {
-    url = mirror://gnome/sources/libIDL/0.8/libIDL-0.8.13.tar.bz2;
-    sha256 = "0w9b4q5sllwncz498sj5lmc3ajzc8x74dy0jy27m2yg9v887xk5w";
+stdenv.mkDerivation rec {
+  name = src.pkgname;
+
+  src = fetchurl_gnome {
+    project = "libIDL";
+    major = "0"; minor = "8"; patchlevel = "14";
+    sha256 = "08129my8s9fbrk0vqvnmx6ph4nid744g5vbwphzkaik51664vln5";
   };
-  buildInputs = [ flex bison pkgconfig glib gettext ];
+
+  buildInputs = [ glib gettext ];
+
+  buildNativeInputs = [ flex bison pkgconfig ];
 }
