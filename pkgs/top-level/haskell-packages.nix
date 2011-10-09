@@ -921,6 +921,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   parallel_1_1_0_1 = callPackage ../development/libraries/haskell/parallel/1.1.0.1.nix {};
   parallel_2_2_0_1 = callPackage ../development/libraries/haskell/parallel/2.2.0.1.nix {};
   parallel_3_1_0_1 = callPackage ../development/libraries/haskell/parallel/3.1.0.1.nix {};
+  parallel_3_2_0_0 = callPackage ../development/libraries/haskell/parallel/3.2.0.0.nix {};
   parallel = self.parallel_1_1_0_1;
 
   parseargs = callPackage ../development/libraries/haskell/parseargs {};
