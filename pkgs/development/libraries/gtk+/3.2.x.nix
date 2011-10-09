@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl_gnome {
     project = "gtk+";
-    major = "3"; minor = "1"; patchlevel = "16"; extension = "xz";
-    sha256 = "15arbf75qpchr9wrawb3zkn52rzf5wm2qv4dq10zfzlflimrq2rg";
+    major = "3"; minor = "2"; patchlevel = "0"; extension = "xz";
+    sha256 = "0k6l5sw8njbnbapzm9v5jwlrrl7xv1b8c9lmqx97bzbapslw3qxw";
   };
 
   enableParallelBuilding = true;

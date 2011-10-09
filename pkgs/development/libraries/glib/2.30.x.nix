@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl_gnome {
     project = "glib";
-    major = "2"; minor = "29"; patchlevel = "18"; extension = "xz";
-    sha256 = "1hc198x625w1w8if1xlvqyjs9aazc27s0l374kqc4sr51wcpbxpy";
+    major = "2"; minor = "30"; patchlevel = "0"; extension = "xz";
+    sha256 = "1hfdnxf5hsfhkd54390lnc1b14m9n7y031fpma4vpsh96js00k6n";
   };
 
   # configure script looks for d-bus but it is only needed for tests

@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl_gnome {
     project = "atk";
-    major = "2"; minor = "1"; patchlevel = "5"; extension = "xz";
-    sha256 = "005b9sq8p9ykp4f35b59si3mcbw4p9hyxps1ij4x73p07rrbf0z9";
+    major = "2"; minor = "2"; patchlevel = "0"; extension = "xz";
+    sha256 = "17bkqg89l9hxbkgc76cxlin1bwczk7m6ikbccx677lrxh3kz08lb";
   };
 
   buildNativeInputs = [ pkgconfig perl xz ];
