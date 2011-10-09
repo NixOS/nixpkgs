@@ -1197,6 +1197,8 @@ let
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
 
+  cntlm = callPackage ../tools/networking/cntlm { };
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
