@@ -9,5 +9,5 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl /* xmlto */ ];
   dontBuild = 1; # do not build doc yet.
-  installPhase = ''make INSTALL_DIR=/bin MAN_DIR=/man DESTDIR="$out" install'';
+  installPhase = ''make INSTALL_DIR=/bin MAN_DIR=/share/man/man1 DESTDIR="$out" install'';
 }

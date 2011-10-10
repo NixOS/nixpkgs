@@ -39,6 +39,7 @@ installPhase() {
     ln -snf libnvidia-tls.so.$versionNumber $out/lib/tls/libnvidia-tls.so.1
     ln -snf libXvMCNVIDIA.so.$versionNumber $out/lib/libXvMCNVIDIA_dynamic.so.1
     ln -snf libcuda.so.$versionNumber $out/lib/libcuda.so.1
+    ln -snf libcuda.so.1 $out/lib/libcuda.so
     ln -snf libvdpau_nvidia.so.$versionNumber $out/lib/libvdpau_nvidia.so
 
     patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*

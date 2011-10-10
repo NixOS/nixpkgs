@@ -1065,6 +1065,8 @@ let
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
 
+  odt2txt = callPackage ../tools/text/odt2txt { };
+
   offlineimap = callPackage ../tools/networking/offlineimap {
     ssl = pythonPackages.ssl;
   };
@@ -1195,6 +1197,8 @@ let
 
   proxytunnel = callPackage ../tools/misc/proxytunnel { };
 
+  cntlm = callPackage ../tools/networking/cntlm { };
+
   psmisc = callPackage ../os-specific/linux/psmisc { };
 
   pstoedit = callPackage ../tools/graphics/pstoedit { };
@@ -1237,7 +1241,7 @@ let
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
 
   relfs = callPackage ../tools/filesystems/relfs {
-    inherit (gnome) gnomevfs GConf;
+    inherit (gnome) gnome_vfs GConf;
   };
 
   remind = callPackage ../tools/misc/remind { };
@@ -2677,7 +2681,7 @@ let
 
   guileGnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome.GConf;
-    inherit (gnome) glib gnomevfs gtk libglade libgnome libgnomecanvas
+    inherit (gnome) glib gnome_vfs gtk libglade libgnome libgnomecanvas
       libgnomeui pango;
   };
 
@@ -3586,17 +3590,19 @@ let
   });
 
   gtkLibs3x = let callPackage = newScope pkgs.gtkLibs3x; in {
-    glib = callPackage ../development/libraries/glib/2.29.x.nix { };
+    glib = callPackage ../development/libraries/glib/2.30.x.nix { };
+
+    glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
 
     gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
 
-    atk = callPackage ../development/libraries/atk/2.1.x.nix { };
+    atk = callPackage ../development/libraries/atk/2.2.x.nix { };
 
     cairo = callPackage ../development/libraries/cairo { };
 
     pango = callPackage ../development/libraries/pango/1.29.x.nix { };
 
-    gtk = callPackage ../development/libraries/gtk+/3.1.x.nix { };
+    gtk = callPackage ../development/libraries/gtk+/3.2.x.nix { };
 
     # Let hydra build gtk-3.x but do not show this to users yet
     recurseForRelease = true;
@@ -3889,7 +3895,7 @@ let
   libspectre = callPackage ../development/libraries/libspectre { };
 
   libgsf = callPackage ../development/libraries/libgsf {
-    inherit (gnome) glib gnomevfs libbonobo;
+    inherit (gnome) glib gnome_vfs libbonobo;
   };
 
   libiconv = callPackage ../development/libraries/libiconv { };
@@ -4554,7 +4560,7 @@ let
 
   webkit =
     builderDefsPackage ../development/libraries/webkit {
-      inherit (gnome28) gtkdoc libsoup;
+      inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
         libjpeg libtiff libpng libxml2 libxslt sqlite
@@ -4568,7 +4574,7 @@ let
 
   webkitSVN =
     builderDefsPackage ../development/libraries/webkit/svn.nix {
-      inherit (gnome28) gtkdoc libsoup;
+      inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
         libjpeg libtiff libpng libxml2 libxslt sqlite
@@ -6314,18 +6320,19 @@ let
 
   cdrtools = callPackage ../applications/misc/cdrtools { };
 
-  chatzilla =
-    xulrunnerWrapper {
-      launcher = "chatzilla";
-      application = callPackage ../applications/networking/irc/chatzilla { };
-    };
+  chatzilla = callPackage ../applications/networking/irc/chatzilla {
+    xulrunner = firefox36Pkgs.xulrunner;
+  };
 
   chrome = callPackage ../applications/networking/browsers/chromium {
     inherit (gnome) GConf;
     patchelf = patchelf06;
   };
 
-  chromeWrapper = wrapFirefox { browser = chrome; browserName = "chrome"; desktopName = "Chrome"; };
+  chromeWrapper = wrapFirefox
+    { browser = chrome; browserName = "chrome"; desktopName = "Chrome";
+      icon = "${chrome}/libexec/chrome/product_logo_48.png";
+    };
 
   cinelerra = callPackage ../applications/video/cinelerra {
     inherit (gnome) esound;
@@ -6358,10 +6365,7 @@ let
 
   comical = callPackage ../applications/graphics/comical { };
 
-  conkeror = xulrunnerWrapper {
-    launcher = "conkeror";
-    application = callPackage ../applications/networking/browsers/conkeror { };
-  };
+  conkeror = callPackage ../applications/networking/browsers/conkeror { };
 
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
     inherit cmake patchelf;
@@ -6789,7 +6793,7 @@ let
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
-    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
@@ -6799,7 +6803,7 @@ let
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
-    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
@@ -6815,7 +6819,7 @@ let
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
-    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
@@ -6825,7 +6829,7 @@ let
     inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
       python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
       wirelesstools;
-    inherit (gnome) libIDL libgnomeui gnomevfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
@@ -6976,7 +6980,7 @@ let
       which gettext makeWrapper file libidn sqlite docutils libnotify
       vala dbus_glib;
     inherit (gtkLibs) gtk glib;
-    inherit (gnome28) gtksourceview;
+    inherit (gnome) gtksourceview;
     inherit (webkit.passthru.args) libsoup;
     inherit (xlibs) kbproto xproto libXScrnSaver scrnsaverproto;
   };
@@ -6988,7 +6992,7 @@ let
   mmex = callPackage ../applications/office/mmex { };
 
   monodevelop = callPackage ../applications/editors/monodevelop {
-    inherit (gnome) gnomevfs libbonobo libglade libgnome GConf glib gtk;
+    inherit (gnome) gnome_vfs libbonobo libglade libgnome GConf glib gtk;
     mozilla = firefox;
     gtksharp = gtksharp2;
   };
@@ -7304,7 +7308,7 @@ let
 
   surf = callPackage ../applications/misc/surf {
     inherit (gtkLibs) gtk glib;
-    libsoup = gnome28.libsoup;
+    libsoup = gnome.libsoup;
   };
 
   svk = perlPackages.SVK;
@@ -7345,17 +7349,7 @@ let
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
-  thunderbird = thunderbird3;
-
-  thunderbird2 = callPackage ../applications/networking/mailreaders/thunderbird/2.x.nix {
-    inherit (gnome) libIDL;
-  };
-
-  thunderbird3 = callPackage ../applications/networking/mailreaders/thunderbird/3.x.nix {
-    inherit (gnome) libIDL;
-  };
-
-  thunderbird5 = callPackage ../applications/networking/mailreaders/thunderbird/5.x.nix {
+  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/7.x.nix {
     inherit (gnome) libIDL;
   };
 
@@ -7393,7 +7387,7 @@ let
     inherit pkgconfig webkit makeWrapper;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libX11 kbproto;
-    inherit (gnome28) glib_networking libsoup;
+    inherit (gnome) glib_networking libsoup;
   };
 
   valknut = callPackage ../applications/networking/p2p/valknut {
@@ -7478,9 +7472,10 @@ let
   wordnet = callPackage ../applications/misc/wordnet { };
 
   wrapFirefox =
-    { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? "" }:
+    { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
+    , icon ? "${browser}/lib/${browser.name}/icons/mozicon128.png" }:
     import ../applications/networking/browsers/firefox/wrapper.nix {
-      inherit stdenv makeWrapper makeDesktopItem browser browserName desktopName nameSuffix;
+      inherit stdenv makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
       plugins =
         let
           enableAdobeFlash = getConfig [ browserName "enableAdobeFlash" ] true;
@@ -7889,20 +7884,21 @@ let
   #   import ../desktops/e17 { inherit callPackage pkgs; }
   # );
 
-  gnome28 = recurseIntoAttrs (import ../desktops/gnome-2.28 pkgs);
+  gnome2 = (callPackage ../desktops/gnome-2 {
+    callPackage = pkgs.newScope pkgs.gnome2;
+    self = pkgs.gnome2;
+  }  // pkgs.gtkLibs);
 
-  gnome = gnome28;
+  gnome3 = (import ../desktops/gnome-3 {
+    callPackage = pkgs.newScope pkgs.gnome3;
+  } // pkgs.gtkLibs3x);
+
+  gnome = recurseIntoAttrs gnome2;
 
   kde3 = recurseIntoAttrs {
 
     kdelibs = callPackage ../desktops/kde-3/kdelibs {
       stdenv = overrideGCC stdenv gcc43;
-      qt = qt3;
-    };
-
-    kdebase = callPackage ../desktops/kde-3/kdebase {
-      stdenv = overrideGCC stdenv gcc43;
-      inherit (kde3) kdelibs;
       qt = qt3;
     };
 
@@ -7919,11 +7915,6 @@ let
     kbasket = callPackage ../applications/misc/kbasket {
       stdenv = overrideGCC stdenv gcc43;
       inherit (kde3) kdelibs;
-    };
-
-    kile = callPackage ../applications/editors/kile/2.0.nix {
-      inherit (kde3) arts kdelibs;
-      qt = qt3;
     };
 
     kphone = callPackage ../applications/networking/kphone {
@@ -7988,7 +7979,7 @@ let
 
       kdiff3 = callPackage ../tools/text/kdiff3 { };
 
-      kile = callPackage ../applications/editors/kile/2.1.nix { };
+      kile = callPackage ../applications/editors/kile { };
 
       kmplayer = callPackage ../applications/video/kmplayer {
         inherit (pkgs.gtkLibs) pango;
@@ -8235,6 +8226,8 @@ let
   yacas = callPackage ../applications/science/math/yacas { };
 
   ### SCIENCE / MISC
+
+  boinc = callPackage ../applications/science/misc/boinc { };
 
   golly = callPackage ../applications/science/misc/golly { };
 
