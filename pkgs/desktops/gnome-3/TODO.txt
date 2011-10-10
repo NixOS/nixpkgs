@@ -1,6 +1,5 @@
 ## CORE
 core:NetworkManager:0.9.1.90:
-core:atkmm:2.22.5:
 core:brasero:3.2.0:
 core:cantarell-fonts:0.0.6:
 core:caribou:0.4.0:
