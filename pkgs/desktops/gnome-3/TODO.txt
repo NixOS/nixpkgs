@@ -1,6 +1,5 @@
 ## CORE
 core:NetworkManager:0.9.1.90:
-core:atk:2.2.0:
 core:atkmm:2.22.5:
 core:brasero:3.2.0:
 core:cantarell-fonts:0.0.6:
@@ -16,12 +15,9 @@ core:evince:3.2.0:
 core:evolution-data-server:3.2.0:
 core:folks:0.6.3.2:
 core:gcalctool:6.2.0:
-core:gdk-pixbuf:2.24.0:
 core:gdm:3.2.0:
 core:gjs:1.30.0:
-core:glib:2.30.0:
 core:glib-networking:2.30.0:
-core:glibmm:2.30.0:
 core:gnome-backgrounds:3.2.0:
 core:gnome-bluetooth:3.2.0:
 core:gnome-contacts:3.2.0.1:
@@ -54,7 +50,6 @@ core:gsettings-desktop-schemas:3.2.0:
 core:gst-plugins-base:0.10.35:
 core:gst-plugins-good:0.10.30:
 core:gstreamer:0.10.35:
-core:gtk+:3.2.0:
 core:gtk+:2.24.6:
 core:gtk-doc:1.18:
 core:gtkmm:3.2.0:
@@ -75,7 +70,6 @@ core:mutter:3.2.0:
 core:nautilus:3.2.0:
 core:network-manager-applet:0.9.1.90:
 core:notification-daemon:0.7.2:
-core:pango:1.29.4:
 core:pangomm:2.28.3:
 core:polkit-gnome:0.103:
 core:sushi:0.2.0:
