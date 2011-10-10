@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "odt2txt-0.4";
 
   src = fetchurl {
-    url = "${homepage}/${name}.tar.gz";
+    url = "${meta.homepage}/${name}.tar.gz";
     sha256 = "1y36s7w2ng0r4nismxb3hb3zvsim8aimvvblz9hgnanw3kwbvx55";
   };
 
