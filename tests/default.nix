@@ -22,7 +22,6 @@ with import ../lib/testing.nix { inherit nixpkgs system; };
   portmap = makeTest (import ./portmap.nix);
   proxy = makeTest (import ./proxy.nix);
   quake3 = makeTest (import ./quake3.nix);
-  remote_builds = makeTest (import ./remote-builds.nix);
   simple = makeTest (import ./simple.nix);
   #subversion = makeTest (import ./subversion.nix);
   tomcat = makeTest (import ./tomcat.nix);
