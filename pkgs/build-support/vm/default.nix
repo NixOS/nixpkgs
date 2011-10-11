@@ -127,7 +127,7 @@ rec {
     if test -z "$mountDisk"; then
       mount -t tmpfs none /fs
     else
-      mount -t ext2 /dev/${hd} /fs
+      mount /dev/${hd} /fs
     fi
 
     mkdir -p /fs/dev
@@ -166,7 +166,6 @@ rec {
     halt -d -p -f
   '';
 
-  
   initrd = makeInitrd {
     contents = [
       { object = stage1Init;
@@ -303,7 +302,7 @@ rec {
   '';
 
 
-  createRootFS = ''
+  defaultCreateRootFS = ''
     mkdir /mnt
     ${e2fsprogs}/sbin/mke2fs -F /dev/${hd}
     ${utillinux}/bin/mount -t ext2 /dev/${hd} /mnt
@@ -486,12 +485,12 @@ rec {
     
   fillDiskWithRPMs =
     { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
-    , runScripts ? true
+    , runScripts ? true, createRootFS ? defaultCreateRootFS
     }:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name preInstall postInstall rpms;
-
+      memSize = 512;
       preVM = createEmptyImage {inherit size fullName;};
 
       buildCommand = ''
@@ -526,10 +525,10 @@ rec {
         eval "$postInstall"
         
         rm /mnt/.debug
-        
-        ${utillinux}/bin/umount /mnt/nix/store
-        ${utillinux}/bin/umount /mnt/tmp
-        ${utillinux}/bin/umount /mnt
+
+        ${utillinux}/bin/umount /mnt/nix/store 
+        ${utillinux}/bin/umount /mnt/tmp 
+        ${utillinux}/bin/umount /mnt 
       '';
 
       passthru = { inherit fullName; };
@@ -631,7 +630,7 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    { size ? 4096, debs, name, fullName, postInstall ? null }:
+    { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS }:
     
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall;
@@ -712,12 +711,15 @@ rec {
      `primary.xml.gz' file of a Fedora or openSUSE distribution. */
      
   rpmClosureGenerator =
-    {name, packagesList, urlPrefix, packages, archs ? []}:
-    
+    {name, packagesLists, urlPrefixes, packages, archs ? []}:
+    assert (builtins.length packagesLists) == (builtins.length urlPrefixes) ;
     runCommand "${name}.nix" {buildInputs = [perl perlPackages.XMLSimple]; inherit archs;} ''
-      gunzip < ${packagesList} > ./packages.xml
+      ${lib.concatImapStrings (i: pl: ''
+        gunzip < ${pl} > ./packages_${toString i}.xml
+      '') packagesLists}
       perl -w ${rpm/rpm-closure.pl} \
-        ./packages.xml ${urlPrefix} ${toString packages} > $out
+        ${lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} " ) (lib.zipLists packagesLists urlPrefixes)} \
+        ${toString packages} > $out
     '';
 
 
@@ -726,15 +728,17 @@ rec {
      names. */
      
   makeImageFromRPMDist =
-    { name, fullName, size ? 4096, urlPrefix, packagesList
+    { name, fullName, size ? 4096
+    , urlPrefix ? "", urlPrefixes ? [urlPrefix]
+    , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? []
     , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"]
-    , runScripts ? true }:
+    , runScripts ? true, createRootFS ? defaultCreateRootFS }:
 
     fillDiskWithRPMs {
-      inherit name fullName size preInstall postInstall runScripts;
+      inherit name fullName size preInstall postInstall runScripts createRootFS;
       rpms = import (rpmClosureGenerator {
-        inherit name packagesList urlPrefix archs;
+        inherit name packagesLists urlPrefixes archs;
         packages = packages ++ extraPackages;
       }) { inherit fetchurl; };
     };
