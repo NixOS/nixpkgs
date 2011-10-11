@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "vacuum";
-  version = "1.0.0";
-  sha256 = "2229948ce801052c5ffb70ffc07e301d87d60740b053df8a7b7851ad02c01d9f";
+  version = "1.0.0.1";
+  sha256 = "172py7nvyv66hvqmhigfm59rjb328bfzv0z11q8qdpf5w1fpvmc5";
   extraLibraries = [ ghcPaths ];
   meta = {
-    homepage = "http://moonpatio.com/vacuum/";
+    homepage = "http://web.archive.org/web/20100410115820/http://moonpatio.com/vacuum/";
     description = "Extract graph representations of ghc heap values";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
