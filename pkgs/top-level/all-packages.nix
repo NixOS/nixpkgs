@@ -3537,19 +3537,13 @@ let
 
     glib = callPackage ../development/libraries/glib/2.20.x.nix { };
 
-    glibmm = callPackage ../development/libraries/glibmm/2.18.x.nix { };
-
     atk = callPackage ../development/libraries/atk/1.24.x.nix { };
 
     cairo = callPackage ../development/libraries/cairo { };
 
     pango = callPackage ../development/libraries/pango/1.24.x.nix { };
 
-    pangomm = callPackage ../development/libraries/pangomm/2.14.x.nix { };
-
     gtk = callPackage ../development/libraries/gtk+/2.16.x.nix { };
-
-    gtkmm = callPackage ../development/libraries/gtkmm/2.14.x.nix { };
 
   });
 
