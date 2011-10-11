@@ -4807,7 +4807,6 @@ let
   setuptools = pythonPackages.setuptools;
 
   wxPython = pythonPackages.wxPython;
-  wxPython26 = pythonPackages.wxPython26;
   wxPython28 = pythonPackages.wxPython28;
 
   twisted = pythonPackages.twisted;
