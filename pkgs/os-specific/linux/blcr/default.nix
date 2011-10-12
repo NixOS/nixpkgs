@@ -31,5 +31,9 @@ stdenv.mkDerivation {
     description = "Berkeley Lab Checkpoint/Restart for Linux (BLCR)";
     homepage = https://ftg.lbl.gov/projects/CheckpointRestart/;
     license = "GPL2";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [
+      z77z
+    ];
   };
 }
