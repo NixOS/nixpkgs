@@ -94,7 +94,7 @@ let
       createDisk("harddisk", 4 * 1024);
 
       my $machine = createMachine({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso"),
-        qemuFlags => '${if testChannel then qemuNICFlags 1 1 2 else ""}'});
+        qemuFlags => '${optionalString testChannel (toString (qemuNICFlags 1 1 2))}'});
       $machine->start;
 
       ${optionalString testChannel ''
