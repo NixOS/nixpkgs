@@ -82,6 +82,12 @@
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
   };
 
+  ipl10 = {
+    shortName = "IPL 1.0";
+    fullName = "IBM Public License Version 1.0";
+    url = http://www.ibm.com/developerworks/opensource/library/os-i18n2/os-ipl.html;
+  };
+
   ijg = {
     shortName = "IJG";
     fullName = "Independent JPEG Group License";
