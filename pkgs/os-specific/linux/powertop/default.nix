@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
   patches = [
     ./powertop-1.13.patch
-    ./0001-CONFIG_INOTIFY_USER-instead-of-CONFIG_INOTIFY.patch
+    ./inotify_user.patch
   ];
   buildInputs = [ncurses gettext];
   meta = {
