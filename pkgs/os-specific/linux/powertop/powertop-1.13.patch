@@ -1,7 +1,7 @@
 diff -ru powertop-1.13/Makefile powertop-1.13.new/Makefile
 --- powertop-1.13/Makefile
 +++ powertop-1.13.new/Makefile
-@@ -1,6 +1,6 @@
+@@ -1,8 +1,8 @@
  VERSION = 1.13
  
 -BINDIR=/usr/bin
@@ -10,6 +10,6 @@ diff -ru powertop-1.13/Makefile powertop-1.13.new/Makefile
 +BINDIR=${out}/bin
 +LOCALESDIR=${out}/share/locale
 +MANDIR=${out}/share/man/man8
- WARNFLAGS=-Wall  -W -Wshadow -W -Wformat -Wimplicit-function-declaration -Wimplicit-int
+ WARNFLAGS=-Wall -Wshadow -W -Wformat -Wimplicit-function-declaration -Wimplicit-int
  CFLAGS?=-Os -g ${WARNFLAGS}
  CC?=gcc
