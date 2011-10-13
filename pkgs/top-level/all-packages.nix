@@ -5537,8 +5537,33 @@ let
 
   linux_2_6_38_ati = linux_2_6_38.override { extraConfig="DRM_RADEON_KMS y"; };
 
+  # Please keep in sync with linux_2_6_39_powertop, except for extraConfig
   linux_2_6_39 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.39.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [ #kernelPatches.fbcondecor_2_6_38
+        kernelPatches.sec_perm_2_6_24
+        kernelPatches.aufs2_1_2_6_39
+        #kernelPatches.mips_restart_2_6_36
+      ];
+  };
+
+  # Please keep in sync with linux_2_6_39, except for extraConfig
+  linux_2_6_39_powertop = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.39.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    extraConfig = ''
+        CPU_FREQ_GOV_ONDEMAND y
+        CPU_FREQ_STAT y
+        DEBUG_KERNEL y
+        HIGH_RES_TIMERS y
+        HPET_TIMER y
+        NO_HZ y
+        PM_ADVANCED_DEBUG y
+        PM_RUNTIME y
+        SND_AC97_POWER_SAVE y
+        TIMER_STATS y
+        USB_SUSPEND y
+    '';
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
@@ -5713,6 +5738,7 @@ let
   linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_38_ati = recurseIntoAttrs (linuxPackagesFor linux_2_6_38_ati pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_39 = recurseIntoAttrs (linuxPackagesFor linux_2_6_39 pkgs.linuxPackages_2_6_39);
+  linuxPackages_2_6_39_powertop = recurseIntoAttrs (linuxPackagesFor linux_2_6_39_powertop pkgs.linuxPackages_2_6_39_powertop);
   linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
   linuxPackages_3_1 = recurseIntoAttrs (linuxPackagesFor linux_3_1 pkgs.linuxPackages_3_1);
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
