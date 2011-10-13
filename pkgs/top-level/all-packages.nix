@@ -5537,7 +5537,6 @@ let
 
   linux_2_6_38_ati = linux_2_6_38.override { extraConfig="DRM_RADEON_KMS y"; };
 
-  # Please keep in sync with linux_2_6_39_powertop, except for extraConfig
   linux_2_6_39 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.39.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5548,9 +5547,7 @@ let
       ];
   };
 
-  # Please keep in sync with linux_2_6_39, except for extraConfig
-  linux_2_6_39_powertop = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.39.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+  linux_2_6_39_powertop = linux_2_6_39.override {
     extraConfig = ''
         CPU_FREQ_GOV_ONDEMAND y
         CPU_FREQ_STAT y
@@ -5564,15 +5561,8 @@ let
         TIMER_STATS y
         USB_SUSPEND y
     '';
-    kernelPatches =
-      [ #kernelPatches.fbcondecor_2_6_38
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_1_2_6_39
-        #kernelPatches.mips_restart_2_6_36
-      ];
   };
 
-  # Please keep in sync with linux_3_0_powertop, except for extraConfig
   linux_3_0 = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5584,9 +5574,7 @@ let
       ];
   };
 
-  # Please keep in sync with linux_3_0, except for extraConfig
-  linux_3_0_powertop = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+  linux_3_0_powertop = linux_3_0.override {
     extraConfig = ''
         CPU_FREQ_GOV_ONDEMAND y
         CPU_FREQ_STAT y
@@ -5600,13 +5588,6 @@ let
         TIMER_STATS y
         USB_SUSPEND y
     '';
-    kernelPatches =
-      [ #kernelPatches.fbcondecor_2_6_38
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs3_0
-        #kernelPatches.aufs2_1_3_0
-        #kernelPatches.mips_restart_2_6_36
-      ];
   };
 
   linux_3_1 = makeOverridable (import ../os-specific/linux/kernel/linux-3.1.nix) {
@@ -5620,8 +5601,7 @@ let
       ];
   };
 
-  linux_3_1_powertop = makeOverridable (import ../os-specific/linux/kernel/linux-3.1.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+  linux_3_1_powertop = linux_3_1.override {
     extraConfig = ''
         CPU_FREQ_GOV_ONDEMAND y
         CPU_FREQ_STAT y
@@ -5635,13 +5615,6 @@ let
         TIMER_STATS y
         USB_SUSPEND y
     '';
-    kernelPatches =
-      [ #kernelPatches.fbcondecor_2_6_38
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.efi_stub
-        #kernelPatches.aufs2_1_2_6_38
-        #kernelPatches.mips_restart_2_6_36
-      ];
   };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
