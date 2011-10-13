@@ -8,4 +8,10 @@ stdenv.mkDerivation {
   };
   patches = [./powertop-1.13.patch];
   buildInputs = [ncurses gettext];
+  meta = {
+    description = "Analyze power consumption on Intel-based laptops";
+    license = "GPLv2";
+    maintainers = [ stdenv.lib.maintainers.chaoflow ];
+    platforms = stdenv.lib.platforms.linux;
+  };
 }
