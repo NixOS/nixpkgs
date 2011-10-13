@@ -969,6 +969,8 @@ let
 
   mpage = callPackage ../tools/text/mpage { };
 
+  mscgen = callPackage ../tools/graphics/mscgen { };
+
   msf = builderDefsPackage (import ../tools/security/metasploit/3.1.nix) {
     inherit ruby makeWrapper;
   };
