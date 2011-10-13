@@ -5549,15 +5549,9 @@ let
 
   linux_2_6_39_powertop = linux_2_6_39.override {
     extraConfig = ''
-        CPU_FREQ_GOV_ONDEMAND y
-        CPU_FREQ_STAT y
         DEBUG_KERNEL y
-        HIGH_RES_TIMERS y
-        HPET_TIMER y
-        NO_HZ y
         PM_ADVANCED_DEBUG y
         PM_RUNTIME y
-        SND_AC97_POWER_SAVE y
         TIMER_STATS y
         USB_SUSPEND y
     '';
@@ -5576,15 +5570,9 @@ let
 
   linux_3_0_powertop = linux_3_0.override {
     extraConfig = ''
-        CPU_FREQ_GOV_ONDEMAND y
-        CPU_FREQ_STAT y
         DEBUG_KERNEL y
-        HIGH_RES_TIMERS y
-        HPET_TIMER y
-        NO_HZ y
         PM_ADVANCED_DEBUG y
         PM_RUNTIME y
-        SND_AC97_POWER_SAVE y
         TIMER_STATS y
         USB_SUSPEND y
     '';
@@ -5603,15 +5591,9 @@ let
 
   linux_3_1_powertop = linux_3_1.override {
     extraConfig = ''
-        CPU_FREQ_GOV_ONDEMAND y
-        CPU_FREQ_STAT y
         DEBUG_KERNEL y
-        HIGH_RES_TIMERS y
-        HPET_TIMER y
-        NO_HZ y
         PM_ADVANCED_DEBUG y
         PM_RUNTIME y
-        SND_AC97_POWER_SAVE y
         TIMER_STATS y
         USB_SUSPEND y
     '';
