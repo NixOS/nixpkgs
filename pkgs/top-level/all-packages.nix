@@ -1003,11 +1003,7 @@ let
 
   namazu = callPackage ../tools/text/namazu { };
 
-  nbd = callPackage ../tools/networking/nbd {
-    glib = gtkLibs.glib.override {
-      stdenv = makeStaticBinaries stdenv;
-    };
-  };
+  nbd = callPackage ../tools/networking/nbd { };
 
   netcdf = callPackage ../development/libraries/netcdf { };
 
