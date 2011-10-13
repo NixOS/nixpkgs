@@ -9,6 +9,7 @@ stdenv.mkDerivation {
   patches = [
     ./powertop-1.13.patch
     ./inotify_user.patch
+    ./modprobe_configs.patch
   ];
   buildInputs = [ncurses gettext];
   meta = {
