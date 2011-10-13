@@ -48,6 +48,12 @@ in
       $client2->succeed("echo bla > /data/bar");
       $server->succeed("test -e /data/bar");
 
+      # Test whether restarting the ‘nfs-kernel-exports’ job works
+      # correctly.  In Upstart 0.6.7 this fails because the jobs that
+      # depend on ‘nfs-kernel-exports’ are stopped but not restarted.
+      $server->succeed("restart nfs-kernel-exports");
+      $client2->succeed("echo bla >> /data/bar");
+
       # Test whether we can get a lock.  !!! This step takes about 90
       # seconds because the NFS server waits that long after booting
       # before accepting new locks.
