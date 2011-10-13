@@ -5620,6 +5620,30 @@ let
       ];
   };
 
+  linux_3_1_powertop = makeOverridable (import ../os-specific/linux/kernel/linux-3.1.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    extraConfig = ''
+        CPU_FREQ_GOV_ONDEMAND y
+        CPU_FREQ_STAT y
+        DEBUG_KERNEL y
+        HIGH_RES_TIMERS y
+        HPET_TIMER y
+        NO_HZ y
+        PM_ADVANCED_DEBUG y
+        PM_RUNTIME y
+        SND_AC97_POWER_SAVE y
+        TIMER_STATS y
+        USB_SUSPEND y
+    '';
+    kernelPatches =
+      [ #kernelPatches.fbcondecor_2_6_38
+        kernelPatches.sec_perm_2_6_24
+        kernelPatches.efi_stub
+        #kernelPatches.aufs2_1_2_6_38
+        #kernelPatches.mips_restart_2_6_36
+      ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -5768,6 +5792,7 @@ let
   linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
   linuxPackages_3_0_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_0_powertop pkgs.linuxPackages_3_0_powertop);
   linuxPackages_3_1 = recurseIntoAttrs (linuxPackagesFor linux_3_1 pkgs.linuxPackages_3_1);
+  linuxPackages_3_1_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_1_powertop pkgs.linuxPackages_3_1_powertop);
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
   linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36);
