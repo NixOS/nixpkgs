@@ -10,66 +10,40 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bash emacs gdb git glib gmime gnupg1 pkgconfig talloc xapian ];
 
-  # XXX: Make me a loop
   patchPhase = ''
-    # substituteInPlace "test/atomicity" \
-    #   --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/aggregate-results.sh" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/author-order" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/basic" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/crypto" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/dump-restore" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/emacs" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/emacs-large-search-buffer" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/encoding" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/from-guessing" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/json" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/long-id" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/maildir-sync" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/new" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/notmuch-test" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/raw" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/reply" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-by-folder" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-insufficient-from-quoting" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-folder-coherence" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-output" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-position-overlap-bug" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/symbol-hiding" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/test-lib.sh" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/test-verbose" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/thread-naming" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/thread-order" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/uuencode" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
+    (cd test && for prg in \
+        aggregate-results.sh \
+        author-order \
+        basic \
+        crypto \
+        dump-restore \
+        emacs \
+        emacs-large-search-buffer \
+        encoding \
+        from-guessing \
+        json \
+        long-id \
+        maildir-sync \
+        new \
+        notmuch-test \
+        raw \
+        reply \
+        search \
+        search-by-folder \
+        search-insufficient-from-quoting \
+        search-folder-coherence \
+        search-output \
+        search-position-overlap-bug \
+        symbol-hiding \
+        test-lib.sh \
+        test-verbose \
+        thread-naming \
+        thread-order \
+        uuencode \
+    ;do
+      substituteInPlace "$prg" \
+        --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
+    done)
   '';
 
   postBuild = ''
