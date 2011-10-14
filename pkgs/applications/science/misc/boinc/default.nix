@@ -3,12 +3,12 @@ mesa, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK,
 sqlite, gtk, patchelf, libXScrnSaver, libnotify, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "boinc-6.13.6";
+  name = "boinc-6.12.39";
 
   src = fetchsvn {
-    url = "http://boinc.berkeley.edu/svn/tags/boinc_core_release_6_13_6";
+    url = "http://boinc.berkeley.edu/svn/tags/boinc_core_release_6_12_39";
     rev = 24341;
-    sha256 = "17312g4mhxigka1rafxxw46a4mbdlfj1wh1nlp1cbg43hv2rf7bq";
+    sha256 = "158fkm4mr7wljsy8gav20km8jamf00mxjk1wsiqw6kx62bih37yb";
   };
 
   buildInputs = [ libtool automake autoconf m4 pkgconfig curl mesa libXmu libXi

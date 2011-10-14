@@ -1,0 +1,28 @@
+From 0002a70b83221a8a831d776836d13105ac886323 Mon Sep 17 00:00:00 2001
+From: Florian Friesdorf <flo@chaoflow.net>
+Date: Thu, 13 Oct 2011 14:57:02 +0200
+Subject: [PATCH] powertop tries to load configs, if /proc/config.gz is
+ missing
+
+---
+ config.c |    4 ++++
+ 1 files changed, 4 insertions(+), 0 deletions(-)
+
+diff --git a/config.c b/config.c
+index b2567f2..62ac978 100644
+--- a/config.c
++++ b/config.c
+@@ -44,6 +44,10 @@ static void read_kernel_config(void)
+ 	char filename[100];
+ 	if (configcount)
+ 		return;
++	if (access("/proc/config.gz", R_OK) != 0) {
++		file = popen("modprobe configs >/dev/null 2>&1", "r");
++		pclose(file);
++	}
+ 	if (access("/proc/config.gz", R_OK) == 0) {
+ 		file = popen("zcat /proc/config.gz 2> /dev/null", "r");
+ 		while (file && !feof(file)) {
+-- 
+1.7.6
+

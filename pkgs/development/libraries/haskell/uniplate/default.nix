@@ -1,10 +1,10 @@
-{ cabal, syb }:
+{ cabal, hashable, syb, unorderedContainers }:
 
 cabal.mkDerivation (self: {
   pname = "uniplate";
-  version = "1.6.2";
-  sha256 = "1lns0llhszk68jnq5if3xrk997idzszqc267q63kkdwp1zxdicrd";
-  buildDepends = [ syb ];
+  version = "1.6.3";
+  sha256 = "14p10zhsa9ws0rn2nm0gi25bdyhhs83b6qv8bjyywb02sh15xhkw";
+  buildDepends = [ hashable syb unorderedContainers ];
   meta = {
     homepage = "http://community.haskell.org/~ndm/uniplate/";
     description = "Help writing simple, concise and fast generic operations";

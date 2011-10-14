@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, dbus, libnih }:
 
 stdenv.mkDerivation rec {
-  name = "upstart-0.6.7";
+  name = "upstart-1.3";
   
   src = fetchurl {
-    url = "http://upstart.ubuntu.com/download/0.6/${name}.tar.gz";
-    sha256 = "1f1pds27cadi6ycii1fkn5bbs1brjqxa2b45wfn03ikc2azqxlr9";
+    url = "http://upstart.ubuntu.com/download/1.3/${name}.tar.gz";
+    md5 = "7820797b64878c27115fff6a7398a6a9";
   };
 
   buildInputs = [ pkgconfig dbus libnih ];

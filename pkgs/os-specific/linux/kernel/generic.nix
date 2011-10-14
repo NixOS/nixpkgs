@@ -139,7 +139,10 @@ stdenv.mkDerivation {
         + ")");
     license = "GPLv2";
     homepage = http://www.kernel.org/;
-    maintainers = [ lib.maintainers.eelco ];
+    maintainers = [
+      lib.maintainers.eelco
+      lib.maintainers.chaoflow
+    ];
     platforms = lib.platforms.linux;
   } // extraMeta;
 }

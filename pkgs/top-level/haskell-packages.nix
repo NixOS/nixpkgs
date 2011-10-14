@@ -1340,6 +1340,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   zlibEnum = callPackage ../development/libraries/haskell/zlib-enum {};
 
+  Zwaluw = callPackage ../development/libraries/haskell/Zwaluw {};
+
   # Compilers.
 
   AgdaExecutable = callPackage ../development/compilers/Agda-executable {};

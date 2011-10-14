@@ -1,0 +1,28 @@
+From 89e46f3270e3b6d704959c4d0f44ae6bab8f7616 Mon Sep 17 00:00:00 2001
+From: Florian Friesdorf <flo@chaoflow.net>
+Date: Thu, 13 Oct 2011 10:14:34 +0200
+Subject: [PATCH] CONFIG_INOTIFY_USER instead of CONFIG_INOTIFY
+
+since 2.6.36 the former fully replaced the latter
+---
+ powertop.c |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/powertop.c b/powertop.c
+index 74eb328..8df3652 100644
+--- a/powertop.c
++++ b/powertop.c
+@@ -1191,8 +1191,8 @@ int main(int argc, char **argv)
+ 		suggest_kernel_config("CONFIG_CPU_FREQ_STAT", 1,
+ 				    _("Suggestion: Enable the CONFIG_CPU_FREQ_STAT kernel configuration option.\n"
+ 				      "This option allows PowerTOP to show P-state percentages \n" "P-states correspond to CPU frequencies."), 2);
+-		suggest_kernel_config("CONFIG_INOTIFY", 1,
+-				    _("Suggestion: Enable the CONFIG_INOTIFY kernel configuration option.\n"
++		suggest_kernel_config("CONFIG_INOTIFY_USER", 1,
++				    _("Suggestion: Enable the CONFIG_INOTIFY_USER kernel configuration option.\n"
+ 				      "This option allows programs to wait for changes in files and directories\n"
+ 				      "instead of having to poll for these changes"), 5);
+ 
+-- 
+1.7.6
+
