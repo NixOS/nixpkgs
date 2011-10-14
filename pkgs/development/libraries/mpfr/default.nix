@@ -1,11 +1,11 @@
 {stdenv, fetchurl, gmp}:
 
 stdenv.mkDerivation rec {
-  name = "mpfr-3.0.1";
+  name = "mpfr-3.1.0";
 
   src = fetchurl {
     url = "mirror://gnu/mpfr/${name}.tar.bz2";
-    sha256 = "0zwfwc9rn2sl3kpnr72fi1b8lh8c0mcmgy61y301jhs9pfcp15z1";
+    sha256 = "105nx8qqx5x8f4rlplr2wk4cyv61iw5j3jgi2k21rpb8s6xbp9vl";
   };
 
   buildInputs = [ gmp ];
