@@ -194,7 +194,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_2_0_1;
       mtl1 = self.mtl_1_1_1_1;
       text = self.text_0_11_1_5;
-      repaExamples = null;	# don't pick this version of 'repa-examples' during nix-env -u
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
     };
 
   haskellPlatform_2011_2_0_1 =
@@ -236,7 +236,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2011_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2011_2_0_0;
       mtl1 = self.mtl_1_1_1_1;
-      repaExamples = null;	# don't pick this version of 'repa-examples' during nix-env -u
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
     };
 
   haskellPlatform_2011_2_0_0 =
@@ -274,7 +274,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellPlatformDefaults_2010_2_0_0 =
     self : self.haskellPlatformArgs_2010_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_2_0_0;
-      repaExamples = null;	# don't pick this version of 'repa-examples' during nix-env -u
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
     };
 
   haskellPlatform_2010_2_0_0 =
@@ -311,7 +311,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2010_1_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_1_0_0;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
-      repaExamples = null;	# don't pick this version of 'repa-examples' during nix-env -u
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
     };
 
   haskellPlatform_2010_1_0_0 =
@@ -349,7 +349,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2009_2_0_2 self // {
       haskellPlatform = self.haskellPlatform_2009_2_0_2;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
-      repaExamples = null;	# don't pick this version of 'repa-examples' during nix-env -u
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
     };
 
   haskellPlatform_2009_2_0_2 =
