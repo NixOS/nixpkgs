@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, xz, gmp ? null
+{ stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null }:
 
@@ -6,14 +6,14 @@ assert aclSupport -> acl != null;
 assert selinuxSupport -> ( (libselinux != null) && (libsepol != null) );
 
 stdenv.mkDerivation (rec {
-  name = "coreutils-8.13";
+  name = "coreutils-8.14";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "06xc4jfkr5h8pc6wq14ncihapf5chcwvvcjvpwkby1ngw0xbxz8b";
+    sha256 = "0bdh31fvd0ng2sqrrbz0a4yy084hmj76pbljksqyv4ljq4bhh4hd";
   };
 
-  buildNativeInputs = [ perl xz ];
+  buildNativeInputs = [ perl ];
   buildInputs = [ gmp ]
     ++ stdenv.lib.optional aclSupport acl
     ++ stdenv.lib.optional selinuxSupport libselinux
