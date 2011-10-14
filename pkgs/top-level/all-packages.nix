@@ -2586,8 +2586,16 @@ let
     sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
   };
 
-  pythonFull = callPackage ../development/interpreters/python/wrapper.nix {
-    extraLibs = lib.attrValues python.modules;
+  pythonFull = python27Full;
+
+  python26Full = callPackage ../development/interpreters/python/wrapper.nix {
+    extraLibs = lib.attrValues python26.modules;
+    python = python26;
+  };
+
+  python27Full = callPackage ../development/interpreters/python/wrapper.nix {
+    extraLibs = lib.attrValues python27.modules;
+    python = python27;
   };
 
   pythonhomeWrapper = callPackage ../development/interpreters/python/pythonhome-wrapper.nix { };
