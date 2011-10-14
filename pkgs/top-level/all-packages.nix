@@ -2764,6 +2764,8 @@ let
 
   byacc = callPackage ../development/tools/parsing/byacc { };
 
+  cbrowser = callPackage ../development/tools/misc/cbrowser { };
+
   ccache = callPackage ../development/tools/misc/ccache { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
