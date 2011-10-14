@@ -581,6 +581,8 @@ let
 
   dirmngr = callPackage ../tools/security/dirmngr { };
 
+  disper = callPackage ../tools/misc/disper { };
+
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
   docbook2x = callPackage ../tools/typesetting/docbook2x {
