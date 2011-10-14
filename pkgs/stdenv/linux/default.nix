@@ -293,7 +293,7 @@ rec {
       inherit gcc;
       inherit (stdenvLinuxBoot3Pkgs) binutils glibc;
       inherit (stdenvLinuxBoot4Pkgs)
-        gzip bzip2 bash coreutils diffutils findutils gawk
+        gzip bzip2 xz bash coreutils diffutils findutils gawk
         gnumake gnused gnutar gnugrep gnupatch patchelf
         attr acl;
     };
