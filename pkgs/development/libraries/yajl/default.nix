@@ -19,5 +19,9 @@ stdenv.mkDerivation {
     '';
     homepage = http://lloyd.github.com/yajl/;
     license = stdenv.lib.license.isc;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [
+      z77z
+    ];
   };
 }
