@@ -4640,6 +4640,8 @@ let
 
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
+  yajl = callPackage ../development/libraries/yajl { };
+
   zangband = builderDefsPackage (import ../games/zangband) {
     inherit ncurses flex bison autoconf automake m4 coreutils;
   };
