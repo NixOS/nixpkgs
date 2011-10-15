@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   doCheck = !stdenv.isDarwin;
 
   # Upstream is aware of it; it may be in the next release.
-  patches = [ ./s_isdir.patch ];
+  patches = [ ./s_isdir.patch ./readlink-EINVAL.patch ];
 
   meta = {
     homepage = http://www.gnu.org/software/m4/;
