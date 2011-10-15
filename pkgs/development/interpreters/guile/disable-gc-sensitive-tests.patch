@@ -3,6 +3,16 @@ compiling with `-O0' (as is done with coverage analysis) since there may
 be many false references held on the stack, leading to the failure of
 such tests.
 
+--- a/test-suite/tests/gc.test
++++ b/test-suite/tests/gc.test
+@@ -67,6 +67,7 @@
+ 
+ (with-test-prefix "gc"
+   (pass-if "Unused modules are removed"
++    (throw 'unresolved)
+     (let* ((guard (make-guardian))
+            (total 1000))
+
 --- a/test-suite/tests/threads.test
 +++ b/test-suite/tests/threads.test
 @@ -366,6 +366,7 @@
