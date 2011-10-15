@@ -221,8 +221,10 @@ mountFS() {
     # For CIFS mounts, retry a few times before giving up.
     local n=0
     while true; do
-        if mount -t "$fsType" -o "$options" "$device" /mnt-root$mountPoint; then
-            break
+        if [ "$fsType" = "nfs" ]; then
+          nfsmount "$device" "/mnt-root$mountPoint" && break
+        else
+          mount -t "$fsType" -o "$options" "$device" "/mnt-root$mountPoint" && break
         fi
         if [ "$fsType" != cifs -o "$n" -ge 10 ]; then fail; break; fi
         echo "retrying..."

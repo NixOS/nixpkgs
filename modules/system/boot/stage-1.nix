@@ -169,6 +169,11 @@ let
         cp ${kernelPackages.splashutils}/${kernelPackages.splashutils.helperName} $out/bin/splash_helper
       ''}
 
+      # Copy nfsmount if there is any NFS mounts required for boot.
+      ${optionalString (filter (fs: fs.fsType == "nfs" && (fs.mountPoint == "/" || fs.neededForBoot)) fileSystems != []) ''
+        cp -v ${pkgs.klibc}/lib/klibc/bin.static/nfsmount $out/bin
+      ''}
+
       ${config.boot.initrd.extraUtilsCommands}
 
       # Run patchelf to make the programs refer to the copied libraries.
