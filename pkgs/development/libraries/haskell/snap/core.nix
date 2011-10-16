@@ -1,18 +1,19 @@
 { cabal, attoparsec, attoparsecEnumerator, blazeBuilder
-, bytestringMmap, bytestringNums, caseInsensitive, deepseq, dlist
-, enumerator, MonadCatchIOTransformers, mtl, text, time
-, transformers, unixCompat, vector, zlib
+, blazeBuilderEnumerator, bytestringMmap, bytestringNums
+, caseInsensitive, deepseq, dlist, enumerator
+, MonadCatchIOTransformers, mtl, text, time, transformers
+, unixCompat, vector, zlibEnum
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap-core";
-  version = "0.5.4";
-  sha256 = "0v6lsb60s3w96rqpp9ky8nd660zja8asw02vx1562nvd19k65jbb";
+  version = "0.5.5";
+  sha256 = "1md9n3f11ki87774fh3p7d6bykfdwcqz6b2yrjci4mwf1b1xppkj";
   buildDepends = [
-    attoparsec attoparsecEnumerator blazeBuilder bytestringMmap
-    bytestringNums caseInsensitive deepseq dlist enumerator
-    MonadCatchIOTransformers mtl text time transformers unixCompat
-    vector zlib
+    attoparsec attoparsecEnumerator blazeBuilder blazeBuilderEnumerator
+    bytestringMmap bytestringNums caseInsensitive deepseq dlist
+    enumerator MonadCatchIOTransformers mtl text time transformers
+    unixCompat vector zlibEnum
   ];
   meta = {
     homepage = "http://snapframework.com/";
