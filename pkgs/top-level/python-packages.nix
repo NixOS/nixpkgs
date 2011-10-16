@@ -1963,6 +1963,22 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  virtualenv = buildPythonPackage rec {
+    name = "virtualenv-1.6.4";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
+      md5 = "1072b66d53c24e019a8f1304ac9d9fc5";
+    };
+
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "a tool to create isolated Python environments";
+      homepage = http://www.virtualenv.org;
+      license = licenses.mit;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
 
   vnc2flv = buildPythonPackage rec {
     name = "vnc2flv-20100207";
