@@ -2494,11 +2494,7 @@ let
 
   guile = guile_2_0;
 
-  io = builderDefsPackage (import ../development/interpreters/io) {
-    inherit sqlite zlib gmp libffi cairo ncurses freetype mesa
-      libpng libtiff libjpeg readline libsndfile libxml2
-      freeglut e2fsprogs libsamplerate pcre libevent libedit;
-  };
+  io = callPackage ../development/interpreters/io { };
 
   j = callPackage ../development/interpreters/j {};
 
