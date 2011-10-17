@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [
     cmake zlib sqlite gmp libffi cairo ncurses freetype mesa
     libpng libtiff libjpeg readline libsndfile libxml2
-    freeglut e2fsprogs libsamplerate pcre libevent libedit yajl
+    freeglut libsamplerate pcre libevent libedit yajl
   ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=release" ];
