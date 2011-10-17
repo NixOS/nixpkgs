@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, ruby}:
+{stdenv, fetchurl, cmake, ruby, darwinInstallNameToolUtility}:
 
 stdenv.mkDerivation {
   name = "yajl-2.0.1";
@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     sha256 = "08a7bgmdpvi6w9f9bxx5f42njwmwzdf6jz3w6ila7jgbl5mhknf2";
   };
 
-  buildInputs = [ cmake ruby ];
+  buildInputs = [ cmake ruby ]
+    ++ stdenv.lib.optional stdenv.isDarwin darwinInstallNameToolUtility;
 
   meta = {
     description = "Yet Another JSON Library";
@@ -19,7 +20,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://lloyd.github.com/yajl/;
     license = stdenv.lib.license.isc;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; [ linux darwin ];
     maintainers = with stdenv.lib.maintainers; [
       z77z
     ];
