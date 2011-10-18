@@ -57,6 +57,8 @@ stdenv.mkDerivation ({
         tools/clang/lib/Frontend/InitHeaderSearch.cpp
     '';
 
+    passthru = { gcc = gcc.gcc; };
+
     meta = {
       homepage = http://clang.llvm.org/;
       description = "A C language family frontend for LLVM";

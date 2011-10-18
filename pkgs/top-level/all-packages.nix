@@ -1640,9 +1640,7 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clang = llvm.override {
-    buildClang = true;
-  };
+  clang = wrapClang (llvm.override { buildClang = true; });
 
   clangSVN = llvmSVN.override {
     buildClang = true;
@@ -2425,6 +2423,18 @@ let
     shell = bash;
     inherit stdenv binutils coreutils zlib;
   };
+
+  wrapClangWith = clangWrapper: glibc: baseClang: clangWrapper {
+    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
+    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
+    nativePrefix = if stdenv ? gcc then stdenv.gcc.nativePrefix else "";
+    clang = baseClang;
+    libc = glibc;
+    shell = bash;
+    inherit stdenv binutils coreutils zlib;
+  };
+
+  wrapClang = wrapClangWith (import ../build-support/clang-wrapper) glibc;
 
   wrapGCC = wrapGCCWith (import ../build-support/gcc-wrapper) glibc;
 
