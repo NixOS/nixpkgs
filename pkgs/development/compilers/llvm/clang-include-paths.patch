@@ -1,15 +1,15 @@
 diff -ru -x '*~' a/tools/clang/lib/Frontend/InitHeaderSearch.cpp b/tools/clang/lib/Frontend/InitHeaderSearch.cpp
---- a/tools/clang/lib/Frontend/InitHeaderSearch.cpp	2010-09-03 18:45:53.000000000 +0200
-+++ b/tools/clang/lib/Frontend/InitHeaderSearch.cpp	2011-02-05 14:59:08.669573190 +0100
-@@ -443,6 +443,7 @@
-       AddPath(*i, System, false, false, false);
-     return;
-   }
+--- a/tools/clang/lib/Frontend/InitHeaderSearch.cpp	2011-03-21 20:24:04.000000000 -0400
++++ b/tools/clang/lib/Frontend/InitHeaderSearch.cpp	2011-10-18 12:09:50.624355551 -0400
+@@ -438,6 +438,7 @@
+ 
+ void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
+                                             const HeaderSearchOptions &HSOpts) {
 +#if 0
    llvm::Triple::OSType os = triple.getOS();
+ 
    switch (os) {
-   case llvm::Triple::Win32:
-@@ -532,6 +533,8 @@
+@@ -559,6 +560,8 @@
    }
  
    AddPath("/usr/include", System, false, false, false);
@@ -18,7 +18,7 @@ diff -ru -x '*~' a/tools/clang/lib/Frontend/InitHeaderSearch.cpp b/tools/clang/l
  }
  
  void InitHeaderSearch::
-@@ -550,6 +553,7 @@
+@@ -577,6 +580,7 @@
                                    triple);
      return;
    }
@@ -26,7 +26,7 @@ diff -ru -x '*~' a/tools/clang/lib/Frontend/InitHeaderSearch.cpp b/tools/clang/l
    // FIXME: temporary hack: hard-coded paths.
    switch (os) {
    case llvm::Triple::Cygwin:
-@@ -769,6 +773,10 @@
+@@ -847,6 +851,10 @@
    default:
      break;
    }

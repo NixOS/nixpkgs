@@ -1,12 +1,14 @@
 { stdenv, fetchurl, gcc, flex, perl, libtool, groff
 , buildClang ? false }:
 
+let version = "2.9"; in
+
 stdenv.mkDerivation ({
-  name = "llvm-2.8";
-  
+  name = "llvm-${version}";
+
   src = fetchurl {
-    url    = http://llvm.org/releases/2.8/llvm-2.8.tgz;
-    sha256 = "0fyl2gk2ld28isz9bq4f6r4dhqm9vljfj3pdfwlc2v0w5xsdpb95";
+    url    = "http://llvm.org/releases/${version}/llvm-${version}.tgz";
+    sha256 = "0y9pgdakn3n0vf8zs6fjxjw6972nyw4rkfwwza6b8a3ll77kc4k6";
   };
 
   buildInputs = [ gcc flex perl groff ];
@@ -17,7 +19,7 @@ stdenv.mkDerivation ({
     homepage = http://llvm.org/;
     description = "Collection of modular and reusable compiler and toolchain technologies";
     license = "BSD";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [viric shlevy];
     platforms = with stdenv.lib.platforms; all;
   };
 }
@@ -30,17 +32,17 @@ stdenv.mkDerivation ({
               else if (stdenv.system == "x86_64-linux") then "x86_64-unknown-linux-gnu"
               else throw "System not supported";
   in {
-    name = "clang-2.8";
+    name = "clang-${version}";
 
     srcClang = fetchurl {
-      url = http://llvm.org/releases/2.8/clang-2.8.tgz;
-      sha256 = "1hg0vqmyr4wdy686l2bga0rpin41v0q9ds2k5659m8z6acali0zd";
+      url = "http://llvm.org/releases/${version}/clang-${version}.tgz";
+      sha256 = "1pq9g7qxw761dp6gx3amx39kl9p4zhlymmn8gfmcnw9ag0zizi3h";
     };
 
     prePatch = ''
       pushd tools
       unpackFile $srcClang
-      mv clang-2.8 clang
+      mv clang-${version} clang
       popd
       find
     '';
@@ -59,7 +61,7 @@ stdenv.mkDerivation ({
       homepage = http://clang.llvm.org/;
       description = "A C language family frontend for LLVM";
       license = "BSD";
-      maintainers = with stdenv.lib.maintainers; [viric];
+      maintainers = with stdenv.lib.maintainers; [viric shlevy];
       platforms = with stdenv.lib.platforms; linux;
     };
   }
