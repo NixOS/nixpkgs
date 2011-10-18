@@ -33,7 +33,8 @@ rec {
       enableParallelBuilding = true;
     } // (removeAttrs a [ "meta" "name" ]));
 
-  # kdeMonoPkg wrapper for modules splitted upstream. Used in TODO
+  # kdeMonoPkg wrapper for modules splitted upstream compatible with combinePkgs
+  # API.
   kdeSplittedPkg = module: {name, sane ? name}: kdeMonoPkg name;
 
   # Build subdirectory ${subdir} of tarball ${module}-${release}.tar.bz2

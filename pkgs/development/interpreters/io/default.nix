@@ -1,57 +1,31 @@
-args :  
-let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
-  fullDepEntry = args.fullDepEntry;
-  doPatchShebangs = args.doPatchShebangs;
+{ stdenv, fetchurl, cmake, zlib, sqlite, gmp, libffi, cairo, ncurses,
+  freetype, mesa, libpng, libtiff, libjpeg, readline, libsndfile, libxml2,
+  freeglut, libsamplerate, pcre, libevent, libedit, yajl,
+  python, openssl, glfw
+}:
 
-  version = lib.attrByPath ["version"] "2008.03.30" args; 
-  buildInputs = with args; [
-    zlib sqlite gmp libffi cairo ncurses freetype mesa
+stdenv.mkDerivation {
+  name = "io-2011.09.12";
+  src = fetchurl {
+    url = http://github.com/stevedekorte/io/tarball/2011.09.12;
+    name = "io-2011.09.12.tar.gz";
+    sha256 = "14nhk5vkk74pbf36jsfaxqh2ihi5d7jby79yf1ibbax319xbjk3v";
+  };
+
+  buildInputs = [
+    cmake zlib sqlite gmp libffi cairo ncurses freetype mesa
     libpng libtiff libjpeg readline libsndfile libxml2
-    freeglut e2fsprogs libsamplerate pcre libevent libedit
+    freeglut libsamplerate pcre libevent libedit yajl
   ];
-in
-rec {
-  src = /* Here a fetchurl expression goes */
-    fetchurl {
-      url = "http://github.com/stevedekorte/io/tarball/${version}";
-      name = "io-${version}.tar.gz";
-      sha256 = "1i1hcidcf93145jj1vwwa2jvp8lb25pn2kg0cb56a059narrqxlv";
-    };
 
-  inherit buildInputs;
-  configureFlags = [];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=release" ];
 
-  makeFlags = ["INSTALL_PREFIX=$out"];
-
-  /* doConfigure should be specified separately */
-  phaseNames = ["preBuild" "doMakeInstall" "postInstall" (doPatchShebangs "$out/share/io/samples") 
-    (doPatchShebangs "$out/lib/io")];
-      
-  preBuild = fullDepEntry (''
-    for i in $pkgs ${
-        if args.stdenv ? glibc then args.stdenv.glibc else ""
-      } ${
-        if args ? libffi &&  args.libffi != null then "$(echo ${args.libffi}/lib/*/include/..)" else ""
-      }; do
-        echo "Path: $i"
-        sed -i build/AddonBuilder.io -e '/"\/sw"/asearchPrefixes append("'"$i"'"); '
-	sed -i addons/Flux/io/Flux.io -e 's@/usr/local/@'"$out/"'@g' 
-    done
-  '') ["minInit" "addInputs" "doUnpack"];
-
-  postInstall = fullDepEntry (''
-    ensureDir $out/share/io
-
-    ln -s $out/lib/io/addons $out/share/io
-    cp -r samples $out/share/io
-  '') ["minInit" "doUnpack" "defEnsureDir" "doMakeInstall"];
-
-  name = "io-" + version;
   meta = {
     description = "Io programming language";
-    maintainers = [lib.maintainers.raskin];
-    platforms = lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [
+      raskin
+      z77z
+    ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
