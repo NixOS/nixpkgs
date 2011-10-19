@@ -47,7 +47,7 @@ stdenv.mkDerivation ({
       find
     '';
 
-    patches = [ ./clang-include-paths.patch ];
+    patches = [ ./clang-include-paths.patch ./clang-ld-flags.patch ];
 
     # Set up the header file paths
     preConfigure = ''
