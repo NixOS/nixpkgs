@@ -1283,13 +1283,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
-  # vty_4_6_0_4 = callPackage ../development/libraries/haskell/vty/4.6.0.4.nix {
-  #   vector = self.vector_0_7_1;
-  # };
-  vty_4_7_0_4 = callPackage ../development/libraries/haskell/vty/4.7.0.4.nix {
+  vty = callPackage ../development/libraries/haskell/vty {
     vector = self.vector_0_7_1;
   };
-  vty = self.vty_4_7_0_4;
 
   wai = callPackage ../development/libraries/haskell/wai {};
 
