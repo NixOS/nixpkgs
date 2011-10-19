@@ -1,13 +1,14 @@
-{ cabal, base64Bytestring, cereal, fileEmbed, httpTypes, pureMD5
-, text, transformers, unixCompat, wai, waiAppStatic, yesodCore
+{ cabal, base64Bytestring, cereal, enumerator, fileEmbed, httpTypes
+, pureMD5, text, transformers, unixCompat, wai, waiAppStatic
+, yesodCore
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-static";
-  version = "0.3.0.1";
-  sha256 = "1dvg60kawmvczwxvkxzx5k19y36i23fi0faw71ck58mlkjdczby5";
+  version = "0.3.1.2";
+  sha256 = "0r72xspxq7122k9vird4yqqzrn6p4xgzvxid7ig62zdxjlw1p36j";
   buildDepends = [
-    base64Bytestring cereal fileEmbed httpTypes pureMD5 text
+    base64Bytestring cereal enumerator fileEmbed httpTypes pureMD5 text
     transformers unixCompat wai waiAppStatic yesodCore
   ];
   meta = {
