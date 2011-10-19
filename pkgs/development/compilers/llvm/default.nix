@@ -5,10 +5,6 @@ let version = "2.9"; in
 stdenv.mkDerivation {
   name = "llvm-${version}";
 
-  CC = if stdenv.gcc ? clang then "clang" else "gcc";
-
-  CXX = if stdenv.gcc ? clang then "clang++" else "g++";
-
   src = fetchurl {
     url    = "http://llvm.org/releases/${version}/llvm-${version}.tgz";
     sha256 = "0y9pgdakn3n0vf8zs6fjxjw6972nyw4rkfwwza6b8a3ll77kc4k6";
@@ -16,7 +12,11 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl groff ];
 
-  configureFlags = [ "--enable-optimized" "--enable-shared" "--disable-static" ];
+  configureFlags = [ "--enable-optimized" "--enable-shared" "--disable-static" ]
+    ++ stdenv.lib.optionals (stdenv.gcc ? clang) [
+      "--with-built-clang=yes"
+      "CXX=clang++"
+    ];
 
   meta = {
     homepage = http://llvm.org/;

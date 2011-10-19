@@ -12,15 +12,16 @@ in
 stdenv.mkDerivation {
   name = "clang-${version}";
 
-  CC = if stdenv.gcc ? clang then "clang" else "gcc";
-
-  CXX = if stdenv.gcc ? clang then "clang++" else "g++";
-
   src = llvm.src;
 
   buildInputs = [ perl llvm groff ];
 
-  configureFlags = [ "--enable-optimized" "--enable-shared" "--disable-static" ];
+  configureFlags = [ "--enable-optimized" "--enable-shared" "--disable-static" ]
+    ++ stdenv.lib.optionals (stdenv.gcc ? clang) [
+      "--with-built-clang=yes"
+      "CXX=clang++"
+    ];
+
   srcClang = fetchurl {
       url = "http://llvm.org/releases/${version}/clang-${version}.tgz";
       sha256 = "1pq9g7qxw761dp6gx3amx39kl9p4zhlymmn8gfmcnw9ag0zizi3h";
