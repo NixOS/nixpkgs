@@ -366,9 +366,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
 
-  aeson = callPackage ../development/libraries/haskell/aeson {};
+  aeson = callPackage ../development/libraries/haskell/aeson {
+    vector = self.vector_0_7_1;
+  };
 
-  aesonNative = callPackage ../development/libraries/haskell/aeson-native {};
+  aesonNative = callPackage ../development/libraries/haskell/aeson-native {
+    vector = self.vector_0_7_1;
+  };
 
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
 
@@ -418,9 +422,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
-  blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
+  blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {
+    vector = self.vector_0_7_1;
+  };
 
-  blazeTextualNative = callPackage ../development/libraries/haskell/blaze-textual-native {};
+  blazeTextualNative = callPackage ../development/libraries/haskell/blaze-textual-native {
+    vector = self.vector_0_7_1;
+  };
 
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
@@ -484,7 +492,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
-  criterion = callPackage ../development/libraries/haskell/criterion {};
+  criterion = callPackage ../development/libraries/haskell/criterion {
+    vector = self.vector_0_7_1;
+  };
 
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
@@ -492,7 +502,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cryptoApi_0_7 = callPackage ../development/libraries/haskell/crypto-api/0.7.nix {};
   cryptoApi = self.cryptoApi_0_6_4;
 
-  cryptocipher = callPackage ../development/libraries/haskell/cryptocipher {};
+  cryptocipher = callPackage ../development/libraries/haskell/cryptocipher {
+     primitive = self.primitive_0_3_1;
+     vector = self.vector_0_7_1;
+  };
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
@@ -581,7 +594,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
-  gamma = callPackage ../development/libraries/haskell/gamma {};
+  gamma = callPackage ../development/libraries/haskell/gamma {
+    vector = self.vector_0_7_1;
+  };
 
   gdiff = callPackage ../development/libraries/haskell/gdiff {};
 
@@ -729,7 +744,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
-  hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
+  hmatrix = callPackage ../development/libraries/haskell/hmatrix {
+    vector = self.vector_0_7_1;
+  };
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
@@ -874,7 +891,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 
-  mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
+  mwcRandom = callPackage ../development/libraries/haskell/mwc-random {
+     primitive = self.primitive_0_3_1;
+     vector = self.vector_0_7_1;
+  };
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
@@ -995,7 +1015,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   random = null; # core package until ghc-7.2.1
   random_newtime = self.random_1_0_0_2_newtime;
 
-  randomFu = callPackage ../development/libraries/haskell/random-fu {};
+  randomFu = callPackage ../development/libraries/haskell/random-fu {
+    vector = self.vector_0_7_1;
+  };
 
   randomSource = callPackage ../development/libraries/haskell/random-source {};
 
@@ -1071,15 +1093,22 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
-  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
+  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {
+    vector = self.vector_0_7_1;
+  };
 
-  snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
+  snapServer = callPackage ../development/libraries/haskell/snap/server.nix {
+    vector = self.vector_0_7_1;
+  };
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
   StateVar = callPackage ../development/libraries/haskell/StateVar {};
 
-  statistics = callPackage ../development/libraries/haskell/statistics {};
+  statistics = callPackage ../development/libraries/haskell/statistics {
+     primitive = self.primitive_0_3_1;
+     vector = self.vector_0_7_1;
+  };
 
   streamproc = callPackage ../development/libraries/haskell/streamproc {};
 
@@ -1198,7 +1227,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   tls = callPackage ../development/libraries/haskell/tls {};
 
-  tlsExtra = callPackage ../development/libraries/haskell/tls-extra {};
+  tlsExtra = callPackage ../development/libraries/haskell/tls-extra {
+    vector = self.vector_0_7_1;
+  };
 
   transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
   transformers = self.transformers_0_2_2_0;
@@ -1245,12 +1276,19 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
   vector = self.vector_0_7_1;
 
-  vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
+  vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {
+     primitive = self.primitive_0_3_1;
+     vector = self.vector_0_7_1;
+  };
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
-  vty_4_6_0_4 = callPackage ../development/libraries/haskell/vty/4.6.0.4.nix {};
-  vty_4_7_0_4 = callPackage ../development/libraries/haskell/vty/4.7.0.4.nix {};
+  # vty_4_6_0_4 = callPackage ../development/libraries/haskell/vty/4.6.0.4.nix {
+  #   vector = self.vector_0_7_1;
+  # };
+  vty_4_7_0_4 = callPackage ../development/libraries/haskell/vty/4.7.0.4.nix {
+    vector = self.vector_0_7_1;
+  };
   vty = self.vty_4_7_0_4;
 
   wai = callPackage ../development/libraries/haskell/wai {};
@@ -1317,7 +1355,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yesodForm = callPackage ../development/libraries/haskell/yesod-form {};
 
-  yesodJson = callPackage ../development/libraries/haskell/yesod-json {};
+  yesodJson = callPackage ../development/libraries/haskell/yesod-json {
+    vector = self.vector_0_7_1;
+  };
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
