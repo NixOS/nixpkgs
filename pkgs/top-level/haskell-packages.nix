@@ -1237,7 +1237,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Vec = callPackage ../development/libraries/haskell/Vec {};
 
-  vector_0_7_1 = callPackage ../development/libraries/haskell/vector/0.7.1.nix {};
+  vector_0_7_1 = callPackage ../development/libraries/haskell/vector/0.7.1.nix {
+    primitive = self.primitive_0_3_1;
+  };
   vector_0_9 = callPackage ../development/libraries/haskell/vector/0.9.nix {
     primitive = self.primitive_0_4_0_1;
   };
