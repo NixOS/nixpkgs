@@ -370,9 +370,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     vector = self.vector_0_7_1;
   };
 
-  aesonNative = callPackage ../development/libraries/haskell/aeson-native {
-    vector = self.vector_0_7_1;
-  };
+  aesonNative = callPackage ../development/libraries/haskell/aeson-native {};
 
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
 
@@ -426,9 +424,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     vector = self.vector_0_7_1;
   };
 
-  blazeTextualNative = callPackage ../development/libraries/haskell/blaze-textual-native {
-    vector = self.vector_0_7_1;
-  };
+  blazeTextualNative = callPackage ../development/libraries/haskell/blaze-textual-native {};
 
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
@@ -502,10 +498,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cryptoApi_0_7 = callPackage ../development/libraries/haskell/crypto-api/0.7.nix {};
   cryptoApi = self.cryptoApi_0_6_4;
 
-  cryptocipher = callPackage ../development/libraries/haskell/cryptocipher {
-    primitive = self.primitive_0_3_1;
-    vector = self.vector_0_7_1;
-  };
+  cryptocipher = callPackage ../development/libraries/haskell/cryptocipher {};
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
@@ -1063,9 +1056,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   regular = callPackage ../development/libraries/haskell/regular {};
 
-  repa = callPackage ../development/libraries/haskell/repa {
-    vector = self.vector_0_9;
-  };
+  repa = callPackage ../development/libraries/haskell/repa {};
 
   repaAlgorithms = callPackage ../development/libraries/haskell/repa-algorithms {};
 
