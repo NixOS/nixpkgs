@@ -1,17 +1,20 @@
-{ stdenv, fetchurl, gcc, flex, perl, libtool, groff
-, buildClang ? false }:
+{ stdenv, fetchurl, perl, groff, buildClang ? false }:
 
 let version = "2.9"; in
 
 stdenv.mkDerivation ({
   name = "llvm-${version}";
 
+  CC = if stdenv.gcc ? clang then "clang" else "gcc";
+
+  CXX = if stdenv.gcc ? clang then "clang++" else "g++";
+
   src = fetchurl {
     url    = "http://llvm.org/releases/${version}/llvm-${version}.tgz";
     sha256 = "0y9pgdakn3n0vf8zs6fjxjw6972nyw4rkfwwza6b8a3ll77kc4k6";
   };
 
-  buildInputs = [ gcc flex perl groff ];
+  buildInputs = [ perl groff ];
 
   configureFlags = [ "--enable-optimized" "--enable-shared" "--disable-static" ];
 
@@ -51,13 +54,13 @@ stdenv.mkDerivation ({
 
     # Set up the header file paths
     preConfigure = ''
-      sed -i -e 's,C_INCLUDE_PATH,"${gcc.libc}/include/",' \
+      sed -i -e 's,C_INCLUDE_PATH,"${stdenv.gcc.libc}/include/",' \
         -e 's,CPP_HOST,"${triplet}",' \
-        -e 's,CPP_INCLUDE_PATH,"${gcc.gcc}/include/c++/${gcc.gcc.version}",' \
+        -e 's,CPP_INCLUDE_PATH,"${stdenv.gcc.gcc}/include/c++/${stdenv.gcc.gcc.version}",' \
         tools/clang/lib/Frontend/InitHeaderSearch.cpp
     '';
 
-    passthru = { gcc = gcc.gcc; };
+    passthru = { gcc = stdenv.gcc.gcc; };
 
     meta = {
       homepage = http://clang.llvm.org/;

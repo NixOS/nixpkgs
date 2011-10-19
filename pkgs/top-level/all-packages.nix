@@ -1640,7 +1640,12 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clang = wrapClang (llvm.override { buildClang = true; });
+  clangBoot = wrapClang (llvm.override { buildClang = true; });
+
+  clang = wrapClang (llvm.override { buildClang = true; stdenv = stdenvAdapters.overrideGCC stdenv clangBoot; });
+
+  #Use this instead of stdenv to build with clang
+  clangStdenv = stdenvAdapters.overrideGCC stdenv clang;
 
   clangSVN = llvmSVN.override {
     buildClang = true;

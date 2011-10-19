@@ -11,6 +11,7 @@ rec {
   # Override the compiler in stdenv for specific packages.
   overrideGCC = stdenv: gcc: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // { NIX_GCC = gcc; });
+      inherit gcc;
     };
 
     
