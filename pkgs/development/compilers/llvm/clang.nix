@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   patches = [ ./clang-include-paths.patch ./clang-ld-flags.patch ./clang-tblgen.patch ./clang-system-llvm-libs.patch ];
 
   buildFlags = [ "TableGen=tblgen" "LLVM_CONFIG=llvm-config" ];
-  # Set up the header file paths
+
   preBuild = ''
     sed -i -e 's,C_INCLUDE_PATH,"${stdenv.gcc.libc}/include/",' \
       -e 's,CPP_HOST,"${triplet}",' \
@@ -48,6 +48,11 @@ stdenv.mkDerivation {
     make
     popd
     cd tools/clang
+  '';
+
+  postInstall = ''
+    install -v -m755 tools/scan-build/scan-build $out/bin
+    install -v -m755 tools/scan-view/scan-view $out/bin
   '';
 
   passthru = { gcc = stdenv.gcc.gcc; };
