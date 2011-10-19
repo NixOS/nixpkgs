@@ -874,6 +874,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
+  NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
+
   neither = callPackage ../development/libraries/haskell/neither {};
 
   network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
