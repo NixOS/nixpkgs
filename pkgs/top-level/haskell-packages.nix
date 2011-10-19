@@ -503,8 +503,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cryptoApi = self.cryptoApi_0_6_4;
 
   cryptocipher = callPackage ../development/libraries/haskell/cryptocipher {
-     primitive = self.primitive_0_3_1;
-     vector = self.vector_0_7_1;
+    primitive = self.primitive_0_3_1;
+    vector = self.vector_0_7_1;
   };
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
@@ -890,8 +890,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 
   mwcRandom = callPackage ../development/libraries/haskell/mwc-random {
-     primitive = self.primitive_0_3_1;
-     vector = self.vector_0_7_1;
+    primitive = self.primitive_0_3_1;
+    vector = self.vector_0_7_1;
   };
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
@@ -1104,8 +1104,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   StateVar = callPackage ../development/libraries/haskell/StateVar {};
 
   statistics = callPackage ../development/libraries/haskell/statistics {
-     primitive = self.primitive_0_3_1;
-     vector = self.vector_0_7_1;
+    primitive = self.primitive_0_3_1;
+    vector = self.vector_0_7_1;
   };
 
   streamproc = callPackage ../development/libraries/haskell/streamproc {};
@@ -1275,8 +1275,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   vector = self.vector_0_9;
 
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {
-     primitive = self.primitive_0_3_1;
-     vector = self.vector_0_7_1;
+    primitive = self.primitive_0_3_1;
+    vector = self.vector_0_7_1;
   };
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
