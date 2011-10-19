@@ -744,9 +744,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
-  hmatrix = callPackage ../development/libraries/haskell/hmatrix {
-    vector = self.vector_0_7_1;
-  };
+  hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
 
