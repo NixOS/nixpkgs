@@ -2411,6 +2411,8 @@ rec {
         # "InstanceId", as required by the Amazon spec.  EC2 tolerates
         # "InstanceId", but Nova doesn't.
         ../development/perl-modules/net-amazon-ec2-nova-compat.patch
+        # Support DescribeInstancesV6.
+        ../development/perl-modules/net-amazon-ec2-ipv6.patch
       ];
     propagatedBuildInputs =
       [ DigestHMAC LWP LWPProtocolHttps Moose URI ParamsValidate XMLSimple ];

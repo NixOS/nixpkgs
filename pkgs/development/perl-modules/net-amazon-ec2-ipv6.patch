@@ -1,0 +1,60 @@
+Support OpenStack's DescribeInstancesV6 API call.
+
+diff -ru -x '*~' Net-Amazon-EC2-0.14-orig2//lib/Net/Amazon/EC2/RunningInstances.pm Net-Amazon-EC2-0.14//lib/Net/Amazon/EC2/RunningInstances.pm
+--- Net-Amazon-EC2-0.14-orig2//lib/Net/Amazon/EC2/RunningInstances.pm	2010-01-24 02:12:50.000000000 +0100
++++ Net-Amazon-EC2-0.14//lib/Net/Amazon/EC2/RunningInstances.pm	2011-06-21 17:19:36.000000000 +0200
+@@ -25,6 +25,10 @@
+ This element remains empty until the instance enters a 
+ running state.
+ 
++=item dns_name_v6 (optional)
++
++The public IPv6 address of the instance.
++
+ =item image_id (required)
+ 
+ The image id of the AMI currently running in this instance.
+@@ -126,6 +130,7 @@
+ 
+ has 'ami_launch_index'  	=> ( is => 'ro', isa => 'Str', required => 0 );
+ has 'dns_name'          	=> ( is => 'ro', isa => 'Maybe[Str]', required => 0 );
++has 'dns_name_v6'          	=> ( is => 'ro', isa => 'Maybe[Str]', required => 0 );
+ has 'image_id'          	=> ( is => 'ro', isa => 'Str', required => 1 );
+ has 'kernel_id'         	=> ( is => 'ro', isa => 'Maybe[Str]', required => 1 );
+ has 'ramdisk_id'        	=> ( is => 'ro', isa => 'Maybe[Str]', required => 1 );
+diff -ru -x '*~' Net-Amazon-EC2-0.14-orig2//lib/Net/Amazon/EC2.pm Net-Amazon-EC2-0.14//lib/Net/Amazon/EC2.pm
+--- Net-Amazon-EC2-0.14-orig2//lib/Net/Amazon/EC2.pm	2011-06-16 16:11:53.000000000 +0200
++++ Net-Amazon-EC2-0.14//lib/Net/Amazon/EC2.pm	2011-10-20 20:13:12.585277245 +0200
+@@ -1542,6 +1542,7 @@
+ 	my $self = shift;
+ 	my %args = validate( @_, {
+ 		InstanceId => { type => SCALAR | ARRAYREF, optional => 1 },
++		Action => { default => "DescribeInstances" },
+ 	});
+ 	
+ 	# If we have a array ref of instances lets split them out into their InstanceId.n format
+@@ -1556,7 +1557,8 @@
+ 		$args{"InstanceId.1"} = delete $args{InstanceId};
+ 	}
+ 	
+-	my $xml = $self->_sign(Action  => 'DescribeInstances', %args);
++	my $xml = $self->_sign(Action => $args{Action}, %args);
++	delete $args{Action};
+ 	my $reservations;
+ 	
+ 	if ( grep { defined && length } $xml->{Errors} ) {
+@@ -1635,6 +1637,7 @@
+ 				my $running_instance = Net::Amazon::EC2::RunningInstances->new(
+ 					ami_launch_index		=> $instance_elem->{amiLaunchIndex},
+ 					dns_name				=> $instance_elem->{dnsName},
++					dns_name_v6			=> $instance_elem->{dnsNameV6},
+ 					image_id				=> $instance_elem->{imageId},
+ 					kernel_id				=> $instance_elem->{kernelId},
+ 					ramdisk_id				=> $instance_elem->{ramdiskId},
+@@ -3866,4 +3869,4 @@
+ 
+ =head1 SEE ALSO
+ 
+-Amazon EC2 API: L<http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/>
+\ No newline at end of file
++Amazon EC2 API: L<http://docs.amazonwebservices.com/AWSEC2/latest/APIReference/>
