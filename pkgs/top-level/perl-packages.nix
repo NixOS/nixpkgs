@@ -2413,7 +2413,7 @@ rec {
         ../development/perl-modules/net-amazon-ec2-nova-compat.patch
       ];
     propagatedBuildInputs =
-      [ DigestHMAC LWP Moose URI ParamsValidate XMLSimple Moose CryptSSLeay ];
+      [ DigestHMAC LWP LWPProtocolHttps Moose URI ParamsValidate XMLSimple ];
     doCheck = false; # wants to create actual EC2 instances (for $$$)
   };
 
