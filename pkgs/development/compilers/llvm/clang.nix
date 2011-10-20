@@ -2,7 +2,7 @@
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 let
-  triplet = if (stdenv.system == "i686-linux") then "i686-unknown-linux-gnu"
+  triplet = if (stdenv.system == "i686-linux") then "i686-pc-linux-gnu"
             else if (stdenv.system == "x86_64-linux") then "x86_64-unknown-linux-gnu"
             else throw "System not supported";
 
