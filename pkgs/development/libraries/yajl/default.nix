@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       C, and a small validating JSON generator.
     '';
     homepage = http://lloyd.github.com/yajl/;
-    license = stdenv.lib.license.isc;
+    license = "ISC";
     platforms = with stdenv.lib.platforms; [ linux darwin ];
     maintainers = with stdenv.lib.maintainers; [
       z77z
