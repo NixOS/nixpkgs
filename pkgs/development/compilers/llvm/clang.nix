@@ -1,13 +1,6 @@
 { stdenv, fetchurl, perl, groff, llvm }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
-let
-  triplet = if (stdenv.system == "i686-linux") then "i686-pc-linux-gnu"
-            else if (stdenv.system == "x86_64-linux") then "x86_64-unknown-linux-gnu"
-            else throw "System not supported";
-
-  version = "2.9";
-in
+let version = "2.9"; in
 
 stdenv.mkDerivation {
   name = "clang-${version}";
@@ -41,7 +34,7 @@ stdenv.mkDerivation {
 
   preBuild = ''
     sed -i -e 's,C_INCLUDE_PATH,"${stdenv.gcc.libc}/include/",' \
-      -e 's,CPP_HOST,"${triplet}",' \
+      -e 's,CPP_HOST,"'$(${stdenv.gcc.gcc}/bin/gcc -dumpmachine)'",' \
       -e 's,CPP_INCLUDE_PATH,"${stdenv.gcc.gcc}/include/c++/${stdenv.gcc.gcc.version}",' \
       tools/clang/lib/Frontend/InitHeaderSearch.cpp
 
@@ -63,6 +56,6 @@ stdenv.mkDerivation {
     description = "A C language family frontend for LLVM";
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric shlevy];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; all;
   };
 }
