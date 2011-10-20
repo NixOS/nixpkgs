@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff }:
+{ stdenv, fetchurl, perl, groff, darwinSwVersUtility }:
 
 let version = "2.9"; in
 
@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "0y9pgdakn3n0vf8zs6fjxjw6972nyw4rkfwwza6b8a3ll77kc4k6";
   };
 
-  buildInputs = [ perl groff ];
+  buildInputs = [ perl groff ] ++
+    stdenv.lib.optional stdenv.isDarwin darwinSwVersUtility;
 
   configureFlags = [ "--enable-optimized" "--enable-shared" "--disable-static" ]
     ++ stdenv.lib.optionals (stdenv.gcc ? clang) [
