@@ -21,11 +21,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "samba-3.6.0";
+  name = "samba-3.6.1";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "0gzm09l75i95iibcxykc2h2m9haqx70jp1bpis1mhmvqwillbhg1";
+    sha256 = "0r6mbghja357xhpada5djg0gpczi50f18ap53hdn8b7y0amz5c65";
   };
 
   buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = ''
     --with-pam
-    --with-cifsmount
     --with-aio-support
     --with-pam_smbpass
     --disable-swat
