@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
     sha256 = "0r6mbghja357xhpada5djg0gpczi50f18ap53hdn8b7y0amz5c65";
   };
 
+  patches =
+    [ # Fix for https://bugzilla.samba.org/show_bug.cgi?id=8541.
+      (fetchurl {
+        url = https://attachments.samba.org/attachment.cgi?id=7018;
+        sha256 = "1fmq0dx7r09pf6gdw1bcigmnx36yb80xcrh7jv0yv9m1w8m3l2w9";
+      })
+    ];
+
   buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]
     ++ stdenv.lib.optional useKerberos kerberos;
 
