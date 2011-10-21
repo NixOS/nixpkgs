@@ -1,5 +1,7 @@
 { stdenv, fetchurl, perl, groff, llvm }:
 
+assert stdenv.isLinux;
+
 let version = "2.9"; in
 
 stdenv.mkDerivation {
