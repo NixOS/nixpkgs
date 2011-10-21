@@ -156,6 +156,8 @@ let pythonPackages = python.modules // rec {
       sha1 = "00a033b0a593c3ca82927867950f73d88b831155";
     };
 
+    patches = [ ../development/python-modules/boto-1.9-python-2.7.patch ];
+
     meta = {
       homepage = http://code.google.com/p/boto/;
 
