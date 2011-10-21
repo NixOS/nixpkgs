@@ -8,15 +8,15 @@
 }:
 
 let
+  version = "1.7.7";
   svn = subversionClient.override { perlBindings = true; };
 in
-
-stdenv.mkDerivation rec {
-  name = "git-1.7.6";
+stdenv.mkDerivation {
+  name = "git-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/software/scm/git/${name}.tar.bz2";
-    sha256 = "778795cece63cd758192378f3a999870cea290181b3a4c9de573c77192561082";
+    url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
+    sha256 = "1xkpyd6mff4m8kmk4vkwi7snr2ff2nmrmsa5hf9bk2a93v07p5ss";
   };
 
   patches = [ ./docbook2texi.patch ];
