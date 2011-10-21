@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, groff, llvm }:
 
-assert stdenv.isLinux;
+assert stdenv.isLinux && stdenv.gcc.gcc != null;
 
 let version = "2.9"; in
 
