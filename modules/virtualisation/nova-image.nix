@@ -13,6 +13,7 @@ with pkgs.lib;
               mkdir $out
               diskImage=$out/image
               ${pkgs.vmTools.kvm}/bin/qemu-img create -f raw $diskImage "4G"
+              mv closure xchg/
             '';
           buildInputs = [ pkgs.utillinux pkgs.perl ];
           exportReferencesGraph =
@@ -38,13 +39,13 @@ with pkgs.lib;
           mount --bind /sys /mnt/sys
 
           # Copy all paths in the closure to the filesystem.
-          storePaths=$(perl ${pkgs.pathsFromGraph} $ORIG_TMPDIR/closure)
+          storePaths=$(perl ${pkgs.pathsFromGraph} /tmp/xchg/closure)
 
           mkdir -p /mnt/nix/store
           ${pkgs.rsync}/bin/rsync -av $storePaths /mnt/nix/store/
 
           # Register the paths in the Nix database.
-          printRegistration=1 perl ${pkgs.pathsFromGraph} $ORIG_TMPDIR/closure | \
+          printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
               chroot /mnt ${config.environment.nix}/bin/nix-store --load-db
 
           # Create the system profile to allow nixos-rebuild to work.
