@@ -3,7 +3,7 @@
 */
 args: with args; with pkgs;
 let
-  inherit (pkgs) stdenv fetchurl subversion;
+  inherit (pkgs) stdenv fetchgit fetchurl subversion;
 in
 rec {
 
@@ -91,8 +91,7 @@ rec {
   };
 
   gitFastExport = import ./fast-export {
-    inherit fetchurl sourceFromHead stdenv mercurial coreutils git makeWrapper
-      subversion;
+    inherit fetchgit stdenv mercurial coreutils git makeWrapper subversion;
   };
 
   git2cl = import ./git2cl {
