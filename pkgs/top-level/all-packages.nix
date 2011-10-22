@@ -1228,6 +1228,8 @@ let
 
   qhull = callPackage ../development/libraries/qhull { };
 
+  qjoypad = callPackage ../tools/misc/qjoypad { };
+
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
   radvd = callPackage ../tools/networking/radvd { };
