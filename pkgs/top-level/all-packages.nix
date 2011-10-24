@@ -5072,6 +5072,8 @@ let
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
 
+  bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
+
   bluez = callPackage ../os-specific/linux/bluez { };
 
   bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
