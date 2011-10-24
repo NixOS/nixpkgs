@@ -436,6 +436,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
 
+  cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};
+
   cairo = callPackage ../development/libraries/haskell/cairo {
     inherit (pkgs) cairo zlib;
     libc = pkgs.stdenv.gcc.libc;
