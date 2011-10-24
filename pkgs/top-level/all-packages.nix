@@ -927,6 +927,8 @@ let
 
   lzop = callPackage ../tools/compression/lzop { };
 
+  mu0 = callPackage ../tools/networking/mu0 { };
+
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
   };
