@@ -33,7 +33,7 @@ assert langVhdl     -> gnat != null;
 
 with stdenv.lib;
 
-let version = "4.4.3";
+let version = "4.4.6";
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
