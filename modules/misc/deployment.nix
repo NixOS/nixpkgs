@@ -83,6 +83,14 @@ with pkgs.lib;
       '';
     };
 
+    deployment.ec2.securityGroup = mkOption {
+      default = "";
+      example = "my-group";
+      description = ''
+        Security group for the instance.
+      '';
+    };
+
     # Ad hoc cloud options.
 
     deployment.adhoc.controller = mkOption {
