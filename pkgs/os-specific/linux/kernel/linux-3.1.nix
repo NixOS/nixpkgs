@@ -200,18 +200,17 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.1-rc8";
+    version = "3.1";
 
-    modDirVersion = "3.1.0-rc8";
+    modDirVersion = "3.1.0";
 
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
     '';
   
     src = fetchurl {
-      url = "https://github.com/torvalds/linux/tarball/v${version}";
-      sha256 = "1sz6snv2wavzasrswaprkjpzpll4247v4br0x2i6sndl2nqa6jz7";
-      name = "v${version}.tar.gz";
+      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
+      sha256 = "0nck9cx66crqhw17y4vc3rfqrcz5269nwn2p5dh0qjvmihvx4wr5";
     };
 
     config = configWithPlatform stdenv.platform;
