@@ -182,7 +182,7 @@ let cfg = config.deployment; in
       
       ami = mkDefault (
         if cfg.ec2.zone == "eu-west-1" && config.nixpkgs.system == "i686-linux" then "ami-c9f2d8bd" else
-        if cfg.ec2.zone == "eu-west-1" && config.nixpkgs.system == "x86_64-linux" then "ami-ecb49e98" else
+        if cfg.ec2.zone == "eu-west-1" && config.nixpkgs.system == "x86_64-linux" then "ami-c34c71b7" else
         if cfg.ec2.zone == "us-east-1" && config.nixpkgs.system == "x86_64-linux" then "ami-d93bf4b0" else
         # !!! Doesn't work, not lazy enough.
         # throw "I don't know an AMI for zone ‘${cfg.ec2.zone}’ and platform type ‘${config.nixpkgs.system}’"
