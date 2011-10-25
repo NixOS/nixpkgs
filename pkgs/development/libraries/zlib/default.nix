@@ -17,6 +17,10 @@ stdenv.mkDerivation (rec {
     fi
   '';
 
+  # As zlib takes part in the stdenv building, we don't want references
+  # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+  NIX_LDFLAGS = "-static-libgcc";
+
   crossAttrs = {
     dontStrip = if static then true else false;
   } // (if stdenv.cross.libc == "msvcrt" then {
