@@ -1,14 +1,12 @@
-{ stdenv, fetchsvn }:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bcm43xx-firmware-610.811";
 
-  # For convenience, get it from the Debian SVN repo.  Upstream seems to be
-  # https://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=tree;f=brcm
-  src = fetchsvn {
-    url = svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/brcm80211/brcm;
-    rev = 17441;
-    sha256 = "0dpc3kwgrslr3i00vx9pvvk2xvcwwf24yrbh6d5gxq9r1q65p8sz";
+  src = fetchurl {
+    url = "https://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=snapshot;h=e62f89cefb4660a16b192c57b446cac975836d05;sf=tgz";
+    sha256 = "a4409c3ed21b5650da9277873e4b05228937ed65526bffd9c93d09cbdf7935b2";
+    name = "brcm-e62f89cefb4660a16b192c57b446cac975836d05.tar.gz";
   };
 
   buildPhase = "true";
