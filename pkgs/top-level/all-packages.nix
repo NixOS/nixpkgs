@@ -5775,6 +5775,8 @@ let
       inherit (gnome) gtkmm libglademm;
     };
 
+    v86d = callPackage ../os-specific/linux/v86d { };
+
     virtualbox = callPackage ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
       inherit (gnome) libIDL;
