@@ -95,6 +95,7 @@ let cfg = config.deployment; in
 
     deployment.ec2.keyPair = mkOption {
       example = "my-keypair";
+      type = types.uniq types.string;
       description = ''
         Name of the SSH key pair to be used to communicate securely
         with the instance.  Key pairs can be created using the
@@ -102,11 +103,13 @@ let cfg = config.deployment; in
       '';
     };
 
-    deployment.ec2.securityGroup = mkOption {
-      default = "";
-      example = "my-group";
+    deployment.ec2.securityGroups = mkOption {
+      default = [ "default" ];
+      example = [ "my-group" "my-other-group" ];
+      type = types.list types.string;
       description = ''
-        Security group for the instance.
+        Security groups for the instance.  These determine the
+        firewall rules applied to the instance.
       '';
     };
 
