@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   # As binutils takes part in the stdenv building, we don't want references
   # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
-  NIX_LDFLAGS = "-static-libgcc";
+  NIX_CFLAGS_COMPILE = "-static-libgcc";
 
   configureFlags = "--disable-werror" # needed for dietlibc build
       + stdenv.lib.optionalString (stdenv.system == "mips64-linux")
