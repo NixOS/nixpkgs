@@ -59,7 +59,7 @@ in
     };
 
     nixpkgs.system = mkOption {
-      default = "";
+      default = pkgs.stdenv.system;
       description = ''
         Specifies the Nix platform type for which NixOS should be built.
         If unset, it defaults to the platform type of your host system

@@ -2,6 +2,8 @@
 
 with pkgs.lib;
 
+let cfg = config.deployment; in
+
 {
   options = {
 
@@ -49,15 +51,31 @@ with pkgs.lib;
     };
 
     deployment.ec2.controller = mkOption {
-      example = https://ec2.eu-west-1.amazonaws.com:443/;
+      example = https://ec2.eu-west-1.amazonaws.com/;
+      type = types.uniq types.string;
       description = ''
         URI of an Amazon EC2-compatible cloud controller web service,
-        used to create and manage virtual machines.
+        used to create and manage virtual machines.  If you're using
+        EC2, it's more convenient to set
+        <option>deployment.ec2.zone</option>.
+      '';
+    };
+
+    deployment.ec2.zone = mkOption {
+      default = "";
+      example = "us-east-1";
+      type = types.uniq types.string;
+      description = ''
+        Amazon EC2 zone in which the instance is to be deployed.  This
+        option only applies when using EC2.  It implicitly sets
+        <option>deployment.ec2.controller</option> and
+        <option>deployment.ec2.ami</option>.
       '';
     };
 
     deployment.ec2.ami = mkOption {
       example = "ami-ecb49e98";
+      type = types.uniq types.string;
       description = ''
         EC2 identifier of the AMI disk image used in the virtual
         machine.  This must be a NixOS image providing SSH access.
@@ -67,6 +85,7 @@ with pkgs.lib;
     deployment.ec2.instanceType = mkOption {
       default = "m1.small";
       example = "m1.large";
+      type = types.uniq types.string;
       description = ''
         EC2 instance type.  See <link
         xlink:href='http://aws.amazon.com/ec2/instance-types/'/> for a
@@ -128,4 +147,25 @@ with pkgs.lib;
     };
 
   };
+
+
+  config = {
+  
+    deployment.ec2 = mkIf (cfg.ec2.zone != "") {
+    
+      controller = mkDefault "https://ec2.${cfg.ec2.zone}.amazonaws.com/";
+      
+      ami = mkDefault (
+        if cfg.ec2.zone == "eu-west-1" && config.nixpkgs.system == "i686-linux" then "ami-c9f2d8bd" else
+        if cfg.ec2.zone == "eu-west-1" && config.nixpkgs.system == "x86_64-linux" then "ami-ecb49e98" else
+        if cfg.ec2.zone == "us-east-1" && config.nixpkgs.system == "x86_64-linux" then "ami-d93bf4b0" else
+        # !!! Doesn't work, not lazy enough.
+        # throw "I don't know an AMI for zone ‘${cfg.ec2.zone}’ and platform type ‘${config.nixpkgs.system}’"
+        "");
+        
+      
+    };
+        
+  };
+  
 }
