@@ -1,20 +1,29 @@
 { stdenv, fetchurl }:
 
+let
+  src1 = fetchurl {
+    url = "https://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=blob_plain;f=brcm/bcm43xx_hdr-0.fw;hb=15888a2eab052ac3d3f49334e4f6f05f347a516e";
+    sha256 = "d02549964d21dd90fc35806483b9fc871d93d7d38ae1a70a9ce006103c2a3de3";
+    name = "bcm43xx_hdr-0.fw";
+  };
+
+  src2 = fetchurl {
+    url = "https://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=blob_plain;f=brcm/bcm43xx-0.fw;hb=15888a2eab052ac3d3f49334e4f6f05f347a516e";
+    sha256 = "f90f685903127e4db431fe1efccefebf77272712bd4bfe46d1d1d5825ee52797";
+    name = "bcm43xx-0.fw";
+  };
+in
 stdenv.mkDerivation {
   name = "bcm43xx-firmware-610.811";
 
-  src = fetchurl {
-    url = "https://git.kernel.org/?p=linux/kernel/git/dwmw2/linux-firmware.git;a=snapshot;h=e62f89cefb4660a16b192c57b446cac975836d05;sf=tgz";
-    sha256 = "a4409c3ed21b5650da9277873e4b05228937ed65526bffd9c93d09cbdf7935b2";
-    name = "brcm-e62f89cefb4660a16b192c57b446cac975836d05.tar.gz";
-  };
+  unpackPhase = "true";
 
   buildPhase = "true";
 
   installPhase = ''
     mkdir -p $out/brcm
-    for i in *.fw*; do
-      cp $i $out/brcm/$(echo $i | sed 's/\(.*\.fw\).*/\1/')
+    for i in ${src1} ${src2}; do
+      cp -v $i $out/brcm/$(echo $i | sed -r -e 's|.*/[a-z0-9]+-||')
     done
   '';
 
