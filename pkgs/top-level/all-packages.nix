@@ -899,6 +899,8 @@ let
 
   most = callPackage ../tools/misc/most { };
 
+  netperf = callPackage ../applications/networking/netperf { };
+
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs = callPackage ../development/web/nodejs {};
