@@ -65,6 +65,7 @@ rec {
         IP_NF_MATCH_ADDRTYPE y
         IP_NF_TARGET_LOG y
         IP_NF_MANGLE y
+        IPV6 m
 
         # Fail to build
         DRM n
