@@ -5737,6 +5737,10 @@ let
       inherit kernel perl;
     };
 
+    klibc = callPackage ../os-specific/linux/klibc {
+      linuxHeaders = glibc.kernelHeaders;
+    };
+
     splashutils =
       if kernel.features ? fbConDecor then pkgs.splashutils else null;
 
