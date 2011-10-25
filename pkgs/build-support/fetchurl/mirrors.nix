@@ -100,6 +100,7 @@ rec {
     http://www.de.kernel.org/pub/
     http://ramses.wh2.tu-dresden.de/pub/mirrors/kernel.org/
     http://linux-kernel.uio.no/pub/
+    http://kernel.osuosl.org/pub/
   ];
 
   # Mirrors of ftp://ftp.kde.org/pub/kde/.
