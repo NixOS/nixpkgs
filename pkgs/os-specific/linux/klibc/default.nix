@@ -3,7 +3,7 @@
 assert stdenv.isLinux;
 
 let
-  version = "1.5.20";
+  version = "1.5.24";
   baseMakeFlags = ["V=1" "prefix=$out" "SHLIBDIR=$out/lib"];
 in
 
@@ -11,11 +11,9 @@ stdenv.mkDerivation {
   name = "klibc-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";
-    sha256 = "07683dn18r3k35d6pp0sn88pqcx7dldqx3m6f2gz45i1j094qp7m";
+    url = "http://ftp.eu.openbsd.org/pub/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";
+    sha256 = "18lm32dlj9k2ky9wwk274zmc3jndgrb41b6qm82g3lza6wlw3yki";
   };
-
-  patches = [ ./make382.patch ];
 
   # Trick to make this build on nix. It expects to have the kernel sources
   # instead of only the linux kernel headers.
