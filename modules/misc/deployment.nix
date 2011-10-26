@@ -60,17 +60,17 @@ let cfg = config.deployment; in
         URI of an Amazon EC2-compatible cloud controller web service,
         used to create and manage virtual machines.  If you're using
         EC2, it's more convenient to set
-        <option>deployment.ec2.zone</option>.
+        <option>deployment.ec2.region</option>.
       '';
     };
 
-    deployment.ec2.zone = mkOption {
+    deployment.ec2.region = mkOption {
       default = "";
       example = "us-east-1";
       type = types.uniq types.string;
       description = ''
-        Amazon EC2 zone in which the instance is to be deployed.  This
-        option only applies when using EC2.  It implicitly sets
+        Amazon EC2 region in which the instance is to be deployed.
+        This option only applies when using EC2.  It implicitly sets
         <option>deployment.ec2.controller</option> and
         <option>deployment.ec2.ami</option>.
       '';
@@ -183,16 +183,16 @@ let cfg = config.deployment; in
 
   config = {
   
-    deployment.ec2 = mkIf (cfg.ec2.zone != "") {
+    deployment.ec2 = mkIf (cfg.ec2.region != "") {
     
-      controller = mkDefault "https://ec2.${cfg.ec2.zone}.amazonaws.com/";
+      controller = mkDefault "https://ec2.${cfg.ec2.region}.amazonaws.com/";
       
       ami = mkDefault (
-        if cfg.ec2.zone == "eu-west-1" && config.nixpkgs.system == "i686-linux" then "ami-c9f2d8bd" else
-        if cfg.ec2.zone == "eu-west-1" && config.nixpkgs.system == "x86_64-linux" then "ami-c34c71b7" else
-        if cfg.ec2.zone == "us-east-1" && config.nixpkgs.system == "x86_64-linux" then "ami-d93bf4b0" else
+        if cfg.ec2.region == "eu-west-1" && config.nixpkgs.system == "i686-linux" then "ami-c9f2d8bd" else
+        if cfg.ec2.region == "eu-west-1" && config.nixpkgs.system == "x86_64-linux" then "ami-c34c71b7" else
+        if cfg.ec2.region == "us-east-1" && config.nixpkgs.system == "x86_64-linux" then "ami-d93bf4b0" else
         # !!! Doesn't work, not lazy enough.
-        # throw "I don't know an AMI for zone ‘${cfg.ec2.zone}’ and platform type ‘${config.nixpkgs.system}’"
+        # throw "I don't know an AMI for region ‘${cfg.ec2.region}’ and platform type ‘${config.nixpkgs.system}’"
         "");
         
     };
