@@ -4,14 +4,14 @@
 }:
 
 let
-  version = "3.20110915";
+  version = "3.20111011";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/g/git-annex/git-annex_${version}.tar.gz";
-    sha256 = "d16c305c82b151ef6ce0c5cfa52a119240b66e02424aefc15a1f67392f976d47";
+    sha256 = "6bfd8ff6784d309bc20aaae38b0edd8f71ed44255b584093a881153d8a70c01c";
   };
 
   buildInputs = [

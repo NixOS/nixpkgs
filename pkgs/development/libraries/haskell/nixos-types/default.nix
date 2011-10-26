@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "nixos-types";
-  version = "1.1";
-  sha256 = "0vnlhq2pjnslq1h9h3lyaxw604s3zdhs7k8hfr35m178rdm3a5az";
+  version = "1.2";
+  sha256 = "140qk6wqq87qfk471cnhrg135fnqv0vfmfxh8kj14ar2kxvzrr8w";
   buildDepends = [ regexPosix ];
   meta = {
     homepage = "http://github.com/haskell4nix/nixos-types";

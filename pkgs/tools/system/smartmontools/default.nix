@@ -1,14 +1,14 @@
 {stdenv, fetchurl}:
 
 let
-  name = "smartmontools-5.41";
+  name = "smartmontools-5.42";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
-    sha256 = "173eb14e3253a30230f38c7e684085bcae7fa021efff58bdf94c2702ac76fa32";
+    sha256 = "b664d11e814e114ce3a32a4fa918c9e649c684e2897c007b2a8b92574decc374";
   };
 
   meta = {

@@ -1,6 +1,6 @@
 diff -ru -x '*~' Net-Amazon-EC2-0.14-orig/lib/Net/Amazon/EC2.pm Net-Amazon-EC2-0.14/lib/Net/Amazon/EC2.pm
 --- Net-Amazon-EC2-0.14-orig/lib/Net/Amazon/EC2.pm	2010-02-02 02:26:58.000000000 +0100
-+++ Net-Amazon-EC2-0.14/lib/Net/Amazon/EC2.pm	2011-06-16 14:18:19.874176129 +0200
++++ Net-Amazon-EC2-0.14/lib/Net/Amazon/EC2.pm	2011-06-16 16:11:53.861341300 +0200
 @@ -1552,6 +1552,8 @@
  			$args{"InstanceId." . $count} = $instance_id;
  			$count++;
@@ -10,3 +10,12 @@ diff -ru -x '*~' Net-Amazon-EC2-0.14-orig/lib/Net/Amazon/EC2.pm Net-Amazon-EC2-0
  	}
  	
  	my $xml = $self->_sign(Action  => 'DescribeInstances', %args);
+@@ -3739,6 +3741,8 @@
+ 			$args{"InstanceId." . $count} = $instance_id;
+ 			$count++;
+ 		}
++	} else {
++		$args{"InstanceId.1"} = delete $args{InstanceId};
+ 	}
+ 	
+ 	my $xml = $self->_sign(Action  => 'TerminateInstances', %args);	

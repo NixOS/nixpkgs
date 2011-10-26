@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "skein";
-  version = "0.1.0.1";
-  sha256 = "1i05ajmnsm0ac9cqnf1lmdaa6sxkirxv5r2h8phpapzvzwislpr8";
+  version = "0.1.0.2";
+  sha256 = "1ay7ri011vwvl74b9calbnav90d0r08gzqgdk8nvw1qx4slk1ibs";
   buildDepends = [ cereal cryptoApi tagged ];
   meta = {
     description = "Skein, a family of cryptographic hash functions. Includes Skein-MAC as well.";

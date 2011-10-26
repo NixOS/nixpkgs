@@ -3,7 +3,7 @@
 */
 args: with args; with pkgs;
 let
-  inherit (pkgs) stdenv fetchurl subversion;
+  inherit (pkgs) stdenv fetchgit fetchurl subversion;
 in
 rec {
 
@@ -48,8 +48,7 @@ rec {
   gitAnnex = lib.makeOverridable (import ./git-annex) {
     inherit stdenv fetchurl libuuid rsync findutils curl perl git ikiwiki which;
     inherit (haskellPackages) ghc MissingH utf8String pcreLight SHA dataenc
-      HTTP testpack monadControl hS3 mtl network hslogger hxt json;
-    QuickCheck2 = haskellPackages.QuickCheck_2_4_0_1;
+      HTTP testpack monadControl hS3 mtl network hslogger hxt json QuickCheck2;
   };
 
   qgit = import ./qgit {
@@ -92,8 +91,7 @@ rec {
   };
 
   gitFastExport = import ./fast-export {
-    inherit fetchurl sourceFromHead stdenv mercurial coreutils git makeWrapper
-      subversion;
+    inherit fetchgit stdenv mercurial coreutils git makeWrapper subversion;
   };
 
   git2cl = import ./git2cl {

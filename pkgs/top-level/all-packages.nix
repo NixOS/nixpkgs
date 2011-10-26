@@ -899,6 +899,8 @@ let
 
   most = callPackage ../tools/misc/most { };
 
+  netperf = callPackage ../applications/networking/netperf { };
+
   ninka = callPackage ../development/tools/misc/ninka { };
 
   nodejs = callPackage ../development/web/nodejs {};
@@ -926,6 +928,8 @@ let
   xz = callPackage ../tools/compression/xz { };
 
   lzop = callPackage ../tools/compression/lzop { };
+
+  mu0 = callPackage ../tools/networking/mu0 { };
 
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
@@ -1227,6 +1231,8 @@ let
   qdu = callPackage ../tools/misc/qdu { };
 
   qhull = callPackage ../development/libraries/qhull { };
+
+  qjoypad = callPackage ../tools/misc/qjoypad { };
 
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
@@ -1636,7 +1642,19 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clang = wrapClang (llvm.override { buildClang = true; });
+  clangBootUnwrapped = callPackage ../development/compilers/llvm/clang.nix { };
+
+  clangBoot = wrapClang clangBootUnwrapped;
+
+  clangUnwrapped = let clangBootStdenv = stdenvAdapters.overrideGCC stdenv clangBoot; in clangBootUnwrapped.override {
+    stdenv = clangBootStdenv;
+    llvm = llvm.override { stdenv = clangBootStdenv; };
+  };
+
+  clang = wrapClang clangUnwrapped;
+
+  #Use this instead of stdenv to build with clang
+  clangStdenv = stdenvAdapters.overrideGCC stdenv clang;
 
   clangSVN = llvmSVN.override {
     buildClang = true;
@@ -1647,10 +1665,7 @@ let
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
   dylan = callPackage ../development/compilers/gwydion-dylan {
-    dylan =
-      import ../development/compilers/gwydion-dylan/binary.nix {
-        inherit fetchurl stdenv;
-  };
+    dylan = callPackage ../development/compilers/gwydion-dylan/binary.nix {  };
   };
 
   ecl = callPackage ../development/compilers/ecl { };
@@ -4870,6 +4885,7 @@ let
 
   dovecot = callPackage ../servers/mail/dovecot { };
   dovecot_1_1_1 = callPackage ../servers/mail/dovecot/1.1.1.nix { };
+  dovecot_2_0 = callPackage ../servers/mail/dovecot/2.0.nix { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd {
     erlang = erlangR13B ;
@@ -5068,6 +5084,8 @@ let
   alsaPluginWrapper = callPackage ../os-specific/linux/alsa-plugins/wrapper.nix { };
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
+
+  bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
   bluez = callPackage ../os-specific/linux/bluez { };
 
@@ -5744,6 +5762,10 @@ let
       inherit kernel perl;
     };
 
+    klibc = callPackage ../os-specific/linux/klibc {
+      linuxHeaders = glibc.kernelHeaders;
+    };
+
     splashutils =
       if kernel.features ? fbConDecor then pkgs.splashutils else null;
 
@@ -5777,6 +5799,8 @@ let
       linux = kernel;
       inherit (gnome) gtkmm libglademm;
     };
+
+    v86d = callPackage ../os-specific/linux/v86d { };
 
     virtualbox = callPackage ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
@@ -5965,6 +5989,8 @@ let
   radeonR700 = callPackage ../os-specific/linux/firmware/radeon-r700 { };
   radeonR600 = callPackage ../os-specific/linux/firmware/radeon-r600 { };
   radeonJuniper = callPackage ../os-specific/linux/firmware/radeon-juniper { };
+
+  regionset = callPackage ../os-specific/linux/regionset { };
 
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
@@ -7036,7 +7062,11 @@ let
 
   mercurial = callPackage ../applications/version-management/mercurial {
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
-    inherit (pythonPackages) ssl;
+    inherit (pythonPackages) ssl curses;
+    # when used with hg-fast-export (git) mercurials files are using
+    # httplib.FakeSocket which is not provided after python 2.6.  (httplib2
+    # has removed it from its interface).
+    python = python27;
   };
 
   merkaartor = callPackage ../applications/misc/merkaartor { };
@@ -7687,6 +7717,8 @@ let
   };
 
   ### GAMES
+
+  alienarena = callPackage ../games/alienarena { };
 
   asc = callPackage ../games/asc {
     lua = lua5;

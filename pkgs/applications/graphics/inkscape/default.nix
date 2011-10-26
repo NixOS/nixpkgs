@@ -4,14 +4,14 @@
 , gsl, python, pyxml, lxml, poppler }:
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.48.1";
+  name = "inkscape-0.48.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/inkscape/${name}.tar.bz2";
-    sha256 = "11mvwil787pj3kx3qvjqvd6z5hlk40i6g95g4vs52hrp2ifs9ga4";
+    sha256 = "10v7ixdz7f8vgk2wv0m81zli9p0f446cm1f4aqlvni1ndsx44fi2";
   };
 
-  patches = [ ./configure-python-libs.patch ]; 
+  patches = [ ./configure-python-libs.patch ];
 
   propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from

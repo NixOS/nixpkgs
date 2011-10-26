@@ -2116,13 +2116,14 @@ rec {
   };
 
   LWP = buildPerlPackage rec {
-    name = "libwww-perl-6.02";
+    name = "libwww-perl-6.03";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/LWP/${name}.tar.gz";
-      sha256 = "0cn2cbrz5mrpqmnfhhk0bgv0c1q1x722xlnlnzw6zymj5sg3w6dm";
+      sha256 = "1zlnz4ylk1y0rw56vlf9knawwjx72b1gm09yp06ccpgmmndif4dg";
     };
     propagatedBuildInputs =
       [ EncodeLocale FileListing HTMLParser HTTPCookies HTTPMessage LWPMediaTypes URI NetHTTP ];
+    doCheck = false; # tries to start a daemon
   };
 
   LWPMediaTypes = buildPerlPackage rec {
@@ -2411,9 +2412,11 @@ rec {
         # "InstanceId", as required by the Amazon spec.  EC2 tolerates
         # "InstanceId", but Nova doesn't.
         ../development/perl-modules/net-amazon-ec2-nova-compat.patch
+        # Support DescribeInstancesV6.
+        ../development/perl-modules/net-amazon-ec2-ipv6.patch
       ];
     propagatedBuildInputs =
-      [ DigestHMAC LWP Moose URI ParamsValidate XMLSimple Moose CryptSSLeay ];
+      [ DigestHMAC LWP LWPProtocolHttps Moose URI ParamsValidate XMLSimple ];
     doCheck = false; # wants to create actual EC2 instances (for $$$)
   };
 

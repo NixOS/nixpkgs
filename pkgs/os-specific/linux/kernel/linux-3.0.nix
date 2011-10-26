@@ -77,8 +77,9 @@ let
       FB_GEODE y
 
       # Video configuration
-      # The intel drivers already require KMS
+      # Enable KMS for devices whose X.org driver supports it.
       DRM_I915_KMS y
+      DRM_RADEON_KMS y
       # Hybrid graphics support
       VGA_SWITCHEROO y
 
@@ -192,6 +193,10 @@ let
       CGROUP_MEM_RES_CTLR_SWAP? y
       DEVPTS_MULTIPLE_INSTANCES? y
 
+      # Enable staging drivers.  These are somewhat experimental, but
+      # they generally don't hurt.
+      STAGING y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -200,7 +205,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.0.4";
+    version = "3.0.8";
   
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
@@ -208,7 +213,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
-      sha256 = "1vypjcdii75h5f4zsw9lm8wzxd5ix0mk5p94c96hxv828mqqkmhk";
+      sha256 = "1p9sacxz430rmq5zj8pch2i0dczi5jna5g8xf4gni3w436invlaf";
     };
 
     config = configWithPlatform stdenv.platform;

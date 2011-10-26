@@ -156,6 +156,8 @@ let pythonPackages = python.modules // rec {
       sha1 = "00a033b0a593c3ca82927867950f73d88b831155";
     };
 
+    patches = [ ../development/python-modules/boto-1.9-python-2.7.patch ];
+
     meta = {
       homepage = http://code.google.com/p/boto/;
 
@@ -1358,6 +1360,17 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  ldap = buildPythonPackage rec {
+    name = "python-ldap-2.4.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
+      sha256 = "17aysa9b4zjw00ikjirf4m37xbp2ifj1g0zjs14xzqqib3nh1yw8";
+    };
+
+    NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
+    propagatedBuildInputs = [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
+  };
 
   pylint = buildPythonPackage rec {
     name = "pylint-0.23.0";
