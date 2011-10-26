@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ConfigFile";
-  version = "1.1.0";
-  sha256 = "0m5p56if711qi69lxw78746sb0jr5gqbmip5hdbb7lk4z5drgvhc";
+  version = "1.1.1";
+  sha256 = "0w2yhbnqldhmj3d98j720l4lj4d08abqcff751p2slszdm5pw1jm";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ MissingH mtl parsec ];
