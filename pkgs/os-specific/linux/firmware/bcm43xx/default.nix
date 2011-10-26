@@ -22,9 +22,8 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/brcm
-    for i in ${src1} ${src2}; do
-      cp -v $i $out/brcm/$(echo $i | sed -r -e 's|.*/[a-z0-9]+-||')
-    done
+    cp ${src1} $out/brcm/${src1.name}
+    cp ${src2} $out/brcm/${src2.name}
   '';
 
   meta = {
