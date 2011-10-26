@@ -1,6 +1,8 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
-, selinuxSupport? false, libselinux ? null, libsepol ? null }:
+, selinuxSupport? false, libselinux ? null, libsepol ? null
+, xz
+}:
 
 assert aclSupport -> acl != null;
 assert selinuxSupport -> ( (libselinux != null) && (libsepol != null) );
@@ -13,7 +15,7 @@ stdenv.mkDerivation (rec {
     sha256 = "0bdh31fvd0ng2sqrrbz0a4yy084hmj76pbljksqyv4ljq4bhh4hd";
   };
 
-  buildNativeInputs = [ perl ];
+  buildNativeInputs = [ perl xz ];
   buildInputs = [ gmp ]
     ++ stdenv.lib.optional aclSupport acl
     ++ stdenv.lib.optional selinuxSupport libselinux
