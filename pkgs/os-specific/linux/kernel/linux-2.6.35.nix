@@ -181,6 +181,9 @@ let
       X86_CHECK_BIOS_CORRUPTION y
       X86_MCE y
 
+      # Allow up to 128 GiB of RAM in Xen domains.
+      XEN_MAX_DOMAIN_MEMORY 128
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
