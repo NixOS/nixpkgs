@@ -10,6 +10,7 @@ let cfg = config.deployment; in
     deployment.targetEnv = mkOption {
       default = "none";
       example = "ec2";
+      type = types.uniq types.string;
       description = ''
         This option specifies the type of the environment in which the
         machine is to be deployed by
@@ -31,6 +32,7 @@ let cfg = config.deployment; in
 
     deployment.targetHost = mkOption {
       default = config.networking.hostName;
+      type = types.uniq types.string;
       description = ''
         This option specifies a hostname or IP address which can be
         used by <command>nixos-deploy-network</command> to execute
@@ -43,6 +45,7 @@ let cfg = config.deployment; in
     deployment.ec2.type = mkOption {
       default = "ec2";
       example = "nova";
+      type = types.uniq types.string;
       description = ''
         Specifies the type of cloud.  This affects the machine
         configuration.  Current values are <literal>"ec2"</literal>
@@ -117,6 +120,7 @@ let cfg = config.deployment; in
 
     deployment.adhoc.controller = mkOption {
       example = "cloud.example.org";
+      type = types.uniq types.string;
       description = ''
         Hostname or IP addres of the machine to which
         <command>nixos-deploy-network</command> should connect (via
@@ -126,6 +130,7 @@ let cfg = config.deployment; in
 
     deployment.adhoc.createVMCommand = mkOption {
       default = "create-vm";
+      type = types.uniq types.string;
       description = ''
         Remote command to create a NixOS virtual machine.  It should
         print an identifier denoting the VM on standard output.
@@ -134,6 +139,7 @@ let cfg = config.deployment; in
 
     deployment.adhoc.destroyVMCommand = mkOption {
       default = "destroy-vm";
+      type = types.uniq types.string;
       description = ''
         Remote command to destroy a previously created NixOS virtual
         machine.
@@ -142,6 +148,7 @@ let cfg = config.deployment; in
 
     deployment.adhoc.queryVMCommand = mkOption {
       default = "query-vm";
+      type = types.uniq types.string;
       description = ''
         Remote command to query information about a previously created
         NixOS virtual machine.  It should print the IPv6 address of
