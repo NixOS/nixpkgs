@@ -46,11 +46,6 @@ stdenv.mkDerivation {
     cd tools/clang
   '';
 
-  postInstall = ''
-    install -v -m755 tools/scan-build/scan-build $out/bin
-    install -v -m755 tools/scan-view/scan-view $out/bin
-  '';
-
   passthru = { gcc = stdenv.gcc.gcc; };
 
   meta = {
