@@ -1,9 +1,9 @@
-{stdenv, fetchurl, openssl, pam}:
+{stdenv, fetchurl, openssl, pam, bzip2, zlib}:
 
 stdenv.mkDerivation {
   name = "dovecot-2.0.15";
 
-  buildInputs = [openssl pam];
+  buildInputs = [openssl pam bzip2 zlib];
 
   src = fetchurl {
     url = http://dovecot.org/releases/2.0/dovecot-2.0.15.tar.gz;
