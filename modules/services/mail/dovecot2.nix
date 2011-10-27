@@ -36,13 +36,15 @@ let
         user = root
       }
       userdb {
-        driver=passwd
+        driver = passwd
       }
       passdb {
-        driver=pam
+        driver = pam
+        args = dovecot2
       }
-      auth_debug = yes
-      auth_verbose = yes
+      #auth_debug = yes
+      #auth_verbose = yes
+      #debug_log_path = /tmp/dovecot2debug.log
 
       pop3_uidl_format = %08Xv%08Xu
 
@@ -133,6 +135,8 @@ in
 
         exec = "${pkgs.dovecot_2_0}/sbin/dovecot -F -c ${confFile}";
       };
+
+    environment.systemPackages = [ pkgs.dovecot_2_0 ];
 
   };
 
