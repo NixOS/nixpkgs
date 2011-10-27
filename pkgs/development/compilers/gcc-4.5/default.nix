@@ -204,7 +204,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optional (boehmgc != null) boehmgc)
     ++ (optionals langJava [zip unzip])
-    ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
+    ++ (optionals javaAwtGtk ([gtk pkgconfig libart_lgpl] ++ xlibs))
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
