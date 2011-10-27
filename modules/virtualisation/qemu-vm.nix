@@ -240,7 +240,7 @@ in
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
   boot.initrd.availableKernelModules =
-    [ "cifs" "nls_utf8" "hmac" "md4" ]
+    [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" ]
     ++ optional cfg.writableStore [ "aufs" ];
 
   boot.extraModulePackages =
