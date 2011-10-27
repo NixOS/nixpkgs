@@ -50,7 +50,10 @@ let
     buildCommand =
       ''
         echo "$config" > $out
-        cat ${kdebase_workspace}/share/config/kdm/kdmrc >> $out
+
+        # The default kdmrc would add "-nolisten tcp", and we already
+        # have that managed by nixos. Hence the grep.
+        cat ${kdebase_workspace}/share/config/kdm/kdmrc | grep -v nolisten >> $out
       '';
   };
 
