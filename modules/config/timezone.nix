@@ -1,10 +1,11 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
-let
+with pkgs.lib;
 
+{
   options = {
 
-    time.timeZone = pkgs.lib.mkOption {
+    time.timeZone = mkOption {
       default = "CET";
       example = "America/New_York";
       description = "The time zone used when displaying times and dates.";
@@ -12,14 +13,19 @@ let
 
   };
 
-in
+  config = {
 
-{
-  require = [options];
+    environment.shellInit =
+      ''
+        export TZ=${config.time.timeZone}
+        export TZDIR=${pkgs.glibc}/share/zoneinfo
+      '';
 
-  environment.shellInit =
-    ''
-      export TZ=${config.time.timeZone}
-      export TZDIR=${pkgs.glibc}/share/zoneinfo
-    '';
+    environment.etc = singleton
+      { source = "${pkgs.glibc}/share/zoneinfo/${config.time.timeZone}";
+        target = "localtime";
+      };
+      
+  };
+  
 }
