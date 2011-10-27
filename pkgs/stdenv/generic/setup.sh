@@ -453,8 +453,8 @@ unpackFile() {
 
     case "$curSrc" in
         *.tar | *.tar.* | *.tgz | *.tbz2)
-	    # GNU tar can automatically select the decompression method
-	    # (info "(tar) gzip").
+            # GNU tar can automatically select the decompression method
+            # (info "(tar) gzip").
             tar xvf $curSrc
             ;;
         *.zip)
@@ -834,9 +834,11 @@ genericBuild() {
         if test "$curPhase" = installPhase -a -n "$dontInstall"; then continue; fi
         if test "$curPhase" = fixupPhase -a -n "$dontFixup"; then continue; fi
         if test "$curPhase" = distPhase -a -z "$doDist"; then continue; fi
-        
-	echo
-	echo "@ phase-started $out $curPhase"
+
+        if [ -n "$tracePhases" ]; then
+            echo
+            echo "@ phase-started $out $curPhase"
+        fi
 
         showPhaseHeader "$curPhase"
         dumpVars
@@ -849,8 +851,10 @@ genericBuild() {
             cd "${sourceRoot:-.}"
         fi
         
-	echo
-	echo "@ phase-succeeded $out $curPhase"
+        if [ -n "$tracePhases" ]; then
+            echo
+            echo "@ phase-succeeded $out $curPhase"
+        fi
 
         stopNest
     done
