@@ -2559,11 +2559,11 @@ let
   # mercurial (hg) bleeding edge version
   octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
 
-  perl58 = callPackage ../development/interpreters/perl-5.8 {
+  perl58 = callPackage ../development/interpreters/perl/5.8 {
     impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
 
-  perl510 = callPackage ../development/interpreters/perl-5.10 {
+  perl510 = callPackage ../development/interpreters/perl/5.10 {
     fetchurl = fetchurlBoot;
   };
 
