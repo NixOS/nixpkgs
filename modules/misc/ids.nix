@@ -64,6 +64,8 @@ in
     fourStoreEndpoint = 43;
     virtuoso = 44;
     rtkit = 45;
+    dovecot2 = 46;
+    dovenull2 = 47;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -110,6 +112,7 @@ in
     fourStore = 42;
     fourStoreEndpoint = 43;
     virtuoso = 44;
+    dovecot2 = 45;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
