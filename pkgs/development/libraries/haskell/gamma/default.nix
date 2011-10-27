@@ -5,6 +5,9 @@ cabal.mkDerivation (self: {
   version = "0.7.0.1";
   sha256 = "0728b5mrzmj9hkaqvikl45jyi2p9hnkl2p6l9yv7wnw557yb0gb2";
   buildDepends = [ continuedFractions converge vector ];
+  preConfigure = ''
+    sed -i 's|\(vector.*\) && < 0.8|\1|' ${self.pname}.cabal
+  '';
   meta = {
     homepage = "https://github.com/mokus0/gamma";
     description = "Gamma function and related functions";
