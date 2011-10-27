@@ -90,6 +90,7 @@ stdenv.mkDerivation ({
   configureFlags = [
     "-C"
     "--enable-add-ons"
+    "--sysconfdir=/etc"
     "--localedir=/var/run/current-system/sw/lib/locale"
     (if kernelHeaders != null
      then "--with-headers=${kernelHeaders}/include"
@@ -111,6 +112,8 @@ stdenv.mkDerivation ({
     # so the glibc does not depend on its compiler store path
     "libc_cv_as_needed=no"
   ];
+
+  installFlags = [ "sysconfdir=$(out)/etc" ];
   
   buildInputs = stdenv.lib.optionals (cross != null) [ gccCross ]
     ++ stdenv.lib.optional (mig != null) mig;
