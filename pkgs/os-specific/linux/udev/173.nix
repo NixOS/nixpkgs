@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
       rm -frv $out/share/gtk-doc
     '';
 
-  patches = [ ./custom-rules.patch ];
+  patches = [ ./custom-rules.patch ] ++
+    stdenv.lib.optional (stdenv.system == "armv5tel-linux") ./pre-accept4-kernel.patch;
 
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html;

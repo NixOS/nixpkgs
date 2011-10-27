@@ -1,0 +1,43 @@
+From:
+https://github.com/archlinuxarm/PKGBUILDs/blob/master/core/udev-oxnas/pre-accept4-kernel.patch
+
+diff -urN a/udev/udev-ctrl.c b/udev/udev-ctrl.c
+--- a/udev/udev-ctrl.c	2011-10-09 17:10:32.000000000 -0600
++++ b/udev/udev-ctrl.c	2011-10-25 15:11:09.000000000 -0600
+@@ -15,6 +15,7 @@
+ #include <stddef.h>
+ #include <string.h>
+ #include <unistd.h>
++#include <fcntl.h>
+ #include <sys/types.h>
+ #include <sys/poll.h>
+ #include <sys/socket.h>
+@@ -182,6 +183,7 @@
+ 	struct ucred ucred;
+ 	socklen_t slen;
+ 	const int on = 1;
++	int flgs;
+ 
+ 	conn = calloc(1, sizeof(struct udev_ctrl_connection));
+ 	if (conn == NULL)
+@@ -189,13 +191,19 @@
+ 	conn->refcount = 1;
+ 	conn->uctrl = uctrl;
+ 
+-	conn->sock = accept4(uctrl->sock, NULL, NULL, SOCK_CLOEXEC|SOCK_NONBLOCK);
++//	conn->sock = accept4(uctrl->sock, NULL, NULL, SOCK_CLOEXEC|SOCK_NONBLOCK);
++	conn->sock = accept(uctrl->sock, NULL, NULL);
+ 	if (conn->sock < 0) {
+ 		if (errno != EINTR)
+ 			err(uctrl->udev, "unable to receive ctrl connection: %m\n");
+ 		goto err;
+ 	}
+ 
++// Since we don't have accept4
++	flgs = fcntl(conn->sock, F_GETFL, NULL);
++	if(flgs >= 0) fcntl(conn->sock, F_SETFL, flgs | O_NONBLOCK);
++	fcntl(conn->sock, F_SETFD, FD_CLOEXEC);
++
+ 	/* check peer credential of connection */
+ 	slen = sizeof(ucred);
+ 	if (getsockopt(conn->sock, SOL_SOCKET, SO_PEERCRED, &ucred, &slen) < 0) {
