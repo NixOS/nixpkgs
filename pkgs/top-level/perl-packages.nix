@@ -954,6 +954,14 @@ rec {
     propagatedBuildInputs = [TestException ClassAccessorChained];
   };
 
+  DataUUID = buildPerlPackage rec {
+    name = "Data-UUID-1.217";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Data/${name}.tar.gz";
+      sha256 = "0vgykclw1mn06a53d8y3g7s7vanks8078dh2j4jb84djk0cw9h0q";
+    };
+  };
+
   DataVisitor = buildPerlPackage rec {
     name = "Data-Visitor-0.25";
     src = fetchurl {
