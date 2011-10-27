@@ -2563,15 +2563,13 @@ let
     impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
 
-  perl510 = callPackage ../development/interpreters/perl/5.10 {
-    fetchurl = fetchurlBoot;
-  };
+  perl510 = callPackage ../development/interpreters/perl/5.10 { };
 
   perl514 = callPackage ../development/interpreters/perl/5.14 {
     fetchurl = fetchurlBoot;
   };
 
-  perl = if system != "i686-cygwin" then perl510 else sysPerl;
+  perl = if system != "i686-cygwin" then perl514 else sysPerl;
 
   php = php5_3;
 
