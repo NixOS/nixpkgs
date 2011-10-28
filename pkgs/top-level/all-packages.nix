@@ -8009,7 +8009,7 @@ let
 
   };
 
-  kde4 = recurseIntoAttrs pkgs.kde45;
+  kde4 = recurseIntoAttrs pkgs.kde47;
 
   # TODO: merge with branches/drop-kde4.5 if you want to remove KDE SC 4.5
   # This branch removes kde45 and quite a few compatibility hacks
