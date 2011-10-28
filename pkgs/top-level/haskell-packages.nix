@@ -905,8 +905,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {};
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {};
-  OpenGL_2_4_0_1 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.1.nix {};
-  OpenGL24 = self.OpenGL_2_4_0_1;
+  OpenGL_2_4_0_2 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.2.nix {};
+  OpenGL24 = self.OpenGL_2_4_0_2;
   OpenGL = self.OpenGL_2_2_1_1;
 
   OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
