@@ -1170,9 +1170,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   testpack = callPackage ../development/libraries/haskell/testpack {};
 
-  texmath_0_4 = callPackage ../development/libraries/haskell/texmath/0.4.nix {};
-  texmath_0_5_0_1 = callPackage ../development/libraries/haskell/texmath/0.5.0.1.nix {};
-  texmath = self.texmath_0_5_0_1;
+  texmath = callPackage ../development/libraries/haskell/texmath {};
 
   text_0_11_0_5 = callPackage ../development/libraries/haskell/text/0.11.0.5.nix {};
   text_0_11_0_6 = callPackage ../development/libraries/haskell/text/0.11.0.6.nix {};
