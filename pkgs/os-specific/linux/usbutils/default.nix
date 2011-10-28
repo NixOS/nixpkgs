@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   name = "usbutils-0.86";
   
   src = fetchurl {
-    url = "mirror://sourceforge/linux-usb/${name}.tar.gz";
+    url = "mirror://kernel/linux/utils/usb/usbutils/${name}.tar.gz";
     sha256 = "1x0jkiwrgdb8qwy21iwhxpc8k61apxqp1901h866d1ydsakbxcmk";
   };
   
