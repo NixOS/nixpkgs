@@ -4,12 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "GLUT";
-  version = "2.2.2.0";
-  sha256 = "0hilpjwkjvpz4sz0zqa36vmx8m1yycjnqdd721mqns7lib2fnzrx";
+  version = "2.2.2.1";
+  sha256 = "09qpkrwpc3w173mvqwda7vi0ncpzzzrnlfa14ja7jba489a8l1mw";
   buildDepends = [ OpenGL StateVar Tensor ];
   extraLibraries = [ freeglut libICE libSM libXi libXmu mesa ];
   meta = {
-    homepage = "http://www.haskell.org/HOpenGL/";
+    homepage = "http://www.haskell.org/haskellwiki/Opengl";
     description = "A binding for the OpenGL Utility Toolkit";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

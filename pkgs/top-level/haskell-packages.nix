@@ -623,10 +623,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {};
   GLUT_2_1_2_1 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {};
-  GLUT_2_2_2_0 = callPackage ../development/libraries/haskell/GLUT/2.2.2.0.nix {
-    OpenGL = self.OpenGL_2_4_0_1;
+  GLUT_2_2_2_1 = callPackage ../development/libraries/haskell/GLUT/2.2.2.1.nix {
+    OpenGL = self.OpenGL_2_4_0_2;
   };
-  GLUT22 = self.GLUT_2_2_2_0;
+  GLUT22 = self.GLUT_2_2_2_1;
   GLUT = self.GLUT_2_1_1_2;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
