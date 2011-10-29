@@ -76,7 +76,7 @@ in
             ln -sfn "$(readlink -f "$systemConfig")" /var/run/current-system
 
             # Prevent the current configuration from being garbage-collected.
-            ln -sfn /var/run/current-system /nix/var/nix/gcroots/current-system
+            ln -sfn /var/run/current-system ${config.nixpkgs.config.nix.stateDir}/nix/gcroots/current-system
           '';
       };
 

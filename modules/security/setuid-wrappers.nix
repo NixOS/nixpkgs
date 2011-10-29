@@ -100,7 +100,7 @@ in
             if test -z "$source"; then
                 # If we can't find the program, fall back to the
                 # system profile.
-                source=/nix/var/nix/profiles/default/bin/${program}
+                source=${config.nixpkgs.config.nix.stateDir}/nix/profiles/default/bin/${program}
             fi
 
             cp ${setuidWrapper}/bin/setuid-wrapper ${wrapperDir}/${program}

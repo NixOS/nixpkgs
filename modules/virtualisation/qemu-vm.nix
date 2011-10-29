@@ -222,7 +222,7 @@ let
 
           # Install GRUB and generate the GRUB boot menu.
           touch /etc/NIXOS
-          mkdir -p /nix/var/nix/profiles
+          mkdir -p ${config.nixpkgs.config.nix.stateDir}/nix/profiles
           ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
           umount /boot
@@ -276,11 +276,11 @@ in
       chmod 1777 $targetRoot/tmp
 
       mkdir -p $targetRoot/boot
-      mount -o remount,ro $targetRoot/nix/store
+      mount -o remount,ro $targetRoot${config.nixpkgs.config.nix.storeDir}
       ${optionalString cfg.writableStore ''
         mkdir /mnt-store-tmpfs
         mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
-        mount -t aufs -o dirs=/mnt-store-tmpfs=rw:$targetRoot/nix/store=rr none $targetRoot/nix/store
+        mount -t aufs -o dirs=/mnt-store-tmpfs=rw:$targetRoot${config.nixpkgs.config.nix.storeDir}=rr none $targetRoot${config.nixpkgs.config.nix.storeDir}
       ''}
     '';
 
@@ -314,7 +314,7 @@ in
     [ { mountPoint = "/";
         device = "/dev/vda";
       }
-      { mountPoint = "/nix/store";
+      { mountPoint = "${config.nixpkgs.config.nix.storeDir}";
         device = "//10.0.2.4/store";
         fsType = "cifs";
         options = "guest,sec=none,noperm,noacl";

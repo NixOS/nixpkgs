@@ -133,7 +133,7 @@ in
 
           Additionally you can specify the up/ down scripts by setting
           the up down properties.
-          Config lines up=/nix/store/xxx-up-script down=...
+          Config lines up=${config.nixpkgs.config.nix.storeDir}/xxx-up-script down=...
           will be appended to your configuration file automatically
 
           If you define at least one of up/down "script-security 2" will be

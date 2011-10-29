@@ -22,8 +22,8 @@ let
       ''
         if [ "$rollback" != "$succeeded" ]
 	then
-	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --rollback
-	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p ${config.nixpkgs.config.nix.stateDir}/nix/profiles/system --rollback
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} ${config.nixpkgs.config.nix.stateDir}/nix/profiles/system/bin/switch-to-configuration switch
 
 	    rollback=$((rollback + 1))
 	fi
@@ -50,12 +50,12 @@ let
       in
       ''
         echo "=== activating system configuration on ${getAttr targetProperty (config.deployment)} ==="
-	ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel} ||
-	  (ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --rollback; rollbackSucceeded)
+	ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p ${config.nixpkgs.config.nix.stateDir}/nix/profiles/system --set ${config.system.build.toplevel} ||
+	  (ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p ${config.nixpkgs.config.nix.stateDir}/nix/profiles/system --rollback; rollbackSucceeded)
 
-        ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} /nix/var/nix/profiles/system/bin/switch-to-configuration switch ||
-	  ( ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p /nix/var/nix/profiles/system --rollback
-	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} /nix/var/nix/profiles/system/bin/switch-to-configuration switch
+        ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} ${config.nixpkgs.config.nix.stateDir}/nix/profiles/system/bin/switch-to-configuration switch ||
+	  ( ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} nix-env -p ${config.nixpkgs.config.nix.stateDir}/nix/profiles/system --rollback
+	    ssh $NIX_SSHOPTS ${getAttr targetProperty (config.deployment)} ${config.nixpkgs.config.nix.stateDir}/nix/profiles/system/bin/switch-to-configuration switch
 	    rollbackSucceeded
 	  )
 

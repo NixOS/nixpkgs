@@ -308,26 +308,26 @@ in
         # Set up Nix.
         mkdir -p /nix/etc/nix
         ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
-        chown root.nixbld /nix/store
-        chmod 1775 /nix/store
+        chown root.nixbld ${config.nixpkgs.config.nix.storeDir}
+        chmod 1775 ${config.nixpkgs.config.nix.storeDir}
 
         # Nix initialisation.
         mkdir -m 0755 -p \
-          /nix/var/nix/gcroots \
-          /nix/var/nix/temproots \
-          /nix/var/nix/manifests \
-          /nix/var/nix/userpool \
-          /nix/var/nix/profiles \
-          /nix/var/nix/db \
-          /nix/var/log/nix/drvs \
-          /nix/var/nix/channel-cache \
-          /nix/var/nix/chroots
-        mkdir -m 1777 -p /nix/var/nix/gcroots/per-user
-        mkdir -m 1777 -p /nix/var/nix/profiles/per-user
-        mkdir -m 1777 -p /nix/var/nix/gcroots/tmp
+          ${config.nixpkgs.config.nix.stateDir}/nix/gcroots \
+          ${config.nixpkgs.config.nix.stateDir}/nix/temproots \
+          ${config.nixpkgs.config.nix.stateDir}/nix/manifests \
+          ${config.nixpkgs.config.nix.stateDir}/nix/userpool \
+          ${config.nixpkgs.config.nix.stateDir}/nix/profiles \
+          ${config.nixpkgs.config.nix.stateDir}/nix/db \
+          ${config.nixpkgs.config.nix.stateDir}/log/nix/drvs \
+          ${config.nixpkgs.config.nix.stateDir}/nix/channel-cache \
+          ${config.nixpkgs.config.nix.stateDir}/nix/chroots
+        mkdir -m 1777 -p ${config.nixpkgs.config.nix.stateDir}/nix/gcroots/per-user
+        mkdir -m 1777 -p ${config.nixpkgs.config.nix.stateDir}/nix/profiles/per-user
+        mkdir -m 1777 -p ${config.nixpkgs.config.nix.stateDir}/nix/gcroots/tmp
 
-        ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
-        ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/
+        ln -sf ${config.nixpkgs.config.nix.stateDir}/nix/profiles ${config.nixpkgs.config.nix.stateDir}/nix/gcroots/
+        ln -sf ${config.nixpkgs.config.nix.stateDir}/nix/manifests ${config.nixpkgs.config.nix.stateDir}/nix/gcroots/
       '';
 
   };

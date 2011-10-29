@@ -78,7 +78,7 @@ in
           If non-null, override the default login shell with the
           specified value.
         '';
-        example = "/nix/store/xyz-bash-10.0/bin/bash10";
+        example = "${config.nixpkgs.config.nix.storeDir}/xyz-bash-10.0/bin/bash10";
       };
 
       srpKeyExchange = mkOption {

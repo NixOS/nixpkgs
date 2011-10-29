@@ -50,8 +50,8 @@ let
           "~/.nix-profile/lib/X11/fonts"
           "~/.nix-profile/share/fonts"
           # - the default profile
-          "/nix/var/nix/profiles/default/lib/X11/fonts"
-          "/nix/var/nix/profiles/default/share/fonts"
+          "${config.nixpkgs.config.nix.stateDir}/nix/profiles/default/lib/X11/fonts"
+          "${config.nixpkgs.config.nix.stateDir}/nix/profiles/default/share/fonts"
         ];
         description = "
           List of primary font paths.
