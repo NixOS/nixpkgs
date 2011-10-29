@@ -70,4 +70,6 @@ in
     };
 
   };
+
+  config.nixpkgs.config.nix = { storeDir = /nix/store; stateDir = /nix/var; };
 }
