@@ -133,9 +133,9 @@ if test -n "$pullManifest"; then
     manifests=$(nix-instantiate --eval-only --xml --strict $NIXOS -A manifests \
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
 
-    mkdir -p /nix/var/nix/channel-cache
+    mkdir -p @stateDir@/nix/channel-cache
     for i in $manifests; do
-        NIX_DOWNLOAD_CACHE=/nix/var/nix/channel-cache nix-pull $i || true
+        NIX_DOWNLOAD_CACHE=@stateDir@/nix/channel-cache nix-pull $i || true
     done
 fi
 
@@ -162,8 +162,8 @@ fi
 if test -z "$rollback"; then
     echo "building the system configuration..." >&2
     if test "$action" = switch -o "$action" = boot; then
-        nix-env -p /nix/var/nix/profiles/system -f $NIXOS --set -A system $extraBuildFlags
-        pathToConfig=/nix/var/nix/profiles/system
+        nix-env -p @stateDir@/nix/profiles/system -f $NIXOS --set -A system $extraBuildFlags
+        pathToConfig=@stateDir@/nix/profiles/system
     elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
         nix-build $NIXOS -A system -K -k $extraBuildFlags > /dev/null
         pathToConfig=./result
@@ -178,14 +178,14 @@ if test -z "$rollback"; then
     fi
 else # test -n "$rollback"
     if test "$action" = switch -o "$action" = boot; then
-        nix-env --rollback -p /nix/var/nix/profiles/system
-        pathToConfig=/nix/var/nix/profiles/system
+        nix-env --rollback -p @stateDir@/nix/profiles/system
+        pathToConfig=@stateDir@/nix/profiles/system
     elif test "$action" = test -o "$action" = build; then
         systemNumber=$(
-            nix-env -p /nix/var/nix/profiles/system --list-generations |
+            nix-env -p @stateDir@/nix/profiles/system --list-generations |
             sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
         )
-        ln -sT /nix/var/nix/profiles/system-${systemNumber}-link ./result
+        ln -sT @stateDir@/nix/profiles/system-${systemNumber}-link ./result
         pathToConfig=./result
     else
         showSyntax
