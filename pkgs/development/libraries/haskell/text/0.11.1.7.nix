@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "text";
-  version = "0.11.1.6";
-  sha256 = "1c4vzxwjcmdlb8nj71g6rqdw4nhz0l17saazhw1vv8cbizmdm4m7";
+  version = "0.11.1.7";
+  sha256 = "1pjllmqnl4rwa6d2mjcj2kp0w7whwxlb04rsaml7yyyk4dw97a2p";
   buildDepends = [ deepseq ];
   meta = {
     homepage = "https://github.com/bos/text";
