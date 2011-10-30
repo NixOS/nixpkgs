@@ -502,6 +502,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cssText = callPackage ../development/libraries/haskell/css-text {};
 
+  curl = callPackage ../development/libraries/haskell/curl { curl = pkgs.curl; };
+
   dataAccessor = callPackage ../development/libraries/haskell/data-accessor/data-accessor.nix {};
 
   dataAccessorTemplate = callPackage ../development/libraries/haskell/data-accessor/data-accessor-template.nix {};
