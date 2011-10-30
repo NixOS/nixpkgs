@@ -414,8 +414,7 @@ replaced by the result of their application to DERIVATIONS, a vhash."
 (define %openpgp-key-server "keys.gnupg.net")
 
 (define (gnupg-verify sig file)
-  "Verify signature SIG for FILE.  Return a status s-exp or #f if GnuPG
-failed."
+  "Verify signature SIG for FILE.  Return a status s-exp if GnuPG failed."
 
   (define (status-line->sexp line)
     ;; See file `doc/DETAILS' in GnuPG.
@@ -480,9 +479,10 @@ failed."
   (let* ((pipe   (open-pipe* OPEN_READ %gpg-command "--status-fd=1"
                              "--verify" sig file))
          (status (parse-status pipe)))
-    (if (pipe-failed? pipe)
-        #f
-        status)))
+    ;; Ignore PIPE's exit status since STATUS above should contain all the
+    ;; info we need.
+    (close-pipe pipe)
+    status))
 
 (define (gnupg-status-good-signature? status)
   "If STATUS, as returned by `gnupg-verify', denotes a good signature, return
