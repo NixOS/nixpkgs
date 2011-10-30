@@ -39,6 +39,16 @@ let
           ";
         };
 
+        timeLimit = mkOption {
+          default = 0;
+          type = with pkgs.lib.types; int;
+          description = "
+            Specifies the time limit (in seconds) to use when performing
+            searches. A value of zero (0), which is the default, is to
+            wait indefinitely for searches to be completed.
+          ";
+        };
+
         bind = {
           distinguishedName = mkOption {
             default = "";
@@ -56,6 +66,35 @@ let
             description = "
               The path to a file containing the credentials to use when binding
               to the LDAP server (if not binding anonymously).
+            ";
+          };
+
+          timeLimit = mkOption {
+            default = 30;
+            type = with pkgs.lib.types; int;
+            description = "
+              Specifies the time limit (in seconds) to use when connecting
+              to the directory server. This is distinct from the time limit
+              specified in <literal>users.ldap.timeLimit</literal> and affects
+              the initial server connection only.
+            ";
+          };
+
+          policy = mkOption {
+            default = "hard_open";
+            type = with pkgs.lib.types; string;
+            description = "
+              Specifies the policy to use for reconnecting to an unavailable
+              LDAP server. The default is <literal>hard_open</literal>, which
+              reconnects if opening the connection to the directory server
+              failed. By contrast, <literal>hard_init</literal> reconnects if
+              initializing the connection failed. Initializing may not
+              actually contact the directory server, and it is possible that
+              a malformed configuration file will trigger reconnection. If
+              <literal>soft</literal> is specified, then
+              <literal>nss_ldap</literal> will return immediately on server
+              failure. All hard reconnect policies block with exponential
+              backoff before retrying.
             ";
           };
         };
@@ -82,6 +121,9 @@ mkIf config.users.ldap.enable {
           ''
             uri ${config.users.ldap.server}
             base ${config.users.ldap.base}
+            timelimit ${toString config.users.ldap.timeLimit}
+            bind_timelimit ${toString config.users.ldap.bind.timeLimit}
+            bind_policy ${config.users.ldap.bind.policy}
 
             ${optionalString config.users.ldap.useTLS ''
               ssl start_tls
