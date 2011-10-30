@@ -328,21 +328,36 @@ replaced by the result of their application to DERIVATIONS, a vhash."
         status
         #f)))
 
-(define (nix-prefetch-url url)
-  ;; Download URL in the Nix store and return the base32-encoded SHA256 hash
-  ;; of the file at URL
-  (let* ((pipe (open-pipe* OPEN_READ "nix-prefetch-url" url))
-         (hash (read-line pipe)))
-    (if (or (pipe-failed? pipe)
-            (eof-object? hash))
-        (values #f #f)
-        (let* ((pipe (open-pipe* OPEN_READ "nix-store" "--print-fixed-path"
-                                   "sha256" hash (basename url)))
-               (path (read-line pipe)))
-          (if (or (pipe-failed? pipe)
-                  (eof-object? path))
-              (values #f #f)
-              (values (string-trim-both hash) (string-trim-both path)))))))
+(define (memoize proc)
+  "Return a memoizing version of PROC."
+  (let ((cache (make-hash-table)))
+    (lambda args
+      (let ((results (hash-ref cache args)))
+        (if results
+            (apply values results)
+            (let ((results (call-with-values (lambda ()
+                                               (apply proc args))
+                             list)))
+              (hash-set! cache args results)
+              (apply values results)))))))
+
+(define nix-prefetch-url
+  (memoize
+   (lambda (url)
+     "Download URL in the Nix store and return the base32-encoded SHA256 hash of
+the file at URL."
+     (let* ((pipe (open-pipe* OPEN_READ "nix-prefetch-url" url))
+            (hash (read-line pipe)))
+       (if (or (pipe-failed? pipe)
+               (eof-object? hash))
+           (values #f #f)
+           (let* ((pipe (open-pipe* OPEN_READ "nix-store" "--print-fixed-path"
+                                    "sha256" hash (basename url)))
+                  (path (read-line pipe)))
+             (if (or (pipe-failed? pipe)
+                     (eof-object? path))
+                 (values #f #f)
+                 (values (string-trim-both hash) (string-trim-both path)))))))))
 
 (define (update-nix-expression file
                                old-version old-hash
@@ -926,6 +941,7 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
         gnu-packages))
 
 (define (fetch-gnu project directory version archive-type)
+  "Download PROJECT's tarball over FTP."
   (let* ((server  (ftp-server/directory project))
          (base    (string-append project "-" version ".tar." archive-type))
          (url     (string-append "ftp://" server "/" directory "/" base))
