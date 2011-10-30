@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gengetopt-2.22.4";
+  name = "gengetopt-2.22.5";
 
   src = fetchurl {
     url = "mirror://gnu/gengetopt/${name}.tar.gz";
-    sha256 = "08a4wmzvin8ljdgw2c0mcz654h4hpzam2p43hsf951c0xhj6ppsf";
+    sha256 = "0dr1xmlgk9q8za17wnpgghb5ifnbca5vb0w5bc6fpc2j0cjb6vrv";
   };
 
   doCheck = true;
