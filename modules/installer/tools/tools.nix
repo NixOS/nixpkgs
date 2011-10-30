@@ -10,7 +10,6 @@ let
   makeProg = args: pkgs.substituteAll (args // {
     dir = "bin";
     isExecutable = true;
-    inherit (config.nixpkgs.config.nix) storeDir stateDir;
   });
 
   nixosBuildVMS = makeProg {

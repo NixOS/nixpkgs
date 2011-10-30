@@ -45,11 +45,11 @@ in
 
       deployDir = mkOption {
         description = "Location of the deployment files";
-        default = "${config.nixpkgs.config.nix.stateDir}/nix/profiles/default/server/default/deploy/";
+        default = "/nix/var/nix/profiles/default/server/default/deploy/";
       };
 
       libUrl = mkOption {
-        default = "file://${config.nixpkgs.config.nix.stateDir}/nix/profiles/default/server/default/lib";
+        default = "file:///nix/var/nix/profiles/default/server/default/lib";
         description = "Location where the shared library JARs are stored";
       };
 

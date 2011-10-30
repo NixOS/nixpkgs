@@ -339,7 +339,7 @@ let
     # But do allow access to files in the store so that we don't have
     # to generate <Directory> clauses for every generated file that we
     # want to serve.
-    <Directory ${config.nixpkgs.config.nix.storeDir}>
+    <Directory /nix/store>
         Order allow,deny
         Allow from all
     </Directory>

@@ -155,7 +155,7 @@ in
       };
 
     services.dbus.packages =
-      [ "${config.nixpkgs.config.nix.stateDir}/nix/profiles/default"
+      [ "/nix/var/nix/profiles/default"
         config.system.path
       ];
 

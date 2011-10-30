@@ -10,7 +10,7 @@ let
     environment.etc = mkOption {
       default = [];
       example = [
-        { source = "${config.nixpkgs.config.nix.storeDir}/.../etc/dir/file.conf.example";
+        { source = "/nix/store/.../etc/dir/file.conf.example";
           target = "dir/file.conf";
           mode = "0440";
         }

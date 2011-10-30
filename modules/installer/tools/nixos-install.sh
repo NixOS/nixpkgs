@@ -6,7 +6,7 @@
 # - register validity
 # - with a chroot to the target device:
 #   * do a nix-pull
-#   * nix-env -p @stateDir@/nix/profiles/system -i <nix-expr for the configuration>
+#   * nix-env -p /nix/var/nix/profiles/system -i <nix-expr for the configuration>
 #   * run the activation script of the configuration (also installs Grub)
 
 set -e
@@ -92,16 +92,16 @@ mkdir -m 0755 -p $mountPoint/var
 # Create the necessary Nix directories on the target device, if they
 # don't already exist.
 mkdir -m 0755 -p \
-    $mountPoint@stateDir@/nix/gcroots \
-    $mountPoint@stateDir@/nix/temproots \
-    $mountPoint@stateDir@/nix/manifests \
-    $mountPoint@stateDir@/nix/userpool \
-    $mountPoint@stateDir@/nix/profiles \
-    $mountPoint@stateDir@/nix/db \
-    $mountPoint@stateDir@/log/nix/drvs
+    $mountPoint/nix/var/nix/gcroots \
+    $mountPoint/nix/var/nix/temproots \
+    $mountPoint/nix/var/nix/manifests \
+    $mountPoint/nix/var/nix/userpool \
+    $mountPoint/nix/var/nix/profiles \
+    $mountPoint/nix/var/nix/db \
+    $mountPoint/nix/var/log/nix/drvs
 
 mkdir -m 1777 -p \
-    $mountPoint@storeDir@ \
+    $mountPoint/nix/store \
 
 
 # Get the store paths to copy from the references graph.
@@ -112,7 +112,7 @@ storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
 echo "copying Nix to $mountPoint...."
 for i in $storePaths; do
     echo "  $i"
-    rsync -a $i $mountPoint@storeDir@/
+    rsync -a $i $mountPoint/nix/store/
 done
 
 
@@ -154,7 +154,7 @@ fi
 # it into the system configuration profile.
 echo "building the system configuration..."
 NIXPKGS=/mnt/etc/nixos/nixpkgs chroot $mountPoint @nix@/bin/nix-env \
-    -p @stateDir@/nix/profiles/system \
+    -p /nix/var/nix/profiles/system \
     -f "/mnt$NIXOS" \
     --set -A system
 
@@ -196,4 +196,4 @@ touch $mountPoint/etc/NIXOS
 # configuration.
 echo "finalising the installation..."
 NIXOS_INSTALL_GRUB=1 chroot $mountPoint \
-    @stateDir@/nix/profiles/system/bin/switch-to-configuration boot
+    /nix/var/nix/profiles/system/bin/switch-to-configuration boot

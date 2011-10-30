@@ -41,8 +41,8 @@ with pkgs.lib;
           # Copy all paths in the closure to the filesystem.
           storePaths=$(perl ${pkgs.pathsFromGraph} /tmp/xchg/closure)
 
-          mkdir -p /mnt${config.nixpkgs.config.nix.storeDir}
-          ${pkgs.rsync}/bin/rsync -av $storePaths /mnt${config.nixpkgs.config.nix.storeDir}/
+          mkdir -p /mnt/nix/store
+          ${pkgs.rsync}/bin/rsync -av $storePaths /mnt/nix/store/
 
           # Register the paths in the Nix database.
           printRegistration=1 perl ${pkgs.pathsFromGraph} /tmp/xchg/closure | \
@@ -50,7 +50,7 @@ with pkgs.lib;
 
           # Create the system profile to allow nixos-rebuild to work.
           chroot /mnt ${config.environment.nix}/bin/nix-env \
-              -p ${config.nixpkgs.config.nix.stateDir}/nix/profiles/system --set ${config.system.build.toplevel}
+              -p /nix/var/nix/profiles/system --set ${config.system.build.toplevel}
 
           # `nixos-rebuild' requires an /etc/NIXOS.
           mkdir -p /mnt/etc

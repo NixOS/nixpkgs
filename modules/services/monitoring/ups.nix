@@ -13,7 +13,7 @@ let
   {
     options = {
       # This can be infered from the UPS model by looking at
-      # ${config.nixpkgs.config.nix.storeDir}/nut/share/driver.list
+      # /nix/store/nut/share/driver.list
       driver = mkOption {
         type = types.uniq types.string;
         description = ''

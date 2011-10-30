@@ -217,7 +217,7 @@ let
 
 
   # The initrd only has to mount / or any FS marked as necessary for
-  # booting (such as the FS containing ${config.nixpkgs.config.nix.storeDir}, or an FS needed for
+  # booting (such as the FS containing /nix/store, or an FS needed for
   # mounting /, like / on a loopback).
   fileSystems = filter
     (fs: fs.mountPoint == "/" || fs.neededForBoot)

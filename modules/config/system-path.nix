@@ -69,7 +69,7 @@ let
           automatically updated every time you rebuild the system
           configuration.  (The latter is the main difference with
           installing them in the default profile,
-          <filename>${config.nixpkgs.config.nix.stateDir}/nix/profiles/default</filename>.
+          <filename>/nix/var/nix/profiles/default</filename>.
         '';
       };
 

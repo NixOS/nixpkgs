@@ -143,7 +143,7 @@ in
     [ { mountPoint = "/";
         device = "/dev/root";
       }
-      { mountPoint = "${config.nixpkgs.config.nix.storeDir}";
+      { mountPoint = "/nix/store";
         fsType = "squashfs";
         device = "/nix-store.squashfs";
         options = "loop";
@@ -169,7 +169,7 @@ in
   boot.initrd.kernelModules = [ "loop" ];
 
   # In stage 1, mount a tmpfs on top of / (the ISO image) and
-  # ${config.nixpkgs.config.nix.storeDir} (the squashfs image) to make this a live CD.
+  # /nix/store (the squashfs image) to make this a live CD.
   boot.initrd.postMountCommands =
     ''
       mkdir /mnt-root-tmpfs
@@ -180,8 +180,8 @@ in
 
       mkdir /mnt-store-tmpfs
       mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
-      mkdir -p $targetRoot${config.nixpkgs.config.nix.storeDir}
-      mount -t aufs -o dirs=/mnt-store-tmpfs=rw:/mnt-root${config.nixpkgs.config.nix.storeDir}=ro none /mnt-root-union${config.nixpkgs.config.nix.storeDir}
+      mkdir -p $targetRoot/nix/store
+      mount -t aufs -o dirs=/mnt-store-tmpfs=rw:/mnt-root/nix/store=ro none /mnt-root-union/nix/store
     '';
 
   # Closures to be copied to the Nix store on the CD, namely the init
@@ -223,7 +223,7 @@ in
       }
       { # Quick hack: need a mount point for the store.
         source = pkgs.runCommand "empty" {} "ensureDir $out";
-        target = "${config.nixpkgs.config.nix.storeDir}";
+        target = "/nix/store";
       }
     ];
 
@@ -257,11 +257,11 @@ in
     ''
       # After booting, register the contents of the Nix store on the
       # CD in the Nix database in the tmpfs.
-      ${config.environment.nix}/bin/nix-store --load-db < ${config.nixpkgs.config.nix.storeDir}/nix-path-registration
+      ${config.environment.nix}/bin/nix-store --load-db < /nix/store/nix-path-registration
 
       # nixos-rebuild also requires a "system" profile and an
       # /etc/NIXOS tag.
       touch /etc/NIXOS
-      ${config.environment.nix}/bin/nix-env -p ${config.nixpkgs.config.nix.stateDir}/nix/profiles/system --set /var/run/current-system
+      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /var/run/current-system
     '';
 }
