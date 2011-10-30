@@ -545,6 +545,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   doubleConversion = callPackage ../development/libraries/haskell/double-conversion {};
 
+  download = callPackage ../development/libraries/haskell/download {};
+
   editline = callPackage ../development/libraries/haskell/editline {};
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
