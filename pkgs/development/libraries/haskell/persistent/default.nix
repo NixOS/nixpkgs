@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "persistent";
-  version = "0.6.3";
-  sha256 = "0m50z9k941bhh05jjz1268sn1bi7w8i6jzccldgnbjjvsw2xaisx";
+  version = "0.6.4";
+  sha256 = "149dk6i6w36rq3z6zzrcmpr0kxpp6hk0qpc43vwj0dm68nrffaqk";
   buildDepends = [
     blazeHtml dataObject enumerator monadControl mtl pathPieces pool
     text time transformers
