@@ -10,6 +10,24 @@ let
 
   isKDE47 = pkgs.kde4 ? kde_wallpapers;
 
+  # Disable Nepomuk and Strigi by default.  As of KDE 4.7, they don't
+  # really work very well (e.g. searching files often fails to find
+  # files), segfault sometimes and consume significant resources.
+  # They can be re-enabled in the KDE System Settings under "Desktop
+  # Search".
+  nepomukConfig = pkgs.writeTextFile
+    { name = "nepomuk-config";
+      destination = "/share/config/nepomukserverrc";
+      text = 
+        ''
+          [Basic Settings]
+          Start Nepomuk=false
+
+          [Service-nepomukstrigiservice]
+          autostart=false
+        '';
+    };
+
 in
 
 {
@@ -138,7 +156,9 @@ in
           pkgs.shared_desktop_ontologies # used by nepomuk
           pkgs.strigi # used by nepomuk
         ]
-      ) ++ config.environment.kdePackages;
+      )
+      ++ [ nepmukConfig ]
+      ++ config.environment.kdePackages;
 
     environment.pathsToLink = [ "/share" ];
 
