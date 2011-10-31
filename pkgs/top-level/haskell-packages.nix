@@ -1196,7 +1196,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   time_1_1_3   = callPackage ../development/libraries/haskell/time/1.1.3.nix {};
   time_1_2_0_3 = callPackage ../development/libraries/haskell/time/1.2.0.3.nix {};
   time_1_2_0_5 = callPackage ../development/libraries/haskell/time/1.2.0.5.nix {};
-  time_1_4 = callPackage ../development/libraries/haskell/time/1.4.nix {};
+  time_1_4_0_1 = callPackage ../development/libraries/haskell/time/1.4.0.1.nix {};
   # time is in the core package set. It should only be necessary to
   # pass it explicitly in rare circumstances.
   time = null;
