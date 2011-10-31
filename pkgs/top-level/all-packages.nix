@@ -4929,9 +4929,7 @@ let
 
   myserver = callPackage ../servers/http/myserver { };
 
-  nginx = builderDefsPackage (import ../servers/http/nginx) {
-    inherit openssl pcre zlib libxml2 libxslt;
-  };
+  nginx = callPackage ../servers/http/nginx { };
 
   postfix = callPackage ../servers/mail/postfix { };
 
