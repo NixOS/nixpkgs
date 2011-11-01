@@ -555,7 +555,12 @@ in
 
         description = "Apache HTTPD";
 
-        startOn = "started ${startingDependency} and filesystem";
+        startOn = "started ${startingDependency} and filesystem"
+          # Hacky.  Some subservices depend on Postgres
+          # (e.g. Mediawiki), but they don't have a way to declare
+          # that dependency.  So just start httpd after postgresql if
+          # the latter is enabled.
+          + optionalString config.services.postgresql.enable " and started postgresql";
 
         environment =
           { PATH = concatStringsSep ":" (
