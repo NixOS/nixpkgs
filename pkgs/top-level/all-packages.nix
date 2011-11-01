@@ -905,6 +905,8 @@ let
 
   nodejs = callPackage ../development/web/nodejs {};
 
+  ldns = callPackage ../development/libraries/ldns { };
+
   lftp = callPackage ../tools/networking/lftp { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
