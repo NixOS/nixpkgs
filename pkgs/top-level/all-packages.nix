@@ -3433,7 +3433,9 @@ let
      //
 
      (if crossGNU
-      then { inherit machHeaders hurdHeaders mig fetchgit; }
+      then {
+        inherit machHeaders hurdHeaders hurdLibpthreadHeaders mig fetchgit;
+      }
       else { }))));
 
   glibcCross = glibc212Cross;
@@ -5219,6 +5221,11 @@ let
     glibcCross = null;
     libuuid = null;
     hurdPartedCross = null;
+  };
+
+  hurdLibpthreadHeaders = callPackage ../os-specific/gnu/libpthread {
+    headersOnly = true;
+    hurd = null;
   };
 
   hurdLibpthreadCross = forceBuildDrv(import ../os-specific/gnu/libpthread {
