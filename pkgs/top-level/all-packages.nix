@@ -5126,6 +5126,8 @@ let
     inherit devicemapper;
   };
 
+  drbd = callPackage ../os-specific/linux/drbd { };
+  
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (utillinuxng // {
