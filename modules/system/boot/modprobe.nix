@@ -75,7 +75,7 @@ with pkgs.lib;
             '')}
             ${config.boot.extraModprobeConfig}
           '';
-        target = "modprobe.conf";
+        target = "modprobe.d/nixos.conf";
       };
 
     boot.blacklistedKernelModules =
