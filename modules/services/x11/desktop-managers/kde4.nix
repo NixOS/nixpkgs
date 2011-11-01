@@ -157,7 +157,7 @@ in
           pkgs.strigi # used by nepomuk
         ]
       )
-      ++ [ nepmukConfig ]
+      ++ [ nepomukConfig ]
       ++ config.environment.kdePackages;
 
     environment.pathsToLink = [ "/share" ];
