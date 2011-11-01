@@ -3720,6 +3720,8 @@ let
 
   json_glib = callPackage ../development/libraries/json-glib { };
 
+  libjson = callPackage ../development/libraries/libjson { };
+
   judy = callPackage ../development/libraries/judy { };
 
   krb5 = callPackage ../development/libraries/kerberos/krb5.nix { };
