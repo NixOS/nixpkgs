@@ -1,5 +1,5 @@
 { stdenv, fetchurl, kernelHeaders
-, machHeaders ? null, hurdHeaders ? null, hurdLibpthreadHeaders ? null
+, machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
 , mig ? null, fetchgit ? null
 , installLocales ? true
 , profilingLibraries ? false
@@ -41,9 +41,9 @@ in
 
   (if hurdHeaders != null
    then rec {
-     inherit machHeaders hurdHeaders hurdLibpthreadHeaders mig fetchgit;
+     inherit machHeaders hurdHeaders libpthreadHeaders mig fetchgit;
 
-     propagatedBuildInputs = [ machHeaders hurdHeaders hurdLibpthreadHeaders ];
+     propagatedBuildInputs = [ machHeaders hurdHeaders libpthreadHeaders ];
 
      passthru = {
        # When building GCC itself `propagatedBuildInputs' above is not

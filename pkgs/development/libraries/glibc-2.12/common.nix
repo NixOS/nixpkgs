@@ -5,7 +5,7 @@ cross :
 
 { name, fetchurl, stdenv, installLocales ? false
 , gccCross ? null, kernelHeaders ? null
-, machHeaders ? null, hurdHeaders ? null, hurdLibpthreadHeaders ? null
+, machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
 , mig ? null, fetchgit ? null
 , profilingLibraries ? false, meta
 , preConfigure ? "", ... }@args :
@@ -32,7 +32,7 @@ assert (cross != null) -> (gccCross != null);
 
 assert (mig != null) -> (machHeaders != null);
 assert (machHeaders != null) -> (hurdHeaders != null);
-assert (hurdHeaders != null) -> (hurdLibpthreadHeaders != null);
+assert (hurdHeaders != null) -> (libpthreadHeaders != null);
 assert (hurdHeaders != null) -> (fetchgit != null);
 
 stdenv.mkDerivation ({
@@ -201,7 +201,7 @@ stdenv.mkDerivation ({
    # Work around the fact that the configure snippet that looks for
    # <hurd/version.h> does not honor `--with-headers=$sysheaders' and that
    # glibc expects Mach, Hurd, and pthread headers to be in the same place.
-   CPATH = "${hurdHeaders}/include:${machHeaders}/include:${hurdLibpthreadHeaders}/include";
+   CPATH = "${hurdHeaders}/include:${machHeaders}/include:${libpthreadHeaders}/include";
 
    # `fetchgit' is a function and thus should not be passed to the
    # `derivation' primitive.
