@@ -494,7 +494,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptoApi = callPackage ../development/libraries/haskell/crypto-api {};
 
-  cryptocipher = callPackage ../development/libraries/haskell/cryptocipher {};
+  cryptocipher_0_2_14 = callPackage ../development/libraries/haskell/cryptocipher/0.2.14.nix {};
+  cryptocipher_0_3_0 = callPackage ../development/libraries/haskell/cryptocipher/0.3.0.nix {};
+  cryptocipher = self.cryptocipher_0_2_14;
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
