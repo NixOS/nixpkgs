@@ -1,10 +1,12 @@
 { fetchurl, stdenv, texinfo, perl
 , XMLSAX, XMLParser, XMLNamespaceSupport
-, groff, libxml2, libxslt, gnused, libiconv
+, groff, libxml2, libxslt, gnused, libiconv, opensp
+, docbook_xml_dtd_43
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "docbook2X-0.8.8";
+  
   src = fetchurl {
     url = "mirror://sourceforge/docbook2x/${name}.tar.gz";
     sha256 = "0ifwzk99rzjws0ixzimbvs83x6cxqk1xzmg84wa1p7bs6rypaxs0";
@@ -15,7 +17,7 @@ stdenv.mkDerivation rec {
   patches = [ ./db2x_texixml-to-stdout.patch ];
 
   buildInputs = [ perl texinfo groff libxml2 libxslt makeWrapper
-                  XMLSAX XMLParser XMLNamespaceSupport
+                  XMLSAX XMLParser XMLNamespaceSupport opensp
   	        ] ++ (if libiconv != null then [libiconv] else []);
 
   postConfigure = ''
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
 	--prefix PERL5LIB :						\
 	"${XMLNamespaceSupport}/lib/perl5/site_perl"			\
 	--prefix XML_CATALOG_FILES "\ "					\
-	"$out/share/docbook2X/dtd/catalog.xml\ $out/share/docbook2X/xslt/catalog.xml"
+	"$out/share/docbook2X/dtd/catalog.xml\ $out/share/docbook2X/xslt/catalog.xml\ ${docbook_xml_dtd_43}/xml/dtd/docbook/catalog.xml"
     done
 
     wrapProgram $out/bin/sgml2xml-isoent --prefix PATH : \
