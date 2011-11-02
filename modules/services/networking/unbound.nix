@@ -48,7 +48,7 @@ in
     services.unbound = {
 
       enable = mkOption {
-        default = true;
+        default = false;
         description = "
           Whether to enable the Unbound domain name server.
         ";
