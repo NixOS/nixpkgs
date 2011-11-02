@@ -12,12 +12,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ flex ];
 
-  configureFlags = "--without-distro --without-legacy_utils --without-pacemaker --localstatedir=/var --sysconfdir=/etc";
+  configureFlags = "--without-distro --without-pacemaker --localstatedir=/var --sysconfdir=/etc";
 
   preConfigure =
     ''
       export PATH=${udev}/sbin:$PATH
       substituteInPlace user/Makefile.in --replace /sbin/ $out/sbin/
+      substituteInPlace user/legacy/Makefile.in \
+        --replace /sbin/ $out/sbin/ \
+        --replace '$(DESTDIR)/lib/drbd' $out/lib/drbd
+      substituteInPlace user/drbdadm_usage_cnt.c --replace /lib/drbd $out/lib/drbd
       substituteInPlace scripts/drbd.rules --replace /sbin/drbdadm $out/sbin/drbdadm
     '';
 
