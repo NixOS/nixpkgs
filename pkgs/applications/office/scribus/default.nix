@@ -1,50 +1,22 @@
 { stdenv, fetchurl, pkgconfig, freetype, lcms, libtiff, libxml2
 , libart_lgpl, qt, python, cups, fontconfig, libjpeg
-, zlib, libpng, xorg, cairo, cmake }:
-
-assert stdenv.gcc.gcc != null;
-
-# NOTE: ! If Scribus doesn't render text try another font.
-
-# a lot of templates, colour palettes, colour profiles or gradients
-# will be released with the next version of scribus - So don't miss them
-# when upgrading this package
-
-let useCairo = false; in
-
+, zlib, libpng, xorg, cairo, podofo, aspell, boost, cmake }:
 stdenv.mkDerivation {
-  name = "scribus-1.3.3.14";
+  name = "scribus-1.4.0rc6";
 
   src = fetchurl {
-    url = mirror://sourceforge/scribus/scribus/1.3.3.14/scribus-1.3.3.14.tar.bz2;
-    sha256 = "1ig7x6vxhqgjlpnv6hkzpb6gj4yvxsrx7rw900zlp7g6zxl01iyy";
+    url = mirror://sourceforge/scribus/scribus/scribus-1.4.0.rc6.tar.bz2;
+    sha256 = "1rrnzxjzhqj4lgyfswly501xlyvm4hsnnq7zw008v0cnkx31icli";
   };
 
-  cmakeFlags = if useCairo then "-DWANT_CAIRO=1" else "";
-
-  configurePhase = ''
-    set -x
-    mkdir -p build;
-    cd build
-    eval -- "cmake .. $cmakeFlags"
-    set +x
-  '';
+  enableParallelBuilding = true;
 
   buildInputs =
-    [ pkgconfig /*<- required fro cairo only?*/ cmake freetype lcms libtiff libxml2 libart_lgpl qt
+    [ pkgconfig cmake freetype lcms libtiff libxml2 libart_lgpl qt
       python cups fontconfig
       xorg.libXaw xorg.libXext xorg.libX11 xorg.libXtst xorg.libXi xorg.libXinerama
-      libjpeg zlib libpng
-    ] ++ stdenv.lib.optional useCairo cairo;
-
-  # fix rpath which is removed by cmake..
-  postFixup = ''
-    for i in $buildNativeInputs ${stdenv.gcc.gcc}; do
-      [ -d "$i/lib" ] && RPATH="$RPATH:$i/lib"
-      [ -d "$i/lib64" ] && RPATH="$RPATH:$i/lib64"
-    done
-    patchelf --set-rpath "''\${RPATH:1}" $out/bin/scribus
-  '';
+      libjpeg zlib libpng podofo aspell cairo
+    ];
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.marcweber ];
@@ -54,4 +26,3 @@ stdenv.mkDerivation {
     license = "GPLv2";
   };
 }
-
