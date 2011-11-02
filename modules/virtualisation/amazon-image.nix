@@ -3,7 +3,7 @@
 with pkgs.lib;
 
 {
-  require = [ ./ec2-data.nix ];
+  require = [ ../profiles/headless.nix ./ec2-data.nix ];
 
   system.build.amazonImage =
     pkgs.vmTools.runInLinuxVM (
@@ -103,9 +103,6 @@ with pkgs.lib;
       mkdir -m 755 -p $targetRoot/ephemeral0/nix
       mount -t aufs -o dirs=$targetRoot/ephemeral0/nix=rw:$targetRoot/nix=rr none $targetRoot/nix
     '';
-
-  # There are no virtual consoles.
-  services.mingetty.ttys = [ ];
 
   # Allow root logins only using the SSH key that the user specified
   # at instance creation time.

@@ -3,7 +3,7 @@
 with pkgs.lib;
 
 {
-  require = [ ../profiles/qemu-guest.nix ./ec2-data.nix ];
+  require = [ ../profiles/qemu-guest.nix ../profiles/headless.nix ./ec2-data.nix ];
 
   system.build.novaImage =
     pkgs.vmTools.runInLinuxVM (
