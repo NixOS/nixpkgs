@@ -126,6 +126,7 @@
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
   ./services/networking/sabnzbd.nix
+  ./services/networking/unbound.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
   ./services/networking/cntlm.nix

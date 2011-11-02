@@ -66,6 +66,7 @@ in
     rtkit = 45;
     dovecot2 = 46;
     dovenull2 = 47;
+    unbound = 48;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
