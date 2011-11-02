@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "iproute2-2.6.35";
 
   src = fetchurl {
-    url = "http://devresources.linux-foundation.org/dev/iproute2/download/${name}.tar.bz2";
+    url = "http://pkgs.fedoraproject.org/repo/pkgs/iproute/iproute2-2.6.35.tar.bz2/b0f281b3124bf04669e18f5fe16d4934/iproute2-2.6.35.tar.bz2";
     sha256 = "18why1wy0v859axgrlfxn80zmskss0410hh9rf5gn9cr29zg9cla";
   };
 

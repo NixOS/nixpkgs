@@ -639,7 +639,7 @@ let
   fcron = callPackage ../tools/system/fcron {  # see also cron
   };
 
-  fdisk = callPackage ../tools/system/fdisk { parted = parted_2_3; };
+  fdisk = callPackage ../tools/system/fdisk { };
 
   fdm = callPackage ../tools/networking/fdm {};
 
@@ -905,6 +905,8 @@ let
 
   nodejs = callPackage ../development/web/nodejs {};
 
+  ldns = callPackage ../development/libraries/ldns { };
+
   lftp = callPackage ../tools/networking/lftp { };
 
   libtirpc = callPackage ../development/libraries/libtirpc { };
@@ -1120,14 +1122,14 @@ let
 
   patchutils = callPackage ../tools/text/patchutils { };
 
-  parted = callPackage ../tools/misc/parted { };
-  parted_2_3 = callPackage ../tools/misc/parted/2.3.nix { };
+  parted = callPackage ../tools/misc/parted { hurd = null; };
+  parted_2_3 = callPackage ../tools/misc/parted/2.3.nix { hurd = null; };
 
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (callPackage ../tools/misc/parted {
         # Needs the Hurd's libstore.
-        hurd = hurdCrossIntermediate;
+        hurd = gnu.hurdCrossIntermediate;
 
         # The Hurd wants a libparted.a.
         enableStatic = true;
@@ -1806,7 +1808,7 @@ let
       libpthreadCross =
         # FIXME: Don't explicitly refer to `i586-pc-gnu'.
         if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-        then hurdLibpthreadCross
+        then gnu.libpthreadCross
         else null;
      });
     libc = libcCross;
@@ -2942,21 +2944,6 @@ let
 
   ltrace = callPackage ../development/tools/misc/ltrace { };
 
-  mig = callPackage ../os-specific/gnu/mig
-    (if stdenv.isLinux
-     then {
-       # Build natively, but force use of a 32-bit environment because we're
-       # targeting `i586-pc-gnu'.
-       stdenv = (import ../stdenv {
-         system = "i686-linux";
-         stdenvType = "i686-linux";
-         allPackages = args:
-           import ./all-packages.nix ({ inherit config; } // args);
-         inherit platform;
-       }).stdenv;
-     }
-     else { });
-
   mk = callPackage ../development/tools/build-managers/mk { };
 
   noweb = callPackage ../development/tools/literate-programming/noweb { };
@@ -3442,14 +3429,17 @@ let
      in ({
        inherit stdenv fetchurl;
        gccCross = gccCrossStageStatic;
-       kernelHeaders = if crossGNU then hurdHeaders else linuxHeadersCross;
+       kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
        installLocales = getConfig [ "glibc" "locales" ] false;
      }
 
      //
 
      (if crossGNU
-      then { inherit machHeaders hurdHeaders mig fetchgit; }
+      then {
+        inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
+        inherit fetchgit;
+      }
       else { }))));
 
   glibc214 = (callPackage ../development/libraries/glibc-2.14 {
@@ -3756,6 +3746,8 @@ let
   jetty_util = callPackage ../development/libraries/java/jetty-util { };
 
   json_glib = callPackage ../development/libraries/json-glib { };
+
+  libjson = callPackage ../development/libraries/libjson { };
 
   judy = callPackage ../development/libraries/judy { };
 
@@ -4966,9 +4958,7 @@ let
 
   myserver = callPackage ../servers/http/myserver { };
 
-  nginx = builderDefsPackage (import ../servers/http/nginx) {
-    inherit openssl pcre zlib libxml2 libxslt;
-  };
+  nginx = callPackage ../servers/http/nginx { };
 
   postfix = callPackage ../servers/mail/postfix { };
 
@@ -5165,6 +5155,8 @@ let
     inherit devicemapper;
   };
 
+  drbd = callPackage ../os-specific/linux/drbd { };
+  
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (utillinuxng // {
@@ -5218,50 +5210,10 @@ let
 
   htop = callPackage ../os-specific/linux/htop { };
 
-  hurdCross = forceBuildDrv(import ../os-specific/gnu/hurd {
-    inherit fetchgit stdenv autoconf libtool texinfo machHeaders
-      mig glibcCross hurdPartedCross;
-    libuuid = libuuid.hostDrv;
-    automake = automake111x;
-    headersOnly = false;
-    cross = assert crossSystem != null; crossSystem;
-    gccCross = gccCrossStageFinal;
-  });
-
-  hurdCrossIntermediate = forceBuildDrv(import ../os-specific/gnu/hurd {
-    inherit fetchgit stdenv autoconf libtool texinfo machHeaders
-      mig glibcCross;
-    automake = automake111x;
-    headersOnly = false;
-    cross = assert crossSystem != null; crossSystem;
-
-    # The "final" GCC needs glibc and the Hurd libraries (libpthread in
-    # particular) so we first need an intermediate Hurd built with the
-    # intermediate GCC.
-    gccCross = gccCrossStageStatic;
-
-    # This intermediate Hurd is only needed to build libpthread, which needs
-    # libihash, and to build Parted, which needs libstore and
-    # libshouldbeinlibc.
-    buildTarget = "libihash libstore libshouldbeinlibc";
-    installTarget = "libihash-install libstore-install libshouldbeinlibc-install";
-  });
-
-  hurdHeaders = callPackage ../os-specific/gnu/hurd {
-    automake = automake111x;
-    headersOnly = true;
-    gccCross = null;
-    glibcCross = null;
-    libuuid = null;
-    hurdPartedCross = null;
-  };
-
-  hurdLibpthreadCross = forceBuildDrv(import ../os-specific/gnu/libpthread {
-    inherit fetchgit stdenv autoconf automake libtool
-      machHeaders hurdHeaders glibcCross;
-    hurd = hurdCrossIntermediate;
-    gccCross = gccCrossStageStatic;
-    cross = assert crossSystem != null; crossSystem;
+  # GNU/Hurd core packages.
+  gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
+    callPackage = newScope pkgs.gnu;
+    inherit platform crossSystem;
   });
 
   hwdata = callPackage ../os-specific/linux/hwdata { };
@@ -5919,18 +5871,6 @@ let
 
   lvm2 = callPackage ../os-specific/linux/lvm2 { };
 
-  # In theory GNU Mach doesn't have to be cross-compiled.  However, since it
-  # has to be built for i586 (it doesn't work on x86_64), one needs a cross
-  # compiler for that host.
-  mach = callPackage ../os-specific/gnu/mach {
-    automake = automake111x;  };
-
-  machHeaders = callPackage ../os-specific/gnu/mach {
-    automake = automake111x;
-    headersOnly = true;
-    mig = null;
-  };
-
   mdadm = callPackage ../os-specific/linux/mdadm { };
 
   mingetty = callPackage ../os-specific/linux/mingetty { };
@@ -6228,6 +6168,8 @@ let
   };
 
   docbook5 = callPackage ../data/sgml+xml/schemas/docbook-5.0 { };
+
+  docbook_sgml_dtd_41 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/4.1.nix { };
 
   docbook_xml_dtd_412 = callPackage ../data/sgml+xml/schemas/xml-dtd/docbook/4.1.2.nix { };
 
@@ -8058,7 +8000,7 @@ let
 
   };
 
-  kde4 = recurseIntoAttrs pkgs.kde45;
+  kde4 = recurseIntoAttrs pkgs.kde47;
 
   # TODO: merge with branches/drop-kde4.5 if you want to remove KDE SC 4.5
   # This branch removes kde45 and quite a few compatibility hacks

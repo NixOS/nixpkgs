@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "0.9.3.2";
-  sha256 = "1h45vgxcn4sraax5rsccksx5yz57k32d7vzpp02prz2s2x5bv3xl";
+  version = "0.9.3.3";
+  sha256 = "0qy926x009mci17fhlrcn758vc9lxybzfg16pb69ydzbdr9lqa77";
   buildDepends = [
     aesonNative blazeBuilder blazeHtml caseInsensitive cereal
     clientsession cookie dataObject dataObjectYaml enumerator failure

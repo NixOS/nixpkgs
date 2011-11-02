@@ -1,13 +1,13 @@
 { cabal, deepseq }:
 
 cabal.mkDerivation (self: {
-  pname = "text";
-  version = "0.11.1.5";
-  sha256 = "0fxxhw932gdvaqafsbw7dfzccc43hv92yhxppzp6jrg0npbyz04l";
+  pname = "time";
+  version = "1.4.0.1";
+  sha256 = "046jyz2xnbg2s94d9xhpphgq93mqlky7bc50vss40wdk6l7w8aws";
   buildDepends = [ deepseq ];
   meta = {
-    homepage = "https://bitbucket.org/bos/text";
-    description = "An efficient packed Unicode text type";
+    homepage = "http://semantic.org/TimeLib/";
+    description = "A time library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

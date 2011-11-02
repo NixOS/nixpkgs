@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-enumerator";
-  version = "0.7.1.2";
-  sha256 = "1jxy017vhmzwq4480r6g45mg3x1d48zckbcyqhsk40bw5i32dfmv";
+  version = "0.7.1.4";
+  sha256 = "1dp3hw10wpf8izmp48jai90x7mxws05gbjqx9s24gl7y2m24q2xg";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

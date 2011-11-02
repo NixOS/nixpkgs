@@ -1,12 +1,16 @@
-{ cabal, cereal, cryptoApi, primitive, tagged, vector }:
+{ cabal, cereal, cryptoApi, cryptoPubkeyTypes, primitive, tagged
+, vector
+}:
 
 cabal.mkDerivation (self: {
   pname = "cryptocipher";
-  version = "0.2.14";
-  sha256 = "1r91d9sqc53c628z378fyah7vvmkakvxpwbslam0yhfgp2p0l23z";
+  version = "0.3.0";
+  sha256 = "17jbzssdbprspadz5ynyam60l5iw7s809irklfg1ii89x26mlyix";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ cereal cryptoApi primitive tagged vector ];
+  buildDepends = [
+    cereal cryptoApi cryptoPubkeyTypes primitive tagged vector
+  ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cryptocipher";
     description = "Symmetrical Block, Stream and PubKey Ciphers";

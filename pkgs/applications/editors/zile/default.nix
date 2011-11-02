@@ -1,14 +1,14 @@
-{ fetchurl, stdenv, ncurses, help2man }:
+{ fetchurl, stdenv, ncurses, boehmgc, perl, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "zile-2.3.24";
+  name = "zile-2.4.2";
 
   src = fetchurl {
     url = "mirror://gnu/zile/${name}.tar.gz";
-    sha256 = "12by1f5nbk2qcq0f35aqjq5g54nsnajk2rk5060icsjc86pv52r1";
+    sha256 = "0ia91c18fyssnhabfb22npmidjkx32rqfkjgxxjibvdwfja25d3k";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = [ ncurses boehmgc perl ];
   buildNativeInputs = [ help2man ];
 
   # Tests can't be run because most of them rely on the ability to

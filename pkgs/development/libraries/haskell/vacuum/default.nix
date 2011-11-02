@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vacuum";
-  version = "1.0.0.1";
-  sha256 = "172py7nvyv66hvqmhigfm59rjb328bfzv0z11q8qdpf5w1fpvmc5";
+  version = "1.0.0.2";
+  sha256 = "1amlzd89952fvw1sbajf9kv3f2s2i6xbqs1zjxw442achg465y7i";
   extraLibraries = [ ghcPaths ];
   meta = {
     homepage = "http://web.archive.org/web/20100410115820/http://moonpatio.com/vacuum/";

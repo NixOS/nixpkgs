@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext, perl, LWP, gnutls ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-1.13.3";
+  name = "wget-1.13.4";
 
   src = fetchurl {
     url = "mirror://gnu/wget/${name}.tar.gz";
-    sha256 = "07wxl38qiy95k3hv2fd1sglgrlp6z920pr9mcfsj8dg7iaxbhppi";
+    sha256 = "1kadjg63x1mm741dxdidwsn1rz0f7dkzbq59v0iww87jr45p3ir4";
   };
 
   preConfigure =

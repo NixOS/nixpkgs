@@ -1,8 +1,8 @@
-{stdenv, fetchurl, docbook2x}:
+{ stdenv, fetchurl, docbook2x, docbook_sgml_dtd_41 }:
 
 stdenv.mkDerivation {
   name = "module-init-tools-3.16";
-  
+
   src = [
     (fetchurl {
       url = mirror://kernel/linux/utils/kernel/module-init-tools/module-init-tools-3.16.tar.bz2;
@@ -16,6 +16,8 @@ stdenv.mkDerivation {
       sha256 = "1j1nzi87kgsh4scl645fhwhjvljxj83cmdasa4n4p5krhasgw358";
     })
   ];
+
+  SGML_CATALOG_FILES = "${docbook_sgml_dtd_41}/sgml/dtd/docbook-4.1/docbook.cat";
 
   patches = [ ./module-dir.patch ./docbook2man.patch ];
 

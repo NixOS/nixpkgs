@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, gnum4 }:
+{ fetchurl, stdenv, gnum4, texinfo, texLive, automake }:
 
 let
-  version = "9.0.1";
+  version = "9.1";
   bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
 in
 stdenv.mkDerivation {
@@ -15,23 +15,47 @@ stdenv.mkDerivation {
     if stdenv.isi686
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-i386.tar.gz";
-      sha256 = "0cfj3bawjdnpa7cbqh2f23hfpjpmryypmzkhndvdbi79a65fl0n2";
+      sha256 = "1vqdy9f1lbzflr9bw0gjn4g4w3hdpnjrkiwj5aaah70flif5ndns";
     } else if stdenv.isx86_64
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
-      sha256 = "0p188d7n0iqdgvra6qv5apvcsv0z2p97ry7xz5216zkc364i6mmr";
+      sha256 = "1l4zxqm5r1alc6y1cky62rn8h6i40qyiba081n6phwypwxr5sd0g";
     } else fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-c-${version}.tar.gz";
-      sha256 = "1g2mifrx0bvag0hlrbk81rkrlm1pbn688zw8b9d2i0sl5g2p1ril";
+      sha256 = "1661cybycfvjjyq92gb3n1cygxfmfjdhnh3d2ha3vy6xxk9d7za9";
     };
 
-  preConfigure = "cd src";
-  buildPhase =
-    if bootstrapFromC
-    then "./etc/make-liarc.sh --prefix=$out"
-    else "make compile-microcode";
+  configurePhase =
+    '' cd src
+       ./configure --prefix="$out"
 
-  buildInputs = [ gnum4 ];
+       cd ../doc
+       ./configure --prefix="$out"
+       cd ..
+     '';
+
+  buildPhase =
+    '' cd src
+       ${if bootstrapFromC
+         then "./etc/make-liarc.sh --prefix=$out"
+         else "make compile-microcode"}
+
+       cd ../doc
+
+       # Provide a `texinfo.tex'.
+       export TEXINPUTS="$(echo ${automake}/share/automake-*)"
+       echo "\$TEXINPUTS is \`$TEXINPUTS'"
+       make
+
+       cd ..
+    '';
+
+  installPhase =
+    '' make install -C src
+       make install -C doc
+    '';
+
+  buildNativeInputs = [ gnum4 texinfo texLive automake ];
 
   # XXX: The `check' target doesn't exist.
   doCheck = false;

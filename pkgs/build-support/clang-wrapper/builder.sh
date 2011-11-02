@@ -47,7 +47,7 @@ else
     # It's unclear if these will ever be provided by an LLVM project
     clangCFlags="$clangCFlags -B$basePath"
 
-    clangCFlags="$clangCFlags -I$clang/lib/clang/$clangVersion/include"
+    clangCFlags="$clangCFlags -isystem$clang/lib/clang/$clangVersion/include"
     echo "$clangCFlags" > $out/nix-support/clang-cflags
     
     clangPath="$clang/bin"
