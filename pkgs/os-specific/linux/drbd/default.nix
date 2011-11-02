@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, udev }:
+{ stdenv, fetchurl, flex, udev, perl }:
 
 assert stdenv.isLinux;
 
@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "096njwxjpwvnl259gxq6cr6n0r6ba0h5aryvgk05hqi95jx927vg";
   };
 
-  buildInputs = [ flex ];
+  patches = [ ./pass-force.patch ];
+
+  buildInputs = [ flex perl ];
 
   configureFlags = "--without-distro --without-pacemaker --localstatedir=/var --sysconfdir=/etc";
 
