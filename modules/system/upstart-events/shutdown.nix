@@ -88,6 +88,13 @@ with pkgs.lib;
               tryAgain=
               failed= # list of mount points that couldn't be unmounted/remounted
 
+              # Get rid of loopback devices.
+              loDevices=$(losetup -a | sed 's#^\(/dev/loop[0-9]\+\).*#\1#')
+              if [ -n "$loDevices" ]; then
+                  echo "removing loopback devices $loDevices..."
+                  losetup -d $loDevices
+              fi
+
               cp /proc/mounts /dev/.mounts # don't read /proc/mounts while it's changing
               exec 4< /dev/.mounts
               while read -u 4 device mp fstype options rest; do
