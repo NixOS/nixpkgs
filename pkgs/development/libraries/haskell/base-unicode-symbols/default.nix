@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "base-unicode-symbols";
-  version = "0.2.2.1";
-  sha256 = "095x4mlkn7i9byg6kdp2f7z0x7sizmy4lgsi0rsabazyd3d8rr9l";
+  version = "0.2.2.2";
+  sha256 = "13bn580r3wk7g5bq8ry04i2lvrcf576wjzlr0imli8rklkx8k3b8";
   meta = {
     homepage = "http://haskell.org/haskellwiki/Unicode-symbols";
     description = "Unicode alternatives for common functions and operators";
