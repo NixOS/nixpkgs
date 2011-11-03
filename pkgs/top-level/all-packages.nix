@@ -911,6 +911,8 @@ let
 
   lftp = callPackage ../tools/networking/lftp { };
 
+  libtirpc = callPackage ../development/libraries/ti-rpc { };
+
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   logrotate = callPackage ../tools/system/logrotate { };
