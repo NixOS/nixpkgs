@@ -7,4 +7,7 @@
   boot.initrd.enableSplashScreen = false;
   services.ttyBackgrounds.enable = false;
   services.mingetty.ttys = [ ];
+
+  # Since we can't manually respond to a panic, just reboot.
+  boot.kernelParams = [ "panic=1" "stage1panic=1" ];
 }
