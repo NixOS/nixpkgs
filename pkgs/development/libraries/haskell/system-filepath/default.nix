@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "system-filepath";
-  version = "0.4.1";
-  sha256 = "0jb32516xiwgbvr68yrf142fnzxfhn2dwh48nfr06gz65l7y4fcx";
+  version = "0.4.2";
+  sha256 = "070srsvqqjix0afy5ch1zcmpnrrszkds83rv0dp0izqrlzl038mr";
   buildDepends = [ text ];
   meta = {
     homepage = "https://john-millikin.com/software/hs-filepath/";
