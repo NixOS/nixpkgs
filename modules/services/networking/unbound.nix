@@ -32,9 +32,10 @@ let
         pidfile: "${stateDir}/unbound.pid"
         verbosity: 1      # uncomment and increase to get more logging.
         # listen on all interfaces, answer queries from the local subnet.
-        ${interfaces}
-        ${access}
-        ${forward}
+      ${interfaces}
+      ${access}
+      ${forward}
+      ${cfg.extraConfig}
     '';
 
 in
@@ -72,6 +73,13 @@ in
         default = [ ];
         description = "
           What servers to forward the queries to.
+        ";
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        description = "
+          Extra unbound config
         ";
       };
 
