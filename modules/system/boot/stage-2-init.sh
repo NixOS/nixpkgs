@@ -71,9 +71,6 @@ for o in $(cat /proc/cmdline); do
             # !!! argh, can't pass a startup event to Upstart yet.
             exec @shell@
             ;;
-        safemode)
-            safeMode=1
-            ;;
         resume=*)
             set -- $(IFS==; echo $o)
             resumeDevice=$2
