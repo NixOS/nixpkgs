@@ -4,6 +4,8 @@
 
 { config, pkgs, ... }:
 
+with pkgs.lib;
+
 {
 
   jobs.fetchEC2Data =
@@ -16,7 +18,9 @@
       script =
         ''
           echo "setting host name..."
-          ${pkgs.nettools}/bin/hostname $(${pkgs.curl}/bin/curl http://169.254.169.254/1.0/meta-data/hostname)
+          ${optionalString (config.networking.hostName == "") ''
+            ${pkgs.nettools}/bin/hostname $(${pkgs.curl}/bin/curl http://169.254.169.254/1.0/meta-data/hostname)
+          ''}
 
           # Don't download the SSH key if it has already been injected
           # into the image (a Nova feature).
