@@ -226,7 +226,7 @@ in
                 $extraOptions
                 END
               '';
-          target = "nix.conf"; # will be symlinked from /nix/etc/nix/nix.conf in activate-configuration.sh.
+          target = "nix/nix.conf";
         }
       ]
 
@@ -281,7 +281,7 @@ in
 
     nix.envVars =
       ''
-        export NIX_CONF_DIR=/nix/etc/nix
+        export NIX_CONF_DIR=/etc/nix
 
         # Enable the copy-from-other-stores substituter, which allows builds
         # to be sped up by copying build results from remote Nix stores.  To
@@ -306,8 +306,6 @@ in
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
         # Set up Nix.
-        mkdir -p /nix/etc/nix
-        ln -sfn /etc/nix.conf /nix/etc/nix/nix.conf
         chown root.nixbld /nix/store
         chmod 1775 /nix/store
 
