@@ -64,7 +64,7 @@ in
       interfaces = mkOption {
         default = [ "127.0.0.0" "::1" ];
         description = "
-          What addresses the server should listen to
+          What addresses the server should listen to.
         ";
       };
 
