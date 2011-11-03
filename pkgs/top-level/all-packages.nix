@@ -571,6 +571,8 @@ let
     # TODO i18n can be installed as well, implement it?
   };
 
+  dnstop = callPackage ../tools/networking/dnstop { };
+
   dhcp = callPackage ../tools/networking/dhcp { };
 
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
