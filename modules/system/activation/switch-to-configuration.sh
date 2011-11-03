@@ -114,7 +114,7 @@ EOF
 	# Xen domains unless we have to.
         # TODO: Jobs should be able to declare that they should not be
 	# auto-restarted.
-        if echo "$job" | grep -q "^shutdown$\|^control-alt-delete$\|^xserver$\|^dbus$\|^disnix$\|^emergency-shell$\|^xendomains$\|^udevtrigger$"; then continue; fi
+        if echo "$job" | grep -q "^shutdown$\|^control-alt-delete$\|^xserver$\|^dbus$\|^disnix$\|^emergency-shell$\|^xendomains$\|^udevtrigger$\|^drbd-down$"; then continue; fi
 
         if ! test -e "$oldJobs/$job.conf"; then
             echo "starting $job..."
