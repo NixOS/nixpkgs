@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ ncurses openssl tcl tk];
 
+  patches = [ ./va_list.patch ];
+
   meta = {
     description = "Console MSN Messenger client for Linux and other unix systems";
     homepage = http://gtmess.sourceforge.net/;
