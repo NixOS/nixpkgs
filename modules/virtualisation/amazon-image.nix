@@ -66,14 +66,7 @@ with pkgs.lib;
     [ { mountPoint = "/";
         device = "/dev/disk/by-label/nixos";
       }
-      { mountPoint = "/ephemeral0";
-        device = "/dev/xvdc";
-        neededForBoot = true;
-      }
     ];
-
-  swapDevices =
-    [ { device = "/dev/xvdb"; } ];
 
   boot.initrd.kernelModules = [ "xen-blkfront" "aufs" ];
   boot.kernelModules = [ "xen-netfront" ];
@@ -85,23 +78,55 @@ with pkgs.lib;
   boot.loader.grub.timeout = 0;
   boot.loader.grub.extraPerEntryConfig = "root (hd0)";
 
-  # Put /tmp and /var on /ephemeral0, which has a lot more space.
-  # Unfortunately we can't do this with the `fileSystems' option
-  # because it has no support for creating the source of a bind
-  # mount.  Also, "move" /nix to /ephemeral0 by layering an AUFS
-  # on top of it so we have a lot more space for Nix operations.
+  # Mount all formatted ephemeral disks and activate all swap devices.
+  # We cannot do this with the ‘fileSystems’ and ‘swapDevices’ options
+  # because the set of devices is dependent on the instance type
+  # (e.g. "m1.large" has one ephemeral filesystem and one swap device,
+  # while "m1.large" has two ephemeral filesystems and no swap
+  # devices).  Also, put /tmp and /var on /disk0, since it has a lot
+  # more space than the root device.  Similarly, "move" /nix to /disk0
+  # by layering an AUFS on top of it so we have a lot more space for
+  # Nix operations.
   boot.initrd.postMountCommands =
     ''
-      mkdir -m 1777 -p $targetRoot/ephemeral0/tmp
-      mkdir -m 1777 -p $targetRoot/tmp
-      mount --bind $targetRoot/ephemeral0/tmp $targetRoot/tmp
+      diskNr=0
+      diskForAufs=
+      for device in /dev/xvd*; do
+          if [ "$device" = /dev/xvda1 ]; then continue; fi
+          fsType=$(blkid -o value -s TYPE "$device" || true)
+          if [ "$fsType" = swap ]; then
+              echo "activating swap device $device..."
+              swapon "$device" || true
+          elif [ "$fsType" = ext3 ]; then
+              mp="/disk$diskNr"
+              diskNr=$((diskNr + 1))
+              echo "mounting $device om $mp..."
+              if mountFS "$device" "$mp" "" ext3; then
+                  if [ -z "$diskForAufs" ]; then diskForAufs="$mp"; fi
+              fi
+          else
+              echo "skipping unknown device type $device"
+          fi
+      done
 
-      mkdir -m 755 -p $targetRoot/ephemeral0/var
-      mkdir -m 755 -p $targetRoot/var
-      mount --bind $targetRoot/ephemeral0/var $targetRoot/var
+      if [ -n "$diskForAufs" ]; then
+          mkdir -m 755 -p $targetRoot/$diskForAufs/root
 
-      mkdir -m 755 -p $targetRoot/ephemeral0/nix
-      mount -t aufs -o dirs=$targetRoot/ephemeral0/nix=rw:$targetRoot/nix=rr none $targetRoot/nix
+          mkdir -m 1777 -p $targetRoot/$diskForAufs/root/tmp $targetRoot/tmp
+          mount --bind $targetRoot/$diskForAufs/root/tmp $targetRoot/tmp
+
+          mkdir -m 755 -p $targetRoot/$diskForAufs/root/var $targetRoot/var
+          mount --bind $targetRoot/$diskForAufs/root/var $targetRoot/var
+
+          mkdir -m 755 -p $targetRoot/$diskForAufs/root/nix
+          mount -t aufs -o dirs=$targetRoot/$diskForAufs/root/nix=rw:$targetRoot/nix=rr none $targetRoot/nix
+      fi
+    '';
+
+  boot.initrd.extraUtilsCommands =
+    ''
+      # We need swapon in the initrd.
+      cp ${pkgs.utillinux}/sbin/swapon $out/bin
     '';
 
   # Allow root logins only using the SSH key that the user specified
