@@ -133,4 +133,7 @@ with pkgs.lib;
   # at instance creation time.
   services.openssh.enable = true;
   services.openssh.permitRootLogin = "without-password";
+
+  # Force getting the hostname from EC2.
+  networking.hostName = mkDefault "";
 }
