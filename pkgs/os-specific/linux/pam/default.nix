@@ -19,8 +19,15 @@ stdenv.mkDerivation {
     propagatedBuildInputs = [ flex.hostDrv cracklib.hostDrv ];
     preConfigure = ''
       ar x ${flex.hostDrv}/lib/libfl.a
-      export LDFLAGS="$LDFLAGS $PWD/libyywrap.o"
+      mv libyywrap.o libyywrap-target.o
+      ar x ${flex}/lib/libfl.a
+      mv libyywrap.o libyywrap-host.o
+      export LDFLAGS="$LDFLAGS $PWD/libyywrap-target.o"
+      sed -e 's/@CC@/gcc/' -i doc/specs/Makefile.in
     '';
+    postConfigure = ''
+      sed -e "s@ $PWD/libyywrap-target.o@ $PWD/libyywrap-host.o@" -i doc/specs/Makefile
+    ''; 
   };
 
   postInstall = ''
