@@ -43,14 +43,7 @@ in
 
   config = mkIf config.sound.enable {
 
-    environment.systemPackages = [alsaUtils];
-
-    users.extraGroups = singleton
-      { # Alsalib seems to require the existence of this group, even
-        # if it's not used (e.g., doesn't own any devices).
-        name = "audio";
-        gid = config.ids.gids.audio;
-      };
+    environment.systemPackages = [ alsaUtils ];
 
     jobs.alsa =
       { startOn = "stopped udevtrigger";

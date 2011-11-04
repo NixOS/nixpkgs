@@ -77,6 +77,9 @@ let
           { name = "tape";
             gid = ids.gids.tape;
           }
+          { name = "audio";
+            gid = ids.gids.audio;
+          }
           { name = "video";
             gid = ids.gids.video;
           }
