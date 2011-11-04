@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uuagc-cabal";
-  version = "1.0.0.7";
-  sha256 = "1ciypx0rrisjbwx8fc9bzkkv975646951ibqpvbxipxzvv5npy9y";
+  version = "1.0.0.9";
+  sha256 = "1iifzy58w50162bwj20xmldsyq0xaq0g849zgwxai26881a1jlfg";
   buildDepends = [ mtl uulib ];
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/HUT/WebHome";
