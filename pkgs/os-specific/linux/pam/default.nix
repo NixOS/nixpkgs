@@ -17,6 +17,10 @@ stdenv.mkDerivation {
   crossAttrs = {
     # Skip libxcrypt cross-building, as it fails for mips and armv5tel
     propagatedBuildInputs = [ flex.hostDrv cracklib.hostDrv ];
+    preConfigure = ''
+      ar x ${flex.hostDrv}/lib/libfl.a
+      export LDFLAGS="$LDFLAGS $PWD/libyywrap.o"
+    '';
   };
 
   postInstall = ''
