@@ -801,6 +801,8 @@ let
 
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
 
+  gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
+
   gupnp = callPackage ../development/libraries/gupnp {
     inherit (gnome) libsoup;
   };
