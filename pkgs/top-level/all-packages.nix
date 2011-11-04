@@ -4265,7 +4265,6 @@ let
   neon029 = callPackage ../development/libraries/neon/0.29.nix {
     compressionSupport = true;
     sslSupport = true;
-    openssl = opensslNew;
   };
 
   nethack = builderDefsPackage (import ../games/nethack) {
@@ -4338,8 +4337,6 @@ let
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
   };
-
-  opensslNew = callPackage ../development/libraries/openssl/1.0.0e.nix { };
 
   ortp = callPackage ../development/libraries/ortp { };
 

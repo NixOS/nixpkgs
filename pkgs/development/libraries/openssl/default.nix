@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 
 let
-  name = "openssl-1.0.0d";
+  name = "openssl-1.0.0e";
 
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
@@ -13,10 +13,20 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.openssl.org/source/${name}.tar.gz";
-    sha256 = "1nr0cf6pf8i4qsnx31kqhiqv402xgn76yhjhlbdri8ma1hgislcj";
+    sha256 = "1xw0ffzmr4wbnb0glywgks375dvq8x87pgxmwx6vhgvkflkxqqg3";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
+  patches =
+    [ # Allow the location of the X509 certificate file (the CA
+      # bundle) to be set through the environment variable
+      # ‘OPENSSL_X509_CERT_FILE’.  This is necessary because the
+      # default location ($out/ssl/cert.pem) doesn't exist, and
+      # hardcoding something like /etc/ssl/cert.pem is impure and
+      # cannot be overriden per-process.  For security, the
+      # environment variable is ignored for setuid binaries.
+      ./cert-file.patch
+    ]
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
 
   buildNativeInputs = [ perl ];
 
@@ -26,6 +36,8 @@ stdenv.mkDerivation {
     if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc" else "./config";
 
   configureFlags = "shared --libdir=lib";
+
+  makeFlags = "MANDIR=$(out)/share/man";
 
   postInstall =
     ''
