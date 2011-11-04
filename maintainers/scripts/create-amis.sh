@@ -13,7 +13,7 @@ buildAndUploadFor() {
     ec2-bundle-image -i ./ec2-ami/nixos.img --user "$AWS_ACCOUNT" --arch "$arch" \
         -c "$EC2_CERT" -k "$EC2_PRIVATE_KEY"
 
-    name="$(echo nixos-$arch-r$revision | tr '[A-Z]' '[a-z]')"
+    name="$(echo nixos-$arch-r$revision | tr '[A-Z]_' '[a-z]-')"
     bucket="$name-eu"
     ec2-upload-bundle -b "$bucket" -m /tmp/nixos.img.manifest.xml \
         -a "$AWS_ACCESS_KEY_ID" -s "$AWS_SECRET_ACCESS_KEY" --location EU
@@ -33,5 +33,5 @@ buildAndUploadFor() {
     ec2-modify-image-attribute "$ami" -l -a all
 }
 
-buildAndUploadFor i686-linux i386
-#buildAndUploadFor x86_64-linux x86_64
+#buildAndUploadFor i686-linux i386
+buildAndUploadFor x86_64-linux x86_64
