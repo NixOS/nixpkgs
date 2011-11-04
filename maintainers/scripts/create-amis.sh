@@ -24,7 +24,7 @@ buildAndUploadFor() {
     echo "using PV-GRUB kernel $kernel"
 
     ami=$(ec2-register "$bucket/nixos.img.manifest.xml" -n "$bucket" -d "NixOS $system r$revision" \
-        --region "$region" --kernel "$kernel" | cut -f 1)
+        --region "$region" --kernel "$kernel" | cut -f 2)
 
     echo "AMI ID is $ami"
 
