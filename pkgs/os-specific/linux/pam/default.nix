@@ -1,6 +1,6 @@
 { stdenv, fetchurl, flex, cracklib, libxcrypt }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "linux-pam-1.1.1";
 
   src = fetchurl {
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   crossAttrs = {
     # Skip libxcrypt cross-building, as it fails for mips and armv5tel
     propagatedBuildInputs = [ flex.hostDrv cracklib.hostDrv ];
-    preConfigure = ''
+    preConfigure = preConfigure + ''
       ar x ${flex.hostDrv}/lib/libfl.a
       mv libyywrap.o libyywrap-target.o
       ar x ${flex}/lib/libfl.a
