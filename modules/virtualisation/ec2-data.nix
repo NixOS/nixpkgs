@@ -39,7 +39,15 @@ with pkgs.lib;
                   rm -f /root/key.pub
               fi
           fi
+        '';
+    };
 
+  jobs.printHostKey =
+    { name = "print-host-key";
+      task = true;
+      startOn = "started sshd";
+      script =
+        ''
           # Print the host public key on the console so that the user
           # can obtain it securely by parsing the output of
           # ec2-get-console-output.
@@ -48,6 +56,5 @@ with pkgs.lib;
           echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
         '';
     };
-
 
 }
