@@ -15,11 +15,15 @@ with pkgs.lib;
 
       task = true;
 
+      path = [ pkgs.curl ];
+
       script =
         ''
+          curl="curl --retry 3 --retry-delay 0 --fail"
+        
           echo "setting host name..."
           ${optionalString (config.networking.hostName == "") ''
-            ${pkgs.nettools}/bin/hostname $(${pkgs.curl}/bin/curl http://169.254.169.254/1.0/meta-data/hostname)
+            ${pkgs.nettools}/bin/hostname $($curl http://169.254.169.254/1.0/meta-data/hostname)
           ''}
 
           # Don't download the SSH key if it has already been injected
@@ -27,9 +31,7 @@ with pkgs.lib;
           if ! [ -e /root/.ssh/authorized_keys ]; then
               echo "obtaining SSH key..."
               mkdir -p /root/.ssh
-              ${pkgs.curl}/bin/curl --retry 3 --retry-delay 0 --fail \
-                -o /root/key.pub \
-                http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
+              $curl -o /root/key.pub http://169.254.169.254/1.0/meta-data/public-keys/0/openssh-key
               if [ $? -eq 0 -a -e /root/key.pub ]; then
                   if ! grep -q -f /root/key.pub /root/.ssh/authorized_keys; then
                       cat /root/key.pub >> /root/.ssh/authorized_keys
@@ -38,6 +40,18 @@ with pkgs.lib;
                   chmod 600 /root/.ssh/authorized_keys
                   rm -f /root/key.pub
               fi
+          fi
+
+          # Extract the intended SSH host key for this machine from
+          # the supplied user data, if available.  Otherwise sshd will
+          # generate one normally.
+          $curl http://169.254.169.254/2011-01-01/user-data > /root/user-data || true
+          key="$(sed 's/|/\n/g; s/SSH_HOST_DSA_KEY://; t; d' /root/user-data)"
+          key_pub="$(sed 's/SSH_HOST_DSA_KEY_PUB://; t; d' /root/user-data)"
+          if [ -n "$key" -a -n "$key_pub" -a ! -e /etc/ssh/ssh_host_dsa_key ]; then
+              mkdir -m 0755 -p /etc/ssh
+              (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
+              echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
           fi
         '';
     };
@@ -56,5 +70,9 @@ with pkgs.lib;
           echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
         '';
     };
+
+  # Only start sshd after we've obtained the host key (if given in the
+  # user data), otherwise the sshd job will generate one itself.
+  jobs.sshd.startOn = mkOverride 90 "stopped fetch-ec2-data";
 
 }
