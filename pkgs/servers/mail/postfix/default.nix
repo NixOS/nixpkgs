@@ -26,8 +26,8 @@ stdenv.mkDerivation {
 
     mkdir $out/share/postfix/conf
     cp conf/* $out/share/postfix/conf
-    sed -e 's@PATH=.*@PATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:$out/sbin@' -i $out/share/postfix/conf/post-install
-    sed -e '2aPATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:$out/sbin' -i $out/share/postfix/conf/postfix-script
+    sed -e 's@PATH=.*@PATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin@' -i $out/share/postfix/conf/post-install $out/libexec/postfix/post-install
+    sed -e '2aPATH=${coreutils}/bin:${findutils}/bin:${gnused}/bin:${gnugrep}/bin:'$out'/sbin' -i $out/share/postfix/conf/postfix-script $out/libexec/postfix/postfix-script
     chmod a+x $out/share/postfix/conf/{postfix-script,post-install}
   '';
 
@@ -49,6 +49,12 @@ stdenv.mkDerivation {
   buildInputs = [db4 openssl cyrus_sasl bison perl];
   
   patches = [ ./postfix-2.2.9-db.patch  ./postfix-2.2.9-lib.patch ./db-linux3.patch ];
+
+  postPatch = ''
+    sed -i -e s,/usr/bin,/var/run/current-system/sw/bin, \
+      -e s,/usr/sbin,/var/run/current-system/sw/sbin, \
+      -e s,:/sbin,, src/util/sys_defs.h
+  '';
   
   inherit glibc;
 }
