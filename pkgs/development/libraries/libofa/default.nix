@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ expat curl fftw ];
 
-  patches = [ ./libofa-0.9.3-gcc-4.patch ./libofa-0.9.3-gcc-4.3.patch ./gcc-4.x.patch ];
+  patches = [ ./libofa-0.9.3-gcc-4.patch ./libofa-0.9.3-gcc-4.3.patch ./gcc-4.x.patch ./curl-types.patch ];
 
   src = fetchurl {
     url = "http://musicip-libofa.googlecode.com/files/${name}.tar.gz";
