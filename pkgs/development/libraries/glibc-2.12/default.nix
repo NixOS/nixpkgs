@@ -4,6 +4,7 @@
 , installLocales ? true
 , profilingLibraries ? false
 , gccCross ? null
+, debugSymbols ? false
 }:
 
 assert stdenv.gcc.gcc != null;
@@ -13,7 +14,7 @@ let
   cross = if gccCross != null then gccCross.target else null;
 in
   build cross ({
-    name = "glibc";
+    name = "glibc${if debugSymbols then "-debug" else ""}";
 
     inherit fetchurl stdenv kernelHeaders installLocales profilingLibraries
       gccCross;
@@ -36,6 +37,18 @@ in
 
     meta.description = "The GNU C Library";
   }
+
+  //
+
+  (if debugSymbols
+   then {
+     # Build with debugging symbols, but leave optimizations on and don't
+     # attempt to keep the build tree.
+     dontStrip = true;
+     dontCrossStrip = true;
+     NIX_STRIP_DEBUG = 0;
+   }
+   else {})
 
   //
 
