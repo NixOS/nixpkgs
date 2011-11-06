@@ -7889,6 +7889,8 @@ let
   # TODO: the corresponding nix file is missing
   # xracer = callPackage ../games/xracer { };
 
+  xonotic = callPackage ../games/xonotic { };
+
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
     inherit (xlibs) libX11 xproto libXpm libXt;
   };
