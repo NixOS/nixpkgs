@@ -11,7 +11,7 @@ let version = "0.9.25"; in
       sha256 = "0dfycf80x73dz67c97j1ry29wrv35393ai5ry46i1x1fzfq6rv8v";
     };
 
-    buildInputs = [ perl texinfo ];
+    buildNativeInputs = [ perl texinfo ];
 
     patches =
       [ (fetchurl {
