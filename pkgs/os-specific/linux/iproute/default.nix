@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
    + " CONFDIR=$(out)/etc DOCDIR=$(out)/share/doc/${name}"
   + " MANDIR=$(out)/share/man";
 
-  buildInputs = [bison flex db4 iptables];
+  buildInputs = [db4 iptables];
+  buildNativeInputs = [bison flex db4];
 
   meta = {
     homepage =
