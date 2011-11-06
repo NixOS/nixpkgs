@@ -1,16 +1,18 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
 , gconf, gtk, libX11, libICE, libSM, libXtst, libXi, intltool, gettext
 , alsaLib, libsamplerate, libsndfile, speex, bluez, udev
-, jackaudioSupport ? false, jackaudio ? null }:
+, jackaudioSupport ? false, jackaudio ? null
+, xz, json_c, xextproto
+}:
 
 assert jackaudioSupport -> jackaudio != null;
 
 stdenv.mkDerivation rec {
-  name = "pulseaudio-0.9.23";
+  name = "pulseaudio-1.1";
 
   src = fetchurl {
-    url = "http://freedesktop.org/software/pulseaudio/releases/${name}.tar.gz";
-    sha256 = "0kms3w1i48j9368amr8wv83gk4szrnglh1biyp8jyqyb2k388gmg";
+    url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-1.1.tar.xz";
+    sha256 = "1vpm0681zj2jvhbabvnmrmfxr3172k4x58kjb39y5g3fdw9k3rbg";
   };
 
   # Since `libpulse*.la' contain `-lgdbm', it must be propagated.
@@ -19,7 +21,9 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig gnum4 libtool intltool glib dbus avahi
       libsamplerate libsndfile speex alsaLib bluez udev
-      #gtk gconf libX11 libICE libSM libXtst libXi
+      xz json_c
+      #gtk gconf 
+      libX11 libICE libSM libXtst libXi xextproto
     ]
     ++ stdenv.lib.optional jackaudioSupport jackaudio;
 
@@ -32,6 +36,11 @@ stdenv.mkDerivation rec {
     # Move the udev rules under $(prefix).
     sed -i "src/Makefile.in" \
         -e "s|udevrulesdir[[:blank:]]*=.*$|udevrulesdir = $out/lib/udev/rules.d|g"
+
+   # don't install proximity-helper as root and setuid
+   sed -i "src/Makefile.in" \
+       -e "s|chown root|true |" \
+       -e "s|chmod r+s |true |"
   '';
 
   configureFlags = ''
@@ -41,7 +50,7 @@ stdenv.mkDerivation rec {
     ${if jackaudioSupport then "--enable-jack" else ""}
   '';
 
-  installFlags = "sysconfdir=$(out)/etc";
+  installFlags = "pulseconfdir=$(out)/etc dbuspolicydir=$out/etc/dbus-1/system.d xdgautostartdir=$out/etc/xdg/autostart";
 
   enableParallelBuilding = true;
 

@@ -3716,6 +3716,8 @@ let
 
   json_glib = callPackage ../development/libraries/json-glib { };
 
+  json_c = callPackage ../development/libraries/json-c { };
+
   libjson = callPackage ../development/libraries/libjson { };
 
   judy = callPackage ../development/libraries/judy { };
