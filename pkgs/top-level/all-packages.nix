@@ -3183,6 +3183,8 @@ let
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
+  cogl = callPackage ../development/libraries/cogl { };
+
   coin3d = callPackage ../development/libraries/coin3d { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
@@ -3550,7 +3552,7 @@ let
 
   gtkLibs = pkgs.gtkLibs224;
 
-  inherit (pkgs.gtkLibs) glib gtk pango cairo;
+  inherit (pkgs.gtkLibs) glib gtk pango cairo gdk_pixbuf;
 
   gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in {
 
