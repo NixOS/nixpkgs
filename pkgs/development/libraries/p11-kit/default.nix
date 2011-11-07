@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://p11-glue.freedesktop.org/;
-    platforms = stdenv.lib.platfroms.all;
+    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }
