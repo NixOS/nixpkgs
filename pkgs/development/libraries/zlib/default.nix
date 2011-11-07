@@ -8,8 +8,6 @@ stdenv.mkDerivation (rec {
     sha256 = "0n7rlgvjn73pyil3s1l6p77m7wkc809n934rnzxv1b1za4pfar30";
   };
 
-  patches = [ ./zlib-LARGEFILE64_SOURCE.patch ];
-
   configureFlags = if static then "" else "--shared";
 
   preConfigure = ''
