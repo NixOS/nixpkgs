@@ -1,8 +1,9 @@
 { stdenv, fetchurl, pkgconfig, gnum4, gdbm, libtool, glib, dbus, avahi
-, gconf, gtk, libX11, libICE, libSM, libXtst, libXi, intltool, gettext
+, gconf, gtk, intltool, gettext
 , alsaLib, libsamplerate, libsndfile, speex, bluez, udev
 , jackaudioSupport ? false, jackaudio ? null
-, xz, json_c, xextproto
+, x11Support ? false, xlibs
+, xz, json_c
 }:
 
 assert jackaudioSupport -> jackaudio != null;
@@ -23,9 +24,9 @@ stdenv.mkDerivation rec {
       libsamplerate libsndfile speex alsaLib bluez udev
       xz json_c
       #gtk gconf 
-      libX11 libICE libSM libXtst libXi xextproto
     ]
-    ++ stdenv.lib.optional jackaudioSupport jackaudio;
+    ++ stdenv.lib.optional jackaudioSupport jackaudio
+    ++ stdenv.lib.optional x11Support xlibs.xlibs;
 
   preConfigure = ''
     # Change the `padsp' script so that it contains the full path to
