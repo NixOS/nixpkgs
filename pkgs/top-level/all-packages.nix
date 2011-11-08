@@ -5640,20 +5640,20 @@ let
 
     aufs =
       if kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs2 { }
+        callPackage ../os-specific/linux/aufs/2.nix { }
       else if kernel.features ? aufs2_1 then
-        callPackage ../os-specific/linux/aufs2.1 { }
+        callPackage ../os-specific/linux/aufs/2.1.nix { }
       else if kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs3 { }
+        callPackage ../os-specific/linux/aufs/3.nix { }
       else null;
 
     aufs_util = 
       if kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs2-util { }
+        callPackage ../os-specific/linux/aufs-util/2.nix { }
       else if kernel.features ? aufs2_1 then
-        callPackage ../os-specific/linux/aufs2.1-util { }
+        callPackage ../os-specific/linux/aufs-util/2.1.nix { }
       else if kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs3-util { }
+        callPackage ../os-specific/linux/aufs-util/3.nix { }
       else null;
       
     blcr = callPackage ../os-specific/linux/blcr {
