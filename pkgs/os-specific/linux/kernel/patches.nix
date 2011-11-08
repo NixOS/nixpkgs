@@ -297,12 +297,26 @@ rec {
   aufs3_0 = rec {
     name = "aufs3.0";
     version = "3.0";
-    utilRev = "a08d17d433567c7c2586c5fc2625a714b20fe155";
-    utilHash = "4772c1c6a36da7bbd448057c227a9cd1856ccf72748765cf85421ab0c4e34535";
+    utilRev = "cabe3601001ab3838215116c32715c9de9412e62";
+    utilHash = "7fc6cfe1e69a0b2438eaee056e15d42a2d6be396a637fcfb1b89858fcecc832f";
     patch = makeAufs3StandalonePatch {
       inherit version;
-      rev = "1067b9d8d64d23c70d905c9cd3c90a669e39c4d4";
-      sha256 = "b508cab5987a623f057ae5fdc006c909a6bae6151af6e12fe672bf97b1a7549d";
+      rev = "517b27621cdfb793959acac849dae9888338526a";
+      sha256 = "8085200ac78d0c1e082d4c721a09f4a4c1d96ae86e307075836d09c3e7d502df";
+    };
+    features.aufsBase = true;
+    features.aufs3 = true;
+  };
+
+  aufs3_1 = rec {
+    name = "aufs3.1";
+    version = "3.1";
+    utilRev = "cabe3601001ab3838215116c32715c9de9412e62";
+    utilHash = "7fc6cfe1e69a0b2438eaee056e15d42a2d6be396a637fcfb1b89858fcecc832f";
+    patch = makeAufs3StandalonePatch {
+      inherit version;
+      rev = "7386b57432ec5e73632a5375804239b02b6c00f0";
+      sha256 = "af4e9ad890e1b72d14170c97d8ead53291f09e275db600932724e6181530be2d";
     };
     features.aufsBase = true;
     features.aufs3 = true;
