@@ -230,7 +230,6 @@ print <<EOF ;
 
 {
   require = [
-    "\${modulesPath}/profiles/@profile@.nix"
     "\${modulesPath}/installer/scan/not-detected.nix"
   ];
 
