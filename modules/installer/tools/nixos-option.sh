@@ -208,8 +208,7 @@ if $generate; then
 {
   require = [
     # Include the configuration for part of your system which have been
-    # detected automatically.  In addition, it includes the same
-    # configuration as the installation device that you used.
+    # detected automatically.
     ./hardware-configuration.nix
   ];
 
