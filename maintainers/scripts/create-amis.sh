@@ -21,8 +21,13 @@ buildAndUploadFor() {
 
         bucket="$name-$region"
 
+        if [ "$region" = eu-west-1 ]; then s3location=EU;
+        elif [ "$region" = us-east-1 ]; then s3location=US;
+        else s3location="$region"
+        fi
+
         ec2-upload-bundle -b "$bucket" -m /tmp/nixos.img.manifest.xml \
-            -a "$AWS_ACCESS_KEY_ID" -s "$AWS_SECRET_ACCESS_KEY" --location "$region"
+            -a "$AWS_ACCESS_KEY_ID" -s "$AWS_SECRET_ACCESS_KEY" --location "$s3location"
 
         kernel=$(ec2-describe-images -o amazon --filter "manifest-location=*pv-grub-hd0_1.02-$arch*" --region "$region" | cut -f 2)
         echo "using PV-GRUB kernel $kernel"
