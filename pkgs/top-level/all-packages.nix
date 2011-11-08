@@ -5638,8 +5638,6 @@ let
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    aufs = callPackage ../os-specific/linux/aufs { };
-
     aufs2 = if kernel.features ? aufs2 then
       callPackage ../os-specific/linux/aufs2 { }
       else null;
