@@ -137,10 +137,6 @@ in
        ''}
       '';
 
-    # Force the xserver autorun to false.
-    services.xserver.autorun = mkForce false;
-    services.xserver.defaultDepth = mkForce 16;
-
     # Some more help text.
     services.mingetty.helpLine =
       ''

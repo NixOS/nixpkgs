@@ -1,16 +1,12 @@
 # This module defines a NixOS configuration that contains X11 and
-# KDE 4.
+# KDE 4.  It's used by the graphical installation CD.
+
 { config, pkgs, ... }:
 
 {
-  require = [ ./base.nix ];
-
   services.xserver = {
     enable = true;
-    autorun = true;
-    defaultDepth = 24;
-    displayManager.auto.enable = true;
-    desktopManager.default = "kde4";
+    displayManager.kdm.enable = true;
     desktopManager.kde4.enable = true;
   };
 }

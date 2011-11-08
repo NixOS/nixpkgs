@@ -1,3 +1,6 @@
+# This module defines the software packages included in the "minimal"
+# installation CD.  It might be useful elsewhere.
+
 { config, pkgs, ... }:
 
 {
