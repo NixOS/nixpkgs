@@ -91,7 +91,7 @@ let
 
 
   enableSplashScreen =
-    config.boot.initrd.enableSplashScreen && kernelPackages.splashutils != null;
+    config.boot.vesa && config.boot.initrd.enableSplashScreen && kernelPackages.splashutils != null;
 
 
   # Some additional utilities needed in stage 1, like mount, lvm, fsck

@@ -50,7 +50,7 @@ in
     services.ttyBackgrounds = {
 
       enable = mkOption {
-        default = splashutils != null;
+        default = true;
         description = ''
           Whether to enable graphical backgrounds for the virtual consoles.
         '';
@@ -82,11 +82,11 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.ttyBackgrounds.enable (
-  mkAssert (splashutils != null) "
-    The kernelPackages does not provide splashutils, as required by ttyBackgrounds.
-    Either provide kernelPackages with splashutils, or disable ttyBackgrounds.
-  " {
+  config = mkIf (config.boot.vesa && config.services.ttyBackgrounds.enable && splashutils != null) (
+    mkAssert (splashutils != null) ''
+      The kernelPackages does not provide splashutils, as required by ttyBackgrounds.
+      Either provide kernelPackages with splashutils, or disable ttyBackgrounds.
+    '' {
 
     services.ttyBackgrounds.specificThemes = singleton
       { tty = config.services.syslogd.tty;
