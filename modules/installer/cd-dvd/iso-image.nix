@@ -154,15 +154,10 @@ in
   # We need squashfs in the initrd to mount the compressed Nix store,
   # and aufs to make the root filesystem appear writable.
   boot.extraModulePackages =
-    let features = config.boot.kernelPackages.kernel.features; in
-
-    pkgs.stdenv.lib.singleton (if features ? aufs2 && features.aufs2 then
-      config.boot.kernelPackages.aufs2
-    else if features ? aufs2_1 && features.aufs2_1 then
-      config.boot.kernelPackages.aufs2_1
-    else if features ? aufs3 && features.aufs3 then
-      config.boot.kernelPackages.aufs3
-    else abort "This kernel doesn't have aufs enabled");
+    if config.boot.kernelPackages.aufs == null then
+      abort "This kernel doesn't have aufs enabled"
+    else
+      [ config.boot.kernelPackages.aufs ];
 
   boot.initrd.availableKernelModules = [ "aufs" "squashfs" "iso9660" ];
 

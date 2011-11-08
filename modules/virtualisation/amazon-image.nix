@@ -71,7 +71,7 @@ with pkgs.lib;
   boot.initrd.kernelModules = [ "xen-blkfront" "aufs" ];
   boot.kernelModules = [ "xen-netfront" ];
 
-  boot.extraModulePackages = [ config.boot.kernelPackages.aufs2 ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.aufs ];
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.device = "nodev";

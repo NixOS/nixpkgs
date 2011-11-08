@@ -244,7 +244,7 @@ in
     ++ optional cfg.writableStore [ "aufs" ];
 
   boot.extraModulePackages =
-    optional cfg.writableStore config.boot.kernelPackages.aufs2;
+    optional cfg.writableStore config.boot.kernelPackages.aufs;
 
   boot.initrd.extraUtilsCommands =
     ''

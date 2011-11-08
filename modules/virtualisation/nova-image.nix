@@ -78,7 +78,7 @@ with pkgs.lib;
 
   boot.initrd.kernelModules = [ "aufs" ];
 
-  boot.extraModulePackages = [ config.boot.kernelPackages.aufs2 ];
+  boot.extraModulePackages = [ config.boot.kernelPackages.aufs ];
 
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
