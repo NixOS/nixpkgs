@@ -36,6 +36,7 @@ in
       # Profiles of this basic installation CD.
       ../../profiles/all-hardware.nix
       ../../profiles/base.nix
+      # ../../profiles/minimal.nix # should include this, but then the graphical CD will also get it.
       ../../profiles/installation-device.nix
     ];
 
