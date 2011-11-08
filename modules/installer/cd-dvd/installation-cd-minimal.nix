@@ -1,11 +1,11 @@
 # This module defines a small NixOS installation CD.  It does not
 # contain any graphical stuff.
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
 
 {
-  require = [
-    ./installation-cd-base.nix
-    ../../profiles/minimal.nix
-  ];
+  require =
+    [ ./installation-cd-base.nix
+      ../../profiles/minimal.nix
+    ];
 }
