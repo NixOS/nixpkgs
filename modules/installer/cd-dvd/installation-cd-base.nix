@@ -34,6 +34,7 @@ in
       ./iso-image.nix
 
       # Profiles of this basic installation CD.
+      ../../profiles/all-hardware.nix
       ../../profiles/base.nix
       ../../profiles/installation-device.nix
     ];

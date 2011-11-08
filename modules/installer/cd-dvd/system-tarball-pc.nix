@@ -112,13 +112,14 @@ let
 in
 
 {
-  require = [
-    ./system-tarball.nix
+  require =
+    [ ./system-tarball.nix
 
-   # Profiles of this basic installation.
-    ../../profiles/base.nix
-    ../../profiles/installation-device.nix
-  ];
+      # Profiles of this basic installation.
+      ../../profiles/all-hardware.nix
+      ../../profiles/base.nix
+      ../../profiles/installation-device.nix
+    ];
 
   # To speed up further installation of packages, include the complete stdenv
   # in the Nix store of the tarball.

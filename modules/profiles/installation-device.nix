@@ -1,5 +1,5 @@
-# Provide a basic cponfiguration for installation devices like CDs.
-{config, pkgs, modules, ...}:
+# Provide a basic configuration for installation devices like CDs.
+{ config, pkgs, modules, ... }:
 
 with pkgs.lib;
 
@@ -151,7 +151,6 @@ in
           else ""
         }
       '';
-
 
     # Allow sshd to be started manually through "start sshd".  It should
     # not be started by default on the installation CD because the
