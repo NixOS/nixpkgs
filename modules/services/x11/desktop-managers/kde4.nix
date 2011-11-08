@@ -172,7 +172,7 @@ in
     services.udisks = mkIf isKDE47 { enable = true; };
     services.upower = mkIf (isKDE47 && config.powerManagement.enable) { enable = true; };
 
-    security.pam.services = [ { name = "kde"; } ];
+    security.pam.services = [ { name = "kde"; allowNullPassword = true; } ];
 
   };
 
