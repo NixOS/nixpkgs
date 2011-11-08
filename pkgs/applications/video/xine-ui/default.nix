@@ -14,6 +14,10 @@ stdenv.mkDerivation {
       xlibs.libXinerama xlibs.libXi
     ];
 
+  preBuild = ''
+    sed -e '/curl.types.h/d' -i *.c *.h */*.c */*.h */*/*.c */*/*.h
+  '';
+
   configureFlags = "--with-readline=${readline}";
   
   NIX_LDFLAGS = "-lXext -lgcc_s";
