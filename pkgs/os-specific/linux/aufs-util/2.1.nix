@@ -36,8 +36,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Utilities for AUFS2.1";
     homepage = http://aufs.sourceforge.net/;
-    maintainers = [ stdenv.lib.maintainers.eelco 
-                    stdenv.lib.maintainers.shlevy ];
+    maintainers = [ stdenv.lib.maintainers.eelco  ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
