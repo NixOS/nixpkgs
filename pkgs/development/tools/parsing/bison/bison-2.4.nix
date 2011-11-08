@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
   };
 
   buildNativeInputs = [m4];
-  propagatedBuildInputs = [m4];
 
   doCheck = true;
 

@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib libffi ];
 
+  passthru.gioModuleDir = "lib/gio/modules";
+
   # glib buildsystem fails to find python, thus hardcodes python2.4 in #!
   postInstall = ''rm -rvf $out/share/gtk-doc'';
 

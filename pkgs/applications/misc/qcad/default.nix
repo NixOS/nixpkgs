@@ -19,15 +19,26 @@ stdenv.mkDerivation {
 
   buildInputs = [ qt3 libpng libXext libX11 ];
 
-  patchPhase = ''
+  prePatch = ''
     sed -i 's/-pedantic//' mkspecs/defs.pro
-    patch -p1 < ${ ./qcad-2.0.4.0-1.src-intptr.patch /* taken from gentoo, fixes amd64 compilation issue */}
+    # patch -p1 < ${ ./qcad-2.0.4.0-1.src-intptr.patch }
   '';
+  patches = [
+    /* taken from gentoo, fixes amd64 compilation issue */
+    ./qcad-2.0.4.0-1.src-intptr.patch
+    /* taken from gentoo, fixes gcc 4.3 or above compilation issue */
+    ./qcad-2.0.4.0-gcc43.patch
+  ];
 
   # probably there is more to be done. But this seems to work for now (eg see gentoo ebuild)
   installPhase = ''
     ensureDir $out/{bin,share}
     cp -r qcad $out/share
+
+    # The compilation does not fail with error code. But qcad will not exist
+    # if it failed.
+    test -f $out/share/qcad/qcad
+
     cat >> $out/bin/qcad << EOF
     #!/bin/sh
     cd $out/share/qcad

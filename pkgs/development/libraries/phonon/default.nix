@@ -1,21 +1,26 @@
-{ stdenv, fetchurl, cmake, automoc4, qt4 }:
+{ stdenv, fetchurl, cmake, automoc4, qt4, xz }:
+
+let
+  v = "4.5.1";
+in
 
 stdenv.mkDerivation rec {
-  name = "phonon-4.5.0";
+  name = "phonon-${v}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/phonon/4.5.0/src/${name}.tar.bz2";
-    sha256 = "1p2jhxx3ij9xqxvzdz6fm14b83iag9sk940clgj5jnnw00x93s36";
+    url = "mirror://kde/stable/phonon/${v}/src/${name}.tar.xz";
+    sha256 = "1j7lw8w7h2z415vhbp2jlgv3mqwvrspf8xnzb8l0gsfanqfg1001";
   };
 
-  buildInputs = [ cmake automoc4 qt4 ];
+  buildInputs = [ qt4 ];
 
+  buildNativeInputs = [ cmake automoc4 xz ];
+
+  cmakeFlags = "-DPHONON_MKSPECS_DIR=mkspecs";
   preConfigure =
     ''
-      substituteInPlace CMakeLists.txt \
-        --replace 'PHONON_MKSPECS_DIR}' 'CMAKE_INSTALL_PREFIX}/mkspecs'
       substituteInPlace designer/CMakeLists.txt \
-        --replace 'QT_PLUGINS_DIR}' 'CMAKE_INSTALL_PREFIX}/lib/qt4/plugins'
+        --replace '{QT_PLUGINS_DIR}' '{CMAKE_INSTALL_PREFIX}/lib/qt4/plugins'
     '';
 
   meta = {

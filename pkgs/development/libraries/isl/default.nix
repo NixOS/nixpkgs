@@ -5,7 +5,7 @@ let
   staticFlags = if static then " --enable-static --disable-shared" else "";
 in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "isl-${version}";
   
   src = fetchurl {
@@ -17,6 +17,9 @@ stdenv.mkDerivation {
 
   dontDisableStatic = if static then true else false;
   configureFlags = "--with-gmp-prefix=${gmp}" + staticFlags;
+  crossAttrs = {
+    configureFlags = configureFlags + " --with-gmp-prefix=${gmp.hostDrv} ";
+  };
 
   meta = {
     homepage = http://www.kotnet.org/~skimo/isl/;

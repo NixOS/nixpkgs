@@ -273,6 +273,6 @@ rec {
   # override only the attributes that are already present in the old set
   # useful for deep-overriding
   overrideExisting = old: new:
-  old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] (getAttr attr old) new)) (attrNames old));
+    old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] (getAttr attr old) new)) (attrNames old));
 
 }

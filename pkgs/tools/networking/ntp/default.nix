@@ -3,11 +3,11 @@
 assert stdenv.isLinux -> libcap != null;
  
 stdenv.mkDerivation rec {
-  name = "ntp-4.2.6p2";
+  name = "ntp-4.2.6p4";
   
   src = fetchurl {
     url = "http://www.eecis.udel.edu/~ntp/ntp_spool/ntp4/ntp-4.2/${name}.tar.gz";
-    sha256 = "1n79scfvgjk8hn1fr4q2kkk6xm83k68r4p488ai09nm20dwqp2a2";
+    sha256 = "1ww1hpy0yfmj13vs46d80hs48hy8ig6kn6p6d8q2syym02khxhyy";
   };
   
   configureFlags = ''

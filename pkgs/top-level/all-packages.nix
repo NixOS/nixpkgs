@@ -571,6 +571,8 @@ let
     # TODO i18n can be installed as well, implement it?
   };
 
+  dnstop = callPackage ../tools/networking/dnstop { };
+
   dhcp = callPackage ../tools/networking/dhcp { };
 
   dhcpcd = callPackage ../tools/networking/dhcpcd { };
@@ -787,7 +789,7 @@ let
 
   grub2 = grub19x;
 
-  # grub2_efi = callPackage ../tools/misc/grub/1.9x.nix { EFIsupport = true; };
+  grub2_efi = callPackage ../tools/misc/grub/1.9x.nix { EFIsupport = true; };
 
   gssdp = callPackage ../development/libraries/gssdp {
     inherit (gnome) libsoup;
@@ -798,6 +800,8 @@ let
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
+
+  gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
 
   gupnp = callPackage ../development/libraries/gupnp {
     inherit (gnome) libsoup;
@@ -909,7 +913,7 @@ let
 
   lftp = callPackage ../tools/networking/lftp { };
 
-  libtirpc = callPackage ../development/libraries/libtirpc { };
+  libtirpc = callPackage ../development/libraries/ti-rpc { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
@@ -3189,6 +3193,8 @@ let
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
+  cogl = callPackage ../development/libraries/cogl { };
+
   coin3d = callPackage ../development/libraries/coin3d { };
 
   commoncpp2 = callPackage ../development/libraries/commoncpp2 { };
@@ -3579,7 +3585,7 @@ let
 
   gtkLibs = pkgs.gtkLibs224;
 
-  inherit (pkgs.gtkLibs) glib gtk pango cairo;
+  inherit (pkgs.gtkLibs) glib gtk pango cairo gdk_pixbuf;
 
   gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in {
 
@@ -3744,6 +3750,8 @@ let
   jetty_util = callPackage ../development/libraries/java/jetty-util { };
 
   json_glib = callPackage ../development/libraries/json-glib { };
+
+  json_c = callPackage ../development/libraries/json-c { };
 
   libjson = callPackage ../development/libraries/libjson { };
 
@@ -4337,6 +4345,8 @@ let
   };
 
   ortp = callPackage ../development/libraries/ortp { };
+
+  p11_kit = callPackage ../development/libraries/p11-kit { };
 
   pangoxsl = callPackage ../development/libraries/pangoxsl {
     inherit (gtkLibs) glib pango;
@@ -5631,7 +5641,6 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        kernelPatches.efi_stub
         #kernelPatches.aufs2_1_2_6_38
         #kernelPatches.mips_restart_2_6_36
       ];
@@ -7298,7 +7307,7 @@ let
 
   scribus = callPackage ../applications/office/scribus {
     inherit (gnome) libart_lgpl;
-    qt = qt3;
+    qt = qt4;
   };
 
   seeks = callPackage ../tools/networking/p2p/seeks { };
@@ -7925,6 +7934,8 @@ let
 
   # TODO: the corresponding nix file is missing
   # xracer = callPackage ../games/xracer { };
+
+  xonotic = callPackage ../games/xonotic { };
 
   xsokoban = builderDefsPackage (import ../games/xsokoban) {
     inherit (xlibs) libX11 xproto libXpm libXt;

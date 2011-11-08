@@ -11,7 +11,14 @@ stdenv.mkDerivation {
     sha256 = "0ysff249mwhq0053bw3hxh58djc0gy7vjan2z1krrf9n5d5vvv0b";
   };
   buildInputs = [yacc];
-  propagatedBuildInputs = [m4];
+  propagatedBuildNativeInputs = [m4];
+
+  crossAttrs = {
+    preConfigure = ''
+      export ac_cv_func_malloc_0_nonnull=yes
+      export ac_cv_func_realloc_0_nonnull=yes
+    '';
+  };
 
   meta = {
     description = "A fast lexical analyser generator";

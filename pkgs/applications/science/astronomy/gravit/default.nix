@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     license = "GPLv2";
 
     longDescription = ''
-          Gravit is a gravity simulator which runs under Linux, Windows and
+      Gravit is a gravity simulator which runs under Linux, Windows and
       Mac OS X. It uses Newtonian physics using the Barnes-Hut N-body
       algorithm. Although the main goal of Gravit is to be as accurate
       as possible, it also creates beautiful looking gravity patterns.
