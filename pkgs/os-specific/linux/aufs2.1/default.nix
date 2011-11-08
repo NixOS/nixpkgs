@@ -8,7 +8,7 @@ let version =
   else "20110408"; in
 
 stdenv.mkDerivation {
-  name = "aufs2.1-${version}";
+  name = "aufs2.1-${version}-${kernel.version}";
 
   src =
   if (builtins.lessThan (builtins.compareVersions kernel.version "2.6.38") 0) 

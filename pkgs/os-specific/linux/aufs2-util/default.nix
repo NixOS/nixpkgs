@@ -1,16 +1,18 @@
-{ stdenv, fetchurl, kernel, aufs2 }:
+{ stdenv, fetchurl, kernel, aufs }:
+
+assert aufs != null;
 
 let version = "20100506"; in
 
 stdenv.mkDerivation {
-  name = "aufs2-util-${version}";
+  name = "aufs2-util-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://nixos.org/tarballs/aufs2-util-git-${version}.tar.bz2";
     sha256 = "0ly0c3p8fjxqbk8k5rmm1a91wg8wcrvhi1lv4aawalkkk8rqbnwk";
   };
 
-  buildInputs = [ aufs2 ];
+  buildInputs = [ aufs ];
 
   makeFlags =
     [ "KDIR=${kernel}/lib/modules/${kernel.version}/build"

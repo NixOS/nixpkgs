@@ -1,9 +1,11 @@
-{ stdenv, fetchgit, kernel, aufs2_1 }:
+{ stdenv, fetchgit, kernel, aufs }:
+
+assert aufs != null;
 
 let version = "20110217"; in
 
 stdenv.mkDerivation {
-  name = "aufs2.1-util-${version}";
+  name = "aufs2.1-util-${version}-${kernel.version}";
 
   src = fetchgit {
     url = "git://git.c3sl.ufpr.br/aufs/aufs2-util.git";
@@ -11,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0fce5601b67efe8b5652a813ae612348bf4503aa71056cd31a5ed0406632e364";
   };
 
-  buildInputs = [ aufs2_1 ];
+  buildInputs = [ aufs ];
 
   makeFlags =
     [ "KDIR=${kernel}/lib/modules/${kernel.version}/build"

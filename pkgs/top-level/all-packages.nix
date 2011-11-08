@@ -5638,30 +5638,24 @@ let
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    aufs2 = if kernel.features ? aufs2 then
-      callPackage ../os-specific/linux/aufs2 { }
+    aufs =
+      if kernel.features ? aufs2 then
+        callPackage ../os-specific/linux/aufs2 { }
+      else if kernel.features ? aufs2_1 then
+        callPackage ../os-specific/linux/aufs2.1 { }
+      else if kernel.features ? aufs3 then
+        callPackage ../os-specific/linux/aufs3 { }
       else null;
 
-    aufs2_1 = if kernel.features ? aufs2_1 then
-      callPackage ../os-specific/linux/aufs2.1 { }
+    aufs_util = 
+      if kernel.features ? aufs2 then
+        callPackage ../os-specific/linux/aufs2-util { }
+      else if kernel.features ? aufs2_1 then
+        callPackage ../os-specific/linux/aufs2.1-util { }
+      else if kernel.features ? aufs3 then
+        callPackage ../os-specific/linux/aufs3-util { }
       else null;
-
-    aufs3 = if kernel.features ? aufs3 then
-      callPackage ../os-specific/linux/aufs3 { }
-      else null;
-
-    aufs2_util = if kernel.features ? aufs2 then
-      callPackage ../os-specific/linux/aufs2-util { }
-      else null;
-
-    aufs2_1_util = if kernel.features ? aufs2_1 then
-      callPackage ../os-specific/linux/aufs2.1-util { }
-      else null;
-
-    aufs3_util = if kernel.features ? aufs3 then
-      callPackage ../os-specific/linux/aufs3-util { }
-      else null;
-
+      
     blcr = callPackage ../os-specific/linux/blcr {
       #libtool = libtool_1_5; # libtool 2 causes a fork bomb
     };

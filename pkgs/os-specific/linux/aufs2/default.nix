@@ -5,7 +5,7 @@ assert kernel.features ? aufsBase;
 let version = "20100522"; in
 
 stdenv.mkDerivation {
-  name = "aufs2-${version}";
+  name = "aufs2-${version}-${kernel.version}";
 
   src = 
   if (builtins.lessThan (builtins.compareVersions kernel.version "2.6.35") 0) then

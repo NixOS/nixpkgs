@@ -12,7 +12,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "aufs3-${patch.version}";
+  name = "aufs3-${patch.version}-${kernel.version}";
 
   src = patch.patch.src;
 

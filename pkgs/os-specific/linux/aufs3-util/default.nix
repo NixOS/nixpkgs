@@ -1,15 +1,17 @@
-{ stdenv, fetchgit, kernel, aufs3 }:
+{ stdenv, fetchgit, kernel, aufs }:
+
+assert aufs != null;
 
 stdenv.mkDerivation {
-  name = "aufs3-util-${aufs3.patch.version}";
+  name = "aufs3-util-${aufs.patch.version}-${kernel.version}";
 
   src = fetchgit {
     url = git://aufs.git.sourceforge.net/gitroot/aufs/aufs-util.git;
-    rev = aufs3.patch.utilRev;
-    sha256 = aufs3.patch.utilHash;
+    rev = aufs.patch.utilRev;
+    sha256 = aufs.patch.utilHash;
   };
 
-  buildInputs = [ aufs3 ];
+  buildInputs = [ aufs ];
 
   makeFlags =
     [ "KDIR=${kernel}/lib/modules/${kernel.modDirVersion}/build"
