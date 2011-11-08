@@ -130,6 +130,13 @@ let
       type = "graphical";
     };
 
+    # A variant with a more recent (but possibly less stable) kernel
+    # that might support more hardware.
+    iso_new_kernel = makeIso {
+      module = ./modules/installer/cd-dvd/installation-cd-new-kernel.nix;
+      type = "new-kernel";
+    };
+
 
     # Provide a tarball that can be unpacked into an SD card, and easily
     # boot that system from uboot (like for the sheevaplug).
