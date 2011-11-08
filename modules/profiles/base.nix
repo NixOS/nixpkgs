@@ -43,6 +43,7 @@
     pkgs.zip
     pkgs.xz
     pkgs.dar # disk archiver
+    pkgs.cabextract
 
     # Some editors.
     pkgs.vim
