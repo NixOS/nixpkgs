@@ -3,6 +3,8 @@
 
 { config, pkgs, ... }:
 
+with pkgs.lib;
+
 {
   require = [
     ./installation-cd-base.nix
@@ -18,4 +20,14 @@
 
   # Don't start the X server by default.
   services.xserver.autorun = mkForce false;
+
+  # Auto-login as root.
+  services.xserver.displayManager.kdm.extraConfig =
+    ''
+      [X-*-Core]
+      AllowRootLogin=true
+      AutoLoginEnable=true
+      AutoLoginUser=root
+      AutoLoginPass=""
+    '';
 }
