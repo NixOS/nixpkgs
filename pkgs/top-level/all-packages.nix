@@ -5909,6 +5909,8 @@ let
 
   powertop = callPackage ../os-specific/linux/powertop { };
 
+  prayer = callPackage ../servers/prayer { };
+
   procps = callPackage ../os-specific/linux/procps { };
 
   pwdutils = callPackage ../os-specific/linux/pwdutils { };
@@ -7415,6 +7417,8 @@ let
   };
 
   uucp = callPackage ../tools/misc/uucp { };
+
+  uwimap = callPackage ../tools/networking/uwimap { };
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper;
