@@ -67,6 +67,6 @@
   networking.enableIntel2100BGFirmware = true;
   networking.enableIntel2200BGFirmware = true;
   networking.enableIntel3945ABGFirmware = true;
-  networking.enableRTL8192cFirmware = true;
+  #networking.enableRTL8192cFirmware = true; # doesn't build
   
 }
