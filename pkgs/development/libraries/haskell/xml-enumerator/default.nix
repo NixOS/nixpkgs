@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-enumerator";
-  version = "0.4.3.1";
-  sha256 = "1j9950vqaanjig6wv2pk582x1znzb141p5apg05z9i0sk1w5hczh";
+  version = "0.4.3.2";
+  sha256 = "0ahxg81fr4vf5lwbqsbhvpfczhi2fgxb7qrzd38d2zgklrh9vh7v";
   buildDepends = [
     attoparsecText attoparsecTextEnumerator blazeBuilder
     blazeBuilderEnumerator dataDefault enumerator failure text
