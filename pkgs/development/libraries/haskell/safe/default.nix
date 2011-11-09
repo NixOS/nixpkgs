@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "safe";
-  version = "0.3";
-  sha256 = "174jm7nlqsgvc6namjpfknlix6yy2sf9pxnb3ifznjvx18kgc7m0";
+  version = "0.3.1";
+  sha256 = "0sq4fcwh9bmhi79rnxh70hqwa2k3sipqnvq0f9a78j4wg6nmm6li";
   meta = {
     homepage = "http://community.haskell.org/~ndm/safe/";
     description = "Library for safe (pattern match free) functions";
