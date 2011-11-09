@@ -847,6 +847,8 @@ let
 
   iftop = callPackage ../tools/networking/iftop { };
 
+  imapproxy = callPackage ../tools/networking/imapproxy { };
+
   imapsync = callPackage ../tools/networking/imapsync {
     inherit (perlPackages) MailIMAPClient;
   };
