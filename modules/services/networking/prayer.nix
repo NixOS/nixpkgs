@@ -6,6 +6,8 @@ let
 
   inherit (pkgs) prayer;
 
+  cfg = config.services.prayer;
+
   stateDir = "/var/lib/prayer";
 
   prayerUser = "prayer";
@@ -18,7 +20,9 @@ let
     prayer_group = "${prayerGroup}"
     sendmail_path = "/var/setuid-wrappers/sendmail"
 
-    ${config.services.prayer.extraConfig}
+    use_http_port ${cfg.port}
+
+    ${cfg.extraConfig}
   '';
 
   prayerCfg = pkgs.runCommand "prayer.cf" { } ''
@@ -38,21 +42,14 @@ in
       enable = mkOption {
         default = false;
         description = ''
-          Whether to run the machine as a HTTP proxy server.
+          Whether to run the prayer webmail http server.
         '';
       };
 
-      listenAddress = mkOption {
-        default = "127.0.0.1:8118";
+      port = mkOption {
+        default = "2080";
         description = ''
-          Address the proxy server is listening to.
-        '';
-      };
-
-      logDir = mkOption {
-        default = "/var/log/prayer" ;
-        description = ''
-          Location for prayer log files.
+          Port the prayer http server is listening to.
         '';
       };
 
