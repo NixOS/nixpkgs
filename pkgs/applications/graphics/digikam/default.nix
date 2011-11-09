@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2, eigen,
-kdegraphics, lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, kdeedu,
+kdegraphics, lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, kdeedu, libkipi, libkdcraw, libkexiv2,
 liblqr1, lensfun, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake qt4 kdelibs kdegraphics automoc4 phonon qimageblitz qca2 eigen
-    lcms jasper libgphoto2 kdepimlibs gettext soprano kdeedu liblqr1 lensfun
+    lcms jasper libgphoto2 kdepimlibs gettext soprano kdeedu liblqr1 lensfun libkipi libkdcraw libkexiv2
     pkgconfig ];
 
   KDEDIRS=kdeedu;
