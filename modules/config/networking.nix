@@ -2,7 +2,9 @@
 
 {config, pkgs, ...}:
 
+with pkgs.lib;
 let
+  cfg = config.networking;
 
   options = {
 
@@ -15,6 +17,13 @@ let
     };
 
   };
+
+  localhostWithDomain = optionalString (cfg.domain != "")
+    "localhost.${cfg.domain}";
+
+  hostnameWithDomain = optionalString
+    (cfg.domain != "" && cfg.hostName != "")
+    "${cfg.hostName}.${cfg.domain}";
 
 in
 
@@ -40,11 +49,10 @@ in
       { # /etc/hosts: Hostname-to-IP mappings.
         source = pkgs.writeText "hosts"
           ''
-            ${config.networking.extraHosts}
-            ${if config.networking.hostName != ""
-              then "127.0.0.1 ${config.networking.hostName}"
-              else ""}
-            127.0.0.1 localhost
+            ${cfg.extraHosts}
+            ${optionalString (cfg.hostName != "")
+              "127.0.0.1 ${cfg.hostName} ${hostnameWithDomain}"}
+            127.0.0.1 localhost ${localhostWithDomain}
           '';
         target = "hosts";
       }
