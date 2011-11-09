@@ -67,6 +67,7 @@ in
     dovecot2 = 46;
     dovenull2 = 47;
     unbound = 48;
+    prayer = 49;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -114,6 +115,7 @@ in
     fourStoreEndpoint = 43;
     virtuoso = 44;
     dovecot2 = 45;
+    prayer = 46;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
