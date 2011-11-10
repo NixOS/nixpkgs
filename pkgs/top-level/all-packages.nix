@@ -4985,6 +4985,8 @@ let
 
   nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official { };
 
+  oidentd = callPackage ../servers/identd/oidentd { };
+
   openfire = callPackage ../servers/xmpp/openfire { };
 
   postgresql = postgresql83;
