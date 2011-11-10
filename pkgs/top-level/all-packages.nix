@@ -6636,13 +6636,6 @@ let
 
   firefox50Wrapper = wrapFirefox { browser = firefox50Pkgs.firefox; };
 
-  firefox60Pkgs = callPackage ../applications/networking/browsers/firefox/6.0.nix {
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-  };
-
-  firefox60Wrapper = wrapFirefox { browser = firefox60Pkgs.firefox; };
-
   firefox70Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
@@ -6650,10 +6643,12 @@ let
 
   firefox70Wrapper = wrapFirefox { browser = firefox70Pkgs.firefox; };
 
-  firefox80bPkgs = callPackage ../applications/networking/browsers/firefox/8.0.nix {
+  firefox80Pkgs = callPackage ../applications/networking/browsers/firefox/8.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
+
+  firefox80Wrapper = wrapFirefox { browser = firefox80Pkgs.firefox; };
 
   flac = callPackage ../applications/audio/flac { };
 
