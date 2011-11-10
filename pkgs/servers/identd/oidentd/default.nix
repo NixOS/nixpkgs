@@ -11,5 +11,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://ojnk.sourceforge.net/;
     description = "An implementation of the IDENT protocol";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
