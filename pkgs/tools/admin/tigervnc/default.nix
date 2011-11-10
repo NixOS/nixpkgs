@@ -1,20 +1,16 @@
-{stdenv, fetchsvn, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver,
-autoconf, automake, cvs, libtool, nasm, utilmacros, pixman, xkbcomp, xkeyboard_config,
-fontDirectories, fontutil }:
+{ stdenv, fetchurl, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver
+, autoconf, automake, cvs, libtool, nasm, utilmacros, pixman, xkbcomp, xkeyboard_config
+, fontDirectories, fontutil, libgcrypt, gnutls, pam }:
 
 with stdenv.lib;
 
-stdenv.mkDerivation {
-  name = "tigervnc-svn-4232";
-  src = fetchsvn {
-    url = https://tigervnc.svn.sourceforge.net/svnroot/tigervnc/trunk;
-    rev = 4232;
-    sha256 = "070lsddgx6qj7bpw4p65w54fr7z46vp8wyshv9p0fh3k5izrfnxj";
+stdenv.mkDerivation rec {
+  name = "tigervnc-1.1.0";
+  
+  src = fetchurl {
+    url = "mirror://sourceforge/tigervnc/${name}.tar.gz";
+    sha256 = "1x30s12fwv9rk0fnwwn631qq0d8rpjjx53bvzlx8c91cba170jsr";
   };
-
-  preConfigure = ''
-    autoreconf -vfi
-  '';
 
   configureFlags = "--enable-nls";
 
@@ -66,8 +62,10 @@ stdenv.mkDerivation {
     make TIGERVNC_SRCDIR=`pwd`/../.. install
   '';
 
-  buildInputs = [ libX11 libXext gettext libICE libXtst libXi libSM autoconf automake cvs
-    libtool nasm utilmacros fontutil ] ++ xorgserver.buildNativeInputs;
+  buildInputs =
+    [ libX11 libXext gettext libICE libXtst libXi libSM autoconf automake cvs
+      libtool nasm utilmacros fontutil libgcrypt gnutls pam
+    ] ++ xorgserver.buildNativeInputs;
 
   propagatedBuildInputs = xorgserver.propagatedBuildNativeInputs;
 
