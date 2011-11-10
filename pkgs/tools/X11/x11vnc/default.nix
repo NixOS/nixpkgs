@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, libjpeg, xorg }:
+{ stdenv, fetchurl, openssl, zlib, libjpeg, xorg, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "x11vnc-0.9.13";
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     configureFlags="--mandir=$out/share/man"
+
+    substituteInPlace x11vnc/unixpw.c \
+        --replace '"/bin/su"' '"/var/setuid-wrappers/su"' \
+        --replace '"/bin/true"' '"${coreutils}/bin/true"'
   '';
 
   meta = {
