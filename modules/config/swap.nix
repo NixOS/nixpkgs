@@ -45,16 +45,6 @@ with pkgs.lib;
             '';
           };
 
-          cipher = mkOption {
-            default = false;
-            example = true;
-            type = types.bool;
-            description = ''
-              Encrypt the swap device to protect swapped data.  This option
-              does not work with labels.
-            '';
-          };
-
         };
 
         config = {
