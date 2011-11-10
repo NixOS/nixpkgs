@@ -65,10 +65,10 @@
   ./services/hardware/acpid.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/hal.nix
-  ./services/hardware/udisks.nix
-  ./services/hardware/upower.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/udev.nix
+  ./services/hardware/udisks.nix
+  ./services/hardware/upower.nix
   ./services/logging/klogd.nix
   ./services/logging/logrotate.nix
   ./services/logging/syslogd.nix
@@ -91,9 +91,9 @@
   ./services/misc/virtualbox.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/nagios/default.nix
-  ./services/monitoring/ups.nix
   ./services/monitoring/smartd.nix
   ./services/monitoring/systemhealth.nix
+  ./services/monitoring/ups.nix
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-server.nix
   ./services/network-filesystems/drbd.nix
@@ -104,6 +104,7 @@
   ./services/networking/avahi-daemon.nix
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
+  ./services/networking/cntlm.nix
   ./services/networking/ddclient.nix
   ./services/networking/dhclient.nix
   ./services/networking/dhcpd.nix
@@ -119,6 +120,7 @@
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/nat.nix
   ./services/networking/ntpd.nix
+  ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
   ./services/networking/openvpn.nix
   ./services/networking/portmap.nix
@@ -128,11 +130,10 @@
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
   ./services/networking/sabnzbd.nix
-  ./services/networking/unbound.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
-  ./services/networking/cntlm.nix
   ./services/networking/tftpd.nix
+  ./services/networking/unbound.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wakeonlan.nix
   ./services/networking/wicd.nix
@@ -158,8 +159,8 @@
   ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/kdm.nix
   ./services/x11/display-managers/slim.nix
-  ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/multitouch.nix
+  ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
   ./services/x11/window-managers/awesome.nix
   ./services/x11/window-managers/compiz.nix
