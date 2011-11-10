@@ -1,7 +1,7 @@
 { callPackage, callPackageOrig, stdenv, qt47 }:
 
 let
-  release = "4.7.2";
+  release = "4.7.3";
 
   # Need callPackageOrig to avoid infinite cycle
   kde = callPackageOrig ./kde-package {
