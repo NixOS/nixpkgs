@@ -676,6 +676,8 @@ let
     guile = guile_1_8;
   };
 
+  freetds = callPackage ../development/libraries/freetds { };
+
   ftgl = callPackage ../development/libraries/ftgl { };
 
   fuppes = callPackage ../tools/networking/fuppes {
