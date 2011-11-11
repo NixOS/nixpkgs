@@ -26,7 +26,7 @@ let
   x11vncWrapper = pkgs.writeScriptBin "x11vnc-wrapper"
     ''
       #! ${pkgs.stdenv.shell}
-      export PATH=${makeSearchPath "bin" [ xvfbWrapper pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xdpyinfo pkgs.xorg.xauth pkgs.nettools pkgs.shadow pkgs.procps pkgs.utillinux pkgs.bash ]}:$PATH
+      export PATH=${makeSearchPath "bin" [ xvfbWrapper pkgs.gawk pkgs.which pkgs.openssl pkgs.xorg.xauth pkgs.nettools pkgs.shadow pkgs.procps pkgs.utillinux pkgs.bash ]}:$PATH
       export FD_GEOM=1024x786x24
       exec ${pkgs.x11vnc}/bin/x11vnc -inetd -display WAIT:1024x786:cmd=FINDCREATEDISPLAY-Xvfb.xdmcp -unixpw -ssl SAVE 2> /var/log/x11vnc.log
     '';
