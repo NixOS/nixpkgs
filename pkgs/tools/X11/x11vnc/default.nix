@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
     substituteInPlace x11vnc/unixpw.c \
         --replace '"/bin/su"' '"/var/setuid-wrappers/su"' \
         --replace '"/bin/true"' '"${coreutils}/bin/true"'
+        
+    substituteInPlace x11vnc/ssltools.h \
+        --replace xdpyinfo ${xorg.xdpyinfo}/bin/xdpyinfo
   '';
 
   meta = {
