@@ -74,11 +74,11 @@ let cfg = config.hardware.pulseaudio; in
         }
 
         { target = "pulse/default.pa";
-          source = "${cfg.package}/etc/default.pa";
+          source = "${cfg.package}/etc/pulse/default.pa";
         }
 
         { target = "pulse/system.pa";
-          source = "${cfg.package}/etc/system.pa";
+          source = "${cfg.package}/etc/pulse/system.pa";
         }
 
       ]);
