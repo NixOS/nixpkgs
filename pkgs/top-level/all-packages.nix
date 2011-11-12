@@ -5145,7 +5145,7 @@ let
   };
 
   drbd = callPackage ../os-specific/linux/drbd { };
-  
+
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (utillinuxng // {
@@ -5670,7 +5670,7 @@ let
         callPackage ../os-specific/linux/aufs/3.nix { }
       else null;
 
-    aufs_util = 
+    aufs_util =
       if kernel.features ? aufs2 then
         callPackage ../os-specific/linux/aufs-util/2.nix { }
       else if kernel.features ? aufs2_1 then
@@ -5678,7 +5678,7 @@ let
       else if kernel.features ? aufs3 then
         callPackage ../os-specific/linux/aufs-util/3.nix { }
       else null;
-      
+
     blcr = callPackage ../os-specific/linux/blcr {
       #libtool = libtool_1_5; # libtool 2 causes a fork bomb
     };
