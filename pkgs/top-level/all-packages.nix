@@ -2349,8 +2349,6 @@ let
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
-    nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
-
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries {
       camomile = camomile_0_8_2;
     };

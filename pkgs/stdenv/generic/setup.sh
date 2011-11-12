@@ -269,7 +269,7 @@ fi
 
 
 # Make GNU Make produce nested output.
-#export NIX_INDENT_MAKE=1
+export NIX_INDENT_MAKE=1
 
 
 # Normalize the NIX_BUILD_CORES variable. The value might be 0, which
