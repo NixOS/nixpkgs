@@ -395,6 +395,13 @@ stdenv.mkDerivation ({
   };
 }
 
+// optionalAttrs (cross != null || libcCross != null) {
+  # `builder.sh' sets $CPP, which leads configure to use "gcc -E" instead of,
+  # say, "i586-pc-gnu-gcc -E" when building `gcc.hostDrv'.
+  # FIXME: Fix `builder.sh' directly in the next stdenv-update.
+  postUnpack = "unset CPP";
+}
+
 // optionalAttrs (cross != null && cross.libc == "msvcrt" && crossStageStatic) {
   makeFlags = [ "all-gcc" "all-target-libgcc" ];
   installTargets = "install-gcc install-target-libgcc";
