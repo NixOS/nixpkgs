@@ -6650,6 +6650,11 @@ let
 
   firefox80Wrapper = wrapFirefox { browser = firefox80Pkgs.firefox; };
 
+  firefox90bPkgs = callPackage ../applications/networking/browsers/firefox/9.0.nix {
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
+
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = flashplayer10;
