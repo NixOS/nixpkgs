@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libX11 pkgconfig libXaw];
 
+  # Without this, it gets Xmu as a dependency, but without rpath entry
+  NIX_LDFLAGS = "-lXmu";
+
   # This will not make xfontsel find its app-defaults, but at least the $out
   # directory will contain them.
   # hack: Copying the XFontSel app-defaults file to $HOME makes xfontsel work.
