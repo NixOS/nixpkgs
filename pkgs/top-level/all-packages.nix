@@ -1847,6 +1847,16 @@ let
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
     profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
+
+    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+    libpthreadCross =
+      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+      then gnu.libpthreadCross
+      else null;
   }));
 
   gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc-4.6 {
