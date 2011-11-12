@@ -202,17 +202,18 @@ stdenv.mkDerivation ({
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
-  buildNativeInputs = [ texinfo which ]
-    ++ optional langJava perl;
+  buildNativeInputs = [ texinfo which gettext ]
+    ++ (optional (perl != null) perl)
+    ++ (optional javaAwtGtk pkgconfig)
+    ++ (optionals langTreelang [bison flex]);
 
-  buildInputs = [ gmp mpfr mpc libelf gettext ]
+  buildInputs = [ gmp mpfr mpc libelf ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
     ++ (optional (cloog != null) cloog)
-    ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
-    ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
+    ++ (optionals javaAwtGtk [ gtk libart_lgpl ] ++ xlibs)
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
