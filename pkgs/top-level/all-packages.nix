@@ -2307,6 +2307,8 @@ let
 
   nasm = callPackage ../development/compilers/nasm { };
 
+  nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
+
   ocaml = ocaml_3_11_1;
 
   ocaml_3_08_0 = callPackage ../development/compilers/ocaml/3.08.0.nix { };
