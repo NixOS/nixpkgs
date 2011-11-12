@@ -89,6 +89,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ghc703Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_1 super;
   ghc704Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_1 super; # link
   ghc721Prefs  = super : super // super.haskellPlatformDefaults_future super;
+  ghc722Prefs  = super : super // super.haskellPlatformDefaults_future super;
   ghcHEADPrefs = super : super // super.haskellPlatformDefaults_future super; # link
 
   # GHC and its wrapper
