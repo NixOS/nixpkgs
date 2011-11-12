@@ -175,6 +175,12 @@ stdenv.mkDerivation ({
            echo "augmenting \`LIB_SPEC' in \`${gnu_h}' with \`${extraLibSpec}'..."
            sed -i "${gnu_h}" \
                -es'|LIB_SPEC *"\(.*\)$|LIB_SPEC "${extraLibSpec} \1|g'
+
+           echo "setting \`NATIVE_SYSTEM_HEADER_DIR' and \`STANDARD_INCLUDE_DIR' to \`${libc}/include'..."
+           sed -i "${gnu_h}" \
+               -es'|#define STANDARD_INCLUDE_DIR.*$|#define STANDARD_INCLUDE_DIR "${libc}/include"|g'
+           sed -i gcc/config/t-gnu \
+               -es'|NATIVE_SYSTEM_HEADER_DIR.*$|NATIVE_SYSTEM_HEADER_DIR = ${libc}/include|g'
         ''
     else if cross != null || stdenv.gcc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
