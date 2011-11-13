@@ -127,7 +127,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     cgi          = self.cgi_3001_1_7_4; # 7.2 ok, 7.3 ok
     fgl          = self.fgl_5_4_2_4; # 7.2 ok, 7.3 ok
     GLUT         = self.GLUT_2_1_2_1; # 7.2 ok, 7.3 ok
-    haskellSrc   = self.haskellSrc_1_0_1_4; # 7.2 fails, 7.3 fails
+    haskellSrc   = self.haskellSrc_1_0_1_5; # 7.2 fails, 7.3 fails
     html         = self.html_1_0_1_2; # 7.2 ok, 7.3 ok
     HUnit        = self.HUnit_1_2_2_3; # 7.2 ok, 7.3 ok
     network      = self.network_2_3_0_7; # 7.2 ok, 7.3 ok
@@ -683,7 +683,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellSrc_1_0_1_3 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.3.nix {};
   haskellSrc_1_0_1_4 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.4.nix {};
-  haskellSrc = self.haskellSrc_1_0_1_3;
+  haskellSrc_1_0_1_5 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.5.nix {};
+  haskellSrc = self.haskellSrc_1_0_1_5;
 
   # The old version is required for Agda.
   haskellSrcExts_1_11_1 = callPackage ../development/libraries/haskell/haskell-src-exts/1.11.1.nix {};
