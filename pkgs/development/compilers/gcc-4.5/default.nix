@@ -147,7 +147,6 @@ stdenv.mkDerivation ({
 
   postPatch =
     if (stdenv.system == "i586-pc-gnu"
-        || (libcCross != null)                 # e.g., building `gcc.hostDrv'
         || (cross != null && cross.config == "i586-pc-gnu"
             && libcCross != null))
     then
