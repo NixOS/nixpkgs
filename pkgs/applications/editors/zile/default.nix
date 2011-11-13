@@ -8,12 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0ia91c18fyssnhabfb22npmidjkx32rqfkjgxxjibvdwfja25d3k";
   };
 
-  buildInputs = [ ncurses boehmgc perl ];
-  buildNativeInputs = [ help2man ];
+  buildInputs = [ ncurses boehmgc ];
+  buildNativeInputs = [ help2man perl ];
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.
   doCheck = false;
+
+  # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
+  preConfigure = "export gl_cv_func_fstatat_zero_flag=yes";
 
   meta = {
     description = "GNU Zile, a lightweight Emacs clone";
