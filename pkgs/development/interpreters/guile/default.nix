@@ -29,9 +29,8 @@ rec {
 
   enableParallelBuilding = true;
 
-  patches =
-    stdenv.lib.optionals (coverageAnalysis != null)
-      [ ./gcov-file-name.patch ./disable-gc-sensitive-tests.patch ];
+  patches = [ ./disable-gc-sensitive-tests.patch ] ++
+    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
