@@ -3804,6 +3804,8 @@ let
     inherit (gnome) gtk glib libsoup;
   };
 
+  libchop = callPackage ../development/libraries/libchop { };
+
   libcm = callPackage ../development/libraries/libcm { };
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
