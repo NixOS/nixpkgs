@@ -1,0 +1,15 @@
+This fixes `deserialize-object/ascii'.
+
+diff --git a/guile2/chop/objects.scm b/guile2/chop/objects.scm
+index 1849195..1aa521d 100644
+--- a/guile2/chop/objects.scm
++++ b/guile2/chop/objects.scm
+@@ -133,7 +133,7 @@
+ 
+ (define (deserialize-object/ascii class str)
+   "Deserialize STR and return a new instance of CLASS that corresponds."
+-  (%deserialize-object class (string->utf8 str) %ascii))
++  (%deserialize-object class (string->pointer str) %ascii))
+ 
+ (define (deserialize-object/binary class bv)
+   "Deserialize BV and return a new instance of CLASS that corresponds."
