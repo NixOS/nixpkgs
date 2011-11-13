@@ -14,11 +14,8 @@ rec {
     sha256 = "14rhlpxxa4v5y3gl992l7lnd5qnqawx0a84idnwq0w2qviwcvsyj";
   };
 
-  buildNativeInputs = [ xz ];
-  buildInputs =
-    [ makeWrapper gawk readline libtool libunistring
-      libffi pkgconfig
-    ];
+  buildNativeInputs = [ xz makeWrapper gawk pkgconfig ];
+  buildInputs = [ readline libtool libunistring libffi ];
   propagatedBuildInputs = [ gmp boehmgc ]
 
     # XXX: These ones aren't normally needed here, but since
@@ -26,6 +23,11 @@ rec {
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
     # see below.
     ++ [ libtool libunistring ];
+
+  # A native Guile 2.0 is needed to cross-build Guile.
+  selfBuildNativeInput = true;
+
+  enableParallelBuilding = true;
 
   patches =
     stdenv.lib.optionals (coverageAnalysis != null)
