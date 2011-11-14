@@ -195,6 +195,7 @@ in {
     gnumake.hostDrv = nativePlatforms;
     gnused.hostDrv = nativePlatforms;
     guile_1_8.hostDrv = nativePlatforms;
+    guile.hostDrv = nativePlatforms;
     libffi.hostDrv = nativePlatforms;
     libtool.hostDrv = nativePlatforms;
     libunistring.hostDrv = nativePlatforms;
