@@ -431,6 +431,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
 
+  bytestringLexing = callPackage ../development/libraries/haskell/bytestring-lexing {};
+
   bytestringMmap = callPackage ../development/libraries/haskell/bytestring-mmap {};
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
