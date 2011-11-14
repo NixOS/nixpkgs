@@ -1,0 +1,47 @@
+From 8b2d0b3792e4c0535ff7241cf3770232618cdefc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Ludovic=20Court=C3=A8s?= <ludo@gnu.org>
+Date: Mon, 14 Nov 2011 17:34:10 +0100
+Subject: [PATCH 2/2] block-indexer-hash: Fix off-by-n in ASCII
+ deserialization of the block indexer.
+
+* src/block-indexer-hash.c (hbi_deserialize): Don't read beyond SIZE.
+
+* tests/interfaces/deserialize.c (ascii_serials): Add a
+  `hash_block_indexer' example.
+---
+ src/block-indexer-hash.c       |    2 +-
+ tests/interfaces/deserialize.c |    5 +++++
+ 2 files changed, 6 insertions(+), 1 deletions(-)
+
+diff --git a/src/block-indexer-hash.c b/src/block-indexer-hash.c
+index 858ddd7..db7d6b4 100644
+--- a/src/block-indexer-hash.c
++++ b/src/block-indexer-hash.c
+@@ -638,7 +638,7 @@ hbi_deserialize (const char *buffer, size_t size, chop_serial_method_t method,
+ 	  size_t name_len = 0;
+ 	  const char *end = buffer;
+ 
+-	  while (isalnum (*end))
++	  while (isalnum (*end) && end - buffer < size)
+ 	    {
+ 	      if (name_len >= sizeof (name))
+ 		return CHOP_DESERIAL_CORRUPT_INPUT;
+diff --git a/tests/interfaces/deserialize.c b/tests/interfaces/deserialize.c
+index 6e9b765..af7015e 100644
+--- a/tests/interfaces/deserialize.c
++++ b/tests/interfaces/deserialize.c
+@@ -44,6 +44,11 @@ static const struct pair ascii_serials[] =
+       "3q2hrigwtmsmvqi64cy2yw7szh66drvf/122",
+     },
+ 
++    {
++      "hash_block_indexer",
++      "SHA1"
++    },
++
+     { NULL, NULL }
+   };
+ 
+-- 
+1.7.6
+

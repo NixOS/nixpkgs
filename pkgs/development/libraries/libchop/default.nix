@@ -9,7 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0i7gl0c99pf6794bbwm3iha6a0bciqq969mgwwv6gm9phiiy5s8b";
   };
 
-  patches = [ ./guile-ascii-deserialize.patch ];
+  patches =
+    [ ./0001-tests-Simplify-deserialize.c.patch
+      ./0002-block-indexer-hash-Fix-off-by-n-in-ASCII-deserializa.patch
+      ./0003-fix-test-makefile.patch
+      ./0004-tests-Export-XDG_CACHE_HOME-in-utils-backup.patch
+    ];
 
   buildNativeInputs = [ pkgconfig gperf ];
   buildInputs =
