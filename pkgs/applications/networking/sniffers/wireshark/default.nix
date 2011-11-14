@@ -1,12 +1,37 @@
-{stdenv, fetchurl, perl, pkgconfig, gtk, libpcap, flex, bison}:
+{ stdenv, fetchurl, perl, pkgconfig, gtk, libpcap, flex, bison
+, gnutls, libgcrypt, glib, zlib, libxml2, libxslt, adns, geoip
+, heimdal, python, lynx, lua5
+}:
 
-stdenv.mkDerivation rec {
-  version = "1.4.2";
+let
+  version = "1.6.2";
+in
+stdenv.mkDerivation {
   name = "wireshark-${version}";
+
   src = fetchurl {
-    url = "http://www.wireshark.org/download/src/${name}.tar.bz2";
-    sha256 = "1cj9n3yhahj6pabx1h1gas6b6dhwsljjz2w3ngky3a4g6bnf3ij4";
+    url = "mirror://sourceforge/wireshark/wireshark-${version}.tar.bz2";
+    sha256 = "0zqy8ws05xz36y49azf5lrwzgfz26h7f8d27xjc89hlqrqagahsk";
   };
-  configureFlags = "--with-pcap=${libpcap}";
-  buildInputs = [perl pkgconfig gtk libpcap flex bison];
+
+  buildInputs = [perl pkgconfig gtk libpcap flex bison gnutls libgcrypt
+    glib zlib libxml2 libxslt adns geoip heimdal python lynx lua5
+  ];
+
+  configureFlags = "--disable-usr-local --with-ssl --enable-threads --enable-packet-editor";
+
+  meta = {
+    homepage = "http://sourceforge.net/projects/wireshark/";
+    description = "a powerful network protocol analyzer";
+    license = stdenv.lib.licenses.gpl2;
+
+    longDescription = ''
+      Wireshark (formerly known as "Etherreal") is a powerful network
+      protocol analyzer developed by an international team of networking
+      experts. It runs on UNIX, OS X and Windows.
+    '';
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
 }
