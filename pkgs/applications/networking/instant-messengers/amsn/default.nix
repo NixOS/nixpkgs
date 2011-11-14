@@ -1,15 +1,19 @@
-{stdenv, fetchurl, which, tcl, tk, x11, libstdcpp }:
+{stdenv, fetchurl, which, tcl, tk, x11, libpng, libjpeg, makeWrapper}:
 
 stdenv.mkDerivation {
-  name = "amsn-0.96";
-  builder = ./builder.sh;
+  name = "amsn-0.98.4";
   src = fetchurl {
-    url = mirror://sourceforge/amsn/amsn-0.96.tar.bz2;
-    md5 = "3df6b0d34ef1997a47c0b8af29b2547a";
+    url = mirror://sourceforge/amsn/amsn-0.98.4-src.tar.gz;
+    sha256 = "1kcn1hc6bvgy4svf5l3j5psdrvsmy0p3r33fn7gzcinqdf3xfgqx";
   };
 
-  inherit tcl tk libstdcpp;
-  buildInputs = [which tcl tk x11 ];
+  configureFlags = "--with-tcl=${tcl}/lib --with-tk=${tk}/lib --enable-static";
+
+  buildInputs = [which tcl tk x11 libpng libjpeg makeWrapper];
+
+  postInstall = ''
+    wrapProgram $out/bin/amsn --prefix PATH : ${tk}/bin
+  '';
 
   meta = {
     homepage = http://amsn-project.net;
