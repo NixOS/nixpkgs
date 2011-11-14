@@ -6275,9 +6275,7 @@ let
 
   adobeReader = callPackage_i686 ../applications/misc/adobe-reader { };
 
-  amsn = callPackage ../applications/networking/instant-messengers/amsn {
-    libstdcpp = gcc33.gcc;
-  };
+  amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   antiword = callPackage ../applications/office/antiword {};
 
