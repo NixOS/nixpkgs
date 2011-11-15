@@ -1,10 +1,10 @@
-{ cabal, transformers }:
+{ cabal, thExtras, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "flexible-defaults";
-  version = "0.0.0.2";
-  sha256 = "0hr3x4hlah6pd88xvr9lgvz1v4pyxpyv6q9zms96jkm5wc4mkbwx";
-  buildDepends = [ transformers ];
+  version = "0.0.0.3";
+  sha256 = "1s0dz61bqzzbxqvn9i8zwaccsha15als45zzjs2yc11r3m151dla";
+  buildDepends = [ thExtras transformers ];
   meta = {
     homepage = "https://github.com/mokus0/flexible-defaults";
     description = "Generate default function implementations for complex type classes";
