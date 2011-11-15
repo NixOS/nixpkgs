@@ -1194,6 +1194,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
+  thExtras = callPackage ../development/libraries/haskell/th-extras {};
+
   thLift = callPackage ../development/libraries/haskell/th-lift {};
 
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
