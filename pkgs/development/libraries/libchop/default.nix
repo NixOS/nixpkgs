@@ -2,19 +2,12 @@
 , libuuid, lzo, pkgconfig, guile }:
 
 stdenv.mkDerivation rec {
-  name = "libchop-0.5";
+  name = "libchop-0.5.1";
 
   src = fetchurl {
     url = "mirror://savannah/libchop/${name}.tar.gz";
-    sha256 = "0i7gl0c99pf6794bbwm3iha6a0bciqq969mgwwv6gm9phiiy5s8b";
+    sha256 = "1sfq4ibzc9fjmq7ga96k05lr77cyizxnipa3bzm5d22jwal1x3ib";
   };
-
-  patches =
-    [ ./0001-tests-Simplify-deserialize.c.patch
-      ./0002-block-indexer-hash-Fix-off-by-n-in-ASCII-deserializa.patch
-      ./0003-fix-test-makefile.patch
-      ./0004-tests-Export-XDG_CACHE_HOME-in-utils-backup.patch
-    ];
 
   buildNativeInputs = [ pkgconfig gperf ];
   buildInputs =
