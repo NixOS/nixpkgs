@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
       ''
         --with-store-dir=${storeDir} --localstatedir=${stateDir}
         --with-bzip2=${bzip2.hostDrv} --with-sqlite=${sqlite.hostDrv}
+        --enable-gc
+        --with-dbi=${perlPackages.DBI}/lib/perl5/site_perl
+        --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
         --disable-init-state
         CFLAGS=-O3 CXXFLAGS=-O3
       '';
