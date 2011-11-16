@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
         --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
         --disable-init-state
         CFLAGS=-O3 CXXFLAGS=-O3
-      '';
+      '' + stdenv.lib.optionalString (
+          stdenv.cross ? nix && stdenv.cross.nix ? system
+      ) ''--with-system=${stdenv.cross.nix.system}'';
     doCheck = false;
   };
 
