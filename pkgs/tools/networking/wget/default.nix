@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kadjg63x1mm741dxdidwsn1rz0f7dkzbq59v0iww87jr45p3ir4";
   };
 
-  preConfigure =
+  preConfigure = stdenv.lib.optionalString doCheck
     '' for i in "doc/texi2pod.pl" "tests/run-px" "util/rmold.pl"
        do
          sed -i "$i" -e 's|/usr/bin.*perl|${perl}/bin/perl|g'
@@ -21,16 +21,17 @@ stdenv.mkDerivation rec {
        done
     '';
 
-  buildInputs = [ gettext perl ]
-    ++ stdenv.lib.optional doCheck LWP
+  buildNativeInputs = [ gettext ];
+  buildInputs =
+    stdenv.lib.optionals doCheck [ perl LWP ]
     ++ stdenv.lib.optional (gnutls != null) gnutls;
 
   configureFlags =
     if gnutls != null
     then "--with-ssl=gnutls"
-    else "";
+    else "--without-ssl";
 
-  doCheck = true;
+  doCheck = (perl != null);
 
   meta = {
     description = "GNU Wget, a tool for retrieving files using HTTP, HTTPS, and FTP";
