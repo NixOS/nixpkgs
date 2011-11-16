@@ -1056,7 +1056,13 @@ rec {
 
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
     inherit fetchurl buildPerlPackage DBI;
-    inherit (pkgs) sqlite;
+    sqlite = pkgs.lib.overrideDerivation pkgs.sqlite (args: {
+      name = "sqlite-3.7.7.1";
+      src = fetchurl {
+        url = http://www.sqlite.org/sqlite-autoconf-3070701.tar.gz;
+        sha256 = "1pvf72gb6yidc4zjml3k6kwhlvvhbgmbm8hfin9y5jvvbyr3dk3x";
+      };
+    });
   };
 
   DBDmysql = import ../development/perl-modules/DBD-mysql {
