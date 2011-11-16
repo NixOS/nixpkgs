@@ -1,8 +1,14 @@
 { stdenv, fetchurl, patchelf }:
+
+assert stdenv ? glibc;
+
 stdenv.mkDerivation rec {
   version = "3.0";
+  
   date = "February2011";
+  
   name = "nvidia-cg-toolkit-${version}";
+  
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
@@ -14,7 +20,8 @@ stdenv.mkDerivation rec {
         url = "http://developer.download.nvidia.com/cg/Cg_${version}/Cg-${version}_${date}_x86.tgz";
         sha256 = "0hr8l0r20akbfm5j0vqv4ghl0acwjf5996pxnfxlajacl9w58nam";
       }
-    else null;
+    else throw "nvidia-cg-toolkit does not support platform ${stdenv.system}";
+    
   installPhase = ''
     for b in cgc cgfxcat cginfo
     do
@@ -36,6 +43,7 @@ stdenv.mkDerivation rec {
     ensureDir "$out/share/doc/$name/"
     cp -v -r local/Cg/* "$out/share/doc/$name/"
   '';
+  
   meta = {
     homepage = http://developer.nvidia.com/cg-toolkit;
     license = [ "nonfree-redistributable" ];
