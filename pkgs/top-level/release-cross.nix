@@ -176,6 +176,7 @@ let
     platform = pkgs.platforms.pc;
     libc = "glibc";
     openssl.system = "hurd-x86";  # Nix depends on OpenSSL.
+    nix.system = "i686-gnu"; # Hack until nix is more cross-compile aware
   };
 in {
   crossGNU = mapTestOnCross crossSystem {
