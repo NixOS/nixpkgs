@@ -6,6 +6,12 @@ let
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
     stdenv.cross;
+
+  # openssl only defines _GNU_SOURCE on Linux by default, but we need it on GNU
+  hurdGNUSourcePatch = fetchurl {
+    url = http://patch-tracker.debian.org/patch/series/dl/openssl/1.0.0e-2.1/gnu_source.patch;
+    sha256 = "0zp4x8bql92fbqywnigqfsfj2vvabb66wv6g6zgzh0y6js1ic4pn";
+  };
 in
 
 stdenv.mkDerivation {
@@ -41,6 +47,8 @@ stdenv.mkDerivation {
       # It's configure does not like --build or --host
       export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
     '';
+
+    patches = stdenv.lib.optional (opensslCrossSystem == "hurd-x86") hurdGNUSourcePatch;
 
     postInstall = ''
       # Openssl installs readonly files, which otherwise we can't strip.
