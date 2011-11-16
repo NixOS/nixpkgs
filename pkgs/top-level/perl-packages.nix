@@ -1056,6 +1056,8 @@ rec {
 
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
     inherit fetchurl buildPerlPackage DBI;
+
+    # sqlite-3.7.9 breaks DBDSQLite, overriding locally for now
     sqlite = pkgs.lib.overrideDerivation pkgs.sqlite (args: {
       name = "sqlite-3.7.7.1";
       src = fetchurl {
