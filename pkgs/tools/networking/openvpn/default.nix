@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ iproute lzo openssl ];
 
   configureFlags = ''
+    --enable-password-save
     --with-ifconfig-path=${nettools}/sbin/ifconfig
     --with-iproute-path=${iproute}/sbin/ip
     --with-route-path=${nettools}/sbin/route
