@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "graphviz";
-  version = "2999.12.0.3";
-  sha256 = "0qvkmklf2wxac6j01fnh8r352b52xzhr8wryk1b9119wvcbli8md";
+  version = "2999.12.0.4";
+  sha256 = "02yg5c02k3sdrcq5srzpdvlzs6cnrns67576qzr8n7ynhpvard73";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
