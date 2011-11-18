@@ -3126,9 +3126,8 @@ let
   boost144 = callPackage ../development/libraries/boost/1.44.nix { };
   boost146 = callPackage ../development/libraries/boost/1.46.nix { };
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
-  # 1.47.0 doesn't compile on Darwin. The issue is probably trivial to
-  # fix, but no-one has done it yet.
-  boost = if stdenv.isDarwin then boost146 else boost147;
+  boost148 = callPackage ../development/libraries/boost/1.48.nix { };
+  boost = boost148;
 
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
   boostFull = appendToName "full" (boost.override {
