@@ -1,5 +1,5 @@
 { GConf, alsaLib, bzip2, cairo, cups, dbus, dbus_glib, expat
-, fetchurl, ffmpeg, fontconfig, freetype, gtkLibs, libX11
+, fetchurl, ffmpeg, fontconfig, freetype, gtkLibs, libX11, libXfixes
 , libXScrnSaver, libXdamage, libXext, libXrender, libXt, libXtst
 , libgcrypt, libjpeg, libpng, makeWrapper, nspr, nss, patchelf
 , stdenv, unzip, zlib, pam, pcre }:
@@ -7,23 +7,23 @@
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
-  name = "chromium-16.0.879.0-pre${version}";
+  name = "chromium-17.0.943.0-pre${version}";
 
   # To determine the latest revision, get
   # ‘http://commondatastorage.googleapis.com/chromium-browser-continuous/Linux/LAST_CHANGE’.
   # For the version number, see ‘about:config’.
-  version = "100626";
+  version = "110566";
   
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://commondatastorage.googleapis.com/chromium-browser-continuous/Linux_x64/${version}/chrome-linux.zip";
-        sha256 = "1dymz7h9v5hkivn6qn26bnj1waw60z3mngh8g46yvvc5xn4npc3l";
+        sha256 = "0pi2qbcvqy9gn2s0bfqlam3mj5ghnnnkrbxrrjl63737377an7ha";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://commondatastorage.googleapis.com/chromium-browser-continuous/Linux/${version}/chrome-linux.zip";
-        sha256 = "0zqaj90lfzdddbs6sjygmyxlh8nw3xfr9xw450g9cabg6a2sh7ca";
+        sha256 = "0mk8ikgz97i69qy1cy3cqw4a2ff2ixjzyw5i86fmrq7m1f156yva";
       }
     else throw "Chromium is not supported on this platform.";
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   libPath =
     stdenv.lib.makeLibraryPath
        [ GConf alsaLib bzip2 cairo cups dbus dbus_glib expat
-         ffmpeg fontconfig freetype libX11 libXScrnSaver
+         ffmpeg fontconfig freetype libX11 libXScrnSaver libXfixes
          libXdamage libXext libXrender libXt libXtst libgcrypt libjpeg
          libpng nspr stdenv.gcc.gcc zlib stdenv.gcc.libc
          gtkLibs.glib gtkLibs.gtk gtkLibs.gdk_pixbuf gtkLibs.pango
