@@ -962,12 +962,12 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  nose = buildPythonPackage {
+  nose = buildPythonPackage rec {
     name = "nose-1.0.0";
 
     src = fetchurl {
-      url = http://somethingaboutorange.com/mrl/projects/nose/nose-1.0.0.tar.gz;
-      sha256 = "0qm6q232h5r071gwfkiszkmfqc60k7abl15bk495lcdkk62m91db";
+      url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
+      md5 = "47a4784c817afa6ef11a505b574584ed";
     };
 
     # Fails with ‘This platform lacks a functioning sem_open
