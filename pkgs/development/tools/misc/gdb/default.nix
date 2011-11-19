@@ -20,7 +20,7 @@ let
   # having `stdenv ? cross' doesn't tell us if we're building `hostDrv' and
   # `buildDrv'.
   isGNU =
-      stdenv.system == "i586-pc-gnu"
+      stdenv.system == "i686-gnu"
       || (stdenv ? cross && stdenv.cross.config == "i586-pc-gnu");
 in
 
