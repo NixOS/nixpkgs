@@ -3042,6 +3042,8 @@ let
 
   gdb = callPackage ../development/tools/misc/gdb {
     readline = readline5;
+    hurd = gnu.hurdCross;
+    inherit (gnu) mig;
   };
 
   gdbCross = callPackage ../development/tools/misc/gdb {
