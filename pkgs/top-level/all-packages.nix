@@ -7417,6 +7417,10 @@ let
 
   tla = callPackage ../applications/version-management/arch { };
 
+  torchat = callPackage ../applications/networking/instant-messengers/torchat {
+    wrapPython = pythonPackages.wrapPython;
+  };
+
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
   trayer = callPackage ../applications/window-managers/trayer {
