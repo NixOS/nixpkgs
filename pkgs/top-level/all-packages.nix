@@ -5036,7 +5036,10 @@ let
 
   samba = callPackage ../servers/samba { };
 
-  shishi = callPackage ../servers/shishi { };
+  shishi = callPackage ../servers/shishi {
+    # GNU Shishi 1.0.0 fails to build with GnuTLS 3.x.
+    gnutls = gnutls2;
+  };
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
