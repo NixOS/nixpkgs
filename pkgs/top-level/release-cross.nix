@@ -180,8 +180,9 @@ let
   };
 in {
   crossGNU = mapTestOnCross crossSystem {
-    hurdCross = nativePlatforms;
-    mach.hostDrv = nativePlatforms;
+    gnu.hurdCross = nativePlatforms;
+    gnu.mach.hostDrv = nativePlatforms;
+    gnu.mig = nativePlatforms;
 
     coreutils.hostDrv = nativePlatforms;
     ed.hostDrv = nativePlatforms;
