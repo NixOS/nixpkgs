@@ -603,6 +603,8 @@ let
     zlib = zlibStatic;
   };
 
+  dtach = callPackage ../tools/misc/dtach { };
+
   duplicity = callPackage ../tools/backup/duplicity {
     inherit (pythonPackages) boto;
     gnupg = gnupg1;
