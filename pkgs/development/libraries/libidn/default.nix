@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vc8yni7sg5iq1ijg9l558pa4v6c1v5l57zc024lgxcmhy35wxig";
   };
 
-  doCheck = true;
+  doCheck = ! stdenv.isDarwin;
 
   meta = {
     homepage = http://www.gnu.org/software/libidn/;
