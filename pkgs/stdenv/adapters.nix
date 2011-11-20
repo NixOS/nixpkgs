@@ -330,16 +330,22 @@ rec {
     { mkDerivation = args:
         let
           pkg = stdenv.mkDerivation args;
+          drv = builtins.unsafeDiscardStringContext pkg.drvPath;
           license =
             if pkg ? meta && pkg.meta ? license then
               pkg.meta.license
+            else if pkg ? outputHash then
+              # Fixed-output derivations such as source tarballs usually
+              # don't have licensing information, but that's OK.
+              null
             else
-              null;
+              builtins.trace
+                "warning: ${drv} lacks licensing information" null;
 
           validate = arg:
             if licensePred license then arg
             else abort ''
-              while building ${builtins.unsafeDiscardStringContext pkg.drvPath}:
+              while building ${drv}:
               license `${builtins.toString license}' does not pass the predicate.
             '';
 
