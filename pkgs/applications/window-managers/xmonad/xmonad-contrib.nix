@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xmonad-contrib";
-  version = "0.9.2";
-  sha256 = "06hg5j4w8iz62wmyygq4c7xcbi9dxlhhh3dbic438cjk7c0w1h5p";
+  version = "0.10";
+  sha256 = "0lp7qr69rpjy4s3knhdgh2bp6zs81xp0az1lisv4a2i7i1ys7hfq";
   buildDepends = [
     extensibleExceptions mtl random utf8String X11 X11Xft xmonad
   ];
