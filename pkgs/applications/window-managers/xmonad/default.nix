@@ -1,4 +1,4 @@
-{ cabal, extensibleExceptions, mtl, utf8String, X11 }:
+{ cabal, extensibleExceptions, mtl, utf8String, X11, xmessage }:
 
 cabal.mkDerivation (self: {
   pname = "xmonad";
@@ -18,4 +18,9 @@ cabal.mkDerivation (self: {
       self.stdenv.lib.maintainers.simons
     ];
   };
+
+  preConfigure = ''
+    substituteInPlace XMonad/Core.hs --replace \
+      '"xmessage"' '"${xmessage}/bin/xmessage"'
+  '';
 })
