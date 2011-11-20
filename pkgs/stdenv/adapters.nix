@@ -302,7 +302,7 @@ rec {
               else
                 null;
           in
-            builtins.trace "@:drv:${toString drvPath}:${builtins.exprToString license}:@"
+            builtins.trace "@:drv:${toString drvPath}:${builtins.toString license}:@"
               val;
         in pkg // {
           outPath = printDrvPath pkg.outPath;
@@ -338,12 +338,10 @@ rec {
 
           validate = arg:
             if licensePred license then arg
-            else abort "
-              Error while building ${builtins.unsafeDiscardStringContext pkg.drvPath}:
-              The license predicate is not verified.
-
-              bad license: ${builtins.exprToString license}
-            ";
+            else abort ''
+              while building ${builtins.unsafeDiscardStringContext pkg.drvPath}:
+              license `${builtins.toString license}' does not pass the predicate.
+            '';
 
         in pkg // {
           outPath = validate pkg.outPath;
