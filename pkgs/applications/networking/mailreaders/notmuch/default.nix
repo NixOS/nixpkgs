@@ -53,11 +53,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Notmuch -- The mail indexer";
-
     longDescription = "";
-
-    license = "GPLv3";
-
+    license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
