@@ -38,6 +38,7 @@
   ./programs/shadow.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/wvdial.nix
   ./rename.nix
   ./security/ca.nix
   ./security/consolekit.nix
