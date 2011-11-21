@@ -831,6 +831,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
+  libmpd = callPackage ../development/libraries/haskell/libmpd {};
+
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
 
   ltk = callPackage ../development/libraries/haskell/ltk {};
