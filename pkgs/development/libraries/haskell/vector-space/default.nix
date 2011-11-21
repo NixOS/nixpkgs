@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vector-space";
-  version = "0.7.8";
-  sha256 = "195g9zsb73w4a0fcfz0kank6gyqajww0qiqivr4fy0bik2nsr6ry";
+  version = "0.8.0";
+  sha256 = "1wd8psw2s98m8yfr8mam5abz2bhvxz1r78w703hgca8rr6hiaz0g";
   buildDepends = [ Boolean MemoTrie NumInstances ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/vector-space";
