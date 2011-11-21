@@ -98,7 +98,8 @@ let
                || result.system == "powerpc-linux"
                || result.system == "armv5tel-linux"
                || result.system == "mips64-linux";
-        isSunOS = result.system == "i386-sunos";
+        isSunOS = result.system == "i686-solaris"
+               || result.system == "x86_64-solaris";
         isCygwin = result.system == "i686-cygwin";
 	isFreeBSD = result.system == "i686-freebsd"
 	       || result.system == "x86_64-freebsd";

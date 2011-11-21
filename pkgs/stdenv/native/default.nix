@@ -3,12 +3,12 @@
 rec {
 
   shell = 
-    if system == "i686-freebsd" || system == "x86_64-freebsd" 
-    then "/usr/local/bin/bash"
+    if system == "i686-freebsd" || system == "x86_64-freebsd" then "/usr/local/bin/bash"
+    else if system == "i686-solaris" then "/usr/bin/bash"
     else "/bin/bash";
 
   path = 
-    (if system == "i386-sunos" then [ "/usr/gnu" ] else []) ++
+    (if system == "i686-solaris" then [ "/usr/gnu" ] else []) ++
     (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
     ["/" "/usr" "/usr/local"];
 
@@ -115,7 +115,7 @@ rec {
     name = "gcc-native";
     nativeTools = true;
     nativeLibc = true;
-    nativePrefix = if system == "i386-sunos" then "/usr/gnu" else "/usr";
+    nativePrefix = if system == "i686-solaris" then "/usr/gnu" else "/usr";
     stdenv = stdenvBoot0;
   };
 
