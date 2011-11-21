@@ -2,11 +2,11 @@
   pcre, cfitsio, perl, gob2, vala, libtiff }:
 
 stdenv.mkDerivation rec {
-  name = "giv-0.9.19";
+  name = "giv-0.9.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/giv/${name}.tar.gz";
-    sha256 = "07sgpp4k27417ymavcvil4waq6ac2mj08g42g1l52l435xm5mnh7";
+    sha256 = "09s659vvv26nw9vaw3a766al8yq6np7p0xb4iw907921j6nbqp7z";
   };
 
   # It built code to be put in a shared object without -fPIC
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sed -i s,/usr/local,$out, SConstruct 
   '';
 
-  patches = [ ./build.patch ./union.patch ];
+  patches = [ ./build.patch ];
 
   buildPhase = "scons";
 
