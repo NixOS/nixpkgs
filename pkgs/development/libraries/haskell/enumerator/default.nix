@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "enumerator";
-  version = "0.4.15";
-  sha256 = "06yzf2xaadmdhgidzyp7qywd8d401f4n1qlfyx0q72nafgnlvr6v";
+  version = "0.4.16";
+  sha256 = "16556x3km4si7gvprf7xmsiqw1ygjwavhbgh32fmzf7709bpqnhs";
   buildDepends = [ text transformers ];
   meta = {
     homepage = "https://john-millikin.com/software/enumerator/";
