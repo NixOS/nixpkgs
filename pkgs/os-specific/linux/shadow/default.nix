@@ -3,7 +3,7 @@
 let
   glibc = if stdenv ? cross
           then glibcCross
-          else stdenv.glibc;
+          else assert stdenv ? glib; stdenv.glibc;
 in
 stdenv.mkDerivation rec {
   name = "shadow-4.1.4.2";
