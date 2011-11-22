@@ -1407,12 +1407,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {};
   haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {};
   haddock_2_9_4 = callPackage ../development/tools/documentation/haddock/2.9.4.nix {};
-  haddock = self.haddock_2_7_2;
+  haddock = self.haddock_2_9_4;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
   happy_1_18_6 = callPackage ../development/tools/parsing/happy/1.18.6.nix {};
-  happy = self.happy_1_18_4;
+  happy = self.happy_1_18_6;
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
