@@ -8066,7 +8066,9 @@ let
         inherit (pkgs.gtkLibs) gdk_pixbuf;
       };
 
-      koffice = callPackage ../applications/office/koffice { };
+      koffice = callPackage ../applications/office/koffice {
+        boost = boost147;
+      };
 
       konq_plugins = callPackage ../applications/networking/browsers/konq-plugins { };
 
