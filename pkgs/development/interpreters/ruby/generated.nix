@@ -3,12 +3,12 @@
 g: # Get dependencies from patched gems
 {
   aliases = {
-    actionmailer = g.actionmailer_3_1_1;
-    actionpack = g.actionpack_3_1_1;
-    activemodel = g.activemodel_3_1_1;
-    activerecord = g.activerecord_3_1_1;
-    activeresource = g.activeresource_3_1_1;
-    activesupport = g.activesupport_3_1_1;
+    actionmailer = g.actionmailer_3_1_3;
+    actionpack = g.actionpack_3_1_3;
+    activemodel = g.activemodel_3_1_3;
+    activerecord = g.activerecord_3_1_3;
+    activeresource = g.activeresource_3_1_3;
+    activesupport = g.activesupport_3_1_3;
     arel = g.arel_2_2_1;
     builder = g.builder_3_0_0;
     bundler = g.bundler_1_0_21;
@@ -17,92 +17,92 @@ g: # Get dependencies from patched gems
     i18n = g.i18n_0_6_0;
     json = g.json_1_6_1;
     mail = g.mail_2_3_0;
-    mime_types = g.mime_types_1_16;
+    mime_types = g.mime_types_1_17_2;
     multi_json = g.multi_json_1_0_3;
     nix = g.nix_0_1_1;
-    polyglot = g.polyglot_0_3_2;
-    rack = g.rack_1_3_4;
+    polyglot = g.polyglot_0_3_3;
+    rack = g.rack_1_3_5;
     rack_cache = g.rack_cache_1_1;
     rack_mount = g.rack_mount_0_8_3;
     rack_ssl = g.rack_ssl_1_3_2;
     rack_test = g.rack_test_0_6_1;
-    rails = g.rails_3_1_1;
-    railties = g.railties_3_1_1;
-    rake = g.rake_0_9_2;
-    rdoc = g.rdoc_3_10;
-    sprockets = g.sprockets_2_0_2;
+    rails = g.rails_3_1_3;
+    railties = g.railties_3_1_3;
+    rake = g.rake_0_9_2_2;
+    rdoc = g.rdoc_3_11;
+    sprockets = g.sprockets_2_0_3;
     thor = g.thor_0_14_6;
     tilt = g.tilt_1_3_3;
     treetop = g.treetop_1_4_10;
-    tzinfo = g.tzinfo_0_3_30;
+    tzinfo = g.tzinfo_0_3_31;
   };
   gem_nix_args = [ ''nix'' ''rails'' ''rake'' ];
   gems = {
-    actionmailer_3_1_1 = {
+    actionmailer_3_1_3 = {
       basename = ''actionmailer'';
       meta = {
         description = ''Email composition, delivery, and receiving framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Email on Rails. Compose, deliver, receive, and test emails using the familiar controller/view pattern. First-class support for multipart email and attachments.'';
       };
-      name = ''actionmailer-3.1.1'';
+      name = ''actionmailer-3.1.3'';
       requiredGems = [ g.mail_2_3_0 ];
-      sha256 = ''0aa5vpaw8kr7id21wgslxjyxy9bygl5mjkjyn9mqg8qg7182dp0d'';
+      sha256 = ''04qjgf8irg2srqa9j0ahxpydx42h9dymiabfiyzwy0h3wayg2qyj'';
     };
-    actionpack_3_1_1 = {
+    actionpack_3_1_3 = {
       basename = ''actionpack'';
       meta = {
         description = ''Web-flow and rendering framework putting the VC in MVC (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Web apps on Rails. Simple, battle-tested conventions for building and testing MVC web applications. Works with any Rack-compatible server.'';
       };
-      name = ''actionpack-3.1.1'';
-      requiredGems = [ g.activemodel_3_1_1 g.rack_cache_1_1 g.rack_test_0_6_1 g.rack_mount_0_8_3 g.sprockets_2_0_2 g.erubis_2_7_0 ];
-      sha256 = ''0hh4ndbi9kvkp1srad324vd9i7nhi8vqc0vhfh044jzwq1dvbqc6'';
+      name = ''actionpack-3.1.3'';
+      requiredGems = [ g.activemodel_3_1_3 g.rack_cache_1_1 g.rack_test_0_6_1 g.rack_mount_0_8_3 g.sprockets_2_0_3 g.erubis_2_7_0 ];
+      sha256 = ''1awhqxdfg2zcb0b34jwq3sm2favay94n4glqywqzrn85wkf47a2q'';
     };
-    activemodel_3_1_1 = {
+    activemodel_3_1_3 = {
       basename = ''activemodel'';
       meta = {
         description = ''A toolkit for building modeling frameworks (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''A toolkit for building modeling frameworks like Active Record and Active Resource. Rich support for attributes, callbacks, validations, observers, serialization, internationalization, and testing.'';
       };
-      name = ''activemodel-3.1.1'';
+      name = ''activemodel-3.1.3'';
       requiredGems = [ g.builder_3_0_0 g.i18n_0_6_0 ];
-      sha256 = ''0r7zlzswf1vdhk97lll6kv64l0nya2li9gai19vd4qclh4m2n9n1'';
+      sha256 = ''1kpkr1gwvjbxc8q3n1ps1j8zf7m1258swb9n5zm5igr6j0d803a3'';
     };
-    activerecord_3_1_1 = {
+    activerecord_3_1_3 = {
       basename = ''activerecord'';
       meta = {
         description = ''Object-relational mapper framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Databases on Rails. Build a persistent domain model by mapping database tables to Ruby classes. Strong conventions for associations, validations, aggregations, migrations, and testing come baked-in.'';
       };
-      name = ''activerecord-3.1.1'';
-      requiredGems = [ g.arel_2_2_1 g.tzinfo_0_3_30 ];
-      sha256 = ''1zab48wj04nyl01kkmmj23l5lwjid5mkhd92hpr3qf1r82zcj983'';
+      name = ''activerecord-3.1.3'';
+      requiredGems = [ g.arel_2_2_1 g.tzinfo_0_3_31 ];
+      sha256 = ''0z2p51hm12alg6axih2mhxjsj8vmnvdqp3wwzcg9bbkp3fc368w0'';
     };
-    activeresource_3_1_1 = {
+    activeresource_3_1_3 = {
       basename = ''activeresource'';
       meta = {
         description = ''REST modeling framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''REST on Rails. Wrap your RESTful web app with Ruby classes and work with them like Active Record models.'';
       };
-      name = ''activeresource-3.1.1'';
+      name = ''activeresource-3.1.3'';
       requiredGems = [  ];
-      sha256 = ''04wk4s5a5iiyhd90m6bfs0vl92h3yf85vypfp79y3n0ybq7hd27w'';
+      sha256 = ''0hf3fi6zwk9zqzgk4rr95ax9mfzfkzpq28qw7fm2av6841wl54fg'';
     };
-    activesupport_3_1_1 = {
+    activesupport_3_1_3 = {
       basename = ''activesupport'';
       meta = {
         description = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.'';
       };
-      name = ''activesupport-3.1.1'';
+      name = ''activesupport-3.1.3'';
       requiredGems = [ g.multi_json_1_0_3 ];
-      sha256 = ''1d9c0iqsngp7sib5jjvs2zlq8xwzi2yfc0kp6s9a7y6rm9k5f9f2'';
+      sha256 = ''19na7857adshdsswsgygky30r985ng100z3n78scd65481zcgb9z'';
     };
     arel_2_2_1 = {
       basename = ''arel'';
@@ -213,19 +213,33 @@ simple to do.  Currently the following builder objects are supported:
         longDescription = ''A really Ruby Mail handler.'';
       };
       name = ''mail-2.3.0'';
-      requiredGems = [ g.mime_types_1_16 g.treetop_1_4_10 ];
+      requiredGems = [ g.mime_types_1_17_2 g.treetop_1_4_10 ];
       sha256 = ''1cnid9wn5wy0d2shx4ykvgd5jrvgq55yal8i51b47d4037n1yr53'';
     };
-    mime_types_1_16 = {
+    mime_types_1_17_2 = {
       basename = ''mime_types'';
       meta = {
-        description = ''Manages a MIME Content-Type database that will return the Content-Type for a given filename.'';
+        description = ''This library allows for the identification of a file's likely MIME content type'';
         homepage = ''http://mime-types.rubyforge.org/'';
-        longDescription = ''MIME::Types for Ruby originally based on and synchronized with MIME::Types for Perl by Mark Overmeer, copyright 2001 - 2009. As of version 1.15, the data format for the MIME::Type list has changed and the synchronization will no longer happen.'';
+        longDescription = ''This library allows for the identification of a file's likely MIME content
+type. This is release 1.17.2. The identification of MIME content type is based
+on a file's filename extensions.
+
+MIME::Types for Ruby originally based on and synchronized with MIME::Types for
+Perl by Mark Overmeer, copyright 2001 - 2009. As of version 1.15, the data
+format for the MIME::Type list has changed and the synchronization will no
+longer happen.
+
+Homepage::  http://mime-types.rubyforge.org/
+GitHub::    http://github.com/halostatue/mime-types/
+Copyright:: 2002 - 2011, Austin Ziegler
+            Based in part on prior work copyright Mark Overmeer
+
+:include: License.rdoc'';
       };
-      name = ''mime-types-1.16'';
+      name = ''mime-types-1.17.2'';
       requiredGems = [  ];
-      sha256 = ''1slp7g2xv9ygcapqv13qgh3g6ipx5k5c3imb5sdyh0b9ip5s34y3'';
+      sha256 = ''0i4pmx86xbnlrhbbm9znnyfglmb21vwjvh262c6qw3m19w6ifs6p'';
     };
     multi_json_1_0_3 = {
       basename = ''multi_json'';
@@ -249,7 +263,7 @@ simple to do.  Currently the following builder objects are supported:
       requiredGems = [  ];
       sha256 = ''0kwrbkkg0gxibhsz9dpd5zabcf2wqsicg28yiazyb3dc9dslk26k'';
     };
-    polyglot_0_3_2 = {
+    polyglot_0_3_3 = {
       basename = ''polyglot'';
       meta = {
         description = ''Augment 'require' to load non-Ruby file types'';
@@ -259,11 +273,11 @@ The Polyglot library allows a Ruby module to register a loader
 for the file type associated with a filename extension, and it
 augments 'require' to find and load matching files.'';
       };
-      name = ''polyglot-0.3.2'';
+      name = ''polyglot-0.3.3'';
       requiredGems = [  ];
-      sha256 = ''0m2ni5bcwfmhjwndhy115zgcvq0wdf3hk0hal1sfidfz9vbd0hyz'';
+      sha256 = ''082zmail2h3cxd9z1wnibhk6aj4sb1f3zzwra6kg9bp51kx2c00v'';
     };
-    rack_1_3_4 = {
+    rack_1_3_5 = {
       basename = ''rack'';
       meta = {
         description = ''a modular Ruby webserver interface'';
@@ -277,9 +291,9 @@ middleware) into a single method call.
 Also see http://rack.rubyforge.org.
 '';
       };
-      name = ''rack-1.3.4'';
+      name = ''rack-1.3.5'';
       requiredGems = [  ];
-      sha256 = ''17wil1sf8pinmbzlf05sfw48ry6x1hmgxq1im8fagjrf3p2rnzrl'';
+      sha256 = ''1qg5nqd3a8v52hfcr9885vyfc9sscykp72by1xb1c090l5pc68hp'';
     };
     rack_cache_1_1 = {
       basename = ''rack_cache'';
@@ -289,7 +303,7 @@ Also see http://rack.rubyforge.org.
         longDescription = ''HTTP Caching for Rack'';
       };
       name = ''rack-cache-1.1'';
-      requiredGems = [ g.rack_1_3_4 ];
+      requiredGems = [ g.rack_1_3_5 ];
       sha256 = ''08jlym48qwfj7wddv0vpjj3vlc03q8wvbya24zbrjj8grgfgrvrl'';
     };
     rack_mount_0_8_3 = {
@@ -330,42 +344,40 @@ request helpers feature.'';
       requiredGems = [  ];
       sha256 = ''0hq5q8fjhbb7szzrj7k0l21z025c4qsxqzd5qmgivikhymw10ws0'';
     };
-    rails_3_1_1 = {
+    rails_3_1_3 = {
       basename = ''rails'';
       meta = {
         description = ''Full-stack web application framework.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
-      name = ''rails-3.1.1'';
-      requiredGems = [ g.activesupport_3_1_1 g.actionpack_3_1_1 g.activerecord_3_1_1 g.activeresource_3_1_1 g.actionmailer_3_1_1 g.railties_3_1_1 g.bundler_1_0_21 ];
-      sha256 = ''0w8ab71f4b78mq8q7kbb5bfwsbzy4mnp82jckzwndkhxf9141js2'';
+      name = ''rails-3.1.3'';
+      requiredGems = [ g.activesupport_3_1_3 g.actionpack_3_1_3 g.activerecord_3_1_3 g.activeresource_3_1_3 g.actionmailer_3_1_3 g.railties_3_1_3 g.bundler_1_0_21 ];
+      sha256 = ''07p8agfarj5nz8v1nlg1rfqy1cnqxhpakxhadfhk4sqrzlp2a5z8'';
     };
-    railties_3_1_1 = {
+    railties_3_1_3 = {
       basename = ''railties'';
       meta = {
         description = ''Tools for creating, working with, and running Rails applications.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Rails internals: application bootup, plugins, generators, and rake tasks.'';
       };
-      name = ''railties-3.1.1'';
-      requiredGems = [ g.rake_0_9_2 g.thor_0_14_6 g.rack_ssl_1_3_2 g.rdoc_3_10 ];
-      sha256 = ''0xvspkv63xvm47daw13dn7p1nzhmlk0zmyw4mznazp44zvzkli63'';
+      name = ''railties-3.1.3'';
+      requiredGems = [ g.rake_0_9_2_2 g.thor_0_14_6 g.rack_ssl_1_3_2 g.rdoc_3_11 ];
+      sha256 = ''07kgr9nzvgwpjqwssiknlqds1a9mj74g1hqpwsj6720x4pk9r13h'';
     };
-    rake_0_9_2 = {
+    rake_0_9_2_2 = {
       basename = ''rake'';
       meta = {
         description = ''Ruby based make-like utility.'';
         homepage = ''http://rake.rubyforge.org'';
-        longDescription = ''      Rake is a Make-like program implemented in Ruby. Tasks
-      and dependencies are specified in standard Ruby syntax.
-'';
+        longDescription = ''Rake is a Make-like program implemented in Ruby. Tasks and dependencies arespecified in standard Ruby syntax.'';
       };
-      name = ''rake-0.9.2'';
+      name = ''rake-0.9.2.2'';
       requiredGems = [  ];
-      sha256 = ''1348lm18j0rki4zjgb4rgplai32j0izkvbbi66lk7n0z89dm4ny5'';
+      sha256 = ''19n4qp5gzbcqy9ajh56kgwqv9p9w2hnczhyvaqz0nlvk9diyng6q'';
     };
-    rdoc_3_10 = {
+    rdoc_3_11 = {
       basename = ''rdoc'';
       meta = {
         description = ''RDoc produces HTML and command-line documentation for Ruby projects'';
@@ -376,20 +388,20 @@ documentation.
 
 See RDoc for a description of RDoc's markup and basic use.'';
       };
-      name = ''rdoc-3.10'';
+      name = ''rdoc-3.11'';
       requiredGems = [ g.json_1_6_1 ];
-      sha256 = ''16cx357w9s9ijyl8pzd947dr6n7wnmm6cd0yxm4cy0hbjqafpn1k'';
+      sha256 = ''0wq8525v21pxcnwgn5ypblcsb0xasnicjnqqd7mrrfqm2g3k2frm'';
     };
-    sprockets_2_0_2 = {
+    sprockets_2_0_3 = {
       basename = ''sprockets'';
       meta = {
         description = ''Rack-based asset packaging system'';
         homepage = ''http://getsprockets.org/'';
         longDescription = ''Sprockets is a Rack-based asset packaging system that concatenates and serves JavaScript, CoffeeScript, CSS, LESS, Sass, and SCSS.'';
       };
-      name = ''sprockets-2.0.2'';
+      name = ''sprockets-2.0.3'';
       requiredGems = [ g.hike_1_2_1 g.tilt_1_3_3 ];
-      sha256 = ''1wwpixlql2p9jq497g97iv0iw2fni7sldcxvfzz65df07pi54624'';
+      sha256 = ''1az22a7vjfhfglbn02np8lci6ww1lzgzs0i9qlfwx87ybp2227bi'';
     };
     thor_0_14_6 = {
       basename = ''thor'';
@@ -420,19 +432,19 @@ See RDoc for a description of RDoc's markup and basic use.'';
         homepage = ''http://functionalform.blogspot.com'';
       };
       name = ''treetop-1.4.10'';
-      requiredGems = [ g.polyglot_0_3_2 ];
+      requiredGems = [ g.polyglot_0_3_3 ];
       sha256 = ''01f4w7fm6phhdbkx7bp0b58hrk3x4b0a63p2vvjbxm5gi2gv9ap2'';
     };
-    tzinfo_0_3_30 = {
+    tzinfo_0_3_31 = {
       basename = ''tzinfo'';
       meta = {
         description = ''Daylight-savings aware timezone library'';
         homepage = ''http://tzinfo.rubyforge.org/'';
         longDescription = ''TZInfo is a Ruby library that uses the standard tz (Olson) database to provide daylight savings aware transformations between times in different time zones.'';
       };
-      name = ''tzinfo-0.3.30'';
+      name = ''tzinfo-0.3.31'';
       requiredGems = [  ];
-      sha256 = ''13zzcbbwkz5h9v7ik1xmwlp1bwnn5qpm37b3h2p2csa2j2n7nbaj'';
+      sha256 = ''1kwc25c1x8cvryjhpp8sx20vrd8h9g9gsl7p5393a88544qy41hb'';
     };
   };
 }
