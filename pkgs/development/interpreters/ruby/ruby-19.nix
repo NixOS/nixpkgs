@@ -4,6 +4,7 @@
 , gdbm, gdbmSupport ? true
 , ncurses, readline, cursesSupport ? false
 , groff, docSupport ? false
+, libyaml, yamlSupport ? false
 }:
 
 let
@@ -28,7 +29,8 @@ stdenv.mkDerivation rec {
     ++ (op docSupport groff )
     ++ (op zlibSupport zlib)
     ++ (op opensslSupport openssl)
-    ++ (op gdbmSupport gdbm);
+    ++ (op gdbmSupport gdbm)
+    ++ (op yamlSupport libyaml);
     
   configureFlags = ["--enable-shared" "--enable-pthread"];
 
