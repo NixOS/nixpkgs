@@ -129,14 +129,6 @@ in
         mkdir -p /media
       '';
 
-    system.activationScripts.cgroups =
-      ''
-        if ! ${pkgs.sysvtools}/bin/mountpoint -q /dev/cgroup; then
-            mkdir -p /dev/cgroup
-            ${pkgs.utillinux}/bin/mount -t cgroup -o freezer,cpuacct,cpu,cpuset none /dev/cgroup
-        fi
-      '';
-
   };
 
 }
