@@ -6339,9 +6339,7 @@ let
 
   bitcoin = callPackage ../applications/misc/bitcoin {
     boost = boost144;
-    wxGTK = wxGTK290;
-    db4 = db47;
-    inherit (xlibs) libSM;
+    db4 = db48;
   };
 
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
