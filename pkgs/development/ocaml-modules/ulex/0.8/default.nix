@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
   patches = [ ./meta_version.patch ./camlp5.patch ];
 
+  propagatedBuildInputs = [ camlp5 ];
+
   buildFlags = "all all.opt";
 
   meta = {

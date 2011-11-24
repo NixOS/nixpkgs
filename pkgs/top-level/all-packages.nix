@@ -8240,7 +8240,6 @@ let
   matita = callPackage ../applications/science/logic/matita {
     inherit (ocamlPackages) findlib lablgtk ocaml_expat gmetadom ocaml_http
             lablgtkmathview ocaml_mysql ocaml_sqlite3 ocamlnet ulex08 camlzip ocaml_pcre;
-    camlp5 = ocamlPackages.camlp5_transitional;
   };
 
   minisat = callPackage ../applications/science/logic/minisat {};
