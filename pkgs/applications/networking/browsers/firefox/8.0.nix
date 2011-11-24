@@ -21,7 +21,7 @@ rec {
 
   
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/${firefoxVersion}-candidates/build1/source/firefox-${firefoxVersion}.source.tar.bz2";
+    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
     sha1 = "0dd207c5cee9d53114c55aa23eeca36b754bc128";
   };
   
