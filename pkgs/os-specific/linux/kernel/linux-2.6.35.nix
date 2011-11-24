@@ -184,6 +184,11 @@ let
       # Allow up to 128 GiB of RAM in Xen domains.
       XEN_MAX_DOMAIN_MEMORY 128
 
+      # PROC_EVENTS requires that the netlink connector is not built
+      # as a module.  This is required by libcgroup's cgrulesengd.
+      CONNECTOR y
+      PROC_EVENTS y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';

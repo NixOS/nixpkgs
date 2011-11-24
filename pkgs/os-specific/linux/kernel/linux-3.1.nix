@@ -197,6 +197,11 @@ let
       # they generally don't hurt.
       STAGING y
 
+      # PROC_EVENTS requires that the netlink connector is not built
+      # as a module.  This is required by libcgroup's cgrulesengd.
+      CONNECTOR y
+      PROC_EVENTS y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
