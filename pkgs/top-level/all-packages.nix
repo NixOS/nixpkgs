@@ -5261,7 +5261,7 @@ let
 
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
 
-  libcgroup = callPackage ../os-specific/linux/libcg { };
+  libcgroup = callPackage ../os-specific/linux/libcgroup { };
 
   libnl = callPackage ../os-specific/linux/libnl { };
 

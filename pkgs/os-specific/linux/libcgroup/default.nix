@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pam, yacc, flex}:
+{ stdenv, fetchurl, pam, yacc, flex }:
 
 stdenv.mkDerivation rec {
   name = "libcgroup-0.37.1";
@@ -11,9 +11,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ pam ];
 
   buildNativeInputs = [ yacc flex ];
+  
   meta = {
-    description = "library that abstracts the control group file system in Linux";
-    homepage = "http://libcg.sourceforge.net";
+    description = "Library and tools to manage Linux's cgroup resource management system";
+    homepage = http://libcg.sourceforge.net/;
     license = "LGPL";
     platforms = stdenv.lib.platforms.linux;
   };
