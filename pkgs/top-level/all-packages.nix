@@ -8244,6 +8244,8 @@ let
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
 
+  picosat = callPackage ../applications/science/logic/picosat {};
+
   prover9 = callPackage ../applications/science/logic/prover9 { };
 
   satallax = callPackage ../applications/science/logic/satallax {};
