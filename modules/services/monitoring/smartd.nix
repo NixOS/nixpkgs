@@ -7,7 +7,7 @@ let
   cfg = config.services.smartd;
 
   smartdMail = pkgs.writeScript "smartdmail.sh" ''
-    #! /bin/sh
+    #! ${pkgs.stdenv.shell}
     TMPNAM=/tmp/smartd-message.$$.tmp
     if test -n "$SMARTD_ADDRESS"; then
       echo  >"$TMPNAM" "From: smartd <root>"
