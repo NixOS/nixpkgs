@@ -64,8 +64,6 @@ in
         }
       ];
 
-      systemPackages = [ pkgs.wvdial ];
-
     };
 
   };
