@@ -161,7 +161,7 @@ rec {
             file $i;
             if file $i | grep executable &>/dev/null; then 
 	        rm "$out/bin/$(basename "$i")"
-                echo -e '#! /bin/sh\n"'"$i"'" "$@"' > "$out/bin/$(basename "$i")"
+                echo -e '#! /bin/sh\nexec "'"$i"'" "$@"' > "$out/bin/$(basename "$i")"
                 chmod a+x "$out/bin/$(basename "$i")"
             fi;
         done;
