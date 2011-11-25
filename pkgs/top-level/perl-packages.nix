@@ -3024,6 +3024,7 @@ rec {
       url = "mirror://cpan/modules/by-module/Plack/${name}.tar.gz";
       sha256 = "0hf3wpm2q4zcgjahjrpkkzy4fn74vkddg9yqs7p97xb290pvlbki";
     };
+    patches = [ ../development/perl-modules/starman-dont-change-name.patch ];
     buildInputs = [ TestRequires TestTCP ];
     propagatedBuildInputs = [ Plack DataDump HTTPParserXS NetServer ];
     doCheck = false; # binds to various TCP ports1
