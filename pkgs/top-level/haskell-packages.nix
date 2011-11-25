@@ -677,6 +677,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
+  hashtables = callPackage ../development/libraries/haskell/hashtables {};
+
   haskeline = callPackage ../development/libraries/haskell/haskeline {};
 
   haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
