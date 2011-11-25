@@ -9,8 +9,10 @@
 
       startOn = "started syslogd";
 
+      path = [ pkgs.sysklogd ];
+
       exec =
-        "${pkgs.sysklogd}/sbin/klogd -c 1 -2 -n " +
+        "klogd -c 1 -2 -n " +
         "-k $(dirname $(readlink -f /var/run/booted-system/kernel))/System.map";
     };
 

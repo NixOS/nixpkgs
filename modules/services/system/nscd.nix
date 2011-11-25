@@ -52,7 +52,9 @@ in
             mkdir -m 0755 -p /var/db/nscd
           '';
 
-        exec = "${pkgs.glibc}/sbin/nscd -f ${./nscd.conf} -d 2> /dev/null";
+        path = [ pkgs.glibc ];
+
+        exec = "nscd -f ${./nscd.conf} -d 2> /dev/null";
       };
 
   };

@@ -562,16 +562,16 @@ in
           # the latter is enabled.
           + optionalString config.services.postgresql.enable " and started postgresql";
 
-        environment =
-          { PATH = concatStringsSep ":" (
-              [ "${pkgs.coreutils}/bin" "${pkgs.gnugrep}/bin" ]
-              ++ # Needed for PHP's mail() function.  !!! Probably the
-                 # ssmtp module should export the path to sendmail in
-                 # some way.
-                 optional config.networking.defaultMailServer.directDelivery "${pkgs.ssmtp}/sbin"
-              ++ (concatMap (svc: svc.extraServerPath) allSubservices) );
+        path =
+          [ httpd pkgs.coreutils pkgs.gnugrep ]
+          ++ # Needed for PHP's mail() function.  !!! Probably the
+             # ssmtp module should export the path to sendmail in
+             # some way.
+             optional config.networking.defaultMailServer.directDelivery pkgs.ssmtp
+          ++ concatMap (svc: svc.extraServerPath) allSubservices;
 
-            PHPRC = if enablePHP then phpIni else "";
+        environment =
+          { PHPRC = if enablePHP then phpIni else "";
 
             TZ = config.time.timeZone;
 
@@ -605,7 +605,7 @@ in
 
         daemonType = "fork";
 
-        exec = "${httpd}/bin/httpd -f ${httpdConf}";
+        exec = "httpd -f ${httpdConf}";
 
         preStop =
           ''

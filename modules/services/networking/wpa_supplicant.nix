@@ -48,6 +48,8 @@ in
       { startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
+        path = [ pkgs.wpa_supplicant ];
+
         preStart =
           ''
             touch -a ${configFile}
@@ -55,8 +57,7 @@ in
           '';
 
         exec =
-          "${pkgs.wpa_supplicant}/sbin/wpa_supplicant " +
-          "-s -C /var/run/wpa_supplicant " +
+          "wpa_supplicant -s -C /var/run/wpa_supplicant " +
           "-c ${configFile} -i${config.networking.WLANInterface}";
       };
   

@@ -99,7 +99,11 @@ in
 
         startOn = "stopped udevtrigger and started syslogd";
 
-        exec = "${pkgs.acpid}/sbin/acpid --foreground --confdir ${acpiConfDir}";
+        path = [ pkgs.acpid ];
+
+        daemonType = "fork";
+
+        exec = "acpid --confdir ${acpiConfDir}";
       };
 
   };

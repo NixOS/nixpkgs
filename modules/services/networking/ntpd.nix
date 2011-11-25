@@ -75,6 +75,8 @@ in
 
         startOn = "ip-up";
 
+        path = [ ntp ];
+
         preStart =
           ''
             mkdir -m 0755 -p ${stateDir}
@@ -88,10 +90,10 @@ in
             # because Upstart cannot kill jobs stuck in the start
             # phase.  Thus a hanging ntpd job can block system
             # shutdown.
-            # ${ntp}/bin/ntpd -q -g ${ntpFlags}
+            # ntpd -q -g ${ntpFlags}
           '';
 
-        exec = "${ntp}/bin/ntpd -g -n ${ntpFlags}";
+        exec = "ntpd -g -n ${ntpFlags}";
       };
 
   };

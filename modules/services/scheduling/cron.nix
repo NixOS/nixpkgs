@@ -93,6 +93,8 @@ in
         # Needed to interpret times in the local timezone.
         environment = { TZ = config.time.timeZone; };
 
+        path = [ cronNixosPkg ];
+
         preStart =
           ''
             mkdir -m 710 -p /var/cron
@@ -104,7 +106,7 @@ in
             fi
           '';
 
-        exec = "${cronNixosPkg}/sbin/cron -n";
+        exec = "cron -n";
       };
 
   };

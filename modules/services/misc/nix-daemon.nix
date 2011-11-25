@@ -249,14 +249,16 @@ in
 
         startOn = "startup";
 
+        path = [ nix pkgs.openssl pkgs.utillinux ]
+          ++ optionals config.nix.distributedBuilds [ pkgs.openssh pkgs.gzip ];
+
         script =
           ''
-            export PATH=${if config.nix.distributedBuilds then "${pkgs.openssh}/bin:${pkgs.gzip}/bin:" else ""}${pkgs.openssl}/bin:${nix}/bin:$PATH
             ${config.nix.envVars}
             exec \
               nice -n ${builtins.toString config.nix.daemonNiceLevel} \
-              ${pkgs.utillinux}/bin/ionice -n ${builtins.toString config.nix.daemonIONiceLevel} \
-              ${nix}/bin/nix-worker --daemon > /dev/null 2>&1
+              ionice -n ${builtins.toString config.nix.daemonIONiceLevel} \
+              nix-worker --daemon > /dev/null 2>&1
           '';
 
         extraConfig =

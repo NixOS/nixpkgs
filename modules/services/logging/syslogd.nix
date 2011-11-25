@@ -102,7 +102,9 @@ in
 
         daemonType = "fork";
 
-        exec = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf}";
+        path = [ pkgs.sysklogd ];
+
+        exec = "syslogd ${toString cfg.extraParams} -f ${syslogConf}";
       };
 
   };

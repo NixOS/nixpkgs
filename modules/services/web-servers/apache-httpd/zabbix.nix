@@ -46,7 +46,7 @@ in
   '';
 
   # The frontend needs "ps" to find out whether zabbix_server is running.
-  extraServerPath = ["${pkgs.procps}/bin"];
+  extraServerPath = [ pkgs.procps ];
 
   options = {
 

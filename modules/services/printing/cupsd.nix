@@ -129,7 +129,8 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
-        path = [ config.system.path ];
+        # !!! Why is config.system.path in here?
+        path = [ cups config.system.path ];
 
         preStart =
           ''
@@ -140,7 +141,7 @@ in
             mkdir -m 0755 -p ${cfg.tempDir}
           '';
 
-        exec = "${cups}/sbin/cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";
+        exec = "cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";
       };
 
     services.printing.drivers = [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends ];

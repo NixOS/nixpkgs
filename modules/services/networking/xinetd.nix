@@ -132,7 +132,9 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
-        exec = "${xinetd}/sbin/xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
+        path = [ xinetd ];
+
+        exec = "xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
       };
 
   };

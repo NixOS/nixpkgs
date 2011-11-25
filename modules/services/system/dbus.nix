@@ -118,20 +118,22 @@ in
     jobs.dbus =
       { startOn = "started udev and started syslogd";
 
+        path = [ pkgs.dbus_daemon pkgs.dbus_tools ];
+
         preStart =
           ''
             mkdir -m 0755 -p ${homeDir}
             chown messagebus ${homeDir}
 
             mkdir -m 0755 -p /var/lib/dbus
-            ${pkgs.dbus_tools}/bin/dbus-uuidgen --ensure
+            dbus-uuidgen --ensure
 
             rm -f ${homeDir}/pid
           '';
 
         daemonType = "fork";
 
-        exec = "${pkgs.dbus_daemon}/bin/dbus-daemon --system";
+        exec = "dbus-daemon --system";
 
         postStop =
           ''

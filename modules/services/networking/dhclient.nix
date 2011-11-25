@@ -67,6 +67,8 @@ in
       { startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
+        path = [ dhcp ];
+
         preStart =
           ''
             # dhclient barfs if /proc/net/if_inet6 doesn't exist.
@@ -101,7 +103,7 @@ in
 
             mkdir -m 755 -p ${stateDir}
 
-            exec ${dhcp}/sbin/dhclient -d $interfaces -e "PATH=$PATH" -lf ${stateDir}/dhclient.leases -sf ${dhcp}/sbin/dhclient-script
+            exec dhclient -d $interfaces -e "PATH=$PATH" -lf ${stateDir}/dhclient.leases -sf ${dhcp}/sbin/dhclient-script
           '';
       };
 

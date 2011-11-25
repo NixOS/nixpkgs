@@ -68,6 +68,8 @@ in
 
         startOn = "stopped udevtrigger";
 
+        path = [ at ];
+
         preStart =
           ''
             # Snippets taken and adapted from the original `install' rule of
@@ -99,7 +101,7 @@ in
             fi
           '';
 
-        exec = "${at}/sbin/atd";
+        exec = "atd";
 
         daemonType = "fork";
       };

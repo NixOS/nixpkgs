@@ -51,9 +51,7 @@ in {
     Disallow: ${urlPrefix}
   '';
 
-  extraServerPath = [
-    (pkgs.python+"/bin")
-  ];
+  extraServerPath = [ pkgs.python ];
 
   globalEnvVars = [ { name = "PYTHONPATH"; value = "${mercurial}/lib/${pkgs.python.libPrefix}/site-packages"; } ];
 

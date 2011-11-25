@@ -60,11 +60,11 @@ with pkgs.lib;
 
       startOn = "started udev and filesystem";
 
-      exec = "${pkgs.mingetty}/sbin/mingetty --loginprog=${pkgs.shadow}/bin/login --noclear ${tty}";
+      path = [ pkgs.mingetty ];
 
-      environment = {
-        LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
-      };
+      exec = "mingetty --loginprog=${pkgs.shadow}/bin/login --noclear ${tty}";
+
+      environment.LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
 
     }) config.services.mingetty.ttys);
 
