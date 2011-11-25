@@ -77,7 +77,9 @@ in
 
         startOn = "started syslogd";
 
-        exec = "${pkgs.smartmontools}/sbin/smartd --no-fork --pidfile=/var/run/smartd.pid ${smartdFlags}";
+        path = [ pkgs.smartmontools ];
+
+        exec = "smartd --no-fork --pidfile=/var/run/smartd.pid ${smartdFlags}";
       };
 
   };
