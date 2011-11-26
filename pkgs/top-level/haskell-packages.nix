@@ -802,6 +802,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     parsec = self.parsec2;
   };
 
+  iteratee = callPackage ../development/libraries/haskell/iteratee {};
+
   ivor = callPackage ../development/libraries/haskell/ivor {};
 
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
