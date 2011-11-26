@@ -2342,11 +2342,21 @@ let
 
     camlidl = callPackage ../development/tools/ocaml/camlidl { };
 
-    camlp5_strict = callPackage ../development/tools/ocaml/camlp5 { };
+    camlp5_5_strict = callPackage ../development/tools/ocaml/camlp5/5.15.nix { };
 
-    camlp5_transitional = callPackage ../development/tools/ocaml/camlp5 {
+    camlp5_5_transitional = callPackage ../development/tools/ocaml/camlp5/5.15.nix {
       transitional = true;
     };
+
+    camlp5_6_strict = callPackage ../development/tools/ocaml/camlp5 { };
+
+    camlp5_6_transitional = callPackage ../development/tools/ocaml/camlp5 {
+      transitional = true;
+    };
+
+    camlp5_strict = camlp5_6_strict;
+
+    camlp5_transitional = camlp5_6_transitional;
 
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
 
@@ -2398,7 +2408,7 @@ let
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
-      camlp5 = camlp5_transitional;
+      camlp5 = camlp5_5_transitional;
     };
   };
 
@@ -8206,7 +8216,7 @@ let
 
   coq = callPackage ../applications/science/logic/coq {
     inherit (ocamlPackages) findlib lablgtk;
-    camlp5 = ocamlPackages.camlp5_transitional;
+    camlp5 = ocamlPackages.camlp5_5_transitional;
   };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
@@ -8253,7 +8263,7 @@ let
   spass = callPackage ../applications/science/logic/spass {};
 
   ssreflect = callPackage ../applications/science/logic/ssreflect {
-    camlp5 = ocamlPackages.camlp5_transitional;
+    camlp5 = ocamlPackages.camlp5_5_transitional;
   };
 
   tptp = callPackage ../applications/science/logic/tptp {};
