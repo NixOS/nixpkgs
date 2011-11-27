@@ -1,8 +1,0 @@
-# Specifications for the "cryptokit" library:
-requires = ""
-description = "A library of cryptographic primitives for OCaml"
-version = "1.3"
-directory = "^"
-
-archive(byte) = "cryptokit.cma"
-archive(native) = "cryptokit.cmxa"

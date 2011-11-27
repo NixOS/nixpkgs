@@ -1,40 +1,24 @@
-{stdenv, fetchurl, zlib, ocaml}:
+{stdenv, fetchurl, zlib, ocaml, findlib, ncurses}:
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "1.3";
+  version = "1.5";
 in
 
 stdenv.mkDerivation {
   name = "cryptokit-${version}";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/326/" +
+    url = "http://forge.ocamlcore.org/frs/download.php/639/" +
           "cryptokit-${version}.tar.gz";
-    sha256 = "0kqrlxkpzrj2qpniy6mhn7gx3n29s86vk4q0im2hqpxi9knkkwwy";
+    sha256 = "1r5kbsbsicrbpdrdim7h8xg2b1a8qg8sxig9q6cywzm57r33lj72";
   };
 
-  buildInputs = [zlib ocaml];
+  buildInputs = [zlib ocaml findlib ncurses];
 
-  patches = [ ./makefile.patch ];
+  buildFlags = "setup.data build";
 
-  configurePhase = ''
-    export INSTALLDIR="$out/lib/ocaml/${ocaml_version}/site-lib/cryptokit"
-    substituteInPlace Makefile \
-      --subst-var-by ZLIB_LIBDIR "${zlib}/lib" \
-      --subst-var-by ZLIB_INCLUDE "${zlib}/include" \
-      --subst-var INSTALLDIR 
-  '';
-
-  buildFlags = "all allopt";
-
-  doCheck = true;
-  
-  checkTarget = "test";
-
-  preInstall = "ensureDir $INSTALLDIR";
-
-  postInstall = "cp -a ${./META} $INSTALLDIR/META";
+  preBuild = "ensureDir $out/lib/ocaml/${ocaml_version}/site-lib/cryptokit";
 
   meta = {
     homepage = "http://pauillac.inria.fr/~xleroy/software.html";

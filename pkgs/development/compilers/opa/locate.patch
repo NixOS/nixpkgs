@@ -1,0 +1,14 @@
+Needed to have ocamlfind discover ocamlgraph with Nixpkgs.
+
+diff -x '*~' -Naur MLstate-opalang-ee92891/configure MLstate-opalang-ee92891-new//configure
+--- MLstate-opalang-ee92891/configure	2011-09-30 05:41:18.000000000 -0430
++++ MLstate-opalang-ee92891-new//configure	2011-11-24 13:47:01.332558705 -0430
+@@ -567,7 +567,7 @@
+ fi
+ 
+ # - checking ocamlgraph
+-if ! CONFIG_LIB_OCAMLGRAPH=$(locate-ocaml-lib "Graph" "ocamlgraph/graph")
++if ! CONFIG_LIB_OCAMLGRAPH=$(locate-ocaml-lib "Graph" "ocamlgraph" "graph")
+ then lib-not-found "ocamlgraph" "libocamlgraph-ocaml-dev"
+ fi
+ 

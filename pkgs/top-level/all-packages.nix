@@ -2387,6 +2387,8 @@ let
 
     ocaml_expat = callPackage ../development/ocaml-modules/expat { };
 
+    ocamlgraph = callPackage ../development/ocaml-modules/ocamlgraph { };
+
     ocaml_http = callPackage ../development/ocaml-modules/http { };
 
     ocaml_lwt = callPackage ../development/ocaml-modules/lwt { };
@@ -2405,7 +2407,11 @@ let
 
     ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
+    opa = callPackage ../development/compilers/opa { }; 
+
     ounit = callPackage ../development/ocaml-modules/ounit { };
+
+    ulex = callPackage ../development/ocaml-modules/ulex { };
 
     ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
       camlp5 = camlp5_5_transitional;
