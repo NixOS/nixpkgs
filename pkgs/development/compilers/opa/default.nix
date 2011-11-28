@@ -58,6 +58,6 @@ stdenv.mkDerivation rec {
     homepage = http://opalang.org/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.kkallio ];
-    platforms = "x86_64-linux";
+    platforms = [ "x86_64-linux" ];
   };
 }
