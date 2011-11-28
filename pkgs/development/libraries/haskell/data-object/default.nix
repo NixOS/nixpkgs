@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-object";
-  version = "0.3.1.7";
-  sha256 = "0b4jai09nx3h2vfj5f2q1wp0wldvkjygyzkgrrc6hnsfx2qv8qf7";
+  version = "0.3.1.8";
+  sha256 = "0v7kn6rv71fhf2l7ll7plzr90irm2fyp25lskv2zwazp4swhw52x";
   buildDepends = [ failure text time ];
   meta = {
     homepage = "http://github.com/snoyberg/data-object/tree/master";
