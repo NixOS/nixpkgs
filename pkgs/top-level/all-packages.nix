@@ -2407,8 +2407,6 @@ let
 
     ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
-    opa = callPackage ../development/compilers/opa { }; 
-
     ounit = callPackage ../development/ocaml-modules/ounit { };
 
     ulex = callPackage ../development/ocaml-modules/ulex { };
@@ -2422,6 +2420,8 @@ let
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
   ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
   ocamlPackages_3_12_0 = mkOcamlPackages ocaml_3_12_0 pkgs.ocamlPackages_3_12_0;
+
+  opa = let callPackage = newScope pkgs.ocamlPackages_3_12_0; in callPackage ../development/compilers/opa { }; 
 
   opencxx = callPackage ../development/compilers/opencxx {
     gcc = gcc33;
