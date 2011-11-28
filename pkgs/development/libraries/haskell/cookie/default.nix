@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cookie";
-  version = "0.3.0.1";
-  sha256 = "1gqz2q09fnbk8scd164mg02jsdh0sg5g06grr627qsjy583i2ad7";
+  version = "0.3.0.2";
+  sha256 = "123ylraxcavj82qcvrbfpb172k8zl5qgzh2byv84did1f1dz0ris";
   buildDepends = [ blazeBuilder text time ];
   meta = {
     homepage = "http://github.com/snoyberg/cookie";
