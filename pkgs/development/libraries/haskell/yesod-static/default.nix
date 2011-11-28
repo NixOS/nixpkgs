@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-static";
-  version = "0.3.1.2";
-  sha256 = "0r72xspxq7122k9vird4yqqzrn6p4xgzvxid7ig62zdxjlw1p36j";
+  version = "0.3.2";
+  sha256 = "0m0fws0bwhf1cyw1a3cg85mhdjr9pv35a39671jsqkkvmmxiixlf";
   buildDepends = [
     base64Bytestring cereal enumerator fileEmbed httpTypes pureMD5 text
     transformers unixCompat wai waiAppStatic yesodCore
