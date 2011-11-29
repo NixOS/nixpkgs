@@ -171,9 +171,6 @@ let kernel = config.boot.kernelPackages.kernel; in
 
         # For usual AT keyboards.
         "i8042"
-
-        # Provide the CFQ scheduler in the initrd.
-        "cfq_iosched"
       ];
 
     # The Linux kernel >= 2.6.27 provides firmware.
