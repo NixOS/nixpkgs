@@ -409,6 +409,15 @@ rec {
       ];
   };
 
+  CatalystPluginAccessLog = buildPerlPackage rec {
+    name = "Catalyst-Plugin-AccessLog-1.04";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      sha256 = "1cbbg6fviyv398lyhmv14ya0v0h0xs04d29zz9r49vzsbw6shy33";
+    };
+    propagatedBuildInputs = [ CatalystRuntime DateTime ];
+  };
+
   CatalystPluginAuthentication = buildPerlPackage rec {
     name = "Catalyst-Plugin-Authentication-0.10018";
     src = fetchurl {
