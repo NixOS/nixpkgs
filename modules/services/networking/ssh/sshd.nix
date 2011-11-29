@@ -14,6 +14,98 @@ let
     v == "forced-commands-only" ||
     v == "no";
 
+  userOptions = {
+    openssh.authorizedKeys = {
+
+      preserveExistingKeys = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If this option is enabled, the keys specified in
+          <literal>keys</literal> and/or <literal>keyFiles</literal> will be
+          placed in a special section of the user's authorized_keys file
+          and any existing keys will be preserved. That section will be
+          regenerated each time NixOS is activated. However, if
+          <literal>preserveExisting</literal> isn't enabled, the complete file
+          will be generated, and any user modifications will be wiped out.
+        '';
+      };
+
+      keys = mkOption {
+        type = types.listOf types.string;
+        default = [];
+        description = ''
+          A list of verbatim OpenSSH public keys that should be inserted into the
+          user's authorized_keys file. You can combine the <literal>keys</literal> and
+          <literal>keyFiles</literal> options.
+        '';
+      };
+
+      keyFiles = mkOption {
+        type = types.listOf types.string;
+        default = [];
+        description = ''
+          A list of files each containing one OpenSSH public keys that should be
+          inserted into the user's authorized_keys file. You can combine
+          the <literal>keyFiles</literal> and
+          <literal>keys</literal> options.
+        '';
+      };
+
+    };
+  };
+
+  mkAuthkeyScript =
+    let
+      marker1 = "### NixOS will regenerate this line and every line below it.";
+      marker2 = "### NixOS will regenerate this file. Do not edit!";
+      users = map (userName: getAttr userName config.users.extraUsers) (attrNames config.users.extraUsers);
+      usersWithKeys = flip filter users (u:
+        length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
+      );
+      userLoop = flip concatMapStrings usersWithKeys (u:
+        let
+          authKeys = concatStringsSep "," u.openssh.authorizedKeys.keys;
+          authKeyFiles = concatStringsSep "," u.openssh.authorizedKeys.keyFiles;
+          preserveExisting = if u.openssh.authorizedKeys.preserveExistingKeys then "true" else "false";
+        in ''
+          mkAuthKeysFile "${u.name}" "${authKeys}" "${authKeyFiles}" "${preserveExisting}"
+        ''
+      );
+    in ''
+      mkAuthKeysFile() {
+        local userName="$1"
+        local authKeys="$2"
+        local authKeyFiles="$3"
+        local preserveExisting="$4"
+        IFS=","
+
+        for f in $authKeyFiles; do
+          if [ -f "$f" ]; then
+            authKeys="$(${pkgs.coreutils}/bin/cat "$f"),$authKeys"
+          fi
+        done
+
+        if [ -n "$authKeys" ]; then
+          eval authfile=~$userName/.ssh/authorized_keys
+          ${pkgs.coreutils}/bin/mkdir -p "$(dirname $authfile)"
+          ${pkgs.coreutils}/bin/touch "$authfile"
+          if [ "$preserveExisting" == "false" ]; then
+            rm -f "$authfile"
+            authKeys="${marker2},$authKeys"
+          else
+            ${pkgs.gnused}/bin/sed -i '/^### NixOS.*$/,$d' "$authfile"
+            authKeys="${marker1},$authKeys"
+          fi
+          for key in $authKeys; do ${pkgs.coreutils}/bin/echo "$key" >> "$authfile"; done
+        fi
+
+        unset IFS
+      }
+      ${userLoop}
+    '';
+
+
 in
 
 {
@@ -102,6 +194,10 @@ in
 
     };
 
+    users.extraUsers = mkOption {
+      options = [ userOptions ];
+    };
+
   };
 
 
@@ -135,6 +231,8 @@ in
 
         preStart =
           ''
+            ${mkAuthkeyScript}
+
             mkdir -m 0755 -p /etc/ssh
 
             if ! test -f /etc/ssh/ssh_host_dsa_key; then

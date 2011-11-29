@@ -5,43 +5,83 @@ with pkgs.lib;
 let
 
   ids = config.ids;
+  users = config.users;
 
+  userOpts = {name, config, ...}:
 
-  # User accounts to be created/updated by NixOS.
-  users =
-    let
-      defaultUsers =
-        [ { name = "root";
-            uid = ids.uids.root;
-            description = "System administrator";
-            home = "/root";
-            shell = config.users.defaultUserShell;
-            group = "root";
-          }
-          { name = "nobody";
-            uid = ids.uids.nobody;
-            description = "Unprivileged account (don't use!)";
-          }
-        ];
+  {
+    options = {
+      name = mkOption {
+        type = with types; uniq string;
+        description = "The name of the user account. If undefined, the name of the attribute set will be used.";
+      };
+      description = mkOption {
+        type = with types; uniq string;
+        default = "";
+        description = "A short description of the user account.";
+      };
+      uid = mkOption {
+        type = with types; uniq (nullOr int);
+        default = null;
+        description = "The account UID. If undefined, NixOS will select a UID.";
+      };
+      group = mkOption {
+        type = with types; uniq string;
+        default = "nogroup";
+        description = "The user's primary group.";
+      };
+      extraGroups = mkOption {
+        type = types.listOf types.string;
+        default = [];
+        description = "The user's auxiliary groups.";
+      };
+      home = mkOption {
+        type = with types; uniq string;
+        default = "/var/empty";
+        description = "The user's home directory.";
+      };
+      shell = mkOption {
+        type = with types; uniq string;
+        default = "/noshell";
+        description = "The path to the user's shell.";
+      };
+      createHome = mkOption {
+        type = types.bool;
+        default = false;
+        description = "If true, the home directory will be created automatically.";
+      };
+      useDefaultShell = mkOption {
+        type = types.bool;
+        default = false;
+        description = "If true, the user's shell will be set to <literal>users.defaultUserShell</literal>.";
+      };
+      password = mkOption {
+        type = with types; uniq (nullOr string);
+        default = null;
+        description = "The user's password. If undefined, no password is set for the user.  Warning: do not set confidential information here because this data would be readable by all.  This option should only be used for public account such as guest.";
+      };
+      isSystemUser = mkOption {
+        type = types.bool;
+        default = true;
+        description = "Indicates if the user is a system user or not.";
+      };
+      createUser = mkOption {
+        type = types.bool;
+        default = true;
+        description = "
+          Indicates if the user should be created automatically as a local user.
+          Set this to false if the user for instance is an LDAP user. NixOS will
+          then not modify any of the basic properties for the user account.
+        ";
+      };
+    };
 
-      # !!! Use NixOS module system to add default attributes.
-      addAttrs =
-        { name
-        , description
-        , uid ? ""
-        , group ? "nogroup"
-        , extraGroups ? []
-        , home ? "/var/empty"
-        , shell ? (if useDefaultShell then config.users.defaultUserShell else "/noshell")
-        , createHome ? false
-        , useDefaultShell ? false
-        , password ? null
-        , isSystemUser ? true
-        }:
-        { inherit name description uid group extraGroups home shell createHome password isSystemUser; };
-
-    in map addAttrs (defaultUsers ++ config.users.extraUsers);
-
+    config = {
+      name = mkDefault name;
+      uid = mkDefault (attrByPath [name] null ids.uids);
+      shell = mkIf config.useDefaultShell (mkDefault users.defaultUserShell);
+    };
+  };
 
   # Groups to be created/updated by NixOS.
   groups =
@@ -109,11 +149,14 @@ let
 
   # Note: the 'X' in front of the password is to distinguish between
   # having an empty password, and not having a password.
-  serializedUser = u: "${u.name}\n${u.description}\n${toString u.uid}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n${toString u.isSystemUser}\n";
+  serializedUser = userName: let u = getAttr userName config.users.extraUsers; in "${u.name}\n${u.description}\n${if u.uid != null then toString u.uid else ""}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n${toString u.isSystemUser}\n${if u.createUser then "yes" else "no"}\n";
+
   serializedGroup = g: "${g.name}\n${toString g.gid}";
 
   # keep this extra file so that cat can be used to pass special chars such as "`" which is used in the avahi daemon
-  usersFile = pkgs.writeText "users" (concatStrings (map serializedUser users));
+  usersFile = pkgs.writeText "users" (
+    concatMapStrings serializedUser (attrNames config.users.extraUsers)
+  );
 
 in
 
@@ -124,22 +167,24 @@ in
   options = {
 
     users.extraUsers = mkOption {
-      default = [];
-      example =
-        [ { name = "alice";
-            uid = 1234;
-            description = "Alice";
-            home = "/home/alice";
-            createHome = true;
-            group = "users";
-            extraGroups = ["wheel"];
-            shell = "/bin/sh";
-            password = "foobar";
-          }
-        ];
+      default = {};
+      type = types.loaOf types.optionSet;
+      example = {
+        alice = {
+          uid = 1234;
+          description = "Alice";
+          home = "/home/alice";
+          createHome = true;
+          group = "users";
+          extraGroups = ["wheel"];
+          shell = "/bin/sh";
+          password = "foobar";
+        };
+      };
       description = ''
         Additional user accounts to be created automatically by the system.
       '';
+      options = [ userOpts ];
     };
 
     users.extraGroups = mkOption {
@@ -154,12 +199,33 @@ in
       '';
     };
 
+    user = mkOption {
+      default = {};
+      description = ''
+        This option defines settings for individual users on the system.
+      '';
+      type = types.loaOf types.optionSet;
+      options = [ ];
+    };
+
   };
 
 
   ###### implementation
 
   config = {
+
+    users.extraUsers = {
+      root = {
+        description = "System administrator";
+        home = "/root";
+        shell = config.users.defaultUserShell;
+        group = "root";
+      };
+      nobody = {
+        description = "Unprivileged account (don't use!)";
+      };
+    };
 
     system.activationScripts.rootPasswd = stringAfter [ "etc" ]
       ''
@@ -192,6 +258,11 @@ in
             read createHome
             read password
             read isSystemUser
+            read createUser
+
+            if ! test "$createUser" = "yes"; then
+                continue
+            fi
 
             if ! curEnt=$(getent passwd "$name"); then
                 useradd ''${isSystemUser:+--system} \
