@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, readline, pam, openldap, popt, iniparser, libunwind, fam
-, acl, cups
+{ stdenv, fetchurl, readline, pam ? null, openldap ? null
+, popt, iniparser, libunwind
+, fam ? null , acl ? null, cups ? null
 , useKerberos ? false, kerberos ? null, winbind ? true
 
 # Eg. smbclient and smbspool require a smb.conf file.
@@ -14,11 +15,7 @@
 
 }:
 
-let
-
- useWith = flag: option: if flag then "--with-"+option else "";
- 
-in
+assert useKerberos -> kerberos != null;
 
 stdenv.mkDerivation rec {
   name = "samba-3.6.1";
@@ -38,19 +35,29 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = "cd source3";
+  postPatch =
+    # XXX: Awful hack to allow cross-compilation.
+    '' sed -i source3/configure \
+           -e 's/^as_fn_error \("cannot run test program while cross compiling\)/$as_echo \1/g'
+    '';
 
-  configureFlags = ''
-    --with-pam
-    --with-aio-support
-    --with-pam_smbpass
-    --disable-swat
-    --with-configdir=${configDir}
-    --with-fhs
-    --localstatedir=/var
-    ${useWith winbind "winbind"}
-    ${if stdenv.gcc.libc != null then "--with-libiconv=${stdenv.gcc.libc}" else ""}
-  '';
+  preConfigure =
+    '' cd source3
+       export samba_cv_CC_NEGATIVE_ENUM_VALUES=yes
+       export libreplace_cv_HAVE_GETADDRINFO=yes
+       export ac_cv_file__proc_sys_kernel_core_pattern=no # XXX: true on Linux, false elsewhere
+    '';
+
+  configureFlags =
+    stdenv.lib.optionals (pam != null) [ "--with-pam" "--with-pam_smbpass" ]
+    ++ [ "--with-aio-support"
+         "--disable-swat"
+         "--with-configdir=${configDir}"
+         "--with-fhs"
+         "--localstatedir=/var"
+       ]
+    ++ (stdenv.lib.optional winbind "--with-winbind")
+    ++ (stdenv.lib.optional (stdenv.gcc.libc != null) "--with-libiconv=${stdenv.gcc.libc}");
 
   # Need to use a DESTDIR because `make install' tries to write in /var and /etc.
   installFlags = "DESTDIR=$(TMPDIR)/inst";

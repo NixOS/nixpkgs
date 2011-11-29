@@ -5054,6 +5054,15 @@ let
 
   samba = callPackage ../servers/samba { };
 
+  # A lightweight Samba, useful for non-Linux-based OSes.
+  samba_light = callPackage ../servers/samba {
+    pam = null;
+    fam = null;
+    cups = null;
+    acl = null;
+    openldap = null;
+  };
+
   shishi = callPackage ../servers/shishi {
     # GNU Shishi 1.0.0 fails to build with GnuTLS 3.x.
     gnutls = gnutls2;
