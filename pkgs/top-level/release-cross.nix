@@ -190,6 +190,7 @@ in {
     boehmgc.hostDrv = nativePlatforms;
     findutils.hostDrv = nativePlatforms;
     gcc.hostDrv = nativePlatforms;
+    gcc46.hostDrv = nativePlatforms;
     gdb.hostDrv = nativePlatforms;
     gmp.hostDrv = nativePlatforms;
     gnugrep.hostDrv = nativePlatforms;
