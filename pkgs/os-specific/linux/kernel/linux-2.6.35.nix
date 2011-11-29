@@ -18,6 +18,11 @@ let
       # Enable the kernel's built-in memory tester.
       MEMTEST y
 
+      # Include the CFQ I/O scheduler in the kernel, rather than as a
+      # module, so that the initrd gets a good I/O scheduler.
+      IOSCHED_CFQ y
+      BLK_CGROUP y # required by CFQ
+
       # Disable some expensive (?) features.
       FTRACE n
       KPROBES n
