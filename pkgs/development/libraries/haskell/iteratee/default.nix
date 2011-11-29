@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "iteratee";
-  version = "0.8.7.3";
-  sha256 = "1aqrqsd4q3isvv8dxaq61sgkns6lr7xabmllxp717f1jrnij7f54";
+  version = "0.8.7.4";
+  sha256 = "08smgb4xad8zpjzjrpjpv3vindhwgbcsf4rgipnrpyvz6mrg4w9i";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
