@@ -5478,12 +5478,6 @@ let
       ];
   };
 
-  linux_2_6_34_tuxonice = linux_2_6_34.override (attrs: {
-    kernelPatches = attrs.kernelPatches ++ [
-      kernelPatches.tuxonice_2_6_34
-    ];
-  });
-
   linux_2_6_35 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.35.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5494,12 +5488,6 @@ let
       ] ++ lib.optional (platform.kernelArch == "arm")
         kernelPatches.sheevaplug_modules_2_6_35;
   };
-
-  linux_2_6_35_tuxonice = linux_2_6_35.override (attrs: {
-    kernelPatches = attrs.kernelPatches ++ [
-      kernelPatches.tuxonice_2_6_35
-    ];
-  });
 
   linux_nanonote_jz_2_6_34 = makeOverridable
     (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.34.nix) {
@@ -5551,12 +5539,6 @@ let
       ];
   };
 
-  linux_2_6_36_tuxonice = linux_2_6_36.override (attrs: {
-    kernelPatches = attrs.kernelPatches ++ [
-      kernelPatches.tuxonice_2_6_36
-    ];
-  });
-
   linux_2_6_37 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.37.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5567,12 +5549,6 @@ let
         #kernelPatches.mips_restart_2_6_36
       ];
   };
-
-  linux_2_6_37_tuxonice = linux_2_6_37.override (attrs: {
-    kernelPatches = attrs.kernelPatches ++ [
-      kernelPatches.tuxonice_2_6_37
-    ];
-  });
 
   linux_2_6_38 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.38.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
@@ -5813,13 +5789,9 @@ let
     recurseIntoAttrs (linuxPackagesFor linux_2_6_32_xen pkgs.linuxPackages_2_6_32_xen);
   linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33 pkgs.linuxPackages_2_6_33);
   linuxPackages_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_2_6_34 pkgs.linuxPackages_2_6_34);
-  linuxPackages_2_6_34_tuxonice = recurseIntoAttrs (linuxPackagesFor linux_2_6_34_tuxonice pkgs.linuxPackages_2_6_34_tuxonice);
   linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);
-  linuxPackages_2_6_35_tuxonice = recurseIntoAttrs (linuxPackagesFor linux_2_6_35_tuxonice pkgs.linuxPackages_2_6_35_tuxonice);
   linuxPackages_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_2_6_36 pkgs.linuxPackages_2_6_36);
-  linuxPackages_2_6_36_tuxonice = recurseIntoAttrs (linuxPackagesFor linux_2_6_36_tuxonice pkgs.linuxPackages_2_6_36_tuxonice);
   linuxPackages_2_6_37 = recurseIntoAttrs (linuxPackagesFor linux_2_6_37 pkgs.linuxPackages_2_6_37);
-  linuxPackages_2_6_37_tuxonice = recurseIntoAttrs (linuxPackagesFor linux_2_6_37_tuxonice pkgs.linuxPackages_2_6_37_tuxonice);
   linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_38_ati = recurseIntoAttrs (linuxPackagesFor linux_2_6_38_ati pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_39 = recurseIntoAttrs (linuxPackagesFor linux_2_6_39 pkgs.linuxPackages_2_6_39);

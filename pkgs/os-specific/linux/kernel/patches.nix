@@ -36,23 +36,23 @@ let
       };
     };
 
-    makeAufs3StandalonePatch =  {version, rev, sha256}:
+  makeAufs3StandalonePatch = {version, rev, sha256}:
 
-      stdenv.mkDerivation {
-        name = "aufs3-standalone-${version}.patch";
+    stdenv.mkDerivation {
+      name = "aufs3-standalone-${version}.patch";
 
-        src = fetchgit {
-          url = git://aufs.git.sourceforge.net/gitroot/aufs/aufs3-standalone.git;
-          inherit sha256 rev;
-        };
-
-        phases = [ "unpackPhase" "installPhase" ];
-
-        #Instructions from http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs3-standalone.git;a=blob;f=Documentation/filesystems/aufs/README;h=b8cf077635b323d1b454266366f05f476bbd09cb;hb=1067b9d8d64d23c70d905c9cd3c90a669e39c4d4
-        installPhase = ''
-          cat aufs3-base.patch aufs3-proc_map.patch aufs3-standalone.patch > $out
-        '';
+      src = fetchgit {
+        url = git://aufs.git.sourceforge.net/gitroot/aufs/aufs3-standalone.git;
+        inherit sha256 rev;
       };
+
+      phases = [ "unpackPhase" "installPhase" ];
+
+      # Instructions from http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs3-standalone.git;a=blob;f=Documentation/filesystems/aufs/README;h=b8cf077635b323d1b454266366f05f476bbd09cb;hb=1067b9d8d64d23c70d905c9cd3c90a669e39c4d4
+      installPhase = ''
+        cat aufs3-base.patch aufs3-proc_map.patch aufs3-standalone.patch > $out
+      '';
+    };
 
 in
 
@@ -396,31 +396,6 @@ rec {
       name = "guruplug-arch-number";
       patch = ./guruplug-mach-type.patch;
     };
-
-  tuxonice_2_6_34 = makeTuxonicePatch {
-    version = "3.2-rc2";
-    kernelVersion = "2.6.34";
-    sha256 = "0bagqinmky1kmvg3vw8cdysqklxrsfjm7gqrpxviq9jq8vyycviz";
-  };
-
-  tuxonice_2_6_35 = makeTuxonicePatch {
-    version = "3.2-rc2";
-    kernelVersion = "2.6.35";
-    sha256 = "00jbrqq6p1lyvli835wczc0vqsn0z73jpb2aak3ak0vgnvsxw37q";
-  };
-
-  tuxonice_2_6_36 = makeTuxonicePatch {
-    version = "3.2-rc2";
-    kernelVersion = "2.6.36";
-    sha256 = "1vcw3gpjdghnkli46j37pc6rp8mqk8dh688jv8rppzsry0ll7b7k";
-  };
-
-  tuxonice_2_6_37 = makeTuxonicePatch {
-    version = "3.2-rc2";
-    kernelVersion = "2.6.37";
-    url = "http://tuxonice.net/files/current-tuxonice-for-2.6.37.patch_0.bz2";
-    sha256 = "0acllabvbm9pmjnh0zx9mgnp47xbrl9ih6i037c85h0ymnjsxdhk";
-  };
 
   glibc_getline =
     {
