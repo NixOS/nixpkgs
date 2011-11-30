@@ -1,11 +1,11 @@
 {stdenv, fetchurl, gmp, static ? false}:
 
 stdenv.mkDerivation rec {
-  name = "isl-0.08";
+  name = "isl-0.07";             # CLooG 0.16.3 fails to build with ISL 0.08.
 
   src = fetchurl {
     url = "http://www.kotnet.org/~skimo/isl/${name}.tar.bz2";
-    sha256 = "16rqvajcp9x6j76mg9q6bprqkgsm1zprx50j90s6v996y7ww3j9l";
+    sha256 = "0kpxmvhrwwdygqqafqzjf9xiksq7paac2x24g9jhr3f9ajj3zkyx";
   };
 
   buildInputs = [ gmp ];
