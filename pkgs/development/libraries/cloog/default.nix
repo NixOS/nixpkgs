@@ -1,31 +1,23 @@
 { fetchurl, stdenv, gmp, isl, static ? false }:
 
-let
-  staticFlags =
-    assert static -> isl.dontDisableStatic == true;
-    if static then "--enable-static --disable-shared" else "";
-
-in
+assert static -> isl.dontDisableStatic;
 
 stdenv.mkDerivation rec {
-  name = "cloog-0.16.2";
+  name = "cloog-0.16.3";
 
   src = fetchurl {
     url = "http://www.bastoul.net/cloog/pages/download/count.php3?url=./${name}.tar.gz";
-    sha256 = "1w9n9lsq18k65fywwbbvhkgl917053w1kvqw0xhlwcma0v59m6mx";
+    sha256 = "0lzbsszfzsr0jfwkccfbsvx913d2yc45dqwa472plmxkhbwykmc9";
   };
 
   buildInputs = [ gmp ];
 
   propagatedBuildInputs = [ isl ];
 
-  configureFlags = "--with-isl=system --with-isl-prefix=${isl}" + staticFlags;
-    
-  dontDisableStatic = if static then true else false;
+  configureFlags = [ "--with-isl=system" ]
+    ++ (stdenv.lib.optionals static [ "--enable-static" "--disable-shared" ]);
 
-  crossAttrs = {
-    configureFlags = "--with-isl=system --with-isl-prefix=${isl.hostDrv}" + staticFlags;
-  };
+  dontDisableStatic = static;
 
   doCheck = true;
 
