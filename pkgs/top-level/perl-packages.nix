@@ -2587,17 +2587,6 @@ rec {
     propagatedBuildInputs = [JSONAny Encode LWP CryptSSLeay];
   };
 
-  nixPerl = buildPerlPackage {
-    name = "Nix-1.0pre29083";
-    src = fetchsvn {
-      url = https://svn.nixos.org/repos/nix/nix-perl/trunk;
-      rev = 29083;
-      sha256 = "02wfy4l355s57w7lrynbwx97nlxvasx3xfsn72gla0i8mg6pdgaw";
-    };
-    NIX_PREFIX = pkgs.nixUnstable;
-    doCheck = false; # tests currently don't work
-  };
-
   NumberCompare = buildPerlPackage rec {
     name = "Number-Compare-0.01";
     src = fetchurl {
