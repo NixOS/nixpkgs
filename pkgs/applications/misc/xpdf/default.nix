@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     if test -n \"${base14Fonts}\"; then
       substituteInPlace $out/etc/xpdfrc \\
         --replace /usr/local/share/ghostscript/fonts ${base14Fonts} \\
-        --replace '#displayFontT1' displayFontT2
+        --replace '#fontFile' fontFile
     fi
   ";
 
