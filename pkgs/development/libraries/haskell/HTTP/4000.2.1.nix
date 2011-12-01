@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "HTTP";
-  version = "4000.1.2";
-  sha256 = "19vcy8xinrvn01caly6sg1p1yvbbf7nwq10kxmnwqssnl4h5cwn8";
+  version = "4000.2.1";
+  sha256 = "01076rk7ly5228pszn54x4nqc6rqq1xw11ij9ajvhzf419islh0a";
   buildDepends = [ mtl network parsec ];
   meta = {
-    homepage = "http://projects.haskell.org/http/";
+    homepage = "https://github.com/haskell/HTTP";
     description = "A library for client-side HTTP";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
