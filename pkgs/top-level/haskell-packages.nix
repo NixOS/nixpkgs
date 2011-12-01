@@ -139,7 +139,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexCompat  = self.regexCompat_0_93_1; # 7.2 ok, 7.3 ok
     regexPosix   = self.regexPosix_0_94_4; # 7.2 ok, 7.3 ok
     stm          = self.stm_2_2_0_1; # 7.2 ok, 7.3 ok
-    syb          = self.syb_0_3_3; # 7.2 ok, 7.3 ok
+    syb          = self.syb_0_3_5; # 7.2 ok, 7.3 ok
     xhtml        = self.xhtml_3000_2_0_1; # 7.2 ok, 7.3 ok
     zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
     HTTP         = self.HTTP_4000_1_2; # 7.2 ok, 7.3 ok
@@ -1098,7 +1098,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
   syb_0_3   = callPackage ../development/libraries/haskell/syb/0.3.nix {};
-  syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
+  syb_0_3_5 = callPackage ../development/libraries/haskell/syb/0.3.5.nix {};
   syb02     = self.syb_0_2_2;
   syb03     = self.syb_0_3;
   syb       = null; # by default, we assume that syb ships with GHC, which is
