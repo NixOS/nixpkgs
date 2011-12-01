@@ -1,0 +1,16 @@
+Patch for <http://rt.openssl.org/Ticket/Display.html?id=2435&user=guest&pass=guest>.
+Fixes compilation on FreeBSD 8.2 with GNU Make 3.81.
+
+diff --git a/crypto/perlasm/x86_64-xlate.pl b/crypto/perlasm/x86_64-xlate.pl
+index e47116b..dc500ae 100755
+--- a/crypto/perlasm/x86_64-xlate.pl
++++ b/crypto/perlasm/x86_64-xlate.pl
+@@ -66,7 +66,7 @@ if ($flavour =~ /\./) { $output = $flavour; undef $flavour; }
+   my ($outdev,$outino,@junk)=stat($output);
+ 
+     open STDOUT,">$output" || die "can't open $output: $!"
+-	if ($stddev!=$outdev || $stdino!=$outino);
++	if (!defined($outdev) || $stddev!=$outdev || $stdino!=$outino);
+ }
+ 
+ my $gas=1;	$gas=0 if ($output =~ /\.asm$/);
