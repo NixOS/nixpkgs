@@ -1,17 +1,18 @@
 { cabal, aeson, attoparsec, base64Bytestring, blazeBuilder
 , caseInsensitive, enumerator, failure, httpEnumerator, httpTypes
 , network, random, RSA, SHA, tagsoup, text, time, tls, transformers
-, xmlEnumerator
+, unorderedContainers, xmlEnumerator
 }:
 
 cabal.mkDerivation (self: {
   pname = "authenticate";
-  version = "0.10.3";
-  sha256 = "1sp8yanb8wray3pnakaj7jqsxirjw6ds2f1j2p72p9hn3kcf4255";
+  version = "0.10.3.1";
+  sha256 = "01xqqnvy2xjcgnp5qq5xiqm1whxywa31cgd79mm290i2r4baiq8s";
   buildDepends = [
     aeson attoparsec base64Bytestring blazeBuilder caseInsensitive
     enumerator failure httpEnumerator httpTypes network random RSA SHA
-    tagsoup text time tls transformers xmlEnumerator
+    tagsoup text time tls transformers unorderedContainers
+    xmlEnumerator
   ];
   meta = {
     homepage = "http://github.com/snoyberg/authenticate/tree/master";
