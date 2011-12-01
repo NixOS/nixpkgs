@@ -841,9 +841,12 @@ let
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
-  hydra = callPackage ../development/tools/misc/hydra {
-    nix = nixUnstable;
-  };
+  # FIXME: This Hydra snapshot is outdated and depends on the `nixPerl',
+  # which no longer exists.
+  #
+  # hydra = callPackage ../development/tools/misc/hydra {
+  #   nix = nixUnstable;
+  # };
 
   iasl = callPackage ../development/compilers/iasl { };
 
