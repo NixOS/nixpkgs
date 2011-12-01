@@ -441,6 +441,8 @@ the file at URL."
     (define validsig-rx
       (make-regexp
        "^\\[GNUPG:\\] VALIDSIG ([[:xdigit:]]+) ([[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}) ([[:digit:]]+) .*$"))
+    (define expkeysig-rx                    ; good signature, but expired key
+      (make-regexp "^\\[GNUPG:\\] EXPKEYSIG ([[:xdigit:]]+) (.*)$"))
     (define errsig-rx
       (make-regexp
        "^\\[GNUPG:\\] ERRSIG ([[:xdigit:]]+) ([^ ]+) ([^ ]+) ([^ ]+) ([[:digit:]]+) ([[:digit:]]+)"))
@@ -450,20 +452,25 @@ the file at URL."
            (lambda (match)
              `(signature-id ,(match:substring match 1) ; sig id
                             ,(match:substring match 2) ; date
-                            ,(string->number      ; timestamp
+                            ,(string->number           ; timestamp
                               (match:substring match 3)))))
           ((regexp-exec goodsig-rx line)
            =>
            (lambda (match)
-             `(good-signature ,(match:substring match 1) ; key id
+             `(good-signature ,(match:substring match 1)    ; key id
                               ,(match:substring match 2)))) ; user name
           ((regexp-exec validsig-rx line)
            =>
            (lambda (match)
              `(valid-signature ,(match:substring match 1) ; fingerprint
                                ,(match:substring match 2) ; sig creation date
-                               ,(string->number   ; timestamp
+                               ,(string->number           ; timestamp
                                  (match:substring match 3)))))
+          ((regexp-exec expkeysig-rx line)
+           =>
+           (lambda (match)
+             `(expired-key-signature ,(match:substring match 1) ; fingerprint
+                                     ,(match:substring match 2)))) ; user name
           ((regexp-exec errsig-rx line)
            =>
            (lambda (match)
@@ -471,7 +478,7 @@ the file at URL."
                                ,(match:substring match 2) ; pubkey algo
                                ,(match:substring match 3) ; hash algo
                                ,(match:substring match 4) ; sig class
-                               ,(string->number   ; timestamp
+                               ,(string->number           ; timestamp
                                  (match:substring match 5))
                                ,(let ((rc
                                        (string->number ; return code
@@ -504,7 +511,7 @@ the file at URL."
 a key-id/user pair; return #f otherwise."
   (any (lambda (sexp)
          (match sexp
-           (('good-signature key-id user)
+           (((or 'good-signature 'expired-key-signature) key-id user)
             (cons key-id user))
            (_ #f)))
        status))
