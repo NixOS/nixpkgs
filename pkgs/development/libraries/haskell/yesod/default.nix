@@ -1,4 +1,4 @@
-{ cabal, attoparsecText, blazeBuilder, blazeHtml, hamlet, httpTypes
+{ cabal, attoparsec, blazeBuilder, blazeHtml, hamlet, httpTypes
 , monadControl, parsec, shakespeareCss, shakespeareJs
 , shakespeareText, text, time, transformers, unixCompat, wai
 , waiExtra, warp, yesodAuth, yesodCore, yesodForm, yesodJson
@@ -7,12 +7,12 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "0.9.3.2";
-  sha256 = "1dwdjf7iydbpnbfpixjmw90dbb25030mv1s2a9cmbpdg70dzzknp";
+  version = "0.9.3.3";
+  sha256 = "11xjj9madb9dxk06z3izzbv3cish748hkf57k37mjsvlidbxd104";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    attoparsecText blazeBuilder blazeHtml hamlet httpTypes monadControl
+    attoparsec blazeBuilder blazeHtml hamlet httpTypes monadControl
     parsec shakespeareCss shakespeareJs shakespeareText text time
     transformers unixCompat wai waiExtra warp yesodAuth yesodCore
     yesodForm yesodJson yesodPersistent
