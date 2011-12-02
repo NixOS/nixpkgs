@@ -384,10 +384,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec/enumerator.nix {};
 
-  attoparsecText = callPackage ../development/libraries/haskell/attoparsec-text {};
-
-  attoparsecTextEnumerator = callPackage ../development/libraries/haskell/attoparsec-text-enumerator {};
-
   authenticate = callPackage ../development/libraries/haskell/authenticate {};
 
   base16Bytestring = callPackage ../development/libraries/haskell/base16-bytestring {};
