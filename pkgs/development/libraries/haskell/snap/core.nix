@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-core";
-  version = "0.6.0.1";
-  sha256 = "1vcpi56a5cia8z7n3zskhl2b7v9vkqkr87hy8n3hz5lz1lc82kkz";
+  version = "0.7";
+  sha256 = "1rplv1pg531jfmvxlhl7lz9hdhbxllk59daik013i172wglggivp";
   buildDepends = [
     attoparsec attoparsecEnumerator base16Bytestring blazeBuilder
     blazeBuilderEnumerator bytestringMmap bytestringNums
