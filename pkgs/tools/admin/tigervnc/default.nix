@@ -65,7 +65,9 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libX11 libXext gettext libICE libXtst libXi libSM autoconf automake cvs
       libtool nasm utilmacros fontutil libgcrypt gnutls pam
-    ] ++ xorgserver.buildNativeInputs;
+    ];
+  
+  buildNativeInputs = xorgserver.buildNativeInputs;
 
   propagatedBuildNativeInputs = xorgserver.propagatedBuildNativeInputs;
 
