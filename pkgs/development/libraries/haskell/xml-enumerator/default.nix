@@ -1,16 +1,15 @@
-{ cabal, attoparsecText, attoparsecTextEnumerator, blazeBuilder
+{ cabal, attoparsec, attoparsecEnumerator, blazeBuilder
 , blazeBuilderEnumerator, dataDefault, enumerator, failure, text
 , transformers, xmlTypes
 }:
 
 cabal.mkDerivation (self: {
   pname = "xml-enumerator";
-  version = "0.4.3.2";
-  sha256 = "0ahxg81fr4vf5lwbqsbhvpfczhi2fgxb7qrzd38d2zgklrh9vh7v";
+  version = "0.4.4";
+  sha256 = "1xz37gzk3kk9sqkcbyspcdyz7rk3afkv33g7q45ih5fbd7zkd5gm";
   buildDepends = [
-    attoparsecText attoparsecTextEnumerator blazeBuilder
-    blazeBuilderEnumerator dataDefault enumerator failure text
-    transformers xmlTypes
+    attoparsec attoparsecEnumerator blazeBuilder blazeBuilderEnumerator
+    dataDefault enumerator failure text transformers xmlTypes
   ];
   meta = {
     homepage = "http://github.com/snoyberg/xml";
