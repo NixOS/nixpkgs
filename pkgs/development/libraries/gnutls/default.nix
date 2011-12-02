@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
-    ./configure $configureFlags                                 \
+    ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
       --without-p11-kit                                         \
       --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
