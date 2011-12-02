@@ -1,10 +1,14 @@
-{ cabal, aeson, shakespeareJs, text, vector, yesodCore }:
+{ cabal, aeson, shakespeareJs, text, unorderedContainers, vector
+, yesodCore
+}:
 
 cabal.mkDerivation (self: {
   pname = "yesod-json";
-  version = "0.2.2";
-  sha256 = "11n34wg0jjamghd93ild48rzganbwzbqf6shv8lyy1lsm2jl8q0v";
-  buildDepends = [ aeson shakespeareJs text vector yesodCore ];
+  version = "0.2.2.1";
+  sha256 = "16l5ygj9xsg2lzw3mkn1kmq543n9w5z1g6lyl8nw5bblp66lfxq3";
+  buildDepends = [
+    aeson shakespeareJs text unorderedContainers vector yesodCore
+  ];
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Generate content for Yesod using the aeson package";
