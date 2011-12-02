@@ -4,14 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "aeson";
-  version = "0.3.2.12";
-  sha256 = "12dq79bd8kvl4hc493c7ff9k9xdpibnnnfgpvpxh4ljnqcqr4hcy";
+  version = "0.4.0.0";
+  sha256 = "1j0m7hh82ab7lg757wq75k28llfd1igawmg4g2qdia5gimm652pa";
   buildDepends = [
     attoparsec blazeBuilder blazeTextual deepseq hashable mtl syb text
     time unorderedContainers vector
   ];
   meta = {
-    homepage = "http://github.com/mailrank/aeson";
+    homepage = "https://github.com/bos/aeson";
     description = "Fast JSON parsing and encoding";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
