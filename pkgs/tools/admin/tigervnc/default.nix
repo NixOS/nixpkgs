@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       libtool nasm utilmacros fontutil libgcrypt gnutls pam
     ] ++ xorgserver.buildNativeInputs;
 
-  propagatedBuildInputs = xorgserver.propagatedBuildNativeInputs;
+  propagatedBuildNativeInputs = xorgserver.propagatedBuildNativeInputs;
 
   meta = {
     homepage = http://www.tigervnc.org/;
