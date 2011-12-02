@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-extra";
-  version = "0.4.5.1";
-  sha256 = "1aq0zvxyk5hgdvpydvf8hlvv61ilrsmbmdaxhiq46waaabxqgdfc";
+  version = "0.4.5.2";
+  sha256 = "05gq22il1jnvw5rcqr6gassxj29f8l4536zm6bpgk1kff8cxa3g1";
   buildDepends = [
     blazeBuilder blazeBuilderEnumerator caseInsensitive dataDefault
     enumerator httpTypes network text time transformers wai
