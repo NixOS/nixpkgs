@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     depending on Python etc. */
   postInstall = ''
     pushd test
-    for a in simple-agent test-adapter test-device; do
+    for a in simple-agent test-adapter test-device test-input; do
       cp $a $out/bin/bluez-$a
       wrapProgram $out/bin/bluez-$a --prefix PYTHONPATH : ${pythonpath}
     done
