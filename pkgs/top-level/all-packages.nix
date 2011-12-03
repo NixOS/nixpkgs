@@ -6751,6 +6751,12 @@ let
 
   qcad = callPackage ../applications/misc/qcad { };
 
+  libquvi = callPackage ../applications/video/quvi/library.nix { };
+
+  quvi = callPackage ../applications/video/quvi/tool.nix { };
+
+  quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
+
   qjackctl = callPackage ../applications/audio/qjackctl { };
 
   gkrellm = callPackage ../applications/misc/gkrellm { };
