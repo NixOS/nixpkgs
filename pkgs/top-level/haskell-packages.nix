@@ -107,6 +107,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     ghc = ghc;
   };
 
+  # An experimental wrapper around ghcPlain that does not automatically
+  # pick up packages from the profile, but instead has a fixed set of packages
+  # in its global database. The set of packages can be specified as an
+  # argument to this function.
+
+  ghcWithPackages = pkgs : callPackage ../development/compilers/ghc/with-packages.nix {
+    packages = pkgs self;
+  };
+
   # This is the Cabal builder, the function we use to build most Haskell
   # packages. It isn't the Cabal library, which is a core package of GHC
   # and therefore not separately listed here.
