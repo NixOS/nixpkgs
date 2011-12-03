@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "transformers-base";
-  version = "0.4";
-  sha256 = "1g6q1g0ddr3jjjir0h1g6bc0zpq5gxcyx4q93fidraxxz2pmfrs0";
+  version = "0.4.0.1";
+  sha256 = "0avnnxbxh59xgxzb8vldysrbw37sim9iaiiscgjhdlscxy6yasbb";
   buildDepends = [ transformers ];
   meta = {
     homepage = "https://github.com/mvv/transformers-base";
