@@ -18,5 +18,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://samba.anu.edu.au/rsync/;
     description = "A fast incremental file transfer utility";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
