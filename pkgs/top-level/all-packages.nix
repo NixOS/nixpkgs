@@ -6680,13 +6680,18 @@ let
 
   flac = callPackage ../applications/audio/flac { };
 
-  flashplayer = flashplayer10;
+  flashplayer = flashplayer11;
 
   flashplayer9 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
     inherit (gtkLibs) atk;
   };
 
   flashplayer10 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
+    inherit (gtkLibs) atk gdk_pixbuf;
+    debug = getConfig ["flashplayer" "debug"] false;
+  };
+
+  flashplayer11 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
     inherit (gtkLibs) atk gdk_pixbuf;
     debug = getConfig ["flashplayer" "debug"] false;
   };
