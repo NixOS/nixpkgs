@@ -15,6 +15,7 @@
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
+  mornfall = "Petr Ročkai <me@mornfall.net>";
   neznalek = "Vladimír Čunát <vcunat@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom.stdin@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
