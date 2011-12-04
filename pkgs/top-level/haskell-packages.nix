@@ -104,7 +104,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
                                # top of this file.
 
   ghc = callPackage ../development/compilers/ghc/wrapper.nix {
-    ghc = ghc;
+    ghc = ghc; # refers to ghcPlain
   };
 
   # An experimental wrapper around ghcPlain that does not automatically
@@ -113,6 +113,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # argument to this function.
 
   ghcWithPackages = pkgs : callPackage ../development/compilers/ghc/with-packages.nix {
+    ghc = ghc; # refers to ghcPlain
     packages = pkgs self;
   };
 
