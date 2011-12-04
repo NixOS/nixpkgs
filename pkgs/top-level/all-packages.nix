@@ -4597,6 +4597,7 @@ let
   tnt = callPackage ../development/libraries/tnt { };
 
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
+  tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
 
   tremor = callPackage ../development/libraries/tremor { };
 
