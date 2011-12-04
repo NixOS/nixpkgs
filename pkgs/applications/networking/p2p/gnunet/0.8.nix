@@ -1,30 +1,25 @@
-{ stdenv, fetchsvn, libextractor, libmicrohttpd, libgcrypt
-, zlib, gmp, curl, libtool, adns, sqlite, pkgconfig
+{ stdenv, fetchurl, libextractor, libmicrohttpd, libgcrypt
+, zlib, gmp, curl, libtool, guile, adns, sqlite, pkgconfig
 , libxml2, ncurses, gettext, findutils
-, autoconf, automake
 , gtkSupport ? false, gtk ? null, libglade ? null
 , makeWrapper }:
 
 assert gtkSupport -> (gtk != null) && (libglade != null);
 
-let
-  rev = "17000";
-  version = "0.9-svn-${rev}";
+let version = "0.8.1b";
 in
   stdenv.mkDerivation {
     name = "gnunet-${version}";
 
-    src = fetchsvn {
-      url = "https://gnunet.org/svn/gnunet";
-      sha256 = "17nkvykg3xb5m1y86i9lahgsic9jpj6h0nr73ywzpxpp7ql45cm4";
-      inherit rev;
+    src = fetchurl {
+      url = "mirror://gnu/gnunet/GNUnet-${version}.tar.gz";
+      sha256 = "0k6nrsxz5s52z6hlahb7d3sj1z0gidm79n04pf9j2ngfylp4v1bw";
     };
 
     buildInputs = [
       libextractor libmicrohttpd libgcrypt gmp curl libtool
-      zlib adns sqlite libxml2 ncurses
+      zlib guile adns sqlite libxml2 ncurses
       pkgconfig gettext findutils
-      autoconf automake
       makeWrapper
     ] ++ (if gtkSupport then [ gtk libglade ] else []);
 
@@ -47,8 +42,19 @@ in
         echo "$i: replacing references to \`/tmp' by \`$TMPDIR'..."
         substituteInPlace "$i" --replace "/tmp" "$TMPDIR"
       done
+    '';
 
-      autoreconf -vfi
+    doCheck = false;
+
+    # 1. Run tests have once GNUnet is installed.
+    # 2. Help programs find the numerous modules that sit under
+    #    `$out/lib/GNUnet'.
+
+    # FIXME: `src/transports/test_udp' hangs forever.
+    postInstall = ''
+      #GNUNET_PREFIX="$out" make check
+      wrapProgram "$out/bin/gnunetd" \
+        --prefix LTDL_LIBRARY_PATH ":" "$out/lib/GNUnet"
     '';
 
     meta = {

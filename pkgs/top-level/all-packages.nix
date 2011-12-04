@@ -6773,13 +6773,13 @@ let
     inherit (gnome) GConf;
   };
 
-  gnunet = callPackage ../applications/networking/p2p/gnunet {
+  gnunet08 = callPackage ../applications/networking/p2p/gnunet/0.8.nix {
     inherit (gnome) gtk libglade;
     guile = guile_1_8;
     gtkSupport = getConfig [ "gnunet" "gtkSupport" ] true;
   };
 
-  gnunet09 = lowPrio (callPackage ../applications/networking/p2p/gnunet/0.9.nix { });
+  gnunet = callPackage ../applications/networking/p2p/gnunet { };
 
   gocr = callPackage ../applications/graphics/gocr { };
 
