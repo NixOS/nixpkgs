@@ -781,7 +781,6 @@ Return #t if the signature was good, #f otherwise."
       ("freefont-ttf" "ftp.gnu.org"   "/gnu/freefont" #f)
       ("gnupg"        "ftp.gnupg.org" "/gcrypt" #t)
       ("gnu-ghostscript" "ftp.gnu.org"  "/gnu/ghostscript" #f)
-      ("GNUnet"       "ftp.gnu.org" "/gnu/gnunet" #f)
       ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg" #f)
       ("icecat"       "ftp.gnu.org" "/gnu/gnuzilla" #f)
       ("source-highlight" "ftp.gnu.org" "/gnu/src-highlite" #f)
@@ -805,7 +804,6 @@ Return #t if the signature was good, #f otherwise."
       ("gnumake"     . "make")
       ("gnused"      . "sed")
       ("gnutar"      . "tar")
-      ("gnunet"      . "GNUnet") ;; ftp.gnu.org/gnu/gnunet/GNUnet-x.y.tar.gz
       ("mitscheme"   . "mit-scheme")
       ("texmacs"     . "TeXmacs")))
 
