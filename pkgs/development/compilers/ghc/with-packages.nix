@@ -38,20 +38,24 @@ stdenv.mkDerivation rec {
 
     for currentPath in ${stdenv.lib.concatStringsSep " " allPackages}; do
       currentPkgDir="$currentPath/lib/ghc-pkgs/ghc-${ghc.version}"
-      echo -n "Linking $currentPath "
-      for f in $currentPath/bin/*; do
-        ln -s $f $out/bin
-        echo -n .
-      done
-      for f in $currentPkgDir/*.conf; do
-        ln -s $f $linkedPkgDir
-        echo -n .
-      done
-      echo
+      # Check if current path is a Cabal package for the current GHC
+      if test -d $currentPkgDir; then
+        echo -n "Linking $currentPath "
+        for f in $currentPath/bin/*; do
+          ln -s $f $out/bin
+          echo -n .
+        done
+        for f in $currentPkgDir/*.conf; do
+          ln -s $f $linkedPkgDir
+          echo -n .
+        done
+        echo
+      fi
     done
 
-    echo "Generating package cache ..."
+    echo -n "Generating package cache "
     ${ghc}/bin/ghc-pkg --global-conf $linkedPkgDir recache
+    echo .
 
     echo -n "Generating wrappers "
 
@@ -71,7 +75,9 @@ stdenv.mkDerivation rec {
     done
 
     for prg in hp2ps hpc hasktags hsc2hs haddock haddock-${ghc.version}; do
-      test -x ${ghc}/bin/$prg && ln -s ${ghc}/bin/$prg $out/bin/$prg && echo -n .
+      if test -x ${ghc}/bin/$prg -a ! -x $out/bin/$prg; then
+        ln -s ${ghc}/bin/$prg $out/bin/$prg && echo -n .
+      fi
     done
     echo
   '';
