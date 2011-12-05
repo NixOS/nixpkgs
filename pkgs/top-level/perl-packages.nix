@@ -1120,17 +1120,17 @@ rec {
   };
 
   DBIxClass = buildPerlPackage rec {
-    name = "DBIx-Class-0.08195";
+    name = "DBIx-Class-0.08196";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/DBIx/${name}.tar.gz";
-      sha256 = "197q2pkkk6dpq1r76jcnzamk5dqac5k9n3wgq8dd5ak8sw6cj7p6";
+      url = "mirror://cpan/authors/id/A/AR/ARODLAND/${name}.tar.gz";
+      sha256 = "15k1kgbrsnkwr0ib6cyr114zk904lisy4k09gfiynag9wjhv47lm";
     };
     buildInputs = [ DBDSQLite TestException TestWarn ];
     propagatedBuildInputs = 
       [ PackageStash ClassAccessorGrouped ClassC3Componentised
         ClassInspector ConfigAny ContextPreserve DBI DataCompare
         DataDumperConcise DataPage HashMerge MROCompat ModuleFind
-        PathClass SQLAbstract ScopeGuard SubName TryTiny VariableMagic
+        PathClass SQLAbstract ScopeGuard SubName TryTiny
         NamespaceClean
       ];
   };
@@ -1155,17 +1155,18 @@ rec {
   };
 
   DBIxClassSchemaLoader = buildPerlPackage rec {
-    name = "DBIx-Class-Schema-Loader-0.07010";
+    name = "DBIx-Class-Schema-Loader-0.07014";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/DBIx/${name}.tar.gz";
-      sha256 = "08yy5lsrb7h1xzp7d1bqsgnjpa2d8ik14qhsq2d7v7r3f5fk5q3g";
+      sha256 = "0qrsh6i8p4mpx5bapn40cpsbvnvzivli71gymbiqjd0mjflbsjf6";
     };
     buildInputs = [ TestException TestMore TestWarn DBDSQLite ];
     propagatedBuildInputs = 
-      [ DataDump LinguaENInflectNumber LinguaENInflectPhrase ClassAccessor
-        ClassAccessorGrouped ClassC3Componentised MROCompat CarpClan 
-        DBIxClass ClassLoad ClassUnload FileSlurp ListMoreUtils 
-        NamespaceClean ScopeGuard TryTiny 
+      [ DataDump LinguaENInflectNumber LinguaENInflectPhrase
+        ClassAccessor ClassAccessorGrouped ClassC3Componentised
+        MROCompat CarpClan DBIxClass ClassLoad ClassUnload
+        ListMoreUtils NamespaceClean ScopeGuard TryTiny TaskWeaken
+        StringCamelCase StringToIdentifierEN
       ];
   };
 
@@ -2073,10 +2074,10 @@ rec {
   };
 
   LinguaENInflectPhrase = buildPerlPackage rec {
-    name = "Lingua-EN-Inflect-Phrase-0.04";
+    name = "Lingua-EN-Inflect-Phrase-0.10";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Lingua/${name}.tar.gz";
-      sha256 = "12a74zkc1rybsvxwg8fxdjs6frfq7naky2ks4idcwd48lya3nw90";
+      sha256 = "1l7sjnibnvgb7a73cjhysmrg4j2bfcn0x5yrqmh0v23laj9fsbbm";
     };
     buildInputs = [ TestMore ];
     propagatedBuildInputs = 
@@ -3053,6 +3054,14 @@ rec {
     propagatedBuildInputs = [ StatisticsDescriptive StatisticsDistributions ];
   };
 
+  StringCamelCase = buildPerlPackage rec {
+    name = "String-CamelCase-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/String/${name}.tar.gz";
+      sha256 = "17kh8nap2z5g5rqcvw0m7mvbai7wr7h0al39w8l827zhqad8ss42";
+    };
+  };
+
   StringFormat = buildPerlPackage rec {
     name = "String-Format-1.16";
     src = fetchurl {
@@ -3075,6 +3084,16 @@ rec {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
       sha256 = "17v0pwiprsz9ibxlhpi789jxg691nz9prpabvb4dn4nb0qbi0yd0";
     };
+  };
+
+  StringToIdentifierEN = buildPerlPackage rec {
+    name = "String-ToIdentifier-EN-0.06";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/String/${name}.tar.gz";
+      sha256 = "1rmldr7jf4jvkhzlv8hgp48lrmybvinmhv8kcnrpa8las0ijm4vm";
+    };
+    propagatedBuildInputs = 
+      [ LinguaENInflectPhrase TextUnidecode NamespaceClean ];
   };
 
   SubExporter = buildPerlPackage rec {
@@ -3576,6 +3595,14 @@ rec {
       sha256 = "05r3jvdf8av16hgy0i3wnc581ski08q1bnllq5cq1fnc7h2nm1c7";
     };
     propagatedBuildInputs = [TextAligner];
+  };
+
+  TextUnidecode = buildPerlPackage rec {
+    name = "Text-Unidecode-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Text/${name}.tar.gz";
+      sha256 = "01kbw5xshs906ikg0rgf51y9m6m26a4msv7ghcqwx7w2shgs0ga7";
+    };
   };
 
   Throwable = buildPerlPackage rec {
