@@ -6,11 +6,11 @@ in
 assert hotplugSupport -> stdenv.system == "i686-linux";
 
 stdenv.mkDerivation {
-  name = "sane-backends-1.0.21";
+  name = "sane-backends-1.0.22.git201111204";
   
   src = fetchurl {
-    url = ftp://ftp.sane-project.org/pub/sane/sane-backends-1.0.21/sane-backends-1.0.21.tar.gz;
-    sha256 = "12wl4a86hxwlrx46lm5z6lw4id3j8wi82yv3khxcz5sqjai2ykp4";
+    url = http://www.sane-project.org/snapshots/sane-backends-git20111204.tar.gz;
+    sha256 = "00b3fi8zjrq3in0wndz1xcz228mgfhwhh2knmyjsikr88hal0m47";
   };
   
   udevSupport = hotplugSupport;

@@ -8486,6 +8486,10 @@ let
     gt68xxFirmware = getConfig ["sane" "gt68xxFirmware"] null;
   };
 
+  saneBackendsSnapshot = callPackage ../misc/sane-backends/snapshot.nix {
+    gt68xxFirmware = getConfig ["sane" "gt68xxFirmware"] null;
+  };
+
   saneFrontends = callPackage ../misc/sane-front { };
 
   slock = callPackage ../misc/screensavers/slock { };
