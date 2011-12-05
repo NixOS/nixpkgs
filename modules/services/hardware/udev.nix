@@ -68,7 +68,7 @@ let
       echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev ... "
       import_progs=$(grep 'IMPORT{program}="[^/$]' $out/* |
         sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
-      run_progs=$(grep 'RUN+="[^/$]' $out/* |
+      run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="[^/$]' |
         sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
       for i in $import_progs $run_progs; do
         if [[ ! -x ${pkgs.udev}/lib/udev/$i && ! $i =~ socket:.* ]]; then
@@ -82,7 +82,7 @@ let
       echo -n "Checking that all programs call by absolute paths in udev rules exist ... "
       import_progs=$(grep 'IMPORT{program}="/' $out/* |
         sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
-      run_progs=$(grep 'RUN+="/' $out/* |
+      run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="/' |
         sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
       for i in $import_progs $run_progs; do
         if [[ ! -x $i ]]; then
