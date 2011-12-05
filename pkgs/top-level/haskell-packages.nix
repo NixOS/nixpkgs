@@ -862,6 +862,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MonadCatchIOTransformers = callPackage ../development/libraries/haskell/MonadCatchIO-transformers {};
 
+  monadControl_OBSOLETE = callPackage ../development/libraries/haskell/monad-control/0.2.0.3.nix {};
   monadControl = callPackage ../development/libraries/haskell/monad-control {};
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
