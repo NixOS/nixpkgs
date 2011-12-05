@@ -68,6 +68,7 @@ in
     dovenull2 = 47;
     unbound = 48;
     prayer = 49;
+    mpd = 50;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -116,6 +117,7 @@ in
     virtuoso = 44;
     dovecot2 = 45;
     prayer = 46;
+    mpd = 47;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
