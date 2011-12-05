@@ -4975,6 +4975,7 @@ let
   mod_wsgi = callPackage ../servers/http/apache-modules/mod_wsgi { };
 
   mpd = callPackage ../servers/mpd { };
+  mpd_clientlib = callPackage ../servers/mpd/clientlib.nix { };
 
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
@@ -7077,6 +7078,8 @@ let
   mpg123 = callPackage ../applications/audio/mpg123 { };
 
   mpg321 = callPackage ../applications/audio/mpg321 { };
+
+  ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
   MPlayer = callPackage ../applications/video/MPlayer { };
 
