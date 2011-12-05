@@ -1677,10 +1677,6 @@ let
   #Use this instead of stdenv to build with clang
   clangStdenv = stdenvAdapters.overrideGCC stdenv clang;
 
-  clangSVN = llvmSVN.override {
-    buildClang = true;
-  };
-
   clean = callPackage ../development/compilers/clean { };
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
