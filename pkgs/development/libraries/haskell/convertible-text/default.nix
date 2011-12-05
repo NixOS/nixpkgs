@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "convertible-text";
-  version = "0.3.0.10";
-  sha256 = "1hi7rqijay37b5msyzqqgvkvrsdpj9p96ajxmyk4vm7nnk5dfhbp";
+  version = "0.4.0.1";
+  sha256 = "0m252ml2zgw0jxfs678m1wp9ivy6gvi9w50qw7zi9ycxnzj9j6r2";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ attempt text time ];
