@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-css";
-  version = "0.10.3";
-  sha256 = "1r0m1pqgg43dmc1gb1aj99hyk1jw0ciln9k7q3mq8vwc602kfd5r";
+  version = "0.10.4";
+  sha256 = "006ndbhzxkr2zw6gs13bm5pfq7i301bbg6nhagm3h9nnzp155snz";
   buildDepends = [ parsec shakespeare text ];
   meta = {
     homepage = "http://www.yesodweb.com/book/templates";
