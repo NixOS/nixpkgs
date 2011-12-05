@@ -6,15 +6,14 @@
 , buildInputs ? []
 , name ? "source-tarball"
 , version ? "0"
+, versionSuffix ? 
+    if officialRelease
+    then ""
+    else if src ? rev then "pre${toString src.rev}" else ""
 , src, stdenv, autoconf, automake, libtool
 , ... } @ args:
 
 let
-
-  versionSuffix =
-    if officialRelease
-    then ""
-    else if src ? rev then "pre${toString src.rev}" else "";
 
   # By default, provide all the GNU Build System as input.
   bootstrapBuildInputs =
