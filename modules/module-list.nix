@@ -68,6 +68,7 @@
   ./services/hardware/bluetooth.nix
   ./services/hardware/hal.nix
   ./services/hardware/pcscd.nix
+  ./services/hardware/sane.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks.nix
   ./services/hardware/upower.nix
