@@ -4197,6 +4197,8 @@ let
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
 
+  log4cplus = callPackage ../development/libraries/log4cplus { };
+
   loudmouth = callPackage ../development/libraries/loudmouth { };
 
   lzo = callPackage ../development/libraries/lzo { };
