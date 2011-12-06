@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "hwloc-1.3";
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v1.2/downloads/${name}.tar.bz2";
+    url = "http://www.open-mpi.org/software/hwloc/v1.3/downloads/${name}.tar.bz2";
     sha256 = "10zlz0hng7scjx1xn8jflx3gbga5djbhxhj94k5kszrivc8zh8xy";
   };
 
