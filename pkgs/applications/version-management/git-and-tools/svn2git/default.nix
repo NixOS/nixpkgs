@@ -1,7 +1,7 @@
 { stdenv, fetchgit, ruby, makeWrapper, git }:
 
 stdenv.mkDerivation rec {
-  name = "svn2git-20111206";
+  name = "svn2git-2.1.0-20111206";
 
   src = fetchgit {
     url = https://github.com/nirvdrum/svn2git;
