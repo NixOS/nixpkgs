@@ -3859,6 +3859,8 @@ let
 
   libdv = callPackage ../development/libraries/libdv { };
 
+  libdvbpsi = callPackage ../development/libraries/libdvbpsi { };
+
   libdwg = callPackage ../development/libraries/libdwg { };
 
   libdvdcss = callPackage ../development/libraries/libdvdcss { };
