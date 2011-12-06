@@ -101,7 +101,8 @@ rec {
   };
 
   svn2git = import ./svn2git {
-    inherit stdenv fetchgit qt47 subversion apr;
+    inherit stdenv fetchgit ruby makeWrapper;
+    git = gitSVN;
   };
 
   gitSubtree = import ./git-subtree {

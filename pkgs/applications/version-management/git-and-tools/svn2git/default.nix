@@ -1,25 +1,30 @@
-{ stdenv, fetchgit, qt47, subversion, apr}:
+{ stdenv, fetchgit, ruby, makeWrapper, git }:
 
 stdenv.mkDerivation rec {
-  name = "svn2git";
+  name = "svn2git-20111206";
 
   src = fetchgit {
-    url = http://git.gitorious.org/svn2git/svn2git.git;
-    rev = "197979b6a641b8b5fa4856c700b1235491c73a41";
-    sha256 = "7be1a8f5822aff2d4ea7f415dce0b4fa8c6a82310acf24e628c5f1ada2d2d613";
+    url = https://github.com/nirvdrum/svn2git;
+    rev = "5cd8d4b509affb66eb2dad50d7298c52b3b0d848";
+    sha256 = "26aa17f68f605e958b623d803b4bd405e12d6c5d51056635873a2c59e4c7b9ca";
   };
 
-  buildPhase = ''
-    sed -i 's|/bin/cat|cat|' ./src/repository.cpp
-    qmake
-    make CXXFLAGS='-I${apr}/include/apr-1 -I${subversion}/include/subversion-1 -DVER="\"${src.rev}\""'
-  '';
+  buildInputs = [ ruby makeWrapper ];
 
-  installPhase = ''
-    ensureDir $out/bin
-    cp svn-all-fast-export $out/bin
-  '';
+  buildPhase = "true";
 
-  buildInputs = [subversion apr qt47];
-  
+  installPhase =
+    ''
+      mkdir -p $out
+      cp -r lib $out/
+      
+      mkdir -p $out/bin
+      substituteInPlace bin/svn2git --replace '/usr/bin/env ruby' ${ruby}/bin/ruby
+      cp bin/svn2git $out/bin/
+      chmod +x $out/bin/svn2git
+      
+      wrapProgram $out/bin/svn2git \
+        --set RUBYLIB $out/lib \
+        --prefix PATH : ${git}/bin
+    '';
 }
