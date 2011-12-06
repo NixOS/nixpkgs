@@ -6463,6 +6463,8 @@ let
     inherit (xlibs) libX11;
   };
 
+  dvb_apps  = callPackage ../applications/video/dvb-apps { };
+
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
   dwm = callPackage ../applications/window-managers/dwm {
