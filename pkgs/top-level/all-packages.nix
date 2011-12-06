@@ -3703,7 +3703,9 @@ let
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
-  hwloc = callPackage ../development/libraries/hwloc { };
+  hwloc = callPackage ../development/libraries/hwloc {
+    inherit (xlibs) libX11;
+  };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
