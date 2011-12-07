@@ -1008,8 +1008,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
-  random_1_0_0_3 = callPackage ../development/libraries/haskell/random/1.0.0.3.nix {};
-  random_1_0_1_0 = callPackage ../development/libraries/haskell/random/1.0.1.0.nix {};
   random_1_0_1_1 = callPackage ../development/libraries/haskell/random/1.0.1.1.nix {};
   random = null; # core package until ghc-7.2.1
 
