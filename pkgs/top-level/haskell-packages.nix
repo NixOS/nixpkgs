@@ -157,7 +157,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     text         = self.text_0_11_1_9; # 7.2 ok, 7.3 ok
     transformers = self.transformers_0_2_2_0; # 7.2 ok, 7.3 ok
     mtl          = self.mtl_2_0_1_0; # 7.2 ok, 7.3 ok
-    random       = self.random_1_0_0_3; # 7.2 ok, 7.3 ok
+    random       = self.random_1_0_1_1; # 7.2 ok, 7.3 ok
     cabalInstall = self.cabalInstall_0_10_2; # 7.2 fails, 7.3 fails
     alex         = self.alex_3_0_1; # 7.2 ok, 7.3 ok
     happy        = self.happy_1_18_8; # 7.2 ok, 7.3 ok
@@ -1013,6 +1013,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
   random_1_0_0_3 = callPackage ../development/libraries/haskell/random/1.0.0.3.nix {};
   random_1_0_1_0 = callPackage ../development/libraries/haskell/random/1.0.1.0.nix {};
+  random_1_0_1_1 = callPackage ../development/libraries/haskell/random/1.0.1.1.nix {};
   random = null; # core package until ghc-7.2.1
   random_newtime = self.random_1_0_0_2_newtime;
 
