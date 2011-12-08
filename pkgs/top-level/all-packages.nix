@@ -8492,6 +8492,7 @@ let
 
   saneBackends = callPackage ../misc/sane-backends {
     gt68xxFirmware = getConfig ["sane" "gt68xxFirmware"] null;
+    hotplugSupport = getConfig ["sane" "hotplugSupport"] true;
   };
 
   saneBackendsSnapshot = callPackage ../misc/sane-backends/snapshot.nix {
