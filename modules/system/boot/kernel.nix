@@ -46,7 +46,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     };
 
     boot.vesa = mkOption {
-      default = true;
+      default = config.boot.kernelPackages.splashutils != null;
       example = false;
       description = ''
         Whether to activate VESA video mode on boot.
