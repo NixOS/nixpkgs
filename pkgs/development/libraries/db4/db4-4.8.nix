@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://download-east.oracle.com/berkeley-db/db-4.8.26.tar.gz;
+    url = http://download.oracle.com/berkeley-db/db-4.8.26.tar.gz;
     sha256 = "0hcxh0kb6m0wk3apjhs57p7b171zzn63rg4l3nkcavygg5gx2mgp";
   };
   
