@@ -2,10 +2,10 @@
 , libX11, libXext, eina, eet }:
 stdenv.mkDerivation rec {
   name = "evas-${version}";
-  version = "1.0.1";
+  version = "1.1.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.gz";
-    sha256 = "0xkwyvxy32dwja0i3j8r8bzlybjwlrgmrhcri1bscp3aaj75x2rx";
+    sha256 = "1qjmxn5a5qhc2slxjx7bsas76w0zlnrbs6hx9swr8xarkifjk3dv";
   };
   buildInputs = [ pkgconfig freetype fontconfig libpng libjpeg
                   libX11 libXext eina eet

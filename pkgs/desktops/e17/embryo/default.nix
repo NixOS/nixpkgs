@@ -1,11 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, pkgconfig, eina }:
 stdenv.mkDerivation rec {
   name = "embryo-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.gz";
-    sha256 = "0ch9vps83s892vda1ss1cf1fbgzff9p51df2fip7fqlj8y1shvvx";
+    sha256 = "0nk7jajsgi5xf02yxahwr3cm7bml5477fb1mas1i7a788bw7i6zn";
   };
+  buildInputs = [ pkgconfig eina ];
   meta = {
     description = "Enlightenment's small Pawn based virtual machine and compiler";
     longDescription = ''
