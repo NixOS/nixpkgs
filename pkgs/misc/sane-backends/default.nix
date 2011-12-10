@@ -3,7 +3,7 @@
 let
   firmware = gt68xxFirmware {inherit fetchurl;};
 in
-assert hotplugSupport -> stdenv.system == "i686-linux";
+assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
 
 stdenv.mkDerivation {
   name = "sane-backends-1.0.21";
