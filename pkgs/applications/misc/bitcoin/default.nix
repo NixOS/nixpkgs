@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = " https://github.com/bitcoin/bitcoin/tarball/v${version}";
-    sha256 = "146q0ijvdmk9iidmavzkpdgflnfi86ahqkwdvxpf5gmfqdd53yqx";
+    sha256 = "1i9wnbjf9yrs9rq5jnh9pk1x5j982qh3xpjm05z8dgd3nympgyy8";
   };
 
   buildInputs = [ openssl db4 boost zlib miniupnpc qt4 ];
