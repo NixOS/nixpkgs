@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace cont/base/make_gamedata_arch.sh --replace "#!/bin/sh" "#!${stdenv.shell}/bin/sh" \
-      --replace "which" "type -p"    
+      --replace "which" "type -p"
   '';
 
   #patches = [ ./gcc44.patch];
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "A powerful real-time strategy(RTS) game engine";
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom ];
-    platforms = platforms.all;
+    platforms = platforms.unix;
   };
 }
