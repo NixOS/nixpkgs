@@ -143,7 +143,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     network      = self.network_2_3_0_7; # 7.2 ok, 7.3 ok
     OpenGL       = self.OpenGL_2_2_3_0; # 7.2 ok, 7.3 ok
     parallel     = self.parallel_3_1_0_1; # 7.2 ok, 7.3 ok
-    parsec       = self.parsec_3_1_1; # 7.2 ok, 7.3 ok
+    parsec       = self.parsec_3_1_2; # 7.2 ok, 7.3 ok
     QuickCheck   = self.QuickCheck_2_4_0_1; # 7.2 ok, 7.3 ok
     regexBase    = self.regexBase_0_93_2; # 7.2 ok, 7.3 ok
     regexCompat  = self.regexCompat_0_93_1; # 7.2 ok, 7.3 ok
@@ -957,7 +957,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   parsec_3_1_2   = callPackage ../development/libraries/haskell/parsec/3.1.2.nix {};
   parsec2 = self.parsec_2_1_0_1;
   parsec3 = self.parsec_3_1_2;
-  parsec  = self.parsec2;
+  parsec  = self.parsec3;
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
