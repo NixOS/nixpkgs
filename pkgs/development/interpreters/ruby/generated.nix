@@ -15,10 +15,10 @@ g: # Get dependencies from patched gems
     erubis = g.erubis_2_7_0;
     hike = g.hike_1_2_1;
     i18n = g.i18n_0_6_0;
-    json = g.json_1_6_1;
+    json = g.json_1_6_3;
     mail = g.mail_2_3_0;
     mime_types = g.mime_types_1_17_2;
-    multi_json = g.multi_json_1_0_3;
+    multi_json = g.multi_json_1_0_4;
     nix = g.nix_0_1_1;
     polyglot = g.polyglot_0_3_3;
     rack = g.rack_1_3_5;
@@ -30,13 +30,14 @@ g: # Get dependencies from patched gems
     railties = g.railties_3_1_3;
     rake = g.rake_0_9_2_2;
     rdoc = g.rdoc_3_11;
+    sass = g.sass_3_1_11;
     sprockets = g.sprockets_2_0_3;
     thor = g.thor_0_14_6;
     tilt = g.tilt_1_3_3;
     treetop = g.treetop_1_4_10;
     tzinfo = g.tzinfo_0_3_31;
   };
-  gem_nix_args = [ ''nix'' ''rails'' ''rake'' ];
+  gem_nix_args = [ ''nix'' ''rails'' ''rake'' ''sass'' ];
   gems = {
     actionmailer_3_1_3 = {
       basename = ''actionmailer'';
@@ -101,7 +102,7 @@ g: # Get dependencies from patched gems
         longDescription = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.'';
       };
       name = ''activesupport-3.1.3'';
-      requiredGems = [ g.multi_json_1_0_3 ];
+      requiredGems = [ g.multi_json_1_0_4 ];
       sha256 = ''19na7857adshdsswsgygky30r985ng100z3n78scd65481zcgb9z'';
     };
     arel_2_2_1 = {
@@ -194,16 +195,16 @@ simple to do.  Currently the following builder objects are supported:
       requiredGems = [  ];
       sha256 = ''1pgmfhmh2wv409g7kla30mkp8jpslvp25vcmmim1figl87wpn3j0'';
     };
-    json_1_6_1 = {
+    json_1_6_3 = {
       basename = ''json'';
       meta = {
         description = ''JSON Implementation for Ruby'';
         homepage = ''http://flori.github.com/json'';
         longDescription = ''This is a JSON implementation as a Ruby extension in C.'';
       };
-      name = ''json-1.6.1'';
+      name = ''json-1.6.3'';
       requiredGems = [  ];
-      sha256 = ''0xxqr491s2xrxy76551jby4fcwdqa222wwhfhxhgwj7prf35sqc4'';
+      sha256 = ''0bcl6r04b0r5c0n1y47c7d29r50rl2rzd2hsc23832kgfrc1488m'';
     };
     mail_2_3_0 = {
       basename = ''mail'';
@@ -241,16 +242,16 @@ Copyright:: 2002 - 2011, Austin Ziegler
       requiredGems = [  ];
       sha256 = ''0i4pmx86xbnlrhbbm9znnyfglmb21vwjvh262c6qw3m19w6ifs6p'';
     };
-    multi_json_1_0_3 = {
+    multi_json_1_0_4 = {
       basename = ''multi_json'';
       meta = {
         description = ''A gem to provide swappable JSON backends.'';
         homepage = ''http://github.com/intridea/multi_json'';
         longDescription = ''A gem to provide swappable JSON backends utilizing Yajl::Ruby, the JSON gem, JSON pure, or a vendored version of okjson.'';
       };
-      name = ''multi_json-1.0.3'';
+      name = ''multi_json-1.0.4'';
       requiredGems = [  ];
-      sha256 = ''12c7h38x1cmgl265n4397zx3ag8szkrq1q4lw7pp6fkqd532n9xb'';
+      sha256 = ''0f2yrlxcdhdskkm4q11p2didwl26wikxycysb7i49ndp94rklvcr'';
     };
     nix_0_1_1 = {
       basename = ''nix'';
@@ -389,8 +390,23 @@ documentation.
 See RDoc for a description of RDoc's markup and basic use.'';
       };
       name = ''rdoc-3.11'';
-      requiredGems = [ g.json_1_6_1 ];
+      requiredGems = [ g.json_1_6_3 ];
       sha256 = ''0wq8525v21pxcnwgn5ypblcsb0xasnicjnqqd7mrrfqm2g3k2frm'';
+    };
+    sass_3_1_11 = {
+      basename = ''sass'';
+      meta = {
+        description = ''A powerful but elegant CSS compiler that makes CSS fun again.'';
+        homepage = ''http://sass-lang.com/'';
+        longDescription = ''      Sass makes CSS fun again. Sass is an extension of CSS3, adding
+      nested rules, variables, mixins, selector inheritance, and more.
+      It's translated to well-formatted, standard CSS using the
+      command line tool or a web-framework plugin.
+'';
+      };
+      name = ''sass-3.1.11'';
+      requiredGems = [  ];
+      sha256 = ''0ksbvvc210yd3fjk7gzsj25qzcd5ahw5rsh3bx94w53ylq60af2g'';
     };
     sprockets_2_0_3 = {
       basename = ''sprockets'';
