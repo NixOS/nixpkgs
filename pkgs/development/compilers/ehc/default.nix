@@ -3,7 +3,7 @@
 }:
 
 let
-  revision = "2293";
+  revision = "2375";
 in
 stdenv.mkDerivation {
   name = "ehc-svn-${revision}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchsvn {
      url = https://subversion.cs.uu.nl/repos/project.UHC.pub/trunk/EHC;
      rev = revision;
-     sha256 = "f4c3d83734cffd64b11e31637598330271a2bb8d2573235d063b27b2ef5f76b6";
+     sha256 = "bde79664b7d04337ce668eab63291702687e6d572a302111425e5ff870c57619";
   };
 
   propagatedBuildInputs = [mtl network binary fgl syb];
