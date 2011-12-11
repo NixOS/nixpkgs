@@ -1,12 +1,13 @@
-{ cabal }:
+{ cabal, dlist }:
 
 cabal.mkDerivation (self: {
   pname = "smallcheck";
-  version = "0.5";
-  sha256 = "10bmaifpkd5h3fp76cgbbc21q6nd0v8b3f80fjnb1ggg5zqs10dv";
+  version = "0.6";
+  sha256 = "19b2dyjbryx2a5bq70pn2mbzlcvjjwhii78fwwx6q57r13zljb9v";
+  buildDepends = [ dlist ];
   meta = {
     homepage = "https://github.com/feuerbach/smallcheck";
-    description = "Another lightweight testing library in Haskell";
+    description = "A property-based testing library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
