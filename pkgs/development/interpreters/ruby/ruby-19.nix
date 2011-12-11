@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     license = "Ruby";
     homepage = "http://www.ruby-lang.org/en/";
     description = "The Ruby language";
+    platforms = stdenv.lib.platforms.all;
   };
 
   passthru = rec {
