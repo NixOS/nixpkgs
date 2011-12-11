@@ -1443,7 +1443,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   leksah = callPackage ../applications/editors/leksah {};
 
-  xmobar = callPackage ../applications/misc/xmobar {};
+  xmobar = callPackage ../applications/misc/xmobar {
+    parsec = self.parsec3;
+  };
 
   xmonad = callPackage ../applications/window-managers/xmonad {};
 
