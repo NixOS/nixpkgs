@@ -1376,7 +1376,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   AgdaExecutable = callPackage ../development/compilers/Agda-executable {};
 
-  ehc = callPackage ../development/compilers/ehc {};
+  uhc = callPackage ../development/compilers/uhc {};
 
   epic = callPackage ../development/compilers/epic {};
 

@@ -6,10 +6,10 @@ let
   revision = "2375";
 in
 stdenv.mkDerivation {
-  name = "ehc-svn-${revision}";
+  name = "uhc-svn-${revision}";
 
   src = fetchsvn {
-     url = https://subversion.cs.uu.nl/repos/project.UHC.pub/trunk/EHC;
+     url = "https://subversion.cs.uu.nl/repos/project.UHC.pub/trunk/EHC";
      rev = revision;
      sha256 = "bde79664b7d04337ce668eab63291702687e6d572a302111425e5ff870c57619";
   };
@@ -17,14 +17,15 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [mtl network binary fgl syb];
   buildInputs = [coreutils m4 ghc libtool uulib uuagc];
 
+  # Can we rename this flag to "--with-cpp-uhc-options"?
   configureFlags = "--with-cpp-ehc-options=-I${glibc}/include";
 
-  # EHC builds packages during compilation; these are by default
+  # UHC builds packages during compilation; these are by default
   # installed in the user-specific package config file. We do not
   # want that, and hack the build process to use a temporary package
   # configuration file instead.
   preConfigure = ''
-    p=`pwd`/ehc-local-packages
+    p=`pwd`/uhc-local-packages
     echo '[]' > $p
     sed -i "s|--user|--package-db=$p|g" mk/shared.mk.in
     sed -i "s|-fglasgow-exts|-fglasgow-exts -package-conf=$p|g" mk/shared.mk.in
@@ -32,8 +33,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://www.cs.uu.nl/wiki/Ehc/WebHome";
-    description = "Essential Haskell Compiler";
+    homepage = "http://www.cs.uu.nl/wiki/UHC";
+    description = "Utrecht Haskell Compiler";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [
       stdenv.lib.maintainers.andres
