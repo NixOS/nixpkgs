@@ -21,11 +21,14 @@ stdenv.mkDerivation rec {
 
     echo "Linking GHC core libraries:"
 
-    if test -f $originalTopDir/settings; then
-      echo -n "Linking $originalTopDir/settings "
-      ln -s $originalTopDir/settings $linkedTopDir
-      echo .
-    fi
+    echo -n "Linking $originalTopDir "
+    for f in $originalTopDir/*; do
+      if test -f $f; then
+        ln -s $f $linkedTopDir
+        echo -n .
+      fi
+    done
+    echo
 
     echo -n "Linking $originalPkgDir "
     for f in $originalPkgDir/*.conf; do
