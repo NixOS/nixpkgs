@@ -360,6 +360,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2009_2_0_2 self // {
       haskellPlatform = self.haskellPlatform_2009_2_0_2;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
+      text = self.text_0_11_0_6;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
     };
 
