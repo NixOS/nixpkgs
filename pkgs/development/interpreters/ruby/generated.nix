@@ -29,6 +29,7 @@ g: # Get dependencies from patched gems
     rails = g.rails_3_1_3;
     railties = g.railties_3_1_3;
     rake = g.rake_0_9_2_2;
+    rb_fsevent = g.rb_fsevent_0_4_3_1;
     rdoc = g.rdoc_3_11;
     sass = g.sass_3_1_11;
     sprockets = g.sprockets_2_0_3;
@@ -37,7 +38,7 @@ g: # Get dependencies from patched gems
     treetop = g.treetop_1_4_10;
     tzinfo = g.tzinfo_0_3_31;
   };
-  gem_nix_args = [ ''nix'' ''rails'' ''rake'' ''sass'' ];
+  gem_nix_args = [ ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ];
   gems = {
     actionmailer_3_1_3 = {
       basename = ''actionmailer'';
@@ -377,6 +378,17 @@ request helpers feature.'';
       name = ''rake-0.9.2.2'';
       requiredGems = [  ];
       sha256 = ''19n4qp5gzbcqy9ajh56kgwqv9p9w2hnczhyvaqz0nlvk9diyng6q'';
+    };
+    rb_fsevent_0_4_3_1 = {
+      basename = ''rb_fsevent'';
+      meta = {
+        description = ''Very simple &amp; usable FSEvents API'';
+        homepage = ''http://rubygems.org/gems/rb-fsevent'';
+        longDescription = ''FSEvents API with Signals catching (without RubyCocoa)'';
+      };
+      name = ''rb-fsevent-0.4.3.1'';
+      requiredGems = [  ];
+      sha256 = ''043w4695j7f9n0hawy9y0yci36linivsbp23v52v2qg64ji7hsiw'';
     };
     rdoc_3_11 = {
       basename = ''rdoc'';
