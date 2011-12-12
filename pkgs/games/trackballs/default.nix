@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     "ensureDir $out/src; cp -R * $out/src ; cd $out/src";
 
   NIX_CFLAGS_COMPILE = "-iquote ${SDL}/include/SDL";
-  configureFlags = optionalString "--enable-debug";
+  configureFlags = optionalString debug "--enable-debug";
 
   patchPhase = ''
     sed -i -e 's/images icons music/images music/' share/Makefile.in
