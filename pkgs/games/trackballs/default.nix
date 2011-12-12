@@ -1,6 +1,8 @@
 { stdenv, fetchurl, SDL, mesa, SDL_ttf, gettext, zlib, SDL_mixer, SDL_image, guile
 , debug ? false }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "trackballs-1.1.4";
   
