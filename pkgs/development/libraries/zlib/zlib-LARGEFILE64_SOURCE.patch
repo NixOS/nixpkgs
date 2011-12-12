@@ -4,8 +4,8 @@ http://mail.madler.net/pipermail/zlib-devel_madler.net/2011-June/002583.html
 
 Mark Adler madler at madler.net
 
-*** ../zlib-1.2.5/zlib.h    2010-04-19 21:12:48.000000000 -0700
---- zlib.h  2011-02-26 21:23:30.000000000 -0800
+*** a/zlib.h    2010-04-19 21:12:48.000000000 -0700
+--- b/zlib.h  2011-02-26 21:23:30.000000000 -0800
 ***************
 *** 1572,1584 ****
   #endif
@@ -44,8 +44,8 @@ Mark Adler madler at madler.net
        ZEXTERN gzFile ZEXPORT gzopen64 OF((const char *, const char *));
        ZEXTERN z_off_t ZEXPORT gzseek64 OF((gzFile, z_off_t, int));
        ZEXTERN z_off_t ZEXPORT gztell64 OF((gzFile));
-*** ../zlib-1.2.5/zconf.h.in    2010-04-18 10:58:06.000000000 -0700
---- zconf.h.in  2010-07-18 09:05:49.000000000 -0700
+*** a/zconf.h.in    2010-04-18 10:58:06.000000000 -0700
+--- b/zconf.h.in  2010-07-18 09:05:49.000000000 -0700
 ***************
 *** 374,380 ****
   #  undef _LARGEFILE64_SOURCE
