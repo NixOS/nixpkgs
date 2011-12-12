@@ -46,7 +46,7 @@ assert cloog != null -> cloogppl == null;
 with stdenv.lib;
 with builtins;
 
-let version = "4.6.1";
+let version = "4.6.2";
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
