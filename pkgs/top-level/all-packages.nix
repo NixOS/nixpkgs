@@ -7557,6 +7557,10 @@ let
           ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
           ++ lib.optional (getConfig [browserName "enableGoogleTalkPlugin"] false) google_talk_plugin
          );
+      libs = 
+        if getConfig [ browserName "enableQuakeLive" ] false
+        then with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]
+        else [ ];
     };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
