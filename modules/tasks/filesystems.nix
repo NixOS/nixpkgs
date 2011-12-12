@@ -116,7 +116,7 @@ in
 
     system.sbin.mount = mkOption {
       internal = true;
-      default = pkgs.utillinuxng;
+      default = pkgs.utillinux;
       description = "
         Package containing mount and umount.
       ";
