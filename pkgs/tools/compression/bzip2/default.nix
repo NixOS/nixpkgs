@@ -1,13 +1,15 @@
-{stdenv, fetchurl, linkStatic ? false}:
+{ stdenv, fetchurl, linkStatic ? false }:
+
+let version = "1.0.6"; in
 
 stdenv.mkDerivation {
-  name = "bzip2-1.0.5";
+  name = "bzip2-${version}";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://www.bzip.org/1.0.5/bzip2-1.0.5.tar.gz;
-    sha256 = "08py2s9vw6dgw457lbklh1vsr3b8x8dlv7d8ygdfaxlx61l57gzp";
+    url = "http://www.bzip.org/${version}/bzip2-${version}.tar.gz";
+    sha256 = "1kfrc7f0ja9fdn6j1y6yir6li818npy6217hvr3wzmnmzhs8z152";
   };
 
   crossAttrs = {
