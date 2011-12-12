@@ -5227,8 +5227,8 @@ let
 
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-    then (utillinuxng // {
-      hostDrv = lib.overrideDerivation utillinuxng.hostDrv (args: {
+    then (utillinux // {
+      hostDrv = lib.overrideDerivation utillinux.hostDrv (args: {
         # `libblkid' fails to build on GNU/Hurd.
         configureFlags = args.configureFlags
           + " --disable-libblkid --disable-mount --disable-libmount"
@@ -5241,7 +5241,7 @@ let
       });
     })
     else if stdenv.isLinux
-    then utillinuxng
+    then utillinux
     else null;
 
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
@@ -6090,16 +6090,12 @@ let
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
 
-  utillinux = utillinuxng;
-
-  utillinuxCurses = utillinuxngCurses;
-
-  utillinuxng = lowPrio (callPackage ../os-specific/linux/util-linux-ng {
+  utillinux = lowPrio (callPackage ../os-specific/linux/util-linux {
     ncurses = null;
     perl = null;
   });
 
-  utillinuxngCurses = utillinuxng.override {
+  utillinuxCurses = utillinux.override {
     inherit ncurses perl;
   };
 

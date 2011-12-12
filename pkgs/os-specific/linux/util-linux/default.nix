@@ -1,11 +1,13 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-ng-2.18";
+  name = "util-linux-2.20.1";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux-ng/v2.18/${name}.tar.bz2";
-    sha256 = "1k1in1ba9kvh0kplri9765wh0yk68qrkk1a55dqsm21qfryc1idq";
+    # This used to be mirror://kernel/linux/utils/util-linux, but it
+    # disappeared in the kernel.org meltdown.
+    url = "mirror://gentoo/distfiles/${name}.tar.bz2";
+    sha256 = "1q5vjcvw4f067c63vj2n3xggvk5prm11571x6vnqiav47vdbqvni";
   };
 
   # !!! It would be better to obtain the path to the mount helpers
