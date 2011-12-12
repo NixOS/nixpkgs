@@ -5330,16 +5330,7 @@ let
 
   libnl1 = callPackage ../os-specific/linux/libnl/v1.nix { };
 
-  linuxHeaders =
-  let
-
-    kernel = {
-      src = linuxPackages.kernel.src;
-      version = linuxPackages.kernel.version;
-    };
-
-  in
-  callPackage ../os-specific/linux/kernel-headers { inherit kernel; };
+  linuxHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
@@ -5359,11 +5350,7 @@ let
   linuxHeadersCross = assert crossSystem != null;
     linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
 
-  linuxHeaders_2_6_18 = callPackage ../os-specific/linux/kernel-headers/2.6.18.5.nix { };
-
   linuxHeaders_2_6_28 = callPackage ../os-specific/linux/kernel-headers/2.6.28.nix { };
-
-  linuxHeaders_2_6_32 = callPackage ../os-specific/linux/kernel-headers/2.6.32.nix { };
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
