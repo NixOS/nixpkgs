@@ -42,7 +42,6 @@ stdenv.mkDerivation {
   buildNativeInputs = [ unzip ];
 
   dontStrip = true;
-  NIX_STRIP_DEBUG = false;
 
   installPhase = ''
     ensureDir $out

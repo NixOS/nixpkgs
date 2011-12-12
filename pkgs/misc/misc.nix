@@ -113,7 +113,6 @@ in
 
     dontStrip = true;
 
-    NIX_STRIP_DEBUG=0;
     CFLAGS="-ggdb -O0";
     CXXFLAGS="-ggdb -O0";
 

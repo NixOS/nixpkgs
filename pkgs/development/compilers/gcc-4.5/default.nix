@@ -391,7 +391,7 @@ stdenv.mkDerivation ({
 
 # GCC 4.5.2 doesn't support the `install-strip' target, so let `stdenv' do
 # the stripping by default.
-// optionalAttrs (!stripped) { dontStrip = true; NIX_STRIP_DEBUG = false; }
+// optionalAttrs (!stripped) { dontStrip = true; }
 
 // optionalAttrs langVhdl rec {
   name = "ghdl-0.29";

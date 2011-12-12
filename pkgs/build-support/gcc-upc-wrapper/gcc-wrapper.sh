@@ -95,11 +95,6 @@ if test "$dontLink" != "1"; then
 	fi
     done
     export NIX_LDFLAGS_SET=1
-
-    if test "$NIX_STRIP_DEBUG" = "1"; then
-        # Add executable-stripping flags.
-        extraAfter=(${extraAfter[@]} $NIX_CFLAGS_STRIP)
-    fi
 fi
 
 # As a very special hack, if the arguments are just `-v', then don't

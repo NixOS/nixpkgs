@@ -46,7 +46,6 @@ stdenv.mkDerivation {
   '';
 
   dontStrip = true;
-  NIX_STRIP_DEBUG = false;
 
   installPhase = ''
     ensureDir $out

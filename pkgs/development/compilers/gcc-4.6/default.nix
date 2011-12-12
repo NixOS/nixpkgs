@@ -405,7 +405,7 @@ stdenv.mkDerivation ({
   installTargets = "install-gcc install-target-libgcc";
 }
 
-// optionalAttrs (!stripped) { dontStrip = true; NIX_STRIP_DEBUG = false; }
+// optionalAttrs (!stripped) { dontStrip = true; }
 
 // optionalAttrs langVhdl rec {
   name = "ghdl-0.29";

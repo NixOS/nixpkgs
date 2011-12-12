@@ -5,7 +5,9 @@
 # ensuring purity of components produced by it.
 
 # The function defaults are for easy testing.
-{system ? "i686-linux", allPackages ? import ../../top-level/all-packages.nix, platform}:
+{ system ? "i686-linux"
+, allPackages ? import ../../top-level/all-packages.nix
+, platform ? null }:
 
 rec {
 

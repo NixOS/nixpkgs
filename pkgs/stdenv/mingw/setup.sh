@@ -202,13 +202,6 @@ if test "$NIX_NO_SELF_RPATH" != "1"; then
 fi
 
 
-# Strip debug information by default.
-if test -z "$NIX_STRIP_DEBUG"; then
-    export NIX_STRIP_DEBUG=1
-    export NIX_CFLAGS_STRIP="-g0 -Wl,--strip-debug"
-fi
-
-
 # Set the TZ (timezone) environment variable, otherwise commands like
 # `date' will complain (e.g., `Tue Mar 9 10:01:47 Local time zone must
 # be set--see zic manual page 2004').
