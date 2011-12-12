@@ -1,11 +1,11 @@
 { fetchurl, stdenv, bash, emacs, gdb, git, glib, gmime, gnupg1, pkgconfig, talloc, xapian }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.8";
+  name = "notmuch-0.9";
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "f40bcdc6447cae9f76d5b4e70ab70d87e4a813cd123b524c1dc3155a3371a949";
+    sha256 = "e6f1046941d2894d143cb7c19d4810f97946f98742f6d9b8a7208ddb858c57e4";
   };
 
   buildInputs = [ bash emacs gdb git glib gmime gnupg1 pkgconfig talloc xapian ];
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     (cd test && for prg in \
         aggregate-results.sh \
+        atomicity \
         author-order \
         basic \
         crypto \
@@ -52,11 +53,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Notmuch -- The mail indexer";
-
     longDescription = "";
-
-    license = "GPLv3";
-
+    license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };

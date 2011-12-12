@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cmdlib";
-  version = "0.3.4";
-  sha256 = "1f8vb681xd2v7hv0s84x032yf8x2jlxc0j302irv20fkc1w1vbrr";
+  version = "0.3.5";
+  sha256 = "0218f4rl64wvvka95m969hg5y9vc29dqaawfcnk7d1qsv3hx9ydl";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl split syb transformers ];

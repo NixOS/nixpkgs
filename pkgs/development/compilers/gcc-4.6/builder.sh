@@ -5,11 +5,6 @@ export NIX_FIXINC_DUMMY=$NIX_BUILD_TOP/dummy
 mkdir $NIX_FIXINC_DUMMY
 
 
-# libstdc++ needs this; otherwise it will use /lib/cpp, which is a Bad
-# Thing.
-export CPP="gcc -E"
-export CXXCPP="g++ -E"
-
 if test "$staticCompiler" = "1"; then
     EXTRA_LDFLAGS="-static"
 else

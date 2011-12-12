@@ -10,8 +10,8 @@ assert (hurdPartedCross != null) -> (libuuid != null);
 let
   # Unfortunately we can't use `master@{DATE}', see
   # <http://www.bramschoenmakers.nl/en/node/645>.
-  date   = "20110516";
-  rev    = "ffd73488f9eecdb9da40e15f5fdcebf392cb88f8";
+  date   = "20111115";
+  rev    = "969fbb646ffd89a482302e303eaded79781c3331";
   suffix = if headersOnly
            then "-headers"
            else (if buildTarget != "all"
@@ -23,7 +23,7 @@ stdenv.mkDerivation ({
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/hurd.git";
-    sha256 = "6527e85347fe387bd3119fbf2ea07590a35ecad9eec14bb00cd6a443507111a9";
+    sha256 = "b7f57ec2c6dcaf35ec03fb7979eb5506180ce4c6e2edf60a587f12ac5b11f004";
     inherit rev;
   };
 

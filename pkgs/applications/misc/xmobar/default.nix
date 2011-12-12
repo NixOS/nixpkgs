@@ -1,12 +1,14 @@
-{ cabal, mtl, parsec, stm, time, utf8String, X11, X11Xft }:
+{ cabal, libXrandr, mtl, parsec, stm, time, utf8String, X11, X11Xft
+}:
 
 cabal.mkDerivation (self: {
   pname = "xmobar";
-  version = "0.13";
-  sha256 = "0ijava0vn2dmc6v57i6x663rvxz3ryb2gqks18qk1qli4k0m3hf7";
+  version = "0.14";
+  sha256 = "1y26b2a5v9hxv1zmjcb4m8j9qkqdn74mqc3q58vgp5cav45rphvh";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ mtl parsec stm time utf8String X11 X11Xft ];
+  extraLibraries = [ libXrandr ];
   configureFlags = "-fwith_xft";
   meta = {
     homepage = "http://projects.haskell.org/xmobar/";

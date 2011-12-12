@@ -14,11 +14,8 @@ rec {
     sha256 = "14rhlpxxa4v5y3gl992l7lnd5qnqawx0a84idnwq0w2qviwcvsyj";
   };
 
-  buildNativeInputs = [ xz ];
-  buildInputs =
-    [ makeWrapper gawk readline libtool libunistring
-      libffi pkgconfig
-    ];
+  buildNativeInputs = [ xz makeWrapper gawk pkgconfig ];
+  buildInputs = [ readline libtool libunistring libffi ];
   propagatedBuildInputs = [ gmp boehmgc ]
 
     # XXX: These ones aren't normally needed here, but since
@@ -27,9 +24,13 @@ rec {
     # see below.
     ++ [ libtool libunistring ];
 
-  patches =
-    stdenv.lib.optionals (coverageAnalysis != null)
-      [ ./gcov-file-name.patch ./disable-gc-sensitive-tests.patch ];
+  # A native Guile 2.0 is needed to cross-build Guile.
+  selfBuildNativeInput = true;
+
+  enableParallelBuilding = true;
+
+  patches = [ ./disable-gc-sensitive-tests.patch ] ++
+    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"

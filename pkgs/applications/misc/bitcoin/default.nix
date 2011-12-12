@@ -1,32 +1,30 @@
-{ fetchurl, stdenv, openssl, db4, boost, zlib, glib, libSM, gtk, wxGTK, miniupnpc }:
+{ fetchurl, stdenv, openssl, db4, boost, zlib, miniupnpc, qt4 }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.24";
+  version = "0.5.0";
   name = "bitcoin-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bitcoin/Bitcoin/${name}/${name}-src.tar.gz";
-    sha256 = "18n8i37c478b275m2x82411i1fsw8l34qm1k65ynnw38fpaj4h3r";
+    url = " https://github.com/bitcoin/bitcoin/tarball/v${version}";
+    sha256 = "1i9wnbjf9yrs9rq5jnh9pk1x5j982qh3xpjm05z8dgd3nympgyy8";
   };
 
-  buildInputs = [ openssl db4 boost zlib glib libSM gtk wxGTK miniupnpc ];
+  buildInputs = [ openssl db4 boost zlib miniupnpc qt4 ];
 
-  preConfigure = ''
+  unpackCmd = "tar xvf $curSrc";
+
+  buildPhase = ''
+    qmake
+    make
     cd src
-    substituteInPlace makefile.unix \
-      --replace "-Wl,-Bstatic" "" \
-      --replace "-Wl,-Bdynamic" "" \
-      --replace "DEBUGFLAGS=-g -D__WXDEBUG__" "DEBUGFLAGS=" \
+    make -f makefile.unix
+    cd ..
   '';
-
-  makefile = "makefile.unix";
-
-  buildFlags = "bitcoin bitcoind";
 
   installPhase = ''
     ensureDir $out/bin
-    cp bitcoin $out/bin
-    cp bitcoind $out/bin
+    cp bitcoin-qt $out/bin
+    cp src/bitcoind $out/bin
   '';
 
   meta = { 

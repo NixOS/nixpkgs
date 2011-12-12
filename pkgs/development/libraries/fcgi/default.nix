@@ -10,7 +10,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc-4.4.diff ];
 
-  meta = { 
+  postInstall = "ln -s . $out/include/fastcgi";
+
+  meta = {
     description = "FastCGI  is a language independent, scalable, open extension to CG";
     homepage = http://www.fastcgi.com/;
     license = "FastCGI see LICENSE.TERMS";

@@ -1,7 +1,7 @@
 { fetchurl, stdenv, gnum4, texinfo, texLive, automake }:
 
 let
-  version = "9.1";
+  version = "9.1.1";
   bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
 in
 stdenv.mkDerivation {
@@ -15,24 +15,15 @@ stdenv.mkDerivation {
     if stdenv.isi686
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-i386.tar.gz";
-      sha256 = "1vqdy9f1lbzflr9bw0gjn4g4w3hdpnjrkiwj5aaah70flif5ndns";
+      sha256 = "0vi760fy550d9db538m0vzbq1mpdncvw9g8bk4lswk0kcdira55z";
     } else if stdenv.isx86_64
     then fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-${version}-x86-64.tar.gz";
-      sha256 = "1l4zxqm5r1alc6y1cky62rn8h6i40qyiba081n6phwypwxr5sd0g";
+      sha256 = "1wcxm9hyfc53myvlcn93fyqrnnn4scwkknl9hkbp1cphc6mp291x";
     } else fetchurl {
       url = "mirror://gnu/mit-scheme/stable.pkg/${version}/mit-scheme-c-${version}.tar.gz";
-      sha256 = "1661cybycfvjjyq92gb3n1cygxfmfjdhnh3d2ha3vy6xxk9d7za9";
+      sha256 = "0pclakzwxbqgy6wqwvs6ml62wgby8ba8xzmwzdwhx1v8wv05yw1j";
     };
-
-  configurePhase =
-    '' cd src
-       ./configure --prefix="$out"
-
-       cd ../doc
-       ./configure --prefix="$out"
-       cd ..
-     '';
 
   buildPhase =
     '' cd src

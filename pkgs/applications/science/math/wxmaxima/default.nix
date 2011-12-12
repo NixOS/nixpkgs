@@ -2,14 +2,14 @@
 
 let
   name    = "wxmaxima";
-  version = "11.04.0";
+  version = "11.08.0";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/wxMaxima-${version}.tar.gz";
-    sha256 = "1dfwh5ka125wr6wxzyiwz16lk8kaf09rb6lldzryjwh8zi7yw8dm";
+    sha256 = "dfa25cc15de52829a93da624d42344213cc979351b5fcd3dff2afed6738832df";
   };
 
   buildInputs = [wxGTK maxima makeWrapper];

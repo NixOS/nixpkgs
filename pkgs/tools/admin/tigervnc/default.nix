@@ -1,29 +1,31 @@
-{stdenv, fetchsvn, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver,
-autoconf, automake, cvs, libtool, nasm, utilmacros, pixman, xkbcomp, xkeyboard_config,
-fontDirectories, fontutil }:
+{ stdenv, fetchurl, libX11, libXext, gettext, libICE, libXtst, libXi, libSM, xorgserver
+, autoconf, automake, cvs, libtool, nasm, utilmacros, pixman, xkbcomp, xkeyboard_config
+, fontDirectories, fontutil, libgcrypt, gnutls, pam, flex, bison
+, fixesproto, damageproto, xcmiscproto, bigreqsproto, randrproto, renderproto
+, fontsproto, videoproto, compositeproto, scrnsaverproto, resourceproto
+, libxkbfile, libXfont, libpciaccess
+}:
+
+
 
 with stdenv.lib;
 
-stdenv.mkDerivation {
-  name = "tigervnc-svn-4232";
-  src = fetchsvn {
-    url = https://tigervnc.svn.sourceforge.net/svnroot/tigervnc/trunk;
-    rev = 4232;
-    sha256 = "070lsddgx6qj7bpw4p65w54fr7z46vp8wyshv9p0fh3k5izrfnxj";
+stdenv.mkDerivation rec {
+  name = "tigervnc-1.1.0";
+  
+  src = fetchurl {
+    url = "mirror://sourceforge/tigervnc/${name}.tar.gz";
+    sha256 = "1x30s12fwv9rk0fnwwn631qq0d8rpjjx53bvzlx8c91cba170jsr";
   };
-
-  preConfigure = ''
-    autoreconf -vfi
-  '';
 
   configureFlags = "--enable-nls";
 
   inherit fontDirectories;
 
   patchPhase = ''
-    sed -i -e 's,$(includedir)/pixman-1,${pixman}/include/pixman-1,' unix/xserver/hw/vnc/Makefile.am
-    sed -i -e '/^$pidFile/a$ENV{XKB_BINDIR}="${xkbcomp}/bin";' unix/vncserver 
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver 
+    sed -i -e 's,$(includedir)/pixman-1,${if stdenv ? cross then pixman.hostDrv else pixman}/include/pixman-1,' unix/xserver/hw/vnc/Makefile.am
+    sed -i -e '/^$pidFile/a$ENV{XKB_BINDIR}="${if stdenv ? cross then xkbcomp.hostDrv else xkbcomp}/bin";' unix/vncserver 
+    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${if stdenv ? cross then xkeyboard_config.hostDrv else xkeyboard_config}/etc/X11/xkb";' unix/vncserver 
 
     fontPath=
     for i in $fontDirectories; do
@@ -50,7 +52,7 @@ stdenv.mkDerivation {
     done
     patch -p1 < ../xserver18.patch
     autoreconf -vfi
-    ./configure --prefix=$out --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx
+    ./configure $configureFlags --disable-xinerama --disable-xvfb --disable-xnest --disable-xorg --disable-dmx --disable-dri --disable-dri2 --disable-glx
     make TIGERVNC_SRCDIR=`pwd`/../..
     popd
   '';
@@ -66,10 +68,24 @@ stdenv.mkDerivation {
     make TIGERVNC_SRCDIR=`pwd`/../.. install
   '';
 
-  buildInputs = [ libX11 libXext gettext libICE libXtst libXi libSM autoconf automake cvs
-    libtool nasm utilmacros fontutil ] ++ xorgserver.buildNativeInputs;
+  crossAttrs = {
+    buildInputs = (map (x : x.hostDrv) (buildInputs ++ [
+      fixesproto damageproto xcmiscproto bigreqsproto randrproto renderproto
+      fontsproto videoproto compositeproto scrnsaverproto resourceproto
+      libxkbfile libXfont libpciaccess
+    ]));
+  };
 
-  propagatedBuildInputs = xorgserver.propagatedBuildNativeInputs;
+  buildInputs =
+    [ libX11 libXext gettext libICE libXtst libXi libSM
+      nasm libgcrypt gnutls pam pixman
+    ];
+  
+  buildNativeInputs = 
+    [ autoconf automake cvs utilmacros fontutil libtool flex bison ] 
+      ++ xorgserver.buildNativeInputs;
+
+  propagatedBuildNativeInputs = xorgserver.propagatedBuildNativeInputs;
 
   meta = {
     homepage = http://www.tigervnc.org/;

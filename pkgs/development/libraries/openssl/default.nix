@@ -6,6 +6,11 @@ let
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
     stdenv.cross;
+
+  hurdGNUSourcePatch = fetchurl {
+    url = http://patch-tracker.debian.org/patch/series/dl/openssl/1.0.0e-2.1/gnu_source.patch;
+    sha256 = "0zp4x8bql92fbqywnigqfsfj2vvabb66wv6g6zgzh0y6js1ic4pn";
+  };
 in
 
 stdenv.mkDerivation {
@@ -26,7 +31,8 @@ stdenv.mkDerivation {
       # environment variable is ignored for setuid binaries.
       ./cert-file.patch
     ]
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch
+    ++ stdenv.lib.optional (stdenv.system == "x86_64-freebsd") ./freebsd-x86_64-asm.patch;
 
   buildNativeInputs = [ perl ];
 
@@ -53,6 +59,17 @@ stdenv.mkDerivation {
       # It's configure does not like --build or --host
       export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
     '';
+
+    patches = stdenv.lib.optionals (opensslCrossSystem == "hurd-x86") [
+      # OpenSSL only defines _GNU_SOURCE on Linux, but we need it on GNU
+      hurdGNUSourcePatch
+
+      # Use the target settings from Debian's "debian-hurd-i386" target.
+      # see http://patch-tracker.debian.org/patch/series/view/openssl/1.0.0e-2.1/debian-targets.patch
+      # In particular, this sets the shared library extension properly so that
+      # make install succeeds
+      ./hurd-target.patch
+    ];
 
     postInstall = ''
       # Openssl installs readonly files, which otherwise we can't strip.

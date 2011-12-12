@@ -5,14 +5,14 @@
 
 cabal.mkDerivation (self: {
   pname = "warp";
-  version = "0.4.5";
-  sha256 = "0ql9a7qa6ivsvgr66hgj6bs8c3y8rr320kk1cxq9qbpi00gy5j8b";
+  version = "0.4.6.2";
+  sha256 = "1ja9w3440j69w7638wrjd6067svqcsaqdl1zklr6jx20zyadww94";
   buildDepends = [
     blazeBuilder blazeBuilderEnumerator caseInsensitive enumerator
     httpTypes network simpleSendfile transformers unixCompat wai
   ];
   meta = {
-    homepage = "http://github.com/snoyberg/warp";
+    homepage = "http://github.com/yesodweb/wai";
     description = "A fast, light-weight web server for WAI applications";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

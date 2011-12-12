@@ -14,7 +14,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl ];
 
-  postInstall = "install -D -m 444 doc/rtorrent.1 $out/share/man/man1/rtorrent.1";
+  postInstall = ''
+    ensureDir $out/share/man/man1
+    mv doc/rtorrent.1 $out/share/man/man1/rtorrent.1
+  '';
 
   meta = {
     homepage = "http://libtorrent.rakshasa.no/";

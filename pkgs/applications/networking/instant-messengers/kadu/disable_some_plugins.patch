@@ -1,0 +1,28 @@
+diff --git a/Plugins.cmake b/Plugins.cmake
+index ad63f20..c14a781 100644
+--- a/Plugins.cmake
++++ b/Plugins.cmake
+@@ -30,9 +30,9 @@ set (COMPILE_PLUGINS
+ 
+ # encryption
+ 	# Encrypted chat support
+-	encryption_ng
++        # encryption_ng
+ 	# OpenSSL encrypted chat support
+-	encryption_ng_simlite
++        # encryption_ng_simlite
+ 
+ # docking
+ 	# Tray icon support (common part of all docking modules)
+@@ -104,9 +104,9 @@ if (UNIX)
+ 
+ 	# mediaplayer
+ 		# MPD mediaplayer support
+-		mpd_mediaplayer
++		# mpd_mediaplayer
+ 		# MPRIS Media Players support
+-		mprisplayer_mediaplayer
++                # mprisplayer_mediaplayer
+ 	)
+ endif (UNIX)
+ 

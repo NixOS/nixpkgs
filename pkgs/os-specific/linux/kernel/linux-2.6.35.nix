@@ -18,6 +18,11 @@ let
       # Enable the kernel's built-in memory tester.
       MEMTEST y
 
+      # Include the CFQ I/O scheduler in the kernel, rather than as a
+      # module, so that the initrd gets a good I/O scheduler.
+      IOSCHED_CFQ y
+      BLK_CGROUP y # required by CFQ
+
       # Disable some expensive (?) features.
       FTRACE n
       KPROBES n
@@ -183,6 +188,11 @@ let
 
       # Allow up to 128 GiB of RAM in Xen domains.
       XEN_MAX_DOMAIN_MEMORY 128
+
+      # PROC_EVENTS requires that the netlink connector is not built
+      # as a module.  This is required by libcgroup's cgrulesengd.
+      CONNECTOR y
+      PROC_EVENTS y
 
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}

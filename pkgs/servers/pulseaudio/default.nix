@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       #gtk gconf 
     ]
     ++ stdenv.lib.optional jackaudioSupport jackaudio
-    ++ stdenv.lib.optional x11Support xlibs.xlibs;
+    ++ stdenv.lib.optionals x11Support [ xlibs.xlibs xlibs.libXtst xlibs.libXi ];
 
   preConfigure = ''
     # Change the `padsp' script so that it contains the full path to
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     ${if jackaudioSupport then "--enable-jack" else ""}
   '';
 
-  installFlags = "pulseconfdir=$(out)/etc dbuspolicydir=$out/etc/dbus-1/system.d xdgautostartdir=$out/etc/xdg/autostart";
+  installFlags = "sysconfdir=$(out)/etc pulseconfdir=$(out)/etc/pulse";
 
   enableParallelBuilding = true;
 

@@ -15,6 +15,8 @@ stdenv.mkDerivation {
     sha256 = "0fjlkwps14adfgxdrbb4yg65fhyimplvjjs1xqj5np197cig67x0";
   };
 
+  createFindlibDestdir = true;
+
   buildInputs = [ocaml findlib];
 
   buildFlags = "all all.opt";

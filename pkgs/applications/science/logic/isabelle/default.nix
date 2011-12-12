@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   inherit name theories;
 
   src = fetchurl {
-    url = "http://www.cl.cam.ac.uk/research/hvg/${pname}/dist/${name}.tar.gz";
+    url = http://isabelle.in.tum.de/website-Isabelle2011/dist/Isabelle2011.tar.gz;
     sha256 = "ea85eb2a859891be387f020b2e45f8c9a0bd1d8bbc3902f28a429e9c61cb0b6a";
   };
 

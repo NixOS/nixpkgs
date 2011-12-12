@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0x9hkb4iqz64gcabzkdcfy4p78sdhnpjwh54g8wx5bdgy9087vpr";
   };
 
-  buildInputs = [ perl perlXMLParser xkbcomp gettext intltool ];
+  buildInputs = [ gettext ];
+
+  buildNativeInputs = [ perl perlXMLParser intltool xkbcomp ];
 
   patches = [ ./eo.patch ];
 

@@ -1,0 +1,93 @@
+These patches have the compiler place path flags in various places so that
+ocaml and c libraries are found in their Nixpkgs locations.
+
+diff -x '*~' -Naur MLstate-opalang-6b295a9//build_rules.ml MLstate-opalang-6b295a9-new//build_rules.ml
+--- MLstate-opalang-6b295a9//build_rules.ml	2011-11-21 08:07:04.000000000 -0430
++++ MLstate-opalang-6b295a9-new//build_rules.ml	2011-11-27 00:34:35.845277134 -0430
+@@ -373,7 +373,11 @@
+     | Some dep -> dep::list
+   ) (tags_of_pathname (env "%.opa_plugin")) []
+   in
+-  let lib_dir s = [A"--ml";A"-I";A"--ml";P (if Pathname.exists s then ".." / s else ("+"^s))] in
++  let cryptokitdir_opt = function
++    | Some path -> path
++    | None -> ""
++  in
++  let lib_dir s = [A"--ml";A"-I";A"--ml";P (if Pathname.exists s then ".." / s else (if s = "cryptokit" then (cryptokitdir_opt Config.Libdir.cryptokit) else ("+"^s)))] in
+   let include_dirs = List.flatten (List.map lib_dir caml_use_lib) in
+   let files = List.map ((^) path) files in
+   build_list build files;
+diff -x '*~' -Naur MLstate-opalang-6b295a9//config.mli MLstate-opalang-6b295a9-new//config.mli
+--- MLstate-opalang-6b295a9//config.mli	2011-11-21 08:07:04.000000000 -0430
++++ MLstate-opalang-6b295a9-new//config.mli	2011-11-27 00:30:39.312443906 -0430
+@@ -43,6 +43,9 @@
+ (** Flag for Dbm present *)
+ val has_dbm : bool
+ 
++(** openssh link directory *)
++val openssl : string option
++
+ (** library directories, if the libs are enabled *)
+ val libnatpmp : (string*string*string) option (** name of the lib, lib dir, include dir *)
+ 
+diff -x '*~' -Naur MLstate-opalang-6b295a9//configure MLstate-opalang-6b295a9-new//configure
+--- MLstate-opalang-6b295a9//configure	2011-11-21 08:07:04.000000000 -0430
++++ MLstate-opalang-6b295a9-new//configure	2011-11-27 00:40:52.496151405 -0430
+@@ -27,6 +27,7 @@
+ 
+ NO_CAMLIDL=1
+ NO_DBM=1
++CONFIG_LIB_OPENSSL=""
+ 
+ while [ $# -gt 0 ]; do
+     case "$1" in
+@@ -51,6 +52,11 @@
+             shift
+             OCAMLOPT=$1
+             ;;
++        -openssl)
++            if [ $# -lt 2 ]; then echo "Error: option $1 requires an argument" >&2; exit 1; fi
++            shift
++            CONFIG_LIB_OPENSSL=$1
++            ;;
+         -ocamlfind)
+             if [ $# -lt 2 ]; then echo "Error: option $1 requires an argument" >&2; exit 1; fi
+             shift
+@@ -647,6 +653,8 @@
+ let miniupnpc = $(camlopt "$HAS_MINIUPNPC" "$(camlstrtuple "${MINIUPNPC[@]}")")
+ let has_dbm = $(camlbool "$HAS_DBM")
+ 
++let openssl = $(camlopt "$CONFIG_LIB_OPENSSL" '"'"$CONFIG_LIB_OPENSSL"'"')
++
+ let available = [ $TAGS_LIST]
+ let all_tags = [ $(for t in $ALL_TAGS_LIST; do echo -n "\"$t\"; "; done)]
+ 
+diff -x '*~' -Naur MLstate-opalang-6b295a9//qml2ocaml/qml2ocamlOptions.ml MLstate-opalang-6b295a9-new//qml2ocaml/qml2ocamlOptions.ml
+--- MLstate-opalang-6b295a9//qml2ocaml/qml2ocamlOptions.ml	2011-11-21 08:07:04.000000000 -0430
++++ MLstate-opalang-6b295a9-new//qml2ocaml/qml2ocamlOptions.ml	2011-11-27 00:32:57.721442828 -0430
+@@ -44,6 +44,7 @@
+ 
+   let options_linker =
+     ["-w a"]
++    @ (match Config.openssl with | Some dir -> ["-ccopt"; "-L"^dir] | None -> [])
+     @ (if Base.is_windows then
+          ["-cclib"; "Dnsapi.lib"; "-cclib"; "libeay32.lib"; "-cclib"; "ssleay32.lib" (*; "ssl_stubs.obj" *)]
+        else [])
+@@ -51,11 +52,13 @@
+   (**
+      Absolute path for include directory, will be passed with the option -I to the ocaml compiler.
+   *)
++  let uselibdirpath = fun po p -> match po with | Some path -> path | None -> p
++
+   let server_include_dir = [
+-    "+zip" ; "+site-lib/zip" ; "+site-lib/camlzip" ;
+-    "+ssl" ; "+site-lib/ssl" ;
+-    "+cryptokit"; "+site-lib/cryptokit" ;
+-    "+ulex" ; "+site-lib/ulex" ;
++    uselibdirpath Config.Libdir.camlzip "+zip" ; "+site-lib/zip" ; "+site-lib/camlzip" ;
++    uselibdirpath Config.Libdir.ssl "+ssl" ; "+site-lib/ssl" ;
++    uselibdirpath Config.Libdir.cryptokit "+cryptokit"; "+site-lib/cryptokit" ;
++    uselibdirpath Config.Libdir.ulex "+ulex" ; "+site-lib/ulex" ;
+   ] @ (
+     if Config.has_dbm then [
+       "+dbm" ; "+site-lib/dbm" ;

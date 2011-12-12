@@ -383,8 +383,8 @@ with (import ./release-lib.nix);
 
   firefox36Pkgs.firefox = linux;
   firefox50Pkgs.firefox = linux;
-  firefox60Pkgs.firefox = linux;
   firefox70Pkgs.firefox = linux;
+  firefox80Pkgs.firefox = linux;
 
   gnome = {
     gnome_panel = linux;
@@ -435,29 +435,24 @@ with (import ./release-lib.nix);
   */
 
   linuxPackages_2_6_25 = {
-    aufs = linux;
     kernel = linux;
   };
 
   linuxPackages_2_6_27 = {
-    aufs = linux;
     kernel = linux;
     virtualbox = linux;
     virtualboxGuestAdditions = linux;
   };
 
   linuxPackages_2_6_28 = {
-    aufs = linux;
     kernel = linux;
   };
 
   linuxPackages_2_6_29 = {
-    aufs = linux;
     kernel = linux;
   };
 
   linuxPackages_2_6_31 = {
-    aufs = linux;
     kernel = linux;
   };
 

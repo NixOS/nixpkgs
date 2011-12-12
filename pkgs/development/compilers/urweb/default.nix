@@ -2,23 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "urweb";
-  version = "20110917";
+  version = "20111127";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.impredicative.com/ur/${name}.tgz";
-    sha256 = "1qgb25bwpdcs303q7yz1dm577xyy5pzzyvaqabhkvhbgxmlcpl73";
+    sha256 = "1mhicigbi434fdr4gim4dswnmff9dldszh93g2w2542nlxvn9lbj";
   };
 
   buildInputs = [ stdenv.gcc file openssl mlton mysql postgresql sqlite ];
 
   prePatch = ''
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
-    sed -e 's@gcc @${stdenv.gcc}/bin/gcc @g' -i src/compiler.sml
     '';
 
   preConfigure =
     ''
+      export CC="${stdenv.gcc}/bin/gcc";
       export CCARGS="-I$out/include \
                       -L${mysql}/lib/mysql -L${postgresql}/lib -L${sqlite}/lib";
 

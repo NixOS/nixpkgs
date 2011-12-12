@@ -3,8 +3,8 @@
 stdenv.mkDerivation rec {
   name = "rtl8192c-fw";
   src = fetchurl {
-    url = "ftp://WebUser:n8W9ErCy@208.70.202.219/cn/wlan/92ce_se_de_linux_mac80211_0003.0401.2011.tar.gz";
-    sha256 = "002kj6f1xaali2iwrxvirqq0hbiyb2cpf93y2xycp3qd69cp8lik";
+    url = "ftp://WebUser:AxPL9s3k@202.134.71.21/cn/wlan/92ce_se_de_linux_mac80211_0004.0816.2011.tar.gz";
+    sha256 = "1kg63h5rj4kja2csmqsrxjipb1wpznfbrvn9cla9d9byksy5fn64";
   };
 
   phases = [ "unpackPhase" "installPhase" ];

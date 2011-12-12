@@ -5,7 +5,7 @@
 , libcaca, pulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, udev, gnutls, avahi, libcddb, jackaudio, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
-, libass, libva
+, libass, libva, libdvbpsi
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     pkgconfig dbus hal fribidi qt4 libvorbis libtheora speex lua libgcrypt
     libupnp libcaca pulseaudio flac schroedinger libxml2 librsvg mpeg2dec
     udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
-    libkate libtiger libv4l samba liboggz libass
+    libkate libtiger libv4l samba liboggz libass libdvbpsi
   ]
   ++ (with xlibs; [ xlibs.xlibs libXv libXvMC libXpm xcbutil libva ]);
 

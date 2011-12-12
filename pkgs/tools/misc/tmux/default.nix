@@ -12,6 +12,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=\${out}";
 
+  crossAttrs = {
+    preBuild = ''
+      makeFlags=" $makeFlags CC=${stdenv.cross.config}-gcc "
+    '';
+  };
+
   buildInputs = [ ncurses libevent ];
 
   meta = {

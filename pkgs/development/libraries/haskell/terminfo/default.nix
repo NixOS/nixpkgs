@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "terminfo";
-  version = "0.3.2.2";
-  sha256 = "1370vxvv32aarmk64yvwb8rav523xk7fg5h65cgxvn4ppjqv0f51";
+  version = "0.3.2.3";
+  sha256 = "06y2vx7d4hl55p3p1c7yj2lx8yaw14c5h2qclj8m5xg2wkifnf5f";
   buildDepends = [ extensibleExceptions ];
   extraLibraries = [ ncurses ];
   meta = {

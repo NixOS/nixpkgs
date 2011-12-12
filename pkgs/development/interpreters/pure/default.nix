@@ -12,11 +12,11 @@ let
   sourceInfo = rec {
     baseName="pure";
     project="pure-lang";
-    version="0.47";
+    version="0.49";
     name="${baseName}-${version}";
     extension="tar.gz";
     url="http://${project}.googlecode.com/files/${name}.${extension}";
-    hash="16j0k639kw2am4fc2h7q5sk7kx5z7nca896dakhphlb9zn9h0gbv";
+    hash="0kkrcmmqks82g3qlkvs3cd23v6b5948rw3xsdadd1jidh74jg33x";
   };
 in
 rec {

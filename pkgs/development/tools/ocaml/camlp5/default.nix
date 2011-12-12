@@ -3,7 +3,7 @@
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
   pname = "camlp5";
-  version = "5.15";
+  version = "6.02.3";
   webpage = http://pauillac.inria.fr/~ddr/camlp5/;
   metafile = ./META;
 in
@@ -14,8 +14,15 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/distrib/src/${pname}-${version}.tgz";
-    sha256 = "1sx5wlfpydqskm97gp7887p3avbl3vanlmrwj35wx5mbzj6kn9nq";
+    sha256 = "1z9bwh267117br0vlhirv9yy2niqp2n25zfnl14wg6kgg9bqx7rj";
   };
+
+  patches = fetchurl {
+    url = "${webpage}/distrib/src/patch-${version}-1";
+    sha256 = "159qpvr07mnn72yqwx24c6mw7hs6bl77capsii7apg9dcxar8w7v";
+  };
+
+  patchFlags = "-p 0";
 
   buildInputs = [ ocaml ];
 

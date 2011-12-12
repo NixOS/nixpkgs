@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, eina, eet, ecore }:
 stdenv.mkDerivation rec {
   name = "efreet-${version}";
-  version = "1.0.1";
+  version = "1.1.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.gz";
-    sha256 = "0fakczsrr1idyvrp04mxw51ww017kn65xa77vq8wka4js8y0nagi";
+    sha256 = "0fqrrp8dvaqhwczlh7xyh1x6wr4flpmpy6ihrjh1ywymgcvrfwkf";
   };
   buildInputs = [ pkgconfig eina eet ecore ];
   meta = {

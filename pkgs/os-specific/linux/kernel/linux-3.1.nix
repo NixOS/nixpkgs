@@ -20,6 +20,11 @@ let
       # Enable the kernel's built-in memory tester.
       MEMTEST y
 
+      # Include the CFQ I/O scheduler in the kernel, rather than as a
+      # module, so that the initrd gets a good I/O scheduler.
+      IOSCHED_CFQ y
+      BLK_CGROUP y # required by CFQ
+
       # Disable some expensive (?) features.
       FTRACE n
       KPROBES n
@@ -197,6 +202,11 @@ let
       # they generally don't hurt.
       STAGING y
 
+      # PROC_EVENTS requires that the netlink connector is not built
+      # as a module.  This is required by libcgroup's cgrulesengd.
+      CONNECTOR y
+      PROC_EVENTS y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -205,9 +215,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.1";
-
-    modDirVersion = "3.1.0";
+    version = "3.1.4";
 
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
@@ -215,7 +223,7 @@ import ./generic.nix (
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
-      sha256 = "0nck9cx66crqhw17y4vc3rfqrcz5269nwn2p5dh0qjvmihvx4wr5";
+      sha256 = "0wd43q1m11d4s5ab2kwnga4jvi5racqwlg4pmcp4fqim0q8jl9g6";
     };
 
     config = configWithPlatform stdenv.platform;

@@ -4,15 +4,27 @@
 # Set it to true to fetch the latest release/branchpoint from git.
 , bleedingEdgeVersion ? false
 
+# Additional dependencies for GNU/Hurd.
+, mig ? null, hurd ? null
+
 # needed for the git version
 , flex, bison }:
 
 let
-    basename =
-      if bleedingEdgeVersion
-      then "gdb-7.3.20110726"
-      else "gdb-7.3.1";
+  basename =
+    if bleedingEdgeVersion
+    then "gdb-7.3.20110726"
+    else "gdb-7.3.1";
+
+  # Whether (cross-)building for GNU/Hurd.  This is an approximation since
+  # having `stdenv ? cross' doesn't tell us if we're building `hostDrv' and
+  # `buildDrv'.
+  isGNU =
+      stdenv.system == "i686-gnu"
+      || (stdenv ? cross && stdenv.cross.config == "i586-pc-gnu");
 in
+
+assert isGNU -> mig != null && hurd != null;
 
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (target != null)
@@ -34,9 +46,11 @@ stdenv.mkDerivation rec {
   # I think python is not a native input, but I leave it
   # here while I will not need it cross building
   buildNativeInputs = [ texinfo python ]
-  ++ stdenv.lib.optionals bleedingEdgeVersion [ flex bison ];
+    ++ stdenv.lib.optional isGNU mig
+    ++ stdenv.lib.optionals bleedingEdgeVersion [ flex bison ];
 
   buildInputs = [ ncurses readline gmp mpfr expat ]
+    ++ stdenv.lib.optional isGNU hurd
     ++ stdenv.lib.optional doCheck dejagnu;
 
   configureFlags = with stdenv.lib;

@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /bin/sh
 
 # Usage: download kde release to $dir, then run
 # $0 $dir

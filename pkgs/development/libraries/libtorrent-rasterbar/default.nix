@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libtorrent-rasterbar-${version}";
-  version = "0.15.4";
+  version = "0.15.8";
   
   src = fetchurl {
     url = "http://libtorrent.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1pjdn0as4h71bhm0fbjqsh1y10fbifn2hfrkhkgdsdqhz7vdbfwy";
+    sha256 = "0767i20igrfadscw3vdyadd4qidybwx9h898rkaq95zlwhaygpzm";
   };
 
   buildInputs = [ boost pkgconfig openssl zlib ];

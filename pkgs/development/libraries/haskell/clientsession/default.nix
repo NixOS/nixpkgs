@@ -1,12 +1,14 @@
-{ cabal, base64Bytestring, cereal, cryptoApi, cryptocipher, skein
+{ cabal, base64Bytestring, cereal, cprngAes, cryptoApi
+, cryptocipher, entropy, skein, tagged
 }:
 
 cabal.mkDerivation (self: {
   pname = "clientsession";
-  version = "0.7.3.3";
-  sha256 = "0cfj225hzn8fsffwnq5zq55dh9m5av1i58b4njhna7miiz6b4jsq";
+  version = "0.7.3.6";
+  sha256 = "04cvws7h2pm3rk8p2yj1pqkf9vjqq65hxg9sjldg7zhxdjgq1hgc";
   buildDepends = [
-    base64Bytestring cereal cryptoApi cryptocipher skein
+    base64Bytestring cereal cprngAes cryptoApi cryptocipher entropy
+    skein tagged
   ];
   meta = {
     homepage = "http://github.com/snoyberg/clientsession/tree/master";

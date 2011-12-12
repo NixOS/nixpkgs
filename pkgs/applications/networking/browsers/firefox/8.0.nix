@@ -15,14 +15,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "8.0b1";
+  firefoxVersion = "8.0.1";
   
-  xulVersion = "8.0"; # this attribute is used by other packages
+  xulVersion = "8.0.1"; # this attribute is used by other packages
 
   
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/${firefoxVersion}-candidates/build1/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "1sdahpawgngvjh4cap2vdg00ngiwji5nkb40dh5kd393wa6c8mpm";
+    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
+    sha1 = "0dd207c5cee9d53114c55aa23eeca36b754bc128";
   };
   
   commonConfigureFlags =
@@ -161,7 +161,7 @@ rec {
             file $i;
             if file $i | grep executable &>/dev/null; then 
 	        rm "$out/bin/$(basename "$i")"
-                echo -e '#! /bin/sh\n"'"$i"'" "$@"' > "$out/bin/$(basename "$i")"
+                echo -e '#! /bin/sh\nexec "'"$i"'" "$@"' > "$out/bin/$(basename "$i")"
                 chmod a+x "$out/bin/$(basename "$i")"
             fi;
         done;
