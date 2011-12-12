@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.kotnet.org/~skimo/isl/;
     license = "LGPLv2.1";
-    description = "A library for manipulating sets and relations of integer points bounded by linear constraints.";
+    description = "A library for manipulating sets and relations of integer points bounded by linear constraints";
     maintainers = [ stdenv.lib.maintainers.shlevy ];
     platforms = stdenv.lib.platforms.all;
   };
