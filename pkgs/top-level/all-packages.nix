@@ -419,7 +419,7 @@ let
   bootchart = callPackage ../tools/system/bootchart { };
 
   btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
-    inherit libuuid zlib acl;
+    inherit libuuid zlib acl attr fetchgit;
   };
 
   catdoc = callPackage ../tools/text/catdoc { };
