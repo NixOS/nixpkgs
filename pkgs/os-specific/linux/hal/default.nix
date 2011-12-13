@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, python, pciutils, expat
 , libusb, dbus, dbus_glib, glib, libuuid, perl
 , perlXMLParser, gettext, zlib, gperf, consolekit, policykit
-, libsmbios, dmidecode, udev, utillinuxng, pmutils, usbutils
+, libsmbios, dmidecode, udev, utillinux, pmutils, usbutils
 , eject, upstart
 }:
 
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
       substituteInPlace $i \
         ${changeDmidecode} \
         ${if udev != null then "--replace /sbin/udevadm ${udev}/sbin/udevadm" else ""} \
-        --replace /bin/mount ${utillinuxng}/bin/mount \
-        --replace /bin/umount ${utillinuxng}/bin/umount \
+        --replace /bin/mount ${utillinux}/bin/mount \
+        --replace /bin/umount ${utillinux}/bin/umount \
         --replace /usr/bin/pm-is-supported ${pmutils}/bin/pm-is-supported \
         --replace /usr/sbin/pm ${pmutils}/sbin/pm \
         --replace /sbin/shutdown ${upstart}/sbin/shutdown

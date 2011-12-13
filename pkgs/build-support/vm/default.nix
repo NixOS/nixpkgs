@@ -351,7 +351,7 @@ rec {
     with pkgs; runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file";
-      buildInputs = [utillinuxng];
+      buildInputs = [ utillinux ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
         ${module_init_tools}/sbin/modprobe loop
@@ -376,7 +376,7 @@ rec {
     with pkgs; runInLinuxVM (
     stdenv.mkDerivation {
       name = "extract-file-mtd";
-      buildInputs = [utillinuxng mtdutils];
+      buildInputs = [ utillinux mtdutils ];
       buildCommand = ''
         ln -s ${linux}/lib /lib
         ${module_init_tools}/sbin/modprobe mtd
