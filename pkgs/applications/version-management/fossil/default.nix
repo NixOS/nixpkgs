@@ -1,16 +1,11 @@
 {stdenv, fetchurl, zlib, openssl, tcl, readline, sqlite}:
 
-let
-  version = "1.20";
-  filedate = "20111021125253";
-in
-
 stdenv.mkDerivation {
-  name = "fossil-${version}";
+  name = "fossil-1.21";
 
   src = fetchurl {
-    url = "http://www.fossil-scm.org/download/fossil-src-${filedate}.tar.gz";
-    sha256 = "0m75kw77iray3kbjm1xfn8hr116fn11yv1wr7adcwy314cgj0vv3";
+    url = http://www.fossil-scm.org/download/fossil-src-20111213135356.tar.gz;
+    sha256 = "07g78sf26v7zr4qzcwky4h4zzaaz8apy33d35bhc5ax63z6md1f9";
   };
 
   buildInputs = [ zlib openssl readline sqlite ];
