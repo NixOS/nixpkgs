@@ -2,6 +2,7 @@ name = WPA2-TTLS
 author = various contributors
 version = 1
 require identity *Identity anonymous_identity *Anonymous_identity password *Password ca_cert *Path_to_CA_Cert
+protected password *Password
 -----
 ctrl_interface=/var/run/wpa_supplicant
 network={
