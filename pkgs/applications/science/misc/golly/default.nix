@@ -17,7 +17,7 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doMake" "doDeploy"];
+  phaseNames = ["setVars" "doConfigure" "doMakeInstall"];
   setVars = a.noDepEntry ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lperl -L$(echo "${perl}"/lib/perl5/5*/*/CORE)"
     pythonLib="$(echo "${python}"/lib/libpython*.so)"
@@ -26,14 +26,6 @@ rec {
     export NIX_LDFLAGS="$NIX_LDFLAGS -l$pythonLib"
     echo "Flags: $NIX_LDFLAGS"
   '';
-  goSrcDir = ''cd */'';
-  makeFlags = [
-    "-f makefile-gtk"
-    ];
-  doDeploy = a.fullDepEntry ''
-    cat < ${./make-install.make}  >> makefile-gtk
-    make -f makefile-gtk out="$out" install
-  '' ["minInit" "doMake" "defEnsureDir"];
       
   meta = {
     description = "Cellular automata simulation program";
