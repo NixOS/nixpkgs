@@ -3215,8 +3215,7 @@ let
 
   cln = callPackage ../development/libraries/cln { };
 
-  clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) {
-  };
+  clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) { };
 
   clucene_core = callPackage ../development/libraries/clucene-core { };
 
@@ -4400,7 +4399,7 @@ let
   };
 
   pcre = callPackage ../development/libraries/pcre {
-    unicodeSupport = getConfig ["pcre" "unicode"] false;
+    unicodeSupport = getConfig ["pcre" "unicode"] true;
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
