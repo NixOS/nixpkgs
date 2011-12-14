@@ -17,7 +17,9 @@ in rec {
   libs = stdenv.mkDerivation {
     name = "dbus-library-" + version;
 
-    buildInputs = [ pkgconfig expat ];
+    buildNativeInputs = [ pkgconfig ];
+
+    buildInputs = [ expat ];
 
     inherit src patches configureFlags;
 
@@ -42,7 +44,9 @@ in rec {
 
     configureFlags = "${configureFlags} --with-dbus-daemondir=${daemon}/bin";
 
-    buildInputs = [ pkgconfig expat libs ]
+    buildNativeInputs = [ pkgconfig ];
+
+    buildInputs = [ expat libs ]
       ++ stdenv.lib.optionals useX11 [ libX11 libICE libSM ];
 
     NIX_LDFLAGS = "-ldbus-1";
