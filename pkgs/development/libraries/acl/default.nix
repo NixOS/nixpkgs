@@ -1,14 +1,14 @@
 { stdenv, fetchurl, gettext, attr }:
 
 stdenv.mkDerivation rec {
-  name = "acl-2.2.49";
+  name = "acl-2.2.51";
 
   src = fetchurl {
     url = "mirror://savannah/acl/${name}.src.tar.gz";
-    sha256 = "1mg5nxr0r9y08lmyxmm2lfss5jz1xzbs0npsc8597x2f5rsz9ixr";
+    sha256 = "09aj30m49ivycl3irram8c3givc0crivjm3ymw0nhfaxrwhlb186";
   };
 
-  buildNativeInputs = [gettext];
+  buildNativeInputs = [ gettext ];
   buildInputs = [ attr ];
 
   # Upstream use C++-style comments in C code. Remove them.
