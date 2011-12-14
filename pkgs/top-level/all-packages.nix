@@ -3265,14 +3265,6 @@ let
     useX11 = true;
   };
 
-  dbus_all_1_5_6 = callPackage ../development/libraries/dbus/1.5.6.nix {
-    useX11 = true;
-  };
-
-  dbus_glib_0_94 = callPackage ../development/libraries/dbus-glib/0.94.nix {
-    dbus = pkgs.dbus_all_1_5_6.libs;
-  };
-
   dbus_glib = callPackage ../development/libraries/dbus-glib { };
 
   dbus_java = callPackage ../development/libraries/java/dbus-java { };
@@ -6063,9 +6055,7 @@ let
 
   untie = callPackage ../os-specific/linux/untie { };
 
-  upower = callPackage ../os-specific/linux/upower {
-    dbus_glib = pkgs.dbus_glib_0_94;
-  };
+  upower = callPackage ../os-specific/linux/upower { };
 
   upstart = callPackage ../os-specific/linux/upstart { };
 
