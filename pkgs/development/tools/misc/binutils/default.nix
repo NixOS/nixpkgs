@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
       + stdenv.lib.optionalString (cross != null) " --target=${cross.config}"
       + stdenv.lib.optionalString gold " --enable-gold";
 
+  enableParallelBuilding = true;
+      
   meta = {
     description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
 

@@ -1,28 +1,19 @@
-{stdenv, fetchurl, m4, cxx ? true, static ? false}:
-
-let
-  staticFlags = stdenv.lib.optionals static
-                  [ "--enable-static" "--disable-shared" ];
-in
+{ stdenv, fetchurl, m4, cxx ? true }:
 
 stdenv.mkDerivation rec {
-  name = "gmp-5.0.1";
+  name = "gmp-5.0.2";
 
   src = fetchurl {
     url = "mirror://gnu/gmp/${name}.tar.bz2";
-    sha256 = "1yrr14l6vvhm1g27y8nb3c75j0i4ii4k1gw7ik08safk3zq119m2";
+    sha256 = "0a2ch2kpbzrsf3c1pfc6sph87hk2xmwa6np3sn2rzsflzmvdphnv";
   };
 
-  buildNativeInputs = [m4];
+  buildNativeInputs = [ m4 ];
 
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures (x86).
     [ "--enable-fat" ]
-
-    ++ (if cxx then [ "--enable-cxx" ] else [ "--disable-cxx" ])
-    ++ staticFlags;
-
-  dontDisableStatic = if static then true else false;
+    ++ (if cxx then [ "--enable-cxx" ] else [ "--disable-cxx" ]);
 
   doCheck = true;
 

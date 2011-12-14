@@ -109,13 +109,14 @@ rec {
     } // {inherit fetchurl;};
 
     
-  # Return a modified stdenv that enables building static libraries.
-  enableStaticLibraries = stdenv: stdenv //
+  # Return a modified stdenv that builds static libraries instead of
+  # shared libraries.
+  makeStaticLibraries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontDisableStatic = true;
         configureFlags =
-          (if args ? configureFlags then args.configureFlags else "")
-          + " --enable-static";
+          (if args ? configureFlags then toString args.configureFlags else "")
+          + " --enable-static --disable-shared";
       });
     } // {inherit fetchurl;};
 

@@ -108,7 +108,7 @@ let
       # overrided packages will not be built with the crossStdenv
       # adapter.
       overrides = overrider pkgsOrig //
-        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) pkgsOrig.stdenv.overrides);
+        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) (pkgsOrig.stdenv.overrides pkgsOrig));
 
       # The un-overriden packages, passed to `overrider'.
       pkgsOrig = pkgsFun pkgs {};
@@ -1208,11 +1208,8 @@ let
 
   ppl = callPackage ../development/libraries/ppl { };
 
-  ppl0_11 = callPackage ../development/libraries/ppl/0.11.nix { };
-
   /* WARNING: this version is unsuitable for using with a setuid wrapper */
-  ppp = builderDefsPackage (import ../tools/networking/ppp) {
-  };
+  ppp = builderDefsPackage (import ../tools/networking/ppp) { };
 
   pptp = callPackage ../tools/networking/pptp {};
 
@@ -1777,8 +1774,7 @@ let
   gcc46_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc-4.6) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
-        cloog gettext which noSysDirs;
-      ppl = ppl0_11;
+        cloog ppl gettext which noSysDirs;
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -1878,9 +1874,6 @@ let
     libcCross = null;
     binutilsCross = null;
 
-    ppl = ppl0_11;
-    cloogppl = null;
-
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
     profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
@@ -1894,9 +1887,6 @@ let
     cross = null;
     libcCross = null;
     binutilsCross = null;
-
-    ppl = ppl0_11;
-    cloogppl = null;
   }));
 
   gccApple =
@@ -2047,7 +2037,6 @@ let
     gnatboot = gnat45;
     # We can't use the ppl stuff, because we would have
     # libstdc++ problems.
-    cloogppl = null;
     ppl = null;
     cloog = null;
   });
@@ -2547,7 +2536,8 @@ let
   # compatibility issues in 2.47 - at list 2.44.1 is known good
   # for sbcl bootstrap
   clisp_2_44_1 = callPackage ../development/interpreters/clisp/2.44.1.nix {
-    libsigsegv = libsigsegv_25;  };
+    libsigsegv = libsigsegv_25;
+  };
 
   clojure = callPackage ../development/interpreters/clojure { };
 
@@ -3555,17 +3545,9 @@ let
   gmp =
     if stdenv.system == "i686-darwin" then
       # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
-      makeOverridable (import ../development/libraries/gmp/4.3.1.nix) {
-        inherit stdenv fetchurl m4;
-        cxx = false;
-      }
+      callPackage ../development/libraries/gmp/4.3.1.nix { }
     else
-      # We temporarily leave gmp 4 here, waiting for a new ppl/cloog-ppl that
-      # would build well with gmp 5.
-      makeOverridable (import ../development/libraries/gmp/4.nix) {
-        inherit stdenv fetchurl m4;
-        cxx = false;
-      };
+      callPackage ../development/libraries/gmp { };
 
   gmpxx = gmp.override { cxx = true; };
 
