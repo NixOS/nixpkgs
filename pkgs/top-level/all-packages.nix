@@ -4730,6 +4730,8 @@ let
     static = true;
   }));
 
+  zeromq = callPackage ../development/libraries/zeromq {};
+
   zvbi = callPackage ../development/libraries/zvbi {
     pngSupport = true;
   };
