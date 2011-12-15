@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "murmur-hash";
-  version = "0.1.0.4";
-  sha256 = "08nvdv3r5scqpdcivwp0d77dl4vpkgq58rzxv1xpb8r1krqy588d";
+  version = "0.1.0.5";
+  sha256 = "1m7rm57bxkrl4i9fbvmx5m29axyxddrs4ss7plbd19pw3wsvgmr0";
   meta = {
     homepage = "http://github.com/nominolo/murmur-hash";
     description = "MurmurHash2 implementation for Haskell";
