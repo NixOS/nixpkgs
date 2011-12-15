@@ -4936,7 +4936,9 @@ let
     erlang = erlangR13B ;
   };
 
-  couchdb = callPackage ../servers/http/couchdb { };
+  couchdb = callPackage ../servers/http/couchdb {
+    spidermonkey = spidermonkey_185;
+  };
 
   felix = callPackage ../servers/felix { };
 
