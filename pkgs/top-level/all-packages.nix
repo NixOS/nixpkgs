@@ -2419,7 +2419,7 @@ let
   ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
   ocamlPackages_3_12_0 = mkOcamlPackages ocaml_3_12_0 pkgs.ocamlPackages_3_12_0;
 
-  opa = let callPackage = newScope pkgs.ocamlPackages_3_12_0; in callPackage ../development/compilers/opa { }; 
+  opa = let callPackage = newScope pkgs.ocamlPackages_3_12_0; in callPackage ../development/compilers/opa { };
 
   opencxx = callPackage ../development/compilers/opencxx {
     gcc = gcc33;
@@ -7559,7 +7559,7 @@ let
           ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
           ++ lib.optional (getConfig [browserName "enableGoogleTalkPlugin"] false) google_talk_plugin
          );
-      libs = 
+      libs =
         if getConfig [ browserName "enableQuakeLive" ] false
         then with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]
         else [ ];
