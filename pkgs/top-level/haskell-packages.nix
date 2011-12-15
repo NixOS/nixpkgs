@@ -140,7 +140,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5; # 7.2 fails, 7.3 fails
     html         = self.html_1_0_1_2; # 7.2 ok, 7.3 ok
     HUnit        = self.HUnit_1_2_2_3; # 7.2 ok, 7.3 ok
-    network      = self.network_2_3_0_7; # 7.2 ok, 7.3 ok
+    network      = self.network_2_3_0_8; # 7.2 ok, 7.3 ok
     OpenGL       = self.OpenGL_2_2_3_0; # 7.2 ok, 7.3 ok
     parallel     = self.parallel_3_1_0_1; # 7.2 ok, 7.3 ok
     parsec       = self.parsec_3_1_2; # 7.2 ok, 7.3 ok
@@ -917,8 +917,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
-  network_2_3_0_7 = callPackage ../development/libraries/haskell/network/2.3.0.7.nix {};
-  network = self.network_2_3_0_7;
+  network_2_3_0_8 = callPackage ../development/libraries/haskell/network/2.3.0.8.nix {};
+  network = self.network_2_3_0_8;
 
   nixosTypes = callPackage ../development/libraries/haskell/nixos-types {};
 
