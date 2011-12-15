@@ -1,4 +1,4 @@
-args @ {stdenv, fetchurl, erlang, spidermonkey, 
+args @ {stdenv, fetchurl, erlang, spidermonkey,
 	icu, getopt, curl, ...}:
 
 let s = import ./src-for-default.nix; in
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     sed -i -e "s|\`getopt|\`${getopt}/bin/getopt|" $out/bin/couchdb
   '';
- 
-  configureFlags = "--with-erlang=${erlang}/lib/erlang/usr/include"; 
+
+  configureFlags = "--with-erlang=${erlang}/lib/erlang/usr/include --with-js-include=${spidermonkey}/include --with-js-lib=${spidermonkey}/lib";
 
 }

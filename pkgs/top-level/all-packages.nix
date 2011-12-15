@@ -419,7 +419,7 @@ let
   bootchart = callPackage ../tools/system/bootchart { };
 
   btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
-    inherit libuuid zlib acl;
+    inherit libuuid zlib acl attr fetchgit;
   };
 
   catdoc = callPackage ../tools/text/catdoc { };
@@ -2418,7 +2418,7 @@ let
   ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
   ocamlPackages_3_12_0 = mkOcamlPackages ocaml_3_12_0 pkgs.ocamlPackages_3_12_0;
 
-  opa = let callPackage = newScope pkgs.ocamlPackages_3_12_0; in callPackage ../development/compilers/opa { }; 
+  opa = let callPackage = newScope pkgs.ocamlPackages_3_12_0; in callPackage ../development/compilers/opa { };
 
   opencxx = callPackage ../development/compilers/opencxx {
     gcc = gcc33;
@@ -2710,6 +2710,7 @@ let
 
   spidermonkey = callPackage ../development/interpreters/spidermonkey { };
   spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
+  spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
 
   sysPerl = callPackage ../development/interpreters/sys-perl { };
 
@@ -4733,6 +4734,8 @@ let
     static = true;
   }));
 
+  zeromq = callPackage ../development/libraries/zeromq {};
+
   zvbi = callPackage ../development/libraries/zvbi {
     pngSupport = true;
   };
@@ -4936,7 +4939,9 @@ let
     erlang = erlangR13B ;
   };
 
-  couchdb = callPackage ../servers/http/couchdb { };
+  couchdb = callPackage ../servers/http/couchdb {
+    spidermonkey = spidermonkey_185;
+  };
 
   felix = callPackage ../servers/felix { };
 
@@ -7552,6 +7557,10 @@ let
           ++ lib.optional (supportsJDK && getConfig [browserName "jre"] false && jrePlugin ? mozillaPlugin) jrePlugin
           ++ lib.optional (getConfig [browserName "enableGoogleTalkPlugin"] false) google_talk_plugin
          );
+      libs =
+        if getConfig [ browserName "enableQuakeLive" ] false
+        then with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]
+        else [ ];
     };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };

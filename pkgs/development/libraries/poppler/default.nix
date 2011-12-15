@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "poppler-0.16.7";
+  name = "poppler-0.18.2";
 
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
-    sha256 = "1k9by922qkn9pkkf03jjxxqhp4s0gmsgs6c8f4m19m1l5npyid7s";
+    sha256 = "0ljvr6l1lfwbkl0v4vw9dybski7d4sx52iz6k37mkfnj3x36npxi";
   };
 
   propagatedBuildInputs =
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals gtkSupport [ glib gtk ]
     ++ stdenv.lib.optional qt4Support qt4;
 
-  buildInputs = [ pkgconfig cmake ];
+  buildNativeInputs = [ pkgconfig cmake ];
 
   cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
 

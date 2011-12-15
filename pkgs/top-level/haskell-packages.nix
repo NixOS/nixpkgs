@@ -140,7 +140,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5; # 7.2 fails, 7.3 fails
     html         = self.html_1_0_1_2; # 7.2 ok, 7.3 ok
     HUnit        = self.HUnit_1_2_2_3; # 7.2 ok, 7.3 ok
-    network      = self.network_2_3_0_7; # 7.2 ok, 7.3 ok
+    network      = self.network_2_3_0_8; # 7.2 ok, 7.3 ok
     OpenGL       = self.OpenGL_2_2_3_0; # 7.2 ok, 7.3 ok
     parallel     = self.parallel_3_1_0_1; # 7.2 ok, 7.3 ok
     parsec       = self.parsec_3_1_2; # 7.2 ok, 7.3 ok
@@ -149,7 +149,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexCompat  = self.regexCompat_0_93_1; # 7.2 ok, 7.3 ok
     regexPosix   = self.regexPosix_0_94_4; # 7.2 ok, 7.3 ok
     stm          = self.stm_2_2_0_1; # 7.2 ok, 7.3 ok
-    syb          = self.syb_0_3_5; # 7.2 ok, 7.3 ok
+    syb          = self.syb_0_3_6; # 7.2 ok, 7.3 ok
     xhtml        = self.xhtml_3000_2_0_1; # 7.2 ok, 7.3 ok
     zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
     HTTP         = self.HTTP_4000_2_1; # 7.2 ok, 7.3 ok
@@ -433,6 +433,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
+  bson = callPackage ../development/libraries/haskell/bson {};
+
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
 
   bytestringLexing = callPackage ../development/libraries/haskell/bytestring-lexing {};
@@ -477,6 +479,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   colour = callPackage ../development/libraries/haskell/colour {};
 
+  compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
+
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
   controlMonadAttempt = callPackage ../development/libraries/haskell/control-monad-attempt {};
@@ -516,6 +520,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataAccessor = callPackage ../development/libraries/haskell/data-accessor/data-accessor.nix {};
 
   dataAccessorTemplate = callPackage ../development/libraries/haskell/data-accessor/data-accessor-template.nix {};
+
+  dataBinaryIeee754 = callPackage ../development/libraries/haskell/data-binary-ieee754 {};
 
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
 
@@ -864,6 +870,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   MonadCatchIOTransformers = callPackage ../development/libraries/haskell/MonadCatchIO-transformers {};
 
   monadControl_OBSOLETE = callPackage ../development/libraries/haskell/monad-control/0.2.0.3.nix {};
+  monadControl2 = self.monadControl_OBSOLETE;
   monadControl = callPackage ../development/libraries/haskell/monad-control {};
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
@@ -875,6 +882,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   MonadPrompt = callPackage ../development/libraries/haskell/MonadPrompt {};
 
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
+
+  mongoDB = callPackage ../development/libraries/haskell/mongoDB {
+    monadControl = self.monadControl2;
+  };
 
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
 
@@ -906,8 +917,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
-  network_2_3_0_7 = callPackage ../development/libraries/haskell/network/2.3.0.7.nix {};
-  network = self.network_2_3_0_7;
+  network_2_3_0_8 = callPackage ../development/libraries/haskell/network/2.3.0.8.nix {};
+  network = self.network_2_3_0_8;
 
   nixosTypes = callPackage ../development/libraries/haskell/nixos-types {};
 
@@ -1102,9 +1113,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
   syb_0_3   = callPackage ../development/libraries/haskell/syb/0.3.nix {};
-  syb_0_3_5 = callPackage ../development/libraries/haskell/syb/0.3.5.nix {};
-  syb02     = self.syb_0_2_2;
-  syb03     = self.syb_0_3;
+  syb_0_3_6 = callPackage ../development/libraries/haskell/syb/0.3.6.nix {};
   syb       = null; # by default, we assume that syb ships with GHC, which is
                     # true for the older GHC versions
 
@@ -1349,6 +1358,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yst = callPackage ../development/libraries/haskell/yst {};
 
+  zeromqHaskell = callPackage ../development/libraries/haskell/zeromq-haskell {};
+
   zipArchive = callPackage ../development/libraries/haskell/zip-archive {};
 
   zipper = callPackage ../development/libraries/haskell/zipper {
@@ -1385,7 +1396,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   idris = callPackage ../development/compilers/idris {};
 
   pakcs = callPackage ../development/compilers/pakcs {
-    syb = self.syb02;
+    syb = self.syb_0_2_2;
   };
 
   # Development tools.

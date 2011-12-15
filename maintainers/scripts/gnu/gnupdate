@@ -1065,7 +1065,10 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
 
     (case selection
       ((stdenv)
-       gnu)
+       (filter (lambda (p)
+                 (member (package-source-output-path p)
+                         (force stdenv)))
+               gnu))
       ((non-stdenv)
        (filter (lambda (p)
                  (not (member (package-source-output-path p)
