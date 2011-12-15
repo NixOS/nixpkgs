@@ -1,7 +1,7 @@
 { stdenv, fetchurl, file, mono, gtksharp, gtksourceviewsharp
 , gtkmozembedsharp, monodoc
 , perl, perlXMLParser, pkgconfig
-, glib, gtk, GConf, gnomevfs, libbonobo, libglade, libgnome
+, glib, gtk, GConf, gnome_vfs, libbonobo, libglade, libgnome
 , mozilla
 }:
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   
   buildInputs = [
     file mono gtksharp gtksourceviewsharp perl perlXMLParser pkgconfig
-    glib gtk GConf gnomevfs libbonobo libglade libgnome
+    glib gtk GConf gnome_vfs libbonobo libglade libgnome
     gtkmozembedsharp monodoc
   ];
   

@@ -3,11 +3,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "warzone2100";
-  version = "2.3.7";
+  version = "2.3.9";
   name = "${pname}-${version}";
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "157v3jqaj0l910y8bcr9zpl0inx8g2942nm8zdnnn16gklf9mb26";
+    sha256 = "1nvs4slnl75b64pf9gwcpbra56jzcbxyv83fis5pki69aavkp14y";
   };
   buildInputs = [ bison flex gettext pkgconfig SDL libpng libtheora openal
                   popt physfs mesa quesoglc zip unzip

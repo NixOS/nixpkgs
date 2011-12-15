@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, hotplugSupport ? false, libusb ? null
+{ stdenv, fetchurl, hotplugSupport ? true, libusb ? null
 , gt68xxFirmware ? null }:
 let
   firmware = gt68xxFirmware {inherit fetchurl;};
 in
-assert hotplugSupport -> stdenv.system == "i686-linux";
+assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
 
 stdenv.mkDerivation {
   name = "sane-backends-1.0.21";
@@ -20,6 +20,7 @@ stdenv.mkDerivation {
   postInstall = ''
     if test "$udevSupport" = "1"; then
       ensureDir $out/etc/udev/rules.d/
+      ./tools/sane-desc -m udev > $out/etc/udev/rules.d/60-libsane.rules || \
       cp tools/udev/libsane.rules $out/etc/udev/rules.d/60-libsane.rules
     fi
   '';

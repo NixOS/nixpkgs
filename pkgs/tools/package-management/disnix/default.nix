@@ -1,10 +1,10 @@
 {stdenv, fetchurl, pkgconfig, dbus_glib, libxml2, libxslt, getopt, nixUnstable, gettext, libiconv}:
 
 stdenv.mkDerivation {
-  name = "disnix-0.3pre27244";
+  name = "disnix-0.3pre29816";
   src = fetchurl {
-    url = http://hydra.nixos.org/build/1083290/download/4/disnix-0.3pre27244.tar.gz;
-    sha256 = "1x7y34mxs26k019y9y8fsnzdk7wmjqfmybw99qgqqxy5kblvlzns";
+    url = http://hydra.nixos.org/build/1453079/download/4/disnix-0.3pre29816.tar.gz;
+    sha256 = "13gi0zs0a8pvgmgh3h431ydran3qf3px5m3d6vddd9b225kbkgwz";
   };
   buildInputs = [ pkgconfig dbus_glib libxml2 libxslt getopt nixUnstable ]
                 ++ stdenv.lib.optional (!stdenv.isLinux) libiconv

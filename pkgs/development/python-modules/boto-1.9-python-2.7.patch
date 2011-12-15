@@ -1,0 +1,19 @@
+Fix Boto 1.9 on Python 2.7.
+
+https://github.com/boto/boto/commit/6760075073c34d6dddb7e13b80dfa8d09f0f4f79
+
+diff --git a/boto/connection.py b/boto/connection.py
+index c5779e2..71942f1 100644
+--- a/boto/connection.py
++++ b/boto/connection.py
+@@ -252,8 +252,9 @@ class AWSAuthConnection(object):
+             # versions, it would append ":443" to the hostname sent
+             # in the Host header and so we needed to make sure we
+             # did the same when calculating the V2 signature.  In 2.6
++            # (and higher!)
+             # it no longer does that.  Hence, this kludge.
+-            if sys.version[:3] == "2.6" and port == 443:
++            if sys.version[:3] in ('2.6', '2.7') and port == 443:
+                 signature_host = self.host
+             else:
+                 signature_host = '%s:%d' % (self.host, port)

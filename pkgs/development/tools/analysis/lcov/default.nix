@@ -42,5 +42,6 @@ stdenv.mkDerivation rec {
     license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.all;
   };
 }

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   # details.
   # There are many test failures on `i386-pc-solaris2.11'.
   doCheck = (stdenv.system != "i686-cygwin"
-             && stdenv.system != "i386-sunos");
+             && stdenv.system != "i686-solaris");
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the
   # "fixed" path in generated files!

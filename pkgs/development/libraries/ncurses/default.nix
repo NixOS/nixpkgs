@@ -8,7 +8,7 @@ let
      <http://mail.python.org/pipermail/python-bugs-list/2006-September/035362.html>,
      but this is left as an exercise to the reader.
      So disable them for now.  */
-  cxx = stdenv.system != "i386-sunos";
+  cxx = stdenv.system != "i686-solaris";
 in
 stdenv.mkDerivation (rec {
   name = "ncurses-5.7";

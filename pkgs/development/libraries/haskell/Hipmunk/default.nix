@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Hipmunk";
-  version = "5.2.0.3";
-  sha256 = "1as00372hz0ngy6pc5l0w7qgw5flcyag07zk3dxkbj5kv24xk49m";
+  version = "5.2.0.6";
+  sha256 = "16yh7v6v05nksspcfz8h054piyhmrfbpaada36562rjxcywyfnfj";
   buildDepends = [ StateVar transformers ];
   noHaddock = true;
   meta = {

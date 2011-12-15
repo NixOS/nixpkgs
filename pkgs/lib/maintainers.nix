@@ -15,6 +15,7 @@
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
+  mornfall = "Petr Ročkai <me@mornfall.net>";
   neznalek = "Vladimír Čunát <vcunat@gmail.com>";
   phreedom = "Evgeny Egorochkin <phreedom.stdin@gmail.com>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
@@ -27,7 +28,7 @@
   simons = "Peter Simons <simons@cryp.to>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
-  viric = "Lluís Batlle i Rossell <viriketo@gmail.com>";
+  viric = "Lluís Batlle i Rossell <viric@viric.name>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   z77z = "Marco Maggesi <maggesi@math.unifi.it>";
 }

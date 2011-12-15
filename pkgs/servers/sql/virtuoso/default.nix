@@ -1,24 +1,14 @@
 { stdenv, fetchurl, libxml2, openssl, readline, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "virtuoso-opensource-6.1.3";
+  name = "virtuoso-opensource-6.1.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/virtuoso/${name}.tar.gz";
-    sha256 = "0rj629qjsibpllazngbhzhsh90x6nidpn292qz1xdvirwvb2h3s2";
+    sha256 = "0khm81hvjh6p4l0ca4zj00fk41ixjv998k6y9g7mvq1338hr4gqm";
   };
 
   buildInputs = [ libxml2 openssl readline gawk ];
-
-  patchFlags = "-p0";
-
-  patches =
-    [ (fetchurl {
-        url = "http://bugsfiles.kde.org/attachment.cgi?id=63510";
-        name = "virtuoso-charset-fix.diff";
-        sha256 = "09kxjhsy3rbys0bcxpmgga4sa6qjyy79dyl4n8b0gp1hnzjskvkz";
-      })
-    ];
 
   CPP = "${stdenv.gcc}/bin/gcc -E";
 
@@ -32,6 +22,7 @@ stdenv.mkDerivation rec {
     echo Moving documentation
     mkdir -pv $out/share/doc
     mv -v $out/share/virtuoso/doc $out/share/doc/${name}
+    echo Removing jars and empty directories
     find $out -name "*.a" -delete -o -name "*.jar" -delete -o -type d -empty -delete
     '';
   

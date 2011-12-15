@@ -1,10 +1,10 @@
-{ cabal, bytestringTrie, network, time }:
+{ cabal, attoparsec, network, time }:
 
 cabal.mkDerivation (self: {
   pname = "hp2any-core";
-  version = "0.10.1";
-  sha256 = "1qblsvlj4x22ml3k5mlr28r5xk9rmi7lpipd369dbvdzm0rflf03";
-  buildDepends = [ bytestringTrie network time ];
+  version = "0.11.1";
+  sha256 = "146bigmch7dawyyakj0w55p0jdpnxkj8q5izjsswqqk0pdxia546";
+  buildDepends = [ attoparsec network time ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Hp2any";
     description = "Heap profiling helper library";

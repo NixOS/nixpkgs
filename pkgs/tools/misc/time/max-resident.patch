@@ -1,0 +1,16 @@
+Fix the "max resident" size reported by ‘time’ being off by a factor of 4. 
+
+From http://lists.gnu.org/archive/html/help-gnu-utils/2010-10/msg00002.html
+
+diff -ru -x '*~' time-1.7-orig/time.c time-1.7/time.c
+--- time-1.7-orig/time.c	1996-06-13 15:38:21.000000000 -0400
++++ time-1.7/time.c	2011-10-31 10:40:27.000000000 -0400
+@@ -392,7 +392,7 @@
+ 		       ptok ((UL) resp->ru.ru_ixrss) / MSEC_TO_TICKS (v));
+ 	      break;
+ 	    case 'M':		/* Maximum resident set size.  */
+-	      fprintf (fp, "%lu", ptok ((UL) resp->ru.ru_maxrss));
++              fprintf (fp, "%lu", (UL) resp->ru.ru_maxrss);
+ 	      break;
+ 	    case 'O':		/* Outputs.  */
+ 	      fprintf (fp, "%ld", resp->ru.ru_oublock);

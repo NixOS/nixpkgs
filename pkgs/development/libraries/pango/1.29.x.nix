@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl_gnome {
     project = "pango";
-    major = "1"; minor = "29"; patchlevel = "3"; extension = "xz";
-    sha256 = "0vp88j3ghngkkc4dpya443qng0bb1g86g54bcwf4lf3zmk6r1nmh";
+    major = "1"; minor = "29"; patchlevel = "4"; extension = "xz";
+    sha256 = "0zqjq6ccv6mbah74rcvb03ksq1jwan21z37mdmqa56307sax3s3s";
   };
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin gettext;

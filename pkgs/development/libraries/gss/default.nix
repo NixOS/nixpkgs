@@ -1,11 +1,11 @@
 { fetchurl, stdenv, shishi }:
 
 stdenv.mkDerivation rec {
-  name = "gss-1.0.1";
+  name = "gss-1.0.2";
 
   src = fetchurl {
     url = "mirror://gnu/gss/${name}.tar.gz";
-    sha256 = "05g9p45gmd0332ly19g13rbi0wdx447imw42f22482rdr8vpy9m0";
+    sha256 = "1qa8lbkzi6ilfggx7mchfzjnchvhwi68rck3jf9j4425ncz7zsd9";
   };
 
   buildInputs = [ shishi ];

@@ -1,0 +1,24 @@
+diff --git a/src/mgr/curlftpt.cpp b/src/mgr/curlftpt.cpp
+index 7d2fd3c..046291e 100644
+--- a/src/mgr/curlftpt.cpp
++++ b/src/mgr/curlftpt.cpp
+@@ -26,7 +26,6 @@
+ #include <fcntl.h>
+ 
+ #include <curl/curl.h>
+-#include <curl/types.h>
+ #include <curl/easy.h>
+ 
+ #include <swlog.h>
+diff --git a/src/mgr/curlhttpt.cpp b/src/mgr/curlhttpt.cpp
+index b736050..229d4dd 100644
+--- a/src/mgr/curlhttpt.cpp
++++ b/src/mgr/curlhttpt.cpp
+@@ -25,7 +25,6 @@
+ #include <cctype>
+ 
+ #include <curl/curl.h>
+-#include <curl/types.h>
+ #include <curl/easy.h>
+ 
+ #include <swlog.h>

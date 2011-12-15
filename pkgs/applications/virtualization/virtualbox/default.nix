@@ -4,14 +4,14 @@
 , xorriso, makeself, perl, jdk
 }:
 
-let version = "4.1.0"; in
+let version = "4.1.6"; in
 
 stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "1pi066xnjgr3fl42i1vc1pbwic9l4m1k6mzs4ip41fz99w59xfzp";
+    sha256 = "0zmbq0h9g4lamzmxqg281nr9pp88606dxh2dsw6vy1m86g5kfham";
   };
 
   buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL hal libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk ];

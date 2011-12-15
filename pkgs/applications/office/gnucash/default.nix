@@ -9,14 +9,14 @@
  */
 
 let
-  name = "gnucash-2.4.7";
+  name = "gnucash-2.4.8";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "eeb3b17f9081a544f8705db735df88ab3f468642a1d01552ea4e36bcb5b0730e";
+    sha256 = "06gfgw4sq1b8c9qzinyd3wmcy3i0jyprngr259l0aldv8rvix8aa";
   };
 
   buildInputs = [

@@ -17,7 +17,11 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["fixCurlIncludes" "doConfigure" "doMakeInstall"];
+
+  fixCurlIncludes = a.fullDepEntry ''
+    sed -e '/curl.types.h/d' -i *.{c,h,hpp,cpp}
+  '' ["minInit" "doUnpack"];
       
   name = "gosmore-r21657";
   meta = {

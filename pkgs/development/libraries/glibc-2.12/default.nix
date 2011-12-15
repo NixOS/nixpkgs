@@ -1,8 +1,10 @@
 { stdenv, fetchurl, kernelHeaders
-, machHeaders ? null, hurdHeaders ? null, mig ? null, fetchgit ? null
+, machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
+, mig ? null, fetchgit ? null
 , installLocales ? true
 , profilingLibraries ? false
 , gccCross ? null
+, debugSymbols ? false
 }:
 
 assert stdenv.gcc.gcc != null;
@@ -12,7 +14,7 @@ let
   cross = if gccCross != null then gccCross.target else null;
 in
   build cross ({
-    name = "glibc";
+    name = "glibc${if debugSymbols then "-debug" else ""}";
 
     inherit fetchurl stdenv kernelHeaders installLocales profilingLibraries
       gccCross;
@@ -38,11 +40,23 @@ in
 
   //
 
+  (if debugSymbols
+   then {
+     # Build with debugging symbols, but leave optimizations on and don't
+     # attempt to keep the build tree.
+     dontStrip = true;
+     dontCrossStrip = true;
+     NIX_STRIP_DEBUG = 0;
+   }
+   else {})
+
+  //
+
   (if hurdHeaders != null
    then rec {
-     inherit machHeaders hurdHeaders mig fetchgit;
+     inherit machHeaders hurdHeaders libpthreadHeaders mig fetchgit;
 
-     propagatedBuildInputs = [ machHeaders hurdHeaders ];
+     propagatedBuildInputs = [ machHeaders hurdHeaders libpthreadHeaders ];
 
      passthru = {
        # When building GCC itself `propagatedBuildInputs' above is not

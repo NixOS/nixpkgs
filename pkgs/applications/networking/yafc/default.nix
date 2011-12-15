@@ -16,5 +16,6 @@ stdenv.mkDerivation {
   meta = {
     description = "ftp/sftp client with readline, autocompletion and bookmarks";
     homepage = http://yafc.sourceforge.net;
+    license = "GPLv2+";
   };
 }

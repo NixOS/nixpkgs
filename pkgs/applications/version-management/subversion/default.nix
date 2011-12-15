@@ -19,13 +19,13 @@ assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.6.17";
+  version = "1.7.2";
 
   name = "subversion-${version}";
 
   src = fetchurl {
-    url = "http://subversion.tigris.org/downloads/${name}.tar.bz2";
-    sha1 = "6e3ed7c87d98fdf5f0a999050ab601dcec6155a1";
+    url = "mirror://apache/subversion//${name}.tar.bz2";
+    sha1 = "8c0824aeb7f42da1ff4f7cd296877af7f59812bb";
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]
@@ -48,9 +48,6 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ensureDir $out/share/emacs/site-lisp
-    cp contrib/client-side/emacs/[dp]svn*.el $out/share/emacs/site-lisp/
-
     if test -n "$pythonBindings"; then
         make swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn
         make install-swig-py swig_pydir=$(toPythonPath $out)/libsvn swig_pydir_extra=$(toPythonPath $out)/svn

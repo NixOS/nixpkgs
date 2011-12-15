@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, eina, evas, libX11, libXext }:
 stdenv.mkDerivation rec {
   name = "ecore-${version}";
-  version = "1.0.1";
+  version = "1.1.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.gz";
-    sha256 = "1vi03zxnsdnrjv1rh5r3v0si0b20ikrfb8hf5374i2sqvi1g65j0";
+    sha256 = "12iqhrklp3k5lvbxf7lhqd53wpl1csvricfkzlcv2nny4y3r31m0";
   };
   buildInputs = [ pkgconfig eina evas ];
   propagatedBuildInputs = [ libX11 libXext ];

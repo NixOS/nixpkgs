@@ -1,10 +1,10 @@
-{ cabal, GLUT, OpenGL }:
+{ cabal, bmp, GLUT, OpenGL }:
 
 cabal.mkDerivation (self: {
   pname = "gloss";
-  version = "1.3.4.1";
-  sha256 = "0cyk75b495vq59pnfqy6ny5kb0i0zq2hwfb1q69vj0cfyiqiwjsb";
-  buildDepends = [ GLUT OpenGL ];
+  version = "1.5.2.1";
+  sha256 = "1mwk9gnkbjr76f9g79ixxlwzpsvmhflp5c8a0584fyypjg2r33n3";
+  buildDepends = [ bmp GLUT OpenGL ];
   meta = {
     homepage = "http://gloss.ouroborus.net";
     description = "Painless 2D vector graphics, animations and simulations";

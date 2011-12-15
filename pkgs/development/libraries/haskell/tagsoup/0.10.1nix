@@ -1,0 +1,16 @@
+{ cabal, mtl, network }:
+
+cabal.mkDerivation (self: {
+  pname = "tagsoup";
+  version = "0.10.1";
+  sha256 = "0bssfj5r790yj33q23i0lbj83xahzd9rf4jhqs21vgrpn9fqsynl";
+  isLibrary = true;
+  isExecutable = true;
+  buildDepends = [ mtl network ];
+  meta = {
+    homepage = "http://community.haskell.org/~ndm/tagsoup/";
+    description = "Parsing and extracting information from (possibly malformed) HTML/XML documents";
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+  };
+})

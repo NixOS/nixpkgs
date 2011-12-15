@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, ecore, eina, evas, dbus_libs }:
+{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, expat, ecore, eina, evas
+, dbus_libs }:
 stdenv.mkDerivation rec {
   name = "e_dbus-${version}";
-  version = "1.0.1";
+  version = "1.1.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.gz";
-    sha256 = "1ifkijy4ap2mlqw2nd1dlvzlppyi7bnp15bxiy40nhdly8vhpbdl";
+    sha256 = "10y68f023jjq6dinjc0brpr41acnd7clxgb0q1j2i9isalx1473z";
   };
-  buildInputs = [ pkgconfig ecore eina evas ];
+  buildInputs = [ pkgconfig zlib libjpeg expat ecore eina evas ];
   propagatedBuildInputs = [ dbus_libs ];
   configureFlags = ''
     --disable-edbus-test

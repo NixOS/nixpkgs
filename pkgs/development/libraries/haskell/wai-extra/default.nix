@@ -1,15 +1,16 @@
 { cabal, blazeBuilder, blazeBuilderEnumerator, caseInsensitive
-, enumerator, httpTypes, network, text, time, transformers, wai
-, zlibBindings
+, dataDefault, enumerator, httpTypes, network, text, time
+, transformers, wai, zlibBindings, zlibEnum
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-extra";
-  version = "0.4.3";
-  sha256 = "07m86khgfyyadjgq8yp9kj3ljlpkvf209b1cfz2x7n5wdq8k2wm9";
+  version = "0.4.5.2";
+  sha256 = "05gq22il1jnvw5rcqr6gassxj29f8l4536zm6bpgk1kff8cxa3g1";
   buildDepends = [
-    blazeBuilder blazeBuilderEnumerator caseInsensitive enumerator
-    httpTypes network text time transformers wai zlibBindings
+    blazeBuilder blazeBuilderEnumerator caseInsensitive dataDefault
+    enumerator httpTypes network text time transformers wai
+    zlibBindings zlibEnum
   ];
   meta = {
     homepage = "http://github.com/yesodweb/wai";

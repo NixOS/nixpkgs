@@ -1,9 +1,10 @@
 { stdenv, fetchurl, pkgconfig, eina, eet, evas, ecore, edje, efreet, e_dbus, embryo }:
 stdenv.mkDerivation rec {
-  name = "enlightenment-0.16.999.55225";
+  name = "enlightenment-${version}";
+  version = "0.16.999.65643";
   src = fetchurl {
-    url = "http://download.enlightenment.org/snapshots/2010-12-03/${name}.tar.gz";
-    sha256 = "1cv701fidp9mx3g5m9klmzsp0fj149rb133v1w76rzms3a0wljl1";
+    url = "http://download.enlightenment.org/snapshots/2011-11-28/${name}.tar.gz";
+    sha256 = "1bb577gbccb1wrifrhv9pzm451zhig2p29mwz55b187ls31p36kz";
   };
   buildInputs = [ pkgconfig eina eet ecore evas edje efreet e_dbus embryo ];
   configureFlags = ''

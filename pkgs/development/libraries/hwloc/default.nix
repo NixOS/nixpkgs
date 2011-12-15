@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses }:
+{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.2";
+  name = "hwloc-1.3";
 
   src = fetchurl {
-    url = "http://www.open-mpi.org/software/hwloc/v1.2/downloads/${name}.tar.bz2";
-    sha256 = "04mrlmcp596imzbhlflb53ddld705k9617rzpprnhp3643krn0dw";
+    url = "http://www.open-mpi.org/software/hwloc/v1.3/downloads/${name}.tar.bz2";
+    sha256 = "10zlz0hng7scjx1xn8jflx3gbga5djbhxhj94k5kszrivc8zh8xy";
   };
 
-  buildInputs = [ pkgconfig cairo expat ncurses ];
+  # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
+  buildInputs = [ pkgconfig cairo expat ncurses libX11 ];
 
   doCheck = true;
 

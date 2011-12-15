@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [openssl curl];
 
+  patches = [ ./fix-build-with-latest-curl.patch ];
+
   postInstall = ''
     sed -e  "2i export PATH=\"$out/bin:\$PATH\"" <"frontends/snipe" >"$out/bin/snipe"
     chmod 555 "$out/bin/snipe"

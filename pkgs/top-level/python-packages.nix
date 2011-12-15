@@ -156,6 +156,8 @@ let pythonPackages = python.modules // rec {
       sha1 = "00a033b0a593c3ca82927867950f73d88b831155";
     };
 
+    patches = [ ../development/python-modules/boto-1.9-python-2.7.patch ];
+
     meta = {
       homepage = http://code.google.com/p/boto/;
 
@@ -960,12 +962,12 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  nose = buildPythonPackage {
+  nose = buildPythonPackage rec {
     name = "nose-1.0.0";
 
     src = fetchurl {
-      url = http://somethingaboutorange.com/mrl/projects/nose/nose-1.0.0.tar.gz;
-      sha256 = "0qm6q232h5r071gwfkiszkmfqc60k7abl15bk495lcdkk62m91db";
+      url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
+      md5 = "47a4784c817afa6ef11a505b574584ed";
     };
 
     # Fails with ‘This platform lacks a functioning sem_open
@@ -1358,6 +1360,17 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  ldap = buildPythonPackage rec {
+    name = "python-ldap-2.4.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
+      sha256 = "17aysa9b4zjw00ikjirf4m37xbp2ifj1g0zjs14xzqqib3nh1yw8";
+    };
+
+    NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
+    propagatedBuildInputs = [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
+  };
 
   pylint = buildPythonPackage rec {
     name = "pylint-0.23.0";
@@ -1963,6 +1976,22 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  virtualenv = buildPythonPackage rec {
+    name = "virtualenv-1.6.4";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
+      md5 = "1072b66d53c24e019a8f1304ac9d9fc5";
+    };
+
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "a tool to create isolated Python environments";
+      homepage = http://www.virtualenv.org;
+      license = licenses.mit;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
 
   vnc2flv = buildPythonPackage rec {
     name = "vnc2flv-20100207";
@@ -2024,19 +2053,11 @@ let pythonPackages = python.modules // rec {
   wxPython = wxPython28;
 
 
-  wxPython26 = import ../development/python-modules/wxPython/2.6.nix {
-    inherit (pkgs) stdenv fetchurl pkgconfig;
-    inherit pythonPackages;
-    wxGTK = pkgs.wxGTK26;
-  };
-
-
   wxPython28 = import ../development/python-modules/wxPython/2.8.nix {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit pythonPackages;
     wxGTK = pkgs.wxGTK28;
   };
-
 
   zbase32 = buildPythonPackage (rec {
     name = "zbase32-1.1.2";

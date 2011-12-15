@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, lua, eina, eet, evas, ecore, embryo }:
+{ stdenv, fetchurl, pkgconfig, lua, expat, zlib, libjpeg, eina, eet, evas
+, ecore, embryo }:
 stdenv.mkDerivation rec {
   name = "edje-${version}";
-  version = "1.0.1";
+  version = "1.1.0";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.gz";
-    sha256 = "0z7gjj4ccjr36ba763ijmjkya58fc173vpdw1m298zwhy8n4164j";
+    sha256 = "0fjn4psl70hkfbjmczk06if8yxarg67w5hp2i1vq49kfkpyn2cx7";
   };
-  buildInputs = [ pkgconfig lua eina eet evas ecore embryo ];
+  buildInputs = [ pkgconfig expat zlib libjpeg lua eina eet evas ecore embryo ];
   meta = {
     description = "Enlightenment's abstract GUI layout and animation object library";
     longDescription = ''

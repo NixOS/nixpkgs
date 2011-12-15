@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, openssl, zlib, libjpeg, xorg }:
+{ stdenv, fetchurl, openssl, zlib, libjpeg, xorg, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "x11vnc-0.9.12";
+  name = "x11vnc-0.9.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/libvncserver/${name}.tar.gz";
-    sha256 = "60a7cceee2c9a5f1c854340b2bae13f975ac55906237042f81f795b28a154a79";
+    sha256 = "0fzib5xb1vbs8kdprr4z94v0fshj2c5hhaz69llaarwnc8p9z0pn";
   };
 
   buildInputs =
@@ -18,6 +18,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     configureFlags="--mandir=$out/share/man"
+
+    substituteInPlace x11vnc/unixpw.c \
+        --replace '"/bin/su"' '"/var/setuid-wrappers/su"' \
+        --replace '"/bin/true"' '"${coreutils}/bin/true"'
+        
+    substituteInPlace x11vnc/ssltools.h \
+        --replace xdpyinfo ${xorg.xdpyinfo}/bin/xdpyinfo
   '';
 
   meta = {

@@ -5,13 +5,14 @@ cross :
 
 { name, fetchurl, stdenv, installLocales ? false
 , gccCross ? null, kernelHeaders ? null
-, machHeaders ? null, hurdHeaders ? null, mig ? null, fetchgit ? null
+, machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
+, mig ? null, fetchgit ? null
 , profilingLibraries ? false, meta
 , preConfigure ? "", ... }@args :
 
 let
   # For GNU/Hurd, see below.
-  version = if hurdHeaders != null then "20110623" else "2.12.2";
+  version = if hurdHeaders != null then "20111025" else "2.12.2";
 
   needsPortsNative = stdenv.isMips || stdenv.isArm;
   needsPortsCross = cross.arch == "mips" || cross.arch == "arm";
@@ -31,6 +32,7 @@ assert (cross != null) -> (gccCross != null);
 
 assert (mig != null) -> (machHeaders != null);
 assert (machHeaders != null) -> (hurdHeaders != null);
+assert (hurdHeaders != null) -> (libpthreadHeaders != null);
 assert (hurdHeaders != null) -> (fetchgit != null);
 
 stdenv.mkDerivation ({
@@ -141,8 +143,8 @@ stdenv.mkDerivation ({
       # maintained by the Hurd folks, `tschwinge/Roger_Whittaker' branch.
       # See <http://www.gnu.org/software/hurd/source_repositories/glibc.html>.
       url = "git://git.sv.gnu.org/hurd/glibc.git";
-      sha256 = "39ea53f318376cbd33e06ec23f4a393fc0801ea3aa87286b30943aa7ef7604cd";
-      rev = "77a94de8d3490e73a71efc0b981356d5acb7a28a";
+      sha256 = "3fb3dd7030a4b6d3e144fa94c32a0c4f46f17f94e2dfbc6bef41cfc3198725ca";
+      rev = "d740cf9d201dc9ecb0335b0a585828dea9cce793";
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
@@ -198,11 +200,15 @@ stdenv.mkDerivation ({
  then {
    # Work around the fact that the configure snippet that looks for
    # <hurd/version.h> does not honor `--with-headers=$sysheaders' and that
-   # glibc expects both Mach and Hurd headers to be in the same place.
-   CPATH = "${hurdHeaders}/include:${machHeaders}/include";
+   # glibc expects Mach, Hurd, and pthread headers to be in the same place.
+   CPATH = "${hurdHeaders}/include:${machHeaders}/include:${libpthreadHeaders}/include";
 
    # `fetchgit' is a function and thus should not be passed to the
    # `derivation' primitive.
    fetchgit = null;
+
+   # Install NSS stuff in the right place.
+   # XXX: This will be needed for all new glibcs and isn't Hurd-specific.
+   makeFlags = ''vardbdir="$out/var/db"'';
  }
  else { }))

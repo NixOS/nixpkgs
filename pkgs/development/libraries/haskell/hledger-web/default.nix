@@ -1,19 +1,19 @@
-{ cabal, aesonNative, blazeHtml, clientsession, cmdargs, dataObject
-, dataObjectYaml, failure, fileEmbed, hamlet, hledger, hledgerLib
-, HUnit, ioStorage, parsec, regexpr, safe, shakespeareCss
-, shakespeareJs, shakespeareText, text, time, transformers, wai
-, waiExtra, warp, yesod, yesodCore, yesodForm, yesodJson
-, yesodStatic
+{ cabal, aesonNative, blazeHtml, cabalFileTh, clientsession
+, cmdargs, dataObject, dataObjectYaml, failure, fileEmbed, hamlet
+, hledger, hledgerLib, HUnit, ioStorage, parsec, regexpr, safe
+, shakespeareCss, shakespeareJs, shakespeareText, text, time
+, transformers, wai, waiExtra, warp, yesod, yesodCore, yesodForm
+, yesodJson, yesodStatic
 }:
 
 cabal.mkDerivation (self: {
   pname = "hledger-web";
-  version = "0.16";
-  sha256 = "1564w1619s08q5c1zx8i8z488zis13a8d6n4cnyha9ci95p1c89j";
+  version = "0.16.5";
+  sha256 = "0gqhmyl62jkz156gypzxwj46xrh5as3wrvkwrg04wfmpqrac5n06";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aesonNative blazeHtml clientsession cmdargs dataObject
+    aesonNative blazeHtml cabalFileTh clientsession cmdargs dataObject
     dataObjectYaml failure fileEmbed hamlet hledger hledgerLib HUnit
     ioStorage parsec regexpr safe shakespeareCss shakespeareJs
     shakespeareText text time transformers wai waiExtra warp yesod

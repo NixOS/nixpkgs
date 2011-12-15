@@ -10,11 +10,11 @@ assert sslSupport -> openssl != null;
 assert scpSupport -> libssh2 != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.21.0";
+  name = "curl-7.22.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "1fl7sh38i746b57aqjqjaykwq4rhm2p1phzrgnc2h6wm2k2b95gy";
+    sha256 = "04ji7v06f33y6plvikwj283ad6fxxxjpm7as9xw25c924f3dm85x";
   };
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -58,17 +58,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     substituteInPlace configure --replace /usr/bin /no-such-path
   '';
-
-  patches = [
-    /* Fixes broken retry support when a timeout is used.  The
-       select() system call (used to wait for the connection to come
-       up) can return slightly before the computed deadline (a few
-       milliseconds).  Curl will think the problem is something else,
-       proceed with the next IP address (which usually doesn't exist),
-       then barf with a CURLE_COULDNT_CONNECT error, which is
-       considered non-transient so it won't retry. */
-    ./connect-timeout.patch
-  ];
 
   meta = {
     description = "A command line tool for transferring files with URL syntax";

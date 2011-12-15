@@ -1,10 +1,13 @@
-{system, allPackages ? import ../../..}:
+{ system, allPackages ? import ../../.. }:
 
 rec {
 
-  shell = "/bin/bash";
+  shell = 
+    if system == "i686-freebsd" || system == "x86_64-freebsd" then "/usr/local/bin/bash"
+    else "/bin/bash";
 
-  path = (if system == "i386-sunos" then [ "/usr/gnu" ] else []) ++
+  path = 
+    (if system == "i686-solaris" then [ "/usr/gnu" ] else []) ++
     (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
     ["/" "/usr" "/usr/local"];
 
@@ -88,6 +91,7 @@ rec {
       preHook =
         if system == "i686-darwin" || system == "powerpc-darwin" || system == "x86_64-darwin" then prehookDarwin else
         if system == "i686-freebsd" then prehookFreeBSD else
+        if system == "x86_64-freebsd" then prehookFreeBSD else
         if system == "i686-openbsd" then prehookOpenBSD else
 	if system == "i686-netbsd" then prehookNetBSD else
         prehookBase;
@@ -110,7 +114,7 @@ rec {
     name = "gcc-native";
     nativeTools = true;
     nativeLibc = true;
-    nativePrefix = if system == "i386-sunos" then "/usr/gnu" else "/usr";
+    nativePrefix = if system == "i686-solaris" then "/usr/gnu" else "/usr";
     stdenv = stdenvBoot0;
   };
 

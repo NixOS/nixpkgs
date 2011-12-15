@@ -1,10 +1,10 @@
 {stdenv, fetchurl, perl}:
 
-stdenv.mkDerivation {
-  name = "libical-0.43";
+stdenv.mkDerivation rec {
+  name = "libical-0.47";
   src = fetchurl {
-    url = http://superb-east.dl.sourceforge.net/sourceforge/freeassociation/libical-0.43.tar.gz;
-    md5 = "5f0a1feb60894d0be537aefea5647474";
+    url = "mirror://sourceforge/freeassociation/${name}.tar.gz";
+    sha256 = "1218vaaks9lvx31mrc8212kyngw2k68xm0914vrd77ixn55vnk5g";
   };
-  buildInputs = [ perl ];
+  buildNativeInputs = [ perl ];
 }

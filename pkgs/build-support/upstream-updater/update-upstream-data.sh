@@ -36,6 +36,42 @@ baseName="$(getAttr baseName 'unnamed-package')"
 commonPrefetchVars=" version name hash"
 
 prefetchClause=""
+[ fetchSFdirs = "$method" ] && {
+    if [ -z "$forcedUrl" ]; then 
+	freshUrl="$("$own_dir"/urls-from-page.sh "$(getAttr downloadPage)" |
+          eval "egrep '$(getAttr sourceRegexp '[-][0-9.]+/$')'" | 
+	  eval "egrep -v '$(getAttr blacklistRegexp '^$')'" |
+	  eval "$(getAttr choiceCommand 'head -n 1')" |
+	  eval "$(getAttr versionToFileCommand "sed -re 's@/([^/]*-[0-9.]+)/@/\1/\1$(getAttr fileSuffix .tar.gz)@'")" 
+	)"
+
+	if ! egrep ':' <<< "$freshUrl" ; then 
+		freshUrl="$(dirname "$(getAttr downloadPage).")/$freshUrl"
+	fi
+
+	echo "Found download link: $freshUrl" >&2
+    else
+        freshUrl="$forcedUrl"
+    fi
+
+    freshUrl="$(echo "$freshUrl" | sed -re "$skipRedirectSF")"
+    echo "Sourceforge-corrected URL: $freshUrl" >&2
+    
+    version="$(echo "$freshUrl" | 
+      sed -re "$(getAttr versionExtractorSedScript "$extractVersionSF")")"
+    baseName="$(getAttr baseName "$(echo "$freshUrl" | sed -re 's@.*/project/([^/]+)/.*@\1@')")"
+    url="$freshUrl"
+    name="$baseName-$version"
+    advertisedUrl="$freshUrl"
+
+    if [ x"$freshUrl" = x"$(cat "$src_defs_dir"/advertisedUrl)" ]; then
+        echo "Source link not changed" >&2
+        exit
+    fi
+    hash=$(nix-prefetch-url "$freshUrl")
+
+    prefetchVars="url advertisedUrl";
+}
 [ fetchSF = "$method" ] && {
     if [ -z "$forcedUrl" ]; then 
 	freshUrl="$("$own_dir"/urls-from-page.sh "$(getAttr downloadPage)" |

@@ -1,15 +1,16 @@
-{ cabal, alex, binary, happy, haskeline, haskellSrcExts, mtl
-, QuickCheck, syb, xhtml, zlib
+{ cabal, alex, binary, happy, hashable, hashtables, haskeline
+, haskellSrcExts, mtl, QuickCheck, syb, xhtml, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "Agda";
-  version = "2.2.10";
-  sha256 = "1bh96g5c6b6jzaf3m9gm0vr64avgi86kb45p8i1vg1jbfjdbdlsw";
+  version = "2.3.0";
+  sha256 = "1p0cwf3d146z73gp49cm8fmk33hcbjsvyijbakm1871ssc5i73k0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary haskeline haskellSrcExts mtl QuickCheck syb xhtml zlib
+    binary hashable hashtables haskeline haskellSrcExts mtl QuickCheck
+    syb xhtml zlib
   ];
   buildTools = [ alex happy ];
   meta = {

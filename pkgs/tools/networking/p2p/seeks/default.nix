@@ -1,18 +1,19 @@
 { fetchurl, stdenv, zlib, docbook2x, pcre, curl, libxml2, libevent, perl
-, pkgconfig, protobuf, tokyocabinet, opencv }:
+, pkgconfig, protobuf, tokyocabinet, tokyotyrant, opencv
+}:
 
-let version = "0.3.3"; in
+let version = "0.4.0"; in
 stdenv.mkDerivation {
   name = "seeks-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/seeks/solo/seeks-${version}.tar.gz";
-    sha256 = "1zsl6ixmkvjhy9r2cs22g4q31gg5fkhayvws5jra7jfgmzbrll5c";
+    url = "mirror://sourceforge/seeks/hippy/seeks-${version}.tar.gz";
+    sha256 = "1y91dmd0b0yj5036x8kk92iy88dsnzdwhhz23ba9lp96vpafd2ky";
   };
 
   buildInputs =
     [ zlib docbook2x pcre curl libxml2 libevent perl pkgconfig
-      protobuf tokyocabinet opencv
+      protobuf tokyocabinet tokyotyrant opencv
     ];
 
   configureFlags =

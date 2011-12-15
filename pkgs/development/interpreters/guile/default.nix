@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
+{ fetchurl, stdenv, xz, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
 , libffi, gawk, makeWrapper, coverageAnalysis ? null }:
 
 # Do either a coverage analysis build or a standard build.
@@ -7,17 +7,15 @@
  else stdenv.mkDerivation)
 
 rec {
-  name = "guile-2.0.2";
+  name = "guile-2.0.3";
 
   src = fetchurl {
-    url = "mirror://gnu/guile/${name}.tar.gz";
-    sha256 = "0adiwydwb285bb7mcakfdzjgyv24lrm7pk2grgxzi66kidpm6dhx";
+    url = "mirror://gnu/guile/${name}.tar.xz";
+    sha256 = "14rhlpxxa4v5y3gl992l7lnd5qnqawx0a84idnwq0w2qviwcvsyj";
   };
 
-  buildInputs =
-    [ makeWrapper gawk readline libtool libunistring
-      libffi pkgconfig
-    ];
+  buildNativeInputs = [ xz makeWrapper gawk pkgconfig ];
+  buildInputs = [ readline libtool libunistring libffi ];
   propagatedBuildInputs = [ gmp boehmgc ]
 
     # XXX: These ones aren't normally needed here, but since
@@ -26,9 +24,13 @@ rec {
     # see below.
     ++ [ libtool libunistring ];
 
-  patches =
-    stdenv.lib.optionals (coverageAnalysis != null)
-      [ ./gcov-file-name.patch ./disable-gc-sensitive-tests.patch ];
+  # A native Guile 2.0 is needed to cross-build Guile.
+  selfBuildNativeInput = true;
+
+  enableParallelBuilding = true;
+
+  patches = [ ./disable-gc-sensitive-tests.patch ] ++
+    (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"

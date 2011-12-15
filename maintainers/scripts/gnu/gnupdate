@@ -308,12 +308,17 @@ replaced by the result of their application to DERIVATIONS, a vhash."
   ;; DERIVATION lacks an "src" attribute.
   (and=> (derivation-source derivation) source-output-path))
 
-(define (open-nixpkgs nixpkgs)
+(define* (open-nixpkgs nixpkgs #:optional attribute)
+  ;; Return an input pipe to the XML representation of Nixpkgs.  When
+  ;; ATTRIBUTE is true, only that attribute is considered.
   (let ((script  (string-append nixpkgs
                                 "/maintainers/scripts/eval-release.nix")))
-    (open-pipe* OPEN_READ "nix-instantiate"
-                "--strict" "--eval-only" "--xml"
-                script)))
+    (apply open-pipe* OPEN_READ
+           "nix-instantiate" "--strict" "--eval-only" "--xml"
+           `(,@(if attribute
+                   `("-A" ,attribute)
+                   '())
+             ,script))))
 
 (define (pipe-failed? pipe)
   "Close pipe and return its status if it failed."
@@ -323,21 +328,36 @@ replaced by the result of their application to DERIVATIONS, a vhash."
         status
         #f)))
 
-(define (nix-prefetch-url url)
-  ;; Download URL in the Nix store and return the base32-encoded SHA256 hash
-  ;; of the file at URL
-  (let* ((pipe (open-pipe* OPEN_READ "nix-prefetch-url" url))
-         (hash (read-line pipe)))
-    (if (or (pipe-failed? pipe)
-            (eof-object? hash))
-        (values #f #f)
-        (let* ((pipe (open-pipe* OPEN_READ "nix-store" "--print-fixed-path"
-                                   "sha256" hash (basename url)))
-               (path (read-line pipe)))
-          (if (or (pipe-failed? pipe)
-                  (eof-object? path))
-              (values #f #f)
-              (values (string-trim-both hash) (string-trim-both path)))))))
+(define (memoize proc)
+  "Return a memoizing version of PROC."
+  (let ((cache (make-hash-table)))
+    (lambda args
+      (let ((results (hash-ref cache args)))
+        (if results
+            (apply values results)
+            (let ((results (call-with-values (lambda ()
+                                               (apply proc args))
+                             list)))
+              (hash-set! cache args results)
+              (apply values results)))))))
+
+(define nix-prefetch-url
+  (memoize
+   (lambda (url)
+     "Download URL in the Nix store and return the base32-encoded SHA256 hash of
+the file at URL."
+     (let* ((pipe (open-pipe* OPEN_READ "nix-prefetch-url" url))
+            (hash (read-line pipe)))
+       (if (or (pipe-failed? pipe)
+               (eof-object? hash))
+           (values #f #f)
+           (let* ((pipe (open-pipe* OPEN_READ "nix-store" "--print-fixed-path"
+                                    "sha256" hash (basename url)))
+                  (path (read-line pipe)))
+             (if (or (pipe-failed? pipe)
+                     (eof-object? path))
+                 (values #f #f)
+                 (values (string-trim-both hash) (string-trim-both path)))))))))
 
 (define (update-nix-expression file
                                old-version old-hash
@@ -409,8 +429,7 @@ replaced by the result of their application to DERIVATIONS, a vhash."
 (define %openpgp-key-server "keys.gnupg.net")
 
 (define (gnupg-verify sig file)
-  "Verify signature SIG for FILE.  Return a status s-exp or #f if GnuPG
-failed."
+  "Verify signature SIG for FILE.  Return a status s-exp if GnuPG failed."
 
   (define (status-line->sexp line)
     ;; See file `doc/DETAILS' in GnuPG.
@@ -422,6 +441,8 @@ failed."
     (define validsig-rx
       (make-regexp
        "^\\[GNUPG:\\] VALIDSIG ([[:xdigit:]]+) ([[:digit:]]{4}-[[:digit:]]{2}-[[:digit:]]{2}) ([[:digit:]]+) .*$"))
+    (define expkeysig-rx                    ; good signature, but expired key
+      (make-regexp "^\\[GNUPG:\\] EXPKEYSIG ([[:xdigit:]]+) (.*)$"))
     (define errsig-rx
       (make-regexp
        "^\\[GNUPG:\\] ERRSIG ([[:xdigit:]]+) ([^ ]+) ([^ ]+) ([^ ]+) ([[:digit:]]+) ([[:digit:]]+)"))
@@ -431,20 +452,25 @@ failed."
            (lambda (match)
              `(signature-id ,(match:substring match 1) ; sig id
                             ,(match:substring match 2) ; date
-                            ,(string->number      ; timestamp
+                            ,(string->number           ; timestamp
                               (match:substring match 3)))))
           ((regexp-exec goodsig-rx line)
            =>
            (lambda (match)
-             `(good-signature ,(match:substring match 1) ; key id
+             `(good-signature ,(match:substring match 1)    ; key id
                               ,(match:substring match 2)))) ; user name
           ((regexp-exec validsig-rx line)
            =>
            (lambda (match)
              `(valid-signature ,(match:substring match 1) ; fingerprint
                                ,(match:substring match 2) ; sig creation date
-                               ,(string->number   ; timestamp
+                               ,(string->number           ; timestamp
                                  (match:substring match 3)))))
+          ((regexp-exec expkeysig-rx line)
+           =>
+           (lambda (match)
+             `(expired-key-signature ,(match:substring match 1) ; fingerprint
+                                     ,(match:substring match 2)))) ; user name
           ((regexp-exec errsig-rx line)
            =>
            (lambda (match)
@@ -452,7 +478,7 @@ failed."
                                ,(match:substring match 2) ; pubkey algo
                                ,(match:substring match 3) ; hash algo
                                ,(match:substring match 4) ; sig class
-                               ,(string->number   ; timestamp
+                               ,(string->number           ; timestamp
                                  (match:substring match 5))
                                ,(let ((rc
                                        (string->number ; return code
@@ -475,16 +501,17 @@ failed."
   (let* ((pipe   (open-pipe* OPEN_READ %gpg-command "--status-fd=1"
                              "--verify" sig file))
          (status (parse-status pipe)))
-    (if (pipe-failed? pipe)
-        #f
-        status)))
+    ;; Ignore PIPE's exit status since STATUS above should contain all the
+    ;; info we need.
+    (close-pipe pipe)
+    status))
 
 (define (gnupg-status-good-signature? status)
   "If STATUS, as returned by `gnupg-verify', denotes a good signature, return
 a key-id/user pair; return #f otherwise."
   (any (lambda (sexp)
          (match sexp
-           (('good-signature key-id user)
+           (((or 'good-signature 'expired-key-signature) key-id user)
             (cons key-id user))
            (_ #f)))
        status))
@@ -716,7 +743,8 @@ Return #t if the signature was good, #f otherwise."
                         (('attribute _ "description" value)
                          (string-prefix? "GNU" value))
                         (('attribute _ "homepage" (? string? value))
-                         (string-contains value "www.gnu.org"))
+                         (or (string-contains value "gnu.org")
+                             (string-contains value "gnupg.org")))
                         (('attribute _ "homepage" ((? string? value) ...))
                          (any (cut string-contains <> "www.gnu.org") value))
                         (_ #f)))
@@ -749,10 +777,10 @@ Return #t if the signature was good, #f otherwise."
       ("libosip2"     "ftp.gnu.org"   "/gnu/osip" #f)
       ("libgcrypt"    "ftp.gnupg.org" "/gcrypt" #t)
       ("libgpg-error" "ftp.gnupg.org" "/gcrypt" #t)
+      ("libassuan"    "ftp.gnupg.org" "/gcrypt" #t)
       ("freefont-ttf" "ftp.gnu.org"   "/gnu/freefont" #f)
       ("gnupg"        "ftp.gnupg.org" "/gcrypt" #t)
       ("gnu-ghostscript" "ftp.gnu.org"  "/gnu/ghostscript" #f)
-      ("GNUnet"       "ftp.gnu.org" "/gnu/gnunet" #f)
       ("mit-scheme"   "ftp.gnu.org" "/gnu/mit-scheme/stable.pkg" #f)
       ("icecat"       "ftp.gnu.org" "/gnu/gnuzilla" #f)
       ("source-highlight" "ftp.gnu.org" "/gnu/src-highlite" #f)
@@ -776,7 +804,6 @@ Return #t if the signature was good, #f otherwise."
       ("gnumake"     . "make")
       ("gnused"      . "sed")
       ("gnutar"      . "tar")
-      ("gnunet"      . "GNUnet") ;; ftp.gnu.org/gnu/gnunet/GNUnet-x.y.tar.gz
       ("mitscheme"   . "mit-scheme")
       ("texmacs"     . "TeXmacs")))
 
@@ -921,6 +948,7 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
         gnu-packages))
 
 (define (fetch-gnu project directory version archive-type)
+  "Download PROJECT's tarball over FTP."
   (let* ((server  (ftp-server/directory project))
          (base    (string-append project "-" version ".tar." archive-type))
          (url     (string-append "ftp://" server "/" directory "/" base))
@@ -963,12 +991,18 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
                   (format #t "~%")
                   (format #t "  -x, --xml=FILE      Read XML output of `nix-instantiate'~%")
                   (format #t "                      from FILE.~%")
+                  (format #t "  -A, --attribute=ATTR~%")
+                  (format #t "                      Update only the package pointed to by attribute~%")
+                  (format #t "                      ATTR.~%")
                   (format #t "  -s, --select=SET    Update only packages from SET, which may~%")
                   (format #t "                      be either `all', `stdenv', or `non-stdenv'.~%")
                   (format #t "  -d, --dry-run       Don't actually update Nix expressions~%")
                   (format #t "  -h, --help          Give this help list.~%~%")
                   (format #t "Report bugs to <ludo@gnu.org>~%")
                   (exit 0)))
+        (option '(#\A "attribute") #t #f
+                (lambda (opt name arg result)
+                  (alist-cons 'attribute arg result)))
         (option '(#\s "select") #t #f
                 (lambda (opt name arg result)
                   (cond ((string-ci=? arg "stdenv")
@@ -994,13 +1028,14 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
 (define (gnupdate . args)
   ;; Assume Nixpkgs is under $NIXPKGS or ~/src/nixpkgs.
 
-  (define (nixpkgs->snix xml-file)
+  (define (nixpkgs->snix xml-file attribute)
     (format (current-error-port) "evaluating Nixpkgs...~%")
     (let* ((home (getenv "HOME"))
            (xml  (if xml-file
                      (open-input-file xml-file)
                      (open-nixpkgs (or (getenv "NIXPKGS")
-                                       (string-append home "/src/nixpkgs")))))
+                                       (string-append home "/src/nixpkgs"))
+                                   attribute)))
            (snix (xml->snix xml)))
       (if (not xml-file)
           (let ((status (pipe-failed? xml)))
@@ -1009,7 +1044,37 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
                   (format (current-error-port) "`nix-instantiate' failed: ~A~%"
                           status)
                   (exit 1)))))
-      snix))
+
+      ;; If we asked for a specific attribute, rewrap the thing in an
+      ;; attribute set to match the expectations of `packages-to-update' & co.
+      (if attribute
+          (match snix
+            (('snix loc ('derivation args ...))
+             `(snix ,loc
+                    (attribute-set
+                     ((attribute #f ,attribute
+                                 (derivation ,@args)))))))
+          snix)))
+
+  (define (selected-gnu-packages packages stdenv selection)
+    ;; Return the subset of PACKAGES that are/aren't in STDENV, according to
+    ;; SELECTION.  To do that reliably, we check whether their "src"
+    ;; derivation is a requisite of STDENV.
+    (define gnu
+      (gnu-packages packages))
+
+    (case selection
+      ((stdenv)
+       (filter (lambda (p)
+                 (member (package-source-output-path p)
+                         (force stdenv)))
+               gnu))
+      ((non-stdenv)
+       (filter (lambda (p)
+                 (not (member (package-source-output-path p)
+                              (force stdenv))))
+               gnu))
+      (else gnu)))
 
   (let* ((opts      (args-fold (cdr args) %options
                                (lambda (opt name arg result)
@@ -1017,7 +1082,8 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
                                (lambda (operand result)
                                  (error "extraneous argument `~A'" operand))
                                '()))
-         (snix      (nixpkgs->snix (assoc-ref opts 'xml-file)))
+         (snix      (nixpkgs->snix (assq-ref opts 'xml-file)
+                                   (assq-ref opts 'attribute)))
          (packages  (match snix
                       (('snix _ ('attribute-set attributes))
                        attributes)
@@ -1026,23 +1092,12 @@ pairs.  Example: (\"mit-scheme-9.0.1\" . \"/gnu/mit-scheme/stable.pkg/9.0.1\"). 
                       ;; The source tarballs that make up stdenv.
                       (filter-map derivation-source-output-path
                                   (package-requisites (stdenv-package packages)))))
-         (gnu       (gnu-packages packages))
-         (gnu*      (case (assoc-ref opts 'filter)
-                      ;; Filter out packages that are/aren't in `stdenv'.  To
-                      ;; do that reliably, we check whether their "src"
-                      ;; derivation is a requisite of stdenv.
-                      ((stdenv)
-                       (filter (lambda (p)
-                                 (member (package-source-output-path p)
-                                         (force stdenv)))
-                               gnu))
-                      ((non-stdenv)
-                       (filter (lambda (p)
-                                 (not (member (package-source-output-path p)
-                                              (force stdenv))))
-                               gnu))
-                      (else gnu)))
-         (updates   (packages-to-update gnu*)))
+         (attribute (assq-ref opts 'attribute))
+         (selection (assq-ref opts 'filter))
+         (to-update (if attribute
+                        packages                  ; already a subset
+                        (selected-gnu-packages packages stdenv selection)))
+         (updates   (packages-to-update to-update)))
 
     (format #t "~%~A packages to update...~%" (length updates))
     (for-each (lambda (update)

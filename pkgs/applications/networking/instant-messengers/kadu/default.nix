@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation {
 
-  name = "kadu-0.10.0";
+  name = "kadu-0.10.1";
 
   src = fetchurl {
-    url = http://www.kadu.net/download/stable/kadu-0.10.0.tar.bz2;
-    sha256 = "039dx8y6vzqmv86prk1srmi7fvxlrbisyd6rcfs0gv497bfi1995";
+    url = http://download.kadu.im/stable/kadu-0.10.1.tar.bz2;
+    sha256 = "0j88pyp2nqpc57j38zr135ypfiv4v329gfgiz9rdbqi8j26cyp7g";
   };
 
   buildInputs = [ cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2 phonon
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   # because I was not able to get those working
-  patches = [ ./disable_encryption_plugins.patch ];
+  patches = [ ./disable_some_plugins.patch ];
 
   NIX_LDFLAGS="-lX11";
 

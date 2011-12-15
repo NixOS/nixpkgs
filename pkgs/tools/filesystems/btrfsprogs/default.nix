@@ -1,30 +1,38 @@
-a :  
-let 
+a :
+let
   fetchurl = a.fetchurl;
+  fetchgit = a.fetchgit;
 
-  version = a.lib.attrByPath ["version"] "0.19" a; 
+  version = a.lib.attrByPath ["version"] "0.19" a;
   buildInputs = with a; [
-    zlib libuuid acl 
+    zlib libuuid acl attr
   ];
 in
 
 assert a.libuuid != null;
 
 rec {
-  src = fetchurl {
-    url = "http://www.kernel.org/pub/linux/kernel/people/mason/btrfs/btrfs-progs-${version}.tar.bz2";
-    sha256 = "1z3hmfgv7h489gnh55abm0gzyf2cgjkybhfc2rnm0cvsx01xv8zq";
+  srcDrv = fetchgit {
+    url="git://git.kernel.org/pub/scm/linux/kernel/git/mason/btrfs-progs.git" ;
+    rev="fdb6c0402337d9607c7a39155088eaf033742752" ;
+    sha256="de7f9e04401bd747a831c48d312106e188adb32f32b6d64078ae6d2aab45b1f8" ;
   };
+
+  src = srcDrv + "/";
 
   inherit buildInputs;
   configureFlags = [];
-  makeFlags = ["prefix=$out"];
+  makeFlags = ["prefix=$out CFLAGS=-Os"];
 
-  patches = [ ./glibc212.patch ];
-  phaseNames = ["doPatch" "doEnsureBtrfsImage" "doMakeInstall"];
-      
+  patches = [];
+  phaseNames = ["fixMakefile" "doEnsureBtrfsImage" "doMakeInstall"];
+
+  fixMakefile = a.fullDepEntry ''
+    sed -e 's@^progs = @progs=@g' -i Makefile
+  '' ["minInit" "doUnpack"];
+
   doEnsureBtrfsImage = a.fullDepEntry (''
-    if ! grep 'progs = ' Makefile | grep btrfs-image; then 
+    if ! grep 'progs = ' Makefile | grep btrfs-image; then
       sed -e 's/progs = .*/& btrfs-image/' -i Makefile
     fi
   '') ["minInit" "doUnpack"];

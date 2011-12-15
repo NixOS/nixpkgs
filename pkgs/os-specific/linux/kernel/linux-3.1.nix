@@ -20,6 +20,11 @@ let
       # Enable the kernel's built-in memory tester.
       MEMTEST y
 
+      # Include the CFQ I/O scheduler in the kernel, rather than as a
+      # module, so that the initrd gets a good I/O scheduler.
+      IOSCHED_CFQ y
+      BLK_CGROUP y # required by CFQ
+
       # Disable some expensive (?) features.
       FTRACE n
       KPROBES n
@@ -77,8 +82,9 @@ let
       FB_GEODE y
 
       # Video configuration
-      # The intel drivers already require KMS
+      # Enable KMS for devices whose X.org driver supports it.
       DRM_I915_KMS y
+      DRM_RADEON_KMS y
       # Hybrid graphics support
       VGA_SWITCHEROO y
 
@@ -192,6 +198,15 @@ let
       CGROUP_MEM_RES_CTLR_SWAP? y
       DEVPTS_MULTIPLE_INSTANCES? y
 
+      # Enable staging drivers.  These are somewhat experimental, but
+      # they generally don't hurt.
+      STAGING y
+
+      # PROC_EVENTS requires that the netlink connector is not built
+      # as a module.  This is required by libcgroup's cgrulesengd.
+      CONNECTOR y
+      PROC_EVENTS y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -200,18 +215,15 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.1-rc8";
-
-    modDirVersion = "3.1.0-rc8";
+    version = "3.1.5";
 
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
     '';
   
     src = fetchurl {
-      url = "https://github.com/torvalds/linux/tarball/v${version}";
-      sha256 = "1sz6snv2wavzasrswaprkjpzpll4247v4br0x2i6sndl2nqa6jz7";
-      name = "v${version}.tar.gz";
+      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
+      sha256 = "0wdcpfjv56r5cc67ddhprc9vhjxj2qibhp0bl96p3hbqjjpwfpl6";
     };
 
     config = configWithPlatform stdenv.platform;

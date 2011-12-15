@@ -1,11 +1,14 @@
 { stdenv, fetchurl, Xaw3d, ghostscriptX, perl }:
 
-stdenv.mkDerivation rec {
-  name = "gv-3.7.2";
+let
+  name = "gv-3.7.3";
+in
+stdenv.mkDerivation {
+  inherit name;
 
   src = fetchurl {
     url = "mirror://gnu/gv/${name}.tar.gz";
-    sha256 = "1cj03rb7xs0l3krax4z2llwnldh876p1h3p5vql4gygcxki8vhk2";
+    sha256 = "ee01ba96e3a5c319eb4658357372a118dbb0e231891b360edecbdebd449d1c2b";
   };
 
   buildInputs = [ Xaw3d ghostscriptX perl ];

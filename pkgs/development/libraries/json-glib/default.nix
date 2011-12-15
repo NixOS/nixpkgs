@@ -1,19 +1,16 @@
-{ stdenv, fetchurl, glib, pkgconfig }:
+{ stdenv, fetchurl_gnome, glib, pkgconfig, xz }:
 
-let
-  pname = "json-glib";
-  version = "0.10.4";
-in
 stdenv.mkDerivation rec {
-  name = pname + "-" + version;
+  name = src.pkgname;
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/0.10/${name}.tar.bz2";
-    sha256 = "1naydnjagxw5gsq77lhaasjzfv1kp19v6bkybg1krq7rsd0v7n7g";
+  src = fetchurl_gnome {
+    project = "json-glib";
+    major = "0"; minor = "14"; patchlevel = "0"; extension = "xz";
+    sha256 = "0mpw996cyidspjwns281l5haj9i8azpkfpl4jf98lh3kcqcr07l2";
   };
 
   propagatedBuildInputs = [ glib ];
-  buildInputs = [ pkgconfig ];
+  buildNativeInputs = [ pkgconfig xz ];
 
   meta = {
     homepage = http://live.gnome.org/JsonGlib;

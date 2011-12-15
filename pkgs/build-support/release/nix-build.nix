@@ -68,7 +68,7 @@ stdenv.mkDerivation (
       # multiple tarballs, just pick the first one.
       origSrc=$src
       if test -d $src/tarballs; then
-          src=$(ls $src/tarballs/*.tar.bz2 $src/tarballs/*.tar.gz | sort | head -1)
+          src=$(ls $src/tarballs/*.tar.bz2 $src/tarballs/*.tar.gz $src/tarballs/*.tar.xz | sort | head -1)
       fi
 
       # Set GCC flags for coverage analysis, if desired.

@@ -1,23 +1,28 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "rcs-5.7";
+stdenv.mkDerivation rec {
+  name = "rcs-5.8";
 
   src = fetchurl {
-    url = ftp://ftp.cs.purdue.edu/pub/RCS/rcs-5.7.tar;
-    md5 = "f7b3f106bf87ff6344df38490f6a02c5";
+    url = "mirror://gnu/rcs/${name}.tar.gz";
+    sha256 = "0q12nlghv4khxw5lk0y4949caghzg4jg0ripddi2h3q75vmfh6vh";
   };
 
-  patches = [ ./no-root.patch ];
-
-  preConfigure = ''
-    makeFlags="man1dir=$out/share/man/man1 man5dir=$out/share/man/man5";
-  '';
+  doCheck = true;
 
   meta = {
-    homepage = http://www.cs.purdue.edu/homes/trinkle/RCS/;
-    description = "Revision Control System, a version management system";
-    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
+    homepage = http://www.gnu.org/software/rcs/;
+    description = "GNU RCS, a revision control system";
+    longDescription =
+      '' The GNU Revision Control System (RCS) manages multiple revisions of
+         files. RCS automates the storing, retrieval, logging,
+         identification, and merging of revisions.  RCS is useful for text
+         that is revised frequently, including source code, programs,
+         documentation, graphics, papers, and form letters.
+      '';
+
+    license = "GPLv3+";
+    maintainers = with stdenv.lib.maintainers; [ eelco simons ludo ];
     platforms = stdenv.lib.platforms.all;
   };
 }

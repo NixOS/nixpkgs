@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pool";
-  version = "0.1.1";
-  sha256 = "0h498pi7048m4cida10s28dp9f8c2ig3m4s9chwrfw3yiyai926l";
+  version = "0.1.2";
+  sha256 = "05lrinyk9gxdf67vwdav93ral2y8qsb33i9y5k91vlcjfp7w516q";
   buildDepends = [ monadControl transformers ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";

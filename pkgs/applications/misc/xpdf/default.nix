@@ -8,40 +8,19 @@ assert enablePDFtoPPM -> freetype != null;
 assert useT1Lib -> t1lib != null;
 
 stdenv.mkDerivation {
-  name = "xpdf-3.02pl5";
+  name = "xpdf-3.03";
 
   src = fetchurl {
-    url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02.tar.gz;
-    sha256 = "000zq4ddbwyxiki4vdwpmxbnw5n9hsg9hvwra2p33hslyib7sfmk";
+    url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.03.tar.gz;
+    sha256 = "1jnfzdqc54wa73lw28kjv0m7120mksb0zkcn81jdlvijyvc67kq2";
   };
 
   buildInputs =
     (if enableGUI then [x11 motif] else []) ++
     (if useT1Lib then [t1lib] else []);
 
-  patches = [
-    (fetchurl {
-      url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02pl1.patch;
-      sha256 = "1wxv9l0d2kkwi961ihpdwi75whdvk7cgqxkbfym8cjj11fq17xjq";
-    })
-    (fetchurl {
-      url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02pl2.patch;
-      sha256 = "1nfrgsh9xj0vryd8h65myzd94bjz117y89gq0hzji9dqn23xihfi";
-    })
-    (fetchurl {
-      url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02pl3.patch;
-      sha256 = "0jskkv8x6dqr9zj4azaglas8cziwqqrkbbnzrpm2kzrvsbxyhk2r";
-    })
-    (fetchurl {
-      url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02pl4.patch;
-      sha256 = "1c48h7aizx0ngmzlzw0mpja1w8vqyy3pg62hyxp7c60k86al715h";
-    })
-    (fetchurl {
-      url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.02pl5.patch;
-      sha256 = "1fki66pw56yr6aw38f6amrx7wxwcxbx4704pjqq7pqqr784b7z4j";
-    })
-    ./xpdf-3.02-protection.patch
-  ];
+  # Debian uses '-fpermissive' to bypass some errors on char* constantness.
+  CXXFLAGS = "-O2 -fpermissive";
 
   configureFlags =
     "--infodir=$out/share/info --mandir=$out/share/man --enable-a4-paper"
@@ -54,7 +33,7 @@ stdenv.mkDerivation {
     if test -n \"${base14Fonts}\"; then
       substituteInPlace $out/etc/xpdfrc \\
         --replace /usr/local/share/ghostscript/fonts ${base14Fonts} \\
-        --replace '#displayFontT1' displayFontT1
+        --replace '#fontFile' fontFile
     fi
   ";
 

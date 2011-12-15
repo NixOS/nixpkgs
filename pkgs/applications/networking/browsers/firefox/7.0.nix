@@ -15,14 +15,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "7.0";
+  firefoxVersion = "7.0.1";
   
-  xulVersion = "7.0"; # this attribute is used by other packages
+  xulVersion = "7.0.1"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "1fpadlsdc8d739cz52dicn68v2ilv044hxivilgy9jnrazznrm42";
+    sha1 = "94bbc7152832371dc0be82f411730df043c5c6ac";
   };
   
   commonConfigureFlags =

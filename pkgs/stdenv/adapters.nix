@@ -11,6 +11,7 @@ rec {
   # Override the compiler in stdenv for specific packages.
   overrideGCC = stdenv: gcc: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // { NIX_GCC = gcc; });
+      inherit gcc;
     };
 
     
@@ -301,7 +302,7 @@ rec {
               else
                 null;
           in
-            builtins.trace "@:drv:${toString drvPath}:${builtins.exprToString license}:@"
+            builtins.trace "@:drv:${toString drvPath}:${builtins.toString license}:@"
               val;
         in pkg // {
           outPath = printDrvPath pkg.outPath;
@@ -329,20 +330,24 @@ rec {
     { mkDerivation = args:
         let
           pkg = stdenv.mkDerivation args;
+          drv = builtins.unsafeDiscardStringContext pkg.drvPath;
           license =
             if pkg ? meta && pkg.meta ? license then
               pkg.meta.license
+            else if pkg ? outputHash then
+              # Fixed-output derivations such as source tarballs usually
+              # don't have licensing information, but that's OK.
+              null
             else
-              null;
+              builtins.trace
+                "warning: ${drv} lacks licensing information" null;
 
           validate = arg:
             if licensePred license then arg
-            else abort "
-              Error while building ${builtins.unsafeDiscardStringContext pkg.drvPath}:
-              The license predicate is not verified.
-
-              bad license: ${builtins.exprToString license}
-            ";
+            else abort ''
+              while building ${drv}:
+              license `${builtins.toString license}' does not pass the predicate.
+            '';
 
         in pkg // {
           outPath = validate pkg.outPath;

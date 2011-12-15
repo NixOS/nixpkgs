@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "miniupnpc-1.5";
+  name = "miniupnpc-1.6";
 
   src = fetchurl {
     url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
-    sha256 = "0mx950lfxcjpsfny8qcjx6phb74v4zw1rlj99xicd4icx5j0w3s4";
+    sha256 = "151rh46axl44y7bbflb43pnj52gvlfnkxfgrn2jvai5gwrbbgmmv";
   };
 
   installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";

@@ -25,6 +25,7 @@ let inherit (builtins) head tail trace; in
                 else if (hasSuffixHack ".tar.xz" s) then "tar.xz"
                 else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
                 else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"
+                else if (hasSuffixHack "-git-export" s) then "git-dir"
                 else if (hasSuffixHack ".nar.bz2" s) then "narbz2"
                 else if (hasSuffixHack ".rpm" s) then "rpm"
 
@@ -225,6 +226,10 @@ let inherit (builtins) head tail trace; in
                 cd \"$( unzip -lqq '${s}' | tail -1 | 
                         sed -e 's@^\\(\\s\\+[-0-9:]\\+\\)\\{3,3\\}\\s\\+\\([^/]\\+\\)/.*@\\2@' )\"
         " else if (archiveType s) == "cvs-dir" then "
+                cp -r '${s}' .
+                cd \$(basename ${s})
+                chmod u+rwX -R .
+        " else if (archiveType s) == "git-dir" then "
                 cp -r '${s}' .
                 cd \$(basename ${s})
                 chmod u+rwX -R .

@@ -1,13 +1,14 @@
-args: with args;
+{stdenv, fetchgit, mercurial, coreutils, git, makeWrapper, subversion}:
+
 stdenv.mkDerivation {
   name = "fast-export";
 
-  # REGION AUTO UPDATE:     { name="git_fast_export"; type = "git"; url="git://repo.or.cz/hg2git.git"; }
-  src = sourceFromHead "git_fast_export-1464dabbff7fe42b9069e98869db40276d295ad6.tar.gz"
-               (fetchurl { url = "http://mawercer.de/~nix/repos/git_fast_export-1464dabbff7fe42b9069e98869db40276d295ad6.tar.gz"; sha256 = "c65b8607836794b250f5faeef5ec1bcbf40f0bfaeb39ccb600966deb6a40d755"; });
-  # END
+  src = fetchgit {
+    url = "git://repo.or.cz/fast-export.git";
+    rev = "refs/heads/master";
+  };
 
-  buildInputs =([mercurial.python mercurial makeWrapper subversion]);
+  buildInputs = [mercurial.python mercurial makeWrapper subversion];
 
   buildPhase="true"; # skip svn for now
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation {
     mv *.py $l
     for p in $out/bin/*.sh; do
       wrapProgram $p \
-        --set PYTHONPATH "$(echo ${mercurial}/lib/python*/site-packages)" \
+        --prefix PYTHONPATH : "$(echo ${mercurial}/lib/python*/site-packages):$(echo ${mercurial.python}/lib/python*/site-packages)${stdenv.lib.concatMapStrings (x: ":$(echo ${x}/lib/python*/site-packages)") mercurial.pythonPackages}" \
         --prefix PATH : "$(dirname $(type -p python))":$l
     done
   '';

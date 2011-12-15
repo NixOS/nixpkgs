@@ -1,14 +1,14 @@
 { stdenv, fetchurl, which, screen }:
 
 let
-  name = "wdiff-1.0.1";
+  name = "wdiff-1.1.0";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://gnu/wdiff/${name}.tar.gz";
-    sha256 = "1jyg8vmdlazpcwii8a1ddbc0sxcklp9cvj5y0x9zqaybvwzg9r4l";
+    sha256 = "1lg5lz78xij4jjifv8fj68ixr9mha1c5vp8xzyg6rdx6ynkvnm5i";
   };
 
   # Required for the compile-time for the test suite.

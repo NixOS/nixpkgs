@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libgpgerror }:
 
 stdenv.mkDerivation rec {
-  name = "libgcrypt-1.4.6";
+  name = "libgcrypt-1.5.0";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "11bbpjlqwp0nh4q76wmsk6z1812anqrj28nh6d9mcyrmdgd30jry";
+    sha256 = "1ykkh7dm0gyndz7bbpvn3agijj8xb2h02m02f42hm504c18zqqjb";
   };
 
   propagatedBuildInputs = [ libgpgerror ];
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     license = "LGPLv2+";
 
     homepage = http://gnupg.org/;
+    platforms = stdenv.lib.platforms.all;
   };
 }

@@ -1,0 +1,45 @@
+diff -Naur qcad-2.0.4.0-1.src/dxflib/src/dl_writer_ascii.cpp qcad-2.0.4.0-1.src.new/dxflib/src/dl_writer_ascii.cpp
+--- qcad-2.0.4.0-1.src/dxflib/src/dl_writer_ascii.cpp	2004-09-14 16:13:01.000000000 -0400
++++ qcad-2.0.4.0-1.src.new/dxflib/src/dl_writer_ascii.cpp	2008-04-27 08:35:47.000000000 -0400
+@@ -30,6 +30,7 @@
+ #endif // _MSC_VER > 1000
+ 
+ #include <stdio.h>
++#include <cstring>
+ 
+ #include "dl_writer_ascii.h"
+ #include "dl_exception.h"
+diff -Naur qcad-2.0.4.0-1.src/dxflib/src/dl_writer.h qcad-2.0.4.0-1.src.new/dxflib/src/dl_writer.h
+--- qcad-2.0.4.0-1.src/dxflib/src/dl_writer.h	2004-09-14 16:13:01.000000000 -0400
++++ qcad-2.0.4.0-1.src.new/dxflib/src/dl_writer.h	2008-04-27 08:35:48.000000000 -0400
+@@ -34,6 +34,7 @@
+ 
+ 
+ #include <iostream>
++#include <cstring>
+ 
+ #include "dl_attributes.h"
+ 
+diff -Naur qcad-2.0.4.0-1.src/qcadactions/src/rs_actionzoompan.cpp qcad-2.0.4.0-1.src.new/qcadactions/src/rs_actionzoompan.cpp
+--- qcad-2.0.4.0-1.src/qcadactions/src/rs_actionzoompan.cpp	2004-09-14 16:13:03.000000000 -0400
++++ qcad-2.0.4.0-1.src.new/qcadactions/src/rs_actionzoompan.cpp	2008-04-27 08:35:48.000000000 -0400
+@@ -28,6 +28,7 @@
+ #include "rs_snapper.h"
+ #include "rs_point.h"
+ 
++#include <cstdlib>
+ 
+ RS_ActionZoomPan::RS_ActionZoomPan(RS_EntityContainer& container,
+                                    RS_GraphicView& graphicView)
+diff -Naur qcad-2.0.4.0-1.src/qcadlib/src/information/rs_information.h qcad-2.0.4.0-1.src.new/qcadlib/src/information/rs_information.h
+--- qcad-2.0.4.0-1.src/qcadlib/src/information/rs_information.h	2004-09-14 16:13:02.000000000 -0400
++++ qcad-2.0.4.0-1.src.new/qcadlib/src/information/rs_information.h	2008-04-27 08:35:48.000000000 -0400
+@@ -31,7 +31,7 @@
+ #include "rs_line.h"
+ #include "rs_arc.h"
+ 
+-
++#include <cstdlib>
+ 
+ /**
+  * Class for getting information about entities. This includes

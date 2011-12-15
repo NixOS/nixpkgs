@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "fakeroot-1.14.5";
+  name = "fakeroot-1.18.1";
 
   src = fetchurl {
-    url = http://ftp.de.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.14.5.orig.tar.bz2;
-    sha256 = "0s5f785qsh057z05l9i5k1h9cbj9x26ki37l4wh4iyabjhschddh";
+    url = http://ftp.de.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.18.1.orig.tar.bz2;
+    sha256 = "0h5jsw715a9hv32cb1m1bajy26l7xxrbgrk6qk1b6m91lxh6rnw9";
   };
 
   meta = {

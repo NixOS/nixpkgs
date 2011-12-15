@@ -1,10 +1,10 @@
-{ cabal, attoparsecText, text }:
+{ cabal, attoparsec, text }:
 
 cabal.mkDerivation (self: {
   pname = "css-text";
-  version = "0.1.0.1";
-  sha256 = "004ky2s6jmiliw8faja5kzp99i36qf56cixvn43n3pnq8gg26kfi";
-  buildDepends = [ attoparsecText text ];
+  version = "0.1.1";
+  sha256 = "10vb08rnfq987w7wrirw8ib1kzafxaaancswm4xpw46ha3rq1m0y";
+  buildDepends = [ attoparsec text ];
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "CSS parser and renderer";

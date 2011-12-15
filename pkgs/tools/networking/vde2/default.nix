@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, openssl, libpcap }:
+{ stdenv, fetchurl, openssl, libpcap, python }:
 
 stdenv.mkDerivation rec {
-  name = "vde2-2.3.1";
+  name = "vde2-2.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/vde/vde2/2.3.1/${name}.tar.gz";
-    sha256 = "1vbrds8k1cn1fgvpkg2ck2227l5yy2f0qxk44sg3vymq0aiw8y37";
+    sha256 = "14xga0ib6p1wrv3hkl4sa89yzjxv7f1vfqaxsch87j6scdm59pr2";
   };
 
-  buildInputs = [ openssl libpcap ];
+  buildInputs = [ openssl libpcap python ];
 
   meta = {
     homepage = http://vde.sourceforge.net/;

@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://tuxera.com/opensource/${name}.tgz";
+    url = "http://pkgs.fedoraproject.org/repo/pkgs/ntfs-3g/ntfs-3g-2010.10.2.tgz/91405690f25822142cdcb43d03e62d3f/ntfs-3g-2010.10.2.tgz";
     sha256 = "0wcyks4nvi1kck8i2dgwfsy5zxhil0v0xam8zbg1p592xbqygiqp";
   };
 

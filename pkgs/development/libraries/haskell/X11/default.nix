@@ -2,12 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "X11";
-  version = "1.5.0.0";
-  sha256 = "653ff8aa4053574a36dbb1729459df6e5a1a87a223bc3eeced8e40c6e3a5406f";
+  version = "1.5.0.1";
+  sha256 = "0s8k3lhvlks6i1mwfnm5fimfd2f0sjw9k2p67is3x564kih7mh19";
   buildDepends = [ syb ];
   extraLibraries = [ libX11 libXext libXinerama ];
   meta = {
-    homepage = "http://code.haskell.org/X11";
+    homepage = "https://github.com/haskell-pkg-janitors/X11";
     description = "A binding to the X11 graphics library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

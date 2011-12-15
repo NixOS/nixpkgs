@@ -49,6 +49,7 @@ if test -z "$finalPath"; then
       tmpClone=$url
     fi
     hg archive -q -y -r "$rev" --cwd $tmpClone $tmpArchive
+    rm -f $tmpArchive/.hg_archival.txt
 
 
     # Compute the hash.

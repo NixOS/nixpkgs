@@ -1,15 +1,12 @@
-a :  
-let 
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-    openssl zlib pcre libxml2 libxslt
-  ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt }:
+stdenv.mkDerivation rec {
+  name = "nginx-1.1.7";
+  src = fetchurl {
+    url = "http://nginx.org/download/${name}.tar.gz";
+    sha256 = "1y0bzmrgnyqw8ghc508nipy5k46byrxc2sycqp35fdx0jmjz3h51";
+  };
+  buildInputs = [ openssl zlib pcre libxml2 libxslt ];
 
-  inherit (s) name;
-  inherit buildInputs;
   configureFlags = [
     "--with-http_ssl_module"
     "--with-http_xslt_module"
@@ -21,18 +18,16 @@ rec {
     # "--with-http_perl_module" 
   ];
 
-  preConfigure = a.fullDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.libxml2}/include/libxml2"
-  '' [];
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2"
+  '';
 
-  phaseNames = ["preConfigure" "doConfigure" "doMakeInstall"];
-      
   meta = {
     description = "nginx - 'engine x' - reverse proxy and lightweight webserver";
     maintainers = [
-      a.lib.maintainers.raskin
+      stdenv.lib.maintainers.raskin
     ];
-    platforms = with a.lib.platforms; 
+    platforms = with stdenv.lib.platforms; 
       all;
   };
 }

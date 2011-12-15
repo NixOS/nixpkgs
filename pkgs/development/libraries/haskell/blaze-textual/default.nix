@@ -1,12 +1,12 @@
-{ cabal, blazeBuilder, doubleConversion, text, time, vector }:
+{ cabal, blazeBuilder, text, time, vector }:
 
 cabal.mkDerivation (self: {
   pname = "blaze-textual";
-  version = "0.2.0.4";
-  sha256 = "0bifxyzm35xvlqry06iv6pqgx1d33jnrvpmn4wnydkyg1r7q3k9v";
-  buildDepends = [ blazeBuilder doubleConversion text time vector ];
+  version = "0.2.0.5";
+  sha256 = "0rl41idjmrw227yi2x6nk2rlm93rgzz2y7jvz2yvmya2ihrppzjf";
+  buildDepends = [ blazeBuilder text time vector ];
   meta = {
-    homepage = "http://github.com/mailrank/blaze-textual";
+    homepage = "http://github.com/bos/blaze-textual";
     description = "Fast rendering of common datatypes";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

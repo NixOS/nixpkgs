@@ -14,7 +14,7 @@
 vmTools.runInLinuxImage (stdenv.mkDerivation (
 
   {
-    #doCheck = true;
+    doCheck = true;
 
     prefix = "/usr";
 

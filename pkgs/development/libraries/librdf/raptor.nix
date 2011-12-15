@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 curl ];
 
+  preBuild = ''
+    sed -e '/curl\/types/d' -i src/*.c src/*.h
+  '';
+
   meta = { 
     description = "The RDF Parser Toolkit";
     homepage = "http://librdf.org/raptor";

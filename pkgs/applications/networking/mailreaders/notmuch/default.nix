@@ -1,75 +1,50 @@
 { fetchurl, stdenv, bash, emacs, gdb, git, glib, gmime, gnupg1, pkgconfig, talloc, xapian }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-0.8";
+  name = "notmuch-0.9";
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "f40bcdc6447cae9f76d5b4e70ab70d87e4a813cd123b524c1dc3155a3371a949";
+    sha256 = "e6f1046941d2894d143cb7c19d4810f97946f98742f6d9b8a7208ddb858c57e4";
   };
 
   buildInputs = [ bash emacs gdb git glib gmime gnupg1 pkgconfig talloc xapian ];
 
-  # XXX: Make me a loop
   patchPhase = ''
-    # substituteInPlace "test/atomicity" \
-    #   --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/aggregate-results.sh" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/author-order" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/basic" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/crypto" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/dump-restore" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/emacs" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/emacs-large-search-buffer" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/encoding" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/from-guessing" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/json" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/long-id" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/maildir-sync" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/new" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/notmuch-test" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/raw" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/reply" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-by-folder" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-insufficient-from-quoting" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-folder-coherence" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-output" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/search-position-overlap-bug" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/symbol-hiding" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/test-lib.sh" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/test-verbose" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/thread-naming" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/thread-order" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
-    substituteInPlace "test/uuencode" \
-      --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
+    (cd test && for prg in \
+        aggregate-results.sh \
+        atomicity \
+        author-order \
+        basic \
+        crypto \
+        dump-restore \
+        emacs \
+        emacs-large-search-buffer \
+        encoding \
+        from-guessing \
+        json \
+        long-id \
+        maildir-sync \
+        new \
+        notmuch-test \
+        raw \
+        reply \
+        search \
+        search-by-folder \
+        search-insufficient-from-quoting \
+        search-folder-coherence \
+        search-output \
+        search-position-overlap-bug \
+        symbol-hiding \
+        test-lib.sh \
+        test-verbose \
+        thread-naming \
+        thread-order \
+        uuencode \
+    ;do
+      substituteInPlace "$prg" \
+        --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
+    done)
   '';
 
   postBuild = ''
@@ -78,11 +53,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Notmuch -- The mail indexer";
-
     longDescription = "";
-
-    license = "GPLv3";
-
+    license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };

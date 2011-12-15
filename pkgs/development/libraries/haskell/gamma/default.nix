@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gamma";
-  version = "0.7.0.1";
-  sha256 = "0728b5mrzmj9hkaqvikl45jyi2p9hnkl2p6l9yv7wnw557yb0gb2";
+  version = "0.9.0.1";
+  sha256 = "02s9m2vlrnfg26c7921x60xxmawzzk27y3czcnvs8hlk01mb1xv7";
   buildDepends = [ continuedFractions converge vector ];
   meta = {
     homepage = "https://github.com/mokus0/gamma";

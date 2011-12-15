@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "blaze-builder-enumerator";
-  version = "0.2.0.2";
-  sha256 = "0as4mjh695jpxp9qfhpsxyr1448l0pk94sh5kk8sgxv5hfiy41k9";
+  version = "0.2.0.3";
+  sha256 = "00a9rly27sh49gi5askg7z3ji8ig9llxk4qcznsag01d1z0kb97n";
   buildDepends = [ blazeBuilder enumerator transformers ];
   meta = {
     homepage = "https://github.com/meiersi/blaze-builder-enumerator";

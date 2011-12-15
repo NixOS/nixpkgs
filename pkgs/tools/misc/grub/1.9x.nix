@@ -77,7 +77,11 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;
+    maintainers = with stdenv.lib.maintainers; [ ludo shlevy ];
+
+    platforms = if EFIsupport then
+      [ "i686-linux" "x86_64-linux" ]
+    else
+      stdenv.lib.platforms.gnu;
   };
 }

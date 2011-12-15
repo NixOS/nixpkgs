@@ -2,11 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "ConfigFile";
-  version = "1.0.6";
-  sha256 = "339722184b86d53d8b361933e572b6e1478824c7eba3fb66b67d0eb5245cd038";
+  version = "1.1.1";
+  sha256 = "0w2yhbnqldhmj3d98j720l4lj4d08abqcff751p2slszdm5pw1jm";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ MissingH mtl parsec ];
+  noHaddock = true;
   meta = {
     homepage = "http://software.complete.org/configfile";
     description = "Configuration file reading & writing";

@@ -1,0 +1,134 @@
+diff -Naur a/tools/clang/include/clang/AST/Makefile b/tools/clang/include/clang/AST/Makefile
+--- a/tools/clang/include/clang/AST/Makefile	2010-08-18 19:23:40.000000000 -0400
++++ b/tools/clang/include/clang/AST/Makefile	2011-10-19 14:19:21.420750346 -0400
+@@ -6,24 +6,24 @@
+ 
+ include $(CLANG_LEVEL)/Makefile
+ 
+-$(ObjDir)/Attrs.inc.tmp : $(TD_SRC_DIR)/Attr.td $(TBLGEN) \
++$(ObjDir)/Attrs.inc.tmp : $(TD_SRC_DIR)/Attr.td \
+                               $(ObjDir)/.dir
+ 	$(Echo) "Building Clang attribute classes with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-attr-classes -o $(call SYSPATH, $@) \
+ 		-I $(PROJ_SRC_DIR)/../../ $<
+ 
+-$(ObjDir)/AttrImpl.inc.tmp : $(TD_SRC_DIR)/Attr.td $(TBLGEN) \
++$(ObjDir)/AttrImpl.inc.tmp : $(TD_SRC_DIR)/Attr.td \
+                               $(ObjDir)/.dir
+ 	$(Echo) "Building Clang attribute implementations with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-attr-impl -o $(call SYSPATH, $@) \
+ 		-I $(PROJ_SRC_DIR)/../../ $<
+ 
+-$(ObjDir)/StmtNodes.inc.tmp : $(TD_SRC_DIR)/StmtNodes.td $(TBLGEN) \
++$(ObjDir)/StmtNodes.inc.tmp : $(TD_SRC_DIR)/StmtNodes.td \
+                               $(ObjDir)/.dir
+ 	$(Echo) "Building Clang statement node tables with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-stmt-nodes -o $(call SYSPATH, $@) $<
+ 
+-$(ObjDir)/DeclNodes.inc.tmp : $(TD_SRC_DIR)/DeclNodes.td $(TBLGEN) \
++$(ObjDir)/DeclNodes.inc.tmp : $(TD_SRC_DIR)/DeclNodes.td \
+                               $(ObjDir)/.dir
+ 	$(Echo) "Building Clang declaration node tables with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-decl-nodes -o $(call SYSPATH, $@) $<
+diff -Naur a/tools/clang/include/clang/Basic/Makefile b/tools/clang/include/clang/Basic/Makefile
+--- a/tools/clang/include/clang/Basic/Makefile	2010-09-09 16:27:36.000000000 -0400
++++ b/tools/clang/include/clang/Basic/Makefile	2011-10-19 14:17:54.950837324 -0400
+@@ -29,20 +29,20 @@
+ CLANG_HAS_VERSION_PATCHLEVEL := 1
+ endif
+ 
+-$(ObjDir)/Diagnostic%Kinds.inc.tmp : Diagnostic.td Diagnostic%Kinds.td $(TBLGEN) $(ObjDir)/.dir
++$(ObjDir)/Diagnostic%Kinds.inc.tmp : Diagnostic.td Diagnostic%Kinds.td $(ObjDir)/.dir
+ 	$(Echo) "Building Clang $(patsubst Diagnostic%Kinds.inc.tmp,%,$(@F)) diagnostic tables with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-diags-defs -clang-component=$(patsubst Diagnostic%Kinds.inc.tmp,%,$(@F)) -o $(call SYSPATH, $@) $<
+ 
+-$(ObjDir)/DiagnosticGroups.inc.tmp : Diagnostic.td DiagnosticGroups.td $(INPUT_TDS) $(TBLGEN) $(ObjDir)/.dir
++$(ObjDir)/DiagnosticGroups.inc.tmp : Diagnostic.td DiagnosticGroups.td $(INPUT_TDS) $(ObjDir)/.dir
+ 	$(Echo) "Building Clang diagnostic groups with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-diag-groups -o $(call SYSPATH, $@) $<
+ 
+-$(ObjDir)/AttrList.inc.tmp : Attr.td $(TBLGEN) $(ObjDir)/.dir
++$(ObjDir)/AttrList.inc.tmp : Attr.td $(ObjDir)/.dir
+ 	$(Echo) "Building Clang attribute list with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-attr-list -o $(call SYSPATH, $@) \
+ 	  -I $(PROJ_SRC_DIR)/../.. $<
+ 
+-$(ObjDir)/arm_neon.inc.tmp : arm_neon.td $(TBLGEN) $(ObjDir)/.dir
++$(ObjDir)/arm_neon.inc.tmp : arm_neon.td $(ObjDir)/.dir
+ 	$(Echo) "Building Clang arm_neon.inc with tblgen"
+ 	$(Verb) $(TableGen) -gen-arm-neon-sema -o $(call SYSPATH, $@) $<
+ 
+diff -Naur a/tools/clang/include/clang/Driver/Makefile b/tools/clang/include/clang/Driver/Makefile
+--- a/tools/clang/include/clang/Driver/Makefile	2010-06-08 16:34:18.000000000 -0400
++++ b/tools/clang/include/clang/Driver/Makefile	2011-10-19 14:25:33.739369159 -0400
+@@ -5,14 +5,14 @@
+ 
+ include $(CLANG_LEVEL)/Makefile
+ 
+-$(ObjDir)/Options.inc.tmp : Options.td OptParser.td $(TBLGEN) $(ObjDir)/.dir
++$(ObjDir)/Options.inc.tmp : Options.td OptParser.td $(ObjDir)/.dir
+ 	$(Echo) "Building Clang Driver Option tables with tblgen"
+ 	$(Verb) $(TableGen) -gen-opt-parser-defs -o $(call SYSPATH, $@) $<
+ 
+-$(ObjDir)/CC1Options.inc.tmp : CC1Options.td OptParser.td $(TBLGEN) $(ObjDir)/.dir
++$(ObjDir)/CC1Options.inc.tmp : CC1Options.td OptParser.td $(ObjDir)/.dir
+ 	$(Echo) "Building Clang CC1 Option tables with tblgen"
+ 	$(Verb) $(TableGen) -gen-opt-parser-defs -o $(call SYSPATH, $@) $<
+ 
+-$(ObjDir)/CC1AsOptions.inc.tmp : CC1AsOptions.td OptParser.td $(TBLGEN) $(ObjDir)/.dir
++$(ObjDir)/CC1AsOptions.inc.tmp : CC1AsOptions.td OptParser.td $(ObjDir)/.dir
+ 	$(Echo) "Building Clang CC1 Assembler Option tables with tblgen"
+ 	$(Verb) $(TableGen) -gen-opt-parser-defs -o $(call SYSPATH, $@) $<
+diff -Naur a/tools/clang/include/clang/Lex/Makefile b/tools/clang/include/clang/Lex/Makefile
+--- a/tools/clang/include/clang/Lex/Makefile	2010-10-19 22:31:43.000000000 -0400
++++ b/tools/clang/include/clang/Lex/Makefile	2011-10-19 14:18:25.082807086 -0400
+@@ -6,7 +6,7 @@
+ 
+ include $(CLANG_LEVEL)/Makefile
+ 
+-$(ObjDir)/AttrSpellings.inc.tmp : $(TD_SRC_DIR)/Attr.td $(TBLGEN) \
++$(ObjDir)/AttrSpellings.inc.tmp : $(TD_SRC_DIR)/Attr.td \
+                                   $(ObjDir)/.dir
+ 	$(Echo) "Building Clang attribute spellings with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-attr-spelling-list -o $(call SYSPATH, $@) \
+diff -Naur a/tools/clang/include/clang/Serialization/Makefile b/tools/clang/include/clang/Serialization/Makefile
+--- a/tools/clang/include/clang/Serialization/Makefile	2010-08-18 19:23:40.000000000 -0400
++++ b/tools/clang/include/clang/Serialization/Makefile	2011-10-19 14:25:05.764398164 -0400
+@@ -6,13 +6,13 @@
+ 
+ include $(CLANG_LEVEL)/Makefile
+ 
+-$(ObjDir)/AttrPCHRead.inc.tmp : $(TD_SRC_DIR)/Attr.td $(TBLGEN) \
++$(ObjDir)/AttrPCHRead.inc.tmp : $(TD_SRC_DIR)/Attr.td \
+                               $(ObjDir)/.dir
+ 	$(Echo) "Building Clang PCH reader with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-attr-pch-read -o $(call SYSPATH, $@) \
+ 		-I $(PROJ_SRC_DIR)/../../ $<
+ 
+-$(ObjDir)/AttrPCHWrite.inc.tmp : $(TD_SRC_DIR)/Attr.td $(TBLGEN) \
++$(ObjDir)/AttrPCHWrite.inc.tmp : $(TD_SRC_DIR)/Attr.td \
+                               $(ObjDir)/.dir
+ 	$(Echo) "Building Clang PCH writer with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-attr-pch-write -o $(call SYSPATH, $@) \
+diff -Naur a/tools/clang/lib/Headers/Makefile b/tools/clang/lib/Headers/Makefile
+--- a/tools/clang/lib/Headers/Makefile	2010-07-21 21:19:36.000000000 -0400
++++ b/tools/clang/lib/Headers/Makefile	2011-10-19 14:15:18.520993127 -0400
+@@ -49,6 +49,6 @@
+ 
+ install-local:: $(INSTHEADERS)
+ 
+-$(ObjDir)/arm_neon.h.inc.tmp : $(CLANG_LEVEL)/include/clang/Basic/arm_neon.td $(TBLGEN) $(ObjDir)/.dir
++$(ObjDir)/arm_neon.h.inc.tmp : $(CLANG_LEVEL)/include/clang/Basic/arm_neon.td $(ObjDir)/.dir
+ 	$(Echo) "Building Clang arm_neon.h.inc with tblgen"
+ 	$(Verb) $(TableGen) -gen-arm-neon -o $(call SYSPATH, $@) $<
+diff -Naur a/tools/clang/lib/StaticAnalyzer/Checkers/Makefile b/tools/clang/lib/StaticAnalyzer/Checkers/Makefile
+--- a/tools/clang/lib/StaticAnalyzer/Checkers/Makefile	2011-02-15 02:42:38.000000000 -0500
++++ b/tools/clang/lib/StaticAnalyzer/Checkers/Makefile	2011-10-19 14:15:58.240953760 -0400
+@@ -19,6 +19,6 @@
+ 
+ include $(CLANG_LEVEL)/Makefile
+ 
+-$(ObjDir)/Checkers.inc.tmp : Checkers.td $(PROJ_SRC_DIR)/$(CLANG_LEVEL)/include/clang/StaticAnalyzer/Checkers/CheckerBase.td $(TBLGEN) $(ObjDir)/.dir
++$(ObjDir)/Checkers.inc.tmp : Checkers.td $(PROJ_SRC_DIR)/$(CLANG_LEVEL)/include/clang/StaticAnalyzer/Checkers/CheckerBase.td $(ObjDir)/.dir
+ 	$(Echo) "Building Clang SA Checkers tables with tblgen"
+ 	$(Verb) $(TableGen) -gen-clang-sa-checkers -I $(PROJ_SRC_DIR)/$(CLANG_LEVEL)/include -o $(call SYSPATH, $@) $<

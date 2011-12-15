@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "gegl-0.1.6";
 
   src = fetchurl {
-    url = "ftp://ftp.gimp.org/pub/gegl/0.1/${name}.tar.bz2";
+    url = "http://ftp.snt.utwente.nl/pub/software/gimp/gegl/0.1/${name}.tar.bz2";
     sha256 = "1l966ygss2zkksyw62nm139v2abfzbqqrj0psizvbgzf4mb24rm1";
   };
 

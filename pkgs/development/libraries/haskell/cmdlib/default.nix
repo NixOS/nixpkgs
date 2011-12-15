@@ -1,12 +1,12 @@
-{ cabal, mtl, split, syb }:
+{ cabal, mtl, split, syb, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "cmdlib";
-  version = "0.3.3";
-  sha256 = "0gryz70d69r9pscwxmn5yr02r0zvvgj1vwc3g9klgbkipbsa7xvk";
+  version = "0.3.5";
+  sha256 = "0218f4rl64wvvka95m969hg5y9vc29dqaawfcnk7d1qsv3hx9ydl";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ mtl split syb ];
+  buildDepends = [ mtl split syb transformers ];
   meta = {
     description = "a library for command line parsing & online help";
     license = self.stdenv.lib.licenses.bsd3;

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bytestring-nums";
-  version = "0.3.3";
-  sha256 = "09gdbyj5qw98j57cs9phzsbmvdm7y6j07wg908i34jklwm24nxfd";
+  version = "0.3.5";
+  sha256 = "12knbyrvr1wa7za8bwypvq3cp81k18qi032dl98s2ylhcz1r6rdk";
   isLibrary = true;
   isExecutable = true;
   meta = {

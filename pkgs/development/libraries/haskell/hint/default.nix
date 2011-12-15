@@ -4,14 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "hint";
-  version = "0.3.3.2";
-  sha256 = "1qm74hjz8cxypvavcw7s094zg9ic3r1ll2lj3y159ipc79cw2sn1";
+  version = "0.3.3.3";
+  sha256 = "0i7d7c2786c13npbb5np3gaidsq4kkajvm3fn2gx8djrhhlrqw5l";
   buildDepends = [
     extensibleExceptions ghcMtl ghcPaths haskellSrc MonadCatchIOMtl mtl
     random utf8String
   ];
   meta = {
-    homepage = "http://projects.haskell.org/hint";
+    homepage = "http://darcsden.com/jcpetruzza/hint";
     description = "Runtime Haskell interpreter (GHC API wrapper)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

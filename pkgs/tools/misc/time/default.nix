@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0va9063fcn7xykv658v2s9gilj2fq4rcdxx2mn2mmy1v4ndafzp3";
   };
 
+  patches = [ ./max-resident.patch ];
+
   meta = {
     description = "GNU Time, a tool that runs programs and summarizes the system resources they use";
 

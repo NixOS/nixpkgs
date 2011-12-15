@@ -46,7 +46,7 @@ assert cloog != null -> cloogppl == null;
 with stdenv.lib;
 with builtins;
 
-let version = "4.6.1";
+let version = "4.6.2";
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
@@ -153,13 +153,17 @@ stdenv.mkDerivation ({
 
   postPatch =
     if (stdenv.system == "i586-pc-gnu"
+        || (libcCross != null                  # e.g., building `gcc.hostDrv'
+            && libcCross ? crossConfig
+            && libcCross.crossConfig == "i586-pc-gnu")
         || (cross != null && cross.config == "i586-pc-gnu"
             && libcCross != null))
     then
       # On GNU/Hurd glibc refers to Hurd & Mach headers and libpthread is not
       # in glibc, so add the right `-I' flags to the default spec string.
+      assert libcCross != null -> libpthreadCross != null;
       let
-        libc = if cross != null then libcCross else stdenv.glibc;
+        libc = if libcCross != null then libcCross else stdenv.glibc;
         gnu_h = "gcc/config/gnu.h";
         i386_gnu_h = "gcc/config/i386/gnu.h";
         extraCPPDeps =
@@ -181,12 +185,18 @@ stdenv.mkDerivation ({
            echo "augmenting \`LIB_SPEC' in \`${gnu_h}' with \`${extraLibSpec}'..."
            sed -i "${gnu_h}" \
                -es'|LIB_SPEC *"\(.*\)$|LIB_SPEC "${extraLibSpec} \1|g'
+
+           echo "setting \`NATIVE_SYSTEM_HEADER_DIR' and \`STANDARD_INCLUDE_DIR' to \`${libc}/include'..."
+           sed -i "${gnu_h}" \
+               -es'|#define STANDARD_INCLUDE_DIR.*$|#define STANDARD_INCLUDE_DIR "${libc}/include"|g'
+           sed -i gcc/config/t-gnu \
+               -es'|NATIVE_SYSTEM_HEADER_DIR.*$|NATIVE_SYSTEM_HEADER_DIR = ${libc}/include|g'
         ''
     else if cross != null || stdenv.gcc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       let
-        libc = if (cross != null && libcCross != null) then libcCross else stdenv.gcc.libc;
+        libc = if (libcCross != null) then libcCross else stdenv.gcc.libc;
       in
         '' echo "fixing the \`GLIBC_DYNAMIC_LINKER' and \`UCLIBC_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
@@ -202,17 +212,18 @@ stdenv.mkDerivation ({
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
-  buildNativeInputs = [ texinfo which ]
-    ++ optional langJava perl;
+  buildNativeInputs = [ texinfo which gettext ]
+    ++ (optional (perl != null) perl)
+    ++ (optional javaAwtGtk pkgconfig)
+    ++ (optionals langTreelang [bison flex]);
 
-  buildInputs = [ gmp mpfr mpc libelf gettext ]
+  buildInputs = [ gmp mpfr mpc libelf ]
     ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
     ++ (optional (cloog != null) cloog)
-    ++ (optionals langTreelang [bison flex])
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
-    ++ (optionals javaAwtGtk [gtk pkgconfig libart_lgpl] ++ xlibs)
+    ++ (optionals javaAwtGtk [ gtk libart_lgpl ] ++ xlibs)
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])

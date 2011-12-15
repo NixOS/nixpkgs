@@ -1,9 +1,18 @@
-{stdenv, fetchurl, perl, bison, mktemp, linuxHeaders, linuxHeadersCross}:
+{
+  stdenv,
+  fetchurl,
+  perl,
+  bison,
+  mktemp,
+  linuxHeaders,
+  linuxHeadersCross,
+  kernel ? null
+}:
 
 assert stdenv.isLinux;
 
 let
-  version = "1.5.20";
+  version = "1.5.24";
   baseMakeFlags = ["V=1" "prefix=$out" "SHLIBDIR=$out/lib"];
 in
 
@@ -11,18 +20,16 @@ stdenv.mkDerivation {
   name = "klibc-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";
-    sha256 = "07683dn18r3k35d6pp0sn88pqcx7dldqx3m6f2gz45i1j094qp7m";
+    url = "http://ftp.eu.openbsd.org/pub/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";
+    sha256 = "18lm32dlj9k2ky9wwk274zmc3jndgrb41b6qm82g3lza6wlw3yki";
   };
-
-  patches = [ ./make382.patch ];
 
   # Trick to make this build on nix. It expects to have the kernel sources
   # instead of only the linux kernel headers.
   # So it cannot run the 'make headers_install' it wants to run.
   # We don't install the headers, so klibc will not be useful as libc, but
   # usually in nixpkgs we only use the userspace tools comming with klibc.
-  prePatch = ''
+  prePatch = stdenv.lib.optionalString (kernel == null) ''
     sed -i -e /headers_install/d scripts/Kbuild.install
   '';
   
@@ -51,10 +58,18 @@ stdenv.mkDerivation {
     echo "CONFIG_AEABI=y" >> defconfig
     makeFlags=$(eval "echo $makeFlags")
 
+  '' + (if kernel == null then ''
     mkdir linux
     cp -prsd $linuxHeaders/include linux/
     chmod -R u+w linux/include/
-  ''; # */
+  '' else ''
+    tar xvf ${kernel.src}
+    mv linux* linux
+    cd linux
+    ln -sv ${kernel}/config .config
+    make prepare
+    cd ..
+  '');
   
   # Install static binaries as well.
   postInstall = ''

@@ -148,7 +148,6 @@ rec {
       }
     ;
 
-
     uniq = elemType: mkOptionType {
       inherit (elemType) name check iter fold docPath hasOptions;
       merge = list:

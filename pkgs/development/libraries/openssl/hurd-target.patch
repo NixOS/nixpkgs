@@ -1,0 +1,12 @@
+diff -Naur openssl-1.0.0d-orig/Configure openssl-1.0.0d/Configure
+--- openssl-1.0.0d-orig/Configure	2010-11-30 17:19:26.000000000 -0500
++++ openssl-1.0.0d/Configure	2011-11-16 13:52:57.614416683 -0500
+@@ -563,7 +563,7 @@
+ "newsos4-gcc","gcc:-O -DB_ENDIAN::(unknown):NEWS4:-lmld -liberty:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_RISC1 DES_UNROLL BF_PTR::::",
+ 
+ ##### GNU Hurd
+-"hurd-x86",  "gcc:-DL_ENDIAN -DTERMIOS -O3 -fomit-frame-pointer -march=i486 -Wall::-D_REENTRANT::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:linux-shared:-fPIC",
++"hurd-x86","gcc:-DL_ENDIAN -DTERMIOS -O3 -Wa,--noexecstack -g -mtune=i486 -Wall::-D_REENTRANT::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:linux-shared:-fPIC::.so.\$(SHLIB_MAJOR).\$(SHLIB_MINOR)",
+ 
+ ##### OS/2 EMX
+ "OS2-EMX", "gcc::::::::",

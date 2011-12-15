@@ -1,5 +1,5 @@
 { stdenv, fetchcvs, builderDefs, ocaml, fuse, postgresql, pcre
-, libuuid, gnomevfs, pkgconfig, GConf }:
+, libuuid, gnome_vfs, pkgconfig, GConf }:
 
 	let localDefs = builderDefs.passthru.function {
 	src = fetchcvs {
@@ -10,7 +10,7 @@
 	};
 		
 		buildInputs = [ocaml fuse postgresql pcre
-			libuuid gnomevfs pkgconfig GConf];
+			libuuid gnome_vfs pkgconfig GConf];
 		configureFlags = [];
 		    build = builderDefs.stringsWithDeps.fullDepEntry ("
 			cd deps 

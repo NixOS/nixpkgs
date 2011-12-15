@@ -1,0 +1,22 @@
+diff --git a/src/client/screen.c b/src/client/screen.c
+index e8fa75f..d3842ac 100644
+--- a/src/client/screen.c
++++ b/src/client/screen.c
+@@ -255,7 +255,7 @@ void msg(int attr, const char *fmt, ...)
+     va_start(ap, fmt);
+     r = vmsg(attr, SML, fmt, ap);
+     va_end(ap);
+-    if (r) vmsg(C_ERR, SML, "msg(): output truncated\n", NULL);
++    if (r) msgn(C_ERR, SML, "msg(): output truncated\n");
+ }
+ 
+ void msgn(int attr, int size, const char *fmt, ...)
+@@ -266,7 +266,7 @@ void msgn(int attr, int size, const char *fmt, ...)
+     va_start(ap, fmt);
+     r = vmsg(attr, size, fmt, ap);
+     va_end(ap);
+-    if (r) vmsg(C_ERR, SML, "msgn(): output truncated\n", NULL);
++    if (r) msgn(C_ERR, SML, "msgn(): output truncated\n");
+ }
+ 
+ int screen_shut()

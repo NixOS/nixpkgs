@@ -1,15 +1,15 @@
 { fetchurl, stdenv, xz, zlib, lzo, libtasn1, nettle
-, guileBindings, guile }:
+, guileBindings, guile, perl }:
 
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
 
-  name = "gnutls-3.0.2";
+  name = "gnutls-3.0.8";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.xz";
-    sha256 = "0jy0j77inv6yr7s9mnhs5kvjjmhj0ifg35145s1qn3hd9ma36nii";
+    sha256 = "0qcp7jm8c2fyk5kdb4fgyrv9hb745mcf066vwmlb8dchx15ijkms";
   };
 
   configurePhase = ''
@@ -22,8 +22,10 @@ stdenv.mkDerivation rec {
         else ""}
   '';
 
-  buildInputs = [ xz zlib lzo ]
+  buildInputs = [ zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;
+
+  buildNativeInputs = [ xz perl ];
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 

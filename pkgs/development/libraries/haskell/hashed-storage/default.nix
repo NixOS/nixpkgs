@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hashed-storage";
-  version = "0.5.8";
-  sha256 = "1730hg6h7a1b0vgr9dvish41bpgly5cjpdwhqny75fi5in7dqplh";
+  version = "0.5.9";
+  sha256 = "1ycn0zwk5jqm6wwgs8nxpdg7fh5wx0i2058i0a924whj196kkhk2";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

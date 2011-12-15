@@ -1,27 +1,29 @@
 { fetchgit, stdenv, autoconf, automake, libtool
-, machHeaders, hurdHeaders, hurd
+, machHeaders, hurdHeaders, hurd, headersOnly ? false
 , cross ? null, gccCross ? null, glibcCross ? null }:
 
 assert (cross != null) -> (gccCross != null) && (glibcCross != null);
+assert (!headersOnly) -> (hurd != null);
 
 let
-  date = "20100512";
+  date = "20111020";
 
   # Use the `tschwinge/Peter_Herbolzheimer' branch as prescribed in
   # <http://www.gnu.org/software/hurd/hurd/building/cross-compiling.html>.
-  rev = "c4bb52770f0b6703bef76c5abdd08663b46b4dc9";
+  rev = "a7b82c3302bf9c47176648eb802a61ae2d9a16f5";
 in
 stdenv.mkDerivation ({
-  name = "libpthread-hurd-${date}";
+  name = "libpthread-hurd-${if headersOnly then "headers-" else ""}${date}";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/libpthread.git";
-    sha256 = "1wya9kfmqgn04l995a25p4hxfwddjahfmhdzljb4cribw0bqdizg";
+    sha256 = "e8300762914d927c0da4168341a5982a1057613e1af363ee68942087b2570b3d";
     inherit rev;
   };
 
   buildNativeInputs = [ autoconf automake libtool ];
-  buildInputs = [ machHeaders hurdHeaders hurd ]
+  buildInputs = [ machHeaders hurdHeaders ]
+   ++ stdenv.lib.optional (!headersOnly) hurd
    ++ stdenv.lib.optional (gccCross != null) gccCross;
 
   preConfigure = "autoreconf -vfi";
@@ -34,6 +36,20 @@ stdenv.mkDerivation ({
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+(if headersOnly
+ then {
+   configureFlags =
+     [ "--build=i586-pc-gnu"
+       "ac_cv_lib_ihash_hurd_ihash_create=yes"
+     ];
+
+   buildPhase = ":";
+   installPhase = "make install-data-local-headers";
+ }
+ else { })
 
 //
 

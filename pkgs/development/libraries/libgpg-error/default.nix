@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "libgpg-error-1.7";
+  name = "libgpg-error-1.10";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "14as9cpm4k9c6lxm517s9vzqrmjmdpf8i4s41k355xc27qdk6083";
+    sha256 = "0cal3jdnzdailr13qcy74grfbplbghkgr3qwk6qjjp4bass2j1jj";
   };
 
   doCheck = true;
@@ -23,5 +23,6 @@ stdenv.mkDerivation rec {
     homepage = http://gnupg.org;
 
     license = "LGPLv2+";
-  };    
+    platforms = stdenv.lib.platforms.all;
+  };
 }

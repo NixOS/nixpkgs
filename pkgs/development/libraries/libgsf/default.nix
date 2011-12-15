@@ -1,6 +1,6 @@
 { fetchurl, stdenv, perl, perlXMLParser, pkgconfig, libxml2
 , glib, gettext, intltool, bzip2
-, gnomevfs, libbonobo, python }:
+, gnome_vfs, libbonobo, python }:
 
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ perl perlXMLParser pkgconfig gettext bzip2 gnomevfs python intltool ];
+    [ perl perlXMLParser pkgconfig gettext bzip2 gnome_vfs python intltool ];
 
   propagatedBuildInputs = [ glib libxml2 libbonobo ];
 
