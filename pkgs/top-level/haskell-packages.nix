@@ -89,8 +89,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ghc703Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_1 super;
   ghc704Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_1 super; # link
   ghc721Prefs  = super : super // super.haskellPlatformDefaults_future super;
-  ghc722Prefs  = super : super // super.haskellPlatformDefaults_future super;
-  ghcHEADPrefs = super : super // super.haskellPlatformDefaults_future super; # link
+  ghc722Prefs  = super : super // super.haskellPlatformDefaults_future super; #link
+  ghcHEADPrefs = super : super // super.haskellPlatformDefaults_HEAD super;
 
   # GHC and its wrapper
   #
@@ -142,9 +142,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     HUnit        = self.HUnit_1_2_2_3; # 7.2 ok, 7.3 ok
     network      = self.network_2_3_0_8; # 7.2 ok, 7.3 ok
     OpenGL       = self.OpenGL_2_2_3_0; # 7.2 ok, 7.3 ok
-    parallel     = self.parallel_3_1_0_1; # 7.2 ok, 7.3 ok
+    parallel     = self.parallel_3_2_0_0; # 7.2 ok, 7.3 ok
     parsec       = self.parsec_3_1_2; # 7.2 ok, 7.3 ok
-    QuickCheck   = self.QuickCheck_2_4_0_1; # 7.2 ok, 7.3 ok
+    QuickCheck   = self.QuickCheck_2_4_1_1; # 7.2 ok, 7.3 ok
     regexBase    = self.regexBase_0_93_2; # 7.2 ok, 7.3 ok
     regexCompat  = self.regexCompat_0_93_1; # 7.2 ok, 7.3 ok
     regexPosix   = self.regexPosix_0_94_4; # 7.2 ok, 7.3 ok
@@ -167,6 +167,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellPlatformDefaults_future =
     self : self.haskellPlatformArgs_future self // {
       mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
+    };
+
+  haskellPlatformDefaults_HEAD =
+    self : self.haskellPlatformDefaults_future self // {
+      deepseq = null; # apparently a core library in ghc-7.3
     };
 
   haskellPlatformArgs_2011_2_0_1 = self : {
