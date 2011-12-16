@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, lib, cmake, qt4, qtscriptgenerator, perl, gettext, curl
-, libxml2, mysql, taglib, taglib_extras, loudmouth , kdelibs, automoc4, phonon
-, strigi, soprano, qca2, libmtp, liblastfm, libgpod, pkgconfig }:
+{ stdenv, fetchurl, lib, qtscriptgenerator, perl, gettext, curl
+, libxml2, mysql, taglib, taglib_extras, loudmouth , kdelibs
+, qca2, libmtp, liblastfm, libgpod, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   QT_PLUGIN_PATH="${qtscriptgenerator}/lib/qt4/plugins";
-  buildInputs = [ cmake qt4 qtscriptgenerator perl stdenv.gcc.libc gettext curl
+  buildInputs = [ qtscriptgenerator stdenv.gcc.libc gettext curl
     libxml2 mysql taglib taglib_extras loudmouth kdelibs automoc4 phonon strigi
     soprano qca2 libmtp liblastfm libgpod pkgconfig ];
 

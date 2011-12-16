@@ -8010,9 +8010,6 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde47;
 
-  # TODO: merge with branches/drop-kde4.5 if you want to remove KDE SC 4.5
-  # This branch removes kde45 and quite a few compatibility hacks
-  kde45 = kdePackagesFor pkgs.kde45 "4.5";
   kde47 = kdePackagesFor pkgs.kde47 "4.7";
 
   kdePackagesFor = self: version:
