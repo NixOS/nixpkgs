@@ -1,15 +1,10 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "popt-1.16";
-
+  name = "popt-1.15";
+  
   src = fetchurl {
-    url = "http://rpm5.org/files/popt/popt-1.16.tar.gz";
-    sha256 = "1j2c61nn2n351nhj4d25mnf3vpiddcykq005w2h6kw79dwlysa77";
+    url = http://rpm5.org/files/popt/popt-1.15.tar.gz;
+    sha256 = "1wqbcimg4zlfp7261i89s1918a46fjfbvq1a4ij4a6prk27576q6";
   };
-
-  meta = {
-    description = "command line option parsing library";
-  };
-
 }
