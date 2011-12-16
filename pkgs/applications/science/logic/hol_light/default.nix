@@ -1,20 +1,22 @@
 {stdenv, fetchsvn, writeScript, ocaml, findlib, camlp5}:
 
-stdenv.mkDerivation rec {
-  name = "hol_light-20111106";
-  src = fetchsvn {
-    url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "112";
-    sha256 = "6c7b39ea024b2e8042c1a22a01f778caedaaf82189c9f2c1cfa8c08707151129";
-  };
-
-  buildInputs = [ ocaml findlib camlp5 ];
-
+let
   start_script = ''
     #!/bin/sh
     cd "$out/lib/hol_light"
     exec ${ocaml}/bin/ocaml -I "$(ocamlfind query camlp5)" -init make.ml
   '';
+in
+
+stdenv.mkDerivation {
+  name = "hol_light-20111204";
+  src = fetchsvn {
+    url = http://hol-light.googlecode.com/svn/trunk;
+    rev = "114";
+    sha256 = "a9203a0118caf5d0ca7621abafab4af6245e1c1ae6ba628ead7c6f69aa86d9d3";
+  };
+
+  buildInputs = [ ocaml findlib camlp5 ];
 
   buildPhase = ''
     make pa_j.ml
