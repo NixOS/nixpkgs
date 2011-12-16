@@ -3,7 +3,7 @@
 , xz, openexr, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
-, getopt, udev, herqq, phonon, gettext
+, getopt, udev, herqq, phonon
 }:
 
 kde {

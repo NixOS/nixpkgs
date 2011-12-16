@@ -2232,7 +2232,8 @@ let
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix
-      ghc6121Binary (x : x.ghcHEADPrefs) false false lowPrio;
+      (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+      (x : x.ghcHEADPrefs) false false lowPrio;
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
@@ -2332,7 +2333,7 @@ let
 
   ocaml_3_11_1 = callPackage ../development/compilers/ocaml/3.11.1.nix { };
 
-  ocaml_3_12_0 = lowPrio (callPackage ../development/compilers/ocaml/3.12.0.nix { });
+  ocaml_3_12_1 = lowPrio (callPackage ../development/compilers/ocaml/3.12.1.nix { });
 
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
     inherit ocaml;
@@ -2416,9 +2417,11 @@ let
   ocamlPackages = recurseIntoAttrs ocamlPackages_3_11_1;
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
   ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
-  ocamlPackages_3_12_0 = mkOcamlPackages ocaml_3_12_0 pkgs.ocamlPackages_3_12_0;
+  ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
 
-  opa = let callPackage = newScope pkgs.ocamlPackages_3_12_0; in callPackage ../development/compilers/opa { };
+  opa = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/compilers/opa { };
+
+  ocamlnat = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/ocaml-modules/ocamlnat { };
 
   opencxx = callPackage ../development/compilers/opencxx {
     gcc = gcc33;
@@ -8003,9 +8006,6 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde47;
 
-  # TODO: merge with branches/drop-kde4.5 if you want to remove KDE SC 4.5
-  # This branch removes kde45 and quite a few compatibility hacks
-  kde45 = kdePackagesFor pkgs.kde45 "4.5";
   kde47 = kdePackagesFor pkgs.kde47 "4.7";
 
   kdePackagesFor = self: version:
@@ -8029,9 +8029,6 @@ let
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
       digikam = callPackage ../applications/graphics/digikam { };
-
-      filelight = if kde4 ? filelight then kde4.filelight
-        else callPackage ../applications/misc/filelight { };
 
       k3b = callPackage ../applications/misc/k3b { };
 

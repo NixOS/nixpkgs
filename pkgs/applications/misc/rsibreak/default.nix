@@ -1,12 +1,20 @@
-{ stdenv, fetchurl, cmake, kdelibs, kdebase_workspace }:
+{ stdenv, fetchurl, kdelibs, kdebase_workspace, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "rsibreak-0.10";
+  name = "rsibreak-0.11";
 
   src = fetchurl {
-    url = "http://www.rsibreak.org/files/${name}.tar.bz2";
-    sha256 = "02vvwmzhvc9jfrzmnfn3cygx63yx7g360lcslwj1vikzkg834ik0";
+    url = "${meta.homepage}/files/${name}.tar.bz2";
+    sha256 = "1yrf73r8mixskh8b531wb8dfs9z7rrw010xsrflhjhjmqh94h8mw";
   };
 
-  buildInputs = [ cmake kdelibs kdebase_workspace ];
+  buildNativeInputs = [ gettext ];
+
+  buildInputs = [ kdelibs kdebase_workspace ];
+
+  meta = {
+    homepage = http://www.rsibreak.org/;
+    description = "Repetitive Strain Injury prevention";
+    inherit (kdelibs.meta) platforms maintainers;
+  };
 }
