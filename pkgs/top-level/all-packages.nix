@@ -8034,9 +8034,6 @@ let
 
       digikam = callPackage ../applications/graphics/digikam { };
 
-      filelight = if kde4 ? filelight then kde4.filelight
-        else callPackage ../applications/misc/filelight { };
-
       k3b = callPackage ../applications/misc/k3b { };
 
       kadu = callPackage ../applications/networking/instant-messengers/kadu { };
