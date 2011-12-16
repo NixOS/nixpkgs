@@ -2333,7 +2333,7 @@ let
 
   ocaml_3_11_1 = callPackage ../development/compilers/ocaml/3.11.1.nix { };
 
-  ocaml_3_12_0 = lowPrio (callPackage ../development/compilers/ocaml/3.12.0.nix { });
+  ocaml_3_12_1 = lowPrio (callPackage ../development/compilers/ocaml/3.12.1.nix { });
 
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
     inherit ocaml;
