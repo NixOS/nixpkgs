@@ -2,15 +2,14 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "1.2.6";
 in
 
 stdenv.mkDerivation {
-  name = "ocaml-findlib-${version}";
+  name = "ocaml-findlib-1.2.7";
 
   src = fetchurl {
-    url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
-    sha256 = "1b6z5lylsjxxaifw2yc21cs0dc84zqi4q57sgwg4j8k3m60ivpxs";
+    url = http://download.camlcity.org/download/findlib-1.2.7.tar.gz;
+    sha256 = "16q2avr48hd7vwz3bwvjw39dva86mdwa05drcwz32fwbwhlv2869";
   };
 
   buildInputs = [m4 ncurses ocaml];

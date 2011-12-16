@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, perl
-, gettext}:
+{ stdenv, fetchurl, kdelibs, gettext}:
 
 stdenv.mkDerivation rec {
-  name = "rekonq-0.7.0";
-  passthru = { inherit stdenv; };
+  name = "rekonq-0.8.1";
 
   src = fetchurl {
     url = "mirror://sf/rekonq/${name}.tar.bz2";
-    sha256 = "14gi8ic53jkam2v52zp4p965dw6pqhjm3xhqssm5vimx7hp0kc1w";
+    sha256 = "0zwvdk66q9iphdkrhn850p9f0h8lads9qx3v6dnq15gfk793nz4h";
   };
 
-  buildInputs = [ cmake qt4 kdelibs automoc4 phonon perl gettext ];
+  buildInputs = [ kdelibs ];
+
+  buildNativeInputs = [ gettext ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

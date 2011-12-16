@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, kdelibs, kdepimlibs, automoc4, funambol,liblikeback }:
+{ stdenv, fetchgit, kdepimlibs, funambol, liblikeback }:
 
 stdenv.mkDerivation rec {
   name = "akunambol-20110304";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d2x42lbw32qyawri7z0mrbafz36r035w5bxjpq51awyqjwkbb2d";
   };
 
-  buildInputs = [ cmake automoc4 kdelibs kdepimlibs funambol liblikeback ];
+  buildInputs = [ kdepimlibs funambol liblikeback ];
   KDEDIRS = liblikeback;
 
   patches = [ ./non-latin.diff ];
