@@ -1,6 +1,7 @@
 { stdenv, fetchurl, lib, qtscriptgenerator, perl, gettext, curl
 , libxml2, mysql, taglib, taglib_extras, loudmouth , kdelibs
-, qca2, libmtp, liblastfm, libgpod, pkgconfig }:
+, qca2, libmtp, liblastfm, libgpod, pkgconfig, automoc4, phonon
+, strigi, soprano }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
