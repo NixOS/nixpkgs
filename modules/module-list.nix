@@ -190,6 +190,7 @@
   ./system/upstart-events/runlevel.nix
   ./system/upstart-events/shutdown.nix
   ./system/upstart/upstart.nix
+  ./tasks/cpu-freq.nix
   ./tasks/filesystems.nix
   ./tasks/kbd.nix
   ./tasks/lvm.nix
