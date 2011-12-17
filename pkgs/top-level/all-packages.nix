@@ -4885,6 +4885,16 @@ let
 
   pyqt4 = callPackage ../development/python-modules/pyqt { };
 
+  pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
+
+  pysideGeneratorrunner = callPackage ../development/python-modules/pyside/generatorrunner.nix { };
+
+  pyside = callPackage ../development/python-modules/pyside { };
+
+  pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
+
+  pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix { };
+
   pyx = callPackage ../development/python-modules/pyx { };
 
   pyxml = callPackage ../development/python-modules/pyxml { };
