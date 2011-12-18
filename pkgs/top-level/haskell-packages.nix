@@ -1100,6 +1100,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regexCompat_0_95_1   = callPackage ../development/libraries/haskell/regex-compat/0.95.1.nix   {
     regexPosix = self.regexPosix_0_95_1;
   };
+  regexCompat93 = self.regexCompat_0_93_1;
   regexCompat = self.regexCompat_0_71_0_1;
 
   regexPosix_0_72_0_3 = callPackage ../development/libraries/haskell/regex-posix/0.72.0.3.nix {};
@@ -1502,7 +1503,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Applications.
 
-  darcs = callPackage ../applications/version-management/darcs {};
+  darcs = callPackage ../applications/version-management/darcs {
+    regexCompat = self.regexCompat93;
+  };
 
   leksah = callPackage ../applications/editors/leksah {};
 
