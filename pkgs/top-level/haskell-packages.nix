@@ -144,7 +144,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     OpenGL       = self.OpenGL_2_2_3_0; # 7.2 ok, 7.3 ok
     parallel     = self.parallel_3_2_0_0; # 7.2 ok, 7.3 ok
     parsec       = self.parsec_3_1_2; # 7.2 ok, 7.3 ok
-    QuickCheck   = self.QuickCheck_2_4_1_1; # 7.2 ok, 7.3 ok
+    QuickCheck   = self.QuickCheck_2_4_2; # 7.2 ok, 7.3 ok
     regexBase    = self.regexBase_0_93_2; # 7.2 ok, 7.3 ok
     regexCompat  = self.regexCompat_0_93_1; # 7.2 ok, 7.3 ok
     regexPosix   = self.regexPosix_0_94_4; # 7.2 ok, 7.3 ok
@@ -1063,8 +1063,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   QuickCheck_2_1_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.1.1.1.nix {};
   QuickCheck_2_4_0_1 = callPackage ../development/libraries/haskell/QuickCheck/2.4.0.1.nix {};
   QuickCheck_2_4_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.4.1.1.nix {};
+  QuickCheck_2_4_2 = callPackage ../development/libraries/haskell/QuickCheck/2.4.2.nix {};
   QuickCheck1 = self.QuickCheck_1_2_0_1;
-  QuickCheck2 = self.QuickCheck_2_4_1_1;
+  QuickCheck2 = self.QuickCheck_2_4_2;
   QuickCheck  = self.QuickCheck2;
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
