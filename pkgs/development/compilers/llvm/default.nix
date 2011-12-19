@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff, darwinSwVersUtility }:
+{ stdenv, fetchurl, perl, groff, darwinSwVersUtility, cmake }:
 
 let version = "3.0"; in
 
@@ -10,14 +10,10 @@ stdenv.mkDerivation {
     sha256 = "0xq4gi7lflv8ilfckslhfvnja5693xjii1yvzz39kklr6hfv37ji";
   };
 
-  buildInputs = [ perl groff ] ++
+  buildInputs = [ perl groff cmake ] ++
     stdenv.lib.optional stdenv.isDarwin darwinSwVersUtility;
 
-  configureFlags = [ "--enable-optimized" "--enable-shared" "--disable-static" ]
-    ++ stdenv.lib.optionals (stdenv.gcc ? clang) [
-      "--with-built-clang=yes"
-      "CXX=clang++"
-    ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   enableParallelBuilding = true;
 

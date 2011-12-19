@@ -1665,7 +1665,11 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clangBootUnwrapped = callPackage ../development/compilers/llvm/clang.nix { };
+  clangBootUnwrapped = callPackage ../development/compilers/llvm/clang.nix {
+    # There is a bug in gcc-4.5 that prevents building a release build of
+    # clang-3.0
+    stdenv = stdenvAdapters.overrideGCC stdenv gcc46;
+  };
 
   clangBoot = wrapClang clangBootUnwrapped;
 
