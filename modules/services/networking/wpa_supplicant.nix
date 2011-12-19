@@ -44,6 +44,8 @@ in
 
     environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
+    services.dbus.packages = [ pkgs.wpa_supplicant ];
+
     jobs.wpa_supplicant = 
       { startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
@@ -57,8 +59,8 @@ in
           '';
 
         exec =
-          "wpa_supplicant -s -C /var/run/wpa_supplicant " +
-          "-c ${configFile} -i${config.networking.WLANInterface}";
+          "wpa_supplicant -s -u -c ${configFile} "
+          + (optionalString (config.networking.WLANInterface != null) "-i ${config.networking.WLANInterface}");
       };
   
   };
