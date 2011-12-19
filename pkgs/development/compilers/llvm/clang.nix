@@ -7,10 +7,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl llvm groff cmake ];
 
-  patches = stdenv.lib.optionals stdenv.isLinux
+  patches = stdenv.lib.optionals (stdenv.gcc.libc != null) 
     [ ./clang-include-paths.patch ./clang-ld-flags.patch ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
     sed -i -e 's,C_INCLUDE_PATH,"${stdenv.gcc.libc}/include/",' \
       -e 's,CPP_HOST,"'$(${stdenv.gcc}/bin/cc -dumpmachine)'",' \
       -e 's,CPP_INCLUDE_PATH,"${stdenv.gcc.gcc}/include/c++/${stdenv.gcc.gcc.version}",' \
