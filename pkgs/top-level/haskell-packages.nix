@@ -1060,7 +1060,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   QuickCheck_1_2_0_0 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.0.nix {};
   QuickCheck_1_2_0_1 = callPackage ../development/libraries/haskell/QuickCheck/1.2.0.1.nix {};
-  QuickCheck_2_1_0_3 = callPackage ../development/libraries/haskell/QuickCheck/2.1.0.3.nix {};
   QuickCheck_2_1_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.1.1.1.nix {};
   QuickCheck_2_4_0_1 = callPackage ../development/libraries/haskell/QuickCheck/2.4.0.1.nix {};
   QuickCheck_2_4_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.4.1.1.nix {};
