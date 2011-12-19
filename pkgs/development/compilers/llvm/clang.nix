@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, perl, groff, llvm, cmake }:
+{ stdenv, fetchurl, perl, groff, llvm, cmake, darwinInstallNameToolUtility }:
 
 let version = "3.0"; in
 
 stdenv.mkDerivation {
   name = "clang-${version}";
 
-  buildInputs = [ perl llvm groff cmake ];
+  buildInputs = [ perl llvm groff cmake ] ++ stdenv.lib.optional stdenv.isDarwin darwinInstallNameToolUtility;
 
   patches = stdenv.lib.optionals (stdenv.gcc.libc != null) 
     [ ./clang-include-paths.patch ./clang-ld-flags.patch ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     description = "A C language family frontend for LLVM";
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric shlevy];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; all;
   };
 }
 
