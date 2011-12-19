@@ -4426,7 +4426,6 @@ let
   postgis = callPackage ../development/libraries/postgis { };
 
   protobuf = callPackage ../development/libraries/protobuf { };
-  protobuf_2_2_0 = callPackage ../development/libraries/protobuf/2.2.0.nix { };
 
   pth = callPackage ../development/libraries/pth { };
 
