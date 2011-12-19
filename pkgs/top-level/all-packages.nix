@@ -5162,6 +5162,8 @@ let
 
   bluez = callPackage ../os-specific/linux/bluez { };
 
+  beret = callPackage ../games/beret { };
+
   bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
 
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
