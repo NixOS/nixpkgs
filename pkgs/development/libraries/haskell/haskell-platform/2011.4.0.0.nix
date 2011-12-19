@@ -29,8 +29,14 @@ cabal.mkDerivation (self : {
   '';
   noHaddock = true;
   meta = {
+    homepage = "http://haskell.org/platform";
     description = "Haskell Platform meta package";
-    maintainers = [self.stdenv.lib.maintainers.andres];
+    license = self.stdenv.lib.licenses.bsd3;
+    platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
 
