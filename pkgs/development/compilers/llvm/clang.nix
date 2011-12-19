@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     description = "A C language family frontend for LLVM";
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric shlevy];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
 

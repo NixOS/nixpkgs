@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric shlevy];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
 
