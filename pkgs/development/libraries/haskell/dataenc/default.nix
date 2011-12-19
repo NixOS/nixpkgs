@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "dataenc";
-  version = "0.14.0.2";
-  sha256 = "1zym24259d053b7vbxir2l7229gilkg81vvc0wf9605873j6gw5b";
+  version = "0.14.0.3";
+  sha256 = "1k6k9cpx5ma32gvzf2mdbz4kfiblwfah9875qr13zkl4has9y0pd";
   isLibrary = true;
   isExecutable = true;
   meta = {
