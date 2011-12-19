@@ -950,8 +950,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   multiplate = callPackage ../development/libraries/haskell/multiplate {};
 
   multirec_0_5_1 = callPackage ../development/libraries/haskell/multirec/0.5.1.nix {};
-  multirec_0_6 = callPackage ../development/libraries/haskell/multirec/0.6.nix {};
-  multirec = self.multirec_0_6;
+  multirec_0_7 = callPackage ../development/libraries/haskell/multirec/0.7.nix {};
+  multirec = self.multirec_0_7;
 
   multiset = callPackage ../development/libraries/haskell/multiset {};
 
