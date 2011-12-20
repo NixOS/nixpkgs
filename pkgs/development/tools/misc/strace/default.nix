@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz, perl }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "strace-4.6";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "12n2faqq7whmszpjhv2lcb06r7900j53p0zl7vipi18inr0smycy";
   };
 
-  buildNativeInputs = [ xz perl ];
+  buildNativeInputs = [ perl ];
 
   meta = {
     homepage = http://strace.sourceforge.net/;
