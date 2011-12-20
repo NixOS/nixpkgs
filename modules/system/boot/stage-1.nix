@@ -206,7 +206,7 @@ let
       $out/bin/e2fsck -V 2>&1 | grep "e2fsck "
       $out/bin/tune2fs 2> /dev/null | grep "tune2fs "
       $out/bin/udevadm --version
-      $out/bin/blkid -v 2>&1 | tee -a $out/log | grep "blkid from util-linux-ng"
+      $out/bin/blkid -v 2>&1 | tee -a $out/log | grep "blkid from util-linux"
       $out/bin/dmsetup --version 2>&1 | tee -a $out/log | grep "version:"
       LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a $out/log | grep "LVM"
       $out/bin/reiserfsck -V
