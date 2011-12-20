@@ -51,7 +51,7 @@ in
           ''
             ${cfg.extraHosts}
             ${optionalString (cfg.hostName != "")
-              "127.0.0.1 ${cfg.hostName} ${hostnameWithDomain}"}
+              "127.0.0.1 ${hostnameWithDomain} ${cfg.hostName}"}
             127.0.0.1 localhost ${localhostWithDomain}
           '';
         target = "hosts";
