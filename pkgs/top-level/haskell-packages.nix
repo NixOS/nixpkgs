@@ -351,7 +351,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     zlib         = self.zlib_0_5_2_0;
     alex         = self.alex_2_3_2;
     cgi          = self.cgi_3001_1_7_2;
-    QuickCheck   = self.QuickCheck_2_1_0_3;
+    QuickCheck   = self.QuickCheck_2_1_1_1;
     HTTP         = self.HTTP_4000_0_9;
     HUnit        = self.HUnit_1_2_2_1;
     network      = self.network_2_2_1_7;
