@@ -6,7 +6,8 @@ with pkgs.lib;
   ###### interface
 
   options = {
-    cpuFreqGovernor = mkOption {
+  
+    powerManagement.cpuFreqGovernor = mkOption {
       default = "";
       example = "ondemand";
       description = ''
@@ -15,13 +16,17 @@ with pkgs.lib;
         "userspace".
       '';
     };
+    
   };
 
 
   ###### implementation
 
-  config = mkIf (config.cpuFreqGovernor != "") ({
-    jobs.cpuFreq =
+  config = mkIf (config.powerManagement.cpuFreqGovernor != "") {
+
+    environment.systemPackages = [ pkgs.cpufrequtils ];
+
+    jobs.cpufreq =
       { description = "Initialize CPU frequency governor";
 
         startOn = "started udev";
@@ -30,10 +35,11 @@ with pkgs.lib;
 
         script = ''
           for i in $(seq 0 $(($(nproc) - 1))); do
-            ${pkgs.cpufrequtils}/bin/cpufreq-set -g ${config.cpuFreqGovernor} -c $i
+            ${pkgs.cpufrequtils}/bin/cpufreq-set -g ${config.powerManagement.cpuFreqGovernor} -c $i
           done
         '';
       };
-  });
+      
+  };
 
 }

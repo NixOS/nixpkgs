@@ -91,6 +91,8 @@ in
         "p4_clockmod"
       ];
 
+    powerManagement.cpuFreqGovernor = "ondemand";
+
   };
 
 }
