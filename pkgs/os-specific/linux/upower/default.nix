@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
         --replace /usr/sbin/pm- ${pmutils}/sbin/pm-
     '';
 
-  installFlags = "localstatedir=$(TMPDIR)/var";
+  installFlags = "historydir=$(TMPDIR)/foo";
 
   meta = {
     homepage = http://upower.freedesktop.org/;
