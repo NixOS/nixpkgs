@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "authenticate";
-  version = "0.10.3.1";
-  sha256 = "01xqqnvy2xjcgnp5qq5xiqm1whxywa31cgd79mm290i2r4baiq8s";
+  version = "0.10.4";
+  sha256 = "0bjxlnc2qf1900ch9cnab26qz6a0vdz5nz1dwrjby1n5xqqzjd7x";
   buildDepends = [
     aeson attoparsec base64Bytestring blazeBuilder caseInsensitive
     enumerator failure httpEnumerator httpTypes network random RSA SHA
@@ -15,7 +15,7 @@ cabal.mkDerivation (self: {
     xmlEnumerator
   ];
   meta = {
-    homepage = "http://github.com/snoyberg/authenticate/tree/master";
+    homepage = "http://github.com/yesodweb/authenticate";
     description = "Authentication methods for Haskell web applications";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
