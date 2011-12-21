@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "base16-bytestring";
-  version = "0.1.1.3";
-  sha256 = "0v08fnkykvd6y6in6f9a808vk2gfd9pf0wd7rr28z6wwxm5d2x6l";
+  version = "0.1.1.4";
+  sha256 = "061rxlw5kjwj0s08kml46qpw602xwwp05285gpad8c7baw5mzxlr";
   meta = {
     homepage = "http://github.com/bos/base16-bytestring";
     description = "Fast base16 (hex) encoding and decoding for ByteStrings";
