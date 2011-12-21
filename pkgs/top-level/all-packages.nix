@@ -3539,7 +3539,7 @@ let
         cxx = false;
       };
 
-  gmpxx = gmp.override { cxx = true; };
+  gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
