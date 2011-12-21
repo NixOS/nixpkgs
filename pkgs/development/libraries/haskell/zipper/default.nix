@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zipper";
-  version = "0.3.1";
-  sha256 = "170qjc3mbk6i96z5js745ix57i0xkgpa5h9xjiiirq9x6bfbbqyp";
+  version = "0.4";
+  sha256 = "0s3gw883kwxgmz9sk3638ba8i1zb5dirv2hanc3caf6pfay6caks";
   buildDepends = [ multirec ];
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/GenericProgramming/Multirec";
