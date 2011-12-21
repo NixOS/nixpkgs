@@ -5171,12 +5171,7 @@ let
 
   conky = callPackage ../os-specific/linux/conky { };
 
-  cpufrequtils = (
-    import ../os-specific/linux/cpufrequtils {
-    inherit fetchurl stdenv libtool gettext;
-    glibc = stdenv.gcc.libc;
-    linuxHeaders = stdenv.gcc.libc.kernelHeaders;
-  });
+  cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
   cryopid = callPackage ../os-specific/linux/cryopid { };
 
