@@ -14,11 +14,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnuplot-4.4.2";
+  name = "gnuplot-4.4.4";
   
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${name}.tar.gz";
-    sha256 = "1r799l6ww9w21qnklqfn335jkfc6y0ilhv3sv4x4mf4ghgacis1p";
+    sha256 = "1zfv3npsxfn743wl65ibh11djxrc8fxzi2mgg75ppy6m12fmja6j";
   };
 
   configureFlags = if libX11 != null then ["--with-x"] else ["--without-x"];
