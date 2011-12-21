@@ -9,7 +9,9 @@ stdenv.mkDerivation {
 
   NIX_CFLAGS_LINK = "-lgcc_s";
 
-  patchPhase = ''
+  patches = [ ./use-home-dir.patch ];
+
+  postPatch = ''
     sed -i 's@RESOURCE_PATH ""@RESOURCE_PATH "'$out'/share/"@' game.c
   '';
 

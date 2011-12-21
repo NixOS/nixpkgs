@@ -1,0 +1,48 @@
+diff -Naur beret-beret-orig/game.c beret-beret/game.c
+--- beret-beret-orig/game.c	2011-12-17 18:51:32.000000000 -0500
++++ beret-beret/game.c	2011-12-21 13:16:37.047511020 -0500
+@@ -10,12 +10,10 @@
+ #include <stdlib.h>
+ #include <stdio.h>
+ #include <string.h>
+-#ifdef __APPLE__
+ #include <sys/stat.h>
+ #include <unistd.h>
+ #include <errno.h>
+ #include <pwd.h>
+-#endif
+ 
+ #define CAMSCROLL 15
+ #define SCR_WIDTH 780
+@@ -88,12 +86,8 @@
+ #define DIRSEP "/"
+ #endif
+ 
+-#ifdef __APPLE__
+-#define SUPPORT_PATH "Library/Application Support/Beret/"
+-#define RESOURCE_PATH "Beret.app/Contents/Resources/"
+-#else
++#define SUPPORT_PATH ".beret"
+ #define RESOURCE_PATH ""
+-#endif
+ 
+ #define QUITMOD_WIN KMOD_ALT
+ #define QUITKEY_WIN SDLK_F4
+@@ -812,7 +806,6 @@
+ 
+ int init() {
+ 
+-  #ifdef __APPLE__
+   char filestr[512];
+   // Get the home directory of the user.
+   struct passwd *pwd = getpwuid(getuid());
+@@ -827,9 +820,6 @@
+     sprintf(filestr, "%s/saves", support_path);
+     mkdir(filestr, S_IRWXU);
+   }
+-  #else
+-  sprintf(support_path, "");
+-  #endif
+ 
+   if (SDL_Init(SDL_INIT_EVERYTHING) == -1) {
+     printf("Error: couldn't initialize SDL\n");
