@@ -5859,7 +5859,7 @@ let
 
   libsmbios = callPackage ../os-specific/linux/libsmbios { };
 
-  lm_sensors = callPackage ../os-specific/linux/lm_sensors { };
+  lm_sensors = callPackage ../os-specific/linux/lm-sensors { };
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
