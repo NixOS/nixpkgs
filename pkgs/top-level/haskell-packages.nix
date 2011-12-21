@@ -949,9 +949,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   multiplate = callPackage ../development/libraries/haskell/multiplate {};
 
-  multirec_0_5_1 = callPackage ../development/libraries/haskell/multirec/0.5.1.nix {};
-  multirec_0_7 = callPackage ../development/libraries/haskell/multirec/0.7.nix {};
-  multirec = self.multirec_0_7;
+  multirec = callPackage ../development/libraries/haskell/multirec {};
 
   multiset = callPackage ../development/libraries/haskell/multiset {};
 
@@ -1415,9 +1413,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   zipArchive = callPackage ../development/libraries/haskell/zip-archive {};
 
-  zipper = callPackage ../development/libraries/haskell/zipper {
-    multirec = self.multirec_0_5_1;
-  };
+  zipper = callPackage ../development/libraries/haskell/zipper {};
 
   zlib_0_5_0_0 = callPackage ../development/libraries/haskell/zlib/0.5.0.0.nix {
     inherit (pkgs) zlib;
