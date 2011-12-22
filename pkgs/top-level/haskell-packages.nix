@@ -130,7 +130,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # We try to support several platform versions. For these, we set all
   # versions explicitly.
 
-  # NOTE: 2011.2.0.1 is the current default.
+  # NOTE: 2011.4.0.0 is the current default.
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
