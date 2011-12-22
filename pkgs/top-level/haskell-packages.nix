@@ -142,7 +142,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     HUnit        = self.HUnit_1_2_2_3; # 7.2 ok, 7.3 ok
     network      = self.network_2_3_0_8; # 7.2 ok, 7.3 ok
     OpenGL       = self.OpenGL_2_2_3_0; # 7.2 ok, 7.3 ok
-    parallel     = self.parallel_3_2_0_0; # 7.2 ok, 7.3 ok
+    parallel     = self.parallel_3_2_0_2; # 7.2 ok, 7.3 ok
     parsec       = self.parsec_3_1_2; # 7.2 ok, 7.3 ok
     QuickCheck   = self.QuickCheck_2_4_2; # 7.2 ok, 7.3 ok
     regexBase    = self.regexBase_0_93_2; # 7.2 ok, 7.3 ok
@@ -1006,8 +1006,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   parallel_1_1_0_1 = callPackage ../development/libraries/haskell/parallel/1.1.0.1.nix {};
   parallel_2_2_0_1 = callPackage ../development/libraries/haskell/parallel/2.2.0.1.nix {};
   parallel_3_1_0_1 = callPackage ../development/libraries/haskell/parallel/3.1.0.1.nix {};
-  parallel_3_2_0_0 = callPackage ../development/libraries/haskell/parallel/3.2.0.0.nix {};
-  parallel = self.parallel_1_1_0_1;
+  parallel_3_2_0_2 = callPackage ../development/libraries/haskell/parallel/3.2.0.2.nix {};
+  parallel = self.parallel_3_2_0_2;
 
   parseargs = callPackage ../development/libraries/haskell/parseargs {};
 
