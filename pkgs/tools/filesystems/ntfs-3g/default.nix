@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs-3g";
-  version = "2010.10.2";
+  version = "2011.4.12";
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = "--disable-ldconfig --exec-prefix=\${prefix} --enable-mount-helper";
+
+  postInstall =
+    ''
+      # Prefer ntfs-3g over the ntfs driver in the kernel.
+      ln -s mount.ntfs-3g $out/sbin/mount.ntfs
+    '';
 
   meta = {
     homepage = http://www.tuxera.com/community/;
