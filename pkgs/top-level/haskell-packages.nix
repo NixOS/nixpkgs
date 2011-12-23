@@ -209,7 +209,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2011_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2011_4_0_0;
       mtl1 = self.mtl_1_1_1_1;
-      text = self.text_0_11_1_11;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
     };
 
@@ -252,7 +251,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2011_2_0_1 self // {
       haskellPlatform = self.haskellPlatform_2011_2_0_1;
       mtl1 = self.mtl_1_1_1_1;
-      text = self.text_0_11_1_11;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
     };
 
