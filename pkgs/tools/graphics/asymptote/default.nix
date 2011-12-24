@@ -41,6 +41,7 @@ rec {
 
   fixInfoDir = a.noDepEntry ''
     mv -v "$out/share/info/asymptote/"*.info $out/share/info/
+    sed -i -e 's|(asymptote/asymptote)|(asymptote)|' $out/share/info/asymptote.info
     rmdir $out/share/info/asymptote
     rm $out/share/info/dir
   '';
