@@ -4458,6 +4458,13 @@ let
     inherit (pkgs.gnome) glib;
   };
 
+  qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
+    # GNOME dependencies are not used unless gtkStyle == true
+    inherit (pkgs.gnome) gtk libgnomeui GConf gnome_vfs;
+    # GStreamer is required for HTML5 video in QtWebKit
+    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
+  };
+
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
