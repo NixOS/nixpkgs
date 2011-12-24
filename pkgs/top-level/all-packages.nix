@@ -1070,7 +1070,8 @@ let
 
   ntfs3g = callPackage ../tools/filesystems/ntfs-3g { };
 
-  ntfsprogs = callPackage ../tools/filesystems/ntfsprogs { };
+  # ntfsprogs are merged into ntfs-3g
+  ntfsprogs = pkgs.ntfs3g;
 
   ntp = callPackage ../tools/networking/ntp { };
 
