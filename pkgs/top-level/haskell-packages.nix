@@ -154,7 +154,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
     HTTP         = self.HTTP_4000_2_1; # 7.2 ok, 7.3 ok
     deepseq      = self.deepseq_1_1_0_2; # 7.2 ok, 7.3 ok
-    text         = self.text_0_11_1_11; # 7.2 ok, 7.3 ok
+    text         = self.text_0_11_1_12; # 7.2 ok, 7.3 ok
     transformers = self.transformers_0_2_2_0; # 7.2 ok, 7.3 ok
     mtl          = self.mtl_2_0_1_0; # 7.2 ok, 7.3 ok
     random       = self.random_1_0_1_1; # 7.2 ok, 7.3 ok
@@ -1251,8 +1251,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   text_0_11_0_5 = callPackage ../development/libraries/haskell/text/0.11.0.5.nix {};
   text_0_11_0_6 = callPackage ../development/libraries/haskell/text/0.11.0.6.nix {};
   text_0_11_1_5 = callPackage ../development/libraries/haskell/text/0.11.1.5.nix {};
-  text_0_11_1_11 = callPackage ../development/libraries/haskell/text/0.11.1.11.nix {};
-  text = self.text_0_11_1_11;
+  text_0_11_1_12 = callPackage ../development/libraries/haskell/text/0.11.1.12.nix {};
+  text = self.text_0_11_1_12;
 
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
