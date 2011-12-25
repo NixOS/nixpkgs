@@ -1160,6 +1160,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   strict = callPackage ../development/libraries/haskell/strict {};
 
+  stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
+
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
   syb_0_3   = callPackage ../development/libraries/haskell/syb/0.3.nix {};
   syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
