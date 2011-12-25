@@ -10,5 +10,9 @@ cabal.mkDerivation (self: {
     description = "Polymorphic functions to build and combine stringlike values";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
