@@ -1,0 +1,64 @@
+--- a/src/gui/painting/qcups.cpp	2011-12-08 09:06:02.000000000 +0400
++++ b/src/gui/painting/qcups.cpp	2011-12-18 12:17:07.000000000 +0400
+@@ -87,7 +87,7 @@
+ 
+ static void resolveCups()
+ {
+-    QLibrary cupsLib(QLatin1String("cups"), 2);
++    QLibrary cupsLib(QLatin1String("@cups@/lib/libcups"), 2);
+     if(cupsLib.load()) {
+         _cupsGetDests = (CupsGetDests) cupsLib.resolve("cupsGetDests");
+         _cupsFreeDests = (CupsFreeDests) cupsLib.resolve("cupsFreeDests");
+--- a/src/gui/painting/qprinterinfo_unix.cpp	2011-12-08 09:06:02.000000000 +0400
++++ b/src/gui/painting/qprinterinfo_unix.cpp	2011-12-23 16:22:15.000000000 +0400
+@@ -454,7 +454,7 @@
+     char *domain;
+     int err;
+ 
+-    QLibrary lib(QLatin1String("nsl"));
++    QLibrary lib(QLatin1String("@glibc@/lib/libnsl"));
+     typedef int (*ypGetDefaultDomain)(char **);
+     ypGetDefaultDomain _ypGetDefaultDomain = (ypGetDefaultDomain)lib.resolve("yp_get_default_domain");
+     typedef int (*ypAll)(const char *, const char *, const struct ypall_callback *);
+--- a/src/network/kernel/qhostinfo_unix.cpp	2011-12-23 16:26:07.000000000 +0400
++++ b/src/network/kernel/qhostinfo_unix.cpp	2011-12-23 16:25:55.000000000 +0400
+@@ -95,7 +95,7 @@
+ static void resolveLibrary()
+ {
+ #ifndef QT_NO_LIBRARY
+-    QLibrary lib(QLatin1String("resolv"));
++    QLibrary lib(QLatin1String("@glibc@/lib/libresolv"));
+     if (!lib.load())
+         return;
+ 
+--- a/src/corelib/tools/qlocale_icu.cpp	2011-12-08 09:06:03.000000000 +0400
++++ b/src/corelib/tools/qlocale_icu.cpp	2011-12-23 16:29:15.000000000 +0400
+@@ -81,7 +81,7 @@
+     if (status == NotLoaded) {
+ 
+         // resolve libicui18n
+-        QLibrary lib(QLatin1String("icui18n"), QLatin1String(U_ICU_VERSION_SHORT));
++        QLibrary lib(QLatin1String("@icu@/lib/libicui18n"), QLatin1String(U_ICU_VERSION_SHORT));
+         if (!lib.load()) {
+             qWarning() << "Unable to load library icui18n" << lib.errorString();
+             status = ErrorLoading;
+@@ -110,7 +110,7 @@
+         }
+ 
+         // resolve libicuuc
+-        QLibrary ucLib(QLatin1String("icuuc"), QLatin1String(U_ICU_VERSION_SHORT));
++        QLibrary ucLib(QLatin1String("@icu@/lib/libicuuc"), QLatin1String(U_ICU_VERSION_SHORT));
+         if (!ucLib.load()) {
+             qWarning() << "Unable to load library icuuc" << ucLib.errorString();
+             status = ErrorLoading;
+--- a/src/plugins/platforms/xlib/qxlibstatic.cpp	2011-12-08 09:06:02.000000000 +0400
++++ b/src/plugins/platforms/xlib/qxlibstatic.cpp	2011-12-23 20:38:49.000000000 +0400
+@@ -242,7 +242,7 @@
+ }
+ 
+ #  define XFIXES_LOAD_RUNTIME(vernum, symbol, symbol_type) \
+-    (symbol_type)qt_load_library_runtime("libXfixes", vernum, 4, #symbol);
++    (symbol_type)qt_load_library_runtime("@libXfixes@/lib/libXfixes", vernum, 4, #symbol);
+ #  define XFIXES_LOAD_V1(symbol) \
+     XFIXES_LOAD_RUNTIME(1, symbol, Ptr##symbol)
+ #  define XFIXES_LOAD_V2(symbol) \

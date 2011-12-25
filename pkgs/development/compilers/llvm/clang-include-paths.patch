@@ -1,39 +1,49 @@
-diff -ru -x '*~' a/tools/clang/lib/Frontend/InitHeaderSearch.cpp b/tools/clang/lib/Frontend/InitHeaderSearch.cpp
---- a/tools/clang/lib/Frontend/InitHeaderSearch.cpp	2011-03-21 20:24:04.000000000 -0400
-+++ b/tools/clang/lib/Frontend/InitHeaderSearch.cpp	2011-10-18 12:09:50.624355551 -0400
-@@ -438,6 +438,7 @@
- 
- void InitHeaderSearch::AddDefaultCIncludePaths(const llvm::Triple &triple,
-                                             const HeaderSearchOptions &HSOpts) {
-+#if 0
-   llvm::Triple::OSType os = triple.getOS();
- 
-   switch (os) {
-@@ -559,6 +560,8 @@
-   }
- 
-   AddPath("/usr/include", System, false, false, false);
-+#endif
-+  AddPath(C_INCLUDE_PATH, System, false, false, false);
- }
- 
- void InitHeaderSearch::
-@@ -577,6 +580,7 @@
-                                   triple);
+diff -Naur clang-3.0.src-orig/lib/Driver/ToolChains.cpp clang-3.0.src/lib/Driver/ToolChains.cpp
+--- clang-3.0.src-orig/lib/Driver/ToolChains.cpp	2011-11-17 02:40:32.000000000 -0500
++++ clang-3.0.src/lib/Driver/ToolChains.cpp	2011-12-19 06:29:27.562428830 -0500
+@@ -1926,14 +1926,17 @@
+   if (DriverArgs.hasArg(options::OPT_nostdinc))
      return;
-   }
-+#if 0  
-   // FIXME: temporary hack: hard-coded paths.
-   switch (os) {
-   case llvm::Triple::Cygwin:
-@@ -847,6 +851,10 @@
-   default:
-     break;
-   }
+ 
++#if 0
+   if (!DriverArgs.hasArg(options::OPT_nostdlibinc))
+     addSystemInclude(DriverArgs, CC1Args, D.SysRoot + "/usr/local/include");
+ 
 +#endif
-+  AddGnuCPlusPlusIncludePaths(
-+      CPP_INCLUDE_PATH,
-+      CPP_HOST, "", "", triple);
+   if (!DriverArgs.hasArg(options::OPT_nobuiltininc)) {
+     llvm::sys::Path P(D.ResourceDir);
+     P.appendComponent("include");
+     addSystemInclude(DriverArgs, CC1Args, P.str());
+   }
++#if 0
+ 
+   if (DriverArgs.hasArg(options::OPT_nostdlibinc))
+     return;
+@@ -1998,6 +2001,8 @@
+     return;
+ 
+   addExternCSystemInclude(DriverArgs, CC1Args, D.SysRoot + "/usr/include");
++#endif
++  addExternCSystemInclude(DriverArgs, CC1Args, D.SysRoot + C_INCLUDE_PATH);
  }
  
- void InitHeaderSearch::AddDefaultSystemIncludePaths(const LangOptions &Lang,
+ static bool addLibStdCXXIncludePaths(Twine Base, Twine TargetArchDir,
+@@ -2030,6 +2035,7 @@
+   bool IsTarget64Bit = (TargetArch == llvm::Triple::x86_64 ||
+                         TargetArch == llvm::Triple::ppc64);
+ 
++#if 0
+   StringRef CxxIncludeRoot(CXX_INCLUDE_ROOT);
+   if (!CxxIncludeRoot.empty()) {
+     StringRef CxxIncludeArch(CXX_INCLUDE_ARCH);
+@@ -2072,6 +2078,10 @@
+                              GCCInstallation.getTriple() + Suffix,
+                              DriverArgs, CC1Args);
+   }
++#endif
++    addLibStdCXXIncludePaths(CPP_INCLUDE_PATH,
++                             CPP_HOST,
++                             DriverArgs, CC1Args);
+ }
+ 
+ /// DragonFly - DragonFly tool chain which can call as(1) and ld(1) directly.

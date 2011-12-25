@@ -1,0 +1,90 @@
+name:                haskell-platform
+version:             2011.4.0.0
+homepage:            http://haskell.org/platform
+license:             BSD3
+license-file:        LICENSE
+author:              libraries@haskell.org
+maintainer:          haskell-platform@projects.haskell.org
+category:            System
+synopsis:            The Haskell Platform
+description:
+    The Haskell Platform (HP) is the blessed set of libraries and tools on
+    which to build further Haskell libraries and applications. It is
+    intended to provide a comprehensive, stable, and quality tested base for
+    Haskell projects to work from.
+    .
+    This version specifies the following additional developer tools be
+    installed, for a system to be in full compliance:
+    . 
+    * cabal-install
+    * alex
+    * happy
+    * haddock
+
+cabal-version:       >= 1.8
+build-type:          Custom
+tested-with:         GHC ==7.0.4
+
+library
+  build-depends:
+    -- ghc 7.x
+    -- Core libraries: provided by every ghc installation
+    -- We don't include "non-API" packages here.
+    -- array                    ==0.3.0.2
+    -- base                     ==4.3.1.0
+    -- bytestring               ==0.9.1.10
+    -- Cabal                    ==1.10.2.0
+    -- containers               ==0.4.0.0
+    -- directory                ==1.1.0.0
+    -- extensible-exceptions    ==0.1.1.2
+    -- filepath                 ==1.2.0.0
+    -- haskell2010              ==1.0.0.0
+    -- haskell98                ==1.1.0.1
+    -- hpc                      ==0.5.0.6
+    -- old-locale               ==1.0.0.2
+    -- old-time                 ==1.0.0.6
+    -- pretty                   ==1.0.1.2
+    -- process                  ==1.0.1.5
+    -- random                   ==1.0.0.3
+    -- template-haskell         ==2.5.0.0
+    -- time                     ==1.2.0.3
+    -- unix                     ==XXX 2.4.2.0
+    -- Win32                    ==XXX 2.2.0.1
+
+    -- Libraries in addition to what GHC provides:
+    -- Note: newer versions of cgi need monad-catchio.
+    cgi                         ==3001.1.7.4,
+    fgl                         ==5.4.2.4,
+    GLUT                        ==2.1.2.1,
+    haskell-src                 ==1.0.1.4,
+    html                        ==1.0.1.2,
+    HUnit                       ==1.2.4.2,
+    network                     ==2.3.0.5,
+    OpenGL                      ==2.2.3.0,
+    parallel                    ==3.1.0.1,
+    parsec                      ==3.1.1,
+    QuickCheck                  ==2.4.1.1,
+    regex-base                  ==0.93.2,
+    regex-compat                ==0.95.1,
+    regex-posix                 ==0.95.1,
+    stm                         ==2.2.0.1,
+    syb                         ==0.3.3,
+    xhtml                       ==3000.2.0.4,
+    zlib                        ==0.5.3.1,
+    HTTP                        ==4000.1.2,
+    deepseq                     ==1.1.0.2,
+
+    -- 2011.1 proposals:
+    text                        ==0.11.1.5,
+    transformers                ==0.2.2.0,
+    mtl                         ==2.0.1.0
+
+  -- Depending on programs does not work, they are not registered
+  -- We list them to help distro packaging.
+  build-tools:
+    cabal-install ==0.10.2,
+    alex          ==2.3.5,
+    happy         ==1.18.6
+    -- hscolour      ==1.17       
+  --  haddock       ==2.9.2     -- need to use the one shipped with ghc
+

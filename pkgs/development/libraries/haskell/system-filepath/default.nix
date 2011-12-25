@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "system-filepath";
-  version = "0.4.3";
-  sha256 = "16a57dipz3aid5n22gzyd9yqmsxm98c3s6vb7minj82q9rbl5z67";
+  version = "0.4.4";
+  sha256 = "16904xwbcy82ghf1bckw8h63pfj9jfbdlqrr8jf91jzl27lqlwxf";
   buildDepends = [ deepseq text ];
   meta = {
-    homepage = "https://john-millikin.com/software/hs-filepath/";
+    homepage = "https://john-millikin.com/software/haskell-filesystem/";
     description = "High-level, byte-based file and directory path manipulations";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;

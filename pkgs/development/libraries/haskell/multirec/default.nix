@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "multirec";
-  version = "0.5.1";
-  sha256 = "0y62gb2ml0799a3f1ny5ydjc4rjwj1dgs48f5fj6hf2fpl4hk02l";
+  version = "0.7";
+  sha256 = "1n196qqggfnk8fa1x296rdbyb77a6ykhy01z8x2glgdimzpxsiay";
   noHaddock = true;
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/GenericProgramming/Multirec";

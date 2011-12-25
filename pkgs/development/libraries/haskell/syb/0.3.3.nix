@@ -1,12 +1,12 @@
-{ cabal, deepseq }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
-  pname = "parallel";
-  version = "3.2.0.0";
-  sha256 = "1wqdy9p7xqq84ffgzdakvqydxq9668r9xq3wyay9wlgrk83wd1sq";
-  buildDepends = [ deepseq ];
+  pname = "syb";
+  version = "0.3.3";
+  sha256 = "0jskxbnzariq2ahcymvjrp4bhl9cpflc1nh51whdl9axcrd5c901";
   meta = {
-    description = "Parallel programming library";
+    homepage = "http://www.cs.uu.nl/wiki/GenericProgramming/SYB";
+    description = "Scrap Your Boilerplate";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
