@@ -1132,6 +1132,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   RepLib = callPackage ../development/libraries/haskell/RepLib {};
 
+  repr = callPackage ../development/libraries/haskell/repr {};
+
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
