@@ -85,7 +85,8 @@ stdenv.mkDerivation rec {
 
   # The following libraries are only used in plugins
   buildInputs = [ cups # Qt dlopen's libcups instead of linking to it
-    mysql postgresql sqlite libjpeg libmng libtiff icu ];
+    mysql postgresql sqlite libjpeg libmng libtiff icu ]
+    ++ stdenv.lib.optionals gtkStyle [ gtk gdk_pixbuf ];
 
   buildNativeInputs = [ perl pkgconfig which ];
 
