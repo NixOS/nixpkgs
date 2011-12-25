@@ -2233,7 +2233,8 @@ let
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix
-      (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+      # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+      (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
       (x : x.ghcHEADPrefs) false false lowPrio;
 
   haxeDist = import ../development/compilers/haxe {
