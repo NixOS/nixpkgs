@@ -1,13 +1,14 @@
-{ cabal, aeson, shakespeareJs, text, unorderedContainers, vector
-, yesodCore
+{ cabal, aeson, blazeBuilder, shakespeareJs, text
+, unorderedContainers, vector, yesodCore
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-json";
-  version = "0.2.2.1";
-  sha256 = "16l5ygj9xsg2lzw3mkn1kmq543n9w5z1g6lyl8nw5bblp66lfxq3";
+  version = "0.2.2.2";
+  sha256 = "0mhajy0hal9icwys63vcmlipl3gwm8bvv7xywwjydd86drqhz9ni";
   buildDepends = [
-    aeson shakespeareJs text unorderedContainers vector yesodCore
+    aeson blazeBuilder shakespeareJs text unorderedContainers vector
+    yesodCore
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
