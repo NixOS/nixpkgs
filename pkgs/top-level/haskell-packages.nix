@@ -635,6 +635,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   failure = callPackage ../development/libraries/haskell/failure {};
 
+  fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
+
   fclabels = callPackage ../development/libraries/haskell/fclabels {};
 
   funcmp = callPackage ../development/libraries/haskell/funcmp {};
