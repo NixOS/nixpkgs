@@ -1,11 +1,11 @@
 {stdenv, fetchurl, zlib, libpng, gd, geoip, db4}:
 
 stdenv.mkDerivation {
-  name = "webalizer-2.21-02";
+  name = "webalizer-2.23-05";
 
   src = fetchurl {
-    url = ftp://ftp.mrunix.net/pub/webalizer/webalizer-2.21-02-src.tgz;
-    sha256 = "0spfsqxhgfnmd2yyhrmrj8chjilr8qbx1g2n3kn44k9gd4y3jfc7";
+    url = ftp://ftp.mrunix.net/pub/webalizer/webalizer-2.23-05-src.tar.bz2;
+    sha256 = "0nl88y57a7gawfragj3viiigfkh5sgivfb4n0k89wzcjw278pj5g";
   };
 
   preConfigure =
