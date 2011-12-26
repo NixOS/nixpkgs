@@ -133,6 +133,11 @@ with pkgs.lib;
           if [ -n "$failed" ]; then
               echo "[1;31mwarning:[0m the following filesystems could not be unmounted:"
               for mp in $failed; do echo "  $mp"; done
+              echo Enter 'i' to launch a shell, or wait 10 seconds to continue.
+              read -t 10 A
+              if [ "$A" == "i" ]; then
+                bash -i < /dev/console &> /dev/console
+              fi
               sleep 5
           fi
 
