@@ -481,6 +481,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bson = callPackage ../development/libraries/haskell/bson {};
 
+  byteorder = callPackage ../development/libraries/haskell/byteorder {};
+
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
 
   bytestringLexing = callPackage ../development/libraries/haskell/bytestring-lexing {};
