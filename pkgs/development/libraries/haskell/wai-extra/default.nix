@@ -1,15 +1,15 @@
 { cabal, blazeBuilder, blazeBuilderEnumerator, caseInsensitive
-, dataDefault, enumerator, httpTypes, network, text, time
-, transformers, wai, zlibBindings, zlibEnum
+, dataDefault, enumerator, fastLogger, httpTypes, network, text
+, time, transformers, wai, zlibBindings, zlibEnum
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-extra";
-  version = "0.4.5.2";
-  sha256 = "05gq22il1jnvw5rcqr6gassxj29f8l4536zm6bpgk1kff8cxa3g1";
+  version = "0.4.6";
+  sha256 = "1wpdfzw5qzbd33iypgppp4822vn7vhja6y26dnkb17n08r83vvhv";
   buildDepends = [
     blazeBuilder blazeBuilderEnumerator caseInsensitive dataDefault
-    enumerator httpTypes network text time transformers wai
+    enumerator fastLogger httpTypes network text time transformers wai
     zlibBindings zlibEnum
   ];
   meta = {
