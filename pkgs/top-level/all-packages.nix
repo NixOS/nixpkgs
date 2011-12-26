@@ -8040,7 +8040,9 @@ let
 
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
-      digikam = callPackage ../applications/graphics/digikam { };
+      digikam = callPackage ../applications/graphics/digikam {
+        boost = boost147;
+      };
 
       k3b = callPackage ../applications/misc/k3b { };
 
