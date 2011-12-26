@@ -152,7 +152,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     syb          = self.syb_0_3_6; # 7.2 ok, 7.3 ok
     xhtml        = self.xhtml_3000_2_0_1; # 7.2 ok, 7.3 ok
     zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
-    HTTP         = self.HTTP_4000_2_1; # 7.2 ok, 7.3 ok
+    HTTP         = self.HTTP_4000_2_2; # 7.2 ok, 7.3 ok
     deepseq      = self.deepseq_1_1_0_2; # 7.2 ok, 7.3 ok
     text         = self.text_0_11_1_12; # 7.2 ok, 7.3 ok
     transformers = self.transformers_0_2_2_0; # 7.2 ok, 7.3 ok
@@ -759,7 +759,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_1_1 = callPackage ../development/libraries/haskell/HTTP/4000.1.1.nix {};
   HTTP_4000_1_2 = callPackage ../development/libraries/haskell/HTTP/4000.1.2.nix {};
   HTTP_4000_2_1 = callPackage ../development/libraries/haskell/HTTP/4000.2.1.nix {};
-  HTTP = self.HTTP_4000_2_1;
+  HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
+  HTTP = self.HTTP_4000_2_2;
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
