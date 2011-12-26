@@ -10,6 +10,31 @@ let
 
   exports = pkgs.writeText "exports" cfg.server.exports;
 
+/*
+  Description at http://nfs.sourceforge.net/nfs-howto/ar01s03.html :
+
+  "If your distribution does not include them in the startup scripts, then then
+  you should add them, configured to start in the following order:
+
+  rpc.portmap
+  rpc.mountd, rpc.nfsd
+  rpc.statd, rpc.lockd (if necessary), and
+  rpc.rquotad"
+
+  I tried to mimic that with upstart, playing with stopping/stopped/started/starting
+  events.
+
+  I consider two scenarios:
+    - Starting at boot. Then, portmap will emit a started event.
+    - "restart nfs-kernel-exports". Then, portmap will not emit anything. Due
+      to the comment in postStart, this will happen on nixos-rebuild if
+      the exportfs file changed.
+
+  From these scenarios, I came up with the startOn and stopOn at the time of commiting
+  this comment.
+*/
+
+
 in
 
 {
@@ -94,13 +119,35 @@ in
 
             description = "Kernel NFS server";
 
-            startOn = "started network-interfaces";
+            startOn = "started network-interfaces and started portmap";
+
+            postStart =
+              ''
+                # exports file is ${exports}
+                # keep this comment so that this job is restarted whenever exports changes!
+                exportfs -ra
+              '';
+          };
+        }
+
+      // optionalAttrs cfg.server.enable
+        { nfs_kernel_nfsd =
+          { name = "nfs-kernel-nfsd";
+
+            description = "Kernel NFS server";
+
+            startOn = "starting nfs-kernel-exports or started portmap";
+            stopOn = "stopped nfs-kernel-statd or stopping portmap";
 
             preStart =
               ''
                 export PATH=${pkgs.nfsUtils}/sbin:$PATH
                 mkdir -p /var/lib/nfs
 
+                # Create a state directory required by NFSv4.
+                mkdir -p /var/lib/nfs/v4recovery
+
+                # rpc.nfsd needs the kernel support
                 ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
 
                 ${pkgs.sysvtools}/bin/mountpoint -q /proc/fs/nfsd \
@@ -115,27 +162,6 @@ in
                     | xargs -d '\n' mkdir -p
                   ''
                 }
-
-                # exports file is ${exports}
-                # keep this comment so that this job is restarted whenever exports changes!
-                exportfs -ra
-              '';
-          };
-        }
-
-      // optionalAttrs cfg.server.enable
-        { nfs_kernel_nfsd =
-          { name = "nfs-kernel-nfsd";
-
-            description = "Kernel NFS server";
-
-            startOn = "started nfs-kernel-exports and started nfs-kernel-mountd and started nfs-kernel-statd and started portmap";
-            stopOn = "stopping nfs-kernel-exports";
-
-            preStart =
-              ''
-                # Create a state directory required by NFSv4.
-                mkdir -p /var/lib/nfs/v4recovery
 
                 ${pkgs.nfsUtils}/sbin/rpc.nfsd \
                   ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} \
@@ -152,8 +178,8 @@ in
 
             description = "Kernel NFS server - mount daemon";
 
-            startOn = "started portmap and started nfs-kernel-exports";
-            stopOn = "stopped nfs-kernel-nfsd";
+            startOn = "starting nfs-kernel-exports or started portmap";
+            stopOn = "stopped nfs-kernel-statd";
 
             daemonType = "fork";
 
@@ -167,8 +193,8 @@ in
 
             description = "Kernel NFS server - Network Status Monitor";
 
-            startOn = "started portmap";
-            stopOn = "never";
+            startOn = "started nfs-kernel-mountd and started nfs-kernel-nfsd";
+            stopOn = "stopping nfs-kernel-exports or stopping portmap";
 
             preStart =
               ''
