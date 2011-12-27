@@ -1345,6 +1345,10 @@ let
 
   smartmontools = callPackage ../tools/system/smartmontools { };
 
+  smbldaptools = callPackage ../tools/networking/smbldaptools {
+    inherit (perlPackages) NetLDAP CryptSmbHash DigestSHA1;
+  };
+
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { };
