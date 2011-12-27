@@ -112,6 +112,14 @@ in
         target = "exports";
       });
 
+    /* We have to load this quite before running the daemons. Using
+       "modprobe nfsd" when loading the daemons causes a race condition where
+       nfsd can return 'authentication failed'/'Permission denied'.
+
+      I've not tried with nfsd alone. So I add what I tried, with nfs_acl too.
+    */
+    boot.kernelModules = mkIf cfg.server.enable [ "nfsd" "nfs_acl" ];
+
     jobs =
       optionalAttrs cfg.server.enable
         { nfs_kernel_exports =
@@ -119,7 +127,7 @@ in
 
             description = "Kernel NFS server";
 
-            startOn = "started network-interfaces and started portmap";
+            startOn = "started network-interfaces and started portmap and filesystem";
 
             postStart =
               ''
@@ -146,9 +154,6 @@ in
 
                 # Create a state directory required by NFSv4.
                 mkdir -p /var/lib/nfs/v4recovery
-
-                # rpc.nfsd needs the kernel support
-                ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
 
                 ${pkgs.sysvtools}/bin/mountpoint -q /proc/fs/nfsd \
                 || ${config.system.sbin.mount}/bin/mount -t nfsd none /proc/fs/nfsd
