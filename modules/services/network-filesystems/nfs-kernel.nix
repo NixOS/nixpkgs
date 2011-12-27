@@ -193,7 +193,10 @@ in
 
             description = "Kernel NFS server - Network Status Monitor";
 
-            startOn = "started nfs-kernel-mountd and started nfs-kernel-nfsd";
+            startOn = if (cfg.server.enable) then
+		    "started nfs-kernel-mountd and started nfs-kernel-nfsd"
+		else
+		    "started portmap";
             stopOn = "stopping nfs-kernel-exports or stopping portmap";
 
             preStart =
