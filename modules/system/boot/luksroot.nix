@@ -38,8 +38,19 @@ in
       done
     '';
 
+    # test whether cryptsetup finds all dependencies and is at least
+    # version 1.4.1
     boot.initrd.extraUtilsCommandsTest = ''
-      $out/bin/cryptsetup --version
+      cryptsetup_version=$($out/bin/cryptsetup --version |cut -d' ' -f2)
+      if test $(echo $version |cut -d'.' -f1) -lt 1; then
+        if test $(echo $version |cut -d'.' -f2) -lt 4; then
+          if test $(echo $version |cut -d'.' -f3) -lt 2; then
+            echo "Somehow the version of cryptsetup is too old: $cryptsetup_version instead of 1.4.1"
+            exit 1
+          fi
+        fi
+      fi
+      unset cryptsetup_version
     '';
 
     boot.initrd.preLVMCommands = ''
