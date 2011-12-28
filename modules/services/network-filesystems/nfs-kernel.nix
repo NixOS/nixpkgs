@@ -118,7 +118,7 @@ in
 
       I've not tried with nfsd alone. So I add what I tried, with nfs_acl too.
     */
-    boot.kernelModules = mkIf cfg.server.enable [ "nfsd" "nfs_acl" ];
+    # boot.kernelModules = mkIf cfg.server.enable [ "nfsd" "nfs_acl" ];
 
     jobs =
       optionalAttrs cfg.server.enable
@@ -155,6 +155,9 @@ in
                 # Create a state directory required by NFSv4.
                 mkdir -p /var/lib/nfs/v4recovery
 
+                # rpc.nfsd needs the kernel support
+                ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
+
                 ${pkgs.sysvtools}/bin/mountpoint -q /proc/fs/nfsd \
                 || ${config.system.sbin.mount}/bin/mount -t nfsd none /proc/fs/nfsd
 
@@ -183,7 +186,7 @@ in
 
             description = "Kernel NFS server - mount daemon";
 
-            startOn = "starting nfs-kernel-exports or started portmap";
+            startOn = "started nfs-kernel-nfsd";
             stopOn = "stopped nfs-kernel-statd";
 
             daemonType = "fork";
@@ -199,9 +202,9 @@ in
             description = "Kernel NFS server - Network Status Monitor";
 
             startOn = if (cfg.server.enable) then
-		    "started nfs-kernel-mountd and started nfs-kernel-nfsd"
-		else
-		    "started portmap";
+              "started nfs-kernel-mountd and started nfs-kernel-nfsd"
+              else
+                "started portmap";
             stopOn = "stopping nfs-kernel-exports or stopping portmap";
 
             preStart =
