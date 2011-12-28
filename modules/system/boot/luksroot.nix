@@ -45,6 +45,19 @@ in
     '';
 
     boot.initrd.postDeviceCommands = ''
+      # Wait for luksRoot to appear, e.g. if on a usb drive.
+      # XXX: copied and adapted from stage-1-init.sh - should be
+      # available as a function.
+      if ! test -e ${luksRoot}; then
+          echo -n "waiting for device ${luksRoot} to appear..."
+          for ((try = 0; try < 10; try++)); do
+              sleep 1
+              if test -e ${luksRoot}; then break; fi
+              echo -n "."
+          done
+          echo "ok"
+      fi
+      # open luksRoot and scan for logical volumes
       cryptsetup luksOpen ${luksRoot} luksroot
       lvm vgscan
       lvm vgchange -ay
