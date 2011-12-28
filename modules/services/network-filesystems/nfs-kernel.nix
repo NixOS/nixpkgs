@@ -112,14 +112,6 @@ in
         target = "exports";
       });
 
-    /* We have to load this quite before running the daemons. Using
-       "modprobe nfsd" when loading the daemons causes a race condition where
-       nfsd can return 'authentication failed'/'Permission denied'.
-
-      I've not tried with nfsd alone. So I add what I tried, with nfs_acl too.
-    */
-    # boot.kernelModules = mkIf cfg.server.enable [ "nfsd" "nfs_acl" ];
-
     jobs =
       optionalAttrs cfg.server.enable
         { nfs_kernel_exports =
@@ -202,7 +194,7 @@ in
             description = "Kernel NFS server - Network Status Monitor";
 
             startOn = if (cfg.server.enable) then
-              "started nfs-kernel-mountd and started nfs-kernel-nfsd"
+                "started nfs-kernel-mountd and started nfs-kernel-nfsd"
               else
                 "started portmap";
             stopOn = "stopping nfs-kernel-exports or stopping portmap";
