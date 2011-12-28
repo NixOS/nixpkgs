@@ -28,10 +28,20 @@ in
 
   config = mkIf (luksRoot != "") {
 
+    # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
-      cp -r ${pkgs.cryptsetup}/lib/* $out/lib/
-      cp -r ${pkgs.popt}/lib/* $out/lib
-      cp ${pkgs.cryptsetup}/sbin/* $out/bin
+      cp -pdv ${pkgs.cryptsetup}/sbin/cryptsetup $out/bin
+      # XXX: do we have a function that does this?
+      for lib in $(ldd $out/bin/cryptsetup |grep '=>' |grep /nix/store/ |cut -d' ' -f3); do
+        cp -pdvn $lib $out/lib
+        cp -pvn $(readlink -f $lib) $out/lib
+      done
+    '';
+
+    boot.initrd.extraUtilsCommandsTest = ''
+      $out/bin/cryptsetup --version
+      $out/bin/lvm vgscan --version
+      $out/bin/lvm vgchange --version
     '';
 
     boot.initrd.postDeviceCommands = ''
