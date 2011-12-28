@@ -36,7 +36,6 @@ in
         cp -pdvn $lib $out/lib
         cp -pvn $(readlink -f $lib) $out/lib
       done
-      ERROR_THAT_IS_NOT_CAUGHT_WHY_IS_OUR_QUEST_TO_FIND_OUT
     '';
 
     # test whether cryptsetup finds all dependencies and is at least
