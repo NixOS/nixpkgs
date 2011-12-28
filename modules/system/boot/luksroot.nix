@@ -40,11 +40,9 @@ in
 
     boot.initrd.extraUtilsCommandsTest = ''
       $out/bin/cryptsetup --version
-      $out/bin/lvm vgscan --version
-      $out/bin/lvm vgchange --version
     '';
 
-    boot.initrd.postDeviceCommands = ''
+    boot.initrd.preLVMCommands = ''
       # Wait for luksRoot to appear, e.g. if on a usb drive.
       # XXX: copied and adapted from stage-1-init.sh - should be
       # available as a function.
@@ -59,8 +57,6 @@ in
       fi
       # open luksRoot and scan for logical volumes
       cryptsetup luksOpen ${luksRoot} luksroot
-      lvm vgscan
-      lvm vgchange -ay
     '';
 
   };
