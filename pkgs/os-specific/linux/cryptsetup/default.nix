@@ -1,25 +1,19 @@
-{stdenv, fetchurl, libuuid, popt, devicemapper, udev }:
+{stdenv, fetchurl, devicemapper, libgcrypt, libuuid, pkgconfig, popt, udev }:
 
-stdenv.mkDerivation {
-  name = "cryptsetup-1.0.6";
+stdenv.mkDerivation rec {
+  name = "cryptsetup-1.4.1";
   src = fetchurl {
-    url = http://cryptsetup.googlecode.com/files/cryptsetup-1.0.6.tar.bz2;
-    sha256 = "df7fda80cfa01f063caf39140287a47d018dfe056fc71a3ba605e690ff0183fd";
+    url = "http://cryptsetup.googlecode.com/files/${name}.tar.bz2";
+    sha256 = "82b143328c2b427ef2b89fb76c701d311c95b54093c21bbf22342f7b393bddcb";
   };
 
-  configureFlags = [ "--enable-libdevmapper" ];
-
-  patchPhase = ''
-    sed -i -e 's@/sbin/udevsettle@${udev}/sbin/udevadm settle@' lib/libdevmapper.c
-  '';
-
-  buildInputs = [ libuuid popt devicemapper ];
+  buildInputs = [ devicemapper libgcrypt libuuid pkgconfig popt ];
 
   meta = {
     homepage = http://code.google.com/p/cryptsetup/;
     description = "LUKS for dm-crypt";
     license = "GPLv2";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric chaoflow ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
