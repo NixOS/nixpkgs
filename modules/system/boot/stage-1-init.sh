@@ -123,6 +123,11 @@ udevadm trigger --action=add
 udevadm settle
 udevadm control --env=STARTUP=
 
+
+# XXX: Use case usb->lvm will still fail, usb->luks->lvm is covered
+@preLVMCommands@
+
+
 echo "starting device mapper and LVM..."
 lvm vgscan
 lvm vgchange -ay

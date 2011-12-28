@@ -35,6 +35,14 @@ let
       '';
     };
 
+    boot.initrd.preLVMCommands = mkOption {
+      default = "";
+      merge = mergeStringOption;
+      description = ''
+        Shell commands to be executed immediately before lvm discovery.
+      '';
+    };
+
     boot.initrd.postDeviceCommands = mkOption {
       default = "";
       merge = mergeStringOption;
@@ -304,7 +312,7 @@ let
     inherit (config.boot) resumeDevice devSize runSize;
 
     inherit (config.boot.initrd) checkJournalingFS
-      postDeviceCommands postMountCommands kernelModules;
+      preLVMCommands postDeviceCommands postMountCommands kernelModules;
 
     # !!! copy&pasted from upstart-jobs/filesystems.nix.
     mountPoints =
