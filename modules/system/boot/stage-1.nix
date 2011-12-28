@@ -65,6 +65,18 @@ let
       '';
     };
 
+    boot.initrd.extraUtilsCommandsTest = mkOption {
+      internal = true;
+      default = "";
+      merge = mergeStringOption;
+      description = ''
+        Shell commands to be executed in the builder of the
+        extra-utils derivation after patchelf has done its
+        job.  This can be used to test additional utilities
+        copied in extraUtilsCommands.
+      '';
+    };
+
     fileSystems = mkOption {
       options.neededForBoot = mkOption {
         default = false;
@@ -213,6 +225,8 @@ let
       $out/bin/mdadm --version
       $out/bin/basename --version
       $out/bin/modprobe --version
+
+      ${config.boot.initrd.extraUtilsCommandsTest}
     ''; # */
 
 
