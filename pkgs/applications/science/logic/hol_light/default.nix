@@ -9,10 +9,10 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "hol_light-20111204";
+  name = "hol_light-20111224";
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
-    rev = "114";
+    rev = "116";
     sha256 = "a9203a0118caf5d0ca7621abafab4af6245e1c1ae6ba628ead7c6f69aa86d9d3";
   };
 
