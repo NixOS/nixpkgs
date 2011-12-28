@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = http://hol-light.googlecode.com/svn/trunk;
     rev = "116";
-    sha256 = "a9203a0118caf5d0ca7621abafab4af6245e1c1ae6ba628ead7c6f69aa86d9d3";
+    sha256 = "c840cc2dfeb2088484692cb0073e6a7bb85e3e44e95aee1e0f5a8e223f7ccae6";
   };
 
   buildInputs = [ ocaml findlib camlp5 ];
