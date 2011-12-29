@@ -7424,6 +7424,8 @@ let
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
+  taskwarrior_unstable = callPackage ../applications/misc/taskwarrior/unstable.nix { };
+
   tesseract = callPackage ../applications/graphics/tesseract { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
