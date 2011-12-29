@@ -31,17 +31,25 @@ stdenv.mkDerivation {
     tar xf ${documentation} -C $out/share
     ensureDir $out/etc/
     cat > $out/etc/zprofile <<EOF
-if test -r /etc/zprofile; then
-  . /etc/zprofile
+if test -e /etc/NIXOS; then
+  if test -r /etc/zprofile; then
+    . /etc/zprofile
+  else
+    emulate bash
+    alias shopt=false
+    . /etc/profile
+    unalias shopt
+    emulate zsh
+  fi
+  if test -r /etc/zprofile.local; then
+    . /etc/zprofile.local
+  fi
 else
-  emulate bash
-  alias shopt=false
-  . /etc/profile
-  unalias shopt
-  emulate zsh
-fi
-if test -r /etc/zprofile.local; then
-  . /etc/zprofile.local
+  # on non-nixos we just source the global /etc/zprofile as if we did
+  # not use the configure flag
+  if test -r /etc/zprofile; then
+    . /etc/zprofile
+  fi
 fi
 EOF
     $out/bin/zsh -c "zcompile $out/etc/zprofile"
