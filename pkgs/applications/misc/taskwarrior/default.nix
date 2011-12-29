@@ -11,6 +11,6 @@ stdenv.mkDerivation {
   meta = {
     description = "Command-line todo list manager";
     homepage = http://taskwarrior.org/;
-    license = "MIT";
+    license = "GPLv2+";
   };
 }
