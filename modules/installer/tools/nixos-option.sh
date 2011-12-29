@@ -166,6 +166,29 @@ findSources(){
     evalNix --strict
 }
 
+# Given a result from nix-instantiate, recover the list of attributes it
+# contains.
+attrNames() {
+  local attributeset=$1
+  # sed is used to replace un-printable subset by 0s, and to remove most of
+  # the inner-attribute set, which reduce the likelyhood to encounter badly
+  # pre-processed input.
+  echo "builtins.attrNames $attributeset" | \
+    sed 's,<[A-Z]*>,0,g; :inner; s/{[^\{\}]*};/0;/g; t inner;' | \
+    evalNix --strict
+}
+
+# map a simple list which contains strings or paths.
+nixMap() {
+  local fun="$1"
+  local list="$2"
+  local elem
+  for elem in $list; do
+    test $elem = '[' -o $elem = ']' && continue;
+    $fun $elem
+  done
+}
+
 if $install; then
   if test -e "$mountPoint$NIXOS"; then
     export NIXOS="$mountPoint$NIXOS"
@@ -362,17 +385,13 @@ if test "$(evalOpt "_type" 2> /dev/null)" = '"option"'; then
   if $defs; then
     $desc || $value && echo;
 
+    printPath () { echo "  $1"; }
+
     echo "Declared by:"
-    for f in $(findSources "declarations"); do
-      test $f = '[' -o $f = ']' && continue;
-      echo "  $f"
-    done
+    nixMap printPath "$(findSources "declarations")"
     echo ""
     echo "Defined by:"
-    for f in $(findSources "definitions"); do
-      test $f = '[' -o $f = ']' && continue;
-      echo "  $f"
-    done
+    nixMap printPath "$(findSources "definitions")"
     echo ""
   fi
 
@@ -380,13 +399,12 @@ else
   # echo 1>&2 "Warning: This value is not an option."
 
   result=$(evalCfg)
-  if names=$(echo "builtins.attrNames $result" | sed 's,<[A-Z]*>,0,g' | nix-instantiate - --eval-only --strict 2> /dev/null); then
-    echo 1>&2 "This attribute set contains:" 
-    for attr in $names; do
-      test $attr = '[' -o $attr = ']' && continue;
-      eval echo $attr # escape extra double-quotes in the attribute name.
-    done
+  if names=$(attrNames "$result" 2> /dev/null); then
+    echo 1>&2 "This attribute set contains:"
+    escapeQuotes () { eval echo "$1"; }
+    nixMap escapeQuotes "$names"
   else
+    echo 1>&2 "An error occured while looking for attribute names."
     echo $result
   fi
 fi
