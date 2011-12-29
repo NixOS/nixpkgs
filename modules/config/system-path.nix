@@ -120,8 +120,18 @@ let
 in
 
 {
-  require = [options];
+  require = [ options ];
 
   environment.systemPackages = requiredPackages;
-  environment.pathsToLink = ["/bin" "/sbin" "/lib" "/share/man" "/share/info" "/share/emacs" "/man" "/info" "/etc/xdg"];
+  environment.pathsToLink = [
+    "/bin"
+    "/etc/xdg"
+    "/info"
+    "/lib"
+    "/man"
+    "/sbin"
+    "/share/emacs"
+    "/share/info"
+    "/share/man"
+  ];
 }
