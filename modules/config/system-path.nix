@@ -132,6 +132,7 @@ in
     "/sbin"
     "/share/emacs"
     "/share/info"
+    "/share/terminfo"
     "/share/man"
   ];
 }
