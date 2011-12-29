@@ -29,6 +29,10 @@ for i in $NIX_PROFILES; do # !!! reverse
     export INFOPATH=$i/info:$i/share/info${INFOPATH:+:}$INFOPATH
     export PKG_CONFIG_PATH="$i/lib/pkgconfig${PKG_CONFIG_PATH:+:}$PKG_CONFIG_PATH"
 
+    # terminfo and reset TERM with new TERMINFO available
+    export TERMINFO_DIRS=$i/share/terminfo${TERMINFO_DIRS:+:}$TERMINFO_DIRS
+    export TERM=$TERM
+
     # "lib/site_perl" is for backwards compatibility with packages
     # from Nixpkgs <= 0.12.
     export PERL5LIB="$i/lib/perl5/site_perl:$i/lib/site_perl${PERL5LIB:+:}$PERL5LIB"
