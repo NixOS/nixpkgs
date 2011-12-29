@@ -7422,6 +7422,8 @@ let
     withKde = getConfig [ "taskJuggler" "kde" ] false;
   };
 
+  taskwarrior = callPackage ../applications/misc/taskwarrior { };
+
   tesseract = callPackage ../applications/graphics/tesseract { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
