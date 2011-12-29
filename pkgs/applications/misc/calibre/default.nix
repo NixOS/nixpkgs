@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-0.8.30";
+  name = "calibre-0.8.32";
 
   src = fetchurl {
     url = "http://calibre-ebook.googlecode.com/files/${name}.tar.xz";
-    sha256 = "1w94kaynxiksjfi6wqlvwnryl08f8m0ylqwgzwkz1hjznqiji282";
+    sha256 = "0d0zq4sr0qm8jarg0ps24lfizb4hyb57pjsp81y1sb5nzjki7jml";
   };
 
   inherit python;
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       $out/lib/calibre/calibre/ebooks/metadata/*.py
       $out/lib/calibre/calibre/ebooks/rtf2xml/*.py"
 
-    sed -i "s/env python/python/" $PYFILES
+    sed -i "s/env python[0-9.]*/python/" $PYFILES
     for a in $out/bin/*; do
       wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH --prefix LD_LIBRARY_PATH : ${unrar}/lib
     done
