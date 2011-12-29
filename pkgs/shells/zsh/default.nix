@@ -19,14 +19,35 @@ stdenv.mkDerivation {
     sha256 = "8708f485823fb7e51aa696776d0dfac7d3558485182672cf9311c12a50a95486";
   };
   
-  configureFlags = "--with-tcsetpgrp --enable-maildir-support --enable-multibyte";
+  buildInputs = [ ncurses coreutils ];
 
+  preConfigure = ''
+    configureFlags="--enable-maildir-support --enable-multibyte --enable-zprofile=$out/etc/zprofile --with-tcsetpgrp"
+  '';
+
+  # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
     ensureDir $out/share/
     tar xf ${documentation} -C $out/share
+    ensureDir $out/etc/
+    cat > $out/etc/zprofile <<EOF
+if test -r /etc/zprofile; then
+  . /etc/zprofile
+else
+  emulate bash
+  alias shopt=false
+  . /etc/profile
+  unalias shopt
+  emulate zsh
+fi
+if test -r /etc/zprofile.local; then
+  . /etc/zprofile.local
+fi
+EOF
+    $out/bin/zsh -c "zcompile $out/etc/zprofile"
+    mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
   '';
-
-  buildInputs = [ ncurses coreutils ];
+  # XXX: patch zsh to take zwc if newer _or equal_
 
   meta = {
     description = "the Z shell";
