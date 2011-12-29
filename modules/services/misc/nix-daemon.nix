@@ -171,7 +171,7 @@ in
       envVars = mkOption {
         internal = true;
         default = "";
-        merge = mergeStringOption;
+        type = with pkgs.lib.types; string;
         description = "
           Environment variables used by Nix.
         ";

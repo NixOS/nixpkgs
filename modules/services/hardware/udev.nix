@@ -170,7 +170,7 @@ in
         example = ''
           KERNEL=="eth*", ATTR{address}=="00:1D:60:B9:6D:4F", NAME="my_fast_network_card"
         '';
-        merge = mergeStringOption;
+        type = with pkgs.lib.types; string;
         description = ''
           Additional <command>udev</command> rules. They'll be written
           into file <filename>10-local.rules</filename>. Thus they are

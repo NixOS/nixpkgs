@@ -8,7 +8,7 @@ let
       postBootCommands = pkgs.lib.mkOption {
         default = "";
         example = "rm -f /var/log/messages";
-        merge = pkgs.lib.mergeStringOption;
+        type = with pkgs.lib.types; string;
         description = ''
           Shell commands to be executed just before Upstart is started.
         '';

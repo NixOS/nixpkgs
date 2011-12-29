@@ -15,7 +15,7 @@ let
         description = "
           Script used to initialized user shell environments.
         ";
-        merge = mergeStringOption;
+        type = with pkgs.lib.types; string;
       };
 
   };

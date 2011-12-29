@@ -37,7 +37,7 @@ let
 
     boot.initrd.preLVMCommands = mkOption {
       default = "";
-      merge = mergeStringOption;
+      type = with types; string;
       description = ''
         Shell commands to be executed immediately before lvm discovery.
       '';
@@ -45,7 +45,7 @@ let
 
     boot.initrd.postDeviceCommands = mkOption {
       default = "";
-      merge = mergeStringOption;
+      type = with types; string;
       description = ''
         Shell commands to be executed immediately after stage 1 of the
         boot has loaded kernel modules and created device nodes in
@@ -55,7 +55,7 @@ let
 
     boot.initrd.postMountCommands = mkOption {
       default = "";
-      merge = mergeStringOption;
+      type = with types; string;
       description = ''
         Shell commands to be executed immediately after the stage 1
         filesystems have been mounted.
@@ -65,7 +65,7 @@ let
     boot.initrd.extraUtilsCommands = mkOption {
       internal = true;
       default = "";
-      merge = mergeStringOption;
+      type = with types; string;
       description = ''
         Shell commands to be executed in the builder of the
         extra-utils derivation.  This can be used to provide
@@ -76,7 +76,7 @@ let
     boot.initrd.extraUtilsCommandsTest = mkOption {
       internal = true;
       default = "";
-      merge = mergeStringOption;
+      type = with types; string;
       description = ''
         Shell commands to be executed in the builder of the
         extra-utils derivation after patchelf has done its
