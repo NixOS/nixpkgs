@@ -136,7 +136,7 @@ with pkgs.lib;
               echo Enter 'i' to launch a shell, or wait 10 seconds to continue.
               read -t 10 A
               if [ "$A" == "i" ]; then
-                bash -i < /dev/console &> /dev/console
+                ${pkgs.bashInteractive}/bin/bash -i < /dev/console &> /dev/console
               fi
               sleep 5
           fi
