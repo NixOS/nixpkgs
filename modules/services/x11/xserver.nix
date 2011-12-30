@@ -228,6 +228,14 @@ in
         '';
       };
 
+      xkbVariant = mkOption {
+        default = "";
+        example = "colemak";
+        description = ''
+          X keyboard variant.
+        '';
+      };
+
       config = mkOption {
         description = ''
           The contents of the configuration file of the X server
@@ -463,6 +471,7 @@ in
           Option "XkbModel" "${cfg.xkbModel}"
           Option "XkbLayout" "${cfg.layout}"
           Option "XkbOptions" "${cfg.xkbOptions}"
+          Option "XkbVariant" "${cfg.xkbVariant}"
         EndSection
 
         Section "ServerLayout"
