@@ -44,11 +44,16 @@ while (<>) {
     my $tarball = "$_";
     print "\nDOING TARBALL $tarball\n";
 
-    $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
-    die unless defined $1;
-    my $pkg = $1;
-    $pkg =~ s/-//g;
-    #next unless $pkg eq "xcbutil";
+    my $pkg;
+    if ($tarball =~ s/:([a-zA-Z0-9_]+)$//) {
+      $pkg = $1;
+    } else {
+      $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
+      die unless defined $1;
+      $pkg = $1;
+      $pkg =~ s/-//g;
+      #next unless $pkg eq "xcbutil";
+    }
 
     $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
     my $pkgName = $1;
