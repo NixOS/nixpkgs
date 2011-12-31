@@ -5,6 +5,8 @@ mirror://xorg/individual/app/xrdb-1.0.8.tar.bz2
 mirror://xorg/individual/driver/xf86-input-evdev-2.6.0.tar.bz2
 mirror://xorg/individual/driver/xf86-video-ati-6.14.2.tar.bz2
 mirror://xorg/individual/driver/xf86-video-intel-2.14.0.tar.bz2
+mirror://xorg/individual/driver/xf86-video-intel-2.14.901.tar.bz2:xf86videointel_2_14_901
+mirror://xorg/individual/driver/xf86-video-intel-2.17.0.tar.bz2:xf86videointel_2_17_0
 mirror://xorg/individual/lib/libX11-1.4.1.tar.bz2
 mirror://xorg/individual/lib/libXaw-1.0.9.tar.bz2
 mirror://xorg/individual/lib/libXi-1.4.1.tar.bz2
