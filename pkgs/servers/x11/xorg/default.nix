@@ -1148,14 +1148,56 @@ let
   })) // {inherit python ;};
     
   xcbutil = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
-    name = "xcb-util-0.3.6";
+    name = "xcb-util-0.3.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xcb/xcb-util-0.3.6.tar.bz2;
-      sha256 = "0mqfyq6skm19hhfmd5kmcn0v4di4pmbdszmbf2lmhn01mc8yxf7z";
+      url = mirror://xorg/individual/xcb/xcb-util-0.3.8.tar.bz2;
+      sha256 = "c1eed9284750bc09352e60654df77bb585dbbe7673fdcc675e58b7f3a0b447b9";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};
+    
+  xcbutilImage = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
+    name = "xcb-util-image-0.3.8";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/xcb/xcb-util-image-0.3.8.tar.bz2;
+      sha256 = "40390528c26e8231132540f16579b821de68bb2e9152918f72182d5a4038a6d9";
+    };
+    buildInputs = [pkgconfig gperf m4 libxcb xcbutil xproto ];
+  })) // {inherit gperf m4 libxcb xcbutil xproto ;};
+    
+  # XXX: No package 'xorg-macros' found
+  xcbutilKeysyms = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
+    name = "xcb-util-keysyms-0.3.8";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/xcb/xcb-util-keysyms-0.3.8.tar.bz2;
+      sha256 = "913d32f7afe380c580da7636ee13f2728790237bb5c03def536363f552686121";
+    };
+    buildInputs = [pkgconfig gperf m4 libxcb xproto ];
+  })) // {inherit gperf m4 libxcb xproto ;};
+    
+  # XXX: No package 'xorg-macros' found
+  xcbutilRenderutil = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
+    name = "xcb-util-renderutil-0.3.8";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.8.tar.bz2;
+      sha256 = "9789a5c55728fa7bae374d9fdf1c61095869bdc68561911760879095644c7452";
+    };
+    buildInputs = [pkgconfig gperf m4 libxcb ];
+  })) // {inherit gperf m4 libxcb ;};
+    
+  xcbutilWm = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
+    name = "xcb-util-wm-0.3.8";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/xcb/xcb-util-wm-0.3.8.tar.bz2;
+      sha256 = "c557abbe4c7d45268f0541ee3d8f9a1a8799692fcc28aa33f39db93cc2e65007";
+    };
+    buildInputs = [pkgconfig gperf m4 libxcb ];
+  })) // {inherit gperf m4 libxcb ;};
     
   xclock = (stdenv.mkDerivation ((if overrides ? xclock then overrides.xclock else x: x) {
     name = "xclock-1.0.5";
