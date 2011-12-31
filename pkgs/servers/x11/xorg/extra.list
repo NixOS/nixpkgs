@@ -1,2 +1,17 @@
 mirror://xorg/individual/xcb/xcb-util-0.3.6.tar.bz2
 mirror://xorg/individual/lib/pixman-0.20.2.tar.bz2
+mirror://xorg/individual/proto/dmxproto-2.3.1.tar.bz2
+mirror://xorg/individual/lib/libpciaccess-0.12.1.tar.bz2
+mirror://xorg/individual/lib/libX11-1.4.1.tar.bz2
+mirror://xorg/individual/lib/libXaw-1.0.9.tar.bz2
+mirror://xorg/individual/lib/libXi-1.4.1.tar.bz2
+mirror://xorg/individual/app/x11perf-1.5.3.tar.bz2
+mirror://xorg/individual/proto/xf86driproto-2.1.1.tar.bz2
+mirror://xorg/individual/driver/xf86-input-evdev-2.6.0.tar.bz2
+mirror://xorg/individual/driver/xf86-video-ati-6.14.2.tar.bz2
+mirror://xorg/individual/driver/xf86-video-intel-2.14.0.tar.bz2
+mirror://xorg/individual/proto/xf86vidmodeproto-2.3.1.tar.bz2
+mirror://xorg/individual/proto/xineramaproto-1.2.1.tar.bz2
+mirror://xorg/individual/app/xkbcomp-1.2.1.tar.bz2
+mirror://xorg/individual/xserver/xorg-server-1.9.5.tar.bz2
+mirror://xorg/individual/app/xrdb-1.0.8.tar.bz2
