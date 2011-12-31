@@ -59,8 +59,8 @@ done
 # Search directory for Aspell dictionaries.
 export ASPELL_CONF="dict-dir $HOME/.nix-profile/lib/aspell"
 
-# ~/bin and the setuid wrappers override other bin directories.
-export PATH=$HOME/bin:@wrapperDir@:$PATH
+# The setuid wrappers override other bin directories.
+export PATH=@wrapperDir@:$PATH
 
 # Set up the per-user profile.
 mkdir -m 0755 -p $NIX_USER_PROFILE_DIR
