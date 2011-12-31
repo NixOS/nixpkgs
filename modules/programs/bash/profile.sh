@@ -41,6 +41,9 @@ for i in $NIX_PROFILES; do # !!! reverse
     # ALSA plugins
     export ALSA_PLUGIN_DIRS="$i/lib/alsa-lib${ALSA_PLUGIN_DIRS:+:}$ALSA_PLUGIN_DIRS"
 
+    # emacs load path
+    export EMACSLOADPATH=$i/share/emacs/site-lisp${EMACSLOADPATH:+:}$EMACSLOADPATH
+
     # GStreamer.
     export GST_PLUGIN_PATH="$i/lib/gstreamer-0.10${GST_PLUGIN_PATH:+:}$GST_PLUGIN_PATH"
 
