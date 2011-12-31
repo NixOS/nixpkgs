@@ -22,6 +22,7 @@ NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $HOME/.ni
 
 unset PATH INFOPATH PKG_CONFIG_PATH PERL5LIB ALSA_PLUGIN_DIRS GST_PLUGIN_PATH KDEDIRS
 unset QT_PLUGIN_PATH QTWEBKIT_PLUGIN_PATH STRIGI_PLUGIN_PATH XDG_CONFIG_DIRS XDG_DATA_DIRS
+unset MOZ_PLUGIN_PATH TERMINFO_DIRS
 
 for i in $NIX_PROFILES; do # !!! reverse
     # We have to care not leaving an empty PATH element, because that means '.' to Linux
