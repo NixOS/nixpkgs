@@ -52,7 +52,7 @@ for i in $NIX_PROFILES; do # !!! reverse
     export XDG_DATA_DIRS=$i/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 
     # mozilla plugins
-    export MOZ_PLUGIN_PATH=$i/lib/mozilla/plugins${PATH:+:}$PATH
+    export MOZ_PLUGIN_PATH=$i/lib/mozilla/plugins${MOZ_PLUGIN_PATH:+:}$MOZ_PLUGIN_PATH
 done
 
 # Search directory for Aspell dictionaries.
