@@ -1,6 +1,6 @@
 {stdenv, fetchurl, xz, cmake, gperf, imagemagick, pkgconfig, lua
 , glib, cairo, pango, imlib2, libxcb, libxdg_basedir, xcbutil
-, xcbutilImage, xcbutilKeysyms, xcbutilWm, libpthreadstubs, libXau
+, xcbutilimage, xcbutilkeysyms, xcbutilwm, libpthreadstubs, libXau
 , libXdmcp, pixman, doxygen
 , libstartup_notification, libev, asciidoc, xmlto, dbus, docbook_xsl
 , docbook_xml_dtd_45, libxslt, coreutils}:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
  
   buildInputs = [ xz cmake gperf imagemagick pkgconfig lua glib cairo pango
-    imlib2 libxcb libxdg_basedir xcbutil xcbutilImage xcbutilKeysyms xcbutilWm
+    imlib2 libxcb libxdg_basedir xcbutil xcbutilimage xcbutilkeysyms xcbutilwm
     libstartup_notification libev libpthreadstubs libXau libXdmcp pixman doxygen
     asciidoc xmlto dbus docbook_xsl docbook_xml_dtd_45 libxslt ];
 
