@@ -384,9 +384,15 @@ in
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
 
-    jobs.xserver =
+    jobs.check_for_xserver_start =
       { startOn = if cfg.autorun then "filesystem and stopped udevtrigger" else "";
+        stopOn = "";
+        task = true;
+        script = "grep -qv noX11 /proc/cmdline && initctl emit start_xserver || true";
+      };
 
+    jobs.xserver =
+      { startOn = "start_xserver";
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
