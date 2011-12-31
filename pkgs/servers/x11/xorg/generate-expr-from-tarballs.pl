@@ -4,7 +4,7 @@
 
 # export i="mirror://xorg/X11R7.6/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.6.list
 # manually update extra.list
-# then run: cat tarballs-7.6.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
+# then run: cat extra.list tarballs-7.6.list old.list | perl ./generate-expr-from-tarballs.pl
 
 use strict;
 
