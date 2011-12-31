@@ -2020,11 +2020,11 @@ let
   })) // {inherit libxcb ;};
     
   xlsclients = (stdenv.mkDerivation ((if overrides ? xlsclients then overrides.xlsclients else x: x) {
-    name = "xlsclients-1.1.1";
+    name = "xlsclients-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.6/src/everything/xlsclients-1.1.1.tar.bz2;
-      sha256 = "0ng81cm40881gddzwrfdbsvbnqfpqllxaxdsa8m2ljqxlq9mwfs5";
+      url = mirror://xorg/individual/app/xlsclients-1.1.2.tar.bz2;
+      sha256 = "1ce5f3987b63ea79b3f8421fcb1dd9c739e99efa97f280eafd8e93574b9027d1";
     };
     buildInputs = [pkgconfig libxcb xcbutil ];
   })) // {inherit libxcb xcbutil ;};
