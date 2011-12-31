@@ -1152,52 +1152,50 @@ let
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/xcb/xcb-util-0.3.8.tar.bz2;
-      sha256 = "c1eed9284750bc09352e60654df77bb585dbbe7673fdcc675e58b7f3a0b447b9";
+      sha256 = "1fa7njhg7dsqbrkwrzbkfszdp1dmggvlsrb05qshkg2h8wldkvn1";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};
     
-  xcbutilImage = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
+  xcbutilimage = (stdenv.mkDerivation ((if overrides ? xcbutilimage then overrides.xcbutilimage else x: x) {
     name = "xcb-util-image-0.3.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/xcb/xcb-util-image-0.3.8.tar.bz2;
-      sha256 = "40390528c26e8231132540f16579b821de68bb2e9152918f72182d5a4038a6d9";
+      sha256 = "1nd67105lb8qfa7r2lli5sxnipi1p1wnbwa04l9k30kfq8l0afa0";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xcbutil xproto ];
   })) // {inherit gperf m4 libxcb xcbutil xproto ;};
     
-  # XXX: No package 'xorg-macros' found
-  xcbutilKeysyms = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
+  xcbutilkeysyms = (stdenv.mkDerivation ((if overrides ? xcbutilkeysyms then overrides.xcbutilkeysyms else x: x) {
     name = "xcb-util-keysyms-0.3.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/xcb/xcb-util-keysyms-0.3.8.tar.bz2;
-      sha256 = "913d32f7afe380c580da7636ee13f2728790237bb5c03def536363f552686121";
+      sha256 = "08b1d19gaqv3agpkvh5mgcir11vjy89ywdknva0cb073mzvk4gci";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};
     
-  # XXX: No package 'xorg-macros' found
-  xcbutilRenderutil = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
+  xcbutilrenderutil = (stdenv.mkDerivation ((if overrides ? xcbutilrenderutil then overrides.xcbutilrenderutil else x: x) {
     name = "xcb-util-renderutil-0.3.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.8.tar.bz2;
-      sha256 = "9789a5c55728fa7bae374d9fdf1c61095869bdc68561911760879095644c7452";
+      sha256 = "0lkl9ij9b447c0br2qc5qsynjn09c4fdz7sd6yp7pyi8az2sb2cp";
     };
-    buildInputs = [pkgconfig gperf m4 libxcb ];
-  })) // {inherit gperf m4 libxcb ;};
+    buildInputs = [pkgconfig gperf m4 libxcb xproto ];
+  })) // {inherit gperf m4 libxcb xproto ;};
     
-  xcbutilWm = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
+  xcbutilwm = (stdenv.mkDerivation ((if overrides ? xcbutilwm then overrides.xcbutilwm else x: x) {
     name = "xcb-util-wm-0.3.8";
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/xcb/xcb-util-wm-0.3.8.tar.bz2;
-      sha256 = "c557abbe4c7d45268f0541ee3d8f9a1a8799692fcc28aa33f39db93cc2e65007";
+      sha256 = "01shwv13rfcxycrsla6c5xlrk1qska7kvvj10n7jcibx9jzanmy5";
     };
-    buildInputs = [pkgconfig gperf m4 libxcb ];
-  })) // {inherit gperf m4 libxcb ;};
+    buildInputs = [pkgconfig gperf m4 libxcb xproto ];
+  })) // {inherit gperf m4 libxcb xproto ;};
     
   xclock = (stdenv.mkDerivation ((if overrides ? xclock then overrides.xclock else x: x) {
     name = "xclock-1.0.5";
@@ -1474,7 +1472,7 @@ let
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/driver/xf86-video-ati-6.14.2.tar.bz2;
-      sha256 = "017974b622eea3b4483405368492b0c6f178854a9b9753d50e13c578b8a328dc";
+      sha256 = "1p18lfw7ii8k1vam75wv9a2piwf6n2988dh56i4b98zf4av78y81";
     };
     buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};
@@ -2024,10 +2022,10 @@ let
     builder = ./builder.sh;
     src = fetchurl {
       url = mirror://xorg/individual/app/xlsclients-1.1.2.tar.bz2;
-      sha256 = "1ce5f3987b63ea79b3f8421fcb1dd9c739e99efa97f280eafd8e93574b9027d1";
+      sha256 = "1l97j15mg4wfzpm81wlpzagfjff7v4fwn7s2z2rpksk3gfcg7r8w";
     };
-    buildInputs = [pkgconfig libxcb xcbutil ];
-  })) // {inherit libxcb xcbutil ;};
+    buildInputs = [pkgconfig libxcb ];
+  })) // {inherit libxcb ;};
     
   xmessage = (stdenv.mkDerivation ((if overrides ? xmessage then overrides.xmessage else x: x) {
     name = "xmessage-1.0.3";
