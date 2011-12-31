@@ -1577,7 +1577,7 @@ let
     buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ];
   })) // {inherit dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ;};
     
-  xf86videointel_2_14_901 = (stdenv.mkDerivation ((if overrides ? xf86videointel then overrides.xf86videointel else x: x) {
+  xf86videointel_2_14_901 = (stdenv.mkDerivation ((if overrides ? xf86videointel_2_14_901 then overrides.xf86videointel_2_14_901 else x: x) {
     name = "xf86-video-intel-2.14.901";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1586,6 +1586,16 @@ let
     };
     buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ];
   })) // {inherit dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXvMC ;};
+    
+  xf86videointel_2_17_0 = (stdenv.mkDerivation ((if overrides ? xf86videointel_2_17_0 then overrides.xf86videointel_2_17_0 else x: x) {
+    name = "xf86-video-intel-2.17.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/driver/xf86-video-intel-2.17.0.tar.bz2;
+      sha256 = "11s3vjp0lrfmb4bv848fd5bajj77j3rf451lm0qyylnclbr5114b";
+    };
+    buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess pixman randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ];
+  })) // {inherit dri2proto fontsproto libdrm udev libpciaccess pixman randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ;};
     
   xf86videomach64 = (stdenv.mkDerivation ((if overrides ? xf86videomach64 then overrides.xf86videomach64 else x: x) {
     name = "xf86-video-mach64-6.8.2";
