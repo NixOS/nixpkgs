@@ -50,6 +50,9 @@ for i in $NIX_PROFILES; do # !!! reverse
     export QTWEBKIT_PLUGIN_PATH=$i/lib/mozilla/plugins/${QTWEBKIT_PLUGIN_PATH:+:}$QTWEBKIT_PLUGIN_PATH
     export XDG_CONFIG_DIRS=$i/etc/xdg${XDG_CONFIG_DIRS:+:}$XDG_CONFIG_DIRS
     export XDG_DATA_DIRS=$i/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
+
+    # mozilla plugins
+    export MOZ_PLUGIN_PATH=$i/lib/mozilla/plugins${PATH:+:}$PATH
 done
 
 # Search directory for Aspell dictionaries.
