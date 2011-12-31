@@ -1,4 +1,9 @@
-mirror://xorg/individual/xcb/xcb-util-0.3.6.tar.bz2
+mirror://xorg/individual/app/xlsclients-1.1.2.tar.bz2
+mirror://xorg/individual/xcb/xcb-util-0.3.8.tar.bz2
+mirror://xorg/individual/xcb/xcb-util-image-0.3.8.tar.bz2
+mirror://xorg/individual/xcb/xcb-util-keysyms-0.3.8.tar.bz2
+mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.8.tar.bz2
+mirror://xorg/individual/xcb/xcb-util-wm-0.3.8.tar.bz2
 mirror://xorg/individual/lib/pixman-0.20.2.tar.bz2
 mirror://xorg/individual/proto/dmxproto-2.3.1.tar.bz2
 mirror://xorg/individual/lib/libpciaccess-0.12.1.tar.bz2
