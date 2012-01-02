@@ -1342,6 +1342,10 @@ let
 
   smartmontools = callPackage ../tools/system/smartmontools { };
 
+  smbldaptools = callPackage ../tools/networking/smbldaptools {
+    inherit (perlPackages) NetLDAP CryptSmbHash DigestSHA1;
+  };
+
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { };
@@ -2232,7 +2236,8 @@ let
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix
-      (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+      # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+      (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
       (x : x.ghcHEADPrefs) false false lowPrio;
 
   haxeDist = import ../development/compilers/haxe {
@@ -7412,6 +7417,10 @@ let
     withKde = getConfig [ "taskJuggler" "kde" ] false;
   };
 
+  taskwarrior = callPackage ../applications/misc/taskwarrior { };
+
+  taskwarrior_unstable = callPackage ../applications/misc/taskwarrior/unstable.nix { };
+
   tesseract = callPackage ../applications/graphics/tesseract { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
@@ -8034,7 +8043,9 @@ let
 
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
-      digikam = callPackage ../applications/graphics/digikam { };
+      digikam = callPackage ../applications/graphics/digikam {
+        boost = boost147;
+      };
 
       k3b = callPackage ../applications/misc/k3b { };
 

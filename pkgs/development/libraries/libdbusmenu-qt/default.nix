@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, qt4, cmake, doxygen }:
+{ stdenv, fetchurl, qt4, cmake }:
 
 let
   baseName = "libdbusmenu-qt";
-  v = "0.8.3";
+  v = "0.9.0";
 in
 
 stdenv.mkDerivation rec {
@@ -10,10 +10,13 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://launchpad.net/${baseName}/trunk/${v}/+download/${name}.tar.bz2";
-    sha256 = "1fkw6wpxjmmx4p8779z662qphip3pgdcsn6cyb0frryfj4sa32ka";
+    sha256 = "0xdicb3fmwgbyhc6cpcmdkwysdg18m5rcqc3izpwv6brq4aq4787";
   };
 
-  buildInputs = [ cmake qt4 doxygen ];
+  buildInputs = [ qt4 ];
+  buildNativeInputs = [ cmake ];
+
+  cmakeFlags = "-DWITH_DOC=OFF";
   
   meta = with stdenv.lib; {
     description = "Provides a Qt implementation of the DBusMenu spec";

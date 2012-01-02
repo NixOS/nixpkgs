@@ -1,22 +1,19 @@
 { stdenv, fetchurl, emacs, texinfo }:
 
 let
-  version = "1.0.0";
+  version = "1.1.0";
 in
 stdenv.mkDerivation {
   name = "magit-${version}";
 
   src = fetchurl {
     url = "http://github.com/downloads/magit/magit/magit-${version}.tar.gz";
-    sha256 = "1hfdl90d96zin31v8x4p8zx5f0x0i5i9hccysx6q3prdgw9r6wzq";
+    sha256 = "8e147e1f2e69938232f859daf712515b46aa367d7b7d90b42538e083f52a72b4";
   };
 
   buildInputs = [emacs texinfo];
 
-  configurePhase =
-    '' sed -i Makefile \
-           -e "s|^PREFIX=.*$|PREFIX=$out|g ; s|/etc/emacs/|$out/etc/emacs/|"
-    '';
+  configurePhase = "makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc )";
 
   meta = {
     description = "Magit, an Emacs interface to Git";
@@ -34,7 +31,7 @@ stdenv.mkDerivation {
     '';
 
     license = "GPLv3+";
-    homepage = "http://github.com/philjackson/magit";
+    homepage = "https://github.com/magit/magit";
     platforms = stdenv.lib.platforms.all;
     maintainers = with stdenv.lib.maintainers; [ simons ludo ];
   };

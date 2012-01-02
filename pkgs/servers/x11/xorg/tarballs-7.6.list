@@ -3,8 +3,8 @@ mirror://xorg/X11R7.6/src/everything/bdftopcf-1.0.3.tar.bz2
 mirror://xorg/X11R7.6/src/everything/bigreqsproto-1.1.1.tar.bz2
 mirror://xorg/X11R7.6/src/everything/compositeproto-0.4.2.tar.bz2
 mirror://xorg/X11R7.6/src/everything/damageproto-1.2.1.tar.bz2
-mirror://xorg/individual/proto/dmxproto-2.3.1.tar.bz2
 mirror://xorg/X11R7.6/src/everything/dri2proto-2.3.tar.bz2
+mirror://xorg/individual/proto/dmxproto-2.3.1.tar.bz2
 mirror://xorg/X11R7.6/src/everything/encodings-1.0.4.tar.bz2
 mirror://xorg/X11R7.6/src/everything/fixesproto-4.1.2.tar.bz2
 mirror://xorg/X11R7.6/src/everything/font-adobe-100dpi-1.0.3.tar.bz2
@@ -179,7 +179,7 @@ mirror://xorg/X11R7.6/src/everything/xkbevd-1.1.2.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xkbutils-1.0.3.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xkill-1.0.3.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xlsatoms-1.1.0.tar.bz2
-mirror://xorg/X11R7.6/src/everything/xlsclients-1.1.1.tar.bz2
+mirror://xorg/individual/app/xlsclients-1.1.2.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xmodmap-1.0.5.tar.bz2
 mirror://xorg/X11R7.6/src/everything/xorg-docs-1.6.tar.bz2
 mirror://xorg/individual/xserver/xorg-server-1.9.5.tar.bz2

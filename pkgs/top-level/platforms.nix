@@ -83,6 +83,9 @@ rec {
         BLK_DEV_CMD640_ENHANCED n
 
         FUSE_FS m
+
+        # nixos mounts some cgroup
+        CGROUPS y
       '';
     kernelTarget = "uImage";
     uboot = "sheevaplug";

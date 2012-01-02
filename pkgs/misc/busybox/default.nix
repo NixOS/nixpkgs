@@ -29,7 +29,7 @@ let
 
   nixConfig = ''
     CONFIG_PREFIX "$out"
-    CONFIG_INSTALL_NO_USR n
+    CONFIG_INSTALL_NO_USR y
   '';
 
   staticConfig = (if enableStatic then ''
@@ -56,12 +56,6 @@ stdenv.mkDerivation rec {
     $extraCrossConfig
     EOF
     make oldconfig
-  '';
-
-  postInstall = ''
-    mv -v $out/usr/bin/* $out/bin
-    mv -v $out/usr/sbin/* $out/sbin
-    rm -fRv $out/usr/
   '';
 
   crossAttrs = {

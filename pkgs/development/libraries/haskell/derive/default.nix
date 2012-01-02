@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "derive";
-  version = "2.5.4";
-  sha256 = "0gmj24qzh3vyvp0a44v4mf1qpkrg4d9q0m15d0yfbyzrimyjx1c7";
+  version = "2.5.5";
+  sha256 = "1vv7y2jfyxq2abh4avyjwia309a6rylbyiqia1m0ka7zwv2rxd6y";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ haskellSrcExts syb transformers uniplate ];

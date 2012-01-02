@@ -3,7 +3,7 @@
 , withGNOME ? false, libgnomeui }:
 
 stdenv.mkDerivation rec {
-  inherit (src) name;
+  name = src.pkgname;
 
   src = fetchurl_gnome {
     project = "dia";

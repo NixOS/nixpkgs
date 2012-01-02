@@ -2,9 +2,13 @@
 
 # Typical command to generate the list of tarballs:
 
-# export i="mirror://xorg/X11R7.4/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.4.list
+# export i="mirror://xorg/X11R7.6/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.6.list
 # manually update extra.list
-# then run: cat tarballs-7.4.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
+# then run: cat tarballs-7.6.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
+# tarballs-x.y.list is generated + changes for individual packages
+# extra.list are packages not contained in the tarballs
+# old.list are packages that used to be part of the tarballs
+
 
 use strict;
 
@@ -44,11 +48,16 @@ while (<>) {
     my $tarball = "$_";
     print "\nDOING TARBALL $tarball\n";
 
-    $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
-    die unless defined $1;
-    my $pkg = $1;
-    $pkg =~ s/-//g;
-    #next unless $pkg eq "xcbutil";
+    my $pkg;
+    if ($tarball =~ s/:([a-zA-Z0-9_]+)$//) {
+      $pkg = $1;
+    } else {
+      $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
+      die unless defined $1;
+      $pkg = $1;
+      $pkg =~ s/-//g;
+      #next unless $pkg eq "xcbutil";
+    }
 
     $tarball =~ /\/([^\/]*)\.tar\.bz2$/;
     my $pkgName = $1;

@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "0.9.3.4";
-  sha256 = "1iw6qf1dywss8w4ig3dr04cyi01jq9frvmkbqgj5jq8v11y55x6v";
+  version = "0.9.4.1";
+  sha256 = "0dcd4m91liash046i0qaq51s447sl4fn55gsg7mi807lffik436q";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

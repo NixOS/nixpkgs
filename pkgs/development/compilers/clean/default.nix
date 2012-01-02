@@ -1,16 +1,16 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "clean-2.3";
+  name = "clean-2.4";
 
   src =
     if stdenv.system == "i686-linux" then (fetchurl {
-      url = "http://clean.cs.ru.nl/download/Clean23/linux/clean2.3_boot.tar.gz";
-      sha256 = "0rrjpqdbqwbx7n8v35wi3wpm6lpv9zd1n5q50byb2h0ljqw31j9h";
+      url = "http://clean.cs.ru.nl/download/Clean24/linux/clean2.4_boot.tar.gz";
+      sha256 = "1w8vvmkwzq8g51639r62apcy75sj69nm08082a34xvqm9ymfgkq5";
     })
     else if stdenv.system == "x86_64-linux" then (fetchurl {
-        url = "http://clean.cs.ru.nl/download/Clean23/linux/clean2.3_64_boot.tar.gz";
-        sha256 = "0bvkaiwcaa1p6h1bl4bgnia1yd0j8nq6sb1yiwar74y2m1wwmjqj";
+        url = "http://clean.cs.ru.nl/download/Clean24/linux/clean2.4_64_boot.tar.gz";
+        sha256 = "08gsa1pjl5wyzh4ah8ccfx8a7mdcn6ycsn1lzkrr9adygv1gmm7r";
     })
     else throw "Architecture not supported";
 

@@ -19,6 +19,10 @@ stdenv.mkDerivation {
   
   makeFlags = "DESTDIR=$(out)";
 
+  crossAttrs = {
+    CC = stdenv.cross.config + "-gcc";
+  };
+
   meta = {
     homepage = http://procps.sourceforge.net/;
     description = "Utilities that give information about processes using the /proc filesystem";

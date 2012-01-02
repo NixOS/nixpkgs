@@ -152,7 +152,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     syb          = self.syb_0_3_6; # 7.2 ok, 7.3 ok
     xhtml        = self.xhtml_3000_2_0_1; # 7.2 ok, 7.3 ok
     zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
-    HTTP         = self.HTTP_4000_2_1; # 7.2 ok, 7.3 ok
+    HTTP         = self.HTTP_4000_2_2; # 7.2 ok, 7.3 ok
     deepseq      = self.deepseq_1_1_0_2; # 7.2 ok, 7.3 ok
     text         = self.text_0_11_1_12; # 7.2 ok, 7.3 ok
     transformers = self.transformers_0_2_2_0; # 7.2 ok, 7.3 ok
@@ -439,6 +439,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
 
+  attoparsecConduit = callPackage ../development/libraries/haskell/attoparsec-conduit {};
+
   attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec/enumerator.nix {};
 
   authenticate = callPackage ../development/libraries/haskell/authenticate {};
@@ -467,6 +469,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeBuilder = callPackage ../development/libraries/haskell/blaze-builder {};
 
+  blazeBuilderConduit = callPackage ../development/libraries/haskell/blaze-builder-conduit {};
+
   blazeBuilderEnumerator = callPackage ../development/libraries/haskell/blaze-builder-enumerator {};
 
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
@@ -480,6 +484,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
   bson = callPackage ../development/libraries/haskell/bson {};
+
+  byteorder = callPackage ../development/libraries/haskell/byteorder {};
 
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
 
@@ -526,6 +532,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   colour = callPackage ../development/libraries/haskell/colour {};
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
+
+  conduit = callPackage ../development/libraries/haskell/conduit {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
@@ -612,6 +620,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   downloadCurl = callPackage ../development/libraries/haskell/download-curl { tagsoup = self.tagsoup_0_10_1; };
 
+  dstring = callPackage ../development/libraries/haskell/dstring {};
+
   editline = callPackage ../development/libraries/haskell/editline {};
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
@@ -630,6 +640,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   extensibleExceptions = null; # a core package in recent GHCs
 
   failure = callPackage ../development/libraries/haskell/failure {};
+
+  fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
   fclabels = callPackage ../development/libraries/haskell/fclabels {};
 
@@ -757,7 +769,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_1_1 = callPackage ../development/libraries/haskell/HTTP/4000.1.1.nix {};
   HTTP_4000_1_2 = callPackage ../development/libraries/haskell/HTTP/4000.1.2.nix {};
   HTTP_4000_2_1 = callPackage ../development/libraries/haskell/HTTP/4000.2.1.nix {};
-  HTTP = self.HTTP_4000_2_1;
+  HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
+  HTTP = self.HTTP_4000_2_2;
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
@@ -833,6 +846,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   html_1_0_1_2 = callPackage ../development/libraries/haskell/html/1.0.1.2.nix {};
   html = self.html_1_0_1_2;
 
+  httpConduit = callPackage ../development/libraries/haskell/http-conduit {};
+
   httpdShed = callPackage ../development/libraries/haskell/httpd-shed {};
 
   httpDate = callPackage ../development/libraries/haskell/http-date {};
@@ -891,6 +906,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
+
+  liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
 
@@ -990,7 +1007,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
 
-  pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
+  pathPieces_0_0_0 = callPackage ../development/libraries/haskell/path-pieces/0.0.0.nix {};
+  pathPieces_0_1_0 = callPackage ../development/libraries/haskell/path-pieces/0.1.0.nix {};
+  pathPieces = self.pathPieces_0_1_0;
 
   pandoc = callPackage ../development/libraries/haskell/pandoc/default.nix {};
 
@@ -1022,7 +1041,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
 
-  persistent = callPackage ../development/libraries/haskell/persistent {};
+  persistent = callPackage ../development/libraries/haskell/persistent {
+    pathPieces = self.pathPieces_0_0_0;
+  };
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
@@ -1130,6 +1151,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   RepLib = callPackage ../development/libraries/haskell/RepLib {};
 
+  repr = callPackage ../development/libraries/haskell/repr {};
+
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
@@ -1158,6 +1181,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   strict = callPackage ../development/libraries/haskell/strict {};
 
+  stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
+
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
   syb_0_3   = callPackage ../development/libraries/haskell/syb/0.3.nix {};
   syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
@@ -1184,6 +1209,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   shakespeare = callPackage ../development/libraries/haskell/shakespeare {};
 
   shakespeareCss = callPackage ../development/libraries/haskell/shakespeare-css {};
+
+  shakespeareI18n = callPackage ../development/libraries/haskell/shakespeare-i18n {};
 
   shakespeareJs = callPackage ../development/libraries/haskell/shakespeare-js {};
 
@@ -1336,6 +1363,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   waiExtra = callPackage ../development/libraries/haskell/wai-extra {};
 
+  waiLogger = callPackage ../development/libraries/haskell/wai-logger {};
+
   warp = callPackage ../development/libraries/haskell/warp {};
 
   WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {
@@ -1357,7 +1386,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   webRoutes = callPackage ../development/libraries/haskell/web-routes {};
 
-  webRoutesQuasi = callPackage ../development/libraries/haskell/web-routes-quasi {};
+  webRoutesQuasi = callPackage ../development/libraries/haskell/web-routes-quasi {
+    pathPieces = self.pathPieces_0_0_0;
+  };
 
   CouchDB = callPackage ../development/libraries/haskell/CouchDB {};
 
@@ -1381,6 +1412,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xml = callPackage ../development/libraries/haskell/xml {};
 
+  xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
+
   xmlEnumerator = callPackage ../development/libraries/haskell/xml-enumerator {};
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
@@ -1395,7 +1428,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yesodAuth = callPackage ../development/libraries/haskell/yesod-auth {};
 
-  yesodCore = callPackage ../development/libraries/haskell/yesod-core {};
+  yesodCore = callPackage ../development/libraries/haskell/yesod-core {
+    pathPieces = self.pathPieces_0_0_0;
+  };
 
   yesodForm = callPackage ../development/libraries/haskell/yesod-form {};
 
@@ -1425,6 +1460,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib = self.zlib_0_5_0_0;
 
   zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
+
+  zlibConduit = callPackage ../development/libraries/haskell/zlib-conduit {};
 
   zlibEnum = callPackage ../development/libraries/haskell/zlib-enum {};
 
