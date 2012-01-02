@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hamlet";
-  version = "0.10.5";
-  sha256 = "0kizy0qij6zbayrbb3gr4iqys1551ax5c8w5lvh6chg3ypl1i1m3";
+  version = "0.10.6";
+  sha256 = "0ai00jwbq5nnrgcfhz3sxm2jm2jvz7qbj56lr0wlc3z818a22ams";
   buildDepends = [
     blazeBuilder blazeHtml failure parsec shakespeare text
   ];

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, linuxHeaders, glibc, libtool, gettext}:
+{ stdenv, fetchurl, libtool, gettext }:
 
 assert stdenv.isLinux && stdenv.system != "powerpc-linux";
 
@@ -16,5 +16,10 @@ stdenv.mkDerivation {
       -i Makefile
   '';
 
-  buildInputs = [ linuxHeaders glibc libtool gettext ];
+  buildInputs = [ stdenv.gcc.libc.kernelHeaders libtool gettext ];
+
+  meta = {
+    description = "Tools to display or change the CPU governor settings";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

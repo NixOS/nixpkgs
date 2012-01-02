@@ -1,12 +1,12 @@
-{stdenv, fetchurl, cmake, qt4, perl, gettext, kdelibs, kde_baseapps, automoc4, phonon}:
+{stdenv, fetchurl, gettext, kdelibs, kde_baseapps}:
 
 stdenv.mkDerivation rec {
-  name = "krusader-2.2.0-beta1";
+  name = "krusader-2.4.0-beta1";
   src = fetchurl {
     url = "mirror://sourceforge/krusader/${name}.tar.bz2";
-    sha256 = "0rbk0hw8p1bb03w74gspljbzhvpbs3dcr6ckp38gh5r80mcmqfbs";
+    sha256 = "1q1m4cjzz2m41pdpxnwrsiczc7990785b700lv64midjjgjnr7j6";
   };
-  buildInputs = [ cmake qt4 perl gettext kdelibs automoc4 phonon kde_baseapps ];
+  buildInputs = [ gettext kdelibs kde_baseapps ];
   meta = {
     description = "Norton/Total Commander clone for KDE";
     license = "GPL";

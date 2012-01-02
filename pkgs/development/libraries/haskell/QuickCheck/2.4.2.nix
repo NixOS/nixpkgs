@@ -1,12 +1,12 @@
-{ cabal, extensibleExceptions, mtl, random }:
+{ cabal, extensibleExceptions, random }:
 
 cabal.mkDerivation (self: {
   pname = "QuickCheck";
-  version = "2.1.0.3";
-  sha256 = "91a861233fe0a37a032d092dd5e8ec40c2c99fbbf0701081394eb244f23757b1";
-  buildDepends = [ extensibleExceptions mtl random ];
+  version = "2.4.2";
+  sha256 = "17qp73sdp780lha3i6xdsrvgshqz47qwldqknadc0w3vmscw61bg";
+  buildDepends = [ extensibleExceptions random ];
   meta = {
-    homepage = "http://www.cs.chalmers.se/~koen";
+    homepage = "http://code.haskell.org/QuickCheck";
     description = "Automatic testing of Haskell programs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

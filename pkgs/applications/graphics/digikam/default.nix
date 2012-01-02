@@ -1,22 +1,28 @@
 { stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2, eigen,
 kdegraphics, lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, kdeedu,
-liblqr1, lensfun, pkgconfig }:
+liblqr1, lensfun, pkgconfig, qjson, libkdcraw, opencv, libkexiv2, libkipi, boost,
+shared_desktop_ontologies, marble }:
 
 stdenv.mkDerivation rec {
-  name = "digikam-1.5.0";
+  name = "digikam-2.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/digikam/${name}.tar.bz2";
-    sha256 = "1vvzw132aw2c1z2v1zc3aqa99kvg501krr2law35ri12zkqjsvaz";
+    sha256 = "0fyyhc26syd1d1m8jqyg2i66hwd523mh419ln8y944jkrjj6gadc";
   };
 
   buildInputs = [ cmake qt4 kdelibs kdegraphics automoc4 phonon qimageblitz qca2 eigen
     lcms jasper libgphoto2 kdepimlibs gettext soprano kdeedu liblqr1 lensfun
-    pkgconfig ];
+    pkgconfig qjson libkdcraw opencv libkexiv2 libkipi boost shared_desktop_ontologies
+    marble ];
 
   KDEDIRS=kdeedu;
 
-  patches = [ ./include.diff ];
+  # Make digikam find some FindXXXX.cmake
+  preConfigure = ''
+    cp ${qjson}/share/apps/cmake/modules/FindQJSON.cmake cmake/modules;
+    cp ${marble}/share/apps/cmake/modules/FindMarble.cmake cmake/modules;
+  '';
 
   meta = {
     description = "Photo Management Program";

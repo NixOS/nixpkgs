@@ -1,33 +1,26 @@
-diff -Naur a/tools/clang/lib/Driver/ToolChains.cpp b/tools/clang/lib/Driver/ToolChains.cpp
---- a/tools/clang/lib/Driver/ToolChains.cpp	2011-03-21 17:29:27.000000000 -0400
-+++ b/tools/clang/lib/Driver/ToolChains.cpp	2011-10-18 19:43:48.999590771 -0400
-@@ -1482,12 +1482,9 @@
-     Lib = Lib64;
-   }
+diff -Naur clang-3.0.src-orig/lib/Driver/ToolChains.cpp clang-3.0.src/lib/Driver/ToolChains.cpp
+--- clang-3.0.src-orig/lib/Driver/ToolChains.cpp	2011-11-17 02:40:32.000000000 -0500
++++ clang-3.0.src/lib/Driver/ToolChains.cpp	2011-12-19 05:32:38.695513475 -0500
+@@ -1800,6 +1800,7 @@
  
--  llvm::sys::Path LinkerPath(Base + "/../../../../" + GccTriple + "/bin/ld");
--  if (!llvm::sys::fs::exists(LinkerPath.str(), Exists) && Exists)
--    Linker = LinkerPath.str();
--  else
--    Linker = GetProgramPath("ld");
-+  Linker = GetProgramPath("ld");
+   Linker = GetProgramPath("ld");
  
 +#if 0
    LinuxDistro Distro = DetectLinuxDistro(Arch);
  
-   if (IsUbuntu(Distro)) {
-@@ -1531,6 +1528,7 @@
-   Paths.push_back(Base + "/../../..");
-   if (Arch == getArch() && IsUbuntu(Distro))
-     Paths.push_back("/usr/lib/" + GccTriple);
+   if (IsOpenSuse(Distro) || IsUbuntu(Distro)) {
+@@ -1882,6 +1883,7 @@
+   addPathIfExists(SysRoot + "/lib", Paths);
+   addPathIfExists(SysRoot + "/usr/lib/" + MultiarchTriple, Paths);
+   addPathIfExists(SysRoot + "/usr/lib", Paths);
 +#endif
  }
  
  bool Linux::HasNativeLLVMSupport() const {
-diff -Naur a/tools/clang/lib/Driver/Tools.cpp b/tools/clang/lib/Driver/Tools.cpp
---- a/tools/clang/lib/Driver/Tools.cpp	2011-03-06 18:31:01.000000000 -0500
-+++ b/tools/clang/lib/Driver/Tools.cpp	2011-10-18 18:44:00.799604267 -0400
-@@ -3619,6 +3619,7 @@
+diff -Naur clang-3.0.src-orig/lib/Driver/Tools.cpp clang-3.0.src/lib/Driver/Tools.cpp
+--- clang-3.0.src-orig/lib/Driver/Tools.cpp	2011-11-07 05:27:39.000000000 -0500
++++ clang-3.0.src/lib/Driver/Tools.cpp	2011-12-19 05:34:44.075325534 -0500
+@@ -4306,6 +4306,7 @@
        ToolChain.getArch() == llvm::Triple::thumb ||
        (!Args.hasArg(options::OPT_static) &&
         !Args.hasArg(options::OPT_shared))) {
@@ -35,8 +28,8 @@ diff -Naur a/tools/clang/lib/Driver/Tools.cpp b/tools/clang/lib/Driver/Tools.cpp
      CmdArgs.push_back("-dynamic-linker");
      if (ToolChain.getArch() == llvm::Triple::x86)
        CmdArgs.push_back("/lib/ld-linux.so.2");
-@@ -3627,6 +3628,7 @@
-       CmdArgs.push_back("/lib/ld-linux.so.3");
+@@ -4318,6 +4319,7 @@
+       CmdArgs.push_back("/lib64/ld64.so.1");
      else
        CmdArgs.push_back("/lib64/ld-linux-x86-64.so.2");
 +#endif

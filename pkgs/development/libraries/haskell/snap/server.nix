@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-server";
-  version = "0.7";
-  sha256 = "1zvijghk7597xbmxv2x3qk92jlckwpz73c57cmfl63as5x6psxhr";
+  version = "0.7.0.1";
+  sha256 = "149jgd9mcndw9sc051020y7yiai1fipjnqk4s3sbw4lmaysap673";
   buildDepends = [
     attoparsec attoparsecEnumerator binary blazeBuilder
     blazeBuilderEnumerator bytestringNums caseInsensitive directoryTree

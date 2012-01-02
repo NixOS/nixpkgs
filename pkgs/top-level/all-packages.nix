@@ -1070,7 +1070,8 @@ let
 
   ntfs3g = callPackage ../tools/filesystems/ntfs-3g { };
 
-  ntfsprogs = callPackage ../tools/filesystems/ntfsprogs { };
+  # ntfsprogs are merged into ntfs-3g
+  ntfsprogs = pkgs.ntfs3g;
 
   ntp = callPackage ../tools/networking/ntp { };
 
@@ -1343,6 +1344,10 @@ let
   slsnif = callPackage ../tools/misc/slsnif { };
 
   smartmontools = callPackage ../tools/system/smartmontools { };
+
+  smbldaptools = callPackage ../tools/networking/smbldaptools {
+    inherit (perlPackages) NetLDAP CryptSmbHash DigestSHA1;
+  };
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
@@ -1665,13 +1670,12 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clangBootUnwrapped = callPackage ../development/compilers/llvm/clang.nix { };
-
-  clangBoot = wrapClang clangBootUnwrapped;
-
-  clangUnwrapped = let clangBootStdenv = stdenvAdapters.overrideGCC stdenv clangBoot; in clangBootUnwrapped.override {
-    stdenv = clangBootStdenv;
-    llvm = llvm.override { stdenv = clangBootStdenv; };
+  clangUnwrapped = callPackage ../development/compilers/llvm/clang.nix {
+    # There is a bug in gcc-4.5 that prevents building a release build of
+    # clang-3.0
+    stdenv = if stdenv.isLinux
+      then (stdenvAdapters.overrideGCC stdenv gcc46)
+      else stdenv;
   };
 
   clang = wrapClang clangUnwrapped;
@@ -2233,7 +2237,9 @@ let
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
     haskellPackagesFun ../development/compilers/ghc/head.nix
-      ghc6121Binary (x : x.ghcHEADPrefs) false false lowPrio;
+      # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+      (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
+      (x : x.ghcHEADPrefs) false false lowPrio;
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
@@ -2334,6 +2340,10 @@ let
   ocaml_3_11_1 = callPackage ../development/compilers/ocaml/3.11.1.nix { };
 
   ocaml_3_12_1 = lowPrio (callPackage ../development/compilers/ocaml/3.12.1.nix { });
+
+  metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
+
+  ber_metaocaml_003 = callPackage ../development/compilers/ocaml/ber-metaocaml-003.nix { };
 
   mkOcamlPackages = ocaml: self: let callPackage = newScope self; in rec {
     inherit ocaml;
@@ -2494,7 +2504,8 @@ let
     clang = baseClang;
     libc = glibc;
     shell = bash;
-    inherit stdenv binutils coreutils zlib;
+    binutils = stdenv.gcc.binutils;
+    inherit stdenv coreutils zlib;
   };
 
   wrapClang = wrapClangWith (import ../build-support/clang-wrapper) glibc;
@@ -3538,7 +3549,7 @@ let
         cxx = false;
       };
 
-  gmpxx = gmp.override { cxx = true; };
+  gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
@@ -4421,7 +4432,6 @@ let
   postgis = callPackage ../development/libraries/postgis { };
 
   protobuf = callPackage ../development/libraries/protobuf { };
-  protobuf_2_2_0 = callPackage ../development/libraries/protobuf/2.2.0.nix { };
 
   pth = callPackage ../development/libraries/pth { };
 
@@ -4452,6 +4462,13 @@ let
 
   qt47 = callPackage ../development/libraries/qt-4.x/4.7 {
     inherit (pkgs.gnome) glib;
+  };
+
+  qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
+    # GNOME dependencies are not used unless gtkStyle == true
+    inherit (pkgs.gnome) gtk libgnomeui GConf gnome_vfs;
+    # GStreamer is required for HTML5 video in QtWebKit
+    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
   };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
@@ -4884,6 +4901,16 @@ let
 
   pyqt4 = callPackage ../development/python-modules/pyqt { };
 
+  pysideApiextractor = callPackage ../development/python-modules/pyside/apiextractor.nix { };
+
+  pysideGeneratorrunner = callPackage ../development/python-modules/pyside/generatorrunner.nix { };
+
+  pyside = callPackage ../development/python-modules/pyside { };
+
+  pysideTools = callPackage ../development/python-modules/pyside/tools.nix { };
+
+  pysideShiboken = callPackage ../development/python-modules/pyside/shiboken.nix { };
+
   pyx = callPackage ../development/python-modules/pyx { };
 
   pyxml = callPackage ../development/python-modules/pyxml { };
@@ -5151,6 +5178,8 @@ let
 
   bluez = callPackage ../os-specific/linux/bluez { };
 
+  beret = callPackage ../games/beret { };
+
   bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
 
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
@@ -5159,12 +5188,7 @@ let
 
   conky = callPackage ../os-specific/linux/conky { };
 
-  cpufrequtils = (
-    import ../os-specific/linux/cpufrequtils {
-    inherit fetchurl stdenv libtool gettext;
-    glibc = stdenv.gcc.libc;
-    linuxHeaders = stdenv.gcc.libc.kernelHeaders;
-  });
+  cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
   cryopid = callPackage ../os-specific/linux/cryopid { };
 
@@ -5847,7 +5871,7 @@ let
 
   libsmbios = callPackage ../os-specific/linux/libsmbios { };
 
-  lm_sensors = callPackage ../os-specific/linux/lm_sensors { };
+  lm_sensors = callPackage ../os-specific/linux/lm-sensors { };
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
@@ -6664,20 +6688,6 @@ let
 
   firefox36Wrapper = wrapFirefox { browser = firefox36Pkgs.firefox; };
 
-  firefox50Pkgs = callPackage ../applications/networking/browsers/firefox/5.0.nix {
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-  };
-
-  firefox50Wrapper = wrapFirefox { browser = firefox50Pkgs.firefox; };
-
-  firefox70Pkgs = callPackage ../applications/networking/browsers/firefox/7.0.nix {
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-  };
-
-  firefox70Wrapper = wrapFirefox { browser = firefox70Pkgs.firefox; };
-
   firefox80Pkgs = callPackage ../applications/networking/browsers/firefox/8.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
@@ -6685,10 +6695,12 @@ let
 
   firefox80Wrapper = wrapFirefox { browser = firefox80Pkgs.firefox; };
 
-  firefox90bPkgs = callPackage ../applications/networking/browsers/firefox/9.0.nix {
+  firefox90Pkgs = callPackage ../applications/networking/browsers/firefox/9.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
+
+  firefox90Wrapper = wrapFirefox { browser = firefox90Pkgs.firefox; };
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7410,6 +7422,10 @@ let
     withKde = getConfig [ "taskJuggler" "kde" ] false;
   };
 
+  taskwarrior = callPackage ../applications/misc/taskwarrior { };
+
+  taskwarrior_unstable = callPackage ../applications/misc/taskwarrior/unstable.nix { };
+
   tesseract = callPackage ../applications/graphics/tesseract { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
@@ -8032,7 +8048,9 @@ let
 
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
-      digikam = callPackage ../applications/graphics/digikam { };
+      digikam = callPackage ../applications/graphics/digikam {
+        boost = boost147;
+      };
 
       k3b = callPackage ../applications/misc/k3b { };
 

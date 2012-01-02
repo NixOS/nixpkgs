@@ -1,14 +1,14 @@
-{ cabal, attoparsec, blazeBuilder, blazeTextual, deepseq, dlist
-, hashable, mtl, syb, text, time, unorderedContainers, vector
+{ cabal, attoparsec, blazeBuilder, deepseq, dlist, hashable, mtl
+, syb, text, time, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "aeson";
-  version = "0.4.0.0";
-  sha256 = "1j0m7hh82ab7lg757wq75k28llfd1igawmg4g2qdia5gimm652pa";
+  version = "0.5.0.0";
+  sha256 = "1n7c0kf6rdf5p76mjcxlqrzhnfz4b1zkkbxk9w94hibb0s4kwxv6";
   buildDepends = [
-    attoparsec blazeBuilder blazeTextual deepseq dlist hashable mtl syb
-    text time unorderedContainers vector
+    attoparsec blazeBuilder deepseq dlist hashable mtl syb text time
+    unorderedContainers vector
   ];
   meta = {
     homepage = "https://github.com/bos/aeson";

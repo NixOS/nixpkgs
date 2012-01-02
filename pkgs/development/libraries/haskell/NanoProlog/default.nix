@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "NanoProlog";
-  version = "0.2.3.3";
-  sha256 = "0008xpahqbs2djchlw1bslhqqhbc0n7ql7pqm4g7lh8xd3ampxba";
+  version = "0.3";
+  sha256 = "0wjjwzzc78sj7nsaq1hgxiwv0pc069mxns425lhmrlxcm0vf8fmn";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ ListLike uuParsinglib ];

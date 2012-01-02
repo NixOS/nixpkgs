@@ -2,7 +2,7 @@
 
 let
   name    = "maxima";
-  version = "5.25.1";
+  version = "5.26.0";
 
   searchPath =
     stdenv.lib.makeSearchPath "bin"
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/${name}/${name}-${version}.tar.gz";
-    sha256 = "8e98ad742151e52edb56337bd62c8a9749f7b598cb6ed4e991980e0e6f89706a";
+    sha256 = "887105c99a91122f3e622472aa39bdd1ca8ed6198cf09b49917f63f8396dced9";
   };
 
   buildInputs = [sbcl texinfo perl makeWrapper];
@@ -29,8 +29,9 @@ stdenv.mkDerivation {
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   '';
 
-  # The regression test suite has minor failures, but curiously enough
-  # this doesn't seem to abort the build process:
+  # Failures in the regression test suite are not going to abort the
+  # build process. We run the suite mostly so that potential errors show
+  # up in the build log. See also:
   # <http://sourceforge.net/tracker/?func=detail&aid=3365831&group_id=4933&atid=104933>.
   doCheck = true;
 

@@ -836,6 +836,14 @@ rec {
     };
   };
 
+  ConvertASN1 = buildPerlPackage rec {
+    name = "Convert-ASN1-0.22";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GB/GBARR/Convert-ASN1-0.22.tar.gz";
+      sha256 = "1vpny8smwl23rai1kxngi5i31jhp6s6cdls19gjhcwsxf76daqxy";
+    };
+  };
+
   constant = buildPerlPackage {
     name = "constant-1.15";
     src = fetchurl {
@@ -919,6 +927,14 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDPORTER/${name}.tar.gz";
       sha256 = "0r5w5i81s02x756alad9psxmpqmcxahzjpqxsb3kacsqj8s5br9b";
+    };
+  };
+
+  CryptSmbHash = buildPerlPackage rec {
+    name = "Crypt-SmbHash-0.12";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BJ/BJKUIT/Crypt-SmbHash-0.12.tar.gz";
+      sha256 = "0dxivcqmabkhpz5xzph6rzl8fvq9xjy26b2ci77pv5gsmdzari38";
     };
   };
 
@@ -2534,6 +2550,15 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MA/MANU/Net-IP-1.25.tar.gz;
       sha256 = "1iv0ka6d8kp9iana6zn51sxbcmz2h3mbn6cd8pald36q5whf5mjc";
+    };
+  };
+
+  NetLDAP = buildPerlPackage {
+    name = "Net-LDAP-0.43";
+    propagatedBuildInputs = [ ConvertASN1 ];
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GB/GBARR/perl-ldap-0.43.tar.gz;
+      sha256 = "0ak7393zs8ps6r6in5ilr9l1mzxxh529jr768sjzx4273p7li3m0";
     };
   };
 

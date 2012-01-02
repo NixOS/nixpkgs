@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, qt4, perl, bzip2, libxml2, exiv2
-, clucene_core, fam, zlib, dbus_tools
+, clucene_core, fam, zlib, dbus_tools, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   CLUCENE_HOME = clucene_core;
 
   buildInputs =
-    [ cmake perl zlib bzip2 stdenv.gcc.libc libxml2 qt4 exiv2 clucene_core fam dbus_tools ];
+    [ zlib bzip2 stdenv.gcc.libc libxml2 qt4 exiv2 clucene_core fam dbus_tools ];
+
+  buildNativeInputs = [ cmake pkgconfig perl ];
 
   enableParallelBuilding = true;
 

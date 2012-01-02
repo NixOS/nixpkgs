@@ -1,5 +1,6 @@
 use strict;
 use XML::Simple;
+use List::Util qw(min);
 
 my @packagesFiles = ();
 my @urlPrefixes = ();
@@ -11,6 +12,44 @@ while(-f $ARGV[0]) {
     my $urlPrefix = shift @ARGV;
     push(@packagesFiles, $packagesFile);
     push(@urlPrefixes, $urlPrefix);
+}
+
+
+sub rpmvercmp {
+    my ($version1, $version2) = @_;
+    my @vercmps1 = split /\./, $version1;
+    my @vercmps2 = split /\./, $version2;
+    my $l1 = scalar(@vercmps1);
+    my $l2 = scalar(@vercmps2);
+    my $l = min($l1, $l2);
+
+    for(my $i=0; $i<$l; $i++) {
+        my $v1 = $vercmps1[$i];
+        my $v2 = $vercmps2[$i];
+
+        if($v1 =~ /^[0-9]*$/ && $v2 =~ /^[0-9]*$/) {
+	    if ( int($v1) > int($v2) ) {
+		return 1;
+	    }
+	    elsif ( int($v1) < int($v2) ) {
+		return -1;
+	    }
+	} else {
+	    if ( $v1 gt $v2 ) {
+		return 1;
+	    }
+	    elsif ( $v1 lt $v2 ) {
+		return -1;
+	    }
+	}
+    }
+    if($l1 == $l2) {
+        return 0;
+    } elsif ($l1 > $l2) {
+        return 1;
+    } elsif ($l1 < $l2) {
+        return -1;
+    }
 }
 
 my @toplevelPkgs = @ARGV;
@@ -36,7 +75,8 @@ for (my $i = 0; $i < scalar(@packagesFiles); $i++) {
         if (defined $pkgs{$pkg->{name}}) {
             my $earlierPkg = $pkgs{$pkg->{name}};
             print STDERR "WARNING: duplicate occurrence of package $pkg->{name}\n";
-            if ($earlierPkg->{'time'}->{file} <= $pkg->{'time'}->{file}) {
+            #   <version epoch="0" ver="1.28.0" rel="2.el6"/>
+            if (rpmvercmp($pkg->{'version'}->{ver}, $earlierPkg->{'version'}->{ver}) >= 0) {
                 print STDERR "WARNING: replaced package $pkg->{name} with newer one\n";
                 $pkg->{urlPrefix} = $urlPrefixes[$i];
                 $pkgs{$pkg->{name}} = $pkg;

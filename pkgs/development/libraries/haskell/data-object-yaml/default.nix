@@ -1,20 +1,19 @@
-{ cabal, convertibleText, dataObject, enumerator, failure, text
+{ cabal, conduit, convertibleText, dataObject, failure, text
 , transformers, yaml
 }:
 
 cabal.mkDerivation (self: {
   pname = "data-object-yaml";
-  version = "0.3.3.6";
-  sha256 = "0hha52nrxb539bvdz6ksn9sxmksfwmjhh7h8mp223s340vxrlpk3";
+  version = "0.3.4";
+  sha256 = "1wx6m7mjmdks8ym6dh117bhkdks4d1jlfchqif0svcwg04qnfczd";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    convertibleText dataObject enumerator failure text transformers
-    yaml
+    conduit convertibleText dataObject failure text transformers yaml
   ];
   meta = {
     homepage = "http://github.com/snoyberg/data-object-yaml";
-    description = "Serialize data to and from Yaml files";
+    description = "Serialize data to and from Yaml files (deprecated)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
