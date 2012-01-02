@@ -8327,9 +8327,7 @@ let
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
-  tulip = callPackage ../applications/science/misc/tulip {
-    qt = qt46;
-  };
+  tulip = callPackage ../applications/science/misc/tulip { };
 
   vite = callPackage ../applications/science/misc/vite {
     qt = qt4;

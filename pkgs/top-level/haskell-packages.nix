@@ -933,9 +933,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MonadCatchIOTransformers = callPackage ../development/libraries/haskell/MonadCatchIO-transformers {};
 
-  monadControl_OBSOLETE = callPackage ../development/libraries/haskell/monad-control/0.2.0.3.nix {};
-  monadControl2 = self.monadControl_OBSOLETE;
-  monadControl = callPackage ../development/libraries/haskell/monad-control {};
+  monadControl_0_2_0_3 = callPackage ../development/libraries/haskell/monad-control/0.2.0.3.nix {};
+  monadControl_0_3_1 = callPackage ../development/libraries/haskell/monad-control/0.3.1.nix {};
+  monadControl = self.monadControl_0_3_1;
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
@@ -948,7 +948,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {
-    monadControl = self.monadControl2;
+    monadControl = self.monadControl_0_2_0_3;
   };
 
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
