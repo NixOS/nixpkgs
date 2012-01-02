@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, pyqt4, sip, popplerQt4, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qt4, icu
+, imagemagick, libjpeg, fontconfig, podofo, qt4, icu, sqlite
 , pil, makeWrapper, unrar, chmlib, pythonPackages, xz
 }:
 
@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     [ python pyqt4 sip popplerQt4 libpng imagemagick libjpeg
       fontconfig podofo qt4 pil chmlib icu
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
-      pythonPackages.cssutils pythonPackages.beautifulsoap pythonPackages.sqlite3
+      pythonPackages.cssutils pythonPackages.beautifulsoap
+      pythonPackages.sqlite3 sqlite
     ];
 
   installPhase = ''
