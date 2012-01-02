@@ -1,22 +1,18 @@
-{ fetchurl, stdenv, libxml2, freetype, mesa, glew, qt
-, autoconf, automake, libtool, cmake, makeWrapper }:
+{ fetchurl, stdenv, libxml2, freetype, mesa, glew, qt4
+, cmake, makeWrapper }:
 
-let version = "3.5.0"; in
+let version = "3.6.1"; in
 stdenv.mkDerivation rec {
   name = "tulip-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/auber/tulip/tulip-${version}/${name}-src.tar.gz";
-    sha256 = "0wl0wqjlifpay61pn7dxr3dl5r4a7v80f5g277p6s06ibvn2p3ln";
+    url = "mirror://sourceforge/auber/${name}-src.tar.gz";
+    sha256 = "0d76zmp7gmid4lc91zz6sp4rzxlga6vfwfqhap04326r4zl4nx1q";
   };
 
-  buildInputs = [ libxml2 freetype glew ]
-    ++ [ autoconf automake libtool cmake qt makeWrapper ];
-  propagagedBuildInputs = [ mesa qt ];
+  buildInputs = [ libxml2 freetype glew mesa qt4 ];
 
-  postInstall=''
-    wrapProgram "$out/bin/tulip"
-  '';
+  buildNativeInputs = [ cmake makeWrapper ];
 
   # FIXME: "make check" needs Docbook's DTD 4.4, among other things.
   doCheck = false;
