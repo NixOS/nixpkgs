@@ -3,7 +3,7 @@
 , xz, openexr, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
-, getopt, udev, herqq, phonon
+, getopt, udev, herqq, phonon, libjpeg
 }:
 
 kde {
@@ -11,7 +11,7 @@ kde {
     [
       acl attr attica avahi bzip2 enchant fam getopt giflib herqq jasper
       libdbusmenu_qt libXScrnSaver libxslt pcre polkit_qt_1 qca2
-      shared_desktop_ontologies udev xz libxml2
+      shared_desktop_ontologies udev xz libxml2 libjpeg
     ];
 
   propagatedBuildInputs = [ qt4 soprano strigi phonon ];
