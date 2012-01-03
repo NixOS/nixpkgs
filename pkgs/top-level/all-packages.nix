@@ -8093,6 +8093,8 @@ let
 
       libktorrent = callPackage ../development/libraries/libktorrent { };
 
+      libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
+
       liblikeback = callPackage ../development/libraries/liblikeback { };
 
       networkmanagement = callPackage ../tools/networking/networkmanagement { };
