@@ -1,14 +1,14 @@
 {stdenv, fetchurl_gnome, gtk, pkgconfig, perl, perlXMLParser, libxml2, gettext
 , python, libxml2Python, docbook5, docbook_xsl, libxslt, intltool, libart_lgpl
-, withGNOME ? false, libgnomeui }:
+, withGNOME ? false, libgnomeui, xz }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
 
   src = fetchurl_gnome {
     project = "dia";
-    major = "0"; minor = "97"; patchlevel = "1";
-    sha256 = "0hli89fdzzbshqdznxrbgyqw55qlr4z5xpn86jcg5fl7kln8pzld";
+    major = "0"; minor = "97"; patchlevel = "2"; extension = "xz";
+    sha256 = "1qgawm7rrf4wd1yc0fp39ywv8gbz4ry1s16k00dzg5w6p67lfqd7";
   };
 
   buildInputs =
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       libxslt docbook_xsl libart_lgpl
     ] ++ stdenv.lib.optional withGNOME libgnomeui;
 
-  buildNativeInputs = [ pkgconfig intltool perl ];
+  buildNativeInputs = [ pkgconfig intltool perl xz ];
 
   configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
 

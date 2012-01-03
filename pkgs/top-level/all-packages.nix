@@ -3353,7 +3353,7 @@ let
 
   flite = callPackage ../development/libraries/flite { };
 
-  fltk11 = callPackage ../development/libraries/fltk/fltk11.nix { };
+  fltk13 = callPackage ../development/libraries/fltk/fltk13.nix { };
 
   fltk20 = callPackage ../development/libraries/fltk { };
 
@@ -5314,6 +5314,8 @@ let
 
   iwlwifi5000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5000-ucode { };
 
+  iwlwifi5150ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5150-ucode { };
+
   iwlwifi6000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000-ucode { };
 
   iwlwifi6000g2aucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000g2a-ucode { };
@@ -6443,9 +6445,7 @@ let
 
   compiz_plugins_extra = callPackage ../applications/window-managers/compiz/plugins-extra.nix { };
 
-  cinepaint = callPackage ../applications/graphics/cinepaint {
-    fltk = fltk11;
-  };
+  cinepaint = callPackage ../applications/graphics/cinepaint { };
 
   codeville = builderDefsPackage (import ../applications/version-management/codeville/0.8.0.nix) {
     inherit makeWrapper;
@@ -6674,7 +6674,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox80Pkgs;
+  firefoxPkgs = pkgs.firefox90Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gtkLibs) gtk pango;
@@ -6869,7 +6869,7 @@ let
   homebank = callPackage ../applications/office/homebank { };
 
   htmldoc = callPackage ../applications/misc/htmldoc {
-    fltk = fltk11;
+    fltk = fltk13;
   };
 
   hugin = callPackage ../applications/graphics/hugin {
@@ -7259,7 +7259,7 @@ let
 
   rakarrack = callPackage ../applications/audio/rakarrack {
     inherit (xorg) libXpm libXft;
-    fltk = fltk11;
+    fltk = fltk13;
   };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
@@ -7685,7 +7685,7 @@ let
   qgis = callPackage ../applications/misc/qgis {};
 
   yoshimi = callPackage ../applications/audio/yoshimi {
-    fltk = fltk11;
+    fltk = fltk13;
   };
 
   zapping = callPackage ../applications/video/zapping {
@@ -7698,9 +7698,7 @@ let
 
   zathura = callPackage ../applications/misc/zathura { };
 
-  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
-    fltk = fltk11;
-  };
+  zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
 
   ### GAMES
 
@@ -8093,7 +8091,11 @@ let
 
       libktorrent = callPackage ../development/libraries/libktorrent { };
 
+      libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
+
       liblikeback = callPackage ../development/libraries/liblikeback { };
+
+      networkmanagement = callPackage ../tools/networking/networkmanagement { };
 
       partitionManager = callPackage ../tools/misc/partition-manager { };
 
@@ -8322,9 +8324,7 @@ let
 
   simgrid = callPackage ../applications/science/misc/simgrid { };
 
-  tulip = callPackage ../applications/science/misc/tulip {
-    qt = qt46;
-  };
+  tulip = callPackage ../applications/science/misc/tulip { };
 
   vite = callPackage ../applications/science/misc/vite {
     qt = qt4;
