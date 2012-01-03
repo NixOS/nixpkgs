@@ -66,7 +66,7 @@ EOF
     homepage = http://www.gnu.org/software/emacs/;
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ ludo simons chaoflow ];
     platforms = stdenv.lib.platforms.all;
   };
 }
