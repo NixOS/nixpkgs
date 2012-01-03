@@ -8096,6 +8096,8 @@ let
 
       liblikeback = callPackage ../development/libraries/liblikeback { };
 
+      networkmanagement = callPackage ../tools/networking/networkmanagement { };
+
       partitionManager = callPackage ../tools/misc/partition-manager { };
 
       polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
