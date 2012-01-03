@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl
+{ stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl, lcms, freetype
 , x11Support, x11 ? null
 , cupsSupport ? false, cups ? null
 , gnuFork ? true
@@ -28,10 +28,10 @@ let
   };
 
   gnuForkData = rec {
-    name = "ghostscript-8.71.1";
+    name = "ghostscript-9.04.1";
     src = fetchurl {
       url = "mirror://gnu/ghostscript/gnu-${name}.tar.bz2";
-      sha256 = "0vab9905h6sl5s5miai4vhhwdacjlkxqmykfr42x32sr25wjqgvl";
+      sha256 = "0zqa6ggbkdqiszsywgrra4ij0sddlmrfa50bx2mh568qid4ga0a2";
     };
 
     inherit meta;
@@ -56,8 +56,6 @@ in
 stdenv.mkDerivation rec {
   inherit (variant) name src meta;
 
-  builder = ./builder.sh;
-
   fonts = [
     (fetchurl {
       url = mirror://gnu/ghostscript/gnu-gs-fonts-std-6.0.tar.gz;
@@ -70,17 +68,30 @@ stdenv.mkDerivation rec {
     # ... add other fonts here
   ];
 
-  buildInputs = [libjpeg libpng libtiff zlib pkgconfig fontconfig openssl]
-    ++ stdenv.lib.optional x11Support x11
+  buildInputs = [libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms]
+    ++ stdenv.lib.optionals x11Support [x11 freetype]
     ++ stdenv.lib.optional cupsSupport cups;
 
-  configureFlags =
-    if x11Support then [ "--with-x" ] else [ "--without-x" ];
-
   CFLAGS = "-fPIC";
+  NIX_LDFLAGS = "-lz -rpath=${freetype}/lib";
 
-  patches = [ ./purity.patch ./urw-font-files.patch ]
-    ++ stdenv.lib.optional gnuFork ./pstoraster.patch;
+  patches = [ ./purity.patch ./urw-font-files.patch ];
+
+  preConfigure = ''
+    # "ijs" is impure: it contains symlinks to /usr/share/automake etc.!
+    rm -rf ijs/ltmain.sh
+
+    # Don't install stuff in the Cups store path.
+    makeFlagsArray=(CUPSSERVERBIN=$out/lib/cups CUPSSERVERROOT=$out/etc/cups CUPSDATA=$out/share/cups)
+  '';
+
+  configureFlags = if x11Support then [ "--with-x" ] else [ "--without-x" ];
 
   doCheck = true;
+
+  postInstall = ''
+    for i in $fonts; do
+      (cd $out/share/ghostscript && tar xvfz $i)
+    done
+  '';
 }
