@@ -3362,7 +3362,7 @@ let
 
   flite = callPackage ../development/libraries/flite { };
 
-  fltk11 = callPackage ../development/libraries/fltk/fltk11.nix { };
+  fltk13 = callPackage ../development/libraries/fltk/fltk13.nix { };
 
   fltk20 = callPackage ../development/libraries/fltk { };
 
@@ -6449,7 +6449,7 @@ let
   compiz_plugins_extra = callPackage ../applications/window-managers/compiz/plugins-extra.nix { };
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
-    fltk = fltk11;
+    fltk = fltk13;
   };
 
   codeville = builderDefsPackage (import ../applications/version-management/codeville/0.8.0.nix) {
@@ -6874,7 +6874,7 @@ let
   homebank = callPackage ../applications/office/homebank { };
 
   htmldoc = callPackage ../applications/misc/htmldoc {
-    fltk = fltk11;
+    fltk = fltk13;
   };
 
   hugin = callPackage ../applications/graphics/hugin {
@@ -7264,7 +7264,7 @@ let
 
   rakarrack = callPackage ../applications/audio/rakarrack {
     inherit (xorg) libXpm libXft;
-    fltk = fltk11;
+    fltk = fltk13;
   };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
@@ -7690,7 +7690,7 @@ let
   qgis = callPackage ../applications/misc/qgis {};
 
   yoshimi = callPackage ../applications/audio/yoshimi {
-    fltk = fltk11;
+    fltk = fltk13;
   };
 
   zapping = callPackage ../applications/video/zapping {
@@ -7704,7 +7704,7 @@ let
   zathura = callPackage ../applications/misc/zathura { };
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
-    fltk = fltk11;
+    fltk = fltk13;
   };
 
   ### GAMES
