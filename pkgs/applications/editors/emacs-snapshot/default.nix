@@ -48,6 +48,16 @@ stdenv.mkDerivation {
     ${if gtkGUI then "--with-x-toolkit=gtk --enable-font-backend --with-xft" else ""}
   ";
 
+  postInstall = ''
+    cat >$out/share/emacs/site-lisp/site-start.el <<EOF
+;; nixos specific load-path
+(setq load-path
+      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+                               (split-string (getenv "NIX_PROFILES"))))
+              load-path))
+EOF
+  '';
+
   meta = {
     description = "GNU Emacs with Unicode, GTK and Xft support (23.x alpha)";
     homepage = http://www.emacswiki.org/cgi-bin/wiki/XftGnuEmacs;

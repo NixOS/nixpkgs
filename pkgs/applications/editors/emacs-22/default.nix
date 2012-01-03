@@ -30,6 +30,16 @@ stdenv.mkDerivation rec {
   configureFlags =
     stdenv.lib.optional gtkGUI "--with-x-toolkit=gtk";
 
+  postInstall = ''
+    cat >$out/share/emacs/site-lisp/site-start.el <<EOF
+;; nixos specific load-path
+(setq load-path
+      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+                               (split-string (getenv "NIX_PROFILES"))))
+              load-path))
+EOF
+  '';
+
   meta = {
     description = "GNU Emacs, *the* text editor";
 
