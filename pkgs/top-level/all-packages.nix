@@ -4299,7 +4299,6 @@ let
   neon029 = callPackage ../development/libraries/neon/0.29.nix {
     compressionSupport = true;
     sslSupport = true;
-    openssl = opensslNew;
   };
 
   nethack = builderDefsPackage (import ../games/nethack) {
@@ -4372,8 +4371,6 @@ let
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
   };
-
-  opensslNew = callPackage ../development/libraries/openssl/1.0.0e.nix { };
 
   ortp = callPackage ../development/libraries/ortp { };
 
@@ -5310,6 +5307,8 @@ let
   iwlwifi4965ucodeV2 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode/version-2.nix { };
 
   iwlwifi5000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5000-ucode { };
+
+  iwlwifi5150ucode = callPackage ../os-specific/linux/firmware/iwlwifi-5150-ucode { };
 
   iwlwifi6000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000-ucode { };
 
@@ -6677,7 +6676,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox80Pkgs;
+  firefoxPkgs = pkgs.firefox90Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gtkLibs) gtk pango;
@@ -8095,6 +8094,8 @@ let
       libktorrent = callPackage ../development/libraries/libktorrent { };
 
       liblikeback = callPackage ../development/libraries/liblikeback { };
+
+      networkmanagement = callPackage ../tools/networking/networkmanagement { };
 
       partitionManager = callPackage ../tools/misc/partition-manager { };
 
