@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, fftw, fltk, minixml, zlib }:
+{ stdenv, fetchurl, alsaLib, cmake, fftw, fltk13, minixml, pkgconfig, zlib }:
 
 stdenv.mkDerivation  rec {
   name = "zynaddsubfx-${version}";
@@ -9,11 +9,17 @@ stdenv.mkDerivation  rec {
     sha256 = "1zn5lgh76rrbfj8d4jys2gc1j2pqrbdd18ywfdrk0s7jq4inwyfg";
   };
 
-  buildInputs = [ alsaLib fftw fltk minixml zlib ];
+  buildInputs = [ alsaLib fftw fltk13 minixml zlib ];
+  buildNativeInputs = [ cmake pkgconfig ];
 
-  preConfigure = "cd src";
+  patches = [
+    (fetchurl {
+      url = http://patch-tracker.debian.org/patch/series/dl/zynaddsubfx/2.4.0-1.2/09_fluid_1.3.patch;
+      sha256 = "06wl7fs44b24ls1fzh21596n6zzc3ywm2bcdfrkfiiwpzin3yjq6";
+    })
+  ];
 
-  installPhase = "mkdir -p $out/bin; cp zynaddsubfx $out/bin";
+#installPhase = "mkdir -pv $out/bin; cp -v zynaddsubfx $out/bin";
 
   meta = with stdenv.lib; {
     description = "high quality software synthesizer";

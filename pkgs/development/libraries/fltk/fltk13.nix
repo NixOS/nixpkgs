@@ -3,17 +3,18 @@
 
 let inherit (composableDerivation) edf; in
 
+let version = "1.3.0"; in
 composableDerivation.composableDerivation {} {
-  name = "fltk-1.1.10";
+  name = "fltk-${version}";
 
   src = fetchurl {
-    url = http://ftp.rz.tu-bs.de/pub/mirror/ftp.easysw.com/ftp/pub/fltk/1.1.10/fltk-1.1.10-source.tar.bz2;
-    sha256 = "16mic69a48y3ybijml754x38djxxb25rn8441p9qsssqy8ms5b9p";
+    url = "ftp://ftp.easysw.com/pub/fltk/${version}/fltk-${version}-source.tar.gz";
+    sha256 = "075j6ljx4dfg9rnkardn24y0f26ylpakm0yylg6a9kllha07c1lr";
   };
 
   propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
 
-  buildInputs = [ pkgconfig ];
+  buildNativeInputs = [ pkgconfig ];
 
   flags =
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?

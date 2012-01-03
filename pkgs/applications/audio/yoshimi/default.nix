@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, boost, cmakeCurses, fftwSinglePrec, fltk
+{ stdenv, fetchurl, alsaLib, boost, cmake, fftwSinglePrec, fltk
 , jackaudio, libsndfile, mesa, minixml, pkgconfig, zlib }:
 
 assert stdenv ? glibc;
@@ -12,12 +12,18 @@ stdenv.mkDerivation  rec {
     sha256 = "0y67w7y515hx2bi5gfjgsw1hdah1bdrrvcfmqyjsvn7jbd0q47v1";
   };
 
-  buildInputs = [ alsaLib boost cmakeCurses fftwSinglePrec fltk
-    jackaudio libsndfile mesa minixml pkgconfig zlib ];
+  buildInputs = [ alsaLib boost fftwSinglePrec fltk jackaudio libsndfile mesa
+    minixml zlib ];
+  buildNativeInputs = [ cmake pkgconfig ];
 
-  preConfigure = ''
-    cd src
-  '';
+  preConfigure = "cd src";
+
+  patches = [
+    (fetchurl {
+      url = http://patch-tracker.debian.org/patch/series/dl/yoshimi/0.060.10-3/02-fluid_1.3.patch;
+      sha256 = "1sywirbaaw4zhn5ypga27j02qvrvqjwv3lw8kvzyj575q4c4qnri";
+    })
+  ];
 
   cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc}/lib/libm.so" ];
 
