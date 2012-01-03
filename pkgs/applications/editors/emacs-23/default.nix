@@ -31,6 +31,16 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv ? glibc)
          [ "--with-crt-dir=${stdenv.glibc}/lib" ];
 
+  postInstall = ''
+    cat >$out/share/emacs/site-lisp/site-start.el <<EOF
+;; nixos specific load-path
+(setq load-path
+      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+                               (split-string (getenv "NIX_PROFILES"))))
+              load-path))
+EOF
+  '';
+
   doCheck = true;
 
   meta = {
