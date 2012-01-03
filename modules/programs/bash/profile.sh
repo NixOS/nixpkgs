@@ -17,8 +17,8 @@ export EDITOR=nano
 export LOCATE_PATH=/var/cache/locatedb
 
 # Include the various profiles in the appropriate environment variables.
-NIX_USER_PROFILE_DIR=/nix/var/nix/profiles/per-user/$USER
-NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $HOME/.nix-profile"
+export NIX_USER_PROFILE_DIR=/nix/var/nix/profiles/per-user/$USER
+export NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $HOME/.nix-profile"
 
 unset PATH INFOPATH PKG_CONFIG_PATH PERL5LIB ALSA_PLUGIN_DIRS GST_PLUGIN_PATH KDEDIRS
 unset QT_PLUGIN_PATH QTWEBKIT_PLUGIN_PATH STRIGI_PLUGIN_PATH XDG_CONFIG_DIRS XDG_DATA_DIRS
