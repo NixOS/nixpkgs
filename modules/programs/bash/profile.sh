@@ -62,6 +62,11 @@ export ASPELL_CONF="dict-dir $HOME/.nix-profile/lib/aspell"
 # The setuid wrappers override other bin directories.
 export PATH=@wrapperDir@:$PATH
 
+# ~/bin if it exists overrides other bin directories.
+if test -d $HOME/bin; then
+    export PATH=$HOME/bin:$PATH
+fi
+
 # Set up the per-user profile.
 mkdir -m 0755 -p $NIX_USER_PROFILE_DIR
 if test "$(stat --printf '%u' $NIX_USER_PROFILE_DIR)" != "$(id -u)"; then
