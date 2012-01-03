@@ -6990,6 +6990,8 @@ let
     inherit (gnome) libglade;
   };
 
+  librecad = callPackage ../applications/misc/librecad { };
+
   lingot = callPackage ../applications/audio/lingot {
     inherit (gnome) libglade;
   };
