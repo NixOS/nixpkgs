@@ -11,6 +11,7 @@ let
   version = "${majorVersion}.${minorVersion}";
 in
 
+# WARNING: Do NOT upgrade cmake in trunk: it fails to build on i686-linux
 stdenv.mkDerivation rec {
   name = "cmake-${os useNcurses "cursesUI-"}${os useQt4 "qt4UI-"}${version}";
 
