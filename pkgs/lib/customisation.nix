@@ -34,7 +34,7 @@ rec {
   overrideDerivation = drv: f:
     let
       # Filter out special attributes.
-      drop = ["meta" "passthru" "outPath" "drvPath" "hostDrv" "buildDrv" "type" "override" "deepOverride" "origArgs"]
+      drop = [ "meta" "passthru" "outPath" "drvPath" "hostDrv" "buildDrv" "type" "override" "deepOverride" "origArgs" "drvAttrs" "outputName" "all" "out" ]
               # also drop functions such as .merge .override etc
              ++ lib.filter (n: isFunction (getAttr n drv)) (attrNames drv);
       attrs = removeAttrs drv drop;
