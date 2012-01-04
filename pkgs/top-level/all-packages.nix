@@ -3936,6 +3936,9 @@ let
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
+  libgdiplus = callPackage ../development/libraries/libgdiplus {
+  };
+
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
   libgphoto2 = callPackage ../development/libraries/libgphoto2 { };
