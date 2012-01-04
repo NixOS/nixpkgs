@@ -30,6 +30,7 @@ stdenv.mkDerivation {
         -e "s/ ranlib/$crossConfig-ranlib/" \
         src/Makefile
     '';
+    dontStrip = true;
   };
 
   meta = {

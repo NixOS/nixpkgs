@@ -988,6 +988,8 @@ let
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
+  modemmanager = callPackage ../tools/networking/modemmanager {};
+
   monit = builderDefsPackage ../tools/system/monit {
     inherit openssl flex bison;
   };
@@ -5702,6 +5704,25 @@ let
         #kernelPatches.mips_restart_2_6_36
       ];
   };
+
+  linux_3_2_powertop = linux_3_2.override {
+    extraConfig = ''
+        DEBUG_KERNEL y
+        PM_ADVANCED_DEBUG y
+        PM_RUNTIME y
+        TIMER_STATS y
+        USB_SUSPEND y
+        BACKTRACE_SELF_TEST n
+        CPU_NOTIFIER_ERROR_INJECT n
+        DEBUG_DEVRES n
+        DEBUG_NX_TEST n
+        DEBUG_STACK_USAGE n
+        DEBUG_STACKOVERFLOW n
+        RCU_TORTURE_TEST n
+        SCHEDSTATS n
+    '';
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -5849,6 +5870,7 @@ let
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
   linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36);
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor linux_3_2 pkgs.linuxPackages_3_2);
+  linuxPackages_3_2_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_2_powertop pkgs.linuxPackages_3_2_powertop);
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -6989,6 +7011,8 @@ let
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
     inherit (gnome) libglade;
   };
+
+  librecad = callPackage ../applications/misc/librecad { };
 
   lingot = callPackage ../applications/audio/lingot {
     inherit (gnome) libglade;

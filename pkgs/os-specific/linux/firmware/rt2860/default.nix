@@ -1,14 +1,17 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchsvn }:
 
-stdenv.mkDerivation rec {
+# Upstream is http://git.kernel.org/?p=linux/kernel/git/firmware/linux-firmware.git
+
+stdenv.mkDerivation {
   name = "rt2860-fw-26";
-  src = fetchurl {
-    url = "http://www.ralinktech.com/download.php?t=U0wyRnpjMlYwY3k4eU1ERXdMekF6THpNeEwyUnZkMjVzYjJGa01UWTBNamsyTVRBNE1pNTZhWEE5UFQxU1ZESTROakJmUm1seWJYZGhjbVZmVmpJMkM%3D";
-    name = "RT2860_Firmware_V26.zip";
-    sha256 = "0kvjd8kfnmh8jj35jd10pnr1z7a00ks4c317dnnzgkd86mmcg4px";
+
+  src = fetchsvn {
+    url = svn://svn.debian.org/kernel/dists/trunk/firmware-nonfree/ralink;
+    rev = 17279;
+    sha256 = "06nc6w3xcrxzcai7gaf27k0v8k2xbq3imzpgc02rbxv5q5flxh65";
   };
 
-  buildInputs = [ unzip ];
+  unpackPhase = "true";
   
   buildPhase = "true";
 
@@ -16,7 +19,11 @@ stdenv.mkDerivation rec {
   # says: "Your rights to redistribute the Software shall be
   # contingent upon your installation of this Agreement in its
   # entirety in the same directory as the Software."
-  installPhase = "ensureDir $out/${name}; cp *.bin $out; cp *.txt $out/${name}";
+  installPhase = ''
+    ensureDir $out
+    cp $src/rt2860.bin $out
+    cp $src/LICENSE $out/rt2860.LICENSE
+  '';
   
   meta = {
     description = "Firmware for the Ralink RT2860 wireless cards";
