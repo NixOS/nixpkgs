@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cat >$out/share/emacs/site-lisp/site-start.el <<EOF
 ;; nixos specific load-path
-(setq load-path
-      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
-                               (split-string (getenv "NIX_PROFILES"))))
-              load-path))
+(when (getenv "NIX_PROFILES") (setq load-path
+                      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+                                               (split-string (getenv "NIX_PROFILES"))))
+                       load-path)))
 EOF
   '';
 
