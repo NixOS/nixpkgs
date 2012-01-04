@@ -1262,6 +1262,8 @@ let
 
   radvd = callPackage ../tools/networking/radvd { };
 
+  privateer = callPackage ../games/privateer { };
+
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
   recutils = callPackage ../tools/misc/recutils { };
