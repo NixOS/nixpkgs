@@ -8627,6 +8627,12 @@ let
 
   vice = callPackage ../misc/emulators/vice { };
 
+  vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
+    inherit stdenv fetchurl makeWrapper perl pkgconfig webkit gtk;
+    inherit (xlibs) libX11;
+    inherit (gnome) libsoup glib_networking;
+  };
+
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
