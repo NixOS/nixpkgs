@@ -10,7 +10,14 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = "-ldl";
 
-  buildInputs = [ cmake lua5 ];
+  buildNativeInputs = [ cmake ];
+  buildInputs = [ lua5 ];
+
+  crossAttrs = {
+    preConfigure = ''
+      export NIX_CROSS_LDFLAGS="$NIX_CROSS_LDFLAGS -ldl"
+    '';
+  };
 
   meta = {
     description = "Command-line todo list manager";

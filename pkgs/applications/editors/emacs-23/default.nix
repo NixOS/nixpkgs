@@ -31,6 +31,16 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv ? glibc)
          [ "--with-crt-dir=${stdenv.glibc}/lib" ];
 
+  postInstall = ''
+    cat >$out/share/emacs/site-lisp/site-start.el <<EOF
+;; nixos specific load-path
+(when (getenv "NIX_PROFILES") (setq load-path
+                      (append (reverse (mapcar (lambda (x) (concat x "/share/emacs/site-lisp/"))
+                                               (split-string (getenv "NIX_PROFILES"))))
+                       load-path)))
+EOF
+  '';
+
   doCheck = true;
 
   meta = {
@@ -56,7 +66,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/emacs/;
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ ludo simons chaoflow ];
     platforms = stdenv.lib.platforms.all;
   };
 }
