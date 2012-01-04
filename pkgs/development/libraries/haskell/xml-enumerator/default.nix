@@ -5,15 +5,15 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-enumerator";
-  version = "0.4.4";
-  sha256 = "1xz37gzk3kk9sqkcbyspcdyz7rk3afkv33g7q45ih5fbd7zkd5gm";
+  version = "0.4.4.1";
+  sha256 = "0vwn6s7x626970b8lgyhmngkqv5n5kvv0qikrvi9sjzq5rjyx1zj";
   buildDepends = [
     attoparsec attoparsecEnumerator blazeBuilder blazeBuilderEnumerator
     dataDefault enumerator failure text transformers xmlTypes
   ];
   meta = {
     homepage = "http://github.com/snoyberg/xml";
-    description = "Pure-Haskell utilities for dealing with XML with the enumerator package";
+    description = "Pure-Haskell utilities for dealing with XML with the enumerator package. (deprecated)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
