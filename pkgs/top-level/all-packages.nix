@@ -1203,6 +1203,8 @@ let
 
   pngnq = callPackage ../tools/graphics/pngnq { };
 
+  pngtoico = callPackage ../tools/graphics/pngtoico { };
+
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
