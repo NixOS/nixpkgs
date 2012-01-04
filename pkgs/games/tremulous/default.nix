@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     tar xvf $src3
     cd ..
   '';
+  patches = [ ./parse.patch ];
+  patchFlags = "-p 0";
+  NIX_LD_FLAGS = ''
+    -rpath ${stdenv.gcc}/lib
+    -rpath ${stdenv.gcc}/lib64
+  '';
   buildPhase = ''
     cd Release_1.011
     make
@@ -45,11 +51,12 @@ stdenv.mkDerivation rec {
         cat << EOF > $out/bin/$b
     #!/bin/sh
     cd $out/opt/tremulous
-    ./$b.$arch "$@"
+    exec ./$b.$arch "\$@"
     EOF
         chmod +x $out/bin/$b
     done
   '';
+  dontPatchELF = true;
   meta = {
     description = "A game that blends a team based FPS with elements of an RTS";
     longDescription = ''
