@@ -852,6 +852,8 @@ let
 
   iasl = callPackage ../development/compilers/iasl { };
 
+  icoutils = callPackage ../tools/graphics/icoutils { };
+
   idutils = callPackage ../tools/misc/idutils { };
 
   iftop = callPackage ../tools/networking/iftop { };
