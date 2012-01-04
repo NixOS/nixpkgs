@@ -1,41 +1,32 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, substituteAll, libpcap }:
 
-  version = a.lib.attrByPath ["version"] "2.4.4" a; 
-  buildInputs = with a; [
-    
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  name = "ppp-2.4.5";
+
   src = fetchurl {
-    url = "http://ppp.samba.org/ftp/ppp/ppp-${version}.tar.gz";
-    sha256 = "1sli1s478k85vmjdbrqm39nn5r20x9qgg3a0lbp2dwz50zy4bbsq";
+    url = "${meta.homepage}ftp/ppp/${name}.tar.gz";
+    sha256 = "019m00q85nrgdpjlhb9021a3iw3pr4a0913gp4h9k7r9r7z7lca3";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  patches =
+    [ ( substituteAll {
+        src = ./nix-purity.patch;
+        inherit libpcap;
+        glibc = stdenv.gcc.libc;
+      })
+      ./nonpriv.patch
+    ];
 
-  phaseNames = ["exportVars" "patchPrivileged" "doConfigure" "doMakeInstall"];
+  postPatch = "rm -v include/linux/if_pppol2tp.h";
 
-  exportVars = a.noDepEntry(''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -lcrypt "
-  '');
+  buildInputs = [ libpcap ];
 
-  /* We want to run it as far as we can with our current permissions
-     For example, dependent builds would prefer to run --version 
-     without ever using setuid pppd. We are not setuid anyway, so.. */
-  patchPrivileged = a.fullDepEntry(''
-    sed -e '/privileged =/aprivileged = 1;' -i pppd/main.c
-    sed -e '/SH DESCRIPTION/a WARNING: Patched version unsuitable to be setuid root' -i pppd/pppd.8
-  '') ["minInit" "doUnpack"];
+  postInstall = "chmod -v -R +rw $out";
 
-  passthru = {
-    inherit version;
-  };
-      
-  name = "ppp-" + version;
   meta = {
+    homepage = http://ppp.samba.org/;
     description = "Point-to-point implementation for Linux and Solaris";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }

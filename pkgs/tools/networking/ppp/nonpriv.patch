@@ -1,0 +1,13 @@
+diff --git a/pppd/main.c b/pppd/main.c
+index 014d614..6661d33 100644
+--- a/pppd/main.c
++++ b/pppd/main.c
+@@ -334,7 +334,7 @@ main(argc, argv)
+     umask(umask(0777) | 022);
+ 
+     uid = getuid();
+-    privileged = uid == 0;
++    privileged = (uid == 0) || (geteuid() != 0);
+     slprintf(numbuf, sizeof(numbuf), "%d", uid);
+     script_setenv("ORIG_UID", numbuf, 0);
+ 

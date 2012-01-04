@@ -1217,9 +1217,7 @@ let
 
   ppl0_11 = callPackage ../development/libraries/ppl/0.11.nix { };
 
-  /* WARNING: this version is unsuitable for using with a setuid wrapper */
-  ppp = builderDefsPackage (import ../tools/networking/ppp) {
-  };
+  ppp = callPackage ../tools/networking/ppp { };
 
   pptp = callPackage ../tools/networking/pptp {};
 
