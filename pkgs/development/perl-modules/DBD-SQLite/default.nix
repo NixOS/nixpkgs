@@ -1,14 +1,14 @@
 {fetchurl, buildPerlPackage, DBI, sqlite}:
 
 buildPerlPackage rec {
-  name = "DBD-SQLite-1.31";
+  name = "DBD-SQLite-1.35";
   
   src = fetchurl {
     url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
-    sha256 = "1xi9bfxfndb4kajixc1y7rrz2sjjv2z7vcm5msrxznx3vr358zlq";
+    sha256 = "0zdwnj0jmkaqb2grkh451g1jc8nsdy4sf6lhn8xd0my0a3pd227z";
   };
   
-  propagatedBuildInputs = [DBI];
+  propagatedBuildInputs = [ DBI ];
   
   makeMakerFlags = "SQLITE_LOCATION=${sqlite}";
 
