@@ -1,12 +1,12 @@
 { stdenv, fetchurl, which, texLive }:
 
 stdenv.mkDerivation {
-  name = "EProver-1.2";
+  name = "EProver-1.4";
 
   src = fetchurl {
-    name = "E-1.2.tar.gz";
-    url = "http://www4.informatik.tu-muenchen.de/~schulz/WORK/E_DOWNLOAD/V_1.2/E.tgz";
-    sha256 = "14sbpmh8vg376lrrq7i364aa8g5aacq344ihivxn6w4ydh9138nq";
+    name = "E-1.4.tar.gz";
+    url = "http://www4.informatik.tu-muenchen.de/~schulz/WORK/E_DOWNLOAD/V_1.4/E.tgz";
+    sha256 = "1hxkr21xqkkh4bzqip6qf70w9xvvb8p20zzkvyin631ffgvyvr93";
   };
 
   buildInputs = [which texLive];
