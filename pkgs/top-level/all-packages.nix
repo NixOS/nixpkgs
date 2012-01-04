@@ -988,6 +988,8 @@ let
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
+  modemmanager = callPackage ../tools/networking/modemmanager {};
+
   monit = builderDefsPackage ../tools/system/monit {
     inherit openssl flex bison;
   };

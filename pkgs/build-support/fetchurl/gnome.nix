@@ -1,6 +1,6 @@
 { fetchurl }:
 
-{ project, major, minor, patchlevel, extension ? "bz2", sha256 }:
+{ project, major, minor, patchlevel ? null, extension ? "bz2", sha256 }:
 
 let
   baseVersion = "${major}.${minor}";
