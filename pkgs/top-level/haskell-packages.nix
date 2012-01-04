@@ -1055,9 +1055,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
 
-  primitive_0_3_1 = callPackage ../development/libraries/haskell/primitive/0.3.1.nix {};
-  primitive_0_4_0_1 = callPackage ../development/libraries/haskell/primitive/0.4.0.1.nix {};
-  primitive = self.primitive_0_4_0_1;
+  primitive = callPackage ../development/libraries/haskell/primitive {};
 
   processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
@@ -1341,13 +1339,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Vec = callPackage ../development/libraries/haskell/Vec {};
 
-  vector_0_7_1 = callPackage ../development/libraries/haskell/vector/0.7.1.nix {
-    primitive = self.primitive_0_3_1;
-  };
-  vector_0_9_1 = callPackage ../development/libraries/haskell/vector/0.9.1.nix {
-    primitive = self.primitive_0_4_0_1;
-  };
-  vector = self.vector_0_9_1;
+  vector = callPackage ../development/libraries/haskell/vector {};
 
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
 
