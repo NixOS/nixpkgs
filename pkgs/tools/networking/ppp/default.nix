@@ -1,7 +1,8 @@
 { stdenv, fetchurl, substituteAll, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "ppp-2.4.5";
+  version = "2.4.5";
+  name = "ppp-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}ftp/ppp/${name}.tar.gz";
