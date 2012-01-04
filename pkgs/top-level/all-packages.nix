@@ -1215,8 +1215,7 @@ let
 
   ppl = callPackage ../development/libraries/ppl { };
 
-  /* WARNING: this version is unsuitable for using with a setuid wrapper */
-  ppp = builderDefsPackage (import ../tools/networking/ppp) { };
+  ppp = callPackage ../tools/networking/ppp { };
 
   pptp = callPackage ../tools/networking/pptp {};
 
@@ -3941,6 +3940,9 @@ let
   libftdi = callPackage ../development/libraries/libftdi { };
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
+
+  libgdiplus = callPackage ../development/libraries/libgdiplus {
+  };
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
