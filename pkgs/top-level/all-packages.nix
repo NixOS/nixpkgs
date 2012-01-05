@@ -2335,7 +2335,7 @@ let
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
-  ocaml = ocaml_3_11_1;
+  ocaml = ocaml_3_12_1;
 
   ocaml_3_08_0 = callPackage ../development/compilers/ocaml/3.08.0.nix { };
 
@@ -2428,7 +2428,7 @@ let
     };
   };
 
-  ocamlPackages = recurseIntoAttrs ocamlPackages_3_11_1;
+  ocamlPackages = recurseIntoAttrs ocamlPackages_3_12_1;
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
   ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
