@@ -26,5 +26,6 @@ stdenv.mkDerivation {
     '';
     homepage = http://www.jedsoft.org/most/index.html;
     license = "GPLv2";
+    platforms = stdenv.lib.platforms.gnu; # random choice
   };
 }
