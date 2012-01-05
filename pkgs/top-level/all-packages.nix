@@ -3064,6 +3064,8 @@ let
 
   swig = callPackage ../development/tools/misc/swig { };
 
+  swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
+
   swigWithJava = swig;
 
   swftools = callPackage ../tools/video/swftools { };
