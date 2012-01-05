@@ -6276,6 +6276,8 @@ let
 
   miscfiles = callPackage ../data/misc/miscfiles { };
 
+  mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
+
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
   oldstandard = callPackage ../data/fonts/oldstandard { };
