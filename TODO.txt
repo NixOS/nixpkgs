@@ -5,7 +5,5 @@ stdenv-updates back into trunk. Notation:
 + Done
 
 urkud:
-- Remove HAL
-- Remove old policykit
 - Introduce libiconvOrNull and libiconvOrLibc instead of current 'magic'
 
