@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, cmake, libxml2, glib, swig, python }:
+{ stdenv, fetchurl, cmake, libxml2, swig2, python, glib }:
 
 stdenv.mkDerivation rec {
   name = "libplist-1.3";
 
-  buildInputs = [ cmake swig ];
+  buildNativeInputs = [ cmake swig2 ];
 
   patches = [ ./swig.patch ];
 
   propagatedBuildInputs = [ libxml2 glib python ];
+
+  passthru.swig = swig2;
 
   src = fetchurl {
     url = "http://github.com/downloads/JonathanBeck/libplist/${name}.tar.bz2";
