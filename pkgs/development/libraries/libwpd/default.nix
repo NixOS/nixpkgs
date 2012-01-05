@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, glib, libgsf, libxml2, bzip2 }:
+{ stdenv, fetchurl, pkgconfig, glib, libgsf, libxml2, xz }:
 
-stdenv.mkDerivation {
-  name = "libwpd-0.8.14";
+stdenv.mkDerivation rec {
+  name = "libwpd-0.9.4";
   
   src = fetchurl {
-    url = mirror://sourceforge/libwpd/libwpd-0.8.14.tar.gz;
-    sha256 = "1syli6i5ma10cwzpa61a18pyjmianjwsf6pvmvzsh5md6yk4yx01";
+    url = "mirror://sourceforge/libwpd/${name}.tar.xz";
+    sha256 = "0qba429cqd72nwn1mzpj7llyi3kwykb2lplcfxffvq8svzxyzkxy";
   };
   
-  buildInputs = [ pkgconfig glib libgsf libxml2 bzip2 ];
+  buildInputs = [ glib libgsf libxml2 ];
+
+  buildNativeInputs = [ pkgconfig xz ];
 }

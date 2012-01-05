@@ -1,14 +1,15 @@
 { stdenv, fetchurl, pkgconfig, libwpd }:
 
 stdenv.mkDerivation rec {
-  name = "libwpg-0.1.3";
+  name = "libwpg-0.2.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libwpg/${name}.tar.bz2";
-    sha256 = "086mgy36mia76mpfa2qgn0q44b3aigvvng9snzrxh60v3v9wixa7";
+    url = "mirror://sourceforge/libwpg/${name}.tar.xz";
+    sha256 = "0d83nx4rxkrq2sbfbbqpddni56h1328dzmraxyl6vh9p4f19rh5d";
   };
 
-  buildInputs = [ pkgconfig libwpd ];
+  buildInputs = [ libwpd ];
+  buildNativeInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://libwpg.sourceforge.net;
