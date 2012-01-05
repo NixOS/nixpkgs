@@ -5821,6 +5821,8 @@ let
       stdenv = overrideGCC stdenv gcc34;
     };
 
+    perf = callPackage ../os-specific/linux/kernel/perf.nix { };
+
     # State Nix
     snix = callPackage ../tools/package-management/snix {
 
