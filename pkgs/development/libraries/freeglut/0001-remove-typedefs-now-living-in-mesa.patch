@@ -1,0 +1,43 @@
+From 9df489c765921d8d3ff96a13c01592d9209431bb Mon Sep 17 00:00:00 2001
+From: Florian Friesdorf <flo@chaoflow.net>
+Date: Wed, 4 Jan 2012 23:12:44 +0100
+Subject: [PATCH] remove typedefs now living in mesa
+
+---
+ progs/demos/smooth_opengl3/smooth_opengl3.c |   20 --------------------
+ 1 files changed, 0 insertions(+), 20 deletions(-)
+
+diff --git a/progs/demos/smooth_opengl3/smooth_opengl3.c b/progs/demos/smooth_opengl3/smooth_opengl3.c
+index abbdfb5..1172615 100755
+--- a/progs/demos/smooth_opengl3/smooth_opengl3.c
++++ b/progs/demos/smooth_opengl3/smooth_opengl3.c
+@@ -98,26 +98,6 @@ typedef char ourGLchar;
+ #define APIENTRY
+ #endif
+ 
+-typedef void (APIENTRY *PFNGLGENBUFFERSPROC) (GLsizei n, GLuint *buffers);
+-typedef void (APIENTRY *PFNGLBINDBUFFERPROC) (GLenum target, GLuint buffer);
+-typedef void (APIENTRY *PFNGLBUFFERDATAPROC) (GLenum target, ourGLsizeiptr size, const GLvoid *data, GLenum usage);
+-typedef GLuint (APIENTRY *PFNGLCREATESHADERPROC) (GLenum type);
+-typedef void (APIENTRY *PFNGLSHADERSOURCEPROC) (GLuint shader, GLsizei count, const ourGLchar **string, const GLint *length);
+-typedef void (APIENTRY *PFNGLCOMPILESHADERPROC) (GLuint shader);
+-typedef GLuint (APIENTRY *PFNGLCREATEPROGRAMPROC) (void);
+-typedef void (APIENTRY *PFNGLATTACHSHADERPROC) (GLuint program, GLuint shader);
+-typedef void (APIENTRY *PFNGLLINKPROGRAMPROC) (GLuint program);
+-typedef void (APIENTRY *PFNGLUSEPROGRAMPROC) (GLuint program);
+-typedef void (APIENTRY *PFNGLGETSHADERIVPROC) (GLuint shader, GLenum pname, GLint *params);
+-typedef void (APIENTRY *PFNGLGETSHADERINFOLOGPROC) (GLuint shader, GLsizei bufSize, GLsizei *length, ourGLchar *infoLog);
+-typedef void (APIENTRY *PFNGLGETPROGRAMIVPROC) (GLenum target, GLenum pname, GLint *params);
+-typedef void (APIENTRY *PFNGLGETPROGRAMINFOLOGPROC) (GLuint program, GLsizei bufSize, GLsizei *length, ourGLchar *infoLog);
+-typedef GLint (APIENTRY *PFNGLGETATTRIBLOCATIONPROC) (GLuint program, const ourGLchar *name);
+-typedef void (APIENTRY *PFNGLVERTEXATTRIBPOINTERPROC) (GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer);
+-typedef void (APIENTRY *PFNGLENABLEVERTEXATTRIBARRAYPROC) (GLuint index);
+-typedef GLint (APIENTRY *PFNGLGETUNIFORMLOCATIONPROC) (GLuint program, const ourGLchar *name);
+-typedef void (APIENTRY *PFNGLUNIFORMMATRIX4FVPROC) (GLint location, GLsizei count, GLboolean transpose, const GLfloat *value);
+-
+ PFNGLGENBUFFERSPROC gl_GenBuffers;
+ PFNGLBINDBUFFERPROC gl_BindBuffer;
+ PFNGLBUFFERDATAPROC gl_BufferData;
+-- 
+1.7.8
+

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "continued-fractions";
-  version = "0.9.1.0";
-  sha256 = "07g6ms68xfzd25zr2k2fpg4f4pynmq4mn7djkzrg3gbfh9gfq37q";
+  version = "0.9.1.1";
+  sha256 = "0gqp1yazmmmdf04saa306jdsf8r5s98fll9rnm8ff6jzr87nvnnh";
   meta = {
     homepage = "/dev/null";
     description = "Continued fractions";

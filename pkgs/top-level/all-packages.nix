@@ -852,6 +852,8 @@ let
 
   iasl = callPackage ../development/compilers/iasl { };
 
+  icoutils = callPackage ../tools/graphics/icoutils { };
+
   idutils = callPackage ../tools/misc/idutils { };
 
   iftop = callPackage ../tools/networking/iftop { };
@@ -1203,6 +1205,8 @@ let
 
   pngnq = callPackage ../tools/graphics/pngnq { };
 
+  pngtoico = callPackage ../tools/graphics/pngtoico { };
+
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
@@ -1213,9 +1217,7 @@ let
 
   ppl0_11 = callPackage ../development/libraries/ppl/0.11.nix { };
 
-  /* WARNING: this version is unsuitable for using with a setuid wrapper */
-  ppp = builderDefsPackage (import ../tools/networking/ppp) {
-  };
+  ppp = callPackage ../tools/networking/ppp { };
 
   pptp = callPackage ../tools/networking/pptp {};
 
@@ -1259,6 +1261,8 @@ let
   qshowdiff = callPackage ../tools/text/qshowdiff { };
 
   radvd = callPackage ../tools/networking/radvd { };
+
+  privateer = callPackage ../games/privateer { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
@@ -3931,6 +3935,9 @@ let
   libftdi = callPackage ../development/libraries/libftdi { };
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
+
+  libgdiplus = callPackage ../development/libraries/libgdiplus {
+  };
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
 
@@ -8621,6 +8628,12 @@ let
   };
 
   vice = callPackage ../misc/emulators/vice { };
+
+  vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
+    inherit stdenv fetchurl makeWrapper perl pkgconfig webkit gtk;
+    inherit (xlibs) libX11;
+    inherit (gnome) libsoup glib_networking;
+  };
 
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 

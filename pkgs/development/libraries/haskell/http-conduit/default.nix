@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "1.0.0";
-  sha256 = "1ix2qx6zqp8g7hjg2ygwivzg4hhz2ac22rbybh9adzvzw0q2yvgk";
+  version = "1.0.0.1";
+  sha256 = "0yag65ariakvbvsrr3kd16bags4caw8n3qlcwpzrblprgjrv06vm";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

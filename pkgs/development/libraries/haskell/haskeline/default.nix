@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskeline";
-  version = "0.6.4.5";
-  sha256 = "1blhbh53p6di3q3gldzmg3i8f4w3ahipai3di49i4rdcnjry0j5b";
+  version = "0.6.4.6";
+  sha256 = "136h71rb50sypkdbnk849mbcgfzx3y4hfxmx2c7kf90zpmsx5wmj";
   buildDepends = [ extensibleExceptions mtl terminfo utf8String ];
   meta = {
     homepage = "http://trac.haskell.org/haskeline";
