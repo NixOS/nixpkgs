@@ -1,0 +1,34 @@
+This patch, to be applied after `cert-file.patch', fixes compilation
+on GNU/Hurd where `PATH_MAX' is not defined.
+
+diff -ubB --show-c-function openssl-1.0.0e/crypto/x509/x509_def.c.orig openssl-1.0.0e/crypto/x509/x509_def.c
+--- openssl-1.0.0e/crypto/x509/x509_def.c.orig	2012-01-06 00:08:48.000000000 +0100
++++ openssl-1.0.0e/crypto/x509/x509_def.c	2012-01-06 00:11:29.000000000 +0100
+@@ -58,6 +58,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <string.h>
+ #include <limits.h>
+ #include <unistd.h>
+ #include <sys/types.h>
+@@ -76,14 +77,16 @@ const char *X509_get_default_cert_dir(vo
+ 
+ const char *X509_get_default_cert_file(void)
+ 	{
+-	static char buf[PATH_MAX] = X509_CERT_FILE;
++	static char *buf;
+ 	static int init = 0;
+ 	if (!init) {
+ 	    init = 1;
+ 	    char * s = getenv("OPENSSL_X509_CERT_FILE");
+ 	    if (s && getuid() == geteuid()) {
+-		strncpy(buf, s, sizeof(buf));
+-		buf[sizeof(buf) - 1] = 0;
++	         buf = strdup(s);
++	    }
++	    if (!s) {
++	         buf = strdup(X509_CERT_FILE);
+ 	    }
+ 	}
+ 	return buf;

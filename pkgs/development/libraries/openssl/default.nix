@@ -26,7 +26,13 @@ stdenv.mkDerivation {
       # environment variable is ignored for setuid binaries.
       ./cert-file.patch
     ]
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
+
+    ++ (stdenv.lib.optionals (stdenv ? cross && opensslCrossSystem == "hurd-x86")
+         [ ./cert-file-path-max.patch # merge with `cert-file.patch' eventually
+           ./gnu.patch                # submitted upstream
+         ])
+
+    ++ (stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch);
 
   buildNativeInputs = [ perl ];
 
