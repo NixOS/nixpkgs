@@ -19,10 +19,19 @@ stdenv.mkDerivation {
 
   patches = [ ./0001-fix-VSFile-constructor.patch ];
 
+  preConfigure = ''
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags gtk+-2.0)"
+  '';
+
+  installPhase = ''
+    ensureDir $out/bin
+    cp vegastrike $out/bin
+    cp vegaserver $out/bin
+  '';
+  
   meta = {
     homepage = http://privateer.sourceforge.net/;
     longDescription = "";
     maintainers = with stdenv.lib.maintainers; [ chaoflow ];
-    platforms = stdenv.lib.platforms.gnu;
   };
 }
