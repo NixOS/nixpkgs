@@ -6859,9 +6859,7 @@ let
     opencv = opencv_2_1;
   };
 
-  qrencode = builderDefsPackage (import ../tools/graphics/qrencode) {
-    inherit libpng pkgconfig;
-  };
+  qrencode = callPackage ../tools/graphics/qrencode { };
 
   gecko_mediaplayer = callPackage ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
     inherit (gnome) GConf;
