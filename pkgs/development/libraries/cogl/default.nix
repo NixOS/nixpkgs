@@ -1,14 +1,13 @@
-{ stdenv, fetchurl_gnome, pkgconfig, mesa, glib, gdk_pixbuf
+{ stdenv, fetchurl, pkgconfig, mesa, glib, gdk_pixbuf
 , pangoSupport ? true, pango, cairo
 , libXfixes, libXcomposite, libXdamage, xz }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "cogl-1.8.2";
 
-  src = fetchurl_gnome {
-    project = "cogl";
-    major = "1"; minor = "8"; patchlevel = "0"; extension = "xz";
-    sha256 = "0b0arg0sjky5y4ypgh8dpznd9f1azhi1d5rhf4zbcw2mkl91qmdi";
+  src = fetchurl {
+    url = mirror://gnome/sources/cogl/1.8/cogl-1.8.2.tar.xz;
+    sha256 = "1ix87hz3qxqysqwx58wbc46lzchlmfs08fjzbf3l6mmsqj8gs9pc";
   };
 
   buildNativeInputs = [ xz pkgconfig ];
