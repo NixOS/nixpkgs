@@ -55,6 +55,9 @@ stdenv.mkDerivation rec {
       pushd libelf
       make install
       popd
+      pushd libdwfl
+      make install
+      popd
       pushd libdw
       make install
       popd
