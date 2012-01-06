@@ -2978,6 +2978,8 @@ let
 
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
 
+  itstool = callPackage ../development/tools/misc/itstool { };
+
   jam = callPackage ../development/tools/build-managers/jam { };
 
   jikespg = callPackage ../development/tools/parsing/jikespg { };
