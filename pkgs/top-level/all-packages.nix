@@ -3643,7 +3643,7 @@ let
 
     glibmm = callPackage ../development/libraries/glibmm/2.28.x.nix { };
 
-    atk = callPackage ../development/libraries/atk/1.32.x.nix { };
+    atk = callPackage ../development/libraries/atk/2.2.x.nix { };
 
     atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
 
