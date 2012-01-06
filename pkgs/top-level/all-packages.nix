@@ -7631,9 +7631,7 @@ let
     inherit gsl aalib zlib libpng intltool gettext perl;
   };
 
-  xara = callPackage ../applications/graphics/xara {
-    wxGTK = wxGTK26;
-  };
+  xara = callPackage ../applications/graphics/xara { };
 
   xawtv = callPackage ../applications/video/xawtv { };
 
