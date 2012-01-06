@@ -6207,6 +6207,8 @@ let
 
   cacert = callPackage ../data/misc/cacert { };
 
+  cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
+
   corefonts = callPackage ../data/fonts/corefonts { };
 
   wrapFonts = paths : ((import ../data/fonts/fontWrap) {
