@@ -8,6 +8,8 @@
 
   libgnome_keyring = callPackage ./platform/libgnome-keyring.nix { };
 
+  libsoup = callPackage ./platform/libsoup.nix { };
+
   gsettings_desktop_schemas = callPackage ./platform/gsettings-desktop-schemas.nix {};
 
   GConf = callPackage ./platform/GConf.nix { };
