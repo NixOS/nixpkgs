@@ -4318,6 +4318,8 @@ let
 
   nettle = callPackage ../development/libraries/nettle { };
 
+  newt = callPackage ../development/libraries/newt { };
+
   nspr = callPackage ../development/libraries/nspr { };
 
   nss = callPackage ../development/libraries/nss { };

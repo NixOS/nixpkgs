@@ -1,4 +1,4 @@
-{ stdenv, kernel, elfutils }:
+{ stdenv, kernel, elfutils, python, perl, newt }:
 
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
@@ -7,10 +7,21 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     cd tools/perf
-    export makeFlags="DESTDIR=$out"
+    sed -i s,/usr/include/elfutils,$elfutils/include/elfutils, Makefile
+    export makeFlags="DESTDIR=$out $makeFlags"
   '';
 
-  buildInputs = [ elfutils ];
+  buildInputs = [ elfutils python perl newt ];
+
+  inherit elfutils;
+
+  crossAttrs = {
+    /* I don't want cross-python or cross-perl -
+       I don't know if cross-python even works */
+    propagatedBuildInputs = [ elfutils.hostDrv newt.hostDrv ];
+    makeFlags = "CROSS_COMPILE=${stdenv.cross.config}-";
+    elfutils = elfutils.hostDrv;
+  };
 
   meta = {
     homepage = https://perf.wiki.kernel.org/;
