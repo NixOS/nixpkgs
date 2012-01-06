@@ -17,4 +17,6 @@
   gsettings_desktop_schemas = callPackage ./platform/gsettings-desktop-schemas.nix {};
 
   GConf = callPackage ./platform/GConf.nix { };
+
+  gnome_user_docs = callPackage ./platform/gnome-user-docs.nix { };
 }
