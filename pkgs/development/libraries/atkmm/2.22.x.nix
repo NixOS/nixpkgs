@@ -1,12 +1,11 @@
-{ stdenv, fetchurl_gnome, atk, glibmm, pkgconfig }:
+{ stdenv, fetchurl, atk, glibmm, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "atkmm-2.22.6";
 
-  src = fetchurl_gnome {
-    project = "atkmm";
-    major = "2"; minor = "22"; patchlevel = "5";
-    sha256 = "0v5ynws5pc4qdgrr8hrl8wajl3xxh3kgljchj7cqyb4mcxg3xq31";
+  src = fetchurl {
+    url = mirror://gnome/sources/atkmm/2.22/atkmm-2.22.6.tar.xz;
+    sha256 = "1dmf72i7jv2a2gavjiah2722bf5qk3hb97hn5dasxqxr0r8jjx0a";
   };
 
   propagatedBuildInputs = [ atk glibmm ];
