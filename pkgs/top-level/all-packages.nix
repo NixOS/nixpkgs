@@ -8050,6 +8050,8 @@ let
 
   kde47 = kdePackagesFor pkgs.kde47 "4.7";
 
+  kde48 = kdePackagesFor pkgs.kde48 "4.8";
+
   kdePackagesFor = self: version:
     let callPackageOrig = callPackage; in
     let
