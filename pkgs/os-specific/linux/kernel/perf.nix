@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   '';
 
   # perf refers both to newt and slang
-  buildInputs = [ elfutils python perl newt slang asciidoc xmlto
-    docbook_xsl docbook_xml_dtd_45 libxslt ];
+  buildNativeInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt ];
+  buildInputs = [ elfutils python perl newt slang ];
 
   installFlags = "install install-man ASCIIDOC8=1";
 
