@@ -1,4 +1,5 @@
-{ stdenv, kernel, elfutils, python, perl, newt, slang }:
+{ stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto
+, docbook_xsl, docbook_xml_dtd_45, libxslt }:
 
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
@@ -12,7 +13,10 @@ stdenv.mkDerivation {
   '';
 
   # perf refers both to newt and slang
-  buildInputs = [ elfutils python perl newt slang ];
+  buildInputs = [ elfutils python perl newt slang asciidoc xmlto
+    docbook_xsl docbook_xml_dtd_45 libxslt ];
+
+  installFlags = "install install-man ASCIIDOC8=1";
 
   inherit elfutils;
 
