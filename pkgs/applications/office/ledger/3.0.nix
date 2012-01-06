@@ -27,6 +27,8 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = "http://ledger-cli.org/";
     description = "A double-entry accounting system with a command-line reporting interface";
