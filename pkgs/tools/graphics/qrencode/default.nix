@@ -1,27 +1,20 @@
-args :  
-let 
-  lib = args.lib;
-  fetchurl = args.fetchurl;
+{ stdenv, fetchurl, libpng, pkgconfig }:
 
-  version = lib.attrByPath ["version"] "3.0.3" args; 
-  buildInputs = with args; [
-    libpng pkgconfig
-  ];
-in
-rec {
+stdenv.mkDerivation rec {
+  name = "qrencode-3.2.0";
+
   src = fetchurl {
-    url = "http://megaui.net/fukuchi/works/qrencode/qrencode-${version}.tar.gz";
-    sha256 = "1f5nnbk016casqfprdli50ssv08l0gj5zrd0q4rdvzfwqy67i7vm";
+    url = "${meta.homepage}/${name}.tar.bz2";
+    sha256 = "13q6cz2lif8d7y95f8sgfqaxc1qr0sz9nl2xh71lfmx7v5ybri03";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  buildInputs = [ libpng ];
+  buildNativeInputs = [ pkgconfig ];
 
-  /* doConfigure should be specified separately */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
-  name = "qrencode-" + version;
   meta = {
+    homepage = http://fukuchi.org/works/qrencode/;
     description = "QR code encoder";
+    platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }
