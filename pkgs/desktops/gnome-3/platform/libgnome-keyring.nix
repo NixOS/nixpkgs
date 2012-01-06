@@ -1,7 +1,7 @@
 { stdenv, fetchurl, glib, dbus_libs, libgcrypt, pkgconfig, xz,
 intltool }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libgnome-keyring-3.2.2";
 
   src = fetchurl {

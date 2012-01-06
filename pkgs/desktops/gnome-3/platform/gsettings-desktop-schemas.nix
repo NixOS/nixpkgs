@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xz, glib, pkgconfig, intltool }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "gsettings-desktop-schemas-3.2.0";
 
   src = fetchurl {
