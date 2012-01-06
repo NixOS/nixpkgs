@@ -15,6 +15,8 @@ stdenv.mkDerivation {
   # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
   dontDisableStatic = true;
 
+  # In fact I think this line does not help at all to what I
+  # wanted to achieve: have mono to find libgdiplus automatically
   configureFlags = "--with-libgdiplus=${libgdiplus}/lib/libgdiplus.so";
 
   # Attempt to fix this error when running "mcs --version":
@@ -27,4 +29,12 @@ stdenv.mkDerivation {
     makeFlagsArray=(INSTALL=`type -tp install`)
     patchShebangs ./
   ";
+
+  meta = {
+    homepage = http://mono-project.com/;
+    description = "Cross platform, open source .NET development framework";
+    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with stdenv.lib.maintainers; [viric];
+    license = "free"; # Combination of LGPL/X11/GPL ?
+  };
 }

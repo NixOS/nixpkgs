@@ -31,4 +31,11 @@ stdenv.mkDerivation {
     ensureDir $out/lib/qt4/plugins/script
     cp -av plugins/script/* $out/lib/qt4/plugins/script
   '';
+
+  meta = {
+    description = "QtScript bindings generator";
+    homepage = http://code.google.com/p/qtscriptgenerator/;
+    inherit (qt4.meta) platforms;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
+  };
 }

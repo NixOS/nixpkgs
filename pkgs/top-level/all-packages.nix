@@ -1260,6 +1260,8 @@ let
 
   radvd = callPackage ../tools/networking/radvd { };
 
+  privateer = callPackage ../games/privateer { };
+
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
   recutils = callPackage ../tools/misc/recutils { };
@@ -3062,6 +3064,8 @@ let
   strace = callPackage ../development/tools/misc/strace { };
 
   swig = callPackage ../development/tools/misc/swig { };
+
+  swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
 
   swigWithJava = swig;
 
@@ -5825,6 +5829,8 @@ let
       stdenv = overrideGCC stdenv gcc34;
     };
 
+    perf = callPackage ../os-specific/linux/kernel/perf.nix { };
+
     # State Nix
     snix = callPackage ../tools/package-management/snix {
 
@@ -6269,6 +6275,8 @@ let
   manpages = callPackage ../data/documentation/man-pages { };
 
   miscfiles = callPackage ../data/misc/miscfiles { };
+
+  mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
@@ -8069,6 +8077,8 @@ let
 
       bangarang = callPackage ../applications/video/bangarang { };
 
+      basket = callPackage ../applications/office/basket { };
+
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
       digikam = callPackage ../applications/graphics/digikam {
@@ -8625,6 +8635,12 @@ let
   };
 
   vice = callPackage ../misc/emulators/vice { };
+
+  vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
+    inherit stdenv fetchurl makeWrapper perl pkgconfig webkit gtk;
+    inherit (xlibs) libX11;
+    inherit (gnome) libsoup glib_networking;
+  };
 
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, pkgconfig, gettext, perl, libiconv, zlib, xz, libffi
+{ stdenv, fetchurl, pkgconfig, gettext, perl, libiconv, zlib, xz, libffi
 , python }:
 
 # TODO:
@@ -12,12 +12,11 @@
 #       $out/bin/gtester-report' to postInstall if this is solved
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "glib-2.30.2";
 
-  src = fetchurl_gnome {
-    project = "glib";
-    major = "2"; minor = "30"; patchlevel = "0"; extension = "xz";
-    sha256 = "1hfdnxf5hsfhkd54390lnc1b14m9n7y031fpma4vpsh96js00k6n";
+  src = fetchurl {
+    url = mirror://gnome/sources/glib/2.30/glib-2.30.2.tar.xz;
+    sha256 = "10lfzxwc45lh5vfnd33l4m9z1mf3arpwdd8jz94dn79j6diixsgh";
   };
 
   # configure script looks for d-bus but it is only needed for tests

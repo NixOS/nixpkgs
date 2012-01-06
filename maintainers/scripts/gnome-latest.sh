@@ -84,20 +84,10 @@ sha256=`nix-hash --to-base32 --type sha256 $sha256`
 echo "Chosen ${ext_pref}, hash is ${sha256}" >&2
 
 cat <<EOF
-  src = fetchurl_gnome {
-    project = "${project}";
-EOF
-echo -n "    major = \"`echo ${version} | cut -d. -f1`\";"
-echo -n " minor = \"`echo ${version} | cut -d. -f2`\";"
-patchlevel=`echo ${version} | cut -d. -f3`
-if [ -n "$patchlevel" ]; then
-  echo -n " patchlevel = \"${patchlevel}\";"
-fi
-if [ "$ext_pref" != "bz2" ]; then
-  echo -n " extension = \"${ext_pref}\";"
-fi
-echo
-cat <<EOF
+  name = "${project}-${version}";
+
+  src = fetchurl {
+    url = mirror://gnome/sources/${project}/${baseVersion}/${project}-${version}.tar.${ext_pref};
     sha256 = "${sha256}";
   };
 EOF

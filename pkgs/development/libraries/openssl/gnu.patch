@@ -1,0 +1,25 @@
+Patch to fix compilation on GNU/Hurd and GNU/kFreeBSD.
+
+--- openssl-1.0.0e/Configure	2012-01-06 00:39:49.000000000 +0100
++++ openssl-1.0.0e/Configure	2012-01-06 00:39:51.000000000 +0100
+@@ -563,7 +563,7 @@ my %table=(
+ "newsos4-gcc","gcc:-O -DB_ENDIAN::(unknown):NEWS4:-lmld -liberty:BN_LLONG RC4_CHAR RC4_CHUNK DES_PTR DES_RISC1 DES_UNROLL BF_PTR::::",
+ 
+ ##### GNU Hurd
+-"hurd-x86",  "gcc:-DL_ENDIAN -DTERMIOS -O3 -fomit-frame-pointer -march=i486 -Wall::-D_REENTRANT::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:linux-shared:-fPIC",
++"hurd-x86",  "gcc:-DL_ENDIAN -DTERMIOS -O3 -fomit-frame-pointer -march=i486 -Wall::-D_REENTRANT::-ldl:BN_LLONG ${x86_gcc_des} ${x86_gcc_opts}:${x86_elf_asm}:dlfcn:linux-shared:-fPIC::.so",
+ 
+ ##### OS/2 EMX
+ "OS2-EMX", "gcc::::::::",
+
+--- openssl-1.0.0e/crypto/dso/dso_dlfcn.c	2012-01-06 00:05:47.000000000 +0100
++++ openssl-1.0.0e/crypto/dso/dso_dlfcn.c	2012-01-06 00:21:05.000000000 +0100
+@@ -60,7 +60,7 @@
+    that handle _GNU_SOURCE and other similar macros.  Defining it later
+    is simply too late, because those headers are protected from re-
+    inclusion.  */
+-#ifdef __linux
++#if defined __linux || defined __GNU__ || defined __GLIBC__
+ # ifndef _GNU_SOURCE
+ #  define _GNU_SOURCE	/* make sure dladdr is declared */
+ # endif

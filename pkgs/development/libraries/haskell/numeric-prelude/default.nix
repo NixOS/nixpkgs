@@ -1,15 +1,16 @@
-{ cabal, nonNegative, parsec, QuickCheck, random, storableRecord
-, utilityHt
+{ cabal, deepseq, nonNegative, parsec, QuickCheck, random
+, storableRecord, utilityHt
 }:
 
 cabal.mkDerivation (self: {
   pname = "numeric-prelude";
-  version = "0.2.2.1";
-  sha256 = "12b2h103f43rlrfk3zck6mzbvw6v4jf8g4kxz1k14v201lrvb2da";
+  version = "0.3";
+  sha256 = "0zxqfsgyg7gf051qjzv57bb1cvrbzlvvyyl2d3gmikyy6h3pis1f";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    nonNegative parsec QuickCheck random storableRecord utilityHt
+    deepseq nonNegative parsec QuickCheck random storableRecord
+    utilityHt
   ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Numeric_Prelude";

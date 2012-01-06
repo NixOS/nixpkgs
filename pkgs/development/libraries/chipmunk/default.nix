@@ -4,7 +4,8 @@ let
   fetchurl = args.fetchurl;
   fullDepEntry = args.fullDepEntry;
 
-  version = lib.attrByPath ["version"] "4.1.0" args; 
+  version = lib.attrByPath ["version"] "6.0.3" args; 
+  majorVersion = lib.attrByPath ["majorVersion"] "6" args; 
   buildInputs = with args; [
     cmake freeglut mesa 
     libX11 xproto inputproto libXi libXmu
@@ -12,8 +13,8 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://files.slembcke.net/chipmunk/release/Chipmunk-${version}.tgz";
-    sha256 = "0ry17lf4kdcac91bpavks2cswch3izsmmam0yhczk7rayj9cvqsh";
+    url = "http://files.slembcke.net/chipmunk/release/Chipmunk-${majorVersion}.x/Chipmunk-${version}.tgz";
+    sha256 = "c6f550454bc1c63a2a63e0ff8febecb4781a528ab6d6b657a17933a6f567541a";
   };
 
   inherit buildInputs;
@@ -28,7 +29,7 @@ rec {
 
   demoInstall = fullDepEntry(''
     ensureDir $out/bin
-    cp chipmunk_demos $out/bin
+    cp Demo/chipmunk_demos $out/bin
   '') ["doMakeInstall" "defEnsureDir"];
       
   name = "chipmunk-" + version;

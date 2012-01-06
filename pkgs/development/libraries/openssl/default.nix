@@ -26,8 +26,14 @@ stdenv.mkDerivation {
       # environment variable is ignored for setuid binaries.
       ./cert-file.patch
     ]
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch
-    ++ stdenv.lib.optional (stdenv.system == "x86_64-freebsd") ./freebsd-x86_64-asm.patch;
+
+    ++ (stdenv.lib.optionals (stdenv ? cross && opensslCrossSystem == "hurd-x86")
+         [ ./cert-file-path-max.patch # merge with `cert-file.patch' eventually
+           ./gnu.patch                # submitted upstream
+         ])
+
+    ++ (stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch)
+    ++ stdenv.lib.optional (stdenv.system == "x86_64-freebsd") ./freebsd-x86_64-asm.patch;;
 
   buildNativeInputs = [ perl ];
 
@@ -71,5 +77,6 @@ stdenv.mkDerivation {
     description = "A cryptographic library that implements the SSL and TLS protocols";
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.simons ];
+    priority = 10; # resolves collision with ‘man-pages’
   };
 }
