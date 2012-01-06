@@ -8078,6 +8078,8 @@ let
 
       bangarang = callPackage ../applications/video/bangarang { };
 
+      basket = callPackage ../applications/office/basket { };
+
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
       digikam = callPackage ../applications/graphics/digikam {
