@@ -3680,6 +3680,8 @@ let
 
     gtk = callPackage ../development/libraries/gtk+/3.2.x.nix { };
 
+    gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+
     # Let hydra build gtk-3.x but do not show this to users yet
     recurseForRelease = true;
   };
