@@ -2978,6 +2978,8 @@ let
 
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
 
+  itstool = callPackage ../development/tools/misc/itstool { };
+
   jam = callPackage ../development/tools/build-managers/jam { };
 
   jikespg = callPackage ../development/tools/parsing/jikespg { };
@@ -3063,6 +3065,8 @@ let
   strace = callPackage ../development/tools/misc/strace { };
 
   swig = callPackage ../development/tools/misc/swig { };
+
+  swig2 = callPackage ../development/tools/misc/swig/2.x.nix { };
 
   swigWithJava = swig;
 
@@ -3621,27 +3625,13 @@ let
 
   });
 
-  gtkLibs216 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs216; in {
-
-    glib = callPackage ../development/libraries/glib/2.20.x.nix { };
-
-    atk = callPackage ../development/libraries/atk/1.24.x.nix { };
-
-    cairo = callPackage ../development/libraries/cairo { };
-
-    pango = callPackage ../development/libraries/pango/1.24.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/2.16.x.nix { };
-
-  });
-
   gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
 
     glib = callPackage ../development/libraries/glib/2.28.x.nix { };
 
     glibmm = callPackage ../development/libraries/glibmm/2.28.x.nix { };
 
-    atk = callPackage ../development/libraries/atk/1.32.x.nix { };
+    atk = callPackage ../development/libraries/atk/2.2.x.nix { };
 
     atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
 
@@ -3677,6 +3667,8 @@ let
     pango = callPackage ../development/libraries/pango/1.29.x.nix { };
 
     gtk = callPackage ../development/libraries/gtk+/3.2.x.nix { };
+
+    gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
 
     # Let hydra build gtk-3.x but do not show this to users yet
     recurseForRelease = true;
@@ -4316,6 +4308,8 @@ let
 
   nettle = callPackage ../development/libraries/nettle { };
 
+  newt = callPackage ../development/libraries/newt { };
+
   nspr = callPackage ../development/libraries/nspr { };
 
   nss = callPackage ../development/libraries/nss { };
@@ -4684,10 +4678,6 @@ let
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
-
-  wxGTK26 = callPackage ../development/libraries/wxGTK-2.6 {
-    inherit (gtkLibs216) gtk;
-  };
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
     inherit (gtkLibs) gtk;
@@ -5821,6 +5811,8 @@ let
       stdenv = overrideGCC stdenv gcc34;
     };
 
+    perf = callPackage ../os-specific/linux/kernel/perf.nix { };
+
     # State Nix
     snix = callPackage ../tools/package-management/snix {
 
@@ -6021,6 +6013,8 @@ let
 
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
+  ralink_fw = callPackage ../os-specific/linux/firmware/ralink { };
+
   rt2860fw = callPackage ../os-specific/linux/firmware/rt2860 { };
 
   rt2870fw = callPackage ../os-specific/linux/firmware/rt2870 { };
@@ -6213,6 +6207,8 @@ let
 
   cacert = callPackage ../data/misc/cacert { };
 
+  cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
+
   corefonts = callPackage ../data/fonts/corefonts { };
 
   wrapFonts = paths : ((import ../data/fonts/fontWrap) {
@@ -6271,6 +6267,8 @@ let
   manpages = callPackage ../data/documentation/man-pages { };
 
   miscfiles = callPackage ../data/misc/miscfiles { };
+
+  mobile_broadband_provider_info = callPackage ../data/misc/mobile-broadband-provider-info { };
 
   mph_2b_damase = callPackage ../data/fonts/mph-2b-damase { };
 
@@ -7621,9 +7619,7 @@ let
     inherit gsl aalib zlib libpng intltool gettext perl;
   };
 
-  xara = callPackage ../applications/graphics/xara {
-    wxGTK = wxGTK26;
-  };
+  xara = callPackage ../applications/graphics/xara { };
 
   xawtv = callPackage ../applications/video/xawtv { };
 
@@ -8052,6 +8048,8 @@ let
 
   kde47 = kdePackagesFor pkgs.kde47 "4.7";
 
+  kde48 = kdePackagesFor pkgs.kde48 "4.8";
+
   kdePackagesFor = self: version:
     let callPackageOrig = callPackage; in
     let
@@ -8069,6 +8067,8 @@ let
       amarok = callPackage ../applications/audio/amarok { };
 
       bangarang = callPackage ../applications/video/bangarang { };
+
+      basket = callPackage ../applications/office/basket { };
 
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, pkgconfig, glib, atk, pango, cairo, perl, xlibs
+{ stdenv, fetchurl, pkgconfig, glib, atk, pango, cairo, perl, xlibs
 , gdk_pixbuf, xz
 , xineramaSupport ? true
 , cupsSupport ? true, cups ? null
@@ -7,13 +7,12 @@
 assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
-stdenv.mkDerivation rec {
-  name = src.pkgname;
-  
-  src = fetchurl_gnome {
-    project = "gtk+";
-    major = "2"; minor = "24"; patchlevel = "6"; extension = "xz";
-    sha256 = "1jpgxycxgz1g5yd7spxyc2i8zvn8swm275dkd4d0ryn1bma6n0la";
+stdenv.mkDerivation {
+  name = "gtk+-2.24.8";
+
+  src = fetchurl {
+    url = mirror://gnome/sources/gtk+/2.24/gtk+-2.24.8.tar.xz;
+    sha256 = "0g5rj25qrgkwrnvpb76a8c2cinryf9kb1drdx8pgag4kczv2jfwa";
   };
 
   patches =

@@ -1,25 +1,28 @@
 {stdenv, fetchurl, gettext, perl, perlXMLParser, intltool, pkgconfig, glib,
-  libxml2, sqlite, libplist, libusb1, zlib, sg3_utils, gtk, taglib,
-  libimobiledevice, python, pygobject, mutagen, swig }:
+  libxml2, sqlite, libusb1, zlib, sg3_utils, gdk_pixbuf, taglib,
+  libimobiledevice, python, pygobject, mutagen }:
 
 stdenv.mkDerivation rec {
-  name = "libgpod-0.7.94";
+  name = "libgpod-0.8.2";
   src = fetchurl {
-    url = "mirror://sourceforge/gtkpod/${name}.tar.gz";
-    sha256 = "0bs6p5np8kbyhvkj4vza2dmq7qfsf48chx00hirkf3mqccp41xk4";
+    url = "mirror://sourceforge/gtkpod/${name}.tar.bz2";
+    sha256 = "14m0amy56q4riwvcjszv04a9zp7l2xk8nx0vvhy94yqd0sqfjm00";
   };
 
-  patchPhase = ''sed -e "s,udevdir=,&$out," -i configure'';
+  preConfigure = "configureFlagsArray=( --with-udev-dir=$out/lib/udev )";
   configureFlags = "--without-hal --enable-udev";
 
-  propagatedBuildInputs = [ glib libxml2 sqlite libplist libusb1 zlib sg3_utils
-    gtk taglib libimobiledevice python pygobject mutagen ];
+  propagatedBuildInputs = [ glib libxml2 sqlite zlib sg3_utils
+    gdk_pixbuf taglib libimobiledevice python pygobject mutagen ];
 
-  buildInputs = [ gettext perlXMLParser intltool pkgconfig perl swig ];
+  buildNativeInputs = [ gettext perlXMLParser intltool pkgconfig perl
+    libimobiledevice.swig ];
 
   meta = {
     homepage = http://gtkpod.sourceforge.net/;
     description = "Library used by gtkpod to access the contents of an ipod";
     license = "LGPL";
+    platforms = stdenv.lib.platforms.gnu;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
   };
 }

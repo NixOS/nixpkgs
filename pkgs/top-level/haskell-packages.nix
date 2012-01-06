@@ -915,7 +915,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
 
-  maude = callPackage ../development/libraries/haskell/maude {};
+  maude = callPackage ../development/libraries/haskell/maude {
+    parsec = self.parsec3;
+  };
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
@@ -1315,9 +1317,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
-  unixCompat_0_2_2_1 = callPackage ../development/libraries/haskell/unix-compat/0.2.2.1.nix {};
-  unixCompat_0_3 = callPackage ../development/libraries/haskell/unix-compat/0.3.nix {};
-  unixCompat = self.unixCompat_0_2_2_1;
+  unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
   unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
 

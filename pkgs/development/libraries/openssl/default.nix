@@ -6,6 +6,25 @@ let
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
     stdenv.cross;
+
+  patchesCross = isCross:
+    [ # Allow the location of the X509 certificate file (the CA
+      # bundle) to be set through the environment variable
+      # ‘OPENSSL_X509_CERT_FILE’.  This is necessary because the
+      # default location ($out/ssl/cert.pem) doesn't exist, and
+      # hardcoding something like /etc/ssl/cert.pem is impure and
+      # cannot be overriden per-process.  For security, the
+      # environment variable is ignored for setuid binaries.
+      ./cert-file.patch
+    ]
+
+    ++ (stdenv.lib.optionals (isCross && opensslCrossSystem == "hurd-x86")
+         [ ./cert-file-path-max.patch # merge with `cert-file.patch' eventually
+           ./gnu.patch                # submitted upstream
+         ])
+
+    ++ (stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch);
+  
 in
 
 stdenv.mkDerivation {
@@ -16,17 +35,7 @@ stdenv.mkDerivation {
     sha256 = "1xw0ffzmr4wbnb0glywgks375dvq8x87pgxmwx6vhgvkflkxqqg3";
   };
 
-  patches =
-    [ # Allow the location of the X509 certificate file (the CA
-      # bundle) to be set through the environment variable
-      # ‘OPENSSL_X509_CERT_FILE’.  This is necessary because the
-      # default location ($out/ssl/cert.pem) doesn't exist, and
-      # hardcoding something like /etc/ssl/cert.pem is impure and
-      # cannot be overriden per-process.  For security, the
-      # environment variable is ignored for setuid binaries.
-      ./cert-file.patch
-    ]
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
+  patches = patchesCross false;
 
   buildNativeInputs = [ perl ];
 
@@ -49,6 +58,8 @@ stdenv.mkDerivation {
     ''; # */
 
   crossAttrs = {
+    patches = patchesCross true;
+
     preConfigure=''
       # It's configure does not like --build or --host
       export configureFlags="--libdir=lib --cross-compile-prefix=${stdenv.cross.config}- shared ${opensslCrossSystem}"
