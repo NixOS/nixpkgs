@@ -4691,10 +4691,6 @@ let
 
   wxGTK = wxGTK28;
 
-  wxGTK26 = callPackage ../development/libraries/wxGTK-2.6 {
-    inherit (gtkLibs216) gtk;
-  };
-
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
     inherit (gtkLibs) gtk;
   };
