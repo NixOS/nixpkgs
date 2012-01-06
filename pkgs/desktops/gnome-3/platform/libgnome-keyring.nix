@@ -11,4 +11,8 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ glib dbus_libs libgcrypt ];
   buildNativeInputs = [ pkgconfig xz intltool ];
+
+  meta = {
+    inherit (glib.meta) platforms maintainers;
+  };
 }

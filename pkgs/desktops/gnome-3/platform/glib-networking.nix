@@ -18,5 +18,6 @@ stdenv.mkDerivation {
 
   meta = {
     TODO = "Look at `--without-ca-certificates` again";
+    inherit (glib.meta) platforms maintainers;
   };
 }

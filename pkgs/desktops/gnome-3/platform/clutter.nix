@@ -10,6 +10,15 @@ stdenv.mkDerivation {
   };
 
   buildNativeInputs = [ xz pkgconfig ];
-  buildInputs = [ libX11 glib mesa libXext libXfixes libXdamage libXcomposite
-    libXi cogl pango atk json_glib ];
+  buildInputs =
+    [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
+      atk json_glib
+    ];
+
+  meta = {
+    homepage = http://www.clutter-project.org/;
+    description = "An open source software library for creating fast, compelling, portable, and dynamic graphical user interfaces";
+    platforms = stdenv.lib.platforms.mesaPlatforms;
+    maintainers = [ stdenv.lib.maintainers.urkud ];
+  };
 }

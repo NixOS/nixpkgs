@@ -13,4 +13,11 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ pkgconfig xz intltool ];
 
   configureFlags = "--disable-orbit";
+
+  meta = {
+    homepage = http://projects.gnome.org/gconf/;
+    description = "A system for storing application preferences";
+    maintainers = [ stdenv.lib.maintainers.urkud ];
+    inherit (gtk.meta) platforms;
+  };
 }

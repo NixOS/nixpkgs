@@ -17,4 +17,8 @@ stdenv.mkDerivation {
 
   # glib_networking is a runtime dependency, not a compile-time dependency
   configureFlags = "--disable-tls-check";
+
+  meta = {
+    inherit (glib.meta) maintainers platforms;
+  };
 }
