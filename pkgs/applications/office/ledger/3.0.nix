@@ -18,6 +18,10 @@ stdenv.mkDerivation {
     git texinfo
   ];
 
+  CPPFLAGS = "-I${gmp}/include -I${mpfr}/include";
+
+  LDFLAGS = "-L${gmp}/lib -L${mpfr}/lib";
+
   buildPhase = ''
     sed -i acprep \
       -e 's|search_prefixes = .*|search_prefixes = ["${boost}"]|'
@@ -25,7 +29,7 @@ stdenv.mkDerivation {
     python acprep update --no-pch --prefix=$out
   '';
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   enableParallelBuilding = true;
 
@@ -41,7 +45,7 @@ stdenv.mkDerivation {
       their data, there really is no alternative.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
