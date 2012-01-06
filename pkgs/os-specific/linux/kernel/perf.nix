@@ -1,4 +1,4 @@
-{ stdenv, kernel, elfutils, python, perl, newt }:
+{ stdenv, kernel, elfutils, python, perl, newt, slang }:
 
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     export makeFlags="DESTDIR=$out $makeFlags"
   '';
 
-  buildInputs = [ elfutils python perl newt ];
+  # perf refers both to newt and slang
+  buildInputs = [ elfutils python perl newt slang ];
 
   inherit elfutils;
 
