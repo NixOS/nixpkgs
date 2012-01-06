@@ -1,0 +1,60 @@
+--- a/kget/CMakeLists.txt	2010-08-16 19:08:36.000000000 +0400
++++ b/kget/CMakeLists.txt	2010-08-16 22:04:24.000000000 +0400
+@@ -53,21 +53,20 @@
+ add_subdirectory(desktop)
+ add_subdirectory(plasma)
+ 
+-# find kworkspace library to allow the shutdown after downloads completed option
+-find_library(KDE4_KWORKSPACE_LIBRARY NAMES kworkspace PATHS ${KDE4_LIB_INSTALL_DIR} NO_DEFAULT_PATH )
+-if(KDE4_KWORKSPACE_LIBRARY)
+-    set(KDE4_KWORKSPACE_LIBS ${kworkspace_LIB_DEPENDS} ${KDE4_KWORKSPACE_LIBRARY})
++macro_optional_find_package(KDE4Workspace)
++macro_log_feature(KDE4WORKSPACE_FOUND "KDE4Workspace" "KDE4 workspace libraries, part of kdebase-workspace" "http://www.kde.org" FALSE "" "Allows 'shutdown after downloads completed' in kget")
++if(KDE4WORKSPACE_FOUND)
+     add_definitions(-DHAVE_KWORKSPACE)
+-    set(KWORKSPACE_FOUND true)
+-endif(KDE4_KWORKSPACE_LIBRARY)
++	include_directories(${KDE4WORKSPACE_INCLUDE_DIR})
++endif(KDE4WORKSPACE_FOUND)
+ 
+ # find libkonq to allow actions and open with options in the context menu of a transfer
+-find_library(KDE4_KONQUEROR_LIBRARY NAMES konq PATHS ${KDE4_LIB_INSTALL_DIR} NO_DEFAULT_PATH )
+-if(KDE4_KONQUEROR_LIBRARY)
+-    set(KDE4_KONQUEROR_LIBS ${konq_LIB_DEPENDS} ${KDE4_KONQUEROR_LIBRARY})
++macro_optional_find_package(LibKonq)
++macro_log_feature(LIBKONQ_FOUND "libkonq" "KDE4 Konqueror library" "http://www.kde.org" FALSE "" "Needed to build actions and open with options in the context menu of a transfer")
++if(LIBKONQ_FOUND)
+     add_definitions(-DHAVE_KONQUEROR)
+-    set(KONQUEROR_FOUND true)
+-endif(KDE4_KONQUEROR_LIBRARY)
++	include_directories(${LIBKONQ_INCLUDE_DIR})
++endif(LIBKONQ_FOUND)
+ 
+ 
+ include_directories(
+@@ -142,9 +141,9 @@
+ 
+ target_link_libraries(kgetcore ${KDE4_KIO_LIBS})
+ 
+-if (KWORKSPACE_FOUND)
+-    target_link_libraries(kgetcore ${KDE4_KWORKSPACE_LIBS})
+-endif (KWORKSPACE_FOUND)
++if (KDE4WORKSPACE_FOUND)
++    target_link_libraries(kgetcore ${KDE4WORKSPACE_KWORKSPACE_LIBS})
++endif (KDE4WORKSPACE_FOUND)
+ 
+ if (HAVE_NEPOMUK)
+   target_link_libraries(kgetcore ${SOPRANO_LIBRARIES} ${NEPOMUK_LIBRARIES})
+@@ -294,9 +293,9 @@
+   target_link_libraries(kget ${SOPRANO_LIBRARIES} ${NEPOMUK_LIBRARIES})
+ endif (HAVE_NEPOMUK)
+ 
+-if (KONQUEROR_FOUND)
+-  target_link_libraries(kget ${KDE4_KONQUEROR_LIBS})
+-endif (KONQUEROR_FOUND)
++if (LIBKONQ_FOUND)
++  target_link_libraries(kget ${LIBKONQ_LIBRARY})
++endif (LIBKONQ_FOUND)
+ 
+ if (QGPGME_FOUND)
+   target_link_libraries(kget ${QGPGME_LIBRARIES})
