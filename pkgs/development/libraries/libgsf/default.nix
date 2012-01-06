@@ -1,18 +1,19 @@
 { fetchurl, stdenv, perl, perlXMLParser, pkgconfig, libxml2
-, glib, gettext, intltool, bzip2
+, glib, gettext, intltool, bzip2, xz
 , gnome_vfs, libbonobo, python }:
 
 
 stdenv.mkDerivation rec {
-  name = "libgsf-1.14.16";
+  name = "libgsf-1.14.22";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/gnome/sources/libgsf/1.14/${name}.tar.bz2";
-    sha256 = "0249n2hgrcnzphinaxng0cpn7afchg84l4ka4wka9kyv3g58zz8i";
+    url = mirror://gnome/sources/libgsf/1.14/libgsf-1.14.22.tar.xz;
+    sha256 = "0gvq1gbbcl078s3kgdc508jp7p3a3ps34fj4pf8vsamprbikpwm5";
   };
 
+  buildNativeInputs = [ xz intltool pkgconfig ];
   buildInputs =
-    [ perl perlXMLParser pkgconfig gettext bzip2 gnome_vfs python intltool ];
+    [ perl perlXMLParser gettext bzip2 gnome_vfs python ];
 
   propagatedBuildInputs = [ glib libxml2 libbonobo ];
 
