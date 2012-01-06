@@ -3623,20 +3623,6 @@ let
 
   });
 
-  gtkLibs216 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs216; in {
-
-    glib = callPackage ../development/libraries/glib/2.20.x.nix { };
-
-    atk = callPackage ../development/libraries/atk/1.24.x.nix { };
-
-    cairo = callPackage ../development/libraries/cairo { };
-
-    pango = callPackage ../development/libraries/pango/1.24.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/2.16.x.nix { };
-
-  });
-
   gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
 
     glib = callPackage ../development/libraries/glib/2.28.x.nix { };
