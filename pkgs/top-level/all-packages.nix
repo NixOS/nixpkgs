@@ -1586,7 +1586,6 @@ let
             gcc = {
               arch = "mips32";
             };
-            openssl.system = "linux-generic32";
           };
         };
       in
