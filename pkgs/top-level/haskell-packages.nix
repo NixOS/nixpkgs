@@ -915,7 +915,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
 
-  maude = callPackage ../development/libraries/haskell/maude {};
+  maude = callPackage ../development/libraries/haskell/maude {
+    parsec = self.parsec3;
+  };
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
