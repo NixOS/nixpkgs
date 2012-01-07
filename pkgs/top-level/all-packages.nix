@@ -3091,10 +3091,7 @@ let
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
-  xxdiff = builderDefsPackage (import ../development/tools/misc/xxdiff/3.2.nix) {
-    inherit pkgconfig makeWrapper bison python flex qt3;
-    inherit (xlibs) libXext libX11;
-  };
+  xxdiff = callPackage ../development/tools/misc/xxdiff { };
 
   yacc = bison;
 
