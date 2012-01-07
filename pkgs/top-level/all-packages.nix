@@ -7874,8 +7874,7 @@ let
   soi = callPackage ../games/soi {};
 
   # You still can override by passing more arguments.
-  spaceOrbit = callPackage ../games/orbit {
-    inherit (gnome) esound;  };
+  spaceOrbit = callPackage ../games/orbit { };
 
   spring = callPackage ../games/spring { };
 
