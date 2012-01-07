@@ -34,6 +34,7 @@ fi
 eval `xsltproc kde-submodules.xslt kde_projects.xml`
 
 module[kde-baseapps]=kde-baseapps
+unset module[kactivities]
 
 print_sane() {
   echo "Called print_sane $1" >&2

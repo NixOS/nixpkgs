@@ -117,13 +117,6 @@ modules=[
   ];
 }
 {
-  module="kdelibs";
-  split=true;
-  pkgs=[
-    { name="kactivities";  }
-  ];
-}
-{
   module="kdeutils";
   split=true;
   pkgs=[
@@ -208,6 +201,7 @@ sane="kde_baseapps";  split=true;
     { name="konsole";  }
   ];
 }
+{ module="kactivities";  split=false;}
 { module="kdeadmin";  split=false;
   pkgs=[
     { name="strigi-analyzer"; sane="strigi_analyzer";}
