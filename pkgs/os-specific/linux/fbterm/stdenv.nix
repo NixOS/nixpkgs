@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   buildNativeInputs = [ ncurses ];
   buildInputs = [ gpm freetype fontconfig pkgconfig ];
 
-  postPatch = ''
+  preConfigure = ''
     sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
 
     sed -e '/install-exec-hook:/,/^[^\t]/{d}; /.NOEXPORT/iinstall-exec-hook:\
