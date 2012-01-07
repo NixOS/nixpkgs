@@ -1,5 +1,5 @@
 {stdenv, fetchurl,
-zlib, libpng, libjpeg, perl, expat, qt,
+zlib, libpng, libjpeg, perl, expat, qt3,
 libX11, libXext, libSM, libICE,
 withKde, kdelibs, kdebase
 }:
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     --without-arts --disable-docs
     --x-includes=${libX11}/include
     --x-libraries=${libX11}/lib
-    --with-qt-dir=${qt}
+    --with-qt-dir=${qt3}
     --with-kde-support=${if withKde then "yes" else "no"} --with-ical-support=${if withKde then "yes" else "no"}
   ";
 

@@ -1,4 +1,5 @@
-{stdenv, fetchurl, pkgconfig, glib, kdelibs, libX11, libXext, zlib, libjpeg, libpng, perl, qt}:
+{stdenv, fetchurl, pkgconfig, glib, kdelibs, libX11, libXext, zlib, libjpeg
+, libpng, perl, qt3}:
 
 stdenv.mkDerivation {
   name = "arts-1.5.10";
@@ -19,7 +20,10 @@ stdenv.mkDerivation {
     --enable-final
   '';
 
-  buildInputs = [pkgconfig glib kdelibs libX11 libXext zlib libjpeg libpng perl qt];
+  buildNativeInputs = [ pkgconfig perl ];
+
+  buildInputs =
+    [glib kdelibs libX11 libXext zlib libjpeg libpng qt3];
 
   meta = {
     homepage = http://www.arts-project.org/;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm, libpng }:
+{ stdenv, fetchurl, pkgconfig, pango, glibmm, cairomm, libpng, xz }:
 
 stdenv.mkDerivation rec {
   name = "pangomm-2.28.4";
@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "10kcdpg080m393f1vz0km41kd3483fkyabprm59gvjwklxkcp3bp";
   };
 
+  buildInputs = [ xz];
   buildNativeInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pango glibmm cairomm libpng ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xlibs, zlib, perl, qt, openssl, pcre
+{ stdenv, fetchurl, xlibs, zlib, perl, qt3, openssl, pcre
 , pkgconfig, libjpeg, libpng, libtiff, libxml2, libxslt, libtool, expat
 , freetype, bzip2, cups, attr, acl
 }:
@@ -22,10 +22,10 @@ stdenv.mkDerivation {
     ./kdelibs-3.5.10-openssl_1.0.0.patch
   ];
 
-  passthru = {inherit openssl libjpeg qt; inherit (xlibs) libX11;};
+  passthru = {inherit openssl libjpeg qt3; inherit (xlibs) libX11;};
   
   buildInputs = [
-    zlib perl qt openssl pcre pkgconfig libjpeg libpng libtiff libxml2
+    zlib perl qt3 openssl pcre pkgconfig libjpeg libpng libtiff libxml2
     libxslt expat libtool freetype bzip2 cups
     xlibs.libX11 xlibs.libXt xlibs.libXext xlibs.libXrender xlibs.libXft
   ];

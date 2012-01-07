@@ -1,9 +1,9 @@
 rec {
-   version="1.5";
-   name="fbterm-1.5";
-   hash="05qzc6g9a79has3cy7dlw70n4pn13r552a2i1g4xy23acnpvvjsb";
+   version="1.7";
+   name="fbterm-1.7";
+   hash="19qjb2zb4gwr1jlybmalaw3y3zybvc8vliwj85dfabmill1k1afh";
    url="http://fbterm.googlecode.com/files/fbterm-${version}.tar.gz";
-   advertisedUrl="http://fbterm.googlecode.com/files/fbterm-1.5.tar.gz";
+   advertisedUrl="http://fbterm.googlecode.com/files/fbterm-1.7.tar.gz";
   
   
 }

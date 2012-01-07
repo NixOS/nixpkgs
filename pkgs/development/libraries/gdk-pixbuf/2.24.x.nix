@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, xlibs, xz
+{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, xz
 , jasper }:
 
 stdenv.mkDerivation {
@@ -10,13 +10,13 @@ stdenv.mkDerivation {
   };
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
-  buildInputs = [ xlibs.xlibs ];
+  buildInputs = [ libX11 ];
 
   buildNativeInputs = [ pkgconfig xz ];
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
-  configureFlags = "--with-libjasper";
+  configureFlags = "--with-libjasper --with-x11";
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

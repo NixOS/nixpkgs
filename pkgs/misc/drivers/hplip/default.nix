@@ -1,5 +1,5 @@
 {stdenv, fetchurl, cups, zlib, libjpeg, libusb, python, saneBackends, dbus
-, pkgconfig, polkit, qtSupport ? false, qt4
+, pkgconfig, polkit, qtSupport ? true, qt4
 }:
 
 stdenv.mkDerivation rec {

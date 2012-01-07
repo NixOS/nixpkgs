@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, flex, bison, qt }:
+{ stdenv, fetchurl, perl, flex, bison, qt4 }:
 
 let
   name = "doxygen-1.7.4";
@@ -15,18 +15,18 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ perl flex bison ]
-    ++ stdenv.lib.optional (qt != null) qt;
+    ++ stdenv.lib.optional (qt4 != null) qt4;
 
   prefixKey = "--prefix ";
 
   configureFlags =
     [ "--dot dot" ]
-    ++ stdenv.lib.optional (qt != null) "--with-doxywizard";
+    ++ stdenv.lib.optional (qt4 != null) "--with-doxywizard";
 
-  preConfigure = stdenv.lib.optionalString (qt != null)
+  preConfigure = stdenv.lib.optionalString (qt4 != null)
     ''
-      echo "using QTDIR=${qt}..."
-      export QTDIR=${qt}
+      echo "using QTDIR=${qt4}..."
+      export QTDIR=${qt4}
     '';
 
   makeFlags = "MAN1DIR=share/man/man1";
@@ -47,6 +47,6 @@ stdenv.mkDerivation {
     '';
 
     maintainers = [stdenv.lib.maintainers.simons];
-    platforms = if (qt != null) then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
+    platforms = if (qt4 != null) then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
   };
 }
