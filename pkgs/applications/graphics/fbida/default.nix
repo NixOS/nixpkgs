@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
   
   makeFlags = [ "prefix=$(out)" "verbose=yes" ];
 
+  crossAttrs = {
+    makeFlags = makeFlags ++ [ "CC=${stdenv.cross.config}-gcc" "STRIP="];
+  };
+
   meta = {
     description = "Image viewing and manipulation programs";
   };
