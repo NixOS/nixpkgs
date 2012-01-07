@@ -4162,6 +4162,10 @@ let
     inherit (gnome) glib;
   };
 
+  libwpd_08 = callPackage ../development/libraries/libwpd/0.8.nix {
+    inherit (gnome) glib;
+  };
+
   libwpg = callPackage ../development/libraries/libwpg { };
 
   libx86 = builderDefsPackage ../development/libraries/libx86 {};
@@ -7197,6 +7201,7 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon029;
+    libwpd = libwpd_08;
   };
 
   go_oo = callPackage ../applications/office/openoffice/go-oo.nix {
