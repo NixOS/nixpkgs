@@ -229,7 +229,6 @@ sane="kde_baseapps";  split=true;
   ];
 
 }
-{ module="kde-base-artwork"; sane="kde_base_artwork"; split=false;}
 { module="kdegames";  split=false;}
 { module="kdelibs";  split=false;}
 { module="kdemultimedia";  split=false;}
