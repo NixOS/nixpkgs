@@ -4398,7 +4398,7 @@ let
 
   phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
 
-  phonon_backend_vlc = newScope pkgs.kde4 ../development/libraries/phonon-backend-vlc { };
+  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { };
 
   physfs = callPackage ../development/libraries/physfs { };
 
