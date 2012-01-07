@@ -15,11 +15,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "polkit-0.104";
+  name = "polkit-0.102";
 
   src = fetchurl {
     url = "http://hal.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "1yf7307svs8qk76qdlgww1bhgdcia5cm92n16xz7njhy73c162kb";
+    sha256 = "0hc60nwqnmixavgg0alk4w0llwj5xmm4bw8qh915qvqwhkd76r8a";
   };
 
   buildInputs =
