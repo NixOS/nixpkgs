@@ -5,7 +5,7 @@ rec {
     sha256 = "1f5j9l9n5j2ab0h3iwaz0mnz0y8h7ilc0dbcrfmaibk2njx38mcn";
   };
 
-  buildInputs = [qt flex bison python pkgconfig makeWrapper 
+  buildInputs = [qt3 flex bison python pkgconfig makeWrapper 
     libX11 libXext];
   configureFlags = [];
 
@@ -20,7 +20,7 @@ rec {
 
   prepareMainBuild = fullDepEntry (''
     cd src 
-    export QTDIR=${qt}/
+    export QTDIR=${qt3}/
     make -f Makefile.bootstrap makefile
   '') ["minInit" "doUnpack"];
 

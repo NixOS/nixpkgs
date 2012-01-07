@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libX11, libXext, libSM, kdelibs, qt, libjpeg, libungif, libpng, libtiff, imlib, arts, expat, perl}:
+{stdenv, fetchurl, libX11, libXext, libSM, kdelibs, qt3, libjpeg, libungif, libpng, libtiff, imlib, arts, expat, perl}:
 
 stdenv.mkDerivation {
   name = "kuickshow-0.8.5";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     --x-includes=${libX11}/include
     --x-libraries=${libX11}/lib";
 
-  buildInputs = [kdelibs libX11 libXext libSM qt libjpeg libungif libpng libtiff imlib arts expat perl];
+  buildInputs = [kdelibs libX11 libXext libSM qt3 libjpeg libungif libpng libtiff imlib arts expat perl];
   inherit libjpeg;
 
   KDEDIR = kdelibs;

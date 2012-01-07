@@ -5,7 +5,7 @@
 , xineramaSupport ? true, libXinerama ? null
 , cursorSupport ? true, libXcursor ? null
 , threadSupport ? true
-, mysqlSupport ? true, mysql ? null
+, mysqlSupport ? false, mysql ? null
 , openglSupport ? false, mesa ? null, libXmu ? null
 , x11, xextproto, zlib, libjpeg, libpng, which
 }:

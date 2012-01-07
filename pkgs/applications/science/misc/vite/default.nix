@@ -1,4 +1,4 @@
-{ fetchsvn, stdenv, cmake, qt, mesa }:
+{ fetchsvn, stdenv, cmake, qt4, mesa }:
 
 # ViTE 1.1 has several bugs, so use the SVN version.
 let
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   patches = [ ./larger-line-buffer.patch ];
 
-  buildInputs = [ cmake qt mesa ];
+  buildInputs = [ cmake qt4 mesa ];
 
   NIX_LDFLAGS = "-lGLU";
 
