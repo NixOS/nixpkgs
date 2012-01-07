@@ -8019,10 +8019,6 @@ let
       stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
     };
 
-    kuickshow = callPackage ../applications/graphics/kuickshow {
-      inherit (kde3) arts kdelibs;
-    };
-
   };
 
   kde4 = recurseIntoAttrs pkgs.kde47;
@@ -8100,6 +8096,8 @@ let
       krusader = callPackage ../applications/misc/krusader { };
 
       ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
+
+      kuickshow = callPackage ../applications/graphics/kuickshow { };
 
       libktorrent = callPackage ../development/libraries/libktorrent { };
 
