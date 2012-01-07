@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cryptsetup, dbus, dbus_glib, hal, intltool, ntfs3g, utillinuxng
+{stdenv, fetchurl, cryptsetup, dbus, dbus_glib, intltool, ntfs3g, utillinuxng
 , mediaDir ? "/media/"
 , lockDir ? "/var/lock/pmount"
 , whiteList ? "/etc/pmount.allow"
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
   };
 
-  buildInputs = [ hal intltool utillinuxng ];
+  buildInputs = [ intltool utillinuxng ];
 
   configureFlags = ""
   + " --with-media-dir=${mediaDir}"
@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
   + " --with-whitelist=${whiteList}"
   + " --with-mount-prog=${utillinuxng}/bin/mount"
   + " --with-umount-prog=${utillinuxng}/bin/umount"
-  + " --with-cryptsetup=${cryptsetup}/sbin/cryptsetup"
-  + " --with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g"
-  + " --enable-hal";
+  + " --with-mount-ntfs3g=${ntfs3g}/sbin/mount.ntfs-3g";
 
   postConfigure = ''
     # etc/Mafile.am is hardcoded and it does not respect the --prefix option.
