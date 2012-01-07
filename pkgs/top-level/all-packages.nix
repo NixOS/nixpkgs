@@ -7279,7 +7279,9 @@ let
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qemu = callPackage ../applications/virtualization/qemu/0.13.nix { };
+  qemu = callPackage ../applications/virtualization/qemu/0.15.nix { };
+
+  qemu_0_13 = callPackage ../applications/virtualization/qemu/0.13.nix { };
 
   qemuSVN = callPackage ../applications/virtualization/qemu/svn-6642.nix { };
 
