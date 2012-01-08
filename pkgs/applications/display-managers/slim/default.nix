@@ -1,4 +1,4 @@
-{stdenv, fetchurl, x11, libjpeg, libpng, libXmu, freetype, pam}:
+{stdenv, fetchurl, x11, libjpeg, libpng12, libXmu, freetype, pam}:
 
 stdenv.mkDerivation rec {
   name = "slim-1.3.2";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ./pam2.patch
   ];
 
-  buildInputs = [x11 libjpeg libpng libXmu freetype pam];
+  buildInputs = [x11 libjpeg libpng12 libXmu freetype pam];
 
   NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
 
