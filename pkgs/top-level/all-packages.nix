@@ -3150,6 +3150,8 @@ let
 
   attr = callPackage ../development/libraries/attr { };
 
+  aqbanking = callPackage ../development/libraries/aqbanking { };
+
   aubio = callPackage ../development/libraries/aubio { };
 
   axis = callPackage ../development/libraries/axis { };
@@ -3697,6 +3699,8 @@ let
   gtkspell = callPackage ../development/libraries/gtkspell { };
 
   gts = callPackage ../development/libraries/gts { };
+
+  gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
@@ -8100,6 +8104,8 @@ let
       ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
 
       kuickshow = callPackage ../applications/graphics/kuickshow { };
+
+      libalkimia = callPackage ../development/libraries/libalkimia { };
 
       libktorrent = callPackage ../development/libraries/libktorrent { };
 
