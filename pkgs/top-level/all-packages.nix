@@ -6525,6 +6525,11 @@ let
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
+  dvswitch = callPackage ../applications/video/dvswitch {
+    inherit (gtkLibs) gtkmm;
+    inherit (xlibs) libXau libXdmcp libXv libpthreadstubs pixman;
+  };
+
   dwm = callPackage ../applications/window-managers/dwm {
     patches = getConfig [ "dwm" "patches" ] [];
   };
