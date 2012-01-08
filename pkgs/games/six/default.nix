@@ -19,6 +19,7 @@ stdenv.mkDerivation {
     description = "Six - A Hex playing program for KDE";
     homepage = http://six.retes.hu/;
     license = "GPLv2";
+    platforms = stdenv.lib.platforms.linux;
   };
 
   buildInputs = [ arts kdelibs libX11 libXext libXt perl qt3 zlib ];

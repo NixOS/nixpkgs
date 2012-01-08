@@ -1506,6 +1506,8 @@ let
 
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
+  unclutter = callPackage ../tools/misc/unclutter { };
+
   unbound = callPackage ../tools/networking/unbound { };
 
   units = callPackage ../tools/misc/units { };
@@ -2659,12 +2661,13 @@ let
   pure = callPackage ../development/interpreters/pure {};
 
   python = python27;
+  python3 = python32;
 
   python26 = callPackage ../development/interpreters/python/2.6 { };
 
   python27 = callPackage ../development/interpreters/python/2.7 { };
 
-  python3 = callPackage ../development/interpreters/python/3.1 {
+  python31 = callPackage ../development/interpreters/python/3.1 {
     arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
   };
@@ -2821,7 +2824,10 @@ let
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
     doCheck = !stdenv.isArm && !stdenv.isCygwin
       # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
-      && stdenv.system != "i686-solaris";
+      && stdenv.system != "i686-solaris"
+
+      # One test fails to terminate on FreeBSD: <http://bugs.gnu.org/8788>.
+      && !stdenv.isFreeBSD;
   };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
@@ -3143,6 +3149,8 @@ let
   attica = callPackage ../development/libraries/attica { };
 
   attr = callPackage ../development/libraries/attr { };
+
+  aqbanking = callPackage ../development/libraries/aqbanking { };
 
   aubio = callPackage ../development/libraries/aubio { };
 
@@ -3691,6 +3699,8 @@ let
   gtkspell = callPackage ../development/libraries/gtkspell { };
 
   gts = callPackage ../development/libraries/gts { };
+
+  gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
@@ -6178,7 +6188,7 @@ let
   xmoto = builderDefsPackage (import ../games/xmoto) {
     inherit chipmunk sqlite curl zlib bzip2 libjpeg libpng
       freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf
-      lua5 ode libxdg_basedir;
+      lua5 ode libxdg_basedir libxml2;
   };
 
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
@@ -6516,6 +6526,11 @@ let
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
+
+  dvswitch = callPackage ../applications/video/dvswitch {
+    inherit (gtkLibs) gtkmm;
+    inherit (xlibs) libXau libXdmcp libXv libpthreadstubs pixman;
+  };
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = getConfig [ "dwm" "patches" ] [];
@@ -8008,11 +8023,6 @@ let
       inherit (kde3) kdelibs;
     };
 
-    kbasket = callPackage ../applications/misc/kbasket {
-      stdenv = overrideGCC stdenv gcc43;
-      inherit (kde3) kdelibs;
-    };
-
     kphone = callPackage ../applications/networking/kphone {
       stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
     };
@@ -8097,6 +8107,8 @@ let
 
       kuickshow = callPackage ../applications/graphics/kuickshow { };
 
+      libalkimia = callPackage ../development/libraries/libalkimia { };
+
       libktorrent = callPackage ../development/libraries/libktorrent { };
 
       libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
@@ -8129,7 +8141,11 @@ let
 
       semnotes = callPackage ../applications/misc/semnotes { };
 
+      skrooge = callPackage ../applications/office/skrooge { };
+
       yakuake = callPackage ../applications/misc/yakuake { };
+
+      zanshin = callPackage ../applications/office/zanshin { };
     };
 
   redshift = callPackage ../applications/misc/redshift {
