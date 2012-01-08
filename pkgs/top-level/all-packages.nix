@@ -6186,7 +6186,7 @@ let
   xmoto = builderDefsPackage (import ../games/xmoto) {
     inherit chipmunk sqlite curl zlib bzip2 libjpeg libpng
       freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf
-      lua5 ode libxdg_basedir;
+      lua5 ode libxdg_basedir libxml2;
   };
 
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
