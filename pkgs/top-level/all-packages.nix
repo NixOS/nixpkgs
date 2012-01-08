@@ -8016,11 +8016,6 @@ let
       inherit (kde3) kdelibs;
     };
 
-    kbasket = callPackage ../applications/misc/kbasket {
-      stdenv = overrideGCC stdenv gcc43;
-      inherit (kde3) kdelibs;
-    };
-
     kphone = callPackage ../applications/networking/kphone {
       stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
     };
