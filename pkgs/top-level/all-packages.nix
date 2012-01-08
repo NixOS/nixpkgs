@@ -4448,6 +4448,7 @@ let
 
   qt46 = callPackage ../development/libraries/qt-4.x/4.6 {
     inherit (gnome) glib;
+    libpng = pkgs.libpng12;
   };
 
   qt47 = callPackage ../development/libraries/qt-4.x/4.7 {
