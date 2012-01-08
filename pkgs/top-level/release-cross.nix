@@ -203,6 +203,7 @@ in {
     libunistring.hostDrv = nativePlatforms;
     lsh.hostDrv = nativePlatforms;
     nixUnstable.hostDrv = nativePlatforms;
+    openssl.hostDrv = nativePlatforms;            # dependency of Nix
     patch.hostDrv = nativePlatforms;
     zile.hostDrv = nativePlatforms;
   };

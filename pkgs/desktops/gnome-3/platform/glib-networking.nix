@@ -1,7 +1,7 @@
 { stdenv, fetchurl, glib, xz, pkgconfig, intltool, gnutls, libgcrypt
 , gsettings_desktop_schemas }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "glib-networking-2.30.2";
 
   src = fetchurl {
@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     TODO = "Look at `--without-ca-certificates` again";
+    inherit (glib.meta) platforms maintainers;
   };
 }

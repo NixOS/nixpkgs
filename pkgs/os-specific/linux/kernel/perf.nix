@@ -1,4 +1,5 @@
-{ stdenv, kernel, elfutils }:
+{ stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto
+, docbook_xsl, docbook_xml_dtd_45, libxslt }:
 
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
@@ -7,10 +8,25 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     cd tools/perf
-    export makeFlags="DESTDIR=$out"
+    sed -i s,/usr/include/elfutils,$elfutils/include/elfutils, Makefile
+    export makeFlags="DESTDIR=$out $makeFlags"
   '';
 
-  buildInputs = [ elfutils ];
+  # perf refers both to newt and slang
+  buildNativeInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt ];
+  buildInputs = [ elfutils python perl newt slang ];
+
+  installFlags = "install install-man ASCIIDOC8=1";
+
+  inherit elfutils;
+
+  crossAttrs = {
+    /* I don't want cross-python or cross-perl -
+       I don't know if cross-python even works */
+    propagatedBuildInputs = [ elfutils.hostDrv newt.hostDrv ];
+    makeFlags = "CROSS_COMPILE=${stdenv.cross.config}-";
+    elfutils = elfutils.hostDrv;
+  };
 
   meta = {
     homepage = https://perf.wiki.kernel.org/;

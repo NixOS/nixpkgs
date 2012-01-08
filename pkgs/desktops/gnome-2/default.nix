@@ -50,6 +50,8 @@
 
   gnome_vfs_monikers = callPackage ./platform/gnome-vfs-monikers { };
 
+  libgnome_keyring = callPackage ./platform/libgnome-keyring { };
+
   libgnome = callPackage ./platform/libgnome { };
 
   libgnomeui = callPackage ./platform/libgnomeui { };

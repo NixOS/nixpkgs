@@ -1,11 +1,10 @@
-{ stdenv, fetchurl_gnome, pkgconfig, perl, glib, xz }:
+{ stdenv, fetchurl, pkgconfig, perl, glib, xz }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "atk-2.2.0";
 
-  src = fetchurl_gnome {
-    project = "atk";
-    major = "2"; minor = "2"; patchlevel = "0"; extension = "xz";
+  src = fetchurl {
+    url = mirror://gnome/sources/atk/2.2/atk-2.2.0.tar.xz;
     sha256 = "17bkqg89l9hxbkgc76cxlin1bwczk7m6ikbccx677lrxh3kz08lb";
   };
 

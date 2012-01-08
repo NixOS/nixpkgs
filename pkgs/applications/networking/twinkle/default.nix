@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, commoncpp2, ccrtp, openssl, boost
-, libsndfile, libxml2, libjpeg, readline, qt, perl, file
+, libsndfile, libxml2, libjpeg, readline, qt3, perl, file
 , alsaLib, speex, libzrtpcpp, xorg }:
         
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ pkgconfig commoncpp2 ccrtp openssl boost libsndfile
-      libxml2 libjpeg readline qt perl file
+      libxml2 libjpeg readline qt3 perl file
       # optional ? :
       alsaLib
       speex libzrtpcpp xorg.libX11 xorg.libXaw xorg.libICE xorg.libXext

@@ -47,7 +47,7 @@ stdenv.mkDerivation {
       their data, there really is no alternative.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

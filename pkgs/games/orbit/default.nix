@@ -1,5 +1,5 @@
 { stdenv, fetchurl, builderDefs, mesa, libXi, libXt, libXext, libX11
-, libXmu, freeglut, esound }:
+, libXmu, freeglut }:
 
 with builderDefs;
 	let localDefs = builderDefs.passthru.function (rec {
@@ -9,7 +9,7 @@ with builderDefs;
 			url = http://ftp.de.debian.org/debian/pool/main/s/space-orbit/space-orbit_1.01.orig.tar.gz;
 		};
 
-		buildInputs = [mesa libXi libXt libXext libX11 libXmu freeglut esound];
+		buildInputs = [mesa libXi libXt libXext libX11 libXmu freeglut];
 		configureFlags = [];
 		debianPatch = 
 		fetchurl {
@@ -20,7 +20,7 @@ with builderDefs;
 			gunzip < ${debianPatch} | patch -Np1
                         cd src
 			sed -e 's@/usr/share/games/orbit/@'$out'/dump/@g' -i *.c
-                        sed -e '/DIR=/d' -i Makefile 
+                        sed -e '/DIR=/d; s/-lesd//; s/-DESD//;' -i Makefile 
                         make 
                         ensureDir $out/bin
                         cp -r .. $out/dump

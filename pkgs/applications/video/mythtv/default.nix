@@ -1,9 +1,11 @@
-{ stdenv, fetchurl, which, qt3, x11, xlibs
+a@{ stdenv, fetchurl, which, qt3, x11, xlibs
 , lame, zlib, mesa, alsaLib
 , freetype, perl
 }:
 
-assert qt3.mysqlSupport;
+let
+  qt3 = a.qt3.override { mysqlSupport = true; };
+in
 
 stdenv.mkDerivation {
   name = "mythtv-0.21";

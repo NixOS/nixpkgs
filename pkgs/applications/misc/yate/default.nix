@@ -1,4 +1,4 @@
-{ composableDerivation, fetchurl, lib, qt, openssl, autoconf, automake, pkgconfig }:
+{ composableDerivation, fetchurl, lib, qt4, openssl, autoconf, automake, pkgconfig }:
 
 let inherit (composableDerivation) edf wwf; in
 
@@ -11,7 +11,7 @@ composableDerivation.composableDerivation {} ( fixed : {
   };
 
   # TODO zaptel ? postgres ?
-  buildInputs = [ qt openssl autoconf automake pkgconfig ];
+  buildInputs = [ qt4 openssl autoconf automake pkgconfig ];
 
   # /dev/null is used when linking which is a impure path for the wrapper
   preConfigure =

@@ -2,15 +2,15 @@
 , gccCross ? null }:
 
 let
-  version = "2011-03-08";
+  version = "2011-12-26";
 in
 stdenv.mkDerivation {
   name = "xburst-tools-${version}";
 
   src = fetchgit {
     url = git://projects.qi-hardware.com/xburst-tools.git;
-    rev = "a3a38cabf1e854667d90f49f0b4487e28974a3a6";
-    sha256 = "ac5671708cf9d18de79207530335f6781fa4bedf55288069786f4ecb971c4658";
+    rev = "c71ce8e15db25fe49ce8702917cb17720882e341";
+    sha256 = "abe4c4591183f2bc5ca6363451d1cd7d966c080b4f5bfb0fedf7e9a4f70267a4";
   };
 
   preConfigure = ''

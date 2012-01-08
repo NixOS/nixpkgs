@@ -26,6 +26,8 @@ stdenv.mkDerivation {
     done
     chmod +w -R *
     sed -i -e 's/console=ttyS0,57600n8//' include/configs/qi_lb60.h
+    # Load more than 2MiB for the kernel
+    sed -i -e 's/0x200000;bootm/0x400000;bootm/' include/configs/qi_lb60.h
   '';
 
   # Remove the cross compiler prefix, and add reiserfs support

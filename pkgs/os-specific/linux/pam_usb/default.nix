@@ -5,12 +5,12 @@ let
   pumountBin = useSetUID pmount "/bin/pumount";
 in
 
-stdenv.mkDerivation {
-  name = "pam_usb-0.4.2";
+stdenv.mkDerivation rec {
+  name = "pam_usb-0.5.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/pamusb/pam_usb/pam_usb-0.4.2/pam_usb-0.4.2.tar.gz;
-    sha256 = "736afced7482c7c5d47127285f7defe0a304a6136a0090588fa8698d385ba202";
+    url = "mirror://sourceforge/pamusb/${name}.tar.gz";
+    sha256 = "1g1w0s9d8mfld8abrn405ll5grv3xgs0b0hsganrz6qafdq9j7q1";
   };
 
   buildInputs = [

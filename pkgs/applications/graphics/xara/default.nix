@@ -1,35 +1,20 @@
-{stdenv, fetchurl, autoconf, automake, gettext, libtool, cvs, wxGTK, gtk,
-pkgconfig, libxml2, zip, libpng, libjpeg, shebangfix, perl, freetype}:
+{stdenv, fetchurl, automake, gettext, freetype, libxml2, pango, pkgconfig
+, wxGTK, gtk, perl, zip}:
 
 stdenv.mkDerivation {
-  name = "xaralx-0.7r1766";
+  name = "xaralx-0.7r1785";
+
   src = fetchurl {
-    url = http://downloads2.xara.com/opensource/XaraLX-0.7r1766.tar.bz2;
-    sha256 = "1rcl7hqvcai586jky7hvzxhnq8q0ka2rsmgiq5ijwclgr5d4ah7n";
+    url = http://downloads2.xara.com/opensource/XaraLX-0.7r1785.tar.bz2;
+    sha256 = "05xbzq1i1vw2mdsv7zjqfpxfv3g1j0g5kks0gq6sh373xd6y8lyh";
   };
     
-  buildInputs = [automake autoconf gettext libtool cvs wxGTK gtk pkgconfig libxml2 zip libpng libjpeg shebangfix perl];
+  buildNativeInputs = [ automake pkgconfig gettext perl zip ];
+  buildInputs = [ wxGTK gtk libxml2 freetype pango ];
 
-  inherit freetype libpng libjpeg libxml2;
-  configureFlags = "--with-wx-config --disable-svnversion --disable-international";
+  configureFlags = "--disable-svnversion";
 
-  patches = [./gtk_cflags.patch];
+  patches = map fetchurl (import ./debian-patches.nix);
 
-  # Why do I need to add library path for freetype ? 
-  installPhase = "
-    make install
-    ensureDir \$out/lib
-    mv \$out/{bin,lib}/XaraLX
-cat >> \$out/bin/XaraLX << EOF
-#!/bin/sh
-LD_LIBRARY_PATH=\$freetype/lib:\$libpng/lib:\$libjpeg/lib:\$libxml2/lib:
-\$out/lib/XaraLX \"\\$@\"
-EOF
-chmod +x \$out/bin/XaraLX
-";
- 
-  patchPhase = "
-    find . -iname \"*.pl\" | xargs shebangfix;
-    unset patchPhase; patchPhase
-   "; 
+  prePatch = "patchShebangs Scripts";
 }

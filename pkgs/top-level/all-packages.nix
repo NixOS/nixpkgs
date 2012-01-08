@@ -2904,13 +2904,9 @@ let
     inherit python pil makeWrapper;
   };
 
-  doxygen = lowPrio (callPackage ../development/tools/documentation/doxygen {
-    qt = null;
-  });
+  doxygen = lowPrio (doxygen_gui.override { qt4 = null; });
 
-  doxygen_gui = doxygen.override {
-    qt = qt4;
-  };
+  doxygen_gui = callPackage ../development/tools/documentation/doxygen { };
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
 
@@ -2980,6 +2976,8 @@ let
   intelgen4asm = callPackage ../development/misc/intelgen4asm { };
 
   ired = callPackage ../development/tools/analysis/radare/ired.nix { };
+
+  itstool = callPackage ../development/tools/misc/itstool { };
 
   jam = callPackage ../development/tools/build-managers/jam { };
 
@@ -3094,11 +3092,7 @@ let
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
-  xxdiff = builderDefsPackage (import ../development/tools/misc/xxdiff/3.2.nix) {
-    qt = qt3;
-    inherit pkgconfig makeWrapper bison python flex;
-    inherit (xlibs) libXext libX11;
-  };
+  xxdiff = callPackage ../development/tools/misc/xxdiff { };
 
   yacc = bison;
 
@@ -3630,27 +3624,13 @@ let
 
   });
 
-  gtkLibs216 = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs216; in {
-
-    glib = callPackage ../development/libraries/glib/2.20.x.nix { };
-
-    atk = callPackage ../development/libraries/atk/1.24.x.nix { };
-
-    cairo = callPackage ../development/libraries/cairo { };
-
-    pango = callPackage ../development/libraries/pango/1.24.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/2.16.x.nix { };
-
-  });
-
   gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
 
     glib = callPackage ../development/libraries/glib/2.28.x.nix { };
 
     glibmm = callPackage ../development/libraries/glibmm/2.28.x.nix { };
 
-    atk = callPackage ../development/libraries/atk/1.32.x.nix { };
+    atk = callPackage ../development/libraries/atk/2.2.x.nix { };
 
     atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
 
@@ -3686,6 +3666,8 @@ let
     pango = callPackage ../development/libraries/pango/1.29.x.nix { };
 
     gtk = callPackage ../development/libraries/gtk+/3.2.x.nix { };
+
+    gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
 
     # Let hydra build gtk-3.x but do not show this to users yet
     recurseForRelease = true;
@@ -4179,6 +4161,10 @@ let
     inherit (gnome) glib;
   };
 
+  libwpd_08 = callPackage ../development/libraries/libwpd/0.8.nix {
+    inherit (gnome) glib;
+  };
+
   libwpg = callPackage ../development/libraries/libwpg { };
 
   libx86 = builderDefsPackage ../development/libraries/libx86 {};
@@ -4273,9 +4259,7 @@ let
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
-  mlt = callPackage ../development/libraries/mlt {
-    qt = qt4;
-  };
+  mlt = callPackage ../development/libraries/mlt { };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
 
@@ -4324,6 +4308,8 @@ let
   };
 
   nettle = callPackage ../development/libraries/nettle { };
+
+  newt = callPackage ../development/libraries/newt { };
 
   nspr = callPackage ../development/libraries/nspr { };
 
@@ -4409,7 +4395,7 @@ let
 
   phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
 
-  phonon_backend_vlc = newScope pkgs.kde4 ../development/libraries/phonon-backend-vlc { };
+  phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { };
 
   physfs = callPackage ../development/libraries/physfs { };
 
@@ -4462,11 +4448,6 @@ let
 
   qt3 = callPackage ../development/libraries/qt-3 {
     openglSupport = mesaSupported;
-    mysqlSupport = getConfig ["qt" "mysql"] false;
-  };
-
-  qt3mysql = qt3.override {
-    mysqlSupport = true;
   };
 
   qt4 = pkgs.kde4.qt4;
@@ -4693,10 +4674,6 @@ let
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
-
-  wxGTK26 = callPackage ../development/libraries/wxGTK-2.6 {
-    inherit (gtkLibs216) gtk;
-  };
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
     inherit (gtkLibs) gtk;
@@ -6031,6 +6008,8 @@ let
 
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
+  ralink_fw = callPackage ../os-specific/linux/firmware/ralink { };
+
   rt2860fw = callPackage ../os-specific/linux/firmware/rt2860 { };
 
   rt2870fw = callPackage ../os-specific/linux/firmware/rt2870 { };
@@ -6216,6 +6195,8 @@ let
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
   cacert = callPackage ../data/misc/cacert { };
+
+  cantarell_fonts = callPackage ../data/fonts/cantarell-fonts { };
 
   corefonts = callPackage ../data/fonts/corefonts { };
 
@@ -6866,9 +6847,7 @@ let
     opencv = opencv_2_1;
   };
 
-  qrencode = builderDefsPackage (import ../tools/graphics/qrencode) {
-    inherit libpng pkgconfig;
-  };
+  qrencode = callPackage ../tools/graphics/qrencode { };
 
   gecko_mediaplayer = callPackage ../applications/networking/browsers/mozilla-plugins/gecko-mediaplayer {
     inherit (gnome) GConf;
@@ -7166,9 +7145,7 @@ let
   mupdf = callPackage ../applications/misc/mupdf {
   };
 
-  mythtv = callPackage ../applications/video/mythtv {
-    qt3 = qt3mysql;
-  };
+  mythtv = callPackage ../applications/video/mythtv { };
 
   nano = callPackage ../applications/editors/nano { };
 
@@ -7206,6 +7183,7 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon029;
+    libwpd = libwpd_08;
   };
 
   go_oo = callPackage ../applications/office/openoffice/go-oo.nix {
@@ -7283,7 +7261,9 @@ let
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
-  qemu = callPackage ../applications/virtualization/qemu/0.13.nix { };
+  qemu = callPackage ../applications/virtualization/qemu/0.15.nix { };
+
+  qemu_0_13 = callPackage ../applications/virtualization/qemu/0.13.nix { };
 
   qemuSVN = callPackage ../applications/virtualization/qemu/svn-6642.nix { };
 
@@ -7448,8 +7428,6 @@ let
   teamspeak_client = callPackage ../applications/networking/instant-messengers/teamspeak/client.nix { };
 
   taskjuggler = callPackage ../applications/misc/taskjuggler {
-    qt = qt3;
-
     # KDE support is not working yet.
     inherit (kde3) kdelibs kdebase;
     withKde = getConfig [ "taskJuggler" "kde" ] false;
@@ -7488,7 +7466,6 @@ let
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   twinkle = callPackage ../applications/networking/twinkle {
-    qt = qt3;
     boost = boostFull;
     ccrtp = ccrtp_1_8;
     libzrtpcpp = libzrtpcpp_1_6;
@@ -7510,9 +7487,7 @@ let
     inherit (gnome) glib_networking libsoup;
   };
 
-  valknut = callPackage ../applications/networking/p2p/valknut {
-    qt = qt3;
-  };
+  valknut = callPackage ../applications/networking/p2p/valknut { };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
@@ -7628,9 +7603,7 @@ let
     inherit gsl aalib zlib libpng intltool gettext perl;
   };
 
-  xara = callPackage ../applications/graphics/xara {
-    wxGTK = wxGTK26;
-  };
+  xara = callPackage ../applications/graphics/xara { };
 
   xawtv = callPackage ../applications/video/xawtv { };
 
@@ -7716,9 +7689,7 @@ let
     inherit (gnome) scrollkeeper libglade;
   };
 
-  yate = callPackage ../applications/misc/yate {
-    qt = qt4;
-  };
+  yate = callPackage ../applications/misc/yate { };
 
   qgis = callPackage ../applications/misc/qgis {};
 
@@ -7902,8 +7873,7 @@ let
   soi = callPackage ../games/soi {};
 
   # You still can override by passing more arguments.
-  spaceOrbit = callPackage ../games/orbit {
-    inherit (gnome) esound;  };
+  spaceOrbit = callPackage ../games/orbit { };
 
   spring = callPackage ../games/spring { };
 
@@ -8025,13 +7995,10 @@ let
 
     kdelibs = callPackage ../desktops/kde-3/kdelibs {
       stdenv = overrideGCC stdenv gcc43;
-      qt = qt3;
     };
 
     arts = callPackage ../development/libraries/arts {
-      qt = qt3;
-      inherit (gnome) glib;
-      inherit (kde3) kdelibs;
+      inherit (pkgs.kde3) kdelibs;
     };
 
     k3b = callPackage ../applications/misc/k3b/1.0.nix {
@@ -8044,13 +8011,7 @@ let
     };
 
     kphone = callPackage ../applications/networking/kphone {
-      qt = qt3;
       stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
-    };
-
-    kuickshow = callPackage ../applications/graphics/kuickshow {
-      inherit (kde3) arts kdelibs;
-      qt = qt3;
     };
 
   };
@@ -8058,6 +8019,8 @@ let
   kde4 = recurseIntoAttrs pkgs.kde47;
 
   kde47 = kdePackagesFor pkgs.kde47 "4.7";
+
+  kde48 = kdePackagesFor pkgs.kde48 "4.8";
 
   kdePackagesFor = self: version:
     let callPackageOrig = callPackage; in
@@ -8128,6 +8091,8 @@ let
       krusader = callPackage ../applications/misc/krusader { };
 
       ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
+
+      kuickshow = callPackage ../applications/graphics/kuickshow { };
 
       libktorrent = callPackage ../development/libraries/libktorrent { };
 
@@ -8366,9 +8331,7 @@ let
 
   tulip = callPackage ../applications/science/misc/tulip { };
 
-  vite = callPackage ../applications/science/misc/vite {
-    qt = qt4;
-  };
+  vite = callPackage ../applications/science/misc/vite { };
 
   ### MISC
 
@@ -8445,9 +8408,7 @@ let
 
   gxemul = callPackage ../misc/gxemul { };
 
-  hplip = callPackage ../misc/drivers/hplip {
-    qtSupport = true;
-  };
+  hplip = callPackage ../misc/drivers/hplip { };
 
   # using the new configuration style proposal which is unstable
   jack1d = callPackage ../misc/jackaudio/jack1.nix { };
