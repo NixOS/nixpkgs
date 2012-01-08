@@ -1506,6 +1506,8 @@ let
 
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
+  unclutter = callPackage ../tools/misc/unclutter { };
+
   unbound = callPackage ../tools/networking/unbound { };
 
   units = callPackage ../tools/misc/units { };
