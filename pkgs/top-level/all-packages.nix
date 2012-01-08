@@ -2661,12 +2661,13 @@ let
   pure = callPackage ../development/interpreters/pure {};
 
   python = python27;
+  python3 = python32;
 
   python26 = callPackage ../development/interpreters/python/2.6 { };
 
   python27 = callPackage ../development/interpreters/python/2.7 { };
 
-  python3 = callPackage ../development/interpreters/python/3.1 {
+  python31 = callPackage ../development/interpreters/python/3.1 {
     arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
   };
