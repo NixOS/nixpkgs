@@ -2824,7 +2824,10 @@ let
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
     doCheck = !stdenv.isArm && !stdenv.isCygwin
       # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
-      && stdenv.system != "i686-solaris";
+      && stdenv.system != "i686-solaris"
+
+      # One test fails to terminate on FreeBSD: <http://bugs.gnu.org/8788>.
+      && !stdenv.isFreeBSD;
   };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
