@@ -8139,7 +8139,11 @@ let
 
       semnotes = callPackage ../applications/misc/semnotes { };
 
+      skrooge = callPackage ../applications/office/skrooge { };
+
       yakuake = callPackage ../applications/misc/yakuake { };
+
+      zanshin = callPackage ../applications/office/zanshin { };
     };
 
   redshift = callPackage ../applications/misc/redshift {
