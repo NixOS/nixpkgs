@@ -4069,6 +4069,7 @@ let
 
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = callPackage ../development/libraries/libpng/libpng-apng.nix { };
+  libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
   libproxy = callPackage ../development/libraries/libproxy { };
 
