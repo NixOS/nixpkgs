@@ -161,7 +161,7 @@ in
         ServerRoot /etc/cups
 
         ServerBin ${bindir}/lib/cups
-        DataDir ${bindir}/share/cups
+        DataDir ${pkgs.cups}/share/cups
 
         AccessLog ${logDir}/access_log
         ErrorLog ${logDir}/error_log
