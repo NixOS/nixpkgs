@@ -4209,6 +4209,8 @@ let
 
   lightning = callPackage ../development/libraries/lightning { };
 
+  lirc = callPackage ../development/libraries/lirc { };
+
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
     inherit gmp mesa libjpeg libpng
