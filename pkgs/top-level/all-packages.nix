@@ -4638,6 +4638,8 @@ let
 
   vamp = callPackage ../development/libraries/audio/vamp { };
 
+  vcdimager = callPackage ../development/libraries/vcdimager { };
+
   vigra = callPackage ../development/libraries/vigra { };
 
   vmime = callPackage ../development/libraries/vmime { };
