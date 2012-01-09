@@ -4210,6 +4210,8 @@ let
 
   lightning = callPackage ../development/libraries/lightning { };
 
+  lirc = callPackage ../development/libraries/lirc { };
+
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
     inherit gmp mesa libjpeg libpng
@@ -4639,6 +4641,8 @@ let
   ucommon = callPackage ../development/libraries/ucommon { };
 
   vamp = callPackage ../development/libraries/audio/vamp { };
+
+  vcdimager = callPackage ../development/libraries/vcdimager { };
 
   vigra = callPackage ../development/libraries/vigra { };
 
