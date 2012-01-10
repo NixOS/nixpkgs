@@ -56,4 +56,9 @@ in
     buildInputs = [ gems.rake zlib libuuid ];
     gemFlags = "--no-rdoc --no-ri";
   };
+
+  rjb = {
+    buildInputs = [ jdk ];
+    JAVA_HOME = jdk;
+  };
 }
