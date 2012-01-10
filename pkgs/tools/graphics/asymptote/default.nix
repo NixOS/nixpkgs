@@ -20,7 +20,7 @@ rec {
 
   inherit (s) name;
   inherit buildInputs;
-  configureFlags = [];
+  configureFlags = "--enable-gc=${a.boehmgc} --enable-offscreen";
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["setVars" "doUnpack" "fixPaths" "extractTexinfoTex"
