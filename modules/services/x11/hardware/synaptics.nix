@@ -18,7 +18,7 @@ let cfg = config.services.xserver.synaptics; in
 
       dev = mkOption {
         default = null;
-	example = "/dev/input/event0";
+        example = "/dev/input/event0";
         description =
           ''
             Path for touchpad device.  Set to null to apply to any
@@ -44,6 +44,17 @@ let cfg = config.services.xserver.synaptics; in
       vertEdgeScroll = mkOption {
         default = ! cfg.twoFingerScroll;
         description = "Whether to enable vertical edge drag-scrolling.";
+      };
+
+      additionalOptions = mkOption {
+        default = "";
+        example = ''
+          Option "RTCornerButton" "2"
+          Option "RBCornerButton" "3"
+		'';
+        description = ''
+          Additional options for synaptics touchpad driver.
+        '';
       };
 
     };
@@ -74,6 +85,7 @@ let cfg = config.services.xserver.synaptics; in
           Option "VertTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "HorizTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
+          ${cfg.additionalOptions}
         EndSection
       '';
 
