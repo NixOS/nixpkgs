@@ -6028,6 +6028,8 @@ let
 
   rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
 
+  rtl8168e2fw = callPackage ../os-specific/linux/firmware/rtl8168e-2 { };
+
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
