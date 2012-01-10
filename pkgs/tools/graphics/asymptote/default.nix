@@ -28,7 +28,6 @@ rec {
     "fixInfoDir"];
 
   setVars = a.noDepEntry ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.boehmgc}/include/gc"
     export HOME="$PWD"
   '';
 
