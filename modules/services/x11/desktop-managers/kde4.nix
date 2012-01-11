@@ -8,8 +8,6 @@ let
   cfg = xcfg.desktopManager.kde4;
   xorg = pkgs.xorg;
 
-  isKDE47 = pkgs.kde4 ? kde_wallpapers;
-
   # Disable Nepomuk and Strigi by default.  As of KDE 4.7, they don't
   # really work very well (e.g. searching files often fails to find
   # files), segfault sometimes and consume significant resources.
@@ -83,10 +81,6 @@ in
                 sed -e '/nix\\store\|nix\/store/ d' -i $HOME/.config/Trolltech.conf
             fi
 
-            ${optionalString (!isKDE47) ''
-              export DBUS_FATAL_WARNINGS=0
-            ''}
-
             # Start KDE.
             exec ${pkgs.kde4.kdebase_workspace}/bin/startkde
           '';
@@ -101,28 +95,6 @@ in
       };
 
     environment.systemPackages =
-      (if !isKDE47 then
-        # KDE <= 4.6
-        [ # temporary workarounds
-          pkgs.shared_desktop_ontologies
-          pkgs.strigi
-
-          pkgs.kde4.kdelibs
-          pkgs.kde4.kdebase
-          pkgs.kde4.kdebase_runtime
-          pkgs.kde4.kdebase_workspace
-          pkgs.kde4.oxygen_icons
-          pkgs.kde4.qt4 # needed for qdbus
-          pkgs.shared_mime_info
-          pkgs.gst_all.gstreamer
-          pkgs.gst_all.gstPluginsBase
-          pkgs.gst_all.gstPluginsGood
-          pkgs.gst_all.gstFfmpeg # for mp3 playback
-          xorg.xmessage # so that startkde can show error messages
-          xorg.xset # used by startkde, non-essential
-        ] ++ optional (pkgs ? phonon_backend_gstreamer) pkgs.phonon_backend_gstreamer
-      else
-        # KDE >= 4.7
         [ pkgs.kde4.kdelibs
 
           pkgs.kde4.kde_baseapps # Splitted kdebase
@@ -156,7 +128,6 @@ in
           pkgs.shared_desktop_ontologies # used by nepomuk
           pkgs.strigi # used by nepomuk
         ]
-      )
       ++ [ nepomukConfig ]
       ++ config.environment.kdePackages;
 
@@ -168,9 +139,8 @@ in
       };
 
     # Enable helpful DBus services.
-    services.hal = mkIf (!isKDE47) { enable = true; };
-    services.udisks = mkIf isKDE47 { enable = true; };
-    services.upower = mkIf (isKDE47 && config.powerManagement.enable) { enable = true; };
+    services.udisks.enable = true;
+    services.upower = mkIf config.powerManagement.enable { enable = true; };
 
     security.pam.services = [ { name = "kde"; allowNullPassword = true; } ];
 
