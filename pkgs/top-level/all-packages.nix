@@ -8562,11 +8562,12 @@ let
 
   texLive = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed
-      gd t1lib freetype icu perl ruby expat curl
+      gd t1lib freetype icu perl expat curl
       libjpeg bison python fontconfig flex;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
+    ruby = ruby18;
   };
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
