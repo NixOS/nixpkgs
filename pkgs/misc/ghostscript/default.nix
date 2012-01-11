@@ -91,11 +91,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preBuild = "make so";
+  installTargets="install soinstall";
 
   postInstall = ''
-    make soinstall
-
     for i in $fonts; do
       (cd $out/share/ghostscript && tar xvfz $i)
     done
