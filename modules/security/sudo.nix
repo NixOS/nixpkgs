@@ -32,6 +32,10 @@ in
         ''
           # Don't edit this file. Set nixos option security.sudo.configFile instead
 
+          # env vars to keep for root and %wheel also if not explicitly set
+          Defaults:root,%wheel env_keep+=LOCALE_ARCHIVE
+          Defaults:root,%wheel env_keep+=TERMINFO_DIRS
+
           # "root" is allowed to do anything.
           root        ALL=(ALL) SETENV: ALL
 
