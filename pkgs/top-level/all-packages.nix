@@ -6448,6 +6448,8 @@ let
 
   cdrtools = callPackage ../applications/misc/cdrtools { };
 
+  centerim = callPackage ../applications/networking/instant-messengers/centerim { };
+
   chatzilla = callPackage ../applications/networking/irc/chatzilla {
     xulrunner = firefox36Pkgs.xulrunner;
   };
