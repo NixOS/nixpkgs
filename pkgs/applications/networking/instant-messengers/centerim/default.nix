@@ -1,4 +1,5 @@
-{stdenv, fetchurl, openssl, curl, ncurses, gpgme, libjpeg }:
+{stdenv, fetchurl, openssl, curl, ncurses, libjpeg
+, withGpg ? true, gpgme ? null}:
 
 stdenv.mkDerivation rec {
   name = "centerim-4.22.10";
@@ -8,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0viz86jflp684vfginhl6aaw4gh2qvalc25anlwljjl3kkmibklk";
   };
 
-  buildInputs = [ openssl curl ncurses gpgme libjpeg ];
+  buildInputs = [ openssl curl ncurses libjpeg ]
+    ++ stdenv.lib.optional withGpg gpgme;
 
   configureFlags = [ "--with-openssl=${openssl}" ];
 
