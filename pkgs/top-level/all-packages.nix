@@ -6006,6 +6006,9 @@ let
 
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
 
+  firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
+  firmwareLinuxFree = callPackage ../os-specific/linux/firmware/firmware-linux-free { };
+
   radeontools = callPackage ../os-specific/linux/radeontools { };
 
   radeonR700 = callPackage ../os-specific/linux/firmware/radeon-r700 { };
@@ -6025,8 +6028,6 @@ let
   rt73fw = callPackage ../os-specific/linux/firmware/rt73 { };
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
-
-  linuxFirmware = callPackage ../os-specific/linux/firmware/dwmw2 { };
 
   rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
 
