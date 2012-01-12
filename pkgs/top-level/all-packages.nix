@@ -177,7 +177,7 @@ let
 
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
-  recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
+  recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
   builderDefs = lib.composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
     inherit stringsWithDeps lib stdenv writeScript
