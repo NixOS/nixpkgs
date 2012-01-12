@@ -92,7 +92,7 @@ in
       ];
 
     powerManagement.cpuFreqGovernor = "ondemand";
-
+    powerManagement.scsiLinkPolicy = "min_power";
   };
 
 }

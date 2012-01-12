@@ -195,6 +195,7 @@
   ./tasks/kbd.nix
   ./tasks/lvm.nix
   ./tasks/network-interfaces.nix
+  ./tasks/scsi-link-power-management.nix
   ./tasks/swraid.nix
   ./tasks/tty-backgrounds.nix
   ./virtualisation/libvirtd.nix
