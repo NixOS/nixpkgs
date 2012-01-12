@@ -8209,6 +8209,8 @@ let
     stdenv = overrideGCC stdenv gcc42;
   };
 
+  archimedes = callPackage ../applications/science/electronics/archimedes { };
+
   biolib = callPackage ../development/libraries/science/biology/biolib { };
 
   emboss = callPackage ../applications/science/biology/emboss { };
