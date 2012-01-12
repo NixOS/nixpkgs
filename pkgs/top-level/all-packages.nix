@@ -6026,6 +6026,8 @@ let
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
+  linuxFirmware = callPackage ../os-specific/linux/firmware/dwmw2 { };
+
   rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
 
   rtl8168e2fw = callPackage ../os-specific/linux/firmware/rtl8168e-2 { };
