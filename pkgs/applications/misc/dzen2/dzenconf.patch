@@ -1,0 +1,49 @@
+--- a/config.mk	2012-01-12 23:04:41.000000000 +0400
++++ b/config.mk	2012-01-12 23:07:58.000000000 +0400
+@@ -1,15 +1,20 @@
++X11INC = SETME
++X11LIB = SETME
++XINERAMAINC = SETME
++XINERAMALIB = SETME
++XPMINC = SETME
++XPMLIB = SETME
++PREFIX = SETME
++
+ # dzen version
+ VERSION = 0.8.5
+ 
+ # Customize below to fit your system
+ 
+ # paths
+-PREFIX = /usr/local
+ MANPREFIX = ${PREFIX}/share/man
+ 
+-X11INC = /usr/X11R6/include
+-X11LIB = /usr/X11R6/lib
+-INCS = -I. -I/usr/include -I${X11INC}
++INCS = -I. -I${X11INC} -I${XINERAMAINC} -I${XPMINC}
+ 
+ # Configure the features you want to be supported
+ # Only one of the following options has to be uncommented, 
+@@ -19,8 +24,8 @@
+ # Comment  : Add # to the beginning of the respective lines
+ 
+ # Option 1: No Xinerama no XPM
+-LIBS = -L/usr/lib -lc -L${X11LIB} -lX11
+-CFLAGS = -Os ${INCS} -DVERSION=\"${VERSION}\"
++#LIBS = -L/usr/lib -lc -L${X11LIB} -lX11
++#CFLAGS = -Os ${INCS} -DVERSION=\"${VERSION}\"
+ 
+ # Option 2: No Xinerama with XPM
+ #LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lXpm
+@@ -31,8 +36,8 @@
+ #CFLAGS = -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XINERAMA
+ 
+ # Option 4: With Xinerama and XPM
+-#LIBS = -L/usr/lib -lc -L${X11LIB} -lX11 -lXinerama -lXpm
+-#CFLAGS = -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XINERAMA -DDZEN_XPM
++LIBS = -lc -L${X11LIB} -L${XINERAMALIB} -L${XPMLIB} -lX11 -lXinerama -lXpm
++CFLAGS = -Os ${INCS} -DVERSION=\"${VERSION}\" -DDZEN_XINERAMA -DDZEN_XPM
+ 
+ # END of feature configuration
+ 

@@ -7553,6 +7553,8 @@ let
   dmenu = callPackage ../applications/misc/dmenu {
     enableXft = config.dmenu.enableXft or false;
   };
+ 
+  dzen2 =  callPackage ../applications/misc/dzen2 { };
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
     inherit libpng libtiff libjpeg imagemagick librsvg
