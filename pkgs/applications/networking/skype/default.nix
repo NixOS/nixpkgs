@@ -61,8 +61,6 @@ stdenv.mkDerivation rec {
     ---
     > Icon=$out/opt/skype/icons/SkypeBlue_48x48.png
     EOF
-    echo hi
-    cat skype.desktop
     ensureDir $out/share/applications
     mv skype.desktop $out/share/applications
   '';
