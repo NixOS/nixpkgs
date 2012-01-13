@@ -53,6 +53,18 @@ stdenv.mkDerivation rec {
     EOF
 
     chmod +x $out/bin/skype
+
+    # Desktop icon for Skype
+    patch skype.desktop << EOF
+    5c5
+    < Icon=skype.png
+    ---
+    > Icon=$out/opt/skype/icons/SkypeBlue_48x48.png
+    EOF
+    echo hi
+    cat skype.desktop
+    ensureDir $out/share/applications
+    mv skype.desktop $out/share/applications
   '';
 
   meta = {
