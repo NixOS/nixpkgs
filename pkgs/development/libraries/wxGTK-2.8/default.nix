@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   ";
 
   postBuild = "(cd contrib/src && make)";
-  
+
   postInstall = "
     (cd contrib/src && make install)
     (cd $out/include && ln -s wx-*/* .)
