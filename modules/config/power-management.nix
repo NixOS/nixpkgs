@@ -91,8 +91,9 @@ in
         "p4_clockmod"
       ];
 
-    powerManagement.cpuFreqGovernor = "ondemand";
-    powerManagement.scsiLinkPolicy = "min_power";
+    powerManagement.cpuFreqGovernor = mkDefault "ondemand";
+    powerManagement.scsiLinkPolicy = mkDefault "min_power";
+    
   };
 
 }
