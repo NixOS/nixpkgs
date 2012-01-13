@@ -4684,14 +4684,20 @@ let
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
     inherit (gtkLibs) gtk;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gnome) GConf;
   };
 
   wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
     inherit (gtkLibs) gtk;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gnome) GConf;
   };
 
   wxGTK291 = callPackage ../development/libraries/wxGTK-2.9/2.9.1.nix {
     inherit (gtkLibs) gtk;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gnome) GConf;
   };
 
   wtk = callPackage ../development/libraries/wtk { };

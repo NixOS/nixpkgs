@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
+, gstreamer, gstPluginsBase, GConf
 , mesa, compat24 ? false, compat26 ? true, unicode ? true,
 }:
 
@@ -10,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "1gjs9vfga60mk4j4ngiwsk9h6c7j22pw26m3asxr1jwvqbr8kkqk";
   };
 
-  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto mesa ];
+  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto mesa gstreamer gstPluginsBase GConf ];
 
   buildNativeInputs = [ pkgconfig ];
 
@@ -21,6 +22,7 @@ stdenv.mkDerivation {
     "--disable-precomp-headers"
     (if unicode then "--enable-unicode" else "")
     "--with-opengl"
+    "--enable-mediactrl"
   ];
 
   # This variable is used by configure to find some dependencies.
