@@ -6460,10 +6460,10 @@ let
     xulrunner = firefox36Pkgs.xulrunner;
   };
 
-  chrome = callPackage ../applications/networking/browsers/chromium {
+  chrome = lowPrio (callPackage ../applications/networking/browsers/chromium {
     inherit (gnome) GConf;
     patchelf = patchelf06;
-  };
+  });
 
   chromeWrapper = wrapFirefox
     { browser = chrome; browserName = "chrome"; desktopName = "Chrome";
