@@ -4686,11 +4686,11 @@ let
     inherit (gtkLibs) gtk;
   };
 
-  wxGTK29 = callPackage ../development/libraries/wxGTK-2.9 {
+  wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
     inherit (gtkLibs) gtk;
   };
 
-  wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
+  wxGTK291 = callPackage ../development/libraries/wxGTK-2.9/2.9.1.nix {
     inherit (gtkLibs) gtk;
   };
 
