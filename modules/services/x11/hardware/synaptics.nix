@@ -46,6 +46,18 @@ let cfg = config.services.xserver.synaptics; in
         description = "Whether to enable vertical edge drag-scrolling.";
       };
 
+      tapButtons = mkOption {
+        default = true;
+        example = "false";
+        description = "Whether to enable tap buttons.";
+      };
+
+      palmDetect = mkOption {
+        default = "";
+        example = "true";
+        description = "Whether to enable palm detection (hardware support required)";
+      };
+
       additionalOptions = mkOption {
         default = "";
         example = ''
@@ -79,12 +91,13 @@ let cfg = config.services.xserver.synaptics; in
           Option "MinSpeed" "${cfg.minSpeed}"
           Option "MaxSpeed" "${cfg.maxSpeed}"
           Option "AccelFactor" "0.0010"
-          Option "TapButton1" "1"
-          Option "TapButton2" "2"
-          Option "TapButton3" "3"
+          Option "TapButton1" "${if cfg.tapButtons then "1" else "0"}"
+          Option "TapButton2" "${if cfg.tapButtons then "2" else "0"}"
+          Option "TapButton3" "${if cfg.tapButtons then "3" else "0"}"
           Option "VertTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "HorizTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
+          ${if cfg.palmDetect then ''Option "PalmDetect" "1"'' else ""}
           ${cfg.additionalOptions}
         EndSection
       '';
