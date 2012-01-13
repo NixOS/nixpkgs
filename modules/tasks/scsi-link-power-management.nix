@@ -23,9 +23,7 @@ with pkgs.lib;
 
   config = mkIf (config.powerManagement.scsiLinkPolicy != "") {
 
-    environment.systemPackages = [ pkgs.cpufrequtils ];
-
-    jobs.cpufreq =
+    jobs.scsilinkpmpolicy =
       { description = "Set SCSI link power management policy";
 
         startOn = "started udev";
