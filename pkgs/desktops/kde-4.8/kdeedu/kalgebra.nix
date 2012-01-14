@@ -1,6 +1,6 @@
-{ kde, kdelibs, libkdeedu, readline }:
+{ kde, kdelibs, libkdeedu, analitza }:
 kde {
-  buildInputs = [ kdelibs libkdeedu readline ];
+  buildInputs = [ kdelibs libkdeedu analitza ];
 
   meta = {
     description = "2D and 3D Graph Calculator";
