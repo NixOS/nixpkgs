@@ -1,10 +1,10 @@
 {stdenv, fetchurl, perl}:
 
 stdenv.mkDerivation rec {
-  name = "libical-0.47";
+  name = "libical-0.48";
   src = fetchurl {
     url = "mirror://sourceforge/freeassociation/${name}.tar.gz";
-    sha256 = "1218vaaks9lvx31mrc8212kyngw2k68xm0914vrd77ixn55vnk5g";
+    sha256 = "1w6znkh0xxhbcm717mbzfva9ycrqs2lajhng391i7pghaw3qprra";
   };
   buildNativeInputs = [ perl ];
 }
