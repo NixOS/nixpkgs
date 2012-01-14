@@ -48,13 +48,13 @@ let cfg = config.services.xserver.synaptics; in
 
       tapButtons = mkOption {
         default = true;
-        example = "false";
+        example = false;
         description = "Whether to enable tap buttons.";
       };
 
       palmDetect = mkOption {
         default = false;
-        example = "true";
+        example = true;
         description = "Whether to enable palm detection (hardware support required)";
       };
 
