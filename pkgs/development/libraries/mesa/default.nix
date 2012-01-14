@@ -1,37 +1,37 @@
-{ stdenv, fetchurl, flex, bison, pkgconfig, x11, xlibs, libdrm, file, expat
+{ stdenv, fetchurl, flex, bison, pkgconfig, libdrm, file, expat, makedepend
+, libXxf86vm, libXfixes, libXdamage, glproto, dri2proto, libX11, libxcb, libXext
+, libXt, udev
 , python, libxml2Python, lipo ? null }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "7.10.3"; in
+let version = "7.11.2"; in
 
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "1h451vgsfsp0h0wig66spqgxmjalsy28gvd9viynfwmq7741yw0y";
+    sha256 = "0msk1fh4yw4yi7z37v75vhpa23z49lkwgin6drczbihbqsl6lx2p";
   };
 
   patches = [ ./swrast-settexbuffer.patch ];
 
-  postPatch = ''
-    find . -name "*.py" -exec sed -i -e "s|#! */usr/bin/env python|#! ${python}/bin/python|" {} +
-  '';
+  prePatch = "patchShebangs .";
 
+# r300
   configureFlags =
       " --with-driver=dri --enable-gl-osmesa --enable-gles1"
-    + " --enable-gallium --enable-gallium-r600 --enable-gles2"
-    + " --enable-gallium-swrast --enable-gallium-egl --disable-glx-tls"
+    + " --with-gallium-drivers=i915,i965,nouveau,r600,svga,swrast"
+    + " --enable-gles2 --enable-gallium-egl --disable-glx-tls"
     + " --enable-xcb --enable-egl --disable-glut";
 
-  buildInputs =
-    [ pkgconfig expat x11 libdrm xlibs.makedepend xlibs.glproto
-      xlibs.libXxf86vm xlibs.libXfixes xlibs.libXdamage xlibs.dri2proto
-      lipo file python libxml2Python flex bison
-    ];
+  buildInputs = [ expat libdrm libXxf86vm libXfixes libXdamage glproto dri2proto
+    libxml2Python libX11 libXext libxcb lipo libXt udev ];
+
+  buildNativeInputs = [ pkgconfig python makedepend file flex bison ];
 
   enableParallelBuilding = true;
 
