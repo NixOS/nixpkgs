@@ -13,14 +13,14 @@ assert monotoneSupport -> (monotone != null);
 
 let
   name = "ikiwiki";
-  version = "3.20111229";
+  version = "3.20120109";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
-    sha256 = "6470d40c77ae055cfe8c5bbe2f64c765fc84f1ed2dcdd7dcc7577ae190414b89";
+    sha256 = "0a47135c039f3dfd62162dd3b250397fcdab2dbb4bf4cf0433099f6e48d6f3e8";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate

@@ -177,7 +177,7 @@ let
 
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
-  recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
+  recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
   builderDefs = lib.composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
     inherit stringsWithDeps lib stdenv writeScript
@@ -4686,14 +4686,20 @@ let
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
     inherit (gtkLibs) gtk;
-  };
-
-  wxGTK29 = callPackage ../development/libraries/wxGTK-2.9 {
-    inherit (gtkLibs) gtk;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gnome) GConf;
   };
 
   wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
     inherit (gtkLibs) gtk;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gnome) GConf;
+  };
+
+  wxGTK291 = callPackage ../development/libraries/wxGTK-2.9/2.9.1.nix {
+    inherit (gtkLibs) gtk;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gnome) GConf;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
@@ -6008,6 +6014,8 @@ let
 
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
 
+  firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
+
   radeontools = callPackage ../os-specific/linux/radeontools { };
 
   radeonR700 = callPackage ../os-specific/linux/firmware/radeon-r700 { };
@@ -6029,6 +6037,8 @@ let
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
+
+  rtl8168e2fw = callPackage ../os-specific/linux/firmware/rtl8168e-2 { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
@@ -6445,14 +6455,16 @@ let
 
   cdrtools = callPackage ../applications/misc/cdrtools { };
 
+  centerim = callPackage ../applications/networking/instant-messengers/centerim { };
+
   chatzilla = callPackage ../applications/networking/irc/chatzilla {
     xulrunner = firefox36Pkgs.xulrunner;
   };
 
-  chrome = callPackage ../applications/networking/browsers/chromium {
+  chrome = lowPrio (callPackage ../applications/networking/browsers/chromium {
     inherit (gnome) GConf;
     patchelf = patchelf06;
-  };
+  });
 
   chromeWrapper = wrapFirefox
     { browser = chrome; browserName = "chrome"; desktopName = "Chrome";
@@ -7408,8 +7420,10 @@ let
     pythonBindings = false;
     perlBindings = false;
     javahlBindings = false;
+    saslSupport = false;
     compressionSupport = true;
     httpd = apacheHttpd;
+    sasl = cyrus_sasl;
   };
 
   subversionClient = lowPrio (appendToName "client" (subversion.override {
@@ -8204,6 +8218,8 @@ let
     stdenv = overrideGCC stdenv gcc42;
   };
 
+  archimedes = callPackage ../applications/science/electronics/archimedes { };
+
   biolib = callPackage ../development/libraries/science/biology/biolib { };
 
   emboss = callPackage ../applications/science/biology/emboss { };
@@ -8562,11 +8578,12 @@ let
 
   texLive = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed
-      gd t1lib freetype icu perl ruby expat curl
+      gd t1lib freetype icu perl expat curl
       libjpeg bison python fontconfig flex;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
+    ruby = ruby18;
   };
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions

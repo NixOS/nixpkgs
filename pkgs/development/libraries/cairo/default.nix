@@ -21,15 +21,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig x11 fontconfig pixman xlibs.libXrender ]
+    [ pkgconfig x11 fontconfig xlibs.libXrender ]
     ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
-    ++ stdenv.lib.optional gobjectSupport glib
 
     # On non-GNU systems we need GNU Gettext for libintl.
     ++ stdenv.lib.optional (!stdenv.isLinux) gettext;
 
   propagatedBuildInputs =
-    [ freetype ] ++
+    [ freetype pixman ] ++
+    stdenv.lib.optional gobjectSupport glib ++
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
     

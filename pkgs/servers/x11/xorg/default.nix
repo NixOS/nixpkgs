@@ -1468,11 +1468,11 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videoati = (stdenv.mkDerivation ((if overrides ? xf86videoati then overrides.xf86videoati else x: x) {
-    name = "xf86-video-ati-6.14.2";
+    name = "xf86-video-ati-6.14.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-ati-6.14.2.tar.bz2;
-      sha256 = "1p18lfw7ii8k1vam75wv9a2piwf6n2988dh56i4b98zf4av78y81";
+      url = mirror://xorg/individual/driver/xf86-video-ati-6.14.3.tar.bz2;
+      sha256 = "1d1ph7xvgcr7rdf5sgibhas625aghvm3f61yzwmfk8znxx4jcjl4";
     };
     buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
   })) // {inherit fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ;};

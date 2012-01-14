@@ -1,19 +1,22 @@
 { kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, shared_desktop_ontologies,
   lm_sensors, pciutils, libraw1394, libusb, libxklavier, python, libqalculate,
   consolekit, xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison, akonadi,
-  pykde4
+  pykde4, libjpeg, pkgconfig, libXft, libXxf86misc, kactivities
 }:
 
 kde {
 
   buildInputs =
-    [ kdelibs qimageblitz libdbusmenu_qt pykde4
+    [ kdelibs qimageblitz libdbusmenu_qt pykde4 libjpeg libXft libXxf86misc
       xorg.libxkbfile xorg.libXcomposite xorg.libXScrnSaver xorg.libXtst
       xorg.libXcomposite xorg.libXdamage xorg.libXau xorg.libXdmcp
       xorg.libpthreadstubs
       boost gpsd shared_desktop_ontologies lm_sensors pciutils libraw1394
       libusb python libqalculate consolekit kdepimlibs pam prison akonadi
+      kactivities
     ];
+
+  buildNativeInputs = [ pkgconfig ];
 
   preConfigure =
    ''

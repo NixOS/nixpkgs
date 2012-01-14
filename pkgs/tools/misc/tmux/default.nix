@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "1.3";
+  version = "1.5";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "72c2d6f1c30fb4ccbd29b530a7d8a08e67c9c2d87ac8d67e3806561670fc0362";
+    sha256 = "eb8215b57c05b765d2446d9acb2bc5edcdb3eb4ea31af89ee127a27e90056306";
   };
 
   makeFlags = "PREFIX=\${out}";

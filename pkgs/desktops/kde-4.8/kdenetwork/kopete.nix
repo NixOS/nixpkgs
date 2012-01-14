@@ -1,17 +1,21 @@
 { kde, kdelibs, speex, libmsn, libotr, kdepimlibs, qimageblitz, libktorrent,
   jasper, libidn, mediastreamer, msilbc, pkgconfig, libxml2, libxslt, giflib,
-  libgadu, boost, qca2, gpgme }:
+  libgadu, boost, qca2, gpgme, sqlite }:
 
 kde {
   buildInputs = [ kdelibs speex libmsn libotr kdepimlibs qimageblitz libktorrent
     jasper libidn mediastreamer msilbc libxml2 libxslt giflib libgadu boost qca2
-    gpgme ];
+    gpgme sqlite ];
 
   buildNativeInputs = [ pkgconfig ];
 
   KDEDIRS = libktorrent;
 
-  patchPhase = "cp -v ${./FindmsiLBC.cmake} kopete/cmake/modules/FindmsiLBC.cmake";
+  patchPhase =
+    ''
+      cp -v ${./FindmsiLBC.cmake} kopete/cmake/modules/FindmsiLBC.cmake
+      cp -v ${./FindJasper.cmake} kopete/cmake/modules/FindJasper.cmake
+    '';
 
   cmakeFlags = [ "-DBUILD_skypebuttons=TRUE" ];
 

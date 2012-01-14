@@ -1,15 +1,19 @@
 {stdenv, fetchurl, pkgconfig, libxml2, curl, wirelesstools, glib, openssl}:
 
-stdenv.mkDerivation {
-  name = "conky-1.7.2";
+stdenv.mkDerivation rec {
+  name = "conky-1.8.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/conky/conky-1.7.2.tar.bz2";
-    sha256 = "0p375id2saxm2bp6c33ddn9d6rxymmq60ajlvx49smwhzyqa3h5k";
+    url = "mirror://sourceforge/conky/${name}.tar.bz2";
+    sha256 = "0hsybra4qzaqzny6n66m7768vbwkikajcvcbsqgnnnb9527jfnpq";
   };
 
   buildInputs = [ pkgconfig libxml2 curl wirelesstools glib openssl ];
-  configureFlags = "--disable-x11 --disable-xdamage --disable-own-window --disable-xft --disable-lua --enable-mpd --enable-double-buffer --enable-proc-uptime --enable-seti --enable-wlan --enable-rss";
+  configureFlags =
+    (map (x: "--disable-${x}") [ "x11" "xdamage" "own-window" "xft" "lua" "ncurses" ])
+    ++ (map (x: "--enable-${x}") [ "mpd" "double-buffer" "wlan" "rss" ]);
+
+  patches = [ ./curl-types-h.patch ];
 
   meta = {
     homepage = http://conky.sourceforge.net/;

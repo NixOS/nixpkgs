@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake ];
   
   meta = with stdenv.lib; {
+    homepage = http://oscaf.sourceforge.net/;
     description = "Ontologies necessary for the Nepomuk semantic desktop";
     longDescription = ''
       The shared-desktop-ontologies package brings the semantic web to the

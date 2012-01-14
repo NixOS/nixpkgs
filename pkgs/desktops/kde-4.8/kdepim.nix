@@ -1,11 +1,11 @@
 { kde, boost, gpgme, libassuan, libxml2, libxslt, kdepimlibs, kdepim_runtime
-, akonadi, shared_desktop_ontologies, cyrus_sasl, grantlee }:
+, akonadi, shared_desktop_ontologies, cyrus_sasl, grantlee, prison }:
 
 kde {
 
   buildInputs =
     [ kdepimlibs boost akonadi shared_desktop_ontologies libxml2
-      libxslt cyrus_sasl gpgme libassuan grantlee
+      libxslt cyrus_sasl gpgme libassuan grantlee prison
     ];
 
   passthru.propagatedUserEnvPackages = [ akonadi kdepimlibs kdepim_runtime ];

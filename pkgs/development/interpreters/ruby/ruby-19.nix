@@ -4,7 +4,7 @@
 , gdbm, gdbmSupport ? true
 , ncurses, readline, cursesSupport ? false
 , groff, docSupport ? false
-, libyaml, yamlSupport ? false
+, libyaml, yamlSupport ? true
 }:
 
 let

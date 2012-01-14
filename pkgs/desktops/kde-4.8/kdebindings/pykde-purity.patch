@@ -2,15 +2,6 @@ diff --git a/CMakeLists.txt b/CMakeLists.txt
 index c853e38..5df3253 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -73,7 +73,7 @@ INCLUDE_DIRECTORIES(
-     ${QT_QTWEBKIT_INCLUDE_DIR}
-     ${KDE4_INCLUDE_DIR}
-     ${KDE4_INCLUDE_DIR}/solid
--    ${KDE4_INCLUDE_DIR}/phonon
-+	${PHONON_INCLUDE_DIR}/phonon
-     ${KDE4_INCLUDE_DIR}/kio
-     ${KDE4_INCLUDE_DIR}/kdeprint
-     ${KDE4_INCLUDE_DIR}/kdeprint/lpr
 @@ -232,7 +232,7 @@ _pkg_config = {
      'pykde_kde_sip_flags':  '${_SIP_TAGS} ${_SIP_X} ${SIP_EXTRA_OPTIONS}',
      'pykde_mod_dir':        '${PYTHON_SITE_PACKAGES_INSTALL_DIR}/PyKDE4',

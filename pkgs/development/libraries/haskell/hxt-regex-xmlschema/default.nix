@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hxt-regex-xmlschema";
-  version = "9.0.1";
-  sha256 = "1mg22fa0f0cbj9gkl5zaq0xh94ljkmzrc019h3cxv728chpgby0c";
+  version = "9.0.4";
+  sha256 = "0jl89p9sb76zb6j2b9ssxaai6jq3jbnnpv4v05wfvlmk8apckwgf";
   buildDepends = [ hxtCharproperties parsec ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Regular_expressions_for_XML_Schema";

@@ -14,4 +14,5 @@ stdenv.mkDerivation {
   outputHash = if (md5 != null) then md5 else sha256;
   
   inherit url tag;
+  preferLocalBuild = true;
 }

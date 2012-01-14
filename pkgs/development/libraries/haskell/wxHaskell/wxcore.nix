@@ -2,14 +2,14 @@
 
 cabal.mkDerivation (self: {
   pname = "wxcore";
-  version = "0.12.1.7";
-  sha256 = "12vs449xg2xjp503ywjwxadan3v7dq38ph66292szwj1vmhl07v4";
+  version = "0.13.2";
+  sha256 = "1kzgqmh0vjm1qcskkfdyjbbq276nhd76w7bgxgdq67zl48bfc09g";
   buildDepends = [ parsec stm time wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell core";
-    license = "LGPL";
+    license = "unknown";
     platforms = self.ghc.meta.platforms;
     maintainers = [
       self.stdenv.lib.maintainers.andres
