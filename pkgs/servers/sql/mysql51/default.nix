@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "07xbnwk7h1xya8s6dw34nrv7ampzag8l0l1szd2pc9zyqkzhydw4";
   };
 
-  buildInputs = [ps ncurses zlib perl openssl];
+  buildInputs = [ncurses zlib perl openssl] ++ stdenv.lib.optional stdenv.isLinux ps;
 
   configureFlags = "--enable-thread-safe-client --with-ssl=${openssl} --with-embedded-server --with-plugins=max-no-ndb" +
     (if stdenv.system == "x86_64-linux" then " --with-lib-ccflags=-fPIC" else "");
@@ -30,5 +30,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.mysql.com/;
     description = "The world's most popular open source database";
+    platforms = stdenv.lib.platforms.all;
   };
 }
