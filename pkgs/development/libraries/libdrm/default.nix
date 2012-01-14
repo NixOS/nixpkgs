@@ -1,31 +1,28 @@
-{stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, cairo, udev}:
+{stdenv, fetchurl, pkgconfig, libpthreadstubs}:
 
-stdenv.mkDerivation rec {
-  name = "libdrm-2.4.29";
+stdenv.mkDerivation (rec {
+  name = "libdrm-2.4.24";
   
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "0bj5ihmnzpbbgdrvp5f8bgsk0k19haixr893449pjd4k7v4jshz2";
+    sha256 = "19dnzy7g6jqfjz38dp187b97vb4a8h4k748x56gsyn24ys0j60f7";
   };
 
-  buildNativeInputs = [ pkgconfig ];
-  buildInputs = [ libpthreadstubs libpciaccess cairo udev ];
+  buildInputs = [ pkgconfig libpthreadstubs ];
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
+  patches = [ ./libdrm-apple.patch ];
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin
+  preConfigure = ''
+    # General case: non intel.
+    if test -n "$crossConfig"; then
+      configureFlags="$configureFlags --disable-intel";
+    fi
+  '' + stdenv.lib.optionalString stdenv.isDarwin
   "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
-
-  configureFlags = [ "--enable-nouveau-experimental-api" "--enable-udev" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-C";
-
-  crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
 
   meta = {
     homepage = http://dri.freedesktop.org/libdrm/;
     description = "Library for accessing the kernel's Direct Rendering Manager";
     license = "bsd";
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.linux;
   };
-}
+} // (stdenv.lib.optionalAttrs stdenv.isDarwin { configureFlags = [ "-C" ]; }))

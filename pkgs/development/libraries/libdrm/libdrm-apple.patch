@@ -2,9 +2,9 @@ diff -Naur libdrm-2.4.26-orig/intel/intel_bufmgr_gem.c libdrm-2.4.26/intel/intel
 --- libdrm-2.4.26-orig/intel/intel_bufmgr_gem.c	2011-04-01 10:30:51.000000000 -0400
 +++ libdrm-2.4.26/intel/intel_bufmgr_gem.c	2011-08-29 02:17:20.000000000 -0400
 @@ -51,6 +51,7 @@
+ #include <sys/mman.h>
  #include <sys/stat.h>
  #include <sys/types.h>
- #include <stdbool.h>
 +#include <sys/time.h>
  
  #include "errno.h"
