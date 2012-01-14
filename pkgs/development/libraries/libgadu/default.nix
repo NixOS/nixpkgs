@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "045a0bd395k3ramdvlzyfx3878p42fv4r04rgasmdsm2n33wgm38";
   };
 
-  buildInputs = [ zlib ];
+  propagatedBuildInputs = [ zlib ];
 
   meta = {
     description = "A library to deal with gadu-gadu protocol (most popular polish IM protocol)";
