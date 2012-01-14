@@ -53,7 +53,7 @@ let cfg = config.services.xserver.synaptics; in
       };
 
       palmDetect = mkOption {
-        default = "";
+        default = false;
         example = "true";
         description = "Whether to enable palm detection (hardware support required)";
       };
