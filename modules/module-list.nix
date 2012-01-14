@@ -20,8 +20,7 @@
   ./hardware/network/rt73.nix
   ./hardware/network/rtl8192c.nix
   ./hardware/pcmcia.nix
-  ./hardware/firmware-nonfree.nix
-  ./hardware/firmware-free.nix
+  ./hardware/all-firmware.nix
   ./installer/generations-dir/generations-dir.nix
   ./installer/grub/grub.nix
   ./installer/init-script/init-script.nix

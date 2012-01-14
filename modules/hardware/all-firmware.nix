@@ -6,11 +6,11 @@
 
   options = {
 
-    hardware.enableFirmwareLinuxNonfree = pkgs.lib.mkOption {
+    hardware.enableAllFirmware = pkgs.lib.mkOption {
       default = false;
       type = pkgs.lib.types.bool;
       description = ''
-        Turn on this option if you want the set of firmware of the non-free package.
+        Turn on this option if you want to enable all the firmware shipped with Debian/Ubuntu.
       '';
     };
 
@@ -19,7 +19,7 @@
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.hardware.enableFirmwareLinuxNonfree {
+  config = pkgs.lib.mkIf config.hardware.enableAllFirmware {
     hardware.firmware = [ pkgs.firmwareLinuxNonfree ];
   };
 
