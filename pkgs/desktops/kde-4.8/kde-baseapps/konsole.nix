@@ -1,8 +1,8 @@
-{ kde, kdelibs }:
+{ kde, kdelibs, kde_baseapps }:
 
 kde {
 
-  buildInputs = [ kdelibs ];
+  buildInputs = [ kdelibs kde_baseapps ];
 
   meta = {
     description = "Konsole, the KDE terminal emulator";

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "failure";
-  version = "0.1.0.1";
-  sha256 = "15zkhnxkfsd3qf4wmcp6kcfip9ahb4s3ywnh14whmhicp9mkm3q0";
+  version = "0.1.2";
+  sha256 = "14pwj0zb5kk2wadpddanxv3kr0hzklxhzbprmkh40yn1dbwgdas4";
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Failure";
     description = "A simple type class for success/failure computations";

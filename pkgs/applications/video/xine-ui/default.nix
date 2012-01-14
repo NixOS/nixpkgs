@@ -1,26 +1,29 @@
-{stdenv, fetchurl, pkgconfig, xlibs, xineLib, libpng, readline, ncurses, curl}:
+{stdenv, fetchurl, pkgconfig, xlibs, xineLib, libpng, readline, ncurses, curl
+, lirc, xz, shared_mime_info }:
 
-stdenv.mkDerivation {
-  name = "xine-ui-0.99.5";
+stdenv.mkDerivation rec {
+  name = "xine-ui-0.99.6";
   
   src = fetchurl {
-    url = mirror://sourceforge/xine/xine-ui-0.99.5.tar.gz;
-    sha256 = "07jywadk6fhk3wn1j9m0cfa0zy0i17kz0nyyxwa3shvhznfals0k";
+    url = "mirror://sourceforge/xine/${name}.tar.xz";
+    sha256 = "1wwylnckm5kfq5fi154w8jqf5cwvp7c1ani15q7sgfrfdkmy7caf";
   };
   
+  buildNativeInputs = [ xz pkgconfig shared_mime_info ];
+
   buildInputs =
-    [ pkgconfig xineLib libpng readline ncurses curl
+    [ xineLib libpng readline ncurses curl lirc
       xlibs.xlibs xlibs.libXext xlibs.libXv xlibs.libXxf86vm xlibs.libXtst xlibs.inputproto
-      xlibs.libXinerama xlibs.libXi
+      xlibs.libXinerama xlibs.libXi xlibs.libXft
     ];
 
-  preBuild = ''
-    sed -e '/curl.types.h/d' -i *.c *.h */*.c */*.h */*/*.c */*/*.h
-  '';
+  patchPhase = ''sed -e '/curl\/types\.h/d' -i src/xitk/download.c'';
 
   configureFlags = "--with-readline=${readline}";
   
-  NIX_LDFLAGS = "-lXext -lgcc_s";
+  LIRC_CFLAGS="-I${lirc}/include";
+  LIRC_LIBS="-L ${lirc}/lib -llirc_client";
+#NIX_LDFLAGS = "-lXext -lgcc_s";
 
   meta = { 
     homepage = http://www.xine-project.org/;

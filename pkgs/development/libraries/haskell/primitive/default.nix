@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "primitive";
-  version = "0.4.0.1";
-  sha256 = "08j7js5y2vk3ywfhs260fxngd725xkvhrp20dcwb67fk8qgxh4bz";
+  version = "0.4.1";
+  sha256 = "06999i59xhvjwfdbnr1n09zkvg7lnim64nqxqlvk0x6slkidb7f6";
   meta = {
     homepage = "http://code.haskell.org/primitive";
     description = "Wrappers for primitive operations";

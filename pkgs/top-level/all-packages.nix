@@ -177,7 +177,7 @@ let
 
   # Applying this to an attribute set will cause nix-env to look
   # inside the set for derivations.
-  recurseIntoAttrs = attrs: attrs // {recurseForDerivations = true;};
+  recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
   builderDefs = lib.composedArgsAndFun (import ../build-support/builder-defs/builder-defs.nix) {
     inherit stringsWithDeps lib stdenv writeScript
@@ -1504,6 +1504,8 @@ let
 
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
+  unclutter = callPackage ../tools/misc/unclutter { };
+
   unbound = callPackage ../tools/networking/unbound { };
 
   units = callPackage ../tools/misc/units { };
@@ -2662,12 +2664,13 @@ let
   pure = callPackage ../development/interpreters/pure {};
 
   python = python27;
+  python3 = python32;
 
   python26 = callPackage ../development/interpreters/python/2.6 { };
 
   python27 = callPackage ../development/interpreters/python/2.7 { };
 
-  python3 = callPackage ../development/interpreters/python/3.1 {
+  python31 = callPackage ../development/interpreters/python/3.1 {
     arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
     sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
   };
@@ -2824,7 +2827,10 @@ let
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
     doCheck = !stdenv.isArm && !stdenv.isCygwin
       # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
-      && stdenv.system != "i686-solaris";
+      && stdenv.system != "i686-solaris"
+
+      # One test fails to terminate on FreeBSD: <http://bugs.gnu.org/8788>.
+      && !stdenv.isFreeBSD;
   };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
@@ -3144,6 +3150,8 @@ let
   attica = callPackage ../development/libraries/attica { };
 
   attr = callPackage ../development/libraries/attr { };
+
+  aqbanking = callPackage ../development/libraries/aqbanking { };
 
   aubio = callPackage ../development/libraries/aubio { };
 
@@ -3699,6 +3707,8 @@ let
 
   gts = callPackage ../development/libraries/gts { };
 
+  gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
+
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
@@ -4206,6 +4216,8 @@ let
 
   lightning = callPackage ../development/libraries/lightning { };
 
+  lirc = callPackage ../development/libraries/lirc { };
+
   liquidwar = builderDefsPackage ../games/liquidwar {
     inherit (xlibs) xproto libX11 libXrender;
     inherit gmp mesa libjpeg libpng
@@ -4635,6 +4647,8 @@ let
 
   vamp = callPackage ../development/libraries/audio/vamp { };
 
+  vcdimager = callPackage ../development/libraries/vcdimager { };
+
   vigra = callPackage ../development/libraries/vigra { };
 
   vmime = callPackage ../development/libraries/vmime { };
@@ -4677,14 +4691,20 @@ let
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
     inherit (gtkLibs) gtk;
-  };
-
-  wxGTK29 = callPackage ../development/libraries/wxGTK-2.9 {
-    inherit (gtkLibs) gtk;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gnome) GConf;
   };
 
   wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
     inherit (gtkLibs) gtk;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gnome) GConf;
+  };
+
+  wxGTK291 = callPackage ../development/libraries/wxGTK-2.9/2.9.1.nix {
+    inherit (gtkLibs) gtk;
+    inherit (gst_all) gstreamer gstPluginsBase;
+    inherit (gnome) GConf;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
@@ -5998,6 +6018,8 @@ let
 
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
 
+  firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
+
   radeontools = callPackage ../os-specific/linux/radeontools { };
 
   radeonR700 = callPackage ../os-specific/linux/firmware/radeon-r700 { };
@@ -6019,6 +6041,8 @@ let
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
+
+  rtl8168e2fw = callPackage ../os-specific/linux/firmware/rtl8168e-2 { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
@@ -6176,7 +6200,7 @@ let
   xmoto = builderDefsPackage (import ../games/xmoto) {
     inherit chipmunk sqlite curl zlib bzip2 libjpeg libpng
       freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf
-      lua5 ode libxdg_basedir;
+      lua5 ode libxdg_basedir libxml2;
   };
 
   xorg_sys_opengl = callPackage ../os-specific/linux/opengl/xorg-sys { };
@@ -6429,13 +6453,15 @@ let
 
   cdrtools = callPackage ../applications/misc/cdrtools { };
 
+  centerim = callPackage ../applications/networking/instant-messengers/centerim { };
+
   chatzilla = callPackage ../applications/networking/irc/chatzilla {
     xulrunner = firefox36Pkgs.xulrunner;
   };
 
-  chrome = callPackage ../applications/networking/browsers/chromium {
+  chrome = lowPrio (callPackage ../applications/networking/browsers/chromium {
     inherit (gnome) GConf;
-  };
+  });
 
   chromeWrapper = wrapFirefox
     { browser = chrome; browserName = "chrome"; desktopName = "Chrome";
@@ -6513,6 +6539,11 @@ let
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
+
+  dvswitch = callPackage ../applications/video/dvswitch {
+    inherit (gtkLibs) gtkmm;
+    inherit (xlibs) libXau libXdmcp libXv libpthreadstubs pixman;
+  };
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = getConfig [ "dwm" "patches" ] [];
@@ -7386,8 +7417,10 @@ let
     pythonBindings = false;
     perlBindings = false;
     javahlBindings = false;
+    saslSupport = false;
     compressionSupport = true;
     httpd = apacheHttpd;
+    sasl = cyrus_sasl;
   };
 
   subversionClient = lowPrio (appendToName "client" (subversion.override {
@@ -8005,11 +8038,6 @@ let
       inherit (kde3) kdelibs;
     };
 
-    kbasket = callPackage ../applications/misc/kbasket {
-      stdenv = overrideGCC stdenv gcc43;
-      inherit (kde3) kdelibs;
-    };
-
     kphone = callPackage ../applications/networking/kphone {
       stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
     };
@@ -8094,6 +8122,8 @@ let
 
       kuickshow = callPackage ../applications/graphics/kuickshow { };
 
+      libalkimia = callPackage ../development/libraries/libalkimia { };
+
       libktorrent = callPackage ../development/libraries/libktorrent { };
 
       libkvkontakte = callPackage ../development/libraries/libkvkontakte { };
@@ -8126,7 +8156,11 @@ let
 
       semnotes = callPackage ../applications/misc/semnotes { };
 
+      skrooge = callPackage ../applications/office/skrooge { };
+
       yakuake = callPackage ../applications/misc/yakuake { };
+
+      zanshin = callPackage ../applications/office/zanshin { };
     };
 
   redshift = callPackage ../applications/misc/redshift {
@@ -8180,6 +8214,8 @@ let
     lesstif = lesstif93;
     stdenv = overrideGCC stdenv gcc42;
   };
+
+  archimedes = callPackage ../applications/science/electronics/archimedes { };
 
   biolib = callPackage ../development/libraries/science/biology/biolib { };
 
@@ -8539,11 +8575,12 @@ let
 
   texLive = builderDefsPackage (import ../misc/tex/texlive) {
     inherit builderDefs zlib bzip2 ncurses libpng ed
-      gd t1lib freetype icu perl ruby expat curl
+      gd t1lib freetype icu perl expat curl
       libjpeg bison python fontconfig flex;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
+    ruby = ruby18;
   };
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions

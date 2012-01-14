@@ -85,15 +85,15 @@ stdenv.mkDerivation rec {
     makeFlagsArray=(CUPSSERVERBIN=$out/lib/cups CUPSSERVERROOT=$out/etc/cups CUPSDATA=$out/share/cups)
   '';
 
-  configureFlags = if x11Support then [ "--with-x" ] else [ "--without-x" ];
+  configureFlags =
+    (if x11Support then [ "--with-x" ] else [ "--without-x" ]) ++
+    (if cupsSupport then [ "--enable-cups" "--with-install-cups" ] else [ "--disable-cups" ]);
 
   doCheck = true;
 
-  preBuild = "make so";
+  installTargets="install soinstall";
 
   postInstall = ''
-    make soinstall
-
     for i in $fonts; do
       (cd $out/share/ghostscript && tar xvfz $i)
     done
