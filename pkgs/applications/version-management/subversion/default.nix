@@ -42,10 +42,9 @@ stdenv.mkDerivation rec {
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}
-    ${if saslSupport then "--enable-sasl" else "--disable-sasl"}
+    ${if saslSupport then "--enable-sasl --with-sasl=${sasl}" else "--disable-sasl"}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
-    --with-sasl=${sasl}
   '';
 
   preBuild = ''
