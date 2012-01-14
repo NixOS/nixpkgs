@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "streamproc";
-  version = "1.4";
-  sha256 = "fbff569d7b294850998e9a6b6a14bf81484b1adb312801ea15d1d890faff12cf";
+  version = "1.6";
+  sha256 = "0bb1rdzzpjggw7dk4q3hwa1j1bvkfqhz6vrd45shcp57ixqlp6ws";
   meta = {
     homepage = "http://gitorious.org/streamproc";
     description = "Stream Processer Arrow";
