@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel }:
+{ stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "avogadro-1.0.3";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 eigen zlib openbabel ];
 
-  buildNativeInputs = [ cmake ];
+  buildNativeInputs = [ cmake pkgconfig ];
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.urkud ];
