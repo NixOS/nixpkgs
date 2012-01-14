@@ -7418,8 +7418,10 @@ let
     pythonBindings = false;
     perlBindings = false;
     javahlBindings = false;
+    saslSupport = false;
     compressionSupport = true;
     httpd = apacheHttpd;
+    sasl = cyrus_sasl;
   };
 
   subversionClient = lowPrio (appendToName "client" (subversion.override {

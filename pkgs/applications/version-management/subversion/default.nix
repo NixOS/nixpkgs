@@ -6,8 +6,10 @@
 , pythonBindings ? false
 , perlBindings ? false
 , javahlBindings ? false
+, saslSupport ? false
 , stdenv, fetchurl, apr, aprutil, neon, zlib, sqlite
 , httpd ? null, expat, swig ? null, jdk ? null, python ? null, perl ? null
+, sasl ? null
 }:
 
 assert bdbSupport -> aprutil.bdbSupport;
@@ -31,7 +33,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib apr aprutil sqlite ]
     ++ stdenv.lib.optional httpSupport neon
     ++ stdenv.lib.optional pythonBindings python
-    ++ stdenv.lib.optional perlBindings perl;
+    ++ stdenv.lib.optional perlBindings perl
+    ++ stdenv.lib.optional saslSupport sasl;
 
   configureFlags = ''
     ${if bdbSupport then "--with-berkeley-db" else "--without-berkeley-db"}
@@ -39,8 +42,10 @@ stdenv.mkDerivation rec {
     ${if pythonBindings || perlBindings then "--with-swig=${swig}" else "--without-swig"}
     ${if javahlBindings then "--enable-javahl --with-jdk=${jdk}" else ""}
     ${if stdenv.isDarwin then "--enable-keychain" else "--disable-keychain"}
+    ${if saslSupport then "--enable-sasl" else "--disable-sasl"}
     --with-zlib=${zlib}
     --with-sqlite=${sqlite}
+    --with-sasl=${sasl}
   '';
 
   preBuild = ''
