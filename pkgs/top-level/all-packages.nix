@@ -6013,7 +6013,6 @@ let
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
-  firmwareLinuxFree = callPackage ../os-specific/linux/firmware/firmware-linux-free { };
 
   radeontools = callPackage ../os-specific/linux/radeontools { };
 
