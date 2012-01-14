@@ -1,9 +1,12 @@
-{ kde, kdelibs, exiv2, shared_desktop_ontologies, kde_baseapps, libkipi }:
+{ kde, kdelibs, exiv2, shared_desktop_ontologies, kde_baseapps, libkipi
+, libjpeg, pkgconfig }:
 
 kde {
 
   buildInputs =
-    [ kdelibs exiv2 shared_desktop_ontologies kde_baseapps libkipi ];
+    [ kdelibs exiv2 shared_desktop_ontologies kde_baseapps libkipi libjpeg ];
+
+  buildNativeInputs = [ pkgconfig ];
 
   meta = {
     description = "Gwenview, the KDE image viewer";
