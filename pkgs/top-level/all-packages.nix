@@ -760,7 +760,7 @@ let
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
-  gource = callPackage ../tools/misc/gource { };
+  gource = callPackage ../applications/version-management/gource {};
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
