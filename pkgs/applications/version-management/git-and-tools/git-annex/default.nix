@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://git-annex.branchable.com/";
     description = "Manage files with git without checking them into git";
-    license = "GPLv3+";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription = ''
       Git-annex allows managing files with git, without checking the
