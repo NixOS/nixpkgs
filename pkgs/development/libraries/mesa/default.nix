@@ -1,6 +1,6 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, libdrm, file, expat, makedepend
 , libXxf86vm, libXfixes, libXdamage, glproto, dri2proto, libX11, libxcb, libXext
-, libXt, udev, enableTextureFloats ? false,
+, libXt, udev, enableTextureFloats ? false
 , python, libxml2Python, lipo ? null }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
