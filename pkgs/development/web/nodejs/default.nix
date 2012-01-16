@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, python, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.5";
+  version = "0.6.7";
   name = "nodejs-${version}";
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "72364d240fb61e678897c099df6f2913857c5931aa9b1f44e73e432d4629ca2f";
+    sha256 = "0m3d4j0gjidckj2dgb7pll47j94c6p0xhlbsbcpjsd93jx28fhxk";
   };
 
   configureFlags = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf}
   '';
 
-  buildInputs = [ python openssl zlib];
+  buildInputs = [ python openssl zlib ];
 
   meta = with stdenv.lib; {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
