@@ -932,6 +932,8 @@ let
 
   logrotate = callPackage ../tools/system/logrotate { };
 
+  logstalgica = callPackage ../tools/graphics/logstalgica {};
+
   lout = callPackage ../tools/typesetting/lout { };
 
   lrzip = callPackage ../tools/compression/lrzip { };
