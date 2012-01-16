@@ -2431,12 +2431,22 @@ let
     ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
       camlp5 = camlp5_5_transitional;
     };
+
+    ocaml_typeconv = callPackage ../development/ocaml-modules/typeconv { };
+
+    ocaml_sexplib = callPackage ../development/ocaml-modules/sexplib { };
+
+    ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
+
+    pycaml = callPackage ../development/ocaml-modules/pycaml { };
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_3_11_1;
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
   ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
+
+  ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
   opa = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/compilers/opa { };
 
@@ -2886,7 +2896,10 @@ let
 
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle { };
+  coccinelle = callPackage ../development/tools/misc/coccinelle {
+    ocamlPackages = ocamlPackages_3_12_1;
+    ocaml = ocaml_3_12_1;
+  };
 
   cppi = callPackage ../development/tools/misc/cppi { };
 
