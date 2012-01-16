@@ -1,4 +1,4 @@
-{ callPackage, callPackageOrig, stdenv, qt47 }:
+{ callPackage, callPackageOrig, stdenv, qt48 }:
 
 let
   release = "4.7.4";
@@ -44,7 +44,7 @@ kde.modules // kde.individual //
 
   akonadi = callPackage ./support/akonadi { };
 
-  qt4 = qt47;
+  qt4 = qt48;
 
   kdebase_workspace = kde.modules.kde_workspace;
 
