@@ -1,19 +1,14 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation (rec {
-  name = "libffi-3.0.9";
+  name = "libffi-3.0.10";
 
   src = fetchurl {
     url = "ftp://sourceware.org/pub/libffi/${name}.tar.gz";
-    sha256 = "0ln4jbpb6clcsdpb9niqk0frgx4k0xki96wiv067ig0q4cajb7aq";
+    sha256 = "0bs97dgvqrbzc9zv9y2ff5flfvbmfyc68dpnxvm6mdcygq1bj7ph";
   };
 
   doCheck = true;
-
-  postInstall =
-    # Install headers in the right place.
-    '' ln -sv "$out/lib/"libffi*/include "$out/include"
-    '';
 
   meta = {
     description = "libffi, a foreign function call interface library";
