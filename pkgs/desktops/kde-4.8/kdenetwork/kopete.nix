@@ -14,7 +14,6 @@ kde {
   patchPhase =
     ''
       cp -v ${./FindmsiLBC.cmake} kopete/cmake/modules/FindmsiLBC.cmake
-      cp -v ${./FindJasper.cmake} kopete/cmake/modules/FindJasper.cmake
     '';
 
   cmakeFlags = [ "-DBUILD_skypebuttons=TRUE" ];
