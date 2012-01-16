@@ -2,11 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-events";
-  version = "0.3.0.1";
-  sha256 = "08jnri6cwybg8b2f53rn8y1xzcpz32r0svahcw01g837p07mcpla";
+  version = "0.4.0.0";
+  sha256 = "0q1r5jxk8ma8rg65n4iixl5zyk4nxpzi4ywf0jz8y1nbbhbas7g2";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary mtl ];
+  noHaddock = true;
   meta = {
     description = "Library and tool for parsing .eventlog files from GHC";
     license = self.stdenv.lib.licenses.bsd3;
