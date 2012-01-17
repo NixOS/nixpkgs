@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml";
-  version = "1.3.10";
-  sha256 = "0mmibqzbbqmw4a8gc4f2yy144nx48gpfwj3iqq6dydvcikajxav2";
+  version = "1.3.11";
+  sha256 = "1av8cn62aaz0pl0fqqlp8wsyg36a1068qawzci8fxzasrfyyc8ca";
   buildDepends = [ text ];
   meta = {
     homepage = "http://code.galois.com";
