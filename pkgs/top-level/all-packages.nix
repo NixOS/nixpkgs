@@ -8190,7 +8190,7 @@ let
     inherit (gtkLibs) glib gtk;
   };
 
-  xfce = xfce46;
+  xfce = xfce48;
 
   xfce46 = recurseIntoAttrs
     (let callPackage = newScope pkgs.xfce46; in
