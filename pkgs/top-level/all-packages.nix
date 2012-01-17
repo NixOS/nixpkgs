@@ -1287,7 +1287,6 @@ let
   ripmime = callPackage ../tools/networking/ripmime {};
 
   rsnapshot = callPackage ../tools/backup/rsnapshot {
-
     # For the `logger' command, we can use either `utillinux' or
     # GNU Inetutils.  The latter is more portable.
     logger = inetutils;
@@ -1556,6 +1555,8 @@ let
   which = callPackage ../tools/system/which { };
 
   wicd = callPackage ../tools/networking/wicd { };
+
+  wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf { };
 
   wv = callPackage ../tools/misc/wv { };
 
