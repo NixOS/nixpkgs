@@ -76,6 +76,7 @@ in
         pkgs.xfce.garcon
         pkgs.xfce.thunar_volman
         pkgs.xfce.gvfs
+        pkgs.xfce.xfce4_appfinder
       ]
       ++ optional config.powerManagement.enable pkgs.xfce.xfce4_power_manager;
 
