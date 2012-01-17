@@ -2,11 +2,11 @@
 , libstartup_notification }:
 
 stdenv.mkDerivation rec {
-  name = "libxfce4ui-4.8.0";
+  name = "libxfce4ui-4.8.1";
   
   src = fetchurl {
     url = "http://archive.xfce.org/src/xfce/libxfce4ui/4.8/${name}.tar.bz2";
-    sha1 = "107f9d8e3e583f3cf5330074e89ea72eb2a82888";
+    sha1 = "408645581e589135aa03d2e9b84f4eede68596b2";
   };
 
   buildInputs =

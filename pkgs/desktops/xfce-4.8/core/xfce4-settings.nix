@@ -2,11 +2,11 @@
 , xfconf, xorg, libnotify, libxklavier }:
 
 stdenv.mkDerivation rec {
-  name = "xfce4-settings-4.8.2";
+  name = "xfce4-settings-4.8.3";
   
   src = fetchurl {
     url = "http://archive.xfce.org/src/xfce/xfce4-settings/4.8/${name}.tar.bz2";
-    sha1 = "402afe308944a315c385d2b1ed567f997d016b61";
+    sha1 = "98431633ba3ec2a4a10182bc7266904d9256949b";
   };
 
   buildInputs =

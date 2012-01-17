@@ -2,11 +2,11 @@
 , libxfce4ui, xfconf, libwnck, exo }:
 
 stdenv.mkDerivation rec {
-  name = "xfce4-panel-4.8.5";
+  name = "xfce4-panel-4.8.6";
   
   src = fetchurl {
     url = "http://archive.xfce.org/src/xfce/xfce4-panel/4.8/${name}.tar.bz2";
-    sha1 = "67b9d5bc422663f60f5a05e7cfd7ca67b4542813";
+    sha1 = "332fc968332e6271e1bb65d6de8de2524b0440ec";
   };
 
   buildInputs =
