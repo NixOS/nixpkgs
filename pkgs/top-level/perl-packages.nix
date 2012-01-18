@@ -2987,6 +2987,14 @@ rec {
     };
   };
 
+  SortVersions = buildPerlPackage rec {
+    name = "Sort-Versions-1.5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/E/ED/EDAVIS/${name}.tar.gz";
+      sha256 = "1yhyxaakyhcffgr9lwd314badhlc2gh9f6n47013ljshbnkgzhh9";
+    };
+  };
+
   SpreadsheetParseExcel = buildPerlPackage rec {
     name = "Spreadsheet-ParseExcel-0.58";
     src = fetchurl {
