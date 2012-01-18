@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, networkmanager, pptp, ppp, xz, intltool, pkgconfig }:
+{ stdenv, fetchurl, networkmanager, pptp, ppp, intltool, pkgconfig }:
 
 let
   pn = "networkmanager-pptp";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ networkmanager pptp ppp ];
 
-  buildNativeInputs = [ xz intltool pkgconfig ];
+  buildNativeInputs = [ intltool pkgconfig ];
 
   configureFlags = "--without-gnome --disable-nls";
 }

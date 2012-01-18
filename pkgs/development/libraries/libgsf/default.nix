@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gvq1gbbcl078s3kgdc508jp7p3a3ps34fj4pf8vsamprbikpwm5";
   };
 
-  buildNativeInputs = [ xz intltool pkgconfig ];
+  buildNativeInputs = [ intltool pkgconfig ];
   buildInputs =
     [ perl perlXMLParser gettext bzip2 gnome_vfs python ];
 

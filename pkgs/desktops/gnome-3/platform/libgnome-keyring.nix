@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, dbus_libs, libgcrypt, pkgconfig, xz,
+{ stdenv, fetchurl, glib, dbus_libs, libgcrypt, pkgconfig,
 intltool }:
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   propagatedBuildInputs = [ glib dbus_libs libgcrypt ];
-  buildNativeInputs = [ pkgconfig xz intltool ];
+  buildNativeInputs = [ pkgconfig intltool ];
 
   meta = {
     inherit (glib.meta) platforms maintainers;

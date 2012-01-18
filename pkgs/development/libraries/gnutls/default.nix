@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, xz, zlib, lzo, libtasn1, nettle
+{ fetchurl, stdenv, zlib, lzo, libtasn1, nettle
 , guileBindings, guile, perl }:
 
 assert guileBindings -> guile != null;
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;
 
-  buildNativeInputs = [ xz perl ];
+  buildNativeInputs = [ perl ];
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 

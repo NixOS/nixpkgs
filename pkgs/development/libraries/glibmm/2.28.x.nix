@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, pkgconfig, glib, libsigcxx, xz }:
+{ stdenv, fetchurl_gnome, pkgconfig, glib, libsigcxx }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qyb8jb9avfzcdyhldxx7qljjhf30czwnh7c2r9p0x4nin2rjkpq";
   };
 
-  buildNativeInputs = [pkgconfig xz];
+  buildNativeInputs = [pkgconfig];
   propagatedBuildInputs = [glib libsigcxx];
 
   meta = {

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, glib, dbus_glib, pkgconfig, xz, libxml2, gtk, intltool }:
+{ stdenv, fetchurl_gnome, glib, dbus_glib, pkgconfig, libxml2, gtk, intltool }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ glib dbus_glib libxml2 gtk ];
-  buildNativeInputs = [ pkgconfig xz intltool ];
+  buildNativeInputs = [ pkgconfig intltool ];
 
   configureFlags = "--disable-orbit";
 

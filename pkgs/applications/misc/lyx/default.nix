@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "a790951d6ed660b254e82d682b478665f119dd522ab4759fdeb5cd8d42f66f61";
   };
 
-  buildInputs = [texLive qt python makeWrapper xz ];
+  buildInputs = [texLive qt python makeWrapper ];
 
   # don't ask me why it can't find libX11.so.6
   postInstall = ''

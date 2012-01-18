@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, xz, pkgconfig, mesa, libX11, libXext, libXfixes
+{ stdenv, fetchurl, glib, pkgconfig, mesa, libX11, libXext, libXfixes
 , libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0bzsvnharawfg525lpavrp55mq4aih5nb01dwwqwnccg8hk9z2fw";
   };
 
-  buildNativeInputs = [ xz pkgconfig ];
+  buildNativeInputs = [ pkgconfig ];
   buildInputs =
     [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
       atk json_glib

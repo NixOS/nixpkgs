@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz, pkgconfig, glib, dbus, dbus_glib, polkit
+{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, polkit
 , intltool, libxslt, docbook_xsl, udev, libusb1, pmutils }:
 
 assert stdenv.isLinux;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dbus_glib polkit intltool libxslt docbook_xsl udev libusb1 ];
 
-  buildNativeInputs = [ xz pkgconfig ];
+  buildNativeInputs = [ pkgconfig ];
 
   configureFlags = "--with-backend=linux --localstatedir=/var";
 

@@ -1,10 +1,10 @@
-{ kde, kdelibs, shared_desktop_ontologies, bzip2, xz, libssh, exiv2, attica
+{ kde, kdelibs, shared_desktop_ontologies, bzip2, libssh, exiv2, attica
 , libcanberra, virtuoso, samba, ntrack
 }:
 
 kde {
   buildInputs =
-    [ kdelibs shared_desktop_ontologies bzip2 xz libssh exiv2 attica
+    [ kdelibs shared_desktop_ontologies bzip2 libssh exiv2 attica
       samba (libcanberra.override { gtk = null; }) ntrack
     ];
 

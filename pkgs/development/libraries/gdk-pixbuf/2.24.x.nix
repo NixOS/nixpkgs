@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
   buildInputs = [ libX11 ];
 
-  buildNativeInputs = [ pkgconfig xz ];
+  buildNativeInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 

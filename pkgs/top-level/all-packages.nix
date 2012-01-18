@@ -6945,20 +6945,14 @@ let
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
-  icecat3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
-    inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
-      wirelesstools;
+  icecat3 = lowPrio (callPackage ../applications/networking/browsers/icecat-3 {
     inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
 
-  icecatXulrunner3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
+  icecatXulrunner3 = lowPrio (callPackage ../applications/networking/browsers/icecat-3 {
     application = "xulrunner";
-    inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
-      wirelesstools;
     inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;

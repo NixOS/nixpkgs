@@ -12,7 +12,6 @@
 , libtool
 , jasper
 , libX11
-, xz
 , tetex ? null
 , librsvg ? null
 }:
@@ -40,8 +39,6 @@ stdenv.mkDerivation rec {
     libtool jasper libX11 ];
 
   buildInputs = [ tetex graphviz ];
-
-  buildNativeInputs = [ xz ];
 
   preConfigure = if tetex != null then
     ''

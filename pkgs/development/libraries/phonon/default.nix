@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, automoc4, qt4, xz }:
+{ stdenv, fetchurl, cmake, automoc4, qt4 }:
 
 let
   v = "4.5.1";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 ];
 
-  buildNativeInputs = [ cmake automoc4 xz ];
+  buildNativeInputs = [ cmake automoc4 ];
 
   cmakeFlags = "-DPHONON_MKSPECS_DIR=mkspecs";
   preConfigure =

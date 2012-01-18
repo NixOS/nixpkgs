@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpng, xz }:
+{ stdenv, fetchurl, libpng }:
 
 stdenv.mkDerivation rec {
   name = "pngcrush-1.7.17";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -i s,/usr,$out, Makefile
   '';
 
-  buildInputs = [ xz libpng ];
+  buildInputs = [ libpng ];
 
   meta = {
     homepage = http://pmt.sourceforge.net/pngcrush;

@@ -3,7 +3,7 @@
 , alsaLib, libsamplerate, libsndfile, speex, bluez, udev
 , jackaudioSupport ? false, jackaudio ? null
 , x11Support ? false, xlibs
-, xz, json_c
+, json_c
 }:
 
 assert jackaudioSupport -> jackaudio != null;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig gnum4 libtool intltool glib dbus avahi
       libsamplerate libsndfile speex alsaLib bluez udev
-      xz json_c
+      json_c
       #gtk gconf 
     ]
     ++ stdenv.lib.optional jackaudioSupport jackaudio

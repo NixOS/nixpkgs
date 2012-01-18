@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sh40r7gz81fg7ivgr7rld8spvqb6hsfvnf6gd3gbcr5b830v1rs";
   };
   
-  buildInputs = [zlib attr xz];
+  buildInputs = [zlib attr];
 
   preBuild = ''
     cd squashfs-tools

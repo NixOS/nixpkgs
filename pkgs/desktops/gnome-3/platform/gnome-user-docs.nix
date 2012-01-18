@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz, itstool, libxml2, gettext }:
+{ stdenv, fetchurl, itstool, libxml2, gettext }:
 
 stdenv.mkDerivation {
   name = "gnome-user-docs-3.2.2";
@@ -8,5 +8,5 @@ stdenv.mkDerivation {
     sha256 = "1ka0nw2kc85p10y8x31v0wv06a88k7qrgafp4ys04y9fzz0rkcjj";
   };
 
-  buildNativeInputs = [ xz itstool libxml2 gettext ];
+  buildNativeInputs = [ itstool libxml2 gettext ];
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pcre, libiconv ? null, xz }:
+{ stdenv, fetchurl, pcre, libiconv ? null }:
 
 let version = "2.10"; in
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation ({
     sha256 = "1cvsqyfzk1p38fcaav22dn76fkd02g7bjnqna6vrpk9vy9rnfybc";
   };
 
-  buildInputs = [ pcre xz ]
+  buildInputs = [ pcre ]
     ++ (stdenv.lib.optional (libiconv != null) libiconv);
 
   doCheck = if stdenv.isDarwin then false else true;

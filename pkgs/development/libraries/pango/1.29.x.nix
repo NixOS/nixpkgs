@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, pkgconfig, gettext, x11, glib, cairo, libpng, xz }:
+{ stdenv, fetchurl_gnome, pkgconfig, gettext, x11, glib, cairo, libpng }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin gettext;
 
-  buildNativeInputs = [ pkgconfig xz ];
+  buildNativeInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ x11 glib cairo libpng ];
 

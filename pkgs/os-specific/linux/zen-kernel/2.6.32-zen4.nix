@@ -1,4 +1,4 @@
-args @ {stdenv, fetchurl, xz, runCommand, userModeLinux ? false, extraConfig ? "", 
+args @ {stdenv, fetchurl, runCommand, userModeLinux ? false, extraConfig ? "", 
   kernelPatches ? [], extraMeta ? {}, 
   features ? {}, preConfigure ? "",
   ...}:
@@ -20,7 +20,7 @@ import ../kernel/generic.nix (
     kernelPatches = [
       {
          name = "zen4"; 
-         patch = runCommand "2.6.32-zen4.patch" {} "${xz}/bin/lzma -d < ${ fetchurl {
+         patch = runCommand "2.6.32-zen4.patch" {} "lzma -d < ${ fetchurl {
 	   name = "2.6.32-zen4";
            url = "http://downloads.zen-kernel.org/2.6.32/2.6.32-zen4.patch.lzma";
            sha256 = "1dyp9sfigqjfqw1c94010c521bhcy1xnzp91kkhg3dwgzfpsp2k2";

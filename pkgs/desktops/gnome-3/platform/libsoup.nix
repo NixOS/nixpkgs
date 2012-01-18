@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
 
-  buildNativeInputs = [ pkgconfig xz ];
+  buildNativeInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring sqlite ];
   passthru.propagatedUserEnvPackages = [ glib_networking ];

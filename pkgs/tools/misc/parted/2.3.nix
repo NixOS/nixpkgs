@@ -1,5 +1,5 @@
 { stdenv, fetchurl, devicemapper, libuuid, gettext, readline
-, utillinux, xz, enableStatic ? false, hurd ? null }:
+, utillinux, enableStatic ? false, hurd ? null }:
 
 stdenv.mkDerivation rec {
   name = "parted-2.3";
@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0sabj81nawcjm8ww34lxg65ka8crv3w2ab4crh8ypw5agg681836";
   };
 
-  buildNativeInputs = [ xz ];
   buildInputs = [ libuuid ]
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, udev, polkit, dbus_glib, ppp, intltool, pkgconfig, xz }:
+{ stdenv, fetchurl_gnome, udev, polkit, dbus_glib, ppp, intltool, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zvwrni4l21d856nq28khigrhwgrq5cc7nh45zidwjj8q7bsxiz7";
   };
 
-  buildNativeInputs = [ xz intltool pkgconfig ];
+  buildNativeInputs = [ intltool pkgconfig ];
 
   buildInputs = [ udev polkit dbus_glib ppp ];
 

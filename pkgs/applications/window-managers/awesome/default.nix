@@ -1,4 +1,4 @@
-{stdenv, fetchurl, xz, cmake, gperf, imagemagick, pkgconfig, lua
+{stdenv, fetchurl, cmake, gperf, imagemagick, pkgconfig, lua
 , glib, cairo, pango, imlib2, libxcb, libxdg_basedir, xcbutil
 , xcbutilimage, xcbutilkeysyms, xcbutilwm, libpthreadstubs, libXau
 , libXdmcp, pixman, doxygen
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "576b4f6d2c3f56dfbe52ad92f2eecece111f0f05816e32126cd03d4b4387761d";
   };
  
-  buildInputs = [ xz cmake gperf imagemagick pkgconfig lua glib cairo pango
+  buildInputs = [ cmake gperf imagemagick pkgconfig lua glib cairo pango
     imlib2 libxcb libxdg_basedir xcbutil xcbutilimage xcbutilkeysyms xcbutilwm
     libstartup_notification libev libpthreadstubs libXau libXdmcp pixman doxygen
     asciidoc xmlto dbus docbook_xsl docbook_xml_dtd_45 libxslt ];
