@@ -2777,7 +2777,7 @@ let
 
   jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
-  jruby116 = callPackage ../development/interpreters/jruby { };
+  jruby165 = callPackage ../development/interpreters/jruby { };
 
   guileCairo = callPackage ../development/guile-modules/guile-cairo { };
 
