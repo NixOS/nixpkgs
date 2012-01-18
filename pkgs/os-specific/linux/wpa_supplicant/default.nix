@@ -32,7 +32,15 @@ in
     url = "http://w1.fi/gitweb/gitweb.cgi?p=hostap-07.git;a=commitdiff_plain;h=b80b5639935d37b95d00f86b57f2844a9c775f57";
     name = "wpa_supplicant-nm-0.9.patch";
     sha256 = "1pqba0l4rfhba5qafvvbywi9x1qmphs944p704bh1flnx7cz6ya8";
-    }) ];
+    })
+    # wpa_supplicant crashes when controlled through dbus (wicd/nm)
+    # see: https://bugzilla.redhat.com/show_bug.cgi?id=678625
+    (fetchurl {
+      url = "https://bugzilla.redhat.com/attachment.cgi?id=491018";
+      name = "dbus-assertion-fix.patch";
+      sha256 = "6206d79bcd800d56cae73e2a01a27ac2bee961512f77e5d62a59256a9919077a";
+    })
+  ];
 
   postInstall = ''
     ensureDir $out/share/man/man5 $out/share/man/man8
