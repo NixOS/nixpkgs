@@ -23,7 +23,7 @@ ln -s /dev/net/tun /dev/tun || true;
 if test "$1" = "start"; then
 	trap 'stop ; exit ' 15
 
-	if test -n "@pingBefore@"; then while ! @iputils@/bin/ping @gw6server@ -c1 -w1 ; do sleep 1; done; fi
+	if test -n "@pingBefore@"; then while ! @iputils@/sbin/ping @gw6server@ -c1 -w1 ; do sleep 1; done; fi
     cd /tmp/.gw6c
         @coreutils@/bin/yes |       \
     env - HOME=/tmp/.gw6c $extraEnv \
