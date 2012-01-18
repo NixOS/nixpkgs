@@ -215,7 +215,7 @@ in
             fi
           '';
 
-        postStop = "${mysql}/bin/mysqladmin --user=root --password=\"$(cat ${cfg.rootPassword})\" shutdown";
+        postStop = "${mysql}/bin/mysqladmin ${optionalString (cfg.rootPassword != null) "--user=root --password=\"$(cat ${cfg.rootPassword})\""} shutdown";
         
         # !!! Need a postStart script to wait until mysqld is ready to
         # accept connections.
