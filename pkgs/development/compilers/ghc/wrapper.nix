@@ -8,7 +8,7 @@ stdenv.mkDerivation {
 
   unpackPhase = "true";
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp $GHCGetPackages $out/bin/ghc-get-packages.sh
     chmod 755 $out/bin/ghc-get-packages.sh
     for prg in ghc ghci ghc-${ghc.version} ghci-${ghc.version}; do
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     done
     EOF
     chmod +x $out/bin/ghc-packages
-    ensureDir $out/nix-support
+    mkdir -p $out/nix-support
     ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
   '';
 

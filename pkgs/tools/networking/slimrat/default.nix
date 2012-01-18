@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/share/slimrat $out/bin
+    mkdir -p $out/share/slimrat $out/bin
     cp -R src/* $out/share/slimrat
     # slimrat-gui does not work (it needs the Gtk2 perl package)
     for i in slimrat; do

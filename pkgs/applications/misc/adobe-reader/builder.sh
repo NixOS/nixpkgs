@@ -3,7 +3,7 @@ source $stdenv/setup
 echo "unpacking $src..."
 tar xvfa $src
 
-ensureDir $out/Adobe/Reader9
+mkdir -p $out/Adobe/Reader9
 
 echo "unpacking reader..."
 set +e
@@ -24,5 +24,5 @@ substituteInPlace $out/Adobe/Reader*/bin/acroread \
     --replace /bin/ls $(type -P ls) \
     --replace xargs "xargs -r"
 
-ensureDir $out/bin
+mkdir -p $out/bin
 ln -s $out/Adobe/Reader*/bin/acroread $out/bin/acroread

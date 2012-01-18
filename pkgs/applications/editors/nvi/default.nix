@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/share/vi/catalog
+    mkdir -p $out/bin $out/share/vi/catalog
     for a in dutch english french german ru_SU.KOI8-R spanish swedish; do
       cp ../catalog/$a $out/share/vi/catalog
     done
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ln -s $out/bin/nvi $out/bin/ex
     ln -s $out/bin/nvi $out/bin/view
 
-    ensureDir $out/share/man/man1
+    mkdir -p $out/share/man/man1
     cp ../docs/USD.doc/vi.man/vi.1 $out/share/man/man1/nvi.1
     ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/vi
     ln -s $out/share/man/man1/nvi.1 $out/share/man/man1/ex

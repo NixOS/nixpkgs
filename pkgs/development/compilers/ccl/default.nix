@@ -21,10 +21,10 @@ rec {
   phaseNames = ["doUnpack" "doPatchElf" "doCopy"];
 
   doCopy = a.fullDepEntry ''
-    ensureDir "$out/share"
+    mkdir -p "$out/share"
     cp -r . "$out/share/ccl-installation"
 
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     for i in $(find . -maxdepth 1 -type f -perm +111); do
       echo -e '#! /bin/sh\n'"$out/share/ccl-installation/$(basename "$i")"'"$@"\n' > "$out"/bin/"$(basename "$i")"
       chmod a+x "$out"/bin/"$(basename "$i")"

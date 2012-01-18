@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
     wrapPythonPrograms
 
-    ensureDir $out/lib/torchat
+    mkdir -p $out/lib/torchat
     cp -rf * $out/lib/torchat
     makeWrapper ${python}/bin/python $out/bin/torchat \
         --set PYTHONPATH $out/lib/torchat:$program_PYTHONPATH \

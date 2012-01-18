@@ -44,10 +44,10 @@ stdenv.mkDerivation {
   dontStrip = true;
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -v u-boot u-boot.{kwb,map} $out
 
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp tools/{envcrc,mkimage} $out/bin
   '';
 }

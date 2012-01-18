@@ -22,11 +22,11 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      ensureDir $out/lib/modules/${kernel.modDirVersion}/misc
+      mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
       cp -v aufs.ko $out/lib/modules/${kernel.modDirVersion}/misc
 
       # Install the headers because aufs3-util requires them.
-      ensureDir $out/include/linux
+      mkdir -p $out/include/linux
       cp -v usr/include/linux/aufs_type.h $out/include/linux
     '';
 

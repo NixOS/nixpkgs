@@ -31,8 +31,8 @@ buildPhase() {
 }
 
 preInstall() {
-    ensureDir $out
-    ensureDir $out/lib
+    mkdir -p $out
+    mkdir -p $out/lib
 }
 
 genericBuild

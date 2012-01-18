@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     echo '#define _PATH_SENDMAIL "${sendmailPath}"' >> pathnames.h
   '';
 
-  preInstall = "ensureDir $out/bin $out/sbin $out/share/man/man1 $out/share/man/man5 $out/share/man/man8";
+  preInstall = "mkdir -p $out/bin $out/sbin $out/share/man/man1 $out/share/man/man5 $out/share/man/man8";
   
   meta = {
     description = "Vixie Cron, a daemon for running commands at specific times";

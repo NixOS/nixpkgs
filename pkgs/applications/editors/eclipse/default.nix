@@ -27,7 +27,7 @@ let
 
       buildCommand = ''
         # Unpack tarball.
-        ensureDir $out
+        mkdir -p $out
         tar xfvz $src -C $out
 
         # Patch binaries.
@@ -47,7 +47,7 @@ let
           --add-flags "-configuration \$HOME/.eclipse/''${productId}_$productVersion/configuration"
 
         # Create desktop item.
-        ensureDir $out/share/applications
+        mkdir -p $out/share/applications
         cp ${desktopItem}/share/applications/* $out/share/applications
       ''; # */
 

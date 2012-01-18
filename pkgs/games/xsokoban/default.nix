@@ -38,7 +38,7 @@ rec {
   preBuild = a.fullDepEntry (''
     sed -e "s@/usr/local/@$out/@" -i Makefile
     sed -e "s@ /bin/@ @" -i Makefile 
-    ensureDir $out/bin $out/share $out/man/man1 $out/lib
+    mkdir -p $out/bin $out/share $out/man/man1 $out/lib
   '') ["minInit" "doConfigure" "defEnsureDir"];
 
   name = "xsokoban-" + version;

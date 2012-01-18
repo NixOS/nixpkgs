@@ -84,7 +84,7 @@ stdenv.mkDerivation {
     fi
 
     # Put the GNU IceCat icon in the right place.
-    ensureDir "$out/lib/$libDir/chrome/icons/default"
+    mkdir -p "$out/lib/$libDir/chrome/icons/default"
     ln -s ../../../icons/default.xpm  "$out/lib/$libDir/chrome/icons/default/"
   '';
 

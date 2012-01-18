@@ -34,7 +34,7 @@ rec {
     cd ..
   '' ["doMake"];
   createDirs = fullDepEntry ''
-    ensureDir $out/bin $out/lib $out/include $out/share
+    mkdir -p $out/bin $out/lib $out/include $out/share
   '' ["defEnsureDir"];
 
   name = "libdecodeqr-" + version;

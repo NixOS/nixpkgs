@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   preInstall = ''
     installFlags="LIBEXECDIR=$out/modules $installFlags"
-    ensureDir $out/modules
+    mkdir -p $out/modules
   '';
 
   passthru = { inherit apacheHttpd; };

@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   '';
   buildPhase = "true";
   installPhase = ''
-    ensureDir $out/lib
-    ensureDir $out/bin
+    mkdir -p $out/lib
+    mkdir -p $out/bin
     export DESTDIR=$out
     ruby install.rb
   '';

@@ -29,8 +29,8 @@ rec {
       allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
     }
     ''
-      ensureDir $out/bin
-      ensureDir $out/lib
+      mkdir -p $out/bin
+      mkdir -p $out/lib
       
       # Copy what we need from Glibc.
       cp -p ${glibc}/lib/ld-linux*.so.? $out/lib
@@ -364,8 +364,8 @@ rec {
         ${module_init_tools}/sbin/modprobe cramfs
         mknod /dev/loop0 b 7 0
 
-        ensureDir $out
-        ensureDir tmp
+        mkdir -p $out
+        mkdir -p tmp
         mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
           mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
         cp -Rv tmp/* $out/ || exit 0
@@ -388,8 +388,8 @@ rec {
         mknod /dev/mtd0 c 90 0
         mknod /dev/mtdblock0 b 31 0
 
-        ensureDir $out
-        ensureDir tmp
+        mkdir -p $out
+        mkdir -p tmp
 
         dd if=${file} of=/dev/mtd0
         mount ${lib.optionalString (fs != null) "-t ${fs} "}/dev/mtdblock0 tmp
@@ -610,7 +610,7 @@ rec {
     installPhase = ''
       eval "$preInstall"
 
-      ensureDir $out/$outDir
+      mkdir -p $out/$outDir
       find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
       for i in $out/$outDir/*.rpm; do

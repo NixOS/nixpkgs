@@ -13,7 +13,7 @@ echo "version $version"
 
 export version
 
-ensureDir $out/lib/modules/$version/misc
+mkdir -p $out/lib/modules/$version/misc
 
 LINUX_DIR=$kernel/lib/modules/$version/build
 PREFIX=$out

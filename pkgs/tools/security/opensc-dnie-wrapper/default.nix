@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   phases = [ "installPhase" ];
 
   installPhase = ''
-    ensureDir $out/etc
+    mkdir -p $out/etc
     cp ${opensc}/etc/opensc.conf $out/etc
     chmod +w $out/etc/opensc.conf
 

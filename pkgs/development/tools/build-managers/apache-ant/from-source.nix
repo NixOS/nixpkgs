@@ -39,7 +39,7 @@ EOF
 
   # Note: We don't build the javadoc.
   buildPhase = ''
-    ensureDir "$out"
+    mkdir -p "$out"
     ./build.sh -Dant.install="$out" install-lite
   '';
 
@@ -48,7 +48,7 @@ EOF
     # rearrange a few things.
     rm -v "$out/bin/"*.bat
 
-    ensureDir "$out/lib/java"
+    mkdir -p "$out/lib/java"
     mv -v "$out/lib/"*.jar "$out/lib/java"
     sed -i "$out/bin/ant" \
         -e "s|^ANT_LIB=.*$|ANT_LIB=$out/lib/java|g ;

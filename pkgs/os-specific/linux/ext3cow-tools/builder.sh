@@ -13,7 +13,7 @@ sed -i "s/linux\/ext3cow_fs.h/$kernerlext3cowheader_slashed/" ext3cow_tools.h		#
 
 make
 
-ensureDir $out/bin/
+mkdir -p $out/bin/
 cp ss $out/bin/snapshot
 cp tt $out/bin/
 cp e2d $out/bin/

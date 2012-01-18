@@ -12,12 +12,12 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      ensureDir $out/libexec/s3sync
+      mkdir -p $out/libexec/s3sync
       cp *.rb $out/libexec/s3sync
       makeWrapper "${ruby}/bin/ruby $out/libexec/s3sync/s3cmd.rb" $out/bin/s3cmd
       makeWrapper "${ruby}/bin/ruby $out/libexec/s3sync/s3sync.rb" $out/bin/s3sync
 
-      ensureDir $out/share/doc/s3sync
+      mkdir -p $out/share/doc/s3sync
       cp README* $out/share/doc/s3sync/
     ''; # */
 

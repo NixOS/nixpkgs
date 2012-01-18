@@ -5,7 +5,7 @@ pushd unzipped
 unzip $src || true
 popd
 
-ensureDir $out
+mkdir -p $out
 mv unzipped/* $out/
 
 # Remove crap in the root directory.

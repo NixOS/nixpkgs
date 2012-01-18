@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    ensureDir $out/{man/man6,bin}
+    mkdir -p $out/{man/man6,bin}
     makeFlags="DESTDIR=$out/bin MANDIR=$out/man/man6 DEFAULTFONTDIR=$out/share/figlet"
   '';
 

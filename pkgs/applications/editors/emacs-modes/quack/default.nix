@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     emacsDir="$out/share/emacs/site-lisp"
 
-    ensureDir "$emacsDir"
+    mkdir -p "$emacsDir"
     cp -v "$src" "$emacsDir/quack.el"
     emacs --batch -f batch-byte-compile "$emacsDir/quack.el"
   '';

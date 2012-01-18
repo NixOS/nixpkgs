@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    ensureDir .test
+    mkdir -p .test
     make
     make opt
   '';

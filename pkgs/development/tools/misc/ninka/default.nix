@@ -25,12 +25,12 @@ stdenv.mkDerivation {
   
   installPhase = ''
     cd ../..
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ninka.pl $out/bin
     cp -av {extComments,splitter,filter,senttok,matcher} $out/bin
     
     cd comments/comments    
-    ensureDir $out/{bin,share/man/man1}
+    mkdir -p $out/{bin,share/man/man1}
     make install    
   '';
   

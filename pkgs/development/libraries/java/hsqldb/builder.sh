@@ -2,5 +2,5 @@ source $stdenv/setup
 
 unzip $src
 cd hsqldb*
-ensureDir $out
+mkdir -p $out
 cp -R * $out/

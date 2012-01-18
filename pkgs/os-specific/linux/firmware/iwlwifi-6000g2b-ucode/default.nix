@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildPhase = "true";
 
   installPhase = ''
-    ensureDir "$out"
+    mkdir -p "$out"
     chmod -x *
     cp * "$out"
   '';

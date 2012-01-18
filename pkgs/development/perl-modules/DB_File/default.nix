@@ -21,7 +21,7 @@ buildPerlPackage {
   # lib/perl5/site_perl, and the *.pm should be inside lib/perl5/site_perl/...
   # for other packages to get that in the PERL5LIB env var.
   postInstall = ''
-    ensureDir $out/lib/perl5/site_perl/
+    mkdir -p $out/lib/perl5/site_perl/
     cp -R $out/lib/perl5/5* $out/lib/perl5/site_perl
   '';
 }

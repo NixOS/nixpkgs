@@ -31,7 +31,7 @@ composableDerivation.composableDerivation {} ( fixed : {
       src/tools/install.neko
     sed -i "s@/usr/local@$out@" Makefile vm/load.c
     # make sure that nekotools boot finds the neko executable and not our wrapper:
-    ensureDir $out/{bin,lib}
+    mkdir -p $out/{bin,lib}
 
     sed -i "s@\"neko\"@\".neko-wrapped\"@" src/tools/nekoboot.neko
     ln -s ./neko bin/.neko-wrapped

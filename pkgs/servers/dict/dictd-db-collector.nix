@@ -25,7 +25,7 @@ let
 		}
 	";
 	installPhase = ''  
-  	ensureDir $out/share/dictd
+  	mkdir -p $out/share/dictd
 	cd $out/share/dictd
 	echo "${databases}" >databases.names 
 	echo "${accessSection}" > dictd.conf

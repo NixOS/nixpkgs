@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      ensureDir $out
+      mkdir -p $out
       cp -prvd * $out/
       wrapProgram $out/bin/ib2009ux --prefix PATH : ${xdg_utils}/bin
     '';

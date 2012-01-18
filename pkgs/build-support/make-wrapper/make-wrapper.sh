@@ -4,7 +4,7 @@ makeWrapper() {
     local params varName value command separator n fileNames
     local flagsBefore flags
 
-    ensureDir "$(dirname $wrapper)"
+    mkdir -p "$(dirname $wrapper)"
 
     echo "#! $SHELL -e" > $wrapper
 

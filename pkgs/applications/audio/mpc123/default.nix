@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     # XXX: Should install locales too (though there's only 1 available).
-    '' ensureDir "$out/bin"
+    '' mkdir -p "$out/bin"
        cp -v mpc123 "$out/bin"
     '';
 

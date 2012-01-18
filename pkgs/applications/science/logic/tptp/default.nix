@@ -31,7 +31,7 @@ rec {
     "patchBinaries" "makeLinks"];
 
   goTarget = a.fullDepEntry ''
-    ensureDir "$out"/share/
+    mkdir -p "$out"/share/
     cd "$out"/share/
   '' ["defEnsureDir" "minInit"];
 
@@ -54,7 +54,7 @@ rec {
   '' ["addInputs"];
 
   makeLinks = a.fullDepEntry ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     ln -s "../share/tptp/TPTP2X/tptp2X" "$out/bin"
     ln -s "../share/tptp/Scripts/tptp2T" "$out/bin"
     ln -s "../share/tptp/Scripts/tptp4X" "$out/bin"

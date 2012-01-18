@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      ensureDir $out/share/fonts
+      mkdir -p $out/share/fonts
       cp *.bdf $out/share/fonts
       cd $out/share/fonts
       mkfontdir 

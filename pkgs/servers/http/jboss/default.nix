@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   '';
   
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -av * $out
   '';
   

@@ -30,7 +30,7 @@ rec {
   phaseNames = ["fixTarget" "doMakeInstall"];
   fixTarget = a.fullDepEntry (''
     sed -i Makefile -e "s@LOCATION=.*@LOCATION=$out@"
-    ensureDir "$out/bin" "$out/man/man1"
+    mkdir -p "$out/bin" "$out/man/man1"
   '') ["doUnpack" "minInit" "defEnsureDir"];
       
   meta = {

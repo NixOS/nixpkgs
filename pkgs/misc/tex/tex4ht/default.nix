@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     for f in src/tex4ht src/t4ht src/htcmd bin/unix/*; do # */
       mv $f $out/bin/.
     done
 
-    ensureDir $out/share
+    mkdir -p $out/share
     cp -r texmf $out/share/.
   '';
 

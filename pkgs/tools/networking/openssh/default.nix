@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       configureFlags="$configureFlags --with-privsep-path=$out/empty"
-      ensureDir $out/empty
+      mkdir -p $out/empty
     '';
 
   postInstall =
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       chmod +x $out/bin/ssh-copy-id
       cp contrib/ssh-copy-id.1 $out/share/man/man1/
 
-      ensureDir $out/etc/ssh
+      mkdir -p $out/etc/ssh
       cp moduli $out/etc/ssh/
     '';
 

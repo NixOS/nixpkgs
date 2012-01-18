@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      ensureDir $out/lib/modules/${kernel.version}/misc
+      mkdir -p $out/lib/modules/${kernel.version}/misc
       cp -v aufs.ko $out/lib/modules/${kernel.version}/misc
 
       # Install the headers because aufs2.1-util requires them.

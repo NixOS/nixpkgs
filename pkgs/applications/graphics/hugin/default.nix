@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     exiv2 gettext ilmbase mesa freeglut glew libXmu libXi ];
 
   postInstall = ''
-    ensureDir "$out/nix-support"
+    mkdir -p "$out/nix-support"
     echo "${enblendenfuse} ${autopanosiftc}" > $out/nix-support/propagated-user-env-packages
   '';
 

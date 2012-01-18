@@ -25,7 +25,7 @@ in
     '';
 
     installPhase = ''
-      ensureDir "$out/bin" "$out/share/doc/impressive"
+      mkdir -p "$out/bin" "$out/share/doc/impressive"
       mv impressive.py "$out/bin/impressive"
       mv * "$out/share/doc/impressive"
 

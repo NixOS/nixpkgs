@@ -8,7 +8,7 @@ configurePhase() {
 }
 
 installPhase() {
-  ensureDir $out/bin
+  mkdir -p $out/bin
   cp jikespg $out/bin
 }
 

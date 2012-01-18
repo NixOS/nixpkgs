@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "offrss-1.1";
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp offrss $out/bin
   '';
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
-      ensureDir $out/share/fonts
+      mkdir -p $out/share/fonts
       cp *.ttf $out/share/fonts
     '';
 

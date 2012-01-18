@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     sed -i s,/usr,$out, usr/lib/pkgconfig/*
    
-    ensureDir $out
+    mkdir -p $out
     cp -R usr/lib $out
     cp -R usr/share $out
   '';

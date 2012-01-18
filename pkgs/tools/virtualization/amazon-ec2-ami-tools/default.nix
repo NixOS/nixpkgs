@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      ensureDir $out
+      mkdir -p $out
       mv * $out
       rm $out/*.txt
 

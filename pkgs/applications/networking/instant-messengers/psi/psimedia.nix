@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   postBuild = ''
     TARGET="$out/share/psi/plugins"
-    ensureDir "$TARGET"
+    mkdir -p "$TARGET"
     cp gstprovider/*.so "$TARGET"/
   '';
 

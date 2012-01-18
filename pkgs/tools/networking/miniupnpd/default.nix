@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      ensureDir $out/share/man/man1
+      mkdir -p $out/share/man/man1
       cp miniupnpd.1 $out/share/man/man1/
     '';
 

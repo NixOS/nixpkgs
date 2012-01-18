@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   configurePhase =
     ''
-      ensureDir $out/nix-support
+      mkdir -p $out/nix-support
       cp $db $out/nix-support/hddtemp.db
       ./configure --prefix=$out --with-db-path=$out/nix-support/hddtemp.db
     ''; 

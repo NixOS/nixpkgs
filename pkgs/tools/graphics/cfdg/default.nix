@@ -16,10 +16,10 @@ rec {
   phaseNames = ["doMake" "copyFiles"];
 
   copyFiles = a.fullDepEntry ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp cfdg $out/bin/
 
-    ensureDir $out/share/doc/${name}
+    mkdir -p $out/share/doc/${name}
     cp *.txt $out/share/doc/${name}
   '' ["defEnsureDir" "doMake"];
       

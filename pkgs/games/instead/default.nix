@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   inherit games;
 
   installPhase = ''
-    ensureDir $out/bin $out/share/${name}
+    mkdir -p $out/bin $out/share/${name}
     cp sdl-instead $out/bin
     cp -R games languages stead themes $out/share/${name}
     pushd $out/share/${name}/games

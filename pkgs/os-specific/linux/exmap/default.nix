@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
   #checkPhase = "make test"
 
   installPhase = ''
-    ensureDir "$out/share/${name}"
+    mkdir -p "$out/share/${name}"
     cp kernel/*.ko "$out/share/${name}"
 
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp src/{gexmap,exmtool,elftool,showproc} "$out/bin"
   '';
 

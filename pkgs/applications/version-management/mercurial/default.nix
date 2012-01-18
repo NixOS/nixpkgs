@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   postInstall = (stdenv.lib.optionalString guiSupport
     ''
-      ensureDir $out/etc/mercurial
+      mkdir -p $out/etc/mercurial
       cp contrib/hgk $out/bin
       cat >> $out/etc/mercurial/hgrc << EOF
       [extensions]
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       done
 
       # copy hgweb.cgi to allow use in apache
-      ensureDir $out/share/cgi-bin
+      mkdir -p $out/share/cgi-bin
       cp -v hgweb.cgi $out/share/cgi-bin
       chmod u+x $out/share/cgi-bin/hgweb.cgi
     '';

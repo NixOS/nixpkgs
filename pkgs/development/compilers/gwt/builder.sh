@@ -1,14 +1,14 @@
 source $stdenv/setup
 
 tar xfvj $src
-ensureDir $out
+mkdir -p $out
 cp -av $name $out
 
 # Create wrapper scripts so that the GWT compiler/host work
 
 libPath="$libstdcpp5/lib:$glib/lib:$gtk/lib:$atk/lib:$pango/lib:$libX11/lib:$libXt/lib:$out/$name/mozilla-1.7.12"
 
-ensureDir $out/bin
+mkdir -p $out/bin
 
 cat > $out/bin/gwt-compile <<EOF
 #!/bin/sh

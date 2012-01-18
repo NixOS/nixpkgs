@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/libexec
+    mkdir -p $out/bin $out/libexec
     cp sand $out/libexec
     echo -e '#! /bin/sh\nLC_ALL=C '$out'/libexec/sand "$@"' >$out/bin/fsg
     chmod a+x $out/bin/fsg

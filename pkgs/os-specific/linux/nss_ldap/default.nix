@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     substituteInPlace Makefile \
       --replace '/usr$(libdir)' $TMPDIR \
       --replace 'install-data-local:' 'install-data-local-disabled:'
-    ensureDir $out/etc
+    mkdir -p $out/etc
   '';
 
   buildInputs = [openldap];

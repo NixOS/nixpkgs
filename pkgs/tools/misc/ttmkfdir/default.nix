@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     ];
 
   preInstall = ''
-    ensureDir $out; makeFlags="DESTDIR=$out BINDIR=/bin"
+    mkdir -p $out; makeFlags="DESTDIR=$out BINDIR=/bin"
   '';
 
   buildInputs = [freetype fontconfig libunwind libtool flex bison];

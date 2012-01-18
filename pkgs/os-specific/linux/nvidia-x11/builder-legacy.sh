@@ -36,7 +36,7 @@ buildPhase() {
 installPhase() {
 
     # Install libGL and friends.
-    ensureDir $out/lib
+    mkdir -p $out/lib
     cp -prd usr/lib/* usr/X11R6/lib/libXv* $out/lib/
 
     ln -snf libGLcore.so.$versionNumber $out/lib/libGLcore.so
@@ -59,11 +59,11 @@ installPhase() {
     if test -z "$libsOnly"; then
         
         # Install the kernel module.
-        ensureDir $out/lib/modules/$kernelVersion/misc
+        mkdir -p $out/lib/modules/$kernelVersion/misc
         cp usr/src/nv/nvidia.ko $out/lib/modules/$kernelVersion/misc
 
         # Install the X driver.
-        ensureDir $out/lib/xorg/modules
+        mkdir -p $out/lib/xorg/modules
         cp -prd usr/X11R6/lib/modules/* $out/lib/xorg/modules/
 
         ln -snf libnvidia-wfb.so.$versionNumber $out/lib/xorg/modules/libnvidia-wfb.so.1
@@ -72,7 +72,7 @@ installPhase() {
         patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*
 
         # Install the programs.
-        ensureDir $out/bin
+        mkdir -p $out/bin
 
         for i in nvidia-settings nvidia-xconfig; do
 	    cp usr/bin/$i $out/bin/$i

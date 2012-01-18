@@ -6,5 +6,5 @@ tar zxvf $src
 cd postgresql-jdbc-*
 ant
 
-ensureDir $out/share/java
+mkdir -p $out/share/java
 cp jars/*.jar $out/share/java

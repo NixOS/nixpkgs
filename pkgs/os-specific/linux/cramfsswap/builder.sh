@@ -1,6 +1,6 @@
 source $stdenv/setup
 
 export DESTDIR=$out
-ensureDir $out/usr/bin
+mkdir -p $out/usr/bin
 
 genericBuild

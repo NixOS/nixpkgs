@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   makeFlags = "-f makefile.u";
 
   installPhase = ''
-    ensureDir $out/include $out/lib
+    mkdir -p $out/include $out/lib
     cp libf2c.a $out/lib
     cp f2c.h $out/include
   '';

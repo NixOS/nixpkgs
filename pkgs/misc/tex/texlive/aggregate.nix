@@ -7,12 +7,12 @@ rec {
 
   doAggregate = fullDepEntry (''
 
-    ensureDir $out/bin
+    mkdir -p $out/bin
     for currentPath in ${lib.concatStringsSep " " buildInputs}; do
         echo Symlinking "$currentPath"
         find $currentPath/share/info $currentPath/share/man $(echo $currentPath/texmf*/) ! -type d | while read; do
             REPLY="''${REPLY#$currentPath}"
-            ensureDir $out/"$(dirname "$REPLY")"
+            mkdir -p $out/"$(dirname "$REPLY")"
             ln -fs $currentPath/"$REPLY" $out/"$REPLY"
             echo
         done | while read; do head -n 99 >/dev/null; echo -n .; done
@@ -33,7 +33,7 @@ rec {
     rm -r $out/texmf-config
     find $out/texmf/ -type d | while read; do
       REPLY="''${REPLY#$out/texmf}"
-      ensureDir $out/texmf-config/"$REPLY"
+      mkdir -p $out/texmf-config/"$REPLY"
     done
 
     for i in $out/libexec/*/* :; do

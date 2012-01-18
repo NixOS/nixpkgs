@@ -15,7 +15,7 @@
 stdenv.mkDerivation {
   inherit name;
   buildCommand = ''
-    ensureDir $out/share/applications
+    mkdir -p $out/share/applications
     cat > $out/share/applications/$name.desktop <<EOF
     [Desktop Entry]
     Type=${type}

@@ -3554,11 +3554,11 @@ let
           glibc32 = (import ./all-packages.nix {system = "i686-linux";}).glibc;
         }
         ''
-          ensureDir $out
+          mkdir -p $out
           ln -s $glibc64/* $out/
 
           rm $out/lib $out/lib64
-          ensureDir $out/lib
+          mkdir -p $out/lib
           ln -s $glibc64/lib/* $out/lib
           ln -s $glibc32/lib $out/lib/32
           ln -s lib $out/lib64

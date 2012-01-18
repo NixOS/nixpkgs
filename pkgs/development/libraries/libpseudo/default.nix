@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    ensureDir $out/include
-    ensureDir $out/lib
+    mkdir -p $out/include
+    mkdir -p $out/lib
   '';
 
   buildInputs = [pkgconfig glib ncurses];

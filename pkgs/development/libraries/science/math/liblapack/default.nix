@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir "$out/lib"
+    mkdir -p "$out/lib"
     install -m755 *.a* "$out/lib"
     install -m755 *.so* "$out/lib"
     ln -sf liblapack.so.3 "$out/lib/liblapack.so"

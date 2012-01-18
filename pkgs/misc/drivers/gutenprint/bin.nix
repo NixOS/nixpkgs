@@ -11,7 +11,7 @@ add the following lines to bindirCmds property of  printing/cupsd.nix:
 
   ln -s ${pkgs.gutenprintBin}/lib/cups/backend/* $out/lib/cups/backend/
   ln -s ${pkgs.gutenprintBin}/lib/cups/filter/* $out/lib/cups/filter/
-  ensureDir $out/lib/cups/model
+  mkdir -p $out/lib/cups/model
   cat ${pkgs.gutenprintBin}/ppds/Canon/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd.gz |gunzip > $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
   sed -i 's@/opt/gutenprint/cups@${pkgs.gutenprintBin}/cups@' $out/lib/cups/model/Canon-PIXMA_iP4000-gutenprint.5.0.sim-en.ppd
 

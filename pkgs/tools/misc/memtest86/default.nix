@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-I.";
   
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp memtest.bin $out/
   '';
 

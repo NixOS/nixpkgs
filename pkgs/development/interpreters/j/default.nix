@@ -53,11 +53,11 @@ rec {
   '' ["doUnpack" "addInputs" "minInit"];
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out"
+    mkdir -p "$out"
     cp -r j/bin "$out/bin"
     rm "$out/bin/profilex_template.ijs"
     
-    ensureDir "$out/share/j"
+    mkdir -p "$out/share/j"
 
     cp -r docs j/addons j/system "$out/share/j"
   '' ["doUnpack" "doBuildJ" "minInit" "defEnsureDir"];

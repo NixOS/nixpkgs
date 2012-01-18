@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     installFlags=GNOME_DATADIR=$out
-    ensureDir $out/control-center/screensavers
+    mkdir -p $out/control-center/screensavers
   '';
 
   meta = {

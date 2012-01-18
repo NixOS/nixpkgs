@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
-      ensureDir $out/lib/locale
+      mkdir -p $out/lib/locale
       cp $TMPDIR/nix/store/*/lib/locale/locale-archive $out/lib/locale/
     '';
 

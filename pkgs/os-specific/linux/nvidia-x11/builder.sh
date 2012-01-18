@@ -27,7 +27,7 @@ buildPhase() {
 installPhase() {
 
     # Install libGL and friends.
-    ensureDir $out/lib
+    mkdir -p $out/lib
     cp -prd libcuda.* libGL.* libnvidia-cfg.* libnvidia-compiler.* libnvidia-tls.* libnvidia-glcore.* libOpenCL.* libXv* libvdpau_nvidia* tls $out/lib/
     
     ln -snf libnvidia-glcore.so.$versionNumber $out/lib/libnvidia-glcore.so
@@ -50,15 +50,15 @@ installPhase() {
     if test -z "$libsOnly"; then
         
         # Install the kernel module.
-        ensureDir $out/lib/modules/$kernelVersion/misc
+        mkdir -p $out/lib/modules/$kernelVersion/misc
         cp kernel/nvidia.ko $out/lib/modules/$kernelVersion/misc
 
         # Install the X driver.
-        ensureDir $out/lib/xorg/modules
+        mkdir -p $out/lib/xorg/modules
         cp -p libnvidia-wfb.* $out/lib/xorg/modules/
-        ensureDir $out/lib/xorg/modules/drivers
+        mkdir -p $out/lib/xorg/modules/drivers
         cp -p nvidia_drv.so $out/lib/xorg/modules/drivers
-        ensureDir $out/lib/xorg/modules/extensions
+        mkdir -p $out/lib/xorg/modules/extensions
         cp -p libglx.so.* $out/lib/xorg/modules/extensions
 
         ln -snf libnvidia-wfb.so.$versionNumber $out/lib/xorg/modules/libnvidia-wfb.so.1
@@ -67,7 +67,7 @@ installPhase() {
         patchelf --set-rpath $out/lib $out/lib/xorg/modules/extensions/libglx.so.*.*
 
         # Install the programs.
-        ensureDir $out/bin
+        mkdir -p $out/bin
 
         for i in nvidia-settings nvidia-xconfig; do
 	    cp $i $out/bin/$i
@@ -76,16 +76,16 @@ installPhase() {
         done
     
         # Header files etc.
-        ensureDir $out/include/nvidia
+        mkdir -p $out/include/nvidia
         cp -p *.h $out/include/nvidia
 
-        ensureDir $out/share/man/man1
+        mkdir -p $out/share/man/man1
         cp -p *.1.gz $out/share/man/man1
 
-        ensureDir $out/share/applications
+        mkdir -p $out/share/applications
         cp -p *.desktop $out/share/applications
 
-        ensureDir $out/share/pixmaps
+        mkdir -p $out/share/pixmaps
         cp -p nvidia-settings.png $out/share/pixmaps
 
         # Patch the `nvidia-settings.desktop' file.

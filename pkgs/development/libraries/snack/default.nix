@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   postInstall = "aoeu";
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     make install DESTDIR="$out" 
   '';
 

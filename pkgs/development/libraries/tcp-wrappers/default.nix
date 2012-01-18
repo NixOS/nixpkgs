@@ -50,7 +50,7 @@ rec {
   '' ["minInit"];
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out"/{sbin,lib}
+    mkdir -p "$out"/{sbin,lib}
     make libwrap.so
     cp libwrap.{a,so} "$out/lib"
     find . -perm +111 -a ! -name '*.*' -exec cp '{}' "$out/sbin" ';'

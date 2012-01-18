@@ -27,13 +27,13 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp pdfread.py $out/bin
     chmod +x $out/bin/pdfread.py
 
     LIBSUFFIX=lib/${python.libPrefix}/site-packages/
     PYDIR=$out/$LIBSUFFIX
-    ensureDir $PYDIR
+    mkdir -p $PYDIR
     cp -R *.py pylrs $PYDIR
 
     wrapProgram $out/bin/pdfread.py --prefix PYTHONPATH : $PYTHONPATH:${pil}/$LIBSUFFIX/PIL:$PYDIR \

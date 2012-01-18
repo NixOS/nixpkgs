@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
        ];
 
   installPhase = ''
-    ensureDir $out/bin
-    ensureDir $out/libexec/chrome
+    mkdir -p $out/bin
+    mkdir -p $out/libexec/chrome
 
     cp -R * $out/libexec/chrome
 

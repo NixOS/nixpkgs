@@ -43,7 +43,7 @@ rec {
   '') ["doUnpack" "addInputs" "setParams"];
 
   doInstall = a.fullDepEntry (''
-    ensureDir $BIN_DIR $SYSTEM_DATA_DIR $DOC_DIR $PIXMAP_DIR
+    mkdir -p $BIN_DIR $SYSTEM_DATA_DIR $DOC_DIR $PIXMAP_DIR
     bash install.sh
   '') ["doBuild" "addInputs" "setParams" "defEnsureDir"];
       

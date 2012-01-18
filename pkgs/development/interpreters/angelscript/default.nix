@@ -32,7 +32,7 @@ rec {
   prepareBuild = a.fullDepEntry ''
     cd angelscript/projects/gnuc
     sed -i makefile -e "s@LOCAL = .*@LOCAL = $out@"
-    ensureDir "$out/lib" "$out/bin" "$out/share" "$out/include"
+    mkdir -p "$out/lib" "$out/bin" "$out/share" "$out/include"
     export SHARED=1 
     export VERSION="${version}"
   '' ["minInit" "addInputs" "doUnpack" "defEnsureDir"];
@@ -42,7 +42,7 @@ rec {
   '' ["minInit"];
 
   installDocs = a.fullDepEntry ''
-    ensureDir "$out/share/angelscript"
+    mkdir -p "$out/share/angelscript"
     cp -r ../../../docs  "$out/share/angelscript"
   '' ["defEnsureDir" "prepareBuild"];
       

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE="-include ${zlib}/include/zlib.h";
 
   postInstall = ''
-    ensureDir $out/share/naev
+    mkdir -p $out/share/naev
     cp -v $srcData $out/share/naev/ndata
     wrapProgram $out/bin/naev --add-flags $out/share/naev/ndata
   '';

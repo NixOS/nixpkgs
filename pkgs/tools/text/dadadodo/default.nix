@@ -21,7 +21,7 @@ rec {
   installFlags = "PREFIX=$out";
 
   doDeploy = a.fullDepEntry (''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp dadadodo $out/bin
   '') [ "minInit" "doMake" "defEnsureDir"];
       

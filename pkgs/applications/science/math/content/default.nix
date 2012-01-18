@@ -77,7 +77,7 @@ rec {
   '') ["addInputs" "buildVibrant" "setPlatform"];
 
   install = a.fullDepEntry (''
-    ensureDir $out/share/${name}/build-snapshot $out/bin $out/lib $out/share/${name}/doc
+    mkdir -p $out/share/${name}/build-snapshot $out/bin $out/lib $out/share/${name}/doc
     find . -name '*.o' -exec cp '{}' $out/lib ';'
     find . -name '*.so' -exec cp '{}' $out/lib ';'
     find . -name '*.txt' -exec cp '{}' $out/share/${name}/doc ';'

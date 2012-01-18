@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
     '';
     
     installPhase = ''
-      ensureDir $out/bin
-      ensureDir $out/lib
+      mkdir -p $out/bin
+      mkdir -p $out/lib
       
       cp -v libv8.* $out/lib
       cp -v shell $out/bin/v8-shell

@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/{bin,share/sonic-visualiser}
+    mkdir -p $out/{bin,share/sonic-visualiser}
     cp sonic-visualiser/sonic-visualiser $out/bin
     cp -r sonic-visualiser/samples $out/share/sonic-visualiser/samples
     wrapProgram $out/bin/sonic-visualiser --prefix LD_LIBRARY_PATH : ${libX11}/lib

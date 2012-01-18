@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
-      ensureDir $out/share/qemu-images
+      mkdir -p $out/share/qemu-images
       bunzip2 < $src > $out/share/qemu-images/linux-0.2.img
     '';
 

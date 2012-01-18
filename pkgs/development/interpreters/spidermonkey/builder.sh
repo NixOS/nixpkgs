@@ -22,9 +22,9 @@ $MAKE printlibraries
 $MAKE printprograms
 $MAKE
 
-ensureDir $out
-ensureDir $out/bin
-ensureDir $out/lib
+mkdir -p $out
+mkdir -p $out/bin
+mkdir -p $out/lib
 
 # Install the binaries that have been created.
 install $(cat PROGRAMS) $out/bin

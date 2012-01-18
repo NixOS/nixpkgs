@@ -9,7 +9,7 @@ rec {
   buildInputs = [texLive unzip];
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
-    ensureDir $out/texmf/tex/latex/moderncv $out/texmf/doc $out/share
+    mkdir -p $out/texmf/tex/latex/moderncv $out/texmf/doc $out/share
     mv *.cls *.sty $out/texmf/tex/latex/moderncv/
     mv examples $out/texmf/doc/moderncv
     ln -s $out/texmf* $out/share/

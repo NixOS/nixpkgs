@@ -17,7 +17,7 @@ buildPhase() {
 
 postInstall() {
     sqlDir="$out/share/mythtv/sql"
-    ensureDir $sqlDir
+    mkdir -p $sqlDir
     cp -p ./database/mc.sql $sqlDir/
 }
 

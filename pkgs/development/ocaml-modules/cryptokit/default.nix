@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   buildFlags = "setup.data build";
 
-  preBuild = "ensureDir $out/lib/ocaml/${ocaml_version}/site-lib/cryptokit";
+  preBuild = "mkdir -p $out/lib/ocaml/${ocaml_version}/site-lib/cryptokit";
 
   meta = {
     homepage = "http://pauillac.inria.fr/~xleroy/software.html";

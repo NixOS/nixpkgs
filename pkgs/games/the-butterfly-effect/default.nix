@@ -38,9 +38,9 @@ rec {
   '';
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out/share/tbe"
+    mkdir -p "$out/share/tbe"
     cp -r . "$out/share/tbe/build-dir"
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     echo '#! /bin/sh' >> "$out/bin/tbe"
     echo "$out/share/tbe/build-dir/tbe \"\$@\"" >> "$out/bin/tbe"
     chmod a+x "$out/bin/tbe"

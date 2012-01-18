@@ -14,11 +14,11 @@ stdenv.mkDerivation rec {
   checkPhase = "make utest";
 
   installPhase = ''
-    ensureDir "$out/share/emacs/site-lisp"
+    mkdir -p "$out/share/emacs/site-lisp"
     cp -v */*.el */*/*.el */*.elc */*/*.elc "$out/share/emacs/site-lisp"
     chmod a-x "$out/share/emacs/site-lisp/"*
 
-    ensureDir "$out/share/info"
+    mkdir -p "$out/share/info"
     cp -v */*.info* */*/*.info* "$out/share/info"
   '';
 

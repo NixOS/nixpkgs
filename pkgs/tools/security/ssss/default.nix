@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       sed -e s@/usr/@$out/@g -i Makefile
       cp ssss.manpage.xml ssss.1
       cp ssss.manpage.xml ssss.1.html
-      ensureDir $out/bin $out/share/man/man1
+      mkdir -p $out/bin $out/share/man/man1
       echo -e 'install:\n\tcp ssss-combine ssss-split '"$out"'/bin' >>Makefile
     '';
 

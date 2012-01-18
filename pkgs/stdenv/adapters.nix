@@ -83,10 +83,10 @@ rec {
           + " --disable-shared"; # brrr...
 
         NIX_GCC = runCommand "klibc-wrapper" {} ''
-          ensureDir $out/bin
+          mkdir -p $out/bin
           ln -s ${klibc}/bin/klcc $out/bin/gcc
           ln -s ${klibc}/bin/klcc $out/bin/cc
-          ensureDir $out/nix-support
+          mkdir -p $out/nix-support
           echo 'PATH=$PATH:${stdenv.gcc.binutils}/bin' > $out/nix-support/setup-hook
         '';
       });
@@ -209,7 +209,7 @@ rec {
 
         moveBuildDir =
           ''
-            ensureDir $out/.build
+            mkdir -p $out/.build
             cd $out/.build
           '';
       } stdenv;

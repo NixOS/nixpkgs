@@ -29,7 +29,7 @@ rec {
   makeFlags = ["PREFIX=\$out"];
 
   prepareOut = a.fullDepEntry ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
   '' ["minInit" "defEnsureDir"];
       
   meta = {

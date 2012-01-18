@@ -22,7 +22,7 @@ with builderDefs;
 			sed -e 's@/usr/share/games/orbit/@'$out'/dump/@g' -i *.c
                         sed -e '/DIR=/d; s/-lesd//; s/-DESD//;' -i Makefile 
                         make 
-                        ensureDir $out/bin
+                        mkdir -p $out/bin
                         cp -r .. $out/dump
                         cat >$out/bin/space-orbit <<EOF
 #! /bin/sh

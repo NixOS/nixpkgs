@@ -4,14 +4,14 @@ unpackFile $src
 
 cd docbook-*
 
-ensureDir $out/xml/rng
+mkdir -p $out/xml/rng
 cp -prv rng $out/xml/rng/docbook
 
-ensureDir $out/xml/dtd
+mkdir -p $out/xml/dtd
 cp -prv dtd $out/xml/dtd/docbook
 
-ensureDir $out/share/doc
+mkdir -p $out/share/doc
 cp -prv docs $out/share/doc/docbook
 
-ensureDir $out/share/docbook
+mkdir -p $out/share/docbook
 cp -prv tools $out/share/docbook/

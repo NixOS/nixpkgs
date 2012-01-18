@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    ensureDir $out/etc $out/var/lib
+    mkdir -p $out/etc $out/var/lib
     makeFlags="$makeFlags prefix=$out"
   '';
 

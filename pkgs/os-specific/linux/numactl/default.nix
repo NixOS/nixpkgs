@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     # The `install' rule expects this directory to be available.
-    ensureDir "$out/share/man/man5"
+    mkdir -p "$out/share/man/man5"
   '';
 
   meta = {

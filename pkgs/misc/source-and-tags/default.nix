@@ -28,13 +28,13 @@ args: with args; {
            '') createTagFiles );
       in ''
       SRC_DEST=$out/src/$name
-      ensureDir $SRC_DEST
+      mkdir -p $SRC_DEST
       pwd; ls
       cp -r $srcDir $SRC_DEST
       cd $SRC_DEST
       ${createTags}
 
-      ensureDir $out/nix-support
+      mkdir -p $out/nix-support
       echo "TAG_FILES=\"\$TAG_FILES\''${TAG_FILES:+:}$TAG_FILES\"" >> $out/nix-support/setup-hook
     '';
   };

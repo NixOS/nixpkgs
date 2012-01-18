@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out/bin
+mkdir -p $out/bin
 
 cat >> $out/bin/jing <<EOF
 #! $SHELL

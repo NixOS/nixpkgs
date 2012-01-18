@@ -32,7 +32,7 @@ rec {
   doDeploy = a.simplyShare "welkin";
 
   createBin = a.fullDepEntry ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     echo "#! ${a.stdenv.shell}" > "$out/bin/welkin"
     echo "export JAVA_HOME=${jre}" >> "$out/bin/welkin"
     echo "\"$out/share/welkin/welkin.sh\" \"\$@\"" >> "$out/bin/welkin"

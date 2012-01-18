@@ -2,9 +2,9 @@ source $stdenv/setup
 
 # This is a very dirty hack to prevent the binaries from putting the
 # Mesa libraries in their RPATHs.
-ensureDir $out/tmp
+mkdir -p $out/tmp
 ln -s $mesa/lib/* $out/tmp/
-ensureDir $out/lib
+mkdir -p $out/lib
 ln -s $mesa/lib/libGLU* $out/lib/
 export NIX_LDFLAGS="-L$out/tmp $NIX_LDFLAGS"
 
@@ -14,7 +14,7 @@ rm -rf $out/tmp
 
 
 # Add a wrapper around each program to use the appropriate OpenGL driver.
-ensureDir $out/bin/.orig
+mkdir -p $out/bin/.orig
 
 for i in $(cd $out/bin && ls); do
     mv $out/bin/$i $out/bin/.orig/$i

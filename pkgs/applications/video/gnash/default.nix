@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   # XXX: Tests currently fail.
   doCheck = false;
 
-  preInstall = ''ensureDir $out/plugins'';
+  preInstall = ''mkdir -p $out/plugins'';
   postInstall = ''
     make install-plugins
 

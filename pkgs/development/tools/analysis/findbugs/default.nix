@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -prd bin lib plugin doc $out/
     rm $out/bin/*.bat
   '';

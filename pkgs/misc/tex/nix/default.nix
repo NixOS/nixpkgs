@@ -182,7 +182,7 @@ rec {
           ln -s $postscript $input
         fi
 
-        ensureDir $out
+        mkdir -p $out
         convert -units PixelsPerInch \
           -density 600 \
           -trim \

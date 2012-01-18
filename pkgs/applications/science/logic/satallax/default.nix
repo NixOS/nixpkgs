@@ -34,21 +34,21 @@ rec {
       make
     )
 
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp minisat/simp/minisat "$out/bin"
 
     echo "(setq *minisat-binary* \"$out/bin/minisat\")" > config.lisp
 
   '') ["defEnsureDir" "minInit" "addInputs" "doUnpack"];
   doDeploy = a.fullDepEntry (''
-    ensureDir "$out/share/satallax/build-dir"
+    mkdir -p "$out/share/satallax/build-dir"
     cp -r * "$out/share/satallax/build-dir"
     cd  "$out/share/satallax/build-dir"
 
     sbcl --load make.lisp
     ! ( ./test | grep ERROR )
     
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp bin/satallax "$out/bin"
   '') ["defEnsureDir" "minInit" "addInputs" "doUnpack"];
       

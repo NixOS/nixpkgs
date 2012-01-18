@@ -24,7 +24,7 @@ in
 
     # FIXME: Install javadoc as well.
     installPhase =
-      '' ensureDir "$out/lib/java"
+      '' mkdir -p "$out/lib/java"
          cp -v build/x*.jar "$out/lib/java"
       '';
 

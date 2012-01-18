@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     phases = "buildPhase";
 
     buildPhase = "
-ensureDir \$out/bin
+mkdir -p \$out/bin
 cat > \$out/bin/${jedit.name} << EOF
 #!/bin/sh
 exec $java -jar $jeditjar \\$*

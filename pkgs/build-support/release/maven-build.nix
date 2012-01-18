@@ -22,7 +22,7 @@ stdenv.mkDerivation ( rec {
   setupPhase = ''
     runHook preSetupPhase
 
-    ensureDir $out/nix-support
+    mkdir -p $out/nix-support
     export LANG="en_US.UTF-8"
     export LOCALE_ARCHIVE=$glibcLocales/lib/locale/locale-archive
     export M2_REPO=$TMPDIR/repository
@@ -74,7 +74,7 @@ stdenv.mkDerivation ( rec {
   '';
 
   mvnRelease = ''
-    ensureDir $out/release
+    mkdir -p $out/release
 
     zip=$(ls target/*.zip| head -1)
     releaseName=$(basename $zip .zip)

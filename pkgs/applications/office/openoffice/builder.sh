@@ -70,7 +70,7 @@ installPhase() {
 	-f openoffice.lst -l en-US -p OpenOffice \
 	-buildid $BUILD -simple $ooFiles)
 
-    ensureDir $out/bin
+    mkdir -p $out/bin
     for i in soffice ooffice; do wrapSOffice $i; done
     
     # Create some wrappers to start individual OpenOffice components.
@@ -78,7 +78,7 @@ installPhase() {
     
     # Create symlinks to desktop files, so that openoffice.org apps can be picked from
     # the application menu in KDE and GNOME
-    ensureDir $out/share
+    mkdir -p $out/share
     ln -s $out/lib/openoffice/openoffice.org3/share/xdg $out/share/applications
 
     # Apply a minor correction to the *.desktop files in order to correctly address the icons

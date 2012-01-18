@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       t=$out/etc/bash_completion.d
-      ensureDir $t
+      mkdir -p $t
       cp ${./upstart-bash-completion} $t/upstart
     '';
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   # Somehow building the info still does not work, because the final
   # libc.info hasn't a Top node.
   installPhase = ''
-    ensureDir $out/share/info
+    mkdir -p $out/share/info
     cp ../$sourceRoot/manual/*.info $out/share/info
   '';
 

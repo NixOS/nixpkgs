@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   unpackPhase = "true";
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     echo '
 #!/bin/sh
 

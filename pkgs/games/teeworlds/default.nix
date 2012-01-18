@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     # Copy the graphics, sounds, etc.
-    ensureDir "$out/share/${name}"
+    mkdir -p "$out/share/${name}"
     cp -rv data other/icons "$out/share/${name}"
 
     # Copy the executables (client, server, etc.).
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     executables=""
     for file in *
     do
@@ -46,7 +46,7 @@ EOF
     done
 
     # Copy the documentation.
-    ensureDir "$out/doc/${name}"
+    mkdir -p "$out/doc/${name}"
     cp -v *.txt "$out/doc/${name}"
   '';
 

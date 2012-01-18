@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   installPhase = ''
     # Install VirtualBox files
     cd out/linux.*/release/bin
-    ensureDir $out/virtualbox
+    mkdir -p $out/virtualbox
     cp -av * $out/virtualbox
     
     # Install kernel module
@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     make install
     
     # Create wrapper script
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp -v ${./VBox.sh} $out/bin/VBox.sh
     sed -i -e "s|@INSTALL_PATH@|$out/virtualbox|" \
            -e "s|@QT4_PATH@|${qt4}/lib|" \
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     done
     
     # Create and fix desktop item
-    ensureDir $out/share/applications
+    mkdir -p $out/share/applications
     sed -i -e "s|Icon=VBox|Icon=$out/virtualbox/VBox.png|" $out/virtualbox/virtualbox.desktop
     ln -sfv $out/virtualbox/virtualbox.desktop $out/share/applications
   '';

@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out
+mkdir -p $out
 
 n=1
 for p in $srcs; do
@@ -21,7 +21,7 @@ done
 while read target; do
     read source
     echo "$source -> $target"
-    ensureDir "$out/$(dirname "$target")"
+    mkdir -p "$out/$(dirname "$target")"
     cp "$source" "$out/$target"
 done < $filemap
 

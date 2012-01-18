@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp unifdef $out/bin
   '';
 

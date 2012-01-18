@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ libX11 libXt libXext libXaw ];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp darcnes $out/bin
   '';
 

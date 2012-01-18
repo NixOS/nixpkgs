@@ -10,7 +10,7 @@ buildPhase() {
 }
 
 installPhase() {
-    ensureDir $out
+    mkdir -p $out
     cp -prvd * $out/
 }
 

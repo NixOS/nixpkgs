@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir $out/checkstyle
+    mkdir -p $out/checkstyle
     cp -R * $out/checkstyle
   '';
 

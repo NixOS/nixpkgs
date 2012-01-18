@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/sbin $out/etc
+    mkdir -p $out/sbin $out/etc
     cp script/bootchartd $out/sbin
     cp script/bootchartd.conf $out/etc
     chmod +x $out/sbin/bootchartd

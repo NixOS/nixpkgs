@@ -40,9 +40,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     sed -e "s@/usr/local/lib/OGRE@${ogre}/lib/OGRE@" -i ../bin/plugins.cfg
     sed -e "/CgProgramManager/d" -i ../bin/plugins.cfg
-    ensureDir $out/share/rigsofrods
+    mkdir -p $out/share/rigsofrods
     cp -r .. $out/share/rigsofrods/build-dir
-    ensureDir $out/bin
+    mkdir -p $out/bin
     for i in RoR rorconfig RoRViewer; do
       echo '#! ${stdenv.shell}' >> "$out/bin/$i"
       if [ "$i" = "rorconfig" ]; then

@@ -48,7 +48,7 @@ rec {
   makeSetupHook = { deps ? [], substitutions ? {} }: script:
     runCommand "hook" substitutions
       (''
-        ensureDir $out/nix-support
+        mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
       '' + stdenv.lib.optionalString (deps != []) ''
         echo ${toString deps} > $out/nix-support/propagated-build-native-inputs

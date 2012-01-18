@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     gcc foo.c -o foo
   '';
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp foo $out/bin
   '';
 }</programlisting>
@@ -112,7 +112,7 @@ buildPhase() {
 }
 
 installPhase() {
-  ensureDir $out/bin
+  mkdir -p $out/bin
   cp foo $out/bin
 }
 
@@ -939,14 +939,6 @@ functions.</para>
 <variablelist>
 
   
-  <varlistentry xml:id='fun-ensureDir'>
-    <term><function>ensureDir</function> <replaceable>args</replaceable></term>
-    <listitem><para>Creates the specified directories, including all
-    necessary parent directories, if they do not already
-    exist.</para></listitem>
-  </varlistentry>
-  
-
   <varlistentry xml:id='fun-substitute'>
     <term><function>substitute</function>
     <replaceable>infile</replaceable>

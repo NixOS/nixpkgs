@@ -12,7 +12,7 @@ stdenv.mkDerivation  rec {
   buildInputs = [ alsaLib libX11 makeWrapper tcl tk ];
 
   configurePhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     sed -e "s@/usr/local@$out@" -i Makefile
   '';
 

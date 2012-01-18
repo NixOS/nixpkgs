@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out/bin
+mkdir -p $out/bin
 
 cat > $out/bin/ut2004demo <<EOF
 #! $SHELL -e

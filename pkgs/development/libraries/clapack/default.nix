@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ cmake ];
 
   installPhase = ''
-    ensureDir $out/include $out/lib
+    mkdir -p $out/include $out/lib
     cp SRC/*.a F2CLIBS/libf2c/*.a BLAS/SRC/*.a $out/lib
     cp ../INCLUDE/* $out/include
   '';

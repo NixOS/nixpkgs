@@ -33,11 +33,11 @@ in
 
     postInstall =
       ''
-        ensureDir $out/share/zabbix
+        mkdir -p $out/share/zabbix
         cp -prvd frontends/php $out/share/zabbix/php
-        ensureDir $out/share/zabbix/db/data
+        mkdir -p $out/share/zabbix/db/data
         cp -prvd create/data/*.sql $out/share/zabbix/db/data
-        ensureDir $out/share/zabbix/db/schema
+        mkdir -p $out/share/zabbix/db/schema
         cp -prvd create/schema/*.sql $out/share/zabbix/db/schema
       '';
 

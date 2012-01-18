@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   # error. Still this is better than getting it always.
   # TODO: build from source and patch this
   unpackPhase = ''
-    ensureDir $out/bin;
+    mkdir -p $out/bin;
     cd $out; unzip $src
     s=$out/bin/OpenJump
     dir=$(echo $out/openjump-*)

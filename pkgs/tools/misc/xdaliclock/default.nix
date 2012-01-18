@@ -32,7 +32,7 @@ rec {
   phaseNames = ["doConfigure" "prepareDirs" "doMakeInstall"];
 
   prepareDirs = a.fullDepEntry ''
-    ensureDir "$out/bin" "$out/share" "$out/share/man/man1"
+    mkdir -p "$out/bin" "$out/share" "$out/share/man/man1"
   '' ["minInit" "defEnsureDir"];
 
   goSrcDir = "cd X11";

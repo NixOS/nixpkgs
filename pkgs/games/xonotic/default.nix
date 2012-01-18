@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     make DP_FS_BASEDIR=$DP_FS_BASEDIR sv-release
   '';
   installPhase = ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp darkplaces-dedicated "$out/bin/xonotic-dedicated"
     cp darkplaces-sdl "$out/bin/xonotic-sdl"
     cd ../..
-    ensureDir "$out/share/xonotic"
+    mkdir -p "$out/share/xonotic"
     mv data "$out/share/xonotic"
   '';
   dontPatchELF = true;

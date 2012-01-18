@@ -50,7 +50,7 @@ let version = "0.9.25"; in
     postInstall = ''
       makeinfo --force tcc-doc.texi || true
 
-      ensureDir "$out/share/info"
+      mkdir -p "$out/share/info"
       mv tcc-doc.info* "$out/share/info"
 
       echo 'int main () { printf ("it works!\n"); exit(0); }' | \

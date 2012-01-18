@@ -3,10 +3,10 @@ source $stdenv/setup
 export DESTDIR=$out
 
 preInstall() {
-  ensureDir $out
-  ensureDir $out/etc
-  ensureDir $out/sbin
-  ensureDir $out/usr
+  mkdir -p $out
+  mkdir -p $out/etc
+  mkdir -p $out/sbin
+  mkdir -p $out/usr
   make install-program
 }
 

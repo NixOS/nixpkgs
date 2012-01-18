@@ -233,9 +233,9 @@ preConfigure() {
     fi
 
     # Cross compiler evilness
-    ensureDir $out
-    ensureDir $out/arm-linux
-    ensureDir $out/arm-linux/bin
+    mkdir -p $out
+    mkdir -p $out/arm-linux
+    mkdir -p $out/arm-linux/bin
     ln -s $binutilsArm/arm-linux/bin/as $out/arm-linux/bin/as
     ln -s $binutilsArm/arm-linux/bin/ld $out/arm-linux/bin/ld
     ln -s $binutilsArm/arm-linux/bin/ar $out/arm-linux/bin/ar

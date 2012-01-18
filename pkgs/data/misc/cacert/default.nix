@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
-      ensureDir $out/etc
+      mkdir -p $out/etc
       bunzip2 < $src > $out/etc/ca-bundle.crt
     '';
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   buildInputs = [ libX11 ];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp icbm3d $out/bin
   '';
 

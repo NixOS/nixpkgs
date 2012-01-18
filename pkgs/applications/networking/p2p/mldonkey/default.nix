@@ -22,7 +22,7 @@ stdenv.mkDerivation (rec {
   # Byte code compilation (the ocaml opt compiler is not supported in many platforms)
   buildPhase = "make mlnet.byte";
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp mlnet.byte $out/bin/mlnet
   '';
 

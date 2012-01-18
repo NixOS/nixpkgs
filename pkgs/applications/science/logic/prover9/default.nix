@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   buildFlags = "all";
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp bin/* $out/bin
   '';
 

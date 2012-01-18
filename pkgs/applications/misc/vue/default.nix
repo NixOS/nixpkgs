@@ -31,7 +31,7 @@ rec {
 
   doDeploy = a.fullDepEntry ''
     unzip ${src}
-    ensureDir "$out"/{share/vue,bin}
+    mkdir -p "$out"/{share/vue,bin}
     cp VUE.jar "$out/share/vue/vue.jar"
     echo '#!${a.stdenv.shell}' >> "$out/bin/vue" 
     echo '${a.jre}/bin/java -jar "'"$out/share/vue/vue.jar"'" "$@"' >> "$out/bin/vue" 

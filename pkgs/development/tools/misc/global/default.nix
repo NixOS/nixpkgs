@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postInstall = ''
-    ensureDir "$out/share/emacs/site-lisp"
+    mkdir -p "$out/share/emacs/site-lisp"
     cp -v *.el "$out/share/emacs/site-lisp"
   '';
 

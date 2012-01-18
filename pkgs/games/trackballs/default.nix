@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   CXXFLAGS = CFLAGS;
   dontStrip = debug;
   postUnpack = optionalString debug
-    "ensureDir $out/src; cp -R * $out/src ; cd $out/src";
+    "mkdir -p $out/src; cp -R * $out/src ; cd $out/src";
 
   NIX_CFLAGS_COMPILE = "-iquote ${SDL}/include/SDL";
   configureFlags = optionalString debug "--enable-debug";

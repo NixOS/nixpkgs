@@ -28,7 +28,7 @@ rec {
     cd $out/share/${installSuffix}
     make LISP=${a.sbcl}/bin/sbcl
     make LISP=${a.sbcl}/bin/sbcl regression
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp saved_acl2 "$out/bin/acl2"
   '') ["doDeploy" "addInputs" "defEnsureDir"];
       

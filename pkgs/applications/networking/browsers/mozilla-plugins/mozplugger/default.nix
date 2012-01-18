@@ -22,7 +22,7 @@ rec {
   '') ["doUnpack" "minInit"];
 
   postInstall = a.fullDepEntry(''
-    ensureDir $out/share/${name}/plugin
+    mkdir -p $out/share/${name}/plugin
     ln -s $out/lib/mozilla/plugins/mozplugger.so $out/share/${name}/plugin
   '') ["doMakeInstall" "minInit" "defEnsureDir"];
 

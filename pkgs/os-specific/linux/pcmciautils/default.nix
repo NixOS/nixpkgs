@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     lib.concatMapStrings (path: ''
       for f in : $(find ${path} -type f); do
         test "$f" == ":" && continue;
-        ensureDir $(dirname $out/lib/firmware/$\{f#${path}});
+        mkdir -p $(dirname $out/lib/firmware/$\{f#${path}});
         ln -s $f $out/lib/firmware/$\{f#${path}};
       done;
     '') firmware;

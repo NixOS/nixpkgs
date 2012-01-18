@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl ];
 
   postInstall = ''
-    ensureDir $out/share/man/man1
+    mkdir -p $out/share/man/man1
     mv doc/rtorrent.1 $out/share/man/man1/rtorrent.1
   '';
 

@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out
+mkdir -p $out
 
 mkdir root
 cd root

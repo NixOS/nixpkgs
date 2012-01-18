@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir "$out/lib/hol_light" "$out/bin"
+    mkdir -p "$out/lib/hol_light" "$out/bin"
     cp -a  . $out/lib/hol_light
     echo "${start_script}" > "$out/bin/hol_light"
     chmod a+x "$out/bin/hol_light"

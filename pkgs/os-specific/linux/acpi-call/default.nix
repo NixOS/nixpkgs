@@ -17,9 +17,9 @@ stdenv.mkDerivation {
  
   installPhase = ''
     kernelVersion=$(cd ${kernel}/lib/modules && ls)
-    ensureDir $out/lib/modules/$kernelVersion/misc
+    mkdir -p $out/lib/modules/$kernelVersion/misc
     cp acpi_call.ko $out/lib/modules/$kernelVersion/misc
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp test_off.sh $out/bin/test_discrete_video_off.sh
   '';
 

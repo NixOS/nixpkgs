@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   installPhase =
     '' make install prefix="$out"
 
-       ensureDir "$out/share/${name}"
+       mkdir -p "$out/share/${name}"
        cp -v default.sdf "$out/share/${name}"
        sed -i "$out/bin/swec" -e"s|realpath(\$0)|'$out/share/${name}/swec'|g"
 

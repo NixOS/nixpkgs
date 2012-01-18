@@ -8,17 +8,17 @@ rec {
 
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
-    ensureDir $out/share/
+    mkdir -p $out/share/
 
-    ensureDir $out/texmf/fonts/enc
-    ensureDir $out/texmf/fonts/map
-    ensureDir $out/texmf/fonts/type1/public/cm-super
+    mkdir -p $out/texmf/fonts/enc
+    mkdir -p $out/texmf/fonts/map
+    mkdir -p $out/texmf/fonts/type1/public/cm-super
     cp pfb/*.pfb $out/texmf/fonts/type1/public/cm-super
-    ensureDir $out/texmf/dvips/cm-super
+    mkdir -p $out/texmf/dvips/cm-super
     cp dvips/*.{map,enc}  $out/texmf/dvips/cm-super
     cp dvips/*.enc  $out/texmf/fonts/enc
     cp dvips/*.map  $out/texmf/fonts/map
-    ensureDir $out/texmf/dvipdfm/config
+    mkdir -p $out/texmf/dvipdfm/config
     cp dvipdfm/*.map  $out/texmf/dvipdfm/config
 
     ln -s $out/texmf* $out/share/

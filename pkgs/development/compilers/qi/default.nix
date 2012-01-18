@@ -16,8 +16,8 @@ let
 	allBuild = fullDepEntry ("
 		(sleep 0.1; echo ) | clisp install.txt;
 		(sleep 0.1; echo -e '1\n(quit)\n' ) | sh Qi-Linux-CLisp 
-		ensureDir \$out/share
-		ensureDir \$out/bin
+		mkdir -p \$out/share
+		mkdir -p \$out/bin
 		cp -r . \$out/share/Qi-9.1
 		echo -e '#! ${shell}
 		arg1=\${1:-'\$out'/share/Qi-9.1/startup.txt}

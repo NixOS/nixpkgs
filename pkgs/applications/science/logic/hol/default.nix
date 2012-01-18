@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [polyml];
 
   buildCommand = ''
-    ensureDir "$out/src"
+    mkdir -p "$out/src"
     cd  "$out/src"
 
     tar -xzf "$src"
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     
     bin/build -expk -symlink
 
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     ln -st $out/bin  $out/src/hol/bin/*
     # ln -s $out/src/hol/bin $out/bin
   '';

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     prefix=$out/eggdrop
-    ensureDir $prefix
+    mkdir -p $prefix
   '';
 
   postConfigure = ''

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cd warsow_${version}_sdk
     unzip $src1
     unzip $src2
-    ensureDir source/release/
+    mkdir -p source/release/
     mv warsow_${mversion}_unified/basewsw source/release/
     cd source
   '';
@@ -33,8 +33,8 @@ stdenv.mkDerivation rec {
     for f in warsow wsw_server wswtv_server; do
         substituteInPlace $f --replace BINARY_DIR= BINARY_DIR=$dest
     done
-    ensureDir $dest
-    ensureDir $out/bin
+    mkdir -p $dest
+    mkdir -p $out/bin
     cp -v {warsow,wsw_server,wswtv_server}.* $dest
     cp -rv basewsw libs $dest
     cp -v warsow wsw_server wswtv_server $out/bin

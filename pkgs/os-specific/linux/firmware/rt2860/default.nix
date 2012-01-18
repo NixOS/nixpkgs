@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   # contingent upon your installation of this Agreement in its
   # entirety in the same directory as the Software."
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp $src/rt2860.bin $out
     cp $src/LICENSE $out/rt2860.LICENSE
   '';

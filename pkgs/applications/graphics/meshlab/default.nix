@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/opt/meshlab $out/bin $out/lib
+    mkdir -p $out/opt/meshlab $out/bin $out/lib
     pushd distrib
     cp -R * $out/opt/meshlab
     popd

@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
     buildInputs = [unzip];
     phases = "unpackPhase buildPhase";
     buildPhase = ''
-      ensureDir $out/{bin,lib}
+      mkdir -p $out/{bin,lib}
       mv * $out/lib
       bin="$out/bin/selenium-remote-control"
       cat >> "$bin" << EOF
@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
     };
     phases = "buildPhase";
     buildPhase = ''
-      ensureDir $out/{bin,lib}
+      mkdir -p $out/{bin,lib}
       cp $src $out/lib/
       bin="$out/bin/selenium-remote-control"
       cat >> "$bin" << EOF

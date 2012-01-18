@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     make
     cd ../../../StormLib/stormlib/
     make
-    ensureDir $out/lib
+    mkdir -p $out/lib
     cd ../..
 #    cp bncsutil/src/bncsutil/libbncutil.so $out/lib
 #    cp StormLib/stormlib/libStorm.so $out/lib
@@ -30,14 +30,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/lib
+    mkdir -p $out/lib
     cp bncsutil/src/bncsutil/libbncsutil.so $out/lib
     cp StormLib/stormlib/libStorm.so $out/lib
 
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ghost/ghost++ $out/bin
 
-    ensureDir $out/share/ghost-one/languages
+    mkdir -p $out/share/ghost-one/languages
     cp -r mapcfgs $out/share/ghost-one
     cp Languages/*.cfg $out/share/ghost-one/languages
     cp language.cfg $out/share/ghost-one/languages/English.cfg

@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   buildInputs = [ruby sqlite];
   buildPhase = "true";
   installPhase = ''
-    ensureDir $out/lib
+    mkdir -p $out/lib
     ruby setup.rb config --prefix=$out 
     # --bindir $out/bin --libdir $out/lib
     ruby setup.rb setup

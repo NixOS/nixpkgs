@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   ";
 
   installPhase = "
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp glxinfo glxgears $out/bin/
   ";
 }

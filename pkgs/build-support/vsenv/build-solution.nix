@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   installPhase = ''
     cd ${baseDir}
     vcbuild.exe /rebuild ${slnFile}
-    ensureDir $out
+    mkdir -p $out
     cp Debug/* $out
   '';
   buildInputs = [ vs ] ++ extraBuildInputs;

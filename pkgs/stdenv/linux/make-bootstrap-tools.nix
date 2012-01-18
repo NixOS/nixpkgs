@@ -92,7 +92,7 @@ rec {
 
       buildCommand = ''
 	set -x
-        ensureDir $out/bin $out/lib $out/libexec
+        mkdir -p $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
         cp -d ${glibc}/lib/ld*.so* $out/lib

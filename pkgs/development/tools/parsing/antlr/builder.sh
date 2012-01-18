@@ -4,8 +4,8 @@ tar zxvf $src
 cd antlr-*
 cd lib
 
-ensureDir $out/lib/antlr
-ensureDir $out/bin
+mkdir -p $out/lib/antlr
+mkdir -p $out/bin
 
 cp *.jar $out/lib/antlr
 

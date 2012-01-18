@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   unpackPhase = "unpackFile \$src; sourceRoot=.";
 
   buildPhase = "pwd; gcc -o pstree pstree.c";
-  installPhase = "ensureDir \$out/bin; cp pstree \$out/bin";
+  installPhase = "mkdir -p \$out/bin; cp pstree \$out/bin";
 
   meta = {
     description = "Show the set of running processes as a tree";

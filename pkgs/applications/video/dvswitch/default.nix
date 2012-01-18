@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = "
-    ensureDir $out
+    mkdir -p $out
     cp src/dv* $out/
   ";
 

@@ -28,7 +28,7 @@ rec {
   '' ["minInit" "addInputs" "doUnpack"];
 
   demoInstall = fullDepEntry(''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp Demo/chipmunk_demos $out/bin
   '') ["doMakeInstall" "defEnsureDir"];
       

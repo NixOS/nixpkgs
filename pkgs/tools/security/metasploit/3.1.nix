@@ -9,8 +9,8 @@ rec {
   configureFlags = [];
 
   doInstall = fullDepEntry(''
-    ensureDir $out/share/msf
-    ensureDir $out/bin
+    mkdir -p $out/share/msf
+    mkdir -p $out/bin
 
     cp -r * $out/share/msf
 

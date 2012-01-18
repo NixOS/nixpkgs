@@ -38,9 +38,9 @@ rec {
   '' ["build" "addInputs"];
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out/share/bam"
+    mkdir -p "$out/share/bam"
     cp -r docs examples tests  "$out/share/bam"
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp bam "$out/bin"
   '' ["minInit" "defEnsureDir" "build"];
       

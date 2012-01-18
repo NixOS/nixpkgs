@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     make INSTALL_HDR_PATH=$out headers_install
 
     # Some builds (e.g. KVM) want a kernel.release.
-    ensureDir $out/include/config
+    mkdir -p $out/include/config
     echo "${version}-default" > $out/include/config/kernel.release
   '';
 

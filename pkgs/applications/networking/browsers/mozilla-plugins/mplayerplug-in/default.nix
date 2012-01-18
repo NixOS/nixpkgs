@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig browser (browser.gtk) libXpm gettext ];
   
   installPhase = ''
-    ensureDir $out/lib/mozilla/plugins
+    mkdir -p $out/lib/mozilla/plugins
     cp -p mplayerplug-in*.so mplayerplug-in*.xpt $out/lib/mozilla/plugins
   '';
 

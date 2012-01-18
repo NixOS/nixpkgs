@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     # Install binaries
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp eduke32 mapster32 $out/bin 
     
     # Make wrapper script
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     chmod 755 $out/bin/eduke32-wrapper
     
     # Install desktop item
-    ensureDir $out/share/applications
+    mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications
   '';
   

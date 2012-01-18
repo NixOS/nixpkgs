@@ -26,9 +26,9 @@ stdenv.mkDerivation {
 		'';
   installPhase = ''
 		python setup.py install --prefix=$out
-		ensureDir "$out"/share/tpm/
+		mkdir -p "$out"/share/tpm/
 		cp -r .  "$out"/share/tpm/build-dir
-		ensureDir "$out/bin"
+		mkdir -p "$out/bin"
 		echo "#! /bin/sh" >> "$out/bin/tpm"
 		echo "export PYTHONPATH=\"\$PYTHONPATH:$PYTHONPATH:$(echo ${pil}/lib/python*/site-packages/PIL)\"" >> "$out/bin/tpm"
 		echo "cd \"$out/share/tpm/build-dir\"" >> "$out/bin/tpm"

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [bison flex texinfo readline texLive];
 
   preConfigure = "sed -i 's/ginstall-info/install-info/g' doc/Makefile";
-  installPhase = "ensureDir $out/bin ; make PREFIX=$out install";
+  installPhase = "mkdir -p $out/bin ; make PREFIX=$out install";
 
   meta = {
     description = "Geometry Drawing Language";

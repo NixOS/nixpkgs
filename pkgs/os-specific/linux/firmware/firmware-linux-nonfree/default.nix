@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   patchPhase = "rm -rf debian defines TODO";
 
-  installPhase = "ensureDir $out && cp -ra * $out/";
+  installPhase = "mkdir -p $out && cp -ra * $out/";
 
   # repeat the same trick for radeon, 3com, etc.
   postInstall = "ln -s $out/realtek/rtlwifi $out/rtlwifi";

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     if test "$udevSupport" = "1"; then
-      ensureDir $out/etc/udev/rules.d/
+      mkdir -p $out/etc/udev/rules.d/
       ./tools/sane-desc -m udev > $out/etc/udev/rules.d/60-libsane.rules || \
       cp tools/udev/libsane.rules $out/etc/udev/rules.d/60-libsane.rules
     fi

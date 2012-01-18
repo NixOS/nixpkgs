@@ -8,11 +8,11 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
 
     cp -v pal2nal.pl $out/bin 
 
-    ensureDir $out/doc
+    mkdir -p $out/doc
 
     cp -v README $out/doc
   '';

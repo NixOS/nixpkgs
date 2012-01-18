@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # says: "Your rights to redistribute the Software shall be
   # contingent upon your installation of this Agreement in its
   # entirety in the same directory as the Software."
-  installPhase = "ensureDir $out/${name}; cp *.bin $out; cp *.txt $out/${name}";
+  installPhase = "mkdir -p $out/${name}; cp *.bin $out; cp *.txt $out/${name}";
   
   meta = {
     description = "Firmware for the Ralink RT73 wireless card";

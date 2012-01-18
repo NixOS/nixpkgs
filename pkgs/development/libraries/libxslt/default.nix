@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [libxml2];
   
   postInstall = ''
-    ensureDir $out/nix-support
+    mkdir -p $out/nix-support
     ln -s ${libxml2}/nix-support/setup-hook $out/nix-support/
   '';
 

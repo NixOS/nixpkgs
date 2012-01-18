@@ -48,14 +48,14 @@ rec {
   '';
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out"/lib
-    ensureDir "$out"/include/Box2D
+    mkdir -p "$out"/lib
+    mkdir -p "$out"/include/Box2D
     cp Library/* Source/Gen/float/lib*.{a,so} "$out"/lib
     cp -r Source "$out"/include/Box2D/Source
     find "$out"/include/Box2D/Source ! -name '*.h' -exec rm '{}' ';'
     sed -e s@../Source@Box2D/Source@ -i Include/Box2D.h
     cp Include/Box2D.h "$out"/include/Box2D
-    ensureDir "$out/share"
+    mkdir -p "$out/share"
     cp -r Examples "$out/share"
   '' ["minInit" "addInputs" "doMake" "defEnsureDir"];
 

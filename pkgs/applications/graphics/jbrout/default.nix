@@ -20,7 +20,7 @@ buildPythonPackage {
   '';
 
   postInstall = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     echo '#!/bin/sh' > $out/bin/jbrout
     echo "python $out/lib/python2.7/site-packages/jbrout-src-py2.7.egg/jbrout/jbrout.py" >> $out/bin/jbrout
     chmod +x $out/bin/jbrout

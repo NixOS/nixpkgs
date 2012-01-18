@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out/lib
+mkdir -p $out/lib
 
 ln -s /usr/lib/libGL.so.1 $out/lib/
 ln -s /usr/lib/libGLU.so.1 $out/lib/

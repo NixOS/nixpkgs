@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = ''
-     ensureDir $out/share/applications
+     mkdir -p $out/share/applications
      cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 

@@ -95,7 +95,7 @@ in
         )
       }
 
-      ensureDir $target/{include,lib}
+      mkdir -p $target/{include,lib}
       link $target/lib "$(echo "''${!LIB_PATHS[@]}")"
       link $target/include "$(echo "''${!INCLUDE_PATHS[@]}")"
       echo "''${!LIBS[@]}" > $target/libs

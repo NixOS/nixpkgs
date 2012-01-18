@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   buildInputs = [x11 SDL mesa openal];
 
   preInstall = ''
-    ensureDir $out/baseq3
+    mkdir -p $out/baseq3
     installTargets=copyfiles
     installFlags="COPYDIR=$out"
   '';

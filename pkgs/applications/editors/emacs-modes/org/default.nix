@@ -29,10 +29,10 @@ stdenv.mkDerivation rec {
   installPhase =
     '' make install install-info
 
-       ensureDir "$out/share/doc/${name}"
+       mkdir -p "$out/share/doc/${name}"
        cp -v doc/org*.{html,pdf,txt} "$out/share/doc/${name}"
 
-       ensureDir "$out/share/org"
+       mkdir -p "$out/share/org"
        cp -R contrib "$out/share/org/contrib"
     '';
 

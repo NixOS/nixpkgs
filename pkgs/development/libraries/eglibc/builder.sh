@@ -20,7 +20,7 @@ preConfigure() {
     done
 
     # Include source for debugging
-    ensureDir $out/src
+    mkdir -p $out/src
     cp -R libc ports $out/src
     ln -s $out/src/ports $out/src/libc/ports
     # glibc wants -O2 minimum

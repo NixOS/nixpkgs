@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
   buildNativeInputs = stdenv.lib.optionals (cross != null) [ gccCross ];
 
   preInstall = if (cross != null) then ''
-    ensureDir $out/lib
+    mkdir -p $out/lib
     ln -s ${stdenv.gcc.gcc}/lib/libgcc_s.so.1 $out/lib/libgcc_s.so.1
   '' else "";
 

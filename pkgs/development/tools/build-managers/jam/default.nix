@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp bin.linux/jam $out/bin
   '';
 

@@ -8,10 +8,10 @@ stdenv.mkDerivation rec {
   };
   
   installPhase = ''
-    ensureDir $out/share/fonts/truetype
+    mkdir -p $out/share/fonts/truetype
     cp -v *.ttf $out/share/fonts/truetype
 
-    ensureDir "$out/doc/${name}"
+    mkdir -p "$out/doc/${name}"
     cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${name}"
   '';
 

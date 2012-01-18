@@ -69,7 +69,7 @@ rec {
   '') ["minInit" "doUnpack"];
 
   doAddPrograms = fullDepEntry (''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     for i in Programs/.libs/* Programs/*; do 
         cp $i $out/bin/webkit-program-$(basename $i) || true
     done

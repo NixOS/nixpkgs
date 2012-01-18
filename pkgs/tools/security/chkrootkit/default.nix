@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = "
-    ensureDir $out/sbin
+    mkdir -p $out/sbin
     cp check_wtmpx chkdirs chklastlog chkproc chkrootkit chkutmp chkwtmp ifpromisc strings-static $out/sbin
   ";
   

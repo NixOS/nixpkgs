@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1q3cjshxk484i8gqxm682bxcrps7205nl9vlim4s6z827bjlmc4a";
   };
 
-  installPhase = '' ensureDir $out; cp -r * $out '';
+  installPhase = '' mkdir -p $out; cp -r * $out '';
 
   meta = { 
     description = "Ruby interpreter written in Java";

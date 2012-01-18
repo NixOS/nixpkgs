@@ -6,7 +6,7 @@ source $stdenv/setup
 # should work (but didn't - got no response on #cvs)
 # See als man Page for those options
 
-ensureDir export
+mkdir -p export
 if [ -n "$tag" ]; then
     tag="-r $tag"
 else

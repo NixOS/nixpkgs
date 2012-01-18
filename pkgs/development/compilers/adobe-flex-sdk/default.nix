@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     unzip ${src}
     t=$out/opt/flex-sdk
-    ensureDir $t $out/bin
+    mkdir -p $t $out/bin
     mv * $t
     rm $t/bin/*.exe $t/bin/*.bat
     sed 's/$//' -i $t/bin/*

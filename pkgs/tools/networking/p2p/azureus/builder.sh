@@ -1,9 +1,9 @@
 source $stdenv/setup
 
-ensureDir $out/jars
+mkdir -p $out/jars
 cp $src $out/jars/azureus.jar
 
-ensureDir $out/bin
+mkdir -p $out/bin
 cat > $out/bin/azureus <<EOF
 #! $SHELL -e
 azureusHome=$out

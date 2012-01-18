@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   phases = "buildPhase";
 
   buildPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     s=$out/bin/shebangfix
     cp $file $s
     chmod +wx $s

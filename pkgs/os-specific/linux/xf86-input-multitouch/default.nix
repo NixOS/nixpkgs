@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     make DESTDIR="$out" LIBDIR="lib" install
-    ensureDir $out/include/xorg
+    mkdir -p $out/include/xorg
     echo -n "$confFile" > $out/include/xorg/10-multitouch.conf
   '';
 

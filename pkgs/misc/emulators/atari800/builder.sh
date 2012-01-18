@@ -6,7 +6,7 @@ preConfigure() {
 
 postInstall() {
     romsDir=$out/share/atari800/roms
-    ensureDir $romsDir
+    mkdir -p $romsDir
     unzip $rom -d $romsDir
 }
 

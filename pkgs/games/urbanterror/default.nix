@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
   '';
   installPhase = ''
     destDir="$out/opt/urbanterror"
-    ensureDir "$destDir"
-    ensureDir "$out/bin"
+    mkdir -p "$destDir"
+    mkdir -p "$out/bin"
     cp -v ioUrbanTerrorClientSource/build/release-linux-*/ioUrbanTerror.* \
           "$destDir/ioUrbanTerror"
     cp -v ioUrbanTerrorServerSource/build/release-linux-*/ioUrTded.* \

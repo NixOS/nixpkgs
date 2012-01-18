@@ -3,7 +3,7 @@ source $stdenv/setup
 
 unzip $src || true
 
-ensureDir $out
+mkdir -p $out
 mv $dirname/* $out/
 
 # Remove crap in the root directory.

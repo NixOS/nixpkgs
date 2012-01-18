@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
     # Install Emacs mode.
     cd "contrib/xcscope"
 
-    ensureDir "$out/libexec/cscope"
+    mkdir -p "$out/libexec/cscope"
     cp "cscope-indexer" "$out/libexec/cscope"
 
-    ensureDir "$out/share/emacs/site-lisp"
+    mkdir -p "$out/share/emacs/site-lisp"
     emacs --batch --eval '(byte-compile-file "xcscope.el")'
     cp xcscope.el{,c} "$out/share/emacs/site-lisp"
   '';

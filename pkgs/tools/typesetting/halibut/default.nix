@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
-    ensureDir $out/share/man/man1
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
     pushd doc
     make halibut.1
     popd

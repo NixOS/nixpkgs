@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
         fi
     done
 
-    ensureDir $out/pcsc/drivers
+    mkdir -p $out/pcsc/drivers
     cp -R proprietary/* $out/pcsc/drivers
   '';
 

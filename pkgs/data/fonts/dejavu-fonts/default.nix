@@ -19,11 +19,11 @@ stdenv.mkDerivation {
     ln -s ${perl}/lib/*/*/unicore/* -t resources/
   '';
   installPhase = '' 
-    ensureDir $out/share/fonts/truetype
+    mkdir -p $out/share/fonts/truetype
     for i in $(find build -name '*.ttf'); do 
         cp $i $out/share/fonts/truetype; 
     done;
-    ensureDir $out/share/dejavu-fonts
+    mkdir -p $out/share/dejavu-fonts
     cp -r build/* $out/share/dejavu-fonts
   '';
 }

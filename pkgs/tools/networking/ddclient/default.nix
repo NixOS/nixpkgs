@@ -15,7 +15,7 @@ buildPerlPackage {
   ''; 
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ddclient $out/bin
   '';
 

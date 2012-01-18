@@ -39,7 +39,7 @@ in
 
     installPhase =
       ''
-        ensureDir "$out/lib/locale"
+        mkdir -p "$out/lib/locale"
         cp -v "$TMPDIR/nix/store/"*"/lib/locale/locale-archive" "$out/lib/locale"
       '';
 

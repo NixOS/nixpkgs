@@ -32,7 +32,7 @@ rec {
 
   installProgram = a.fullDepEntry(''
     mv "$out/share/philter/".*rc "$out/share/philter/philterrc"
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp "$out/share/philter/src/philter.py" "$out/bin/philter"
     chmod a+x "$out/bin/philter"
   '') ["addInputs" "copyToShare" "minInit"];

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [unzip];
 
   installPhase = ''
-    ensureDir $out/lib/jars
+    mkdir -p $out/lib/jars
     cp lib/*.jar $out/lib/jars/
   '';
 

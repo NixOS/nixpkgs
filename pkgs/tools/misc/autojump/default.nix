@@ -21,10 +21,10 @@ let version = "4"; in
     buildInputs = [ python ];
 
     installPhase = ''
-      ensureDir "$out/bin" "$out/share/man/man1"
+      mkdir -p "$out/bin" "$out/share/man/man1"
       yes no | sh ./install.sh
 
-      ensureDir "$out/etc/bash_completion.d"
+      mkdir -p "$out/etc/bash_completion.d"
       cp -v autojump.bash "$out/etc/bash_completion.d"
 
       echo "Bash users: Make sure to source \`$out/etc/bash_completion.d/autojump.bash'"

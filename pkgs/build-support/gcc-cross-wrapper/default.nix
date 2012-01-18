@@ -20,7 +20,7 @@ let
     phases = [ "installPhase" ];
     installPhase = ''
       echo $out
-      ensureDir $out
+      mkdir -p $out
       cp -Rd ${gcc}/${cross.config}/lib $out/lib
       chmod -R +w $out/lib
       for a in $out/lib/*.la; do

@@ -26,9 +26,9 @@ rec {
 
     fullOut=$(toPythonPath $out)
     
-    ensureDir $fullOut
-    ensureDir $out/bin
-    ensureDir $out/share/viewmtn
+    mkdir -p $fullOut
+    mkdir -p $out/bin
+    mkdir -p $out/share/viewmtn
     
     cp -r * $fullOut
     cp $fullOut/viewmtn.py $out/bin

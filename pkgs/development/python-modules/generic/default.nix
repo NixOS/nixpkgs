@@ -50,7 +50,7 @@ python.stdenv.mkDerivation (attrs // {
   # XXX: Should we run `easy_install --always-unzip'?  It doesn't seem
   # to have a noticeable impact on small scripts.
   installPhase = ''
-    ensureDir "$out/lib/${python.libPrefix}/site-packages"
+    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
 
     echo "installing \`${name}' with \`easy_install'..."
     export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"

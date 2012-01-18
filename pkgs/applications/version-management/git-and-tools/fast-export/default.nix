@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   installPhase = ''
     sed -i "s@/usr/bin/env.*@$(type -p python)@" *.py
     l=$out/libexec/git-fast-export
-    ensureDir $out/{bin,doc/git-fast-export} $l
+    mkdir -p $out/{bin,doc/git-fast-export} $l
     mv *.txt $out/doc/git-fast-export
     sed -i "s@ROOT=.*@ROOT=$l@" *.sh
     mv *.sh $out/bin

@@ -25,7 +25,7 @@ for module in $rootModules; do
 done
 
 echo "closure:"
-ensureDir $out/lib/modules/"$version"
+mkdir -p $out/lib/modules/"$version"
 for module in $closure; do
     target=$(echo $module | sed "s^$NIX_STORE.*/lib/modules/^$out/lib/modules/^")
     if test -e "$target"; then continue; fi

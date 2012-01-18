@@ -123,7 +123,7 @@ rec {
   bootstrapGlibc = stdenvLinuxBoot0.mkDerivation {
     name = "bootstrap-glibc";
     buildCommand = ''
-      ensureDir $out
+      mkdir -p $out
       ln -s ${bootstrapTools}/lib $out/lib
       ln -s ${bootstrapTools}/include-glibc $out/include
     '';

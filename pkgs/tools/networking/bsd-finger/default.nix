@@ -16,5 +16,5 @@ stdenv.mkDerivation rec {
 
   preBuild = "cd finger";
 
-  preInstall = '' ensureDir $out/man/man1 $out/bin '';
+  preInstall = '' mkdir -p $out/man/man1 $out/bin '';
 }

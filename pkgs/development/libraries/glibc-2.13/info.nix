@@ -18,7 +18,7 @@ in
     # Somehow building the info still does not work, because the final
     # libc.info hasn't a Top node.
     installPhase = ''
-      ensureDir "$out/share/info"
+      mkdir -p "$out/share/info"
       cp -v "../$sourceRoot/manual/"*.info* "$out/share/info"
     '';
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp bitcoin-qt $out/bin
     cp src/bitcoind $out/bin
   '';

@@ -46,7 +46,7 @@ rec {
   };
 } // (if externalPurple2 then {
   postInstall = fullDepEntry (''
-      ensureDir $out/lib/purple-2
+      mkdir -p $out/lib/purple-2
       cp ${args.purple2Source}/lib/purple-2/* $out/lib/purple-2/
     '') ["minInit" "defEnsureDir"]; }
   else {})

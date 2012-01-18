@@ -39,7 +39,7 @@ exitHandler() {
         # normally.  Otherwise, return the original exit code.
         if test -n "$succeedOnFailure"; then
             echo "build failed with exit code $exitCode (ignored)"
-            ensureDir "$out/nix-support"
+            mkdir -p "$out/nix-support"
             echo -n $exitCode > "$out/nix-support/failed"
             exit 0
         fi
@@ -139,7 +139,7 @@ ensureDir() {
 }
 
 installBin() {
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp "$@" $out/bin
 }
 
@@ -682,7 +682,7 @@ patchShebangs() {
 installPhase() {
     runHook preInstall
 
-    ensureDir "$prefix"
+    mkdir -p "$prefix"
 
     installTargets=${installTargets:-install}
     echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
@@ -709,7 +709,7 @@ fixupPhase() {
                     echo "both $d/ and share/$d/ exists!"
                 else
                     echo "fixing location of $d/ subdirectory"
-                    ensureDir $prefix/share
+                    mkdir -p $prefix/share
                     if test -w $prefix/share; then
                         mv -v $prefix/$d $prefix/share
                         ln -sv share/$d $prefix
@@ -755,17 +755,17 @@ fixupPhase() {
     fi
 
     if test -n "$propagatedBuildInputs"; then
-        ensureDir "$out/nix-support"
+        mkdir -p "$out/nix-support"
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
     if test -n "$propagatedBuildNativeInputs"; then
-        ensureDir "$out/nix-support"
+        mkdir -p "$out/nix-support"
         echo "$propagatedBuildNativeInputs" > "$out/nix-support/propagated-build-native-inputs"
     fi
 
     if test -n "$setupHook"; then
-        ensureDir "$out/nix-support"
+        mkdir -p "$out/nix-support"
         substituteAll "$setupHook" "$out/nix-support/setup-hook"
     fi
 
@@ -780,7 +780,7 @@ distPhase() {
     make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
 
     if test "$dontCopyDist" != 1; then
-        ensureDir "$out/tarballs"
+        mkdir -p "$out/tarballs"
 
         # Note: don't quote $tarballs, since we explicitly permit
         # wildcards in there.

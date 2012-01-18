@@ -5,7 +5,7 @@ with builderDefs;
 	let localDefs = builderDefs.passthru.function (rec {
 		src=_src;
 		doInstall = fullDepEntry (''
-			ensureDir $out/share/dictd
+			mkdir -p $out/share/dictd
 			tar xf  ${src}
 			cp $(ls ./${_subdir}/*.{dict*,index} || true) $out/share/dictd 
 			echo "${_locale}" >$out/share/dictd/locale

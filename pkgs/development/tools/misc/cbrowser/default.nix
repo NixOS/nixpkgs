@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tk makeWrapper ];
 
   installPhase = ''
-    ensureDir $out/bin $out/share/${name}
+    mkdir -p $out/bin $out/share/${name}
     cp -R * $out/share/${name}/
 
     makeWrapper $out/share/${name}/cbrowser $out/bin/cbrowser \

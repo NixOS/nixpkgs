@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-iquote ${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix} -I${freetype}/include/freetype2";
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp bin/* $out/bin
   '';
 

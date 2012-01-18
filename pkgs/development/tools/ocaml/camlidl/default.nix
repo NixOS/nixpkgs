@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     mv config/Makefile.unix config/Makefile
     substituteInPlace config/Makefile --replace BINDIR=/usr/local/bin BINDIR=$out
     substituteInPlace config/Makefile --replace OCAMLLIB=/usr/local/lib/ocaml OCAMLLIB=$out/lib/ocaml/${ocaml_version}/site-lib/camlidl
-    ensureDir $out/lib/ocaml/${ocaml_version}/site-lib/camlidl/caml
+    mkdir -p $out/lib/ocaml/${ocaml_version}/site-lib/camlidl/caml
   '';
 
   meta = {

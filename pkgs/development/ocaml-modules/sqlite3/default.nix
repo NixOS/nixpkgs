@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     export OCAMLPATH=$OCAMLPATH:$OCAMLFIND_DESTDIR
-    ensureDir $out/bin
+    mkdir -p $out/bin
   '';
 
   createFindlibDestdir = true;

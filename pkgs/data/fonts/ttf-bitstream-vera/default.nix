@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   buildPhase = "true";
   installPhase = "
     fontDir=$out/share/fonts/truetype
-    ensureDir $fontDir
+    mkdir -p $fontDir
     cp *.ttf $fontDir
   ";
 }

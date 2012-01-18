@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   '';
 
   postInstall = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     ln -vs $RTDIR/matita $RTDIR/matitac $RTDIR/matitaclean $RTDIR/matitadep $RTDIR/matitawiki $out/bin
   '';
 

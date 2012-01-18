@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    ensureDir $out/share/man
+    mkdir -p $out/share/man
     cp -R * $out/share/man
   '';
 

@@ -64,7 +64,7 @@ stdenv.mkDerivation {
 
   # manually copy tcc and include files.. see comment above
   installPhase = ''
-    ensureDir $out{,/sbin,/lib/tcng/include}
+    mkdir -p $out{,/sbin,/lib/tcng/include}
     make DESTDIR=$out install
     cp tcc/tcc $out/sbin
     cp tcc/*.tc $out/lib/tcng/include

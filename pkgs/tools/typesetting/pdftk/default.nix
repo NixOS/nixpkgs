@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   preBuild = "cd pdftk";
 
   installPhase = ''
-    ensureDir $out/bin $out/share/man/man1
+    mkdir -p $out/bin $out/share/man/man1
     cp pdftk $out/bin
     cp ../debian/pdftk.1 $out/share/man/man1
   '';

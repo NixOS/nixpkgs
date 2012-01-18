@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip scheme texinfo ];
 
   configurePhase = ''
-    ensureDir "$out"
+    mkdir -p "$out"
     sed -i "Makefile" \
         -e "s|^[[:blank:]]*prefix[[:blank:]]*=.*$|prefix = $out/|g"
   '';

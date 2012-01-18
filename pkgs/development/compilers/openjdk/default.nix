@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   postUnpack = ''
-    ensureDir drops
+    mkdir -p drops
     cp ${jaxp_src} drops/${jaxp_src_name}
     cp ${jaxws_src} drops/${jaxws_src_name}
     cp ${jaf_src} drops/${jaf_src_name}
@@ -114,14 +114,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
   '';
 #  '' + (if jreOnly then "" else ''
 #    if [ -z $jre ]; then
 #      exit 0
 #    fi
-#    ensureDir $jre
+#    mkdir -p $jre
 #    cp -av build/*/j2re-image/* $jre
 #  '');
 

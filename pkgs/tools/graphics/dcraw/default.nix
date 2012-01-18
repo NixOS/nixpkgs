@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     set +e
     sh install
     set -e

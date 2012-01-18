@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   };
   phases="buildPhase";
   buildPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     ghc --make $src -o $out/bin/hasktags-modified
   '';
   buildInputs = [ ghcPlain ];

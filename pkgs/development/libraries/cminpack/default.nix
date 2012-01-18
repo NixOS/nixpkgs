@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    ensureDir $out/lib $out/include
+    mkdir -p $out/lib $out/include
   '';
 
   meta = {

@@ -25,7 +25,7 @@ preBuild() {
 }
 
 postInstall() {
-    ensureDir "$out/nix-support"
+    mkdir -p "$out/nix-support"
     cp $setupHook $out/nix-support/setup-hook
 }
 

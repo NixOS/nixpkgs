@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   # Very ugly - I don't know enough Mono to improve this. Isn't there any rpath in binaries?
   installPhase = ''
-    ensureDir $out/lib/pinta $out/bin
+    mkdir -p $out/lib/pinta $out/bin
     cp bin/*.{dll,exe} $out/lib/pinta
     cat > $out/bin/pinta << EOF
     #!/bin/sh

@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   
   installPhase = ''
     cd ..
-    ensureDir $out/lib/qt4/plugins/script
+    mkdir -p $out/lib/qt4/plugins/script
     cp -av plugins/script/* $out/lib/qt4/plugins/script
   '';
 

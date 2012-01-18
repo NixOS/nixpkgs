@@ -2,6 +2,6 @@ source $stdenv/setup
 
 makeFlags="-e PREFIX=\"$out\""
 
-ensureDir $out/bin
+mkdir -p $out/bin
 
 genericBuild

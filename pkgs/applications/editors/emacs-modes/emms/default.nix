@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
                           s|/usr/include/taglib|${taglib}/include/taglib|g ;
                           s|/usr/lib|${taglib}/lib|g ;
                           s|^all:\(.*\)\$|all:\1 emms-print-metadata|g"
-    ensureDir "$out/share/man/man1"
+    mkdir -p "$out/share/man/man1"
 
     sed -i "emms-player-mpg321-remote.el" \
         -e 's|emms-player-mpg321-remote-command[[:blank:]]\+"mpg321"|emms-player-mpg321-remote-command "${mpg321}/bin/mpg321"|g'
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ensureDir "$out/bin" && cp emms-print-metadata "$out/bin"
+    mkdir -p "$out/bin" && cp emms-print-metadata "$out/bin"
   '';
 
   meta = {

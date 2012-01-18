@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [openssl];
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp vfdecrypt $out/bin
   '';
 }

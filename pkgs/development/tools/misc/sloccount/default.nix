@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
   checkPhase = ''HOME="$TMPDIR" PATH="$PWD:$PATH" make test'';
 
   preInstall = ''
-    ensureDir "$out/bin"
-    ensureDir "$out/share/man/man1"
-    ensureDir "$out/share/doc"
+    mkdir -p "$out/bin"
+    mkdir -p "$out/share/man/man1"
+    mkdir -p "$out/share/doc"
   '';
 
   meta = {

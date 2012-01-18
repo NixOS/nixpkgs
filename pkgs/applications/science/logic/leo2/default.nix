@@ -29,17 +29,17 @@ rec {
   phaseNames = ["makeInstallationDir" "doUnpack" "doMake" "doFinalize"];
 
   makeInstallationDir = a.fullDepEntry (''
-    ensureDir "$out/share/leo2/build-dir"
+    mkdir -p "$out/share/leo2/build-dir"
     cd "$out/share/leo2/build-dir"
   '') ["minInit" "defEnsureDir"];
 
   goSrcDir = "cd src/";
 
   doFinalize = a.fullDepEntry (''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     echo -e "#! /bin/sh\\n$PWD/../bin/leo --atprc $out/etc/leoatprc \"\$@\"\\n" > "$out/bin/leo"
     chmod a+x "$out/bin/leo"
-    ensureDir "$out/etc"
+    mkdir -p "$out/etc"
     echo -e "e = ${eprover}/bin/eprover\\nepclextract = ${eprover}/bin/epclextract" > "$out/etc/leoatprc"
   '') ["minInit" "doMake" "defEnsureDir"];
 

@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   phases = [ "installPhase" ];
 
   installPhase = ''
-    ensureDir $out/include
+    mkdir -p $out/include
     cp -R ${mingw_runtime_headers}/include/* $out/include
     cp -R ${w32api_headers}/include/* $out/include
   '';

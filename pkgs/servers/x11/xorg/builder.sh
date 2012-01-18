@@ -32,7 +32,7 @@ postInstall() {
         fi
     done
 
-    ensureDir "$out/nix-support"
+    mkdir -p "$out/nix-support"
     echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     echo "$propagatedBuildNativeInputs" > "$out/nix-support/propagated-build-native-inputs"
 }

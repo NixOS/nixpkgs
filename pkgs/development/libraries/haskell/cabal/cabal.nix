@@ -126,12 +126,12 @@
 
               ./Setup copy
 
-              ensureDir $out/bin # necessary to get it added to PATH
+              mkdir -p $out/bin # necessary to get it added to PATH
 
               local confDir=$out/lib/ghc-pkgs/ghc-${ghc.ghc.version}
               local installedPkgConf=$confDir/${self.fname}.installedconf
               local pkgConf=$confDir/${self.fname}.conf
-              ensureDir $confDir
+              mkdir -p $confDir
               ./Setup register --gen-pkg-config=$pkgConf
               if test -f $pkgConf; then
                 echo '[]' > $installedPkgConf

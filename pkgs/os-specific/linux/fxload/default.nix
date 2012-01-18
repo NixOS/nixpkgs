@@ -22,9 +22,9 @@ stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    ensureDir $out/sbin
-    ensureDir $out/share/man/man8
-    ensureDir $out/share/usb
+    mkdir -p $out/sbin
+    mkdir -p $out/share/man/man8
+    mkdir -p $out/share/usb
   '';
 
   meta = {

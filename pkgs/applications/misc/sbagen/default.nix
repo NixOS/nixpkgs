@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   buildPhase = "./mk";
 
   installPhase = ''
-    ensureDir $out/{bin,share/sbagen/doc}
+    mkdir -p $out/{bin,share/sbagen/doc}
     cp -r --target-directory=$out/share/sbagen examples scripts river1.ogg river2.ogg
     cp sbagen $out/bin
     cp --target-directory=$out/share/sbagen/doc README.txt SBAGEN.txt theory{,2}.txt {wave,holosync,focus,TODO}.txt

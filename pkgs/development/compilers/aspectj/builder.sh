@@ -7,7 +7,7 @@ output.dir=$out
 context.javaPath=$jre
 EOF
 
-ensureDir $out
+mkdir -p $out
 $jre/bin/java -jar $src -text props
 
 echo "Removing files at top level"

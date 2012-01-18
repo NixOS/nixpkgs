@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     jam install
-    ensureDir $out/share
+    mkdir -p $out/share
     pushd $out/share
     tar xf $srcData
   '';
