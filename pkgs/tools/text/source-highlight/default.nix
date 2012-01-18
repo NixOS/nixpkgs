@@ -2,14 +2,14 @@
 
 let
   name = "source-highlight";
-  version = "3.1.5";
+  version = "3.1.6";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
       url = "mirror://gnu/src-highlite/${name}-${version}.tar.gz";
-      sha256 = "16a2ybd0i7gk926ipp7c63mxcfwklbb20fw65npyrjzr94z1agwx";
+      sha256 = "0a5zh876nc1gig8z586b953r8ahh9zbs1lmi8vxjrkwp6zqzf4xm";
     };
 
   configureFlags = [ "--with-boost=${boost}" ];
