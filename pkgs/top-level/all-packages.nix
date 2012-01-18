@@ -2119,20 +2119,20 @@ let
   });
   */
 
-  ghc6101Binary = lowPrio (import ../development/compilers/ghc/6.10.1-binary.nix {
-    inherit fetchurl stdenv perl ncurses gmp libedit;
+  ghc6101Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.1-binary.nix {
+    gmp = gmp4;
   });
 
-  ghc6102Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
-    inherit fetchurl stdenv perl ncurses gmp libedit;
+  ghc6102Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.2-binary.nix {
+    gmp = gmp4;
   });
 
-  ghc6121Binary = lowPrio (import ../development/compilers/ghc/6.12.1-binary.nix {
-    inherit fetchurl stdenv perl ncurses gmp;
+  ghc6121Binary = lowPrio (callPackage ../development/compilers/ghc/6.12.1-binary.nix {
+    gmp = gmp4;
   });
 
-  ghc704Binary = lowPrio (import ../development/compilers/ghc/7.0.4-binary.nix {
-    inherit fetchurl stdenv perl ncurses gmp;
+  ghc704Binary = lowPrio (callPackage ../development/compilers/ghc/7.0.4-binary.nix {
+    gmp = gmp4;
   });
 
   # For several compiler versions, we export a large set of Haskell-related
@@ -3585,6 +3585,9 @@ let
 
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
+  # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
+  gmp4 = callPackage ../development/libraries/gmp/4.nix { };
+  
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
   goffice = callPackage ../development/libraries/goffice {

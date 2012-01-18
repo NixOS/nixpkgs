@@ -1,10 +1,6 @@
-{stdenv, fetchurl, m4, cxx ? true, static ? false}:
+{ stdenv, fetchurl, m4, cxx ? true }:
 
-let
-  staticFlags = if static then " --enable-static --disable-shared" else "";
-in
-
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "gmp-4.3.2";
 
   src = fetchurl {
@@ -12,7 +8,7 @@ stdenv.mkDerivation (rec {
     sha256 = "0x8prpqi9amfcmi7r4zrza609ai9529pjaq0h4aw51i867064qck";
   };
 
-  buildNativeInputs = [m4];
+  buildNativeInputs = [ m4 ];
 
   # Prevent the build system from using sub-architecture-specific
   # instructions (e.g., SSE2 on i686).
@@ -25,10 +21,7 @@ stdenv.mkDerivation (rec {
     then "ln -sf configfsf.guess config.guess"
     else ''echo "Darwin host is `./config.guess`."'';
 
-  configureFlags = (if cxx then "--enable-cxx" else "--disable-cxx") +
-      staticFlags;
-
-  dontDisableStatic = if static then true else false;
+  configureFlags = if cxx then "--enable-cxx" else "--disable-cxx";
 
   doCheck = true;
 
@@ -64,10 +57,3 @@ stdenv.mkDerivation (rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-//
-
-# Don't run the native `strip' when cross-compiling.
-(if (stdenv ? cross)
- then { dontStrip = true; }
- else { }))
