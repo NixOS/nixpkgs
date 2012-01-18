@@ -1628,6 +1628,8 @@ let
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
 
+  youtubeDL = callPackage ../tools/misc/youtube-dl { };
+
   zbar = callPackage ../tools/graphics/zbar {};
 
   zdelta = callPackage ../tools/compression/zdelta { };
