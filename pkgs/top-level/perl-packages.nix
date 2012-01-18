@@ -2021,10 +2021,10 @@ rec {
   };
 
   JSON = buildPerlPackage rec {
-    name = "JSON-2.21";
+    name = "JSON-2.53";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MAKAMAKA/${name}.tar.gz";
-      sha256 = "1dz00922yq7pz8hb9bbk8pqkwh0brf595lklsind62lf5f247vj7";
+      sha256 = "0rfms17d0pkai26kqyzaylbr5wxcrrhyjkyshq85l41xb0g1iplh";
     };
     propagatedBuildInputs = [JSONXS];
   };
@@ -2047,10 +2047,10 @@ rec {
   };
 
   JSONXS = buildPerlPackage rec {
-    name = "JSON-XS-2.29";
+    name = "JSON-XS-2.32";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
-      sha256 = "1gl8x2rc3krpj6cs1dg0g28iqqfbn9zyq4nz9mbngv0lccc0y5vy";
+      sha256 = "012bf324pf5lnrf6ck2y167i1q1zzzc0w43b381qfnk7v5fcvaik";
     };
     buildInputs = [CommonSense];
   };
