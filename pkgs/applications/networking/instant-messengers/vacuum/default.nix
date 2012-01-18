@@ -31,11 +31,6 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["addInputs" "doQMake" "doMakeInstall"];
 
-  preBuild = a.fullDepEntry (''
-    echo "Fixing a name collision with a function added in Qt 4.7"
-    sed -re 's/qHash[(][a-z ]*QUrl/vacuum_obsolete_&/' -i src/plugins/dataforms/dataforms.cpp
-  '') ["minInit" "doUnpack"];
-
   doQMake = a.fullDepEntry (''
     qmake INSTALL_PREFIX=$out -recursive vacuum.pro
   '') ["doUnpack" "addInputs"];
