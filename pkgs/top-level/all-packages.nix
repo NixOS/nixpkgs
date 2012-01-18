@@ -7359,6 +7359,7 @@ let
 
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS);
+    enableCopyDevicesPatch = (getConfig ["rsync" "enableCopyDevicesPatch"] false);
   };
 
   rxvt = callPackage ../applications/misc/rxvt { };
