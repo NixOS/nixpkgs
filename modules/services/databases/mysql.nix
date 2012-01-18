@@ -80,49 +80,49 @@ in
       initialDatabases = mkOption {
         default = [];
         description = "List of database names and their initial schemas that should be used to create databases on the first startup of MySQL";
-	example = [
-	  { name = "foodatabase"; schema = ./foodatabase.sql; }
-	  { name = "bardatabase"; schema = ./bardatabase.sql; }
-	];
+        example = [
+          { name = "foodatabase"; schema = ./foodatabase.sql; }
+          { name = "bardatabase"; schema = ./bardatabase.sql; }
+        ];
       };
 
       initialScript = mkOption {
         default = null;
-	description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
+        description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
       };
 
       rootPassword = mkOption {
         default = null;
-	description = "Path to a file containing the root password, modified on the first startup. Not specifying a root password will leave the root password empty.";
+        description = "Path to a file containing the root password, modified on the first startup. Not specifying a root password will leave the root password empty.";
       };
 
       replication = {
         role = mkOption {
-	  default = "none";
-	  description = "Role of the MySQL server instance. Can be either: master, slave or none";
-	};
+          default = "none";
+          description = "Role of the MySQL server instance. Can be either: master, slave or none";
+        };
 
         serverId = mkOption {
-	  default = 1;
-	  description = "Id of the MySQL server instance. This number must be unique for each instance";
-	};
+          default = 1;
+          description = "Id of the MySQL server instance. This number must be unique for each instance";
+        };
 
-	masterHost = mkOption {
-	  description = "Hostname of the MySQL master server";
-	};
+        masterHost = mkOption {
+          description = "Hostname of the MySQL master server";
+        };
 
-	masterUser = mkOption {
-	  description = "Username of the MySQL replication user";
-	};
+        masterUser = mkOption {
+          description = "Username of the MySQL replication user";
+        };
 
-	masterPassword = mkOption {
-	  description = "Password of the MySQL replication user";
-	};
+        masterPassword = mkOption {
+          description = "Password of the MySQL replication user";
+        };
 
-	masterPort = mkOption {
-	  default = 3306;
-	  description = "Port number on which the MySQL master server runs";
-	};
+        masterPort = mkOption {
+          default = 3306;
+          description = "Port number on which the MySQL master server runs";
+        };
       };
     };
 
@@ -151,17 +151,14 @@ in
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R ${cfg.user} ${cfg.dataDir}
                 ${mysql}/bin/mysql_install_db ${mysqldOptions}
-		touch /tmp/mysql_init
+                touch /tmp/mysql_init
             fi
 
             mkdir -m 0700 -p ${cfg.pidDir}
             chown -R ${cfg.user} ${cfg.pidDir}
-          '';
+            
+            ${mysql}/libexec/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions} &
 
-        exec = "${mysql}/libexec/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
-
-	postStart =
-	  ''
             # Wait until the MySQL server is available for use
             count=0
             while [ ! -e /tmp/mysql.sock ]
@@ -169,7 +166,7 @@ in
                 if [ $count -eq 30 ]
                 then
                     echo "Tried 30 times, giving up..."
-	            exit 1
+                    exit 1
                 fi
 
                 echo "MySQL daemon not yet started. Waiting for 1 second..."
@@ -177,48 +174,49 @@ in
                 sleep 1
             done
 
-	    if [ -f /tmp/mysql_init ]
-	    then
-	        # Create initial databases
-
+            if [ -f /tmp/mysql_init ]
+            then
                 ${concatMapStrings (database:
                   ''
+                    # Create initial databases
                     if ! test -e "${cfg.dataDir}/${database.name}"; then
                         echo "Creating initial database: ${database.name}"
                         ( echo "create database ${database.name};"
                           echo "use ${database.name};"
-		          if [ -f "${database.schema}" ]
-		          then
+                          
+                          if [ -f "${database.schema}" ]
+                          then
                               cat ${database.schema}
-		          elif [ -d "${database.schema}" ]
-		          then
-		              cat ${database.schema}/mysql-databases/*.sql
-		          fi
-		        ) | ${mysql}/bin/mysql -u root -N
+                          elif [ -d "${database.schema}" ]
+                          then
+                              cat ${database.schema}/mysql-databases/*.sql
+                          fi
+                        ) | ${mysql}/bin/mysql -u root -N
                     fi
                   '') cfg.initialDatabases}
 
-	        # Execute initial script
+                ${optionalString (cfg.initialScript != null)
+                  ''
+                    # Execute initial script
+                    cat ${cfg.initialScript} | ${mysql}/bin/mysql -u root -N
+                  ''}
 
-		${optionalString (cfg.initialScript != null)
-		  ''
-		    cat ${cfg.initialScript} | ${mysql}/bin/mysql -u root -N
-		  ''}
+                ${optionalString (cfg.rootPassword != null)
+                  ''
+                    # Change root password
+                    
+                    ( echo "use mysql;"
+                      echo "update user set Password=password('$(cat ${cfg.rootPassword})') where User='root';"
+                      echo "flush privileges;"
+                    ) | ${mysql}/bin/mysql -u root -N
+                  ''}
 
-	        # Change root password
+              rm /tmp/mysql_init
+            fi
+          '';
 
-		${optionalString (cfg.rootPassword != null)
-		  ''
-		    ( echo "use mysql;"
-		      echo "update user set Password=password('$(cat ${cfg.rootPassword})') where User='root';"
-		      echo "flush privileges;"
-		    ) | ${mysql}/bin/mysql -u root -N
-		  ''}
-
-	      rm /tmp/mysql_init
-	    fi
-	  '';
-
+        postStop = "${mysql}/bin/mysqladmin --user=root --password=\"$(cat ${cfg.rootPassword})\" shutdown";
+        
         # !!! Need a postStart script to wait until mysqld is ready to
         # accept connections.
 
