@@ -33,7 +33,7 @@ rec {
 
   doEnsureBtrfsImage = a.fullDepEntry (''
     if ! grep 'progs = ' Makefile | grep btrfs-image; then
-      sed -e 's/progs = .*/& btrfs-image/' -i Makefile
+      sed -e 's/progs = \(.*\)\\/progs = \1btrfs-image \\/' -i Makefile
     fi
   '') ["minInit" "doUnpack"];
 
