@@ -60,6 +60,7 @@
   ./services/backup/sitecopy-backup.nix
   ./services/databases/4store-endpoint.nix
   ./services/databases/4store.nix
+  ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
