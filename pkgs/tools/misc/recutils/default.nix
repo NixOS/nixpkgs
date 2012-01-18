@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gettext, emacs, curl, check, bc }:
 
 stdenv.mkDerivation rec {
-  name = "recutils-1.4";
+  name = "recutils-1.5";
 
   src = fetchurl {
     url = "mirror://gnu/recutils/${name}.tar.gz";
-    sha256 = "1kakmzmkdkgqmvqfzrpkwjjkg492rk3k7xfgnwcjacap9l79z9pv";
+    sha256 = "1v2xzwwwhc5j5kmvg4sv6baxjpsfqh8ln7ilv4mgb1408rs7xmky";
   };
 
   doCheck = true;
