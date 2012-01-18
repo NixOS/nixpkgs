@@ -1,4 +1,4 @@
-{stdenv, fetchurl, iproute, lzo, openssl, nettools}:
+{stdenv, fetchurl, iproute, lzo, openssl}:
 
 stdenv.mkDerivation rec {
   name = "openvpn-2.2.2";
@@ -12,9 +12,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = ''
     --enable-password-save
-    --with-ifconfig-path=${nettools}/sbin/ifconfig
+    --enable-iproute2
     --with-iproute-path=${iproute}/sbin/ip
-    --with-route-path=${nettools}/sbin/route
   '';
 
   meta = { 
