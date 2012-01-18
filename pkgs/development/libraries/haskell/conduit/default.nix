@@ -4,14 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "conduit";
-  version = "0.0.3";
-  sha256 = "149xj6i2whpjf6jqsgfgvpbwni5r0v3qrg7g42i78bd6n40xma72";
+  version = "0.0.4";
+  sha256 = "1sc14nh21ba85azm4my5qnllnlbmsq5j6h1yd1mdsk2z3fb0x5zz";
   buildDepends = [
     liftedBase monadControl text transformers transformersBase
   ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
-    description = "A pull-based approach to streaming data";
+    description = "Streaming data processing library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

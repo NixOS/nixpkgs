@@ -2,11 +2,11 @@
 , libwnck, dbus_glib, xfconf, xorg, xfce4panel }:
 
 stdenv.mkDerivation rec {
-  name = "xfce4-session-4.8.1";
+  name = "xfce4-session-4.8.2";
   
   src = fetchurl {
     url = "http://archive.xfce.org/src/xfce/xfce4-session/4.8/${name}.tar.bz2";
-    sha1 = "a33534e53fa36a38a1f9bd164469a9fb62c765a7";
+    sha1 = "636c2983552861a959225e554898675152a4d812";
   };
 
   buildInputs =

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "colour";
-  version = "2.3.2";
-  sha256 = "1j0y8cfdzhzjid1hg50qvh5nsa6kfnxcwxaizxyk73z60dn8g9b6";
+  version = "2.3.3";
+  sha256 = "1qmn1778xzg07jg9nx4k1spdz2llivpblf6wwrps1qpqjhsac5cd";
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Colour";
     description = "A model for human colour/color perception";

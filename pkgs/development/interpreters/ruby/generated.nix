@@ -20,14 +20,14 @@ g: # Get dependencies from patched gems
     hike = g.hike_1_2_1;
     hoe = g.hoe_2_3_3;
     i18n = g.i18n_0_6_0;
-    json = g.json_1_6_4;
-    json_pure = g.json_pure_1_6_4;
+    json = g.json_1_6_5;
+    json_pure = g.json_pure_1_6_5;
     mail = g.mail_2_3_0;
     mime_types = g.mime_types_1_17_2;
     minitar = g.minitar_0_5_3;
     multi_json = g.multi_json_1_0_4;
     net_sftp = g.net_sftp_2_0_4;
-    net_ssh = g.net_ssh_2_2_2;
+    net_ssh = g.net_ssh_2_3_0;
     nix = g.nix_0_1_1;
     polyglot = g.polyglot_0_3_3;
     rack = g.rack_1_4_0;
@@ -339,16 +339,16 @@ See class rdoc for help. Hint: ri Hoe'';
       requiredGems = [  ];
       sha256 = ''1pgmfhmh2wv409g7kla30mkp8jpslvp25vcmmim1figl87wpn3j0'';
     };
-    json_1_6_4 = {
+    json_1_6_5 = {
       basename = ''json'';
       meta = {
         description = ''JSON Implementation for Ruby'';
         homepage = ''http://flori.github.com/json'';
         longDescription = ''This is a JSON implementation as a Ruby extension in C.'';
       };
-      name = ''json-1.6.4'';
+      name = ''json-1.6.5'';
       requiredGems = [  ];
-      sha256 = ''1adka4y7z9v4lmd2zqyap21ghqdnjaivr1ghnqcnw3dmsdrgf39l'';
+      sha256 = ''0zmdzxbczpciyra7zskn7ayfi0z43p2f3n060gsjgjiqcb5bvz75'';
     };
     json_pure_1_4_3 = {
       basename = ''json_pure'';
@@ -361,16 +361,16 @@ See class rdoc for help. Hint: ri Hoe'';
       requiredGems = [  ];
       sha256 = ''1xw357gkmk6712c94lhpsrq8j9v91mgc2nxlr1m6n20yl6sz2g9r'';
     };
-    json_pure_1_6_4 = {
+    json_pure_1_6_5 = {
       basename = ''json_pure'';
       meta = {
         description = ''JSON Implementation for Ruby'';
         homepage = ''http://flori.github.com/json'';
         longDescription = ''This is a JSON implementation in pure Ruby.'';
       };
-      name = ''json_pure-1.6.4'';
+      name = ''json_pure-1.6.5'';
       requiredGems = [  ];
-      sha256 = ''12i95k265gx4vy2cpxrb3z4slc4czsh3srgky2a6d5h3q6c1kvbf'';
+      sha256 = ''09s5qymc4y9q0376zjiwf5bjm69fcivr75ar8ji0kmhjkk2rwc55'';
     };
     mail_2_3_0 = {
       basename = ''mail'';
@@ -438,7 +438,7 @@ Copyright:: 2002 - 2011, Austin Ziegler
         longDescription = ''A pure Ruby implementation of the SFTP client protocol'';
       };
       name = ''net-sftp-2.0.4'';
-      requiredGems = [ g.net_ssh_2_2_2 ];
+      requiredGems = [ g.net_ssh_2_3_0 ];
       sha256 = ''1f0ml1z7kjnd79avn42fmys8j0w2995j5lk30ak5n40bq805yvky'';
     };
     net_ssh_2_0_23 = {
@@ -452,16 +452,16 @@ Copyright:: 2002 - 2011, Austin Ziegler
       requiredGems = [  ];
       sha256 = ''1fllf6mgwc213m5mn266qwhl65zc84wl8rq9m3lvbggw9mh5ynrr'';
     };
-    net_ssh_2_2_2 = {
+    net_ssh_2_3_0 = {
       basename = ''net_ssh'';
       meta = {
         description = ''Net::SSH: a pure-Ruby implementation of the SSH2 client protocol.'';
         homepage = ''http://github.com/net-ssh/net-ssh'';
         longDescription = ''Net::SSH: a pure-Ruby implementation of the SSH2 client protocol.'';
       };
-      name = ''net-ssh-2.2.2'';
+      name = ''net-ssh-2.3.0'';
       requiredGems = [  ];
-      sha256 = ''11rlcb6w534g21x1g1jz1v1lvyj3zv6s621pf9cwl1aqbl6zh711'';
+      sha256 = ''1q1fznl4nk2963czpzfby4m9jw9rs37k1rzgbjad5r1n7r6dv0sv'';
     };
     nix_0_1_1 = {
       basename = ''nix'';
@@ -640,7 +640,7 @@ documentation.
 See RDoc for a description of RDoc's markup and basic use.'';
       };
       name = ''rdoc-3.12'';
-      requiredGems = [ g.json_1_6_4 ];
+      requiredGems = [ g.json_1_6_5 ];
       sha256 = ''0cd4hrkba7zr675m62yb87l7hpf0sp2qw8ccc2s0y2fa2fxdxdkp'';
     };
     rjb_1_3_3 = {
@@ -726,7 +726,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
 * For all rubyforge upgrades, run 'rubyforge config' to ensure you have latest.'';
       };
       name = ''rubyforge-2.0.3'';
-      requiredGems = [ g.json_pure_1_6_4 ];
+      requiredGems = [ g.json_pure_1_6_5 ];
       sha256 = ''1ck9hkad55dy25819v4gd1nmnpvcrb3i4np3hc03h1j6q8qpxg5p'';
     };
     rubyforge_2_0_4 = {

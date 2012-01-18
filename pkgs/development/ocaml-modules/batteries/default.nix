@@ -5,11 +5,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "ocaml-batteries-1.4.0";
+  name = "ocaml-batteries-1.4.1";
 
   src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/643/batteries-1.4.0.tar.gz;
-    sha256 = "1qyhiyanlhpbj0dv0vyqak87qfadjzg2pb8q93iybmg59akaxl15";
+    url = http://forge.ocamlcore.org/frs/download.php/684/batteries-1.4.1.tar.gz;
+    sha256 = "bdca7deba290d83c66c0a5001da52b2d7f2af58b7b7e7d9303d4363aaafe9c30";
   };
 
   buildInputs = [ocaml findlib camomile ounit];

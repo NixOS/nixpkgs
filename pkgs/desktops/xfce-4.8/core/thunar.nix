@@ -2,11 +2,12 @@
 , dbus_glib, libstartup_notification, xfconf, xfce4panel, udev, libnotify }:
 
 stdenv.mkDerivation rec {
-  name = "thunar-1.2.2";
+  version = "1.2.3";
+  name = "thunar-${version}";
   
   src = fetchurl {
-    url = "http://archive.xfce.org/src/xfce/thunar/1.2/Thunar-1.2.2.tar.bz2";
-    sha1 = "314e3d53ec7be1ea578da4d842ecc8dc5958b1bd";
+    url = "http://archive.xfce.org/src/xfce/thunar/1.2/Thunar-${version}.tar.bz2";
+    sha1 = "a05d0e14515d70c5ad94cca881822a707d366863";
   };
 
   buildInputs =

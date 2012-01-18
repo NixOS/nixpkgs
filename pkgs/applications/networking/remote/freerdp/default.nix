@@ -1,29 +1,36 @@
 { stdenv
 , fetchurl
+, cmake
 , openssl
 , printerSupport ? true, cups
 , pkgconfig
 , zlib
 , libX11
 , libXcursor
+, libXdamage
+, libXext
 , alsaLib
 }:
 
 assert printerSupport -> cups != null;
 stdenv.mkDerivation rec {
-  name = "freerdp-0.8.2";
+  name = "freerdp-${version}";
+  version = "1.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/freerdp/${name}.tar.gz";
-    sha256 = "1q9hhwyc4hk49hsmd2kghrfsawxcc7gy7vcmhdf91l8v95xp16iq";
+    url = "https://github.com/downloads/FreeRDP/FreeRDP/FreeRDP-${version}.tar.gz";
+    sha256 = "1h7b2ykgsp1b04p67syb3p2xgpsb45i6zl1jvm09h0dr5an85awd";
   };
 
   buildInputs = [
+    cmake
     openssl
     pkgconfig
     zlib
     libX11
     libXcursor
+    libXdamage
+    libXext
     alsaLib
   ] ++ stdenv.lib.optional printerSupport cups;
 
@@ -46,4 +53,3 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }
-

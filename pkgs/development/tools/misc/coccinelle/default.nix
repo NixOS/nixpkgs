@@ -1,14 +1,21 @@
-{ fetchurl, stdenv, ocaml, perl, python, ncurses, makeWrapper }:
+{ fetchurl, stdenv, perl, python, ncurses, makeWrapper
+, ocaml, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "coccinelle-0.2.2";
+  name = "coccinelle-1.0.0-rc9";
 
   src = fetchurl {
     url = "http://coccinelle.lip6.fr/distrib/${name}.tgz";
-    sha256 = "1rnhxlqwcps67nyn61xj8mf6wdja29q8m16r4jwdwxvfpnsdhwfy";
+    sha256 = "75d5354e76500b627ccc33b8a929305e5a815ebf08027a8dc094f75ece241697";
   };
 
-  buildInputs = [ ocaml perl python ncurses makeWrapper ];
+  buildInputs = [
+      ocaml ocamlPackages.findlib
+      ocamlPackages.menhir ocamlPackages.ocaml_batteries
+      ocamlPackages.ocaml_pcre ocamlPackages.ocaml_sexplib
+      ocamlPackages.ocaml_extlib ocamlPackages.pycaml
+      python ncurses makeWrapper perl
+    ];
 
   preConfigure =
     '' sed -i "configure" -e's|/usr/bin/perl|${perl}/bin/perl|g'
@@ -16,10 +23,13 @@ stdenv.mkDerivation rec {
            -e"s|/usr/local/share|$out/share|g"
     '';
 
-  buildPhase = "make depend && make all";
+  buildPhase = "make depend && make all && make all.opt";
 
   # Note: The tests want $out/share/coccinelle/standard.h so they must be run
   # after "make install".
+  # (I'm not sure if this is still needed.)
+  # Note: The check phase is now disabled completely, because the expected
+  # testing score is not always updated.
   doCheck = false;
 
   postInstall =

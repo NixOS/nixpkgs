@@ -760,7 +760,7 @@ let
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
-  gource = callPackage ../tools/misc/gource { };
+  gource = callPackage ../applications/version-management/gource {};
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
@@ -931,6 +931,8 @@ let
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   logrotate = callPackage ../tools/system/logrotate { };
+
+  logstalgica = callPackage ../tools/graphics/logstalgica {};
 
   lout = callPackage ../tools/typesetting/lout { };
 
@@ -1283,7 +1285,6 @@ let
   ripmime = callPackage ../tools/networking/ripmime {};
 
   rsnapshot = callPackage ../tools/backup/rsnapshot {
-
     # For the `logger' command, we can use either `utillinux' or
     # GNU Inetutils.  The latter is more portable.
     logger = inetutils;
@@ -1548,6 +1549,8 @@ let
   which = callPackage ../tools/system/which { };
 
   wicd = callPackage ../tools/networking/wicd { };
+
+  wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf { };
 
   wv = callPackage ../tools/misc/wv { };
 
@@ -2244,10 +2247,11 @@ let
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
-    haskellPackagesFun ../development/compilers/ghc/head.nix
-      # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
-      (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
-      (x : x.ghcHEADPrefs) false false lowPrio;
+    recurseIntoAttrs
+      (haskellPackagesFun ../development/compilers/ghc/head.nix
+        # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+        (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
+        (x : x.ghcHEADPrefs) false false lowPrio);
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
@@ -2430,12 +2434,22 @@ let
     ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
       camlp5 = camlp5_5_transitional;
     };
+
+    ocaml_typeconv = callPackage ../development/ocaml-modules/typeconv { };
+
+    ocaml_sexplib = callPackage ../development/ocaml-modules/sexplib { };
+
+    ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
+
+    pycaml = callPackage ../development/ocaml-modules/pycaml { };
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_3_12_1;
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
   ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
+
+  ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
   opa = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/compilers/opa { };
 
@@ -2888,7 +2902,10 @@ let
 
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle { };
+  coccinelle = callPackage ../development/tools/misc/coccinelle {
+    ocamlPackages = ocamlPackages_3_12_1;
+    ocaml = ocaml_3_12_1;
+  };
 
   cppi = callPackage ../development/tools/misc/cppi { };
 
@@ -7474,7 +7491,7 @@ let
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/7.x.nix {
+  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/9.x.nix {
     inherit (gnome) libIDL;
   };
 
@@ -8172,7 +8189,7 @@ let
     inherit (gtkLibs) glib gtk;
   };
 
-  xfce = xfce46;
+  xfce = xfce48;
 
   xfce46 = recurseIntoAttrs
     (let callPackage = newScope pkgs.xfce46; in

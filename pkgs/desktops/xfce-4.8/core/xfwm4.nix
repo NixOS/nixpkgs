@@ -2,11 +2,11 @@
 , libxfce4ui, xfconf, libwnck, libstartup_notification, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "xfwm4-4.8.1";
+  name = "xfwm4-4.8.3";
   
   src = fetchurl {
     url = "http://archive.xfce.org/src/xfce/xfwm4/4.8/${name}.tar.bz2";
-    sha1 = "4075a689f572ae157ed80ab3ce5be85f09dac766";
+    sha1 = "6d27deca383e0c2fba0cede0bbe0e9aee18e9257";
   };
 
   buildInputs =

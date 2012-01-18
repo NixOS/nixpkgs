@@ -2,11 +2,11 @@
 , libxfce4ui, libwnck, xfconf, garcon, libnotify, exo }:
 
 stdenv.mkDerivation rec {
-  name = "xfdesktop-4.8.2";
+  name = "xfdesktop-4.8.3";
   
   src = fetchurl {
     url = "http://archive.xfce.org/src/xfce/xfdesktop/4.8/${name}.tar.bz2";
-    sha1 = "fe7d71bb502197b0353b952947826a5a50ab13bc";
+    sha1 = "b3af72a69627f860f22b37d021efd81e4e37eb55";
   };
 
   buildInputs =
