@@ -42,6 +42,8 @@ rec {
     in newDrv //
       { meta = if drv ? meta then drv.meta else {};
         passthru = if drv ? passthru then drv.passthru else {};
+        hostDrv = overrideDerivation drv.hostDrv f;
+        buildDrv = overrideDerivation drv.buildDrv f;
       };
 
 
