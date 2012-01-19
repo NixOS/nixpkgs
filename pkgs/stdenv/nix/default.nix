@@ -1,6 +1,6 @@
-{stdenv, pkgs}:
+{ stdenv, pkgs }:
 
-import ../generic {
+import ../generic rec {
   name = "stdenv-nix";
   
   preHook =
@@ -38,4 +38,12 @@ import ../generic {
   shell = pkgs.bash + "/bin/sh";
 
   fetchurlBoot = stdenv.fetchurlBoot;
+
+  overrides = pkgs_: {
+    inherit gcc;
+    inherit (gcc) binutils;
+    inherit (pkgs) 
+      gzip bzip2 xz bash coreutils diffutils findutils gawk
+      gnumake gnused gnutar gnugrep gnupatch perl;
+  };
 }
