@@ -9,5 +9,9 @@ cabal.mkDerivation (self: {
     description = "a typed, persistent store for values of arbitrary types";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
