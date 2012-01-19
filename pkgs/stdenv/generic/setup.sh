@@ -315,43 +315,39 @@ substitute() {
     local output="$2"
 
     local -a params=("$@")
-    local -a args=()
 
     local n p pattern replacement varName
+
+    local content="$(cat $input)"
 
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p=${params[$n]}
 
-        if test "$p" = "--replace"; then
+        if [ "$p" = --replace ]; then
             pattern="${params[$((n + 1))]}"
             replacement="${params[$((n + 2))]}"
             n=$((n + 2))
         fi
 
-        if test "$p" = "--subst-var"; then
+        if [ "$p" = --subst-var ]; then
             varName="${params[$((n + 1))]}"
             pattern="@$varName@"
             replacement="${!varName}"
             n=$((n + 1))
         fi
 
-        if test "$p" = "--subst-var-by"; then
+        if [ "$p" = --subst-var-by ]; then
             pattern="@${params[$((n + 1))]}@"
             replacement="${params[$((n + 2))]}"
             n=$((n + 2))
         fi
 
-        if test ${#args[@]} != 0; then
-            args[${#args[@]}]="-a"
-        fi
-        args[${#args[@]}]="$pattern"
-        args[${#args[@]}]="$replacement"
+        content="${content//"$pattern"/$replacement}"
     done
 
-    replace-literal -e -s -- "${args[@]}" < "$input" > "$output".tmp
-    if test -x "$output"; then
-        chmod +x "$output".tmp
-    fi
+    # !!! This doesn't work properly if $content is "-n".
+    echo -n "$content" > "$output".tmp
+    if [ -x "$output" ]; then chmod +x "$output".tmp; fi
     mv -f "$output".tmp "$output"
 }
 

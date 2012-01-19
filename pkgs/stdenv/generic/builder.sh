@@ -16,8 +16,6 @@ done
 
 mkdir $out
 
-# Can't use substitute() here, because replace may not have been
-# built yet (in the bootstrap).
 sed \
     -e "s^@preHook@^$_preHook^g" \
     -e "s^@postHook@^$_postHook^g" \
