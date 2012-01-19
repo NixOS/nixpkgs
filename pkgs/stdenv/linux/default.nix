@@ -82,7 +82,6 @@ rec {
     import ../generic {
       inherit system;
       name = "stdenv-linux-boot";
-      param1 = bootstrapTools;
       preHook = builtins.toFile "prehook.sh"
         ''
           # Don't patch #!/interpreter because it leads to retained

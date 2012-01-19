@@ -1,5 +1,4 @@
 { system, name, preHook ? null, postHook ? null, initialPath, gcc, shell
-, param1 ? "", param2 ? "", param3 ? "", param4 ? "", param5 ? ""
 , extraAttrs ? {}, overrides ? (pkgs: {})
 
 , # The `fetchurl' to use for downloading curl and its dependencies
@@ -26,9 +25,6 @@ let
         setup = setupScript;
 
         inherit preHook postHook initialPath gcc shell;
-
-        # TODO: make this more elegant.
-        inherit param1 param2 param3 param4 param5;
 
         propagatedUserEnvPkgs = [gcc] ++
           lib.filter lib.isDerivation initialPath;

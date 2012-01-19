@@ -106,20 +106,15 @@ fi
 
 # Execute the pre-hook.
 export SHELL=@shell@
-if test -z "$shell"; then
+if [ -z "$shell" ]; then
     export shell=@shell@
 fi
-param1=@param1@
-param2=@param2@
-param3=@param3@
-param4=@param4@
-param5=@param5@
-if test -n "@preHook@"; then source @preHook@; fi
+if [ -n "@preHook@" ]; then source @preHook@; fi
 runHook preHook
 
 
 # Check that the pre-hook initialised SHELL.
-if test -z "$SHELL"; then echo "SHELL not set"; exit 1; fi
+if [ -z "$SHELL" ]; then echo "SHELL not set"; exit 1; fi
 
 
 # Hack: run gcc's setup hook.
