@@ -12,5 +12,5 @@ rec {
   unix = linux ++ darwin ++ freebsd ++ openbsd;
   all = linux ++ darwin ++ cygwin ++ freebsd ++ openbsd;
   allBut = platform: lists.filter (x: platform != x) all;
-  mesaPlatforms = linux ++ darwin ++ freebsd;
+  mesaPlatforms = linux;
 }

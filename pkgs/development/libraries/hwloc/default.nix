@@ -9,7 +9,12 @@ stdenv.mkDerivation rec {
   };
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
-  buildInputs = [ pkgconfig cairo expat ncurses libX11 ];
+  buildNativeInputs = [ pkgconfig ];
+
+  # Filter out `null' inputs.  This allows users to `.override' the
+  # derivation and set optional dependencies to `null'.
+  buildInputs = stdenv.lib.filter (x: x != null)
+   [ cairo expat ncurses libX11 ];
 
   doCheck = true;
 

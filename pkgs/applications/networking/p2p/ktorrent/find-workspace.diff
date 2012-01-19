@@ -1,19 +1,4 @@
-Fix finding taskmanager.h and kworkspace.h
-diff --git a/plasma/applet/CMakeLists.txt b/plasma/applet/CMakeLists.txt
-index 3a72241..69b1205 100644
---- a/plasma/applet/CMakeLists.txt
-+++ b/plasma/applet/CMakeLists.txt
-@@ -6,7 +6,9 @@ if(NOT QT_VERSION_OK)
- else(NOT QT_VERSION_OK)
- 	
- 	set(TASKMANAGER_FOUND FALSE)
--	FIND_PATH(TASKMANAGER_INCLUDE_DIR NAMES taskmanager.h  PATHS ${KDE4_INCLUDE_DIR}/taskmanager ${INCLUDE_INSTALL_DIR}/taskmanager.h)
-+	FIND_PATH(TASKMANAGER_INCLUDE_DIR
-+		NAMES taskmanager/taskmanager.h
-+		HINTS ${KDE4_INCLUDE_DIR} ${INCLUDE_INSTALL_DIR})
- 	FIND_LIBRARY(TASKMANAGER_LIBRARY NAMES taskmanager PATHS ${KDE4_LIB_DIR} ${LIB_INSTALL_DIR})
- 
- 	if(TASKMANAGER_INCLUDE_DIR AND TASKMANAGER_LIBRARY)
+Fix finding kworkspace.h
 diff --git a/plugins/shutdown/CMakeLists.txt b/plugins/shutdown/CMakeLists.txt
 index 59e5470..5b932ff 100644
 --- a/plugins/shutdown/CMakeLists.txt

@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   preConfigure = 
     (lib.concatMapStrings (script:
       ''
-        sed -e '/bin_SCRIPTS/a${script} \\' -i scripts/Makefile.am
+        sed -e '/bin_SCRIPTS = /a${script} \\' -i scripts/Makefile.am
       ''
     ) enableScripts)
     + preConfigure

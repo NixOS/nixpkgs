@@ -1,18 +1,30 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation {
-  name = "jruby-1.1.6";
+  name = "jruby-1.6.5.1";
 
   src = fetchurl {
-    url = http://dist.codehaus.org/jruby/1.1.6RC1/jruby-bin-1.1.6RC1.tar.gz;
-    sha256 = "1q3cjshxk484i8gqxm682bxcrps7205nl9vlim4s6z827bjlmc4a";
+    url = http://jruby.org.s3.amazonaws.com/downloads/1.6.5.1/jruby-bin-1.6.5.1.tar.gz;
+    sha256 = "1j0iv1q950lyir9vqfgg2533f1q28jaz7vnxqswsaix1mjhm29qd";
   };
 
-  installPhase = '' ensureDir $out; cp -r * $out '';
+  buildInputs = [ makeWrapper ];
+
+  installPhase = ''
+     ensureDir $out
+     mv * $out
+     rm $out/bin/*.{bat,dll,exe,sh}
+     mv $out/README $out/docs
+
+     for i in $out/bin/*; do
+       wrapProgram $i \
+         --set JAVA_HOME ${jre}
+     done
+  '';
 
   meta = { 
     description = "Ruby interpreter written in Java";
-    homepage = http://jruby.codehaus.org/;
+    homepage = http://jruby.org/;
     license = "CPL-1.0 GPL-2 LGPL-2.1"; # one of those
   };
 }

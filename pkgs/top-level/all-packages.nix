@@ -760,7 +760,7 @@ let
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
-  gource = callPackage ../tools/misc/gource { };
+  gource = callPackage ../applications/version-management/gource {};
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
@@ -931,6 +931,8 @@ let
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
   logrotate = callPackage ../tools/system/logrotate { };
+
+  logstalgica = callPackage ../tools/graphics/logstalgica {};
 
   lout = callPackage ../tools/typesetting/lout { };
 
@@ -1285,7 +1287,6 @@ let
   ripmime = callPackage ../tools/networking/ripmime {};
 
   rsnapshot = callPackage ../tools/backup/rsnapshot {
-
     # For the `logger' command, we can use either `utillinux' or
     # GNU Inetutils.  The latter is more portable.
     logger = inetutils;
@@ -1555,6 +1556,8 @@ let
 
   wicd = callPackage ../tools/networking/wicd { };
 
+  wkhtmltopdf = callPackage ../tools/graphics/wkhtmltopdf { };
+
   wv = callPackage ../tools/misc/wv { };
 
   wv2 = callPackage ../tools/misc/wv2 { };
@@ -1624,6 +1627,8 @@ let
   xsel = callPackage ../tools/misc/xsel { };
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
+
+  youtubeDL = callPackage ../tools/misc/youtube-dl { };
 
   zbar = callPackage ../tools/graphics/zbar {};
 
@@ -2244,10 +2249,11 @@ let
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
-    haskellPackagesFun ../development/compilers/ghc/head.nix
-      # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
-      (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
-      (x : x.ghcHEADPrefs) false false lowPrio;
+    recurseIntoAttrs
+      (haskellPackagesFun ../development/compilers/ghc/head.nix
+        # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+        (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
+        (x : x.ghcHEADPrefs) false false lowPrio);
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
@@ -2267,6 +2273,7 @@ let
     inherit (gtkLibs) glib gtk pango atk;
     libstdcpp5 = gcc33.gcc;
   };
+  gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
@@ -2430,12 +2437,22 @@ let
     ulex08 = callPackage ../development/ocaml-modules/ulex/0.8 {
       camlp5 = camlp5_5_transitional;
     };
+
+    ocaml_typeconv = callPackage ../development/ocaml-modules/typeconv { };
+
+    ocaml_sexplib = callPackage ../development/ocaml-modules/sexplib { };
+
+    ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
+
+    pycaml = callPackage ../development/ocaml-modules/pycaml { };
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_3_11_1;
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
   ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
+
+  ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
   opa = let callPackage = newScope pkgs.ocamlPackages_3_12_1; in callPackage ../development/compilers/opa { };
 
@@ -2763,7 +2780,7 @@ let
 
   jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
-  jruby116 = callPackage ../development/interpreters/jruby { };
+  jruby165 = callPackage ../development/interpreters/jruby { };
 
   guileCairo = callPackage ../development/guile-modules/guile-cairo { };
 
@@ -2885,7 +2902,10 @@ let
 
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle { };
+  coccinelle = callPackage ../development/tools/misc/coccinelle {
+    ocamlPackages = ocamlPackages_3_12_1;
+    ocaml = ocaml_3_12_1;
+  };
 
   cppi = callPackage ../development/tools/misc/cppi { };
 
@@ -2987,6 +3007,8 @@ let
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
   lcov = callPackage ../development/tools/analysis/lcov { };
+
+  leiningen = callPackage ../development/tools/build-managers/leiningen { };
 
   libtool = libtool_2;
 
@@ -5044,6 +5066,8 @@ let
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
+  mongodb = callPackage ../servers/nosql/mongodb { useV8 = (getConfig ["mongodb" "useV8"] false); };
+
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
     ps = procps; /* !!! Linux only */
@@ -6108,7 +6132,9 @@ let
   udev173 = callPackage ../os-specific/linux/udev/173.nix { };
   udev = pkgs.udev173;
 
-  udisks = callPackage ../os-specific/linux/udisks { };
+  udisks = callPackage ../os-specific/linux/udisks {
+    inherit (gnome) gtkdoc;
+  };
 
   uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
@@ -7340,6 +7366,7 @@ let
 
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS);
+    enableCopyDevicesPatch = (getConfig ["rsync" "enableCopyDevicesPatch"] false);
   };
 
   rxvt = callPackage ../applications/misc/rxvt { };
@@ -7477,7 +7504,7 @@ let
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/7.x.nix {
+  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/9.x.nix {
     inherit (gnome) libIDL;
   };
 
@@ -8175,7 +8202,7 @@ let
     inherit (gtkLibs) glib gtk;
   };
 
-  xfce = xfce46;
+  xfce = xfce48;
 
   xfce46 = recurseIntoAttrs
     (let callPackage = newScope pkgs.xfce46; in
@@ -8585,6 +8612,12 @@ let
     ghostscript = ghostscriptX;
     ruby = ruby18;
   };
+
+  texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
+    paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
+              texLivePGF texLiveBeamer texLiveModerncv ];
+
+  });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
   where TeXLive was added)

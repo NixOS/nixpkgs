@@ -2,19 +2,17 @@
 , exo, dbus_glib, libxfce4util, libxfce4ui, xfconf }:
 
 stdenv.mkDerivation rec {
-  name = "ristretto-0.0.93";
+  name = "ristretto-0.2.3";
   
   src = fetchurl {
-    url = "http://archive.xfce.org/src/apps/ristretto/0.0/${name}.tar.bz2";
-    sha1 = "c71acaad169633faffe26609f9cc671b04ff52d3";
+    url = "http://archive.xfce.org/src/apps/ristretto/0.2/${name}.tar.bz2";
+    sha1 = "5a34b865cb9013b67467b0e8d51970f0a1e977d1";
   };
 
   buildInputs =
-    [ pkgconfig intltool libexif gtk thunar exo dbus_glib
-      libxfce4util libxfce4ui xfconf
+    [ pkgconfig intltool libexif gtk dbus_glib libxfce4util
+      libxfce4ui xfconf
     ];
-
-  NIX_LDFLAGS = "-lX11";
 
   meta = {
     homepage = http://goodies.xfce.org/projects/applications/ristretto;

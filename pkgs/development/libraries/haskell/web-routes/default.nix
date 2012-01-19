@@ -1,10 +1,14 @@
-{ cabal, mtl, network, parsec, utf8String }:
+{ cabal, blazeBuilder, httpTypes, mtl, network, parsec, text
+, utf8String
+}:
 
 cabal.mkDerivation (self: {
   pname = "web-routes";
-  version = "0.25.3";
-  sha256 = "09bqz7vn2050jr67m3rrqi0krfxa9n1fxm9rgi3c837g522nb4kk";
-  buildDepends = [ mtl network parsec utf8String ];
+  version = "0.26.2";
+  sha256 = "0v7vkd53jf9zf2m0lbiq10qp39ghlnxwafs1hixbz2qfcgsns10j";
+  buildDepends = [
+    blazeBuilder httpTypes mtl network parsec text utf8String
+  ];
   meta = {
     description = "Library for maintaining correctness and composability of URLs within an application";
     license = self.stdenv.lib.licenses.bsd3;

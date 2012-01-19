@@ -1,13 +1,31 @@
 {stdenv, fetchurl, freetype, mesa}:
- 
-stdenv.mkDerivation {
+
+let
   name = "ftgl-2.1.3-rc5";
-  
+in
+stdenv.mkDerivation {
+  inherit name;
+
   src = fetchurl {
-    url = mirror://sourceforge/ftgl/files/FTGL%20Source/2.1.3%7Erc5/ftgl-2.1.3-rc5.tar.gz ;
+    url = "mirror://sourceforge/ftgl/${name}.tar.gz";
     sha256 = "0nsn4s6vnv5xcgxcw6q031amvh2zfj2smy1r5mbnjj2548hxcn2l";
   };
-  
+
   buildInputs = [freetype mesa];
 
+  meta = {
+    homepage = "http://sourceforge.net/apps/mediawiki/ftgl/";
+    description = "font rendering library for OpenGL applications";
+    license = stdenv.lib.licenses.gpl3Plus;
+
+    longDescription = ''
+      FTGL is a free cross-platform Open Source C++ library that uses
+      Freetype2 to simplify rendering fonts in OpenGL applications. FTGL
+      supports bitmaps, pixmaps, texture maps, outlines, polygon mesh,
+      and extruded polygon rendering modes.
+    '';
+
+    platforms = stdenv.lib.platforms.gnu;
+    maintainers = [];
+  };
 }

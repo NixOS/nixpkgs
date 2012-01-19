@@ -1,24 +1,27 @@
-{ stdenv, fetchurl, openssl, python, zlib }:
+{ stdenv, fetchurl, openssl, python, zlib, v8 }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.5";
+  version = "0.6.6";
   name = "nodejs-${version}";
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "72364d240fb61e678897c099df6f2913857c5931aa9b1f44e73e432d4629ca2f";
+    sha256 = "00i14bjhyadxrh0df1ig4ndv1c0b7prnnhyar5lxcgxnn4cabgks";
   };
 
   configureFlags = [
     "--openssl-includes=${openssl}/include"
     "--openssl-libpath=${openssl}/lib"
+    "--shared-v8"
+    "--shared-v8-includes=${v8}/includes"
+    "--shared-v8-libpath=${v8}/lib"
   ];
 
   patchPhase = ''
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf}
   '';
 
-  buildInputs = [ python openssl zlib];
+  buildInputs = [ python openssl v8 zlib];
 
   meta = with stdenv.lib; {
     description = "Event-driven I/O framework for the V8 JavaScript engine";

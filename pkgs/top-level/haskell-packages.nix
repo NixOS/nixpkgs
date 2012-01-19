@@ -672,6 +672,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcEvents = callPackage ../development/libraries/haskell/ghc-events {};
 
+  ghcMod = callPackage ../development/libraries/haskell/ghc-mod {};
+
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
 
   ghcPaths = callPackage ../development/libraries/haskell/ghc-paths {};
@@ -914,6 +916,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
+
+  mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
   maude = callPackage ../development/libraries/haskell/maude {
     parsec = self.parsec3;
@@ -1336,6 +1340,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   vacuum = callPackage ../development/libraries/haskell/vacuum {};
 
   vacuumCairo = callPackage ../development/libraries/haskell/vacuum-cairo {};
+
+  vault = callPackage ../development/libraries/haskell/vault {};
 
   Vec = callPackage ../development/libraries/haskell/Vec {};
 

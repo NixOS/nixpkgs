@@ -1,14 +1,19 @@
-{ cabal, binary, cairo, ghcEvents, glib, gtk, mtl, pango }:
+{ cabal, binary, cairo, deepseq, ghcEvents, glib, gtk, mtl, pango
+, time
+}:
 
 cabal.mkDerivation (self: {
   pname = "threadscope";
-  version = "0.2.0";
-  sha256 = "0b8lc8han4d90wgzliy80l1gbkm09gg6qxsn37blj41wzl6yzr9k";
+  version = "0.2.1";
+  sha256 = "08s9fbwg33rgbqjdx7n90q83livfay9khr2ddjwj8brw8k1wkmxg";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ binary cairo ghcEvents glib gtk mtl pango ];
+  buildDepends = [
+    binary cairo deepseq ghcEvents glib gtk mtl pango time
+  ];
   configureFlags = "--ghc-options=-rtsopts";
   meta = {
+    homepage = "http://www.haskell.org/haskellwiki/ThreadScope";
     description = "A graphical tool for profiling parallel Haskell programs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

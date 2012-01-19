@@ -5,6 +5,7 @@ rec {
 
   #### SUPPORT
 
+  # The useful bits from ‘gnome-disk-utility’.
   libgdu = callPackage ./support/libgdu.nix { };  
 
   # Gvfs is required by Thunar for the trash feature and for volume
@@ -57,9 +58,9 @@ rec {
 
   gtk_xfce_engine = callPackage ./core/gtk-xfce-engine.nix { };
 
-  # !!! Add xfce4-appfinder
+  xfce4_appfinder = callPackage ./core/xfce4-appfinder.nix { };
 
-  
+
   #### APPLICATIONS
   
   terminal = callPackage ./applications/terminal.nix {
