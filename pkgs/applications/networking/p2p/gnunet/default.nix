@@ -7,11 +7,11 @@
 assert gtkSupport -> (gtk != null) && (libglade != null);
 
 stdenv.mkDerivation rec {
-  name = "gnunet-0.9.0";
+  name = "gnunet-0.9.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${name}.tar.gz";
-    sha256 = "1a0faq2j20dxhpdq0lpi8mjhddwmscbaa1bsxk460p5mj8n55i3p";
+    sha256 = "0ipx027lzcgdv70adfk8f4h0zrzm9mlhy3vj9cgc0ck8x52llfpq";
   };
 
   buildInputs = [
@@ -41,8 +41,17 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  # XXX: There are several test failures, forwarded to bug-gnunet@gnu.org.
   doCheck = false;
+
+  /* FIXME: Tests must be run this way, but there are still a couple of
+     failures.
+
+  postInstall =
+    '' export GNUNET_PREFIX="$out"
+       export PATH="$out/bin:$PATH"
+       make -k check
+    '';
+  */
 
   meta = {
     description = "GNUnet, GNU's decentralized anonymous and censorship-resistant P2P framework";

@@ -1,0 +1,33 @@
+commit 0f0cfa14805519cfd9e0b97ee9668dc4f86379de
+Author: Yury G. Kudryashov <urkud.urkud@gmail.com>
+Date:   Wed Jan 18 05:07:13 2012 +0400
+
+    Use CMAKE_CURRENT_{SOURCE,BINARY}_DIR
+    
+    Some projects (e.g., digikam) include snapshots of this library into their
+    release tarballs, so the libkvkontakte_SOURCE_DIR != CMAKE_SOURCE_DIR.
+
+diff --git a/extra/libkvkontakte/CMakeLists.txt b/extra/libkvkontakte/CMakeLists.txt
+index f19b28b..4310a74 100644
+--- a/extra/libkvkontakte/CMakeLists.txt
++++ b/extra/libkvkontakte/CMakeLists.txt
+@@ -21,7 +21,7 @@ set(INCLUDE_INSTALL_DIR include )
+ 
+ 
+ # === Closer to the code, close to the body ===
+-set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules")
++set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+ find_package(KDE4 REQUIRED)
+ include(KDE4Defaults)
+ include(MacroLibrary)
+@@ -35,8 +35,8 @@ macro_log_feature(QJSON_FOUND "QJSON" "Qt library for handling JSON data" "http:
+ add_definitions(${QT_DEFINITIONS} ${KDE4_DEFINITIONS})
+ 
+ include_directories(
+-  ${CMAKE_SOURCE_DIR}
+-  ${CMAKE_BINARY_DIR}
++  ${CMAKE_CURRENT_SOURCE_DIR}
++  ${CMAKE_CURRENT_BINARY_DIR}
+   ${KDE4_INCLUDES}
+   ${QJSON_INCLUDE_DIR}
+ )

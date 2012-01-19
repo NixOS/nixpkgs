@@ -1,7 +1,7 @@
 {stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? true}:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.11.1";
+  name = "automake-1.11.2";
 
   # TODO: Remove the `aclocal' wrapper when $ACLOCAL_PATH support is
   # available upstream; see
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/automake/${name}.tar.bz2";
-    sha256 = "1bn7jl11wbkyy4ivgja92zkyjj8w3agwp2xnf7g8f7qa1qy9s5av";
+    sha256 = "06476qbd16dlasz29drmljqmr4gwx4qgcl075033b2hc73wx2ijg";
   };
 
   buildInputs = [perl autoconf makeWrapper];
@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;
-
-  patches = [ ./more-robust-silent-tests.patch ];
 
   meta = {
     homepage = http://www.gnu.org/software/automake/;

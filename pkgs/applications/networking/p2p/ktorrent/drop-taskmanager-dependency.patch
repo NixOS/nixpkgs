@@ -1,0 +1,175 @@
+commit 6d4a6ae51692966862ccb20d17cb217717519d40
+Author: Joris Guisson <joris.guisson@gmail.com>
+Date:   Wed Nov 23 20:17:08 2011 +0100
+
+    Use dbus to show ktorrent window from plasma applet. This removes the dependency on libtaskmanager.
+    
+    BUG: 287309
+Changelog removed by Yury G. Kudryashov
+
+diff --git a/plasma/applet/CMakeLists.txt b/plasma/applet/CMakeLists.txt
+index 3a72241..4307cf2 100644
+--- a/plasma/applet/CMakeLists.txt
++++ b/plasma/applet/CMakeLists.txt
+@@ -5,25 +5,15 @@ if(NOT QT_VERSION_OK)
+ 
+ else(NOT QT_VERSION_OK)
+ 	
+-	set(TASKMANAGER_FOUND FALSE)
+-	FIND_PATH(TASKMANAGER_INCLUDE_DIR NAMES taskmanager.h  PATHS ${KDE4_INCLUDE_DIR}/taskmanager ${INCLUDE_INSTALL_DIR}/taskmanager.h)
+-	FIND_LIBRARY(TASKMANAGER_LIBRARY NAMES taskmanager PATHS ${KDE4_LIB_DIR} ${LIB_INSTALL_DIR})
+-
+-	if(TASKMANAGER_INCLUDE_DIR AND TASKMANAGER_LIBRARY)
+-		set(TASKMANAGER_FOUND TRUE)
+-		message(STATUS "Found libtaskmanager: ${TASKMANAGER_LIBRARY} ")
+-		include_directories(${TASKMANAGER_INCLUDE_DIR})
+-		set(ktapplet_SRCS applet.cpp chunkbar.cpp fadingitem.cpp fadingnavigationwidget.cpp)
+-		
+-		kde4_add_ui_files(ktapplet_SRCS appletconfig.ui)
+-		
+-		kde4_add_plugin(plasma_applet_ktorrent ${ktapplet_SRCS})
+-		target_link_libraries(plasma_applet_ktorrent  ${KDE4_PLASMA_LIBS} ${KDE4_KIO_LIBS} ${TASKMANAGER_LIBRARY} ${LIBKTORRENT_LIBRARIES} ktcore)
+-		
+-		install(TARGETS plasma_applet_ktorrent DESTINATION ${PLUGIN_INSTALL_DIR})
+-		install(FILES plasma-applet-ktorrent.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+-	endif(TASKMANAGER_INCLUDE_DIR AND TASKMANAGER_LIBRARY)
+-
+-	macro_log_feature(TASKMANAGER_FOUND "libtaskmanager" "libtaskmanager library and header files" "http://www.kde.org/" FALSE "" "libtaskmanager is needed for KTorrent Plasmoid")
++	
++	set(ktapplet_SRCS applet.cpp chunkbar.cpp fadingitem.cpp fadingnavigationwidget.cpp)
++	
++	kde4_add_ui_files(ktapplet_SRCS appletconfig.ui)
++	
++	kde4_add_plugin(plasma_applet_ktorrent ${ktapplet_SRCS})
++	target_link_libraries(plasma_applet_ktorrent  ${KDE4_PLASMA_LIBS} ${KDE4_KIO_LIBS} ${LIBKTORRENT_LIBRARIES} ktcore)
++	
++	install(TARGETS plasma_applet_ktorrent DESTINATION ${PLUGIN_INSTALL_DIR})
++	install(FILES plasma-applet-ktorrent.desktop DESTINATION ${SERVICES_INSTALL_DIR})
+ 
+ endif(NOT QT_VERSION_OK)
+diff --git a/plasma/applet/applet.cpp b/plasma/applet/applet.cpp
+index 59e7191..bf09479 100644
+--- a/plasma/applet/applet.cpp
++++ b/plasma/applet/applet.cpp
+@@ -21,6 +21,9 @@
+ #include "applet.h"
+ #include <QFile>
+ #include <QGraphicsLinearLayout>
++#include <QDBusConnection>
++#include <QDBusConnectionInterface>
++#include <QDBusMessage>
+ #include <KConfigDialog>
+ #include <KLocale>
+ #include <KRun>
+@@ -31,12 +34,11 @@
+ #include <Plasma/IconWidget>
+ #endif
+ #include <Plasma/Label>
+-#include <taskmanager/taskmanager.h>
+-#include <taskmanager/task.h>
+ #include <util/functions.h>
+ #include "chunkbar.h"
+ #include "fadingnavigationwidget.h"
+ 
++
+ using namespace bt;
+ 
+ namespace ktplasma
+@@ -174,7 +176,8 @@ namespace ktplasma
+ 		}
+ 	}
+ 
+-	void Applet::updateNavigation() {
++	void Applet::updateNavigation() 
++	{
+ 		navigation->setEnabled(connected_to_app && !sources.empty()
+ 			&& (sources.count() > 1 || !sources.contains(current_source)));
+ 	}
+@@ -193,12 +196,14 @@ namespace ktplasma
+ 		}
+ 	}
+ 	
+-	void Applet::updateSources() {
++	void Applet::updateSources() 
++	{
+ 		sources = engine->sources();
+ 		sources.removeOne("core");
+ 	}
+ 
+-	void Applet::setSource(QString source) {
++	void Applet::setSource(QString source) 
++	{
+ 		if (!current_source.isEmpty())
+ 			engine->disconnectSource(current_source,this);
+ 		clearData();
+@@ -340,20 +345,39 @@ namespace ktplasma
+ 
+ 	void Applet::iconClicked()
+ 	{
+-		TaskManager::TaskDict tasks = TaskManager::TaskManager::self()->tasks();
+-		for (TaskManager::TaskDict::iterator i = tasks.begin();i != tasks.end();i ++)
++		QDBusConnection session_bus = QDBusConnection::sessionBus();
++		QDBusConnectionInterface* dbus_service = session_bus.interface();
++		if (!session_bus.isConnected() || !dbus_service || !dbus_service->isServiceRegistered("org.ktorrent.ktorrent"))
+ 		{
+-			if (i.value()->className() == "ktorrent")
+-			{
+-				KWindowSystem::activateWindow(i.key());
+-				return;
+-			}
++			// can't find the window, try launching it
++			KUrl::List empty;
++			KRun::run("ktorrent", empty, 0);
++		}
++		else
++		{
++			QDBusMessage msg = QDBusMessage::createMethodCall("org.ktorrent.ktorrent", "/ktorrent/MainWindow_1", "org.kde.KMainWindow", "winId");
++			QDBusPendingCall call = session_bus.asyncCall(msg, 5000);
++			QDBusPendingCallWatcher* watcher = new QDBusPendingCallWatcher(call ,this);
++			connect(watcher, SIGNAL(finished(QDBusPendingCallWatcher*)), this, SLOT(dbusCallFinished(QDBusPendingCallWatcher*)));
+ 		}
+-
+-		// can't find the window, try launching it
+-		KUrl::List empty;
+-		KRun::run("ktorrent", empty, 0);
+ 	}
++	
++	void Applet::dbusCallFinished(QDBusPendingCallWatcher* self)
++	{
++		if (self->isError())
++		{
++			// call failed, try launching it
++			KUrl::List empty;
++			KRun::run("ktorrent", empty, 0);
++		}
++		else
++		{
++			QDBusPendingReply<qlonglong> reply = *self;
++			KWindowSystem::activateWindow(reply.value());		
++		}
++		self->deleteLater();
++	}
++
+ 
+ 	void Applet::clearData()
+ 	{		
+diff --git a/plasma/applet/applet.h b/plasma/applet/applet.h
+index 29b3265..d396118 100644
+--- a/plasma/applet/applet.h
++++ b/plasma/applet/applet.h
+@@ -27,6 +27,7 @@
+ #include "fadingnavigationwidget.h"
+ 
+ class QGraphicsLinearLayout;
++class QDBusPendingCallWatcher;
+ 
+ namespace Plasma
+ {
+@@ -68,6 +69,7 @@ namespace ktplasma
+ 		void iconClicked();
+ 		void selectPrev();
+ 		void selectNext();
++		void dbusCallFinished(QDBusPendingCallWatcher* self);
+ 		
+ 	private:
+ 		void updateTorrentCombo();

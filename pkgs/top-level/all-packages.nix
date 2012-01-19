@@ -1622,6 +1622,8 @@ let
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
 
+  youtubeDL = callPackage ../tools/misc/youtube-dl { };
+
   zbar = callPackage ../tools/graphics/zbar {};
 
   zdelta = callPackage ../tools/compression/zdelta { };
@@ -2271,6 +2273,7 @@ let
     inherit (gtkLibs) glib gtk pango atk;
     libstdcpp5 = gcc33.gcc;
   };
+  gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
@@ -2780,7 +2783,7 @@ let
 
   jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
-  jruby116 = callPackage ../development/interpreters/jruby { };
+  jruby165 = callPackage ../development/interpreters/jruby { };
 
   guileCairo = callPackage ../development/guile-modules/guile-cairo { };
 
@@ -3007,6 +3010,8 @@ let
   jikespg = callPackage ../development/tools/parsing/jikespg { };
 
   lcov = callPackage ../development/tools/analysis/lcov { };
+
+  leiningen = callPackage ../development/tools/build-managers/leiningen { };
 
   libtool = libtool_2;
 
@@ -5069,6 +5074,8 @@ let
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
+  mongodb = callPackage ../servers/nosql/mongodb { useV8 = (getConfig ["mongodb" "useV8"] false); };
+
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
     ps = procps; /* !!! Linux only */
@@ -6132,7 +6139,9 @@ let
   udev173 = callPackage ../os-specific/linux/udev/173.nix { };
   udev = pkgs.udev173;
 
-  udisks = callPackage ../os-specific/linux/udisks { };
+  udisks = callPackage ../os-specific/linux/udisks {
+    inherit (gnome) gtkdoc;
+  };
 
   uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
@@ -7351,6 +7360,7 @@ let
 
   rsync = callPackage ../applications/networking/sync/rsync {
     enableACLs = !(stdenv.isDarwin || stdenv.isSunOS);
+    enableCopyDevicesPatch = (getConfig ["rsync" "enableCopyDevicesPatch"] false);
   };
 
   rxvt = callPackage ../applications/misc/rxvt { };
@@ -8596,6 +8606,12 @@ let
     ghostscript = ghostscriptX;
     ruby = ruby18;
   };
+
+  texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
+    paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
+              texLivePGF texLiveBeamer texLiveModerncv ];
+
+  });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
   where TeXLive was added)

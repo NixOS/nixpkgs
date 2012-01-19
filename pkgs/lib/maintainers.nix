@@ -8,6 +8,7 @@
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   bjg = "Brian Gough <bjg@gnu.org>";
+  bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   eelco = "Eelco Dolstra <e.dolstra@tudelft.nl>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";

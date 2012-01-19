@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib }:
+{ stdenv, fetchurl, openssl, python, zlib, v8 }:
 
 stdenv.mkDerivation rec {
   version = "0.6.6";
@@ -12,13 +12,16 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--openssl-includes=${openssl}/include"
     "--openssl-libpath=${openssl}/lib"
+    "--shared-v8"
+    "--shared-v8-includes=${v8}/includes"
+    "--shared-v8-libpath=${v8}/lib"
   ];
 
   patchPhase = ''
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf}
   '';
 
-  buildInputs = [ python openssl zlib ];
+  buildInputs = [ python openssl v8 zlib];
 
   meta = with stdenv.lib; {
     description = "Event-driven I/O framework for the V8 JavaScript engine";

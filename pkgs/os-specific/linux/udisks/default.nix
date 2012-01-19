@@ -1,6 +1,7 @@
 { stdenv, fetchurl, pkgconfig, sg3_utils, udev, glib, dbus, dbus_glib
 , polkit, parted, lvm2, libatasmart, intltool, libuuid, mdadm
-, libxslt, docbook_xsl, utillinux, automake, autoconf }:
+, libxslt, docbook_xsl, utillinux
+, automake, autoconf, libtool, gtkdoc }:
 
 stdenv.mkDerivation rec {
   name = "udisks-1.0.4";
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
       lvm2 libatasmart intltool libuuid libxslt docbook_xsl
     ];
 
-  buildNativeInputs = [ automake autoconf pkgconfig ];
+  buildNativeInputs = [ automake autoconf libtool gtkdoc pkgconfig ];
 
   configureFlags = "--localstatedir=/var --enable-lvm2";
 
@@ -34,7 +35,9 @@ stdenv.mkDerivation rec {
         "/sbin:/bin:/usr/sbin:/usr/bin" \
         "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin"
 
-      automake
+      # The patch above modifies Makefile.am, so redo the whole thing.
+      # FIXME: Remove that ASAP---e.g., by writing the patch differently.
+      autoreconf -vfi
     '';
 
   meta = {

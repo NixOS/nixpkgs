@@ -1,0 +1,68 @@
+commit 25cc9c9876a5233bd630105d0110319892d4e18c
+Author: Gilles Caulier <caulier.gilles@gmail.com>
+Date:   Tue Jan 3 15:16:37 2012 +0100
+
+    enable checkall and clearall buttons only with libkipi version 1.4.0
+    BUGS: 290496
+
+diff --git a/core/utilities/setup/setupplugins.cpp b/utilities/setup/setupplugins.cpp
+index 0f4030a..b8efb35 100644
+--- a/core/utilities/setup/setupplugins.cpp
++++ b/core/utilities/setup/setupplugins.cpp
+@@ -6,8 +6,8 @@
+  * Date        : 2004-01-02
+  * Description : setup Kipi plugins tab.
+  *
+- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+- * Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
++ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
++ * Copyright (C) 2011-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
+  *
+  * This program is free software; you can redistribute it
+  * and/or modify it under the terms of the GNU General
+@@ -100,6 +100,11 @@ SetupPlugins::SetupPlugins(QWidget* parent)
+ 
+     panel->setLayout(mainLayout);
+ 
++#if KIPI_VERSION < 0x010400
++    d->checkAllBtn->setVisible(false);
++    d->clearBtn->setVisible(false);
++#endif
++
+     initPlugins();
+ 
+     // --------------------------------------------------------
+@@ -158,14 +163,18 @@ void SetupPlugins::applyPlugins()
+ void SetupPlugins::slotCheckAll()
+ {
+     QApplication::setOverrideCursor(Qt::WaitCursor);
++#if KIPI_VERSION >= 0x010400
+     d->kipiConfig->slotCheckAll();
++#endif
+     QApplication::restoreOverrideCursor();
+ }
+ 
+ void SetupPlugins::slotClear()
+ {
+     QApplication::setOverrideCursor(Qt::WaitCursor);
++#if KIPI_VERSION >= 0x010400
+     d->kipiConfig->slotClear();
++#endif
+     QApplication::restoreOverrideCursor();
+ }
+ 
+diff --git a/core/utilities/setup/setupplugins.h b/utilities/setup/setupplugins.h
+index 271a569..114e0fa 100644
+--- a/core/utilities/setup/setupplugins.h
++++ b/core/utilities/setup/setupplugins.h
+@@ -6,8 +6,8 @@
+  * Date        : 2004-01-02
+  * Description : setup Kipi plugins tab.
+  *
+- * Copyright (C) 2004-2011 by Gilles Caulier <caulier dot gilles at gmail dot com>
+- * Copyright (C) 2011 by Andi Clemens <andi dot clemens at googlemail dot com>
++ * Copyright (C) 2004-2012 by Gilles Caulier <caulier dot gilles at gmail dot com>
++ * Copyright (C) 2011-2012 by Andi Clemens <andi dot clemens at googlemail dot com>
+  *
+  * This program is free software; you can redistribute it
+  * and/or modify it under the terms of the GNU General
