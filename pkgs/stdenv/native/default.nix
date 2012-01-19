@@ -83,7 +83,7 @@ rec {
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).  
   makeStdenv =
-    {gcc, fetchurl, extraPath ? []}:
+    { gcc, fetchurl, extraPath ? [], overrides ? (pkgs: { }) }:
 
     import ../generic {
       name = "stdenv-native";
@@ -100,7 +100,7 @@ rec {
 
       fetchurlBoot = fetchurl;
 
-      inherit system shell gcc;
+      inherit system shell gcc overrides;
     };
 
 
@@ -137,12 +137,13 @@ rec {
   };
 
 
-  # Using that, build a stdenv that adds the `replace' command (which
-  # most systems don't have, so we mustn't rely on the native
-  # environment providing it).
+  # Using that, build a stdenv that adds the ‘xz’ command (which most
+  # systems don't have, so we mustn't rely on the native environment
+  # providing it).
   stdenvBoot2 = makeStdenv {
     inherit gcc fetchurl;
-    extraPath = [stdenvBoot1Pkgs.replace];
+    extraPath = [ stdenvBoot1Pkgs.xz ];
+    overrides = pkgs: { inherit (stdenvBoot1Pkgs) xz; };
   };
 
 
