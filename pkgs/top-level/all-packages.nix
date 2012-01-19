@@ -8611,6 +8611,12 @@ let
     ruby = ruby18;
   };
 
+  texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
+    paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
+              texLivePGF texLiveBeamer texLiveModerncv ];
+
+  });
+
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
   where TeXLive was added)
 
