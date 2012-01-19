@@ -787,6 +787,7 @@ let
 
   grub = callPackage_i686 ../tools/misc/grub {
     buggyBiosCDSupport = getConfig ["grub" "buggyBiosCDSupport"] true;
+    automake = automake110x;
   };
 
   grub19x = callPackage ../tools/misc/grub/1.9x.nix { };
