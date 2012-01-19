@@ -6127,7 +6127,9 @@ let
   udev173 = callPackage ../os-specific/linux/udev/173.nix { };
   udev = pkgs.udev173;
 
-  udisks = callPackage ../os-specific/linux/udisks { };
+  udisks = callPackage ../os-specific/linux/udisks {
+    inherit (gnome) gtkdoc;
+  };
 
   uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
     inherit fetchurl stdenv perl mktemp module_init_tools;
