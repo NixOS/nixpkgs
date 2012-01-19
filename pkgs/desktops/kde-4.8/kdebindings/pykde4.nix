@@ -8,11 +8,9 @@ kde {
 
   propagatedBuildInputs = [ pyqt4 sip ];
 
-#NIX_CFLAGS_COMPILE = "-I${phonon}/include/phonon";
+  patches = [ ./pykde4-hardcode-lib-python.patch ];
 
-  patches = [ ./pykde-purity.patch ];
-
-  cmakeFlags = "-DHARDCODE_LIB_PYTHON_PATH=ON";
+  cmakeFlags = "-DHARDCODE_LIB_PYTHON_PATH=ON ";
 
   preConfigure =
     ''
@@ -21,6 +19,7 @@ kde {
       # needs to install a plugin.
       mkdir -pv $out/${pydir}
       ${lndir}/bin/lndir ${pyqt4}/${pydir} $out/${pydir}
+      cmakeFlagsArray=( "-DSIP_DEFAULT_SIP_DIR=$prefix/share/sip" )
     '';
 
   meta = {
