@@ -3008,6 +3008,8 @@ let
 
   lcov = callPackage ../development/tools/analysis/lcov { };
 
+  leiningen = callPackage ../development/tools/build-managers/leiningen { };
+
   libtool = libtool_2;
 
   libtool_1_5 = callPackage ../development/tools/misc/libtool { };
