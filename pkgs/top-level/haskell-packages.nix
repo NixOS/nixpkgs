@@ -1341,6 +1341,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vacuumCairo = callPackage ../development/libraries/haskell/vacuum-cairo {};
 
+  vault = callPackage ../development/libraries/haskell/vault {};
+
   Vec = callPackage ../development/libraries/haskell/Vec {};
 
   vector = callPackage ../development/libraries/haskell/vector {};
