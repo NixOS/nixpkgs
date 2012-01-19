@@ -394,12 +394,12 @@ nestingLevel=0
 
 startNest() {
     nestingLevel=$(($nestingLevel + 1))
-    echo -en "\e[$1p"
+    echo -en "\033[$1p"
 }
 
 stopNest() {
     nestingLevel=$(($nestingLevel - 1))
-    echo -en "\e[q"
+    echo -en "\033[q"
 }
 
 header() {
