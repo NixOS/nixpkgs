@@ -2273,6 +2273,7 @@ let
     inherit (gtkLibs) glib gtk pango atk;
     libstdcpp5 = gcc33.gcc;
   };
+  gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
