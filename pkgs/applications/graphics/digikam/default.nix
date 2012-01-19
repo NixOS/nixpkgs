@@ -1,28 +1,26 @@
 { stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2, eigen,
-kdegraphics, lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, kdeedu,
+lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, libjpeg, libtiff,
 liblqr1, lensfun, pkgconfig, qjson, libkdcraw, opencv, libkexiv2, libkipi, boost,
-shared_desktop_ontologies, marble }:
+shared_desktop_ontologies, marble, clapack, mysql }:
 
 stdenv.mkDerivation rec {
-  name = "digikam-2.4.1";
+  name = "digikam-2.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/digikam/${name}.tar.bz2";
-    sha256 = "0fyyhc26syd1d1m8jqyg2i66hwd523mh419ln8y944jkrjj6gadc";
+    sha256 = "06l52j8i45vyfj3b81ivifqsqdjlcj4g68d8w06c5lhzniwjqaam";
   };
 
-  buildInputs = [ cmake qt4 kdelibs kdegraphics automoc4 phonon qimageblitz qca2 eigen
-    lcms jasper libgphoto2 kdepimlibs gettext soprano kdeedu liblqr1 lensfun
-    pkgconfig qjson libkdcraw opencv libkexiv2 libkipi boost shared_desktop_ontologies
-    marble ];
+  buildNativeInputs = [ cmake automoc4 pkgconfig ];
 
-  KDEDIRS=kdeedu;
+  buildInputs = [ qt4 kdelibs phonon qimageblitz qca2 eigen lcms libjpeg libtiff
+    jasper libgphoto2 kdepimlibs gettext soprano liblqr1 lensfun qjson libkdcraw
+    opencv libkexiv2 libkipi boost shared_desktop_ontologies marble mysql ];
 
   # Make digikam find some FindXXXX.cmake
-  preConfigure = ''
-    cp ${qjson}/share/apps/cmake/modules/FindQJSON.cmake cmake/modules;
-    cp ${marble}/share/apps/cmake/modules/FindMarble.cmake cmake/modules;
-  '';
+  KDEDIRS="${marble}:${qjson}";
+
+  patches = [ ./libkvkontakte-not-topdir.patch ./ftbfs-libkipi.patch ];
 
   meta = {
     description = "Photo Management Program";
