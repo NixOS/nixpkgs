@@ -102,9 +102,7 @@ fi
 
 # Execute the pre-hook.
 export SHELL=@shell@
-if [ -z "$shell" ]; then
-    export shell=@shell@
-fi
+if [ -z "$shell" ]; then export shell=@shell@; fi
 if [ -n "@preHook@" ]; then source @preHook@; fi
 runHook preHook
 
@@ -844,7 +842,6 @@ genericBuild() {
 
 
 # Execute the post-hook.
-if test -n "@postHook@"; then source @postHook@; fi
 runHook postHook
 
 

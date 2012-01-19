@@ -8,7 +8,6 @@ mkdir $out
 
 sed \
     -e "s^@preHook@^$preHook^g" \
-    -e "s^@postHook@^$postHook^g" \
     -e "s^@initialPath@^$initialPath^g" \
     -e "s^@gcc@^$gcc^g" \
     -e "s^@shell@^$shell^g" \
