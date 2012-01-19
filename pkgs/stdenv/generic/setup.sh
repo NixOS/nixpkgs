@@ -103,7 +103,6 @@ fi
 # Execute the pre-hook.
 export SHELL=@shell@
 if [ -z "$shell" ]; then export shell=@shell@; fi
-if [ -n "@preHook@" ]; then source @preHook@; fi
 runHook preHook
 
 
@@ -173,6 +172,7 @@ nativePkgs=""
 for i in $buildNativeInputs $propagatedBuildNativeInputs; do
     findInputs $i nativePkgs propagated-build-native-inputs
 done
+
 
 # Set the relevant environment variables to point to the build inputs
 # found above.

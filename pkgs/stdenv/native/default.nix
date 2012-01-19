@@ -11,22 +11,23 @@ rec {
     (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
     ["/" "/usr" "/usr/local"];
 
-  prehookBase = builtins.toFile "prehook-base.sh" ''
+  prehookBase = ''
     # Disable purity tests; it's allowed (even needed) to link to
     # libraries outside the Nix store (like the C library).
     export NIX_ENFORCE_PURITY=
   '';
 
-  prehookDarwin = builtins.toFile "prehook-darwin.sh" ''
-    source ${prehookBase}
+  prehookDarwin = ''
+    ${prehookBase}
     export NIX_DONT_SET_RPATH=1
     export NIX_NO_SELF_RPATH=1
     dontFixLibtool=1
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s" 
+    xargsFlags=" "
   '';
 
-  prehookFreeBSD = builtins.toFile "prehook-freebsd.sh" ''
-    source ${prehookBase}
+  prehookFreeBSD = ''
+    ${prehookBase}
     
     alias make=gmake
     alias tar=gtar
@@ -38,8 +39,8 @@ rec {
     export NIX_GCC_NEEDS_GREP=1
   '';
 
-  prehookOpenBSD = builtins.toFile "prehook-openbsd.sh" ''
-    source ${prehookBase}
+  prehookOpenBSD = ''
+    ${prehookBase}
     
     alias make=gmake
     alias grep=ggrep
@@ -55,8 +56,8 @@ rec {
     export NIX_GCC_NEEDS_GREP=1
   '';
 
-  prehookNetBSD = builtins.toFile "prehook-netbsd.sh" ''
-    source ${prehookBase}
+  prehookNetBSD = ''
+    ${prehookBase}
     
     alias make=gmake
     alias sed=gsed
@@ -68,8 +69,8 @@ rec {
     export NIX_GCC_NEEDS_GREP=1
   '';
 
-  prehookCygwin = builtins.toFile "prehook-cygwin.sh" ''
-    source ${prehookBase}
+  prehookCygwin = ''
+    ${prehookBase}
     
     if test -z "$cygwinConfigureEnableShared"; then
       export configureFlags="$configureFlags --disable-shared"

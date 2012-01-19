@@ -55,10 +55,10 @@ rec {
     
     builder = bootstrapFiles.sh;
     
-    args = if (system == "armv5tel-linux") then
-      ([ ./scripts/unpack-bootstrap-tools-arm.sh ])
-      else 
-      ([ ./scripts/unpack-bootstrap-tools.sh ]);
+    args =
+      if system == "armv5tel-linux"
+      then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
+      else [ ./scripts/unpack-bootstrap-tools.sh ];
     
     inherit (bootstrapFiles) bzip2 mkdir curl cpio;
     
@@ -82,7 +82,7 @@ rec {
     import ../generic {
       inherit system;
       name = "stdenv-linux-boot";
-      preHook = builtins.toFile "prehook.sh"
+      preHook =
         ''
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
@@ -263,7 +263,7 @@ rec {
     
     inherit system;
     
-    preHook = builtins.toFile "prehook.sh" commonPreHook;
+    preHook = commonPreHook;
     
     initialPath = 
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})
