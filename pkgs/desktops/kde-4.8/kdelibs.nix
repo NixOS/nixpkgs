@@ -8,10 +8,9 @@
 
 kde {
   buildInputs =
-    [
-      acl attr attica avahi bzip2 enchant fam getopt giflib herqq jasper
+    [ acl attr attica avahi bzip2 enchant fam getopt giflib herqq jasper
       libdbusmenu_qt libXScrnSaver libxslt pcre polkit_qt_1 qca2
-      shared_desktop_ontologies udev xz libxml2 libjpeg kerberos
+      shared_desktop_ontologies udev libxml2 libjpeg kerberos
     ];
 
   propagatedBuildInputs = [ qt4 soprano strigi phonon ];
