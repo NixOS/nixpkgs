@@ -1,8 +1,9 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
 , dbus, libusb, acl }:
 
-let version = "1.4.7"; in
-
+let
+  version = "1.4.7";
+in
 stdenv.mkDerivation {
   name = "cups-${version}";
 
