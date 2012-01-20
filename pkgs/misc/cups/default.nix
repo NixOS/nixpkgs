@@ -13,7 +13,14 @@ stdenv.mkDerivation {
     sha256 = "1xlnkdqldq81pdqgisqbyh92k249bzz35m1f5bp4la06p00ksvjf";
   };
 
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff pam dbus libusb acl ];
+  # The following code looks strange, but it had to be arranged like
+  # this in order to avoid major rebuilds while testing portability to
+  # non-Linux platforms. This should be cleaned once the expression is
+  # stable.
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ pam ]
+    ++ [ dbus libusb ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ acl ] ;
 
   propagatedBuildInputs = [ openssl ];
 
@@ -41,7 +48,7 @@ stdenv.mkDerivation {
     homepage = http://www.cups.org/;
     description = "A standards-based printing system for UNIX";
     license = "GPLv2"; # actually LGPL for the library and GPL for the rest
-    maintainers = [ stdenv.lib.maintainers.urkud ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.urkud stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }
