@@ -97,20 +97,13 @@ let inherit (builtins) head tail trace; in
 
         # changing this ? see [1]
         minInit = fullDepEntry ("
+                ${stdenv.preHook}
+                
                 set -e
                 NIX_GCC=${stdenv.gcc}
                 export SHELL=${stdenv.shell}
                 PATH_DELIMITER=':'
-        " + (if stdenv ? preHook && stdenv.preHook != null && toString stdenv.preHook != "" then 
-                "
-                param1=${stdenv.param1}
-                param2=${stdenv.param2}
-                param3=${stdenv.param3}
-                param4=${stdenv.param4}
-                param5=${stdenv.param5}
-                source ${stdenv.preHook}
-        " +         
-                "
+                
                 # Set up the initial path.
                 PATH=
                 for i in \$NIX_GCC ${toString stdenv.initialPath}; do
@@ -121,8 +114,7 @@ let inherit (builtins) head tail trace; in
 
                 prefix=${if args ? prefix then (toString args.prefix) else "\$out"}
 
-                "
-        else "")) ["defNest" "defAddToSearchPath"];
+                ") ["defNest" "defAddToSearchPath"];
                 
         # if you change this rewrite using '' instead of "" to get rid of indentation in builder scripts
         addInputs = fullDepEntry ("
