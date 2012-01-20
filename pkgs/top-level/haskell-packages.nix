@@ -332,6 +332,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2010_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_2_0_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      deepseq = self.deepseq_1_1_0_2;
+      # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
   haskellPlatform_2010_2_0_0 =
@@ -553,7 +555,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
-  criterion = callPackage ../development/libraries/haskell/criterion {};
+  criterion = callPackage ../development/libraries/haskell/criterion {
+    mtl = self.mtl2;
+    parsec = self.parsec3;
+  };
 
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
