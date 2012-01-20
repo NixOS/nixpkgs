@@ -260,8 +260,6 @@ rec {
   #     dependency (`nix-store -qR') on bootstrapTools or the
   #     first binutils built.
   stdenvLinux = import ../generic rec {
-    name = "stdenv-linux";
-    
     inherit system;
     
     preHook = commonPreHook;

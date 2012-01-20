@@ -1,8 +1,6 @@
 { stdenv, pkgs }:
 
 import ../generic rec {
-  name = "stdenv-nix";
-  
   preHook =
     ''
       export NIX_ENFORCE_PURITY=1

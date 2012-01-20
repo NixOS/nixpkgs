@@ -1,4 +1,4 @@
-{ system, name, preHook ? "", initialPath, gcc, shell
+{ system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
 , extraAttrs ? {}, overrides ? (pkgs: {})
 
 , # The `fetchurl' to use for downloading curl and its dependencies
