@@ -1,6 +1,6 @@
-diff -ru perl-5.14.2-orig/Configure perl-5.14.2/Configure
+diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
 --- perl-5.14.2-orig/Configure	2011-09-26 11:44:34.000000000 +0200
-+++ perl-5.14.2/Configure	2011-10-27 17:42:26.791103662 +0200
++++ perl-5.14.2/Configure	2012-01-20 17:05:23.089223129 +0100
 @@ -106,15 +106,7 @@
  fi
  
@@ -66,6 +66,15 @@ diff -ru perl-5.14.2-orig/Configure perl-5.14.2/Configure
  for file in $loclist; do
  	eval xxx=\$$file
  	case "$xxx" in
+@@ -4785,7 +4768,7 @@
+ : Set private lib path
+ case "$plibpth" in
+ '') if ./mips; then
+-		plibpth="$incpath/usr/lib /usr/local/lib /usr/ccs/lib"
++		plibpth="$incpath/usr/lib"
+ 	fi;;
+ esac
+ case "$libpth" in
 @@ -8390,13 +8373,8 @@
  echo " "
  case "$sysman" in
@@ -94,10 +103,9 @@ diff -ru perl-5.14.2-orig/Configure perl-5.14.2/Configure
  
  : see what type gids are declared as in the kernel
  echo " "
-Only in perl-5.14.2-orig/cpan/Module-Pluggable/t/lib/EditorJunk/Plugin: Bar.pm~
-diff -ru perl-5.14.2-orig/ext/Errno/Errno_pm.PL perl-5.14.2/ext/Errno/Errno_pm.PL
+diff -ru -x '*~' perl-5.14.2-orig/ext/Errno/Errno_pm.PL perl-5.14.2/ext/Errno/Errno_pm.PL
 --- perl-5.14.2-orig/ext/Errno/Errno_pm.PL	2011-09-26 11:44:34.000000000 +0200
-+++ perl-5.14.2/ext/Errno/Errno_pm.PL	2011-10-27 17:40:13.083352010 +0200
++++ perl-5.14.2/ext/Errno/Errno_pm.PL	2012-01-20 17:02:07.938138311 +0100
 @@ -137,11 +137,7 @@
  	if ($dep =~ /(\S+errno\.h)/) {
  	     $file{$1} = 1;
@@ -111,10 +119,10 @@ diff -ru perl-5.14.2-orig/ext/Errno/Errno_pm.PL perl-5.14.2/ext/Errno/Errno_pm.P
  	# Some Linuxes have weird errno.hs which generate
  	# no #file or #line directives
  	my $linux_errno_h = -e '/usr/include/errno.h' ?
-diff -ru perl-5.14.2-orig/hints/freebsd.sh perl-5.14.2/hints/freebsd.sh
+diff -ru -x '*~' perl-5.14.2-orig/hints/freebsd.sh perl-5.14.2/hints/freebsd.sh
 --- perl-5.14.2-orig/hints/freebsd.sh	2011-09-19 15:18:22.000000000 +0200
-+++ perl-5.14.2/hints/freebsd.sh	2011-10-27 17:40:13.083352010 +0200
-@@ -118,13 +118,13 @@
++++ perl-5.14.2/hints/freebsd.sh	2012-01-20 17:10:37.267924044 +0100
+@@ -118,21 +118,21 @@
          objformat=`/usr/bin/objformat`
          if [ x$objformat = xaout ]; then
              if [ -e /usr/lib/aout ]; then
@@ -132,3 +140,13 @@ diff -ru perl-5.14.2-orig/hints/freebsd.sh perl-5.14.2/hints/freebsd.sh
              ldflags="-Wl,-E "
              lddlflags="-shared "
          fi
+         cccdlflags='-DPIC -fPIC'
+         ;;
+ *)
+-       libpth="/usr/lib /usr/local/lib"
+-       glibpth="/usr/lib /usr/local/lib"
++       libpth=""
++       glibpth=""
+        ldflags="-Wl,-E "
+         lddlflags="-shared "
+         cccdlflags='-DPIC -fPIC'
