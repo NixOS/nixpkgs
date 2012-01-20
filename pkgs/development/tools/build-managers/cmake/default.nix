@@ -39,15 +39,12 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  postUnpack =
-    ''
-      dontUseCmakeConfigure=1
-      source $setupHook
-      fixCmakeFiles $sourceRoot
-    '';
+  dontUseCmakeConfigure = true;
 
   preConfigure = optionalString (stdenv ? glibc)
     ''
+      source $setupHook
+      fixCmakeFiles .
       substituteInPlace Modules/Platform/UnixPaths.cmake --subst-var-by glibc ${stdenv.glibc}
     '';
 
