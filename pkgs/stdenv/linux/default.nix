@@ -236,6 +236,7 @@ rec {
       gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
       name = "";
     };
+    extraPath = [ stdenvLinuxBoot3Pkgs.xz ];
     overrides = pkgs: {
       inherit (stdenvLinuxBoot1Pkgs) perl;
       inherit (stdenvLinuxBoot3Pkgs) gettext gnum4 xz gmp;
