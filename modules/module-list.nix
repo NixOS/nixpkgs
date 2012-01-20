@@ -62,6 +62,7 @@
   ./services/databases/4store.nix
   ./services/databases/mongodb.nix
   ./services/databases/mysql.nix
+  ./services/databases/mysql55.nix
   ./services/databases/openldap.nix
   ./services/databases/postgresql.nix
   ./services/databases/virtuoso.nix
