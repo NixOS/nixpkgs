@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = s.hash;
   };
 
+  patches = [ ./ftbfs.patch ];
+
   buildNativeInputs = [ perl ];
 
   buildInputs = [ zlib libjpeg freetype giflib libpng ]
