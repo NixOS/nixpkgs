@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
   buildNativeInputs = [ perl pkgconfig gettext xz ];
 
-  propagatedBuildInputs = [ zlib ];
+  propagatedBuildInputs = [ zlib ]
+    ++ stdenv.lib.optional (!stdenv.isLinux) gettext;
 
   # glib buildsystem fails to find python, thus hardcodes python2.4 in #!
   postInstall = ''

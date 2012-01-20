@@ -1,9 +1,9 @@
 rec {
-   version="1.4.3";
-   name="directfb-1.4.3";
-   hash="0y79lwzq7srlbgrva7b5y8klbp6gmr8hxrayq8njaw7by3jald8l";
-   url="http://directfb.org/downloads/Core/DirectFB-1.4/DirectFB-${version}.tar.gz";
-   advertisedUrl="http://directfb.org/downloads/Core/DirectFB-1.4/DirectFB-1.4.3.tar.gz";
+   version="1.5.3";
+   name="directfb-1.5.3";
+   hash="1w2i4az6v4sh086s27qbyn5w02s67a7dfm2xdpdm4r2zpgl7axg5";
+   url="http://directfb.org/downloads/Core/DirectFB-1.5/DirectFB-${version}.tar.gz";
+   advertisedUrl="http://directfb.org/downloads/Core/DirectFB-1.5/DirectFB-1.5.3.tar.gz";
   
   
 }
