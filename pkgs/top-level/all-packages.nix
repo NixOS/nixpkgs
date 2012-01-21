@@ -6635,6 +6635,17 @@ let
     librsvg = null /* if stdenv.isDarwin then null else librsvg */;
   };
 
+  emacs24 = lowPrio (callPackage ../applications/editors/emacs-24 {
+    # use override to select the appropriate gui toolkit
+    libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
+    Xaw3d = null;
+    gtk = if stdenv.isDarwin then null else gtkLibs.gtk;
+    # TODO: these packages don't build on Darwin.
+    # XXX: Do we want gconf by default? What is emacs using it for?
+    gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
+    librsvg = if stdenv.isDarwin then null else librsvg;
+  });
+
   emacsSnapshot = lowPrio (callPackage ../applications/editors/emacs-snapshot {
     xawSupport = getConfig [ "emacs" "xawSupport" ] false;
     xaw3dSupport = getConfig [ "emacs" "xaw3dSupport" ] false;
@@ -6701,6 +6712,7 @@ let
 
   emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
   emacs23Packages = recurseIntoAttrs (emacsPackages emacs23 pkgs.emacs23Packages);
+  emacs24Packages = recurseIntoAttrs (emacsPackages emacs24 pkgs.emacs24Packages);
 
   epdfview = callPackage ../applications/misc/epdfview { };
 

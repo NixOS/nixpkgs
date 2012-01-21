@@ -1,25 +1,30 @@
 { stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
-, libtiff, librsvg, texinfo, gconf
+, libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
 }:
+
+# XXX: ?
+# - checking for alsa >= 1.0.0... no
+# - checking for Wand >= 6.2.8... no
+# - imagemagickBig instead of imagemagick?
 
 assert (gtk != null) -> (pkgconfig != null);
 assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-23.3";
+  name = "emacs-24.0.92";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/emacs/${name}.tar.bz2";
-    sha256 = "0kfa546qi0idkwk29gclgi13qd8q54pcqgy9qwjknlclszprdp3a";
+    url = "http://alpha.gnu.org/gnu/emacs/pretest/${name}.tar.gz";
+    sha256 = "0pwps72zj7mm6asly1vdq46dcj3in4qrkb6ss9xq6nbf039nj4w6";
   };
 
   buildInputs = 
     [ ncurses x11 texinfo libXaw Xaw3d libXpm libpng libjpeg libungif
-      libtiff librsvg libXft gconf
+      libtiff librsvg libXft gconf libxml2 imagemagick gnutls
     ] 
     ++ stdenv.lib.optionals (gtk != null) [ gtk pkgconfig ]
     ++ stdenv.lib.optional stdenv.isLinux dbus;
@@ -44,7 +49,7 @@ EOF
   doCheck = true;
 
   meta = {
-    description = "GNU Emacs 23.x, the extensible, customizable text editor";
+    description = "PRETEST: GNU Emacs 24.x, the extensible, customizable text editor";
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its
