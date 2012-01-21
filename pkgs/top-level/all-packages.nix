@@ -6681,6 +6681,8 @@ let
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
+    notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
+
     nxml = callPackage ../applications/editors/emacs-modes/nxml { };
 
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
@@ -7246,7 +7248,11 @@ let
   netsurfBrowser = netsurf.browser;
   netsurf = recurseIntoAttrs (import ../applications/networking/browsers/netsurf { inherit pkgs; });
 
-  notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
+  notmuch = callPackage ../applications/networking/mailreaders/notmuch {
+      # use emacsPackages.notmuch if you want emacs support
+      emacs = null;
+  };
+  notmuchGit = callPackage ../applications/networking/mailreaders/notmuch/git.nix { };
 
   nova = callPackage ../applications/virtualization/nova { };
 
