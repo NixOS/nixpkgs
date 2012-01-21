@@ -5,7 +5,7 @@ let
   rev = "cf35984971341b8a8688";
 in
 stdenv.mkDerivation {
-  name = "ledger3-${rev}";
+  name = "ledger3-2012.01.${rev}";
 
   src = fetchgit {
     url = "git://github.com/jwiegley/ledger.git";
