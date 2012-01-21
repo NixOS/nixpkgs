@@ -2895,10 +2895,12 @@ let
 
   # Wrapper that works as gcc or g++
   # It can be used by setting in nixpkgs config like this, for example:
-  #    replaceStdenv = { pkgs }: (pkgs.ccacheStdenv "/var/ccache");
+  #    replaceStdenv = { pkgs }: pkgs.ccacheStdenv "exports CCACHE_DIR=/var/ccache";
   # But if you build in chroot, you should have that path in chroot
-  ccacheWrapper = cacheDir: wrapGCC (ccache.links cacheDir);
-  ccacheStdenv = cacheDir: overrideGCC stdenv (ccacheWrapper cacheDir);
+  # If instantiated directly, it will use the HOME/.ccache as cache directory.
+  ccacheWrapper = { extraConfig ? "" }: wrapGCC (ccache.links extraConfig);
+  ccacheStdenv = extraConfig: overrideGCC stdenv
+    (ccacheWrapper { inherit extraConfig; } );
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
