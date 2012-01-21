@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "0kfa546qi0idkwk29gclgi13qd8q54pcqgy9qwjknlclszprdp3a";
   };
 
-  buildInputs = 
+  buildInputs =
     [ ncurses x11 texinfo libXaw Xaw3d libXpm libpng libjpeg libungif
       libtiff librsvg libXft gconf
-    ] 
+    ]
     ++ stdenv.lib.optionals (gtk != null) [ gtk pkgconfig ]
     ++ stdenv.lib.optional stdenv.isLinux dbus;
 
