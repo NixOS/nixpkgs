@@ -73,7 +73,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer-r${mplayerRev}";
+  name = "mplayer-${mplayerRev}";
 
   src = fetchsvn {
     # Old kind of URL:
