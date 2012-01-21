@@ -7,23 +7,23 @@
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" ;
 
 stdenv.mkDerivation rec {
-  name = "chromium-17.0.943.0-pre${version}";
+  name = "chromium-18.0.975.0-pre${version}";
 
   # To determine the latest revision, get
   # ‘http://commondatastorage.googleapis.com/chromium-browser-continuous/Linux/LAST_CHANGE’.
-  # For the version number, see ‘about:config’.
-  version = "110566";
+  # For the version number, see ‘about:version’.
+  version = "114925";
   
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://commondatastorage.googleapis.com/chromium-browser-continuous/Linux_x64/${version}/chrome-linux.zip";
-        sha256 = "0pi2qbcvqy9gn2s0bfqlam3mj5ghnnnkrbxrrjl63737377an7ha";
+        sha256 = "19ayrcz1vw7nqr3bbas5f414n3kibf7knd285azrk29f7a7dnpd6";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://commondatastorage.googleapis.com/chromium-browser-continuous/Linux/${version}/chrome-linux.zip";
-        sha256 = "0mk8ikgz97i69qy1cy3cqw4a2ff2ixjzyw5i86fmrq7m1f156yva";
+        sha256 = "1bhcd3plw3r62bfysc9nszn07xv3gamf5lkwd6ardwyxanclc7x6";
       }
     else throw "Chromium is not supported on this platform.";
 
