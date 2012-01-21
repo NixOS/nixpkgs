@@ -61,14 +61,14 @@ let
       license = "unfree";
     };
   } else null;
-  
+
   ffmpegGit = fetchgit {
     url = "git://git.videolan.org/ffmpeg.git";
-    rev = "80d156d";
-    sha256 = "6d0124621491b8adc5f1bfb426ab137efc72dab99a89835aa3c30b970cb14004";
+    rev = "9e53f62be1a171eaf9620958c225d42cf5142a30";
+    sha256 = "be0ef2a394c82a0eee0be66bc0b943d37efb90f74ce1030aa89606109434c943";
   };
-  
-  mplayerRev = "33472";
+
+  mplayerRev = "34586";
 
 in
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
     url = "svn://svn.mplayerhq.hu/mplayer/trunk";
     rev = "${mplayerRev}";
-    sha256 = "01b0b5x6li8c2m2mam7mabmk02npvprcwrim00a51sdlvqxh309v";
+    sha256 = "5688add3256b5de8e0410194232aaaeb01531bb507459ffe4f07e69cb2d81bd7";
   };
 
   prePatch = ''
