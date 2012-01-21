@@ -1,13 +1,13 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "pkg-config-0.26";
+  name = "pkg-config-0.23";
   
   setupHook = ./setup-hook.sh;
   
   src = fetchurl {
     url = "http://pkgconfig.freedesktop.org/releases/${name}.tar.gz";
-    sha256 = "1by86fjr5i6l7l428bdk4axcls32bcb598g5wjrhz4vwg5m97hcl";
+    sha256 = "0lrvk17724mc2nzpaa0vwybarrl50r7qdnr4h6jijm50srrf1808";
   };
 
   patches = [
