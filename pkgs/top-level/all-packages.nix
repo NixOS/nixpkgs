@@ -204,18 +204,19 @@ let
 
   stdenv =
     if bootStdenv != null then (bootStdenv // {inherit platform;}) else
-      let
-          changer = getConfig ["replaceStdenv"] null;
-      in if changer != null then
-        changer {
-          # We import again all-packages to avoid recursivities.
-          pkgs = import ./all-packages.nix {
-            # We remove packageOverrides to avoid recursivities
-            config = removeAttrs config [ "replaceStdenv" ];
-          };
-        }
-      else if crossSystem != null then
+      if crossSystem != null then
         stdenvCross
+      else
+        let
+            changer = getConfig ["replaceStdenv"] null;
+        in if changer != null then
+          changer {
+            # We import again all-packages to avoid recursivities.
+            pkgs = import ./all-packages.nix {
+              # We remove packageOverrides to avoid recursivities
+              config = removeAttrs config [ "replaceStdenv" ];
+            };
+          }
       else
         defaultStdenv;
 
@@ -2894,7 +2895,7 @@ let
 
   # Wrapper that works as gcc or g++
   # It can be used by setting in nixpkgs config like this, for example:
-  #    replaceStdenv = { pkgs }: (pkgs.ccacheStdenv "/var/ccache")
+  #    replaceStdenv = { pkgs }: (pkgs.ccacheStdenv "/var/ccache");
   # But if you build in chroot, you should have that path in chroot
   ccacheWrapper = cacheDir: wrapGCC (ccache.links cacheDir);
   ccacheStdenv = cacheDir: overrideGCC stdenv (ccacheWrapper cacheDir);
