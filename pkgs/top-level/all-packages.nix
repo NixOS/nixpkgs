@@ -6646,14 +6646,6 @@ let
     librsvg = if stdenv.isDarwin then null else librsvg;
   });
 
-  emacsSnapshot = lowPrio (callPackage ../applications/editors/emacs-snapshot {
-    xawSupport = getConfig [ "emacs" "xawSupport" ] false;
-    xaw3dSupport = getConfig [ "emacs" "xaw3dSupport" ] false;
-    gtkGUI = getConfig [ "emacs" "gtkSupport" ] true;
-    xftSupport = getConfig [ "emacs" "xftSupport" ] true;
-    dbusSupport = getConfig [ "emacs" "dbusSupport" ] true;
-  });
-
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
