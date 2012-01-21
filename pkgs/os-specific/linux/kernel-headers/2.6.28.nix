@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     if stdenv.system == "x86_64-linux" then "x86_64" else
     if stdenv.system == "powerpc-linux" then "powerpc" else
     if stdenv.system == "armv5tel-linux" then "arm" else
-    if stdenv.system == "mips64-linux" then "mips" else
+    if stdenv.system == "mips64el-linux" then "mips" else
     abort "don't know what the kernel include directory is called for this platform";
 
   buildInputs = [perl];

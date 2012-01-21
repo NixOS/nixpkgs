@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = "--disable-werror" # needed for dietlibc build
-      + stdenv.lib.optionalString (stdenv.system == "mips64-linux")
+      + stdenv.lib.optionalString (stdenv.system == "mips64el-linux")
         " --enable-fix-loongson2f-nop"
       + stdenv.lib.optionalString (cross != null) " --target=${cross.config}"
       + stdenv.lib.optionalString gold " --enable-gold";

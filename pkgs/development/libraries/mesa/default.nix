@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./swrast-settexbuffer.patch ] ++ stdenv.lib.optional
-    (stdenv.system == "mips64-linux") ./mips_wmb.patch;
+    (stdenv.system == "mips64el-linux") ./mips_wmb.patch;
 
   prePatch = "patchShebangs .";
 

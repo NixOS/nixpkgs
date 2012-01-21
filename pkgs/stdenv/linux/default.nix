@@ -14,7 +14,7 @@ rec {
     else if system == "x86_64-linux" then import ./bootstrap/x86_64
     else if system == "powerpc-linux" then import ./bootstrap/powerpc
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
-    else if system == "mips64-linux" then import ./bootstrap/loongson2f
+    else if system == "mips64el-linux" then import ./bootstrap/loongson2f
     else abort "unsupported platform for the pure Linux stdenv";
 
 
@@ -23,7 +23,7 @@ rec {
       export NIX_ENFORCE_PURITY=1
       havePatchELF=1
       ${if system == "x86_64-linux" then "NIX_LIB64_IN_SELF_RPATH=1" else ""}
-      ${if system == "mips64-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
+      ${if system == "mips64el-linux" then "NIX_LIB32_IN_SELF_RPATH=1" else ""}
     '';
 
 
