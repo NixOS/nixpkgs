@@ -19,8 +19,8 @@ stdenv.mkDerivation {
   # non-Linux platforms. This should be cleaned once the expression is
   # stable.
   buildInputs = [ pkgconfig zlib libjpeg libpng libtiff ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ pam ]
-    ++ [ dbus libusb ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus ]
+    ++ [ libusb ]
     ++ stdenv.lib.optionals stdenv.isLinux [ acl ] ;
 
   propagatedBuildInputs = [ openssl ];
