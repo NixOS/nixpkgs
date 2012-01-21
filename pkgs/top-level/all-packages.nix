@@ -7133,8 +7133,8 @@ let
   };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
     inherit (pythonPackages) ssl curses;
+    guiSupport = false;		# use mercurialFull to get hgk GUI
   };
 
   mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
