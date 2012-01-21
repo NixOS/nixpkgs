@@ -7135,10 +7135,6 @@ let
   mercurial = callPackage ../applications/version-management/mercurial {
     guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
     inherit (pythonPackages) ssl curses;
-    # when used with hg-fast-export (git) mercurials files are using
-    # httplib.FakeSocket which is not provided after python 2.6.  (httplib2
-    # has removed it from its interface).
-    python = python27;
   };
 
   merkaartor = callPackage ../applications/misc/merkaartor { };
