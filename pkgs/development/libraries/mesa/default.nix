@@ -17,7 +17,8 @@ stdenv.mkDerivation {
     sha256 = "0msk1fh4yw4yi7z37v75vhpa23z49lkwgin6drczbihbqsl6lx2p";
   };
 
-  patches = [ ./swrast-settexbuffer.patch ];
+  patches = [ ./swrast-settexbuffer.patch ] ++ stdenv.lib.optional
+    (stdenv.system == "mips64-linux") ./mips_wmb.patch;
 
   prePatch = "patchShebangs .";
 
