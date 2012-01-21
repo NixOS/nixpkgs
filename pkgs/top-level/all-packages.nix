@@ -7252,7 +7252,6 @@ let
       # use emacsPackages.notmuch if you want emacs support
       emacs = null;
   };
-  notmuchGit = callPackage ../applications/networking/mailreaders/notmuch/git.nix { };
 
   nova = callPackage ../applications/virtualization/nova { };
 
