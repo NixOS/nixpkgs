@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     '';
     homepage = http://conkeror.org/;
     license = [ "MPLv1.1" "GPLv2" "LGPLv2.1" ];
-    maintainers = with stdenv.lib.maintainers; [ astsmtl ];
+    maintainers = with stdenv.lib.maintainers; [ astsmtl chaoflow ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
