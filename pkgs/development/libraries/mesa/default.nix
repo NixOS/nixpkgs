@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 # r300
   configureFlags =
       " --with-driver=dri --enable-gl-osmesa --enable-gles1"
-    + " --with-gallium-drivers=i915,i965,nouveau,r600,svga,swrast"
+    + " --with-gallium-drivers=i915,nouveau,r600,svga,swrast"
     + " --enable-gles2 --enable-gallium-egl --disable-glx-tls"
     + " --enable-xcb --enable-egl --disable-glut"
     # Texture floats are patented, see docs/patents.txt
