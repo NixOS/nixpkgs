@@ -1,10 +1,38 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, runCommand, gcc}:
 
+let
+  ccache =
 stdenv.mkDerivation {
-  name = "ccache-3.0";
+  name = "ccache-3.1.7";
   src = fetchurl {
-    url = http://samba.org/ftp/ccache/ccache-3.0.tar.gz;
-    sha256 = "0mi8sfnlcp2pmp7nzb7894rv85v13zxrj0v3qgnwhny3gx2p5pgk";
+    url = http://samba.org/ftp/ccache/ccache-3.1.7.tar.gz;
+    sha256 = "04ax6ks49b6rn57hx4v9wbvmsfmw6ipn0wyfqwhh4lzw70flv3r7";
+  };
+
+  passthru = {
+    # A derivation that provides gcc and g++ commands, but that
+    # will end up calling ccache for the given cacheDir
+    links = cacheDir : (runCommand "ccache-links"
+        { inherit (gcc) langC langCC; }
+      ''
+        mkdir -p $out/bin
+        if [ $langC -eq 1 ]; then
+          cat > $out/bin/gcc << EOF
+          #!/bin/sh
+          export CCACHE_DIR=${cacheDir}
+          exec ${ccache}/bin/ccache ${gcc.gcc}/bin/gcc "\$@"
+        EOF
+          chmod +x $out/bin/gcc
+        fi
+        if [ $langCC -eq 1 ]; then
+          cat > $out/bin/g++ << EOF
+          #!/bin/sh
+          export CCACHE_DIR=${cacheDir}
+          exec ${ccache}/bin/ccache ${gcc.gcc}/bin/g++ "\$@"
+        EOF
+          chmod +x $out/bin/g++
+        fi
+      '');
   };
 
   meta = {
@@ -12,4 +40,6 @@ stdenv.mkDerivation {
     homepage = http://ccache.samba.org/;
     license = "GPL";
   };
-}
+};
+in
+ccache
