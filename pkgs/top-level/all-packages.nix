@@ -7137,6 +7137,8 @@ let
     inherit (pythonPackages) ssl curses;
   };
 
+  mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
+
   merkaartor = callPackage ../applications/misc/merkaartor { };
 
   meshlab = callPackage ../applications/graphics/meshlab {
