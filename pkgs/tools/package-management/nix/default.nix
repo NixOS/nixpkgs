@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     doCheck = false;
   };
 
-  doCheck = true;
+  #doCheck = true;
 
   meta = {
     description = "The Nix Deployment System";
