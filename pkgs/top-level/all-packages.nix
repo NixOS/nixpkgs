@@ -6695,7 +6695,11 @@ let
 
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
-    proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral { };
+    proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral {
+      texLive = pkgs.texLiveAggregationFun {
+                  paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
+                };
+    };
 
     quack = callPackage ../applications/editors/emacs-modes/quack { };
 
