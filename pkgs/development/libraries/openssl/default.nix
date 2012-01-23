@@ -18,12 +18,12 @@ let
       ./cert-file.patch
     ]
 
-    ++ (stdenv.lib.optionals (isCross && opensslCrossSystem == "hurd-x86")
+    ++ stdenv.lib.optionals (isCross && opensslCrossSystem == "hurd-x86")
          [ ./cert-file-path-max.patch # merge with `cert-file.patch' eventually
            ./gnu.patch                # submitted upstream
-         ])
+         ]
 
-    ++ (stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch)
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch
     ++ stdenv.lib.optional (stdenv.system == "x86_64-freebsd") ./freebsd-x86_64-asm.patch;
   
 in
