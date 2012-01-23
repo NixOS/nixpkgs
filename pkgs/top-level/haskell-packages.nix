@@ -625,6 +625,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   downloadCurl = callPackage ../development/libraries/haskell/download-curl { tagsoup = self.tagsoup_0_10_1; };
 
+  DSH = callPackage ../development/libraries/haskell/DSH {
+    json = self.json_0_5;
+  };
+
   dstring = callPackage ../development/libraries/haskell/dstring {};
 
   editline = callPackage ../development/libraries/haskell/editline {};
@@ -649,6 +653,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
   fclabels = callPackage ../development/libraries/haskell/fclabels {};
+
+  FerryCore = callPackage ../development/libraries/haskell/FerryCore {};
 
   funcmp = callPackage ../development/libraries/haskell/funcmp {};
 
@@ -1048,6 +1054,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   parsimony = callPackage ../development/libraries/haskell/parsimony {};
 
+  Pathfinder = callPackage ../development/libraries/haskell/Pathfinder {};
+
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
@@ -1255,6 +1263,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   systemFilepath = callPackage ../development/libraries/haskell/system-filepath {};
 
   systemFileio = callPackage ../development/libraries/haskell/system-fileio {};
+
+  TableAlgebra = callPackage ../development/libraries/haskell/TableAlgebra {};
 
   tabular = callPackage ../development/libraries/haskell/tabular {};
 
