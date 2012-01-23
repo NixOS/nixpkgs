@@ -1,6 +1,7 @@
 { stdenv, fetchurl, ncurses, x11, libXaw, libXpm, Xaw3d
 , pkgconfig, gtk, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, texinfo, gconf, libxml2, imagemagick, gnutls
+, alsaLib
 }:
 
 # XXX: ?
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = 
     [ ncurses x11 texinfo libXaw Xaw3d libXpm libpng libjpeg libungif
-      libtiff librsvg libXft gconf libxml2 imagemagick gnutls
+      libtiff librsvg libXft gconf libxml2 imagemagick gnutls alsaLib
     ] 
     ++ stdenv.lib.optionals (gtk != null) [ gtk pkgconfig ]
     ++ stdenv.lib.optional stdenv.isLinux dbus;

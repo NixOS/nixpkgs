@@ -6641,9 +6641,11 @@ let
     Xaw3d = null;
     gtk = if stdenv.isDarwin then null else gtkLibs.gtk;
     # TODO: these packages don't build on Darwin.
-    # XXX: Do we want gconf by default? What is emacs using it for?
     gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
     librsvg = if stdenv.isDarwin then null else librsvg;
+    # alsa only on linux
+    alsaLib = if stdenv.isLinux then alsaLib else null;
+    imagemagick = imagemagickBig;
   });
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
