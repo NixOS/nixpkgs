@@ -131,6 +131,7 @@ in
     "/man"
     "/sbin"
     "/share/emacs"
+    "/share/org"
     "/share/info"
     "/share/terminfo"
     "/share/man"
