@@ -1786,6 +1786,30 @@ let
 
   gcc45 = gcc45_real;
 
+  gcc45_debug =
+    let gcc = lib.overrideDerivation gcc45.gcc (attrs:
+      # GCC 4.5's builder.sh contains hard-coded `-g0' flags, so patch it to
+      # remove them.
+      # TODO: Remove those `-g0' and this hack on the next stdenv update.
+      let
+        orig_builder = builtins.head (builtins.tail attrs.args);
+        new_builder = stdenv.mkDerivation {
+          name = "builder-gcc-4.5-debug";
+          phases = "buildPhase";
+          buildPhase =
+            '' cp -v "${orig_builder}" "$out"
+               sed -i "$out" -e 's/-g0//g ; s/--strip-debug//g'
+               chmod +x "$out"
+            '';
+        };
+      in {
+        args = [ "-e" "${new_builder}" ];
+        postHook = '' rm -rf "$out/src/build" '';
+      });
+   in
+     lowPrio (wrapGCC (misc.debugVersion gcc));
+
+
   gcc46 = gcc46_real;
 
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
