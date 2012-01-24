@@ -27,9 +27,6 @@ stdenv.mkDerivation rec {
 
   # Note: The tests want $out/share/coccinelle/standard.h so they must be run
   # after "make install".
-  # (I'm not sure if this is still needed.)
-  # Note: The check phase is now disabled completely, because the expected
-  # testing score is not always updated.
   doCheck = false;
 
   postInstall =
