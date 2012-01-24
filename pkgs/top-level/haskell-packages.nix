@@ -910,7 +910,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
-  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
+  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {
+    alex = self.alex_3_0_1;
+  };
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
@@ -1503,7 +1505,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   alex_2_3_3 = callPackage ../development/tools/parsing/alex/2.3.3.nix {};
   alex_2_3_5 = callPackage ../development/tools/parsing/alex/2.3.5.nix {};
   alex_3_0_1 = callPackage ../development/tools/parsing/alex/3.0.1.nix {};
-  alex = self.alex_2_3_1;
+  alex = self.alex_3_0_1;
 
   alexMeta = callPackage ../development/tools/haskell/alex-meta {};
 
