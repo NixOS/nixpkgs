@@ -848,6 +848,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HsSyck = callPackage ../development/libraries/haskell/HsSyck {};
 
+  HsOpenSSL = callPackage ../development/libraries/haskell/HsOpenSSL {};
+
   HStringTemplate = callPackage ../development/libraries/haskell/HStringTemplate {};
 
   hspread = callPackage ../development/libraries/haskell/hspread {};
