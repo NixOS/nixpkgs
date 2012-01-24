@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, qt4, libgadu, libXScrnSaver, libsndfile, libX11,
-  alsaLib, aspell, libidn, qca2, phonon }:
+  alsaLib, aspell, libidn, qca2, phonon, pkgconfig }:
 
 stdenv.mkDerivation {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0j88pyp2nqpc57j38zr135ypfiv4v329gfgiz9rdbqi8j26cyp7g";
   };
 
-  buildInputs = [ cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2 phonon
+  buildInputs = [ cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2 phonon pkgconfig
   ];
 
   configureFlags = "CPPFLAGS=-DQT_NO_DEBUG";
