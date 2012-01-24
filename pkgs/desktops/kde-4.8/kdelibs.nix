@@ -4,6 +4,7 @@
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
 , getopt, udev, herqq, phonon, libjpeg
+, pkgconfig
 }:
 
 kde {
@@ -12,6 +13,7 @@ kde {
       acl attr attica avahi bzip2 enchant fam getopt giflib herqq jasper
       libdbusmenu_qt libXScrnSaver libxslt pcre polkit_qt_1 qca2
       shared_desktop_ontologies udev xz libxml2 libjpeg kerberos
+      pkgconfig
     ];
 
   propagatedBuildInputs = [ qt4 soprano strigi phonon ];
