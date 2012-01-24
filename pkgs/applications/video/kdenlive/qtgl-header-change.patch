@@ -1,0 +1,14 @@
+Correct for changed Qt opengl includes.
+Reference: http://www.kdenlive.org/mantis/view.php?id=2396
+
+diff -Naur kdenlive-0.8.2.1.orig//src/videoglwidget.cpp kdenlive-0.8.2.1/src/videoglwidget.cpp
+--- kdenlive-0.8.2.1.orig//src/videoglwidget.cpp	2012-01-24 00:04:53.588121469 -0430
++++ kdenlive-0.8.2.1/src/videoglwidget.cpp	2012-01-24 00:05:32.817410938 -0430
+@@ -2,6 +2,7 @@
+ #include <QtGui>
+ #include <QtOpenGL>
+ #include "videoglwidget.h"
++#include "GL/glu.h"
+ 
+ #ifndef GL_TEXTURE_RECTANGLE_EXT
+ #define GL_TEXTURE_RECTANGLE_EXT GL_TEXTURE_RECTANGLE_NV
