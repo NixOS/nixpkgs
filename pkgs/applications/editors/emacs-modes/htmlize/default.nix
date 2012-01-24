@@ -6,8 +6,8 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el;
-    sha256 = "17sbhf4r6jh4610x8qb2y0y3hww7w33vfsjqg4vrz99pr29xffry";
+    url = http://fly.srk.fer.hr/~hniksic/emacs/htmlize.el.cgi;
+    sha256 = "70cf41a2ea6a478a45143a8cd672381c01ed894448200e602531acbf2b1fd160";
   };
 
   meta = {
