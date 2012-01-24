@@ -8200,7 +8200,9 @@ let
 
       polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
 
-      psi = callPackage ../applications/networking/instant-messengers/psi { };
+      psi = callPackage ../applications/networking/instant-messengers/psi {
+        inherit (gtkLibs) glib;
+      };
 
       quassel = callPackage ../applications/networking/irc/quassel { };
 
