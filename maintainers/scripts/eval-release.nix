@@ -5,6 +5,7 @@
 with import ../../pkgs/lib;
 
 let
+  trace = if (builtins.getEnv "VERBOSE") == "1" then builtins.trace else (x: y: y);
 
   rel = removeAttrs (import ../../pkgs/top-level/release.nix) [ "tarball" "xbursttools" ];
 
@@ -15,7 +16,7 @@ let
   maybe = as: let y = builtins.tryEval (strictAttrs as); in if y.success then y.value else builtins.trace "FAIL" null;
 
   call = attrs: flip mapAttrs attrs
-    (n: v: /* builtins.trace n */ (
+    (n: v: trace n (
       if builtins.isFunction v then maybe (v { system = "i686-linux"; })
       else if builtins.isAttrs v then call v
       else null
