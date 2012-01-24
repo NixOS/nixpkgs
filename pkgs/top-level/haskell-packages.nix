@@ -991,7 +991,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 
-  mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
+  mwcRandom_0_10_0_1 = callPackage ../development/libraries/haskell/mwc-random/0.10.0.1.nix {};
+  mwcRandom_0_11_0_0 = callPackage ../development/libraries/haskell/mwc-random/0.11.0.0.nix {};
+  mwcRandom = self.mwcRandom_0_11_0_0;
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
@@ -1188,7 +1190,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
-  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
+  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {
+    mwcRandom = self.mwcRandom_0_10_0_1;
+  };
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 
