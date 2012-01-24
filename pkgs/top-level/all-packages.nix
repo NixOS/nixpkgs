@@ -8251,6 +8251,8 @@ let
       yakuake = callPackage ../applications/misc/yakuake { };
 
       zanshin = callPackage ../applications/office/zanshin { };
+
+      kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
     };
 
   redshift = callPackage ../applications/misc/redshift {
