@@ -8,10 +8,6 @@
   sha256 = "0f5rsyrn33iz0sny3wxsghv7c7yrbhas42yarb5rq958i3kpm6wz";
 })
 (fetchurl {
-  url = "http://download.documentfoundation.org/libreoffice/src/3.4.5/libreoffice-bootstrap-3.4.5.2.tar.bz2";
-  sha256 = "05xz6ykddrm6mrgl9jssr2xpg2ir0x6c1c3n1cph0mvd0hiz58x9";
-})
-(fetchurl {
   url = "http://download.documentfoundation.org/libreoffice/src/3.4.5/libreoffice-calc-3.4.5.2.tar.bz2";
   sha256 = "1l00y0qj1s9m31jmqg7q7bczxa5xsng388nqc9zc3vd6zjf4xy9i";
 })
@@ -70,5 +66,13 @@
 (fetchurl {
   url = "http://download.documentfoundation.org/libreoffice/src/3.4.5/libreoffice-writer-3.4.5.2.tar.bz2";
   sha256 = "0k7xf94abavdzpns1z13phl3vjz0xkfv2h5sn7rgpr3dy184klxh";
+})
+(fetchurl {
+  url = "http://download.documentfoundation.org/libreoffice/src/3.4.5/libreoffice-sdk-3.4.5.2.tar.bz2";
+  sha256 = "1f9iv875aw9sic4gl45ik1vx24gpq9iarjl673wz6l0wxr6hgrgw";
+})
+(fetchurl {
+  url = "http://download.documentfoundation.org/libreoffice/src/3.4.5/libreoffice-testing-3.4.5.2.tar.bz2";
+  sha256 = "05sk3li5jgmjv722ncsr2i7arhmsvkkvmh4qw7xl70p8dpxhla8q";
 })
 ]

@@ -11,10 +11,9 @@ fi
 
 echo '{fetchurl} : ['
 
-# I skip, as I hope I'll not need: sdk testing 
 for a in artwork base bootstrap calc components extensions extras filters \
   help impress libs-core libs-extern libs-extern-sys libs-gui postprocess \
-  translations ure writer; do
+  translations ure writer sdk testing; do
 
   URL=http://download.documentfoundation.org/libreoffice/src/$VERSIONBASE/libreoffice-$a-$VERSION.tar.bz2
 
