@@ -76,8 +76,8 @@ in
 
         description = "Zabbix server daemon";
 
-        startOn = "started postgresql";
-        stopOn = "stopping postgresql";
+        startOn = if cfg.dbServer == "localhost" then "started postgresql" else "filesystem";
+        stopOn = if cfg.dbServer == "localhost" then "stopping postgresql" else "starting shutdown";
 
         preStart =
           ''
