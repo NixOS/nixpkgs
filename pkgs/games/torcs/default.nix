@@ -1,13 +1,13 @@
 { fetchurl, stdenv, mesa, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
-libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm,
+libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
 libpng, zlib, bash }:
 
 stdenv.mkDerivation rec {
-  name = "torcs-1.3.1";
+  name = "torcs-1.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/torcs/${name}.tar.bz2";
-    sha256 = "1zai7nrx93pcv24r3fkr08831szj7vz3a6xy8fihlv6wvfnpn6wh";
+    sha256 = "0171ixhnd9cs8jkwa5awrxklfgyykcbc9m8270b8cw30lsx7qhp1";
   };
 
   patchPhase = ''
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ mesa freeglut libX11 plib openal freealut libXrandr xproto
-    libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib bash ];
+    libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis ];
+
+  buildNativeInputs = [ bash ];
 
   installTargets = "install datainstall";
 

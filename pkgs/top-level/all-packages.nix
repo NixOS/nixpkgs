@@ -204,14 +204,19 @@ let
 
   stdenv =
     if bootStdenv != null then (bootStdenv // {inherit platform;}) else
-      let changer = getConfig ["replaceStdenv"] null;
-      in if changer != null then
-        changer {
-          stdenv = stdenvCross;
-          overrideSetup = overrideSetup;
-        }
-      else if crossSystem != null then
+      if crossSystem != null then
         stdenvCross
+      else
+        let
+            changer = getConfig ["replaceStdenv"] null;
+        in if changer != null then
+          changer {
+            # We import again all-packages to avoid recursivities.
+            pkgs = import ./all-packages.nix {
+              # We remove packageOverrides to avoid recursivities
+              config = removeAttrs config [ "replaceStdenv" ];
+            };
+          }
       else
         defaultStdenv;
 
@@ -1781,6 +1786,30 @@ let
 
   gcc45 = gcc45_real;
 
+  gcc45_debug =
+    let gcc = lib.overrideDerivation gcc45.gcc (attrs:
+      # GCC 4.5's builder.sh contains hard-coded `-g0' flags, so patch it to
+      # remove them.
+      # TODO: Remove those `-g0' and this hack on the next stdenv update.
+      let
+        orig_builder = builtins.head (builtins.tail attrs.args);
+        new_builder = stdenv.mkDerivation {
+          name = "builder-gcc-4.5-debug";
+          phases = "buildPhase";
+          buildPhase =
+            '' cp -v "${orig_builder}" "$out"
+               sed -i "$out" -e 's/-g0//g ; s/--strip-debug//g'
+               chmod +x "$out"
+            '';
+        };
+      in {
+        args = [ "-e" "${new_builder}" ];
+        postHook = '' rm -rf "$out/src/build" '';
+      });
+   in
+     lowPrio (wrapGCC (misc.debugVersion gcc));
+
+
   gcc46 = gcc46_real;
 
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
@@ -2824,6 +2853,8 @@ let
     gcj = gcj.gcc; # use the raw GCJ, which has ${gcj}/lib/jvm
   };
 
+  astyle = callPackage ../development/tools/misc/astyle { };
+
   autobuild = callPackage ../development/tools/misc/autobuild { };
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
@@ -2887,6 +2918,24 @@ let
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
   ccache = callPackage ../development/tools/misc/ccache { };
+
+  # Wrapper that works as gcc or g++
+  # It can be used by setting in nixpkgs config like this, for example:
+  #    replaceStdenv = { pkgs }: pkgs.ccacheStdenv;
+  # But if you build in chroot, you should have that path in chroot
+  # If instantiated directly, it will use the HOME/.ccache as cache directory.
+  # You can use an override in packageOverrides to set extraConfig:
+  #    packageOverrides = pkgs: {
+  #     ccacheWrapper = pkgs.ccacheWrapper.override {
+  #       extraConfig = ''
+  #         CCACHE_COMPRESS=1
+  #         CCACHE_DIR=/bin/.ccache
+  #       '';
+  #     };
+  #
+  ccacheWrapper = makeOverridable ({ extraConfig ? "" }:
+     wrapGCC (ccache.links extraConfig)) {};
+  ccacheStdenv = overrideGCC stdenv ccacheWrapper;
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
@@ -5767,6 +5816,8 @@ let
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
+    bbswitch = callPackage ../os-specific/linux/bbswitch {};
+
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
     aufs =
@@ -6614,12 +6665,17 @@ let
     librsvg = null /* if stdenv.isDarwin then null else librsvg */;
   };
 
-  emacsSnapshot = lowPrio (callPackage ../applications/editors/emacs-snapshot {
-    xawSupport = getConfig [ "emacs" "xawSupport" ] false;
-    xaw3dSupport = getConfig [ "emacs" "xaw3dSupport" ] false;
-    gtkGUI = getConfig [ "emacs" "gtkSupport" ] true;
-    xftSupport = getConfig [ "emacs" "xftSupport" ] true;
-    dbusSupport = getConfig [ "emacs" "dbusSupport" ] true;
+  emacs24 = lowPrio (callPackage ../applications/editors/emacs-24 {
+    # use override to select the appropriate gui toolkit
+    libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
+    Xaw3d = null;
+    gtk = if stdenv.isDarwin then null else gtkLibs.gtk;
+    # TODO: these packages don't build on Darwin.
+    gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
+    librsvg = if stdenv.isDarwin then null else librsvg;
+    # alsa only on linux
+    alsaLib = if stdenv.isLinux then alsaLib else null;
+    imagemagick = imagemagickBig;
   });
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
@@ -6657,6 +6713,8 @@ let
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
 
+    notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
+
     nxml = callPackage ../applications/editors/emacs-modes/nxml { };
 
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
@@ -6667,7 +6725,11 @@ let
 
     prologMode = callPackage ../applications/editors/emacs-modes/prolog { };
 
-    proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral { };
+    proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral {
+      texLive = pkgs.texLiveAggregationFun {
+                  paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
+                };
+    };
 
     quack = callPackage ../applications/editors/emacs-modes/quack { };
 
@@ -6680,6 +6742,7 @@ let
 
   emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
   emacs23Packages = recurseIntoAttrs (emacsPackages emacs23 pkgs.emacs23Packages);
+  emacs24Packages = recurseIntoAttrs (emacsPackages emacs24 pkgs.emacs24Packages);
 
   epdfview = callPackage ../applications/misc/epdfview { };
 
@@ -7065,13 +7128,18 @@ let
 
   librecad = callPackage ../applications/misc/librecad { };
 
+  libreoffice = callPackage ../applications/office/openoffice/libreoffice.nix {
+    inherit (perlPackages) ArchiveZip CompressZlib;
+    inherit (gnome) GConf ORBit2;
+  };
+
   lingot = callPackage ../applications/audio/lingot {
     inherit (gnome) libglade;
   };
 
   links = callPackage ../applications/networking/browsers/links { };
 
-  ledger = callPackage ../applications/office/ledger { };
+  ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
   links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
@@ -7106,13 +7174,11 @@ let
   };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    guiSupport = getConfig ["mercurial" "guiSupport"] false; # for hgk (gitk gui for hg)
     inherit (pythonPackages) ssl curses;
-    # when used with hg-fast-export (git) mercurials files are using
-    # httplib.FakeSocket which is not provided after python 2.6.  (httplib2
-    # has removed it from its interface).
-    python = python27;
+    guiSupport = false;		# use mercurialFull to get hgk GUI
   };
+
+  mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
 
   merkaartor = callPackage ../applications/misc/merkaartor { };
 
@@ -7221,7 +7287,10 @@ let
   netsurfBrowser = netsurf.browser;
   netsurf = recurseIntoAttrs (import ../applications/networking/browsers/netsurf { inherit pkgs; });
 
-  notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
+  notmuch = callPackage ../applications/networking/mailreaders/notmuch {
+      # use emacsPackages.notmuch if you want emacs support
+      emacs = null;
+  };
 
   nova = callPackage ../applications/virtualization/nova { };
 
@@ -7593,9 +7662,7 @@ let
     inherit (xlibs) libX11;
   };
 
-  vlc = callPackage ../applications/video/vlc {
-    lua = lua5;
-  };
+  vlc = callPackage ../applications/video/vlc { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
@@ -8166,7 +8233,9 @@ let
 
       polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
 
-      psi = callPackage ../applications/networking/instant-messengers/psi { };
+      psi = callPackage ../applications/networking/instant-messengers/psi {
+        inherit (gtkLibs) glib;
+      };
 
       quassel = callPackage ../applications/networking/irc/quassel { };
 
@@ -8191,6 +8260,8 @@ let
       yakuake = callPackage ../applications/misc/yakuake { };
 
       zanshin = callPackage ../applications/office/zanshin { };
+
+      kwooty = callPackage ../applications/networking/newsreaders/kwooty { };
     };
 
   redshift = callPackage ../applications/misc/redshift {

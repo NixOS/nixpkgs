@@ -68,11 +68,11 @@ let
   })) // {inherit ;};
     
   dri2proto = (stdenv.mkDerivation ((if overrides ? dri2proto then overrides.dri2proto else x: x) {
-    name = "dri2proto-2.3";
+    name = "dri2proto-2.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.6/src/everything/dri2proto-2.3.tar.bz2;
-      sha256 = "0xz6nf5rrn1fvply5mq7dd1w89r73mggylp9lpzzwdfvl291h55j";
+      url = mirror://xorg/individual/proto/dri2proto-2.6.tar.bz2;
+      sha256 = "02drlfqvjm2q7dvkkwli3fs2crb6rdb3kyd13vwx7z0rijrc10md";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};

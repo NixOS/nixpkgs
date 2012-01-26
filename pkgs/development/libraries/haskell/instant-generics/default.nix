@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "instant-generics";
-  version = "0.3.3";
-  sha256 = "125ninsm1k9hixlwqdn7b842fpqxz4zih4rh8fn7r7djmv1zpq9q";
+  version = "0.3.4";
+  sha256 = "0j3sfbw3j0izwmhvwcl8nxxvlrpfla5rngxx2yvl6w5i87wyhswi";
   buildDepends = [ syb ];
   noHaddock = true;
   meta = {

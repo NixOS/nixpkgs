@@ -214,10 +214,10 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.2";
+    version = "3.2.1";
     testing = false;
 
-    modDirVersion = "3.2.0";
+    modDirVersion = version;
 
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
@@ -225,7 +225,7 @@ import ./generic.nix (
   
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.0/${if testing then "testing/" else ""}linux-${version}.tar.bz2";
-      sha256 = "0qylk7b6w7x3a47mvzbn3yj47q3x79i49aiq8p5af3fgacmzr0f8";
+      sha256 = "0kplzd61zblbsqzhggwk5lca0diqd8crhrd7d7jd6gc8jcyiwavy";
     };
 
     config = configWithPlatform stdenv.platform;

@@ -17,14 +17,15 @@ stdenv.mkDerivation {
     sha256 = "0msk1fh4yw4yi7z37v75vhpa23z49lkwgin6drczbihbqsl6lx2p";
   };
 
-  patches = [ ./swrast-settexbuffer.patch ];
+  patches = [ ./swrast-settexbuffer.patch ] ++ stdenv.lib.optional
+    (stdenv.system == "mips64el-linux") ./mips_wmb.patch;
 
   prePatch = "patchShebangs .";
 
 # r300
   configureFlags =
       " --with-driver=dri --enable-gl-osmesa --enable-gles1"
-    + " --with-gallium-drivers=i915,i965,nouveau,r600,svga,swrast"
+    + " --with-gallium-drivers=i915,nouveau,r600,svga,swrast"
     + " --enable-gles2 --enable-gallium-egl --disable-glx-tls"
     + " --enable-xcb --enable-egl --disable-glut"
     # Texture floats are patented, see docs/patents.txt

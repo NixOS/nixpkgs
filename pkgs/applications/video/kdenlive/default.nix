@@ -1,19 +1,19 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, kdelibs, automoc4, phonon, mlt, gettext
-, qimageblitz, qjson, shared_mime_info, soprano }:
+, qimageblitz, qjson, shared_mime_info, soprano, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "kdenlive-${version}";
-  version = "0.8";
+  version = "0.8.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/kdenlive/${name}.tar.gz";
-    sha256 = "18e3390c9eb7124af5cd43819c679374aec46dcaf1fc5cdb43918db470c1076f";
+    sha256 = "a454a0659c9673453800df8382dfdbcb87acfb9b174712ffeb46b8304bf00717";
   };
 
-  patches = [ ./kdenlive-newmlt.patch ];
+  patches = [ ./qtgl-header-change.patch ];
 
   buildInputs = [ cmake qt4 perl kdelibs automoc4 phonon mlt gettext
-    qimageblitz qjson shared_mime_info soprano ];
+    qimageblitz qjson shared_mime_info soprano pkgconfig ];
 
   meta = {
     description = "Free and open source video editor";

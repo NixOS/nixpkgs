@@ -1,13 +1,14 @@
-{ cabal, deepseq, erf, monadPar, mwcRandom, primitive, vector
-, vectorAlgorithms
+{ cabal, deepseq, erf, mathFunctions, monadPar, mwcRandom
+, primitive, vector, vectorAlgorithms
 }:
 
 cabal.mkDerivation (self: {
   pname = "statistics";
-  version = "0.10.0.1";
-  sha256 = "0bn131yzq3qk4dpr78i3ndsxyn7hars9jw9krfsxmin9pqr114sw";
+  version = "0.10.1.0";
+  sha256 = "0fnpwnhcwxjcm81b9daqdy07cw5qgqa7m2bj6fxxwicpvawcyabc";
   buildDepends = [
-    deepseq erf monadPar mwcRandom primitive vector vectorAlgorithms
+    deepseq erf mathFunctions monadPar mwcRandom primitive vector
+    vectorAlgorithms
   ];
   meta = {
     homepage = "https://github.com/bos/statistics";

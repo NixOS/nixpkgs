@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HStringTemplate";
-  version = "0.6.6";
-  sha256 = "1ian79az5q6m08pwb5fks52ffs4h2mq02kkcwmr6jb7i0ha2k2si";
+  version = "0.6.8";
+  sha256 = "1fybvb3v2b786n1hfzcvyanj3yfm5j8z4fm48vaskcggawh6rlkr";
   buildDepends = [
     deepseq mtl parsec syb sybWithClass text time utf8String
   ];

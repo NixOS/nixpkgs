@@ -1,14 +1,14 @@
-{ cabal, binary, bson, cryptohash, monadControl, mtl, network
-, parsec, random, randomShuffle
+{ cabal, binary, bson, cryptohash, liftedBase, monadControl, mtl
+, network, parsec, random, randomShuffle, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "mongoDB";
-  version = "1.1.1";
-  sha256 = "0hy47kvswm4g85c3lb75fvdrcnrcbmjrhk15r1jjriwzqicgiimz";
+  version = "1.2.0";
+  sha256 = "0rffa13p889mxbbkj2bmqy3yada3mrhngvp8pp7qvrll1acm7s13";
   buildDepends = [
-    binary bson cryptohash monadControl mtl network parsec random
-    randomShuffle
+    binary bson cryptohash liftedBase monadControl mtl network parsec
+    random randomShuffle transformersBase
   ];
   meta = {
     homepage = "http://github.com/TonyGen/mongoDB-haskell";

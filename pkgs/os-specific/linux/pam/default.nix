@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ flex ];
   buildInputs = [ cracklib ]
     ++ stdenv.lib.optional
-      (stdenv.system != "armv5tel-linux" && stdenv.system != "mips64-linux")
+      (stdenv.system != "armv5tel-linux" && stdenv.system != "mips64el-linux")
       libxcrypt;
 
   crossAttrs = {

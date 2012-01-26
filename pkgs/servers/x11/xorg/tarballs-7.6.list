@@ -3,7 +3,7 @@ mirror://xorg/X11R7.6/src/everything/bdftopcf-1.0.3.tar.bz2
 mirror://xorg/X11R7.6/src/everything/bigreqsproto-1.1.1.tar.bz2
 mirror://xorg/X11R7.6/src/everything/compositeproto-0.4.2.tar.bz2
 mirror://xorg/X11R7.6/src/everything/damageproto-1.2.1.tar.bz2
-mirror://xorg/X11R7.6/src/everything/dri2proto-2.3.tar.bz2
+mirror://xorg/individual/proto/dri2proto-2.6.tar.bz2
 mirror://xorg/individual/proto/dmxproto-2.3.1.tar.bz2
 mirror://xorg/X11R7.6/src/everything/encodings-1.0.4.tar.bz2
 mirror://xorg/X11R7.6/src/everything/fixesproto-4.1.2.tar.bz2
