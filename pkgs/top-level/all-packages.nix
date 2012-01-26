@@ -7096,6 +7096,8 @@ let
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
+  k3d = callPackage ../applications/graphics/k3d {};
+
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
   };
