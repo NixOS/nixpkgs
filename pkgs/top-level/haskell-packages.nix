@@ -1078,6 +1078,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pool = callPackage ../development/libraries/haskell/pool {};
 
+  poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
+
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
   prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
