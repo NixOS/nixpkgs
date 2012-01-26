@@ -683,7 +683,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcEvents = callPackage ../development/libraries/haskell/ghc-events {};
 
-  ghcMod = callPackage ../development/libraries/haskell/ghc-mod {};
+  ghcMod = callPackage ../development/libraries/haskell/ghc-mod {
+    emacsPackages = pkgs.emacs23Packages;
+  };
 
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
 
