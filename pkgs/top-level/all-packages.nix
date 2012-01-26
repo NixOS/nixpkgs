@@ -5037,9 +5037,7 @@ let
   dovecot_1_1_1 = callPackage ../servers/mail/dovecot/1.1.1.nix { };
   dovecot_2_0 = callPackage ../servers/mail/dovecot/2.0.nix { };
 
-  ejabberd = callPackage ../servers/xmpp/ejabberd {
-    erlang = erlangR13B ;
-  };
+  ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
