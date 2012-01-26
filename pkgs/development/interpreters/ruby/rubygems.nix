@@ -1,10 +1,10 @@
 args : with args; 
 rec {
 
-  version = "1.8.10";
+  version = "1.8.15";
   src = fetchurl {
     url = "http://production.cf.rubygems.org/rubygems/${name}.tgz";
-    sha256 = "0ll5swf4mi4nbgnr5jcyzmnlwb1zr2md9kvsgy3d1f485bb1n59q";
+    sha256 = "0crfdaxpcv13x40mb0ccm5n0r3dknw7w7xl87icj99kyqmfx8k51";
   };
 
   buildInputs = [ruby makeWrapper];

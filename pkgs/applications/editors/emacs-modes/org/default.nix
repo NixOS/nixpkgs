@@ -1,11 +1,11 @@
 { fetchurl, stdenv, emacs, texinfo, which }:
 
 stdenv.mkDerivation rec {
-  name = "org-7.8";
+  name = "org-7.8.03";
 
   src = fetchurl {
     url = "http://orgmode.org/${name}.tar.gz";
-    sha256 = "0idxsxdr5p0bvnjmhvpdkfwhlpkxmihnaljf43k0311g9z3k22qz";
+    sha256 = "49357cca7d892e70cd2dfcc0b5d96d9fd164ef5a1f251ace3865ecb27dc1e958";
   };
 
   buildInputs = [ emacs texinfo ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
     license = "GPLv3+";
 
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.chaoflow ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = with stdenv.lib.maintainers; [ ludo chaoflow ];
+    platforms = stdenv.lib.platforms.gnu;
   };
 }

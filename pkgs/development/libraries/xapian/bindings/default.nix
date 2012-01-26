@@ -5,11 +5,11 @@ let inherit (composableDerivation) wwf; in
 
 composableDerivation.composableDerivation {} rec {
 
-  name = "xapian-bindings-1.2.7";
+  name = "xapian-bindings-1.2.8";
 
   src = fetchurl {
-    url = "http://oligarchy.co.uk/xapian/1.2.7/${name}.tar.gz";
-    sha256 = "c9f63ad7a032c260f0617e029327d7b05dd986d91af401032268a9f7b2eabde8";
+    url = "http://oligarchy.co.uk/xapian/1.2.8/${name}.tar.gz";
+    sha256 = "eb740c619c75d288e65a1c2f86faecdca53d44d3f9896bcc080085839887b124";
   };
 
   buildInputs = [ xapian pkgconfig zlib ];

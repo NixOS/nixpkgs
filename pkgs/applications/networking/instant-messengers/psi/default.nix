@@ -1,5 +1,5 @@
 { stdenv, fetchurl, aspell, qt4, zlib, sox, libX11, xproto, libSM, 
-  libICE, qca2, pkgconfig, qca2_ossl, liboil, speex, gst_all }:
+  libICE, qca2, pkgconfig, qca2_ossl, liboil, speex, gst_all, which, glib }:
 
 stdenv.mkDerivation rec {
   name = "psi-0.14";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [aspell qt4 zlib sox libX11 xproto libSM libICE 
-    qca2 qca2_ossl pkgconfig];
+    qca2 qca2_ossl pkgconfig which glib];
 
   NIX_CFLAGS_COMPILE="-I${qca2}/include/QtCrypto";
   
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ];
 
   psiMedia = (import ./psimedia.nix) {
-    inherit stdenv fetchurl qt4 speex gst_all liboil;
+    inherit stdenv fetchurl qt4 speex gst_all liboil which glib pkgconfig;
   };
 
   postInstall = ''

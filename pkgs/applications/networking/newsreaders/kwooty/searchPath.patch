@@ -1,0 +1,19 @@
+--- kwooty-kwooty/src/utility.cpp	2012-01-24 22:22:45.091383072 +0100
++++ kwooty-kwooty/src/utility.cpp	2012-01-24 22:29:08.526208140 +0100
+@@ -299,6 +299,7 @@
+ 
+     QString programPathName;
+     QStringList searchPathList = Settings::searchPathList();
++    searchPathList << "/usr/bin/unpar" << "/usr/bin/unrar" << "/usr/bin/7z";
+ 
+     QStringList programsWithDifferentNames = programToSearch.split(";");
+ 
+@@ -363,7 +364,7 @@
+     QStringList niceProcessArgs;
+ 
+     // look for 'nice' location :
+-    QString nicePath = KStandardDirs::findExe("nice");
++    QString nicePath = QString("/usr/bin/nice");
+     niceProcessArgs.append(nicePath);
+     niceProcessArgs.append("-n");
+ 

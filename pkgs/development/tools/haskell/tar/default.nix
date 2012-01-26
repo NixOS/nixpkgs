@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tar";
-  version = "0.3.1.0";
-  sha256 = "1n16sq5y7x30r1k7ydxmncn9x2nx3diildzyfxjy2b8drxp4jr03";
+  version = "0.3.2.0";
+  sha256 = "0yplrfai8bwihyn18whi0jiz1qzll9hgbc37xcy2jkr28480jba9";
   meta = {
     description = "Reading, writing and manipulating \".tar\" archive files.";
     license = self.stdenv.lib.licenses.bsd3;

@@ -1,16 +1,14 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation (rec {
-  name = "boehm-gc-7.2pre20110122";
+  name = "boehm-gc-7.2alpha6";
 
   src = fetchurl {
-    url = "http://nixos.org/tarballs/${name}.tar.bz2";
-    sha256 = "06nf60flq6344pgic3bz83jh6pvj4k42apm3x4xwxc4d2is457ly";
+    url = "http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/gc-7.2alpha6.tar.gz";
+    sha256 = "05jwadjbrv8pr7z9cb4miskicxqpxm0pca4h2rg5cgbpajr2bx7b";
   };
 
   doCheck = true;
-
-  configureFlags = stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "CPPFLAGS=-D_XOPEN_SOURCE";
 
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";

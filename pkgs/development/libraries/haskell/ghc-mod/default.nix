@@ -1,4 +1,4 @@
-{ cabal, attoparsec, attoparsecEnumerator, ghcPaths, hlint, regexPosix, emacs, emacs23Packages }:
+{ cabal, attoparsec, attoparsecEnumerator, ghcPaths, hlint, regexPosix, emacsPackages }:
 
 cabal.mkDerivation (self: {
   pname = "ghc-mod";
@@ -7,8 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     attoparsec attoparsecEnumerator ghcPaths hlint regexPosix
   ];
-#  buildTools = [emacs emacs23];
-  propagatedBuildInputs = [emacs emacs23Packages.haskellMode];
+  propagatedBuildInputs = [emacsPackages.emacs emacsPackages.haskellMode];
   isExecutable = true;
   postInstall = ''
     cd $out/share/$pname-$version
@@ -20,11 +19,14 @@ cabal.mkDerivation (self: {
   '';
 
   meta = {
+    homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
     description = "Happy Haskell programming on Emacs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
+      self.stdenv.lib.maintainers.andres
       self.stdenv.lib.maintainers.bluescreen303
+      self.stdenv.lib.maintainers.simons
     ];
   };
 })
