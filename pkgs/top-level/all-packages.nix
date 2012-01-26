@@ -3266,6 +3266,8 @@ let
   celt = callPackage ../development/libraries/celt {};
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix {};
 
+  cgal = callPackage ../development/libraries/CGAL {};
+
   cgui = callPackage ../development/libraries/cgui {};
 
   check = callPackage ../development/libraries/check { };
@@ -4410,6 +4412,8 @@ let
   openbabel = callPackage ../development/libraries/openbabel { };
 
   opencascade = callPackage ../development/libraries/opencascade { };
+
+  opencsg = callPackage ../development/libraries/opencsg { };
 
   openct = callPackage ../development/libraries/openct { };
 
