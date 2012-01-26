@@ -1521,6 +1521,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
+  ebnf2ps = callPackage ../development/tools/parsing/ebnf2ps {
+    inherit (pkgs) fetchurl;
+  };
+
   frown = callPackage ../development/tools/parsing/frown {};
 
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix {};
