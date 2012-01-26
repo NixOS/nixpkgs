@@ -1180,6 +1180,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   repr = callPackage ../development/libraries/haskell/repr {};
 
+  resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
+
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
