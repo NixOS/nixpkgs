@@ -5814,6 +5814,8 @@ let
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
+    bbswitch = callPackage ../os-specific/linux/bbswitch {};
+
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
     aufs =
