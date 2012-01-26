@@ -7323,6 +7323,8 @@ let
     neon = neon029;
   };
 
+  openscad = callPackage ../applications/graphics/openscad {};
+
   opera = callPackage ../applications/networking/browsers/opera {
     inherit (pkgs.gtkLibs) gdk_pixbuf atk;
     inherit (pkgs.kde4) kdelibs;
