@@ -5954,7 +5954,7 @@ let
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
   linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36);
-  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor linux_3_2 pkgs.linuxPackages_3_2);
+  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 pkgs.linuxPackages_3_2);
   linuxPackages_3_2_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_2_powertop pkgs.linuxPackages_3_2_powertop);
 
   # The current default kernel / kernel modules.
