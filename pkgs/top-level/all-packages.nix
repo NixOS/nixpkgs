@@ -4728,13 +4728,14 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libpng libxml2 libxslt sqlite
+        libjpeg libtiff libxml2 libxslt sqlite
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
       inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
+      libpng = libpng12;
     };
 
   webkitSVN =
@@ -4742,13 +4743,14 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libpng libxml2 libxslt sqlite
+        libjpeg libtiff libxml2 libxslt sqlite
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
       inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
+      libpng = libpng12;
     };
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
