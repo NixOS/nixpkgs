@@ -7046,9 +7046,7 @@ let
 
   icecat3Wrapper = wrapFirefox { browser = icecat3Xul; browserName = "icecat"; desktopName = "IceCat"; };
 
-  icewm = callPackage ../applications/window-managers/icewm {
-    inherit (gtkLibs) gtk;
-  };
+  icewm = callPackage ../applications/window-managers/icewm { };
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
