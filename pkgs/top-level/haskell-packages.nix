@@ -703,6 +703,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     libc = pkgs.stdenv.gcc.libc;
   };
 
+  GLFW = callPackage ../development/libraries/haskell/GLFW {};
+
   glib = callPackage ../development/libraries/haskell/glib {
     glib = pkgs.glib;
     libc = pkgs.stdenv.gcc.libc;
