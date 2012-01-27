@@ -3154,13 +3154,11 @@ let
   uisp = callPackage ../development/tools/misc/uisp { };
 
   gdb = callPackage ../development/tools/misc/gdb {
-    readline = readline5;
     hurd = gnu.hurdCross;
     inherit (gnu) mig;
   };
 
   gdbCross = callPackage ../development/tools/misc/gdb {
-    readline = readline5;
     target = crossSystem;
   };
 

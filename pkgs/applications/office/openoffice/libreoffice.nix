@@ -8,7 +8,7 @@
 , langs ? [ "en-US" "ca" "ru" "eo" "fr" "nl" "de" "en-GB" ]
 }:
 
-throw "The expression for libreoffice is still not ready"
+# throw "The expression for libreoffice is still not ready"
 
 stdenv.mkDerivation rec {
   name = "libreoffice-3.4.5.2";
