@@ -3812,7 +3812,9 @@ let
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
-  imlib = callPackage ../development/libraries/imlib { };
+  imlib = callPackage ../development/libraries/imlib {
+    libpng = libpng12;
+  };
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
