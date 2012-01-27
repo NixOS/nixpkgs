@@ -4423,6 +4423,7 @@ let
 
   opencv_2_1 = callPackage ../development/libraries/opencv/2.1.nix {
     ffmpeg = ffmpeg_0_6_90;
+    libpng = libpng12;
     inherit (gst_all) gstreamer;
   };
 
@@ -6968,7 +6969,7 @@ let
   };
 
   qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
-    inherit libpng;
+    libpng = libpng12;
     opencv = opencv_2_1;
   };
 
