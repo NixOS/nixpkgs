@@ -3,7 +3,7 @@ rec {
   name = "moderncv-2012.01.16";
   src = fetchurl {
     url = "http://mirror.ctan.org/macros/latex/contrib/moderncv.zip";
-    sha256 = "a9d2de7fc03c35c4084915b2788c8d7acfb695f9e27f6cd81427a7dd1a64cb54";
+    sha256 = "1sfpj76p0z128rvxw0svh7dfrvf3zhmi3v7bkzfkll4byij34ni0";
   };
 
   buildInputs = [texLive unzip];
