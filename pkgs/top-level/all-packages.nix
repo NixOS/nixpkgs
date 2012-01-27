@@ -3154,13 +3154,11 @@ let
   uisp = callPackage ../development/tools/misc/uisp { };
 
   gdb = callPackage ../development/tools/misc/gdb {
-    readline = readline5;
     hurd = gnu.hurdCross;
     inherit (gnu) mig;
   };
 
   gdbCross = callPackage ../development/tools/misc/gdb {
-    readline = readline5;
     target = crossSystem;
   };
 
@@ -3265,6 +3263,8 @@ let
 
   celt = callPackage ../development/libraries/celt {};
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix {};
+
+  cgal = callPackage ../development/libraries/CGAL {};
 
   cgui = callPackage ../development/libraries/cgui {};
 
@@ -4412,6 +4412,8 @@ let
 
   opencascade = callPackage ../development/libraries/opencascade { };
 
+  opencsg = callPackage ../development/libraries/opencsg { };
+
   openct = callPackage ../development/libraries/openct { };
 
   opencv = callPackage ../development/libraries/opencv {
@@ -5041,9 +5043,7 @@ let
   dovecot_1_1_1 = callPackage ../servers/mail/dovecot/1.1.1.nix { };
   dovecot_2_0 = callPackage ../servers/mail/dovecot/2.0.nix { };
 
-  ejabberd = callPackage ../servers/xmpp/ejabberd {
-    erlang = erlangR13B ;
-  };
+  ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_185;
@@ -5956,7 +5956,7 @@ let
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
   linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36);
-  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor linux_3_2 pkgs.linuxPackages_3_2);
+  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 pkgs.linuxPackages_3_2);
   linuxPackages_3_2_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_2_powertop pkgs.linuxPackages_3_2_powertop);
 
   # The current default kernel / kernel modules.
@@ -7100,6 +7100,8 @@ let
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
+  k3d = callPackage ../applications/graphics/k3d {};
+
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
   };
@@ -7322,6 +7324,8 @@ let
     inherit (gnome) GConf ORBit2;
     neon = neon029;
   };
+
+  openscad = callPackage ../applications/graphics/openscad {};
 
   opera = callPackage ../applications/networking/browsers/opera {
     inherit (pkgs.gtkLibs) gdk_pixbuf atk;

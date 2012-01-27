@@ -1,13 +1,13 @@
-{ cabal, monadControl, transformers }:
+{ cabal, conduit, resourcePool, transformers }:
 
 cabal.mkDerivation (self: {
-  pname = "pool";
-  version = "0.1.2.1";
-  sha256 = "1fwwnwxk3kprr2z9y7bwa1qwxfkzwcb2n5l6vkq1c5s8gjls581c";
-  buildDepends = [ monadControl transformers ];
+  pname = "pool-conduit";
+  version = "0.0.0";
+  sha256 = "0cbs7swb1ay3l1hlbirys171ybqg887csnp6yiy9biq11q5mhsml";
+  buildDepends = [ conduit resourcePool transformers ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
-    description = "Thread-safe resource pools. (deprecated)";
+    description = "Resource pool allocations via ResourceT";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

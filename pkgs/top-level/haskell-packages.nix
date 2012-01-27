@@ -683,7 +683,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcEvents = callPackage ../development/libraries/haskell/ghc-events {};
 
-  ghcMod = callPackage ../development/libraries/haskell/ghc-mod {};
+  ghcMod = callPackage ../development/libraries/haskell/ghc-mod {
+    emacsPackages = pkgs.emacs23Packages;
+  };
 
   ghcMtl = callPackage ../development/libraries/haskell/ghc-mtl {};
 
@@ -1076,6 +1078,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pool = callPackage ../development/libraries/haskell/pool {};
 
+  poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
+
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
   prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
@@ -1175,6 +1179,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   RepLib = callPackage ../development/libraries/haskell/RepLib {};
 
   repr = callPackage ../development/libraries/haskell/repr {};
+
+  resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
 
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
@@ -1520,6 +1526,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   BNFCMeta = callPackage ../development/tools/haskell/BNFC-meta {};
 
   cpphs = callPackage ../development/tools/misc/cpphs {};
+
+  ebnf2ps = callPackage ../development/tools/parsing/ebnf2ps {
+    inherit (pkgs) fetchurl;
+  };
 
   frown = callPackage ../development/tools/parsing/frown {};
 

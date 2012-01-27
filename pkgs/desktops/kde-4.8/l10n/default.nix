@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, gettext, release }:
+{ stdenv, fetchurl, kdelibs, gettext, release, stable }:
 
 let
 
@@ -11,7 +11,7 @@ let
       name = "kde-l10n-${saneName}-${release}";
 
       src = fetchurl {
-        url = "mirror://kde/unstable/${release}/src/kde-l10n/kde-l10n-${lang}-${release}.tar.bz2";
+        url = "mirror://kde/${if stable then "" else "un"}stable/${release}/src/kde-l10n/kde-l10n-${lang}-${release}.tar.bz2";
         name = "${name}.tar.bz2";
         inherit sha256;
       };
