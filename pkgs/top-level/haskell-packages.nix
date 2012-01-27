@@ -151,7 +151,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     stm          = self.stm_2_2_0_1; # 7.2 ok, 7.3 ok
     syb          = self.syb_0_3_6; # 7.2 ok, 7.3 ok
     xhtml        = self.xhtml_3000_2_0_1; # 7.2 ok, 7.3 ok
-    zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
+    zlib         = self.zlib_0_5_3_2; # 7.2 ok, 7.3 ok
     HTTP         = self.HTTP_4000_2_2; # 7.2 ok, 7.3 ok
     deepseq      = self.deepseq_1_1_0_2; # 7.2 ok, 7.3 ok
     text         = self.text_0_11_1_13; # 7.2 ok, 7.3 ok
@@ -210,6 +210,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_4_0_0;
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2011_4_0_0 =
@@ -252,6 +253,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_2_0_1;
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2011_2_0_1 =
@@ -294,6 +296,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_2_0_0;
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2011_2_0_0 =
@@ -332,6 +335,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2010_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_2_0_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
@@ -371,6 +375,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2010_1_0_0;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2010_1_0_0 =
@@ -410,6 +415,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       text = self.text_0_11_0_6;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2009_2_0_2 =
@@ -1486,7 +1492,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib_0_5_3_1 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
     inherit (pkgs) zlib;
   };
-  zlib = self.zlib_0_5_0_0;
+  zlib_0_5_3_2 = callPackage ../development/libraries/haskell/zlib/0.5.3.2.nix {
+    inherit (pkgs) zlib;
+  };
+  zlib = self.zlib_0_5_3_2;
 
   zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
 
