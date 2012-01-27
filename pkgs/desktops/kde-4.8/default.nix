@@ -52,5 +52,8 @@ kde.modules // kde.individual //
 
   full = stdenv.lib.attrValues kde.modules;
 
-  l10n = callPackage ./l10n { inherit release; };
+  l10n = callPackage ./l10n {
+    inherit release;
+    inherit (kde.manifest) stable;
+  };
 }
