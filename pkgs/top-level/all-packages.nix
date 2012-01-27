@@ -7889,6 +7889,7 @@ let
 
   exult = callPackage ../games/exult {
     stdenv = overrideGCC stdenv gcc42;
+    libpng = libpng12;
   };
 
   /*
