@@ -2220,10 +2220,8 @@ let
     haskellPackagesFun ../development/compilers/ghc/7.0.3.nix
       ghc6101Binary (x : x.ghc703Prefs) false false lowPrio;
 
-  # Current default version: 7.0.4
-  # Note that the platform isn't officially released for ghc-7.0.4, but
-  # it works without problems.
-
+  # Current default version: 7.0.4.
+  #
   # The following items are a bit convoluted, but they serve the
   # following purpose:
   #   - for the default version of GHC, both profiling and
@@ -3629,7 +3627,7 @@ let
     else
       # We temporarily leave gmp 4 here, waiting for a new ppl/cloog-ppl that
       # would build well with gmp 5.
-      makeOverridable (import ../development/libraries/gmp/4.nix) {
+      makeOverridable (import ../development/libraries/gmp/4.3.2.nix) {
         inherit stdenv fetchurl m4;
         cxx = false;
       };
@@ -4057,6 +4055,10 @@ let
   };
 
   libiconv = callPackage ../development/libraries/libiconv { };
+
+  libiconvOrNull = if gcc ? libc then null else libiconv;
+
+  libiconvOrLibc = if gcc ? libc then gcc.libc else libiconv;
 
   libid3tag = callPackage ../development/libraries/libid3tag { };
 
