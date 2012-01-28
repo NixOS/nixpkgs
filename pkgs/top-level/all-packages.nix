@@ -3690,14 +3690,6 @@ let
 
   inherit (pkgs.gtkLibs) glib gtk pango cairo gdk_pixbuf;
 
-  gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in {
-
-    glib = callPackage ../development/libraries/glib/1.2.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/1.2.x.nix { };
-
-  });
-
   gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
 
     glib = callPackage ../development/libraries/glib/2.28.x.nix { };
@@ -7765,12 +7757,6 @@ let
 
   xineUI = callPackage ../applications/video/xine-ui { };
 
-  xmms = callPackage ../applications/audio/xmms {
-    inherit (gnome) esound;
-    inherit (gtkLibs1x) glib gtk;
-    stdenv = overrideGCC stdenv gcc34; # due to problems with gcc 4.x
-  };
-
   xneur = callPackage ../applications/misc/xneur {
     GStreamer=gst_all.gstreamer;
     inherit (gtkLibs) glib gtk pango atk gdk_pixbuf;
@@ -8531,10 +8517,6 @@ let
     inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11
       scrnsaverproto;
     python = pythonFull;
-  };
-
-  generator = callPackage ../misc/emulators/generator {
-    inherit (gtkLibs1x) gtk;
   };
 
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
