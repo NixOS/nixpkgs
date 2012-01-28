@@ -3688,11 +3688,11 @@ let
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
-  gtkLibs = pkgs.gtkLibs224;
+  gtkLibs = recurseIntoAttrs pkgs.gtkLibs224;
 
   inherit (pkgs.gtkLibs) glib gtk pango cairo gdk_pixbuf;
 
-  gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
+  gtkLibs224 = let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
 
     glib = callPackage ../development/libraries/glib/2.28.x.nix { };
 
@@ -3716,7 +3716,7 @@ let
 
     gob2 = callPackage ../development/tools/misc/gob2 { };
 
-  });
+  };
 
   gtkLibs3x = let callPackage = newScope pkgs.gtkLibs3x; in {
     glib = callPackage ../development/libraries/glib/2.30.x.nix { };
@@ -6264,8 +6264,7 @@ let
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
-  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant {
-  };
+  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
   wpa_supplicant_gui = pkgs.wpa_supplicant.gui;
 

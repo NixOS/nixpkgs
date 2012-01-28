@@ -15,7 +15,6 @@ with (import ./release-lib.nix);
 
 } // (mapTestOn ((packagesWithMetaPlatform pkgs) // rec {
 
-  MPlayer = linux;
   abcde = linux;
   alsaUtils = linux;
   apacheHttpd = linux;
@@ -52,12 +51,10 @@ with (import ./release-lib.nix);
   chatzilla = linux;
   cksfv = all;
   classpath = linux;
-  cmake = all;
   consolekit = linux;
   coreutils = all;
   cpio = all;
   cron = linux;
-  cups = linux;
   cvs = linux;
   db4 = all;
   ddrescue = linux;
@@ -237,7 +234,6 @@ with (import ./release-lib.nix);
   php = linux;
   pidgin = linux;
   pinentry = linux;
-  pkgconfig = all;
   pltScheme = linux;
   pmccabe = linux;
   portmap = linux;
@@ -333,7 +329,6 @@ with (import ./release-lib.nix);
   wine = ["i686-linux"];
   wireshark = linux;
   wirelesstools = linux;
-  wpa_supplicant = linux;
   wxGTK = linux;
   x11_ssh_askpass = linux;
   xchm = linux;
@@ -353,20 +348,6 @@ with (import ./release-lib.nix);
   zip = all;
   zsh = linux;
   zsnes = ["i686-linux"];
-
-  aspellDicts = {
-    de = all;
-    en = all;
-    es = all;
-    fr = all;
-    nl = all;
-    ru = all;
-  };
-
-  dbus_all = {
-    libs = linux;
-    tools = linux;
-  };
 
   emacs22Packages = {
     bbdb = linux;
@@ -389,10 +370,6 @@ with (import ./release-lib.nix);
     gnome_panel = linux;
     metacity = linux;
     gnome_vfs = linux;
-  };
-
-  gtkLibs = {
-    gtk = linux;
   };
 
   /*
