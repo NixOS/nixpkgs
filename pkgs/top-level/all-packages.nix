@@ -4054,6 +4054,10 @@ let
 
   libiconv = callPackage ../development/libraries/libiconv { };
 
+  libiconvOrNull = if gcc ? libc then null else libiconv;
+
+  libiconvOrLibc = if gcc ? libc then gcc.libc else libiconv;
+
   libid3tag = callPackage ../development/libraries/libid3tag { };
 
   libidn = callPackage ../development/libraries/libidn { };
