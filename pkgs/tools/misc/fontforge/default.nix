@@ -5,7 +5,7 @@
 }:
 
 let 
-  version = "20090408";
+  version = "20110222";
   name = "fontforge-${version}";
 in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   
   src = fetchurl {
     url = "mirror://sourceforge/fontforge/fontforge_full-${version}.tar.bz2";
-    sha256 = "1s9a1mgbr5sv5jx6rdj2v3p6s52hgjr9wqd1aq57kn9whc8ny8y4";
+    sha256 = "0gj342iyd2qmza523r84m65fm7bymcfd4lbllywbfjzq4s0838lg";
   };
     
   configureFlags = lib.optionalString withX11 "--with-gui=gdraw";
