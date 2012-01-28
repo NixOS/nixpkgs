@@ -2220,10 +2220,8 @@ let
     haskellPackagesFun ../development/compilers/ghc/7.0.3.nix
       ghc6101Binary (x : x.ghc703Prefs) false false lowPrio;
 
-  # Current default version: 7.0.4
-  # Note that the platform isn't officially released for ghc-7.0.4, but
-  # it works without problems.
-
+  # Current default version: 7.0.4.
+  #
   # The following items are a bit convoluted, but they serve the
   # following purpose:
   #   - for the default version of GHC, both profiling and
