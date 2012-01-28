@@ -3632,6 +3632,8 @@ let
         cxx = false;
       };
 
+  gmp5 = callPackage ../development/libraries/gmp/5.0.3.nix { };
+
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
