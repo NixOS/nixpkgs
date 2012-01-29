@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, alsaLib, boost, cmake, gtkmm, libXau, libXdmcp,
-  libXv, libav, pixman, libpthreadstubs, pkgconfig }:
+{ stdenv, fetchurl, alsaLib, boost, cmake, gtkmm, libXau, libXdmcp
+, libXv, libav, pixman, libpthreadstubs, pkgconfig 
+}:
 
 stdenv.mkDerivation rec {
   name = "dvswitch-${version}";
@@ -15,13 +16,12 @@ stdenv.mkDerivation rec {
     libpthreadstubs pixman pkgconfig
   ];
 
-  installPhase = "
-    ensureDir $out
-    cp src/dv* $out/
-  ";
+  patchPhase = ''
+    sed -e "s@prefix /usr/local@prefix $out@" -i CMakeLists.txt
+  '';
 
   meta =  with stdenv.lib; {
-    description = "digital video mixer intended for interactive live mixing of several incoming DV video streams";
+    description = "interactive live video mixer for DV streams";
     homepage = "http://dvswitch.alioth.debian.org";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
