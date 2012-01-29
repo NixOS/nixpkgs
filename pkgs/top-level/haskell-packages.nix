@@ -993,7 +993,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mtl2 = self.mtl_2_0_1_0;
   mtl  = self.mtl1;
 
-  mtlparse  = callPackage ../development/libraries/haskell/mtlparse {};
+  mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
+
+  multiarg = callPackage ../development/libraries/haskell/multiarg {};
 
   multiplate = callPackage ../development/libraries/haskell/multiplate {};
 
