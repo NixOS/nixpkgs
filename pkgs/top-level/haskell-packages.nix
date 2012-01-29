@@ -647,6 +647,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   erf = callPackage ../development/libraries/haskell/erf {};
 
+  explicitException = callPackage ../development/libraries/haskell/explicit-exception {};
+
   filepath = callPackage ../development/libraries/haskell/filepath {};
 
   extensibleExceptions_0_1_1_0 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.0.nix {};
