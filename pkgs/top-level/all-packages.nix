@@ -7945,6 +7945,8 @@ let
 
   njam = callPackage ../games/njam { };
 
+  oilrush = callPackage ../games/oilrush { };
+
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
   };
