@@ -14,8 +14,10 @@ g: # Get dependencies from patched gems
     builder = g.builder_3_0_0;
     buildr = g.buildr_1_4_6;
     bundler = g.bundler_1_0_21;
+    childprocess = g.childprocess_0_3_0;
     diff_lcs = g.diff_lcs_1_1_3;
     erubis = g.erubis_2_7_0;
+    ffi = g.ffi_1_0_11;
     highline = g.highline_1_5_1;
     hike = g.hike_1_2_1;
     hoe = g.hoe_2_3_3;
@@ -46,8 +48,9 @@ g: # Get dependencies from patched gems
     rspec_expectations = g.rspec_expectations_2_1_0;
     rspec_mocks = g.rspec_mocks_2_1_0;
     rubyforge = g.rubyforge_2_0_4;
-    rubyzip = g.rubyzip_0_9_4;
+    rubyzip = g.rubyzip_0_9_5;
     sass = g.sass_3_1_12;
+    selenium_webdriver = g.selenium_webdriver_2_18_0;
     sprockets = g.sprockets_2_1_2;
     thor = g.thor_0_14_6;
     tilt = g.tilt_1_3_3;
@@ -55,7 +58,7 @@ g: # Get dependencies from patched gems
     tzinfo = g.tzinfo_0_3_31;
     xml_simple = g.xml_simple_1_0_12;
   };
-  gem_nix_args = [ ''buildr'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ];
+  gem_nix_args = [ ''buildr'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
   gems = {
     actionmailer_3_2_1 = {
       basename = ''actionmailer'';
@@ -217,6 +220,17 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [  ];
       sha256 = ''0lcxz75vvgqib43wxzv6021qs5d7bxhnds4j4q27hzqs982cn0s6'';
     };
+    childprocess_0_3_0 = {
+      basename = ''childprocess'';
+      meta = {
+        description = ''This gem aims at being a simple and reliable solution for controlling external programs running in the background on any Ruby / OS combination.'';
+        homepage = ''http://github.com/jarib/childprocess'';
+        longDescription = ''This gem aims at being a simple and reliable solution for controlling external programs running in the background on any Ruby / OS combination.'';
+      };
+      name = ''childprocess-0.3.0'';
+      requiredGems = [ g.ffi_1_0_11 ];
+      sha256 = ''1bvx6nkc1m24wjjybk943x1vjr51c98l0pwj73hj1r237307jyb4'';
+    };
     diff_lcs_1_1_2 = {
       basename = ''diff_lcs'';
       meta = {
@@ -275,6 +289,21 @@ is the MIT license.'';
       name = ''erubis-2.7.0'';
       requiredGems = [  ];
       sha256 = ''1fj827xqjs91yqsydf0zmfyw9p4l2jz5yikg3mppz6d7fi8kyrb3'';
+    };
+    ffi_1_0_11 = {
+      basename = ''ffi'';
+      meta = {
+        description = ''Ruby-FFI is a ruby extension for programmatically loading dynamic libraries, binding functions within them, and calling those functions from Ruby code'';
+        homepage = ''http://wiki.github.com/ffi/ffi'';
+        longDescription = ''Ruby-FFI is a ruby extension for programmatically loading dynamic
+libraries, binding functions within them, and calling those functions
+from Ruby code. Moreover, a Ruby-FFI extension works without changes
+on Ruby and JRuby. Discover why should you write your next extension
+using Ruby-FFI here[http://wiki.github.com/ffi/ffi/why-use-ffi].'';
+      };
+      name = ''ffi-1.0.11'';
+      requiredGems = [  ];
+      sha256 = ''177v6bwslyb7n961nw11i8x9j43k796s11bs98kynl58n0a3n99b'';
     };
     highline_1_5_1 = {
       basename = ''highline'';
@@ -738,6 +767,16 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [  ];
       sha256 = ''1lc67ssqyz49rm1jms5sdvy6x41h070razxlmvj4j5q6w3qixx41'';
     };
+    rubyzip_0_9_5 = {
+      basename = ''rubyzip'';
+      meta = {
+        description = ''rubyzip is a ruby module for reading and writing zip files'';
+        homepage = ''http://github.com/aussiegeek/rubyzip'';
+      };
+      name = ''rubyzip-0.9.5'';
+      requiredGems = [  ];
+      sha256 = ''1744bds6lc46d1kjfgapf34p2574s70hcyz63877qkry4db2jb54'';
+    };
     sass_3_1_12 = {
       basename = ''sass'';
       meta = {
@@ -752,6 +791,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''sass-3.1.12'';
       requiredGems = [  ];
       sha256 = ''10n2aic53290xsa3y3d63523s8xc78w5q5gqpns6cbljkdwb0ndy'';
+    };
+    selenium_webdriver_2_18_0 = {
+      basename = ''selenium_webdriver'';
+      meta = {
+        description = ''The next generation developer focused tool for automated testing of webapps'';
+        homepage = ''http://selenium.googlecode.com'';
+        longDescription = ''WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.'';
+      };
+      name = ''selenium-webdriver-2.18.0'';
+      requiredGems = [ g.rubyzip_0_9_5 g.childprocess_0_3_0 ];
+      sha256 = ''17am2b6bjv62s02n1bfmhg9wz5n7sppzh7dx1llp28ivj2hdfbg9'';
     };
     sprockets_2_1_2 = {
       basename = ''sprockets'';
