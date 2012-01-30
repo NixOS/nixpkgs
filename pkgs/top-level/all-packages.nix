@@ -505,6 +505,8 @@ let
 
   convertlit = callPackage ../tools/text/convertlit { };
 
+  cowsay = callPackage ../tools/misc/cowsay { };
+
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
   usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
