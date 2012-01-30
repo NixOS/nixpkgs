@@ -6253,6 +6253,10 @@ let
       paths = [ w32api mingw_runtime ];
     };
 
+    pthreads = callPackage ../os-specific/windows/pthread-w32 {
+      mingw_headers = mingw_headers2;
+    };
+
     wxMSW = callPackage ../os-specific/windows/wxMSW-2.8 { };
   };
 
