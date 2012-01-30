@@ -830,6 +830,8 @@ let
 
   pigz = callPackage ../tools/compression/pigz { };
 
+  hardlink = callPackage ../tools/system/hardlink { };
+
   halibut = callPackage ../tools/typesetting/halibut { };
 
   hddtemp = callPackage ../tools/misc/hddtemp { };
