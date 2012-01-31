@@ -1,7 +1,7 @@
 {stdenv, fetchurl, coreutils, pam, groff}:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.7.2";
+  name = "sudo-1.8.3p2";
 
   src = fetchurl {
     urls = 
