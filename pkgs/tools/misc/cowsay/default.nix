@@ -10,4 +10,9 @@ stdenv.mkDerivation {
   installPhase = ''
     bash ./install.sh $out
   '';
+
+  meta = {
+    description = "cowsay is a program which generates ASCII pictures of a cow with a message.";
+    homepage = http://www.nog.net/~tony/warez/cowsay.shtml;
+  };
 }
