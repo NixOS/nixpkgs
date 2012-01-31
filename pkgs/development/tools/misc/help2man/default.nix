@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, gettext, LocaleGettext}:
+{ stdenv, fetchurl, perl, gettext, LocaleGettext, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "help2man-1.40.5";
@@ -8,13 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "1d1wn9krvf9mp97c224710n1pcfh73p7w7na65zn2a06124rln8k";
   };
 
-  buildInputs = [
-    perl
-    gettext
-    LocaleGettext
-  ];
+  buildInputs = [ makeWrapper perl gettext LocaleGettext ];
 
   doCheck = false;                                # target `check' is missing
+
+  postInstall =
+    '' wrapProgram "$out/bin/help2man" \
+         --prefix PERL5LIB : "$(echo ${LocaleGettext}/lib/perl*/site_perl)"
+    '';
+
 
   meta = {
     description = "GNU help2man generates man pages from `--help' output";
