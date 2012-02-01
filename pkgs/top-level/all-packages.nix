@@ -7158,13 +7158,7 @@ let
   ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
-  links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
-    inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff
-      gpm openssl SDL SDL_image SDL_net pkgconfig;
-    inherit (xlibs) libX11 libXau xproto libXt;
-  };
-
-  links2Stdenv = callPackage ../applications/networking/browsers/links2/stdenv.nix { };
+  links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = callPackage ../applications/networking/linphone {
     inherit (gnome) libglade gtk;
