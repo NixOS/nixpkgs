@@ -313,6 +313,11 @@ let
     inherit stdenv;
   };
 
+  makeAutostartItem = import ../build-support/make-startupitem {
+    inherit stdenv;
+    inherit lib;
+  };
+
   makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
     inherit stdenv perl cpio contents ubootChooser;
   };
@@ -5256,6 +5261,8 @@ let
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
 
+  microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
+
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
   bluez = callPackage ../os-specific/linux/bluez { };
@@ -7477,7 +7484,9 @@ let
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  skype_linux = callPackage_i686 ../applications/networking/skype { };
+  skype_linux = callPackage_i686 ../applications/networking/skype {
+    usePulseAudio = getConfig [ "pulseaudio" ] false; # disabled by default (the 100% cpu bug)
+  };
 
   slim = callPackage ../applications/display-managers/slim { };
 
