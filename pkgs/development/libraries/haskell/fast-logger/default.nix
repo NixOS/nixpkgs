@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fast-logger";
-  version = "0.0.1";
-  sha256 = "19ff2dhkh62i1ljsl90wnsblzk30dz0yx4kw5gk1hb22md7hakim";
+  version = "0.0.2";
+  sha256 = "1pwxhgcy4lmc63dnr9fihkmiclf60hrnsv8wzbsdg0jcj4qi0zr7";
   buildDepends = [ blazeBuilder ];
   meta = {
     description = "A fast logging system";
