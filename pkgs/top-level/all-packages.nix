@@ -1535,6 +1535,8 @@ let
 
   unzip = unzip60;
 
+  unzipNLS = unzip.override { enableNLS = true; };
+
   unzip552 = callPackage ../tools/archivers/unzip/5.52.nix { };
 
   unzip60 = callPackage ../tools/archivers/unzip/6.0.nix { };
