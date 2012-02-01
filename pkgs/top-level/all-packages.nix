@@ -4039,6 +4039,8 @@ let
 
   libmtp = callPackage ../development/libraries/libmtp { };
 
+  libnatspec = callPackage ../development/libraries/libnatspec { };
+
   libnice = callPackage ../development/libraries/libnice {
     inherit (gnome) glib;
   };
