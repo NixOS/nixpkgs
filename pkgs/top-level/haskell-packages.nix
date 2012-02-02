@@ -1473,6 +1473,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     pathPieces = self.pathPieces_0_0_0;
   };
 
+  yesodDefault = callPackage ../development/libraries/haskell/yesod-default {};
+
   yesodForm = callPackage ../development/libraries/haskell/yesod-form {};
 
   yesodJson = callPackage ../development/libraries/haskell/yesod-json {};
