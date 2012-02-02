@@ -1214,6 +1214,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 
+  socks = callPackage ../development/libraries/haskell/socks {};
+
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
   StateVar = callPackage ../development/libraries/haskell/StateVar {};
