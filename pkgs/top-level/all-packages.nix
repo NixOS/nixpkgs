@@ -3084,7 +3084,6 @@ let
 
   omake = callPackage ../development/tools/ocaml/omake { };
 
-
   openocd = callPackage ../development/tools/misc/openocd { };
 
   oprofile = import ../development/tools/profiling/oprofile {
@@ -8693,7 +8692,6 @@ let
   texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
     paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
               texLivePGF texLiveBeamer texLiveModerncv ];
-
   });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
