@@ -531,9 +531,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   clientsession = callPackage ../development/libraries/haskell/clientsession {};
 
-  cmdargs_0_8 = callPackage ../development/libraries/haskell/cmdargs/0.8.nix {};
-  cmdargs_0_9_2 = callPackage ../development/libraries/haskell/cmdargs/0.9.2.nix {};
-  cmdargs = self.cmdargs_0_9_2;
+  cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
 
   cmdlib = callPackage ../development/libraries/haskell/cmdlib {};
 
@@ -832,9 +830,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   hjsmin = callPackage ../development/libraries/haskell/hjsmin {};
 
   hledger = callPackage ../development/libraries/haskell/hledger {};
-  hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {
-    cmdargs = self.cmdargs_0_8;
-  };
+  hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
   hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {};
   hledgerChart = callPackage ../development/libraries/haskell/hledger-chart {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
