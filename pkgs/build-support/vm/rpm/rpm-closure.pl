@@ -76,8 +76,9 @@ for (my $i = 0; $i < scalar(@packagesFiles); $i++) {
             my $earlierPkg = $pkgs{$pkg->{name}};
             print STDERR "WARNING: duplicate occurrence of package $pkg->{name}\n";
             #   <version epoch="0" ver="1.28.0" rel="2.el6"/>
-            if (rpmvercmp($pkg->{'version'}->{ver}, $earlierPkg->{'version'}->{ver}) >= 0) {
-                print STDERR "WARNING: replaced package $pkg->{name} with newer one\n";
+            my $cmp = rpmvercmp($pkg->{'version'}->{ver}, $earlierPkg->{'version'}->{ver});
+            if ($cmp > 0 || ($cmp == 0 && rpmvercmp($pkg->{'version'}->{rel}, $earlierPkg->{'version'}->{rel})>0)) {
+                print STDERR "WARNING: replaced package $pkg->{name} (".$earlierPkg->{'version'}->{ver}." ".$earlierPkg->{'version'}->{rel}.") with newer one (".$pkg->{'version'}->{ver}." ".$pkg->{'version'}->{rel}.")\n";
                 $pkg->{urlPrefix} = $urlPrefixes[$i];
                 $pkgs{$pkg->{name}} = $pkg;
             }
@@ -175,3 +176,4 @@ foreach my $pkgName (@needed) {
 }
 
 print "]\n";
+exit 1
