@@ -1084,6 +1084,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     pathPieces = self.pathPieces_0_0_0;
   };
 
+  persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
+
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
   polyparse = callPackage ../development/libraries/haskell/polyparse/default.nix {};
