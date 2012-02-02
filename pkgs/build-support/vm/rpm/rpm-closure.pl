@@ -176,4 +176,3 @@ foreach my $pkgName (@needed) {
 }
 
 print "]\n";
-exit 1
