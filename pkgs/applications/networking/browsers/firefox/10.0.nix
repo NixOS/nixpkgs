@@ -15,14 +15,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "8.0.1";
+  firefoxVersion = "10.0";
   
-  xulVersion = "8.0.1"; # this attribute is used by other packages
+  xulVersion = "10.0"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "0dd207c5cee9d53114c55aa23eeca36b754bc128";
+    sha1 = "cbf1fb0efe0a3a2b2dafaa324b136736e93de70c";
   };
   
   commonConfigureFlags =
@@ -139,7 +139,7 @@ rec {
       [ "--enable-application=browser"
         "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
         "--enable-chrome-format=jar"
-	"--disable-elf-hack"
+        "--disable-elf-hack"
       ]
       ++ commonConfigureFlags
       ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
