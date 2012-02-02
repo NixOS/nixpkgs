@@ -166,5 +166,6 @@ stdenv.mkDerivation rec {
     homepage = "http://mplayerhq.hu";
     license = "GPL";
     maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

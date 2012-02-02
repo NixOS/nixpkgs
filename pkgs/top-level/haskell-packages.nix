@@ -151,7 +151,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     stm          = self.stm_2_2_0_1; # 7.2 ok, 7.3 ok
     syb          = self.syb_0_3_6; # 7.2 ok, 7.3 ok
     xhtml        = self.xhtml_3000_2_0_1; # 7.2 ok, 7.3 ok
-    zlib         = self.zlib_0_5_3_2; # 7.2 ok, 7.3 ok
+    zlib         = self.zlib_0_5_3_1; # 7.2 ok, 7.3 ok
     HTTP         = self.HTTP_4000_2_2; # 7.2 ok, 7.3 ok
     deepseq      = self.deepseq_1_1_0_2; # 7.2 ok, 7.3 ok
     text         = self.text_0_11_1_13; # 7.2 ok, 7.3 ok
@@ -210,7 +210,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_4_0_0;
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2011_4_0_0 =
@@ -253,7 +252,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_2_0_1;
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2011_2_0_1 =
@@ -296,7 +294,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_2_0_0;
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2011_2_0_0 =
@@ -335,7 +332,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2010_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_2_0_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
@@ -375,7 +371,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2010_1_0_0;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2010_1_0_0 =
@@ -415,7 +410,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       text = self.text_0_11_0_6;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      zlib_0_5_3_2 = null;	# don't pick this version of 'zlib' during nix-env -u
     };
 
   haskellPlatform_2009_2_0_2 =
@@ -647,6 +641,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   erf = callPackage ../development/libraries/haskell/erf {};
 
+  explicitException = callPackage ../development/libraries/haskell/explicit-exception {};
+
   filepath = callPackage ../development/libraries/haskell/filepath {};
 
   extensibleExceptions_0_1_1_0 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.0.nix {};
@@ -829,8 +825,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hledger = callPackage ../development/libraries/haskell/hledger {};
   hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
-  hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {};
-  hledgerChart = callPackage ../development/libraries/haskell/hledger-chart {};
+  #hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {};
+  #hledgerChart = callPackage ../development/libraries/haskell/hledger-chart {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
   hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
 
@@ -991,7 +987,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mtl2 = self.mtl_2_0_1_0;
   mtl  = self.mtl1;
 
-  mtlparse  = callPackage ../development/libraries/haskell/mtlparse {};
+  mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
+
+  multiarg = callPackage ../development/libraries/haskell/multiarg {};
 
   multiplate = callPackage ../development/libraries/haskell/multiplate {};
 
@@ -1044,7 +1042,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pathPieces_0_1_0 = callPackage ../development/libraries/haskell/path-pieces/0.1.0.nix {};
   pathPieces = self.pathPieces_0_1_0;
 
-  pandoc = callPackage ../development/libraries/haskell/pandoc/default.nix {};
+  pandoc = callPackage ../development/libraries/haskell/pandoc {};
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
@@ -1079,6 +1077,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   persistent = callPackage ../development/libraries/haskell/persistent {
     pathPieces = self.pathPieces_0_0_0;
   };
+
+  persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
@@ -1209,6 +1209,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
+
+  socks = callPackage ../development/libraries/haskell/socks {};
 
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
@@ -1467,6 +1469,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     pathPieces = self.pathPieces_0_0_0;
   };
 
+  yesodDefault = callPackage ../development/libraries/haskell/yesod-default {};
+
   yesodForm = callPackage ../development/libraries/haskell/yesod-form {};
 
   yesodJson = callPackage ../development/libraries/haskell/yesod-json {};
@@ -1492,10 +1496,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib_0_5_3_1 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
     inherit (pkgs) zlib;
   };
-  zlib_0_5_3_2 = callPackage ../development/libraries/haskell/zlib/0.5.3.2.nix {
-    inherit (pkgs) zlib;
-  };
-  zlib = self.zlib_0_5_3_2;
+  zlib = self.zlib_0_5_3_1;
 
   zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
 

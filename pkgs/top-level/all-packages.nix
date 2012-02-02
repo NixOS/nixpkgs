@@ -313,6 +313,11 @@ let
     inherit stdenv;
   };
 
+  makeAutostartItem = import ../build-support/make-startupitem {
+    inherit stdenv;
+    inherit lib;
+  };
+
   makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
     inherit stdenv perl cpio contents ubootChooser;
   };
@@ -504,6 +509,8 @@ let
   colordiff = callPackage ../tools/text/colordiff { };
 
   convertlit = callPackage ../tools/text/convertlit { };
+
+  cowsay = callPackage ../tools/misc/cowsay { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
@@ -829,6 +836,8 @@ let
   gzip = callPackage ../tools/compression/gzip { };
 
   pigz = callPackage ../tools/compression/pigz { };
+
+  hardlink = callPackage ../tools/system/hardlink { };
 
   halibut = callPackage ../tools/typesetting/halibut { };
 
@@ -1525,6 +1534,8 @@ let
   unshield = callPackage ../tools/archivers/unshield { };
 
   unzip = unzip60;
+
+  unzipNLS = unzip.override { enableNLS = true; };
 
   unzip552 = callPackage ../tools/archivers/unzip/5.52.nix { };
 
@@ -3073,7 +3084,6 @@ let
 
   omake = callPackage ../development/tools/ocaml/omake { };
 
-
   openocd = callPackage ../development/tools/misc/openocd { };
 
   oprofile = import ../development/tools/profiling/oprofile {
@@ -3632,6 +3642,8 @@ let
         cxx = false;
       };
 
+  gmp5 = callPackage ../development/libraries/gmp/5.0.3.nix { };
+
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
@@ -3686,19 +3698,11 @@ let
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
-  gtkLibs = pkgs.gtkLibs224;
+  gtkLibs = recurseIntoAttrs pkgs.gtkLibs224;
 
   inherit (pkgs.gtkLibs) glib gtk pango cairo gdk_pixbuf;
 
-  gtkLibs1x = recurseIntoAttrs (let callPackage = newScope pkgs.gtkLibs1x; in {
-
-    glib = callPackage ../development/libraries/glib/1.2.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/1.2.x.nix { };
-
-  });
-
-  gtkLibs224 = recurseIntoAttrs (let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
+  gtkLibs224 = let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
 
     glib = callPackage ../development/libraries/glib/2.28.x.nix { };
 
@@ -3722,7 +3726,7 @@ let
 
     gob2 = callPackage ../development/tools/misc/gob2 { };
 
-  });
+  };
 
   gtkLibs3x = let callPackage = newScope pkgs.gtkLibs3x; in {
     glib = callPackage ../development/libraries/glib/2.30.x.nix { };
@@ -4037,6 +4041,8 @@ let
   libmhash = callPackage ../development/libraries/libmhash {};
 
   libmtp = callPackage ../development/libraries/libmtp { };
+
+  libnatspec = callPackage ../development/libraries/libnatspec { };
 
   libnice = callPackage ../development/libraries/libnice {
     inherit (gnome) glib;
@@ -5265,6 +5271,8 @@ let
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
 
+  microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
+
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
   bluez = callPackage ../os-specific/linux/bluez { };
@@ -6266,6 +6274,10 @@ let
       paths = [ w32api mingw_runtime ];
     };
 
+    pthreads = callPackage ../os-specific/windows/pthread-w32 {
+      mingw_headers = mingw_headers2;
+    };
+
     wxMSW = callPackage ../os-specific/windows/wxMSW-2.8 { };
   };
 
@@ -6277,8 +6289,7 @@ let
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
 
-  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant {
-  };
+  wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
   wpa_supplicant_gui = pkgs.wpa_supplicant.gui;
 
@@ -6834,19 +6845,19 @@ let
 
   firefox36Wrapper = wrapFirefox { browser = firefox36Pkgs.firefox; };
 
-  firefox80Pkgs = callPackage ../applications/networking/browsers/firefox/8.0.nix {
-    inherit (gtkLibs) gtk pango;
-    inherit (gnome) libIDL;
-  };
-
-  firefox80Wrapper = wrapFirefox { browser = firefox80Pkgs.firefox; };
-
   firefox90Pkgs = callPackage ../applications/networking/browsers/firefox/9.0.nix {
     inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
   firefox90Wrapper = wrapFirefox { browser = firefox90Pkgs.firefox; };
+
+  firefox100Pkgs = callPackage ../applications/networking/browsers/firefox/10.0.nix {
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
+
+  firefox100Wrapper = wrapFirefox { browser = firefox100Pkgs.firefox; };
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7153,13 +7164,7 @@ let
   ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
   ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
-  links2 = (builderDefsPackage ../applications/networking/browsers/links2) {
-    inherit fetchurl stdenv bzip2 zlib libjpeg libpng libtiff
-      gpm openssl SDL SDL_image SDL_net pkgconfig;
-    inherit (xlibs) libX11 libXau xproto libXt;
-  };
-
-  links2Stdenv = callPackage ../applications/networking/browsers/links2/stdenv.nix { };
+  links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = callPackage ../applications/networking/linphone {
     inherit (gnome) libglade gtk;
@@ -7483,7 +7488,9 @@ let
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  skype_linux = callPackage_i686 ../applications/networking/skype { };
+  skype_linux = callPackage_i686 ../applications/networking/skype {
+    usePulseAudio = getConfig [ "pulseaudio" ] false; # disabled by default (the 100% cpu bug)
+  };
 
   slim = callPackage ../applications/display-managers/slim { };
 
@@ -7772,12 +7779,6 @@ let
 
   xineUI = callPackage ../applications/video/xine-ui { };
 
-  xmms = callPackage ../applications/audio/xmms {
-    inherit (gnome) esound;
-    inherit (gtkLibs1x) glib gtk;
-    stdenv = overrideGCC stdenv gcc34; # due to problems with gcc 4.x
-  };
-
   xneur = callPackage ../applications/misc/xneur {
     GStreamer=gst_all.gstreamer;
     inherit (gtkLibs) glib gtk pango atk gdk_pixbuf;
@@ -7965,6 +7966,8 @@ let
   naev = callPackage ../games/naev { };
 
   njam = callPackage ../games/njam { };
+
+  oilrush = callPackage ../games/oilrush { };
 
   openttd = callPackage ../games/openttd {
     zlib = zlibStatic;
@@ -8541,10 +8544,6 @@ let
     python = pythonFull;
   };
 
-  generator = callPackage ../misc/emulators/generator {
-    inherit (gtkLibs1x) gtk;
-  };
-
   gensgs = callPackage_i686 ../misc/emulators/gens-gs { };
 
   ghostscript = callPackage ../misc/ghostscript {
@@ -8701,7 +8700,6 @@ let
   texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
     paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
               texLivePGF texLiveBeamer texLiveModerncv ];
-
   });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions

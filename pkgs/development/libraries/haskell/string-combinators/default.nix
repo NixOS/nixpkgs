@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "string-combinators";
-  version = "0.6.0.2";
-  sha256 = "1bsnli6376nq5dmcx8da2fakj7h73plqz6v1myzhkz1f6r3qcjfi";
+  version = "0.6.0.3";
+  sha256 = "18jawxqvcj7zpvb0wf1zln12s03mp6nglhv5ccywrkb5x0r0557j";
   buildDepends = [ baseUnicodeSymbols ];
   meta = {
     homepage = "https://github.com/basvandijk/string-combinators";

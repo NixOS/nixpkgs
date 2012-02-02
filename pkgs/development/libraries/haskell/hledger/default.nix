@@ -1,16 +1,16 @@
-{ cabal, cmdargs, csv, haskeline, hledgerLib, HUnit, mtl, parsec
-, regexpr, safe, split, time, utf8String
+{ cabal, cabalFileTh, cmdargs, csv, haskeline, hledgerLib, HUnit
+, mtl, parsec, regexpr, safe, split, time, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "hledger";
-  version = "0.16.1";
-  sha256 = "182a5qlcxbh9q8hzrmgm99hcgvxjq8j5xq202iff14p1yqv0irs2";
+  version = "0.17";
+  sha256 = "0ah01d10hvz12zwkprk6sb3by8azz9fhm772440arhd7r9fn6232";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    cmdargs csv haskeline hledgerLib HUnit mtl parsec regexpr safe
-    split time utf8String
+    cabalFileTh cmdargs csv haskeline hledgerLib HUnit mtl parsec
+    regexpr safe split time utf8String
   ];
   meta = {
     homepage = "http://hledger.org";

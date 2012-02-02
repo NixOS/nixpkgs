@@ -89,5 +89,10 @@ gui = stdenv.mkDerivation {
     mkdir -pv $out/share/icons
     cp -av icons/hicolor $out/share/icons
   '';
+
+  meta = {
+    description = "Qt4 wpa_supplicant client";
+    inherit (qt4.meta) platforms;
+  };
 };
 }

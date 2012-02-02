@@ -40,17 +40,17 @@ library, use the 'NOGUI' parameter:
    $ make NOGUI=1
 */
 
-{ fetchurl, stdenv, pkgconfig, fuse, wxGTK, devicemapper,
+{ fetchurl, stdenv, pkgconfig, nasm, fuse, wxGTK, devicemapper,
   wxGUI ? true
 }:
 
 stdenv.mkDerivation {
-  name = "truecrypt-6.3a";
+  name = "truecrypt-7.1";
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://www.sfr-fresh.com/unix/misc/TrueCrypt_6.3a_Source.tar.gz;
-    sha256 = "1vwnzay9gjlldqbdb20rhq2arhyzhdy347qc00hkpqmv2b8z070y";
+    url = http://fossies.org/unix/misc/TrueCrypt-7.1-Source.tar.gz;
+    sha256 = "1x6rdxcvklb3zpmgfc3mg5h71gzki1q55ljkzjab2vzkf9n5v0cl";
   };
 
   pkcs11h = fetchurl {
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
     sha256 = "5ae6a4f32ca737e02def3bf314c9842fb89be82bf00b6f4022a97d8d565522b8";
   };
 
-  buildInputs = [ pkgconfig fuse devicemapper wxGTK ]; 
+  buildInputs = [ pkgconfig fuse devicemapper wxGTK nasm ]; 
   makeFlags = if (wxGUI) then "" else "NOGUI=1";
 
   meta = {

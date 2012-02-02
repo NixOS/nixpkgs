@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "happstack-util";
-  version = "6.0.2";
-  sha256 = "03qlnclpg72iflry1xlkd0sxqm6nybvx113la9r0cmsnz17y546a";
+  version = "6.0.3";
+  sha256 = "0hqssd5wzir6rxn46q8r3hdp3nl7v5m7w322j39120xpg2bhiphh";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

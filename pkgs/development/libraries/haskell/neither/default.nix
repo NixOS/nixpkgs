@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "neither";
-  version = "0.3.0.1";
-  sha256 = "1vr8zap3vp28dr48s510lfrbfhw5yz25vng6wyk20582lv4j2mz8";
+  version = "0.3.1";
+  sha256 = "1n00v2xs2ghm273barc3bbi67wgpvyihhgl1ij7qczyp9fhqlyfk";
   buildDepends = [ failure transformers ];
   meta = {
     homepage = "http://github.com/snoyberg/neither";

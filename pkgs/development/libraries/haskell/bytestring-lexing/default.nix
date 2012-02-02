@@ -2,12 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "bytestring-lexing";
-  version = "0.2.1";
-  sha256 = "0pibn4phfp346i6i8zwic5zlbq9lqa6ifyx6bdl3p5c8jy3v23r9";
+  version = "0.3.0";
+  sha256 = "1jrhmljy7m84imcmvsarv74i3hcm60ja9pl1ww3lm0zgi0rrddqd";
   buildTools = [ alex ];
   meta = {
-    homepage = "http://code.haskell.org/~dons/code/bytestring-lexing";
-    description = "Parse literals efficiently from bytestrings";
+    homepage = "http://code.haskell.org/~wren/";
+    description = "Parse literals efficiently from strict or lazy bytestrings";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
