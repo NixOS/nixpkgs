@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "citeproc-hs";
-  version = "0.3.3";
-  sha256 = "0yhzqxrr7jn1h0r2vy1jmlrf0z64qcr2fl37i04rpiwzb3nc16r4";
+  version = "0.3.4";
+  sha256 = "17w6fpmlhbfd8jxxz4s6ybz3dswf0i96fjjbs05ykh4i97rs62nv";
   buildDepends = [
     hsBibutils HTTP json mtl network pandocTypes parsec syb time
     utf8String xml
