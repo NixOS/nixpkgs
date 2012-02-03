@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake bison ncurses openssl readline zlib ] ++ stdenv.lib.optionals stdenv.isDarwin [ darwinInstallNameToolUtility perl ];
   
-  cmakeFlags = "-DWITH_SSL=yes -DWITH_READLINE=yes -DWITH_EMBEDDED_SERVER=yes -DWITH_ZLIB=yes -DINSTALL_SCRIPTDIR=bin";
+  cmakeFlags = "-DWITH_SSL=yes -DWITH_READLINE=yes -DWITH_EMBEDDED_SERVER=yes -DWITH_ZLIB=yes -DINSTALL_SCRIPTDIR=bin -DHAVE_IPV6=yes";
   
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
