@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hledger-interest";
-  version = "1.3";
-  sha256 = "1sgnl3vv38cmgxv3xag3c78j1955xxwdmr5xr3f8rc78np6d0wnz";
+  version = "1.4";
+  sha256 = "0lm4jcxcig3yxzhbnka1q54fvshn5b9d91a5a2mbmkzbwhzjj0lg";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ hledgerLib mtl time ];
