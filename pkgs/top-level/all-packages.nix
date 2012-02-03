@@ -5184,6 +5184,8 @@ let
 
   radius = callPackage ../servers/radius { };
 
+  redis = callPackage ../servers/nosql/redis { };
+
   redstore = callPackage ../servers/http/redstore { };
 
   samba = callPackage ../servers/samba { };
