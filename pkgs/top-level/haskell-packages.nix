@@ -370,6 +370,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2010_1_0_0;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      deepseq = self.deepseq_1_1_0_2;
+      # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
   haskellPlatform_2010_1_0_0 =
@@ -409,12 +411,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       text = self.text_0_11_0_6;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      deepseq = self.deepseq_1_1_0_2;
+      # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
   haskellPlatform_2009_2_0_2 =
     callPackage ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix
       (self.haskellPlatformArgs_2009_2_0_2 self);
-
 
   # Haskell libraries.
 
