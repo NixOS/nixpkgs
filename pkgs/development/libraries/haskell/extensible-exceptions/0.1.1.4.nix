@@ -1,12 +1,11 @@
 { cabal }:
 
 cabal.mkDerivation (self: {
-  pname = "binary";
-  version = "0.5.1.0";
-  sha256 = "18si0f021447b1kqshar224zyh02gc65z7v82waxcn4igss7gm1a";
+  pname = "extensible-exceptions";
+  version = "0.1.1.4";
+  sha256 = "1273nqws9ij1rp1bsq5jc7k2jxpqa0svawdbim05lf302y0firbc";
   meta = {
-    homepage = "http://code.haskell.org/binary/";
-    description = "Binary serialisation for Haskell values using lazy ByteStrings";
+    description = "Extensible exceptions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

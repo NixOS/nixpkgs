@@ -2274,16 +2274,20 @@ let
       (x : x.ghc704Prefs) false false (x : x);
 
   haskellPackages_ghc721 =
-    recurseIntoAttrs
-      (haskellPackagesFun ../development/compilers/ghc/7.2.1.nix
-        (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
-        (x : x.ghc721Prefs) false false lowPrio);
+    haskellPackagesFun ../development/compilers/ghc/7.2.1.nix
+      (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
+      (x : x.ghc721Prefs) false false lowPrio;
 
   haskellPackages_ghc722 =
+    haskellPackagesFun ../development/compilers/ghc/7.2.2.nix
+      (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
+      (x : x.ghc722Prefs) false false lowPrio;
+
+  haskellPackages_ghc741 =
     recurseIntoAttrs
-      (haskellPackagesFun ../development/compilers/ghc/7.2.2.nix
+      (haskellPackagesFun ../development/compilers/ghc/7.4.1.nix
         (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
-        (x : x.ghc722Prefs) false false lowPrio);
+        (x : x.ghc741Prefs) false false lowPrio);
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
@@ -5186,6 +5190,8 @@ let
   rabbitmq_server = callPackage ../servers/amqp/rabbitmq-server { };
 
   radius = callPackage ../servers/radius { };
+
+  redis = callPackage ../servers/nosql/redis { };
 
   redstore = callPackage ../servers/http/redstore { };
 

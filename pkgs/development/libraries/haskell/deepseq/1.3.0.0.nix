@@ -1,12 +1,11 @@
 { cabal }:
 
 cabal.mkDerivation (self: {
-  pname = "filepath";
+  pname = "deepseq";
   version = "1.3.0.0";
-  sha256 = "1v5affq82b4fypm49d5sradcx4ymgmkac563vfx483pmyl73i5jl";
+  sha256 = "0z2k1rda67nmhv62irjfd642iarj1i9m55l6p47j4cysrszhvqgy";
   meta = {
-    homepage = "http://www-users.cs.york.ac.uk/~ndm/filepath/";
-    description = "Library for manipulating FilePaths in a cross platform way";
+    description = "Deep evaluation of data structures";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vty";
-  version = "4.7.0.8";
-  sha256 = "1wh94m2i0ivdkf8hhl9qrsfs7z3mk0xrzgwdfgqw7lhq321i2bnm";
+  version = "4.7.0.10";
+  sha256 = "03cvr4z0fvxfyrikgf89777cp1xqhy22yj83p0dysp0i5ds6cd9v";
   buildDepends = [
     deepseq mtl parallel parsec terminfo utf8String vector
   ];

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hjsmin";
-  version = "0.0.14";
-  sha256 = "16053hnxnr9vsqvasbibjwjdg0jpsl5fwzgy54ac1xkh4rhp3a5i";
+  version = "0.0.15";
+  sha256 = "1bik3bvaz4zjhyx8nyghhs61l14zm71hndfhj4k0xvkw3h6hlj9k";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ blazeBuilder languageJavascript text ];

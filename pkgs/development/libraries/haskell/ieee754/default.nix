@@ -1,12 +1,12 @@
 { cabal }:
 
 cabal.mkDerivation (self: {
-  pname = "binary";
-  version = "0.5.1.0";
-  sha256 = "18si0f021447b1kqshar224zyh02gc65z7v82waxcn4igss7gm1a";
+  pname = "ieee754";
+  version = "0.7.3";
+  sha256 = "0gq747h15inxbxbgmzmchb9a8p57rhv3bmj69idx5arh0d3whgv0";
   meta = {
-    homepage = "http://code.haskell.org/binary/";
-    description = "Binary serialisation for Haskell values using lazy ByteStrings";
+    homepage = "http://github.com/patperry/hs-ieee754";
+    description = "Utilities for dealing with IEEE floating point numbers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
