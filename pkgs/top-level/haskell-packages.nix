@@ -148,7 +148,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     QuickCheck   = self.QuickCheck_2_4_2;       # 7.4.1 ok
     regexBase    = self.regexBase_0_93_2;       # 7.4.1 ok
     regexCompat  = self.regexCompat_0_93_1;     # 7.4.1 ok
-    regexPosix   = self.regexPosix_0_94_4;      # 7.4.1 ok
+    regexPosix   = self.regexPosix_0_95_1;      # 7.4.1 ok
     stm          = self.stm_2_2_0_1;            # 7.4.1 ok
     syb          = self.syb_0_3_6;              # 7.4.1 ok
     xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
@@ -1156,7 +1156,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regexBase_0_72_0_2 = callPackage ../development/libraries/haskell/regex-base/0.72.0.2.nix {};
   regexBase_0_93_1   = callPackage ../development/libraries/haskell/regex-base/0.93.1.nix   {};
   regexBase_0_93_2   = callPackage ../development/libraries/haskell/regex-base/0.93.2.nix   {};
-  regexBase = self.regexBase_0_72_0_2;
+  regexBase = self.regexBase_0_93_2;
 
   regexCompat_0_71_0_1 = callPackage ../development/libraries/haskell/regex-compat/0.71.0.1.nix {};
   regexCompat_0_92     = callPackage ../development/libraries/haskell/regex-compat/0.92.nix     {};
