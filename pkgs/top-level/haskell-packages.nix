@@ -900,6 +900,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
 
+  ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
+
   instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
 
   ioStorage = callPackage ../development/libraries/haskell/io-storage {};
