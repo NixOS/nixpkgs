@@ -466,6 +466,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
+  bitarray = callPackage ../development/libraries/haskell/bitarray {};
+
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
 
   bktrees = callPackage ../development/libraries/haskell/bktrees {};
@@ -539,6 +541,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   conduit = callPackage ../development/libraries/haskell/conduit {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
+
+  containersDeepseq = callPackage ../development/libraries/haskell/containers-deepseq {};
 
   controlMonadAttempt = callPackage ../development/libraries/haskell/control-monad-attempt {};
 
@@ -677,6 +681,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
   gamma = callPackage ../development/libraries/haskell/gamma {};
+
+  gd = callPackage ../development/libraries/haskell/gd {
+    inherit (pkgs) gd zlib;
+  };
 
   gdiff = callPackage ../development/libraries/haskell/gdiff {};
 
