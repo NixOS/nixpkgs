@@ -3684,6 +3684,9 @@ let
     guileBindings = getConfig ["gnutls" "guile"] true;
   };
 
+  gnutls_without_guile = gnutls.override { guileBindings = false; };
+  gnutls2_without_guile = gnutls2.override { guileBindings = false; };
+
   gpgme = callPackage ../development/libraries/gpgme { };
 
   grantlee = callPackage ../development/libraries/grantlee { };
