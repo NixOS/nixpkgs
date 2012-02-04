@@ -24,8 +24,7 @@ stdenv.mkDerivation {
     mv analog.man $out/share/man/man1/analog.1
     mv docs $out/share/doc/${name}/manual
     mv how-to $out/share/doc/${name}/
-    mv lang $out/share/${name}/
-    mv examples $out/share/${name}/
+    mv lang images examples $out/share/${name}/
   '';
 
   meta = {
