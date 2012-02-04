@@ -1251,7 +1251,7 @@ let
 
   pwgen = callPackage ../tools/security/pwgen { };
 
-  pydb = callPackage ../tools/pydb { };
+  pydb = callPackage ../development/tools/pydb { };
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
