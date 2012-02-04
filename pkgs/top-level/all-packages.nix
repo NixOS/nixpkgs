@@ -363,6 +363,8 @@ let
 
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
+  analog = callPackage ../tools/admin/analog {};
+
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
