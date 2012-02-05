@@ -6806,6 +6806,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  goldendict = callPackage ../applications/misc/goldendict { };
+
   grass = import ../applications/misc/grass {
     inherit (xlibs) libXmu libXext libXp libX11 libXt libSM libICE libXpm
       libXaw libXrender;
