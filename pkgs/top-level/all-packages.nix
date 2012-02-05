@@ -3301,8 +3301,7 @@ let
 
   clanlib = callPackage ../development/libraries/clanlib { };
 
-  clapack = callPackage ../development/libraries/clapack {
-  };
+  clapack = callPackage ../development/libraries/clapack { };
 
   classads = callPackage ../development/libraries/classads { };
 
