@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, microcode2ucode }:
 
 let version = "20111110";
     num = "20728";
@@ -9,16 +9,16 @@ in stdenv.mkDerivation {
     sha256 = "16f532cdf9cce03e01e714619ad9406a465aa965bbd1288035398db79921cbc1";
   };
 
-#  setSourceRoot = ''
-#    sourceRoot=.
-#  '';
-
+  buildInputs = [ microcode2ucode ];
   sourceRoot = ".";
 
-  dontBuild = true;
+  buildPhase = ''
+    intel-microcode2ucode microcode.dat
+  '';
+
   installPhase = ''
     ensureDir $out
-    cp microcode.dat "$out/"
+    cp -r intel-ucode "$out/"
   '';
 
   meta = {

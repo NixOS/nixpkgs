@@ -5273,6 +5273,8 @@ let
 
   alsaUtils = callPackage ../os-specific/linux/alsa-utils { };
 
+  microcode2ucode = callPackage ../os-specific/linux/microcode/converter.nix { };
+
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
 
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
