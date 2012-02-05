@@ -1,0 +1,16 @@
+--- VirtualGL-2.3/cmakescripts/FindTurboJPEG.cmake.orig 2012-02-02 17:33:49.496283001 +0100
++++ VirtualGL-2.3/cmakescripts/FindTurboJPEG.cmake      2012-02-02 17:44:18.772483239 +0100
+@@ -40,8 +40,11 @@
+        endif()
+ endif()
+ 
+-set(TJPEG_LIBRARY ${DEFAULT_TJPEG_LIBRARY} CACHE PATH
+-  "TurboJPEG library path (default: ${DEFAULT_TJPEG_LIBRARY})")
++if(NOT TJPEG_LIBRARY)
++       message(STATUS "TJPEG_LIBRARY environment variable not set")
++       set(TJPEG_LIBRARY ${DEFAULT_TJPEG_LIBRARY} CACHE PATH
++               "TurboJPEG library path (default: ${DEFAULT_TJPEG_LIBRARY})")
++endif()
+ 
+ if(WIN32)
+        set(CMAKE_REQUIRED_DEFINITIONS -MT)

@@ -680,6 +680,8 @@ let
 
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
+  libbsd = callPackage ../development/libraries/libbsd { };
+
   flvtool2 = callPackage ../tools/video/flvtool2 { };
 
   fontforge = callPackage ../tools/misc/fontforge { };
@@ -7681,6 +7683,8 @@ let
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
 
   virtualgl = callPackage ../tools/X11/virtualgl { };
+
+  bumblebee = callPackage ../tools/X11/bumblebee { };
 
   vkeybd = callPackage ../applications/audio/vkeybd {
     inherit (xlibs) libX11;
