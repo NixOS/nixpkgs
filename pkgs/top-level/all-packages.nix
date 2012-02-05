@@ -3038,6 +3038,8 @@ let
   gnumake380 = callPackage ../development/tools/build-managers/gnumake-3.80 { };
   gnumake381 = callPackage ../development/tools/build-managers/gnumake/3.81.nix { };
 
+  gob2 = callPackage ../development/tools/misc/gob2 { };
+
   gradle = callPackage ../development/tools/build-managers/gradle { };
 
   gperf = callPackage ../development/tools/misc/gperf { };
@@ -3708,35 +3710,30 @@ let
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
-  gtkLibs = recurseIntoAttrs pkgs.gtkLibs224;
-
-  inherit (pkgs.gtkLibs) glib gtk pango cairo gdk_pixbuf;
-
-  gtkLibs224 = let callPackage = pkgs.newScope pkgs.gtkLibs224; in {
-
-    glib = callPackage ../development/libraries/glib/2.28.x.nix { };
-
-    glibmm = callPackage ../development/libraries/glibmm/2.28.x.nix { };
-
-    atk = callPackage ../development/libraries/atk/2.2.x.nix { };
-
-    atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
-
-    cairo = callPackage ../development/libraries/cairo { };
-
-    pango = callPackage ../development/libraries/pango/1.28.x.nix { };
-
-    pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
-
-    gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/2.24.x.nix { };
-
-    gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
-
-    gob2 = callPackage ../development/tools/misc/gob2 { };
-
+  gtkLibs = {
+    inherit (pkgs) glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtk
+      gtkmm;
   };
+
+  glib = callPackage ../development/libraries/glib/2.28.x.nix { };
+
+  glibmm = callPackage ../development/libraries/glibmm/2.28.x.nix { };
+
+  atk = callPackage ../development/libraries/atk/2.2.x.nix { };
+
+  atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
+
+  cairo = callPackage ../development/libraries/cairo { };
+
+  pango = callPackage ../development/libraries/pango/1.28.x.nix { };
+
+  pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
+
+  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
+
+  gtk = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+
+  gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
 
   gtkLibs3x = let callPackage = newScope pkgs.gtkLibs3x; in {
     glib = callPackage ../development/libraries/glib/2.30.x.nix { };
@@ -6923,7 +6920,7 @@ let
   gitSVN = gitAndTools.gitSVN;
 
   giv = callPackage ../applications/graphics/giv {
-    inherit (gtkLibs) gdk_pixbuf gtk gob2;
+    inherit (gtkLibs) gdk_pixbuf gtk;
     pcre = pcre.override { unicodeSupport = true; };
   };
 
