@@ -137,12 +137,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;         # 7.4.1 ok
     fgl          = self.fgl_5_4_2_4;            # 7.4.1 ok
-    GLUT         = self.GLUT_2_1_2_1;           # 7.4.1 fails
+    GLUT         = self.GLUT_2_3_0_0;           # 7.4.1 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 fails
     html         = self.html_1_0_1_2;           # 7.4.1 ok
     HUnit        = self.HUnit_1_2_2_3;          # 7.4.1 ok
     network      = self.network_2_3_0_10;       # 7.4.1 ok
-    OpenGL       = self.OpenGL_2_2_3_0;         # 7.4.1 fails
+    OpenGL       = self.OpenGL_2_5_0_0;         # 7.4.1 ok
     parallel     = self.parallel_3_2_0_2;       # 7.4.1 ok
     parsec       = self.parsec_3_1_2;           # 7.4.1 ok
     QuickCheck   = self.QuickCheck_2_4_2;       # 7.4.1 ok
@@ -738,8 +738,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   GLUT_2_2_2_1 = callPackage ../development/libraries/haskell/GLUT/2.2.2.1.nix {
     OpenGL = self.OpenGL_2_4_0_2;
   };
+  GLUT_2_3_0_0 = callPackage ../development/libraries/haskell/GLUT/2.3.0.0.nix {
+    OpenGL = self.OpenGL_2_5_0_0;
+  };
   GLUT22 = self.GLUT_2_2_2_1;
-  GLUT = self.GLUT_2_1_1_2;
+  GLUT = self.GLUT_2_3_0_0;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs.gtkLibs) gtk;
@@ -1048,8 +1051,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {};
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {};
   OpenGL_2_4_0_2 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.2.nix {};
+  OpenGL_2_5_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.5.0.0.nix {};
   OpenGL24 = self.OpenGL_2_4_0_2;
-  OpenGL = self.OpenGL_2_2_1_1;
+  OpenGL = self.OpenGL_2_5_0_0;
 
   OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
 
