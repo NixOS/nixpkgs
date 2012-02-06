@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   cfg = config.services.tomcat;
-
+  tomcat = pkgs.tomcat6;
 in
 
 {
@@ -63,7 +63,7 @@ in
       };
 
       webapps = mkOption {
-        default = [ pkgs.tomcat6 ];
+        default = [ tomcat ];
         description = "List containing WAR files or directories with WAR files which are web applications to be deployed on Tomcat";
       };
 
@@ -127,16 +127,16 @@ in
 	    mkdir -p ${cfg.baseDir}
 
 	    # Create a symlink to the bin directory of the tomcat component
-	    ln -sfn ${pkgs.tomcat6}/bin ${cfg.baseDir}/bin
+	    ln -sfn ${tomcat}/bin ${cfg.baseDir}/bin
 
 	    # Create a conf/ directory
 	    mkdir -p ${cfg.baseDir}/conf
 	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/conf
 
 	    # Symlink the config files in the conf/ directory (except for catalina.properties and server.xml)
-	    for i in $(ls ${pkgs.tomcat6}/conf | grep -v catalina.properties | grep -v server.xml)
+	    for i in $(ls ${tomcat}/conf | grep -v catalina.properties | grep -v server.xml)
 	    do
-	        ln -sfn ${pkgs.tomcat6}/conf/$i ${cfg.baseDir}/conf/`basename $i`
+	        ln -sfn ${tomcat}/conf/$i ${cfg.baseDir}/conf/`basename $i`
 	    done
 
             # Create subdirectory for virtual hosts
@@ -146,12 +146,12 @@ in
 	    # Change all references from CATALINA_HOME to CATALINA_BASE and add support for shared libraries
 	    sed -e 's|''${catalina.home}|''${catalina.base}|g' \
                 -e 's|shared.loader=|shared.loader=''${catalina.base}/shared/lib/*.jar|' \
-		${pkgs.tomcat6}/conf/catalina.properties > ${cfg.baseDir}/conf/catalina.properties
+		${tomcat}/conf/catalina.properties > ${cfg.baseDir}/conf/catalina.properties
 
 	    # Create a modified server.xml which also includes all virtual hosts
 	    sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${
                          toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs/${virtualHost.name}\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
-	        ${pkgs.tomcat6}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
+	        ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
 
 	    # Create a logs/ directory
 	    mkdir -p ${cfg.baseDir}/logs
@@ -179,7 +179,7 @@ in
 	    chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/webapps
 
 	    # Symlink all the given common libs files or paths into the lib/ directory
-	    for i in ${pkgs.tomcat6} ${toString cfg.commonLibs}
+	    for i in ${tomcat} ${toString cfg.commonLibs}
 	    do
 		if [ -f $i ]
 		then
@@ -330,13 +330,13 @@ in
 		''
 	    else ""}
 
-            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${pkgs.tomcat6}/bin/startup.sh'
+            ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${tomcat}/bin/startup.sh'
           '';
 
         postStop =
           ''
             echo "Stopping tomcat..."
-            CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${pkgs.tomcat6}/bin/shutdown.sh
+            CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${pkgs.jdk} ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c ${tomcat}/bin/shutdown.sh
           '';
 
       };
