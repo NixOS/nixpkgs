@@ -1061,7 +1061,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pathPieces_0_1_0 = callPackage ../development/libraries/haskell/path-pieces/0.1.0.nix {};
   pathPieces = self.pathPieces_0_1_0;
 
-  pandoc = callPackage ../development/libraries/haskell/pandoc {};
+  pandoc = callPackage ../development/libraries/haskell/pandoc {
+    testFramework = self.testFramework_0_4_2_2;
+  };
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
