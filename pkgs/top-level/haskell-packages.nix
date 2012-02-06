@@ -138,7 +138,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     cgi          = self.cgi_3001_1_7_4;         # 7.4.1 ok
     fgl          = self.fgl_5_4_2_4;            # 7.4.1 ok
     GLUT         = self.GLUT_2_3_0_0;           # 7.4.1 ok
-    haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 fails
+    haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 ok
     html         = self.html_1_0_1_2;           # 7.4.1 ok
     HUnit        = self.HUnit_1_2_2_3;          # 7.4.1 ok
     network      = self.network_2_3_0_10;       # 7.4.1 ok
