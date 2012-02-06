@@ -6865,6 +6865,13 @@ let
 
   firefox100Wrapper = wrapFirefox { browser = firefox100Pkgs.firefox; };
 
+  firefox11Pkgs = callPackage ../applications/networking/browsers/firefox/11.0.nix {
+    inherit (gtkLibs) gtk pango;
+    inherit (gnome) libIDL;
+  };
+
+  firefox11Wrapper = wrapFirefox { browser = firefox11Pkgs.firefox; };
+
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = flashplayer11;
