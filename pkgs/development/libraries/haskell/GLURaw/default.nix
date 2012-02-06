@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "GLURaw";
-  version = "1.1.0.1";
-  sha256 = "0n2yazdk98ia9j65n4ac7k0lnyp9cmz51d344x0jsi0xyfckm0mq";
+  version = "1.2.0.0";
+  sha256 = "06dsazj3zadjahwy926gnjngqg8cb1mhdxh8bg5f3axf3hsvxqp1";
   buildDepends = [ OpenGLRaw ];
   extraLibraries = [ freeglut mesa ];
   meta = {
