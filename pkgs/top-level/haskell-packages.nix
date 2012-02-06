@@ -160,7 +160,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     random       = self.random_1_0_1_1;         # 7.4.1 ok
     cabalInstall = self.cabalInstall_0_10_2;    # 7.4.1 fails
     alex         = self.alex_3_0_1;             # 7.4.1 ok
-    happy        = self.happy_1_18_8;           # 7.4.1 fails
+    happy        = self.happy_1_18_9;           # 7.4.1 ok
     haddock      = self.haddock_2_9_2;          # 7.4.1 fails
   };
 
@@ -1573,7 +1573,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
   happy_1_18_6 = callPackage ../development/tools/parsing/happy/1.18.6.nix {};
   happy_1_18_8 = callPackage ../development/tools/parsing/happy/1.18.8.nix {};
-  happy = self.happy_1_18_8;
+  happy_1_18_9 = callPackage ../development/tools/parsing/happy/1.18.9.nix {};
+  happy = self.happy_1_18_9;
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
