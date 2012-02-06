@@ -5871,6 +5871,8 @@ let
       inherit (gtkLibs) gtkmm;
     };
 
+    frandom = callPackage ../os-specific/linux/frandom { };
+
     iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
 
     iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
