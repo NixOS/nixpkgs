@@ -1,13 +1,13 @@
-{ cabal, cairo, colour, dataAccessor, dataAccessorTemplate, gtk
-, mtl, time
+{ cabal, cairo, colour, dataAccessor, dataAccessorTemplate, mtl
+, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "Chart";
-  version = "0.14";
-  sha256 = "0ji81j4c2by5zyrdhx1s17j6kqsi3ngr9y1zh7hr9wv7jsrj3rf2";
+  version = "0.15";
+  sha256 = "1357gqn2ifalknl85n2z9ysf195dnaxm175rp0kmmzbf4vik9gc4";
   buildDepends = [
-    cairo colour dataAccessor dataAccessorTemplate gtk mtl time
+    cairo colour dataAccessor dataAccessorTemplate mtl time
   ];
   meta = {
     homepage = "http://www.dockerz.net/software/chart.html";

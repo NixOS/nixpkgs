@@ -1,6 +1,6 @@
 { fetchcvs, stdenv, emacs, w3m, imagemagick, texinfo, autoconf }:
 
-let date = "2009-07-09"; in
+let date = "2012-01-15"; in
 stdenv.mkDerivation rec {
   name = "emacs-w3m-cvs${date}";
 

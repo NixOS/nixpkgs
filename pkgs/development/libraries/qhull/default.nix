@@ -1,11 +1,11 @@
 {stdenv, fetchurl, cmake}:
 
 stdenv.mkDerivation rec {
-  name = "qhull-2011.1";
+  name = "qhull-2012.1";
 
   src = fetchurl {
     url = "${meta.homepage}/download/${name}-src.tgz";
-    sha256 = "1i2lqw0552mvbcc1q7l4b31fpzf2l2qcabc23r4sybhwyljl9bmd";
+    sha256 = "19hb10vs7ww45ifn7mpvxykn470gd1g568d84mlld6v4pnz7gamv";
   };
 
   buildNativeInputs = [ cmake ];

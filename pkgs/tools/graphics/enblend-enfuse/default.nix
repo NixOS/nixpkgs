@@ -1,14 +1,17 @@
-{stdenv, fetchurl, libtiff, libpng, lcms, libxmi, boost }:
+{stdenv, fetchurl, libtiff, libpng, lcms, libxmi, boost, mesa, freeglut
+, pkgconfig, perl, glew }:
 
-stdenv.mkDerivation {
-  name = "enblend-enfuse-3.2";
+stdenv.mkDerivation rec {
+  name = "enblend-enfuse-4.0";
 
   src = fetchurl {
-    url = mirror://sourceforge/enblend/enblend-enfuse-3.2.tar.gz;
-    sha256 = "0ly6fdn5ym1v6m1f4gqc6s4zqgrfcys1ypfm82g5qbhh66x6gqw4";
+    url = "mirror://sourceforge/enblend/${name}.tar.gz";
+    sha256 = "1i2kq842zrncpadarhcikg447abmh5r7a5js3mzg553ql3148am1";
   };
 
-  buildInputs = [ libtiff libpng lcms libxmi boost ];
+  buildInputs = [ libtiff libpng lcms libxmi boost mesa freeglut glew ];
+
+  buildNativeInputs = [ perl pkgconfig ];
 
   meta = {
     homepage = http://enblend.sourceforge.net/;

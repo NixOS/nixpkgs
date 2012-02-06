@@ -1,18 +1,23 @@
-{ cabal, base64Bytestring, citeprocHs, dlist, extensibleExceptions
-, highlightingKate, HTTP, json, mtl, network, pandocTypes, parsec
-, random, syb, tagsoup, texmath, utf8String, xhtml, xml, zipArchive
+{ cabal, ansiTerminal, base64Bytestring, blazeHtml, citeprocHs
+, Diff, extensibleExceptions, highlightingKate, HTTP, HUnit, json
+, mtl, network, pandocTypes, parsec, QuickCheck, random, syb
+, tagsoup, temporary, testFramework, testFrameworkHunit
+, testFrameworkQuickcheck2, texmath, time, utf8String, xml
+, zipArchive, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.8.2.1";
-  sha256 = "0cwly0j2rj46h654iwl04l6jkhk6rrhynqvrdnq47067n9vm60pi";
+  version = "1.9.0.3";
+  sha256 = "1p5054sdvvgl38rr0ajfavr79rwr2l8jdrpzai329ksskkh1acdp";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    base64Bytestring citeprocHs dlist extensibleExceptions
-    highlightingKate HTTP json mtl network pandocTypes parsec random
-    syb tagsoup texmath utf8String xhtml xml zipArchive
+    ansiTerminal base64Bytestring blazeHtml citeprocHs Diff
+    extensibleExceptions highlightingKate HTTP HUnit json mtl network
+    pandocTypes parsec QuickCheck random syb tagsoup temporary
+    testFramework testFrameworkHunit testFrameworkQuickcheck2 texmath
+    time utf8String xml zipArchive zlib
   ];
   configureFlags = "-fhighlighting -fthreaded";
   meta = {

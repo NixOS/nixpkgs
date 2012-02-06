@@ -1,14 +1,14 @@
 {stdenv, fetchurl, binutilsCross ? null, gccCross ? null, onlyHeaders ? false}:
 
 let
-  name = "mingwrt-3.18";
+  name = "mingwrt-3.20";
 in
 stdenv.mkDerivation (rec {
   inherit name;
 
   src = fetchurl {
-    url = "mirror://sourceforge/mingw/${name}-mingw32-src.tar.gz";
-    sha256 = "0hmxgkxnf6an70g07gmyik46sw1qm204izh6sp923szddvypjjfy";
+    url = "mirror://sourceforge/mingw/MinGW/Base/mingw-rt/${name}-mingw32-src.tar.gz";
+    sha256 = "02pydg1m8y35nxb4k34nlb5c341y2waq76z42mgdzlcf661r91pi";
   };
 
 } //

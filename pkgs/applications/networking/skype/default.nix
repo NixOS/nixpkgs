@@ -1,6 +1,6 @@
 { stdenv, fetchurl, alsaLib, libXv, libXi, libXrender, libXrandr, zlib, glib
 , libXext, libX11, libXScrnSaver, libSM, qt4, libICE, freetype, fontconfig
-, pulseaudio }:
+, pulseaudio, usePulseAudio, lib }:
 
 assert stdenv.system == "i686-linux";
 
@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "157ba3ci12bq0nv2m8wlsab45ib5sccqagyna8nixnhqw9q72sxm";
   };
 
-  buildInputs = [
+  buildInputs = 
+    lib.optional usePulseAudio pulseaudio ++ [
     alsaLib
-    pulseaudio
     stdenv.glibc 
     stdenv.gcc.gcc
     libXv

@@ -6,18 +6,18 @@
 let
 
   hpnSrc = fetchurl {
-    url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.8p1-hpn13v11.diff.gz;
-    sha256 = "1xwx2m2sihpy57mwdnc9km3c72hxfdjyp5mmr1vcx2c8kp901db2";
+    url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.9p1-hpn13v12.diff.gz;
+    sha256 = "0h1h45vic4zks5bc5mvkc50rlgy2c219vn3rmpmalgm5hws9qjbl";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-5.8p2";
+  name = "openssh-5.9p1";
 
   src = fetchurl {
     url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
-    sha1 = "64798328d310e4f06c9f01228107520adbc8b3e5";
+    sha256 = "1mbpfyq3kjc4p8pc631iqgvcqhwhm6vdwvzsdmd54jzhdxmqngld";
   };
 
   prePatch = stdenv.lib.optionalString hpnSupport

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vector-algorithms";
-  version = "0.5.3";
-  sha256 = "14h2x3yrb4fji8bf84xbfp84pax6lzr8njc0c4061xpwcmair36j";
+  version = "0.5.4";
+  sha256 = "0j16jmnmgksbzsq2vvxjmciywi91clak77i6zjjghvn9dpmnsmv2";
   buildDepends = [ primitive vector ];
   meta = {
     homepage = "http://code.haskell.org/~dolio/";

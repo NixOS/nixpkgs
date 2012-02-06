@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "binary";
-  version = "0.5.0.2";
-  sha256 = "02qkybh11psmggkqcs7f8kh4izfj44gq1wk23xhv3jbxc7gdxhp0";
+  version = "0.5.1.0";
+  sha256 = "18si0f021447b1kqshar224zyh02gc65z7v82waxcn4igss7gm1a";
   meta = {
     homepage = "http://code.haskell.org/binary/";
     description = "Binary serialisation for Haskell values using lazy ByteStrings";

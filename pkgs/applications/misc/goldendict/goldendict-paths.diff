@@ -1,0 +1,10 @@
+--- goldendict.pro~	2010-12-27 22:52:21.000000000 +0100
++++ goldendict.pro	2010-12-27 22:52:21.000000000 +0100
+@@ -63,2 +63,2 @@
+-    isEmpty( PREFIX ):PREFIX = /usr/local
+-    DEFINES += PROGRAM_DATA_DIR=\\\"$$PREFIX/share/apps/goldendict/\\\"
++    isEmpty( PREFIX ):PREFIX = /
++    DEFINES += PROGRAM_DATA_DIR=\\\"$$PREFIX/share/goldendict/\\\"
+@@ -66 +66 @@
+-    locale.path = $$PREFIX/share/apps/goldendict/locale/
++    locale.path = $$PREFIX/share/goldendict/locale/

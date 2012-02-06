@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "email-validate";
-  version = "0.2.7";
-  sha256 = "13zam197ph431f351g8srsxwqchjdwx1c1bizmildsc1zxm2nm3q";
+  version = "0.2.8";
+  sha256 = "04cz1nm1zkb46kdxs43pmkxli2xm5nqlh951nn0mdgy6hqhkpkqd";
   buildDepends = [ parsec ranges ];
   meta = {
     homepage = "http://porg.es/blog/email-address-validation-simpler-faster-more-correct";

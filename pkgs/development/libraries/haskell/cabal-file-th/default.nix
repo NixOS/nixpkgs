@@ -4,6 +4,7 @@ cabal.mkDerivation (self: {
   pname = "cabal-file-th";
   version = "0.2.1";
   sha256 = "0nczwicgf6kx3lk5m7wqf1wj6ghn8jfx112dzh7jh4f4xs66nsd1";
+  patchPhase = "sed -i cabal-file-th.cabal -e 's|Cabal >= 1.10 && < 1.13|Cabal|'";
   meta = {
     homepage = "http://github.com/nkpart/cabal-file-th";
     description = "Template Haskell expressions for reading fields from a project's cabal file";

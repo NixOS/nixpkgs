@@ -11,6 +11,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     Chart cmdargs colour hledger hledgerLib HUnit safe time
   ];
+  patchPhase = ''
+    sed -i hledger-chart.cabal -e 's|Chart >= 0.11 && < 0.15|Chart|g'
+  '';
   meta = {
     homepage = "http://hledger.org";
     description = "A pie chart image generator for the hledger accounting tool";
