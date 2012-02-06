@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HaskellForMaths";
-  version = "0.4.1";
-  sha256 = "0jwdxz5wqayx196giv7nj5j0k9zw50x555ig6xj00cladvplvh9h";
+  version = "0.4.3";
+  sha256 = "00s502h3pw9i464qn6cn74ihghcnn5gsar891q276ld682m5vdns";
   buildDepends = [ random ];
   meta = {
     homepage = "http://haskellformaths.blogspot.com/";
