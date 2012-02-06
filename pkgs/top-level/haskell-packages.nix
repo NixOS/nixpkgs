@@ -1325,7 +1325,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   terminfo = callPackage ../development/libraries/haskell/terminfo {};
 
-  testFramework = callPackage ../development/libraries/haskell/test-framework {};
+  testFramework_0_4_2_2 = callPackage ../development/libraries/haskell/test-framework/0.4.2.2.nix {};
+  testFramework_0_5 = callPackage ../development/libraries/haskell/test-framework/0.5.nix {};
+  testFramework = self.testFramework_0_5;
 
   testFrameworkHunit = callPackage ../development/libraries/haskell/test-framework-hunit {};
 
