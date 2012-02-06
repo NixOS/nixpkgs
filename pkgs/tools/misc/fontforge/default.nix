@@ -28,6 +28,9 @@ stdenv.mkDerivation {
       --replace /usr/include /no-such-path \
       --replace /usr/lib /no-such-path \
       --replace /usr/local /no-such-path \
+
+
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lz"
   '';
 
   buildInputs =
