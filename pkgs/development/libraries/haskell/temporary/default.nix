@@ -9,5 +9,9 @@ cabal.mkDerivation (self: {
     description = "Portable temporary file and directory support for Windows and Unix, based on code from Cabal";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
