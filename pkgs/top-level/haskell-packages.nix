@@ -1319,6 +1319,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   tagsoup_0_10_1 = callPackage ../development/libraries/haskell/tagsoup/0.10.1nix {};
 
+  temporary = callPackage ../development/libraries/haskell/temporary {};
+
   Tensor = callPackage ../development/libraries/haskell/Tensor {};
 
   terminfo = callPackage ../development/libraries/haskell/terminfo {};
