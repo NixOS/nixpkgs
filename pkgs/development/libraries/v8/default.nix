@@ -5,14 +5,14 @@ assert readline != null;
 let
   system = stdenv.system;
   arch = if system == "i686-linux" then "ia32" else if system == "x86_64-linux" then "x64" else "";
-  version = "3.6.6.17";
+  version = "3.6.6.20";
 in
 assert system == "i686-linux" || system == "x86_64-linux";
 stdenv.mkDerivation rec {
     name = "v8-${version}";
     src = fetchsvn {
       url = "http://v8.googlecode.com/svn/tags/${version}";
-      sha256 = "7080d53b9d3aefc591c2e181dcf97d538ce36177284fc658eca6420ea36a926f";
+      sha256 = "68565086baa5a37a0fa15e1c0b7914210fa590b29a8196014cd83789da6a01ba";
     };
 
     buildInputs = [python scons readline makeWrapper];
