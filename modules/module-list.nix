@@ -70,6 +70,7 @@
   ./services/hardware/acpid.nix
   ./services/hardware/bluetooth.nix
   ./services/hardware/hal.nix
+  ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/sane.nix
   ./services/hardware/udev.nix
