@@ -1,16 +1,14 @@
 { stdenv, fetchurl, openssl, curl }:
 
 stdenv.mkDerivation {
-  name = "esniper-2.26.0";
+  name = "esniper-2.27.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/esniper/esniper-2-26-0.tgz";
-    sha256 = "5fd9a0f4b27b98deca303cd3d16c1ed060e05a165a40b2f4a9f8546db5e3877d";
+    url = "mirror://sourceforge/esniper/esniper-2-27-0.tgz";
+    sha256 = "0ca9946395be8958d3eb28c9abc4a1a4d4c9134e4b6b3c3816f4631e3be25c02";
   };
 
   buildInputs = [openssl curl];
-
-  patches = [ ./fix-build-with-latest-curl.patch ];
 
   postInstall = ''
     sed -e  "2i export PATH=\"$out/bin:\$PATH\"" <"frontends/snipe" >"$out/bin/snipe"
