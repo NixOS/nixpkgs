@@ -1,6 +1,8 @@
 { config, pkgs, serverInfo, ... }:
 
 let
+  extraWorkersProperties = pkgs.lib.optionalString (config ? extraWorkersProperties) config.extraWorkersProperties;
+  
   workersProperties = pkgs.writeText "workers.properties" ''
 # Define list of workers that will be used
 # for mapping requests
@@ -22,6 +24,8 @@ worker.loadbalancer.balance_workers=node1
 
 # Status worker for managing load balancer
 worker.status.type=status
+
+${extraWorkersProperties}
   '';
 in
 {
