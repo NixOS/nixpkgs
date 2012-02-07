@@ -3940,4 +3940,12 @@ rec {
     };
   };
 
+  YAMLLibYAML = buildPerlPackage rec {
+    name = "YAML-LibYAML-0.38";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/YAML/${name}.tar.gz";
+      sha256 = "eb98f304d14f6557b07adfa24da16e00cfa54a9d9484b6e898e35f919c5eb7ba";
+    };
+  };
+
 }
