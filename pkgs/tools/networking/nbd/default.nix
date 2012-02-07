@@ -11,14 +11,13 @@ stdenv.mkDerivation {
     sha256 = "179548406aa2bcb0c6bff3aa0484dbb04136ec055aa385c84fefbe3c9ea96ba4";
   };
 
-  buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional stdenv.isLinux stdenv.glibc.kernelHeaders;
-  postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
-
   patches = [ ./0001-properly-check-for-HAVE_FALLOC_PH-in-both-occurrence.patch ];
 
-  # The test suite doesn't succeed on Hydra (NixOS), because it assumes
-  # that certain global configuration files available.
-  doCheck = false;
+  buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional stdenv.isLinux stdenv.glibc.kernelHeaders;
+
+  postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
+
+  doCheck = true;
 
   meta = {
     homepage = "http://nbd.sourceforge.net";
