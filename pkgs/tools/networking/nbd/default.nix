@@ -20,10 +20,6 @@ stdenv.mkDerivation {
   # that certain global configuration files available.
   doCheck = false;
 
-  # Glib calls `clock_gettime', which is in librt.  Since we're using
-  # a static Glib, we need to pass it explicitly.
-  NIX_LDFLAGS = "-lrt";
-
   meta = {
     homepage = "http://nbd.sourceforge.net";
     description = "map arbitrary files as block devices over the network";
