@@ -380,7 +380,7 @@ rec {
       sha256 = "19iasq94nph33vz4jrk5x6cqd9ivq0db867s524faba8avrrlxz9";
     };
     buildInputs = [ TestMore TestException TestRequires DBDSQLite ];
-    propagatedBuildInputs = 
+    propagatedBuildInputs =
       [ DBIxClass CatalystRuntime CatalystXComponentTraits Moose MooseXTypes
         NamespaceAutoclean CarpClan ListMoreUtils TieIxHash TryTiny
         CatalystDevel DBIxClassSchemaLoader MooseXNonMoose
@@ -562,7 +562,7 @@ rec {
       url = "mirror://cpan/modules/by-module/CatalystX/${name}.tar.gz";
       sha256 = "0a2mhfgv0kqmaxf2crs8mqk44lyhd9qcwlpzhrc0b0dh4z503mr4";
     };
-    propagatedBuildInputs = 
+    propagatedBuildInputs =
       [ CatalystRuntime MooseXTraitsPluggable NamespaceAutoclean ListMoreUtils ];
   };
 
@@ -1134,7 +1134,7 @@ rec {
       sha256 = "15k1kgbrsnkwr0ib6cyr114zk904lisy4k09gfiynag9wjhv47lm";
     };
     buildInputs = [ DBDSQLite TestException TestWarn ];
-    propagatedBuildInputs = 
+    propagatedBuildInputs =
       [ PackageStash ClassAccessorGrouped ClassC3Componentised
         ClassInspector ConfigAny ContextPreserve DBI DataCompare
         DataDumperConcise DataPage HashMerge MROCompat ModuleFind
@@ -1169,7 +1169,7 @@ rec {
       sha256 = "0qrsh6i8p4mpx5bapn40cpsbvnvzivli71gymbiqjd0mjflbsjf6";
     };
     buildInputs = [ TestException TestMore TestWarn DBDSQLite ];
-    propagatedBuildInputs = 
+    propagatedBuildInputs =
       [ DataDump LinguaENInflectNumber LinguaENInflectPhrase
         ClassAccessor ClassAccessorGrouped ClassC3Componentised
         MROCompat CarpClan DBIxClass ClassLoad ClassUnload
@@ -1299,8 +1299,8 @@ rec {
       sha256 = "0z4nl7aizbailraqwkkqhx6k3hdz67wxszjfhd5yg2vn06ybsjwj";
     };
     buildInputs = [ TestMore ];
-    propagatedBuildInputs = 
-      [ CaptureTiny EmailAbstract EmailAddress ListMoreUtils Moose 
+    propagatedBuildInputs =
+      [ CaptureTiny EmailAbstract EmailAddress ListMoreUtils Moose
         Throwable TryTiny
       ];
   };
@@ -1389,10 +1389,10 @@ rec {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
       sha256 = "0fwhb2cf5x7y87xwml66p624iynf0mzvhy1q4aq5yv7l3lhwhaby";
     };
-    propagatedBuildInputs = 
+    propagatedBuildInputs =
       [ ParseCPANMeta version JSONPP CPANMetaYAML CPANMeta
-        FileCopyRecursive VersionRequirements ExtUtilsManifest 
-      ]; 
+        FileCopyRecursive VersionRequirements ExtUtilsManifest
+      ];
   };
 
   ExtUtilsManifest = buildPerlPackage rec {
@@ -2088,7 +2088,7 @@ rec {
       sha256 = "1l7sjnibnvgb7a73cjhysmrg4j2bfcn0x5yrqmh0v23laj9fsbbm";
     };
     buildInputs = [ TestMore ];
-    propagatedBuildInputs = 
+    propagatedBuildInputs =
       [ LinguaENInflect LinguaENInflectNumber LinguaENTagger ];
   };
 
@@ -2415,7 +2415,7 @@ rec {
       sha256 = "0gv79bsnacrzwpac3dll64zj40qcsbp4kdk8yr9z5bwim7nkvnv3";
     };
     buildInputs =[ TestException ];
-    propagatedBuildInputs = 
+    propagatedBuildInputs =
       [ ClassMOP Moose NamespaceAutoclean ListMoreUtils ];
   };
 
@@ -3012,7 +3012,7 @@ rec {
       sha256 = "12abz50zz51s1f5hvs5xl6smb369sjid1zyjkfygkiglqp4an0kr";
     };
     buildInputs = [ TestDeep TestException TestWarn ];
-    propagatedBuildInputs = 
+    propagatedBuildInputs =
       [ ClassAccessorGrouped GetoptLongDescriptive HashMerge ];
   };
 
@@ -3117,7 +3117,7 @@ rec {
       url = "mirror://cpan/modules/by-module/String/${name}.tar.gz";
       sha256 = "1rmldr7jf4jvkhzlv8hgp48lrmybvinmhv8kcnrpa8las0ijm4vm";
     };
-    propagatedBuildInputs = 
+    propagatedBuildInputs =
       [ LinguaENInflectPhrase TextUnidecode NamespaceClean ];
   };
 
