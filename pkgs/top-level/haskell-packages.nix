@@ -1061,9 +1061,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pathPieces_0_1_0 = callPackage ../development/libraries/haskell/path-pieces/0.1.0.nix {};
   pathPieces = self.pathPieces_0_1_0;
 
-  pandoc = callPackage ../development/libraries/haskell/pandoc {
-    testFramework = self.testFramework_0_4_2_2;
-  };
+  pandoc = callPackage ../development/libraries/haskell/pandoc {};
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
@@ -1327,9 +1325,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   terminfo = callPackage ../development/libraries/haskell/terminfo {};
 
-  testFramework_0_4_2_2 = callPackage ../development/libraries/haskell/test-framework/0.4.2.2.nix {};
-  testFramework_0_5 = callPackage ../development/libraries/haskell/test-framework/0.5.nix {};
-  testFramework = self.testFramework_0_5;
+  testFramework = callPackage ../development/libraries/haskell/test-framework {};
 
   testFrameworkHunit = callPackage ../development/libraries/haskell/test-framework-hunit {};
 
