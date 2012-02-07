@@ -6715,6 +6715,8 @@ let
 
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
+    calfw = callPackage ../applications/editors/emacs-modes/calfw { };
+
     cua = callPackage ../applications/editors/emacs-modes/cua { };
 
     ecb = callPackage ../applications/editors/emacs-modes/ecb { };
