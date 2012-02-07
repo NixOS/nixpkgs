@@ -166,6 +166,7 @@ rec {
     halt -d -p -f
   '';
 
+  
   initrd = makeInitrd {
     contents = [
       { object = stage1Init;
@@ -1153,23 +1154,23 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
     };
 
-    ubuntu1010i386 = {
-      name = "ubuntu-10.04-maverick-i386";
-      fullName = "Ubuntu 10.04 Maverick (i386)";
+    ubuntu1110i386 = {
+      name = "ubuntu-11.10-oneiric-i386";
+      fullName = "Ubuntu 11.10 Oneiric (i386)";
       packagesList = fetchurl {
-        url = mirror://ubuntu/dists/maverick/main/binary-i386/Packages.bz2;
-        sha256 = "1qjs4042y03bxbxwjs3pgrs99ba6vqvjaaz6zhaxxaqj1r12dwa0";
+        url = mirror://ubuntu/dists/oneiric/main/binary-i386/Packages.bz2;
+        sha256 = "11r1s76ppi7rwz08i20d7n4ndaj9lb9wsl9k8ww4s1c6agzpwv8a";
       };
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
  
-    ubuntu1010x86_64 = {
-      name = "ubuntu-10.04-maverick-amd64";
-      fullName = "Ubuntu 10.04 Maverick (amd64)";
+    ubuntu1110x86_64 = {
+      name = "ubuntu-11.10-oneiric-amd64";
+      fullName = "Ubuntu 11.10 Oneiric (amd64)";
       packagesList = fetchurl {
-        url = mirror://ubuntu/dists/maverick/main/binary-amd64/Packages.bz2;
-        sha256 = "1p0i4gp1bxd3zvckgnh1hx4vfc23rfgzd19dk5rmi61lzbzzqbgc";
+        url = mirror://ubuntu/dists/oneiric/main/binary-amd64/Packages.bz2;
+        sha256 = "07k784gxwaqmyggmzczy9hjkgfp6p6dcs8rhkxw5hfzn0jaf8l2s";
       };
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
