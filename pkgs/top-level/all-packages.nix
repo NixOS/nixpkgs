@@ -8139,7 +8139,7 @@ let
 
   gnome3 = (import ../desktops/gnome-3 {
     callPackage = pkgs.newScope pkgs.gnome3;
-  } // pkgs.gtkLibs3x);
+  });
 
   gnome = recurseIntoAttrs gnome2;
 
