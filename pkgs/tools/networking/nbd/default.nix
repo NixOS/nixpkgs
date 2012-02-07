@@ -17,7 +17,8 @@ stdenv.mkDerivation {
 
   postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
 
-  doCheck = true;
+  # The test suite doesn't succeed on Hydra.
+  doCheck = false;
 
   meta = {
     homepage = "http://nbd.sourceforge.net";
