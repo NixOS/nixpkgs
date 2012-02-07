@@ -6874,7 +6874,7 @@ let
     inherit (gnome) libIDL;
   };
 
-  firefox11Wrapper = wrapFirefox { browser = firefox11Pkgs.firefox; };
+  firefox11Wrapper = lowPrio (wrapFirefox { browser = firefox11Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
