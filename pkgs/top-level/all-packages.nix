@@ -6733,6 +6733,8 @@ let
       # Requires Emacs 23, for `avl-tree'.
     };
 
+    js2 = callPackage ../applications/editors/emacs-modes/js2 { };
+
     stratego = callPackage ../applications/editors/emacs-modes/stratego { };
 
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
