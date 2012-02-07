@@ -7157,6 +7157,7 @@ let
   libreoffice = callPackage ../applications/office/openoffice/libreoffice.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
+    force = getConfig [ "libreoffice" "force" ] false;
   };
 
   lingot = callPackage ../applications/audio/lingot {
