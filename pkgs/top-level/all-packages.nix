@@ -3731,32 +3731,15 @@ let
 
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
 
-  gtk = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+  gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+
+  gtk = pkgs.gtk2;
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
 
-  gtkLibs3x = let callPackage = newScope pkgs.gtkLibs3x; in {
-    glib = callPackage ../development/libraries/glib/2.30.x.nix { };
+  pango129 = lowPrio (callPackage ../development/libraries/pango/1.29.x.nix { });
 
-    glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
-
-    gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
-
-    atk = callPackage ../development/libraries/atk/2.2.x.nix { };
-
-    atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
-
-    cairo = callPackage ../development/libraries/cairo { };
-
-    pango = callPackage ../development/libraries/pango/1.29.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/3.2.x.nix { };
-
-    gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
-
-    # Let hydra build gtk-3.x but do not show this to users yet
-    recurseForRelease = true;
-  };
+  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     inherit (gnome) gtk;
