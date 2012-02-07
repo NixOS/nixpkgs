@@ -4,12 +4,12 @@
 # that would be nice
 
 stdenv.mkDerivation rec {
-  name = "calfw-1.3";
+  name = "calfw-1.3-5-ga9b6615";
 
   src = fetchgit {
     url = "git://github.com/kiwanami/emacs-calfw.git";
-    rev = "e3408d8d1f4dd6d1e76883d728efc62bba41ee7a";
-    sha256 = "1b9c74200aa0b06fcd199f6c2cc91fdfaceb04e7744fe842e1fe4839c0c933f3";
+    rev = "a9b6615b6666bbebe78257c557fd9a2e3a325d8d";
+    sha256 = "524acc8fec7e64ebe0d370ddb1d96eee6a409d650b79011fa910c35225a7f393";
   };
 
   buildInputs = [ emacs ];
