@@ -7089,7 +7089,7 @@ let
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick YAML;
+      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML;
     gitSupport = false;
     monotoneSupport = false;
     extraUtils = [];

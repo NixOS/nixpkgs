@@ -1,10 +1,9 @@
 { stdenv, fetchurl, perl, gettext, makeWrapper, lib, PerlMagick, YAML
 , TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate
 , CGISession, CGIFormBuilder, DBFile, LocaleGettext, RpcXML, XMLSimple
-, gitSupport ? false
-, git ? null
-, monotoneSupport ? false
-, monotone ? null
+, YAMLLibYAML
+, gitSupport ? false, git ? null
+, monotoneSupport ? false, monotone ? null
 , extraUtils ? []
 }:
 
@@ -13,19 +12,19 @@ assert monotoneSupport -> (monotone != null);
 
 let
   name = "ikiwiki";
-  version = "3.20120115";
+  version = "3.20120202";
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
-    sha256 = "3145372b3d86068f90348a96f9daf3a3b438d747be0e977358d82ee752499c1f";
+    sha256 = "0bada9a98e0990c6d99e8ca978e42926578aec36d033d6a273e415349a6cbb48";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
     TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-    RpcXML XMLSimple PerlMagick YAML]
+    RpcXML XMLSimple PerlMagick YAML YAMLLibYAML ]
     ++ stdenv.lib.optionals gitSupport [git]
     ++ stdenv.lib.optionals monotoneSupport [monotone];
 
