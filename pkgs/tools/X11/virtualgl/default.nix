@@ -1,4 +1,5 @@
-{stdenv, fetchurl, mesa, libX11, openssl, libXext, libjpeg_turbo}:
+{ stdenv, fetchurl, mesa, libX11, openssl, libXext
+, libjpeg_turbo, cmake }:
 
 let
   libDir = if stdenv.is64bit then "lib64" else "lib";
@@ -6,21 +7,23 @@ in
 stdenv.mkDerivation {
   name = "virtualgl-2.1.4";
   src = fetchurl {
-    url = mirror://sourceforge/virtualgl/VirtualGL-2.1.4.tar.gz;
-    sha256 = "d455e599620473a07711196615e59c73d08a7f392a9fcf60a6bc05d82809d89d";
+    url = mirror://sourceforge/virtualgl/VirtualGL-2.3.tar.gz;
+    sha256 = "2f00c4eb20b0ae88e957a23fb66882e4ade2faa208abd30aa8c4f61570ecd4b9";
   };
 
-  patches = [ ./xshm.patch ];
+  patches = [ ./xshm.patch ./fixturbopath.patch ];
 
   prePatch = ''
     sed -i s,LD_PRELOAD=lib,LD_PRELOAD=$out/${libDir}/lib, rr/vglrun
   '';
 
-  preInstall =''
+  cmakeFlags = [ "-DTJPEG_LIBRARY=${libjpeg_turbo}/lib/libturbojpeg.so" ];
+
+  preInstall = ''
     export makeFlags="prefix=$out"
   '';
 
-  buildInputs = [ mesa libX11 openssl libXext libjpeg_turbo ];
+  buildInputs = [ cmake mesa libX11 openssl libXext libjpeg_turbo ];
 
   meta = {
     homepage = http://www.virtualgl.org/;

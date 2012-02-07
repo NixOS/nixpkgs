@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     bktrees extensibleExceptions fgl graphviz pandoc random text time
   ];
+  patchPhase = ''
+    sed -i Graphalyze.cabal -e 's|pandoc == 1.8.\*|pandoc|'
+  '';
   meta = {
     description = "Graph-Theoretic Analysis library";
     license = "unknown";

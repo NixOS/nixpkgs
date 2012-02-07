@@ -137,12 +137,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;         # 7.4.1 ok
     fgl          = self.fgl_5_4_2_4;            # 7.4.1 ok
-    GLUT         = self.GLUT_2_1_2_1;           # 7.4.1 fails
-    haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 fails
+    GLUT         = self.GLUT_2_3_0_0;           # 7.4.1 ok
+    haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 ok
     html         = self.html_1_0_1_2;           # 7.4.1 ok
     HUnit        = self.HUnit_1_2_2_3;          # 7.4.1 ok
     network      = self.network_2_3_0_10;       # 7.4.1 ok
-    OpenGL       = self.OpenGL_2_2_3_0;         # 7.4.1 fails
+    OpenGL       = self.OpenGL_2_5_0_0;         # 7.4.1 ok
     parallel     = self.parallel_3_2_0_2;       # 7.4.1 ok
     parsec       = self.parsec_3_1_2;           # 7.4.1 ok
     QuickCheck   = self.QuickCheck_2_4_2;       # 7.4.1 ok
@@ -160,7 +160,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     random       = self.random_1_0_1_1;         # 7.4.1 ok
     cabalInstall = self.cabalInstall_0_10_2;    # 7.4.1 fails
     alex         = self.alex_3_0_1;             # 7.4.1 ok
-    happy        = self.happy_1_18_8;           # 7.4.1 fails
+    happy        = self.happy_1_18_9;           # 7.4.1 ok
     haddock      = self.haddock_2_9_2;          # 7.4.1 fails
   };
 
@@ -738,8 +738,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   GLUT_2_2_2_1 = callPackage ../development/libraries/haskell/GLUT/2.2.2.1.nix {
     OpenGL = self.OpenGL_2_4_0_2;
   };
+  GLUT_2_3_0_0 = callPackage ../development/libraries/haskell/GLUT/2.3.0.0.nix {
+    OpenGL = self.OpenGL_2_5_0_0;
+  };
   GLUT22 = self.GLUT_2_2_2_1;
-  GLUT = self.GLUT_2_1_1_2;
+  GLUT = self.GLUT_2_3_0_0;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs.gtkLibs) gtk;
@@ -1048,8 +1051,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {};
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {};
   OpenGL_2_4_0_2 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.2.nix {};
+  OpenGL_2_5_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.5.0.0.nix {};
   OpenGL24 = self.OpenGL_2_4_0_2;
-  OpenGL = self.OpenGL_2_2_1_1;
+  OpenGL = self.OpenGL_2_5_0_0;
 
   OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
 
@@ -1057,7 +1061,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pathPieces_0_1_0 = callPackage ../development/libraries/haskell/path-pieces/0.1.0.nix {};
   pathPieces = self.pathPieces_0_1_0;
 
-  pandoc = callPackage ../development/libraries/haskell/pandoc {};
+  pandoc = callPackage ../development/libraries/haskell/pandoc {
+    testFramework = self.testFramework_0_4_2_2;
+  };
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
@@ -1315,11 +1321,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   tagsoup_0_10_1 = callPackage ../development/libraries/haskell/tagsoup/0.10.1nix {};
 
+  temporary = callPackage ../development/libraries/haskell/temporary {};
+
   Tensor = callPackage ../development/libraries/haskell/Tensor {};
 
   terminfo = callPackage ../development/libraries/haskell/terminfo {};
 
-  testFramework = callPackage ../development/libraries/haskell/test-framework {};
+  testFramework_0_4_2_2 = callPackage ../development/libraries/haskell/test-framework/0.4.2.2.nix {};
+  testFramework_0_5 = callPackage ../development/libraries/haskell/test-framework/0.5.nix {};
+  testFramework = self.testFramework_0_5;
 
   testFrameworkHunit = callPackage ../development/libraries/haskell/test-framework-hunit {};
 
@@ -1573,7 +1583,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
   happy_1_18_6 = callPackage ../development/tools/parsing/happy/1.18.6.nix {};
   happy_1_18_8 = callPackage ../development/tools/parsing/happy/1.18.8.nix {};
-  happy = self.happy_1_18_8;
+  happy_1_18_9 = callPackage ../development/tools/parsing/happy/1.18.9.nix {};
+  happy = self.happy_1_18_9;
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 

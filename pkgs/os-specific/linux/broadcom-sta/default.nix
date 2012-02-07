@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ kernel ];
-  patches = [ ./makefile.patch ];
+  patches = [ ./makefile.patch ./linux-2.6.39.patch ./linux-3.2.patch ];
     #++ stdenv.lib.optional
     #(! builtins.lessThan (builtins.compareVersions kernel.version "2.6.37") 0)
       #[ ./mutex-sema.patch ];

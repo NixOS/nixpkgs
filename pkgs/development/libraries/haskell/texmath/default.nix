@@ -2,14 +2,14 @@
 
 cabal.mkDerivation (self: {
   pname = "texmath";
-  version = "0.5.0.4";
-  sha256 = "0wi7zix10p73hb8aiyq47d27k5hi0l0ba5p6h7kdbhia9xm5w5w5";
+  version = "0.6.0.1";
+  sha256 = "0q39a83g7kcj9qpnjg0v7pd0b4w9i090nl2s9v8lpv4n46z6cyaq";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ parsec syb xml ];
   meta = {
     homepage = "http://github.com/jgm/texmath";
-    description = "Conversion of LaTeX math formulas to MathML";
+    description = "Conversion of LaTeX math formulas to MathML or OMML";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
     maintainers = [

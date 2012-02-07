@@ -1,0 +1,11 @@
+--- old/src/wl/sys/wl_cfg80211.c
++++ new/src/wl/sys/wl_cfg80211.c
+@@ -1811,7 +1811,7 @@
+ 	notif_bss_info->frame_len = offsetof(struct ieee80211_mgmt, u.beacon.variable) +
+ 	                            wl_get_ielen(wl);
+ 	freq = ieee80211_channel_to_frequency(notif_bss_info->channel 
+-#if LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 39)
+ 		,(notif_bss_info->channel <= CH_MAX_2G_CHANNEL) ? IEEE80211_BAND_2GHZ : IEEE80211_BAND_5GHZ
+ #endif
+ 	);

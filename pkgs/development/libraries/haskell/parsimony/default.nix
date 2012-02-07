@@ -1,10 +1,10 @@
-{ cabal, utf8String }:
+{ cabal, text }:
 
 cabal.mkDerivation (self: {
   pname = "parsimony";
-  version = "1.1";
-  sha256 = "0476zmsjyjf58lh85806baqblq8hjxcrrnqc6ddxxq17lmvsd5ic";
-  buildDepends = [ utf8String ];
+  version = "1.3";
+  sha256 = "0vbayvk989m85qfxxls74rn0v8ylb5l7lywp30sw2wybvi4r08lg";
+  buildDepends = [ text ];
   meta = {
     description = "Monadic parser combinators derived from Parsec";
     license = self.stdenv.lib.licenses.bsd3;

@@ -1,0 +1,11 @@
+--- bumblebee-3.0/src/bbsecondary.c.orig	2012-02-05 00:03:06.003439638 +0100
++++ bumblebee-3.0/src/bbsecondary.c	2012-02-05 00:46:38.017382619 +0100
+@@ -149,6 +149,8 @@
+       "-sharevts",
+       "-nolisten", "tcp",
+       "-noreset",
++      "-xkbdir", getenv("XKB_DIR"),
++      "-logfile", "/dev/null",
+       "-verbose", "3",
+       "-isolateDevice", pci_id,
+       "-modulepath",

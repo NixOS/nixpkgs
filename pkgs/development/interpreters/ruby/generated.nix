@@ -3,6 +3,7 @@
 g: # Get dependencies from patched gems
 {
   aliases = {
+    ZenTest = g.ZenTest_4_5_0;
     actionmailer = g.actionmailer_3_2_1;
     actionpack = g.actionpack_3_2_1;
     activemodel = g.activemodel_3_2_1;
@@ -11,6 +12,7 @@ g: # Get dependencies from patched gems
     activesupport = g.activesupport_3_2_1;
     arel = g.arel_3_0_0;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_1;
+    autotest_rails = g.autotest_rails_4_1_1;
     builder = g.builder_3_0_0;
     buildr = g.buildr_1_4_6;
     bundler = g.bundler_1_0_21;
@@ -49,7 +51,7 @@ g: # Get dependencies from patched gems
     rspec_mocks = g.rspec_mocks_2_1_0;
     rubyforge = g.rubyforge_2_0_4;
     rubyzip = g.rubyzip_0_9_5;
-    sass = g.sass_3_1_12;
+    sass = g.sass_3_1_13;
     selenium_webdriver = g.selenium_webdriver_2_18_0;
     sprockets = g.sprockets_2_1_2;
     thor = g.thor_0_14_6;
@@ -58,8 +60,36 @@ g: # Get dependencies from patched gems
     tzinfo = g.tzinfo_0_3_31;
     xml_simple = g.xml_simple_1_0_12;
   };
-  gem_nix_args = [ ''buildr'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
+  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
   gems = {
+    ZenTest_4_5_0 = {
+      basename = ''ZenTest'';
+      meta = {
+        description = ''ZenTest provides 4 different tools: zentest, unit_diff, autotest, and multiruby'';
+        homepage = ''http://www.zenspider.com/ZSS/Products/ZenTest/'';
+        longDescription = ''ZenTest provides 4 different tools: zentest, unit_diff, autotest, and
+multiruby.
+
+ZenTest scans your target and unit-test code and writes your missing
+code based on simple naming rules, enabling XP at a much quicker
+pace. ZenTest only works with Ruby and Test::Unit. Nobody uses this
+tool anymore but it is the package namesake, so it stays.
+
+unit_diff is a command-line filter to diff expected results from
+actual results and allow you to quickly see exactly what is wrong.
+
+autotest is a continous testing facility meant to be used during
+development. As soon as you save a file, autotest will run the
+corresponding dependent tests.
+
+multiruby runs anything you want on multiple versions of ruby. Great
+for compatibility checking! Use multiruby_setup to manage your
+installed versions.'';
+      };
+      name = ''ZenTest-4.5.0'';
+      requiredGems = [  ];
+      sha256 = ''05iam95wqafz4c890b17w7ahp9i4jbz4hsw6304p9zbsaq7d7h1h'';
+    };
     actionmailer_3_2_1 = {
       basename = ''actionmailer'';
       meta = {
@@ -165,6 +195,18 @@ database compatibility and query generation.'';
       name = ''atoulme-Antwrap-0.7.1'';
       requiredGems = [ g.rjb_1_3_9 ];
       sha256 = ''0r9jy2asyma8h0878nhjfbi00qvb4yapc8glngvmkkj21zbx2mfy'';
+    };
+    autotest_rails_4_1_1 = {
+      basename = ''autotest_rails'';
+      meta = {
+        description = ''This is an autotest plugin to provide rails support'';
+        homepage = ''https://github.com/seattlerb/autotest-rails'';
+        longDescription = ''This is an autotest plugin to provide rails support. It provides basic
+rails support and extra plugins for migrations and fixtures.'';
+      };
+      name = ''autotest-rails-4.1.1'';
+      requiredGems = [ g.ZenTest_4_5_0 ];
+      sha256 = ''09i6mpxibs8yfdcr53nazlxq94yswahz9gdjqdz9srfshcccqbal'';
     };
     builder_2_1_2 = {
       basename = ''builder'';
@@ -777,7 +819,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [  ];
       sha256 = ''1744bds6lc46d1kjfgapf34p2574s70hcyz63877qkry4db2jb54'';
     };
-    sass_3_1_12 = {
+    sass_3_1_13 = {
       basename = ''sass'';
       meta = {
         description = ''A powerful but elegant CSS compiler that makes CSS fun again.'';
@@ -788,9 +830,9 @@ See RDoc for a description of RDoc's markup and basic use.'';
       command line tool or a web-framework plugin.
 '';
       };
-      name = ''sass-3.1.12'';
+      name = ''sass-3.1.13'';
       requiredGems = [  ];
-      sha256 = ''10n2aic53290xsa3y3d63523s8xc78w5q5gqpns6cbljkdwb0ndy'';
+      sha256 = ''0x07yckw9c4d59713midk2n85d3h88fcp147p8nai88gbvrm8b63'';
     };
     selenium_webdriver_2_18_0 = {
       basename = ''selenium_webdriver'';
