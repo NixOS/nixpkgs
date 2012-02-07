@@ -962,6 +962,30 @@ rec {
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
 
+    fedora16i386 = {
+      name = "fedora-16-i386";
+      fullName = "Fedora 16 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/16/Everything/i386/os/repodata/8d5e9b291748d8254e1e66ad2d35bdb7e020d8c2c6a84f928595597b7e546118-primary.xml.gz;
+        sha256 = "8d5e9b291748d8254e1e66ad2d35bdb7e020d8c2c6a84f928595597b7e546118";
+      };
+      urlPrefix = mirror://fedora/linux/releases/16/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+    };
+
+    fedora16x86_64 = {
+      name = "fedora-16-x86_64";
+      fullName = "Fedora 16 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/16/Everything/x86_64/os/repodata/3fffacc6006d9b4782e57f3f11fcb44ab2a1abf6625e4afb4bf6a1e6475dd107-primary.xml.gz;
+        sha256 = "3fffacc6006d9b4782e57f3f11fcb44ab2a1abf6625e4afb4bf6a1e6475dd107";
+      };
+      urlPrefix = mirror://fedora/linux/releases/16/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
