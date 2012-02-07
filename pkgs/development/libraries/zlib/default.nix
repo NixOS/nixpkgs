@@ -1,11 +1,12 @@
 { stdenv, fetchurl, static ? false }:
 
 stdenv.mkDerivation rec {
-  name = "zlib-1.2.5";
+  name = "zlib-1.2.6";
   
   src = fetchurl {
-    url = "http://www.zlib.net/${name}.tar.gz";
-    sha256 = "0n7rlgvjn73pyil3s1l6p77m7wkc809n934rnzxv1b1za4pfar30";
+    urls = [ "http://www.zlib.net/${name}.tar.gz"
+        "http://gentoo.netnitco.net/distfiles/${name}.tar.gz" ];
+    sha256 = "06x6m33ls1606ni7275q5z392csvh18dgs55kshfnvrfal45w8r1";
   };
 
   patches =
