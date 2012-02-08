@@ -706,6 +706,8 @@ let
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
+  fuse_zip = callPackage ../tools/filesystems/fuse-zip { };
+
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
