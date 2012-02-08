@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Ebnf2ps";
-  version = "1.0.9";
-  sha256 = "0c8nbjyar5dqv33vnm3r1f2rbrmwnv1fm41cbgb6fbsf0cp3979w";
+  version = "1.0.10";
+  sha256 = "0xim32bnfapfs53lvmdz2af08rqd15lp5b0rh6yjqm7n1g2061zs";
   isLibrary = false;
   isExecutable = true;
   buildTools = [ happy ];
