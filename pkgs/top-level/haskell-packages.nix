@@ -1566,9 +1566,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
-  ebnf2ps = callPackage ../development/tools/parsing/ebnf2ps {
-    inherit (pkgs) fetchurl;
-  };
+  Ebnf2ps = callPackage ../development/tools/parsing/Ebnf2ps {};
 
   frown = callPackage ../development/tools/parsing/frown {};
 
