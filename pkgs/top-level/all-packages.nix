@@ -4233,6 +4233,8 @@ let
 
   libvorbis = callPackage ../development/libraries/libvorbis { };
 
+  libwebp = callPackage ../development/libraries/libwebp { };
+
   libwmf = callPackage ../development/libraries/libwmf { };
 
   libwpd = callPackage ../development/libraries/libwpd {
