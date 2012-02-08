@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hint";
-  version = "0.3.3.3";
-  sha256 = "0i7d7c2786c13npbb5np3gaidsq4kkajvm3fn2gx8djrhhlrqw5l";
+  version = "0.3.3.4";
+  sha256 = "0pmvhlj9m0s1wvw8ppx1wx879lwzg38bcvhy1ma1d4wnrpq3bhiy";
   buildDepends = [
     extensibleExceptions ghcMtl ghcPaths haskellSrc MonadCatchIOMtl mtl
     random utf8String
