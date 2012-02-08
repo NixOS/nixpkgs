@@ -9,9 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "06x6m33ls1606ni7275q5z392csvh18dgs55kshfnvrfal45w8r1";
   };
 
-  patches =
-    [ ./zlib-LARGEFILE64_SOURCE.patch ]
-    ++ stdenv.lib.optional (stdenv.system == "i686-cygwin") [ ./no-shared.patch ];
+  patches = stdenv.lib.optional (stdenv.system == "i686-cygwin") [ ./no-shared.patch ];
 
   configureFlags = if static then "" else "--shared";
 
