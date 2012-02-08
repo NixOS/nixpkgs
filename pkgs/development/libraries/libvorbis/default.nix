@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, libogg }:
+{ stdenv, fetchurl, libogg, xz }:
 
 stdenv.mkDerivation rec {
-  name = "libvorbis-1.3.2";
+  name = "libvorbis-1.3.3";
   
   src = fetchurl {
-    url = "http://downloads.xiph.org/releases/vorbis/${name}.tar.bz2";
-    sha256 = "159khaa9j0pd4fm554m1igzmrhsa3qbh4n8avihfinwym05vc14z";
+    url = "http://downloads.xiph.org/releases/vorbis/${name}.tar.xz";
+    sha256 = "1gby6hapz9njx4l9g0pndyk4q83z5fgrgc30mfwfgx7bllspsk43";
   };
 
+  buildNativeInputs = [ xz ];
   propagatedBuildInputs = [ libogg ];
 
   meta = {
