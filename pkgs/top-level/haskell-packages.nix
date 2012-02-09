@@ -1564,7 +1564,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Ebnf2ps = callPackage ../development/tools/parsing/Ebnf2ps {};
 
-  frown = callPackage ../development/tools/parsing/frown {};
+  # 2012-02-09: Disabled because upstream site has disappeared. This tool is clearly
+  #             unmaintained, and we should delete it unless anyone complains.
+  # frown = callPackage ../development/tools/parsing/frown {};
 
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix {};
   haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {};
