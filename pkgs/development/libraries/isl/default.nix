@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "isl-0.07"; # CLooG 0.16.3 fails to build with ISL 0.08.
 
   src = fetchurl {
-    url = "http://www.kotnet.org/~skimo/isl/${name}.tar.bz2";
+    urls = [
+        "http://www.kotnet.org/~skimo/isl/${name}.tar.bz2"
+        "ftp://ftp.linux.student.kuleuven.be/pub/people/skimo/isl/${name}.tar.bz2"
+      ];
     sha256 = "0kpxmvhrwwdygqqafqzjf9xiksq7paac2x24g9jhr3f9ajj3zkyx";
   };
 
