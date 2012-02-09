@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.5";
   sha256 = "12jbvq0lp7z5q6g94pv8s5455yydfyh9h2xlr76wqzfh3myvy6fl";
   buildDepends = [ mtl parsec syb ];
+  patchPhase = "sed -i json.cabal -e '1iExtensions: FlexibleInstances'";
   meta = {
     description = "Support for serialising Haskell to and from JSON";
     license = self.stdenv.lib.licenses.bsd3;
