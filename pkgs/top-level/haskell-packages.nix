@@ -1583,7 +1583,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
-  HaRe = callPackage ../development/tools/haskell/HaRe {};
+  # 2012-02-09: Disabled because this package is clearly, and it won't compile with
+  #             any recent version of GHC. We should delete it unless anyone
+  #             complains.
+  # HaRe = callPackage ../development/tools/haskell/HaRe {};
 
   hlint = callPackage ../development/tools/haskell/hlint {};
 
