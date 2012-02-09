@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lnpxcl4z084bvx3jd0pqgr350ljnizpnlwh5vbzjp0iw9jakbxp";
   };
   
-  buildInputs = [ zlib ];
+  propagatedBuildInputs = [ zlib ];
 
   meta = {
     homepage = http://www.nih.at/libzip;
