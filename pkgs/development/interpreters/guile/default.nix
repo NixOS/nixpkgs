@@ -6,7 +6,7 @@
  then coverageAnalysis
  else stdenv.mkDerivation)
 
-rec {
+(rec {
   name = "guile-2.0.5";
 
   src = fetchurl {
@@ -69,3 +69,13 @@ rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+(if stdenv.isFreeBSD
+ then {
+   # XXX: Thread support is currently broken on FreeBSD (namely the
+   # `SCM_I_IS_THREAD' assertion in `scm_spawn_thread' is hit.)
+   configureFlags = [ "--disable-threads" ];
+ }
+ else {}))
