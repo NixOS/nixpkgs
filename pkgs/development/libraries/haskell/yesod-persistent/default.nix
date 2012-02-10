@@ -1,13 +1,11 @@
-{ cabal, failure, persistent, persistentTemplate, transformers
-, yesodCore
-}:
+{ cabal, persistent, persistentTemplate, transformers, yesodCore }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-persistent";
-  version = "0.2.2";
-  sha256 = "0pgvckyn3l9ggw77hmdpxfx5iwdk36fcfx464rqfzdy28agax47c";
+  version = "0.3.1";
+  sha256 = "0pxzwqrq4wr9hdnppi5ri0iip2a8gg2y7lplmhn2791jc001ll7m";
   buildDepends = [
-    failure persistent persistentTemplate transformers yesodCore
+    persistent persistentTemplate transformers yesodCore
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
