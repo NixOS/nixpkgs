@@ -8040,6 +8040,8 @@ let
 
   stardust = callPackage ../games/stardust {};
 
+  stuntrally = callPackage ../games/stuntrally { };
+
   superTux = callPackage ../games/super-tux { };
 
   superTuxKart = callPackage ../games/super-tux-kart {
