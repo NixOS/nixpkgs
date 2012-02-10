@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "th-lift";
-  version = "0.5.4";
-  sha256 = "1ax5rniainbw4lynfng0wv8a6x2cfv7k69n5nv1pwpb4s76am1hi";
+  version = "0.5.5";
+  sha256 = "1zp9alv3nbvra1rscddak3i33c2jnv6g6806h94qbfkq3zbimfi0";
   meta = {
     description = "Derive Template Haskell's Lift class for datatypes";
     license = "unknown";
