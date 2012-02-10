@@ -4,10 +4,10 @@ assert readline != null;
 
 let
   system = stdenv.system;
-  arch = if system == "i686-linux" then "ia32" else if system == "x86_64-linux" then "x64" else "";
+  arch = if system == "i686-linux" then "ia32" else if system == "x86_64-linux" || system == "x86_64-darwin" then "x64" else "";
   version = "3.6.6.20";
 in
-assert system == "i686-linux" || system == "x86_64-linux";
+assert arch != "";
 stdenv.mkDerivation rec {
     name = "v8-${version}";
     src = fetchsvn {
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
       cp -v libv8.* $out/lib
       cp -v d8 $out/bin/d8
       cp -vR include $out/
-      wrapProgram $out/bin/d8 --set LD_LIBRARY_PATH $out/lib
+      wrapProgram $out/bin/d8 --set ${if stdenv.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH"} $out/lib
     '';
 }
