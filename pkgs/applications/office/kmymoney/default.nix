@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, kdelibs, automoc4, kdepimlibs, gettext,
-  shared_mime_info, perl, boost, gpgme, gmpxx, libalkimia, libofx, libical }:
+{ stdenv, fetchurl, cmake, kdelibs, automoc4, kdepimlibs, gettext, pkgconfig
+, shared_mime_info, perl, boost, gpgme, gmpxx, libalkimia, libofx, libical }:
 
 stdenv.mkDerivation rec {
   name = "kmymoney-4.6.1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ kdepimlibs perl boost gpgme gmpxx libalkimia libofx libical ];
-  buildNativeInputs = [ cmake automoc4 gettext shared_mime_info ];
+  buildNativeInputs = [ cmake automoc4 gettext shared_mime_info pkgconfig ];
 
   KDEDIRS = libalkimia;
 
