@@ -1,13 +1,17 @@
-{stdenv, fetchurl, djvulibre, qt4 }:
+{stdenv, fetchurl, djvulibre, qt4, pkgconfig }:
 
-stdenv.mkDerivation {
-	name = "djview4-4.1-2";
+stdenv.mkDerivation rec {
+	name = "djview-4.8";
 	src = fetchurl {
-		url = mirror://sf/djvu/djview4-4.1-2.tar.gz;
-		sha256 = "10k0h892kab3n8xypw6vsnvhwil410hvvqj375pwiss4vlm5isv1";
+		url = "mirror://sourceforge/djvu/${name}.tar.gz";
+		sha256 = "17y8jvbvj98h25qwsr93v24x75famv8d0jbb0h46xjj555y6wx4c";
 	};
 
 	buildInputs = [djvulibre qt4];
+
+  buildNativeInputs = [ pkgconfig ];
+
+  patches = [ ./djview4-qt-4.8.patch ];
 
   passthru = {
     mozillaPlugin = "/lib/netscape/plugins";

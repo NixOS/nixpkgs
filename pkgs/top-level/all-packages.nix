@@ -6624,7 +6624,8 @@ let
 
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
-  djview4 = callPackage ../applications/graphics/djview { };
+  djview = callPackage ../applications/graphics/djview { };
+  djview4 = pkgs.djview;
 
   dmenu = callPackage ../applications/misc/dmenu { };
 
