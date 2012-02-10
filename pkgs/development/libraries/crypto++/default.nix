@@ -1,11 +1,11 @@
 { fetchurl, stdenv, unzip, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "crypto++-5.6.0";
+  name = "crypto++-5.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cryptopp/cryptopp560.zip";
-    sha256 = "1icbk50mr1sqycqbxbqg703m8aamz23ajgl22ychxdahz2sz08mm";
+    url = "mirror://sourceforge/cryptopp/cryptopp561.zip";
+    sha256 = "0s7jhvnfihikqp1iwpdz03fad62xkjxci6jiahrh6f3sn664vrwq";
   };
 
   patches = [ ./pic.patch ]
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   cxxflags = if stdenv.isi686 then "-march=i686" else
-             if stdenv.isx86_64 then "-march=nocona" else
+             if stdenv.isx86_64 then "-march=nocona -fPIC" else
              "";
 
   configurePhase = ''
@@ -35,12 +35,10 @@ stdenv.mkDerivation rec {
       -e '/^CXXFLAGS =/s|-g -O2|-O3|'
   '';
 
-  # Deal with one of the crappiest build system around there.
+  # I add what 'enableParallelBuilding' would add to the make call,
+  # if we were using the generic build phase.
   buildPhase = ''
-    # These guys forgot a file or something.
-    : > modexppc.cpp
-
-    make PREFIX="$out" all cryptopp.dll
+    make PREFIX="$out" all libcryptopp.so -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES
   '';
 
   # TODO: Installing cryptotest.exe doesn't seem to be necessary. We run
@@ -48,11 +46,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir "$out"
     make install PREFIX="$out"
-    cp -v cryptopp.dll "$out/lib/libcryptopp.so"
   '';
 
   doCheck = true;
-  checkPhase = "make test";
+  checkPhase = "LD_LIBRARY_PATH=`pwd` make test";
 
   meta = {
     description = "Crypto++, a free C++ class library of cryptographic schemes";

@@ -152,7 +152,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     stm          = self.stm_2_2_0_1;            # 7.4.1 ok
     syb          = self.syb_0_3_6;              # 7.4.1 ok
     xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
-    zlib         = self.zlib_0_5_3_1;           # 7.4.1 ok
+    zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
     HTTP         = self.HTTP_4000_2_2;          # 7.4.1 ok
     text         = self.text_0_11_1_13;         # 7.4.1 ok
     transformers = self.transformers_0_2_2_0;   # 7.4.1 ok
@@ -632,9 +632,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   downloadCurl = callPackage ../development/libraries/haskell/download-curl { tagsoup = self.tagsoup_0_10_1; };
 
-  DSH = callPackage ../development/libraries/haskell/DSH {
-    json = self.json_0_5;
-  };
+  DSH = callPackage ../development/libraries/haskell/DSH {};
 
   dstring = callPackage ../development/libraries/haskell/dstring {};
 
@@ -927,9 +925,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     WebBitsHtml = self.WebBitsHtml_1_0_1;
   };
 
-  json_0_4_4 = callPackage ../development/libraries/haskell/json/0.4.4.nix {};
-  json_0_5 = callPackage ../development/libraries/haskell/json/0.5.nix {};
-  json = self.json_0_4_4;
+  json = callPackage ../development/libraries/haskell/json {};
 
   jsonEnumerator = callPackage ../development/libraries/haskell/jsonEnumerator {};
 
@@ -1061,9 +1057,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pathPieces_0_1_0 = callPackage ../development/libraries/haskell/path-pieces/0.1.0.nix {};
   pathPieces = self.pathPieces_0_1_0;
 
-  pandoc = callPackage ../development/libraries/haskell/pandoc {
-    testFramework = self.testFramework_0_4_2_2;
-  };
+  pandoc = callPackage ../development/libraries/haskell/pandoc {};
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
@@ -1327,9 +1321,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   terminfo = callPackage ../development/libraries/haskell/terminfo {};
 
-  testFramework_0_4_2_2 = callPackage ../development/libraries/haskell/test-framework/0.4.2.2.nix {};
-  testFramework_0_5 = callPackage ../development/libraries/haskell/test-framework/0.5.nix {};
-  testFramework = self.testFramework_0_5;
+  testFramework = callPackage ../development/libraries/haskell/test-framework {};
 
   testFrameworkHunit = callPackage ../development/libraries/haskell/test-framework-hunit {};
 
@@ -1524,7 +1516,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib_0_5_3_1 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
     inherit (pkgs) zlib;
   };
-  zlib = self.zlib_0_5_3_1;
+  zlib_0_5_3_3 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
+    inherit (pkgs) zlib;
+  };
+  zlib = self.zlib_0_5_3_3;
 
   zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
 
@@ -1567,11 +1562,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
-  ebnf2ps = callPackage ../development/tools/parsing/ebnf2ps {
-    inherit (pkgs) fetchurl;
-  };
+  Ebnf2ps = callPackage ../development/tools/parsing/Ebnf2ps {};
 
-  frown = callPackage ../development/tools/parsing/frown {};
+  # 2012-02-09: Disabled because upstream site has disappeared. This tool is clearly
+  #             unmaintained, and we should delete it unless anyone complains.
+  # frown = callPackage ../development/tools/parsing/frown {};
 
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix {};
   haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {};
@@ -1588,7 +1583,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
-  HaRe = callPackage ../development/tools/haskell/HaRe {};
+  # 2012-02-09: Disabled because this package is clearly, and it won't compile with
+  #             any recent version of GHC. We should delete it unless anyone
+  #             complains.
+  # HaRe = callPackage ../development/tools/haskell/HaRe {};
 
   hlint = callPackage ../development/tools/haskell/hlint {};
 

@@ -2,10 +2,10 @@
 , mp3Support ? true, lame ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
-, vorbisSupport ? false, libvorbis ? null
+, vorbisSupport ? true, libvorbis ? null
 , vpxSupport ? false, libvpx ? null
 , x264Support ? true, x264 ? null
-, xvidSupport ? false, xvidcore ? null
+, xvidSupport ? true, xvidcore ? null
 , faacSupport ? false, faac ? null
 }:
 

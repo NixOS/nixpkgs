@@ -4,23 +4,18 @@
 , alsaLib
 }:
 
-# XXX: ?
-# - checking for alsa >= 1.0.0... no
-# - checking for Wand >= 6.2.8... no
-# - imagemagickBig instead of imagemagick?
-
 assert (gtk != null) -> (pkgconfig != null);
 assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-24.0.92";
+  name = "emacs-24.0.93";
 
   builder = ./builder.sh;
 
   src = fetchurl {
     url = "http://alpha.gnu.org/gnu/emacs/pretest/${name}.tar.gz";
-    sha256 = "0pwps72zj7mm6asly1vdq46dcj3in4qrkb6ss9xq6nbf039nj4w6";
+    sha256 = "4a100accb2f76231aed4dddb32d3725dec131280ad3bdf1b39b52ce337a210fe";
   };
 
   buildInputs = 

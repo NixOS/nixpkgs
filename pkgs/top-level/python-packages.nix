@@ -759,10 +759,10 @@ let pythonPackages = python.modules // rec {
 
 
   matplotlib = buildPythonPackage ( rec {
-    name = "matplotlib-1.0.1";
+    name = "matplotlib-1.1.0";
     src = fetchurl {
       url = "http://downloads.sourceforge.net/matplotlib/${name}.tar.gz";
-      sha256 = "1xksjix227n9hm6jnhlwkdf1yf1zgz18665cisqk8grv6xvn7g43";
+      sha256 = "be37e1d86c65ecacae6683f8805e051e9904e5f2e02bf2b7a34262c46a6d06a7";
     };
 
     doCheck = false;

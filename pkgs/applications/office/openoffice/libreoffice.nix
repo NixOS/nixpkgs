@@ -6,10 +6,13 @@
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2
 , autoconf, openldap, postgresql, bash
 , langs ? [ "en-US" "ca" "ru" "eo" "fr" "nl" "de" "en-GB" ]
+, force ? false
 }:
 
-throw "The expression for libreoffice is still not ready"
-
+if !force then
+  throw ''The expression for libreoffice is still not ready.
+  Set config.libreoffice.force = true; if you want to try it anyway.''
+else
 stdenv.mkDerivation rec {
   name = "libreoffice-3.4.5.2";
 

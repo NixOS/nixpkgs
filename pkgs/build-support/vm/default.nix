@@ -166,6 +166,7 @@ rec {
     halt -d -p -f
   '';
 
+  
   initrd = makeInitrd {
     contents = [
       { object = stage1Init;
@@ -961,6 +962,30 @@ rec {
       packages = commonFedoraPackages ++ [ "cronie" "util-linux-ng" ];
     };
 
+    fedora16i386 = {
+      name = "fedora-16-i386";
+      fullName = "Fedora 16 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/16/Everything/i386/os/repodata/8d5e9b291748d8254e1e66ad2d35bdb7e020d8c2c6a84f928595597b7e546118-primary.xml.gz;
+        sha256 = "8d5e9b291748d8254e1e66ad2d35bdb7e020d8c2c6a84f928595597b7e546118";
+      };
+      urlPrefix = mirror://fedora/linux/releases/16/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+    };
+
+    fedora16x86_64 = {
+      name = "fedora-16-x86_64";
+      fullName = "Fedora 16 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/16/Everything/x86_64/os/repodata/3fffacc6006d9b4782e57f3f11fcb44ab2a1abf6625e4afb4bf6a1e6475dd107-primary.xml.gz;
+        sha256 = "3fffacc6006d9b4782e57f3f11fcb44ab2a1abf6625e4afb4bf6a1e6475dd107";
+      };
+      urlPrefix = mirror://fedora/linux/releases/16/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+    };
+
     opensuse103i386 = {
       name = "opensuse-10.3-i586";
       fullName = "openSUSE 10.3 (i586)";
@@ -1175,6 +1200,28 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
+    ubuntu1110i386 = {
+      name = "ubuntu-11.10-oneiric-i386";
+      fullName = "Ubuntu 11.10 Oneiric (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/oneiric/main/binary-i386/Packages.bz2;
+        sha256 = "11r1s76ppi7rwz08i20d7n4ndaj9lb9wsl9k8ww4s1c6agzpwv8a";
+      };
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+ 
+    ubuntu1110x86_64 = {
+      name = "ubuntu-11.10-oneiric-amd64";
+      fullName = "Ubuntu 11.10 Oneiric (amd64)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/oneiric/main/binary-amd64/Packages.bz2;
+        sha256 = "07k784gxwaqmyggmzczy9hjkgfp6p6dcs8rhkxw5hfzn0jaf8l2s";
+      };
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1220,22 +1267,22 @@ rec {
     };
 
     debian60i386 = {
-      name = "debian-6.0.3-squeeze-i386";
-      fullName = "Debian 6.0.3 Squeeze (i386)";
+      name = "debian-6.0.4-squeeze-i386";
+      fullName = "Debian 6.0.4 Squeeze (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-i386/Packages.bz2;
-        sha1 = "90a55b6bb049d0777d06d5b28a1848b38678426b";
+        sha256 = "5686732aa690d80ba4c390af3f7b9ba3c3c8c17861c89bca3a3694c403d7b7e6";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
         
     debian60x86_64 = {
-      name = "debian-6.0.3-squeeze-amd64";
-      fullName = "Debian 6.0.3 Squeeze (amd64)";
+      name = "debian-6.0.4-squeeze-amd64";
+      fullName = "Debian 6.0.4 Squeeze (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
-        sha1 = "071626063ab0a70f10200e2e27a5c7fae29fa4ad";
+        sha256 = "525f919bb48a4d2d0cb3a4fb5b0d4338e7936f68753ca945358ea1c3792ea7b7";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
