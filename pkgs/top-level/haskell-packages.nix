@@ -1101,9 +1101,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
 
-  persistent = callPackage ../development/libraries/haskell/persistent {
-    pathPieces = self.pathPieces_0_0_0;
-  };
+  persistent = callPackage ../development/libraries/haskell/persistent {};
 
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
 
