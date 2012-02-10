@@ -7178,7 +7178,7 @@ let
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = callPackage ../applications/networking/linphone {
-    inherit (gnome) libglade gtk;
+    inherit (gnome) libglade;
   };
 
   lmms = callPackage ../applications/audio/lmms { };
