@@ -1,15 +1,15 @@
-{ cabal, binary, ConfigFile, gtk, MissingH, mtl, random, zlib }:
+{ cabal, binary, ConfigFile, gtk, mtl, random, zlib }:
 
 cabal.mkDerivation (self: {
   pname = "LambdaHack";
-  version = "0.1.20110918";
-  sha256 = "14zn650x7r65lb76hygz6yiwzbg2rbcyisi7kx2lszrbg0fp8pa9";
-  isLibrary = false;
+  version = "0.2.0";
+  sha256 = "09lgbpwrlw29n797q3k5aafvkg04nd8cw6pi41g914phf7lxzq4c";
+  isLibrary = true;
   isExecutable = true;
-  buildDepends = [ binary ConfigFile gtk MissingH mtl random zlib ];
+  buildDepends = [ binary ConfigFile gtk mtl random zlib ];
   meta = {
     homepage = "http://github.com/kosmikus/LambdaHack";
-    description = "A roguelike game engine in early development";
+    description = "A roguelike game engine in early and very active development";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [
