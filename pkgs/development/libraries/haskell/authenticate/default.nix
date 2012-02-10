@@ -1,18 +1,16 @@
-{ cabal, aeson, attoparsec, base64Bytestring, blazeBuilder
-, caseInsensitive, enumerator, failure, httpEnumerator, httpTypes
-, network, random, RSA, SHA, tagsoup, text, time, tls, transformers
-, unorderedContainers, xmlEnumerator
+{ cabal, aeson, attoparsec, blazeBuilder, blazeBuilderConduit
+, caseInsensitive, conduit, httpConduit, httpTypes, network
+, tagsoup, text, transformers, unorderedContainers, xmlConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "authenticate";
-  version = "0.10.4";
-  sha256 = "0bjxlnc2qf1900ch9cnab26qz6a0vdz5nz1dwrjby1n5xqqzjd7x";
+  version = "1.0.0";
+  sha256 = "0a163dhi69gh6zmi43jidxlaknbk1y0frjlwijdf7fp073rh0p87";
   buildDepends = [
-    aeson attoparsec base64Bytestring blazeBuilder caseInsensitive
-    enumerator failure httpEnumerator httpTypes network random RSA SHA
-    tagsoup text time tls transformers unorderedContainers
-    xmlEnumerator
+    aeson attoparsec blazeBuilder blazeBuilderConduit caseInsensitive
+    conduit httpConduit httpTypes network tagsoup text transformers
+    unorderedContainers xmlConduit
   ];
   meta = {
     homepage = "http://github.com/yesodweb/authenticate";
