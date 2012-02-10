@@ -439,7 +439,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   async = callPackage ../development/libraries/haskell/async {};
 
-  attempt = callPackage ../development/libraries/haskell/attempt {};
+  attempt_0_3_1_1 = callPackage ../development/libraries/haskell/attempt/0.3.1.1.nix {
+    failure = self.failure_0_1_2;
+  };
+  attempt_0_4_0 = callPackage ../development/libraries/haskell/attempt/0.4.0.nix {};
+  attempt = self.attempt_0_4_0;
 
   attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
 
@@ -551,7 +555,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     time = self.time_1_1_3;
   };
 
-  convertibleText = callPackage ../development/libraries/haskell/convertible-text {};
+  convertibleText = callPackage ../development/libraries/haskell/convertible-text {
+    attempt = self.attempt_0_3_1_1;
+  };
 
   continuedFractions = callPackage ../development/libraries/haskell/continued-fractions {};
 
