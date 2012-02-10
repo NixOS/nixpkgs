@@ -4681,6 +4681,8 @@ let
 ##    inherit stdenv fetchurl cmake qt4 telepathy_qt;
 ##  };
 
+  tclap = callPackage ../development/libraries/tclap {};
+
   tcp_wrappers = callPackage ../development/libraries/tcp-wrappers {};
 
   tdb = callPackage ../development/libraries/tdb { };
