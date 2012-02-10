@@ -1511,6 +1511,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
+  yesodRoutes = callPackage ../development/libraries/haskell/yesod-routes {};
+
   yesodStatic = callPackage ../development/libraries/haskell/yesod-static {};
 
   yst = callPackage ../development/libraries/haskell/yst {};
