@@ -592,7 +592,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
-  dataObject = callPackage ../development/libraries/haskell/data-object {};
+  dataObject = callPackage ../development/libraries/haskell/data-object {
+    failure = self.failure_0_1_2;
+  };
 
   dataObjectYaml = callPackage ../development/libraries/haskell/data-object-yaml {};
 
@@ -656,7 +658,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   extensibleExceptions_0_1_1_4 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.4.nix {};
   extensibleExceptions = null; # a core package in recent GHCs
 
-  failure = callPackage ../development/libraries/haskell/failure {};
+  failure_0_1_2 = callPackage ../development/libraries/haskell/failure/0.1.2.nix {};
+  failure_0_2_0 = callPackage ../development/libraries/haskell/failure/0.2.0.nix {};
+  failure = self.failure_0_2_0;
 
   fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
@@ -1471,7 +1475,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
 
-  xmlEnumerator = callPackage ../development/libraries/haskell/xml-enumerator {};
+  xmlEnumerator = callPackage ../development/libraries/haskell/xml-enumerator {
+    failure = self.failure_0_1_2;
+  };
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
