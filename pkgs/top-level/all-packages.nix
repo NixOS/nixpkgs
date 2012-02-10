@@ -7042,8 +7042,7 @@ let
     fltk = fltk13;
   };
 
-  hugin = callPackage ../applications/graphics/hugin {
-  };
+  hugin = callPackage ../applications/graphics/hugin { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
