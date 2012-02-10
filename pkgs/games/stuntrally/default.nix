@@ -1,5 +1,7 @@
 { fetchurl, stdenv, cmake, boost, ogre, myguiSvn, ois, SDL, libvorbis, pkgconfig }:
 
+throw "Stunt Rally needs ogre with cg support at runtime - we have to package nvidia cg"
+
 stdenv.mkDerivation rec {
   name = "stunt-rally-1.4";
 
