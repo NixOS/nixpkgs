@@ -7881,6 +7881,10 @@ let
     guile = guile_1_8;
   };
 
+  bitsnbots = callPackage ../games/bitsnbots {
+    lua = lua5;
+  };
+
   blackshades = callPackage ../games/blackshades { };
 
   blackshadeselite = callPackage ../games/blackshadeselite { };
