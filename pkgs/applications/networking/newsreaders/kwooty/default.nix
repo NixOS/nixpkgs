@@ -5,14 +5,14 @@
 , unrar, p7zip, par2cmdline, coreutils
 }:
 
-let version = "0.8.0";
+let version = "0.8.1";
     name = "kwooty-${version}";
 in stdenv.mkDerivation {
   inherit name;
   
   src = fetchurl {
     url = "mirror://sourceforge/kwooty/${name}.tar.gz";
-    sha256 = "bb50fb9b3d6c973f2abee62cfc11a7086900a4b676c12bf4e0a2adc170a977fc";
+    sha256 = "746ed50ec3c067711932c89dc3ee5527c126f37c6922b3eda49535eb83c245e4";
   };
 
   patches = [ ./searchPath.patch ];
@@ -33,6 +33,6 @@ in stdenv.mkDerivation {
     ];
                   
   meta = with stdenv.lib; {
-    description = "Binary news reader for KDE";
+    description = "Binary news reader of KDE";
   };
 }
