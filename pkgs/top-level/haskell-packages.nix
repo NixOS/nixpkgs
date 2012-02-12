@@ -439,7 +439,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   async = callPackage ../development/libraries/haskell/async {};
 
-  attempt = callPackage ../development/libraries/haskell/attempt {};
+  attempt_0_3_1_1 = callPackage ../development/libraries/haskell/attempt/0.3.1.1.nix {
+    failure = self.failure_0_1_2;
+  };
+  attempt_0_4_0 = callPackage ../development/libraries/haskell/attempt/0.4.0.nix {};
+  attempt = self.attempt_0_4_0;
 
   attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
 
@@ -551,7 +555,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     time = self.time_1_1_3;
   };
 
-  convertibleText = callPackage ../development/libraries/haskell/convertible-text {};
+  convertibleText = callPackage ../development/libraries/haskell/convertible-text {
+    attempt = self.attempt_0_3_1_1;
+  };
 
   continuedFractions = callPackage ../development/libraries/haskell/continued-fractions {};
 
@@ -571,6 +577,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cryptoApi = callPackage ../development/libraries/haskell/crypto-api {};
 
   cryptocipher = callPackage ../development/libraries/haskell/cryptocipher {};
+
+  cryptoConduit = callPackage ../development/libraries/haskell/crypto-conduit {};
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
@@ -592,7 +600,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
-  dataObject = callPackage ../development/libraries/haskell/data-object {};
+  dataObject = callPackage ../development/libraries/haskell/data-object {
+    failure = self.failure_0_1_2;
+  };
 
   dataObjectYaml = callPackage ../development/libraries/haskell/data-object-yaml {};
 
@@ -656,7 +666,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   extensibleExceptions_0_1_1_4 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.4.nix {};
   extensibleExceptions = null; # a core package in recent GHCs
 
-  failure = callPackage ../development/libraries/haskell/failure {};
+  failure_0_1_2 = callPackage ../development/libraries/haskell/failure/0.1.2.nix {};
+  failure_0_2_0 = callPackage ../development/libraries/haskell/failure/0.2.0.nix {};
+  failure = self.failure_0_2_0;
 
   fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
@@ -1089,9 +1101,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
 
-  persistent = callPackage ../development/libraries/haskell/persistent {
-    pathPieces = self.pathPieces_0_0_0;
-  };
+  persistent = callPackage ../development/libraries/haskell/persistent {};
 
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
 
@@ -1471,7 +1481,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
 
-  xmlEnumerator = callPackage ../development/libraries/haskell/xml-enumerator {};
+  xmlEnumerator = callPackage ../development/libraries/haskell/xml-enumerator {
+    failure = self.failure_0_1_2;
+  };
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
@@ -1496,6 +1508,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   yesodJson = callPackage ../development/libraries/haskell/yesod-json {};
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
+
+  yesodRoutes = callPackage ../development/libraries/haskell/yesod-routes {};
 
   yesodStatic = callPackage ../development/libraries/haskell/yesod-static {};
 

@@ -7856,6 +7856,10 @@ let
     guile = guile_1_8;
   };
 
+  bitsnbots = callPackage ../games/bitsnbots {
+    lua = lua5;
+  };
+
   blackshades = callPackage ../games/blackshades { };
 
   blackshadeselite = callPackage ../games/blackshadeselite { };
@@ -8014,6 +8018,8 @@ let
   springLobby = callPackage ../games/spring/spring-lobby.nix { };
 
   stardust = callPackage ../games/stardust {};
+
+  stuntrally = callPackage ../games/stuntrally { };
 
   superTux = callPackage ../games/super-tux { };
 

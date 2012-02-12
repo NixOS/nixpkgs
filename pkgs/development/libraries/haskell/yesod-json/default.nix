@@ -1,14 +1,15 @@
-{ cabal, aeson, attoparsecEnumerator, blazeBuilder, shakespeareJs
-, text, transformers, unorderedContainers, vector, yesodCore
+{ cabal, aeson, attoparsecConduit, blazeBuilder, conduit, safe
+, shakespeareJs, text, transformers, vector, wai, waiExtra
+, yesodCore, yesodRoutes
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-json";
-  version = "0.2.3";
-  sha256 = "0bd75zzxqrarqk8b2v515jv0zbi5x27fmb9cbj3g57l9ig57lqy5";
+  version = "0.3.1";
+  sha256 = "17w82mfl364dc0k1zk1gqas3fyskz2jc50diq71fiw87apslva4v";
   buildDepends = [
-    aeson attoparsecEnumerator blazeBuilder shakespeareJs text
-    transformers unorderedContainers vector yesodCore
+    aeson attoparsecConduit blazeBuilder conduit safe shakespeareJs
+    text transformers vector wai waiExtra yesodCore yesodRoutes
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
