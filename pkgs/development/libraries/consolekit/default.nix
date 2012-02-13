@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig dbus_glib zlib pam glib libX11 polkit expat ];
   patches = [ ./0001-Don-t-daemonize-when-activated.patch
-    ./0002-Don-t-take-bus-name-until-ready.patch ];
+    ./0002-Don-t-take-bus-name-until-ready.patch
+    ./commands.patch  # adds shutdown commands for NixOS to the list of shutdown commands
+  ];
 
   # For console-kit to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_LDFLAGS = "-lgcc_s";
