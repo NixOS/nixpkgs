@@ -2,11 +2,11 @@
 , pkgconfig, fontconfig, libzip, zip, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "freeciv-2.2.7";
+  name = "freeciv-2.3.1";
 
   src = fetchurl {
-    url = "mirror://sf/freeciv/${name}.tar.bz2";
-    sha256 = "993dd1685dad8012225fdf434673515a194fa072b3d5bfb04952a98fb862d319";
+    url = "mirror://sourceforge/freeciv/${name}.tar.bz2";
+    sha256 = "1n3ak0y9hj9kha0r3cdbi8zb47vrgal1jsbblamqgwwwgzy8cri3";
   };
 
   buildInputs = [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype pkgconfig fontconfig libzip zip zlib] ;
