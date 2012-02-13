@@ -1,6 +1,12 @@
-{ stdenv, fetchurl, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype
-, pkgconfig, fontconfig, libzip, zip, zlib }:
+{ stdenv, fetchurl, zlib, bzip2, pkgconfig
+, sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype
+, gtkClient ? false, gtk
+, server ? true, readline }:
 
+let
+  inherit (stdenv.lib) optional optionals;
+  client = sdlClient || gtkClient;
+in
 stdenv.mkDerivation rec {
   name = "freeciv-2.3.1";
 
@@ -9,7 +15,12 @@ stdenv.mkDerivation rec {
     sha256 = "1n3ak0y9hj9kha0r3cdbi8zb47vrgal1jsbblamqgwwwgzy8cri3";
   };
 
-  buildInputs = [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype pkgconfig fontconfig libzip zip zlib] ;
+  buildNativeInputs = [ pkgconfig ];
+
+  buildInputs = [ zlib bzip2 ]
+    ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype ]
+    ++ optional gtkClient gtk
+    ++ optional server readline;
 
   meta = with stdenv.lib; {
     description = "multiplayer (or single player), turn-based strategy game.";
