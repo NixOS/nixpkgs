@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HaRe";
-  version = "0.6.0.1";
-  sha256 = "cd3fa312c7fa6a5f761bbc3ebdbc6300e83ba9e285047acded6269d2164d67f8";
+  version = "0.6.0.2";
+  sha256 = "13mi6z37fszrl97mll4injhq8dyhqzm344x7y2vw8krr5xjj3kw2";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ hint mtl network syb ];

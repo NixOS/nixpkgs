@@ -8179,6 +8179,8 @@ let
 
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
 
+      calligra = callPackage ../applications/office/calligra { };
+
       digikam = callPackage ../applications/graphics/digikam {
         boost = boost147;
       };

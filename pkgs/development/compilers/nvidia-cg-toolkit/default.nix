@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/"
     [ "$system" = "x86_64-linux" ] && cp -v lib64/* "$out/lib/"
     [ "$system" = "i686-linux" ] && cp -v lib/* "$out/lib/"
-    for mandir in man1 man3 manCg manCgFX
+    for mandir in man1 man3 \
+      ${if stdenv.system == "x86_64-linux" then "manCg" else ""} manCgFX
     do
         mkdir -p "$out/share/man/$mandir/"
         cp -v share/man/$mandir/* "$out/share/man/$mandir/"

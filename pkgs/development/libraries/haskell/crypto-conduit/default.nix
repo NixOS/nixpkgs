@@ -10,5 +10,9 @@ cabal.mkDerivation (self: {
     description = "Conduit interface for cryptographic operations (from crypto-api)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

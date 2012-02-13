@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "system-fileio";
-  version = "0.3.4";
-  sha256 = "184f5bb3qhag6cwmk0zc2ldkwnkzbv82pv7hy541j8jqqi5wprih";
+  version = "0.3.5";
+  sha256 = "0d1baliykfpg15bzknx98slr0qa5yjr3va3w8hs02wgx6sp3wsy2";
   buildDepends = [ systemFilepath text time ];
   meta = {
     homepage = "https://john-millikin.com/software/haskell-filesystem/";

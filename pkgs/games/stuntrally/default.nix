@@ -1,6 +1,5 @@
-{ fetchurl, stdenv, cmake, boost, ogre, myguiSvn, ois, SDL, libvorbis, pkgconfig }:
-
-throw "Stunt Rally needs ogre with cg support at runtime - we have to package nvidia cg"
+{ fetchurl, stdenv, cmake, boost, ogre, myguiSvn, ois, SDL, libvorbis, pkgconfig
+, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "stunt-rally-1.4";
@@ -10,7 +9,14 @@ stdenv.mkDerivation rec {
     sha256 = "1am5af4l1qliyrq1183sqvwzqwcjx0v6gkzsxhfmk6ygp7yhw7kq";
   };
 
-  buildInputs = [ cmake boost ogre myguiSvn ois SDL libvorbis pkgconfig ];
+  buildInputs = [ cmake boost ogre myguiSvn ois SDL libvorbis pkgconfig makeWrapper ];
+
+  # I think they suppose cmake should give them OGRE_PLUGIN_DIR defined, but
+  # the cmake code I saw is not ready for that. Therefore, we use the env var.
+  postInstall = ''
+    wrapProgram $out/bin/stuntrally --set OGRE_PLUGIN_DIR ${ogre}/lib/OGRE
+    wrapProgram $out/bin/sr-editor --set OGRE_PLUGIN_DIR ${ogre}/lib/OGRE
+  '';
 
   enableParallelBuilding = true;
 
