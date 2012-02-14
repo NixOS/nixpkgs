@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-i18n";
-  version = "0.0.1";
-  sha256 = "0hnjrds4vhqyd7pda8rciz50kspf01880j93qn6xx610hbqsal3m";
+  version = "0.0.2";
+  sha256 = "1hb144n3fa5qiy3skrmab0qv63fa5vf4vg4ar9hrybmwdksqa410";
   buildDepends = [ parsec shakespeare text ];
   meta = {
     homepage = "http://www.yesodweb.com/book/i18n";
