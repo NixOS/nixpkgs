@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "libmpd";
-  version = "0.7.1";
-  sha256 = "1vahcr1vjpr1wfkifp8ih3fajz1886zhc3cj643f7s3im7wjzw5j";
+  version = "0.7.2";
+  sha256 = "109bm5fgwmydh3bi93wxr6ac3gkp7pcvp4a8z226c1wlgc995zap";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl network time utf8String ];
