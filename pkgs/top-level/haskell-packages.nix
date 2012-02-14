@@ -119,8 +119,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   # This is the Cabal builder, the function we use to build most Haskell
-  # packages. It isn't the Cabal library, which is a core package of GHC
-  # and therefore not separately listed here.
+  # packages. It isn't the Cabal library, which is spelled "Cabal".
 
   cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {
     enableLibraryProfiling = enableLibraryProfiling;
@@ -504,6 +503,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   bytestringMmap = callPackage ../development/libraries/haskell/bytestring-mmap {};
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
+
+  Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix {};
+  Cabal = null; # core package in GHC
 
   cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};
 
