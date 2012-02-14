@@ -426,8 +426,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   aeson = callPackage ../development/libraries/haskell/aeson {};
 
-  aesonNative = callPackage ../development/libraries/haskell/aeson-native {};
-
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
 
   ansiWlPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
@@ -485,8 +483,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
   blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
-
-  blazeTextualNative = callPackage ../development/libraries/haskell/blaze-textual-native {};
 
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
