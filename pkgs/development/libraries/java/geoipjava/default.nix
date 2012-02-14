@@ -1,10 +1,10 @@
 {stdenv, fetchurl, jdk, unzip}:
 
 stdenv.mkDerivation {
-  name = "GeoIPJava-1.2.3";
+  name = "GeoIPJava-1.2.5";
   src = fetchurl {
-    url = http://geolite.maxmind.com/download/geoip/api/java/GeoIPJava-1.2.3.zip;
-    sha256 = "0l8vxan2xh0mp1vjxh39q05jyfw8gk5y77b7i8s1aw7ssyzd05vs";
+    url = http://geolite.maxmind.com/download/geoip/api/java/GeoIPJava-1.2.5.zip;
+    sha256 = "1gb2d0qvvq7xankz7l7ymbr3qprwk9bifpy4hlgw0sq4i6a55ypd";
   };
   buildInputs = [ jdk unzip ];
   buildPhase = 
