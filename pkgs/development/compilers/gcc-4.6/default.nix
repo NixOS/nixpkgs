@@ -230,8 +230,8 @@ stdenv.mkDerivation ({
     ${if enableMultilib then "" else "--disable-multilib"}
     ${if enableShared then "" else "--disable-shared"}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
-    ${if cloog != null then 
-      "--with-cloog=${cloog} --enable-cloog-backend=isl" 
+    ${if cloog != null then
+      "--with-cloog=${cloog} --enable-cloog-backend=isl"
       else ""}
     ${if langJava then
       "--with-ecj-jar=${javaEcj} " +
@@ -319,7 +319,7 @@ stdenv.mkDerivation ({
       --target=${stdenv.cross.config}
     '';
   };
- 
+
 
   # Needed for the cross compilation to work
   AR = "ar";
