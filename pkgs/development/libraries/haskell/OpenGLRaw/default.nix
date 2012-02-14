@@ -1,9 +1,10 @@
-{ cabal, mesa }:
+{ cabal, Cabal, mesa }:
 
 cabal.mkDerivation (self: {
   pname = "OpenGLRaw";
   version = "1.2.0.0";
   sha256 = "1nwk93wlwh7gz2lb1dc88frmwik71g61a7k8xfiib2q5a8a8kf9r";
+  buildDepends = [ Cabal ];
   extraLibraries = [ mesa ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Opengl";

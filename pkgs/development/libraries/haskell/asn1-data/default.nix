@@ -1,4 +1,6 @@
-{ cabal, attoparsec, attoparsecEnumerator, enumerator, mtl, text }:
+{ cabal, attoparsec, attoparsecEnumerator, Cabal, enumerator, mtl
+, text
+}:
 
 cabal.mkDerivation (self: {
   pname = "asn1-data";
@@ -7,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    attoparsec attoparsecEnumerator enumerator mtl text
+    attoparsec attoparsecEnumerator Cabal enumerator mtl text
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-asn1-data";

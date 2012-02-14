@@ -1,10 +1,10 @@
-{ cabal, stm, wxcore }:
+{ cabal, Cabal, stm, wxcore }:
 
 cabal.mkDerivation (self: {
   pname = "wx";
   version = "0.13.2.1";
   sha256 = "0s5jmsrip26ahvz7mzf12m9rcibrk9is3kwbswz87h0sr0k11nbv";
-  buildDepends = [ stm wxcore ];
+  buildDepends = [ Cabal stm wxcore ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "wxHaskell";

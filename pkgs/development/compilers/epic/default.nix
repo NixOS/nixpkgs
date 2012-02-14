@@ -1,4 +1,4 @@
-{ cabal, boehmgc, gmp, happy, mtl }:
+{ cabal, boehmgc, Cabal, gmp, happy, mtl }:
 
 cabal.mkDerivation (self: {
   pname = "epic";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1irvfk8xf627bfzsgbqa56816jkc99rrxpml9ycg2grq7razp9fw";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ mtl ];
+  buildDepends = [ Cabal mtl ];
   buildTools = [ happy ];
   extraLibraries = [ boehmgc gmp ];
   meta = {

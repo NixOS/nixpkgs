@@ -1,5 +1,5 @@
-{ cabal, binary, mtl, syb, sybWithClass, sybWithClassInstancesText
-, text, time
+{ cabal, binary, Cabal, mtl, syb, sybWithClass
+, sybWithClassInstancesText, text, time
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary mtl syb sybWithClass sybWithClassInstancesText text time
+    binary Cabal mtl syb sybWithClass sybWithClassInstancesText text
+    time
   ];
   meta = {
     homepage = "http://happstack.com";

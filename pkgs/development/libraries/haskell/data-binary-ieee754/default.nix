@@ -1,4 +1,4 @@
-{ cabal, binary }:
+{ cabal, binary, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "data-binary-ieee754";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0i0nclq8858flpp2sl3czwz6rfaykjrlzpvlfr6vlxzf8zvah9kz";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ binary ];
+  buildDepends = [ binary Cabal ];
   meta = {
     homepage = "http://john-millikin.com/software/data-binary-ieee754/";
     description = "Parser/Serialiser for IEEE-754 floating-point values";

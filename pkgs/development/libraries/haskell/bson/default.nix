@@ -1,5 +1,5 @@
-{ cabal, binary, compactStringFix, cryptohash, dataBinaryIeee754
-, mtl, network, time
+{ cabal, binary, Cabal, compactStringFix, cryptohash
+, dataBinaryIeee754, mtl, network, time
 }:
 
 cabal.mkDerivation (self: {
@@ -7,8 +7,8 @@ cabal.mkDerivation (self: {
   version = "0.1.7";
   sha256 = "1dmndq0rx22h9kxv31rxwqhwkgsvqg9qy4l0xmvpcvvl101zj4jx";
   buildDepends = [
-    binary compactStringFix cryptohash dataBinaryIeee754 mtl network
-    time
+    binary Cabal compactStringFix cryptohash dataBinaryIeee754 mtl
+    network time
   ];
   meta = {
     homepage = "http://github.com/TonyGen/bson-haskell";

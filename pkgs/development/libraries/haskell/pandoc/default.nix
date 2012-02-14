@@ -1,7 +1,7 @@
-{ cabal, base64Bytestring, blazeHtml, citeprocHs
-, extensibleExceptions, highlightingKate, HTTP, json, mtl, network
-, pandocTypes, parsec, random, syb, tagsoup, temporary, texmath
-, time, utf8String, xml, zipArchive, zlib
+{ cabal, base64Bytestring, blazeHtml, Cabal, citeprocHs
+, extensibleExceptions, filepath, highlightingKate, HTTP, json, mtl
+, network, pandocTypes, parsec, random, syb, tagsoup, temporary
+, texmath, time, utf8String, xml, zipArchive, zlib
 }:
 
 cabal.mkDerivation (self: {
@@ -11,9 +11,10 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    base64Bytestring blazeHtml citeprocHs extensibleExceptions
-    highlightingKate HTTP json mtl network pandocTypes parsec random
-    syb tagsoup temporary texmath time utf8String xml zipArchive zlib
+    base64Bytestring blazeHtml Cabal citeprocHs extensibleExceptions
+    filepath highlightingKate HTTP json mtl network pandocTypes parsec
+    random syb tagsoup temporary texmath time utf8String xml zipArchive
+    zlib
   ];
   configureFlags = "-fhighlighting -fthreaded";
   meta = {

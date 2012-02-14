@@ -1,4 +1,4 @@
-{ cabal, blazeBuilder, blazeBuilderConduit, caseInsensitive
+{ cabal, blazeBuilder, blazeBuilderConduit, Cabal, caseInsensitive
 , conduit, dataDefault, fastLogger, httpTypes, network, text, time
 , transformers, wai, zlibConduit
 }:
@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   version = "1.1.0";
   sha256 = "1mj2swb2bgsay9prpw6h0wmwsqyan53ndyczmhppdax4y5088f55";
   buildDepends = [
-    blazeBuilder blazeBuilderConduit caseInsensitive conduit
+    blazeBuilder blazeBuilderConduit Cabal caseInsensitive conduit
     dataDefault fastLogger httpTypes network text time transformers wai
     zlibConduit
   ];

@@ -1,4 +1,4 @@
-{ cabal, cereal, cryptoApi, tagged }:
+{ cabal, Cabal, cereal, cryptoApi, tagged }:
 
 cabal.mkDerivation (self: {
   pname = "cryptohash";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1nplmwihq40jmng4r3wiyfb0i33a8wx2gmlbqajc62wny98l7sab";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ cereal cryptoApi tagged ];
+  buildDepends = [ Cabal cereal cryptoApi tagged ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cryptohash";
     description = "collection of crypto hashes, fast, pure and practical";

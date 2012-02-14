@@ -1,10 +1,10 @@
-{ cabal, happy, syb }:
+{ cabal, Cabal, happy, syb }:
 
 cabal.mkDerivation (self: {
   pname = "haskell-src";
   version = "1.0.1.5";
   sha256 = "1ay3i2sbrp0pzg6fagg8gqrwq5lcnm5jb5sr11frbk274a82cdwz";
-  buildDepends = [ syb ];
+  buildDepends = [ Cabal syb ];
   buildTools = [ happy ];
   meta = {
     description = "Support for manipulating Haskell source code";

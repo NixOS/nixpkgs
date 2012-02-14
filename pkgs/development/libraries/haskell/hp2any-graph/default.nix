@@ -1,5 +1,5 @@
-{ cabal, freeglut, GLUT, hp2anyCore, mesa, network, OpenGL
-, parseargs
+{ cabal, Cabal, filepath, freeglut, GLUT, hp2anyCore, mesa, network
+, OpenGL, parseargs
 }:
 
 cabal.mkDerivation (self: {
@@ -8,7 +8,9 @@ cabal.mkDerivation (self: {
   sha256 = "1al20pxfgkgwynrx7vr0i57342s91lcm3cnd9qjx8b6vkqmzykkq";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ GLUT hp2anyCore network OpenGL parseargs ];
+  buildDepends = [
+    Cabal filepath GLUT hp2anyCore network OpenGL parseargs
+  ];
   extraLibraries = [ freeglut mesa ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Hp2any";

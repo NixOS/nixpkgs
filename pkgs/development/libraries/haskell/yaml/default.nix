@@ -1,4 +1,4 @@
-{ cabal, aeson, attoparsec, conduit, text, transformers
+{ cabal, aeson, attoparsec, Cabal, conduit, text, transformers
 , unorderedContainers, vector
 }:
 
@@ -7,8 +7,8 @@ cabal.mkDerivation (self: {
   version = "0.5.2";
   sha256 = "1jhzycasfmjlfdpca1cflrggc16jp16852af7d6cwfsy342wh6gp";
   buildDepends = [
-    aeson attoparsec conduit text transformers unorderedContainers
-    vector
+    aeson attoparsec Cabal conduit text transformers
+    unorderedContainers vector
   ];
   meta = {
     homepage = "http://github.com/snoyberg/yaml/";

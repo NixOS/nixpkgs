@@ -1,10 +1,10 @@
-{ cabal, regexBase, regexPosix }:
+{ cabal, Cabal, regexBase, regexPosix }:
 
 cabal.mkDerivation (self: {
   pname = "regex-compat";
   version = "0.92";
   sha256 = "430d251bd704071fca1e38c9b250543f00d4e370382ed552ac3d7407d4f27936";
-  buildDepends = [ regexBase regexPosix ];
+  buildDepends = [ Cabal regexBase regexPosix ];
   meta = {
     homepage = "http://sourceforge.net/projects/lazy-regex";
     description = "Replaces/Enhances Text.Regex";

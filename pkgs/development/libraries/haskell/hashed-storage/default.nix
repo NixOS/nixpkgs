@@ -1,4 +1,6 @@
-{ cabal, binary, dataenc, extensibleExceptions, mmap, mtl, zlib }:
+{ cabal, binary, Cabal, dataenc, extensibleExceptions, filepath
+, mmap, mtl, zlib
+}:
 
 cabal.mkDerivation (self: {
   pname = "hashed-storage";
@@ -7,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary dataenc extensibleExceptions mmap mtl zlib
+    binary Cabal dataenc extensibleExceptions filepath mmap mtl zlib
   ];
   meta = {
     description = "Hashed file storage support code";

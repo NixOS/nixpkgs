@@ -1,4 +1,4 @@
-{ cabal, MissingH, mtl, parsec }:
+{ cabal, Cabal, MissingH, mtl, parsec }:
 
 cabal.mkDerivation (self: {
   pname = "ConfigFile";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0w2yhbnqldhmj3d98j720l4lj4d08abqcff751p2slszdm5pw1jm";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ MissingH mtl parsec ];
+  buildDepends = [ Cabal MissingH mtl parsec ];
   noHaddock = true;
   meta = {
     homepage = "http://software.complete.org/configfile";

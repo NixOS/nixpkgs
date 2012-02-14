@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "MemoTrie";
   version = "0.4.10";
   sha256 = "1hkraq33sai046gwqlabc9nkz6jbl6vgj0c6lc6j4j5h5d8v08kk";
+  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/MemoTrie";
     description = "Trie-based memo functions";

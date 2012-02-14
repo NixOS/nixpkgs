@@ -1,4 +1,4 @@
-{ cabal, haskellSrcExts, mtl, uulib }:
+{ cabal, Cabal, filepath, haskellSrcExts, mtl, uulib }:
 
 cabal.mkDerivation (self: {
   pname = "uuagc-bootstrap";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0zsb8pz2zx7y8sjp392hpdk30dzzmppjizcnlgd1wvq2csacnfxq";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ haskellSrcExts mtl uulib ];
+  buildDepends = [ Cabal filepath haskellSrcExts mtl uulib ];
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/HUT/WebHome";
     description = "Attribute Grammar System of Universiteit Utrecht";

@@ -1,4 +1,4 @@
-{ cabal, ListLike, uuParsinglib }:
+{ cabal, Cabal, ListLike, uuParsinglib }:
 
 cabal.mkDerivation (self: {
   pname = "NanoProlog";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0wjjwzzc78sj7nsaq1hgxiwv0pc069mxns425lhmrlxcm0vf8fmn";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ ListLike uuParsinglib ];
+  buildDepends = [ Cabal ListLike uuParsinglib ];
   meta = {
     description = "Very small interpreter for a Prolog-like language";
     license = self.stdenv.lib.licenses.bsd3;

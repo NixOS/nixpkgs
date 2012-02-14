@@ -1,10 +1,10 @@
-{ cabal, binary }:
+{ cabal, binary, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "bmp";
   version = "1.2.0.2";
   sha256 = "0y1fjbhk73dj260wd1jhcf12fkh4maba4iwkzdg2087s9saxvljk";
-  buildDepends = [ binary ];
+  buildDepends = [ binary Cabal ];
   meta = {
     homepage = "http://code.ouroborus.net/bmp";
     description = "Read and write uncompressed BMP image files";

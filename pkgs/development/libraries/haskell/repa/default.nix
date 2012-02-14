@@ -1,10 +1,10 @@
-{ cabal, QuickCheck, vector }:
+{ cabal, Cabal, QuickCheck, vector }:
 
 cabal.mkDerivation (self: {
   pname = "repa";
   version = "2.2.0.1";
   sha256 = "016cigxivjd17g0hysf76b3lznjpk478q0hg9hsy154ms7xap3dy";
-  buildDepends = [ QuickCheck vector ];
+  buildDepends = [ Cabal QuickCheck vector ];
   meta = {
     homepage = "http://repa.ouroborus.net";
     description = "High performance, regular, shape polymorphic parallel arrays";

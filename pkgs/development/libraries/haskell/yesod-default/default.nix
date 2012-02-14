@@ -1,4 +1,4 @@
-{ cabal, shakespeareCss, shakespeareJs, text, transformers
+{ cabal, Cabal, shakespeareCss, shakespeareJs, text, transformers
 , unorderedContainers, wai, waiExtra, warp, yaml, yesodCore
 }:
 
@@ -7,8 +7,8 @@ cabal.mkDerivation (self: {
   version = "0.6.1";
   sha256 = "0am5f8r2w7695zfc6vi0gy8yin9kfgj37qzr14r5v6wzhk1gq5da";
   buildDepends = [
-    shakespeareCss shakespeareJs text transformers unorderedContainers
-    wai waiExtra warp yaml yesodCore
+    Cabal shakespeareCss shakespeareJs text transformers
+    unorderedContainers wai waiExtra warp yaml yesodCore
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

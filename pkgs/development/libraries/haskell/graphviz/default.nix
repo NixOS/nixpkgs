@@ -1,5 +1,5 @@
-{ cabal, colour, dlist, extensibleExceptions, fgl, polyparse, text
-, transformers, wlPprintText
+{ cabal, Cabal, colour, dlist, extensibleExceptions, fgl, filepath
+, polyparse, text, transformers, wlPprintText
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    colour dlist extensibleExceptions fgl polyparse text transformers
-    wlPprintText
+    Cabal colour dlist extensibleExceptions fgl filepath polyparse text
+    transformers wlPprintText
   ];
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";

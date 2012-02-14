@@ -1,5 +1,5 @@
-{ cabal, certificate, cryptoApi, cryptocipher, cryptohash, mtl
-, network, text, time, tls, vector
+{ cabal, Cabal, certificate, cryptoApi, cryptocipher, cryptohash
+, mtl, network, text, time, tls, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    certificate cryptoApi cryptocipher cryptohash mtl network text time
-    tls vector
+    Cabal certificate cryptoApi cryptocipher cryptohash mtl network
+    text time tls vector
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-tls-extra";

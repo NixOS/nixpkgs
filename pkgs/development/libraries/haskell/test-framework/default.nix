@@ -1,5 +1,5 @@
-{ cabal, ansiTerminal, ansiWlPprint, extensibleExceptions, hostname
-, random, regexPosix, time, xml
+{ cabal, ansiTerminal, ansiWlPprint, Cabal, extensibleExceptions
+, hostname, random, regexPosix, time, xml
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    ansiTerminal ansiWlPprint extensibleExceptions hostname random
-    regexPosix time xml
+    ansiTerminal ansiWlPprint Cabal extensibleExceptions hostname
+    random regexPosix time xml
   ];
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";

@@ -1,4 +1,4 @@
-{ cabal, alex, happy, random }:
+{ cabal, alex, Cabal, filepath, happy, random }:
 
 cabal.mkDerivation (self: {
   pname = "gtk2hs-buildtools";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "003d48q8q6ji4axa69bh0sp95fic19cgw3hwigsjbl46qgh6n9gl";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ random ];
+  buildDepends = [ Cabal filepath random ];
   buildTools = [ alex happy ];
   meta = {
     homepage = "http://projects.haskell.org/gtk2hs/";

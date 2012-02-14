@@ -1,9 +1,10 @@
-{ cabal, glib, gtk2hsBuildtools, libc, pkgconfig }:
+{ cabal, Cabal, glib, gtk2hsBuildtools, libc, pkgconfig }:
 
 cabal.mkDerivation (self: {
   pname = "glib";
   version = "0.12.2";
   sha256 = "0p1d6j23yf30824q5gn7pw7s47hs4rnaqs69d2hn2pnzpc1ml3c6";
+  buildDepends = [ Cabal ];
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc pkgconfig ];
   pkgconfigDepends = [ glib ];

@@ -1,10 +1,10 @@
-{ cabal, cpphs, happy }:
+{ cabal, Cabal, cpphs, happy }:
 
 cabal.mkDerivation (self: {
   pname = "haskell-src-exts";
   version = "1.11.1";
   sha256 = "1jqf8l81zw7x5ryf8h2n0b2636yhxkfp3j4ndbqw6hc7i5q581m6";
-  buildDepends = [ cpphs ];
+  buildDepends = [ Cabal cpphs ];
   buildTools = [ happy ];
   meta = {
     homepage = "http://code.haskell.org/haskell-src-exts";

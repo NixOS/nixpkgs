@@ -1,10 +1,10 @@
-{ cabal, StateVar, transformers }:
+{ cabal, Cabal, StateVar, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "Hipmunk";
   version = "5.2.0.6";
   sha256 = "16yh7v6v05nksspcfz8h054piyhmrfbpaada36562rjxcywyfnfj";
-  buildDepends = [ StateVar transformers ];
+  buildDepends = [ Cabal StateVar transformers ];
   noHaddock = true;
   meta = {
     homepage = "http://patch-tag.com/r/felipe/hipmunk/home";

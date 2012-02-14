@@ -1,4 +1,4 @@
-{ cabal, happy }:
+{ cabal, Cabal, happy }:
 
 cabal.mkDerivation (self: {
   pname = "Ebnf2ps";
@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0xim32bnfapfs53lvmdz2af08rqd15lp5b0rh6yjqm7n1g2061zs";
   isLibrary = false;
   isExecutable = true;
+  buildDepends = [ Cabal ];
   buildTools = [ happy ];
   meta = {
     homepage = "http://www.informatik.uni-freiburg.de/~thiemann/haskell/ebnf2ps/";

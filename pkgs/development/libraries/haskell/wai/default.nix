@@ -1,4 +1,4 @@
-{ cabal, blazeBuilder, conduit, httpTypes, network, text
+{ cabal, blazeBuilder, Cabal, conduit, httpTypes, network, text
 , transformers, vault
 }:
 
@@ -7,7 +7,8 @@ cabal.mkDerivation (self: {
   version = "1.1.0";
   sha256 = "1kmmivcak9v13rgivs2vhr543dfdx19wncwlpda453570ywam7vh";
   buildDepends = [
-    blazeBuilder conduit httpTypes network text transformers vault
+    blazeBuilder Cabal conduit httpTypes network text transformers
+    vault
   ];
   meta = {
     homepage = "https://github.com/yesodweb/wai";

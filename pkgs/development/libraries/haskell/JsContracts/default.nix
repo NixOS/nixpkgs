@@ -1,4 +1,4 @@
-{ cabal, mtl, parsec, syb, WebBits, WebBitsHtml }:
+{ cabal, Cabal, filepath, mtl, parsec, syb, WebBits, WebBitsHtml }:
 
 cabal.mkDerivation (self: {
   pname = "JsContracts";
@@ -6,7 +6,9 @@ cabal.mkDerivation (self: {
   sha256 = "17l6kdpdc7lrpd9j4d2b6vklkpclshcjy6hzpi442b7pj96sn589";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ mtl parsec syb WebBits WebBitsHtml ];
+  buildDepends = [
+    Cabal filepath mtl parsec syb WebBits WebBitsHtml
+  ];
   meta = {
     homepage = "http://www.cs.brown.edu/research/plt/";
     description = "Design-by-contract for JavaScript";

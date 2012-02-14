@@ -1,4 +1,4 @@
-{ cabal, Agda }:
+{ cabal, Agda, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "Agda-executable";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1n1ak6z2vh356k9mk0zkiv6dqp9dvx97a7r21b0xnhwkmh3f8p5p";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ Agda ];
+  buildDepends = [ Agda Cabal ];
   meta = {
     homepage = "http://wiki.portal.chalmers.se/agda/";
     description = "Command-line program for type-checking and compiling Agda programs";

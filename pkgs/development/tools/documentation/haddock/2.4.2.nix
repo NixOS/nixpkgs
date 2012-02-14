@@ -1,4 +1,4 @@
-{ cabal, alex, ghcPaths, happy }:
+{ cabal, alex, Cabal, filepath, ghcPaths, happy }:
 
 cabal.mkDerivation (self: {
   pname = "haddock";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "dbf0a7d0103a3ce6a91b2a3b96148c1b9c13ea7f8bd74260c21fe98df7839547";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ ghcPaths ];
+  buildDepends = [ Cabal filepath ghcPaths ];
   buildTools = [ alex happy ];
   meta = {
     homepage = "http://www.haskell.org/haddock/";

@@ -1,4 +1,4 @@
-{ cabal, base64Bytestring, cereal, conduit, cryptoConduit
+{ cabal, base64Bytestring, Cabal, cereal, conduit, cryptoConduit
 , cryptohash, fileEmbed, httpTypes, text, transformers, unixCompat
 , wai, waiAppStatic, yesodCore
 }:
@@ -8,8 +8,9 @@ cabal.mkDerivation (self: {
   version = "0.10.1";
   sha256 = "07dapygk2n6d7sk39gwi06w96b13dqhxgx3l7ac198nil5x2m68m";
   buildDepends = [
-    base64Bytestring cereal conduit cryptoConduit cryptohash fileEmbed
-    httpTypes text transformers unixCompat wai waiAppStatic yesodCore
+    base64Bytestring Cabal cereal conduit cryptoConduit cryptohash
+    fileEmbed httpTypes text transformers unixCompat wai waiAppStatic
+    yesodCore
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

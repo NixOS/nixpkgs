@@ -1,4 +1,4 @@
-{ cabal }:
+{ cabal, Cabal, filepath }:
 
 cabal.mkDerivation (self: {
   pname = "cabal-ghci";
@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0za0bf59f4a3v5zvyy7h1xvxskrazdga4j1cs6psfv9fv80qig9r";
   isLibrary = true;
   isExecutable = true;
+  buildDepends = [ Cabal filepath ];
   meta = {
     homepage = "http://code.atnnn.com/projects/cabal-ghci/wiki";
     description = "Set up ghci with options taken from a .cabal file";

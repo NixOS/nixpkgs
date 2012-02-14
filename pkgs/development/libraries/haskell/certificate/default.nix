@@ -1,4 +1,5 @@
-{ cabal, asn1Data, base64Bytestring, cryptoPubkeyTypes, mtl, time
+{ cabal, asn1Data, base64Bytestring, Cabal, cryptoPubkeyTypes, mtl
+, time
 }:
 
 cabal.mkDerivation (self: {
@@ -8,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    asn1Data base64Bytestring cryptoPubkeyTypes mtl time
+    asn1Data base64Bytestring Cabal cryptoPubkeyTypes mtl time
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-certificate";

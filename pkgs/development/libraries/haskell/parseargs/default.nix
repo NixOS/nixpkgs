@@ -1,4 +1,4 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "parseargs";
@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1ncdbjzfkhb1f3aznsci26kss9nrv3iilc65q5xdl9nly8p837mv";
   isLibrary = true;
   isExecutable = true;
+  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://wiki.cs.pdx.edu/bartforge/parseargs";
     description = "Command-line argument parsing library for Haskell programs";

@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "continued-fractions";
   version = "0.9.1.1";
   sha256 = "0gqp1yazmmmdf04saa306jdsf8r5s98fll9rnm8ff6jzr87nvnnh";
+  buildDepends = [ Cabal ];
   meta = {
     homepage = "/dev/null";
     description = "Continued fractions";

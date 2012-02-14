@@ -1,4 +1,4 @@
-{ cabal, QuickCheck, utilityHt }:
+{ cabal, Cabal, QuickCheck, utilityHt }:
 
 cabal.mkDerivation (self: {
   pname = "non-negative";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0aebb6f5518191a02b11230798444997a03b84d63d2aaa6c38cac6718f6c351c";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ QuickCheck utilityHt ];
+  buildDepends = [ Cabal QuickCheck utilityHt ];
   meta = {
     homepage = "http://code.haskell.org/~thielema/non-negative/";
     description = "Non-negative numbers";

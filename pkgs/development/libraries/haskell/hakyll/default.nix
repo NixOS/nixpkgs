@@ -1,6 +1,6 @@
-{ cabal, binary, blazeHtml, citeprocHs, cryptohash, hamlet, mtl
-, pandoc, parsec, regexBase, regexTdfa, snapCore, snapServer
-, tagsoup, time
+{ cabal, binary, blazeHtml, Cabal, citeprocHs, cryptohash, filepath
+, hamlet, mtl, pandoc, parsec, regexBase, regexTdfa, snapCore
+, snapServer, tagsoup, time
 }:
 
 cabal.mkDerivation (self: {
@@ -8,8 +8,8 @@ cabal.mkDerivation (self: {
   version = "3.2.6.1";
   sha256 = "0chpg04rsp8lxzdj43wqs3wyc7i70hfi3raxdar6bhwxhfxgj4wn";
   buildDepends = [
-    binary blazeHtml citeprocHs cryptohash hamlet mtl pandoc parsec
-    regexBase regexTdfa snapCore snapServer tagsoup time
+    binary blazeHtml Cabal citeprocHs cryptohash filepath hamlet mtl
+    pandoc parsec regexBase regexTdfa snapCore snapServer tagsoup time
   ];
   meta = {
     homepage = "http://jaspervdj.be/hakyll";

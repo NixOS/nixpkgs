@@ -1,4 +1,4 @@
-{ cabal, blazeBuilder, blazeHtml, dataDefault, emailValidate
+{ cabal, blazeBuilder, blazeHtml, Cabal, dataDefault, emailValidate
 , hamlet, network, persistent, shakespeareCss, shakespeareJs, text
 , time, transformers, wai, xssSanitize, yesodCore, yesodPersistent
 }:
@@ -8,9 +8,9 @@ cabal.mkDerivation (self: {
   version = "0.4.1";
   sha256 = "0l55n7zml3sf8f2qmmii5cq53awajc4vfr5msrm8kvi3ivzjld0s";
   buildDepends = [
-    blazeBuilder blazeHtml dataDefault emailValidate hamlet network
-    persistent shakespeareCss shakespeareJs text time transformers wai
-    xssSanitize yesodCore yesodPersistent
+    blazeBuilder blazeHtml Cabal dataDefault emailValidate hamlet
+    network persistent shakespeareCss shakespeareJs text time
+    transformers wai xssSanitize yesodCore yesodPersistent
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";
