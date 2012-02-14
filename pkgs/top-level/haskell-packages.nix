@@ -1604,7 +1604,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
 
-  tar = callPackage ../development/tools/haskell/tar {};
+  tar_0_3_2_0 = callPackage ../development/tools/haskell/tar/0.3.2.0.nix {};
+  tar_0_4_0_0 = callPackage ../development/tools/haskell/tar/0.4.0.0.nix {};
+  tar = self.tar_0_4_0_0;
 
   threadscope = callPackage ../development/tools/haskell/threadscope {};
 
@@ -1616,6 +1618,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   darcs = callPackage ../applications/version-management/darcs {
     regexCompat = self.regexCompat93;
+    tar = self.tar_0_3_2_0;
   };
 
   leksah = callPackage ../applications/editors/leksah {};
