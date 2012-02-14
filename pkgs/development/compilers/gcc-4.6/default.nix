@@ -19,6 +19,7 @@
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
 , gnatboot ? null
 , enableMultilib ? false
+, enablePlugin ? false
 , name ? "gcc"
 , cross ? null
 , binutilsCross ? null
@@ -229,6 +230,7 @@ stdenv.mkDerivation ({
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
     ${if enableShared then "" else "--disable-shared"}
+    ${if enablePlugin then "--enable-plugin" else ""}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}
     ${if cloog != null then
       "--with-cloog=${cloog} --enable-cloog-backend=isl"
