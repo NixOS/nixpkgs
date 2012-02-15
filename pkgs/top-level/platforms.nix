@@ -67,6 +67,12 @@ rec {
         IP_NF_MANGLE y
         IPV6 m
 
+        CIFS y
+        CIFS_XATTR y
+        CIFS_POSIX y
+        CIFS_FSCACHE y
+        CIFS_ACL y
+
         # Fail to build
         DRM n
         SCSI_ADVANSYS n
