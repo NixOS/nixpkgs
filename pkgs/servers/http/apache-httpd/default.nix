@@ -8,12 +8,12 @@ assert sslSupport -> openssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 
 stdenv.mkDerivation rec {
-  version = "2.2.21";
+  version = "2.2.22";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha1 = "c02f9b05da9a7e316ff37d9053dc76a57ba51cb4";
+    sha1 = "766cd0843050a8dfb781e48b976f3ba6ebcf8696";
   };
 
   buildInputs = [perl apr aprutil pcre] ++
