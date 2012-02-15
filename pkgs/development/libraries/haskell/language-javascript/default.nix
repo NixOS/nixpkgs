@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-javascript";
-  version = "0.4.7";
-  sha256 = "029ncc7hdw3pi9fbnxd0knz7wy3jpj5wcfqsxzyk5dkwji6d95x1";
+  version = "0.4.8";
+  sha256 = "0zrvlr683r093v4nblxc4wcpb91gxw3y9a92dx02qi9v983pznf7";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ Cabal mtl utf8Light ];
