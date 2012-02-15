@@ -45,15 +45,6 @@ in
       '';
     };
 
-    networking.extraResolvConf = mkOption {
-      default = "";
-      example = "options timeout:1 attempts:6";
-      description = ''
-        Extra text to add to resolv.conf, additional to the
-        domain name and the nameservers.
-      '';
-    };
-
     networking.domain = mkOption {
       default = "";
       example = "home";
