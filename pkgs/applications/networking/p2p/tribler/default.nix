@@ -1,4 +1,5 @@
-{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools }:
+{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools
+, enablePlayer ? false, vlc ? null }:
 
 let rev = "24912"; in
 
@@ -34,7 +35,10 @@ stdenv.mkDerivation {
           --set _TRIBLERPATH $out/share/tribler \
           --set PYTHONPATH $out/share/tribler:$program_PYTHONPATH \
           --run 'cd $_TRIBLERPATH' \
-          --add-flags "-O $out/share/tribler/Tribler/Main/tribler.py"
+          --add-flags "-O $out/share/tribler/Tribler/Main/tribler.py" \
+          ${stdenv.lib.optionalString enablePlayer ''
+            --prefix LD_LIBRARY_PATH : ${vlc}/lib
+          ''}
     '';
 
   meta = {
