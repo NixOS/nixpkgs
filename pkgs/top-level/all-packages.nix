@@ -2981,6 +2981,8 @@ let
 
   cflow = callPackage ../development/tools/misc/cflow { };
 
+  cppcheck = callPackage ../development/tools/analysis/cppcheck { };
+
   cscope = callPackage ../development/tools/misc/cscope { };
 
   csslint = callPackage ../development/web/csslint { };
