@@ -583,9 +583,7 @@ let
     stdenv = overrideInStdenv stdenv [gnumake381];
   };
 
-  dnsmasq = callPackage ../tools/networking/dnsmasq {
-    # TODO i18n can be installed as well, implement it?
-  };
+  dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
   dnstop = callPackage ../tools/networking/dnstop { };
 
