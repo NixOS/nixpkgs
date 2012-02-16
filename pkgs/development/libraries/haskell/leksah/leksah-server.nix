@@ -1,5 +1,5 @@
-{ cabal, binary, binaryShared, deepseq, haddock, hslogger, ltk, mtl
-, network, parsec, processLeksah, time
+{ cabal, binary, binaryShared, Cabal, deepseq, filepath, haddock
+, hslogger, ltk, mtl, network, parsec, processLeksah, time
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary binaryShared deepseq haddock hslogger ltk mtl network parsec
-    processLeksah time
+    binary binaryShared Cabal deepseq filepath haddock hslogger ltk mtl
+    network parsec processLeksah time
   ];
   meta = {
     homepage = "http://leksah.org";

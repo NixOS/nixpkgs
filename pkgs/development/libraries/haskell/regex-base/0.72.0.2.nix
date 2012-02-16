@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "regex-base";
   version = "0.72.0.2";
   sha256 = "38a4901b942fea646a422d52c52ef14eec4d6561c258b3c54cd96a8a354141ee";
+  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://sourceforge.net/projects/lazy-regex";
     description = "Replaces/Enhances Text.Regex";

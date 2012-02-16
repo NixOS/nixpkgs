@@ -23,7 +23,7 @@ stdenv.mkDerivation ({
     homepage = http://www.info-zip.org;
     description = "An extraction utility for archives compressed in .zip format";
     license = "free"; # http://www.info-zip.org/license.html
-    meta.platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.all;
   };
 } // (if enableNLS then {
   patches =

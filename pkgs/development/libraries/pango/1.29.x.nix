@@ -1,11 +1,10 @@
-{ stdenv, fetchurl_gnome, pkgconfig, gettext, x11, glib, cairo, libpng, xz }:
+{ stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng, xz }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "pango-1.29.4";
 
-  src = fetchurl_gnome {
-    project = "pango";
-    major = "1"; minor = "29"; patchlevel = "4"; extension = "xz";
+  src = fetchurl {
+    url = mirror://gnome/sources/pango/1.29/pango-1.29.4.tar.xz;
     sha256 = "0zqjq6ccv6mbah74rcvb03ksq1jwan21z37mdmqa56307sax3s3s";
   };
 

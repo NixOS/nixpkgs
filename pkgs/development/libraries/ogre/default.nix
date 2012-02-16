@@ -5,6 +5,7 @@ x@{builderDefsPackage
   , xproto, libX11, libXmu, libSM, pkgconfig
   , libXxf86vm, xf86vidmodeproto, libICE
   , renderproto, libXrender
+  , nvidia_cg_toolkit
   , ...}:
 builderDefsPackage
 (a :  

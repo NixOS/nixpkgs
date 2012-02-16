@@ -1,13 +1,15 @@
-{ cabal, attoparsec, attoparsecEnumerator, enumerator, mtl, text }:
+{ cabal, attoparsec, attoparsecEnumerator, Cabal, enumerator, mtl
+, text
+}:
 
 cabal.mkDerivation (self: {
   pname = "asn1-data";
-  version = "0.6.1.2";
-  sha256 = "1655fp71l8qjif4p6c1y2xk8r0gj58djg7np5zwwm6jlj780773r";
+  version = "0.6.1.3";
+  sha256 = "0vly55dpqrm9vb8ayp72na1nf2rr5ini3d81qqvxflmjgpksrgwq";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    attoparsec attoparsecEnumerator enumerator mtl text
+    attoparsec attoparsecEnumerator Cabal enumerator mtl text
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-asn1-data";

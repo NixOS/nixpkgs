@@ -1,10 +1,10 @@
-{ cabal, deepseq, text }:
+{ cabal, Cabal, deepseq, text }:
 
 cabal.mkDerivation (self: {
   pname = "attoparsec";
-  version = "0.10.1.0";
-  sha256 = "1wlil4zxnyrygvkgmap8kcqf4f6rc08ais20alyy4ggzmx73sl9q";
-  buildDepends = [ deepseq text ];
+  version = "0.10.1.1";
+  sha256 = "07zl85nkimpswlb4rxycisaphhyrlq4la2limxxi7sk21gyh88b0";
+  buildDepends = [ Cabal deepseq text ];
   meta = {
     homepage = "https://github.com/bos/attoparsec";
     description = "Fast combinator parsing for bytestrings";

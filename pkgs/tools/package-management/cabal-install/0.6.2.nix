@@ -1,4 +1,4 @@
-{ cabal, HTTP, network, random, zlib }:
+{ cabal, Cabal, filepath, HTTP, network, random, zlib }:
 
 cabal.mkDerivation (self: {
   pname = "cabal-install";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "d8ea91bd0a2a624ab1cf52ddfe48cef02b532bb5e2fcda3fd72ca51efc04b41a";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ HTTP network random zlib ];
+  buildDepends = [ Cabal filepath HTTP network random zlib ];
   meta = {
     homepage = "http://www.haskell.org/cabal/";
     description = "The command-line interface for Cabal and Hackage";

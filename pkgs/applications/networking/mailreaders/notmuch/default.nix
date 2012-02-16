@@ -58,9 +58,8 @@ stdenv.mkDerivation rec {
   '';
 
   # XXX: emacs tests broken
-  #postBuild = ''
-  #  make test
-  #'';
+  doCheck = false;
+  checkTarget = "test";
 
   meta = {
     description = "Notmuch -- The mail indexer";

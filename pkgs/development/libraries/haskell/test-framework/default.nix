@@ -1,16 +1,16 @@
-{ cabal, ansiTerminal, ansiWlPprint, extensibleExceptions, hostname
-, random, regexPosix, time, xml
+{ cabal, ansiTerminal, ansiWlPprint, Cabal, extensibleExceptions
+, hostname, random, regexPosix, time, xml
 }:
 
 cabal.mkDerivation (self: {
   pname = "test-framework";
-  version = "0.4.2.2";
-  sha256 = "1lwdx4z9j5wxbmmlakf6knirdhi0ic6xpmhrj9ipa5ybw2zszakr";
+  version = "0.5";
+  sha256 = "19zm9xdhyjhqi2ryd2gkwi7m92s88mmiw1b6b91hjfhfw3c1qlzz";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    ansiTerminal ansiWlPprint extensibleExceptions hostname random
-    regexPosix time xml
+    ansiTerminal ansiWlPprint Cabal extensibleExceptions hostname
+    random regexPosix time xml
   ];
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";

@@ -1,15 +1,15 @@
-{ cabal, deepseq, nonNegative, parsec, QuickCheck, random
+{ cabal, Cabal, deepseq, nonNegative, parsec, QuickCheck, random
 , storableRecord, utilityHt
 }:
 
 cabal.mkDerivation (self: {
   pname = "numeric-prelude";
-  version = "0.3";
-  sha256 = "0zxqfsgyg7gf051qjzv57bb1cvrbzlvvyyl2d3gmikyy6h3pis1f";
+  version = "0.3.0.1";
+  sha256 = "14hi0l4pga4srrfypx4alsyq34y5wsanis6216cds3zjw6db3frg";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    deepseq nonNegative parsec QuickCheck random storableRecord
+    Cabal deepseq nonNegative parsec QuickCheck random storableRecord
     utilityHt
   ];
   meta = {

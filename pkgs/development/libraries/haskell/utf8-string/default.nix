@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "utf8-string";
   version = "0.3.7";
   sha256 = "1s59xsw1i311rpxb7arnd280pjqab5mrlfjmxbabknka8wqlnnvq";
+  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://github.com/glguy/utf8-string/";
     description = "Support for reading and writing UTF8 Strings";

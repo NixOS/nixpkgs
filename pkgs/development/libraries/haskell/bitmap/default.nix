@@ -1,12 +1,13 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "bitmap";
-  version = "0.0.1";
-  sha256 = "281ad4d9234349cfd14f91977b48e2d1861c037f4b6562aa138cddd25c801a7e";
+  version = "0.0.2";
+  sha256 = "1flrfbrsnlcal7qyvl1wb0p8c14w0mvvkmgs7d943jqnlh4gay5m";
+  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://code.haskell.org/~bkomuves/";
-    description = "A library for handling and manipulating bitmaps";
+    description = "A library for handling and manipulating bitmaps (rectangular pixel arrays)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

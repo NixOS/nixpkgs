@@ -1,4 +1,4 @@
-{ cabal, HDBC, mtl, odbc, time, utf8String }:
+{ cabal, Cabal, HDBC, mtl, odbc, time, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "HDBC-odbc";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0vza38ggs863wjh25xnwslwlin68166ywws72bs766rl0rq7fkf4";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ HDBC mtl time utf8String ];
+  buildDepends = [ Cabal HDBC mtl time utf8String ];
   extraLibraries = [ odbc ];
   noHaddock = true;
   meta = {

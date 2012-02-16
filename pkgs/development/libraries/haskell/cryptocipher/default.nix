@@ -1,5 +1,5 @@
-{ cabal, cereal, cryptoApi, cryptoPubkeyTypes, primitive, tagged
-, vector
+{ cabal, Cabal, cereal, cryptoApi, cryptoPubkeyTypes, primitive
+, tagged, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    cereal cryptoApi cryptoPubkeyTypes primitive tagged vector
+    Cabal cereal cryptoApi cryptoPubkeyTypes primitive tagged vector
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cryptocipher";

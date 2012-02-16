@@ -1,4 +1,4 @@
-{ cabal, hashable, monadControl, stm, time, transformers
+{ cabal, Cabal, hashable, monadControl, stm, time, transformers
 , transformersBase, vector
 }:
 
@@ -7,7 +7,8 @@ cabal.mkDerivation (self: {
   version = "0.2.1.0";
   sha256 = "12akfi906l1nm7h3wvjkzl9bxn74dbv17xw2c1mqgl6sg470d587";
   buildDepends = [
-    hashable monadControl stm time transformers transformersBase vector
+    Cabal hashable monadControl stm time transformers transformersBase
+    vector
   ];
   meta = {
     homepage = "http://github.com/bos/pool";

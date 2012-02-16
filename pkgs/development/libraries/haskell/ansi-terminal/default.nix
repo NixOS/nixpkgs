@@ -1,4 +1,4 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "ansi-terminal";
@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "09r4nlpmkis6cp30jkymfas13hz6ph4zqxhvigrxn6s76v7nb5a8";
   isLibrary = true;
   isExecutable = true;
+  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://batterseapower.github.com/ansi-terminal";
     description = "Simple ANSI terminal support, with Windows compatibility";

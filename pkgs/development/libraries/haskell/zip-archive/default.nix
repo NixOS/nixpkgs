@@ -1,4 +1,4 @@
-{ cabal, binary, digest, mtl, utf8String, zlib }:
+{ cabal, binary, Cabal, digest, filepath, mtl, utf8String, zlib }:
 
 cabal.mkDerivation (self: {
   pname = "zip-archive";
@@ -6,7 +6,9 @@ cabal.mkDerivation (self: {
   sha256 = "1q52v18kl1j049kk3yb7rp0k27p6q7r72mg1vcbdid6qd7a9dh48";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ binary digest mtl utf8String zlib ];
+  buildDepends = [
+    binary Cabal digest filepath mtl utf8String zlib
+  ];
   meta = {
     homepage = "http://github.com/jgm/zip-archive";
     description = "Library for creating and modifying zip archives";

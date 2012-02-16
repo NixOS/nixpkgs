@@ -1,12 +1,14 @@
-{ cabal, GLURaw, libX11, mesa, ObjectName, OpenGLRaw, StateVar
-, Tensor
+{ cabal, Cabal, GLURaw, libX11, mesa, ObjectName, OpenGLRaw
+, StateVar, Tensor
 }:
 
 cabal.mkDerivation (self: {
   pname = "OpenGL";
   version = "2.5.0.0";
   sha256 = "1kpakn5i4aka67mqcpfq9jpl38h409x63zd14y35abpm6h3x8m3j";
-  buildDepends = [ GLURaw ObjectName OpenGLRaw StateVar Tensor ];
+  buildDepends = [
+    Cabal GLURaw ObjectName OpenGLRaw StateVar Tensor
+  ];
   extraLibraries = [ libX11 mesa ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Opengl";

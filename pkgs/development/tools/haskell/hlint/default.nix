@@ -1,4 +1,6 @@
-{ cabal, cpphs, haskellSrcExts, hscolour, transformers, uniplate }:
+{ cabal, Cabal, cpphs, filepath, haskellSrcExts, hscolour
+, transformers, uniplate
+}:
 
 cabal.mkDerivation (self: {
   pname = "hlint";
@@ -7,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    cpphs haskellSrcExts hscolour transformers uniplate
+    Cabal cpphs filepath haskellSrcExts hscolour transformers uniplate
   ];
   meta = {
     homepage = "http://community.haskell.org/~ndm/hlint/";

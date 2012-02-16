@@ -1,10 +1,10 @@
-{ cabal, deepseq, text }:
+{ cabal, Cabal, deepseq, text }:
 
 cabal.mkDerivation (self: {
   pname = "system-filepath";
-  version = "0.4.5";
-  sha256 = "18jpn3pyy6dh20xpdlwmhcjvbywjz4vr9fvwcwhylbicrw627ybs";
-  buildDepends = [ deepseq text ];
+  version = "0.4.6";
+  sha256 = "0p8lf10b5zn2gw5klpjc397q892cydvnl677srj9rk3lhmsm5jjl";
+  buildDepends = [ Cabal deepseq text ];
   meta = {
     homepage = "https://john-millikin.com/software/haskell-filesystem/";
     description = "High-level, byte-based file and directory path manipulations";

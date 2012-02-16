@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "transformers";
   version = "0.2.2.0";
   sha256 = "1nkazxy2p0w5ad76vg1lc4l0nla1kdqjdf9pymjgk75dpiyijbdz";
+  buildDepends = [ Cabal ];
   meta = {
     description = "Concrete functor and monad transformers";
     license = self.stdenv.lib.licenses.bsd3;

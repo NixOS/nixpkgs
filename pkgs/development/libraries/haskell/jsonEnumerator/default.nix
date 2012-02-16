@@ -1,4 +1,4 @@
-{ cabal, blazeBuilder, blazeBuilderEnumerator, enumerator
+{ cabal, blazeBuilder, blazeBuilderEnumerator, Cabal, enumerator
 , jsonTypes, text, transformers
 }:
 
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.0.1.2";
   sha256 = "08gwrm15pvvhhrkrncy6wr4fi5v55fdhc8byfrw5zd62hmx8xm9d";
   buildDepends = [
-    blazeBuilder blazeBuilderEnumerator enumerator jsonTypes text
+    blazeBuilder blazeBuilderEnumerator Cabal enumerator jsonTypes text
     transformers
   ];
   meta = {

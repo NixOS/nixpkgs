@@ -1,10 +1,10 @@
-{ cabal, SDL, SDL_image }:
+{ cabal, Cabal, SDL, SDL_image }:
 
 cabal.mkDerivation (self: {
   pname = "SDL-image";
   version = "0.6.1";
   sha256 = "18n6al40db7xalqqr4hp0l26qxxv1kmd8mva0n7vmhg05zypf6ni";
-  buildDepends = [ SDL ];
+  buildDepends = [ Cabal SDL ];
   extraLibraries = [ SDL_image ];
   meta = {
     description = "Binding to libSDL_image";

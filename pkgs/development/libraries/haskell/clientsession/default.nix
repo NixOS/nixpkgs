@@ -1,4 +1,4 @@
-{ cabal, base64Bytestring, cereal, cprngAes, cryptoApi
+{ cabal, base64Bytestring, Cabal, cereal, cprngAes, cryptoApi
 , cryptocipher, entropy, skein, tagged
 }:
 
@@ -7,8 +7,8 @@ cabal.mkDerivation (self: {
   version = "0.7.4";
   sha256 = "050mg3rzyld4v2b9v1pc1q563sp7sffiapvr8ks8f46ibl17lvss";
   buildDepends = [
-    base64Bytestring cereal cprngAes cryptoApi cryptocipher entropy
-    skein tagged
+    base64Bytestring Cabal cereal cprngAes cryptoApi cryptocipher
+    entropy skein tagged
   ];
   meta = {
     homepage = "http://github.com/yesodweb/clientsession/tree/master";

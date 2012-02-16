@@ -1,4 +1,4 @@
-{ cabal, network }:
+{ cabal, Cabal, network }:
 
 cabal.mkDerivation (self: {
   pname = "httpd-shed";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "c03f784742bdc3053c7e867e587ee859a9a3adaa082d36bdb2ea69da1b02069f";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ network ];
+  buildDepends = [ Cabal network ];
   meta = {
     description = "A simple web-server with an interact style API";
     license = self.stdenv.lib.licenses.bsd3;

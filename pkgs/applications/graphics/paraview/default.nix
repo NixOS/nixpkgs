@@ -7,10 +7,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "paraview-3.10.1";
+  name = "paraview-3.12.0";
   src = fetchurl {
-    url = "http://www.paraview.org/files/v3.10/ParaView-3.10.1.tar.gz";
-    sha256 = "1z2wvywpd3rvz4jhfs3mi35hsx4yqkdim58d075jx9kg7gifwga5";
+    url = "http://www.paraview.org/files/v3.12/ParaView-3.12.0.tar.gz";
+    sha256 = "0n0n0hrv02rd9rb63z4baalf40m8v870027mr47b93scgp18qyim";
   };
 
   # [  5%] Generating vtkGLSLShaderLibrary.h
@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
 #    "-DPYTHON_LIBRARY="
   ];
 
-  # I don't enable it due to memory bounds
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   buildInputs = [ cmake qt4 hdf5 mpich2 python libxml2 mesa ];
 

@@ -1,7 +1,7 @@
-{ cabal, aeson, blazeHtml, cabalFileTh, clientsession, cmdargs
-, dataObject, dataObjectYaml, failure, fileEmbed, hamlet, hledger
-, hledgerLib, HUnit, ioStorage, parsec, regexpr, safe
-, shakespeareCss, shakespeareJs, shakespeareText, text, time
+{ cabal, aeson, blazeHtml, Cabal, cabalFileTh, clientsession
+, cmdargs, dataObject, dataObjectYaml, failure, fileEmbed, filepath
+, hamlet, hledger, hledgerLib, HUnit, ioStorage, parsec, regexpr
+, safe, shakespeareCss, shakespeareJs, shakespeareText, text, time
 , transformers, wai, waiExtra, warp, yesod, yesodCore, yesodForm
 , yesodJson, yesodStatic
 }:
@@ -13,9 +13,9 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aeson blazeHtml cabalFileTh clientsession cmdargs dataObject
-    dataObjectYaml failure fileEmbed hamlet hledger hledgerLib HUnit
-    ioStorage parsec regexpr safe shakespeareCss shakespeareJs
+    aeson blazeHtml Cabal cabalFileTh clientsession cmdargs dataObject
+    dataObjectYaml failure fileEmbed filepath hamlet hledger hledgerLib
+    HUnit ioStorage parsec regexpr safe shakespeareCss shakespeareJs
     shakespeareText text time transformers wai waiExtra warp yesod
     yesodCore yesodForm yesodJson yesodStatic
   ];

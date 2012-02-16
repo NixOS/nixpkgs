@@ -1,4 +1,4 @@
-{ cabal, binary }:
+{ cabal, binary, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "SHA";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "12sz1dblmpiy8bg45fwndp1g9gf7494vqqbvbd1hwr5qzyfwyqck";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ binary ];
+  buildDepends = [ binary Cabal ];
   meta = {
     description = "Implementations of the SHA suite of message digest functions";
     license = self.stdenv.lib.licenses.bsd3;

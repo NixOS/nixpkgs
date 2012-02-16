@@ -1,4 +1,5 @@
-{ cabal, hslogger, HUnit, mtl, network, parsec, random, regexCompat
+{ cabal, Cabal, filepath, hslogger, HUnit, mtl, network, parsec
+, random, regexCompat
 }:
 
 cabal.mkDerivation (self: {
@@ -8,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    hslogger HUnit mtl network parsec random regexCompat
+    Cabal filepath hslogger HUnit mtl network parsec random regexCompat
   ];
   meta = {
     homepage = "http://software.complete.org/missingh";

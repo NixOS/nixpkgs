@@ -1,10 +1,10 @@
-{ cabal, mtl, RepLib, transformers }:
+{ cabal, Cabal, mtl, RepLib, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "unbound";
   version = "0.3.1";
   sha256 = "13k53dcap8knvl2qzcykx838laas34xfc0480705vzl1z9z1xppz";
-  buildDepends = [ mtl RepLib transformers ];
+  buildDepends = [ Cabal mtl RepLib transformers ];
   noHaddock = true;
   meta = {
     homepage = "http://code.google.com/p/replib/";

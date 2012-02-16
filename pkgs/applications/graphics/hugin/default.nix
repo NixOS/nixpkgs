@@ -1,25 +1,29 @@
-{stdenv, fetchurl, panotools, cmake, wxGTK, libtiff, libpng, openexr, boost,
-  pkgconfig, exiv2, gettext, ilmbase, enblendenfuse, autopanosiftc, mesa, freeglut,
- glew, libXmu, libXi }:
+{stdenv, fetchurl, panotools, cmake, wxGTK, libtiff, libpng, openexr, boost
+, pkgconfig, exiv2, gettext, ilmbase, enblendenfuse, autopanosiftc, mesa
+, freeglut, glew, libXmu, libXi, tclap }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2010.4.0";
+  name = "hugin-2011.4.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/${name}.tar.bz2";
-    sha256 = "13n3p4f39mbdydsjqy48csjgvv30lfcwvln5y5dyy95lyrfwcp6l";
+    sha256 = "1bnxljgqxzfdz14l7y29wzi52x1a38mghsjavnr28fr4vfmqwjrf";
   };
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR";
 
-  NIX_LDFLAGS = "-lrt";
+#NIX_LDFLAGS = "-lrt";
 
-  buildInputs = [ cmake panotools wxGTK libtiff libpng openexr boost pkgconfig
+  buildInputs = [ panotools wxGTK libtiff libpng openexr boost tclap
     exiv2 gettext ilmbase mesa freeglut glew libXmu libXi ];
 
+  buildNativeInputs = [ cmake pkgconfig ];
+
+  propagatedUserEnvPackages = [ enblendenfuse autopanosiftc ];
+
   postInstall = ''
-    ensureDir "$out/nix-support"
-    echo "${enblendenfuse} ${autopanosiftc}" > $out/nix-support/propagated-user-env-packages
+    mkdir -p "$out/nix-support"
+    echo $propagatedUserEnvPackages > $out/nix-support/propagated-user-env-packages
   '';
 
   meta = {

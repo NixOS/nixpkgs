@@ -1,10 +1,10 @@
-{ cabal, shakespeare, text }:
+{ cabal, Cabal, shakespeare, text }:
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-text";
-  version = "0.10.3";
-  sha256 = "0w3qf0zykdi5ixjcp0l9zdgwhbnnljn6ib88xkai05xkm6wzh06s";
-  buildDepends = [ shakespeare text ];
+  version = "0.10.5";
+  sha256 = "13nhasfbza73kv3iin16iidwyz71b8d75vq0ym37zygpxb5izkvw";
+  buildDepends = [ Cabal shakespeare text ];
   meta = {
     homepage = "http://www.yesodweb.com/book/templates";
     description = "Interpolation with quasi-quotation: put variables strings";

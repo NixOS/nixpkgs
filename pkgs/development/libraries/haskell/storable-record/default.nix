@@ -1,4 +1,4 @@
-{ cabal, transformers, utilityHt }:
+{ cabal, Cabal, transformers, utilityHt }:
 
 cabal.mkDerivation (self: {
   pname = "storable-record";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "5ed2680dcfc4c3d4fe605d23e797b847fe047b7acd3f4acfd82155c93e72b280";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ transformers utilityHt ];
+  buildDepends = [ Cabal transformers utilityHt ];
   meta = {
     homepage = "http://code.haskell.org/~thielema/storable-record/";
     description = "Elegant definition of Storable instances for records";

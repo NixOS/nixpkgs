@@ -1,5 +1,5 @@
-{ cabal, extensibleExceptions, fgl, Graphalyze, graphviz
-, haskellSrcExts, mtl, multiset, random
+{ cabal, Cabal, extensibleExceptions, fgl, filepath, Graphalyze
+, graphviz, haskellSrcExts, mtl, multiset, random
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    extensibleExceptions fgl Graphalyze graphviz haskellSrcExts mtl
-    multiset random
+    Cabal extensibleExceptions fgl filepath Graphalyze graphviz
+    haskellSrcExts mtl multiset random
   ];
   meta = {
     description = "Static code analysis using graph-theoretic techniques";

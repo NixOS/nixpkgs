@@ -706,6 +706,8 @@ let
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
 
+  fuse_zip = callPackage ../tools/filesystems/fuse-zip { };
+
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
@@ -2979,6 +2981,8 @@ let
 
   cflow = callPackage ../development/tools/misc/cflow { };
 
+  cppcheck = callPackage ../development/tools/analysis/cppcheck { };
+
   cscope = callPackage ../development/tools/misc/cscope { };
 
   csslint = callPackage ../development/web/csslint { };
@@ -3731,32 +3735,15 @@ let
 
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
 
-  gtk = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+  gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+
+  gtk = pkgs.gtk2;
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
 
-  gtkLibs3x = let callPackage = newScope pkgs.gtkLibs3x; in {
-    glib = callPackage ../development/libraries/glib/2.30.x.nix { };
+  pango129 = lowPrio (callPackage ../development/libraries/pango/1.29.x.nix { });
 
-    glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
-
-    gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
-
-    atk = callPackage ../development/libraries/atk/2.2.x.nix { };
-
-    atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
-
-    cairo = callPackage ../development/libraries/cairo { };
-
-    pango = callPackage ../development/libraries/pango/1.29.x.nix { };
-
-    gtk = callPackage ../development/libraries/gtk+/3.2.x.nix { };
-
-    gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
-
-    # Let hydra build gtk-3.x but do not show this to users yet
-    recurseForRelease = true;
-  };
+  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     inherit (gnome) gtk;
@@ -4251,6 +4238,8 @@ let
 
   libvorbis = callPackage ../development/libraries/libvorbis { };
 
+  libwebp = callPackage ../development/libraries/libwebp { };
+
   libwmf = callPackage ../development/libraries/libwmf { };
 
   libwpd = callPackage ../development/libraries/libwpd {
@@ -4698,6 +4687,8 @@ let
 ##  tapioca_qt = import ../development/libraries/tapioca-qt {
 ##    inherit stdenv fetchurl cmake qt4 telepathy_qt;
 ##  };
+
+  tclap = callPackage ../development/libraries/tclap {};
 
   tcp_wrappers = callPackage ../development/libraries/tcp-wrappers {};
 
@@ -6642,7 +6633,8 @@ let
 
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
-  djview4 = callPackage ../applications/graphics/djview { };
+  djview = callPackage ../applications/graphics/djview { };
+  djview4 = pkgs.djview;
 
   dmenu = callPackage ../applications/misc/dmenu { };
 
@@ -6722,6 +6714,8 @@ let
 
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
+    calfw = callPackage ../applications/editors/emacs-modes/calfw { };
+
     cua = callPackage ../applications/editors/emacs-modes/cua { };
 
     ecb = callPackage ../applications/editors/emacs-modes/ecb { };
@@ -6737,6 +6731,8 @@ let
     jdee = callPackage ../applications/editors/emacs-modes/jdee {
       # Requires Emacs 23, for `avl-tree'.
     };
+
+    js2 = callPackage ../applications/editors/emacs-modes/js2 { };
 
     stratego = callPackage ../applications/editors/emacs-modes/stratego { };
 
@@ -6853,7 +6849,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox90Pkgs;
+  firefoxPkgs = pkgs.firefox100Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gtkLibs) gtk pango;
@@ -7056,8 +7052,7 @@ let
     fltk = fltk13;
   };
 
-  hugin = callPackage ../applications/graphics/hugin {
-  };
+  hugin = callPackage ../applications/graphics/hugin { };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
@@ -7096,7 +7091,7 @@ let
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick YAML;
+      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML;
     gitSupport = false;
     monotoneSupport = false;
     extraUtils = [];
@@ -7177,6 +7172,7 @@ let
   libreoffice = callPackage ../applications/office/openoffice/libreoffice.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
+    force = getConfig [ "libreoffice" "force" ] false;
   };
 
   lingot = callPackage ../applications/audio/lingot {
@@ -7191,7 +7187,7 @@ let
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
   linphone = callPackage ../applications/networking/linphone {
-    inherit (gnome) libglade gtk;
+    inherit (gnome) libglade;
   };
 
   lmms = callPackage ../applications/audio/lmms { };
@@ -7894,6 +7890,10 @@ let
     guile = guile_1_8;
   };
 
+  bitsnbots = callPackage ../games/bitsnbots {
+    lua = lua5;
+  };
+
   blackshades = callPackage ../games/blackshades { };
 
   blackshadeselite = callPackage ../games/blackshadeselite { };
@@ -8054,6 +8054,8 @@ let
 
   stardust = callPackage ../games/stardust {};
 
+  stuntrally = callPackage ../games/stuntrally { };
+
   superTux = callPackage ../games/super-tux { };
 
   superTuxKart = callPackage ../games/super-tux-kart {
@@ -8160,7 +8162,7 @@ let
 
   gnome3 = (import ../desktops/gnome-3 {
     callPackage = pkgs.newScope pkgs.gnome3;
-  } // pkgs.gtkLibs3x);
+  });
 
   gnome = recurseIntoAttrs gnome2;
 
@@ -8211,6 +8213,8 @@ let
       basket = callPackage ../applications/office/basket { };
 
       bluedevil = callPackage ../tools/bluetooth/bluedevil { };
+
+      calligra = callPackage ../applications/office/calligra { };
 
       digikam = callPackage ../applications/graphics/digikam {
         boost = boost147;

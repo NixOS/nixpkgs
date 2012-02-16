@@ -19,20 +19,23 @@ stdenv.mkDerivation rec {
     sha256 = "1h93jdx89dfgxlnw66lfcdk9kisadm689zanvgkzbfb3si2frv83";
   };
 
-  buildInputs = [
-    perl zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
-    dbus fribidi qt4 libvorbis libtheora speex lua5 libgcrypt
-    libupnp libcaca pulseaudio flac schroedinger libxml2 librsvg mpeg2dec
-    udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
-    libkate libtiger libv4l samba liboggz libass libdvbpsi
-  ]
-  ++ (with xlibs; [ xlibs.xlibs libXv libXvMC libXpm xcbutil libva ]);
+  buildInputs =
+    [ perl zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
+      dbus fribidi qt4 libvorbis libtheora speex lua5 libgcrypt
+      libupnp libcaca pulseaudio flac schroedinger libxml2 librsvg mpeg2dec
+      udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
+      libkate libtiger libv4l samba liboggz libass libdvbpsi libva
+      xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
+    ];
 
   buildNativeInputs = [ pkgconfig ];
 
-  configureFlags = [ "--enable-alsa"
-    "--with-kde-solid=$out/share/apps/solid/actions"
-  ];
+  configureFlags =
+    [ "--enable-alsa"
+      "--with-kde-solid=$out/share/apps/solid/actions"
+    ];
+
+  enableParallelBuilding = true;
 
   preBuild = ''
     substituteInPlace modules/misc/freetype.c --replace \

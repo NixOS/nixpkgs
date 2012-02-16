@@ -33,6 +33,6 @@ rec {
 
   name = "libffcall-" + version;
   meta = {
-    description = "Foreign fuction call library";
+    description = "Foreign function call library";
   };
 }

@@ -1,4 +1,4 @@
-{ cabal, blazeBuilder, httpTypes, mtl, network, parsec, text
+{ cabal, blazeBuilder, Cabal, httpTypes, mtl, network, parsec, text
 , utf8String
 }:
 
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.26.3";
   sha256 = "1ldi4gjraga57qj9drknwp19vmy30fhcp6vw3y7xqcrarvp5n2mx";
   buildDepends = [
-    blazeBuilder httpTypes mtl network parsec text utf8String
+    blazeBuilder Cabal httpTypes mtl network parsec text utf8String
   ];
   meta = {
     description = "Library for maintaining correctness and composability of URLs within an application";

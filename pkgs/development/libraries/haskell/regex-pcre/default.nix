@@ -1,10 +1,10 @@
-{ cabal, pcre, regexBase }:
+{ cabal, Cabal, pcre, regexBase }:
 
 cabal.mkDerivation (self: {
   pname = "regex-pcre";
   version = "0.94.2";
   sha256 = "0p4az8z4jlrcmmyz9bjf7n90hpg6n242vq4255w2dz5v29l822wn";
-  buildDepends = [ regexBase ];
+  buildDepends = [ Cabal regexBase ];
   extraLibraries = [ pcre ];
   meta = {
     homepage = "http://sourceforge.net/projects/lazy-regex";

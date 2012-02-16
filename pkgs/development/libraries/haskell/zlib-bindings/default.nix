@@ -1,10 +1,10 @@
-{ cabal, zlib }:
+{ cabal, Cabal, zlib }:
 
 cabal.mkDerivation (self: {
   pname = "zlib-bindings";
-  version = "0.0.3.1";
-  sha256 = "1j1z797zi5svxyv5ssfx8lyhmzlc2j7iad4b01aw0jvyp3ad4qan";
-  buildDepends = [ zlib ];
+  version = "0.0.3.2";
+  sha256 = "0x78fkjinfhhihhfihr0g5rc4d8jkhza3vw5qsyds74skd6rsy1q";
+  buildDepends = [ Cabal zlib ];
   meta = {
     homepage = "http://github.com/snoyberg/zlib-bindings";
     description = "Low-level bindings to the zlib package";

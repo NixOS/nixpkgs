@@ -1,4 +1,4 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "bytestring-nums";
@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "12knbyrvr1wa7za8bwypvq3cp81k18qi032dl98s2ylhcz1r6rdk";
   isLibrary = true;
   isExecutable = true;
+  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://github.com/solidsnack/bytestring-nums";
     description = "Parse numeric literals from ByteStrings";

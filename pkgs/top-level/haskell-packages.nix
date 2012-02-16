@@ -119,8 +119,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   # This is the Cabal builder, the function we use to build most Haskell
-  # packages. It isn't the Cabal library, which is a core package of GHC
-  # and therefore not separately listed here.
+  # packages. It isn't the Cabal library, which is spelled "Cabal".
 
   cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {
     enableLibraryProfiling = enableLibraryProfiling;
@@ -141,7 +140,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 ok
     html         = self.html_1_0_1_2;           # 7.4.1 ok
     HUnit        = self.HUnit_1_2_2_3;          # 7.4.1 ok
-    network      = self.network_2_3_0_10;       # 7.4.1 ok
+    network      = self.network_2_3_0_11;       # 7.4.1 ok
     OpenGL       = self.OpenGL_2_5_0_0;         # 7.4.1 ok
     parallel     = self.parallel_3_2_0_2;       # 7.4.1 ok
     parsec       = self.parsec_3_1_2;           # 7.4.1 ok
@@ -152,7 +151,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     stm          = self.stm_2_2_0_1;            # 7.4.1 ok
     syb          = self.syb_0_3_6;              # 7.4.1 ok
     xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
-    zlib         = self.zlib_0_5_3_1;           # 7.4.1 ok
+    zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
     HTTP         = self.HTTP_4000_2_2;          # 7.4.1 ok
     text         = self.text_0_11_1_13;         # 7.4.1 ok
     transformers = self.transformers_0_2_2_0;   # 7.4.1 ok
@@ -427,7 +426,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   aeson = callPackage ../development/libraries/haskell/aeson {};
 
-  aesonNative = callPackage ../development/libraries/haskell/aeson-native {};
+  alternativeIo = callPackage ../development/libraries/haskell/alternative-io {};
 
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
 
@@ -439,7 +438,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   async = callPackage ../development/libraries/haskell/async {};
 
-  attempt = callPackage ../development/libraries/haskell/attempt {};
+  attempt_0_3_1_1 = callPackage ../development/libraries/haskell/attempt/0.3.1.1.nix {
+    failure = self.failure_0_1_2;
+  };
+  attempt_0_4_0 = callPackage ../development/libraries/haskell/attempt/0.4.0.nix {};
+  attempt = self.attempt_0_4_0;
 
   attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
 
@@ -483,8 +486,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
 
-  blazeTextualNative = callPackage ../development/libraries/haskell/blaze-textual-native {};
-
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
@@ -500,6 +501,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   bytestringMmap = callPackage ../development/libraries/haskell/bytestring-mmap {};
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
+
+  Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix {};
+  Cabal = null; # core package in GHC
 
   cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};
 
@@ -551,7 +555,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     time = self.time_1_1_3;
   };
 
-  convertibleText = callPackage ../development/libraries/haskell/convertible-text {};
+  convertibleText = callPackage ../development/libraries/haskell/convertible-text {
+    attempt = self.attempt_0_3_1_1;
+  };
 
   continuedFractions = callPackage ../development/libraries/haskell/continued-fractions {};
 
@@ -571,6 +577,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cryptoApi = callPackage ../development/libraries/haskell/crypto-api {};
 
   cryptocipher = callPackage ../development/libraries/haskell/cryptocipher {};
+
+  cryptoConduit = callPackage ../development/libraries/haskell/crypto-conduit {};
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
@@ -592,7 +600,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
-  dataObject = callPackage ../development/libraries/haskell/data-object {};
+  dataObject = callPackage ../development/libraries/haskell/data-object {
+    failure = self.failure_0_1_2;
+  };
 
   dataObjectYaml = callPackage ../development/libraries/haskell/data-object-yaml {};
 
@@ -632,9 +642,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   downloadCurl = callPackage ../development/libraries/haskell/download-curl { tagsoup = self.tagsoup_0_10_1; };
 
-  DSH = callPackage ../development/libraries/haskell/DSH {
-    json = self.json_0_5;
-  };
+  DSH = callPackage ../development/libraries/haskell/DSH {};
 
   dstring = callPackage ../development/libraries/haskell/dstring {};
 
@@ -650,7 +658,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   explicitException = callPackage ../development/libraries/haskell/explicit-exception {};
 
-  filepath = callPackage ../development/libraries/haskell/filepath {};
+  filepath_1_3_0_0 = callPackage ../development/libraries/haskell/filepath {};
+  filepath = null; # a core package in recent GHCs
 
   extensibleExceptions_0_1_1_0 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.0.nix {};
   extensibleExceptions_0_1_1_2 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.2.nix {};
@@ -658,7 +667,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   extensibleExceptions_0_1_1_4 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.4.nix {};
   extensibleExceptions = null; # a core package in recent GHCs
 
-  failure = callPackage ../development/libraries/haskell/failure {};
+  failure_0_1_2 = callPackage ../development/libraries/haskell/failure/0.1.2.nix {};
+  failure_0_2_0 = callPackage ../development/libraries/haskell/failure/0.2.0.nix {};
+  failure = self.failure_0_2_0;
 
   fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
@@ -927,9 +938,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     WebBitsHtml = self.WebBitsHtml_1_0_1;
   };
 
-  json_0_4_4 = callPackage ../development/libraries/haskell/json/0.4.4.nix {};
-  json_0_5 = callPackage ../development/libraries/haskell/json/0.5.nix {};
-  json = self.json_0_4_4;
+  json = callPackage ../development/libraries/haskell/json {};
 
   jsonEnumerator = callPackage ../development/libraries/haskell/jsonEnumerator {};
 
@@ -1028,11 +1037,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
-  network_2_3_0_8 = callPackage ../development/libraries/haskell/network/2.3.0.8.nix {};
-  network_2_3_0_10 = callPackage ../development/libraries/haskell/network/2.3.0.10.nix {};
-  network = self.network_2_3_0_10;
-
-  nixosTypes = callPackage ../development/libraries/haskell/nixos-types {};
+  network_2_3_0_11 = callPackage ../development/libraries/haskell/network/2.3.0.11.nix {};
+  network = self.network_2_3_0_11;
 
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
@@ -1061,9 +1067,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pathPieces_0_1_0 = callPackage ../development/libraries/haskell/path-pieces/0.1.0.nix {};
   pathPieces = self.pathPieces_0_1_0;
 
-  pandoc = callPackage ../development/libraries/haskell/pandoc {
-    testFramework = self.testFramework_0_4_2_2;
-  };
+  pandoc = callPackage ../development/libraries/haskell/pandoc {};
 
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
@@ -1095,9 +1099,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
 
-  persistent = callPackage ../development/libraries/haskell/persistent {
-    pathPieces = self.pathPieces_0_0_0;
-  };
+  persistent = callPackage ../development/libraries/haskell/persistent {};
 
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
 
@@ -1327,9 +1329,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   terminfo = callPackage ../development/libraries/haskell/terminfo {};
 
-  testFramework_0_4_2_2 = callPackage ../development/libraries/haskell/test-framework/0.4.2.2.nix {};
-  testFramework_0_5 = callPackage ../development/libraries/haskell/test-framework/0.5.nix {};
-  testFramework = self.testFramework_0_5;
+  testFramework = callPackage ../development/libraries/haskell/test-framework {};
 
   testFrameworkHunit = callPackage ../development/libraries/haskell/test-framework-hunit {};
 
@@ -1479,7 +1479,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
 
-  xmlEnumerator = callPackage ../development/libraries/haskell/xml-enumerator {};
+  xmlEnumerator = callPackage ../development/libraries/haskell/xml-enumerator {
+    failure = self.failure_0_1_2;
+  };
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
@@ -1505,6 +1507,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yesodPersistent = callPackage ../development/libraries/haskell/yesod-persistent {};
 
+  yesodRoutes = callPackage ../development/libraries/haskell/yesod-routes {};
+
   yesodStatic = callPackage ../development/libraries/haskell/yesod-static {};
 
   yst = callPackage ../development/libraries/haskell/yst {};
@@ -1524,7 +1528,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib_0_5_3_1 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
     inherit (pkgs) zlib;
   };
-  zlib = self.zlib_0_5_3_1;
+  zlib_0_5_3_3 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
+    inherit (pkgs) zlib;
+  };
+  zlib = self.zlib_0_5_3_3;
 
   zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
 
@@ -1567,11 +1574,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cpphs = callPackage ../development/tools/misc/cpphs {};
 
-  ebnf2ps = callPackage ../development/tools/parsing/ebnf2ps {
-    inherit (pkgs) fetchurl;
-  };
+  Ebnf2ps = callPackage ../development/tools/parsing/Ebnf2ps {};
 
-  frown = callPackage ../development/tools/parsing/frown {};
+  # 2012-02-09: Disabled because upstream site has disappeared. This tool is clearly
+  #             unmaintained, and we should delete it unless anyone complains.
+  # frown = callPackage ../development/tools/parsing/frown {};
 
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix {};
   haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {};
@@ -1596,7 +1603,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
 
-  tar = callPackage ../development/tools/haskell/tar {};
+  tar_0_3_2_0 = callPackage ../development/tools/haskell/tar/0.3.2.0.nix {};
+  tar_0_4_0_0 = callPackage ../development/tools/haskell/tar/0.4.0.0.nix {};
+  tar = self.tar_0_4_0_0;
 
   threadscope = callPackage ../development/tools/haskell/threadscope {};
 
@@ -1608,6 +1617,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   darcs = callPackage ../applications/version-management/darcs {
     regexCompat = self.regexCompat93;
+    tar = self.tar_0_3_2_0;
   };
 
   leksah = callPackage ../applications/editors/leksah {};

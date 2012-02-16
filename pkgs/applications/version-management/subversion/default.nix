@@ -21,13 +21,13 @@ assert compressionSupport -> neon.compressionSupport;
 
 stdenv.mkDerivation rec {
 
-  version = "1.7.2";
+  version = "1.7.3";
 
   name = "subversion-${version}";
 
   src = fetchurl {
     url = "mirror://apache/subversion//${name}.tar.bz2";
-    sha1 = "8c0824aeb7f42da1ff4f7cd296877af7f59812bb";
+    sha1 = "624d4070361c0e8d7cf4f5c667629e72459b122d";
   };
 
   buildInputs = [ zlib apr aprutil sqlite ]

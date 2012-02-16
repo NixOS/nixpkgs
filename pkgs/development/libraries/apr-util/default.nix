@@ -6,11 +6,11 @@
 assert bdbSupport -> db4 != null;
 
 stdenv.mkDerivation rec {
-  name = "apr-util-1.3.12";
+  name = "apr-util-1.4.1";
   
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    md5 = "0f671b037ca62751a8a7005578085560";
+    md5 = "52b31b33fb1aa16e65ddaefc76e41151";
   };
   
   configureFlags = ''

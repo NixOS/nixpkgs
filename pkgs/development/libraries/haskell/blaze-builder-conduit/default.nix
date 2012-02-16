@@ -1,10 +1,10 @@
-{ cabal, blazeBuilder, conduit, text, transformers }:
+{ cabal, blazeBuilder, Cabal, conduit, text, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "blaze-builder-conduit";
-  version = "0.0.1";
-  sha256 = "1k9is6dknfqjnkqrvxs9z8cx0ffnnz4q02is9plndyg8pccgjfa9";
-  buildDepends = [ blazeBuilder conduit text transformers ];
+  version = "0.2.0";
+  sha256 = "13fcxmzw4xz7y271vdf6w6fj6isninjcxnm7h7gbk4yf31wx831r";
+  buildDepends = [ blazeBuilder Cabal conduit text transformers ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Convert streams of builders to streams of bytestrings";

@@ -1,10 +1,12 @@
-{ cabal, libX11, mesa, parsec, stm, time, wxdirect, wxGTK }:
+{ cabal, Cabal, filepath, libX11, mesa, parsec, stm, time, wxdirect
+, wxGTK
+}:
 
 cabal.mkDerivation (self: {
   pname = "wxcore";
-  version = "0.13.2";
-  sha256 = "1kzgqmh0vjm1qcskkfdyjbbq276nhd76w7bgxgdq67zl48bfc09g";
-  buildDepends = [ parsec stm time wxdirect ];
+  version = "0.13.2.1";
+  sha256 = "0p0d9vxw2pyvnhswsgasdd62hj86w3ixbbsx41wkswzkjjjib9i6";
+  buildDepends = [ Cabal filepath parsec stm time wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";

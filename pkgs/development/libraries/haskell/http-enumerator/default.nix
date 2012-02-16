@@ -1,5 +1,5 @@
 { cabal, asn1Data, attoparsec, attoparsecEnumerator
-, base64Bytestring, blazeBuilder, blazeBuilderEnumerator
+, base64Bytestring, blazeBuilder, blazeBuilderEnumerator, Cabal
 , caseInsensitive, certificate, cprngAes, dataDefault, enumerator
 , failure, httpTypes, monadControl, network, tls, tlsExtra
 , transformers, utf8String, zlibEnum
@@ -7,15 +7,15 @@
 
 cabal.mkDerivation (self: {
   pname = "http-enumerator";
-  version = "0.7.2.5";
-  sha256 = "1sck3z1x73qbak6p11745bywxwz91nk635jvv4wmgq4ifyfkbabb";
+  version = "0.7.3";
+  sha256 = "0l7azfvibqnninbxvbvgvia53jjf2fa1mhbip8gafy53asig6d06";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     asn1Data attoparsec attoparsecEnumerator base64Bytestring
-    blazeBuilder blazeBuilderEnumerator caseInsensitive certificate
-    cprngAes dataDefault enumerator failure httpTypes monadControl
-    network tls tlsExtra transformers utf8String zlibEnum
+    blazeBuilder blazeBuilderEnumerator Cabal caseInsensitive
+    certificate cprngAes dataDefault enumerator failure httpTypes
+    monadControl network tls tlsExtra transformers utf8String zlibEnum
   ];
   meta = {
     homepage = "http://github.com/snoyberg/http-enumerator";

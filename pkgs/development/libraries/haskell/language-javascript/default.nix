@@ -1,12 +1,12 @@
-{ cabal, alex, happy, mtl, utf8Light }:
+{ cabal, alex, Cabal, happy, mtl, utf8Light }:
 
 cabal.mkDerivation (self: {
   pname = "language-javascript";
-  version = "0.4.7";
-  sha256 = "029ncc7hdw3pi9fbnxd0knz7wy3jpj5wcfqsxzyk5dkwji6d95x1";
+  version = "0.4.9";
+  sha256 = "19a8c8bq4s533iyb6h3vl59dnya6d7inaqk1hbhnlil1w2d0n5b5";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ mtl utf8Light ];
+  buildDepends = [ Cabal mtl utf8Light ];
   buildTools = [ alex happy ];
   meta = {
     homepage = "http://github.com/alanz/language-javascript";

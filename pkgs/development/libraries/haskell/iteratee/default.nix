@@ -1,4 +1,5 @@
-{ cabal, ListLike, MonadCatchIOTransformers, parallel, transformers
+{ cabal, Cabal, ListLike, MonadCatchIOTransformers, parallel
+, transformers
 }:
 
 cabal.mkDerivation (self: {
@@ -8,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    ListLike MonadCatchIOTransformers parallel transformers
+    Cabal ListLike MonadCatchIOTransformers parallel transformers
   ];
   meta = {
     homepage = "http://www.tiresiaspress.us/haskell/iteratee";

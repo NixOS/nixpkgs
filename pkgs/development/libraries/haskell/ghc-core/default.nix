@@ -1,4 +1,4 @@
-{ cabal, colorizeHaskell, pcreLight }:
+{ cabal, Cabal, colorizeHaskell, filepath, pcreLight }:
 
 cabal.mkDerivation (self: {
   pname = "ghc-core";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1s68m2zkpz0n927rgzg0l0r5v8pk3z03rlkd82h83agw0hzb9ng7";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ colorizeHaskell pcreLight ];
+  buildDepends = [ Cabal colorizeHaskell filepath pcreLight ];
   meta = {
     homepage = "http://code.haskell.org/~dons/code/ghc-core";
     description = "Display GHC's core and assembly output in a pager";

@@ -1,4 +1,4 @@
-{ cabal, mtl }:
+{ cabal, Cabal, mtl }:
 
 cabal.mkDerivation (self: {
   pname = "BNFC";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0nnalzsql1k5y3s93g5y2hy2gcdsrbi8r7cwzmdcy4vyy589pin0";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ mtl ];
+  buildDepends = [ Cabal mtl ];
   meta = {
     homepage = "http://www.cse.chalmers.se/research/group/Language-technology/BNFC/";
     description = "A compiler front-end generator";

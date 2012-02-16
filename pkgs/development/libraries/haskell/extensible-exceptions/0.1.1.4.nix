@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "extensible-exceptions";
   version = "0.1.1.4";
   sha256 = "1273nqws9ij1rp1bsq5jc7k2jxpqa0svawdbim05lf302y0firbc";
+  buildDepends = [ Cabal ];
   meta = {
     description = "Extensible exceptions";
     license = self.stdenv.lib.licenses.bsd3;

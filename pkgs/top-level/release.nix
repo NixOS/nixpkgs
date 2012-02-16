@@ -304,7 +304,6 @@ with (import ./release-lib.nix);
   udev = linux;
   uml = ["i686-linux"];
   unrar = linux;
-  unzip = all;
   upstart = linux;
   usbutils = linux;
   utillinux = linux;

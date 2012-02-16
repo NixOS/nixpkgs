@@ -1,10 +1,10 @@
-{ cabal, conduit, resourcePool, transformers }:
+{ cabal, Cabal, conduit, resourcePool, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "pool-conduit";
   version = "0.0.0.1";
   sha256 = "1im5fpwadg9hmajay6dkwmlzbp5rzn8hh9wh01iy23jgivkqk2q0";
-  buildDepends = [ conduit resourcePool transformers ];
+  buildDepends = [ Cabal conduit resourcePool transformers ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
     description = "Resource pool allocations via ResourceT";

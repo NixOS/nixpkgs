@@ -1,14 +1,15 @@
-{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools }:
+{ stdenv, fetchsvn, pythonPackages, makeWrapper, nettools
+, enablePlayer ? false, vlc ? null }:
 
-let rev = "22523"; in
+let rev = "24912"; in
 
 stdenv.mkDerivation {
-  name = "tribler-5.4.3-pre${rev}";
+  name = "tribler-5.5.13-pre${rev}";
 
   src = fetchsvn {
-    url = http://svn.tribler.org/abc/branches/release-5.4.x;
+    url = http://svn.tribler.org/abc/branches/release-5.5.x;
     inherit rev;
-    sha256 = "09hscrnl50s9qncklnqqzwxwvidl3hj7hr7qsysmv6sw7b9rbx0g";
+    sha256 = "1x4rf83gsxif7fwx7p4crfji52i5y8rp54qfv1lbyxr8dfqjx83g";
   };
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
@@ -34,7 +35,10 @@ stdenv.mkDerivation {
           --set _TRIBLERPATH $out/share/tribler \
           --set PYTHONPATH $out/share/tribler:$program_PYTHONPATH \
           --run 'cd $_TRIBLERPATH' \
-          --add-flags "-O $out/share/tribler/Tribler/Main/tribler.py"
+          --add-flags "-O $out/share/tribler/Tribler/Main/tribler.py" \
+          ${stdenv.lib.optionalString enablePlayer ''
+            --prefix LD_LIBRARY_PATH : ${vlc}/lib
+          ''}
     '';
 
   meta = {
