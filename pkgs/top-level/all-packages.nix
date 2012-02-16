@@ -4004,6 +4004,7 @@ let
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus {
+    libpng = pkgs.libpng12;
   };
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
