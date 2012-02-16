@@ -1,5 +1,5 @@
 { cabal, attoparsec, attoparsecEnumerator, binary, blazeBuilder
-, blazeBuilderEnumerator, bytestringNums, Cabal, caseInsensitive
+, blazeBuilderEnumerator, bytestringNums, caseInsensitive
 , directoryTree, enumerator, filepath, MonadCatchIOTransformers
 , mtl, murmurHash, network, PSQueue, snapCore, text, time
 , transformers, unixCompat, vector, vectorAlgorithms
@@ -11,10 +11,10 @@ cabal.mkDerivation (self: {
   sha256 = "149jgd9mcndw9sc051020y7yiai1fipjnqk4s3sbw4lmaysap673";
   buildDepends = [
     attoparsec attoparsecEnumerator binary blazeBuilder
-    blazeBuilderEnumerator bytestringNums Cabal caseInsensitive
-    directoryTree enumerator filepath MonadCatchIOTransformers mtl
-    murmurHash network PSQueue snapCore text time transformers
-    unixCompat vector vectorAlgorithms
+    blazeBuilderEnumerator bytestringNums caseInsensitive directoryTree
+    enumerator filepath MonadCatchIOTransformers mtl murmurHash network
+    PSQueue snapCore text time transformers unixCompat vector
+    vectorAlgorithms
   ];
   meta = {
     homepage = "http://snapframework.com/";

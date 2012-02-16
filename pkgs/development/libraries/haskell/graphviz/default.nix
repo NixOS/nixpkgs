@@ -1,4 +1,4 @@
-{ cabal, Cabal, colour, dlist, extensibleExceptions, fgl, filepath
+{ cabal, colour, dlist, extensibleExceptions, fgl, filepath
 , polyparse, text, transformers, wlPprintText
 }:
 
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal colour dlist extensibleExceptions fgl filepath polyparse text
+    colour dlist extensibleExceptions fgl filepath polyparse text
     transformers wlPprintText
   ];
   meta = {

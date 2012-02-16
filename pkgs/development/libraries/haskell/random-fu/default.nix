@@ -1,5 +1,5 @@
-{ cabal, Cabal, erf, gamma, monadLoops, mtl, randomShuffle
-, randomSource, rvar, syb, transformers, vector
+{ cabal, erf, gamma, monadLoops, mtl, randomShuffle, randomSource
+, rvar, syb, transformers, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.2.1.1";
   sha256 = "034pnmagly3akmmcli018258fnyqlyz79av21dqqklfixvw3yja7";
   buildDepends = [
-    Cabal erf gamma monadLoops mtl randomShuffle randomSource rvar syb
+    erf gamma monadLoops mtl randomShuffle randomSource rvar syb
     transformers vector
   ];
   meta = {

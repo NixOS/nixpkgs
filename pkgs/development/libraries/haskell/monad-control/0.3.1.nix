@@ -1,12 +1,11 @@
-{ cabal, baseUnicodeSymbols, Cabal, transformers, transformersBase
-}:
+{ cabal, baseUnicodeSymbols, transformers, transformersBase }:
 
 cabal.mkDerivation (self: {
   pname = "monad-control";
   version = "0.3.1";
   sha256 = "0laqvbnj1dfcdxrybxdnzw5g95drv34ys0cbwkcw47nl9w801p45";
   buildDepends = [
-    baseUnicodeSymbols Cabal transformers transformersBase
+    baseUnicodeSymbols transformers transformersBase
   ];
   meta = {
     homepage = "https://github.com/basvandijk/monad-control";

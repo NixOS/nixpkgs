@@ -1,10 +1,10 @@
-{ cabal, Cabal, primitive, time, vector }:
+{ cabal, primitive, time, vector }:
 
 cabal.mkDerivation (self: {
   pname = "mwc-random";
   version = "0.10.0.1";
   sha256 = "0mmkl90rf57f2rxg3y2nibd37l9mwr2j4c71bwyvxqzfk7cylw9b";
-  buildDepends = [ Cabal primitive time vector ];
+  buildDepends = [ primitive time vector ];
   meta = {
     homepage = "https://github.com/bos/mwc-random";
     description = "Fast, high quality pseudo random number generation";

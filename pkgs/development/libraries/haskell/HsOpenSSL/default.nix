@@ -1,10 +1,10 @@
-{ cabal, Cabal, network, openssl, time }:
+{ cabal, network, openssl, time }:
 
 cabal.mkDerivation (self: {
   pname = "HsOpenSSL";
   version = "0.10.1.2";
   sha256 = "0najn3749s6jxqavpxw7q58jzsvli06sxjgkvs3lidasv6jhwmxh";
-  buildDepends = [ Cabal network time ];
+  buildDepends = [ network time ];
   extraLibraries = [ openssl ];
   meta = {
     homepage = "https://github.com/phonohawk/HsOpenSSL";

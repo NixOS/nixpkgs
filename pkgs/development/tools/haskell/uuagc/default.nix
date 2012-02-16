@@ -1,5 +1,5 @@
-{ cabal, Cabal, filepath, haskellSrcExts, mtl, uuagcBootstrap
-, uuagcCabal, uulib
+{ cabal, filepath, haskellSrcExts, mtl, uuagcBootstrap, uuagcCabal
+, uulib
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal filepath haskellSrcExts mtl uuagcBootstrap uuagcCabal uulib
+    filepath haskellSrcExts mtl uuagcBootstrap uuagcCabal uulib
   ];
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/HUT/WebHome";

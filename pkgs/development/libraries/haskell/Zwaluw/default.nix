@@ -1,10 +1,9 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "Zwaluw";
   version = "0.1";
   sha256 = "1crvcvni5gzpc1c6cnaqqp0gng1l9gk9d8ac23967nvp82xav7s1";
-  buildDepends = [ Cabal ];
   meta = {
     homepage = "https://github.com/MedeaMelana/Zwaluw";
     description = "Combinators for bidirectional URL routing";

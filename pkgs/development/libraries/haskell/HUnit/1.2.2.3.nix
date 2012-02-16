@@ -1,4 +1,4 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "HUnit";
@@ -6,7 +6,6 @@ cabal.mkDerivation (self: {
   sha256 = "158i6s014ybh5bflzspd21qzdlhdyk89yqpmk8kwc59lxjvvjsxz";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://hunit.sourceforge.net/";
     description = "A unit testing framework for Haskell";

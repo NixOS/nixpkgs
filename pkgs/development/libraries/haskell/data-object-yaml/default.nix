@@ -1,4 +1,4 @@
-{ cabal, Cabal, conduit, convertibleText, dataObject, failure, text
+{ cabal, conduit, convertibleText, dataObject, failure, text
 , transformers, yaml
 }:
 
@@ -9,8 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal conduit convertibleText dataObject failure text transformers
-    yaml
+    conduit convertibleText dataObject failure text transformers yaml
   ];
   meta = {
     homepage = "http://github.com/snoyberg/data-object-yaml";

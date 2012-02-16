@@ -1,5 +1,4 @@
-{ cabal, Cabal, llvm, random, repa, repaAlgorithms, repaIo, vector
-}:
+{ cabal, llvm, random, repa, repaAlgorithms, repaIo, vector }:
 
 cabal.mkDerivation (self: {
   pname = "repa-examples";
@@ -7,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0rqpq4v2ir86x9z0aw8pcz929imcw9lf415j88kg12x2rk451mm0";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ Cabal random repa repaAlgorithms repaIo vector ];
+  buildDepends = [ random repa repaAlgorithms repaIo vector ];
   extraLibraries = [ llvm ];
   meta = {
     homepage = "http://repa.ouroborus.net";

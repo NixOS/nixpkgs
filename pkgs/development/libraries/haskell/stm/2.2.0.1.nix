@@ -1,10 +1,9 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "stm";
   version = "2.2.0.1";
   sha256 = "1p0x414ffsd77mmlfz1cmwg2cbhinnbpxypxgvygg05js67msj8q";
-  buildDepends = [ Cabal ];
   meta = {
     description = "Software Transactional Memory";
     license = self.stdenv.lib.licenses.bsd3;

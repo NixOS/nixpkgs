@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, kdelibs, kde_workspace, networkmanager }:
+{ stdenv, fetchurl, gettext, kdelibs, kde_workspace, networkmanager, pkgconfig }:
 
 let
   pname = "networkmanagement";
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ kdelibs kde_workspace networkmanager ];
-  buildNativeInputs = [ gettext ];
+  buildNativeInputs = [ gettext pkgconfig ];
 
   NIX_CFLAGS_COMPILE="-I${kde_workspace}/include/solid/control";
 

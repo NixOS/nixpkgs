@@ -1,5 +1,4 @@
-{ cabal, blazeHtml, Cabal, filepath, mtl, parsec, regexPcreBuiltin
-}:
+{ cabal, blazeHtml, filepath, mtl, parsec, regexPcreBuiltin }:
 
 cabal.mkDerivation (self: {
   pname = "highlighting-kate";
@@ -7,9 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "005k3yc406h4wz5jk47nk4g5qb409kd7dwyw7n9g31gjqxp73p8v";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [
-    blazeHtml Cabal filepath mtl parsec regexPcreBuiltin
-  ];
+  buildDepends = [ blazeHtml filepath mtl parsec regexPcreBuiltin ];
   meta = {
     homepage = "http://github.com/jgm/highlighting-kate";
     description = "Syntax highlighting";

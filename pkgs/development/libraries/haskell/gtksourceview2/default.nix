@@ -1,12 +1,12 @@
-{ cabal, Cabal, glib, gtk, gtk2hsBuildtools, gtksourceview, libc
-, mtl, pkgconfig
+{ cabal, glib, gtk, gtk2hsBuildtools, gtksourceview, libc, mtl
+, pkgconfig
 }:
 
 cabal.mkDerivation (self: {
   pname = "gtksourceview2";
   version = "0.12.3";
   sha256 = "0bhwvhwsg3mf4w94fl6z6qkn67i68hh3zwwhzqa59lia0nc233gd";
-  buildDepends = [ Cabal glib gtk mtl ];
+  buildDepends = [ glib gtk mtl ];
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc pkgconfig ];
   pkgconfigDepends = [ gtksourceview ];

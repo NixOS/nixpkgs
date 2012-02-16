@@ -1,4 +1,4 @@
-{ cabal, Cabal, transformers }:
+{ cabal, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "explicit-exception";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0pgdbaav952bwcmbfwg0fgvc15k57rlnw131bs3pnp8rqdbxfv39";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal transformers ];
+  buildDepends = [ transformers ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Exception";
     description = "Exceptions which are explicit in the type signature";

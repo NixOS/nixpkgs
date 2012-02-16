@@ -1,10 +1,10 @@
-{ cabal, Cabal, parsec }:
+{ cabal, parsec }:
 
 cabal.mkDerivation (self: {
   pname = "network";
   version = "2.3.0.11";
   sha256 = "1ghm8rw0m3x71pnndbmzm9j99yh8bmmrlhz4ykslsk2my7ihmxdk";
-  buildDepends = [ Cabal parsec ];
+  buildDepends = [ parsec ];
   meta = {
     homepage = "http://github.com/haskell/network";
     description = "Low-level networking interface";

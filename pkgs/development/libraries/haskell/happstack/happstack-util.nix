@@ -1,5 +1,5 @@
-{ cabal, Cabal, extensibleExceptions, filepath, hslogger, mtl
-, network, parsec, random, time, unixCompat
+{ cabal, extensibleExceptions, filepath, hslogger, mtl, network
+, parsec, random, time, unixCompat
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal extensibleExceptions filepath hslogger mtl network parsec
-    random time unixCompat
+    extensibleExceptions filepath hslogger mtl network parsec random
+    time unixCompat
   ];
   meta = {
     homepage = "http://happstack.com";

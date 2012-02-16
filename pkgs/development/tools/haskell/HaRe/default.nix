@@ -1,4 +1,4 @@
-{ cabal, Cabal, filepath, hint, mtl, network, syb }:
+{ cabal, filepath, hint, mtl, network, syb }:
 
 cabal.mkDerivation (self: {
   pname = "HaRe";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "13mi6z37fszrl97mll4injhq8dyhqzm344x7y2vw8krr5xjj3kw2";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ Cabal filepath hint mtl network syb ];
+  buildDepends = [ filepath hint mtl network syb ];
   meta = {
     homepage = "http://www.cs.kent.ac.uk/projects/refactor-fp";
     description = "the Haskell Refactorer";

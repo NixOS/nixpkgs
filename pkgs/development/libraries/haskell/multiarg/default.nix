@@ -1,4 +1,4 @@
-{ cabal, Cabal, explicitException, QuickCheck, text, transformers
+{ cabal, explicitException, QuickCheck, text, transformers
 , utf8String
 }:
 
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.1.0.0";
   sha256 = "010mph49fq0rdr5dmm4pdlbmfmaaas8wffa9p1cgprs2ic1hnx3g";
   buildDepends = [
-    Cabal explicitException QuickCheck text transformers utf8String
+    explicitException QuickCheck text transformers utf8String
   ];
   meta = {
     homepage = "https://github.com/massysett/multiarg";

@@ -1,10 +1,9 @@
-{ cabal, Cabal, pcre }:
+{ cabal, pcre }:
 
 cabal.mkDerivation (self: {
   pname = "pcre-light";
   version = "0.4";
   sha256 = "1xiikiap1bvx9czw64664vifdq64scx0yhfclh5m8mkvn3x6yzxk";
-  buildDepends = [ Cabal ];
   extraLibraries = [ pcre ];
   meta = {
     homepage = "http://code.haskell.org/~dons/code/pcre-light";

@@ -1,4 +1,4 @@
-{ cabal, Cabal, convertible, mtl, text, time, utf8String }:
+{ cabal, convertible, mtl, text, time, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "HDBC";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1gqihvsf5w7j8xbn1xy93mdrsh77qwxbhfmyjivbm6i95w1i0kb7";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal convertible mtl text time utf8String ];
+  buildDepends = [ convertible mtl text time utf8String ];
   meta = {
     homepage = "https://github.com/hdbc/hdbc";
     description = "Haskell Database Connectivity";

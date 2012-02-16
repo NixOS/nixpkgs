@@ -1,5 +1,5 @@
-{ cabal, blazeBuilder, blazeHtml, Cabal, failure, parsec
-, shakespeare, text
+{ cabal, blazeBuilder, blazeHtml, failure, parsec, shakespeare
+, text
 }:
 
 cabal.mkDerivation (self: {
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.10.8";
   sha256 = "1vlp8vwaipz757vnd95gcdi9dkrpbgfdlsb3kgjivsj7rqbmxf7z";
   buildDepends = [
-    blazeBuilder blazeHtml Cabal failure parsec shakespeare text
+    blazeBuilder blazeHtml failure parsec shakespeare text
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/templates";

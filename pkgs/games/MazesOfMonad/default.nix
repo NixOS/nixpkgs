@@ -1,4 +1,4 @@
-{ cabal, Cabal, filepath, HUnit, mtl, random, regexPosix, time }:
+{ cabal, filepath, HUnit, mtl, random, regexPosix, time }:
 
 cabal.mkDerivation (self: {
   pname = "MazesOfMonad";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1zk6bckll03b40iq8z13753glkmcan6439w8cc6rn5h2fhp189v9";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ Cabal filepath HUnit mtl random regexPosix time ];
+  buildDepends = [ filepath HUnit mtl random regexPosix time ];
   meta = {
     description = "Console-based Role Playing Game";
     license = self.stdenv.lib.licenses.bsd3;

@@ -1,10 +1,10 @@
-{ cabal, Cabal, HUnit, QuickCheck }:
+{ cabal, HUnit, QuickCheck }:
 
 cabal.mkDerivation (self: {
   pname = "Ranged-sets";
   version = "0.3.0";
   sha256 = "1am0lsd3yiyn7ayk9k4ff7zdj67m0pxjl10cxi5f9hgjj4y9380l";
-  buildDepends = [ Cabal HUnit QuickCheck ];
+  buildDepends = [ HUnit QuickCheck ];
   meta = {
     homepage = "http://code.haskell.org/ranged-sets";
     description = "Ranged sets for Haskell";

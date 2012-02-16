@@ -1,6 +1,4 @@
-{ cabal, binary, Cabal, ConfigFile, filepath, gtk, mtl, random
-, zlib
-}:
+{ cabal, binary, ConfigFile, filepath, gtk, mtl, random, zlib }:
 
 cabal.mkDerivation (self: {
   pname = "LambdaHack";
@@ -8,9 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "09lgbpwrlw29n797q3k5aafvkg04nd8cw6pi41g914phf7lxzq4c";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [
-    binary Cabal ConfigFile filepath gtk mtl random zlib
-  ];
+  buildDepends = [ binary ConfigFile filepath gtk mtl random zlib ];
   meta = {
     homepage = "http://github.com/kosmikus/LambdaHack";
     description = "A roguelike game engine in early and very active development";

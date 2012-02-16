@@ -1,5 +1,5 @@
-{ cabal, Cabal, cmdargs, filepath, HUnit, mtl, parsec, regexpr
-, safe, split, time, utf8String
+{ cabal, cmdargs, filepath, HUnit, mtl, parsec, regexpr, safe
+, split, time, utf8String
 }:
 
 cabal.mkDerivation (self: {
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.17";
   sha256 = "0dlm3hjbcf48nzz597ag1q9y0phsc09062wvzpmfkhk4hsijpds4";
   buildDepends = [
-    Cabal cmdargs filepath HUnit mtl parsec regexpr safe split time
+    cmdargs filepath HUnit mtl parsec regexpr safe split time
     utf8String
   ];
   meta = {

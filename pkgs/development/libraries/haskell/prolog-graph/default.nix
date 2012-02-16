@@ -1,5 +1,4 @@
-{ cabal, Cabal, cmdargs, fgl, graphviz, mtl, prolog, prologGraphLib
-, text
+{ cabal, cmdargs, fgl, graphviz, mtl, prolog, prologGraphLib, text
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +8,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    Cabal cmdargs fgl graphviz mtl prolog prologGraphLib text
+    cmdargs fgl graphviz mtl prolog prologGraphLib text
   ];
   meta = {
     homepage = "https://github.com/Erdwolf/prolog";

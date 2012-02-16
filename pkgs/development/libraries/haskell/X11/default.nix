@@ -1,10 +1,10 @@
-{ cabal, Cabal, libX11, libXext, libXinerama, syb }:
+{ cabal, libX11, libXext, libXinerama, syb }:
 
 cabal.mkDerivation (self: {
   pname = "X11";
   version = "1.5.0.1";
   sha256 = "0s8k3lhvlks6i1mwfnm5fimfd2f0sjw9k2p67is3x564kih7mh19";
-  buildDepends = [ Cabal syb ];
+  buildDepends = [ syb ];
   extraLibraries = [ libX11 libXext libXinerama ];
   meta = {
     homepage = "https://github.com/haskell-pkg-janitors/X11";

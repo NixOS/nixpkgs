@@ -1,4 +1,4 @@
-{ cabal, Cabal, HUnit, QuickCheck, random }:
+{ cabal, HUnit, QuickCheck, random }:
 
 cabal.mkDerivation (self: {
   pname = "Crypto";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "05wafv8flrh1893rh208azzig5k5pa022s2fg3f8lrqb23c6v63p";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal HUnit QuickCheck random ];
+  buildDepends = [ HUnit QuickCheck random ];
   meta = {
     description = "Collects together existing Haskell cryptographic functions into a package";
     license = "unknown";

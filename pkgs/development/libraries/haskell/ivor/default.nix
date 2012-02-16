@@ -1,10 +1,10 @@
-{ cabal, binary, Cabal, mtl, parsec }:
+{ cabal, binary, mtl, parsec }:
 
 cabal.mkDerivation (self: {
   pname = "ivor";
   version = "0.1.14.1";
   sha256 = "0r9ykfkxpwsrhsvv691r361pf79a7y511hxy2mvd6ysz1441mych";
-  buildDepends = [ binary Cabal mtl parsec ];
+  buildDepends = [ binary mtl parsec ];
   meta = {
     homepage = "http://www.dcs.st-and.ac.uk/~eb/Ivor/";
     description = "Theorem proving library based on dependent type theory";

@@ -1,5 +1,5 @@
-{ cabal, Cabal, Crypto, dataenc, HTTP, hxt, MissingH, network
-, random, regexCompat, utf8String
+{ cabal, Crypto, dataenc, HTTP, hxt, MissingH, network, random
+, regexCompat, utf8String
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal Crypto dataenc HTTP hxt MissingH network random regexCompat
+    Crypto dataenc HTTP hxt MissingH network random regexCompat
     utf8String
   ];
   meta = {

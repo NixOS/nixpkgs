@@ -1,10 +1,9 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "entropy";
   version = "0.2.1";
   sha256 = "1qp8hvdzfgg2wk7d431qycwbn2zpzlplc1c7dbhimj1had5jscrs";
-  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://trac.haskell.org/crypto-api/wiki";
     description = "A platform independent entropy source";

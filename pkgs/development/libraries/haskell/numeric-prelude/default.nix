@@ -1,4 +1,4 @@
-{ cabal, Cabal, deepseq, nonNegative, parsec, QuickCheck, random
+{ cabal, deepseq, nonNegative, parsec, QuickCheck, random
 , storableRecord, utilityHt
 }:
 
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal deepseq nonNegative parsec QuickCheck random storableRecord
+    deepseq nonNegative parsec QuickCheck random storableRecord
     utilityHt
   ];
   meta = {

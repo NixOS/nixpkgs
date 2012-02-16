@@ -1,4 +1,4 @@
-{ cabal, Cabal, parsec, syb, xml }:
+{ cabal, parsec, syb, xml }:
 
 cabal.mkDerivation (self: {
   pname = "texmath";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0vj1kh62qs7badv00lcda9m3j53kc069kmrv5lmz62a96y4kx5yi";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal parsec syb xml ];
+  buildDepends = [ parsec syb xml ];
   meta = {
     homepage = "http://github.com/jgm/texmath";
     description = "Conversion of LaTeX math formulas to MathML or OMML";

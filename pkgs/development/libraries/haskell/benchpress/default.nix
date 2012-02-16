@@ -1,10 +1,10 @@
-{ cabal, Cabal, mtl, time }:
+{ cabal, mtl, time }:
 
 cabal.mkDerivation (self: {
   pname = "benchpress";
   version = "0.2.2.4";
   sha256 = "0cabjx0gkbk5blqkm9pmnz8kmi3573367365gny4r3m431iwxgnf";
-  buildDepends = [ Cabal mtl time ];
+  buildDepends = [ mtl time ];
   meta = {
     homepage = "http://github.com/tibbe/benchpress";
     description = "Micro-benchmarking with detailed statistics";
