@@ -1,6 +1,5 @@
 a :  
 let 
-  s = import ./src-for-default.nix;
   buildInputs = with a; [
     xproto libX11 gmp guile
     mesa libjpeg libpng
@@ -12,9 +11,13 @@ let
   ];
 in
 rec {
-  src = a.fetchUrlFromSrcInfo s;
+  name = "liquidwar6-0.0.13beta";
 
-  inherit (s) name;
+  src = a.fetchurl {
+    url = "http://ftp.gnu.org/gnu/liquidwar6/${name}.tar.gz";
+    sha256 = "1jjf7wzb8jf02hl3473vz1q74fhmxn0szbishgi1f1j6a7234wx2";
+  };
+
   inherit buildInputs;
   configureFlags = [];
 
