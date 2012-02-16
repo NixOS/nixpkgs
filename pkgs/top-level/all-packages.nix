@@ -5891,7 +5891,7 @@ let
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
-    kqemu = builderDefsPackage ../os-specific/linux/kqemu/1.4.0pre1.nix {
+    kqemu = builderDefsPackage ../os-specific/linux/kqemu {
       inherit kernel perl;
     };
 
@@ -5901,10 +5901,6 @@ let
 
     splashutils =
       if kernel.features ? fbConDecor then pkgs.splashutils else null;
-
-    ext3cowtools = callPackage ../os-specific/linux/ext3cow-tools {
-      kernel_ext3cowpatched = kernel;
-    };
 
     /* compiles but has to be integrated into the kernel somehow
       Let's have it uncommented and finish it..
@@ -5916,15 +5912,6 @@ let
     };
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
-
-    # State Nix
-    snix = callPackage ../tools/package-management/snix {
-
-      aterm = aterm25;
-      db4 = db45;
-
-      flex = flex2533;
-      ext3cow_kernel = kernel;    };
 
     sysprof = callPackage ../development/tools/profiling/sysprof {
       inherit (gnome) gtk glib pango libglade;
