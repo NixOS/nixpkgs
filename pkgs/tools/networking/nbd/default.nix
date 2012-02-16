@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   patches = [ ./0001-properly-check-for-HAVE_FALLOC_PH-in-both-occurrence.patch ];
 
-  buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional stdenv.isLinux stdenv.glibc.kernelHeaders;
+  buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.kernelHeaders;
 
   postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
 
