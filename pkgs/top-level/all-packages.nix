@@ -1130,6 +1130,8 @@ let
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
+  openresolv = callPackage ../tools/networking/openresolv { };
+
   opensc_0_11_7 = callPackage ../tools/security/opensc/0.11.7.nix { };
 
   opensc = opensc_0_11_7;
