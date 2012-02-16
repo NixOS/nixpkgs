@@ -1,4 +1,5 @@
 x@{builderDefsPackage
+  , zlib
   , curl, gnutls, fribidi, libpng, SDL, SDL_gfx, SDL_image, SDL_mixer
   , SDL_net, SDL_ttf, libunwind, libX11, xproto, libxml2, pkgconfig
   , gettext, intltool, libtool, perl
@@ -13,10 +14,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="warmux";
-    version="11.01";
+    version="11.04.1";
     name="${baseName}-${version}";
     url="http://download.gna.org/${baseName}/${name}.tar.bz2";
-    hash="1f063yaab08gflh4hnd8clb4as41ayfphi4q0cmi8syjiaap2qgh";
+    hash="1vp44wdpnb1g6cddmn3nphc543pxsdhjis52mfif0p2c7qslz73q";
   };
 in
 rec {
@@ -30,7 +31,9 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
-      
+
+  configureFlags = "CFLAGS=\"-include ${zlib}/include/zlib.h\"";
+
   meta = {
     description = "Ballistics turn-based battle game between teams";
     maintainers = with a.lib.maintainers;
