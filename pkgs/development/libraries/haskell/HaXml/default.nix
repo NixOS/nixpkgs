@@ -1,4 +1,4 @@
-{ cabal, Cabal, filepath, polyparse, random }:
+{ cabal, filepath, polyparse, random }:
 
 cabal.mkDerivation (self: {
   pname = "HaXml";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1ckmi8iwyaid4mcnh8117s9kq45f8r7sidh6dbhzbj0dl29rrkbz";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal filepath polyparse random ];
+  buildDepends = [ filepath polyparse random ];
   meta = {
     homepage = "http://www.cs.york.ac.uk/fp/HaXml/";
     description = "Utilities for manipulating XML documents";

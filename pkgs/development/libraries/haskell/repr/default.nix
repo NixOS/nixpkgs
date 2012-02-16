@@ -1,13 +1,11 @@
-{ cabal, baseUnicodeSymbols, Cabal, dstring, random
-, stringCombinators
-}:
+{ cabal, baseUnicodeSymbols, dstring, random, stringCombinators }:
 
 cabal.mkDerivation (self: {
   pname = "repr";
   version = "0.4.1.2";
   sha256 = "09rv23p1hvvfw5wnhiawgrpqgqa4i0d00skyj9z1jj6bfxk5avjs";
   buildDepends = [
-    baseUnicodeSymbols Cabal dstring random stringCombinators
+    baseUnicodeSymbols dstring random stringCombinators
   ];
   meta = {
     homepage = "https://github.com/basvandijk/repr";

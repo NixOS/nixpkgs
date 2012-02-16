@@ -1,7 +1,6 @@
-{ cabal, blazeHtml, Cabal, extensibleExceptions, filepath
-, happstackData, happstackUtil, hslogger, html, MaybeT, mtl
-, network, parsec, sendfile, syb, text, time, utf8String, xhtml
-, zlib
+{ cabal, blazeHtml, extensibleExceptions, filepath, happstackData
+, happstackUtil, hslogger, html, MaybeT, mtl, network, parsec
+, sendfile, syb, text, time, utf8String, xhtml, zlib
 }:
 
 cabal.mkDerivation (self: {
@@ -11,9 +10,9 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    blazeHtml Cabal extensibleExceptions filepath happstackData
-    happstackUtil hslogger html MaybeT mtl network parsec sendfile syb
-    text time utf8String xhtml zlib
+    blazeHtml extensibleExceptions filepath happstackData happstackUtil
+    hslogger html MaybeT mtl network parsec sendfile syb text time
+    utf8String xhtml zlib
   ];
   meta = {
     homepage = "http://happstack.com";

@@ -1,4 +1,4 @@
-{ cabal, Cabal, deepseq, erf, mathFunctions, monadPar, mwcRandom
+{ cabal, deepseq, erf, mathFunctions, monadPar, mwcRandom
 , primitive, vector, vectorAlgorithms
 }:
 
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.10.1.0";
   sha256 = "0fnpwnhcwxjcm81b9daqdy07cw5qgqa7m2bj6fxxwicpvawcyabc";
   buildDepends = [
-    Cabal deepseq erf mathFunctions monadPar mwcRandom primitive vector
+    deepseq erf mathFunctions monadPar mwcRandom primitive vector
     vectorAlgorithms
   ];
   meta = {

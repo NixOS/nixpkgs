@@ -1,4 +1,4 @@
-{ cabal, Cabal, text }:
+{ cabal, text }:
 
 cabal.mkDerivation (self: {
   pname = "tagsoup";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1q1dzsaj131fcvibka72i7si1i0gxkz5d9zl0akd8mbapy5mmlv5";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal text ];
+  buildDepends = [ text ];
   meta = {
     homepage = "http://community.haskell.org/~ndm/tagsoup/";
     description = "Parsing and extracting information from (possibly malformed) HTML/XML documents";

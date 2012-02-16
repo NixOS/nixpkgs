@@ -1,4 +1,4 @@
-{ cabal, Cabal, perl, QuickCheck }:
+{ cabal, perl, QuickCheck }:
 
 cabal.mkDerivation (self: {
   pname = "alex";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1w7s9kzgr4kfh6cyhb4qkvxwy9gcw3xa1d2k5dy575k3wk73awkj";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ Cabal QuickCheck ];
+  buildDepends = [ QuickCheck ];
   buildTools = [ perl ];
   meta = {
     homepage = "http://www.haskell.org/alex/";

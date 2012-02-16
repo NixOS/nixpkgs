@@ -1,10 +1,9 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "numtype";
   version = "1.0";
   sha256 = "2606e81d7bcef0ba76b1e6ffc8d513c36fef5fefaab3bdd02da18761ec504e1f";
-  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://dimensional.googlecode.com/";
     description = "Type-level (low cardinality) integers";

@@ -1,4 +1,4 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "cpphs";
@@ -6,7 +6,6 @@ cabal.mkDerivation (self: {
   sha256 = "1dnz4992hr662ys1lkf6iyqmi2a3bksim8dlryqwd9wx9h24lhq2";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://haskell.org/cpphs/";
     description = "A liberalised re-implementation of cpp, the C pre-processor";

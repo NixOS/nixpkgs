@@ -1,4 +1,4 @@
-{ cabal, Cabal, mtl, perl }:
+{ cabal, mtl, perl }:
 
 cabal.mkDerivation (self: {
   pname = "happy";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1mqdawxszmdk71fbl8ljxz7jyhai00sflaw0gahp039n44mrspam";
   isLibrary = false;
   isExecutable = true;
-  buildDepends = [ Cabal mtl ];
+  buildDepends = [ mtl ];
   buildTools = [ perl ];
   meta = {
     homepage = "http://www.haskell.org/happy/";

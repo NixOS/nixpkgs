@@ -1,5 +1,5 @@
-{ cabal, Cabal, filepath, libXrandr, mtl, parsec, stm, time
-, utf8String, X11, X11Xft
+{ cabal, filepath, libXrandr, mtl, parsec, stm, time, utf8String
+, X11, X11Xft
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    Cabal filepath mtl parsec stm time utf8String X11 X11Xft
+    filepath mtl parsec stm time utf8String X11 X11Xft
   ];
   extraLibraries = [ libXrandr ];
   configureFlags = "-fwith_xft";

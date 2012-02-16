@@ -1,10 +1,10 @@
-{ cabal, baseUnicodeSymbols, Cabal, dlist }:
+{ cabal, baseUnicodeSymbols, dlist }:
 
 cabal.mkDerivation (self: {
   pname = "dstring";
   version = "0.4.0.3";
   sha256 = "0wzj1wzls7w79ac84sc5msblh2dmfmcxm77drpdqdirl1pwdlq9c";
-  buildDepends = [ baseUnicodeSymbols Cabal dlist ];
+  buildDepends = [ baseUnicodeSymbols dlist ];
   meta = {
     homepage = "https://github.com/basvandijk/dstring";
     description = "Difference strings";

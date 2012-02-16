@@ -1,12 +1,10 @@
-{ cabal, Cabal, cereal, cryptoApi, cryptocipher, entropy, random }:
+{ cabal, cereal, cryptoApi, cryptocipher, entropy, random }:
 
 cabal.mkDerivation (self: {
   pname = "cprng-aes";
   version = "0.2.3";
   sha256 = "1xyphzb3afvw7kpgq3b0c86b45rp5a8s870gag1lp7h686lhfnn3";
-  buildDepends = [
-    Cabal cereal cryptoApi cryptocipher entropy random
-  ];
+  buildDepends = [ cereal cryptoApi cryptocipher entropy random ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cprng-aes";
     description = "Crypto Pseudo Random Number Generator using AES in counter mode";

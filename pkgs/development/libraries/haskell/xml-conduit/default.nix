@@ -1,5 +1,5 @@
 { cabal, attoparsec, attoparsecConduit, blazeBuilder
-, blazeBuilderConduit, Cabal, conduit, dataDefault, failure
+, blazeBuilderConduit, conduit, dataDefault, failure
 , systemFilepath, text, transformers, xmlTypes
 }:
 
@@ -8,7 +8,7 @@ cabal.mkDerivation (self: {
   version = "0.5.2";
   sha256 = "0wr9xbx2dwv0kmnx9jwlm1734a22mc79ydg4sh61335fdjvchfnd";
   buildDepends = [
-    attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit Cabal
+    attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
     conduit dataDefault failure systemFilepath text transformers
     xmlTypes
   ];

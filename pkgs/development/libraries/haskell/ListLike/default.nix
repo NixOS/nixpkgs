@@ -1,4 +1,4 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "ListLike";
@@ -6,7 +6,6 @@ cabal.mkDerivation (self: {
   sha256 = "0cpj7vqlazs2yzh0ffhlg69kdb18xyicybfw614nlqfhhrp53lj9";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://software.complete.org/listlike";
     description = "Generic support for list-like structures";

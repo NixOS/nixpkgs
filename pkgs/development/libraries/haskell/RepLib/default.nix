@@ -1,10 +1,10 @@
-{ cabal, Cabal, mtl, typeEquality }:
+{ cabal, mtl, typeEquality }:
 
 cabal.mkDerivation (self: {
   pname = "RepLib";
   version = "0.5.1";
   sha256 = "1c6zqi87lmmmiz8amsvhw6wkhg90rhh6yl5vh0a9ism3apwh1i7r";
-  buildDepends = [ Cabal mtl typeEquality ];
+  buildDepends = [ mtl typeEquality ];
   noHaddock = true;
   meta = {
     homepage = "http://code.google.com/p/replib/";

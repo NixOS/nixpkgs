@@ -1,10 +1,9 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "Tensor";
   version = "1.0.0.1";
   sha256 = "10arhk5gkn5jxpb53r80bblpk0afdax1fc2mik40hj5g5g960cp9";
-  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://www.haskell.org/HOpenGL/";
     description = "Tensor data types";

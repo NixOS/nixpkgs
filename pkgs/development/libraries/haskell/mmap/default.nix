@@ -1,4 +1,4 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "mmap";
@@ -6,7 +6,6 @@ cabal.mkDerivation (self: {
   sha256 = "0f08x9kmv3a03kz5a6dpxr30nks55cs9sp55qpn2jnw31qx6hg6p";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal ];
   meta = {
     description = "Memory mapped files for POSIX and Windows";
     license = self.stdenv.lib.licenses.bsd3;

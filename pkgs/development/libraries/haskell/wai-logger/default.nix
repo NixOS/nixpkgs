@@ -1,5 +1,5 @@
-{ cabal, blazeBuilder, byteorder, Cabal, caseInsensitive
-, fastLogger, httpTypes, network, time, wai
+{ cabal, blazeBuilder, byteorder, caseInsensitive, fastLogger
+, httpTypes, network, time, wai
 }:
 
 cabal.mkDerivation (self: {
@@ -7,8 +7,8 @@ cabal.mkDerivation (self: {
   version = "0.1.4";
   sha256 = "1rvcqq4jlkcjavy8a3vf61jclwpnjmj6cp3whrzwvay9b1qfsck3";
   buildDepends = [
-    blazeBuilder byteorder Cabal caseInsensitive fastLogger httpTypes
-    network time wai
+    blazeBuilder byteorder caseInsensitive fastLogger httpTypes network
+    time wai
   ];
   meta = {
     description = "A logging system for WAI";

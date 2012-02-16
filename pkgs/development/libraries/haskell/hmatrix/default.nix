@@ -1,12 +1,10 @@
-{ cabal, binary, blas, Cabal, gsl, liblapack, storableComplex
-, vector
-}:
+{ cabal, binary, blas, gsl, liblapack, storableComplex, vector }:
 
 cabal.mkDerivation (self: {
   pname = "hmatrix";
   version = "0.13.1.0";
   sha256 = "0pl5z6zsxyvbdfdng77r2c4isq6d4wbyzx2qs9r8rbn6glaxwrmp";
-  buildDepends = [ binary Cabal storableComplex vector ];
+  buildDepends = [ binary storableComplex vector ];
   extraLibraries = [ blas gsl liblapack ];
   meta = {
     homepage = "http://perception.inf.um.es/hmatrix";

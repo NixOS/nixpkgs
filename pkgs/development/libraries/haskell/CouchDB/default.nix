@@ -1,10 +1,10 @@
-{ cabal, Cabal, HTTP, json, mtl, network }:
+{ cabal, HTTP, json, mtl, network }:
 
 cabal.mkDerivation (self: {
   pname = "CouchDB";
   version = "0.10.1";
   sha256 = "1ny62ab0sjrkh7mpxj0ahqrv7c8dh0n5s1g8xl0mq3yiwlrjdsim";
-  buildDepends = [ Cabal HTTP json mtl network ];
+  buildDepends = [ HTTP json mtl network ];
   meta = {
     homepage = "http://github.com/arjunguha/haskell-couchdb/";
     description = "CouchDB interface";

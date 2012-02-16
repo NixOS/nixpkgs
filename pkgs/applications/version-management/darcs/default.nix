@@ -1,4 +1,4 @@
-{ cabal, Cabal, curl, extensibleExceptions, filepath, hashedStorage
+{ cabal, curl, extensibleExceptions, filepath, hashedStorage
 , haskeline, html, HTTP, mmap, mtl, network, parsec, random
 , regexCompat, tar, terminfo, text, zlib
 }:
@@ -10,9 +10,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal extensibleExceptions filepath hashedStorage haskeline html
-    HTTP mmap mtl network parsec random regexCompat tar terminfo text
-    zlib
+    extensibleExceptions filepath hashedStorage haskeline html HTTP
+    mmap mtl network parsec random regexCompat tar terminfo text zlib
   ];
   extraLibraries = [ curl ];
   meta = {

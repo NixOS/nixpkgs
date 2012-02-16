@@ -1,5 +1,5 @@
-{ cabal, Cabal, cereal, certificate, cryptoApi, cryptocipher
-, cryptohash, mtl
+{ cabal, cereal, certificate, cryptoApi, cryptocipher, cryptohash
+, mtl
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal cereal certificate cryptoApi cryptocipher cryptohash mtl
+    cereal certificate cryptoApi cryptocipher cryptohash mtl
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-tls";

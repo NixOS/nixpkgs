@@ -1,10 +1,10 @@
-{ cabal, Cabal, monadControl, transformers }:
+{ cabal, monadControl, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "pool";
   version = "0.1.2.1";
   sha256 = "1fwwnwxk3kprr2z9y7bwa1qwxfkzwcb2n5l6vkq1c5s8gjls581c";
-  buildDepends = [ Cabal monadControl transformers ];
+  buildDepends = [ monadControl transformers ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
     description = "Thread-safe resource pools. (deprecated)";

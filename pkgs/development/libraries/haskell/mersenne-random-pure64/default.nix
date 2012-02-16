@@ -1,10 +1,10 @@
-{ cabal, Cabal, random }:
+{ cabal, random }:
 
 cabal.mkDerivation (self: {
   pname = "mersenne-random-pure64";
   version = "0.2.0.3";
   sha256 = "0cyjfdl17n5al04vliykx0m7zncqh3201vn9b9fqfqqpmm61grqz";
-  buildDepends = [ Cabal random ];
+  buildDepends = [ random ];
   meta = {
     homepage = "http://code.haskell.org/~dons/code/mersenne-random-pure64/";
     description = "Generate high quality pseudorandom numbers purely using a Mersenne Twister";

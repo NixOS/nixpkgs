@@ -1,4 +1,4 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "data-reify";
@@ -6,7 +6,6 @@ cabal.mkDerivation (self: {
   sha256 = "0mif89mpj5zvw8czc51mfj27jw2ipxd2awnm9q13s46k6s5pv6a7";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://www.ittc.ku.edu/csdl/fpg/Tools/IOReification";
     description = "Reify a recursive data structure into an explicit graph";

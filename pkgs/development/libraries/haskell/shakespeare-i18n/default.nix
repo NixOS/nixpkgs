@@ -1,10 +1,10 @@
-{ cabal, Cabal, parsec, shakespeare, text }:
+{ cabal, parsec, shakespeare, text }:
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-i18n";
   version = "0.0.2";
   sha256 = "1hb144n3fa5qiy3skrmab0qv63fa5vf4vg4ar9hrybmwdksqa410";
-  buildDepends = [ Cabal parsec shakespeare text ];
+  buildDepends = [ parsec shakespeare text ];
   meta = {
     homepage = "http://www.yesodweb.com/book/i18n";
     description = "A type-based approach to internationalization";

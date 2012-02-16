@@ -1,4 +1,4 @@
-{ cabal, Cabal, HDBC, mtl, sqlite, utf8String }:
+{ cabal, HDBC, mtl, sqlite, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "HDBC-sqlite3";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "11765nsncgyv9j6r5wpziqyhy0lxrmqbhgricbdx0c788ky75y92";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal HDBC mtl utf8String ];
+  buildDepends = [ HDBC mtl utf8String ];
   extraLibraries = [ sqlite ];
   meta = {
     homepage = "http://software.complete.org/hdbc-sqlite3";

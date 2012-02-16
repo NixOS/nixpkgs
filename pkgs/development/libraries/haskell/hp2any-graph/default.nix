@@ -1,4 +1,4 @@
-{ cabal, Cabal, filepath, freeglut, GLUT, hp2anyCore, mesa, network
+{ cabal, filepath, freeglut, GLUT, hp2anyCore, mesa, network
 , OpenGL, parseargs
 }:
 
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    Cabal filepath GLUT hp2anyCore network OpenGL parseargs
+    filepath GLUT hp2anyCore network OpenGL parseargs
   ];
   extraLibraries = [ freeglut mesa ];
   meta = {

@@ -1,10 +1,10 @@
-{ cabal, Cabal, deepseq }:
+{ cabal, deepseq }:
 
 cabal.mkDerivation (self: {
   pname = "text";
   version = "0.11.1.12";
   sha256 = "0j2044whj3xckmxqmgdjbc2mpwdan481qzjslwplqbqwml2jvkml";
-  buildDepends = [ Cabal deepseq ];
+  buildDepends = [ deepseq ];
   meta = {
     homepage = "https://github.com/bos/text";
     description = "An efficient packed Unicode text type";

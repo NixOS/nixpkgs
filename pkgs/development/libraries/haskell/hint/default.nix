@@ -1,4 +1,4 @@
-{ cabal, Cabal, extensibleExceptions, filepath, ghcMtl, ghcPaths
+{ cabal, extensibleExceptions, filepath, ghcMtl, ghcPaths
 , haskellSrc, MonadCatchIOMtl, mtl, random, utf8String
 }:
 
@@ -7,7 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.3.3.4";
   sha256 = "0pmvhlj9m0s1wvw8ppx1wx879lwzg38bcvhy1ma1d4wnrpq3bhiy";
   buildDepends = [
-    Cabal extensibleExceptions filepath ghcMtl ghcPaths haskellSrc
+    extensibleExceptions filepath ghcMtl ghcPaths haskellSrc
     MonadCatchIOMtl mtl random utf8String
   ];
   meta = {

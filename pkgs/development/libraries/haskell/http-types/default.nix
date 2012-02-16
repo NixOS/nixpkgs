@@ -1,4 +1,4 @@
-{ cabal, blazeBuilder, Cabal, caseInsensitive, text }:
+{ cabal, blazeBuilder, caseInsensitive, text }:
 
 cabal.mkDerivation (self: {
   pname = "http-types";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1dkp2iqqalrm381vagw65bhjnm80hv02h28447lmjl2j60b4mby0";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ blazeBuilder Cabal caseInsensitive text ];
+  buildDepends = [ blazeBuilder caseInsensitive text ];
   meta = {
     homepage = "https://github.com/aristidb/http-types";
     description = "Generic HTTP types for Haskell (for both client and server code)";

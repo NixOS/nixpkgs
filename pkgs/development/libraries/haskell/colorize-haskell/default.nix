@@ -1,4 +1,4 @@
-{ cabal, ansiTerminal, Cabal, haskellLexer }:
+{ cabal, ansiTerminal, haskellLexer }:
 
 cabal.mkDerivation (self: {
   pname = "colorize-haskell";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1v4spa6vw9igjpd1dr595z5raz5fr8f485q5w9imrv8spms46xh3";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ ansiTerminal Cabal haskellLexer ];
+  buildDepends = [ ansiTerminal haskellLexer ];
   meta = {
     homepage = "http://github.com/yav/colorize-haskell";
     description = "Highligt Haskell source";

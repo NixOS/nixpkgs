@@ -1,10 +1,10 @@
-{ cabal, Cabal, mtl, network, parsec }:
+{ cabal, mtl, network, parsec }:
 
 cabal.mkDerivation (self: {
   pname = "HTTP";
   version = "4000.2.2";
   sha256 = "0qrr9wdj25sdfxifppmw0w14g8skpgf42ic4iqcqylxxzfa8v7vh";
-  buildDepends = [ Cabal mtl network parsec ];
+  buildDepends = [ mtl network parsec ];
   meta = {
     homepage = "https://github.com/haskell/HTTP";
     description = "A library for client-side HTTP";

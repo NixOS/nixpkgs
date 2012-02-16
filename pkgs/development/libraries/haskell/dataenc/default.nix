@@ -1,4 +1,4 @@
-{ cabal, Cabal }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "dataenc";
@@ -6,7 +6,6 @@ cabal.mkDerivation (self: {
   sha256 = "1k6k9cpx5ma32gvzf2mdbz4kfiblwfah9875qr13zkl4has9y0pd";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Library/Data_encoding";
     description = "Data encoding library";

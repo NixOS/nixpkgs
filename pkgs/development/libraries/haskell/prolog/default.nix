@@ -1,10 +1,10 @@
-{ cabal, Cabal, mtl, parsec, syb, thLift, transformers }:
+{ cabal, mtl, parsec, syb, thLift, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "prolog";
   version = "0.1";
   sha256 = "00791fb1f84wq42wvacnjl290fbn28x9hknxsic3ksi3f7psladm";
-  buildDepends = [ Cabal mtl parsec syb thLift transformers ];
+  buildDepends = [ mtl parsec syb thLift transformers ];
   meta = {
     homepage = "https://github.com/Erdwolf/prolog";
     description = "A Prolog interpreter written in Haskell";

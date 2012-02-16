@@ -1,5 +1,4 @@
-{ cabal, Cabal, liftedBase, monadControl, transformers
-, transformersBase
+{ cabal, liftedBase, monadControl, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
@@ -7,7 +6,7 @@ cabal.mkDerivation (self: {
   version = "0.0.0";
   sha256 = "1nfwiw753m8ljrk47yi5cgncbfkddnr4fz44fk1pv501a86cmk8y";
   buildDepends = [
-    Cabal liftedBase monadControl transformers transformersBase
+    liftedBase monadControl transformers transformersBase
   ];
   meta = {
     description = "IO as Alternative instance";

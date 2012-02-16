@@ -1,4 +1,4 @@
-{ cabal, binary, Cabal, cereal, cryptoApi, tagged }:
+{ cabal, binary, cereal, cryptoApi, tagged }:
 
 cabal.mkDerivation (self: {
   pname = "pureMD5";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "0whlsb6zq4zcp3wq0bd6pgcsl0namr8b2s6i4l5aykq8v7fx40ii";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ binary Cabal cereal cryptoApi tagged ];
+  buildDepends = [ binary cereal cryptoApi tagged ];
   meta = {
     description = "A Haskell-only implementation of the MD5 digest (hash) algorithm";
     license = self.stdenv.lib.licenses.bsd3;

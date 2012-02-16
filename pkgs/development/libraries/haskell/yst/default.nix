@@ -1,5 +1,5 @@
-{ cabal, Cabal, csv, filepath, HsSyck, HStringTemplate, pandoc
-, parsec, split, time, utf8String, xhtml
+{ cabal, csv, filepath, HsSyck, HStringTemplate, pandoc, parsec
+, split, time, utf8String, xhtml
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    Cabal csv filepath HsSyck HStringTemplate pandoc parsec split time
+    csv filepath HsSyck HStringTemplate pandoc parsec split time
     utf8String xhtml
   ];
   meta = {

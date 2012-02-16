@@ -1,4 +1,4 @@
-{ cabal, Cabal, filepath, mtl, network, time, utf8String }:
+{ cabal, filepath, mtl, network, time, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "libmpd";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "109bm5fgwmydh3bi93wxr6ac3gkp7pcvp4a8z226c1wlgc995zap";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal filepath mtl network time utf8String ];
+  buildDepends = [ filepath mtl network time utf8String ];
   meta = {
     homepage = "http://github.com/joachifm/libmpd-haskell";
     description = "An MPD client library";

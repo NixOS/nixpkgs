@@ -1,5 +1,4 @@
-{ cabal, Cabal, extensibleExceptions, filepath, mtl, terminfo
-, utf8String
+{ cabal, extensibleExceptions, filepath, mtl, terminfo, utf8String
 }:
 
 cabal.mkDerivation (self: {
@@ -7,7 +6,7 @@ cabal.mkDerivation (self: {
   version = "0.6.4.6";
   sha256 = "136h71rb50sypkdbnk849mbcgfzx3y4hfxmx2c7kf90zpmsx5wmj";
   buildDepends = [
-    Cabal extensibleExceptions filepath mtl terminfo utf8String
+    extensibleExceptions filepath mtl terminfo utf8String
   ];
   meta = {
     homepage = "http://trac.haskell.org/haskeline";

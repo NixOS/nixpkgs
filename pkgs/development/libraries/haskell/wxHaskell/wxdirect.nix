@@ -1,4 +1,4 @@
-{ cabal, Cabal, parsec, strict, time }:
+{ cabal, parsec, strict, time }:
 
 cabal.mkDerivation (self: {
   pname = "wxdirect";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1gn5si6939yizlkf7hzm2a2gff5sa98m7q5q1hz23av98zfa8pv7";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ Cabal parsec strict time ];
+  buildDepends = [ parsec strict time ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/WxHaskell";
     description = "helper tool for building wxHaskell";

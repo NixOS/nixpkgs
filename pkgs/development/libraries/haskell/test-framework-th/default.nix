@@ -1,4 +1,4 @@
-{ cabal, Cabal, haskellSrcExts, languageHaskellExtract, regexPosix
+{ cabal, haskellSrcExts, languageHaskellExtract, regexPosix
 , testFramework
 }:
 
@@ -7,8 +7,7 @@ cabal.mkDerivation (self: {
   version = "0.2.2";
   sha256 = "0nzfvxr5bnxinx41a5w5mwhyxzz2936dl0xhd80cv9plx19ylh0w";
   buildDepends = [
-    Cabal haskellSrcExts languageHaskellExtract regexPosix
-    testFramework
+    haskellSrcExts languageHaskellExtract regexPosix testFramework
   ];
   meta = {
     homepage = "http://github.com/finnsson/test-generator";

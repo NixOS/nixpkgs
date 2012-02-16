@@ -1,10 +1,10 @@
-{ cabal, Cabal, deepseq }:
+{ cabal, deepseq }:
 
 cabal.mkDerivation (self: {
   pname = "time";
   version = "1.4.0.1";
   sha256 = "046jyz2xnbg2s94d9xhpphgq93mqlky7bc50vss40wdk6l7w8aws";
-  buildDepends = [ Cabal deepseq ];
+  buildDepends = [ deepseq ];
   meta = {
     homepage = "http://semantic.org/TimeLib/";
     description = "A time library";
