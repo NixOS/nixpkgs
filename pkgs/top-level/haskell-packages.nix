@@ -119,8 +119,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   # This is the Cabal builder, the function we use to build most Haskell
-  # packages. It isn't the Cabal library, which is a core package of GHC
-  # and therefore not separately listed here.
+  # packages. It isn't the Cabal library, which is spelled "Cabal".
 
   cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {
     enableLibraryProfiling = enableLibraryProfiling;
@@ -141,7 +140,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 ok
     html         = self.html_1_0_1_2;           # 7.4.1 ok
     HUnit        = self.HUnit_1_2_2_3;          # 7.4.1 ok
-    network      = self.network_2_3_0_10;       # 7.4.1 ok
+    network      = self.network_2_3_0_11;       # 7.4.1 ok
     OpenGL       = self.OpenGL_2_5_0_0;         # 7.4.1 ok
     parallel     = self.parallel_3_2_0_2;       # 7.4.1 ok
     parsec       = self.parsec_3_1_2;           # 7.4.1 ok
@@ -427,7 +426,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   aeson = callPackage ../development/libraries/haskell/aeson {};
 
-  aesonNative = callPackage ../development/libraries/haskell/aeson-native {};
+  alternativeIo = callPackage ../development/libraries/haskell/alternative-io {};
 
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
 
@@ -487,8 +486,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
 
-  blazeTextualNative = callPackage ../development/libraries/haskell/blaze-textual-native {};
-
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
@@ -504,6 +501,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   bytestringMmap = callPackage ../development/libraries/haskell/bytestring-mmap {};
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
+
+  Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
+  Cabal = null; # core package in GHC
 
   cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};
 
@@ -658,7 +658,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   explicitException = callPackage ../development/libraries/haskell/explicit-exception {};
 
-  filepath = callPackage ../development/libraries/haskell/filepath {};
+  filepath_1_3_0_0 = callPackage ../development/libraries/haskell/filepath {};
+  filepath = null; # a core package in recent GHCs
 
   extensibleExceptions_0_1_1_0 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.0.nix {};
   extensibleExceptions_0_1_1_2 = callPackage ../development/libraries/haskell/extensible-exceptions/0.1.1.2.nix {};
@@ -1036,11 +1037,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
-  network_2_3_0_8 = callPackage ../development/libraries/haskell/network/2.3.0.8.nix {};
-  network_2_3_0_10 = callPackage ../development/libraries/haskell/network/2.3.0.10.nix {};
-  network = self.network_2_3_0_10;
-
-  nixosTypes = callPackage ../development/libraries/haskell/nixos-types {};
+  network_2_3_0_11 = callPackage ../development/libraries/haskell/network/2.3.0.11.nix {};
+  network = self.network_2_3_0_11;
 
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
@@ -1605,7 +1603,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
 
-  tar = callPackage ../development/tools/haskell/tar {};
+  tar_0_3_2_0 = callPackage ../development/tools/haskell/tar/0.3.2.0.nix {};
+  tar_0_4_0_0 = callPackage ../development/tools/haskell/tar/0.4.0.0.nix {};
+  tar = self.tar_0_4_0_0;
 
   threadscope = callPackage ../development/tools/haskell/threadscope {};
 
@@ -1617,6 +1617,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   darcs = callPackage ../applications/version-management/darcs {
     regexCompat = self.regexCompat93;
+    tar = self.tar_0_3_2_0;
   };
 
   leksah = callPackage ../applications/editors/leksah {};

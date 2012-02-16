@@ -1,5 +1,5 @@
-{ cabal, csv, HsSyck, HStringTemplate, pandoc, parsec, split, time
-, utf8String, xhtml
+{ cabal, csv, filepath, HsSyck, HStringTemplate, pandoc, parsec
+, split, time, utf8String, xhtml
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    csv HsSyck HStringTemplate pandoc parsec split time utf8String
-    xhtml
+    csv filepath HsSyck HStringTemplate pandoc parsec split time
+    utf8String xhtml
   ];
   meta = {
     homepage = "http://github.com/jgm/yst";

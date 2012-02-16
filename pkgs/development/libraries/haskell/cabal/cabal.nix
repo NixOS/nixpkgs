@@ -1,6 +1,6 @@
 # generic builder for Cabal packages
 
-{stdenv, fetchurl, lib, pkgconfig, ghc, enableLibraryProfiling ? false} :
+{stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, enableLibraryProfiling ? false} :
 {
   mkDerivation =
     args : # arguments for the individual package, can modify the defaults
@@ -51,7 +51,7 @@
             # default buildInputs are just ghc, if more buildInputs are required
             # buildInputs can be extended by the client by using extraBuildInputs,
             # but often propagatedBuildInputs is preferable anyway
-            buildInputs = [ghc] ++ self.extraBuildInputs;
+            buildInputs = [ghc Cabal] ++ self.extraBuildInputs;
             extraBuildInputs = self.buildTools ++
                                (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
                                (if self.isLibrary then [] else self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);

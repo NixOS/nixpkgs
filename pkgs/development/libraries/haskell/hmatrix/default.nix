@@ -6,7 +6,6 @@ cabal.mkDerivation (self: {
   sha256 = "0pl5z6zsxyvbdfdng77r2c4isq6d4wbyzx2qs9r8rbn6glaxwrmp";
   buildDepends = [ binary storableComplex vector ];
   extraLibraries = [ blas gsl liblapack ];
-  configureFlags = "-fvector";
   meta = {
     homepage = "http://perception.inf.um.es/hmatrix";
     description = "Linear algebra and numerical computation";

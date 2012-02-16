@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "stb-image";
-  version = "0.2";
-  sha256 = "7d027b6de52d07bbe439a84897aaa6e26a8f05c6fa6f4aeaa3060be23ae11937";
+  version = "0.2.1";
+  sha256 = "1mx6i5q56wy13fvpnypb2c6fk2z3i5xdfblkpazzc70p2dgxaf52";
   buildDepends = [ bitmap ];
   meta = {
     homepage = "http://code.haskell.org/~bkomuves/";

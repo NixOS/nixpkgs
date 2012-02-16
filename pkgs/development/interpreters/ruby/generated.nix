@@ -3,7 +3,7 @@
 g: # Get dependencies from patched gems
 {
   aliases = {
-    ZenTest = g.ZenTest_4_5_0;
+    ZenTest = g.ZenTest_4_6_2;
     actionmailer = g.actionmailer_3_2_1;
     actionpack = g.actionpack_3_2_1;
     activemodel = g.activemodel_3_2_1;
@@ -12,10 +12,10 @@ g: # Get dependencies from patched gems
     activesupport = g.activesupport_3_2_1;
     arel = g.arel_3_0_0;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_1;
-    autotest_rails = g.autotest_rails_4_1_1;
+    autotest_rails = g.autotest_rails_4_1_2;
     builder = g.builder_3_0_0;
     buildr = g.buildr_1_4_6;
-    bundler = g.bundler_1_0_21;
+    bundler = g.bundler_1_0_22;
     childprocess = g.childprocess_0_3_1;
     coffee_script = g.coffee_script_2_2_0;
     coffee_script_source = g.coffee_script_source_1_2_0;
@@ -53,9 +53,9 @@ g: # Get dependencies from patched gems
     rspec_expectations = g.rspec_expectations_2_1_0;
     rspec_mocks = g.rspec_mocks_2_1_0;
     rubyforge = g.rubyforge_2_0_4;
-    rubyzip = g.rubyzip_0_9_5;
-    sass = g.sass_3_1_14;
-    selenium_webdriver = g.selenium_webdriver_2_18_0;
+    rubyzip = g.rubyzip_0_9_6_1;
+    sass = g.sass_3_1_15;
+    selenium_webdriver = g.selenium_webdriver_2_19_0;
     sprockets = g.sprockets_2_1_2;
     thor = g.thor_0_14_6;
     tilt = g.tilt_1_3_3;
@@ -65,11 +65,11 @@ g: # Get dependencies from patched gems
   };
   gem_nix_args = [ ''autotest-rails'' ''buildr'' ''coffee-script'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
   gems = {
-    ZenTest_4_5_0 = {
+    ZenTest_4_6_2 = {
       basename = ''ZenTest'';
       meta = {
         description = ''ZenTest provides 4 different tools: zentest, unit_diff, autotest, and multiruby'';
-        homepage = ''http://www.zenspider.com/ZSS/Products/ZenTest/'';
+        homepage = ''https://github.com/seattlerb/zentest'';
         longDescription = ''ZenTest provides 4 different tools: zentest, unit_diff, autotest, and
 multiruby.
 
@@ -80,6 +80,8 @@ tool anymore but it is the package namesake, so it stays.
 
 unit_diff is a command-line filter to diff expected results from
 actual results and allow you to quickly see exactly what is wrong.
+Do note that minitest 2.2+ provides an enhanced assert_equal obviating
+the need for unit_diff
 
 autotest is a continous testing facility meant to be used during
 development. As soon as you save a file, autotest will run the
@@ -89,9 +91,9 @@ multiruby runs anything you want on multiple versions of ruby. Great
 for compatibility checking! Use multiruby_setup to manage your
 installed versions.'';
       };
-      name = ''ZenTest-4.5.0'';
+      name = ''ZenTest-4.6.2'';
       requiredGems = [  ];
-      sha256 = ''05iam95wqafz4c890b17w7ahp9i4jbz4hsw6304p9zbsaq7d7h1h'';
+      sha256 = ''0knbim1lvp7q7k529if3h78584x845h9xyz08vykrdqa97x4lkh0'';
     };
     actionmailer_3_2_1 = {
       basename = ''actionmailer'';
@@ -199,7 +201,7 @@ database compatibility and query generation.'';
       requiredGems = [ g.rjb_1_3_9 ];
       sha256 = ''0r9jy2asyma8h0878nhjfbi00qvb4yapc8glngvmkkj21zbx2mfy'';
     };
-    autotest_rails_4_1_1 = {
+    autotest_rails_4_1_2 = {
       basename = ''autotest_rails'';
       meta = {
         description = ''This is an autotest plugin to provide rails support'';
@@ -207,9 +209,9 @@ database compatibility and query generation.'';
         longDescription = ''This is an autotest plugin to provide rails support. It provides basic
 rails support and extra plugins for migrations and fixtures.'';
       };
-      name = ''autotest-rails-4.1.1'';
-      requiredGems = [ g.ZenTest_4_5_0 ];
-      sha256 = ''09i6mpxibs8yfdcr53nazlxq94yswahz9gdjqdz9srfshcccqbal'';
+      name = ''autotest-rails-4.1.2'';
+      requiredGems = [ g.ZenTest_4_6_2 ];
+      sha256 = ''1wkb5jayb39yx0i8ly7sibygf9f9c3w24jg2z1qgm135zlb070v4'';
     };
     builder_2_1_2 = {
       basename = ''builder'';
@@ -254,16 +256,16 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [ g.rake_0_8_7 g.builder_2_1_2 g.net_ssh_2_0_23 g.net_sftp_2_0_4 g.rubyzip_0_9_4 g.highline_1_5_1 g.json_pure_1_4_3 g.rubyforge_2_0_3 g.hoe_2_3_3 g.rjb_1_3_3 g.atoulme_Antwrap_0_7_1 g.diff_lcs_1_1_2 g.rspec_expectations_2_1_0 g.rspec_mocks_2_1_0 g.rspec_core_2_1_0 g.rspec_2_1_0 g.xml_simple_1_0_12 g.minitar_0_5_3 ];
       sha256 = ''11qwqrdnmzzi4zhgajfq1f1ckvd4kpfm9gyqrfjfalphs4gi0vxz'';
     };
-    bundler_1_0_21 = {
+    bundler_1_0_22 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://gembundler.com'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.0.21'';
+      name = ''bundler-1.0.22'';
       requiredGems = [  ];
-      sha256 = ''0lcxz75vvgqib43wxzv6021qs5d7bxhnds4j4q27hzqs982cn0s6'';
+      sha256 = ''0hzcsicdvvyhp6b6rv208859a13ag1cxxcd3nd3hf90jldd2iry0'';
     };
     childprocess_0_3_1 = {
       basename = ''childprocess'';
@@ -676,7 +678,7 @@ request helpers feature.'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
       name = ''rails-3.2.1'';
-      requiredGems = [ g.activesupport_3_2_1 g.actionpack_3_2_1 g.activerecord_3_2_1 g.activeresource_3_2_1 g.actionmailer_3_2_1 g.railties_3_2_1 g.bundler_1_0_21 ];
+      requiredGems = [ g.activesupport_3_2_1 g.actionpack_3_2_1 g.activerecord_3_2_1 g.activeresource_3_2_1 g.actionmailer_3_2_1 g.railties_3_2_1 g.bundler_1_0_22 ];
       sha256 = ''0fx5pmywvh0s263dd6qv34rbc4qxnla5qzh8r30zrip24j6w0nr5'';
     };
     railties_3_2_1 = {
@@ -852,17 +854,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [  ];
       sha256 = ''1lc67ssqyz49rm1jms5sdvy6x41h070razxlmvj4j5q6w3qixx41'';
     };
-    rubyzip_0_9_5 = {
+    rubyzip_0_9_6_1 = {
       basename = ''rubyzip'';
       meta = {
         description = ''rubyzip is a ruby module for reading and writing zip files'';
         homepage = ''http://github.com/aussiegeek/rubyzip'';
       };
-      name = ''rubyzip-0.9.5'';
+      name = ''rubyzip-0.9.6.1'';
       requiredGems = [  ];
-      sha256 = ''1744bds6lc46d1kjfgapf34p2574s70hcyz63877qkry4db2jb54'';
+      sha256 = ''0azmbbv5j7xx45rn3502vb01n1b2zczi1jk84aw9qc3y9fvkwc3i'';
     };
-    sass_3_1_14 = {
+    sass_3_1_15 = {
       basename = ''sass'';
       meta = {
         description = ''A powerful but elegant CSS compiler that makes CSS fun again.'';
@@ -873,20 +875,20 @@ See RDoc for a description of RDoc's markup and basic use.'';
       command line tool or a web-framework plugin.
 '';
       };
-      name = ''sass-3.1.14'';
+      name = ''sass-3.1.15'';
       requiredGems = [  ];
-      sha256 = ''0nrgsrqkfn3w8bpqsq9h4jv5wj0wikn3mp0gb3b7qdzkhw0h9947'';
+      sha256 = ''1lsmqm84w03w8s54i53cf3mplklpasakff2ng6zqf75digg27fzs'';
     };
-    selenium_webdriver_2_18_0 = {
+    selenium_webdriver_2_19_0 = {
       basename = ''selenium_webdriver'';
       meta = {
         description = ''The next generation developer focused tool for automated testing of webapps'';
         homepage = ''http://selenium.googlecode.com'';
         longDescription = ''WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.'';
       };
-      name = ''selenium-webdriver-2.18.0'';
-      requiredGems = [ g.rubyzip_0_9_5 g.childprocess_0_3_1 ];
-      sha256 = ''17am2b6bjv62s02n1bfmhg9wz5n7sppzh7dx1llp28ivj2hdfbg9'';
+      name = ''selenium-webdriver-2.19.0'';
+      requiredGems = [ g.rubyzip_0_9_6_1 g.childprocess_0_3_1 ];
+      sha256 = ''1phhb8ivv203r4qs2nwxnkd6qmx02lj1xgsc5wkkm0gxl2lgz0ll'';
     };
     sprockets_2_1_2 = {
       basename = ''sprockets'';

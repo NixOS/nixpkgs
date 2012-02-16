@@ -1,5 +1,5 @@
-{ cabal, binary, cairo, deepseq, ghcEvents, glib, gtk, mtl, pango
-, time
+{ cabal, binary, cairo, deepseq, filepath, ghcEvents, glib, gtk
+, mtl, pango, time
 }:
 
 cabal.mkDerivation (self: {
@@ -9,7 +9,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    binary cairo deepseq ghcEvents glib gtk mtl pango time
+    binary cairo deepseq filepath ghcEvents glib gtk mtl pango time
   ];
   configureFlags = "--ghc-options=-rtsopts";
   meta = {

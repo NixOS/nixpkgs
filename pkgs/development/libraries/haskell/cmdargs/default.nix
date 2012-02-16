@@ -1,4 +1,4 @@
-{ cabal, transformers }:
+{ cabal, filepath, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "cmdargs";
@@ -6,7 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1mm16249nprclmgplw5bmmzsnmfm8dlkc5janrwvmlssbxw5hgnk";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ transformers ];
+  buildDepends = [ filepath transformers ];
   meta = {
     homepage = "http://community.haskell.org/~ndm/cmdargs/";
     description = "Command line argument processing";

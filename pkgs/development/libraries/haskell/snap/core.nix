@@ -1,9 +1,9 @@
 { cabal, attoparsec, attoparsecEnumerator, base16Bytestring
 , blazeBuilder, blazeBuilderEnumerator, bytestringMmap
 , bytestringNums, caseInsensitive, deepseq, dlist, enumerator
-, HUnit, MonadCatchIOTransformers, mtl, mwcRandom, regexPosix, text
-, time, transformers, unixCompat, unorderedContainers, vector
-, zlibEnum
+, filepath, HUnit, MonadCatchIOTransformers, mtl, mwcRandom
+, regexPosix, text, time, transformers, unixCompat
+, unorderedContainers, vector, zlibEnum
 }:
 
 cabal.mkDerivation (self: {
@@ -13,7 +13,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     attoparsec attoparsecEnumerator base16Bytestring blazeBuilder
     blazeBuilderEnumerator bytestringMmap bytestringNums
-    caseInsensitive deepseq dlist enumerator HUnit
+    caseInsensitive deepseq dlist enumerator filepath HUnit
     MonadCatchIOTransformers mtl mwcRandom regexPosix text time
     transformers unixCompat unorderedContainers vector zlibEnum
   ];

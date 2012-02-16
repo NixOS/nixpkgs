@@ -1,12 +1,13 @@
 { cabal, filepath }:
 
 cabal.mkDerivation (self: {
-  pname = "cautious-file";
-  version = "1.0";
-  sha256 = "1s2la91vk9c99bj0ipzc4r6w81rcs4jfmn0xr1cgjab00bzj880q";
+  pname = "Cabal";
+  version = "1.14.0";
+  sha256 = "1r5b4x1ham5gdg9m9l8idpvr9czlk1q21vqmg0di4adkp2fhlm3j";
   buildDepends = [ filepath ];
   meta = {
-    description = "Ways to write a file cautiously, to reduce the chances of problems such as data loss due to crashes or power failures";
+    homepage = "http://www.haskell.org/cabal/";
+    description = "A framework for packaging Haskell software";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [

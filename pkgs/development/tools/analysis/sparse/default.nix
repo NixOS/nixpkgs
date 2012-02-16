@@ -1,11 +1,11 @@
 { fetchurl, stdenv, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "sparse-0.4.1";
+  name = "sparse-0.4.4";
 
   src = fetchurl {
     url = "mirror://kernel/software/devel/sparse/dist/${name}.tar.gz";
-    sha256 = "18nkgqkqhfp4gdjhdy8xgwxvla5vjccg1kzyz5ngpjw35q0hp5fb";
+    sha256 = "5ad02110130fd8f8d82f2b030de5f2db6f924fd805593a5b8be8072a620414c6";
   };
 
   preConfigure = ''

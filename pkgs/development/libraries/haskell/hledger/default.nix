@@ -1,5 +1,5 @@
-{ cabal, cabalFileTh, cmdargs, csv, haskeline, hledgerLib, HUnit
-, mtl, parsec, regexpr, safe, split, time, utf8String
+{ cabal, cabalFileTh, cmdargs, csv, filepath, haskeline, hledgerLib
+, HUnit, mtl, parsec, regexpr, safe, split, time, utf8String
 }:
 
 cabal.mkDerivation (self: {
@@ -9,8 +9,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    cabalFileTh cmdargs csv haskeline hledgerLib HUnit mtl parsec
-    regexpr safe split time utf8String
+    cabalFileTh cmdargs csv filepath haskeline hledgerLib HUnit mtl
+    parsec regexpr safe split time utf8String
   ];
   meta = {
     homepage = "http://hledger.org";

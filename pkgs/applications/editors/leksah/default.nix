@@ -1,6 +1,6 @@
-{ cabal, binary, binaryShared, deepseq, glib, gtk, gtksourceview2
-, hslogger, leksahServer, ltk, mtl, network, parsec, processLeksah
-, regexBase, regexTdfa, strict, time, utf8String
+{ cabal, binary, binaryShared, Cabal, deepseq, filepath, glib, gtk
+, gtksourceview2, hslogger, leksahServer, ltk, mtl, network, parsec
+, processLeksah, regexBase, regexTdfa, strict, time, utf8String
 }:
 
 cabal.mkDerivation (self: {
@@ -10,9 +10,9 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary binaryShared deepseq glib gtk gtksourceview2 hslogger
-    leksahServer ltk mtl network parsec processLeksah regexBase
-    regexTdfa strict time utf8String
+    binary binaryShared Cabal deepseq filepath glib gtk gtksourceview2
+    hslogger leksahServer ltk mtl network parsec processLeksah
+    regexBase regexTdfa strict time utf8String
   ];
   noHaddock = true;
   meta = {
