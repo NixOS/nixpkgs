@@ -16,7 +16,6 @@ cabal.mkDerivation (self: {
     random syb tagsoup temporary texmath time utf8String xml zipArchive
     zlib
   ];
-  configureFlags = "-fhighlighting -fthreaded";
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Conversion between markup formats";
