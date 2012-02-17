@@ -753,6 +753,11 @@ fixupPhase() {
         echo "$propagatedBuildNativeInputs" > "$out/nix-support/propagated-build-native-inputs"
     fi
 
+    if [ -n "$propagatedUserEnvPkgs" ]; then
+        mkdir -p "$out/nix-support"
+        echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
+    fi
+
     if [ -n "$setupHook" ]; then
         mkdir -p "$out/nix-support"
         substituteAll "$setupHook" "$out/nix-support/setup-hook"
