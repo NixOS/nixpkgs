@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-date";
-  version = "0.0.1";
-  sha256 = "1dqnglz1l6h14339nd5q8sq90fak64ab8fs9fkhf8ipg5y0pzwbd";
+  version = "0.0.2";
+  sha256 = "18nijf3hswbvcd5amhbccqmgnanmslsmqpd2iixlvwz5hqb3ncvj";
   buildDepends = [ attoparsec ];
   meta = {
     description = "HTTP Date parser/formatter";
