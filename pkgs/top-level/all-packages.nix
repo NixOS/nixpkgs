@@ -1427,7 +1427,7 @@ let
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
   tcng = callPackage ../tools/networking/tcng {
-    kernel = linux_2_6_28;
+    kernel = linux_2_6_27;
   };
 
   telnet = callPackage ../tools/networking/telnet { };
@@ -5435,70 +5435,19 @@ let
 
   linux_2_6_15 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.15.nix) {
     inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideInStdenv stdenv [gcc34 gnumake381];
+    stdenv = overrideInStdenv stdenv [ gcc34 gnumake381 ];
     kernelPatches =
       [ kernelPatches.cifs_timeout_2_6_15
       ];
   };
 
-  linux_2_6_25 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.25.nix) {
-    inherit fetchurl perl mktemp module_init_tools;
-    extraConfig = "KMOD y";
-    stdenv = overrideInStdenv stdenv [gnumake381];
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_25
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.glibc_getline
-        kernelPatches.cifs_timeout_2_6_25
-      ];
-  };
-
-  linux_2_6_26 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.26.nix) {
-    inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideInStdenv stdenv [gnumake381];
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_25
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.glibc_getline
-        kernelPatches.cifs_timeout_2_6_25
-      ];
-  };
-
   linux_2_6_27 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.27.nix) {
     inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideInStdenv stdenv [gnumake381];
+    stdenv = overrideGCC (overrideInStdenv stdenv [ gnumake381 ]) gcc45;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_27
         kernelPatches.sec_perm_2_6_24
         kernelPatches.cifs_timeout_2_6_25
-      ];
-  };
-
-  linux_2_6_28 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.28.nix) {
-    inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideInStdenv stdenv [gnumake381];
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_28
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.ext4_softlockups_2_6_28
-        kernelPatches.glibc_getline
-        kernelPatches.cifs_timeout_2_6_25
-      ];
-  };
-
-  linux_2_6_29 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_29
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.cifs_timeout_2_6_29
-      ];
-  };
-
-  linux_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools platform;
-    kernelPatches =
-      [ kernelPatches.cifs_timeout_2_6_29
       ];
   };
 
@@ -5546,58 +5495,6 @@ let
       ];
   };
 
-  linux_2_6_32_zen4 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.32-zen4.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools runCommand xz;
-  };
-
-  linux_2_6_32_zen4_oldi686 = linux_2_6_32_zen4.override {
-    features = {
-      oldI686 = true;
-    };
-  };
-
-  linux_2_6_32_zen4_bfs = linux_2_6_32_zen4.override {
-    features = {
-      ckSched = true;
-    };
-  };
-
-  linux_2_6_33 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.33.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_33
-        kernelPatches.aufs2_2_6_33
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.cifs_timeout_2_6_29
-      ];
-  };
-
-  linux_2_6_33_zen1 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.33-zen1.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools runCommand xz;
-  };
-
-  linux_2_6_33_zen1_oldi686 = linux_2_6_33_zen1.override {
-    features = {
-      oldI686 = true;
-    };
-  };
-
-  linux_2_6_33_zen1_bfs = linux_2_6_33_zen1.override {
-    features = {
-      ckSched = true;
-    };
-  };
-
-  linux_2_6_34 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.34.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ /*kernelPatches.fbcondecor_2_6_33*/
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_2_6_34
-        kernelPatches.cifs_timeout_2_6_29
-      ];
-  };
-
   linux_2_6_35 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.35.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5638,37 +5535,14 @@ let
     };
 
   linux_2_6_35_oldI686 = linux_2_6_35.override {
-      extraConfig = ''
-          HIGHMEM64G? n
-          XEN? n
-      '';
-      extraMeta = {
-        platforms = ["i686-linux"];
-        maintainers = [lib.maintainers.raskin];
-      };
-  };
-
-  linux_2_6_36 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.36.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ #kernelPatches.fbcondecor_2_6_35
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_2_6_36
-        kernelPatches.mips_restart_2_6_36
-        kernelPatches.cifs_timeout_2_6_35
-        kernelPatches.mips_restart_2_6_36
-      ];
-  };
-
-  linux_2_6_37 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.37.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_37
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_1_2_6_37
-        kernelPatches.cifs_timeout_2_6_35
-        #kernelPatches.mips_restart_2_6_36
-      ];
+    extraConfig = ''
+      HIGHMEM64G? n
+      XEN? n
+    '';
+    extraMeta = {
+      platforms = ["i686-linux"];
+      maintainers = [lib.maintainers.raskin];
+    };
   };
 
   linux_2_6_38 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.38.nix) {
@@ -5912,21 +5786,13 @@ let
   };
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_2_6_25 = recurseIntoAttrs (linuxPackagesFor linux_2_6_25 pkgs.linuxPackages_2_6_25);
   linuxPackages_2_6_27 = recurseIntoAttrs (linuxPackagesFor linux_2_6_27 pkgs.linuxPackages_2_6_27);
-  linuxPackages_2_6_28 = recurseIntoAttrs (linuxPackagesFor linux_2_6_28 pkgs.linuxPackages_2_6_28);
-  linuxPackages_2_6_29 = recurseIntoAttrs (linuxPackagesFor linux_2_6_29 pkgs.linuxPackages_2_6_29);
-  linuxPackages_2_6_31 = recurseIntoAttrs (linuxPackagesFor linux_2_6_31 pkgs.linuxPackages_2_6_31);
   linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32 pkgs.linuxPackages_2_6_32);
   linuxPackages_2_6_32_systemtap =
     recurseIntoAttrs (linuxPackagesFor linux_2_6_32_systemtap pkgs.linuxPackages_2_6_32_systemtap);
   linuxPackages_2_6_32_xen =
     recurseIntoAttrs (linuxPackagesFor linux_2_6_32_xen pkgs.linuxPackages_2_6_32_xen);
-  linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33 pkgs.linuxPackages_2_6_33);
-  linuxPackages_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_2_6_34 pkgs.linuxPackages_2_6_34);
   linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);
-  linuxPackages_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_2_6_36 pkgs.linuxPackages_2_6_36);
-  linuxPackages_2_6_37 = recurseIntoAttrs (linuxPackagesFor linux_2_6_37 pkgs.linuxPackages_2_6_37);
   linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_38_ati = recurseIntoAttrs (linuxPackagesFor linux_2_6_38_ati pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_39 = recurseIntoAttrs (linuxPackagesFor linux_2_6_39 pkgs.linuxPackages_2_6_39);
@@ -6171,8 +6037,7 @@ let
     inherit (gnome) gtkdoc;
   };
 
-  uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
+  uml = linux.override {
     userModeLinux = true;
   };
 
