@@ -3576,15 +3576,18 @@ let
      in ({
        inherit stdenv fetchurl;
        gccCross = gccCrossStageStatic;
-       kernelHeaders = if crossGNU then hurdHeaders else linuxHeadersCross;
+       kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
        installLocales = getConfig [ "glibc" "locales" ] false;
      }
 
      //
 
      (if crossGNU
-      then { inherit machHeaders hurdHeaders mig fetchgit; }
-      else { }))));
+      then {
+        inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
+        inherit fetchgit;
+      }
+      else { })));
 
   # We can choose:
   libcCrossChooser = name : if (name == "glibc") then glibcCross
