@@ -4,12 +4,14 @@ stdenv.mkDerivation rec {
   name = "zlib-1.2.6";
   
   src = fetchurl {
-    urls = [ "http://www.zlib.net/${name}.tar.gz"
-        "http://gentoo.netnitco.net/distfiles/${name}.tar.gz" ];
+    urls = 
+      [ "http://www.zlib.net/${name}.tar.gz"
+        "http://gentoo.netnitco.net/distfiles/${name}.tar.gz" 
+      ];
     sha256 = "06x6m33ls1606ni7275q5z392csvh18dgs55kshfnvrfal45w8r1";
   };
 
-  patches = stdenv.lib.optional (stdenv.system == "i686-cygwin") [ ./no-shared.patch ];
+  patches = [ ];
 
   configureFlags = if static then "" else "--shared";
 
