@@ -19,5 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.linphone.org/;
     description = "Open Source video SIP softphone";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.gnu;
   };
 }
