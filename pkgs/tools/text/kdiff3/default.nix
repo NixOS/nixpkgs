@@ -1,23 +1,20 @@
-{ stdenv, fetchurl, cmake, qt4, perl, kdelibs, automoc4, phonon, gettext, kde_baseapps }:
+{ stdenv, fetchurl, cmake, kdelibs, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "kdiff3-0.9.95";
+  name = "kdiff3-0.9.96";
   src = fetchurl {
     url = "mirror://sourceforge/kdiff3/${name}.tar.gz";
-    sha256 = "03rg41vdi44wh7kygv46nkzyrirl6qyar901hnlmdwjpi6ycwwh3";
+    sha256 = "14fnflp5ansi7b59h8vn81mb8pdqpbanz0qzyw9sxk2pgp24xrqh";
   };
 
-  # kdebase allows having a konqueror plugin built
-  buildInputs = [ cmake qt4 perl kdelibs automoc4 phonon gettext kde_baseapps ];
-
-  # Adjust the version of the DocBook XML to 4.2 ( so that it validates ).
-  patches = [ ./adjust-docbook-xml-version-to-4.2.patch ];
+  buildInputs = [ kdelibs ];
+  buildNativeInputs = [ cmake gettext ];
 
   meta = {
     homepage = http://kdiff3.sourceforge.net/;
     license = "GPLv2+";
     description = "Compares and merges 2 or 3 files or directories";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [viric urkud];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

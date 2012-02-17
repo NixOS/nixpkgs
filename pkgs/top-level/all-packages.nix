@@ -583,9 +583,7 @@ let
     stdenv = overrideInStdenv stdenv [gnumake381];
   };
 
-  dnsmasq = callPackage ../tools/networking/dnsmasq {
-    # TODO i18n can be installed as well, implement it?
-  };
+  dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
   dnstop = callPackage ../tools/networking/dnstop { };
 
@@ -1131,6 +1129,8 @@ let
   };
 
   openobex = callPackage ../tools/bluetooth/openobex { };
+
+  openresolv = callPackage ../tools/networking/openresolv { };
 
   opensc_0_11_7 = callPackage ../tools/security/opensc/0.11.7.nix { };
 
@@ -4714,7 +4714,9 @@ let
 
   vcdimager = callPackage ../development/libraries/vcdimager { };
 
-  vigra = callPackage ../development/libraries/vigra { };
+  vigra = callPackage ../development/libraries/vigra {
+    inherit (pkgs.pythonPackages) numpy;
+  };
 
   vmime = callPackage ../development/libraries/vmime { };
 
@@ -5890,10 +5892,6 @@ let
     splashutils =
       if kernel.features ? fbConDecor then pkgs.splashutils else null;
 
-    ext3cowtools = callPackage ../os-specific/linux/ext3cow-tools {
-      kernel_ext3cowpatched = kernel;
-    };
-
     /* compiles but has to be integrated into the kernel somehow
       Let's have it uncommented and finish it..
     */
@@ -5904,15 +5902,6 @@ let
     };
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
-
-    # State Nix
-    snix = callPackage ../tools/package-management/snix {
-
-      aterm = aterm25;
-      db4 = db45;
-
-      flex = flex2533;
-      ext3cow_kernel = kernel;    };
 
     sysprof = callPackage ../development/tools/profiling/sysprof {
       inherit (gnome) gtk glib pango libglade;
