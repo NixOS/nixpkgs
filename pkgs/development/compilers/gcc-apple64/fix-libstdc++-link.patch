@@ -1,0 +1,17 @@
+Prevent our libstdc++.dylib from having a runtime dependency on
+/usr/lib/libstdc++.dylib.  This is caused by the implicit -lstdc++
+passed by g++ when it links libstdc++.dylib.  Adding "-nostdlib" to
+the g++ invocation prevents this.
+
+diff -ru -x '*~' libstdcxx-39-orig/libstdcxx/libstdc++-v3/src/Makefile.in libstdcxx-39/libstdcxx/libstdc++-v3/src/Makefile.in
+--- x/libstdcxx/libstdc++-v3/src/Makefile.in	2006-10-16 21:08:22.000000000 +0200
++++ y/libstdcxx/libstdc++-v3/src/Makefile.in	2012-02-17 18:44:05.210570590 +0100
+@@ -388,7 +388,7 @@
+ 
+ libstdc___la_DEPENDENCIES = ${version_dep} $(libstdc___la_LIBADD)
+ libstdc___la_LDFLAGS = \
+-	-version-info $(libtool_VERSION) ${version_arg} -lm 
++	-version-info $(libtool_VERSION) ${version_arg} -lm -Wc,-nostdlib
+ 
+ 
+ # Use special rules for the deprecated source files so that they find

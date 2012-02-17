@@ -84,9 +84,11 @@ postInstall() {
     rm -rf $out/libexec/gcc/*/*/install-tools
 }
 
+
 postUnpack() {
-  mv $libstdcxx/libstdcxx $sourceRoot/
+    mv $libstdcxx/libstdcxx $sourceRoot/
 }
+
 
 STDCXX_INCDIR="$out/include/c++/4.2.1"
 
@@ -94,11 +96,19 @@ genericBuild
 
 
 echo '-------------------------------------------------------------------------------------------------------------------------'
-echo 'libstdcxx-16'
+echo 'libstdcxx'
 echo '-------------------------------------------------------------------------------------------------------------------------'
 
 cd ..
 pwd
+
+unpackPhase () {
+    true
+}
+
+patchPhase() {
+    true
+}
 
 preConfigure() {
     # Perform the build in a different directory.
@@ -111,18 +121,9 @@ preConfigure() {
     configureFlags="--disable-libstdcxx-pch --disable-libstdcxx-debug --disable-multilib --with-gxx-include-dir=${STDCXX_INCDIR}"
 }
 
-unpackPhase () {
-  echo '-'
-}
-
 postInstall() {
-  echo '-'
-  echo "cp -v ${STDCXX_INCDIR}/*/bits/* ${STDCXX_INCDIR}/bits/"
-  cp -v ${STDCXX_INCDIR}/*/bits/* ${STDCXX_INCDIR}/bits/
-}
-
-patchPhase() {
-  echo '-'
+    echo "cp -v ${STDCXX_INCDIR}/*/bits/* ${STDCXX_INCDIR}/bits/"
+    cp -v ${STDCXX_INCDIR}/*/bits/* ${STDCXX_INCDIR}/bits/
 }
 
 genericBuild
