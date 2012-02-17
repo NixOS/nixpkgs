@@ -3587,7 +3587,7 @@ let
         inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
         inherit fetchgit;
       }
-      else { })));
+      else { }))));
 
   # We can choose:
   libcCrossChooser = name : if (name == "glibc") then glibcCross
