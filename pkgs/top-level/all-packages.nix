@@ -4725,7 +4725,9 @@ let
 
   vcdimager = callPackage ../development/libraries/vcdimager { };
 
-  vigra = callPackage ../development/libraries/vigra { };
+  vigra = callPackage ../development/libraries/vigra {
+    inherit (pkgs.pythonPackages) numpy;
+  };
 
   vmime = callPackage ../development/libraries/vmime { };
 
