@@ -11,7 +11,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "caneda-git-2010-10-24";
+  name = "caneda-git-2012-02-16";
 
   src = fetchgit {
     url = git://caneda.git.sourceforge.net/gitroot/caneda/caneda;
