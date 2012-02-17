@@ -3,9 +3,11 @@
 let
 
   version = "0.4.1";
-  name = "bbswitch-${version}";
+  name = "bbswitch-${version}-${kernel.version}";
 
-in stdenv.mkDerivation {
+in
+
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {

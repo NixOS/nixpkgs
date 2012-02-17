@@ -1,4 +1,4 @@
-{stdenv, fetchurl , kernel, xlibs, which, imake
+{ stdenv, fetchurl, kernel, xlibs, which, imake
 , mesa # for fgl_glxgears
 , libXxf86vm, xf86vidmodeproto # for fglrx_gamma
 , xorg, makeWrapper, glibc, patchelf
@@ -14,33 +14,32 @@
 
 # The gentoo ebuild contains much more magic..
 
-let lib = stdenv.lib;
-    inherit (lib) concatStringsSep;
-in
 # http://wiki.cchtml.com/index.php/Main_Page
 
+assert stdenv.system == "x86_64-linux";
+
 stdenv.mkDerivation rec {
-  name = "ati-drivers-${version}";
+  name = "ati-drivers-${version}-${kernel.version}";
   version = "10-11-x86";
 
   builder = ./builder.sh;
 
   inherit libXxf86vm xf86vidmodeproto;
 
-  src =
-    assert stdenv.system == "x86_64-linux";
-  fetchurl {
+  src = fetchurl {
     url = https://a248.e.akamai.net/f/674/9206/0/www2.ati.com/drivers/linux/ati-driver-installer-10-11-x86.x86_64.run;
     sha256 = "1z33w831ayx1j5lm9d1xv6whkmzsz9v8li3s8c96hwnwki6zpimr";
   };
 
-  buildInputs = [xlibs.libXext xlibs.libX11
-    xlibs.libXrandr which imake makeWrapper
-    patchelf
-  ];
+  buildInputs =
+    [ xlibs.libXext xlibs.libX11
+      xlibs.libXrandr which imake makeWrapper
+      patchelf
+    ];
+    
   inherit kernel glibc /* glibc only used for setting interpreter */;
   
-  LD_LIBRARY_PATH = concatStringsSep ":"
+  LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
     [ "${xorg.libXrandr}/lib"
       "${xorg.libXrender}/lib"
       "${xorg.libXext}/lib"

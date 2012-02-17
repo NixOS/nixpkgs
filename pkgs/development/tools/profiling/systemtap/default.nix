@@ -3,7 +3,7 @@
 , gtkmm, libglademm, boost, perl, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "systemtap-1.2";
+  name = "systemtap-1.2-${linux.version}";
 
   src = fetchurl {
     url = "http://sources.redhat.com/systemtap/ftp/releases/${name}.tar.gz";

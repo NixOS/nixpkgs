@@ -5893,9 +5893,7 @@ let
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
-    kqemu = builderDefsPackage ../os-specific/linux/kqemu/1.4.0pre1.nix {
-      inherit kernel perl;
-    };
+    kqemu = callPackage ../os-specific/linux/kqemu { };
 
     klibc = callPackage ../os-specific/linux/klibc {
       linuxHeaders = glibc.kernelHeaders;

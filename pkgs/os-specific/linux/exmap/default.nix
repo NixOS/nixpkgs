@@ -1,7 +1,7 @@
 { fetchurl, stdenv, kernel, pkgconfig, gtkmm, boost, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "exmap-0.10";
+  name = "exmap-0.10-${kernel.version}";
 
   src = fetchurl {
     url = "http://www.berthels.co.uk/exmap/download/${name}.tgz";

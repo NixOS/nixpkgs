@@ -6,7 +6,8 @@ let version = "5_100_82_112";
 in
 
 stdenv.mkDerivation {
-  name = "broadcom-sta-${version}";
+  name = "broadcom-sta-${version}-${kernel.version}";
+  
   src = fetchurl {
     url = "http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_${bits}-v${version}.tar.gz";
     sha256 = if bits == "32"
