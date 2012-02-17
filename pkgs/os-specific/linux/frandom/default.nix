@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation rec {
-  name = "frandom-1.1";
+  name = "frandom-1.1-${kernel.version}";
 
   src = fetchurl {
     url = "http://sourceforge.net/projects/frandom/files/${name}.tar.gz";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   buildInputs = [];
 
   meta = {
-    description = "A very fast random number generator kernel module.";
+    description = "A very fast random number generator kernel module";
     homepage = http://frandom.sourceforge.net/;
     license = "GPLv2";
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];

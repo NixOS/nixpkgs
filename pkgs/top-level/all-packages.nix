@@ -4543,11 +4543,6 @@ let
 
   qt4 = pkgs.kde4.qt4;
 
-  qt46 = callPackage ../development/libraries/qt-4.x/4.6 {
-    inherit (gnome) glib;
-    libpng = pkgs.libpng12;
-  };
-
   qt47 = callPackage ../development/libraries/qt-4.x/4.7 {
     inherit (pkgs.gnome) glib;
   };
@@ -5901,9 +5896,7 @@ let
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
-    kqemu = builderDefsPackage ../os-specific/linux/kqemu/1.4.0pre1.nix {
-      inherit kernel perl;
-    };
+    kqemu = callPackage ../os-specific/linux/kqemu { };
 
     klibc = callPackage ../os-specific/linux/klibc {
       linuxHeaders = glibc.kernelHeaders;
@@ -8453,10 +8446,7 @@ let
 
   ### SCIENCE / ELECTRONICS
 
-  caneda = callPackage ../applications/science/electronics/caneda {
-    # At the time of writing, it fails to build with qt47
-    qt4 = qt46;
-  };
+  caneda = callPackage ../applications/science/electronics/caneda { };
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
