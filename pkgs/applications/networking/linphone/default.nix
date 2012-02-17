@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, libosip, libexosip, speex,
-  readline, ffmpeg, alsaLib, SDL, libv4l, libtheora, libXv }:
+{ stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, libosip, libexosip
+, speex, readline, mediastreamer }:
         
 stdenv.mkDerivation rec {
   name = "linphone-3.5.0";
@@ -9,14 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "1jrgsyx2mn6y50hjfx79fzqhp42r78cjr63w3bfjdl258zy2f6ix";
   };
 
-  buildInputs = [ intltool gtk libglade libosip libexosip speex readline
-    ffmpeg alsaLib SDL libv4l libtheora libXv ];
+  buildInputs = [ gtk libglade libosip libexosip readline mediastreamer speex ];
 
-  buildNativeInputs = [ pkgconfig ];
+  buildNativeInputs = [ intltool pkgconfig ];
+
+  configureFlags = "--enable-external-ortp --enable-external-mediastreamer";
 
   meta = {
     homepage = http://www.linphone.org/;
     description = "Open Source video SIP softphone";
     license = "GPLv2+";
+    platforms = stdenv.lib.platforms.gnu;
   };
 }

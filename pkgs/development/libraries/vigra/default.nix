@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, cmake, libtiff, libpng, libjpeg, doxygen, python, fftw }:
-stdenv.mkDerivation {
-  name = "vigra-1.7.0";
+{ stdenv, fetchurl, cmake, libtiff, libpng, libjpeg, doxygen, python,
+  fftw, fftwSinglePrec, hdf5, boost, numpy }:
+stdenv.mkDerivation rec {
+  name = "vigra-1.8.0";
 
   src = fetchurl {
-    url = http://hci.iwr.uni-heidelberg.de/vigra/vigra-1.7.0-src.tar.gz;
-    sha256 = "1laf9p0h35xpzs98yd13alm17gh40sn9b7z01ylcja4g7p3a3hs4";
+    url = "${meta.homepage}/${name}-src.tar.gz";
+    sha256 = "0542qy1bqaq73l7i8aqdhwdbhd6m1wldsn1w2sfyf8yf4398ffpw";
   };
 
-  buildInputs = [ cmake fftw libtiff libpng libjpeg doxygen python ];
+  buildInputs = [ cmake fftw fftwSinglePrec libtiff libpng libjpeg python boost
+    numpy hdf5 ];
 
   cmakeFlags = if (stdenv.system == "x86_64-linux") then
       "-DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC"
