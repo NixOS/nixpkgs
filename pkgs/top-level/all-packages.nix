@@ -4538,10 +4538,6 @@ let
 
   qt4 = pkgs.kde4.qt4;
 
-  qt46 = callPackage ../development/libraries/qt-4.x/4.6 {
-    inherit (gnome) glib;
-  };
-
   qt47 = callPackage ../development/libraries/qt-4.x/4.7 {
     inherit (pkgs.gnome) glib;
   };
@@ -8442,10 +8438,7 @@ let
 
   ### SCIENCE / ELECTRONICS
 
-  caneda = callPackage ../applications/science/electronics/caneda {
-    # At the time of writing, it fails to build with qt47
-    qt4 = qt46;
-  };
+  caneda = callPackage ../applications/science/electronics/caneda { };
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 

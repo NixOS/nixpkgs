@@ -1,10 +1,11 @@
 {stdenv, fetchgit, qt4, cmake, libxml2, libxslt}:
 
 let
+
   srcComponents = fetchgit {
-    url = git://git.tuxfamily.org/gitroot/caneda/components.git;
-    rev = "9ff20b6ad1b8f639441123f195337121f3b02404";
-    sha256 = "32f12e72eaadca7b8e409ee12c55fbbdbf43dfa9bc9675ac8458da6393ef3cad";
+    url = git://caneda.git.sourceforge.net/gitroot/caneda/components;
+    rev = "34cd36b620e0dfc57ba2d2b6168734ea9a2cfa9a";
+    sha256 = "840f07921eecbf10e38e44e5c61c716295a16c98fbb75016d9a44e7dfee40e59";
   };
 
 in
@@ -13,9 +14,9 @@ stdenv.mkDerivation rec {
   name = "caneda-git-2010-10-24";
 
   src = fetchgit {
-    url = git://git.tuxfamily.org/gitroot/caneda/caneda.git;
-    rev = "62fc0d8e248705ea51269dce8f291ff69924728e";
-    sha256 = "8fa928b7dbd235eff3d938c5a1212ee360c6a90aab7b396eea2f5fe68aba7ab0";
+    url = git://caneda.git.sourceforge.net/gitroot/caneda/caneda;
+    rev = "fff9e2f7988fe5d062548cafeda1e5cd660769d1";
+    sha256 = "dfbcac97f5a1b41ad9a63392394f37fb294cbf78c576673c9bc4a5370957b2c8";
   };
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
