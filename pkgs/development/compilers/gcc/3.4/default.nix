@@ -5,7 +5,7 @@
 
 assert langC;
 
-with import ../../../lib;
+with stdenv.lib;
 
 stdenv.mkDerivation {
   name = "gcc-3.4.6";

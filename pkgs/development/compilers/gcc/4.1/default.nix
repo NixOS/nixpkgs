@@ -10,7 +10,7 @@
 
 assert langC || langFortran;
 
-with import ../../../lib;
+with stdenv.lib;
 
 stdenv.mkDerivation {
   name = "${name}-4.1.2";

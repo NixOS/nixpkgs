@@ -8,7 +8,7 @@
 
 assert langC;
 
-with import ../../../lib;
+with stdenv.lib;
 
 stdenv.mkDerivation {
   name = "${name}-4.0.4";

@@ -1733,15 +1733,15 @@ let
 
   gcc = gcc46;
 
-  gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
+  gcc295 = wrapGCC (import ../development/compilers/gcc/2.95 {
     inherit fetchurl stdenv noSysDirs;
   });
 
-  gcc33 = wrapGCC (import ../development/compilers/gcc-3.3 {
+  gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
     inherit fetchurl stdenv noSysDirs;
   });
 
-  gcc34 = wrapGCC (import ../development/compilers/gcc-3.4 {
+  gcc34 = wrapGCC (import ../development/compilers/gcc/3.4 {
     inherit fetchurl stdenv noSysDirs;
   });
 
@@ -1750,30 +1750,30 @@ let
   # expects a single digit after the dot.  As a workaround, we feed
   # GCC with Texinfo 4.9.  Stupid bug, hackish workaround.
 
-  gcc40 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.0) {
+  gcc40 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.0) {
     inherit fetchurl stdenv noSysDirs;
     texinfo = texinfo49;
     profiledCompiler = true;
   });
 
-  gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.1) {
+  gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.1) {
     inherit fetchurl noSysDirs gmp mpfr;
     stdenv = overrideGCC stdenv gcc42;
     texinfo = texinfo49;
     profiledCompiler = false;
   });
 
-  gcc42 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.2) {
+  gcc42 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.2) {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = false;
   });
 
-  gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
+  gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.3) {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
     profiledCompiler = true;
   }));
 
-  gcc43_realCross = makeOverridable (import ../development/compilers/gcc-4.3) {
+  gcc43_realCross = makeOverridable (import ../development/compilers/gcc/4.3) {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
     binutilsCross = binutilsCross;
     libcCross = libcCross;
@@ -1784,7 +1784,7 @@ let
   };
 
   gcc44_realCross = lib.addMetaAttrs { platforms = []; }
-    (makeOverridable (import ../development/compilers/gcc-4.4) {
+    (makeOverridable (import ../development/compilers/gcc/4.4) {
       inherit stdenv fetchurl texinfo gmp mpfr /* ppl cloogppl */ noSysDirs
           gettext which;
       binutilsCross = binutilsCross;
@@ -1800,7 +1800,7 @@ let
   gcc46 = gcc46_real;
 
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
-    (makeOverridable (import ../development/compilers/gcc-4.5) {
+    (makeOverridable (import ../development/compilers/gcc/4.5) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         ppl cloogppl gettext which noSysDirs;
       binutilsCross = binutilsCross;
@@ -1812,7 +1812,7 @@ let
     });
 
   gcc46_realCross = lib.addMetaAttrs { platforms = []; }
-    (makeOverridable (import ../development/compilers/gcc-4.6) {
+    (makeOverridable (import ../development/compilers/gcc/4.6) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         cloog ppl gettext which noSysDirs;
       binutilsCross = binutilsCross;
@@ -1869,13 +1869,13 @@ let
     enableMultilib = true;
   }));
 
-  gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
+  gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.4) {
     inherit fetchurl stdenv texinfo gmp mpfr /* ppl cloogppl */
       gettext which noSysDirs;
     profiledCompiler = true;
   }));
 
-  gcc45_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.5) {
+  gcc45_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.5) {
     inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
       ppl cloogppl
       gettext which noSysDirs;
@@ -1895,7 +1895,7 @@ let
   }));
 
   # A non-stripped version of GCC.
-  gcc45_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc-4.5 {
+  gcc45_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.5 {
     stripped = false;
 
     inherit noSysDirs;
@@ -1908,7 +1908,7 @@ let
     profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
   }));
 
-  gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc-4.6 {
+  gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
     inherit noSysDirs;
     cross = null;
     libcCross = null;
@@ -1920,7 +1920,7 @@ let
   }));
 
   # A non-stripped version of GCC.
-  gcc46_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc-4.6 {
+  gcc46_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
     stripped = false;
 
     inherit noSysDirs;
@@ -1930,10 +1930,10 @@ let
   }));
 
   gccApple =
-    wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
+    wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc/4.2-apple32 else import ../development/compilers/gcc/4.2-apple64) {
       inherit fetchurl stdenv noSysDirs;
       profiledCompiler = true;
-    }) ;
+    });
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
@@ -2094,7 +2094,7 @@ let
     langGo = true;
   });
 
-  ghdl = wrapGCC (import ../development/compilers/gcc-4.3 {
+  ghdl = wrapGCC (import ../development/compilers/gcc/4.3 {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat;
     name = "ghdl";
     langVhdl = true;
@@ -2105,7 +2105,7 @@ let
   });
 
   # Not officially supported version for ghdl
-  ghdl_gcc44 = lowPrio (wrapGCC (import ../development/compilers/gcc-4.4 {
+  ghdl_gcc44 = lowPrio (wrapGCC (import ../development/compilers/gcc/4.4 {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat gettext which
       ppl cloogppl;
     name = "ghdl";
