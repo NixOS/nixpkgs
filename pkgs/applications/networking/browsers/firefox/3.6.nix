@@ -12,14 +12,14 @@
 
 rec {
 
-  firefoxVersion = "3.6.21";
+  firefoxVersion = "3.6.27";
   
-  xulVersion = "1.9.2.21"; # this attribute is used by other packages
+  xulVersion = "1.9.2.27"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "3c1f001ad22d93b48e191999f548b4382db3d36c";
+    sha1 = "dd472a10e4ef5b017f00074d0325be13e832d610";
   };
 
 
@@ -50,6 +50,9 @@ rec {
       ./xulrunner-chromium-mips.patch
       ./xulrunner-mips-n32.patch
       ./xulrunner-1.9.2_beta4-mips-bus-error.patch
+
+      # Fix building on GCC 4.6.
+      ./gcc-4.6.patch
     ];
 
     buildInputs =
