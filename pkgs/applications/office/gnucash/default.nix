@@ -8,15 +8,12 @@
  * for a possible solution.
  */
 
-let
-  name = "gnucash-2.4.8";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "gnucash-2.4.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "06gfgw4sq1b8c9qzinyd3wmcy3i0jyprngr259l0aldv8rvix8aa";
+    sha256 = "1k76b6hnsmljggxsq5l9w94krfmhx58ij8jcxf72p0ddnlimdrjj";
   };
 
   buildInputs = [
@@ -44,7 +41,7 @@ stdenv.mkDerivation {
   '';
 
   # The following settings fix failures in the test suite. It's not required otherwise.
-  NIX_LDFLAGS = "-rpath=${guile}/lib";
+  NIX_LDFLAGS = "-rpath=${guile}/lib -rpath=${glib}/lib";
   preCheck = "export GNC_DOT_DIR=$PWD/dot-gnucash";
   doCheck = true;
 
