@@ -1,0 +1,35 @@
+From https://401629.bugs.gentoo.org/attachment.cgi?id=300539
+Fix building VLC against zlib 1.2.6.
+
+http://bugs.gentoo.org/401629
+http://trac.videolan.org/vlc/ticket/5964
+
+--- a/modules/gui/skins2/src/theme_loader.cpp
++++ b/modules/gui/skins2/src/theme_loader.cpp
+@@ -768,7 +768,7 @@
+     {
+         void *toClose = currentGzVp;
+         currentGzVp = NULL;  currentGzFd = -1;
+-        return gzclose( toClose );
++        return gzclose( (gzFile) toClose );
+     }
+     return -1;
+ }
+@@ -777,7 +777,7 @@
+ {
+     if( currentGzVp != NULL && fd != -1 )
+     {
+-        return gzread( currentGzVp, p_buffer, i_length );
++        return gzread( (gzFile) currentGzVp, p_buffer, i_length );
+     }
+     return -1;
+ }
+@@ -786,7 +786,7 @@
+ {
+     if( currentGzVp != NULL && fd != -1 )
+     {
+-        return gzwrite( currentGzVp, const_cast<void*>(p_buffer), i_length );
++        return gzwrite( (gzFile) currentGzVp, const_cast<void*>(p_buffer), i_length );
+     }
+     return -1;
+ }
