@@ -24,6 +24,9 @@ stdenv.mkDerivation {
   
   buildInputs = [x11 SDL mesa openal];
 
+  # Fix building on GCC 4.6.
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+
   preInstall = ''
     mkdir -p $out/baseq3
     installTargets=copyfiles
