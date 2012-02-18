@@ -2787,7 +2787,7 @@ let
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
     inherit ruby makeWrapper;
   };
-  rubygems = rubygemsFun ruby;
+  rubygems = hiPrio (rubygemsFun ruby);
 
   rq = callPackage ../applications/networking/cluster/rq { };
 

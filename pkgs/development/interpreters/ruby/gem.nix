@@ -40,6 +40,15 @@ let
 
       runHook postInstall
     '';
+
+    propagatedUserEnvPkgs = requiredGems;
+    postFixup = ''
+      if [ -n "$propagatedUserEnvPkgs" ]; then
+          mkdir -p "$out/nix-support"
+          echo "$propagatedUserEnvPkgs" > "$out/nix-support/propagated-user-env-packages"
+      fi
+    '';
+
   };
   mb = stdenv.lib.maybeAttr;
   patchedGem = a: stdenv.mkDerivation (removeAttrs (stdenv.lib.mergeAttrsByFuncDefaults
