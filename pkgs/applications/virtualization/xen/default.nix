@@ -6,7 +6,7 @@ with stdenv.lib;
 
 let
 
-  version = "4.0.1";
+  version = "4.0.3";
 
   libDir = if stdenv.is64bit then "lib64" else "lib";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://bits.xensource.com/oss-xen/release/${version}/xen-${version}.tar.gz";
-    sha256 = "0ww8j5fa2jxg0zyx7d7z9jyv2j47m8w420sy16w3rf8d80lisvbf";
+    sha256 = "0p4i7mm8cdsr8i9z3dij6nriyvz6la2rhm7jkyk2n8h62nnxi1b5";
   };
 
   patches =
