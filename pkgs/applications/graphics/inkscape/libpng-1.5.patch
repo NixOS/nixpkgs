@@ -1,0 +1,47 @@
+Source: upstream revisions 10061 and 10707
+
+--- a/src/sp-image.cpp	2011-02-21 07:59:34 +0000
++++ b/src/sp-image.cpp	2011-02-21 08:57:28 +0000
+@@ -387,9 +387,13 @@
+ 
+ #if defined(PNG_iCCP_SUPPORTED)
+                 {
+-                    char* name = 0;
++                    png_charp name = 0;
+                     int compression_type = 0;
+-                    char* profile = 0;
++#if (PNG_LIBPNG_VER < 10500)
++                    png_charp profile = 0;
++#else
++                    png_bytep profile = 0;
++#endif
+                     png_uint_32 proflen = 0;
+                     if ( png_get_iCCP(pngPtr, infoPtr, &name, &compression_type, &profile, &proflen) ) {
+ //                                         g_message("Found an iCCP chunk named [%s] with %d bytes and comp %d", name, proflen, compression_type);
+
+--- a/src/extension/internal/pdfinput/svg-builder.cpp	2011-10-27 04:55:51 +0000
++++ b/src/extension/internal/pdfinput/svg-builder.cpp	2011-10-29 20:34:00 +0000
+@@ -1481,7 +1481,7 @@
+         return NULL;
+     }
+     // Set error handler
+-    if (setjmp(png_ptr->jmpbuf)) {
++    if (setjmp(png_jmpbuf(png_ptr))) {
+         png_destroy_write_struct(&png_ptr, &info_ptr);
+         return NULL;
+     }
+
+--- a/src/helper/png-write.cpp	2011-08-07 10:53:12 +0000
++++ b/src/helper/png-write.cpp	2011-10-29 20:34:00 +0000
+@@ -166,8 +166,8 @@
+     /* Set error handling.  REQUIRED if you aren't supplying your own
+      * error hadnling functions in the png_create_write_struct() call.
+      */
+-    if (setjmp(png_ptr->jmpbuf)) {
+-        /* If we get here, we had a problem reading the file */
++    if (setjmp(png_jmpbuf(png_ptr))) {
++        // If we get here, we had a problem reading the file
+         fclose(fp);
+         png_destroy_write_struct(&png_ptr, &info_ptr);
+         return false;
+

@@ -1,7 +1,7 @@
-{ kde, kdelibs, libvncserver }:
+{ kde, kdelibs, libvncserver, libjpeg }:
 
 kde {
-  buildInputs = [ kdelibs libvncserver ];
+  buildInputs = [ kdelibs libvncserver libjpeg ];
 
   patches = [ ./kdenetwork.patch ];
 }

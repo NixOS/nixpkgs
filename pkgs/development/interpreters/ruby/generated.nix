@@ -17,11 +17,8 @@ g: # Get dependencies from patched gems
     buildr = g.buildr_1_4_6;
     bundler = g.bundler_1_0_22;
     childprocess = g.childprocess_0_3_1;
-    coffee_script = g.coffee_script_2_2_0;
-    coffee_script_source = g.coffee_script_source_1_2_0;
     diff_lcs = g.diff_lcs_1_1_3;
     erubis = g.erubis_2_7_0;
-    execjs = g.execjs_1_3_0;
     ffi = g.ffi_1_0_11;
     highline = g.highline_1_5_1;
     hike = g.hike_1_2_1;
@@ -63,7 +60,7 @@ g: # Get dependencies from patched gems
     tzinfo = g.tzinfo_0_3_31;
     xml_simple = g.xml_simple_1_0_12;
   };
-  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''coffee-script'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
+  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
   gems = {
     ZenTest_4_6_2 = {
       basename = ''ZenTest'';
@@ -158,7 +155,7 @@ installed versions.'';
         longDescription = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.'';
       };
       name = ''activesupport-3.2.1'';
-      requiredGems = [ g.i18n_0_6_0 ];
+      requiredGems = [ g.i18n_0_6_0 g.multi_json_1_0_4 ];
       sha256 = ''0ajkzsa7467jp7lxgjcsl94nqkvw9d0h492rypljs0f8f1fn744v'';
     };
     arel_3_0_0 = {
@@ -278,34 +275,6 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [ g.ffi_1_0_11 ];
       sha256 = ''0phkpxvwz88kgbi4d2akiqbppf374kn2rwf64hfs99p1j1ksbw5l'';
     };
-    coffee_script_2_2_0 = {
-      basename = ''coffee_script'';
-      meta = {
-        description = ''Ruby CoffeeScript Compiler'';
-        homepage = ''http://github.com/josh/ruby-coffee-script'';
-        longDescription = ''    Ruby CoffeeScript is a bridge to the JS CoffeeScript compiler.
-'';
-      };
-      name = ''coffee-script-2.2.0'';
-      requiredGems = [ g.coffee_script_source_1_2_0 g.execjs_1_3_0 ];
-      sha256 = ''133cp4znfp44wwnv12myw8s0z6qws74ilqmw88iwzkshg689zpdc'';
-    };
-    coffee_script_source_1_2_0 = {
-      basename = ''coffee_script_source'';
-      meta = {
-        description = ''The CoffeeScript Compiler'';
-        homepage = ''http://jashkenas.github.com/coffee-script/'';
-        longDescription = ''      CoffeeScript is a little language that compiles into JavaScript.
-      Underneath all of those embarrassing braces and semicolons,
-      JavaScript has always had a gorgeous object model at its heart.
-      CoffeeScript is an attempt to expose the good parts of JavaScript
-      in a simple way.
-'';
-      };
-      name = ''coffee-script-source-1.2.0'';
-      requiredGems = [  ];
-      sha256 = ''13cpmlj2m5lyxipdxmnajy12bzwmgc6g2n090gpa0wd5am7xvhkp'';
-    };
     diff_lcs_1_1_2 = {
       basename = ''diff_lcs'';
       meta = {
@@ -364,18 +333,6 @@ is the MIT license.'';
       name = ''erubis-2.7.0'';
       requiredGems = [  ];
       sha256 = ''1fj827xqjs91yqsydf0zmfyw9p4l2jz5yikg3mppz6d7fi8kyrb3'';
-    };
-    execjs_1_3_0 = {
-      basename = ''execjs'';
-      meta = {
-        description = ''Run JavaScript code from Ruby'';
-        homepage = ''https://github.com/sstephenson/execjs'';
-        longDescription = ''    ExecJS lets you run JavaScript code from Ruby.
-'';
-      };
-      name = ''execjs-1.3.0'';
-      requiredGems = [ g.multi_json_1_0_4 ];
-      sha256 = ''1sski14wdzfljx2f9j7r09li3rxqwvink8n5v489ykw1sicg6l2s'';
     };
     ffi_1_0_11 = {
       basename = ''ffi'';

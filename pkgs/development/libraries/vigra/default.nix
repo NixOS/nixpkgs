@@ -11,10 +11,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake fftw fftwSinglePrec libtiff libpng libjpeg python boost
     numpy hdf5 ];
 
-  cmakeFlags = if (stdenv.system == "x86_64-linux") then
-      "-DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC"
-    else
-      "";
+  preConfigure = "cmakeFlags+=\" -DVIGRANUMPY_INSTALL_DIR=$out/lib/${python.libPrefix}/site-packages\"";
+  cmakeFlags = stdenv.lib.optionals (stdenv.system == "x86_64-linux")
+      [ "-DCMAKE_CXX_FLAGS=-fPIC" "-DCMAKE_C_FLAGS=-fPIC" ];
 
   meta = {
     description = "Novel computer vision C++ library with customizable algorithms and data structures";

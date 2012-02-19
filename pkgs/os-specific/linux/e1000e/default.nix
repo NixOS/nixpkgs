@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kernel }:
 
 stdenv.mkDerivation {
-  name = "e1000e-1.5.1";
+  name = "e1000e-1.5.1-${kernel.version}";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/e1000/e1000e-1.5.1.tar.gz";

@@ -1,13 +1,4 @@
-{
-  stdenv,
-  fetchurl,
-  perl,
-  bison,
-  mktemp,
-  linuxHeaders,
-  linuxHeadersCross,
-  kernel ? null
-}:
+{ stdenv, fetchurl, perl, bison, mktemp, linuxHeaders, linuxHeadersCross, kernel ? null }:
 
 assert stdenv.isLinux;
 
@@ -17,7 +8,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "klibc-${version}";
+  name = "klibc-${version}${stdenv.lib.optionalString (kernel != null) "-${kernel.version}"}";
 
   src = fetchurl {
     url = "http://ftp.eu.openbsd.org/pub/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";

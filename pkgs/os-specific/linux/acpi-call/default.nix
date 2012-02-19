@@ -1,13 +1,14 @@
-{stdenv, fetchgit, kernel, ...}:
+{ stdenv, fetchgit, kernel }:
 
 stdenv.mkDerivation {
-  src = fetchgit {
-    url="git://github.com/mkottman/acpi_call.git";
-    rev="4f71ce83392bc52b3497";
-    sha256="1f20516dc7d42bc7d9d71eaa54f48f38cd56b8683062f81d6f3857990056bdd3";
-  };
-  name = "acpi-call";
+  name = "acpi-call-${kernel.version}";
 
+  src = fetchgit {
+    url = "git://github.com/mkottman/acpi_call.git";
+    rev = "4f71ce83392bc52b3497";
+    sha256 = "1f20516dc7d42bc7d9d71eaa54f48f38cd56b8683062f81d6f3857990056bdd3";
+  };
+  
   preBuild = ''
     kernelVersion=$(cd ${kernel}/lib/modules && ls)
     sed -e 's/break/true/' -i test_off.sh

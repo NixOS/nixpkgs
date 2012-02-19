@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kernel, perl }:
 
 stdenv.mkDerivation {
-  name = "ndiswrapper-1.56-stable";
+  name = "ndiswrapper-1.56-${kernel.version}";
 
   # need at least .config and include 
   inherit kernel;

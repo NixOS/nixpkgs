@@ -2766,7 +2766,7 @@ let
   rubygemsFun = ruby: builderDefsPackage (import ../development/interpreters/ruby/rubygems.nix) {
     inherit ruby makeWrapper;
   };
-  rubygems = rubygemsFun ruby;
+  rubygems = hiPrio (rubygemsFun ruby);
 
   rq = callPackage ../applications/networking/cluster/rq { };
 
@@ -5744,9 +5744,7 @@ let
 
     wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
-    kqemu = builderDefsPackage ../os-specific/linux/kqemu/1.4.0pre1.nix {
-      inherit kernel perl;
-    };
+    kqemu = callPackage ../os-specific/linux/kqemu { };
 
     klibc = callPackage ../os-specific/linux/klibc {
       linuxHeaders = glibc.kernelHeaders;
@@ -8619,5 +8617,7 @@ let
   zsnes = callPackage_i686 ../misc/emulators/zsnes { };
 
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
+
+  bullet = callPackage ../development/libraries/bullet {};
 
 }; in pkgs
