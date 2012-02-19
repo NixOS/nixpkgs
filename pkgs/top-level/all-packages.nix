@@ -7852,7 +7852,7 @@ let
 
   alienarena = callPackage ../games/alienarena { };
 
-  andyetitmoves = callPackage ../games/andyetitmoves {};
+  andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
 
   asc = callPackage ../games/asc {
     lua = lua5;
