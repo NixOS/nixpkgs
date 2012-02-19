@@ -8100,7 +8100,9 @@ let
 
   warzone2100 = callPackage ../games/warzone2100 { };
 
-  widelands = callPackage ../games/widelands {};
+  widelands = callPackage ../games/widelands {
+    libpng = libpng12;
+  };
 
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
