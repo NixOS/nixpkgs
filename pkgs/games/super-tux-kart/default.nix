@@ -1,17 +1,21 @@
 { fetchurl, stdenv, plib, SDL, openal, freealut, mesa
-, libvorbis, libogg, gettext }:
+, libvorbis, libogg, gettext, irrlicht3843, libXxf86vm, curl, pkgconfig
+, fribidi }:
 
 stdenv.mkDerivation rec {
-  name = "supertuxkart-0.6.2a";
+  name = "supertuxkart-0.7.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/supertuxkart/${name}-src.tar.bz2";
-    sha256 = "0bdn12kg85bgcgj9shfc40k56228hysiixfaxkycgb688nhldngr";
+    sha256 = "0njrs2qyhbiqdbsqk9jx0sl8nhdwmipf1i91k23rv1biwrim9yq7";
   };
 
   buildInputs = [
-    plib SDL openal freealut mesa libvorbis libogg gettext
+    plib SDL openal freealut mesa libvorbis libogg gettext irrlicht3843
+    libXxf86vm curl pkgconfig fribidi
   ];
+
+  configureFlags = [ "--with-irrlicht=${irrlicht3843}" ];
 
   postInstall = ''
     mv $out/games $out/bin

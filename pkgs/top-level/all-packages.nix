@@ -3824,6 +3824,8 @@ let
 
   intltool = gnome.intltool;
 
+  irrlicht3843 = callPackage ../development/libraries/irrlicht { };
+
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   itk = callPackage ../development/libraries/itk { };
