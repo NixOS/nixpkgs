@@ -4,11 +4,11 @@ assert zlib != null;
 
 # If you want to upgrade libpng, look at libpng15 branch
 stdenv.mkDerivation rec {
-  name = "libpng-1.2.46";
+  name = "libpng-1.2.47";
   
   src = fetchurl {
     url = "mirror://sourceforge/libpng/${name}.tar.xz";
-    sha256 = "0rcx4v4khdkrvz7b02fmx7lab2pk1lal4dhx9widv36b7g2xvwzn";
+    sha256 = "1lai3dnzw81y40jr17bdj1qh08hwv9mc1v74yybl7jdx2hiilsvx";
   };
   
   propagatedBuildInputs = [ zlib ];
