@@ -784,11 +784,6 @@ let
     inherit (gtkLibs) pango;
   };
 
-  /* Last version to export to dia */
-  graphviz_2_24 = callPackage ../tools/graphics/graphviz/2.0.nix {
-    inherit (gtkLibs) pango;
-  };
-
   /* Readded by Michael Raskin. There are programs in the wild
    * that do want 2.0 but not 2.22. Please give a day's notice for
    * objections before removal.
