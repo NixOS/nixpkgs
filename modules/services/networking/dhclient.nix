@@ -116,12 +116,16 @@ in
 
     powerManagement.resumeCommands =
       ''
-        export PATH=${config.system.build.upstart}/sbin:$PATH
-        initctl restart wpa_supplicant
-        initctl restart dhclient
+        ${config.system.build.upstart}/sbin/restart dhclient
+      '';
+
+    networking.interfaceMonitor.commands =
+      ''
+        if [ "$status" = up ]; then
+          ${config.system.build.upstart}/sbin/restart dhclient
+        fi
       '';
 
   };
 
 }
-

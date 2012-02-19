@@ -63,6 +63,11 @@ in
           + (optionalString (config.networking.WLANInterface != null) "-i ${config.networking.WLANInterface}");
       };
   
+    powerManagement.resumeCommands =
+      ''
+        ${config.system.build.upstart}/sbin/restart wpa_supplicant
+      '';
+
   };
 
 }

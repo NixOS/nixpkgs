@@ -6,6 +6,8 @@ let
 
   inherit (pkgs) ifplugd;
 
+  cfg = config.networking.interfaceMonitor;
+
   # The ifplugd action script, which is called whenever the link
   # status changes (i.e., a cable is plugged in or unplugged).  We do
   # nothing when a cable is unplugged.  When a cable is plugged in, we
@@ -14,10 +16,9 @@ let
   plugScript = pkgs.writeScript "ifplugd.action"
     ''
       #! ${pkgs.stdenv.shell}
-      if test "$2" = up; then
-        initctl stop dhclient
-        initctl start dhclient
-      fi
+      iface="$1"
+      status="$2"
+      ${cfg.commands}
     '';
 
 in
@@ -30,21 +31,33 @@ in
 
     networking.interfaceMonitor.enable = mkOption {
       default = false;
-      description = "
+      description = ''
         If <literal>true</literal>, monitor Ethernet interfaces for
         cables being plugged in or unplugged.  When this occurs, the
         <command>dhclient</command> service is restarted to
         automatically obtain a new IP address.  This is useful for
         roaming users (laptops).
-      ";
+      '';
     };
 
     networking.interfaceMonitor.beep = mkOption {
       default = false;
-      description = "
+      description = ''
         If <literal>true</literal>, beep when an Ethernet cable is
         plugged in or unplugged.
-      ";
+      '';
+    };
+
+    networking.interfaceMonitor.commands = mkOption {
+      default = false;
+      description = ''
+        Shell commands to be executed when the link status of an
+        interface changes.  On invocation, the shell variable
+        <varname>iface</varname> contains the name of the interface,
+        while the variable <varname>status</varname> contains either
+        <literal>up</literal> or <literal>down</literal> to indicate
+        the new status.
+      '';
     };
 
   };
@@ -52,7 +65,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.networking.interfaceMonitor.enable {
+  config = mkIf cfg.enable {
 
     jobs.ifplugd =
       { description = "Network interface connectivity monitor";
@@ -68,7 +81,7 @@ in
           '';
       };
 
-    environment.systemPackages = [ifplugd];
+    environment.systemPackages = [ ifplugd ];
 
   };
 
