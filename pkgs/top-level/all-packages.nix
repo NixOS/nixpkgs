@@ -7852,6 +7852,8 @@ let
 
   alienarena = callPackage ../games/alienarena { };
 
+  andyetitmoves = callPackage ../games/andyetitmoves {};
+
   asc = callPackage ../games/asc {
     lua = lua5;
     libsigcxx = libsigcxx12;
