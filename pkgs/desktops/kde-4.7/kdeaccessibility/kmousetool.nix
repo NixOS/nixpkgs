@@ -1,7 +1,7 @@
-{ kde, kdelibs, libXtst }:
+{ kde, kdelibs, libXtst, libXt }:
 
 kde {
-  buildInputs = [ kdelibs libXtst ];
+  buildInputs = [ kdelibs libXtst libXt ];
 
   meta = {
     description = "A program that clicks the mouse for you";

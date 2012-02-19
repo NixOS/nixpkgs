@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, perl, perlXMLParser, gtk, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm
 , glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
-, gsl, python, pyxml, lxml, poppler }:
+, gsl, python, pyxml, lxml, poppler, imagemagick, libwpg }:
 
 stdenv.mkDerivation rec {
   name = "inkscape-0.48.2";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "10v7ixdz7f8vgk2wv0m81zli9p0f446cm1f4aqlvni1ndsx44fi2";
   };
 
-  patches = [ ./configure-python-libs.patch ];
+  patches = [ ./configure-python-libs.patch ./libpng-1.5.patch ];
 
   propagatedBuildInputs = [
     # Python is used at run-time to execute scripts, e.g., those from
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig perl perlXMLParser gtk libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm glibmm libsigcxx lcms boost gettext
-    makeWrapper intltool gsl poppler
+    makeWrapper intltool gsl poppler imagemagick libwpg
   ];
 
   configureFlags = "--with-python";

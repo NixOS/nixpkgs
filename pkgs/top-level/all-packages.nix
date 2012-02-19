@@ -8793,4 +8793,6 @@ let
 
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 
+  bullet = callPackage ../development/libraries/bullet {};
+
 }; in pkgs

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ruby, qt4, pkgconfig, libsamplerate, fftwSinglePrec }:
+{ stdenv, fetchurl, ruby, qt4, pkgconfig, libsamplerate, fftwSinglePrec, which }:
 
 let version = "0.3.3"; in
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   prefixKey = "--prefix ";
   propagatedBuildInputs = [ qt4 libsamplerate fftwSinglePrec ];
-  buildNativeInputs = [ ruby pkgconfig ];
+  buildNativeInputs = [ ruby pkgconfig which ];
 
   configureFlags = "--release";
 

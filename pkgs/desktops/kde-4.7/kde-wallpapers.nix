@@ -1,8 +1,11 @@
-{ kde, kdelibs }:
+{ kde, cmake }:
 
 kde {
+  buildNativeInputs = [ cmake ];
 
-  buildInputs = [ kdelibs ];
+  patches = [ ./files/kde-wallpapers-buildsystem.patch ];
+
+  cmakeFlags = "-DWALLPAPER_INSTALL_DIR=share/wallpapers";
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
