@@ -1,11 +1,11 @@
 { kde, kdelibs, speex, libmsn, libotr, kdepimlibs, qimageblitz, libktorrent,
   jasper, libidn, mediastreamer, msilbc, pkgconfig, libxml2, libxslt, giflib,
-  libgadu, boost, qca2, gpgme }:
+  libgadu, boost, qca2, gpgme, sqlite }:
 
 kde {
   buildInputs = [ kdelibs speex libmsn libotr kdepimlibs qimageblitz libktorrent
     jasper libidn mediastreamer msilbc libxml2 libxslt giflib libgadu boost qca2
-    gpgme ];
+    gpgme sqlite ];
 
   buildNativeInputs = [ pkgconfig ];
 
