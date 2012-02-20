@@ -4628,7 +4628,9 @@ let
 
   soprano = callPackage ../development/libraries/soprano { };
 
-  soqt = callPackage ../development/libraries/soqt { };
+  soqt = callPackage ../development/libraries/soqt {
+    qt4 = qt47;
+  };
 
   speechd = callPackage ../development/libraries/speechd { };
 
@@ -7192,7 +7194,7 @@ let
   merkaartor = callPackage ../applications/misc/merkaartor { };
 
   meshlab = callPackage ../applications/graphics/meshlab {
-    qt = qt4;
+    qt = qt47;
   };
 
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
@@ -7350,6 +7352,7 @@ let
   };
 
   paraview = callPackage ../applications/graphics/paraview {
+    qt4 = qt47;
   };
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
