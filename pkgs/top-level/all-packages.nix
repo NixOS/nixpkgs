@@ -1110,9 +1110,7 @@ let
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
-  offlineimap = callPackage ../tools/networking/offlineimap {
-    ssl = pythonPackages.ssl;
-  };
+  offlineimap = callPackage ../tools/networking/offlineimap { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
 
@@ -7185,7 +7183,7 @@ let
   };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    inherit (pythonPackages) ssl curses;
+    inherit (pythonPackages) curses;
     guiSupport = false;		# use mercurialFull to get hgk GUI
   };
 
