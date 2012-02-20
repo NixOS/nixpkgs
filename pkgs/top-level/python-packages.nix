@@ -1822,6 +1822,35 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  skype4py = buildPythonPackage (rec {
+    name = "Skype4Py-1.0.32.0";
+
+    src = fetchurl {
+      url = mirror://sourceforge/skype4py/Skype4Py-1.0.32.0.tar.gz;
+      sha256 = "0cmkrv450wa8v50bng5dflpwkl5c1p9pzysjkb2956w5kvwh6f5b";
+    };
+
+    unpackPhase = ''
+      tar xf $src
+      find . -type d -exec chmod +rx {} \;
+      sourceRoot=`pwd`/`ls -d S*`
+    '';
+
+    doCheck = false;
+
+    propagatedBuildInputs = [ pkgs.xlibs.libX11 ];
+
+    meta = {
+      description = "High-level, platform independent Skype API wrapper for Python";
+
+      # The advertisement says https://developer.skype.com/wiki/Skype4Py
+      # but that url does not work. This following web page points to the
+      # download link and has some information about the package.
+      homepage = http://pypi.python.org/pypi/Skype4Py/1.0.32.0;
+
+      license = "BSD";
+    };
+  });
 
   sphinx = buildPythonPackage (rec {
     name = "Sphinx-1.0.7";
