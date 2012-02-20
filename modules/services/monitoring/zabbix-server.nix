@@ -21,7 +21,9 @@ let
 
       PidFile = ${pidFile}
 
-      DBHost = ${cfg.dbServer}
+      ${optionalString (cfg.dbServer != "localhost") ''
+        DBHost = ${cfg.dbServer}
+      ''}
 
       DBName = zabbix
 
@@ -76,8 +78,7 @@ in
 
         description = "Zabbix server daemon";
 
-        startOn = if cfg.dbServer == "localhost" then "started postgresql" else "filesystem";
-        stopOn = if cfg.dbServer == "localhost" then "stopping postgresql" else "starting shutdown";
+        startOn = "filesystem";
 
         preStart =
           ''
@@ -94,6 +95,8 @@ in
             fi
           '';
 
+        path = [ pkgs.nettools ];
+
         # Zabbix doesn't have an option not to daemonize, and doesn't
         # daemonize in a way that allows Upstart to track it.  So to
         # make sure that we notice when it goes down, we start Zabbix
@@ -102,7 +105,6 @@ in
         # just monitor `cat'.
         script =
           ''
-            export PATH=${pkgs.nettools}/bin:$PATH
             rm -f ${stateDir}/dummy
             mkfifo ${stateDir}/dummy
             cat ${stateDir}/dummy &
