@@ -1838,7 +1838,7 @@ let pythonPackages = python.modules // rec {
 
     doCheck = false;
 
-    propagatedBuildInputs = [ pkgs.xlibs.libX11 ];
+    propagatedBuildInputs = [ pkgs.xlibs.libX11 pkgs.pythonDBus pkgs.pygobject ];
 
     meta = {
       description = "High-level, platform independent Skype API wrapper for Python";
