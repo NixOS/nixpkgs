@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, makeWrapper, docutils, unzip
-, guiSupport ? false, tk ? null, curses }:
+, guiSupport ? false, tk ? null, ssl, curses }:
 
 let
   name = "mercurial-2.0.2";
@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
-  pythonPackages = [ curses ];
+  pythonPackages = [ ssl curses ];
 
   buildInputs = [ python makeWrapper docutils unzip ];
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     ''
       for i in $(cd $out/bin && ls); do
         wrapProgram $out/bin/$i \
-          --prefix PYTHONPATH : "$(toPythonPath "$out ${curses}")" \
+          --prefix PYTHONPATH : "$(toPythonPath "$out ${ssl} ${curses}")" \
           $WRAP_TK
       done
 

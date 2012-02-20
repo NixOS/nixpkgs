@@ -38,7 +38,7 @@ let
 
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [ bzip2 openssl ]
+    [ bzip2 ]
     ++ optional zlibSupport zlib
     ++ optionals stdenv.isDarwin [ darwinArchUtility darwinSwVersUtility ];
 
@@ -170,6 +170,11 @@ let
     sqlite3 = buildInternalPythonModule {
       moduleName = "sqlite3";
       deps = [ sqlite ];
+    };
+
+    ssl = buildInternalPythonModule {
+      moduleName = "ssl";
+      deps = [ openssl ];
     };
 
     tkinter = buildInternalPythonModule {
