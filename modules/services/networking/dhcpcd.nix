@@ -35,6 +35,29 @@ let
       denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* virbr* vnet*
     '';
 
+  # Hook for emitting ip-up/ip-down events.
+  exitHook = pkgs.writeText "dhcpcd.exit-hook"
+    ''
+      #exec >> /var/log/dhcpcd 2>&1
+      #set -x
+    
+      if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
+          # Restart ntpd.  (The "ip-up" event below will trigger the
+          # restart.)  We need to restart it to make sure that it will
+          # actually do something: if ntpd cannot resolve the server
+          # hostnames in its config file, then it will never do
+          # anything ever again ("couldn't resolve ..., giving up on
+          # it"), so we silently lose time synchronisation.
+          ${config.system.build.upstart}/sbin/initctl stop ntpd
+
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-up IFACE=$interface
+      fi
+
+      if [ "$reason" = EXPIRE -o "$reason" = RELEASE ]; then
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-down IFACE=$interface
+      fi
+    '';
+
 in
 
 {
@@ -49,12 +72,16 @@ in
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
-        exec = "dhcpcd --config ${dhcpcdConf} --background --persistent";
-
-        daemonType = "daemon";
+        exec = "dhcpcd --config ${dhcpcdConf} --nobackground --persistent";
       };
 
     environment.systemPackages = [ dhcpcd ];
+
+    environment.etc =
+      [ { source = exitHook;
+          target = "dhcpcd.exit-hook";
+        }
+      ];
 
     powerManagement.resumeCommands =
       ''
