@@ -2059,6 +2059,28 @@ let pythonPackages = python.modules // rec {
     wxGTK = pkgs.wxGTK28;
   };
 
+  xlib = buildPythonPackage (rec {
+    name = "xlib-0.15rc1";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/python-xlib/python-${name}.tar.bz2";
+      sha256 = "0mvzz605pxzj7lfp2w6z4qglmr4rjza9xrb7sl8yn12cklzfky0m";
+    };
+
+    # Tests require `pyutil' so disable them to avoid circular references.
+    doCheck = false;
+
+    propagatedBuildInputs = [ pkgs.xlibs.libX11 ];
+
+    meta = {
+      description = "Fully functional X client library for Python programs";
+
+      homepage = http://python-xlib.sourceforge.net/;
+
+      license = "GPLv2+";
+    };
+  });
+
   zbase32 = buildPythonPackage (rec {
     name = "zbase32-1.1.2";
 
