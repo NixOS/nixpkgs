@@ -163,6 +163,16 @@ in
 
     };
 
+    networking.useDHCP = mkOption {
+      default = true;
+      merge = mergeEnableOption;
+      description = ''
+        Whether to use DHCP to obtain an IP adress and other
+        configuration for all network interfaces that are not manually
+        configured.
+      '';
+    };
+
   };
 
 
