@@ -8,71 +8,55 @@ let
 
   inherit (pkgs) openvpn;
 
-  PATH = "${pkgs.iptables}/sbin:${pkgs.coreutils}/bin:${pkgs.iproute}/sbin:${pkgs.nettools}/sbin";
-
-  makeOpenVPNJob = cfg : name:
+  makeOpenVPNJob = cfg: name:
     let
+
+      path = (getAttr "openvpn-${name}" config.jobs).path;
+    
       upScript = ''
-        #!/bin/sh
-        exec &> /var/log/openvpn-${name}-up
-        PATH=${PATH}
+        #! /bin/sh
+        exec > /var/log/openvpn-${name}-up 2>&1
+        export PATH=${path}
+
+        # For convenience in client scripts, extract the remote domain
+        # name and name server.
+        for var in ''${!foreign_option_*}; do
+          x=(''${!var})
+          if [ "''${x[0]}" = dhcp-option ]; then
+            if [ "''${x[1]}" = DOMAIN ]; then domain="''${x[2]}"
+            elif [ "''${x[1]}" = DNS ]; then nameserver="''${x[2]}"
+            fi
+          fi
+        done
+        
         ${cfg.up}
       '';
+      
       downScript = ''
-        #!/bin/sh
-        exec &> /var/log/openvpn-${name}-down
-        PATH=${PATH}
+        #! /bin/sh
+        exec > /var/log/openvpn-${name}-down 2>&1
+        export PATH=${path}
         ${cfg.down}
       '';
+      
       configFile = pkgs.writeText "openvpn-config-${name}"
         ''
-          ${if cfg.up != "" || cfg.down != "" then "script-security 2" else ""}
+          ${optionalString (cfg.up != "" || cfg.down != "") "script-security 2"}
           ${cfg.config}
-          ${if cfg.up != "" then "up ${pkgs.writeScript "openvpn-${name}-up" upScript}" else "" }
-          ${if cfg.down != "" then "down ${pkgs.writeScript "openvpn-${name}-down" downScript}" else "" }
+          ${optionalString (cfg.up != "") "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
+          ${optionalString (cfg.down != "") "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
         '';
+        
     in {
-      description = "OpenVPN-${name}";
+      description = "OpenVPN instance ‘${name}’";
 
       startOn = "started network-interfaces";
       stopOn = "stopping network-interfaces";
 
-      environment = { PATH = "${pkgs.coreutils}/bin"; };
+      path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
 
-      script =
-        ''
-          exec &> /var/log/openvpn-${name}
-          ${config.system.sbin.modprobe} tun || true
-          ${openvpn}/sbin/openvpn --config ${configFile}
-        '';
+      exec = "${openvpn}/sbin/openvpn --config ${configFile}";
     };
-
-  openvpnInstanceOptions = {
-
-    config = mkOption {
-      type = types.string;
-      description = ''
-        config of this openvpn instance
-      '';
-    };
-    up = mkOption {
-      default = "";
-      type = types.string;
-      description = ''
-        script which is run when server instance starts up succesfully.
-        Use it to setup firewall and routing
-      '';
-    };
-    down = mkOption {
-      default = "";
-      type = types.string;
-      description = ''
-        script which is run when server instance shuts down
-        Usually this reverts what up has done
-      '';
-    };
-
-  };
 
 in
 
@@ -82,69 +66,84 @@ in
 
   options = {
 
-    services.openvpn = {
+    /* !!! Obsolete. */
+    services.openvpn.enable = mkOption {
+      default = true;
+      description = "Whether to enable OpenVPN.";
+    };
 
-      enable = mkOption {
-        default = false;
-        description = "Whether to enable OpenVPN.";
+    services.openvpn.servers = mkOption {
+      default = {};
+
+      example = {
+      
+        server = {
+          config = ''
+            # Simplest server configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
+            # server :
+            dev tun
+            ifconfig 10.8.0.1 10.8.0.2
+            secret /root/static.key
+          '';
+          up = "ip route add ...";
+          down = "ip route del ...";
+        };
+        
+        client = {
+          config = ''
+            client
+            remote vpn.example.org
+            dev tun
+            proto tcp-client
+            port 8080
+            ca /root/.vpn/ca.crt
+            cert /root/.vpn/alice.crt
+            key /root/.vpn/alice.key
+          '';
+          up = "echo nameserver $nameserver | ${pkgs.openresolv}/sbin/resolvconf -m 0 -a $dev";
+          down = "${pkgs.openresolv}/sbin/resolvconf -d $dev";
+        };
+        
       };
 
+      description = ''
+        Each attribute of this option defines an Upstart job to run an
+        OpenVPN instance.  These can be OpenVPN servers or clients.
+        The name of each Upstart job is
+        <literal>openvpn-</literal><replaceable>name</replaceable>,
+        where <replaceable>name</replaceable> is the corresponding
+        attribute name.
+      '';
 
-      servers = mkOption {
+      type = types.attrsOf types.optionSet;
+      
+      options =  {
 
-        default = {};
-
-        example = {
-            mostSimple = {
-              config = ''
-                # Most simple configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
-                # server :
-                dev tun
-                ifconfig 10.8.0.1 10.8.0.2
-                secret static.key
-              '';
-              up = "ip route add ..!";
-              down = "ip route add ..!";
-            };
-            clientMostSimple = {
-              config = ''
-                #client:
-                #remote myremote.mydomain
-                #dev tun
-                #ifconfig 10.8.0.2 10.8.0.1
-                #secret static.key
-              '';
-            };
-            serverScalable = {
-              config = ''
-                multiple clienst
-                see example file found in http://openvpn.net/index.php/documentation/howto.html
-              '';
-            };
+        config = mkOption {
+          type = types.string;
+            description = ''
+            Configuration of this OpenVPN instance.  See
+            <citerefentry><refentrytitle>openvpn</refentrytitle><manvolnum>8</manvolnum></citerefentry>
+            for details.
+          '';
         };
 
-        # !!! clean up this description please
-        description = ''
-          You can define multiple openvpn instances.
+        up = mkOption {
+          default = "";
+          type = types.string;
+          description = ''
+            Shell commands executed when the instance is starting.
+          '';
+        };
 
-          The id of an instance is given by the attribute name.
+        down = mkOption {
+          default = "";
+          type = types.string;
+          description = ''
+            Shell commands executed when the instance is shutting down.
+          '';
+        };
 
-          Each instance will result in a new job file.
-
-          Additionally you can specify the up/ down scripts by setting
-          the up down properties.
-          Config lines up=/nix/store/xxx-up-script down=...
-          will be appended to your configuration file automatically
-
-          If you define at least one of up/down "script-security 2" will be
-          prepended to your config otherwise you scripts aren't run by openvpn
-
-          Don't forget to check that the all package sizes can be sent. For
-          examlpe if scp hangs you should set --fragment XXX --mssfix YYY.
-        '';
-
-        type = types.attrsOf types.optionSet;
-        options = [ openvpnInstanceOptions ];
       };
 
     };
@@ -154,12 +153,14 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf (cfg.servers != {}) {
 
     jobs = listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers);
 
     environment.systemPackages = [ openvpn ];
-
+    
+    boot.kernelModules = [ "tun" ];
+    
   };
 
 }
