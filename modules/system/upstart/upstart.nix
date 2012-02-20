@@ -7,16 +7,6 @@ let
   upstart = pkgs.upstart;
 
 
-  # Path for Upstart jobs.  Should be quite minimal.
-  upstartPath =
-    [ pkgs.coreutils
-      pkgs.findutils
-      pkgs.gnugrep
-      pkgs.gnused
-      upstart
-    ];
-
-
   # From a job description, generate an Upstart job file.
   makeJob = job:
 
@@ -41,7 +31,7 @@ let
 
           ${optionalString (job.stopOn != "") "stop on ${job.stopOn}"}
 
-          env PATH=${makeSearchPath "bin" (job.path ++ upstartPath)}:${makeSearchPath "sbin" (job.path ++ upstartPath)}
+          env PATH=${job.path}
 
           ${concatMapStrings (n: "env ${n}=\"${getAttr n env}\"\n") (attrNames env)}
 
@@ -276,6 +266,7 @@ let
 
     path = mkOption {
       default = [ ];
+      apply = ps: "${makeSearchPath "bin" ps}:${makeSearchPath "sbin" ps}";
       description = ''
         Packages added to the job's <envar>PATH</envar> environment variable.
         Both the <filename>bin</filename> and <filename>sbin</filename>
@@ -289,6 +280,7 @@ let
   upstartJob = {name, config, ...}: {
 
     options = {
+    
       jobDrv = mkOption {
         default = makeJob config;
         type = types.uniq types.package;
@@ -297,13 +289,25 @@ let
           value is generated from other options.
         '';
       };
+      
     };
 
     config = {
+    
       # The default name is the name extracted from the attribute path.
       name = mkDefaultValue (
         replaceChars ["<" ">" "*"] ["_" "_" "_name_"] name
       );
+      
+      # Default path for Upstart jobs.  Should be quite minimal.
+      path =
+        [ pkgs.coreutils
+          pkgs.findutils
+          pkgs.gnugrep
+          pkgs.gnused
+          upstart
+        ];
+      
     };
 
   };
