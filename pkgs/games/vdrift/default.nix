@@ -1,16 +1,16 @@
 { fetchurl, stdenv, mesa, SDL, scons, freeglut, SDL_image, glew, libvorbis,
-  asio, boost, SDL_gfx }:
+  asio, boost, SDL_gfx, pkgconfig, bullet, curl, libarchive }:
 
 stdenv.mkDerivation rec {
-  name = "vdrift-2010-06-30";
+  name = "vdrift-2011-10-22";
 
   src = fetchurl {
     url = "mirror://sourceforge/vdrift/${name}.tar.bz2";
-    sha256 = "1zbh62363gx4ayyx4wcsp5di4f16qqfg2ajwkgw71kss6j7lk71j";
+    sha256 = "0vg1v1590jbln6k236kxn2sfgclvc6g34kykhh4nq9q3l1xgy38s";
   };
 
   buildInputs = [ scons mesa SDL freeglut SDL_image glew libvorbis asio boost
-    SDL_gfx ];
+    SDL_gfx pkgconfig bullet curl libarchive ];
 
   buildPhase = ''
     sed -i -e s,/usr/local,$out, SConstruct
