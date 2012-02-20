@@ -8,11 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "1zhpm89s6bk29lx7hq5f6fqm7i6dq2wq9vv5m25rv5wv6747v0m6";
   };
 
+  configureFlags = "--sysconfdir=/etc";
+
   makeFlags = "PREFIX=\${out}";
 
   # Hack to make installation succeed.  dhcpcd will still use /var/db
   # at runtime.
-  installFlags = "DBDIR=\${TMPDIR}/db";
+  installFlags = "DBDIR=\${TMPDIR}/db SYSCONFDIR=$(out)/etc";
 
   meta = {
     description = "A client for the Dynamic Host Configuration Protocol (DHCP)";
