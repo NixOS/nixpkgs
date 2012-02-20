@@ -49,7 +49,7 @@ in
     };
 
     networking.interfaceMonitor.commands = mkOption {
-      default = false;
+      default = "";
       description = ''
         Shell commands to be executed when the link status of an
         interface changes.  On invocation, the shell variable
