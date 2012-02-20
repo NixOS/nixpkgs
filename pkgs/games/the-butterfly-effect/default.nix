@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , qt4, box2d
+  , qt4, box2d, which
   ,fetchsvn
   , ...}:
 builderDefsPackage

@@ -121,7 +121,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # This is the Cabal builder, the function we use to build most Haskell
   # packages. It isn't the Cabal library, which is spelled "Cabal".
 
-  cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {
+  cabal = callPackage ../build-support/cabal {
     enableLibraryProfiling = enableLibraryProfiling;
   };
 

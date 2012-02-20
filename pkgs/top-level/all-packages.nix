@@ -784,11 +784,6 @@ let
     inherit (gtkLibs) pango;
   };
 
-  /* Last version to export to dia */
-  graphviz_2_24 = callPackage ../tools/graphics/graphviz/2.0.nix {
-    inherit (gtkLibs) pango;
-  };
-
   /* Readded by Michael Raskin. There are programs in the wild
    * that do want 2.0 but not 2.22. Please give a day's notice for
    * objections before removal.
@@ -3795,6 +3790,8 @@ let
   iniparser = callPackage ../development/libraries/iniparser { };
 
   intltool = gnome.intltool;
+
+  irrlicht3843 = callPackage ../development/libraries/irrlicht { };
 
   isocodes = callPackage ../development/libraries/iso-codes { };
 
@@ -7677,6 +7674,8 @@ let
   ### GAMES
 
   alienarena = callPackage ../games/alienarena { };
+
+  andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
 
   asc = callPackage ../games/asc {
     lua = lua5;

@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dhcpcd-5.0.6";
+  name = "dhcpcd-5.5.4";
 
   src = fetchurl {
     url = "http://roy.marples.name/downloads/dhcpcd/${name}.tar.bz2";
-    sha256 = "0q8yz1kg9x031lnsvws010wawg0z85xv34575x1iavh3lrd90705";
+    sha256 = "1zhpm89s6bk29lx7hq5f6fqm7i6dq2wq9vv5m25rv5wv6747v0m6";
   };
 
   makeFlags = "PREFIX=\${out}";
