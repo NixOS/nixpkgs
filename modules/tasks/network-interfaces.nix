@@ -179,6 +179,7 @@ in
         pkgs.nettools
         pkgs.wirelesstools
         pkgs.rfkill
+        pkgs.openresolv
       ]
       ++ optional (cfg.bridges != {}) pkgs.bridge_utils
       ++ optional cfg.enableIPv6 pkgs.ndisc6;
@@ -196,6 +197,7 @@ in
           ''
             set +e # continue in case of errors
 
+            # Set MAC addresses of interfaces, if desired.
             ${flip concatMapStrings cfg.interfaces (i:
               optionalString (i.macAddress != "")
                 ''
@@ -236,16 +238,15 @@ in
                 '')
             }
 
-            # Set the nameservers.
-            if test -n "${toString cfg.nameservers}"; then
-                rm -f /etc/resolv.conf
-                if test -n "${cfg.domain}"; then
-                    echo "domain ${cfg.domain}" >> /etc/resolv.conf
-                fi
-                for i in ${toString cfg.nameservers}; do
-                    echo "nameserver $i" >> /etc/resolv.conf
-                done
-            fi
+            # Set the static DNS configuration, if given.
+            cat | ${pkgs.openresolv}/sbin/resolvconf -a static <<EOF
+            ${optionalString (cfg.nameservers != [] && cfg.domain != "") ''
+              domain ${cfg.domain}
+            ''}
+            ${flip concatMapStrings cfg.nameservers (ns: ''
+              nameserver ${ns}
+            '')}
+            EOF
 
             # Set the default gateway.
             ${optionalString (cfg.defaultGateway != "") ''

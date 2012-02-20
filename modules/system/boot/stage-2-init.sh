@@ -96,6 +96,7 @@ mkdir -m 0755 -p /etc/nixos
 
 # Miscellaneous boot time cleanup.
 rm -rf /var/run /var/lock /var/log/upstart
+rm -f /etc/resolv.conf
 
 #echo -n "cleaning \`/tmp'..."
 #rm -rf --one-file-system /tmp/*
