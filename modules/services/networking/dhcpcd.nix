@@ -12,6 +12,29 @@ let
     map (i: i.name) (filter (i: i ? ipAddress && i.ipAddress != "" ) config.networking.interfaces)
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges));
 
+  # Config file adapted from the one that ships with dhcpcd.
+  dhcpcdConf = pkgs.writeText "dhcpcd.conf"
+    ''
+      # Inform the DHCP server of our hostname for DDNS.
+      hostname
+
+      # A list of options to request from the DHCP server.
+      option domain_name_servers, domain_name, domain_search, host_name
+      option classless_static_routes, ntp_servers, interface_mtu
+
+      # A ServerID is required by RFC2131.
+      require dhcp_server_identifier
+
+      # A hook script is provided to lookup the hostname if not set by
+      # the DHCP server, but it should not be run by default.
+      nohook lookup-hostname
+
+      # Ignore peth* devices; on Xen, they're renamed physical
+      # Ethernet cards used for bridging.  Likewise for vif* and tap*
+      # (Xen) and virbr* and vnet* (libvirt).
+      denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* virbr* vnet*
+    '';
+
 in
 
 {
@@ -43,34 +66,9 @@ in
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
-        script =
-          ''
-            # Determine the interface on which to start dhcpcd.
-            interfaces=
+        exec = "dhcpcd --config ${dhcpcdConf} --background --persistent";
 
-            for i in $(cd /sys/class/net && ls -d *); do
-                # Only run dhcpcd on interfaces of type ARPHRD_ETHER
-                # (1), i.e. Ethernet.  Ignore peth* devices; on Xen,
-                # they're renamed physical Ethernet cards used for
-                # bridging.  Likewise for vif* and tap* (Xen) and
-                # virbr* and vnet* (libvirt).
-                if [ "$(cat /sys/class/net/$i/type)" = 1 ]; then
-                    if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q "$i" &&
-                       ! echo "$i" | grep -x -q "peth.*\|vif.*\|tap.*\|virbr.*\|vnet.*";
-		    then
-                        echo "Running dhcpcd on $i"
-                        interfaces="$interfaces $i"
-                    fi
-                fi
-            done
-
-            if [ -z "$interfaces" ]; then
-                echo 'No interfaces on which to start dhcpcd!'
-                exit 1
-            fi
-
-            exec dhcpcd --nobackground --persistent $interfaces
-          '';
+        daemonType = "daemon";
       };
 
     environment.systemPackages = [ dhcpcd ];
@@ -78,13 +76,6 @@ in
     powerManagement.resumeCommands =
       ''
         ${config.system.build.upstart}/sbin/restart dhcpcd
-      '';
-
-    networking.interfaceMonitor.commands =
-      ''
-        if [ "$status" = up ]; then
-          ${config.system.build.upstart}/sbin/restart dhcpcd
-        fi
       '';
 
   };
