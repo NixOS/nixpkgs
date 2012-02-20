@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fclabels";
-  version = "1.1.0.2";
-  sha256 = "19p3ghjmc6jrgzifm5vrsd3cp5xmccw811zczcmsk1xjr4ady95r";
+  version = "1.1.1.0";
+  sha256 = "1xkgqib7ya3l6m9bz5ly6x9k0n71jiydk8ss38rvn9j5gryv3las";
   buildDepends = [ mtl transformers ];
   meta = {
     description = "First class accessor labels";
