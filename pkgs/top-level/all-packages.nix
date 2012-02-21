@@ -2665,10 +2665,9 @@ let
   maude = callPackage ../development/interpreters/maude { };
 
   octave = callPackage ../development/interpreters/octave {
-    # Needed because later gm versions require an initialization the actual octave is not
-    # doing.
-    # http://www-old.cae.wisc.edu/pipermail/octave-maintainers/2010-February/015295.html
-    graphicsmagick = graphicsmagick137;
+    clapack = clapack.override {
+      withPIC = true;
+    };
   };
 
   # mercurial (hg) bleeding edge version

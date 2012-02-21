@@ -1,13 +1,19 @@
 {stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull,
-libX11, graphicsmagick}:
+libX11, graphicsmagick, pcre, blas, clapack, texLive }:
 
-stdenv.mkDerivation {
-  name = "octave-3.2.4";
+stdenv.mkDerivation rec {
+  name = "octave-3.6.0";
   src = fetchurl {
-    url = ftp://ftp.octave.org/pub/octave/octave-3.2.4.tar.bz2;
-    sha256 = "0iyivx7qz7cvwz7qczqrl4ysqivlhn5ax92z9md0m77dqw2isis8";
+    url = "mirror://gnu/octave/${name}.tar.bz2";
+    sha256 = "1mwj5pbbdzfbmcqyk0vx6si7mh8yhayppwnb1i63v871gxy775z5";
   };
-  buildInputs = [gfortran readline ncurses perl flex texinfo qhull libX11
-    graphicsmagick ];
-  configureFlags = "--enable-readline --enable-dl";
+
+  buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
+    graphicsmagick pcre blas clapack texLive ];
+
+  NIX_LDFLAGS = "-lf2c"; # For clapack
+
+  enableParallelBuilding = true;
+
+  configureFlags = "--enable-readline --enable-dl --disable-docs";
 }
