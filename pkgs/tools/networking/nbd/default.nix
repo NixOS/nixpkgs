@@ -1,17 +1,15 @@
 { stdenv, fetchurl, pkgconfig, glib }:
 
 let
-  name = "nbd-2.9.25";
+  name = "nbd-3.0";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/${name}.tar.bz2";
-    sha256 = "179548406aa2bcb0c6bff3aa0484dbb04136ec055aa385c84fefbe3c9ea96ba4";
+    sha256 = "f7210edfa858f5ae69bdbf76f5467ac9dcaa97074d945e55e2a683e7aa228b93";
   };
-
-  patches = [ ./0001-properly-check-for-HAVE_FALLOC_PH-in-both-occurrence.patch ];
 
   buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.kernelHeaders;
 
