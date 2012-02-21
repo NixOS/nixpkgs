@@ -1917,6 +1917,32 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  taskcoach = buildPythonPackage rec {
+    name = "TaskCoach-1.3.7";
+
+    src = fetchurl {
+      url = "mirror://sourceforge/taskcoach/${name}.tar.gz";
+      sha256 = "069hyxc8ypn51a8imfkfqdalp1l4pv09swj2v3bi4hjscq9af6i8";
+    };
+
+    propagatedBuildInputs = [ wxPython ];
+
+    # I don't know why I need to add these libraries. Shouldn't they
+    # be part of wxPython?
+    postInstall = ''
+      libspaths=${pkgs.xlibs.libSM}/lib:${pkgs.xlibs.libXScrnSaver}/lib
+      wrapProgram $out/bin/taskcoach.py \
+        --prefix LD_LIBRARY_PATH : $libspaths
+    '';
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://taskcoach.org/;
+      description = "A very small text templating language";
+      license = "GPLv3+";
+    };
+  };
 
   tempita = buildPythonPackage rec {
     version = "0.4";
