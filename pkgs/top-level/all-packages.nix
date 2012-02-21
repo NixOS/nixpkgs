@@ -2664,11 +2664,7 @@ let
 
   maude = callPackage ../development/interpreters/maude { };
 
-  octave = callPackage ../development/interpreters/octave {
-    clapack = clapack.override {
-      withPIC = true;
-    };
-  };
+  octave = callPackage ../development/interpreters/octave { };
 
   # mercurial (hg) bleeding edge version
   octaveHG = callPackage ../development/interpreters/octave/hg.nix { };

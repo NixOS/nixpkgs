@@ -1,5 +1,5 @@
 {stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull,
-libX11, graphicsmagick, pcre, atlas, clapack, texLive }:
+libX11, graphicsmagick, pcre, liblapack, texLive, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "octave-3.4.3";
@@ -9,13 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
-    graphicsmagick pcre clapack atlas texLive ];
+    graphicsmagick pcre liblapack texLive pkgconfig ];
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    configureFlagsArray=('--with-blas=-L${atlas}/lib -lf77blas -latlas'
-      '--with-lapack=-L${clapack}/lib -llapack -lf2c')
-  '';
   configureFlags = [ "--enable-readline" "--enable-dl" ];
 }
