@@ -241,7 +241,7 @@ let
   };
 
   buildEnv = import ../build-support/buildenv {
-    inherit runCommand perl;
+    inherit (pkgs) runCommand perl;
   };
 
   dotnetenv = import ../build-support/dotnetenv {
