@@ -9,7 +9,7 @@ pythonPackages.buildPythonPackage rec {
     md5 = "c4be4adf371d1a84ce1581af365a53d0";
   };
 
-  pythonPath = [ pythonPackages.prettytable pythonPackages.argparse pythonPackages.httplib2 pythonPackages.ssl ];
+  pythonPath = [ pythonPackages.prettytable pythonPackages.argparse pythonPackages.httplib2 ];
 
   buildInputs = [ pythonPackages.mock pythonPackages.nose ];
 

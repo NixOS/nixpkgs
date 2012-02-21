@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];
 
   pythonPath =
-    [ pythonPackages.wxPython pythonPackages.ssl pythonPackages.curses pythonPackages.apsw
+    [ pythonPackages.wxPython pythonPackages.curses pythonPackages.apsw
       pythonPackages.setuptools pythonPackages.m2crypto pythonPackages.sqlite3
     ];
 

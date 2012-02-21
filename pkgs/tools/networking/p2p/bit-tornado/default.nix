@@ -1,5 +1,4 @@
-{stdenv,fetchurl,python, wxPython, makeWrapper, 
-  ssl}:
+{ stdenv,fetchurl,python, wxPython, makeWrapper }:
 stdenv.mkDerivation {
   name = "bit-tornado-0.3.18";
 
@@ -8,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1q6rapidnizy8wawasirgyjl9s4lrm7mm740mc5q5sdjyl5svrnr";
   };
 
-  buildInputs = [python wxPython makeWrapper ssl];
+  buildInputs = [ python wxPython makeWrapper ];
 
   buildPhase = '' '';
   installPhase = ''

@@ -554,7 +554,7 @@ let pythonPackages = python.modules // rec {
 
     buildInputs = [ nose mox ];
 
-    propagatedBuildInputs = [ gflags sqlalchemy webob routes eventlet python.modules.ssl ];
+    propagatedBuildInputs = [ gflags sqlalchemy webob routes eventlet ];
 
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
 

@@ -10,8 +10,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython ];
 
-  pythonPath = [ pythonPackages.ssl ];
-  
   installPhase =
     ''
       python setup.py install --prefix=$out

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ which pythonPackages.python pythonPackages.wrapPython ];
 
   # We need boto 1.9 for now.  See https://bugs.launchpad.net/euca2ools/devel/+bug/623888
-  pythonPath = [ pythonPackages.setuptools pythonPackages.boto_1_9 pythonPackages.m2crypto pythonPackages.ssl ];
+  pythonPath = [ pythonPackages.setuptools pythonPackages.boto_1_9 pythonPackages.m2crypto ];
 
   preBuild =
     ''

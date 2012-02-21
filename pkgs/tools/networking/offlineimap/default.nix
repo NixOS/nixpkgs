@@ -1,4 +1,4 @@
-{ fetchurl, buildPythonPackage, ssl }:
+{ fetchurl, buildPythonPackage }:
 
 buildPythonPackage {
   name = "offlineimap-6.2.0.2";
@@ -7,8 +7,6 @@ buildPythonPackage {
     url = "http://ftp.de.debian.org/debian/pool/main/o/offlineimap/offlineimap_6.2.0.2.orig.tar.gz";
     sha256 = "1w69qv1dm37m53k8cd068lk5z3qjlscnjxr397gs8kdsfds67v7c";
   };
-
-  propagatedBuildInputs = [ ssl ];
 
   doCheck = false;
 
