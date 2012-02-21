@@ -13,7 +13,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.kernelHeaders;
 
-  postInstall = ''install -D -m 444 README "$out/share/doc/nbd/README"'';
+  postInstall = ''
+    mkdir -p "$out/share/doc/${name}"
+    cp README "$out/share/doc/${name}/README"
+  '';
 
   # The test suite doesn't succeed on Hydra.
   doCheck = false;
