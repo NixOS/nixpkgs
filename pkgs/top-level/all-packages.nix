@@ -3299,8 +3299,6 @@ let
 
   clanlib = callPackage ../development/libraries/clanlib { };
 
-  clapack = callPackage ../development/libraries/clapack { };
-
   classads = callPackage ../development/libraries/classads { };
 
   classpath = callPackage ../development/libraries/java/classpath {
