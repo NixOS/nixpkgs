@@ -1939,7 +1939,7 @@ let pythonPackages = python.modules // rec {
 
     meta = {
       homepage = http://taskcoach.org/;
-      description = "A very small text templating language";
+      description = "Todo manager to keep track of personal tasks and todo lists";
       license = "GPLv3+";
     };
   };
