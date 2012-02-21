@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     graphicsmagick pcre liblapack texLive pkgconfig mesa fltk zlib curl
     fftw fftwSinglePrec ];
 
+  doCheck = true;
+
   enableParallelBuilding = true;
 
   configureFlags = [ "--enable-readline" "--enable-dl" ];
