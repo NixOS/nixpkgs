@@ -188,12 +188,20 @@ in
         List of directories containing firmware files.  Such files
         will be loaded automatically if the kernel asks for them
         (i.e., when it has detected specific hardware that requires
-        firmware to function).
+        firmware to function).  If more than one path contains a
+        firmware file with the same name, the first path in the list
+        takes precedence.  Note that you must rebuild your system if
+        you add files to any of these directories.  For quick testing,
+        put firmware files in /root/test-firmware and add that
+        directory to the list.
+        Note that you can also add firmware packages to this
+        list as these are directories in the nix store.
       '';
       apply = list: pkgs.buildEnv {
         name = "firmware";
         paths = list;
         pathsToLink = [ "/" ];
+        ignoreCollisions = true;
       };
     };
 
