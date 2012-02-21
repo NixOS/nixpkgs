@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
                           else "0mg41ya0b27blq3b5498kwl4rj46dj21rcd7qd0rw1kyvr7sx4v4";
              }
     else
-      abort "And Yet It Moves nix package only supports linux and intel cpu's.";
+      throw "And Yet It Moves nix package only supports linux and intel cpu's.";
 
   phases = "unpackPhase installPhase";
 

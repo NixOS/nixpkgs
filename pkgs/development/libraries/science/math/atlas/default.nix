@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gfortran }:
 
 stdenv.mkDerivation {
-  name = "atlas-3.9.11";
+  name = "atlas-3.9.67";
   
   src = fetchurl {
-    url = mirror://sf/math-atlas/atlas3.9.11.tar.bz2;
-    sha256 = "d91e593a772cf540ff693f7d8c43d10c3037eb334c5c77572ea1b6a64a0b9677";
+    url = mirror://sf/math-atlas/atlas3.9.67.tar.bz2;
+    sha256 = "06xxlv440z8a3qmfrh17p28girv71c6awvpw5vhpspr0pcsgk1pa";
   };
 
   # configure outside of the source directory

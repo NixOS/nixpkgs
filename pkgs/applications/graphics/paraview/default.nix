@@ -3,7 +3,7 @@
 , mpich2
 , python
 , libxml2
-, mesa
+, mesa, libXt
 }:
 
 stdenv.mkDerivation rec {
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake qt4 hdf5 mpich2 python libxml2 mesa ];
+  buildInputs = [ cmake qt4 hdf5 mpich2 python libxml2 mesa libXt ];
 
   meta = {
     homepage = "http://www.paraview.org/";

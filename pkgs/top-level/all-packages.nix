@@ -2639,10 +2639,7 @@ let
   maude = callPackage ../development/interpreters/maude { };
 
   octave = callPackage ../development/interpreters/octave {
-    # Needed because later gm versions require an initialization the actual octave is not
-    # doing.
-    # http://www-old.cae.wisc.edu/pipermail/octave-maintainers/2010-February/015295.html
-    graphicsmagick = graphicsmagick137;
+    fltk = fltk13;
   };
 
   # mercurial (hg) bleeding edge version
@@ -3268,8 +3265,6 @@ let
   };
 
   clanlib = callPackage ../development/libraries/clanlib { };
-
-  clapack = callPackage ../development/libraries/clapack { };
 
   classads = callPackage ../development/libraries/classads { };
 
@@ -4600,7 +4595,11 @@ let
 
   soprano = callPackage ../development/libraries/soprano { };
 
-  soqt = callPackage ../development/libraries/soqt { };
+  soqt = callPackage ../development/libraries/soqt {
+    qt4 = qt47;
+  };
+
+  soqtQt48 = soqt.override { qt4 = qt48; };
 
   speechd = callPackage ../development/libraries/speechd { };
 
@@ -6100,7 +6099,7 @@ let
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
-  wpa_supplicant_gui = pkgs.wpa_supplicant.gui;
+  wpa_supplicant_gui = callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
 
   xf86_input_multitouch =
     callPackage ../os-specific/linux/xf86-input-multitouch { };
@@ -7015,7 +7014,7 @@ let
   merkaartor = callPackage ../applications/misc/merkaartor { };
 
   meshlab = callPackage ../applications/graphics/meshlab {
-    qt = qt4;
+    qt = qt47;
   };
 
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
@@ -7173,7 +7172,10 @@ let
   };
 
   paraview = callPackage ../applications/graphics/paraview {
+    qt4 = qt47;
   };
+
+  paraviewQt48 = paraview.override { qt4 = qt48; };
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
 

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "smallcheck";
-  version = "0.6";
-  sha256 = "19b2dyjbryx2a5bq70pn2mbzlcvjjwhii78fwwx6q57r13zljb9v";
+  version = "0.6.1";
+  sha256 = "1p2bsc08lcyzmqdjc5qsr60dr03kvc8xw7kk4lbi9cnn9s9w90vb";
   buildDepends = [ dlist ];
   meta = {
     homepage = "https://github.com/feuerbach/smallcheck";
