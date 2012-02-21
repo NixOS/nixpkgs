@@ -7354,6 +7354,8 @@ let
     qt4 = qt47;
   };
 
+  paraviewQt48 = paraview.override { qt4 = qt48; };
+
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
