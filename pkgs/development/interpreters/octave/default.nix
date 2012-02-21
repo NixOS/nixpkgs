@@ -1,5 +1,6 @@
 {stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull,
-libX11, graphicsmagick, pcre, liblapack, texLive, pkgconfig }:
+libX11, graphicsmagick, pcre, liblapack, texLive, pkgconfig, mesa, fltk,
+fftw, fftwSinglePrec, zlib, curl }:
 
 stdenv.mkDerivation rec {
   name = "octave-3.4.3";
@@ -9,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
-    graphicsmagick pcre liblapack texLive pkgconfig ];
+    graphicsmagick pcre liblapack texLive pkgconfig mesa fltk zlib curl
+    fftw fftwSinglePrec ];
 
   enableParallelBuilding = true;
 

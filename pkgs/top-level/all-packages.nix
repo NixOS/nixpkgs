@@ -2664,7 +2664,9 @@ let
 
   maude = callPackage ../development/interpreters/maude { };
 
-  octave = callPackage ../development/interpreters/octave { };
+  octave = callPackage ../development/interpreters/octave {
+    fltk = fltk13;
+  };
 
   # mercurial (hg) bleeding edge version
   octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
