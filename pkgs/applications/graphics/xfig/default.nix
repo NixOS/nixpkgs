@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "xfig-${version}";
 
   src = fetchurl {
-    url = "http://sourceforge/mcj/xfig.${version}.full.tar.gz";
+    url = "mirror://sourceforge/mcj/xfig.${version}.full.tar.gz";
     sha256 = "1hl5x49sgc0vap411whhcq6qhvh4xbjg7jggv7ih9pplg5nwy0aw";
   };
 
@@ -40,5 +40,6 @@ stdenv.mkDerivation {
   meta = {
     description = "An interactive drawing tool for X11";
     homepage = http://xfig.org;
+    platforms = stdenv.lib.platforms.gnu;         # arbitrary choice
   };
 }
