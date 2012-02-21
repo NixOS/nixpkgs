@@ -22,5 +22,6 @@ stdenv.mkDerivation {
     license = "GPL";
     homepage = http://kdesvn.alwins-world.de;
     maintainers = [ lib.maintainers.sander ];
+    inherit (kdelibs.meta) platforms;
   };
 }
