@@ -4631,6 +4631,8 @@ let
     qt4 = qt47;
   };
 
+  soqtQt48 = soqt.override { qt4 = qt48; };
+
   speechd = callPackage ../development/libraries/speechd { };
 
   speech_tools = callPackage ../development/libraries/speech-tools {};
