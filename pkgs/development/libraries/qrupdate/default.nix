@@ -1,19 +1,29 @@
 { stdenv
 , fetchurl
 , gfortran
-, blas
 , liblapack
 }:
 stdenv.mkDerivation {
-  name = "qrupdate-1.1.1";
+  name = "qrupdate-1.1.2";
   src = fetchurl {
-    url = mirror://sourceforge/qrupdate/1.1/qrupdate-1.1.1.tar.gz ;
-    sha256 = "0ak68qd15zccr2d2qahxcxsrcdgxy7drg362jj9swv7rb39h00cz";  			
+    url = mirror://sourceforge/qrupdate/qrupdate-1.1.2.tar.gz ;
+    sha256 = "024f601685phcm1pg8lhif3lpy5j9j0k6n0r46743g4fvh8wg8g2";  			
   };
   
-  preConfigure = ''
+  configurePhase = ''
     export PREFIX=$out
+    sed -i -e 's,^BLAS=.*,BLAS=-L${liblapack}/lib -L${liblapack.blas} -lcblas -lf77blas -latlas,' \
+      -e 's,^LAPACK=.*,LAPACK=-L${liblapack}/lib -llapack -lcblas -lf77blas -latlas,' \
+      Makeconf
   '';
+
+  doCheck = true;
+
+  checkTarget = "test";
+
+  buildTarget = "lib";
+
+  installTarget = "install-staticlib";
   
-  buildInputs = [gfortran blas liblapack] ;
+  buildInputs = [ gfortran liblapack ];
 }
