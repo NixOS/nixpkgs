@@ -16,9 +16,15 @@ stdenv.mkDerivation rec {
 
   LC_ALL = "C";
 
+  postInstall =
+    ''
+      mkdir -p $out/share/man
+      cp -rvd doc/src/sgml/man1 $out/share/man
+    '';
+
   passthru = {
     inherit readline;
-    psqlSchema = "9.0";
+    psqlSchema = "9.1";
   };
 
   meta = {
