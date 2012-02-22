@@ -4623,11 +4623,7 @@ let
 
   soprano = callPackage ../development/libraries/soprano { };
 
-  soqt = callPackage ../development/libraries/soqt {
-    qt4 = qt47;
-  };
-
-  soqtQt48 = soqt.override { qt4 = qt48; };
+  soqt = callPackage ../development/libraries/soqt { };
 
   speechd = callPackage ../development/libraries/speechd { };
 
@@ -7272,11 +7268,7 @@ let
     inherit (gnome) libglademm;
   };
 
-  paraview = callPackage ../applications/graphics/paraview {
-    qt4 = qt47;
-  };
-
-  paraviewQt48 = paraview.override { qt4 = qt48; };
+  paraview = callPackage ../applications/graphics/paraview { };
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
