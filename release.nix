@@ -1,81 +1,9 @@
 { nixpkgs ? ../nixpkgs }:
 
-let
+let helpers = import ./lib/release-helpers.nix { inherit nixpkgs; };
 
-
-  makeIso =
-    { module, type, description ? type, maintainers ? ["eelco"] }:
-    { nixosSrc ? {outPath = ./.; rev = 1234;}
-    , officialRelease ? false
-    , system ? "i686-linux"
-    }:
-
-    with import nixpkgs {inherit system;};
-
-    let
-
-      version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
-
-      versionModule =
-        { system.nixosVersion = version;
-          isoImage.isoBaseName = "nixos-${type}";
-        };
-
-      config = (import lib/eval-config.nix {
-        inherit system nixpkgs;
-        modules = [ module versionModule ];
-      }).config;
-
-      iso = config.system.build.isoImage;
-
-    in
-      # Declare the ISO as a build product so that it shows up in Hydra.
-      runCommand "nixos-iso-${version}"
-        { meta = {
-            description = "NixOS installation CD (${description}) - ISO image for ${system}";
-            maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
-          };
-          inherit iso;
-          passthru = { inherit config; };
-        }
-        ''
-          ensureDir $out/nix-support
-          echo "file iso" $iso/iso/*.iso* >> $out/nix-support/hydra-build-products
-        ''; # */
-
-
-  makeSystemTarball =
-    { module, maintainers ? ["viric"]}:
-    { nixosSrc ? {outPath = ./.; rev = 1234;}
-    , officialRelease ? false
-    , system ? "i686-linux"
-    }:
-
-    with import nixpkgs {inherit system;};
-    let
-      version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
-
-      versionModule = { system.nixosVersion = version; };
-
-      config = (import lib/eval-config.nix {
-        inherit system nixpkgs;
-        modules = [ module versionModule ];
-      }).config;
-
-      tarball = config.system.build.tarball;
-    in
-      tarball //
-        { meta = {
-            description = "NixOS system tarball for ${system} - ${stdenv.platform.name}";
-            maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
-          };
-          inherit config;
-        };
-
-
-  jobs = rec {
-
-
+in
+rec {
     tarball =
       { nixosSrc ? {outPath = ./.; rev = 1234;}
       , officialRelease ? false
@@ -120,41 +48,40 @@ let
       }).manual;
 
 
-    iso_minimal = makeIso {
+    iso_minimal = helpers.makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
       type = "minimal";
     };
 
-    iso_graphical = makeIso {
+    iso_graphical = helpers.makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
       type = "graphical";
     };
 
     # A variant with a more recent (but possibly less stable) kernel
     # that might support more hardware.
-    iso_new_kernel = makeIso {
+    iso_new_kernel = helpers.makeIso {
       module = ./modules/installer/cd-dvd/installation-cd-new-kernel.nix;
       type = "new-kernel";
     };
-
 
     # Provide a tarball that can be unpacked into an SD card, and easily
     # boot that system from uboot (like for the sheevaplug).
     # The pc variant helps preparing the expression for the system tarball
     # in a machine faster than the sheevpalug
-    system_tarball_pc = makeSystemTarball {
+    system_tarball_pc = helpers.makeSystenTarball {
       module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
     };
 
     system_tarball_fuloong2f =
       assert builtins.currentSystem == "mips64-linux";
-      makeSystemTarball {
+      helpers.makeSystenTarball {
         module = ./modules/installer/cd-dvd/system-tarball-fuloong2f.nix;
       } { system = "mips64-linux"; };
 
     system_tarball_sheevaplug =
       assert builtins.currentSystem == "armv5tel-linux";
-      makeSystemTarball {
+      helpers.makeSystenTarball {
         module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
       } { system = "armv5tel-linux"; };
 
@@ -192,7 +119,4 @@ let
         xfce = t.xfce.test;
       };
 
-  };
-
-
-in jobs
+}
