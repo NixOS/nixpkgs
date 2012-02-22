@@ -5711,24 +5711,6 @@ let
       ];
   };
 
-  linux_2_6_39_powertop = linux_2_6_39.override {
-    extraConfig = ''
-        DEBUG_KERNEL y
-        PM_ADVANCED_DEBUG y
-        PM_RUNTIME y
-        TIMER_STATS y
-        USB_SUSPEND y
-        BACKTRACE_SELF_TEST n
-        CPU_NOTIFIER_ERROR_INJECT n
-        DEBUG_DEVRES n
-        DEBUG_NX_TEST n
-        DEBUG_STACK_USAGE n
-        DEBUG_STACKOVERFLOW n
-        RCU_TORTURE_TEST n
-        SCHEDSTATS n
-    '';
-  };
-
   linux_3_0 = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5738,24 +5720,6 @@ let
         #kernelPatches.aufs2_1_3_0
         #kernelPatches.mips_restart_2_6_36
       ];
-  };
-
-  linux_3_0_powertop = linux_3_0.override {
-    extraConfig = ''
-        DEBUG_KERNEL y
-        PM_ADVANCED_DEBUG y
-        PM_RUNTIME y
-        TIMER_STATS y
-        USB_SUSPEND y
-        BACKTRACE_SELF_TEST n
-        CPU_NOTIFIER_ERROR_INJECT n
-        DEBUG_DEVRES n
-        DEBUG_NX_TEST n
-        DEBUG_STACK_USAGE n
-        DEBUG_STACKOVERFLOW n
-        RCU_TORTURE_TEST n
-        SCHEDSTATS n
-    '';
   };
 
   linux_3_1 = makeOverridable (import ../os-specific/linux/kernel/linux-3.1.nix) {
@@ -5768,24 +5732,6 @@ let
       ];
   };
 
-  linux_3_1_powertop = linux_3_1.override {
-    extraConfig = ''
-        DEBUG_KERNEL y
-        PM_ADVANCED_DEBUG y
-        PM_RUNTIME y
-        TIMER_STATS y
-        USB_SUSPEND y
-        BACKTRACE_SELF_TEST n
-        CPU_NOTIFIER_ERROR_INJECT n
-        DEBUG_DEVRES n
-        DEBUG_NX_TEST n
-        DEBUG_STACK_USAGE n
-        DEBUG_STACKOVERFLOW n
-        RCU_TORTURE_TEST n
-        SCHEDSTATS n
-    '';
-  };
-
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5794,24 +5740,6 @@ let
         #kernelPatches.aufs3_1
         #kernelPatches.mips_restart_2_6_36
       ];
-  };
-
-  linux_3_2_powertop = linux_3_2.override {
-    extraConfig = ''
-        DEBUG_KERNEL y
-        PM_ADVANCED_DEBUG y
-        PM_RUNTIME y
-        TIMER_STATS y
-        USB_SUSPEND y
-        BACKTRACE_SELF_TEST n
-        CPU_NOTIFIER_ERROR_INJECT n
-        DEBUG_DEVRES n
-        DEBUG_NX_TEST n
-        DEBUG_STACK_USAGE n
-        DEBUG_STACKOVERFLOW n
-        RCU_TORTURE_TEST n
-        SCHEDSTATS n
-    '';
   };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
@@ -5943,16 +5871,12 @@ let
   linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_38_ati = recurseIntoAttrs (linuxPackagesFor linux_2_6_38_ati pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_39 = recurseIntoAttrs (linuxPackagesFor linux_2_6_39 pkgs.linuxPackages_2_6_39);
-  linuxPackages_2_6_39_powertop = recurseIntoAttrs (linuxPackagesFor linux_2_6_39_powertop pkgs.linuxPackages_2_6_39_powertop);
   linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
-  linuxPackages_3_0_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_0_powertop pkgs.linuxPackages_3_0_powertop);
   linuxPackages_3_1 = recurseIntoAttrs (linuxPackagesFor linux_3_1 pkgs.linuxPackages_3_1);
-  linuxPackages_3_1_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_1_powertop pkgs.linuxPackages_3_1_powertop);
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
   linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36);
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 pkgs.linuxPackages_3_2);
-  linuxPackages_3_2_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_2_powertop pkgs.linuxPackages_3_2_powertop);
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;

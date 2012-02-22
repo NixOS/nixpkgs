@@ -5,8 +5,20 @@ args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
 let
   configWithPlatform = kernelPlatform :
     ''
-      # Don't include any debug features.
-      DEBUG_KERNEL n
+      # powermanagement and debugging for powertop
+      DEBUG_KERNEL y
+      PM_ADVANCED_DEBUG y
+      PM_RUNTIME y
+      TIMER_STATS y
+      USB_SUSPEND y
+      BACKTRACE_SELF_TEST n
+      CPU_NOTIFIER_ERROR_INJECT n
+      DEBUG_DEVRES n
+      DEBUG_NX_TEST n
+      DEBUG_STACK_USAGE n
+      DEBUG_STACKOVERFLOW n
+      RCU_TORTURE_TEST n
+      SCHEDSTATS n
 
       # Support drivers that need external firmware.
       STANDALONE n
