@@ -14,6 +14,21 @@ let
     v == "forced-commands-only" ||
     v == "no";
 
+  hostKeyTypeNames = {
+    dsa1024  = "dsa";
+    rsa1024  = "rsa";
+    ecdsa521 = "ecdsa";
+  };
+
+  hostKeyTypeBits = {
+    dsa1024  = 1024;
+    rsa1024  = 1024;
+    ecdsa521 = 521;
+  };
+
+  hktn = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeNames;
+  hktb = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeBits;
+
   userOptions = {
     openssh.authorizedKeys = {
 
@@ -187,6 +202,11 @@ in
         '';
       };
 
+      hostKeyType = mkOption {
+        default = "dsa1024";
+        description = "Type of host key to generate (dsa1024/rsa1024/ecdsa521)";
+      };
+
       extraConfig = mkOption {
         default = "";
         description = "Verbatim contents of <filename>sshd_config</filename>.";
@@ -235,8 +255,8 @@ in
 
             mkdir -m 0755 -p /etc/ssh
 
-            if ! test -f /etc/ssh/ssh_host_dsa_key; then
-                ${pkgs.openssh}/bin/ssh-keygen -t dsa -b 1024 -f /etc/ssh/ssh_host_dsa_key -N ""
+            if ! test -f /etc/ssh/ssh_host_${hktn}_key; then
+                ${pkgs.openssh}/bin/ssh-keygen -t ${hktn} -b ${toString hktb} -f /etc/ssh/ssh_host_${hktn}_key -N ""
             fi
           '';
 
@@ -244,7 +264,7 @@ in
 
         exec =
           ''
-            ${pkgs.openssh}/sbin/sshd -h /etc/ssh/ssh_host_dsa_key \
+            ${pkgs.openssh}/sbin/sshd -h /etc/ssh/ssh_host_${hktn}_key \
               -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
           '';
       };
