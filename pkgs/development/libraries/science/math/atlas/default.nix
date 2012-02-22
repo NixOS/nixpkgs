@@ -12,7 +12,8 @@ stdenv.mkDerivation {
   preConfigure = '' mkdir build; cd build; configureScript=../configure; '';
 
   # the manual says you should pass -fPIC as configure arg .. It works
-  configureFlags = "-Fa alg -fPIC";
+  configureFlags = "-Fa alg -fPIC" + 
+    (if stdenv.isi686 then " -b 32" else "");
 
   buildInputs = [ gfortran ];
 
