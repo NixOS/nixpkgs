@@ -322,6 +322,20 @@ rec {
     features.aufs3 = true;
   };
 
+  aufs3_2 = rec {
+    name = "aufs3.2";
+    version = "3.2";
+    utilRev = "a953b0218667e06b722f4c41df29edacd8dc8e1f";
+    utilHash = "28ac4c1a07b2c30fb61a6facc9cedcf67b14f303baedf1b121aeb6293ea49eb4";
+    patch = makeAufs3StandalonePatch {
+      inherit version;
+      rev = "9c4bbeb58f0ecc235ea820ae320efa2c0006e033";
+      sha256 = "5363a7f5fbadaef9457e743a5781f2525332c4bbb91693ca2596ab2d8f7860ea";
+    };
+    features.aufsBase = true;
+    features.aufs3 = true;
+  };
+
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
   # make CIFS more resilient to high load on the CIFS server.
   cifs_timeout_2_6_15 =
