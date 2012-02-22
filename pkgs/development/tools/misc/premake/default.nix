@@ -21,6 +21,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://industriousone.com/premake;
     description = "A simple build configuration and project generation tool using lua";
-    license = stdenv.lib.licenses.bsd;
+    license = stdenv.lib.licenses.bsd3;
   };
 }
