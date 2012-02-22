@@ -3864,6 +3864,8 @@ let
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
+  libaacs = callPackage ../development/libraries/libaacs { };
+
   libaal = callPackage ../development/libraries/libaal { };
 
   libao = callPackage ../development/libraries/libao {
