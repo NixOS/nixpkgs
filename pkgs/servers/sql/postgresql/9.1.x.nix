@@ -1,20 +1,25 @@
-{ stdenv, fetchurl, zlib, ncurses, readline }:
+{ stdenv, fetchurl, zlib, readline }:
 
-let version = "8.4.10"; in
+let version = "9.1.2"; in
 
 stdenv.mkDerivation rec {
   name = "postgresql-${version}";
   
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "1yvwn2qpn2dpgfi496r1zl8b8xy52lb2pprg076pvc37sklq77vl";
+    sha256 = "0c6vwlfxppjvrikqfq6s87sxmxxvsx1qq03bwgk589sv9x8zym4d";
   };
 
-  buildInputs = [ zlib ncurses readline ];
+  buildInputs = [ zlib readline ];
+
+  enableParallelBuilding = true;
 
   LC_ALL = "C";
 
-  passthru = { inherit readline; };
+  passthru = {
+    inherit readline;
+    psqlSchema = "9.0";
+  };
 
   meta = {
     homepage = http://www.postgresql.org/;

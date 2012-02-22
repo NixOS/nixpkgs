@@ -5154,6 +5154,8 @@ let
 
   postgresql90 = callPackage ../servers/sql/postgresql/9.0.x.nix { };
 
+  postgresql91 = callPackage ../servers/sql/postgresql/9.1.x.nix { };
+
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
   pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
