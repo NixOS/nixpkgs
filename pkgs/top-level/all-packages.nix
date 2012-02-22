@@ -3194,6 +3194,8 @@ let
 
   a52dec = callPackage ../development/libraries/a52dec { };
 
+  aacskeys = callPackage ../development/libraries/aacskeys { };
+
   aalib = callPackage ../development/libraries/aalib { };
 
   acl = callPackage ../development/libraries/acl { };
