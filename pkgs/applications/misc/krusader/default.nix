@@ -12,5 +12,6 @@ stdenv.mkDerivation rec {
     license = "GPL";
     homepage = http://www.krusader.org;
     maintainers = with stdenv.lib.maintainers; [ sander urkud ];
+    inherit (kdelibs.meta) platforms;
   };
 }
