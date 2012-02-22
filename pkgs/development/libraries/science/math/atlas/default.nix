@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ gfortran ];
 
+  doCheck = true;
+
   meta = {
     description = "Atlas library";
     license = "GPL";
