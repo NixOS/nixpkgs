@@ -3886,6 +3886,8 @@ let
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
 
+  libbluray = callPackage ../development/libraries/libbluray { };
+
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra {
