@@ -1,10 +1,10 @@
 { fetchurl, stdenv, erlang, esdl }:
 
 stdenv.mkDerivation rec {
-  name = "wings-1.3.0.1";
+  name = "wings-1.4.1";
   src = fetchurl {
     url = "mirror://sourceforge/wings/${name}.tar.bz2";
-    sha256 = "1zab1qxhgrncwqj1xg6z08m0kqbkdiqp4777p1bv2kczcf31isyp";
+    sha256 = "16kqy92rapmbvkc58mc50cidp1pm8nlwlwx69riyadc9w4qs9bji";
   };
 
   ERL_LIBS = "${esdl}/lib/erlang/addons";
