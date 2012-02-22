@@ -3119,6 +3119,8 @@ let
      */
   pkgconfig = forceBuildDrv (callPackage ../development/tools/misc/pkgconfig { });
 
+  premake = callPackage ../development/tools/misc/premake { };
+
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
     lua = lua5;
