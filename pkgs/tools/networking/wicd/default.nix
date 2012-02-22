@@ -90,11 +90,13 @@ stdenv.mkDerivation rec {
     echo '#!/bin/sh
 initctl emit -n wicd-preconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/preconnect/upstart-emit
     echo '#!/bin/sh
-initctl emit -n wicd-postconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/postconnect/upstart-emit
+initctl emit -n wicd-postconnect ITYPE="$1" ESSID="$2" BSSID="$3"
+initctl emit -n ip-up' > $out/etc/scripts/postconnect/upstart-emit
     echo '#!/bin/sh
 initctl emit -n wicd-predisconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/predisconnect/upstart-emit
     echo '#!/bin/sh
-initctl emit -n wicd-postdisconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/postdisconnect/upstart-emit
+initctl emit -n wicd-postdisconnect ITYPE="$1" ESSID="$2" BSSID="$3"
+initctl emit -n ip-down' > $out/etc/scripts/postdisconnect/upstart-emit
     chmod a+x $out/etc/scripts/*/upstart-emit
   '';
 
