@@ -26,15 +26,40 @@ let
         '';
     };
 
+  phononBackends = {
+    gstreamer = [
+      pkgs.phonon_backend_gstreamer
+      pkgs.gst_all.gstPluginsBase
+      pkgs.gst_all.gstPluginsGood
+      pkgs.gst_all.gstPluginsUgly
+      pkgs.gst_all.gstPluginsBad
+      pkgs.gst_all.gstFfmpeg # for mp3 playback
+      pkgs.gst_all.gstreamer # needed?
+    ];
+
+    vlc = [pkgs.phonon_backend_vlc];
+  };
+
+  phononBackendPackages = flip concatMap cfg.phononBackends
+    (name: attrByPath [name] (throw "unknown phonon backend `${name}'") phononBackends);
 in
 
 {
   options = {
 
-    services.xserver.desktopManager.kde4.enable = mkOption {
-      default = false;
-      example = true;
-      description = "Enable the KDE 4 desktop environment.";
+    services.xserver.desktopManager.kde4 = {
+      enable = mkOption {
+        default = false;
+        example = true;
+        description = "Enable the KDE 4 desktop environment.";
+      };
+
+      phononBackends = mkOption {
+        type = types.list types.string;
+        default = ["gstreamer"];
+        example = ["gstreamer" "vlc"];
+        description = "Which phonon multimedia backend kde should use";
+      };
     };
 
     environment.kdePackages = mkOption {
@@ -110,15 +135,6 @@ in
           # Starts KDE's Polkit authentication agent.
           pkgs.kde4.polkit_kde_agent
 
-          # Phonon backends.
-          pkgs.phonon_backend_gstreamer
-          pkgs.gst_all.gstPluginsBase
-          pkgs.gst_all.gstPluginsGood
-          pkgs.gst_all.gstPluginsUgly
-          pkgs.gst_all.gstPluginsBad
-          pkgs.gst_all.gstFfmpeg # for mp3 playback
-          pkgs.gst_all.gstreamer # needed?
-
           # Miscellaneous runtime dependencies.
           pkgs.kde4.qt4 # needed for qdbus
           pkgs.shared_mime_info
@@ -128,7 +144,7 @@ in
           pkgs.shared_desktop_ontologies # used by nepomuk
           pkgs.strigi # used by nepomuk
         ]
-      ++ [ nepomukConfig ]
+      ++ [ nepomukConfig ] ++ phononBackendPackages
       ++ config.environment.kdePackages;
 
     environment.pathsToLink = [ "/share" ];
