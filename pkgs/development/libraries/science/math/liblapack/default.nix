@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, atlas, cmake }:
+{ stdenv, fetchurl, gfortran, atlas, cmake, python }:
 
 stdenv.mkDerivation {
   name = "liblapack-3.4.0";
@@ -9,6 +9,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ atlas ];
   buildInputs = [ gfortran cmake ];
+  buildNativeInputs = [ python ];
 
   cmakeFlags = [
     "-DUSE_OPTIMIZED_BLAS=ON"
@@ -17,7 +18,18 @@ stdenv.mkDerivation {
     "-DCMAKE_Fortran_FLAGS=-fPIC"
   ];
 
+  doCheck = true;
+
+  checkPhase = "
+    sed -i 's,^#!.*,#!${python}/bin/python,' lapack_testing.py
+    ctest
+  ";
+
   enableParallelBuilding = true;
+
+  passthru = {
+    blas = atlas;
+  };
 
   meta = {
     description = "Linear Algebra PACKage";
