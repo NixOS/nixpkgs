@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
   patches =
     [ # Fix for https://bugzilla.samba.org/show_bug.cgi?id=8541.
       ./readlink.patch
+
+      # Allow cross-builds for GNU/Hurd.
+      ./libnss-wins-pthread.patch
     ];
 
   buildInputs = [ readline pam openldap popt iniparser libunwind fam acl cups ]
@@ -39,7 +42,7 @@ stdenv.mkDerivation rec {
     # XXX: Awful hack to allow cross-compilation.
     '' sed -i source3/configure \
            -e 's/^as_fn_error \("cannot run test program while cross compiling\)/$as_echo \1/g'
-    '';
+    ''; # "
 
   preConfigure =
     '' cd source3

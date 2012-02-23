@@ -1622,6 +1622,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   leksah = callPackage ../applications/editors/leksah {};
 
+  mathblog = callPackage ../applications/misc/mathblog {};
+
   xmobar = callPackage ../applications/misc/xmobar {
     parsec = self.parsec3;
   };

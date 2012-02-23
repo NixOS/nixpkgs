@@ -1,19 +1,21 @@
-{ stdenv, fetchurl, cmake, automoc4, qt4, pkgconfig, phonon, gst_all }:
+{ stdenv, fetchurl, cmake, automoc4, qt4, pkgconfig, phonon, gst_all, xz }:
 
-let version = "4.5.1"; in
+let
+  version = "4.6.0";
+  pname = "phonon-backend-gstreamer";
+in
 
 stdenv.mkDerivation rec {
-  name = "phonon-backend-gstreamer-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/phonon/phonon-backend-gstreamer/${version}/src/${name}.tar.bz2";
-    sha256 = "13m3kd0iy28nsn532xl97c50vq8ci3qs2i92yk4fw428qvknqck2";
+    url = "mirror://kde/stable/phonon/${pname}/${version}/src/${name}.tar.xz";
+    sha256 = "0bwkd1dmj8p4m5xindh6ixfvifq36qmvfn246vx22syqfl6f1m2v";
   };
 
-  buildInputs =
-    [ cmake pkgconfig phonon qt4 automoc4
-      gst_all.gstreamer gst_all.gstPluginsBase
-    ];
+  buildInputs = [ phonon qt4 gst_all.gstreamer gst_all.gstPluginsBase ];
+
+  buildNativeInputs = [ cmake automoc4 xz pkgconfig ];
 
   meta = {
     homepage = http://phonon.kde.org/;

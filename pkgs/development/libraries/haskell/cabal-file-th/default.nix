@@ -1,10 +1,10 @@
-{ cabal }:
+{ cabal, Cabal }:
 
 cabal.mkDerivation (self: {
   pname = "cabal-file-th";
-  version = "0.2.1";
-  sha256 = "0nczwicgf6kx3lk5m7wqf1wj6ghn8jfx112dzh7jh4f4xs66nsd1";
-  patchPhase = "sed -i cabal-file-th.cabal -e 's|Cabal >= 1.10 && < 1.13|Cabal|'";
+  version = "0.2.2";
+  sha256 = "1ql2gmg3mdfkmnk1m3966npr6l1in15fzlkbn7dr1cp4s90igqhy";
+  buildDepends = [ Cabal ];
   meta = {
     homepage = "http://github.com/nkpart/cabal-file-th";
     description = "Template Haskell expressions for reading fields from a project's cabal file";

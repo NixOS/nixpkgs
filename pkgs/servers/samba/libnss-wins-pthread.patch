@@ -1,0 +1,15 @@
+`libnss_wins' uses pthreads but is built without `-pthread'.  This is
+not a problem when building natively on GNU/Linux, but causes troubles
+when cross-building for GNU/Hurd (undefined references to libpthread
+functions.)
+
+--- samba-3.6.1/source3/Makefile.in	2012-02-22 15:25:15.000000000 +0100
++++ samba-3.6.1/source3/Makefile.in	2012-02-22 15:25:47.000000000 +0100
+@@ -2760,6 +2760,7 @@ bin/vlp@EXEEXT@: $(BINARY_PREREQS) $(VLP
+ 	@echo "Linking $@"
+ 	@$(SHLD) $(LDSHFLAGS) -o $@ $(WINBIND_WINS_NSS_OBJ) \
+ 		$(LDAP_LIBS) $(KRB5LIBS) $(LIBS) $(LIBTALLOC_LIBS) $(LIBTDB_LIBS) $(ZLIB_LIBS) \
++		$(PTHREAD_LDFLAGS) \
+ 		@SONAMEFLAG@`basename $@`@NSSSONAMEVERSIONSUFFIX@
+ 
+ bin/winbind_krb5_locator.@SHLIBEXT@: $(BINARY_PREREQS) $(WINBIND_KRB5_LOCATOR_OBJ) $(LIBWBCLIENT)

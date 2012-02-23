@@ -182,6 +182,7 @@ in {
     gnu.hurdCross = nativePlatforms;
     gnu.mach.hostDrv = nativePlatforms;
     gnu.mig = nativePlatforms;
+    gnu.smbfs = nativePlatforms;
 
     coreutils.hostDrv = nativePlatforms;
     ed.hostDrv = nativePlatforms;
@@ -205,6 +206,7 @@ in {
     nixUnstable.hostDrv = nativePlatforms;
     openssl.hostDrv = nativePlatforms;            # dependency of Nix
     patch.hostDrv = nativePlatforms;
+    samba_light.hostDrv = nativePlatforms;      # needed for `runInGenericVM'
     zile.hostDrv = nativePlatforms;
   };
 }) // (
