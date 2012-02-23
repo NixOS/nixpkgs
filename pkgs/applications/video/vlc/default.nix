@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, xlibs, libdvdnav
+{ stdenv, fetchurl, xz, bzip2, perl, xlibs, libdvdnav, libbluray
 , zlib, a52dec, libmad, faad2, ffmpeg, alsaLib
 , pkgconfig, dbus, fribidi, qt4, freefont_ttf
 , libvorbis, libtheora, speex, lua5, libgcrypt, libupnp
@@ -10,18 +10,18 @@
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "1.1.13";
+  version = "2.0.0";
 
   patchPhase = ''sed -e "s@/bin/echo@echo@g" -i configure'';
 
   src = fetchurl {
-    url = "http://download.videolan.org/pub/videolan/vlc/${version}/${name}.tar.bz2";
-    sha256 = "1h93jdx89dfgxlnw66lfcdk9kisadm689zanvgkzbfb3si2frv83";
+    url = "http://download.videolan.org/pub/videolan/vlc/${version}/${name}.tar.xz";
+    sha256 = "455fc04b5f7ce3d7294ed71a9dd172ff4eb97875cfc30b554ef4ce55ec6f5106";
   };
 
   buildInputs =
-    [ perl zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
-      dbus fribidi qt4 libvorbis libtheora speex lua5 libgcrypt
+    [ xz bzip2 perl zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
+      libbluray dbus fribidi qt4 libvorbis libtheora speex lua5 libgcrypt
       libupnp libcaca pulseaudio flac schroedinger libxml2 librsvg mpeg2dec
       udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preBuild = ''
-    substituteInPlace modules/misc/freetype.c --replace \
+    substituteInPlace modules/text_renderer/freetype.c --replace \
       /usr/share/fonts/truetype/freefont/FreeSerifBold.ttf \
       ${freefont_ttf}/share/fonts/truetype/FreeSerifBold.ttf
   '';

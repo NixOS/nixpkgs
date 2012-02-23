@@ -1,10 +1,13 @@
 { stdenv, fetchurl, kernel }:
 
+let baseName = "frandom-1.1";
+in
+
 stdenv.mkDerivation rec {
-  name = "frandom-1.1-${kernel.version}";
+  name = "${baseName}-${kernel.version}";
 
   src = fetchurl {
-    url = "http://sourceforge.net/projects/frandom/files/${name}.tar.gz";
+    url = "http://sourceforge.net/projects/frandom/files/${baseName}.tar.gz";
     sha256 = "15rgyk4hfawqg7z1spk2xlk1nn6rcdls8gdhc70f91shrc9pvlls";
   };
 

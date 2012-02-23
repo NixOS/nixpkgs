@@ -1,0 +1,11 @@
+--- kdesvn-1.5.5.orig/src/svnfrontend/graphtree/revgraphview.h
++++ kdesvn-1.5.5/src/svnfrontend/graphtree/revgraphview.h
+@@ -49,7 +49,7 @@ typedef svn::SharedPointer<KTemporaryFil
+ /**
+ 	@author Rajko Albrecht <ral@alwins-world.de>
+ */
+-class RevGraphView : virtual public QGraphicsView
++class RevGraphView : public QGraphicsView
+ {
+     Q_OBJECT
+ public:

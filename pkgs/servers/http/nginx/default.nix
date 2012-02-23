@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${libxml2}/include/libxml2"
   '';
 
+  postInstall = ''
+    mv $out/sbin $out/bin
+  '';
+
   meta = {
     description = "nginx - 'engine x' - reverse proxy and lightweight webserver";
     maintainers = [

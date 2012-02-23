@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, browser, x11
-, GConf, gnome_mplayer, MPlayer
+, GConf, gnome_mplayer, MPlayer, gmtk
 }:
 
 stdenv.mkDerivation rec {
-  name = "gecko-mediaplayer-1.0.4";
+  name = "gecko-mediaplayer-1.0.5";
 
   src = fetchurl {
     url = "http://gecko-mediaplayer.googlecode.com/files/${name}.tar.gz";
-    sha256 = "18asxxsqng303cxcww75k4r6syqjs7lylibv997kq0869kz4spsp";
+    sha256 = "913fd39e70c564cb210c2544a88869f9d1a448184421f000b14b2bc5ba718b49";
   };
 
-  buildInputs = [pkgconfig glib dbus dbus_glib browser x11 GConf browser.xulrunner];
+  buildInputs = [ pkgconfig glib dbus dbus_glib browser x11 GConf browser.xulrunner gmtk ];
 
   # !!! fix this
   preBuild =

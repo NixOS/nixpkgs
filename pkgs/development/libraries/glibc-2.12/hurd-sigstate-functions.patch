@@ -1,0 +1,20 @@
+This patch adds a GNU ld version script entry for the `_hurd_sigstate_*'
+functions that were introduced to support SA_SIGINFO.  A similar patch
+should be applied upstream soon.
+
+diff --git a/hurd/Versions b/hurd/Versions
+index 83c8ab1..295cfda 100644
+--- a/hurd/Versions
++++ b/hurd/Versions
+@@ -156,6 +156,11 @@ libc {
+     # functions used in macros & inline functions
+     __errno_location;
+   }
++  GLIBC_2.13 {
++    # functions introduced for SA_SIGINFO support and referenced from
++    # <hurd/signal.h>
++    _hurd_sigstate_*;
++  }
+ 
+ %if !SHLIB_COMPAT (libc, GLIBC_2_0, GLIBC_2_2)
+   HURD_CTHREADS_0.3 {

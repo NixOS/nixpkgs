@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
   buildInputs = [ qt4 ];
 
-  patches = [./qtscriptgenerator.gcc-4.4.patch];
+  patches = [ ./qtscriptgenerator.gcc-4.4.patch ./qt-4.8.patch ];
   
   # Why isn't the author providing proper Makefile or a CMakeLists.txt ?
   buildPhase = ''

@@ -5,8 +5,8 @@ stdenv.mkDerivation {
 
   src = fetchsvn {
     url = https://netpbm.svn.sourceforge.net/svnroot/netpbm/advanced;
-    rev = 1177;
-    sha256 = "d8893599fcb7839025e7fbe24120928b4bbcd70f0e1034a21d91885c40a5c39f";
+    rev = 1656;
+    sha256 = "0mbrvd8nc52yrg8wgxcvxsajxc9qrnjqhlcks6dpdzq7qmwjy6g9";
   };
 
   NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";

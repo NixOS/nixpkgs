@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "web-routes";
-  version = "0.26.3";
-  sha256 = "1ldi4gjraga57qj9drknwp19vmy30fhcp6vw3y7xqcrarvp5n2mx";
+  version = "0.27.1";
+  sha256 = "0rbl57qnn908hwfhj14m8z11pscrv44rlg7c9y9rm6jvwy4v58qz";
   buildDepends = [
     blazeBuilder httpTypes mtl network parsec text utf8String
   ];

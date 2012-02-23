@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, coin3d, qt4 }:
+{ fetchurl, stdenv, coin3d, qt4, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "soqt-${version}";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ coin3d qt4 ];
+
+  buildNativeInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://www.coin3d.org/;

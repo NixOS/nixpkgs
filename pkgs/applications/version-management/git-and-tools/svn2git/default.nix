@@ -1,12 +1,12 @@
 { stdenv, fetchgit, ruby, makeWrapper, git }:
 
 stdenv.mkDerivation rec {
-  name = "svn2git-2.2.0";
+  name = "svn2git-2.1.0-20111206";
 
   src = fetchgit {
     url = https://github.com/nirvdrum/svn2git;
-    rev = "db0769835e9d1d3ff324091a3bb7756200a09932";
-    sha256 = "6d2f2acb9900e2aa8e608d3239b42f890f2334b622adb5ea33b2b4815a52efa2";
+    rev = "5cd8d4b509affb66eb2dad50d7298c52b3b0d848";
+    sha256 = "26aa17f68f605e958b623d803b4bd405e12d6c5d51056635873a2c59e4c7b9ca";
   };
 
   buildInputs = [ ruby makeWrapper ];

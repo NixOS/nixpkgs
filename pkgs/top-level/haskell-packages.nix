@@ -121,7 +121,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # This is the Cabal builder, the function we use to build most Haskell
   # packages. It isn't the Cabal library, which is spelled "Cabal".
 
-  cabal = callPackage ../development/libraries/haskell/cabal/cabal.nix {
+  cabal = callPackage ../build-support/cabal {
     enableLibraryProfiling = enableLibraryProfiling;
   };
 
@@ -139,7 +139,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     GLUT         = self.GLUT_2_3_0_0;           # 7.4.1 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 ok
     html         = self.html_1_0_1_2;           # 7.4.1 ok
-    HUnit        = self.HUnit_1_2_2_3;          # 7.4.1 ok
+    HUnit        = self.HUnit_1_2_4_2;          # 7.4.1 ok
     network      = self.network_2_3_0_11;       # 7.4.1 ok
     OpenGL       = self.OpenGL_2_5_0_0;         # 7.4.1 ok
     parallel     = self.parallel_3_2_0_2;       # 7.4.1 ok
@@ -907,7 +907,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HUnit_1_2_2_1 = callPackage ../development/libraries/haskell/HUnit/1.2.2.1.nix {};
   HUnit_1_2_2_3 = callPackage ../development/libraries/haskell/HUnit/1.2.2.3.nix {};
   HUnit_1_2_4_2 = callPackage ../development/libraries/haskell/HUnit/1.2.4.2.nix {};
-  HUnit = self.HUnit_1_2_0_3;
+  HUnit = self.HUnit_1_2_4_2;
 
   hxt = callPackage ../development/libraries/haskell/hxt {};
 
@@ -1621,6 +1621,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   leksah = callPackage ../applications/editors/leksah {};
+
+  mathblog = callPackage ../applications/misc/mathblog {};
 
   xmobar = callPackage ../applications/misc/xmobar {
     parsec = self.parsec3;

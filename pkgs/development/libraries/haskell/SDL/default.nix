@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "SDL";
-  version = "0.6.2";
-  sha256 = "1fqj3sw709q28rmjzcffa3k1mcp7r9cvdrrqmcppaz5yv63ychly";
+  version = "0.6.3";
+  sha256 = "0m3ick3rw8623ja42yfj4pa57naa6yb20ym8lv252gwb18ghp4sp";
   extraLibraries = [ SDL ];
   meta = {
     description = "Binding to libSDL";

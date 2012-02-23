@@ -784,11 +784,6 @@ let
     inherit (gtkLibs) pango;
   };
 
-  /* Last version to export to dia */
-  graphviz_2_24 = callPackage ../tools/graphics/graphviz/2.0.nix {
-    inherit (gtkLibs) pango;
-  };
-
   /* Readded by Michael Raskin. There are programs in the wild
    * that do want 2.0 but not 2.22. Please give a day's notice for
    * objections before removal.
@@ -2670,10 +2665,7 @@ let
   maude = callPackage ../development/interpreters/maude { };
 
   octave = callPackage ../development/interpreters/octave {
-    # Needed because later gm versions require an initialization the actual octave is not
-    # doing.
-    # http://www-old.cae.wisc.edu/pipermail/octave-maintainers/2010-February/015295.html
-    graphicsmagick = graphicsmagick137;
+    fltk = fltk13;
   };
 
   # mercurial (hg) bleeding edge version
@@ -2966,6 +2958,8 @@ let
 
   cmake = callPackage ../development/tools/build-managers/cmake { };
 
+  cmake264 = callPackage ../development/tools/build-managers/cmake/264.nix { };
+
   cmakeCurses = cmake.override { useNcurses = true; };
 
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
@@ -3127,6 +3121,8 @@ let
      */
   pkgconfig = forceBuildDrv (callPackage ../development/tools/misc/pkgconfig { });
 
+  premake = callPackage ../development/tools/misc/premake { };
+
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
     lua = lua5;
@@ -3199,6 +3195,8 @@ let
 
 
   a52dec = callPackage ../development/libraries/a52dec { };
+
+  aacskeys = callPackage ../development/libraries/aacskeys { };
 
   aalib = callPackage ../development/libraries/aalib { };
 
@@ -3306,8 +3304,6 @@ let
   };
 
   clanlib = callPackage ../development/libraries/clanlib { };
-
-  clapack = callPackage ../development/libraries/clapack { };
 
   classads = callPackage ../development/libraries/classads { };
 
@@ -3826,6 +3822,8 @@ let
 
   intltool = gnome.intltool;
 
+  irrlicht3843 = callPackage ../development/libraries/irrlicht { };
+
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   itk = callPackage ../development/libraries/itk { };
@@ -3874,6 +3872,8 @@ let
 
   lib3ds = callPackage ../development/libraries/lib3ds { };
 
+  libaacs = callPackage ../development/libraries/libaacs { };
+
   libaal = callPackage ../development/libraries/libaal { };
 
   libao = callPackage ../development/libraries/libao {
@@ -3893,6 +3893,8 @@ let
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
 
   libbluedevil = callPackage ../development/libraries/libbluedevil { };
+
+  libbluray = callPackage ../development/libraries/libbluray { };
 
   libcaca = callPackage ../development/libraries/libcaca { };
 
@@ -4826,6 +4828,8 @@ let
     ];
   };
 
+  xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
+
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
   yajl = callPackage ../development/libraries/yajl { };
@@ -5168,6 +5172,8 @@ let
   postgresql84 = callPackage ../servers/sql/postgresql/8.4.x.nix { };
 
   postgresql90 = callPackage ../servers/sql/postgresql/9.0.x.nix { };
+
+  postgresql91 = callPackage ../servers/sql/postgresql/9.1.x.nix { };
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
@@ -5722,24 +5728,6 @@ let
       ];
   };
 
-  linux_2_6_39_powertop = linux_2_6_39.override {
-    extraConfig = ''
-        DEBUG_KERNEL y
-        PM_ADVANCED_DEBUG y
-        PM_RUNTIME y
-        TIMER_STATS y
-        USB_SUSPEND y
-        BACKTRACE_SELF_TEST n
-        CPU_NOTIFIER_ERROR_INJECT n
-        DEBUG_DEVRES n
-        DEBUG_NX_TEST n
-        DEBUG_STACK_USAGE n
-        DEBUG_STACKOVERFLOW n
-        RCU_TORTURE_TEST n
-        SCHEDSTATS n
-    '';
-  };
-
   linux_3_0 = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5749,24 +5737,6 @@ let
         #kernelPatches.aufs2_1_3_0
         #kernelPatches.mips_restart_2_6_36
       ];
-  };
-
-  linux_3_0_powertop = linux_3_0.override {
-    extraConfig = ''
-        DEBUG_KERNEL y
-        PM_ADVANCED_DEBUG y
-        PM_RUNTIME y
-        TIMER_STATS y
-        USB_SUSPEND y
-        BACKTRACE_SELF_TEST n
-        CPU_NOTIFIER_ERROR_INJECT n
-        DEBUG_DEVRES n
-        DEBUG_NX_TEST n
-        DEBUG_STACK_USAGE n
-        DEBUG_STACKOVERFLOW n
-        RCU_TORTURE_TEST n
-        SCHEDSTATS n
-    '';
   };
 
   linux_3_1 = makeOverridable (import ../os-specific/linux/kernel/linux-3.1.nix) {
@@ -5779,50 +5749,14 @@ let
       ];
   };
 
-  linux_3_1_powertop = linux_3_1.override {
-    extraConfig = ''
-        DEBUG_KERNEL y
-        PM_ADVANCED_DEBUG y
-        PM_RUNTIME y
-        TIMER_STATS y
-        USB_SUSPEND y
-        BACKTRACE_SELF_TEST n
-        CPU_NOTIFIER_ERROR_INJECT n
-        DEBUG_DEVRES n
-        DEBUG_NX_TEST n
-        DEBUG_STACK_USAGE n
-        DEBUG_STACKOVERFLOW n
-        RCU_TORTURE_TEST n
-        SCHEDSTATS n
-    '';
-  };
-
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        #kernelPatches.aufs3_1
+        kernelPatches.aufs3_2
         #kernelPatches.mips_restart_2_6_36
       ];
-  };
-
-  linux_3_2_powertop = linux_3_2.override {
-    extraConfig = ''
-        DEBUG_KERNEL y
-        PM_ADVANCED_DEBUG y
-        PM_RUNTIME y
-        TIMER_STATS y
-        USB_SUSPEND y
-        BACKTRACE_SELF_TEST n
-        CPU_NOTIFIER_ERROR_INJECT n
-        DEBUG_DEVRES n
-        DEBUG_NX_TEST n
-        DEBUG_STACK_USAGE n
-        DEBUG_STACKOVERFLOW n
-        RCU_TORTURE_TEST n
-        SCHEDSTATS n
-    '';
   };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
@@ -5954,16 +5888,12 @@ let
   linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_38_ati = recurseIntoAttrs (linuxPackagesFor linux_2_6_38_ati pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_39 = recurseIntoAttrs (linuxPackagesFor linux_2_6_39 pkgs.linuxPackages_2_6_39);
-  linuxPackages_2_6_39_powertop = recurseIntoAttrs (linuxPackagesFor linux_2_6_39_powertop pkgs.linuxPackages_2_6_39_powertop);
   linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
-  linuxPackages_3_0_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_0_powertop pkgs.linuxPackages_3_0_powertop);
   linuxPackages_3_1 = recurseIntoAttrs (linuxPackagesFor linux_3_1 pkgs.linuxPackages_3_1);
-  linuxPackages_3_1_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_1_powertop pkgs.linuxPackages_3_1_powertop);
   linuxPackages_nanonote_jz_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34);
   linuxPackages_nanonote_jz_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35);
   linuxPackages_nanonote_jz_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36);
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 pkgs.linuxPackages_3_2);
-  linuxPackages_3_2_powertop = recurseIntoAttrs (linuxPackagesFor linux_3_2_powertop pkgs.linuxPackages_3_2_powertop);
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -6280,7 +6210,7 @@ let
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 
-  wpa_supplicant_gui = pkgs.wpa_supplicant.gui;
+  wpa_supplicant_gui = callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
 
   xf86_input_multitouch =
     callPackage ../os-specific/linux/xf86-input-multitouch { };
@@ -7006,6 +6936,11 @@ let
 
   gqview = callPackage ../applications/graphics/gqview { };
 
+  gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
+    inherit (gnome) GConf;
+    inherit (gtkLibs) gtk;
+  };
+
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
   google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
@@ -7202,7 +7137,7 @@ let
   merkaartor = callPackage ../applications/misc/merkaartor { };
 
   meshlab = callPackage ../applications/graphics/meshlab {
-    qt = qt4;
+    qt = qt47;
   };
 
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
@@ -7359,8 +7294,7 @@ let
     inherit (gnome) libglademm;
   };
 
-  paraview = callPackage ../applications/graphics/paraview {
-  };
+  paraview = callPackage ../applications/graphics/paraview { };
 
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
@@ -7861,6 +7795,8 @@ let
   ### GAMES
 
   alienarena = callPackage ../games/alienarena { };
+
+  andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
 
   asc = callPackage ../games/asc {
     lua = lua5;
@@ -8375,7 +8311,13 @@ let
 
   ### SCIENCE/MATH
 
-  atlas = callPackage ../development/libraries/science/math/atlas { };
+  atlas = callPackage ../development/libraries/science/math/atlas {
+    # The build process measures CPU capabilities and optimizes the
+    # library to perform best on that particular machine. That is a
+    # great feature, but it's of limited use with pre-built binaries
+    # coming from a central build farm.
+    tolerateCpuTimingInaccuracy = true;
+  };
 
   blas = callPackage ../development/libraries/science/math/blas { };
 

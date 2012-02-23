@@ -5,8 +5,20 @@ args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
 let
   configWithPlatform = kernelPlatform :
     ''
-      # Don't include any debug features.
-      DEBUG_KERNEL n
+      # powermanagement and debugging for powertop
+      DEBUG_KERNEL y
+      PM_ADVANCED_DEBUG y
+      PM_RUNTIME y
+      TIMER_STATS y
+      USB_SUSPEND y
+      BACKTRACE_SELF_TEST n
+      CPU_NOTIFIER_ERROR_INJECT n
+      DEBUG_DEVRES n
+      DEBUG_NX_TEST n
+      DEBUG_STACK_USAGE n
+      DEBUG_STACKOVERFLOW n
+      RCU_TORTURE_TEST n
+      SCHEDSTATS n
 
       # Support drivers that need external firmware.
       STANDALONE n
@@ -214,7 +226,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.2.4";
+    version = "3.2.7";
     testing = false;
 
     modDirVersion = version;
@@ -222,10 +234,10 @@ import ./generic.nix (
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
     '';
-  
+
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.0/${if testing then "testing/" else ""}linux-${version}.tar.bz2";
-      sha256 = "1c648a7041e65a167d3fd8beda484a3d55c35cad9d6d189b9949d3c621887da7";
+      sha256 = "e80009e097e137b9a1f1efacabc482c1d4b3651b238bf733a41595d0b387ae12";
     };
 
     config = configWithPlatform stdenv.platform;

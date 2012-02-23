@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, qt4, kdelibs, automoc4, phonon, qimageblitz, qca2, eigen,
 lcms, jasper, libgphoto2, kdepimlibs, gettext, soprano, libjpeg, libtiff,
 liblqr1, lensfun, pkgconfig, qjson, libkdcraw, opencv, libkexiv2, libkipi, boost,
-shared_desktop_ontologies, marble, clapack, mysql }:
+shared_desktop_ontologies, marble, mysql }:
 
 stdenv.mkDerivation rec {
   name = "digikam-2.5.0";

@@ -1,13 +1,27 @@
 {stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull,
-libX11, graphicsmagick}:
+libX11, graphicsmagick, pcre, liblapack, texLive, pkgconfig, mesa, fltk,
+fftw, fftwSinglePrec, zlib, curl, qrupdate }:
 
-stdenv.mkDerivation {
-  name = "octave-3.2.4";
+stdenv.mkDerivation rec {
+  name = "octave-3.4.3";
   src = fetchurl {
-    url = ftp://ftp.octave.org/pub/octave/octave-3.2.4.tar.bz2;
-    sha256 = "0iyivx7qz7cvwz7qczqrl4ysqivlhn5ax92z9md0m77dqw2isis8";
+    url = "mirror://gnu/octave/${name}.tar.bz2";
+    sha256 = "0j61kpfbv8l8rw3r9cwcmskvvav3q2f6plqdq3lnb153jg61klcl";
   };
-  buildInputs = [gfortran readline ncurses perl flex texinfo qhull libX11
-    graphicsmagick ];
-  configureFlags = "--enable-readline --enable-dl";
+
+  buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
+    graphicsmagick pcre liblapack texLive pkgconfig mesa fltk zlib curl
+    fftw fftwSinglePrec qrupdate ];
+
+  doCheck = true;
+
+  enableParallelBuilding = true;
+
+  configureFlags = [ "--enable-readline" "--enable-dl" ];
+
+  # Keep a copy of the octave tests detailed results in the output
+  # derivation, because someone may care
+  postInstall = ''
+    cp test/fntests.log $out/share/octave/${name}-fntests.log
+  '';
 }

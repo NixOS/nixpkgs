@@ -1,0 +1,93 @@
+diff --git a/Modules/Platform/Linux.cmake b/Modules/Platform/Linux.cmake
+index 4e4c2cb..9784655 100644
+--- a/Modules/Platform/Linux.cmake
++++ b/Modules/Platform/Linux.cmake
+@@ -43,21 +43,10 @@ ELSE(DEFINED CMAKE_INSTALL_SO_NO_EXE)
+   # checking the platform every time.  This option is advanced enough
+   # that only package maintainers should need to adjust it.  They are
+   # capable of providing a setting on the command line.
+-  IF(EXISTS "/etc/debian_version")
+-    SET(CMAKE_INSTALL_SO_NO_EXE 1 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  ELSE(EXISTS "/etc/debian_version")
+-    SET(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
+-      "Install .so files without execute permission.")
+-  ENDIF(EXISTS "/etc/debian_version")
++  SET(CMAKE_INSTALL_SO_NO_EXE 0 CACHE INTERNAL
++    "Install .so files without execute permission.")
+ ENDIF(DEFINED CMAKE_INSTALL_SO_NO_EXE)
+ 
+ INCLUDE(Platform/UnixPaths)
+ 
+-# Debian has lib64 paths only for compatibility so they should not be
+-# searched.
+-IF(EXISTS "/etc/debian_version")
+-  SET_PROPERTY(GLOBAL PROPERTY FIND_LIBRARY_USE_LIB64_PATHS FALSE)
+-ENDIF(EXISTS "/etc/debian_version")
+-# always include the gcc compiler information
+ INCLUDE(Platform/gcc)
+diff --git a/Modules/Platform/UnixPaths.cmake b/Modules/Platform/UnixPaths.cmake
+index 584d334..4fcf951 100755
+--- a/Modules/Platform/UnixPaths.cmake
++++ b/Modules/Platform/UnixPaths.cmake
+@@ -8,56 +8,18 @@ GET_FILENAME_COMPONENT(_CMAKE_INSTALL_DIR "${_CMAKE_INSTALL_DIR}" PATH)
+ # List common installation prefixes.  These will be used for all
+ # search types.
+ LIST(APPEND CMAKE_SYSTEM_PREFIX_PATH
+-  # Standard
+-  / /usr /usr/local
+-
+-  # CMake install location
+-  "${_CMAKE_INSTALL_DIR}"
+-
+-  # Project install destination.
+-  "${CMAKE_INSTALL_PREFIX}"
+-  )
+-
+-# List common include file locations not under the common prefixes.
+-LIST(APPEND CMAKE_SYSTEM_INCLUDE_PATH
+-  # Windows API on Cygwin
+-  /usr/include/w32api
+-
+-  # X11
+-  /usr/X11R6/include /usr/include/X11
+-
+-  # Other
+-  /opt/local/include /usr/pkg/include
+-  /opt/csw/include /opt/include  
+-  /usr/openwin/include
+-  )
+-
+-LIST(APPEND CMAKE_SYSTEM_LIBRARY_PATH
+-  # Windows API on Cygwin
+-  /usr/lib/w32api
+-
+-  # X11
+-  /usr/X11R6/lib /usr/lib/X11
+-
+-  # Other
+-  /opt/local/lib /usr/pkg/lib
+-  /opt/csw/lib /opt/lib 
+-  /usr/openwin/lib
+-  )
+-
+-LIST(APPEND CMAKE_SYSTEM_PROGRAM_PATH
+-  /usr/pkg/bin
++  "@glibc@"
+   )
+ 
+ LIST(APPEND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES
+-  /lib /usr/lib /usr/lib32 /usr/lib64
++  "@glibc@/lib"
+   )
+ 
+ LIST(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
+-  /usr/include
++  "@glibc@/include"
+   )
+ LIST(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
+-  /usr/include
++  "@glibc@/include"
+   )
+ 
+ # Enable use of lib64 search path variants by default.
