@@ -1,20 +1,22 @@
-a@{ stdenv, fetchurl, xz, qt4, vlc, automoc4, cmake, phonon }:
+{ stdenv, fetchurl, xz, qt4, vlc, automoc4, cmake, phonon }:
 
 let
-  pn = "phonon-backend-vlc";
+  pname = "phonon-backend-vlc";
   v = "0.5.0";
-  vlc = a.vlc.override { inherit qt4; }; #Force using the same qt version
+  vlc_ = vlc.override { inherit qt4; }; #Force using the same qt version
 in
 
 stdenv.mkDerivation {
-  name = "${pn}-${v}";
+  name = "${pname}-${v}";
 
   src = fetchurl {
-    url = "mirror://kde/stable/phonon/${pn}/${v}/src/${pn}-${v}.tar.xz";
-    sha256 = "2256fe9fef74bcd165c24ae8e9b606a48264c9193a4a1da6ef0aaa02dad76388";
+    url = "mirror://kde/stable/phonon/${pname}/${v}/src/${pname}-${v}.tar.xz";
+    sha256 = "1233szd05ahaxyk1sjis374n90m40svfks2aq9jx3g3lxygzwmi2";
   };
 
-  buildInputs = [ xz qt4 vlc cmake automoc4 phonon ];
+  buildNativeInputs = [ cmake automoc4 xz ];
+
+  buildInputs = [ qt4 vlc_ phonon ];
 
   meta = {
     description = "VideoLAN backend for Phonon multimedia framework";
