@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   configureFlags = "--disable-nls";
 
   meta = {
-    description = "IRC client using GTK".
+    description = "IRC client using GTK";
     homepage = http://www.xchat.org;
     platforms = with stdenv.lib.platforms; linux;
   };
