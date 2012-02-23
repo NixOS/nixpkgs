@@ -6929,6 +6929,11 @@ let
 
   gqview = callPackage ../applications/graphics/gqview { };
 
+  gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
+    inherit (gnome) GConf;
+    inherit (gtkLibs) gtk;
+  };
+
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
   google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
