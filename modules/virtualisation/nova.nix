@@ -43,7 +43,7 @@ in
 
     virtualisation.nova.extraConfig =
       mkOption {
-        default = false;
+        default = "";
         description =
           ''
             Additional text appended to <filename>nova.conf</filename>,
