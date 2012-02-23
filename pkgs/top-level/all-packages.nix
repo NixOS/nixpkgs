@@ -2958,6 +2958,8 @@ let
 
   cmake = callPackage ../development/tools/build-managers/cmake { };
 
+  cmake264 = callPackage ../development/tools/build-managers/cmake/264.nix { };
+
   cmakeCurses = cmake.override { useNcurses = true; };
 
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
