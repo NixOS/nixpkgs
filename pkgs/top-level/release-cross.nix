@@ -205,6 +205,7 @@ in {
     nixUnstable.hostDrv = nativePlatforms;
     openssl.hostDrv = nativePlatforms;            # dependency of Nix
     patch.hostDrv = nativePlatforms;
+    samba_light.hostDrv = nativePlatforms;      # needed for `runInGenericVM'
     zile.hostDrv = nativePlatforms;
   };
 }) // (
