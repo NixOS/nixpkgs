@@ -1,16 +1,17 @@
-{stdenv, fetchurl, yacc, flex, pkgconfig, glib}:
+{stdenv, fetchurl, yacc, flex, pkgconfig, glib, xz}:
 
 stdenv.mkDerivation rec {
-  baseName = "vala";
-  baseVersion = "0.11";
-  revision = "2";
-  version = "${baseVersion}.${revision}";
-  name = "${baseName}-${version}";
+  name = "vala-0.14.2";
+
   src = fetchurl {
-    url = "mirror://gnome/sources/${baseName}/${baseVersion}/${name}.tar.bz2";
-    sha256 = "489b60a49a03c8915b513a722ca08986c18ae0dc6489cce6bbb8415670612046";
+    url = mirror://gnome/sources/vala/0.14/vala-0.14.2.tar.xz;
+    sha256 = "1l5kllw9vpwv24lzv9fp64l3sad46wpxgvsgryrwlrjg91w6jzl0";
   };
-  buildInputs = [ yacc flex glib pkgconfig ];
+
+  buildNativeInputs = [ yacc flex pkgconfig xz ];
+
+  buildInputs = [ glib ];
+
   meta = {
     description = "Compiler for the GObject type system";
     homepage = "http://live.gnome.org/Vala";
