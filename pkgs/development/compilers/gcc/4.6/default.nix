@@ -19,7 +19,7 @@
 , libXrandr ? null, libXi ? null, inputproto ? null, randrproto ? null
 , gnatboot ? null
 , enableMultilib ? false
-, enablePlugin ? false
+, enablePlugin ? true             # whether to support user-supplied plug-ins
 , name ? "gcc"
 , cross ? null
 , binutilsCross ? null
