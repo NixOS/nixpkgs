@@ -8296,7 +8296,13 @@ let
 
   ### SCIENCE/MATH
 
-  atlas = callPackage ../development/libraries/science/math/atlas { };
+  atlas = callPackage ../development/libraries/science/math/atlas {
+    # The build process measures CPU capabilities and optimizes the
+    # library to perform best on that particular machine. That is a
+    # great feature, but it's of limited use with pre-built binaries
+    # coming from a central build farm.
+    tolerateCpuTimingInaccuracy = true;
+  };
 
   blas = callPackage ../development/libraries/science/math/blas { };
 
