@@ -4821,6 +4821,8 @@ let
     ];
   };
 
+  xmlrpc_c = callPackage ../development/libraries/xmlrpc-c { };
+
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
   yajl = callPackage ../development/libraries/yajl { };

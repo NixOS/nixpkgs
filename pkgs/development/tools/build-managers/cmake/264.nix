@@ -1,5 +1,5 @@
 { fetchurl, stdenv, replace, curl, expat, zlib, bzip2, libarchive
-, useNcurses ? false, ncurses, useQt4 ? false, qt4
+, useNcurses ? false, ncurses, useQt4 ? false, qt4, xmlrpc_c
 , darwinInstallNameToolUtility }:
 
 with stdenv.lib;
@@ -11,7 +11,6 @@ let
   version = "${majorVersion}.${minorVersion}";
 in
 
-# WARNING: Do NOT upgrade cmake in trunk: it fails to build on i686-linux
 stdenv.mkDerivation rec {
   name = "cmake-${os useNcurses "cursesUI-"}${os useQt4 "qt4UI-"}${version}";
 
@@ -27,7 +26,7 @@ stdenv.mkDerivation rec {
     # Nixpkgs' Glibc.
     optional (stdenv ? glibc) ./search-path-264.patch;
 
-  buildInputs = [ curl expat zlib bzip2 libarchive ]
+  buildInputs = [ curl expat zlib bzip2 libarchive xmlrpc_c ]
     ++ optional stdenv.isDarwin darwinInstallNameToolUtility
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
