@@ -1,0 +1,41 @@
+From 0fbc8097f98481439e68aeb095a8d7e106924bbe Mon Sep 17 00:00:00 2001
+From: Jonathan Daugherty <jtd@galois.com>
+Date: Tue, 21 Feb 2012 11:06:57 -0800
+Subject: [PATCH 6/8] Loosen dependencies on SHA, HUnit, and test-framework
+
+---
+ mathblog.cabal |    8 ++++----
+ 1 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/mathblog.cabal b/mathblog.cabal
+index ea5498c..371dd12 100644
+--- a/mathblog.cabal
++++ b/mathblog.cabal
+@@ -44,7 +44,7 @@ Executable mb
+     process >= 1.0,
+     time >= 1.1,
+     old-locale >= 1.0,
+-    SHA >= 1.4 && < 1.5,
++    SHA >= 1.4 && < 1.6,
+     bytestring >= 0.9 && < 1.0,
+     HStringTemplate >= 0.6 && < 0.7,
+     ConfigFile >= 1.1 && < 1.2
+@@ -79,12 +79,12 @@ Executable mb-tests
+     process >= 1.0 && < 1.1,
+     time >= 1.1,
+     old-locale >= 1.0 && < 1.1,
+-    SHA >= 1.4 && < 1.5,
++    SHA >= 1.4 && < 1.6,
+     bytestring >= 0.9 && < 1.0,
+     HStringTemplate >= 0.6 && < 0.7,
+     ConfigFile >= 1.1 && < 1.2,
+-    HUnit >= 1.2.2 && < 1.2.3,
+-    test-framework >= 0.3.3 && < 0.4,
++    HUnit >= 1.2.2 && < 1.2.5,
++    test-framework >= 0.3.3 && < 0.6,
+     test-framework-hunit >= 0.2.6 && < 0.3
+ 
+   GHC-Options: -Wall
+-- 
+1.7.8
+
