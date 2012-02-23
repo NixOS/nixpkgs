@@ -7034,6 +7034,8 @@ let
 
   irssi = callPackage ../applications/networking/irc/irssi { };
 
+  bip = callPackage ../applications/networking/irc/bip { };
+
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
   jedit = callPackage ../applications/editors/jedit { };
