@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-conduit";
-  version = "0.5.2";
-  sha256 = "0wr9xbx2dwv0kmnx9jwlm1734a22mc79ydg4sh61335fdjvchfnd";
+  version = "0.5.3";
+  sha256 = "09jphn19g6v9z1b75iyqcdyn75n7inbhib8g9fgfzwd7q8rdd3yc";
   buildDepends = [
     attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
     conduit dataDefault failure systemFilepath text transformers
