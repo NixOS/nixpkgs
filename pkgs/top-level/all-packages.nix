@@ -4371,6 +4371,8 @@ let
 
   myguiSvn = callPackage ../development/libraries/mygui/svn.nix {};
 
+  mysocketw = callPackage ../development/libraries/mysocketw { };
+
   ncurses = makeOverridable (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
     unicode = system != "i686-cygwin";
@@ -4415,6 +4417,8 @@ let
   };
 
   ogre = callPackage ../development/libraries/ogre {};
+
+  ogrepaged = callPackage ../development/libraries/ogrepaged { };
 
   openal = callPackage ../development/libraries/openal { };
 
