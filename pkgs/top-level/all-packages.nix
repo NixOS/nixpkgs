@@ -7278,6 +7278,7 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon029;
+    libwpd = libwpd_08;
   };
 
   openscad = callPackage ../applications/graphics/openscad {};
