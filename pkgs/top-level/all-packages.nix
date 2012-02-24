@@ -6032,6 +6032,8 @@ let
 
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
+  rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
+
   ralink_fw = callPackage ../os-specific/linux/firmware/ralink { };
 
   rt2860fw = callPackage ../os-specific/linux/firmware/rt2860 { };
