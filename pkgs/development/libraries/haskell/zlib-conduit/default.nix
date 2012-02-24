@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zlib-conduit";
-  version = "0.2.0";
-  sha256 = "1vwan9vglj7xdna3pfw71bcfcp10s4vn6fd6wwdz7wvxrbn52gsk";
+  version = "0.2.0.1";
+  sha256 = "0css7cr9jj6rn829bw8mlbdl0d6iz9ckhsbrlrdcppx8k4gzb4rg";
   buildDepends = [ conduit transformers zlibBindings ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
