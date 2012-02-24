@@ -1,5 +1,5 @@
 { fetchsvn, fetchurl, stdenv, wxGTK290, freeimage, cmake, zziplib, mesa, boost, 
-  pkgconfig, libuuid, lua5, openal, ogre, ois, curl, gtk, pixman, mygui, unzip,
+  pkgconfig, libuuid, openal, ogre, ois, curl, gtk, pixman, mygui, unzip,
   angelscript, caelum, ogrepaged, mysocketw, libxcb
   }:
 
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    # "-DROR_USE_LUA=TRUE" "-DLUA_LIBRARIES=${lua5}/lib/liblua.a"
     "-DROR_USE_CURL=TRUE"
     "-DROR_USE_MYGUI=TRUE"
     "-DROR_USE_OPNEAL=TRUE"
@@ -29,34 +28,24 @@ stdenv.mkDerivation rec {
     "-DROR_USE_ANGELSCRIPT=TRUE"
     "-DROR_USE_SOCKETW=TRUE"
   ];
-  makeFlags = "VERBOSE=1";
 
   installPhase = ''
     sed -e "s@/usr/local/lib/OGRE@${ogre}/lib/OGRE@" -i ../tools/linux/binaries/plugins.cfg
     ensureDir $out/share/rigsofrods
-    cp -r .. $out/share/rigsofrods/build-dir
-    cp ../tools/linux/binaries/plugins.cfg $out/share/rigsofrods/build-dir/bin
+    cp -r ../bin/* $out/share/rigsofrods
+    cp ../tools/linux/binaries/plugins.cfg $out/share/rigsofrods
     ensureDir $out/bin
-    ln -s $out/share/rigsofrods/build-dir/bin/{RoR,rorconfig} $out/bin
+    ln -s $out/share/rigsofrods/{RoR,rorconfig} $out/bin
     cd $out/share/rigsofrods
-    mkdir contentpack
-    cd contentpack
+    mkdir packs
+    cd packs
     unzip "${contentPackSrc}"
-
-    echo First run rorconfig once to create ~/.rigsofrods
-    echo Then copy $out/share/rigsofrods/build-dir/bin/plugins.cfg to ~/.rigsofrods
-    echo Then ln $out/share/rigsofrods/contentpack/* to ~/.rigsofrods/packs
   '';
 
-  patches = [ ./doubleslash.patch ];
-
-  preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -langelscript -lgtk-x11-2.0"
-    sed -e 's@wxLOCALE_CONV_ENCODING@0@g' -i source/configurator/configurator.cpp
-  '';
+  patches = [ ./doubleslash.patch ./paths.patch ];
 
   buildInputs = [ wxGTK290 freeimage cmake zziplib mesa boost pkgconfig
-    libuuid lua5 openal ogre ois curl gtk mygui unzip angelscript
+    libuuid openal ogre ois curl gtk mygui unzip angelscript
     caelum ogrepaged mysocketw libxcb ];
 
   meta = {
