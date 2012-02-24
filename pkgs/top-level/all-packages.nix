@@ -3276,6 +3276,8 @@ let
 
   buddy = callPackage ../development/libraries/buddy { };
 
+  caelum = callPackage ../development/libraries/caelum { };
+
   cairomm = callPackage ../development/libraries/cairomm { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
