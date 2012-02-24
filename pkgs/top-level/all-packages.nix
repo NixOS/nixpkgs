@@ -7426,6 +7426,8 @@ let
     usePulseAudio = getConfig [ "pulseaudio" ] false; # disabled by default (the 100% cpu bug)
   };
 
+  dropbox = callPackage ../applications/networking/dropbox { };
+
   slim = callPackage ../applications/display-managers/slim { };
 
   sndBase = builderDefsPackage (import ../applications/audio/snd) {
