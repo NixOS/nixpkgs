@@ -444,6 +444,8 @@ let
 
   syslogng = callPackage ../tools/system/syslog-ng { };
 
+  mcelog = callPackage ../os-specific/linux/mcelog { };
+
   asciidoc = callPackage ../tools/typesetting/asciidoc { };
 
   autossh = callPackage ../tools/networking/autossh { };
