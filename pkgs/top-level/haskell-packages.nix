@@ -1000,6 +1000,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
+  monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
+
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {
     monadControl = self.monadControl_0_2_0_3;
   };
