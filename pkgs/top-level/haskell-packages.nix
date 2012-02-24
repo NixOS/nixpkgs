@@ -844,7 +844,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   #hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {};
   #hledgerChart = callPackage ../development/libraries/haskell/hledger-chart {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
-  hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
+  #hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
