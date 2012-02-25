@@ -96,7 +96,6 @@
   ./services/misc/rogue.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
-  ./services/misc/virtualbox.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/nagios/default.nix
   ./services/monitoring/smartd.nix
@@ -206,5 +205,6 @@
   ./tasks/tty-backgrounds.nix
   ./virtualisation/libvirtd.nix
   ./virtualisation/nova.nix
+  ./virtualisation/virtualbox-guest.nix
   ./virtualisation/xen-dom0.nix
 ]
