@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
     "-DROR_USE_PAGED=TRUE"
     "-DROR_USE_ANGELSCRIPT=TRUE"
     "-DROR_USE_SOCKETW=TRUE"
+    "-DCMAKE_BUILD_TYPE=Release"
   ];
 
   installPhase = ''
