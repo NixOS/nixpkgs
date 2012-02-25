@@ -4,7 +4,7 @@
 , stateDir ? "/nix/var"
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "nix-1.0pre31851";
 
   src = fetchurl {
@@ -51,4 +51,6 @@ stdenv.mkDerivation rec {
     homepage = http://nixos.org/;
     license = "LGPLv2+";
   };
-}
+} // stdenv.lib.optionalAttrs stdenv.isDarwin {
+      phases = "$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase $preInstallPhases installPhase checkPhase fixupPhase $preDistPhases distPhase $postPhases";
+})
