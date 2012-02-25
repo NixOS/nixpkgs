@@ -57,7 +57,7 @@ let
       };
 
       keyFiles = mkOption {
-        type = types.listOf types.string;
+        #type = types.listOf types.string;
         default = [];
         description = ''
           A list of files each containing one OpenSSH public keys that should be
