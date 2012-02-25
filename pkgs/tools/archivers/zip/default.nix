@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, libnatspec }:
+{ stdenv, fetchurl, enableNLS ? true, libnatspec ? null }:
+
+assert enableNLS -> libnatspec != null;
 
 stdenv.mkDerivation {
   name = "zip-3.0";
@@ -12,9 +14,9 @@ stdenv.mkDerivation {
 
   installFlags="-f unix/Makefile prefix=$(out) INSTALL=cp";
 
-  patches = [ ./natspec-gentoo.patch.bz2 ];
+  patches = if enableNLS then [ ./natspec-gentoo.patch.bz2 ] else [];
 
-  buildInputs = [ libnatspec ];
+  buildInputs = if enableNLS then [ libnatspec ] else [];
 
   meta = {
     homepage = http://www.info-zip.org;
@@ -22,4 +24,3 @@ stdenv.mkDerivation {
     maintainer = [ stdenv.lib.maintainers.urkud ];
   };
 }
-

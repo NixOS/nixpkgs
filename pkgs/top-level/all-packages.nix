@@ -7272,6 +7272,7 @@ let
     inherit (gnome) GConf ORBit2;
     neon = neon029;
     libwpd = libwpd_08;
+    zip = zip.override { enableNLS = false; };
   };
 
   go_oo = callPackage ../applications/office/openoffice/go-oo.nix {
@@ -7279,6 +7280,7 @@ let
     inherit (gnome) GConf ORBit2;
     neon = neon029;
     libwpd = libwpd_08;
+    zip = zip.override { enableNLS = false; };
   };
 
   openscad = callPackage ../applications/graphics/openscad {};
