@@ -1,5 +1,11 @@
 {stdenv, fetchurl}:
 
+let
+  bindir = if stdenv.system == "i686-linux" then "bin.linuxx86"
+    else if stdenv.system == "x86_64-linux" then "bin.linux"
+    else throw "Unsupported platform by now";
+in
+
 stdenv.mkDerivation {
   name = "jam-2.5";
   src = fetchurl {
@@ -9,7 +15,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     ensureDir $out/bin
-    cp bin.linux/jam $out/bin
+    cp ${bindir}/jam $out/bin
   '';
 
   meta = {
