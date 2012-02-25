@@ -28,17 +28,22 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    for i in $out/{bin,sbin}/*
+    for i in "$out/{bin,sbin}/"*
     do
       wrapProgram $i --prefix PATH :  \
         "${nettools}/bin:${nettools}/sbin"
     done
+
+    mkdir -p $out/share/doc/vpnc
+    cp README nortel.txt ChangeLog $out/share/doc/vpnc/
   '';
 
   meta = {
-    description = ''VPNC, a virtual private network (VPN) client
-                    for Cisco's VPN concentrators'';
-    homepage = http://www.unix-ag.uni-kl.de/~massar/vpnc/;
+    homepage = "http://www.unix-ag.uni-kl.de/~massar/vpnc/";
+    description = "virtual private network (VPN) client for Cisco's VPN concentrators";
     license = "GPLv2+";
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

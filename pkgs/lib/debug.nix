@@ -42,7 +42,7 @@ rec {
       else if x == null then "x is null"
       else if isInt x then "x is an integer `${toString x}'"
       else if isString x then "x is a string `${substring 0 50 x}...'"
-      else "x is probably a path `${substring 0 50 (toString x)}'";
+      else "x is probably a path `${substring 0 50 (toString x)}...'";
 
   # trace the arguments passed to function and its result 
   # maybe rewrite these functions in a traceCallXml like style. Then one function is enough

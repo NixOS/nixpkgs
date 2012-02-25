@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8 }:
+{ stdenv, fetchurl, openssl, python, zlib, v8, darwinInstallNameToolUtility }:
 
 stdenv.mkDerivation rec {
   version = "0.6.10";
@@ -17,11 +17,17 @@ stdenv.mkDerivation rec {
     "--shared-v8-libpath=${v8}/lib"
   ];
 
-  patchPhase = ''
+  patches = stdenv.lib.optional stdenv.isDarwin ./no-arch-flag.patch;
+
+  prePatch = ''
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf}
   '';
 
-  buildInputs = [ python openssl v8 zlib];
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -change libv8.dylib ${v8}/lib/libv8.dylib $out/bin/node
+  '';
+
+  buildInputs = [ python openssl v8 zlib ] ++ stdenv.lib.optional stdenv.isDarwin darwinInstallNameToolUtility;
 
   meta = with stdenv.lib; {
     description = "Event-driven I/O framework for the V8 JavaScript engine";

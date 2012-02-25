@@ -444,6 +444,8 @@ let
 
   syslogng = callPackage ../tools/system/syslog-ng { };
 
+  mcelog = callPackage ../os-specific/linux/mcelog { };
+
   asciidoc = callPackage ../tools/typesetting/asciidoc { };
 
   autossh = callPackage ../tools/networking/autossh { };
@@ -3221,7 +3223,8 @@ let
   boost146 = callPackage ../development/libraries/boost/1.46.nix { };
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost148 = callPackage ../development/libraries/boost/1.48.nix { };
-  boost = boost148;
+  boost149 = callPackage ../development/libraries/boost/1.49.nix { };
+  boost = boost149;
 
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
   boostFull = appendToName "full" (boost.override {
@@ -3236,6 +3239,8 @@ let
   box2d_2_0_1 = callPackage ../development/libraries/box2d/2.0.1.nix { };
 
   buddy = callPackage ../development/libraries/buddy { };
+
+  caelum = callPackage ../development/libraries/caelum { };
 
   cairomm = callPackage ../development/libraries/cairomm { };
 
@@ -4335,6 +4340,8 @@ let
 
   myguiSvn = callPackage ../development/libraries/mygui/svn.nix {};
 
+  mysocketw = callPackage ../development/libraries/mysocketw { };
+
   ncurses = makeOverridable (import ../development/libraries/ncurses) {
     inherit fetchurl stdenv;
     unicode = system != "i686-cygwin";
@@ -4379,6 +4386,8 @@ let
   };
 
   ogre = callPackage ../development/libraries/ogre {};
+
+  ogrepaged = callPackage ../development/libraries/ogrepaged { };
 
   openal = callPackage ../development/libraries/openal { };
 
@@ -5865,6 +5874,8 @@ let
 
   rfkill = callPackage ../os-specific/linux/rfkill { };
 
+  rfkill_udev = callPackage ../os-specific/linux/rfkill/udev.nix { };
+
   ralink_fw = callPackage ../os-specific/linux/firmware/ralink { };
 
   rt2860fw = callPackage ../os-specific/linux/firmware/rt2860 { };
@@ -6853,6 +6864,8 @@ let
 
   irssi = callPackage ../applications/networking/irc/irssi { };
 
+  bip = callPackage ../applications/networking/irc/bip { };
+
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
   jedit = callPackage ../applications/editors/jedit { };
@@ -7079,12 +7092,15 @@ let
     inherit (gnome) GConf ORBit2;
     neon = neon029;
     libwpd = libwpd_08;
+    zip = zip.override { enableNLS = false; };
   };
 
   go_oo = callPackage ../applications/office/openoffice/go-oo.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon029;
+    libwpd = libwpd_08;
+    zip = zip.override { enableNLS = false; };
   };
 
   openscad = callPackage ../applications/graphics/openscad {};
@@ -7240,6 +7256,8 @@ let
   skype_linux = callPackage_i686 ../applications/networking/skype {
     usePulseAudio = getConfig [ "pulseaudio" ] false; # disabled by default (the 100% cpu bug)
   };
+
+  dropbox = callPackage ../applications/networking/dropbox { };
 
   slim = callPackage ../applications/display-managers/slim { };
 

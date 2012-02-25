@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gkk96yid3nq8i4z8xbiarj0r9v7b2zavf5mnh0rc7kclzxa7mmf";
   };
 
-  patches = [ ./smb-tmpdir.patch ];
+  patches = [ ./smb-tmpdir.patch ./qemu-img-fix-corrupt-vdi.patch ];
 
   configureFlags = "--audio-drv-list=alsa";
 
