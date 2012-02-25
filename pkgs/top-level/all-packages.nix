@@ -1222,7 +1222,9 @@ let
 
   pngnq = callPackage ../tools/graphics/pngnq { };
 
-  pngtoico = callPackage ../tools/graphics/pngtoico { };
+  pngtoico = callPackage ../tools/graphics/pngtoico {
+    libpng = libpng12;
+  };
 
   polipo = callPackage ../servers/polipo { };
 
