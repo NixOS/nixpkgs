@@ -3260,7 +3260,8 @@ let
   boost146 = callPackage ../development/libraries/boost/1.46.nix { };
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost148 = callPackage ../development/libraries/boost/1.48.nix { };
-  boost = boost148;
+  boost149 = callPackage ../development/libraries/boost/1.49.nix { };
+  boost = boost149;
 
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
   boostFull = appendToName "full" (boost.override {
