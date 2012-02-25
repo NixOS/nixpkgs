@@ -1,4 +1,5 @@
-# VirtualBox server
+# Module for VirtualBox guests.
+
 { config, pkgs, ... }:
 
 with pkgs.lib;
@@ -32,7 +33,7 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ ];
+    environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
     boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
@@ -41,7 +42,7 @@ in
 
         startOn = "started udev";
 
-        exec = "${kernel.virtualboxGuestAdditions}/sbin/VBoxService";
+        exec = "${kernel.virtualboxGuestAdditions}/sbin/VBoxService --foreground";
       };
 
   };
