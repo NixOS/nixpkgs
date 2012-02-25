@@ -1,0 +1,21 @@
+diff -Naur node-v0.6.10-orig/wscript node-v0.6.10/wscript
+--- node-v0.6.10-orig/wscript	2012-02-02 19:56:42.000000000 -0500
++++ node-v0.6.10/wscript	2012-02-25 14:18:50.000000000 -0500
+@@ -443,17 +443,6 @@
+   if sys.platform.startswith("darwin"):
+     # used by platform_darwin_*.cc
+     conf.env.append_value('LINKFLAGS', ['-framework','Carbon'])
+-    # cross compile for architecture specified by DEST_CPU
+-    if 'DEST_CPU' in conf.env:
+-      arch = conf.env['DEST_CPU']
+-      # map supported_archs to GCC names:
+-      arch_mappings = {'ia32': 'i386', 'x64': 'x86_64'}
+-      if arch in arch_mappings:
+-        arch = arch_mappings[arch]
+-      flags = ['-arch', arch]
+-      conf.env.append_value('CCFLAGS', flags)
+-      conf.env.append_value('CXXFLAGS', flags)
+-      conf.env.append_value('LINKFLAGS', flags)
+   if 'DEST_CPU' in conf.env:
+     arch = conf.env['DEST_CPU']
+     # TODO: -m32 is only available on 64 bit machines, so check host type
