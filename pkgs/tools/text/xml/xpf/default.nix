@@ -1,6 +1,4 @@
-{stdenv, fetchurl, python, libxml2}:
-
-assert libxml2.pythonSupport == true;
+{ stdenv, fetchurl, python, libxml2Python }:
 
 stdenv.mkDerivation {
   name = "xpf-0.2";
@@ -10,7 +8,11 @@ stdenv.mkDerivation {
     md5 = "d92658828139e1495e052d0cfe25d312";
   };
   
-  buildInputs = [python libxml2];
+  buildInputs = [ python libxml2Python ];
+
+  preConfigure = ''
+    sed -i configure -e 's:test -e .*/libxml2.py":python -c "import libxml2":'
+  '';
 
   meta = {
     description = "XML Pipes and Filters - command line tools for manipulating and querying XML data";
