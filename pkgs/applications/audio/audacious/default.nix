@@ -3,22 +3,25 @@
 , libvorbis, libcdio, libcddb, flac, ffmpeg
 }:
 
-stdenv.mkDerivation rec {
-  name = "audacious-3.0";
-  
+let
+  version = "3.2.1";
+in
+stdenv.mkDerivation {
+  name = "audacious-${version}";
+
   src = fetchurl {
-    url = "http://distfiles.atheme.org/${name}.tar.gz";
-    sha256 = "0kj78hgf73fmbm6y3idir2kavbnnlv0jb9ka0pcsb12sxb994s68";
+    url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
+    sha256 = "064a8d2887a0f92a1637df9d71b8eefa8064199c04eccfaac725f840cff6eac3";
   };
 
   pluginsSrc = fetchurl {
-    url = "http://distfiles.atheme.org/audacious-plugins-3.0.tar.gz";
-    sha256 = "0hhxk1mxnnrb1shshpf1nf8mqpc9q1qpsljwn4jzylcnwy6pq4rw";
+    url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
+    sha256 = "5b7d3e52f6b8903bc01ae15651817e990d3348ae6b9734767f354eb2dbfc8c2d";
   };
-  
+
   # `--enable-amidiplug' is to prevent configure from looking in /proc/asound.
   configureFlags = "--enable-amidiplug --disable-oss";
-  
+
   buildInputs =
     [ gettext pkgconfig glib gtk libmowgli libmcs libxml2 dbus_glib
       libmad xlibs.libXcomposite libogg libvorbis flac alsaLib libcdio
@@ -51,6 +54,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Audacious, a media player forked from the Beep Media Player, which was itself an XMMS fork";
     homepage = http://audacious-media-player.org/;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
+    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
   };
 }
