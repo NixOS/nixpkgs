@@ -54,6 +54,8 @@ stdenv.mkDerivation {
 
   postInstall = ''
     rm -rf "$out/lib/python${majorVersion}/test"
+    rm "$out/lib/python${majorVersion}/site-packages/README"
+    rmdir "$out/lib/python${majorVersion}/site-packages/"
   '';
 
   passthru = {
