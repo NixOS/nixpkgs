@@ -2766,7 +2766,8 @@ let
 
   ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
   ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
-  ruby = callPackage ../development/interpreters/ruby { };
+  
+  ruby = ruby19;
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
 
