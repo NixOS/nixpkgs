@@ -3498,7 +3498,7 @@ let
 
   glibc = glibc213;
 
-  glibcCross = glibc214Cross;
+  glibcCross = glibc213Cross;
 
   glibc25 = callPackage ../development/libraries/glibc/2.5 {
     kernelHeaders = linuxHeaders_2_6_28;
