@@ -1,3 +1,6 @@
+# Create a python that knows about additional python packages via
+# PYTHONPATH
+
 {stdenv, python, makeWrapper, extraLibs ? []}:
 
 stdenv.mkDerivation {
