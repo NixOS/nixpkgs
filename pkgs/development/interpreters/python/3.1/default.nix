@@ -80,8 +80,9 @@ stdenv.mkDerivation {
       hierarchical packages; exception-based error handling; and very
       high level dynamic data types.
     '';
-    license = "GPLv2";
+    license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ simons chaoflow ];
   };
+
 }
