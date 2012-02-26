@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "13j9f6i8rx0qd5m96iwrcha78h34qpfk5qzi7cv098pms6gq022m";
   };
 
+  patchPhase = ''
+    sed -i -e s,--export-dynamic,, configure
+  '';
+
   buildInputs = [ perl python zip xmlto zlib ];
 
   doCheck = true;
