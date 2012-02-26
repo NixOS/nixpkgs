@@ -6449,14 +6449,9 @@ let
     gnutls = gnutls2;
   };
 
-  blender = callPackage ../applications/misc/blender/2.49.nix { };
-
-  blender_2_57 = lowPrio (import ../applications/misc/blender {
-    inherit stdenv fetchurl SDL cmake gettext ilmbase libjpeg libpng
-      libsamplerate libtiff mesa openal openexr openjpeg zlib;
-    inherit (xlibs) libXi;
+  blender = callPackage  ../applications/misc/blender {
     python = python32;
-  });
+  };
 
   bvi = callPackage ../applications/editors/bvi { };
 
