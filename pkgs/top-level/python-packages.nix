@@ -674,12 +674,15 @@ let pythonPackages = python.modules // rec {
 
     configureFlags = "--with-python=${python}";
 
-    postConfigure = ''
-      cd python
-      sed -i setup.py \
-          -e "s:^ROOT.*:ROOT = r'${pkgs.libxml2}':" \
-          -e "s:^iconv_includes.*:iconv_includes= r'${pkgs.libxml2.libiconv}':"
-    '';
+    postConfigure = let
+      changeIconv = "-e s:^iconv_includes.*:iconv_includes=r'${pkgs.libxml2.libiconv}':";
+    in
+      ''
+        cd python
+        sed -i setup.py \
+            -e "s:^ROOT.*:ROOT = r'${pkgs.libxml2}':" \
+            ${if pkgs.libxml2.libiconv != null then changeIconv else ""}
+      '';
 
     # has no tests
     doCheck = false;
