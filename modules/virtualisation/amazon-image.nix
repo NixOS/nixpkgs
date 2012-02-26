@@ -100,7 +100,7 @@ with pkgs.lib;
           elif [ "$fsType" = ext3 ]; then
               mp="/disk$diskNr"
               diskNr=$((diskNr + 1))
-              echo "mounting $device om $mp..."
+              echo "mounting $device on $mp..."
               if mountFS "$device" "$mp" "" ext3; then
                   if [ -z "$diskForAufs" ]; then diskForAufs="$mp"; fi
               fi
