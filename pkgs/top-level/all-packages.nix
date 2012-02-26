@@ -4234,13 +4234,9 @@ let
 
   libxmi = callPackage ../development/libraries/libxmi { };
 
-  libxml2 = callPackage ../development/libraries/libxml2 {
-    pythonSupport = false;
-  };
+  libxml2 = callPackage ../development/libraries/libxml2 { };
 
-  libxml2Python = libxml2.override {
-    pythonSupport = true;
-  };
+  libxml2Python = pythonPackages.libxml2;
 
   libxmlxx = callPackage ../development/libraries/libxmlxx {
     inherit (gtkLibs) glibmm;
