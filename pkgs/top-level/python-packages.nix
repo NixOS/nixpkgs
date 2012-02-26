@@ -1918,11 +1918,11 @@ let pythonPackages = python.modules // rec {
   };
 
   taskcoach = buildPythonPackage rec {
-    name = "TaskCoach-1.3.7";
+    name = "TaskCoach-1.3.8";
 
     src = fetchurl {
       url = "mirror://sourceforge/taskcoach/${name}.tar.gz";
-      sha256 = "069hyxc8ypn51a8imfkfqdalp1l4pv09swj2v3bi4hjscq9af6i8";
+      sha256 = "0gc277cgnw6f167lrbxlf7rmgyjxwzgkmi77qz9xwvnwcj2l94xn";
     };
 
     propagatedBuildInputs = [ wxPython ];
