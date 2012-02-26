@@ -25,6 +25,5 @@ stdenv.mkDerivation rec {
     homepage = http://kdesvn.alwins-world.de;
     maintainers = [ stdenv.lib.maintainers.sander ];
     inherit (kdelibs.meta) platforms;
-    inherit (kdelibs.meta) platforms;
   };
 }
