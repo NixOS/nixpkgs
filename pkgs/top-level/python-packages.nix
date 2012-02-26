@@ -9,13 +9,13 @@ let pythonPackages = python.modules // rec {
 
   buildPythonPackage = import ../development/python-modules/generic {
     inherit (pkgs) lib;
-    inherit python wrapPython setuptools;
+    inherit python wrapPython setuptools site;
   };
 
 
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
-    inherit python wrapPython;
+    inherit python wrapPython site;
   };
 
 

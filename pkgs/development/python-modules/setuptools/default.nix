@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, wrapPython }:
+{ stdenv, fetchurl, python, wrapPython, site }:
 
 stdenv.mkDerivation rec {
   name = "setuptools-0.6c11";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lx1hwxkhipyh206bgl90ddnfcnb68bzcvyawczbf833fadyl3v3";
   };
 
-  buildInputs = [ python wrapPython ];
+  buildInputs = [ python wrapPython site ];
 
   buildPhase = "python setup.py build --build-base $out";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       # remove generic files, leave setuptools.pth
       rm $dst/site.py*
       rm $dst/easy-install.pth
-      wrapPythonPrograms
+      pythonPath=${site} wrapPythonPrograms
     '';
 
   doCheck = false; # doesn't work with Python 2.7
