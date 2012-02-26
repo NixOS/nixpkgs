@@ -12,6 +12,16 @@ stdenv.mkDerivation rec {
       dst=$out/lib/${python.libPrefix}/site-packages
       mkdir -p $dst
       cat ${./site.py} >> $dst/site.py
+
+      # by providing content for bin/ we make sure, that python or
+      # some other script is linked instead of the bin/ directory
+      # itself. This is needed for the wrappers to make all site
+      # packages available if site is installed.
+      mkdir $out/bin
+      cat ${./pysite} >> $out/bin/pysite
+      substituteInPlace $out/bin/pysite \
+          --replace PYTHON_LIB_PREFIX ${python.libPrefix}
+      chmod +x $out/bin/pysite
     '';
 
   meta = {

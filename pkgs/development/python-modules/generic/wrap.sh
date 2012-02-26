@@ -15,6 +15,14 @@ wrapPythonProgramsIn() {
         _addToPythonPath $i
     done
 
+    program_PYTHONPATH='$(
+        # activate site if installed
+        bindir=$(dirname "$0")
+        pysite="$bindir/pysite"
+        relpath=$(test -x "$pysite" && "$pysite" path)
+        echo -n ${relpath:+"$relpath":}
+)'"$program_PYTHONPATH"
+
     for i in $(find "$dir" -type f -perm +0100); do
 
         # Rewrite "#! .../env python" to "#! /nix/store/.../python".
@@ -25,7 +33,7 @@ wrapPythonProgramsIn() {
         if head -n1 "$i" | grep -q /python; then
             echo "wrapping \`$i'..."
             wrapProgram "$i" \
-                --prefix PYTHONPATH ":" $program_PYTHONPATH \
+                --prefix PYTHONPATH ":" "$program_PYTHONPATH" \
                 --prefix PATH ":" $program_PATH
         fi
     done
