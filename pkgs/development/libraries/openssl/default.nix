@@ -32,7 +32,10 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://www.openssl.org/source/${name}.tar.gz";
+    urls = [
+      "http://www.openssl.org/source/${name}.tar.gz"
+      "http://openssl.linux-mirror.org/source/${name}.tar.gz"
+    ];
     sha1 = "2b517baada2338663c27314cb922f9755e73e07f";
   };
 
