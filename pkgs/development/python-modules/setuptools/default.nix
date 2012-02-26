@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
       mkdir -p $dst
       PYTHONPATH=$dst:$PYTHONPATH
       python setup.py install --prefix=$out
+      # remove generic files, leave setuptools.pth
+      rm $dst/site.py*
+      rm $dst/easy-install.pth
       wrapPythonPrograms
     '';
 
