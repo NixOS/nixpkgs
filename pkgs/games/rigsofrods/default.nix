@@ -4,12 +4,13 @@
   }:
 
 stdenv.mkDerivation rec {
-  version = "0.39.4";
+  version = "0.39-svn2267";
   name = "rigsofrods-${version}";
 
-  src = fetchurl {
-    url = mirror://sourceforge/rigsofrods/rigsofrods-source-0.39.4.tar.bz2;
-    sha256 = "1kpjkski0yllwzdki0rjpqvifjs0fwpgs513y4dv4s9wfwan1qcx";
+  src = fetchsvn {
+    url = https://rigsofrods.svn.sourceforge.net/svnroot/rigsofrods/trunk;
+    rev = 2267;
+    sha256 = "19r3v6x1wk3nb1cyixbp1bmdg96h31bxjlsz6zh6qc317wjmy96b";
   };
 
   contentPackSrc = fetchurl {
