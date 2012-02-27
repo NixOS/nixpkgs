@@ -130,10 +130,10 @@ let pythonPackages = python.modules // rec {
     name = "logilab-astng-0.21.1";
 
     src = fetchurl {
-      url = "http://ftp.logilab.org/pub/astng/${name}.tar.gz";
+      url = "ftp://ftp.logilab.org/pub/astng/${name}.tar.gz";
       sha256 = "0rqp2vwrnv6gkzdd96j078h1sz26plh49cmnyswy2wb6l4wans67";
     };
-    propagatedBuildInputs = [logilabCommon];
+    buildInputs = [ logilabCommon ];
   };
 
   beautifulsoup = buildPythonPackage (rec {
@@ -717,10 +717,10 @@ let pythonPackages = python.modules // rec {
     name = "logilab-common-0.56.0";
 
     src = fetchurl {
-      url = "http://ftp.logilab.org/pub/common/${name}.tar.gz";
+      url = "ftp://ftp.logilab.org/pub/common/${name}.tar.gz";
       sha256 = "14p557nqypbd10d8k7qs6jlm58pksiwh86wvvl0axyki00hj6971";
     };
-    propagatedBuildInputs = [unittest2];
+    buildInputs = [ unittest2 ];
   };
 
   lxml = buildPythonPackage ( rec {
