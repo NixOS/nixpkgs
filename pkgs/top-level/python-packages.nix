@@ -136,8 +136,8 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [logilabCommon];
   };
 
-  beautifulsoap = buildPythonPackage (rec {
-    name = "beautifulsoap-3.0.8";
+  beautifulsoup = buildPythonPackage (rec {
+    name = "beautifulsoup-3.0.8";
 
     src = fetchurl {
       url = "http://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.0.8.tar.gz";
