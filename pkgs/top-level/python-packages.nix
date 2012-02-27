@@ -6,12 +6,18 @@ let pythonPackages = python.modules // rec {
 
   inherit (pkgs) fetchurl fetchsvn stdenv;
 
-
   buildPythonPackage = import ../development/python-modules/generic {
     inherit (pkgs) lib unzip;
     inherit python wrapPython setuptools site offlineDistutils;
   };
 
+  wrapPython = pkgs.makeSetupHook
+    { deps = pkgs.makeWrapper;
+      substitutions.libPrefix = python.libPrefix;
+    }
+    ../development/python-modules/generic/wrap.sh;
+
+  ### real packages below here
 
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
@@ -24,22 +30,17 @@ let pythonPackages = python.modules // rec {
     inherit python;
   };
 
+
   offlineDistutils = import ../development/python-modules/offline-distutils {
     inherit (pkgs) stdenv;
     inherit python;
   };
 
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl;
     inherit buildPythonPackage pythonPackages;
   };
-
-
-  wrapPython = pkgs.makeSetupHook
-    { deps = pkgs.makeWrapper;
-      substitutions.libPrefix = python.libPrefix;
-    }
-    ../development/python-modules/generic/wrap.sh;
 
 
   anyjson = buildPythonPackage rec {
@@ -67,7 +68,7 @@ let pythonPackages = python.modules // rec {
       sha1 = "f124e5e4a6644bf6d1734032a01ac44db1b25a29";
     };
 
-    doCheck = false;
+    checkPhase = "cd tests/client_0_8/ && python run_all.py";
 
     meta = {
       homepage = http://code.google.com/p/py-amqplib/;
@@ -86,7 +87,9 @@ let pythonPackages = python.modules // rec {
 
     buildInputs = [ pkgs.sqlite ];
 
+    # XXX: currently fails
     doCheck = false;
+    checkPhase = "python setup.py test";
 
     meta = {
       description = "A Python wrapper for the SQLite embedded relational database engine";
@@ -103,8 +106,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "ee6da1aaad8b08a74a33eb82264b1a2bf12a7d5aefc7e9d7d40a8f8fa9912e62";
     };
 
-    # How do we run the tests?
-    doCheck = false;
+    checkPhase = "python test/test_argparse.py";
 
     meta = {
       homepage = http://code.google.com/p/argparse/;
@@ -142,8 +144,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "1gasiy5lwbhsxw27g36d88n36xbj52434klisvqhljgckd4xqcy7";
     };
 
-    # No tests implemented
-    doCheck = false;
+    checkPhase = "python BeautifulSoupTests.py";
 
     meta = {
       homepage = http://www.crummy.com/software/BeautifulSoup/;
@@ -214,15 +215,29 @@ let pythonPackages = python.modules // rec {
       md5 = "530a0614de3a669314c3acd4995c54d5";
     };
 
-    buildInputs = [ nose ];
-
-    propagatedBuildInputs = [ amqplib anyjson ];
+    buildInputs = [ nose amqplib anyjson ];
 
     doCheck = false; # depends on the network
 
     meta = {
       homepage = http://pypi.python.org/pypi/carrot;
       description = "AMQP Messaging Framework for Python";
+    };
+  };
+
+
+  chardet = buildPythonPackage rec {
+    version = "1.0.1";
+    name = "chardet-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/chardet/${name}.tar.gz";
+      md5 = "7c28b02bca7847c13bebedaf4df6c5a3";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/chardet;
+      description = "Universal encoding detector";
     };
   };
 
@@ -236,7 +251,7 @@ let pythonPackages = python.modules // rec {
       md5 = "853917116e731afbc8c8a43c37e6ddba";
     };
 
-    propagatedBuildInputs = [ markdown ];
+    buildInputs = [ markdown ];
 
     meta = {
       homepage = http://www.cheetahtemplate.org/;
@@ -246,14 +261,18 @@ let pythonPackages = python.modules // rec {
 
 
   cherrypy = buildPythonPackage (rec {
-    name = "cherrypy-3.1.2";
+    name = "cherrypy-3.2.2";
 
     src = fetchurl {
-      url = "http://download.cherrypy.org/cherrypy/3.1.2/CherryPy-3.1.2.tar.gz";
-      sha256 = "1xlvanhnxgvwd7vvypbafyl6yqfkpnwa9rs9k3058z84gd86bz8d";
+      url = "http://download.cherrypy.org/cherrypy/3.2.2/CherryPy-3.2.2.tar.gz";
+      sha256 = "14dn129h69wj0h8yr0bjwbrk8kygl6mkfnxc5m3fxhlm4xb8hnnw";
     };
 
+    buildInputs = [ markdown nose ];
+
+    # XXX: tests hang
     doCheck = false;
+    checkPhase = "cd cherrypy && nosetests -s test/";
 
     meta = {
       homepage = "http://www.cherrypy.org";
@@ -279,12 +298,14 @@ let pythonPackages = python.modules // rec {
   });
 
   cssutils = buildPythonPackage (rec {
-    name = "cssutils-0.9.7a6";
+    name = "cssutils-0.9.9";
 
     src = fetchurl {
-      url = http://cssutils.googlecode.com/files/cssutils-0.9.7a6.zip;
-      sha256 = "1i5n97l20kn2w9v6x8ybcdnl323vy8lcc5qlxz5l89di36a2skgw";
+      url = "http://pypi.python.org/packages/source/c/cssutils/${name}.zip";
+      md5 = "5f8ea824cc0e0518b574da20e895be08";
     };
+
+    buildInputs = [ chardet mock ];
 
     # The tests fail - I don't know why
     doCheck = false;
@@ -299,11 +320,11 @@ let pythonPackages = python.modules // rec {
   });
 
   darcsver = buildPythonPackage (rec {
-    name = "darcsver-1.7.2";
+    name = "darcsver-1.7.4";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/darcsver/${name}.tar.gz";
-      md5 = "94ca7e8c9ea0f69c0f3fc6f9fc88f65a";
+      md5 = "e38aecd1343ab8447888a479ab12cb59";
     };
 
     buildInputs = [ mock ];
@@ -313,7 +334,7 @@ let pythonPackages = python.modules // rec {
     # http://thread.gmane.org/gmane.comp.file-systems.tahoe.devel/3200 for a
     # discussion.
 
-    # Gives "ValueError: Empty module name" with no clue as to why.
+    # Gives: AttributeError: 'module' object has no attribute 'test_darcsver'
     doCheck = false;
 
     meta = {
@@ -380,7 +401,8 @@ let pythonPackages = python.modules // rec {
       sha256 = "0wfz4nxl95jcr2f2mc5gijgighavcghg33plzbz5jyi531jpffss";
     };
 
-    doCheck = false;
+    doCheck = false; # has two failing tests
+    checkPhase = "./test/alltests.py";
 
     meta = {
       homepage = http://docutils.sourceforge.net/;
@@ -412,10 +434,6 @@ let pythonPackages = python.modules // rec {
       md5 = "ce75c7c3c86741175a84456cc5bd531e";
     };
 
-    buildInputs = [ ];
-
-    propagatedBuildInputs = [ ];
-
     meta = {
       homepage = http://pypi.python.org/pypi/enum/;
       description = "Robust enumerated type support in Python.";
@@ -431,9 +449,7 @@ let pythonPackages = python.modules // rec {
       md5 = "4728e3bd7f72763c1e5dccac0296f8ea";
     };
 
-    buildInputs = [ nose httplib2  ];
-
-    propagatedBuildInputs = [ greenlet ];
+    buildInputs = [ nose httplib2 greenlet ];
 
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
 
@@ -468,10 +484,11 @@ let pythonPackages = python.modules // rec {
       sha256 = "8b3e4fc678c5c41483b3130666583a1c3909713adcd325204daded7b67171ed5";
     };
 
-    propagatedBuildInputs = [ twisted pkgs.pyopenssl ];
+    buildInputs = [ twisted ];
+    propagatedBuildInputs = [ pkgs.pyopenssl ];
 
     # For some reason "python setup.py test" doesn't work with Python 2.6.
-    doCheck = false;
+    #doCheck = false;
 
     meta = {
       homepage = http://foolscap.lothar.com/;
@@ -643,14 +660,14 @@ let pythonPackages = python.modules // rec {
 
 
   libcloud = buildPythonPackage (rec {
-    name = "libcloud-0.3.1";
+    name = "libcloud-0.8.0";
 
     src = fetchurl {
-      url = mirror://apache/incubator/libcloud/apache-libcloud-incubating-0.3.1.tar.bz2;
-      sha256 = "11qilrs4sd4c1mkd64ikrjsc2vwrshhc54n5mh4xrark9c7ayp0y";
+      url = "http://pypi.python.org/packages/source/a/apache-libcloud/apache-${name}.tar.bz2";
+      md5 = "b0ed4698b2be329f2339a77fd40ca7ff";
     };
 
-    buildInputs = [ zopeInterface ];
+    buildInputs = [ mock zopeInterface ];
 
     preConfigure = "cp test/secrets.py-dist test/secrets.py";
 
@@ -833,6 +850,24 @@ let pythonPackages = python.modules // rec {
       license = "BSD-style";
     };
   });
+
+
+  # minimock = buildPythonPackage (rec {
+  #   name = "minimock-1.2.7";
+
+  #   src = fetchurl {
+  #     url = "http://pypi.python.org/packages/source/M/MiniMock/MiniMock-1.2.7.tar.gz";
+  #     md5 = "31e813667ed46b6990630a0f5bd62d94";
+  #   };
+
+  #   meta = {
+  #     description = "The simplest possible mock library";
+
+  #     homepage = http://pypi.python.org/pypi/MiniMock/;
+
+  #     license = "MIT-style";
+  #   };
+  # });
 
 
   mock = buildPythonPackage (rec {
@@ -1333,18 +1368,13 @@ let pythonPackages = python.modules // rec {
     name = "pycurl-7.19.0";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
+      url = "http://pycurl.sourceforge.net/download/pycurl-7.19.0.tar.gz";
       sha256 = "0hh6icdbp7svcq0p57zf520ifzhn7jw64x07k99j7h57qpy2sy7b";
     };
 
     buildInputs = [ libcurl ];
 
     doCheck = false;
-
-    postInstall = ''
-      find $out -name easy-install.pth | xargs rm -v
-      find $out -name 'site.py*' | xargs rm -v
-    '';
 
     meta = {
       homepage = http://pycurl.sourceforge.net/;
@@ -1411,13 +1441,13 @@ let pythonPackages = python.modules // rec {
   };
 
   pylint = buildPythonPackage rec {
-    name = "pylint-0.23.0";
+    name = "pylint-0.25.1";
 
     src = fetchurl {
-      url = "http://ftp.logilab.org/pub/pylint/${name}.tar.gz";
-      sha256 = "07091avcc2b374i5f3blszmawjcin8xssjfryz91qbxybb8r7c6d";
+      url = "http://pypi.python.org/packages/source/p/pylint/${name}.tar.gz";
+      md5 = "728bbc2b339bc3749af013709a7f87a5";
     };
-    propagatedBuildInputs = [astng];
+    propagatedBuildInputs = [ astng ];
   };
 
   pymacs = pkgs.stdenv.mkDerivation rec {
@@ -1548,13 +1578,13 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-
+  # XXX: currently fails to build
   pysvn = pkgs.stdenv.mkDerivation {
-    name = "pysvn-1.7.2";
+    name = "pysvn-1.7.5";
 
     src = fetchurl {
-      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.2.tar.gz";
-      sha256 = "2b2980d200515e754e00a12d99dbce25c1ea90fddf8cba2bfa354c9305c5e455";
+      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.5.tar.gz";
+      sha256 = "cb9664de62a85adba8471eda1894c3831d3400131feeea0e7b9cdd7c15d671ef";
     };
 
     buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
@@ -1563,9 +1593,9 @@ let pythonPackages = python.modules // rec {
     # There seems to be no way to pass that path to configure.
     NIX_CFLAGS_COMPILE="-I${pkgs.aprutil}/include/apr-1";
 
+    # XXX: sort out setting of PYTHONPATH with custom configurePhase
     configurePhase = ''
       cd Source
-      python setup.py backport
       python setup.py configure \
         --apr-inc-dir=${pkgs.apr}/include/apr-1 \
         --apr-lib-dir=${pkgs.apr}/lib \
@@ -1674,12 +1704,9 @@ let pythonPackages = python.modules // rec {
       sha256 = "1c7ipk5vwqnln83rmai5jzyxkjdajdzbk5cgy1z83nyr5hbkgkqr";
     };
 
-    doCheck = false;
-
-    postInstall = ''
-      find $out -name easy-install.pth | xargs rm -v
-      find $out -name 'site.py*' | xargs rm -v
-    '';
+    buildInputs = [ python.modules.bsddb nose ];
+    doCheck = false; # failing tests involving network
+    checkPhase = "python run_tests.py";
 
     meta = {
       description = "RDFLib is a Python library for working with RDF, a simple yet powerful language for representing information.";
@@ -2240,15 +2267,13 @@ let pythonPackages = python.modules // rec {
   };
 
   hgsvn = buildPythonPackage rec {
-    name = "hgsvn-0.1.8";
-    src = fetchurl rec {
-      name = "hgsvn-0.1.8.tar.gz";
-      url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.tar.gz#md5=56209eae48b955754e09185712123428";
-      sha256 = "18a7bj1i0m4shkxmdvw1ci5i0isq5vqf0bpwgrhnk305rijvbpch";
+    name = "hgsvn-0.1.9";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.tar.gz";
+      md5 = "901f2fb04faad5a1e7cf84abfad564fd";
     };
 
-    buildInputs = [ pkgs.setuptools ];
-    doCheck = false;
+    buildInputs = [ nose pkgs.subversion pkgs.mercurial ];
 
     meta = {
       description = "HgSVN";
