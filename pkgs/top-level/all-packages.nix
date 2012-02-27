@@ -2764,7 +2764,7 @@ let
 
   ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
   ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
-  
+
   ruby = ruby19;
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
@@ -2958,8 +2958,8 @@ let
   };
 
   cmake = callPackage ../development/tools/build-managers/cmake { };
-  
-  cmake_2_8_7 = callPackage ../development/tools/build-managers/cmake/2.8.7.nix { 
+
+  cmake_2_8_7 = callPackage ../development/tools/build-managers/cmake/2.8.7.nix {
     zlib = zlib_latest;
   };
 
