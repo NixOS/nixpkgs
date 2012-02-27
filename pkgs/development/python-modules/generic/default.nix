@@ -17,6 +17,8 @@
   # pollute the user environment.
   pythonPath ? []
 
+, preConfigure ? "true"
+
   # distutils registers dependencies in .pth (good) but also creates
   # console_scripts for dependencies in bin/ (bad). easy_install
   # creates no scripts for dependencies (good) but does not register
@@ -84,7 +86,7 @@ python.stdenv.mkDerivation (attrs // {
 
     # enable pth files for dependencies
     export PYTHONPATH="${site}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-  '';
+  '' + preConfigure;
 
   # XXX: I think setuptools is not needed here
   pythonPath = [ setuptools site ] ++ pythonPath;
