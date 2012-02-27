@@ -675,7 +675,7 @@ let pythonPackages = python.modules // rec {
     configureFlags = "--with-python=${python}";
 
     postConfigure = let
-      changeIconv = "-e s:^iconv_includes.*:iconv_includes=r'${pkgs.libxml2.libiconv}':";
+      changeIconv = ''-e "s:^iconv_includes.*:iconv_includes=r'${pkgs.libxml2.libiconv}':"'';
     in
       ''
         cd python
