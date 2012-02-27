@@ -54,6 +54,7 @@
 
 , doCheck ? true
 
+# run after fixupPhase
 , checkPhase ?
     ''
       runHook preCheck
@@ -68,6 +69,9 @@
 # Keep extra attributes from ATTR, e.g., `patchPhase', etc.
 python.stdenv.mkDerivation (attrs // {
   inherit doCheck buildPhase checkPhase;
+
+  # moves checkPhase from after buildPhase to after fixupPhase
+  builder = ./builder.sh;
 
   name = namePrefix + name;
 
