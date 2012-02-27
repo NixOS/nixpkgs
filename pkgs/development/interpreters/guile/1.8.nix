@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cpp-4.5.patch ];
 
+  # GCC 4.6 raises a number of set-but-unused warnings.
+  configureFlags = [ "--disable-error-on-warning" ];
+
   buildNativeInputs = [ makeWrapper gawk ];
   propagatedBuildInputs = [ readline gmp libtool ];
   selfBuildNativeInput = true;
