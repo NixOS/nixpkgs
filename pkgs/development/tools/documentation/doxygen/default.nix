@@ -1,14 +1,14 @@
 { stdenv, fetchurl, perl, flex, bison, qt4 }:
 
 let
-  name = "doxygen-1.7.4";
+  name = "doxygen-1.8.0";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "ftp://ftp.stack.nl/pub/users/dimitri/${name}.src.tar.gz";
-    sha256 = "0rnzyp5f8c454fdkgpg5hpxwmx642spgxcpw3blbvnyw8129jp44";
+    sha256 = "0cymkk8wpws326aqpsixyzr4pk98xgpzrvxxjm76ar79pcs91ykh";
   };
 
   patches = [ ./tmake.patch ];
