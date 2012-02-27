@@ -8,8 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0s7jhvnfihikqp1iwpdz03fad62xkjxci6jiahrh6f3sn664vrwq";
   };
 
-  patches = [ ./pic.patch ]
-    ++ stdenv.lib.optional (stdenv.system != "i686-cygwin") ./dll.patch;
+  patches = [
+    ./pic.patch
+    ./salsa-gcc4.6.patch
+  ] ++ stdenv.lib.optional (stdenv.system != "i686-cygwin") ./dll.patch;
 
 
   buildInputs = [ unzip ]
