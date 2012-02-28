@@ -1102,9 +1102,8 @@ let pythonPackages = python.modules // rec {
     name = "optfunc-git";
 
     src = pkgs.fetchgit {
-      url = "git://github.com/simonw/optfunc.git";
+      url = "http://github.com/simonw/optfunc.git";
       rev = "e3fa034a545ed94ac5a039cf5b170c7d0ee21b7b";
-      sha256 = "916f8d998529aaf1bc450462820af7bf3b0eb0e0a513e4db69781321dcd28151";
     };
 
     installCommand = ''
@@ -1113,7 +1112,7 @@ let pythonPackages = python.modules // rec {
       cp * $dest/
     '';
 
-    checkPhase = "python test.py";
+    doCheck = false;
 
     meta = {
       description = "A new experimental interface to optparse which works by introspecting a function definition";
