@@ -45,7 +45,6 @@ def __boot():
     sys.__egginsert = 0                     # and reset the current one
 
     for item in PYTHONPATH:
-        sys.__egginsert = sys.path.index(os.path.abspath(item))
         addsitedir(item)
 
     sys.__egginsert += oldpos           # restore effective old position
