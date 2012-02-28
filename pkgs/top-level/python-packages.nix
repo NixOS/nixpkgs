@@ -597,6 +597,22 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  iptools = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "iptools-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/iptools/iptools-${version}.tar.gz";
+      md5 = "de60e5fab861f29dbf5f4446f8576532";
+    };
+
+    meta = {
+      description = "Utilities for manipulating IP addresses including a class that can be used to include CIDR network blocks in Django's INTERNAL_IPS setting.";
+      homepage = http://pypi.python.org/pypi/iptools;
+    };
+  };
+
+
   ipy = buildPythonPackage rec {
     version = "0.74";
     name = "ipy-${version}";
