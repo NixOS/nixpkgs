@@ -870,6 +870,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
+  HSH = callPackage ../development/libraries/haskell/HSH {};
+
   HsSyck = callPackage ../development/libraries/haskell/HsSyck {};
 
   HsOpenSSL = callPackage ../development/libraries/haskell/HsOpenSSL {};
