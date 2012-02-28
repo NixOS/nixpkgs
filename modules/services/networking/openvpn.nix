@@ -50,8 +50,8 @@ let
     in {
       description = "OpenVPN instance ‘${name}’";
 
-      startOn = "started network-interfaces";
-      stopOn = "stopping network-interfaces";
+      startOn = mkDefault "started network-interfaces";
+      stopOn = mkDefault "stopping network-interfaces";
 
       path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
 
