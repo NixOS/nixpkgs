@@ -2620,8 +2620,6 @@ let
 
   angelscript = callPackage ../development/interpreters/angelscript {};
 
-  angelscript_2_20 = callPackage ../development/interpreters/angelscript/2.20.nix {};
-
   clisp = callPackage ../development/interpreters/clisp { };
 
   # compatibility issues in 2.47 - at list 2.44.1 is known good
@@ -7972,7 +7970,6 @@ let
 
   rigsofrods = callPackage ../games/rigsofrods {
     mygui = myguiSvn;
-    angelscript = angelscript_2_20;
   };
 
   rogue = callPackage ../games/rogue { };
