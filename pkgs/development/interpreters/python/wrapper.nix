@@ -7,7 +7,6 @@ stdenv.mkDerivation {
   name = "python-${python.version}-wrapper";
 
   buildInputs = [ makeWrapper ];
-  builder = ./wrapper-builder.sh;
   propagatedBuildInputs = [ python ] ++ extraLibs;
 
   unpackPhase = "true";
