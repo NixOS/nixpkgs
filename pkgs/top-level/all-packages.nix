@@ -3007,6 +3007,15 @@ let
 
   doxygen = lowPrio (doxygen_gui.override { qt4 = null; });
 
+  /* XXX: The LaTeX output with Doxygen 1.8.0 makes LaTeX barf:
+
+       ! You can't use `\/' in vertical mode.
+
+     Thus, keep 1.7 around until a better fix is available.  */
+  doxygen_1_7 = callPackage ../development/tools/documentation/doxygen/1.7.nix {
+    qt4 = null;
+  };
+
   doxygen_gui = callPackage ../development/tools/documentation/doxygen { };
 
   eggdbus = callPackage ../development/tools/misc/eggdbus { };
