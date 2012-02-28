@@ -3022,10 +3022,27 @@ rec {
       url = "mirror://cpan/authors/id/D/DA/DAVEBAIRD/${name}.tar.gz";
       sha256 = "1qqh89kz065mkgyg5pjcgbf8qcpzfk8vf1lgkbwynknadmv87zqg";
     };
-    propagatedBuildInputs = [
-      SQLAbstract TestException DBI TestDeep
-    ];
-    buildInputs = [TestPod TestPodCoverage];
+    propagatedBuildInputs =
+      [ SQLAbstract TestException DBI TestDeep ];
+    buildInputs = [ TestPod TestPodCoverage ];
+  };
+
+  SQLSplitStatement = buildPerlPackage rec {
+    name = "SQL-SplitStatement-1.00020";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/SQL/${name}.tar.gz";
+      sha256 = "0bqg45k4c9qkb2ypynlwhpvzsl4ssfagmsalys18s5c79ps30z7p";
+    };
+    buildInputs = [ TestException ];
+    propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];    
+  };
+
+  SQLTokenizer = buildPerlPackage rec {
+    name = "SQL-Tokenizer-0.24";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/SQL/${name}.tar.gz";
+      sha256 = "1qa2dfbzdlr5qqdam9yn78z5w3al5r8577x06qan8wv58ay6ka7s";
+    };
   };
 
   SQLTranslator = buildPerlPackage rec {
