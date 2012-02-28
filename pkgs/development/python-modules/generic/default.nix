@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, wrapPython, lib, site, offlineDistutils }:
+{ python, setuptools, wrapPython, lib, site }:
 
 { name, namePrefix ? "python-"
 
@@ -68,15 +68,6 @@ python.stdenv.mkDerivation (attrs // {
   name = namePrefix + name;
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
-
-  configurePhase = ''
-    # do not allow distutils to make downloads, whatever install command is used
-    export PYTHONPATH="${setuptools}/lib/${python.libPrefix}:$PYTHONPATH"
-    export PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}:$PYTHONPATH"
-
-    # enable pth files for dependencies
-    export PYTHONPATH="${site}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-  '';
 
   # XXX: I think setuptools is not needed here
   pythonPath = [ setuptools site ] ++ pythonPath;
