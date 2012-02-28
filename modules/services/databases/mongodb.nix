@@ -96,8 +96,7 @@ in
 
     jobs.mongodb =
       { description = "MongoDB server";
-        daemonType = "none";
-        respawn = false; # seems to interfere with normal stopping
+        daemonType = "fork";
 
         startOn = "filesystem";
 
@@ -110,7 +109,6 @@ in
           '';
 
         exec = "${pkgs.shadow}/bin/su ${cfg.user} -c \"${mongodb}/bin/mongod --config ${mongoCnf}\"";
-        preStop = "${pkgs.shadow}/bin/su ${cfg.user} -c \"${mongodb}/bin/mongod --config ${mongoCnf} --shutdown\"";
 
         extraConfig = "kill timeout 10";
       };
