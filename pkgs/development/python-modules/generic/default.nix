@@ -17,33 +17,9 @@
   # pollute the user environment.
   pythonPath ? []
 
-  # distutils registers dependencies in .pth (good) but also creates
-  # console_scripts for dependencies in bin/ (bad). easy_install
-  # creates no scripts for dependencies (good) but does not register
-  # them in pth neither (bad) - the combination gives us a pth with
-  # dependencies and scripts only for the package we are currently
-  # installing.
 , installCommand ?
     ''
-      # install the current package with easy_install.pth including dependencies
-      python setup.py install --prefix="$out"
-
-      # remove console_scripts again, because they were created for deps, too
-      rm -Rf "$out"/bin
-
-      # run easy_install to generate scripts for the current package,
-      # it won't reinstall
       easy_install --prefix="$out" .
-
-      # move colliding easy_install.pth to specifically named one
-      mv "$out/lib/${python.libPrefix}/site-packages/"{easy-install.pth,${name}.pth}
-
-      # These cause collisions and our output is not a site anyway
-      # If you need a site, install python-site
-      rm -f "$out/lib/${python.libPrefix}/site-packages/"site.py*
-
-      # If setuptools is a dependency, it is included in $(name}.pth
-      rm -f "$out/lib/${python.libPrefix}/site-packages/setuptools.pth"
     ''
     
 , buildPhase ? "true"
@@ -91,10 +67,6 @@ python.stdenv.mkDerivation (attrs // {
       # dependencies in the user environment (since Python modules don't
       # have something like an RPATH, so the only way to find the
       # dependencies is to have them in the PYTHONPATH variable).
-      #
-      # XXX: this is not needed for things to work (pth pulls in deps)
-      # but would be nice to have anyway - However, python deps end up
-      # in propagated-build-native-inputs
       if test -e $out/nix-support/propagated-build-inputs; then
           ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
       fi
