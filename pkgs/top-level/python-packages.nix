@@ -8,7 +8,7 @@ let pythonPackages = python.modules // rec {
 
 
   buildPythonPackage = import ../development/python-modules/generic {
-    inherit (pkgs) lib unzip;
+    inherit (pkgs) lib;
     inherit python wrapPython setuptools site offlineDistutils;
   };
 
@@ -84,7 +84,7 @@ let pythonPackages = python.modules // rec {
       sha1 = "fa4aec08e59fa5964197f59ba42408d64031675b";
     };
 
-    buildInputs = [ pkgs.sqlite ];
+    buildInputs = [ pkgs.unzip pkgs.sqlite ];
 
     doCheck = false;
 
@@ -102,6 +102,8 @@ let pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/a/argparse/${name}.zip";
       sha256 = "ee6da1aaad8b08a74a33eb82264b1a2bf12a7d5aefc7e9d7d40a8f8fa9912e62";
     };
+
+    buildInputs = [ pkgs.unzip ];
 
     # How do we run the tests?
     doCheck = false;
@@ -285,6 +287,8 @@ let pythonPackages = python.modules // rec {
       url = http://cssutils.googlecode.com/files/cssutils-0.9.7a6.zip;
       sha256 = "1i5n97l20kn2w9v6x8ybcdnl323vy8lcc5qlxz5l89di36a2skgw";
     };
+
+    buildInputs = [ pkgs.unzip ];
 
     # The tests fail - I don't know why
     doCheck = false;
@@ -1637,7 +1641,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "204aca8b42dbe90e460794d743dd16182011da85507bfd4f092f9f76e0688040";
     };
 
-    buildInputs = [ pkgs.pyrex ];
+    buildInputs = [ pkgs.unzip pkgs.pyrex ];
     propagatedBuildInputs = [ pkgs.libyaml ];
 
     meta = {
@@ -2112,6 +2116,8 @@ let pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/W/WebOb/WebOb-${version}.zip";
       md5 = "8e46dd755f6998d471bfbcb4def897ff";
     };
+
+    buildInputs = [ pkgs.unzip ];
 
     # The test requires "webtest", which is a cyclic dependency.  (WTF?)
     doCheck = false;

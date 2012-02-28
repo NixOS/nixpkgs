@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, wrapPython, lib, site, offlineDistutils, unzip }:
+{ python, setuptools, wrapPython, lib, site, offlineDistutils }:
 
 { name, namePrefix ? "python-"
 
@@ -71,7 +71,7 @@ python.stdenv.mkDerivation (attrs // {
 
   name = namePrefix + name;
 
-  buildInputs = [ python wrapPython setuptools unzip ] ++ buildInputs ++ pythonPath;
+  buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
   preConfigure = ''
     # do not allow distutils to make downloads, whatever install command is used
