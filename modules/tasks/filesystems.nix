@@ -3,9 +3,12 @@
 with pkgs.lib;
 
 let
+  needsBtrfsProgs = any (fs: fs.fsType == "btrfs") config.fileSystems;
 
   # Packages that provide fsck backends.
-  fsPackages = [ pkgs.e2fsprogs pkgs.reiserfsprogs pkgs.dosfstools ];
+  fsPackages = [ pkgs.e2fsprogs pkgs.reiserfsprogs pkgs.dosfstools ]
+             ++ optional needsBtrfsProgs pkgs.btrfsProgs;
+
 
 in
 
@@ -175,6 +178,7 @@ in
             exec > /dev/console 2>&1
             echo "mounting filesystems..."
             export PATH=${config.system.sbin.mount}/bin:${makeSearchPath "sbin" ([pkgs.utillinux] ++ fsPackages)}:$PATH
+            ${optionalString needsBtrfsProgs "${pkgs.btrfsProgs}/bin/btrfs device scan"}
             ${pkgs.mountall}/sbin/mountall
           '';
       };
