@@ -1629,7 +1629,9 @@ let
 
   xorriso = callPackage ../tools/cd-dvd/xorriso { };
 
-  xpf = callPackage ../tools/text/xml/xpf { };
+  xpf = callPackage ../tools/text/xml/xpf {
+    libxml2 = libxml2Python;
+  };
 
   xsel = callPackage ../tools/misc/xsel { };
 
