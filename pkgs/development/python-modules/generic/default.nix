@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, wrapPython, lib, site }:
+{ python, setuptools, wrapPython, lib }:
 
 { name, namePrefix ? "python-"
 
@@ -69,8 +69,7 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
-  # XXX: I think setuptools is not needed here
-  pythonPath = [ setuptools site ] ++ pythonPath;
+  pythonPath = [ setuptools] ++ pythonPath;
 
   # XXX: Should we run `easy_install --always-unzip'?  It doesn't seem
   # to have a noticeable impact on small scripts.
