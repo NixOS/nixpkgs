@@ -30,16 +30,10 @@ wrapPythonProgramsIn() {
             sed -i "$i" -e "1 s^.*/env[ ]*python^#! $python^"
         fi
         
-        # PYTHONPATH is suffixed, PATH is prefixed. Reasoning:
-        # PATH is set in the environment and our packages' bin need to
-        # be chosen over the default PATH. PYTHONPATH is usually not
-        # set, so we can use it to override the modules chosen at
-        # install time. If we would want the same for PATH we could
-        # introduce PATH_OVERWRITE or similar.
         if head -n1 "$i" | grep -q /python; then
             echo "wrapping \`$i'..."
             wrapProgram "$i" \
-                --suffix PYTHONPATH ":" "$program_PYTHONPATH" \
+                --prefix PYTHONPATH ":" "$program_PYTHONPATH" \
                 --prefix PATH ":" $program_PATH
         fi
     done
