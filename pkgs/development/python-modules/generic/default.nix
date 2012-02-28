@@ -28,19 +28,15 @@
       # install the current package with easy_install.pth including dependencies
       python setup.py install --prefix="$out"
 
-      # plain distutils knows no dependencies
-      eapth="$out"/lib/${python.libPrefix}/site-packages/easy-install.pth
-      if [ -e "$eapth" ]; then
-          # remove console_scripts again, because they were created for deps, too
-          rm -Rf "$out"/bin
+      # remove console_scripts again, because they were created for deps, too
+      rm -Rf "$out"/bin
 
-          # run easy_install to generate scripts for the current package,
-          # it won't reinstall
-          easy_install --prefix="$out" .
+      # run easy_install to generate scripts for the current package,
+      # it won't reinstall
+      easy_install --prefix="$out" .
 
-          # move colliding easy_install.pth to specifically named one
-          mv "$eapth" $(dirname "$eapth")/${name}.pth
-      fi
+      # move colliding easy_install.pth to specifically named one
+      mv "$out/lib/${python.libPrefix}/site-packages/"{easy-install.pth,${name}.pth}
 
       # These cause collisions and our output is not a site anyway
       # If you need a site, install python-site
