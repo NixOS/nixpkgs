@@ -665,35 +665,6 @@ let pythonPackages = python.modules // rec {
   });
 
 
-  libxml2 = buildPythonPackage (rec {
-    name = pkgs.libxml2.name;
-    src = pkgs.libxml2.src;
-
-    buildInputs = [ python ];
-    propagatedBuildInputs = [ pkgs.libxml2 ];
-
-    configureFlags = "--with-python=${python}";
-
-    postConfigure = ''
-      cd python
-      sed -i setup.py \
-          -e "s:^ROOT.*:ROOT = r'${pkgs.libxml2}':" \
-          -e "s:^iconv_includes.*:iconv_includes= r'${pkgs.libxml2.libiconv}':"
-    '';
-
-    # has no tests
-    doCheck = false;
-
-    passthru = { lib = pkgs.libxml2; };
-
-    meta = {
-      homepage = http://xmlsoft.org/;
-      description = "Python bindings for libxml2";
-      license = "bsd";
-    };
-  });
-
-
   lockfile = buildPythonPackage rec {
     name = "lockfile-0.9.1";
 

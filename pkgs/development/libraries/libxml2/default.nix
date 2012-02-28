@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, libiconvOrLibc, zlib }:
+{stdenv, fetchurl, zlib, python ? null, pythonSupport ? true }:
+
+assert pythonSupport -> python != null;
 
 stdenv.mkDerivation {
   name = "libxml2-2.7.7";
@@ -8,11 +10,15 @@ stdenv.mkDerivation {
     sha256 = "03kkknm7xl77qfdig8mzalsi8ljsyblzin18gy3h8zranffrpyzs";
   };
 
-  propagatedBuildInputs = [ libiconvOrLibc zlib ];
+  configureFlags = ''                                                  
+    ${if pythonSupport then "--with-python=${python}" else ""}         
+  '';
+  
+  propagatedBuildInputs = [zlib];
 
   setupHook = ./setup-hook.sh;
 
-  passthru = { libiconv = libiconvOrLibc; };
+  passthru = {inherit pythonSupport;};
 
   meta = {
     homepage = http://xmlsoft.org/;
