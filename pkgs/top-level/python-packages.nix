@@ -19,12 +19,6 @@ let pythonPackages = python.modules // rec {
   };
 
 
-  site = import ../development/python-modules/site {
-    inherit (pkgs) stdenv;
-    inherit python;
-  };
-
-
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl;
     inherit buildPythonPackage pythonPackages;
