@@ -73,7 +73,7 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
-  preConfigure = ''
+  configurePhase = ''
     # do not allow distutils to make downloads, whatever install command is used
     export PYTHONPATH="${setuptools}/lib/${python.libPrefix}:$PYTHONPATH"
     export PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}:$PYTHONPATH"
