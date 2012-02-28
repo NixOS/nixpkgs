@@ -1571,6 +1571,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HaRe = callPackage ../development/tools/haskell/HaRe {};
 
+  hasktags = callPackage ../development/tools/haskell/hasktags {};
+
   hlint = callPackage ../development/tools/haskell/hlint {};
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
