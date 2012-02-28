@@ -5989,6 +5989,8 @@ let
 
   numactl = callPackage ../os-specific/linux/numactl { };
 
+  gogoclient = callPackage ../os-specific/linux/gogoclient { };
+
   gw6c = builderDefsPackage (import ../os-specific/linux/gw6c) {
     inherit fetchurl stdenv nettools openssl procps iproute;
   };
