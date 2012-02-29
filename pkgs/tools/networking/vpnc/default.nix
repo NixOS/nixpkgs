@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "1128860lis89g1s21hqxvap2nq426c9j4bvgghncc1zj0ays7kj6";
   };
 
-  patches = [ ./makefile.patch ];
+  patches = [ ./makefile.patch ./vpnc-script.patch ];
 
   # The `etc/vpnc/vpnc-script' script relies on `which' and on
   # `ifconfig' as found in net-tools (not GNU Inetutils).
