@@ -2,11 +2,11 @@
 stdenv.mkDerivation rec {
 
   name = "vidalia-${version}";
-  version = "0.2.15";
+  version = "0.2.17";
 
   src = fetchurl {
     url = "https://www.torproject.org/dist/vidalia/${name}.tar.gz";
-    sha256 = "02c8q6l93w1f9jwnl13jvpzk8vms3lrqz41bs36ny7cfzgczv625";
+    sha256 = "0x0vb37h2d5njxmqkss03ybv7b7jw25682xb793mix1m8l0hs44r";
   };
 
   buildInputs = [ cmake qt4 ];
