@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "ff6d863c42b4ef798f50ff5eff77b47b77b5c0d28b6f65364e8a436a216dc591";
   };
 
-  buildInputs = [ocaml findlib python]; 
+  buildInputs = [ocaml findlib python ocaml_make];
 
   createFindlibDestdir = true;
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   # fix some paths to the appropriate store paths.
   patchPhase = ''
-    sed -i "Makefile" -e's|/usr/include/OCamlMakefile|${ocaml_make}|g'
+    sed -i "Makefile" -e's|/usr/include/OCamlMakefile|${ocaml_make}/include/OCamlMakefile|g'
     sed -i "Makefile" -e's|/usr|${python}|g'
     '';
 
