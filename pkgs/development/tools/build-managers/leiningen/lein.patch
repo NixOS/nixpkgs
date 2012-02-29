@@ -1,15 +1,14 @@
---- lein-pkg	2012-01-09 20:47:44.000000000 -0800
-+++ lein-pkg-nix	2012-01-09 20:45:01.000000000 -0800
-@@ -70,7 +70,7 @@
+--- lein-pkg	2012-02-28 15:26:40.000000000 -0800
++++ lein-pkg-nix	2012-02-28 17:17:02.000000000 -0800
+@@ -71,30 +71,14 @@
  LEIN_PLUGIN_PATH="$(echo "$DEV_PLUGINS" | tr \\n :)"
  LEIN_USER_PLUGIN_PATH="$(echo "$(unique_user_plugins)" | tr \\n :)"
  CLASSPATH="$CLASSPATH:$LEIN_PLUGIN_PATH:$LEIN_USER_PLUGIN_PATH:test/:src/:resources/"
 -CLOJURE_JAR="/usr/share/java/clojure-1.2.jar:/usr/share/java/asm3.jar:/usr/share/java/asm3-commons.jar"
 +CLOJURE_JAR="$(dirname $0)/../lib/*clojure-1.2.1.jar"
- NULL_DEVICE=/dev/null
  
  # apply context specific CLASSPATH entries
-@@ -78,23 +78,7 @@
+ if [ -f .lein-classpath ]; then
      CLASSPATH="`cat .lein-classpath`:$CLASSPATH"
  fi
  
@@ -26,11 +25,8 @@
 -
 -# Do not use installed leiningen jar during self-compilation
 -if ! { [ "$1" = "compile" ] &&
--       grep -qsE 'defproject leiningen[[:space:]]+"[[:digit:].]+"' \
--         project.clj ;}; then
+-        grep -qsE 'defproject leiningen[[:space:]]+"[[:digit:].]+"' \
+-            project.clj ;}; then
 -    CLASSPATH="$CLASSPATH":/usr/share/java/leiningen-$LEIN_VERSION.jar
 -fi
 +CLASSPATH="$CLASSPATH:$(dirname $0)/../lib/*"
- 
- if [ $DEBUG ]; then
-     echo $CLASSPATH
