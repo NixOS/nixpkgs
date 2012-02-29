@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "filestore";
-  version = "0.4.0.4";
-  sha256 = "14rp2689gjnk9pqk2xv4m3q3icgfvbik32c2d6gx4l2y7n78dsbx";
+  version = "0.4.1";
+  sha256 = "02ki6b4rbmk463qmmqia7igkrsr7h1kxal94k6pikkikylx2f8r7";
   buildDepends = [ Diff filepath parsec split time utf8String xml ];
   meta = {
     homepage = "http://johnmacfarlane.net/repos/filestore";
