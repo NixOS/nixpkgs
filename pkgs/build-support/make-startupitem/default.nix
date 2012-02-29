@@ -2,8 +2,9 @@
 # as autostart item.
 
 {stdenv, lib}:
-{ name     # name of the desktop file (without .desktop)
-, package  # package where the desktop file resides in
+{ name            # name of the desktop file (without .desktop)
+, package         # package where the desktop file resides in
+, srcPrefix ? ""  # additional prefix that the desktop file may have in the 'package'
 , after ? null
 , condition ? null
 , phase ? "2"
@@ -20,7 +21,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     ensureDir $out/share/autostart
     target=${name}.desktop
-    cp ${package}/share/applications/${name}.desktop $target
+    cp ${package}/share/applications/${srcPrefix}${name}.desktop $target
     chmod +rw $target
     echo "X-KDE-autostart-phase=${phase}" >> $target
     ${lib.optionalString (after != null) ''echo "${after}" >> $target''}
