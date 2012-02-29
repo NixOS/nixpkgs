@@ -6672,6 +6672,8 @@ let
 
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
 
+    ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
+
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
 
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
