@@ -5302,6 +5302,10 @@ let
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
 
+  apparmor = callPackage ../os-specific/linux/apparmor {
+    inherit (perlPackages) LocaleGettext TermReadKey RpcXML;
+  };
+
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
   bluez = callPackage ../os-specific/linux/bluez { };
