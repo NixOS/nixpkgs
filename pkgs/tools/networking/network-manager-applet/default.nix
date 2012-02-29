@@ -1,11 +1,11 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, glib, libglade
 , networkmanager, GConf, libnotify, gnome_keyring, dbus_glib
-, polkit, xz }:
+, polkit, isocodes, xz }:
 
 let
   pn = "network-manager-applet";
   major = "0.9";
-  version = "${major}.0";
+  version = "${major}.2.0";
 in
 
 stdenv.mkDerivation rec {
@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pn}/${major}/${name}.tar.xz";
-    sha256 = "097y7c29bgd9wm0im06ka3cd94zssg4s626y5lw7yrypq3hzg18f";
+    sha256 = "ebe725d0140f658c6a3f384674c72fba7a7c417df3be0e84ee8f45e6dfc219de";
   };
 
   buildInputs = [ gtk libglade networkmanager GConf libnotify gnome_keyring
-    polkit];
+    polkit isocodes ];
 
   buildNativeInputs = [ intltool pkgconfig xz ];
 
