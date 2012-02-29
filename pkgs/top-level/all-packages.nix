@@ -1460,6 +1460,8 @@ let
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
+  vidalia = callPackage ../tools/security/vidalia { };
+
   vbetool = builderDefsPackage ../tools/system/vbetool {
     inherit pciutils libx86 zlib;
   };
