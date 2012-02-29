@@ -49,10 +49,10 @@ in
       { # /etc/hosts: Hostname-to-IP mappings.
         source = pkgs.writeText "hosts"
           ''
-            ${cfg.extraHosts}
             ${optionalString (cfg.hostName != "")
               "127.0.0.1 ${hostnameWithDomain} ${cfg.hostName}"}
             127.0.0.1 localhost ${localhostWithDomain}
+            ${cfg.extraHosts}
           '';
         target = "hosts";
       }
