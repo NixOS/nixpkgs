@@ -1900,9 +1900,6 @@ let
 
   gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
     inherit noSysDirs;
-    cross = null;
-    libcCross = null;
-    binutilsCross = null;
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
