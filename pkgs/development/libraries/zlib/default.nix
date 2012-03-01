@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
     sha256 = "06x6m33ls1606ni7275q5z392csvh18dgs55kshfnvrfal45w8r1";
   };
 
-  patches = [ ];
-
   configureFlags = if static then "" else "--shared";
 
   preConfigure = ''
@@ -30,7 +28,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     dontStrip = if static then true else false;
-  } // (if stdenv.cross.libc == "msvcrt" then {
+  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
     configurePhase=''
       installFlags="BINARY_PATH=$out/bin INCLUDE_PATH=$out/include LIBRARY_PATH=$out/lib"
     '';
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
       "-f" "win32/Makefile.gcc"
       "PREFIX=${stdenv.cross.config}-"
     ] ++ (if static then [] else [ "SHARED_MODE=1" ]);
-  } else {});
+  };
 
   # zlib doesn't like the automatic --disable-shared from the Cygwin stdenv.
   cygwinConfigureEnableShared = true;
