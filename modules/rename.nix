@@ -67,6 +67,8 @@ in zipModules ([]
 # ++ rename alias "services.xserver.slim.theme" "services.xserver.displayManager.slim.theme"
 ++ rename obsolete "environment.extraPackages" "environment.systemPackages"
 
+++ rename obsolete "security.extraSetuidPrograms" "security.setuidPrograms"
+
 # Old Grub-related options.
 ++ rename obsolete "boot.copyKernels" "boot.loader.grub.copyKernels"
 ++ rename obsolete "boot.extraGrubEntries" "boot.loader.grub.extraEntries"

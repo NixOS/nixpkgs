@@ -27,17 +27,11 @@ in
     security.setuidPrograms = mkOption {
       default = [];
       description = ''
-        Only the programs from system path listed here will be made
-        setuid root (through a wrapper program).
-      '';
-    };
-
-    security.extraSetuidPrograms = mkOption {
-      default = [];
-      example = ["fusermount"];
-      description = ''
-        This option lists additional programs that must be made setuid
-        root. Obsolete, use setuidPrograms instead.
+        The Nix store cannot contain setuid/setgid programs directly.
+        For this reason, NixOS can automatically generate wrapper
+        programs that have the necessary privileges.  This option
+        lists the names of programs in the system environment for
+        which setuid root wrappers should be created.
       '';
     };
 
@@ -62,8 +56,9 @@ in
       default = "/var/setuid-wrappers";
       description = ''
         This option defines the path to the setuid wrappers.  It
-        should generally not be overriden. Some packages in nixpkgs rely on
-        wrapperDir == /var/setuid-wrappers
+        should generally not be overriden. Some packages in Nixpkgs
+        expect that <option>wrapperDir</option> is
+        <filename>/var/setuid-wrappers</filename>.
       '';
     };
 
@@ -81,8 +76,7 @@ in
       let
         setuidPrograms =
           (map (x: { program = x; owner = "root"; group = "root"; setuid = true; })
-            (config.security.setuidPrograms ++
-             config.security.extraSetuidPrograms))
+            config.security.setuidPrograms)
           ++ config.security.setuidOwners;
 
         makeSetuidWrapper =
