@@ -148,7 +148,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexBase    = self.regexBase_0_93_2;       # 7.4.1 ok
     regexCompat  = self.regexCompat_0_93_1;     # 7.4.1 ok
     regexPosix   = self.regexPosix_0_95_1;      # 7.4.1 ok
-    stm          = self.stm_2_2_0_1;            # 7.4.1 ok
+    stm          = self.stm_2_3;		# 7.4.1 ok
     syb          = self.syb_0_3_6;              # 7.4.1 ok
     xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
     zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
@@ -456,7 +456,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   base64String = callPackage ../development/libraries/haskell/base64-string {};
 
-  base64Bytestring = callPackage ../development/libraries/haskell/base64-bytestring {};
+  base64Bytestring_0_1_0_3 = callPackage ../development/libraries/haskell/base64-bytestring/0.1.0.3.nix {};
+  base64Bytestring_0_1_1_0 = callPackage ../development/libraries/haskell/base64-bytestring/0.1.1.0.nix {};
+  base64Bytestring = self.base64Bytestring_0_1_0_3; # Version 0.1.1.0 has serious performance issues.
 
   baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
 
@@ -868,6 +870,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
 
+  HSH = callPackage ../development/libraries/haskell/HSH {};
+
   HsSyck = callPackage ../development/libraries/haskell/HsSyck {};
 
   HsOpenSSL = callPackage ../development/libraries/haskell/HsOpenSSL {};
@@ -906,6 +910,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   hxtRegexXmlschema = callPackage ../development/libraries/haskell/hxt-regex-xmlschema {};
 
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
+
+  IfElse = callPackage ../development/libraries/haskell/IfElse {};
 
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
 
@@ -1283,7 +1289,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   stm_2_1_1_2 = callPackage ../development/libraries/haskell/stm/2.1.1.2.nix {};
   stm_2_1_2_1 = callPackage ../development/libraries/haskell/stm/2.1.2.1.nix {};
   stm_2_2_0_1 = callPackage ../development/libraries/haskell/stm/2.2.0.1.nix {};
-  stm = self.stm_2_1_1_2;
+  stm_2_3 = callPackage ../development/libraries/haskell/stm/2.3.nix {};
+  stm = self.stm_2_3;
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
 
@@ -1568,6 +1575,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
   HaRe = callPackage ../development/tools/haskell/HaRe {};
+
+  haskdogs = callPackage ../development/tools/haskell/haskdogs {};
+
+  hasktags = callPackage ../development/tools/haskell/hasktags {};
 
   hlint = callPackage ../development/tools/haskell/hlint {};
 

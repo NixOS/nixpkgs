@@ -1,0 +1,12 @@
+diff -ubr vpnc-0.5.3-orig/vpnc-script.in vpnc-0.5.3/vpnc-script.in
+--- vpnc-0.5.3-orig/vpnc-script.in	2012-02-29 23:03:35.289636602 +0100
++++ vpnc-0.5.3/vpnc-script.in	2012-02-29 23:03:59.597307445 +0100
+@@ -116,7 +116,7 @@
+ 
+ if [ -n "$IPROUTE" ]; then
+ 	fix_ip_get_output () {
+-		sed 's/cache//;s/metric \?[0-9]\+ [0-9]\+//g;s/hoplimit [0-9]\+//g'
++		sed 's/cache//;s/metric \?[0-9]\+ [0-9]\+//g;s/hoplimit [0-9]\+//g;s/ipid 0x....//g'
+ 	}
+ 
+ 	set_vpngateway_route() {

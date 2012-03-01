@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
       libX11 libXext libXft
     ];
                   
-  meta = with stdenv.lib; {
+  meta = {
     description = "Binary news reader of KDE";
   };
 }

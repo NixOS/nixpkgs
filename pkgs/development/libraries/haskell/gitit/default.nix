@@ -1,21 +1,22 @@
-{ cabal, cgi, ConfigFile, feed, filepath, filestore, ghcPaths
-, happstackServer, happstackUtil, highlightingKate, hslogger
-, HStringTemplate, HTTP, json, mtl, network, pandoc, pandocTypes
-, parsec, random, recaptcha, safe, SHA, syb, text, time, url
-, utf8String, xhtml, xml, xssSanitize, zlib
+{ cabal, blazeHtml, cgi, ConfigFile, feed, filepath, filestore
+, ghcPaths, happstackServer, happstackUtil, highlightingKate
+, hslogger, HStringTemplate, HTTP, json, mtl, network, pandoc
+, pandocTypes, parsec, random, recaptcha, safe, SHA, syb, tagsoup
+, text, time, url, utf8String, xhtml, xml, xssSanitize, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "gitit";
-  version = "0.8.1";
-  sha256 = "1b5i6fm68vwhlvgz0m7xxzklkxc2c6lrqyqfqyjs93p5j0aqgvfn";
+  version = "0.9";
+  sha256 = "00kjfmczj5m3b8r8djdpad8d27s44z7pf76yyc0sdja1f3bd4mlp";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    cgi ConfigFile feed filepath filestore ghcPaths happstackServer
-    happstackUtil highlightingKate hslogger HStringTemplate HTTP json
-    mtl network pandoc pandocTypes parsec random recaptcha safe SHA syb
-    text time url utf8String xhtml xml xssSanitize zlib
+    blazeHtml cgi ConfigFile feed filepath filestore ghcPaths
+    happstackServer happstackUtil highlightingKate hslogger
+    HStringTemplate HTTP json mtl network pandoc pandocTypes parsec
+    random recaptcha safe SHA syb tagsoup text time url utf8String
+    xhtml xml xssSanitize zlib
   ];
   meta = {
     homepage = "http://gitit.net";

@@ -61,4 +61,11 @@ in
     buildInputs = [ jdk ];
     JAVA_HOME = jdk;
   };
+
+  buildr = {
+    # Many Buildfiles rely on RUBYLIB containing the current directory
+    # (as was the default in Ruby < 1.9.2).
+    extraWrapperFlags = "--prefix RUBYLIB : .";
+  };
+  
 }

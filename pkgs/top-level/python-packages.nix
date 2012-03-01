@@ -597,6 +597,22 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  iptools = buildPythonPackage rec {
+    version = "0.4.0";
+    name = "iptools-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/iptools/iptools-${version}.tar.gz";
+      md5 = "de60e5fab861f29dbf5f4446f8576532";
+    };
+
+    meta = {
+      description = "Utilities for manipulating IP addresses including a class that can be used to include CIDR network blocks in Django's INTERNAL_IPS setting.";
+      homepage = http://pypi.python.org/pypi/iptools;
+    };
+  };
+
+
   ipy = buildPythonPackage rec {
     version = "0.74";
     name = "ipy-${version}";
@@ -1918,11 +1934,11 @@ let pythonPackages = python.modules // rec {
   };
 
   taskcoach = buildPythonPackage rec {
-    name = "TaskCoach-1.3.7";
+    name = "TaskCoach-1.3.8";
 
     src = fetchurl {
       url = "mirror://sourceforge/taskcoach/${name}.tar.gz";
-      sha256 = "069hyxc8ypn51a8imfkfqdalp1l4pv09swj2v3bi4hjscq9af6i8";
+      sha256 = "0gc277cgnw6f167lrbxlf7rmgyjxwzgkmi77qz9xwvnwcj2l94xn";
     };
 
     propagatedBuildInputs = [ wxPython ];

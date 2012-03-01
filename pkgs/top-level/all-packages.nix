@@ -802,8 +802,6 @@ let
 
   grub19x = callPackage ../tools/misc/grub/1.9x.nix { };
 
-  grub198 = callPackage ../tools/misc/grub/1.98.nix { };
-
   grub2 = grub19x;
 
   grub2_efi = callPackage ../tools/misc/grub/1.9x.nix { EFIsupport = true; };
@@ -1456,6 +1454,8 @@ let
 
   vacuum = callPackage ../applications/networking/instant-messengers/vacuum {};
 
+  vidalia = callPackage ../tools/security/vidalia { };
+
   vbetool = builderDefsPackage ../tools/system/vbetool {
     inherit pciutils libx86 zlib;
   };
@@ -1892,9 +1892,6 @@ let
     stripped = false;
 
     inherit noSysDirs;
-    cross = null;
-    libcCross = null;
-    binutilsCross = null;
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
@@ -1910,6 +1907,16 @@ let
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
     profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
+
+    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+    libpthreadCross =
+      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+      then gnu.libpthreadCross
+      else null;
   }));
 
   # A non-stripped version of GCC.
@@ -2738,7 +2745,8 @@ let
 
   ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
   ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
-  ruby = callPackage ../development/interpreters/ruby { };
+
+  ruby = ruby19;
 
   rubyLibs = recurseIntoAttrs (callPackage ../development/interpreters/ruby/libs.nix { });
 
@@ -2932,6 +2940,10 @@ let
 
   cmake = callPackage ../development/tools/build-managers/cmake { };
 
+  cmake_2_8_7 = callPackage ../development/tools/build-managers/cmake/2.8.7.nix {
+    zlib = zlib_latest;
+  };
+
   cmake264 = callPackage ../development/tools/build-managers/cmake/264.nix { };
 
   cmakeCurses = cmake.override { useNcurses = true; };
@@ -2966,6 +2978,12 @@ let
   };
 
   doxygen = lowPrio (doxygen_gui.override { qt4 = null; });
+
+  /* XXX: The LaTeX output with Doxygen 1.8.0 makes LaTeX barf.
+     See <https://bugzilla.gnome.org/show_bug.cgi?id=670973>.  */
+  doxygen_1_7 = callPackage ../development/tools/documentation/doxygen/1.7.nix {
+    qt4 = null;
+  };
 
   doxygen_gui = callPackage ../development/tools/documentation/doxygen { };
 
@@ -4812,6 +4830,9 @@ let
     fetchurl = fetchurlBoot;
   };
 
+  # To be removed in stdenv-updates; zlib is already fixed and the latest there
+  zlib_latest = callPackage ../development/libraries/zlib/latest.nix { };
+
   zlibStatic = lowPrio (appendToName "static" (import ../development/libraries/zlib {
     inherit fetchurl stdenv;
     static = true;
@@ -5248,6 +5269,10 @@ let
   microcode2ucode = callPackage ../os-specific/linux/microcode/converter.nix { };
 
   microcodeIntel = callPackage ../os-specific/linux/microcode/intel.nix { };
+
+  apparmor = callPackage ../os-specific/linux/apparmor {
+    inherit (perlPackages) LocaleGettext TermReadKey RpcXML;
+  };
 
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
@@ -5807,6 +5832,8 @@ let
 
   numactl = callPackage ../os-specific/linux/numactl { };
 
+  gogoclient = callPackage ../os-specific/linux/gogoclient { };
+
   gw6c = builderDefsPackage (import ../os-specific/linux/gw6c) {
     inherit fetchurl stdenv nettools openssl procps iproute;
   };
@@ -5861,6 +5888,7 @@ let
   pwdutils = callPackage ../os-specific/linux/pwdutils { };
 
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
+  qemu_kvm_1_0 = callPackage ../os-specific/linux/qemu-kvm/1.0.nix { };
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
 
@@ -6271,14 +6299,9 @@ let
     gnutls = gnutls2;
   };
 
-  blender = callPackage ../applications/misc/blender/2.49.nix { };
-
-  blender_2_57 = lowPrio (import ../applications/misc/blender {
-    inherit stdenv fetchurl SDL cmake gettext ilmbase libjpeg libpng
-      libsamplerate libtiff mesa openal openexr openjpeg zlib;
-    inherit (xlibs) libXi;
+  blender = callPackage  ../applications/misc/blender {
     python = python32;
-  });
+  };
 
   bvi = callPackage ../applications/editors/bvi { };
 
@@ -6479,6 +6502,8 @@ let
     stratego = callPackage ../applications/editors/emacs-modes/stratego { };
 
     haskellMode = callPackage ../applications/editors/emacs-modes/haskell { };
+
+    ocamlMode = callPackage ../applications/editors/emacs-modes/ocaml { };
 
     hol_light_mode = callPackage ../applications/editors/emacs-modes/hol_light { };
 
@@ -7451,7 +7476,11 @@ let
     inherit (xlibs) libX11;
   };
 
-  vlc = callPackage ../applications/video/vlc { };
+  vlc = callPackage ../applications/video/vlc {
+    # To be removed on stdenv-updates. It fails on i686-linux with
+    # the stdenv zlib.
+    zlib = zlib_latest;
+  };
 
   vnstat = callPackage ../applications/networking/vnstat { };
 

@@ -1,16 +1,24 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "ocaml-make-6.33.0";
+let
+
+  version = "6.36.0";
+  sha256 = "7c9a771d79bf945050dc7530957f4b61669976177818185e64c002cbfd75e3a2";
+
+in stdenv.mkDerivation {
+  name = "ocaml-make-${version}";
 
   src = fetchurl {
-    url = "http://www.ocaml.info/ocaml_sources/ocaml-make-6.33.0.tar.gz";
-    sha256 = "3054303ba04e4bbbe038e08310fabc3e5a0e3899bbba33d9ac5ed7a1b9d1e05a";
+    url = "http://hg.ocaml.info/release/ocaml-make/archive/release-${version}.tar.bz2";
+    inherit sha256;
   };
 
-  phases = [ "unpackPhase" "installPhase" ];
+  installPhase = ''
+    ensureDir "$out/include/"
+    cp OCamlMakefile "$out/include/"
+  '';
 
-  installPhase = "cp OCamlMakefile $out";
+  setupHook = ./setup-hook.sh;
 
   meta = {
     homepage = "http://www.ocaml.info/home/ocaml_sources.html";

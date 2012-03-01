@@ -23,7 +23,7 @@ let
   sha256 = "72aeaf00727da9f3fe39386dcf883bb303de928ba43c738fcc5bb62b93eca252";
 
   # relative location where the dropbox libraries are stored
-  sharedir = "share/dropbox";
+  appdir = "opt/dropbox";
 
   # Libraries referenced by dropbox binary.
   # Be aware that future versions of the dropbox binary may refer
@@ -60,17 +60,17 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir "$out/${sharedir}"
-    cp -r .dropbox-dist/* "$out/${sharedir}/"
+    ensureDir "$out/${appdir}"
+    cp -r .dropbox-dist/* "$out/${appdir}/"
     ensureDir "$out/bin"
-    ln -s "$out/${sharedir}/dropbox" "$out/bin/dropbox"
+    ln -s "$out/${appdir}/dropbox" "$out/bin/dropbox"
 
     patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 \
-      "$out/${sharedir}/dropbox"
+      "$out/${appdir}/dropbox"
 
-    RPATH=${ldpath}:${gcc.gcc}/lib64:$out/${sharedir}
+    RPATH=${ldpath}:${gcc.gcc}/lib64:$out/${appdir}
     echo "updating rpaths to: $RPATH"
-    find "$out/${sharedir}" -type f -a -perm +0100 \
+    find "$out/${appdir}" -type f -a -perm +0100 \
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
 
     ensureDir "$out/share/applications"

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "clientsession";
-  version = "0.7.4";
-  sha256 = "050mg3rzyld4v2b9v1pc1q563sp7sffiapvr8ks8f46ibl17lvss";
+  version = "0.7.4.1";
+  sha256 = "1fnrngbx86zcvh0ybv7ans132d216ayxdzlgw0x4qh0sw9r3w2ip";
   buildDepends = [
     base64Bytestring cereal cprngAes cryptoApi cryptocipher entropy
     skein tagged

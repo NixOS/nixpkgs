@@ -182,7 +182,7 @@ in {
     gnu.hurdCross = nativePlatforms;
     gnu.mach.hostDrv = nativePlatforms;
     gnu.mig = nativePlatforms;
-    gnu.smbfs = nativePlatforms;
+    gnu.smbfs.hostDrv = nativePlatforms;
 
     coreutils.hostDrv = nativePlatforms;
     ed.hostDrv = nativePlatforms;
