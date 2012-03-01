@@ -5330,7 +5330,7 @@ let
         # `libblkid' fails to build on GNU/Hurd.
         configureFlags = args.configureFlags
           + " --disable-libblkid --disable-mount --disable-libmount"
-          + " --disable-fsck --enable-static";
+          + " --disable-fsck --enable-static --disable-partx";
         doCheck = false;
         CPPFLAGS =                    # ugly hack for ugly software!
           lib.concatStringsSep " "
