@@ -16,7 +16,7 @@ let
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    md5 = "0p0fd8i533zsdm6gc0jmhmdifccx4v064mh0i1hl2s6fcjhc20j5";
+    sha256 = "0p0fd8i533zsdm6gc0jmhmdifccx4v064mh0i1hl2s6fcjhc20j5";
   };
   
   patches =
