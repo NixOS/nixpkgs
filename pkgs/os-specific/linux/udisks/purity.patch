@@ -1,7 +1,7 @@
-diff --git a/data/80-udisks.rules.in b/data/80-udisks.rules.in
+diff --git a/data/80-udisks.rules b/data/80-udisks.rules
 index 6720394..60b67ed 100644
---- a/data/80-udisks.rules.in
-+++ b/data/80-udisks.rules.in
+--- a/data/80-udisks.rules
++++ b/data/80-udisks.rules
 @@ -23,7 +23,7 @@ LABEL="ata_port_cardbus_end"
  #  this is the case we can trigger a 'change' on the sas_expander device
  #  when the bsg device appears)
@@ -55,20 +55,3 @@ index 6720394..60b67ed 100644
  
  
  # Example rule for tagging a device with a specific media type. Where and
-diff --git a/data/Makefile.am b/data/Makefile.am
-index ca6d8ac..ed9faa3 100644
---- a/data/Makefile.am
-+++ b/data/Makefile.am
-@@ -25,7 +25,11 @@ $(dbusconf_DATA): $(dbusconf_in_files) Makefile
- 	cp $< $@
- 
- udevrulesdir = $(slashlibdir)/udev/rules.d
--udevrules_DATA = 80-udisks.rules
-+udevrules_in_files = 80-udisks.rules.in
-+udevrules_DATA =  $(udevrules_in_files:.rules.in=.rules)
-+
-+$(udevrules_DATA): $(udevrules_in_files) Makefile
-+	@sed -e "s|\@slashlibdir\@|$(slashlibdir)|g" $< > $@
- 
- pkgconfigdir = $(datadir)/pkgconfig
- pkgconfig_DATA = udisks.pc

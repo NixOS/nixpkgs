@@ -5983,9 +5983,7 @@ let
   udev173 = callPackage ../os-specific/linux/udev/173.nix { };
   udev = pkgs.udev173;
 
-  udisks = callPackage ../os-specific/linux/udisks {
-    inherit (gnome) gtkdoc;
-  };
+  udisks = callPackage ../os-specific/linux/udisks { };
 
   uml = linux.override {
     userModeLinux = true;
