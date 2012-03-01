@@ -17,14 +17,13 @@ stdenv.mkDerivation {
   preBuild = ''
     kernelVersion=$(cd ${kernel}/lib/modules && ls)
     substituteInPlace Makefile \
-      --replace "\$(shell uname -r)" "$kernelVersion" \
+      --replace "\$(shell uname -r)" "${kernel.version}" \
       --replace "/lib/modules" "${kernel}/lib/modules"
   '';
  
   installPhase = ''
-    kernelVersion=$(cd ${kernel}/lib/modules && ls)
-    ensureDir $out/lib/modules/$kernelVersion/misc
-    cp bbswitch.ko $out/lib/modules/$kernelVersion/misc
+    ensureDir $out/lib/modules/${kernel.version}/misc
+    cp bbswitch.ko $out/lib/modules/${kernel.version}/misc
 
     ensureDir $out/bin
     tee $out/bin/discrete_vga_poweroff << EOF

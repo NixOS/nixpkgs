@@ -1,17 +1,17 @@
 { stdenv, fetchurl, libevent, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.2.1.30";
+  name = "tor-0.2.2.35";
 
   src = fetchurl {
     url = "http://www.torproject.org/dist/${name}.tar.gz";
-    sha256 = "02g15k8w5r57r9r6lz0sxzzvqx200y397y142cjswsd4zyla2lpk";
+    sha256 = "f141a41fffd31494a0f96ebbb6b999eab33ce62d5c31f81222a0acd034adbf3a";
   };
 
-  patchPhase =
+#  patchPhase =
     # DNS lookups fail in chroots.
-    '' sed -i "src/or/test.c" -es/localhost/127.0.0.1/g
-    '';
+#    '' sed -i "src/or/test.c" -es/localhost/127.0.0.1/g
+#    '';
 
   buildInputs = [ libevent openssl zlib ];
 

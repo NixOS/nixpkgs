@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "0gkk96yid3nq8i4z8xbiarj0r9v7b2zavf5mnh0rc7kclzxa7mmf";
   };
 
-  patches = [ ./smb-tmpdir.patch ];
+  patches = [ ./smb-tmpdir.patch ./qemu-img-fix-corrupt-vdi.patch ];
 
-  configureFlags = "--audio-drv-list=alsa";
+  configureFlags =
+    [ "--audio-drv-list=alsa"
+      "--smbd=smbd"                               # use `smbd' from $PATH
+    ];
 
   enableParallelBuilding = true;
 
@@ -21,12 +24,6 @@ stdenv.mkDerivation rec {
     [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
       ncurses python glib
     ];
-
-  preBuild =
-    ''
-      # Don't use a hardcoded path to Samba.
-      substituteInPlace ./net.h --replace /usr/sbin/smbd smbd
-    '';
 
   postInstall =
     ''

@@ -12,6 +12,7 @@
 , lcovExtraTraceFiles ? []
 , src, stdenv
 , name ? if doCoverageAnalysis then "nix-coverage" else "nix-build"
+, failureHook ? null
 , ... } @ args:
 
 stdenv.mkDerivation (
@@ -37,7 +38,8 @@ stdenv.mkDerivation (
         fi
       '';
 
-    failureHook = ''
+    failureHook = (stdenv.lib.optionalString (failureHook != null) failureHook) +
+    ''
       if test -n "$succeedOnFailure"; then
           if test -n "$keepBuildDirectory"; then
               KEEPBUILDDIR="$out/`basename $TMPDIR`"

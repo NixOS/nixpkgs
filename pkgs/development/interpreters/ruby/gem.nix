@@ -31,7 +31,8 @@ let
         wrapProgram "$prog" \
           --prefix GEM_PATH : "$GEM_PATH" \
           --prefix RUBYLIB : "${rubygems}/lib" \
-          --set RUBYOPT 'rubygems'
+          --set RUBYOPT rubygems \
+          $extraWrapperFlags ''${extraWrapperFlagsArray[@]}
       done
 
       for prog in $out/gems/*/bin/*; do

@@ -1,12 +1,12 @@
 { fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonPackage rec {
-  name = "novaclient-2.4.3";
+  name = "novaclient-2012.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/p/python-novaclient/python-${name}.tar.gz";
-    md5 = "c4be4adf371d1a84ce1581af365a53d0";
+    md5 = "8f53a308e08b2af4645281917be77ffc";
   };
 
   pythonPath = [ pythonPackages.prettytable pythonPackages.argparse pythonPackages.httplib2 pythonPackages.ssl ];

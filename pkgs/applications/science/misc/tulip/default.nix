@@ -1,16 +1,16 @@
 { fetchurl, stdenv, libxml2, freetype, mesa, glew, qt4
-, cmake, makeWrapper }:
+, cmake, makeWrapper, libjpeg }:
 
-let version = "3.6.1"; in
+let version = "3.7.0"; in
 stdenv.mkDerivation rec {
   name = "tulip-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/auber/${name}-src.tar.gz";
-    sha256 = "0d76zmp7gmid4lc91zz6sp4rzxlga6vfwfqhap04326r4zl4nx1q";
+    url = "mirror://sourceforge/auber/tulip/tulip-3.7.0/${name}-src.tar.gz";
+    sha256 = "150fj9pdxblvl5sby61cb2kq98r6h8yljk3vq5xizn198d3fz4jq";
   };
 
-  buildInputs = [ libxml2 freetype glew mesa qt4 ];
+  buildInputs = [ libxml2 freetype glew mesa qt4 libjpeg ];
 
   buildNativeInputs = [ cmake makeWrapper ];
 

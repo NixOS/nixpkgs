@@ -10,16 +10,14 @@ stdenv.mkDerivation {
   };
   
   preBuild = ''
-    kernelVersion=$(cd ${kernel}/lib/modules && ls)
     sed -e 's/break/true/' -i test_off.sh
     sed -e 's@/bin/bash@.bin/sh@' -i test_off.sh
-    sed -e "s@/lib/modules/\$(.*)@${kernel}/lib/modules/$kernelVersion@" -i Makefile
+    sed -e "s@/lib/modules/\$(.*)@${kernel}/lib/modules/${kernel.version}@" -i Makefile
   '';
  
   installPhase = ''
-    kernelVersion=$(cd ${kernel}/lib/modules && ls)
-    ensureDir $out/lib/modules/$kernelVersion/misc
-    cp acpi_call.ko $out/lib/modules/$kernelVersion/misc
+    ensureDir $out/lib/modules/${kernel.version}/misc
+    cp acpi_call.ko $out/lib/modules/${kernel.version}/misc
     ensureDir $out/bin
     cp test_off.sh $out/bin/test_discrete_video_off.sh
   '';

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pandoc-types";
-  version = "1.9.0.2";
-  sha256 = "1rqqchxinjk3njgkp73i92q4iz1cl84p56i2fmgj2zn221r0zhyl";
+  version = "1.9.1";
+  sha256 = "1174nkaig0g71n3kqrhgqn7xmr9rni3l3dh1xpypc0ksjm0ym21i";
   buildDepends = [ syb ];
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";

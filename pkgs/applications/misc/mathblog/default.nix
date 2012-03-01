@@ -4,16 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "mathblog";
-  version = "0.4";
-  sha256 = "0kpawik74hp9k56b858idnlkla3iaalys8mas6c4gf4jfw2w0r3j";
+  version = "0.5";
+  sha256 = "01iyzrwscqirhcr4622d0n16mr4p54qbvg5m2a0ns36j59xfd79g";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
     ConfigFile filepath HStringTemplate HUnit pandoc pandocTypes SHA
     testFramework testFrameworkHunit time
-  ];
-  patches = [
-    ./0006-Loosen-dependencies-on-SHA-HUnit-and-test-framework.patch
   ];
   meta = {
     description = "A program for creating and managing a static weblog with LaTeX math and function graphs";

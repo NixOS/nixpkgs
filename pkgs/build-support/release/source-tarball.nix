@@ -54,7 +54,7 @@ stdenv.mkDerivation (
 
       eval "$preAutoconf"
 
-      if test -x ./bootstrap; then ./bootstrap
+      if test -x ./bootstrap && test -f ./bootstrap; then ./bootstrap
       elif test -x ./bootstrap.sh; then ./bootstrap.sh
       elif test -x ./autogen.sh; then ./autogen.sh
       elif test -x ./autogen ; then ./autogen

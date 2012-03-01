@@ -2,7 +2,7 @@
 
 let
   pname = "krb5";
-  version = "1.6.3";
+  version = "1.10";
   name = "${pname}-${version}";
   webpage = http://web.mit.edu/kerberos/;
 in
@@ -11,8 +11,8 @@ stdenv.mkDerivation (rec {
   inherit name;
 
   src = fetchurl {
-    url = "${webpage}/dist/krb5/1.6/${name}-signed.tar";
-    sha256 = "7a1bd7d4bd326828c8ee382ed2b69ccd6c58762601df897d6a32169d84583d2a";
+    url = "${webpage}/dist/krb5/1.10/${name}-signed.tar";
+    sha256 = "1pa4m6538drb51gsqxbbxlsnc9fm9ccid9m2s3pv3di5l0a7l8bg";
   };
 
   buildInputs = [ perl ncurses yacc ];

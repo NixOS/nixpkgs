@@ -1,0 +1,12 @@
+diff -ubr boost_1_49_0/libs/filesystem/v2/src/v2_path.cpp boost_1_49_0-patched/libs/filesystem/v2/src/v2_path.cpp
+--- boost_1_49_0/libs/filesystem/v2/src/v2_path.cpp	2011-01-11 22:39:33.000000000 +0100
++++ boost_1_49_0-patched/libs/filesystem/v2/src/v2_path.cpp	2012-02-25 20:00:33.628767485 +0100
+@@ -45,7 +45,7 @@
+   {
+ #if !defined(macintosh) && !defined(__APPLE__) && !defined(__APPLE_CC__) 
+     // ISO C calls this "the locale-specific native environment":
+-    static std::locale lc("");
++    static std::locale lc;
+ #else  // Mac OS
+     // "All BSD system functions expect their string parameters to be in UTF-8 encoding
+     // and nothing else."

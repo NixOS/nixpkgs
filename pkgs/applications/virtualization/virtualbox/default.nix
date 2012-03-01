@@ -1,33 +1,37 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
+, libXcursor, libXmu, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
 , python, which, alsaLib, curl, gawk
-, xorriso, makeself, perl, jdk
+, xorriso, makeself, perl, jdk, pkgconfig
 }:
 
-let version = "4.1.6"; in
+let version = "4.1.8"; in
 
 stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "0zmbq0h9g4lamzmxqg281nr9pp88606dxh2dsw6vy1m86g5kfham";
+    sha256 = "1q04825ayynzgh8zl6y038lzxp3jk1a3dxpg6f52kk4vkirdc5pg";
   };
 
-  buildInputs = [iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL hal libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk ];
+  buildInputs =
+    [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
+      hal libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk
+      pkgconfig which libXmu
+    ];
 
-  patchPhase = "
+  patchPhase = ''
     set -x
     MODULES_BUILD_DIR=`echo ${kernel}/lib/modules/*/build`
-    sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \\
-        -e 's@MKISOFS --version@MKISOFS -version@' \\
+    sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \
+        -e 's@MKISOFS --version@MKISOFS -version@' \
         -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 
     find . -type f | xargs sed 's/depmod -a/true/' -i
     export USER=nix
     set +x
-  ";
+  '';
 
   configurePhase = ''
     ./configure --with-qt4-dir=${qt4} --disable-python --disable-pulse --disable-hardening --with-mkisofs=${xorriso}/bin/xorrisofs

@@ -148,7 +148,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexBase    = self.regexBase_0_93_2;       # 7.4.1 ok
     regexCompat  = self.regexCompat_0_93_1;     # 7.4.1 ok
     regexPosix   = self.regexPosix_0_95_1;      # 7.4.1 ok
-    stm          = self.stm_2_2_0_1;            # 7.4.1 ok
+    stm          = self.stm_2_3;		# 7.4.1 ok
     syb          = self.syb_0_3_6;              # 7.4.1 ok
     xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
     zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
@@ -456,7 +456,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   base64String = callPackage ../development/libraries/haskell/base64-string {};
 
-  base64Bytestring = callPackage ../development/libraries/haskell/base64-bytestring {};
+  base64Bytestring_0_1_0_3 = callPackage ../development/libraries/haskell/base64-bytestring/0.1.0.3.nix {};
+  base64Bytestring_0_1_1_0 = callPackage ../development/libraries/haskell/base64-bytestring/0.1.1.0.nix {};
+  base64Bytestring = self.base64Bytestring_0_1_0_3; # Version 0.1.1.0 has serious performance issues.
 
   baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
 
@@ -547,10 +549,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
 
-  containersDeepseq = callPackage ../development/libraries/haskell/containers-deepseq {};
-
-  controlMonadAttempt = callPackage ../development/libraries/haskell/control-monad-attempt {};
-
   convertible = callPackage ../development/libraries/haskell/convertible {
     time = self.time_1_1_3;
   };
@@ -599,12 +597,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
-
-  dataObject = callPackage ../development/libraries/haskell/data-object {
-    failure = self.failure_0_1_2;
-  };
-
-  dataObjectYaml = callPackage ../development/libraries/haskell/data-object-yaml {};
 
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
@@ -854,7 +846,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   #hledgerVty = callPackage ../development/libraries/haskell/hledger-vty {};
   #hledgerChart = callPackage ../development/libraries/haskell/hledger-chart {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
-  hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
+  #hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
 
   HList = callPackage ../development/libraries/haskell/HList {};
 
@@ -877,6 +869,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   hsdns = callPackage ../development/libraries/haskell/hsdns {};
 
   hsemail = callPackage ../development/libraries/haskell/hsemail {};
+
+  HSH = callPackage ../development/libraries/haskell/HSH {};
 
   HsSyck = callPackage ../development/libraries/haskell/HsSyck {};
 
@@ -917,6 +911,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
 
+  IfElse = callPackage ../development/libraries/haskell/IfElse {};
+
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
 
   instantGenerics = callPackage ../development/libraries/haskell/instant-generics {};
@@ -939,8 +935,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   json = callPackage ../development/libraries/haskell/json {};
-
-  jsonEnumerator = callPackage ../development/libraries/haskell/jsonEnumerator {};
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
@@ -1000,6 +994,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
+  monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
+
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {
     monadControl = self.monadControl_0_2_0_3;
   };
@@ -1030,8 +1026,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mwcRandom = self.mwcRandom_0_11_0_0;
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
-
-  neither = callPackage ../development/libraries/haskell/neither {};
 
   network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
@@ -1106,8 +1100,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
   polyparse = callPackage ../development/libraries/haskell/polyparse/default.nix {};
-
-  pool = callPackage ../development/libraries/haskell/pool {};
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
@@ -1297,7 +1289,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   stm_2_1_1_2 = callPackage ../development/libraries/haskell/stm/2.1.1.2.nix {};
   stm_2_1_2_1 = callPackage ../development/libraries/haskell/stm/2.1.2.1.nix {};
   stm_2_2_0_1 = callPackage ../development/libraries/haskell/stm/2.2.0.1.nix {};
-  stm = self.stm_2_1_1_2;
+  stm_2_3 = callPackage ../development/libraries/haskell/stm/2.3.nix {};
+  stm = self.stm_2_3;
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
 
@@ -1448,12 +1441,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
   WebBitsHtml = self.WebBitsHtml_1_0_2;
 
-  webRoutes = callPackage ../development/libraries/haskell/web-routes {};
-
-  webRoutesQuasi = callPackage ../development/libraries/haskell/web-routes-quasi {
-    pathPieces = self.pathPieces_0_0_0;
-  };
-
   CouchDB = callPackage ../development/libraries/haskell/CouchDB {};
 
   wlPprintText = callPackage ../development/libraries/haskell/wl-pprint-text {};
@@ -1478,10 +1465,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   xml = callPackage ../development/libraries/haskell/xml {};
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
-
-  xmlEnumerator = callPackage ../development/libraries/haskell/xml-enumerator {
-    failure = self.failure_0_1_2;
-  };
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
@@ -1576,10 +1559,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Ebnf2ps = callPackage ../development/tools/parsing/Ebnf2ps {};
 
-  # 2012-02-09: Disabled because upstream site has disappeared. This tool is clearly
-  #             unmaintained, and we should delete it unless anyone complains.
-  # frown = callPackage ../development/tools/parsing/frown {};
-
   haddock_2_4_2 = callPackage ../development/tools/documentation/haddock/2.4.2.nix {};
   haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {};
   haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {};
@@ -1596,6 +1575,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 
   HaRe = callPackage ../development/tools/haskell/HaRe {};
+
+  haskdogs = callPackage ../development/tools/haskell/haskdogs {};
+
+  hasktags = callPackage ../development/tools/haskell/hasktags {};
 
   hlint = callPackage ../development/tools/haskell/hlint {};
 

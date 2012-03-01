@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "authenticate";
-  version = "1.0.0";
-  sha256 = "0a163dhi69gh6zmi43jidxlaknbk1y0frjlwijdf7fp073rh0p87";
+  version = "1.0.0.1";
+  sha256 = "0wrbr7kwd4g8idd6i4ghvpd5q7nq0b8zx5qphqvkbs128m0r308d";
   buildDepends = [
     aeson attoparsec blazeBuilder blazeBuilderConduit caseInsensitive
     conduit httpConduit httpTypes network tagsoup text transformers

@@ -223,7 +223,7 @@ stdenv.mkDerivation ({
     ++ (optional (cloog != null) cloog)
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
-    ++ (optionals javaAwtGtk [ gtk libart_lgpl ] ++ xlibs)
+    ++ (optionals javaAwtGtk ([ gtk libart_lgpl ] ++ xlibs))
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])

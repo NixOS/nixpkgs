@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "epic";
-  version = "0.9.2";
-  sha256 = "1irvfk8xf627bfzsgbqa56816jkc99rrxpml9ycg2grq7razp9fw";
+  version = "0.9.3";
+  sha256 = "1x8y3ljha8r52pw83mjfv5i49dq0b7i1xbxg8j9hlvr2vwfa4237";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ Cabal mtl ];
