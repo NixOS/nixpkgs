@@ -18,10 +18,6 @@ stdenv.mkDerivation (rec {
     sha256 = "0fsn7xis81za62afan0vvm38bvgzg5wfmv1m86flqcj0nj7jjilh";
   };
 
-  crossAttrs = {
-    patches = [ ./wint_t.patch ];
-  };
-
   configureFlags = ''
     --with-shared --includedir=''${out}/include --without-debug
     ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
