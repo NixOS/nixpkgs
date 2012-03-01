@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       LIBEXECDIR=$out/libexec/resolvconf
       VARDIR=/var/run/resolvconf
       MANDIR=$out/share/man
-      RESTARTCMD="initctl restart \1"
+      RESTARTCMD="false \1"
       EOF
     '';
 

@@ -1,12 +1,14 @@
 { stdenv, fetchurl, static ? false }:
 
+let version = "1.2.6"; in
+
 stdenv.mkDerivation rec {
-  name = "zlib-1.2.6";
+  name = "zlib-${version}";
   
   src = fetchurl {
-    urls = 
-      [ "http://www.zlib.net/${name}.tar.gz"
-        "http://gentoo.netnitco.net/distfiles/${name}.tar.gz" 
+    urls =
+      [ "http://www.zlib.net/${name}.tar.gz"  # old versions vanish from here
+        "mirror://sourceforge/libpng/zlib/${version}/${name}.tar.gz"
       ];
     sha256 = "06x6m33ls1606ni7275q5z392csvh18dgs55kshfnvrfal45w8r1";
   };
