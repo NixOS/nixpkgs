@@ -174,4 +174,4 @@ fi
 
 # Start Upstart's init.
 echo "starting Upstart..."
-PATH=/var/run/current-system/upstart/sbin exec init
+PATH=/var/run/current-system/upstart/sbin exec init ${debug2:+--verbose}
