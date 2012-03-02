@@ -216,7 +216,7 @@ let cfg = config.deployment; in
         let
           unpack = name: sha256: pkgs.runCommand "virtualbox-charon-${name}.vdi" {}
             ''
-              xz < ${pkgs.fetchurl {
+              xz -d < ${pkgs.fetchurl {
                 url = "http://nixos.org/releases/nixos/virtualbox-charon-images/virtualbox-charon-${name}.vdi.xz";
                 inherit sha256;
               }} > $out
