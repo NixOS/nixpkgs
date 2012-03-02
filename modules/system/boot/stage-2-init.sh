@@ -57,6 +57,7 @@ cat /proc/mounts > /etc/mtab
 
 
 # Process the kernel command line.
+debug2=
 for o in $(cat /proc/cmdline); do
     case $o in
         debugtrace)
@@ -64,8 +65,7 @@ for o in $(cat /proc/cmdline); do
             set -x
             ;;
         debug2)
-            echo "Debug shell called from @out@"
-            exec @shell@
+            debug2=1
             ;;
         S|s|single)
             # !!! argh, can't pass a startup event to Upstart yet.
@@ -166,7 +166,10 @@ export MODULE_DIR=@kernel@/lib/modules/
 
 
 # For debugging Upstart.
-#@shell@ --login < /dev/console > /dev/console 2>&1 &
+if [ -n "$debug2" ]; then
+    echo "Debug shell called from @out@"
+    @shell@
+fi
 
 
 # Start Upstart's init.
