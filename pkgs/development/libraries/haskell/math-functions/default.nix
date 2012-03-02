@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "math-functions";
-  version = "0.1.1.0";
-  sha256 = "0qb0hbfzd1g8cz3dkm8cs2wknz08b63vn7nljmynk794y64b1klp";
+  version = "0.1.1.1";
+  sha256 = "1256fyd80z6yf61a5a90b3lad7hj0n59cyn741nkdh8p6hqrsi7z";
   buildDepends = [ erf vector ];
   meta = {
     homepage = "https://github.com/bos/math-functions";
