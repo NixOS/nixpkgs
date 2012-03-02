@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ ./find-source.patch
-    ];
+    [ ./find-source.patch ]
+    ++ (stdenv.lib.optional stdenv.isFreeBSD ./freebsd-install.patch);
 
   preBuild = ''
     makeFlagsArray=(PREFIX=$out BIN_DIR=$out/bin MAN_DIR=$out/share/man)
