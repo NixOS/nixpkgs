@@ -1,17 +1,24 @@
-{stdenv, fetchurl, mesa, tcl, tk, file, libXmu}:
+{stdenv, fetchurl, mesa, tcl, tk, file, libXmu, automake, autoconf, libtool, qt4,
+ftgl, freetype}:
 
 stdenv.mkDerivation rec {
-  name = "opencascade-6.3.0";
+  name = "opencascade-6.5.2";
   src = fetchurl {
-    url = http://files.opencascade.com/OCC_6.3_release/OpenCASCADE_src.tgz;
-    md5 = "52778127974cb3141c2827f9d40d1f11";
+    url = http://files.opencascade.com/OCCT/OCC_6.5.2_release/OpenCASCADE652.tar.gz;
+    sha256 = "0nsfjhd6rv1fmq8jbyzcs0f13h4xfld487vqs9bwd4lbwcfqxwcy";
   };
 
-  buildInputs = [ mesa tcl tk file libXmu ];
+  buildInputs = [ mesa tcl tk file libXmu automake autoconf libtool qt4 ftgl freetype ];
+
+  preUnpack = ''
+    sourceRoot=`pwd`/ros
+  '';
 
   preConfigure = ''
-    cd ros
+    sh ./build_configure
   '';
+
+  NIX_CFLAGS_COMPILE = "-I${ftgl}/include/FTGL -I${freetype}/include/freetype2";
 
   configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" ];
 
@@ -20,6 +27,8 @@ stdenv.mkDerivation rec {
     ensureDir $out/share/doc/${name}
     cp -R ../doc $out/share/doc/${name}
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Open CASCADE Technology, libraries for 3D modeling and numerical simulation";

@@ -700,6 +700,8 @@ let
 
   ftgl = callPackage ../development/libraries/ftgl { };
 
+  ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
+
   fuppes = callPackage ../tools/networking/fuppes {
     ffmpeg = ffmpeg_0_6_90;
   };
@@ -4446,7 +4448,9 @@ let
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
-  opencascade = callPackage ../development/libraries/opencascade { };
+  opencascade = callPackage ../development/libraries/opencascade {
+    ftgl = ftgl212;
+  };
 
   opencsg = callPackage ../development/libraries/opencsg { };
 
