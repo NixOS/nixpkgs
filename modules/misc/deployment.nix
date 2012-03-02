@@ -156,6 +156,17 @@ let cfg = config.deployment; in
       '';
     };
 
+    # VirtualBox options.
+
+    deployment.virtualbox.baseImage = mkOption {
+      example = "/home/alice/base-disk.vdi";
+      description = ''
+        Path to the initial disk image used to bootstrap the
+        VirtualBox instance.  The instance boots from a clone of this
+        image.
+      '';
+    };
+
     # Computed options useful for referring to other machines in
     # network specifications.
 
@@ -197,6 +208,25 @@ let cfg = config.deployment; in
         # throw "I don't know an AMI for region ‘${cfg.ec2.region}’ and platform type ‘${config.nixpkgs.system}’"
         "");
         
+    };
+
+    deployment.virtualbox = {
+
+      baseImage = mkDefault (
+        let
+          unpack = name: sha256: pkgs.runCommand "virtualbox-charon-${name}.vdi" {}
+            ''
+              xz < ${pkgs.fetchurl {
+                url = "http://nixos.org/releases/nixos/virtualbox-charon-images/virtualbox-charon-${name}.vdi.xz";
+                inherit sha256;
+              }} > $out
+            '';
+        in if config.nixpkgs.system == "x86_64-linux" then
+          unpack "r32740-x86_64" "0vwjcf85y4qyd5hxh8gb2nnkhbpdz2j284w5d7x94rvczfpa49hz"
+        else if config.nixpkgs.system == "i686-linux" then /foo/disk.vdi else
+          throw "Unsupported VirtualBox system type!"
+      );
+    
     };
         
   };
