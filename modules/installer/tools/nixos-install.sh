@@ -15,10 +15,6 @@ if test -z "$mountPoint"; then
     mountPoint=/mnt
 fi
 
-if test -z "$NIXOS"; then
-    NIXOS=/etc/nixos/nixos
-fi
-
 # NIXOS_CONFIG is interpreted relative to $mountPoint.
 if test -z "$NIXOS_CONFIG"; then
     NIXOS_CONFIG=/etc/nixos/configuration.nix
@@ -34,19 +30,11 @@ if ! grep -F -q " $mountPoint " /proc/mounts; then
     exit 1
 fi
     
-if ! test -e "$NIXOS"; then
-    echo "NixOS source directory $NIXOS doesn't exist"
-    exit 1
-fi
-    
 if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
     echo "configuration file $mountPoint/$NIXOS_CONFIG doesn't exist"
     exit 1
 fi
     
-
-NIXOS=$(readlink -f "$NIXOS")
-
 
 # Enable networking in the chroot.
 mkdir -m 0755 -p $mountPoint/etc
@@ -153,10 +141,9 @@ fi
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
 echo "building the system configuration..."
-NIXPKGS=/mnt/etc/nixos/nixpkgs chroot $mountPoint @nix@/bin/nix-env \
-    -p /nix/var/nix/profiles/system \
-    -f "/mnt$NIXOS" \
-    --set -A system
+NIX_PATH=nixpkgs=/mnt/etc/nixos/nixpkgs:nixos=/mnt/etc/nixos/nixos \
+    chroot $mountPoint @nix@/bin/nix-env \
+    -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
 
 
 # Make a backup of the old NixOS/Nixpkgs sources.
@@ -176,8 +163,8 @@ fi
 
 
 # Copy the NixOS/Nixpkgs sources to the target.
-cp -prd $NIXOS $targetNixos
-if test -e /etc/nixos/nixpkgs; then
+cp -prd /etc/nixos/nixos $targetNixos
+if [ -e /etc/nixos/nixpkgs ]; then
     cp -prd /etc/nixos/nixpkgs $targetNixpkgs
 fi
 

@@ -272,22 +272,6 @@ the Nix manual for details.</para>
 <variablelist>
 
   <varlistentry>
-    <term><envar>NIXOS</envar></term>
-    <listitem>
-      <para>Path to the NixOS source tree.  Defaults to
-      <filename>/etc/nixos/nixos</filename>.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><envar>NIXPKGS</envar></term>
-    <listitem>
-      <para>Path to the Nixpkgs source tree.  Defaults to
-      <filename>/etc/nixos/nixpkgs</filename>.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
     <term><envar>NIXOS_CONFIG</envar></term>
     <listitem>
       <para>Path to the main NixOS configuration module.  Defaults to

@@ -1,6 +1,6 @@
-{ nixpkgs, system }:
+{ system }:
 
-let pkgs = import nixpkgs { config = {}; inherit system; }; in
+let pkgs = import <nixpkgs> { config = {}; inherit system; }; in
 
 with pkgs;
 with import ../lib/qemu-flags.nix;
@@ -22,7 +22,7 @@ rec {
     nodes: configurations:
 
     import ./eval-config.nix {
-      inherit nixpkgs system;
+      inherit system;
       modules = configurations ++
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs

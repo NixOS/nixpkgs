@@ -1,8 +1,6 @@
-{ nixpkgs ? ../../nixpkgs
-, system ? builtins.currentSystem
-}:
+{ system ? builtins.currentSystem }:
 
-with import ../lib/testing.nix { inherit nixpkgs system; };
+with import ../lib/testing.nix { inherit system; };
 
 {
   avahi = makeTest (import ./avahi.nix);

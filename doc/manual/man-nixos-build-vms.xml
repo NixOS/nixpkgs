@@ -107,27 +107,4 @@ for the same architecture as the host system.
 </refsection>
 
 
-<refsection><title>Environment variables</title>
-
-<variablelist>
-
-  <varlistentry>
-    <term><envar>NIXOS</envar></term>
-    <listitem>
-      <para>Path to the NixOS source tree.  Defaults to
-      <filename>/etc/nixos/nixos</filename>.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><envar>NIXPKGS_ALL</envar></term>
-    <listitem>
-      <para>Path to the Nixpkgs source tree.  Defaults to
-      <filename>/etc/nixos/nixpkgs</filename>.</para>
-    </listitem>
-  </varlistentry>
-</variablelist>
-
-</refsection>
-
 </refentry>

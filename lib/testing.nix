@@ -1,6 +1,6 @@
-{ nixpkgs, system }:
+{ system }:
 
-with import ./build-vms.nix { inherit nixpkgs system; };
+with import ./build-vms.nix { inherit system; };
 with pkgs;
 
 rec {
@@ -118,7 +118,7 @@ rec {
   makeTests = testsFun: lib.mapAttrs (name: complete) (call testsFun);
 
   apply = makeTest; # compatibility
-  call = f: f { inherit pkgs nixpkgs system; };
+  call = f: f { inherit pkgs system; };
 
   complete = t: t // rec {
     nodes = buildVirtualNetwork (

@@ -1,12 +1,5 @@
 #! @shell@ -e
 
-# Allow the location of NixOS sources and the system configuration
-# file to be overridden.
-NIXOS=${NIXOS:-/etc/nixos/nixos}
-NIXPKGS=${NIXPKGS:-/etc/nixos/nixpkgs}
-NIXOS_CONFIG=${NIXOS_CONFIG:-/etc/nixos/configuration.nix}
-export NIXPKGS # must be exported so that a non default location is passed to nixos/default.nix
-
 showSyntax() {
     # !!! more or less cut&paste from
     # system/switch-to-configuration.sh (which we call, of course).
@@ -45,8 +38,7 @@ Various nix-build options are also accepted, in particular:
  
 Environment variables affecting nixos-rebuild:
 
-  \$NIXOS                 path to the NixOS source tree
-  \$NIXPKGS               path to the Nixpkgs source tree
+  \$NIX_PATH              Nix expression search path 
   \$NIXOS_CONFIG          path to the NixOS system configuration specification
 EOF
     exit 1
@@ -130,7 +122,7 @@ fi
 # Pull the manifests defined in the configuration (the "manifests"
 # attribute).  Wonderfully hacky.
 if test -n "$pullManifest"; then
-    manifests=$(nix-instantiate --eval-only --xml --strict $NIXOS -A manifests \
+    manifests=$(nix-instantiate --eval-only --xml --strict '<nixos>' -A manifests \
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
 
     mkdir -p /nix/var/nix/channel-cache
@@ -147,9 +139,9 @@ if [ "$action" = pull ]; then exit 0; fi
 # more conservative.
 if test -n "$buildNix"; then
     echo "building Nix..." >&2
-    if ! nix-build $NIXOS -A config.environment.nix -o $tmpDir/nix $extraBuildFlags > /dev/null; then
-        if ! nix-build $NIXOS -A nixFallback -o $tmpDir/nix $extraBuildFlags > /dev/null; then
-            nix-build $NIXPKGS -A nixUnstable -o $tmpDir/nix $extraBuildFlags > /dev/null
+    if ! nix-build '<nixos>' -A config.environment.nix -o $tmpDir/nix $extraBuildFlags > /dev/null; then
+        if ! nix-build '<nixos>' -A nixFallback -o $tmpDir/nix $extraBuildFlags > /dev/null; then
+            nix-build '<nixpkgs>' -A nixUnstable -o $tmpDir/nix $extraBuildFlags > /dev/null
         fi
     fi
     PATH=$tmpDir/nix/bin:$PATH
@@ -162,16 +154,16 @@ fi
 if test -z "$rollback"; then
     echo "building the system configuration..." >&2
     if test "$action" = switch -o "$action" = boot; then
-        nix-env -p /nix/var/nix/profiles/system -f $NIXOS --set -A system $extraBuildFlags
+        nix-env -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system $extraBuildFlags
         pathToConfig=/nix/var/nix/profiles/system
     elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
-        nix-build $NIXOS -A system -K -k $extraBuildFlags > /dev/null
+        nix-build '<nixos>' -A system -K -k $extraBuildFlags > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm ]; then
-        nix-build $NIXOS -A vm -K -k $extraBuildFlags > /dev/null
+        nix-build '<nixos>' -A vm -K -k $extraBuildFlags > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm-with-bootloader ]; then
-        nix-build $NIXOS -A vmWithBootLoader -K -k $extraBuildFlags > /dev/null
+        nix-build '<nixos>' -A vmWithBootLoader -K -k $extraBuildFlags > /dev/null
         pathToConfig=./result
     else
         showSyntax

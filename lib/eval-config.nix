@@ -3,7 +3,6 @@
 # values.
 
 { system ? builtins.currentSystem
-, nixpkgs ? import ./from-env.nix "NIXPKGS" /etc/nixos/nixpkgs
 , pkgs ? null
 , baseModules ? import ../modules/module-list.nix
 , extraArgs ? {}
@@ -31,7 +30,7 @@ rec {
   extraArgs = extraArgs_ // {
     inherit pkgs modules baseModules;
     modulesPath = ../modules;
-    pkgs_i686 = import nixpkgs { system = "i686-linux"; };
+    pkgs_i686 = import <nixpkgs> { system = "i686-linux"; };
   };
 
   # Import Nixpkgs, allowing the NixOS option nixpkgs.config to
@@ -47,15 +46,15 @@ rec {
   pkgs =
     if pkgs_ != null
     then pkgs_
-    else import nixpkgs (
+    else import <nixpkgs> (
       let
         system = if nixpkgsOptions.system != "" then nixpkgsOptions.system else system_;
         nixpkgsOptions = (import ./eval-config.nix {
-          inherit system nixpkgs extraArgs modules;
+          inherit system extraArgs modules;
           # For efficiency, leave out most NixOS modules; they don't
           # define nixpkgs.config, so it's pointless to evaluate them.
           baseModules = [ ../modules/misc/nixpkgs.nix ];
-          pkgs = import nixpkgs { system = system_; config = {}; };
+          pkgs = import <nixpkgs> { system = system_; config = {}; };
         }).optionDefinitions.nixpkgs;
       in
       {

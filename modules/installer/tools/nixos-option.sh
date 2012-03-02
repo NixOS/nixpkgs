@@ -4,10 +4,7 @@
 # file to be overridden.
 
 : ${mountPoint=/mnt}
-: ${NIXOS=/etc/nixos/nixos}
 : ${NIXOS_CONFIG=/etc/nixos/configuration.nix}
-: ${NIXPKGS=/etc/nixos/nixpkgs}
-export NIXOS
 
 usage () {
   echo 1>&2 "
@@ -38,9 +35,7 @@ Options:
 Environment variables affecting $0:
 
   \$mountPoint          Path to the target file system.
-  \$NIXOS               Path where the NixOS repository is located.
   \$NIXOS_CONFIG        Path to your configuration file.
-  \$NIXPKGS             Path to Nix packages.
 
 "
 
@@ -190,12 +185,6 @@ nixMap() {
 }
 
 if $install; then
-  if test -e "$mountPoint$NIXOS"; then
-    export NIXOS="$mountPoint$NIXOS"
-  fi
-  if test -e "$mountPoint$NIXPKGS"; then
-    export NIXPKGS="$mountPoint$NIXPKGS"
-  fi
   export NIXOS_CONFIG="$mountPoint$NIXOS_CONFIG"
 fi
 
@@ -319,8 +308,8 @@ if $xml; then
   evalNix --xml --no-location <<EOF
 let
   reach = attrs: attrs${option:+.$option};
-  nixos = import $NIXOS {};
-  nixpkgs = import $NIXPKGS {};
+  nixos = <nixos>;
+  nixpkgs = <nixpkgs>;
   sources = builtins.map (f: f.source);
   opt = reach nixos.eval.options;
   cfg = reach nixos.config;

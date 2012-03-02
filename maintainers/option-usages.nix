@@ -1,4 +1,4 @@
-{ configuration ? import ../lib/from-env.nix "NIXOS_CONFIG" /etc/nixos/configuration.nix
+{ configuration ? import ../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
 
 # []: display all options
 # [<option names>]: display the selected options
