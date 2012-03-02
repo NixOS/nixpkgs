@@ -42,7 +42,7 @@ assert libelf != null -> zlib != null;
 with stdenv.lib;
 with builtins;
 
-let version = "4.6.2";
+let version = "4.6.3";
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
