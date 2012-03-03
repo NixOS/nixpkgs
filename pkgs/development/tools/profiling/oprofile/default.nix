@@ -3,7 +3,7 @@
 , withGUI ? false , qt4 ? null}:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
-assert withGui -> qt4 != null;
+assert withGUI -> qt4 != null;
 
 stdenv.mkDerivation rec {
   name = "oprofile-0.9.7";
@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ binutils zlib popt makeWrapper gawk which gnugrep pkgconfig ]
-    ++ stdenv.lib.optionals withGui [ qt4 ];
+    ++ stdenv.lib.optionals withGUI [ qt4 ];
 
   configureFlags =
     [ "--with-kernel-support"
       "--disable-shared"   # needed because only the static libbfd is available
     ]
-    ++ stdenv.lib.optional withGui "--with-qt-dir=${qt4} --enable-gui=qt4";
+    ++ stdenv.lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";
 
   postInstall = ''
     wrapProgram "$out/bin/opcontrol"					\
