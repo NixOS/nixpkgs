@@ -29,7 +29,7 @@ let
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
-      pkgs.gnutar
+      pkgs.gnutarWithMan
       pkgs.gzip
       pkgs.less
       pkgs.libcap
