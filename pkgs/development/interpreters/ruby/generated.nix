@@ -4,13 +4,13 @@ g: # Get dependencies from patched gems
 {
   aliases = {
     ZenTest = g.ZenTest_4_6_2;
-    actionmailer = g.actionmailer_3_2_1;
-    actionpack = g.actionpack_3_2_1;
-    activemodel = g.activemodel_3_2_1;
-    activerecord = g.activerecord_3_2_1;
-    activeresource = g.activeresource_3_2_1;
-    activesupport = g.activesupport_3_2_1;
-    arel = g.arel_3_0_0;
+    actionmailer = g.actionmailer_3_2_2;
+    actionpack = g.actionpack_3_2_2;
+    activemodel = g.activemodel_3_2_2;
+    activerecord = g.activerecord_3_2_2;
+    activeresource = g.activeresource_3_2_2;
+    activesupport = g.activesupport_3_2_2;
+    arel = g.arel_3_0_2;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_1;
     autotest_rails = g.autotest_rails_4_1_2;
     builder = g.builder_3_0_0;
@@ -24,13 +24,13 @@ g: # Get dependencies from patched gems
     hike = g.hike_1_2_1;
     hoe = g.hoe_2_3_3;
     i18n = g.i18n_0_6_0;
-    journey = g.journey_1_0_1;
+    journey = g.journey_1_0_3;
     json = g.json_1_6_5;
     json_pure = g.json_pure_1_6_5;
     mail = g.mail_2_4_1;
     mime_types = g.mime_types_1_17_2;
     minitar = g.minitar_0_5_3;
-    multi_json = g.multi_json_1_0_4;
+    multi_json = g.multi_json_1_1_0;
     net_sftp = g.net_sftp_2_0_4;
     net_ssh = g.net_ssh_2_3_0;
     nix = g.nix_0_1_1;
@@ -39,8 +39,8 @@ g: # Get dependencies from patched gems
     rack_cache = g.rack_cache_1_1;
     rack_ssl = g.rack_ssl_1_3_2;
     rack_test = g.rack_test_0_6_1;
-    rails = g.rails_3_2_1;
-    railties = g.railties_3_2_1;
+    rails = g.rails_3_2_2;
+    railties = g.railties_3_2_2;
     rake = g.rake_0_9_2_2;
     rb_fsevent = g.rb_fsevent_0_9_0;
     rdoc = g.rdoc_3_12;
@@ -52,7 +52,7 @@ g: # Get dependencies from patched gems
     rubyforge = g.rubyforge_2_0_4;
     rubyzip = g.rubyzip_0_9_6_1;
     sass = g.sass_3_1_15;
-    selenium_webdriver = g.selenium_webdriver_2_19_0;
+    selenium_webdriver = g.selenium_webdriver_2_20_0;
     sprockets = g.sprockets_2_1_2;
     thor = g.thor_0_14_6;
     tilt = g.tilt_1_3_3;
@@ -92,73 +92,73 @@ installed versions.'';
       requiredGems = [  ];
       sha256 = ''0knbim1lvp7q7k529if3h78584x845h9xyz08vykrdqa97x4lkh0'';
     };
-    actionmailer_3_2_1 = {
+    actionmailer_3_2_2 = {
       basename = ''actionmailer'';
       meta = {
         description = ''Email composition, delivery, and receiving framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Email on Rails. Compose, deliver, receive, and test emails using the familiar controller/view pattern. First-class support for multipart email and attachments.'';
       };
-      name = ''actionmailer-3.2.1'';
+      name = ''actionmailer-3.2.2'';
       requiredGems = [ g.mail_2_4_1 ];
-      sha256 = ''02xxyz3r3cfhiynx73y2ybabdhf9x9vxfqj215p8477w6cm2sh47'';
+      sha256 = ''0x4308y786100146m2fx7bygp77cwzsds3cgwjjlkw9hgyapcxz0'';
     };
-    actionpack_3_2_1 = {
+    actionpack_3_2_2 = {
       basename = ''actionpack'';
       meta = {
         description = ''Web-flow and rendering framework putting the VC in MVC (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Web apps on Rails. Simple, battle-tested conventions for building and testing MVC web applications. Works with any Rack-compatible server.'';
       };
-      name = ''actionpack-3.2.1'';
-      requiredGems = [ g.activemodel_3_2_1 g.rack_cache_1_1 g.rack_test_0_6_1 g.journey_1_0_1 g.sprockets_2_1_2 g.erubis_2_7_0 ];
-      sha256 = ''0yz5h8c4m1a8590kdsx2akg3jmbrsjf9wbd950lv19c3sm3sahzx'';
+      name = ''actionpack-3.2.2'';
+      requiredGems = [ g.activemodel_3_2_2 g.rack_cache_1_1 g.rack_test_0_6_1 g.journey_1_0_3 g.sprockets_2_1_2 g.erubis_2_7_0 ];
+      sha256 = ''0371q3xr81r07ch3y0ziil9481smv7rv03xdlhp78b5wgqq2d8zs'';
     };
-    activemodel_3_2_1 = {
+    activemodel_3_2_2 = {
       basename = ''activemodel'';
       meta = {
         description = ''A toolkit for building modeling frameworks (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''A toolkit for building modeling frameworks like Active Record and Active Resource. Rich support for attributes, callbacks, validations, observers, serialization, internationalization, and testing.'';
       };
-      name = ''activemodel-3.2.1'';
+      name = ''activemodel-3.2.2'';
       requiredGems = [ g.builder_3_0_0 ];
-      sha256 = ''1m639mdhkjwxw7szl3r7ay4s8yjwbh2sfjyv2d4wrkiq4wpz694m'';
+      sha256 = ''0qsgan79g0mq5dc0w4jng0847db6354ds9nxb627cc0ijxzny4zi'';
     };
-    activerecord_3_2_1 = {
+    activerecord_3_2_2 = {
       basename = ''activerecord'';
       meta = {
         description = ''Object-relational mapper framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Databases on Rails. Build a persistent domain model by mapping database tables to Ruby classes. Strong conventions for associations, validations, aggregations, migrations, and testing come baked-in.'';
       };
-      name = ''activerecord-3.2.1'';
-      requiredGems = [ g.arel_3_0_0 g.tzinfo_0_3_31 ];
-      sha256 = ''0xch76nqfgyx750z89lsxkvgshci1y49f4h7xmgiq9nmr4gfxxmv'';
+      name = ''activerecord-3.2.2'';
+      requiredGems = [ g.arel_3_0_2 g.tzinfo_0_3_31 ];
+      sha256 = ''08hgn2hwg2vjxcq8k656n4xhh0xyi09w5ailgqgqhkksa51m2i5b'';
     };
-    activeresource_3_2_1 = {
+    activeresource_3_2_2 = {
       basename = ''activeresource'';
       meta = {
         description = ''REST modeling framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''REST on Rails. Wrap your RESTful web app with Ruby classes and work with them like Active Record models.'';
       };
-      name = ''activeresource-3.2.1'';
+      name = ''activeresource-3.2.2'';
       requiredGems = [  ];
-      sha256 = ''0fvsi8kikmp287dym3s4y1np9s0sxm0q65kx0idgsp9bi89wpl0d'';
+      sha256 = ''0fagf0mp895axy5j21yrshgqlssi949rp0a3qgaqz5bcl1b0ck8b'';
     };
-    activesupport_3_2_1 = {
+    activesupport_3_2_2 = {
       basename = ''activesupport'';
       meta = {
         description = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.'';
       };
-      name = ''activesupport-3.2.1'';
-      requiredGems = [ g.i18n_0_6_0 g.multi_json_1_0_4 ];
-      sha256 = ''0ajkzsa7467jp7lxgjcsl94nqkvw9d0h492rypljs0f8f1fn744v'';
+      name = ''activesupport-3.2.2'';
+      requiredGems = [ g.i18n_0_6_0 g.multi_json_1_1_0 ];
+      sha256 = ''0d7rzjd2rv5qjs1mgfyhdmj08hx8lz0f1vnjq6lhz2k776qiiaxh'';
     };
-    arel_3_0_0 = {
+    arel_3_0_2 = {
       basename = ''arel'';
       meta = {
         description = ''Arel is a SQL AST manager for Ruby'';
@@ -172,9 +172,9 @@ It is intended to be a framework framework; that is, you can build your own ORM
 with it, focusing on innovative object and collection modeling as opposed to
 database compatibility and query generation.'';
       };
-      name = ''arel-3.0.0'';
+      name = ''arel-3.0.2'';
       requiredGems = [  ];
-      sha256 = ''0ci86z4h8bw2rzx9wf1kdkyz19cdrawmkvjfavdm06bpjrhrpykl'';
+      sha256 = ''158bvrhammpblky9z9dgimjr55bdypfx6w5s1dm4vyj42h49qpkx'';
     };
     atoulme_Antwrap_0_7_1 = {
       basename = ''atoulme_Antwrap'';
@@ -412,16 +412,16 @@ See class rdoc for help. Hint: ri Hoe'';
       requiredGems = [  ];
       sha256 = ''1pgmfhmh2wv409g7kla30mkp8jpslvp25vcmmim1figl87wpn3j0'';
     };
-    journey_1_0_1 = {
+    journey_1_0_3 = {
       basename = ''journey'';
       meta = {
         description = ''Journey is a router'';
-        homepage = ''http://github.com/tenderlove/journey'';
+        homepage = ''http://github.com/rails/journey'';
         longDescription = ''Journey is a router.  It routes requests.'';
       };
-      name = ''journey-1.0.1'';
+      name = ''journey-1.0.3'';
       requiredGems = [  ];
-      sha256 = ''1fccxnc9ji6j2p1avfph701b0lf2rzsksyipfavhv8kjwlzvsglx'';
+      sha256 = ''15bxq7dqhk88n7cjvmx0ipizc22mzf5mnb58r1nq2sq5mcpag6gb'';
     };
     json_1_6_5 = {
       basename = ''json'';
@@ -503,16 +503,16 @@ Copyright:: 2002 - 2011, Austin Ziegler
       requiredGems = [  ];
       sha256 = ''035vs1knnnjsb8arfp8vx75warvwcdpiljjwv38lqljai9v8fq53'';
     };
-    multi_json_1_0_4 = {
+    multi_json_1_1_0 = {
       basename = ''multi_json'';
       meta = {
         description = ''A gem to provide swappable JSON backends.'';
         homepage = ''http://github.com/intridea/multi_json'';
         longDescription = ''A gem to provide swappable JSON backends utilizing Yajl::Ruby, the JSON gem, JSON pure, or a vendored version of okjson.'';
       };
-      name = ''multi_json-1.0.4'';
+      name = ''multi_json-1.1.0'';
       requiredGems = [  ];
-      sha256 = ''0f2yrlxcdhdskkm4q11p2didwl26wikxycysb7i49ndp94rklvcr'';
+      sha256 = ''0dsqx39l6zwfw9l9zyl4l9rr83617a6i1rznw218jskxhi7jsqxr'';
     };
     net_sftp_2_0_4 = {
       basename = ''net_sftp'';
@@ -627,27 +627,27 @@ request helpers feature.'';
       requiredGems = [  ];
       sha256 = ''0hq5q8fjhbb7szzrj7k0l21z025c4qsxqzd5qmgivikhymw10ws0'';
     };
-    rails_3_2_1 = {
+    rails_3_2_2 = {
       basename = ''rails'';
       meta = {
         description = ''Full-stack web application framework.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
-      name = ''rails-3.2.1'';
-      requiredGems = [ g.activesupport_3_2_1 g.actionpack_3_2_1 g.activerecord_3_2_1 g.activeresource_3_2_1 g.actionmailer_3_2_1 g.railties_3_2_1 g.bundler_1_0_22 ];
-      sha256 = ''0fx5pmywvh0s263dd6qv34rbc4qxnla5qzh8r30zrip24j6w0nr5'';
+      name = ''rails-3.2.2'';
+      requiredGems = [ g.activesupport_3_2_2 g.actionpack_3_2_2 g.activerecord_3_2_2 g.activeresource_3_2_2 g.actionmailer_3_2_2 g.railties_3_2_2 g.bundler_1_0_22 ];
+      sha256 = ''0kwh8142zxyvrva09m5g85cmwhby714q87j1mb8s6wikv4gvfmy9'';
     };
-    railties_3_2_1 = {
+    railties_3_2_2 = {
       basename = ''railties'';
       meta = {
         description = ''Tools for creating, working with, and running Rails applications.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Rails internals: application bootup, plugins, generators, and rake tasks.'';
       };
-      name = ''railties-3.2.1'';
+      name = ''railties-3.2.2'';
       requiredGems = [ g.thor_0_14_6 g.rack_ssl_1_3_2 g.rdoc_3_12 ];
-      sha256 = ''13ya1jryzz8s1j1vh1qw44y282vjjk72nf3a6dzsna9z8yx4278h'';
+      sha256 = ''1px41w2jrzjn7h8pm427dhliqn06yyj5md5iq5s3zmx1dps35cvf'';
     };
     rake_0_8_7 = {
       basename = ''rake'';
@@ -836,16 +836,16 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [  ];
       sha256 = ''1lsmqm84w03w8s54i53cf3mplklpasakff2ng6zqf75digg27fzs'';
     };
-    selenium_webdriver_2_19_0 = {
+    selenium_webdriver_2_20_0 = {
       basename = ''selenium_webdriver'';
       meta = {
         description = ''The next generation developer focused tool for automated testing of webapps'';
         homepage = ''http://selenium.googlecode.com'';
         longDescription = ''WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.'';
       };
-      name = ''selenium-webdriver-2.19.0'';
+      name = ''selenium-webdriver-2.20.0'';
       requiredGems = [ g.rubyzip_0_9_6_1 g.childprocess_0_3_1 ];
-      sha256 = ''1phhb8ivv203r4qs2nwxnkd6qmx02lj1xgsc5wkkm0gxl2lgz0ll'';
+      sha256 = ''1d37vmb7gry82bidmpnkq2nx20abi1dk55rydl9hyj94907jvc73'';
     };
     sprockets_2_1_2 = {
       basename = ''sprockets'';
