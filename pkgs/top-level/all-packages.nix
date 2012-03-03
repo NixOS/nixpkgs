@@ -3120,16 +3120,7 @@ let
 
   openocd = callPackage ../development/tools/misc/openocd { };
 
-  oprofile = import ../development/tools/profiling/oprofile {
-    inherit fetchurl stdenv binutils popt makeWrapper gawk which gnugrep zlib;
-
-    # Optional build inputs for the (useless) GUI.
-    /*
-    qt = qt3;
-    inherit (xlibs) libX11 libXext;
-    inherit libpng;
-     */
-  };
+  oprofile = callPackage ../development/tools/profiling/oprofile { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
 

@@ -1,16 +1,16 @@
 { stdenv, fetchurl, binutils, popt, makeWrapper, gawk, which, gnugrep, zlib
-, qt ? null, libX11 ? null, libXext ? null, libpng ? null }:
+, pkgconfig
+, withGUI ? false , qt4 ? null}:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
-assert (qt != null) -> ((libX11 != null) && (libXext != null)
-                        && (libpng != null));
+assert withGui -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "oprofile-0.9.6";
+  name = "oprofile-0.9.7";
 
   src = fetchurl {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
-    sha256 = "103q0w4wr5lnhg1yfdhc67dvdwzqpzml57fp4l6nbz29fw5d839z";
+    sha256 = "09ymfgcvp6372xnxdbq664ba8f4nzz4cxlya7wi8s1gabmym0nyb";
   };
 
   patchPhase = ''
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
             s|^PATH=.*$||g"
   '';
 
-  buildInputs = [ binutils zlib popt makeWrapper gawk which gnugrep ]
-    ++ stdenv.lib.optionals (qt != null) [ qt libX11 libXext libpng ];
+  buildInputs = [ binutils zlib popt makeWrapper gawk which gnugrep pkgconfig ]
+    ++ stdenv.lib.optionals withGui [ qt4 ];
 
   configureFlags =
     [ "--with-kernel-support"
       "--disable-shared"   # needed because only the static libbfd is available
     ]
-    ++ stdenv.lib.optional (qt != null) "--with-qt-dir=${qt}";
+    ++ stdenv.lib.optional withGui "--with-qt-dir=${qt4} --enable-gui=qt4";
 
   postInstall = ''
     wrapProgram "$out/bin/opcontrol"					\
