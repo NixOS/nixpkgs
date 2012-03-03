@@ -1460,6 +1460,8 @@ let
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
 
+  unfs3 = callPackage ../servers/unfs3 { };
+
   upx = callPackage ../tools/compression/upx { };
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
