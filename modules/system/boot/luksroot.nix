@@ -3,30 +3,56 @@
 with pkgs.lib;
 
 let
-  luksRoot = config.boot.initrd.luksRoot;
+  luks = config.boot.initrd.luks;
+
+  openCommand = { name, device }: ''
+    # Wait for luksRoot to appear, e.g. if on a usb drive.
+    # XXX: copied and adapted from stage-1-init.sh - should be
+    # available as a function.
+    if ! test -e ${device}; then
+        echo -n "waiting 10 seconds for device ${device} to appear..."
+        for ((try = 0; try < 10; try++)); do
+            sleep 1
+            if test -e ${device}; then break; fi
+            echo -n "OK"
+        done
+        echo "ok"
+    fi
+
+    # open luksRoot and scan for logical volumes
+    cryptsetup luksOpen ${device} ${name}
+  '';
+
 in
 {
 
   options = {
-
-    boot.initrd.luksRoot = mkOption {
-      default = "";
-      example = "/dev/sda3";
+    boot.initrd.luks.enable = mkOption {
+      default = false;
       description = '';
-        The device that should be decrypted using LUKS before trying to mount the
-        root partition. This works for both LVM-over-LUKS and LUKS-over-LVM setups.
-
-        Make sure that initrd has the crypto modules needed for decryption.
-
-        The decrypted device name is /dev/mapper/luksroot.
+        Have luks in the initrd.
       '';
     };
 
+    boot.initrd.luks.devices = mkOption {
+      default = [ ];
+      example = [ { name = "luksroot"; device = "/dev/sda3"; } ];
+      description = '';
+        The list of devices that should be decrypted using LUKS before trying to mount the
+        root partition. This works for both LVM-over-LUKS and LUKS-over-LVM setups.
+
+        The devices are decrypted to the device mapper names defined.
+
+        Make sure that initrd has the crypto modules needed for decryption.
+      '';
+    };
   };
 
+  config = mkIf luks.enable {
 
-
-  config = mkIf (luksRoot != "") {
+    # Some modules that may be needed for mounting anything ciphered
+    boot.initrd.kernelModules = [ "aes_generic" "aes_x86_64" "dm_mod" "dm_crypt"
+      "sha256_generic" "cbc" "cryptd" ];
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
@@ -42,23 +68,6 @@ in
       $out/bin/cryptsetup --version
     '';
 
-    boot.initrd.preLVMCommands = ''
-      # Wait for luksRoot to appear, e.g. if on a usb drive.
-      # XXX: copied and adapted from stage-1-init.sh - should be
-      # available as a function.
-      if ! test -e ${luksRoot}; then
-          echo -n "waiting for device ${luksRoot} to appear..."
-          for ((try = 0; try < 10; try++)); do
-              sleep 1
-              if test -e ${luksRoot}; then break; fi
-              echo -n "."
-          done
-          echo "ok"
-      fi
-      # open luksRoot and scan for logical volumes
-      cryptsetup luksOpen ${luksRoot} luksroot
-    '';
-
+    boot.initrd.preLVMCommands = concatMapStrings openCommand luks.devices;
   };
-
 }
