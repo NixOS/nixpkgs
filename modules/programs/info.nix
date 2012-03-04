@@ -32,5 +32,5 @@ let
 in
 
 {
-  environment.systemPackages = [infoWrapper];
+  environment.systemPackages = [ infoWrapper pkgs.texinfo ];
 }
