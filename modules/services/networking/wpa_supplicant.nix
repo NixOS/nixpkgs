@@ -6,6 +6,10 @@ let
 
   configFile = "/etc/wpa_supplicant.conf";
 
+  ifaces =
+    config.networking.wireless.interfaces ++
+    optional (config.networking.WLANInterface != "") config.networking.WLANInterface;
+
 in
 
 {
@@ -14,7 +18,7 @@ in
 
   options = {
   
-    networking.enableWLAN = mkOption {
+    networking.wireless.enable = mkOption {
       default = false;
       description = ''
         Whether to start <command>wpa_supplicant</command> to scan for
@@ -29,9 +33,16 @@ in
     };
 
     networking.WLANInterface = mkOption {
-      default = "wlan0";
+      default = "";
+      description = "Obsolete. Use <option>networking.wireless.interfaces</option> instead.";
+    };
+
+    networking.wireless.interfaces = mkOption {
+      default = [];
+      example = [ "wlan0" "wlan1" ];
       description = ''
-        The interface wpa_supplicant will use, if enableWLAN is set.
+        The interfaces <command>wpa_supplicant</command> will use.  If empty, it will
+        automatically use all wireless interfaces.
       '';
     };
 
@@ -40,7 +51,7 @@ in
 
   ###### implementation
   
-  config = mkIf config.networking.enableWLAN {
+  config = mkIf config.networking.wireless.enable {
 
     environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
@@ -58,9 +69,20 @@ in
             chmod 600 ${configFile}
           '';
 
-        exec =
-          "wpa_supplicant -s -u -c ${configFile} "
-          + (optionalString (config.networking.WLANInterface != null) "-i ${config.networking.WLANInterface}");
+        script =
+          ''
+            ${if ifaces == [] then ''
+              for i in $(cd /sys/class/net && echo *); do
+                if [ -e /sys/class/net/$i/wireless ]; then
+                  ifaces="$ifaces''${ifaces:+ -N} -i$i"
+                fi
+              done
+            '' else ''
+              ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
+            ''}
+            echo "|$ifaces|"
+            exec wpa_supplicant -s -u -c ${configFile} $ifaces
+          '';
       };
   
     powerManagement.resumeCommands =

@@ -68,6 +68,7 @@ in zipModules ([]
 ++ rename obsolete "environment.extraPackages" "environment.systemPackages"
 
 ++ rename obsolete "security.extraSetuidPrograms" "security.setuidPrograms"
+++ rename obsolete "networking.enableWLAN" "networking.wireless.enable"
 
 # Old Grub-related options.
 ++ rename obsolete "boot.copyKernels" "boot.loader.grub.copyKernels"
