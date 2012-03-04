@@ -283,8 +283,8 @@ in
           '';
       };
 
-    jobs.allInterfaces = {
-      name = "all-interfaces";
+    jobs.networking = {
+      name = "networking";
       description = "all required interfaces are up";
       startOn = concatStringsSep " and " (map (job: "started ${job.name}") cfg.interfaceJobs);
       stopOn  = concatStringsSep " and " (map (job: "stopping ${job.name}") cfg.interfaceJobs);

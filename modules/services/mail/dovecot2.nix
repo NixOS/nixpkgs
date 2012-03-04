@@ -123,7 +123,7 @@ in
     jobs.dovecot2 =
       { description = "Dovecot IMAP/POP3 server";
 
-        startOn = "started all-interfaces";
+        startOn = "started networking";
 
         preStart =
           ''

@@ -553,7 +553,7 @@ in
 
         description = "Apache HTTPD";
 
-        startOn = "started all-interfaces and filesystem"
+        startOn = "started networking and filesystem"
           # Hacky.  Some subservices depend on Postgres
           # (e.g. Mediawiki), but they don't have a way to declare
           # that dependency.  So just start httpd after postgresql if

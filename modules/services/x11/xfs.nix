@@ -36,7 +36,7 @@ in
     jobs.xfs =
       { description = "X Font Server";
 
-        startOn = "started all-interfaces";
+        startOn = "started networking";
 
         exec = "${pkgs.xorg.xfs}/bin/xfs -config ${configFile}";
       };

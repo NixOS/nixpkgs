@@ -125,8 +125,8 @@ in
 
         description = "IRCD Hybrid server";
 
-        startOn = "started all-interfaces";
-        stopOn = "stopping all-interfaces";
+        startOn = "started networking";
+        stopOn = "stopping networking";
 
         exec = "${ircdService}/bin/control start";
       };

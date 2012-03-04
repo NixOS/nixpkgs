@@ -48,7 +48,7 @@ in
     jobs.openfire =
       { description = "OpenFire XMPP server";
 
-        startOn = "started all-interfaces ${extraStartDependency}";
+        startOn = "started networking ${extraStartDependency}";
 
         script =
           ''
