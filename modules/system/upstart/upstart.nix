@@ -25,7 +25,9 @@ let
         ''
           # Upstart job `${job.name}'.  This is a generated file.  Do not edit.
 
-          description "${job.description}"
+          ${optionalString (job.description != "") ''
+            description "${job.description}"
+          ''}
 
           ${if isList job.startOn then
               "start on ${concatStringsSep " or " job.startOn}"
@@ -144,7 +146,7 @@ let
 
     description = mkOption {
       type = types.string;
-      default = "(no description given)";
+      default = "";
       description = ''
         A short description of this job.
       '';
