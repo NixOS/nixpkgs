@@ -5,7 +5,7 @@ with pkgs.lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = { name, device }: ''
+  openCommand = { name, device, ... }: ''
     # Wait for luksRoot to appear, e.g. if on a usb drive.
     # XXX: copied and adapted from stage-1-init.sh - should be
     # available as a function.
@@ -14,7 +14,7 @@ let
         for ((try = 0; try < 10; try++)); do
             sleep 1
             if test -e ${device}; then break; fi
-            echo -n "OK"
+            echo -n .
         done
         echo "ok"
     fi
@@ -22,6 +22,10 @@ let
     # open luksRoot and scan for logical volumes
     cryptsetup luksOpen ${device} ${name}
   '';
+
+  isPreLVM = f: f.preLVM;
+  preLVM = filter isPreLVM luks.devices;
+  postLVM = filter (f: !(isPreLVM f)) luks.devices;
 
 in
 {
@@ -36,7 +40,7 @@ in
 
     boot.initrd.luks.devices = mkOption {
       default = [ ];
-      example = [ { name = "luksroot"; device = "/dev/sda3"; } ];
+      example = [ { name = "luksroot"; device = "/dev/sda3"; preLVM = true; } ];
       description = '';
         The list of devices that should be decrypted using LUKS before trying to mount the
         root partition. This works for both LVM-over-LUKS and LUKS-over-LVM setups.
@@ -45,6 +49,36 @@ in
 
         Make sure that initrd has the crypto modules needed for decryption.
       '';
+
+      type = types.list types.optionSet;
+
+      options = {
+
+        name = mkOption {
+          example = "luksroot";
+          type = types.string;
+          description = ''
+            Name of the interface.
+          '';
+        };
+
+        device = mkOption {
+          example = "/dev/sda2";
+          type = types.string;
+          description = ''
+            IP address of the interface.  Leave empty to configure the
+            interface using DHCP.
+          '';
+        };
+
+        preLVM = mkOption {
+          default = true;
+          type = types.bool;
+          description = ''
+            Whether the luksOpen will be attempted before LVM scan or after it.
+          '';
+        };
+      };
     };
   };
 
@@ -68,6 +102,7 @@ in
       $out/bin/cryptsetup --version
     '';
 
-    boot.initrd.preLVMCommands = concatMapStrings openCommand luks.devices;
+    boot.initrd.preLVMCommands = concatMapStrings openCommand preLVM;
+    boot.initrd.postDeviceCommands = concatMapStrings openCommand postLVM;
   };
 }
