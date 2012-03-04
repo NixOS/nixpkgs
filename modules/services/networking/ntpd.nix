@@ -15,7 +15,6 @@ let
   modprobe = config.system.sbin.modprobe;
 
   configFile = pkgs.writeText "ntp.conf" ''
-    driftfile ${stateDir}/ntp.drift
     # Keep the drift file in ${stateDir}/ntp.drift.  However, since we
     # chroot to ${stateDir}, we have to specify it as /ntp.drift.
     driftfile /ntp.drift
@@ -70,6 +69,8 @@ in
         home = stateDir;
       };
 
+    boot.kernelModules = [ "capability" ];
+
     jobs.ntpd =
       { description = "NTP daemon";
 
@@ -81,16 +82,6 @@ in
           ''
             mkdir -m 0755 -p ${stateDir}
             chown ${ntpUser} ${stateDir}
-
-            # Needed to run ntpd as an unprivileged user.
-            ${modprobe}/sbin/modprobe --quiet capability || true
-
-            # !!! This can hang indefinitely if the network is down or
-            # the servers are unreachable.  This is particularly bad
-            # because Upstart cannot kill jobs stuck in the start
-            # phase.  Thus a hanging ntpd job can block system
-            # shutdown.
-            # ntpd -q -g ${ntpFlags}
           '';
 
         exec = "ntpd -g -n ${ntpFlags}";
