@@ -22,7 +22,7 @@ let
   nixosTarball = makeTarball "nixos.tar.bz2" (cleanSource ../../..);
 
   # Put Nixpkgs in a tarball.
-  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (cleanSource pkgs.path);
+  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (cleanSource <nixpkgs>);
 
   includeSources = true;
 

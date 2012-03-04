@@ -1,5 +1,3 @@
-{ nixpkgs ? ../nixpkgs }:
-
 let
 
 
@@ -10,7 +8,7 @@ let
     , system ? "i686-linux"
     }:
 
-    with import nixpkgs {inherit system;};
+    with <nixpkgs> {inherit system;};
 
     let
 
@@ -22,7 +20,7 @@ let
         };
 
       config = (import lib/eval-config.nix {
-        inherit system nixpkgs;
+        inherit system;
         modules = [ module versionModule ];
       }).config;
 
@@ -51,14 +49,14 @@ let
     , system ? "i686-linux"
     }:
 
-    with import nixpkgs {inherit system;};
+    with import <nixpkgs> {inherit system;};
     let
       version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
 
       versionModule = { system.nixosVersion = version; };
 
       config = (import lib/eval-config.nix {
-        inherit system nixpkgs;
+        inherit system;
         modules = [ module versionModule ];
       }).config;
 
@@ -81,7 +79,7 @@ let
       , officialRelease ? false
       }:
 
-      with import nixpkgs {};
+      with import <nixpkgs> {};
 
       releaseTools.makeSourceTarball {
         name = "nixos-tarball";
@@ -109,10 +107,9 @@ let
       }:
 
       (import "${nixosSrc}/doc/manual" {
-        pkgs = import nixpkgs {};
+        pkgs = import <nixpkgs> {};
         options =
           (import lib/eval-config.nix {
-            inherit nixpkgs;
             modules = [ { fileSystems = []; } ];
           }).options;
         revision =
@@ -162,7 +159,6 @@ let
     tests =
       let
         t = import ./tests {
-          inherit nixpkgs;
           system = "i686-linux";
         };
       in {
