@@ -4,8 +4,6 @@ with pkgs.lib;
 
 let
 
-  startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
-
   cfg = config.services.dovecot;
 
   dovecotConf =
@@ -116,7 +114,7 @@ in
     jobs.dovecot =
       { description = "Dovecot IMAP/POP3 server";
 
-        startOn = "started ${startingDependency}";
+        startOn = "started all-interfaces";
 
         preStart =
           ''

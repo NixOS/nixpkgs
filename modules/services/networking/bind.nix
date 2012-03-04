@@ -4,8 +4,6 @@ with pkgs.lib;
 
 let
 
-  startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
-
   cfg = config.services.bind;
 
   confFile = pkgs.writeText "named.conf"

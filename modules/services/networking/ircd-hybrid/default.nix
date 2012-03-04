@@ -12,7 +12,7 @@ let
     substFiles = [ "=>/conf" ./ircd.conf ];
     inherit (pkgs) ircdHybrid coreutils su iproute gnugrep procps;
 
-    gw6cEnabled = if config.services.gw6c.enable && config.services.gw6c.autorun then "true" else "false";
+    ipv6Enabled = if config.networking.enableIPv6 then "true" else "false";
 
     inherit (cfg) serverName sid description adminEmail
             extraPort;
@@ -25,8 +25,6 @@ let
 
     builder = ./builder.sh;
   };
-
-  startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
 
 in
 
@@ -127,8 +125,8 @@ in
 
         description = "IRCD Hybrid server";
 
-        startOn = "started ${startingDependency}";
-        stopOn = "stopping ${startingDependency}";
+        startOn = "started all-interfaces";
+        stopOn = "stopping all-interfaces";
 
         exec = "${ircdService}/bin/control start";
       };

@@ -4,8 +4,6 @@ with pkgs.lib;
 
 let
 
-  startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
-
   cfg = config.services.postfix;
   user = cfg.user;
   group = cfg.group;
@@ -21,9 +19,7 @@ let
       default_privs = nobody
 
     ''
-    + optionalString (config.services.gw6c.enable || config.networking.enableIPv6) (''
-      inet_protocols = all
-    '')
+    + optionalString config.networking.enableIPv6 "inet_protocols = all"
     + (if cfg.networks != null then
         ''
           mynetworks = ${concatStringsSep ", " cfg.networks}
@@ -309,7 +305,7 @@ in
       # accurate way is unlikely to be better.
       { description = "Postfix mail server";
 
-        startOn = "started ${startingDependency}";
+        startOn = "started all-interfaces";
 
         daemonType = "none";
 

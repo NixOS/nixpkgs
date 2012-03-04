@@ -6,8 +6,6 @@ let
 
   mainCfg = config.services.httpd;
 
-  startingDependency = if config.services.gw6c.enable then "gw6c" else "network-interfaces";
-
   httpd = pkgs.apacheHttpd;
 
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
@@ -555,7 +553,7 @@ in
 
         description = "Apache HTTPD";
 
-        startOn = "started ${startingDependency} and filesystem"
+        startOn = "started all-interfaces and filesystem"
           # Hacky.  Some subservices depend on Postgres
           # (e.g. Mediawiki), but they don't have a way to declare
           # that dependency.  So just start httpd after postgresql if

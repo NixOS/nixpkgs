@@ -6,10 +6,8 @@ let
 
   inherit (pkgs) jre openfire coreutils which gnugrep gawk gnused;
 
-  startDependency =
-    if config.services.openfire.usePostgreSQL then "postgresql" else
-    if config.services.gw6c.enable then "gw6c" else
-    "network-interfaces";
+  extraStartDependency =
+    if config.services.openfire.usePostgreSQL then "and started postgresql" else "";
 
 in
 
@@ -50,7 +48,7 @@ in
     jobs.openfire =
       { description = "OpenFire XMPP server";
 
-        startOn = "started ${startDependency}";
+        startOn = "started all-interfaces ${extraStartDependency}";
 
         script =
           ''
