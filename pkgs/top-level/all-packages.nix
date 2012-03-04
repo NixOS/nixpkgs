@@ -700,6 +700,8 @@ let
 
   ftgl = callPackage ../development/libraries/ftgl { };
 
+  ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
+
   fuppes = callPackage ../tools/networking/fuppes {
     ffmpeg = ffmpeg_0_6_90;
   };
@@ -774,7 +776,11 @@ let
 
   gnused_4_2 = callPackage ../tools/text/gnused/4.2.nix { };
 
-  gnutar = callPackage ../tools/archivers/gnutar { };
+  gnutar = lowPrio (callPackage ../tools/archivers/gnutar { });
+
+  gnutarWithMan = callPackage ../tools/archivers/gnutar {
+    withMan = true;
+  };
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
@@ -1455,6 +1461,8 @@ let
   };
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
+
+  unfs3 = callPackage ../servers/unfs3 { };
 
   upx = callPackage ../tools/compression/upx { };
 
@@ -3116,16 +3124,7 @@ let
 
   openocd = callPackage ../development/tools/misc/openocd { };
 
-  oprofile = import ../development/tools/profiling/oprofile {
-    inherit fetchurl stdenv binutils popt makeWrapper gawk which gnugrep zlib;
-
-    # Optional build inputs for the (useless) GUI.
-    /*
-    qt = qt3;
-    inherit (xlibs) libX11 libXext;
-    inherit libpng;
-     */
-  };
+  oprofile = callPackage ../development/tools/profiling/oprofile { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
 
@@ -4452,7 +4451,9 @@ let
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
-  opencascade = callPackage ../development/libraries/opencascade { };
+  opencascade = callPackage ../development/libraries/opencascade {
+    ftgl = ftgl212;
+  };
 
   opencsg = callPackage ../development/libraries/opencsg { };
 

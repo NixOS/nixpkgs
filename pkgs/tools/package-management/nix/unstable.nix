@@ -4,12 +4,12 @@
 , stateDir ? "/nix/var"
 }:
 
-stdenv.mkDerivation (rec {
-  name = "nix-1.0pre31851";
+stdenv.mkDerivation rec {
+  name = "nix-1.0pre2606_8afd28a";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/1937677/download/4/${name}.tar.bz2";
-    sha256 = "36f07b6b701da74f07d8c8cc43044306e570b6837555ad523701d86e5f567568";
+    url = "http://hydra.nixos.org/build/2183656/download/4/${name}.tar.bz2";
+    sha256 = "4f21d01563ab9e949e09997ddaa89066c40a13b27e028a6fdffc67b97dd90dcb";
   };
 
   buildNativeInputs = [ perl pkgconfig ];
@@ -46,11 +46,13 @@ stdenv.mkDerivation (rec {
 
   doCheck = true;
 
+  # Hack to get the check to succeed on Darwin.
+  phases = stdenv.lib.optionalString stdenv.isDarwin
+    "$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase $preInstallPhases installPhase checkPhase fixupPhase $preDistPhases distPhase $postPhases";
+
   meta = {
     description = "The Nix Deployment System";
     homepage = http://nixos.org/;
     license = "LGPLv2+";
   };
-} // stdenv.lib.optionalAttrs stdenv.isDarwin {
-      phases = "$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase $preInstallPhases installPhase checkPhase fixupPhase $preDistPhases distPhase $postPhases";
-})
+}

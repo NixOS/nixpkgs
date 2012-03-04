@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
+, libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel
 , python, which, alsaLib, curl, gawk
 , xorriso, makeself, perl, jdk, pkgconfig
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
-      hal libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk
+      libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk
       pkgconfig which libXmu
     ];
 
@@ -49,19 +49,23 @@ stdenv.mkDerivation {
     echo "VBOX_WITH_WARNINGS_AS_ERRORS :=" >> LocalConfig.kmk
   '';
 
-  buildPhase = ''
+  enableParallelBuilding = true;
+
+  preBuild = ''
     source env.sh
     kmk
     cd out/linux.*/release/bin/src
     export KERN_DIR=${kernel}/lib/modules/*/build
-    make
+  '';
+
+  postBuild = ''
     cd ../../../../..
   '';
     
   installPhase = ''
     # Install VirtualBox files
     cd out/linux.*/release/bin
-    ensureDir $out/virtualbox
+    mkdir -p $out/virtualbox
     cp -av * $out/virtualbox
     
     # Install kernel module
@@ -80,7 +84,7 @@ stdenv.mkDerivation {
     make install
     
     # Create wrapper script
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp -v ${./VBox.sh} $out/bin/VBox.sh
     sed -i -e "s|@INSTALL_PATH@|$out/virtualbox|" \
            -e "s|@QT4_PATH@|${qt4}/lib|" \
@@ -94,7 +98,7 @@ stdenv.mkDerivation {
     done
     
     # Create and fix desktop item
-    ensureDir $out/share/applications
+    mkdir -p $out/share/applications
     sed -i -e "s|Icon=VBox|Icon=$out/virtualbox/VBox.png|" $out/virtualbox/virtualbox.desktop
     ln -sfv $out/virtualbox/virtualbox.desktop $out/share/applications
   '';

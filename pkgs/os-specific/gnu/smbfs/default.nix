@@ -2,6 +2,9 @@
 
 let
   date = "2011-11-14";
+  samba_patched = stdenv.lib.overrideDerivation samba (attrs: {
+    patches = attrs.patches ++ [ ./samba-without-byte-range-locks.patch ];
+  });
 in
 stdenv.mkDerivation rec {
   name = "smbfs-${date}";
@@ -19,7 +22,7 @@ stdenv.mkDerivation rec {
                s|^LDFLAGS=\(.*\)$|LDFLAGS=\1 -pthread|g'
     '';
 
-  buildInputs = [ hurd machHeaders samba ];
+  buildInputs = [ hurd machHeaders samba_patched ];
 
   installPhase =
     '' mkdir -p "$out/hurd"
