@@ -1,4 +1,4 @@
-{ pkgs, nixpkgs, system, ... }:
+{ pkgs, system, ... }:
 
 with pkgs.lib;
 with import ../lib/qemu-flags.nix;
@@ -9,7 +9,7 @@ let
   # instrumentation.
   iso =
     (import ../lib/eval-config.nix {
-      inherit nixpkgs system;
+      inherit system;
       modules =
         [ ../modules/installer/cd-dvd/installation-cd-graphical.nix
           ../modules/testing/test-instrumentation.nix
