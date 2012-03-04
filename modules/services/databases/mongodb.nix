@@ -96,7 +96,7 @@ in
 
     jobs.mongodb =
       { description = "MongoDB server";
-        daemonType = "fork";
+        daemonType = "daemon";
 
         startOn = "filesystem";
 
@@ -108,7 +108,9 @@ in
             fi
           '';
 
-        exec = "${pkgs.shadow}/bin/su ${cfg.user} -c \"${mongodb}/bin/mongod --config ${mongoCnf}\"";
+        path = [mongodb];
+        exec = "mongod --config ${mongoCnf} --fork";
+        setuid = cfg.user;
 
         extraConfig = "kill timeout 10";
       };
