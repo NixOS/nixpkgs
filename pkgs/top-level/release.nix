@@ -123,6 +123,7 @@ with (import ./release-lib.nix);
   gnused = all;
   gnutar = all;
   gnutls = linux;
+  gogoclient = linux;
   gphoto2 = linux;
   gpm = linux;
   gprolog = linux;
