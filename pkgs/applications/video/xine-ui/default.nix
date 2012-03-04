@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, xlibs, xineLib, libpng, readline, ncurses, curl
+{stdenv, fetchurl, pkgconfig, xlibs, xineLib, libpng12, readline, ncurses, curl
 , lirc, xz, shared_mime_info }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ xz pkgconfig shared_mime_info ];
 
   buildInputs =
-    [ xineLib libpng readline ncurses curl lirc
+    [ xineLib libpng12 readline ncurses curl lirc
       xlibs.xlibs xlibs.libXext xlibs.libXv xlibs.libXxf86vm xlibs.libXtst xlibs.inputproto
       xlibs.libXinerama xlibs.libXi xlibs.libXft
     ];

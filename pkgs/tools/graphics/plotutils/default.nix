@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [libpng];
 
+  patches = map fetchurl (import ./debian-patches.nix);
+
   configureFlags = "--enable-libplotter"; # required for pstoedit
 
   doCheck = true;

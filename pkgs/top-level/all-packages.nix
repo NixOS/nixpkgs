@@ -1228,7 +1228,9 @@ let
 
   pngnq = callPackage ../tools/graphics/pngnq { };
 
-  pngtoico = callPackage ../tools/graphics/pngtoico { };
+  pngtoico = callPackage ../tools/graphics/pngtoico {
+    libpng = libpng12;
+  };
 
   polipo = callPackage ../servers/polipo { };
 
@@ -3830,7 +3832,9 @@ let
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
-  imlib = callPackage ../development/libraries/imlib { };
+  imlib = callPackage ../development/libraries/imlib {
+    libpng = libpng12;
+  };
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
@@ -4026,6 +4030,7 @@ let
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus {
+    libpng = pkgs.libpng12;
   };
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
@@ -4180,6 +4185,7 @@ let
 
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = callPackage ../development/libraries/libpng/libpng-apng.nix { };
+  libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
   libproxy = callPackage ../development/libraries/libproxy { };
 
@@ -4460,6 +4466,7 @@ let
 
   opencv_2_1 = callPackage ../development/libraries/opencv/2.1.nix {
     ffmpeg = ffmpeg_0_6_90;
+    libpng = libpng12;
     inherit (gst_all) gstreamer;
   };
 
@@ -4766,13 +4773,14 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libpng libxml2 libxslt sqlite
+        libjpeg libtiff libxml2 libxslt sqlite
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
       inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
+      libpng = libpng12;
     };
 
   webkitSVN =
@@ -4780,13 +4788,14 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libpng libxml2 libxslt sqlite
+        libjpeg libtiff libxml2 libxslt sqlite
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
       inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
+      libpng = libpng12;
     };
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
@@ -6951,7 +6960,7 @@ let
   };
 
   qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
-    inherit libpng;
+    libpng = libpng12;
     opencv = opencv_2_1;
   };
 
@@ -7889,6 +7898,7 @@ let
 
   exult = callPackage ../games/exult {
     stdenv = overrideGCC stdenv gcc42;
+    libpng = libpng12;
   };
 
   /*
@@ -8076,7 +8086,9 @@ let
 
   warzone2100 = callPackage ../games/warzone2100 { };
 
-  widelands = callPackage ../games/widelands {};
+  widelands = callPackage ../games/widelands {
+    libpng = libpng12;
+  };
 
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
@@ -8673,7 +8685,7 @@ let
 
   splix = callPackage ../misc/cups/drivers/splix { };
 
-  tetex = callPackage ../tools/typesetting/tex/tetex { };
+  tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
 
