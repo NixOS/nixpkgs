@@ -774,8 +774,6 @@ let
 
   gnused = callPackage ../tools/text/gnused { };
 
-  gnused_4_2 = callPackage ../tools/text/gnused/4.2.nix { };
-
   gnutar = callPackage ../tools/archivers/gnutar { };
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
