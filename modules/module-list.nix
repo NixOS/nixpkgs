@@ -121,6 +121,7 @@
   ./services/networking/flashpolicyd.nix
   ./services/networking/git-daemon.nix
   ./services/networking/gnunet.nix
+  ./services/networking/gogoclient.nix
   ./services/networking/gvpe.nix
   ./services/networking/gw6c/default.nix
   ./services/networking/ifplugd.nix
