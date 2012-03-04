@@ -172,17 +172,6 @@ in
         configured.
       '';
     };
-
-    networking.interfaceJobs = mkOption {
-      default = [config.jobs.networkInterfaces];
-      type = types.list types.attrs;
-      merge = mergeListOption;
-      description = ''
-        List of jobs that bring up additional interfaces.
-        For example vpn / ipv6 / ppp tasks.
-        This gets used by certain services as dependency for their upstart job.
-      '';
-    };
   };
 
 
@@ -286,15 +275,11 @@ in
     jobs.networking = {
       name = "networking";
       description = "all required interfaces are up";
-      startOn = concatStringsSep " and " (map (job: "started ${job.name}") cfg.interfaceJobs);
-      stopOn  = concatStringsSep " and " (map (job: "stopping ${job.name}") cfg.interfaceJobs);
+      startOn = "started network-interfaces";
+      stopOn  = "stopping network-interfaces";
       task = true;
       exec = "true";
     };
-
-
-    networking.interfaceJobs = [config.jobs.networkInterfaces];
-    
 
     # Set the host name in the activation script.  Don't clear it if
     # it's not configured in the NixOS configuration, since it may

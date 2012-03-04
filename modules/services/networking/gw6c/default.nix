@@ -150,16 +150,13 @@ in
     jobs.gw6c =
       { description = "Gateway6 client";
 
-        startOn = if cfg.autorun then "started network-interfaces" else "";
+        startOn = optionalString cfg.autorun "starting networking";
         stopOn = "stopping network-interfaces";
 
         exec = "${gw6cService}/bin/control start";
       };
 
-    networking = {
-      enableIPv6 = true;
-      interfaceJobs = optional cfg.autorun config.jobs.gw6c;
-    };
+    networking.enableIPv6 = true;
 
   };
 

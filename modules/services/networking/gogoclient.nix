@@ -58,15 +58,12 @@ in
 
     # environment.systemPackages = [pkgs.gogoclient];
 
-    networking = {
-      enableIPv6 = true;
-      interfaceJobs = optional cfg.autorun config.jobs.gogoclient;
-    };
+    networking.enableIPv6 = true;
 
     jobs.gogoclient = {
       name = "gogoclient";
       description = "ipv6 tunnel";
-      startOn = if cfg.autorun then "started network-interfaces" else "";
+      startOn = optionalString cfg.autorun "starting networking";
       stopOn = "stopping network-interfaces";
       script = "cd /var/lib/gogoc; exec gogoc -y -f /etc/gogoc.conf";
       path = [pkgs.gogoclient];
