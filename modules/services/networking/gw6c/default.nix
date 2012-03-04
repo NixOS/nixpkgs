@@ -156,6 +156,11 @@ in
         exec = "${gw6cService}/bin/control start";
       };
 
+    networking = {
+      enableIPv6 = true;
+      interfaceJobs = optional cfg.autorun config.jobs.gw6c;
+    };
+
   };
 
 }
