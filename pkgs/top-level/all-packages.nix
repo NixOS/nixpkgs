@@ -6512,6 +6512,7 @@ let
 
   chrome = lowPrio (callPackage ../applications/networking/browsers/chromium {
     inherit (gnome) GConf;
+    libpng = libpng12;
     patchelf = patchelf06;
   });
 
