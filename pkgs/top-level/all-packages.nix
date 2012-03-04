@@ -776,11 +776,7 @@ let
 
   gnused_4_2 = callPackage ../tools/text/gnused/4.2.nix { };
 
-  gnutar = lowPrio (callPackage ../tools/archivers/gnutar { });
-
-  gnutarWithMan = callPackage ../tools/archivers/gnutar {
-    withMan = true;
-  };
+  gnutar = callPackage ../tools/archivers/gnutar { };
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 

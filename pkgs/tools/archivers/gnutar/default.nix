@@ -1,8 +1,6 @@
-{stdenv, fetchurl, withMan ? false, help2man ? null}:
+{ stdenv, fetchurl }:
 
-assert withMan -> help2man != null;
-
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "gnutar-1.25";
 
   src = fetchurl {
@@ -34,10 +32,4 @@ stdenv.mkDerivation (rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;
   };
-} // (if withMan then {
-  buildInputs = [ help2man ];
-  postInstall = ''
-    ensureDir $out/share/man/man1
-    help2man $out/bin/tar > $out/share/man/man1/tar.1
-  '';
-} else {}))
+}
