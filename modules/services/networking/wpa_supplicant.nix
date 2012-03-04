@@ -80,7 +80,6 @@ in
             '' else ''
               ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
             ''}
-            echo "|$ifaces|"
             exec wpa_supplicant -s -u -c ${configFile} $ifaces
           '';
       };
