@@ -6,6 +6,11 @@ let
 
   upstart = pkgs.upstart;
 
+  userExists = u:
+    (u == "") || any (uu: uu.name == u) (attrValues config.users.extraUsers);
+
+  groupExists = g:
+    (g == "") || any (gg: gg.name == g) (attrValues config.users.extraGroups);
 
   # From a job description, generate an Upstart job file.
   makeJob = job:
@@ -94,6 +99,14 @@ let
              if job.daemonType == "none" then "" else
              throw "invalid daemon type `${job.daemonType}'"
           )}
+
+          ${optionalString (job.setuid != "") ''
+            setuid ${job.setuid}
+          ''}
+
+          ${optionalString (job.setgid != "") ''
+            setuid ${job.setgid}
+          ''}
 
           ${job.extraConfig}
         '';
@@ -255,6 +268,24 @@ let
       '';
     };
 
+    setuid = mkOption {
+      type = types.string;
+      check = userExists;
+      default = "";
+      description = ''
+        Run the daemon as a different user.
+      '';
+    };
+
+    setgid = mkOption {
+      type = types.string;
+      check = groupExists;
+      default = "";
+      description = ''
+        Run the daemon as a different group.
+      '';
+    };
+
     extraConfig = mkOption {
       type = types.string;
       default = "";
@@ -367,6 +398,13 @@ in
     # Upstart can listen on the system bus, allowing normal users to
     # do status queries.
     services.dbus.packages = [ upstart ];
+
+    system.activationScripts.chownJobLogs = stringAfter ["var"] 
+    (concatMapStrings (job: ''
+      touch /var/log/upstart/${job.name}
+      ${optionalString (job.setuid != "") "chown ${job.setuid} /var/log/upstart/${job.name}"}
+      ${optionalString (job.setgid != "") "chown :${job.setgid} /var/log/upstart/${job.name}"}
+    '') (attrValues config.jobs));
 
   };
 
