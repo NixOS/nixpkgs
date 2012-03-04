@@ -1,13 +1,19 @@
 # This module defines the packages that appear in
 # /var/run/current-system/sw.
 
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
 let
 
   cfg = config.environment;
+
+  extraManpages = pkgs.runCommand "extra-manpages" { buildInputs = [ pkgs.help2man ]; }
+    ''
+      mkdir -p $out/share/man/man1
+      help2man ${pkgs.gnutar}/bin/tar > $out/share/man/man1/tar.1
+    '';
 
   requiredPackages =
     [ config.system.sbin.modprobe # must take precedence over module_init_tools
@@ -29,7 +35,7 @@ let
       pkgs.gnugrep
       pkgs.gnupatch
       pkgs.gnused
-      pkgs.gnutarWithMan
+      pkgs.gnutar
       pkgs.gzip
       pkgs.less
       pkgs.libcap
@@ -52,6 +58,7 @@ let
       pkgs.udev
       pkgs.usbutils
       pkgs.utillinux
+      extraManpages      
     ];
 
 

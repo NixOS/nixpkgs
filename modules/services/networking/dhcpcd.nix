@@ -33,6 +33,9 @@ let
       # Ethernet cards used for bridging.  Likewise for vif* and tap*
       # (Xen) and virbr* and vnet* (libvirt).
       denyinterfaces ${toString ignoredInterfaces} peth* vif* tap* tun* virbr* vnet* vboxnet*
+
+      # Disable listening for IPv6 Router Advertisements for now.
+      noipv6rs
     '';
 
   # Hook for emitting ip-up/ip-down events.
@@ -72,7 +75,7 @@ in
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
-        exec = "dhcpcd --config ${dhcpcdConf} --nobackground --persistent";
+        exec = "dhcpcd --config ${dhcpcdConf} --nobackground";
       };
 
     environment.systemPackages = [ dhcpcd ];
