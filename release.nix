@@ -8,7 +8,7 @@ let
     , system ? "i686-linux"
     }:
 
-    with <nixpkgs> {inherit system;};
+    with import <nixpkgs> {inherit system;};
 
     let
 
