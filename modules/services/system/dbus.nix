@@ -135,6 +135,13 @@ in
 
         exec = "dbus-daemon --system";
 
+        postStart =
+          ''
+            # Signal Upstart to connect to the system bus.  This
+            # allows ‘initctl’ to work for non-root users.
+            kill -USR1 1
+          '';
+
         postStop =
           ''
             # !!! Hack: doesn't belong here.
