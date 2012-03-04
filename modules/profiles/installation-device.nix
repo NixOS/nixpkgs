@@ -155,7 +155,7 @@ in
     jobs.sshd.startOn = pkgs.lib.mkOverride 50 "";
 
     # Enable wpa_supplicant, but don't start it by default.
-    networking.enableWLAN = true;
+    networking.wireless.enable = true;
     jobs.wpa_supplicant.startOn = pkgs.lib.mkOverride 50 "";
   };
 }

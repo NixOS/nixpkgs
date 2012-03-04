@@ -242,8 +242,7 @@ if $generate; then
 
   networking = {
     # hostName = "nixos"; # Define your hostname.
-    interfaceMonitor.enable = true; # Watch for plugged cable.
-    enableWLAN = true;  # Enables Wireless.
+    wireless.enable = true;  # Enables Wireless.
   };
 
   # Add file system entries for each partition that you want to see mounted

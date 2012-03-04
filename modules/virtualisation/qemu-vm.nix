@@ -382,5 +382,5 @@ in
   services.mingetty.ttys = ttys ++ optional (!cfg.graphics) "ttyS0";
 
   # Wireless won't work in the VM.
-  networking.enableWLAN = mkOverride 50 false;
+  networking.wireless.enable = mkOverride 50 false;
 }
