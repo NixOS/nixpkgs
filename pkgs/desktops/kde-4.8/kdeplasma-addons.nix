@@ -11,6 +11,8 @@ kde {
     attica python qca2 qimageblitz kdepimlibs
     libqalculate libXtst shared_desktop_ontologies marble libkexiv2];
 
+  buildNativeInputs = [ pkgconfig ];
+
   meta = {
     description = "KDE Plasma Addons";
     license = "GPL";
