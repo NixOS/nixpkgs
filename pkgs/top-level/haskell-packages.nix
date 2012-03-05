@@ -160,7 +160,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     cabalInstall = self.cabalInstall_0_10_2;    # 7.4.1 fails
     alex         = self.alex_3_0_1;             # 7.4.1 ok
     happy        = self.happy_1_18_9;           # 7.4.1 ok
-    haddock      = self.haddock_2_9_2;          # 7.4.1 fails
+    haddock      = self.haddock_2_10_0;         # 7.4.1 ok
   };
 
   haskellPlatformDefaults_future =
@@ -1563,7 +1563,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haddock_2_7_2 = callPackage ../development/tools/documentation/haddock/2.7.2.nix {};
   haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {};
   haddock_2_9_4 = callPackage ../development/tools/documentation/haddock/2.9.4.nix {};
-  haddock = self.haddock_2_9_4;
+  haddock_2_10_0 = callPackage ../development/tools/documentation/haddock/2.10.0.nix {};
+  haddock = self.haddock_2_10_0;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
