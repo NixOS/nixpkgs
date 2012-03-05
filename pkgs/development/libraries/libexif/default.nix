@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "libexif-0.6.19";
+  name = "libexif-0.6.20";
 
   src = fetchurl {
     url = "mirror://sourceforge/libexif/${name}.tar.bz2";
-    sha256 = "1gfa07bzs2lk0n887f1lvz5b9a7abyc3f5zaf39w4sf23hk9axpr";
+    sha256 = "05fphfmgrni6838v0lkcqv88fbw7r1mdw3ypy3bh567vv05x4wm7";
   };
 
   buildInputs = [ gettext ];
