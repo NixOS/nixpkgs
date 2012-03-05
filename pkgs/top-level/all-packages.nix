@@ -698,6 +698,8 @@ let
 
   ftgl = callPackage ../development/libraries/ftgl { };
 
+  ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
+
   fuppes = callPackage ../tools/networking/fuppes {
     ffmpeg = ffmpeg_0_6_90;
   };
@@ -769,8 +771,6 @@ let
   };
 
   gnused = callPackage ../tools/text/gnused { };
-
-  gnused_4_2 = callPackage ../tools/text/gnused/4.2.nix { };
 
   gnutar = callPackage ../tools/archivers/gnutar { };
 
@@ -1218,7 +1218,9 @@ let
 
   pngnq = callPackage ../tools/graphics/pngnq { };
 
-  pngtoico = callPackage ../tools/graphics/pngtoico { };
+  pngtoico = callPackage ../tools/graphics/pngtoico {
+    libpng = libpng12;
+  };
 
   polipo = callPackage ../servers/polipo { };
 
@@ -1448,6 +1450,8 @@ let
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
 
+  unfs3 = callPackage ../servers/unfs3 { };
+
   upx = callPackage ../tools/compression/upx { };
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
@@ -1510,7 +1514,9 @@ let
 
   ts = callPackage ../tools/system/ts { };
 
-  transfig = callPackage ../tools/graphics/transfig { };
+  transfig = callPackage ../tools/graphics/transfig {
+    libpng = libpng12;
+  };
 
   truecrypt = callPackage ../applications/misc/truecrypt {
     wxGUI = getConfig [ "truecrypt" "wxGUI" ] true;
@@ -3083,9 +3089,7 @@ let
 
   openocd = callPackage ../development/tools/misc/openocd { };
 
-  oprofile = callPackage ../development/tools/profiling/oprofile {
-    qt3 = null;
-  };
+  oprofile = callPackage ../development/tools/profiling/oprofile { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
 
@@ -3796,7 +3800,9 @@ let
 
   ilmbase = callPackage ../development/libraries/ilmbase { };
 
-  imlib = callPackage ../development/libraries/imlib { };
+  imlib = callPackage ../development/libraries/imlib {
+    libpng = libpng12;
+  };
 
   imlib2 = callPackage ../development/libraries/imlib2 { };
 
@@ -3992,6 +3998,7 @@ let
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
   libgdiplus = callPackage ../development/libraries/libgdiplus {
+    libpng = pkgs.libpng12;
   };
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
@@ -4146,6 +4153,7 @@ let
 
   libpng = callPackage ../development/libraries/libpng { };
   libpng_apng = callPackage ../development/libraries/libpng/libpng-apng.nix { };
+  libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
   libproxy = callPackage ../development/libraries/libproxy { };
 
@@ -4411,7 +4419,9 @@ let
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
-  opencascade = callPackage ../development/libraries/opencascade { };
+  opencascade = callPackage ../development/libraries/opencascade {
+    ftgl = ftgl212;
+  };
 
   opencsg = callPackage ../development/libraries/opencsg { };
 
@@ -4424,6 +4434,7 @@ let
 
   opencv_2_1 = callPackage ../development/libraries/opencv/2.1.nix {
     ffmpeg = ffmpeg_0_6_90;
+    libpng = libpng12;
     inherit (gst_all) gstreamer;
   };
 
@@ -4730,13 +4741,14 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libpng libxml2 libxslt sqlite
+        libjpeg libtiff libxml2 libxslt sqlite
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
       inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
+      libpng = libpng12;
     };
 
   webkitSVN =
@@ -4744,13 +4756,14 @@ let
       inherit (gnome) gtkdoc libsoup;
       inherit (gtkLibs) gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libpng libxml2 libxslt sqlite
+        libjpeg libtiff libxml2 libxslt sqlite
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
       inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
         gstPluginsGood;
       inherit (xlibs) libXt renderproto libXrender;
+      libpng = libpng12;
     };
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
@@ -6329,6 +6342,7 @@ let
 
   chrome = lowPrio (callPackage ../applications/networking/browsers/chromium {
     inherit (gnome) GConf;
+    libpng = libpng12;
   });
 
   chromeWrapper = wrapFirefox
@@ -6770,7 +6784,7 @@ let
   };
 
   qrdecode = builderDefsPackage (import ../tools/graphics/qrdecode) {
-    inherit libpng;
+    libpng = libpng12;
     opencv = opencv_2_1;
   };
 
@@ -7702,6 +7716,7 @@ let
 
   exult = callPackage ../games/exult {
     stdenv = overrideGCC stdenv gcc42;
+    libpng = libpng12;
   };
 
   /*
@@ -7889,7 +7904,9 @@ let
 
   warzone2100 = callPackage ../games/warzone2100 { };
 
-  widelands = callPackage ../games/widelands {};
+  widelands = callPackage ../games/widelands {
+    libpng = libpng12;
+  };
 
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
@@ -8486,7 +8503,7 @@ let
 
   splix = callPackage ../misc/cups/drivers/splix { };
 
-  tetex = callPackage ../tools/typesetting/tex/tetex { };
+  tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
   tex4ht = callPackage ../tools/typesetting/tex/tex4ht { };
 

@@ -7,8 +7,10 @@
 , threadSupport ? true
 , mysqlSupport ? false, mysql ? null
 , openglSupport ? false, mesa ? null, libXmu ? null
-, x11, xextproto, zlib, libjpeg, libpng, which
+, x11, xextproto, zlib, libjpeg, libpng12, which
 }:
+
+let libpng = libpng12; in
 
 assert xftSupport -> libXft != null;
 assert xrenderSupport -> xftSupport && libXrender != null;
@@ -29,7 +31,8 @@ stdenv.mkDerivation {
     sha256 = "0jd4g3bwkgk2s4flbmgisyihm7cam964gzb3pawjlkhas01zghz8";
   };
 
-  buildInputs = [x11 libXft libXrender zlib libjpeg libpng which];
+  buildNativeInputs = [ which ];
+  propagatedBuildInputs = [x11 libXft libXrender zlib libjpeg libpng];
 
   configureFlags = "
     -v

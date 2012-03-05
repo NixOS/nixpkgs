@@ -2,11 +2,11 @@
 , libuuid, lzo, pkgconfig, guile }:
 
 stdenv.mkDerivation rec {
-  name = "libchop-0.5.1";
+  name = "libchop-0.5.2";
 
   src = fetchurl {
     url = "mirror://savannah/libchop/${name}.tar.gz";
-    sha256 = "1sfq4ibzc9fjmq7ga96k05lr77cyizxnipa3bzm5d22jwal1x3ib";
+    sha256 = "0fpdyxww41ba52d98blvnf543xvirq1v9xz1i3x1gm9lzlzpmc2g";
   };
 
   buildNativeInputs = [ pkgconfig gperf ];

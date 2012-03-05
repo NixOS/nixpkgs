@@ -1,31 +1,29 @@
-{ stdenv, fetchurl, libjpeg, libexif, giflib, libtiff, libpng
-, pkgconfig, freetype, fontconfig
+{ stdenv, fetchurl, libjpeg, libexif, libungif, libtiff, libpng, libwebp
+, pkgconfig, freetype, fontconfig, which, imagemagick, curl, saneBackends
 }:
 
 stdenv.mkDerivation rec {
-  name = "fbida-2.07";
+  name = "fbida-2.09";
   
   src = fetchurl {
     url = "http://dl.bytesex.org/releases/fbida/${name}.tar.gz";
-    sha256 = "0i6v3fvjc305pfw48sglb5f22lwxldmfch6mjhqbcp7lqkkxw435";
+    sha256 = "1riia87v5nsx858xnlvc7sspr1p36adjqrdch1255ikr5xbv6h6x";
   };
 
-  preBuild =
-    ''
-      # Fetch a segfault in exiftran (http://bugs.gentoo.org/284753).
-      # `fbida' contains a copy of some internal libjpeg source files.
-      # If these do not match with the actual libjpeg, exiftran may
-      # fail.
-      tar xvf ${libjpeg.src}
-      for i in jpegint.h jpeglib.h jinclude.h transupp.c transupp.h; do
-        cp jpeg-*/$i jpeg/
-      done
-    '';
-
+  buildNativeInputs = [ pkgconfig which ];
   buildInputs =
-    [ pkgconfig libexif libjpeg giflib libpng giflib freetype fontconfig ];
+    [ libexif libjpeg libpng libungif freetype fontconfig libtiff libwebp
+      imagemagick curl saneBackends
+    ];
   
   makeFlags = [ "prefix=$(out)" "verbose=yes" ];
+
+  patchPhase =
+    ''
+    sed -e 's@ cpp\>@ gcc -E -@' -i GNUmakefile
+    '';
+
+  configurePhase = "make config $makeFlags";
 
   crossAttrs = {
     makeFlags = makeFlags ++ [ "CC=${stdenv.cross.config}-gcc" "STRIP="];

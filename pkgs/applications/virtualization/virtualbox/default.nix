@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt4, libIDL, SDL, hal, libcap, zlib, libpng, glib, kernel
+, libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel
 , python, which, alsaLib, curl, gawk
 , xorriso, makeself, perl, jdk, pkgconfig
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
-      hal libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk
+      libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk
       pkgconfig which libXmu
     ];
 
@@ -49,12 +49,16 @@ stdenv.mkDerivation {
     echo "VBOX_WITH_WARNINGS_AS_ERRORS :=" >> LocalConfig.kmk
   '';
 
-  buildPhase = ''
+  enableParallelBuilding = true;
+
+  preBuild = ''
     source env.sh
     kmk
     cd out/linux.*/release/bin/src
     export KERN_DIR=${kernel}/lib/modules/*/build
-    make
+  '';
+
+  postBuild = ''
     cd ../../../../..
   '';
     

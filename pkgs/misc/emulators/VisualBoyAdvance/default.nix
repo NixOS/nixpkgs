@@ -6,7 +6,7 @@ stdenv.mkDerivation {
     url = mirror://sourceforge/vba/VisualBoyAdvance-src-1.7.2.tar.gz;
     sha256 = "1dr9w5i296dyq2gbx7sijk6p375aqnwld2n6rwnbzm2g3a94y4gl";
   };
-  patches = [ ./fix.diff ]; # patch to shut up lost of precision errors
+  patches = [ ./libpng15.patch ./fix.diff ]; # patch to shut up lost of precision errors
   preConfigure = ''
     # Fix errors with invalid conversion from 'const char*' to 'char*'
     sed -i -e "s|char \* p = strrchr|const char * p = strrchr|g" src/GBA.cpp
