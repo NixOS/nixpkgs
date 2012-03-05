@@ -1520,7 +1520,9 @@ let
 
   ts = callPackage ../tools/system/ts { };
 
-  transfig = callPackage ../tools/graphics/transfig { };
+  transfig = callPackage ../tools/graphics/transfig {
+    libpng = libpng12;
+  };
 
   truecrypt = callPackage ../applications/misc/truecrypt {
     wxGUI = getConfig [ "truecrypt" "wxGUI" ] true;
