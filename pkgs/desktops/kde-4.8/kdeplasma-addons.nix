@@ -1,6 +1,6 @@
 { kde, kdelibs, marble, shared_desktop_ontologies
 , boost, eigen, kde_workspace, attica, python, qca2, qimageblitz
-, kdepimlibs, libkexiv2, libqalculate, libXtst }:
+, kdepimlibs, libkexiv2, libqalculate, libXtst, libdbusmenu_qt }:
 # TODO: qwt, scim
 
 kde {
@@ -8,7 +8,7 @@ kde {
   KDEDIRS=marble;
 
   buildInputs = [ kdelibs boost eigen kde_workspace
-    attica python qca2 qimageblitz kdepimlibs
+    attica python qca2 qimageblitz kdepimlibs libdbusmenu_qt
     libqalculate libXtst shared_desktop_ontologies marble libkexiv2];
 
   buildNativeInputs = [ pkgconfig ];
