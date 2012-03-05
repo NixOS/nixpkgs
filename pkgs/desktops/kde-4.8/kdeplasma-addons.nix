@@ -1,4 +1,4 @@
-{ kde, kdelibs, marble, shared_desktop_ontologies
+{ kde, kdelibs, marble, shared_desktop_ontologies, pkgconfig
 , boost, eigen, kde_workspace, attica, python, qca2, qimageblitz
 , kdepimlibs, libkexiv2, libqalculate, libXtst, libdbusmenu_qt }:
 # TODO: qwt, scim
