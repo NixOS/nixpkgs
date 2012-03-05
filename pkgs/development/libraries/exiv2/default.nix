@@ -1,11 +1,11 @@
 {stdenv, fetchurl, zlib, expat}:
 
 stdenv.mkDerivation rec {
-  name = "exiv2-0.21";
+  name = "exiv2-0.22";
   
   src = fetchurl {
     url = "http://www.exiv2.org/${name}.tar.gz";
-    sha256 = "1r9phzb1h9v8smw1pix2k9lyr44n4nyba15x7qh45c0pwsjdf9yq";
+    sha256 = "0ynf4r4fqijaa9yb0wfddk0a151p8cbcqxab54dyhc1xk83saf6k";
   };
   
   propagatedBuildInputs = [zlib expat];
