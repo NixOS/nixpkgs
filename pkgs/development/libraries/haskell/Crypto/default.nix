@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ HUnit QuickCheck random ];
+  patches = [ ./class-constraints.diff ];
   meta = {
     description = "Collects together existing Haskell cryptographic functions into a package";
     license = "unknown";
