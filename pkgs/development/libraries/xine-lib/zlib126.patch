@@ -1,0 +1,52 @@
+http://anonscm.debian.org/hg/xine-lib/xine-lib/rev/24d09421ed09
+
+# HG changeset patch
+# User Ulrich Müller <ulm@gentoo.org>
+# Date 1327945720 0
+# Node ID 24d09421ed09d3a78efeab5c9b8ab31daaaba4fd
+# Parent  da296856c52e654cf599248de3a01bb754363c79
+Compile failure in osd.c with sys-libs/zlib-1.2.6
+
+diff -r da296856c52e -r 24d09421ed09 misc/xine-fontconv.c
+--- a/misc/xine-fontconv.c	Wed Jan 18 22:01:28 2012 +0000
++++ b/misc/xine-fontconv.c	Mon Jan 30 17:48:40 2012 +0000
+@@ -109,7 +109,7 @@
+ osd_font_t     font;
+ 
+ 
+-static int gzwrite_i16(gzFile *fp, uint16_t number) {
++static int gzwrite_i16(gzFile fp, uint16_t number) {
+   return gzputc(fp, number & 0xFF) != -1 &&
+          gzputc(fp, (number >> 8) & 0xFF) != -1;
+ }
+@@ -341,7 +341,7 @@
+ 
+   char                filename[1024];
+   FT_Bitmap          *out_bitmap;
+-  gzFile             *fp;
++  gzFile              fp;
+   int                 error;
+   int                 error_counter;
+   int                 glyph_index;
+diff -r da296856c52e -r 24d09421ed09 src/xine-engine/osd.c
+--- a/src/xine-engine/osd.c	Wed Jan 18 22:01:28 2012 +0000
++++ b/src/xine-engine/osd.c	Mon Jan 30 17:48:40 2012 +0000
+@@ -650,7 +650,7 @@
+   osd->display_y = y;
+ }
+ 
+-static uint16_t gzread_i16(gzFile *fp) {
++static uint16_t gzread_i16(gzFile fp) {
+   uint16_t ret;
+   ret = gzgetc(fp);
+   ret |= (gzgetc(fp)<<8);
+@@ -663,7 +663,7 @@
+ 
+ static int osd_renderer_load_font(osd_renderer_t *this, char *filename) {
+ 
+-  gzFile      *fp;
++  gzFile       fp;
+   osd_font_t  *font = NULL;
+   int          i, ret = 0;
+ 
+

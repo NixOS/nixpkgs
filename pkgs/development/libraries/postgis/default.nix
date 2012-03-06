@@ -74,7 +74,7 @@ let
       s=$out/bin/pg_db_postgis_enable
 
       sql_comments=$out/share/postgis-${version}/comments.sql
-      ensureDir $(dirname $sql_comments)
+      mkdir -p $(dirname $sql_comments)
       cp $(find -iname ${fix.fixed.sql_comments}) $sql_comments
 
       for script in $scriptNames; do

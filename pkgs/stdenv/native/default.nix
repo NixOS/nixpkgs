@@ -11,23 +11,23 @@ rec {
     (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
     ["/" "/usr" "/usr/local"];
 
-  prehookBase = builtins.toFile "prehook-base.sh" ''
+  prehookBase = ''
     # Disable purity tests; it's allowed (even needed) to link to
     # libraries outside the Nix store (like the C library).
     export NIX_ENFORCE_PURITY=
   '';
 
-  prehookDarwin = builtins.toFile "prehook-darwin.sh" ''
-    source ${prehookBase}
+  prehookDarwin = ''
+    ${prehookBase}
     export NIX_DONT_SET_RPATH=1
     export NIX_NO_SELF_RPATH=1
     dontFixLibtool=1
-    NIX_STRIP_DEBUG=0
     stripAllFlags=" " # the Darwin "strip" command doesn't know "-s" 
+    xargsFlags=" "
   '';
 
-  prehookFreeBSD = builtins.toFile "prehook-freebsd.sh" ''
-    source ${prehookBase}
+  prehookFreeBSD = ''
+    ${prehookBase}
     
     alias make=gmake
     alias tar=gtar
@@ -39,8 +39,8 @@ rec {
     export NIX_GCC_NEEDS_GREP=1
   '';
 
-  prehookOpenBSD = builtins.toFile "prehook-openbsd.sh" ''
-    source ${prehookBase}
+  prehookOpenBSD = ''
+    ${prehookBase}
     
     alias make=gmake
     alias grep=ggrep
@@ -56,8 +56,8 @@ rec {
     export NIX_GCC_NEEDS_GREP=1
   '';
 
-  prehookNetBSD = builtins.toFile "prehook-netbsd.sh" ''
-    source ${prehookBase}
+  prehookNetBSD = ''
+    ${prehookBase}
     
     alias make=gmake
     alias sed=gsed
@@ -69,8 +69,8 @@ rec {
     export NIX_GCC_NEEDS_GREP=1
   '';
 
-  prehookCygwin = builtins.toFile "prehook-cygwin.sh" ''
-    source ${prehookBase}
+  prehookCygwin = ''
+    ${prehookBase}
     
     if test -z "$cygwinConfigureEnableShared"; then
       export configureFlags="$configureFlags --disable-shared"
@@ -83,11 +83,9 @@ rec {
   # A function that builds a "native" stdenv (one that uses tools in
   # /usr etc.).  
   makeStdenv =
-    {gcc, fetchurl, extraPath ? []}:
+    { gcc, fetchurl, extraPath ? [], overrides ? (pkgs: { }) }:
 
     import ../generic {
-      name = "stdenv-native";
-
       preHook =
         if system == "i686-darwin" || system == "powerpc-darwin" || system == "x86_64-darwin" then prehookDarwin else
         if system == "i686-freebsd" then prehookFreeBSD else
@@ -100,7 +98,7 @@ rec {
 
       fetchurlBoot = fetchurl;
 
-      inherit system shell gcc;
+      inherit system shell gcc overrides;
     };
 
 
@@ -137,12 +135,13 @@ rec {
   };
 
 
-  # Using that, build a stdenv that adds the `replace' command (which
-  # most systems don't have, so we mustn't rely on the native
-  # environment providing it).
+  # Using that, build a stdenv that adds the ‘xz’ command (which most
+  # systems don't have, so we mustn't rely on the native environment
+  # providing it).
   stdenvBoot2 = makeStdenv {
     inherit gcc fetchurl;
-    extraPath = [stdenvBoot1Pkgs.replace];
+    extraPath = [ stdenvBoot1Pkgs.xz ];
+    overrides = pkgs: { inherit (stdenvBoot1Pkgs) xz; };
   };
 
 

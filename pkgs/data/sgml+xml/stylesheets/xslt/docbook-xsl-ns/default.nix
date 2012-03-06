@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
-      ensureDir $out/xml/xsl
+      mkdir -p $out/xml/xsl
       cd ..
       mv docbook-xsl-ns-* $out/xml/xsl/docbook
     '';

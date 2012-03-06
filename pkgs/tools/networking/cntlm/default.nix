@@ -11,9 +11,9 @@ stdenv.mkDerivation {
   buildInputs = [ which ];
 
   installPhase = ''
-    ensureDir $out/bin; cp cntlm $out/bin/;
-    ensureDir $out/share/; cp COPYRIGHT README VERSION doc/cntlm.conf $out/share/;
-    ensureDir $out/man/; cp doc/cntlm.1 $out/man/;
+    mkdir -p $out/bin; cp cntlm $out/bin/;
+    mkdir -p $out/share/; cp COPYRIGHT README VERSION doc/cntlm.conf $out/share/;
+    mkdir -p $out/man/; cp doc/cntlm.1 $out/man/;
   '';
 
   meta = {

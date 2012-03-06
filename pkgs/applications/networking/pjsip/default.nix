@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl libsamplerate ];
 
   postInstall = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp pjsip-apps/bin/pjsua-* $out/bin/pjsua
-    ensureDir $out/share/${name}/samples
+    mkdir -p $out/share/${name}/samples
     cp pjsip-apps/bin/samples/*/* $out/share/${name}/samples
   '';
 

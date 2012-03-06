@@ -1,8 +1,8 @@
 source $stdenv/setup
 
 
-ensureDir $out/bin
-ensureDir $out/nix-support
+mkdir -p $out/bin
+mkdir -p $out/nix-support
 
 
 if test -z "$nativeLibc"; then

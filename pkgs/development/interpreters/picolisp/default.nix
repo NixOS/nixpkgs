@@ -41,7 +41,7 @@ rec {
 
     sed -e "s@/usr/@$out/@g" -i bin/pil
 
-    ensureDir "$out/share/picolisp" "$out/lib" "$out/bin"
+    mkdir -p "$out/share/picolisp" "$out/lib" "$out/bin"
     cp -r . "$out/share/picolisp/build-dir"
     ln -s "$out/share/picolisp/build-dir" "$out/lib/picolisp"
     ln -s "$out/lib/picolisp/bin/picolisp" "$out/bin/picolisp"

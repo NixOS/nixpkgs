@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
 
     mv sim simutrans/
 
-    ensureDir $out/simutrans
+    mkdir -p $out/simutrans
     cp -r simutrans $out
 
-    ensureDir $out/bin
+    mkdir -p $out/bin
     ln -s $out/simutrans/sim $out/bin/simutrans
   '';
 

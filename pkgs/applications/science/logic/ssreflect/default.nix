@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     COQLIB=$out/lib/coq make -f Makefile.coq install -e
-    ensureDir $out/bin
+    mkdir -p $out/bin
   '';
 
   meta = {

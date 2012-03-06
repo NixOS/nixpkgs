@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/share/teetertorture
+    mkdir -p $out/bin $out/share/teetertorture
     cp teetertorture $out/bin
     cp -R data/* $out/share/teetertorture
   '';

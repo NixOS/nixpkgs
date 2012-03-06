@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   phases = "unpackPhase installPhase";
 
   installPhase = "
-    ensureDir $out/lib/java
+    mkdir -p $out/lib/java
     install -t $out/lib/java clojure.jar
   ";
 

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sed -i -e 's/-DNXT/-DNXT -DCPP="\\"gcc -E -x c\\""/' makefile
   '';
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp ../Xspin*/xsp* $out/bin/xspin
     sed -i -e '1s@^#!/bin/sh@#!${tk}/bin/wish@' \
       -e '/exec wish/d' $out/bin/xspin

@@ -23,10 +23,10 @@ rec {
   '');
 
   installation = fullDepEntry (''
-    ensureDir $out/bin 
-    ensureDir $out/share/stumpwm/doc
-    ensureDir $out/share/info 
-    ensureDir $out/share/stumpwm/lisp
+    mkdir -p $out/bin 
+    mkdir -p $out/share/stumpwm/doc
+    mkdir -p $out/share/info 
+    mkdir -p $out/share/stumpwm/lisp
 
     cp stumpwm $out/bin
     cp contrib/stumpish $out/bin || true

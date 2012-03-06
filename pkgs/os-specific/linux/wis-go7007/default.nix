@@ -61,9 +61,9 @@ stdenv.mkDerivation {
     substituteInPlace Makefile \
         --replace '$(DESTDIR)$(KSRC)/include/linux' $includeDir \
         --replace '$(DESTDIR)$(FIRMWARE_DIR)' '$(FIRMWARE_DIR)'
-    ensureDir $includeDir
-    ensureDir $out/etc/hotplug/usb
-    ensureDir $out/etc/udev/rules.d
+    mkdir -p $includeDir
+    mkdir -p $out/etc/hotplug/usb
+    mkdir -p $out/etc/udev/rules.d
  
     makeFlagsArray=(KERNELSRC=$kernelSource \
         FIRMWARE_DIR=$out/firmware FXLOAD=${fxload}/sbin/fxload \
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
   ''; # */
 
   postInstall = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp apps/gorecord apps/modet $out/bin/
   '';
 

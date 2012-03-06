@@ -14,8 +14,8 @@ stdenv.mkDerivation  rec {
     ladspaPlugins liblo pkgconfig ];
 
   installPhase = ''
-    ensureDir $out/bin
-    ensureDir $out/lib
+    mkdir -p $out/bin
+    mkdir -p $out/lib
     cp src/Xsynth_gtk $out/bin
     cp src/.libs/* $out/lib
   '';

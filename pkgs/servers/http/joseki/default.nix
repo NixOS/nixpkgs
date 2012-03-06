@@ -72,12 +72,12 @@ rec {
 
     mv lib/slf4j-simple-*.jar lib/obsolete
 
-    ensureDir "$out/share"
+    mkdir -p "$out/share"
     TARGET="$out/share/${name}-dist"
     cp -r . "$TARGET"
     ln -s  "$TARGET/lib" "$out/lib"
     chmod a+x "$TARGET/bin/"*
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
 
     echo -e '#! /bin/sh\nls "'"$TARGET"'"/bin' > "$out/bin/jena-list-commands"
     echo '#! /bin/sh' >> "$out/bin/jena-command"

@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out
+mkdir -p $out
 
 cabextract $src
 
@@ -12,7 +12,7 @@ rm ../vc* # reduce temporary disk usage a bit
 while read target; do
     read source
     echo "$source -> $target"
-    ensureDir $out/$(dirname $target)
+    mkdir -p $out/$(dirname $target)
     cp -p "$source" $out/"$target"
 done < $filemap
 

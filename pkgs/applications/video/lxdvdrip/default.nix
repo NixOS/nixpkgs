@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   '';
 
   preInstall = ''
-    ensureDir $out/man/man1 $out/bin $out/share $out/etc
+    mkdir -p $out/man/man1 $out/bin $out/share $out/etc
   '';
 
   buildInputs = [ libdvdread ];

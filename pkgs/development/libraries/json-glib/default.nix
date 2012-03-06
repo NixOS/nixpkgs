@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, glib, pkgconfig, xz }:
+{ stdenv, fetchurl_gnome, glib, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ glib ];
-  buildNativeInputs = [ pkgconfig xz ];
+  buildNativeInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://live.gnome.org/JsonGlib;

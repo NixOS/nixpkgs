@@ -25,7 +25,7 @@ args: with args; stdenv.mkDerivation {
      set +e
      make &> /dev/null
      set -e
-     ensureDir \$out/bin
+     mkdir -p \$out/bin
      cp cmd/wmiimenu \$out/bin
   ";
   meta = { homepage = "www.suckless.org";

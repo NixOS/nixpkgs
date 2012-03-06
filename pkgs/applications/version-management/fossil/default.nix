@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     INSTALLDIR=$out/bin make install
   '';
 

@@ -7,5 +7,5 @@ stdenv.mkDerivation {
     sha256 = "1m5nfzgwaglqabpm2l2mjqvigz1z0dj87cmj2pjbbzxmmpapv0lq";
   };
   buildPhase = "rm *.o 915resolution; make";
-  installPhase = "ensureDir $out/sbin; cp 915resolution $out/sbin/";
+  installPhase = "mkdir -p $out/sbin; cp 915resolution $out/sbin/";
 }

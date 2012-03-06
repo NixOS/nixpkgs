@@ -30,7 +30,7 @@ stdenv.mkDerivation {
         --suffix-each LD_LIBRARY_PATH ':' "$libs" \
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))"
 
-    ensureDir $out/share/applications
+    mkdir -p $out/share/applications
     cp $desktopItem/share/applications/* $out/share/applications
   '';
 

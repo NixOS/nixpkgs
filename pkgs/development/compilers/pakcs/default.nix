@@ -41,7 +41,7 @@ stdenv.mkDerivation {
     # The Prolog sources must be built in their final directory.
     (cd $out/curry2prolog/ ; make)
 
-    ensureDir $out/share/emacs/site-lisp/curry-pakcs
+    mkdir -p $out/share/emacs/site-lisp/curry-pakcs
     for e in "$out/tools/emacs/"*.el ; do
       ln -s $out/tools/emacs/$e $out/share/emacs/site-lisp/curry-pakcs/;
     done

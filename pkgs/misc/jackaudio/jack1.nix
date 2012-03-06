@@ -36,7 +36,7 @@ composableDerivation.composableDerivation {} {
   
   # make sure the jackaudio is found by symlinking lib64 to lib
   postInstall = ''
-    ensureDir $out/lib
+    mkdir -p $out/lib
     ln -s $out/lib{64,}/pkgconfig
   '';
   

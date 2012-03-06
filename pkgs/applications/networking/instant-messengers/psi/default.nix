@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     PSI_PLUGINS="$out/lib/psi/plugins"
-    ensureDir "$PSI_PLUGINS"
+    mkdir -p "$PSI_PLUGINS"
     ln -s "${psiMedia}"/share/psi/plugins/*.so "$PSI_PLUGINS"
     PSI_QT_PLUGINS="$out/share/psi"
-    ensureDir "$PSI_QT_PLUGINS"/crypto
+    mkdir -p "$PSI_QT_PLUGINS"/crypto
     ln -s "${qca2_ossl}"/lib/qt4/plugins/crypto/*.so "$PSI_QT_PLUGINS"/crypto
   '';
 

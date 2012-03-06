@@ -47,7 +47,7 @@ stdenv.mkDerivation {
           else throw "Unsupported system";
 
   installPhase = ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     export GOROOT="$(pwd)/"
     export GOBIN="$out/bin"
     export PATH="$GOBIN:$PATH"
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
 
     # Handle Libraries and make them availabale under /share/go.
     export GOLIB="pkg/"$GOOS"_"$GOARCH
-    ensureDir "$out/lib/go/$GOLIB"
+    mkdir -p "$out/lib/go/$GOLIB"
     cp -r ./$GOLIB $out/lib/go/pkg/
 
     # this line set $AS $CC $GC $LD
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
       --set "GOARCH" "$GOARCH"
 
     # Copy the emacs configuration for Go files.
-    ensureDir "$out/share/emacs/site-lisp"
+    mkdir -p "$out/share/emacs/site-lisp"
     cp ./misc/emacs/* $out/share/emacs/site-lisp/ # */
   '';
 

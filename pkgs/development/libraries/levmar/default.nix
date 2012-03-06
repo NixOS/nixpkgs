@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/include $out/lib
+    mkdir -p $out/include $out/lib
     cp lm.h $out/include
     cp liblevmar.a $out/lib
   '';

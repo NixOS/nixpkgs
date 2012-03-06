@@ -13,7 +13,7 @@ in
   in with localDefs;
 let
   copyFile = fullDepEntry ("
-    ensureDir \$out/include
+    mkdir -p \$out/include
     cp ${src} \$out/include/ladspa.h
   ") [minInit defEnsureDir];
 in

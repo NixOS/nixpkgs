@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
   '';
   installPhase = ''
     arch=$(uname -m | sed -e s/i.86/x86/)
-    ensureDir $out/opt/tremulous
+    mkdir -p $out/opt/tremulous
     cp -v Release_1.011/build/release-linux-$arch/tremulous.$arch $out/opt/tremulous/
     cp -v mg_tremded_source/build/release-linux-$arch/tremded.$arch $out/opt/tremulous/
     cp -rv base $out/opt/tremulous
-    ensureDir $out/bin
+    mkdir -p $out/bin
     for b in tremulous tremded
     do
         cat << EOF > $out/bin/$b

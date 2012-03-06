@@ -7,12 +7,12 @@ export JAVA_HOME=${jdk}
 echo $JAVA_HOME=${jdk}
 sh ./build.sh make_swt make_atk
 
-ensureDir $out/lib
+mkdir -p $out/lib
 cp *.so $out/lib
 
 mkdir out
 javac -d out/ $(find org/ -name "*.java")
 
-ensureDir $out/jars
+mkdir -p $out/jars
 cp version.txt out/
 cd out && jar -c * > $out/jars/swt.jar

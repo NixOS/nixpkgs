@@ -27,7 +27,7 @@ in
     '';
 
     patchPhase = ''
-      ensureDir "$out/share/man/man3"
+      mkdir -p "$out/share/man/man3"
 
       sed -i "linuxthreads/man/Makefile" \
           -e "s|MANDIR *=.*$|MANDIR = $out/share/man/man3| ;

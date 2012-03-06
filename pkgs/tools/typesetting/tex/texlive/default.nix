@@ -18,10 +18,10 @@ rec {
   setupHook = ./setup-hook.sh;
 
   doMainBuild = fullDepEntry (''
-    ensureDir $out
-    ensureDir $out/nix-support
+    mkdir -p $out
+    mkdir -p $out/nix-support
     cp ${setupHook} $out/nix-support/setup-hook.sh
-    ensureDir $out/share
+    mkdir -p $out/share
     tar xf ${texmfSrc} -C $out --strip-components=1
     tar xf ${langTexmfSrc} -C $out --strip-components=1
 
@@ -45,7 +45,7 @@ rec {
 
   doPostInstall = fullDepEntry(''
     mv $out/bin $out/libexec
-    ensureDir $out/bin
+    mkdir -p $out/bin
     for i in "$out/libexec/"*"/"*; do
         test \( \! -d "$i" \) -a -x "$i" || continue
         echo -ne "#! $SHELL\\nexec $i \"\$@\"" >$out/bin/$(basename $i)
@@ -69,7 +69,7 @@ rec {
     #
     # I find it acceptable, hence the "|| true".
     echo "building format files..."
-    ensureDir "$out/texmf-var/web2c"
+    mkdir -p "$out/texmf-var/web2c"
     PATH="$PATH:$out/bin" fmtutil-sys --all || true
 
     PATH=$PATH:$out/bin mktexlsr $out/texmf*

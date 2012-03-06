@@ -17,7 +17,7 @@ let
 
   call = attrs: flip mapAttrs attrs
     (n: v: trace n (
-      if builtins.isFunction v then maybe (v { system = "i686-linux"; })
+      if builtins.isFunction v then maybe (v { system = "x86_64-linux"; })
       else if builtins.isAttrs v then call v
       else null
     ));

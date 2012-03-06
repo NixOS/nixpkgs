@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out
+mkdir -p $out
 
 for ((i = 1; i <= $nrFrames; i++)); do
     echo "producing frame $i...";

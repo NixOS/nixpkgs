@@ -28,7 +28,7 @@ lib.overrideDerivation go_oo (attrs: {
 
   makesh = ''
     sed -i -e '/-x $WG/d' -e "s/WGET='''/WGET='echo XXX'/" download
-    ensureDir $out
+    mkdir -p $out
 
     set +e
     ./download --all | grep XXX | 

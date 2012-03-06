@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   makeFlags = "prefix=$$out";
 
   postInstall = ''
-    ensureDir "$out/etc/bash_completion.d/"
+    mkdir -p "$out/etc/bash_completion.d/"
     ln -s ../../share/stgit/completion/stgit-completion.bash "$out/etc/bash_completion.d/"
   '';
 

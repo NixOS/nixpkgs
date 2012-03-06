@@ -19,7 +19,7 @@ in
     '';
 
     installPhase = ''
-      ensureDir $out/opt/mmex
+      mkdir -p $out/opt/mmex
       cp -r mmex runtime/{*.txt,*.png,*.db3,en,help,*.wav,*.ico} $out/opt/mmex
     '';
 

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   phases = "unpackPhase installPhase";
 
   installPhase = ''
-    ensureDir $out/{opt/skype/,bin}
+    mkdir -p $out/{opt/skype/,bin}
     cp -r * $out/opt/skype/
 
     fullPath=
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     ---
     > Icon=$out/opt/skype/icons/SkypeBlue_48x48.png
     EOF
-    ensureDir $out/share/applications
+    mkdir -p $out/share/applications
     mv skype.desktop $out/share/applications
   '';
 

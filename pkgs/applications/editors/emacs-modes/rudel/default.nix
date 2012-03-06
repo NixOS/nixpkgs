@@ -14,7 +14,7 @@ stdenv.mkDerivation
 
   installPhase = ''
     for n in . obby zeroconf jupiter; do
-      ensureDir "$out/share/emacs/site-lisp/$n";
+      mkdir -p "$out/share/emacs/site-lisp/$n";
       cp $n/*.el "$out/share/emacs/site-lisp/$n/";
     done
     install -D -m444 doc/card.pdf "$out/share/doc/rudel/card.pdf"

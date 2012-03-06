@@ -39,7 +39,7 @@ stdenv.mkDerivation (
     '';
 
     installPhase = ''
-      ensureDir $out/lib/java
+      mkdir -p $out/lib/java
       ${ if jars == [] then '' 
            find . -name "*.jar" | xargs -I{} cp -v {} $out/lib/java
          '' else stdenv.lib.concatMapStrings (j: ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation (
       header "Generating jar wrappers"
     '' + (stdenv.lib.concatMapStrings (w: ''
 
-      ensureDir $out/bin
+      mkdir -p $out/bin
       cat >> $out/bin/${w.name} <<EOF
       #! /bin/sh
       export JAVA_HOME=$jre
@@ -98,7 +98,7 @@ stdenv.mkDerivation (
     buildInputs = [ant jre] ++ stdenv.lib.optional (args ? buildInputs) args.buildInputs ;
 
     postHook = ''
-      ensureDir $out/nix-support
+      mkdir -p $out/nix-support
       echo "$system" > $out/nix-support/system
 
       # If `src' is the result of a call to `makeSourceTarball', then it

@@ -1,11 +1,11 @@
-{stdenv, fetchurl, unicodeSupport ? false, cplusplusSupport ? true}:
+{ stdenv, fetchurl, unicodeSupport ? true, cplusplusSupport ? true }:
 
-stdenv.mkDerivation {
-  name = "pcre-8.10";
+stdenv.mkDerivation rec {
+  name = "pcre-8.21";
 
   src = fetchurl {
-    url = mirror://sourceforge/pcre/pcre-8.10.tar.bz2;
-    sha256 = "7ac4e016f6bad8c7d990e6de9bce58c04ff5dd8838be0c5ada0afad1d6a07480";
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/${name}.tar.bz2";
+    sha256 = "1qwrqldbwszbmr4cw4f0xmcl889cmmjbf58l9vxn89zw26fm1f54";
   };
 
   # The compiler on Darwin crashes with an internal error while building the

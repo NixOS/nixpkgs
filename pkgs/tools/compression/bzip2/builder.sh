@@ -8,7 +8,7 @@ if test -n "$sharedLibrary"; then
     }
 
     preInstall() {
-        ensureDir $out/lib
+        mkdir -p $out/lib
         mv libbz2.so* $out/lib
         ln -s libbz2.so.1.0 $out/lib/libbz2.so
     }

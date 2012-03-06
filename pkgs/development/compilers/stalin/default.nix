@@ -13,19 +13,19 @@ stdenv.mkDerivation rec {
   buildPhase = '' ./build '';
 
   installPhase = ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp stalin "$out/bin"
 
-    ensureDir "$out/man/man1"
+    mkdir -p "$out/man/man1"
     cp stalin.1 "$out/man/man1"
 
-    ensureDir "$out/share/emacs/site-lisp"
+    mkdir -p "$out/share/emacs/site-lisp"
     cp stalin.el "$out/share/emacs/site-lisp"
 
-    ensureDir "$out/doc/${name}"
+    mkdir -p "$out/doc/${name}"
     cp README "$out/doc/${name}"
 
-    ensureDir "$out/share/${name}/include"
+    mkdir -p "$out/share/${name}/include"
     cp "include/"* "$out/share/${name}/include"
 
     substituteInPlace "$out/bin/stalin" \

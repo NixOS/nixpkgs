@@ -32,10 +32,10 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     sed -e "s@/usr/local/lib/OGRE@${ogre}/lib/OGRE@" -i ../tools/linux/binaries/plugins.cfg
-    ensureDir $out/share/rigsofrods
+    mkdir -p $out/share/rigsofrods
     cp -r ../bin/* $out/share/rigsofrods
     cp ../tools/linux/binaries/plugins.cfg $out/share/rigsofrods
-    ensureDir $out/bin
+    mkdir -p $out/bin
     ln -s $out/share/rigsofrods/{RoR,rorconfig} $out/bin
     cd $out/share/rigsofrods
     mkdir packs

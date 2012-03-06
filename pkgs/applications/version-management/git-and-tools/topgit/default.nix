@@ -16,9 +16,9 @@ stdenv.mkDerivation {
   configurePhase = "export prefix=$out";
 
   postInstall = ''
-    ensureDir "$out/share/doc/topgit-${version}"
+    mkdir -p "$out/share/doc/topgit-${version}"
     cp README "$out/share/doc/topgit-${version}/"
-    ensureDir "$out/etc/bash_completion.d"
+    mkdir -p "$out/etc/bash_completion.d"
     make prefix="$out" install
     mv "contrib/tg-completion.bash" "$out/etc/bash_completion.d/"
   '';

@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out
+mkdir -p $out
 
 export TEXMFCNF=$TMPDIR:
 echo 'max_print_line = 8192' >> $TMPDIR/texmf.cnf

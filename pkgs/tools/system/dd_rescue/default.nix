@@ -40,7 +40,7 @@ rec {
   fixPaths = a.doPatchShebangs ''$out/bin'';
 
   install_dd_rhelp = a.fullDepEntry (''
-    ensureDir "$out/share/dd_rescue" "$out/bin"
+    mkdir -p "$out/share/dd_rescue" "$out/bin"
     tar xf "${dd_rhelp_src}" -C "$out/share/dd_rescue"
     cp "$out/share/dd_rescue"/dd_rhelp*/dd_rhelp "$out/bin"
   '') ["minInit" "defEnsureDir"];

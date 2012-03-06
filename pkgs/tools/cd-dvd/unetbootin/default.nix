@@ -41,13 +41,13 @@ stdenv.mkDerivation rec {
 
   installPhase =
     ''
-      ensureDir $out/bin
+      mkdir -p $out/bin
       cp unetbootin $out/bin
 
-      ensureDir $out/share/unetbootin
+      mkdir -p $out/share/unetbootin
       cp unetbootin_*.qm  $out/share/unetbootin
 
-      ensureDir $out/share/applications
+      mkdir -p $out/share/applications
       cp unetbootin.desktop $out/share/applications
 
       wrapProgram $out/bin/unetbootin \

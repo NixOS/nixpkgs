@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/include
+    mkdir -p $out/include
     cp -a include/{asm,asm-$platform,acpi,linux,pcmcia,scsi,video} \
       $out/include
   '';

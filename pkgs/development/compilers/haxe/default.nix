@@ -79,7 +79,7 @@ let
 
       # probably rpath should be set properly
       installPhase = ''
-        ensureDir $out/lib/haxe
+        mkdir -p $out/lib/haxe
         cp -r bin $out/bin
         wrapProgram "$out/bin/haxe" \
           --set "LD_LIBRARY_PATH" $zlib/lib \
@@ -107,7 +107,7 @@ let
         buildPhase = ''
           cd std/tools/${name};
           haxe *.hxml
-          ensureDir $out/bin
+          mkdir -p $out/bin
           mv ${name} $out/bin/
         '';
 

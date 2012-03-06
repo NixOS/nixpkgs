@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp vegastrike $out/bin
     cp vegaserver $out/bin
   '';

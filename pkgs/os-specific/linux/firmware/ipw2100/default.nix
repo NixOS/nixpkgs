@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   # says: "Your rights to redistribute the Software shall be
   # contingent upon your installation of this Agreement in its
   # entirety in the same directory as the Software."
-  installPhase = "ensureDir $out; cp * $out";
+  installPhase = "mkdir -p $out; cp * $out";
   
   meta = {
     # "... you may transfer a copy of the Software ... provided such

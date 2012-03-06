@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   preInstall = ''
     sed -i s,/usr/local,$out, src/makefile.linux
-    ensureDir $out/lib $out/include
+    mkdir -p $out/lib $out/include
   '';
 
   meta = {

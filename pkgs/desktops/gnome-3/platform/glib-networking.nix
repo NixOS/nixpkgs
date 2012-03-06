@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, xz, pkgconfig, intltool, gnutls, libgcrypt
+{ stdenv, fetchurl, glib, pkgconfig, intltool, gnutls, libgcrypt
 , gsettings_desktop_schemas }:
 
 stdenv.mkDerivation {
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ glib gnutls libgcrypt ];
   buildInputs = [ gsettings_desktop_schemas ];
-  buildNativeInputs = [ xz pkgconfig intltool ];
+  buildNativeInputs = [ pkgconfig intltool ];
 
   configureFlags = "--without-ca-certificates";
   postConfigure = "export makeFlags=GIO_MODULE_DIR=$out/${glib.gioModuleDir}";

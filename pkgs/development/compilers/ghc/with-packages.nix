@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
     linkedTopDir="$out/lib"
     linkedPkgDir="$linkedTopDir/package.conf.d"
 
-    ensureDir $out/bin
-    ensureDir $linkedTopDir
-    ensureDir $linkedPkgDir
+    mkdir -p $out/bin
+    mkdir -p $linkedTopDir
+    mkdir -p $linkedPkgDir
 
     echo "Linking GHC core libraries:"
 

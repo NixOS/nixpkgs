@@ -32,7 +32,7 @@ rec {
   '' ["addInputs"];
 
   doInstall = a.fullDepEntry (''
-    ensureDir "$out"/share/fonts/ttf/
+    mkdir -p "$out"/share/fonts/ttf/
     cp ANDAGII_.TTF "$out"/share/fonts/ttf/andagii.ttf
   '') ["defEnsureDir" "minInit"];
       

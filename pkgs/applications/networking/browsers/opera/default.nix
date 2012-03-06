@@ -15,8 +15,6 @@ in
 stdenv.mkDerivation rec {
   name = "opera-11.51-1087";
 
-  buildNativeInputs = [ xz ];
-  
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {

@@ -1,10 +1,10 @@
 source $stdenv/setup
 
-ensureDir $out/jars
+mkdir -p $out/jars
 unzip -j $src '*/trang.jar'
 cp -p *.jar $out/jars
 
-ensureDir $out/bin
+mkdir -p $out/bin
 
 cat >> $out/bin/trang <<EOF
 #! $SHELL

@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libsigsegv-2.8";
+  name = "libsigsegv-2.10";
 
   src = fetchurl {
     url = "mirror://gnu/libsigsegv/${name}.tar.gz";
-    sha256 = "052vcxgajdlvc77dqcs48axjz698r1g2gyagz2qcr6zvkyw304w6";
+    sha256 = "16hrs8k3nmc7a8jam5j1fpspd6sdpkamskvsdpcw6m29vnis8q44";
   };
 
   doCheck = true;

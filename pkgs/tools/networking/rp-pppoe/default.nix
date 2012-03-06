@@ -32,7 +32,7 @@ rec {
   '') ["minInit" "doUnpack"];
 
   makeDirs = a.fullDepEntry(''
-    ensureDir $out/share/${name}/etc/ppp
+    mkdir -p $out/share/${name}/etc/ppp
   '') ["minInit" "defEnsureDir"];
 
   name = "rp-pppoe-" + version;

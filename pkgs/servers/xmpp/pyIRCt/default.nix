@@ -19,7 +19,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["deploy" (a.makeManyWrappers "$out/share/${name}/irc.py" a.pythonWrapperArguments)];
   deploy = a.fullDepEntry (''
-    ensureDir $out/bin $out/share/${name}
+    mkdir -p $out/bin $out/share/${name}
     sed -e 's@/usr/bin/@${a.python}/bin/@' -i irc.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.pyIRCt.xml"]' -i config.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.python-irc-transport.xml"]' -i config.py

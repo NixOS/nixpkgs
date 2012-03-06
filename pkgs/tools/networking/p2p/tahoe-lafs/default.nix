@@ -66,7 +66,7 @@ buildPythonPackage {
     # something writable doesn't help; providing $FONTCONFIG_FILE doesn't
     # help either.  So we just don't run `make' under `docs/'.
 
-    ensureDir "$out/share/doc/${name}"
+    mkdir -p "$out/share/doc/${name}"
     cp -rv "docs/"* "$out/share/doc/${name}"
     find "$out/share/doc/${name}" -name Makefile -exec rm -v {} \;
 

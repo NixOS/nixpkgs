@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ unzip ];
 
   installPhase = "
-    ensureDir $out/share/texmf-nix/tex/generic/lkproof
+    mkdir -p $out/share/texmf-nix/tex/generic/lkproof
     cp -prd *.sty $out/share/texmf-nix/tex/generic/lkproof
   ";
 }

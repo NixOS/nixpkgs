@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
-     ensureDir $out
+     mkdir -pv $out
      mv * $out
      rm $out/bin/*.{bat,dll,exe,sh}
      mv $out/README $out/docs

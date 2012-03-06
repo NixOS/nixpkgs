@@ -1,6 +1,6 @@
 source $stdenv/setup
 
-ensureDir $out/bin
+mkdir -p $out/bin
 cat > $out/bin/nuke-refs <<EOF
 #! $SHELL -e
 for i in \$*; do

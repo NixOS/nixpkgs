@@ -108,7 +108,7 @@ let
       # overrided packages will not be built with the crossStdenv
       # adapter.
       overrides = overrider pkgsOrig //
-        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) pkgsOrig.stdenv.overrides);
+        (lib.optionalAttrs (pkgsOrig.stdenv ? overrides && crossSystem == null) (pkgsOrig.stdenv.overrides pkgsOrig));
 
       # The un-overriden packages, passed to `overrider'.
       pkgsOrig = pkgsFun pkgs {};
@@ -241,7 +241,7 @@ let
   };
 
   buildEnv = import ../build-support/buildenv {
-    inherit runCommand perl;
+    inherit (pkgs) runCommand perl;
   };
 
   dotnetenv = import ../build-support/dotnetenv {
@@ -460,9 +460,7 @@ let
     gui = true;
   };
 
-  bittornado = callPackage ../tools/networking/p2p/bit-tornado {
-    inherit (pythonPackages) ssl;
-  };
+  bittornado = callPackage ../tools/networking/p2p/bit-tornado { };
 
   blueman = callPackage ../tools/bluetooth/blueman {
     inherit (pythonPackages) notify;
@@ -1110,9 +1108,7 @@ let
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
-  offlineimap = callPackage ../tools/networking/offlineimap {
-    ssl = pythonPackages.ssl;
-  };
+  offlineimap = callPackage ../tools/networking/offlineimap { };
 
   opendbx = callPackage ../development/libraries/opendbx { };
 
@@ -1233,8 +1229,6 @@ let
   povray = callPackage ../tools/graphics/povray { };
 
   ppl = callPackage ../development/libraries/ppl { };
-
-  ppl0_11 = callPackage ../development/libraries/ppl/0.11.nix { };
 
   ppp = callPackage ../tools/networking/ppp { };
 
@@ -1426,7 +1420,7 @@ let
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
   tcng = callPackage ../tools/networking/tcng {
-    kernel = linux_2_6_28;
+    kernel = linux_2_6_27;
   };
 
   telnet = callPackage ../tools/networking/telnet { };
@@ -1542,13 +1536,9 @@ let
 
   unshield = callPackage ../tools/archivers/unshield { };
 
-  unzip = unzip60;
+  unzip = callPackage ../tools/archivers/unzip { };
 
   unzipNLS = unzip.override { enableNLS = true; };
-
-  unzip552 = callPackage ../tools/archivers/unzip/5.52.nix { };
-
-  unzip60 = callPackage ../tools/archivers/unzip/6.0.nix { };
 
   uptimed = callPackage ../tools/system/uptimed { };
 
@@ -1669,11 +1659,11 @@ let
   ### SHELLS
 
 
-  bash = lowPrio (callPackage ../shells/bash/4.1.nix {
+  bash = lowPrio (callPackage ../shells/bash {
     texinfo = null;
   });
 
-  bashInteractive = appendToName "interactive" (callPackage ../shells/bash/4.2.nix {
+  bashInteractive = appendToName "interactive" (callPackage ../shells/bash {
     interactive = true;
   });
 
@@ -1740,17 +1730,17 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc45;
+  gcc = gcc46;
 
-  gcc295 = wrapGCC (import ../development/compilers/gcc-2.95 {
+  gcc295 = wrapGCC (import ../development/compilers/gcc/2.95 {
     inherit fetchurl stdenv noSysDirs;
   });
 
-  gcc33 = wrapGCC (import ../development/compilers/gcc-3.3 {
+  gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
     inherit fetchurl stdenv noSysDirs;
   });
 
-  gcc34 = wrapGCC (import ../development/compilers/gcc-3.4 {
+  gcc34 = wrapGCC (import ../development/compilers/gcc/3.4 {
     inherit fetchurl stdenv noSysDirs;
   });
 
@@ -1759,30 +1749,30 @@ let
   # expects a single digit after the dot.  As a workaround, we feed
   # GCC with Texinfo 4.9.  Stupid bug, hackish workaround.
 
-  gcc40 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.0) {
+  gcc40 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.0) {
     inherit fetchurl stdenv noSysDirs;
     texinfo = texinfo49;
     profiledCompiler = true;
   });
 
-  gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.1) {
+  gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.1) {
     inherit fetchurl noSysDirs gmp mpfr;
     stdenv = overrideGCC stdenv gcc42;
     texinfo = texinfo49;
     profiledCompiler = false;
   });
 
-  gcc42 = wrapGCC (makeOverridable (import ../development/compilers/gcc-4.2) {
+  gcc42 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.2) {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = false;
   });
 
-  gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.3) {
+  gcc43 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.3) {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
     profiledCompiler = true;
   }));
 
-  gcc43_realCross = makeOverridable (import ../development/compilers/gcc-4.3) {
+  gcc43_realCross = makeOverridable (import ../development/compilers/gcc/4.3) {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs;
     binutilsCross = binutilsCross;
     libcCross = libcCross;
@@ -1793,7 +1783,7 @@ let
   };
 
   gcc44_realCross = lib.addMetaAttrs { platforms = []; }
-    (makeOverridable (import ../development/compilers/gcc-4.4) {
+    (makeOverridable (import ../development/compilers/gcc/4.4) {
       inherit stdenv fetchurl texinfo gmp mpfr /* ppl cloogppl */ noSysDirs
           gettext which;
       binutilsCross = binutilsCross;
@@ -1806,34 +1796,10 @@ let
 
   gcc45 = gcc45_real;
 
-  gcc45_debug =
-    let gcc = lib.overrideDerivation gcc45.gcc (attrs:
-      # GCC 4.5's builder.sh contains hard-coded `-g0' flags, so patch it to
-      # remove them.
-      # TODO: Remove those `-g0' and this hack on the next stdenv update.
-      let
-        orig_builder = builtins.head (builtins.tail attrs.args);
-        new_builder = stdenv.mkDerivation {
-          name = "builder-gcc-4.5-debug";
-          phases = "buildPhase";
-          buildPhase =
-            '' cp -v "${orig_builder}" "$out"
-               sed -i "$out" -e 's/-g0//g ; s/--strip-debug//g'
-               chmod +x "$out"
-            '';
-        };
-      in {
-        args = [ "-e" "${new_builder}" ];
-        postHook = '' rm -rf "$out/src/build" '';
-      });
-   in
-     lowPrio (wrapGCC (misc.debugVersion gcc));
-
-
   gcc46 = gcc46_real;
 
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
-    (makeOverridable (import ../development/compilers/gcc-4.5) {
+    (makeOverridable (import ../development/compilers/gcc/4.5) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
         ppl cloogppl gettext which noSysDirs;
       binutilsCross = binutilsCross;
@@ -1845,10 +1811,9 @@ let
     });
 
   gcc46_realCross = lib.addMetaAttrs { platforms = []; }
-    (makeOverridable (import ../development/compilers/gcc-4.6) {
+    (makeOverridable (import ../development/compilers/gcc/4.6) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
-        cloog gettext which noSysDirs;
-      ppl = ppl0_11;
+        cloog ppl gettext which noSysDirs;
       binutilsCross = binutilsCross;
       libcCross = libcCross;
       profiledCompiler = false;
@@ -1903,13 +1868,13 @@ let
     enableMultilib = true;
   }));
 
-  gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.4) {
+  gcc44 = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.4) {
     inherit fetchurl stdenv texinfo gmp mpfr /* ppl cloogppl */
       gettext which noSysDirs;
     profiledCompiler = true;
   }));
 
-  gcc45_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc-4.5) {
+  gcc45_real = lowPrio (wrapGCC (makeOverridable (import ../development/compilers/gcc/4.5) {
     inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib perl
       ppl cloogppl
       gettext which noSysDirs;
@@ -1928,11 +1893,19 @@ let
       else null;
   }));
 
-  gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc-4.6 {
+  # A non-stripped version of GCC.
+  gcc45_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.5 {
+    stripped = false;
+
     inherit noSysDirs;
 
-    ppl = ppl0_11;
-    cloogppl = null;
+    # bootstrapping a profiled compiler does not work in the sheevaplug:
+    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
+    profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
+  }));
+
+  gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
+    inherit noSysDirs;
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
@@ -1950,23 +1923,20 @@ let
   }));
 
   # A non-stripped version of GCC.
-  gcc46_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc-4.6 {
+  gcc46_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
     stripped = false;
 
     inherit noSysDirs;
     cross = null;
     libcCross = null;
     binutilsCross = null;
-
-    ppl = ppl0_11;
-    cloogppl = null;
   }));
 
   gccApple =
-    wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc-apple else import ../development/compilers/gcc-apple64) {
+    wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc/4.2-apple32 else import ../development/compilers/gcc/4.2-apple64) {
       inherit fetchurl stdenv noSysDirs;
       profiledCompiler = true;
-    }) ;
+    });
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
@@ -2110,7 +2080,6 @@ let
     gnatboot = gnat45;
     # We can't use the ppl stuff, because we would have
     # libstdc++ problems.
-    cloogppl = null;
     ppl = null;
     cloog = null;
   });
@@ -2128,7 +2097,7 @@ let
     langGo = true;
   });
 
-  ghdl = wrapGCC (import ../development/compilers/gcc-4.3 {
+  ghdl = wrapGCC (import ../development/compilers/gcc/4.3 {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat;
     name = "ghdl";
     langVhdl = true;
@@ -2139,7 +2108,7 @@ let
   });
 
   # Not officially supported version for ghdl
-  ghdl_gcc44 = lowPrio (wrapGCC (import ../development/compilers/gcc-4.4 {
+  ghdl_gcc44 = lowPrio (wrapGCC (import ../development/compilers/gcc/4.4 {
     inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gnat gettext which
       ppl cloogppl;
     name = "ghdl";
@@ -2177,20 +2146,20 @@ let
   });
   */
 
-  ghc6101Binary = lowPrio (import ../development/compilers/ghc/6.10.1-binary.nix {
-    inherit fetchurl stdenv perl ncurses gmp libedit;
+  ghc6101Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.1-binary.nix {
+    gmp = gmp4;
   });
 
-  ghc6102Binary = lowPrio (import ../development/compilers/ghc/6.10.2-binary.nix {
-    inherit fetchurl stdenv perl ncurses gmp libedit;
+  ghc6102Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.2-binary.nix {
+    gmp = gmp4;
   });
 
-  ghc6121Binary = lowPrio (import ../development/compilers/ghc/6.12.1-binary.nix {
-    inherit fetchurl stdenv perl ncurses gmp;
+  ghc6121Binary = lowPrio (callPackage ../development/compilers/ghc/6.12.1-binary.nix {
+    gmp = gmp4;
   });
 
-  ghc704Binary = lowPrio (import ../development/compilers/ghc/7.0.4-binary.nix {
-    inherit fetchurl stdenv perl ncurses gmp;
+  ghc704Binary = lowPrio (callPackage ../development/compilers/ghc/7.0.4-binary.nix {
+    gmp = gmp4;
   });
 
   # For several compiler versions, we export a large set of Haskell-related
@@ -2404,13 +2373,11 @@ let
 
   nvidia_cg_toolkit = callPackage ../development/compilers/nvidia-cg-toolkit { };
 
-  ocaml = ocaml_3_11_1;
+  ocaml = ocaml_3_12_1;
 
   ocaml_3_08_0 = callPackage ../development/compilers/ocaml/3.08.0.nix { };
 
   ocaml_3_10_0 = callPackage ../development/compilers/ocaml/3.10.0.nix { };
-
-  ocaml_3_11_1 = callPackage ../development/compilers/ocaml/3.11.1.nix { };
 
   ocaml_3_12_1 = lowPrio (callPackage ../development/compilers/ocaml/3.12.1.nix { });
 
@@ -2505,9 +2472,8 @@ let
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
   };
 
-  ocamlPackages = recurseIntoAttrs ocamlPackages_3_11_1;
+  ocamlPackages = recurseIntoAttrs ocamlPackages_3_12_1;
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
-  ocamlPackages_3_11_1 = mkOcamlPackages ocaml_3_11_1 pkgs.ocamlPackages_3_11_1;
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
@@ -2633,7 +2599,8 @@ let
   # compatibility issues in 2.47 - at list 2.44.1 is known good
   # for sbcl bootstrap
   clisp_2_44_1 = callPackage ../development/interpreters/clisp/2.44.1.nix {
-    libsigsegv = libsigsegv_25;  };
+    libsigsegv = libsigsegv_25;
+  };
 
   clojure = callPackage ../development/interpreters/clojure { };
 
@@ -2686,15 +2653,17 @@ let
   # mercurial (hg) bleeding edge version
   octaveHG = callPackage ../development/interpreters/octave/hg.nix { };
 
-  perl58 = callPackage ../development/interpreters/perl-5.8 {
+  perl58 = callPackage ../development/interpreters/perl/5.8 {
     impureLibcPath = if stdenv.isLinux then null else "/usr";
   };
 
-  perl510 = callPackage ../development/interpreters/perl-5.10 {
+  perl510 = callPackage ../development/interpreters/perl/5.10 { };
+
+  perl514 = callPackage ../development/interpreters/perl/5.14 {
     fetchurl = fetchurlBoot;
   };
 
-  perl = if system != "i686-cygwin" then perl510 else sysPerl;
+  perl = if system != "i686-cygwin" then perl514 else sysPerl;
 
   php = php5_3;
 
@@ -2926,7 +2895,7 @@ let
     cross = assert crossSystem != null; crossSystem;
   });
 
-  bison = bison24;
+  bison = bison25;
 
   bison1875 = callPackage ../development/tools/parsing/bison/bison-1.875.nix { };
 
@@ -3123,8 +3092,6 @@ let
   oprofile = callPackage ../development/tools/profiling/oprofile { };
 
   patchelf = callPackage ../development/tools/misc/patchelf { };
-
-  patchelf06 = callPackage ../development/tools/misc/patchelf/0.6.nix { };
 
   peg = callPackage ../development/tools/parsing/peg { };
 
@@ -3337,8 +3304,7 @@ let
 
   cln = callPackage ../development/libraries/cln { };
 
-  clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) {
-  };
+  clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) { };
 
   clucene_core = callPackage ../development/libraries/clucene-core { };
 
@@ -3400,14 +3366,6 @@ let
 
   dbus_all = callPackage ../development/libraries/dbus {
     useX11 = true;
-  };
-
-  dbus_all_1_5_6 = callPackage ../development/libraries/dbus/1.5.6.nix {
-    useX11 = true;
-  };
-
-  dbus_glib_0_94 = callPackage ../development/libraries/dbus-glib/0.94.nix {
-    dbus = pkgs.dbus_all_1_5_6.libs;
   };
 
   dbus_glib = callPackage ../development/libraries/dbus-glib { };
@@ -3559,57 +3517,73 @@ let
 
   glfw = callPackage ../development/libraries/glfw { };
 
-  glibc = glibc212;
+  glibc = glibc213;
 
-  glibc25 = callPackage ../development/libraries/glibc-2.5 {
+  glibcCross = glibc213Cross;
+
+  glibc25 = callPackage ../development/libraries/glibc/2.5 {
     kernelHeaders = linuxHeaders_2_6_28;
     installLocales = false;
   };
 
-  glibc27 = callPackage ../development/libraries/glibc-2.7 {
+  glibc27 = callPackage ../development/libraries/glibc/2.7 {
     kernelHeaders = linuxHeaders;
     #installLocales = false;
   };
 
-  glibc29 = callPackage ../development/libraries/glibc-2.9 {
+  glibc29 = callPackage ../development/libraries/glibc/2.9 {
     kernelHeaders = linuxHeaders;
     installLocales = getConfig [ "glibc" "locales" ] false;
   };
 
-  glibc29Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.9) {
+  glibc29Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.9) {
     inherit stdenv fetchurl;
     gccCross = gccCrossStageStatic;
     kernelHeaders = linuxHeadersCross;
     installLocales = getConfig [ "glibc" "locales" ] false;
   });
 
-  glibc212 = (callPackage ../development/libraries/glibc-2.12 {
+  glibc213 = (callPackage ../development/libraries/glibc/2.13 {
     kernelHeaders = linuxHeaders;
     installLocales = getConfig [ "glibc" "locales" ] false;
     machHeaders = null;
     hurdHeaders = null;
     gccCross = null;
-  }) // (if crossSystem != null then { hostDrv = glibc212Cross; } else {});
+  }) // (if crossSystem != null then { hostDrv = glibc213Cross; } else {});
 
-  glibc212Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc-2.12)
-    (let crossGNU = (crossSystem != null && crossSystem.config == "i586-pc-gnu");
-     in ({
+  glibc213Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.13)
+    (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
+     in {
        inherit stdenv fetchurl;
        gccCross = gccCrossStageStatic;
        kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
        installLocales = getConfig [ "glibc" "locales" ] false;
      }
-
-     //
-
-     (if crossGNU
-      then {
+     // lib.optionalAttrs crossGNU {
         inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
         inherit fetchgit;
-      }
-      else { }))));
+      }));
 
-  glibcCross = glibc212Cross;
+  glibc214 = (callPackage ../development/libraries/glibc/2.14 {
+    kernelHeaders = linuxHeaders;
+    installLocales = getConfig [ "glibc" "locales" ] false;
+    machHeaders = null;
+    hurdHeaders = null;
+    gccCross = null;
+  }) // (lib.optionalAttrs (crossSystem != null) { hostDrv = glibc214Cross; });
+
+  glibc214Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.14)
+    (let crossGNU = (crossSystem != null && crossSystem.config == "i586-pc-gnu");
+     in {
+       inherit stdenv fetchurl;
+       gccCross = gccCrossStageStatic;
+       kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
+       installLocales = getConfig [ "glibc" "locales" ] false;
+     }
+     // lib.optionalAttrs crossGNU {
+        inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
+        inherit fetchgit;
+      }));
 
   # We can choose:
   libcCrossChooser = name : if (name == "glibc") then glibcCross
@@ -3624,9 +3598,9 @@ let
     installLocales = getConfig [ "glibc" "locales" ] false;
   };
 
-  glibcLocales = callPackage ../development/libraries/glibc-2.12/locales.nix { };
+  glibcLocales = callPackage ../development/libraries/glibc/2.14/locales.nix { };
 
-  glibcInfo = callPackage ../development/libraries/glibc-2.12/info.nix { };
+  glibcInfo = callPackage ../development/libraries/glibc/2.14/info.nix { };
 
   glibc_multi =
       runCommand "${glibc.name}-multi"
@@ -3634,11 +3608,11 @@ let
           glibc32 = (import ./all-packages.nix {system = "i686-linux";}).glibc;
         }
         ''
-          ensureDir $out
+          mkdir -p $out
           ln -s $glibc64/* $out/
 
           rm $out/lib $out/lib64
-          ensureDir $out/lib
+          mkdir -p $out/lib
           ln -s $glibc64/lib/* $out/lib
           ln -s $glibc32/lib $out/lib/32
           ln -s lib $out/lib64
@@ -3659,22 +3633,20 @@ let
   gmp =
     if stdenv.system == "i686-darwin" then
       # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
-      makeOverridable (import ../development/libraries/gmp/4.3.1.nix) {
-        inherit stdenv fetchurl m4;
-        cxx = false;
-      }
+      callPackage ../development/libraries/gmp/4.3.1.nix { }
     else
-      # We temporarily leave gmp 4 here, waiting for a new ppl/cloog-ppl that
-      # would build well with gmp 5.
-      makeOverridable (import ../development/libraries/gmp/4.3.2.nix) {
-        inherit stdenv fetchurl m4;
-        cxx = false;
-      };
-
-  gmp5 = callPackage ../development/libraries/gmp/5.0.3.nix { };
+      callPackage ../development/libraries/gmp/5.0.3.nix { };
 
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
+  # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
+  gmp4 =
+    if stdenv.system == "i686-darwin" then
+      # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
+      callPackage ../development/libraries/gmp/4.3.1.nix { }
+    else
+      callPackage ../development/libraries/gmp/4.3.2.nix { };
+  
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
   goffice = callPackage ../development/libraries/goffice {
@@ -4504,7 +4476,7 @@ let
   };
 
   pcre = callPackage ../development/libraries/pcre {
-    unicodeSupport = getConfig ["pcre" "unicode"] false;
+    unicodeSupport = getConfig ["pcre" "unicode"] true;
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
@@ -5366,12 +5338,12 @@ let
 
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-    then (utillinuxng // {
-      hostDrv = lib.overrideDerivation utillinuxng.hostDrv (args: {
+    then (utillinux // {
+      hostDrv = lib.overrideDerivation utillinux.hostDrv (args: {
         # `libblkid' fails to build on GNU/Hurd.
         configureFlags = args.configureFlags
           + " --disable-libblkid --disable-mount --disable-libmount"
-          + " --disable-fsck --enable-static";
+          + " --disable-fsck --enable-static --disable-partx";
         doCheck = false;
         CPPFLAGS =                    # ugly hack for ugly software!
           lib.concatStringsSep " "
@@ -5380,7 +5352,7 @@ let
       });
     })
     else if stdenv.isLinux
-    then utillinuxng
+    then utillinux
     else null;
 
   e3cfsprogs = callPackage ../os-specific/linux/e3cfsprogs { };
@@ -5473,7 +5445,7 @@ let
 
   libnl1 = callPackage ../os-specific/linux/libnl/v1.nix { };
 
-  linuxHeaders = linuxHeaders_2_6_32;
+  linuxHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
@@ -5493,80 +5465,25 @@ let
   linuxHeadersCross = assert crossSystem != null;
     linuxHeadersCrossChooser crossSystem.platform.kernelMajor;
 
-  linuxHeaders_2_6_18 = callPackage ../os-specific/linux/kernel-headers/2.6.18.5.nix { };
-
   linuxHeaders_2_6_28 = callPackage ../os-specific/linux/kernel-headers/2.6.28.nix { };
-
-  linuxHeaders_2_6_32 = callPackage ../os-specific/linux/kernel-headers/2.6.32.nix { };
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
   linux_2_6_15 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.15.nix) {
     inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideInStdenv stdenv [gcc34 gnumake381];
+    stdenv = overrideInStdenv stdenv [ gcc34 gnumake381 ];
     kernelPatches =
       [ kernelPatches.cifs_timeout_2_6_15
       ];
   };
 
-  linux_2_6_25 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.25.nix) {
-    inherit fetchurl perl mktemp module_init_tools;
-    extraConfig = "KMOD y";
-    stdenv = overrideInStdenv stdenv [gnumake381];
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_25
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.glibc_getline
-        kernelPatches.cifs_timeout_2_6_25
-      ];
-  };
-
-  linux_2_6_26 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.26.nix) {
-    inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideInStdenv stdenv [gnumake381];
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_25
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.glibc_getline
-        kernelPatches.cifs_timeout_2_6_25
-      ];
-  };
-
   linux_2_6_27 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.27.nix) {
     inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideInStdenv stdenv [gnumake381];
+    stdenv = overrideGCC (overrideInStdenv stdenv [ gnumake381 ]) gcc45;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_27
         kernelPatches.sec_perm_2_6_24
         kernelPatches.cifs_timeout_2_6_25
-      ];
-  };
-
-  linux_2_6_28 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.28.nix) {
-    inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideInStdenv stdenv [gnumake381];
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_28
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.ext4_softlockups_2_6_28
-        kernelPatches.glibc_getline
-        kernelPatches.cifs_timeout_2_6_25
-      ];
-  };
-
-  linux_2_6_29 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.29.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_29
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.cifs_timeout_2_6_29
-      ];
-  };
-
-  linux_2_6_31 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.31.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools platform;
-    kernelPatches =
-      [ kernelPatches.cifs_timeout_2_6_29
       ];
   };
 
@@ -5614,58 +5531,6 @@ let
       ];
   };
 
-  linux_2_6_32_zen4 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.32-zen4.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools runCommand xz;
-  };
-
-  linux_2_6_32_zen4_oldi686 = linux_2_6_32_zen4.override {
-    features = {
-      oldI686 = true;
-    };
-  };
-
-  linux_2_6_32_zen4_bfs = linux_2_6_32_zen4.override {
-    features = {
-      ckSched = true;
-    };
-  };
-
-  linux_2_6_33 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.33.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_33
-        kernelPatches.aufs2_2_6_33
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.cifs_timeout_2_6_29
-      ];
-  };
-
-  linux_2_6_33_zen1 = makeOverridable (import ../os-specific/linux/zen-kernel/2.6.33-zen1.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools runCommand xz;
-  };
-
-  linux_2_6_33_zen1_oldi686 = linux_2_6_33_zen1.override {
-    features = {
-      oldI686 = true;
-    };
-  };
-
-  linux_2_6_33_zen1_bfs = linux_2_6_33_zen1.override {
-    features = {
-      ckSched = true;
-    };
-  };
-
-  linux_2_6_34 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.34.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ /*kernelPatches.fbcondecor_2_6_33*/
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_2_6_34
-        kernelPatches.cifs_timeout_2_6_29
-      ];
-  };
-
   linux_2_6_35 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.35.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5706,36 +5571,14 @@ let
     };
 
   linux_2_6_35_oldI686 = linux_2_6_35.override {
-      extraConfig = ''
-          HIGHMEM64G? n
-          XEN? n
-      '';
-      extraMeta = {
-        platforms = ["i686-linux"];
-        maintainers = [lib.maintainers.raskin];
-      };
-  };
-
-  linux_2_6_36 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.36.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ #kernelPatches.fbcondecor_2_6_35
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_2_6_36
-        kernelPatches.mips_restart_2_6_36
-        kernelPatches.cifs_timeout_2_6_35
-      ];
-  };
-
-  linux_2_6_37 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.37.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_37
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_1_2_6_37
-        kernelPatches.cifs_timeout_2_6_35
-        #kernelPatches.mips_restart_2_6_36
-      ];
+    extraConfig = ''
+      HIGHMEM64G? n
+      XEN? n
+    '';
+    extraMeta = {
+      platforms = ["i686-linux"];
+      maintainers = [lib.maintainers.raskin];
+    };
   };
 
   linux_2_6_38 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.38.nix) {
@@ -5852,6 +5695,8 @@ let
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
+    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
+
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
     nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
@@ -5903,21 +5748,13 @@ let
   };
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_2_6_25 = recurseIntoAttrs (linuxPackagesFor linux_2_6_25 pkgs.linuxPackages_2_6_25);
   linuxPackages_2_6_27 = recurseIntoAttrs (linuxPackagesFor linux_2_6_27 pkgs.linuxPackages_2_6_27);
-  linuxPackages_2_6_28 = recurseIntoAttrs (linuxPackagesFor linux_2_6_28 pkgs.linuxPackages_2_6_28);
-  linuxPackages_2_6_29 = recurseIntoAttrs (linuxPackagesFor linux_2_6_29 pkgs.linuxPackages_2_6_29);
-  linuxPackages_2_6_31 = recurseIntoAttrs (linuxPackagesFor linux_2_6_31 pkgs.linuxPackages_2_6_31);
   linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32 pkgs.linuxPackages_2_6_32);
   linuxPackages_2_6_32_systemtap =
     recurseIntoAttrs (linuxPackagesFor linux_2_6_32_systemtap pkgs.linuxPackages_2_6_32_systemtap);
   linuxPackages_2_6_32_xen =
     recurseIntoAttrs (linuxPackagesFor linux_2_6_32_xen pkgs.linuxPackages_2_6_32_xen);
-  linuxPackages_2_6_33 = recurseIntoAttrs (linuxPackagesFor linux_2_6_33 pkgs.linuxPackages_2_6_33);
-  linuxPackages_2_6_34 = recurseIntoAttrs (linuxPackagesFor linux_2_6_34 pkgs.linuxPackages_2_6_34);
   linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);
-  linuxPackages_2_6_36 = recurseIntoAttrs (linuxPackagesFor linux_2_6_36 pkgs.linuxPackages_2_6_36);
-  linuxPackages_2_6_37 = recurseIntoAttrs (linuxPackagesFor linux_2_6_37 pkgs.linuxPackages_2_6_37);
   linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_38_ati = recurseIntoAttrs (linuxPackagesFor linux_2_6_38_ati pkgs.linuxPackages_2_6_38);
   linuxPackages_2_6_39 = recurseIntoAttrs (linuxPackagesFor linux_2_6_39 pkgs.linuxPackages_2_6_39);
@@ -6159,12 +5996,9 @@ let
   udev173 = callPackage ../os-specific/linux/udev/173.nix { };
   udev = pkgs.udev173;
 
-  udisks = callPackage ../os-specific/linux/udisks {
-    inherit (gnome) gtkdoc;
-  };
+  udisks = callPackage ../os-specific/linux/udisks { };
 
-  uml = import ../os-specific/linux/kernel/linux-2.6.29.nix {
-    inherit fetchurl stdenv perl mktemp module_init_tools;
+  uml = linux.override {
     userModeLinux = true;
   };
 
@@ -6174,24 +6008,18 @@ let
 
   untie = callPackage ../os-specific/linux/untie { };
 
-  upower = callPackage ../os-specific/linux/upower {
-    dbus_glib = pkgs.dbus_glib_0_94;
-  };
+  upower = callPackage ../os-specific/linux/upower { };
 
   upstart = callPackage ../os-specific/linux/upstart { };
 
   usbutils = callPackage ../os-specific/linux/usbutils { };
 
-  utillinux = utillinuxng;
-
-  utillinuxCurses = utillinuxngCurses;
-
-  utillinuxng = lowPrio (callPackage ../os-specific/linux/util-linux-ng {
+  utillinux = lowPrio (callPackage ../os-specific/linux/util-linux {
     ncurses = null;
     perl = null;
   });
 
-  utillinuxngCurses = utillinuxng.override {
+  utillinuxCurses = utillinux.override {
     inherit ncurses perl;
   };
 
@@ -6515,7 +6343,6 @@ let
   chrome = lowPrio (callPackage ../applications/networking/browsers/chromium {
     inherit (gnome) GConf;
     libpng = libpng12;
-    patchelf = patchelf06;
   });
 
   chromeWrapper = wrapFirefox
@@ -7012,20 +6839,14 @@ let
 
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
-  icecat3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
-    inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
-      wirelesstools;
+  icecat3 = lowPrio (callPackage ../applications/networking/browsers/icecat-3 {
     inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
 
-  icecatXulrunner3 = lowPrio (import ../applications/networking/browsers/icecat-3 {
+  icecatXulrunner3 = lowPrio (callPackage ../applications/networking/browsers/icecat-3 {
     application = "xulrunner";
-    inherit fetchurl stdenv xz pkgconfig perl zip libjpeg libpng zlib cairo
-      python dbus dbus_glib freetype fontconfig bzip2 xlibs alsaLib libnotify
-      wirelesstools;
     inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
@@ -7166,7 +6987,7 @@ let
   };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    inherit (pythonPackages) ssl curses;
+    inherit (pythonPackages) curses;
     guiSupport = false;		# use mercurialFull to get hgk GUI
   };
 

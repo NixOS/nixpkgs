@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   phases = [ "installPhase" ];
   installPhase = ''
-    ensureDir $out/rtlwifi
+    mkdir -p $out/rtlwifi
     cp "$src/rtlwifi/rtl8192cfw.bin" "$out/rtlwifi/rtl8192cfw.bin"
   '';
 

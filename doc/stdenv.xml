@@ -70,7 +70,7 @@ stdenv.mkDerivation {
     gcc foo.c -o foo
   '';
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp foo $out/bin
   '';
 }</programlisting>
@@ -112,7 +112,7 @@ buildPhase() {
 }
 
 installPhase() {
-  ensureDir $out/bin
+  mkdir -p $out/bin
   cp foo $out/bin
 }
 
@@ -939,14 +939,6 @@ functions.</para>
 <variablelist>
 
   
-  <varlistentry xml:id='fun-ensureDir'>
-    <term><function>ensureDir</function> <replaceable>args</replaceable></term>
-    <listitem><para>Creates the specified directories, including all
-    necessary parent directories, if they do not already
-    exist.</para></listitem>
-  </varlistentry>
-  
-
   <varlistentry xml:id='fun-substitute'>
     <term><function>substitute</function>
     <replaceable>infile</replaceable>
@@ -1062,7 +1054,16 @@ echo @foo@
     That is, no substitution is performed for undefined variables.</para></listitem>
   </varlistentry>
 
-  
+
+  <varlistentry xml:id='fun-substituteAllInPlace'>
+    <term><function>substituteAllInPlace</function>
+    <replaceable>file</replaceable></term>
+    <listitem><para>Like <function>substituteAll</function>, but performs
+    the substitutions in place on the file
+    <replaceable>file</replaceable>.</para></listitem>
+  </varlistentry>
+
+
   <varlistentry xml:id='fun-stripHash'>
     <term><function>stripHash</function>
     <replaceable>path</replaceable></term>

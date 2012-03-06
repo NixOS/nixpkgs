@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs = [emacs texinfo ctags];
   configureFlags = "--with-package-dir=$$out/share/emacs/site-lisp";
-  preInstall = "ensureDir $out/info";
+  preInstall = "mkdir -p $out/info";
   installTargets = "install-pkg texinfo";
   postInstall = ''
     mv  $out/info $out/share/

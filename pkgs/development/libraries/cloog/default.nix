@@ -1,6 +1,4 @@
-{ fetchurl, stdenv, gmp, isl, static ? false }:
-
-assert static -> isl.dontDisableStatic;
+{ fetchurl, stdenv, gmp, isl }:
 
 stdenv.mkDerivation rec {
   name = "cloog-0.16.3";
@@ -14,10 +12,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ isl ];
 
-  configureFlags = [ "--with-isl=system" ]
-    ++ (stdenv.lib.optionals static [ "--enable-static" "--disable-shared" ]);
-
-  dontDisableStatic = static;
+  configureFlags = [ "--with-isl=system" ];
 
   doCheck = true;
 

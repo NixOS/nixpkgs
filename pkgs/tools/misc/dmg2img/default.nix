@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [zlib bzip2 openssl];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp dmg2img $out/bin
   '';
 }

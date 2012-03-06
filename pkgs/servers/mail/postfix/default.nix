@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   '';
   
   postInstall = ''
-    ensureDir $out
+    mkdir -p $out
     mv ut/$out/* $out/
 
     mkdir $out/share/postfix/conf

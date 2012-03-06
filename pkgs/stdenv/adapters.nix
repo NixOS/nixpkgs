@@ -83,10 +83,10 @@ rec {
           + " --disable-shared"; # brrr...
 
         NIX_GCC = runCommand "klibc-wrapper" {} ''
-          ensureDir $out/bin
+          mkdir -p $out/bin
           ln -s ${klibc}/bin/klcc $out/bin/gcc
           ln -s ${klibc}/bin/klcc $out/bin/cc
-          ensureDir $out/nix-support
+          mkdir -p $out/nix-support
           echo 'PATH=$PATH:${stdenv.gcc.binutils}/bin' > $out/nix-support/setup-hook
         '';
       });
@@ -109,13 +109,14 @@ rec {
     } // {inherit fetchurl;};
 
     
-  # Return a modified stdenv that enables building static libraries.
-  enableStaticLibraries = stdenv: stdenv //
+  # Return a modified stdenv that builds static libraries instead of
+  # shared libraries.
+  makeStaticLibraries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontDisableStatic = true;
         configureFlags =
-          (if args ? configureFlags then args.configureFlags else "")
-          + " --enable-static";
+          (if args ? configureFlags then toString args.configureFlags else "")
+          + " --enable-static --disable-shared";
       });
     } // {inherit fetchurl;};
 
@@ -208,7 +209,7 @@ rec {
 
         moveBuildDir =
           ''
-            ensureDir $out/.build
+            mkdir -p $out/.build
             cd $out/.build
           '';
       } stdenv;

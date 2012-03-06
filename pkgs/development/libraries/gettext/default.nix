@@ -1,8 +1,6 @@
-# XXX: Remove me when `stdenv-updates' is merged.
-
 { stdenv, fetchurl, libiconv }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "gettext-0.18.1.1";
   
   src = fetchurl {
@@ -23,6 +21,10 @@ stdenv.mkDerivation (rec {
     fi
   '';
 
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  
+  enableParallelBuilding = true;
+      
   crossAttrs = {
     buildInputs = stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
       stdenv.gccCross.libc.libiconv.hostDrv;
@@ -58,11 +60,3 @@ stdenv.mkDerivation (rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-//
-
-(if (!stdenv.isLinux) # any non-GNU system
-    then {
-      buildInputs = [ libiconv ];
-    }
-    else {}))

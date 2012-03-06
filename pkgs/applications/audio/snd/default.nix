@@ -40,7 +40,7 @@ rec {
 
   makeDocsWork = fullDepEntry ''
                 # hackish way to make html docs work
-                h="$out/share/snd/html"; ensureDir "$h"; cp *.html "$h"
+                h="$out/share/snd/html"; mkdir -p "$h"; cp *.html "$h"
                 patch -p1 < ${./doc.patch}
                 sed "s@HTML-DIR@$h@" -i index.scm snd-help.c
             '' ["defEnsureDir"];

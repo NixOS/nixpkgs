@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yss9cxxkcb6dzrv78xvi845ls6lhhbv6g8yfm6zjjl07v7jbm6c";
   };
 
+  patches = [ ./zlib126.patch ];
 #  patches =
 #    [ (fetchurl {
 #        url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-libs/xine-lib/files/xine-lib-1.1.19-ffmpeg.patch?revision=1.1";

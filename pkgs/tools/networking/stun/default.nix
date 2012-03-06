@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/{bin,man/man8,man/man1}
+    mkdir -p $out/{bin,man/man8,man/man1}
     cp client $out/bin/stun
     cp server $out/bin/stund
     cp debian/manpages/stund.8 $out/man/man8

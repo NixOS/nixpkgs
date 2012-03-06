@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
   buildInputs = [boost zlib botan libidn lua pcre sqlite pkgconfig];
 
   postInstall = ''
-    ensureDir $out/share/${name}
+    mkdir -p $out/share/${name}
     cp -rv contrib/ $out/share/${name}/contrib
-    ensureDir $out/lib/perl5/site_perl/${perlVersion}
+    mkdir -p $out/lib/perl5/site_perl/${perlVersion}
     cp -v contrib/Monotone.pm $out/lib/perl5/site_perl/${perlVersion}
   '';
 

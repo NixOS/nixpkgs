@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages }:
+{ stdenv, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
   name = "getmail-4.20.0";
@@ -8,8 +8,6 @@ buildPythonPackage rec {
     url = "http://pyropus.ca/software/getmail/old-versions/${name}.tar.gz";
     sha256 = "17cpyra61virk1d223w8pdwhv2qzhbwdbnrr1ab1znf4cv9m3knn";
   };
-
-  pythonPath = [ pythonPackages.ssl ];
 
   doCheck = false;
 

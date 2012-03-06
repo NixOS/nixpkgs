@@ -36,7 +36,7 @@ rec {
   '') ["minInit" "doUnpack"];
 
   postInstall = a.fullDepEntry (''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     ln -s $out/games/nethack $out/bin/nethack
     sed -i $out/bin/nethack -e '5aNEWHACKDIR="$HOME/.nethack"'
     sed -i $out/bin/nethack -e '6amkdir -p "$NEWHACKDIR/save"'

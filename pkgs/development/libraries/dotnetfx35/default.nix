@@ -8,7 +8,7 @@ in
     name = "dotnetfx-3.5";
     src = "${windir}/Microsoft.NET/Framework/v3.5";
     buildCommand = ''
-      ensureDir $out/bin
+      mkdir -p $out/bin
       ln -s $src/MSBuild.exe $out/bin
     '';
   };

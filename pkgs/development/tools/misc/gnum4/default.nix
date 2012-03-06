@@ -1,17 +1,17 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "gnum4-1.4.15";
+  name = "gnum4-1.4.16";
 
   src = fetchurl {
-    url = mirror://gnu/m4/m4-1.4.15.tar.bz2;
-    sha256 = "1ygzshj4h6l6wh52vjqczkyahmv67r3yzi1m6nkh94qgndffmbqa";
+    url = mirror://gnu/m4/m4-1.4.16.tar.bz2;
+    sha256 = "035r7ma272j2cwni2961jp22k6bn3n9xwn3b3qbcn2yrvlghql22";
   };
 
   doCheck = !stdenv.isDarwin;
 
   # Upstream is aware of it; it may be in the next release.
-  patches = [ ./s_isdir.patch ];
+  patches = [ ./s_isdir.patch ./readlink-EINVAL.patch ];
 
   meta = {
     homepage = http://www.gnu.org/software/m4/;

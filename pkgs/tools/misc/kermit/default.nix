@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ];
 
   unpackPhase = ''
-    ensureDir src
+    mkdir -p src
     pushd src
     tar xvzf $src
   '';
@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   '';
   buildPhase = "make -f makefile linux";
   installPhase = ''
-    ensureDir $out/bin
-    ensureDir $out/man/man1
+    mkdir -p $out/bin
+    mkdir -p $out/man/man1
     make -f makefile install
   '';
 

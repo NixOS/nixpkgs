@@ -12,11 +12,11 @@ with stdenv.lib;
 let
 
   majorVersion = "2.6";
-  version = "${majorVersion}.6";
+  version = "${majorVersion}.7";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    md5 = "cf4e6881bb84a7ce6089e4a307f71f14";
+    sha256 = "0p0fd8i533zsdm6gc0jmhmdifccx4v064mh0i1hl2s6fcjhc20j5";
   };
   
   patches =
@@ -75,7 +75,7 @@ let
 
     meta = {
       homepage = "http://python.org";
-      description = "Python -- a high-level dynamically-typed programming language";
+      description = "a high-level dynamically-typed programming language";
       longDescription = ''
         Python is a remarkably powerful dynamic programming language that
         is used in a wide variety of application domains. Some of its key
@@ -85,9 +85,9 @@ let
         hierarchical packages; exception-based error handling; and very
         high level dynamic data types.
       '';
-      license = "GPLv2";
+      license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
-      maintainers = [ stdenv.lib.maintainers.simons ];
+      maintainers = with stdenv.lib.maintainers; [ simons chaoflow ];
     };
   };
 

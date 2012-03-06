@@ -16,7 +16,7 @@ stdenv.mkDerivation (rec {
   name = name + "-headers";
   phases = [ "unpackPhase" "installPhase" ];
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -R include $out
   '';
 } else {

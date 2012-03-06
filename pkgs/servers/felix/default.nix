@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   ''
     tar xfvz $src
     cd felix-framework-*
-    ensureDir $out
+    mkdir -p $out
     cp -av * $out
   '';
   meta = {

@@ -1,30 +1,12 @@
 { stdenv, fetchurl, noSysDirs, zlib, cross ? null, gold ? false, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null }:
 
-let
-    basename = "binutils-2.21";
-in
+let basename = "binutils-2.21.1a"; in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
-  # WARNING: Upstream made a mistake in packaging that may mean anyone
-  # but the FSF hosting this tarball is accidentally in violation of
-  # the GPL. We can't update binutils until the next stdenv-updates,
-  # so we are stuck with this version. The issue is discussed in
-  # this email: http://sourceware.org/ml/binutils/2011-08/msg00198.html
-  # The tarball for this minor version will not be fixed, as only the
-  # tarballs for the latest minor version of each major version will
-  # be repackaged. The fixed sources for the closest version to this one
-  # can be found at mirror://gnu/binutils/binutils-2.21.1a.tar.bz2
-  # or http://ftp.gnu.org/gnu/binutils/binutils-2.21.1a.tar.bz2
-  # The sources missing from this tarball come from cgen. It is unclear
-  # WHICH sources should be included, but the cvs tree can be checked out
-  # by:
-  # cvs -z 9 -d :pserver:anoncvs@sourceware.org:/cvs/src login
-  # {enter "anoncvs" as the password}
-  # cvs -z 9 -d :pserver:anoncvs@sourceware.org:/cvs/src co cgen
   src = fetchurl {
-    url = "http://nixos.org/tarballs/${basename}.tar.bz2";
-    sha256 = "1iyhc42zfa0j2gaxy4zvpk47sdqj4rqvib0mb8597ss8yidyrav0";
+    url = "mirror://gnu/binutils/${basename}.tar.bz2";
+    sha256 = "0m7nmd7gc9d9md43wbrv65hz6lbi2crqwryzpigv19ray1lzmv6d";
   };
 
   patches = [
@@ -49,9 +31,13 @@ stdenv.mkDerivation rec {
     # Use symlinks instead of hard links to save space ("strip" in the
     # fixup phase strips each hard link separately).
     for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in; do
-        substituteInPlace $i --replace 'ln ' 'ln -s '
+        sed -i "$i" -e 's|ln |ln -s |'
     done
   '';
+
+  # As binutils takes part in the stdenv building, we don't want references
+  # to the bootstrap-tools libgcc (as uses to happen on arm/mips)
+  NIX_CFLAGS_COMPILE = "-static-libgcc";
 
   configureFlags = "--disable-werror" # needed for dietlibc build
       + stdenv.lib.optionalString (stdenv.system == "mips64el-linux")
@@ -59,6 +45,8 @@ stdenv.mkDerivation rec {
       + stdenv.lib.optionalString (cross != null) " --target=${cross.config}"
       + stdenv.lib.optionalString gold " --enable-gold";
 
+  enableParallelBuilding = true;
+      
   meta = {
     description = "GNU Binutils, tools for manipulating binaries (linker, assembler, etc.)";
 

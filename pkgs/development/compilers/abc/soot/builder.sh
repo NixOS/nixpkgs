@@ -15,5 +15,5 @@ EOF
 
 ant classesjar
 
-ensureDir $out/jars/
+mkdir -p $out/jars/
 mv lib/sootclasses-foo.jar $out/jars/soot.jar

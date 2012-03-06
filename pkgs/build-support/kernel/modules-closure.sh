@@ -25,10 +25,11 @@ for module in $rootModules; do
 done
 
 echo "closure:"
-ensureDir $out/lib/modules/"$version"
+mkdir -p $out/lib/modules/"$version"
 for module in $closure; do
     target=$(echo $module | sed "s^$NIX_STORE.*/lib/modules/^$out/lib/modules/^")
     if test -e "$target"; then continue; fi
+    if test \! -e "$module"; then continue; fi # XXX: to avoid error with "cp builtin builtin"
     mkdir -p $(dirname $target)
     echo $module
     cp $module $target

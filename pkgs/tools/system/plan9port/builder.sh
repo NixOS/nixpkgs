@@ -40,7 +40,7 @@ popd
 
 # Installation
 export PLAN9=$out
-ensureDir $PLAN9
+mkdir -p $PLAN9
 GLOBIGNORE='src:.*'
 cp -R * $PLAN9
 GLOBIGNORE=

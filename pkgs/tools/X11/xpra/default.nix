@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -r install/* $out
 
     for i in $(cd $out/bin && ls); do

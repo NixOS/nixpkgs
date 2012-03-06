@@ -37,7 +37,7 @@ rec {
   '';
 
   doUnpack = a.fullDepEntry ''
-    ensureDir $out/share/sauerbraten/build-dir
+    mkdir -p $out/share/sauerbraten/build-dir
     ln -s  $out/share/sauerbraten/build-dir
     cd $out/share/sauerbraten/build-dir
     (cd ${src}; find . -type d) | tail -n +2 | xargs -L 1 mkdir
@@ -50,7 +50,7 @@ rec {
 
   doCreateScripts = a.fullDepEntry ''
     cd ..
-    ensureDir $out/bin
+    mkdir -p $out/bin
     echo '#! /bin/sh' >> $out/bin/sauerbraten_server
     echo 'cd "'"$out"'/share/sauerbraten/build-dir"' >> $out/bin/sauerbraten_server
     echo './bin_unix/native_server "$@"' >> $out/bin/sauerbraten_server

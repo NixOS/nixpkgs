@@ -37,7 +37,7 @@ rec {
   '' ["doUnpack" "addInputs"];
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp netboot "$out/bin"
   '' ["defEnsureDir" "minInit"];
       

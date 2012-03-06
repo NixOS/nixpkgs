@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional jackSupport jackaudio);
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -r ./release $out/bin
   '';
 

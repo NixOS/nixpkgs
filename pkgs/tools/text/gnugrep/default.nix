@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, pcre, libiconv ? null}:
+{ stdenv, fetchurl, pcre, libiconv ? null }:
 
-let version = "2.7"; in
+let version = "2.10"; in
 
 stdenv.mkDerivation ({
   name = "gnugrep-${version}";
 
   src = fetchurl {
-    url = "mirror://gnu/grep/grep-${version}.tar.gz";
-    sha256 = "1b8vksfd1ngharac3ygaqim3lrf0yqap992sg0vfm7572l88655d";
+    url = "mirror://gnu/grep/grep-${version}.tar.xz";
+    sha256 = "1cvsqyfzk1p38fcaav22dn76fkd02g7bjnqna6vrpk9vy9rnfybc";
   };
 
   buildInputs = [ pcre ]

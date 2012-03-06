@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "cantarell-fonts-0.0.7";
@@ -7,8 +7,6 @@ stdenv.mkDerivation {
     url = mirror://gnome/sources/cantarell-fonts/0.0/cantarell-fonts-0.0.7.tar.xz;
     sha256 = "1410ywvi951ngmx58g339phzsaf1rgjja6i0xvg49r4ds90zh8ba";
   };
-
-  buildNativeInputs = [ xz ];
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.urkud ];

@@ -2,7 +2,7 @@
 , dbus, libusb, acl }:
 
 let
-  version = "1.4.7";
+  version = "1.5.0";
 in
 stdenv.mkDerivation {
   name = "cups-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "1xlnkdqldq81pdqgisqbyh92k249bzz35m1f5bp4la06p00ksvjf";
+    sha256 = "0czc0bmrm31jy03inm6w2mbr5s9q9xk6s1x5x4kddx2qlml9pyf6";
   };
 
   # The following code looks strange, but it had to be arranged like
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.cups.org/;
     description = "A standards-based printing system for UNIX";
-    license = "GPLv2"; # actually LGPL for the library and GPL for the rest
+    license = stdenv.lib.licenses.gpl2; # actually LGPL for the library and GPL for the rest
     maintainers = [ stdenv.lib.maintainers.urkud stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ erlang esdl ];
 
   installPhase = ''
-    ensureDir $out/bin $out/lib/${name}/ebin
+    mkdir -p $out/bin $out/lib/${name}/ebin
     cp ebin/* $out/lib/${name}/ebin
     cp -R fonts textures shaders plugins $out/lib/$name
     cat << EOF > $out/bin/wings

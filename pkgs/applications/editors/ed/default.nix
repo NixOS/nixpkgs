@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "ed-1.4";
+  name = "ed-1.5";
 
   src = fetchurl {
     url = "mirror://gnu/ed/${name}.tar.gz";
-    sha256 = "1njgcghms1377csldi1yqjhcpghiii6bshdhnjpqp78sxs2xldnv";
+    sha256 = "18gvhyhwpabmgv4lh21lg8vl3z7acdyhh2mr2kj9g75wksj39pcp";
   };
 
   doCheck = true;

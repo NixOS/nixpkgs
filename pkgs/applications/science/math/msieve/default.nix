@@ -16,7 +16,7 @@ stdenv.mkDerivation {
                else if stdenv.system == "i686-linux" then "x86"
                else "generic";
 
-  installPhase = ''ensureDir $out/bin/
+  installPhase = ''mkdir -p $out/bin/
                    cp msieve $out/bin/'';
 
   meta = {

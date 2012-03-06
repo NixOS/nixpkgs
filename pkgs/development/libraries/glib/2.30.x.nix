@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl, libiconv, zlib, xz, libffi
+{ stdenv, fetchurl, pkgconfig, gettext, perl, libiconv, zlib, libffi
 , python }:
 
 # TODO:
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   # configure script looks for d-bus but it is only needed for tests
   buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
-  buildNativeInputs = [ perl pkgconfig gettext xz python ];
+  buildNativeInputs = [ perl pkgconfig gettext python ];
 
   propagatedBuildInputs = [ zlib libffi ];
 

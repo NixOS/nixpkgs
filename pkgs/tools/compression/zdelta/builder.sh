@@ -1,7 +1,7 @@
 source $stdenv/setup
 
 installPhase() {
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp -p zdc zdu $out/bin
 }
 

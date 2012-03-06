@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     bin/ooinstall $out
-    ensureDir $out/bin
+    mkdir -p $out/bin
     for a in $out/program/{sbase,scalc,sdraw,simpress,smath,soffice,swriter,soffice.bin}; do
       ln -s $a $out/bin
     done

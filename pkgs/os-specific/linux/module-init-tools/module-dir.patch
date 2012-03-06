@@ -1,36 +1,43 @@
-diff -Naur module-init-tools-3.16-orig/depmod.c module-init-tools-3.16/depmod.c
---- module-init-tools-3.16-orig/depmod.c	2011-06-02 13:55:01.000000000 -0400
-+++ module-init-tools-3.16/depmod.c	2011-10-01 23:30:14.947293695 -0400
-@@ -48,10 +48,6 @@
+commit cf2c95edb7918bc658f6cae93793c1949fc9cb6e
+Author: David Guibert <david.guibert@gmail.com>
+Date:   Fri Aug 5 14:20:12 2011 +0200
+
+    introduce module-dir
+
+diff --git a/depmod.c b/depmod.c
+index a1d2f8c..9362a35 100644
+--- a/depmod.c
++++ b/depmod.c
+@@ -48,9 +48,6 @@
  
  #include "testing.h"
  
 -#ifndef MODULE_DIR
 -#define MODULE_DIR "/lib/modules/"
 -#endif
--
+ 
  #ifndef MODULE_BUILTIN_KEY
  #define MODULE_BUILTIN_KEY "built-in"
- #endif
-@@ -1514,6 +1510,7 @@
- 			     struct module_overrides **overrides)
- {
+@@ -1516,6 +1513,7 @@ static int parse_config_file(const char *filename,
  	char *line;
-+	char *module_dir;
  	unsigned int linenum = 0;
  	FILE *cfile;
++ 	char *module_dir;
  
-@@ -1536,6 +1533,9 @@
- 			continue;
- 		}
+ 	cfile = fopen(filename, "r");
+ 	if (!cfile) {
+@@ -1525,6 +1523,10 @@ static int parse_config_file(const char *filename,
+ 		return 0;
+ 	}
  
-+		if((module_dir = getenv("MODULE_DIR")) == NULL)
-+			module_dir = "/lib/modules/";
++        if((module_dir = getenv("MODULE_DIR")) == NULL) {
++                module_dir = "/lib/modules/";
++        }
 +
- 		if (streq(cmd, "search")) {
- 			char *search_path;
- 			
-@@ -1550,7 +1550,7 @@
+ 	while ((line = getline_wrapped(cfile, &linenum)) != NULL) {
+ 		char *ptr = line;
+ 		char *cmd, *modname;
+@@ -1550,7 +1552,7 @@ static int parse_config_file(const char *filename,
  					continue;
  				}
  				nofail_asprintf(&dirname, "%s%s%s/%s", basedir,
@@ -39,7 +46,7 @@ diff -Naur module-init-tools-3.16-orig/depmod.c module-init-tools-3.16/depmod.c
  				len = strlen(dirname);
  				*search = add_search(dirname, len, *search);
  				free(dirname);
-@@ -1565,7 +1565,7 @@
+@@ -1565,7 +1567,7 @@ static int parse_config_file(const char *filename,
  				continue;
  
  			nofail_asprintf(&pathname, "%s%s%s/%s/%s.ko", basedir,
@@ -48,27 +55,28 @@ diff -Naur module-init-tools-3.16-orig/depmod.c module-init-tools-3.16/depmod.c
  
  			*overrides = add_override(pathname, *overrides);
  			free(pathname);
-@@ -1737,6 +1737,7 @@
+@@ -1737,6 +1739,7 @@ int main(int argc, char *argv[])
  	char *basedir = "", *dirname, *version;
  	char *system_map = NULL, *module_symvers = NULL;
  	int i;
-+	char *module_dir;
++ 	char *module_dir;
  	const char *config = NULL;
  
  	if (native_endianness() == 0)
-@@ -1832,7 +1833,10 @@
+@@ -1832,7 +1835,11 @@ int main(int argc, char *argv[])
  	if (optind == argc)
  		all = 1;
  
 -	nofail_asprintf(&dirname, "%s%s%s", basedir, MODULE_DIR, version);
-+	if((module_dir = getenv("MODULE_DIR")) == NULL)
-+		module_dir = "/lib/modules/";
++        if((module_dir = getenv("MODULE_DIR")) == NULL) {
++                module_dir = "/lib/modules/";
++        }
 +
 +	nofail_asprintf(&dirname, "%s%s%s", basedir, module_dir, version);
  
  	if (maybe_all) {
  		if (!doing_stdout && !depfile_out_of_date(dirname))
-@@ -1850,7 +1854,7 @@
+@@ -1850,7 +1857,7 @@ int main(int argc, char *argv[])
  		size_t len;
  
  		nofail_asprintf(&dirname, "%s%s%s/updates", basedir,
@@ -77,36 +85,35 @@ diff -Naur module-init-tools-3.16-orig/depmod.c module-init-tools-3.16/depmod.c
  		len = strlen(dirname);
  		search = add_search(dirname, len, search);
  	}
-diff -Naur module-init-tools-3.16-orig/modinfo.c module-init-tools-3.16/modinfo.c
---- module-init-tools-3.16-orig/modinfo.c	2011-06-02 13:55:01.000000000 -0400
-+++ module-init-tools-3.16/modinfo.c	2011-10-01 23:32:15.335093548 -0400
-@@ -19,10 +19,6 @@
+diff --git a/modinfo.c b/modinfo.c
+index 1dd8469..67b1041 100644
+--- a/modinfo.c
++++ b/modinfo.c
+@@ -19,9 +19,6 @@
  #include "zlibsupport.h"
  #include "testing.h"
  
 -#ifndef MODULE_DIR
 -#define MODULE_DIR "/lib/modules"
 -#endif
--
+ 
  struct param
  {
- 	struct param *next;
-@@ -192,6 +188,7 @@
- 	unsigned long size;
+@@ -193,6 +190,11 @@ static struct elf_file *grab_module(const char *name,
  	struct utsname buf;
  	char *depname, *p, *moddir;
-+	char *module_dir;
  	struct elf_file *module;
++ 	char *module_dir;
++
++        if((module_dir = getenv("MODULE_DIR")) == NULL) {
++                module_dir = "/lib/modules/";
++        }
  
  	if (strchr(name, '.') || strchr(name, '/')) {
-@@ -206,10 +203,14 @@
- 		uname(&buf);
+ 		module = grab_elf_file(name);
+@@ -207,9 +209,9 @@ static struct elf_file *grab_module(const char *name,
  		kernel = buf.release;
  	}
-+
-+	if((module_dir = getenv("MODULE_DIR")) == NULL)
-+		module_dir = "/lib/modules/";
-+
  	if (strlen(basedir))
 -		nofail_asprintf(&moddir, "%s/%s/%s", basedir, MODULE_DIR, kernel);
 +		nofail_asprintf(&moddir, "%s/%s/%s", basedir, module_dir, kernel);
@@ -116,10 +123,11 @@ diff -Naur module-init-tools-3.16-orig/modinfo.c module-init-tools-3.16/modinfo.
  
  	/* Search for it in modules.dep. */
  	nofail_asprintf(&depname, "%s/%s", moddir, "modules.dep");
-diff -Naur module-init-tools-3.16-orig/modprobe.c module-init-tools-3.16/modprobe.c
---- module-init-tools-3.16-orig/modprobe.c	2011-06-02 13:55:01.000000000 -0400
-+++ module-init-tools-3.16/modprobe.c	2011-10-01 23:34:04.111913368 -0400
-@@ -86,10 +86,6 @@
+diff --git a/modprobe.c b/modprobe.c
+index 5464f45..d9fbf9d 100644
+--- a/modprobe.c
++++ b/modprobe.c
+@@ -86,10 +86,6 @@ typedef enum
  
  } modprobe_flags_t;
  
@@ -130,24 +138,24 @@ diff -Naur module-init-tools-3.16-orig/modprobe.c module-init-tools-3.16/modprob
  /**
   * print_usage - output the prefered program usage
   *
-@@ -2131,6 +2127,7 @@
- 	char *cmdline_opts = NULL;
- 	char *dirname;
- 	errfn_t error = fatal;
-+	char *module_dir;
- 	int failed = 0;
- 	modprobe_flags_t flags = 0;
+@@ -2136,6 +2132,7 @@ int main(int argc, char *argv[])
  	struct modprobe_conf conf = {};
-@@ -2233,7 +2230,10 @@
+ 
+ 	recursion_depth = 0;
++ 	char *module_dir = NULL;
+ 
+ 	/* Prepend options from environment. */
+ 	argv = merge_args(getenv("MODPROBE_OPTIONS"), argv, &argc);
+@@ -2233,7 +2230,11 @@ int main(int argc, char *argv[])
  	if (argc < optind + 1 && !dump_config && !list_only)
  		print_usage(argv[0]);
  
 -	nofail_asprintf(&dirname, "%s%s/%s", basedir, MODULE_DIR, buf.release);
-+	if((module_dir = getenv("MODULE_DIR")) == NULL)
-+		module_dir = "/lib/modules/";
++	if((module_dir = getenv("MODULE_DIR")) == NULL) {
++		module_dir = "/lib/modules";
++	}
 +
 +	nofail_asprintf(&dirname, "%s%s/%s", basedir, module_dir, buf.release);
  
  	/* Old-style -t xxx wildcard?  Only with -l. */
  	if (list_only) {
-

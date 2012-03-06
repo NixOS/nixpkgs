@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildNativeInputs = [ perl pkgconfig xz ];
+  buildNativeInputs = [ perl pkgconfig ];
 
   propagatedBuildInputs =
     [ xlibs.xlibs glib atk pango129 gdk_pixbuf cairo

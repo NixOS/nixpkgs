@@ -26,7 +26,7 @@ rec {
     cd bmrsa 
     unzip ${src}
     sed -e 's/gcc/g++/' -i Makefile
-    ensureDir $out/bin
+    mkdir -p $out/bin
     echo -e 'install:\n\tcp bmrsa '$out'/bin' >> Makefile
   '') ["minInit" "addInputs" "defEnsureDir"];
       

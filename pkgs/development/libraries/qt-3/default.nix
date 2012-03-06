@@ -65,6 +65,9 @@ stdenv.mkDerivation {
     
     # randr.h and Xrandr.h need not be in the same prefix.
     ./xrandr.patch
+
+    # Make it build with gcc 4.6.0
+    ./qt3-gcc4.6.0.patch
   ];
 
   passthru = {inherit mysqlSupport;};

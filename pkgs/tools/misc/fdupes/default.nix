@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
 
   # workaround: otherwise make install fails (should be fixed in trunk)
-  preInstall = "ensureDir $out/bin $out/man/man1";
+  preInstall = "mkdir -p $out/bin $out/man/man1";
 
   makeFlags = "PREFIX=\${out}";
 

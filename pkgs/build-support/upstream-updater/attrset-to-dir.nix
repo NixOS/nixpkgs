@@ -1,7 +1,7 @@
 a :  
 a.stdenv.mkDerivation rec {
   buildCommand = ''
-    ensureDir "$out/attributes"
+    mkdir -p "$out/attributes"
     
   '' + (a.lib.concatStrings (map
     (n: ''

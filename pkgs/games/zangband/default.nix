@@ -21,9 +21,9 @@ rec {
     sed -re 's/ch(own|grp|mod)/true/' -i lib/*/makefile.zb makefile.in
     sed -e '/FIXED_PATHS/d' -i src/z-config.h
     ./bootstrap
-    ensureDir $out/share/games/zangband
-    ensureDir $out/share/man
-    ensureDir $out/bin
+    mkdir -p $out/share/games/zangband
+    mkdir -p $out/share/man
+    mkdir -p $out/bin
   '') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
 
   postInstall = a.fullDepEntry (''

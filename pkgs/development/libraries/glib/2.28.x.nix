@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, pkgconfig, gettext, perl, libiconv, zlib, xz }:
+{ stdenv, fetchurl_gnome, pkgconfig, gettext, perl, libiconv, zlib }:
 
 # TODO:
 # * Add gio-module-fam
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   # configure script looks for d-bus but it is only needed for tests
   buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
-  buildNativeInputs = [ perl pkgconfig gettext xz ];
+  buildNativeInputs = [ perl pkgconfig gettext ];
 
   propagatedBuildInputs = [ zlib ]
     ++ stdenv.lib.optional (!stdenv.isLinux) gettext;

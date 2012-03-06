@@ -1,31 +1,19 @@
-{ fetchurl, stdenv, ppl, static ? false }:
-
-let
-
-  # --with-host-libstdcxx helps when *ppl* is built statically.
-  # But I will suppose that this is statically built only when ppl is also
-  # statically built.
-  staticFlags =
-    assert static -> ppl.dontDisableStatic == true;
-    if static then " --enable-static --disable-shared --with-host-libstdcxx=-lstdc++" else "";
-    
-in
+{ fetchurl, stdenv, ppl }:
 
 stdenv.mkDerivation rec {
-  name = "cloog-ppl-0.15.9";
+  name = "cloog-ppl-0.15.11";
 
   src = fetchurl {
     url = "mirror://gcc/infrastructure/${name}.tar.gz";
-    sha256 = "19a2n75k3d3n8llng25f2g88lpvd4zn0lm073rkndjw6l6yd8m4c";
+    sha256 = "0psdm0bn5gx60glfh955x5b3b23zqrd92idmjr0b00dlnb839mkw";
   };
 
   propagatedBuildInputs = [ ppl ];
 
-  configureFlags = "--with-ppl=${ppl}" + staticFlags;
-  dontDisableStatic = if static then true else false;
+  configureFlags = "--with-ppl=${ppl}";
 
   crossAttrs = {
-    configureFlags = "--with-ppl=${ppl.hostDrv}" + staticFlags;
+    configureFlags = "--with-ppl=${ppl.hostDrv}";
   };
 
   doCheck = true;

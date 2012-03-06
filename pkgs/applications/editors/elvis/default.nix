@@ -15,16 +15,16 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    ensureDir $out/share/man/man1
+    mkdir -p $out/share/man/man1
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/share/elvis $out/share/elvis/doc
+    mkdir -p $out/bin $out/share/elvis $out/share/elvis/doc
     cp elvis ref elvtags elvfmt $out/bin
     cp -R data/* $out/share/elvis
     cp doc/* $out/share/elvis/doc
 
-    ensureDir $out/share/man/man1
+    mkdir -p $out/share/man/man1
     for a in doc/*.man; do
       cp $a $out/share/man/man1/`basename $a .man`.1
     done

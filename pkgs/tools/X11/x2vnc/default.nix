@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
       xorg.libXrandr xorg.randrproto
     ];
 
-  preInstall = "ensureDir $out";
+  preInstall = "mkdir -p $out";
 
   meta = {
     homepahe = http://fredrik.hubbe.net/x2vnc.html;

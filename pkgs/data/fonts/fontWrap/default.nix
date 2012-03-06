@@ -7,7 +7,7 @@ args : with args;
 	in with localDefs;
 let
 	doInstall = fullDepEntry ("
-		ensureDir \$out/share/fonts/
+		mkdir -p \$out/share/fonts/
 		cd \$out/share/fonts
 		for i in ${toString paths}; do
 			find \$i -type f -exec ln -s '{}' . ';' ;

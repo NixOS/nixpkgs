@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "patchelf-0.5";
-  
+  name = "patchelf-0.6";
+
   src = fetchurl {
     url = "http://nixos.org/releases/patchelf/${name}/${name}.tar.bz2";
-    sha256 = "24b9a850af45e1a277e234b9eb090b52305a2e1c6b02addeb3ae98b4b49d37ce";
+    sha256 = "fc7e7fa95f282fc37a591a802629e0e1ed07bc2a8bf162228d9a69dd76127c01";
   };
 
   meta = {

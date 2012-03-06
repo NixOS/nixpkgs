@@ -12,11 +12,11 @@ with stdenv.lib;
 let
 
   majorVersion = "2.7";
-  version = "${majorVersion}.1";
+  version = "${majorVersion}.2";
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "14i2c7yqa7ljmx2i2bb827n61q33zn23ax96czi8rbkyyny8gqw0";
+    sha256 = "1axx9h1r157fanldmnj1q2gdw2sm0sg8h3mx1l2adddmgq3fnmsh";
   };
 
   patches =
@@ -38,7 +38,7 @@ let
 
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [ bzip2 ]
+    [ bzip2 openssl ]
     ++ optional zlibSupport zlib
     ++ optionals stdenv.isDarwin [ darwinArchUtility darwinSwVersUtility ];
 
@@ -89,7 +89,7 @@ let
 
     meta = {
       homepage = "http://python.org";
-      description = "Python -- a high-level dynamically-typed programming language";
+      description = "a high-level dynamically-typed programming language";
       longDescription = ''
         Python is a remarkably powerful dynamic programming language that
         is used in a wide variety of application domains. Some of its key
@@ -99,9 +99,9 @@ let
         hierarchical packages; exception-based error handling; and very
         high level dynamic data types.
       '';
-      license = "GPLv2";
+      license = stdenv.lib.licenses.psfl;
       platforms = stdenv.lib.platforms.all;
-      maintainers = [ stdenv.lib.maintainers.simons ];
+      maintainers = with stdenv.lib.maintainers; [ simons chaoflow ];
     };
   };
 
@@ -170,11 +170,6 @@ let
     sqlite3 = buildInternalPythonModule {
       moduleName = "sqlite3";
       deps = [ sqlite ];
-    };
-
-    ssl = buildInternalPythonModule {
-      moduleName = "ssl";
-      deps = [ openssl ];
     };
 
     tkinter = buildInternalPythonModule {

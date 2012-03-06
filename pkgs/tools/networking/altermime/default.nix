@@ -31,7 +31,7 @@ rec {
   phaseNames = ["doPatch" "fixTarget" "doMakeInstall"];
   fixTarget = a.fullDepEntry (''
     sed -i Makefile -e "s@/usr/local@$out@"
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
   '') ["doUnpack" "minInit" "defEnsureDir"];
       
   meta = {

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/opt/$name
+    mkdir -p $out/bin $out/opt/$name
     cp objs/blackshades $out/bin
     cp -R Data IF* Readme $out/opt/$name/
   '';

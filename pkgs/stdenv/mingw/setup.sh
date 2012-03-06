@@ -38,7 +38,7 @@ exitHandler() {
         # normally.  Otherwise, return the original exit code.
         if test -n "$succeedOnFailure"; then
             echo "build failed with exit code $exitCode (ignored)"
-            ensureDir "$out/nix-support"
+            mkdir -p "$out/nix-support"
             echo -n $exitCode > "$out/nix-support/failed"
             exit 0
         fi
@@ -133,7 +133,7 @@ ensureDir() {
 }
 
 installBin() {
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp "$@" $out/bin
 }
 
@@ -199,13 +199,6 @@ if test "$NIX_NO_SELF_RPATH" != "1"; then
     if test -n "$NIX_LIB64_IN_SELF_RPATH"; then
         export NIX_LDFLAGS="-rpath $out/lib64 $NIX_LDFLAGS"
     fi
-fi
-
-
-# Strip debug information by default.
-if test -z "$NIX_STRIP_DEBUG"; then
-    export NIX_STRIP_DEBUG=1
-    export NIX_CFLAGS_STRIP="-g0 -Wl,--strip-debug"
 fi
 
 
@@ -618,7 +611,7 @@ patchShebangs() {
 installPhase() {
     runHook preInstall
 
-    ensureDir "$prefix"
+    mkdir -p "$prefix"
 
     installTargets=${installTargets:-install}
     echo "install flags: $installTargets $makeFlags ${makeFlagsArray[@]} $installFlags ${installFlagsArray[@]}"
@@ -645,7 +638,7 @@ fixupPhase() {
                     echo "both $d/ and share/$d/ exists!"
                 else
                     echo "fixing location of $d/ subdirectory"
-                    ensureDir $prefix/share
+                    mkdir -p $prefix/share
                     if test -w $prefix/share; then
                         mv -v $prefix/$d $prefix/share
                         ln -sv $prefix/share/$d $prefix/$d
@@ -677,12 +670,12 @@ fixupPhase() {
     fi
 
     if test -n "$propagatedBuildInputs"; then
-        ensureDir "$out/nix-support"
+        mkdir -p "$out/nix-support"
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
     if test -n "$setupHook"; then
-        ensureDir "$out/nix-support"
+        mkdir -p "$out/nix-support"
         substituteAll "$setupHook" "$out/nix-support/setup-hook"
     fi
 
@@ -697,7 +690,7 @@ distPhase() {
     make ${makefile:+-f $makefile} $distFlags "${distFlagsArray[@]}" ${distTarget:-dist}
 
     if test "$dontCopyDist" != 1; then
-        ensureDir "$out/tarballs"
+        mkdir -p "$out/tarballs"
 
         # Note: don't quote $tarballs, since we explicitly permit
         # wildcards in there.

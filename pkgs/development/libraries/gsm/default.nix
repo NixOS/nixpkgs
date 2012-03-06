@@ -29,7 +29,7 @@ rec {
   phaseNames = ["createDirs" "setVars" "doMakeInstall"];
 
   createDirs = a.fullDepEntry ''
-    ensureDir "$out/"{bin,lib,share/man,share/info,include/gsm}
+    mkdir -p "$out/"{bin,lib,share/man,share/info,include/gsm}
   '' ["minInit" "defEnsureDir"];
 
   setVars = a.noDepEntry ''

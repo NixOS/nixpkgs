@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, expat, libX11, libICE, libSM, useX11 ? true }:
 
 let
-  version = "1.4.14";
+  version = "1.4.16";
 
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "0xsqkq2q2hb09dcdsw0y359zvml480h79qvl9g31r7da57y7xwj7";
+    sha256 = "1ii93d0lzj5xm564dcq6ca4s0nvm5i9fx3jp0s7i9hlc5wkfd3hx";
   };
 
   patches = [ ./ignore-missing-includedirs.patch ];
@@ -17,7 +17,9 @@ in rec {
   libs = stdenv.mkDerivation {
     name = "dbus-library-" + version;
 
-    buildInputs = [ pkgconfig expat ];
+    buildNativeInputs = [ pkgconfig ];
+
+    buildInputs = [ expat ];
 
     inherit src patches configureFlags;
 
@@ -42,14 +44,16 @@ in rec {
 
     configureFlags = "${configureFlags} --with-dbus-daemondir=${daemon}/bin";
 
-    buildInputs = [ pkgconfig expat libs ]
+    buildNativeInputs = [ pkgconfig ];
+
+    buildInputs = [ expat libs ]
       ++ stdenv.lib.optionals useX11 [ libX11 libICE libSM ];
 
     NIX_LDFLAGS = "-ldbus-1";
 
     preConfigure =
       ''
-        sed -i 's@ $(top_builddir)/dbus/libdbus-1.la@@' tools/Makefile.in
+        sed -i 's@$(top_builddir)/dbus/libdbus-1.la@@' tools/Makefile.in
         substituteInPlace tools/Makefile.in --replace 'install-localstatelibDATA:' 'disabled:'
       '';
 

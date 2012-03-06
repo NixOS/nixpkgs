@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      ensureDir $out/lib
+      mkdir -p $out/lib
       ln -fs ${samba}/lib/libsmbclient.so $out/lib/libsmbclient.so.0
     '';
 

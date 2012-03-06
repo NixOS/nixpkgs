@@ -29,7 +29,7 @@ rec {
   phaseNames = ["setVars" "doMake" "doDeploy"];
   goSrcDir = "cd simp";
   doDeploy = a.fullDepEntry (''
-    ensureDir "$out"/bin
+    mkdir -p "$out"/bin
     cp minisat_static "$out/bin"/minisat
   '') ["minInit" "defEnsureDir"];
   makeFlags = ["rs"];

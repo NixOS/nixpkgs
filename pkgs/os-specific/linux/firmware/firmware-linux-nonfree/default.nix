@@ -53,7 +53,7 @@ in stdenv.mkDerivation {
   buildInputs = [ dpkg ];
 
   installPhase = ''
-    ensureDir "$out/"
+    mkdir -p "$out/"
     cp -r lib/firmware/* "$out/"
   '';
 

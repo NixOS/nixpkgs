@@ -1,0 +1,103 @@
+Patch fixing CryptoPP so:
+- it builds properly in mips64 with gcc 4.4 (gcc 4.4 does not have the 'h' asm constraint)
+- it runs properly in mips64 (where lack of templated *Precision functions gave wrong numbers).
+  An assertion check failed without this.
+
+diff --git a/src/utils/lib/CryptoPP.cc b/src/utils/lib/CryptoPP.cc
+index 9208e1c..6b12b0a 100644
+--- a/src/utils/lib/CryptoPP.cc
++++ b/src/utils/lib/CryptoPP.cc
+@@ -890,35 +890,6 @@ unsigned int Parity(unsigned long value)
+ 	return (unsigned int)value&1;
+ }
+ 
+-unsigned int BytePrecision(unsigned long value)
+-{
+-	unsigned int i;
+-	for (i=sizeof(value); i; --i)
+-		if (value >> (i-1)*8)
+-			break;
+-
+-	return i;
+-}
+-
+-unsigned int BitPrecision(unsigned long value)
+-{
+-	if (!value)
+-		return 0;
+-
+-	unsigned int l=0, h=8*sizeof(value);
+-
+-	while (h-l > 1)
+-	{
+-		unsigned int t = (l+h)/2;
+-		if (value >> t)
+-			l = t;
+-		else
+-			h = t;
+-	}
+-
+-	return h;
+-}
+-
+ unsigned long Crop(unsigned long value, unsigned int size)
+ {
+ 	if (size < 8*sizeof(value))
+@@ -1880,7 +1851,10 @@ public:
+ 		#elif defined(__x86_64__)
+ 			__asm__("mulq %3" : "=d" (r.m_halfs.high), "=a" (r.m_halfs.low) : "a" (a), "rm" (b) : "cc");
+ 		#elif defined(__mips64)
+-			__asm__("dmultu %2,%3" : "=h" (r.m_halfs.high), "=l" (r.m_halfs.low) : "r" (a), "r" (b));
++      //typedef unsigned int uint128_t __attribute__((mode(TI)));
++      __uint128_t tmp = (__uint128_t) a * b;
++      r.m_halfs.high = tmp >> 64;
++      r.m_halfs.low = tmp;
+ 		#elif defined(_M_IX86)
+ 			// for testing
+ 			word64 t = (word64)a * b;
+diff --git a/src/utils/lib/CryptoPP.h b/src/utils/lib/CryptoPP.h
+index d2ec1b2..775a898 100644
+--- a/src/utils/lib/CryptoPP.h
++++ b/src/utils/lib/CryptoPP.h
+@@ -1869,10 +1869,39 @@ template <class T> inline const T& STDMAX(const T& a, const T& b)
+ // #define GETBYTE(x, y) (((byte *)&(x))[y])
+ 
+ CRYPTOPP_DLL unsigned int Parity(unsigned long);
+-CRYPTOPP_DLL unsigned int BytePrecision(unsigned long);
+-CRYPTOPP_DLL unsigned int BitPrecision(unsigned long);
+ CRYPTOPP_DLL unsigned long Crop(unsigned long, unsigned int size);
+ 
++template <typename T>
++unsigned int BitPrecision(const T &value)
++{
++	if (!value)
++		return 0;
++
++	unsigned int l=0, h=8*sizeof(value);
++
++	while (h-l > 1)
++	{
++		unsigned int t = (l+h)/2;
++		if (value >> t)
++			l = t;
++		else
++			h = t;
++	}
++
++	return h;
++}
++
++template <typename T>
++unsigned int BytePrecision(const T &value)
++{
++	unsigned int i;
++	for (i=sizeof(value); i; --i)
++		if (value >> (i-1)*8)
++			break;
++
++	return i;
++}
++
+ inline unsigned int BitsToBytes(unsigned int bitCount)
+ {
+ 	return ((bitCount+7)/(8));

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libpng, xz }:
+{ stdenv, fetchurl, libpng }:
 
 stdenv.mkDerivation rec {
   name = "pngcrush-1.7.22";
@@ -13,7 +13,6 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libpng ];
-  buildNativeInputs = [ xz ];
 
   meta = {
     homepage = http://pmt.sourceforge.net/pngcrush;

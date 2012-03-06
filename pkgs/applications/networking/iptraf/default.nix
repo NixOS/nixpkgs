@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   preConfigure = "cd src";
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp iptraf $out/bin
   '';
   

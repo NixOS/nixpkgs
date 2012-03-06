@@ -97,20 +97,13 @@ let inherit (builtins) head tail trace; in
 
         # changing this ? see [1]
         minInit = fullDepEntry ("
+                ${stdenv.preHook}
+                
                 set -e
                 NIX_GCC=${stdenv.gcc}
                 export SHELL=${stdenv.shell}
                 PATH_DELIMITER=':'
-        " + (if stdenv ? preHook && stdenv.preHook != null && toString stdenv.preHook != "" then 
-                "
-                param1=${stdenv.param1}
-                param2=${stdenv.param2}
-                param3=${stdenv.param3}
-                param4=${stdenv.param4}
-                param5=${stdenv.param5}
-                source ${stdenv.preHook}
-        " +         
-                "
+                
                 # Set up the initial path.
                 PATH=
                 for i in \$NIX_GCC ${toString stdenv.initialPath}; do
@@ -121,8 +114,7 @@ let inherit (builtins) head tail trace; in
 
                 prefix=${if args ? prefix then (toString args.prefix) else "\$out"}
 
-                "
-        else "")) ["defNest" "defAddToSearchPath"];
+                ") ["defNest" "defAddToSearchPath"];
                 
         # if you change this rewrite using '' instead of "" to get rid of indentation in builder scripts
         addInputs = fullDepEntry ("
@@ -320,7 +312,7 @@ let inherit (builtins) head tail trace; in
 
         # changing this ? see [1]
         doForceShare = fullDepEntry (" 
-                ensureDir \"\$prefix/share\"
+                mkdir -p \"\$prefix/share\"
                 for d in ${toString forceShare}; do
                         if [ -d \"\$prefix/\$d\" -a ! -d \"\$prefix/share/\$d\" ]; then
                                 mv -v \"\$prefix/\$d\" \"\$prefix/share\"
@@ -332,7 +324,7 @@ let inherit (builtins) head tail trace; in
         doForceCopy = fullDepEntry (''
                 name="$(basename $out)"
                 name="''${name#*-}"
-                ensureDir "$prefix/share/$name"
+                mkdir -p "$prefix/share/$name"
                 for f in ${toString forceCopy}; do
                         cp -r "$f" "$prefix/share/$name/$f" || true
                 done;
@@ -393,7 +385,7 @@ let inherit (builtins) head tail trace; in
         preservePathWrapperArguments = ''''${PATH:+ --prefix PATH : $PATH }'';
 
         doPropagate = fullDepEntry ("
-                ensureDir \$out/nix-support
+                mkdir -p \$out/nix-support
                 echo '${toString (attrByPath ["propagatedBuildInputs"] [] args)}' >\$out/nix-support/propagated-build-inputs
         ") ["minInit" "defEnsureDir"];
 
@@ -410,7 +402,7 @@ let inherit (builtins) head tail trace; in
 	'') ["minInit" "addInputs" "doUnpack"];
 
 	doScons = fullDepEntry (''
-		ensureDir $out
+		mkdir -p $out
 		${if (attrByPath ["sconsCleanEnv"] false args)
 		 then ""
 		 else ''
@@ -462,13 +454,13 @@ let inherit (builtins) head tail trace; in
                 x.text + "\n" + after ;};
 
 	createDirs = fullDepEntry (concatStringsSep ";"
-		(map (x: "ensureDir ${x}") (attrByPath ["neededDirs"] [] args))
+		(map (x: "mkdir -p ${x}") (attrByPath ["neededDirs"] [] args))
 	) ["minInit" "defEnsureDir"];
 
 	copyExtraDoc = fullDepEntry (''
           name="$(basename $out)"
           name="''${name#*-}"
-          ensureDir "$out/share/doc/$name"
+          mkdir -p "$out/share/doc/$name"
 	'' + (concatStringsSep ";"
                (map 
 	         (x: ''cp "${x}" "$out/share/doc/$name" || true;'') 
@@ -547,11 +539,11 @@ let inherit (builtins) head tail trace; in
    installFonts = 
       let retrievedName = (if args ? name then args.name else ""); in
    fullDepEntry (''
-           ensureDir $out/share/fonts/truetype/public/${retrievedName}
-           ensureDir $out/share/fonts/opentype/public/${retrievedName}
-           ensureDir $out/share/fonts/type1/public/${retrievedName}
-           ensureDir $out/share/texmf/fonts/enc/${retrievedName}
-           ensureDir $out/share/texmf/fonts/map/${retrievedName}
+           mkdir -p $out/share/fonts/truetype/public/${retrievedName}
+           mkdir -p $out/share/fonts/opentype/public/${retrievedName}
+           mkdir -p $out/share/fonts/type1/public/${retrievedName}
+           mkdir -p $out/share/texmf/fonts/enc/${retrievedName}
+           mkdir -p $out/share/texmf/fonts/map/${retrievedName}
 
         cp *.ttf $out/share/fonts/truetype/public/${retrievedName} || echo No TrueType fonts
         cp *.otf $out/share/fonts/opentype/public/${retrievedName} || echo No OpenType fonts
@@ -561,7 +553,7 @@ let inherit (builtins) head tail trace; in
    '') ["minInit" "defEnsureDir"];
 
    simplyShare = shareName: fullDepEntry (''
-     ensureDir $out/share
+     mkdir -p $out/share
      cp -r . $out/share/${shareName}
    '') ["doUnpack" "defEnsureDir"];
 
@@ -588,7 +580,7 @@ let inherit (builtins) head tail trace; in
    '') ["minInit"];
 
    createPythonInstallationTarget = fullDepEntry (''
-     ensureDir $(toPythonPath $out)
+     mkdir -p $(toPythonPath $out)
      export PYTHONPATH=$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath $out)
    '') ["minInit" "addInputs" "defEnsureDir"];
 

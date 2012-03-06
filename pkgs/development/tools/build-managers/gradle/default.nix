@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     rm bin/*.bat
     mv * $out
   '';

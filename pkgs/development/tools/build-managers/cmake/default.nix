@@ -7,11 +7,10 @@ with stdenv.lib;
 let
   os = stdenv.lib.optionalString;
   majorVersion = "2.8";
-  minorVersion = "4";
+  minorVersion = "7";
   version = "${majorVersion}.${minorVersion}";
 in
 
-# WARNING: Do NOT upgrade cmake in trunk: it fails to build on i686-linux
 stdenv.mkDerivation rec {
   name = "cmake-${os useNcurses "cursesUI-"}${os useQt4 "qt4UI-"}${version}";
 
@@ -19,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    sha256 = "1k2kjaj3vfifb329ff7fr4hcbpbaqb66l97pshq70h7m0zwajznr";
+    sha256 = "17zmxh0gyis6w05d2km0swlvy94h3w10jgra0fpa5qcg7l2j628k";
   };
 
   patches =
@@ -40,15 +39,12 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
-  postUnpack =
-    ''
-      dontUseCmakeConfigure=1
-      source $setupHook
-      fixCmakeFiles $sourceRoot
-    '';
+  dontUseCmakeConfigure = true;
 
   preConfigure = optionalString (stdenv ? glibc)
     ''
+      source $setupHook
+      fixCmakeFiles .
       substituteInPlace Modules/Platform/UnixPaths.cmake --subst-var-by glibc ${stdenv.glibc}
     '';
 

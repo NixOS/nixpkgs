@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, xz, flex, bison, gettext, ncurses, libusb, freetype, qemu
+{ fetchurl, stdenv, flex, bison, gettext, ncurses, libusb, freetype, qemu
 , EFIsupport ? false }:
 
 let
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "06q2a7bg1mbsms604a89fkdnwrc1jg9hr2mmfdmg3il39j6i827k";
   };
 
-  buildNativeInputs = [ xz flex bison ];
+  buildNativeInputs = [ flex bison ];
   buildInputs = [ ncurses libusb freetype gettext ]
     ++ stdenv.lib.optional doCheck qemu;
 

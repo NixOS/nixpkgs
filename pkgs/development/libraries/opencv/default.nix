@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, gtk, libjpeg, libpng, libtiff, jasper, ffmpeg
-, pkgconfig, gstreamer }:
+, pkgconfig, gstreamer, xineLib, glib }:
 
 let v = "2.3.1a"; in
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0325s7pa2npcw2gc06pr6q5ik4xdyf08rvkfc0myn10w20lzb8m9";
   };
 
-  buildInputs = [ gtk libjpeg libpng libtiff jasper ffmpeg gstreamer ];
+  buildInputs = [ gtk glib libjpeg libpng libtiff jasper ffmpeg xineLib gstreamer ];
 
   buildNativeInputs = [ cmake pkgconfig ];
 

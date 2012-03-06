@@ -13,14 +13,14 @@ stdenv.mkDerivation rec{
   buildFlags = "libiniparser.so";
 
   installPhase = ''
-    ensureDir $out/lib
+    mkdir -p $out/lib
     cp libiniparser.so.0 $out/lib
     ln -s libiniparser.so.0 $out/lib/libiniparser.so
 
-    ensureDir $out/include
+    mkdir -p $out/include
     cp src/*.h $out/include
 
-    ensureDir $out/share/doc/${name}
+    mkdir -p $out/share/doc/${name}
     for i in AUTHORS INSTALL LICENSE README; do
       bzip2 -c -9 $i > $out/share/doc/${name}/$i.bz2;
     done;

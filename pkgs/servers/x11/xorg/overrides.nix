@@ -114,7 +114,7 @@ in
   setxkbmap = attrs: attrs // {
     postInstall =
       ''
-        ensureDir $out/share
+        mkdir -p $out/share
         ln -sfn ${args.xkeyboard_config}/etc/X11 $out/share/X11
       '';
   };

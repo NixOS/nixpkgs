@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
     ];
 
   installPhase =
-    '' ensureDir "$out/bin"
+    '' mkdir -p "$out/bin"
        cp -v httpfs2 "$out/bin"
 
-       ensureDir "$out/share/man/man1"
+       mkdir -p "$out/share/man/man1"
        cp -v *.1 "$out/share/man/man1"
     '';
 

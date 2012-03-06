@@ -28,7 +28,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    ensureDir "$out/share/${name}"
+    mkdir -p "$out/share/${name}"
     cp -rv "data/"* "$out/share/${name}"
 
     mv -v "$out/bin/castle-combat.py" "$out/bin/castle-combat"

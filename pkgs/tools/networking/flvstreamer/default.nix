@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp flvstreamer $out/bin
     cp streams $out/bin
     cp rtmpsrv $out/bin

@@ -13,6 +13,8 @@ stdenv.mkDerivation (rec {
     homepage = http://mldonkey.sourceforge.net/;
   };
 
+  patches = [ ./gcc44mips64.patch ];
+
   buildInputs = [ ocaml zlib ncurses bzip2 file gd libpng ];
   configureFlags = [ "--disable-gui" ];
 } // (if (stdenv.system != "i686-linux" && stdenv.system != "x86_64-linux") then
@@ -20,7 +22,7 @@ stdenv.mkDerivation (rec {
   # Byte code compilation (the ocaml opt compiler is not supported in many platforms)
   buildPhase = "make mlnet.byte";
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp mlnet.byte $out/bin/mlnet
   '';
 

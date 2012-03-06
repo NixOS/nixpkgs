@@ -29,7 +29,7 @@ rec {
   phaseNames = ["doConfigure" "createDirs" "doMakeInstall"];
 
   createDirs = a.fullDepEntry ''
-    ensureDir "$out/"{bin,lib,share/man,etc}
+    mkdir -p "$out/"{bin,lib,share/man,etc}
   '' ["defEnsureDir"];
 
   meta = {

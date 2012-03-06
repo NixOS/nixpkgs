@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   name = "vlc-${version}";
   version = "2.0.0";
 
-  patchPhase = ''sed -e "s@/bin/echo@echo@g" -i configure'';
-
   src = fetchurl {
     url = "http://download.videolan.org/pub/videolan/vlc/${version}/${name}.tar.xz";
     sha256 = "455fc04b5f7ce3d7294ed71a9dd172ff4eb97875cfc30b554ef4ce55ec6f5106";
   };
+
+  patches = [ ./zlib.patch ];
 
   buildInputs =
     [ xz bzip2 perl zlib a52dec libmad faad2 ffmpeg alsaLib libdvdnav libdvdnav.libdvdread
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     [ "--enable-alsa"
       "--with-kde-solid=$out/share/apps/solid/actions"
     ];
+
+  preConfigure = ''sed -e "s@/bin/echo@echo@g" -i configure'';
 
   enableParallelBuilding = true;
 

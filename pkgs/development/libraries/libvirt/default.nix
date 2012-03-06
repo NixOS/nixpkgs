@@ -24,7 +24,7 @@ stdenv.mkDerivation {
       patchShebangs . # fixes /usr/bin/python references
     '';
 
-  configureFlags = "--localstatedir=/var --sysconfdir=/etc --with-init-script=redhat";
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc --with-init-script=redhat --without-macvtap";
 
   installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc";
 

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     ''
       # Install Emacs mode.
       echo "installing Emacs mode..."
-      ensureDir $out/share/emacs/site-lisp
+      mkdir -p $out/share/emacs/site-lisp
       cp -p contrib/emacs/*.el $out/share/emacs/site-lisp
 
       wrapArgs=
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
    + ''# install bash completion script
       d="$out/etc/bash_completion.d"
-      ensureDir $d; cp contrib/completion/git-completion.bash "$d"
+      mkdir -p $d; cp contrib/completion/git-completion.bash "$d"
      '';
 
   meta = {

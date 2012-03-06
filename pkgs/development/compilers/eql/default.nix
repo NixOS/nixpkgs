@@ -64,7 +64,7 @@ rec {
 
   doDeploy = a.fullDepEntry (''
     cd ..
-    ensureDir $out/bin $out/lib/eql/ $out/include $out/include/gen $out/lib
+    mkdir -p $out/bin $out/lib/eql/ $out/include $out/include/gen $out/lib
     cp -r . $out/lib/eql/build-dir
     ln -s $out/lib/eql/build-dir/eql $out/bin
     ln -s $out/lib/eql/build-dir/src/*.h $out/include

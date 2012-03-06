@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-D_GNU_SOURCE";
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp rxp $out/bin
   '';
   meta = {

@@ -19,7 +19,7 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["mkDirs" "installPythonPackage"];
   mkDirs = a.fullDepEntry(''
-    ensureDir $out/bin $out/lib $out/share $(toPythonPath $out)
+    mkdir -p $out/bin $out/lib $out/share $(toPythonPath $out)
     export PYTHONPATH=$PYTHONPATH:$(toPythonPath $out)
   '') ["defEnsureDir" "addInputs"];
       

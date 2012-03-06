@@ -10,7 +10,7 @@ patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" --set-rpath 
 echo "constructing JDK and JRE installations"
 if test -z "$installjdk"; then
   sh ${construct} . tmp-linux-jdk tmp-linux-jre
-  ensureDir $out
+  mkdir -p $out
   cp -R tmp-linux-jre/* $out
 else
   sh ${construct} . $out tmp-linux-jre

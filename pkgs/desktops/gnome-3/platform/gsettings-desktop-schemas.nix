@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz, glib, pkgconfig, intltool }:
+{ stdenv, fetchurl, glib, pkgconfig, intltool }:
 
 stdenv.mkDerivation {
   name = "gsettings-desktop-schemas-3.2.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ glib ];
-  buildNativeInputs = [ pkgconfig xz intltool ];
+  buildNativeInputs = [ pkgconfig intltool ];
 
   meta = {
     inherit (glib.meta) maintainers platforms;

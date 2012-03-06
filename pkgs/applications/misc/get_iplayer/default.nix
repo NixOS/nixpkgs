@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   buildInputs = [makeWrapper perl];
 
   installPhase = '' 
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp get_iplayer $out/bin
     wrapProgram $out/bin/get_iplayer --suffix PATH ${ffmpeg}/bin:${flvstreamer}/bin
   '';  

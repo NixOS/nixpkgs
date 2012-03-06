@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   preInstall = "
-    ensureDir $out/man/man{1,8} $out/sbin $out/bin
+    mkdir -p $out/man/man{1,8} $out/sbin $out/bin
   ";
 
   meta = {

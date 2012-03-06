@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ libpcap ncurses ];
 
   preInstall = ''
-    ensureDir $out/share/man/man8 $out/bin
+    mkdir -p $out/share/man/man8 $out/bin
   '';
 
   meta = { 

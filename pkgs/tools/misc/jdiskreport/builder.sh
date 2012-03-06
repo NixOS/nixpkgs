@@ -2,11 +2,11 @@ source $stdenv/setup
 
 unzip $src
 
-ensureDir $out/jars
+mkdir -p $out/jars
 mv */*.jar $out/jars
 jar=$(ls $out/jars/jdiskreport-*.jar)
 
-ensureDir $out/bin
+mkdir -p $out/bin
 cat > $out/bin/jdiskreport <<EOF
 #! $SHELL -e
 exec $jdk/bin/java -jar $jar

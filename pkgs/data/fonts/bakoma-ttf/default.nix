@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
   
   buildPhase = "true";
-  installPhase = "ensureDir $out/share/fonts/truetype; cp ttf/*.ttf $out/share/fonts/truetype";
+  installPhase = "mkdir -p $out/share/fonts/truetype; cp ttf/*.ttf $out/share/fonts/truetype";
 
   meta = {
     description = "TrueType versions of the Computer Modern and AMS TeX Fonts";

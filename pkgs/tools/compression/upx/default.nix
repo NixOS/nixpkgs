@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     cd src
   ";
 
-  installPhase = "ensureDir $out/bin ; cp upx.out $out/bin/upx";
+  installPhase = "mkdir -p $out/bin ; cp upx.out $out/bin/upx";
 
   meta = {
     homepage = http://upx.sourceforge.net/;

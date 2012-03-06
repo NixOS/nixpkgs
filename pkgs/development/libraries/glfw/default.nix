@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ mesa libX11 libXext ];
 
   buildPhase = ''
-    ensureDir $out
+    mkdir -p $out
     make x11-install PREFIX=$out
   '';
   

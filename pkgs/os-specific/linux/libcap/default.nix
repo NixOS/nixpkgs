@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     postinst = n : ''
-      ensureDir $out/share/doc/${n}
+      mkdir -p $out/share/doc/${n}
       cp ../License $out/share/doc/${n}/License
     '';
   };

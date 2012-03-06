@@ -30,8 +30,12 @@ rec {
   propagatedBuildInputs = [a.dbus a.glib a.dbus_glib];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
+  phaseNames = ["fixConfigure" "doConfigure" "doMakeInstall"];
       
+  fixConfigure = a.fullDepEntry ''
+    sed -e 's@-Werror@@' -i configure
+  '' ["minInit" "doUnpack"];
+
   meta = {
     description = "Geolocation framework and some data providers";
     maintainers = with a.lib.maintainers;

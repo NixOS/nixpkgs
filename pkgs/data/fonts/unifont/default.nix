@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   
   installPhase =
     ''
-      ensureDir $out/share/fonts $out/share/fonts/truetype
+      mkdir -p $out/share/fonts $out/share/fonts/truetype
       cp ${pcf} $out/share/fonts/unifont.pcf.gz
       gunzip < ${ttf} > $out/share/fonts/truetype/unifont.ttf
       cd $out/share/fonts

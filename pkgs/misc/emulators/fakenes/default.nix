@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     libXxf86vm libXcursor libXpm ];
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp fakenes $out/bin
   '';
 

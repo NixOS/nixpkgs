@@ -25,10 +25,10 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "lib" "headers" ];
 
   postInstall = ''
-    ensureDir $lib
+    mkdir -p $lib
     cp -av $out/lib* $lib
 
-    ensureDir $headers
+    mkdir -p $headers
     cp -av $out/include $headers
   '';
 }))

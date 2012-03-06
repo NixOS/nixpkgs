@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ m4 ]
     ++ stdenv.lib.optional doCheck perl;
+  propagatedBuildInputs = [ m4 ];
+
+  M4 = "m4";
 
   doCheck = true;
 

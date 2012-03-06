@@ -44,7 +44,7 @@ stdenv.mkDerivation (
           if test -n "$keepBuildDirectory"; then
               KEEPBUILDDIR="$out/`basename $TMPDIR`"
               header "Copying build directory to $KEEPBUILDDIR"
-              ensureDir $KEEPBUILDDIR
+              mkdir -p $KEEPBUILDDIR
               cp -R $TMPDIR/* $KEEPBUILDDIR
               stopNest 
           fi
@@ -58,7 +58,7 @@ stdenv.mkDerivation (
     name = name + (if src ? version then "-" + src.version else "");
   
     postHook = ''
-      ensureDir $out/nix-support
+      mkdir -p $out/nix-support
       echo "$system" > $out/nix-support/system
 
       if test -z "${toString doCoverageAnalysis}"; then

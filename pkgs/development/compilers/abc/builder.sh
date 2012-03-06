@@ -23,7 +23,7 @@ EOF
 
 $apacheAnt/bin/ant jars
 
-ensureDir $out/jars
+mkdir -p $out/jars
 
 cp lib/abc.jar $out/jars
 cp lib/abc-runtime.jar $out/jars
@@ -31,7 +31,7 @@ cp lib/abc-testing.jar $out/jars
 cp lib/abc-complete.jar $out/jars
 
 # Create the executable abc script
-ensureDir $out/bin
+mkdir -p $out/bin
 cat > $out/bin/abc <<EOF
 #! $SHELL -e
 

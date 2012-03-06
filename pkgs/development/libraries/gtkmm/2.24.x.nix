@@ -1,4 +1,4 @@
-{ stdenv, fetchurl_gnome, pkgconfig, gtk, glibmm, cairomm, pangomm, atkmm, xz }:
+{ stdenv, fetchurl_gnome, pkgconfig, gtk, glibmm, cairomm, pangomm, atkmm }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gcm91sc1a05c56kzh74l370ggj0zz8nmmjvjaaxgmhdq8lpl369";
   };
 
-  buildNativeInputs = [pkgconfig xz];
+  buildNativeInputs = [pkgconfig];
 
   propagatedBuildInputs = [ glibmm gtk atkmm cairomm pangomm ];
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ qt4 perl ];
 
   configurePhase = ''
-    ensureDir $out/{bin,man/man1}
+    mkdir -p $out/{bin,man/man1}
     makeFlags="PREFIX=$out"
   '';
 

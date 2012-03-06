@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   buildCommand = "
     unzip $src -d $out
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cat > $out/bin/saxon8 <<EOF
 #! $shell
 export JAVA_HOME=${jre}

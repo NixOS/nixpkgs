@@ -8,5 +8,5 @@ stdenv.mkDerivation rec {
     sha256 = "0v3591fknmimarzk5icm0qxdcfzfckwi2drh165vsiggmj590iyx";
   };
 
-  buildInputs = [gnutls libtasn1 pkgconfig readline zlib xz];
+  buildInputs = [gnutls libtasn1 pkgconfig readline zlib];
 }

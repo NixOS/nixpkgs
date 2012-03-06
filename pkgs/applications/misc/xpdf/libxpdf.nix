@@ -31,10 +31,10 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
-    ensureDir $out/lib/goo
-    ensureDir $out/lib/fofi
-    ensureDir $out/lib/xpdf
-    ensureDir $out/include
+    mkdir -p $out/lib/goo
+    mkdir -p $out/lib/fofi
+    mkdir -p $out/lib/xpdf
+    mkdir -p $out/include
 
     cp -v goo/libGoo.a $out/lib/goo
     cp -v fofi/libfofi.a $out/lib/fofi

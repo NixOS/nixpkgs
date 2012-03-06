@@ -42,13 +42,12 @@ stdenv.mkDerivation {
   buildNativeInputs = [ unzip ];
 
   dontStrip = true;
-  NIX_STRIP_DEBUG = false;
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp -v u-boot u-boot.{kwb,map} $out
 
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp tools/{envcrc,mkimage} $out/bin
   '';
 }

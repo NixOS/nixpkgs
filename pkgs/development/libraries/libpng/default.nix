@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, xz }:
+{ stdenv, fetchurl, zlib }:
 
 assert zlib != null;
 
@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ zlib ];
-
-  buildNativeInputs = [ xz ];
 
   passthru = { inherit zlib; };
 

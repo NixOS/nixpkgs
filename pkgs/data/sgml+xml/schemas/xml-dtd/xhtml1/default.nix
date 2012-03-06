@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      ensureDir $out/xml/dtd/xhtml1
+      mkdir -p $out/xml/dtd/xhtml1
       cp DTD/*.ent DTD/*.dtd $out/xml/dtd/xhtml1
 
       # Generate an XML catalog.

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e s@/usr/@$out/@g -i Makefile
     sed -e 's@ln -f@ln -sf@g' -i Makefile
-    ensureDir $out/bin $out/share/man/man1
+    mkdir -p $out/bin $out/share/man/man1
   '';
 
   meta = {

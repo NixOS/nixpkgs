@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig glib fuse ];
   postInstall = ''
-    ensureDir $out/sbin
+    mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
   '';
 

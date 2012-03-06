@@ -22,7 +22,7 @@ rec {
 
   preConfigure = a.fullDepEntry (''
     sed -e s@/usr/@"$out/"@g -i configure $(find . -name 'Makefile*')
-    ensureDir $out/share/locale
+    mkdir -p $out/share/locale
   '') ["doUnpack" "minInit" "defEnsureDir"];
       
   name = "xaos-" + version;

@@ -1,7 +1,7 @@
-{ kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, shared_desktop_ontologies,
-  lm_sensors, pciutils, libraw1394, libusb, libxklavier, python, libqalculate,
-  consolekit, xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison, akonadi,
-  pykde4, libjpeg, pkgconfig, libXft, libXxf86misc
+{ kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, shared_desktop_ontologies
+, lm_sensors, pciutils, libraw1394, libusb, libxklavier, python, libqalculate
+, consolekit, xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison, akonadi
+, pykde4, libjpeg, pkgconfig, libXft, libXxf86misc
 }:
 
 kde {

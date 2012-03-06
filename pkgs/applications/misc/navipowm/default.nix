@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/share/${name}/Icons
+    mkdir -p $out/bin $out/share/${name}/Icons
     cp bin/NaviPOWM $out/bin
     cp ../../common/Config/navipowm.ini $out/share/${name}
     cp ../../common/Images/* $out/share/${name}

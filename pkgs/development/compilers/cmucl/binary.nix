@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   name = "cmucl-binary-${version}";
 
   buildCommand = ''
-    ensureDir $out
+    mkdir -p $out
     tar -C $out -xjf ${dist}
     patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
       $out/bin/lisp

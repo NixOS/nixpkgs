@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp ${keymap}.keymap $out/share/gmu/default.keymap
     cp gmuinput.${conf}.conf $out/share/gmu/gmuinput.conf
-    ensureDir $out/etc/gmu
+    mkdir -p $out/etc/gmu
     cp gmu.${conf}.conf $out/etc/gmu/gmu.conf
   '';
 

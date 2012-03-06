@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     for a in $BINFILES; do 
       patchelf --set-interpreter $(cat $NIX_GCC/nix-support/dynamic-linker) $a
     done
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp $BINFILES $out/bin
   '';
 

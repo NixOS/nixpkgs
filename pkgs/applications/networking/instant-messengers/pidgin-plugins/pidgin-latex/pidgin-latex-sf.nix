@@ -12,7 +12,7 @@ rec {
   ];
 
   preBuild = fullDepEntry (''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     ln -s $(which convert) $out/bin
     ln -s $(which xelatex) $out/bin
     ln -s $(which dvips) $out/bin
@@ -26,8 +26,8 @@ rec {
   '') ["minInit" "addInputs" "defEnsureDir" "doUnpack"];
 
   postInstall = fullDepEntry (''
-    ensureDir $out/lib
-    ensureDir $out/share/pidgin-latex
+    mkdir -p $out/lib
+    mkdir -p $out/share/pidgin-latex
     ln -s ../../lib/pidgin/LaTeX.so  $out/share/pidgin-latex 
   '') ["minInit" "defEnsureDir" "doMakeInstall"];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, imagemagick, xz }:
+{ stdenv, fetchurl, pkgconfig, imagemagick }:
 
 stdenv.mkDerivation rec {
   name = "libdmtx-0.7.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ imagemagick xz ];
+  propagatedBuildInputs = [ imagemagick ];
 
   meta = {
     description = "An open source software for reading and writing Data Matrix barcodes";

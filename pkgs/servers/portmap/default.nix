@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ tcpWrapper ];
 
   installPhase = ''
-    ensureDir "$out/sbin" && ensureDir "$out/man/man8" && \
+    mkdir -p "$out/sbin" && ensureDir "$out/man/man8" && \
     make install BASEDIR=$out
   '';
 

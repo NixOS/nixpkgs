@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin $out/lib $out/include
+    mkdir -p $out/bin $out/lib $out/include
     cp c-client/*.h c-client/linkage.c $out/include
     cp c-client/c-client.a $out/lib/libc-client.a
     cp mailutil/mailutil imapd/imapd dmail/dmail mlock/mlock mtest/mtest tmail/tmail \

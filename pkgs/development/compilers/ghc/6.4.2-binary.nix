@@ -49,10 +49,10 @@ stdenv.mkDerivation {
   # that the executables work with no special setup.
   postInstall = if stdenv.isDarwin then ''
 
-    ensureDir $out/frameworks/GMP.framework/Versions/A
+    mkdir -p $out/frameworks/GMP.framework/Versions/A
     ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
     ln -s ${gmp}/lib/libgmp.dylib $out/frameworks/GMP.framework/Versions/A/GMP
-    ensureDir $out/frameworks/GNUreadline.framework/Versions/A
+    mkdir -p $out/frameworks/GNUreadline.framework/Versions/A
     ln -s ${readline}/lib/libreadline.dylib $out/frameworks/GNUreadline.framework/GNUreadline
     ln -s ${readline}/lib/libreadline.dylib $out/frameworks/GNUreadline.framework/Versions/A/GNUreadline
 

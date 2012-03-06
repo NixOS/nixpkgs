@@ -1,9 +1,9 @@
 source $stdenv/setup
 
-ensureDir $out/share/keen4
+mkdir -p $out/share/keen4
 unzip -j $dist -d $out/share/keen4
 
-ensureDir $out/bin
+mkdir -p $out/bin
 cat > $out/bin/keen4 <<EOF
 #! $SHELL -e
 if test -z "\$HOME"; then

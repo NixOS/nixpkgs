@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libiconv }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "gettext-0.17";
   
   src = fetchurl {
@@ -21,6 +21,8 @@ stdenv.mkDerivation (rec {
     fi
   '';
 
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  
   meta = {
     description = "GNU gettext, a well integrated set of translation tools and documentation";
 
@@ -48,11 +50,3 @@ stdenv.mkDerivation (rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
-
-//
-
-(if (!stdenv.isLinux) # any non-GNU system
-    then {
-      buildInputs = [ libiconv ];
-    }
-    else {}))

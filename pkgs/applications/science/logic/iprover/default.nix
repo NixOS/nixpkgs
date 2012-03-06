@@ -30,10 +30,10 @@ rec {
   phaseNames = ["doConfigure" "doMake" "doDeploy"];
   configureCommand = "sh configure";
   doDeploy = a.fullDepEntry (''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     cp iproveropt "$out/bin"
 
-    ensureDir "$out/share/${name}"
+    mkdir -p "$out/share/${name}"
     cp *.p "$out/share/${name}"
     echo -e "#! /bin/sh\\n$out/bin/iproveropt --clausifier \"${eprover}/bin/eprover\" --clausifier_options \" --tstp-format --silent --cnf \" \"\$@\"" > "$out"/bin/iprover
     chmod a+x  "$out"/bin/iprover

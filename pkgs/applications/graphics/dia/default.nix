@@ -1,6 +1,6 @@
 {stdenv, fetchurl_gnome, gtk, pkgconfig, perl, perlXMLParser, libxml2, gettext
 , python, libxml2Python, docbook5, docbook_xsl, libxslt, intltool, libart_lgpl
-, withGNOME ? false, libgnomeui, xz }:
+, withGNOME ? false, libgnomeui }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       libxslt docbook_xsl libart_lgpl
     ] ++ stdenv.lib.optional withGNOME libgnomeui;
 
-  buildNativeInputs = [ pkgconfig intltool perl xz ];
+  buildNativeInputs = [ pkgconfig intltool perl ];
 
   configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
 

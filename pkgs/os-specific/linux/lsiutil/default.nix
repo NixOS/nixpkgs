@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   preBuild =
     ''
-      ensureDir $out/bin
+      mkdir -p $out/bin
       substituteInPlace Makefile --replace /usr/bin $out/bin
       substituteInPlace lsiutil.c \
         --replace /sbin/modprobe modprobe \

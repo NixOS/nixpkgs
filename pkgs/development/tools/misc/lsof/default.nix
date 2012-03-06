@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   configurePhase = "./Configure -n linux;";
   
   installPhase = ''
-    ensureDir $out/bin $out/man/man8
+    mkdir -p $out/bin $out/man/man8
     cp lsof.8 $out/man/man8/
     cp lsof $out/bin
   '';

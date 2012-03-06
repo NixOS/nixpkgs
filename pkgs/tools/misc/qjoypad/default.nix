@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     cd src
     substituteInPlace config --replace /bin/bash /bin/sh
-    ensureDir $out
+    mkdir -p $out
     export NIX_LDFLAGS="$NIX_LDFLAGS -rpath ${libX11}/lib"
   '';
   meta = {

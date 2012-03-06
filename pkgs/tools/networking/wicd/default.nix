@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     python setup.py install --prefix=$out
-    ensureDir $out/share/other
+    mkdir -p $out/share/other
     cp other/dhclient.conf.template.default $out/share/other/dhclient.conf.template.default
 
     # Add a template for "WPA2 Enterprise" encryption as used, e.g., by the

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   ];
 
   buildPhase = ''
-    ensureDir $out
+    mkdir -p $out
     export CXX=g++
     scons PREFIX=$out install
   '';

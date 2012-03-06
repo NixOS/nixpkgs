@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, glib, xz }:
+{ stdenv, fetchurl, pkgconfig, perl, glib }:
 
 stdenv.mkDerivation rec {
   name = "atk-2.2.0";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "17bkqg89l9hxbkgc76cxlin1bwczk7m6ikbccx677lrxh3kz08lb";
   };
 
-  buildNativeInputs = [ pkgconfig perl xz ];
+  buildNativeInputs = [ pkgconfig perl ];
 
   propagatedBuildInputs = [ glib ];
 

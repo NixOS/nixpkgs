@@ -42,11 +42,11 @@ stdenv.mkDerivation {
       }
 
       # Install contrib stuff.
-      ensureDir $out/share/git
+      mkdir -p $out/share/git
       mv contrib $out/share/git/
-      ensureDir $out/share/emacs/site-lisp
+      mkdir -p $out/share/emacs/site-lisp
       ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
-      ensureDir $out/etc/bash_completion.d
+      mkdir -p $out/etc/bash_completion.d
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/etc/bash_completion.d/
 
       # grep is a runtime dependence, need to patch so that it's found

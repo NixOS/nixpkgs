@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
   '';
   postBuild = ''
-    ensureDir $out/include
+    mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
   '';
 

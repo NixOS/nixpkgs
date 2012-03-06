@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   
   configureFlags = "--with-pcap=linux";
 
-  preInstall = ''ensureDir $out/bin'';
+  preInstall = ''mkdir -p $out/bin'';
   
   patches = [ ./libpcap_amd64.patch ];
 

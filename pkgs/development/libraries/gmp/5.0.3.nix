@@ -1,8 +1,4 @@
-{stdenv, fetchurl, m4, cxx ? true, static ? false}:
-
-let
-  staticFlags = if static then " --enable-static --disable-shared" else "";
-in
+{ stdenv, fetchurl, m4, cxx ? true }:
 
 stdenv.mkDerivation rec {
   name = "gmp-5.0.3";
@@ -12,16 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "dcafe9989c7f332b373e1f766af8e9cd790fc802fdec422a1910a6ef783480e3";
   };
 
-  buildNativeInputs = [m4];
+  buildNativeInputs = [ m4 ];
 
-  # Prevent the build system from using sub-architecture-specific
-  # instructions (e.g., SSE2 on i686).
-  preConfigure = "ln -sf configfsf.guess config.guess";
-
-  configureFlags = if cxx then "--enable-cxx" else "--disable-cxx" +
-      staticFlags;
-
-  dontDisableStatic = if static then true else false;
+  configureFlags =
+    # Build a "fat binary", with routines for several sub-architectures (x86).
+    [ "--enable-fat" ]
+    ++ (if cxx then [ "--enable-cxx" ] else [ "--disable-cxx" ]);
 
   doCheck = true;
 

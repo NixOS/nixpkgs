@@ -35,7 +35,7 @@ rec {
   '' ["minInit" "doUnpack"];
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out"/{bin,lib}
+    mkdir -p "$out"/{bin,lib}
     for d in bin lib; do
       for i in ./$d/*; do
         test "$(basename "$i")" = "Makefile" ||

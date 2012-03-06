@@ -21,7 +21,7 @@ stdenv.mkDerivation (rec {
   makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else "")
     + (if ! nativeCode then " NATIVE=false" else "");
 
-  preInstall = "ensureDir $out/bin";
+  preInstall = "mkdir -p $out/bin";
 
   postInstall = if enableX11 then ''
     for i in $(cd $out/bin && ls); do

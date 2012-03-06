@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xvidSupport "--enable-libxvid"
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree";
 
-  buildInputs = [ pkgconfig lame yasm xz ]
+  buildInputs = [ pkgconfig lame yasm ]
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional speexSupport speex
     ++ stdenv.lib.optional theoraSupport libtheora

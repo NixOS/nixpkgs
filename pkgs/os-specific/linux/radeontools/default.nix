@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     chmod +x lightwatch.pl
     cp radeontool lightwatch.pl $out/bin
   '';

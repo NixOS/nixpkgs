@@ -410,58 +410,6 @@ with (import ./release-lib.nix);
   };
   */
 
-  linuxPackages_2_6_25 = {
-    kernel = linux;
-  };
-
-  linuxPackages_2_6_27 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_28 = {
-    kernel = linux;
-  };
-
-  linuxPackages_2_6_29 = {
-    kernel = linux;
-  };
-
-  linuxPackages_2_6_31 = {
-    kernel = linux;
-  };
-
-  linuxPackages_2_6_32 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_35 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_36 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_37 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
-  linuxPackages_2_6_38 = {
-    kernel = linux;
-    virtualbox = linux;
-    virtualboxGuestAdditions = linux;
-  };
-
   strategoPackages = {
     sdf = all;
     strategoxt = all;

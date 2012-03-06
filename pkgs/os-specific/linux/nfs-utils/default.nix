@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, tcpWrapper, utillinuxng, libcap }:
+{ fetchurl, stdenv, tcpWrapper, utillinux, libcap }:
 
 stdenv.mkDerivation rec {
   name = "nfs-utils-1.2.3";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # Needs `libblkid' and `libcomerr' from `e2fsprogs' or `util-linux-ng'.
-  buildInputs = [ tcpWrapper utillinuxng libcap ];
+  buildInputs = [ tcpWrapper utillinux libcap ];
 
   # FIXME: Add the dependencies needed for NFSv4 and TI-RPC.
   configureFlags =

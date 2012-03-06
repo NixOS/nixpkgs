@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   '';
   
   installPhase =''
-    ensureDir $out/{opt/googleearth/,bin};
+    mkdir -p $out/{opt/googleearth/,bin};
     tar xf googleearth-data.tar -C $out/opt/googleearth
     tar xf googleearth-linux-x86.tar -C $out/opt/googleearth
     cp bin/googleearth $out/opt/googleearth

@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "xlibs-wrapper";
   buildPhase = "true";
-  installPhase = "ensureDir $out";
+  installPhase = "mkdir -p $out";
   unpackPhase = "sourceRoot=.";
   propagatedBuildInputs = packages;
 } // {

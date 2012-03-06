@@ -48,7 +48,7 @@ configurePhase() {
 
 installPhase() {
 
-    ensureDir $out
+    mkdir -p $out
 
     # New kernel versions have a combined tree for i386 and x86_64.
     archDir=$arch
@@ -60,7 +60,7 @@ installPhase() {
     # Copy the bzImage and System.map.
     cp System.map $out
     if test "$arch" = um; then
-        ensureDir $out/bin
+        mkdir -p $out/bin
         cp linux $out/bin
     elif test "$kernelTarget" != "vmlinux"; then
         # In any case we copy the 'vmlinux' ELF in the next lines

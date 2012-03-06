@@ -53,7 +53,7 @@ stdenv.mkDerivation {
           -e '/untar/d' \
           build.xml
     ant
-    ensureDir $out/{bin,lib}
+    mkdir -p $out/{bin,lib}
     JAR=$out/lib/css-validator.jar
     cat >> $out/bin/css-validator << EOF
     #!/bin/sh

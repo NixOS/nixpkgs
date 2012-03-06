@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      ensureDir $out/share/fonts/junicode-ttf
+      mkdir -p $out/share/fonts/junicode-ttf
       cp *.ttf $out/share/fonts/junicode-ttf
     '';
 

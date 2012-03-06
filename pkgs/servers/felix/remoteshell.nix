@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
   buildCommand = 
   ''
-    ensureDir $out/bundle
+    mkdir -p $out/bundle
     cp ${src} $out/bundle/org.apache.felix.shell.remote-1.0.4.jar
   '';
 }

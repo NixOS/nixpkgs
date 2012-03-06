@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     make -fMakefile.linux
   '';
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp -v ../Slr $out/bin 
   '';
 

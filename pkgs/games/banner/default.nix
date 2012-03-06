@@ -19,7 +19,7 @@ let
     installPhase = ''
       make INSTBASEDIR=$out install
       if [ -d $out/man ]; then
-        ensureDir $out/share
+        mkdir -p $out/share
 	mv -v $out/man $out/share/
       fi
     '';

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   makeFlags = "PURPLE_LIBDIR=lib PURPLE_DATADIR=share/data DESTDIR=$$out";
-  preInstall = "ensureDir \$out/share";
+  preInstall = "mkdir -p \$out/share";
   postInstall = "ln -s \$out/lib/purple-2 \$out/share/pidgin-msn-pecan";
 
   buildInputs = [pidgin];

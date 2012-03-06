@@ -22,9 +22,9 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     install -v -m755 beret $out/bin
-    ensureDir $out/share
+    mkdir -p $out/share
     cp -av tahoma.ttf images music rooms sfx $out/share
   '';
 

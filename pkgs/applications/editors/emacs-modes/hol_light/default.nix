@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     DEST=$out/share/emacs/site-lisp
-    ensureDir $DEST
+    mkdir -p $DEST
     cp -a * $DEST
   '';
 

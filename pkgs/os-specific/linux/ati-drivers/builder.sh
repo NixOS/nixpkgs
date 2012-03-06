@@ -136,7 +136,7 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
 
 { # install
 
-  ensureDir $out/lib/xorg
+  mkdir -p $out/lib/xorg
 
   cp -r common/usr/include $out
   cp -r common/usr/sbin $out
@@ -152,7 +152,7 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   cp -r $DIR_DEPENDING_ON_XORG_VERSION/usr/X11R6/$lib_arch/* $out/lib/xorg
 
   t=$out/lib/modules/${kernelVersion}/kernel/drivers/misc
-  ensureDir $t
+  mkdir -p $t
 
   cp ./common/lib/modules/fglrx/build_mod/2.6.x/fglrx.ko $t
 
@@ -174,7 +174,7 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
 }
 
 { # build samples
-  ensureDir $out/bin
+  mkdir -p $out/bin
 
   mkdir -p samples
   cd samples

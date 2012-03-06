@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     makeFlags = "TREE=\$(out) MANTREE=\$(TREE)/share/man CC=${stdenv.cross.config}-gcc";
   };
 
-  preInstall = "ensureDir \$out/share/man";
+  preInstall = "mkdir -p \$out/share/man";
   postInstall = "mv \$out/bin/replace \$out/bin/replace-literal";
 
   patches = [./malloc.patch];

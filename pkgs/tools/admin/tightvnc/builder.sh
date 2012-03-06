@@ -31,13 +31,13 @@ buildPhase() {
 }
 
 installPhase() {
-    ensureDir $out/bin
-    ensureDir $out/share/man/man1
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
     ./vncinstall $out/bin $out/share/man
 
     # fix HTTP client:
     t=$out/share/tightvnc
-    ensureDir $t
+    mkdir -p $t
     sed -i "s@/usr/local/vnc/classes@$out/vnc/classes@g" $out/bin/vncserver
     cp -r classes $t
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   preInstall = ''
-    ensureDir $out/bin $out/include
+    mkdir -p $out/bin $out/include
   '';
  
   buildInputs = [ ncurses pkgconfig glib libviper libpseudo gpm libvterm ];

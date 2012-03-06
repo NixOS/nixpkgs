@@ -23,7 +23,7 @@ in
       '' find -name \*.jar -or -name \*.class -exec rm -v {} \;
 
          # The build process tries to download it by itself.
-         ensureDir "build/tmp-xbean"
+         mkdir -p "build/tmp-xbean"
          ln -sv "${xbeans}" "build/tmp-xbean/xbean.zip"
       '';
 
@@ -34,7 +34,7 @@ in
 
     # FIXME: Install javadoc as well.
     installPhase =
-      '' ensureDir "$out/lib/java"
+      '' mkdir -p "$out/lib/java"
          cp -v *.jar "$out/lib/java"
       '';
 

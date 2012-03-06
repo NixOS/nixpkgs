@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/lib/xdebug
+    mkdir -p $out/lib/xdebug
     cp modules/xdebug.so $out/lib
     cp LICENSE $out/lib/xdebug
   '';

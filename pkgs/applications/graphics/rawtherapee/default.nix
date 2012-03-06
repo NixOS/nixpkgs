@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DWITH_RAWZOR=OFF" ];
 
   installPhase = ''
-    ensureDir $out/bin $out/lib
+    mkdir -p $out/bin $out/lib
     cp rtgui/rt $out/bin
     # Weird kind of path reference
     cp -r ../release/* $out/bin

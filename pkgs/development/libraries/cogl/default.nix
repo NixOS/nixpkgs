@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, mesa, glib, gdk_pixbuf
 , pangoSupport ? true, pango, cairo
-, libXfixes, libXcomposite, libXdamage, xz }:
+, libXfixes, libXcomposite, libXdamage }:
 
 stdenv.mkDerivation rec {
   name = "cogl-1.8.2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ix87hz3qxqysqwx58wbc46lzchlmfs08fjzbf3l6mmsqj8gs9pc";
   };
 
-  buildNativeInputs = [ xz pkgconfig ];
+  buildNativeInputs = [ pkgconfig ];
 
   propagatedBuildInputs =
     [ mesa glib gdk_pixbuf libXfixes libXcomposite libXdamage ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   
   buildPhase = "true";
 
-  installPhase = "ensureDir $out/zd1211; cp * $out/zd1211";
+  installPhase = "mkdir -p $out/zd1211; cp * $out/zd1211";
   
   meta = {
     description = "Firmware for the ZyDAS ZD1211(b) 802.11a/b/g USB WLAN chip";

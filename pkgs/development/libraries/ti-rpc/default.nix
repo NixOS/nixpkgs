@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   preConfigure =
     '' sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i "Makefile.in"
     '';
-  preInstall = "ensureDir $out/etc";
+  preInstall = "mkdir -p $out/etc";
 
   doCheck = true;
 

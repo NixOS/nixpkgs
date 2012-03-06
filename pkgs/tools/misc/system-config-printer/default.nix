@@ -1,7 +1,7 @@
 { stdenv, fetchurl, udev, intltool, pkgconfig, glib, xmlto
 , makeWrapper, pygobject, pygtk, docbook_xml_dtd_412, docbook_xsl
 , pythonDBus, libxml2, desktop_file_utils, libusb, cups, pycups
-, xz, pythonPackages
+, pythonPackages
 , withGUI ? true
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ xz intltool pkgconfig glib udev libusb cups xmlto
+    [ intltool pkgconfig glib udev libusb cups xmlto
       libxml2 docbook_xml_dtd_412 docbook_xsl desktop_file_utils
       pythonPackages.python pythonPackages.wrapPython
     ];

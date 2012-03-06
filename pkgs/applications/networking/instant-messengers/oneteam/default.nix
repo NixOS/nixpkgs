@@ -59,14 +59,14 @@ rec {
   doDeploy = a.fullDepEntry ''
     TARGET_DIR="$out/share/oneteam/app"
     BUILD_DIR="$PWD"
-    ensureDir "$TARGET_DIR"
+    mkdir -p "$TARGET_DIR"
     cd "$TARGET_DIR"
     unzip "$BUILD_DIR/oneteam.xulapp"
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     echo "#! ${a.stdenv.shell}" > "$out/bin/oneteam"
     echo "\"${xulrunner}/bin/xulrunner\" \"$TARGET_DIR/application.ini\"" > "$out/bin/oneteam"
     chmod a+x "$out/bin/oneteam"
-    ensureDir "$out/share/doc"
+    mkdir -p "$out/share/doc"
     cp -r "$BUILD_DIR/docs" "$out/share/doc/oneteam"
   '' ["defEnsureDir"];
 

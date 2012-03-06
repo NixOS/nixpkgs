@@ -33,7 +33,7 @@ rec {
   '') ["preBuild" "addInputs"];
 
   deploy = a.fullDepEntry (''
-    ensureDir $out/bin $out/lib $out/include $out/source $out/share/${name}/build-snapshot
+    mkdir -p $out/bin $out/lib $out/include $out/source $out/share/${name}/build-snapshot
     cd ncbi/build
     cp *.o *.so $out/lib
     cp -r . $out/share/${name}/build-snapshot

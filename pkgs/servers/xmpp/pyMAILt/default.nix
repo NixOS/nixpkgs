@@ -21,7 +21,7 @@ rec {
   phaseNames = ["deploy" (a.makeManyWrappers "$out/share/${name}/mail.py" a.pythonWrapperArguments)];
   deploy = a.fullDepEntry (''
     cd mail-transport
-    ensureDir $out/bin $out/share/${name}
+    mkdir -p $out/bin $out/share/${name}
     sed -e 's@/usr/bin/@${a.python}/bin/@' -i mail.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.pyMAILt.xml"]' -i config.py
     sed -e '/configFiles/aconfigFiles += [os.getenv("HOME")+"/.python-mail-transport.xml"]' -i config.py

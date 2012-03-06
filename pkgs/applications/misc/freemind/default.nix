@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   # JDK 7 beta seems to have fixed this (bug ?)
 
   installPhase = ''
-    ensureDir $out/{bin,nix-support}
+    mkdir -p $out/{bin,nix-support}
     cp -r ../bin/dist $out/nix-support
     sed -i 's/which/type -p/' $out/nix-support/dist/freemind.sh
     cat > $out/bin/freemind << EOF

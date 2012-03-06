@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   unpackPhase = "sh ${src}";
   installPhase = ''
     cd ${name}
-    ensureDir $out/{bin,share/{${name},man/man1}}
+    mkdir -p $out/{bin,share/{${name},man/man1}}
     mv makeself.lsm README $out/share/${name}
     mv makeself.sh $out/bin/makeself
     mv makeself.1  $out/share/man/man1/

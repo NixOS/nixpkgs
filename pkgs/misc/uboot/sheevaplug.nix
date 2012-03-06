@@ -45,14 +45,13 @@ stdenv.mkDerivation {
   buildNativeInputs = [ unzip ];
 
   dontStrip = true;
-  NIX_STRIP_DEBUG = false;
 
   installPhase = ''
-    ensureDir $out
+    mkdir -p $out
     cp u-boot-rd88f6281Sheevaplug_400db_nand.bin $out
     cp u-boot u-boot.map $out
 
-    ensureDir $out/bin
+    mkdir -p $out/bin
     cp tools/{envcrc,mkimage} $out/bin
   '';
 }

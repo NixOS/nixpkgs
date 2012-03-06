@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [ libtiff gettext];
 
   preInstall = ''
-    ensureDir $out/lib
+    mkdir -p $out/lib
   '';
 
   meta = {

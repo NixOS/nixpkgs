@@ -33,7 +33,7 @@ stdenv.mkDerivation (
     name = name + (if src ? version then "-" + src.version else "");
   
     postHook = ''
-      ensureDir $out/nix-support
+      mkdir -p $out/nix-support
       echo "$system" > $out/nix-support/system
 
       # If `src' is the result of a call to `makeSourceTarball', then it
@@ -62,7 +62,7 @@ stdenv.mkDerivation (
 
     distPhase =
       ''
-        ensureDir $out/tarballs
+        mkdir -p $out/tarballs
         tar cvfj $out/tarballs/''${releaseName:-binary-dist}.tar.bz2 -C $TMPDIR/inst .
       '';
 

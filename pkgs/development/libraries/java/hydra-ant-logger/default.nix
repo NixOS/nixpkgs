@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = '' 
-    ensureDir "$out/lib/java"
+    mkdir -p "$out/lib/java"
     cp -v *.jar "$out/lib/java"
   '';
 }

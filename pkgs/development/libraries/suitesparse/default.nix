@@ -14,8 +14,8 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     export PREFIX=$out
-    ensureDir $out/lib
-    ensureDir $out/include
+    mkdir -p $out/lib
+    mkdir -p $out/include
   '';
 
   NIX_CFLAGS = "-fPIC";

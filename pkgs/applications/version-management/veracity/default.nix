@@ -37,10 +37,10 @@ rec {
   '' else "") ["doMake" "minInit"];
 
   prepare_sgneeds = a.fullDepEntry (''
-    ensureDir "$out/sgneeds/include/spidermonkey"
+    mkdir -p "$out/sgneeds/include/spidermonkey"
     for d in bin include lib; do 
-      ensureDir "$out/sgneeds/$d"
-      ensureDir "$out/sgneeds/$d"
+      mkdir -p "$out/sgneeds/$d"
+      mkdir -p "$out/sgneeds/$d"
       for p in "${spidermonkey_1_8_0rc1}"; do
         for f in "$p"/"$d"/*; do
 	  ln -sf "$f" "$out"/sgneeds/"$d"
@@ -53,7 +53,7 @@ rec {
 	done
       done
 
-    ensureDir "$out/sgneeds/include/sgbrings"
+    mkdir -p "$out/sgneeds/include/sgbrings"
     ln -s "$out/sgneeds/include/js" "$out/sgneeds/include/sgbrings/js"
     for f in "$out/sgneeds/lib/"libjs*; do
       bn="$(basename "$f")"
@@ -84,7 +84,7 @@ rec {
   '' ["minInit"];
 
   doDeploy = a.fullDepEntry ''
-    ensureDir "$out/bin" "$out/share/veracity/"
+    mkdir -p "$out/bin" "$out/share/veracity/"
     cp -r .. "$out/share/veracity/build-dir"
     ln -s "$out/share/veracity/build-dir/build/src/cmd/vv" "$out/bin"
     ln -s "$out/share/veracity/build-dir/build/src/script/vscript" "$out/bin"

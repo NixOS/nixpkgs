@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-   ensureDir "$out"/bin
+   mkdir -p "$out"/bin
    cp picomus "$out"/bin
    cp picosat "$out"/bin
-   ensureDir "$out"/lib
+   mkdir -p "$out"/lib
    cp libpicosat.a "$out"/lib
    cp libpicosat.so "$out"/lib
-   ensureDir "$out"/include/picosat
+   mkdir -p "$out"/include/picosat
    cp picosat.h "$out"/include/picosat
   '';
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   preConfigure = "export HOME=$TMPDIR";
 
   installPhase = ''
-    ensureDir $out/bin $out
+    mkdir -p $out/bin $out
     cp -R data locale $out
     cp neverball $out/bin
     cp neverputt $out/bin

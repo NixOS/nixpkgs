@@ -26,7 +26,7 @@ buildPythonPackage (rec {
   doCheck = false;
 
   postInstall =
-    '' ensureDir "$out/share/info"
+    '' mkdir -p "$out/share/info"
        make -C docs buildbot.info
        cp -v "docs/buildbot.info"* "$out/share/info"
     '';

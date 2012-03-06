@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   
   buildPhase = "true";
 
-  installPhase = "ensureDir $out; chmod -x *; cp * $out";
+  installPhase = "mkdir -p $out; chmod -x *; cp * $out";
   
   meta = {
     description = "Firmware for the Intel 3945ABG wireless card";

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, glib, libglade
 , networkmanager, GConf, libnotify, gnome_keyring, dbus_glib
-, polkit, isocodes, xz }:
+, polkit, isocodes }:
 
 let
   pn = "network-manager-applet";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk libglade networkmanager GConf libnotify gnome_keyring
     polkit isocodes ];
 
-  buildNativeInputs = [ intltool pkgconfig xz ];
+  buildNativeInputs = [ intltool pkgconfig ];
 
   meta = with stdenv.lib; {
     homepage = http://projects.gnome.org/NetworkManager/;

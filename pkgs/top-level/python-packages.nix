@@ -554,7 +554,7 @@ let pythonPackages = python.modules // rec {
 
     buildInputs = [ nose mox ];
 
-    propagatedBuildInputs = [ gflags sqlalchemy webob routes eventlet python.modules.ssl ];
+    propagatedBuildInputs = [ gflags sqlalchemy webob routes eventlet ];
 
     PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
 
@@ -1051,7 +1051,7 @@ let pythonPackages = python.modules // rec {
 
     installCommand = ''
       dest=$(toPythonPath $out)/optfunc
-      ensureDir $dest
+      mkdir -p $dest
       cp * $dest/
     '';
 
@@ -1559,10 +1559,10 @@ let pythonPackages = python.modules // rec {
 
     installPhase = ''
       dest=$(toPythonPath $out)/pysvn
-      ensureDir $dest
+      mkdir -p $dest
       cp pysvn/__init__.py $dest/
       cp pysvn/_pysvn*.so $dest/
-      ensureDir $out/share/doc
+      mkdir -p $out/share/doc
       mv -v ../Docs $out/share/doc/pysvn-1.7.2
       rm -v $out/share/doc/pysvn-1.7.2/generate_cpp_docs_from_html_docs.py
     '';

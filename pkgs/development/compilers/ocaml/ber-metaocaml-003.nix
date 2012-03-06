@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     cd ..
   '';
   postBuild = ''
-    ensureDir $out/include
+    mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
   '';
   postInstall = ''

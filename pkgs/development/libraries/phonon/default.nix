@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, automoc4, qt4, xz, pulseaudio }:
+{ stdenv, fetchurl, cmake, automoc4, qt4, pulseaudio }:
 
 let
   v = "4.6.0";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 pulseaudio ];
 
-  buildNativeInputs = [ cmake automoc4 xz ];
+  buildNativeInputs = [ cmake automoc4 ];
 
   meta = {
     homepage = http://phonon.kde.org/;

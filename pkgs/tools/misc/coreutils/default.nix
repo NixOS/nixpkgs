@@ -1,16 +1,17 @@
 { stdenv, fetchurl, perl, gmp ? null
 , aclSupport ? false, acl ? null
-, selinuxSupport? false, libselinux ? null, libsepol ? null }:
+, selinuxSupport? false, libselinux ? null, libsepol ? null
+}:
 
 assert aclSupport -> acl != null;
 assert selinuxSupport -> ( (libselinux != null) && (libsepol != null) );
 
-stdenv.mkDerivation (rec {
-  name = "coreutils-8.7";
+stdenv.mkDerivation rec {
+  name = "coreutils-8.15";
 
   src = fetchurl {
-    url = "mirror://gnu/coreutils/${name}.tar.gz";
-    sha256 = "11ykd7glys6lcfb2mwgmkqmmffv1pan70j6sl9vcjpnlf9dvk7bw";
+    url = "mirror://gnu/coreutils/${name}.tar.xz";
+    sha256 = "176lgw810xw84c6fz5xwhydxggkndmzggl0pxqzldbjf85vv6zl3";
   };
 
   buildNativeInputs = [ perl ];
@@ -41,6 +42,8 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
+  NIX_LDFLAGS = stdenv.lib.optionalString selinuxSupport "-lsepol";
+
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
@@ -56,5 +59,5 @@ stdenv.mkDerivation (rec {
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
-} // (if selinuxSupport then { NIX_LDFLAGS = "-lsepol"; } else { } ) )
+}
 

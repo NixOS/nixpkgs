@@ -5,12 +5,12 @@ preBuild() {
 }
 
 preInstall() {
-  ensureDir $out/bin
+  mkdir -p $out/bin
 }
 
 postInstall() {
   # Install the "prefabs".
-  ensureDir $out/share/ploticus/prefabs &&		\
+  mkdir -p $out/share/ploticus/prefabs &&		\
   cd .. &&						\
   cp -rv prefabs/* $out/share/ploticus/prefabs
 

@@ -1,36 +1,35 @@
-addCMakeParams()
-{
+addCMakeParams() {
     addToSearchPath CMAKE_PREFIX_PATH $1
 }
 
-fixCmakeFiles()
-{
-    local replaceArgs
-    echo "fixing cmake files"
-    replaceArgs="-e -f -L -T /usr /var/empty -a /opt /var/empty"
-    find $1 -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt -print0 |
-        xargs -0 replace-literal ${replaceArgs}
+fixCmakeFiles() {
+    # Replace occurences of /usr and /opt by /var/empty.
+    echo "fixing cmake files..."
+    find "$1" \( -type f -name "*.cmake" -o -name "*.cmake.in" -o -name CMakeLists.txt \) -print |
+        while read fn; do
+            sed -e 's^/usr\([ /]\|$\)^/var/empty\1^g' -e 's^/opt\([ /]\|$\)^/var/empty\1^g' < "$fn" > "$fn.tmp"
+            mv "$fn.tmp" "$fn"
+        done
 }
 
-cmakeConfigurePhase()
-{
+cmakeConfigurePhase() {
     eval "$preConfigure"
 
-    if test -z "$dontFixCmake"; then
+    if [ -z "$dontFixCmake" ]; then
         fixCmakeFiles .
     fi
 
-    if test -z "$dontUseCmakeBuildDir"; then
+    if [ -z "$dontUseCmakeBuildDir" ]; then
         mkdir -p build
         cd build
         cmakeDir=..
     fi
 
-    if test -z "$dontAddPrefix"; then
+    if [ -z "$dontAddPrefix" ]; then
         cmakeFlags="-DCMAKE_INSTALL_PREFIX=$prefix $cmakeFlags"
     fi
 
-    if test -n "$crossConfig"; then
+    if [ -n "$crossConfig" ]; then
         # By now it supports linux builds only. We should set the proper
         # CMAKE_SYSTEM_NAME otherwise.
         # http://www.cmake.org/Wiki/CMake_Cross_Compiling
@@ -38,7 +37,8 @@ cmakeConfigurePhase()
     fi
 
     # Avoid cmake resetting the rpath of binaries, on make install
-    cmakeFlags="-DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
+    # And build always Release, to ensure optimisation flags
+    cmakeFlags="-DCMAKE_BUILD_TYPE=Release -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
 
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
@@ -47,11 +47,11 @@ cmakeConfigurePhase()
     eval "$postConfigure"
 }
 
-if test -z "$dontUseCmakeConfigure"; then
+if [ -z "$dontUseCmakeConfigure" ]; then
     configurePhase=cmakeConfigurePhase
 fi
 
-if test -n "$crossConfig"; then
+if [ -n "$crossConfig" ]; then
     crossEnvHooks+=(addCMakeParams)
 else
     envHooks+=(addCMakeParams)

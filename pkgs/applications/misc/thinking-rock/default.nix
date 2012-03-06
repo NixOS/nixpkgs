@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     ls -1 bin/* | grep -ve  'bin/tr''$' | xargs rm
     # don't keep the other .exe file either
     find . -iname "*.exe" | xargs -n1 rm
-    ensureDir $out/{nix-support/tr-files,bin}
+    mkdir -p $out/{nix-support/tr-files,bin}
     cp -r . $out/nix-support/tr-files
     cat >> $out/bin/thinkingrock << EOF
     #!/bin/sh

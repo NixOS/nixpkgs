@@ -165,6 +165,12 @@
     fullname = "Public Domain";
   };
   
+  psfl = {
+    shortName = "PSFL";
+    fullName = "Python Software Foundation License";
+    url = http://docs.python.org/license.html;
+  };
+
   proprietary = {
     shortName = "Proprietary";
     fullName = "Proprietary (non redistributable) license";

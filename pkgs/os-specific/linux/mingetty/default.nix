@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   preInstall = ''
-    ensureDir $out/sbin $out/share/man/man8
+    mkdir -p $out/sbin $out/share/man/man8
     makeFlagsArray=(SBINDIR=$out/sbin MANDIR=$out/share/man/man8)
   '';
 

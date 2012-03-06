@@ -33,8 +33,8 @@ stdenv.mkDerivation {
 
   postUnpack =
     ''
-      ensureDir $out/share/texmf
-      ensureDir $out/share/texmf-dist
+      mkdir -p $out/share/texmf
+      mkdir -p $out/share/texmf-dist
       gunzip < $texmf | (cd $out/share/texmf-dist && tar xvf -)
     '';
 

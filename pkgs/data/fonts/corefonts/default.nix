@@ -42,7 +42,7 @@ stdenv.mkDerivation {
     cabextract --lowercase viewer1.cab
   
     fontDir=$out/share/fonts/truetype
-    ensureDir $fontDir
+    mkdir -p $fontDir
     cp *.ttf $fontDir
 
     # Also put the EULA there to be on the safe side.

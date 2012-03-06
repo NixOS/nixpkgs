@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   configurePhase = "true"; 	# Skip configure
 
   preInstall = ''
-    ensureDir "$out/lib/ocaml/${ocaml_version}/site-lib"
+    mkdir -p "$out/lib/ocaml/${ocaml_version}/site-lib"
   '';
 
   doCheck = true;

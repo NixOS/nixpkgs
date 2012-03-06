@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     mv $out/inc $out/include
-    ensureDir $out/share/doc/${name}
+    mkdir -p $out/share/doc/${name}
     cp -R ../doc $out/share/doc/${name}
   '';
 

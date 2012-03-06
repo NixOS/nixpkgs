@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     sed -i s,/usr/local,$out, Makefile
-    ensureDir $out/bin
+    mkdir -p $out/bin
   '';
 
   meta = {

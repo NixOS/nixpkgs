@@ -20,7 +20,7 @@ stdenv.mkDerivation (rec {
   };
 
   postInstall = ''
-    ensureDir "$out/nix-support"
+    mkdir -p "$out/nix-support"
     echo "# Path to the GHC compiler directory in the store" > $out/nix-support/setup-hook
     echo "ghc=$out" >> $out/nix-support/setup-hook
     echo ""         >> $out/nix-support/setup-hook

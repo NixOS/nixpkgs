@@ -32,5 +32,5 @@ stdenv.mkDerivation {
     description = "A tool for automating interactive applications";
     homepage = http://expect.nist.gov/;
   };
-  postInstall="cp expect{,k} $out/bin; ensureDir $out/lib; cp *.so $out/lib";
+  postInstall="cp expect{,k} $out/bin; mkdir -p $out/lib; cp *.so $out/lib";
 }

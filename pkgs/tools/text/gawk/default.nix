@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libsigsegv }:
 
 stdenv.mkDerivation rec {
-  name = "gawk-3.1.8";
+  name = "gawk-4.0.0";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.bz2";
-    sha256 = "1d0jfh319w4h8l1zzqv248916wrc2add1b1aghri31rj9hn7pg2x";
+    sha256 = "0sss7rhpvizi2a88h6giv0i7w5h07s2fxkw3s6n1hqvcnhrfgbb0";
   };
 
   doCheck = true;

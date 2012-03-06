@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, xz, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
+{ fetchurl, stdenv, pkgconfig, gtk, pango, perl, python, ply, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs, alsaLib
 , libnotify, gnome_vfs, libgnomeui
 , freetype, fontconfig, wirelesstools ? null, pixman
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ xz libgnomeui libnotify gnome_vfs alsaLib
+    [ libgnomeui libnotify gnome_vfs alsaLib
       pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2 pixman
       python ply dbus dbus_glib pango freetype fontconfig
       xlibs.libXi xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
     fi
 
     # Put the GNU IceCat icon in the right place.
-    ensureDir "$out/lib/$libDir/chrome/icons/default"
+    mkdir -p "$out/lib/$libDir/chrome/icons/default"
     ln -s ../../../icons/default.xpm  "$out/lib/$libDir/chrome/icons/default/"
   '';
 

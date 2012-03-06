@@ -7,7 +7,7 @@ args=
 target=$out
 if test -n "$dir"; then
     target=$out/$dir/$name
-    ensureDir $out/$dir
+    mkdir -p $out/$dir
 fi
 
 substituteAll $src $target

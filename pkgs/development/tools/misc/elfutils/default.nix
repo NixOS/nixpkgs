@@ -1,4 +1,4 @@
-{stdenv, fetchurl, m4, zlib, bzip2, xz, bison, flex, gettext}:
+{stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext}:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # We need bzip2 in NativeInputs because otherwise we can't unpack the src,
   # as the host-bzip2 will be in the path.
   buildNativeInputs = [m4 bison flex gettext bzip2];
-  buildInputs = [zlib bzip2 xz];
+  buildInputs = [zlib bzip2];
 
   crossAttrs = {
 

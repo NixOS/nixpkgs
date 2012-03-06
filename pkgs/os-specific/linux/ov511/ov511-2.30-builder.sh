@@ -13,6 +13,6 @@ echo "version $version"
 
 export version
 
-ensureDir $out/lib/modules/$version/kernel/drivers/usb/media/
+mkdir -p $out/lib/modules/$version/kernel/drivers/usb/media/
 
 genericBuild

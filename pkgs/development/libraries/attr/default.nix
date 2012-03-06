@@ -1,14 +1,14 @@
 { stdenv, fetchurl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "attr-2.4.44";
+  name = "attr-2.4.46";
 
   src = fetchurl {
     url = "mirror://savannah/attr/${name}.src.tar.gz";
-    sha256 = "16244r2vrd57i5fnf7dz3yi2mcckc47jr9y539jvljrzwnw18qlz";
+    sha256 = "07qf6kb2zk512az481bbnsk9jycn477xpva1a726n5pzlzf9pmnw";
   };
 
-  buildNativeInputs = [gettext];
+  buildNativeInputs = [ gettext ];
 
   configureFlags = "MAKE=make MSGFMT=msgfmt MSGMERGE=msgmerge XGETTEXT=xgettext ECHO=echo SED=sed AWK=gawk";
 

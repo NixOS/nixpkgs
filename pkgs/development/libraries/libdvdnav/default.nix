@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   configureScript = "./configure2"; # wtf?
 
   preConfigure = ''
-    ensureDir $out
+    mkdir -p $out
   '';
 
   meta = {

@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     set -x
-    ensureDir $out/bin
-    ensureDir $out/share/df_linux
+    mkdir -p $out/bin
+    mkdir -p $out/share/df_linux
     cp -r * $out/share/df_linux
     cp $permission $out/share/df_linux/nix_permission
  

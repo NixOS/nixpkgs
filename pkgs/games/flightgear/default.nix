@@ -38,7 +38,7 @@ rec {
   phaseNames = ["doConfigure" "doMakeInstall" "deployData"];
 
   deployData = a.fullDepEntry ''
-    ensureDir "$out/share/FlightGear"
+    mkdir -p "$out/share/FlightGear"
     cd "$out/share/FlightGear"
     tar xvf ${datasrc}
   '' ["minInit" "defEnsureDir"];

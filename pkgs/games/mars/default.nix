@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     cd ..
     find -name '*.svn' -exec rm -rf {} \;
-    ensureDir "$out/share/mars/"
-    ensureDir "$out/bin/"
+    mkdir -p "$out/share/mars/"
+    mkdir -p "$out/bin/"
     cp -rv data resources credits.txt license.txt "$out/share/mars/"
     cp -v mars "$out/bin/mars.bin"
     cat << EOF > "$out/bin/mars"

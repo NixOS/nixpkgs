@@ -90,7 +90,7 @@ stdenv.mkDerivation {
           --replace /bin/ls "$(type -tP ls)"
 
       # Create a desktop item.
-      ensureDir $out/share/applications
+      mkdir -p $out/share/applications
       cat > $out/share/applications/thunderbird.desktop <<EOF
       [Desktop Entry]
       Type=Application

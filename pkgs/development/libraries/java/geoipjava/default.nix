@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     '';
   installPhase =
     ''
-      ensureDir $out/share/java
+      mkdir -p $out/share/java
       cp maxmindgeoip.jar $out/share/java
     '';
   meta = {

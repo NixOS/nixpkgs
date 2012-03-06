@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     find -type f | xargs sed -i 's@/usr/bin/perl@${perl}/bin/perl@'
-    ensureDir $out
+    mkdir -p $out
     sed -e 's/chown/true/' \
         -e 's/chgrp/true/' \
         -e 's@^CFLAGS_FT =.*@CFLAGS_FT=-DUSE_FREETYPE -I${freetype}/include/freetype2@' \

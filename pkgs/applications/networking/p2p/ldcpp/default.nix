@@ -12,7 +12,7 @@ with builderDefs;
       openssl libX11 boost];
     configureFlags = [];
     doScons = fullDepEntry (''
-      ensureDir $out
+      mkdir -p $out
       export NIX_LDFLAGS="$NIX_LDFLAGS -lX11";
       
       for i in gettext xgettext msgfmt msgcat; do

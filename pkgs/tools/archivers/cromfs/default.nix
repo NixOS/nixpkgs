@@ -1,20 +1,14 @@
-{stdenv, fetchurl, pkgconfig, fuse, perl}:
+{ stdenv, fetchurl, pkgconfig, fuse, perl }:
 
 stdenv.mkDerivation rec {
-  name = "cromfs-1.5.9.1";
+  name = "cromfs-1.5.10";
+  
   src = fetchurl {
     url = "http://bisqwit.iki.fi/src/arch/${name}.tar.bz2";
-    sha256 = "02k0nd7zvcksn7vjxlynsdgdvkayfzzhv622n9zkka94756lr0fk";
+    sha256 = "1w079zb5scv6bj919ndr0fkiirq2bkyjrnmwqrr9yzwbyinzg73j";
   };
 
-  patchPhase = ''sed -i 's@/bin/bash@/bin/sh@g' configure; set -x'';
-
-  meta = {
-    description = "FUSE Compressed ROM filesystem with lzma"  ;
-	  homepage = http://bisqwit.iki.fi/source/cromfs.html;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
-  };
+  patchPhase = ''sed -i 's@/bin/bash@/bin/sh@g' configure'';
 
   # Removing the static linking, as it doesn't compile in x86_64.
   makeFlags = "cromfs-driver util/mkcromfs util/unmkcromfs util/cvcromfs";
@@ -27,5 +21,12 @@ stdenv.mkDerivation rec {
     install util/unmkcromfs $out/bin
   '';
 
-  buildInputs = [pkgconfig fuse perl];
+  buildInputs = [ pkgconfig fuse perl ];
+
+  meta = {
+    description = "FUSE Compressed ROM filesystem with lzma";
+    homepage = http://bisqwit.iki.fi/source/cromfs.html;
+    maintainers = [ stdenv.lib.maintainers.viric ];
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

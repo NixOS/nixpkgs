@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libgsf, libxml2, xz }:
+{ stdenv, fetchurl, pkgconfig, glib, libgsf, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "libwpd-0.9.4";
@@ -10,5 +10,5 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ glib libgsf libxml2 ];
 
-  buildNativeInputs = [ pkgconfig xz ];
+  buildNativeInputs = [ pkgconfig ];
 }

@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   installPhase = ''
     cp -r . $out; cd $out
     t=bin/debootstrap
-    ensureDir bin man/man8
+    mkdir -p bin man/man8
     cat >> $t << EOF
     #!/bin/sh
     export DEBOOTSTRAP_DIR=$out/usr/share/debootstrap
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
   /* build from source:
   installPhase = ''
     cp ${devices} devices.tar.gz
-    ensureDir $out/{bin,man/man8};
+    mkdir -p $out/{bin,man/man8};
     cp debootstrap.8 $out/man/man8
     sed -i  \
       -e 's@-o root@@'   \

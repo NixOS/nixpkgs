@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   makeFlags = [ "LIBUSB=${libusb}" "linux" ];
 
   installPhase = ''
-    ensureDir $out/bin $out/share/pk2
+    mkdir -p $out/bin $out/share/pk2
     cp pk2cmd $out/bin
     cp PK2DeviceFile.dat $out/share/pk2
     wrapProgram $out/bin/pk2cmd --prefix PATH : $out/share/pk2

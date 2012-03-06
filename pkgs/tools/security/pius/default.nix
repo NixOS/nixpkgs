@@ -19,10 +19,10 @@ stdenv.mkDerivation {
   buildPhase = "true";
 
   installPhase =
-    '' ensureDir "$out/bin"
+    '' mkdir -p "$out/bin"
        cp -v pius "$out/bin"
 
-       ensureDir "$out/doc/pius-${version}"
+       mkdir -p "$out/doc/pius-${version}"
        cp -v README "$out/doc/pius-${version}"
     '';
 

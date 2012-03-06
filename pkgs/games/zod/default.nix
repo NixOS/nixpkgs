@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS="-L${mysql}/lib/mysql";
 
   installPhase = ''
-    ensureDir $out/bin $out/share/zod
+    mkdir -p $out/bin $out/share/zod
     pushd $out/share/zod
     unrar x $srcAssets
     popd

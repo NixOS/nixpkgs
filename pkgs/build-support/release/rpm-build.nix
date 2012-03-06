@@ -14,7 +14,7 @@ vmTools.buildRPM (
     name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
 
     preBuild = ''
-      ensureDir $out/nix-support
+      mkdir -p $out/nix-support
       cat "$diskImage"/nix-support/full-name > $out/nix-support/full-name
 
       # If `src' is the result of a call to `makeSourceTarball', then it

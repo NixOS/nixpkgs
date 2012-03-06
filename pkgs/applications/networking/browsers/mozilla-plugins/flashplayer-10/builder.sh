@@ -15,7 +15,7 @@ unpackPhase() {
 }
 
 installPhase() {
-    ensureDir $out/lib/mozilla/plugins
+    mkdir -p $out/lib/mozilla/plugins
     cp -pv libflashplayer.so $out/lib/mozilla/plugins
     patchelf --set-rpath "$rpath" $out/lib/mozilla/plugins/libflashplayer.so
 }

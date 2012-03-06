@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0v31l3k0fzy7isdsx2sh0baaixzlml1m7vgz6cd0015d9f5n99vl";
   };
 
+  patchPhase = ''
+    sed -i /stdcall-alias/d source/Irrlicht/Makefile
+  '';
+
   preConfigure = ''
     cd source/Irrlicht
   '';

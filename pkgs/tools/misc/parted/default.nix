@@ -1,5 +1,5 @@
 { stdenv, fetchurl, devicemapper, libuuid, gettext, readline
-, utillinuxng, xz, check, enableStatic ? false, hurd ? null }:
+, utillinux, check, enableStatic ? false, hurd ? null }:
 
 stdenv.mkDerivation rec {
   name = "parted-3.0";
@@ -9,7 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "054ybvjkj1mbm4mpn1rl12jzhvqg37b0xwwr4ly1zisvzrjhi11a";
   };
 
-  buildNativeInputs = [ xz ];
   buildInputs = [ libuuid ]
     ++ stdenv.lib.optional (readline != null) readline
     ++ stdenv.lib.optional (gettext != null) gettext
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
   preCheck =
     stdenv.lib.optionalString doCheck
       # The `t0400-loop-clobber-infloop.sh' test wants `mkswap'.
-      "export PATH=\"${utillinuxng}/sbin:$PATH\"";
+      "export PATH=\"${utillinux}/sbin:$PATH\"";
 
   meta = {
     description = "GNU Parted, a tool to create, destroy, resize, check, and copy partitions";

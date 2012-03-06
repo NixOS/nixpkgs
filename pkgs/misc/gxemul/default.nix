@@ -8,8 +8,8 @@ composableDerivation.composableDerivation {} {
   inherit name;
   
   flags = {
-    doc   = { installPhase = "ensureDir \$out/share/${name}; cp -r doc \$out/share/${name};"; implies = "man"; };
-    demos = { installPhase = "ensureDir \$out/share/${name}; cp -r demos \$out/share/${name};"; };
+    doc   = { installPhase = "mkdir -p \$out/share/${name}; cp -r doc \$out/share/${name};"; implies = "man"; };
+    demos = { installPhase = "mkdir -p \$out/share/${name}; cp -r demos \$out/share/${name};"; };
     man   = { installPhase = "cp -r ./man \$out/;";};
   };
 
@@ -19,7 +19,7 @@ composableDerivation.composableDerivation {} {
     manSupport = true;
   };
 
-  installPhase = "ensureDir \$out/bin; cp gxemul \$out/bin;";
+  installPhase = "mkdir -p \$out/bin; cp gxemul \$out/bin;";
 
   src = fetchurl {
     url = http://gavare.se/gxemul/src/gxemul-0.4.6.tar.gz;

@@ -48,8 +48,6 @@ mkDerivation {
   phases = [ "buildPhase" "fixupPhase" ];
   setupNew = substituteAll {
     src = ../../stdenv/generic/setup.sh;
-    preHook="";
-    postHook="";
     initialPath= (import ../../stdenv/common-path.nix) { inherit pkgs; };
     gcc = stdenv.gcc;
   };

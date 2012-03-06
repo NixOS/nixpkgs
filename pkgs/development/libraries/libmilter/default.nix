@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = '' 
-    ensureDir $out/lib
+    mkdir -p $out/lib
     cd libmilter
     cat > a.m4 <<EOF
       define(\`confEBINDIR', \`$out/libexec')

@@ -22,7 +22,7 @@ rec {
   libc = if a.stdenv ? glibc then a.stdenv.glibc else "";
 
   doCmake = a.fullDepEntry(''
-    ensureDir $PWD/builddir
+    mkdir -p $PWD/builddir
     cd builddir
     export NIX_LDFLAGS="$NIX_LDFLAGS -ldl -L$out/lib"
     cmake .. -DCMAKE_BUILD_TYPE=debug -DCMAKE_INSTALL_PREFIX=$out -DDL_LIB=${libc}/lib

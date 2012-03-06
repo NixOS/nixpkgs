@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      ensureDir $out/share/man/man3
+      mkdir -p $out/share/man/man3
       cp man3/miniupnpc.3 $out/share/man/man3/
     '';
 

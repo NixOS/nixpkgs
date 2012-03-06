@@ -37,7 +37,7 @@ rec {
   fixInstall = a.fullDepEntry (''
     rm -rf "$out/LIB"
     cp -r Singular/LIB "$out"
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     ln -s "$out"/*/Singular "$out/bin"
   '') ["minInit" "defEnsureDir"];
       

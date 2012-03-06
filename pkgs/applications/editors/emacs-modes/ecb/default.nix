@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    ensureDir "$out/share/emacs/site-lisp"
+    mkdir -p "$out/share/emacs/site-lisp"
     cp -rv *.el *.elc ecb-images "$out/share/emacs/site-lisp"
 
-    ensureDir "$out/share/info"
+    mkdir -p "$out/share/info"
     cp -v info-help/*.info* "$out/share/info"
   '';
 

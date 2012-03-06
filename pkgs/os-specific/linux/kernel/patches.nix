@@ -84,41 +84,11 @@ rec {
       features.fbConDecor = true;
     };
 
-  fbcondecor_2_6_28 =
-    { name = "fbcondecor-0.9.5-2.6.28";
-      patch = fetchurl {
-        url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.5-2.6.28.patch;
-        sha256 = "105q2dwrwi863r7nhlrvljim37aqv67mjc3lgg529jzqgny3fjds";
-      };
-      extraConfig = fbcondecorConfig;
-      features.fbConDecor = true;
-    };
-
-  fbcondecor_2_6_29 =
-    { name = "fbcondecor-0.9.6-2.6.29.2";
-      patch = fetchurl {
-        url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.6-2.6.29.2.patch;
-        sha256 = "1yppvji13sgnql62h4wmskzl9l198pp1pbixpbymji7mr4a0ylx1";
-      };
-      extraConfig = fbcondecorConfig;
-      features.fbConDecor = true;
-    };
-
   fbcondecor_2_6_31 =
     { name = "fbcondecor-0.9.6-2.6.31.2";
       patch = fetchurl {
         url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.6-2.6.31.2.patch;
         sha256 = "1avk0yn0y2qbpsxf31r6d14y4a1mand01r4k4i71yfxvpqcgxka9";
-      };
-      extraConfig = fbcondecorConfig;
-      features.fbConDecor = true;
-    };
-
-  fbcondecor_2_6_33 =
-    { name = "fbcondecor-0.9.6-2.6.33-rc7";
-      patch = fetchurl {
-        url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.6-2.6.33-rc7.patch;
-        sha256 = "1v9lg3bgva0xry0s09drpw3n139s8hln8slayaf6i26vg4l4xdz6";
       };
       extraConfig = fbcondecorConfig;
       features.fbConDecor = true;
@@ -135,17 +105,6 @@ rec {
       features.fbConDecor = true;
     };
 
-  fbcondecor_2_6_37 =
-    rec {
-      name = "fbcondecor-0.9.6-2.6.37";
-      patch = fetchurl {
-        url = "http://dev.gentoo.org/~spock/projects/fbcondecor/archive/${name}.patch";
-        sha256 = "1yap9q6mp15jhsysry4x17cpm5dj35g8l2d0p0vn1xq25x3jfkqk";
-      };
-      extraConfig = fbcondecorConfig;
-      features.fbConDecor = true;
-    };
-
   fbcondecor_2_6_38 =
     rec {
       name = "fbcondecor-0.9.6-2.6.38";
@@ -155,15 +114,6 @@ rec {
       };
       extraConfig = fbcondecorConfig;
       features.fbConDecor = true;
-    };
-
-  # From http://patchwork.kernel.org/patch/19495/
-  ext4_softlockups_2_6_28 =
-    { name = "ext4-softlockups-fix";
-      patch = fetchurl {
-        url = http://patchwork.kernel.org/patch/19495/raw;
-        sha256 = "0vqcj9qs7jajlvmwm97z8cljr4vb277aqhsjqrakbxfdiwlhrzzf";
-      };
     };
 
   gcov_2_6_28 =
@@ -214,16 +164,6 @@ rec {
       features.aufs2 = true;
     };
 
-  aufs2_2_6_33 =
-    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2-33;hb=aufs2-33
-      # Note that this merely the patch needed to build AUFS2 as a
-      # standalone package.
-      name = "aufs2";
-      patch = ./aufs2-33.patch;
-      features.aufsBase = true;
-      features.aufs2 = true;
-    };
-
   aufs2_2_6_34 =
     { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2-34;hb=aufs2-34
       # Note that this merely the patch needed to build AUFS2 as a
@@ -250,16 +190,6 @@ rec {
       # standalone package.
       name = "aufs2";
       patch = ./aufs2.1-36.patch;
-      features.aufsBase = true;
-      features.aufs2_1 = true;
-    };
-
-  aufs2_1_2_6_37 =
-    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2.1-37;hb=refs/heads/aufs2.1-37
-      # Note that this merely the patch needed to build AUFS2.1 as a
-      # standalone package.
-      name = "aufs2.1";
-      patch = ./aufs2.1-37.patch;
       features.aufsBase = true;
       features.aufs2_1 = true;
     };
@@ -409,13 +339,5 @@ rec {
       # <http://www.plugcomputer.org/plugwiki/index.php/Compiling_Linux_Kernel_for_the_Plug_Computer>.
       name = "guruplug-arch-number";
       patch = ./guruplug-mach-type.patch;
-    };
-
-  glibc_getline =
-    {
-      # Patch to work around conflicting types for the `getline' function
-      # with recent Glibcs (2009).
-      name = "glibc-getline";
-      patch = ./getline.patch;
     };
 }

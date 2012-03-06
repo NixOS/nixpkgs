@@ -28,19 +28,19 @@ stdenv.mkDerivation rec {
         patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux*.so.? "bin/$b"
     done
     # FIXME: cgfxcat and cginfo need more patchelf
-    ensureDir "$out/bin/"
+    mkdir -p "$out/bin/"
     cp -v bin/* "$out/bin/"
-    ensureDir "$out/include/"
+    mkdir -p "$out/include/"
     cp -v -r include/Cg/ "$out/include/"
-    ensureDir "$out/lib/"
+    mkdir -p "$out/lib/"
     [ "$system" == "x86_64-linux" ] && cp -v lib64/* "$out/lib/"
     [ "$system" == "i686-linux" ] && cp -v lib/* "$out/lib/"
     for mandir in man1 man3 manCg manCgFX
     do
-        ensureDir "$out/share/man/$mandir/"
+        mkdir -p "$out/share/man/$mandir/"
         cp -v share/man/$mandir/* "$out/share/man/$mandir/"
     done
-    ensureDir "$out/share/doc/$name/"
+    mkdir -p "$out/share/doc/$name/"
     cp -v -r local/Cg/* "$out/share/doc/$name/"
   '';
   

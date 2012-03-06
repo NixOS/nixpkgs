@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, xz, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
+{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
 , libffi, gawk, makeWrapper, coverageAnalysis ? null }:
 
 # Do either a coverage analysis build or a standard build.
@@ -14,7 +14,7 @@
     sha256 = "1lycm10x316jzlv1nyag7x9gisn4d3dz8jcmbi6lbdn0z6a9skc2";
   };
 
-  buildNativeInputs = [ xz makeWrapper gawk pkgconfig ];
+  buildNativeInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
   propagatedBuildInputs = [ gmp boehmgc ]
 

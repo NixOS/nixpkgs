@@ -23,7 +23,7 @@ in
     ];
 
     configurePhase = ''
-      ensureDir "dist"
+      mkdir -p "dist"
       cat > build.properties <<EOF
         dist.lisp.dir = dist/share/emacs/site-lisp
         dist.java.lib.dir = dist/lib/java
@@ -50,7 +50,7 @@ in
     installPhase = ''
       ant install
 
-      ensureDir "$out/share/${name}"
+      mkdir -p "$out/share/${name}"
       cp -rv java/bsh-commands "$out/share/${name}"
 
       # Move everything that's not a JAR to $datadir.  This includes

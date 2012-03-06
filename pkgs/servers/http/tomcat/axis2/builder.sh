@@ -2,12 +2,12 @@ source $stdenv/setup
 
 unzip $src
 cd axis2-*
-ensureDir $out
+mkdir -p $out
 cp -av * $out
 cd webapp
 ant
 cd ..
-ensureDir $out/webapps
+mkdir -p $out/webapps
 cp dist/axis2.war $out/webapps
 cd $out/webapps
 mkdir axis2

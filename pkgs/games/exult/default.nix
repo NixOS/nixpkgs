@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-      ensureDir $out/share/exult/music
+      mkdir -p $out/share/exult/music
       for i in $musicFiles; do
           unzip -o -d $out/share/exult/music $i
       done

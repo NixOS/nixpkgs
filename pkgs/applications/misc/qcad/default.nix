@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   # probably there is more to be done. But this seems to work for now (eg see gentoo ebuild)
   installPhase = ''
-    ensureDir $out/{bin,share}
+    mkdir -p $out/{bin,share}
     cp -r qcad $out/share
 
     # The compilation does not fail with error code. But qcad will not exist

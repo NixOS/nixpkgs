@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildPhase = "true";
 
   installPhase = ''
-    ensureDir "$out/bin"
+    mkdir -p "$out/bin"
     echo > "$out/bin/${pname}" "#!/bin/sh"
     echo >>"$out/bin/${pname}" "${java}/bin/java -Xmx512m -jar ${jarfile}"
     chmod +x "$out/bin/${pname}"

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     ncurses pkgconfig randrproto xorgserver xproto udev ];
 
   preConfigure = ''
-    ensureDir $out/share/X11/xorg.conf.d
+    mkdir -p $out/share/X11/xorg.conf.d
     configureFlags="--with-xorg-module-dir=$out/lib/xorg/modules
     --with-sdkdir=$out/include/xorg --with-xorg-conf-dir=$out/share/X11/xorg.conf.d"
   '';

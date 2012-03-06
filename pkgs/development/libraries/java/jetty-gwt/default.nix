@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "17x8ss75rx9xjn93rq861mdn9d6gw87rbrf24blawa6ahhb56ppf";
   };
   buildCommand = ''
-    ensureDir $out/share/java
+    mkdir -p $out/share/java
     cp $src $out/share/java/$name.jar
   '';
 }

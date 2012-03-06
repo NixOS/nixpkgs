@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/bin
+    mkdir -p $out/bin
     mv $TMP/$name $out
     cd $out/$name
     bin/isabelle install -p $out/bin

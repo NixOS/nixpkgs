@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     find -type f | xargs sed 's@/bin/rm@rm@g' -i
     make clean
-    ensureDir $out/{etc,lib/udev,share/man/man1}
+    mkdir -p $out/{etc,lib/udev,share/man/man1}
     makeFlags="DESTDIR=$out PREFIX=$out"
   '';
 

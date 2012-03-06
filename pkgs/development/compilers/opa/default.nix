@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     done
 
     # Install emacs mode.
-    ensureDir $out/share/emacs/site-lisp/opa
+    mkdir -p $out/share/emacs/site-lisp/opa
     install -m 0644 -v ./utils/emacs/{opa-mode.el,site-start.el} $out/share/emacs/site-lisp/opa
   '';
 

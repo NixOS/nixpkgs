@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    substituteInPlace configure --replace /usr/bin /no-such-path
+    sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
   '';
 
   meta = {

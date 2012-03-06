@@ -95,7 +95,7 @@ in
         )
       }
 
-      ensureDir $target/{include,lib}
+      mkdir -p $target/{include,lib}
       link $target/lib "$(echo "''${!LIB_PATHS[@]}")"
       link $target/include "$(echo "''${!INCLUDE_PATHS[@]}")"
       echo "''${!LIBS[@]}" > $target/libs
@@ -113,7 +113,6 @@ in
 
     dontStrip = true;
 
-    NIX_STRIP_DEBUG=0;
     CFLAGS="-ggdb -O0";
     CXXFLAGS="-ggdb -O0";
 

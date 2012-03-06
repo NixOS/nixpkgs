@@ -92,7 +92,7 @@ rec {
 
       buildCommand = ''
 	set -x
-        ensureDir $out/bin $out/lib $out/libexec
+        mkdir -p $out/bin $out/lib $out/libexec
 
         # Copy what we need of Glibc.
         cp -d ${glibc}/lib/ld*.so* $out/lib
@@ -133,7 +133,6 @@ rec {
         cp -d ${gnumake}/bin/* $out/bin
         cp -d ${patch}/bin/* $out/bin
         cp ${patchelf}/bin/* $out/bin
-        cp ${replace}/bin/* $out/bin
 
         cp -d ${gnugrep.pcre}/lib/libpcre*.so* $out/lib # needed by grep
         

@@ -1,0 +1,18 @@
+Newer Linux kernels would return EINVAL instead of ENOENT.
+The patch below, taken from Gnulib, allows the test to pass when
+these Linux versions are in use:
+https://lists.gnu.org/archive/html/bug-gnulib/2011-03/msg00308.html .
+
+diff --git a/tests/test-readlink.h b/tests/test-readlink.h
+index 08d5662..7247fc4 100644
+--- a/tests/test-readlink.h
++++ b/tests/test-readlink.h
+@@ -38,7 +38,7 @@ test_readlink (ssize_t (*func) (char const *, char *, size_t), bool print)
+   ASSERT (errno == ENOENT);
+   errno = 0;
+   ASSERT (func ("", buf, sizeof buf) == -1);
+-  ASSERT (errno == ENOENT);
++  ASSERT (errno == ENOENT || errno == EINVAL);
+   errno = 0;
+   ASSERT (func (".", buf, sizeof buf) == -1);
+   ASSERT (errno == EINVAL);

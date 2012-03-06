@@ -27,9 +27,9 @@ stdenv.mkDerivation {
 
   # XXX: think/discuss about this, also with respect to nixos vs nix-on-X
   postInstall = ''
-    ensureDir $out/share/
+    mkdir -p $out/share/
     tar xf ${documentation} -C $out/share
-    ensureDir $out/etc/
+    mkdir -p $out/etc/
     cat > $out/etc/zprofile <<EOF
 if test -e /etc/NIXOS; then
   if test -r /etc/zprofile; then

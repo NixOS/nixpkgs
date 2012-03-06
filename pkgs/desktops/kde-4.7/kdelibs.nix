@@ -1,17 +1,16 @@
 { kde, gcc, cmake, perl
 , qt4, bzip2, pcre, fam, libxml2, libxslt, shared_mime_info, giflib, jasper
-, xz, openexr, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
+, openexr, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
 , docbook_xml_dtd_42, docbook_xsl, polkit_qt_1
-, getopt, udev, herqq, phonon, libjpeg
+, getopt, udev, herqq, phonon, libjpeg, xz
 }:
 
 kde {
   buildInputs =
-    [
-      acl attr attica avahi bzip2 enchant fam getopt giflib herqq jasper
+    [ acl attr attica avahi bzip2 enchant fam getopt giflib herqq jasper
       libdbusmenu_qt libXScrnSaver libxslt pcre polkit_qt_1 qca2
-      shared_desktop_ontologies udev xz libxml2 libjpeg kerberos
+      shared_desktop_ontologies xz udev libxml2 libjpeg kerberos
     ];
 
   propagatedBuildInputs = [ qt4 soprano strigi phonon ];

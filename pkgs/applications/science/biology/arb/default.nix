@@ -33,22 +33,22 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    ensureDir $out/lib
+    mkdir -p $out/lib
     shareddir=/nix/var/lib/arb
     # link out writable shared location lib/pts
-    ensureDir $shareddir/lib/pts
+    mkdir -p $shareddir/lib/pts
     cp -vau lib/pts $shareddir/lib
     rm -vrf lib/pts
     ln -vs $shareddir/lib/pts $out/lib/pts
     chmod a+rwx $shareddir/lib/pts
     # link out writable shared location lib/nas/
-    ensureDir $shareddir/lib/nas
+    mkdir -p $shareddir/lib/nas
     cp -vau lib/nas $shareddir/lib
     rm -vrf lib/nas
     ln -vs $shareddir/lib/nas $out/lib/nas
     chmod a+rwx $shareddir/lib/nas
     # link out shared lib/pixmaps (not sure about this, yet):
-    ensureDir $shareddir/lib/pixmaps
+    mkdir -p $shareddir/lib/pixmaps
     cp -vau lib/pixmaps $shareddir/lib
     rm -vrf lib/pixmaps
     ln -vs $shareddir/lib/pixmaps $out/lib/pixmaps

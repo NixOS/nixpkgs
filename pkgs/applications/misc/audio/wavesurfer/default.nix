@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ snack tcl tk makeWrapper ];
 
   installPhase = ''
-    ensureDir $out/{bin,nix-support,share/wavesurfer/}
+    mkdir -p $out/{bin,nix-support,share/wavesurfer/}
     mv doc $out/share/wavesurfer
     mv * $out/nix-support
     ln -s $out/{nix-support,bin}/wavesurfer.tcl

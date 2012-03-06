@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   phases = "installPhase";
 
   installPhase = ''
-    ensureDir $out/lib/java
+    mkdir -p $out/lib/java
     ln -s ${jar} $out/lib/java/clooj.jar
   '';
 

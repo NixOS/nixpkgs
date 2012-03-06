@@ -12,20 +12,19 @@
 , libtool
 , jasper
 , libX11
-, xz
 , tetex ? null
 , librsvg ? null
 }:
 
 let
-  version = "6.6.9-4";
+  version = "6.7.5-3";
 in
 stdenv.mkDerivation rec {
   name = "ImageMagick-${version}";
 
   src = fetchurl {
     url = "mirror://imagemagick/${name}.tar.xz";
-    sha256 = "035j3i3cm29bwc9lipn838gznswrc69g7mwh8h9jj24ss2dmqrf1";
+    sha256 = "0m0sa4jxsvm8pf9nfvkzlbzq13d1lj15lfz6jif12l6ywyh2c1cs";
   };
 
   configureFlags = ''
@@ -40,8 +39,6 @@ stdenv.mkDerivation rec {
     libtool jasper libX11 ];
 
   buildInputs = [ tetex graphviz ];
-
-  buildNativeInputs = [ xz ];
 
   preConfigure = if tetex != null then
     ''

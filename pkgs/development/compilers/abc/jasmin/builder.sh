@@ -20,5 +20,5 @@ EOF
 
 ant jasmin-jar
 
-ensureDir $out/jars/
+mkdir -p $out/jars/
 mv lib/jasminclasses-foo.jar $out/jars/jasmin.jar

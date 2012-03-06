@@ -22,18 +22,18 @@ echo "building..."
 make REAL_DAEMON_DIR="$out/sbin" linux
 
 # Install
-ensureDir "$out/sbin"
+mkdir -p "$out/sbin"
 cp -v safe_finger tcpd tcpdchk tcpdmatch try-from "$out/sbin"
 
-ensureDir "$out/lib"
+mkdir -p "$out/lib"
 cp -v shared/lib*.so* "$out/lib"
 
-ensureDir "$out/include"
+mkdir -p "$out/include"
 cp -v *.h "$out/include"
 
-ensureDir "$out/man"
+mkdir -p "$out/man"
 for i in 3 5 8;
 do
-  ensureDir "$out/man/man$i"
+  mkdir -p "$out/man/man$i"
   cp *.$i "$out/man/man$i" ;
 done

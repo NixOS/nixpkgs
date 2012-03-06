@@ -10,10 +10,10 @@ rec {
   phaseNames = ["doCopy"];
   doCopy = fullDepEntry (''
     export HOME=$PWD
-    ensureDir $out/share/
+    mkdir -p $out/share/
 
-    ensureDir $out/texmf/tex/latex/xcolor
-    ensureDir $out/texmf/dvips/xcolor
+    mkdir -p $out/texmf/tex/latex/xcolor
+    mkdir -p $out/texmf/dvips/xcolor
     latex xcolor.ins 
     cp *.sty *.def $out/texmf/tex/latex/xcolor
     cp *.pro $out/texmf/dvips/xcolor
@@ -25,7 +25,7 @@ rec {
     #latex xcolor.dtx
 
     rm *.sty *.pro *.ins *.def *.dtx
-    ensureDir $out/texmf/doc/latex-xcolor
+    mkdir -p $out/texmf/doc/latex-xcolor
     cp *  $out/texmf/doc/latex-xcolor
 
     ln -s $out/texmf* $out/share/

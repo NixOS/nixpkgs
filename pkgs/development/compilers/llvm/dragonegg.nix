@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ llvm gmp mpfr mpc ];
 
   installPhase = ''
-    ensureDir $out/lib $out/share/doc/${name}
+    mkdir -p $out/lib $out/share/doc/${name}
     cp -d dragonegg.so $out/lib
     cp README COPYING $out/share/doc/${name}
   '';

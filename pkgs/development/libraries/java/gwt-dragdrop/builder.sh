@@ -1,4 +1,4 @@
 source $stdenv/setup
 
-ensureDir $out/share/java
+mkdir -p $out/share/java
 cp $src $out/share/java/$name.jar

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     sed -i "s/path\.join/path\.resolve/g" cli.js # fixes csslint issue #167
-    ensureDir $out/bin;
+    mkdir -p $out/bin;
     cp -r * $out/bin
     mv $out/bin/cli.js $out/bin/csslint
   '';

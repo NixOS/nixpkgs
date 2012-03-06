@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libwpd, xz }:
+{ stdenv, fetchurl, pkgconfig, libwpd }:
 
 stdenv.mkDerivation rec {
   name = "libwpg-0.2.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libwpd ];
-  buildNativeInputs = [ pkgconfig xz ];
+  buildNativeInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://libwpg.sourceforge.net;

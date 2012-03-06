@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s,/etc/vim,,g" Makefile.in
   '';
 
-  preInstall = "ensureDir $out/etc/vim";
+  preInstall = "mkdir -p $out/etc/vim";
 
   buildInputs = [ python ];
 

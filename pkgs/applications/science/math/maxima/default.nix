@@ -24,7 +24,7 @@ stdenv.mkDerivation {
       wrapProgram "$prog" --prefix PATH ":" "${searchPath}"
     done
     # Move emacs modules and documentation into the right place.
-    ensureDir $out/share/emacs $out/share/doc
+    mkdir -p $out/share/emacs $out/share/doc
     ln -s ../maxima/${version}/emacs $out/share/emacs/site-lisp
     ln -s ../maxima/${version}/doc $out/share/doc/maxima
   '';

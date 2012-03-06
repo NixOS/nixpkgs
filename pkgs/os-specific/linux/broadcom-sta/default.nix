@@ -34,7 +34,7 @@ stdenv.mkDerivation {
     ''
       binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
       docDir="$out/share/doc/broadcom-sta/"
-      ensureDir "$binDir" "$docDir"
+      mkdir -p "$binDir" "$docDir"
       cp wl.ko "$binDir"
       cp lib/LICENSE.txt "$docDir"
     '';

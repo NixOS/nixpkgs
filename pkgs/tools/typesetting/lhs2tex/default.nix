@@ -8,9 +8,9 @@ cabal.mkDerivation (self: {
   extraBuildInputs = [regexCompat texLive];
 
   postInstall = ''
-    ensureDir "$out/share/doc/$name"
+    mkdir -p "$out/share/doc/$name"
     cp doc/Guide2.pdf $out/share/doc/$name
-    ensureDir "$out/nix-support"
+    mkdir -p "$out/nix-support"
   '';
 
   meta = {

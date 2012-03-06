@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    ensureDir $out/{bin,sbin} $out/share/man/{man1,man5}
+    mkdir -p $out/{bin,sbin} $out/share/man/{man1,man5}
     cp src/vnstat $out/bin
     cp src/vnstatd $out/sbin
     cp man/vnstat.1 man/vnstatd.1 $out/share/man/man1
