@@ -43,6 +43,16 @@ with stdenv.lib;
 with builtins;
 
 let version = "4.6.3";
+
+    patches = [ ]
+      ++ optional (cross != null) ./libstdc++-target.patch
+      ++ optional noSysDirs ./no-sys-dirs.patch
+      # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
+      # target libraries and tools.
+      ++ optional langAda ./gnat-cflags.patch
+      ++ optional langVhdl ./ghdl-ortho-cflags.patch
+      ++ optional stdenv.isGNU ./hurd-sigrtmin.patch;
+
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
       # `configure' time.
@@ -137,15 +147,7 @@ stdenv.mkDerivation ({
     inherit langC langCC langFortran langJava langAda langGo;
   };
 
-  patches =
-    [ ]
-    ++ optional (cross != null) ./libstdc++-target.patch
-    ++ optional noSysDirs ./no-sys-dirs.patch
-    # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
-    # target libraries and tools.
-    ++ optional langAda ./gnat-cflags.patch
-    ++ optional langVhdl ./ghdl-ortho-cflags.patch
-    ;
+  inherit patches;
 
   postPatch =
     if (stdenv.system == "i586-pc-gnu"
@@ -278,6 +280,7 @@ stdenv.mkDerivation ({
     else "install";
 
   crossAttrs = {
+    patches = patches ++ [ ./hurd-sigrtmin.patch ];
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
     CC = "${stdenv.cross.config}-gcc";
