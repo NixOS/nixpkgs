@@ -240,3 +240,4 @@ print <<EOF ;
   nix.maxJobs = $cpus;
 $attrs}
 EOF
+# workaround for a bug in substituteAll
