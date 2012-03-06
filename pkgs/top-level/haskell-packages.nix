@@ -1239,8 +1239,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
 
-  syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
-  syb_0_3   = callPackage ../development/libraries/haskell/syb/0.3.nix {};
   syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
   syb_0_3_6 = callPackage ../development/libraries/haskell/syb/0.3.6.nix {};
   syb       = null; # by default, we assume that syb ships with GHC, which is
