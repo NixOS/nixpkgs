@@ -3,11 +3,11 @@
 , libXrender, libexif }:
 
 stdenv.mkDerivation rec {
-  name = "libgdiplus-2.10";
+  name = "libgdiplus-2.10.9";
 
   src = fetchurl {
     url = "http://download.mono-project.com/sources/libgdiplus/${name}.tar.bz2";
-    sha256 = "190j6yvfbpg6bda4n7pdcf2dbqdvrb4dmz5abs2yv0smxybh77id";
+    sha256 = "0klnbly2q0yx5p0l5z8da9lhqsjj9xqj06kdw2v7rnms4z1vdpkd";
   };
 
   patches =
