@@ -8772,7 +8772,9 @@ let
 
   xosd = callPackage ../misc/xosd { };
 
-  xsane = callPackage ../misc/xsane { };
+  xsane = callPackage ../misc/xsane {
+    libpng = libpng12;
+  };
 
   yafc = callPackage ../applications/networking/yafc { };
 
