@@ -7557,7 +7557,8 @@ let
 
   xaos = builderDefsPackage (import ../applications/graphics/xaos) {
     inherit (xlibs) libXt libX11 libXext xextproto xproto;
-    inherit gsl aalib zlib libpng intltool gettext perl;
+    inherit gsl aalib zlib intltool gettext perl;
+    libpng = libpng12;
   };
 
   xara = callPackage ../applications/graphics/xara { };
