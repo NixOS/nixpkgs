@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
   patches = [
     # Search in "share/man" relative to each path in $PATH (in addition to "man").
     ./share.patch
+
+    # Prefer /etc/man.conf over $out/lib/man.conf.  Man only reads the
+    # first file that exists, so this is necessary to allow the
+    # builtin config to be overriden.
+    ./conf.patch
   ];
 
   preConfigure = ''
