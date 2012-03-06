@@ -1325,10 +1325,10 @@ rec {
   };
 
   Encode = buildPerlPackage {
-    name = "Encode-2.39";
+    name = "Encode-2.44";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.39.tar.gz;
-      sha256 = "0d9gzgxl9z5x2zq34m6gbx672b599h0fay4q0pfgv3va8mrm1wdz";
+      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.44.tar.gz;
+      sha256 = "c121f9c8ae03e718d1b5d5465d66bb3138af429188735966326656f99a9499c6";
     };
   };
 
@@ -2761,10 +2761,10 @@ rec {
   };
 
   PerlMagick = buildPerlPackage {
-    name = "PerlMagick-6.59";
+    name = "PerlMagick-6.74";
     src = fetchurl {
-      url = http://image_magick.veidrodis.com:8003/image_magick/perl/PerlMagick-6.59.tar.gz;
-      sha256 = "6d7a33f6431b5650637cf73dd696927dbb2073f28e8f8d11a465d7de4c4638b3";
+      url = mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-6.74.tar.gz;
+      sha256 = "6f2fbd3398610f2f02d5670eb5e0f5cb58079fba0e6b9d26519f469c104b969a";
     };
     buildInputs = [pkgs.imagemagick];
     preConfigure =
@@ -3034,7 +3034,7 @@ rec {
       sha256 = "0bqg45k4c9qkb2ypynlwhpvzsl4ssfagmsalys18s5c79ps30z7p";
     };
     buildInputs = [ TestException ];
-    propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];    
+    propagatedBuildInputs = [ ClassAccessor ListMoreUtils RegexpCommon SQLTokenizer ];
   };
 
   SQLTokenizer = buildPerlPackage rec {
@@ -3934,10 +3934,10 @@ rec {
   };
 
   YAML = buildPerlPackage rec {
-    name = "YAML-0.68";
+    name = "YAML-0.80";
     src = fetchurl {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
-      sha256 = "0yg0pgsjkfczsblx03rxlw4ib92k0gwdyb1a258xb9wdg0w61h34";
+      sha256 = "81ada73c7eda69dad3cc679b2facba50f2634edcc16c59a7b66bffb9f2fa0e90";
     };
   };
 
