@@ -2,7 +2,7 @@
 , dbus, libusb, acl }:
 
 let
-  version = "1.5.0";
+  version = "1.5.2";
 in
 stdenv.mkDerivation {
   name = "cups-${version}";
@@ -11,17 +11,11 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://ftp.easysw.com/pub/cups/${version}/cups-${version}-source.tar.bz2";
-    sha256 = "0czc0bmrm31jy03inm6w2mbr5s9q9xk6s1x5x4kddx2qlml9pyf6";
+    sha256 = "1yw7l5rq93zg91akqf68b871frrs4q0krc9cx43ly7v3ih8all5i";
   };
 
-  # The following code looks strange, but it had to be arranged like
-  # this in order to avoid major rebuilds while testing portability to
-  # non-Linux platforms. This should be cleaned once the expression is
-  # stable.
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus ]
-    ++ [ libusb ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ acl ] ;
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus acl ] ;
 
   propagatedBuildInputs = [ openssl ];
 
@@ -46,7 +40,7 @@ stdenv.mkDerivation {
     ];
 
   meta = {
-    homepage = http://www.cups.org/;
+    homepage = "http://www.cups.org/";
     description = "A standards-based printing system for UNIX";
     license = stdenv.lib.licenses.gpl2; # actually LGPL for the library and GPL for the rest
     maintainers = [ stdenv.lib.maintainers.urkud stdenv.lib.maintainers.simons ];
