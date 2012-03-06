@@ -1943,7 +1943,7 @@ let
     texinfo = texinfo49;
   });
 
-  gfortran = gfortran45;
+  gfortran = gfortran46;
 
   gfortran40 = wrapGCC (gcc40.gcc.override {
     langFortran = true;
@@ -3642,7 +3642,7 @@ let
       callPackage ../development/libraries/gmp/4.3.1.nix { }
     else
       callPackage ../development/libraries/gmp/4.3.2.nix { };
-  
+
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
   goffice = callPackage ../development/libraries/goffice {
