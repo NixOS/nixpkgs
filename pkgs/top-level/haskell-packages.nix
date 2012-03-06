@@ -456,9 +456,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   base64String = callPackage ../development/libraries/haskell/base64-string {};
 
-  base64Bytestring_0_1_0_3 = callPackage ../development/libraries/haskell/base64-bytestring/0.1.0.3.nix {};
-  base64Bytestring_0_1_1_0 = callPackage ../development/libraries/haskell/base64-bytestring/0.1.1.0.nix {};
-  base64Bytestring = self.base64Bytestring_0_1_0_3; # Version 0.1.1.0 has serious performance issues.
+  base64Bytestring = callPackage ../development/libraries/haskell/base64-bytestring {};
 
   baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
 
