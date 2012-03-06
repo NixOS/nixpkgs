@@ -1534,9 +1534,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   idris = callPackage ../development/compilers/idris {};
 
-  pakcs = callPackage ../development/compilers/pakcs {
-    syb = self.syb_0_2_2;
-  };
+  pakcs = callPackage ../development/compilers/pakcs {};
 
   # Development tools.
 
