@@ -52,7 +52,7 @@ diff -x '*~' -rc checkinstall-1.6.2pre20081116-orig/installwatch/create-localdec
   		6)
   			echo '#define GLIBC_MINOR 6' >> $OUTFILE
   			SUBVERSION='glibc-2.6' ;;
-! 		7|8|9|10|11|12)
+! 		7|8|9|10|11|12|13|14|15)
   			echo '#define GLIBC_MINOR 7' >> $OUTFILE
   			SUBVERSION='glibc-2.7' ;;
   		*)
