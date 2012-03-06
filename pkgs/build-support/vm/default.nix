@@ -348,6 +348,7 @@ rec {
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
   });
 
+  
   extractFs = {file, fs ? null} :
     with pkgs; runInLinuxVM (
     stdenv.mkDerivation {
@@ -373,6 +374,7 @@ rec {
       '';
     });
 
+    
   extractMTDfs = {file, fs ? null} :
     with pkgs; runInLinuxVM (
     stdenv.mkDerivation {
@@ -399,6 +401,7 @@ rec {
       '';
     });
 
+    
   qemuCommandGeneric = ''
     ${kvm}/bin/qemu-system-x86_64 \
       -nographic -no-reboot \
@@ -755,7 +758,7 @@ rec {
       bunzip2 < ${packagesList} > ./Packages
 
       # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
-      substituteInPlace ./Packages --replace x86_64-linux-gnu x86-64-linux-gnu
+      sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
 
       ${perl}/bin/perl -I${dpkg} -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
