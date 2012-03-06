@@ -4834,9 +4834,6 @@ let
     fetchurl = fetchurlBoot;
   };
 
-  # To be removed in stdenv-updates; zlib is already fixed and the latest there
-  zlib_latest = callPackage ../development/libraries/zlib/latest.nix { };
-
   zlibStatic = lowPrio (appendToName "static" (import ../development/libraries/zlib {
     inherit fetchurl stdenv;
     static = true;
@@ -7479,11 +7476,7 @@ let
     inherit (xlibs) libX11;
   };
 
-  vlc = callPackage ../applications/video/vlc {
-    # To be removed on stdenv-updates. It fails on i686-linux with
-    # the stdenv zlib.
-    zlib = zlib_latest;
-  };
+  vlc = callPackage ../applications/video/vlc { };
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
