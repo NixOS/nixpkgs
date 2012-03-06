@@ -1,5 +1,5 @@
 {stdenv, fetchurl, saneBackends, saneFrontends,
-	libX11, gtk, pkgconfig, libusb ? null}:
+	libX11, gtk, pkgconfig, libpng, libusb ? null}:
 stdenv.mkDerivation {
   name = "xsane-0.996";
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sed -e '/SANE_CAP_ALWAYS_SETTABLE/d' -i src/xsane-back-gtk.c
   '';
 
-  buildInputs = [saneBackends saneFrontends libX11 gtk pkgconfig ] ++
+  buildInputs = [libpng saneBackends saneFrontends libX11 gtk pkgconfig ] ++
 	(if (libusb != null) then [libusb] else []);
 
   meta = {
