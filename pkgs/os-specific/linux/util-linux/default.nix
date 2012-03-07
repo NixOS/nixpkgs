@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1q5vjcvw4f067c63vj2n3xggvk5prm11571x6vnqiav47vdbqvni";
   };
 
+  patches = [ ./linux-specific-header.patch ];
+
   crossAttrs = {
     # Work around use of `AC_RUN_IFELSE'.
     preConfigure = "export scanf_cv_type_modifier=ms";
