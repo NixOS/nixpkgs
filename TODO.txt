@@ -1,9 +1,0 @@
-This file contains list of tasks that should be done before merging
-stdenv-updates back into trunk. Notation:
-- TODO
-* In progress
-+ Done
-
-urkud:
-- Introduce libiconvOrNull and libiconvOrLibc instead of current 'magic'
-
