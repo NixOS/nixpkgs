@@ -3594,9 +3594,9 @@ let
     installLocales = getConfig [ "glibc" "locales" ] false;
   };
 
-  glibcLocales = callPackage ../development/libraries/glibc/2.14/locales.nix { };
+  glibcLocales = callPackage ../development/libraries/glibc/2.13/locales.nix { };
 
-  glibcInfo = callPackage ../development/libraries/glibc/2.14/info.nix { };
+  glibcInfo = callPackage ../development/libraries/glibc/2.13/info.nix { };
 
   glibc_multi =
       runCommand "${glibc.name}-multi"
