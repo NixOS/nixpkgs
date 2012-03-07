@@ -1,11 +1,11 @@
 { fetchurl, buildPerlPackage, bzip2 }:
 
 buildPerlPackage rec {
-  name = "Compress-Raw-Bzip2-2.037";
-    
+  name = "Compress-Raw-Bzip2-2.049";
+
   src = fetchurl {
     url = "mirror://cpan/modules/by-module/Compress/${name}.tar.gz";
-    sha256 = "0fhl8dh8mhvpqfqm85amv694ybflckqhyli9y18x8viwaddbxqpy";
+    sha256 = "7881473e0ab5ecc6ce609382e4f7466fb32217e928eef27e7084702bb07ac172";
   };
 
   # Don't build a private copy of bzip2.
