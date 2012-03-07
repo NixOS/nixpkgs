@@ -4728,7 +4728,9 @@ let
 
   vtk = callPackage ../development/libraries/vtk { };
 
-  vxl = callPackage ../development/libraries/vxl { };
+  vxl = callPackage ../development/libraries/vxl {
+    libpng = libpng12;
+  };
 
   webkit =
     builderDefsPackage ../development/libraries/webkit {

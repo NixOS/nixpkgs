@@ -9,11 +9,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake unzip libtiff expat zlib libpng libjpeg ];
 
-  cmakeFlags = if (stdenv.system == "x86_64-linux") then
+  cmakeFlags = "-DBUILD_TESTING=OFF " + (if (stdenv.system == "x86_64-linux") then
       "-DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC"
     else
-      "";
-    
+      "");
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "C++ Libraries for Computer Vision Research and Implementation";
