@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1q5vjcvw4f067c63vj2n3xggvk5prm11571x6vnqiav47vdbqvni";
   };
 
+  crossAttrs = {
+    # Work around use of `AC_RUN_IFELSE'.
+    preConfigure = "export scanf_cv_type_modifier=ms";
+  };
+
   # !!! It would be better to obtain the path to the mount helpers
   # (/sbin/mount.*) through an environment variable, but that's
   # somewhat risky because we have to consider that mount can setuid
