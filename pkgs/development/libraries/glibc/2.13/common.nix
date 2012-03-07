@@ -12,7 +12,7 @@ cross :
 
 let
   # For GNU/Hurd, see below.
-  version = if hurdHeaders != null then "20111025" else "2.13";
+  version = if hurdHeaders != null then "20120223" else "2.13";
 
   needsPortsNative = stdenv.isMips || stdenv.isArm;
   needsPortsCross = cross.arch == "mips" || cross.arch == "arm";
@@ -148,8 +148,8 @@ stdenv.mkDerivation ({
       # maintained by the Hurd folks, `tschwinge/Roger_Whittaker' branch.
       # See <http://www.gnu.org/software/hurd/source_repositories/glibc.html>.
       url = "git://git.sv.gnu.org/hurd/glibc.git";
-      sha256 = "3fb3dd7030a4b6d3e144fa94c32a0c4f46f17f94e2dfbc6bef41cfc3198725ca";
-      rev = "d740cf9d201dc9ecb0335b0a585828dea9cce793";
+      sha256 = "cecec9dd5a2bafc875c56b058b6d7628a22b250b53747513dec304f31ffdb82d";
+      rev = "d3cdecf18e6550b0984a42b43ed48c5fb26501e1";
     }
     else fetchurl {
       url = "mirror://gnu/glibc/glibc-${version}.tar.bz2";
