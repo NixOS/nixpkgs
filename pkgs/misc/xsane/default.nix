@@ -1,11 +1,11 @@
 {stdenv, fetchurl, saneBackends, saneFrontends,
 	libX11, gtk, pkgconfig, libpng, libusb ? null}:
 stdenv.mkDerivation {
-  name = "xsane-0.996";
+  name = "xsane-0.998";
 
   src = fetchurl {
-    url = ftp://ftp.sane-project.org/pub/sane/xsane/xsane-0.996.tar.gz;
-    sha256 = "0zddar0y76iv4c55qzfmnm819z5hzisr2jwjb60x36v6bdrhcjx5";
+    url = http://www.xsane.org/download/xsane-0.998.tar.gz;
+    sha256 = "0vn2cj85ijgp2v2j2h9xpqmg2jwlbxmwyb88kxhjjakqay02ybm3";
   };
 
   preConfigure = ''
