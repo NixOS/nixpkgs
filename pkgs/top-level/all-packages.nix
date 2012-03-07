@@ -7126,7 +7126,6 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon029;
-    libwpd = libwpd_08;
     zip = zip.override { enableNLS = false; };
   };
 

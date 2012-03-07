@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pam, python, tcsh, libxslt, perl, ArchiveZip
-, CompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
+, CompressZlib, zlib, libjpeg, expat, pkgconfig, freetype
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     sed -i -e '1s,/usr/bin/python,${python}/bin/python,' bin/*.py
     echo "$distroFlags" > distro-configs/SUSE-11.1.conf.in
 
-    ./configure --with-distro=SUSE-11.1 --with-system-libwpd --without-git --with-system-cairo \
+    ./configure --with-distro=SUSE-11.1 --without-system-libwpd --without-git --with-system-cairo \
       --with-lang="${langsSpaces}" --with-tag=${tag} --without-split
   '';
 
@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pam python tcsh libxslt perl ArchiveZip CompressZlib zlib 
-    libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
+    libjpeg expat pkgconfig freetype libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi
     cups libXinerama openssl gperf GConf ORBit2
