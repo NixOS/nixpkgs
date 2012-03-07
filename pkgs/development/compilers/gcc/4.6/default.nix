@@ -44,6 +44,9 @@ with builtins;
 
 let version = "4.6.3";
 
+    # Whether building a cross-compiler for GNU/Hurd.
+    crossGNU = cross != null && cross.config == "i586-pc-gnu";
+
     patches = [ ]
       ++ optional (cross != null) ./libstdc++-target.patch
       ++ optional noSysDirs ./no-sys-dirs.patch
@@ -51,7 +54,7 @@ let version = "4.6.3";
       # target libraries and tools.
       ++ optional langAda ./gnat-cflags.patch
       ++ optional langVhdl ./ghdl-ortho-cflags.patch
-      ++ optional stdenv.isGNU ./hurd-sigrtmin.patch;
+      ++ optional (stdenv.isGNU || crossGNU) ./hurd-sigrtmin.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -150,12 +153,11 @@ stdenv.mkDerivation ({
   inherit patches;
 
   postPatch =
-    if (stdenv.system == "i586-pc-gnu"
+    if (stdenv.isGNU
         || (libcCross != null                  # e.g., building `gcc.hostDrv'
             && libcCross ? crossConfig
             && libcCross.crossConfig == "i586-pc-gnu")
-        || (cross != null && cross.config == "i586-pc-gnu"
-            && libcCross != null))
+        || (crossGNU && libcCross != null))
     then
       # On GNU/Hurd glibc refers to Hurd & Mach headers and libpthread is not
       # in glibc, so add the right `-I' flags to the default spec string.
