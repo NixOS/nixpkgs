@@ -7125,6 +7125,8 @@ let
     inherit (gnome) GConf ORBit2;
     neon = neon029;
     libwpd = libwpd_08;
+    /* It uses Switch.pm, deprecated in perl 5.14 */
+    perl = perl510;
     zip = zip.override { enableNLS = false; };
   };
 
