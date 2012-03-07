@@ -4,15 +4,15 @@
 assert (!headersOnly) -> (mig != null);
 
 let
-  date = "20100512";
-  rev = "7987a711e8f13c0543e87a0211981f4b40ef6d94";
+  date = "20120303";
+  rev = "2a603e88f86bee88e013c2451eacf076fbcaed81";
 in
 stdenv.mkDerivation ({
   name = "gnumach${if headersOnly then "-headers" else ""}-${date}";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/hurd/gnumach.git";
-    sha256 = "7b383a23b7fbe1ec812951cc0f553c85da3279f4f723dd6a65e45976f9d5ca2d";
+    sha256 = "6db17d091d410fb573e15ae5d59d860a17d78b2073f605c1dc1473f6f2c25ccc";
     inherit rev;
   };
 
