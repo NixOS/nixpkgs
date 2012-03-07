@@ -1,0 +1,12 @@
+Index: cdecl-2.5/cdecl.c
+===================================================================
+--- cdecl-2.5.orig/cdecl.c
++++ cdecl-2.5/cdecl.c
+@@ -204,6 +204,7 @@ int DebugFlag = 0;		/* -d, output debugg
+ #define ANSI	4	/* combo not allowed anymore in ANSI compiler */
+ #define A	ANSI
+ 
++extern char **completion_matches PARAMS((char *, rl_compentry_func_t *));
+ /* This is an lower left triangular array. If we needed */
+ /* to save 9 bytes, the "long" row can be removed. */
+ char crosscheck[9][9] = {
