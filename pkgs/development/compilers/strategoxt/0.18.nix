@@ -41,11 +41,11 @@ rec {
 
   
   strategoxt = stdenv.mkDerivation rec {
-    name = "strategoxt-1.8pre23644";
+    name = "strategoxt-1.8pre24429";
 
     src = fetchurl {
-      url = http://hydra.nixos.org/build/1569309/download/1/strategoxt-1.8pre23644.tar.gz;
-      sha256 = "9c900d132e7a8790e914aa78598c376f8ed05947c62b9d05df617ba2eae29381";
+      url = http://hydra.nixos.org/build/2175544/download/1/strategoxt-1.8pre24429.tar.gz;
+      sha256 = "124f1d61a440b94c38b731c2e7015340dbbc1deb6d442b31dbecb46b0a00fa83";
     };
 
     buildInputs = [pkgconfig aterm sdf getopt];
