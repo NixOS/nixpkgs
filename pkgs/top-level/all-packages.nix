@@ -3471,9 +3471,7 @@ let
 
   gamin = callPackage ../development/libraries/gamin { };
 
-  gav = callPackage ../games/gav {
-    stdenv = overrideGCC stdenv gcc41;
-  };
+  gav = callPackage ../games/gav { };
 
   gdome2 = callPackage ../development/libraries/gdome2 {
     inherit (gnome) gtkdoc;
