@@ -1,12 +1,16 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "inadyn-1.96.3";
+  name = "inadyn-1.98.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/inadyn/${name}.tar.gz";
-    sha256 = "0zyqhq1y3wrns4bxlmbkgs5bl5g7wrvkc7xc4fk50papygyc4q51";
+    url = "https://github.com/downloads/troglobit/inadyn/${name}.tar.bz2";
+    sha256 = "1qkwmln9ccqbs5cldwximi1maapvzkm7mssxgff71n981d8ad83j";
   };
+
+  preConfigure = ''
+    export makeFlags=prefix=$out
+  '';
 
   meta = {
     homepage = http://inadyn.sourceforge.net/;
