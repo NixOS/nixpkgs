@@ -15,9 +15,8 @@ if test -z "$mountPoint"; then
     mountPoint=/mnt
 fi
 
-# NIXOS_CONFIG is interpreted relative to $mountPoint.
 if test -z "$NIXOS_CONFIG"; then
-    NIXOS_CONFIG=/etc/nixos/configuration.nix
+    NIXOS_CONFIG=/mnt/etc/nixos/configuration.nix
 fi
 
 if ! test -e "$mountPoint"; then
@@ -30,8 +29,8 @@ if ! grep -F -q " $mountPoint " /proc/mounts; then
     exit 1
 fi
     
-if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
-    echo "configuration file $mountPoint/$NIXOS_CONFIG doesn't exist"
+if ! test -e "$NIXOS_CONFIG"; then
+    echo "configuration file $NIXOS_CONFIG doesn't exist"
     exit 1
 fi
     
@@ -91,6 +90,8 @@ mkdir -m 0755 -p \
 mkdir -m 1777 -p \
     $mountPoint/nix/store \
 
+echo /mnt$NIXOS_CONFIG
+
 
 # Get the store paths to copy from the references graph.
 storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
@@ -141,9 +142,9 @@ fi
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
 echo "building the system configuration..."
-NIX_PATH=nixpkgs=/mnt/etc/nixos/nixpkgs:nixos=/mnt/etc/nixos/nixos \
+NIX_PATH=nixpkgs=/mnt/etc/nixos/nixpkgs:nixos=/mnt/etc/nixos/nixos:nixos-config="/mnt$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
-    -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
+    -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
 
 
 # Make a backup of the old NixOS/Nixpkgs sources.
