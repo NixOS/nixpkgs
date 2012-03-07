@@ -195,7 +195,7 @@ stdenv.mkDerivation ({
     license = "LGPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.linux;
+    #platforms = stdenv.lib.platforms.linux;
   } // meta;
 }
 
