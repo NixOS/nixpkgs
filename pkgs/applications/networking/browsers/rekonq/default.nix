@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kdelibs, gettext}:
+{ stdenv, fetchurl, kdelibs, gettext, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "rekonq-0.9.0-1";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs ];
 
-  buildNativeInputs = [ gettext ];
+  buildNativeInputs = [ gettext pkgconfig ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
