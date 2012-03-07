@@ -8,13 +8,13 @@ rec {
   buildPatchelfInVM = runInLinuxVM patchelf;
 
 
-  testRPMImage = makeImageTestScript diskImages.fedora8i386;
+  testRPMImage = makeImageTestScript diskImages.fedora16i386;
 
 
   buildPatchelfRPM = buildRPM {
     name = "patchelf-rpm";
     src = patchelf.src;
-    diskImage = diskImages.fedora13i386;
+    diskImage = diskImages.fedora16x86_64;
   };
 
   

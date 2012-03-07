@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, nspr, nss, popt, db4 }:
+{ stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, nspr, nss, popt, db4, xz }:
 
 stdenv.mkDerivation rec {
   name = "rpm-4.7.2";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha1 = "07b90f653775329ea726ce0005c4c82f56167ca0";
   };
 
-  buildInputs = [ cpio zlib bzip2 file nspr nss popt db4 ];
+  buildInputs = [ cpio zlib bzip2 file nspr nss popt db4 xz ];
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
