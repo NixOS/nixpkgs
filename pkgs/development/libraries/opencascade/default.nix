@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     sh ./build_configure
   '';
 
-  NIX_CFLAGS_COMPILE = "-I${ftgl}/include/FTGL -I${freetype}/include/freetype2";
+  # -fpermissive helps building opencascade, although gcc detects a flaw in the code
+  # and reports an error otherwise. Further versions may fix that.
+  NIX_CFLAGS_COMPILE = "-I${ftgl}/include/FTGL -I${freetype}/include/freetype2 -fpermissive";
 
   configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" ];
 
