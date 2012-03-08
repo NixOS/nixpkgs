@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     pushd build/${tag}
 
     patch -p1 < ${./xlib.patch}
+    patch -p3 < ${./gcc46.patch}
 
     # Fix svtools: hardcoded jpeg path
     sed -i -e 's,^JPEG3RDLIB=.*,JPEG3RDLIB=${libjpeg}/lib/libjpeg.so,' solenv/inc/libs.mk
