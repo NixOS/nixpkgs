@@ -4929,6 +4929,10 @@ let
     inherit pkgs;
   });
 
+  perl510Packages = recurseIntoAttrs (import ./perl-packages.nix {
+    pkgs = pkgs // { perl = perl510; };
+  });
+
   perlXMLParser = perlPackages.XMLParser;
 
   ack = perlPackages.ack;
@@ -7121,7 +7125,7 @@ let
   };
 
   go_oo = callPackage ../applications/office/openoffice/go-oo.nix {
-    inherit (perlPackages) ArchiveZip CompressZlib;
+    inherit (perl510Packages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2;
     neon = neon029;
     libwpd = libwpd_08;
