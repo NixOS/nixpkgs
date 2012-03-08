@@ -1,17 +1,17 @@
-{stdenv, fetchurl, python, pkgconfig, libxml2Python, libxslt, intltool, scrollkeeper,
-  makeWrapper}:
+{stdenv, fetchurl, python, pkgconfig, libxml2Python, libxslt, intltool
+, makeWrapper, pythonPackages }:
 
 stdenv.mkDerivation {
-  name = "gnome-doc-utils-0.18.0";
+  name = "gnome-doc-utils-0.18.1";
+
   src = fetchurl {
-    url = mirror://gnome/sources/gnome-doc-utils/0.18/gnome-doc-utils-0.18.0.tar.bz2;
-    sha256 = "1937zr088vn7vhy9rwfc021ih21hhf700c3m4ria8mlcpcvh1380";
+    url = mirror://gnome/sources/gnome-doc-utils/0.18/gnome-doc-utils-0.18.1.tar.bz2;
+    sha256 = "0psl9xnph6qga809dbkakjfp2z9mc32dxrdk8s6zn8whm41gc0gn";
   };
+
   configureFlags = "--disable-scrollkeeper";
-  buildInputs = [ python pkgconfig libxml2Python libxslt intltool scrollkeeper 
-    makeWrapper ];
-  postInstall = ''
-    wrapProgram $out/bin/xml2po --prefix PYTHONPATH : $(toPythonPath $out) \
-      ''${PYTHONPATH:+ --prefix PYTHONPATH : $PYTHONPATH} \
-  '';
+  buildInputs = [ python libxml2Python libxslt ];
+  postInstall = "wrapPythonPrograms";
+
+  buildNativeInputs = [ pkgconfig intltool pythonPackages.wrapPython ];
 }
