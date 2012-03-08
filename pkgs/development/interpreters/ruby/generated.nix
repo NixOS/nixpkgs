@@ -15,7 +15,7 @@ g: # Get dependencies from patched gems
     autotest_rails = g.autotest_rails_4_1_2;
     builder = g.builder_3_0_0;
     buildr = g.buildr_1_4_6;
-    bundler = g.bundler_1_0_22;
+    bundler = g.bundler_1_1_0;
     childprocess = g.childprocess_0_3_1;
     diff_lcs = g.diff_lcs_1_1_3;
     erubis = g.erubis_2_7_0;
@@ -27,7 +27,7 @@ g: # Get dependencies from patched gems
     journey = g.journey_1_0_3;
     json = g.json_1_6_5;
     json_pure = g.json_pure_1_6_5;
-    mail = g.mail_2_4_1;
+    mail = g.mail_2_4_3;
     mime_types = g.mime_types_1_17_2;
     minitar = g.minitar_0_5_3;
     multi_json = g.multi_json_1_1_0;
@@ -36,7 +36,7 @@ g: # Get dependencies from patched gems
     nix = g.nix_0_1_1;
     polyglot = g.polyglot_0_3_3;
     rack = g.rack_1_4_1;
-    rack_cache = g.rack_cache_1_1;
+    rack_cache = g.rack_cache_1_2;
     rack_ssl = g.rack_ssl_1_3_2;
     rack_test = g.rack_test_0_6_1;
     rails = g.rails_3_2_2;
@@ -57,7 +57,7 @@ g: # Get dependencies from patched gems
     thor = g.thor_0_14_6;
     tilt = g.tilt_1_3_3;
     treetop = g.treetop_1_4_10;
-    tzinfo = g.tzinfo_0_3_31;
+    tzinfo = g.tzinfo_0_3_32;
     xml_simple = g.xml_simple_1_0_12;
   };
   gem_nix_args = [ ''autotest-rails'' ''buildr'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
@@ -100,7 +100,7 @@ installed versions.'';
         longDescription = ''Email on Rails. Compose, deliver, receive, and test emails using the familiar controller/view pattern. First-class support for multipart email and attachments.'';
       };
       name = ''actionmailer-3.2.2'';
-      requiredGems = [ g.mail_2_4_1 ];
+      requiredGems = [ g.mail_2_4_3 ];
       sha256 = ''0x4308y786100146m2fx7bygp77cwzsds3cgwjjlkw9hgyapcxz0'';
     };
     actionpack_3_2_2 = {
@@ -111,7 +111,7 @@ installed versions.'';
         longDescription = ''Web apps on Rails. Simple, battle-tested conventions for building and testing MVC web applications. Works with any Rack-compatible server.'';
       };
       name = ''actionpack-3.2.2'';
-      requiredGems = [ g.activemodel_3_2_2 g.rack_cache_1_1 g.rack_test_0_6_1 g.journey_1_0_3 g.sprockets_2_1_2 g.erubis_2_7_0 ];
+      requiredGems = [ g.activemodel_3_2_2 g.rack_cache_1_2 g.rack_test_0_6_1 g.journey_1_0_3 g.sprockets_2_1_2 g.erubis_2_7_0 ];
       sha256 = ''0371q3xr81r07ch3y0ziil9481smv7rv03xdlhp78b5wgqq2d8zs'';
     };
     activemodel_3_2_2 = {
@@ -133,7 +133,7 @@ installed versions.'';
         longDescription = ''Databases on Rails. Build a persistent domain model by mapping database tables to Ruby classes. Strong conventions for associations, validations, aggregations, migrations, and testing come baked-in.'';
       };
       name = ''activerecord-3.2.2'';
-      requiredGems = [ g.arel_3_0_2 g.tzinfo_0_3_31 ];
+      requiredGems = [ g.arel_3_0_2 g.tzinfo_0_3_32 ];
       sha256 = ''08hgn2hwg2vjxcq8k656n4xhh0xyi09w5ailgqgqhkksa51m2i5b'';
     };
     activeresource_3_2_2 = {
@@ -253,16 +253,16 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [ g.rake_0_8_7 g.builder_2_1_2 g.net_ssh_2_0_23 g.net_sftp_2_0_4 g.rubyzip_0_9_4 g.highline_1_5_1 g.json_pure_1_4_3 g.rubyforge_2_0_3 g.hoe_2_3_3 g.rjb_1_3_3 g.atoulme_Antwrap_0_7_1 g.diff_lcs_1_1_2 g.rspec_expectations_2_1_0 g.rspec_mocks_2_1_0 g.rspec_core_2_1_0 g.rspec_2_1_0 g.xml_simple_1_0_12 g.minitar_0_5_3 ];
       sha256 = ''11qwqrdnmzzi4zhgajfq1f1ckvd4kpfm9gyqrfjfalphs4gi0vxz'';
     };
-    bundler_1_0_22 = {
+    bundler_1_1_0 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://gembundler.com'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.0.22'';
+      name = ''bundler-1.1.0'';
       requiredGems = [  ];
-      sha256 = ''0hzcsicdvvyhp6b6rv208859a13ag1cxxcd3nd3hf90jldd2iry0'';
+      sha256 = ''0b9s1pi7xg0sdwhvjgdwhr98h23fd3dj257gh06ldrnilvi5w1z1'';
     };
     childprocess_0_3_1 = {
       basename = ''childprocess'';
@@ -456,16 +456,16 @@ See class rdoc for help. Hint: ri Hoe'';
       requiredGems = [  ];
       sha256 = ''09s5qymc4y9q0376zjiwf5bjm69fcivr75ar8ji0kmhjkk2rwc55'';
     };
-    mail_2_4_1 = {
+    mail_2_4_3 = {
       basename = ''mail'';
       meta = {
         description = ''Mail provides a nice Ruby DSL for making, sending and reading emails.'';
         homepage = ''http://github.com/mikel/mail'';
         longDescription = ''A really Ruby Mail handler.'';
       };
-      name = ''mail-2.4.1'';
+      name = ''mail-2.4.3'';
       requiredGems = [ g.mime_types_1_17_2 g.treetop_1_4_10 ];
-      sha256 = ''03h5bj9cws7my0igrqxwyjg9p1p8i0gwvwhma3rff09wz7k45mw0'';
+      sha256 = ''1awghn40l7h6njfp6jd4qgsvd8yxvsi7s2ppz689jjj6gbjzbhn6'';
     };
     mime_types_1_17_2 = {
       basename = ''mime_types'';
@@ -590,16 +590,16 @@ Also see http://rack.rubyforge.org.
       requiredGems = [  ];
       sha256 = ''1cx3wzg48pn4sbb6a0iq726fjh3q7y77fly81mfnprrnwp7d0190'';
     };
-    rack_cache_1_1 = {
+    rack_cache_1_2 = {
       basename = ''rack_cache'';
       meta = {
         description = ''HTTP Caching for Rack'';
         homepage = ''http://tomayko.com/src/rack-cache/'';
-        longDescription = ''HTTP Caching for Rack'';
+        longDescription = ''Rack::Cache is suitable as a quick drop-in component to enable HTTP caching for Rack-based applications that produce freshness (Expires, Cache-Control) and/or validation (Last-Modified, ETag) information.'';
       };
-      name = ''rack-cache-1.1'';
+      name = ''rack-cache-1.2'';
       requiredGems = [ g.rack_1_4_1 ];
-      sha256 = ''08jlym48qwfj7wddv0vpjj3vlc03q8wvbya24zbrjj8grgfgrvrl'';
+      sha256 = ''073ffpsqmy4nqxz178qisb3a4v3305c49ypj0jw6s9mkz02yvgq2'';
     };
     rack_ssl_1_3_2 = {
       basename = ''rack_ssl'';
@@ -635,7 +635,7 @@ request helpers feature.'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
       name = ''rails-3.2.2'';
-      requiredGems = [ g.activesupport_3_2_2 g.actionpack_3_2_2 g.activerecord_3_2_2 g.activeresource_3_2_2 g.actionmailer_3_2_2 g.railties_3_2_2 g.bundler_1_0_22 ];
+      requiredGems = [ g.activesupport_3_2_2 g.actionpack_3_2_2 g.activerecord_3_2_2 g.activeresource_3_2_2 g.actionmailer_3_2_2 g.railties_3_2_2 g.bundler_1_1_0 ];
       sha256 = ''0kwh8142zxyvrva09m5g85cmwhby714q87j1mb8s6wikv4gvfmy9'';
     };
     railties_3_2_2 = {
@@ -890,16 +890,16 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [ g.polyglot_0_3_3 ];
       sha256 = ''01f4w7fm6phhdbkx7bp0b58hrk3x4b0a63p2vvjbxm5gi2gv9ap2'';
     };
-    tzinfo_0_3_31 = {
+    tzinfo_0_3_32 = {
       basename = ''tzinfo'';
       meta = {
         description = ''Daylight-savings aware timezone library'';
         homepage = ''http://tzinfo.rubyforge.org/'';
         longDescription = ''TZInfo is a Ruby library that uses the standard tz (Olson) database to provide daylight savings aware transformations between times in different time zones.'';
       };
-      name = ''tzinfo-0.3.31'';
+      name = ''tzinfo-0.3.32'';
       requiredGems = [  ];
-      sha256 = ''1kwc25c1x8cvryjhpp8sx20vrd8h9g9gsl7p5393a88544qy41hb'';
+      sha256 = ''1qn4dk9c9mpgdmmr9ih5rjh6n3wkdxkjkji9hbwan5rxg00ns77b'';
     };
     xml_simple_1_0_12 = {
       basename = ''xml_simple'';
