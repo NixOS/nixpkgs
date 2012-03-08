@@ -81,11 +81,6 @@
 
   libwnck = callPackage ./desktop/libwnck { };
 
-  # Not part of GNOME desktop, but provides CSS support for librsvg
-  libcroco = callPackage ./desktop/libcroco { };
-
-  librsvg = callPackage ./desktop/librsvg { };
-
   libgweather = callPackage ./desktop/libgweather { };
 
   gvfs = callPackage ./desktop/gvfs { };

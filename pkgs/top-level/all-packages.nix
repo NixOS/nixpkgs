@@ -3918,6 +3918,8 @@ let
 
   libcm = callPackage ../development/libraries/libcm { };
 
+  libcroco = callPackage ../development/libraries/libcroco {};
+
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
   libcue = callPackage ../development/libraries/libcue { };
@@ -4170,6 +4172,8 @@ let
   libpseudo = callPackage ../development/libraries/libpseudo { };
 
   libqalculate = callPackage ../development/libraries/libqalculate { };
+
+  librsvg = callPackage ../development/libraries/librsvg { };
 
   librsync = callPackage ../development/libraries/librsync { };
 
@@ -5794,8 +5798,6 @@ let
   libraw1394 = callPackage ../development/libraries/libraw1394 { };
 
   libsexy = callPackage ../development/libraries/libsexy { };
-
-  librsvg = gnome.librsvg;
 
   libsepol = callPackage ../os-specific/linux/libsepol { };
 
