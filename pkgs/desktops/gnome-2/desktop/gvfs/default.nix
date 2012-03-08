@@ -1,13 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, dbus, samba, hal, libarchive, fuse, libgphoto2
-, cdparanoia, libxml2, libtool, glib, intltool, GConf, gnome_keyring, libsoup}:
+{ stdenv, fetchurl, pkgconfig, dbus_libs, samba, libarchive, fuse, libgphoto2
+, libcdio, libxml2, libtool, glib, intltool, GConf, gnome_keyring, libsoup
+, udev, avahi}:
 
 stdenv.mkDerivation {
-  name = "gvfs-1.4.0";
+  name = "gvfs-1.8.2";
+
   src = fetchurl {
-    url = mirror://gnome/sources/gvfs/1.4/gvfs-1.4.0.tar.bz2;
-    sha256 = "1fzqq21888c1w357kcy8m12393wd6jjlk4pg118npn11m4gbb13s";
+    url = mirror://gnome/sources/gvfs/1.8/gvfs-1.8.2.tar.bz2;
+    sha256 = "0ickz1g3b16ncnv6vdpx0j5nx70ixdl6nsrv8cainvj1dn7sr588";
   };
-  builder = ./builder.sh;
-  buildInputs = [ pkgconfig dbus.libs samba hal libarchive fuse libgphoto2 cdparanoia libxml2 libtool
-                  glib intltool GConf gnome_keyring libsoup ];
+
+  buildInputs =
+    [ glib dbus_libs udev samba libarchive fuse libgphoto2 libcdio libxml2 GConf
+      gnome_keyring libsoup avahi libtool
+    ];
+
+  buildNativeInputs = [ pkgconfig intltool ];
 }
