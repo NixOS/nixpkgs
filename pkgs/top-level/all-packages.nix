@@ -7836,7 +7836,7 @@ let
 
   spring = callPackage ../games/spring { };
 
-  springLobby = callPackage ../games/spring/spring-lobby.nix { };
+  springLobby = callPackage ../games/spring/springlobby.nix { };
 
   stardust = callPackage ../games/stardust {};
 
