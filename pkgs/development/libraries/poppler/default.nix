@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "poppler-0.18.2";
+  name = "poppler-0.18.4";
 
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
-    sha256 = "0ljvr6l1lfwbkl0v4vw9dybski7d4sx52iz6k37mkfnj3x36npxi";
+    sha256 = "0bnl05al7mjndp2h0355946j59nfw76f5v0x57d47q68rm412hik";
   };
 
   propagatedBuildInputs =
