@@ -38,7 +38,9 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
 
               if [ "$NIXOS_INSTALL_GRUB" = 1 -o "$oldGrubVersion" != "$newGrubVersion" ]; then
                   echo "installing the GRUB bootloader..."
-                  @grub@/sbin/grub-install "$(readlink -f "@grubDevice@")" --no-floppy
+                  for a in @grubDevices@; do
+                    @grub@/sbin/grub-install "$(readlink -f "$a")" --no-floppy
+                  done
                   echo "$newGrubVersion" > /boot/grub/version
               fi
           fi

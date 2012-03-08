@@ -54,6 +54,20 @@ in
           value <literal>nodev</literal> means that a GRUB boot menu
           will be generated, but GRUB itself will not actually be
           installed.
+
+          To install grub into multiple devices look at
+          <literal>devices</literal>.
+        '';
+      };
+
+      devices = mkOption {
+        default = [];
+        example = [ "/dev/hda" ];
+        type = with pkgs.lib.types; listOf string;
+        description = ''
+          The devices on which the boot loader, GRUB, will be
+          installed. Can be used instead of <literal>device</literal> to
+          install grub into multiple devices (as softraid arrays holding /boot).
         '';
       };
 
