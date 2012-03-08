@@ -11,8 +11,8 @@ if [[ ! -d "${dir}" ]]; then
   exit 1
 fi
 
-release=$(ls "${dir}"/kdelibs-*.tar.bz2 | \
-  sed -e 's/.*kdelibs-//' -e 's/\.tar\.bz2//')
+release=$(ls "${dir}"/kdelibs-*.tar.xz | \
+  sed -e 's/.*kdelibs-//' -e 's/\.tar\.xz//')
 
 if [[ ${release##*.} -gt 50 ]]; then
   stable="false"
@@ -45,8 +45,8 @@ print_sane() {
   fi
 }
 
-for i in `cd "${dir}"; ls *-${release}.tar.bz2`; do
-  package=${i%-${release}.tar.bz2}
+for i in `cd "${dir}"; ls *-${release}.tar.xz`; do
+  package=${i%-${release}.tar.xz}
   packages+=( "$package" )
   echo -n "${package}.. " >&2
   hash[$package]=$(nix-hash --type sha256 --flat --base32 "${dir}/${i}")
@@ -99,7 +99,7 @@ print_mono_module(){
   echo -n "$1 ... " >&2
   echo -n " split=false;"
   cml="$1-$release/CMakeLists.txt"
-  tar -xf "${dir}/$1-${release}.tar.bz2" "$cml"
+  tar -xf "${dir}/$1-${release}.tar.xz" "$cml"
   if grep '^[^#]*add_subdirectory' $cml >/dev/null; then
     if grep '^[^#]*add_subdirectory' $cml | grep -v macro_optional_add_subdirectory >/dev/null; then
       echo " is monolithic (has unconditionally added subdirs)" >&2

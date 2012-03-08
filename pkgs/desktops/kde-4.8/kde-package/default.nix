@@ -12,7 +12,7 @@ rec {
   # src attribute for $name tarball
   kdesrc = name: fetchurl {
     url = "mirror://kde/" + (if manifest.stable then "" else "un")
-      + "stable/${release}/src/${name}-${release}.tar.bz2";
+      + "stable/${release}/src/${name}-${release}.tar.xz";
     sha256 = getAttr name manifest.hashes;
   };
 
@@ -37,7 +37,7 @@ rec {
   # API.
   kdeSplittedPkg = module: {name, sane ? name}: kdeMonoPkg name;
 
-  # Build subdirectory ${subdir} of tarball ${module}-${release}.tar.bz2
+  # Build subdirectory ${subdir} of tarball ${module}-${release}.tar.xz
   kdeSubdirPkg = module:
     {name, subdir ? name, sane ? name}:
     let name_ = name; in

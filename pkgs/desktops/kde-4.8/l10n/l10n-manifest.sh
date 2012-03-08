@@ -10,15 +10,15 @@ if [[ ! -d "${dir}" ]]; then
   exit 1
 fi
 
-release=$(ls "${dir}"/kde-l10n-en_GB-*.tar.bz2 | \
-	sed -e 's/.*en_GB-//' -e 's/\.tar\.bz2//')
+release=$(ls "${dir}"/kde-l10n-en_GB-*.tar.xz | \
+	sed -e 's/.*en_GB-//' -e 's/\.tar\.xz//')
 
 echo "Detected release ${release}" >&2
 
 exec > "manifest-${release}.nix"
 echo "["
-for i in `cd "${dir}"; ls kde-l10n-*-${release}.tar.bz2`; do
-  lang=${i%-${release}.tar.bz2}
+for i in `cd "${dir}"; ls kde-l10n-*-${release}.tar.xz`; do
+  lang=${i%-${release}.tar.xz}
   lang=${lang#kde-l10n-}
   echo -n "${lang}.. " >&2
   hash=$(nix-hash --type sha256 --flat --base32 "${dir}/${i}")

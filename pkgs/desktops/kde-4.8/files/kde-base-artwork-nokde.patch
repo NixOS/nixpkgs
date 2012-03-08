@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 04d2142..294b9a8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,6 @@
+-find_package(KDE4 REQUIRED)
+-include(KDE4Defaults)
++if(NOT DATA_INSTALL_DIR)
++  find_package(KDE4 REQUIRED)
++  include(KDE4Defaults)
++endif()
+ 
+ add_subdirectory( ksplashx-themes )
