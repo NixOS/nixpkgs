@@ -60,8 +60,6 @@
 
   at_spi = callPackage ./platform/at-spi { };
 
-  glib_networking = callPackage ./platform/glib-networking { };
-
   gtk_doc = callPackage ./platform/gtk-doc { };
 
   gtkhtml = callPackage ./platform/gtkhtml { };

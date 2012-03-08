@@ -3719,6 +3719,8 @@ let
 
   glibmm = callPackage ../development/libraries/glibmm/2.28.x.nix { };
 
+  glib_networking = callPackage ../development/libraries/glib-networking {};
+
   atk = callPackage ../development/libraries/atk/2.2.x.nix { };
 
   atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
@@ -7450,10 +7452,10 @@ let
   uwimap = callPackage ../tools/networking/uwimap { };
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
-    inherit pkgconfig webkit makeWrapper;
+    inherit pkgconfig webkit makeWrapper glib_networking;
     inherit (gtkLibs) gtk glib;
     inherit (xlibs) libX11 kbproto;
-    inherit (gnome) glib_networking libsoup;
+    inherit (gnome) libsoup;
   };
 
   valknut = callPackage ../applications/networking/p2p/valknut { };
@@ -8589,9 +8591,7 @@ let
   vice = callPackage ../misc/emulators/vice { };
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
-    inherit stdenv fetchurl makeWrapper perl pkgconfig webkit gtk;
-    inherit (xlibs) libX11;
-    inherit (gnome) libsoup glib_networking;
+    inherit (gnome) libsoup;
   };
 
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
