@@ -1,14 +1,17 @@
-{stdenv, fetchurl, pkgconfig, dbus, libgcrypt, libtasn1, pam, python, glib, gtk, intltool, GConf}:
+{stdenv, fetchurl, pkgconfig, dbus, libgcrypt, libtasn1, pam, python, glib,
+gtk, intltool, GConf, libgnome_keyring }:
 
 stdenv.mkDerivation {
-  name = "gnome-keyring-2.28.0";
-  
+  name = "gnome-keyring-2.30.3";
+
   src = fetchurl {
-    url = mirror://gnome/sources/gnome-keyring/2.28/gnome-keyring-2.28.0.tar.bz2;
-    sha256 = "1d6av3cq32ypq9f9mv7f9bcqkkdqgbvbb831kad62smczvqk8chv";
+    url = mirror://gnome/sources/gnome-keyring/2.30/gnome-keyring-2.30.3.tar.bz2;
+    sha256 = "02r9gv3a4a705jf3h7c0bizn33c73wz0iw2500m7z291nrnmqkmj";
   };
   
-  buildInputs = [ pkgconfig dbus.libs libgcrypt pam python gtk intltool GConf ];
+  buildInputs = [ dbus.libs libgcrypt pam python gtk GConf libgnome_keyring ];
 
   propagatedBuildInputs = [ glib libtasn1 ];
+
+  buildNativeInputs = [ pkgconfig intltool ];
 }
