@@ -104,5 +104,7 @@ in
 
     boot.initrd.preLVMCommands = concatMapStrings openCommand preLVM;
     boot.initrd.postDeviceCommands = concatMapStrings openCommand postLVM;
+
+    environment.systemPackages = [ pkgs.cryptsetup ];
   };
 }
