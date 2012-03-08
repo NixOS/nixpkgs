@@ -1,7 +1,7 @@
 x@{builderDefsPackage
   , python, gtk, pygtk, gnutls, cairo, libtool, glib, pkgconfig, libtasn1
   , libffi, cyrus_sasl, intltool, perl, perlPackages, firefox36Pkgs
-  , kbproto, libX11, libXext, xextproto, pygobject
+  , kbproto, libX11, libXext, xextproto, pygobject, libgcrypt
   , ...}:
 builderDefsPackage
 (a :  
