@@ -1932,6 +1932,20 @@ let
     binutilsCross = null;
   }));
 
+  gcc47 = lowPrio (wrapGCC (lib.overrideDerivation gcc46_debug.gcc (a: {
+    name = "gcc-debug-4.7.0rc20120302";
+    src = fetchurl {
+      url = "ftp://gcc.gnu.org/pub/gcc/snapshots/4.7.0-RC-20120302/gcc-4.7.0-RC-20120302.tar.bz2";
+      sha256 = "13clix3cqf93rmkgmb9izqz0ld0h0xrgpirsjr0fs0f7c86c935l";
+    };
+
+    configureFlags = a.configureFlags
+      # This flag replaces `no-sys-dirs.patch'.
+      + " --with-native-system-header-dir=${stdenv.glibc}/include";
+
+    patches = [];
+  })));
+
   gccApple =
     wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc/4.2-apple32 else import ../development/compilers/gcc/4.2-apple64) {
       inherit fetchurl stdenv noSysDirs;
