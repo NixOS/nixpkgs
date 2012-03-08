@@ -1,5 +1,5 @@
-{stdenv, fetchurl, pkgconfig, libxml2, gnutls, libproxy, sqlite, curl, 
-  glib, GConf, gnome_keyring}:
+{ stdenv, fetchurl, pkgconfig, libxml2, gnutls, libproxy, sqlite, curl
+, glib, GConf, libgnome_keyring }:
 
 stdenv.mkDerivation rec {
   name = "libsoup-2.34.3";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig libxml2 gnutls libproxy sqlite curl 
-    glib GConf gnome_keyring ];
+    glib GConf libgnome_keyring ];
 
   configureFlags = "--disable-tls-check";
 }
