@@ -3,12 +3,33 @@
 with pkgs.lib;
 
 let
-  needsBtrfsProgs = any (fs: fs.fsType == "btrfs") config.fileSystems;
+  usingSome = fsname: any (fs: fs.fsType == fsname) config.fileSystems;
+  usingSomeStage1 =  fsname: any (fs: fs.fsType == fsname &&
+    (fs.mountPoint == "/" || fs.neededForBoot)) config.fileSystems;
+
+  usingBtrfs = usingSome "btrfs";
+  usingBtrfsStage1 = usingSomeStage1 "btrfs";
+
+  usingReiserfs = usingSome "reiserfs";
+  usingReiserfsStage1 = usingSomeStage1 "reiserfs";
 
   # Packages that provide fsck backends.
-  fsPackages = [ pkgs.e2fsprogs pkgs.reiserfsprogs pkgs.dosfstools ]
-             ++ optional needsBtrfsProgs pkgs.btrfsProgs;
+  fsPackages = [ pkgs.e2fsprogs pkgs.dosfstools ]
+    ++ optional usingReiserfs pkgs.btrfsProgs
+    ++ optional usingBtrfs pkgs.btrfsProgs;
 
+  fsKernelModules = optional usingBtrfsStage1 [ "btrfs" "crc32c" ]
+    ++ optional usingReiserfsStage1 [ "reiserfs" ];
+
+  fsExtraUtilsCommands = optionalString usingBtrfsStage1 ''
+      cp -v ${pkgs.btrfsProgs}/bin/btrfsck $out/bin
+      cp -v ${pkgs.btrfsProgs}/bin/btrfs $out/bin
+      ln -sv btrfsck $out/bin/fsck.btrfs
+    '';
+
+  fsPostDeviceCommands = optionalString usingBtrfsStage1 ''
+    btrfs device scan
+  '';
 
 in
 
@@ -162,6 +183,10 @@ in
         target = "fstab";
       };
 
+    boot.initrd.extraUtilsCommands = fsExtraUtilsCommands;
+    boot.initrd.postDeviceCommands = fsPostDeviceCommands;
+    boot.initrd.kernelModules = fsKernelModules;
+
     jobs.mountall =
       { startOn = "started udev"
           # !!! The `started nfs-kernel-statd' condition shouldn't be
@@ -178,7 +203,7 @@ in
             exec > /dev/console 2>&1
             echo "mounting filesystems..."
             export PATH=${config.system.sbin.mount}/bin:${makeSearchPath "sbin" ([pkgs.utillinux] ++ fsPackages)}:$PATH
-            ${optionalString needsBtrfsProgs "${pkgs.btrfsProgs}/bin/btrfs device scan"}
+            ${optionalString usingBtrfs "${pkgs.btrfsProgs}/bin/btrfs device scan"}
             ${pkgs.mountall}/sbin/mountall
           '';
       };
