@@ -1372,13 +1372,17 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   unbound = callPackage ../development/libraries/haskell/unbound {};
 
-  uniplate = callPackage ../development/libraries/haskell/uniplate {};
+  uniplate = callPackage ../development/libraries/haskell/uniplate {
+    unorderedContainers = self.unorderedContainers_0_1_4_6;
+  };
 
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
-  unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
+  unorderedContainers_0_1_4_6 = callPackage ../development/libraries/haskell/unordered-containers/0.1.4.6.nix {};
+  unorderedContainers_0_2_0_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.0.0.nix {};
+  unorderedContainers = self.unorderedContainers_0_2_0_0;
 
   url = callPackage ../development/libraries/haskell/url {};
 
