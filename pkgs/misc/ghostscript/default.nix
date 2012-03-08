@@ -35,18 +35,20 @@ let
     };
 
     inherit meta;
+    patches = [ ./purity.patch ];
   };
 
   mainlineData = {
-    name = "ghostscript-9.04";
+    name = "ghostscript-9.05";
     src = fetchurl {
-      url = http://downloads.ghostscript.com/public/ghostscript-9.04.tar.bz2;
-      sha256 = "1i0bsfzwppzk112vy62ydz927m9dlc1wvywanzi09hnk9as20b7q";
+      url = http://downloads.ghostscript.com/public/ghostscript-9.05.tar.bz2;
+      sha256 = "1b6fi76x6pn9dmr9k9lh8kimn968dmh91k824fmm59d5ycm22h8g";
     };
     meta = meta // {
       homepage = http://www.ghostscript.com/;
       description = "GPL Ghostscript, a PostScript interpreter";
     };
+    patches = [ ./purity-9.05.patch ];
   };
 
   variant = if gnuFork then gnuForkData else mainlineData;
@@ -75,7 +77,7 @@ stdenv.mkDerivation rec {
   CFLAGS = "-fPIC";
   NIX_LDFLAGS = "-lz -rpath=${freetype}/lib";
 
-  patches = [ ./purity.patch ./urw-font-files.patch ];
+  patches = variant.patches ++ [ ./urw-font-files.patch ];
 
   preConfigure = ''
     # "ijs" is impure: it contains symlinks to /usr/share/automake etc.!
