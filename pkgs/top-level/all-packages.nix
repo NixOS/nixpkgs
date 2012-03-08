@@ -8292,6 +8292,8 @@ let
 
   eukleides = callPackage ../applications/science/math/eukleides { };
 
+  gap = callPackage ../applications/science/math/gap { };
+
   maxima = callPackage ../applications/science/math/maxima { };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { };
