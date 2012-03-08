@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus_libs, samba, libarchive, fuse, libgphoto2
-, libcdio, libxml2, libtool, glib, intltool, GConf, gnome_keyring, libsoup
+, libcdio, libxml2, libtool, glib, intltool, GConf, libgnome_keyring, libsoup
 , udev, avahi}:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   buildInputs =
     [ glib dbus_libs udev samba libarchive fuse libgphoto2 libcdio libxml2 GConf
-      gnome_keyring libsoup avahi libtool
+      libgnome_keyring libsoup avahi libtool
     ];
 
   buildNativeInputs = [ pkgconfig intltool ];
