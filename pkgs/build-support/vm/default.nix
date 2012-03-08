@@ -33,10 +33,10 @@ rec {
       mkdir -p $out/lib
       
       # Copy what we need from Glibc.
-      cp -p ${glibc}/lib/ld-linux*.so.? $out/lib
-      cp -p ${glibc}/lib/libc.so.* $out/lib
-      cp -p ${glibc}/lib/librt.so.* $out/lib
-      cp -p ${glibc}/lib/libdl.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc}/lib/ld-linux*.so.? $out/lib
+      cp -p ${pkgs.stdenv.glibc}/lib/libc.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc}/lib/librt.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc}/lib/libdl.so.* $out/lib
 
       # Copy some utillinux stuff.
       cp ${utillinux}/bin/mount ${utillinux}/bin/umount $out/bin
