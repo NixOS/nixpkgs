@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gdk_pixbuf, scons, pkgconfig, gtk, glib,
-  pcre, cfitsio, perl, gob2, vala, libtiff }:
+  pcre, cfitsio, perl, gob2, vala, libtiff, json_glib }:
 
 stdenv.mkDerivation rec {
-  name = "giv-0.9.20";
+  name = "giv-0.9.22";
 
   src = fetchurl {
     url = "mirror://sourceforge/giv/${name}.tar.gz";
-    sha256 = "09s659vvv26nw9vaw3a766al8yq6np7p0xb4iw907921j6nbqp7z";
+    sha256 = "1q0806b66ajppxbv1i71wx5d3ydc1h3hsz23m6g4g80dhiai7dly";
   };
 
   # It built code to be put in a shared object without -fPIC
@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
 
   installPhase = "scons install";
 
-  buildInputs = [ gdk_pixbuf pkgconfig gtk glib scons pcre cfitsio perl gob2 vala libtiff ];
+  buildInputs = [ gdk_pixbuf pkgconfig gtk glib scons pcre cfitsio perl gob2 vala libtiff
+    json_glib ];
 
   meta = {
     description = "Cross platform image and hierarchical vector viewer based";
