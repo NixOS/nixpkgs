@@ -3727,7 +3727,7 @@ let
 
   cairo = callPackage ../development/libraries/cairo { };
 
-  pango = callPackage ../development/libraries/pango/1.28.x.nix { };
+  pango = callPackage ../development/libraries/pango/1.29.x.nix { };
 
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
 
@@ -3738,8 +3738,6 @@ let
   gtk = pkgs.gtk2;
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
-
-  pango129 = lowPrio (callPackage ../development/libraries/pango/1.29.x.nix { });
 
   gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
 
