@@ -1020,8 +1020,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 
   mwcRandom_0_10_0_1 = callPackage ../development/libraries/haskell/mwc-random/0.10.0.1.nix {};
-  mwcRandom_0_11_0_0 = callPackage ../development/libraries/haskell/mwc-random/0.11.0.0.nix {};
-  mwcRandom = self.mwcRandom_0_11_0_0;
+  mwcRandom_0_12_0_0 = callPackage ../development/libraries/haskell/mwc-random/0.12.0.0.nix {};
+  mwcRandom = self.mwcRandom_0_12_0_0;
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
