@@ -1,6 +1,6 @@
 { stdenv, fetchurl_gnome, pkgconfig, libxml2, xlibs, glib, pango
 , intltool, libgnome, libgnomecanvas, libbonoboui, GConf, libtool
-, gnome_vfs, gnome_keyring, libglade }:
+, gnome_vfs, libgnome_keyring, libglade }:
 
 stdenv.mkDerivation rec {
   name = src.pkgname;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   
   buildNativeInputs = [ pkgconfig intltool ];
   buildInputs =
-    [ xlibs.xlibs libxml2 GConf pango glib gnome_keyring libglade libtool ];
+    [ xlibs.xlibs libxml2 GConf pango glib libgnome_keyring libglade libtool ];
 
   propagatedBuildInputs = [ libgnome libbonoboui libgnomecanvas gnome_vfs ];
 }
