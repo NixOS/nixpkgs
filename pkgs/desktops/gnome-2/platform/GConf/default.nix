@@ -2,11 +2,11 @@
 , polkit, intltool, dbus_libs }:
 
 stdenv.mkDerivation {
-  name = "GConf-2.28.1";
+  name = "GConf-2.32.4";
 
   src = fetchurl {
-    url = mirror://gnome/sources/GConf/2.28/GConf-2.28.1.tar.bz2;
-    sha256 = "001h9gngz31gnvs6mjyazdibhdqmw1wwk88n934b0mv013wpgi2k";
+    url = mirror://gnome/sources/GConf/2.32/GConf-2.32.4.tar.xz;
+    sha256 = "09ch709cb9fniwc4221xgkq0jf0x0lxs814sqig8p2dcll0llvzk";
   };
 
   buildInputs = [ pkgconfig ORBit2 dbus_libs dbus_glib libxml2 polkit intltool ];
