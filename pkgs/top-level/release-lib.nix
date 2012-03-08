@@ -11,6 +11,7 @@ rec {
     else if system == "i686-linux" then pkgs_i686_linux
     else if system == "x86_64-darwin" then pkgs_x86_64_darwin
     else if system == "i686-darwin" then pkgs_i686_darwin
+    else if system == "x86_64-freebsd" then pkgs_x86_64_freebsd
     else if system == "i686-freebsd" then pkgs_i686_freebsd
     else if system == "i686-cygwin" then pkgs_i686_cygwin
     else abort "unsupported system type: ${system}";
@@ -19,6 +20,7 @@ rec {
   pkgs_i686_linux = allPackages { system = "i686-linux"; };
   pkgs_x86_64_darwin = allPackages { system = "x86_64-darwin"; };
   pkgs_i686_darwin = allPackages { system = "i686-darwin"; };
+  pkgs_x86_64_freebsd = allPackages { system = "x86_64-freebsd"; };
   pkgs_i686_freebsd = allPackages { system = "i686-freebsd"; };
   pkgs_i686_cygwin = allPackages { system = "i686-cygwin"; };
 
