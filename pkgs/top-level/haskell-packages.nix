@@ -1221,6 +1221,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {
     mwcRandom = self.mwcRandom_0_10_0_1;
+    unorderedContainers = self.unorderedContainers_0_1_4_6;
   };
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
@@ -1380,7 +1381,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
-  unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
+  unorderedContainers_0_1_4_6 = callPackage ../development/libraries/haskell/unordered-containers/0.1.4.6.nix {};
+  unorderedContainers_0_2_0_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.0.0.nix {};
+  unorderedContainers = self.unorderedContainers_0_2_0_0;
 
   url = callPackage ../development/libraries/haskell/url {};
 
