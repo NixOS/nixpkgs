@@ -3,11 +3,11 @@
 , udev, avahi}:
 
 stdenv.mkDerivation {
-  name = "gvfs-1.8.2";
+  name = "gvfs-1.10.1";
 
   src = fetchurl {
-    url = mirror://gnome/sources/gvfs/1.8/gvfs-1.8.2.tar.bz2;
-    sha256 = "0ickz1g3b16ncnv6vdpx0j5nx70ixdl6nsrv8cainvj1dn7sr588";
+    url = mirror://gnome/sources/gvfs/1.10/gvfs-1.10.1.tar.xz;
+    sha256 = "124jrkph3cqr2pijmzzr6qwzy2vaq3vvndskzkxd0v5dwp7glc6d";
   };
 
   buildInputs =
