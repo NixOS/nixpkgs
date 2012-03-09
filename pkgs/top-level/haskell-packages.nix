@@ -936,9 +936,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
-  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {
-    alex = self.alex_3_0_1;
-  };
+  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
