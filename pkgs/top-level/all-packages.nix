@@ -4603,8 +4603,6 @@ let
 
   rlog = callPackage ../development/libraries/rlog { };
 
-  rte = callPackage ../development/libraries/rte { };
-
   rubberband = callPackage ../development/libraries/rubberband {
     fftw = fftwSinglePrec;
     inherit (vamp) vampSDK;
@@ -4861,11 +4859,6 @@ let
   }));
 
   zeromq = callPackage ../development/libraries/zeromq {};
-
-  zvbi = callPackage ../development/libraries/zvbi {
-    pngSupport = true;
-  };
-
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
@@ -7670,14 +7663,6 @@ let
 
   yoshimi = callPackage ../applications/audio/yoshimi {
     fltk = fltk13;
-  };
-
-  zapping = callPackage ../applications/video/zapping {
-    inherit (gnome) scrollkeeper libgnomeui libglade esound;
-    teletextSupport = true;
-    jpegSupport = true;
-    pngSupport = true;
-    recordingSupport = true;
   };
 
   zathura = callPackage ../applications/misc/zathura { };
