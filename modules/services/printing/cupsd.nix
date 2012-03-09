@@ -32,6 +32,10 @@ let
       # hard-coded $PATH.
       mkdir -p $out/lib/cups/filter
       ln -s ${pkgs.coreutils}/bin/date ${pkgs.coreutils}/bin/cat ${pkgs.gnused}/bin/sed $out/lib/cups/filter/
+
+      # Import filter configuration from Ghostscript.
+      mkdir -p $out/share/cups/mime/
+      ln -v -s "${pkgs.ghostscript}/etc/cups/"* $out/share/cups/mime/
     '';
   };
 
@@ -135,7 +139,6 @@ in
         preStart =
           ''
             mkdir -m 0755 -p /etc/cups
-            ln -f -v -s "${pkgs.ghostscript}/etc/cups/"* /etc/cups/
             mkdir -m 0755 -p ${logDir}
             mkdir -m 0700 -p /var/cache/cups
             mkdir -m 0700 -p /var/spool/cups
