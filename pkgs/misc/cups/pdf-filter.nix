@@ -23,8 +23,9 @@ stdenv.mkDerivation {
     '';
 
   installPhase = ''
-    mkdir -pv $out/lib/cups/filter
+    mkdir -pv $out/lib/cups/filter $out/share/cups/mime
     cp -v pdftops $out/lib/cups/filter
+    echo >$out/share/cups/mime/pdftops.convs 'application/pdf application/vnd.cups-postscript 66 pdftops'
     '';
 
 
