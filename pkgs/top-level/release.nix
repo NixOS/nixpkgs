@@ -142,7 +142,6 @@ with (import ./release-lib.nix);
   hal = linux;
   hal_info = linux;
   hddtemp = linux;
-  hdparm = linux;
   hello = all;
   host = linux;
   htmlTidy = all;
