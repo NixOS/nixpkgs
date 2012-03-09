@@ -8392,7 +8392,7 @@ let
   ghostscript = callPackage ../misc/ghostscript {
     x11Support = false;
     cupsSupport = getConfig [ "ghostscript" "cups" ] true;
-    gnuFork = getConfig [ "ghostscript" "gnu" ] true;
+    gnuFork = getConfig [ "ghostscript" "gnu" ] false;
   };
 
   ghostscriptX = appendToName "with-X" (ghostscript.override {
