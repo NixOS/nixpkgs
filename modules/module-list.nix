@@ -203,6 +203,7 @@
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/reiserfs.nix
+  ./tasks/filesystems/vfat.nix
   ./tasks/kbd.nix
   ./tasks/lvm.nix
   ./tasks/network-interfaces.nix
