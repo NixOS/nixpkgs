@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, wxGTK, openal, pkgconfig, curl, libtorrentRasterbar
-, gettext, bash, gawk, boost }:
+, gettext, bash, gawk, boost}:
 stdenv.mkDerivation rec {
 
   name = "springlobby-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "37cf3aa1ed78a0ded782cc5c692301619dbb2cf4749bccbf059c51707daaf734";
   };
 
-  buildInputs = [ cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost ];
+  buildInputs = [ cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost];
 
   prePatch = ''
     substituteInPlace tools/regen_config_header.sh --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
@@ -18,7 +18,12 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace "boost_system-mt" "boost_system"
   '';
 
+  # for now sound is disabled as it causes a linker error with alure i can't resolve (qknight)
+  cmakeFlags = "-DOPTION_SOUND:BOOL=OFF"; 
+
   enableParallelBuilding = true;
+
+  #buildPhase = "make VERBOSE=1";
 
   meta = with stdenv.lib; {
     homepage = http://springlobby.info/;
