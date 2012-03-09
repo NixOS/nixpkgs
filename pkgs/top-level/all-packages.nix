@@ -1580,7 +1580,8 @@ let
   x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
 
   xbursttools = assert stdenv ? glibc; import ../tools/misc/xburst-tools {
-    inherit stdenv fetchgit autoconf automake libusb confuse pkgconfig;
+    inherit stdenv fetchgit autoconf automake confuse pkgconfig;
+    libusb = libusb1;
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
     gccCross =
