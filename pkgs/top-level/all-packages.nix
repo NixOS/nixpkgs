@@ -4922,7 +4922,9 @@ let
 
   smack = callPackage ../development/libraries/java/smack { };
 
-  swt = callPackage ../development/libraries/java/swt { };
+  swt = callPackage ../development/libraries/java/swt {
+    inherit (gnome) libsoup;
+  };
 
   v8 = callPackage ../development/libraries/v8 { };
 
