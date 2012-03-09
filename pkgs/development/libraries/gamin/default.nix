@@ -8,9 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
   };
 
-  buildInputs = [ python pkgconfig glib ];
+  buildNativeInputs = [ pkgconfig ];
+
+  buildInputs = [ python glib ];
 
   # `_GNU_SOURCE' is needed, e.g., to get `struct ucred' from
   # <sys/socket.h> with Glibc 2.9.
   configureFlags = "--disable-debug --with-python=${python} CPPFLAGS=-D_GNU_SOURCE";
+
+  patches = map fetchurl (import ./debian-patches.nix);
 }
