@@ -1,0 +1,73 @@
+Index: tvtime-1.0.2/src/Makefile.am
+===================================================================
+--- tvtime-1.0.2.orig/src/Makefile.am
++++ tvtime-1.0.2/src/Makefile.am
+@@ -19,9 +19,6 @@ pkgsysconfdir = $(sysconfdir)/@PACKAGE@
+ tmpdir = /tmp
+ localedir = $(datadir)/locale
+ 
+-TTF_CFLAGS = `$(FREETYPE_CONFIG) --cflags`
+-TTF_LIBS = `$(FREETYPE_CONFIG) --libs`
+-
+ # Set the following if you want to specify an additional font directory
+ # FONT_CFLAGS = -DFONTDIR='/usr/share/fonts/truetype/freefont/'
+ 
+@@ -76,20 +73,20 @@ tvtime_SOURCES = $(COMMON_SRCS) $(OUTPUT
+ tvtime_CFLAGS = $(TTF_CFLAGS) $(PNG_CFLAGS) $(OPT_CFLAGS) \
+ 	$(PLUGIN_CFLAGS) $(X11_CFLAGS) $(XML2_FLAG) \
+ 	$(FONT_CFLAGS) $(AM_CFLAGS)
+-tvtime_LDFLAGS  = $(TTF_LIBS) $(ZLIB_LIBS) $(PNG_LIBS) \
++tvtime_LDADD  = $(TTF_LIBS) $(ZLIB_LIBS) $(PNG_LIBS) \
+ 	$(X11_LIBS) $(XML2_LIBS) -lm -lsupc++
+ 
+ tvtime_command_SOURCES = utils.h utils.c tvtimeconf.h tvtimeconf.c \
+ 	tvtime-command.c
+ tvtime_command_CFLAGS = $(OPT_CFLAGS) $(XML2_FLAG) $(AM_CFLAGS)
+-tvtime_command_LDFLAGS  = $(ZLIB_LIBS) $(XML2_LIBS)
++tvtime_command_LDADD  = $(ZLIB_LIBS) $(XML2_LIBS)
+ tvtime_configure_SOURCES = utils.h utils.c tvtimeconf.h tvtimeconf.c \
+ 	tvtime-configure.c
+ tvtime_configure_CFLAGS = $(OPT_CFLAGS) $(XML2_FLAG) $(AM_CFLAGS)
+-tvtime_configure_LDFLAGS  = $(ZLIB_LIBS) $(XML2_LIBS)
++tvtime_configure_LDADD  = $(ZLIB_LIBS) $(XML2_LIBS)
+ tvtime_scanner_SOURCES = utils.h utils.c videoinput.h videoinput.c \
+ 	tvtimeconf.h tvtimeconf.c station.h station.c tvtime-scanner.c \
+ 	mixer.h mixer.c
+ tvtime_scanner_CFLAGS = $(OPT_CFLAGS) $(XML2_FLAG) $(AM_CFLAGS)
+-tvtime_scanner_LDFLAGS  = $(ZLIB_LIBS) $(XML2_LIBS)
++tvtime_scanner_LDADD  = $(ZLIB_LIBS) $(XML2_LIBS)
+ 
+Index: tvtime-1.0.2/configure.ac
+===================================================================
+--- tvtime-1.0.2.orig/configure.ac
++++ tvtime-1.0.2/configure.ac
+@@ -10,6 +10,7 @@ if test x"$host_alias" = x""; then host_
+ 
+ # Check for compilers.
+ AC_PROG_CC
++AM_PROG_CC_C_O
+ AC_CHECK_PROG(found_cc, "$CC", yes, no)
+ test "x$found_cc" = "xyes" || exit 1
+ 
+@@ -17,9 +18,6 @@ AC_PROG_CXX
+ AC_CHECK_PROG(found_cxx, "$CXX", yes, no)
+ test "x$found_cxx" = "xyes" || exit 1
+ 
+-# Check for libtool.
+-AC_PROG_LIBTOOL
+-
+ # Checks for header files.
+ AC_HEADER_STDC
+ AC_CHECK_HEADERS([ctype.h dirent.h errno.h fcntl.h getopt.h langinfo.h math.h netinet/in.h pwd.h signal.h stdint.h stdio.h stdlib.h string.h sys/ioctl.h sys/mman.h sys/resource.h sys/stat.h sys/time.h sys/wait.h sys/types.h unistd.h wordexp.h locale.h])
+@@ -65,10 +63,7 @@ dnl ------------------------------------
+ dnl freetype
+ dnl ---------------------------------------------
+ dnl Test for freetype
+-AC_PATH_PROG(FREETYPE_CONFIG, freetype-config, no)
+-if test "$FREETYPE_CONFIG" = "no" ; then
+-  AC_MSG_ERROR(freetype2 needed and freetype-config not found)
+-fi
++PKG_CHECK_MODULES([TTF], [freetype2])
+ 
+ dnl ---------------------------------------------
+ dnl libxml2

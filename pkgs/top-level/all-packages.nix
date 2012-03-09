@@ -7107,6 +7107,10 @@ let
 
   mythtv = callPackage ../applications/video/mythtv { };
 
+  tvtime = callPackage ../applications/video/tvtime {
+    kernel = linux;
+  };
+
   nano = callPackage ../applications/editors/nano { };
 
   navipowm = callPackage ../applications/misc/navipowm {

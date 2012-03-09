@@ -1,0 +1,14 @@
+Include zlib.h which is no longer implicitly included with libpng-1.5
+Bug 369663
+
+diff -ru tvtime-111b28cca42d.orig/src/pngoutput.c tvtime-111b28cca42d/src/pngoutput.c
+--- tvtime-111b28cca42d.orig/src/pngoutput.c	2011-02-01 02:35:26.000000000 +0100
++++ tvtime-111b28cca42d/src/pngoutput.c	2011-06-02 13:36:55.965999463 +0200
+@@ -18,6 +18,7 @@
+ 
+ #include <stdio.h>
+ #include <stdlib.h>
++#include <zlib.h>
+ #include <png.h>
+ #include "pngoutput.h"
+ 
