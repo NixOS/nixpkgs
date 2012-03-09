@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     sed -e 's@\.\./cups/$(LIBCUPS)@@' -e 's@$(LIBCUPSIMAGE)@@' -i filter/Makefile
-    ''; 
+    '';
 
   NIX_LDFLAGS="-L${cups}/lib";
 
