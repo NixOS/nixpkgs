@@ -1,16 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gnutls, libproxy, sqlite, curl
-, glib, GConf, libgnome_keyring }:
+{ stdenv, fetchurl, glib, libxml2, pkgconfig
+, gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking }:
 
-stdenv.mkDerivation rec {
-  name = "libsoup-2.34.3";
+stdenv.mkDerivation {
+  name = "libsoup-2.36.1";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libsoup/2.34/libsoup-2.34.3.tar.xz;
-    sha256 = "072af1iqcky5vm6akm450qhdjrgav4yyl6s8idhnq0gpm5jqhgy4";
+    url = mirror://gnome/sources/libsoup/2.36/libsoup-2.36.1.tar.xz;
+    sha256 = "0r8zkr0a328jkww4dv9z1q691rw59nh4lf5f5pzzr9szzw3j8wkk";
   };
 
-  buildInputs = [ pkgconfig libxml2 gnutls libproxy sqlite curl 
-    glib GConf libgnome_keyring ];
 
+  buildNativeInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ glib libxml2 ]
+    ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring sqlite ];
+  passthru.propagatedUserEnvPackages = [ glib_networking ];
+
+  # glib_networking is a runtime dependency, not a compile-time dependency
   configureFlags = "--disable-tls-check";
+
+  meta = {
+    inherit (glib.meta) maintainers platforms;
+  };
 }
