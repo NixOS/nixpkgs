@@ -6,8 +6,6 @@ let
 
   cfg = config.services.autofs;
 
-  mount = config.system.sbin.mount;
-
   autoMaster = pkgs.writeText "auto.master" cfg.autoMaster;
 
 in
@@ -114,7 +112,7 @@ in
           unescapeSpaces(){ sed 's/\\040/ /g'; }
           sed -n 's@^\s*\(\([^\\ ]\|\\ \)*\)\s.*@\1@p' ${autoMaster} | sed 's/[\\]//' | while read mountPoint; do
             sed -n "s@[^ ]\+\s\+\($(echo "$mountPoint"| escapeSpaces)[^ ]*\).*@\1@p" /proc/mounts | sort -r | unescapeSpaces| while read smountP; do
-              ${mount}/bin/umount -l "$smountP" || true
+              ${pkgs.utillinux}/bin/umount -l "$smountP" || true
             done
           done
           '';

@@ -151,7 +151,7 @@ in
                 ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
 
                 ${pkgs.sysvtools}/bin/mountpoint -q /proc/fs/nfsd \
-                || ${config.system.sbin.mount}/bin/mount -t nfsd none /proc/fs/nfsd
+                || ${pkgs.utillinux}/bin/mount -t nfsd none /proc/fs/nfsd
 
                 ${optionalString cfg.server.createMountPoints
                   ''

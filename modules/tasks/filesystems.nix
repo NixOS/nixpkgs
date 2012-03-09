@@ -2,37 +2,6 @@
 
 with pkgs.lib;
 
-let
-  usingSome = fsname: any (fs: fs.fsType == fsname) config.fileSystems;
-  usingSomeStage1 =  fsname: any (fs: fs.fsType == fsname &&
-    (fs.mountPoint == "/" || fs.neededForBoot)) config.fileSystems;
-
-  usingBtrfs = usingSome "btrfs";
-  usingBtrfsStage1 = usingSomeStage1 "btrfs";
-
-  usingReiserfs = usingSome "reiserfs";
-  usingReiserfsStage1 = usingSomeStage1 "reiserfs";
-
-  # Packages that provide fsck backends.
-  fsPackages = [ pkgs.e2fsprogs pkgs.dosfstools ]
-    ++ optional usingReiserfs pkgs.btrfsProgs
-    ++ optional usingBtrfs pkgs.btrfsProgs;
-
-  fsKernelModules = optional usingBtrfsStage1 [ "btrfs" "crc32c" ]
-    ++ optional usingReiserfsStage1 [ "reiserfs" ];
-
-  fsExtraUtilsCommands = optionalString usingBtrfsStage1 ''
-      cp -v ${pkgs.btrfsProgs}/bin/btrfsck $out/bin
-      cp -v ${pkgs.btrfsProgs}/bin/btrfs $out/bin
-      ln -sv btrfsck $out/bin/fsck.btrfs
-    '';
-
-  fsPostDeviceCommands = optionalString usingBtrfsStage1 ''
-    btrfs device scan
-  '';
-
-in
-
 {
 
   ###### interface
@@ -54,7 +23,7 @@ in
         }
       ];
 
-      description = "
+      description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = \"/\"</literal>).  Each
         entry in the list is an attribute set with the following fields:
@@ -72,7 +41,7 @@ in
 
         <literal>autocreate</literal> forces <literal>mountPoint</literal> to be created with
         <command>mkdir -p</command> .
-      ";
+      '';
 
       type = types.nullOr (types.list types.optionSet);
 
@@ -81,36 +50,28 @@ in
         mountPoint = mkOption {
           example = "/mnt/usb";
           type = types.uniq types.string;
-          description = "
-            Location of the mounted the file system.
-          ";
+          description = "Location of the mounted the file system.";
         };
 
         device = mkOption {
           default = null;
           example = "/dev/sda";
           type = types.uniq (types.nullOr types.string);
-          description = "
-            Location of the device.
-          ";
+          description = "Location of the device.";
         };
 
         label = mkOption {
           default = null;
           example = "root-partition";
           type = types.uniq (types.nullOr types.string);
-          description = "
-            Label of the device (if any).
-          ";
+          description = "Label of the device (if any).";
         };
 
         fsType = mkOption {
           default = "auto";
           example = "ext3";
           type = types.uniq types.string;
-          description = "
-            Type of the file system.
-          ";
+          description = "Type of the file system.";
         };
 
         options = mkOption {
@@ -124,10 +85,10 @@ in
         autocreate = mkOption {
           default = false;
           type = types.bool;
-          description = "
+          description = ''
             Automatically create the mount point defined in
             <option>fileSystems.*.mountPoint</option>.
-          ";
+          '';
         };
 
         noCheck = mkOption {
@@ -138,12 +99,24 @@ in
       };
     };
 
-    system.sbin.mount = mkOption {
+    system.fsPackages = mkOption {
       internal = true;
-      default = pkgs.utillinux;
-      description = "
-        Package containing mount and umount.
-      ";
+      default = [ ];
+      description = "Packages supplying file system mounters and checkers.";
+    };
+
+    boot.supportedFilesystems = mkOption {
+      default = [ ];
+      example = [ "btrfs" ];
+      type = types.list types.string;
+      description = "Names of supported filesystem types.";
+    };
+
+    boot.initrd.supportedFilesystems = mkOption {
+      default = [ ];
+      example = [ "btrfs" ];
+      type = types.list types.string;
+      description = "Names of supported filesystem types in the initial ramdisk.";
     };
 
   };
@@ -153,10 +126,19 @@ in
 
   config = {
 
+    boot.supportedFilesystems =
+      map (fs: fs.fsType) config.fileSystems;
+
+    boot.initrd.supportedFilesystems =
+      map (fs: fs.fsType)
+        (filter (fs: fs.mountPoint == "/" || fs.neededForBoot) config.fileSystems);
+
     # Add the mount helpers to the system path so that `mount' can find them.
+    system.fsPackages = [ pkgs.dosfstools ];
+    
     environment.systemPackages =
-      [ pkgs.ntfs3g pkgs.cifs_utils pkgs.nfsUtils pkgs.mountall ]
-      ++ fsPackages;
+      [ pkgs.ntfs3g pkgs.cifs_utils pkgs.mountall ]
+      ++ config.system.fsPackages;
 
     environment.etc = singleton
       { source = pkgs.writeText "fstab"
@@ -183,10 +165,6 @@ in
         target = "fstab";
       };
 
-    boot.initrd.extraUtilsCommands = fsExtraUtilsCommands;
-    boot.initrd.postDeviceCommands = fsPostDeviceCommands;
-    boot.initrd.kernelModules = fsKernelModules;
-
     jobs.mountall =
       { startOn = "started udev"
           # !!! The `started nfs-kernel-statd' condition shouldn't be
@@ -198,12 +176,12 @@ in
 
         task = true;
 
+        path = [ pkgs.utillinux ] ++ config.system.fsPackages;
+
         script =
           ''
             exec > /dev/console 2>&1
             echo "mounting filesystems..."
-            export PATH=${config.system.sbin.mount}/bin:${makeSearchPath "sbin" ([pkgs.utillinux] ++ fsPackages)}:$PATH
-            ${optionalString usingBtrfs "${pkgs.btrfsProgs}/bin/btrfs device scan"}
             ${pkgs.mountall}/sbin/mountall
           '';
       };

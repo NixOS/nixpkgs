@@ -153,17 +153,6 @@ let
       cp -v ${pkgs.coreutils}/bin/sleep $out/bin
       cp -v ${pkgs.coreutils}/bin/ln $out/bin
 
-      # Copy e2fsck and friends.
-      cp -v ${pkgs.e2fsprogs}/sbin/e2fsck $out/bin
-      cp -v ${pkgs.e2fsprogs}/sbin/tune2fs $out/bin
-      cp -v ${pkgs.reiserfsprogs}/sbin/reiserfsck $out/bin
-      ln -sv e2fsck $out/bin/fsck.ext2
-      ln -sv e2fsck $out/bin/fsck.ext3
-      ln -sv e2fsck $out/bin/fsck.ext4
-      ln -sv reiserfsck $out/bin/fsck.reiserfs
-
-      cp -pdv ${pkgs.e2fsprogs}/lib/lib*.so.* $out/lib
-
       # Copy dmsetup and lvm.
       cp -v ${pkgs.lvm2}/sbin/dmsetup $out/bin/dmsetup
       cp -v ${pkgs.lvm2}/sbin/lvm $out/bin/lvm
@@ -187,11 +176,6 @@ let
       # Maybe copy splashutils.
       ${optionalString enableSplashScreen ''
         cp ${kernelPackages.splashutils}/${kernelPackages.splashutils.helperName} $out/bin/splash_helper
-      ''}
-
-      # Copy nfsmount if there is any NFS mounts required for boot.
-      ${optionalString (filter (fs: fs.fsType == "nfs" && (fs.mountPoint == "/" || fs.neededForBoot)) fileSystems != []) ''
-        cp -v ${pkgs.klibc}/lib/klibc/bin.static/nfsmount $out/bin
       ''}
 
       ${config.boot.initrd.extraUtilsCommands}
@@ -223,13 +207,10 @@ let
       export LD_LIBRARY_PATH=$out/lib
       $out/bin/mount --version | grep "mount from"
       $out/bin/umount --version | grep "umount "
-      $out/bin/e2fsck -V 2>&1 | grep "e2fsck "
-      $out/bin/tune2fs 2> /dev/null | grep "tune2fs "
       $out/bin/udevadm --version
       $out/bin/blkid -v 2>&1 | tee -a $out/log | grep "blkid from util-linux"
       $out/bin/dmsetup --version 2>&1 | tee -a $out/log | grep "version:"
       LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a $out/log | grep "LVM"
-      $out/bin/reiserfsck -V
       $out/bin/mdadm --version
       $out/bin/basename --version
       $out/bin/modprobe --version

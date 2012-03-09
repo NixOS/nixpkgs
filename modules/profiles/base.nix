@@ -31,7 +31,6 @@
 
     # Tools to create / manipulate filesystems.
     pkgs.ntfsprogs # for resizing NTFS partitions
-    pkgs.btrfsProgs
     pkgs.dosfstools
     pkgs.xfsprogs
     pkgs.jfsutils
@@ -50,4 +49,8 @@
     pkgs.bvi # binary editor
     pkgs.joe
   ];
+
+  # Include support for various filesystems.
+  boot.supportedFilesystems = [ "btrfs" "reiserfs" ];
+
 }

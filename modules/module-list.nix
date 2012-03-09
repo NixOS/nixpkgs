@@ -114,6 +114,7 @@
   ./services/networking/cntlm.nix
   ./services/networking/ddclient.nix
   ./services/networking/dhclient.nix
+  #./services/networking/dhcpcd.nix
   ./services/networking/dhcpd.nix
   ./services/networking/dnsmasq.nix
   ./services/networking/ejabberd.nix
@@ -198,6 +199,10 @@
   ./system/upstart/upstart.nix
   ./tasks/cpu-freq.nix
   ./tasks/filesystems.nix
+  ./tasks/filesystems/btrfs.nix
+  ./tasks/filesystems/ext.nix
+  ./tasks/filesystems/nfs.nix
+  ./tasks/filesystems/reiserfs.nix
   ./tasks/kbd.nix
   ./tasks/lvm.nix
   ./tasks/network-interfaces.nix
