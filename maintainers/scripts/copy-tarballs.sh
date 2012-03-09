@@ -8,6 +8,7 @@ urls=$(nix-instantiate --eval-only --xml --strict '<nixpkgs/maintainers/scripts/
 
 for url in $urls; do
     if echo "$url" | grep -q -E "www.cs.uu.nl|nixos.org|.stratego-language.org|java.sun.com|ut2004|linuxq3a|RealPlayer|Adbe|belastingdienst|microsoft|armijn/.nix|sun.com|archive.eclipse.org"; then continue; fi
+    if ! echo "$url" | grep -q -E "\-.*[0-9].*"; then echo "skipping $url"; continue; fi
     $(dirname $0)/copy-tarball.sh "$url"
 done
 

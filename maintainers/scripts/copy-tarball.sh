@@ -3,6 +3,7 @@
 distDir=/data/webserver/tarballs
 
 url="$1"
+file="$2"
 if [ -z "$url" ]; then echo "syntax: $0 URL"; exit 0; fi
 
 base="$(basename "$url")"
@@ -11,15 +12,23 @@ dstPath="$distDir/$base"
 
 if [ -e "$dstPath" ]; then echo "$dstPath already exists"; exit 0; fi
 
-echo "downloading $url to $newPath"
+if [ -z "$file" ]; then
 
-if [ -n "$dryRun" ]; then exit 0; fi
+    echo "downloading $url to $dstPath"
 
-declare -a res
-if ! res=($(PRINT_PATH=1 nix-prefetch-url "$url")); then
-    continue
+    if [ -n "$dryRun" ]; then exit 0; fi
+
+    declare -a res
+    if ! res=($(PRINT_PATH=1 nix-prefetch-url "$url")); then
+        continue
+    fi
+    
+    storePath=${res[1]}
+
+else
+    storePath="$file"
 fi
-storePath=${res[1]}
+    
 cp $storePath "$dstPath.tmp.$$"
 mv -f "$dstPath.tmp.$$" "$dstPath"
 
