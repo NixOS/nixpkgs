@@ -45,10 +45,6 @@ sub hasCPUFeature {
 my $cpus = scalar (grep {/^processor\s*:/} (split '\n', $cpuinfo));
 
 
-# CPU frequency scaling.  Not sure about this test.
-push @kernelModules, "acpi-cpufreq" if hasCPUFeature "acpi";
-
-
 # Virtualization support?
 push @kernelModules, "kvm-intel" if hasCPUFeature "vmx";
 push @kernelModules, "kvm-amd" if hasCPUFeature "svm";
@@ -226,11 +222,11 @@ my $attrs = multiLineList("  ", removeDups @attrs);
 print <<EOF ;
 # This is a generated file.  Do not modify!
 # Make changes to /etc/nixos/configuration.nix instead.
-{ config, pkgs, modulesPath, ... }:
+{ config, pkgs, ... }:
 
 {
   require = [
-    "\${modulesPath}/installer/scan/not-detected.nix"
+    <nixos/modules/installer/scan/not-detected.nix>
   ];
 
   boot.initrd.kernelModules = [$initrdKernelModules ];
