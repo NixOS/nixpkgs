@@ -428,7 +428,6 @@ rec {
      - Power-off or reboot the machine.
   */
   runInGenericVM = drv: lib.overrideDerivation drv (attrs: {
-    system = "i686-linux";
     requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
     args = ["-e" (vmRunCommand qemuCommandGeneric)];
