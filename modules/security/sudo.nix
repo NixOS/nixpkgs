@@ -34,6 +34,7 @@ in
 
           # env vars to keep for root and %wheel also if not explicitly set
           Defaults:root,%wheel env_keep+=LOCALE_ARCHIVE
+          Defaults:root,%wheel env_keep+=NIX_PATH
           Defaults:root,%wheel env_keep+=TERMINFO_DIRS
 
           # "root" is allowed to do anything.
