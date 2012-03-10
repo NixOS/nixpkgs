@@ -166,10 +166,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellPlatformDefaults_future =
     self : self.haskellPlatformArgs_future self // {
       mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
+      binary = null; # now a core package
     };
 
   haskellPlatformDefaults_HEAD =
     self : self.haskellPlatformDefaults_future self // {
+      binary = null; # now a core package
     };
 
   haskellPlatformArgs_2011_4_0_0 = self : {
@@ -466,7 +468,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
-  binary = callPackage ../development/libraries/haskell/binary {};
+  binary_hackage = callPackage ../development/libraries/haskell/binary {};
+  binary = self.binary_hackage; # core package since ghc-7.2.1
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
