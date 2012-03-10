@@ -1,6 +1,6 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libnl1, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
-, libgcrypt, dnsmasq, avahi }:
+, libgcrypt, dnsmasq, avahi, substituteAll }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
@@ -33,24 +33,17 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ intltool pkgconfig ];
 
-  patches = [ ./nixos-purity.patch ];
+  patches =
+    [ ( substituteAll {
+        src = ./nixos-purity.patch;
+        inherit avahi dnsmasq ppp;
+        glibc = stdenv.gcc.libc;
+      })
+    ];
 
   preInstall =
     ''
       installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" )
-    '';
-
-  inherit avahi dnsmasq ppp;
-  glibc = stdenv.gcc.libc;
-
-  # Substitute full paths, check if there any not substituted path
-  postPatch =
-    ''
-      for i in src/backends/NetworkManagerExherbo.c src/dns-manager/nm-dns-dnsmasq.c \
-        src/dnsmasq-manager/nm-dnsmasq-manager.c src/nm-device.c src/ppp-manager/nm-ppp-manager.c; do
-        substituteAll "$i" "$i"
-      done
-      find . -name \*.c | xargs grep '@[a-zA-Z]*@' && exit 1 || true
     '';
 
   meta = with stdenv.lib; {
