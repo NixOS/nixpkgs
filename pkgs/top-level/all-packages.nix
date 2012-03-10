@@ -6246,6 +6246,8 @@ let
 
   aangifte2010 = callPackage_i686 ../applications/taxes/aangifte-2010 { };
 
+  aangifte2011 = callPackage_i686 ../applications/taxes/aangifte-2011 { };
+
   abcde = callPackage ../applications/audio/abcde { };
 
   abiword = callPackage ../applications/office/abiword {
