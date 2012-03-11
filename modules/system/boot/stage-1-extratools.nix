@@ -23,8 +23,6 @@ in
 
   config = {
     boot.initrd.extraUtilsCommands = mkIf config.boot.initrd.withExtraTools ''
-
-      set -x
       cp -pv ${pkgs.ncurses}/lib/libncurses*.so.* $out/lib
       cp -pv ${pkgs.readline}/lib/libreadline.so.* $out/lib
       cp -pv ${pkgs.readline}/lib/libhistory.so.* $out/lib
