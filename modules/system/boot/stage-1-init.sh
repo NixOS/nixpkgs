@@ -70,6 +70,7 @@ mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
 
 # Some console devices, for the interactivity
 mknod /dev/console c 5 1
+mknod /dev/tty c 5 0
 mknod /dev/tty1 c 4 1
 mknod /dev/ttyS0 c 4 64
 mknod /dev/ttyS1 c 4 65
