@@ -124,7 +124,6 @@
   ./services/networking/gnunet.nix
   ./services/networking/gogoclient.nix
   ./services/networking/gvpe.nix
-  ./services/networking/gw6c/default.nix
   ./services/networking/ifplugd.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/nat.nix
