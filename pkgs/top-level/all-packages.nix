@@ -6365,9 +6365,7 @@ let
       icon = "${chrome}/libexec/chrome/product_logo_48.png";
     };
 
-  cinelerra = callPackage ../applications/video/cinelerra {
-    inherit (gnome) esound;
-  };
+  cinelerra = callPackage ../applications/video/cinelerra { };
 
   cmus = callPackage ../applications/audio/cmus { };
 
