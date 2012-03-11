@@ -170,8 +170,19 @@ export MODULE_DIR=@kernel@/lib/modules/
 
 # For debugging Upstart.
 if [ -n "$debug2" ]; then
+    # Get the console from the kernel cmdline
+    console=tty1
+    for o in $(cat /proc/cmdline); do
+      case $o in
+        console=*)
+          set -- $(IFS==; echo $o)
+          console=$2
+          ;;
+      esac
+    done
+
     echo "Debug shell called from @out@"
-    @shell@
+    setsid @shell@ < /dev/$console >/dev/$console 2>/dev/console
 fi
 
 
