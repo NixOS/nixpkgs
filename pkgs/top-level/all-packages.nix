@@ -1075,6 +1075,8 @@ let
 
   networkmanager_pptp = callPackage ../tools/networking/network-manager/pptp.nix { };
 
+  networkmanager_pptp_gnome = networkmanager_pptp.override { withGnome = true; };
+
   networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
 
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};

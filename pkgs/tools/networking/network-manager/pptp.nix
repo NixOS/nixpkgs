@@ -1,24 +1,26 @@
-{ stdenv, fetchurl, networkmanager, pptp, ppp, intltool, pkgconfig }:
-
-let
-  pn = "networkmanager-pptp";
-  gnome_pn = "NetworkManager-pptp";
-  major = "0.9";
-  version = "0.9.0";
-  src = fetchurl {
-    url = "mirror://gnome/sources/${gnome_pn}/${major}/${gnome_pn}-${version}.tar.xz";
-    sha256 = "1mfbavcnc871sxkisisnic472am0qmkgw7caj0b86sdir2q83nlp";
-  };
-in
+{ stdenv, fetchurl, networkmanager, pptp, ppp, intltool, pkgconfig
+, withGnome ? false, gtk, libgnome_keyring }:
 
 stdenv.mkDerivation rec {
-  name = "${pn}-${version}";
+  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  pname = "NetworkManager-pptp";
+  version = "0.9.2.0";
 
-  inherit src;
+  src = fetchurl {
+    url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
+    sha256 = "1fj2v8pjc17m9calckgc2jm8wbimwga8if4r21walf9xysvhsd1b";
+  };
 
-  buildInputs = [ networkmanager pptp ppp ];
+  buildInputs = [ networkmanager pptp ppp ]
+    ++ stdenv.lib.optionals withGnome [ gtk libgnome_keyring ];
 
   buildNativeInputs = [ intltool pkgconfig ];
 
-  configureFlags = "--without-gnome --disable-nls";
+  configureFlags =
+    if withGnome then "--with-gnome --with-gtkver=2" else "--without-gnome";
+
+  meta = {
+    description = "PPtP plugin for NetworkManager";
+    inherit (networkmanager.meta) maitainers platforms;
+  };
 }
