@@ -9,10 +9,10 @@
 , force ? false
 }:
 
-#if !force then
-#  throw ''The expression for libreoffice is still not ready.
-#  Set config.libreoffice.force = true; if you want to try it anyway.''
-#else
+if !force then
+  throw ''The expression for libreoffice is still not ready.
+  Set config.libreoffice.force = true; if you want to try it anyway.''
+else
 stdenv.mkDerivation rec {
   name = "libreoffice-3.4.5.2";
 
