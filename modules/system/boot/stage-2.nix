@@ -49,6 +49,7 @@ let
 
   bootStage2 = pkgs.substituteAll {
     src = ./stage-2-init.sh;
+    shell = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
     inherit kernel;
     inherit (config.boot) devShmSize runSize;
