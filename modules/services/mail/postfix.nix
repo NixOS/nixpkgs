@@ -19,7 +19,9 @@ let
       default_privs = nobody
 
     ''
-    + optionalString config.networking.enableIPv6 "inet_protocols = all"
+    + optionalString config.networking.enableIPv6 ''
+      inet_protocols = all
+    ''
     + (if cfg.networks != null then
         ''
           mynetworks = ${concatStringsSep ", " cfg.networks}
