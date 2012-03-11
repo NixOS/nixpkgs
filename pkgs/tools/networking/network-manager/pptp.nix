@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "PPtP plugin for NetworkManager";
-    inherit (networkmanager.meta) maitainers platforms;
+    inherit (networkmanager.meta) maintainers platforms;
   };
 }
