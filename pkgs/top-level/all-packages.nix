@@ -5857,10 +5857,6 @@ let
 
   gogoclient = callPackage ../os-specific/linux/gogoclient { };
 
-  gw6c = builderDefsPackage (import ../os-specific/linux/gw6c) {
-    inherit fetchurl stdenv nettools openssl procps iproute;
-  };
-
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
   pam = callPackage ../os-specific/linux/pam { };
