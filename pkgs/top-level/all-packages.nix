@@ -1934,7 +1934,6 @@ let
     binutilsCross = null;
   }));
 
-/* needs to be fixed:
   gcc47 = lowPrio (wrapGCC (lib.overrideDerivation gcc46_debug.gcc (a: {
     name = "gcc-debug-4.7.0rc20120302";
     src = fetchurl {
@@ -1944,11 +1943,11 @@ let
 
     configureFlags = a.configureFlags
       # This flag replaces `no-sys-dirs.patch'.
-      + " --with-native-system-header-dir=${stdenv.glibc}/include";
+      + (lib.optionalString (stdenv ? glibc)
+          " --with-native-system-header-dir=${stdenv.glibc}/include");
 
     patches = [];
   })));
-*/
 
   gccApple =
     wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc/4.2-apple32 else import ../development/compilers/gcc/4.2-apple64) {
