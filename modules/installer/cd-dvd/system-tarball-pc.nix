@@ -173,6 +173,7 @@ in
           ATL1E y
           ATL1C y
           VORTEX y
+          VIA_RHINE y
 
           # Enable nfs root boot
           IP_PNP y
