@@ -13,7 +13,7 @@ in
 
   options = {
     boot.initrd.withExtraTools = mkOption {
-      default = true;
+      default = false;
       type = with types; bool;
       description = ''
         Have busybox utils in initrd, and an interactive bash.
