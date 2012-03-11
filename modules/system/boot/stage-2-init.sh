@@ -182,7 +182,7 @@ if [ -n "$debug2" ]; then
     done
 
     echo "Debug shell called from @out@"
-    setsid @shell@ < /dev/$console >/dev/$console 2>/dev/$console
+    setsid @shellDebug@ < /dev/$console >/dev/$console 2>/dev/$console
 fi
 
 
