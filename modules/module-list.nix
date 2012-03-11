@@ -190,6 +190,7 @@
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/stage-1.nix
+  ./system/boot/stage-1-extratools.nix
   ./system/boot/stage-2.nix
   ./system/etc/etc.nix
   ./system/upstart-events/control-alt-delete.nix

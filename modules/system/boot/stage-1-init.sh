@@ -25,12 +25,23 @@ EOF
 
     read reply
 
+    # Get the console from the kernel cmdline
+    console=tty1
+    for o in $(cat /proc/cmdline); do
+      case $o in
+        console=*)
+          set -- $(IFS==; echo $o)
+          console=$2
+          ;;
+      esac
+    done
+
     case $reply in
         f)
-            exec @shell@;;
+            exec setsid @shell@ < /dev/$console >/dev/$console 2>/dev/$console ;;
         i)
             echo "Starting interactive shell..."
-            @shell@ || fail
+            setsid @shell@ < /dev/$console >/dev/$console 2>/dev/$console || fail
             ;;
         *)
             echo "Continuing...";;
@@ -57,6 +68,11 @@ mount -t tmpfs -o "mode=0755,size=@devSize@" none /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
 
+# Some console devices, for the interactivity
+mknod /dev/console c 5 1
+mknod /dev/tty1 c 4 1
+mknod /dev/ttyS0 c 4 64
+mknod /dev/ttyS1 c 4 65
 
 # Process the kernel command line.
 export stage2Init=/init
