@@ -403,6 +403,7 @@ rec {
 
     
   qemuCommandGeneric = ''
+    PATH="${samba}/sbin:$PATH" \
     ${kvm}/bin/qemu-system-x86_64 \
       -nographic -no-reboot \
       -smb $(pwd) -hda $diskImage \
