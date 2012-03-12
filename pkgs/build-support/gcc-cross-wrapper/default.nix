@@ -20,13 +20,20 @@ let
     phases = [ "installPhase" ];
     installPhase = ''
       echo $out
-      mkdir -p $out
-      cp -Rd ${gcc}/${cross.config}/lib $out/lib
-      chmod -R +w $out/lib
-      for a in $out/lib/*.la; do
-          sed -i -e s,${gcc}/${cross.config}/lib,$out/lib,g $a
-      done
-      rm -f $out/lib/*.py
+      mkdir -p "$out"
+
+      if [ -d "${gcc}/${cross.config}/lib" ]
+      then
+          cp -Rd "${gcc}/${cross.config}/lib" "$out/lib"
+          chmod -R +w "$out/lib"
+          for a in "$out/lib/"*.la; do
+              sed -i -e "s,${gcc}/${cross.config}/lib,$out/lib,g" $a
+          done
+          rm -f "$out/lib/"*.py
+      else
+          # The MinGW cross-compiler falls into this category.
+          mkdir "$out/lib"
+      fi
     '';
   };
 in
