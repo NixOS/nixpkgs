@@ -713,6 +713,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcSybUtils = callPackage ../development/libraries/haskell/ghc-syb-utils {};
 
+  gio = callPackage ../development/libraries/haskell/gio {};
+
   gitit = callPackage ../development/libraries/haskell/gitit {};
 
   glade = callPackage ../development/libraries/haskell/glade {
@@ -765,6 +767,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {
     fgl = self.fgl_5_4_2_4;
+    polyparse = self.polyparse_1_7;
   };
 
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
@@ -796,7 +799,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellSrc_1_0_1_5 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.5.nix {};
   haskellSrc = self.haskellSrc_1_0_1_5;
 
-  haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts/default.nix {};
+  haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts {};
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
@@ -1098,7 +1101,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
-  polyparse = callPackage ../development/libraries/haskell/polyparse/default.nix {};
+  polyparse_1_7 = callPackage ../development/libraries/haskell/polyparse/1.7.nix {};
+  polyparse_1_8 = callPackage ../development/libraries/haskell/polyparse/1.8.nix {};
+  polyparse = self.polyparse_1_8;
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
@@ -1383,8 +1388,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
   unorderedContainers_0_1_4_6 = callPackage ../development/libraries/haskell/unordered-containers/0.1.4.6.nix {};
-  unorderedContainers_0_2_0_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.0.0.nix {};
-  unorderedContainers = self.unorderedContainers_0_2_0_0;
+  unorderedContainers_0_2_0_1 = callPackage ../development/libraries/haskell/unordered-containers/0.2.0.1.nix {};
+  unorderedContainers = self.unorderedContainers_0_2_0_1;
 
   url = callPackage ../development/libraries/haskell/url {};
 
@@ -1604,7 +1609,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     tar = self.tar_0_3_2_0;
   };
 
-  leksah = callPackage ../applications/editors/leksah {};
+  leksah = callPackage ../applications/editors/leksah {
+    QuickCheck = self.QuickCheck2;
+  };
 
   mathblog = callPackage ../applications/misc/mathblog {};
 

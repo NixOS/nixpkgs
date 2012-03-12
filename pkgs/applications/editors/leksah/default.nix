@@ -1,18 +1,20 @@
-{ cabal, binary, binaryShared, Cabal, deepseq, filepath, glib, gtk
-, gtksourceview2, hslogger, leksahServer, ltk, mtl, network, parsec
-, processLeksah, regexBase, regexTdfa, strict, time, utf8String
+{ cabal, binary, binaryShared, Cabal, deepseq, enumerator, filepath
+, gio, glib, gtk, gtksourceview2, hslogger, leksahServer, ltk, mtl
+, network, parsec, QuickCheck, regexBase, regexTdfa, strict, text
+, time, transformers, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "leksah";
-  version = "0.10.0.4";
-  sha256 = "1g12w1kl63fxzz1c2x237yrqkaja9awiqyyipkdms5iql0ini7bw";
+  version = "0.12.0.3";
+  sha256 = "1374ffwban58kabnynacl0fyzs6756kd5q1lcfya46mp26l7syrd";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary binaryShared Cabal deepseq filepath glib gtk gtksourceview2
-    hslogger leksahServer ltk mtl network parsec processLeksah
-    regexBase regexTdfa strict time utf8String
+    binary binaryShared Cabal deepseq enumerator filepath gio glib gtk
+    gtksourceview2 hslogger leksahServer ltk mtl network parsec
+    QuickCheck regexBase regexTdfa strict text time transformers
+    utf8String
   ];
   noHaddock = true;
   meta = {

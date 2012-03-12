@@ -1,10 +1,10 @@
-{ cabal, Cabal, filepath, glib, gtk, haddock, mtl, parsec }:
+{ cabal, Cabal, filepath, glib, gtk, mtl, parsec, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "ltk";
-  version = "0.10.0.4";
-  sha256 = "1dp6dl8a0pfj6lx8n8a2y1j3c2z57k9pf81yr45qsp7wg53d6qhf";
-  buildDepends = [ Cabal filepath glib gtk haddock mtl parsec ];
+  version = "0.12.0.0";
+  sha256 = "1hlsfi77yypfnvh1alr3rflbffby9pbmc71m507davr6b09v9w9f";
+  buildDepends = [ Cabal filepath glib gtk mtl parsec transformers ];
   meta = {
     homepage = "http://www.leksah.org";
     description = "Leksah tool kit";

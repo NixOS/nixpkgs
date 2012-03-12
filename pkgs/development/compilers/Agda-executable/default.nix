@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Agda-executable";
-  version = "2.3.0";
-  sha256 = "1n1ak6z2vh356k9mk0zkiv6dqp9dvx97a7r21b0xnhwkmh3f8p5p";
+  version = "2.3.0.1";
+  sha256 = "156nzvpmqi7yizjr4yym2ybc0iv4nqfp84qrpdxcha682k298ib1";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ Agda ];
