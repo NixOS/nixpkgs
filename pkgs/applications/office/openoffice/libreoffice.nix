@@ -10,10 +10,11 @@
 , force ? false
 }:
 
-if !force then
-  throw ''The expression for libreoffice is still not ready.
-  Set config.libreoffice.force = true; if you want to try it anyway.''
-else
+# **  Checking with hydra if it builds totally **
+#if !force then
+#  throw ''The expression for libreoffice is still not ready.
+#  Set config.libreoffice.force = true; if you want to try it anyway.''
+#else
 stdenv.mkDerivation rec {
   name = "libreoffice-3.5.0.3";
 
@@ -29,6 +30,8 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -i 's,/usr/bin/env bash,${bash}/bin/bash,' bin/unpack-sources \
       solenv/bin/install-gdb-printers solenv/bin/striplanguagetags.sh
+
+    sed -i 's,/usr/bin/env perl,${perl}/bin/perl,' solenv/bin/concat-deps.pl
 
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
