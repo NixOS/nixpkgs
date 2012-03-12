@@ -58,7 +58,10 @@ with pkgs.lib;
     # Generate a separate job for each tty.
     jobs = listToAttrs (map (tty: nameValuePair tty {
 
-      startOn = "started udev and filesystem";
+      startOn =
+        if config.services.mingetty.waitOnMounts
+        then "stopped udevtrigger and filesystem"
+        else "stopped udevtrigger"; # !!! should start as soon as the tty device is created
 
       path = [ pkgs.mingetty ];
 
