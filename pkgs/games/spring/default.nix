@@ -6,7 +6,7 @@
 stdenv.mkDerivation rec {
 
   name = "spring-${version}";
-  version = "0.86.0";
+  version = "0.87.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/springrts/spring_86.0_src.tar.lzma";
@@ -23,15 +23,13 @@ stdenv.mkDerivation rec {
       --replace "which" "type -p"
   '';
 
-  #patches = [ ./gcc44.patch];
-
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://springrts.com/;
     description = "A powerful real-time strategy(RTS) game engine";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ maintainers.phreedom maintainers.qknight ];
     platforms = platforms.unix;
   };
 }
