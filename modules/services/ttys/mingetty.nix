@@ -59,7 +59,9 @@ with pkgs.lib;
     jobs = listToAttrs (map (tty: nameValuePair tty {
 
       startOn =
-        if config.services.mingetty.waitOnMounts
+        # On tty1 we should always wait for mountall, since it may
+        # start an emergency-shell job.
+        if config.services.mingetty.waitOnMounts || tty == "tty1"
         then "stopped udevtrigger and filesystem"
         else "stopped udevtrigger"; # !!! should start as soon as the tty device is created
 
