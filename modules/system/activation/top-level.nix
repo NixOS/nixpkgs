@@ -171,10 +171,12 @@ let
       if config.boot.loader.grub.enable
       then (builtins.parseDrvName config.system.build.grub.name).version
       else "";
-    grubDevices = let
+    grubDevices = with pkgs.lib; let
         wrapQuotes = s: "\"" + s + "\"";
-      in map wrapQuotes ([ config.boot.loader.grub.device ] ++
-        config.boot.loader.grub.devices);
+        allDevices = [ config.boot.loader.grub.device ] ++
+          config.boot.loader.grub.devices;
+        definedDevices = filter (s: s != "") allDevices;
+      in map wrapQuotes definedDevices;
     configurationName = config.boot.loader.grub.configurationName;
   };
 
