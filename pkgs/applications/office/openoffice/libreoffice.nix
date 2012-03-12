@@ -3,8 +3,9 @@
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
-, libXinerama, openssl, gperf, cppunit, GConf, ORBit2
-, autoconf, openldap, postgresql, bash
+, libXinerama, openssl, gperf, cppunit, GConf, ORBit2, poppler
+, librsvg, gnome_vfs, gstreamer, gstPluginsBase, mesa
+, autoconf, automake, openldap, postgresql, bash
 , langs ? [ "en-US" "ca" "ru" "eo" "fr" "nl" "de" "en-GB" ]
 , force ? false
 }:
@@ -14,23 +15,27 @@ if !force then
   Set config.libreoffice.force = true; if you want to try it anyway.''
 else
 stdenv.mkDerivation rec {
-  name = "libreoffice-3.4.5.2";
+  name = "libreoffice-3.5.0.3";
 
   srcs_download = import ./libreoffice-srcs.nix { inherit fetchurl; };
 
   src = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/3.4.5/libreoffice-bootstrap-3.4.5.2.tar.bz2";
-    sha256 = "05xz6ykddrm6mrgl9jssr2xpg2ir0x6c1c3n1cph0mvd0hiz58x9";
+    url = "http://download.documentfoundation.org/libreoffice/src/3.5.0/libreoffice-core-3.5.0.3.tar.xz";
+    sha256 = "04hvlj6wzbj3zjpfjq975mgdmf902ywyf94nxcv067asg83qfcvr";
   };
 
+  configureScript = "./autogen.sh";
+
   preConfigure = ''
-    sed -i 's,/usr/bin/env bash,${bash}/bin/bash,' Makefile.in bin/unpack-sources
+    sed -i 's,/usr/bin/env bash,${bash}/bin/bash,' bin/unpack-sources \
+      solenv/bin/install-gdb-printers solenv/bin/striplanguagetags.sh
 
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
   '';
 
   buildPhase = ''
+    mkdir src
     for a in $srcs_download; do
       FILE=$(basename $a)
       # take out the hash
@@ -41,14 +46,8 @@ stdenv.mkDerivation rec {
     sed '/wget nor curl/{n;d}' -i download
     ./download
 
-    # Fix svtools: hardcoded jpeg path
-    sed -i -e 's,^JPEG3RDLIB=.*,JPEG3RDLIB=${libjpeg}/lib/libjpeg.so,' solenv/inc/libs.mk
     # Fix sysui: wants to create a tar for root
     sed -i -e 's,--own.*root,,' sysui/desktop/slackware/makefile.mk
-    # Fix libtextcat: wants to set rpath to /usr/local/lib
-    sed -i -e 's,^CONFIGURE_FLAGS.*,& --prefix='$TMPDIR, libtextcat/makefile.mk
-    # Fix hunspell: the checks fail due to /bin/bash missing, and I find this fix easier
-    sed -i -e 's,make && make check,make,' hunspell/makefile.mk
     # Fix redland: wants to set rpath to /usr/local/lib
     sed -i -e 's,^CONFIGURE_FLAGS.*,& --prefix='$TMPDIR, redland/redland/makefile.mk \
       redland/raptor/makefile.mk redland/rasqal/makefile.mk
@@ -63,14 +62,11 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     # Helpful, while testing the expression
-    # "--with-num-cpus=4"
+    "--with-num-cpus=4"
 
     "--enable-verbose"
 
     # Without these, configure does not finish
-    "--disable-gnome-vfs"
-    "--disable-gstreamer"
-    "--disable-opengl"
     "--without-junit"
     "--without-system-mythes"
 
@@ -84,8 +80,6 @@ stdenv.mkDerivation rec {
     # I imagine this helps. Copied from go-oo.
     "--disable-epm"
     "--disable-fontooo"
-    "--disable-gnome-vfs"
-    "--disable-gnome-vfs"
     "--disable-mathmldtd"
     "--disable-mozilla"
     "--disable-odk"
@@ -119,15 +113,21 @@ stdenv.mkDerivation rec {
     "--without-system-libwps"
     "--without-system-libwpg"
     "--without-system-redland"
+    "--without-system-libvisio"
+    "--without-system-libcmis"
+    "--without-system-nspr"
+    "--without-system-nss"
+    "--without-system-sampleicc"
+    "--without-system-libexttextcat"
   ];
 
   buildInputs = [
     pam python tcsh libxslt perl ArchiveZip CompressZlib zlib 
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
-    getopt file jdk cairo which icu boost libXext libX11 libXtst libXi
-    cups libXinerama openssl gperf GConf ORBit2
-    ant autoconf openldap postgresql cppunit
+    getopt file jdk cairo which icu boost libXext libX11 libXtst libXi mesa
+    cups libXinerama openssl gperf GConf ORBit2 gnome_vfs gstreamer gstPluginsBase
+    ant autoconf openldap postgresql cppunit poppler librsvg automake
   ];
 
   meta = {
