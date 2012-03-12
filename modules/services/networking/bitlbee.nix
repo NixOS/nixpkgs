@@ -19,28 +19,28 @@ in
     services.bitlbee = {
 
       enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the BitlBee IRC to other chat network gateway.
-          Running it allows you to access the MSN, Jabber, Yahoo! and ICQ chat
-          networks via an IRC client.
-        '';
+	default = false;
+	description = ''
+	  Whether to run the BitlBee IRC to other chat network gateway.
+	  Running it allows you to access the MSN, Jabber, Yahoo! and ICQ chat
+	  networks via an IRC client.
+	'';
       };
 
       interface = mkOption {
-        default = "127.0.0.1";
-        description = ''
-          The interface the BitlBee deamon will be listening to.  If `127.0.0.1',
-          only clients on the local host can connect to it; if `0.0.0.0', clients
-          can access it from any network interface.
-        '';
+	default = "127.0.0.1";
+	description = ''
+	  The interface the BitlBee deamon will be listening to.  If `127.0.0.1',
+	  only clients on the local host can connect to it; if `0.0.0.0', clients
+	  can access it from any network interface.
+	'';
       };
 
       portNumber = mkOption {
-        default = 6667;
-        description = ''
-          Number of the port BitlBee will be listening to.
-        '';
+	default = 6667;
+	description = ''
+	  Number of the port BitlBee will be listening to.
+	'';
       };
 
     };
@@ -54,35 +54,36 @@ in
 
     users.extraUsers = singleton
       { name = "bitlbee";
-        uid = bitlbeeUid;
-        description = "BitlBee user";
-        home = "/var/empty";
+	uid = bitlbeeUid;
+	description = "BitlBee user";
+	home = "/var/empty";
       };
 
     users.extraGroups = singleton
       { name = "bitlbee";
-        gid = config.ids.gids.bitlbee;
+	gid = config.ids.gids.bitlbee;
       };
 
     jobs.bitlbee =
       { description = "BitlBee IRC to other chat networks gateway";
+	name = "bitlbee";
 
-        startOn = "ip-up";
+	startOn = "ip-up";
 
-        preStart =
-          ''
-            if ! test -d /var/lib/bitlbee
-            then
-                mkdir -p /var/lib/bitlbee
-                chown bitlbee:bitlbee /var/lib/bitlbee
-            fi
-          '';
+	preStart =
+	  ''
+	    if ! test -d /var/lib/bitlbee
+	    then
+		mkdir -p /var/lib/bitlbee
+		chown bitlbee:bitlbee /var/lib/bitlbee
+	    fi
+	  '';
 
-        exec =
-          ''
-            ${pkgs.bitlbee}/sbin/bitlbee -F -p ${toString portNumber} \
-              -i ${interface} -u bitlbee
-          '';
+	exec =
+	  ''
+	    ${pkgs.bitlbee}/sbin/bitlbee -F -p ${toString portNumber} \
+	      -i ${interface} -u bitlbee
+	  '';
       };
 
     environment.systemPackages = [ pkgs.bitlbee ];
