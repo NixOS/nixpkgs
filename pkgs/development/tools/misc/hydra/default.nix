@@ -40,19 +40,18 @@ stdenv.mkDerivation {
   name = "hydra-${version}";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/1264023/download/2/hydra-${version}.tar.gz";
-    sha256 = "62cecc2da9cb0353ab4eb1f66b6783c0195421c35ba6b6eace9d3b56a9275631";
+    url = http://hydra.nixos.org/build/1142240/download/2/hydra-0.1pre27592.tar.gz;
+    sha256 = "0197bcfkabqqv7611fh9kjabfm0nfci8kanfaa59hqwf3h6fmpwz";
   };
 
   configureFlags = "--with-nix=${nix}";
 
   buildInputs = [ perl makeWrapper libtool nix unzip nukeReferences pkgconfig boehmgc ] ++ perldeps ;
 
-  hydraPath = stdenv.lib.concatStringsSep ":" (map (p: "${p}/bin") ( 
-    [ libxslt sqlite subversion openssh nix coreutils findutils
-      gzip bzip2 lzma gnutar unzip git mercurial gnused graphviz
-      rpm dpkg cdrkit
-    ]));
+  hydraPath = stdenv.lib.concatStringsSep ":" (map (p: "${p}/bin") ( [
+    libxslt sqlite subversion openssh nix coreutils findutils
+    gzip bzip2 lzma gnutar unzip git mercurial gnused graphviz
+    rpm dpkg cdrkit]));
 
   postInstall = ''
     for i in "$out/bin/"*; do
