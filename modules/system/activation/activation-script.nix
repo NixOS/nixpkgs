@@ -126,7 +126,14 @@ in
 
     system.activationScripts.media =
       ''
-        mkdir -p /media
+        mkdir -m 0755 -p /media
+      '';
+
+    system.activationScripts.usrbinenv =
+      ''
+        mkdir -m 0755 -p /usr/bin
+        ln -sfn ${pkgs.coreutils}/bin/env /usr/bin/.env.tmp
+        mv /usr/bin/.env.tmp /usr/bin/env # atomically replace /usr/bin/env
       '';
 
   };
