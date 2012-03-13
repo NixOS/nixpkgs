@@ -26,23 +26,22 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
     
     if [ "@bootLoader@" = "grub" ]; then
         
-      if [ -n "@grubDevice@" ]; then
+      if [ -n "@grubDevices@" ]; then
           mkdir -m 0700 -p /boot/grub
           @menuBuilder@ @out@
 
-          if [ "@grubDevice@" != nodev ]; then
-              
-              # If the GRUB version has changed, then force a reinstall.
-              oldGrubVersion="$(cat /boot/grub/version 2>/dev/null || true)"
-              newGrubVersion="@grubVersion@"
+          # If the GRUB version has changed, then force a reinstall.
+          oldGrubVersion="$(cat /boot/grub/version 2>/dev/null || true)"
+          newGrubVersion="@grubVersion@"
 
-              if [ "$NIXOS_INSTALL_GRUB" = 1 -o "$oldGrubVersion" != "$newGrubVersion" ]; then
-                  echo "installing the GRUB bootloader..."
-                  for a in @grubDevices@; do
-                    @grub@/sbin/grub-install "$(readlink -f "$a")" --no-floppy
-                  done
-                  echo "$newGrubVersion" > /boot/grub/version
-              fi
+          if [ "$NIXOS_INSTALL_GRUB" = 1 -o "$oldGrubVersion" != "$newGrubVersion" ]; then
+              for dev in @grubDevices@; do
+                  if [ "$dev" != nodev ]; then
+                      echo "installing the GRUB bootloader on $dev..."
+                      @grub@/sbin/grub-install "$(readlink -f "$dev")" --no-floppy
+                  fi
+              done
+              echo "$newGrubVersion" > /boot/grub/version
           fi
           
       else
