@@ -1,10 +1,20 @@
-{stdenv, fetchurl, cmake, qt4}:
+{ stdenv, fetchurl, cmake, qt4, pkgconfig, python, libxslt, dbus_glib
+, telepathy_farsight, telepathy_glib }:
 
-stdenv.mkDerivation {
-  name = "telepathy-qt-0.14.1";
+stdenv.mkDerivation rec {
+  name = "telepathy-qt-0.9.0";
+
   src = fetchurl {
-    url = mirror://sourceforge/tapioca-voip/telepathy-qt-0.14.1.tar.gz;
-    md5 = "476e3fbd68b3eaf5354559be7de99333";
+    url = "http://telepathy.freedesktop.org/releases/telepathy-qt/${name}.tar.gz";
+    sha256 = "0v3hnvzm3k2z99rc1znxgriqvf1n7wyjdzzsld0czhbmrz9fhang";
   };
-  buildInputs = [ cmake qt4 ];
+
+  buildNativeInputs = [ cmake pkgconfig python libxslt ];
+  propagatedBuildInputs = [ qt4 dbus_glib telepathy_farsight telepathy_glib ];
+
+  patches = [ ./missing-include.patch ];
+
+  preBuild = ''
+    NIX_CFLAGS_COMPILE+=" `pkg-config --cflags farsight2-0.10`"
+    '';
 }
