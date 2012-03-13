@@ -1,14 +1,14 @@
-{stdenv, fetchurl, pkgconfig, glib}:
+{ stdenv, fetchurl, pkgconfig, glib, gupnp_igd, gstreamer, gstPluginsBase }:
 
-stdenv.mkDerivation {
-  name = "libnice-0.0.10";
+stdenv.mkDerivation rec {
+  name = "libnice-0.1.1";
   
   src = fetchurl {
-    url = http://nice.freedesktop.org/releases/libnice-0.0.10.tar.gz;
-    sha256 = "04r7syk67ihw8gzy83f603kmwvqv2dpd1mrfzpk4p72vjqrqidl6";
+    url = "http://nice.freedesktop.org/releases/${name}.tar.gz";
+    sha256 = "0jcpb953jn7c3ng2vbkljybzh63x6mg4m6rjxj1s1iccm3fi6qki";
   };
 
-  buildInputs = [ pkgconfig glib ];
+  buildInputs = [ pkgconfig glib gupnp_igd gstreamer gstPluginsBase ];
 
   meta = {
     homepage = http://nice.freedesktop.org/wiki/;

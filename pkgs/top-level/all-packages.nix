@@ -4049,7 +4049,7 @@ let
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
   libnice = callPackage ../development/libraries/libnice {
-    inherit (gnome) glib;
+    inherit (gst_all) gstreamer gstPluginsBase;
   };
 
   libplist = callPackage ../development/libraries/libplist { };
