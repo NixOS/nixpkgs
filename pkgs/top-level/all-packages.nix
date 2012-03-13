@@ -4708,6 +4708,10 @@ let
 
   telepathy_glib = callPackage ../development/libraries/telepathy-glib { };
 
+  telepathy_farsight = callPackage ../development/libraries/telepathy-farsight {
+    inherit (pkgs.gst_all) gstPluginsBase gstreamer gst_python;
+  };
+
   telepathy_qt = callPackage ../development/libraries/telepathy-qt { };
 
   tk = callPackage ../development/libraries/tk { };
