@@ -35,6 +35,14 @@ let
       '';
     };
 
+    boot.initrd.mdadmConf = mkOption {
+      default = "";
+      type = with types; string;
+      description = ''
+        Contents of /etc/mdadm.conf at initrd.
+      '';
+    };
+
     boot.initrd.preLVMCommands = mkOption {
       default = "";
       type = with types; string;
@@ -312,6 +320,9 @@ let
     contents =
       [ { object = bootStage1;
           symlink = "/init";
+        }
+        { object = pkgs.writeText "mdadm.conf" config.boot.initrd.mdadmConf;
+          symlink = "/etc/mdadm.conf";
         }
       ] ++ optionals enableSplashScreen
         [ { object = extraUtils;
