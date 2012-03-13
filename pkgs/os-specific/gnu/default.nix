@@ -91,4 +91,8 @@ rec {
     samba = samba_light;
     hurd = hurdCross;
   };
+
+  unionfs = callPackage ./unionfs {
+    hurd = hurdCross;
+  };
 }
