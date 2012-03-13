@@ -202,6 +202,7 @@ let cfg = config.deployment; in
       # $ while read system region ami; do echo "        if cfg.ec2.region == \"$region\" && config.nixpkgs.system == \"$system\" then \"$ami\" else"; done < amis
       ami = mkDefault (
         if cfg.ec2.region == "eu-west-1" && config.nixpkgs.system == "x86_64-linux" then "ami-65dae711" else
+        if cfg.ec2.region == "eu-west-1" && config.nixpkgs.system == "i686-linux"   then "ami-dd90a9a9" else
         if cfg.ec2.region == "us-east-1" && config.nixpkgs.system == "x86_64-linux" then "ami-95bb72fc" else
         if cfg.ec2.region == "us-west-1" && config.nixpkgs.system == "x86_64-linux" then "ami-0b0c534e" else
         # !!! Doesn't work, not lazy enough.
