@@ -1,7 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtk, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gstPluginsBase, GConf
-, mesa, compat24 ? false, compat26 ? true, unicode ? true,
+, withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true,
 }:
+
+assert withMesa -> mesa != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation {
   name = "wxGTK-2.8.12";
@@ -11,7 +15,8 @@ stdenv.mkDerivation {
     sha256 = "1gjs9vfga60mk4j4ngiwsk9h6c7j22pw26m3asxr1jwvqbr8kkqk";
   };
 
-  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto mesa gstreamer gstPluginsBase GConf ];
+  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gstPluginsBase GConf ]
+    ++ optional withMesa mesa;
 
   buildNativeInputs = [ pkgconfig ];
 
@@ -21,15 +26,14 @@ stdenv.mkDerivation {
     (if compat26 then "--enable-compat26" else "--disable-compat26")
     "--disable-precomp-headers"
     (if unicode then "--enable-unicode" else "")
-    "--with-opengl"
     "--enable-mediactrl"
-  ];
+  ] ++ optional withMesa "--with-opengl";
 
   # This variable is used by configure to find some dependencies.
   SEARCH_INCLUDE =
     "${libXinerama}/include ${libSM}/include ${libXxf86vm}/include";
 
-  SEARCH_LIB = "${mesa}/lib";
+  SEARCH_LIB = optionalString withMesa "${mesa}/lib";
 
   # Work around a bug in configure.
   NIX_CFLAGS_COMPILE = "-DHAVE_X11_XLIB_H=1";
