@@ -1,24 +1,19 @@
-{stdenv, fetchurl, libnice, pkgconfig, python, glib, gstreamer, gstPluginsBase,
-  pygobject, gst_python}:
+{ stdenv, fetchurl, libnice, pkgconfig, python, gstreamer, gstPluginsBase
+, pygobject, gst_python, gupnp_igd }:
 
 stdenv.mkDerivation rec {
-  name = "farsight2-0.0.22";
+  name = "farsight2-0.0.31";
   
   src = fetchurl {
     url = "http://farsight.freedesktop.org/releases/farsight2/${name}.tar.gz";
-    sha256 = "07yjndkx1p7ij1ifxsnbqbr8943wmq768x4812khka7dx6ii1sv9";
+    sha256 = "16qz4x14rdycm4nrn5wx6k2y22fzrazsbmihrxdwafx9cyf23kjm";
   };
 
-  buildInputs = [ libnice pkgconfig python glib gstreamer gstPluginsBase 
-    pygobject gst_python ];
+  buildInputs = [ libnice python pygobject gst_python gupnp_igd ];
 
-  preBuild = ''
-    sed -e '/^[[] -z/d' -i python/Makefile
-    find . -name Makefile -execdir sed -e '/^[.]NOEXPORT:/d' -i '{}' ';'
-    find . -name Makefile -execdir sed -r -e 's/^ {8,8}/\t/' -i '{}' ';'
-  '';
+  buildNativeInputs = [ pkgconfig ];
 
-  patches = [./makefile.patch];
+  propagatedBuildInputs = [ gstreamer gstPluginsBase ];
 
   meta = {
     homepage = http://farsight.freedesktop.org/wiki/;

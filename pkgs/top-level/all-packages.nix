@@ -3431,7 +3431,6 @@ let
   faad2 = callPackage ../development/libraries/faad2 { };
 
   farsight2 = callPackage ../development/libraries/farsight2 {
-    inherit (gnome) glib;
     inherit (gst_all) gstreamer gstPluginsBase gst_python;
   };
 
