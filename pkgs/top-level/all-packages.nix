@@ -4694,10 +4694,6 @@ let
 
   talloc = callPackage ../development/libraries/talloc { };
 
-##  tapioca_qt = import ../development/libraries/tapioca-qt {
-##    inherit stdenv fetchurl cmake qt4 telepathy_qt;
-##  };
-
   tclap = callPackage ../development/libraries/tclap {};
 
   tcp_wrappers = callPackage ../development/libraries/tcp-wrappers {};
