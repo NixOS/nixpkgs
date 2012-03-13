@@ -1,16 +1,18 @@
 { stdenv, fetchurl, dbus_glib, glib, python, pkgconfig, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-glib-0.7.0";
+  name = "telepathy-glib-0.17.5";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/telepathy-glib/${name}.tar.gz";
-    sha256 = "0hf1jrgisr7skrji7djh66q0ic351vlsm65xqy982p5d0axzxkz5";
+    sha256 = "13gylgwgjp29zakzj5kb4h0j5zh30dsl8ch7hp3dp4nmy4vdj6h1";
   };
 
   propagatedBuildInputs = [dbus_glib glib python];
   
   buildInputs = [pkgconfig libxslt];
+
+  patches = [ ./fix-pkgconfig.patch ];
   
   meta = {
     homepage = http://telepathy.freedesktop.org;
