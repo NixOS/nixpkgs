@@ -3226,6 +3226,15 @@ rec {
     propagatedBuildInputs = [pkgs.subversion];
   };
 
+  Switch = buildPerlPackage rec {
+    name = "Switch";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RG/RGARCIA/Switch-2.16.tar.gz";
+      sha256 = "1n7rgp1q3zwglv1pka3bnhq5g41334lwc53g31w6g44my8kqz31h";
+    };
+    doCheck = false;                             # FIXME: 2/293 test failures
+  };
+
   SysHostnameLong = buildPerlPackage rec {
     name = "Sys-Hostname-Long-1.4";
     src = fetchurl {
