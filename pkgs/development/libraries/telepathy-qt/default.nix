@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
   patches = [ ./missing-include.patch ];
 
   preBuild = ''
-    NIX_CFLAGS_COMPILE+=" `pkg-config --cflags farsight2-0.10`"
+    NIX_CFLAGS_COMPILE+=" `pkg-config --cflags farsight2-0.10 dbus-glib-1`"
     '';
 }
