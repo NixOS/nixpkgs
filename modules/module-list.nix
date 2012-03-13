@@ -22,6 +22,7 @@
   ./hardware/network/rtl8192c.nix
   ./hardware/pcmcia.nix
   ./hardware/all-firmware.nix
+  ./installer/efi-boot-stub/efi-boot-stub.nix
   ./installer/generations-dir/generations-dir.nix
   ./installer/grub/grub.nix
   ./installer/init-script/init-script.nix

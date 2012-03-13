@@ -50,6 +50,8 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
       
     elif [ "@bootLoader@" = "generationsDir" ]; then
         @menuBuilder@ @out@
+    elif [ "@bootLoader@" = "efiBootStub" ]; then
+        @menuBuilder@ @out@
     else
         echo "Warning: don't know how to make this configuration bootable; please enable a boot loader." 1>&2
     fi
