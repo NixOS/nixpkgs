@@ -766,7 +766,6 @@ let
 
   gnuplot = callPackage ../tools/graphics/gnuplot {
     inherit (gtkLibs) pango;
-    wxGTK = if stdenv.isLinux then wxGTK else wxGTK.override { withMesa = false; };
     texLive = null;
     lua = null;
   };
@@ -4793,6 +4792,7 @@ let
     inherit (gtkLibs) gtk;
     inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
+    withMesa = stdenv.isLinux;
   };
 
   wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
@@ -8306,9 +8306,7 @@ let
 
   maxima = callPackage ../applications/science/math/maxima { };
 
-  wxmaxima = callPackage ../applications/science/math/wxmaxima {
-    wxGTK = if stdenv.isLinux then wxGTK else wxGTK.override { withMesa = false; };
-  };
+  wxmaxima = callPackage ../applications/science/math/wxmaxima { };
 
   pari = callPackage ../applications/science/math/pari {};
 
