@@ -5,6 +5,7 @@
 
 : ${mountPoint=/mnt}
 : ${NIXOS_CONFIG=/etc/nixos/configuration.nix}
+export NIXOS_CONFIG
 
 usage () {
   echo 1>&2 "
@@ -143,7 +144,7 @@ evalAttr(){
   local prefix=$1
   local suffix=$2
   local strict=$3
-  echo "(import $NIXOS {}).$prefix${option:+.$option}${suffix:+.$suffix}" |
+  echo "(import <nixos> {}).$prefix${option:+.$option}${suffix:+.$suffix}" |
     evalNix ${strict:+--strict}
 }
 
@@ -157,7 +158,7 @@ evalCfg(){
 
 findSources(){
   local suffix=$1
-  echo "builtins.map (f: f.source) (import $NIXOS {}).eval.options${option:+.$option}.$suffix" |
+  echo "builtins.map (f: f.source) (import <nixos> {}).eval.options${option:+.$option}.$suffix" |
     evalNix --strict
 }
 
@@ -185,7 +186,7 @@ nixMap() {
 }
 
 if $install; then
-  export NIXOS_CONFIG="$mountPoint$NIXOS_CONFIG"
+  NIXOS_CONFIG="$mountPoint$NIXOS_CONFIG"
 fi
 
 if $generate; then
@@ -307,8 +308,8 @@ if $xml; then
   evalNix --xml --no-location <<EOF
 let
   reach = attrs: attrs${option:+.$option};
-  nixos = <nixos>;
-  nixpkgs = <nixpkgs>;
+  nixos = import <nixos> {};
+  nixpkgs = import <nixpkgs> {};
   sources = builtins.map (f: f.source);
   opt = reach nixos.eval.options;
   cfg = reach nixos.config;
