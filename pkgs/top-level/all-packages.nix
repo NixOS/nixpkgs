@@ -4702,7 +4702,9 @@ let
 
   tecla = callPackage ../development/libraries/tecla { };
 
-  telepathy_gabble = callPackage ../development/libraries/telepathy-gabble { };
+  telepathy_gabble = callPackage ../development/libraries/telepathy-gabble {
+    inherit (pkgs.gnome) libsoup;
+  };
 
   telepathy_glib = callPackage ../development/libraries/telepathy-glib { };
 
