@@ -7,13 +7,14 @@ stdenv.mkDerivation {
 
   buildInputs = [ pciutils zlib perl ];
 
+  patches = [ ./arbitrary-filenames.patch ];
   
   src = fetchurl {
     url = "http://linux.dell.com/efibootmgr/permalink/efibootmgr-${version}.tar.gz";
     sha256 = "0wcfgf8x4p4xfh38m9x3njwsxibm9bhnmvpjj94lj9sk9xxa8qmm";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace "./tools/install.pl" \
       --replace "/usr/bin/perl" "${perl}/bin/perl"
   '';
