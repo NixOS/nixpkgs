@@ -5,20 +5,22 @@
 , icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, gstreamer, gstPluginsBase, mesa
-, autoconf, automake, openldap, postgresql, bash
+, autoconf, automake, openldap, bash
 , langs ? [ "en-US" "ca" "ru" "eo" "fr" "nl" "de" "en-GB" ]
-, force ? false
 }:
 
-# **  Checking with hydra if it builds totally **
-#if !force then
-#  throw ''The expression for libreoffice is still not ready.
-#  Set config.libreoffice.force = true; if you want to try it anyway.''
-#else
+let
+  langsSpaces = stdenv.lib.concatStringsSep " " langs;
+in
 stdenv.mkDerivation rec {
   name = "libreoffice-3.5.0.3";
 
   srcs_download = import ./libreoffice-srcs.nix { inherit fetchurl; };
+
+  src_translation = fetchurl {
+    url = "http://download.documentfoundation.org/libreoffice/src/3.5.0/libreoffice-translations-3.5.0.3.tar.xz";
+    sha256 = "0kk1jb4axjvkmg22yhxx4p9522zix6rr5cs0c5rxzlkm63qw6h8w";
+  };
 
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/3.5.0/libreoffice-core-3.5.0.3.tar.xz";
@@ -27,14 +29,24 @@ stdenv.mkDerivation rec {
 
   configureScript = "./autogen.sh";
 
+  patches = [ ./disable-uimpress-test.patch ];
+
   preConfigure = ''
+    tar xf $src_translation
+    # I think libreoffice expects by default the translations in ./translations
+    mv libreoffice-translations-3.5.0.3/translations .
+
+    sed -i 's,/bin/bash,${bash}/bin/bash,' sysui/desktop/share/makefile.mk
     sed -i 's,/usr/bin/env bash,${bash}/bin/bash,' bin/unpack-sources \
       solenv/bin/install-gdb-printers solenv/bin/striplanguagetags.sh
 
-    sed -i 's,/usr/bin/env perl,${perl}/bin/perl,' solenv/bin/concat-deps.pl
+    sed -i 's,/usr/bin/env perl,${perl}/bin/perl,' solenv/bin/concat-deps.pl solenv/bin/ooinstall
+    sed -i 's,ANT_OPTS+="\(.*\)",ANT_OPTS+=\1,' apache-commons/java/*/makefile.mk
 
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
+
+    export configureFlagsArray=("--with-lang=${langsSpaces}")
   '';
 
   buildPhase = ''
@@ -64,9 +76,6 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    # Helpful, while testing the expression
-    "--with-num-cpus=4"
-
     "--enable-verbose"
 
     # Without these, configure does not finish
@@ -91,6 +100,7 @@ stdenv.mkDerivation rec {
     "--disable-kde"
     "--disable-kde4"
     "--disable-mono"
+    "--disable-postgresql-sdbc"
     "--with-package-format=native"
     "--with-jdk-home=${jdk}"
     "--with-ant-home=${ant}"
@@ -130,7 +140,7 @@ stdenv.mkDerivation rec {
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi mesa
     cups libXinerama openssl gperf GConf ORBit2 gnome_vfs gstreamer gstPluginsBase
-    ant autoconf openldap postgresql cppunit poppler librsvg automake
+    ant autoconf openldap cppunit poppler librsvg automake
   ];
 
   meta = {

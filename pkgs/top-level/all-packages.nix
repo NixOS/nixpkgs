@@ -6973,11 +6973,12 @@ let
   librecad = callPackage ../applications/misc/librecad { };
 
   libreoffice = callPackage ../applications/office/openoffice/libreoffice.nix {
+    # gnumake381 works much faster than 3.82, but does not allow multiprocess builds
+    stdenv = overrideInStdenv stdenv [ gnumake381 ];
+
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     inherit (gst_all) gstreamer gstPluginsBase;
-    postgresql = postgresql91;
-    force = getConfig [ "libreoffice" "force" ] false;
   };
 
   lingot = callPackage ../applications/audio/lingot {

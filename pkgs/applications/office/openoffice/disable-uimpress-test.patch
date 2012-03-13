@@ -1,0 +1,20 @@
+We've to disable this test, because it wants a working fontconfig.
+Otherwise it fails telling fontconfig can't read its config file.
+
+diff --git a/sd/Module_sd.mk b/sd/Module_sd.mk
+index 4fd3a95..10fa388 100644
+--- a/sd/Module_sd.mk
++++ b/sd/Module_sd.mk
+@@ -41,9 +41,9 @@ $(eval $(call gb_Module_add_targets,sd,\
+ ))
+ 
+ ifneq ($(OS),DRAGONFLY)
+-$(eval $(call gb_Module_add_check_targets,sd,\
+-    CppunitTest_sd_uimpress \
+-))
++#$(eval $(call gb_Module_add_check_targets,sd,\
++#    CppunitTest_sd_uimpress \
++#))
+ # disabled for now, seems to have incomplete deps and hangs on a build from scratch
+ #    CppunitTest_sd_filters_test \
+ 
