@@ -822,6 +822,8 @@ let
     inherit (gnome) libsoup;
   };
 
+  gupnp_igd = callPackage ../development/libraries/gupnp-igd {};
+
   gupnptools = callPackage ../tools/networking/gupnp-tools {
     inherit (gnome) libsoup libglade gnomeicontheme;
   };
