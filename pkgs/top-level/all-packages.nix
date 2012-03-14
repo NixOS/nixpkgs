@@ -8514,7 +8514,7 @@ let
 
   pgf2 = callPackage ../tools/typesetting/tex/pgf/2.x.nix { };
   
-  pgfplots = callPackage ../tools/typesetting/pgfplots { };
+  pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
   pjsip = callPackage ../applications/networking/pjsip { };
 
