@@ -916,9 +916,7 @@ let
 
   jing_tools = callPackage ../tools/text/xml/jing/jing-script.nix { };
 
-  jnettop = callPackage ../tools/networking/jnettop {
-    inherit (gnome) glib;
-  };
+  jnettop = callPackage ../tools/networking/jnettop { };
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
@@ -1207,9 +1205,7 @@ let
 
   philter = callPackage ../tools/networking/philter { };
 
-  pinentry = callPackage ../tools/security/pinentry {
-    inherit (gnome) glib gtk;
-  };
+  pinentry = callPackage ../tools/security/pinentry { };
 
   pius = callPackage ../tools/security/pius { };
 
@@ -1626,7 +1622,6 @@ let
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
 
   xmlroff = callPackage ../tools/typesetting/xmlroff {
-    inherit (gtkLibs) glib pango gtk;
     inherit (gnome) libgnomeprint;
   };
 
@@ -2319,7 +2314,6 @@ let
   gprolog = callPackage ../development/compilers/gprolog { };
 
   gwt = callPackage ../development/compilers/gwt {
-    inherit (gtkLibs) glib gtk pango atk;
     libstdcpp5 = gcc33.gcc;
   };
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
@@ -2762,9 +2756,7 @@ let
 
   qi = callPackage ../development/compilers/qi { };
 
-  racket = callPackage ../development/interpreters/racket {
-    inherit (gtkLibs) pango glib gtk;
-  };
+  racket = callPackage ../development/interpreters/racket { };
 
   regina = callPackage ../development/interpreters/regina {};
 
@@ -2833,8 +2825,7 @@ let
 
   guileGnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome.GConf;
-    inherit (gnome) glib gnome_vfs gtk libglade libgnome libgnomecanvas
-      libgnomeui pango;
+    inherit (gnome) gnome_vfs libglade libgnome libgnomecanvas libgnomeui;
   };
 
   guile_lib = callPackage ../development/guile-modules/guile-lib { };
@@ -3328,13 +3319,9 @@ let
 
   cluceneCore = clucene_core; # !!! remove this
 
-  clutter = callPackage ../development/libraries/clutter {
-    inherit (gnome) glib pango gtk;
-  };
+  clutter = callPackage ../development/libraries/clutter { };
 
-  clutter_gtk = callPackage ../development/libraries/clutter-gtk {
-    inherit (gnome) gtk;
-  };
+  clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
@@ -3404,9 +3391,7 @@ let
 
   eigen = callPackage ../development/libraries/eigen {};
 
-  enchant = callPackage ../development/libraries/enchant {
-    inherit (gnome) glib;
-  };
+  enchant = callPackage ../development/libraries/enchant { };
 
   enet = callPackage ../development/libraries/enet { };
 
@@ -3502,7 +3487,6 @@ let
 
   gegl = callPackage ../development/libraries/gegl {
     #  avocodec avformat librsvg
-    inherit (gtkLibs) pango glib gtk;
   };
 
   geoclue = callPackage ../development/libraries/geoclue {};
@@ -3665,14 +3649,12 @@ let
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
   goffice = callPackage ../development/libraries/goffice {
-    inherit (gnome) glib gtk libglade libgnomeui pango;
+    inherit (gnome) libglade libgnomeui;
     gconf = gnome.GConf;
     libart = gnome.libart_lgpl;
   };
 
-  goocanvas = callPackage ../development/libraries/goocanvas {
-    inherit (gnome) gtk glib;
-  };
+  goocanvas = callPackage ../development/libraries/goocanvas { };
 
   google_perftools = callPackage ../development/libraries/google-perftools { };
 
@@ -3780,13 +3762,13 @@ let
   };
 
   gtksharp1 = callPackage ../development/libraries/gtk-sharp-1 {
-    inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml
+    inherit (gnome) libglade libgtkhtml gtkhtml
               libgnomecanvas libgnomeui libgnomeprint
               libgnomeprintui GConf;
   };
 
   gtksharp2 = callPackage ../development/libraries/gtk-sharp-2 {
-    inherit (gnome) gtk glib pango libglade libgtkhtml gtkhtml
+    inherit (gnome) libglade libgtkhtml gtkhtml
               libgnomecanvas libgnomeui libgnomeprint
               libgnomeprintui GConf gnomepanel;
   };
@@ -3891,9 +3873,7 @@ let
 
   lcms2 = callPackage ../development/libraries/lcms2 { };
 
-  lensfun = callPackage ../development/libraries/lensfun {
-    inherit (gnome) glib;
-  };
+  lensfun = callPackage ../development/libraries/lensfun { };
 
   lesstif = callPackage ../development/libraries/lesstif { };
 
@@ -3942,7 +3922,7 @@ let
   libcdio = callPackage ../development/libraries/libcdio { };
 
   libchamplain = callPackage ../development/libraries/libchamplain {
-    inherit (gnome) gtk glib libsoup;
+    inherit (gnome) libsoup;
   };
 
   libchop = callPackage ../development/libraries/libchop { };
@@ -4066,9 +4046,7 @@ let
 
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
-  liblqr1 = callPackage ../development/libraries/liblqr-1 {
-    inherit (gnome) glib;
-  };
+  liblqr1 = callPackage ../development/libraries/liblqr-1 { };
 
   libmhash = callPackage ../development/libraries/libmhash {};
 
@@ -4089,7 +4067,7 @@ let
   libspectre = callPackage ../development/libraries/libspectre { };
 
   libgsf = callPackage ../development/libraries/libgsf {
-    inherit (gnome) glib gnome_vfs libbonobo;
+    inherit (gnome) gnome_vfs libbonobo;
   };
 
   libiconv = callPackage ../development/libraries/libiconv { };
@@ -4282,13 +4260,9 @@ let
 
   libwmf = callPackage ../development/libraries/libwmf { };
 
-  libwpd = callPackage ../development/libraries/libwpd {
-    inherit (gnome) glib;
-  };
+  libwpd = callPackage ../development/libraries/libwpd { };
 
-  libwpd_08 = callPackage ../development/libraries/libwpd/0.8.nix {
-    inherit (gnome) glib;
-  };
+  libwpd_08 = callPackage ../development/libraries/libwpd/0.8.nix { };
 
   libwpg = callPackage ../development/libraries/libwpg { };
 
@@ -4516,9 +4490,7 @@ let
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
 
-  pangoxsl = callPackage ../development/libraries/pangoxsl {
-    inherit (gtkLibs) glib pango;
-  };
+  pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
   pcre = callPackage ../development/libraries/pcre {
     unicodeSupport = getConfig ["pcre" "unicode"] true;
@@ -4588,9 +4560,7 @@ let
 
   qt4 = pkgs.kde4.qt4;
 
-  qt47 = callPackage ../development/libraries/qt-4.x/4.7 {
-    inherit (pkgs.gnome) glib;
-  };
+  qt47 = callPackage ../development/libraries/qt-4.x/4.7 { };
 
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
@@ -5788,7 +5758,7 @@ let
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
     sysprof = callPackage ../development/tools/profiling/sysprof {
-      inherit (gnome) gtk glib pango libglade;
+      inherit (gnome) libglade;
     };
 
     systemtap = callPackage ../development/tools/profiling/systemtap {
@@ -6304,12 +6274,10 @@ let
   antiword = callPackage ../applications/office/antiword {};
 
   ardour = callPackage ../applications/audio/ardour {
-    inherit (gtkLibs) glib pango gtk glibmm gtkmm;
     inherit (gnome) libgnomecanvas;
   };
 
   ardour3 =  lowPrio (callPackage ../applications/audio/ardour/ardour3.nix {
-    inherit (gtkLibs) glib pango gtk glibmm gtkmm;
     inherit (gnome) libgnomecanvas libgnomecanvasmm;
   });
 
@@ -6334,7 +6302,6 @@ let
   avogadro = callPackage ../applications/science/chemistry/avogadro { };
 
   awesome = callPackage ../applications/window-managers/awesome {
-    inherit (gtkLibs) glib pango;
     lua = lua5;
     cairo = cairo.override { xcbSupport = true; };
   };
