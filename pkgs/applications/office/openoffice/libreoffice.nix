@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     # I think libreoffice expects by default the translations in ./translations
     mv libreoffice-translations-3.5.0.3/translations .
 
-    sed -i 's,/bin/bash,${bash}/bin/bash,' sysui/desktop/share/makefile.mk
+    sed -i 's,/bin/bash,${bash}/bin/bash,' sysui/desktop/share/makefile.mk solenv/bin/localize
     sed -i 's,/usr/bin/env bash,${bash}/bin/bash,' bin/unpack-sources \
       solenv/bin/install-gdb-printers solenv/bin/striplanguagetags.sh
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
 
-    export configureFlagsArray=("--with-lang=${langsSpaces}")
+    configureFlagsArray=("--with-lang=${langsSpaces}")
   '';
 
   buildPhase = ''
