@@ -1,16 +1,17 @@
 {stdenv, fetchurl, cmake, libcap, zlib, bzip2}:
 
 stdenv.mkDerivation rec {
-  name = "cdrkit-1.1.10";
+  name = "cdrkit-1.1.11";
 
   src = fetchurl {
     url = "http://cdrkit.org/releases/${name}.tar.gz";
-    sha256 = "1r87n4293lk2xgik9x1lvjr86rdsbaldf0d5flx6zb4c0ss90vlb";
+    sha256 = "1nj7iv3xrq600i37na9a5idd718piiiqbs4zxvpjs66cdrsk1h6i";
   };
 
   buildInputs = [cmake libcap zlib bzip2];
 
-  patches = [ ./include-path.patch ];
+  # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
+  patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ];
 
   postInstall = ''
     # file name compatibility with the old cdrecord (growisofs wants this name)
