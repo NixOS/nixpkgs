@@ -18,3 +18,16 @@ index 4fd3a95..10fa388 100644
  # disabled for now, seems to have incomplete deps and hangs on a build from scratch
  #    CppunitTest_sd_filters_test \
  
+diff --git a/sc/Module_sc.mk b/sc/Module_sc.mk
+index 9c8696b..b36535b 100644
+--- a/sc/Module_sc.mk
++++ b/sc/Module_sc.mk
+@@ -35,7 +35,7 @@ $(eval $(call gb_Module_add_targets,sc,\
+ ))
+ 
+ $(eval $(call gb_Module_add_check_targets,sc,\
+-    CppunitTest_sc_filters_test \
++#    CppunitTest_sc_filters_test \
+     CppunitTest_sc_ucalc \
+ ))
+ 

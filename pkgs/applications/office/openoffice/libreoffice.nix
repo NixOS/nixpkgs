@@ -6,6 +6,7 @@
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, gstreamer, gstPluginsBase, mesa
 , autoconf, automake, openldap, bash
+, fontsConf
 , langs ? [ "en-US" "ca" "ru" "eo" "fr" "nl" "de" "en-GB" ]
 }:
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
 
   configureScript = "./autogen.sh";
 
-  patches = [ ./disable-uimpress-test.patch ];
+  # patches = [ ./disable-uimpress-test.patch ];
 
   preConfigure = ''
     tar xf $src_translation
@@ -50,6 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    export FONTCONFIG_FILE=${fontsConf}
     mkdir src
     for a in $srcs_download; do
       FILE=$(basename $a)
