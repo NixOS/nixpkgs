@@ -1436,9 +1436,7 @@ let
 
   udftools = callPackage ../tools/filesystems/udftools {};
 
-  ufraw = callPackage ../applications/graphics/ufraw {
-    inherit (gnome) gtk;
-  };
+  ufraw = callPackage ../applications/graphics/ufraw { };
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };
 
@@ -3707,9 +3705,7 @@ let
 
   gss = callPackage ../development/libraries/gss { };
 
-  gtkimageview = callPackage ../development/libraries/gtkimageview {
-    inherit (gnome) gtk;
-  };
+  gtkimageview = callPackage ../development/libraries/gtkimageview { };
 
   gtkmathview = callPackage ../development/libraries/gtkmathview { };
 
@@ -3745,7 +3741,6 @@ let
   gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
-    inherit (gnome) gtk;
     gtksharp = gtksharp2;
   };
 
@@ -3992,7 +3987,6 @@ let
   libexosip = callPackage ../development/libraries/exosip {};
 
   libextractor = callPackage ../development/libraries/libextractor {
-    inherit (gnome) gtk;
     libmpeg2 = mpeg2dec;
   };
 
@@ -4548,7 +4542,7 @@ let
 
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
-    inherit (pkgs.gnome) gtk libgnomeui GConf gnome_vfs;
+    inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
     # GStreamer is required for HTML5 video in QtWebKit
     inherit (pkgs.gst_all) gstreamer gstPluginsBase;
   };
@@ -5742,7 +5736,7 @@ let
 
     systemtap = callPackage ../development/tools/profiling/systemtap {
       linux = kernel;
-      inherit (gnome) gtkmm libglademm;
+      inherit (gnome) libglademm;
     };
 
     v86d = callPackage ../os-specific/linux/v86d { };
@@ -5883,7 +5877,7 @@ let
   };
 
   phat = callPackage ../development/libraries/phat {
-    inherit (gnome) gtk libgnomecanvas;
+    inherit (gnome) libgnomecanvas;
   };
 
   pmount = callPackage ../os-specific/linux/pmount { };
@@ -6398,7 +6392,7 @@ let
   darcs = haskellPackages.darcs;
 
   darktable = callPackage ../applications/graphics/darktable {
-    inherit (gnome) GConf libglade atk;
+    inherit (gnome) GConf libglade;
   };
 
   dia = callPackage ../applications/graphics/dia {
@@ -6557,7 +6551,7 @@ let
   esniper = callPackage ../applications/networking/esniper { };
 
   etherape = callPackage ../applications/networking/sniffers/etherape {
-    inherit (gnome) gnomedocutils libgnome libglade gtk libgnomeui scrollkeeper;
+    inherit (gnome) gnomedocutils libgnome libglade libgnomeui scrollkeeper;
   };
 
   evopedia = callPackage ../applications/misc/evopedia { };
@@ -6688,7 +6682,7 @@ let
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
   gimp = callPackage ../applications/graphics/gimp {
-    inherit (gnome) gtk libart_lgpl;
+    inherit (gnome) libart_lgpl;
   };
 
   gimpPlugins = recurseIntoAttrs (import ../applications/graphics/gimp/plugins {
@@ -6738,7 +6732,7 @@ let
   };
 
   gnunet08 = callPackage ../applications/networking/p2p/gnunet/0.8.nix {
-    inherit (gnome) gtk libglade;
+    inherit (gnome) libglade;
     guile = guile_1_8;
     gtkSupport = getConfig [ "gnunet" "gtkSupport" ] true;
   };
@@ -6824,14 +6818,14 @@ let
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icecat3 = lowPrio (callPackage ../applications/networking/browsers/icecat-3 {
-    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
 
   icecatXulrunner3 = lowPrio (callPackage ../applications/networking/browsers/icecat-3 {
     application = "xulrunner";
-    inherit (gnome) libIDL libgnomeui gnome_vfs gtk pango;
+    inherit (gnome) libIDL libgnomeui gnome_vfs;
     inherit (xlibs) pixman;
     inherit (pythonPackages) ply;
   });
@@ -7296,7 +7290,7 @@ let
   sox = callPackage ../applications/misc/audio/sox { };
 
   specimen = callPackage ../applications/audio/specimen {
-    inherit (gnome) gtk libgnomecanvas;
+    inherit (gnome) libgnomecanvas;
   };
 
   spotify = callPackage ../applications/audio/spotify { };
@@ -7673,9 +7667,7 @@ let
 
   crrcsim = callPackage ../games/crrcsim {};
 
-  dwarf_fortress = callPackage_i686 ../games/dwarf-fortress {
-    gnomegtk = pkgsi686Linux.gnome.gtk;
-  };
+  dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { };
 
   eduke32 = callPackage ../games/eduke32 { };
 
@@ -8090,8 +8082,8 @@ let
   ### SCIENCE/GEOMETRY
 
   drgeo = builderDefsPackage (import ../applications/science/geometry/drgeo) {
-    inherit (gnome) libglade gtk;
-    inherit libxml2 perl intltool libtool pkgconfig;
+    inherit (gnome) libglade;
+    inherit libxml2 perl intltool libtool pkgconfig gtk;
     guile = guile_1_8;
   };
 
@@ -8317,9 +8309,9 @@ let
   gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
     inherit perl intltool pyGtkGlade gettext pkgconfig makeWrapper pygobject
       pyopenssl gtkspell libsexy pycrypto aspell pythonDBus pythonSexy
-      docutils;
+      docutils gtk;
     dbus = dbus.libs;
-    inherit (gnome) gtk libglade;
+    inherit (gnome) libglade;
     inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11
       scrnsaverproto;
     python = pythonFull;

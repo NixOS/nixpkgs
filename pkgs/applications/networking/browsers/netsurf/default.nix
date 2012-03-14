@@ -77,9 +77,9 @@ rec {
   browser = import ./netsurf.nix {
     inherit fetchurl sourceFromHead stdenv lib pkgconfig
       libnsbmp libnsgif libsvgtiny libwapcaplet hubub libParserUtils
-      libpng libxml2 libCSS lcms curl libmng;
+      libpng libxml2 libCSS lcms curl libmng glib gtk;
     libharu = netsurfHaru;
-    inherit (gnome) glib gtk libglade;
+    inherit (gnome) libglade;
   };
 
 

@@ -719,7 +719,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   glade = callPackage ../development/libraries/haskell/glade {
     inherit (pkgs.gnome) libglade;
-    gtkC = pkgs.gnome.gtk;
+    gtkC = pkgs.gtk;
     libc = pkgs.stdenv.gcc.libc;
   };
 

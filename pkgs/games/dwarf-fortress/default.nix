@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_ttf, gnomegtk, glib, mesa, openal, glibc, libsndfile}:
+{stdenv, fetchurl, SDL, SDL_image, SDL_ttf, gtk, glib, mesa, openal, glibc, libsndfile}:
 
 assert stdenv.system == "i686-linux";
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
     ln -s \$DF_DIR/save \$DF_DIR/data/
 
     # now run Dwarf Fortress! 
-    export LD_LIBRARY_PATH=\$DF_DIR/df_linux/libs/:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gnomegtk}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/
+    export LD_LIBRARY_PATH=\$DF_DIR/df_linux/libs/:${SDL}/lib:${SDL_image}/lib/:${SDL_ttf}/lib/:${gtk}/lib/:${glib}/lib/:${mesa}/lib/:${openal}/lib/
     \$DF_DIR/df "\$@"
     EOF
 
