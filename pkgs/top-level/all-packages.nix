@@ -4731,13 +4731,13 @@ let
 
   tecla = callPackage ../development/libraries/tecla { };
 
-  telepathy_glib = callPackage ../development/libraries/telepathy-glib { };
+  telepathy_glib = callPackage ../development/libraries/telepathy/glib { };
 
-  telepathy_farsight = callPackage ../development/libraries/telepathy-farsight {
+  telepathy_farsight = callPackage ../development/libraries/telepathy/farsight {
     inherit (pkgs.gst_all) gstPluginsBase gstreamer gst_python;
   };
 
-  telepathy_qt = callPackage ../development/libraries/telepathy-qt { };
+  telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
 
   tk = callPackage ../development/libraries/tk { };
 
