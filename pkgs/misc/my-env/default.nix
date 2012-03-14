@@ -3,7 +3,7 @@
   #### examples of use: ####
   # Add this to your ~/.nixpkgs/config.nix:
   {
-    packageOverrides = pkgs : with pkgs;
+    packageOverrides = pkgs : with pkgs; {
       sdlEnv = pkgs.myEnvFun {
           name = "sdl";
           buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net  pkgconfig];
