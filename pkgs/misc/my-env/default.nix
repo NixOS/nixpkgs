@@ -13,8 +13,8 @@
 
   # Then you can install it by:   nix-env -i sdl-env
   # And you can load it simply calling:  load-sdl-env
-  # and in the new shell spawn you will have 'make' and 'gcc' finding the SDL headers and libs.
-  # Type 'exit', and you will exit it
+  # and this will update your env vars to have 'make' and 'gcc' finding the SDL
+  # headers and libs.
 
 
   ##### Another example, more complicated but achieving more: #######
@@ -47,9 +47,9 @@
   Now we should build our newly defined custom environment using this command on a shell, so type:
     $ nix-env -i env-nix
 
-  One could also use this function instead:
+  You can load the environment simply typing a "load-${name}-env" command.
     $ load-nix-env
-  The result using either command should be:
+  The result using that command should be:
     env-nix loaded
 */
 
