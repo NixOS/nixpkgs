@@ -7437,6 +7437,8 @@ let
     inherit (pkgs.gnome) libsoup;
   };
 
+  telepathy_mission_control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
+
   tesseract = callPackage ../applications/graphics/tesseract { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
