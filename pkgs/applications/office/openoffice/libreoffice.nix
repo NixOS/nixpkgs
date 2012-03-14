@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "0kk1jb4axjvkmg22yhxx4p9522zix6rr5cs0c5rxzlkm63qw6h8w";
   };
 
+  src_help = fetchurl {
+    url = "http://download.documentfoundation.org/libreoffice/src/3.5.0/libreoffice-help-3.5.0.3.tar.xz";
+    sha256 = "0wvlh2r4cy14rs0svr4yb4fidp2g9wbj8vxx2a5swnjf2fdf8qda";
+  };
+
   src = fetchurl {
     url = "http://download.documentfoundation.org/libreoffice/src/3.5.0/libreoffice-core-3.5.0.3.tar.xz";
     sha256 = "04hvlj6wzbj3zjpfjq975mgdmf902ywyf94nxcv067asg83qfcvr";
@@ -30,12 +35,13 @@ stdenv.mkDerivation rec {
 
   configureScript = "./autogen.sh";
 
-  # patches = [ ./disable-uimpress-test.patch ];
-
   preConfigure = ''
     tar xf $src_translation
-    # I think libreoffice expects by default the translations in ./translations
+    # Libreoffice expects by default the translations in ./translations
     mv libreoffice-translations-3.5.0.3/translations .
+    tar xf $src_help
+    # Libreoffice expects by default the help in ./helpcontent2
+    mv libreoffice-help-3.5.0.3/helpcontent2 .
 
     sed -i 's,/bin/bash,${bash}/bin/bash,' sysui/desktop/share/makefile.mk solenv/bin/localize
     sed -i 's,/usr/bin/env bash,${bash}/bin/bash,' bin/unpack-sources \
@@ -51,6 +57,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
+    # This is required as some cppunittests require fontconfig configured
     export FONTCONFIG_FILE=${fontsConf}
     mkdir src
     for a in $srcs_download; do
@@ -85,40 +92,30 @@ stdenv.mkDerivation rec {
     "--without-system-mythes"
 
     # Without this, it wants to download
-    "--with-cairo"
+    "--with-system-cairo"
     "--with-system-libs"
-    "--with-system-python"
+    "--enable-python=system"
     "--with-system-boost"
     "--with-system-db"
 
     # I imagine this helps. Copied from go-oo.
     "--disable-epm"
-    "--disable-fontooo"
     "--disable-mathmldtd"
     "--disable-mozilla"
     "--disable-odk"
-    "--disable-pasf"
     "--disable-dbus"
     "--disable-kde"
     "--disable-kde4"
-    "--disable-mono"
     "--disable-postgresql-sdbc"
     "--with-package-format=native"
     "--with-jdk-home=${jdk}"
     "--with-ant-home=${ant}"
     "--without-afms"
-    "--without-dict"
     "--without-fonts"
     "--without-myspell-dicts"
-    "--without-nas"
     "--without-ppds"
-    "--without-system-agg"
     "--without-system-beanshell"
     "--without-system-hsqldb"
-    "--without-system-xalan"
-    "--without-system-xerces"
-    "--without-system-xml-apis"
-    "--without-system-xt"
     "--without-system-jars"
     "--without-system-hunspell"
     "--without-system-altlinuxhyph"
@@ -130,7 +127,6 @@ stdenv.mkDerivation rec {
     "--without-system-redland"
     "--without-system-libvisio"
     "--without-system-libcmis"
-    "--without-system-nspr"
     "--without-system-nss"
     "--without-system-sampleicc"
     "--without-system-libexttextcat"
