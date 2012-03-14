@@ -64,7 +64,7 @@ edk2 = stdenv.mkDerivation {
         build
       ";
 
-      installPhase = "mv -v Build $out";
+      installPhase = "mv -v Build/*/* $out";
     } // (removeAttrs attrs [ "buildInputs" ] );
   };
 };

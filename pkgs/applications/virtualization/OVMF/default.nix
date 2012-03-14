@@ -14,10 +14,12 @@ in
 stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
   name = "OVMF-2012-03-13";
 
-  src = edk2.src;
-  
-  patchPhase = ''
-    rm -fR Conf BaseTools EdkCompatibilityPkg
+  unpackPhase = ''
+    for file in \
+      "${edk2.src}"/{OvmfPkg,UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg};
+    do
+      ln -sv "$file" .
+    done
   '';
 
   meta = {
