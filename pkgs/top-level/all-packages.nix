@@ -634,6 +634,9 @@ let
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
+  edk2 = callPackage ../development/compilers/edk2 {
+  };
+
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
