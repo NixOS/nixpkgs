@@ -17,6 +17,8 @@ rec {
 
   gst_python = callPackage ./gst-python {};
 
+  qt_gstreamer = callPackage ./qt-gstreamer {};
+
   # Header files are in include/${prefix}/
   prefix = "gstreamer-0.10";
 }
