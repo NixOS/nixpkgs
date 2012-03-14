@@ -12,11 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "01fd2qb0zddif3wz1a2wdmwyzn81cf73678qp2gjs8iikmdz6w7x";
   };
 
-  patches = [ (fetchurl {
-    url = "http://patch-tracker.debian.org/patch/series/dl/k3d/0.8.0.2-15/k3d_gtkmm224.patch";
-    sha256 = "0a81fg96zby6kidqwj6n8mhbrh0j5fpnmfh7lr6havz5r2is9ks5";
-  })
-   ];
+  patches = map fetchurl (import ./debian-patches.nix);
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
