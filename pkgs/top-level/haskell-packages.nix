@@ -1388,8 +1388,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
   unorderedContainers_0_1_4_6 = callPackage ../development/libraries/haskell/unordered-containers/0.1.4.6.nix {};
-  unorderedContainers_0_2_0_1 = callPackage ../development/libraries/haskell/unordered-containers/0.2.0.1.nix {};
-  unorderedContainers = self.unorderedContainers_0_2_0_1;
+  unorderedContainers_0_2_1_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.1.0.nix {};
+  unorderedContainers = self.unorderedContainers_0_2_1_0;
 
   url = callPackage ../development/libraries/haskell/url {};
 
