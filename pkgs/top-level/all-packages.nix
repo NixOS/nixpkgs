@@ -7000,7 +7000,7 @@ let
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
-  linphone = callPackage ../applications/networking/linphone {
+  linphone = callPackage ../applications/networking/instant-messengers/linphone {
     inherit (gnome) libglade;
   };
 
@@ -7330,7 +7330,7 @@ let
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  skype_linux = callPackage_i686 ../applications/networking/skype {
+  skype_linux = callPackage_i686 ../applications/networking/instant-messengers/skype {
     usePulseAudio = getConfig [ "pulseaudio" ] false; # disabled by default (the 100% cpu bug)
   };
 
@@ -7433,7 +7433,7 @@ let
 
   taskwarrior_unstable = callPackage ../applications/misc/taskwarrior/unstable.nix { };
 
-  telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy-gabble {
+  telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble {
     inherit (pkgs.gnome) libsoup;
   };
 
@@ -7465,7 +7465,7 @@ let
 
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
-  twinkle = callPackage ../applications/networking/twinkle {
+  twinkle = callPackage ../applications/networking/instant-messengers/twinkle {
     boost = boostFull;
     ccrtp = ccrtp_1_8;
     libzrtpcpp = libzrtpcpp_1_6;
@@ -8005,7 +8005,7 @@ let
       inherit (kde3) kdelibs;
     };
 
-    kphone = callPackage ../applications/networking/kphone {
+    kphone = callPackage ../applications/networking/instant-messengers/kphone {
       stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
     };
 
@@ -8379,7 +8379,8 @@ let
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = newScope (pkgs.gtkLibs // pkgs.gnome) ../applications/networking/ekiga { };
+  ekiga = newScope (pkgs.gtkLibs // pkgs.gnome)
+    ../applications/networking/instant-messengers/ekiga { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
