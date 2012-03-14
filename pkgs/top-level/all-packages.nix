@@ -4795,19 +4795,21 @@ let
     inherit (gtkLibs) gtk;
     inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
-    withMesa = stdenv.isLinux;
+    withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
     inherit (gtkLibs) gtk;
     inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
+    withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wxGTK291 = callPackage ../development/libraries/wxGTK-2.9/2.9.1.nix {
     inherit (gtkLibs) gtk;
     inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
+    withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wtk = callPackage ../development/libraries/wtk { };
