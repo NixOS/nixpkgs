@@ -4709,10 +4709,6 @@ let
 
   tecla = callPackage ../development/libraries/tecla { };
 
-  telepathy_gabble = callPackage ../development/libraries/telepathy-gabble {
-    inherit (pkgs.gnome) libsoup;
-  };
-
   telepathy_glib = callPackage ../development/libraries/telepathy-glib { };
 
   telepathy_farsight = callPackage ../development/libraries/telepathy-farsight {
@@ -7436,6 +7432,10 @@ let
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
   taskwarrior_unstable = callPackage ../applications/misc/taskwarrior/unstable.nix { };
+
+  telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy-gabble {
+    inherit (pkgs.gnome) libsoup;
+  };
 
   tesseract = callPackage ../applications/graphics/tesseract { };
 
