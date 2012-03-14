@@ -1,7 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtk, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gstPluginsBase, GConf
-, mesa, compat24 ? false, compat26 ? true, unicode ? true,
+, withMesa ? true, mesa ? null, compat24 ? false, compat26 ? true, unicode ? true,
 }:
+
+assert withMesa -> mesa != null;
+
+with stdenv.lib;
 
 stdenv.mkDerivation {
   name = "wxwidgets-2.9.1";
@@ -11,7 +15,8 @@ stdenv.mkDerivation {
     sha256 = "1f6pdlzjawhhs17hmimk0l1n3g4g48n2iqrgl181xqfrbxyz75b8";
   };
 
-  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto mesa gstreamer gstPluginsBase GConf ];
+  buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gstPluginsBase GConf ]
+    ++ optional withMesa mesa;
 
   buildNativeInputs = [ pkgconfig ];
 
@@ -21,11 +26,10 @@ stdenv.mkDerivation {
     (if compat26 then "--enable-compat26" else "--disable-compat26")
     "--disable-precomp-headers"
     (if unicode then "--enable-unicode" else "")
-    "--with-opengl"
     "--enable-mediactrl"
-  ];
+  ] ++ optional withMesa "--with-opengl";
 
-  SEARCH_LIB = "${mesa}/lib";
+  SEARCH_LIB = optionalString withMesa "${mesa}/lib";
 
   preConfigure = "
     substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='
