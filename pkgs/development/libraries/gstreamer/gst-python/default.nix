@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, python, gstreamer
-  , gstPluginsBase, pygtk
+  , gst_plugins_base, pygtk
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig gstPluginsBase pygtk ]
+    [ pkgconfig gst_plugins_base pygtk ]
     ;
 
   propagatedBuildInputs = [ gstreamer python ];

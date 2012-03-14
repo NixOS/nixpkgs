@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, gstPluginsBase, aalib, cairo
+{ fetchurl, stdenv, pkgconfig, gst_plugins_base, aalib, cairo
 , flac, libjpeg, zlib, speex, libpng, libdv, libcaca
 , libiec61883, libavc1394, taglib, pulseaudio
 , glib, gstreamer, bzip2
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-oss";
 
   buildInputs =
-    [ pkgconfig glib gstreamer gstPluginsBase libavc1394 libiec61883
+    [ pkgconfig glib gstreamer gst_plugins_base libavc1394 libiec61883
       aalib libcaca cairo libdv flac libjpeg libpng pulseaudio speex
       taglib bzip2
     ];

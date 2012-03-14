@@ -3679,10 +3679,32 @@ let
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
 
-  gst_all = recurseIntoAttrs
-    (let callPackage = newScope pkgs.gst_all; in
-     import ../development/libraries/gstreamer { inherit callPackage; }
-    );
+  gst_all = {
+    inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
+    gstPluginsBase = pkgs.gst_plugins_base;
+    gstPluginsBad = pkgs.gst_plugins_bad;
+    gstPluginsGood = pkgs.gst_plugins_good;
+    gstPluginsUgly = pkgs.gst_plugins_ugly;
+    gstFfmpeg = pkgs.gst_ffmpeg;
+  };
+
+  gstreamer = callPackage ../development/libraries/gstreamer/gstreamer {};
+
+  gst_plugins_base = callPackage ../development/libraries/gstreamer/gst-plugins-base {};
+
+  gst_plugins_good = callPackage ../development/libraries/gstreamer/gst-plugins-good {};
+
+  gst_plugins_bad = callPackage ../development/libraries/gstreamer/gst-plugins-bad {};
+
+  gst_plugins_ugly = callPackage ../development/libraries/gstreamer/gst-plugins-ugly {};
+
+  gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {};
+
+  gst_python = callPackage ../development/libraries/gstreamer/gst-python {};
+
+  gnonlin = callPackage ../development/libraries/gstreamer/gnonlin {};
+
+  qt_gstreamer = callPackage ../development/libraries/gstreamer/qt-gstreamer {};
 
   gnet = callPackage ../development/libraries/gnet { };
 
