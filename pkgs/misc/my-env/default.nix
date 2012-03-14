@@ -1,18 +1,34 @@
-# idea: provide nix environment for your developement actions
-# experimental
-
+# idea: provide a build environments for your developement of preference
 /*
-  # example:
-  # add postgresql to environment and create ctags (tagfiles can be extracted from TAG_FILES)
-  # add this to your ~/.nixpkgs/config.nix
+  #### examples of use: ####
+  # Add this to your ~/.nixpkgs/config.nix:
+  {
+    packageOverrides = pkgs : with pkgs;
+      sdlEnv = pkgs.myEnvFun {
+          name = "sdl";
+          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net  pkgconfig];
+      };
+    };
+  }
 
+  # Then you can install it by:   nix-env -i sdl-env
+  # And you can load it simply calling:  load-sdl-env
+  # and in the new shell spawn you will have 'make' and 'gcc' finding the SDL headers and libs.
+  # Type 'exit', and you will exit it
+
+
+  ##### Another example, more complicated but achieving more: #######
+  # Make an environment to build nix from source and create ctags (tagfiles can
+  # be extracted from TAG_FILES) from every source package. Here would be a
+  # full ~/.nixpkgs/config.nix
   {
     packageOverrides = pkgs : with pkgs; with sourceAndTags;
-    let simple = { name, buildInputs ? [], cTags ? [], extraCmds ? ""}:
+    let complicatedMyEnv = { name, buildInputs ? [], cTags ? [], extraCmds ? ""}:
             pkgs.myEnvFun {
               inherit name;
             buildInputs = buildInputs 
-                  ++ map (x : sourceWithTagsDerivation ( (addCTaggingInfo x ).passthru.sourceWithTags ) ) cTags;
+                  ++ map (x : sourceWithTagsDerivation
+                    ( (addCTaggingInfo x ).passthru.sourceWithTags ) ) cTags;
             extraCmds = ''
               ${extraCmds}
               HOME=${builtins.getEnv "HOME"}
@@ -21,41 +37,20 @@
           };
     in rec {
       # this is the example we will be using
-      nixEnv = simple {
-       name = "mytestenv";
-       buildInputs = [ libtool stdenv perl curl bzip2 openssl db45 autoconf automake zlib ];
+      nixEnv = complicatedMyEnv {
+        name = "nix";
+        buildInputs = [ libtool stdenv perl curl bzip2 openssl db45 autoconf automake zlib ];
       };
-      # this is a second example (not covered here but still useful) - given by viric
-      sdlEnv = pkgs.myEnvFun {
-          name = "sdl";
-          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net  pkgconfig];
-      };
-      # add more environments below here, just follow the syntax given in the above examples
     };
   }
 
-  put this into your .bashrc
-    loadEnv(){ . "${HOME}/.nix-profile/dev-envs/${1}"; }
+  Now we should build our newly defined custom environment using this command on a shell, so type:
+    $ nix-env -i env-nix
 
-  afterwards execute the new bash shell:
-    $ bash
-
-  the nix expression created is called: env-mytestenv and must appear when searching for it using:
-    $ nix-env -qa '*' | grep nix
-      env-mytestenv
-
-  now we should build our newly defined custom environment using this command on a shell, so type:
-    $ nix-env -iA env-mytestenv
-
-  afterwards load the new environment using:
-    $ loadEnv mytestenv
-  one could also use this function instead:
-    $ load-mytestenv-env
-  the result using either command should be:
-    env-mytestenv loaded
-
-  note: after you typed the above command you will lose all the other tools usually found in a shell you are used to. in this
-        example you will not be able to type 'vi' to edit a file as vi is not included in the dependencies
+  One could also use this function instead:
+    $ load-nix-env
+  The result using either command should be:
+    env-nix loaded
 */
 
 { mkDerivation, substituteAll, pkgs } : { stdenv ? pkgs.stdenv, name, buildInputs ? [], cTags ? [], extraCmds ? ""} :
