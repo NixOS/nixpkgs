@@ -3683,6 +3683,10 @@ let
 
   gnet = callPackage ../development/libraries/gnet { };
 
+  gnu_efi = callPackage ../development/libraries/gnu-efi {
+    stdenv = overrideInStdenv stdenv [gnumake381];
+  };
+
   gnutls = callPackage ../development/libraries/gnutls {
     guileBindings = getConfig ["gnutls" "guile"] true;
   };
