@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeWrapper, boost, file, gettext
-, glib, glibc, libgnome_keyring, gtk, gtkmm, intltool, libctemplate, libglade
+, glib, glibc, libgnome_keyring, gnome_keyring, gtk, gtkmm, intltool
+, libctemplate, libglade
 , libgnome, libsigcxx, libtool, libuuid, libxml2, libzip, lua, mesa, mysql
 , pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite
 }:
