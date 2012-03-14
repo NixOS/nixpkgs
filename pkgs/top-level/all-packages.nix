@@ -132,7 +132,7 @@ let
 
   # We use `callPackage' to be able to omit function arguments that
   # can be obtained from `pkgs' or `pkgs.xorg' (i.e. `defaultScope').
-  # Use `newScope' for sets of packages in `pkgs' (see e.g. `gtkLibs'
+  # Use `newScope' for sets of packages in `pkgs' (see e.g. `gnome'
   # below).
   callPackage = newScope {};
 
@@ -717,9 +717,7 @@ let
 
   gawk = callPackage ../tools/text/gawk { };
 
-  gdmap = callPackage ../tools/system/gdmap {
-    inherit (pkgs.gtkLibs) gtk;
-  };
+  gdmap = callPackage ../tools/system/gdmap { };
 
   genext2fs = callPackage ../tools/filesystems/genext2fs { };
 
@@ -741,8 +739,7 @@ let
 
   gnokii = builderDefsPackage (import ../tools/misc/gnokii) {
     inherit intltool perl gettext libusb pkgconfig bluez readline pcsclite
-      libical;
-    inherit (gtkLibs) gtk glib;
+      libical gtk glib;
     inherit (xorg) libXpm;
   };
 
@@ -768,7 +765,6 @@ let
   gnupg = callPackage ../tools/security/gnupg { };
 
   gnuplot = callPackage ../tools/graphics/gnuplot {
-    inherit (gtkLibs) pango;
     texLive = null;
     lua = null;
   };
@@ -783,17 +779,13 @@ let
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
-  graphviz = callPackage ../tools/graphics/graphviz {
-    inherit (gtkLibs) pango;
-  };
+  graphviz = callPackage ../tools/graphics/graphviz { };
 
   /* Readded by Michael Raskin. There are programs in the wild
    * that do want 2.0 but not 2.22. Please give a day's notice for
    * objections before removal.
    */
-  graphviz_2_0 = callPackage ../tools/graphics/graphviz/2.0.nix {
-    inherit (gtkLibs) pango;
-  };
+  graphviz_2_0 = callPackage ../tools/graphics/graphviz/2.0.nix { };
 
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
@@ -1262,8 +1254,7 @@ let
   };
 
   pythonSexy = builderDefsPackage (import ../development/python-modules/libsexy) {
-    inherit python libsexy pkgconfig libxml2 pygtk;
-    inherit (gtkLibs) pango gtk glib;
+    inherit python libsexy pkgconfig libxml2 pygtk pango gtk glib;
   };
 
   openmpi = callPackage ../development/libraries/openmpi { };
@@ -1318,9 +1309,7 @@ let
     db4 = db45;
   };
 
-  rrdtool = callPackage ../tools/misc/rrdtool {
-    inherit (gtkLibs) pango;
-  };
+  rrdtool = callPackage ../tools/misc/rrdtool { };
 
   rtorrent = callPackage ../tools/networking/p2p/rtorrent { };
 
@@ -2026,7 +2015,7 @@ let
     langC = false;
     profiledCompiler = false;
     inherit zip unzip zlib boehmgc gettext pkgconfig;
-    inherit (gtkLibs) gtk;
+    inherit gtk;
     inherit (gnome) libart_lgpl;
     inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
       libXrandr xproto renderproto xextproto inputproto randrproto;
@@ -2040,7 +2029,7 @@ let
     langC = false;
     profiledCompiler = false;
     inherit zip unzip zlib boehmgc gettext pkgconfig perl;
-    inherit (gtkLibs) gtk;
+    inherit gtk;
     inherit (gnome) libart_lgpl;
     inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
       libXrandr xproto renderproto xextproto inputproto randrproto;
@@ -2054,7 +2043,7 @@ let
     langC = false;
     profiledCompiler = false;
     inherit zip unzip zlib boehmgc gettext pkgconfig perl;
-    inherit (gtkLibs) gtk;
+    inherit gtk;
     inherit (gnome) libart_lgpl;
     inherit (xlibs) libX11 libXt libSM libICE libXtst libXi libXrender
       libXrandr xproto renderproto xextproto inputproto randrproto;
@@ -2365,8 +2354,7 @@ let
   jikes = callPackage ../development/compilers/jikes { };
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
-    inherit makeWrapper;
-    inherit (gtkLibs) gtk glib pango atk gdk_pixbuf;
+    inherit makeWrapper gtk glib pango atk gdk_pixbuf;
     inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
     fpc = fpc;
   };
@@ -4104,9 +4092,7 @@ let
 
   libmad = callPackage ../development/libraries/libmad { };
 
-  libmatchbox = callPackage ../development/libraries/libmatchbox {
-    inherit (gtkLibs) pango;
-  };
+  libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
 
@@ -4284,9 +4270,7 @@ let
     pythonSupport = true;
   };
 
-  libxmlxx = callPackage ../development/libraries/libxmlxx {
-    inherit (gtkLibs) glibmm;
-  };
+  libxmlxx = callPackage ../development/libraries/libxmlxx { };
 
   libxslt = callPackage ../development/libraries/libxslt { };
 
@@ -4752,7 +4736,7 @@ let
   webkit =
     builderDefsPackage ../development/libraries/webkit {
       inherit (gnome) gtkdoc libsoup;
-      inherit (gtkLibs) gtk atk pango glib;
+      inherit gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
         libjpeg libtiff libxml2 libxslt sqlite
         icu cairo perl intltool automake libtool
@@ -4767,7 +4751,7 @@ let
   webkitSVN =
     builderDefsPackage ../development/libraries/webkit/svn.nix {
       inherit (gnome) gtkdoc libsoup;
-      inherit (gtkLibs) gtk atk pango glib;
+      inherit gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
         libjpeg libtiff libxml2 libxslt sqlite
         icu cairo perl intltool automake libtool
@@ -4784,21 +4768,18 @@ let
   wxGTK = wxGTK28;
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
-    inherit (gtkLibs) gtk;
     inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
-    inherit (gtkLibs) gtk;
     inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wxGTK291 = callPackage ../development/libraries/wxGTK-2.9/2.9.1.nix {
-    inherit (gtkLibs) gtk;
     inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
@@ -5704,9 +5685,7 @@ let
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
-    exmap = callPackage ../os-specific/linux/exmap {
-      inherit (gtkLibs) gtkmm;
-    };
+    exmap = callPackage ../os-specific/linux/exmap { };
 
     frandom = callPackage ../os-specific/linux/frandom { };
 
@@ -6091,7 +6070,6 @@ let
   };
 
   wesnoth = callPackage ../games/wesnoth {
-    inherit (gtkLibs) pango;
     lua = lua5;
     boost = boost147;
   };
@@ -6345,7 +6323,7 @@ let
       gtkspell aspell gettext ncurses avahi dbus dbus_glib python
       libtool automake autoconf;
     GStreamer = gst_all.gstreamer;
-    inherit (gtkLibs) gtk glib;
+    inherit gtk glib;
     inherit (gnome) startupnotification GConf ;
     inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
   };
@@ -6445,10 +6423,7 @@ let
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
 
-  dvswitch = callPackage ../applications/video/dvswitch {
-    inherit (gtkLibs) gtkmm;
-    inherit (xlibs) libXau libXdmcp libXv libpthreadstubs pixman;
-  };
+  dvswitch = callPackage ../applications/video/dvswitch { };
 
   dwm = callPackage ../applications/window-managers/dwm {
     patches = getConfig [ "dwm" "patches" ] [];
@@ -6484,7 +6459,7 @@ let
     # use override to select the appropriate gui toolkit
     libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
     Xaw3d = null;
-    gtk = if stdenv.isDarwin then null else gtkLibs.gtk;
+    gtk = if stdenv.isDarwin then null else gtk;
     # TODO: these packages don't build on Darwin.
     gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
     librsvg = null /* if stdenv.isDarwin then null else librsvg */;
@@ -6494,7 +6469,7 @@ let
     # use override to select the appropriate gui toolkit
     libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
     Xaw3d = null;
-    gtk = if stdenv.isDarwin then null else gtkLibs.gtk;
+    gtk = if stdenv.isDarwin then null else gtk;
     # TODO: these packages don't build on Darwin.
     gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
     librsvg = if stdenv.isDarwin then null else librsvg;
@@ -6597,7 +6572,7 @@ let
       libgnomeui libglade scrollkeeper;
   });
 
-  evolution_data_server = newScope (gnome // gtkLibs) ../servers/evolution-data-server { };
+  evolution_data_server = newScope (gnome) ../servers/evolution-data-server { };
 
   exrdisplay = callPackage ../applications/graphics/exrdisplay {
     fltk = fltk20;
@@ -6650,28 +6625,24 @@ let
   firefoxPkgs = pkgs.firefox100Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
-    inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
   firefox36Wrapper = wrapFirefox { browser = firefox36Pkgs.firefox; };
 
   firefox90Pkgs = callPackage ../applications/networking/browsers/firefox/9.0.nix {
-    inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
   firefox90Wrapper = wrapFirefox { browser = firefox90Pkgs.firefox; };
 
   firefox100Pkgs = callPackage ../applications/networking/browsers/firefox/10.0.nix {
-    inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
   firefox100Wrapper = wrapFirefox { browser = firefox100Pkgs.firefox; };
 
   firefox11Pkgs = callPackage ../applications/networking/browsers/firefox/11.0.nix {
-    inherit (gtkLibs) gtk pango;
     inherit (gnome) libIDL;
   };
 
@@ -6681,17 +6652,13 @@ let
 
   flashplayer = flashplayer11;
 
-  flashplayer9 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-9 {
-    inherit (gtkLibs) atk;
-  };
+  flashplayer9 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-9 { };
 
   flashplayer10 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-10 {
-    inherit (gtkLibs) atk gdk_pixbuf;
     debug = getConfig ["flashplayer" "debug"] false;
   };
 
   flashplayer11 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
-    inherit (gtkLibs) atk gdk_pixbuf;
     debug = getConfig ["flashplayer" "debug"] false;
   };
 
@@ -6736,13 +6703,11 @@ let
   gitSVN = gitAndTools.gitSVN;
 
   giv = callPackage ../applications/graphics/giv {
-    inherit (gtkLibs) gdk_pixbuf gtk;
     pcre = pcre.override { unicodeSupport = true; };
   };
 
   gnucash = callPackage ../applications/office/gnucash {
-    inherit (gnome) gtk glib libgnomeui libgtkhtml gtkhtml
-      libbonoboui libgnomeprint;
+    inherit (gnome) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint;
     gconf = gnome.GConf;
     guile = guile_1_8;
     slibGuile = slibGuile.override { scheme = guile_1_8; };
@@ -6783,7 +6748,6 @@ let
   gocr = callPackage ../applications/graphics/gocr { };
 
   gobby5 = callPackage ../applications/editors/gobby {
-    inherit (gtkLibs) gtkmm;
     inherit (gnome) gtksourceview;
   };
 
@@ -6823,7 +6787,6 @@ let
 
   gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
     inherit (gnome) GConf;
-    inherit (gtkLibs) gtk;
   };
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
@@ -6833,8 +6796,7 @@ let
   };
 
   gosmore = builderDefsPackage ../applications/misc/gosmore {
-    inherit fetchsvn curl pkgconfig libxml2;
-    inherit (gtkLibs) gtk;
+    inherit fetchsvn curl pkgconfig libxml2 gtk;
   };
 
   gpsbabel = callPackage ../applications/misc/gpsbabel { };
@@ -6909,7 +6871,6 @@ let
 
   inkscape = callPackage ../applications/graphics/inkscape {
     inherit (pythonPackages) lxml;
-    inherit (gtkLibs) gtk glib glibmm gtkmm;
   };
 
   ion3 = callPackage ../applications/window-managers/ion-3 {
@@ -6952,9 +6913,7 @@ let
 
   larswm = callPackage ../applications/window-managers/larswm { };
 
-  lash = callPackage ../applications/audio/lash {
-    inherit (gtkLibs) gtk;
-  };
+  lash = callPackage ../applications/audio/lash { };
 
   ladspaH = callPackage ../applications/audio/ladspa-plugins/ladspah.nix { };
 
@@ -7030,7 +6989,7 @@ let
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify
       vala dbus_glib;
-    inherit (gtkLibs) gtk glib;
+    inherit gtk glib;
     inherit (gnome) gtksourceview;
     inherit (webkit.passthru.args) libsoup;
     inherit (xlibs) kbproto xproto libXScrnSaver scrnsaverproto;
@@ -7043,7 +7002,7 @@ let
   mmex = callPackage ../applications/office/mmex { };
 
   monodevelop = callPackage ../applications/editors/monodevelop {
-    inherit (gnome) gnome_vfs libbonobo libglade libgnome GConf glib gtk;
+    inherit (gnome) gnome_vfs libbonobo libglade libgnome GConf;
     mozilla = firefox;
     gtksharp = gtksharp2;
   };
@@ -7057,9 +7016,9 @@ let
   };
 
   monotoneViz = builderDefsPackage (import ../applications/version-management/monotone-viz/mtn-head.nix) {
-    inherit ocaml graphviz pkgconfig autoconf automake libtool;
+    inherit ocaml graphviz pkgconfig autoconf automake libtool glib gtk;
     inherit (ocamlPackages) lablgtk;
-    inherit (gnome) gtk libgnomecanvas glib;
+    inherit (gnome) libgnomecanvas;
   };
 
   mozilla = callPackage ../applications/networking/browsers/mozilla {
@@ -7094,7 +7053,7 @@ let
   mrxvt = callPackage ../applications/misc/mrxvt { };
 
   multisync = callPackage ../applications/misc/multisync {
-    inherit (gnome) gtk glib ORBit2 libbonobo libgnomeui GConf;
+    inherit (gnome) ORBit2 libbonobo libgnomeui GConf;
   };
 
   mumble = callPackage ../applications/networking/mumble {
@@ -7173,7 +7132,6 @@ let
   openscad = callPackage ../applications/graphics/openscad {};
 
   opera = callPackage ../applications/networking/browsers/opera {
-    inherit (pkgs.gtkLibs) gdk_pixbuf atk;
     inherit (pkgs.kde4) kdelibs;
     inherit (pkgs.gst_all) gstreamer gstPluginsBase;
   };
@@ -7185,7 +7143,6 @@ let
   panotools = callPackage ../applications/graphics/panotools { };
 
   pavucontrol = callPackage ../applications/audio/pavucontrol {
-    inherit (gtkLibs) gtkmm;
     inherit (gnome) libglademm;
   };
 
@@ -7209,8 +7166,7 @@ let
   pidginlatexSF = builderDefsPackage
     (import ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex/pidgin-latex-sf.nix)
     {
-      inherit pkgconfig pidgin texLive imagemagick which;
-      inherit (gtkLibs) glib gtk;
+      inherit pkgconfig pidgin texLive imagemagick which glib gtk;
     };
 
   pidginmsnpecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
@@ -7233,10 +7189,7 @@ let
 
   pstree = callPackage ../applications/misc/pstree { };
 
-  puredata = callPackage ../applications/audio/puredata {
-    inherit (gtkLibs) glib;
-    inherit (xlibs) libX11;
-  };
+  puredata = callPackage ../applications/audio/puredata { };
 
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
@@ -7250,9 +7203,7 @@ let
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
-  qtractor = callPackage ../applications/audio/qtractor {
-    inherit (gtkLibs) gtk;
-  };
+  qtractor = callPackage ../applications/audio/qtractor { };
 
   rakarrack = callPackage ../applications/audio/rakarrack {
     inherit (xorg) libXpm libXft;
@@ -7263,16 +7214,13 @@ let
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
-  rawtherapee = callPackage ../applications/graphics/rawtherapee {
-    inherit (gtkLibs) gtk gtkmm;
-  };
+  rawtherapee = callPackage ../applications/graphics/rawtherapee { };
 
   rcs = callPackage ../applications/version-management/rcs { };
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
   RealPlayer = callPackage ../applications/video/RealPlayer {
-    inherit (gtkLibs) glib pango atk gtk;
     libstdcpp5 = gcc33.gcc;
   };
 
@@ -7313,9 +7261,7 @@ let
     wxGTK = wxGTK28.override { unicode = false; };
   };
 
-  seq24 = callPackage ../applications/audio/seq24 {
-    inherit (gtkLibs) gtkmm;
-  };
+  seq24 = callPackage ../applications/audio/seq24 { };
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
@@ -7331,7 +7277,7 @@ let
     inherit fetchurl stdenv stringsWithDeps lib fftw;
     inherit pkgconfig gmp gettext;
     inherit (xlibs) libXpm libX11;
-    inherit (gtkLibs) gtk glib;
+    inherit gtk glib;
   };
 
   snd = sndBase.passthru.function {
@@ -7382,7 +7328,6 @@ let
   }));
 
   surf = callPackage ../applications/misc/surf {
-    inherit (gtkLibs) gtk glib;
     libsoup = gnome.libsoup;
   };
 
@@ -7448,9 +7393,7 @@ let
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
-  trayer = callPackage ../applications/window-managers/trayer {
-    inherit (gtkLibs) gdk_pixbuf;
-  };
+  trayer = callPackage ../applications/window-managers/trayer { };
 
   tree = callPackage ../tools/system/tree { };
 
@@ -7473,7 +7416,7 @@ let
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper glib_networking;
-    inherit (gtkLibs) gtk glib;
+    inherit gtk glib;
     inherit (xlibs) libX11 kbproto;
     inherit (gnome) libsoup;
   };
@@ -7500,7 +7443,7 @@ let
       getConfig;
     inherit (pkgs.xlibs) libX11 libXext libSM libXpm
         libXt libXaw libXau libXmu libICE;
-    inherit (pkgs.gtkLibs) glib gtk;
+    inherit (pkgs) glib gtk;
     features = "huge"; # one of  tiny, small, normal, big or huge
     # optional features by passing
     # python
@@ -7623,7 +7566,6 @@ let
 
   xneur = callPackage ../applications/misc/xneur {
     GStreamer=gst_all.gstreamer;
-    inherit (gtkLibs) glib gtk pango atk gdk_pixbuf;
   };
 
   xneur_0_8 = callPackage ../applications/misc/xneur/0.8.nix {
@@ -7631,9 +7573,7 @@ let
   };
 
   xournal = callPackage ../applications/graphics/xournal {
-    inherit (gtkLibs) gtk atk pango glib;
-    inherit (gnome) libgnomeprint libgnomeprintui
-      libgnomecanvas;
+    inherit (gnome) libgnomeprint libgnomeprintui libgnomecanvas;
   };
 
   xpdf = callPackage ../applications/misc/xpdf {
@@ -7652,9 +7592,7 @@ let
     inherit (gnome) libglade;
   };
 
-  xsynth_dssi = callPackage ../applications/audio/xsynth-dssi {
-    inherit (gtkLibs) gtk;
-  };
+  xsynth_dssi = callPackage ../applications/audio/xsynth-dssi { };
 
   xterm = callPackage ../applications/misc/xterm { };
 
@@ -7779,7 +7717,6 @@ let
 
   gparted = callPackage ../tools/misc/gparted {
     parted = parted_2_3;
-    inherit (gtkLibs) gtk glib gtkmm;
     inherit (gnome) gnomedocutils;
   };
 
@@ -7846,8 +7783,7 @@ let
   };
 
   sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
-    inherit (gtkLibs) gtk;
-    inherit pkgconfig fetchsvn perl;
+    inherit pkgconfig fetchsvn perl gtk;
     inherit (xlibs) libX11;
   };
 
@@ -8056,15 +7992,11 @@ let
 
       kile = callPackage ../applications/editors/kile { };
 
-      kmplayer = callPackage ../applications/video/kmplayer {
-        inherit (pkgs.gtkLibs) pango;
-      };
+      kmplayer = callPackage ../applications/video/kmplayer { };
 
       kmymoney = callPackage ../applications/office/kmymoney { };
 
-      kipi_plugins = callPackage ../applications/graphics/kipi-plugins {
-        inherit (pkgs.gtkLibs) gdk_pixbuf;
-      };
+      kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
 
       koffice = callPackage ../applications/office/koffice {
         boost = boost147;
@@ -8096,9 +8028,7 @@ let
 
       polkit_kde_agent = callPackage ../tools/security/polkit-kde-agent { };
 
-      psi = callPackage ../applications/networking/instant-messengers/psi {
-        inherit (gtkLibs) glib;
-      };
+      psi = callPackage ../applications/networking/instant-messengers/psi { };
 
       quassel = callPackage ../applications/networking/irc/quassel { };
 
@@ -8134,9 +8064,7 @@ let
       xf86vidmodeproto;
   };
 
-  oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk {
-    inherit (gtkLibs) glib gtk;
-  };
+  oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };
 
   xfce = xfce48;
 
@@ -8151,9 +8079,7 @@ let
 
   ### SCIENCE
 
-  xplanet = callPackage ../applications/science/astronomy/xplanet {
-    inherit (gtkLibs) pango;
-  };
+  xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
@@ -8370,8 +8296,7 @@ let
 
   dpkg = callPackage ../tools/package-management/dpkg { };
 
-  ekiga = newScope (pkgs.gtkLibs // pkgs.gnome)
-    ../applications/networking/instant-messengers/ekiga { };
+  ekiga = newScope pkgs.gnome ../applications/networking/instant-messengers/ekiga { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
 
@@ -8424,7 +8349,6 @@ let
   lazylist = callPackage ../tools/typesetting/tex/lazylist { };
 
   lilypond = callPackage ../misc/lilypond {
-    inherit (gtkLibs) pango;
     guile = guile_1_8;
   };
 
