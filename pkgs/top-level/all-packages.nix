@@ -5192,6 +5192,8 @@ let
   oidentd = callPackage ../servers/identd/oidentd { };
 
   openfire = callPackage ../servers/xmpp/openfire { };
+ 
+  OVMF = callPackage ../applications/virtualization/OVMF { };
 
   postgresql = postgresql83;
 
