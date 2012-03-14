@@ -1,7 +1,7 @@
 { callPackage, pkgs }:
 
 rec {
-  inherit (pkgs.gtkLibs) gtk glib;
+  inherit (pkgs) gtk glib;
 
   #### CORE
 

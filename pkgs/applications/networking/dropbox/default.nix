@@ -1,6 +1,8 @@
 { stdenv, fetchurl, makeDesktopItem
-, xlibs, gtkLibs, gnome
+, libSM, libX11, libXext, libXcomposite, libXcursor, libXdamage
+, libXfixes, libXi, libXinerama, libXrandr, libXrender
 , dbus, dbus_glib, fontconfig, gcc, patchelf
+, atk, glib, gdk_pixbuf, gtk, pango
 }:
 
 # this package contains the daemon version of dropbox
@@ -28,8 +30,7 @@ let
   # Libraries referenced by dropbox binary.
   # Be aware that future versions of the dropbox binary may refer
   # to different versions than are currently in these packages.
-  ldpath = with xlibs; with gtkLibs; with gnome;
-    stdenv.lib.makeSearchPath "lib" [
+  ldpath = stdenv.lib.makeSearchPath "lib" [
       libSM libX11 libXext libXcomposite libXcursor libXdamage
       libXfixes libXi libXinerama libXrandr libXrender
       atk dbus dbus_glib glib fontconfig gcc gdk_pixbuf

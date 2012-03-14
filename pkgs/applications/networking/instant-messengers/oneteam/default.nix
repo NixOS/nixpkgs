@@ -1,16 +1,16 @@
 x@{builderDefsPackage
   , fetchgit, perl, xulrunner, cmake, perlPackages, zip, unzip, pkgconfig
-  , pulseaudio, gtkLibs, pixman, nspr, nss, libXScrnSaver, scrnsaverproto
+  , pulseaudio, glib, gtk, pixman, nspr, nss, libXScrnSaver, scrnsaverproto
   , ...}:
 builderDefsPackage
 (a :  
 let 
   helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["fetchgit" "perlPackages" "gtkLibs"];
+    ["fetchgit" "perlPackages"];
 
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames)) ++ [
-      a.perlPackages.SubName a.gtkLibs.gtk a.gtkLibs.glib
+      a.perlPackages.SubName a.gtk a.glib
     ];
   sourceInfo = rec {
     baseName="oneteam";

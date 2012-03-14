@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernel, xlibs, gtkLibs, zlib}:
+{stdenv, fetchurl, kernel, xlibs, zlib, gtk, atk, pango, glib}:
 
 let 
 
@@ -32,10 +32,7 @@ stdenv.mkDerivation {
 
   cudaPath = stdenv.lib.makeLibraryPath [zlib stdenv.gcc.gcc];
 
-  programPath = stdenv.lib.makeLibraryPath [
-    gtkLibs.gtk gtkLibs.atk gtkLibs.pango gtkLibs.glib
-    xlibs.libXv
-  ];
+  programPath = stdenv.lib.makeLibraryPath [ gtk atk pango glib xlibs.libXv ];
 
   meta = {
     homepage = http://www.nvidia.com/object/unix.html;

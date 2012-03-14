@@ -28,7 +28,7 @@
 # package, and parameterize the two wrappers as well)
 
 { stdenv, fetchurl, pkgconfig, help2man
-, libX11, glibc, gtkLibs, libbsd
+, libX11, glibc, glib, libbsd
 , makeWrapper, buildEnv, module_init_tools
 , linuxPackages, virtualgl, xorg, xkeyboard_config
 }:
@@ -98,7 +98,7 @@ in stdenv.mkDerivation {
 
   # Build-time dependencies of bumblebeed and optirun.
   # Note that it has several runtime dependencies.
-  buildInputs = [ stdenv makeWrapper pkgconfig help2man libX11 gtkLibs.glib libbsd ];
+  buildInputs = [ stdenv makeWrapper pkgconfig help2man libX11 glib libbsd ];
 
   # create a wrapper environment for bumblebeed and optirun
   postInstall = ''

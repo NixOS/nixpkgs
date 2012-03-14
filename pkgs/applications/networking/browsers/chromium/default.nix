@@ -1,5 +1,6 @@
 { GConf, alsaLib, bzip2, cairo, cups, dbus, dbus_glib, expat
-, fetchurl, ffmpeg, fontconfig, freetype, gtkLibs, libX11, libXfixes
+, fetchurl, ffmpeg, fontconfig, freetype, libX11, libXfixes
+, glib, gtk, gdk_pixbuf, pango
 , libXScrnSaver, libXdamage, libXext, libXrender, libXt, libXtst
 , libgcrypt, libjpeg, libpng, makeWrapper, nspr, nss, patchelf
 , stdenv, unzip, zlib, pam, pcre }:
@@ -37,7 +38,7 @@ stdenv.mkDerivation rec {
          ffmpeg fontconfig freetype libX11 libXScrnSaver libXfixes
          libXdamage libXext libXrender libXt libXtst libgcrypt libjpeg
          libpng nspr stdenv.gcc.gcc zlib stdenv.gcc.libc
-         gtkLibs.glib gtkLibs.gtk gtkLibs.gdk_pixbuf gtkLibs.pango
+         glib gtk gdk_pixbuf pango
          pam
        ];
 

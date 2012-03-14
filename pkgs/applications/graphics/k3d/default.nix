@@ -1,14 +1,14 @@
-{stdenv, fetchurl, gtkLibs, gnome
-  , cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
-  , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-  , gettext, intltool, perl
-  }:
+{stdenv, fetchurl
+, cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
+, libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
+, gettext, intltool, perl, gtkmm, glibmm, gtkglext
+}:
 
 stdenv.mkDerivation rec {
   version = "0.8.0.2";
   name = "k3d-${version}";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/k3d/K-3D%20Source/K-3D%200.8.0.2/k3d-source-0.8.0.2.tar.bz2";
+    url = "mirror://sourceforge/k3d/k3d-source-0.8.0.2.tar.bz2";
     sha256 = "01fd2qb0zddif3wz1a2wdmwyzn81cf73678qp2gjs8iikmdz6w7x";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
   '';
 
-  buildInputs = with gtkLibs; with gnome; [
+  buildInputs = [
      cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
      boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff gettext
      intltool perl

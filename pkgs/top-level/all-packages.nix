@@ -6897,7 +6897,9 @@ let
 
   jwm = callPackage ../applications/window-managers/jwm { };
 
-  k3d = callPackage ../applications/graphics/k3d {};
+  k3d = callPackage ../applications/graphics/k3d {
+    inherit (pkgs.gnome) gtkglext;
+  };
 
   keepnote = callPackage ../applications/office/keepnote {
     pygtk = pyGtkGlade;
@@ -8358,7 +8360,9 @@ let
   maven2 = callPackage ../misc/maven { };
   maven3 = callPackage ../misc/maven/3.0.nix { };
 
-  mess = callPackage ../misc/emulators/mess { };
+  mess = callPackage ../misc/emulators/mess {
+    inherit (pkgs.gnome) GConf;
+  };
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 

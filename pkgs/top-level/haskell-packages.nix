@@ -751,7 +751,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   GLUT = self.GLUT_2_3_0_0;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
-    inherit (pkgs.gtkLibs) gtk;
+    inherit (pkgs) gtk;
     libc = pkgs.stdenv.gcc.libc;
   };
 
@@ -1068,7 +1068,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
   pango = callPackage ../development/libraries/haskell/pango {
-    inherit (pkgs.gtkLibs) pango;
+    inherit (pkgs) pango;
     libc = pkgs.stdenv.gcc.libc;
   };
 
