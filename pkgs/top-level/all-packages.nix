@@ -8129,6 +8129,8 @@ let
 
       skrooge = callPackage ../applications/office/skrooge { };
 
+      telepathy = callPackage ../applications/networking/instant-messengers/telepathy/kde {};
+
       yakuake = callPackage ../applications/misc/yakuake { };
 
       zanshin = callPackage ../applications/office/zanshin { };
