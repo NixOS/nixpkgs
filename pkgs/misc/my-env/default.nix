@@ -20,22 +20,42 @@
             '';
           };
     in rec {
+      # this is the example we will be using
       nixEnv = simple {
-       name = "nix";
-       buildInputs = [ libtool stdenv perl curl bzip2 openssl aterm242fixes db45 autoconf automake zlib ];
-       cTags = [ aterm242fixes];
+       name = "mytestenv";
+       buildInputs = [ libtool stdenv perl curl bzip2 openssl db45 autoconf automake zlib ];
       };
+      # this is a second example (not covered here but still useful) - given by viric
+      sdlEnv = pkgs.myEnvFun {
+          name = "sdl";
+          buildInputs = [ stdenv SDL SDL_image SDL_ttf SDL_gfx cmake SDL_net  pkgconfig];
+      };
+      # add more environments below here, just follow the syntax given in the above examples
     };
   }
 
-
-  Put this into your .bashrc
+  put this into your .bashrc
     loadEnv(){ . "${HOME}/.nix-profile/dev-envs/${1}"; }
 
-  then nix-env -iA env-nix
-  and
-  $ loadEnv postgresql
+  afterwards execute the new bash shell:
+    $ bash
 
+  the nix expression created is called: env-mytestenv and must appear when searching for it using:
+    $ nix-env -qa '*' | grep nix
+      env-mytestenv
+
+  now we should build our newly defined custom environment using this command on a shell, so type:
+    $ nix-env -iA env-mytestenv
+
+  afterwards load the new environment using:
+    $ loadEnv mytestenv
+  one could also use this function instead:
+    $ load-mytestenv-env
+  the result using either command should be:
+    env-mytestenv loaded
+
+  note: after you typed the above command you will lose all the other tools usually found in a shell you are used to. in this
+        example you will not be able to type 'vi' to edit a file as vi is not included in the dependencies
 */
 
 { mkDerivation, substituteAll, pkgs } : { stdenv ? pkgs.stdenv, name, buildInputs ? [], cTags ? [], extraCmds ? ""} :
