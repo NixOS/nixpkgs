@@ -1,7 +1,7 @@
 { fetchurl, stdenv, perl, perlXMLParser, gettext, intltool
 , pkgconfig, glib, gtk, gnomedocutils, gnomeicontheme
 , libgnome, libgnomeui, scrollkeeper, libxslt
-, libglade, gnome_keyring, dbus, dbus_glib
+, libglade, libgnome_keyring, dbus, dbus_glib
 , poppler, libspectre, djvulibre, shared_mime_info
 , makeWrapper, which, ghostscript
 , recentListSize ? null # 5 is not enough, allow passing a different number
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     perl perlXMLParser gettext intltool pkgconfig glib gtk
     gnomedocutils gnomeicontheme libgnome libgnomeui libglade
-    scrollkeeper gnome_keyring
+    scrollkeeper libgnome_keyring
     libxslt  # for `xsltproc'
     dbus dbus_glib poppler libspectre djvulibre makeWrapper which
     ghostscript

@@ -6420,8 +6420,7 @@ let
   darcs = haskellPackages.darcs;
 
   darktable = callPackage ../applications/graphics/darktable {
-    inherit (gnome) GConf gnome_keyring libglade atk;
-    inherit (xlibs) libxcb pixman libpthreadstubs libXau;
+    inherit (gnome) GConf libglade atk;
   };
 
   dia = callPackage ../applications/graphics/dia {
@@ -6595,7 +6594,7 @@ let
   # higher priority.
   evince = hiPrio (callPackage ../applications/misc/evince {
     inherit (gnome) gnomedocutils gnomeicontheme libgnome
-      libgnomeui libglade glib gtk scrollkeeper gnome_keyring;
+      libgnomeui libglade scrollkeeper;
   });
 
   evolution_data_server = newScope (gnome // gtkLibs) ../servers/evolution-data-server { };
@@ -7281,7 +7280,6 @@ let
 
   retroshare = callPackage ../applications/networking/p2p/retroshare {
     qt = qt4;
-    inherit (gnome) gnome_keyring;
   };
 
   rsync = callPackage ../applications/networking/sync/rsync {
