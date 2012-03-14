@@ -25,15 +25,14 @@
        buildInputs = [ libtool stdenv perl curl bzip2 openssl aterm242fixes db45 autoconf automake zlib ];
        cTags = [ aterm242fixes];
       };
-      [...]
     };
   }
 
 
   Put this into your .bashrc
-    loadEnv(){ . "${HOME}/.nix-profile/dev-envs/${1}" }
+    loadEnv(){ . "${HOME}/.nix-profile/dev-envs/${1}"; }
 
-  then nix-env -iA ...nixEnv
+  then nix-env -iA env-nix
   and
   $ loadEnv postgresql
 
