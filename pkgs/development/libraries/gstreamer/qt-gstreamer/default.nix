@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0g377jlzlwgywgk7nbv9fd0aimv8wpzrymwzdiaffczxv5xvip5h";
   };
 
-  buildInputs = [ gstreamer gst_plugins_base boost glib qt4 ];
+  buildInputs = [ gstreamer gst_plugins_base glib qt4 ];
+  propagatedBuildInputs = [ boost ];
   buildNativeInputs = [ cmake automoc4 flex bison pkgconfig ];
 
   patches = [ ./boost1.48.patch ];
