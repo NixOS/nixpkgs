@@ -3404,9 +3404,7 @@ let
 
   faad2 = callPackage ../development/libraries/faad2 { };
 
-  farsight2 = callPackage ../development/libraries/farsight2 {
-    inherit (gst_all) gstreamer gstPluginsBase gst_python;
-  };
+  farsight2 = callPackage ../development/libraries/farsight2 { };
 
   fcgi = callPackage ../development/libraries/fcgi { };
 
@@ -3894,9 +3892,7 @@ let
 
   libcaca = callPackage ../development/libraries/libcaca { };
 
-  libcanberra = callPackage ../development/libraries/libcanberra {
-    # gstreamer = gst_all.gstreamer;
-  };
+  libcanberra = callPackage ../development/libraries/libcanberra { };
 
   libcdaudio = callPackage ../development/libraries/libcdaudio { };
 
@@ -4036,9 +4032,7 @@ let
 
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
-  libnice = callPackage ../development/libraries/libnice {
-    inherit (gst_all) gstreamer gstPluginsBase;
-  };
+  libnice = callPackage ../development/libraries/libnice { };
 
   libplist = callPackage ../development/libraries/libplist { };
 
@@ -4426,13 +4420,11 @@ let
 
   opencv = callPackage ../development/libraries/opencv {
     ffmpeg = ffmpeg_0_6_90;
-    inherit (gst_all) gstreamer;
   };
 
   opencv_2_1 = callPackage ../development/libraries/opencv/2.1.nix {
     ffmpeg = ffmpeg_0_6_90;
     libpng = libpng12;
-    inherit (gst_all) gstreamer;
   };
 
   # this ctl version is needed by openexr_viewers
@@ -4543,8 +4535,6 @@ let
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
-    # GStreamer is required for HTML5 video in QtWebKit
-    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
   };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
@@ -4681,9 +4671,7 @@ let
 
   telepathy_glib = callPackage ../development/libraries/telepathy/glib { };
 
-  telepathy_farsight = callPackage ../development/libraries/telepathy/farsight {
-    inherit (pkgs.gst_all) gstPluginsBase gstreamer gst_python;
-  };
+  telepathy_farsight = callPackage ../development/libraries/telepathy/farsight { };
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
 
@@ -4736,8 +4724,8 @@ let
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
-      inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
-        gstPluginsGood;
+      inherit gstreamer gst_plugins_base gst_ffmpeg
+        gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender;
       libpng = libpng12;
     };
@@ -4751,8 +4739,8 @@ let
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
-      inherit (gst_all) gstreamer gstPluginsBase gstFfmpeg
-        gstPluginsGood;
+      inherit gstreamer gst_plugins_base gst_ffmpeg
+        gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender;
       libpng = libpng12;
     };
@@ -4762,19 +4750,16 @@ let
   wxGTK = wxGTK28;
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
-    inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
-    inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wxGTK291 = callPackage ../development/libraries/wxGTK-2.9/2.9.1.nix {
-    inherit (gst_all) gstreamer gstPluginsBase;
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
@@ -6315,8 +6300,7 @@ let
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
       gtkspell aspell gettext ncurses avahi dbus dbus_glib python
-      libtool automake autoconf;
-    GStreamer = gst_all.gstreamer;
+      libtool automake autoconf gstreamer;
     inherit gtk glib;
     inherit (gnome) startupnotification GConf ;
     inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
@@ -6724,7 +6708,6 @@ let
   gnash = callPackage ../applications/video/gnash {
     xulrunner = icecatXulrunner3;
     inherit (gnome) gtkglext;
-    inherit (gst_all) gstreamer gstPluginsBase gstPluginsGood gstFfmpeg;
   };
 
   gnome_mplayer = callPackage ../applications/video/gnome-mplayer {
@@ -6926,7 +6909,6 @@ let
   libreoffice = callPackage ../applications/office/openoffice/libreoffice.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
-    inherit (gst_all) gstreamer gstPluginsBase;
     fontsConf = makeFontsConf {
       fontDirectories = [
         freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
@@ -7129,7 +7111,6 @@ let
 
   opera = callPackage ../applications/networking/browsers/opera {
     inherit (pkgs.kde4) kdelibs;
-    inherit (pkgs.gst_all) gstreamer gstPluginsBase;
   };
 
   pan = callPackage ../applications/networking/newsreaders/pan {
@@ -7150,9 +7131,7 @@ let
     openssl = if (getConfig ["pidgin" "openssl"] true) then openssl else null;
     gnutls = if (getConfig ["pidgin" "gnutls"] false) then gnutls else null;
     libgcrypt = if (getConfig ["pidgin" "gnutls"] false) then libgcrypt else null;
-    GStreamer = gst_all.gstreamer;
     inherit (gnome) startupnotification;
-    inherit (gst_all) gstPluginsBase;
   };
 
   pidginlatex = callPackage ../applications/networking/instant-messengers/pidgin-plugins/pidgin-latex {
@@ -7560,13 +7539,9 @@ let
 
   xineUI = callPackage ../applications/video/xine-ui { };
 
-  xneur = callPackage ../applications/misc/xneur {
-    GStreamer=gst_all.gstreamer;
-  };
+  xneur = callPackage ../applications/misc/xneur { };
 
-  xneur_0_8 = callPackage ../applications/misc/xneur/0.8.nix {
-    GStreamer = gst_all.gstreamer;
-  };
+  xneur_0_8 = callPackage ../applications/misc/xneur/0.8.nix { };
 
   xournal = callPackage ../applications/graphics/xournal {
     inherit (gnome) libgnomeprint libgnomeprintui libgnomecanvas;

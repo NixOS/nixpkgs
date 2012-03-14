@@ -11,7 +11,7 @@
  * - doxygen
  */
 { stdenv, fetchurl, pkgconfig, gtk, gtkspell, aspell,
-  GStreamer, gstPluginsBase, startupnotification, gettext,
+  gstreamer, gst_plugins_base, startupnotification, gettext,
   perl, perlXMLParser, libxml2, nss, nspr, farsight2,
   libXScrnSaver, ncurses, avahi, dbus, dbus_glib, intltool, libidn
   , lib, python
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   inherit nss ncurses;
   buildInputs = [
     gtkspell aspell
-    GStreamer gstPluginsBase startupnotification
+    gstreamer gst_plugins_base startupnotification
     libxml2] 
   ++ (lib.optional (openssl != null) openssl)
   ++ (lib.optional (gnutls != null) gnutls)

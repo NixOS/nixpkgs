@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, telepathy_glib, farsight2, gstPluginsBase, dbus_glib
+{ stdenv, fetchurl, telepathy_glib, farsight2, gst_plugins_base, dbus_glib
 , pkgconfig, libxslt, python, gstreamer, gst_python, pygobject }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sajy2w109zc6assqby3cfqr7cckwhfsngkhjczz67grb6rbi29c";
   };
 
-  buildInputs = [ gstPluginsBase gst_python pygobject ];
+  buildInputs = [ gst_plugins_base gst_python pygobject ];
 
   propagatedBuildInputs = [ dbus_glib farsight2 telepathy_glib gstreamer ];
   buildNativeInputs = [ pkgconfig python libxslt];

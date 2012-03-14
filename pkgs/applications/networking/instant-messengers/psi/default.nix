@@ -1,5 +1,5 @@
 { stdenv, fetchurl, aspell, qt4, zlib, sox, libX11, xproto, libSM, 
-  libICE, qca2, pkgconfig, qca2_ossl, liboil, speex, gst_all, which, glib }:
+  libICE, qca2, pkgconfig, qca2_ossl, liboil, speex, callPackage, which, glib }:
 
 stdenv.mkDerivation rec {
   name = "psi-0.14";
@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
       " --disable-bundled-qca"
     ];
 
-  psiMedia = (import ./psimedia.nix) {
-    inherit stdenv fetchurl qt4 speex gst_all liboil which glib pkgconfig;
-  };
+  psiMedia = callPackage ./psimedia.nix { };
 
   postInstall = ''
     PSI_PLUGINS="$out/lib/psi/plugins"

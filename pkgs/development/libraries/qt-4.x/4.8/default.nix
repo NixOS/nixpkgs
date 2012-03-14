@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll
-, alsaLib, gstreamer, gstPluginsBase
+, alsaLib, gstreamer, gst_plugins_base
 , libXrender, libXinerama, libXcursor, libXmu , libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig
 , zlib, libjpeg, libpng, libmng, which, mesa, openssl, dbus, cups, pkgconfig
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes
       libXv libXi libSM mesa
       alsaLib zlib libpng openssl dbus.libs freetype fontconfig glib
-      gstreamer gstPluginsBase
+      gstreamer gst_plugins_base
     ];
 
   # The following libraries are only used in plugins

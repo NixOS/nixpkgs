@@ -14,7 +14,7 @@ rec {
   };
 
   buildInputs = [gtkspell aspell
-    GStreamer startupnotification
+    gstreamer startupnotification
     libxml2 openssl nss
     libXScrnSaver ncurses scrnsaverproto 
     libX11 xproto kbproto GConf avahi

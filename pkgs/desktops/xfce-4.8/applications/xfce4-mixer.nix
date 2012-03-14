@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, gst_all, gtk
-, libxfce4util, libxfce4ui, xfce4panel, xfconf }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib, gstreamer, gst_plugins_base
+, gtk, libxfce4util, libxfce4ui, xfce4panel, xfconf }:
 
 let
 
   # The usual Gstreamer plugins package has a zillion dependencies
   # that we don't need for a simple mixer, so build a minimal package.
-  gstPluginsBase = gst_all.gstPluginsBase.override {
+  gst_plugins_minimal = gst_plugins_base.override {
     minimalDeps = true;
   };
 
@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ pkgconfig intltool glib gst_all.gstreamer gstPluginsBase gtk
+    [ pkgconfig intltool glib gstreamer gst_plugins_minimal gtk
       libxfce4util libxfce4ui xfce4panel xfconf
     ];
 
   postInstall =
     ''
       mkdir -p $out/nix-support
-      echo ${gstPluginsBase} > $out/nix-support/propagated-user-env-packages
+      echo ${gst_plugins_minimal} > $out/nix-support/propagated-user-env-packages
     '';
 
   meta = {

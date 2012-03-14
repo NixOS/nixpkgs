@@ -4,7 +4,7 @@
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2, poppler
-, librsvg, gnome_vfs, gstreamer, gstPluginsBase, mesa
+, librsvg, gnome_vfs, gstreamer, gst_plugins_base, mesa
 , autoconf, automake, openldap, bash
 , fontsConf
 , langs ? [ "ca" "ru" "eo" "fr" "nl" "de" "en-GB" ]
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi mesa
-    cups libXinerama openssl gperf GConf ORBit2 gnome_vfs gstreamer gstPluginsBase
+    cups libXinerama openssl gperf GConf ORBit2 gnome_vfs gstreamer gst_plugins_base
     ant autoconf openldap cppunit poppler librsvg automake
   ];
 
