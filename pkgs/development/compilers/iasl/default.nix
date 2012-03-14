@@ -1,14 +1,14 @@
 {stdenv, fetchurl, bison, flex}:
 
 stdenv.mkDerivation {
-  name = "iasl-20090123";
+  name = "iasl-20120215";
   src = fetchurl {
-    url = http://www.acpica.org/download/acpica-unix-20090123.tar.gz;
-    md5 = "4ca6484acbf16cf67fd4ba91d32fd0a0";
+    url = http://www.acpica.org/download/acpica-unix-20120215.tar.gz;
+    sha256 = "13avirbqdnp7whl6ji8ixkhzdwf1cadl5fg8ggzbxp99bx0rgd5j";
   };
 
   buildPhase = "
-    cd compiler
+    cd source/compiler
     make
     cd ..
   ";
