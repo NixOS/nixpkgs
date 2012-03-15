@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, autoconf, automake, flex, bison, machHeaders }:
+{ fetchgit, stdenv, autoconf, automake, flex, bison, machHeaders, bash }:
 
 let
   date = "20100512";
@@ -20,6 +20,14 @@ stdenv.mkDerivation {
   preConfigure = "autoreconf -vfi";
 
   doCheck = true;
+
+  crossAttrs = {
+    postInstall =
+      # Fix the shebang to point to the cross-built shell.
+      '' sed -i "$out/bin/mig" \
+             -e 's|^#!/.*|#!${bash.hostDrv}/bin/sh|g'
+      '';
+  };
 
   meta = {
     description = "GNU MIG, the Mach interface generator";
