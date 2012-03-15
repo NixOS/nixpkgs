@@ -5,7 +5,7 @@
 , icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, gstreamer, gst_plugins_base, mesa
-, autoconf, automake, openldap, bash
+, autoconf, automake, openldap, bash, makeWrapper
 , fontsConf
 , langs ? [ "ca" "ru" "eo" "fr" "nl" "de" "en-GB" ]
 }:
@@ -89,6 +89,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
+      wrapProgram $out/bin/$a --prefix LD_LIBRARY_PATH : ${cups}/lib
     done
   '';
 
@@ -146,7 +147,7 @@ stdenv.mkDerivation rec {
     libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
     getopt file jdk cairo which icu boost libXext libX11 libXtst libXi mesa
     cups libXinerama openssl gperf GConf ORBit2 gnome_vfs gstreamer gst_plugins_base
-    ant autoconf openldap cppunit poppler librsvg automake
+    ant autoconf openldap cppunit poppler librsvg automake makeWrapper
   ];
 
   meta = {
