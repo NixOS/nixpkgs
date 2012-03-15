@@ -142,7 +142,8 @@ let
   # Override system. This is useful to build i686 packages on x86_64-linux.
   forceSystem = system: (import ./all-packages.nix) {
     inherit system;
-    inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config;
+    inherit bootStdenv noSysDirs gccWithCC gccWithProfiling config
+      crossSystem platform;
   };
 
 
