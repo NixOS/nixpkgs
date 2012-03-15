@@ -84,6 +84,11 @@ stdenv.mkDerivation rec {
     make
   '';
 
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s $out/lib/libreoffice/program/soffice $out/bin/soffice
+  '';
+
   configureFlags = [
     "--enable-verbose"
 
