@@ -489,6 +489,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
 
+  bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
+
   bmp = callPackage ../development/libraries/haskell/bmp {};
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
