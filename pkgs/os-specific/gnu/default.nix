@@ -3,7 +3,7 @@
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba_light
 , gccCrossStageStatic, gccCrossStageFinal
-, forceBuildDrv, callPackage, platform, config, crossSystem }:
+, forceBuildDrv, forceSystem, callPackage, platform, config, crossSystem }:
 
 with args;
 
@@ -72,20 +72,11 @@ rec {
     mig = null;
   };
 
-  mig = callPackage ./mig
-    (if stdenv.isLinux
-     then {
-       # Build natively, but force use of a 32-bit environment because we're
-       # targeting `i586-pc-gnu'.
-       stdenv = (import ../../stdenv {
-         system = "i686-linux";
-         stdenvType = "i686-linux";
-         allPackages = args:
-           import ../../top-level/all-packages.nix ({ inherit config; } // args);
-         inherit platform;
-       }).stdenv;
-     }
-     else { });
+  mig = callPackage ./mig {
+    # Build natively, but force use of a 32-bit environment because we're
+    # targeting `i586-pc-gnu'.
+    stdenv = (forceSystem "i686-linux").stdenv;
+  };
 
   smbfs = callPackage ./smbfs {
     samba = samba_light;
