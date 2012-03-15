@@ -128,6 +128,7 @@
   ./services/networking/ifplugd.nix
   ./services/networking/ircd-hybrid/default.nix
   ./services/networking/nat.nix
+  ./services/networking/networkmanager.nix
   ./services/networking/ntpd.nix
   ./services/networking/oidentd.nix
   ./services/networking/openfire.nix
