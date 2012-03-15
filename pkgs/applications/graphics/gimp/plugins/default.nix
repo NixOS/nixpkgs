@@ -5,8 +5,7 @@
 
 { pkgs, gimp }:
 let
-  inherit (pkgs) stdenv fetchurl pkgconfig gtkLibs;
-  inherit (gtkLibs) glib;
+  inherit (pkgs) stdenv fetchurl pkgconfig glib;
   targetPluginDir = "$out/${gimp.name}-plugins";
   targetScriptDir = "$out/${gimp.name}-scripts";
   prefix = "plugin-gimp-";

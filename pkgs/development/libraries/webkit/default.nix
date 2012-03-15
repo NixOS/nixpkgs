@@ -17,7 +17,7 @@ rec {
     ];
 
   propagatedBuildInputs = [
-    gstreamer gstPluginsBase gstFfmpeg gstPluginsGood
+    gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good
     ];
 
   configureFlags = [
@@ -85,6 +85,6 @@ rec {
     maintainers = [stdenv.lib.maintainers.raskin];
   };
   passthru = {
-    inherit gstreamer gstPluginsBase gstPluginsGood gstFfmpeg;
+    inherit gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg;
   };
 }

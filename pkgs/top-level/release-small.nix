@@ -71,11 +71,11 @@ with (import ./release-lib.nix);
   gnused = all;
   gnutar = all;
   gnutls = linux;
+  gogoclient = linux;
   grub = linux;
   grub2 = linux;
   gsl = linux;
   guile = linux;  # tests fail on Cygwin
-  gw6c = linux;
   gzip = all;
   hal = linux;
   hal_info = linux;

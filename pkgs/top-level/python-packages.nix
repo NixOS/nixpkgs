@@ -1006,7 +1006,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "1kh4spwgqxm534qlzzf2ijchckvs0pwjxl1irhicjmlg7mybnfvx";
     };
 
-    buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pkgs.pygobject pkgs.pygtk pkgs.gtkLibs.glib pkgs.gtkLibs.gtk pkgs.dbus_glib ];
+    buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pkgs.pygobject pkgs.pygtk pkgs.glib pkgs.gtk pkgs.dbus_glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
@@ -1624,6 +1624,17 @@ let pythonPackages = python.modules // rec {
       license = "free"; # !?
     };
   });
+
+  RBTools =  buildPythonPackage rec {
+    name = "RBTools-0.4.1";
+
+    src = fetchurl {
+      url = "http://downloads.reviewboard.org/releases/RBTools/0.4/${name}.tar.gz";
+      sha256 = "1v0r7rfzrasj56s53mib51wl056g7ykh2y1c6dwv12r6hzqsycgv";
+    };
+
+    propagatedBuildInputs = [ setuptools ];
+  };
 
   reportlab =
    let freetype = pkgs.lib.overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });

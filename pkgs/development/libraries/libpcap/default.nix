@@ -1,11 +1,11 @@
 { stdenv, fetchurl, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "libpcap-1.1.1";
+  name = "libpcap-1.2.1";
   
   src = fetchurl {
     url = "http://www.tcpdump.org/release/${name}.tar.gz";
-    sha256 = "11asds0r0vd9skbwfbgb1d2hqxr1d92kif4qhhqx2mbyahawm32h";
+    sha256 = "1gfy00zv6blplw3405q46khmjhdnp6ylblvygjjjk5skgvpscdd1";
   };
   
   buildNativeInputs = [ flex bison ];
@@ -14,8 +14,6 @@ stdenv.mkDerivation rec {
 
   preInstall = ''mkdir -p $out/bin'';
   
-  patches = [ ./libpcap_amd64.patch ];
-
   crossAttrs = {
     # Stripping hurts in static libraries
     dontStrip = true;

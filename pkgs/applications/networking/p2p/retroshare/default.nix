@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt, libupnp, gpgme, gnome_keyring, glib}:
+{stdenv, fetchurl, qt, libupnp, gpgme, libgnome_keyring, glib}:
 
 throw "still fails to build"
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "15971wxx8djwcxn170jyn0mlh7cfzqsf031aa849wr9z234gwrcn";
   };
 
-  buildInputs = [ qt libupnp gpgme gnome_keyring glib ];
+  buildInputs = [ qt libupnp gpgme libgnome_keyring glib ];
 
   buildPhase = ''
     cd libbitdht/src

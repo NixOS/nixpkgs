@@ -4,14 +4,14 @@
 }:
 
 let
-  version = "3.20120230";
+  version = "3.20120309";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/g/git-annex/git-annex_${version}.tar.gz";
-    sha256 = "2406fd1405bcdc30cb57ba0455919b5bad2be64bcfe6b6f921cd6ea1797a66fa";
+    sha256 = "54b2d6a9660a700cbe914e8613c1a4bc265f912cf157be774e2b5ea5775a4502";
   };
 
   buildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     makeFlagsArray=( PREFIX=$out )
     sed -i -e 's|#!/usr/bin/perl|#!${perl}/bin/perl|' mdwn2man
-    sed -i -e 's|"cp |"${coreutils}/bin/cp |' -e 's|"rm -f |"${coreutils}/bin/rm -f |' -e 's|, test_addurl||' test.hs
+    sed -i -e 's|"cp |"${coreutils}/bin/cp |' -e 's|"rm -f |"${coreutils}/bin/rm -f |' test.hs
   '';
 
   meta = {

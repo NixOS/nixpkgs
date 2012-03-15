@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pcre, GStreamer, glib, libxml2, aspell
+{ stdenv, fetchurl, pkgconfig, pcre, gstreamer, glib, libxml2, aspell
 , imlib2, xorg, xosd }:
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ xorg.libX11 pkgconfig pcre GStreamer glib libxml2 aspell
+    [ xorg.libX11 pkgconfig pcre gstreamer glib libxml2 aspell
       xorg.libXpm imlib2 xosd xorg.libXt xorg.libXext
     ];
 

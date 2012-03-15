@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   configureFlags = ''
     --disable-use-tty-group
     --enable-write
-    --enable-fs-paths-default=/var/run/current-system/sw/sbin:/sbin
+    --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/sbin:/sbin
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 

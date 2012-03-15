@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , GConf, atk, cairo, cmake, curl, dbus_glib, exiv2, glib
-, gnome_keyring, gphoto2, gtk, ilmbase, intltool, lcms, lcms2
+, libgnome_keyring, gphoto2, gtk, ilmbase, intltool, lcms, lcms2
 , lensfun, libXau, libXdmcp, libexif, libglade, libgphoto2, libjpeg
 , libpng, libpthreadstubs, libraw1394, librsvg, libtiff, libxcb
 , openexr, pixman, pkgconfig, sqlite }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ GConf atk cairo cmake curl dbus_glib exiv2 glib gnome_keyring gtk
+    [ GConf atk cairo cmake curl dbus_glib exiv2 glib libgnome_keyring gtk
       ilmbase intltool lcms lcms2 lensfun libXau libXdmcp libexif
       libglade libgphoto2 libjpeg libpng libpthreadstubs libraw1394
       librsvg libtiff libxcb openexr pixman pkgconfig sqlite

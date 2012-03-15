@@ -26,9 +26,9 @@ rec {
   doWrap = a.makeManyWrappers "$out/bin/uzbl-core" 
     ''
       --prefix GST_PLUGIN_PATH : ${a.webkit.gstreamer}/lib/gstreamer-* \
-      --prefix GST_PLUGIN_PATH : ${a.webkit.gstPluginsBase}/lib/gstreamer-* \
-      --prefix GST_PLUGIN_PATH : ${a.webkit.gstPluginsGood}/lib/gstreamer-* \
-      --prefix GST_PLUGIN_PATH : ${a.webkit.gstFfmpeg}/lib/gstreamer-* \
+      --prefix GST_PLUGIN_PATH : ${a.webkit.gst_plugins_base}/lib/gstreamer-* \
+      --prefix GST_PLUGIN_PATH : ${a.webkit.gst_plugins_good}/lib/gstreamer-* \
+      --prefix GST_PLUGIN_PATH : ${a.webkit.gst_ffmpeg}/lib/gstreamer-* \
       --prefix GIO_EXTRA_MODULES : ${a.glib_networking}/lib/gio/modules
     '';
 

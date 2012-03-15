@@ -1,15 +1,15 @@
 { stdenv, fetchsvn, pythonPackages, makeWrapper, nettools
 , enablePlayer ? false, vlc ? null }:
 
-let rev = "24912"; in
+let rev = "25411"; in
 
 stdenv.mkDerivation {
-  name = "tribler-5.5.13-pre${rev}";
+  name = "tribler-5.5.21-pre${rev}";
 
   src = fetchsvn {
     url = http://svn.tribler.org/abc/branches/release-5.5.x;
     inherit rev;
-    sha256 = "1x4rf83gsxif7fwx7p4crfji52i5y8rp54qfv1lbyxr8dfqjx83g";
+    sha256 = "17c9svy4zjchzihk6mf0kh4lnvaxjfmgfmimyby5w0d3cwbw49zx";
   };
 
   buildInputs = [ pythonPackages.python pythonPackages.wrapPython makeWrapper ];

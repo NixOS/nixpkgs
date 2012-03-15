@@ -137,12 +137,10 @@ with (import ./release-lib.nix);
   gsl = linux;
   guile = linux;  # tests fail on Cygwin
   gv = linux;
-  gw6c = linux;
   gzip = all;
   hal = linux;
   hal_info = linux;
   hddtemp = linux;
-  hdparm = linux;
   hello = all;
   host = linux;
   htmlTidy = all;

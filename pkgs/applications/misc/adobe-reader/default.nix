@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, libX11, cups, gtkLibs, zlib, libxml2 }:
+{ stdenv, fetchurl, libX11, cups, zlib, libxml2, pango, atk, gtk, glib
+, gdk_pixbuf }:
 
 assert stdenv.system == "i686-linux";
 
@@ -17,13 +18,7 @@ stdenv.mkDerivation {
   # versions.
   
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.gcc.gcc libX11 zlib libxml2 cups 
-      gtkLibs.pango
-      gtkLibs.atk
-      gtkLibs.gtk
-      gtkLibs.glib
-      gtkLibs.gdk_pixbuf
-    ];
+    [ stdenv.gcc.gcc libX11 zlib libxml2 cups pango atk gtk glib gdk_pixbuf ];
   
   meta = {
     description = "Adobe Reader, a viewer for PDF documents";

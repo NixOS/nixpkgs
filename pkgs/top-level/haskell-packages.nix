@@ -166,10 +166,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellPlatformDefaults_future =
     self : self.haskellPlatformArgs_future self // {
       mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
+      binary = null; # now a core package
     };
 
   haskellPlatformDefaults_HEAD =
     self : self.haskellPlatformDefaults_future self // {
+      binary = null; # now a core package
     };
 
   haskellPlatformArgs_2011_4_0_0 = self : {
@@ -466,7 +468,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
-  binary = callPackage ../development/libraries/haskell/binary {};
+  binary_hackage = callPackage ../development/libraries/haskell/binary {};
+  binary = self.binary_hackage; # core package since ghc-7.2.1
 
   binaryShared = callPackage ../development/libraries/haskell/binary-shared {};
 
@@ -710,11 +713,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcSybUtils = callPackage ../development/libraries/haskell/ghc-syb-utils {};
 
+  gio = callPackage ../development/libraries/haskell/gio {};
+
   gitit = callPackage ../development/libraries/haskell/gitit {};
 
   glade = callPackage ../development/libraries/haskell/glade {
     inherit (pkgs.gnome) libglade;
-    gtkC = pkgs.gnome.gtk;
+    gtkC = pkgs.gtk;
     libc = pkgs.stdenv.gcc.libc;
   };
 
@@ -746,7 +751,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   GLUT = self.GLUT_2_3_0_0;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
-    inherit (pkgs.gtkLibs) gtk;
+    inherit (pkgs) gtk;
     libc = pkgs.stdenv.gcc.libc;
   };
 
@@ -762,6 +767,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   graphviz = callPackage ../development/libraries/haskell/graphviz {
     fgl = self.fgl_5_4_2_4;
+    polyparse = self.polyparse_1_7;
   };
 
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
@@ -793,7 +799,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellSrc_1_0_1_5 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.5.nix {};
   haskellSrc = self.haskellSrc_1_0_1_5;
 
-  haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts/default.nix {};
+  haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts {};
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
@@ -936,9 +942,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
-  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {
-    alex = self.alex_3_0_1;
-  };
+  languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
@@ -1064,7 +1068,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pandocTypes = callPackage ../development/libraries/haskell/pandoc-types {};
 
   pango = callPackage ../development/libraries/haskell/pango {
-    inherit (pkgs.gtkLibs) pango;
+    inherit (pkgs) pango;
     libc = pkgs.stdenv.gcc.libc;
   };
 
@@ -1097,7 +1101,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
 
-  polyparse = callPackage ../development/libraries/haskell/polyparse/default.nix {};
+  polyparse_1_7 = callPackage ../development/libraries/haskell/polyparse/1.7.nix {};
+  polyparse_1_8 = callPackage ../development/libraries/haskell/polyparse/1.8.nix {};
+  polyparse = self.polyparse_1_8;
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
@@ -1382,8 +1388,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
   unorderedContainers_0_1_4_6 = callPackage ../development/libraries/haskell/unordered-containers/0.1.4.6.nix {};
-  unorderedContainers_0_2_0_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.0.0.nix {};
-  unorderedContainers = self.unorderedContainers_0_2_0_0;
+  unorderedContainers_0_2_1_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.1.0.nix {};
+  unorderedContainers = self.unorderedContainers_0_2_1_0;
 
   url = callPackage ../development/libraries/haskell/url {};
 
@@ -1603,7 +1609,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     tar = self.tar_0_3_2_0;
   };
 
-  leksah = callPackage ../applications/editors/leksah {};
+  leksah = callPackage ../applications/editors/leksah {
+    QuickCheck = self.QuickCheck2;
+  };
 
   mathblog = callPackage ../applications/misc/mathblog {};
 

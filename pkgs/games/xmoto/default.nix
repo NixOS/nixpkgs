@@ -25,7 +25,6 @@ rec {
       a.lib.maintainers.raskin
       a.lib.maintainers.viric
     ];
-    platforms = with a.lib.platforms; 
-      linux ++ freebsd;
+    platforms = a.lib.platforms.linux;
   };
 }

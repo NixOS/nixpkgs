@@ -1,0 +1,15 @@
+Index: tvtime-1.0.2/src/videoinput.c
+===================================================================
+--- tvtime-1.0.2.orig/src/videoinput.c
++++ tvtime-1.0.2/src/videoinput.c
+@@ -35,8 +35,8 @@
+ #ifdef HAVE_CONFIG_H
+ # include "config.h"
+ #endif
+-#include "videodev.h"
+-#include "videodev2.h"
++#include <linux/videodev.h>
++#include <linux/videodev2.h>
+ #include "videoinput.h"
+ #include "mixer.h"
+ 

@@ -55,7 +55,7 @@ index 2767208..6562015 100644
 -		"/usr/local/sbin/dnsmasq",
 -		"/usr/sbin/dnsmasq",
 -		"/sbin/dnsmasq",
-+		"@dnsmasq@/sbin/dnsmasq",
++		"@dnsmasq@/bin/dnsmasq",
  		NULL
  	};
  	const char **binary = paths;
@@ -70,7 +70,7 @@ index ca2f9dc..7afb118 100644
 -		"/usr/local/sbin/dnsmasq",
 -		"/usr/sbin/dnsmasq",
 -		"/sbin/dnsmasq",
-+		"@dnsmasq@/sbin/dnsmasq",
++		"@dnsmasq@/bin/dnsmasq",
  		NULL
  	};
  
@@ -84,7 +84,7 @@ index 3522ea4..75b2db3 100644
  	static const char *aipd_paths[] = {
 -		"/usr/sbin/avahi-autoipd",
 -		"/usr/local/sbin/avahi-autoipd",
-+		"@avahi@/sbin/autoipd",
++		"@avahi@/sbin/avahi-autoipd",
  		NULL
  	};
  	int i = 0;

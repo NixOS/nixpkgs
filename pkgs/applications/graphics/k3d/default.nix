@@ -1,32 +1,32 @@
-{stdenv, fetchurl, gtkLibs, gnome
-  , cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
-  , libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-  , gettext, intltool, perl
-  }:
+{stdenv, fetchurl
+, cmake, mesa, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
+, libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
+, gettext, intltool, perl, gtkmm, glibmm, gtkglext
+}:
 
 stdenv.mkDerivation rec {
   version = "0.8.0.2";
   name = "k3d-${version}";
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/k3d/K-3D%20Source/K-3D%200.8.0.2/k3d-source-0.8.0.2.tar.bz2";
+    url = "mirror://sourceforge/k3d/k3d-source-0.8.0.2.tar.bz2";
     sha256 = "01fd2qb0zddif3wz1a2wdmwyzn81cf73678qp2gjs8iikmdz6w7x";
   };
 
-  patches = [ (fetchurl {
-    url = "http://patch-tracker.debian.org/patch/series/dl/k3d/0.8.0.2-15/k3d_gtkmm224.patch";
-    sha256 = "0a81fg96zby6kidqwj6n8mhbrh0j5fpnmfh7lr6havz5r2is9ks5";
-  })
-   ];
+  patches = map fetchurl ((import ./debian-patches.nix) ++
+    [ {
+      url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-gfx/k3d/files/k3d-0.7.11.0-libpng14.patch;
+      sha256 = "1vl7dbvxg9b54ay0n8dd2v2k3j001h8h1bpr1cbm3vrzv31lnwzx";
+    } ]);
 
   preConfigure = ''
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/build/lib"
   '';
 
-  buildInputs = with gtkLibs; with gnome; [
+  buildInputs = [
      cmake mesa zlib python expat libxml2 libsigcxx libuuid freetype libpng
      boost doxygen cairomm pkgconfig imagemagick libjpeg libtiff gettext
      intltool perl
-     gtkmm glibmm gtkglext 
+     gtkmm glibmm gtkglext
     ];
 
   doCheck = false;
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     homepage = "http://k-3d.org/";
     platforms = with stdenv.lib.platforms;
       linux;
-    maintainers = with stdenv.lib.maintainers; 
+    maintainers = with stdenv.lib.maintainers;
       [raskin];
   };
 }

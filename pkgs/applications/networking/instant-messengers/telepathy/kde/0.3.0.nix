@@ -1,0 +1,13 @@
+[
+{name="ktp-accounts-kcm";key="accounts_kcm";sha256="0i4x4z6w4l9ngx0j258p2vjmsnsdn8hckq7cfld1iliq6fxb1vwv";}
+{name="ktp-approver";key="approver";sha256="0nj89jsina8b736sygxia8jmz6l81n6j0ffin8cpqbp9mczzpv9f";}
+{name="ktp-auth-handler";key="auth_handler";sha256="1fggj8aa56m7ycwi4q44kfzlx6gfigk0zaq8lhms4wdhm6736fhs";}
+{name="ktp-common-internals";key="common_internals";sha256="196f6gkfb3w11qdbamwvkq6hxk2zbdc3js53mh352yhmdyf3cya6";}
+{name="ktp-contact-applet";key="contact_applet";sha256="1vhv78qcyna1r4lmzpixb2a0p973ywjyi1izy8jf1vfhy3kk28dw";}
+{name="ktp-contact-list";key="contact_list";sha256="15gnm09j4g6ip7vgisayd3ixv2sryjazakzkfksxfkdxl3mgfzg3";}
+{name="ktp-filetransfer-handler";key="filetransfer_handler";sha256="1mq48clrlqwbg08211pr7hm24kagjzd8zs287mk9xl2wbv70jgc1";}
+{name="ktp-kded-integration-module";key="kded_integration_module";sha256="1p47dks5cvda4i8xhij01z1qmcv2vw27az0la15rhzqlf8kh4sam";}
+{name="ktp-presence-applet";key="presence_applet";sha256="1npr59g42yxb67dnplingqa2paaxdw60p99kilbvw15chfbrh47r";}
+{name="ktp-send-file";key="send_file";sha256="1961zh4b1bamjyqw3wkm2aclx5sbfbr84i3x7lvfr74vw6cky8mc";}
+{name="ktp-text-ui";key="text_ui";sha256="184zyw6l779nkgpc5dx9lcmh543kmr4ay8cvm8vsnrsknn6p0dgp";}
+]

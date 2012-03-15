@@ -3,7 +3,6 @@
 let
   configParser = ''
     function parseconfig {
-        set -x
         while read LINE; do
             NAME=`echo "$LINE" | cut -d \  -f 1`
             OPTION=`echo "$LINE" | cut -d \  -f 2`
@@ -18,12 +17,11 @@ let
             fi
 
             echo "parseconfig: removing $NAME"
-            sed -i /^$NAME=/d .config
+            sed -i /$NAME'\(=\| \)'/d .config
 
             echo "parseconfig: setting $NAME=$OPTION"
             echo "$NAME=$OPTION" >> .config
         done
-        set +x
     }
   '';
 
@@ -39,11 +37,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.19.0";
+  name = "busybox-1.19.4";
 
   src = fetchurl {
     url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "0332yxvlfv2hbix9n70dyp4xlm2hrk248qqdg006hyfpjsh49kqr";
+    sha256 = "1vhh6xa71w4wzby0f4x357fv6zxvkklmyjc8njgbbzv1v83391cv";
   };
 
   configurePhase = ''

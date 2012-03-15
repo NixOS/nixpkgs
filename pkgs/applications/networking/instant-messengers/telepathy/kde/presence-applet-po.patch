@@ -1,0 +1,24 @@
+commit bf59d0488708eb57ca91a9b6d0ce8951b99ba778
+Author: Rohan Garg <rohangarg@kubuntu.org>
+Date:   Wed Feb 8 01:19:42 2012 +0530
+
+    Do not use CMake 2.8 just yet
+    
+    CMake 2.8 has some scope issues which cause the pofile target to
+    interfere while building translations in the tarball releases.
+    Not requiring CMake 2.8 fixes the build issue.
+    
+    BUG: 292593
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8e2c1de..80add26 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,5 @@
+ project(ktp-presence-applet)
+ 
+-cmake_minimum_required(VERSION 2.8)
+-
+ set(CMAKE_MODULE_PATH
+     "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules"
+     ${CMAKE_MODULE_PATH}

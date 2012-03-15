@@ -7,7 +7,7 @@ builderDefsPackage
 (a :  
 let 
   helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["perlPackages" "firefox36Pkgs" "gtkLibs"];
+    ["perlPackages" "firefox36Pkgs"];
 
   buildInputs = (map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames)))

@@ -1,5 +1,6 @@
 { stdenv, fetchurl, makeWrapper, boost, file, gettext
-, glib, glibc, gnome_keyring, gtk, gtkmm, intltool, libctemplate, libglade
+, glib, glibc, libgnome_keyring, gnome_keyring, gtk, gtkmm, intltool
+, libctemplate, libglade
 , libgnome, libsigcxx, libtool, libuuid, libxml2, libzip, lua, mesa, mysql
 , pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite
 }:
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b5ijaccy2k7if4pld8ihz1wa1wr1f9gj2m5xa4kf7v05zcx93c6";
   };
 
-  buildInputs = [ boost file gettext glib glibc gnome_keyring gtk gtkmm intltool
+  buildInputs = [ boost file gettext glib glibc libgnome_keyring gtk gtkmm intltool
     libctemplate libglade libgnome libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
     mysql paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
 

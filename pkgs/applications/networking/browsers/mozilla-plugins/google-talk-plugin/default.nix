@@ -21,9 +21,9 @@ let
     ];
 
   rpath32 = makeLibraryPath
-    [ pkgsi686Linux.gtkLibs.gdk_pixbuf
-      pkgsi686Linux.gtkLibs.glib
-      pkgsi686Linux.gtkLibs.gtk
+    [ pkgsi686Linux.gdk_pixbuf
+      pkgsi686Linux.glib
+      pkgsi686Linux.gtk
       pkgsi686Linux.xorg.libX11
       pkgsi686Linux.xorg.libXcomposite
       pkgsi686Linux.xorg.libXfixes

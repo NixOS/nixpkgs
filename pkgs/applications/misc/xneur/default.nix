@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xorg, pcre, GStreamer, glib, libxml2
+{ stdenv, fetchurl, pkgconfig, xorg, pcre, gstreamer, glib, libxml2
 , aspell, cairo, imlib2, xosd, libnotify, gtk, pango, atk, enchant,
  gdk_pixbuf}:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ xorg.libX11 pkgconfig pcre GStreamer glib libxml2 aspell cairo
+    [ xorg.libX11 pkgconfig pcre gstreamer glib libxml2 aspell cairo
       xorg.libXpm imlib2 xosd xorg.libXt xorg.libXext xorg.libXi libnotify
       gtk pango enchant gdk_pixbuf
     ];

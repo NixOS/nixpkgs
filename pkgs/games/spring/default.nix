@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
 
   name = "spring-${version}";
-  version = "0.86.0";
+  version = "0.87.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/springrts/spring_86.0_src.tar.lzma";
-    sha256 = "728bc95ac551d2199539f9ec9a79254ebd4414e6aa81e03a6c4534cec61f7bca";
+    url = "mirror://sourceforge/springrts/spring_87.0_src.tar.lzma";
+    sha256 = "4c8528966b62e3fede63a4acb3cd5f13ecfed195688e135293bdc747980738b2";
   };
 
   buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL
@@ -23,15 +23,13 @@ stdenv.mkDerivation rec {
       --replace "which" "type -p"
   '';
 
-  #patches = [ ./gcc44.patch];
-
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://springrts.com/;
     description = "A powerful real-time strategy(RTS) game engine";
     license = licenses.gpl2;
-    maintainers = [ maintainers.phreedom ];
+    maintainers = [ maintainers.phreedom maintainers.qknight ];
     platforms = platforms.unix;
   };
 }

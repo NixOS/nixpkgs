@@ -11,10 +11,6 @@
 
 #### PLATFORM
 
-  audiofile = callPackage ./platform/audiofile { };
-
-  esound = callPackage ./platform/esound { };
-
   libIDL = callPackage ./platform/libIDL {
     gettext = if stdenv.isDarwin then gettext else null;
   };

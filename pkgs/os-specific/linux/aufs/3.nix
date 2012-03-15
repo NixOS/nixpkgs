@@ -20,6 +20,8 @@ stdenv.mkDerivation {
 
   makeFlags = "KDIR=${kernel}/lib/modules/${kernel.modDirVersion}/build";
 
+  NIX_CFLAGS_COMPILE="-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
+
   installPhase =
     ''
       mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
