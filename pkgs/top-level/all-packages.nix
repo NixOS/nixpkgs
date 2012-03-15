@@ -4676,6 +4676,8 @@ let
 
   telepathy_farsight = callPackage ../development/libraries/telepathy/farsight { };
 
+  telepathy_farstream = callPackage ../development/libraries/telepathy/farstream {};
+
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
 
   tk = callPackage ../development/libraries/tk { };
