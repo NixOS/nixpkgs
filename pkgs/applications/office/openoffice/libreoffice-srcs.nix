@@ -356,8 +356,8 @@
   md5 = "3bf481ca95109b14435125c0dd1f2217";
 })
 (fetchurl {
-  url = "http://dev-www.libreoffice.org/src/776ad69a63ac1e99abed176e54ce25d9-libvisio-0.0.14.tar.bz2";
-  md5 = "776ad69a63ac1e99abed176e54ce25d9";
+  url = "http://dev-www.libreoffice.org/src/d28864eb2b59bb57b034c0d4662a3cee-libvisio-0.0.15.tar.bz2";
+  md5 = "d28864eb2b59bb57b034c0d4662a3cee";
 })
 (fetchurl {
   url = "http://dev-www.libreoffice.org/src/e7a384790b13c29113e22e596ade9687-LinLibertineG-20120116.zip";
