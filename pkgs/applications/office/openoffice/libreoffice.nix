@@ -84,9 +84,12 @@ stdenv.mkDerivation rec {
     make
   '';
 
+  # It installs only things to $out/lib/libreoffice
   postInstall = ''
     mkdir -p $out/bin
-    ln -s $out/lib/libreoffice/program/soffice $out/bin/soffice
+    for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
+      ln -s $out/lib/libreoffice/program/$a $out/bin/$a
+    done
   '';
 
   configureFlags = [
