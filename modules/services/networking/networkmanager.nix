@@ -69,7 +69,7 @@ in
           ''
           #!/bin/sh
           if test "$2" = "up"; then
-            ${pkgs.upstart}/sbin/initctl emit ip-up
+            ${pkgs.upstart}/sbin/initctl emit ip-up "IFACE=$1"
           fi
           '';
         target = "NetworkManager/dispatcher.d/01nixos-ip-up";
