@@ -1625,6 +1625,17 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  RBTools =  buildPythonPackage rec {
+    name = "RBTools-0.4.1";
+
+    src = fetchurl {
+      url = "http://downloads.reviewboard.org/releases/RBTools/0.4/${name}.tar.gz";
+      sha256 = "1v0r7rfzrasj56s53mib51wl056g7ykh2y1c6dwv12r6hzqsycgv";
+    };
+
+    propagatedBuildInputs = [ setuptools ];
+  };
+
   reportlab =
    let freetype = pkgs.lib.overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
    in buildPythonPackage rec {
