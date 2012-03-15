@@ -414,6 +414,7 @@ in
         preStart =
           ''
             rm -f /var/run/opengl-driver
+            rm -f /var/run/opengl-driver-32
             ${# !!! The OpenGL driver depends on what's detected at runtime.
               if elem "nvidia" driverNames then
                 ''
