@@ -2,6 +2,32 @@
 
 with pkgs.lib;
 
+let
+
+  fstab = pkgs.writeText "fstab"
+    ''
+      # This is a generated file.  Do not edit!
+
+      # Filesystems.
+      ${flip concatMapStrings config.fileSystems (fs:
+          (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
+          + " " + fs.mountPoint
+          + " " + fs.fsType
+          + " " + fs.options
+          + " 0"
+          + " " + (if fs.fsType == "none" || fs.noCheck then "0" else
+                   if fs.mountPoint == "/" then "1" else "2")
+          + "\n"
+      )}
+
+      # Swap devices.
+      ${flip concatMapStrings config.swapDevices (sw:
+           "${sw.device} none swap\n"
+      )}
+    '';
+
+in
+    
 {
 
   ###### interface
@@ -141,27 +167,7 @@ with pkgs.lib;
       ++ config.system.fsPackages;
 
     environment.etc = singleton
-      { source = pkgs.writeText "fstab"
-          ''
-            # This is a generated file.  Do not edit!
-
-            # Filesystems.
-            ${flip concatMapStrings config.fileSystems (fs:
-                (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
-                + " " + fs.mountPoint
-                + " " + fs.fsType
-                + " " + fs.options
-                + " 0"
-                + " " + (if fs.fsType == "none" || fs.noCheck then "0" else
-                         if fs.mountPoint == "/" then "1" else "2")
-                + "\n"
-            )}
-
-            # Swap devices.
-            ${flip concatMapStrings config.swapDevices (sw:
-                 "${sw.device} none swap\n"
-            )}
-          '';
+      { source = fstab;
         target = "fstab";
       };
 
@@ -180,6 +186,8 @@ with pkgs.lib;
 
         script =
           ''
+            # Ensure that this job is restarted when fstab changed:
+            # ${fstab}
             exec > /dev/console 2>&1
             echo "mounting filesystems..."
             ${pkgs.mountall}/sbin/mountall
