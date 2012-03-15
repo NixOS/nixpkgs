@@ -78,6 +78,11 @@ rec {
     stdenv = (forceSystem "i686-linux").stdenv;
   };
 
+  # XXX: Use this one for its `.hostDrv'.  Using the one above from
+  # `x86_64-linux' leads to building a different cross-toolchain because of
+  # the `forceSystem'.
+  mig_raw = callPackage ./mig {};
+
   smbfs = callPackage ./smbfs {
     samba = samba_light;
     hurd = hurdCross;
