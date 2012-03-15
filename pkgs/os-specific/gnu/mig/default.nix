@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   patches = [ ./noyywrap.patch ];
 
-  buildInputs = [ autoconf automake flex bison machHeaders ];
+  buildNativeInputs = [ autoconf automake flex bison machHeaders ];
 
   preConfigure = "autoreconf -vfi";
 
