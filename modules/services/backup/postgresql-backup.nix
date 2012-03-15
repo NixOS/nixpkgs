@@ -56,7 +56,7 @@ in
   config = mkIf config.services.postgresqlBackup.enable {
     services.cron.systemCronJobs = map postgresqlBackupCron config.services.postgresqlBackup.databases;
 
-    system.activationScripts.postgresqlBackup = stringAfter [ "stdio" "defaultPath" "systemConfig" "users" ]
+    system.activationScripts.postgresqlBackup = stringAfter [ "stdio" "users" ]
       ''
         mkdir -m 0700 -p ${config.services.postgresqlBackup.location}
         chown root ${config.services.postgresqlBackup.location}

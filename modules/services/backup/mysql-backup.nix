@@ -70,7 +70,7 @@ in
 
     services.cron.systemCronJobs = map mysqlBackupCron config.services.mysqlBackup.databases;
 
-    system.activationScripts.mysqlBackup = stringAfter [ "stdio" "defaultPath" "systemConfig" "users" ]
+    system.activationScripts.mysqlBackup = stringAfter [ "stdio" "users" ]
       ''
         mkdir -m 0700 -p ${config.services.mysqlBackup.location}
         chown ${config.services.mysqlBackup.user} ${config.services.mysqlBackup.location}
