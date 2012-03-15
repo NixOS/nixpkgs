@@ -3407,6 +3407,8 @@ let
 
   farsight2 = callPackage ../development/libraries/farsight2 { };
 
+  farstream = callPackage ../development/libraries/farstream { };
+
   fcgi = callPackage ../development/libraries/fcgi { };
 
   ffmpeg = callPackage ../development/libraries/ffmpeg {
