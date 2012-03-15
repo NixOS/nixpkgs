@@ -1,10 +1,10 @@
-{ cabal, alexMeta, happyMeta, haskellSrcMeta }:
+{ cabal, alexMeta, happyMeta, haskellSrcMeta, syb }:
 
 cabal.mkDerivation (self: {
   pname = "BNFC-meta";
-  version = "0.2.2";
-  sha256 = "07jfc0dcrcckibbw0xca1h7x3lnc9jfylfkcs23f0hyg31irf8dx";
-  buildDepends = [ alexMeta happyMeta haskellSrcMeta ];
+  version = "0.3";
+  sha256 = "17vmszgq9cyayqlykjbwzvm8mim641vhpzcrdr3l6zb84hr29xgs";
+  buildDepends = [ alexMeta happyMeta haskellSrcMeta syb ];
   meta = {
     description = "Deriving Quasi-Quoters from BNF Grammars";
     license = self.stdenv.lib.licenses.gpl2;
