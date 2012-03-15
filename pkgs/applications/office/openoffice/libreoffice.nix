@@ -14,23 +14,23 @@ let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
 in
 stdenv.mkDerivation rec {
-  name = "libreoffice-3.5.0.3";
+  name = "libreoffice-3.5.1.2";
 
   srcs_download = import ./libreoffice-srcs.nix { inherit fetchurl; };
 
   src_translation = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/3.5.0/libreoffice-translations-3.5.0.3.tar.xz";
-    sha256 = "0kk1jb4axjvkmg22yhxx4p9522zix6rr5cs0c5rxzlkm63qw6h8w";
+    url = "http://download.documentfoundation.org/libreoffice/src/3.5.1/libreoffice-translations-3.5.1.2.tar.xz";
+    sha256 = "cf8ed662f7d0a679bd3a242a7f88cf445b769afdcd8a3d3df655d774f296972a";
   };
 
   src_help = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/3.5.0/libreoffice-help-3.5.0.3.tar.xz";
-    sha256 = "0wvlh2r4cy14rs0svr4yb4fidp2g9wbj8vxx2a5swnjf2fdf8qda";
+    url = "http://download.documentfoundation.org/libreoffice/src/3.5.1/libreoffice-help-3.5.1.2.tar.xz";
+    sha256 = "43b07225854b1c8b3195b252453b8e97d2d58d83909bf4b5f920cb08b7f33e30";
   };
 
   src = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/3.5.0/libreoffice-core-3.5.0.3.tar.xz";
-    sha256 = "04hvlj6wzbj3zjpfjq975mgdmf902ywyf94nxcv067asg83qfcvr";
+    url = "http://download.documentfoundation.org/libreoffice/src/3.5.1/libreoffice-core-3.5.1.2.tar.xz";
+    sha256 = "61cd12e20fb9460178fc6f08100a9a189c2390c21e2e47eb66e07a5b0ce5cd94";
   };
 
   # Openoffice will open libcups dynamically, so we link it directly
@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     tar xf $src_translation
     # Libreoffice expects by default the translations in ./translations
-    mv libreoffice-translations-3.5.0.3/translations .
+    mv libreoffice-translations-3.5.1.2/translations .
     tar xf $src_help
     # Libreoffice expects by default the help in ./helpcontent2
-    mv libreoffice-help-3.5.0.3/helpcontent2 .
+    mv libreoffice-help-3.5.1.2/helpcontent2 .
 
     sed -i 's,/bin/bash,${bash}/bin/bash,' sysui/desktop/share/makefile.mk solenv/bin/localize
     sed -i 's,/usr/bin/env bash,${bash}/bin/bash,' bin/unpack-sources \
