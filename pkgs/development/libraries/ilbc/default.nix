@@ -13,14 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "0zf4mvi3jzx6zjrfl2rbhl2m68pzbzpf1vbdmn7dqbfpcb67jpdy";
   };
 
-  cmakeLists = ./CMakeLists.txt;
   buildNativeInputs = [ cmake ];
 
   unpackPhase = ''
     mkdir -v ${name}
     cd ${name}
     ${gawk}/bin/gawk -f ${script} ${rfc3951}
-    cp -v ${cmakeLists} CMakeLists.txt
+    cp -v ${./CMakeLists.txt} CMakeLists.txt
     '';
 
 }
