@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unbound";
-  version = "0.3.1";
-  sha256 = "13k53dcap8knvl2qzcykx838laas34xfc0480705vzl1z9z1xppz";
+  version = "0.4";
+  sha256 = "0s4aybbxz5qvkf09wn65qavw10hk0rsyyc2d0ydr02rzz10vd270";
   buildDepends = [ mtl RepLib transformers ];
   noHaddock = true;
   meta = {
