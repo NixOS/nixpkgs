@@ -1,11 +1,11 @@
 { fetchurl, stdenv, tcpWrapper, utillinux, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-1.2.3";
+  name = "nfs-utils-1.2.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/nfs/${name}.tar.bz2";
-    sha256 = "06gzb4idg6rkr4wpj7lrdmg3zdqiz86j43dygykbyz0987lyqxam";
+    sha256 = "16ssfkj36ljifyaskgwpd3ys8ylhi5gasq88aha3bhg5dr7yv59m";
   };
 
   # Needs `libblkid' and `libcomerr' from `e2fsprogs' or `util-linux-ng'.
