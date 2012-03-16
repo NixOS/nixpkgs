@@ -1,25 +1,34 @@
-{ stdenv, fetchurl, scons, boost, pkgconfig, fftw, librdf_raptor
+{ stdenv, fetchsvn, scons, boost, pkgconfig, fftw, librdf_raptor
 , librdf_rasqal, jackaudio, flac, libsamplerate, alsaLib, libxml2
 , libxslt, libsndfile, libsigcxx, libusb, cairomm, glib, pango
 , gtk, glibmm, gtkmm, libgnomecanvas, librdf, liblo, aubio
-, fftwSinglePrec, libmad }:
+, fftwSinglePrec, libmad, automake, autoconf, liblrdf, libtool }:
 
-stdenv.mkDerivation {
-  name = "ardour-2.8.2";
+stdenv.mkDerivation rec {
+  name = "ardour-${version}";
+  version = "2.8.12";
 
   # svn is the source to get official releases from their site?
   # alternative: wget  --data-urlencode 'key=7c4b2e1df903aae5ff5cc4077cda801e' http://ardour.org/downloader
   # but hash is changing ?
-  src = fetchurl {
-    url = http://mawercer.de/~nix/ardour-2.8.2.tar.bz2;
-    sha256 = "1igwv1r6rlybdac24qady5asaf34f9k7kawkkgyvsifhl984m735";
+
+  # TODO: see if this is also true when using a tag (~goibhniu)
+  src = fetchsvn {
+    url = "http://subversion.ardour.org/svn/ardour2/tags/${version}";
+    sha256 = "0d4y8bv12kb0yd2srvxn5388sa4cl5d5rk381saj9f3jgpiciyky";
   };
+
+  patchPhase = ''
+    sed -e "s#/usr/bin/which#type -P#" -i libs/glibmm2/autogen.sh
+    echo '#include "ardour/svn_revision.h"' > libs/ardour/svn_revision.cc
+    echo -e 'namespace ARDOUR {\n extern const char* svn_revision = "2.8.12";\n }\n' >> libs/ardour/svn_revision.cc
+  '';
 
   buildInputs = [
     scons boost pkgconfig fftw librdf_raptor librdf_rasqal jackaudio
     flac libsamplerate alsaLib libxml2 libxslt libsndfile libsigcxx
     libusb cairomm glib pango gtk glibmm gtkmm libgnomecanvas librdf
-    liblo aubio fftwSinglePrec libmad
+    liblo aubio fftwSinglePrec libmad autoconf automake liblrdf libtool
   ];
 
   buildPhase = ''
