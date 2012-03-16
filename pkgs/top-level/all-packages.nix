@@ -4176,6 +4176,8 @@ let
 
   libsndfile = callPackage ../development/libraries/libsndfile { };
 
+  libsoup = pkgs.gnome.libsoup;
+
   libssh = callPackage ../development/libraries/libssh { };
 
   libssh2 = callPackage ../development/libraries/libssh2 { };
