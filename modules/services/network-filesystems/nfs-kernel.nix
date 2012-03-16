@@ -125,7 +125,7 @@ in
               ''
                 # exports file is ${exports}
                 # keep this comment so that this job is restarted whenever exports changes!
-                exportfs -ra
+                ${pkgs.nfsUtils}/sbin/exportfs -ra
               '';
           };
         }
@@ -193,7 +193,7 @@ in
 
             description = "Kernel NFS server - Network Status Monitor";
 
-            startOn = if (cfg.server.enable) then
+            startOn = if cfg.server.enable then
                 "started nfs-kernel-mountd and started nfs-kernel-nfsd"
               else
                 "started portmap";
