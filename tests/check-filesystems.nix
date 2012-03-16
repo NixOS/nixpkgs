@@ -8,14 +8,12 @@ with import ../lib/build-vms.nix { inherit nixos nixpkgs system; };
 rec {
   nodes = {
     share = {pkgs, config, ...}: {
-      services.portmap.enable = true;
-      services.nfsKernel.client.enable = true;
-      services.nfsKernel.server.enable = true;
-      services.nfsKernel.server.exports = ''
+      services.nfs.server.enable = true;
+      services.nfs.server.exports = ''
         /repos1 192.168.1.0/255.255.255.0(rw,no_root_squash)
         /repos2 192.168.1.0/255.255.255.0(rw,no_root_squash)
       '';
-      services.nfsKernel.server.createMountPoints = true;
+      services.nfs.server.createMountPoints = true;
 
       jobs.checkable = {
         startOn = [
@@ -27,22 +25,20 @@ rec {
     };
 
     fsCheck = {pkgs, config, ...}: {
-      # enable nfs import
-      services.portmap.enable = true;
-      services.nfsKernel.client.enable = true;
-
       fileSystems =
         let
           repos1 = {
             mountPoint = "/repos1";
             autocreate = true;
             device = "share:/repos1";
+            fsType = "nfs";
           };
 
           repos2 = {
             mountPoint = "/repos2";
             autocreate = true;
             device = "share:/repos2";
+            fsType = "nfs";
           };
         in pkgs.lib.mkOverrideTemplate 50 {} [
           repos1

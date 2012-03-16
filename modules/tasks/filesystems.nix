@@ -183,7 +183,7 @@ in
             # Ensure that this job is restarted when fstab changed:
             # ${fstab}
             
-            ${optionalString config.services.nfsKernel.client.enable ''
+            ${optionalString config.services.nfs.client.enable ''
               start statd || true
             ''}
             
@@ -196,9 +196,8 @@ in
     # The `mount-failed' event is emitted synchronously, but we don't
     # want `mountall' to wait for the emergency shell.  So use this
     # intermediate job to make the event asynchronous.
-    jobs.mount_failed =
-      { name = "mount-failed";
-        task = true;
+    jobs."mount-failed" =
+      { task = true;
         startOn = "mount-failed";
         script =
           ''
@@ -210,9 +209,8 @@ in
 
     # On an `ip-up' event, notify mountall so that it retries mounting
     # remote filesystems.
-    jobs.mountall_ip_up =
+    jobs."mountall-ip-up" =
       {
-        name = "mountall-ip-up";
         task = true;
         startOn = "ip-up";
         script =
@@ -221,10 +219,8 @@ in
           '';
       };
 
-    jobs.emergency_shell =
-      { name = "emergency-shell";
-
-        task = true;
+    jobs."emergency-shell" =
+      { task = true;
 
         extraConfig = "console owner";
 

@@ -23,12 +23,12 @@ in
 
       server =
         { config, pkgs, ... }:
-        { services.nfsKernel.server.enable = true;
-          services.nfsKernel.server.exports =
+        { services.nfs.server.enable = true;
+          services.nfs.server.exports =
             ''
               /data 192.168.1.0/255.255.255.0(rw,no_root_squash)
             '';
-          services.nfsKernel.server.createMountPoints = true;
+          services.nfs.server.createMountPoints = true;
         };
     };
 
