@@ -20,18 +20,6 @@ let
   rpc.mountd, rpc.nfsd
   rpc.statd, rpc.lockd (if necessary), and
   rpc.rquotad"
-
-  I tried to mimic that with upstart, playing with stopping/stopped/started/starting
-  events.
-
-  I consider two scenarios:
-    - Starting at boot. Then, portmap will emit a started event.
-    - "restart nfs-kernel-exports". Then, portmap will not emit anything. Due
-      to the comment in postStart, this will happen on nixos-rebuild if
-      the exportfs file changed.
-
-  From these scenarios, I came up with the startOn and stopOn at the time of commiting
-  this comment.
 */
 
 
@@ -102,7 +90,7 @@ in
   config =
   mkAssert
     (cfg.client.enable || cfg.server.enable -> config.services.portmap.enable) "
-    Please enable portmap (services.portmap.enable) to use nfs-kernel.
+    Please enable portmap (services.portmap.enable) to use nfsd.
   " {
 
     services.portmap.enable = mkAlways (cfg.client.enable || cfg.server.enable);
@@ -114,13 +102,11 @@ in
 
     jobs =
       optionalAttrs cfg.server.enable
-        { nfs_kernel_nfsd =
-          { name = "nfs-kernel-nfsd";
-
-            description = "Kernel NFS server";
+        { nfsd =
+          { description = "Kernel NFS server";
 
             startOn = "started portmap";
-            stopOn = "stopped nfs-kernel-statd or stopping portmap";
+            stopOn = "stopped statd or stopping portmap";
 
             preStart =
               ''
@@ -160,13 +146,11 @@ in
         }
 
       // optionalAttrs cfg.server.enable
-        { nfs_kernel_mountd =
-          { name = "nfs-kernel-mountd";
+        { mountd =
+          { description = "Kernel NFS server - mount daemon";
 
-            description = "Kernel NFS server - mount daemon";
-
-            startOn = "started nfs-kernel-nfsd";
-            stopOn = "stopped nfs-kernel-statd";
+            startOn = "started nfsd";
+            stopOn = "stopped statd";
 
             daemonType = "fork";
 
@@ -175,16 +159,14 @@ in
         }
 
       // optionalAttrs (cfg.client.enable || cfg.server.enable)
-        { nfs_kernel_statd =
-          { name = "nfs-kernel-statd";
-
-            description = "Kernel NFS server - Network Status Monitor";
+        { statd =
+          { description = "Kernel NFS server - Network Status Monitor";
 
             startOn = if cfg.server.enable then
-                "started nfs-kernel-mountd and started nfs-kernel-nfsd"
+                "started mountd and started nfsd"
               else
                 "started portmap";
-            stopOn = "stopping nfs-kernel-nfsd or stopping portmap";
+            stopOn = "stopping nfsd or stopping portmap";
 
             preStart =
               ''
