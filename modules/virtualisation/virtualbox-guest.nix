@@ -45,6 +45,21 @@ in
         exec = "${kernel.virtualboxGuestAdditions}/sbin/VBoxService --foreground";
       };
 
+    services.xserver.videoDrivers = mkOverride 50 [ "virtualbox" ];
+
+    services.xserver.config =
+      ''
+        Section "InputDevice"
+          Identifier "VBoxMouse"
+          Driver "vboxmouse"
+        EndSection
+      '';
+
+    services.xserver.serverLayoutSection =
+      ''
+        InputDevice "VBoxMouse"
+      '';
+    
   };
 
 }
