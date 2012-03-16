@@ -34,6 +34,9 @@ if test -n "$bootable"; then
     bootFlags="-b $bootImage -c .boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table"
 fi
 
+if test -n "$efiBootable"; then
+    bootFlags="$bootFlags -eltorito-alt-boot -e $efiBootImage -no-emul-boot"
+fi
 
 touch pathlist
 

@@ -73,6 +73,14 @@ let
       '';
     };
 
+    isoImage.makeEfiBootable = mkOption {
+      default = false;
+      description = ''
+        Whether the ISO image should be an efi-bootable volume
+      '';
+    };
+
+
   };
 
 
@@ -109,6 +117,20 @@ let
 
       ${config.boot.loader.grub.extraEntries}
     '';
+
+
+  # The boot params for the efi boot stub
+  bootParams = pkgs.runCommand "boot-params_eltorito" {}
+    ''
+      echo "\\boot\\bzImage initrd=\\boot\\initrd init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" | iconv -f utf-8 -t UCS-2 > $out
+    '';
+
+  targetArch = if pkgs.stdenv.isi686 then
+    "IA32"
+  else if pkgs.stdenv.isx86_64 then
+    "x64"
+  else
+    throw "Unsupported architecture";
 
 in
 
@@ -220,6 +242,13 @@ in
         source = pkgs.runCommand "empty" {} "ensureDir $out";
         target = "/nix/store";
       }
+    ] ++ pkgs.stdenv.lib.optionals config.isoImage.makeEfiBootable [
+      { source = bootParams;
+        target = "/efi/nixos/boot-params";
+      }
+      { source = "${pkgs.NixosBootPkg}/*/NixosBoot.efi";
+        target = "/efi/boot/boot${targetArch}.efi";
+      }
     ];
 
   # The Grub menu.
@@ -239,14 +268,17 @@ in
   boot.loader.grub.timeout = 10;
 
   # Create the ISO image.
-  system.build.isoImage = import ../../../lib/make-iso9660-image.nix {
+  system.build.isoImage = import ../../../lib/make-iso9660-image.nix ({
     inherit (pkgs) stdenv perl cdrkit pathsFromGraph;
 
     inherit (config.isoImage) isoName compressImage volumeID contents;
 
     bootable = true;
     bootImage = "/boot/grub/grub_eltorito";
-  };
+  } // pkgs.stdenv.lib.optionalAttrs config.isoImage.makeEfiBootable {
+    efiBootable = true;
+    efiBootImage = "efi/boot/boot${targetArch}.efi";
+  });
 
   boot.postBootCommands =
     ''

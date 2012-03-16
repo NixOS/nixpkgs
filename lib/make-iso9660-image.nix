@@ -19,8 +19,14 @@
 , # Whether this should be an El-Torito bootable CD.
   bootable ? false
 
+, # Whether this should be an efi-bootable El-Torito CD.
+  efiBootable ? false
+
 , # The path (in the ISO file system) of the boot image.
   bootImage ? ""
+
+, # The path (in the ISO file system) of the efi boot image.
+  efiBootImage ? ""
 
 , # Whether to compress the resulting ISO image with bzip2.
   compressImage ? false
@@ -31,13 +37,14 @@
 }:
 
 assert bootable -> bootImage != "";
+assert efiBootable -> efiBootImage != "";
 
 stdenv.mkDerivation {
   name = "iso9660-image";
   builder = ./make-iso9660-image.sh;
   buildInputs = [perl cdrkit];
 
-  inherit isoName bootable bootImage compressImage volumeID pathsFromGraph;
+  inherit isoName bootable bootImage compressImage volumeID pathsFromGraph efiBootImage efiBootable;
 
   # !!! should use XML.
   sources = map (x: x.source) contents;

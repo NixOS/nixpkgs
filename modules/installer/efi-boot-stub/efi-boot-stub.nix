@@ -88,7 +88,7 @@ let
     inherit (config.boot.loader.efiBootStub) efiSysMountPoint runEfibootmgr installStartupNsh efiDisk efiPartition installRemovableMediaImage;
     kernelFile = platform.kernelTarget;
   } // pkgs.stdenv.lib.optionalAttrs config.boot.loader.efiBootStub.installRemovableMediaImage {
-    removableMediaImage = "${pkgs.NixosBootPkg}/X64/NixosBoot.efi";
+    removableMediaImage = "${pkgs.NixosBootPkg}/*/NixosBoot.efi";
     targetArch = if pkgs.stdenv.isi686 then
       "IA32"
     else if pkgs.stdenv.isx86_64 then
