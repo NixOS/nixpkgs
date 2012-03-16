@@ -10,19 +10,6 @@ let
 
   exports = pkgs.writeText "exports" cfg.server.exports;
 
-/*
-  Description at http://nfs.sourceforge.net/nfs-howto/ar01s03.html :
-
-  "If your distribution does not include them in the startup scripts, then then
-  you should add them, configured to start in the following order:
-
-  rpc.portmap
-  rpc.mountd, rpc.nfsd
-  rpc.statd, rpc.lockd (if necessary), and
-  rpc.rquotad"
-*/
-
-
 in
 
 {
@@ -106,7 +93,7 @@ in
           { description = "Kernel NFS server";
 
             startOn = "started portmap";
-            stopOn = "stopped statd or stopping portmap";
+            stopOn = "stopped statd";
 
             preStart =
               ''
@@ -166,7 +153,7 @@ in
                 "started mountd and started nfsd"
               else
                 "started portmap";
-            stopOn = "stopping nfsd or stopping portmap";
+            stopOn = "stopping nfsd";
 
             preStart =
               ''

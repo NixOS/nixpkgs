@@ -51,6 +51,8 @@ in
 
   config = mkIf config.services.portmap.enable {
 
+    environment.systemPackages = [ portmap ];
+
     users.extraUsers = singleton
       { name = "portmap";
         inherit uid;
