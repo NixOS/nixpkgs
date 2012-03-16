@@ -2,14 +2,14 @@
 libvorbis, sox}:
 
 stdenv.mkDerivation {
-  name = "mlt-0.7.6";
+  name = "mlt-0.7.8";
 
   src = fetchurl {
-    url = mirror://sourceforge/mlt/mlt-0.7.6.tar.gz;
-    sha256 = "f8ea8590417ea2b5543a495f2edc30636d3931932deee7a4e0d8516e9c2b58ae";
+    url = mirror://sourceforge/mlt/mlt-0.7.8.tar.gz;
+    sha256 = "0hvfjk0hspamym0ahi635ivx9iv3v2jy2qv15za1vmz28qkkp0wm";
   };
 
-  buildInputs = [ qt4 SDL ffmpeg libdv libxml2 libsamplerate libvorbis sox ];
+  buildInputs = [ qt4 SDL ffmpeg libdv libxml2 libsamplerate libvorbis sox pkgconfig ];
 
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
