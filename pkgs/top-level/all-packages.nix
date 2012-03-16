@@ -915,6 +915,8 @@ let
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
+  kexectools = callPackage ../os-specific/linux/kexectools { };
+
   keychain = callPackage ../tools/misc/keychain { };
 
   kismet = callPackage ../applications/networking/sniffers/kismet { };
