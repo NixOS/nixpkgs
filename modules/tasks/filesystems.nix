@@ -172,25 +172,24 @@ in
       };
 
     jobs.mountall =
-      { startOn = "started udev"
-          # !!! The `started nfs-kernel-statd' condition shouldn't be
-          # here.  The `nfs-kernel-statd' job should have a `starting
-          # mountall' condition.  However, that doesn't work if
-          # `mountall' is restarted due to an apparent bug in Upstart:
-          # `mountall' hangs forever in the `start/starting' state.
-          + optionalString config.services.nfsKernel.client.enable " and started nfs-kernel-statd";
+      { startOn = "started udev";
 
         task = true;
 
-        path = [ pkgs.utillinux ] ++ config.system.fsPackages;
+        path = [ pkgs.utillinux pkgs.mountall ] ++ config.system.fsPackages;
 
         script =
           ''
             # Ensure that this job is restarted when fstab changed:
             # ${fstab}
+            
+            ${optionalString config.services.nfsKernel.client.enable ''
+              start statd || true
+            ''}
+            
             exec > /dev/console 2>&1
             echo "mounting filesystems..."
-            ${pkgs.mountall}/sbin/mountall
+            exec mountall
           '';
       };
 
