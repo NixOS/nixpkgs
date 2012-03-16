@@ -134,6 +134,12 @@ let
       type = "new-kernel";
     };
 
+    # A variant with experimental efi booting support. Currently requires
+    # an RC kernel. Eventually this should probably be merged into cd-minimal
+    iso_efi = makeIso {
+      module = ./modules/installer/cd-dvd/installation-cd-efi.nix;
+      type = "efi";
+    };
 
     # Provide a tarball that can be unpacked into an SD card, and easily
     # boot that system from uboot (like for the sheevaplug).
