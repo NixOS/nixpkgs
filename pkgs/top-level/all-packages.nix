@@ -1923,10 +1923,10 @@ let
   }));
 
   gcc47 = lowPrio (wrapGCC (lib.overrideDerivation gcc46_debug.gcc (a: {
-    name = "gcc-debug-4.7.0rc20120302";
+    name = "gcc-debug-4.7.0rc20120314";
     src = fetchurl {
-      url = "ftp://gcc.gnu.org/pub/gcc/snapshots/4.7.0-RC-20120302/gcc-4.7.0-RC-20120302.tar.bz2";
-      sha256 = "13clix3cqf93rmkgmb9izqz0ld0h0xrgpirsjr0fs0f7c86c935l";
+      url = "ftp://gcc.gnu.org/pub/gcc/snapshots/4.7.0-RC-20120314/gcc-4.7.0-RC-20120314.tar.bz2";
+      sha256 = "0dhzmrhrzlgvsxfbjc1x98pf2y89zkw2lgijyghmxiczc5gniszp";
     };
 
     configureFlags = a.configureFlags
