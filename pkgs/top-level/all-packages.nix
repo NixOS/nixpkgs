@@ -7358,6 +7358,8 @@ let
 
   telepathy_mission_control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
 
+  telepathy_salut = callPackage ../applications/networking/instant-messengers/telepathy/salut {};
+
   tesseract = callPackage ../applications/graphics/tesseract { };
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
