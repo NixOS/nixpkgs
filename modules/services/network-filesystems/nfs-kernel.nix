@@ -114,29 +114,12 @@ in
 
     jobs =
       optionalAttrs cfg.server.enable
-        { nfs_kernel_exports =
-          { name = "nfs-kernel-exports";
-
-            description = "Kernel NFS server";
-
-            startOn = "started network-interfaces and started portmap and filesystem";
-
-            postStart =
-              ''
-                # exports file is ${exports}
-                # keep this comment so that this job is restarted whenever exports changes!
-                ${pkgs.nfsUtils}/sbin/exportfs -ra
-              '';
-          };
-        }
-
-      // optionalAttrs cfg.server.enable
         { nfs_kernel_nfsd =
           { name = "nfs-kernel-nfsd";
 
             description = "Kernel NFS server";
 
-            startOn = "starting nfs-kernel-exports or started portmap";
+            startOn = "started portmap";
             stopOn = "stopped nfs-kernel-statd or stopping portmap";
 
             preStart =
@@ -147,6 +130,10 @@ in
                 # Create a state directory required by NFSv4.
                 mkdir -p /var/lib/nfs/v4recovery
 
+                # exports file is ${exports}
+                # keep this comment so that this job is restarted whenever exports changes!
+                ${pkgs.nfsUtils}/sbin/exportfs -ra
+                
                 # rpc.nfsd needs the kernel support
                 ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
 
@@ -197,7 +184,7 @@ in
                 "started nfs-kernel-mountd and started nfs-kernel-nfsd"
               else
                 "started portmap";
-            stopOn = "stopping nfs-kernel-exports or stopping portmap";
+            stopOn = "stopping nfs-kernel-nfsd or stopping portmap";
 
             preStart =
               ''
