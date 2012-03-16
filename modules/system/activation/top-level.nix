@@ -38,6 +38,9 @@ let
       description = ''
         Name of the kernel file to be passed to the bootloader.
       '';
+      merge = kernelFiles:
+        builtins.head (map (f: assert f == builtins.head kernelFiles; f)
+          kernelFiles);
     };
 
     system.copySystemConfiguration = pkgs.lib.mkOption {
