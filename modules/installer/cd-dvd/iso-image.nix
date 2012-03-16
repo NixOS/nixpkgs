@@ -119,10 +119,25 @@ let
     '';
 
 
-  # The boot params for the efi boot stub
-  bootParams = pkgs.runCommand "boot-params_eltorito" {}
+  # The efi boot image
+  efiImg = pkgs.runCommand "efi-image_eltorito" {}
     ''
-      echo "\\boot\\bzImage initrd=\\boot\\initrd init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" | iconv -f utf-8 -t UCS-2 > $out
+      #Let's hope 8M is enough
+      dd bs=2048 count=4096 if=/dev/zero of="$out"
+      ${pkgs.dosfstools}/sbin/mkfs.vfat "$out"
+      ${pkgs.mtools}/bin/mmd -i "$out" efi
+      ${pkgs.mtools}/bin/mmd -i "$out" efi/boot
+      ${pkgs.mtools}/bin/mmd -i "$out" efi/nixos
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
+        ${config.boot.kernelPackages.kernel + "/bzImage"} ::efi/nixos/bzImage
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
+        ${config.system.build.initialRamdisk + "/initrd"} ::efi/nixos/initrd
+      echo "\\efi\\nixos\\bzImage initrd=\\efi\\nixos\\initrd init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" | iconv -f utf-8 -t UCS-2 > boot-params
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::efi/nixos/boot-params
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
+        ${import ../efi-boot-stub/nixos-boot-pkg.nix {
+          inherit (pkgs) edk2 stdenv fetchhg; 
+         }}/*/NixosBoot.efi ::efi/boot/boot${targetArch}.efi
     '';
 
   targetArch = if pkgs.stdenv.isi686 then
@@ -243,13 +258,8 @@ in
         target = "/nix/store";
       }
     ] ++ pkgs.stdenv.lib.optionals config.isoImage.makeEfiBootable [
-      { source = bootParams;
-        target = "/efi/nixos/boot-params";
-      }
-      { source = ''${import ../efi-boot-stub/nixos-boot-pkg.nix {
-                     inherit (pkgs) edk2 stdenv fetchhg; 
-                   }}/*/NixosBoot.efi'';
-        target = "/efi/boot/boot${targetArch}.efi";
+      { source = efiImg;
+        target = "/boot/efi.img";
       }
     ];
 
@@ -279,7 +289,7 @@ in
     bootImage = "/boot/grub/grub_eltorito";
   } // pkgs.stdenv.lib.optionalAttrs config.isoImage.makeEfiBootable {
     efiBootable = true;
-    efiBootImage = "efi/boot/boot${targetArch}.efi";
+    efiBootImage = "boot/efi.img";
   });
 
   boot.postBootCommands =
