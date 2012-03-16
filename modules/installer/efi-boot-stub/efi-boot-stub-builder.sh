@@ -75,6 +75,14 @@ addEntry() {
         defaultbootnum=$(efibootmgr | grep "NixOS $generation Generation" | sed 's/Boot//' | sed 's/\*.*//')
 	set -e
       fi
+
+      if test -n "@installRemovableMediaImage@"; then
+        mkdir -pv "@efiSysMountPoint@"/efi/boot
+        cp "@removableMediaImage@" \
+          "@efiSysMountPoint@"/efi/boot/boot"@targetArch@".efi
+	iconv -f utf-8 -t UCS-2 < $startup > "@efiSysMountPoint@"/efi/nixos/boot-params
+        filesCopied["@efiSysMountPoint@"/efi/nixos/boot-params]=1
+      fi
       if test -n "@installStartupNsh@"; then
         sed 's|.*@kernelFile@.efi|@kernelFile@.efi|' < $startup > "@efiSysMountPoint@/startup.nsh"
         cp $kernel "@efiSysMountPoint@/@kernelFile@.efi"

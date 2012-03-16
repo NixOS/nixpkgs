@@ -59,6 +59,18 @@ let
             '';
           };
 
+          installRemovableMediaImage = mkOption {
+            default = false;
+            description = ''
+              Whether to build/install a BOOT{machine type short-name}.EFI file
+              in \EFI\BOOT. This _should_ only be needed for removable devices
+              (CDs, usb sticks, etc.), but it may be an option for broken
+              systems where efibootmgr doesn't work. It reads the UCS-2
+              encoded \EFI\NIXOS\BOOT-PARAMS to find out which kernel to boot
+              with which parameters.
+            '';
+          };
+
         };
       };
     };
@@ -68,14 +80,22 @@ in
 
 ###### implementation
 let
-  efiBootStubBuilder = pkgs.substituteAll {
+  efiBootStubBuilder = pkgs.substituteAll ({
     src = ./efi-boot-stub-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep] ++ (pkgs.stdenv.lib.optionals config.boot.loader.efiBootStub.runEfibootmgr [pkgs.efibootmgr pkgs.module_init_tools]);
-    inherit (config.boot.loader.efiBootStub) efiSysMountPoint runEfibootmgr installStartupNsh efiDisk efiPartition;
+    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.glibc] ++ (pkgs.stdenv.lib.optionals config.boot.loader.efiBootStub.runEfibootmgr [pkgs.efibootmgr pkgs.module_init_tools]);
+    inherit (config.boot.loader.efiBootStub) efiSysMountPoint runEfibootmgr installStartupNsh efiDisk efiPartition installRemovableMediaImage;
     kernelFile = platform.kernelTarget;
-  };
+  } // pkgs.stdenv.lib.optionalAttrs config.boot.loader.efiBootStub.installRemovableMediaImage {
+    removableMediaImage = "${pkgs.NixosBootPkg}/X64/NixosBoot.efi";
+    targetArch = if pkgs.stdenv.isi686 then
+      "IA32"
+    else if pkgs.stdenv.isx86_64 then
+      "x64"
+    else
+      throw "Unsupported architecture";
+  });
 
   # Temporary check, for nixos to cope both with nixpkgs stdenv-updates and trunk
   platform = pkgs.stdenv.platform;
