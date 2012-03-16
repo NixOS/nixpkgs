@@ -48,7 +48,7 @@ let
   nixosHardwareScan = makeProg {
     name = "nixos-hardware-scan";
     src = ./nixos-hardware-scan.pl;
-    inherit (pkgs) perl;
+    inherit (pkgs) perl dmidecode;
   };
 
   nixosOption = makeProg {

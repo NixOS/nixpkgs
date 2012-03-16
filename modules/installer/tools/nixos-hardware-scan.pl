@@ -8,6 +8,7 @@ my @attrs = ();
 my @kernelModules = ();
 my @initrdKernelModules = ();
 my @modulePackages = ();
+my @requires = ("<nixos/modules/installer/scan/not-detected.nix>");
 
 
 sub debug {
@@ -182,6 +183,14 @@ if ($videoDriver) {
 }
 
 
+# Check if we're a VirtualBox guest.  If so, enable the guest
+# additions.
+my $dmi = `@dmidecode@/sbin/dmidecode`;
+if ($dmi =~ /Manufacturer: innotek/) {
+    push @attrs, "services.virtualbox.enable = true;"
+}
+
+
 # Generate the configuration file.
 
 sub removeDups {
@@ -218,6 +227,8 @@ my $initrdKernelModules = toNixExpr(removeDups @initrdKernelModules);
 my $kernelModules = toNixExpr(removeDups @kernelModules);
 my $modulePackages = toNixExpr(removeDups @modulePackages);
 my $attrs = multiLineList("  ", removeDups @attrs);
+my $requires = multiLineList("    ", removeDups @requires);
+
 
 print <<EOF ;
 # This is a generated file.  Do not modify!
@@ -225,9 +236,7 @@ print <<EOF ;
 { config, pkgs, ... }:
 
 {
-  require = [
-    <nixos/modules/installer/scan/not-detected.nix>
-  ];
+  require = [$requires  ];
 
   boot.initrd.kernelModules = [$initrdKernelModules ];
   boot.kernelModules = [$kernelModules ];
