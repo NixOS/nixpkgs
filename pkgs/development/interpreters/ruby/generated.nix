@@ -3,7 +3,7 @@
 g: # Get dependencies from patched gems
 {
   aliases = {
-    ZenTest = g.ZenTest_4_6_2;
+    ZenTest = g.ZenTest_4_7_0;
     actionmailer = g.actionmailer_3_2_2;
     actionpack = g.actionpack_3_2_2;
     activemodel = g.activemodel_3_2_2;
@@ -15,7 +15,7 @@ g: # Get dependencies from patched gems
     autotest_rails = g.autotest_rails_4_1_2;
     builder = g.builder_3_0_0;
     buildr = g.buildr_1_4_6;
-    bundler = g.bundler_1_1_0;
+    bundler = g.bundler_1_1_1;
     childprocess = g.childprocess_0_3_1;
     diff_lcs = g.diff_lcs_1_1_3;
     erubis = g.erubis_2_7_0;
@@ -27,7 +27,7 @@ g: # Get dependencies from patched gems
     journey = g.journey_1_0_3;
     json = g.json_1_6_5;
     json_pure = g.json_pure_1_6_5;
-    mail = g.mail_2_4_3;
+    mail = g.mail_2_4_4;
     mime_types = g.mime_types_1_17_2;
     minitar = g.minitar_0_5_3;
     multi_json = g.multi_json_1_1_0;
@@ -62,7 +62,7 @@ g: # Get dependencies from patched gems
   };
   gem_nix_args = [ ''autotest-rails'' ''buildr'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
   gems = {
-    ZenTest_4_6_2 = {
+    ZenTest_4_7_0 = {
       basename = ''ZenTest'';
       meta = {
         description = ''ZenTest provides 4 different tools: zentest, unit_diff, autotest, and multiruby'';
@@ -88,9 +88,9 @@ multiruby runs anything you want on multiple versions of ruby. Great
 for compatibility checking! Use multiruby_setup to manage your
 installed versions.'';
       };
-      name = ''ZenTest-4.6.2'';
+      name = ''ZenTest-4.7.0'';
       requiredGems = [  ];
-      sha256 = ''0knbim1lvp7q7k529if3h78584x845h9xyz08vykrdqa97x4lkh0'';
+      sha256 = ''1gvhmar81y9rqyf0vh06kxagqswkxkyys4w0s0z6hq84rb4z0v1w'';
     };
     actionmailer_3_2_2 = {
       basename = ''actionmailer'';
@@ -100,7 +100,7 @@ installed versions.'';
         longDescription = ''Email on Rails. Compose, deliver, receive, and test emails using the familiar controller/view pattern. First-class support for multipart email and attachments.'';
       };
       name = ''actionmailer-3.2.2'';
-      requiredGems = [ g.mail_2_4_3 ];
+      requiredGems = [ g.mail_2_4_4 ];
       sha256 = ''0x4308y786100146m2fx7bygp77cwzsds3cgwjjlkw9hgyapcxz0'';
     };
     actionpack_3_2_2 = {
@@ -207,7 +207,7 @@ database compatibility and query generation.'';
 rails support and extra plugins for migrations and fixtures.'';
       };
       name = ''autotest-rails-4.1.2'';
-      requiredGems = [ g.ZenTest_4_6_2 ];
+      requiredGems = [ g.ZenTest_4_7_0 ];
       sha256 = ''1wkb5jayb39yx0i8ly7sibygf9f9c3w24jg2z1qgm135zlb070v4'';
     };
     builder_2_1_2 = {
@@ -253,16 +253,16 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [ g.rake_0_8_7 g.builder_2_1_2 g.net_ssh_2_0_23 g.net_sftp_2_0_4 g.rubyzip_0_9_4 g.highline_1_5_1 g.json_pure_1_4_3 g.rubyforge_2_0_3 g.hoe_2_3_3 g.rjb_1_3_3 g.atoulme_Antwrap_0_7_1 g.diff_lcs_1_1_2 g.rspec_expectations_2_1_0 g.rspec_mocks_2_1_0 g.rspec_core_2_1_0 g.rspec_2_1_0 g.xml_simple_1_0_12 g.minitar_0_5_3 ];
       sha256 = ''11qwqrdnmzzi4zhgajfq1f1ckvd4kpfm9gyqrfjfalphs4gi0vxz'';
     };
-    bundler_1_1_0 = {
+    bundler_1_1_1 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://gembundler.com'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.1.0'';
+      name = ''bundler-1.1.1'';
       requiredGems = [  ];
-      sha256 = ''0b9s1pi7xg0sdwhvjgdwhr98h23fd3dj257gh06ldrnilvi5w1z1'';
+      sha256 = ''05cr17gzx731403fhbzv3szdfa80hghpn77ab6vi73k4177pjnzx'';
     };
     childprocess_0_3_1 = {
       basename = ''childprocess'';
@@ -456,16 +456,16 @@ See class rdoc for help. Hint: ri Hoe'';
       requiredGems = [  ];
       sha256 = ''09s5qymc4y9q0376zjiwf5bjm69fcivr75ar8ji0kmhjkk2rwc55'';
     };
-    mail_2_4_3 = {
+    mail_2_4_4 = {
       basename = ''mail'';
       meta = {
         description = ''Mail provides a nice Ruby DSL for making, sending and reading emails.'';
         homepage = ''http://github.com/mikel/mail'';
         longDescription = ''A really Ruby Mail handler.'';
       };
-      name = ''mail-2.4.3'';
+      name = ''mail-2.4.4'';
       requiredGems = [ g.mime_types_1_17_2 g.treetop_1_4_10 ];
-      sha256 = ''1awghn40l7h6njfp6jd4qgsvd8yxvsi7s2ppz689jjj6gbjzbhn6'';
+      sha256 = ''0idylz5pnlz34mrxm7gs9jbll2c0k0y9dq2qarhxk30gwyvjaxi3'';
     };
     mime_types_1_17_2 = {
       basename = ''mime_types'';
@@ -635,7 +635,7 @@ request helpers feature.'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
       name = ''rails-3.2.2'';
-      requiredGems = [ g.activesupport_3_2_2 g.actionpack_3_2_2 g.activerecord_3_2_2 g.activeresource_3_2_2 g.actionmailer_3_2_2 g.railties_3_2_2 g.bundler_1_1_0 ];
+      requiredGems = [ g.activesupport_3_2_2 g.actionpack_3_2_2 g.activerecord_3_2_2 g.activeresource_3_2_2 g.actionmailer_3_2_2 g.railties_3_2_2 g.bundler_1_1_1 ];
       sha256 = ''0kwh8142zxyvrva09m5g85cmwhby714q87j1mb8s6wikv4gvfmy9'';
     };
     railties_3_2_2 = {
