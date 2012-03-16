@@ -87,12 +87,12 @@ let
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.glibc] ++ (pkgs.stdenv.lib.optionals config.boot.loader.efiBootStub.runEfibootmgr [pkgs.efibootmgr pkgs.module_init_tools]);
     inherit (config.boot.loader.efiBootStub) efiSysMountPoint runEfibootmgr installStartupNsh efiDisk efiPartition installRemovableMediaImage;
     kernelFile = platform.kernelTarget;
-  } // pkgs.stdenv.lib.optionalAttrs config.boot.loader.efiBootStub.installRemovableMediaImage {
-    removableMediaImage = "${pkgs.NixosBootPkg}/*/NixosBoot.efi";
+  } // pkgs.stdenv.lib.optionalAttrs config.boot.loader.efiBootStub.installRemovableMediaImage rec {
+    removableMediaImage = "${pkgs.NixosBootPkg}/${targetArch}/NixosBoot.efi";
     targetArch = if pkgs.stdenv.isi686 then
       "IA32"
     else if pkgs.stdenv.isx86_64 then
-      "x64"
+      "X64"
     else
       throw "Unsupported architecture";
   });
