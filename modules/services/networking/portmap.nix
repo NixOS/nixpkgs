@@ -71,7 +71,7 @@ in
         startOn = "started network-interfaces";
         stopOn = "never";
 
-        daemonType = "fork";
+        daemonType = "fork"; # needed during shutdown
 
         path = [ portmap pkgs.netcat ];
 

@@ -74,44 +74,64 @@ in
 
   ###### implementation
 
-  config =
-  mkAssert
-    (cfg.client.enable || cfg.server.enable -> config.services.portmap.enable) "
-    Please enable portmap (services.portmap.enable) to use nfsd.
-  " {
+  config = {
 
-    services.portmap.enable = mkAlways (cfg.client.enable || cfg.server.enable);
+    services.portmap.enable = cfg.client.enable || cfg.server.enable;
+
+    environment.systemPackages = mkIf cfg.server.enable [ pkgs.nfsUtils ];
 
     environment.etc = mkIf cfg.server.enable (singleton
       { source = exports;
         target = "exports";
       });
 
+    boot.kernelModules = mkIf cfg.server.enable [ "nfsd" ];
+
     jobs =
       optionalAttrs cfg.server.enable
         { nfsd =
           { description = "Kernel NFS server";
 
-            startOn = "started portmap";
-            stopOn = "stopped statd";
+            startOn = "started networking";
+
+            path = [ pkgs.nfsUtils ];
 
             preStart =
               ''
-                export PATH=${pkgs.nfsUtils}/sbin:$PATH
-                mkdir -p /var/lib/nfs
-
+                start portmap || true
+                start mountd || true
+              
                 # Create a state directory required by NFSv4.
                 mkdir -p /var/lib/nfs/v4recovery
 
-                # exports file is ${exports}
-                # keep this comment so that this job is restarted whenever exports changes!
-                ${pkgs.nfsUtils}/sbin/exportfs -ra
-                
-                # rpc.nfsd needs the kernel support
-                ${config.system.sbin.modprobe}/sbin/modprobe nfsd || true
+                rpc.nfsd \
+                  ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} \
+                  ${builtins.toString cfg.server.nproc}
+              '';
 
-                ${pkgs.sysvtools}/bin/mountpoint -q /proc/fs/nfsd \
-                || ${pkgs.utillinux}/bin/mount -t nfsd none /proc/fs/nfsd
+            postStop = "rpc.nfsd 0";
+
+            postStart =
+              ''
+                start statd || true
+              '';
+          };
+        }
+
+      // optionalAttrs cfg.server.enable
+        { mountd =
+          { description = "Kernel NFS server - mount daemon";
+
+            path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
+
+            preStart =
+              ''
+                start portmap || true
+                
+                mkdir -p /var/lib/nfs
+                touch /var/lib/nfs/rmtab
+                
+                mountpoint -q /proc/fs/nfsd || mount -t nfsd none /proc/fs/nfsd
 
                 ${optionalString cfg.server.createMountPoints
                   ''
@@ -123,25 +143,14 @@ in
                   ''
                 }
 
-                ${pkgs.nfsUtils}/sbin/rpc.nfsd \
-                  ${if cfg.server.hostName != null then "-H ${cfg.server.hostName}" else ""} \
-                  ${builtins.toString cfg.server.nproc}
+                # exports file is ${exports}
+                # keep this comment so that this job is restarted whenever exports changes!
+                exportfs -ra
               '';
-
-            postStop = "${pkgs.nfsUtils}/sbin/rpc.nfsd 0";
-          };
-        }
-
-      // optionalAttrs cfg.server.enable
-        { mountd =
-          { description = "Kernel NFS server - mount daemon";
-
-            startOn = "started nfsd";
-            stopOn = "stopped statd";
 
             daemonType = "fork";
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.mountd -f /etc/exports";
+            exec = "rpc.mountd -f /etc/exports";
           };
         }
 
@@ -149,24 +158,22 @@ in
         { statd =
           { description = "Kernel NFS server - Network Status Monitor";
 
-            startOn = if cfg.server.enable then
-                "started mountd and started nfsd"
-              else
-                "started portmap";
-            stopOn = "stopping nfsd";
+            path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
+
+            stopOn = "never"; # needed during shutdown
 
             preStart =
               ''
+                start portmap || true
                 mkdir -p /var/lib/nfs
                 mkdir -p /var/lib/nfs/sm
                 mkdir -p /var/lib/nfs/sm.bak
+                sm-notify -d
               '';
 
             daemonType = "fork";
 
-            exec = "${pkgs.nfsUtils}/sbin/rpc.statd --no-notify";
-
-            postStart = "${pkgs.nfsUtils}/sbin/sm-notify -d";
+            exec = "rpc.statd --no-notify";
           };
         };
 

@@ -413,6 +413,8 @@ sub shutdown {
 sub crash {
     my ($self) = @_;
     return unless $self->{booted};
+    
+    $self->log("forced crash");
 
     $self->sendMonitorCommand("quit");
 

@@ -8,7 +8,7 @@ let
         [ { mountPoint = "/data";
             device = "server:/data";
             fsType = "nfs";
-            options = "bootwait";
+            options = "bootwait,vers=3";
           }
         ];
     };
@@ -34,11 +34,9 @@ in
 
   testScript =
     ''
-      startAll;
+      $server->waitForJob("nfsd");
 
-      $server->waitForJob("nfs-kernel-nfsd");
-      $server->waitForJob("nfs-kernel-mountd");
-      $server->waitForJob("nfs-kernel-statd");
+      startAll;
 
       $client1->waitForJob("tty1"); # depends on filesystems
       $client1->succeed("echo bla > /data/foo");
@@ -48,15 +46,11 @@ in
       $client2->succeed("echo bla > /data/bar");
       $server->succeed("test -e /data/bar");
 
-      # Test whether restarting the ‘nfs-kernel-exports’ job works
-      # correctly.  In Upstart 0.6.7 this fails because the jobs that
-      # depend on ‘nfs-kernel-exports’ are stopped but not restarted.
-      $server->succeed("restart nfs-kernel-exports");
-      $client2->succeed("echo bla >> /data/bar");
+      # Test whether restarting ‘nfsd’ works correctly.
+      $server->succeed("stop nfsd; start nfsd");
+      $client2->succeed("echo bla >> /data/bar"); # will take 90 seconds due to the NFS grace period
 
-      # Test whether we can get a lock.  !!! This step takes about 90
-      # seconds because the NFS server waits that long after booting
-      # before accepting new locks.
+      # Test whether we can get a lock.
       $client2->succeed("time flock -n -s /data/lock true");
 
       # Test locking: client 1 acquires an exclusive lock, so client 2
@@ -78,9 +72,7 @@ in
       $client1->succeed("touch /data/xyzzy");
       $client1->fail("time flock -n -s /data/lock true");
 
-      # Test whether unmounting during shutdown happens quickly.  This
-      # requires portmap and statd to keep running during the
-      # shutdown.
+      # Test whether unmounting during shutdown happens quickly.
       my $t1 = time;
       $client1->shutdown;
       my $duration = time - $t1;
