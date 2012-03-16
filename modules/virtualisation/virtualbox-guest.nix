@@ -60,6 +60,11 @@ in
         InputDevice "VBoxMouse"
       '';
     
+    services.xserver.displayManager.sessionCommands =
+      ''
+        PATH=${makeSearchPath "bin" [ pkgs.gnugrep pkgs.which pkgs.xorg.xorgserver ]}:$PATH \
+          ${kernel.virtualboxGuestAdditions}/bin/VBoxClient-all
+      '';
   };
 
 }

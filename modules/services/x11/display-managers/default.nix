@@ -80,6 +80,8 @@ let
 
       source /etc/profile
 
+      ${cfg.displayManager.sessionCommands}
+
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
           exec ~/.xsession
@@ -162,6 +164,16 @@ in
         example = [ "-ac" "-logverbose" "-nolisten tcp" ];
         description = "List of arguments for the X server.";
         apply = toString;
+      };
+
+      sessionCommands = mkOption {
+        default = "";
+        example =
+          ''
+            xmessage "Hello World!" &
+          '';
+        type = types.string;
+        description = "Shell commands executed just before the window or desktop manager is started.";
       };
 
       session = mkOption {
