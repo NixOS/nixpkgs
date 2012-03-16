@@ -19,7 +19,8 @@ stdenv.mkDerivation (edk2.setup "NixosBootPkg/NixosBootPkg.dsc" {
   '';
 
   meta = {
-    description = "Sample UEFI firmware for QEMU and KVM";
+    description =
+      "Simple EFI app to load the kernel with NixOS-specific arguments";
     homepage = http://www.shealevy.com;
     license = "MIT";
     maintainers = [ stdenv.lib.maintainers.shlevy ];
