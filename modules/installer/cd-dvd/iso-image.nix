@@ -76,7 +76,7 @@ let
     isoImage.makeEfiBootable = mkOption {
       default = false;
       description = ''
-        Whether the ISO image should be an efi-bootable volume
+        Whether the ISO image should be an efi-bootable volume.
       '';
     };
 
