@@ -927,8 +927,6 @@ let
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
-  NixosBootPkg = callPackage ../tools/misc/NixosBootPkg { };
-
   nodejs = callPackage ../development/web/nodejs {};
 
   ldns = callPackage ../development/libraries/ldns { };
