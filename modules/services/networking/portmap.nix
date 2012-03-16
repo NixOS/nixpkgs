@@ -73,12 +73,21 @@ in
 
         daemonType = "fork";
 
+        path = [ portmap pkgs.netcat ];
+
         exec =
           ''
-            ${portmap}/sbin/portmap \
+            portmap \
               ${optionalString (config.services.portmap.chroot != "")
                 "-t '${config.services.portmap.chroot}'"} \
               ${if config.services.portmap.verbose then "-v" else ""}
+          '';
+
+        postStart =
+          ''
+            # Portmap forks into the background before it starts
+            # listening, so wait until its ready.
+            while ! nc -z localhost 111; do sleep 1; done
           '';
       };
 
