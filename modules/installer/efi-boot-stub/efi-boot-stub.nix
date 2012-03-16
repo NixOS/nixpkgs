@@ -108,7 +108,9 @@ in
     # ../system/system-options.nix
   ];
 
-  system = mkIf config.boot.loader.efiBootStub.enable {
+  system = mkIf (config.boot.loader.efiBootStub.enable && (assert
+    (config.boot.kernelPackages.kernel.features ? efiBootStub &&
+    config.boot.kernelPackages.kernel.features.efiBootStub); true)) {
     build = {
       menuBuilder = efiBootStubBuilder;
     };
