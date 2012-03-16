@@ -17,15 +17,14 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags =
-   lib.concatStringsSep " "
-     (lib.optional (daemonUser != false) "RPCUSER=\"${daemonUser}\""
-      ++ lib.optional (daemonUID != false) "DAEMON_UID=${toString daemonUID}"
-      ++ lib.optional (daemonGID != false) "DAEMON_GID=${toString daemonGID}");
+    lib.optional (daemonUser != false) "RPCUSER=\"${daemonUser}\""
+    ++ lib.optional (daemonUID != false) "DAEMON_UID=${toString daemonUID}"
+    ++ lib.optional (daemonGID != false) "DAEMON_GID=${toString daemonGID}";
 
   buildInputs = [ tcpWrapper ];
 
   installPhase = ''
-    mkdir -p "$out/sbin" && ensureDir "$out/man/man8" && \
+    mkdir -p "$out/sbin" "$out/man/man8"
     make install BASEDIR=$out
   '';
 
