@@ -246,7 +246,9 @@ in
       { source = bootParams;
         target = "/efi/nixos/boot-params";
       }
-      { source = "${pkgs.NixosBootPkg}/*/NixosBoot.efi";
+      { source = ''${import ../efi-boot-stub/nixos-boot-pkg.nix {
+                     inherit (pkgs) edk2 stdenv fetchhg; 
+                   }}/*/NixosBoot.efi'';
         target = "/efi/boot/boot${targetArch}.efi";
       }
     ];
