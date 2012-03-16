@@ -1,22 +1,16 @@
 {stdenv, fetchurl, liblapack}:
 
 stdenv.mkDerivation {
-  name = "slr";
+  name = "slr-1.4.2";
+
   src = fetchurl {
-    url = http://www.ebi.ac.uk/goldman-srv/SLR/download/current/slr_source.tgz;
-    sha256 = "0i81fv201p187mim4zakipxnhzqdvd3p5a9qa59xznc6458r2zsn";
+    url = http://www.ebi.ac.uk/goldman-srv/SLR/download/v1.4.2/slr_source.tgz;
+    sha256 = "03ak7jsz89zism6gx8fr1dwlwjgcmnrr9m6xgqpr0xzikxid02jp";
   };
 
   buildInputs = [ liblapack ];
-  buildPhase = ''
-    cd src
-    ls
-    make -fMakefile.linux
-  '';
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -v ../Slr $out/bin 
-  '';
+  preConfigure = "mkdir bin; cd src";
+  makeFlags = "-f Makefile.linux";
 
   meta = {
     description     = "Phylogenetic Analysis by Maximum Likelihood (PAML)";

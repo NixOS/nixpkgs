@@ -8104,9 +8104,7 @@ let
 
   paml = callPackage ../applications/science/biology/paml { };
 
-  /* slr = import ../applications/science/biology/slr {
-    inherit fetchurl stdenv liblapack;
-  }; */
+  /* slr = callPackage ../applications/science/biology/slr { }; */
 
   pal2nal = callPackage ../applications/science/biology/pal2nal { };
 
