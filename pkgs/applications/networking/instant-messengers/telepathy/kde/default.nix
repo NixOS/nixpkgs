@@ -49,5 +49,5 @@ in
 pkgs // {
   inherit version;
   recurseForDerivations = true;
-  full = stdenv.lib.attrValues pkgs;
+  full = stdenv.lib.attrValues stable;
 }
