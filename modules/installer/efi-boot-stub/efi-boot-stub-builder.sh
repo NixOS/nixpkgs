@@ -65,7 +65,7 @@ addEntry() {
     if test -n "@runEfibootmgr@"; then
       set +e
       efibootmgr -c -d "@efiDisk@" -g -l $(echo $kernel | sed 's|@efiSysMountPoint@||' | sed 's|/|\\|g') -L "NixOS $generation Generation" -p "@efiPartition@" \
-        -u systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) initrd=$(echo $initrd | sed 's|@efiSysMountPoint@||' | sed 's|/|\\|g') $(cat $path/kernel-params)
+        -u systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) initrd=$(echo $initrd | sed 's|@efiSysMountPoint@||' | sed 's|/|\\|g') $(cat $path/kernel-params) > /dev/null 2>&1
       set -e
     fi
 
@@ -97,9 +97,9 @@ if test -n "@runEfibootmgr@"; then
   set +e
   modprobe efivars
   for bootnum in $(efibootmgr | grep "NixOS" | grep "Generation" | sed 's/Boot//' | sed 's/\*.*//'); do
-    efibootmgr -B -b "$bootnum"
-    set -e
+    efibootmgr -B -b "$bootnum" > /dev/null 2>&1
   done
+  set -e
 fi
 
 # Add all generations of the system profile to the system partition, in reverse
@@ -114,7 +114,7 @@ done
 
 if test -n "@runEfibootmgr@"; then
   set +e
-  efibootmgr -o $defaultbootnum
+  efibootmgr -o $defaultbootnum > /dev/null 2>&1
   set -e
 fi
 
