@@ -243,6 +243,7 @@ import ./generic.nix (
     configCross = configWithPlatform stdenv.cross.platform;
 
     features.iwlwifi = true;
+    features.efiBootStub = true;
   }
 
   // removeAttrs args ["extraConfig"]
