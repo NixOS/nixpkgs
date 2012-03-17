@@ -69,9 +69,9 @@ in
       { description = "ONC RPC portmap";
 
         startOn = "started network-interfaces";
-        stopOn = "";
+        stopOn = ""; # needed during shutdown
 
-        daemonType = "fork"; # needed during shutdown
+        daemonType = "fork";
 
         path = [ portmap pkgs.netcat ];
 
