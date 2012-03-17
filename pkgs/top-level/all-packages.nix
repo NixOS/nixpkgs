@@ -2384,7 +2384,7 @@ let
 
   ocaml_3_10_0 = callPackage ../development/compilers/ocaml/3.10.0.nix { };
 
-  ocaml_3_12_1 = lowPrio (callPackage ../development/compilers/ocaml/3.12.1.nix { });
+  ocaml_3_12_1 = callPackage ../development/compilers/ocaml/3.12.1.nix { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
