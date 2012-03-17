@@ -5953,11 +5953,6 @@ let
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
-  /*tuxracer = builderDefsPackage (import ../games/tuxracer) {
-    inherit mesa tcl freeglut;
-    inherit (xlibs) libX11 xproto;
-  };*/
-
   ubootChooser = name : if (name == "upstream") then ubootUpstream
     else if (name == "sheevaplug") then ubootSheevaplug
     else if (name == "guruplug") then ubootGuruplug
