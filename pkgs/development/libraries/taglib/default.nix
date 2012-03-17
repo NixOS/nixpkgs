@@ -1,11 +1,11 @@
 {stdenv, fetchurl, zlib, cmake}:
 
 stdenv.mkDerivation rec {
-  name = "taglib-1.7";
+  name = "taglib-1.7.1";
   
   src = fetchurl {
-    url = "http://developer.kde.org/~wheeler/files/src/${name}.tar.gz";
-    sha256 = "0gvpmfrrh4wgdpyc14zq9mk3hivp8kbmfdxjk8bi2nf3py6zpph9";
+    url = "https://github.com/downloads/taglib/taglib/${name}.tar.gz";
+    sha256 = "1nc7zd9jxx5gw4n6zqgvjh0wxlm89ihcyyrzk2rbf15njw4lgpjj";
   };
   
   cmakeFlags = "-DWITH_ASF=ON -DWITH_MP4=ON";
