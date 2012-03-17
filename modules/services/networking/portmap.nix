@@ -69,7 +69,7 @@ in
       { description = "ONC RPC portmap";
 
         startOn = "started network-interfaces";
-        stopOn = "never";
+        stopOn = "";
 
         daemonType = "fork"; # needed during shutdown
 

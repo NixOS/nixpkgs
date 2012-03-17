@@ -45,7 +45,7 @@ in
 
         path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
 
-        stopOn = "never"; # needed during shutdown
+        stopOn = ""; # needed during shutdown
 
         preStart =
           ''

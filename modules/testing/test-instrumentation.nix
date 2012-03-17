@@ -29,7 +29,7 @@ in
 
     jobs.backdoor =
       { startOn = "startup";
-        stopOn = "never";
+        stopOn = "";
 
         script =
           ''
