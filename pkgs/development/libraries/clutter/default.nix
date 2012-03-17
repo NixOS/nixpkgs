@@ -1,20 +1,18 @@
-{ fetchurl, stdenv, pkgconfig, mesa, libXi, libXfixes, libXdamage
-, libXcomposite, cairo, glib, pango, gtk, json_glib }:
+{ stdenv, fetchurl, glib, pkgconfig, mesa, libX11, libXext, libXfixes
+, libXdamage, libXcomposite, libXi, cogl, pango, atk, json_glib }:
 
-stdenv.mkDerivation rec {
-  name = "clutter-1.4.2";
+stdenv.mkDerivation {
+  name = "clutter-1.8.2";
 
   src = fetchurl {
-    url = "http://source.clutter-project.org/sources/clutter/1.4/${name}.tar.bz2";
-    sha256 = "14l8wgk5jdwsnjf991qgzl115kjs1xywil2awlrwj1airsn6gzcj";
+    url = mirror://gnome/sources/clutter/1.8/clutter-1.8.2.tar.xz;
+    sha256 = "0bzsvnharawfg525lpavrp55mq4aih5nb01dwwqwnccg8hk9z2fw";
   };
 
-  buildInputs = [ pkgconfig ];
-
-  # There are all listed in the `Requires' field of `clutter-x11-1.0.pc'.
+  buildNativeInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    [ mesa cairo glib pango gtk json_glib
-      libXi libXfixes libXdamage libXcomposite
+    [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
+      atk json_glib
     ];
 
   meta = {
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
     license = "LGPLv2+";
     homepage = http://www.clutter-project.org/;
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    maintainers = with stdenv.lib.maintainers; [ urkud ludo ];
+    platforms = stdenv.lib.platforms.mesaPlatforms;
   };
 }
