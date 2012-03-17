@@ -29,8 +29,7 @@ stdenv.mkDerivation {
 
   buildFlags = "world"; # Debug with "world VERBOSE=1";
 
-  #patches = [ ./configure.patch ./coq-8.3-make-3.82-compat.patch ];
-  patches = [ /root/configure.patch ];
+  patches = [ ./configure.patch ];
 
   postPatch = ''
     UNAME=$(type -tp uname)
