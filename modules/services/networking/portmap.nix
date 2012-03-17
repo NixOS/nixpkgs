@@ -68,7 +68,7 @@ in
     jobs.portmap =
       { description = "ONC RPC portmap";
 
-        startOn = "startup";
+        startOn = "started network-interfaces";
         stopOn = "never";
 
         daemonType = "fork"; # needed during shutdown
