@@ -44,17 +44,14 @@ in
 
   config = mkIf config.networking.useDHCP {
 
+    # dhclient barfs if /proc/net/if_inet6 doesn't exist.
+    boot.kernelModules = [ "ipv6" ];
+
     jobs.dhclient =
       { startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
         path = [ dhcp ];
-
-        preStart =
-          ''
-            # dhclient barfs if /proc/net/if_inet6 doesn't exist.
-            ${config.system.sbin.modprobe}/sbin/modprobe ipv6 || true
-          '';
 
         script =
           ''

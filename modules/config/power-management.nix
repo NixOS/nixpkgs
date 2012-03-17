@@ -88,7 +88,7 @@ in
 
     boot.kernelModules =
       [ "acpi_cpufreq" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand"
-        "p4_clockmod" "cpufreq_conservative"
+        "cpufreq_conservative"
       ];
 
     powerManagement.cpuFreqGovernor = mkDefault "ondemand";

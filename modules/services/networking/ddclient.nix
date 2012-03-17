@@ -10,8 +10,6 @@ let
 
   ddclientUser = "ddclient";
 
-  modprobe = config.system.sbin.modprobe;
-
   ddclientFlags = "-foreground -file ${ddclientCfg}";
 
   ddclientCfg = pkgs.writeText "ddclient.conf" ''
@@ -89,8 +87,7 @@ in
 
       web = mkOption {
         default = "web, web=checkip.dyndns.com/, web-skip='IP Address'" ;
-        description = ''
-        '';
+        description = "";
       };
 
     };
@@ -101,6 +98,7 @@ in
   ###### implementation
 
   config = mkIf config.services.ddclient.enable {
+  
     environment.systemPackages = [ ddclient ];
 
     users.extraUsers = singleton
@@ -119,9 +117,6 @@ in
           ''
             mkdir -m 0755 -p ${stateDir}
             chown ${ddclientUser} ${stateDir}
-
-            # Needed to run ddclient as an unprivileged user.
-            ${modprobe}/sbin/modprobe capability || true
           '';
 
         exec = "${ddclient}/bin/ddclient ${ddclientFlags}";

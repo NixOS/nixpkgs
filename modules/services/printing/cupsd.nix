@@ -8,8 +8,6 @@ let
 
   logDir = "/var/log/cups";
 
-  modprobe = config.system.sbin.modprobe;
-
   cfg = config.services.printing;
 
   additionalBackends = pkgs.stdenv.mkDerivation {

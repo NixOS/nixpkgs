@@ -10,10 +10,6 @@ let
 
   uptimedUser = "uptimed";
 
-  modprobe = config.system.sbin.modprobe;
-
-  uptimedFlags = "";
-
 in
 
 {
@@ -59,15 +55,12 @@ in
             mkdir -m 0755 -p ${stateDir}
             chown ${uptimedUser} ${stateDir}
 
-            # Needed to run uptimed as an unprivileged user.
-            ${modprobe}/sbin/modprobe capability || true
-
             if ! test -f ${stateDir}/bootid ; then
               ${uptimed}/sbin/uptimed -b
             fi
           '';
 
-        exec = "${uptimed}/sbin/uptimed ${uptimedFlags}";
+        exec = "${uptimed}/sbin/uptimed";
       };
 
   };

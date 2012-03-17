@@ -10,8 +10,6 @@ let
 
   privoxyUser = "privoxy";
 
-  modprobe = config.system.sbin.modprobe;
-
   privoxyFlags = "--no-daemon --user ${privoxyUser} ${privoxyCfg}";
 
   privoxyCfg = pkgs.writeText "privoxy.conf" ''
@@ -68,12 +66,13 @@ in
   ###### implementation
 
   config = mkIf config.services.privoxy.enable {
+  
     environment.systemPackages = [ privoxy ];
 
     users.extraUsers = singleton
       { name = privoxyUser;
         uid = config.ids.uids.privoxy;
-        description = "privoxy daemon user";
+        description = "Privoxy daemon user";
         home = stateDir;
       };
 
@@ -86,9 +85,6 @@ in
           ''
             mkdir -m 0755 -p ${stateDir}
             chown ${privoxyUser} ${stateDir}
-
-            # Needed to run privoxy as an unprivileged user.
-            ${modprobe}/sbin/modprobe capability || true
           '';
 
         exec = "${privoxy}/sbin/privoxy ${privoxyFlags}";

@@ -45,21 +45,14 @@ in
 
     environment.systemPackages = [ alsaUtils ];
 
+    boot.kernelModules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
+
     jobs.alsa =
       { startOn = "stopped udevtrigger";
 
         preStart =
           ''
             mkdir -m 0755 -p $(dirname ${soundState})
-
-            # Load some additional modules.
-	    ${optionalString config.sound.enableOSSEmulation
-	      ''
-                for mod in snd_pcm_oss; do
-                  ${config.system.sbin.modprobe}/sbin/modprobe $mod || true
-                done
-	      ''
-	    }
 
             # Restore the sound state.
             ${alsaUtils}/sbin/alsactl -f ${soundState} restore || true

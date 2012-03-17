@@ -14,8 +14,6 @@ let
     destination = "/etc/udev/rules.d/10-local.rules";
   };
 
-  modprobe = config.system.sbin.modprobe;
-
   nixosRules = ''
 
     # Miscellaneous devices.
@@ -54,7 +52,7 @@ let
       # Fix some paths in the standard udev rules.  Hacky.
       for i in $out/*.rules; do
         substituteInPlace $i \
-          --replace \"/sbin/modprobe \"${modprobe}/sbin/modprobe \
+          --replace \"/sbin/modprobe \"${config.system.sbin.modprobe}/sbin/modprobe \
           --replace \"/sbin/mdadm \"${pkgs.mdadm}/sbin/mdadm \
           --replace \"/sbin/blkid \"${pkgs.utillinux}/sbin/blkid \
           --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount
@@ -231,13 +229,6 @@ in
 
             mkdir -p /var/lib/udev/rules.d
             touch /var/lib/udev/rules.d/70-persistent-cd.rules /var/lib/udev/rules.d/70-persistent-net.rules
-
-            # Do the loading of additional stage 2 kernel modules.
-            # Maybe this isn't the best place...
-            for i in ${toString config.boot.kernelModules}; do
-                echo "Loading kernel module $i..."
-                ${modprobe}/sbin/modprobe $i || true
-            done
 
             mkdir -p /dev/.udev # !!! bug in udev?
           '';

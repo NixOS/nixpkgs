@@ -1,4 +1,6 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 {
 
@@ -6,11 +8,11 @@
 
   options = {
 
-    hardware.cpu.intel.updateMicrocode = pkgs.lib.mkOption {
+    hardware.cpu.intel.updateMicrocode = mkOption {
       default = false;
-      type = pkgs.lib.types.bool;
+      type = types.bool;
       description = ''
-        Update the CPU microcode for intel processors.
+        Update the CPU microcode for Intel processors.
       '';
     };
 
@@ -19,16 +21,9 @@
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.hardware.cpu.intel.updateMicrocode {
-    hardware.firmware = [pkgs.microcodeIntel];
-    jobs.microcode = {
-      name = "microcode";
-      description = "load microcode";
-      startOn = "started udev";
-      exec = "modprobe microcode";
-      path = [config.system.sbin.modprobe];
-      task = true;
-    };
+  config = mkIf config.hardware.cpu.intel.updateMicrocode {
+    hardware.firmware = [ pkgs.microcodeIntel ];
+    boot.kernelModules = [ "microcode" ];
   };
 
 }

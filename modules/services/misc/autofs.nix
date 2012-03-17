@@ -50,11 +50,6 @@ in
         ";
       };
 
-      kernelModules = mkOption {
-        default = ["fuse"];
-        description="kernel modules to load";
-      };
-
       timeout = mkOption {
         default = 600;
         description = "Set the global minimum timeout, in seconds, until directories are unmounted";
@@ -81,19 +76,15 @@ in
         source = pkgs.writeText "auto.master" cfg.autoMaster;
       };
 
+    boot.kernelModules = [ "autofs4" ];
+
     jobs.autofs =
       { description = "Filesystem automounter";
 
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
-        environment =
-          { PATH = "${pkgs.nfsUtils}/sbin:${config.system.sbin.modprobe}/sbin:${pkgs.sshfsFuse}/sbin:${pkgs.sshfsFuse}/bin:$PATH";
-          };
-
-        preStart =
-          pkgs.lib.concatMapStrings (module : "modprobe ${module} || true\n")
-                                    (["autofs4"] ++ cfg.kernelModules);
+        path = [ pkgs.nfsUtils pkgs.sshfsFuse ];
 
         preStop =
           ''

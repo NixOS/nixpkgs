@@ -96,6 +96,10 @@ in
         }
       ];
 
+    # The daemon requires the userspace<->kernelspace netlink
+    # connector.
+    boot.kernelModules = [ "cn" ];
+    
     jobs.cgroups =
       { startOn = "startup";
 
@@ -105,10 +109,6 @@ in
       
         preStart =
           ''
-            # The daemon requires the userspace<->kernelspace netlink
-            # connector.
-            ${config.system.sbin.modprobe}/sbin/modprobe cn || true
-          
             cgclear || true
 
             # Mount the cgroup hierarchies.  Note: we refer to the

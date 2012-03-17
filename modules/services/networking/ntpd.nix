@@ -10,16 +10,12 @@ let
 
   ntpUser = "ntp";
 
-  servers = config.services.ntp.servers;
-
-  modprobe = config.system.sbin.modprobe;
-
   configFile = pkgs.writeText "ntp.conf" ''
     # Keep the drift file in ${stateDir}/ntp.drift.  However, since we
     # chroot to ${stateDir}, we have to specify it as /ntp.drift.
     driftfile /ntp.drift
 
-    ${toString (map (server: "server " + server + " iburst\n") servers)}
+    ${toString (map (server: "server " + server + " iburst\n") config.services.ntp.servers)}
   '';
 
   ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup -i ${stateDir}";
@@ -68,8 +64,6 @@ in
         description = "NTP daemon user";
         home = stateDir;
       };
-
-    boot.kernelModules = [ "capability" ];
 
     jobs.ntpd =
       { description = "NTP daemon";

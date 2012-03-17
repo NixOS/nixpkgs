@@ -9,14 +9,13 @@ let
   stateDir = "/var/lib/tor";
   privoxyDir = stateDir+"/privoxy";
 
-  modprobe = config.system.sbin.modprobe;
-
   cfg = config.services.tor;
 
   torUser = "tor";
 
   opt = name: value: if value != "" then "${name} ${value}" else "";
   optint = name: value: if value != 0 then "${name} ${toString value}" else "";
+
 in
 
 {
@@ -251,9 +250,6 @@ in
                      preStart = ''
                        mkdir -m 0755 -p ${privoxyDir}
                        chown ${torUser} ${privoxyDir}
-
-                       # Needed to run privoxy as an unprivileged user?
-                       ${modprobe}/sbin/modprobe capability || true
                      '';
                      exec = "${privoxy}/sbin/privoxy --no-daemon --user ${torUser} ${pkgs.writeText "torPrivoxy.conf" cfg.client.privoxy.config}";
     }; };
