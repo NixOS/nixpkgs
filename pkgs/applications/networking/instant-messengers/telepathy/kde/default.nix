@@ -24,6 +24,11 @@ let
         buildNativeInputs = [ gettext pkgconfig ];
         buildInputs = [ kdelibs telepathy_qt ]
           ++ stdenv.lib.optional (name != "ktp-common-internals") common_internals;
+
+        meta = {
+          inherit (kdelibs.meta) platforms;
+          maintainers = [ stdenv.lib.maintainers.urkud ];
+        };
       }
     );
   };
