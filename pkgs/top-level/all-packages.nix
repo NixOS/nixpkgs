@@ -6135,6 +6135,8 @@ let
 
   gentium = callPackage ../data/fonts/gentium {};
 
+  gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
+
   gsettings_desktop_schemas = callPackage ../data/misc/gsettings-desktop-schemas {};
 
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
@@ -7889,10 +7891,6 @@ let
     # Backwards compatibility;
     inherit (pkgs) libsoup;
   };
-
-  gnome3 = (import ../desktops/gnome-3 {
-    callPackage = pkgs.newScope pkgs.gnome3;
-  });
 
   gnome = recurseIntoAttrs gnome2;
 
