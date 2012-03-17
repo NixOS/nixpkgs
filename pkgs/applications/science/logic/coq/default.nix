@@ -4,7 +4,7 @@
 {stdenv, fetchurl, ocaml, findlib, camlp5, lablgtk, ncurses}:
 
 let
-  version = "8.3pl1";
+  version = "8.3pl3";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://coq.inria.fr/V${version}/files/coq-${version}.tar.gz";
-    sha256 = "0a791gsbf17y2wi0a376n78pxkhpl0lkzifhy5d3mx3lpn376j9s";
+    sha256 = "0ivrafwr4p8pklb9wfq3zyai19xdk05xr3q16xqk4q9pfad9w9dg";
   };
 
   buildInputs = [ ocaml findlib camlp5 ncurses lablgtk ];
@@ -29,7 +29,8 @@ stdenv.mkDerivation {
 
   buildFlags = "world"; # Debug with "world VERBOSE=1";
 
-  patches = [ ./configure.patch ./coq-8.3-make-3.82-compat.patch ];
+  #patches = [ ./configure.patch ./coq-8.3-make-3.82-compat.patch ];
+  patches = [ /root/configure.patch ];
 
   postPatch = ''
     UNAME=$(type -tp uname)
