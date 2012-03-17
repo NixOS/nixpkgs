@@ -45,6 +45,7 @@ let
           ${optionalString (job.preStart != "") ''
             pre-start script
               exec >> ${log} 2>&1
+              source ${jobHelpers}
               ${job.preStart}
             end script
           ''}
@@ -55,6 +56,7 @@ let
               ''
                 script
                   exec >> ${log} 2>&1
+                  source ${jobHelpers}
                   ${job.script}
                 end script
               ''
@@ -71,6 +73,7 @@ let
           ${optionalString (job.postStart != "") ''
             post-start script
               exec >> ${log} 2>&1
+              source ${jobHelpers}
               ${job.postStart}
             end script
           ''}
@@ -83,6 +86,7 @@ let
             optionalString (job.preStop != "") (assert hasMain; ''
             pre-stop script
               exec >> ${log} 2>&1
+              source ${jobHelpers}
               ${job.preStop}
             end script
           '')}
@@ -90,6 +94,7 @@ let
           ${optionalString (job.postStop != "") ''
             post-stop script
               exec >> ${log} 2>&1
+              source ${jobHelpers}
               ${job.postStop}
             end script
           ''}
@@ -121,6 +126,46 @@ let
           echo "$jobText" > $out
         '';
 
+
+  # Shell functions for use in Upstart jobs.
+  jobHelpers = pkgs.writeText "job-helpers.sh"
+    ''
+      # Ensure that an Upstart service is running.
+      ensure() {
+          local job="$1"
+          local status="$(status "$job")"
+
+          # If it's already running, we're happy.
+          [[ "$status" =~ start/running ]] && return 0
+
+          # If its current goal is to stop, start it.
+          [[ "$status" =~ stop/ ]] && { status="$(start "$job")" || true; }
+
+          # The "start" command is synchronous *if* the job is
+          # not already starting.  So if somebody else started
+          # the job in parallel, the "start" above may return
+          # while the job is still starting.  So wait until it
+          # is up or has failed.
+          while true; do
+              [[ "$status" =~ stop/ ]] && { echo "job $job failed to start"; return 1; }
+              [[ "$status" =~ start/running ]] && return 0
+              echo "waiting for job $job to start..."
+              sleep 1
+              status="$(status "$job")"
+          done
+      }
+
+      # Check whether the current job has been stopped.  Used in
+      # post-start jobs to determine if they should continue.
+      stop_check() {
+          if [[ "$(status)" =~ stop/ ]]; then
+              echo "job asked to stop!"
+              return 1
+          fi
+          return 0
+      }
+    '';
+        
 
   jobOptions = {
 

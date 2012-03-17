@@ -184,7 +184,7 @@ in
             # ${fstab}
             
             ${optionalString config.services.nfs.client.enable ''
-              start statd || true
+              ensure statd || true
             ''}
             
             exec > /dev/console 2>&1

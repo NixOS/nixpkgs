@@ -88,7 +88,7 @@ in
             # Portmap forks into the background before it starts
             # listening, so wait until its ready.
             while ! nc -z localhost 111; do
-                if [[ "$(status)" =~ stop/ ]]; then exit; fi
+                stop_check                
                 sleep 1
             done
           '';

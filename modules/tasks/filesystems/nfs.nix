@@ -49,7 +49,7 @@ in
 
         preStart =
           ''
-            start portmap || true
+            ensure portmap
             mkdir -p /var/lib/nfs
             mkdir -p /var/lib/nfs/sm
             mkdir -p /var/lib/nfs/sm.bak

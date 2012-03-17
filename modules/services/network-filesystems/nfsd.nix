@@ -89,8 +89,8 @@ in
 
         preStart =
           ''
-            start portmap || true
-            start mountd || true
+            ensure portmap
+            ensure mountd
 
             # Create a state directory required by NFSv4.
             mkdir -p /var/lib/nfs/v4recovery
@@ -104,7 +104,7 @@ in
 
         postStart =
           ''
-            start statd || true
+            ensure statd
           '';
       };
 
@@ -115,7 +115,7 @@ in
 
         preStart =
           ''
-            start portmap || true
+            ensure portmap
 
             mkdir -p /var/lib/nfs
             touch /var/lib/nfs/rmtab
