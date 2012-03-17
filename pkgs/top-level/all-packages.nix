@@ -4171,6 +4171,8 @@ let
 
   libsndfile = callPackage ../development/libraries/libsndfile { };
 
+  libsoup = callPackage ../development/libraries/libsoup { };
+
   libssh = callPackage ../development/libraries/libssh { };
 
   libssh2 = callPackage ../development/libraries/libssh2 { };
@@ -7877,10 +7879,13 @@ let
   #   import ../desktops/e17 { inherit callPackage pkgs; }
   # );
 
-  gnome2 = (callPackage ../desktops/gnome-2 {
+  gnome2 = callPackage ../desktops/gnome-2 {
     callPackage = pkgs.newScope pkgs.gnome2;
     self = pkgs.gnome2;
-  }  // pkgs.gtkLibs);
+  }  // pkgs.gtkLibs // {
+    # Backwards compatibility;
+    inherit (pkgs) libsoup;
+  };
 
   gnome3 = (import ../desktops/gnome-3 {
     callPackage = pkgs.newScope pkgs.gnome3;

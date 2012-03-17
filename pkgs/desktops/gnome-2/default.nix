@@ -73,8 +73,6 @@
 
   gnome_keyring = callPackage ./desktop/gnome-keyring { };
 
-  libsoup = callPackage ./desktop/libsoup { };
-
   libwnck = callPackage ./desktop/libwnck { };
 
   libgweather = callPackage ./desktop/libgweather { };
