@@ -3,11 +3,6 @@
 {
   clutter = callPackage ./platform/clutter.nix { };
 
-  cogl = callPackage ../../development/libraries/cogl { };
-
-  # Ensure that we use dbus-glib built with gtkLibs3x.glib
-  dbus_glib = callPackage ../../development/libraries/dbus-glib { };
-
   glib_networking = callPackage ./platform/glib-networking.nix { };
 
   libgnome_keyring = callPackage ./platform/libgnome-keyring.nix { };
