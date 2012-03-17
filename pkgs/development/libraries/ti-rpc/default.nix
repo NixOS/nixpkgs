@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://sourceforge.net/projects/libtirpc/";
     description = "The transport-independent Sun RPC implementation (TI-RPC)";
-    license = stdenv.lib.license.bsd3;
+    license = stdenv.lib.licenses.bsd3;
     longDescription = ''
        Currently, NFS commands use the SunRPC routines provided by the
        glibc.  These routines do not support IPv6 addresses.  Ulrich
