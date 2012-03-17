@@ -3374,9 +3374,7 @@ let
 
   dssi = callPackage ../development/libraries/dssi {};
 
-  dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix {
-    stdenv = overrideGCC stdenv gcc45;
-  };
+  dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix { };
 
   eigen = callPackage ../development/libraries/eigen {};
 
