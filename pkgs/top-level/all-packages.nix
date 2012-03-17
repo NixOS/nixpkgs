@@ -3966,6 +3966,7 @@ let
   libgdata_0_6 = (newScope gnome) ../development/libraries/libgdata/0.6.nix {};
 
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
+  libgnome_keyring3 = callPackage ../development/libraries/libgnome-keyring/3.x.nix { };
 
   liblo = callPackage ../development/libraries/liblo { };
 
