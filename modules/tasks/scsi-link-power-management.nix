@@ -24,7 +24,7 @@ with pkgs.lib;
 
   config = mkIf (config.powerManagement.scsiLinkPolicy != "") {
 
-    jobs.scsilinkpmpolicy =
+    jobs."scsi-link-pm" =
       { description = "Set SCSI link power management policy";
 
         startOn = "started udev";
