@@ -30,6 +30,7 @@
   ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/check-config.nix
+  ./misc/crashdump.nix
   ./misc/deployment.nix
   ./misc/ids.nix
   ./misc/locate.nix
