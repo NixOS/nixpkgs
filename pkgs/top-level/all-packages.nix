@@ -4067,8 +4067,6 @@ let
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
-  libjingle = callPackage ../development/libraries/libjingle/0.3.11.nix { };
-
   libjpeg = callPackage ../development/libraries/libjpeg { };
 
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
