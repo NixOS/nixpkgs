@@ -16,4 +16,9 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ libxslt pkgconfig ];
 
   configureFlags = "--disable-avahi-tests";
+
+  meta = {
+    description = "Link-local XMPP connection manager for Telepathy";
+    platforms = stdenv.lib.platforms.gnu; # Random choice
+  };
 }
