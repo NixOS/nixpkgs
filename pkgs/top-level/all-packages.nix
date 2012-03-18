@@ -7182,6 +7182,8 @@ let
 
   qemu = callPackage ../applications/virtualization/qemu/0.15.nix { };
 
+  qemu_1_0 = callPackage ../applications/virtualization/qemu/1.0.nix { };
+
   qemu_0_13 = callPackage ../applications/virtualization/qemu/0.13.nix { };
 
   qemuSVN = callPackage ../applications/virtualization/qemu/svn-6642.nix { };
