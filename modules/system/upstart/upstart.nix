@@ -42,13 +42,14 @@ let
 
           ${concatMapStrings (n: "env ${n}=\"${getAttr n env}\"\n") (attrNames env)}
 
-          ${optionalString (job.preStart != "") ''
-            pre-start script
-              exec >> ${log} 2>&1
+          pre-start script
+            exec >> ${log} 2>&1
+            ln -sfn "$(readlink -f "/etc/init/${job.name}.conf")" /var/run/upstart-jobs/${job.name}
+            ${optionalString (job.preStart != "") ''
               source ${jobHelpers}
               ${job.preStart}
-            end script
-          ''}
+            ''}
+          end script
 
           ${if job.script != "" && job.exec != "" then
               abort "Job ${job.name} has both a `script' and `exec' attribute."

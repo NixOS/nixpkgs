@@ -62,75 +62,95 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
 fi
 
 # Activate the new configuration.
-if [ "$action" = "switch" -o "$action" = "test" ]; then
+if [ "$action" != switch -a "$action" != test ]; then exit 0; fi
 
-    oldVersion=$(cat /var/run/current-system/upstart-interface-version 2> /dev/null || echo 0)
-    newVersion=$(cat @out@/upstart-interface-version 2> /dev/null || echo 0)
+oldVersion=$(cat /var/run/current-system/upstart-interface-version 2> /dev/null || echo 0)
+newVersion=$(cat @out@/upstart-interface-version 2> /dev/null || echo 0)
 
-    if test "$oldVersion" -ne "$newVersion"; then
+if test "$oldVersion" -ne "$newVersion"; then
         cat <<EOF
 Warning: the new NixOS configuration has an Upstart version that is
 incompatible with the current version.  The new configuration won't
 take effect until you reboot the system.
 EOF
         exit 1
-    fi
-
-    oldJobs=$(readlink -f /etc/static/init)
-    newJobs=$(readlink -f @out@/etc/init)
-
-    stopJob() {
-        local job=$1
-        initctl stop "$job" || true
-    }
-
-    # Stop all services that are not in the new Upstart
-    # configuration.
-    for job in $(cd $oldJobs && ls *.conf); do
-        job=$(basename $job .conf)
-        if ! test -e "$newJobs/$job.conf"; then
-            echo "stopping $job..."
-            stopJob $job
-        fi
-    done
-
-    # Activate the new configuration (i.e., update /etc, make
-    # accounts, and so on).
-    echo "activating the configuration..."
-    @out@/activate @out@
-
-    # Make Upstart reload its jobs.
-    initctl reload-configuration
-
-    # Start all new services and restart all changed services.
-    for job in $(cd $newJobs && ls *.conf); do
-
-        job=$(basename $job .conf)
-        
-        # Hack: skip the shutdown and control-alt-delete jobs.
-        # Another hack: don't restart the X server (that would kill all the clients).
-        # And don't restart dbus, since that causes ConsoleKit to
-        # forget about current sessions.
-        # Idem for the emergeny-shell, because its `console owner'
-        # line screws up the X server.
-        # Idem for xendomains because we don't want to save/restore
-	# Xen domains unless we have to.
-        # TODO: Jobs should be able to declare that they should not be
-	# auto-restarted.
-        if echo "$job" | grep -q "^shutdown$\|^control-alt-delete$\|^xserver$\|^dbus$\|^disnix$\|^emergency-shell$\|^xendomains$\|^udevtrigger$\|^drbd-down$"; then continue; fi
-
-        if ! test -e "$oldJobs/$job.conf"; then
-            echo "starting $job..."
-            initctl start "$job" || true
-        elif test "$(readlink "$oldJobs/$job.conf")" != "$(readlink "$newJobs/$job.conf")"; then
-            echo "restarting $job..."
-            stopJob $job
-            initctl start "$job" || true
-        fi
-    done
-
-    # Signal dbus to reload its configuration.
-    dbusPid=$(initctl status dbus 2> /dev/null | sed -e 's/.*process \([0-9]\+\)/\1/;t;d')
-    [ -n "$dbusPid" ] && kill -HUP "$dbusPid"
-    
 fi
+
+newJobs=$(readlink -f @out@/etc/init)
+
+# Stop all currently running jobs that are not in the new Upstart
+# configuration.  (Here "running" means all jobs that are not in the
+# stop/waiting state.)
+for job in $(initctl list | sed -e '/ stop\/waiting/ d; /^[^a-z]/ d; s/^\([^ ]\+\).*/\1/' | sort); do
+    if ! [ -e "$newJobs/$job.conf" ] ; then
+        echo "stopping obsolete job ‘$job’..."
+        initctl stop "$job" || true
+    fi
+done
+
+# Activate the new configuration (i.e., update /etc, make accounts,
+# and so on).
+echo "activating the configuration..."
+@out@/activate @out@
+
+# Make Upstart reload its jobs.
+initctl reload-configuration
+
+# Allow Upstart jobs to react intelligently to a config change.
+initctl emit config-changed
+
+# Restart all running jobs that have changed.  (Here "running" means
+# all jobs that don't have a "stop" goal.)  We use the symlinks in
+# /var/run/upstart-jobs (created by each job's pre-start script) to
+# determine if a job has changed.
+for job in $(cd $newJobs && ls *.conf); do
+    job=$(basename $job .conf)
+    status=$(status "$job")
+    if ! [[ "$status" =~ start/ ]]; then continue; fi
+    if [ "$(readlink -f "$newJobs/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ]; then continue; fi
+    # Hack: don't restart the X server (that would kill all the clients).
+    # And don't restart dbus, since that causes ConsoleKit to
+    # forget about current sessions.
+    # Idem for xendomains because we don't want to save/restore
+    # Xen domains unless we have to.
+    # TODO: Jobs should be able to declare that they should not be
+    # auto-restarted.
+    if echo "$job" | grep -q "^xserver$\|^dbus$\|^disnix$\|^xendomains$\|^udevtrigger$"; then
+        echo "not restarting changed service ‘$job’"
+        continue
+    fi
+    echo "restarting changed service ‘$job’..."
+    # Note: can't use "restart" here, since that only restarts the
+    # job's main process.
+    stop "$job" || true
+    start "$job" || true
+done
+
+# Start all jobs that are not running but should be.  The "should be"
+# criterion is tricky: the intended semantics is that we end up with
+# the same jobs as after a reboot.  If it's a task, restart it if it
+# differs from the previous instance of the same task; if it wasn't
+# previously run, don't run it.  If it's a service, only start it if
+# it has a "start on" condition.
+for job in $(cd $newJobs && ls *.conf); do
+    job=$(basename $job .conf)
+    status=$(status "$job")
+    if ! [[ "$status" =~ stop/ ]]; then continue; fi
+
+    if grep -q '^task$' "$newJobs/$job.conf"; then
+        if [ ! -e "/var/run/upstart-jobs/$job" -o \
+            "$(readlink -f "$newJobs/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ];
+        then continue; fi
+        echo "starting task ‘$job’..."
+        start "$job" || true
+    else
+        if ! grep -q "^start on" "$newJobs/$job.conf"; then continue; fi
+        echo "starting service ‘$job’..."
+        start "$job" || true
+    fi
+    
+done
+
+# Signal dbus to reload its configuration.
+dbusPid=$(initctl status dbus 2> /dev/null | sed -e 's/.*process \([0-9]\+\)/\1/;t;d')
+[ -n "$dbusPid" ] && kill -HUP "$dbusPid"

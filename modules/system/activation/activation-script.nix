@@ -109,6 +109,11 @@ in
         mkdir -m 0755 -p /var/run/nix/current-load # for distributed builds
         mkdir -m 0700 -p /var/run/nix/remote-stores
 
+        # Directory holding symlinks to currently running Upstart
+        # jobs.  Used to determine which jobs need to be restarted
+        # when switching to a new configuration.
+        mkdir -m 0700 -p /var/run/upstart-jobs
+        
         mkdir -m 0755 -p /var/log
         mkdir -m 0755 -p /var/log/upstart
 
