@@ -201,7 +201,15 @@ in
         startOn = "mount-failed";
         script =
           ''
-            [ -n "$MOUNTPOINT" ] || exit 0
+            # Don't start the emergency shell if the X server is
+            # running.  The user won't see it, and the "console owner"
+            # stanza breaks VT switching and causes the X server to go
+            # to 100% CPU time.
+            status="$(status xserver || true)"
+            [[ "$status" =~ start/ ]] && exit 0
+
+            stop tty1 || true
+            
             start --no-wait emergency-shell \
               DEVICE="$DEVICE" MOUNTPOINT="$MOUNTPOINT"
           '';
@@ -226,8 +234,6 @@ in
 
         script =
           ''
-            [ -n "$MOUNTPOINT" ] || exit 0
-
             exec < /dev/console > /dev/console 2>&1
 
             cat <<EOF
