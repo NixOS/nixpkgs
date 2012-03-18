@@ -129,15 +129,11 @@ let
       ${pkgs.mtools}/bin/mmd -i "$out" efi/boot
       ${pkgs.mtools}/bin/mmd -i "$out" efi/nixos
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${config.boot.kernelPackages.kernel + "/bzImage"} ::efi/nixos/bzImage
+        ${config.boot.kernelPackages.kernel + "/bzImage"} ::efi/boot/boot${targetArch}.efi
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
         ${config.system.build.initialRamdisk + "/initrd"} ::efi/nixos/initrd
-      echo "\\efi\\nixos\\bzImage initrd=\\efi\\nixos\\initrd init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" | iconv -f utf-8 -t UCS-2 > boot-params
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::efi/nixos/boot-params
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${import ../efi-boot-stub/nixos-boot-pkg.nix {
-          inherit (pkgs) edk2 stdenv fetchhg; 
-         }}/*/NixosBoot.efi ::efi/boot/boot${targetArch}.efi
+      echo "initrd=\\efi\\nixos\\initrd init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" > boot-params
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::efi/boot/linux.conf
     '';
 
   targetArch = if pkgs.stdenv.isi686 then

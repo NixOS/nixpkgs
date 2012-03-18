@@ -80,24 +80,20 @@ in
 
 ###### implementation
 let
-  efiBootStubBuilder = pkgs.substituteAll ({
+  efiBootStubBuilder = pkgs.substituteAll {
     src = ./efi-boot-stub-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.glibc] ++ (pkgs.stdenv.lib.optionals config.boot.loader.efiBootStub.runEfibootmgr [pkgs.efibootmgr pkgs.module_init_tools]);
     inherit (config.boot.loader.efiBootStub) efiSysMountPoint runEfibootmgr installStartupNsh efiDisk efiPartition installRemovableMediaImage;
     kernelFile = platform.kernelTarget;
-  } // pkgs.stdenv.lib.optionalAttrs config.boot.loader.efiBootStub.installRemovableMediaImage rec {
-    removableMediaImage = ''${import ./nixos-boot-pkg.nix {
-                              inherit (pkgs) edk2 stdenv fetchhg;
-                            }}/${targetArch}/NixosBoot.efi'';
     targetArch = if pkgs.stdenv.isi686 then
       "IA32"
     else if pkgs.stdenv.isx86_64 then
       "X64"
     else
       throw "Unsupported architecture";
-  });
+  };
 
   # Temporary check, for nixos to cope both with nixpkgs stdenv-updates and trunk
   platform = pkgs.stdenv.platform;

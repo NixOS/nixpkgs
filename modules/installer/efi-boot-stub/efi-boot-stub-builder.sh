@@ -78,10 +78,8 @@ addEntry() {
 
       if test -n "@installRemovableMediaImage@"; then
         mkdir -pv "@efiSysMountPoint@"/efi/boot
-        cp "@removableMediaImage@" \
-          "@efiSysMountPoint@"/efi/boot/boot"@targetArch@".efi
-	iconv -f utf-8 -t UCS-2 < $startup > "@efiSysMountPoint@"/efi/nixos/boot-params
-        filesCopied["@efiSysMountPoint@"/efi/nixos/boot-params]=1
+        cp $kernel "@efiSysMountPoint@"/efi/boot/boot"@targetArch@".efi
+	sed 's|.*@kernelFile@.efi ||' $startup > "@efiSysMountPoint@"/efi/boot/linux.conf
       fi
       if test -n "@installStartupNsh@"; then
         sed 's|.*@kernelFile@.efi|@kernelFile@.efi|' < $startup > "@efiSysMountPoint@/startup.nsh"
