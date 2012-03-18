@@ -154,6 +154,8 @@ let
     initScriptBuilder = config.system.build.initScriptBuilder;
     activationScript = config.system.activationScripts.script;
 
+    jobs = map (j: j.name) (attrValues config.jobs);
+
     # Pass the names of all Upstart tasks to the activation script.
     tasks = attrValues (mapAttrs (n: v: if v.task then ["[${v.name}]=1"] else []) config.jobs);
     

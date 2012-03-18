@@ -106,8 +106,7 @@ declare -A noRestartIfChanged=(@noRestartIfChanged@)
 # all jobs that don't have a "stop" goal.)  We use the symlinks in
 # /var/run/upstart-jobs (created by each job's pre-start script) to
 # determine if a job has changed.
-for job in $(cd $jobsDir && ls *.conf); do
-    job=$(basename $job .conf)
+for job in @jobs@; do
     status=$(status "$job")
     if ! [[ "$status" =~ start/ ]]; then continue; fi
     if [ "$(readlink -f "$jobsDir/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ]; then continue; fi
@@ -128,8 +127,7 @@ done
 # differs from the previous instance of the same task; if it wasn't
 # previously run, don't run it.  If it's a service, only start it if
 # it has a "start on" condition.
-for job in $(cd $jobsDir && ls *.conf); do
-    job=$(basename $job .conf)
+for job in @jobs@; do
     status=$(status "$job")
     if ! [[ "$status" =~ stop/ ]]; then continue; fi
 
