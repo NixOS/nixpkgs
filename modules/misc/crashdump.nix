@@ -4,6 +4,8 @@ with pkgs.lib;
 
 let
   crashdump = config.boot.crashDump;
+
+  kernelParams = concatStringsSep " " crashdump.kernelParams;
 in
 ###### interface
 {
@@ -31,6 +33,12 @@ in
             kernel configuration parameters for the crash dump to work.
           '';
         };
+        kernelParams = mkOption {
+          default = [ "debug1devices" ];
+          description = ''
+            Parameters that will be passed to the kernel kexec-ed on crash.
+          '';
+        };
       };
     };
   };
@@ -42,13 +50,13 @@ in
       postBootCommands = ''
         ${pkgs.kexectools}/sbin/kexec -p /var/run/current-system/kernel \
         --initrd=/var/run/current-system/initrd \
-        --append="init=$(readlink -f /var/run/current-system/init) system=$(readlink -f /var/run/current-system) debug1devices irqpoll maxcpus=1 reset_devices" --reset-vga --console-vga
+        --append="init=$(readlink -f /var/run/current-system/init) system=$(readlink -f /var/run/current-system) irqpoll maxcpus=1 reset_devices ${kernelParams}" --reset-vga --console-vga
       '';
       kernelParams = [
        "crashkernel=64M"
        "nmi_watchdog=1"
       ];
-      kernelPackages = mkOverride 200 (crashdump.kernelPackages // {
+      kernelPackages = mkOverride 50 (crashdump.kernelPackages // {
         kernel = crashdump.kernelPackages.kernel.override 
           (attrs: {
             extraConfig = (optionalString (attrs ? extraConfig) attrs.extraConfig) +
