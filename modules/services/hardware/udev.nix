@@ -236,6 +236,17 @@ in
         daemonType = "fork";
 
         exec = "udevd --daemon";
+
+        postStart =
+          ''
+            # Do the loading of additional stage 2 kernel modules.
+            # This needs to be done while udevd is running, because
+            # the modules may call upon udev's firmware loading rule.
+            for i in ${toString config.boot.kernelModules}; do
+                echo "loading kernel module ‘$i’..."
+                ${config.system.sbin.modprobe}/sbin/modprobe $i || true
+            done
+          '';
       };
 
     jobs.udevtrigger =

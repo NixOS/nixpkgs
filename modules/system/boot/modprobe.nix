@@ -100,11 +100,6 @@ with pkgs.lib;
         # We need this when the kernel (or some module) auto-loads a
         # module.
         echo ${config.system.sbin.modprobe}/sbin/modprobe > /proc/sys/kernel/modprobe
-
-        # Do the loading of additional stage 2 kernel modules.
-        for i in ${toString config.boot.kernelModules}; do
-            ${config.system.sbin.modprobe}/sbin/modprobe $i || true
-        done
       '';
 
   };
