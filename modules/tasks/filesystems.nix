@@ -203,6 +203,7 @@ in
     jobs."mount-failed" =
       { task = true;
         startOn = "mount-failed";
+        restartIfChanged = false;
         script =
           ''
             # Don't start the emergency shell if the X server is
@@ -225,6 +226,7 @@ in
       {
         task = true;
         startOn = "ip-up";
+        restartIfChanged = false;
         script =
           ''
             # Send USR1 to the mountall process.  Can't use "pkill
@@ -242,6 +244,8 @@ in
 
     jobs."emergency-shell" =
       { task = true;
+
+        restartIfChanged = false;
 
         console = "owner";
 

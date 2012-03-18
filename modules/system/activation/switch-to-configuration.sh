@@ -121,7 +121,7 @@ done
 
 # Start all jobs that are not running but should be.  The "should be"
 # criterion is tricky: the intended semantics is that we end up with
-# the same jobs as after a reboot.  If it's a task, restart it if it
+# the same jobs as after a reboot.  If it's a task, start it if it
 # differs from the previous instance of the same task; if it wasn't
 # previously run, don't run it.  If it's a service, only start it if
 # it has a "start on" condition.
@@ -134,6 +134,7 @@ for job in $(cd $newJobs && ls *.conf); do
         if [ ! -e "/var/run/upstart-jobs/$job" -o \
             "$(readlink -f "$newJobs/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ];
         then continue; fi
+        if ! grep -q "^# RESTART-IF-CHANGED" "$newJobs/$job.conf"; then continue; fi
         echo "starting task ‘$job’..."
         start --quiet "$job" || true
     else
