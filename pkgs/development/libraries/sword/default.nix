@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     patchShebangs .;
   '';
 
-  configureFlags = "--without-conf --enable-debug";
+  configureFlags = "--without-conf --enable-tests=no CXXFLAGS=-Wno-unused-but-set-variable";
 
   meta = {
     description = "A software framework that allows research manipulation of Biblical texts";
