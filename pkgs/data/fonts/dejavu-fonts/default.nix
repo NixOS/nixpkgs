@@ -10,6 +10,7 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/dejavu/dejavu-fonts-${version}.tar.bz2";
     sha256 = "1h8x0bnbh9awwsxiwjpp73iczk1y4d5y0as1f4zb4pbk6l2m7v60";
   };
+  buildFlags = "full-ttf";
   preBuild = ''
     sed -e s@/usr/bin/env@$(type -tP env)@ -i scripts/*
     sed -e s@/usr/bin/perl@$(type -tP perl)@ -i scripts/*
