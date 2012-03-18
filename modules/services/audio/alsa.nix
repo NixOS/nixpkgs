@@ -55,13 +55,13 @@ in
             mkdir -m 0755 -p $(dirname ${soundState})
 
             # Restore the sound state.
-            ${alsaUtils}/sbin/alsactl -f ${soundState} restore || true
+            ${alsaUtils}/sbin/alsactl --ignore -f ${soundState} restore
           '';
 
         postStop =
           ''
             # Save the sound state.
-            ${alsaUtils}/sbin/alsactl -f ${soundState} store
+            ${alsaUtils}/sbin/alsactl --ignore -f ${soundState} store
           '';
       };
 
