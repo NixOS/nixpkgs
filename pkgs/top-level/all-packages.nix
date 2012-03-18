@@ -5428,6 +5428,8 @@ let
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
+  latencytop = callPackage ../os-specific/linux/latencytop { };
+
   libaio = callPackage ../os-specific/linux/libaio { };
 
   libatasmart = callPackage ../os-specific/linux/libatasmart { };
