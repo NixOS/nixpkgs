@@ -392,7 +392,9 @@ in
       };
 
     jobs.xserver =
-      { environment =
+      { restartIfChanged = false;
+
+        environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
             TZ = config.time.timeZone;

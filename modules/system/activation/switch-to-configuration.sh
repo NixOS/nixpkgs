@@ -108,14 +108,7 @@ for job in $(cd $newJobs && ls *.conf); do
     status=$(status "$job")
     if ! [[ "$status" =~ start/ ]]; then continue; fi
     if [ "$(readlink -f "$newJobs/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ]; then continue; fi
-    # Hack: don't restart the X server (that would kill all the clients).
-    # And don't restart dbus, since that causes ConsoleKit to
-    # forget about current sessions.
-    # Idem for xendomains because we don't want to save/restore
-    # Xen domains unless we have to.
-    # TODO: Jobs should be able to declare that they should not be
-    # auto-restarted.
-    if echo "$job" | grep -q "^xserver$\|^dbus$\|^disnix$\|^xendomains$\|^udevtrigger$"; then
+    if ! grep -q "^# RESTART-IF-CHANGED" "$newJobs/$job.conf"; then
         echo "not restarting changed service ‘$job’"
         continue
     fi

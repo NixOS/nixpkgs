@@ -126,6 +126,8 @@ in
           + optionalString config.services.tomcat.enable " and started tomcat"
           + optionalString config.services.svnserve.enable " and started svnserve";
 
+          restartIfChanged = false;
+        
           script =
           ''
             export PATH=/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin

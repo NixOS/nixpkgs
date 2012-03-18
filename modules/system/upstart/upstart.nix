@@ -82,6 +82,8 @@ let
           ${optionalString job.task "task"}
           ${optionalString (!job.task && job.respawn) "respawn"}
 
+          ${optionalString job.restartIfChanged "# RESTART-IF-CHANGED"}
+
           ${ # preStop is run only if there is exec or script.
              # (upstart 0.6.5, job.c:562)
             optionalString (job.preStop != "") (assert hasMain; ''
@@ -280,6 +282,15 @@ let
       description = ''
         Whether to restart the job automatically if its process
         ends unexpectedly.
+      '';
+    };
+
+    restartIfChanged = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether the job should be restarted if it has changed after a
+        NixOS configuration switch.
       '';
     };
 

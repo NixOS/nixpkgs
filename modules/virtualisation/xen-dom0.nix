@@ -140,6 +140,8 @@ in
 
         stopOn = "starting shutdown and stopping xend";
 
+        restartIfChanged = false;
+        
         path = [ pkgs.xen ];
 
         environment.XENDOM_CONFIG = "${xen}/etc/sysconfig/xendomains";

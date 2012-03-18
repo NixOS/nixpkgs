@@ -117,7 +117,9 @@ in
 
     jobs.dbus =
       { startOn = "started udev and started syslogd";
-
+      
+        restartIfChanged = false;
+        
         path = [ pkgs.dbus_daemon pkgs.dbus_tools ];
 
         preStart =
