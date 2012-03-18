@@ -1,24 +1,26 @@
-{pkgs, config, modules, baseModules, ...}:
+{ config, pkgs, modules, baseModules, ... }:
+
+with pkgs.lib;
 
 let
 
   options = {
 
-    system.build = pkgs.lib.mkOption {
+    system.build = mkOption {
       default = {};
       description = ''
         Attribute set of derivations used to setup the system.
       '';
     };
 
-    nesting.children = pkgs.lib.mkOption {
+    nesting.children = mkOption {
       default = [];
       description = ''
         Additional configurations to build.
       '';
     };
 
-    nesting.clone = pkgs.lib.mkOption {
+    nesting.clone = mkOption {
       default = [];
       description = ''
         Additional configurations to build based on the current
@@ -26,21 +28,21 @@ let
       '';
     };
 
-    system.boot.loader.id = pkgs.lib.mkOption {
+    system.boot.loader.id = mkOption {
       default = "";
       description = ''
         Id string of the used bootloader.
       '';
     };
 
-    system.boot.loader.kernelFile = pkgs.lib.mkOption {
+    system.boot.loader.kernelFile = mkOption {
       default = "";
       description = ''
         Name of the kernel file to be passed to the bootloader.
       '';
     };
 
-    system.copySystemConfiguration = pkgs.lib.mkOption {
+    system.copySystemConfiguration = mkOption {
       default = false;
       description = ''
         If enabled, copies the NixOS configuration file
@@ -50,10 +52,10 @@ let
       '';
     };
 
-    system.extraSystemBuilderCmds = pkgs.lib.mkOption {
+    system.extraSystemBuilderCmds = mkOption {
       default = "";
       internal = true;
-      merge = pkgs.lib.concatStringsSep "\n";
+      merge = concatStringsSep "\n";
       description = ''
         This code will be added to the builder creating the system store path.
       '';
@@ -89,7 +91,7 @@ let
       kernelPath = "${config.boot.kernelPackages.kernel}/" +
         "${config.system.boot.loader.kernelFile}";
     in ''
-      ensureDir $out
+      mkdir $out
 
       if [ ! -f ${kernelPath} ]; then
         echo "The bootloader cannot find the proper kernel image."
@@ -123,13 +125,13 @@ let
       echo "${toString config.system.build.upstart.interfaceVersion}" > $out/upstart-interface-version
 
       mkdir $out/fine-tune
-      childCount=0;
+      childCount=0
       for i in $children; do
-        childCount=$(( childCount + 1 ));
-        ln -s $i $out/fine-tune/child-$childCount;
+        childCount=$(( childCount + 1 ))
+        ln -s $i $out/fine-tune/child-$childCount
       done
 
-      ensureDir $out/bin
+      mkdir $out/bin
       substituteAll ${./switch-to-configuration.sh} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
 
@@ -151,15 +153,23 @@ let
     menuBuilder = config.system.build.menuBuilder;
     initScriptBuilder = config.system.build.initScriptBuilder;
     activationScript = config.system.activationScripts.script;
+
+    # Pass the names of all Upstart tasks to the activation script.
+    tasks = attrValues (mapAttrs (n: v: if v.task then ["[${v.name}]=1"] else []) config.jobs);
+    
+    # Pass the names of all Upstart jobs that shouldn't be restarted
+    # to the activation script.
+    noRestartIfChanged = attrValues (mapAttrs (n: v: if v.restartIfChanged then [] else ["[${v.name}]=1"]) config.jobs);
+    
     # Most of these are needed by grub-install.
-    path = [
-      pkgs.coreutils
-      pkgs.gnused
-      pkgs.gnugrep
-      pkgs.findutils
-      pkgs.diffutils
-      config.system.build.upstart # for initctl
-    ];
+    path =
+      [ pkgs.coreutils
+        pkgs.gnused
+        pkgs.gnugrep
+        pkgs.findutils
+        pkgs.diffutils
+        config.system.build.upstart # for initctl
+      ];
 
     # Boot loaders
     bootLoader = config.system.boot.loader.id;
@@ -185,9 +195,9 @@ in {
   require = [options];
 
   system.extraSystemBuilderCmds =
-    pkgs.lib.optionalString
+    optionalString
       config.system.copySystemConfiguration
-      "cp ${pkgs.lib.maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"} $out";
+      "cp ${maybeEnv "NIXOS_CONFIG" "/etc/nixos/configuration.nix"} $out";
 
   system.build.toplevel = system;
 }

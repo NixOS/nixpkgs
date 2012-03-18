@@ -94,8 +94,6 @@ let
           ${optionalString job.task "task"}
           ${optionalString (!job.task && job.respawn) "respawn"}
 
-          ${optionalString job.restartIfChanged "# RESTART-IF-CHANGED"}
-
           ${ # preStop is run only if there is exec or script.
              # (upstart 0.6.5, job.c:562)
             optionalString (job.preStop != "") (assert hasMain; ''

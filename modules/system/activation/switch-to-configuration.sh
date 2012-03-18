@@ -76,13 +76,13 @@ EOF
         exit 1
 fi
 
-newJobs=$(readlink -f @out@/etc/init)
+jobsDir=$(readlink -f @out@/etc/init)
 
 # Stop all currently running jobs that are not in the new Upstart
 # configuration.  (Here "running" means all jobs that are not in the
 # stop/waiting state.)
 for job in $(initctl list | sed -e '/ stop\/waiting/ d; /^[^a-z]/ d; s/^\([^ ]\+\).*/\1/' | sort); do
-    if ! [ -e "$newJobs/$job.conf" ] ; then
+    if ! [ -e "$jobsDir/$job.conf" ] ; then
         echo "stopping obsolete job ‘$job’..."
         stop --quiet "$job" || true
     fi
@@ -99,16 +99,19 @@ initctl reload-configuration
 # Allow Upstart jobs to react intelligently to a config change.
 initctl emit config-changed
 
+declare -A tasks=(@tasks@)
+declare -A noRestartIfChanged=(@noRestartIfChanged@)
+
 # Restart all running jobs that have changed.  (Here "running" means
 # all jobs that don't have a "stop" goal.)  We use the symlinks in
 # /var/run/upstart-jobs (created by each job's pre-start script) to
 # determine if a job has changed.
-for job in $(cd $newJobs && ls *.conf); do
+for job in $(cd $jobsDir && ls *.conf); do
     job=$(basename $job .conf)
     status=$(status "$job")
     if ! [[ "$status" =~ start/ ]]; then continue; fi
-    if [ "$(readlink -f "$newJobs/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ]; then continue; fi
-    if ! grep -q "^# RESTART-IF-CHANGED" "$newJobs/$job.conf"; then
+    if [ "$(readlink -f "$jobsDir/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ]; then continue; fi
+    if [ -n "${noRestartIfChanged[$job]}" ]; then
         echo "not restarting changed service ‘$job’"
         continue
     fi
@@ -125,20 +128,20 @@ done
 # differs from the previous instance of the same task; if it wasn't
 # previously run, don't run it.  If it's a service, only start it if
 # it has a "start on" condition.
-for job in $(cd $newJobs && ls *.conf); do
+for job in $(cd $jobsDir && ls *.conf); do
     job=$(basename $job .conf)
     status=$(status "$job")
     if ! [[ "$status" =~ stop/ ]]; then continue; fi
 
-    if grep -q '^task$' "$newJobs/$job.conf"; then
+    if [ -n "${tasks[$job]}" ]; then
         if [ ! -e "/var/run/upstart-jobs/$job" -o \
-            "$(readlink -f "$newJobs/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ];
+            "$(readlink -f "$jobsDir/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ];
         then continue; fi
-        if ! grep -q "^# RESTART-IF-CHANGED" "$newJobs/$job.conf"; then continue; fi
+        if [ -n "${noRestartIfChanged[$job]}" ]; then continue; fi
         echo "starting task ‘$job’..."
         start --quiet "$job" || true
     else
-        if ! grep -q "^start on" "$newJobs/$job.conf"; then continue; fi
+        if ! grep -q "^start on" "$jobsDir/$job.conf"; then continue; fi
         echo "starting service ‘$job’..."
         start --quiet "$job" || true
     fi
