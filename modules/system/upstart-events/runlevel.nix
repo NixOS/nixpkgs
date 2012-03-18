@@ -10,6 +10,7 @@ with pkgs.lib;
     { name = "boot";
       startOn = "startup";
       task = true;
+      restartIfChanged = false;
       script = "telinit 2";
     };
 
@@ -20,11 +21,14 @@ with pkgs.lib;
 
       task = true;
 
+      restartIfChanged = false;
+      
       script =
         ''
           case "$RUNLEVEL" in
               0) initctl start shutdown --no-wait MODE=poweroff;;
               1) initctl start shutdown --no-wait MODE=maintenance;;
+              2) true;;
               6) initctl start shutdown --no-wait MODE=reboot;;
               *) echo "Unsupported runlevel: $RUNLEVEL";;
           esac
