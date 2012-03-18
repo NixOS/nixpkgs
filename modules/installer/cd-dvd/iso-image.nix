@@ -196,6 +196,8 @@ in
 
   boot.initrd.kernelModules = [ "loop" ];
 
+  boot.kernelModules = pkgs.stdenv.lib.optional config.isoImage.makeEfiBootable "efivars":
+
   # In stage 1, mount a tmpfs on top of / (the ISO image) and
   # /nix/store (the squashfs image) to make this a live CD.
   boot.initrd.postMountCommands =

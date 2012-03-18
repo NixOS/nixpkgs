@@ -93,7 +93,7 @@ mkdir -p "@efiSysMountPoint@/efi/nixos/"
 # Remove all old boot manager entries
 if test -n "@runEfibootmgr@"; then
   set +e
-  modprobe efivars
+  modprobe efivars > /dev/null 2>&1
   for bootnum in $(efibootmgr | grep "NixOS" | grep "Generation" | sed 's/Boot//' | sed 's/\*.*//'); do
     efibootmgr -B -b "$bootnum" > /dev/null 2>&1
   done
