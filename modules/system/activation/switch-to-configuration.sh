@@ -84,7 +84,7 @@ newJobs=$(readlink -f @out@/etc/init)
 for job in $(initctl list | sed -e '/ stop\/waiting/ d; /^[^a-z]/ d; s/^\([^ ]\+\).*/\1/' | sort); do
     if ! [ -e "$newJobs/$job.conf" ] ; then
         echo "stopping obsolete job ‘$job’..."
-        initctl stop "$job" || true
+        stop --quiet "$job" || true
     fi
 done
 
@@ -115,8 +115,8 @@ for job in $(cd $newJobs && ls *.conf); do
     echo "restarting changed service ‘$job’..."
     # Note: can't use "restart" here, since that only restarts the
     # job's main process.
-    stop "$job" || true
-    start "$job" || true
+    stop --quiet "$job" || true
+    start --quiet "$job" || true
 done
 
 # Start all jobs that are not running but should be.  The "should be"
@@ -135,11 +135,11 @@ for job in $(cd $newJobs && ls *.conf); do
             "$(readlink -f "$newJobs/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ];
         then continue; fi
         echo "starting task ‘$job’..."
-        start "$job" || true
+        start --quiet "$job" || true
     else
         if ! grep -q "^start on" "$newJobs/$job.conf"; then continue; fi
         echo "starting service ‘$job’..."
-        start "$job" || true
+        start --quiet "$job" || true
     fi
     
 done
