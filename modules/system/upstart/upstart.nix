@@ -42,8 +42,12 @@ let
 
           ${concatMapStrings (n: "env ${n}=\"${getAttr n env}\"\n") (attrNames env)}
 
+          ${optionalString (job.console != "") "console ${job.console}"}
+
           pre-start script
-            exec >> ${log} 2>&1
+            ${optionalString (job.console == "") ''
+              exec >> ${log} 2>&1
+            ''}
             ln -sfn "$(readlink -f "/etc/init/${job.name}.conf")" /var/run/upstart-jobs/${job.name}
             ${optionalString (job.preStart != "") ''
               source ${jobHelpers}
@@ -56,24 +60,32 @@ let
             else if job.script != "" then
               ''
                 script
-                  exec >> ${log} 2>&1
+                  ${optionalString (job.console == "") ''
+                    exec >> ${log} 2>&1
+                  ''}
                   source ${jobHelpers}
                   ${job.script}
                 end script
               ''
-            else if job.exec != "" then
+            else if job.exec != "" && job.console == "" then
               ''
                 script
                   exec >> ${log} 2>&1
                   exec ${job.exec}
                 end script
               ''
+            else if job.exec != "" then
+              ''
+                exec ${job.exec}
+              ''
             else ""
           }
 
           ${optionalString (job.postStart != "") ''
             post-start script
-              exec >> ${log} 2>&1
+              ${optionalString (job.console == "") ''
+                exec >> ${log} 2>&1
+              ''}
               source ${jobHelpers}
               ${job.postStart}
             end script
@@ -88,7 +100,9 @@ let
              # (upstart 0.6.5, job.c:562)
             optionalString (job.preStop != "") (assert hasMain; ''
             pre-stop script
-              exec >> ${log} 2>&1
+              ${optionalString (job.console == "") ''
+                exec >> ${log} 2>&1
+              ''}
               source ${jobHelpers}
               ${job.preStop}
             end script
@@ -96,7 +110,9 @@ let
 
           ${optionalString (job.postStop != "") ''
             post-stop script
-              exec >> ${log} 2>&1
+              ${optionalString (job.console == "") ''
+                exec >> ${log} 2>&1
+              ''}
               source ${jobHelpers}
               ${job.postStop}
             end script
@@ -362,6 +378,18 @@ let
         Both the <filename>bin</filename> and <filename>sbin</filename>
         subdirectories of each package are added.
       '';
+    };
+
+    console = mkOption {
+      default = "";
+      example = "console";
+      description = ''
+        If set to <literal>output</literal>, job output is written to
+        the console.  If it's <literal>owner</literal>, additionally
+        the job becomes owner of the console.  It it's empty (the
+        default), output is written to
+        <filename>/var/log/upstart/<replaceable>jobname</replaceable></filename>
+      '';  
     };
 
   };

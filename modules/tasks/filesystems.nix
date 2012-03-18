@@ -178,7 +178,9 @@ in
 
         path = [ pkgs.utillinux pkgs.mountall ] ++ config.system.fsPackages;
 
-        script =
+        console = "output";
+
+        preStart =
           ''
             # Ensure that this job is restarted when fstab changed:
             # ${fstab}
@@ -186,11 +188,13 @@ in
             ${optionalString config.services.nfs.client.enable ''
               ensure statd || true
             ''}
-            
-            exec > /dev/console 2>&1
+
             echo "mounting filesystems..."
-            exec mountall
           '';
+
+        daemonType = "daemon";
+          
+        exec = "mountall --daemon";
       };
 
     # The `mount-failed' event is emitted synchronously, but we don't
@@ -223,19 +227,26 @@ in
         startOn = "ip-up";
         script =
           ''
-            ${pkgs.procps}/bin/pkill -USR1 -u root mountall || true
+            # Send USR1 to the mountall process.  Can't use "pkill
+            # mountall" here because that has a race condition: we may
+            # accidentally send USR1 to children of mountall (such as
+            # fsck) just before they do execve().
+            status="$(status mountall)"
+            if [[ "$status" =~ "start/running, process "([0-9]+) ]]; then
+                pid=''${BASH_REMATCH[1]}
+                echo "sending USR1 to $pid..."
+                kill -USR1 "$pid"
+            fi
           '';
       };
 
     jobs."emergency-shell" =
       { task = true;
 
-        extraConfig = "console owner";
+        console = "owner";
 
         script =
           ''
-            exec < /dev/console > /dev/console 2>&1
-
             cat <<EOF
 
             [1;31m<<< Emergency shell >>>[0m
