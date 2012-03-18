@@ -23,7 +23,17 @@ with pkgs.lib;
 
   config = mkIf config.hardware.cpu.intel.updateMicrocode {
     hardware.firmware = [ pkgs.microcodeIntel ];
-    boot.kernelModules = [ "microcode" ];
+
+    # This cannot be done using boot.kernelModules
+    # discussion at http://lists.science.uu.nl/pipermail/nix-dev/2012-February/007959.html
+    jobs.microcode = {
+      name = "microcode";
+      description = "load microcode";
+      startOn = "started udev";
+      exec = "modprobe microcode";
+      path = [config.system.sbin.modprobe];
+      task = true;
+    };
   };
 
 }
