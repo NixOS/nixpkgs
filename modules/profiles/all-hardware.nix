@@ -41,6 +41,9 @@
 
       # Virtio (QEMU, KVM etc.) support.
       "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_console"
+
+      # Keyboards
+      "hid_apple"
     ];
 
   boot.initrd.kernelModules =
