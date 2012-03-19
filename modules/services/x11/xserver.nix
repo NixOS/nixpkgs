@@ -13,21 +13,12 @@ let
 
   # Map video driver names to driver packages.
   knownVideoDrivers = {
-    ati          = { modules = [ xorg.xf86videoati ]; };
     ati_unfree   = { modules = [ kernelPackages.ati_drivers_x11 ]; driverName = "fglrx"; };
-    cirrus       = { modules = [ xorg.xf86videocirrus ]; };
-    i810         = { modules = [ xorg.xf86videoi810 ]; };
-    intel        = { modules = [ xorg.xf86videointel ]; };
-    nv           = { modules = [ xorg.xf86videonv ]; };
     nvidia       = { modules = [ kernelPackages.nvidia_x11 ]; };
     nvidiaLegacy96 = { modules = [ kernelPackages.nvidia_x11_legacy96 ]; driverName = "nvidia"; };
     nvidiaLegacy173 = { modules = [ kernelPackages.nvidia_x11_legacy173 ]; driverName = "nvidia"; };
-    openchrome   = { modules = [ xorg.xf86videoopenchrome ]; };
-    sis          = { modules = [ xorg.xf86videosis ]; };
     unichrome    = { modules = [ pkgs.xorgVideoUnichrome ]; };
-    vesa         = { modules = [ xorg.xf86videovesa ]; };
     virtualbox   = { modules = [ kernelPackages.virtualboxGuestAdditions ]; driverName = "vboxvideo"; };
-    vmware       = { modules = [ xorg.xf86videovmware ]; };
   };
 
   driverNames =
@@ -35,7 +26,7 @@ let
 
   drivers = flip map driverNames
     (name: { inherit name; driverName = name; } //
-      attrByPath [name] (throw "unknown video driver `${name}'") knownVideoDrivers);
+      attrByPath [name] (if (hasAttr ("xf86video" + name) xorg) then { modules = [(getAttr ("xf86video" + name) xorg) ]; } else throw "unknown video driver `${name}'") knownVideoDrivers);
 
 
   fontsForXServer =
