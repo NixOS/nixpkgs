@@ -13,6 +13,7 @@
 , src, stdenv
 , name ? if doCoverageAnalysis then "nix-coverage" else "nix-build"
 , failureHook ? null
+, postPhases ? []
 , ... } @ args:
 
 stdenv.mkDerivation (
@@ -25,9 +26,6 @@ stdenv.mkDerivation (
     dontInstall = doCoverageAnalysis;
 
     showBuildStats = true;
-
-    postPhases =
-      (stdenv.lib.optional doCoverageAnalysis "coverageReportPhase") ++ ["finalPhase"];
 
     finalPhase =
       ''
@@ -104,6 +102,9 @@ stdenv.mkDerivation (
     lcovFilter = ["/nix/store/*"] ++ lcovFilter;
 
     inherit lcovExtraTraceFiles;
+
+    postPhases = postPhases ++
+      (stdenv.lib.optional doCoverageAnalysis "coverageReportPhase") ++ ["finalPhase"];
 
     meta = (if args ? meta then args.meta else {}) // {
       description = if doCoverageAnalysis then "Coverage analysis" else "Native Nix build on ${stdenv.system}";
