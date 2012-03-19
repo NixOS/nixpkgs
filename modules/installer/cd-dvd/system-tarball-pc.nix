@@ -158,10 +158,19 @@ in
   services.openssh.enable = true;
   jobs.openssh.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 
-  boot.kernelPackages = pkgs.linuxPackages_2_6_39;
+  # To have a nicer initrd, even though the initrd can't mount an nfsroot now
+  boot.initrd.withExtraTools = true;
+
+  # To be able to use the systemTarball to catch troubles.
+  boot.crashDump = {
+    enable = true;
+    # Why not a recent kernel?
+    kernelPackages = pkgs.linuxPackages_3_2;
+  };
+
   nixpkgs.config = {
     packageOverrides = p: rec {
-      linux_2_6_39 = p.linux_2_6_39.override {
+      linux_3_2 = p.linux_3_2.override {
         extraConfig = ''
           # Enable drivers in kernel for most NICs.
           E1000 y
