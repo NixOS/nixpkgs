@@ -397,15 +397,4 @@ rec {
           && (eqListStrict (lib.attrValues a) (lib.attrValues b))
         else a == b; # FIXME !
 
-
-  # Check absence of non-used options
-  # Obsolete?
-  checker = x: flag: opts: config:
-    (if flag then let result=(
-      (import ../build-support/checker)
-      opts config); in
-      (if (result=="") then x else
-      abort ("Unknown option specified: " + result))
-    else x);
-
 }
