@@ -175,8 +175,14 @@ let
       # Check whether the current job has been stopped.  Used in
       # post-start jobs to determine if they should continue.
       stop_check() {
-          if [[ "$(status)" =~ stop/ ]]; then
+          local status="$(status)"
+          if [[ "$status" =~ stop/ ]]; then
               echo "job asked to stop!"
+              return 1
+          fi
+          if [[ "$status" =~ respawn/ ]]; then
+              echo "job respawning unexpectedly!"
+              stop
               return 1
           fi
           return 0

@@ -102,6 +102,17 @@ initctl emit config-changed
 declare -A tasks=(@tasks@)
 declare -A noRestartIfChanged=(@noRestartIfChanged@)
 
+start_() {
+    local job="$1"
+    if start --quiet "$job"; then
+        # Handle services that cancel themselves.
+        if ! [ -n "${tasks[$job]}" ]; then
+            local status=$(status "$job")
+            [[ "$status" =~ start/running ]] || echo "job ‘$job’ failed to start!"
+        fi
+    fi
+}
+
 # Restart all running jobs that have changed.  (Here "running" means
 # all jobs that don't have a "stop" goal.)  We use the symlinks in
 # /var/run/upstart-jobs (created by each job's pre-start script) to
@@ -118,7 +129,7 @@ for job in @jobs@; do
     # Note: can't use "restart" here, since that only restarts the
     # job's main process.
     stop --quiet "$job" || true
-    start --quiet "$job" || true
+    start_ "$job" || true
 done
 
 # Start all jobs that are not running but should be.  The "should be"
@@ -141,7 +152,7 @@ for job in @jobs@; do
     else
         if ! grep -q "^start on" "$jobsDir/$job.conf"; then continue; fi
         echo "starting service ‘$job’..."
-        start --quiet "$job" || true
+        start_ "$job" || true
     fi
     
 done
