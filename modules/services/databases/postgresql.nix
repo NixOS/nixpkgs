@@ -10,7 +10,7 @@ let
   postgresqlAndPlugins = pg:
     if cfg.extraPlugins == [] then pg
     else pkgs.buildEnv {
-      name = "postgresql-and-plugins";
+      name = "postgresql-and-plugins-${(builtins.parseDrvName pg.name).version}";
       paths = [ pg ] ++ cfg.extraPlugins;
       postBuild =
         ''
@@ -35,6 +35,8 @@ let
       ${cfg.extraConfig}
     '';
 
+  pre84 = versionOlder (builtins.parseDrvName postgresql.name).version "8.4";
+  
 in
 
 {
@@ -133,7 +135,7 @@ in
     services.postgresql.authentication =
       ''
         # Generated file; do not edit!
-        local all all              ident sameuser
+        local all all              ident ${optionalString pre84 "sameuser"}
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '';
