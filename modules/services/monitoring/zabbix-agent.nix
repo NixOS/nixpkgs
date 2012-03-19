@@ -81,6 +81,8 @@ in
         startOn = "ip-up";
         stopOn = "stopping network-interfaces";
 
+        path = [ pkgs.zabbix.agent ];
+
         preStart =
           ''
             mkdir -m 0755 -p ${stateDir} ${logDir}
@@ -100,7 +102,7 @@ in
             mkfifo ${stateDir}/dummy2
             cat ${stateDir}/dummy2 &
             pid=$!
-            ${pkgs.zabbix.agent}/sbin/zabbix_agentd --config ${configFile} 100>${stateDir}/dummy2
+            zabbix_agentd --config ${configFile} 100>${stateDir}/dummy2
             wait "$pid"
           '';
 

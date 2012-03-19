@@ -95,7 +95,7 @@ in
             fi
           '';
 
-        path = [ pkgs.nettools ];
+        path = [ pkgs.nettools pkgs.zabbix.server ];
 
         # Zabbix doesn't have an option not to daemonize, and doesn't
         # daemonize in a way that allows Upstart to track it.  So to
@@ -109,7 +109,7 @@ in
             mkfifo ${stateDir}/dummy
             cat ${stateDir}/dummy &
             pid=$!
-            ${pkgs.zabbix.server}/sbin/zabbix_server --config ${configFile} 100>${stateDir}/dummy
+            zabbix_server --config ${configFile} 100>${stateDir}/dummy
             wait "$pid"
           '';
 
