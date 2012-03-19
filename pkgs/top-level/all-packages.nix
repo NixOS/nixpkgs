@@ -4243,6 +4243,8 @@ let
 
   libwmf = callPackage ../development/libraries/libwmf { };
 
+  libwnck = callPackage ../development/libraries/libwnck { };
+
   libwpd = callPackage ../development/libraries/libwpd { };
 
   libwpd_08 = callPackage ../development/libraries/libwpd/0.8.nix { };
@@ -7893,7 +7895,7 @@ let
     self = pkgs.gnome2;
   }  // pkgs.gtkLibs // {
     # Backwards compatibility;
-    inherit (pkgs) libsoup gtk_doc gnome_doc_utils;
+    inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
   gnome = recurseIntoAttrs gnome2;
