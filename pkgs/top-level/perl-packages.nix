@@ -768,10 +768,10 @@ rec {
   };
 
   ClassXSAccessor = buildPerlPackage rec {
-    name = "Class-XSAccessor-1.11";
+    name = "Class-XSAccessor-1.13";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Class/${name}.tar.gz";
-      sha256 = "0mf7rp73r1pzy47m4bp49jw8iwpi6l1drdpk4qqxik6n7nx15mh2";
+      sha256 = "1nj21xq8bqvfz2mafrfskzw2p2j48b5k3rqxgxk99lw5ysmkz834";
     };
   };
 
@@ -1404,10 +1404,10 @@ rec {
   };
 
   ExtUtilsParseXS = buildPerlPackage rec {
-    name = "ExtUtils-ParseXS-3.03";
+    name = "ExtUtils-ParseXS-3.15";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "0ziq4iwn3bc1zyrm7aigc7nk5lxb69shzix9irxw17i5lfc923xg";
+      sha256 = "06baf0nsmdkfk50p4x9kss4ncm8h49gkzy8hl5cxbxdsab65gmrb";
     };
   };
 
@@ -3775,10 +3775,10 @@ rec {
   };
 
   VariableMagic = buildPerlPackage rec {
-    name = "Variable-Magic-0.46";
+    name = "Variable-Magic-0.48";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Variable/${name}.tar.gz";
-      sha256 = "0z8fbna6nhn0hlvj1qbjw7yjn3dzl7pz1psmc8amv8kg6avgj33q";
+      sha256 = "124isksyw52br0y304dq4fcm26jk1v44s6ni1xd10nnl26fwmzbw";
     };
   };
 
