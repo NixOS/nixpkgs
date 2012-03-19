@@ -35,16 +35,6 @@ rec {
     sendEmailSupport = stdenv.isDarwin == false;
   });
 
-  gitGit = import ./git/git-git.nix {
-    inherit fetchurl sourceFromHead stdenv curl openssl zlib expat perl gettext
-      asciidoc texinfo xmlto docbook2x
-      docbook_xsl docbook_xml_dtd_45 libxslt
-      cpio tcl tk makeWrapper subversion autoconf;
-    svnSupport = false;
-    guiSupport = false;
-    perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey subversion];
-  };
-
   gitAnnex = lib.makeOverridable (import ./git-annex) {
     inherit stdenv fetchurl libuuid rsync findutils curl perl git ikiwiki which coreutils;
     inherit (haskellPackages_ghc741) ghc MissingH utf8String pcreLight SHA dataenc
@@ -63,7 +53,6 @@ rec {
     inherit (xlibs) libXext libX11;
     qt = qt4;
   };
-
 
   stgit = import ./stgit {
     inherit fetchurl stdenv python git;
