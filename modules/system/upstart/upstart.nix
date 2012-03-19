@@ -417,9 +417,7 @@ let
     config = {
     
       # The default name is the name extracted from the attribute path.
-      name = mkDefaultValue (
-        replaceChars ["<" ">" "*"] ["_" "_" "_name_"] name
-      );
+      name = mkDefaultValue name;
       
       # Default path for Upstart jobs.  Should be quite minimal.
       path =
