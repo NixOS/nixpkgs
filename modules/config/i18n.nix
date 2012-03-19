@@ -68,6 +68,5 @@ in
   environment.shellInit =
     ''
       export LANG=${config.i18n.defaultLocale}
-      export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
     '';
 }
