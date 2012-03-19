@@ -13,6 +13,7 @@
 , src, stdenv
 , name ? if doCoverageAnalysis then "nix-coverage" else "nix-build"
 , failureHook ? null
+, prePhases ? []
 , postPhases ? []
 , ... } @ args:
 
@@ -56,13 +57,6 @@ stdenv.mkDerivation (
     name = name + (if src ? version then "-" + src.version else "");
   
     postHook = ''
-      mkdir -p $out/nix-support
-      echo "$system" > $out/nix-support/system
-
-      if test -z "${toString doCoverageAnalysis}"; then
-          echo "nix-build none $out" >> $out/nix-support/hydra-build-products
-      fi
-
       # If `src' is the result of a call to `makeSourceTarball', then it
       # has a subdirectory containing the actual tarball(s).  If there are
       # multiple tarballs, just pick the first one.
@@ -77,9 +71,18 @@ stdenv.mkDerivation (
           export CFLAGS="-O0"
           export CXXFLAGS="-O0"
       fi
-
     ''; # */
 
+    initPhase = ''
+      mkdir -p $out/nix-support
+      echo "$system" > $out/nix-support/system
+
+      if test -z "${toString doCoverageAnalysis}"; then
+          echo "nix-build none $out" >> $out/nix-support/hydra-build-products
+      fi
+    '';
+
+    prePhases = ["initPhase"] ++ prePhases;
 
     # In the report phase, create a coverage analysis report.
     coverageReportPhase = if doCoverageAnalysis then ''
