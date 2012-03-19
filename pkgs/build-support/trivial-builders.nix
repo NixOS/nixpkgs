@@ -112,7 +112,7 @@ _EOF_
   # the default binary.
   useSetUID = drv: path:
     let
-      name = stdenv.lib.basename path;
+      name = baseNameOf path;
       bin = "${drv}${path}";
     in assert name != "";
       writeScript "setUID-${name}" ''

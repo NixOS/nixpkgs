@@ -153,10 +153,6 @@ rec {
         s;
 
         
-  # Why do we need this if we have baseNameOf?
-  basename = s: lib.last (splitString "/" s);
-
-
   # Return true iff string v1 denotes a version older than v2.
   versionOlder = v1: v2: builtins.compareVersions v2 v1 == 1;
 
