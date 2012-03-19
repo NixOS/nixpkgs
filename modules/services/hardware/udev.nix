@@ -1,4 +1,4 @@
-{pkgs, config, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -260,13 +260,9 @@ in
           ''
             # Let udev create device nodes for all modules that have already
             # been loaded into the kernel (or for which support is built into
-            # the kernel).  The `STARTUP' variable is needed to force
-            # the LVM rules to create device nodes.  See
-            # http://www.mail-archive.com/fedora-devel-list@redhat.com/msg10261.html
-            udevadm control --env=STARTUP=1
+            # the kernel).
             udevadm trigger --action=add
             udevadm settle || true # wait for udev to finish
-            udevadm control --env=STARTUP=
 
             initctl emit -n new-devices
           '';

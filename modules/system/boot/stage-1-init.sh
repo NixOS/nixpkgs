@@ -135,10 +135,8 @@ export UDEV_CONFIG_FILE=@udevConf@
 mkdir -p /dev/.udev # !!! bug in udev?
 mkdir -p /dev/.mdadm
 udevd --daemon
-udevadm control --env=STARTUP=1
 udevadm trigger --action=add
 udevadm settle || true
-udevadm control --env=STARTUP=
 
 
 # XXX: Use case usb->lvm will still fail, usb->luks->lvm is covered
@@ -146,7 +144,6 @@ udevadm control --env=STARTUP=
 
 
 echo "starting device mapper and LVM..."
-lvm vgscan
 lvm vgchange -ay
 
 if test -n "$debug1devices"; then fail; fi
