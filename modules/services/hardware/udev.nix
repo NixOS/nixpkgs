@@ -265,7 +265,7 @@ in
             # http://www.mail-archive.com/fedora-devel-list@redhat.com/msg10261.html
             udevadm control --env=STARTUP=1
             udevadm trigger --action=add
-            udevadm settle # wait for udev to finish
+            udevadm settle || true # wait for udev to finish
             udevadm control --env=STARTUP=
 
             initctl emit -n new-devices

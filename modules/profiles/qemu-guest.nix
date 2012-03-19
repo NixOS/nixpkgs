@@ -4,6 +4,6 @@
 { config, pkgs, ... }:
 
 {
-  boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_console" ];
-  boot.initrd.kernelModules = [ "virtio_balloon" ];
+  boot.initrd.availableKernelModules = [ "virtio_net" "virtio_pci" "virtio_blk" ];
+  boot.kernelModules = [ "virtio_balloon" "virtio_console" ];
 }

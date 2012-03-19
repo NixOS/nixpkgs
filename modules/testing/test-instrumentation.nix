@@ -28,7 +28,7 @@ in
   " {
 
     jobs.backdoor =
-      { startOn = "startup";
+      { startOn = "started udev";
         stopOn = "";
 
         script =

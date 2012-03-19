@@ -137,7 +137,7 @@ mkdir -p /dev/.mdadm
 udevd --daemon
 udevadm control --env=STARTUP=1
 udevadm trigger --action=add
-udevadm settle
+udevadm settle || true
 udevadm control --env=STARTUP=
 
 
