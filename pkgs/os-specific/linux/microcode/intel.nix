@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.intel.com;
+    homepage = http://www.intel.com/;
     description = "Microcode for Intel processors";
   };
 }
