@@ -36,6 +36,7 @@ with (import ./release-lib.nix);
   bind = linux;
   bison23 = all;
   bison24 = all;
+  bison25 = all;
   bitlbee = linux;
   bittorrent = linux;
   blender = linux;
