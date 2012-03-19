@@ -25,6 +25,7 @@ stdenv.mkDerivation (
 
     # When doing coverage analysis, we don't care about the result.
     dontInstall = doCoverageAnalysis;
+    useTempPrefix = doCoverageAnalysis;
 
     showBuildStats = true;
 
@@ -77,7 +78,7 @@ stdenv.mkDerivation (
       mkdir -p $out/nix-support
       echo "$system" > $out/nix-support/system
 
-      if test -z "${toString doCoverageAnalysis}"; then
+      if [ -z "${toString doCoverageAnalysis}" ]; then
           echo "nix-build none $out" >> $out/nix-support/hydra-build-products
       fi
     '';
