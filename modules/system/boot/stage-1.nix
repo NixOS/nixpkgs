@@ -258,7 +258,6 @@ let
             --replace cdrom_id ${extraUtils}/bin/cdrom_id \
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace /sbin/modprobe ${extraUtils}/bin/modprobe \
-            --replace '$env{DM_SBIN_PATH}/blkid' ${extraUtils}/bin/blkid \
             --replace 'ENV{DM_SBIN_PATH}="${pkgs.lvm2}/sbin"' 'ENV{DM_SBIN_PATH}="${extraUtils}/bin"' \
             --replace /sbin/mdadm ${extraUtils}/bin/mdadm
       done
