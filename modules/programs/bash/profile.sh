@@ -1,10 +1,15 @@
 # /etc/profile: DO NOT EDIT -- this file has been generated automatically.
 
-if [ -n "${SYSTEM_ETC_PROFILE_HAS_BEEN_SOURCED:-}" ]; then
-    return
-else
-    SYSTEM_ETC_PROFILE_HAS_BEEN_SOURCED="1"
-fi
+# This file is read for (interactive) login shells.  Any
+# initialisation specific to interactive shells should be put in
+# /etc/bashrc, which is sourced from here.
+
+# Only execute this file once per shell.
+if [ -n "$__ETC_PROFILE_SOURCED" ]; then return; fi
+__ETC_PROFILE_SOURCED=1
+
+# Prevent this file from being sourced by interactive non-login child shells.
+export __ETC_PROFILE_DONE=1
 
 # Initialise a bunch of environment variables.
 export LD_LIBRARY_PATH=/var/run/opengl-driver/lib:/var/run/opengl-driver-32/lib # !!! only set if needed
@@ -33,9 +38,7 @@ for i in $NIX_PROFILES; do # !!! reverse
     export TERMINFO_DIRS=$i/share/terminfo${TERMINFO_DIRS:+:}$TERMINFO_DIRS
     export TERM=$TERM
 
-    # "lib/site_perl" is for backwards compatibility with packages
-    # from Nixpkgs <= 0.12.
-    export PERL5LIB="$i/lib/perl5/site_perl:$i/lib/site_perl${PERL5LIB:+:}$PERL5LIB"
+    export PERL5LIB="$i/lib/perl5/site_perl${PERL5LIB:+:}$PERL5LIB"
 
     # ALSA plugins
     export ALSA_PLUGIN_DIRS="$i/lib/alsa-lib${ALSA_PLUGIN_DIRS:+:}$ALSA_PLUGIN_DIRS"
@@ -51,7 +54,7 @@ for i in $NIX_PROFILES; do # !!! reverse
     export XDG_CONFIG_DIRS=$i/etc/xdg${XDG_CONFIG_DIRS:+:}$XDG_CONFIG_DIRS
     export XDG_DATA_DIRS=$i/share${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
 
-    # mozilla plugins
+    # Mozilla plugins.
     export MOZ_PLUGIN_PATH=$i/lib/mozilla/plugins${MOZ_PLUGIN_PATH:+:}$MOZ_PLUGIN_PATH
 done
 
@@ -62,7 +65,7 @@ export ASPELL_CONF="dict-dir $HOME/.nix-profile/lib/aspell"
 export PATH=@wrapperDir@:$PATH
 
 # ~/bin if it exists overrides other bin directories.
-if test -d $HOME/bin; then
+if [ -d $HOME/bin ]; then
     export PATH=$HOME/bin:$PATH
 fi
 
@@ -101,11 +104,6 @@ if test ! -e $HOME/.nix-defexpr -o -L $HOME/.nix-defexpr; then
 fi
 
 @shellInit@
-
-# Some aliases.
-alias ls="ls --color=tty"
-alias ll="ls -l"
-alias l="ls -alh"
 
 # Read system-wide modifications.
 if test -f /etc/profile.local; then
