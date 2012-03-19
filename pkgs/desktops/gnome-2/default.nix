@@ -56,8 +56,6 @@
 
   at_spi = callPackage ./platform/at-spi { };
 
-  gtk_doc = callPackage ./platform/gtk-doc { };
-
   gtkhtml = callPackage ./platform/gtkhtml { };
 
 
@@ -86,8 +84,6 @@
 
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
-
-  gnome_doc_utils = callPackage ./desktop/gnome-doc-utils { };
 
   zenity = callPackage ./desktop/zenity { };
 

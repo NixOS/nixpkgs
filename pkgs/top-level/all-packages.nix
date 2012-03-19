@@ -3019,6 +3019,8 @@ let
 
   global = callPackage ../development/tools/misc/global { };
 
+  gnome_doc_utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
+
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
 
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
@@ -3031,6 +3033,8 @@ let
   gradle = callPackage ../development/tools/build-managers/gradle { };
 
   gperf = callPackage ../development/tools/misc/gperf { };
+
+  gtk_doc = callPackage ../development/tools/documentation/gtk-doc { };
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
 
@@ -7889,7 +7893,7 @@ let
     self = pkgs.gnome2;
   }  // pkgs.gtkLibs // {
     # Backwards compatibility;
-    inherit (pkgs) libsoup;
+    inherit (pkgs) libsoup gtk_doc gnome_doc_utils;
   };
 
   gnome = recurseIntoAttrs gnome2;

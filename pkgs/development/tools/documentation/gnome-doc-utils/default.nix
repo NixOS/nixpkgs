@@ -2,11 +2,11 @@
 , makeWrapper, pythonPackages }:
 
 stdenv.mkDerivation {
-  name = "gnome-doc-utils-0.18.1";
+  name = "gnome-doc-utils-0.20.7";
 
   src = fetchurl {
-    url = mirror://gnome/sources/gnome-doc-utils/0.18/gnome-doc-utils-0.18.1.tar.bz2;
-    sha256 = "0psl9xnph6qga809dbkakjfp2z9mc32dxrdk8s6zn8whm41gc0gn";
+    url = mirror://gnome/sources/gnome-doc-utils/0.20/gnome-doc-utils-0.20.7.tar.xz;
+    sha256 = "01lcq6gm4q9awvg7lccq43qh8g4ibz49s2mgykin78mgph9h396q";
   };
 
   configureFlags = "--disable-scrollkeeper";
