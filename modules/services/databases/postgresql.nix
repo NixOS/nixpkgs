@@ -22,7 +22,7 @@ let
 
   postgresql = postgresqlAndPlugins pkgs.postgresql;
 
-  run = "${pkgs.su}/bin/su -s ${pkgs.stdenv.shell} postgres";
+  run = "su -s ${pkgs.stdenv.shell} postgres";
 
   flags = optional cfg.enableTCPIP "-i";
 
@@ -74,13 +74,7 @@ in
       };
 
       authentication = mkOption {
-        default = ''
-          # Generated file; do not edit!
-          local all mediawiki        ident mediawiki-users
-          local all all              ident sameuser
-          host  all all 127.0.0.1/32 md5
-          host  all all ::1/128      md5
-        '';
+        default = "";
         description = ''
           Defines how users authenticate themselves to the server.
         '';
@@ -136,6 +130,14 @@ in
 
   config = mkIf config.services.postgresql.enable {
 
+    services.postgresql.authentication =
+      ''
+        # Generated file; do not edit!
+        local all all              ident sameuser
+        host  all all 127.0.0.1/32 md5
+        host  all all ::1/128      md5
+      '';
+        
     users.extraUsers = singleton
       { name = "postgres";
         description = "PostgreSQL server user";
@@ -145,13 +147,6 @@ in
       { name = "postgres"; };
 
     environment.systemPackages = [postgresql];
-
-    # !!! This should be be in the mediawiki module, obviously.
-    services.postgresql.identMap =
-      ''
-        mediawiki-users root   mediawiki
-        mediawiki-users wwwrun mediawiki
-      '';
 
     jobs.postgresql =
       { description = "PostgreSQL server";
@@ -163,35 +158,37 @@ in
             PGDATA = cfg.dataDir;
           };
 
+        path = [ pkgs.su postgresql ];
+
         preStart =
           ''
             # Initialise the database.
             if ! test -e ${cfg.dataDir}; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R postgres ${cfg.dataDir}
-                ${run} -c '${postgresql}/bin/initdb -U root'
+                ${run} -c 'initdb -U root'
                 rm -f ${cfg.dataDir}/*.conf
             fi
 
             ln -sfn ${configFile} ${cfg.dataDir}/postgresql.conf
-
-            # We'd like to use the `-w' flag here to wait until the
-            # database is up, but it requires a `postgres' user to
-            # exist.  And we can't call `createuser' before the
-            # database is running.
-            ${run} -c '${postgresql}/bin/pg_ctl start -o "${toString flags}"'
-
-            # So wait until the server is up.  `pg_ctl status' doesn't
-            # work (apparently, it just checks whether the server is
-            # running), so try to connect with psql.
-            while ! ${postgresql}/bin/psql postgres -c ""; do
-                sleep 1
-            done
           ''; # */
 
-        postStop =
+        exec = "${run} -c 'postgres ${toString flags}'";
+
+        # Wait for PostgreSQL to be ready to accept connections.
+        postStart =
           ''
-            ${run} -c '${postgresql}/bin/pg_ctl stop -m fast'
+            while ! psql postgres -c ""; do
+                stop_check
+                sleep 1
+            done
+          '';
+
+        extraConfig =
+          ''
+            # Give Postgres a decent amount of time to clean up after
+            # receiving Upstart's SIGTERM.
+            kill timeout 60
           '';
       };
 
