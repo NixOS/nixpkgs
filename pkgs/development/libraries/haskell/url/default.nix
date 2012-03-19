@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "url";
-  version = "2.1.2";
-  sha256 = "2cf5c4296418afe3940ae4de66d867897b1382cc4d37a0b9a5ccffa16743ef91";
+  version = "2.1.3";
+  sha256 = "0qag18wbrq9jjk1444mjigz1xl7xl03fz66b1lnya9qaihzpxwjs";
   buildDepends = [ utf8String ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Url";
