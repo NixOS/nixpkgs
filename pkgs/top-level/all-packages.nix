@@ -1262,8 +1262,6 @@ let
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
-  qdu = callPackage ../tools/misc/qdu { };
-
   qhull = callPackage ../development/libraries/qhull { };
 
   qjoypad = callPackage ../tools/misc/qjoypad { };
@@ -7415,8 +7413,6 @@ let
     inherit (gnome) libsoup;
   };
 
-  valknut = callPackage ../applications/networking/p2p/valknut { };
-
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   veracity = callPackage ../applications/version-management/veracity {};
@@ -7916,14 +7912,6 @@ let
 
     arts = callPackage ../development/libraries/arts {
       inherit (pkgs.kde3) kdelibs;
-    };
-
-    k3b = callPackage ../applications/misc/k3b/1.0.nix {
-      inherit (kde3) kdelibs;
-    };
-
-    kphone = callPackage ../applications/networking/instant-messengers/kphone {
-      stdenv = overrideGCC stdenv gcc42; # I'm to lazy to clean up header files
     };
 
   };
