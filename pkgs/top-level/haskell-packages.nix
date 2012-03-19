@@ -1025,9 +1025,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 
-  mwcRandom_0_10_0_1 = callPackage ../development/libraries/haskell/mwc-random/0.10.0.1.nix {};
-  mwcRandom_0_12_0_0 = callPackage ../development/libraries/haskell/mwc-random/0.12.0.0.nix {};
-  mwcRandom = self.mwcRandom_0_12_0_0;
+  mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
@@ -1227,10 +1225,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
-  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {
-    mwcRandom = self.mwcRandom_0_10_0_1;
-    unorderedContainers = self.unorderedContainers_0_1_4_6;
-  };
+  snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 
@@ -1389,9 +1384,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
-  unorderedContainers_0_1_4_6 = callPackage ../development/libraries/haskell/unordered-containers/0.1.4.6.nix {};
-  unorderedContainers_0_2_1_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.1.0.nix {};
-  unorderedContainers = self.unorderedContainers_0_2_1_0;
+  unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
 
   url = callPackage ../development/libraries/haskell/url {};
 
