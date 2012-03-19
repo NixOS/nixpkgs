@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "ipw2200-fw-3.1";
   src = fetchurl {
-    url = http://bughost.org/firmware/ipw2200-fw-3.1.tgz;
+    url = http://pkgs.fedoraproject.org/repo/pkgs/ipw2200-firmware/ipw2200-fw-3.1.tgz/eaba788643c7cc7483dd67ace70f6e99/ipw2200-fw-3.1.tgz;
     sha256 = "1gaqc8d827d6ji7zhhkpbr4fzznqpar68gzqbzak1h4cq48qr0f6";
   };
   
