@@ -30,7 +30,6 @@ in
         source = pkgs.substituteAll {
           src = ./profile.sh;
           wrapperDir = config.security.wrapperDir;
-          modulesTree = config.system.modulesTree;
           shellInit = config.environment.shellInit;
         };
         target = "profile";
