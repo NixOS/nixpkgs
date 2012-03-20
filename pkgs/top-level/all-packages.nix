@@ -7121,16 +7121,6 @@ let
     zip = zip.override { enableNLS = false; };
   };
 
-  go_oo = callPackage ../applications/office/openoffice/go-oo.nix {
-    inherit (perl510Packages) ArchiveZip CompressZlib;
-    inherit (gnome) GConf ORBit2;
-    neon = neon029;
-    libwpd = libwpd_08;
-    /* It uses Switch.pm, deprecated in perl 5.14 */
-    perl = perl510;
-    zip = zip.override { enableNLS = false; };
-  };
-
   openscad = callPackage ../applications/graphics/openscad {};
 
   opera = callPackage ../applications/networking/browsers/opera {
