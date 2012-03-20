@@ -3223,6 +3223,8 @@ let
 
   aubio = callPackage ../development/libraries/aubio { };
 
+  audiofile = callPackage ../development/libraries/audiofile { };
+
   axis = callPackage ../development/libraries/axis { };
 
   babl = callPackage ../development/libraries/babl { };
@@ -7171,6 +7173,10 @@ let
 
   pinta = callPackage ../applications/graphics/pinta {
     gtksharp = gtksharp2;
+  };
+
+  pommed = callPackage ../os-specific/linux/pommed {
+    inherit (xorg) libXpm;
   };
 
   pqiv = callPackage ../applications/graphics/pqiv { };
