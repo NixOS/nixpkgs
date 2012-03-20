@@ -282,7 +282,9 @@ in {
               "ls -l /dev/vda* >&2",
               "cat /proc/partitions >&2",
               "mdadm --create --force /dev/md0 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda5 /dev/vda6",
+              "mdadm -W /dev/md0", # wait for sync to finish; booting off an unsynced device tends to fail
               "mdadm --create --force /dev/md1 --metadata 1.2 --level=raid1 --raid-devices=2 /dev/vda7 /dev/vda8",
+              "mdadm -W /dev/md1",
               "mkswap -f /dev/md1 -L swap",
               "swapon -L swap",
               "mkfs.ext3 -L nixos /dev/md0",
