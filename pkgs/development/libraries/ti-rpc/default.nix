@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "f05eb17c85d62423858b8f74512cfe66a9ae1cedf93f03c2a0a32e04f0a33705";
   };
 
+  # http://www.sourcemage.org/projects/grimoire/repository/revisions/d6344b6a3a94b88ed67925a474de5930803acfbf
   preConfigure = ''
+    echo "" > src/des_crypt.c
+
     sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i "doc/Makefile.in"
   '';
 

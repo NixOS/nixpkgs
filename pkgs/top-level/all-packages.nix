@@ -4035,6 +4035,8 @@ let
 
   libnatspec = callPackage ../development/libraries/libnatspec { };
 
+  libnfsidmap = callPackage ../development/libraries/libnfsidmap { };
+
   libnice = callPackage ../development/libraries/libnice { };
 
   libplist = callPackage ../development/libraries/libplist { };
