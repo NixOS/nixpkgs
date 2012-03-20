@@ -1,8 +1,8 @@
 { stdenv, fetchsvn, scons, boost, pkgconfig, fftw, librdf_raptor
 , librdf_rasqal, jackaudio, flac, libsamplerate, alsaLib, libxml2
 , libxslt, libsndfile, libsigcxx, libusb, cairomm, glib, pango
-, gtk, glibmm, gtkmm, libgnomecanvas, librdf, liblo, aubio
-, fftwSinglePrec, libmad, automake, autoconf, liblrdf, libtool }:
+, gtk, glibmm, gtkmm, libgnomecanvas,  liblo, aubio
+, fftwSinglePrec, libmad, automake, autoconf, libtool, liblrdf }:
 
 stdenv.mkDerivation rec {
   name = "ardour-${version}";
@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
   # but hash is changing ?
 
   # TODO: see if this is also true when using a tag (~goibhniu)
+
+  # This version does not run it exits with the following error:
+  # raptor_new_uri_for_rdf_concept called with Raptor V1 world object
+  # raptor_general.c:240:raptor_init: fatal error: raptor_init() failedAborted
   src = fetchsvn {
     url = "http://subversion.ardour.org/svn/ardour2/tags/${version}";
     sha256 = "0d4y8bv12kb0yd2srvxn5388sa4cl5d5rk381saj9f3jgpiciyky";
@@ -27,8 +31,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     scons boost pkgconfig fftw librdf_raptor librdf_rasqal jackaudio
     flac libsamplerate alsaLib libxml2 libxslt libsndfile libsigcxx
-    libusb cairomm glib pango gtk glibmm gtkmm libgnomecanvas librdf
-    liblo aubio fftwSinglePrec libmad autoconf automake liblrdf libtool
+    libusb cairomm glib pango gtk glibmm gtkmm libgnomecanvas liblrdf
+    liblo aubio fftwSinglePrec libmad autoconf automake libtool
   ];
 
   buildPhase = ''
@@ -42,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = { 
     description = "Multi-track hard disk recording software";
     longDescription = ''
+      Broken: use ardour3-svn instead
       Also read "The importance of Paying Something" on their homepage, please!
     '';
     homepage = http://ardour.org/;
