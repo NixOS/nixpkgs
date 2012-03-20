@@ -17,12 +17,8 @@ let
   nixosRules = ''
 
     # Miscellaneous devices.
-    KERNEL=="sonypi",               MODE="0666"
     KERNEL=="kvm",                  MODE="0666"
     KERNEL=="kqemu",                MODE="0666"
-    KERNEL=="vboxdrv",  NAME="vboxdrv",  OWNER="root", GROUP="root", MODE="0666"
-    KERNEL=="vboxadd",  NAME="vboxadd",  OWNER="root", GROUP="root", MODE="0660"
-    KERNEL=="vboxuser", NAME="vboxuser", OWNER="root", GROUP="root", MODE="0666"
   '';
 
   # Perform substitutions in all udev rules files.
