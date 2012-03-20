@@ -1,0 +1,46 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 79945c4..a244d0f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -32,10 +32,6 @@ set(generator_SRC
+     type.cpp
+ )
+ 
+-# force RPATH so that the binary is usable from within the build tree
+-set (CMAKE_SKIP_BUILD_RPATH FALSE)
+-set (CMAKE_SKIP_RPATH FALSE)
+-
+ configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/config.h.in config.h @ONLY )
+ 
+ add_executable(smokegen ${generator_SRC})
+diff --git a/cmake/SmokeConfig.cmake.in b/cmake/SmokeConfig.cmake.in
+index 947315c..de8d66c 100644
+--- a/cmake/SmokeConfig.cmake.in
++++ b/cmake/SmokeConfig.cmake.in
+@@ -44,21 +44,19 @@ macro (find_smoke_component name)
+         set (SMOKE_${uppercase}_FOUND FALSE CACHE INTERNAL "")
+ 
+         find_path(SMOKE_${uppercase}_INCLUDE_DIR 
+-            ${lowercase}_smoke.h 
+-            PATH ${SMOKE_INCLUDE_DIR}
+-            NO_DEFAULT_PATH
++            ${lowercase}_smoke.h
++            HINTS ${SMOKE_INCLUDE_DIR}
++            PATH_SUFFIXES smoke
+             )
+         if(WIN32)
+ 		    # DLLs are in the bin directory.
+             find_library(SMOKE_${uppercase}_LIBRARY
+                 smoke${lowercase}
+-                PATHS "@CMAKE_INSTALL_PREFIX@/bin"
+-                NO_DEFAULT_PATH)
++                PATHS "@CMAKE_INSTALL_PREFIX@/bin")
+         else(WIN32)
+             find_library(SMOKE_${uppercase}_LIBRARY
+                 smoke${lowercase}
+-                PATHS "@SMOKE_LIBRARY_PREFIX@"
+-                NO_DEFAULT_PATH)
++                PATHS "@SMOKE_LIBRARY_PREFIX@")
+         endif(WIN32)
+ 
+         if (NOT SMOKE_${uppercase}_INCLUDE_DIR OR NOT SMOKE_${uppercase}_LIBRARY)

@@ -15,8 +15,8 @@ let
     # kdesdk/kioslave is splitted into kioslave-svn and kioslave-git
     kdesdk = [ "kioslave" ];
     # Most of kdebindings do not compile due to a bug in the buildsystem
-    kdebindings = [ "kimono" "korundum" "kross-interpreters" "perlkde" "perlqt"
-      "qtruby" "qyoto" "smokekde" ];
+    kdebindings = [ "kimono" "korundum" "kross-interpreters" "perlkde"
+      "qtruby" "qyoto" ];
   };
 
   # Extra subpackages in the manifest format

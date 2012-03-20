@@ -4,7 +4,7 @@ kde {
   buildInputs = [ qt4 ];
   buildNativeInputs = [ cmake ];
 
-  patchPhase = "sed -e /RPATH/d -i CMakeLists.txt";
+  patches = [ ./smokegen-nix.patch ];
 
   meta = {
     description = "C++ parser used to generate language bindings for Qt/KDE";
