@@ -3312,6 +3312,7 @@ let
   clutter = callPackage ../development/libraries/clutter { };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
+  clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
