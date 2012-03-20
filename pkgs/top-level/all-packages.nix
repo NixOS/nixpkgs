@@ -6071,6 +6071,10 @@ let
 
   wpa_supplicant_gui = callPackage ../os-specific/linux/wpa_supplicant/gui.nix { };
 
+  xf86_input_mtrack = callPackage ../os-specific/linux/xf86-input-mtrack {
+    inherit (xorg) utilmacros xproto inputproto xorgserver;
+  };
+
   xf86_input_multitouch =
     callPackage ../os-specific/linux/xf86-input-multitouch { };
 
