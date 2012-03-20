@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.bz2";
-    sha256 = "0ay3d2s5442pvdsx9lyfzb986kh6848qhbls9ff982f0glzqdcya";
+    sha256 = "0vb2f5922r1da4va8sx2qn2i1lf2gqg7nfg594kncy98a9b1avnr";
   };
 
   buildInputs = [ kdevplatform kdebase_workspace okteta ];
