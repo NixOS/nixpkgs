@@ -7973,8 +7973,12 @@ let
       kdesvn = callPackage ../applications/version-management/kdesvn { };
 
       kdevelop = callPackage ../applications/editors/kdevelop { };
+      kdevelop_4_3 = callPackage ../applications/editors/kdevelop/4.3.0.nix {
+        kdevplatform = self.kdevplatform_1_3;
+      };
 
       kdevplatform = callPackage ../development/libraries/kdevplatform { };
+      kdevplatform_1_3 = callPackage ../development/libraries/kdevplatform/1.3.0.nix { };
 
       kdiff3 = callPackage ../tools/text/kdiff3 { };
 
