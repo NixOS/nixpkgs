@@ -14,6 +14,7 @@ let
   # Map video driver names to driver packages.
   knownVideoDrivers = {
     ati_unfree   = { modules = [ kernelPackages.ati_drivers_x11 ]; driverName = "fglrx"; };
+    nouveau       = { modules = [ pkgs.xf86_video_nouveau ]; };
     nvidia       = { modules = [ kernelPackages.nvidia_x11 ]; };
     nvidiaLegacy96 = { modules = [ kernelPackages.nvidia_x11_legacy96 ]; driverName = "nvidia"; };
     nvidiaLegacy173 = { modules = [ kernelPackages.nvidia_x11_legacy173 ]; driverName = "nvidia"; };
