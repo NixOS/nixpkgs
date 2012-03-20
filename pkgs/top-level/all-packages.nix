@@ -6082,6 +6082,11 @@ let
 
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
+  xf86_video_nouveau = callPackage ../os-specific/linux/xf86-video-nouveau { 
+    inherit (xorg) xorgserver xproto fontsproto xf86driproto renderproto
+      videoproto utilmacros;
+  };
+
   xmoto = builderDefsPackage (import ../games/xmoto) {
     inherit chipmunk sqlite curl zlib bzip2 libjpeg libpng
       freeglut mesa SDL SDL_mixer SDL_image SDL_net SDL_ttf
