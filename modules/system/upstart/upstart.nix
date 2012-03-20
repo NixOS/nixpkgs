@@ -116,13 +116,11 @@ let
             end script
           ''}
 
-          ${optionalString (!job.task) (
-             if job.daemonType == "fork" then "expect fork" else
-             if job.daemonType == "daemon" then "expect daemon" else
-             if job.daemonType == "stop" then "expect stop" else
-             if job.daemonType == "none" then "" else
-             throw "invalid daemon type `${job.daemonType}'"
-          )}
+          ${if job.daemonType == "fork" then "expect fork" else
+            if job.daemonType == "daemon" then "expect daemon" else
+            if job.daemonType == "stop" then "expect stop" else
+            if job.daemonType == "none" then "" else
+            throw "invalid daemon type `${job.daemonType}'"}
 
           ${optionalString (job.setuid != "") ''
             setuid ${job.setuid}
