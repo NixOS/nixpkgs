@@ -7,12 +7,12 @@ stdenv.mkDerivation {
 
   desktopItem = makeDesktopItem {
     name = browserName;
-    exec = browserName;
+    exec = browserName + " %U";
     icon = icon;
     comment = "";
     desktopName = desktopName;
     genericName = "Web Browser";
-    categories = "Application;Network;";
+    categories = "Application;Network;WebBrowser;";
   };
 
   buildInputs = [makeWrapper];
