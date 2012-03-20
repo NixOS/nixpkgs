@@ -3742,6 +3742,7 @@ let
   gtk = pkgs.gtk2;
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
+  gtkmm3 = callPackage ../development/libraries/gtkmm/3.2.x.nix { };
 
   gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
 
