@@ -53,9 +53,10 @@
   #  $ load-nix-env
   # The result using that command should be:
   #  env-nix loaded
+  and show you a shell with a prefixed prompt.
 */
 
-{ mkDerivation, substituteAll, pkgs } : { stdenv ? pkgs.stdenv, name, buildInputs ? [], cTags ? [], extraCmds ? ""} :
+{ mkDerivation, substituteAll, pkgs } : { stdenv ? pkgs.stdenv, name, buildInputs ? [], cTags ? [], extraCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash"} :
 mkDerivation {
   # The setup.sh script from stdenv will expect the native build inputs in
   # the buildNativeInputs environment variable.
@@ -126,11 +127,9 @@ mkDerivation {
       echo $name loaded
     EOF
 
-    cat >> "$out/bin/load-''${name/env-/}-env" << EOF
-    #!/bin/sh
-
-    source "$out/dev-envs/''${name/env-/}"
-    EOF
-    chmod +x "$out/bin/load-''${name/env-/}-env" 
+    mkdir -p $out/bin
+    sed -e s,@shell@,${shell}, -e s,@myenvpath@,$out/dev-envs/${name}, \
+      -e s,@name@,${name}, ${./loadenv.sh} > $out/bin/load-${name}-env
+    chmod +x $out/bin/load-${name}-env
   '';
 }
