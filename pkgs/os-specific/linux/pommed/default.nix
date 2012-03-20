@@ -6,7 +6,6 @@
 , dbus, dbus_glib
 , alsaLib
 , audiofile
-, eject
 , pkgconfig
 , gtk
 , gettext
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "18lxywmikanjr5pk1jdqda88dxd2579fpyd332xn4njjhlgwy5fp";
   };
 
-  patches = [ build_flags_patch ];
+  patches = [ build_flags_patch ./find-eject-in-path.patch ];
 
   buildInputs = [
     pciutils
@@ -38,7 +37,6 @@ stdenv.mkDerivation rec {
     dbus
     alsaLib
     audiofile
-    eject
     dbus_glib
     pkgconfig
     gtk
