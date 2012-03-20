@@ -42,6 +42,8 @@ with pkgs.lib;
       exec = "${pkgs.pommed}/bin/pommed";
 
       daemonType = "fork";
+
+      path = [ pkgs.eject ];
     };
   };
 }
