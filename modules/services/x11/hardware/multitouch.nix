@@ -26,9 +26,9 @@ with pkgs.lib;
       ''
         # Automatically enable the multitouch driver
         Section "InputClass"
-          MatchIsTouchpad "true"
-          Identifier "Multitouch Touchpad"
-          Driver "multitouch"
+          MatchIsTouchpad "on"
+          Identifier "Touchpads"
+          Driver "mtrack"
         EndSection
       '';
 
