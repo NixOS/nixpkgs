@@ -75,6 +75,7 @@
   ./services/hardware/hal.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
+  ./services/hardware/pommed.nix
   ./services/hardware/sane.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks.nix
