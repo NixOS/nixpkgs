@@ -1,0 +1,27 @@
+diff -ru mountall-2.35-orig/src/mountall.c mountall-2.35/src/mountall.c
+--- mountall-2.35-orig/src/mountall.c	2012-03-20 11:01:14.035898815 +0100
++++ mountall-2.35/src/mountall.c	2012-03-20 11:20:39.194786311 +0100
+@@ -3746,6 +3746,12 @@
+ 		exit (EXIT_ERROR);
+ 	}
+ 
++	/* SIGUSR1 tells us that a network device came up.  Install
++           the handler before daemonising so that the mountall-net job
++           won't kill us by sending USR1. */
++	nih_signal_set_handler (SIGUSR1, nih_signal_handler);
++	NIH_MUST (nih_signal_add_handler (NULL, SIGUSR1, usr1_handler, NULL));
++
+ 	/* Become daemon */
+ 	if (daemonise) {
+ 		pid_t pid;
+@@ -3799,10 +3805,6 @@
+ 	nih_signal_set_handler (SIGTERM, nih_signal_handler);
+ 	NIH_MUST (nih_signal_add_handler (NULL, SIGTERM, nih_main_term_signal, NULL));
+ 
+-	/* SIGUSR1 tells us that a network device came up */
+-	nih_signal_set_handler (SIGUSR1, nih_signal_handler);
+-	NIH_MUST (nih_signal_add_handler (NULL, SIGUSR1, usr1_handler, NULL));
+-
+ 	/* Check for force-fsck on the kernel command line */
+ 	cmdline = fopen ("/proc/cmdline", "r");
+ 	if (cmdline) {

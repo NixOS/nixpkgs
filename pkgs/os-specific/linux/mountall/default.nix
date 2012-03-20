@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1k52d4x75balnwcsqgznvzrdqgbp2dqnrzw0n25kajdcwr192wwy";
   };
 
-  patches = [ ./no-plymouth.patch ];
+  patches = [ ./no-plymouth.patch ./fix-usr1-race.patch ];
 
   preConfigure = "rm -R aclocal.m4; gettextize -f; autoreconf -vfi";
 
