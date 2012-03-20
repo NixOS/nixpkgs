@@ -20,7 +20,7 @@ with pkgs.lib;
 
   config = mkIf config.services.xserver.multitouch.enable {
 
-    services.xserver.modules = [ pkgs.xf86_input_multitouch ];
+    services.xserver.modules = [ pkgs.xf86_input_mtrack ];
 
     services.xserver.config =
       ''
