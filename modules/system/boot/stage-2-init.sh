@@ -160,10 +160,6 @@ ln -sfn "$systemConfig" /var/run/booted-system
 ln -sfn /var/run/booted-system /nix/var/nix/gcroots/booted-system
 
 
-# Ensure that the module tools can find the kernel modules.
-export MODULE_DIR=@kernel@/lib/modules/
-
-
 # Run any user-specified commands.
 @shell@ @postBootCommands@
 

@@ -51,7 +51,6 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
-    inherit kernel;
     inherit (config.boot) devShmSize runSize;
     ttyGid = config.ids.gids.tty;
     upstart = config.system.build.upstart;
