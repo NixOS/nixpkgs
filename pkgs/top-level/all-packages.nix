@@ -6625,7 +6625,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox100Pkgs;
+  firefoxPkgs = pkgs.firefox11Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
@@ -6633,23 +6633,23 @@ let
 
   firefox36Wrapper = wrapFirefox { browser = firefox36Pkgs.firefox; };
 
-  firefox90Pkgs = callPackage ../applications/networking/browsers/firefox/9.0.nix {
+  firefox9Pkgs = callPackage ../applications/networking/browsers/firefox/9.0.nix {
     inherit (gnome) libIDL;
   };
 
-  firefox90Wrapper = wrapFirefox { browser = firefox90Pkgs.firefox; };
+  firefox9Wrapper = wrapFirefox { browser = firefox9Pkgs.firefox; };
 
-  firefox100Pkgs = callPackage ../applications/networking/browsers/firefox/10.0.nix {
+  firefox10Pkgs = callPackage ../applications/networking/browsers/firefox/10.0.nix {
     inherit (gnome) libIDL;
   };
 
-  firefox100Wrapper = wrapFirefox { browser = firefox100Pkgs.firefox; };
+  firefox10Wrapper = wrapFirefox { browser = firefox10Pkgs.firefox; };
 
   firefox11Pkgs = callPackage ../applications/networking/browsers/firefox/11.0.nix {
     inherit (gnome) libIDL;
   };
 
-  firefox11Wrapper = lowPrio (wrapFirefox { browser = firefox11Pkgs.firefox; });
+  firefox11Wrapper = wrapFirefox { browser = firefox11Pkgs.firefox; };
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -6663,6 +6663,7 @@ let
 
   flashplayer11 = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
     debug = getConfig ["flashplayer" "debug"] false;
+    # !!! Fix the dependency on two different builds of nss.
   };
 
   freecad = callPackage ../applications/graphics/freecad {
