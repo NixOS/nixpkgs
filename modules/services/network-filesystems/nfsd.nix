@@ -67,7 +67,7 @@ in
 
   config = mkIf cfg.enable {
 
-    services.portmap.enable = true;
+    services.rpcbind.enable = true;
 
     services.nfs.client.enable = true; # needed for statd and idmapd
 
@@ -89,7 +89,7 @@ in
 
         preStart =
           ''
-            ensure portmap
+            ensure rpcbind
             ensure mountd
 
             # Create a state directory required by NFSv4.
@@ -116,7 +116,7 @@ in
 
         preStart =
           ''
-            ensure portmap
+            ensure rpcbind
 
             mkdir -p /var/lib/nfs
             touch /var/lib/nfs/rmtab

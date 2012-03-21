@@ -141,6 +141,7 @@
   ./services/networking/quassel.nix
   ./services/networking/radvd.nix
   ./services/networking/rdnssd.nix
+  ./services/networking/rpcbind.nix
   ./services/networking/sabnzbd.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix

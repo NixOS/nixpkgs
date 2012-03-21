@@ -49,7 +49,7 @@ in
 
   config = mkIf config.services.nfs.client.enable {
 
-    services.portmap.enable = true;
+    services.rpcbind.enable = true;
     
     system.fsPackages = [ pkgs.nfsUtils ];
 
@@ -72,7 +72,7 @@ in
 
         preStart =
           ''
-            ensure portmap
+            ensure rpcbind
             mkdir -p ${nfsStateDir}/sm
             mkdir -p ${nfsStateDir}/sm.bak
             sm-notify -d
@@ -92,7 +92,7 @@ in
 
         preStart =
           ''
-            ensure portmap
+            ensure rpcbind
             mkdir -p ${rpcMountpoint}
             mount -t rpc_pipefs rpc_pipefs ${rpcMountpoint}
           '';
