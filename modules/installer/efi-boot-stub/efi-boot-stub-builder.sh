@@ -54,7 +54,7 @@ addEntry() {
     copyToKernelsDir $kernel; kernel=$result
     copyToKernelsDir $initrd; initrd=$result
 
-    local startup="@efiSysMountPoint@/efi/nixos/$(cleanName $(readlink -f $path))-startup.nsh"
+    local startup="@efiSysMountPoint@/efi/nixos/generation-$generation-startup.nsh"
     if ! test -e $startup; then
         local dstTmp=$startup.tmp.$$
 	echo "$(echo $kernel | sed 's|@efiSysMountPoint@||' | sed 's|/|\\|g') systemConfig=$(readlink -f $path) init=$(readlink -f $path/init) initrd=$(echo $initrd | sed 's|@efiSysMountPoint@||' | sed 's|/|\\|g') $(cat $path/kernel-params)" > $dstTmp
