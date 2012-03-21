@@ -4734,7 +4734,8 @@ let
   webkit =
     builderDefsPackage ../development/libraries/webkit {
       inherit (gnome) gtkdoc libsoup;
-      inherit gtk atk pango glib;
+      inherit atk pango glib;
+      gtk = gtk3;
       inherit freetype fontconfig gettext gperf curl
         libjpeg libtiff libxml2 libxslt sqlite
         icu cairo perl intltool automake libtool
@@ -4742,7 +4743,7 @@ let
         python ruby which flex geoclue;
       inherit gstreamer gst_plugins_base gst_ffmpeg
         gst_plugins_good;
-      inherit (xlibs) libXt renderproto libXrender;
+      inherit (xlibs) libXt renderproto libXrender kbproto;
       libpng = libpng12;
     };
 
