@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
-let version = "2.0.12"; in
+let version = "2.0.17"; in
 stdenv.mkDerivation {
   name = "libevent-${version}";
 
   src = fetchurl {
-    url = "http://monkey.org/~provos/libevent-${version}-stable.tar.gz";
-    sha256 = "1az554fal8g822nhc9f1qrsx12y741x4ks9smj9ix20g5vvq60mc";
+    url = "https://github.com/downloads/libevent/libevent/libevent-${version}-stable.tar.gz";
+    sha256 = "51735d1241f9f6d2d6465d8abc76f7511764f6de7d81026120c629612296faa6";
   };
 
   meta = {
