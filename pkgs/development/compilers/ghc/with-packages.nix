@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     echo "Linking GHC core libraries:"
 
     echo -n "Linking $originalTopDir "
-    for f in $originalTopDir/*; do
+    for f in "$originalTopDir/"*; do
       if test -f $f; then
         ln -s $f $linkedTopDir
         echo -n .
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     echo
 
     echo -n "Linking $originalPkgDir "
-    for f in $originalPkgDir/*.conf; do
+    for f in "$originalPkgDir/"*.conf; do
       ln -s $f $linkedPkgDir
       echo -n .
     done
@@ -44,11 +44,11 @@ stdenv.mkDerivation rec {
       # Check if current path is a Cabal package for the current GHC
       if test -d $currentPkgDir; then
         echo -n "Linking $currentPath "
-        for f in $currentPath/bin/*; do
+        for f in "$currentPath/bin/"*; do
           ln -s $f $out/bin
           echo -n .
         done
-        for f in $currentPkgDir/*.conf; do
+        for f in "$currentPkgDir/"*.conf; do
           ln -s $f $linkedPkgDir
           echo -n .
         done
