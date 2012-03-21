@@ -187,6 +187,7 @@ in
             
             ${optionalString config.services.nfs.client.enable ''
               ensure statd || true
+              ensure idmapd || true
             ''}
 
             echo "mounting filesystems..."
