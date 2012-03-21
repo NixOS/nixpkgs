@@ -5126,6 +5126,8 @@ let
 
   portmap = callPackage ../servers/portmap { };
 
+  rpcbind = callPackage ../servers/rpcbind { };
+
   monetdb = callPackage ../servers/sql/monetdb { };
 
   mongodb = callPackage ../servers/nosql/mongodb { useV8 = (getConfig ["mongodb" "useV8"] false); };
