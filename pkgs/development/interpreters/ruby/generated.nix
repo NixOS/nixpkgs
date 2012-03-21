@@ -15,7 +15,7 @@ g: # Get dependencies from patched gems
     autotest_rails = g.autotest_rails_4_1_2;
     builder = g.builder_3_0_0;
     buildr = g.buildr_1_4_6;
-    bundler = g.bundler_1_1_1;
+    bundler = g.bundler_1_1_2;
     childprocess = g.childprocess_0_3_1;
     diff_lcs = g.diff_lcs_1_1_3;
     erubis = g.erubis_2_7_0;
@@ -28,7 +28,7 @@ g: # Get dependencies from patched gems
     json = g.json_1_6_5;
     json_pure = g.json_pure_1_6_5;
     mail = g.mail_2_4_4;
-    mime_types = g.mime_types_1_17_2;
+    mime_types = g.mime_types_1_18;
     minitar = g.minitar_0_5_3;
     multi_json = g.multi_json_1_1_0;
     net_sftp = g.net_sftp_2_0_4;
@@ -253,16 +253,16 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [ g.rake_0_8_7 g.builder_2_1_2 g.net_ssh_2_0_23 g.net_sftp_2_0_4 g.rubyzip_0_9_4 g.highline_1_5_1 g.json_pure_1_4_3 g.rubyforge_2_0_3 g.hoe_2_3_3 g.rjb_1_3_3 g.atoulme_Antwrap_0_7_1 g.diff_lcs_1_1_2 g.rspec_expectations_2_1_0 g.rspec_mocks_2_1_0 g.rspec_core_2_1_0 g.rspec_2_1_0 g.xml_simple_1_0_12 g.minitar_0_5_3 ];
       sha256 = ''11qwqrdnmzzi4zhgajfq1f1ckvd4kpfm9gyqrfjfalphs4gi0vxz'';
     };
-    bundler_1_1_1 = {
+    bundler_1_1_2 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://gembundler.com'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.1.1'';
+      name = ''bundler-1.1.2'';
       requiredGems = [  ];
-      sha256 = ''05cr17gzx731403fhbzv3szdfa80hghpn77ab6vi73k4177pjnzx'';
+      sha256 = ''130b2z724bv5k1xzvpzsnv7wxkl4yyigm5vra9lp0km6l1nfbnab'';
     };
     childprocess_0_3_1 = {
       basename = ''childprocess'';
@@ -464,10 +464,10 @@ See class rdoc for help. Hint: ri Hoe'';
         longDescription = ''A really Ruby Mail handler.'';
       };
       name = ''mail-2.4.4'';
-      requiredGems = [ g.mime_types_1_17_2 g.treetop_1_4_10 ];
+      requiredGems = [ g.mime_types_1_18 g.treetop_1_4_10 ];
       sha256 = ''0idylz5pnlz34mrxm7gs9jbll2c0k0y9dq2qarhxk30gwyvjaxi3'';
     };
-    mime_types_1_17_2 = {
+    mime_types_1_18 = {
       basename = ''mime_types'';
       meta = {
         description = ''This library allows for the identification of a file's likely MIME content type'';
@@ -481,16 +481,11 @@ Perl by Mark Overmeer, copyright 2001 - 2009. As of version 1.15, the data
 format for the MIME::Type list has changed and the synchronization will no
 longer happen.
 
-Homepage::  http://mime-types.rubyforge.org/
-GitHub::    http://github.com/halostatue/mime-types/
-Copyright:: 2002 - 2011, Austin Ziegler
-            Based in part on prior work copyright Mark Overmeer
-
-:include: License.rdoc'';
+:include: Licence.rdoc'';
       };
-      name = ''mime-types-1.17.2'';
+      name = ''mime-types-1.18'';
       requiredGems = [  ];
-      sha256 = ''0i4pmx86xbnlrhbbm9znnyfglmb21vwjvh262c6qw3m19w6ifs6p'';
+      sha256 = ''00j7vragd5kdj235mskicn3nbg7hrdc6xjvc9bw9vqmal8x4707q'';
     };
     minitar_0_5_3 = {
       basename = ''minitar'';
@@ -635,7 +630,7 @@ request helpers feature.'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
       name = ''rails-3.2.2'';
-      requiredGems = [ g.activesupport_3_2_2 g.actionpack_3_2_2 g.activerecord_3_2_2 g.activeresource_3_2_2 g.actionmailer_3_2_2 g.railties_3_2_2 g.bundler_1_1_1 ];
+      requiredGems = [ g.activesupport_3_2_2 g.actionpack_3_2_2 g.activerecord_3_2_2 g.activeresource_3_2_2 g.actionmailer_3_2_2 g.railties_3_2_2 g.bundler_1_1_2 ];
       sha256 = ''0kwh8142zxyvrva09m5g85cmwhby714q87j1mb8s6wikv4gvfmy9'';
     };
     railties_3_2_2 = {
