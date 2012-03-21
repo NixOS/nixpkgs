@@ -8,6 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "1kzgwxzh83qi97rblcm9qj80cdvnv8kml2plz0q103j0hifj8vb5";
   };
 
+  preConfigure =
+    ''
+      configureFlags="--with-pluginpath=$out/lib/libnfsidmap"
+    '';
+
   meta = {
     homepage = http://www.citi.umich.edu/projects/nfsv4/linux/;
     description = "Library for holding mulitiple methods of mapping names to id's and visa versa, mainly for NFSv4";
