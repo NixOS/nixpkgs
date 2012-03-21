@@ -7377,11 +7377,7 @@ let
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/9.x.nix {
-    inherit (gnome) libIDL;
-  };
-
-  thunderbird11 = callPackage ../applications/networking/mailreaders/thunderbird/11.x.nix {
+  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/11.x.nix {
     inherit (gnome) libIDL;
   };
 
