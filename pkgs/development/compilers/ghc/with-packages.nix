@@ -1,7 +1,7 @@
 {stdenv, ghc, packages ? [], makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "ghc-${ghc.version}-linkdir";
+  name = "haskell-env-${ghc.name}";
 
   allPackages = stdenv.lib.closePropagation packages;
   buildInputs = allPackages ++ [makeWrapper];
