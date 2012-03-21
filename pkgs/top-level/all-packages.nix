@@ -7411,7 +7411,7 @@ let
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper glib_networking;
-    inherit gtk glib;
+    inherit gtk3 glib;
     inherit (xlibs) libX11 kbproto;
     inherit (gnome) libsoup;
   };
