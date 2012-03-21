@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
         chmod +x "$i"
       done
       sed -i s,/usr/sbin,$out/sbin, utils/statd/statd.c
+
+      # https://bugzilla.redhat.com/show_bug.cgi?id=749195
+      sed -i s,PAGE_SIZE,getpagesize\(\), utils/blkmapd/device-process.c
     '';
 
   preBuild =
