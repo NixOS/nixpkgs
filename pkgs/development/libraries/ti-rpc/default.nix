@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     echo "" > src/des_crypt.c
 
-    sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i "doc/Makefile.in"
+    sed -es"|/etc/netconfig|$out/etc/netconfig|g" -i doc/Makefile.in tirpc/netconfig.h
   '';
 
   preInstall = "mkdir -p $out/etc";

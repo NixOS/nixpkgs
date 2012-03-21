@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, tcpWrapper, utillinux, libcap, libtirpc, libevent, libnfsidmap, lvm2,
-  e2fsprogs }:
+{ fetchurl, stdenv, tcpWrapper, utillinux, libcap, libtirpc, libevent, libnfsidmap
+, lvm2, e2fsprogs }:
 
 stdenv.mkDerivation rec {
   name = "nfs-utils-1.2.5";
@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "16ssfkj36ljifyaskgwpd3ys8ylhi5gasq88aha3bhg5dr7yv59m";
   };
 
-  buildInputs = [ tcpWrapper utillinux libcap libtirpc libevent libnfsidmap lvm2
-    e2fsprogs ];
+  buildInputs =
+    [ tcpWrapper utillinux libcap libtirpc libevent libnfsidmap
+      lvm2 e2fsprogs
+    ];
 
   # FIXME: Add the dependencies needed for NFSv4 and TI-RPC.
   configureFlags =
