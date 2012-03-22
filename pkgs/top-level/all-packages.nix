@@ -7293,10 +7293,6 @@ let
 
   sox = callPackage ../applications/misc/audio/sox { };
 
-  specimen = callPackage ../applications/audio/specimen {
-    inherit (gnome) libgnomecanvas;
-  };
-
   spotify = callPackage ../applications/audio/spotify { };
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
