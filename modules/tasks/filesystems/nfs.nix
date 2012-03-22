@@ -39,6 +39,8 @@ in
     
     system.fsPackages = [ pkgs.nfsUtils ];
 
+    boot.kernelModules = [ "sunrpc" ];
+
     boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
 
     boot.initrd.extraUtilsCommands = mkIf inInitrd
@@ -77,11 +79,11 @@ in
       };
 
     jobs.idmapd =
-      { description = "Kernel NFS server - ID Map Daemon";
+      { description = "NFS ID mapping daemon";
 
         path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
 
-        stopOn = "starting shutdown";
+        startOn = "started udev";
 
         preStart =
           ''
