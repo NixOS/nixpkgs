@@ -10,7 +10,7 @@ with pkgs.lib;
             ''
               mkdir $out
               diskImage=$out/image
-              ${pkgs.vmTools.kvm}/bin/qemu-img create -f raw $diskImage "4G"
+              ${pkgs.vmTools.kvm}/bin/qemu-img create -f raw $diskImage "10G"
               mv closure xchg/
             '';
           postVM =
