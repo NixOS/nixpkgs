@@ -12,7 +12,10 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  configurePhase = "true";
+  buildPhase = ''
+    make all
+    make opt
+  '';
 
   meta = {
     homepage = "http://code.google.com/p/ocaml-extlib/";
