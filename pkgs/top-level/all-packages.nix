@@ -3978,6 +3978,8 @@ let
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
   libgnome_keyring3 = callPackage ../development/libraries/libgnome-keyring/3.x.nix { };
 
+  libgtop = callPackage ../development/libraries/libgtop {};
+
   liblo = callPackage ../development/libraries/liblo { };
 
   liblrdf = callPackage ../development/libraries/liblrdf {};
