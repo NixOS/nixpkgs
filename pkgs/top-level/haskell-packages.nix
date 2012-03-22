@@ -950,6 +950,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
+  lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
+
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
