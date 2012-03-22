@@ -13,7 +13,8 @@ stdenv.mkDerivation {
     sha256 = "f1774028a4525d22d1f4cf4ce0121c99d85a75aed7a498c3e8ab0f5e39888e47";
   };
 
-  buildInputs = [pcre ocaml findlib];
+  buildInputs = [ocaml findlib];
+  propagatedBuildInputs = [pcre];
 
   createFindlibDestdir = true;
 
