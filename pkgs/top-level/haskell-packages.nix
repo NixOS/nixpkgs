@@ -1302,6 +1302,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   storableRecord = callPackage ../development/libraries/haskell/storable-record {};
 
+  Stream = callPackage ../development/libraries/haskell/Stream {};
+
   strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {
