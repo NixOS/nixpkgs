@@ -115,9 +115,9 @@ in
     fourStore = 42;
     fourStoreEndpoint = 43;
     virtuoso = 44;
-    dovecot2 = 45;
-    prayer = 46;
-    mpd = 47;
+    dovecot2 = 46;
+    prayer = 49;
+    mpd = 50;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 

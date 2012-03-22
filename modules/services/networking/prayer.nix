@@ -72,7 +72,7 @@ in
     users.extraUsers = singleton
       { name = prayerUser;
         uid = config.ids.uids.prayer;
-        description = "prayer daemon user";
+        description = "Prayer daemon user";
         home = stateDir;
       };
 
