@@ -1,13 +1,15 @@
-{ cabal, binary, blas, gsl, liblapack, storableComplex, vector }:
+{ cabal, binary, blas, gsl, liblapack, random, storableComplex
+, vector
+}:
 
 cabal.mkDerivation (self: {
   pname = "hmatrix";
-  version = "0.13.1.0";
-  sha256 = "0pl5z6zsxyvbdfdng77r2c4isq6d4wbyzx2qs9r8rbn6glaxwrmp";
-  buildDepends = [ binary storableComplex vector ];
+  version = "0.14.0.1";
+  sha256 = "057ii711qsh5307bp3jqpvlhwp2iacr83whhjm5053b5psinj4z5";
+  buildDepends = [ binary random storableComplex vector ];
   extraLibraries = [ blas gsl liblapack ];
   meta = {
-    homepage = "http://perception.inf.um.es/hmatrix";
+    homepage = "https://github.com/albertoruiz/hmatrix";
     description = "Linear algebra and numerical computation";
     license = "GPL";
     platforms = self.ghc.meta.platforms;

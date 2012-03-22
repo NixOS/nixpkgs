@@ -1211,6 +1211,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   resourcePool = callPackage ../development/libraries/haskell/resource-pool {};
 
+  resourcet = callPackage ../development/libraries/haskell/resourcet {};
+
   RSA = callPackage ../development/libraries/haskell/RSA {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
@@ -1324,7 +1326,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   terminfo = callPackage ../development/libraries/haskell/terminfo {};
 
-  testFramework = callPackage ../development/libraries/haskell/test-framework {};
+  testFramework_0_6 = callPackage ../development/libraries/haskell/test-framework/0.6.nix {};
+  testFramework_0_5 = callPackage ../development/libraries/haskell/test-framework/0.5.nix {};
+  testFramework = self.testFramework_0_6;
 
   testFrameworkHunit = callPackage ../development/libraries/haskell/test-framework-hunit {};
 
@@ -1608,7 +1612,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     QuickCheck = self.QuickCheck2;
   };
 
-  mathblog = callPackage ../applications/misc/mathblog {};
+  mathblog = callPackage ../applications/misc/mathblog {
+    testFramework = self.testFramework_0_5;
+    testFrameworkHunit = self.testFrameworkHunit.override {
+      testFramework = self.testFramework_0_5;
+    };
+  };
 
   xmobar = callPackage ../applications/misc/xmobar {
     parsec = self.parsec3;

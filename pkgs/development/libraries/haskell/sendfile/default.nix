@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "sendfile";
-  version = "0.7.5";
-  sha256 = "0gkkxlbl3ci1b973jyksk03400pm8npmsqv81iqs0lwbzc7nxs28";
+  version = "0.7.6";
+  sha256 = "0wqbnr07s3g7f6p4x27ips9nzjjz1ii5hw1q54i31g40jzv8rs7z";
   buildDepends = [ network ];
   meta = {
     homepage = "http://patch-tag.com/r/mae/sendfile";
