@@ -69,7 +69,7 @@ in
 
     services.rpcbind.enable = true;
 
-    services.nfs.client.enable = true; # needed for statd and idmapd
+    boot.supportedFilesystems = [ "nfs" ]; # needed for statd and idmapd
 
     environment.systemPackages = [ pkgs.nfsUtils ];
 

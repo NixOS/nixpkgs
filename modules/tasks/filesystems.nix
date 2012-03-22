@@ -184,12 +184,6 @@ in
           ''
             # Ensure that this job is restarted when fstab changed:
             # ${fstab}
-            
-            ${optionalString config.services.nfs.client.enable ''
-              ensure statd || true
-              ensure idmapd || true
-            ''}
-
             echo "mounting filesystems..."
           '';
 

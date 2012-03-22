@@ -31,23 +31,9 @@ in
 
 {
 
-  ###### interface
-
-  options = {
-
-    services.nfs.client.enable = mkOption {
-      default = any (fs: fs.fsType == "nfs" || fs.fsType == "nfs4") config.fileSystems;
-      description = ''
-        Whether to enable support for mounting NFS filesystems.
-      '';
-    };
-
-  };
-
-
   ###### implementation
 
-  config = mkIf config.services.nfs.client.enable {
+  config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) {
 
     services.rpcbind.enable = true;
     
@@ -62,6 +48,13 @@ in
       '';
 
     environment.etc = singleton idmapdConfFile;
+
+    # Ensure that statd and idmapd are started before mountall.
+    jobs.mountall.preStart =
+      ''
+        ensure statd || true
+        ensure idmapd || true
+      '';
 
     jobs.statd =
       { description = "Kernel NFS server - Network Status Monitor";
