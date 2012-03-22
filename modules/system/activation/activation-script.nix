@@ -59,8 +59,11 @@ in
 
             export PATH=/empty
             for i in ${toString path}; do
-                PATH=$PATH:$i/bin:$i/sbin;
+                PATH=$PATH:$i/bin:$i/sbin
             done
+
+            # Ensure a consistent umask.
+            umask 0022
 
             ${
               let
