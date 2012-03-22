@@ -114,7 +114,7 @@ let
       $machine->waitForJob("tty1");
       $machine->waitForJob("rogue");
       $machine->waitForJob("nixos-manual");
-      $machine->waitForJob("dhclient");
+      $machine->waitForJob("dhcpcd");
 
       ${optionalString testChannel ''
         # Allow the machine to talk to the fake nixos.org.

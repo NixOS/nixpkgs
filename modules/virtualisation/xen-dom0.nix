@@ -155,10 +155,10 @@ in
         postStop = "${xen}/etc/init.d/xendomains stop";
       };
 
-    # To prevent a race between dhclient and xend's bridge setup
-    # script (which renames eth* to peth* and recreates eth* as a
-    # virtual device), start dhclient after xend.
-    jobs.dhclient.startOn = mkOverride 50 "started xend";
+    # To prevent a race between dhcpcd and xend's bridge setup script
+    # (which renames eth* to peth* and recreates eth* as a virtual
+    # device), start dhcpcd after xend.
+    jobs.dhcpcd.startOn = mkOverride 50 "started xend";
 
     environment.etc =
       [ { source = xendConfig;
