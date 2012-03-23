@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-loops";
-  version = "0.3.1.1";
-  sha256 = "086aqd1x1xc6irp24z1lwhzrknw9r2wbs8fnxz6vyi75m3rqvdcv";
+  version = "0.3.2.0";
+  sha256 = "0si8vz1r13lwliya161kwgrb5dpj01j74b6gbjyv78d5fd4hn7n2";
   buildDepends = [ stm ];
   meta = {
-    homepage = "http://code.haskell.org/~mokus/monad-loops";
+    homepage = "https://github.com/mokus0/monad-loops";
     description = "Monadic loops";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
