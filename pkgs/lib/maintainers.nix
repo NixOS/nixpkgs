@@ -26,7 +26,8 @@
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   shlevy = "Shea Levy <shea@shealevy.com>";
-  simons = "Peter Simons <simons@cryp.to>";
+  simons = "";
+  # simons = "Peter Simons <simons@cryp.to>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
