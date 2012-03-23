@@ -1528,11 +1528,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
   zlib = self.zlib_0_5_3_3;
 
-  zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
+  zlibBindings_0_0_3_2 = callPackage ../development/libraries/haskell/zlib-bindings/0.0.3.2.nix {};
+  zlibBindings_0_1_0 = callPackage ../development/libraries/haskell/zlib-bindings/0.1.0.nix {};
+  zlibBindings = self.zlibBindings_0_0_3_2;
 
   zlibConduit = callPackage ../development/libraries/haskell/zlib-conduit {};
 
-  zlibEnum = callPackage ../development/libraries/haskell/zlib-enum {};
+  zlibEnum = callPackage ../development/libraries/haskell/zlib-enum {
+    zlibBindings = self.zlibBindings_0_0_3_2;
+  };
 
   Zwaluw = callPackage ../development/libraries/haskell/Zwaluw {};
 
