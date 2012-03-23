@@ -223,7 +223,7 @@ let cfg = config.deployment; in
               }} > $out
             '';
         in if config.nixpkgs.system == "x86_64-linux" then
-          unpack "r32740-x86_64" "0vwjcf85y4qyd5hxh8gb2nnkhbpdz2j284w5d7x94rvczfpa49hz"
+          unpack "r33382-x86_64" "16irymms7vs4l3cllbpfl572269dwmlc7zficzf0r05bx7l0jsax"
         else if config.nixpkgs.system == "i686-linux" then /foo/disk.vdi else
           throw "Unsupported VirtualBox system type!"
       );
