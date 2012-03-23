@@ -7998,6 +7998,8 @@ let
 
       krusader = callPackage ../applications/misc/krusader { };
 
+      ksshaskpass = callPackage ../tools/security/ksshaskpass {};
+
       ktorrent = callPackage ../applications/networking/p2p/ktorrent { };
 
       kuickshow = callPackage ../applications/graphics/kuickshow { };
