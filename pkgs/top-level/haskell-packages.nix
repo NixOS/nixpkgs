@@ -989,8 +989,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   MonadCatchIOTransformers = callPackage ../development/libraries/haskell/MonadCatchIO-transformers {};
 
   monadControl_0_2_0_3 = callPackage ../development/libraries/haskell/monad-control/0.2.0.3.nix {};
-  monadControl_0_3_1 = callPackage ../development/libraries/haskell/monad-control/0.3.1.nix {};
-  monadControl = self.monadControl_0_3_1;
+  monadControl_0_3_1_1 = callPackage ../development/libraries/haskell/monad-control/0.3.1.1.nix {};
+  monadControl = self.monadControl_0_3_1_1;
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
