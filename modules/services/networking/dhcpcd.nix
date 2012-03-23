@@ -68,11 +68,10 @@ in
 
     jobs.dhcpcd =
       { startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
-        exec = "dhcpcd --config ${dhcpcdConf} --nobackground --persistent";
+        exec = "dhcpcd --config ${dhcpcdConf} --nobackground";
       };
 
     environment.systemPackages = [ dhcpcd ];
@@ -85,7 +84,9 @@ in
 
     powerManagement.resumeCommands =
       ''
-        ${config.system.build.upstart}/sbin/restart dhcpcd
+        # Tell dhcpcd to rebind its interfaces if it's running.
+        status="$(${config.system.build.upstart}/sbin/status dhcpcd)"
+        [[ "$status" =~ start/running ]] && ${dhcpcd}/sbin/dhcpcd --rebind
       '';
 
   };
