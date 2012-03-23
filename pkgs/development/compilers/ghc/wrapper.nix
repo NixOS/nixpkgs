@@ -1,4 +1,4 @@
-{stdenv, ghc, makeWrapper}:
+{stdenv, ghc, makeWrapper, coreutils}:
 
 stdenv.mkDerivation {
   name = "ghc-${ghc.version}-wrapper";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       case "\$arg" in
         -package-conf) ;;
         *)
-          CANONICALIZED="\$(readlink -f "\$arg")"
+          CANONICALIZED="\$(${stdenv.lib.optionalString stdenv.isDarwin "${coreutils}/bin/"}}readlink -f "\$arg")"
           GHC_PACKAGES_HASH["\$CANONICALIZED"]= ;;
       esac
     done
