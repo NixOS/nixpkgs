@@ -1378,7 +1378,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   tlsExtra = callPackage ../development/libraries/haskell/tls-extra {};
 
   transformers_0_2_2_0 = callPackage ../development/libraries/haskell/transformers/0.2.2.0.nix {};
-  transformers = self.transformers_0_2_2_0;
+  transformers_0_3_0_0 = callPackage ../development/libraries/haskell/transformers/0.3.0.0.nix {};
+  transformers = self.transformers_0_3_0_0;
 
   transformersBase = callPackage ../development/libraries/haskell/transformers-base {};
 
