@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       case "\$arg" in
         -package-conf) ;;
         *)
-          CANONICALIZED="\$(${stdenv.lib.optionalString stdenv.isDarwin "${coreutils}/bin/"}}readlink -f "\$arg")"
+          CANONICALIZED="\$(${stdenv.lib.optionalString stdenv.isDarwin "${coreutils}/bin/"}readlink -f "\$arg")"
           GHC_PACKAGES_HASH["\$CANONICALIZED"]= ;;
       esac
     done
