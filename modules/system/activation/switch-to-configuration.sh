@@ -76,6 +76,10 @@ EOF
         exit 1
 fi
 
+# Ignore SIGHUP so that we're not killed if we're running on (say)
+# virtual console 1 and we restart the "tty1" job.
+trap "" SIGHUP
+
 jobsDir=$(readlink -f @out@/etc/init)
 
 # Stop all currently running jobs that are not in the new Upstart
@@ -113,6 +117,10 @@ start_() {
     fi
 }
 
+log() {
+    echo "$@" >&2 || true
+}
+
 # Restart all running jobs that have changed.  (Here "running" means
 # all jobs that don't have a "stop" goal.)  We use the symlinks in
 # /var/run/upstart-jobs (created by each job's pre-start script) to
@@ -122,10 +130,10 @@ for job in @jobs@; do
     if ! [[ "$status" =~ start/ ]]; then continue; fi
     if [ "$(readlink -f "$jobsDir/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ]; then continue; fi
     if [ -n "${noRestartIfChanged[$job]}" ]; then
-        echo "not restarting changed service ‘$job’"
+        log "not restarting changed service ‘$job’"
         continue
     fi
-    echo "restarting changed service ‘$job’..."
+    log "restarting changed service ‘$job’..."
     # Note: can't use "restart" here, since that only restarts the
     # job's main process.
     stop --quiet "$job" || true
@@ -147,11 +155,11 @@ for job in @jobs@; do
             "$(readlink -f "$jobsDir/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ];
         then continue; fi
         if [ -n "${noRestartIfChanged[$job]}" ]; then continue; fi
-        echo "starting task ‘$job’..."
+        log "starting task ‘$job’..."
         start --quiet "$job" || true
     else
         if ! grep -q "^start on" "$jobsDir/$job.conf"; then continue; fi
-        echo "starting service ‘$job’..."
+        log "starting service ‘$job’..."
         start_ "$job" || true
     fi
     
