@@ -82,15 +82,18 @@ rec {
       map f (stringToCharacters s)
     );
 
+    
   # same as vim escape function.
   # Each character contained in list is prefixed by "\"
   escape = list : string :
     stringAsChars (c: if lib.elem c list then "\\${c}" else c) string;
 
+    
   # still ugly slow. But more correct now
   # [] for zsh
   escapeShellArg = lib.escape (stringToCharacters "\\ ';$`()|<>\t*[]");
 
+  
   # replace characters by their substitutes.  This function is equivalent to
   # the `tr' command except that one character can be replace by multiple
   # ones.  e.g.,
@@ -105,10 +108,12 @@ rec {
     in
       stringAsChars subst s;
 
+      
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions
   eqStrings = a: b: (a+(substring 0 0 b)) == ((substring 0 0 a)+b);
 
+  
   # Cut a string with a separator and produces a list of strings which were
   # separated by this separator. e.g.,
   # `splitString "." "foo.bar.baz"' returns ["foo" "bar" "baz"].
@@ -133,6 +138,7 @@ rec {
     in
       recurse 0 0;
 
+      
   # return the suffix of the second argument if the first argument match its
   # prefix. e.g.,
   # `removePrefix "foo." "foo.bar.baz"' returns "bar.baz".
@@ -146,6 +152,13 @@ rec {
       else
         s;
 
+        
+  # Why do we need this if we have baseNameOf?
   basename = s: lib.last (splitString "/" s);
+
+
+  # Return true iff string v1 denotes a version older than v2.
+  versionOlder = v1: v2: builtins.compareVersions v2 v1 == 1;
+
 
 }
