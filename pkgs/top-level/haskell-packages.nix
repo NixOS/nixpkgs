@@ -1099,6 +1099,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
 
+  permutation = callPackage ../development/libraries/haskell/permutation {};
+
   persistent = callPackage ../development/libraries/haskell/persistent {};
 
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
