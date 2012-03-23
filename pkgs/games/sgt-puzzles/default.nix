@@ -10,15 +10,15 @@ in
 rec {
   src = fetchsvn {
    url = svn://svn.tartarus.org/sgt/puzzles;
-   rev = "8872";
-   sha256 = "16hcrhkl6plzdhw60g7i4vgkxcc4mw4h4bzg2myy5cfhpx7y0m9s";
+   rev = "9437";
+   sha256 = "4820ce1e54e017a64dd9cb8991c020d0628329605a37af2a99b78bffbde43e85";
   } + "/";
 
   inherit buildInputs;
   configureFlags = [];
   makeFlags = ["prefix=$out" "gamesdir=$out/bin"];
 
-  neededDirs = ["$out/bin" "$out/share" ""];
+  neededDirs = ["$out/bin" "$out/share"];
   extraDoc = ["puzzles.txt"];
 
   mkMakefiles = a.fullDepEntry ''
