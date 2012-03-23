@@ -15,7 +15,6 @@ let
   };
 
   nixosRules = ''
-
     # Miscellaneous devices.
     KERNEL=="kvm",                  MODE="0666"
     KERNEL=="kqemu",                MODE="0666"

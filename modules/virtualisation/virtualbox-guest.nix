@@ -65,6 +65,14 @@ in
         PATH=${makeSearchPath "bin" [ pkgs.gnugrep pkgs.which pkgs.xorg.xorgserver ]}:$PATH \
           ${kernel.virtualboxGuestAdditions}/bin/VBoxClient-all
       '';
+
+    services.udev.extraRules =
+      ''
+        # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
+        # should restrict this to logged-in users.
+        KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
+      '';
+      
   };
 
 }
