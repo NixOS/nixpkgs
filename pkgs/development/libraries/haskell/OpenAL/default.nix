@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "OpenAL";
-  version = "1.4.0.0";
-  sha256 = "1vn9r8fd4zwqm8a9d8bgvi9vs1lmygn8sw1rlv819b5wmjwz3ms2";
+  version = "1.4.0.1";
+  sha256 = "180f84sjakhd1b8h5n3l92by2wmic20n6ax0z5fi3fvk9w73khyv";
   buildDepends = [ ObjectName StateVar Tensor ];
   extraLibraries = [ openal ];
   meta = {

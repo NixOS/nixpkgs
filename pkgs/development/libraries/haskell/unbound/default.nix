@@ -2,10 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "unbound";
-  version = "0.4";
-  sha256 = "0s4aybbxz5qvkf09wn65qavw10hk0rsyyc2d0ydr02rzz10vd270";
+  version = "0.4.0.1";
+  sha256 = "0zb029wji85b643iqf4cnkd9d68accrjxnk8422xs82zik2kn6zf";
   buildDepends = [ mtl RepLib transformers ];
-  noHaddock = true;
   meta = {
     homepage = "http://code.google.com/p/replib/";
     description = "Generic support for programming with names and binders";
