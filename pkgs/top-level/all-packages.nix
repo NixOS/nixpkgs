@@ -6992,6 +6992,8 @@ let
     qt = qt47;
   };
 
+  mhwaveedit = callPackage ../applications/audio/mhwaveedit {};
+
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify
