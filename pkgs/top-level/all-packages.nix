@@ -7144,6 +7144,10 @@ let
 
   paraview = callPackage ../applications/graphics/paraview { };
 
+  petrifoo = callPackage ../applications/audio/petrifoo {
+    inherit (gnome) libgnomecanvas;
+  };
+
   pdftk = callPackage ../tools/typesetting/pdftk { };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
