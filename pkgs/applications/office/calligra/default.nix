@@ -4,11 +4,11 @@
 , libkdcraw, libxslt, fftw, glew, gsl, shared_desktop_ontologies }:
 
 stdenv.mkDerivation rec {
-  name = "calligra-2.3.87";
+  name = "calligra-2.3.92";
 
   src = fetchurl {
     url = "mirror://kde/unstable/${name}/${name}.tar.bz2";
-    sha256 = "1arrk2ww3bykv4y8fsn1dn25gq9bf7a4ygggkrczfrxlbv1s9p9v";
+    sha256 = "1ad7vzdhfkv48xhs9p84mwpq8zsdiajz3qjng3h2rswd88sgrblg";
   };
 
   buildNativeInputs = [ cmake perl pkgconfig ];
