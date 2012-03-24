@@ -12,9 +12,6 @@ cabal.mkDerivation (self: {
     description = "wxHaskell core";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

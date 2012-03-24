@@ -10,9 +10,6 @@ cabal.mkDerivation (self: {
     description = "Extract graph representations of ghc heap values";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

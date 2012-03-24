@@ -10,9 +10,6 @@ cabal.mkDerivation (self: {
     description = "An mtl compatible version of the Ghc-Api monads and monad-transformers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

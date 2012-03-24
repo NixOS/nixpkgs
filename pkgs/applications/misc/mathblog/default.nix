@@ -16,9 +16,6 @@ cabal.mkDerivation (self: {
     description = "A program for creating and managing a static weblog with LaTeX math and function graphs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

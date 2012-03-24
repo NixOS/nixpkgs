@@ -9,9 +9,6 @@ cabal.mkDerivation (self: {
     description = "Interfacing with RSS (v 0.9x, 2.x, 1.0) + Atom feeds.";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

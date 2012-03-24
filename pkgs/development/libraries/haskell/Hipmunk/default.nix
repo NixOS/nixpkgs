@@ -11,9 +11,6 @@ cabal.mkDerivation (self: {
     description = "A Haskell binding for Chipmunk";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

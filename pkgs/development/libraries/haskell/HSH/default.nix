@@ -16,9 +16,6 @@ cabal.mkDerivation (self: {
     description = "Library to mix shell scripting with Haskell programs";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

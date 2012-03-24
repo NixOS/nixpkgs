@@ -9,9 +9,6 @@ cabal.mkDerivation (self: {
     description = "Provides Word128, Word192 and Word256 and a way of producing other large words if required";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

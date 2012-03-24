@@ -10,9 +10,6 @@ cabal.mkDerivation (self: {
     description = "A wrapper around Sean Barrett's JPEG/PNG decoder";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

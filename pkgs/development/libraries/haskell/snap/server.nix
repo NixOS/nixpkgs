@@ -21,9 +21,6 @@ cabal.mkDerivation (self: {
     description = "A fast, iteratee-based, epoll-enabled web server for the Snap Framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
