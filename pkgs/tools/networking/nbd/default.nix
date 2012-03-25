@@ -21,6 +21,11 @@ stdenv.mkDerivation {
   # The test suite doesn't succeed on Hydra.
   doCheck = false;
 
+  # Glib calls `clock_gettime', which is in librt. Linking that library
+  # here ensures that a proper rpath is added to the executable so that
+  # it can be loaded at run-time.
+  NIX_LDFLAGS = "-lrt -lpthread";
+
   meta = {
     homepage = "http://nbd.sourceforge.net";
     description = "map arbitrary files as block devices over the network";
