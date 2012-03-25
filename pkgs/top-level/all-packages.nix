@@ -7354,6 +7354,8 @@ let
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
+  tabbed = callPackage ../applications/window-managers/tabbed { };
+
   tahoelafs = callPackage ../tools/networking/p2p/tahoe-lafs {
     inherit (pythonPackages) twisted foolscap simplejson nevow zfec
       pycryptopp pysqlite darcsver setuptoolsTrial setuptoolsDarcs
