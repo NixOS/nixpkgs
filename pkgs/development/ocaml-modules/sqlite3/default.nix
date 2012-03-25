@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://hg.ocaml.info/release/ocaml-sqlite3/archive/" +
           "release-${version}.tar.bz2";
-    sha256 = "0ccy9b4pl9586vlzdkk3kvkz8xqc023ih1aw4nndyjnabkvgl832";
+    sha256 = "0fqbxm90mc2gk6jp9p8s53kay0hbcd0qc0adq8znanz99n8zqp53";
   };
 
   buildInputs = [ocaml findlib];
