@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     homepage = "http://sourceforge.net/apps/trac/vimprobable";
     license = "MIT";
     maintainers = ["Alexander Foremny <alexanderforemny@googlemail.com>"];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
-
