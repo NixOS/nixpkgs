@@ -26,7 +26,7 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
     
     if [ "@bootLoader@" = "grub" ]; then
         
-      if [ -n "@grubDevices@" ]; then
+      if [ -n '@grubDevices@' ]; then
           mkdir -m 0700 -p /boot/grub
           @menuBuilder@ @out@
 
