@@ -4,7 +4,8 @@ with pkgs.lib;
 
 let
 
-  cfg = config.services.openssh;
+  cfg  = config.services.openssh;
+  cfgc = config.programs.ssh;
 
   nssModulesPath = config.system.nssModules.path;
 
@@ -140,7 +141,7 @@ in
       };
 
       forwardX11 = mkOption {
-        default = true;
+        default = cfgc.setXAuthLocation;
         description = ''
           Whether to allow X11 connections to be forwarded.
         '';
@@ -281,9 +282,12 @@ in
           Port ${toString port}
         '') cfg.ports}
 
+        ${optionalString cfgc.setXAuthLocation ''
+            XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
+        ''}
+
         ${if cfg.forwardX11 then ''
           X11Forwarding yes
-          XAuthLocation ${pkgs.xlibs.xauth}/bin/xauth
         '' else ''
           X11Forwarding no
         ''}
@@ -297,6 +301,8 @@ in
         PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
       '';
 
+    assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true; 
+                    msg = "cannot enable X11 forwarding without setting xauth location";}];
   };
 
 }

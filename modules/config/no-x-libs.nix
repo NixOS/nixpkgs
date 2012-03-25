@@ -7,16 +7,14 @@
       example = true;
       description = ''
         Switch off the options in the default configuration that require X libraries.
-        Currently this includes: openssh.forwardX11, dbus, hal, fonts.enableCoreFonts,
+        Currently this includes: ssh X11 forwarding, dbus, hal, fonts.enableCoreFonts,
         fonts.enableFontConfig
       '';
     };
   };
   config = pkgs.lib.mkIf config.environment.noXlibs {
+    programs.ssh.setXAuthLocation = false;
     services = {
-      openssh = {
-        forwardX11 = false;
-      };
       dbus.enable = false;
       hal.enable = false;
     };

@@ -5,7 +5,7 @@
 
 {
   # Don't include X libraries.
-  services.openssh.forwardX11 = false;
+  programs.ssh.setXAuthLocation = false;
   fonts.enableFontConfig = false;
   fonts.enableCoreFonts = false;
 }
