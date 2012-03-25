@@ -2,10 +2,10 @@
 , dbus_libs }:
 stdenv.mkDerivation rec {
   name = "e_dbus-${version}";
-  version = "1.1.0";
+  version = "1.2.0-alpha";
   src = fetchurl {
-    url = "http://download.enlightenment.org/releases/${name}.tar.gz";
-    sha256 = "10y68f023jjq6dinjc0brpr41acnd7clxgb0q1j2i9isalx1473z";
+    url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
+    sha256 = "1kky76v7yydsjihgi1hbwpyqhdmbxmxj2dw4p7kiqbl67dmsjhxg";
   };
   buildInputs = [ pkgconfig zlib libjpeg expat ecore eina evas ];
   propagatedBuildInputs = [ dbus_libs ];
