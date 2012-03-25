@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   # Glib calls `clock_gettime', which is in librt. Linking that library
   # here ensures that a proper rpath is added to the executable so that
   # it can be loaded at run-time.
-  NIX_LDFLAGS = "-lrt -lpthread";
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lrt -lpthread";
 
   meta = {
     homepage = "http://nbd.sourceforge.net";
