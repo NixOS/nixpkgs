@@ -1,0 +1,42 @@
+--- matita/components/content_pres/cicNotationParser.ml 2012-03-25 15:47:03.144583445 -0400
++++ matita/components/content_pres/cicNotationParser.ml 2012-03-25 15:48:30.776209560 -0400
+@@ -209,8 +209,8 @@
+           match magic with
+           | Ast.List0 (_, None) -> Gramext.Slist0 s
+           | Ast.List1 (_, None) -> Gramext.Slist1 s
+-          | Ast.List0 (_, Some l) -> Gramext.Slist0sep (s, gram_of_literal l, false)
+-          | Ast.List1 (_, Some l) -> Gramext.Slist1sep (s, gram_of_literal l, false)
++          | Ast.List0 (_, Some l) -> Gramext.Slist0sep (s, gram_of_literal l)
++          | Ast.List1 (_, Some l) -> Gramext.Slist1sep (s, gram_of_literal l)
+           | _ -> assert false
+         in
+         [ Env (List.map Env.list_declaration p_names),
+--- matita/components/grafite_parser/print_grammar.ml   2012-03-25 15:47:03.123583779 -0400
++++ matita/components/grafite_parser/print_grammar.ml   2012-03-25 15:49:43.900079528 -0400
+@@ -87,7 +87,7 @@
+   | Smeta (_, lt, _) -> List.for_all is_symbol_dummy lt
+   | Snterm e | Snterml (e, _) -> is_entry_dummy e
+   | Slist1 x | Slist0 x -> is_symbol_dummy x
+-  | Slist1sep (x,y,false) | Slist0sep (x,y,false) -> is_symbol_dummy x && is_symbol_dummy y
++  | Slist1sep (x,y) | Slist0sep (x,y) -> is_symbol_dummy x && is_symbol_dummy y
+   | Sopt x -> is_symbol_dummy x
+   | Sself | Snext -> false
+   | Stree t -> is_tree_dummy t
+@@ -186,7 +186,7 @@
+         let todo = visit_symbol symbol todo is_son in
+         Format.fprintf fmt "@]} @ ";
+         todo
+-    | Slist0sep (symbol,sep,false) ->
++    | Slist0sep (symbol,sep) ->
+         Format.fprintf fmt "[@[<hov2> ";
+         let todo = visit_symbol symbol todo is_son in
+         Format.fprintf fmt "{@[<hov2> ";
+@@ -200,7 +200,7 @@
+         let todo = visit_symbol symbol todo is_son in
+         Format.fprintf fmt "@]}+ @ ";
+         todo 
+-    | Slist1sep (symbol,sep,false) ->
++    | Slist1sep (symbol,sep) ->
+         let todo = visit_symbol symbol todo is_son  in
+         Format.fprintf fmt "{@[<hov2> ";
+         let todo = visit_symbol sep todo is_son in

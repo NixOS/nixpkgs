@@ -8200,6 +8200,11 @@ let
             lablgtkmathview ocaml_mysql ocaml_sqlite3 ocamlnet ulex08 camlzip ocaml_pcre;
   };
 
+  matita_130312 = lowPrio (callPackage ../applications/science/logic/matita/130312.nix {
+    inherit (ocamlPackages) findlib lablgtk ocaml_expat gmetadom ocaml_http
+            ocaml_mysql ocamlnet ulex08 camlzip ocaml_pcre;
+  });
+
   minisat = callPackage ../applications/science/logic/minisat {};
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
