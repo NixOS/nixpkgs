@@ -7008,6 +7008,11 @@ let
     inherit (xlibs) kbproto xproto libXScrnSaver scrnsaverproto;
   };
 
+  midoriWrapper = wrapFirefox
+    { browser = midori; browserName = "midori"; desktopName = "Midori";
+      icon = "${midori}/share/icons/hicolor/22x22/apps/midori.png";
+    };
+
   minicom = callPackage ../tools/misc/minicom { };
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
@@ -8536,6 +8541,10 @@ let
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     inherit (gnome) libsoup;
   };
+
+  vimprobable2Wrapper = wrapFirefox
+    { browser = vimprobable2; browserName = "vimprobable2"; desktopName = "Vimprobable2";
+    };
 
   VisualBoyAdvance = callPackage ../misc/emulators/VisualBoyAdvance { };
 
