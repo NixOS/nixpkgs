@@ -2,10 +2,10 @@
 glib_networking}:
 
 stdenv.mkDerivation {
-  name = "vimprobable2-0.9.11.2";
+  name = "vimprobable2-0.9.12.0";
   src = fetchurl {
-    url = "mirror://sourceforge/vimprobable/vimprobable2_0.9.11.2.tar.bz2";
-    sha256 = "017qwhndchmpsn2g38v85rjx00fss69aa1nmgj3v85k5zskv7z65";
+    url = "mirror://sourceforge/vimprobable/vimprobable2_0.9.12.0.tar.bz2";
+    sha256 = "1b6xs6rd4rxy9kdsva13bbx7pd2gy159ad8ncd4pplsqr46hw8fb";
   };
   buildInputs = [ makeWrapper perl pkgconfig libX11 libsoup webkit gtk ];
   installPhase = ''
