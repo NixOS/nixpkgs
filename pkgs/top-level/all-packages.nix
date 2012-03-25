@@ -5808,6 +5808,8 @@ let
 
   klibcShrunk = callPackage ../os-specific/linux/klibc/shrunk.nix { };
 
+  kmod = callPackage ../os-specific/linux/kmod { };
+
   kvm = qemu_kvm;
 
   libcap = callPackage ../os-specific/linux/libcap { };
