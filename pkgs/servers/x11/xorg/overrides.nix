@@ -141,16 +141,13 @@ in
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
   };
 
-  xf86videoopenchrome = attrs: attrs // {
-    name = "xf86-video-openchrome-svn-816";
-    src = args.fetchsvn {
-      url = http://svn.openchrome.org/svn/trunk;
-      sha256 = "1mhfh1n1x7fnxdbbkbz13lzd57m6xi3n9cblzgm43mz5bamacr02";
-      rev = 816;
-      };
-    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa args.automake args.autoconf args.libtool xorg.libXext];
-    preConfigure = "chmod +x autogen.sh";
-    configureScript = "./autogen.sh";
+  xf86videoopenchrome = attrs: attrs // rec {
+    name = "xf86-video-openchrome-0.2.905";
+    src = args.fetchurl {
+      url = "http://openchrome.org/releases/${name}.tar.bz2";
+      sha256 = "1llbm020s0fck9chs0906xz7jr4h3whxan4s10ls9046g7xib3qc";
+    };
+    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa xorg.libXext];
   };
 
   xdriinfo = attrs: attrs // {
