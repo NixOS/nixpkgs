@@ -32,6 +32,10 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications/* $out/share/applications
+
+    # For manpages, in case the program supplies them
+    mkdir -p $out/nix-support
+    echo ${browser} > $out/nix-support/propagated-user-env-packages
   '';
 
   # Let each plugin tell us (through its `mozillaPlugin') attribute
