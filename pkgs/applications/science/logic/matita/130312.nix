@@ -2,7 +2,7 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "0.9.1pre130312";
+  version = "0.99.1pre130312";
   pname = "matita";
 
 in
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     substituteInPlace components/METAS/meta.helm-xml.src --replace "zip" "camlzip"
   '';
 
-  patches = [ ./configure_130312.patch ./130312.patch ];
+  patches = [ ./configure_130312.patch ];
 
   preConfigure = ''
     # Setup for findlib.
