@@ -1925,8 +1925,8 @@ let
   gcc47 = lowPrio (wrapGCC (lib.overrideDerivation gcc46_debug.gcc (a: {
     name = "gcc-debug-4.7.0rc20120314";
     src = fetchurl {
-      url = "ftp://gcc.gnu.org/pub/gcc/snapshots/4.7.0-RC-20120314/gcc-4.7.0-RC-20120314.tar.bz2";
-      sha256 = "0dhzmrhrzlgvsxfbjc1x98pf2y89zkw2lgijyghmxiczc5gniszp";
+      url = "mirror://gnu/gcc/gcc-4.7.0/gcc-4.7.0.tar.bz2";
+      sha256 = "19f9kpqwq75ax3iz1jzzpdqhxrqjk5rbjifdgamnsrbg04z0i056";
     };
 
     configureFlags = a.configureFlags
