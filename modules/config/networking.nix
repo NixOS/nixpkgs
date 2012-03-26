@@ -58,18 +58,17 @@ in
       }
 
       { # /etc/resolvconf.conf: Configuration for openresolv.
-        source = pkgs.writeText "resolvconf.conf"
+        source = pkgs.writeText "resolvconf.conf" (
           ''
             # This is the default, but we must set it here to prevent
             # a collision with an apparently unrelated environment
             # variable with the same name exported by dhcpcd.
             interface_order='lo lo[0-9]*'
-          '' + optionalString config.services.nscd.enable
-          ''
+          '' + optionalString config.services.nscd.enable ''
             # Invalidate the nscd cache whenever resolv.conf is
             # regenerated.
             libc_restart='${pkgs.upstart}/sbin/start invalidate-nscd'
-          '';
+          '' );
         target = "resolvconf.conf";
       }
     ];
