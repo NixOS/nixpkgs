@@ -427,10 +427,6 @@ with (import ./release-lib.nix);
     dryad = linux;
   };
 
-  perlPackages = {
-    TaskCatalystTutorial = linux;
-  };
-
   pythonPackages = {
     zfec = linux;
   };
