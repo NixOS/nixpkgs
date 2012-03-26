@@ -4950,10 +4950,10 @@ let
 
   pythonPackages = python27Packages;
 
-  python26Packages = recurseIntoAttrs (import ./python-packages.nix {
+  python26Packages = import ./python-packages.nix {
     inherit pkgs;
     python = python26;
-  });
+  };
 
   python27Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
