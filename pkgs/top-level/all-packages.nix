@@ -4930,12 +4930,12 @@ let
     inherit pkgs;
   });
 
-  perl510Packages = recurseIntoAttrs (import ./perl-packages.nix {
+  perl510Packages = import ./perl-packages.nix {
     pkgs = pkgs // {
       perl = perl510;
       buildPerlPackage = import ../development/perl-modules/generic perl510;
     };
-  });
+  };
 
   perlXMLParser = perlPackages.XMLParser;
 
