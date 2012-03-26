@@ -1923,7 +1923,7 @@ let
   }));
 
   gcc47 = lowPrio (wrapGCC (lib.overrideDerivation gcc46_debug.gcc (a: {
-    name = "gcc-debug-4.7.0rc20120314";
+    name = "gcc-debug-4.7.0";
     src = fetchurl {
       url = "mirror://gnu/gcc/gcc-4.7.0/gcc-4.7.0.tar.bz2";
       sha256 = "19f9kpqwq75ax3iz1jzzpdqhxrqjk5rbjifdgamnsrbg04z0i056";
