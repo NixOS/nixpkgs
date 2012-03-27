@@ -57,12 +57,12 @@ in
         exec = "nscd -f ${./nscd.conf} -d 2> /dev/null";
       };
 
-    # Flush nscd's ‘hosts’ database when the network comes up to get
-    # rid of any negative entries.
+    # Flush nscd's ‘hosts’ database when the network comes up or the
+    # system configuration changes to get rid of any negative entries.
     jobs.invalidate_nscd =
       { name = "invalidate-nscd";
         description = "Invalidate NSCD cache";
-        startOn = "ip-up";
+        startOn = "ip-up or config-changed";
         task = true;
         exec = "${pkgs.glibc}/sbin/nscd --invalidate hosts";
       };
