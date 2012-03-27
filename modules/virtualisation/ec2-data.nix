@@ -15,10 +15,12 @@ with pkgs.lib;
 
       task = true;
 
-      path = [ pkgs.curl ];
+      path = [ pkgs.curl pkgs.iproute ];
 
       script =
         ''
+          ip route del blackhole 169.254.169.254/32 || true
+          
           curl="curl --retry 3 --retry-delay 0 --fail"
         
           echo "setting host name..."
@@ -53,6 +55,10 @@ with pkgs.lib;
               (umask 077; echo "$key" > /etc/ssh/ssh_host_dsa_key)
               echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
           fi
+
+          # Since the user data is sensitive, prevent it from being
+          # accessed from now on.
+          ip route add blackhole 169.254.169.254/32
         '';
     };
 
