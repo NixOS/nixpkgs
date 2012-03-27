@@ -1,18 +1,22 @@
-{stdenv, fetchurl, unzip, jdk}:
+{ stdenv, fetchurl, unzip, jdk }:
 
-#assert jdk.swingSupport;
-
-stdenv.mkDerivation {
-  name = "jdiskreport-1.3.0";
+stdenv.mkDerivation rec {
+  name = "jdiskreport-1.4.0";
   
   builder = ./builder.sh;
   
   src = fetchurl {
-    url = http://www.jgoodies.com/download/jdiskreport/jdiskreport-1_3_0.zip;
-    sha256 = "1vgiq797gqc6i89w4kscg57snn74wi8x566bhi9xn8r0fbphihxb";
+    url = http://www.jgoodies.com/download/jdiskreport/jdiskreport-1_4_0.zip;
+    sha256 = "0kx43480p89wlyza94lzqygqfafsdf964syc2c24q28y42psz4kd";
   };
   
-  buildInputs = [unzip];
+  buildInputs = [ unzip ];
   
   inherit jdk;
+
+  meta = {
+    homepage = http://www.jgoodies.com/freeware/jdiskreport/;
+    description = "A graphical utility to visualize disk usage";
+    license = "unfree-redistributable";
+  };  
 }
