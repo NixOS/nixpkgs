@@ -15,7 +15,7 @@ g: # Get dependencies from patched gems
     autotest_rails = g.autotest_rails_4_1_2;
     builder = g.builder_3_0_0;
     buildr = g.buildr_1_4_6;
-    bundler = g.bundler_1_1_2;
+    bundler = g.bundler_1_1_3;
     childprocess = g.childprocess_0_3_1;
     diff_lcs = g.diff_lcs_1_1_3;
     erubis = g.erubis_2_7_0;
@@ -25,12 +25,12 @@ g: # Get dependencies from patched gems
     hoe = g.hoe_2_3_3;
     i18n = g.i18n_0_6_0;
     journey = g.journey_1_0_3;
-    json = g.json_1_6_5;
-    json_pure = g.json_pure_1_6_5;
+    json = g.json_1_6_6;
+    json_pure = g.json_pure_1_6_6;
     mail = g.mail_2_4_4;
     mime_types = g.mime_types_1_18;
     minitar = g.minitar_0_5_3;
-    multi_json = g.multi_json_1_1_0;
+    multi_json = g.multi_json_1_2_0;
     net_sftp = g.net_sftp_2_0_4;
     net_ssh = g.net_ssh_2_3_0;
     nix = g.nix_0_1_1;
@@ -155,7 +155,7 @@ installed versions.'';
         longDescription = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.'';
       };
       name = ''activesupport-3.2.2'';
-      requiredGems = [ g.i18n_0_6_0 g.multi_json_1_1_0 ];
+      requiredGems = [ g.i18n_0_6_0 g.multi_json_1_2_0 ];
       sha256 = ''0d7rzjd2rv5qjs1mgfyhdmj08hx8lz0f1vnjq6lhz2k776qiiaxh'';
     };
     arel_3_0_2 = {
@@ -253,16 +253,16 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [ g.rake_0_8_7 g.builder_2_1_2 g.net_ssh_2_0_23 g.net_sftp_2_0_4 g.rubyzip_0_9_4 g.highline_1_5_1 g.json_pure_1_4_3 g.rubyforge_2_0_3 g.hoe_2_3_3 g.rjb_1_3_3 g.atoulme_Antwrap_0_7_1 g.diff_lcs_1_1_2 g.rspec_expectations_2_1_0 g.rspec_mocks_2_1_0 g.rspec_core_2_1_0 g.rspec_2_1_0 g.xml_simple_1_0_12 g.minitar_0_5_3 ];
       sha256 = ''11qwqrdnmzzi4zhgajfq1f1ckvd4kpfm9gyqrfjfalphs4gi0vxz'';
     };
-    bundler_1_1_2 = {
+    bundler_1_1_3 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://gembundler.com'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.1.2'';
+      name = ''bundler-1.1.3'';
       requiredGems = [  ];
-      sha256 = ''130b2z724bv5k1xzvpzsnv7wxkl4yyigm5vra9lp0km6l1nfbnab'';
+      sha256 = ''0078yv2iivpirw04v6s71vx3brx7is2p3bmb5v7ybfi9c8myap6z'';
     };
     childprocess_0_3_1 = {
       basename = ''childprocess'';
@@ -423,16 +423,16 @@ See class rdoc for help. Hint: ri Hoe'';
       requiredGems = [  ];
       sha256 = ''15bxq7dqhk88n7cjvmx0ipizc22mzf5mnb58r1nq2sq5mcpag6gb'';
     };
-    json_1_6_5 = {
+    json_1_6_6 = {
       basename = ''json'';
       meta = {
         description = ''JSON Implementation for Ruby'';
         homepage = ''http://flori.github.com/json'';
         longDescription = ''This is a JSON implementation as a Ruby extension in C.'';
       };
-      name = ''json-1.6.5'';
+      name = ''json-1.6.6'';
       requiredGems = [  ];
-      sha256 = ''0zmdzxbczpciyra7zskn7ayfi0z43p2f3n060gsjgjiqcb5bvz75'';
+      sha256 = ''0g26j5r3hznmn8c4b8hadgfzdr7lvdy3xrr4za8dm60m79i0nvbd'';
     };
     json_pure_1_4_3 = {
       basename = ''json_pure'';
@@ -445,16 +445,16 @@ See class rdoc for help. Hint: ri Hoe'';
       requiredGems = [  ];
       sha256 = ''1xw357gkmk6712c94lhpsrq8j9v91mgc2nxlr1m6n20yl6sz2g9r'';
     };
-    json_pure_1_6_5 = {
+    json_pure_1_6_6 = {
       basename = ''json_pure'';
       meta = {
         description = ''JSON Implementation for Ruby'';
         homepage = ''http://flori.github.com/json'';
         longDescription = ''This is a JSON implementation in pure Ruby.'';
       };
-      name = ''json_pure-1.6.5'';
+      name = ''json_pure-1.6.6'';
       requiredGems = [  ];
-      sha256 = ''09s5qymc4y9q0376zjiwf5bjm69fcivr75ar8ji0kmhjkk2rwc55'';
+      sha256 = ''0n1qs826h18ckgqa0k9wsw2ypm61jjicd4s9nsyaakaqyf62p9cg'';
     };
     mail_2_4_4 = {
       basename = ''mail'';
@@ -498,16 +498,16 @@ longer happen.
       requiredGems = [  ];
       sha256 = ''035vs1knnnjsb8arfp8vx75warvwcdpiljjwv38lqljai9v8fq53'';
     };
-    multi_json_1_1_0 = {
+    multi_json_1_2_0 = {
       basename = ''multi_json'';
       meta = {
         description = ''A gem to provide swappable JSON backends.'';
         homepage = ''http://github.com/intridea/multi_json'';
-        longDescription = ''A gem to provide swappable JSON backends utilizing Yajl::Ruby, the JSON gem, JSON pure, or a vendored version of okjson.'';
+        longDescription = ''A gem to provide easy switching between different JSON backends, including Oj, Yajl, the JSON gem (with C-extensions), the pure-Ruby JSON gem, and OkJson.'';
       };
-      name = ''multi_json-1.1.0'';
+      name = ''multi_json-1.2.0'';
       requiredGems = [  ];
-      sha256 = ''0dsqx39l6zwfw9l9zyl4l9rr83617a6i1rznw218jskxhi7jsqxr'';
+      sha256 = ''1pv5bzj2xniyr2lqh1a4ac5k4gj7k6dmwxp5z4kmyz46bbjkgpg2'';
     };
     net_sftp_2_0_4 = {
       basename = ''net_sftp'';
@@ -630,7 +630,7 @@ request helpers feature.'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
       name = ''rails-3.2.2'';
-      requiredGems = [ g.activesupport_3_2_2 g.actionpack_3_2_2 g.activerecord_3_2_2 g.activeresource_3_2_2 g.actionmailer_3_2_2 g.railties_3_2_2 g.bundler_1_1_2 ];
+      requiredGems = [ g.activesupport_3_2_2 g.actionpack_3_2_2 g.activerecord_3_2_2 g.activeresource_3_2_2 g.actionmailer_3_2_2 g.railties_3_2_2 g.bundler_1_1_3 ];
       sha256 = ''0kwh8142zxyvrva09m5g85cmwhby714q87j1mb8s6wikv4gvfmy9'';
     };
     railties_3_2_2 = {
@@ -689,7 +689,7 @@ documentation.
 See RDoc for a description of RDoc's markup and basic use.'';
       };
       name = ''rdoc-3.12'';
-      requiredGems = [ g.json_1_6_5 ];
+      requiredGems = [ g.json_1_6_6 ];
       sha256 = ''0cd4hrkba7zr675m62yb87l7hpf0sp2qw8ccc2s0y2fa2fxdxdkp'';
     };
     rjb_1_3_3 = {
@@ -775,7 +775,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
 * For all rubyforge upgrades, run 'rubyforge config' to ensure you have latest.'';
       };
       name = ''rubyforge-2.0.3'';
-      requiredGems = [ g.json_pure_1_6_5 ];
+      requiredGems = [ g.json_pure_1_6_6 ];
       sha256 = ''1ck9hkad55dy25819v4gd1nmnpvcrb3i4np3hc03h1j6q8qpxg5p'';
     };
     rubyforge_2_0_4 = {
