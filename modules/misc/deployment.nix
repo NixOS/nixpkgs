@@ -116,6 +116,17 @@ let cfg = config.deployment; in
       '';
     };
 
+    deployment.ec2.tags = mkOption {
+      default = { };
+      example = { foo = "bar"; xyzzy = "bla"; };
+      type = types.attrsOf types.string;
+      description = ''
+        EC2 tags assigned to the instance.  Each tag name can be at
+        most 128 characters, and each tag value can be at most 256
+        characters.  There can be at most 10 tags.
+      '';
+    };
+
     # Ad hoc cloud options.
 
     deployment.adhoc.controller = mkOption {
