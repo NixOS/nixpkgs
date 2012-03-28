@@ -353,16 +353,6 @@ let
     inherit pkgs lib;
   };
 
-  usernixos = let
-      configmodule = getConfig [ "usernixos" ] null;
-      eval = (import ../build-support/usernixos/eval-config.nix) {
-        inherit pkgs system;
-        modules = [ configmodule ];
-      };
-    in
-      assert configmodule != null;
-      eval.config.activation.toplevel;
-
   platforms = import ./platforms.nix;
 
 
