@@ -36,6 +36,7 @@ with (import ./release-lib.nix);
   bind = linux;
   bison23 = all;
   bison24 = all;
+  bison25 = all;
   bitlbee = linux;
   bittorrent = linux;
   blender = linux;
@@ -361,8 +362,8 @@ with (import ./release-lib.nix);
   };
 
   firefox36Pkgs.firefox = linux;
-  firefox90Pkgs.firefox = linux;
-  firefox100Pkgs.firefox = linux;
+  firefox10Pkgs.firefox = linux;
+  firefox11Pkgs.firefox = linux;
 
   gnome = {
     gnome_panel = linux;
@@ -424,10 +425,6 @@ with (import ./release-lib.nix);
     aspectjfront = all;
     strategoShell = all;
     dryad = linux;
-  };
-
-  perlPackages = {
-    TaskCatalystTutorial = linux;
   };
 
   pythonPackages = {

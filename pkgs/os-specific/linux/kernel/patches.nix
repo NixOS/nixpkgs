@@ -334,6 +334,11 @@ rec {
       patch = ./sheevaplug_modules-2.6.35.patch;
     };
 
+  efi_bootstub_config_3_3 =
+    { name = "efi-config-3.3";
+      patch = ./efi-bootstub-config-3.3.patch;
+    };
+
   mips_restart_2_6_36 =
     { name = "mips_restart_2_6_36";
       patch = ./mips_restart.patch;

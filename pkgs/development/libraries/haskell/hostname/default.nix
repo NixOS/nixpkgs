@@ -8,9 +8,6 @@ cabal.mkDerivation (self: {
     description = "A very simple package providing a cross-platform means of determining the hostname";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -10,9 +10,6 @@ cabal.mkDerivation (self: {
     description = "Crypto Pseudo Random Number Generator using AES in counter mode";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

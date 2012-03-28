@@ -1,11 +1,12 @@
 { stdenv, fetchurl, substituteAll
-, alsaLib, gstreamer, gst_plugins_base
 , libXrender, libXinerama, libXcursor, libXmu , libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig
 , zlib, libjpeg, libpng, libmng, which, mesa, openssl, dbus, cups, pkgconfig
 , libtiff, glib, icu
 , mysql, postgresql, sqlite
 , perl, coreutils, libXi
+, buildMultimedia ? true, alsaLib, gstreamer, gst_plugins_base
+, buildWebkit ? true
 , flashplayerFix ? true, gdk_pixbuf
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
 }:
@@ -64,24 +65,25 @@ stdenv.mkDerivation rec {
       -v -no-separate-debug-info -release -no-fast -confirm-license -opensource
 
       -opengl -xrender -xrandr -xinerama -xcursor -xinput -xfixes -fontconfig
-      -qdbus -cups -glib -dbus-linked -openssl-linked
+      -qdbus -${if cups == null then "no-" else ""}cups -glib -dbus-linked -openssl-linked
 
-      -plugin-sql-mysql -system-sqlite
+      ${if mysql != null then "-plugin" else "-no"}-sql-mysql -system-sqlite
 
       -exceptions -xmlpatterns
 
       -make libs -make tools -make translations
       -nomake demos -nomake examples -nomake docs
 
-      -no-phonon -webkit -multimedia -audio-backend
+      -no-phonon ${if buildWebkit then "" else "-no"}-webkit ${if buildMultimedia then "" else "-no"}-multimedia -audio-backend
     '';
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes
       libXv libXi libSM mesa
-      alsaLib zlib libpng openssl dbus.libs freetype fontconfig glib
-      gstreamer gst_plugins_base
-    ];
+    ] ++ (stdenv.lib.optional (buildWebkit || buildMultimedia) alsaLib)
+    ++ [ zlib libpng openssl dbus.libs freetype fontconfig glib ]
+    ++ (stdenv.lib.optionals (buildWebkit || buildMultimedia)
+        [ gstreamer gst_plugins_base ]);
 
   # The following libraries are only used in plugins
   buildInputs = [ cups # Qt dlopen's libcups instead of linking to it

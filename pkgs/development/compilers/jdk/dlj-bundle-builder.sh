@@ -53,5 +53,3 @@ fi
 mkdir $jrePath/lib/$architecture/plugins
 ln -s $jrePath/lib/$architecture/libnpjp2.so $jrePath/lib/$architecture/plugins
 
-# Workaround for assertions in xlib, see http://bugs.sun.com/bugdatabase/view_bug.do?bug_id=6532373.
-substituteInPlace $jrePath/lib/*/xawt/libmawt.so --replace XINERAMA FAKEEXTN

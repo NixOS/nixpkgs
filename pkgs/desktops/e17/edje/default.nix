@@ -2,10 +2,10 @@
 , ecore, embryo }:
 stdenv.mkDerivation rec {
   name = "edje-${version}";
-  version = "1.1.0";
+  version = "1.2.0-alpha";
   src = fetchurl {
-    url = "http://download.enlightenment.org/releases/${name}.tar.gz";
-    sha256 = "0fjn4psl70hkfbjmczk06if8yxarg67w5hp2i1vq49kfkpyn2cx7";
+    url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
+    sha256 = "15vh0plb9gb75q0lgbqv4kjz0pyhbfxk39x3inzn87ih567z73xx";
   };
   buildInputs = [ pkgconfig expat zlib libjpeg lua eina eet evas ecore embryo ];
   meta = {

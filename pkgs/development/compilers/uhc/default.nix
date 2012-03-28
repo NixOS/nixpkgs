@@ -3,7 +3,7 @@
 }:
 
 let
-  revision = "2426";
+  revision = "2495";
 in
 stdenv.mkDerivation {
   name = "uhc-svn-${revision}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   src = fetchsvn {
      url = "https://subversion.cs.uu.nl/repos/project.UHC.pub/trunk/EHC";
      rev = revision;
-     sha256 = "06963edb673697f3eac357eccdc6d4bf7fbe7b9b92a96e3e329a4caf53f85c4c";
+     sha256 = "0402cb05629454e29bdca02051406bc9e515d2525a785c85079469b674378fca";
   };
 
   propagatedBuildInputs = [mtl network binary fgl syb];
@@ -30,6 +30,7 @@ stdenv.mkDerivation {
     sed -i "s|--user|--package-db=$p|g" mk/shared.mk.in
     sed -i "s|-fglasgow-exts|-fglasgow-exts -package-conf=$p|g" mk/shared.mk.in
     sed -i "s|/bin/date|${coreutils}/bin/date|g" mk/dist.mk
+    sed -i "s|/bin/date|${coreutils}/bin/date|g" mk/config.mk.in
   '';
 
   meta = {

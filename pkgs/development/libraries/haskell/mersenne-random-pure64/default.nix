@@ -10,9 +10,6 @@ cabal.mkDerivation (self: {
     description = "Generate high quality pseudorandom numbers purely using a Mersenne Twister";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

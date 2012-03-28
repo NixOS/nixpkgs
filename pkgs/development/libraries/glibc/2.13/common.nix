@@ -77,7 +77,7 @@ stdenv.mkDerivation ({
 
     /* Without this patch many KDE binaries crash. */
     ./glibc-elf-localscope.patch
-  ];
+  ] ++ stdenv.lib.optional installLocales ./catalan-firstdays.patch;
 
   postPatch = ''
     # Needed for glibc to build with the gnumake 3.82

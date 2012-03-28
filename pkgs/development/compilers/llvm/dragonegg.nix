@@ -1,12 +1,11 @@
-{stdenv, fetchsvn, llvm, gmp, mpfr, mpc}:
+{stdenv, fetchurl, llvm, gmp, mpfr, mpc}:
 
 stdenv.mkDerivation rec {
-  name = "dragonegg-2.7";
+  name = "dragonegg-3.0";
 
-  src = fetchsvn {
-    url = http://llvm.org/svn/llvm-project/dragonegg/branches/release_27;
-    rev = 105882;
-    sha256 = "0j0mj3zm1nd8kaj3b28b3w2dlzc1xbywq4mcdxk5nq4yds6rx5np";
+  src = fetchurl {
+    url = "http://llvm.org/releases/3.0/${name}.tar.gz";
+    sha256 = "09v8bxx676iz93qk39dc2fk52iqhqy9pnphvinmm9ch1x791zpvj";
   };
 
   # The gcc the plugin will be built for (the same used building dragonegg)

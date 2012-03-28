@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "nasm-2.09";
+  name = "nasm-2.10";
   
   src = fetchurl {
-    url = http://www.nasm.us/pub/nasm/releasebuilds/2.09/nasm-2.09.tar.bz2;
-    sha256 = "06kv1ii8d3jwq5mczbyx6zc7k1acdwjdfjblv78mglf161i82j4m";
+    url = "http://www.nasm.us/pub/nasm/releasebuilds/2.10/${name}.tar.bz2";
+    sha256 = "1wcxm0il06b17wjarw8pbf9bagjhfcf7yayahmyip03qkfka2yk8";
   };
 
   meta = {

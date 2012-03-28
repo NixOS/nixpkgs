@@ -79,7 +79,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional cupsSupport cups;
 
   CFLAGS = "-fPIC";
-  NIX_LDFLAGS = "-lz -rpath=${freetype}/lib";
+  NIX_LDFLAGS =
+    "-lz -rpath${ if stdenv.isDarwin then " " else "="}${freetype}/lib";
 
   patches = variant.patches ++ [ ./urw-font-files.patch ];
 

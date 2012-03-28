@@ -11,8 +11,10 @@
     };
   }
 
-  # Then you can install it by:   nix-env -i sdl-env
-  # And you can load it simply calling:  load-sdl-env
+  # Then you can install it by:  
+  #  $ nix-env -i sdl-env
+  # And you can load it simply calling:  
+  #  $ load-env-sdl
   # and this will update your env vars to have 'make' and 'gcc' finding the SDL
   # headers and libs.
 
@@ -44,16 +46,17 @@
     };
   }
 
-  Now we should build our newly defined custom environment using this command on a shell, so type:
-    $ nix-env -i env-nix
+  # Now we should build our newly defined custom environment using this command on a shell, so type:
+  #  $ nix-env -i env-nix
 
-  You can load the environment simply typing a "load-${name}-env" command.
-    $ load-nix-env
-  The result using that command should be:
-    env-nix loaded
+  # You can load the environment simply typing a "load-env-${name}" command.
+  #  $ load-env-nix
+  # The result using that command should be:
+  #  env-nix loaded
+  and show you a shell with a prefixed prompt.
 */
 
-{ mkDerivation, substituteAll, pkgs } : { stdenv ? pkgs.stdenv, name, buildInputs ? [], cTags ? [], extraCmds ? ""} :
+{ mkDerivation, substituteAll, pkgs } : { stdenv ? pkgs.stdenv, name, buildInputs ? [], cTags ? [], extraCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash"} :
 mkDerivation {
   # The setup.sh script from stdenv will expect the native build inputs in
   # the buildNativeInputs environment variable.
@@ -124,11 +127,9 @@ mkDerivation {
       echo $name loaded
     EOF
 
-    cat >> "$out/bin/load-''${name/env-/}-env" << EOF
-    #!/bin/sh
-
-    source "$out/dev-envs/''${name/env-/}"
-    EOF
-    chmod +x "$out/bin/load-''${name/env-/}-env" 
+    mkdir -p $out/bin
+    sed -e s,@shell@,${shell}, -e s,@myenvpath@,$out/dev-envs/${name}, \
+      -e s,@name@,${name}, ${./loadenv.sh} > $out/bin/load-env-${name}
+    chmod +x $out/bin/load-env-${name}
   '';
 }

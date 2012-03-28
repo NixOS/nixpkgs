@@ -174,16 +174,19 @@ let pythonPackages = python.modules // rec {
   });
 
 
-  boto = buildPythonPackage (rec {
-    name = "boto-2.0b4";
+  boto = buildPythonPackage rec {
+    name = "boto-2.3.0";
 
     src = fetchurl {
-      url = "http://boto.googlecode.com/files/${name}.tar.gz";
-      sha1 = "3e1deab58b8432d01baef1d37f17cbf6fa999f8d";
+      url = "https://github.com/downloads/boto/boto/${name}.tar.gz";
+      sha256 = "05im9vyk9wq8cjw4cp93jlqb9v98rnrm067p93ih7f0ynnlnjaf1";
     };
 
+    # The tests seem to require AWS credentials.
+    doCheck = false;
+
     meta = {
-      homepage = http://code.google.com/p/boto/;
+      homepage = https://github.com/boto/boto;
 
       license = "bsd";
 
@@ -195,7 +198,7 @@ let pythonPackages = python.modules // rec {
         Services.  This includes S3, SQS, EC2, among others.
       '';
     };
-  });
+  };
 
 
   carrot = buildPythonPackage rec {

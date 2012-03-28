@@ -1,7 +1,7 @@
-diff -Nuar coq-8.3/configure coq-8.3.nixos/configure
---- coq-8.3/configure	2010-10-14 16:02:46.000000000 +0200
-+++ coq-8.3.nixos/configure	2010-11-04 09:57:16.000000000 +0100
-@@ -394,7 +394,6 @@
+diff -Nuar coq-8.3pl3-orig/configure coq-8.3pl3/configure
+--- coq-8.3pl3-orig/configure	2011-12-19 22:57:30.000000000 +0100
++++ coq-8.3pl3/configure	2012-03-17 16:38:16.000000000 +0100
+@@ -395,7 +395,6 @@
  	 ocamlyaccexec=$CAMLBIN/ocamlyacc
  	 ocamlmktopexec=$CAMLBIN/ocamlmktop
  	 ocamlmklibexec=$CAMLBIN/ocamlmklib
@@ -9,12 +9,1104 @@ diff -Nuar coq-8.3/configure coq-8.3.nixos/configure
  esac
  
  if test ! -f "$CAMLC" ; then
-@@ -637,7 +636,7 @@
+@@ -628,7 +627,7 @@
              no)  LABLGTKLIB=+lablgtk2                   # Pour le message
                   LABLGTKINCLUDES="-I $LABLGTKLIB";;     # Pour le makefile
              yes) LABLGTKLIB="$lablgtkdir"               # Pour le message
 -                 LABLGTKINCLUDES="-I \"$LABLGTKLIB\"";; # Pour le makefile
-+                 LABLGTKINCLUDES="-I $LABLGTKLIB";; # Pour le makefile
++                 LABLGTKINCLUDES="-I $LABLGTKLIB";;     # Pour le makefile
          esac;;
      no) LABLGTKINCLUDES="";;
  esac
+diff -Nuar coq-8.3pl3-orig/configure~ coq-8.3pl3/configure~
+--- coq-8.3pl3-orig/configure~	1970-01-01 01:00:00.000000000 +0100
++++ coq-8.3pl3/configure~	2011-12-19 22:57:30.000000000 +0100
+@@ -0,0 +1,1088 @@
++#!/bin/sh
++
++##################################
++#
++#  Configuration script for Coq
++# 
++##################################
++
++VERSION=8.3pl3
++VOMAGIC=08300
++STATEMAGIC=58300
++DATE=`LANG=C date +"%B %Y"`
++
++# Create the bin/ directory if non-existent
++test -d bin || mkdir bin
++
++# a local which command for sh
++which () {
++IFS=":" # set words separator in PATH to be ':' (it allows spaces in dirnames)
++for i in $PATH; do
++  if test -z "$i"; then i=.; fi 
++  if [ -f "$i/$1" ] ; then
++	IFS=" "
++        echo "$i/$1"
++	break
++  fi
++done
++}
++
++usage () {
++    printf "Available options for configure are:\n"
++    echo "-help"
++    printf "\tDisplays this help page\n"
++    echo "-prefix <dir>"
++    printf "\tSet installation directory to <dir>\n"
++    echo "-local"
++    printf "\tSet installation directory to the current source tree\n"
++    echo "-coqrunbyteflags"
++    printf "\tSet link flags for VM-dependent bytecode (coqtop)\n"
++    echo "-coqtoolsbyteflags"
++    printf "\tSet link flags for VM-independant bytecode (coqdep, coqdoc, ...)\n"
++    echo "-custom"
++    printf "\tGenerate all bytecode executables with -custom (not recommended)\n"
++    echo "-src"
++    printf "\tSpecifies the source directory\n"
++    echo "-bindir"
++    echo "-libdir"
++    echo "-mandir"
++    echo "-docdir"
++    printf "\tSpecifies where to install bin/lib/man/doc files resp.\n"
++    echo "-emacslib"
++    echo "-emacs"
++    printf "\tSpecifies where emacs files are to be installed\n"
++    echo "-coqdocdir"
++    printf "\tSpecifies where Coqdoc style files are to be installed\n"
++    echo "-camldir"
++    printf "\tSpecifies the path to the OCaml library\n"
++    echo "-lablgtkdir"
++    printf "\tSpecifies the path to the Lablgtk library\n"
++    echo "-camlp5dir"
++    printf "\tSpecifies where to look for the Camlp5 library and tells to use it\n"
++    echo "-arch"
++    printf "\tSpecifies the architecture\n"
++    echo "-opt"
++    printf "\tSpecifies whether or not to use OCaml *.opt optimized compilers\n"
++    echo "-natdynlink (yes|no)"
++    printf "\tSpecifies whether or not to use dynamic loading of native code\n"
++    echo "-coqide (opt|byte|no)"
++    printf "\tSpecifies whether or not to compile Coqide\n"
++    echo "-browser <command>"
++    printf "\tUse <command> to open URL %%s\n"
++    echo "-with-doc (yes|no)"
++    printf "\tSpecifies whether or not to compile the documentation\n"
++    echo "-with-geoproof (yes|no)"
++    printf "\tSpecifies whether or not to use Geoproof binding\n"
++    echo "-with-cc <file>"
++    echo "-with-ar <file>"
++    echo "-with-ranlib <file>"
++    printf "\tTells configure where to find gcc/ar/ranlib executables\n"
++    echo "-byte-only"
++    printf "\tCompiles only bytecode version of Coq\n"
++    echo "-debug"
++    printf "\tAdd debugging information in the Coq executables\n"
++    echo "-profile"
++    printf "\tAdd profiling information in the Coq executables\n"
++    echo "-annotate"
++    printf "\tCompiles Coq with -dtypes option\n"
++}
++
++
++# Default OCaml binaries
++bytecamlc=ocamlc
++nativecamlc=ocamlopt
++ocamlmklibexec=ocamlmklib
++ocamlexec=ocaml
++ocamldepexec=ocamldep
++ocamldocexec=ocamldoc
++ocamllexexec=ocamllex
++ocamlyaccexec=ocamlyacc
++ocamlmktopexec=ocamlmktop
++camlp4oexec=camlp4o
++
++
++coq_debug_flag=
++coq_debug_flag_opt=
++coq_profile_flag=
++coq_annotate_flag=
++best_compiler=opt
++cflags="-fno-defer-pop -Wall -Wno-unused"
++natdynlink=yes
++
++gcc_exec=gcc
++ar_exec=ar
++ranlib_exec=ranlib
++
++local=false
++coqrunbyteflags_spec=no
++coqtoolsbyteflags_spec=no
++custom_spec=no
++src_spec=no
++prefix_spec=no
++bindir_spec=no
++libdir_spec=no
++mandir_spec=no
++docdir_spec=no
++emacslib_spec=no
++emacs_spec=no
++camldir_spec=no
++lablgtkdir_spec=no
++coqdocdir_spec=no
++arch_spec=no
++coqide_spec=no
++browser_spec=no
++wwwcoq_spec=no
++with_geoproof=false
++with_doc=all
++with_doc_spec=no
++force_caml_version=no
++force_caml_version_spec=no
++
++COQSRC=`pwd`
++
++# Parse command-line arguments
++
++while : ; do
++  case "$1" in
++    "") break;;
++    -help|--help) usage
++	          exit;;
++    -prefix|--prefix) prefix_spec=yes
++                      prefix="$2"
++		      shift;;
++    -local|--local) local=true;;
++    -coqrunbyteflags|--coqrunbyteflags) coqrunbyteflags_spec=yes
++                                        coqrunbyteflags="$2"
++                                        shift;;
++    -coqtoolsbyteflags|--coqtoolsbyteflags) coqtoolsbyteflags_spec=yes
++                                            coqtoolsbyteflags="$2"
++                                            shift;;
++    -custom|--custom) custom_spec=yes
++                      shift;;
++    -src|--src) src_spec=yes
++                COQSRC="$2"
++	        shift;;
++    -bindir|--bindir) bindir_spec=yes
++                      bindir="$2"
++		      shift;;
++    -libdir|--libdir) libdir_spec=yes
++                      libdir="$2"
++		      shift;;
++    -mandir|--mandir) mandir_spec=yes
++                      mandir="$2"
++		      shift;;
++    -docdir|--docdir) docdir_spec=yes
++                      docdir="$2"
++		      shift;;
++    -emacslib|--emacslib) emacslib_spec=yes
++                          emacslib="$2"
++			  shift;;
++    -emacs |--emacs) emacs_spec=yes
++		     emacs="$2"
++		     shift;;
++    -coqdocdir|--coqdocdir) coqdocdir_spec=yes
++	              coqdocdir="$2"
++		      shift;;
++    -camldir|--camldir) camldir_spec=yes
++	                camldir="$2"
++			shift;;
++    -lablgtkdir|--lablgtkdir) lablgtkdir_spec=yes
++	                lablgtkdir="$2"
++			shift;;
++    -camlp5dir|--camlp5dir)
++	                camlp5dir="$2"
++			shift;;
++    -arch|--arch) arch_spec=yes
++                  arch=$2
++		  shift;;
++    -opt|--opt) bytecamlc=ocamlc.opt
++                camlp4oexec=camlp4o  # can't add .opt since dyn load'll be required
++                nativecamlc=ocamlopt.opt;;
++    -natdynlink|--natdynlink) case "$2" in
++	                  yes) natdynlink=yes;;
++                          *) natdynlink=no
++                        esac
++                        shift;;
++    -coqide|--coqide) coqide_spec=yes
++		      case "$2" in
++			  byte|opt) COQIDE=$2;;
++			  *) COQIDE=no
++		      esac
++		      shift;;
++    -browser|--browser) browser_spec=yes
++		      BROWSER=$2
++		      shift;;
++    -coqwebsite|--coqwebsite) wwwcoq_spec=yes
++                      WWWCOQ=$2
++                      shift;;
++    -with-doc|--with-doc) with_doc_spec=yes
++		      case "$2" in
++			  yes|all) with_doc=all;;
++			  *) with_doc=no
++		      esac
++		      shift;;
++    -with-geoproof|--with-geoproof) 
++	  case "$2" in
++	      yes) with_geoproof=true;;
++	      no) with_geoproof=false;;
++	  esac
++	  shift;;
++    -with-cc|-with-gcc|--with-cc|--with-gcc) 
++	  gcc_spec=yes
++	  gcc_exec=$2
++	  shift;;
++    -with-ar|--with-ar) 
++	  ar_spec=yes
++	  ar_exec=$2
++	  shift;;
++    -with-ranlib|--with-ranlib) 
++	  ranlib_spec=yes
++	  ranlib_exec=$2
++	  shift;;
++    -byte-only|-byteonly|--byteonly|--byte-only) best_compiler=byte;;
++    -debug|--debug) coq_debug_flag=-g;;
++    -profile|--profile) coq_profile_flag=-p;;
++    -annotate|--annotate) coq_annotate_flag=-dtypes;;
++    -force-caml-version|--force-caml-version|-force-ocaml-version|--force-ocaml-version) 
++          force_caml_version_spec=yes
++	  force_caml_version=yes;;
++    *) echo "Unknown option \"$1\"." 1>&2; usage; exit 2;;
++  esac
++  shift
++done
++
++if [ $prefix_spec = yes -a $local = true ] ; then
++  echo "Options -prefix and -local are incompatible."
++  echo "Configure script failed!"
++  exit 1
++fi
++
++# compile date
++DATEPGM=`which date`
++case $DATEPGM in
++    "") echo "I can't find the program \"date\" in your path."
++        echo "Please give me the current date"
++	read COMPILEDATE;;
++    *)  COMPILEDATE=`date +"%h %d %Y %H:%M:%S"`;;
++esac
++
++# Architecture
++
++case $arch_spec in
++    no) 
++    # First we test if we are running a Cygwin system
++    if [ `uname -s | cut -c -6` = "CYGWIN" ] ; then
++	ARCH="win32"
++    else
++	# If not, we determine the architecture
++	if test -x /bin/arch ; then
++ 	    ARCH=`/bin/arch`
++ 	elif test -x /usr/bin/arch ; then
++ 	    ARCH=`/usr/bin/arch`
++ 	elif test -x /usr/ucb/arch ; then
++ 	    ARCH=`/usr/ucb/arch`
++ 	elif test -x /bin/uname ; then
++ 	    ARCH=`/bin/uname -s`
++ 	elif test -x /usr/bin/uname ; then
++ 	    ARCH=`/usr/bin/uname -s`
++	else
++	    echo "I can not automatically find the name of your architecture."
++	    printf "%s"\
++		"Give me a name, please [win32 for Win95, Win98 or WinNT]: "
++	    read ARCH
++	fi
++    fi;;
++    yes) ARCH=$arch
++esac
++
++# executable extension
++
++case $ARCH in
++    win32) 
++      EXE=".exe"
++      DLLEXT=".dll";;
++    *) EXE=""
++       DLLEXT=".so"
++esac
++
++# Is the source tree checked out from a recognised
++# version control system ?
++if test -e .svn/entries ; then 
++    checkedout=svn
++elif [ -d '{arch}' ]; then
++    checkedout=gnuarch
++elif [ -z "${GIT_DIR}" ] && [ -d .git ] || [ -d "${GIT_DIR}" ]; then
++    checkedout=git
++else
++    checkedout=0
++fi
++
++# make command
++
++MAKE=`which make`
++if [ "$MAKE" != "" ]; then
++  MAKEVERSION=`$MAKE -v | head -1 | cut -d" " -f3`
++  MAKEVERSIONMAJOR=`echo $MAKEVERSION | cut -d. -f1`
++  MAKEVERSIONMINOR=`echo $MAKEVERSION | cut -d. -f2`
++  if [ "$MAKEVERSIONMAJOR" -eq 3 -a "$MAKEVERSIONMINOR" -ge 81 ]; then
++      echo "You have GNU Make $MAKEVERSION. Good!"
++  else
++      OK="no"
++      if [ -x ./make ]; then
++	  MAKEVERSION=`./make -v | head -1`
++	  if [ "$MAKEVERSION" = "GNU Make 3.81" ]; then OK="yes"; fi
++      fi
++      if [ $OK = "no" ]; then
++	  echo "GNU Make >= 3.81 is needed."
++	  echo "Make 3.81 can be downloaded from ftp://ftp.gnu.org/gnu/make/make-3.81.tar.gz"
++	  echo "then locally installed on a Unix-style system by issuing:"
++	  echo "  tar xzvf make-3.81.tar.gz"
++	  echo "  cd make-3.81"
++          echo "  ./configure"
++          echo "  make"
++          echo "  mv make .."
++	  echo "  cd .."
++	  echo "Restart then the configure script and later use ./make instead of make."
++	  exit 1
++      else
++	  echo "You have locally installed GNU Make 3.81. Good!"
++      fi
++  fi
++else
++  echo "Cannot find GNU Make >= 3.81."
++fi
++
++# Browser command
++
++if [ "$browser_spec" = "no" ]; then
++    case $ARCH in
++        win32) BROWSER='C:\PROGRA~1\INTERN~1\IEXPLORE %s' ;;
++        *) BROWSER='firefox -remote "OpenURL(%s,new-tab)" || firefox %s &' ;;
++    esac
++fi
++
++if [ "$wwwcoq_spec" = "no" ]; then
++    WWWCOQ="http://coq.inria.fr/"
++fi
++
++#########################################
++# Objective Caml programs
++
++case $camldir_spec in
++    no) CAMLC=`which $bytecamlc`
++	case "$CAMLC" in
++	    "") echo "$bytecamlc is not present in your path!"
++		echo "Give me manually the path to the $bytecamlc executable [/usr/local/bin by default]: "
++		read CAMLC
++		
++		case "$CAMLC" in
++		    "") CAMLC=/usr/local/bin/$bytecamlc;;
++		    */ocamlc|*/ocamlc.opt) true;;
++		    */) CAMLC="${CAMLC}"$bytecamlc;;
++		    *) CAMLC="${CAMLC}"/$bytecamlc;;
++		esac
++	esac
++	CAMLBIN=`dirname "$CAMLC"`;;
++    yes) CAMLC=$camldir/$bytecamlc
++        
++         CAMLBIN=`dirname "$CAMLC"`
++	 bytecamlc="$CAMLC"
++	 nativecamlc=$CAMLBIN/$nativecamlc
++	 ocamlexec=$CAMLBIN/ocaml
++	 ocamldepexec=$CAMLBIN/ocamldep
++	 ocamldocexec=$CAMLBIN/ocamldoc
++	 ocamllexexec=$CAMLBIN/ocamllex
++	 ocamlyaccexec=$CAMLBIN/ocamlyacc
++	 ocamlmktopexec=$CAMLBIN/ocamlmktop
++	 ocamlmklibexec=$CAMLBIN/ocamlmklib
++	 camlp4oexec=$CAMLBIN/camlp4o
++esac
++
++if test ! -f "$CAMLC" ; then
++    echo "I can not find the executable '$CAMLC'. Have you installed it?"
++    echo "Configuration script failed!"
++    exit 1
++fi
++
++# Under Windows, OCaml only understands Windows filenames (C:\...)
++case $ARCH in
++    win32) CAMLBIN=`cygpath -m ${CAMLBIN}`;;
++esac
++
++CAMLVERSION=`"$bytecamlc" -version`
++
++case $CAMLVERSION in
++    1.*|2.*|3.00|3.01|3.02|3.03|3.03alpha|3.04|3.05beta|3.05|3.06|3.07*|3.08*|3.09*)
++	echo "Your version of Objective-Caml is $CAMLVERSION."
++	if [ "$force_caml_version" = "yes" ]; then
++	    echo "*Warning* You are compiling Coq with an outdated version of Objective-Caml."
++	else
++	    echo "          You need Objective-Caml 3.10.2 or later."
++	    echo "          Configuration script failed!"
++	    exit 1
++	fi;;
++    ?*)
++	CAMLP4COMPAT="-loc loc" 
++	echo "You have Objective-Caml $CAMLVERSION. Good!";;
++    *)
++	echo "I found the Objective-Caml compiler but cannot find its version number!"
++	echo "Is it installed properly?"
++	echo "Configuration script failed!"
++	exit 1;;
++esac
++
++CAMLTAG=OCAML`echo $CAMLVERSION | sed -e "s/\([1-9]\)\.\([0-9]*\).*/\1\2/g"`
++
++# For coqmktop & bytecode compiler
++
++case $ARCH in
++    win32) # Awfull trick to get around a ^M problem at the end of CAMLLIB
++      CAMLLIB=`"$CAMLC" -where | sed -e 's/^\(.*\)$/\1/'` ;;
++    *)
++      CAMLLIB=`"$CAMLC" -where`
++esac
++
++if [ "$coq_debug_flag" = "-g" ]; then
++    case $CAMLTAG in
++        OCAML31*)
++            # Compilation debug flag
++            coq_debug_flag_opt="-g"
++            ;;
++    esac
++fi
++
++# Native dynlink
++if [ "$natdynlink" = "yes" -a -f `"$CAMLC" -where`/dynlink.cmxa ]; then
++    HASNATDYNLINK=true
++else
++    HASNATDYNLINK=false
++fi
++
++case $HASNATDYNLINK,`uname -s`,`uname -r`,$CAMLVERSION in
++    true,Darwin,9.*,3.11.*)  # ocaml 3.11.0 dynlink on MacOS 10.5 is buggy
++        NATDYNLINKFLAG=os5fixme;;
++    #Possibly a problem on 10.6.0/10.6.1/10.6.2
++    #May just be a 32 vs 64 problem for all 10.6.*
++    true,Darwin,10.0.*,3.11.*) # Possibly a problem on 10.6.0
++        NATDYNLINKFLAG=os5fixme;;
++    true,Darwin,10.1.*,3.11.*) # Possibly a problem on 10.6.1
++        NATDYNLINKFLAG=os5fixme;;
++    true,Darwin,10.2.*,3.11.*) # Possibly a problem on 10.6.2
++        NATDYNLINKFLAG=os5fixme;;
++    true,Darwin,10.*,3.11.*)
++        if [ `getconf LONG_BIT` = "32" ]; then
++	    # Still a problem for x86_32
++            NATDYNLINKFLAG=os5fixme
++        else
++	    # Not a problem for x86_64
++            NATDYNLINKFLAG=$HASNATDYNLINK
++        fi;;
++    *)
++        NATDYNLINKFLAG=$HASNATDYNLINK;;
++esac
++
++# Camlp4 / Camlp5 configuration
++
++if [ "$camlp5dir" != "" ]; then
++    CAMLP4=camlp5
++    CAMLP4LIB=$camlp5dir
++    if [ ! -f $camlp5dir/camlp5.cma ]; then
++	echo "Cannot find camlp5 libraries in $camlp5dir (camlp5.cma not found)."
++	echo "Configuration script failed!"
++	exit 1
++    fi
++    camlp4oexec=`echo $camlp4oexec | sed -e 's/4/5/'`
++else
++    case $CAMLTAG in
++        OCAML31*)
++            if [ -x "${CAMLLIB}/camlp5" ]; then
++                CAMLP4LIB=+camlp5
++            elif [ -x "${CAMLLIB}/site-lib/camlp5" ]; then
++                CAMLP4LIB=+site-lib/camlp5
++            else
++	        echo "Objective Caml $CAMLVERSION found but no Camlp5 installed."
++	        echo "Configuration script failed!"
++	        exit 1
++            fi
++            CAMLP4=camlp5
++            camlp4oexec=`echo $camlp4oexec | sed -e 's/4/5/'`
++            ;;
++        *)
++            CAMLP4=camlp4
++            CAMLP4LIB=+camlp4
++            ;;
++    esac
++fi
++
++if [ "$CAMLP4" = "camlp5" ] && `$camlp4oexec -v 2>&1 | grep -q 5.00`; then
++    echo "Camlp5 version 5.00 not supported: versions 4.0x or >= 5.01 are OK"
++    echo "(depending also on your ocaml version)."
++    echo "Configuration script failed!"
++    exit 1
++fi
++
++
++case $CAMLP4LIB in
++    +*) FULLCAMLP4LIB=$CAMLLIB/`echo $CAMLP4LIB | cut -b 2-`;;
++    *)  FULLCAMLP4LIB=$CAMLP4LIB;;
++esac
++
++# Assume that camlp(4|5) binaries are at the same place as ocaml ones
++# (this should become configurable some day) 
++CAMLP4BIN=${CAMLBIN}
++
++# do we have a native compiler: test of ocamlopt and its version
++
++if [ "$best_compiler" = "opt" ] ; then
++  if test -e "$nativecamlc" || test -e "`which $nativecamlc`"; then
++      CAMLOPTVERSION=`"$nativecamlc" -v | sed -n -e 's|.*version* *\(.*\)$|\1|p' `
++      if [ "`uname -s`" = "Darwin" -a "$ARCH" = "i386" ]; then
++	  case $CAMLOPTVERSION in
++	      3.09.3|3.1?*) ;;
++	      *) echo "Native compilation on MacOS X Pentium requires Objective-Caml >= 3.09.3,"
++		 best_compiler=byte
++		 echo "only the bytecode version of Coq will be available."
++	  esac
++      elif [ ! -f $FULLCAMLP4LIB/gramlib.cmxa ]; then
++	  best_compiler=byte
++	  echo "Cannot find native-code $CAMLP4,"
++	  echo "only the bytecode version of Coq will be available."
++      else
++        if [ "$CAMLOPTVERSION" != "$CAMLVERSION" ] ; then
++	  echo "Native and bytecode compilers do not have the same version!"
++        fi
++        echo "You have native-code compilation. Good!"
++      fi
++  else
++      best_compiler=byte
++      echo "You have only bytecode compilation."
++  fi
++fi
++
++# OS dependent libraries
++
++case $ARCH in
++  sun4*) OS=`uname -r`
++	case $OS in
++	   5*) OS="Sun Solaris $OS"
++	       OSDEPLIBS="-cclib -lunix -cclib -lnsl -cclib -lsocket";;
++	   *) OS="Sun OS $OS"
++	      OSDEPLIBS="-cclib -lunix"
++        esac;;
++  alpha) OSDEPLIBS="-cclib -lunix";;
++  win32) OS="Win32" 
++	 OSDEPLIBS="-cclib -lunix"
++	 cflags="-mno-cygwin $cflags";;
++  *) OSDEPLIBS="-cclib -lunix"
++esac
++
++# lablgtk2 and CoqIDE
++
++# -byte-only should imply -coqide byte, unless the user decides otherwise
++
++if [ "$best_compiler" = "byte" -a "$coqide_spec" = "no" ]; then 
++    coqide_spec=yes
++    COQIDE=byte
++fi
++
++# Which coqide is asked ? which one is possible ?
++
++if [ "$coqide_spec" = "yes" -a "$COQIDE" = "no" ]; then 
++    echo "CoqIde disabled as requested."
++else
++    case $lablgtkdir_spec in
++	no) 
++	    if [ -f "${CAMLLIB}/lablgtk2/glib.mli" ]; then
++		lablgtkdir=${CAMLLIB}/lablgtk2
++	    elif [ -f "${CAMLLIB}/site-lib/lablgtk2/glib.mli" ]; then
++		lablgtkdir=${CAMLLIB}/site-lib/lablgtk2
++	    fi;;
++	yes)
++	    if [ ! -f "$lablgtkdir/glib.mli" ]; then
++		echo "Incorrect LablGtk2 library (glib.mli not found)."
++		echo "Configuration script failed!"
++		exit 1
++	    fi;;
++    esac
++    if [ "$lablgtkdir" = "" ]; then
++	echo "LablGtk2 not found: CoqIde will not be available."
++	COQIDE=no
++    elif [ -z "`grep -w convert_with_fallback "$lablgtkdir/glib.mli"`" ]; then
++	echo "LablGtk2 found but too old: CoqIde will not be available."
++	COQIDE=no;
++    elif [ "$coqide_spec" = "yes" -a "$COQIDE" = "byte" ]; then 
++	echo "LablGtk2 found, bytecode CoqIde will be used as requested."
++	COQIDE=byte
++    elif [ ! -f "${CAMLLIB}/threads/threads.cmxa" ]; then 
++	echo "LablGtk2 found, no native threads: bytecode CoqIde will be available."
++	COQIDE=byte
++    else 
++	echo "LablGtk2 found, native threads: native CoqIde will be available."
++	COQIDE=opt
++    fi
++fi
++
++case $COQIDE in
++    byte|opt)
++        case $lablgtkdir_spec in
++            no)  LABLGTKLIB=+lablgtk2                   # Pour le message
++                 LABLGTKINCLUDES="-I $LABLGTKLIB";;     # Pour le makefile
++            yes) LABLGTKLIB="$lablgtkdir"               # Pour le message
++                 LABLGTKINCLUDES="-I \"$LABLGTKLIB\"";; # Pour le makefile
++        esac;;
++    no) LABLGTKINCLUDES="";;
++esac
++
++# strip command
++
++case $ARCH in
++    win32)
++	# true -> strip : it exists under cygwin !
++	STRIPCOMMAND="strip";; 
++    *)
++    if [ "$coq_profile_flag" = "-p" ] || [ "$coq_debug_flag" = "-g" ] ||
++       [ "`uname -s`" = "Darwin" -a "$HASNATDYNLINK" = "true" ]
++    then
++	STRIPCOMMAND="true"
++    else
++	STRIPCOMMAND="strip"
++    fi
++esac
++
++# mktexlsr
++#MKTEXLSR=`which mktexlsr`
++#case $MKTEXLSR in
++#    "") MKTEXLSR=true;;
++#esac
++
++# "
++### Test if documentation can be compiled (latex, hevea)
++
++if test "$with_doc" = "all" 
++then
++    for cmd in "latex" "hevea" ; do
++	if test ! -x "`which $cmd`"
++	then 
++	    echo "$cmd was not found; documentation will not be available"
++	    with_doc=no
++	    break
++	fi
++    done
++fi
++
++###########################################
++# bindir, libdir, mandir, docdir, etc.
++
++case $src_spec in
++  no) COQTOP=${COQSRC}
++esac
++
++# OCaml only understand Windows filenames (C:\...)
++case $ARCH in
++    win32) COQTOP=`cygpath -m ${COQTOP}`
++esac
++
++case $ARCH in
++  win32)
++	 bindir_def='C:\coq\bin'
++	 libdir_def='C:\coq\lib'
++	 mandir_def='C:\coq\man'
++	 docdir_def='C:\coq\doc'
++	 emacslib_def='C:\coq\emacs'
++         coqdocdir_def='C:\coq\latex';;
++  *)
++	 bindir_def=/usr/local/bin
++	 libdir_def=/usr/local/lib/coq
++	 mandir_def=/usr/local/man
++	 docdir_def=/usr/local/share/doc/coq
++	 emacslib_def=/usr/local/share/emacs/site-lisp
++         coqdocdir_def=/usr/local/share/texmf/tex/latex/misc;;
++esac
++
++emacs_def=emacs
++
++case $bindir_spec/$prefix_spec/$local in
++    yes/*/*) BINDIR=$bindir ;;
++    */yes/*) BINDIR=$prefix/bin ;;
++    */*/true) BINDIR=$COQTOP/bin ;;
++    *) printf "Where should I install the Coq binaries [$bindir_def]? "
++        read BINDIR
++	case $BINDIR in
++	    "") BINDIR=$bindir_def;;
++	    *) true;;
++	esac;;
++esac
++
++case $libdir_spec/$prefix_spec/$local in
++    yes/*/*) LIBDIR=$libdir;;
++    */yes/*)
++        case $ARCH in
++          win32) LIBDIR=$prefix ;;
++          *)  LIBDIR=$prefix/lib/coq ;;
++        esac ;;
++    */*/true) LIBDIR=$COQTOP ;;
++    *)  printf "Where should I install the Coq library [$libdir_def]? "
++        read LIBDIR
++	case $LIBDIR in
++	    "") LIBDIR=$libdir_def;;
++	    *) true;;
++	esac;;
++esac
++
++case $mandir_spec/$prefix_spec/$local in
++    yes/*/*) MANDIR=$mandir;;
++    */yes/*) MANDIR=$prefix/man ;;
++    */*/true) MANDIR=$COQTOP/man ;;
++    *)  printf "Where should I install the Coq man pages [$mandir_def]? "
++        read MANDIR
++	case $MANDIR in
++	    "") MANDIR=$mandir_def;;
++	    *) true;;
++	esac;;
++esac
++
++case $docdir_spec/$prefix_spec/$local in
++    yes/*/*) DOCDIR=$docdir; HTMLREFMANDIR=$DOCDIR/html/refman;;
++    */yes/*) DOCDIR=$prefix/share/doc/coq; HTMLREFMANDIR=$DOCDIR/html/refman;;
++    */*/true) DOCDIR=$COQTOP/doc; HTMLREFMANDIR=$DOCDIR/refman/html;;
++    *)  printf "Where should I install the Coq documentation [$docdir_def]? "
++        read DOCDIR
++	case $DOCDIR in
++	    "") DOCDIR=$docdir_def; HTMLREFMANDIR=$DOCDIR/html/refman;;
++	    *) true;;
++	esac;;
++esac
++
++case $emacslib_spec/$prefix_spec/$local in
++    yes/*/*) EMACSLIB=$emacslib;;
++    */yes/*)
++        case $ARCH in
++          win32) EMACSLIB=$prefix/emacs ;;
++          *)  EMACSLIB=$prefix/share/emacs/site-lisp ;;
++        esac ;;
++    */*/true) EMACSLIB=$COQTOP/tools/emacs ;;
++    *) printf "Where should I install the Coq Emacs mode [$emacslib_def]? "
++        read EMACSLIB
++	case $EMACSLIB in
++	    "") EMACSLIB=$emacslib_def;;
++	    *) true;;
++	esac;;
++esac
++
++case $coqdocdir_spec/$prefix_spec/$local in
++    yes/*/*) COQDOCDIR=$coqdocdir;;
++    */yes/*)
++        case $ARCH in
++          win32) COQDOCDIR=$prefix/latex ;;
++          *)  COQDOCDIR=$prefix/share/emacs/site-lisp ;;
++        esac ;;
++    */*/true) COQDOCDIR=$COQTOP/tools/coqdoc ;;
++    *) printf "Where should I install Coqdoc TeX/LaTeX files [$coqdocdir_def]? "
++        read COQDOCDIR
++	case $COQDOCDIR in
++	    "") COQDOCDIR=$coqdocdir_def;;
++	    *) true;;
++	esac;;
++esac
++
++# Determine if we enable -custom by default (Windows and MacOS)
++CUSTOM_OS=no
++if [ "$ARCH" = "win32" ] || [ "`uname -s`" = "Darwin" ]; then
++    CUSTOM_OS=yes
++fi
++
++BUILDLDPATH="# you might want to set CAML_LD_LIBRARY_PATH by hand!"
++case $coqrunbyteflags_spec/$local/$custom_spec/$CUSTOM_OS in
++    yes/*/*/*) COQRUNBYTEFLAGS="$coqrunbyteflags";;
++    */*/yes/*|*/*/*/yes) COQRUNBYTEFLAGS="-custom";;
++    */true/*/*) COQRUNBYTEFLAGS="-dllib -lcoqrun -dllpath '$COQTOP'/kernel/byterun";;
++    *)
++        COQRUNBYTEFLAGS="-dllib -lcoqrun -dllpath '$LIBDIR'"
++        BUILDLDPATH="export CAML_LD_LIBRARY_PATH='$COQTOP'/kernel/byterun";;
++esac
++case $coqtoolsbyteflags_spec/$custom_spec/$CUSTOM_OS in
++    yes/*/*) COQTOOLSBYTEFLAGS="$coqtoolsbyteflags";;
++    */yes/*|*/*/yes) COQTOOLSBYTEFLAGS="-custom";;
++    *) COQTOOLSBYTEFLAGS="";;
++esac
++
++# case $emacs_spec in
++#     no) printf "Which Emacs command should I use to compile coq.el [$emacs_def]? "
++#         read EMACS
++	
++# 	case $EMACS in
++# 	    "") EMACS=$emacs_def;;
++# 	    *) true;;
++# 	esac;;
++#     yes) EMACS=$emacs;;
++# esac
++
++
++
++###########################################
++# Summary of the configuration
++
++echo ""
++echo "  Coq top directory                 : $COQTOP"
++echo "  Architecture                      : $ARCH"
++if test ! -z "$OS" ; then
++  echo "  Operating system                  : $OS"
++fi
++echo "  Coq VM bytecode link flags        : $COQRUNBYTEFLAGS"
++echo "  Coq tools bytecode link flags     : $COQTOOLSBYTEFLAGS"
++echo "  OS dependent libraries            : $OSDEPLIBS"
++echo "  Objective-Caml/Camlp4 version     : $CAMLVERSION"
++echo "  Objective-Caml/Camlp4 binaries in : $CAMLBIN"
++echo "  Objective-Caml library in         : $CAMLLIB"
++echo "  Camlp4 library in                 : $CAMLP4LIB"
++if test "$best_compiler" = opt ; then
++echo "  Native dynamic link support       : $HASNATDYNLINK"
++fi
++if test "$COQIDE" != "no"; then
++echo "  Lablgtk2 library in               : $LABLGTKLIB"
++fi
++if test "$with_doc" = "all"; then
++echo "  Documentation                     : All"
++else
++echo "  Documentation                     : None"
++fi
++echo "  CoqIde                            : $COQIDE"
++echo "  Web browser                       : $BROWSER"
++echo "  Coq web site                      : $WWWCOQ"
++echo ""
++
++echo "  Paths for true installation:"
++echo "    binaries      will be copied in $BINDIR"
++echo "    library       will be copied in $LIBDIR"
++echo "    man pages     will be copied in $MANDIR"
++echo "    documentation will be copied in $DOCDIR"
++echo "    emacs mode    will be copied in $EMACSLIB"
++echo ""
++
++##################################################
++# Building the $COQTOP/dev/ocamldebug-coq file
++##################################################
++
++OCAMLDEBUGCOQ=$COQSRC/dev/ocamldebug-coq
++
++if test "$coq_debug_flag" = "-g" ; then
++  rm -f $OCAMLDEBUGCOQ
++  sed -e "s|COQTOPDIRECTORY|$COQTOP|" \
++      -e "s|COQLIBDIRECTORY|$LIBDIR|" \
++      -e "s|CAMLBINDIRECTORY|$CAMLBIN|" \
++      -e "s|CAMLP4LIBDIRECTORY|$FULLCAMLP4LIB|"\
++      $OCAMLDEBUGCOQ.template > $OCAMLDEBUGCOQ
++  chmod a-w,a+x $OCAMLDEBUGCOQ
++fi
++
++####################################################
++# Fixing lablgtk types (before/after 2.6.0) 
++####################################################
++
++if [ ! "$COQIDE" = "no" ]; then 
++    if grep "class view " "$lablgtkdir/gText.mli" | grep -q "\[>" ; then
++       if grep -q "?accepts_tab:bool" "$lablgtkdir/gText.mli" ; then
++        cp -f ide/undo_lablgtk_ge212.mli ide/undo.mli
++       else
++	cp -f ide/undo_lablgtk_ge26.mli ide/undo.mli
++       fi
++    else
++	cp -f ide/undo_lablgtk_lt26.mli ide/undo.mli
++    fi
++fi  
++
++##############################################
++# Creation of configuration files
++##############################################
++
++mlconfig_file="$COQSRC/config/coq_config.ml"
++config_file="$COQSRC/config/Makefile"
++config_template="$COQSRC/config/Makefile.template"
++
++
++### Warning !!
++### After this line, be careful when using variables,
++### since some of them (e.g. $COQSRC) will be escaped
++
++
++# An escaped version of a variable
++escape_var () {
++"$ocamlexec" 2>&1 1>/dev/null <<EOF
++  prerr_endline(String.escaped(Sys.getenv"$VAR"));;
++EOF
++}
++
++# Escaped version of browser command
++export BROWSER
++BROWSER=`VAR=BROWSER escape_var`
++
++# damned backslashes under M$Windows
++case $ARCH in
++    win32)
++	COQTOP=`echo $COQTOP |sed -e 's|\\\|\\\\\\\|g'`
++	BINDIR=`echo $BINDIR |sed -e 's|\\\|\\\\\\\|g'`
++	COQSRC=`cygpath -m $COQSRC |sed -e 's|\\\|\\\\\\\|g'`
++	LIBDIR=`echo $LIBDIR |sed -e 's|\\\|\\\\\\\|g'`
++	CAMLBIN=`echo $CAMLBIN |sed -e 's|\\\|\\\\\\\|g'`
++	CAMLLIB=`echo $CAMLLIB |sed -e 's|\\\|\\\\\\\|g'`
++	MANDIR=`echo $MANDIR |sed -e 's|\\\|\\\\\\\|g'`
++	DOCDIR=`echo $DOCDIR |sed -e 's|\\\|\\\\\\\|g'`
++	EMACSLIB=`echo $EMACSLIB |sed -e 's|\\\|\\\\\\\|g'`
++	COQDOCDIR=`echo $COQDOCDIR |sed -e 's|\\\|\\\\\\\|g'`
++	CAMLP4BIN=`echo $CAMLP4BIN |sed -e 's|\\\|\\\\\\\|g'`
++	CAMLP4LIB=`echo $CAMLP4LIB |sed -e 's|\\\|\\\\\\\|g'`
++	LABLGTKINCLUDES=`echo $LABLGTKINCLUDES |sed -e 's|\\\|\\\\\\\|g'`
++	COQRUNBYTEFLAGS=`echo $COQRUNBYTEFLAGS |sed -e 's|\\\|\\\\\\\|g'`
++	COQTOOLSBYTEFLAGS=`echo $COQTOOLSBYTEFLAGS |sed -e 's|\\\|\\\\\\\|g'`
++	BUILDLDPATH=`echo $BUILDLDPATH |sed -e 's|\\\|\\\\\\\|g'`
++	ocamlexec=`echo $ocamlexec |sed -e 's|\\\|\\\\\\\|g'`
++	bytecamlc=`echo $bytecamlc |sed -e 's|\\\|\\\\\\\|g'`
++	nativecamlc=`echo $nativecamlc |sed -e 's|\\\|\\\\\\\|g'`
++	ocamlmklibexec=`echo $ocamlmklibexec |sed -e 's|\\\|\\\\\\\|g'`
++	ocamldepexec=`echo $ocamldepexec |sed -e 's|\\\|\\\\\\\|g'`
++	ocamldocexec=`echo $ocamldocexec |sed -e 's|\\\|\\\\\\\|g'`
++	ocamllexexec=`echo $ocamllexexec |sed -e 's|\\\|\\\\\\\|g'`
++	ocamlyaccexec=`echo $ocamlyaccexec |sed -e 's|\\\|\\\\\\\|g'`
++	camlp4oexec=`echo $camlp4oexec |sed -e 's|\\\|\\\\\\\|g'`
++    ;;
++esac
++
++#####################################################
++# Building the $COQTOP/config/coq_config.ml file
++#####################################################
++
++rm -f "$mlconfig_file"
++cat << END_OF_COQ_CONFIG > $mlconfig_file
++(* DO NOT EDIT THIS FILE: automatically generated by ../configure *)
++
++let local = $local
++let coqrunbyteflags = "$COQRUNBYTEFLAGS"
++let coqlib = "$LIBDIR"
++let coqsrc = "$COQSRC"
++let ocaml = "$ocamlexec"
++let ocamlc = "$bytecamlc"
++let ocamlopt = "$nativecamlc"
++let ocamlmklib = "$ocamlmklibexec"
++let ocamldep = "$ocamldepexec"
++let ocamldoc = "$ocamldocexec"
++let ocamlyacc = "$ocamlyaccexec"
++let ocamllex = "$ocamllexexec"
++let camlbin = "$CAMLBIN"
++let camllib = "$CAMLLIB"
++let camlp4 = "$CAMLP4"
++let camlp4o = "$camlp4oexec"
++let camlp4bin = "$CAMLP4BIN"
++let camlp4lib = "$CAMLP4LIB"
++let camlp4compat = "$CAMLP4COMPAT"
++let coqideincl = "$LABLGTKINCLUDES"
++let cflags = "$cflags"
++let best = "$best_compiler"
++let arch = "$ARCH"
++let has_coqide = "$COQIDE"
++let has_natdynlink = $HASNATDYNLINK
++let natdynlinkflag = "$NATDYNLINKFLAG"
++let osdeplibs = "$OSDEPLIBS"
++let version = "$VERSION"
++let caml_version = "$CAMLVERSION"
++let date = "$DATE"
++let compile_date = "$COMPILEDATE"
++let vo_magic_number = $VOMAGIC
++let state_magic_number = $STATEMAGIC
++let exec_extension = "$EXE"
++let with_geoproof = ref $with_geoproof
++let browser = "$BROWSER"
++let wwwcoq = "$WWWCOQ"
++let wwwrefman = wwwcoq ^ "distrib/" ^ version ^ "/refman/"
++let wwwstdlib = wwwcoq ^ "distrib/" ^ version ^ "/stdlib/"
++let localwwwrefman = "file://$HTMLREFMANDIR/"
++
++END_OF_COQ_CONFIG
++
++# to be sure printf is found on windows when spaces occur in PATH variable
++PRINTF=`which printf`
++
++# Subdirectories of theories/ added in coq_config.ml
++subdirs () {
++    (cd $1; find * \( -name .svn -prune \) -o \( -type d -exec $PRINTF "\"%s\";\n" {} \; \) >> "$mlconfig_file")
++}
++
++echo "let theories_dirs = [" >> "$mlconfig_file"
++subdirs theories
++echo "]" >> "$mlconfig_file"
++
++echo "let plugins_dirs = [" >> "$mlconfig_file"
++subdirs plugins
++echo "]" >> "$mlconfig_file"
++
++chmod a-w "$mlconfig_file"
++
++
++###############################################
++# Building the $COQTOP/config/Makefile file
++###############################################
++
++rm -f "$config_file"
++
++sed -e "s|LOCALINSTALLATION|$local|" \
++    -e "s|XCOQRUNBYTEFLAGS|$COQRUNBYTEFLAGS|" \
++    -e "s|XCOQTOOLSBYTEFLAGS|$COQTOOLSBYTEFLAGS|" \
++    -e "s|COQSRCDIRECTORY|$COQSRC|" \
++    -e "s|COQVERSION|$VERSION|" \
++    -e "s|BINDIRDIRECTORY|$BINDIR|" \
++    -e "s|COQLIBDIRECTORY|$LIBDIR|" \
++    -e "s|BUILDLDPATH=|$BUILDLDPATH|" \
++    -e "s|MANDIRDIRECTORY|$MANDIR|" \
++    -e "s|DOCDIRDIRECTORY|$DOCDIR|" \
++    -e "s|EMACSLIBDIRECTORY|$EMACSLIB|" \
++    -e "s|EMACSCOMMAND|$EMACS|" \
++    -e "s|COQDOCDIRECTORY|$COQDOCDIR|" \
++    -e "s|MKTEXLSRCOMMAND|$MKTEXLSR|" \
++    -e "s|ARCHITECTURE|$ARCH|" \
++    -e "s|OSDEPENDENTLIBS|$OSDEPLIBS|" \
++    -e "s|OSDEPENDENTP4OPTFLAGS|$OSDEPP4OPTFLAGS|" \
++    -e "s|CAMLLIBDIRECTORY|$CAMLLIB|" \
++    -e "s|CAMLTAG|$CAMLTAG|" \
++    -e "s|CAMLP4BINDIRECTORY|$CAMLP4BIN|" \
++    -e "s|CAMLP4LIBDIRECTORY|$CAMLP4LIB|" \
++    -e "s|CAMLP4TOOL|$camlp4oexec|" \
++    -e "s|CAMLP4COMPATFLAGS|$CAMLP4COMPAT|" \
++    -e "s|LABLGTKINCLUDES|$LABLGTKINCLUDES|" \
++    -e "s|COQDEBUGFLAGOPT|$coq_debug_flag_opt|" \
++    -e "s|COQDEBUGFLAG|$coq_debug_flag|" \
++    -e "s|COQPROFILEFLAG|$coq_profile_flag|" \
++    -e "s|CAMLANNOTATEFLAG|$coq_annotate_flag|" \
++    -e "s|CCOMPILEFLAGS|$cflags|" \
++    -e "s|BESTCOMPILER|$best_compiler|" \
++    -e "s|DLLEXTENSION|$DLLEXT|" \
++    -e "s|EXECUTEEXTENSION|$EXE|" \
++    -e "s|BYTECAMLC|$bytecamlc|" \
++    -e "s|OCAMLMKLIBEXEC|$ocamlmklibexec|" \
++    -e "s|NATIVECAMLC|$nativecamlc|" \
++    -e "s|OCAMLEXEC|$ocamlexec|" \
++    -e "s|OCAMLDEPEXEC|$ocamldepexec|" \
++    -e "s|OCAMLDOCEXEC|$ocamldocexec|" \
++    -e "s|OCAMLLEXEXEC|$ocamllexexec|" \
++    -e "s|OCAMLYACCEXEC|$ocamlyaccexec|" \
++    -e "s|CAMLMKTOPEXEC|$ocamlmktopexec|" \
++    -e "s|CCEXEC|$gcc_exec|" \
++    -e "s|AREXEC|$ar_exec|" \
++    -e "s|RANLIBEXEC|$ranlib_exec|" \
++    -e "s|STRIPCOMMAND|$STRIPCOMMAND|" \
++    -e "s|COQIDEOPT|$COQIDE|" \
++    -e "s|CHECKEDOUTSOURCETREE|$checkedout|" \
++    -e "s|WITHDOCOPT|$with_doc|" \
++    -e "s|HASNATIVEDYNLINK|$NATDYNLINKFLAG|" \
++      "$config_template" > "$config_file"
++
++chmod a-w "$config_file"
++
++##################################################
++# The end
++####################################################
++
++echo "If anything in the above is wrong, please restart './configure'."
++echo
++echo "*Warning* To compile the system for a new architecture"
++echo "          don't forget to do a 'make archclean' before './configure'."
++
++# $Id: configure 14833 2011-12-19 21:57:30Z notin $

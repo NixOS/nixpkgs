@@ -18,9 +18,6 @@ cabal.mkDerivation (self: {
     description = "A dependently typed functional programming language and proof assistant";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

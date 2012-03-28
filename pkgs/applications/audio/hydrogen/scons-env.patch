@@ -9,6 +9,14 @@
  
  
  	#location of qt4.py
+@@ -298,7 +298,6 @@
+ 
+         for N in glob.glob('./data/i18n/hydrogen.*'):
+             env.Alias(target="install", source=env.Install(dir= env['DESTDIR'] + env['prefix'] + '/share/hydrogen/data/i18n', source=N))
+-	env.Alias(target="install", source=env.Install(dir= env['DESTDIR'] + env['prefix'] + '/share/hydrogen/data', source="./data/img"))
+ 
+ 	#add every img in ./data/img to the install list. 
+ 	os.path.walk("./data/img/",install_images,env) 
 @@ -379,7 +379,7 @@
  
  includes, a , b = get_platform_flags( opts )

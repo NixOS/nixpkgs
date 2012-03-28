@@ -14,9 +14,6 @@ cabal.mkDerivation (self: {
     description = "ASN1 data reader and writer in RAW, BER, DER and CER forms";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

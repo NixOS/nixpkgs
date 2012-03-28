@@ -1,16 +1,16 @@
 { stdenv, fetchurl, qt4, libvorbis, boost, speechd, protobuf, libsndfile,
- avahi, dbus, libcap,
+ avahi, dbus, libcap, pkgconfig,
 jackSupport ? false, 
 jackaudio ? null }:
 
 
 stdenv.mkDerivation rec {
   name = "mumble-" + version;
-  version = "1.2.2";
+  version = "1.2.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/mumble/${name}.tar.gz";
-    sha256 = "1s4vlkdfmyzx7h3i4060q0sf2xywl9sm6dpjhaa150blbcylwmic";
+    sha256 = "0p4as6bcmbzkiff1gvc0f277dzbz2sfys97gcbxw7gjamqi53285";
   };
 
   patchPhase = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
 
   buildInputs = [ qt4 libvorbis boost speechd protobuf libsndfile avahi dbus
-    libcap ]
+    libcap pkgconfig ]
     ++ (stdenv.lib.optional jackSupport jackaudio);
 
   installPhase = ''

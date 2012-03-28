@@ -1,0 +1,27 @@
+http://projects.archlinux.org/svntogit/packages.git/tree/trunk/rpcbind-sunrpc.patch?h=packages/rpcbind
+
+Lookup "sunrpc" instead of "rpcbind" in /etc/services, since the former is the
+official IANA name.
+
+--- rpcbind-0.1.7/src/rpcbind.c.orig	2008-11-19 14:17:34.000000000 +0100
++++ rpcbind-0.1.7/src/rpcbind.c	2010-01-07 13:03:37.416632894 +0100
+@@ -114,7 +114,7 @@
+ char *udp_uaddr;	/* Universal UDP address */
+ char *tcp_uaddr;	/* Universal TCP address */
+ #endif
+-static char servname[] = "rpcbind";
++static char servname[] = "sunrpc";
+ static char superuser[] = "superuser";
+ 
+ int main __P((int, char *[]));
+--- rpcbind-0.1.7/src/rpcinfo.c~	2010-01-08 16:14:24.592156602 +0000
++++ rpcbind-0.1.7/src/rpcinfo.c	2010-01-08 16:14:31.578838609 +0000
+@@ -633,7 +633,7 @@
+ 	{
+ 	  memset (&hints, 0, sizeof hints);
+ 	  hints.ai_family = AF_INET;
+-	  if ((error = getaddrinfo (host, "rpcbind", &hints, &res)) != 0 &&
++	  if ((error = getaddrinfo (host, "sunrpc", &hints, &res)) != 0 &&
+               (error = getaddrinfo (host, "portmapper", &hints, &res)) != 0)
+ 	    {
+ 	      fprintf (stderr, "rpcinfo: %s: %s\n",

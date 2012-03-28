@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
 
-  version = "2.8.1";
+  version = "2.9.1";
 
   name = "bibletime-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/bibletime/${name}.tar.bz2";
-    sha256 = "00xrgv4cx50ddbcfjiz3vl0cvsixwd0vj7avjvhrh617qqg8w325";
+    sha256 = "1d8kh213rpx4d63sxl5mk1s94xv363l5prrq2kh06cpnl7a8d2ih";
   };
 
   prePatch = ''

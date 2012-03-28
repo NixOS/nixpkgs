@@ -15,14 +15,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "11.0b1";
+  firefoxVersion = "11.0";
   
   xulVersion = "11.0"; # this attribute is used by other packages
 
   
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/nightly/${firefoxVersion}-candidates/build1/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "1f9p2jmjvhmb23wmvj84jj22wd9g803k6pdjm8glwmkzwnva8x1b";
+    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
+    md5 = "4b07acf47857aff72776d805409cdd1b";
   };
   
   commonConfigureFlags =
@@ -32,7 +32,7 @@ rec {
       "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
-      #"--with-system-nspr" # <-- There are links to nspr 4.9.0, but no file...
+      "--with-system-nspr"
       # "--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
       "--enable-system-cairo"
@@ -139,7 +139,7 @@ rec {
       [ "--enable-application=browser"
         "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
         "--enable-chrome-format=jar"
-	"--disable-elf-hack"
+        "--disable-elf-hack"
       ]
       ++ commonConfigureFlags
       ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
@@ -170,6 +170,7 @@ rec {
     meta = {
       description = "Mozilla Firefox - the browser, reloaded";
       homepage = http://www.mozilla.com/en-US/firefox/;
+      maintainers = [ stdenv.lib.maintainers.eelco ];
     };
 
     passthru = {

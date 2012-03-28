@@ -17,7 +17,7 @@ buildPhase() {
         sysSrc=$(echo $kernel/lib/modules/$kernelVersion/build/)
         unset src # used by the nv makefile
         # Hack necessary to compile on 2.6.28.
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$sysSrc/include/asm/mach-default"
+        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$sysSrc/include/asm/mach-default -I$sysSrc/include/generated"
         make SYSSRC=$sysSrc module
         cd ..
     fi

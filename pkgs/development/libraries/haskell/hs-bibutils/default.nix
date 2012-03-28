@@ -10,9 +10,6 @@ cabal.mkDerivation (self: {
     description = "Haskell bindings to bibutils, the bibliography conversion utilities";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

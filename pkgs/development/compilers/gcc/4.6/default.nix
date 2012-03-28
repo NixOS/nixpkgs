@@ -54,6 +54,7 @@ let version = "4.6.3";
       # target libraries and tools.
       ++ optional langAda ./gnat-cflags.patch
       ++ optional langVhdl ./ghdl-ortho-cflags.patch
+      ++ optional langFortran ./gfortran-driving.patch
       ++ optional (stdenv.isGNU || crossGNU) ./hurd-sigrtmin.patch;
 
     javaEcj = fetchurl {

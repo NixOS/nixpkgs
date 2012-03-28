@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "leksah-server";
-  version = "0.12.0.4";
-  sha256 = "0lv6z2b79cxvcz5mldyicx87lp3a0xfmv0wjd0cjf954cdizccg2";
+  version = "0.12.0.5";
+  sha256 = "0kr5xsnjl0brbdysw1rhd7a1gy3i0kn8rq2c5grc2m734ankil6z";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -19,9 +19,6 @@ cabal.mkDerivation (self: {
     description = "Metadata collection for leksah";
     license = "GPL";
     platforms = self.stdenv.lib.platforms.linux;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

@@ -5,16 +5,16 @@ librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile,
 libusb, libuuid, libxml2, libxslt, pango, perl, pkgconfig, python }:
 
 let
-  rev = "9942";
+  rev = "11483";
 in
 
 stdenv.mkDerivation {
   name = "ardour3-svn-${rev}";
 
   src = fetchsvn {
-    url = http://subversion.ardour.org/svn/ardour2/branches/3.0;
+    url = http://subversion.ardour.org/svn/ardour2/tags/3.0-beta3;
     inherit rev;
-    sha256 = "5f463e5a67bcb1ee6b4d24c25307419ea14ce52130819054b775e377c31a0664";
+    sha256 = "02az11lvfbln475np9jyfkdlrkpp1pszjmk6gl75wq6ws08dd7rd";
   };
 
   buildInputs = [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec

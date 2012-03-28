@@ -1,16 +1,16 @@
 { stdenv, fetchurl, cmake, lzma, boost, libdevil, zlib, p7zip
-, openal, libvorbis, glew, freetype, xlibs, SDL, mesa
+, openal, libvorbis, glew, freetype, xlibs, SDL, mesa, binutils
 , jdk ? null, python ? null
 , withAI ? true # support for AI Interfaces and Skirmish AIs
 }:
 stdenv.mkDerivation rec {
 
   name = "spring-${version}";
-  version = "0.87.0";
+  version = "0.88.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/springrts/spring_87.0_src.tar.lzma";
-    sha256 = "4c8528966b62e3fede63a4acb3cd5f13ecfed195688e135293bdc747980738b2";
+    url = "mirror://sourceforge/springrts/spring_88.0_src.tar.lzma";
+    sha256 = "f203114b849a83795fe2d413d01c843b6f5b50df0832ce570bc476502f89e6fa";
   };
 
   buildInputs = [ cmake lzma boost libdevil zlib p7zip openal libvorbis freetype SDL

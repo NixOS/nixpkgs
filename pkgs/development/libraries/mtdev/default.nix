@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "mtdev-1.1.0";
+stdenv.mkDerivation rec {
+  name = "mtdev-1.1.2";
 
   src = fetchurl {
-    url = "http://bitmath.org/code/mtdev/mtdev-1.1.0.tar.bz2";
-    sha256 = "0l5a6vr5r5yx3g86nvj699xlpd5bg5rfzpgjvn46flq4x9r9zpac";
+    url = "http://bitmath.org/code/mtdev/${name}.tar.bz2";
+    sha256 = "0c2sfxxymf20ylvblgmdmybqs0cydmphg9fq6fnp6flbl0fd33b9";
   };
 
   meta = {

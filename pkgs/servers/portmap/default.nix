@@ -11,21 +11,22 @@ stdenv.mkDerivation rec {
     sha256 = "1pj13ll4mbfwjwpn3fbg03qq9im6v2i8fcpa3ffp4viykz9j1j02";
   };
 
-  patchPhase = ''
+  patches = [ ./reuse-socket.patch ];
+
+  postPatch = ''
     substituteInPlace "Makefile" --replace "/usr/share" "" \
       --replace "install -o root -g root" "install"
   '';
 
   makeFlags =
-   lib.concatStringsSep " "
-     (lib.optional (daemonUser != false) "RPCUSER=\"${daemonUser}\""
-      ++ lib.optional (daemonUID != false) "DAEMON_UID=${toString daemonUID}"
-      ++ lib.optional (daemonGID != false) "DAEMON_GID=${toString daemonGID}");
+    lib.optional (daemonUser != false) "RPCUSER=\"${daemonUser}\""
+    ++ lib.optional (daemonUID != false) "DAEMON_UID=${toString daemonUID}"
+    ++ lib.optional (daemonGID != false) "DAEMON_GID=${toString daemonGID}";
 
   buildInputs = [ tcpWrapper ];
 
   installPhase = ''
-    mkdir -p "$out/sbin" && ensureDir "$out/man/man8" && \
+    mkdir -p "$out/sbin" "$out/man/man8"
     make install BASEDIR=$out
   '';
 

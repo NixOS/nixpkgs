@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libxml2, openssl, readline, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "virtuoso-opensource-6.1.4";
+  name = "virtuoso-opensource-6.1.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/virtuoso/${name}.tar.gz";
-    sha256 = "0khm81hvjh6p4l0ca4zj00fk41ixjv998k6y9g7mvq1338hr4gqm";
+    sha256 = "02aax76f51ya5slp1slv4r1ihcb7zpb040n33b581g8n1ppgj2ps";
   };
 
   buildInputs = [ libxml2 openssl readline gawk ];

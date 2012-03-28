@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, libnih, dbus, udev, autoconf, automake, libtool, gettext }:
    
 stdenv.mkDerivation {
-  name = "mountall-2.31";
+  name = "mountall-2.35";
    
   src = fetchurl {
-    url = https://launchpad.net/ubuntu/+archive/primary/+files/mountall_2.31.tar.gz;
-    sha256 = "09885v82kd8x7yf18vw7h6z4816jvn7gmjx5vicxlg4pqlzwqvhv";
+    url = https://launchpad.net/ubuntu/+archive/primary/+files/mountall_2.35.tar.gz;
+    sha256 = "1k52d4x75balnwcsqgznvzrdqgbp2dqnrzw0n25kajdcwr192wwy";
   };
 
-  patches = [ ./no-plymouth.patch ];
+  patches = [ ./no-plymouth.patch ./fix-usr1-race.patch ];
 
   preConfigure = "rm -R aclocal.m4; gettextize -f; autoreconf -vfi";
 

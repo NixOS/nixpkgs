@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, udev }:
 
 let
-  v = "2.02.87";
+  v = "2.02.95";
 in
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/old/LVM2.${v}.tgz";
-    sha256 = "04d605dac9r0yz9khx9pq6a8jdsf9arda2rz1a2d1qr3jhlw4kvg";
+    sha256 = "09cixpdrbzjybf8k8f0rsgkriyvbaj2acmfsg1bzxnjil4vayd83";
   };
 
   configureFlags =
