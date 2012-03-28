@@ -1,6 +1,6 @@
 x@{builderDefsPackage
   , ladspaH, jackaudio, liblo, alsaLib, qt4, libX11, libsndfile, libSM
-  , libsamplerate, libtool, autoconf, automake, xproto, libICE
+  , libsamplerate, libtool, autoconf, automake, xproto, libICE, pkgconfig
   , ...}:
 builderDefsPackage
 (a :  
@@ -12,11 +12,11 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="dssi";
-    version="1.1.0";
+    version="1.1.1";
     project="${baseName}";
     name="${baseName}-${version}";
     url="mirror://sourceforge/project/${project}/${baseName}/${version}/${name}.tar.gz";
-    hash="0lwvyrsr9dm032rrhxad30k712q3arrbn7g898n3flg26hmw58yf";
+    hash="0kl1hzhb7cykzkrqcqgq1dk4xcgrcxv0jja251aq4z4l783jpj7j";
   };
 in
 rec {
