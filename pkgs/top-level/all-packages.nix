@@ -5178,7 +5178,7 @@ let
   oidentd = callPackage ../servers/identd/oidentd { };
 
   openfire = callPackage ../servers/xmpp/openfire { };
- 
+
   OVMF = callPackage ../applications/virtualization/OVMF { };
 
   postgresql = postgresql83;
@@ -6102,7 +6102,7 @@ let
 
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
-  xf86_video_nouveau = callPackage ../os-specific/linux/xf86-video-nouveau { 
+  xf86_video_nouveau = callPackage ../os-specific/linux/xf86-video-nouveau {
     inherit (xorg) xorgserver xproto fontsproto xf86driproto renderproto
       videoproto utilmacros;
   };
@@ -8452,7 +8452,7 @@ let
   pgf1 = callPackage ../tools/typesetting/tex/pgf/1.x.nix { };
 
   pgf2 = callPackage ../tools/typesetting/tex/pgf/2.x.nix { };
-  
+
   pgfplots = callPackage ../tools/typesetting/tex/pgfplots { };
 
   pjsip = callPackage ../applications/networking/pjsip { };
