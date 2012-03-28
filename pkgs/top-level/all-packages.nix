@@ -7483,10 +7483,6 @@ let
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
 
-  virtmanager = callPackage ../applications/virtualization/virt-manager {};
-
-  virtinst = callPackage ../applications/virtualization/virtinst {};
-
   virtualgl = callPackage ../tools/X11/virtualgl { };
 
   bumblebee = callPackage ../tools/X11/bumblebee { };
