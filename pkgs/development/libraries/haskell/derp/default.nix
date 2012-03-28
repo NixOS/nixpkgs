@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "derp";
-  version = "0.1.5";
-  sha256 = "0mpc4hav5iqrcjns5sz8q0v2c0d7nb2hbzn58cmbl7cma2kp36li";
+  version = "0.1.6";
+  sha256 = "0g8y98qjjampbwnxhvjzrs2jczh2mcwsacjq95jxpidgsld00shk";
   meta = {
     description = "Derivative Parsing";
     license = self.stdenv.lib.licenses.bsd3;
