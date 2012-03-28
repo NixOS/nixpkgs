@@ -28,18 +28,18 @@ in
 
 stdenv.mkDerivation {
   name =
-    if installjdk then "jdk-1.6.0_24" else "jre-1.6.0_24";
+    if installjdk then "jdk-1.6.0_32b03" else "jre-1.6.0_32b03";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6u24-dlj-linux-i586.bin;
-        sha256 = "003vf5dhizwd1pcvv6jazx59d1dwws1m87fjbjagbnnra7bka89p";
+        url = http://www.java.net/download/jdk6/6u32/promoted/b03/binaries/jdk-6u32-ea-bin-b03-linux-i586-29_feb_2012.bin;
+        md5 = "7c009afa399476c7d2791386235b8e3b";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = http://download.java.net/dlj/binaries/jdk-6u24-dlj-linux-amd64.bin;
-        sha256 = "17r1rv82q2zlhkillkgkxsirnkzpbsi6f2qg4sjrg0154sk6iflq";
+        url = http://www.java.net/download/jdk6/6u32/promoted/b03/binaries/jdk-6u32-ea-bin-b03-linux-amd64-29_feb_2012.bin;
+        md5 = "7f1a45531a04c372e5660a55c2dfdad8";
       }
     else
       abort "jdk requires i686-linux or x86_64 linux";
