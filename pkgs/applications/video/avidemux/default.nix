@@ -1,20 +1,20 @@
 {stdenv, fetchurl, cmake, pkgconfig, libxml2, qt4, gtk, gettext, SDL,
 libXv, pixman, libpthreadstubs, libXau, libXdmcp, libxslt, x264,
-alsaLib, lame, faac, faad2, libvorbis }:
+alsaLib, lame, faac, faad2, libvorbis, yasm, libvpx, xvidcore, libva }:
 
 assert stdenv ? glibc;
 
 stdenv.mkDerivation {
-  name = "avidemux-2.5.2";
+  name = "avidemux-2.5.6";
   
   src = fetchurl {
-    url = mirror://sourceforge/avidemux/avidemux_2.5.2.tar.gz;
-    sha256 = "1apq5s79ik562xmhyvg6nvkmk2bhm5fcjwsrwrpxwipn6swkfpk8";
+    url = mirror://sourceforge/avidemux/avidemux_2.5.6.tar.gz;
+    sha256 = "12wvxz0n2g85f079d8mdkkp2zm279d34m9v7qgcqndh48cn7znnn";
   };
   
   buildInputs = [ cmake pkgconfig libxml2 qt4 gtk gettext SDL libXv
     pixman libpthreadstubs libXau libXdmcp libxslt x264 alsaLib 
-    lame faac faad2 libvorbis ];
+    lame faac faad2 libvorbis yasm libvpx xvidcore libva ];
 
   cmakeFlags = "-DPTHREAD_INCLUDE_DIR=${stdenv.glibc}/include" +
     " -DGETTEXT_INCLUDE_DIR=${gettext}/include" +
