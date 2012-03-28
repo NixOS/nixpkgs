@@ -31,7 +31,9 @@ EOF
       case $o in
         console=*)
           set -- $(IFS==; echo $o)
-          console=$2
+          params=$2
+          set -- $(IFS=,; echo $params)
+          console=$1
           ;;
       esac
     done
