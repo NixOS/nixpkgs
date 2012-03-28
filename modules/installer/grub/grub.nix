@@ -106,8 +106,17 @@ in
       extraEntries = mkOption {
         default = "";
         example = ''
+          # GRUB 1 example (not GRUB 2 compatible)
           title Windows
             chainloader (hd0,1)+1
+
+          # GRUB 2 example
+          menuentry "Windows7" {
+            title Windows7
+            insmod ntfs
+            set root='(hd1,1)'
+            chainloader +1
+          }
         '';
         description = ''
           Any additional entries you want added to the GRUB boot menu.
