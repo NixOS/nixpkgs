@@ -10,6 +10,7 @@
   bjg = "Brian Gough <bjg@gnu.org>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
+  coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   eelco = "Eelco Dolstra <e.dolstra@tudelft.nl>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";

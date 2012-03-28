@@ -5100,6 +5100,8 @@ let
     ffmpeg = ffmpeg_0_6_90;
   };
 
+  memcached = callPackage ../servers/memcached {};
+
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
   mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
