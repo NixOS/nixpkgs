@@ -1942,17 +1942,26 @@ let
   })));
 
   gccApple =
-    wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc/4.2-apple32 else import ../development/compilers/gcc/4.2-apple64) {
-      inherit fetchurl stdenv noSysDirs;
-      profiledCompiler = true;
-    });
+    wrapGCC (makeOverridable
+      (if stdenv.system == "i686-darwin"
+       then import ../development/compilers/gcc/4.2-apple32
+       else import ../development/compilers/gcc/4.2-apple64) {
+         inherit fetchurl stdenv noSysDirs;
+         profiledCompiler = true;
+       });
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
     texinfo = texinfo49;
   });
 
-  gfortran = gfortran46;
+  gfortran =
+    if stdenv.isDarwin
+    then wrapGCC (gccApple.gcc.override {
+      langF77 = true;
+      inherit gmp mpfr bison flex;
+    })
+    else gfortran46;
 
   gfortran40 = wrapGCC (gcc40.gcc.override {
     langFortran = true;
