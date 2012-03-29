@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, useSetUID, dbus, libxml2, pam, hal, pkgconfig, pmount, python, pythonDBus}:
+{stdenv, fetchurl, makeWrapper, useSetUID, dbus, libxml2, pam, pkgconfig, pmount, python, pythonDBus}:
 
 let
   pmountBin = useSetUID pmount "/bin/pmount";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     makeWrapper
     # pam_usb dependencies
-    dbus libxml2 pam hal pmount pkgconfig
+    dbus libxml2 pam pmount pkgconfig
     # pam_usb's tools dependencies
     python
     # cElementTree is included with python 2.5 and later.
