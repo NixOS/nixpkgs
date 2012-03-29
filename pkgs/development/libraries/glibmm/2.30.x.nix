@@ -1,12 +1,11 @@
-{ stdenv, fetchurl_gnome, pkgconfig, glib, libsigcxx }:
+{ stdenv, fetchurl, pkgconfig, glib, libsigcxx }:
 
 stdenv.mkDerivation rec {
-  name = src.pkgname;
+  name = "glibmm-2.30.1";
 
-  src = fetchurl_gnome {
-    project = "glibmm";
-    major = "2"; minor = "30"; patchlevel = "0"; extension = "xz";
-    sha256 = "1d0dxq4iamch8igrnbvbfwkfpvcnjfzyr9iq2x8hi89b9k1kzbd7";
+  src = fetchurl {
+    url = mirror://gnome/sources/glibmm/2.30/glibmm-2.30.1.tar.xz;
+    sha256 = "15zqgx6rashyhxk89qjqq05p6m40akpgzyjk8bfb3jk68rc2nn39";
   };
 
   buildNativeInputs = [pkgconfig];
