@@ -8421,6 +8421,8 @@ let
 
   nut = callPackage ../applications/misc/nut { };
 
+  nut_2_6_3 = callPackage ../applications/misc/nut/2.6.3.nix { };
+
   disnix = callPackage ../tools/package-management/disnix { };
 
   disnix_activation_scripts = callPackage ../tools/package-management/disnix/activation-scripts {
