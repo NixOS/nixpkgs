@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Logger service for Telepathy framework";
     homepage = http://telepathy.freedesktop.org/wiki/Logger ;
-    maintainers = [ stdenv.lib.mainrainers.urkud ];
+    maintainers = [ stdenv.lib.maintainers.urkud ];
     platforms = stdenv.lib.platforms.gnu; # Arbitrary choice
   };
 }
