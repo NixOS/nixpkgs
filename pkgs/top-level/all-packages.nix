@@ -694,6 +694,8 @@ let
     withX11 = true;
   };
 
+  fortune = callPackage ../tools/misc/fortune { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
