@@ -1,4 +1,4 @@
-{stdenv, fetchurl, makeWrapper, perl, pkgconfig, webkit, gtk, libX11, libsoup,
+{stdenv, fetchurl, makeWrapper, perl, pkgconfig, webkit_gtk2, gtk, libX11, libsoup,
 glib_networking}:
 
 stdenv.mkDerivation {
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     url = "mirror://sourceforge/vimprobable/vimprobable2_0.9.12.0.tar.bz2";
     sha256 = "1b6xs6rd4rxy9kdsva13bbx7pd2gy159ad8ncd4pplsqr46hw8fb";
   };
-  buildInputs = [ makeWrapper perl pkgconfig libX11 libsoup webkit gtk ];
+  buildInputs = [ makeWrapper perl pkgconfig libX11 libsoup webkit_gtk2 gtk ];
   installPhase = ''
     make PREFIX=/ DESTDIR=$out install
     wrapProgram "$out/bin/vimprobable2" --prefix GIO_EXTRA_MODULES : \

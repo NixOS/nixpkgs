@@ -4783,6 +4783,22 @@ let
       perl = perl510;
     };
 
+  webkit_gtk2 = 
+    builderDefsPackage ../development/libraries/webkit/gtk2.nix {
+      inherit (gnome) gtkdoc libsoup;
+      inherit gtk atk pango glib;
+      inherit freetype fontconfig gettext gperf curl
+        libjpeg libtiff libxml2 libxslt sqlite
+        icu cairo intltool automake libtool
+        pkgconfig autoconf bison libproxy enchant
+        python ruby which flex geoclue;
+      inherit gstreamer gst_plugins_base gst_ffmpeg
+        gst_plugins_good;
+      inherit (xlibs) libXt renderproto libXrender;
+      libpng = libpng12;
+      perl = perl510;
+    };
+
   webkitSVN =
     builderDefsPackage ../development/libraries/webkit/svn.nix {
       inherit (gnome) gtkdoc libsoup;
