@@ -1,11 +1,11 @@
 { stdenv, fetchurl, dbus_glib, glib, python, pkgconfig, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-glib-0.17.5";
+  name = "telepathy-glib-0.17.7";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/telepathy-glib/${name}.tar.gz";
-    sha256 = "13gylgwgjp29zakzj5kb4h0j5zh30dsl8ch7hp3dp4nmy4vdj6h1";
+    sha256 = "1brzw0cqawcyh7rffzbmydzbymrrsmzf8rksgamiqpwsdvcnksxz";
   };
 
   propagatedBuildInputs = [dbus_glib glib python];

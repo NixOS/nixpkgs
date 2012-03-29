@@ -2,11 +2,11 @@
 , telepathy_farsight, telepathy_glib }:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-qt-0.9.0";
+  name = "telepathy-qt-0.9.1";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/telepathy-qt/${name}.tar.gz";
-    sha256 = "0v3hnvzm3k2z99rc1znxgriqvf1n7wyjdzzsld0czhbmrz9fhang";
+    sha256 = "0rwyxjk6646r43mvsg01q7rfsah0ni05fa8gxzlx1zhj76db95yh";
   };
 
   buildNativeInputs = [ cmake pkgconfig python libxslt ];
