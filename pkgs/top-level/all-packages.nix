@@ -1280,6 +1280,8 @@ let
 
   recutils = callPackage ../tools/misc/recutils { };
 
+  refind = callPackage ../tools/misc/refind { };
+
   reiser4progs = callPackage ../tools/filesystems/reiser4progs { };
 
   reiserfsprogs = callPackage ../tools/filesystems/reiserfsprogs { };
