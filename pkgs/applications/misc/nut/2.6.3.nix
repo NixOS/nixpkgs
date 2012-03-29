@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev, avahi}:
+{ stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev, avahi, freeipmi }:
 
 stdenv.mkDerivation {
   name = "nut-2.6.3";
@@ -7,15 +7,15 @@ stdenv.mkDerivation {
     sha256 = "0fk3bcivv26kw1psxb6sykqp9n5w02j01s1idypzlci0kmr3p49l";
   };
 
-  buildInputs = [pkgconfig neon libusb openssl udev avahi];
+  buildInputs = [ neon libusb openssl udev avahi freeipmi ];
+  buildNativeInputs = [ pkgconfig ];
 
   configureFlags = [
     "--with-all"
+    "--with-ssl"
     "--without-snmp" # Until we have it ...
     "--without-powerman" # Until we have it ...
     "--without-cgi"
-    "--without-freeipmi"
-    "--without-ipmi"
     "--without-hal"
   ];
 
