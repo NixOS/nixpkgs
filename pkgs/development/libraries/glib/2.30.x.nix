@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gettext, perl, libiconv, zlib, libffi
-, python }:
+, python, pcre }:
 
 # TODO:
 # * Add gio-module-fam
@@ -12,22 +12,23 @@
 #       $out/bin/gtester-report' to postInstall if this is solved
 
 stdenv.mkDerivation rec {
-  name = "glib-2.30.2";
+  name = "glib-2.30.3";
 
   src = fetchurl {
-    url = mirror://gnome/sources/glib/2.30/glib-2.30.2.tar.xz;
-    sha256 = "10lfzxwc45lh5vfnd33l4m9z1mf3arpwdd8jz94dn79j6diixsgh";
+    url = mirror://gnome/sources/glib/2.30/glib-2.30.3.tar.xz;
+    sha256 = "09yxfajynbw78kji48z384lylp67kihfi1g78qrrjif4f5yb5jz6";
   };
 
   # configure script looks for d-bus but it is only needed for tests
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ pcre ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
   buildNativeInputs = [ perl pkgconfig gettext python ];
 
   propagatedBuildInputs = [ zlib libffi ];
 
+  configureFlags = "--with-pcre=system --disable-fam";
+
   passthru.gioModuleDir = "lib/gio/modules";
 
-  # glib buildsystem fails to find python, thus hardcodes python2.4 in #!
   postInstall = ''rm -rvf $out/share/gtk-doc'';
 
   meta = {
