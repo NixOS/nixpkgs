@@ -5,20 +5,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.0pre2614_005d1e4";
+  name = "nix-1.0pre2632_b8fb0ce";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/2230618/download/4/${name}.tar.bz2";
-    sha256 = "47a4ff811f0d23d1c0176bc1fbb828edf16906568b0cbf5942b912ed2d2c1b44";
+    url = "http://hydra.nixos.org/build/2337744/download/4/${name}.tar.bz2";
+    sha256 = "5f965a54ac4ef949b1531d21c3bc1c920552ea3103a39669a3b8a4f3187bd6da";
   };
 
   buildNativeInputs = [ perl pkgconfig ];
-  buildInputs = [ curl openssl boehmgc ];
+  buildInputs = [ curl openssl boehmgc bzip2 sqlite ];
 
   configureFlags =
     ''
       --with-store-dir=${storeDir} --localstatedir=${stateDir}
-      --with-bzip2=${bzip2} --with-sqlite=${sqlite}
       --with-dbi=${perlPackages.DBI}/lib/perl5/site_perl
       --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
       --disable-init-state
@@ -30,11 +29,10 @@ stdenv.mkDerivation rec {
     configureFlags =
       ''
         --with-store-dir=${storeDir} --localstatedir=${stateDir}
-        --with-bzip2=${bzip2.hostDrv} --with-sqlite=${sqlite.hostDrv}
-        --enable-gc
         --with-dbi=${perlPackages.DBI}/lib/perl5/site_perl
         --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
         --disable-init-state
+        --enable-gc
         CFLAGS=-O3 CXXFLAGS=-O3
       '' + stdenv.lib.optionalString (
           stdenv.cross ? nix && stdenv.cross.nix ? system
@@ -44,11 +42,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  installCheckPhase = "make installcheck";
 
-  # Hack to get the check to succeed on Darwin.
-  phases = stdenv.lib.optionalString stdenv.isDarwin
-    "$prePhases unpackPhase patchPhase $preConfigurePhases configurePhase $preBuildPhases buildPhase $preInstallPhases installPhase checkPhase fixupPhase $preDistPhases distPhase $postPhases";
+  postPhases = [ "installCheckPhase" ];
 
   meta = {
     description = "The Nix Deployment System";
