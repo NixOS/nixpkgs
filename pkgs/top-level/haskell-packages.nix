@@ -665,8 +665,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   extensibleExceptions = null; # a core package in recent GHCs
 
   failure_0_1_2 = callPackage ../development/libraries/haskell/failure/0.1.2.nix {};
-  failure_0_2_0 = callPackage ../development/libraries/haskell/failure/0.2.0.nix {};
-  failure = self.failure_0_2_0;
+  failure_0_2_0_1 = callPackage ../development/libraries/haskell/failure/0.2.0.1.nix {};
+  failure = self.failure_0_2_0_1;
 
   fastLogger = callPackage ../development/libraries/haskell/fast-logger {};
 
@@ -1536,7 +1536,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib = self.zlib_0_5_3_3;
 
   zlibBindings_0_0_3_2 = callPackage ../development/libraries/haskell/zlib-bindings/0.0.3.2.nix {};
-  zlibBindings_0_1_0 = callPackage ../development/libraries/haskell/zlib-bindings/0.1.0.nix {};
+  zlibBindings_0_1_0_1 = callPackage ../development/libraries/haskell/zlib-bindings/0.1.0.1.nix {};
   zlibBindings = self.zlibBindings_0_0_3_2;
 
   zlibConduit = callPackage ../development/libraries/haskell/zlib-conduit {};

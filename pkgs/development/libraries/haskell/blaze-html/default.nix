@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "blaze-html";
-  version = "0.4.3.2";
-  sha256 = "1mqfvkmjfqy777h4skvgm9nxjgyi12k8alg7mvsk0aj1i80gvkki";
+  version = "0.4.3.3";
+  sha256 = "0a3g4s4k85h2qvs2kcalv83ma4z5arqdydla64q5d1qlk9c99mzg";
   buildDepends = [ blazeBuilder text ];
   meta = {
     homepage = "http://jaspervdj.be/blaze";
