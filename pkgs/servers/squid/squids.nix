@@ -30,11 +30,11 @@ rec {
     configureFlags = ["--enable-ipv6"];
   };
 
-  squid32Beta = squid30.merge {
-    name = "squid-3.2.0.11";
+  squid32Beta = squid30.merge rec {
+    name = "squid-3.2.0.16";
     src = args.fetchurl {
-      url = http://www.squid-cache.org/Versions/v3/3.2/squid-3.2.0.11.tar.bz2;
-      sha256 = "aa5b9a85e1a90c4adb591c3e796c3fdfb166d8d2c814165d70692636321f69ae";
+      url = "http://www.squid-cache.org/Versions/v3/3.2/${name}.tar.bz2";
+      sha256 = "2431f4f9372e4e1a9c5fca5a4fa0c4bb0761ce3e044642ea9362bb1580a36d25";
     };
     configureFlags = ["--enable-ipv6"];
     buildInputs = [openldap pam db4 cyrus_sasl libcap expat libxml2
