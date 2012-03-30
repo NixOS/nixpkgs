@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, qt4, pkgconfig, python, libxslt, dbus_glib
-, telepathy_farsight, telepathy_glib }:
+, telepathy_farstream, telepathy_glib }:
 
 stdenv.mkDerivation rec {
   name = "telepathy-qt-0.9.1";
@@ -10,11 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   buildNativeInputs = [ cmake pkgconfig python libxslt ];
-  propagatedBuildInputs = [ qt4 dbus_glib telepathy_farsight telepathy_glib ];
-
-  patches = [ ./missing-include.patch ];
-
+  propagatedBuildInputs = [ qt4 dbus_glib telepathy_farstream telepathy_glib ];
   preBuild = ''
-    NIX_CFLAGS_COMPILE+=" `pkg-config --cflags farsight2-0.10 dbus-glib-1`"
-    '';
+    NIX_CFLAGS_COMPILE+=" `pkg-config --cflags dbus-glib-1`"
+  '';
 }
