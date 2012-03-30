@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "mupdf-0.7";
 
   src = fetchurl {
-    url = "http://mupdf.com/download/${name}.tar.gz";
+    url = "http://mupdf.com/download/archive/${name}.tar.gz";
     sha256 = "e7f6307fa472575d27fe893e787ddb3fc927f03ba4ae23105f917189e81960a6";
   };
 
