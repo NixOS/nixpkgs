@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="ripmime";
-    version="1.4.0.9";
+    version="1.4.0.10";
     name="${baseName}-${version}";
     url="http://www.pldaniels.com/${baseName}/${name}.tar.gz";
-    hash="15c48n8n8qavdigw5qycnwp6gys9dv3mgk18ylf5hd4491nnnrhz";
+    hash="0sj06ibmlzy34n8v0mnlq2gwidy7n2aqcwgjh0xssz3vi941aqc9";
   };
 in
 rec {
