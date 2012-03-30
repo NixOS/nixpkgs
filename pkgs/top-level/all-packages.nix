@@ -4035,6 +4035,8 @@ let
 
   libical = callPackage ../development/libraries/libical { };
 
+  libicns = callPackage ../development/libraries/libicns { };
+
   libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
 
   libiodbc = callPackage ../development/libraries/libiodbc {
