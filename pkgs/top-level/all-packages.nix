@@ -5770,6 +5770,8 @@ let
       inherit (gnome) libglademm;
     };
 
+    tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
+
     v86d = callPackage ../os-specific/linux/v86d { };
 
     virtualbox = callPackage ../applications/virtualization/virtualbox {
