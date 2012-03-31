@@ -1,4 +1,0 @@
-[
-  ./activation.nix
-  ./bashrc.nix
-]

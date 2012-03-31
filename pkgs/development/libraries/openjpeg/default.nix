@@ -1,21 +1,13 @@
 { stdenv, fetchurl }: 
 
 stdenv.mkDerivation {
-  name = "openjpeg-1.2";
+  name = "openjpeg-1.5.0";
   
   src = fetchurl {
-    url = http://www.openjpeg.org/openjpeg_v1_2.tar.gz;
-    sha256 = "1i72i0hhssgg6vfkaw3gpwf5ld65g9s77ay8pxd4any1xy54qa90";
+    url = http://openjpeg.googlecode.com/files/openjpeg-1.5.0.tar.gz;
+    sha256 = "1kja6s9dk0hh7p9064kg69y6vninwyvpqi8cap92waj38jmqz469";
   };
 
-  patchPhase = ''
-    sed -i -e 's/-o root -g [^ ]\+//' Makefile Makefile.osx
-  '';
-
-  preInstall = ''
-    export installFlags="PREFIX=$out"
-  '';
-  
   meta = {
     homepage = http://www.openjpeg.org/;
     description = "Open-source JPEG 2000 codec written in C language";

@@ -11,6 +11,7 @@ stdenv.mkDerivation {
 
   configureFlags = "--disable-scrollkeeper";
   buildInputs = [ python libxml2Python libxslt ];
+  pythonPath = [ libxml2Python ];
   postInstall = "wrapPythonPrograms";
 
   buildNativeInputs = [ pkgconfig intltool pythonPackages.wrapPython ];

@@ -7,7 +7,7 @@
 , librsvg, gnome_vfs, gstreamer, gst_plugins_base, mesa
 , autoconf, automake, openldap, bash
 , fontsConf
-, langs ? [ "en-GB" "ca" "ru" "eo" "fr" "nl" "de" ]
+, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" ]
 }:
 
 let

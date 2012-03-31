@@ -353,16 +353,6 @@ let
     inherit pkgs lib;
   };
 
-  usernixos = let
-      configmodule = getConfig [ "usernixos" ] null;
-      eval = (import ../build-support/usernixos/eval-config.nix) {
-        inherit pkgs system;
-        modules = [ configmodule ];
-      };
-    in
-      assert configmodule != null;
-      eval.config.activation.toplevel;
-
   platforms = import ./platforms.nix;
 
 
@@ -442,7 +432,7 @@ let
   bootchart = callPackage ../tools/system/bootchart { };
 
   btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
-    inherit libuuid zlib acl attr fetchgit;
+    inherit (pkgs) libuuid zlib acl attr fetchgit e2fsprogs;
   };
 
   catdoc = callPackage ../tools/text/catdoc { };
@@ -703,6 +693,8 @@ let
   fontforgeX = callPackage ../tools/misc/fontforge {
     withX11 = true;
   };
+
+  fortune = callPackage ../tools/misc/fortune { };
 
   freeipmi = callPackage ../tools/system/freeipmi {};
 
@@ -1287,6 +1279,8 @@ let
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
   recutils = callPackage ../tools/misc/recutils { };
+
+  refind = callPackage ../tools/misc/refind { };
 
   reiser4progs = callPackage ../tools/filesystems/reiser4progs { };
 
@@ -1950,17 +1944,26 @@ let
   })));
 
   gccApple =
-    wrapGCC ( (if stdenv.system == "i686-darwin" then import ../development/compilers/gcc/4.2-apple32 else import ../development/compilers/gcc/4.2-apple64) {
-      inherit fetchurl stdenv noSysDirs;
-      profiledCompiler = true;
-    });
+    wrapGCC (makeOverridable
+      (if stdenv.system == "i686-darwin"
+       then import ../development/compilers/gcc/4.2-apple32
+       else import ../development/compilers/gcc/4.2-apple64) {
+         inherit fetchurl stdenv noSysDirs;
+         profiledCompiler = true;
+       });
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
     texinfo = texinfo49;
   });
 
-  gfortran = gfortran46;
+  gfortran =
+    if stdenv.isDarwin
+    then wrapGCC (gccApple.gcc.override {
+      langF77 = true;
+      inherit gmp mpfr bison flex;
+    })
+    else gfortran46;
 
   gfortran40 = wrapGCC (gcc40.gcc.override {
     langFortran = true;
@@ -4047,6 +4050,8 @@ let
 
   libical = callPackage ../development/libraries/libical { };
 
+  libicns = callPackage ../development/libraries/libicns { };
+
   libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
 
   libiodbc = callPackage ../development/libraries/libiodbc {
@@ -5145,6 +5150,8 @@ let
     ffmpeg = ffmpeg_0_6_90;
   };
 
+  memcached = callPackage ../servers/memcached {};
+
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
   mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
@@ -5797,6 +5804,8 @@ let
       linux = kernel;
       inherit (gnome) libglademm;
     };
+
+    tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
 
@@ -7433,6 +7442,8 @@ let
     inherit (pkgs.gnome) libsoup;
   };
 
+  telepathy_logger = callPackage ../applications/networking/instant-messengers/telepathy/logger {};
+
   telepathy_mission_control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
 
   telepathy_rakia = callPackage ../applications/networking/instant-messengers/telepathy/rakia { };
@@ -8451,6 +8462,8 @@ let
     };
 
   nut = callPackage ../applications/misc/nut { };
+
+  nut_2_6_3 = callPackage ../applications/misc/nut/2.6.3.nix { };
 
   disnix = callPackage ../tools/package-management/disnix { };
 

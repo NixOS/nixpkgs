@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "happstack-hamlet";
-  version = "6.2.4";
-  sha256 = "1m03r1wk34lx9b2bmcrakcaaq701vcdkw2shxmqwk6fsbgh7qjp0";
+  version = "7.0.0";
+  sha256 = "15r6xpyg193iwqin96mn7c9x5w7l8q9m3vbgiwv7bxvhdrl1dp7j";
   buildDepends = [ hamlet happstackServer text ];
   meta = {
     homepage = "http://www.happstack.com/";

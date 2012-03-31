@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "failure";
-  version = "0.2.0";
-  sha256 = "1z7q2ldgfm0khar3vx7paz0jigzd720xjq2s0x02qf2m3iv0ilcv";
+  version = "0.2.0.1";
+  sha256 = "05k62sb2xj4ddjwsbfldxkap7v5kmv04qzic4sszx5i3ykbf20fd";
   buildDepends = [ transformers ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Failure";

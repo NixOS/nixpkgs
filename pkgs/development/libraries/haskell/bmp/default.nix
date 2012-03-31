@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bmp";
-  version = "1.2.0.2";
-  sha256 = "0y1fjbhk73dj260wd1jhcf12fkh4maba4iwkzdg2087s9saxvljk";
+  version = "1.2.1.1";
+  sha256 = "0s5srqkaccrwh9gsxn9kmyh4jf0qf40ix8ipi0b70fbbffr97hmk";
   buildDepends = [ binary ];
   meta = {
     homepage = "http://code.ouroborus.net/bmp";

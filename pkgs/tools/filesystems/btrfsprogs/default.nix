@@ -3,9 +3,9 @@ let
   fetchurl = a.fetchurl;
   fetchgit = a.fetchgit;
 
-  version = a.lib.attrByPath ["version"] "0.19" a;
+  version = a.lib.attrByPath ["version"] "0.19-20120328" a;
   buildInputs = with a; [
-    zlib libuuid acl attr
+    zlib libuuid acl attr e2fsprogs
   ];
 in
 
@@ -14,8 +14,8 @@ assert a.libuuid != null;
 rec {
   srcDrv = fetchgit {
     url="git://git.kernel.org/pub/scm/linux/kernel/git/mason/btrfs-progs.git" ;
-    rev="fdb6c0402337d9607c7a39155088eaf033742752" ;
-    sha256="de7f9e04401bd747a831c48d312106e188adb32f32b6d64078ae6d2aab45b1f8" ;
+    rev="1957076ab4fefa47b6efed3da541bc974c83eed7";
+    sha256="566d863c5500652e999d0d6b823365fb06f2f8f9523e65e69eaa3e993e9b26e1";
   };
 
   src = srcDrv + "/";
