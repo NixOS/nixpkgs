@@ -191,7 +191,7 @@ in
 
     jobs.upsd = {
       description = "Uninterruptible Power Supplies (Daemon)";
-      startOn = "started network-interfaces and upsmon";
+      startOn = "started network-interfaces and started upsmon";
       daemonType = "fork";
       # TODO: replace 'root' by another username.
       exec = ''${pkgs.nut}/sbin/upsd -u root'';
