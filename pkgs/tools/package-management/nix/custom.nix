@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   
   inherit src;
 
-  buildInputs = [perl curl openssl] 
+  buildInputs = [perl curl openssl bzip2 ] 
   	++ (if automake != null then [automake] else [])
   	++ (if autoconf != null then [autoconf] else [])
   	++ (if libtool != null then [libtool] else [])

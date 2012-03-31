@@ -1,24 +1,21 @@
 {stdenv, fetchurl, pkgconfig, glib, libtool, intltool, gnutls2, libproxy
-  , libgcrypt, libtasn1
-  }:
+, gsettings_desktop_schemas, libgcrypt, libtasn1 }:
 
 stdenv.mkDerivation {
-  name = "glib-networking-2.28.5";
-  
+  name = "glib-networking-2.30.2";
+
   src = fetchurl {
-    url = mirror://gnome/sources/glib-networking/2.28/glib-networking-2.28.5.tar.bz2;
-    sha256 = "959ffeb91fee17c1b0fb2aa82872c3daae0230de93708b2ebabeb92b747d7876";
+    url = mirror://gnome/sources/glib-networking/2.30/glib-networking-2.30.2.tar.xz;
+    sha256 = "1g2ran0rn37009fs3xl38m95i5w8sdf9ax0ady4jbjir15844xcz";
   };
 
-  configureFlags = [
-    "--without-ca-certificates"
-  ];
+  configureFlags = "--with-ca-certificates=/etc/ca-bundle.crt";
   
   preBuild = ''
     sed -e "s@${glib}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)
   '';
 
-  buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ glib libtool intltool gnutls2 libproxy libgcrypt 
-    libtasn1];
+  buildNativeInputs = [ pkgconfig intltool ];
+  propagatedBuildInputs =
+    [ glib libtool gnutls2 libproxy libgcrypt libtasn1 gsettings_desktop_schemas ];
 }

@@ -3038,6 +3038,8 @@ let
 
   global = callPackage ../development/tools/misc/global { };
 
+  gnome_doc_utils = callPackage ../development/tools/documentation/gnome-doc-utils {};
+
   gnum4 = callPackage ../development/tools/misc/gnum4 { };
 
   gnumake = callPackage ../development/tools/build-managers/gnumake { };
@@ -3050,6 +3052,8 @@ let
   gradle = callPackage ../development/tools/build-managers/gradle { };
 
   gperf = callPackage ../development/tools/misc/gperf { };
+
+  gtk_doc = callPackage ../development/tools/documentation/gtk-doc { };
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
 
@@ -3329,6 +3333,7 @@ let
   clutter = callPackage ../development/libraries/clutter { };
 
   clutter_gtk = callPackage ../development/libraries/clutter-gtk { };
+  clutter_gtk_0_10 = callPackage ../development/libraries/clutter-gtk/0.10.8.nix { };
 
   cminpack = callPackage ../development/libraries/cminpack { };
 
@@ -3483,6 +3488,8 @@ let
   gamin = callPackage ../development/libraries/gamin { };
 
   gav = callPackage ../games/gav { };
+
+  GConf3 = callPackage ../development/libraries/GConf/3.x.nix { };
 
   gdome2 = callPackage ../development/libraries/gdome2 {
     inherit (gnome) gtkdoc;
@@ -3733,9 +3740,9 @@ let
       gtkmm;
   };
 
-  glib = callPackage ../development/libraries/glib/2.28.x.nix { };
+  glib = callPackage ../development/libraries/glib/2.30.x.nix { };
 
-  glibmm = callPackage ../development/libraries/glibmm/2.28.x.nix { };
+  glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
@@ -3756,6 +3763,7 @@ let
   gtk = pkgs.gtk2;
 
   gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
+  gtkmm3 = callPackage ../development/libraries/gtkmm/3.2.x.nix { };
 
   gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
 
@@ -3925,6 +3933,8 @@ let
     inherit (gnome) libsoup;
   };
 
+  libchamplain_0_6 = callPackage ../development/libraries/libchamplain/0.6.nix {};
+
   libchop = callPackage ../development/libraries/libchop { };
 
   libcm = callPackage ../development/libraries/libcm { };
@@ -3987,6 +3997,11 @@ let
   libgdata_0_6 = (newScope gnome) ../development/libraries/libgdata/0.6.nix {};
 
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
+  libgnome_keyring3 = callPackage ../development/libraries/libgnome-keyring/3.x.nix { };
+
+  libgtop = callPackage ../development/libraries/libgtop {};
+
+  libgweather = callPackage ../development/libraries/libgweather {};
 
   liblo = callPackage ../development/libraries/liblo { };
 
@@ -4194,7 +4209,7 @@ let
 
   libsndfile = callPackage ../development/libraries/libsndfile { };
 
-  libsoup = pkgs.gnome.libsoup;
+  libsoup = callPackage ../development/libraries/libsoup { };
 
   libssh = callPackage ../development/libraries/libssh { };
 
@@ -4258,6 +4273,9 @@ let
   libwebp = callPackage ../development/libraries/libwebp { };
 
   libwmf = callPackage ../development/libraries/libwmf { };
+
+  libwnck = callPackage ../development/libraries/libwnck { };
+  libwnck3 = callPackage ../development/libraries/libwnck/3.x.nix { };
 
   libwpd = callPackage ../development/libraries/libwpd { };
 
@@ -4651,6 +4669,8 @@ let
         # optional
   };
 
+  sofia_sip = callPackage ../development/libraries/sofia-sip { };
+
   soprano = callPackage ../development/libraries/soprano { };
 
   soqt = callPackage ../development/libraries/soqt { };
@@ -4707,8 +4727,6 @@ let
 
   telepathy_glib = callPackage ../development/libraries/telepathy/glib { };
 
-  telepathy_farsight = callPackage ../development/libraries/telepathy/farsight { };
-
   telepathy_farstream = callPackage ../development/libraries/telepathy/farstream {};
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
@@ -4755,6 +4773,23 @@ let
 
   webkit =
     builderDefsPackage ../development/libraries/webkit {
+      inherit (gnome) gtkdoc libsoup;
+      inherit atk pango glib;
+      gtk = gtk3;
+      inherit freetype fontconfig gettext gperf curl
+        libjpeg libtiff libxml2 libxslt sqlite
+        icu cairo intltool automake libtool
+        pkgconfig autoconf bison libproxy enchant
+        python ruby which flex geoclue;
+      inherit gstreamer gst_plugins_base gst_ffmpeg
+        gst_plugins_good;
+      inherit (xlibs) libXt renderproto libXrender kbproto;
+      libpng = libpng12;
+      perl = perl510;
+    };
+
+  webkit_gtk2 = 
+    builderDefsPackage ../development/libraries/webkit/gtk2.nix {
       inherit (gnome) gtkdoc libsoup;
       inherit gtk atk pango glib;
       inherit freetype fontconfig gettext gperf curl
@@ -6182,6 +6217,8 @@ let
 
   gentium = callPackage ../data/fonts/gentium {};
 
+  gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
+
   gsettings_desktop_schemas = callPackage ../data/misc/gsettings-desktop-schemas {};
 
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
@@ -7023,7 +7060,7 @@ let
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify
       vala dbus_glib;
-    inherit gtk glib;
+    inherit gtk3 glib;
     inherit (gnome) gtksourceview;
     inherit (webkit.passthru.args) libsoup;
     inherit (xlibs) kbproto xproto libXScrnSaver scrnsaverproto;
@@ -7409,6 +7446,8 @@ let
 
   telepathy_mission_control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
 
+  telepathy_rakia = callPackage ../applications/networking/instant-messengers/telepathy/rakia { };
+
   telepathy_salut = callPackage ../applications/networking/instant-messengers/telepathy/salut {};
 
   tesseract = callPackage ../applications/graphics/tesseract { };
@@ -7454,7 +7493,7 @@ let
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
     inherit pkgconfig webkit makeWrapper glib_networking;
-    inherit gtk glib;
+    inherit gtk3 glib;
     inherit (xlibs) libX11 kbproto;
     inherit (gnome) libsoup;
   };
@@ -7939,14 +7978,13 @@ let
   #   import ../desktops/e17 { inherit callPackage pkgs; }
   # );
 
-  gnome2 = (callPackage ../desktops/gnome-2 {
+  gnome2 = callPackage ../desktops/gnome-2 {
     callPackage = pkgs.newScope pkgs.gnome2;
     self = pkgs.gnome2;
-  }  // pkgs.gtkLibs);
-
-  gnome3 = (import ../desktops/gnome-3 {
-    callPackage = pkgs.newScope pkgs.gnome3;
-  });
+  }  // pkgs.gtkLibs // {
+    # Backwards compatibility;
+    inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
+  };
 
   gnome = recurseIntoAttrs gnome2;
 

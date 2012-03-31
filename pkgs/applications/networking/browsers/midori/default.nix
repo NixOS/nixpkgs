@@ -5,10 +5,10 @@ let
   doPatchShebangs = args.doPatchShebangs;
   makeManyWrappers = args.makeManyWrappers;
 
-  version = "0.2"; 
-  release = "7";
+  version = "0.4"; 
+  release = "4";
   buildInputs = with args; [
-    intltool python imagemagick gtk glib webkit libxml2 
+    intltool python imagemagick gtk3 glib webkit libxml2 
     gtksourceview pkgconfig which gettext makeWrapper 
     file libidn sqlite docutils libnotify libsoup vala
     kbproto xproto scrnsaverproto libXScrnSaver dbus_glib
@@ -17,16 +17,20 @@ in
 rec {
   src = fetchurl {
     url = "http://archive.xfce.org/src/apps/midori/${version}/midori-${version}.${release}.tar.bz2";
-    sha256 = "b1dcc479ceb938c8d9cdea098c8d72d563bce5010c27fbcaa4c992d10f2d809c";
+    sha256 = "fadd43f76c1c9f6a16483e60a804e58fb6817c6a595b1acdd59bcbdd7b35bca2";
   };
 
   inherit buildInputs;
-  configureFlags = [];
+  configureFlags = ["--enable-gtk3"];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["doUnpack" "shebangsHere" "doConfigure" 
+  phaseNames = ["doUnpack" "setVars" "shebangsHere" "doConfigure" 
     "doMakeInstall" "shebangsInstalled" "wrapWK"
     ];
+
+  setVars = args.fullDepEntry ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lnotify"
+  '' [];
       
   shebangsHere = (doPatchShebangs ".");
   shebangsInstalled = (doPatchShebangs "$out/bin");

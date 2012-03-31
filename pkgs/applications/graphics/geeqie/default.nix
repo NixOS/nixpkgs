@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, libpng, exiv2, lcms
-, intltool, gettext, libchamplain, fbida }:
+, intltool, gettext, libchamplain_0_6, fbida }:
 
 stdenv.mkDerivation rec {
   name = "geeqie-1.0";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig gtk libpng exiv2 lcms intltool gettext
-      libchamplain
+      libchamplain_0_6
     ];
 
   postInstall =

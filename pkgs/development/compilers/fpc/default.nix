@@ -3,12 +3,12 @@
 let startFPC = import ./binary.nix { inherit stdenv fetchurl; }; in
 
 stdenv.mkDerivation rec {
-  version = "2.4.4";
+  version = "2.6.0";
   name = "fpc-${version}";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/sourceforge/freepascal/Source/${version}/fpcbuild-${version}.tar.gz";
-    sha256 = "ecdbc150eecc33f5734e62f1a3507421db8eba6d9074c0c5519a8fc8ffe46924";
+    sha256 = "1vxy2y8pm0ribhpdhqlwwz696ncnz4rk2dafbn1mjgipm97qb26p";
   };
 
   buildInputs = [ startFPC gawk ];

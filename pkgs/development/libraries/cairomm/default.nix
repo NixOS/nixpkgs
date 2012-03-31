@@ -1,11 +1,11 @@
 { fetchurl, stdenv, pkgconfig, cairo, x11, fontconfig, freetype, libsigcxx }:
 
 stdenv.mkDerivation rec {
-  name = "cairomm-1.8.4";
+  name = "cairomm-1.10.0";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.gz";
-    sha256 = "1wf8lvijrk5q5jhxxxfy2yjp97azwdyxfb7kfs8d14wgmzcwd3m2";
+    sha256 = "13rrp96px95m6xnvmsaqb0wcqsnizg3bz334k0yhlyxf7v29d386";
   };
 
   buildInputs = [ pkgconfig ];

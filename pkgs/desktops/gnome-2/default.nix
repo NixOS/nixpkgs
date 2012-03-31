@@ -56,8 +56,6 @@
 
   at_spi = callPackage ./platform/at-spi { };
 
-  gtk_doc = callPackage ./platform/gtk-doc { };
-
   gtkhtml = callPackage ./platform/gtkhtml { };
 
 
@@ -73,10 +71,6 @@
 
   gnome_keyring = callPackage ./desktop/gnome-keyring { };
 
-  libsoup = callPackage ./desktop/libsoup { };
-
-  libwnck = callPackage ./desktop/libwnck { };
-
   libgweather = callPackage ./desktop/libgweather { };
 
   gvfs = callPackage ./desktop/gvfs { };
@@ -88,8 +82,6 @@
 
   # scrollkeeper replacement
   rarian = callPackage ./desktop/rarian { };
-
-  gnome_doc_utils = callPackage ./desktop/gnome-doc-utils { };
 
   zenity = callPackage ./desktop/zenity { };
 

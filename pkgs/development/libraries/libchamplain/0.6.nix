@@ -1,17 +1,19 @@
-{ fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, clutter, sqlite
-, clutter_gtk, libsoup /*, libmemphis */ }:
+{ fetchurl, stdenv, pkgconfig, glib, gtk, cairo, clutter, sqlite
+, clutter_gtk_0_10, libsoup /*, libmenphis */ }:
 
 stdenv.mkDerivation rec {
-  name = "libchamplain-0.12.2";
+  name = "libchamplain-0.6.1";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libchamplain/0.12/libchamplain-0.12.2.tar.xz;
-    sha256 = "0bkyzm378gh6qs7grr2vgzrl4z1pi99yysy8iwzdqzs0bs3rfgyj";
+    url = "http://download.gnome.org/sources/libchamplain/0.6/${name}.tar.gz";
+    sha256 = "1l1in4khnral157j46aq2d26nviz23icnm353587vcwjhdbw86sg";
   };
 
   buildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ glib gtk3 cairo clutter_gtk sqlite libsoup ];
+  # These all appear in `champlain{,-gtk}-0.6.pc'.
+  propagatedBuildInputs =
+    [ glib gtk cairo clutter clutter_gtk_0_10 sqlite libsoup ];
 
   meta = {
     homepage = http://projects.gnome.org/libchamplain/;

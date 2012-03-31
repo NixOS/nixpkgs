@@ -1,6 +1,7 @@
+
 args : with args; 
 let 
-  s = import ./src-for-default.nix;
+  s = import ./src-for-gtk2.nix;
   version = lib.attrByPath ["version"] s.version args;
 in
 rec {
@@ -14,7 +15,6 @@ rec {
     sqlite icu gperf bison flex autoconf automake libtool 
     perl intltool pkgconfig libsoup gtkdoc libXt libproxy
     enchant python ruby which renderproto libXrender geoclue
-    kbproto
     ];
 
   propagatedBuildInputs = [
@@ -26,20 +26,22 @@ rec {
     "--enable-web-sockets"
     "--enable-web-timing"
     
+    # https://bugs.webkit.org/show_bug.cgi?id=55294
+    # "--enable-image-resizer"
+
     "--enable-geolocation"
 
     # Not implemented?
-    #"--enable-web-audio"
+    # "--enable-web-audio"
 
     "--enable-mathml"
 
     #"--enable-wml"
     
     # https://bugs.webkit.org/show_bug.cgi?id=45110
-    #"--enable-indexed-database"
+    # "--enable-indexed-database"
 
-    # Doesn't work in release...
-    #"--enable-xhtmlmp"
+    "--enable-xhtmlmp"
 
     # "--enable-input-speech"
 
@@ -47,10 +49,10 @@ rec {
     "--enable-blob"
 
     # https://bugs.webkit.org/show_bug.cgi?id=59430
-    #"--enable-directory-upload"
+    # "--enable-directory-upload"
 
     # https://bugs.webkit.org/show_bug.cgi?id=58443
-    #"--enable-file-system"
+    # "--enable-file-system"
     ];
 
   /* doConfigure should be specified separately */

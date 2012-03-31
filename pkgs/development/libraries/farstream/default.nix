@@ -2,10 +2,10 @@
 , pygobject, gst_python, gupnp_igd }:
 
 stdenv.mkDerivation rec {
-  name = "farstream-0.1.1";
+  name = "farstream-0.1.2";
   src = fetchurl {
     url = "http://www.freedesktop.org/software/farstream/releases/farstream/${name}.tar.gz";
-    sha256 = "0lmdz7ijpgrc0zbr11jp3msvz44p809scx2m56bk5l5x1xrs123v";
+    sha256 = "1nbkbvq959f70zhr03fwdibhs0sbf1k7zmbz9w99vda7gdcl0nps";
   };
 
   buildInputs = [ libnice python pygobject gst_python gupnp_igd ];

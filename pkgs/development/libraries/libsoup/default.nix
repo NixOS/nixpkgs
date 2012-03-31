@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, libxml2, pkgconfig, xz
+{ stdenv, fetchurl, glib, libxml2, pkgconfig
 , gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking }:
 
 stdenv.mkDerivation {
