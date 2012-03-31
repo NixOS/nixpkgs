@@ -6651,6 +6651,8 @@ let
     inherit stdenv fetchurl openssl;
   };
 
+  fluidsynth = callPackage ../applications/audio/fluidsynth { };
+
   fossil = callPackage ../applications/version-management/fossil { };
 
   goldendict = callPackage ../applications/misc/goldendict { };
@@ -7273,6 +7275,8 @@ let
   qemuSVN = callPackage ../applications/virtualization/qemu/svn-6642.nix { };
 
   qemuImage = callPackage ../applications/virtualization/qemu/linux-img { };
+
+  qsynth = callPackage ../applications/audio/qsynth { };
 
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
