@@ -6854,9 +6854,7 @@ let
 
   googleearth = callPackage_i686 ../applications/misc/googleearth { };
 
-  google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin {
-    inherit pkgsi686Linux;
-  };
+  google_talk_plugin = callPackage ../applications/networking/browsers/mozilla-plugins/google-talk-plugin { };
 
   gosmore = builderDefsPackage ../applications/misc/gosmore {
     inherit fetchsvn curl pkgconfig libxml2 gtk;

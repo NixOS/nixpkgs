@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, rpm, cpio, pkgsi686Linux, mesa, xorg, cairo
-, libpng, gtk, glib, fontconfig, freetype, curl
+{ stdenv, fetchurl, rpm, cpio, mesa, xorg, cairo
+, libpng12, gtk, glib, gdk_pixbuf, fontconfig, freetype, curl
+, dbus_glib, alsaLib, pulseaudio, udev
 }:
 
 with stdenv.lib;
 
 let
 
-  rpathNative = makeLibraryPath
-    [ stdenv.gcc.gcc
-      mesa
+  rpathPlugin = makeLibraryPath
+    [ mesa
       xorg.libXt
       xorg.libX11
       cairo
-      libpng
+      libpng12
       gtk
       glib
       fontconfig
@@ -20,32 +20,33 @@ let
       curl
     ];
 
-  rpath32 = makeLibraryPath
-    [ pkgsi686Linux.gdk_pixbuf
-      pkgsi686Linux.glib
-      pkgsi686Linux.gtk
-      pkgsi686Linux.xorg.libX11
-      pkgsi686Linux.xorg.libXcomposite
-      pkgsi686Linux.xorg.libXfixes
-      pkgsi686Linux.xorg.libXrender
-      pkgsi686Linux.xorg.libXrandr
-      pkgsi686Linux.gcc.gcc
-      pkgsi686Linux.alsaLib
-      pkgsi686Linux.pulseaudio
-      pkgsi686Linux.dbus_glib
-      pkgsi686Linux.udev
+  rpathProgram = makeLibraryPath
+    [ gdk_pixbuf
+      glib
+      gtk
+      xorg.libX11
+      xorg.libXcomposite
+      xorg.libXfixes
+      xorg.libXrender
+      xorg.libXrandr
+      stdenv.gcc.gcc
+      alsaLib
+      pulseaudio
+      dbus_glib
+      udev
+      curl
     ];
 
 in
 
 stdenv.mkDerivation {
-  name = "google-talk-plugin-2.107.0";
+  name = "google-talk-plugin-2.8.5.0";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm";
-        sha256 = "1jdcnz4iwnjmrr5xyqgam1yd0dc2vyd9iij5imnir4r88l5fc9wh";
+        sha256 = "15909wnhspjci0fspvh5j87v1xl7dfix36zrpvk6fpc3m0vys0nh";
       }
     else
       throw "Google Talk does not support your platform.";
@@ -59,14 +60,15 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      mkdir -p $out/lib/mozilla/plugins
-      cp opt/google/talkplugin/libnp*.so $out/lib/mozilla/plugins/
+      plugins=$out/lib/mozilla/plugins
+      mkdir -p $plugins
+      cp opt/google/talkplugin/libnp*.so $plugins
 
-      patchelf --set-rpath "${makeLibraryPath [ stdenv.gcc.gcc ]}:${stdenv.gcc.gcc}/lib64" \
-        $out/lib/mozilla/plugins/libnpgoogletalk64.so
+      patchelf --set-rpath "${makeLibraryPath [ stdenv.gcc.gcc xorg.libX11 ]}:${stdenv.gcc.gcc}/lib64" \
+        $plugins/libnpgoogletalk.so
 
-      patchelf --set-rpath "$out/libexec/google/talkplugin/lib:${rpathNative}:${stdenv.gcc.gcc}/lib64" \
-        $out/lib/mozilla/plugins/libnpgtpo3dautoplugin.so
+      patchelf --set-rpath "$out/libexec/google/talkplugin/lib:${rpathPlugin}:${stdenv.gcc.gcc}/lib64" \
+        $plugins/libnpgtpo3dautoplugin.so
 
       mkdir -p $out/libexec/google/talkplugin
       cp opt/google/talkplugin/GoogleTalkPlugin $out/libexec/google/talkplugin/
@@ -74,10 +76,20 @@ stdenv.mkDerivation {
       mkdir -p $out/libexec/google/talkplugin/lib
       cp opt/google/talkplugin/lib/libCg* $out/libexec/google/talkplugin/lib/
 
+      patchelf --set-rpath "$out/libexec/google/talkplugin/lib" \
+        $out/libexec/google/talkplugin/lib/libCgGL.so 
+
       patchelf \
-        --set-interpreter ${pkgsi686Linux.glibc}/lib/ld-linux*.so.2 \
-        --set-rpath ${rpath32} \
+        --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+        --set-rpath "${rpathProgram}:${stdenv.gcc.gcc}/lib64" \
         $out/libexec/google/talkplugin/GoogleTalkPlugin
+
+      # Generate an LD_PRELOAD wrapper to redirect execvp() calls to
+      # /opt/../GoogleTalkPlugin.
+      preload=$out/libexec/google/talkplugin/libpreload.so
+      mkdir -p $(dirname $preload)
+      gcc -shared ${./preload.c} -o $preload -ldl -DOUT=\"$out\" -fPIC
+      echo $preload > $plugins/extra-ld-preload
     '';
 
   dontStrip = true;
@@ -88,5 +100,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.google.com/chat/video/;
     license = "unfree";
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }
