@@ -17,7 +17,7 @@ stdenv.mkDerivation {
       lib/Driver/ToolChains.cpp
   '';
 
-  cmakeFlags = [ "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}" "-DCMAKE_BUILD_TYPE=Release" ];
+  cmakeFlags = [ "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}" "-DCMAKE_BUILD_TYPE=Release" "-DLLVM_TARGETS_TO_BUILD=all"];
 
   enableParallelBuilding = true;
 
