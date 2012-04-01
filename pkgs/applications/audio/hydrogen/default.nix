@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, 
-  alsaLib, boost, glib, jackaudio, libarchive, liblrdf, libsndfile,
-  pkgconfig, qt4, scons, subversion }:
+{ stdenv, fetchurl, alsaLib, boost, glib, jackaudio, ladspaPlugins
+, libarchive, liblrdf , libsndfile, pkgconfig, qt4, scons, subversion }:
 
 stdenv.mkDerivation rec {
   version = "0.9.5";
@@ -12,11 +11,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ 
-    alsaLib boost glib jackaudio libarchive liblrdf libsndfile
-    pkgconfig qt4 scons subversion 
+    alsaLib boost glib jackaudio ladspaPlugins libarchive liblrdf
+    libsndfile pkgconfig qt4 scons subversion
   ];
 
   patches = [ ./scons-env.patch ];
+
+  postPatch = ''
+    sed -e 's#/usr/lib/ladspa#${ladspaPlugins}/lib/ladspa#' -i libs/hydrogen/src/preferences.cpp
+    sed '/\/usr/d' -i libs/hydrogen/src/preferences.cpp
+    '';
 
   # why doesn't scons find librdf?
   buildPhase = ''
