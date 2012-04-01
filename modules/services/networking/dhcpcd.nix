@@ -53,8 +53,8 @@ let
           ${config.system.build.upstart}/sbin/initctl emit -n ip-up IFACE=$interface
       fi
 
-      if [ "$reason" = EXPIRE -o "$reason" = RELEASE ]; then
           ${config.system.build.upstart}/sbin/initctl emit -n ip-down IFACE=$interface
+      if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER] ; then
       fi
     '';
 
