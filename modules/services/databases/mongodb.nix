@@ -17,6 +17,7 @@ let
     dbpath = ${cfg.dbpath}
     logpath = ${cfg.logpath}
     logappend = ${b2s cfg.logappend}
+    ${optionalString (cfg.replSetName != "") "replSet = ${cfg.replSetName}"}
   '';
 
 in
@@ -76,6 +77,14 @@ in
       useV8 = mkOption {
         default = false;
         description = "Use V8 instead of spidermonkey for js execution";
+      };
+
+      replSetName = mkOption {
+        default = "";
+        description = ''
+          If this instance is part of a replica set, set its name here.
+          Otherwise, leave empty to run as single node.
+        '';
       };
     };
 
