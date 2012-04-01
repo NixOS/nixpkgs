@@ -1,5 +1,5 @@
 {stdenv, fetchurl, python, pygobject, pycairo, pyGtkGlade, pythonDBus, 
- wpa_supplicant, dhcp, wirelesstools, nettools, iproute,
+ wpa_supplicant, dhcp, dhcpcd, wirelesstools, nettools, iproute,
  locale ? "C" }:
 
 # Wicd has a ncurses interface that we do not build because it depends
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     
     substituteInPlace in/scripts=wicd.in --subst-var-by TEMPLATE-DEFAULT $out/share/other/dhclient.conf.template.default
     
-    sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin:${wpa_supplicant}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${iproute}/sbin" in/scripts=wicd.in
+    sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin:${wpa_supplicant}/sbin:${dhcpcd}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${iproute}/sbin" in/scripts=wicd.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pythonDBus})" in/scripts=wicd.in
     sed -i "4iexport LC_ALL=\\\"${locale}\\\"" in/scripts=wicd.in
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin" in/scripts=wicd-client.in
