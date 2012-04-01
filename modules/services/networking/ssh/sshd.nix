@@ -203,6 +203,13 @@ in
         '';
       };
 
+      challengeResponseAuthentication = mkOption {
+        default = true;
+        description = ''
+          Specifies whether challenge/response authentication is allowed.
+        '';
+      };
+
       hostKeyType = mkOption {
         default = "dsa1024";
         description = "Type of host key to generate (dsa1024/rsa1024/ecdsa521)";
@@ -299,6 +306,7 @@ in
         PermitRootLogin ${cfg.permitRootLogin}
         GatewayPorts ${cfg.gatewayPorts}
         PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
+        ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true; 
