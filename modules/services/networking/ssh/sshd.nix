@@ -302,7 +302,7 @@ in
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true; 
-                    msg = "cannot enable X11 forwarding without setting xauth location";}];
+                    message = "cannot enable X11 forwarding without setting xauth location";}];
   };
 
 }

@@ -35,7 +35,7 @@ in
   };
 
   assertions = [{ assertion = if cfg.forwardX11 then cfg.setXAuthLocation else true; 
-                  msg = "cannot enable X11 forwarding without setting xauth location";}];
+                  message = "cannot enable X11 forwarding without setting xauth location";}];
 
   config = {
     environment.etc =

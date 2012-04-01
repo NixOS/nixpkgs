@@ -14,7 +14,7 @@ in
 
     assertions = mkOption {
       default = [];
-      example = [ { assertion = false; msg = "you can't enable this for that reason"; } ];
+      example = [ { assertion = false; message = "you can't enable this for that reason"; } ];
       merge = pkgs.lib.mergeListOption;
       description = ''
         This option allows modules to express conditions that must
