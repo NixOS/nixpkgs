@@ -164,9 +164,8 @@ let
 
     tests =
       let
-        t = import ./tests {
-          system = "i686-linux";
-        };
+        t = import ./tests { system = "i686-linux"; };
+        t_64 = import ./tests { system = "x86_64-linux"; };
       in {
         avahi = t.avahi.test;
         bittorrent = t.bittorrent.test;
@@ -175,6 +174,7 @@ let
         installer.lvm = t.installer.lvm.test;
         installer.separateBoot = t.installer.separateBoot.test;
         installer.simple = t.installer.simple.test;
+        installer.simple_64 = t_64.installer.simple.test;
         installer.swraid = t.installer.swraid.test;
         installer.rebuildCD = t.installer.rebuildCD.test;
         ipv6 = t.ipv6.test;
