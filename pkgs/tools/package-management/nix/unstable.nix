@@ -38,13 +38,12 @@ stdenv.mkDerivation rec {
           stdenv.cross ? nix && stdenv.cross.nix ? system
       ) ''--with-system=${stdenv.cross.nix.system}'';
     doCheck = false;
+    postInstall = ":";
   };
 
   enableParallelBuilding = true;
 
-  installCheckPhase = "make installcheck";
-
-  postPhases = [ "installCheckPhase" ];
+  postInstall = "make installcheck";
 
   meta = {
     description = "The Nix Deployment System";
