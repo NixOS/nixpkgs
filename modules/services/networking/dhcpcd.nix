@@ -40,7 +40,13 @@ let
     ''
       #exec >> /var/log/dhcpcd 2>&1
       #set -x
-    
+
+      params="IFACE=$interface REASON=$reason"
+
+      # only works when interface is wireless and wpa_supplicant has a control socket
+      # but we allow it to fail silently
+      wifiparams=$(/var/run/current-system/sw/sbin/wpa_cli -i$interface status 2>/dev/null | grep ssid | sed 's|^b|B|;s|ssid|SSID|' | xargs)
+
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
           # Restart ntpd.  (The "ip-up" event below will trigger the
           # restart.)  We need to restart it to make sure that it will
@@ -50,11 +56,11 @@ let
           # it"), so we silently lose time synchronisation.
           ${config.system.build.upstart}/sbin/initctl stop ntpd
 
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-up IFACE=$interface
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-up "$params $wifiparams"
       fi
 
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-down IFACE=$interface
       if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER] ; then
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-down "$params $wifiparams"
       fi
     '';
 
