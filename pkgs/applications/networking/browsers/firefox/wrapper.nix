@@ -28,6 +28,7 @@ stdenv.mkDerivation {
         "$out/bin/${browserName}${nameSuffix}" \
         --suffix-each MOZ_PLUGIN_PATH ':' "$plugins" \
         --suffix-each LD_LIBRARY_PATH ':' "$libs" \
+        --suffix-each LD_PRELOAD ':' "$(cat $(filterExisting $(addSuffix /extra-ld-preload $plugins)))" \
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))"
 
     mkdir -p $out/share/applications
