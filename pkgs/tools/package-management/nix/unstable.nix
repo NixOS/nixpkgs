@@ -13,7 +13,16 @@ stdenv.mkDerivation rec {
   };
 
   buildNativeInputs = [ perl pkgconfig ];
-  buildInputs = [ curl openssl boehmgc bzip2 sqlite ];
+
+  buildInputs = [ curl openssl boehmgc sqlite ];
+
+  # Note: bzip2 is not passed as a build input, because the unpack phase
+  # would end up using the wrong bzip2 when cross-compiling.
+  # XXX: The right thing would be to reinstate `--with-bzip2' in Nix.
+  postUnpack =
+    '' export CPATH="${bzip2}/include"
+       export LIBRARY_PATH="${bzip2}/lib"
+    '';
 
   configureFlags =
     ''
@@ -26,6 +35,11 @@ stdenv.mkDerivation rec {
     '';
 
   crossAttrs = {
+    postUnpack =
+      '' export CPATH="${bzip2.hostDrv}/include"
+         export NIX_CROSS_LDFLAGS="-L${bzip2.hostDrv}/lib -rpath-link ${bzip2.hostDrv}/lib $NIX_CROSS_LDFLAGS"
+      '';
+
     configureFlags =
       ''
         --with-store-dir=${storeDir} --localstatedir=${stateDir}
