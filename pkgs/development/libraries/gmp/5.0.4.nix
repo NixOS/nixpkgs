@@ -1,12 +1,14 @@
 { stdenv, fetchurl, m4, cxx ? true }:
 
 stdenv.mkDerivation rec {
-  name = "gmp-5.0.3";
+  name = "gmp-5.0.4";
 
   src = fetchurl {
     url = "mirror://gnu/gmp/${name}.tar.bz2";
-    sha256 = "dcafe9989c7f332b373e1f766af8e9cd790fc802fdec422a1910a6ef783480e3";
+    sha256 = "0vx0z5f1q8jjxjp8hcbcvzz8y41zs889nna4r4ahkpsb7vgamm1m";
   };
+
+  patches = [ ./ignore-bad-cpuid.patch ];
 
   buildNativeInputs = [ m4 ];
 
