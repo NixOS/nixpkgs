@@ -1694,13 +1694,7 @@ let
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
-  clangUnwrapped = callPackage ../development/compilers/llvm/clang.nix {
-    # There is a bug in gcc-4.5 that prevents building a release build of
-    # clang-3.0
-    stdenv = if stdenv.isLinux
-      then (stdenvAdapters.overrideGCC stdenv gcc46)
-      else stdenv;
-  };
+  clangUnwrapped = callPackage ../development/compilers/llvm/clang.nix { };
 
   clang = wrapClang clangUnwrapped;
 
