@@ -422,7 +422,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Haskell libraries.
 
-  Agda = callPackage ../development/libraries/haskell/Agda {};
+  Agda = callPackage ../development/libraries/haskell/Agda {
+    haskellSrcExts = self.haskellSrcExts_1_11_1;
+  };
 
   ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
 
@@ -793,7 +795,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellSrc_1_0_1_5 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.5.nix {};
   haskellSrc = self.haskellSrc_1_0_1_5;
 
-  haskellSrcExts = callPackage ../development/libraries/haskell/haskell-src-exts {};
+  haskellSrcExts_1_11_1 = callPackage ../development/libraries/haskell/haskell-src-exts/1.11.1.nix {};
+  haskellSrcExts_1_13_0 = callPackage ../development/libraries/haskell/haskell-src-exts/1.13.0.nix {};
+  haskellSrcExts = self.haskellSrcExts_1_13_0;
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
@@ -1462,7 +1466,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
 
-  X11 = callPackage ../development/libraries/haskell/X11 {};
+  X11_1_5_0_1 = callPackage ../development/libraries/haskell/X11/1.5.0.1.nix {};
+  X11_1_6_0 = callPackage ../development/libraries/haskell/X11/1.6.0.nix {};
+  X11 = self.X11_1_6_0;
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {};
 
@@ -1630,11 +1636,18 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     parsec = self.parsec3;
   };
 
-  xmonad = callPackage ../applications/window-managers/xmonad {};
+  xmonad = callPackage ../applications/window-managers/xmonad {
+    X11 = self.X11_1_5_0_1;
+  };
 
-  xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
+  xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {
+    X11 = self.X11_1_5_0_1;
+    X11Xft = self.X11Xft.override { X11 = self.X11_1_5_0_1; };
+  };
 
-  xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {};
+  xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {
+    X11 = self.X11_1_5_0_1;
+  };
 
   # Tools.
 
