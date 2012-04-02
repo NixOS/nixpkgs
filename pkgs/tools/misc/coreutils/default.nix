@@ -44,6 +44,14 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString selinuxSupport "-lsepol";
 
+  # the coreutils install calls the ginstall just compiled, before we have
+  # a chance to patchelf it. 
+  libPath = stdenv.lib.makeLibraryPath ([stdenv.gcc.libc] ++ buildInputs);
+
+  preInstall = ''
+    patchelf --set-rpath $libPath src/ginstall
+  '';
+
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
