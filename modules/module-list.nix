@@ -25,6 +25,7 @@
   ./installer/efi-boot-stub/efi-boot-stub.nix
   ./installer/generations-dir/generations-dir.nix
   ./installer/grub/grub.nix
+  ./installer/grub/memtest.nix
   ./installer/init-script/init-script.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix

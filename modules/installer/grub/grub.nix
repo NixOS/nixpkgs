@@ -12,7 +12,7 @@ let
     inherit grub;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-    inherit (config.boot.loader.grub) copyKernels
+    inherit (config.boot.loader.grub) copyKernels extraPrepareConfig
       extraConfig extraEntries extraEntriesBeforeNixOS extraPerEntryConfig
       splashImage configurationLimit version default timeout;
   };
@@ -82,6 +82,14 @@ in
         example = "Stable 2.6.21";
         description = ''
           GRUB entry name instead of default.
+        '';
+      };
+
+      extraPrepareConfig = mkOption {
+        default = "";
+        description = ''
+          Additional bash commands to be run at the script that
+          prepares the grub menu entries.
         '';
       };
 

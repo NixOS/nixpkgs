@@ -240,6 +240,7 @@ if test -n "$copyKernels"; then
     mkdir -p /boot/kernels
 fi
 
+@extraPrepareConfig@
 
 # Additional entries specified verbatim by the configuration.
 extraEntries=`cat <<EOF
