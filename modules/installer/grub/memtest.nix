@@ -1,5 +1,4 @@
-# This module adds Memtest86 to the Grub boot menu on the CD.  !!! It
-# would be nice if this also worked for normal configurations.
+# This module allows getting memtest86+ in grub menus.
 
 {config, pkgs, ...}:
 
