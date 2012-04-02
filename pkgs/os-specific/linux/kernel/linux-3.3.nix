@@ -229,8 +229,6 @@ import ./generic.nix (
 
     testing = false;
 
-    modDirVersion = "3.3.1";
-
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
     '';
