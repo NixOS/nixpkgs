@@ -114,6 +114,8 @@ in
     jobs.bind =
       { description = "BIND name server job";
 
+        startOn = "started network-interfaces";
+
         preStart =
           ''
             ${pkgs.coreutils}/bin/mkdir -p /var/run/named
