@@ -48,8 +48,12 @@ stdenv.mkDerivation {
         url = "http://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm";
         sha256 = "15909wnhspjci0fspvh5j87v1xl7dfix36zrpvk6fpc3m0vys0nh";
       }
-    else
-      throw "Google Talk does not support your platform.";
+    else if stdenv.system == "i686-linux" then
+      fetchurl {
+        url = "http://dl.google.com/linux/direct/google-talkplugin_current_i386.rpm";
+        sha256 = "0sclsj6mcaynkw28kipgmcj6sx5vbyrz1rwwyx89ll48n46k65ya";
+      }
+    else throw "Google Talk does not support your platform.";
 
   buildInputs = [ rpm cpio ];
       
