@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.graphviz.org/";
-    description = "open source graph visualization software"
+    description = "Open source graph visualization software";
 
     longDescription = ''
       Graphviz is open source graph visualization software. Graph
