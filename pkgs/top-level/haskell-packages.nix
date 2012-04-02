@@ -1606,7 +1606,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hslogger = callPackage ../development/tools/haskell/hslogger {};
 
-  SourceGraph = callPackage ../development/tools/haskell/SourceGraph {};
+  SourceGraph = callPackage ../development/tools/haskell/SourceGraph {
+    haskellSrcExts = self.haskellSrcExts_1_11_1;
+  };
 
   tar_0_3_2_0 = callPackage ../development/tools/haskell/tar/0.3.2.0.nix {};
   tar_0_4_0_0 = callPackage ../development/tools/haskell/tar/0.4.0.0.nix {};
