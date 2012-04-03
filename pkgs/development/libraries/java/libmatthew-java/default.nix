@@ -1,10 +1,10 @@
 {stdenv, fetchurl, jdk}:
 
 stdenv.mkDerivation {
-  name = "libmatthew-java-0.7.2";
+  name = "libmatthew-java-0.8";
   src = fetchurl {
-    url = http://www.matthew.ath.cx/projects/java/libmatthew-java-0.7.2.tar.gz;
-    sha256 = "00zd6vplbvha64pf65bpw44abg2y8irblik30pbk35wcm86a0j4z";
+    url = http://www.matthew.ath.cx/projects/java/libmatthew-java-0.8.tar.gz;
+    sha256 = "1yldkhsdzm0a41a0i881bin2jklhp85y3ah245jd6fz3npcx7l85";
   };
   JAVA_HOME=jdk;
   PREFIX=''''${out}'';
