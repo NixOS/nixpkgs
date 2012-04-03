@@ -1,10 +1,10 @@
-{ cabal, text }:
+{ cabal, text, time }:
 
 cabal.mkDerivation (self: {
   pname = "path-pieces";
-  version = "0.0.0";
-  sha256 = "09sk4wlzy37gaii7spisjy4a3pizis9si4kv389bki20gfwpaivf";
-  buildDepends = [ text ];
+  version = "0.1.1";
+  sha256 = "17ymk2azgz2c1hwnzqd9xy77hh51mvrgz4zs7lz4ik6rnvvihraz";
+  buildDepends = [ text time ];
   meta = {
     homepage = "http://github.com/snoyberg/path-pieces";
     description = "Components of paths";

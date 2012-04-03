@@ -753,7 +753,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     libc = pkgs.stdenv.gcc.libc;
   };
 
-  gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
+  gtk2hsBuildtools_0_12_1 = callPackage ../development/libraries/haskell/gtk2hs-buildtools/0.12.1.nix {};
+  gtk2hsBuildtools_0_12_3 = callPackage ../development/libraries/haskell/gtk2hs-buildtools/0.12.3.nix {};
+  gtk2hsBuildtools = self.gtk2hsBuildtools_0_12_1;
   gtk2hsC2hs = self.gtk2hsBuildtools;
 
   gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
@@ -1042,6 +1044,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_3_0_11 = callPackage ../development/libraries/haskell/network/2.3.0.11.nix {};
   network = self.network_2_3_0_11;
 
+  networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
+
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
   numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
@@ -1065,9 +1069,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
 
-  pathPieces_0_0_0 = callPackage ../development/libraries/haskell/path-pieces/0.0.0.nix {};
-  pathPieces_0_1_0 = callPackage ../development/libraries/haskell/path-pieces/0.1.0.nix {};
-  pathPieces = self.pathPieces_0_1_0;
+  pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
 
   pandoc = callPackage ../development/libraries/haskell/pandoc {};
 
@@ -1427,6 +1429,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
+  void = callPackage ../development/libraries/haskell/void {};
+
   vty = callPackage ../development/libraries/haskell/vty {
     mtl = self.mtl2;
   };
@@ -1497,9 +1501,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yesodAuth = callPackage ../development/libraries/haskell/yesod-auth {};
 
-  yesodCore = callPackage ../development/libraries/haskell/yesod-core {
-    pathPieces = self.pathPieces_0_0_0;
-  };
+  yesodCore = callPackage ../development/libraries/haskell/yesod-core {};
 
   yesodDefault = callPackage ../development/libraries/haskell/yesod-default {};
 
