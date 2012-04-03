@@ -7,7 +7,6 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ extensibleExceptions mtl utf8String X11 ];
-  noHaddock = true;
   meta = {
     homepage = "http://xmonad.org";
     description = "A tiling window manager";

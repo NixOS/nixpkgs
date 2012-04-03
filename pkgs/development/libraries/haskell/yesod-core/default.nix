@@ -17,7 +17,6 @@ cabal.mkDerivation (self: {
     shakespeareI18n shakespeareJs text time transformers
     transformersBase vector wai waiExtra waiLogger yesodRoutes
   ];
-  noHaddock = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";
