@@ -1164,7 +1164,7 @@ let
 
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-    then (callPackage ../tools/misc/parted {
+    then (parted.override {
         # Needs the Hurd's libstore.
         hurd = gnu.hurdCrossIntermediate;
 
