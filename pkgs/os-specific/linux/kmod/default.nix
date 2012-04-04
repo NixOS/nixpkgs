@@ -12,6 +12,8 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-xz" "--with-zlib" ];
 
+  patches = [ ./module-dir.patch ];
+
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/kernel/kmod/;
     description = "Tools for loading and managing Linux kernel modules";
