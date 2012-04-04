@@ -5447,7 +5447,6 @@ let
 
   # GNU/Hurd core packages.
   gnu = recurseIntoAttrs (callPackage ../os-specific/gnu {
-    callPackage = newScope pkgs.gnu;
     inherit platform crossSystem;
   });
 
