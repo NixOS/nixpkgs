@@ -432,7 +432,7 @@ unpackFile() {
     case "$curSrc" in
         *.tar.xz | *.tar.lzma)
             # Don't rely on tar knowing about .xz.
-            xz -d < $curSrc | tar x
+            xz -d < $curSrc | tar xf -
             ;;
         *.tar | *.tar.* | *.tgz | *.tbz2)
             # GNU tar can automatically select the decompression method
