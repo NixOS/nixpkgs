@@ -1531,11 +1531,11 @@ let pythonPackages = python.modules // rec {
 
 
   pysvn = pkgs.stdenv.mkDerivation {
-    name = "pysvn-1.7.2";
+    name = "pysvn-1.7.6";
 
     src = fetchurl {
-      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.2.tar.gz";
-      sha256 = "2b2980d200515e754e00a12d99dbce25c1ea90fddf8cba2bfa354c9305c5e455";
+      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.6.tar.gz";
+      sha256 = "0wwb9h3rw2r8hzqya8mv5z8pgjpa6y3i15a3cccdv2mil44289a7";
     };
 
     buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
@@ -1549,6 +1549,7 @@ let pythonPackages = python.modules // rec {
       python setup.py backport
       python setup.py configure \
         --apr-inc-dir=${pkgs.apr}/include/apr-1 \
+        --apu-inc-dir=${pkgs.aprutil}/include/apr-1 \
         --apr-lib-dir=${pkgs.apr}/lib \
         --svn-root-dir=${pkgs.subversion}
     '' + (if !stdenv.isDarwin then "" else ''
@@ -1945,6 +1946,20 @@ let pythonPackages = python.modules // rec {
       homepage = http://code.google.com/p/sqlalchemy-migrate/;
       description = "Schema migration tools for SQLAlchemy";
     };
+  };
+
+  svneverever =  buildPythonPackage rec {
+    name = "svneverever-778489a8";
+
+    src = pkgs.fetchgit {
+      url = git://git.goodpoint.de/svneverever.git;
+      rev = "778489a8c6f07825fb18c9da3892a781c3d659ac";
+      sha256 = "41c9da1dab2be7b60bff87e618befdf5da37c0a56287385cb0cbd3f91e452bb6";
+    };
+
+    propagatedBuildInputs = [ pysvn argparse ];
+
+    doCheck = false;
   };
 
   taskcoach = buildPythonPackage rec {
