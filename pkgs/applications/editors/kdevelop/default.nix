@@ -1,21 +1,19 @@
 { stdenv, fetchurl, kdevplatform, cmake, pkgconfig, automoc4, shared_mime_info,
-  kdebase_workspace, gettext, perl, kdeutils, kdesdk }:
+  kdebase_workspace, gettext, perl, okteta }:
 
-let
-  okteta = if kdeutils ? okteta then kdeutils.okteta else kdesdk.okteta;
-in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "4.2.3";
+  version = "4.3.0";
   pname = "kdevelop";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.bz2";
-    sha256 = "0ay3d2s5442pvdsx9lyfzb986kh6848qhbls9ff982f0glzqdcya";
+    sha256 = "0vb2f5922r1da4va8sx2qn2i1lf2gqg7nfg594kncy98a9b1avnr";
   };
 
-  buildInputs = [ kdevplatform cmake pkgconfig automoc4 shared_mime_info
-    kdebase_workspace gettext stdenv.gcc.libc perl okteta ];
+  buildInputs = [ kdevplatform kdebase_workspace okteta ];
+
+  buildNativeInputs = [ cmake pkgconfig automoc4 shared_mime_info gettext perl ];
 
   NIX_CFLAGS_COMPILE = "-I${okteta}/include/KDE";
 

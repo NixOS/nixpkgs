@@ -2,22 +2,21 @@
   gettext, pkgconfig, apr, aprutil, boost, qjson }:
 
 stdenv.mkDerivation rec {
-  name = "kdevplatform-1.2.3";
+  name = "kdevplatform-1.3.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdevelop/4.2.3/src/${name}.tar.bz2";
-    sha256 = "1h55lh7kkb8d9qgf4yyzmdwn7vq8l49lzlq92jccz7p79lxb2s08";
+    url = "mirror://kde/stable/kdevelop/4.3.0/src/${name}.tar.bz2";
+    sha256 = "0afka8999csyj8hbgmcsbn8h2by04v7n8k4mrwkl0b79crdvwbcd";
   };
 
-  propagatedBuildInputs = [ kdelibs subversion qt4 phonon ];
-  buildInputs =
-    [ cmake automoc4 perl gettext pkgconfig apr aprutil boost
-      stdenv.gcc.libc qjson
-    ];
+  propagatedBuildInputs = [ kdelibs qt4 phonon ];
+  buildInputs = [ apr aprutil subversion boost qjson ];
 
-  meta = with stdenv.lib; {
-    maintainers = [ maintainers.urkud ];
-    platforms = platforms.linux;
+  buildNativeInputs = [ cmake automoc4 gettext pkgconfig ];
+
+  meta = {
+    maintainers = [ stdenv.lib.maintainers.urkud ];
+    platforms = stdenv.lib.platforms.linux;
     description = "KDE libraries for IDE-like programs";
     longDescription = ''
       A free, opensource set of libraries that can be used as a foundation for
