@@ -3,11 +3,15 @@
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba_light
 , gccCrossStageStatic, gccCrossStageFinal
-, forceBuildDrv, forceSystem, callPackage, platform, config, crossSystem }:
+, forceBuildDrv, forceSystem, callPackage, platform, config, crossSystem
+, __overrides ? {} }:
 
 with args;
 
 rec {
+  # Allow callers to override elements of this attribute set.
+  inherit __overrides;
+
   hurdCross = forceBuildDrv(import ./hurd {
     inherit fetchgit stdenv autoconf libtool texinfo machHeaders
       mig glibcCross hurdPartedCross;
