@@ -90,11 +90,11 @@ let
 
     smbfs = callPackage ./smbfs {
       samba = samba_light;
-      hurd = hurdCross;
+      hurd = gnu.hurdCross;
     };
 
     unionfs = callPackage ./unionfs {
-      hurd = hurdCross;
+      hurd = gnu.hurdCross;
     };
   }
 
