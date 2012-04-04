@@ -25,6 +25,7 @@
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
   qknight = "Joachim Schiele <js@lastlog.de>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
+  rob = "Rob Vermaas <rob.vermaas@gmail.com>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   shlevy = "Shea Levy <shea@shealevy.com>";
