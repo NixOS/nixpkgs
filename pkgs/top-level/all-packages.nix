@@ -3386,6 +3386,8 @@ let
     useX11 = true;
   };
 
+  dbus_cplusplus = callPackage ../development/libraries/dbus-cplusplus { };
+
   dbus_glib = callPackage ../development/libraries/dbus-glib { };
 
   dbus_java = callPackage ../development/libraries/java/dbus-java { };
