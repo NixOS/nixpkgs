@@ -2361,6 +2361,8 @@ let
 
   jikes = callPackage ../development/compilers/jikes { };
 
+  julia = callPackage ../development/compilers/julia { };
+
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit makeWrapper gtk glib pango atk gdk_pixbuf;
     inherit (xlibs) libXi inputproto libX11 xproto libXext xextproto;
