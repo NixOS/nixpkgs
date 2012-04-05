@@ -4576,11 +4576,6 @@ let
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
   };
 
-  qt4_8_1 = callPackage ../development/libraries/qt-4.x/4.8/4.8.1.nix {
-    # GNOME dependencies are not used unless gtkStyle == true
-    inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
-  };
-
   qt4_for_skype = qt48.override {
     mysql = null;
     postgresql = null;
