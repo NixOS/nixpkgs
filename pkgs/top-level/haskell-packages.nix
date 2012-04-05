@@ -996,6 +996,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   monadControl_0_3_1_1 = callPackage ../development/libraries/haskell/monad-control/0.3.1.1.nix {};
   monadControl = self.monadControl_0_3_1_1;
 
+  monadcryptorandom = callPackage ../development/libraries/haskell/monadcryptorandom {};
+
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
   monadPar = callPackage ../development/libraries/haskell/monad-par {};
@@ -1539,15 +1541,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
   zlib = self.zlib_0_5_3_3;
 
-  zlibBindings_0_0_3_2 = callPackage ../development/libraries/haskell/zlib-bindings/0.0.3.2.nix {};
-  zlibBindings_0_1_0_1 = callPackage ../development/libraries/haskell/zlib-bindings/0.1.0.1.nix {};
-  zlibBindings = self.zlibBindings_0_0_3_2;
+  zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
 
   zlibConduit = callPackage ../development/libraries/haskell/zlib-conduit {};
 
-  zlibEnum = callPackage ../development/libraries/haskell/zlib-enum {
-    zlibBindings = self.zlibBindings_0_0_3_2;
-  };
+  zlibEnum = callPackage ../development/libraries/haskell/zlib-enum {};
 
   Zwaluw = callPackage ../development/libraries/haskell/Zwaluw {};
 

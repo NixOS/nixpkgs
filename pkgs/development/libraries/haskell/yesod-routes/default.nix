@@ -2,13 +2,13 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-routes";
-  version = "0.0.1";
-  sha256 = "19bnww5idxr0j2l8g838idxkhhn73bhdz0bnvglinv7163fy8xhl";
+  version = "1.0.0";
+  sha256 = "1sqlcawsbv8sz22prcg41dvma6kywyl18dwp7msjlbkxgc2msp3a";
   buildDepends = [ pathPieces text vector ];
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Efficient routing for Yesod";
-    license = self.stdenv.lib.licenses.bsd3;
+    license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };

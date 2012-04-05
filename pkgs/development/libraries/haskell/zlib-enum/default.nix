@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zlib-enum";
-  version = "0.2.1";
-  sha256 = "0cnx7sbgj6s0gvq6pcqyi3xahx7x3bj47ap10z89qfbk0906rkq8";
+  version = "0.2.2";
+  sha256 = "1fmlvjj1krigj5aqipq5pf0mqnybr7zz50mgqr30kznfg48ry29y";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ enumerator transformers zlibBindings ];

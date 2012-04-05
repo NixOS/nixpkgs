@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     haskellSrcExts httpTypes parsec random safe tagsoup time
     transformers uniplate wai warp
   ];
+  patches = [ ./relax-version-requirements.patch ];
   meta = {
     homepage = "http://www.haskell.org/hoogle/";
     description = "Haskell API Search";

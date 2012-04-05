@@ -4,15 +4,15 @@
 
 cabal.mkDerivation (self: {
   pname = "hamlet";
-  version = "0.10.9.1";
-  sha256 = "1z2g7ymb8ihx13dkfq0k0s2fn1k6nig8h306i8p4q76wy7ybw3g0";
+  version = "1.0.1";
+  sha256 = "1h3bq9vignnbvnjwr35yf4am0k90l1c21x0phnhnigdx7wanygcz";
   buildDepends = [
     blazeBuilder blazeHtml failure parsec shakespeare text
   ];
   meta = {
-    homepage = "http://www.yesodweb.com/book/templates";
+    homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "Haml-like template files that are compile-time checked";
-    license = self.stdenv.lib.licenses.bsd3;
+    license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };

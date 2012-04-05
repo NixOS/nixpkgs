@@ -14,6 +14,9 @@ cabal.mkDerivation (self: {
     description = "Practical library for functional reactive programming (FRP)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.bluescreen303 ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.bluescreen303
+    ];
   };
 })

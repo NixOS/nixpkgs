@@ -11,6 +11,9 @@ cabal.mkDerivation (self: {
     binary blazeHtml citeprocHs cryptohash filepath hamlet mtl pandoc
     parsec regexBase regexTdfa snapCore snapServer tagsoup time
   ];
+  patchPhase = ''
+    sed -i 's|hamlet      >= 0.10.3 && < 0.11|hamlet|' hakyll.cabal
+  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";

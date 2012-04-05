@@ -1,15 +1,15 @@
-{ cabal, blazeBuilder, blazeBuilderConduit, bytestringLexing
-, caseInsensitive, conduit, httpTypes, liftedBase, network
+{ cabal, blazeBuilder, blazeBuilderConduit, caseInsensitive
+, conduit, httpTypes, liftedBase, network, networkConduit
 , simpleSendfile, transformers, unixCompat, wai
 }:
 
 cabal.mkDerivation (self: {
   pname = "warp";
-  version = "1.1.0.1";
-  sha256 = "1bgjnnkqgcyj00jd4rgsnpmac0yfd1ydd6i61b252gyrr9dd0wm9";
+  version = "1.2.0";
+  sha256 = "1dz7nrybr08k40phynk5xm7pc5hk86k5r92yr3pri1wdyg7yb6kv";
   buildDepends = [
-    blazeBuilder blazeBuilderConduit bytestringLexing caseInsensitive
-    conduit httpTypes liftedBase network simpleSendfile transformers
+    blazeBuilder blazeBuilderConduit caseInsensitive conduit httpTypes
+    liftedBase network networkConduit simpleSendfile transformers
     unixCompat wai
   ];
   meta = {
