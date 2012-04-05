@@ -10,14 +10,14 @@
 
 assert stdenv ? glibc;
 
-let version = "0.8.9"; in
+let version = "0.8.10"; in
 
 stdenv.mkDerivation rec {
   name = "gnash-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/gnash/${version}/${name}.tar.bz2";
-    sha256 = "1ga8khwaympj4fphhpyqx6ddcikv0zmcpnlykcipny1xy33bs3gr";
+    sha256 = "090j5lly5r6jzbnvlc3mhay6dsrd9sfrkjcgqaibm4nz8lp0f9cn";
   };
 
   patchPhase = ''
@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
          --with-sdl-incl=${SDL}/include/SDL                     \
          --with-npapi-plugindir=$out/plugins                    \
          --enable-media=gst                                     \
+         --without-gconf
          --enable-gui=gtk"
 
        # In `libmedia', Gnash compiles with "-I$gst_plugins_base/include",
