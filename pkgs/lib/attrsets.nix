@@ -78,6 +78,17 @@ rec {
   catAttrs = attr: l: fold (s: l: if hasAttr attr s then [(getAttr attr s)] ++ l else l) [] l;
 
 
+  /* Filter an attribute set by removing all attributes for which the
+     given predicate return false.
+
+     Example:
+       filterAttrs (n: v: n == "foo") { foo = 1; bar = 2; }
+       => { foo = 1; }
+  */
+  filterAttrs = pred: set:
+    listToAttrs (fold (n: ys: let v = getAttr n set; in if pred n v then [(nameValuePair n v)] ++ ys else ys) [] (attrNames set));
+
+
   /* Recursively collect sets that verify a given predicate named `pred'
      from the set `attrs'.  The recursion is stopped when the predicate is
      verified.
