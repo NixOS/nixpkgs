@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, tolerateCpuTimingInaccuracy ? true }:
+{ stdenv, fetchurl, gfortran, tolerateCpuTimingInaccuracy ? true, shared ? false }:
 
 let
   optionalString = stdenv.lib.optionalString;
@@ -25,7 +25,9 @@ stdenv.mkDerivation {
   #   machine in the first place.
   configureFlags = "-Fa alg -fPIC"
     + optionalString stdenv.isi686 " -b 32"
-    + optionalString tolerateCpuTimingInaccuracy " -Si cputhrchk 0";
+    + optionalString tolerateCpuTimingInaccuracy " -Si cputhrchk 0"
+    + optionalString shared " --shared "
+    ;
 
   buildInputs = [ gfortran ];
 
