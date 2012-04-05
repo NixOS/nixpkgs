@@ -1164,17 +1164,20 @@ let
 
   hurdPartedCross =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
-    then (parted.override {
-        # Needs the Hurd's libstore.
-        hurd = gnu.hurdCrossIntermediate;
+    then (makeOverridable
+            ({ hurd }:
+              (parted.override {
+                # Needs the Hurd's libstore.
+                inherit hurd;
 
-        # The Hurd wants a libparted.a.
-        enableStatic = true;
+                # The Hurd wants a libparted.a.
+                enableStatic = true;
 
-        gettext = null;
-        readline = null;
-        devicemapper = null;
-      }).hostDrv
+                gettext = null;
+                readline = null;
+                devicemapper = null;
+              }).hostDrv)
+           { hurd = gnu.hurdCrossIntermediate; })
     else null;
 
   patch = gnupatch;
