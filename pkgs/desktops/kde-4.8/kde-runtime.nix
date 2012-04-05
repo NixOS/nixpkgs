@@ -10,13 +10,6 @@ kde {
 
   passthru.propagatedUserEnvPackages = [ virtuoso ];
 
-  patches = map fetchurl [{
-    # See https://bugs.kde.org/show_bug.cgi?id=289932
-    url = "http://bugsfiles.kde.org/attachment.cgi?id=69386";
-    name = "resourceidentifier.patch";
-    sha256 = "1fpjg1yc191i6ga9sz6r530q9zwh790m3qahsp0i6kzajwpi7jwz";
-  }];
-
   meta = {
     license = "LGPL";
   };
