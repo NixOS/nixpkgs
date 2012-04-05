@@ -1,10 +1,11 @@
+{ nixosSrc ? {outPath = ./.; rev = 1234;} }:
+
 let
 
 
   makeIso =
     { module, type, description ? type, maintainers ? ["eelco"] }:
-    { nixosSrc ? {outPath = ./.; rev = 1234;}
-    , officialRelease ? false
+    { officialRelease ? false
     , system ? "i686-linux"
     }:
 
@@ -44,8 +45,7 @@ let
 
   makeSystemTarball =
     { module, maintainers ? ["viric"]}:
-    { nixosSrc ? {outPath = ./.; rev = 1234;}
-    , officialRelease ? false
+    { officialRelease ? false
     , system ? "i686-linux"
     }:
 
@@ -75,9 +75,7 @@ let
 
 
     tarball =
-      { nixosSrc ? {outPath = ./.; rev = 1234;}
-      , officialRelease ? false
-      }:
+      { officialRelease ? false }:
 
       with import <nixpkgs> {};
 
@@ -102,9 +100,7 @@ let
 
 
     manual =
-      { nixosSrc ? {outPath = ./.; rev = 1234;}
-      , officialRelease ? false
-      }:
+      { officialRelease ? false }:
 
       (import "${nixosSrc}/doc/manual" {
         pkgs = import <nixpkgs> {};
