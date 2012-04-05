@@ -10,6 +10,8 @@ let
 
   # The list of igored individual modules
   ignoreList = {
+    # Doesn't work yet
+    kdeutils = [ "ksecrets" ];
     # kdeadmin/strigi-analyzer has no real code
     kdeadmin = [ "strigi-analyzer" ];
     # kdesdk/kioslave is splitted into kioslave-svn and kioslave-git
