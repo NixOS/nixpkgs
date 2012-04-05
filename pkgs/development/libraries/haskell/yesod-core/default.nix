@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-core";
-  version = "1.0.0";
-  sha256 = "0za3pflbcmgxd45jx0g2yc7cmhmhn1qk45j0mg4qq73r1lcyj6x0";
+  version = "1.0.0.1";
+  sha256 = "15k4zq06qi3pv2l73mxjz1qm18d5665bis7m4fwnk83jbqj2l2xk";
   buildDepends = [
     aeson blazeBuilder blazeHtml caseInsensitive cereal clientsession
     conduit cookie failure fastLogger hamlet httpTypes liftedBase
@@ -17,7 +17,6 @@ cabal.mkDerivation (self: {
     shakespeareCss shakespeareI18n shakespeareJs text time transformers
     transformersBase vector wai waiExtra waiLogger yesodRoutes
   ];
-  noHaddock = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";

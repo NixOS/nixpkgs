@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-default";
-  version = "0.3.0";
-  sha256 = "0nbvknfa9kkc46fl1ffji0ghqb41wwsccmc55mya5zavfq9g05g9";
+  version = "0.4.0";
+  sha256 = "1pil8dxbk0zl2zw1xj9h2bpwpdriwfd7aj48kh0xpw9yazg3m802";
   buildDepends = [ dlist ];
   meta = {
     description = "A class for types with a default value";
