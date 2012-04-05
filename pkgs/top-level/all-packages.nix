@@ -5421,6 +5421,8 @@ let
 
   eject = callPackage ../os-specific/linux/eject { };
 
+  ffado = callPackage ../os-specific/linux/ffado { };
+
   fbterm = builderDefsPackage (import ../os-specific/linux/fbterm) {
     inherit fontconfig gpm freetype pkgconfig ncurses;
   };
