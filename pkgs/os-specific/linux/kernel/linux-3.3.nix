@@ -37,10 +37,12 @@ let
       IOSCHED_CFQ y
       BLK_CGROUP y # required by CFQ
 
+      # Enable NUMA.
+      NUMA? y
+
       # Disable some expensive (?) features.
       FTRACE n
       KPROBES n
-      NUMA? n
       PM_TRACE_RTC n
 
       # Enable various subsystems.
@@ -226,8 +228,6 @@ import ./generic.nix (
 
   rec {
     version = "3.3.1";
-
-    testing = false;
 
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
