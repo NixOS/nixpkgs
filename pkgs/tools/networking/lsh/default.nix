@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
             s|/usr/bin/df|$(type -P df)|g ;
             s|/usr/bin/ipcs|$(type -P ipcs)|g ;
             s|/usr/bin/uptime|$(type -P uptime)|g"
+
+    # Skip the `configure' script that checks whether /dev/ptmx & co. work as
+    # expected, because it relies on impurities (for instance, /dev/pts may
+    # be unavailable in chroots.)
+    export lsh_cv_sys_unix98_ptys=yes
   '';
 
   buildInputs = [ gperf guile gmp zlib liboop readline gnum4 pam ];
