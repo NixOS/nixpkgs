@@ -939,6 +939,8 @@ let
 
   lftp = callPackage ../tools/networking/lftp { };
 
+  libconfig = callPackage ../development/libraries/libconfig { };
+
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
