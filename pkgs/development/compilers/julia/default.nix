@@ -4,6 +4,7 @@
  } :
 let
   liblapackShared = liblapack.override{shared=true;};
+  realGcc = stdenv.gcc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
@@ -68,7 +69,8 @@ stdenv.mkDerivation rec {
 
     sed -e '/cd SuiteSparse-SYSTEM/,+1s@find /lib /usr/lib /usr/local/lib@find ${suitesparse}/lib@' -i external/Makefile
 
-    export NIX_LDFLAGS="$NIX_LDFLAGS -L${stdenv.gcc.gcc}/lib -L${stdenv.gcc.gcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk "
+    ${if realGcc ==null then "" else 
+    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk "''}
 
     sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
   '';
