@@ -56,11 +56,11 @@ let
           # it"), so we silently lose time synchronisation.
           ${config.system.build.upstart}/sbin/initctl stop ntpd
 
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-up "$params $wifiparams"
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-up $params $wifiparams
       fi
 
-      if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER] ; then
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-down "$params $wifiparams"
+      if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-down $params $wifiparams
       fi
     '';
 
