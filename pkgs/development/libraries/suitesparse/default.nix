@@ -1,6 +1,6 @@
 { stdenv, fetchurl, blas, liblapack, gfortran } :
 stdenv.mkDerivation {
-  name = "suitespare";
+  name = "suitesparse";
   src = fetchurl {
     url = http://www.cise.ufl.edu/research/sparse/SuiteSparse/SuiteSparse-3.5.0.tar.gz ;
     sha256 = "0npn7c1j5qag5m2r0cmh3bwc42c1jk8k2yg2cfyxlcrp0h7wn4rc";  			
