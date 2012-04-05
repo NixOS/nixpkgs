@@ -6329,10 +6329,7 @@ let
 
   audacious = callPackage ../applications/audio/audacious { };
 
-  audacity = callPackage ../applications/audio/audacity {
-    portaudio = portaudioSVN;
-    ffmpeg = ffmpeg_0_6_90;
-  };
+  audacity = callPackage ../applications/audio/audacity { };
 
   aumix = callPackage ../applications/audio/aumix {
     gtkGUI = false;
