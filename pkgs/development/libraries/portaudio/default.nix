@@ -1,11 +1,11 @@
 { stdenv, fetchurl, alsaLib, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "portaudio-19-20071207";
-	
+  name = "portaudio-19-20111121";
+  
   src = fetchurl {
-    url = http://www.portaudio.com/archives/pa_stable_v19_20071207.tar.gz;
-    sha256 = "0axz8xzkb6ynzj65p6cv6b0cl5csxsdfvqkd0dljlf3dslkpg886";
+    url = http://www.portaudio.com/archives/pa_stable_v19_20111121.tgz;
+    sha256 = "168vmcag3c5y3zwf7h5298ydh83g72q5bznskrw9cr2h1lrx29lw";
   };
 
   buildInputs = [ alsaLib pkgconfig ];
