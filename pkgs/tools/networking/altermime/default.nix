@@ -26,7 +26,7 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  patches = [./altermime.patch];
+  patches = map a.fetchurl (import ./debian-patches.nix);
 
   phaseNames = ["doPatch" "fixTarget" "doMakeInstall"];
   fixTarget = a.fullDepEntry (''
