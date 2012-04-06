@@ -4795,7 +4795,7 @@ let
       perl = perl510;
     };
 
-  webkit_gtk2 = 
+  webkit_gtk2 =
     builderDefsPackage ../development/libraries/webkit/gtk2.nix {
       inherit (gnome) gtkdoc libsoup;
       inherit gtk atk pango glib;
@@ -7666,7 +7666,7 @@ let
     pyrex = pyrex095;
   };
 
-  xscreensaver = callPackage ../applications/graphics/xscreensaver {
+  xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome) libglade;
   };
 
