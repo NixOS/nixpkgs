@@ -168,9 +168,6 @@ let kernel = config.boot.kernelPackages.kernel; in
     boot.initrd.kernelModules =
       [ # For LVM.
         "dm_mod"
-
-        # For usual AT keyboards.
-        "i8042"
       ];
 
     # The Linux kernel >= 2.6.27 provides firmware.
