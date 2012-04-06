@@ -119,6 +119,11 @@ in
       '';
   };
 
+  x11perf = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${args.freetype}/include/freetype2";
+    buildInputs = attrs.buildInputs ++ [ args.freetype args.fontconfig ];
+  };
+
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     buildInputs = attrs.buildInputs ++ [xorg.kbproto xorg.libxkbfile xorg.randrproto];
