@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       "--with-x-app-defaults=\${out}/share/xscreensaver/app-defaults"
     ];
 
-  preConfigure = ''
+  preConfigure =
     ''
       sed -e 's%@GTK_DATADIR@%@datadir@% ; s%@PO_DATADIR@%@datadir@%' \
         -i driver/Makefile.in po/Makefile.in.in
