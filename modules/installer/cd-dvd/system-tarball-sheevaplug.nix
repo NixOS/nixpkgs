@@ -106,11 +106,6 @@ in
     [ "mvsdio" "mmc_block" "reiserfs" "ext3" "ums-cypress" "rtc_mv"
       "ext4" ];
 
-  boot.initrd.kernelModules =
-    [
-      "scsi_wait_scan"
-    ];
-
   boot.postBootCommands =
     ''
       mkdir -p /mnt

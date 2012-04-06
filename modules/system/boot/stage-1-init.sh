@@ -139,6 +139,8 @@ mkdir -p /dev/.mdadm
 udevd --daemon
 udevadm trigger --action=add
 udevadm settle || true
+modprobe scsi_wait_scan || true
+udevadm settle || true
 
 
 # XXX: Use case usb->lvm will still fail, usb->luks->lvm is covered
@@ -298,13 +300,17 @@ for ((n = 0; n < ${#mountPoints[*]}; n++)); do
     # that we don't properly recognise.
     if test -z "$pseudoDevice" -a ! -e $device; then
         echo -n "waiting for device $device to appear..."
-        for ((try = 0; try < 10; try++)); do
+        for ((try = 0; try < 20; try++)); do
             sleep 1
             if test -e $device; then break; fi
             echo -n "."
         done
         echo
     fi
+
+    # Wait once more for the udev queue to empty, just in case it's
+    # doing something with $device right now.
+    udevadm settle || true
 
     echo "mounting $device on $mountPoint..."
 

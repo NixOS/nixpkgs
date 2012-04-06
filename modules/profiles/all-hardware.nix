@@ -46,11 +46,6 @@
       "hid_apple"
     ];
 
-  boot.initrd.kernelModules =
-    [ # Wait for SCSI devices to appear.
-      "scsi_wait_scan"
-    ];
-
   # Include lots of firmware.
   require =
     [ ../hardware/network/intel-4965agn.nix

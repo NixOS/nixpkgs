@@ -119,11 +119,6 @@ in
   boot.kernelPackages = pkgs.linuxPackages_2_6_35;
   boot.kernelParams = [ "console=tty" ];
 
-  boot.initrd.kernelModules =
-    [ # Wait for SCSI devices to appear.
-      "scsi_wait_scan"
-    ];
-
   boot.postBootCommands =
     ''
       mkdir -p /mnt
