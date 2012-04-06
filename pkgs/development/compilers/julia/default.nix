@@ -1,6 +1,6 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, blas, liblapack
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
- , ncurses
+ , ncurses, libunistring
  } :
 let
   liblapackShared = liblapack.override{shared=true;};
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm blas liblapackShared readline 
-    fftw fftwSinglePrec libunwind suitesparse glpk ncurses
+    fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring
     ];
 
   configurePhase = ''
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     sed -e '/cd SuiteSparse-SYSTEM/,+1s@find /lib /usr/lib /usr/local/lib@find ${suitesparse}/lib@' -i external/Makefile
 
     ${if realGcc ==null then "" else 
-    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk "''}
+    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring "''}
 
     sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
   '';
