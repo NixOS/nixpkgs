@@ -6803,7 +6803,7 @@ let
   gmu = callPackage ../applications/audio/gmu { };
 
   gnash = callPackage ../applications/video/gnash {
-    xulrunner = icecatXulrunner3;
+    xulrunner = firefoxPkgs.xulrunner;
     inherit (gnome) gtkglext;
   };
 
