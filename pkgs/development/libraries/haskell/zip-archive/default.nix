@@ -2,15 +2,15 @@
 
 cabal.mkDerivation (self: {
   pname = "zip-archive";
-  version = "0.1.1.7";
-  sha256 = "1q52v18kl1j049kk3yb7rp0k27p6q7r72mg1vcbdid6qd7a9dh48";
+  version = "0.1.1.8";
+  sha256 = "0rq4jk1sxi6lrc7d7sh500lh83v2fxxrfh2gknqiyzxd3wh364y1";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary digest filepath mtl utf8String zlib ];
   meta = {
     homepage = "http://github.com/jgm/zip-archive";
     description = "Library for creating and modifying zip archives";
-    license = "GPL";
+    license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
