@@ -4770,6 +4770,8 @@ let
 
   vmime = callPackage ../development/libraries/vmime { };
 
+  vrpn = callPackage ../development/libraries/vrpn { };
+
   vtk = callPackage ../development/libraries/vtk { };
 
   vxl = callPackage ../development/libraries/vxl {
