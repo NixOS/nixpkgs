@@ -1,62 +1,41 @@
-x@{builderDefsPackage
-  , mesa, cmake, automake, libtool, autoconf
-  , freetype, freeimage, zziplib, randrproto, libXrandr
-  , libXaw, freeglut, libXt, libpng, boost, ois
-  , xproto, libX11, libXmu, libSM, pkgconfig
-  , libXxf86vm, xf86vidmodeproto, libICE
-  , renderproto, libXrender
-  , nvidia_cg_toolkit
-  , ...}:
-builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    [];
+{ fetchurl, stdenv
+, cmake, mesa
+, freetype, freeimage, zziplib, randrproto, libXrandr
+, libXaw, freeglut, libXt, libpng, boost, ois
+, xproto, libX11, libXmu, libSM, pkgconfig
+, libXxf86vm, xf86vidmodeproto, libICE
+, renderproto, libXrender
+, nvidia_cg_toolkit }:
 
-  buildInputs = map (n: builtins.getAttr n x)
-    (builtins.attrNames (builtins.removeAttrs x helperArgNames));
-  sourceInfo = rec {
-    baseName="ogre";
-    majorVersion="1";
-    minorVersion="7";
-    patchLevel="2";
-    version="${majorVersion}.${minorVersion}.${patchLevel}";
-    name="${baseName}-${version}";
-    project="${baseName}";
-    url="mirror://sourceforge/project/${project}/${baseName}/${majorVersion}.${minorVersion}/${baseName}_src_v${majorVersion}-${minorVersion}-${patchLevel}.tar.bz2";
-    hash="10q8jx842s4aws9py6q67rb4dh5vli5vvg54jl8manjb4f388jh5";
-  };
-in
-rec {
-  src = a.fetchurl {
-    url = sourceInfo.url;
-    sha256 = sourceInfo.hash;
+stdenv.mkDerivation {
+  name = "ogre-1.7.2";
+
+  src = fetchurl {
+    url = "mirror://sourceforge/ogre/1.7/ogre_src_v1-7-2.tar.bz2";
+    sha256 = "10q8jx842s4aws9py6q67rb4dh5vli5vvg54jl8manjb4f388jh5";
   };
 
-  inherit (sourceInfo) name version;
-  inherit buildInputs;
+  cmakeFlags =
+    (map (x: "-DOGRE_BUILD_PLUGIN_${x}=on") [ "BSP" "CG" "OCTREE" "PCZ" "PFX" ])
+    ++ (map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ]);
 
-  doMyBuild = a.fullDepEntry ("make -j4") ["doCmake"];
+  enableParallelBuilding = true;
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doCmake" "doMyBuild" "doMakeInstall"];
-
-  cmakeSkipRpath = false;
+  buildInputs =
+   [ cmake mesa
+     freetype freeimage zziplib randrproto libXrandr
+     libXaw freeglut libXt libpng boost ois
+     xproto libX11 libXmu libSM pkgconfig
+     libXxf86vm xf86vidmodeproto libICE
+     renderproto libXrender
+     nvidia_cg_toolkit
+   ];
 
   meta = {
     description = "A 3D engine";
-    maintainers = with a.lib.maintainers;
-    [
-      raskin
-    ];
-    platforms = with a.lib.platforms;
-      linux;
+    homepage = http://www.ogre3d.org/;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = stdenv.lib.platforms.linux;
     license = "MIT";
   };
-  passthru = {
-    updateInfo = {
-      downloadPage = "http://www.ogre3d.org/download/source";
-    };
-  };
-}) x
-
+}
