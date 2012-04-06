@@ -255,7 +255,6 @@ mountFS() {
 
 
 # Try to find and mount the root device.
-sleep 3
 mkdir /mnt-root
 
 mountPoints=(@mountPoints@)
