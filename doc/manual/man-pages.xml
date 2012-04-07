@@ -26,6 +26,6 @@
   <xi:include href="man-configuration.xml" />
   <xi:include href="man-nixos-rebuild.xml" />
   <xi:include href="man-nixos-option.xml" />
-  <xi:include href="man-nixos-deploy-network.xml" />
   <xi:include href="man-nixos-build-vms.xml" />
+  
 </reference>

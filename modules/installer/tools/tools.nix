@@ -17,11 +17,6 @@ let
     src = ./nixos-build-vms/nixos-build-vms.sh;
   };
 
-  nixosDeployNetwork = makeProg {
-    name = "nixos-deploy-network";
-    src = ./nixos-deploy-network/nixos-deploy-network.sh;
-  };
-
   nixosInstall = makeProg {
     name = "nixos-install";
     src = ./nixos-install.sh;
