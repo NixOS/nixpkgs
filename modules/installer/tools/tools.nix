@@ -111,7 +111,6 @@ in
   config = {
     environment.systemPackages =
       [ nixosBuildVMS
-        nixosDeployNetwork
         nixosInstall
         nixosRebuild
         nixosHardwareScan
