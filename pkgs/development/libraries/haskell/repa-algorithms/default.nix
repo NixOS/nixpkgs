@@ -1,10 +1,11 @@
-{ cabal, repa, vector }:
+{ cabal, llvm, repa, vector }:
 
 cabal.mkDerivation (self: {
   pname = "repa-algorithms";
-  version = "2.2.0.1";
-  sha256 = "1ggxa2h2swgf7621nrzlqmmyi3h2v526w69zcwvms84kyd257p4p";
+  version = "3.1.0.1";
+  sha256 = "17479hp6x02vdwbn201gvxrqsc6smp5q1ip61qbfsvirjih8f3pz";
   buildDepends = [ repa vector ];
+  extraLibraries = [ llvm ];
   meta = {
     homepage = "http://repa.ouroborus.net";
     description = "Algorithms using the Repa array library";

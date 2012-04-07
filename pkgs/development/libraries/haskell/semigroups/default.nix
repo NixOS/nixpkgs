@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "semigroups";
-  version = "0.8";
-  sha256 = "12ly9f1lxzrxvwkcx25cjik7d1f1l2j1rkd0cabgpcg53hz4158c";
+  version = "0.8.0.1";
+  sha256 = "0z2pmfqk75qpjv720l06237cjdn8nmcchzyq7rp4wcvgdik8ahin";
   meta = {
     homepage = "http://github.com/ekmett/semigroups/";
     description = "Haskell 98 semigroups";

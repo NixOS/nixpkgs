@@ -1210,13 +1210,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regular = callPackage ../development/libraries/haskell/regular {};
 
   repa = callPackage ../development/libraries/haskell/repa {};
-
   repaAlgorithms = callPackage ../development/libraries/haskell/repa-algorithms {};
-
-  repaBytestring = callPackage ../development/libraries/haskell/repa-bytestring {};
-
   repaExamples = callPackage ../development/libraries/haskell/repa-examples {};
-
   repaIo = callPackage ../development/libraries/haskell/repa-io {};
 
   RepLib = callPackage ../development/libraries/haskell/RepLib {};
