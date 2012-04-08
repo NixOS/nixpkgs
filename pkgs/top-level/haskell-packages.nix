@@ -153,7 +153,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
     zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
     HTTP         = self.HTTP_4000_2_2;          # 7.4.1 ok
-    text         = self.text_0_11_1_13;         # 7.4.1 ok
+    text         = self.text_0_11_2_0;          # 7.4.1 ok
     transformers = self.transformers_0_2_2_0;   # 7.4.1 ok
     mtl          = self.mtl_2_0_1_0;            # 7.4.1 ok
     random       = self.random_1_0_1_1;         # 7.4.1 ok
@@ -564,10 +564,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cprngAes = callPackage ../development/libraries/haskell/cprng-aes {};
 
-  criterion = callPackage ../development/libraries/haskell/criterion {
-    mtl = self.mtl2;
-    parsec = self.parsec3;
-  };
+  criterion = callPackage ../development/libraries/haskell/criterion {};
 
   Crypto = callPackage ../development/libraries/haskell/Crypto {};
 
@@ -970,9 +967,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
-  maude = callPackage ../development/libraries/haskell/maude {
-    parsec = self.parsec3;
-  };
+  maude = callPackage ../development/libraries/haskell/maude {};
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
@@ -1017,9 +1012,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mtl_1_1_0_2 = callPackage ../development/libraries/haskell/mtl/1.1.0.2.nix {};
   mtl_1_1_1_1 = callPackage ../development/libraries/haskell/mtl/1.1.1.1.nix {};
   mtl_2_0_1_0 = callPackage ../development/libraries/haskell/mtl/2.0.1.0.nix {};
+  mtl_2_1 = callPackage ../development/libraries/haskell/mtl/2.1.nix {
+    transformers = self.transformers_0_3_0_0;
+  };
   mtl1 = self.mtl_1_1_0_2;
-  mtl2 = self.mtl_2_0_1_0;
-  mtl  = self.mtl1;
+  mtl2 = self.mtl_2_1;
+  mtl  = self.mtl2;
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
@@ -1357,7 +1355,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   text_0_11_0_6 = callPackage ../development/libraries/haskell/text/0.11.0.6.nix {};
   text_0_11_1_5 = callPackage ../development/libraries/haskell/text/0.11.1.5.nix {};
   text_0_11_1_13 = callPackage ../development/libraries/haskell/text/0.11.1.13.nix {};
-  text = self.text_0_11_1_13;
+  text_0_11_2_0 = callPackage ../development/libraries/haskell/text/0.11.2.0.nix {};
+  text = self.text_0_11_2_0;
 
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
@@ -1428,9 +1427,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   void = callPackage ../development/libraries/haskell/void {};
 
-  vty = callPackage ../development/libraries/haskell/vty {
-    mtl = self.mtl2;
-  };
+  vty = callPackage ../development/libraries/haskell/vty {};
 
   wai = callPackage ../development/libraries/haskell/wai {};
 
@@ -1633,9 +1630,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     };
   };
 
-  xmobar = callPackage ../applications/misc/xmobar {
-    parsec = self.parsec3;
-  };
+  xmobar = callPackage ../applications/misc/xmobar {};
 
   xmonad = callPackage ../applications/window-managers/xmonad {
     X11 = self.X11_1_5_0_1;
