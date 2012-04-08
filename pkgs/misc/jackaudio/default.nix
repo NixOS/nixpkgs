@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     cd jack-1.9.8
-    python waf configure --prefix=$out --dbus --alsa \
-      ${if firewireSupport then "--firewire" else ""}
+    python waf configure --prefix=$out --dbus --alsa ${if firewireSupport then "--firewire" else ""}
   '';
 
   buildPhase = "python waf build";
