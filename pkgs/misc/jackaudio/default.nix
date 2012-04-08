@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, alsaLib, python, dbus, pythonDBus, expat, makeWrapper }:
+{ stdenv, fetchurl, alsaLib, dbus, expat, libsamplerate
+, libsndfile, makeWrapper, pkgconfig, python, pythonDBus
+, firewireSupport ? false, ffado ? null }:
+
+assert firewireSupport -> ffado != null;
 
 stdenv.mkDerivation rec {
   name = "jackdbus-${version}";
@@ -9,9 +13,16 @@ stdenv.mkDerivation rec {
     sha256 = "0788092zxrivcfnfg15brpjkf14x8ma8cwjz4k0b9xdxajn2wwac";
   };
 
-  buildInputs = [ pkgconfig alsaLib python dbus pythonDBus expat makeWrapper ];
+  buildInputs =
+    [ alsaLib dbus expat libsamplerate libsndfile makeWrapper
+      pkgconfig python pythonDBus
+    ] ++ (stdenv.lib.optional firewireSupport ffado);
 
-  configurePhase = "cd jack-1.9.8 && python waf configure --prefix=$out --dbus --alsa";
+  configurePhase = ''
+    cd jack-1.9.8
+    python waf configure --prefix=$out --dbus --alsa \
+      ${if firewireSupport then "--firewire" else ""}
+  '';
 
   buildPhase = "python waf build";
 
