@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, python, zlib, v8, darwinInstallNameToolUtility }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.11";
+  version = "0.6.14";
   name = "nodejs-${version}";
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "1lfb2f8b6j0wszvsmarzs17h1gwaqvz1rr4nbfnx4pv4c8nxpfwl";
+    sha256 = "07ygshbzx4xxj4apx5qzlpwsavnpkk54i2845my1kiamh4q246g4";
   };
 
   configureFlags = [
