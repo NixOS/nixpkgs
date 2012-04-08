@@ -6300,6 +6300,7 @@ let
 
   ### APPLICATIONS
 
+  a2jmidid = callPackage ../applications/audio/a2jmidid { };
 
   aangifte2005 = callPackage_i686 ../applications/taxes/aangifte-2005 { };
 
