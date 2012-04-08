@@ -3,12 +3,11 @@
 , pyqt4, python, pythonDBus, qt4, scons }:
 
 stdenv.mkDerivation rec {
-  name = "libffado-svn-2117";
+  name = "libffado-svn-1995";
 
   src = fetchsvn {
     url = "http://subversion.ffado.org/ffado/trunk/libffado";
-    rev = "2117";
-    sha256 = "0awv1ccvxxxs5ycd5v3xn79flr79ia8290wmraf0646avihkcpvj";
+    rev = "1995";
   };
 
   buildInputs =
