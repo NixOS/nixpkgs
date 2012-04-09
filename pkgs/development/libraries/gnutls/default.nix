@@ -1,15 +1,15 @@
 { fetchurl, stdenv, zlib, lzo, libtasn1, nettle
-, guileBindings, guile, perl }:
+, guileBindings, guile, perl, psmisc }:
 
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
 
-  name = "gnutls-3.0.11";
+  name = "gnutls-3.0.18";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.xz";
-    sha256 = "1l8k96hms7891zl43qjd7lngjh23kxdq22l6ahm1ham7fyhhrh9r";
+    sha256 = "1ynqnj1j6rrzplk2i64dik34829r0y7lwk4qlvjx993q3mj7z863";
   };
 
   configurePhase = ''
@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ nettle libtasn1 ];
 
   doCheck = true;
+
+  postCheck =
+    # Kill a process that's left behind.
+    stdenv.lib.optionalString doCheck "${psmisc}/bin/killall mini-loss-time";
 
   meta = {
     description = "The GNU Transport Layer Security Library";
