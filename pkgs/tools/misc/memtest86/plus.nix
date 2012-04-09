@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "memtest86-4.0a";
+  name = "memtest86+-4.20";
   
   src = fetchurl {
-    url = http://memtest86.com/memtest86-4.0a.tar.gz;
-    sha256 = "0d2n3nzyvna9k880zk6vl1z3b7wal1hrwcqay9vda8br7yp7634y";
+    url = http://www.memtest.org/download/4.20/memtest86+-4.20.tar.gz;
+    sha256 = "0dw7kvfxiwqdmhapbz6ds1j9fralbky56hnzj4c6fsqfinbwwc2n";
   };
 
   preBuild = ''
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://memtest86.com/;
-    description = "A tool to detect memory errors, to be run from a bootloader";
+    homepage = http://www.memtest.org/;
+    description = "A tool to detect memory errors, fork from memtest86";
   };
 }

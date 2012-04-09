@@ -985,6 +985,8 @@ let
 
   memtest86 = callPackage ../tools/misc/memtest86 { };
 
+  memtest86plus = callPackage ../tools/misc/memtest86/plus.nix { };
+
   mc = callPackage ../tools/misc/mc { };
 
   mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
