@@ -7,18 +7,20 @@ let
 
   memtestPath = "/boot/memtest.bin";
 
+  memtest86 = pkgs.memtest86;
+
 in
 
 {
   boot.loader.grub.extraEntries =
     ''
-      menuentry "Memtest86+" {
+      menuentry "${memtest86.name}" {
         linux16 ${memtestPath}
       }
     '';
 
   isoImage.contents =
-    [ { source = pkgs.memtest86 + "/memtest.bin";
+    [ { source = memtest86 + "/memtest.bin";
         target = memtestPath;
       }
     ];
