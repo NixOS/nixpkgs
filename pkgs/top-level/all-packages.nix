@@ -5713,6 +5713,7 @@ let
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs3_3
         kernelPatches.efi_bootstub_config_3_3
+        kernelPatches.btrfs_enospc
         #kernelPatches.mips_restart_2_6_36
       ];
   };
