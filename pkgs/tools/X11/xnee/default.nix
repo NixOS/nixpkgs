@@ -2,11 +2,11 @@
 , gtk, libXi, inputproto, pkgconfig, recordproto, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "xnee-3.11";
+  name = "xnee-3.12";
 
   src = fetchurl {
     url = "mirror://gnu/xnee/${name}.tar.gz";
-    sha256 = "1x4frrf5ayslbkmr5cwll7psssxk11r4acnadp4qdvd218x50xrq";
+    sha256 = "10vxn0in0l2jir6x90grx5jc64x63l3b0f8liladdbplc8za8zmw";
   };
 
   patchPhase =
