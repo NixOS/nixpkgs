@@ -1,23 +1,23 @@
 { stdenv, fetchurl, libextractor, libmicrohttpd, libgcrypt
 , zlib, gmp, curl, libtool, adns, sqlite, pkgconfig
-, libxml2, ncurses, gettext
+, libxml2, ncurses, gettext, libunistring
 , gtkSupport ? false, gtk ? null, libglade ? null
 , makeWrapper }:
 
 assert gtkSupport -> (gtk != null) && (libglade != null);
 
 stdenv.mkDerivation rec {
-  name = "gnunet-0.9.1";
+  name = "gnunet-0.9.2";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${name}.tar.gz";
-    sha256 = "0ipx027lzcgdv70adfk8f4h0zrzm9mlhy3vj9cgc0ck8x52llfpq";
+    sha256 = "1sa7xc85l7lkd0s7vyxnqhnm7cngnycrvp7zc6yj4b3qjg5z3x94";
   };
 
   buildInputs = [
     libextractor libmicrohttpd libgcrypt gmp curl libtool
     zlib adns sqlite libxml2 ncurses
-    pkgconfig gettext makeWrapper
+    pkgconfig gettext libunistring makeWrapper
   ] ++ (if gtkSupport then [ gtk libglade ] else []);
 
   preConfigure = ''
