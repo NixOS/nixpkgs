@@ -20,7 +20,7 @@ in
   config.boot.loader.grub = mkIf isEnabled {
     extraEntries = 
       ''
-        menuentry "Memtest86+" {
+        menuentry "${pkgs.memtest86.name}" {
           linux16 $bootRoot/memtest.bin
         }
       '';
