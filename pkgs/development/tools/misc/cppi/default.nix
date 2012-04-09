@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "cppi-1.15";
+  name = "cppi-1.16";
 
   src = fetchurl {
     url = "mirror://gnu/cppi/${name}.tar.xz";
-    sha256 = "1avwwpcwx6rvk9j4id8jq58n5kk756dwnd0wqw4a4p3smvby7gw2";
+    sha256 = "16i4j80wam7p189xc9i2ijrcgjn684296rym6ja3nlqv8rv90lm8";
   };
 
   doCheck = true;
