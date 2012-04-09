@@ -220,6 +220,12 @@ let
       CONNECTOR y
       PROC_EVENTS y
 
+      # Tracing
+      FTRACE y
+      FUNCTION_TRACER y
+      FTRACE_SYSCALLS y
+      SCHED_TRACER y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
