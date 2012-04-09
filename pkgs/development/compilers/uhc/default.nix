@@ -1,18 +1,17 @@
-{ stdenv, coreutils, glibc, fetchsvn, m4, libtool, ghc, uulib
+{ stdenv, coreutils, glibc, fetchgit, m4, libtool, ghc, uulib
 , uuagc, mtl, network, binary, llvm, fgl, syb
 }:
 
-let
-  revision = "2495";
-in
 stdenv.mkDerivation {
-  name = "uhc-svn-${revision}";
+  name = "uhc-svn-git20120405";
 
-  src = fetchsvn {
-     url = "https://subversion.cs.uu.nl/repos/project.UHC.pub/trunk/EHC";
-     rev = revision;
-     sha256 = "0402cb05629454e29bdca02051406bc9e515d2525a785c85079469b674378fca";
+  src = fetchgit {
+     url = "https://github.com/UU-ComputerScience/uhc.git";
+     rev = "d6d75a131a36899ff2db2d8c9a4ae6601d7d0675";
+     sha256 = "4117688bf1e4a892d8551c3bcc59c5ec5743842e6a67ec66d399f390fec05b4c";
   };
+
+  postUnpack = "sourceRoot=\${sourceRoot}/EHC";
 
   propagatedBuildInputs = [mtl network binary fgl syb];
   buildInputs = [coreutils m4 ghc libtool uulib uuagc];
