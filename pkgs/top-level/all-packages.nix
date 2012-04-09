@@ -5276,10 +5276,7 @@ let
     openldap = null;
   };
 
-  shishi = callPackage ../servers/shishi {
-    # GNU Shishi 1.0.0 fails to build with GnuTLS 3.x.
-    gnutls = gnutls2;
-  };
+  shishi = callPackage ../servers/shishi { };
 
   sipwitch = callPackage ../servers/sip/sipwitch { };
 
