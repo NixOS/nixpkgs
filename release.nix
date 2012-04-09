@@ -1,4 +1,6 @@
-{ nixosSrc ? {outPath = ./.; rev = 1234;} }:
+{ nixosSrc ? {outPath = ./.; rev = 1234;}
+, nixpkgs ? {outPath = <nixpkgs>; rev = 5678;}
+}:
 
 let
 
@@ -99,6 +101,42 @@ let
       };
 
 
+    channel =
+      { officialRelease ? false }:
+
+      with import <nixpkgs> {};
+
+      releaseTools.makeSourceTarball {
+        name = "nixos-channel";
+
+        version = builtins.readFile ./VERSION;
+
+        src = nixosSrc;
+
+        inherit officialRelease;
+
+        buildInputs = [ nixUnstable ];
+
+        expr =
+          ''
+            { system ? builtins.currentSystem }:
+            { pkgs = (import nixpkgs/default.nix { inherit system; }) // { recurseForDerivations = true; }; }
+          '';
+
+        distPhase = ''
+          releaseName=nixos-$VERSION$VERSION_SUFFIX-${toString nixpkgs.rev}
+          ensureDir "$out/tarballs"
+          mkdir ../$releaseName
+          cp -prd . ../$releaseName/nixos
+          cp -prd ${nixpkgs} ../$releaseName/nixpkgs
+          echo "$expr" > ../$releaseName/default.nix
+          NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
+          cd ..
+          tar cfj $out/tarballs/$releaseName.tar.bz2 $releaseName
+        ''; # */
+      };
+
+
     manual =
       { officialRelease ? false }:
 
@@ -108,8 +146,7 @@ let
           (import lib/eval-config.nix {
             modules = [ { fileSystems = []; } ];
           }).options;
-        revision =
-          if nixosSrc.rev == 1234 then "HEAD" else toString nixosSrc.rev;
+        revision = toString nixosSrc.rev;
       }).manual;
 
 
