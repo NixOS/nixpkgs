@@ -182,6 +182,7 @@ let
       module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
     };
 
+    /*
     system_tarball_fuloong2f =
       assert builtins.currentSystem == "mips64-linux";
       makeSystemTarball {
@@ -193,6 +194,7 @@ let
       makeSystemTarball {
         module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
       } { system = "armv5tel-linux"; };
+    */
 
 
     tests =
