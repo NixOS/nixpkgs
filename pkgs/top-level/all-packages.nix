@@ -3913,6 +3913,8 @@ let
 
   libassuan = callPackage ../development/libraries/libassuan { };
 
+  libassuan2_1 = callPackage ../development/libraries/libassuan/git.nix { };
+
   libav = callPackage ../development/libraries/libav { };
 
   libavc1394 = callPackage ../development/libraries/libavc1394 { };
