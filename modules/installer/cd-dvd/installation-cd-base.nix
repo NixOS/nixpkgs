@@ -30,8 +30,7 @@ in
 
 {
   require =
-    [ ./memtest.nix
-      ./iso-image.nix
+    [ ./iso-image.nix
 
       # Profiles of this basic installation CD.
       ../../profiles/all-hardware.nix
@@ -66,6 +65,8 @@ in
      # plenty of free memory.
      echo 1 > /proc/sys/vm/overcommit_memory
     '';
+
+  boot.loader.grub.memtest86 = true;
 
   # To speed up installation a little bit, include the complete stdenv
   # in the Nix store on the CD.
