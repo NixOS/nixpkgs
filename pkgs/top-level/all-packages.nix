@@ -1087,6 +1087,8 @@ let
 
   nlopt = callPackage ../development/libraries/nlopt {};
 
+  npth = callPackage ../development/libraries/npth {};
+
   nmap = callPackage ../tools/security/nmap {
     inherit (pythonPackages) pysqlite;
   };
