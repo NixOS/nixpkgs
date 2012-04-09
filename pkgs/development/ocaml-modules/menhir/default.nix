@@ -2,7 +2,7 @@
 
 let
   ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "20090505";
+  version = "20120123";
 in
 
 stdenv.mkDerivation {
@@ -10,12 +10,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://pauillac.inria.fr/~fpottier/menhir/menhir-${version}.tar.gz";
-    sha256 = "1dsy80wp7k9wbxc89pjzy2izdkk4b72104m9ik747xzy23mssbyx";
+    sha256 = "65cd9e4f813c62697c60c344963ca11bd461169f574ba3a866c2691541cb4682";
   };
 
   buildInputs = [ocaml findlib];
-
-  configurePhase = "true";	# Skip configure
 
   createFindlibDestdir = true;
 

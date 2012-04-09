@@ -1,0 +1,167 @@
+diff -ur orig/sexplib-7.0.5/lib/conv.ml sexplib-7.0.5/lib/conv.ml
+--- orig/sexplib-7.0.5/lib/conv.ml	2012-03-20 17:41:54.000000000 +0100
++++ sexplib-7.0.5/lib/conv.ml	2012-03-26 20:04:58.128032729 +0200
+@@ -665,7 +665,7 @@
+         | Parse_error pe ->
+             let ppos =
+               match pe.parse_state with
+-              | `Sexp { parse_pos } | `Annot { parse_pos } -> parse_pos
++              | `Sexp { parse_pos = parse_pos } | `Annot { parse_pos = parse_pos } -> parse_pos
+             in
+             List [
+               Atom "Sexplib.Sexp.Parse_error";
+diff -ur orig/sexplib-7.0.5/lib/pre_sexp.ml sexplib-7.0.5/lib/pre_sexp.ml
+--- orig/sexplib-7.0.5/lib/pre_sexp.ml	2012-03-20 17:41:54.000000000 +0100
++++ sexplib-7.0.5/lib/pre_sexp.ml	2012-03-26 20:04:58.129032741 +0200
+@@ -172,13 +172,7 @@
+ (* Output of S-expressions to file *)
+ 
+ let save_of_output ?perm output_function file sexp =
+-  let tmp_name, oc =
+-    let temp_dir =
+-      if Filename.is_relative file then "."
+-      else Filename.dir_sep
+-    in
+-    Filename.open_temp_file ~temp_dir file "tmp"
+-  in
++  let tmp_name, oc = Filename.open_temp_file file "tmp" in
+   try
+     output_function oc sexp;
+     close_out oc;
+@@ -316,9 +310,9 @@
+     else if text_char < 0 then fail "text_char < 0"
+     else if global_offset < 0 then fail "global_offset < 0"
+     else if buf_pos < 0 then fail "buf_pos < 0"
+-    else { text_line; text_char; global_offset; buf_pos }
++    else { text_line = text_line; text_char = text_char; global_offset = global_offset; buf_pos = buf_pos }
+ 
+-  let with_buf_pos t buf_pos = { t with buf_pos }
++  let with_buf_pos t buf_pos = { t with buf_pos = buf_pos }
+ end
+ 
+ type ('a, 't) parse_result =
+@@ -347,11 +341,11 @@
+ 
+ exception Parse_error of parse_error
+ 
+-let bump_text_line { parse_pos } =
++let bump_text_line { parse_pos = parse_pos } =
+   parse_pos.Parse_pos.text_line <- parse_pos.Parse_pos.text_line + 1;
+   parse_pos.Parse_pos.text_char <- 0
+ 
+-let bump_text_pos { parse_pos } =
++let bump_text_pos { parse_pos = parse_pos } =
+   parse_pos.Parse_pos.text_char <- parse_pos.Parse_pos.text_char + 1
+ 
+ let bump_pos_cont state str ~max_pos ~pos cont =
+@@ -378,18 +372,18 @@
+   parse_pos.Parse_pos.buf_pos <- buf_pos;
+   parse_pos.Parse_pos.global_offset <- parse_pos.Parse_pos.global_offset + len
+ 
+-let mk_parse_pos { parse_pos } buf_pos =
++let mk_parse_pos { parse_pos = parse_pos } buf_pos =
+   set_parse_pos parse_pos buf_pos;
+   parse_pos
+ 
+ let raise_parse_error parse_state location buf_pos err_msg =
+   begin
+     match parse_state with
+-    | `Sexp { parse_pos } | `Annot { parse_pos } ->
++    | `Sexp { parse_pos = parse_pos } | `Annot { parse_pos = parse_pos } ->
+         set_parse_pos parse_pos buf_pos;
+         parse_pos.Parse_pos.text_char <- parse_pos.Parse_pos.text_char + 1;
+   end;
+-  let parse_error = { location; err_msg; parse_state } in
++  let parse_error = { location = location; err_msg = err_msg; parse_state = parse_state } in
+   raise (Parse_error parse_error)
+ 
+ let raise_unexpected_char parse_state location buf_pos c =
+@@ -657,7 +651,7 @@
+     let max_pos = check_str_bounds "parse" ~pos ~len str in \
+     let state = \
+       { \
+-        parse_pos; \
++        parse_pos = parse_pos; \
+         pstack = INIT_PSTACK; \
+         pbuf = Buffer.create 128; \
+       } \
+@@ -681,20 +675,20 @@
+ 
+ let mk_annot_pos
+       ({ Parse_pos.text_line = line; text_char = col } as parse_pos) pos =
+-  { Annot.line; col; offset = get_glob_ofs parse_pos pos }
++  { Annot.line = line; col = col; offset = get_glob_ofs parse_pos pos }
+ 
+ let mk_annot_pos1
+       ({ Parse_pos.text_line = line; text_char = col } as parse_pos) pos =
+-  { Annot.line; col = col + 1; offset = get_glob_ofs parse_pos pos }
++  { Annot.line = line; col = col + 1; offset = get_glob_ofs parse_pos pos }
+ 
+-let add_annot_pos { parse_pos; pstack } pos =
++let add_annot_pos { parse_pos = parse_pos; pstack = pstack } pos =
+   pstack.Annot.positions <- mk_annot_pos parse_pos pos :: pstack.Annot.positions
+ 
+-let add_annot_pos1 { parse_pos; pstack } pos =
++let add_annot_pos1 { parse_pos = parse_pos; pstack = pstack } pos =
+   pstack.Annot.positions <-
+     mk_annot_pos1 parse_pos pos :: pstack.Annot.positions
+ 
+-let get_annot_range { parse_pos; pstack } pos =
++let get_annot_range { parse_pos = parse_pos; pstack = pstack } pos =
+   let start_pos =
+     match pstack.Annot.positions with
+     | [] -> assert false  (* impossible *)
+@@ -708,7 +702,7 @@
+       offset = get_glob_ofs parse_pos pos;
+     }
+   in
+-  { Annot.start_pos; end_pos }
++  { Annot.start_pos = start_pos; end_pos = end_pos }
+ 
+ let mk_annot_atom parse_state str pos =
+   Annot.Atom (get_annot_range parse_state pos, Atom str)
+@@ -780,7 +774,7 @@
+   let rec loop this_parse ~pos ~len ~is_incomplete =
+     if len > 0 then
+       match this_parse ~pos ~len buf with
+-      | Done (sexp, ({ Parse_pos.buf_pos } as parse_pos)) ->
++      | Done (sexp, ({ Parse_pos.buf_pos = buf_pos } as parse_pos)) ->
+           rev_sexps_ref := sexp :: !rev_sexps_ref;
+           let n_parsed = buf_pos - pos in
+           let this_parse = mk_this_parse ~parse_pos my_parse in
+@@ -813,7 +807,7 @@
+ 
+ let of_string_bigstring loc this_parse ws_buf get_len get_sub str =
+   match this_parse str with
+-  | Done (_, { Parse_pos.buf_pos }) when buf_pos <> get_len str ->
++  | Done (_, { Parse_pos.buf_pos = buf_pos }) when buf_pos <> get_len str ->
+       let prefix_len = min (get_len str - buf_pos) 20 in
+       let prefix = get_sub str buf_pos prefix_len in
+       let msg =
+@@ -874,7 +868,7 @@
+       failwith (sprintf "Sexplib.Sexp.gen_load_sexp: end of file: %s" file)
+     else
+       match this_parse ~pos:0 ~len buf with
+-      | Done (sexp, ({ Parse_pos.buf_pos } as parse_pos))
++      | Done (sexp, ({ Parse_pos.buf_pos = buf_pos } as parse_pos))
+         when strict ->
+           let rec strict_loop this_parse ~pos ~len =
+             match this_parse ~pos ~len buf with
+@@ -938,7 +932,7 @@
+ 
+   let get_conv_exn ~file ~exc annot_sexp =
+     let range = get_range annot_sexp in
+-    let { start_pos = { line; col } } = range in
++    let { start_pos = { line = line; col = col } } = range in
+     let loc = sprintf "%s:%d:%d" file line col in
+     Of_sexp_error (Annot.Conv_exn (loc, exc), get_sexp annot_sexp)
+ end
+@@ -1003,7 +997,7 @@
+   let sexp = of_string str in
+   try f sexp
+   with Of_sexp_error (exc, sub_sexp) ->
+-    raise (Of_string_conv_exn.E { Of_string_conv_exn.exc; sexp; sub_sexp })
++    raise (Of_string_conv_exn.E { Of_string_conv_exn.exc = exc; sexp = sexp; sub_sexp = sub_sexp })
+ 
+ let of_string_conv_exn str f = gen_of_string_conv_exn of_string str f
+ let of_bigstring_conv_exn bstr f = gen_of_string_conv_exn of_bigstring bstr f

@@ -2968,10 +2968,7 @@ let
 
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
 
-  coccinelle = callPackage ../development/tools/misc/coccinelle {
-    ocamlPackages = ocamlPackages_3_12_1;
-    ocaml = ocaml_3_12_1;
-  };
+  coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
   cppi = callPackage ../development/tools/misc/cppi { };
 
@@ -7111,6 +7108,8 @@ let
     inherit firefox;
     inherit (xlibs) libX11 xproto;
   };
+
+  easytag = callPackage ../applications/audio/easytag { };
 
   mp3info = callPackage ../applications/audio/mp3info { };
 

@@ -1,21 +1,17 @@
 {stdenv, fetchurl, ocaml, findlib, ocaml_typeconv}:
 
-# note: only works with ocaml>3.12
-# use version 5.2.0 if you still want an 3.11 version...
-
 stdenv.mkDerivation {
-  name = "ocaml-sexplib-7.0.4";
+  name = "ocaml-sexplib-7.0.5";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/699/sexplib-7.0.4.tar.gz";
-    sha256 = "83c6c771f423d91bebc4f57202066358adf3775fb000dd780079f51436045a43";
+    url = "http://forge.ocamlcore.org/frs/download.php/832/sexplib-7.0.5.tar.gz";
+    sha256 = "b1022da052254581aae51fb634345920364439f715a2c786abcd0b828c2ce697";
   };
 
-  buildInputs = [ocaml findlib ocaml_typeconv];
+  patches = [ ./sexp-3.10-compat.patch ];
+  buildInputs = [ocaml findlib ocaml_typeconv ];
 
   createFindlibDestdir = true;
-
-  configurePhase = "true";
 
   meta = {
     homepage = "http://forge.ocamlcore.org/projects/sexplib/";
