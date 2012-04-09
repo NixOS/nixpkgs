@@ -2,13 +2,13 @@
 
 cabal.mkDerivation (self: {
   pname = "pool-conduit";
-  version = "0.1.0";
-  sha256 = "1rxagidgd18a9xk7qqafz8l3nqlbr1s4231k8bf1sxd62b8rs4sm";
+  version = "0.1.0.1";
+  sha256 = "1a88x8yi5p99qpq262idfzn9f5cjjdq417rbayp0kknm5c6d9n5c";
   buildDepends = [ resourcePool resourcet transformers ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
     description = "Resource pool allocations via ResourceT";
-    license = self.stdenv.lib.licenses.bsd3;
+    license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };

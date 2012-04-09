@@ -2,13 +2,13 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-i18n";
-  version = "1.0.0";
-  sha256 = "16zbf4y00l1jfah9j8xkhva5avgp6vg0spgjjrm3rxrs1kclxzpv";
+  version = "1.0.0.1";
+  sha256 = "1g4jczz3kvfvdk2w64kbphmv451g8khx5d1bxmhscqkmlh6zgqjz";
   buildDepends = [ parsec shakespeare text ];
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "A type-based approach to internationalization";
-    license = self.stdenv.lib.licenses.bsd3;
+    license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
