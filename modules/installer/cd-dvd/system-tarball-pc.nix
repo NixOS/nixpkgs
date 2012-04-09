@@ -32,7 +32,7 @@ let
       append initrd=initrd ip=dhcp nfsroot=/home/pcroot systemConfig=${config.system.build.toplevel} init=${config.system.build.toplevel}/init
 
     label memtest
-      MENU LABEL ^Memtest86+
+      MENU LABEL ^${pkgs.memtest86.name}
       KERNEL memtest
   '';
 
