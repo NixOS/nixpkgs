@@ -4,6 +4,7 @@
 
 let
 
+  version = builtins.readFile ./.version;
   versionSuffix = "pre${toString nixosSrc.rev}-${toString nixpkgs.rev}";
 
 
@@ -17,10 +18,8 @@ let
 
     let
 
-      version = builtins.readFile ./.version + (lib.optionalString (!officialRelease) versionSuffix);
-
       versionModule =
-        { system.nixosVersion = version;
+        { system.nixosVersion = version + (lib.optionalString (!officialRelease) versionSuffix);
           isoImage.isoBaseName = "nixos-${type}";
         };
 
@@ -33,7 +32,7 @@ let
 
     in
       # Declare the ISO as a build product so that it shows up in Hydra.
-      runCommand "nixos-iso-${version}"
+      runCommand "nixos-iso-${config.system.nixosVersion}"
         { meta = {
             description = "NixOS installation CD (${description}) - ISO image for ${system}";
             maintainers = map (x: lib.getAttr x lib.maintainers) maintainers;
@@ -55,9 +54,7 @@ let
 
     with import <nixpkgs> {inherit system;};
     let
-      version = builtins.readFile ./.version + (lib.optionalString (!officialRelease) versionSuffix);
-
-      versionModule = { system.nixosVersion = version; };
+      versionModule = { system.nixosVersion = version + (lib.optionalString (!officialRelease) versionSuffix); };
 
       config = (import lib/eval-config.nix {
         inherit system;
@@ -86,11 +83,9 @@ let
       releaseTools.makeSourceTarball {
         name = "nixos-tarball";
 
-        version = builtins.readFile ./.version;
-
         src = nixosSrc;
 
-        inherit officialRelease;
+        inherit officialRelease version;
 
         distPhase = ''
           echo -n $VERSION_SUFFIX > .version-suffix
@@ -113,11 +108,9 @@ let
       releaseTools.makeSourceTarball {
         name = "nixos-channel";
 
-        version = builtins.readFile ./.version;
-
         src = nixosSrc;
 
-        inherit officialRelease versionSuffix;
+        inherit officialRelease version versionSuffix;
 
         buildInputs = [ nixUnstable ];
 
