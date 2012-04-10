@@ -19,11 +19,16 @@ in
   };
 
   config.boot.loader.grub = mkIf isEnabled {
-    extraEntries = 
+    extraEntries = if config.boot.loader.grub.version == 2 then
       ''
         menuentry "${memtest86.name}" {
           linux16 $bootRoot/memtest.bin
         }
+      ''
+      else
+      ''
+        menuentry "${memtest86.name}"
+          linux16 $bootRoot/memtest.bin
       '';
     extraPrepareConfig =
       ''
