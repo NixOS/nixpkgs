@@ -126,7 +126,6 @@ in
     assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != []; 
                     message = "user controlled wpa_supplicant needs explicit networking.wireless.interfaces";}];
 
-
   };
 
 }

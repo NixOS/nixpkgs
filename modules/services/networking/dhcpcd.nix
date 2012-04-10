@@ -45,7 +45,9 @@ let
 
       # only works when interface is wireless and wpa_supplicant has a control socket
       # but we allow it to fail silently
-      wifiparams=$(/var/run/current-system/sw/sbin/wpa_cli -i$interface status 2>/dev/null | grep ssid | sed 's|^b|B|;s|ssid|SSID|' | xargs)
+      ${optionalString config.networking.wireless.enable ''
+        params+=" $(${pkgs.wpa_supplicant}/sbin/wpa_cli -i$interface status 2>/dev/null | grep ssid | sed 's|^b|B|;s|ssid|SSID|' | xargs)"
+      ''}
 
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
           # Restart ntpd.  (The "ip-up" event below will trigger the
@@ -56,11 +58,11 @@ let
           # it"), so we silently lose time synchronisation.
           ${config.system.build.upstart}/sbin/initctl stop ntpd
 
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-up $params $wifiparams
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-up $params
       fi
 
       if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-down $params $wifiparams
+          ${config.system.build.upstart}/sbin/initctl emit -n ip-down $params
       fi
     '';
 
