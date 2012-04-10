@@ -95,6 +95,8 @@ done
 
 # We don't have locale-archive in the chroot, so clear $LANG.
 export LANG=
+export LC_ALL=
+export LC_TIME=
 
 
 # Register the paths in the Nix closure as valid.  This is necessary
