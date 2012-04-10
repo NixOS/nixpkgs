@@ -1,6 +1,6 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, blas, liblapack
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
- , ncurses, libunistring
+ , ncurses, libunistring, lighttpd
  } :
 let
   liblapackShared = liblapack.override{shared=true;};
@@ -8,7 +8,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20120405";
+  date = "20120410";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1";
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "a6324519931e874d3691be258af7f81e4e4826e4";
-    sha256 = "897019f1dc5c4ce7d1e5c607c1f9cb6efe0e6fb74184fdd921ab239c3adaed6d";
+    rev = "73776ba8ed510862b81eb1dd5c70e2055deb5895";
+    sha256 = "e833caeeecedc5603ee71405a8cb3813bf7ace10df8f7b4a43c7beccf0ccaf0d";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm blas liblapackShared readline 
@@ -82,6 +82,19 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p "$out/bin"
     ln -s "$out/share/julia/julia" "$out/bin"
+
+    mkdir -p "$out/share/julia/ui/"
+    cp -r ui/website "$out/share/julia/ui/"
+    cp external/lighttpd.conf "$out/share/julia/ui/"
+
+    mkdir -p "$out/share/julia/ui/webserver/"
+    cp -r ui/webserver/{*.jl,*.h} "$out/share/julia/ui/webserver/"
+
+    echo -e '#!/bin/sh' >> "$out/bin/julia-webserver"
+    echo -e "cd \"$out/share/julia\"" >> "$out/bin/julia-webserver"
+    echo -e '${lighttpd}/sbin/lighttpd -D -f ./ui/lighttpd.conf &' >> "$out/bin/julia-webserver"
+    echo -e './julia-release-webserver -p 2001' >> "$out/bin/julia-webserver"
+    chmod a+x "$out/bin/julia-webserver"
   '';
 
   meta = {
