@@ -37,8 +37,8 @@ fi
     
 
 # Do a nix-pull to speed up building.
-if test -n "@nixpkgsURL@" -a ${NIXOS_PULL:-1} != 0; then
-    @nix@/bin/nix-pull @nixpkgsURL@/MANIFEST || true
+if test -n "@nixosURL@" -a ${NIXOS_PULL:-1} != 0; then
+    @nix@/bin/nix-pull @nixosURL@/MANIFEST || true
 fi
 
 

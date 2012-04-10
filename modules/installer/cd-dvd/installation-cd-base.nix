@@ -44,6 +44,8 @@ in
 
   isoImage.volumeID = "NIXOS_CD_${config.system.nixosVersion}";
 
+  installer.nixosURL = "http://nixos.org/releases/nixos/nixos-${config.system.nixosVersion}";
+
   boot.postBootCommands =
     ''
       export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
