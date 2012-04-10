@@ -115,11 +115,13 @@ with pkgs.lib;
           mkdir -m 1777 -p $targetRoot/$diskForAufs/root/tmp $targetRoot/tmp
           mount --bind $targetRoot/$diskForAufs/root/tmp $targetRoot/tmp
 
-          mkdir -m 755 -p $targetRoot/$diskForAufs/root/var $targetRoot/var
-          mount --bind $targetRoot/$diskForAufs/root/var $targetRoot/var
+          if [ ! -e $targetRoot/.ebs ]; then
+              mkdir -m 755 -p $targetRoot/$diskForAufs/root/var $targetRoot/var
+              mount --bind $targetRoot/$diskForAufs/root/var $targetRoot/var
 
-          mkdir -m 755 -p $targetRoot/$diskForAufs/root/nix
-          mount -t aufs -o dirs=$targetRoot/$diskForAufs/root/nix=rw:$targetRoot/nix=rr none $targetRoot/nix
+              mkdir -m 755 -p $targetRoot/$diskForAufs/root/nix
+              mount -t aufs -o dirs=$targetRoot/$diskForAufs/root/nix=rw:$targetRoot/nix=rr none $targetRoot/nix
+          fi
       fi
     '';
 
