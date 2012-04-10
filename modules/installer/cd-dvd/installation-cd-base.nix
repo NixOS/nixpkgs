@@ -57,6 +57,8 @@ in
         mkdir -p /etc/nixos/nixpkgs
         tar xjf ${nixpkgsTarball}/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
         chown -R root.root /etc/nixos
+        echo -n ${config.system.nixosVersion} > /etc/nixos/nixos/.version
+        echo -n "" > /etc/nixos/nixos/.version-suffix
      ''}
 
      # Make the installer more likely to succeed in low memory
