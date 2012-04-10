@@ -78,8 +78,6 @@ mkdir -m 0755 -p \
 mkdir -m 1777 -p \
     $mountPoint/nix/store \
 
-echo /mnt$NIXOS_CONFIG
-
 
 # Get the store paths to copy from the references graph.
 storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
