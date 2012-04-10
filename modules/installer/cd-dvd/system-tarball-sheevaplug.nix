@@ -29,16 +29,6 @@ let
 
   pkgs2storeContents = l : map (x: { object = x; symlink = "none"; }) l;
 
-  options = {
-
-    system.nixosVersion = mkOption {
-      default = "${builtins.readFile ../../../VERSION}";
-      description = ''
-        NixOS version number.
-      '';
-    };
-  };
-
   # A clue for the kernel loading
   kernelParams = pkgs.writeText "kernel-params.txt" ''
     Kernel Parameters:

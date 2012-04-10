@@ -51,6 +51,12 @@ let
     src = ./nixos-option.sh;
   };
 
+  nixosVersion = makeProg {
+    name = "nixos-version";
+    src = ./nixos-version.sh;
+    inherit (config.system) nixosVersion;
+  };
+
   nixosGui = pkgs.xulrunnerWrapper {
     launcher = "nixos-gui";
     application = pkgs.stdenv.mkDerivation {
@@ -116,6 +122,7 @@ in
         nixosHardwareScan
         nixosGenSeccureKeys
         nixosOption
+        nixosVersion
       ] ++ pkgs.lib.optional cfg.enableGraphicalTools nixosGui;
 
     system.build = {

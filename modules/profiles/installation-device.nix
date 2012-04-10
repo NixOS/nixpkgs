@@ -67,13 +67,7 @@ in
   ];
 
   options = {
-    system.nixosVersion = mkOption {
-      default = "${builtins.readFile ../../VERSION}";
-      description = ''
-        NixOS version number.
-      '';
-    };
-
+  
     installer.cloneConfig = mkOption {
       default = true;
       description = ''
@@ -101,6 +95,7 @@ in
         in live CDs.
       '';
     };
+    
   };
 
   config = {

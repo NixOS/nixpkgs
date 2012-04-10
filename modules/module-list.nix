@@ -36,6 +36,7 @@
   ./misc/locate.nix
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
+  ./misc/version.nix
   ./programs/bash/bash.nix
   ./programs/blcr.nix
   ./programs/info.nix

@@ -17,7 +17,7 @@ let
 
     let
 
-      version = builtins.readFile ./VERSION + (lib.optionalString (!officialRelease) versionSuffix);
+      version = builtins.readFile ./.version + (lib.optionalString (!officialRelease) versionSuffix);
 
       versionModule =
         { system.nixosVersion = version;
@@ -55,7 +55,7 @@ let
 
     with import <nixpkgs> {inherit system;};
     let
-      version = builtins.readFile ./VERSION + (lib.optionalString (!officialRelease) versionSuffix);
+      version = builtins.readFile ./.version + (lib.optionalString (!officialRelease) versionSuffix);
 
       versionModule = { system.nixosVersion = version; };
 
@@ -86,18 +86,20 @@ let
       releaseTools.makeSourceTarball {
         name = "nixos-tarball";
 
-        version = builtins.readFile ./VERSION;
+        version = builtins.readFile ./.version;
 
         src = nixosSrc;
 
         inherit officialRelease;
 
         distPhase = ''
+          echo -n $VERSION_SUFFIX > .version-suffix
           releaseName=nixos-$VERSION$VERSION_SUFFIX
           ensureDir "$out/tarballs"
           mkdir ../$releaseName
           cp -prd . ../$releaseName
           cd ..
+          chmod -R u+w $releaseName
           tar cfvj $out/tarballs/$releaseName.tar.bz2 $releaseName
         ''; # */
       };
@@ -111,7 +113,7 @@ let
       releaseTools.makeSourceTarball {
         name = "nixos-channel";
 
-        version = builtins.readFile ./VERSION;
+        version = builtins.readFile ./.version;
 
         src = nixosSrc;
 
@@ -126,6 +128,7 @@ let
           '';
 
         distPhase = ''
+          echo -n $VERSION_SUFFIX > .version-suffix
           releaseName=nixos-$VERSION$VERSION_SUFFIX
           ensureDir "$out/tarballs"
           mkdir ../$releaseName
@@ -134,6 +137,7 @@ let
           echo "$expr" > ../$releaseName/default.nix
           NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
           cd ..
+          chmod -R u+w $releaseName
           tar cfj $out/tarballs/$releaseName.tar.bz2 $releaseName
         ''; # */
       };
