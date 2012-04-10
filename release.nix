@@ -4,18 +4,20 @@
 
 let
 
+  versionSuffix = "pre${toString nixosSrc.rev}-${toString nixpkgs.rev}";
+
 
   makeIso =
     { module, type, description ? type, maintainers ? ["eelco"] }:
     { officialRelease ? false
-    , system ? "i686-linux"
+    , system ? builtins.currentSystem
     }:
 
     with import <nixpkgs> {inherit system;};
 
     let
 
-      version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
+      version = builtins.readFile ./VERSION + (lib.optionalString (!officialRelease) versionSuffix);
 
       versionModule =
         { system.nixosVersion = version;
@@ -48,12 +50,12 @@ let
   makeSystemTarball =
     { module, maintainers ? ["viric"]}:
     { officialRelease ? false
-    , system ? "i686-linux"
+    , system ? builtins.currentSystem
     }:
 
     with import <nixpkgs> {inherit system;};
     let
-      version = builtins.readFile ./VERSION + (if officialRelease then "" else "pre${toString nixosSrc.rev}");
+      version = builtins.readFile ./VERSION + (lib.optionalString (!officialRelease) versionSuffix);
 
       versionModule = { system.nixosVersion = version; };
 
@@ -113,7 +115,7 @@ let
 
         src = nixosSrc;
 
-        inherit officialRelease;
+        inherit officialRelease versionSuffix;
 
         buildInputs = [ nixUnstable ];
 
@@ -124,7 +126,7 @@ let
           '';
 
         distPhase = ''
-          releaseName=nixos-$VERSION$VERSION_SUFFIX-${toString nixpkgs.rev}
+          releaseName=nixos-$VERSION$VERSION_SUFFIX
           ensureDir "$out/tarballs"
           mkdir ../$releaseName
           cp -prd . ../$releaseName/nixos
