@@ -41,7 +41,7 @@ in
   # ISO naming.
   isoImage.isoName = "${config.isoImage.isoBaseName}-${config.system.nixosVersion}-${pkgs.stdenv.system}.iso";
 
-  isoImage.volumeID = "NIXOS_INSTALL_CD_${config.system.nixosVersion}";
+  isoImage.volumeID = "NIXOS_CD_${config.system.nixosVersion}";
 
   boot.postBootCommands =
     ''
