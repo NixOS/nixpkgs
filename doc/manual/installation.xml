@@ -70,7 +70,7 @@ $ nix-build ./nixos/release.nix -A iso_minimal.iso</screen>
   <listitem><para>Boot from the CD.</para></listitem>
 
   <listitem><para>The CD contains a basic NixOS installation.  (It
-  also contain Memtest86+, useful if you want to test new hardware.)
+  also contains Memtest86+, useful if you want to test new hardware.)
   When it’s finished booting, it should have detected most of your
   hardware and brought up networking (check
   <command>ifconfig</command>).  Networking is necessary for the
