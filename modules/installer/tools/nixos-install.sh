@@ -46,28 +46,16 @@ cat /etc/nsswitch.conf > $mountPoint/etc/nsswitch.conf
 
 # Mount some stuff in the target root directory.
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt
-mount --bind /dev $mountPoint/dev
-mount --bind /proc $mountPoint/proc
-mount --bind /sys $mountPoint/sys
+mount --rbind /dev $mountPoint/dev
+mount --rbind /proc $mountPoint/proc
+mount --rbind /sys $mountPoint/sys
 mount --rbind / $mountPoint/mnt
 
-# Note: probably umount -l is enough. It umounts recursive mount points having been mounted by --rbind!
-# Probably umountUnder can be removed ?
-umountUnder() {
-    local dir="$1"
-    for i in $(grep -F " $dir" /proc/mounts \
-        | @perl@/bin/perl -e 'while (<>) { /^\S+\s+(\S+)\s+/; print "$1\n"; }' \
-        | sort -r);
-    do
-	umount $i || true
-    done
-}
-
 cleanup() {
-    umountUnder $mountPoint/mnt
-    umountUnder $mountPoint/dev
-    umountUnder $mountPoint/proc
-    umountUnder $mountPoint/sys
+    umount -l $mountPoint/mnt
+    umount -l $mountPoint/dev
+    umount -l $mountPoint/proc
+    umount -l $mountPoint/sys
 }
 
 trap "cleanup" EXIT
