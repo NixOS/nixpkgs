@@ -94,7 +94,7 @@ let
       createDisk("harddisk", 4 * 1024);
 
       my $machine = createMachine({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso"),
-        qemuFlags => '${optionalString testChannel (toString (qemuNICFlags 1 1 2))}'});
+        qemuFlags => '${optionalString testChannel (toString (qemuNICFlags 1 1 2))} ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"}'});
       $machine->start;
 
       ${optionalString testChannel ''
