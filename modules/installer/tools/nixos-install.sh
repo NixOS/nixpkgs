@@ -10,6 +10,7 @@
 #   * run the activation script of the configuration (also installs Grub)
 
 set -e
+shopt -s nullglob
 
 if test -z "$mountPoint"; then
     mountPoint=/mnt
@@ -35,27 +36,30 @@ if ! test -e "$NIXOS_CONFIG"; then
 fi
     
 
-# Enable networking in the chroot.
-mkdir -m 0755 -p $mountPoint/etc
-touch /etc/resolv.conf 
-cp -f /etc/resolv.conf $mountPoint/etc/
-rm -f $mountPoint/etc/hosts
-cat /etc/hosts > $mountPoint/etc/hosts
-rm -f $mountPoint/etc/nsswitch.conf
-cat /etc/nsswitch.conf > $mountPoint/etc/nsswitch.conf
+# Do a nix-pull to speed up building.
+if test -n "@nixpkgsURL@" -a ${NIXOS_PULL:-1} != 0; then
+    @nix@/bin/nix-pull @nixpkgsURL@/MANIFEST || true
+fi
 
-# Mount some stuff in the target root directory.
-mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt
+
+# Mount some stuff in the target root directory.  We bind-mount /etc
+# into the chroot because we need networking and the nixbld user
+# accounts in /etc/passwd.  But we do need the target's /etc/nixos.
+mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt $mountPoint/etc
 mount --rbind /dev $mountPoint/dev
 mount --rbind /proc $mountPoint/proc
 mount --rbind /sys $mountPoint/sys
 mount --rbind / $mountPoint/mnt
+mount --bind /etc $mountPoint/etc
+mount --bind $mountPoint/mnt/$mountPoint/etc/nixos $mountPoint/etc/nixos
 
 cleanup() {
+    set +e
     umount -l $mountPoint/mnt
     umount -l $mountPoint/dev
     umount -l $mountPoint/proc
     umount -l $mountPoint/sys
+    mountpoint -q $mountPoint/etc && umount -l $mountPoint/etc
 }
 
 trap "cleanup" EXIT
@@ -75,8 +79,15 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/nix/db \
     $mountPoint/nix/var/log/nix/drvs
 
-mkdir -m 1777 -p \
-    $mountPoint/nix/store \
+mkdir -m 1775 -p $mountPoint/nix/store
+chown root.nixbld $mountPoint/nix/store
+
+
+# Make manifests available in the chroot.
+rm -f $mountPoint/nix/var/nix/manifests/*
+for i in /nix/var/nix/manifests/*.nixmanifest; do
+    cp "$(readlink -f "$i")" $mountPoint/nix/var/nix/manifests
+done
 
 
 # Get the store paths to copy from the references graph.
@@ -95,6 +106,12 @@ done
 export LANG=
 export LC_ALL=
 export LC_TIME=
+
+
+# Create a temporary Nix config file that causes the nixbld users to
+# be used.
+echo "build-users-group = nixbld" > /mnt/tmp/nix.conf
+export NIX_CONF_DIR=/tmp
 
 
 # Register the paths in the Nix closure as valid.  This is necessary
@@ -117,11 +134,6 @@ ln -sf @shell@ $mountPoint/bin/sh
 export NIX_OTHER_STORES=/mnt/nix:$NIX_OTHER_STORES
 
 
-# Do a nix-pull to speed up building.
-if test -n "@nixpkgsURL@" -a ${NIXOS_PULL:-1} != 0; then
-    chroot $mountPoint @nix@/bin/nix-pull @nixpkgsURL@/MANIFEST || true
-fi
-
 if test -n "$NIXOS_PREPARE_CHROOT_ONLY"; then
     echo "User requested only to prepare chroot. Exiting."
     exit 0;
@@ -133,6 +145,16 @@ echo "building the system configuration..."
 NIX_PATH=nixpkgs=/mnt/etc/nixos/nixpkgs:nixos=/mnt/etc/nixos/nixos:nixos-config="/mnt$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
+
+
+# Get rid of the manifests.
+rm -f $mountPoint/nix/var/nix/manifests/*
+
+
+# We're done building/downloading, so we don't need the /etc bind
+# mount anymore.  In fact, below we want to modify the target's /etc.
+umount $mountPoint/etc/nixos
+umount $mountPoint/etc
 
 
 # Make a backup of the old NixOS/Nixpkgs sources.
