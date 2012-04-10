@@ -83,13 +83,6 @@ mkdir -m 1775 -p $mountPoint/nix/store
 chown root.nixbld $mountPoint/nix/store
 
 
-# Make manifests available in the chroot.
-rm -f $mountPoint/nix/var/nix/manifests/*
-for i in /nix/var/nix/manifests/*.nixmanifest; do
-    cp "$(readlink -f "$i")" $mountPoint/nix/var/nix/manifests
-done
-
-
 # Get the store paths to copy from the references graph.
 storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
 
@@ -129,15 +122,24 @@ mkdir -m 0755 -p $mountPoint/bin
 ln -sf @shell@ $mountPoint/bin/sh
 
 
+if test -n "$NIXOS_PREPARE_CHROOT_ONLY"; then
+    echo "User requested only to prepare chroot. Exiting."
+    exit 0;
+fi
+
+
 # Make the build below copy paths from the CD if possible.  Note that
 # /mnt in the chroot is the root of the CD.
 export NIX_OTHER_STORES=/mnt/nix:$NIX_OTHER_STORES
 
 
-if test -n "$NIXOS_PREPARE_CHROOT_ONLY"; then
-    echo "User requested only to prepare chroot. Exiting."
-    exit 0;
-fi
+# Make manifests available in the chroot.
+rm -f $mountPoint/nix/var/nix/manifests/*
+for i in /nix/var/nix/manifests/*.nixmanifest; do
+    chroot $mountPoint @nix@/bin/nix-store -r "$(readlink -f "$i")" > /dev/null
+    cp -pd "$i" $mountPoint/nix/var/nix/manifests/
+done
+
 
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.

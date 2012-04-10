@@ -122,7 +122,7 @@ let
             "rm /etc/hosts",
             "echo 192.168.1.1 nixos.org > /etc/hosts",
             "ifconfig eth1 up 192.168.1.2",
-            "nix-pull http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST",
+            "nixos-rebuild pull",
         );
 
         # Test nix-env.
