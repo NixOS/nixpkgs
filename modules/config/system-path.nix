@@ -49,7 +49,6 @@ let
       pkgs.perl
       pkgs.procps
       pkgs.rsync
-      pkgs.seccure
       pkgs.strace
       pkgs.sysklogd
       pkgs.sysvtools

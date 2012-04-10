@@ -35,10 +35,12 @@ let
     src = ./nixos-rebuild.sh;
   };
 
+  /*
   nixosGenSeccureKeys = makeProg {
     name = "nixos-gen-seccure-keys";
     src = ./nixos-gen-seccure-keys.sh;
   };
+  */
 
   nixosHardwareScan = makeProg {
     name = "nixos-hardware-scan";
@@ -120,7 +122,7 @@ in
         nixosInstall
         nixosRebuild
         nixosHardwareScan
-        nixosGenSeccureKeys
+        #nixosGenSeccureKeys
         nixosOption
         nixosVersion
       ] ++ pkgs.lib.optional cfg.enableGraphicalTools nixosGui;
