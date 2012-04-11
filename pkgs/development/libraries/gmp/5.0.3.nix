@@ -65,7 +65,7 @@ stdenv.mkDerivation (rec {
    # architecture (e.g., "x86_64").
    preConfigure =
      '' rm config.guess && ln -s configfsf.guess config.guess
-        chmod +x configfsf.guess.
+        chmod +x configfsf.guess
      '';
  }
  else { }))
