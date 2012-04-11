@@ -143,11 +143,11 @@ sub runTests {
 }
 
 
-# Create an empty qcow2 virtual disk with the given name and size (in
+# Create an empty raw virtual disk with the given name and size (in
 # MiB).
 sub createDisk {
     my ($name, $size) = @_;
-    system("qemu-img create -f qcow2 $name ${size}M") == 0
+    system("qemu-img create -f raw $name ${size}M") == 0
         or die "cannot create image of size $size";
 }
 
