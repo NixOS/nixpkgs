@@ -51,11 +51,4 @@ postInstall() {
     rm -f $out/lib/libgcc_s.so.1
 }
 
-postFixup() {
-    # libelf uses gencat, so we need to fix it's rpath so that it doesn't pick up the system rpath. 
-    patchelf --set-rpath $out/lib $out/bin/gencat
-    # librt (used by acl, used by coreutils) links against pthread, try *not* to pick up the system one. 
-    patchelf --set-rpath $out/lib $out/lib/librt-*.so
-}
-
 genericBuild
