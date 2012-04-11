@@ -185,6 +185,12 @@ in
             # Ensure that this job is restarted when fstab changed:
             # ${fstab}
             echo "mounting filesystems..."
+
+            # Create missing mount points.  Note that this won't work
+            # if the mount point is under another mount point.
+            ${flip concatMapStrings config.fileSystems (fs: optionalString fs.autocreate ''
+              mkdir -p -m 0755 '${fs.mountPoint}'
+            '')}
           '';
 
         daemonType = "daemon";
