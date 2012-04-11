@@ -88,7 +88,7 @@ in
     services.disnix.infrastructure =
       optionalAttrs (cfg.publishInfrastructure.enable)
       ( { hostname = config.networking.hostName;
-          targetHost = config.deployment.targetHost;
+          #targetHost = config.deployment.targetHost;
           system = if config.nixpkgs.system == "" then builtins.currentSystem else config.nixpkgs.system;
           
           supportedTypes = (import "${pkgs.stdenv.mkDerivation {
@@ -104,7 +104,7 @@ in
             '';
           }}");
         }
-        // optionalAttrs (cfg.useWebServiceInterface) { targetEPR = "http://${config.deployment.targetHost}:8080/DisnixWebService/services/DisnixWebService"; }
+        #// optionalAttrs (cfg.useWebServiceInterface) { targetEPR = "http://${config.deployment.targetHost}:8080/DisnixWebService/services/DisnixWebService"; }
         // optionalAttrs (config.services.httpd.enable) { documentRoot = config.services.httpd.documentRoot; }
         // optionalAttrs (config.services.mysql.enable) { mysqlPort = config.services.mysql.port; }
         // optionalAttrs (config.services.tomcat.enable) { tomcatPort = 8080; }
