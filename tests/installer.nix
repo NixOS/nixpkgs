@@ -22,6 +22,7 @@ let
               [ pkgs.glibcLocales
                 pkgs.sudo
                 pkgs.docbook5
+                pkgs.grub
               ];
           }
         ];
@@ -29,7 +30,7 @@ let
 
 
   # The configuration to install.
-  config = { fileSystems, testChannel }: pkgs.writeText "configuration.nix"
+  config = { fileSystems, testChannel, grubVersion }: pkgs.writeText "configuration.nix"
     ''
       { config, pkgs, modulesPath, ... }:
 
@@ -38,7 +39,10 @@ let
             "''${modulesPath}/testing/test-instrumentation.nix"
           ];
 
-        boot.loader.grub.version = 2;
+        boot.loader.grub.version = ${toString grubVersion};
+        ${optionalString (grubVersion == 1) ''
+          boot.loader.grub.splashImage = null;
+        ''}
         boot.loader.grub.device = "/dev/vda";
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
         boot.initrd.kernelModules = [ "ext3" "virtio_console" ];
@@ -89,7 +93,7 @@ let
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems, and a configuration.nix fragment
   # `fileSystems'.
-  testScriptFun = { createPartitions, fileSystems, testChannel }:
+  testScriptFun = { createPartitions, fileSystems, testChannel, grubVersion }:
     ''
       createDisk("harddisk", 4 * 1024);
 
@@ -145,7 +149,7 @@ let
       print STDERR "Result of the hardware scan:\n$cfg\n";
 
       $machine->copyFileFromHost(
-          "${ config { inherit fileSystems testChannel; } }",
+          "${ config { inherit fileSystems testChannel grubVersion; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -185,11 +189,11 @@ let
     '';
 
 
-  makeTest = { createPartitions, fileSystems, testChannel ? false }:
+  makeTest = { createPartitions, fileSystems, testChannel ? false, grubVersion ? 2 }:
     { inherit iso;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
-        inherit createPartitions fileSystems testChannel;
+        inherit createPartitions fileSystems testChannel grubVersion;
       };
     };
 
@@ -297,6 +301,25 @@ in {
           );
         '';
       fileSystems = rootFS + bootFS;
+    };
+
+  # Test a basic install using GRUB 1.
+  grub1 = makeTest
+    { createPartitions =
+        ''
+          $machine->mustSucceed(
+              "parted /dev/vda mklabel msdos",
+              "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
+              "parted /dev/vda -- mkpart primary ext2 1024M -1s",
+              "udevadm settle",
+              "mkswap /dev/vda1 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda2",
+              "mount LABEL=nixos /mnt",
+          );
+        '';
+      fileSystems = rootFS;
+      grubVersion = 1;
     };
 
   # Rebuild the CD configuration with a little modification.
