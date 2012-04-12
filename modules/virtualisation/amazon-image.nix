@@ -78,6 +78,14 @@ with pkgs.lib;
   boot.loader.grub.timeout = 0;
   boot.loader.grub.extraPerEntryConfig = "root (hd0)";
 
+  boot.initrd.postDeviceCommands =
+    ''
+      # Force udev to exit to prevent random "Device or resource busy
+      # while trying to open /dev/xvda" errors from fsck.
+      udevadm control --exit || true
+      kill -9 -- -1
+    '';
+    
   # Mount all formatted ephemeral disks and activate all swap devices.
   # We cannot do this with the ‘fileSystems’ and ‘swapDevices’ options
   # because the set of devices is dependent on the instance type

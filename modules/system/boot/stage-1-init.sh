@@ -322,7 +322,7 @@ done
 
 
 # Stop udevd.
-udevadm control --exit
+udevadm control --exit || true
 
 # Kill any remaining processes, just to be sure we're not taking any
 # with us into stage 2.
