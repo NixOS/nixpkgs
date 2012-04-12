@@ -1,13 +1,13 @@
 { stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "ec2-ami-tools-1.4.0.5";
+  name = "ec2-ami-tools-1.4.0.7";
   
   buildInputs = [ unzip makeWrapper ];
   
   src = fetchurl {
     url = http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip;
-    sha256 = "0vhdqmi076ipqj05dd7fn0drbhcvzccdcdhy8br9sp684scg9a75";
+    sha256 = "0l8c623i1w30bh9k622cdjj5f57rlfc1zs0i01ya016ijyr08qip";
   };
 
   # Amazon EC2 requires that disk images are writable.  If they're
