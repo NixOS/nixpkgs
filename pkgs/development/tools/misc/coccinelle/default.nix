@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, ncurses, ocamlPackages }:
+{ fetchurl, stdenv, python, ncurses, ocamlPackages, makeWrapper }:
 
 let
 
@@ -16,10 +16,20 @@ in stdenv.mkDerivation {
   buildInputs = with ocamlPackages; [
     ocaml findlib menhir
     ocaml_pcre ocaml_sexplib pycaml
-    python ncurses
+    python ncurses makeWrapper
   ];
 
   configureFlagsArray = [ "--enable-release" ];
+
+  postInstall =
+    # On non-NixOS systems, Coccinelle would end up looking up Python modules
+    # in the wrong directory.
+    '' for p in "$out/bin/"*
+       do
+         wrapProgram "$p" \
+           --prefix "PYTHONPATH" ":" "${python}/lib/python${python.majorVersion}"
+       done
+    '';
 
   meta = {
     description = "Coccinelle, a program to apply C code semantic patches";
