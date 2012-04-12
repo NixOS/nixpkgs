@@ -19,6 +19,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ freetype ];
+  buildNativeInputs = [ perl ];
   
   patches = ./gentoo-makefile.patch; # also contains the freetype patch
 
