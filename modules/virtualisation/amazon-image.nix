@@ -91,7 +91,7 @@ with pkgs.lib;
     ''
       diskNr=0
       diskForAufs=
-      for device in /dev/xvd*; do
+      for device in /dev/xvd[abcde]*; do
           if [ "$device" = /dev/xvda -o "$device" = /dev/xvda1 ]; then continue; fi
           fsType=$(blkid -o value -s TYPE "$device" || true)
           if [ "$fsType" = swap ]; then
