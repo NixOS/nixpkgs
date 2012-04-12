@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A functional CLI language";
     homepage = "http://tryfsharp.org/";
-    license = stdenv.lib.licenses.some;
+    license = stdenv.lib.licenses.asl20;
     maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = with stdenv.lib.platforms; linux;
   };
