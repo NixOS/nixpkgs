@@ -56,16 +56,8 @@ stdenv.mkDerivation (rec {
 
 (if stdenv.isFreeBSD
  then {
-   # On FreeBSD, GMP's `config.guess' detects the sub-architecture (e.g.,
-   # "k8") and generates code specific to that sub-architecture, in spite of
-   # `--enable-fat', leading to illegal instructions and similar errors on
-   # machines with a different sub-architecture.
-   # See <http://hydra.nixos.org/build/2269915/nixlog/1/raw>, for an example.
-   # Thus, use GNU's standard `config.guess' so that it assumes the generic
-   # architecture (e.g., "x86_64").
-   preConfigure =
-     '' rm config.guess && ln -s configfsf.guess config.guess
-        chmod +x configfsf.guess
-     '';
+   # The FreeBSD boxes at hydra.nixos.org are VMs run in QEMU.  This patch
+   # allows GMP to work correctly in that environment.
+   patches = [ ./ignore-bad-cpuid.patch ];
  }
  else { }))

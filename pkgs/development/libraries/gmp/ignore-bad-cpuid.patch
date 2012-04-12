@@ -1,0 +1,31 @@
+Don't abort when seeing the default CPU model/platform returned by
+QEMU.
+
+diff -ru -x '*~' gmp-5.0.4-orig/mpn/x86_64/fat/fat.c gmp-5.0.4/mpn/x86_64/fat/fat.c
+--- gmp-5.0.4-orig/mpn/x86_64/fat/fat.c	2012-02-10 11:23:05.000000000 +0100
++++ gmp-5.0.4/mpn/x86_64/fat/fat.c	2012-04-01 21:38:35.843066724 +0200
+@@ -194,13 +194,16 @@
+     {
+       switch (family)
+ 	{
++#if 0
+ 	case 4:
+ 	case 5:
+ 	  abort ();		/* 32-bit processors */
++#endif
+ 
+ 	case 6:
+ 	  switch (model)
+ 	    {
++#if 0
+ 	    case 0x00:
+ 	    case 0x01:
+ 	    case 0x02:
+@@ -217,6 +220,7 @@
+ 	    case 0x0d:		/* Dothan */
+ 	    case 0x0e:		/* Yonah */
+ 	      abort ();		/* 32-bit processors */
++#endif
+ 
+ 	    case 0x0f:		/* Conroe Merom Kentsfield Allendale */
+ 	    case 0x10:
