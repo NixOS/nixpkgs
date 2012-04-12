@@ -2319,6 +2319,8 @@ let
     inherit cmake;
   };
 
+  fsharp = callPackage ../development/compilers/fsharp {};
+
   go = callPackage ../development/compilers/go { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
