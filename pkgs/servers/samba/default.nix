@@ -18,11 +18,11 @@
 assert useKerberos -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "samba-3.6.3";
+  name = "samba-3.6.4";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "0x30qv5y5m5cip077k44gf2khl0hk0s5hpy98ywmqkay5ngl1qk7";
+    sha256 = "052r5c9pwqk6qnzc2g6wljxml6j3nkydbpisgfa0xmvdgzyc42jr";
   };
 
   patches =
