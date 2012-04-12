@@ -650,7 +650,7 @@ let
 
   ethtool = callPackage ../tools/misc/ethtool { };
 
-  euca2ools = callPackage ../tools/virtualization/euca2ools { };
+  euca2ools = callPackage ../tools/virtualization/euca2ools { pythonPackages = python26Packages; };
 
   exif = callPackage ../tools/graphics/exif { };
 
