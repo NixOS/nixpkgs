@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
   };
   
   NIX_CFLAGS_COMPILE = if stdenv.system == "x86_64-linux" then "-fPIC" else "";
+  preInstall = ''
+    mkdir -p "$out/lib"
+    touch "$out/lib/libunwind-generic.so"
+  '';
   
   meta = {
     homepage = http://www.nongnu.org/libunwind;
