@@ -2148,7 +2148,8 @@ let
 
   gcl = builderDefsPackage ../development/compilers/gcl {
     inherit mpfr m4 binutils fetchcvs emacs zlib which
-      gmp texinfo;
+      texinfo;
+    gmp = gmp4;
     inherit (xlibs) libX11 xproto inputproto libXi
       libXext xextproto libXt libXaw libXmu;
     inherit stdenv;
