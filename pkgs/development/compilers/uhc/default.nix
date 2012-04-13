@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation {
-  name = "uhc-svn-git20120405";
+  name = "uhc-svn-git20120412";
 
   src = fetchgit {
      url = "https://github.com/UU-ComputerScience/uhc.git";
-     rev = "d6d75a131a36899ff2db2d8c9a4ae6601d7d0675";
-     sha256 = "4117688bf1e4a892d8551c3bcc59c5ec5743842e6a67ec66d399f390fec05b4c";
+     rev = "eef10f64d84bc0aa145121f2a61accea03b9bc76";
+     sha256 = "c867d22423adb17396a28eef030c53f282b1443db2149aa7b8ab659ac7c18576";
   };
 
   postUnpack = "sourceRoot=\${sourceRoot}/EHC";
