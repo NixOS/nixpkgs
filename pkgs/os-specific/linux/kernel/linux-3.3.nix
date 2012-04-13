@@ -12,7 +12,7 @@ let
       TIMER_STATS y
       USB_SUSPEND y
       BACKTRACE_SELF_TEST n
-      CPU_NOTIFIER_ERROR_INJECT n
+      CPU_NOTIFIER_ERROR_INJECT? n
       DEBUG_DEVRES n
       DEBUG_NX_TEST n
       DEBUG_STACK_USAGE n
@@ -233,7 +233,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.3.1";
+    version = "3.3.2";
     testing = false;
 
     preConfigure = ''
@@ -242,7 +242,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "0b29ijg578nib9hxmzxsvi3jqydcbxdggp0n2k3x0bc14dwzyv0q";
+      sha256 = "19paxvcs3bj32j5fp4ibx963la30p0331w7zvg3zcwmx0ml9pn9y";
     };
 
     config = configWithPlatform stdenv.platform;
