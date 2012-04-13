@@ -3425,9 +3425,10 @@ let
 
   extremetuxracer = builderDefsPackage (import ../games/extremetuxracer) {
     inherit mesa tcl freeglut SDL SDL_mixer pkgconfig
-      libpng gettext intltool;
+      gettext intltool;
     inherit (xlibs) libX11 xproto libXi inputproto
       libXmu libXext xextproto libXt libSM libICE;
+    libpng = libpng12;
   };
 
   eventlog = callPackage ../development/libraries/eventlog { };
