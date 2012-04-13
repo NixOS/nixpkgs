@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional doCheck perl;
   propagatedBuildInputs = [ m4 ];
 
-  M4 = "m4";
+  M4 = "${m4}/bin/m4";
 
   doCheck = true;
 
