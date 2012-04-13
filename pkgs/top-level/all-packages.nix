@@ -5663,7 +5663,6 @@ let
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs2_1_2_6_38
         kernelPatches.cifs_timeout_2_6_38
-        #kernelPatches.mips_restart_2_6_36
       ];
   };
 
@@ -5675,7 +5674,6 @@ let
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs2_1_2_6_39
-        #kernelPatches.mips_restart_2_6_36
       ];
   };
 
@@ -5686,7 +5684,6 @@ let
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs3_0
         #kernelPatches.aufs2_1_3_0
-        #kernelPatches.mips_restart_2_6_36
       ];
   };
 
@@ -5696,7 +5693,6 @@ let
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs3_1
-        #kernelPatches.mips_restart_2_6_36
       ];
   };
 
@@ -5707,7 +5703,6 @@ let
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs3_2
         kernelPatches.cifs_timeout_2_6_38
-        #kernelPatches.mips_restart_2_6_36
       ];
   };
 
@@ -5719,7 +5714,6 @@ let
         kernelPatches.aufs3_3
         kernelPatches.efi_bootstub_config_3_3
         kernelPatches.btrfs_enospc
-        #kernelPatches.mips_restart_2_6_36
       ];
   };
 
