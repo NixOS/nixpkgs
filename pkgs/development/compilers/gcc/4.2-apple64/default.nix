@@ -34,8 +34,9 @@ stdenv.mkDerivation {
   sourceRoot = "gcc-${revision}/";
 
   patches =
-    [ ./pass-cxxcpp.patch ./fix-libstdc++-link.patch ]
-    ++ stdenv.lib.optional noSysDirs [ ./no-sys-dirs.patch ];
+    [ ./pass-cxxcpp.patch ]
+    ++ stdenv.lib.optional noSysDirs ./no-sys-dirs.patch
+    ++ stdenv.lib.optional langCC ./fix-libstdc++-link.patch;
 
   inherit noSysDirs langCC langF77 langObjC;
   langC = true;
