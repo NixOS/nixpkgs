@@ -16,8 +16,9 @@ let
       login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
       halt_cmd ${config.system.build.upstart}/sbin/shutdown -h now
       reboot_cmd ${config.system.build.upstart}/sbin/shutdown -r now
-      ${if cfg.defaultUser != "" then "default_user " + cfg.defaultUser else ""}
-      ${if cfg.hideCursor then "hidecursor true" else ""}
+      ${optionalString (cfg.defaultUser != "") ("default_user " + cfg.defaultUser)}
+      ${optionalString cfg.hideCursor "hidecursor true"}
+      ${optionalString cfg.autoLogin "auto_login yes"}
     '';
 
   # Unpack the SLiM theme, or use the default.
@@ -80,6 +81,14 @@ in
         example = true;
         description = ''
           Hide the mouse cursor on the login screen.
+        '';
+      };
+
+      autoLogin = mkOption {
+        default = false;
+        example = true;
+        description = ''
+          Automatically log in as the default user.
         '';
       };
 
