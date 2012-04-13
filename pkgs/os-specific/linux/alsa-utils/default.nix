@@ -1,17 +1,17 @@
 {stdenv, fetchurl, alsaLib, gettext, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-utils-1.0.23";
+  name = "alsa-utils-1.0.25";
   
   src = fetchurl {
     url = "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2";
-    sha256 = "1c7pl5k3d60wacnha8zfn2dixz7hiiaxvijis4559y15bs8mxl5p";
+    sha256 = "0b1hbdq1bdkbz72zdfy5cgp75jqpysb0mqb0n9wy5gsbccpnlrrf";
   };
   
   buildInputs = [ alsaLib ncurses ];
   buildNativeInputs = [ gettext ];
   
-  configureFlags = "--disable-xmlto";
+  configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
 
   meta = {
     description = "ALSA, the Advanced Linux Sound Architecture utils";
