@@ -29,9 +29,9 @@ stdenv.mkDerivation {
   #     -A 18 = Pentium II
   #     -V 192 = SSE1|SSE2 (Or it takes SSE3 somehow in my machine without SSE3)
   #     -t 0 = No threading
-  configureFlags = "-Fa alg -fPIC -t 0 -V 192"
+  configureFlags = "-t 0"
     + optionalString stdenv.isi686 " -b 32 -A 18"
-    + optionalString stdenv.isx86_64 " -A 31"
+    + optionalString stdenv.isx86_64 " -A 31 -V 192"
     + optionalString tolerateCpuTimingInaccuracy " -Si cputhrchk 0"
     + optionalString shared " --shared "
     ;
