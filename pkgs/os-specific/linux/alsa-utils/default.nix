@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   
   configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
 
+  installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
+
   meta = {
     description = "ALSA, the Advanced Linux Sound Architecture utils";
 
