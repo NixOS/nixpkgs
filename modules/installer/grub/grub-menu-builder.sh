@@ -274,9 +274,10 @@ for generation in $(
     | sed 's/system-\([0-9]\+\)-link/\1/' \
     | sort -n -r); do
     link=/nix/var/nix/profiles/system-$generation-link
-    date=$(stat --printf="%y\n" $link | sed 's/\..*//')
+    date=$(stat --printf="%y\n" $link | sed 's/\..*//' | sed 's/ .*//')
     kernelVersion=$(cd $(dirname $(readlink -f $link/kernel))/lib/modules && echo *)
-    addEntry "NixOS - Configuration $generation ($date - $kernelVersion)" $link "$generation ($date)"
+    nixosVersion=$(if [ -e $link/nixos-version ]; then cat $link/nixos-version; fi)
+    addEntry "NixOS - Configuration $generation ($date - ${nixosVersion:-$kernelVersion})" $link "$generation ($date)"
 done
 
 

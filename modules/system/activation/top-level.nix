@@ -120,9 +120,10 @@ let
       ln -s ${config.system.build.upstart} $out/upstart
       ln -s ${config.hardware.firmware} $out/firmware
 
-      echo "$kernelParams" > $out/kernel-params
-      echo "$configurationName" > $out/configuration-name
-      echo "${toString config.system.build.upstart.interfaceVersion}" > $out/upstart-interface-version
+      echo -n "$kernelParams" > $out/kernel-params
+      echo -n "$configurationName" > $out/configuration-name
+      echo -n "${toString config.system.build.upstart.interfaceVersion}" > $out/upstart-interface-version
+      echo -n "$nixosVersion" > $out/nixos-version
 
       mkdir $out/fine-tune
       childCount=0
@@ -145,7 +146,7 @@ let
   # script `switch-to-configuration' that activates the configuration
   # and makes it bootable.
   system = pkgs.stdenv.mkDerivation {
-    name = "system";
+    name = "nixos-${config.system.nixosVersion}";
     buildCommand = systemBuilder;
     inherit children;
     kernelParams =
@@ -153,6 +154,7 @@ let
     menuBuilder = config.system.build.menuBuilder;
     initScriptBuilder = config.system.build.initScriptBuilder;
     activationScript = config.system.activationScripts.script;
+    nixosVersion = config.system.nixosVersion;
 
     jobs = map (j: j.name) (attrValues config.jobs);
 
