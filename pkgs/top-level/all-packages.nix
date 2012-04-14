@@ -5278,6 +5278,9 @@ let
     cups = null;
     acl = null;
     openldap = null;
+
+    # libunwind 1.0.1 is not ported to GNU/Hurd.
+    libunwind = null;
   };
 
   shishi = callPackage ../servers/shishi { };
