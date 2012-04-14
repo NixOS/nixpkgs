@@ -4715,6 +4715,10 @@ let
     inherit readline ncurses;
   });
 
+  sqliteFull = callPackage ../development/libraries/sqlite/full.nix {
+    inherit readline ncurses;
+  };
+
   stlport = callPackage ../development/libraries/stlport { };
 
   strigi = callPackage ../development/libraries/strigi {};
