@@ -21,6 +21,9 @@ stdenv.mkDerivation {
   configureFlags = "--enable-threadsafe --enable-tempstore";
 
   preConfigure = ''
+    ${ # The tests oserror-1.1.{1,2,3} need the fd limit < 2000
+       # and on the builders in NixOS we have 4096 now.
+       if stdenv.isLinux then "ulimit -n 1024" else ""}
     export TCLLIBDIR=$out/${tcl.libdir}
   '';
 
