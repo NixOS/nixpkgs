@@ -1,7 +1,7 @@
 {stdenv, fetchurl}:
 
 # I could not build it in armv5tel-linux or the fuloon2f
-assert stdenv.system != "armv5tel-linux";
+assert !stdenv.isArm;
 assert stdenv.system != "mips64el-linux";
    
 stdenv.mkDerivation {

@@ -46,7 +46,7 @@
 }:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
-  || stdenv.system == "armv5tel-linux" || stdenv.system == "mips64el-linux";
+  || stdenv.isArm || stdenv.system == "mips64el-linux";
 
 assert stdenv.platform.name == "sheevaplug" -> stdenv.platform.uboot != null;
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation {
     if userModeLinux then "um" else
     if stdenv.system == "i686-linux" then "i386" else
     if stdenv.system == "x86_64-linux" then "x86_64" else
-    if stdenv.system == "armv5tel-linux" then "arm" else
+    if stdenv.isArm then "arm" else
     if stdenv.system == "mips64el-linux" then "mips" else
     abort "Platform ${stdenv.system} is not supported.";
 

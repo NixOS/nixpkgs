@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ flex ];
   buildInputs = [ cracklib ]
     ++ stdenv.lib.optional
-      (stdenv.system != "armv5tel-linux" && stdenv.system != "mips64el-linux")
+      (stdenv.isArm && stdenv.system != "mips64el-linux")
       libxcrypt;
 
   crossAttrs = {
-    # Skip libxcrypt cross-building, as it fails for mips and armv5tel
+    # Skip libxcrypt cross-building, as it fails for mips and arm
     propagatedBuildInputs = [ flex.hostDrv cracklib.hostDrv ];
     preConfigure = preConfigure + ''
       ar x ${flex.hostDrv}/lib/libfl.a

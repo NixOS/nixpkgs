@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     "--enable-kernel=2.6.0"
     "--without-fp"
     "--with-__thread"
-  ] ++ (if (stdenv.system == "armv5tel-linux") then [
+  ] ++ (if stdenv.isArm then [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"

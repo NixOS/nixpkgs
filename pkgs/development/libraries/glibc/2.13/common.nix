@@ -105,7 +105,7 @@ stdenv.mkDerivation ({
     (if cross.float == "soft" then "--without-fp" else "--with-fp")
     "--enable-kernel=2.6.0"
     "--with-__thread"
-  ] ++ stdenv.lib.optionals (stdenv.system == "armv5tel-linux") [
+  ] ++ stdenv.lib.optionals stdenv.isArm [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"
