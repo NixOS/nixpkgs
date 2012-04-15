@@ -17,6 +17,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ python makeWrapper docutils unzip ];
 
+  PYTHONPATH = "${python}/lib/python2.6/site-packages:${python}/lib/python2.7/site-packages:${docutils}/lib/python2.5/site-packages:${docutils}/lib/python2.6/site-packages:${docutils}/lib/python2.7/site-packages";
+
   makeFlags = "PREFIX=$(out)";
 
   postInstall = (stdenv.lib.optionalString guiSupport
