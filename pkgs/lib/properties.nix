@@ -82,7 +82,19 @@ rec {
       attrs;
 
   delayProperties = # implicit attrs argument.
-    delayPropertiesWithIter (f: p: v: lib.mapAttrs f v) "";
+    let
+      # mapAttrs except that it also recurse into potential mkMerge
+      # functions.  This may cause a strictness issue because looking the
+      # type of a string implies evaluating it.
+      iter = fun: path: value:
+        lib.mapAttrs (attr: val:
+          if isProperty val && isMerge val.property then
+            val // { content = map (fun attr) val.content; }
+          else
+            fun attr val
+        ) value;
+    in
+      delayPropertiesWithIter iter "";
 
   # Call onDelay functions.
   triggerPropertiesDelay = name: attrs:
@@ -179,6 +191,22 @@ rec {
   copyProperties = attrs: newAttrs:
     foldProperty id (x: newAttrs) attrs;
 
+  /* Merge. */
+
+  # Create "merge" statement which is skipped by the delayProperty function
+  # and interpreted by the underlying system using properties (modules).
+
+  # Create a "Merge" property which only contains a condition.
+  isMerge = attrs: (typeOf attrs) == "merge";
+  mkMerge = content: mkProperty {
+    property = {
+      _type = "merge";
+      onDelay = name: val: throw "mkMerge is not the first of the list of properties.";
+      onEval = val: throw "mkMerge is not allowed on option definitions.";
+    };
+    inherit content;
+  };
+
   /* If. ThenElse. Always. */
 
   # create "if" statement that can be delayed on sets until a "then-else" or
@@ -202,6 +230,7 @@ rec {
   isThenElse = attrs: (typeOf attrs) == "then-else";
   mkThenElse = attrs:
     assert attrs ? thenPart && attrs ? elsePart;
+    __trace "Obsolete usage of mkThenElse, replace it by mkMerge."
     mkProperty {
       property = {
         _type = "then-else";
