@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   #     -V 192 = SSE1|SSE2 (Or it takes SSE3 somehow in my machine without SSE3)
   #     -V 0 = No SIMD (Pentium II does not have any SSE)
   #     -t 0 = No threading
-  configureFlags = "-Fa alg fPIC -t 0"
+  configureFlags = "-Fa alg -fPIC -t 0"
     + optionalString stdenv.isi686 " -b 32 -A 18 -V 0"
     + optionalString stdenv.isx86_64 " -A 31 -V 192"
     + optionalString tolerateCpuTimingInaccuracy " -Si cputhrchk 0"
