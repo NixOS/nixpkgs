@@ -23,6 +23,13 @@ rec {
     ];
   };
 
+  # support for bugzilla
+  gitBz = import ./git-bz {
+    inherit fetchgit stdenv makeWrapper python asciidoc xmlto # docbook2x docbook_xsl docbook_xml_dtd_45 libxslt
+      ;
+    inherit (pythonPackages) pysqlite;
+  };
+
   # Git with SVN support, but without GUI.
   gitSVN = lowPrio (appendToName "with-svn" (git.override {
     svnSupport = true;

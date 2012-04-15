@@ -75,8 +75,6 @@ stdenv.mkDerivation rec {
        rm -v $out/share/info/{standards,configure,bfd}.info
     '';
 
-  enableParallelBuilding = true;
-
   # TODO: Investigate & fix the test failures.
   doCheck = false;
 

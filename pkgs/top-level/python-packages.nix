@@ -4,7 +4,7 @@ let pythonPackages = python.modules // rec {
 
   inherit python;
 
-  inherit (pkgs) fetchurl fetchsvn stdenv;
+  inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
 
 
   buildPythonPackage = import ../development/python-modules/generic {
@@ -201,6 +201,25 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  bugz = buildPythonPackage (rec {
+    name = "bugz-0.9.3";
+
+    src = fetchgit {
+      url = "git://github.com/williamh/pybugz.git";
+      rev = "refs/tags/0.9.3";
+    };
+
+    propagatedBuildInputs = [ argparse python.modules.ssl ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://www.liquidx.net/pybugz/;
+      description = "Command line interface for Bugzilla";
+    };
+  });
+
+
   carrot = buildPythonPackage rec {
     name = "carrot-0.10.7";
 
@@ -368,6 +387,41 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  dulwich = buildPythonPackage rec {
+    name = "dulwich-0.8.1";
+
+    src = fetchurl {
+      url = "http://samba.org/~jelmer/dulwich/${name}.tar.gz";
+      sha256 = "1a1619e9c7e63fe9bdc93356ee893be1016b7ea12ad953f4e1f1f5c0c5056ee8";
+    };
+
+    buildPhase = "make build";
+    installCommand = ''
+      python setup.py install --prefix="$out" --root=/ --record="$out/lib/${python.libPrefix}/site-packages/dulwich/list.txt" --single-version-externally-managed
+    '';
+    doCheck = false;
+
+    meta = {
+      description = "Simple Python implementation of the Git file formats and protocols.";
+      homepage = http://samba.org/~jelmer/dulwich/;
+    };
+  };
+
+  hggit = buildPythonPackage rec {
+    name = "hg-git-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/h/hg-git/${name}.tar.gz";
+      md5 = "4b15867a07abb0be985177581ce64cee";
+    };
+
+    propagatedBuildInputs = [ dulwich ];
+
+    meta = {
+      description = "Push and pull from a Git server using Mercurial.";
+      homepage = http://hg-git.github.com/;
+    };
+  };
 
   docutils = buildPythonPackage rec {
     name = "docutils-0.8.1";
