@@ -1020,6 +1020,7 @@ let
   };
 
   mosh = callPackage ../tools/networking/mosh {
+    boost = boostHeaders;
     inherit (perlPackages) IOTty;
   };
 
@@ -3276,8 +3277,10 @@ let
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost148 = callPackage ../development/libraries/boost/1.48.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
-  boost149headers = callPackage ../development/libraries/boost/1.49-headers.nix { };
   boost = boost149;
+
+  boostHeaders149 = callPackage ../development/libraries/boost/1.49-headers.nix { };
+  boostHeaders = boostHeaders149;
 
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
   boostFull = appendToName "full" (boost.override {
