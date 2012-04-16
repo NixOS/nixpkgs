@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "storable-record";
-  version = "0.0.2.4";
-  sha256 = "5ed2680dcfc4c3d4fe605d23e797b847fe047b7acd3f4acfd82155c93e72b280";
+  version = "0.0.2.5";
+  sha256 = "078vwwcr47d3dmzkhxr7ggjkq9d5rnxv4z8p049kdnmzfbcmisn3";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ transformers utilityHt ];

@@ -152,7 +152,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     syb          = self.syb_0_3_6;              # 7.4.1 ok
     xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
     zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
-    HTTP         = self.HTTP_4000_2_2;          # 7.4.1 ok
+    HTTP         = self.HTTP_4000_2_3;          # 7.4.1 ok
     text         = self.text_0_11_2_0;          # 7.4.1 ok
     transformers = self.transformers_0_2_2_0;   # 7.4.1 ok
     mtl          = self.mtl_2_0_1_0;            # 7.4.1 ok
@@ -810,7 +810,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_1_2 = callPackage ../development/libraries/haskell/HTTP/4000.1.2.nix {};
   HTTP_4000_2_1 = callPackage ../development/libraries/haskell/HTTP/4000.2.1.nix {};
   HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
-  HTTP = self.HTTP_4000_2_2;
+  HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
+  HTTP = self.HTTP_4000_2_3;
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
@@ -1461,6 +1462,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   wlPprintText = callPackage ../development/libraries/haskell/wl-pprint-text {};
 
   wx = callPackage ../development/libraries/haskell/wxHaskell/wx.nix {};
+
+  wxc = callPackage ../development/libraries/haskell/wxHaskell/wxc.nix {};
 
   wxcore = callPackage ../development/libraries/haskell/wxHaskell/wxcore.nix {
     wxGTK = pkgs.wxGTK28;

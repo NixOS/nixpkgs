@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rvar";
-  version = "0.2";
-  sha256 = "1in2qn1clv9b7ijyllhjflh9zdkna31hpyclhlkfnsc6899z3y1f";
+  version = "0.2.0.1";
+  sha256 = "17wgd4gc1hn04dck168nkyzn9jyipgbysxsznyzy2z36vafqqqbm";
   buildDepends = [ MonadPrompt mtl randomSource transformers ];
   meta = {
     homepage = "https://github.com/mokus0/random-fu";

@@ -5,15 +5,12 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "3.2.7.1";
-  sha256 = "07d7a8l2phb787wgqyh1rci1v9hzwxw35arg03hkal072sacif0c";
+  version = "3.2.7.2";
+  sha256 = "1l37w3q2jhcxjkq3h0nh8hl21vscgvsj6jkkd2hni62kfzfrgqhw";
   buildDepends = [
     binary blazeHtml citeprocHs cryptohash filepath hamlet mtl pandoc
     parsec regexBase regexTdfa snapCore snapServer tagsoup time
   ];
-  patchPhase = ''
-    sed -i 's|hamlet      >= 0.10.3 && < 0.11|hamlet|' hakyll.cabal
-  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
