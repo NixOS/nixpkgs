@@ -1019,6 +1019,10 @@ let
     inherit openssl flex bison;
   };
 
+  mosh = callPackage ../tools/networking/mosh {
+    inherit (perlPackages) IOTty;
+  };
+
   mpage = callPackage ../tools/text/mpage { };
 
   mscgen = callPackage ../tools/graphics/mscgen { };
