@@ -79,6 +79,8 @@ rec {
     chmod a+x "$TARGET/bin/"*
     mkdir -p "$out/bin"
 
+    sed -e 's/\r//g' -i "$TARGET/bin"/*
+
     echo -e '#! /bin/sh\nls "'"$TARGET"'"/bin' > "$out/bin/jena-list-commands"
     echo '#! /bin/sh' >> "$out/bin/jena-command"
     echo 'export JENAROOT="'"$TARGET"'"' >> "$out/bin/jena-command"
