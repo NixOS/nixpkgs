@@ -5,8 +5,9 @@ stdenv.mkDerivation {
 
   src = fetchhg {
     name = "xxdiff";
+    tag = "fdc247a7d9e5";
     url = https://hg.furius.ca/public/xxdiff;
-    sha256 = "0ahx80vdf67vq9w0g66dx39y27gvz6v1aybqj9554n6vxvg1zk5n";
+    sha256 = "7ae7d81becc25b1adabc9383bb5b9005dddb31510cdc404ce8a0d6ff6c3dc47e";
   };
 
   buildNativeInputs = [ flex bison qt4 ];
