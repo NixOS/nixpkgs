@@ -1467,13 +1467,17 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   wx = callPackage ../development/libraries/haskell/wxHaskell/wx.nix {};
 
-  wxc = callPackage ../development/libraries/haskell/wxHaskell/wxc.nix {};
-
-  wxcore = callPackage ../development/libraries/haskell/wxHaskell/wxcore.nix {
-    wxGTK = pkgs.wxGTK28;
+  wxc = callPackage ../development/libraries/haskell/wxHaskell/wxc.nix {
+    wxGTK = pkgs.wxGTK29;
   };
 
-  wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
+  wxcore = callPackage ../development/libraries/haskell/wxHaskell/wxcore.nix {
+    wxGTK = pkgs.wxGTK29;
+  };
+
+  wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {
+    time = self.time_1_2_0_5;
+  };
 
   X11_1_5_0_1 = callPackage ../development/libraries/haskell/X11/1.5.0.1.nix {};
   X11_1_6_0 = callPackage ../development/libraries/haskell/X11/1.6.0.nix {};

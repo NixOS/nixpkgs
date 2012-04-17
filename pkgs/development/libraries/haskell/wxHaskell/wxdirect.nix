@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wxdirect";
-  version = "0.13.1.2";
-  sha256 = "1gn5si6939yizlkf7hzm2a2gff5sa98m7q5q1hz23av98zfa8pv7";
+  version = "0.90";
+  sha256 = "0vlqvj9sys5d2x9ccpq0yxqbsq060g4jb6xrckjspxb605c98r3r";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ parsec strict time ];
