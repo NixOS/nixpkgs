@@ -15,8 +15,9 @@ stdenv.mkDerivation {
     sha256 = "10q8jx842s4aws9py6q67rb4dh5vli5vvg54jl8manjb4f388jh5";
   };
 
-  cmakeFlags =
-    (map (x: "-DOGRE_BUILD_PLUGIN_${x}=on") [ "BSP" "CG" "OCTREE" "PCZ" "PFX" ])
+  cmakeFlags = [ "-DOGRE_INSTALL_SAMPLES=yes" ]
+    ++ (map (x: "-DOGRE_BUILD_PLUGIN_${x}=on")
+            [ "BSP" "CG" "OCTREE" "PCZ" "PFX" ])
     ++ (map (x: "-DOGRE_BUILD_RENDERSYSTEM_${x}=on") [ "GL" ]);
 
   enableParallelBuilding = true;
