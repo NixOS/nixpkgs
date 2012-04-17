@@ -7750,6 +7750,8 @@ let
 
   blackshadeselite = callPackage ../games/blackshadeselite { };
 
+  blobby = callPackage ../games/blobby {};
+
   bsdgames = callPackage ../games/bsdgames { };
 
   btanks = callPackage ../games/btanks { };
