@@ -968,7 +968,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
-  maude = callPackage ../development/libraries/haskell/maude {};
+  maude = callPackage ../development/libraries/haskell/maude {
+    parsec = self.parsec3;
+  };
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
@@ -1101,6 +1103,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   pathtype = callPackage ../development/libraries/haskell/pathtype {};
 
   pcreLight = callPackage ../development/libraries/haskell/pcre-light {};
+
+  pem = callPackage ../development/libraries/haskell/pem {};
 
   permutation = callPackage ../development/libraries/haskell/permutation {};
 
