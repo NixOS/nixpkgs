@@ -213,10 +213,10 @@ rec {
   };
 
   CacheFastMmap = buildPerlPackage rec {
-    name = "Cache-FastMmap-1.39";
+    name = "Cache-FastMmap-1.40";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Cache/${name}.tar.gz";
-      sha256 = "0dq93pz6lqya26pzgpgfa7c7i67h8rg0ylshzmvqzq4brqjpbqsk";
+      sha256 = "0h3ckr04cdn6dvl40m4m97vl5ybf30v1lwhw3jvkr92kpksvq4hd";
     };
   };
 
@@ -478,10 +478,10 @@ rec {
   };
 
   CatalystPluginSession = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Session-0.32";
+    name = "Catalyst-Plugin-Session-0.34";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
-      sha256 = "1pyrvwfan3qiaixbii57q4g34r9i1v61c5rfri6c25wryfh4f2bj";
+      sha256 = "0vgm3pjymzxqnjn8cj8ld1wprwj3hq15n26djvjmnx6pwyf2ffgz";
     };
     buildInputs = [ TestMockObject TestDeep ];
     propagatedBuildInputs =
@@ -499,10 +499,10 @@ rec {
   };
 
   CatalystPluginSessionStoreFastMmap = buildPerlPackage rec {
-    name = "Catalyst-Plugin-Session-Store-FastMmap-0.14";
+    name = "Catalyst-Plugin-Session-Store-FastMmap-0.16";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
-      sha256 = "1ywm96k1kpw9vbh7ihrxlfnfc5s4frb37cbix7xxlfz2vk10jw0d";
+      sha256 = "0x3j6zv3wr41jlwr6yb2jpmcx019ibyn11y8653ffnwhpzbpzsxs";
     };
     propagatedBuildInputs =
       [ PathClass CatalystPluginSession CacheFastMmap MROCompat ];
