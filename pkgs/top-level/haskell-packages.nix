@@ -157,7 +157,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     transformers = self.transformers_0_2_2_0;   # 7.4.1 ok
     mtl          = self.mtl_2_0_1_0;            # 7.4.1 ok
     random       = self.random_1_0_1_1;         # 7.4.1 ok
-    cabalInstall = self.cabalInstall_0_10_2;    # 7.4.1 fails
+    cabalInstall = self.cabalInstall_0_14_0;    # 7.4.1 ok
     alex         = self.alex_3_0_1;             # 7.4.1 ok
     happy        = self.happy_1_18_9;           # 7.4.1 ok
     haddock      = self.haddock_2_10_0;         # 7.4.1 ok
@@ -1666,7 +1666,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_0_8_0  = callPackage ../tools/package-management/cabal-install/0.8.0.nix  {};
   cabalInstall_0_8_2  = callPackage ../tools/package-management/cabal-install/0.8.2.nix  {};
   cabalInstall_0_10_2 = callPackage ../tools/package-management/cabal-install/0.10.2.nix {};
-  cabalInstall = self.cabalInstall_0_6_2;
+  cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
+  cabalInstall = self.cabalInstall_0_14_0;
 
   lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 
