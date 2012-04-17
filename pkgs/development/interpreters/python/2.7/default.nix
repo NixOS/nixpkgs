@@ -172,6 +172,8 @@ let
       deps = [ sqlite ];
     };
 
+    ssl = null;
+
     tkinter = buildInternalPythonModule {
       moduleName = "tkinter";
       deps = [ tcl tk x11 ];
