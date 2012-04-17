@@ -4858,12 +4858,7 @@ let
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
-  wxGTK290 = callPackage ../development/libraries/wxGTK-2.9/2.9.0.nix {
-    inherit (gnome) GConf;
-    withMesa = lib.elem system lib.platforms.mesaPlatforms;
-  };
-
-  wxGTK291 = callPackage ../development/libraries/wxGTK-2.9/2.9.1.nix {
+  wxGTK29 = callPackage ../development/libraries/wxGTK-2.9/default.nix {
     inherit (gnome) GConf;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
