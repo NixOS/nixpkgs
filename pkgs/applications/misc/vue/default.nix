@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="vue";
-    version="3.1.1";
+    version="3.1.2";
     name="${baseName}-${version}";
-    url="http://releases.atech.tufts.edu/vue/v${version}/VUE_3_1_1.zip";
-    hash="1wq2mdvfm7c4vhs9ivl7n3w9ncwyrjgdgycbapzd6l1nym5iz76y";
+    url="http://releases.atech.tufts.edu/vue/v${version}/VUE_3_1_2.zip";
+    hash="0ga98gnp4qhcrb31cb8j0mwbrh6ym6hr4k5y4blxvyfff9c0vq47";
   };
 in
 rec {
