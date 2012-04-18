@@ -341,7 +341,7 @@ in {
           print STDERR "New CD config:\n$cfg\n";
 
           # Apply the new CD configuration.
-          $machine->mustSucceed("nixos-rebuild test --no-pull");
+          $machine->mustSucceed("nixos-rebuild test");
 
           # Connect to it-self.
           #$machine->waitForJob("sshd");
