@@ -152,10 +152,14 @@ let
           "${ config { inherit fileSystems testChannel grubVersion; } }",
           "/mnt/etc/nixos/configuration.nix");
 
+      # Hack to get GRUB 1 to install on virtio.  GRUB 1 has a patch
+      # from Gentoo to support virtio, but it's incomplete: it doesn't
+      # detect /dev/vd* automatically.  And we don't care enough about
+      # GRUB 1 to fix it.
+      $machine->mustSucceed("mkdir -p /mnt/boot/grub; echo '(hd0) /dev/vda' > /mnt/boot/grub/device.map");
+      
       # Perform the installation.
       $machine->mustSucceed("nixos-install >&2");
-
-      $machine->mustSucceed("cat /mnt/boot/grub/grub.cfg >&2");
 
       $machine->shutdown;
 
@@ -165,19 +169,17 @@ let
       # Did /boot get mounted, if appropriate?
       # !!! There is currently no good way to wait for the
       # `filesystems' task to finish.
-      $machine->waitForFile("/boot/grub/grub.cfg");
+      $machine->waitForFile("/boot/grub");
 
       # Did the swap device get activated?
       # !!! Idem.
       $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
 
-      $machine->mustSucceed("nix-env -i coreutils >&2");
+      $machine->mustSucceed("nix-env -f /etc/nixos/nixpkgs -i coreutils >&2");
       $machine->mustSucceed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 
       $machine->mustSucceed("nixos-rebuild switch >&2");
-
-      $machine->mustSucceed("cat /boot/grub/grub.cfg >&2");
 
       $machine->shutdown;
 
