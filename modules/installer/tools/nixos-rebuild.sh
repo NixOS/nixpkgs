@@ -23,8 +23,8 @@ The operation is one of the following:
 Options:
 
   --install-grub         (re-)install the Grub bootloader
-  --pull                 do do a nix-pull to get the latest NixOS
-                         channel manifest
+  --pull                 do a nix-pull to get the latest NixOS channel
+                         manifest
   --no-build-nix         don't build the latest Nix from Nixpkgs before
                          building NixOS
   --rollback             restore the previous NixOS configuration (only
