@@ -40,18 +40,17 @@ stdenv.mkDerivation ({
         then [ "--with-parted" ]
         else [ "--without-parted" ]);
 
-  preConfigure = "autoreconf -vfi";
+  preConfigure =
+    '' autoreconf -vfi
 
-  patchPhase =
-    '' echo "removing \`-o root' from makefiles..."
+       echo "removing \`-o root' from makefiles..."
        for mf in {utils,daemons}/Makefile
        do
          sed -i "$mf" -e's/-o root//g'
        done
     '';
 
-  buildPhase = "make ${buildTarget}";
-  installPhase = "make ${installTarget}";
+  crossAttrs.dontPatchShebangs = true;
 
   meta = {
     description = "The GNU Hurd, GNU project's replacement for the Unix kernel";
@@ -71,6 +70,17 @@ stdenv.mkDerivation ({
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+(if !headersOnly && buildTarget != null
+ then assert installTarget != null; {
+   # Use the default `buildPhase' and `installPhase' so that the usual hooks
+   # can still be used.
+   buildFlags = buildTarget;
+   installTargets = installTarget;
+ }
+ else {})
 
 //
 
