@@ -16,7 +16,8 @@ let
 
   needsPortsNative = stdenv.isMips || stdenv.isArm;
   needsPortsCross = cross.arch == "mips" || cross.arch == "arm";
-  needsPorts = if (stdenv ? cross) && stdenv.cross != null then true
+  needsPorts =
+    if (stdenv ? cross) && stdenv.cross != null && hurdHeaders == null then true
     else if cross == null then needsPortsNative
     else needsPortsCross;
 
@@ -181,7 +182,8 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = http://www.gnu.org/software/libc/;
-    description = "The GNU C Library";
+    description = "The GNU C Library"
+      + stdenv.lib.optionalString (hurdHeaders != null) ", for GNU/Hurd";
 
     longDescription =
       '' Any Unix-like operating system needs a C library: the library which
