@@ -7,6 +7,7 @@
       deployment.ec2.instanceType = "m1.small";
       deployment.ec2.keyPair = "eelco";
       deployment.ec2.securityGroups = [ "eelco-test" ];
-      deployment.ec2.blockDeviceMapping."/dev/xvdg".size = 20;
+      environment.systemPackages = [ pkgs.parted ];
+      fileSystems = [];
     };
 }
