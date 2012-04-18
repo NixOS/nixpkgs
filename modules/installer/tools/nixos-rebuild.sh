@@ -152,7 +152,7 @@ fi
 if test -z "$rollback"; then
     echo "building the system configuration..." >&2
     if test "$action" = switch -o "$action" = boot; then
-        nix-env -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system $extraBuildFlags
+        nix-env $extraBuildFlags -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
         pathToConfig=/nix/var/nix/profiles/system
     elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
         nix-build '<nixos>' -A system -K -k $extraBuildFlags > /dev/null
