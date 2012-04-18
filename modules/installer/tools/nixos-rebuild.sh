@@ -18,19 +18,19 @@ The operation is one of the following:
   build-vm-with-bootloader:
             like build-vm, but include a boot loader in the VM
   dry-run:  just show what store paths would be built/downloaded
-  pull:     just pull the Nixpkgs channel manifest and exit
+  pull:     just pull the NixOS channel manifest and exit
 
 Options:
 
   --install-grub         (re-)install the Grub bootloader
-  --no-pull              don't do a nix-pull to get the latest Nixpkgs
+  --pull                 do do a nix-pull to get the latest NixOS
                          channel manifest
   --no-build-nix         don't build the latest Nix from Nixpkgs before
                          building NixOS
   --rollback             restore the previous NixOS configuration (only
                          with switch, boot, test, build)
 
-  --fast                 same as --no-pull --no-build-nix --show-trace
+  --fast                 same as --no-build-nix --show-trace
 
 Various nix-build options are also accepted, in particular:
 
@@ -48,7 +48,7 @@ EOF
 # Parse the command line.
 extraBuildFlags=
 action=
-pullManifest=1
+pullManifest=
 buildNix=1
 rollback=
 
@@ -64,8 +64,8 @@ while test "$#" -gt 0; do
       --install-grub)
         export NIXOS_INSTALL_GRUB=1
       ;;
-      --no-pull)
-        pullManifest=
+      --pull)
+        pullManifest=1
       ;;
       --no-build-nix)
         buildNix=
@@ -82,7 +82,6 @@ while test "$#" -gt 0; do
       ;;
       --fast)
         buildNix=
-        pullManifest=
         extraBuildFlags="$extraBuildFlags --show-trace"
       ;;
       *)
@@ -99,7 +98,6 @@ if test "$action" = dry-run; then
 fi
 
 if test -n "$rollback"; then
-    pullManifest=
     buildNix=
 fi
 
@@ -121,7 +119,7 @@ fi
 
 # Pull the manifests defined in the configuration (the "manifests"
 # attribute).  Wonderfully hacky.
-if test -n "$pullManifest"; then
+if [ -n "$pullManifest" -o "$action" = pull ]; then
     manifests=$(nix-instantiate --eval-only --xml --strict '<nixos>' -A manifests \
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
 

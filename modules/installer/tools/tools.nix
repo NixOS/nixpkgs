@@ -94,10 +94,10 @@ in
     };
 
     installer.manifests = pkgs.lib.mkOption {
-      default = [http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST];
+      default = [ http://nixos.org/releases/nixos/channels/nixos-unstable/MANIFEST ];
       example =
         [ http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST
-          http://nixos.org/releases/nixpkgs/channels/nixpkgs-stable/MANIFEST
+          http://nixos.org/releases/nixos/channels/nixos-stable/MANIFEST
         ];
       description = ''
         URLs of manifests to be downloaded when you run
