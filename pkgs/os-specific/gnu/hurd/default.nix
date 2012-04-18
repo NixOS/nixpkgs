@@ -40,10 +40,12 @@ stdenv.mkDerivation ({
         then [ "--with-parted" ]
         else [ "--without-parted" ]);
 
-  preConfigure =
-    '' autoreconf -vfi
+  # Use `preConfigure' only for `autoreconf', so that users know they can
+  # simply clear it when the autoconf phase is unneeded.
+  preConfigure = "autoreconf -vfi";
 
-       echo "removing \`-o root' from makefiles..."
+  postConfigure =
+    '' echo "removing \`-o root' from makefiles..."
        for mf in {utils,daemons}/Makefile
        do
          sed -i "$mf" -e's/-o root//g'
