@@ -15,6 +15,7 @@ let
         log_type       = SYSLOG daemon info
         log_on_failure = HOST
         log_on_success = PID HOST DURATION EXIT
+        ${cfg.extraDefaults}
       }
 
       ${concatMapStrings makeService cfg.services}
@@ -33,6 +34,7 @@ let
         user        = ${srv.user}
         server      = ${srv.server}
         ${optionalString (srv.serverArgs != "") "server_args = ${srv.serverArgs}"}
+        ${srv.extraConfig}
       }
     '';
 
@@ -48,6 +50,14 @@ in
       default = false;
       description = ''
         Whether to enable the xinetd super-server daemon.
+      '';
+    };
+
+    services.xinetd.extraDefaults = mkOption {
+      default = "";
+      type = types.string;
+      description = ''
+        Additional configuration lines added to the default section of xinetd's configuration.
       '';
     };
 
@@ -113,6 +123,12 @@ in
             <filename>/etc/services</filename>.  If so, the port
             number can be omitted.
           '';
+        };
+
+        extraConfig = mkOption {
+          type = types.string;
+          default = "";
+          description = "Extra configuration-lines added to the section of the service.";
         };
 
       };
