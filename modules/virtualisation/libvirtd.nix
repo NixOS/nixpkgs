@@ -53,6 +53,7 @@ in
       { description = "Libvirtd virtual machine management daemon";
 
         startOn = "stopped udevtrigger";
+        stopOn = "";
 
         path =
           [ pkgs.bridge_utils pkgs.dmidecode pkgs.dnsmasq
@@ -98,16 +99,15 @@ in
       };
 
     # !!! Split this into save and restore tasks.
-    jobs.libvirt_guests =
-      { name = "libvirt-guests";
-
-        description = "Job to save/restore libvirtd VMs";
+    jobs."libvirt-guests" =
+      { description = "Job to save/restore libvirtd VMs";
 
         startOn = "started libvirtd";
 
         # We want to suspend VMs only on shutdown, but Upstart is broken.
-        #stopOn = "starting shutdown and stopping libvirtd";
-        stopOn = "stopping libvirtd";
+        stopOn = "";
+
+        restartIfChanged = false;
 
         path = [ pkgs.gettext pkgs.libvirt pkgs.gawk ];
 
@@ -120,6 +120,18 @@ in
         postStop = "${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests stop";
 
         respawn = false;
+      };
+
+    jobs."stop-libvirt" =
+      { description = "Helper task to stop libvirtd and libvirt-guests on shutdown";
+        task = true;
+        restartIfChanged = false;
+        startOn = "starting shutdown";
+        script =
+          ''
+            stop libvirt-guests || true
+            stop libvirtd || true
+          '';
       };
 
   };
