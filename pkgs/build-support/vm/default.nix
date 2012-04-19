@@ -211,7 +211,8 @@ rec {
 
 
   qemuCommandLinux = ''
-    ${kvm}/bin/qemu-system-x86_64 \
+    ${kvm}/bin/qemu-kvm \
+      ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
       -net nic,model=virtio \
       -chardev socket,id=samba,path=./samba \
@@ -407,7 +408,7 @@ rec {
     
   qemuCommandGeneric = ''
     PATH="${samba}/sbin:$PATH" \
-    ${kvm}/bin/qemu-system-x86_64 \
+    ${kvm}/bin/qemu-kvm \
       -nographic -no-reboot \
       -smb $(pwd) -hda $diskImage \
       $QEMU_OPTS
