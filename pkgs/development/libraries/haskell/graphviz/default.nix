@@ -1,16 +1,13 @@
-{ cabal, colour, dlist, extensibleExceptions, fgl, filepath
-, polyparse, text, transformers, wlPprintText
+{ cabal, colour, dlist, fgl, filepath, polyparse, text
+, transformers, wlPprintText
 }:
 
 cabal.mkDerivation (self: {
   pname = "graphviz";
-  version = "2999.12.0.4";
-  sha256 = "02yg5c02k3sdrcq5srzpdvlzs6cnrns67576qzr8n7ynhpvard73";
-  isLibrary = true;
-  isExecutable = true;
+  version = "2999.13.0.1";
+  sha256 = "1x6pbcixlqbxcg3dsl9z1f5r0qax2p967z0csqb27am812knakky";
   buildDepends = [
-    colour dlist extensibleExceptions fgl filepath polyparse text
-    transformers wlPprintText
+    colour dlist fgl filepath polyparse text transformers wlPprintText
   ];
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";
