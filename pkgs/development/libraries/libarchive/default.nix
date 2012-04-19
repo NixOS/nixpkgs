@@ -1,5 +1,5 @@
-{fetchurl, stdenv, acl, openssl, libxml2, attr, zlib, bzip2, e2fsprogs
-, sharutils}:
+{ fetchurl, stdenv, acl, openssl, libxml2, attr, zlib, bzip2, e2fsprogs
+, sharutils }:
 
 stdenv.mkDerivation rec {
   name = "libarchive-2.8.3";
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "16095d15334b3c8dbb02db5af3d415f12c1c3bdd4eb43af7bbc36ab7572c0b7a";
   };
 
-  propagatedBuildInputs = [libxml2 zlib bzip2 openssl] ++
-    (if stdenv.isLinux then [e2fsprogs attr acl] else []);
+  propagatedBuildInputs = [ libxml2 zlib bzip2 openssl ] ++
+    stdenv.lib.optionals stdenv.isLinux [ e2fsprogs attr acl ];
 
-  buildInputs = [sharutils];
+  buildInputs = [ sharutils ];
 
   meta = {
     description = "A library for reading and writing streaming archives";
