@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-form";
-  version = "1.0.0.1";
-  sha256 = "072q0sjx88dhpp8qz6lschb8y8hf1n6fqhxan69djaz03jrm164l";
+  version = "1.0.0.2";
+  sha256 = "1jvp0hw9kprwcwdxx1i2aazycf03i1vf8q5vjmdpynhgzyrpkrx1";
   buildDepends = [
     blazeBuilder blazeHtml dataDefault emailValidate hamlet network
     persistent shakespeareCss shakespeareJs text time transformers wai

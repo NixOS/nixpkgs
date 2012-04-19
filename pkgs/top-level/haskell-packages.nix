@@ -210,6 +210,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_4_0_0;
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
     };
 
   haskellPlatform_2011_4_0_0 =
@@ -252,6 +253,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_2_0_1;
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
     };
 
   haskellPlatform_2011_2_0_1 =
@@ -294,6 +296,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2011_2_0_0;
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
     };
 
   haskellPlatform_2011_2_0_0 =
@@ -332,6 +335,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     self : self.haskellPlatformArgs_2010_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_2_0_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
@@ -412,6 +416,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       text = self.text_0_11_0_6;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
@@ -797,8 +802,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellSrc = self.haskellSrc_1_0_1_5;
 
   haskellSrcExts_1_11_1 = callPackage ../development/libraries/haskell/haskell-src-exts/1.11.1.nix {};
-  haskellSrcExts_1_13_0 = callPackage ../development/libraries/haskell/haskell-src-exts/1.13.0.nix {};
-  haskellSrcExts = self.haskellSrcExts_1_13_0;
+  haskellSrcExts_1_13_2 = callPackage ../development/libraries/haskell/haskell-src-exts/1.13.2.nix {};
+  haskellSrcExts = self.haskellSrcExts_1_13_2;
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
