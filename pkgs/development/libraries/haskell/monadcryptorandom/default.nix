@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monadcryptorandom";
-  version = "0.4";
-  sha256 = "1wxqffi5x8kv0qrx82bvpvlqzzwy8vrw5ybqvf2h6cln36ff23m6";
+  version = "0.4.1";
+  sha256 = "01x3zfr4m93bgx062rhxqk1d8qhn6s7rkfkm4yf00p89fclyjsg1";
   buildDepends = [ cryptoApi mtl transformers ];
   meta = {
     homepage = "http://trac.haskell.org/crypto-api/wiki";
