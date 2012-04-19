@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pem";
-  version = "0.1.0";
-  sha256 = "0qhkmxfhzpzg3ycdzr4b7zzf84vmhbqv2irh95ymmdbr0cc5hhn9";
+  version = "0.1.1";
+  sha256 = "0klb39w6mihx35xgdw5wvi1q6r61xgrsqvcqi4c5r6psv5z94cil";
   buildDepends = [ attoparsec base64Bytestring cereal mtl ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-pem";

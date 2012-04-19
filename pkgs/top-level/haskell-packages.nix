@@ -904,8 +904,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   httpDate = callPackage ../development/libraries/haskell/http-date {};
 
-  httpEnumerator = callPackage ../development/libraries/haskell/http-enumerator {};
-
   httpTypes = callPackage ../development/libraries/haskell/http-types {};
 
   HUnit_1_2_0_3 = callPackage ../development/libraries/haskell/HUnit/1.2.0.3.nix {};

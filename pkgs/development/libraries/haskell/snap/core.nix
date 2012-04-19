@@ -17,6 +17,9 @@ cabal.mkDerivation (self: {
     MonadCatchIOTransformers mtl mwcRandom regexPosix text time
     transformers unixCompat unorderedContainers vector zlibEnum
   ];
+  patchPhase = ''
+    sed -i -e 's|MonadCatchIO-transformers >= 0.2.1 && < 0.3|MonadCatchIO-transformers|' snap-core.cabal
+  '';
   meta = {
     homepage = "http://snapframework.com/";
     description = "Snap: A Haskell Web Framework (core interfaces and types)";

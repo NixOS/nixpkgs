@@ -16,6 +16,9 @@ cabal.mkDerivation (self: {
     PSQueue snapCore text time transformers unixCompat vector
     vectorAlgorithms
   ];
+  patchPhase = ''
+    sed -i -e 's|MonadCatchIO-transformers >= 0.2.1    && < 0.3|MonadCatchIO-transformers|' snap-server.cabal
+  '';
   meta = {
     homepage = "http://snapframework.com/";
     description = "A fast, iteratee-based, epoll-enabled web server for the Snap Framework";
