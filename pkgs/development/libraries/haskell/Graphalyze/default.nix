@@ -1,17 +1,14 @@
-{ cabal, bktrees, extensibleExceptions, fgl, graphviz, pandoc
-, random, text, time
+{ cabal, bktrees, fgl, filepath, graphviz, pandoc, random, text
+, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "Graphalyze";
-  version = "0.12.0.0";
-  sha256 = "0lsbwf08flaifdddbg6d3ndrb2d1wzs943hk7n0m316bvahq6kgx";
+  version = "0.13.0.0";
+  sha256 = "1xh6xg2rw43cbi83rmpb0c2yib9cfj0pwg66nx5x5a0al2c9pdsr";
   buildDepends = [
-    bktrees extensibleExceptions fgl graphviz pandoc random text time
+    bktrees fgl filepath graphviz pandoc random text time
   ];
-  patchPhase = ''
-    sed -i Graphalyze.cabal -e 's|pandoc == 1.8.\*|pandoc|'
-  '';
   meta = {
     description = "Graph-Theoretic Analysis library";
     license = "unknown";
