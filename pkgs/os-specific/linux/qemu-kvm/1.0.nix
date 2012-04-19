@@ -3,16 +3,18 @@
 
 assert stdenv.isLinux;
 
-let version = "1.0"; in
+let version = "1.0.1"; in
+
 stdenv.mkDerivation rec {
   name = "qemu-kvm-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/kvm/qemu-kvm/${version}/${name}.tar.gz";
-    sha256 = "0vhigv9r9yrhph4wc4mhg99a683iwf121kjigqzg92x2l3ayl4dp";
+    sha256 = "0kxzwaw8h71mqcm46angpyx8gd58ascrxnr861k068xg89ix5g2p";
   };
 
   patches = [ ./smb-tmpdir.patch ./qemu-img-fix-corrupt-vdi.patch ];
+
   postPatch =
     '' for i in $(find kvm -type f)
        do
