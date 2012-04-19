@@ -58,6 +58,12 @@ let cfg = config.services.xserver.synaptics; in
         description = "Whether to enable palm detection (hardware support required)";
       };
 
+      horizontalScroll = mkOption {
+        default = true;
+        example = false;
+        description = "Whether to enable horizontal scrolling (on touchpad)";
+      };
+
       additionalOptions = mkOption {
         default = "";
         example = ''
@@ -94,10 +100,12 @@ let cfg = config.services.xserver.synaptics; in
           Option "TapButton1" "${if cfg.tapButtons then "1" else "0"}"
           Option "TapButton2" "${if cfg.tapButtons then "2" else "0"}"
           Option "TapButton3" "${if cfg.tapButtons then "3" else "0"}"
+          ${if cfg.tapButtons then "" else ''Option "MaxTapTime" "0"''}
           Option "VertTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "HorizTwoFingerScroll" "${if cfg.twoFingerScroll then "1" else "0"}"
           Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
           ${if cfg.palmDetect then ''Option "PalmDetect" "1"'' else ""}
+          ${if cfg.horizontalScroll then "" else ''Option "HorizScrollDelta" "0"''}
           ${cfg.additionalOptions}
         EndSection
       '';
