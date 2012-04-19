@@ -11,6 +11,7 @@ with import ../lib/testing.nix { inherit system; };
   ipv6 = makeTest (import ./ipv6.nix);
   kde4 = makeTest (import ./kde4.nix);
   login = makeTest (import ./login.nix);
+  misc = makeTest (import ./misc.nix);
   mpich = makeTest (import ./mpich.nix);
   mysql = makeTest (import ./mysql.nix);
   mysql_replication = makeTest (import ./mysql-replication.nix);

@@ -27,7 +27,7 @@ sub new {
     if (!$startCommand) {
         # !!! merge with qemu-vm.nix.
         $startCommand =
-            "qemu-system-x86_64 -m 384 " .
+            "qemu-kvm -m 384 " .
             "-net nic,model=virtio \$QEMU_OPTS ";
         $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=virtio,boot=on,werror=report "
             if defined $args->{hda};

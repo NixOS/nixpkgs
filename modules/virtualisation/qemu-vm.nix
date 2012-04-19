@@ -158,9 +158,10 @@ let
       ${pkgs.vmTools.startSamba}
 
       # Start QEMU.
-      exec ${pkgs.qemu_kvm}/bin/qemu-system-x86_64 \
+      exec ${pkgs.qemu_kvm}/bin/qemu-kvm \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
+          ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
           -net nic,vlan=0,model=virtio \
           -chardev socket,id=samba,path=./samba \
           -net user,vlan=0,guestfwd=tcp:10.0.2.4:445-chardev:samba''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \

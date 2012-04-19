@@ -216,6 +216,7 @@ let
         ipv6 = t.ipv6.test;
         kde4 = t.kde4.test;
         login = t.login.test;
+        misc = t.misc.test;
         mpich = t.mpich.test;
         mysql = t.mysql.test;
         mysql_replication = t.mysql_replication.test;
