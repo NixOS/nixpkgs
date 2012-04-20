@@ -7,64 +7,75 @@ let
   ids = config.ids;
   users = config.users;
 
-  userOpts = {name, config, ...}:
-
-  {
+  userOpts = { name, config, ... }: {
+  
     options = {
+    
       name = mkOption {
         type = with types; uniq string;
         description = "The name of the user account. If undefined, the name of the attribute set will be used.";
       };
+      
       description = mkOption {
         type = with types; uniq string;
         default = "";
         description = "A short description of the user account.";
       };
+      
       uid = mkOption {
         type = with types; uniq (nullOr int);
         default = null;
-        description = "The account UID. If undefined, NixOS will select a UID.";
+        description = "The account UID. If undefined, NixOS will select a free UID.";
       };
+      
       group = mkOption {
         type = with types; uniq string;
         default = "nogroup";
         description = "The user's primary group.";
       };
+      
       extraGroups = mkOption {
         type = types.listOf types.string;
         default = [];
         description = "The user's auxiliary groups.";
       };
+      
       home = mkOption {
         type = with types; uniq string;
         default = "/var/empty";
         description = "The user's home directory.";
       };
+      
       shell = mkOption {
         type = with types; uniq string;
         default = "/noshell";
         description = "The path to the user's shell.";
       };
+      
       createHome = mkOption {
         type = types.bool;
         default = false;
         description = "If true, the home directory will be created automatically.";
       };
+      
       useDefaultShell = mkOption {
         type = types.bool;
         default = false;
         description = "If true, the user's shell will be set to <literal>users.defaultUserShell</literal>.";
       };
+      
       password = mkOption {
         type = with types; uniq (nullOr string);
         default = null;
         description = "The user's password. If undefined, no password is set for the user.  Warning: do not set confidential information here because this data would be readable by all.  This option should only be used for public account such as guest.";
       };
+      
       isSystemUser = mkOption {
         type = types.bool;
         default = true;
         description = "Indicates if the user is a system user or not.";
       };
+      
       createUser = mkOption {
         type = types.bool;
         default = true;
@@ -74,6 +85,7 @@ let
           then not modify any of the basic properties for the user account.
         ";
       };
+      
     };
 
     config = {
@@ -81,71 +93,32 @@ let
       uid = mkDefault (attrByPath [name] null ids.uids);
       shell = mkIf config.useDefaultShell (mkDefault users.defaultUserShell);
     };
+    
   };
 
-  # Groups to be created/updated by NixOS.
-  groups =
-    let
-      defaultGroups =
-        [ { name = "root";
-            gid = ids.gids.root;
-          }
-          { name = "wheel";
-            gid = ids.gids.wheel;
-          }
-          { name = "disk";
-            gid = ids.gids.disk;
-          }
-          { name = "kmem";
-            gid = ids.gids.kmem;
-          }
-          { name = "tty";
-            gid = ids.gids.tty;
-          }
-          { name = "floppy";
-            gid = ids.gids.floppy;
-          }
-          { name = "uucp";
-            gid = ids.gids.uucp;
-          }
-          { name = "lp";
-            gid = ids.gids.lp;
-          }
-          { name = "cdrom";
-            gid = ids.gids.cdrom;
-          }
-          { name = "tape";
-            gid = ids.gids.tape;
-          }
-          { name = "audio";
-            gid = ids.gids.audio;
-          }
-          { name = "video";
-            gid = ids.gids.video;
-          }
-          { name = "dialout";
-            gid = ids.gids.dialout;
-          }
-          { name = "nogroup";
-            gid = ids.gids.nogroup;
-          }
-          { name = "users";
-            gid = ids.gids.users;
-          }
-          { name = "nixbld";
-            gid = ids.gids.nixbld;
-          }
-          { name = "utmp";
-            gid = ids.gids.utmp;
-          }
-        ];
+  groupOpts = { name, config, ... }: {
+  
+    options = {
+    
+      name = mkOption {
+        type = with types; uniq string;
+        description = "The name of the group. If undefined, the name of the attribute set will be used.";
+      };
+      
+      gid = mkOption {
+        type = with types; uniq (nullOr int);
+        default = null;
+        description = "The GID of the group. If undefined, NixOS will select a free GID.";
+      };
+      
+    };
 
-      addAttrs =
-        { name, gid ? "" }:
-        { inherit name gid; };
-
-    in map addAttrs (defaultGroups ++ config.users.extraGroups);
-
+    config = {
+      name = mkDefault name;
+      gid = mkDefault (attrByPath [name] null ids.gids);
+    };
+    
+  };
 
   # Note: the 'X' in front of the password is to distinguish between
   # having an empty password, and not having a password.
@@ -188,15 +161,16 @@ in
     };
 
     users.extraGroups = mkOption {
-      default = [];
+      default = {};
       example =
-        [ { name = "students";
-            gid = 1001;
-          }
-        ];
+        { students.gid = 1001;
+          hackers = { };
+        };
+      type = types.loaOf types.optionSet;
       description = ''
         Additional groups to be created automatically by the system.
       '';
+      options = [ groupOpts ];
     };
 
   };
@@ -216,6 +190,26 @@ in
       nobody = {
         description = "Unprivileged account (don't use!)";
       };
+    };
+
+    users.extraGroups = {
+      root = { };
+      wheel = { };
+      disk = { };
+      kmem = { };
+      tty = { };
+      floppy = { };
+      uucp = { };
+      lp = { };
+      cdrom = { };
+      tape = { };
+      audio = { };
+      video = { };
+      dialout = { };
+      nogroup = { };
+      users = { };
+      nixbld = { };
+      utmp = { };
     };
 
     system.activationScripts.rootPasswd = stringAfter [ "etc" ]
@@ -313,7 +307,7 @@ in
                 fi
             fi
         done <<EndOfGroupList
-        ${concatStringsSep "\n" (map serializedGroup groups)}
+        ${concatStringsSep "\n" (map serializedGroup (attrValues config.users.extraGroups))}
         EndOfGroupList
       '';
 
