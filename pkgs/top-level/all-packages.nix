@@ -2307,12 +2307,19 @@ let
         (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
         (x : x.ghc741Prefs) false false lowPrio);
 
+  # Stable branch snapshot.
+  haskellPackages_ghc742 =
+    recurseIntoAttrs
+      (haskellPackagesFun ../development/compilers/ghc/7.4.2.nix
+        (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
+        (x : x.ghcHEADPrefs) false false lowPrio);
+
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
     recurseIntoAttrs
       (haskellPackagesFun ../development/compilers/ghc/head.nix
         # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
-        (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
+        ghc704Binary
         (x : x.ghcHEADPrefs) false false lowPrio);
 
   haxeDist = import ../development/compilers/haxe {
