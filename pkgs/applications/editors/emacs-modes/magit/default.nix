@@ -1,14 +1,14 @@
 { stdenv, fetchurl, emacs, texinfo }:
 
 let
-  version = "1.1.0";
+  version = "1.1.1";
 in
 stdenv.mkDerivation {
   name = "magit-${version}";
 
   src = fetchurl {
     url = "http://github.com/downloads/magit/magit/magit-${version}.tar.gz";
-    sha256 = "8e147e1f2e69938232f859daf712515b46aa367d7b7d90b42538e083f52a72b4";
+    sha256 = "0zp5qxippmalin2fr73w2alf2w7ilcahmybzdvgn4ch2s3dgvzcz";
   };
 
   buildInputs = [emacs texinfo];
