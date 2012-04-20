@@ -4038,6 +4038,8 @@ let
 
   liblrdf = callPackage ../development/libraries/liblrdf {};
 
+  liblscp = callPackage ../development/libraries/liblscp { };
+
   libev = builderDefsPackage ../development/libraries/libev {
   };
 
@@ -7308,6 +7310,8 @@ let
   qemuSVN = callPackage ../applications/virtualization/qemu/svn-6642.nix { };
 
   qemuImage = callPackage ../applications/virtualization/qemu/linux-img { };
+
+  qsampler = callPackage ../applications/audio/qsampler { };
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
