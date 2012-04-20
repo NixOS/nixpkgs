@@ -46,7 +46,7 @@ rec {
     inherit stdenv fetchurl libuuid rsync findutils curl perl git ikiwiki which coreutils;
     inherit (haskellPackages_ghc741) ghc MissingH utf8String pcreLight SHA dataenc
       HTTP testpack hS3 mtl network hslogger hxt json liftedBase monadControl IfElse
-      QuickCheck2 bloomfilter;
+      QuickCheck2 bloomfilter editDistance;
   };
 
   qgit = import ./qgit {
