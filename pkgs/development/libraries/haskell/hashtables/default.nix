@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hashtables";
-  version = "1.0.1.3";
-  sha256 = "1ad8psza13ff15sd4s862sryw6z8msiys1f7frnp4sibgr6bwdca";
+  version = "1.0.1.4";
+  sha256 = "1s1xj5x90dz9n85bkmjpdp8zwnvvv13m19aaxzi63n3iyn4jki33";
   buildDepends = [ hashable primitive vector ];
   meta = {
     homepage = "http://github.com/gregorycollins/hashtables";

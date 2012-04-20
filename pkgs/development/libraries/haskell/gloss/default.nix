@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gloss";
-  version = "1.7.2.1";
-  sha256 = "1s8xq39xnynsslzrzm7svv8qd301j66zcz9ckcs4f1zwzpq62z0p";
+  version = "1.7.3.1";
+  sha256 = "0vylil8jsj7mb14dijrx2ylmsgs1ma3rh2nmiaakr5cmpp4xshf0";
   buildDepends = [ bmp GLUT OpenGL ];
   meta = {
     homepage = "http://gloss.ouroborus.net";
