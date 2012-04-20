@@ -199,15 +199,6 @@ in
       '';
     };
 
-    user = mkOption {
-      default = {};
-      description = ''
-        This option defines settings for individual users on the system.
-      '';
-      type = types.loaOf types.optionSet;
-      options = [ ];
-    };
-
   };
 
 
