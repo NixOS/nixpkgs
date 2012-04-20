@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://haskell.org/ghc/dist/current/dist/${name}-src.tar.bz2";
-    sha256 = "0mvpdibdvbanpia8lngrw6pinn1jm867mjcz55zj5nv8wqhgfs7r";
+    sha256 = "a111054715133d12fc35d1565f371e149677416af9131e6a47ffdb0354e8a87f";
   };
 
   buildInputs = [ghc perl gmp ncurses] ++
