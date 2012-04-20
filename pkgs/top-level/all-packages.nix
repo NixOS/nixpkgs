@@ -4025,6 +4025,8 @@ let
   libgdata = (newScope gnome) ../development/libraries/libgdata {};
   libgdata_0_6 = (newScope gnome) ../development/libraries/libgdata/0.6.nix {};
 
+  libgig = callPackage ../development/libraries/libgig { };
+
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
   libgnome_keyring3 = callPackage ../development/libraries/libgnome-keyring/3.x.nix { };
 
@@ -6879,6 +6881,8 @@ let
 
   geeqie = callPackage ../applications/graphics/geeqie { };
 
+  gigedit = callPackage ../applications/audio/gigedit { };
+
   gqview = callPackage ../applications/graphics/gqview { };
 
   gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
@@ -7048,6 +7052,8 @@ let
   linphone = callPackage ../applications/networking/instant-messengers/linphone {
     inherit (gnome) libglade;
   };
+
+  linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
   lmms = callPackage ../applications/audio/lmms { };
 
