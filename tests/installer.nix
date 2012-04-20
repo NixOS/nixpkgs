@@ -77,7 +77,7 @@ let
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
       services.httpd.servedDirs = singleton
-        { urlPath = "/releases/nixpkgs/channels/nixpkgs-unstable";
+        { urlPath = "/releases/nixos/channels/nixos-unstable";
           dir = "/tmp/channel";
         };
 
@@ -109,7 +109,7 @@ let
         $webserver->mustSucceed("mkdir /tmp/channel");
         $webserver->mustSucceed(
             "nix-push file:///tmp/channel " .
-            "http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable " .
+            "http://nixos.org/releases/nixos/channels/nixos-unstable " .
             "file:///tmp/channel/MANIFEST ${toString channelContents} >&2");
       ''}
 
@@ -131,7 +131,7 @@ let
 
         # Test nix-env.
         $machine->mustFail("hello");
-        $machine->mustSucceed("nix-env -i hello");
+        $machine->mustSucceed("nix-env -f /etc/nixos/nixpkgs -i hello");
         $machine->mustSucceed("hello") =~ /Hello, world/
             or die "bad `hello' output";
       ''}
