@@ -3,11 +3,11 @@
 # Note: zlib is not required; MySQL can use an internal zlib.
 
 stdenv.mkDerivation {
-  name = "mysql-5.5.20";
+  name = "mysql-5.5.23";
 
   src = fetchurl {
-    url = ftp://mirror.leaseweb.com/mysql/Downloads/MySQL-5.5/mysql-5.5.20.tar.gz;
-    sha256 = "03jl60mzrsd1jb8fvkz6c8j2239b37k8n1i07jk1q4yk58aq8ynh";
+    url = ftp://ftp.inria.fr/pub/MySQL/Downloads/MySQL-5.5/mysql-5.5.23.tar.gz;
+    sha256 = "0sklcz6miff7nb6bi1pqncgjv819255y7if6jxcqgiqs50z319i0";
   };
 
   buildInputs = [ cmake bison ncurses openssl readline zlib ] ++ stdenv.lib.optionals stdenv.isDarwin [ darwinInstallNameToolUtility perl ];
