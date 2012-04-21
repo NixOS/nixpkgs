@@ -1597,7 +1597,7 @@ rec {
   Graph = buildPerlPackage rec {
     name = "Graph-0.94";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHI/modules/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/J/JH/JHI/${name}.tar.gz";
       sha256 = "1lyfl9s4mkhahnpxk2z5v6j750jqb4sls56b9rnkl5lni9ms7xgn";
     };
 
