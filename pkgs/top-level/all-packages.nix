@@ -1109,6 +1109,8 @@ let
   # ntfsprogs are merged into ntfs-3g
   ntfsprogs = pkgs.ntfs3g;
 
+  ntop = callPackage ../tools/networking/ntop { };
+
   ntp = callPackage ../tools/networking/ntp { };
 
   nssmdns = callPackage ../tools/networking/nss-mdns { };
