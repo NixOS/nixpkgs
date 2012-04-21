@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/download/${name}-src.tgz";
-    sha256 = "19hb10vs7ww45ifn7mpvxykn470gd1g568d84mlld6v4pnz7gamv";
+    sha256 = "127zpjp6sm8c101hz239k82lpxqcqf4ksdyfqc2py2sm22kclpm3";
   };
 
   buildNativeInputs = [ cmake ];
