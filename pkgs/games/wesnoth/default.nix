@@ -16,20 +16,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext zlib boost fribidi
                   cmake freetype libpng pkgconfig lua dbus fontconfig libtool ];
 
-  # The preInstall sed substitution fix errors which I
-  # believe arise from autotools version mismatches.  Rather than
-  # hunt for the correct automake and autoconf versions these changes
-  # make the build work with the versions current in Nixpkgs.
-#  preInstall = ''
-#    sed -i -e s,@MKINSTALLDIRS@,`pwd`/config/mkinstalldirs, po/*/Makefile
-#  '';
-
-#  configurePhase = ''
-#    ./autogen.sh --prefix=$out --with-boost=${boost} \
-#                 --with-preferences-dir=.${pname} \
-#                 --with-datadir-name=${pname}
-#  '';
-
   # Make the package build with the gcc currently available in Nixpkgs.
   NIX_CFLAGS_COMPILE = "-Wno-ignored-qualifiers";
 
