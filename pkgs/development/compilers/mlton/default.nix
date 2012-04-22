@@ -5,18 +5,18 @@ stdenv.mkDerivation rec {
 
   binSrc =
     if stdenv.system == "i686-linux" then (fetchurl {
-      url = "http://mlton.org/pages/Download/attachments/${name}-1.x86-linux.static.tgz";
+      url = "http://sourceforge.net/projects/mlton/files/mlton/20100608/${name}-1.x86-linux.static.tgz";
       sha256 = "16qg8df9hg2pmnsblkgxp6bgm7334rsqkxqzskv5fl21wivmnwfw";
     })
     else if stdenv.system == "x86_64-linux" then (fetchurl {
-        url = "http://mlton.org/pages/Download/attachments/${name}-1.amd64-linux.static.tgz";
+        url = "http://sourceforge.net/projects/mlton/files/mlton/20100608/${name}-1.amd64-linux.static.tgz";
         sha256 = "0i6ic8f6prl0cigrmf6bj9kqz3plzappxn17lz1rg2v832nfbw9r";
     })
     else throw "Architecture not supported";
 
   codeSrc =
     fetchurl {
-      url = "http://mlton.org/pages/Download/attachments/${name}.src.tgz";
+      url = "http://sourceforge.net/projects/mlton/files/mlton/20100608/${name}.src.tgz";
       sha256 = "0cqb3k6ld9965hyyfyayi510f205vqzd5qqm3crh13nasvq2rjzj";
     };
 
@@ -30,9 +30,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     # Fix paths in the source.
-    for f in $(find $(pwd) -type f ) ; do
-      substituteInPlace $f --replace '/usr/bin/env bash' $(type -p bash)
-    done
+    find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"
 
     substituteInPlace $(pwd)/Makefile --replace '/bin/cp' $(type -p cp)
 
