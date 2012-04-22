@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 
-  doCheck = true;
+  # XXX: Disable tests on non-Linux because of the `mini-loss-time' hack
+  # below, which is Linux-specific.
+  doCheck = stdenv.isLinux;
 
   postCheck =
     # Kill a process that's left behind.
