@@ -85,6 +85,11 @@ if ! test -L $HOME/.nix-profile; then
     fi
 fi
 
+# Subscribe the root user to the NixOS channel by default.
+if [ "$USER" = root -a ! -e $HOME/.nix-channels ]; then
+    echo "http://nixos.org/releases/nixos/channels/nixos-unstable nixos" > $HOME/.nix-channels
+fi
+
 # Create the per-user garbage collector roots directory.
 NIX_USER_GCROOTS_DIR=/nix/var/nix/gcroots/per-user/$USER
 mkdir -m 0755 -p $NIX_USER_GCROOTS_DIR
