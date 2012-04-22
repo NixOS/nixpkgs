@@ -3,15 +3,27 @@
 
 assert stdenv.isLinux;
 
+let version = "1.0.1"; in
+
 stdenv.mkDerivation rec {
-  name = "qemu-kvm-0.15.1";
+  name = "qemu-kvm-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/kvm/${name}.tar.gz";
-    sha256 = "0gkk96yid3nq8i4z8xbiarj0r9v7b2zavf5mnh0rc7kclzxa7mmf";
+    url = "mirror://sourceforge/kvm/qemu-kvm/${version}/${name}.tar.gz";
+    sha256 = "0kxzwaw8h71mqcm46angpyx8gd58ascrxnr861k068xg89ix5g2p";
   };
 
   patches = [ ./smb-tmpdir.patch ./qemu-img-fix-corrupt-vdi.patch ];
+
+  postPatch =
+    '' for i in $(find kvm -type f)
+       do
+         sed -i "$i" \
+             -e 's|/bin/bash|/bin/sh|g ;
+                 s|/usr/bin/python|${python}/bin/python|g ;
+                 s|/bin/rm|rm|g'
+       done
+    '';
 
   configureFlags =
     [ "--audio-drv-list=alsa"
@@ -27,13 +39,10 @@ stdenv.mkDerivation rec {
 
   postInstall =
     ''
-      # extboot.bin isn't installed due to a bug in the Makefile.
-      cp pc-bios/optionrom/extboot.bin $out/share/qemu/
-
       # Libvirt expects us to be called `qemu-kvm'.  Otherwise it will
       # set the domain type to "qemu" rather than "kvm", which can
       # cause architecture selection to misbehave.
-      ln -s $(cd $out/bin && echo qemu-system-*) $out/bin/qemu-kvm
+      ln -sv $(cd $out/bin && echo qemu-system-*) $out/bin/qemu-kvm
     '';
 
   meta = {

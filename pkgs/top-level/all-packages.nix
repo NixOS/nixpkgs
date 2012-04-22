@@ -5998,7 +5998,6 @@ let
   pwdutils = callPackage ../os-specific/linux/pwdutils { };
 
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
-  qemu_kvm_1_0 = callPackage ../os-specific/linux/qemu-kvm/1.0.nix { };
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
 
