@@ -124,8 +124,6 @@ let
   # having an empty password, and not having a password.
   serializedUser = userName: let u = getAttr userName config.users.extraUsers; in "${u.name}\n${u.description}\n${if u.uid != null then toString u.uid else ""}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n${toString u.isSystemUser}\n${if u.createUser then "yes" else "no"}\n";
 
-  serializedGroup = g: "${g.name}\n${toString g.gid}";
-
   # keep this extra file so that cat can be used to pass special chars such as "`" which is used in the avahi daemon
   usersFile = pkgs.writeText "users" (
     concatMapStrings serializedUser (attrNames config.users.extraUsers)
@@ -290,9 +288,9 @@ in
       ''
         echo "updating groups..."
 
-        while true; do
-            read name || break
-            read gid
+        createGroup() {
+            name="$1"
+            gid="$2"
 
             if ! curEnt=$(getent group "$name"); then
                 groupadd --system \
@@ -306,9 +304,11 @@ in
                     groupmod --gid $gid "$name"
                 fi
             fi
-        done <<EndOfGroupList
-        ${concatStringsSep "\n" (map serializedGroup (attrValues config.users.extraGroups))}
-        EndOfGroupList
+        }
+
+        ${flip concatMapStrings (attrValues config.users.extraGroups) (g: ''
+          createGroup '${g.name}' '${toString g.gid}'
+        '')}
       '';
 
   };
