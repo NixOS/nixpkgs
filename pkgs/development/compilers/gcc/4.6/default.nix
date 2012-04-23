@@ -28,6 +28,7 @@
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
+, gnused
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -226,6 +227,10 @@ stdenv.mkDerivation ({
     ++ (optionals (cross != null) [binutilsCross])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
+
+    # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
+    # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
+    ++ (optional stdenv.isDarwin gnused)
     ;
 
   configureFlagsArray = stdenv.lib.optionals

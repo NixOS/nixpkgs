@@ -1962,8 +1962,12 @@ let
       (if stdenv.system == "i686-darwin"
        then import ../development/compilers/gcc/4.2-apple32
        else import ../development/compilers/gcc/4.2-apple64) {
-         inherit fetchurl stdenv noSysDirs;
+         inherit fetchurl noSysDirs;
          profiledCompiler = true;
+
+         # Since it fails to build with GCC 4.6, build it with the "native"
+         # Apple-GCC.
+         stdenv = allStdenvs.stdenvNative;
        });
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
@@ -3199,7 +3203,14 @@ let
     target = crossSystem;
   };
 
-  valgrind = callPackage ../development/tools/analysis/valgrind { };
+  valgrind = callPackage ../development/tools/analysis/valgrind {
+    stdenv =
+      # On Darwin, Valgrind 3.7.0 expects Apple's GCC (for
+      # `__private_extern'.)
+      if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   valkyrie = callPackage ../development/tools/analysis/valkyrie { };
 
@@ -4429,8 +4440,15 @@ let
   mysocketw = callPackage ../development/libraries/mysocketw { };
 
   ncurses = makeOverridable (import ../development/libraries/ncurses) {
-    inherit fetchurl stdenv;
+    inherit fetchurl;
     unicode = system != "i686-cygwin";
+    stdenv =
+      # On Darwin, NCurses uses `-no-cpp-precomp', which is specific to
+      # Apple-GCC.  Since NCurses is part of stdenv, always use
+      # `stdenvNative' to build it.
+      if stdenv.isDarwin
+      then allStdenvs.stdenvNative
+      else stdenv;
   };
 
   neon = neon029;
