@@ -28,7 +28,7 @@
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
-, gnused
+, gnused ? null
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -39,6 +39,9 @@ assert langVhdl     -> gnat != null;
 
 # LTO needs libelf and zlib.
 assert libelf != null -> zlib != null;
+
+# Make sure we get GNU sed.
+assert stdenv.isDarwin -> gnused != null;
 
 with stdenv.lib;
 with builtins;
