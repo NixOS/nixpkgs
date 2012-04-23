@@ -1,11 +1,8 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2
 , sqlite, tcl, tk, x11, openssl, readline, db4, ncurses, gdbm
-, darwinArchUtility ? null, darwinSwVersUtility ? null
 }:
 
 assert zlibSupport -> zlib != null;
-assert stdenv.isDarwin -> darwinArchUtility != null;
-assert stdenv.isDarwin -> darwinSwVersUtility != null;
 
 with stdenv.lib;
 
@@ -33,8 +30,7 @@ let
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
     [ bzip2 ]
-    ++ optional zlibSupport zlib
-    ++ optionals stdenv.isDarwin [ darwinArchUtility darwinSwVersUtility ];
+    ++ optional zlibSupport zlib;
 
     
   # Build the basic Python interpreter without modules that have

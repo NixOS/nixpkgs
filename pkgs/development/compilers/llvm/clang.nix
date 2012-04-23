@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, perl, groff, llvm, cmake, darwinInstallNameToolUtility }:
+{ stdenv, fetchurl, perl, groff, llvm, cmake }:
 
 let version = "3.0"; in
 
 stdenv.mkDerivation {
   name = "clang-${version}";
 
-  buildInputs = [ perl llvm groff cmake ] ++ stdenv.lib.optional stdenv.isDarwin darwinInstallNameToolUtility;
+  buildInputs = [ perl llvm groff cmake ];
 
   patches = stdenv.lib.optionals (stdenv.gcc.libc != null) 
     [ ./clang-include-paths.patch ./clang-ld-flags.patch ];

@@ -59,21 +59,5 @@ stdenv.mkDerivation (rec {
         sed -i coregrind/link_tool_exe_darwin.in \
             -e 's/^my \$archstr = .*/my $archstr = "x86_64";/g'
      '';
-
-   preConfigure =
-     # Shamelessly drag in MIG.
-     '' mkdir -p "$TMPDIR/impure-deps/bin"
-
-        # MIG assumes the standard Darwin core utilities (e.g., `rm -d'), so
-        # let it see the impure directories.
-        cat > "$TMPDIR/impure-deps/bin/mig" <<EOF
-#!/bin/sh
-export PATH="/usr/bin:/bin:\$PATH"
-exec /usr/bin/mig "\$@"
-EOF
-        chmod +x "$TMPDIR/impure-deps/bin/mig"
-
-        export PATH="$TMPDIR/impure-deps/bin:$PATH"
-     '';
  }
  else {}))

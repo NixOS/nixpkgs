@@ -9,11 +9,8 @@
 , openssl
 , tcl, tk
 , libX11, xproto
-, arch ? null, sw_vers ? null
 }:
 
-assert stdenv.isDarwin -> arch != null;
-assert stdenv.isDarwin -> sw_vers != null;
 assert readline != null -> ncurses != null;
 
 with stdenv.lib;
@@ -23,7 +20,7 @@ let
   version = "${majorVersion}";
 
   buildInputs = filter (p: p != null) [
-    zlib bzip2 gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto arch sw_vers
+    zlib bzip2 gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto
   ];
 in
 stdenv.mkDerivation {

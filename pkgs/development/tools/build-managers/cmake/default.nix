@@ -1,6 +1,6 @@
 { fetchurl, stdenv, replace, curl, expat, zlib, bzip2, libarchive
 , useNcurses ? false, ncurses, useQt4 ? false, qt4
-, darwinInstallNameToolUtility }:
+}:
 
 with stdenv.lib;
 
@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     optional (stdenv ? glibc) ./search-path.patch;
 
   buildInputs = [ curl expat zlib bzip2 libarchive ]
-    ++ optional stdenv.isDarwin darwinInstallNameToolUtility
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 

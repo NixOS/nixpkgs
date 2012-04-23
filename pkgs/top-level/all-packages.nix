@@ -2755,15 +2755,9 @@ let
 
   python27 = callPackage ../development/interpreters/python/2.7 { };
 
-  python31 = callPackage ../development/interpreters/python/3.1 {
-    arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
-    sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
-  };
+  python31 = callPackage ../development/interpreters/python/3.1 { };
 
-  python32 = callPackage ../development/interpreters/python/3.2 {
-    arch = if stdenv.isDarwin then pkgs.darwinArchUtility else null;
-    sw_vers = if stdenv.isDarwin then pkgs.darwinSwVersUtility else null;
-  };
+  python32 = callPackage ../development/interpreters/python/3.2 { };
 
   pythonFull = python27Full;
 
@@ -4387,9 +4381,7 @@ let
     system == "x86_64-darwin" ||
     system == "i686-darwin";
 
-  mesa = callPackage ../development/libraries/mesa {
-    lipo = if stdenv.isDarwin then darwinLipoUtility else null;
-  };
+  mesa = callPackage ../development/libraries/mesa { };
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
@@ -5400,14 +5392,6 @@ let
   cryptsetup = callPackage ../os-specific/linux/cryptsetup { };
 
   cramfsswap = callPackage ../os-specific/linux/cramfsswap { };
-
-  darwinArchUtility = callPackage ../os-specific/darwin/arch { };
-
-  darwinSwVersUtility = callPackage ../os-specific/darwin/sw_vers { };
-
-  darwinLipoUtility = callPackage ../os-specific/darwin/lipo { };
-
-  darwinInstallNameToolUtility = callPackage ../os-specific/darwin/install_name_tool { };
 
   devicemapper = lvm2;
 

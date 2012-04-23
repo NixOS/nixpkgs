@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, darwinInstallNameToolUtility }:
+{ stdenv, fetchurl, openssl, python, zlib, v8 }:
 
 stdenv.mkDerivation rec {
   version = "0.6.14";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     install_name_tool -change libv8.dylib ${v8}/lib/libv8.dylib $out/bin/node
   '';
 
-  buildInputs = [ python openssl v8 zlib ] ++ stdenv.lib.optional stdenv.isDarwin darwinInstallNameToolUtility;
+  buildInputs = [ python openssl v8 zlib ];
 
   meta = with stdenv.lib; {
     description = "Event-driven I/O framework for the V8 JavaScript engine";

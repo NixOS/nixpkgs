@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, groff, darwinSwVersUtility, darwinInstallNameToolUtility, cmake }:
+{ stdenv, fetchurl, perl, groff, cmake }:
 
 let version = "3.0"; in
 
@@ -10,8 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0xq4gi7lflv8ilfckslhfvnja5693xjii1yvzz39kklr6hfv37ji";
   };
 
-  buildInputs = [ perl groff cmake ] ++
-    stdenv.lib.optionals stdenv.isDarwin [ darwinSwVersUtility darwinInstallNameToolUtility ];
+  buildInputs = [ perl groff cmake ];
 
   cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 

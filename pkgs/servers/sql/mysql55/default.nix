@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, bison, ncurses, openssl, readline, zlib, darwinInstallNameToolUtility, perl}:
+{ stdenv, fetchurl, cmake, bison, ncurses, openssl, readline, zlib, perl }:
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
@@ -10,8 +10,8 @@ stdenv.mkDerivation {
     sha256 = "0sklcz6miff7nb6bi1pqncgjv819255y7if6jxcqgiqs50z319i0";
   };
 
-  buildInputs = [ cmake bison ncurses openssl readline zlib ] ++ stdenv.lib.optionals stdenv.isDarwin [ darwinInstallNameToolUtility perl ];
-  
+  buildInputs = [ cmake bison ncurses openssl readline zlib ];
+
   cmakeFlags = "-DWITH_SSL=yes -DWITH_READLINE=yes -DWITH_EMBEDDED_SERVER=yes -DWITH_ZLIB=yes -DINSTALL_SCRIPTDIR=bin -DHAVE_IPV6=yes";
   
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
