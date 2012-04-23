@@ -146,7 +146,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     parsec       = self.parsec_3_1_2;           # 7.4.1 ok
     QuickCheck   = self.QuickCheck_2_4_2;       # 7.4.1 ok
     regexBase    = self.regexBase_0_93_2;       # 7.4.1 ok
-    regexCompat  = self.regexCompat_0_93_1;     # 7.4.1 ok
+    regexCompat  = self.regexCompat_0_95_1;     # 7.4.1 ok
     regexPosix   = self.regexPosix_0_95_1;      # 7.4.1 ok
     stm          = self.stm_2_3;		# 7.4.1 ok
     syb          = self.syb_0_3_6;              # 7.4.1 ok
@@ -491,6 +491,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   blazeBuilderEnumerator = callPackage ../development/libraries/haskell/blaze-builder-enumerator {};
 
   blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
+
+  blazeMarkup = callPackage ../development/libraries/haskell/blaze-markup {};
 
   blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
 
@@ -993,9 +995,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   MonadCatchIOTransformers = callPackage ../development/libraries/haskell/MonadCatchIO-transformers {};
 
-  monadControl_0_2_0_3 = callPackage ../development/libraries/haskell/monad-control/0.2.0.3.nix {};
-  monadControl_0_3_1_1 = callPackage ../development/libraries/haskell/monad-control/0.3.1.1.nix {};
-  monadControl = self.monadControl_0_3_1_1;
+  monadControl = callPackage ../development/libraries/haskell/monad-control {};
 
   monadcryptorandom = callPackage ../development/libraries/haskell/monadcryptorandom {};
 
@@ -1011,9 +1011,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
 
-  mongoDB = callPackage ../development/libraries/haskell/mongoDB {
-    monadControl = self.monadControl_0_2_0_3;
-  };
+  mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
 
@@ -1631,7 +1629,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # Applications.
 
   darcs = callPackage ../applications/version-management/darcs {
-    regexCompat = self.regexCompat93;
     tar = self.tar_0_3_2_0;
   };
 

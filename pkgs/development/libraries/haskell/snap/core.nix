@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-core";
-  version = "0.8.0.1";
-  sha256 = "0lw1c5gczb75878vr5acjck656aq5zg1hva9bfny321v0442azds";
+  version = "0.8.1";
+  sha256 = "11r4zd9z241qvzji7gcmynkib5w9b7c7wa8jx7al2z2aq4qhfx1b";
   buildDepends = [
     attoparsec attoparsecEnumerator base16Bytestring blazeBuilder
     blazeBuilderEnumerator bytestringMmap bytestringNums
@@ -17,9 +17,6 @@ cabal.mkDerivation (self: {
     MonadCatchIOTransformers mtl mwcRandom regexPosix text time
     transformers unixCompat unorderedContainers vector zlibEnum
   ];
-  patchPhase = ''
-    sed -i -e 's|MonadCatchIO-transformers >= 0.2.1 && < 0.3|MonadCatchIO-transformers|' snap-core.cabal
-  '';
   meta = {
     homepage = "http://snapframework.com/";
     description = "Snap: A Haskell Web Framework (core interfaces and types)";

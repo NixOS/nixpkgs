@@ -1,17 +1,18 @@
 { cabal, curl, extensibleExceptions, filepath, hashedStorage
 , haskeline, html, HTTP, mmap, mtl, network, parsec, random
-, regexCompat, tar, terminfo, text, zlib
+, regexCompat, tar, terminfo, text, vector, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "darcs";
-  version = "2.5.2";
-  sha256 = "11mk1xcrxk2x5c0s96s19wb4xvhjl9s59bdqcrj8f4w09zbgjlw9";
+  version = "2.8.0";
+  sha256 = "10yfab7qb20hzikwrgra7zhx7ad2j0s6l7zksmvczf4xm6hw458l";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     extensibleExceptions filepath hashedStorage haskeline html HTTP
-    mmap mtl network parsec random regexCompat tar terminfo text zlib
+    mmap mtl network parsec random regexCompat tar terminfo text vector
+    zlib
   ];
   extraLibraries = [ curl ];
   meta = {
