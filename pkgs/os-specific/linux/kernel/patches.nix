@@ -359,9 +359,4 @@ rec {
       name = "guruplug-arch-number";
       patch = ./guruplug-mach-type.patch;
     };
-
-  btrfs_enospc =
-    { name = "btrfs-enospc-3.3-revert";
-      patch = ./btrfs-enospc.patch;
-    };
 }
