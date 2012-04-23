@@ -29,7 +29,7 @@ let
   relocatedModuleFiles =
     let
       relocateNixOS = path:
-        "/etc/nixos/nixos" + removePrefix nixosPath (toString path);
+        "<nixos" + removePrefix nixosPath (toString path) + ">";
       relocateOthers = null;
     in
       { nixos = map relocateNixOS partitionedModuleFiles.nixos;
@@ -44,16 +44,12 @@ let
   # evaluated.  So we'll just hope for the best.
   configClone = pkgs.writeText "configuration.nix"
     ''
-      {config, pkgs, ...}:
+      { config, pkgs, ... }:
 
       {
         require = [
           ${toString config.installer.cloneConfigIncludes}
         ];
-
-        # Add your own options below and run "nixos-rebuild switch".
-        # E.g.,
-        #   services.openssh.enable = true;
       }
     '';
 in
@@ -84,18 +80,6 @@ in
       '';
     };
 
-    # Ignored. Kept for Backward compatibiliy.
-    # you can retrieve the profiles which have been used by looking at the
-    # list of modules use to configure the installation device.
-    installer.configModule = mkOption {
-      example = "./nixos/modules/installer/cd-dvd/installation-cd.nix";
-      description = ''
-        Filename of the configuration module that builds the CD
-        configuration.  Must be specified to support reconfiguration
-        in live CDs.
-      '';
-    };
-    
   };
 
   config = {
@@ -148,5 +132,13 @@ in
     # Enable wpa_supplicant, but don't start it by default.
     networking.wireless.enable = true;
     jobs.wpa_supplicant.startOn = pkgs.lib.mkOverride 50 "";
+
+    # Tell the Nix evaluator to garbage collect more aggressively.
+    # This is desirable in memory-constrained environments that don't
+    # (yet) have swap set up.
+    environment.shellInit =
+      ''
+        export GC_INITIAL_HEAP_SIZE=100000
+      '';
   };
 }

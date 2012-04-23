@@ -131,7 +131,7 @@ let
 
         # Test nix-env.
         $machine->mustFail("hello");
-        $machine->mustSucceed("nix-env -f /etc/nixos/nixpkgs -i hello");
+        $machine->mustSucceed("nix-env -i hello");
         $machine->mustSucceed("hello") =~ /Hello, world/
             or die "bad `hello' output";
       ''}
@@ -175,7 +175,7 @@ let
       # !!! Idem.
       $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
 
-      $machine->mustSucceed("nix-env -f /etc/nixos/nixpkgs -i coreutils >&2");
+      $machine->mustSucceed("nix-env -i coreutils >&2");
       $machine->mustSucceed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 

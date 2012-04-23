@@ -8,21 +8,19 @@ with pkgs.lib;
 let
 
   # We need a copy of the Nix expressions for Nixpkgs and NixOS on the
-  # CD.  We put them in a tarball because accessing that many small
-  # files from a slow device like a CD-ROM takes too long.  !!! Once
-  # we use squashfs, maybe we won't need this anymore.
-  makeTarball = tarName: input: pkgs.runCommand "tarball" {inherit tarName;}
+  # CD.  These are installed into the "nixos" channel of the root
+  # user, as expected by nixos-rebuild/nixos-install.
+  channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}"
+    { expr = builtins.readFile ../../../lib/channel-expr.nix; }
     ''
-      ensureDir $out
-      (cd ${input} && tar cvfj $out/${tarName} . \
-        --exclude '*~' --exclude 'result')
+      mkdir -p $out/nixos
+      cp -prd ${cleanSource ../../..} $out/nixos/nixos
+      cp -prd ${cleanSource <nixpkgs>} $out/nixos/nixpkgs
+      chmod -R u+w $out/nixos/nixos
+      echo -n ${config.system.nixosVersion} > $out/nixos/nixos/.version
+      echo -n "" > $out/nixos/nixos/.version-suffix
+      echo "$expr" > $out/nixos/default.nix
     '';
-
-  # Put the current directory in a tarball.
-  nixosTarball = makeTarball "nixos.tar.bz2" (cleanSource ../../..);
-
-  # Put Nixpkgs in a tarball.
-  nixpkgsTarball = makeTarball "nixpkgs.tar.bz2" (cleanSource <nixpkgs>);
 
   includeSources = true;
 
@@ -48,19 +46,14 @@ in
 
   boot.postBootCommands =
     ''
-      export PATH=${pkgs.gnutar}/bin:${pkgs.bzip2}/bin:$PATH
-
       # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
       # for nixos-install.
       ${optionalString includeSources ''
         echo "unpacking the NixOS/Nixpkgs sources..."
-        mkdir -p /etc/nixos/nixos
-        tar xjf ${nixosTarball}/nixos.tar.bz2 -C /etc/nixos/nixos
-        mkdir -p /etc/nixos/nixpkgs
-        tar xjf ${nixpkgsTarball}/nixpkgs.tar.bz2 -C /etc/nixos/nixpkgs
-        chown -R root.root /etc/nixos
-        echo -n ${config.system.nixosVersion} > /etc/nixos/nixos/.version
-        echo -n "" > /etc/nixos/nixos/.version-suffix
+        mkdir -p /nix/var/nix/profiles/per-user/root
+        ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/per-user/root/channels -i ${channelSources} --quiet
+        mkdir -m 0700 -p /root/.nix-defexpr
+        ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
      ''}
 
      # Make the installer more likely to succeed in low memory

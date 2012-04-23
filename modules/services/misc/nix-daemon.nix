@@ -28,11 +28,10 @@ in
 
     environment.nix = mkOption {
       default = pkgs.nixUnstable;
-      example = pkgs.nixCustomFun /root/nix.tar.gz;
       merge = mergeOneOption;
-      description = "
+      description = ''
         This option specifies the Nix package instance to use throughout the system.
-      ";
+      '';
     };
 
     nix = {

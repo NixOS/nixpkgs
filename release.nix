@@ -114,11 +114,7 @@ let
 
         buildInputs = [ nixUnstable ];
 
-        expr =
-          ''
-            { system ? builtins.currentSystem }:
-            { pkgs = (import nixpkgs/default.nix { inherit system; }) // { recurseForDerivations = true; }; }
-          '';
+        expr = builtins.readFile lib/channel-expr.nix;
 
         distPhase = ''
           echo -n $VERSION_SUFFIX > .version-suffix
@@ -128,7 +124,6 @@ let
           cp -prd . ../$releaseName/nixos
           cp -prd ${nixpkgs} ../$releaseName/nixpkgs
           echo "$expr" > ../$releaseName/default.nix
-          echo nixos > ../$releaseName/channel-name
           NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
           cd ..
           chmod -R u+w $releaseName

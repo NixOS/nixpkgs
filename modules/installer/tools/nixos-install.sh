@@ -103,7 +103,7 @@ export LC_TIME=
 
 # Create a temporary Nix config file that causes the nixbld users to
 # be used.
-echo "build-users-group = nixbld" > /mnt/tmp/nix.conf
+echo "build-users-group = nixbld" > $mountPoint/tmp/nix.conf
 export NIX_CONF_DIR=/tmp
 
 
@@ -141,16 +141,16 @@ for i in /nix/var/nix/manifests/*.nixmanifest; do
 done
 
 
+# Get the absolute path to the NixOS/Nixpkgs sources.
+srcs=$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path)
+
+
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
 echo "building the system configuration..."
-NIX_PATH=nixpkgs=/mnt/etc/nixos/nixpkgs:nixos=/mnt/etc/nixos/nixos:nixos-config="/mnt$NIXOS_CONFIG" NIXOS_CONFIG= \
+NIX_PATH="/mnt$srcs/nixos:nixos-config=/mnt$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
-
-
-# Get rid of the manifests.
-rm -f $mountPoint/nix/var/nix/manifests/*
 
 
 # We're done building/downloading, so we don't need the /etc bind
@@ -159,27 +159,14 @@ umount $mountPoint/etc/nixos
 umount $mountPoint/etc
 
 
-# Make a backup of the old NixOS/Nixpkgs sources.
-echo "copying NixOS/Nixpkgs sources to /etc/nixos...."
-
-backupTimestamp=$(date "+%Y%m%d%H%M%S")
-
-targetNixos=$mountPoint/etc/nixos/nixos
-if test -e $targetNixos; then
-    mv $targetNixos $targetNixos.backup-$backupTimestamp
-fi
-
-targetNixpkgs=$mountPoint/etc/nixos/nixpkgs
-if test -e $targetNixpkgs; then
-    mv $targetNixpkgs $targetNixpkgs.backup-$backupTimestamp
-fi
-
-
-# Copy the NixOS/Nixpkgs sources to the target.
-cp -prd /etc/nixos/nixos $targetNixos
-if [ -e /etc/nixos/nixpkgs ]; then
-    cp -prd /etc/nixos/nixpkgs $targetNixpkgs
-fi
+# Copy the NixOS/Nixpkgs sources to the target as the initial contents
+# of the NixOS channel.
+echo "copying NixOS/Nixpkgs sources..."
+mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
+chroot $mountPoint @nix@/bin/nix-env \
+    -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
+mkdir -m 0700 -p $mountPoint/root/.nix-defexpr
+ln -s /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
 
 
 # Grub needs an mtab.
