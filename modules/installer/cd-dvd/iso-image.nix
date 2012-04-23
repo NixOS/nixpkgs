@@ -87,7 +87,7 @@ let
   # The Grub image.
   grubImage = pkgs.runCommand "grub_eltorito" {}
     ''
-      ${pkgs.grub2}/bin/grub-mkimage -O i386-pc -o tmp biosdisk iso9660 help linux linux16 chain gfxterm vbe png jpeg
+      ${pkgs.grub2}/bin/grub-mkimage -O i386-pc -o tmp biosdisk iso9660 help linux linux16 chain vbe png jpeg echo test normal
       cat ${pkgs.grub2}/lib/grub/*/cdboot.img tmp > $out
     ''; # */
 
