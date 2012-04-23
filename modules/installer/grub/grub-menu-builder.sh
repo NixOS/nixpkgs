@@ -269,6 +269,12 @@ for link in $((ls -d $defaultConfig/fine-tune/* ) | sort -n); do
     addEntry "NixOS - variation" $link ""
 done
 
+if [ "$grubVersion" = 2 ]; then
+    cat >> $tmp <<EOF
+submenu "NixOS - Old configurations" {
+EOF
+fi
+
 for generation in $(
     (cd /nix/var/nix/profiles && for i in system-*-link; do echo $i; done) \
     | sed 's/system-\([0-9]\+\)-link/\1/' \
@@ -279,6 +285,12 @@ for generation in $(
     nixosVersion=$(if [ -e $link/nixos-version ]; then cat $link/nixos-version; fi)
     addEntry "NixOS - Configuration $generation ($date - ${nixosVersion:-$kernelVersion})" $link "$generation ($date)"
 done
+
+if [ "$grubVersion" = 2 ]; then
+    cat >> $tmp <<EOF
+}
+EOF
+fi
 
 
 # Atomically update the GRUB configuration file.
