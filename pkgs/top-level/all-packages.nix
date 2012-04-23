@@ -195,7 +195,7 @@ let
 
   allStdenvs = import ../stdenv {
     inherit system stdenvType platform;
-    allPackages = args: import ./all-packages.nix ({ inherit config; } // args);
+    allPackages = args: import ./all-packages.nix ({ inherit config system; } // args);
   };
 
   defaultStdenv = allStdenvs.stdenv // { inherit platform; };
