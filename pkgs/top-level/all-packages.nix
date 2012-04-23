@@ -1975,13 +1975,7 @@ let
     texinfo = texinfo49;
   });
 
-  gfortran =
-    if stdenv.isDarwin
-    then wrapGCC (gccApple.gcc.override {
-      langF77 = true;
-      inherit gmp mpfr bison flex;
-    })
-    else gfortran46;
+  gfortran = gfortran46;
 
   gfortran40 = wrapGCC (gcc40.gcc.override {
     langFortran = true;
