@@ -1,19 +1,12 @@
 { stdenv, fetchurl, ed }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "patch-2.6.1";
 
-  src =
-    if stdenv.isDarwin
-    then fetchurl {
-      # Temporary fix for
-      # http://lists.gnu.org/archive/html/bug-patch/2010-01/msg00004.html .
-      url = "ftp://alpha.gnu.org/gnu/patch/patch-2.6.1.87-94d8.tar.gz";
-      sha256 = "0jnw8p0nvkmwi1a2z56bssqik8fvkb71zd2cpzl1sklnrg1g3b6p";
-    } else fetchurl {
-      url = "mirror://gnu/patch/${name}.tar.gz";
-      sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
-    };
+  src = fetchurl {
+    url = "mirror://gnu/patch/${name}.tar.gz";
+    sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
+  };
 
   buildInputs = (stdenv.lib.optional doCheck ed);
 
@@ -40,3 +33,9 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+(stdenv.lib.optionalAttrs stdenv.isDarwin {
+  patches = [ ./darwin-fix.patch ];
+}))
