@@ -21,8 +21,12 @@
   # null, the default standard environment is used.
   bootStdenv ? null
 
+, # Darwin is an "impure" platform, with its libc outside of the store.
+  # Thus, GCC, GFortran, & co. must always look for files in standard system
+  # directories (/usr/include, etc.)
+  noSysDirs ? (system != "x86_64-darwin" && system != "i686-darwin")
+
   # More flags for the bootstrapping of stdenv.
-, noSysDirs ? true
 , gccWithCC ? true
 , gccWithProfiling ? true
 
