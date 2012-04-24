@@ -1,19 +1,17 @@
 {stdenv, fetchurl, ocaml, zlib, bzip2, ncurses, file, gd, libpng }:
 
 stdenv.mkDerivation (rec {
-  name = "mldonkey-3.1.0";
+  name = "mldonkey-3.1.1";
   
   src = fetchurl {
     url = "mirror://sourceforge/mldonkey/${name}.tar.bz2";
-    sha256 = "02038nhh6lbb714ariy2xw1vgfycr1w750zplbgwk5pa3cm163zx";
+    sha256 = "1cj0xvfx03jnpifcqxcgfjhkl3f70r86d8zn2flj9wvlnam98qlr";
   };
   
   meta = {
     description = "Client for many p2p networks, with multiple frontends";
     homepage = http://mldonkey.sourceforge.net/;
   };
-
-  patches = [ ./gcc44mips64.patch ];
 
   buildInputs = [ ocaml zlib ncurses bzip2 file gd libpng ];
   configureFlags = [ "--disable-gui" ];
