@@ -335,10 +335,12 @@ $ mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
 
 </section>
 
+
+<!--===============================================================-->
+
 <section>
 
 <title>Testing the installer</title>
-
 
 <para>Building, burning, and booting from an installation CD is rather
 tedious, so here is a quick way to see if the installer works

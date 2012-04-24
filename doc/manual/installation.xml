@@ -8,61 +8,6 @@
 
 <section>
 
-<title>Building the installation CD</title>
-
-<para>Instead of building an installation CD, you could just download
-one from <link xlink:href="http://nixos.org/nixos/"/>.  If you want
-(or need) to build it yourself:
-
-<orderedlist>
-
-  <listitem><para>Make sure that you have a <emphasis>very</emphasis>
-  recent pre-release version of Nix installed (<link
-  xlink:href="http://nixos.org/releases/nix/nix-unstable/"/>).
-  The NixOS Nix expressions frequently use bleeding-edge features.  If
-  you get any kind of expression evaluation error, try to upgrade your
-  Nix.</para></listitem>
-
-  <listitem><para>Optional but strongly recommended (and currently
-  <emphasis>required</emphasis> for building the
-  <literal>x86_64</literal> ISO): subscribe/pull from the Nixpkgs
-  channel to speed up building, i.e.,
-
-<screen>
-$ nix-channel --add http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable
-$ nix-channel --update</screen>
-
-  </para></listitem>
-
-  <listitem><para>Check out NixOS from <link
-  xlink:href="https://nixos.org/repos/nix/nixos/trunk"/> as
-  <literal>nixos</literal>.</para></listitem>
-
-  <listitem><para>Check out Nixpkgs from
-  <link xlink:href="https://nixos.org/repos/nix/nixpkgs/trunk"/> as
-  <literal>nixpkgs</literal>.</para></listitem>
-
-  <listitem><para>Build the ISO image:
-
-<screen>
-$ nix-build ./nixos/release.nix -A iso_minimal.iso</screen>
-
-  If everything goes well, you’ll end up with an ISO image in
-  <filename>./result/iso/nixos-<replaceable>version</replaceable>-<replaceable>platform</replaceable>.iso</filename>
-  that you can burn onto a CD or attach to a virtual CD-ROM drive in
-  your favourite virtual machine software.</para></listitem>
-
-</orderedlist>
-
-</para>
-
-</section>
-
-
-<!--===============================================================-->
-
-<section>
-
 <title>Installation</title>
 
 <orderedlist>
