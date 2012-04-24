@@ -42,8 +42,11 @@
     NixOS is very much a work in progress, you are likely to encounter
     problems here and there.  Extensive familiarity with Linux is
     recommended.  If you encounter problems, please report them on the
-    <literal>nix-dev@cs.uu.nl</literal> mailing list or on <link
-    xlink:href="irc://irc.freenode.net/#nixos" />.</para>
+    <literal
+    xlink:href="http://lists.science.uu.nl/mailman/listinfo/nix-dev">nix-dev@lists.science.uu.nl</literal>
+    mailing list or on <link
+    xlink:href="irc://irc.freenode.net/#nixos">the
+    <literal>#nixos</literal> channel on Freenode.</link>.</para>
     
   </preface>
   
