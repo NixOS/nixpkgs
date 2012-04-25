@@ -73,7 +73,7 @@ let
 
   mkAuthkeyScript =
     let
-      marker1 = "### NixOS will regenerate this line and every line below it.";
+      marker1 = "### NixOS auto-added key. Do not edit!";
       marker2 = "### NixOS will regenerate this file. Do not edit!";
       users = map (userName: getAttr userName config.users.extraUsers) (attrNames config.users.extraUsers);
       usersWithKeys = flip filter users (u:
@@ -98,7 +98,7 @@ let
 
         for f in $authKeyFiles; do
           if [ -f "$f" ]; then
-            authKeys="$(${pkgs.coreutils}/bin/cat "$f"),$authKeys"
+            authKeys="$(${pkgs.coreutils}/bin/cat "$f") ${marker1},$authKeys"
           fi
         done
 
@@ -110,8 +110,7 @@ let
             rm -f "$authfile"
             authKeys="${marker2},$authKeys"
           else
-            ${pkgs.gnused}/bin/sed -i '/^### NixOS.*$/,$d' "$authfile"
-            authKeys="${marker1},$authKeys"
+            ${pkgs.gnused}/bin/sed -i '/${marker1}/ d' "$authfile"
           fi
           for key in $authKeys; do ${pkgs.coreutils}/bin/echo "$key" >> "$authfile"; done
         fi
