@@ -82,7 +82,7 @@ let
       userLoop = flip concatMapStrings usersWithKeys (u:
         let
           authKeys = concatStringsSep "," u.openssh.authorizedKeys.keys;
-          authKeyFiles = concatStringsSep "," u.openssh.authorizedKeys.keyFiles;
+          authKeyFiles = concatStringsSep " " u.openssh.authorizedKeys.keyFiles;
           preserveExisting = if u.openssh.authorizedKeys.preserveExistingKeys then "true" else "false";
         in ''
           mkAuthKeysFile "${u.name}" "${authKeys}" "${authKeyFiles}" "${preserveExisting}"
@@ -94,29 +94,30 @@ let
         local authKeys="$2"
         local authKeyFiles="$3"
         local preserveExisting="$4"
-        IFS=","
 
+        eval authfile=~$userName/.ssh/authorized_keys
+        mkdir -p "$(dirname $authfile)"
+        touch "$authfile"
+        if [ "$preserveExisting" == false ]; then
+          rm -f "$authfile"
+          echo "${marker2}" > "$authfile"
+        else
+          sed -i '/${marker1}/ d' "$authfile"
+        fi
+        IFS=,
+        for f in $authKeys; do
+          echo "$f ${marker1}" >> "$authfile"
+        done
+        unset IFS
         for f in $authKeyFiles; do
           if [ -f "$f" ]; then
-            authKeys="$(${pkgs.coreutils}/bin/cat "$f") ${marker1},$authKeys"
+            echo "$(cat "$f") ${marker1}" >> "$authfile"
           fi
         done
-
-        if [ -n "$authKeys" ]; then
-          eval authfile=~$userName/.ssh/authorized_keys
-          ${pkgs.coreutils}/bin/mkdir -p "$(dirname $authfile)"
-          ${pkgs.coreutils}/bin/touch "$authfile"
-          if [ "$preserveExisting" == "false" ]; then
-            rm -f "$authfile"
-            authKeys="${marker2},$authKeys"
-          else
-            ${pkgs.gnused}/bin/sed -i '/${marker1}/ d' "$authfile"
-          fi
-          for key in $authKeys; do ${pkgs.coreutils}/bin/echo "$key" >> "$authfile"; done
-        fi
-
-        unset IFS
       }
+
+      exec >> /tmp/log 2>&1
+      set -x
       ${userLoop}
     '';
 
@@ -256,6 +257,8 @@ in
           LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
         };
 
+        path = [ pkgs.openssh pkgs.gnused ];
+
         preStart =
           ''
             ${mkAuthkeyScript}
@@ -263,7 +266,7 @@ in
             mkdir -m 0755 -p /etc/ssh
 
             if ! test -f /etc/ssh/ssh_host_${hktn}_key; then
-                ${pkgs.openssh}/bin/ssh-keygen -t ${hktn} -b ${toString hktb} -f /etc/ssh/ssh_host_${hktn}_key -N ""
+                ssh-keygen -t ${hktn} -b ${toString hktb} -f /etc/ssh/ssh_host_${hktn}_key -N ""
             fi
           '';
 
