@@ -6569,6 +6569,13 @@ let
   };
 
   emacs23 = callPackage ../applications/editors/emacs-23 {
+    stdenv =
+      if stdenv.isDarwin
+      /* On Darwin, use Apple-GCC, otherwise:
+           configure: error: C preprocessor "cc -E -no-cpp-precomp" fails sanity check */
+      then overrideGCC stdenv gccApple
+      else stdenv;
+
     # use override to select the appropriate gui toolkit
     libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
     Xaw3d = null;
