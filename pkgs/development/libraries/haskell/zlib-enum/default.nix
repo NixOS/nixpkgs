@@ -7,6 +7,9 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ enumerator transformers zlibBindings ];
+  patchPhase = ''
+    sed -i -e "s|transformers  *== 0\.2\.\*|transformers|" zlib-enum.cabal
+  '';
   meta = {
     homepage = "http://github.com/maltem/zlib-enum";
     description = "Enumerator interface for zlib compression";

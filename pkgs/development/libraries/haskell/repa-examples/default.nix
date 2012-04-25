@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "repa-examples";
-  version = "3.1.0.1";
-  sha256 = "1zyhq7qd7j0a0rx7j395j6330kybfi0g3whsf25clrg4znd1iwjc";
+  version = "3.1.3.1";
+  sha256 = "15fg356a8sa48vmgn5fxgbj3s48hixsl1x4a8ds0mvvv8m0zlra8";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ random repa repaAlgorithms repaIo vector ];

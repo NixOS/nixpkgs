@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "repa-io";
-  version = "3.1.0.1";
-  sha256 = "1il0zsba9qz0560c56f9hn6wks5kk1bvh8bpng46w70c12gxh81w";
+  version = "3.1.3.1";
+  sha256 = "1ah5zqg3699p98820gs39xh1xipqdknlgkwxrdqsblnm33y1bqnb";
   buildDepends = [ binary bmp repa vector ];
   meta = {
     homepage = "http://repa.ouroborus.net";

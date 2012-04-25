@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network";
-  version = "2.3.0.11";
-  sha256 = "1ghm8rw0m3x71pnndbmzm9j99yh8bmmrlhz4ykslsk2my7ihmxdk";
+  version = "2.3.0.13";
+  sha256 = "0xw53czvcw8k49aqxmchc1rcd6pyxp4icwgp64625fnm3l4yjiq7";
   buildDepends = [ parsec ];
   meta = {
     homepage = "http://github.com/haskell/network";

@@ -140,7 +140,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 ok
     html         = self.html_1_0_1_2;           # 7.4.1 ok
     HUnit        = self.HUnit_1_2_4_2;          # 7.4.1 ok
-    network      = self.network_2_3_0_11;       # 7.4.1 ok
+    network      = self.network_2_3_0_13;       # 7.4.1 ok
     OpenGL       = self.OpenGL_2_5_0_0;         # 7.4.1 ok
     parallel     = self.parallel_3_2_0_2;       # 7.4.1 ok
     parsec       = self.parsec_3_1_2;           # 7.4.1 ok
@@ -1018,11 +1018,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mtl_1_1_0_2 = callPackage ../development/libraries/haskell/mtl/1.1.0.2.nix {};
   mtl_1_1_1_1 = callPackage ../development/libraries/haskell/mtl/1.1.1.1.nix {};
   mtl_2_0_1_0 = callPackage ../development/libraries/haskell/mtl/2.0.1.0.nix {};
-  mtl_2_1 = callPackage ../development/libraries/haskell/mtl/2.1.nix {
+  mtl_2_1_1 = callPackage ../development/libraries/haskell/mtl/2.1.1.nix {
     transformers = self.transformers_0_3_0_0;
   };
   mtl1 = self.mtl_1_1_0_2;
-  mtl2 = self.mtl_2_1;
+  mtl2 = self.mtl_2_1_1;
   mtl  = self.mtl2;
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
@@ -1045,8 +1045,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
-  network_2_3_0_11 = callPackage ../development/libraries/haskell/network/2.3.0.11.nix {};
-  network = self.network_2_3_0_11;
+  network_2_3_0_13 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
+  network = self.network_2_3_0_13;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
