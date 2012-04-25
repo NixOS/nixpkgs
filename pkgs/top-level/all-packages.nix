@@ -8512,6 +8512,11 @@ let
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
     stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
+    stdenv =
+      if stdenv.isDarwin
+      # When building the Perl bindings, `-no-cpp-precomp' is used.
+      then overrideGCC stdenv gccApple
+      else stdenv;
   };
 
   nixSqlite = nixUnstable;
