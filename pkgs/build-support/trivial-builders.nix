@@ -18,7 +18,11 @@ rec {
     , executable ? false # run chmod +x ?
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
     }:
-    runCommand name {inherit text executable; }
+    runCommand name
+      { inherit text executable;
+        # Pointless to do this on a remote machine.
+        preferLocalBuild = true;
+      }
       ''
         n=$out${destination}
         mkdir -p "$(dirname "$n")"
