@@ -63,10 +63,10 @@ in
                 # (1), i.e. Ethernet.  Ignore peth* devices; on Xen,
                 # they're renamed physical Ethernet cards used for
                 # bridging.  Likewise for vif* and tap* (Xen) and
-                # virbr* and vnet* (libvirt).
+                # virbr* and vnet* (libvirt) and veth* (cgroup).
                 if [ "$(cat /sys/class/net/$i/type)" = 1 ]; then
                     if ! for j in ${toString ignoredInterfaces}; do echo $j; done | grep -F -x -q "$i" &&
-                       ! echo "$i" | grep -x -q "peth.*\|vif.*\|tap.*\|virbr.*\|vnet.*";
+                       ! echo "$i" | grep -x -q "peth.*\|vif.*\|tap.*\|virbr.*\|vnet.*\|veth.*";
 		    then
                         echo "Running dhclient on $i"
                         interfaces="$interfaces $i"
