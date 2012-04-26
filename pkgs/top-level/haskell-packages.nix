@@ -149,7 +149,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexCompat  = self.regexCompat_0_95_1;     # 7.4.1 ok
     regexPosix   = self.regexPosix_0_95_1;      # 7.4.1 ok
     stm          = self.stm_2_3;		# 7.4.1 ok
-    syb          = self.syb_0_3_6;              # 7.4.1 ok
+    syb          = self.syb_0_3_6_1;            # 7.4.1 ok
     xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
     zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
     HTTP         = self.HTTP_4000_2_3;          # 7.4.1 ok
@@ -1259,11 +1259,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
 
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
-  syb_0_3   = callPackage ../development/libraries/haskell/syb/0.3.nix {};
+  syb_0_3 = callPackage ../development/libraries/haskell/syb/0.3.nix {};
   syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
-  syb_0_3_6 = callPackage ../development/libraries/haskell/syb/0.3.6.nix {};
-  syb       = null; # by default, we assume that syb ships with GHC, which is
-                    # true for the older GHC versions
+  syb_0_3_6_1 = callPackage ../development/libraries/haskell/syb/0.3.6.1.nix {};
+  syb = null;  # by default, we assume that syb ships with GHC, which is
+               # true for the older GHC versions
 
   sybWithClass = callPackage ../development/libraries/haskell/syb/syb-with-class.nix {};
 

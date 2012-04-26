@@ -2,14 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "zlib-enum";
-  version = "0.2.2";
-  sha256 = "1fmlvjj1krigj5aqipq5pf0mqnybr7zz50mgqr30kznfg48ry29y";
+  version = "0.2.2.1";
+  sha256 = "02ava6h40bqfmby33683nxasfw5fmrgfvbx6kqgz1gqz5921gjx9";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ enumerator transformers zlibBindings ];
-  patchPhase = ''
-    sed -i -e "s|transformers  *== 0\.2\.\*|transformers|" zlib-enum.cabal
-  '';
   meta = {
     homepage = "http://github.com/maltem/zlib-enum";
     description = "Enumerator interface for zlib compression";

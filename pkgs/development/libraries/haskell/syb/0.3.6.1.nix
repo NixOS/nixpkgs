@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "syb";
-  version = "0.3.6";
-  sha256 = "1khb5h4gw1f9l9zhb7x1y9rf2qpypbvm9kmpf0b6xgggd2800s25";
+  version = "0.3.6.1";
+  sha256 = "1xyz6ahyvairzb5n1mrmryzrxrkd4m8ywxa6r6x5nqm2xa7zqv34";
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/GenericProgramming/SYB";
     description = "Scrap Your Boilerplate";

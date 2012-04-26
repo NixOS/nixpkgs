@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-javascript";
-  version = "0.5.3";
-  sha256 = "0x0dzh7yffvf949ynpmrz5hsxcc1p87d6c30q73svgdbdym3zmka";
+  version = "0.5.4";
+  sha256 = "0hjx12n3pkxcdkppqalv6sl68vjlib37gby89ksay807ndslvb9q";
   buildDepends = [ blazeBuilder mtl utf8Light utf8String ];
   buildTools = [ happy ];
   meta = {
