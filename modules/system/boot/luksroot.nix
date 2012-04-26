@@ -63,7 +63,7 @@ in
         device = mkOption {
           example = "/dev/sda2";
           type = types.string;
-          description = "Path of the underlying block device."
+          description = "Path of the underlying block device.";
         };
 
         preLVM = mkOption {
