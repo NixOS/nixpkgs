@@ -184,6 +184,7 @@ let
     { exportReferencesGraph =
         map (x: [("closure-" + baseNameOf x) x]) config.virtualisation.pathsInNixDB;
       buildInputs = [ pkgs.perl ];
+      preferLocalBuild = true;
     }
     ''
       printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out
@@ -353,7 +354,7 @@ in
   # Don't run ntpd in the guest.  It should get the correct time from KVM.
   services.ntp.enable = false;
 
-  system.build.vm = pkgs.runCommand "nixos-vm" {}
+  system.build.vm = pkgs.runCommand "nixos-vm" { preferLocalBuild = true; }
     ''
       ensureDir $out/bin
       ln -s ${config.system.build.toplevel} $out/system

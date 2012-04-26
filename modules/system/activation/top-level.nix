@@ -147,6 +147,7 @@ let
   # and makes it bootable.
   system = pkgs.stdenv.mkDerivation {
     name = "nixos-${config.system.nixosVersion}";
+    preferLocalBuild = true;
     buildCommand = systemBuilder;
     inherit children;
     kernelParams =

@@ -135,7 +135,7 @@ let
 
     in
       pkgs.runCommand ("upstart-" + job.name + ".conf")
-        { inherit (job) buildHook; inherit jobText; }
+        { inherit (job) buildHook; inherit jobText; preferLocalBuild = true; }
         ''
           eval "$buildHook"
           echo "$jobText" > $out
