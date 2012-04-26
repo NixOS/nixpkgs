@@ -162,7 +162,9 @@ umount $mountPoint/etc
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
 # of the NixOS channel.
 echo "copying NixOS/Nixpkgs sources..."
-mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
+mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles
+mkdir -m 1777 -p $mountPoint/nix/var/nix/profiles/per-user
+mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles/per-user/root
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
 mkdir -m 0700 -p $mountPoint/root/.nix-defexpr
