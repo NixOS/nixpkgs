@@ -15,14 +15,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "9.0.1";
+  firefoxVersion = "12.0";
   
-  xulVersion = "9.0.1"; # this attribute is used by other packages
+  xulVersion = "12.0"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "e0748d86753eead5c0929d74158c601bf33b5db0";
+    sha1 = "0177185e54b7d63dc36bd5bd5c80ba6afd52e199";
   };
   
   commonConfigureFlags =
@@ -35,7 +35,7 @@ rec {
       "--with-system-nspr"
       # "--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-      "--enable-system-cairo"
+      # "--enable-system-cairo" # disabled for the moment because our Cairo is too old
       "--enable-system-sqlite"
       "--disable-crashreporter"
       "--disable-tests"
@@ -139,7 +139,7 @@ rec {
       [ "--enable-application=browser"
         "--with-libxul-sdk=${xulrunner}/lib/xulrunner-devel-${xulrunner.version}"
         "--enable-chrome-format=jar"
-	"--disable-elf-hack"
+        "--disable-elf-hack"
       ]
       ++ commonConfigureFlags
       ++ stdenv.lib.optional enableOfficialBranding "--enable-official-branding";
@@ -170,6 +170,7 @@ rec {
     meta = {
       description = "Mozilla Firefox - the browser, reloaded";
       homepage = http://www.mozilla.com/en-US/firefox/;
+      maintainers = [ stdenv.lib.maintainers.eelco ];
     };
 
     passthru = {
