@@ -309,7 +309,7 @@ in
         ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
       '';
 
-    assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true; 
+    assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}];
   };
 
