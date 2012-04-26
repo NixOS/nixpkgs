@@ -116,8 +116,6 @@ let
         done
       }
 
-      exec >> /tmp/log 2>&1
-      set -x
       ${userLoop}
     '';
 
