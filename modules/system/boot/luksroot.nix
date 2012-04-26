@@ -57,26 +57,19 @@ in
         name = mkOption {
           example = "luksroot";
           type = types.string;
-          description = ''
-            Name of the interface.
-          '';
+          description = "Named to be used for the generated device in /dev/mapper.";
         };
 
         device = mkOption {
           example = "/dev/sda2";
           type = types.string;
-          description = ''
-            IP address of the interface.  Leave empty to configure the
-            interface using DHCP.
-          '';
+          description = "Path of the underlying block device."
         };
 
         preLVM = mkOption {
           default = true;
           type = types.bool;
-          description = ''
-            Whether the luksOpen will be attempted before LVM scan or after it.
-          '';
+          description = "Whether the luksOpen will be attempted before LVM scan or after it.";
         };
       };
     };
