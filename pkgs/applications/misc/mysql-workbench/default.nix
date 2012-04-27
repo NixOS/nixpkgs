@@ -72,6 +72,6 @@ exec 19> $FIFOCTL
     homepage = http://wb.mysql.com/;
     license = licenses.gpl2;
     maintainers = [ maintainers.kkallio ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }
