@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-api";
-  version = "0.10.1";
-  sha256 = "1l73c9pik6109frzyrxh8kpdsfpa9wf6ijnd8zfbnhmk5pn6jaww";
+  version = "0.10.2";
+  sha256 = "06dbvdwyw2hf5cafpjfhasgyzzbigvvg74c47lafvqvgxvn9v4ms";
   buildDepends = [ cereal entropy largeword tagged ];
   meta = {
     homepage = "http://trac.haskell.org/crypto-api/wiki";
