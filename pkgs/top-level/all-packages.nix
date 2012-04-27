@@ -2757,8 +2757,6 @@ let
 
   python27 = callPackage ../development/interpreters/python/2.7 { };
 
-  python31 = callPackage ../development/interpreters/python/3.1 { };
-
   python32 = callPackage ../development/interpreters/python/3.2 { };
 
   pythonFull = python27Full;

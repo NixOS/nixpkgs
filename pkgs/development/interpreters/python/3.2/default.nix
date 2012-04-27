@@ -1,14 +1,14 @@
 { stdenv, fetchurl
-, zlib
 , bzip2
-, gdbm
-, sqlite
 , db4
-, ncurses
-, readline
-, openssl
-, tcl, tk
+, gdbm
 , libX11, xproto
+, ncurses
+, openssl
+, readline
+, sqlite
+, tcl, tk
+, zlib
 }:
 
 assert readline != null -> ncurses != null;
@@ -17,7 +17,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.2";
-  version = "${majorVersion}";
+  version = "${majorVersion}.3";
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto
@@ -29,21 +29,20 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "06awxchnv8gai6415pgzz2x8f1xi38v8a4anz6n39ciwq7v5zzbv";
+    sha256 = "5648ec81f93870fde2f0aa4ed45c8718692b15ce6fd9ed309bfb827ae12010aa";
   };
-
-  inherit buildInputs;
-
-  C_INCLUDE_PATH = concatStringsSep ":" (map (p: "${p}/include") buildInputs);
-  LIBRARY_PATH = concatStringsSep ":" (map (p: "${p}/lib") buildInputs);
-  configureFlags = "--enable-shared --with-threads --enable-unicode --with-wctype-functions";
 
   preConfigure = ''
     for i in /usr /sw /opt /pkg; do	# improve purity
       substituteInPlace ./setup.py --replace $i /no-such-path
     done
-    ${optionalString (ncurses != null) ''export NIX_LDFLAGS="$NIX_LDFLAGS -lncurses"''}
-    ${optionalString stdenv.isDarwin   ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"''}
+    ${optionalString stdenv.isDarwin ''export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -msse2"''}
+
+    configureFlagsArray=( --enable-shared --with-threads
+                          CPPFLAGS="${concatStringsSep " " (map (p: "-I${p}/include") buildInputs)}"
+                          LDFLAGS="${concatStringsSep " " (map (p: "-L${p}/lib") buildInputs)}"
+                          LIBS="-lcrypt ${optionalString (ncurses != null) "-lncurses"}"
+                        )
   '';
 
   setupHook = ./setup-hook.sh;
@@ -58,7 +57,7 @@ stdenv.mkDerivation {
     db4Support = db4 != null;
     readlineSupport = readline != null;
     opensslSupport = openssl != null;
-    tkSupport = (tk != null) && (tcl != null);
+    tkSupport = (tk != null) && (tcl != null) && (libX11 != null) && (xproto != null);
     libPrefix = "python${majorVersion}";
   };
 
