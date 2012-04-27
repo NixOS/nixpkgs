@@ -142,6 +142,7 @@ rec {
     driver = runCommand "nixos-test-driver"
       { buildInputs = [ makeWrapper];
         inherit testScript;
+        preferLocalBuild = true;
       }
       ''
         mkdir -p $out/bin
