@@ -1081,9 +1081,10 @@ let pythonPackages = python.modules // rec {
       sha256 = "1pawfmf7j7pd3mjzhmmw9hkglc2qdirrkvv29m5nsmpf2b3ip2vq";
     };
 
-    # TODO: add ATLAS=${pkgs.atlas}
+    patches = [ ../development/python-modules/numpy/no_default_dirs.patch ];
+
     installCommand = ''
-      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
+      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack} ATLAS=${pkgs.atlas}
       python setup.py build --fcompiler="gnu95"
       python setup.py install --prefix=$out
     '';
