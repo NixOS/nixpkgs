@@ -1003,6 +1003,8 @@ let
 
   mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { };
 
+  minecraft = callPackage ../games/minecraft { };
+
   miniupnpc = callPackage ../tools/networking/miniupnpc { };
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
