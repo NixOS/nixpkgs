@@ -32,60 +32,6 @@ let pythonPackages = python.modules // rec {
     ../development/python-modules/generic/wrap.sh;
 
 
-  afew = buildPythonPackage rec {
-    rev = "a3ea63d7048faedb6cc58b4abcb6d4ecfddfb5db";
-    name = "afew-1.0pre${rev}";
-    src = fetchurl {
-      url = "https://github.com/teythoon/afew/tarball/${rev}";
-      name = "${name}.tar.bz";
-      sha256 = "4e8850242a3845602331cabb47299b5a3af21993036a715c83e8dd698ab5d716";
-    };
-
-    propagatedBuildInputs = [ notmuch pkgs.dbacl ];
-
-    doCheck = false;
-
-    postInstall = ''
-      wrapProgram $out/bin/afew \
-        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib
-    '';
-
-    meta = {
-      homepage = https://github.com/teythoon/afew;
-      description = "afew is an initial tagging script for notmuch mail.";
-      maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
-    };
-  };
-
-
-  alot = buildPythonPackage rec {
-    name = "alot-0.3";
-
-    src = fetchurl {
-      url = "https://github.com/pazz/alot/tarball/0.3";
-      name = "${name}.tar.bz";
-      md5 = "fa4944a1a7e9e380da0ee75ea3571a79";
-    };
-
-    doCheck = false;
-
-    propagatedBuildInputs = [ notmuch urwid twisted magic configobj ];
-
-    postInstall = ''
-      wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file511}/lib
-    '';
-
-    meta = {
-      homepage = https://github.com/pazz/alot;
-      description = "Terminal MUA using notmuch mail";
-      maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
-    };
-  };
-
-
   anyjson = buildPythonPackage rec {
     name = "anyjson-0.3.1";
 
@@ -343,25 +289,6 @@ let pythonPackages = python.modules // rec {
       license = "bsd";
 
       description = "Python module for handling HTML forms on the client side";
-    };
-  });
-
-  configobj = buildPythonPackage (rec {
-    name = "configobj-4.7.2";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/c/configobj/${name}.tar.gz";
-      md5 = "201dbaa732a9049c839f9bb6c27fc7b5";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "Config file reading, writing and validation.";
-      homepage = http://pypi.python.org/pypi/configobj;
-      license = pkgs.licenses.bsd3;
-      maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -846,20 +773,17 @@ let pythonPackages = python.modules // rec {
 
 
   magic = pkgs.stdenv.mkDerivation rec {
-    name = "python-${pkgs.file511.name}";
+    name = "python-${pkgs.file.name}";
 
-    src = pkgs.file511.src;
+    src = pkgs.file.src;
 
-    patches = [ ../tools/misc/file/python.patch ];
-    buildInputs = [ python pkgs.file511 ];
+    buildInputs = [ python pkgs.file ];
 
     configurePhase = "cd python";
 
     buildPhase = "python setup.py build";
 
-    installPhase = ''
-      python setup.py install --prefix=$out
-    '';
+    installPhase = "python setup.py install --prefix=$out";
 
     meta = {
       description = "A Python wrapper around libmagic";
@@ -1149,28 +1073,6 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  notmuch = pkgs.stdenv.mkDerivation rec {
-    name = "python-${pkgs.notmuch.name}";
-
-    src = pkgs.notmuch.src;
-
-    buildInputs = [ python pkgs.notmuch ];
-    #propagatedBuildInputs = [ python pkgs.notmuch ];
-
-    configurePhase = "cd bindings/python";
-
-    buildPhase = "python setup.py build";
-
-    installPhase = "python setup.py install --prefix=$out";
-
-    meta = {
-      description = "A Python wrapper around notmuch";
-      homepage = http://notmuchmail.org/;
-      maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
-    };
-  };
-
   numpy = buildPythonPackage ( rec {
     name = "numpy-1.6.1";
 
@@ -1409,7 +1311,6 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-
   pyasn1 = buildPythonPackage ({
     name = "pyasn1-0.0.11a";
 
@@ -1428,26 +1329,6 @@ let pythonPackages = python.modules // rec {
       platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
     };
   });
-
-  Babel = buildPythonPackage (rec {
-    name = "Babel-0.9.6";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/B/Babel/${name}.tar.gz";
-      sha256 = "4a3a085ecf1fcd2736573538ffa114f1f4331b3bbbdd69381e6e172c49c9750f";
-    };
-
-    doCheck = false;
-
-    meta = {
-      homepage = http://babel.edgewall.org;
-      description = "A collection of tools for internationalizing Python applications.";
-      license = "BSD";
-      maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = stdenv.lib.platforms.linux;
-    };
-  });
-
 
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.5.29";
@@ -2249,25 +2130,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://pypi.python.org/pypi/unittest2;
     };
   };
-
-  urwid = buildPythonPackage (rec {
-    name = "urwid-1.0.1";
-
-    doCheck = false;
-
-    src = fetchurl {
-      url = "http://excess.org/urwid/${name}.tar.gz";
-      md5 = "828f7144b94920205e755c249d2e297f";
-    };
-
-    meta = {
-      description = "A full-featured console (xterm et al.) user interface library";
-      homepage = http://excess.org/urwid;
-      license = pkgs.licenses.lgpl21;
-      maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
-    };
-  });
 
   virtualenv = buildPythonPackage rec {
     name = "virtualenv-1.6.4";
