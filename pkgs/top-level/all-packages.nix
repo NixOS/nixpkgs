@@ -674,6 +674,7 @@ let
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
+  file511 = callPackage ../tools/misc/file/511.nix { };
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
@@ -6943,6 +6944,14 @@ let
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
+  i3 = callPackage ../applications/window-managers/i3 { };
+
+  i3lock = callPackage ../applications/window-managers/i3/lock.nix {
+    cairo = cairo.override { xcbSupport = true; };
+  };
+
+  i3status = callPackage ../applications/window-managers/i3/status.nix { };
+
   i810switch = callPackage ../os-specific/linux/i810switch { };
 
   icecat3 = lowPrio (callPackage ../applications/networking/browsers/icecat-3 {
@@ -8427,6 +8436,8 @@ let
   cupsBjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
   darcnes = callPackage ../misc/emulators/darcnes { };
+
+  dbacl = callPackage ../tools/misc/dbacl { };
 
   dblatex = callPackage ../tools/typesetting/tex/dblatex { };
 
