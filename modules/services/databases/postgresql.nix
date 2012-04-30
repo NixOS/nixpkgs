@@ -188,8 +188,12 @@ in
 
         extraConfig =
           ''
+            # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See 
+            # http://www.postgresql.org/docs/current/static/server-shutdown.html
+            kill signal INT
+
             # Give Postgres a decent amount of time to clean up after
-            # receiving Upstart's SIGTERM.
+            # receiving Upstart's SIGINT.
             kill timeout 60
           '';
       };
