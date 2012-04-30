@@ -1,0 +1,11 @@
+--- file-5.11/python/magic.py	2011-09-22 18:57:41.000000000 +0200
++++ file-5.11/python/magic.py.1	2012-04-30 15:00:31.750213810 +0200
+@@ -13,7 +13,7 @@
+     Loads the shared library through ctypes and returns a library
+     L{ctypes.CDLL} instance 
+     """
+-    return ctypes.cdll.LoadLibrary(find_library('magic'))
++    return ctypes.CDLL('libmagic.so')
+ 
+ _libraries = {}
+ _libraries['magic'] = _init()
