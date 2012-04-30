@@ -359,7 +359,7 @@ let pythonPackages = python.modules // rec {
     meta = {
       description = "Config file reading, writing and validation.";
       homepage = http://pypi.python.org/pypi/configobj;
-      license = pkgs.licenses.bsd3;
+      license = pkgs.lib.licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.garbas ];
       platforms = python.meta.platforms;
     };
@@ -2263,7 +2263,7 @@ let pythonPackages = python.modules // rec {
     meta = {
       description = "A full-featured console (xterm et al.) user interface library";
       homepage = http://excess.org/urwid;
-      license = pkgs.licenses.lgpl21;
+      license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
       platforms = python.meta.platforms;
     };
