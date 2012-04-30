@@ -6745,7 +6745,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox11Pkgs;
+  firefoxPkgs = pkgs.firefox12Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
