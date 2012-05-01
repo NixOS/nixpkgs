@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
       CFLAGS=-O3 CXXFLAGS=-O3
     '';
 
+  doInstallCheck = true;
+
   crossAttrs = {
     postUnpack =
       '' export CPATH="${bzip2.hostDrv}/include"
@@ -51,13 +53,10 @@ stdenv.mkDerivation rec {
       '' + stdenv.lib.optionalString (
           stdenv.cross ? nix && stdenv.cross.nix ? system
       ) ''--with-system=${stdenv.cross.nix.system}'';
-    doCheck = false;
-    postInstall = ":";
+    doInstallCheck = false;
   };
 
   enableParallelBuilding = true;
-
-  postInstall = "make installcheck";
 
   meta = {
     description = "The Nix Deployment System";

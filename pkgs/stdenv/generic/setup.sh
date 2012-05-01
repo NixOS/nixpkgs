@@ -767,6 +767,19 @@ fixupPhase() {
 }
 
 
+installCheckPhase() {
+    runHook preInstallCheck
+
+    echo "installcheck flags: $makeFlags ${makeFlagsArray[@]} $installCheckFlags ${installCheckFlagsArray[@]}"
+    make ${makefile:+-f $makefile} \
+        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
+        $makeFlags "${makeFlagsArray[@]}" \
+        $installCheckFlags "${installCheckFlagsArray[@]}" ${installCheckTarget:-installcheck}
+
+    runHook postInstallCheck
+}
+
+
 distPhase() {
     runHook preDist
 
@@ -795,6 +808,7 @@ showPhaseHeader() {
         checkPhase) header "running tests";;
         installPhase) header "installing";;
         fixupPhase) header "post-installation fixup";;
+        installCheckPhase) header "running install tests";;
         *) header "$phase";;
     esac
 }
@@ -811,7 +825,7 @@ genericBuild() {
     if [ -z "$phases" ]; then
         phases="$prePhases unpackPhase patchPhase $preConfigurePhases \
             configurePhase $preBuildPhases buildPhase checkPhase \
-            $preInstallPhases installPhase fixupPhase \
+            $preInstallPhases installPhase fixupPhase installCheckPhase \
             $preDistPhases distPhase $postPhases";
     fi
 
@@ -820,6 +834,7 @@ genericBuild() {
         if [ "$curPhase" = checkPhase -a -z "$doCheck" ]; then continue; fi
         if [ "$curPhase" = installPhase -a -n "$dontInstall" ]; then continue; fi
         if [ "$curPhase" = fixupPhase -a -n "$dontFixup" ]; then continue; fi
+        if [ "$curPhase" = installCheckPhase -a -z "$doInstallCheck" ]; then continue; fi
         if [ "$curPhase" = distPhase -a -z "$doDist" ]; then continue; fi
 
         if [ -n "$tracePhases" ]; then
