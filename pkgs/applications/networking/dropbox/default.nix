@@ -21,8 +21,8 @@ assert stdenv.system == "x86_64-linux";
 
 let
 
-  version = "1.2.52";
-  sha256 = "72aeaf00727da9f3fe39386dcf883bb303de928ba43c738fcc5bb62b93eca252";
+  version = "1.4.0";
+  sha256 = "93933d95cce5956ed99342fa342d01ce2bde8d2e4339afb97f23e0c0ec98875e";
 
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
@@ -50,7 +50,10 @@ in stdenv.mkDerivation {
   name = "dropbox-${version}-bin";
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
-    url = "http://www.dropbox.com/download?plat=lnx.x86_64";
+    # using version-specific URL so if the version is no longer available,
+    # build will fail without having to finish downloading first
+    # url = "http://www.dropbox.com/download?plat=lnx.x86_64";
+    url = "http://dl-web.dropbox.com/u/17/dropbox-lnx.x86_64-${version}.tar.gz";
     inherit sha256;
   };
 
