@@ -7054,6 +7054,8 @@ let
     fftw = fftwSinglePrec;
   };
 
+  lci = callPackage ../applications/science/logic/lci {};
+
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
     inherit (gnome) libglade;
   };
