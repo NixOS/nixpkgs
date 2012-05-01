@@ -1,12 +1,14 @@
 {stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation {
-  name = "clojure-binary-1.2.1";
+stdenv.mkDerivation rec {
+  version = "1.4.0";
+  name = "clojure-binary-${version}";
 
   src = fetchurl {
-    url = https://github.com/downloads/clojure/clojure/clojure-1.2.1.zip;
-    sha256 = "1warps9z2cm3gmp0nlh8plgsr40yccr2vzcsxsq3yawhjkicx7k1";
+    url = "http://repo1.maven.org/maven2/org/clojure/clojure/${version}/clojure-${version}.zip";
+    sha256 = "27a5a151d5cc1bc3e52dff47c66111e637fefeb42d9bedfa1284a1a31d080171";
   };
+
 
   buildInputs = [ unzip ];
 
@@ -14,6 +16,7 @@ stdenv.mkDerivation {
 
   installPhase = "
     mkdir -p $out/lib/java
+    cp clojure-${version}.jar clojure.jar
     install -t $out/lib/java clojure.jar
   ";
 
