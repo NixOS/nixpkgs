@@ -591,6 +591,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   curl = callPackage ../development/libraries/haskell/curl { curl = pkgs.curl; };
 
+  cpu = callPackage ../development/libraries/haskell/cpu {};
+
   dataAccessor = callPackage ../development/libraries/haskell/data-accessor/data-accessor.nix {};
 
   dataAccessorTemplate = callPackage ../development/libraries/haskell/data-accessor/data-accessor-template.nix {};
