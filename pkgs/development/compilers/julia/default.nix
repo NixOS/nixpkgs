@@ -1,6 +1,6 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, blas, liblapack
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
- , ncurses, libunistring, lighttpd
+ , ncurses, libunistring, lighttpd, patchelf
  } :
 let
   liblapackShared = liblapack.override{shared=true;};
@@ -8,12 +8,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20120410";
+  date = "20120501";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1";
   dsfmt_ver = "2.1";
-  arpack_ver = "3.0.2";
+  arpack_ver = "3.1.0";
   clp_ver = "1.14.5";
   lighttpd_ver = "1.4.29";
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation rec {
     sha256 = "e9d3e04bc984ec3b14033342f5ebdcd5202d8d8e40128dd737f566945612378f";
   };
   arpack_src = fetchurl {
-    url = "http://forge.scilab.org/index.php/p/arpack-ng/downloads/353/get/";
-    name = "arpack-ng-${arpack_ver}.tar.gz";
-    sha256 = "4add769386e0f6b0484491bcff129c6f5234190dbf58e07cc068fbd5dc7278bf";
+    url = "http://forge.scilab.org/index.php/p/arpack-ng/downloads/376/get/";
+    name = "arpack-ng_${arpack_ver}.tar.gz";
+    sha256 = "65b7856126f06ecbf9ec450d50df92ca9260d4b0d21baf02497554ac230d6feb";
   };
   clp_src = fetchurl {
     url = "http://www.coin-or.org/download/source/Clp/Clp-${clp_ver}.tgz";
@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "73776ba8ed510862b81eb1dd5c70e2055deb5895";
-    sha256 = "e833caeeecedc5603ee71405a8cb3813bf7ace10df8f7b4a43c7beccf0ccaf0d";
+    rev = "990ffabb00f0e51d326911888facdbc473fb634d";
+    sha256 = "dfcf41b2d7b62dd490bfd6f6fb962713c920de3f00afaee47423bd26eba7e3b2";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm blas liblapackShared readline 
-    fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring
+    fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
     ];
 
   configurePhase = ''
@@ -63,38 +63,51 @@ stdenv.mkDerivation rec {
     }
 
     for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${clp_src}" "${lighttpd_src}" ; do
-      copy_kill_hash "$i" external
+      copy_kill_hash "$i" deps
     done
-    copy_kill_hash "${dsfmt_src}" external/random
+    copy_kill_hash "${dsfmt_src}" deps/random
 
-    sed -e '/cd SuiteSparse-SYSTEM/,+1s@find /lib /usr/lib /usr/local/lib@find ${suitesparse}/lib@' -i external/Makefile
+    sed -e '/cd SuiteSparse-SYSTEM/,+1s@find /lib /usr/lib /usr/local/lib@find ${suitesparse}/lib@' -i deps/Makefile
 
     ${if realGcc ==null then "" else 
     ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring "''}
 
     sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
-  '';
 
-  preInstall = ''
-    export makeFlags="$makeFlags PREFIX=\"$out\""
+    sed -e '1s@#! */bin/bash@#!${stdenv.shell}@' -i deps/*.sh
+
+    export LDFLAGS="-L${suitesparse}/lib"
+
+    mkdir -p "$out/lib"
+    sed -e "s@/usr/local/lib@$out/lib@g" -i deps/Makefile
+    sed -e "s@/usr/lib@$out/lib@g" -i deps/Makefile
+    
+    sed -e '/libumfpack.a/s@find @find ${suitesparse}/lib @' -i deps/Makefile
+
+    export makeFlags="$makeFlags PREFIX=\"$out\" USR=\"$out\""
+
+    sed -e 's@openblas@blas@' -i base/*.jl
+
+    sed -e '/install -v julia-release-webserver/d' -i Makefile
+
+    export dontPatchELF=1
   '';
 
   postInstall = ''
-    mkdir -p "$out/bin"
-    ln -s "$out/share/julia/julia" "$out/bin"
+   ln -s "$out/share/julia/julia" "$out/bin"
 
-    mkdir -p "$out/share/julia/ui/"
-    cp -r ui/website "$out/share/julia/ui/"
-    cp external/lighttpd.conf "$out/share/julia/ui/"
+   mkdir -p "$out/share/julia/ui/"
+   cp -r ui/website "$out/share/julia/ui/"
+   cp deps/lighttpd.conf "$out/share/julia/ui/"
 
-    mkdir -p "$out/share/julia/ui/webserver/"
-    cp -r ui/webserver/{*.jl,*.h} "$out/share/julia/ui/webserver/"
+   mkdir -p "$out/share/julia/ui/webserver/"
+   cp -r ui/webserver/{*.jl,*.h} "$out/share/julia/ui/webserver/"
 
-    echo -e '#!/bin/sh' >> "$out/bin/julia-webserver"
-    echo -e "cd \"$out/share/julia\"" >> "$out/bin/julia-webserver"
-    echo -e '${lighttpd}/sbin/lighttpd -D -f ./ui/lighttpd.conf &' >> "$out/bin/julia-webserver"
-    echo -e './julia-release-webserver -p 2001' >> "$out/bin/julia-webserver"
-    chmod a+x "$out/bin/julia-webserver"
+   echo -e '#!/bin/sh' >> "$out/bin/julia-webserver"
+   echo -e "cd \"$out/share/julia\"" >> "$out/bin/julia-webserver"
+   echo -e '${lighttpd}/sbin/lighttpd -D -f ./ui/lighttpd.conf &' >> "$out/bin/julia-webserver"
+   echo -e '../../bin/julia-release-webserver -p 2001' >> "$out/bin/julia-webserver"
+   chmod a+x "$out/bin/julia-webserver"
   '';
 
   meta = {
