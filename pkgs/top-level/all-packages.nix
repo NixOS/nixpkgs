@@ -7114,7 +7114,7 @@ let
     guiSupport = false;		# use mercurialFull to get hgk GUI
   };
 
-  mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
+  mercurialFull = lowPrio (appendToName "full" (pkgs.mercurial.override { guiSupport = true; }));
 
   merkaartor = callPackage ../applications/misc/merkaartor { };
 
