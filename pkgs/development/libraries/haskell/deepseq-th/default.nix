@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "deepseq-th";
-  version = "0.1.0.2";
-  sha256 = "0f2hrp2rjb3iailnxh47wl1imgq6jqr9qj31vi7k8lgp5pwa90mc";
+  version = "0.1.0.3";
+  sha256 = "1xx88i55iskyxrpxbdg0srb64y5siqs1b8qj7bh3i1893qs9sha2";
   buildDepends = [ deepseq ];
   meta = {
     description = "Template Haskell based deriver for optimised NFData instances";

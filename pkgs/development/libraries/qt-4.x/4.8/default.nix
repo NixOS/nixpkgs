@@ -12,7 +12,7 @@
 }:
 
 let
-  v = "4.8.0";
+  v = "4.8.1";
 in
 
 # TODO:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "0vhb6bysjqz8l0dygg2yypm4frsggma2g9877rdgf5ay917bg4lk";
+    sha256 = "1s3sv2p8q4bjy0h6r81gdnd64apdx8kwm5jc7rxavd21m8v1m1gg";
   };
 
   patches = [ ( substituteAll {

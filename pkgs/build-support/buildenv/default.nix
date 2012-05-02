@@ -26,7 +26,9 @@
 }:
 
 runCommand name
-  { inherit manifest paths ignoreCollisions pathsToLink postBuild; }
+  { inherit manifest paths ignoreCollisions pathsToLink postBuild;
+    preferLocalBuild = true;
+  }
   ''
     ${perl}/bin/perl -w ${./builder.pl}
     eval "$postBuild"

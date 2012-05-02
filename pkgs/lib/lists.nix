@@ -27,11 +27,13 @@ rec {
     then nul
     else foldl op (op nul (head list)) (tail list);
 
+    
   # map with index: `imap (i: v: "${v}-${toString i}") ["a" "b"] ==
   # ["a-1" "b-2"]'
   imap = f: list:
     zipListsWith f (range 1 (length list)) list;
 
+    
   # Concatenate a list of lists.
   concatLists = fold (x: y: x ++ y) [];
 
@@ -54,12 +56,15 @@ rec {
   filter = pred: list:
     fold (x: y: if pred x then [x] ++ y else y) [] list;
 
+    
   # Remove elements 'e' from a list. Useful for buildInputs
   remove = e: filter (x: x != e);
 
+  
   # Given two lists, removes all elements of the first list from the second list
   removeList = l: filter (x: elem x l);
 
+  
   # Return true if `list' has an element `x':
   elem = x: list: fold (a: bs: x == a || bs) false list;
 
@@ -145,17 +150,19 @@ rec {
 
   zipLists = zipListsWith (fst: snd: { inherit fst snd; });
 
-  # invert the order of the elements of a list.
+  
+  # Reverse the order of the elements of a list.
   reverseList = l:
     let reverse_ = accu: l:
       if l == [] then accu
       else reverse_ ([(head l)] ++ accu) (tail l);
     in reverse_ [] l;
 
-  # Sort a list based on the `strictLess' function which compare the two
-  # elements and return true if the first argument is strictly below the
-  # second argument.  The returned list is sorted in an increasing order.
-  # The implementation does a quick-sort.
+    
+  # Sort a list based on a comparator function which compares two
+  # elements and returns true if the first argument is strictly below
+  # the second argument.  The returned list is sorted in an increasing
+  # order.  The implementation does a quick-sort.
   sort = strictLess: list:
     let
       # This implementation only have one element lists on the left hand
@@ -171,25 +178,29 @@ rec {
       qs list [];
 
 
-  # haskell's take:  take 2 [1 2 3 4]  yields  [1 2] 
+  # Return the first (at most) N elements of a list.
   take = count: list:
     if list == [] || count == 0 then []
     else [ (head list) ] ++ take (builtins.sub count 1) (tail list);
 
-  # haskell's drop. drop count elements from head of list
+    
+  # Remove the first (at most) N elements of a list.
   drop = count: list:
     if count == 0 then list
     else drop (builtins.sub count 1) (tail list);
 
+    
   last = list:
     assert list != [];
     let loop = l: if tail l == [] then head l else loop (tail l); in
     loop list;
 
+    
   # Zip two lists together.
   zipTwoLists = xs: ys:
     if xs != [] && ys != [] then
       [ {first = head xs; second = head ys;} ]
       ++ zipTwoLists (tail xs) (tail ys)
     else [];
+
 }

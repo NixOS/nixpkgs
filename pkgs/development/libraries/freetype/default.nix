@@ -19,7 +19,7 @@ stdenv.mkDerivation (rec {
     "-DFT_CONFIG_OPTION_SUBPIXEL_RENDERING=1";
 
   # The asm for armel is written with the 'asm' keyword.
-  CFLAGS = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "-std=gnu99";
+  CFLAGS = stdenv.lib.optionalString stdenv.isArm "-std=gnu99";
 
   meta = {
     description = "A font rendering engine";

@@ -12,7 +12,7 @@ let
       TIMER_STATS y
       USB_SUSPEND y
       BACKTRACE_SELF_TEST n
-      CPU_NOTIFIER_ERROR_INJECT n
+      CPU_NOTIFIER_ERROR_INJECT? n
       DEBUG_DEVRES n
       DEBUG_NX_TEST n
       DEBUG_STACK_USAGE n
@@ -37,10 +37,12 @@ let
       IOSCHED_CFQ y
       BLK_CGROUP y # required by CFQ
 
+      # Enable NUMA.
+      NUMA? y
+
       # Disable some expensive (?) features.
       FTRACE n
       KPROBES n
-      NUMA? n
       PM_TRACE_RTC n
 
       # Enable various subsystems.
@@ -217,6 +219,12 @@ let
       CONNECTOR y
       PROC_EVENTS y
 
+      # Tracing
+      FTRACE y
+      FUNCTION_TRACER y
+      FTRACE_SYSCALLS y
+      SCHED_TRACER y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -225,19 +233,16 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.3";
-
+    version = "3.3.4";
     testing = false;
-
-    modDirVersion = "3.3.0";
 
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
     '';
 
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.0/${if testing then "testing/" else ""}linux-${version}.tar.bz2";
-      sha256 = "0czk8bj46r3r95iz6gi7xkavhjx847s5p9248vabi0c1wjs6kmlg";
+      url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
+      sha256 = "0c3bayhbvlrmfqqq43s4vp194wc97lss2vwng1dhslll7yady286";
     };
 
     config = configWithPlatform stdenv.platform;

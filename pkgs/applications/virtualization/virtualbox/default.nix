@@ -8,7 +8,7 @@
 
 with stdenv.lib;
 
-let version = "4.1.10"; in
+let version = "4.1.12"; in
 
 stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "1gsp3arp79x6gmh403sayh4lzr3l8fc3anp664fyl1dl0ykgmqs7";
+    sha256 = "00hx7cl8n4qdmipxxx8a96x8yw6yim9bz3fjbyzcrs8yls0r2jsf";
   };
 
   buildInputs =

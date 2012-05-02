@@ -93,6 +93,7 @@ let
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
                || result.system == "armv5tel-linux"
+               || result.system == "armv7l-linux"
                || result.system == "mips64el-linux";
         isGNU = result.system == "i686-gnu";      # GNU/Hurd
         isSunOS = result.system == "i686-solaris"
@@ -120,7 +121,8 @@ let
                 || result.system == "x86_64-darwin";
         isMips = result.system == "mips-linux"
                 || result.system == "mips64el-linux";
-        isArm = result.system == "armv5tel-linux";
+        isArm = result.system == "armv5tel-linux"
+             || result.system == "armv7l-linux";
 
         # Utility function: allow stdenv to be easily regenerated with
         # a different setup script.  (See all-packages.nix for an

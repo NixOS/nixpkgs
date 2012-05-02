@@ -37,10 +37,12 @@ let
       IOSCHED_CFQ y
       BLK_CGROUP y # required by CFQ
 
+      # Enable NUMA.
+      NUMA? y
+
       # Disable some expensive (?) features.
       FTRACE n
       KPROBES n
-      NUMA? n
       PM_TRACE_RTC n
 
       # Enable various subsystems.
@@ -218,6 +220,12 @@ let
       CONNECTOR y
       PROC_EVENTS y
 
+      # Tracing
+      FTRACE y
+      FUNCTION_TRACER y
+      FTRACE_SYSCALLS y
+      SCHED_TRACER y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -226,7 +234,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.2.11";
+    version = "3.2.16";
     testing = false;
 
     modDirVersion = version;
@@ -236,8 +244,8 @@ import ./generic.nix (
     '';
 
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.0/${if testing then "testing/" else ""}linux-${version}.tar.bz2";
-      sha256 = "1hacfmf08ydzf4xlg6wkkckl5icj7w9h3nh17myz1s67bp7q61qs";
+      url = "mirror://kernel/linux/kernel/v3.0/${if testing then "testing/" else ""}linux-${version}.tar.xz";
+      sha256 = "0wkfg57xkpnmlcp8g1xkj8jf0x66s3acs9w8snfndcxbw225hqz1";
     };
 
     config = configWithPlatform stdenv.platform;

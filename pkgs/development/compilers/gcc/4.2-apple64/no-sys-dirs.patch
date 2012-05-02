@@ -1,17 +1,3 @@
-diff -ruN gcc-4.1.0/gcc/cppdefault.c gcc-4.1.0.new/gcc/cppdefault.c
---- gcc-4.1.0/gcc/cppdefault.c	2005-06-25 04:02:01.000000000 +0200
-+++ gcc-4.1.0.new/gcc/cppdefault.c	2006-03-01 18:48:58.000000000 +0100
-@@ -41,6 +41,10 @@
- # undef CROSS_INCLUDE_DIR
- #endif
- 
-+#undef LOCAL_INCLUDE_DIR
-+#undef SYSTEM_INCLUDE_DIR
-+#undef STANDARD_INCLUDE_DIR
-+
- const struct default_include cpp_include_defaults[]
- #ifdef INCLUDE_DEFAULTS
- = INCLUDE_DEFAULTS;
 diff -ruN gcc-4.1.0/gcc/Makefile.in gcc-4.1.0.new/gcc/Makefile.in
 --- gcc-4.1.0/gcc/Makefile.in	2006-02-16 16:23:24.000000000 +0100
 +++ gcc-4.1.0.new/gcc/Makefile.in	2006-03-01 18:55:12.000000000 +0100
@@ -55,20 +41,7 @@ diff -ruN gcc-4.1.0/gcc/Makefile.in gcc-4.1.0.new/gcc/Makefile.in
    -DCROSS_INCLUDE_DIR=\"$(CROSS_SYSTEM_HEADER_DIR)\" \
    -DTOOL_INCLUDE_DIR=\"$(gcc_tooldir)/include\" \
    @TARGET_SYSTEM_ROOT_DEFINE@
-diff -ruN gcc-4.1.0/libstdc++-v3/include/Makefile.in gcc-4.1.0.new/libstdc++-v3/include/Makefile.in
---- gcc-4.1.0/libstdc++-v3/include/Makefile.in	2006-01-10 18:14:00.000000000 +0100
-+++ gcc-4.1.0.new/libstdc++-v3/include/Makefile.in	2006-03-01 18:57:32.000000000 +0100
-@@ -1257,8 +1257,8 @@
- 	if [ ! -d "${pch_output_builddir}" ]; then \
- 	  mkdir -p ${pch_output_builddir}; \
- 	fi; \
--	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O0 -g -o ${pch_output_builddir}/O0g.gch; \
--	$(CXX) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O2 -g -o ${pch_output_builddir}/O2g.gch;
-+	$(CXX) $(CFLAGS) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O0 -g -o ${pch_output_builddir}/O0g.gch; \
-+	$(CXX) $(CFLAGS) $(PCHFLAGS) $(AM_CPPFLAGS) ${pch_source} -O2 -g -o ${pch_output_builddir}/O2g.gch;
- 
- # For robustness sake (in light of junk files or in-source
- # configuration), copy from the build or source tree to the install
+
 diff -ruN gcc-4.1.0/ltcf-cxx.sh gcc-4.1.0.new/ltcf-cxx.sh
 --- gcc-4.1.0/ltcf-cxx.sh	2005-07-16 04:30:53.000000000 +0200
 +++ gcc-4.1.0.new/ltcf-cxx.sh	2006-03-01 18:58:15.000000000 +0100

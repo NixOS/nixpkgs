@@ -28,7 +28,7 @@ import ../generic rec {
         import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
       else
         pkgs.binutils;
-    gcc = if stdenv.isDarwin then pkgs.gccApple.gcc else pkgs.gcc.gcc;
+    gcc = pkgs.gcc.gcc;
     coreutils = pkgs.coreutils;
     shell = pkgs.bash + "/bin/sh";
   };

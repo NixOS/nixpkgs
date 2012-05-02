@@ -1,13 +1,13 @@
-{stdenv, fetchurl, makeWrapper, perl, pkgconfig, webkit_gtk2, gtk, libX11, libsoup,
-glib_networking}:
+{ stdenv, fetchurl, makeWrapper, glib_networking, gtk, libsoup, libX11, perl,
+  pkgconfig, webkit }:
 
 stdenv.mkDerivation {
-  name = "vimprobable2-0.9.12.0";
+  name = "vimprobable2-1.0.0";
   src = fetchurl {
-    url = "mirror://sourceforge/vimprobable/vimprobable2_0.9.12.0.tar.bz2";
-    sha256 = "1b6xs6rd4rxy9kdsva13bbx7pd2gy159ad8ncd4pplsqr46hw8fb";
+    url = "mirror://sourceforge/vimprobable/vimprobable2_1.0.0.tar.bz2";
+    sha256 = "1jlx8ssgk42vg1d70n0aa86lr5zixdkkagmcxjc4c7pjvh8vq3gn";
   };
-  buildInputs = [ makeWrapper perl pkgconfig libX11 libsoup webkit_gtk2 gtk ];
+  buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit ];
   installPhase = ''
     make PREFIX=/ DESTDIR=$out install
     wrapProgram "$out/bin/vimprobable2" --prefix GIO_EXTRA_MODULES : \
@@ -28,8 +28,8 @@ stdenv.mkDerivation {
       being completely featureless. 
     '';
     homepage = "http://sourceforge.net/apps/trac/vimprobable";
-    license = "MIT";
-    maintainers = ["Alexander Foremny <alexanderforemny@googlemail.com>"];
+    license = stdenv.lib.licenses.mit;
+    maintainers = [ stdenv.lib.maintainers.aforemny ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

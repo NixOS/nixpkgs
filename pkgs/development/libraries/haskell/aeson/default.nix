@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "aeson";
-  version = "0.6.0.0";
-  sha256 = "1j8g1q7xr1pgyfyrkbh2zz7fhqshj0q5qg7fczrnsbbzf5k459zw";
+  version = "0.6.0.2";
+  sha256 = "04vyjpp3zi2g65rrkq4x4bddw0nfclniq5hhfq7l3jhybd8jxy51";
   buildDepends = [
     attoparsec blazeBuilder deepseq dlist hashable mtl syb text time
     unorderedContainers vector

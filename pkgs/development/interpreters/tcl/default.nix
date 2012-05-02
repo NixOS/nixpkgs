@@ -19,4 +19,8 @@ stdenv.mkDerivation {
     description = "The Tcl scription language";
     homepage = http://www.tcl.tk/;
   };
+  
+  passthru = {
+    libdir = "lib/tcl8.5";
+  };
 }

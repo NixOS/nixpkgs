@@ -40,9 +40,11 @@ stdenv.mkDerivation ({
         then [ "--with-parted" ]
         else [ "--without-parted" ]);
 
+  # Use `preConfigure' only for `autoreconf', so that users know they can
+  # simply clear it when the autoconf phase is unneeded.
   preConfigure = "autoreconf -vfi";
 
-  patchPhase =
+  postConfigure =
     '' echo "removing \`-o root' from makefiles..."
        for mf in {utils,daemons}/Makefile
        do
@@ -50,8 +52,7 @@ stdenv.mkDerivation ({
        done
     '';
 
-  buildPhase = "make ${buildTarget}";
-  installPhase = "make ${installTarget}";
+  crossAttrs.dontPatchShebangs = true;
 
   meta = {
     description = "The GNU Hurd, GNU project's replacement for the Unix kernel";
@@ -71,6 +72,17 @@ stdenv.mkDerivation ({
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+(if !headersOnly && buildTarget != null
+ then assert installTarget != null; {
+   # Use the default `buildPhase' and `installPhase' so that the usual hooks
+   # can still be used.
+   buildFlags = buildTarget;
+   installTargets = installTarget;
+ }
+ else {})
 
 //
 

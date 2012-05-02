@@ -24,4 +24,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp test/fntests.log $out/share/octave/${name}-fntests.log
   '';
+
+  meta = {
+    homepage = http://octave.org/;
+    license = "GPLv3+";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
+  };
 }

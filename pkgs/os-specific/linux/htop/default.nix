@@ -1,21 +1,19 @@
-{fetchurl, stdenv, ncurses}:
+{ fetchurl, stdenv, ncurses }:
 
-let
-  name = "htop-1.0";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "htop-1.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/htop/${name}.tar.gz";
-    sha256 = "242879b86db4b97e1090e7cd391247268ccbe90834ff34b6e8242926c9664852";
+    sha256 = "1wh62mb102nxd5h3pnzakdf0lcyapv1yq44ndcc9wpw30az2rnq7";
   };
 
-  buildInputs = [ncurses];
+  buildInputs = [ ncurses ];
 
   meta = {
     description = "An interactive process viewer for Linux";
     homepage = "http://htop.sourceforge.net";
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.rob ];
   };
 }

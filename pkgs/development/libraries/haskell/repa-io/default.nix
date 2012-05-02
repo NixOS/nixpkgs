@@ -1,10 +1,10 @@
-{ cabal, binary, bmp, repa, repaBytestring, vector }:
+{ cabal, binary, bmp, repa, vector }:
 
 cabal.mkDerivation (self: {
   pname = "repa-io";
-  version = "2.2.0.1";
-  sha256 = "1akp6xkfvbc7jmnzlrz4y5fncqrv9d06y981dndcv6lgxz4hv4j1";
-  buildDepends = [ binary bmp repa repaBytestring vector ];
+  version = "3.1.3.1";
+  sha256 = "1ah5zqg3699p98820gs39xh1xipqdknlgkwxrdqsblnm33y1bqnb";
+  buildDepends = [ binary bmp repa vector ];
   meta = {
     homepage = "http://repa.ouroborus.net";
     description = "Read and write Repa arrays in various formats";

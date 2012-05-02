@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "MonadCatchIO-transformers";
-  version = "0.2.2.3";
-  sha256 = "1qwy9rrmf3kl7rb7v46n81xmrwy4xl63lfnlsiz1qc0hybjkl7m6";
+  version = "0.3.0.0";
+  sha256 = "0v7k6npfr1x9s4bk409y6sc1vhzs5pm4mwpky356z7kdvz2z274c";
   buildDepends = [ extensibleExceptions transformers ];
   meta = {
     description = "Monad-transformer compatible version of the Control.Exception module";

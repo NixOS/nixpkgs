@@ -1,7 +1,7 @@
 { callPackage, callPackageOrig, stdenv, qt48 }:
 
 let
-  release = "4.8.1";
+  release = "4.8.2";
 
   # Need callPackageOrig to avoid infinite cycle
   kde = callPackageOrig ./kde-package {
@@ -10,6 +10,8 @@ let
 
   # The list of igored individual modules
   ignoreList = {
+    # Doesn't work yet
+    kdeutils = [ "ksecrets" ];
     # kdeadmin/strigi-analyzer has no real code
     kdeadmin = [ "strigi-analyzer" ];
     # kdesdk/kioslave is splitted into kioslave-svn and kioslave-git

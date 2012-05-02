@@ -30,6 +30,7 @@ rec {
     setTypes "cpu-type" {
       arm =      { bits = 32; significantByte = littleEndian; };
       armv5tel = { bits = 32; significantByte = littleEndian; };
+      armv7l   = { bits = 32; significantByte = littleEndian; };
       i686 =     { bits = 32; significantByte = littleEndian; };
       powerpc =  { bits = 32; significantByte = bigEndian; };
       x86_64 =   { bits = 64; significantByte = littleEndian; };

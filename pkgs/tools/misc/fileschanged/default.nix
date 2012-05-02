@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ fam ];
 
+  patches = [./unused-variables.debian.patch];
+
   doCheck = true;
 
   meta = {

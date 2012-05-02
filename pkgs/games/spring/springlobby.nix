@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
 
   name = "springlobby-${version}";
-  version = "0.141";
+  version = "0.146";
 
   src = fetchurl {
     url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "37cf3aa1ed78a0ded782cc5c692301619dbb2cf4749bccbf059c51707daaf734";
+    sha256 = "55899baf6732e48bfaa36d80974aa135c051d2cbb6fe92fbcffd80440639eedf";
   };
 
   buildInputs = [ cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost];

@@ -8,6 +8,10 @@ cabal.mkDerivation (self: {
   buildDepends = [
     extensibleExceptions filepath mtl terminfo utf8String
   ];
+  configureFlags = "-fterminfo";
+  patchPhase = ''
+    sed -i -e "s|mtl >= 1.1 && < 2.1|mtl|" haskeline.cabal
+  '';
   meta = {
     homepage = "http://trac.haskell.org/haskeline";
     description = "A command-line interface for user input, written in Haskell";

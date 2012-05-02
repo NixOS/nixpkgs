@@ -1,0 +1,28 @@
+diff -ur numpy-1.6.1-orig/numpy/distutils/system_info.py numpy-1.6.1/numpy/distutils/system_info.py
+--- numpy-1.6.1-orig/numpy/distutils/system_info.py	2011-07-01 17:31:13.000000000 -0400
++++ numpy-1.6.1/numpy/distutils/system_info.py	2012-04-27 14:10:38.000000000 -0400
+@@ -189,18 +189,12 @@
+     default_x11_lib_dirs = []
+     default_x11_include_dirs = []
+ else:
+-    default_lib_dirs = libpaths(['/usr/local/lib','/opt/lib','/usr/lib',
+-                                 '/opt/local/lib','/sw/lib'], platform_bits)
+-    default_include_dirs = ['/usr/local/include',
+-                            '/opt/include', '/usr/include',
+-                            '/opt/local/include', '/sw/include',
+-                            '/usr/include/suitesparse']
+-    default_src_dirs = ['.','/usr/local/src', '/opt/src','/sw/src']
+-
+-    default_x11_lib_dirs = libpaths(['/usr/X11R6/lib','/usr/X11/lib',
+-                                     '/usr/lib'], platform_bits)
+-    default_x11_include_dirs = ['/usr/X11R6/include','/usr/X11/include',
+-                                '/usr/include']
++    default_lib_dirs = []
++    default_include_dirs = []
++    default_src_dirs = ['.']
++
++    default_x11_lib_dirs = []
++    default_x11_include_dirs = []
+ 
+ if os.path.join(sys.prefix, 'lib') not in default_lib_dirs:
+     default_lib_dirs.insert(0,os.path.join(sys.prefix, 'lib'))

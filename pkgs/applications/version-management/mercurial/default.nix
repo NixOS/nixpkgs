@@ -2,20 +2,22 @@
 , guiSupport ? false, tk ? null, curses }:
 
 let
-  name = "mercurial-2.0.2";
+  name = "mercurial-2.1.2";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "http://mercurial.selenic.com/release/${name}.tar.gz";
-    sha256 = "ca8b8fb93f2e3e8c3cdf2f81d87e92592f5f20c5bfcaaeb6a75550d4a69572c9";
+    sha256 = "11lqjnbal667rkbafby9qvb7hyxfycyc7h3hw04p4s4mw64lhkci";
   };
 
   inherit python; # pass it so that the same version can be used in hg2git
   pythonPackages = [ curses ];
 
   buildInputs = [ python makeWrapper docutils unzip ];
+
+  PYTHONPATH = "${python}/lib/python2.6/site-packages:${python}/lib/python2.7/site-packages:${docutils}/lib/python2.5/site-packages:${docutils}/lib/python2.6/site-packages:${docutils}/lib/python2.7/site-packages";
 
   makeFlags = "PREFIX=$(out)";
 

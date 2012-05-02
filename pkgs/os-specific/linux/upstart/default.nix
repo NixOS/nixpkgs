@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, dbus, libnih }:
 
-let version = "1.4"; in
+let version = "1.5"; in
 
 stdenv.mkDerivation rec {
   name = "upstart-${version}";
   
   src = fetchurl {
     url = "http://upstart.ubuntu.com/download/${version}/${name}.tar.gz";
-    md5 = "3aa9ddf8459b56547a6238aa77c61815";
+    md5 = "870920a75f8c13f3a3af4c35916805ac";
   };
 
   buildInputs = [ pkgconfig dbus libnih ];

@@ -12,6 +12,15 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-xz" "--with-zlib" ];
 
+  patches = [ ./module-dir.patch ];
+
+  postInstall = ''
+    for prog in lsmod rmmod insmod modinfo modprobe depmod
+    do
+      ln -sv kmod $out/bin/$prog
+    done
+  '';
+
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/kernel/kmod/;
     description = "Tools for loading and managing Linux kernel modules";

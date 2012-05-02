@@ -40,8 +40,6 @@ with (import ./release-lib.nix);
   bitlbee = linux;
   bittorrent = linux;
   blender = linux;
-  boost = all;
-  boostFull = all;
   bsdiff = all;
   btrfsProgs = linux;
   bvi = all;
@@ -364,6 +362,7 @@ with (import ./release-lib.nix);
   firefox36Pkgs.firefox = linux;
   firefox10Pkgs.firefox = linux;
   firefox11Pkgs.firefox = linux;
+  firefox12Pkgs.firefox = linux;
 
   gnome = {
     gnome_panel = linux;

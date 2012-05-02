@@ -3,92 +3,104 @@
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba_light
 , gccCrossStageStatic, gccCrossStageFinal
-, forceBuildDrv, forceSystem, callPackage, platform, config, crossSystem }:
+, forceBuildDrv, forceSystem, newScope, platform, config, crossSystem
+, overrides ? {} }:
 
 with args;
 
-rec {
-  hurdCross = forceBuildDrv(import ./hurd {
-    inherit fetchgit stdenv autoconf libtool texinfo machHeaders
-      mig glibcCross hurdPartedCross;
-    libuuid = libuuid.hostDrv;
-    automake = automake111x;
-    headersOnly = false;
-    cross = assert crossSystem != null; crossSystem;
-    gccCross = gccCrossStageFinal;
-  });
+let
+  callPackage = newScope gnu;
 
-  hurdCrossIntermediate = forceBuildDrv(import ./hurd {
-    inherit fetchgit stdenv autoconf libtool texinfo machHeaders
-      mig glibcCross;
-    automake = automake111x;
-    headersOnly = false;
-    cross = assert crossSystem != null; crossSystem;
+  gnu = {
+    hurdCross = forceBuildDrv(callPackage ./hurd {
+      inherit fetchgit stdenv autoconf libtool texinfo
+        glibcCross hurdPartedCross;
+      inherit (gnu) machHeaders mig;
+      libuuid = libuuid.hostDrv;
+      automake = automake111x;
+      headersOnly = false;
+      cross = assert crossSystem != null; crossSystem;
+      gccCross = gccCrossStageFinal;
+    });
 
-    # The "final" GCC needs glibc and the Hurd libraries (libpthread in
-    # particular) so we first need an intermediate Hurd built with the
-    # intermediate GCC.
-    gccCross = gccCrossStageStatic;
+    hurdCrossIntermediate = forceBuildDrv(callPackage ./hurd {
+      inherit fetchgit stdenv autoconf libtool texinfo glibcCross;
+      inherit (gnu) machHeaders mig;
+      hurdPartedCross = null;
+      libuuid = null;
+      automake = automake111x;
+      headersOnly = false;
+      cross = assert crossSystem != null; crossSystem;
 
-    # This intermediate Hurd is only needed to build libpthread, which needs
-    # libihash, and to build Parted, which needs libstore and
-    # libshouldbeinlibc.
-    buildTarget = "libihash libstore libshouldbeinlibc";
-    installTarget = "libihash-install libstore-install libshouldbeinlibc-install";
-  });
+      # The "final" GCC needs glibc and the Hurd libraries (libpthread in
+      # particular) so we first need an intermediate Hurd built with the
+      # intermediate GCC.
+      gccCross = gccCrossStageStatic;
 
-  hurdHeaders = callPackage ./hurd {
-    automake = automake111x;
-    headersOnly = true;
-    gccCross = null;
-    glibcCross = null;
-    libuuid = null;
-    hurdPartedCross = null;
-  };
+      # This intermediate Hurd is only needed to build libpthread, which needs
+      # libihash, and to build Parted, which needs libstore and
+      # libshouldbeinlibc.
+      buildTarget = "libihash libstore libshouldbeinlibc";
+      installTarget = "libihash-install libstore-install libshouldbeinlibc-install";
+    });
 
-  libpthreadHeaders = callPackage ./libpthread {
-    headersOnly = true;
-    hurd = null;
-  };
+    hurdHeaders = callPackage ./hurd {
+      automake = automake111x;
+      headersOnly = true;
+      gccCross = null;
+      glibcCross = null;
+      libuuid = null;
+      hurdPartedCross = null;
+    };
 
-  libpthreadCross = forceBuildDrv(import ./libpthread {
-    inherit fetchgit stdenv autoconf automake libtool
-      machHeaders hurdHeaders glibcCross;
-    hurd = hurdCrossIntermediate;
-    gccCross = gccCrossStageStatic;
-    cross = assert crossSystem != null; crossSystem;
-  });
+    libpthreadHeaders = callPackage ./libpthread {
+      headersOnly = true;
+      hurd = null;
+    };
 
-  # In theory GNU Mach doesn't have to be cross-compiled.  However, since it
-  # has to be built for i586 (it doesn't work on x86_64), one needs a cross
-  # compiler for that host.
-  mach = callPackage ./mach {
-    automake = automake111x;
-  };
+    libpthreadCross = forceBuildDrv(callPackage ./libpthread {
+      inherit fetchgit stdenv autoconf automake libtool glibcCross;
+      inherit (gnu) machHeaders hurdHeaders;
+      hurd = gnu.hurdCrossIntermediate;
+      gccCross = gccCrossStageStatic;
+      cross = assert crossSystem != null; crossSystem;
+    });
 
-  machHeaders = callPackage ./mach {
-    automake = automake111x;
-    headersOnly = true;
-    mig = null;
-  };
+    # In theory GNU Mach doesn't have to be cross-compiled.  However, since it
+    # has to be built for i586 (it doesn't work on x86_64), one needs a cross
+    # compiler for that host.
+    mach = callPackage ./mach {
+      automake = automake111x;
+    };
 
-  mig = callPackage ./mig {
-    # Build natively, but force use of a 32-bit environment because we're
-    # targeting `i586-pc-gnu'.
-    stdenv = (forceSystem "i686-linux").stdenv;
-  };
+    machHeaders = callPackage ./mach {
+      automake = automake111x;
+      headersOnly = true;
+      mig = null;
+    };
 
-  # XXX: Use this one for its `.hostDrv'.  Using the one above from
-  # `x86_64-linux' leads to building a different cross-toolchain because of
-  # the `forceSystem'.
-  mig_raw = callPackage ./mig {};
+    mig = callPackage ./mig {
+      # Build natively, but force use of a 32-bit environment because we're
+      # targeting `i586-pc-gnu'.
+      stdenv = (forceSystem "i686-linux").stdenv;
+    };
 
-  smbfs = callPackage ./smbfs {
-    samba = samba_light;
-    hurd = hurdCross;
-  };
+    # XXX: Use this one for its `.hostDrv'.  Using the one above from
+    # `x86_64-linux' leads to building a different cross-toolchain because of
+    # the `forceSystem'.
+    mig_raw = callPackage ./mig {};
 
-  unionfs = callPackage ./unionfs {
-    hurd = hurdCross;
-  };
-}
+    smbfs = callPackage ./smbfs {
+      samba = samba_light;
+      hurd = gnu.hurdCross;
+    };
+
+    unionfs = callPackage ./unionfs {
+      hurd = gnu.hurdCross;
+    };
+  }
+
+  # Allow callers to override elements of this attribute set.
+  // overrides;
+
+in gnu # we trust!

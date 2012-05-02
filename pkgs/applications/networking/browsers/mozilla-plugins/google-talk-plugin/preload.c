@@ -25,7 +25,6 @@ const char * rewrite(const char * path, char * buf)
 
 int execvp(const char * path, char * const argv[])
 {
-    fprintf(stderr, "foo %s\n", path);
     int (*_execvp) (const char *, char * const argv[]) = dlsym(RTLD_NEXT, "execvp");
     char buf[PATH_MAX];
     return _execvp(rewrite(path, buf), argv);

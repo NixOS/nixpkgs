@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       url = https://bugs.archlinux.org/task/25356?getfile=7281;
       sha256 = "01xib1pfdbwacgx8dqxgrf67a0mwkpm4kxy9f9v3df93v0m4pmbm";
     })] ++
-    stdenv.lib.optional (stdenv.system == "armv5tel-linux") ./pre-accept4-kernel.patch;
+    stdenv.lib.optional stdenv.isArm ./pre-accept4-kernel.patch;
 
   meta = {
     homepage = http://www.kernel.org/pub/linux/utils/kernel/hotplug/udev.html;

@@ -14,7 +14,9 @@ let
   cross = if gccCross != null then gccCross.target else null;
 in
   build cross ({
-    name = "glibc${if debugSymbols then "-debug" else ""}";
+    name = "glibc"
+      + stdenv.lib.optionalString (hurdHeaders != null) "-hurd"
+      + stdenv.lib.optionalString debugSymbols "-debug";
 
     inherit fetchurl stdenv kernelHeaders installLocales profilingLibraries
       gccCross;

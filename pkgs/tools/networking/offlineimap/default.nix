@@ -1,18 +1,20 @@
 { fetchurl, buildPythonPackage }:
 
-buildPythonPackage {
-  name = "offlineimap-6.2.0.2";
+buildPythonPackage rec {
+  version = "6.5.3";
+  name = "offlineimap-${version}";
 
   src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/o/offlineimap/offlineimap_6.2.0.2.orig.tar.gz";
-    sha256 = "1w69qv1dm37m53k8cd068lk5z3qjlscnjxr397gs8kdsfds67v7c";
+    url = "https://github.com/spaetz/offlineimap/tarball/v${version}";
+    name = "${name}.tar.bz";
+    sha256 = "8717a56e6244b47b908b23b598efb3470d74450ecd881b6d3573d8aec4a5db38";
   };
 
   doCheck = false;
 
   meta = {
-    description = "IMAP to local files bridge";
-    homepage = "http://software.complete.org/software/projects/show/offlineimap";
+    description = "OfflineImap synchronizes emails between two repositories, so that you can read the same mailbox from multiple computers.";
+    homepage = "http://offlineimap.org";
     license = "GPLv2+";
   };
 }

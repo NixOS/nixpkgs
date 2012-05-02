@@ -1,30 +1,16 @@
-{ stdenv, fetchurl, which, pythonPackages }:
+{ stdenv, fetchgit, which, pythonPackages }:
 
-stdenv.mkDerivation rec {
-  name = "euca2ools-1.3.1";
+pythonPackages.buildPythonPackage rec {
+  name = "euca2ools-2.0.0-pre-20111230";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "http://eucalyptussoftware.com/downloads/releases/${name}.tar.gz";
-    sha256 = "1k4hakbxqsv2gzcdrf6dbyrpnajcan9yilddhs47cg7lgqw7b41f";
+  src = fetchgit {
+    url = https://github.com/eucalyptus/euca2ools.git;
+    rev = "0032f7c85603f34b728a6f8bc6f25d7e4892432e";
+    sha256 = "ae3c3918d60411ebf15faefb6dc94e3a98ab73cf751d8180c52f51b19ed64c09";
   };
 
-  makeFlags = "PREFIX=$(out)";
-
-  buildInputs = [ which pythonPackages.python pythonPackages.wrapPython ];
-
-  # We need boto 1.9 for now.  See https://bugs.launchpad.net/euca2ools/devel/+bug/623888
-  pythonPath = [ pythonPackages.setuptools pythonPackages.boto_1_9 pythonPackages.m2crypto ];
-
-  preBuild =
-    ''
-      substituteInPlace Makefile --replace "-o root" ""
-    
-      substituteInPlace euca2ools/Makefile \
-        --replace 'python setup.py install' "python setup.py install --prefix=$out"
-    '';
-
-  postInstall = "wrapPythonPrograms";
+  pythonPath = [ pythonPackages.boto pythonPackages.m2crypto pythonPackages.ssl ];
 
   meta = {
     homepage = http://open.eucalyptus.com/downloads;

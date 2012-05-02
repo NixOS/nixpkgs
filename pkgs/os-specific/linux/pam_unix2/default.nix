@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "067xnyd3q8ik73glxwyx1lydk4bgl78lzq44mnqqp4jrpnpd04ml";
   };
 
-  buildInputs = [ pam ] ++ stdenv.lib.optional (stdenv.system != "armv5tel-linux") libxcrypt;
+  buildInputs = [ pam ] ++ stdenv.lib.optional (!stdenv.isArm) libxcrypt;
 
   meta = {
     homepage = ftp://ftp.suse.com/pub/people/kukuk/pam/pam_unix2;

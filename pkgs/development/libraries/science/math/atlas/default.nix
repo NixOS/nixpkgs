@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gfortran, tolerateCpuTimingInaccuracy ? true }:
+{ stdenv, fetchurl, gfortran, tolerateCpuTimingInaccuracy ? true, shared ? false }:
 
 let
   optionalString = stdenv.lib.optionalString;
@@ -15,17 +15,27 @@ stdenv.mkDerivation {
   # Configure outside of the source directory.
   preConfigure = '' mkdir build; cd build; configureScript=../configure; '';
 
-  # * The manual says you should pass -fPIC as configure arg. Not sure why, but
-  #   it works.
+  # * -fPIC allows to build atlas inside shared objects, as octave does.
   #
   # * Atlas aborts the build if it detects that some kind of CPU frequency
   #   scaling is active on the build machine because that feature offsets the
   #   performance timings. We ignore that check, however, because with binaries
   #   being pre-built on Hydra those timings aren't accurate for the local
   #   machine in the first place.
-  configureFlags = "-Fa alg -fPIC"
-    + optionalString stdenv.isi686 " -b 32"
-    + optionalString tolerateCpuTimingInaccuracy " -Si cputhrchk 0";
+  # * Atlas detects the cpu and does some tricks. For example, notices the
+  #   hydra AMD Family 10h computer, and uses a SSE trick for it (bit 17 of MXCSR)
+  #   available, for what I know, only in that family. So we hardcode K7
+  #     -A 31 = Athlon K7
+  #     -A 18 = Pentium II
+  #     -V 192 = SSE1|SSE2 (Or it takes SSE3 somehow in my machine without SSE3)
+  #     -V 1 = No SIMD (Pentium II does not have any SSE)
+  #     -t 0 = No threading
+  configureFlags = "-Fa alg -fPIC -t 0"
+    + optionalString stdenv.isi686 " -b 32 -A 18 -V 1"
+    + optionalString stdenv.isx86_64 " -A 31 -V 192"
+    + optionalString tolerateCpuTimingInaccuracy " -Si cputhrchk 0"
+    + optionalString shared " --shared "
+    ;
 
   buildInputs = [ gfortran ];
 

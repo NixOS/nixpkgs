@@ -2,13 +2,13 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-css";
-  version = "0.10.8";
-  sha256 = "1c3a48rfrr5ifarr15zkcwg74zkqw08lhfk5fpkr5z6gxhwnbkas";
+  version = "1.0.1.1";
+  sha256 = "1janifi0sqdvxwq8ywk6g1y9r8qgy2jvizlm0drp09lnw1dlss25";
   buildDepends = [ parsec shakespeare text ];
   meta = {
-    homepage = "http://www.yesodweb.com/book/templates";
+    homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "Stick your haskell variables into css at compile time";
-    license = self.stdenv.lib.licenses.bsd3;
+    license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };

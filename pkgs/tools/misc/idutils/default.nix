@@ -1,11 +1,11 @@
 { fetchurl, stdenv, emacs }:
 
 stdenv.mkDerivation rec {
-  name = "idutils-4.5";
-  
+  name = "idutils-4.6";
+
   src = fetchurl {
-    url = "mirror://gnu/idutils/${name}.tar.gz";
-    sha256 = "0j92k2dwg381kx2z556v9162l16mfra3xqbfcjrkdd2fw5jsgn2q";
+    url = "mirror://gnu/idutils/${name}.tar.xz";
+    sha256 = "1hmai3422iaqnp34kkzxdnywl7n7pvlxp11vrw66ybxn9wxg90c1";
   };
 
   buildInputs = stdenv.lib.optional stdenv.isLinux emacs;

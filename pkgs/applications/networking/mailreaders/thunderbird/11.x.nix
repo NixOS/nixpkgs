@@ -12,7 +12,7 @@
 
 }:
 
-let version = "11.0";
+let version = "11.0.1";
 
     # This patch may become necessary when we use a more recent version of libpng
     # for now, it's actually not needed
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha256 = "0lrp7ngi3ni70m9v11f0l8xvp3s8sc50isxbgy8vj677fzb1qn2s";
+    sha1 = "037344b451b1c031472d92f96d401b15d8e3e7d3";
   };
 
   enableParallelBuilding = true;

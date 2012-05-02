@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libtasn1, libgcrypt, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "shishi-1.0.0";
+  name = "shishi-1.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/shishi/${name}.tar.gz";
-    sha256 = "1j8jbfsdpwqqfv7938gy4b6kvdai3l2nk8267sv18rbp95k9j7ig";
+    sha256 = "13c6w9rpaqb3am65nrn86byvmll5r78pld2vb0i68491vww4fzlx";
   };
 
   buildInputs = [ libtasn1 libgcrypt gnutls ] ;

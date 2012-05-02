@@ -4,21 +4,15 @@
   }:
 
 stdenv.mkDerivation rec {
-  version = "1.3.13";
+  version = "2.0.0";
   name = "audacity-${version}";
 
-  NIX_CFLAGS_COMPILE = "-fPIC -lgtk-x11-2.0 -lglib-2.0 -lgobject-2.0 -lz";
-
   src = fetchurl {
-    url = "mirror://sourceforge/audacity/audacity-minsrc-${version}-beta.tar.bz2";
-    sha256 = "4c2eda638e16e16dfddd202e86ccbe1d170b04c26cfb2c12ffcba0b79e7e1e83";
+    url = "http://audacity.googlecode.com/files/audacity-minsrc-${version}.tar.bz2";
+    sha256 = "0spbib3f86b4qri0g13idyxvysg28hkpsglmjza681zrln62hjfq";
   };
-  buildInputs = [ wxGTK pkgconfig gettext gtk glib zlib intltool perl 
-    libogg libvorbis libmad alsaLib libsndfile libsamplerate flac lame
-    expat id3lib ffmpeg portaudio];
-
-  configureFlags = [
-  ];
+  buildInputs = [ pkgconfig wxGTK libsndfile expat alsaLib libsamplerate
+                  libvorbis libmad flac id3lib ffmpeg gettext ];
 
   dontDisableStatic = true;
 

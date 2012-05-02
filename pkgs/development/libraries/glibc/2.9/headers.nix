@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     "--disable-sanity-checks"
     "--enable-hacker-mode"
     (if profilingLibraries then "--enable-profile" else "--disable-profile")
-  ] ++ (if (stdenv.system == "armv5tel-linux") then [
+  ] ++ (if stdenv.isArm then [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"

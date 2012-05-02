@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "test-framework-quickcheck";
-  version = "0.2.8";
-  sha256 = "0ca6s7dnrdr9s2gdpfb74lswlj2lj091crk89m3yqjcadchkh3vl";
+  version = "0.2.8.1";
+  sha256 = "042vdq18mqw4rhsj3x51mz1iv9zbxvlz7jg6r9cni2xpw5m7v6dk";
   buildDepends = [
     deepseq extensibleExceptions QuickCheck random testFramework
   ];

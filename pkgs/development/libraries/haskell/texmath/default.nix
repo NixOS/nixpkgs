@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "texmath";
-  version = "0.6.0.3";
-  sha256 = "0vj1kh62qs7badv00lcda9m3j53kc069kmrv5lmz62a96y4kx5yi";
+  version = "0.6.0.5";
+  sha256 = "08zryp5y2llhzwbp93wbm37c1lykqgrbq8h23bv39ql8idpym0wq";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ parsec syb xml ];

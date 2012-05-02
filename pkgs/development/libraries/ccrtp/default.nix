@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, pkgconfig, libgcrypt, ucommon }:
 
 stdenv.mkDerivation {
-  name = "ccrtp-2.0.2";
+  name = "ccrtp-2.0.3";
 
   src = fetchurl {
-    url = mirror://gnu/ccrtp/ccrtp-2.0.2.tar.gz;
-    sha256 = "1n42nscqwryz9f0jpg8lnv22x9m8mzr6rqir9cvbgm1r2skwjh4f";
+    url = mirror://gnu/ccrtp/ccrtp-2.0.3.tar.gz;
+    sha256 = "1p4zzqn02zvnyjy84khiq8v65pl422fb6ni946h9sxh4yw2lgn01";
   };
 
   buildInputs = [ openssl pkgconfig libgcrypt ucommon ];

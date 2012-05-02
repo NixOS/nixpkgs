@@ -14,9 +14,9 @@ stdenv.mkDerivation (rec {
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk"];
   buildFlags = "world" +
-    (if (stdenv.system != "armv5tel-linux") then "bootstrap world.opt" else "");
+    (if !stdenv.isArm then "bootstrap world.opt" else "");
   buildInputs = [ncurses];
-  installTargets = "install" + (if (stdenv.system != "armv5tel-linux") then "installopt" else ""); 
+  installTargets = "install" + (if !stdenv.isArm then "installopt" else "");
   patchPhase = ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang

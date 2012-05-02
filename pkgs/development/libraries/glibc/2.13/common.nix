@@ -16,7 +16,8 @@ let
 
   needsPortsNative = stdenv.isMips || stdenv.isArm;
   needsPortsCross = cross.arch == "mips" || cross.arch == "arm";
-  needsPorts = if (stdenv ? cross) && stdenv.cross != null then true
+  needsPorts =
+    if (stdenv ? cross) && stdenv.cross != null && hurdHeaders == null then true
     else if cross == null then needsPortsNative
     else needsPortsCross;
 
@@ -108,7 +109,7 @@ stdenv.mkDerivation ({
     (if cross.float == "soft" then "--without-fp" else "--with-fp")
     "--enable-kernel=2.6.0"
     "--with-__thread"
-  ] ++ stdenv.lib.optionals (stdenv.system == "armv5tel-linux") [
+  ] ++ stdenv.lib.optionals stdenv.isArm [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"
@@ -184,7 +185,8 @@ stdenv.mkDerivation ({
 
   meta = {
     homepage = http://www.gnu.org/software/libc/;
-    description = "The GNU C Library";
+    description = "The GNU C Library"
+      + stdenv.lib.optionalString (hurdHeaders != null) ", for GNU/Hurd";
 
     longDescription =
       '' Any Unix-like operating system needs a C library: the library which

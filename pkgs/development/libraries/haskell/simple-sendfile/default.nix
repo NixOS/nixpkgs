@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "simple-sendfile";
-  version = "0.2.1";
-  sha256 = "0mbnqdy7g9jp2d6x9mcrz315b4xhp92as28bxygf7jhc0aai66aq";
+  version = "0.2.3";
+  sha256 = "1i3jx90kwq504fdl2qbhz25psjvq9ldvwgx5cij82ajjqi61pfrv";
   buildDepends = [ network ];
   meta = {
     description = "Cross platform library for the sendfile system call";

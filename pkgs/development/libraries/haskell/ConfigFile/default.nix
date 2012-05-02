@@ -7,7 +7,6 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ MissingH mtl parsec ];
-  noHaddock = true;
   meta = {
     homepage = "http://software.complete.org/configfile";
     description = "Configuration file reading & writing";

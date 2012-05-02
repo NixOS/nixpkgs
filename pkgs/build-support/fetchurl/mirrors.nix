@@ -36,6 +36,7 @@ rec {
     ftp://mirror.cict.fr/gnu/
     ftp://ftp.cs.tu-berlin.de/pub/gnu/
     ftp://ftp.chg.ru/pub/gnu/
+    ftp://ftp.funet.fi/pub/mirrors/ftp.gnu.org/gnu/
   ];
 
   # GCC.
@@ -96,11 +97,10 @@ rec {
   # kernel.org's /pub (/pub/{linux,software}) tree.
   kernel = [
     http://www.all.kernel.org/pub/
-    http://www.eu.kernel.org/pub/
-    http://www.de.kernel.org/pub/
     http://ramses.wh2.tu-dresden.de/pub/mirrors/kernel.org/
     http://linux-kernel.uio.no/pub/
     http://kernel.osuosl.org/pub/
+    ftp://ftp.funet.fi/pub/mirrors/ftp.kernel.org/pub/
   ];
 
   # Mirrors of ftp://ftp.kde.org/pub/kde/.
@@ -109,6 +109,7 @@ rec {
     http://ftp.gwdg.de/pub/x11/kde/
     ftp://ftp.heanet.ie/mirrors/ftp.kde.org/
     ftp://ftp.kde.org/pub/kde/
+    ftp://ftp.funet.fi/pub/mirrors/ftp.kde.org/pub/kde/
   ];
 
   # Gentoo files.
@@ -168,6 +169,7 @@ rec {
     ftp://ftp.ru.debian.org/debian/
     ftp://ftp.debian.org/debian/
     http://archive.debian.org/debian-archive/debian/
+    ftp://ftp.funet.fi/pub/mirrors/ftp.debian.org/debian/
   ];
 
   # Ubuntu.
@@ -242,6 +244,7 @@ rec {
     http://mirror.cc.columbia.edu/pub/software/apache/
     http://www.apache.org/dist/
     http://archive.apache.org/dist/ # fallback for old releases
+    ftp://ftp.funet.fi/pub/mirrors/apache.org/
   ];
 
   postgresql = [

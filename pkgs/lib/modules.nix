@@ -41,29 +41,31 @@ rec {
   # attributes.
   unifyModuleSyntax = m:
     let
-      getImports = m:
+      delayedModule = delayProperties m;
+      getImports =
         if m ? config || m ? options then
           attrByPath ["imports"] [] m
         else
-          toList (rmProperties (attrByPath ["require"] [] (delayProperties m)));
+          toList (rmProperties (attrByPath ["require"] [] delayedModule));
 
-      getImportedPaths = m: filter isPath (getImports m);
-      getImportedSets = m: filter (x: !isPath x) (getImports m);
+      getImportedPaths = filter isPath getImports;
+      getImportedSets = filter (x: !isPath x) getImports;
 
-      getConfig = m:
-        removeAttrs (delayProperties m) ["require" "key"];
+      getConfig =
+        removeAttrs delayedModule ["require" "key"];
+
     in
       if isModule m then
         { key = "<unknown location>"; } // m
       else
         {
           key = "<unknown location>";
-          imports = getImportedPaths m;
-          config = getConfig m;
+          imports = getImportedPaths;
+          config = getConfig;
         } // (
-          if getImportedSets m != [] then
-            assert tail (getImportedSets m) == [];
-            { options = head (getImportedSets m); }
+          if getImportedSets != [] then
+            assert tail getImportedSets == [];
+            { options = head getImportedSets; }
           else
             {}
         );
@@ -124,9 +126,25 @@ rec {
         value
     ) module;
 
+  # Handle mkMerge function left behind after a delay property.
+  moduleFlattenMerge = module:
+    if module ? config &&
+       isProperty module.config &&
+       isMerge module.config.property
+    then
+      (map (cfg: { key = module.key; config = cfg; }) module.config.content)
+      ++ [ (module // { config = {}; }) ]
+    else
+      [ module ];
 
+  # Handle mkMerge attributes which are left behind by previous delay
+  # properties and convert them into a list of modules. Delay properties
+  # inside the config attribute of a module and create a second module if a
+  # mkMerge attribute was left behind.
+  #
+  # Module -> [ Module ]
   delayModule = module:
-    moduleApply { config = delayProperties; } module;
+    map (moduleApply { config = delayProperties; }) (moduleFlattenMerge module);
 
   evalDefinitions = opt: values:
     if opt ? type && opt.type.delayOnGlobalEval then
@@ -170,7 +188,7 @@ rec {
       addName = name:
         if path == "" then name else path + "." + name;
 
-      modules = map delayModule modules_;
+      modules = concatLists (map delayModule modules_);
 
       modulesOf = name: filterModules name modules;
       declarationsOf = name: filter (m: m ? options) (modulesOf name);

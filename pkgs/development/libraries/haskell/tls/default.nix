@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tls";
-  version = "0.9.1";
-  sha256 = "0724xwk3mchb2hd6sq4zhrs7pyd18banr0ndxc6bhim75vci53sl";
+  version = "0.9.5";
+  sha256 = "1nbfimyxi546n239brhw5lrb7907svvhvy5zgy1f853h17vnli5y";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

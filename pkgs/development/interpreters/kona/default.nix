@@ -14,12 +14,12 @@ rec {
   srcDrv = a.fetchgit {
     url = "https://github.com/kevinlawler/kona.git";
     inherit rev;
-    sha256 = "165ff5f3d1b510a1ad73ec465b4ed1b8ef44d7affa94f952781fea212c72d891";
+    sha256 = "a8189c94fca3e62a740eb6823ab3fc571c0960ff5e7a3eb0353e5cf36ef9fdcb";
   };
 
   src = "${srcDrv}/";
 
-  rev = "fddc2688ef515a653fb6";
+  rev = "81e95b395144f4b02fe8782ad87c1f218b511c43";
   version = "git-${rev}";
   name = "kona-${version}";
   inherit buildInputs;

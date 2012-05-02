@@ -1,8 +1,8 @@
 { stdenv, fetchurl, ncurses, x11 }:
 
 let
-   useX11 = stdenv.system != "armv5tel-linux";
-   useNativeCompilers = stdenv.system != "armv5tel-linux";
+   useX11 = !stdenv.isArm;
+   useNativeCompilers = !stdenv.isArm;
    inherit (stdenv.lib) optionals optionalString;
 in
 

@@ -69,6 +69,7 @@ releaseTools.makeSourceTarball {
     mkdir -p $out/tarballs
     mkdir ../$releaseName
     cp -prd . ../$releaseName
+    echo nixpkgs > ../$releaseName/channel-name
     (cd .. && tar cfa $out/tarballs/$releaseName.tar.bz2 $releaseName) || false
     (cd .. && tar cfa $out/tarballs/$releaseName.tar.lzma $releaseName) || false
 

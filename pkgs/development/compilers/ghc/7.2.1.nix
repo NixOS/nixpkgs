@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ghc, perl, gmp, ncurses, darwinInstallNameToolUtility}:
+{ stdenv, fetchurl, ghc, perl, gmp, ncurses }:
 
 stdenv.mkDerivation rec {
   version = "7.2.1";
@@ -9,8 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "099w2bvx07jq4b1k8f1hspri30wbk35dz6ilsivxr2xg661c2qjm";
   };
 
-  buildInputs = [ghc perl gmp ncurses] ++
-    (if stdenv.isDarwin then [darwinInstallNameToolUtility] else []);
+  buildInputs = [ ghc perl gmp ncurses ];
 
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"

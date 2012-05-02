@@ -10,11 +10,21 @@ stdenv.mkDerivation rec {
     url = "http://ftp.snt.utwente.nl/pub/games/urbanterror/iourbanterror/source/complete/ioUrbanTerrorSource_2007_12_20.zip";
     sha256 = "1s1wq9m7shhvvk7s4400yrmz7dys501i4c9ln1mglc9dhmi8dmcn";
   };
+  buildInputs = [ unzip SDL mesa openal curl ];
   unpackPhase = ''
     mkdir urbanterror
     cd urbanterror
     unzip $src1
     unzip $src2
+  '';
+  patches = [ ./l_script.patch ];
+  patchPhase = ''
+    for d in ioUrbanTerrorClientSource ioUrbanTerrorServerSource
+    do
+      cd "$d"
+      patch -p 0 < "''${patches[0]}"
+      cd ..
+    done
   '';
   configurePhase = ''
     cd ioUrbanTerrorClientSource
@@ -22,9 +32,9 @@ stdenv.mkDerivation rec {
     echo "USE_OPENAL_DLOPEN = 0" >> Makefile.local
     echo "USE_CURL = 1" >> Makefile.local
     echo "USE_CURL_DLOPEN = 0" >> Makefile.local
+    substituteInPlace code/tools/asm/Makefile --replace -Werror ""
     cd ..
   '';
-  buildInputs = [ unzip SDL mesa openal curl ];
   buildPhase = ''
     for d in ioUrbanTerrorClientSource ioUrbanTerrorServerSource
     do

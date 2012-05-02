@@ -4,7 +4,7 @@ let pythonPackages = python.modules // rec {
 
   inherit python;
 
-  inherit (pkgs) fetchurl fetchsvn stdenv;
+  inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
 
 
   buildPythonPackage = import ../development/python-modules/generic {
@@ -30,6 +30,60 @@ let pythonPackages = python.modules // rec {
       substitutions.libPrefix = python.libPrefix;
     }
     ../development/python-modules/generic/wrap.sh;
+
+
+  afew = buildPythonPackage rec {
+    rev = "a3ea63d7048faedb6cc58b4abcb6d4ecfddfb5db";
+    name = "afew-1.0pre${rev}";
+    src = fetchurl {
+      url = "https://github.com/teythoon/afew/tarball/${rev}";
+      name = "${name}.tar.bz";
+      sha256 = "4e8850242a3845602331cabb47299b5a3af21993036a715c83e8dd698ab5d716";
+    };
+
+    propagatedBuildInputs = [ notmuch pkgs.dbacl ];
+
+    doCheck = false;
+
+    postInstall = ''
+      wrapProgram $out/bin/afew \
+        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib
+    '';
+
+    meta = {
+      homepage = https://github.com/teythoon/afew;
+      description = "afew is an initial tagging script for notmuch mail.";
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+
+  alot = buildPythonPackage rec {
+    name = "alot-0.3";
+
+    src = fetchurl {
+      url = "https://github.com/pazz/alot/tarball/0.3";
+      name = "${name}.tar.bz";
+      md5 = "fa4944a1a7e9e380da0ee75ea3571a79";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = [ notmuch urwid twisted magic configobj ];
+
+    postInstall = ''
+      wrapProgram $out/bin/alot \
+        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file511}/lib
+    '';
+
+    meta = {
+      homepage = https://github.com/pazz/alot;
+      description = "Terminal MUA using notmuch mail";
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
+    };
+  };
 
 
   anyjson = buildPythonPackage rec {
@@ -201,6 +255,25 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  bugz = buildPythonPackage (rec {
+    name = "bugz-0.9.3";
+
+    src = fetchgit {
+      url = "git://github.com/williamh/pybugz.git";
+      rev = "refs/tags/0.9.3";
+    };
+
+    propagatedBuildInputs = [ argparse python.modules.ssl ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://www.liquidx.net/pybugz/;
+      description = "Command line interface for Bugzilla";
+    };
+  });
+
+
   carrot = buildPythonPackage rec {
     name = "carrot-0.10.7";
 
@@ -270,6 +343,25 @@ let pythonPackages = python.modules // rec {
       license = "bsd";
 
       description = "Python module for handling HTML forms on the client side";
+    };
+  });
+
+  configobj = buildPythonPackage (rec {
+    name = "configobj-4.7.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/configobj/${name}.tar.gz";
+      md5 = "201dbaa732a9049c839f9bb6c27fc7b5";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Config file reading, writing and validation.";
+      homepage = http://pypi.python.org/pypi/configobj;
+      license = pkgs.lib.licenses.bsd3;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
     };
   });
 
@@ -368,6 +460,41 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  dulwich = buildPythonPackage rec {
+    name = "dulwich-0.8.1";
+
+    src = fetchurl {
+      url = "http://samba.org/~jelmer/dulwich/${name}.tar.gz";
+      sha256 = "1a1619e9c7e63fe9bdc93356ee893be1016b7ea12ad953f4e1f1f5c0c5056ee8";
+    };
+
+    buildPhase = "make build";
+    installCommand = ''
+      python setup.py install --prefix="$out" --root=/ --record="$out/lib/${python.libPrefix}/site-packages/dulwich/list.txt" --single-version-externally-managed
+    '';
+    doCheck = false;
+
+    meta = {
+      description = "Simple Python implementation of the Git file formats and protocols.";
+      homepage = http://samba.org/~jelmer/dulwich/;
+    };
+  };
+
+  hggit = buildPythonPackage rec {
+    name = "hg-git-0.3.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/h/hg-git/${name}.tar.gz";
+      md5 = "4b15867a07abb0be985177581ce64cee";
+    };
+
+    propagatedBuildInputs = [ dulwich ];
+
+    meta = {
+      description = "Push and pull from a Git server using Mercurial.";
+      homepage = http://hg-git.github.com/;
+    };
+  };
 
   docutils = buildPythonPackage rec {
     name = "docutils-0.8.1";
@@ -719,17 +846,20 @@ let pythonPackages = python.modules // rec {
 
 
   magic = pkgs.stdenv.mkDerivation rec {
-    name = "python-${pkgs.file.name}";
+    name = "python-${pkgs.file511.name}";
 
-    src = pkgs.file.src;
+    src = pkgs.file511.src;
 
-    buildInputs = [ python pkgs.file ];
+    patches = [ ../tools/misc/file/python.patch ];
+    buildInputs = [ python pkgs.file511 ];
 
     configurePhase = "cd python";
 
     buildPhase = "python setup.py build";
 
-    installPhase = "python setup.py install --prefix=$out";
+    installPhase = ''
+      python setup.py install --prefix=$out
+    '';
 
     meta = {
       description = "A Python wrapper around libmagic";
@@ -1019,6 +1149,28 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  notmuch = pkgs.stdenv.mkDerivation rec {
+    name = "python-${pkgs.notmuch.name}";
+
+    src = pkgs.notmuch.src;
+
+    buildInputs = [ python pkgs.notmuch ];
+    #propagatedBuildInputs = [ python pkgs.notmuch ];
+
+    configurePhase = "cd bindings/python";
+
+    buildPhase = "python setup.py build";
+
+    installPhase = "python setup.py install --prefix=$out";
+
+    meta = {
+      description = "A Python wrapper around notmuch";
+      homepage = http://notmuchmail.org/;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
+    };
+  };
+
   numpy = buildPythonPackage ( rec {
     name = "numpy-1.6.1";
 
@@ -1027,9 +1179,10 @@ let pythonPackages = python.modules // rec {
       sha256 = "1pawfmf7j7pd3mjzhmmw9hkglc2qdirrkvv29m5nsmpf2b3ip2vq";
     };
 
-    # TODO: add ATLAS=${pkgs.atlas}
+    patches = [ ../development/python-modules/numpy/no_default_dirs.patch ];
+
     installCommand = ''
-      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack}
+      export BLAS=${pkgs.blas} LAPACK=${pkgs.liblapack} ATLAS=${pkgs.atlas}
       python setup.py build --fcompiler="gnu95"
       python setup.py install --prefix=$out
     '';
@@ -1256,6 +1409,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+
   pyasn1 = buildPythonPackage ({
     name = "pyasn1-0.0.11a";
 
@@ -1274,6 +1428,26 @@ let pythonPackages = python.modules // rec {
       platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
     };
   });
+
+  Babel = buildPythonPackage (rec {
+    name = "Babel-0.9.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/B/Babel/${name}.tar.gz";
+      sha256 = "4a3a085ecf1fcd2736573538ffa114f1f4331b3bbbdd69381e6e172c49c9750f";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://babel.edgewall.org;
+      description = "A collection of tools for internationalizing Python applications.";
+      license = "BSD";
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  });
+
 
   pycryptopp = buildPythonPackage (rec {
     name = "pycryptopp-0.5.29";
@@ -1531,11 +1705,11 @@ let pythonPackages = python.modules // rec {
 
 
   pysvn = pkgs.stdenv.mkDerivation {
-    name = "pysvn-1.7.2";
+    name = "pysvn-1.7.6";
 
     src = fetchurl {
-      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.2.tar.gz";
-      sha256 = "2b2980d200515e754e00a12d99dbce25c1ea90fddf8cba2bfa354c9305c5e455";
+      url = "http://pysvn.barrys-emacs.org/source_kits/pysvn-1.7.6.tar.gz";
+      sha256 = "0wwb9h3rw2r8hzqya8mv5z8pgjpa6y3i15a3cccdv2mil44289a7";
     };
 
     buildInputs = [ python pkgs.subversion pkgs.apr pkgs.aprutil pkgs.expat pkgs.neon pkgs.openssl ]
@@ -1549,6 +1723,7 @@ let pythonPackages = python.modules // rec {
       python setup.py backport
       python setup.py configure \
         --apr-inc-dir=${pkgs.apr}/include/apr-1 \
+        --apu-inc-dir=${pkgs.aprutil}/include/apr-1 \
         --apr-lib-dir=${pkgs.apr}/lib \
         --svn-root-dir=${pkgs.subversion}
     '' + (if !stdenv.isDarwin then "" else ''
@@ -1947,6 +2122,20 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  svneverever =  buildPythonPackage rec {
+    name = "svneverever-778489a8";
+
+    src = pkgs.fetchgit {
+      url = git://git.goodpoint.de/svneverever.git;
+      rev = "778489a8c6f07825fb18c9da3892a781c3d659ac";
+      sha256 = "41c9da1dab2be7b60bff87e618befdf5da37c0a56287385cb0cbd3f91e452bb6";
+    };
+
+    propagatedBuildInputs = [ pysvn argparse ];
+
+    doCheck = false;
+  };
+
   taskcoach = buildPythonPackage rec {
     name = "TaskCoach-1.3.8";
 
@@ -2060,6 +2249,25 @@ let pythonPackages = python.modules // rec {
       homepage = http://pypi.python.org/pypi/unittest2;
     };
   };
+
+  urwid = buildPythonPackage (rec {
+    name = "urwid-1.0.1";
+
+    doCheck = false;
+
+    src = fetchurl {
+      url = "http://excess.org/urwid/${name}.tar.gz";
+      md5 = "828f7144b94920205e755c249d2e297f";
+    };
+
+    meta = {
+      description = "A full-featured console (xterm et al.) user interface library";
+      homepage = http://excess.org/urwid;
+      license = pkgs.lib.licenses.lgpl21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
+    };
+  });
 
   virtualenv = buildPythonPackage rec {
     name = "virtualenv-1.6.4";

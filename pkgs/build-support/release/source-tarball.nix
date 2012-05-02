@@ -90,7 +90,7 @@ stdenv.mkDerivation (
 
     buildInputs = buildInputs ++ bootstrapBuildInputs;
     
-    postHook = ''
+    preUnpack = ''
       mkdir -p $out/nix-support
     '';  
 

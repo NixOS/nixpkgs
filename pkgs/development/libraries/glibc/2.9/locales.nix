@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "--enable-add-ons"
     "--without-headers"
     "--disable-profile"
-  ] ++ (if (stdenv.system == "armv5tel-linux") then [
+  ] ++ (if stdenv.isArm then [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"

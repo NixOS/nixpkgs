@@ -1,0 +1,24 @@
+diff -Naur kmod-7-orig/libkmod/libkmod.c kmod-7/libkmod/libkmod.c
+--- kmod-7-orig/libkmod/libkmod.c	2012-03-15 08:19:16.750010226 -0400
++++ kmod-7/libkmod/libkmod.c	2012-04-04 15:21:29.532074313 -0400
+@@ -200,7 +200,7 @@
+ static char *get_kernel_release(const char *dirname)
+ {
+ 	struct utsname u;
+-	char *p;
++	char *p, *dirname_prefix;
+ 
+ 	if (dirname != NULL)
+ 		return path_make_absolute_cwd(dirname);
+@@ -208,7 +208,10 @@
+ 	if (uname(&u) < 0)
+ 		return NULL;
+ 
+-	if (asprintf(&p, "%s/%s", dirname_default_prefix, u.release) < 0)
++	if ((dirname_prefix = getenv("MODULE_DIR")) == NULL)
++		dirname_prefix = dirname_default_prefix;
++
++	if (asprintf(&p, "%s/%s", dirname_prefix, u.release) < 0)
+ 		return NULL;
+ 
+ 	return p;

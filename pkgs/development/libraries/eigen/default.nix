@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://bitbucket.org/eigen/eigen/get/${v}.tar.bz2";
     name = "eigen-${v}.tar.bz2";
-    sha256 = "04lzlhl7r1yqkpq9xabm1v5vgz0z9xqf1k7indgwdw8nfyma3qar";
+    sha256 = "1akcb4g5hvc664gfc6sxb6f6jrm55fgks6017wg0smyvmm6k09v0";
   };
   
   buildNativeInputs = [ cmake ];

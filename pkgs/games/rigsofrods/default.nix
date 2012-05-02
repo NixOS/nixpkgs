@@ -1,4 +1,4 @@
-{ fetchsvn, fetchurl, stdenv, wxGTK290, freeimage, cmake, zziplib, mesa, boost, 
+{ fetchsvn, fetchurl, stdenv, wxGTK29, freeimage, cmake, zziplib, mesa, boost,
   pkgconfig, libuuid, openal, ogre, ois, curl, gtk, pixman, mygui, unzip,
   angelscript, caelum, ogrepaged, mysocketw, libxcb
   }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./doubleslash.patch ./paths.patch ];
 
-  buildInputs = [ wxGTK290 freeimage cmake zziplib mesa boost pkgconfig
+  buildInputs = [ wxGTK29 freeimage cmake zziplib mesa boost pkgconfig
     libuuid openal ogre ois curl gtk mygui unzip angelscript
     caelum ogrepaged mysocketw libxcb ];
 

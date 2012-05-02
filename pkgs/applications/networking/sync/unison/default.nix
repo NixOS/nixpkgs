@@ -2,7 +2,7 @@
 , enableX11 ? true}:
 
 let
-  nativeCode = if stdenv.system == "armv5tel-linux" then false else true;
+  nativeCode = if stdenv.isArm then false else true;
 in
 stdenv.mkDerivation (rec {
 

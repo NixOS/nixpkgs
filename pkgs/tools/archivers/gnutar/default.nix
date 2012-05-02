@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "gnutar-1.26";
 
   src = fetchurl {
@@ -33,3 +33,8 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
+  # May have some issues with root compilation because the bootstrap tool
+  # cannot be used as a login shell for now.
+// stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux") {
+  FORCE_UNSAFE_CONFIGURE = 1;
+})

@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, gfortran, atlas, cmake, python }:
-
+{ stdenv, fetchurl, gfortran, atlas, cmake, python, shared ? false }:
+let 
+  atlasMaybeShared = if shared then atlas.override {shared=true;} else atlas;
+  usedLibExtension = if shared then ".so" else ".a";
+in
 stdenv.mkDerivation {
   name = "liblapack-3.4.0";
   src = fetchurl {
@@ -7,18 +10,20 @@ stdenv.mkDerivation {
     sha256 = "1sf30v1ps5icg67dvw5sbx5yhypx13am470gqg2f7l04f3wrw4x7";
   };
 
-  propagatedBuildInputs = [ atlas ];
+  propagatedBuildInputs = [ atlasMaybeShared ];
   buildInputs = [ gfortran cmake ];
   buildNativeInputs = [ python ];
 
   cmakeFlags = [
     "-DUSE_OPTIMIZED_BLAS=ON"
-    "-DBLAS_ATLAS_f77blas_LIBRARY=${atlas}/lib/libf77blas.a"
-    "-DBLAS_ATLAS_atlas_LIBRARY=${atlas}/lib/libatlas.a"
+    "-DBLAS_ATLAS_f77blas_LIBRARY=${atlasMaybeShared}/lib/libf77blas${usedLibExtension}"
+    "-DBLAS_ATLAS_atlas_LIBRARY=${atlasMaybeShared}/lib/libatlas${usedLibExtension}"
     "-DCMAKE_Fortran_FLAGS=-fPIC"
-  ];
+  ]
+  ++ (stdenv.lib.optional shared "-DBUILD_SHARED_LIBS=ON")
+  ;
 
-  doCheck = true;
+  doCheck = ! shared;
 
   checkPhase = "
     sed -i 's,^#!.*,#!${python}/bin/python,' lapack_testing.py

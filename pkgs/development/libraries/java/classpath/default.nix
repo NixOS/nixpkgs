@@ -1,11 +1,11 @@
 { fetchurl, stdenv, javac, jvm, antlr, pkgconfig, gtk, gconf }:
 
 stdenv.mkDerivation rec {
-  name = "classpath-0.98";
+  name = "classpath-0.99";
 
   src = fetchurl {
     url = "mirror://gnu/classpath/${name}.tar.gz";
-    sha256 = "0gxcdysw36vk3dpylg6f44c0fc8g10ayyb521l8bcygz9p6ml6sh";
+    sha256 = "1j7cby4k66f1nvckm48xcmh352b1d1b33qk7l6hi7dp9i9zjjagr";
   };
 
   patches = [ ./missing-casts.patch ];

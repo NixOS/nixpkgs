@@ -27,7 +27,11 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  preBuild = ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
+  preBuild =
+    # On Darwin, we end up using the native `sed' during bootstrap, and it
+    # fails to run this command, which isn't needed anyway.
+    stdenv.lib.optionalString (!stdenv.isDarwin)
+    ''sed -e "s@\([[:space:]]\)sh @\1''${SHELL} @" -i */Makefile Makefile'';
 
   # When building a wide-character (Unicode) build, create backward
   # compatibility links from the the "normal" libraries to the
