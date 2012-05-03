@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     blazeBuilder conduit httpTypes network text transformers vault
   ];
+  patchPhase = ''
+    sed -i -e 's|, vault.*|, vault|' wai.cabal
+  '';
   meta = {
     homepage = "https://github.com/yesodweb/wai";
     description = "Web Application Interface";
