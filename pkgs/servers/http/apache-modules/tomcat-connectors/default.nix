@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = http://apache.xl-mirror.nl//tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.32-src.tar.gz;
+    url = http://archive.apache.org/dist/tomcat/tomcat-connectors/jk/tomcat-connectors-1.2.32-src.tar.gz;
     sha256 = "1dim62warzy1hqvc7cvnqsbq475sr6vpgwd6gfmddmkgw155saji";
   };
 
