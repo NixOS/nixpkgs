@@ -6471,6 +6471,10 @@ let
 
   compizconfig_python = callPackage ../applications/window-managers/compiz/config-python.nix { };
 
+  coriander = callPackage ../applications/video/coriander {
+    inherit (gnome) libgnomeui GConf;
+  };
+
   libcompizconfig = callPackage ../applications/window-managers/compiz/libcompizconfig.nix { };
 
   compiz_bcop = callPackage ../applications/window-managers/compiz/bcop.nix { };
