@@ -59,15 +59,14 @@ let
             '';
           };
 
-          installRemovableMediaImage = mkOption {
+          installShell = mkOption {
             default = false;
             description = ''
-              Whether to build/install a BOOT{machine type short-name}.EFI file
-              in \EFI\BOOT. This _should_ only be needed for removable devices
+              Whether to install an EFI shell in \EFI\BOOT.
+              This _should_ only be needed for removable devices
               (CDs, usb sticks, etc.), but it may be an option for broken
-              systems where efibootmgr doesn't work. It reads the UCS-2
-              encoded \EFI\NIXOS\BOOT-PARAMS to find out which kernel to boot
-              with which parameters.
+              systems where efibootmgr doesn't work. Particularly useful in
+              conjunction with installStartupNsh
             '';
           };
 
@@ -85,7 +84,22 @@ let
     isExecutable = true;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.glibc] ++ (pkgs.stdenv.lib.optionals config.boot.loader.efiBootStub.runEfibootmgr [pkgs.efibootmgr pkgs.module_init_tools]);
-    inherit (config.boot.loader.efiBootStub) efiSysMountPoint runEfibootmgr installStartupNsh efiDisk efiPartition installRemovableMediaImage;
+    inherit (config.boot.loader.efiBootStub) efiSysMountPoint runEfibootmgr installStartupNsh efiDisk efiPartition;
+
+    efiShell = if config.boot.loader.efiBootStub.installShell then
+      if pkgs.stdenv.isi686 then
+        pkgs.fetchurl {
+          url = "https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/EdkShellBinPkg/FullShell/Ia32/Shell_Full.efi";
+          sha256 = "0ymm3mbbwx9f6cq0bp2nr7ikyagxgsg4sjs5q1s4xbnms27slwjq";
+        }
+      else
+        pkgs.fetchurl {
+          url = "https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/EdkShellBinPkg/FullShell/X64/Shell_Full.efi";
+          sha256 = "1xchy8a05mgqzr82mmahdni0jbxsz6xf6vm2bg1bch9i6l72qgmh";
+        }
+    else
+      null;
+
     kernelFile = platform.kernelTarget;
     targetArch = if pkgs.stdenv.isi686 then
       "IA32"

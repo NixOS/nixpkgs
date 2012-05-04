@@ -76,11 +76,6 @@ addEntry() {
 	set -e
       fi
 
-      if test -n "@installRemovableMediaImage@"; then
-        mkdir -pv "@efiSysMountPoint@"/efi/boot
-        cp $kernel "@efiSysMountPoint@"/efi/boot/boot"@targetArch@".efi
-	sed 's|.*@kernelFile@.efi ||' $startup > "@efiSysMountPoint@"/efi/boot/linux.conf
-      fi
       if test -n "@installStartupNsh@"; then
         sed 's|.*@kernelFile@.efi|@kernelFile@.efi|' < $startup > "@efiSysMountPoint@/startup.nsh"
         cp $kernel "@efiSysMountPoint@/@kernelFile@.efi"
@@ -114,6 +109,11 @@ if test -n "@runEfibootmgr@"; then
   set +e
   efibootmgr -o $defaultbootnum > /dev/null 2>&1
   set -e
+fi
+
+if test -n "@efiShell@"; then
+  mkdir -pv "@efiSysMountPoint@"/efi/boot
+  cp "@efiShell@" "@efiSysMountPoint@"/efi/boot/boot"@targetArch@".efi
 fi
 
 # Remove obsolete files from the EFI system partition

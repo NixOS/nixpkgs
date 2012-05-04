@@ -119,6 +119,17 @@ let
     '';
 
 
+  efiShell = if pkgs.stdenv.isi686 then
+    pkgs.fetchurl {
+      url = "https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/EdkShellBinPkg/FullShell/Ia32/Shell_Full.efi";
+      sha256 = "0ymm3mbbwx9f6cq0bp2nr7ikyagxgsg4sjs5q1s4xbnms27slwjq";
+    }
+  else
+    pkgs.fetchurl {
+      url = "https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/EdkShellBinPkg/FullShell/X64/Shell_Full.efi";
+      sha256 = "1xchy8a05mgqzr82mmahdni0jbxsz6xf6vm2bg1bch9i6l72qgmh";
+    };
+
   # The efi boot image
   efiImg = pkgs.runCommand "efi-image_eltorito" {}
     ''
@@ -129,11 +140,13 @@ let
       ${pkgs.mtools}/bin/mmd -i "$out" efi/boot
       ${pkgs.mtools}/bin/mmd -i "$out" efi/nixos
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${config.boot.kernelPackages.kernel + "/bzImage"} ::efi/boot/boot${targetArch}.efi
+        ${efiShell} ::efi/boot/boot${targetArch}.efi
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" \
+        ${config.boot.kernelPackages.kernel + "/bzImage"} ::bzImage.efi
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
         ${config.system.build.initialRamdisk + "/initrd"} ::efi/nixos/initrd
-      echo "initrd=\\efi\\nixos\\initrd init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" > boot-params
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::efi/boot/linux.conf
+      echo "bzImage.efi initrd=\\efi\\nixos\\initrd init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" > boot-params
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::startup.nsh
     '';
 
   targetArch = if pkgs.stdenv.isi686 then
