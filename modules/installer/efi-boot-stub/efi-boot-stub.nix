@@ -45,8 +45,8 @@ let
             default = false;
             description = ''
               Whether to run efibootmgr to add the configuration to the boot options list.
-              WARNING! efibootmgr has been rumored to brick Apple firmware! Use 'bless' on
-              Apple efi systems.
+              WARNING! efibootmgr has been rumored to brick Apple firmware on
+              old kernels! Don't use it on kernels older than 2.6.39!
             '';
           };
 
