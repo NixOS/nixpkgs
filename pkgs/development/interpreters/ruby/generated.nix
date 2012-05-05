@@ -449,7 +449,7 @@ See class rdoc for help. Hint: ri Hoe'';
       };
       name = ''json-1.7.0'';
       requiredGems = [  ];
-      sha256 = ''no hash'';
+      sha256 = ''5affdd32dfc4a21f3d076d12e223a5da3778d0d027a6b033f556ba394c6ca6de'';
     };
     json_pure_1_4_3 = {
       basename = ''json_pure'';
@@ -670,7 +670,7 @@ request helpers feature.'';
       };
       name = ''railties-3.2.3'';
       requiredGems = [ g.thor_0_14_6 g.rack_ssl_1_3_2 g.rdoc_3_12 ];
-      sha256 = ''no hash'';
+      sha256 = ''8715141b57dd5ad02dda101ea2812ece5e48bf6848d7586eb6c32f1d68ed7599'';
     };
     rake_0_8_7 = {
       basename = ''rake'';
@@ -703,7 +703,7 @@ request helpers feature.'';
       };
       name = ''rb-fsevent-0.9.1'';
       requiredGems = [  ];
-      sha256 = ''no hash'';
+      sha256 = ''d06bb8a10fe89e66a2e017152d9c40d5f728ad2561f8ddd305f56fedfe566f0b'';
     };
     rdoc_3_12 = {
       basename = ''rdoc'';
@@ -718,7 +718,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
       };
       name = ''rdoc-3.12'';
       requiredGems = [ g.json_1_7_0 ];
-      sha256 = ''no hash'';
+      sha256 = ''77b6deba13ca090fb4608c218ec5d5c05d78e841cb0b53cb31f91fb56686a431'';
     };
     rjb_1_3_3 = {
       basename = ''rjb'';
@@ -868,7 +868,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
       };
       name = ''selenium-webdriver-2.21.2'';
       requiredGems = [ g.rubyzip_0_9_8 g.childprocess_0_3_2 g.libwebsocket_0_1_3 ];
-      sha256 = ''no hash'';
+      sha256 = ''07f291d7c1828ba22b2e50947199d766a53fff9ad0016e479b47b35bc5cc1161'';
     };
     sprockets_2_1_3 = {
       basename = ''sprockets'';
@@ -890,7 +890,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
       };
       name = ''thor-0.14.6'';
       requiredGems = [  ];
-      sha256 = ''no hash'';
+      sha256 = ''c7c5abd6b7dfb331efb8740276724773cece66e1fe6b83216589bb87c67e15a3'';
     };
     tilt_1_3_3 = {
       basename = ''tilt'';
