@@ -133,8 +133,8 @@ let
   # The efi boot image
   efiImg = pkgs.runCommand "efi-image_eltorito" {}
     ''
-      #Let's hope 8M is enough
-      dd bs=2048 count=4096 if=/dev/zero of="$out"
+      #Let's hope 10M is enough
+      dd bs=2048 count=5120 if=/dev/zero of="$out"
       ${pkgs.dosfstools}/sbin/mkfs.vfat "$out"
       ${pkgs.mtools}/bin/mmd -i "$out" efi
       ${pkgs.mtools}/bin/mmd -i "$out" efi/boot
