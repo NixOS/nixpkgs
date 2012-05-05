@@ -279,7 +279,7 @@ for those one-off tasks, with a language that's a joy to use.
       };
       name = ''bundler-1.1.3'';
       requiredGems = [  ];
-      sha256 = ''no hash'';
+      sha256 = ''df5ce52b6229bae5cf2eabae71858ea7e735fa0e479b4d00cff1ee18c5f6e800'';
     };
     childprocess_0_3_2 = {
       basename = ''childprocess'';
