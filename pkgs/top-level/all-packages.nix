@@ -5745,7 +5745,6 @@ let
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs3_3
-        kernelPatches.efi_bootstub_config_3_3
       ];
   };
 
