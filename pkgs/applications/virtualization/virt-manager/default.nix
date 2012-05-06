@@ -1,6 +1,6 @@
 x@{builderDefsPackage
-  , gnome, gtk, glib, libxml2, libvirt, gtkvnc, cyrus_sasl, libtasn1, wget,curl
-  , intltool, python
+  , gnome, gtk, glib, libxml2, libvirt, gtkvnc, cyrus_sasl, libtasn1, makeWrapper 
+  , intltool, python, pygtk
   , ...}:
 builderDefsPackage
 (a :  
@@ -34,19 +34,13 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = [ "doUnpack" "patchPhase" "doConfigure" "doMakeInstall"];
+  phaseNames = [ "doUnpack" "patchPhase" "doConfigure" "doMakeInstall" "installPhase" ];
 
-  #configureFlags = [
-  #  --with-libvirt-package-names=libvirt \
-  #  --with-kvm-packages=qemu-system-x86
+  installPhase = a.fullDepEntry ''
+    wrapProgram $out/bin/virt-manager --set PYTHONPATH $PYTHONPATH
+  '' ["minInit"];
 
-  #  --with-libvirt-package-names=libvirt \
-  #  --with-kvm-packages=qemu-kvm
-
-  #  --with-libvirt-package-names=%libvirt_packages \
-  #  --with-kvm-packages=%kvm_packages \
-  #  "--with-libvirt-package-names=libvirt.py"
-  #];
+  #NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
   meta = {
     homepage = http://virt-manager.org;
