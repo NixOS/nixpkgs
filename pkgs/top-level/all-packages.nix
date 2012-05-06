@@ -7613,6 +7613,7 @@ let
   };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
+  virtmanager = callPackage ../applications/virtualization/virt-manager {};
 
   virtualgl = callPackage ../tools/X11/virtualgl { };
 
