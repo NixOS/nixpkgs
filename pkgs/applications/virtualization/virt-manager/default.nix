@@ -1,6 +1,7 @@
 x@{builderDefsPackage
   , gnome, gtk, glib, libxml2, libvirt, gtkvnc, cyrus_sasl, libtasn1, makeWrapper 
-  , intltool, python, pygtk
+  , intltool, python, pygtk, libxml2Python
+  # virtinst is required, but it breaks when building
   , ...}:
 builderDefsPackage
 (a :  
@@ -28,6 +29,12 @@ rec {
 
   patchPhase = a.fullDepEntry '' 
     substituteInPlace "src/virt-manager.in" --replace "exec /usr/bin/python" "exec ${python}/bin/python"
+    sed -e '/import libxml2/i import sys\
+    sys.path.append("${libxml2Python}/lib/${python.libPrefix}/site-packages")' \
+    -i src/virtManager/util.py
+    sed -e '/import libxml2/i import sys\
+    sys.path.append("${libxml2Python}/lib/${python.libPrefix}/site-packages")' \
+    -i src/virtManager/libvirtobject.py
   '' ["minInit"];
 
   inherit (sourceInfo) name version;
