@@ -9,5 +9,6 @@ cabal.mkDerivation (self: {
     description = "Atomic compare and swap for IORefs and STRefs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
