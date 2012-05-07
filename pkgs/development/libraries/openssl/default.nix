@@ -23,8 +23,7 @@ let
            ./gnu.patch                # submitted upstream
          ]
 
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch
-    ++ stdenv.lib.optional (stdenv.system == "x86_64-freebsd") ./freebsd-x86_64-asm.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
   
 in
 
