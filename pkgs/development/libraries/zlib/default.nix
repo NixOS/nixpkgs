@@ -1,6 +1,6 @@
 { stdenv, fetchurl, static ? false }:
 
-let version = "1.2.6"; in
+let version = "1.2.7"; in
 
 stdenv.mkDerivation rec {
   name = "zlib-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
       [ "http://www.zlib.net/${name}.tar.gz"  # old versions vanish from here
         "mirror://sourceforge/libpng/zlib/${version}/${name}.tar.gz"
       ];
-    sha256 = "06x6m33ls1606ni7275q5z392csvh18dgs55kshfnvrfal45w8r1";
+    sha256 = "1i96gsdvxqb6skp9a58bacf1wxamwi9m9pg4yn7cpf7g7239r77s";
   };
 
   configureFlags = if static then "" else "--shared";
