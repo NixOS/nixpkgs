@@ -106,7 +106,7 @@ stdenv.mkDerivation rec {
    echo -e '#!/bin/sh' >> "$out/bin/julia-webserver"
    echo -e "cd \"$out/share/julia\"" >> "$out/bin/julia-webserver"
    echo -e '${lighttpd}/sbin/lighttpd -D -f ./ui/lighttpd.conf &' >> "$out/bin/julia-webserver"
-   echo -e '../../bin/julia-release-webserver -p 2001' >> "$out/bin/julia-webserver"
+   echo -e "'$out/bin/julia-release-webserver' -p 2001" >> "$out/bin/julia-webserver"
    chmod a+x "$out/bin/julia-webserver"
   '';
 
