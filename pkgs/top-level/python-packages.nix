@@ -366,11 +366,11 @@ let pythonPackages = python.modules // rec {
   });
 
   cssutils = buildPythonPackage (rec {
-    name = "cssutils-0.9.7a6";
+    name = "cssutils-0.9.9";
 
     src = fetchurl {
-      url = http://cssutils.googlecode.com/files/cssutils-0.9.7a6.zip;
-      sha256 = "1i5n97l20kn2w9v6x8ybcdnl323vy8lcc5qlxz5l89di36a2skgw";
+      url = http://pypi.python.org/packages/source/c/cssutils/cssutils-0.9.9.zip;
+      sha256 = "139yfm9yz9k33kgqw4khsljs10rkhhxyywbq9i82bh2r31cil1pp";
     };
 
     buildInputs = [ pkgs.unzip ];
