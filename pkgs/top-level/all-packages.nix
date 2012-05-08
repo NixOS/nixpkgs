@@ -5539,7 +5539,9 @@ let
 
   iwlwifi6000g2bucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000g2b-ucode { };
 
-  jujuutils = callPackage ../os-specific/linux/jujuutils { };
+  jujuutils = callPackage ../os-specific/linux/jujuutils {
+    linuxHeaders = linuxHeaders33;
+  };
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
@@ -5558,6 +5560,8 @@ let
   libnl1 = callPackage ../os-specific/linux/libnl/v1.nix { };
 
   linuxHeaders = callPackage ../os-specific/linux/kernel-headers { };
+
+  linuxHeaders33 = callPackage ../os-specific/linux/kernel-headers/3.3.5.nix { };
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
