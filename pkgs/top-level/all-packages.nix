@@ -3997,6 +3997,8 @@ let
 
   libdc1394 = callPackage ../development/libraries/libdc1394 { };
 
+  libdc1394avt = callPackage ../development/libraries/libdc1394avt { };
+
   libdevil = callPackage ../development/libraries/libdevil { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
@@ -6435,6 +6437,8 @@ let
     inherit (xlibs) libXScrnSaver scrnsaverproto libX11 xproto kbproto;
   };
   funpidgin = carrier;
+
+  cc1394 = callPackage ../applications/video/cc1394 { };
 
   cddiscid = callPackage ../applications/audio/cd-discid { };
 
