@@ -5539,6 +5539,8 @@ let
 
   iwlwifi6000g2bucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000g2b-ucode { };
 
+  jujuutils = callPackage ../os-specific/linux/jujuutils { };
+
   kbd = callPackage ../os-specific/linux/kbd { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };

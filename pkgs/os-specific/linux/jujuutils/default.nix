@@ -1,0 +1,16 @@
+{stdenv, fetchurl}:
+
+stdenv.mkDerivation {
+  name = "jujuutils-0.2";
+
+  src = fetchurl {
+    url = http://jujuutils.googlecode.com/files/jujuutils-0.2.tar.gz;
+    sha256 = "1r74m7s7rs9d6y7cffi7mdap3jf96qwm1v6jcw53x5cikgmfxn4x";
+  };
+
+  meta = {
+    description = "Utilities around FireWire devices connected to a Linux computer";
+    license = "GPLv2";
+    homepage = http://code.google.com/p/jujuutils/;
+  };
+}
