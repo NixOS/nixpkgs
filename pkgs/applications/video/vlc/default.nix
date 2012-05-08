@@ -5,7 +5,7 @@
 , libcaca, pulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, udev, gnutls, avahi, libcddb, jackaudio, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
-, libass, libva, libdvbpsi
+, libass, libva, libdvbpsi, libdc1394, libraw1394
 }:
 
 stdenv.mkDerivation rec {
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
       udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
       xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
+      libdc1394 libraw1394
     ];
 
   buildNativeInputs = [ pkgconfig ];
@@ -31,6 +32,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-alsa"
       "--with-kde-solid=$out/share/apps/solid/actions"
+      "--enable-dc1394"
     ];
 
   preConfigure = ''sed -e "s@/bin/echo@echo@g" -i configure'';
