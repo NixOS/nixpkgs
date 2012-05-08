@@ -10,7 +10,8 @@ let
   # interfaces that are part of a bridge.
   ignoredInterfaces =
     map (i: i.name) (filter (i: i ? ipAddress && i.ipAddress != "" ) config.networking.interfaces)
-    ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges));
+    ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
+    ++ config.networking.dhcpcd.denyInterfaces;
 
   # Config file adapted from the one that ships with dhcpcd.
   dhcpcdConf = pkgs.writeText "dhcpcd.conf"
@@ -69,6 +70,23 @@ let
 in
 
 {
+
+  ###### interface
+
+  options = {
+
+    networking.dhcpcd.denyInterfaces = mkOption {
+      default = [];
+      description = ''
+         Disable the DHCP client for any interface which's name matches
+         any of the shell glob patterns in this list. The purpose of
+         this option is blacklist virtual interfaces such as those
+         created by Xen, libvirt, LXC, etc.
+      '';
+    };
+
+  };
+
 
   ###### implementation
 
