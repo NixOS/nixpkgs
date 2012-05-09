@@ -4,14 +4,11 @@
 
 cabal.mkDerivation (self: {
   pname = "wai";
-  version = "1.2.0.1";
-  sha256 = "00f95r1g2s689s1b0div28v7dnjiqz01d66acz77acp28cm0bnmc";
+  version = "1.2.0.2";
+  sha256 = "07h0znwlnfpikw9zxk7cxnyvsgqyix7lv8rylxzj259ylwfpk9fp";
   buildDepends = [
     blazeBuilder conduit httpTypes network text transformers vault
   ];
-  patchPhase = ''
-    sed -i -e 's|, vault.*|, vault|' wai.cabal
-  '';
   meta = {
     homepage = "https://github.com/yesodweb/wai";
     description = "Web Application Interface";
