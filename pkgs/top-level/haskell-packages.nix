@@ -526,6 +526,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
 
+  c2hs = callPackage ../development/libraries/haskell/c2hs {};
+
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal = null; # core package in GHC
 
@@ -814,6 +816,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellLexer = callPackage ../development/libraries/haskell/haskell-lexer {};
 
+  haskellMpi = callPackage ../development/libraries/haskell/haskell-mpi {
+    mpi = pkgs.openmpi;
+  };
+
   haskellSrc_1_0_1_3 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.3.nix {};
   haskellSrc_1_0_1_4 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.4.nix {};
   haskellSrc_1_0_1_5 = callPackage ../development/libraries/haskell/haskell-src/1.0.1.5.nix {};
@@ -968,6 +974,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   json = callPackage ../development/libraries/haskell/json {};
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
+
+  languageC = callPackage ../development/libraries/haskell/language-c {};
 
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
