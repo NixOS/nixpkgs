@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kernel }:
 
 let
-  baseName = "bbswitch-0.4.1";
+  baseName = "bbswitch-0.4.2";
   name = "${baseName}-${kernel.version}";
 
 in
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://github.com/downloads/Bumblebee-Project/bbswitch/${baseName}.tar.gz";
-    sha256 = "d579c6efc5f6482f0cf0b2c1b1f1a127413218cdffdc8f2d5a946c11909bda23";
+    sha256 = "06j3cm1rk3lcbv54k0magrijykrzmkrna8n5cc274iz59842lga3";
   };
 
   preBuild = ''
