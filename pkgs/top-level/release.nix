@@ -188,6 +188,7 @@ with (import ./release-lib.nix);
   mcron = linux;
   mdadm = linux;
   mercurial = allBut "i686-cygwin";
+  mercurialFull = allBut "i686-cygwin";
   mesa = mesaPlatforms;
   midori = linux;
   mingetty = linux;

@@ -1,10 +1,10 @@
 {stdenv, fetchurl, wget, bash, coreutils}:
   stdenv.mkDerivation rec {
-    version = "2.18";
+    version = "2.19";
     name = "wgetpaste-${version}";
       src = fetchurl {
         url = "http://wgetpaste.zlin.dk/${name}.tar.bz2";
-        sha256 = "95ee46eac37ca74ce960c1726afc19f4a1dde4d1875ac860fdc5e45d3cb05d3e";
+        sha256 = "bb832557fca3be838838a87d790cb535974ea70bd2393818201676212f0f3b5a";
     };
     # currently zsh-autocompletion support is not installed
 

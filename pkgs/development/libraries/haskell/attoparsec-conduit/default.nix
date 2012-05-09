@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "attoparsec-conduit";
-  version = "0.4.0";
-  sha256 = "1vlgpa90sgaym754w5wr3jjqjra9yrn3yn4fhi148v25y4ijrrc0";
+  version = "0.4.0.1";
+  sha256 = "1r01xaaw439qpbfnanv2yfw9fz6id8cy17yqdm6x6vk35hmv59kc";
   buildDepends = [ attoparsec conduit text transformers ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";

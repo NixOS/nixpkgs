@@ -10,6 +10,7 @@
 , x264Support ? false, x264 ? null
 , xvidSupport ? false, xvidcore ? null
 , lameSupport ? true, lame ? null
+, speexSupport ? true, speex ? null
 , screenSaverSupport ? true, libXScrnSaver
 , pulseSupport ? false, pulseaudio
 , mesa, pkgconfig, unzip, yasm, freefont_ttf
@@ -29,6 +30,7 @@ assert jackaudioSupport -> jackaudio != null;
 assert amrSupport -> (amrnb != null && amrwb != null);
 assert screenSaverSupport -> libXScrnSaver != null;
 assert vdpauSupport -> libvdpau != null;
+assert speexSupport -> speex != null;
 
 let
 
@@ -111,7 +113,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional pulseSupport pulseaudio
     ++ stdenv.lib.optional screenSaverSupport libXScrnSaver
     ++ stdenv.lib.optional lameSupport lame
-    ++ stdenv.lib.optional vdpauSupport libvdpau;
+    ++ stdenv.lib.optional vdpauSupport libvdpau
+    ++ stdenv.lib.optional speexSupport speex;
 
   buildNativeInputs = [ yasm ];
 
@@ -132,6 +135,7 @@ stdenv.mkDerivation rec {
     ${if codecs != null then "--codecsdir=${codecs}" else ""}
     ${if (stdenv.isi686 || stdenv.isx86_64) then "--enable-runtime-cpudetection" else ""}
     ${if x11Support then "--enable-x11" else ""}
+    ${stdenv.lib.optionalString speexSupport "--enable-speex"}
     --disable-xanim
     --disable-ivtv
     --enable-vidix

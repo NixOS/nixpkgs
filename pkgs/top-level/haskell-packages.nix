@@ -211,6 +211,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
+      monadPar = self.monadPar_0_1_0_3;
     };
 
   haskellPlatform_2011_4_0_0 =
@@ -254,6 +255,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      monadPar = self.monadPar_0_1_0_3;
     };
 
   haskellPlatform_2011_2_0_1 =
@@ -297,6 +299,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      monadPar = self.monadPar_0_1_0_3;
     };
 
   haskellPlatform_2011_2_0_0 =
@@ -336,6 +339,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       haskellPlatform = self.haskellPlatform_2010_2_0_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      monadPar = self.monadPar_0_1_0_3;
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
@@ -376,6 +380,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       deepseq = self.deepseq_1_1_0_2;
+      monadPar = self.monadPar_0_1_0_3;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
@@ -418,6 +423,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       deepseq = self.deepseq_1_1_0_2;
+      monadPar = self.monadPar_0_1_0_3;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
@@ -432,6 +438,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
+
+  abstractDeque = callPackage ../development/libraries/haskell/abstract-deque {};
+
+  abstractPar = callPackage ../development/libraries/haskell/abstract-par {};
 
   aeson = callPackage ../development/libraries/haskell/aeson {};
 
@@ -481,6 +491,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   bitarray = callPackage ../development/libraries/haskell/bitarray {};
 
   bitmap = callPackage ../development/libraries/haskell/bitmap {};
+
+  bitsAtomic = callPackage ../development/libraries/haskell/bits-atomic {};
 
   bktrees = callPackage ../development/libraries/haskell/bktrees {};
 
@@ -934,6 +946,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ioChoice = callPackage ../development/libraries/haskell/io-choice {};
 
+  IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
+
   ioStorage = callPackage ../development/libraries/haskell/io-storage {};
 
   irc = callPackage ../development/libraries/haskell/irc {
@@ -1003,7 +1017,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
 
-  monadPar = callPackage ../development/libraries/haskell/monad-par {};
+  monadPar_0_1_0_3 = callPackage ../development/libraries/haskell/monad-par/0.1.0.3.nix {};
+  monadPar_0_3 = callPackage ../development/libraries/haskell/monad-par/0.3.nix {};
+  monadPar = self.monadPar_0_3;
+
+  monadParExtras = callPackage ../development/libraries/haskell/monad-par-extras {};
 
   monadPeel = callPackage ../development/libraries/haskell/monad-peel {};
 

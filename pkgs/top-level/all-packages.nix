@@ -2816,7 +2816,7 @@ let
   spidermonkey_1_8_0rc1 = callPackage ../development/interpreters/spidermonkey/1.8.0-rc1.nix { };
   spidermonkey_185 = callPackage ../development/interpreters/spidermonkey/185-1.0.0.nix { };
 
-  sysPerl = callPackage ../development/interpreters/sys-perl { };
+  sysPerl = callPackage ../development/interpreters/perl/sys-perl { };
 
   tcl = callPackage ../development/interpreters/tcl { };
 
@@ -3994,6 +3994,10 @@ let
   };
 
   libdbusmenu_qt = callPackage ../development/libraries/libdbusmenu-qt { };
+
+  libdc1394 = callPackage ../development/libraries/libdc1394 { };
+
+  libdc1394avt = callPackage ../development/libraries/libdc1394avt { };
 
   libdevil = callPackage ../development/libraries/libdevil { };
 
@@ -5535,6 +5539,10 @@ let
 
   iwlwifi6000g2bucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000g2b-ucode { };
 
+  jujuutils = callPackage ../os-specific/linux/jujuutils {
+    linuxHeaders = linuxHeaders33;
+  };
+
   kbd = callPackage ../os-specific/linux/kbd { };
 
   latencytop = callPackage ../os-specific/linux/latencytop { };
@@ -5552,6 +5560,8 @@ let
   libnl1 = callPackage ../os-specific/linux/libnl/v1.nix { };
 
   linuxHeaders = callPackage ../os-specific/linux/kernel-headers { };
+
+  linuxHeaders33 = callPackage ../os-specific/linux/kernel-headers/3.3.5.nix { };
 
   linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
@@ -5743,7 +5753,6 @@ let
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs3_3
-        kernelPatches.efi_bootstub_config_3_3
       ];
   };
 
@@ -6435,6 +6444,8 @@ let
   };
   funpidgin = carrier;
 
+  cc1394 = callPackage ../applications/video/cc1394 { };
+
   cddiscid = callPackage ../applications/audio/cd-discid { };
 
   cdparanoia = cdparanoiaIII;
@@ -6468,6 +6479,10 @@ let
   compiz_ccsm = callPackage ../applications/window-managers/compiz/ccsm.nix { };
 
   compizconfig_python = callPackage ../applications/window-managers/compiz/config-python.nix { };
+
+  coriander = callPackage ../applications/video/coriander {
+    inherit (gnome) libgnomeui GConf;
+  };
 
   libcompizconfig = callPackage ../applications/window-managers/compiz/libcompizconfig.nix { };
 
@@ -7114,7 +7129,7 @@ let
     guiSupport = false;		# use mercurialFull to get hgk GUI
   };
 
-  mercurialFull = appendToName "full" (pkgs.mercurial.override { guiSupport = true; });
+  mercurialFull = lowPrio (appendToName "full" (pkgs.mercurial.override { guiSupport = true; }));
 
   merkaartor = callPackage ../applications/misc/merkaartor { };
 
@@ -7608,6 +7623,8 @@ let
   };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
+  virtmanager = callPackage ../applications/virtualization/virt-manager {};
+  #virtinst = callPackage ../applications/virtualization/virtinst {};
 
   virtualgl = callPackage ../tools/X11/virtualgl { };
 
