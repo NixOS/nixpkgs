@@ -30,6 +30,14 @@ let
   hktn = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeNames;
   hktb = attrByPath [cfg.hostKeyType] (throw "unknown host key type `${cfg.hostKeyType}'") hostKeyTypeBits;
 
+  knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
+
+  knownHostsFile = pkgs.writeText "ssh_known_hosts" (
+    flip concatMapStrings knownHosts (h:
+      "${concatStringsSep "," h.hostNames} ${builtins.readFile h.publicKeyFile}"
+    )
+  );
+
   userOptions = {
     openssh.authorizedKeys = {
 
@@ -218,6 +226,42 @@ in
         description = "Verbatim contents of <filename>sshd_config</filename>.";
       };
 
+      knownHosts = mkOption {
+        default = {};
+        type = types.loaOf types.optionSet;
+        description = ''
+          The set of system-wide known SSH hosts.
+        '';
+        example = [
+          { 
+            hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
+            publicKeyFile = ./pubkeys/myhost_ssh_host_dsa_key.pub;
+          }
+          { 
+            hostNames = [ "myhost2" ];
+            publicKeyFile = ./pubkeys/myhost2_ssh_host_dsa_key.pub;
+          }
+        ];
+        options = {
+          hostNames = mkOption {
+            type = types.listOf types.string;
+            default = [];
+            description = ''
+              A list of host names and/or IP numbers used for accessing
+              the host's ssh service.
+            '';
+          };
+          publicKeyFile = mkOption {
+            description = ''
+              The path to the public key file for the host. The public
+              key file is read at build time and saved in the Nix store.
+              You can fetch a public key file from a running SSH server
+              with the <literal>ssh-keyscan</literal> command.
+            '';
+          };
+        };
+      };
+
     };
 
     users.extraUsers = mkOption {
@@ -238,10 +282,14 @@ in
         home = "/var/empty";
       };
 
-    environment.etc = singleton
+    environment.etc = [
       { source = "${pkgs.openssh}/etc/ssh/moduli";
         target = "ssh/moduli";
-      };
+      }
+      { source = knownHostsFile;
+        target = "ssh/ssh_known_hosts";
+      }
+    ];
 
     jobs.sshd = {
 
