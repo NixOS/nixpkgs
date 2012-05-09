@@ -218,7 +218,21 @@ in
 
       hostKeyType = mkOption {
         default = "dsa1024";
-        description = "Type of host key to generate (dsa1024/rsa1024/ecdsa521)";
+        description = ''
+          Type of host key to generate (dsa1024/rsa1024/ecdsa521), if
+          the file specified by <literal>hostKeyPath</literal> does not
+          exist when the service starts.
+        '';
+      };
+
+      hostKeyPath = mkOption {
+        default = "/etc/ssh/ssh_host_${hktn}_key";
+        description = ''
+          Path to the server's private key. If there is no key file
+          on this path, it will be generated when the service is
+          started for the first time. Otherwise, the ssh daemon will
+          use the specified key directly in-place.
+        '';
       };
 
       extraConfig = mkOption {
@@ -311,8 +325,8 @@ in
 
             mkdir -m 0755 -p /etc/ssh
 
-            if ! test -f /etc/ssh/ssh_host_${hktn}_key; then
-                ssh-keygen -t ${hktn} -b ${toString hktb} -f /etc/ssh/ssh_host_${hktn}_key -N ""
+            if ! test -f ${cfg.hostKeyPath}; then
+                ssh-keygen -t ${hktn} -b ${toString hktb} -f ${cfg.hostKeyPath} -N ""
             fi
           '';
 
@@ -320,7 +334,7 @@ in
 
         exec =
           ''
-            ${pkgs.openssh}/sbin/sshd -h /etc/ssh/ssh_host_${hktn}_key \
+            ${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} \
               -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
           '';
       };
