@@ -132,30 +132,33 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # NOTE: 2011.4.0.0 is the current default.
 
+  # These are currently set to versions that will likely be in
+  # the next platform release (May 2012). Please update with
+  # care.
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;         # 7.4.1 ok
     fgl          = self.fgl_5_4_2_4;            # 7.4.1 ok
-    GLUT         = self.GLUT_2_3_0_0;           # 7.4.1 ok
+    GLUT         = self.GLUT_2_1_2_1;           # 7.4.1 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 ok
     html         = self.html_1_0_1_2;           # 7.4.1 ok
     HUnit        = self.HUnit_1_2_4_2;          # 7.4.1 ok
     network      = self.network_2_3_0_13;       # 7.4.1 ok
-    OpenGL       = self.OpenGL_2_5_0_0;         # 7.4.1 ok
+    OpenGL       = self.OpenGL_2_2_3_1;         # 7.4.1 ok
     parallel     = self.parallel_3_2_0_2;       # 7.4.1 ok
     parsec       = self.parsec_3_1_2;           # 7.4.1 ok
     QuickCheck   = self.QuickCheck_2_4_2;       # 7.4.1 ok
     regexBase    = self.regexBase_0_93_2;       # 7.4.1 ok
     regexCompat  = self.regexCompat_0_95_1;     # 7.4.1 ok
     regexPosix   = self.regexPosix_0_95_1;      # 7.4.1 ok
-    stm          = self.stm_2_3;		# 7.4.1 ok
+    stm          = self.stm_2_3;                # 7.4.1 ok
     syb          = self.syb_0_3_6_1;            # 7.4.1 ok
     xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
     zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
     HTTP         = self.HTTP_4000_2_3;          # 7.4.1 ok
     text         = self.text_0_11_2_0;          # 7.4.1 ok
-    transformers = self.transformers_0_2_2_0;   # 7.4.1 ok
-    mtl          = self.mtl_2_0_1_0;            # 7.4.1 ok
+    transformers = self.transformers_0_3_0_0;   # 7.4.1 ok
+    mtl          = self.mtl_2_1_1;              # 7.4.1 ok
     random       = self.random_1_0_1_1;         # 7.4.1 ok
     cabalInstall = self.cabalInstall_0_14_0;    # 7.4.1 ok
     alex         = self.alex_3_0_1;             # 7.4.1 ok
@@ -1094,6 +1097,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   OpenGL_2_2_1_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.1.1.nix {};
   OpenGL_2_2_3_0 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.0.nix {};
+  OpenGL_2_2_3_1 = callPackage ../development/libraries/haskell/OpenGL/2.2.3.1.nix {};
   OpenGL_2_4_0_2 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.2.nix {};
   OpenGL_2_5_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.5.0.0.nix {};
   OpenGL24 = self.OpenGL_2_4_0_2;
