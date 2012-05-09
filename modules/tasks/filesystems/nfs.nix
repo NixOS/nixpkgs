@@ -10,22 +10,19 @@ let
 
   rpcMountpoint = "${nfsStateDir}/rpc_pipefs";
 
-  idmapdConfFile = {
-    target = "idmapd.conf";
-    source = pkgs.writeText "idmapd.conf" ''
-      [General]
-      Pipefs-Directory = ${rpcMountpoint}
-      ${optionalString (config.networking.domain != "")
-        "Domain = ${config.networking.domain}"}
+  idmapdConfFile = pkgs.writeText "idmapd.conf" ''
+    [General]
+    Pipefs-Directory = ${rpcMountpoint}
+    ${optionalString (config.networking.domain != "")
+      "Domain = ${config.networking.domain}"}
 
-      [Mapping]
-      Nobody-User = nobody
-      Nobody-Group = nogroup
+    [Mapping]
+    Nobody-User = nobody
+    Nobody-Group = nogroup
 
-      [Translation]
-      Method = nsswitch
-    '';
-  };
+    [Translation]
+    Method = nsswitch
+  '';
 
 in
 
@@ -99,7 +96,7 @@ in
 
         daemonType = "fork";
 
-        exec = "rpc.idmapd";
+        exec = "rpc.idmapd -v -c ${idmapdConfFile}";
       };
 
   };
