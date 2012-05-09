@@ -30,6 +30,8 @@ let
 
     builder = ./make-etc.sh;
 
+    preferLocalBuild = true;
+
     /* !!! Use toXML. */
     sources = map (x: x.source) config.environment.etc;
     targets = map (x: x.target) config.environment.etc;

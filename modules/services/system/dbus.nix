@@ -12,6 +12,7 @@ let
 
   configDir = pkgs.stdenv.mkDerivation {
     name = "dbus-conf";
+    preferLocalBuild = true;
     buildCommand = ''
       ensureDir $out
 
