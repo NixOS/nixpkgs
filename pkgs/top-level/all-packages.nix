@@ -2214,47 +2214,61 @@ let
   # So we enable it for selected versions only.
 
   # Helper functions to abstract away from repetitive instantiations.
-  haskellPackagesFun =
-    ghcPath : ghcBinary : prefFun : profExplicit : profDefault : modifyPrio :
+  haskellPackagesFun = makeOverridable
+   ({ ghcPath
+    , ghcBinary ? ghc6101Binary
+    , prefFun
+    , extraPrefs ? (x : {})
+    , profExplicit ? false, profDefault ? false
+    , modifyPrio ? lowPrio
+    } :
       import ./haskell-packages.nix {
-        inherit pkgs newScope modifyPrio prefFun;
+        inherit pkgs newScope modifyPrio;
+        prefFun = self : super : prefFun self super // extraPrefs super;
         enableLibraryProfiling =
           if profExplicit then profDefault
                           else getConfig [ "cabal" "libraryProfiling" ] profDefault;
         ghc = callPackage ghcPath { ghc = ghcBinary; };
-      };
+      });
 
   # Currently active GHC versions.
   haskellPackages_ghc6104 =
     recurseIntoAttrs
-      (haskellPackagesFun ../development/compilers/ghc/6.10.4.nix
-        ghc6101Binary (x : x.ghc6104Prefs) false false lowPrio);
+      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/6.10.4.nix;
+                            prefFun = x : x.ghc6104Prefs;
+                          });
 
   haskellPackages_ghc6121 =
-    haskellPackagesFun ../development/compilers/ghc/6.12.1.nix
-      ghc6101Binary (x : x.ghc6121Prefs) false false lowPrio;
+    haskellPackagesFun { ghcPath =  ../development/compilers/ghc/6.12.1.nix;
+                         prefFun = x : x.ghc6121Prefs;
+                       };
 
   haskellPackages_ghc6122 =
-    haskellPackagesFun ../development/compilers/ghc/6.12.2.nix
-      ghc6101Binary (x : x.ghc6122Prefs) false false lowPrio;
+    haskellPackagesFun { ghcPath = ../development/compilers/ghc/6.12.2.nix;
+                         prefFun = x : x.ghc6122Prefs;
+                       };
 
   haskellPackages_ghc6123 =
     recurseIntoAttrs
-      (haskellPackagesFun ../development/compilers/ghc/6.12.3.nix
-        ghc6101Binary (x : x.ghc6123Prefs) false false lowPrio);
+      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/6.12.3.nix;
+                            prefFun = x : x.ghc6123Prefs;
+                          });
 
   # Will never make it into a platform release, severe bugs; leave at lowPrio.
   haskellPackages_ghc701 =
-    haskellPackagesFun ../development/compilers/ghc/7.0.1.nix
-      ghc6101Binary (x : x.ghc701Prefs) false false lowPrio;
+    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.1.nix;
+                         prefFun = x : x.ghc701Prefs;
+                       };
 
   haskellPackages_ghc702 =
-    haskellPackagesFun ../development/compilers/ghc/7.0.2.nix
-      ghc6101Binary (x : x.ghc702Prefs) false false lowPrio;
+    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.2.nix;
+                         prefFun = x : x.ghc702Prefs;
+                       };
 
   haskellPackages_ghc703 =
-    haskellPackagesFun ../development/compilers/ghc/7.0.3.nix
-      ghc6101Binary (x : x.ghc703Prefs) false false lowPrio;
+    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.3.nix;
+                         prefFun = x : x.ghc703Prefs;
+                       };
 
   # Current default version: 7.0.4.
   #
@@ -2281,53 +2295,65 @@ let
 
   haskellPackages_ghc704_no_profiling =
     recurseIntoAttrs
-      (haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-        (if stdenv.isDarwin then ghc704Binary else ghc6101Binary)
-        (x : x.ghc704Prefs) true false
-        (haskellDefaultVersionPrioFun false));
+      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.4.nix;
+                            ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
+                            prefFun = x : x.ghc704Prefs;
+                            profExplicit = true;
+                            modifyPrio = haskellDefaultVersionPrioFun false;
+                          });
 
   haskellPackages_ghc704_profiling =
     recurseIntoAttrs
-      (haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-        (if stdenv.isDarwin then ghc704Binary else ghc6101Binary)
-        (x : x.ghc704Prefs) true true
-        (haskellDefaultVersionPrioFun true));
+      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.4.nix;
+                            ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
+                            prefFun = x : x.ghc704Prefs;
+                            profExplicit = true;
+                            profDefault = true;
+                            modifyPrio = haskellDefaultVersionPrioFun true;
+                          });
 
   haskellPackages_ghc704 =
-    haskellPackagesFun ../development/compilers/ghc/7.0.4.nix
-      (if stdenv.isDarwin then ghc704Binary else ghc6101Binary)
-      (x : x.ghc704Prefs) false false (x : x);
+    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.4.nix;
+                         ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
+                         prefFun = x : x.ghc704Prefs;
+                         modifyPrio = x : x;
+                       };
 
   haskellPackages_ghc721 =
-    haskellPackagesFun ../development/compilers/ghc/7.2.1.nix
-      (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
-      (x : x.ghc721Prefs) false false lowPrio;
+    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.2.1.nix;
+                         ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
+                         prefFun = x : x.ghc721Prefs;
+                       };
 
   haskellPackages_ghc722 =
-    haskellPackagesFun ../development/compilers/ghc/7.2.2.nix
-      (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
-      (x : x.ghc722Prefs) false false lowPrio;
+    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.2.2.nix;
+                         ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
+                         prefFun = x : x.ghc722Prefs;
+                       };
 
   haskellPackages_ghc741 =
     recurseIntoAttrs
-      (haskellPackagesFun ../development/compilers/ghc/7.4.1.nix
-        (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
-        (x : x.ghc741Prefs) false false lowPrio);
+      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.4.1.nix;
+                            ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
+                            prefFun = x : x.ghc741Prefs;
+                          });
 
   # Stable branch snapshot.
   haskellPackages_ghc742 =
     recurseIntoAttrs
-      (haskellPackagesFun ../development/compilers/ghc/7.4.2.nix
-        (if stdenv.isDarwin then ghc704Binary else ghc6121Binary)
-        (x : x.ghcHEADPrefs) false false lowPrio);
+      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.4.2.nix;
+                            ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
+                            prefFun = x : x.ghcHEADPrefs;
+                          });
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   haskellPackages_ghcHEAD =
     recurseIntoAttrs
-      (haskellPackagesFun ../development/compilers/ghc/head.nix
-        # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
-        ghc704Binary
-        (x : x.ghcHEADPrefs) false false lowPrio);
+      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/head.nix;
+                            ghcBinary = # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+                                        ghc704Binary;
+                            prefFun = x : x.ghcHEADPrefs;
+                          });
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;

@@ -31,7 +31,7 @@ stdenv.mkDerivation {
       circles and conics.
     '';
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

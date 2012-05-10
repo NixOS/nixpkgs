@@ -1,5 +1,5 @@
 { fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
-, libffi, gawk, makeWrapper, coverageAnalysis ? null }:
+, libffi, gawk, makeWrapper, coverageAnalysis ? null, gnu ? null }:
 
 # Do either a coverage analysis build or a standard build.
 (if coverageAnalysis != null
@@ -47,6 +47,15 @@
   doCheck = true;
 
   setupHook = ./setup-hook.sh;
+
+  crossAttrs.preConfigure =
+    stdenv.lib.optionalString (stdenv.cross.config == "i586-pc-gnu")
+       # On GNU, libgc depends on libpthread, but the cross linker doesn't
+       # know where to find libpthread, which leads to erroneous test failures
+       # in `configure', where `-pthread' and `-lpthread' aren't explicitly
+       # passed.  So it needs some help (XXX).
+       "export LDFLAGS=-Wl,-rpath-link=${gnu.libpthreadCross}/lib";
+
 
   meta = {
     description = "GNU Guile 2.0, an embeddable Scheme implementation";
