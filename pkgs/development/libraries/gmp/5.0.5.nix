@@ -1,12 +1,14 @@
 { stdenv, fetchurl, m4, cxx ? true }:
 
-stdenv.mkDerivation (rec {
-  name = "gmp-5.0.3";
+stdenv.mkDerivation rec {
+  name = "gmp-5.0.5";
 
   src = fetchurl {
     url = "mirror://gnu/gmp/${name}.tar.bz2";
-    sha256 = "dcafe9989c7f332b373e1f766af8e9cd790fc802fdec422a1910a6ef783480e3";
+    sha256 = "1jfymbr90mpn0zw5sg001llqnvf2462y77vgjknrmfs1rjn8ln0z";
   };
+
+  patches = [ ./ignore-bad-cpuid.patch ];
 
   buildNativeInputs = [ m4 ];
 
@@ -51,13 +53,3 @@ stdenv.mkDerivation (rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-//
-
-(if stdenv.isFreeBSD
- then {
-   # The FreeBSD boxes at hydra.nixos.org are VMs run in QEMU.  This patch
-   # allows GMP to work correctly in that environment.
-   patches = [ ./ignore-bad-cpuid.patch ];
- }
- else { }))

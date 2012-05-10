@@ -51,5 +51,4 @@ postInstall() {
     rm -f $out/lib/libgcc_s.so.1
 }
 
-
 genericBuild

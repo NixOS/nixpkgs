@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 
 let
-  name = "openssl-1.0.0g";
+  name = "openssl-1.0.0i";
 
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
@@ -23,8 +23,7 @@ let
            ./gnu.patch                # submitted upstream
          ]
 
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch
-    ++ stdenv.lib.optional (stdenv.system == "x86_64-freebsd") ./freebsd-x86_64-asm.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
   
 in
 
@@ -36,7 +35,7 @@ stdenv.mkDerivation {
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha1 = "2b517baada2338663c27314cb922f9755e73e07f";
+    sha1 = "b7aa11cbd7d264c2b1f44e3d55b334fb33f7b674";
   };
 
   patches = patchesCross false;

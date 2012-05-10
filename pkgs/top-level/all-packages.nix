@@ -3705,7 +3705,7 @@ let
       # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
       callPackage ../development/libraries/gmp/4.3.1.nix { }
     else
-      callPackage ../development/libraries/gmp/5.0.3.nix { };
+      callPackage ../development/libraries/gmp/5.0.5.nix { };
 
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
