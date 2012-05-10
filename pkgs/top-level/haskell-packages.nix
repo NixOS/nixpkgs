@@ -153,15 +153,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexPosix   = self.regexPosix_0_95_1;      # 7.4.1 ok
     stm          = self.stm_2_3;                # 7.4.1 ok
     syb          = self.syb_0_3_6_1;            # 7.4.1 ok
-    xhtml        = self.xhtml_3000_2_1;         # 7.4.1 ok
+    xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
     zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
     HTTP         = self.HTTP_4000_2_3;          # 7.4.1 ok
     text         = self.text_0_11_2_0;          # 7.4.1 ok
-    transformers = self.transformers_0_2_2_0;   # 7.4.1 ok
-    mtl          = self.mtl_2_0_1_0;            # 7.4.1 ok
+    transformers = self.transformers_0_3_0_0;   # 7.4.1 ok
+    mtl          = self.mtl_2_1_1;              # 7.4.1 ok
     random       = self.random_1_0_1_1;         # 7.4.1 ok
     cabalInstall = self.cabalInstall_0_14_0;    # 7.4.1 ok
-    alex         = self.alex_3_0_2;             # 7.4.1 ok
+    alex         = self.alex_3_0_1;             # 7.4.1 ok
     happy        = self.happy_1_18_9;           # 7.4.1 ok
     haddock      = self.haddock_2_10_0;         # 7.4.1 ok
   };
