@@ -75,10 +75,15 @@ stdenv.mkDerivation ({
 
     /* Allow nixos and nix handle the locale-archive. */
     ./nix-locale-archive.patch
+  ]
 
-    /* don't use /etc/ld.so.cache, for non-nixos systems */
-    ./dont_use_system_ld_so_cache.patch
+  ++ (stdenv.lib.optional (hurdHeaders == null)
 
+      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  Currently
+         disabled on GNU/Hurd, which uses a more recent libc snapshot. */
+         ./dont_use_system_ld_so_cache.patch )
+
+  ++ [
     /* Without this patch many KDE binaries crash. */
     ./glibc-elf-localscope.patch
   ] ++ stdenv.lib.optional installLocales ./catalan-firstdays.patch;
