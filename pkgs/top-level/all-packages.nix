@@ -774,9 +774,9 @@ let
 
   gnupg = callPackage ../tools/security/gnupg { };
 
-  gnupg2_1 = callPackage ../tools/security/gnupg/git.nix {
+  gnupg2_1 = lowPrio (callPackage ../tools/security/gnupg/git.nix {
     libassuan = libassuan2_1;
-  };
+  });
 
   gnuplot = callPackage ../tools/graphics/gnuplot {
     texLive = null;
