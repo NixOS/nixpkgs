@@ -1522,6 +1522,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xhtml_3000_2_0_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.1.nix {};
   xhtml_3000_2_0_4 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.4.nix {};
+  xhtml_3000_2_0_5 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.5.nix {};
   xhtml_3000_2_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.1.nix {};
   xhtml = self.xhtml_3000_2_1;
 
@@ -1605,6 +1606,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   alex_2_3_2 = callPackage ../development/tools/parsing/alex/2.3.2.nix {};
   alex_2_3_3 = callPackage ../development/tools/parsing/alex/2.3.3.nix {};
   alex_2_3_5 = callPackage ../development/tools/parsing/alex/2.3.5.nix {};
+  alex_3_0_1 = callPackage ../development/tools/parsing/alex/3.0.1.nix {};
   alex_3_0_2 = callPackage ../development/tools/parsing/alex/3.0.2.nix {};
   alex = self.alex_3_0_2;
 
