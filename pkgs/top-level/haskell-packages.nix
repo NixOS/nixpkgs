@@ -829,8 +829,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellSrc = self.haskellSrc_1_0_1_5;
 
   haskellSrcExts_1_11_1 = callPackage ../development/libraries/haskell/haskell-src-exts/1.11.1.nix {};
-  haskellSrcExts_1_13_2 = callPackage ../development/libraries/haskell/haskell-src-exts/1.13.2.nix {};
-  haskellSrcExts = self.haskellSrcExts_1_13_2;
+  haskellSrcExts_1_13_3 = callPackage ../development/libraries/haskell/haskell-src-exts/1.13.3.nix {};
+  haskellSrcExts = self.haskellSrcExts_1_13_3;
 
   haskellSrcMeta = callPackage ../development/libraries/haskell/haskell-src-meta {};
 
@@ -1485,8 +1485,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   WebBits_2_0 = callPackage ../development/libraries/haskell/WebBits/2.0.nix {
     parsec = self.parsec2;
   };
-  WebBits_2_1 = callPackage ../development/libraries/haskell/WebBits/2.1.nix {};
-  WebBits = self.WebBits_2_1;
+  WebBits_2_2 = callPackage ../development/libraries/haskell/WebBits/2.2.nix {};
+  WebBits = self.WebBits_2_2;
 
   WebBitsHtml_1_0_1 = callPackage ../development/libraries/haskell/WebBits-Html/1.0.1.nix {
     WebBits = self.WebBits_2_0;

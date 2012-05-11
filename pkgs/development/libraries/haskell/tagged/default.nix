@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tagged";
-  version = "0.4.2";
-  sha256 = "16c2006b7f87003z6vz13fisw18iiqncjqk9x0f4wwzj6i70wgbw";
+  version = "0.4.2.1";
+  sha256 = "0acd0wyyl6nx8i6r5h6smb7apmnmic6kn7ks9pc8nfmhlzhgfk57";
   meta = {
     homepage = "http://github.com/ekmett/tagged";
     description = "Haskell 98 phantom types to avoid unsafely passing dummy arguments";

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskell-src-exts";
-  version = "1.13.2";
-  sha256 = "1vq4qagbypm8lp4dr6zjd6mhgiv096a2cpyfvfs3yq06iqv5x602";
+  version = "1.13.3";
+  sha256 = "0z2vs6ji0dgm3c11jwcq5jcnjr8a6pawrkn3c8a3a5p612v8d495";
   buildDepends = [ cpphs ];
   buildTools = [ happy ];
   meta = {

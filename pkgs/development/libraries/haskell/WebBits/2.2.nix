@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "WebBits";
-  version = "2.1";
-  sha256 = "18m19fck9zb6jh8bfd47nja1q6ab1jmd0q5r3k8m5674i6273hyn";
+  version = "2.2";
+  sha256 = "1frmnjbpgm76dzs1p4766fb6isqc3pxv4dnj8sdhnfliv5j0xv2z";
   buildDepends = [ mtl parsec syb ];
   meta = {
-    homepage = "http://www.cs.brown.edu/research/plt/";
+    homepage = "http://github.com/brownplt/webbits";
     description = "JavaScript analysis tools";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

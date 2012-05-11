@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "MemoTrie";
-  version = "0.4.12";
-  sha256 = "0wjpfy1vlk3fjbdj924viv1wji28kx3w9hsaz7hd0gfs77y9vjza";
+  version = "0.5";
+  sha256 = "07knq5ccsyicznvr25vlbzadrgdw2aic71hhbv6v16wra1f17gbf";
   buildDepends = [ void ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/MemoTrie";
