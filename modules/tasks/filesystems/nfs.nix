@@ -46,8 +46,6 @@ in
         cp -v ${pkgs.klibc}/lib/klibc/bin.static/nfsmount $out/bin
       '';
 
-    environment.etc = singleton idmapdConfFile;
-
     # Ensure that statd and idmapd are started before mountall.
     jobs.mountall.preStart =
       ''
