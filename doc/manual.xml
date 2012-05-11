@@ -14,14 +14,12 @@
         <surname>Dolstra</surname>
       </personname>
       <affiliation>
-        <orgname>Delft University of Technology</orgname>
-        <orgdiv>Department of Software Technology</orgdiv>
+        <orgname>LogicBlox</orgname>
       </affiliation>
     </author>
 
     <copyright>
-      <year>2008</year>
-      <year>2009</year>
+      <year>2008-2012</year>
       <holder>Eelco Dolstra</holder>
     </copyright>
 

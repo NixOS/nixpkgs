@@ -8,15 +8,14 @@
 
 body
 {
-    font-family: sans-serif;
+    font-family: "Nimbus Sans L", sans-serif;
     background: white;
     margin: 2em 1em 2em 1em;
 }
 
-h1,h2,h3
+h1, h2, h3, h4
 {
     color: #005aa0;
-    text-align: left;
 }
 
 h1 /* title */
@@ -46,6 +45,11 @@ h3 /* subsections */
     font-size: 125%;
 }
 
+div.simplesect h2
+{
+    font-size: 110%;
+}
+
 div.appendix h3
 {
     font-size: 150%;
@@ -70,16 +74,23 @@ div.refsection h3
 
 div.example
 {
-    border: 1px solid #6185a0;
+    border: 1px solid #b0b0b0;
     padding: 6px 6px;
     margin-left: 1.5em;
     margin-right: 1.5em;
     background: #f4f4f8;
+    border-radius: 0.4em;
+    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
 }
 
 div.example p.title
 {
     margin-top: 0em;
+}
+
+div.example pre
+{
+    box-shadow: none;
 }
 
 
@@ -89,14 +100,15 @@ div.example p.title
 
 pre.screen, pre.programlisting
 {
-    border: 1px solid #6185a0;
+    border: 1px solid #b0b0b0;
     padding: 3px 3px;
     margin-left: 1.5em;
     margin-right: 1.5em;
     color: #600000;
     background: #f4f4f8;
     font-family: monospace;
-    /* font-size: 90%; */
+    border-radius: 0.4em;
+    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
 }
 
 div.example pre.programlisting
@@ -113,13 +125,15 @@ div.example pre.programlisting
 
 .note, .warning
 {
-    border: 1px solid #6185a0;
+    border: 1px solid #b0b0b0;
     padding: 3px 3px;
     margin-left: 1.5em;
     margin-right: 1.5em;
     margin-bottom: 1em;
     padding: 0.3em 0.3em 0.3em 0.3em;
     background: #fffff5;
+    border-radius: 0.4em;
+    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
 }
 
 div.note, div.warning
@@ -131,7 +145,6 @@ div.note h3, div.warning h3
 {
     color: red;
     font-size: 100%;
-//    margin: 0 0 0 0;
     padding-right: 0.5em;
     display: inline;
 }
@@ -162,20 +175,26 @@ div.navfooter *
                         Links colors and highlighting: 
  ***************************************************************************/
 
+a { text-decoration: none; }
+a:hover { text-decoration: underline; }
 a:link { color: #0048b3; }
 a:visited { color: #002a6a; }
-a:hover { background: #ffffcd; }
 
 
 /***************************************************************************
                               Table of contents:
  ***************************************************************************/
 
-.toc
+div.toc
 {
     font-size: 90%;
 }
 
+div.toc dl
+{
+    margin-top: 0em;
+    margin-bottom: 0em;
+}
 
 
 /***************************************************************************
@@ -208,76 +227,29 @@ div.glosslist dt
     font-style: italic;
 }
 
-.default
-{
-    font-style: italic;
-}
-
-.availability
-{
-    font-style: italic;
-}
-
 .varname
 {
     color: #400000;
 }
 
-
-div.informaltable table
+span.command strong
 {
-  border: 1px solid #6185a0;
-  width: 100%;
-}
-
-div.informaltable td
-{
-  border: 0;
-  padding: 5px;
-}
-
-div.informaltable td.default
-{
-  text-align: right;
-}
-
-div.informaltable th
-{
-  text-align: left;
-  color: #005aa0;
-  border: 0;
-  padding: 5px;
-  background: #fffff5;
-  font-weight: normal;
-  font-style: italic;
-}
-
-td.varname, td.tagname, td.paramname
-{
-  font-weight: bold;
-  vertical-align: top;
-}
-
-div.epigraph
-{
-    font-style: italic;
-    text-align: right;
-}
-
-table.productionset table.productionset
-{
-    font-family: monospace;
-}
-
-strong.command
-{
-//    font-family: monospace;
-//    font-style: italic;
-//    font-weight: normal;
+    font-weight: normal;
     color: #400000;
 }
 
-div.calloutlist td
+div.calloutlist table
 {
-    padding-bottom: 1em;
+    box-shadow: none;
+}
+
+table
+{
+    border-collapse: collapse;
+    box-shadow: 0.4em 0.4em 0.5em #e0e0e0;
+}
+
+div.affiliation
+{
+    font-style: italic;
 }

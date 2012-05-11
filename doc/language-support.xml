@@ -196,6 +196,7 @@ twisted = buildPythonPackage {
 </section>
 
 
+<!--
 <section><title>Haskell</title>
 
 <para>TODO</para>
@@ -215,6 +216,7 @@ twisted = buildPythonPackage {
 <para>* Special support for building TeX documents</para>
 
 </section>
+-->
 
 
 </chapter>
