@@ -1,18 +1,18 @@
-{stdenv, fetchurl, openjdk}:
+{stdenv, fetchurl, makeWrapper, openjdk, rlwrap}:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "1.7.0";
+  version = "1.7.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://raw.github.com/technomancy/leiningen/1.7.0/bin/lein-pkg";
-    sha256 = "1339f6ffc7bae3171174fc9eae990f5b9710ff2804038e931d531632c57f189c";
+    url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
+    sha256 = "7684b899edd6004abafd8e26d2b43d5691217f1aaca535fb94bde1594c8129a5";
   };
 
   jarsrc = fetchurl {
-    url = "https://github.com/downloads/technomancy/leiningen/leiningen-1.7.0-standalone.jar";
-    sha256 = "501eaa1c2a19ca4ffc2fde1776552cb513d69ee874abb547c40cee92156e50bf";
+    url = "https://github.com/downloads/technomancy/leiningen/leiningen-${version}-standalone.jar";
+    sha256 = "5d167b7572b9652d44c2b58a13829704842d976fd2236530ef552194e6c12150";
   };
 
   clojuresrc = fetchurl {
@@ -20,9 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "b38853254a2df9138b2e2c12be0dca3600fa7e2a951fed05fc3ba2d9141a3fb0";
   };
 
-  patches = [ ./lein.patch ];
+  patches = [ ./lein-rlwrap.patch ./lein.patch ];
+
+  inherit rlwrap;
 
   builder = ./builder.sh;
+
+  buildInputs = [ makeWrapper ];
 
   propagatedBuildInputs = [ openjdk ];
 
