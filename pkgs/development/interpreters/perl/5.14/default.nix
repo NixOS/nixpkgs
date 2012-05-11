@@ -58,4 +58,6 @@ stdenv.mkDerivation rec {
     '';
 
   setupHook = ./setup-hook.sh;
+
+  passthru.libPrefix = "lib/perl5/site_perl";
 }

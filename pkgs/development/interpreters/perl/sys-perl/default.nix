@@ -1,6 +1,6 @@
 { stdenv }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "perl";
 
   unpackPhase = "true";
@@ -12,4 +12,8 @@ stdenv.mkDerivation {
     '';
 
   setupHook = ./setup-hook.sh;
+
+  libPrefix = "lib/perl5/site_perl/5.10/i686-cygwin";
+
+  passthru.libPrefix = libPrefix;
 }
