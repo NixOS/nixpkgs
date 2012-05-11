@@ -220,7 +220,7 @@ let
 
     ${if !isMainServer && mainCfg.logPerVirtualHost then ''
       ErrorLog ${mainCfg.logDir}/error_log-${cfg.hostName}
-      CustomLog ${mainCfg.logDir}/access_log-${cfg.hostName} ${mainCfg.logFormat}
+      CustomLog ${mainCfg.logDir}/access_log-${cfg.hostName} ${cfg.logFormat}
     '' else ""}
 
     ${robotsConf}
@@ -444,14 +444,6 @@ in
         default = "/var/log/httpd";
         description = "
           Directory for Apache's log files.  It is created automatically.
-        ";
-      };
-
-      logFormat = mkOption {
-        default = "common";
-        example = "combined";
-        description = "
-          Log format for Apache's log files. Possible values are: combined, common, referer, agent.
         ";
       };
 
