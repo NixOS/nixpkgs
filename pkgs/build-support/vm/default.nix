@@ -1229,6 +1229,28 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
+    ubuntu1204i386 = {
+      name = "ubuntu-12.04-oneiric-i386";
+      fullName = "Ubuntu 12.04 Precise (i386)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/precise/main/binary-i386/Packages.bz2;
+        sha256 = "18ns9h4qhvjfcip9z55grzi371racxavgqkp6b5kfkdq2wwwax2d";
+      };
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+ 
+    ubuntu1204x86_64 = {
+      name = "ubuntu-12.04-oneiric-amd64";
+      fullName = "Ubuntu 12.04 Precise (amd64)";
+      packagesList = fetchurl {
+        url = mirror://ubuntu/dists/precise/main/binary-amd64/Packages.bz2;
+        sha256 = "1aabpn0hdih6cbabyn87yvhccqj44q9k03mqmjsb920iqlckl3fc";
+      };
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
