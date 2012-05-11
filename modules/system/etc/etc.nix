@@ -16,8 +16,26 @@ let
         }
       ];
       description = ''
-        List of files that have to be linked in /etc.
+        List of files that have to be linked in <filename>/etc</filename>.
       '';
+      type = types.listOf types.optionSet;
+      options = {
+        source = mkOption {
+          description = "Source file.";
+        };
+        target = mkOption {
+          description = "Name of symlink (relative to <filename>/etc</filename>).";
+        };
+        mode = mkOption {
+          default = "symlink";
+          example = "0600";
+          description = ''
+            If set to something else than <literal>symlink</literal>,
+            the file is copied instead of symlinked, with the given
+            file mode.
+          '';
+        };
+      };
     };
   };
 in
@@ -35,7 +53,7 @@ let
     /* !!! Use toXML. */
     sources = map (x: x.source) config.environment.etc;
     targets = map (x: x.target) config.environment.etc;
-    modes = map (x: if x ? mode then x.mode else "symlink") config.environment.etc;
+    modes = map (x: x.mode) config.environment.etc;
   };
 
 in
