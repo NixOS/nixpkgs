@@ -1,18 +1,19 @@
-{stdenv, fetchurl, zlib}:
+{ stdenv, fetchurl, zlib, utillinux }:
 
 let name = "pigz";
-    version = "2.1.6";
+    version = "2.2.4";
 in
 stdenv.mkDerivation {
   name = name + "-" + version;
 
   src = fetchurl {
     url = "http://www.zlib.net/${name}/${name}-${version}.tar.gz";
-    sha256 = "2ff1ba812407848787fe6719fde4436cb7c490e6d8c6e721f4e4309caa5f3640";
+    sha256 = "7e7967c47f66c07be97cbfa25c8816b72f9d35258466ea31eddc7666c914160e";
   };
 
-  buildInputs = [zlib];
-  doCheck = false;  # The makefile is broken in 2.1.5. Should be fixed upstream.
+  buildInputs = [zlib] ++ stdenv.lib.optional stdenv.isLinux utillinux;
+
+  doCheck = stdenv.isLinux;
   checkTarget = "tests";
   installPhase =
   ''
@@ -24,7 +25,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.zlib.net/pigz/;
+    homepage = "http://www.zlib.net/pigz/";
     description = "A parallel implementation of gzip for multi-core machines";
+
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
