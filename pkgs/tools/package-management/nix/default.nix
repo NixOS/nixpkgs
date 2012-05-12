@@ -1,39 +1,62 @@
-{ stdenv, fetchurl, perl, curl, bzip2, openssl ? null
+{ stdenv, fetchurl, perl, curl, bzip2, sqlite, openssl ? null
+, pkgconfig, boehmgc, perlPackages
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-0.16";
+  name = "nix-1.0";
 
   src = fetchurl {
-    url = "http://nixos.org/releases/nix/${name}/build/565033/download/4/${name}.tar.bz2";
-    sha256 = "0648ed285f263a2cc5a704c4aee70ec5f0415c3749f540c2691a2a613492c7c3";
+    url = "http://hydra.nixos.org/build/2609700/download/4/${name}.tar.bz2";
+    sha256 = "27f1d4d2a5fb1951bfc9e706c0894a961aed1afe0d095e16eb8fbef94ee7ec17";
   };
 
-  buildNativeInputs = [ perl ];
-  buildInputs = [ curl openssl ];
+  buildNativeInputs = [ perl pkgconfig ];
+
+  buildInputs = [ curl openssl boehmgc sqlite ];
+
+  # Note: bzip2 is not passed as a build input, because the unpack phase
+  # would end up using the wrong bzip2 when cross-compiling.
+  # XXX: The right thing would be to reinstate `--with-bzip2' in Nix.
+  postUnpack =
+    '' export CPATH="${bzip2}/include"
+       export LIBRARY_PATH="${bzip2}/lib"
+    '';
 
   configureFlags =
     ''
       --with-store-dir=${storeDir} --localstatedir=${stateDir}
-      --with-bzip2=${bzip2}
+      --with-dbi=${perlPackages.DBI}/lib/perl5/site_perl
+      --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
       --disable-init-state
+      --enable-gc
       CFLAGS=-O3 CXXFLAGS=-O3
     '';
 
+  doInstallCheck = true;
+
   crossAttrs = {
+    postUnpack =
+      '' export CPATH="${bzip2.hostDrv}/include"
+         export NIX_CROSS_LDFLAGS="-L${bzip2.hostDrv}/lib -rpath-link ${bzip2.hostDrv}/lib $NIX_CROSS_LDFLAGS"
+      '';
+
     configureFlags =
       ''
         --with-store-dir=${storeDir} --localstatedir=${stateDir}
-        --with-bzip2=${bzip2.hostDrv}
+        --with-dbi=${perlPackages.DBI}/lib/perl5/site_perl
+        --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
         --disable-init-state
+        --enable-gc
         CFLAGS=-O3 CXXFLAGS=-O3
-      '';
-    doCheck = false;
+      '' + stdenv.lib.optionalString (
+          stdenv.cross ? nix && stdenv.cross.nix ? system
+      ) ''--with-system=${stdenv.cross.nix.system}'';
+    doInstallCheck = false;
   };
 
-  #doCheck = true;
+  enableParallelBuilding = true;
 
   meta = {
     description = "The Nix Deployment System";
