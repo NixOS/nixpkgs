@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
     sed -i "s/env python[0-9.]*/python/" $PYFILES
     for a in $out/bin/*; do
-      wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH --prefix LD_LIBRARY_PATH : ${unrar}/lib
+      wrapProgram $a --prefix PYTHONPATH : $PYTHONPATH --prefix LD_LIBRARY_PATH : ${unrar}/lib --prefix PATH : ${popplerQt4}/bin
     done
   '';
 
