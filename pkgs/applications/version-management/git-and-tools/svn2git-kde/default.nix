@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, qt47, subversion, apr}:
+{ stdenv, fetchgit, qt4, subversion, apr}:
 
 stdenv.mkDerivation rec {
-  name = "svn2git";
+  name = "svn2git-kde";
 
   src = fetchgit {
     url = http://git.gitorious.org/svn2git/svn2git.git;
@@ -20,6 +20,5 @@ stdenv.mkDerivation rec {
     cp svn-all-fast-export $out/bin
   '';
 
-  buildInputs = [subversion apr qt47];
-  
+  buildInputs = [ subversion apr qt4 ];
 }
