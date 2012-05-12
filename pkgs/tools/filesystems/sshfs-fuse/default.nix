@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "sshfs-fuse-2.2";
+  name = "sshfs-fuse-2.4";
   
   src = fetchurl {
     url = "mirror://sourceforge/fuse/${name}.tar.gz";
-    sha256 = "08sl7q8nqwg57bxbzp2wb9h204gnl1w9c1f7zjdh7xdr9jybqvi0";
+    sha256 = "1ladfxflg0pzd5br0p9n5790sf1975va7igr9z4r702n4a2vm4rw";
   };
   
   buildInputs = [ pkgconfig glib fuse ];
