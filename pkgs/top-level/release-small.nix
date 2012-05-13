@@ -133,7 +133,6 @@ with (import ./release-lib.nix);
   nfsUtils = linux;
   nix = all;
   nixUnstable = all;
-  nixSqlite = all;
   nss_ldap = linux;
   nssmdns = linux;
   ntfs3g = linux;

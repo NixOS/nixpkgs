@@ -41,6 +41,9 @@ releaseTools.makeSourceTarball {
   doCheck = true;
 
   checkPhase = ''
+    export NIX_DB_DIR=$TMPDIR
+    nix-store --init
+  
     # Run the regression tests in `lib'.
     res="$(nix-instantiate --eval-only --strict pkgs/lib/tests.nix)"
     if test "$res" != "[ ]"; then
