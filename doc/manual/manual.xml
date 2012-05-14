@@ -50,7 +50,7 @@
   
 
   <xi:include href="installation.xml" />
-  <xi:include href="userconfiguration.xml" />
+  <!-- <xi:include href="userconfiguration.xml" /> -->
   <xi:include href="troubleshooting.xml" />
   <xi:include href="development.xml" />
   <chapter xml:id="ch-options">
