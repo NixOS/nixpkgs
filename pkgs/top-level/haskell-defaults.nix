@@ -1,0 +1,269 @@
+# Haskell / GHC infrastructure in Nixpkgs
+#
+# In this file, we
+#
+#    * define sets of default package versions for each GHC compiler version,
+#    * associate GHC versions with bootstrap compiler versions and package defaults.
+#
+# The actual Haskell packages are composed in haskell-packages.nix. There is
+# more documentation in there.
+
+{ makeOverridable, lowPrio, stdenv, pkgs, newScope, getConfig, callPackage } : rec {
+
+  # Preferences functions.
+  #
+  # Change these if you want to change the default versions of packages being used
+  # for a particular GHC version.
+
+  ghcHEADPrefs = ghc741Prefs;
+
+  ghc741Prefs_pedantic =
+    self : self.haskellPlatformArgs_future self // {
+      mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
+      binary = null; # now a core package
+    };
+
+  ghc741Prefs =
+    self : ghc741Prefs_pedantic self // {
+      # These are necessary at the moment to prevent many packages from breaking.
+      mtl          = self.mtl_2_0_1_0;
+      transformers = self.transformers_0_2_2_0;
+    };
+
+  ghc722Prefs = ghc741Prefs;
+
+  ghc721Prefs = ghc741Prefs;
+
+  ghc704Prefs =
+    self : self.haskellPlatformArgs_2011_4_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2011_4_0_0;
+      mtl1 = self.mtl_1_1_1_1;
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
+      monadPar = self.monadPar_0_1_0_3;
+    };
+
+  ghc703Prefs =
+    self : self.haskellPlatformArgs_2011_2_0_1 self // {
+      haskellPlatform = self.haskellPlatform_2011_2_0_1;
+      mtl1 = self.mtl_1_1_1_1;
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      monadPar = self.monadPar_0_1_0_3;
+    };
+
+  ghc702Prefs = ghc701Prefs;
+
+  ghc701Prefs =
+    self : self.haskellPlatformArgs_2011_2_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2011_2_0_0;
+      mtl1 = self.mtl_1_1_1_1;
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      monadPar = self.monadPar_0_1_0_3;
+    };
+
+  ghc6123Prefs = ghc6122Prefs;
+
+  ghc6122Prefs =
+    self : self.haskellPlatformArgs_2010_2_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2010_2_0_0;
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      monadPar = self.monadPar_0_1_0_3;
+      deepseq = self.deepseq_1_1_0_2;
+      # deviating from Haskell platform here, to make some packages (notably statistics) compile
+    };
+
+  ghc6121Prefs =
+    self : self.haskellPlatformArgs_2010_1_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2010_1_0_0;
+      extensibleExceptions = self.extensibleExceptions_0_1_1_0;
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      deepseq = self.deepseq_1_1_0_2;
+      monadPar = self.monadPar_0_1_0_3;
+      # deviating from Haskell platform here, to make some packages (notably statistics) compile
+    };
+
+  ghc6104Prefs =
+    self : self.haskellPlatformArgs_2009_2_0_2 self // {
+      haskellPlatform = self.haskellPlatform_2009_2_0_2;
+      extensibleExceptions = self.extensibleExceptions_0_1_1_0;
+      text = self.text_0_11_0_6;
+      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
+      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      deepseq = self.deepseq_1_1_0_2;
+      monadPar = self.monadPar_0_1_0_3;
+      # deviating from Haskell platform here, to make some packages (notably statistics) compile
+    };
+
+  # Abstraction for Haskell packages collections
+  packagesFun = makeOverridable
+   ({ ghcPath
+    , ghcBinary ? ghc6101Binary
+    , prefFun
+    , extraPrefs ? (x : {})
+    , profExplicit ? false, profDefault ? false
+    , modifyPrio ? lowPrio
+    } :
+      import ./haskell-packages.nix {
+        inherit pkgs newScope modifyPrio;
+        prefFun = self : super : self // prefFun super // extraPrefs super;
+        # prefFun = self : super : self;
+        enableLibraryProfiling =
+          if profExplicit then profDefault
+                          else getConfig [ "cabal" "libraryProfiling" ] profDefault;
+        ghc = callPackage ghcPath { ghc = ghcBinary; };
+      });
+
+  defaultVersionPrioFun =
+    profDefault :
+    if getConfig [ "cabal" "libraryProfiling" ] false == profDefault
+      then (x : x)
+      else lowPrio;
+
+  packages = args : let r = packagesFun args;
+                    in  r // { lowPrio     = r.override { modifyPrio   = lowPrio; };
+                               highPrio    = r.override { modifyPrio   = x : x; };
+                               noProfiling = r.override { profDefault  = false;
+                                                          profExplicit = true;
+                                                          modifyPrio   = defaultVersionPrioFun false; };
+                               profiling   = r.override { profDefault  = true;
+                                                          profExplicit = true;
+                                                          modifyPrio   = defaultVersionPrioFun true; };
+                             };
+
+  # Binary versions of GHC
+  #
+  # GHC binaries are around for bootstrapping purposes
+
+  # If we'd want to reactivate the 6.6 and 6.8 series of ghc, we'd
+  # need to reenable an old binary such as this.
+  /*
+  ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
+    inherit fetchurl stdenv ncurses gmp;
+    readline = if stdenv.system == "i686-linux" then readline4 else readline5;
+    perl = perl58;
+  });
+  */
+
+  ghc6101Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.1-binary.nix {
+    gmp = pkgs.gmp4;
+  });
+
+  ghc6102Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.2-binary.nix {
+    gmp = pkgs.gmp4;
+  });
+
+  ghc6121Binary = lowPrio (callPackage ../development/compilers/ghc/6.12.1-binary.nix {
+    gmp = pkgs.gmp4;
+  });
+
+  ghc704Binary = lowPrio (callPackage ../development/compilers/ghc/7.0.4-binary.nix {
+    gmp = pkgs.gmp4;
+  });
+
+  ghc6101BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
+  ghc6121BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
+
+  # Compiler configurations
+  #
+  # Here, we associate compiler versions with bootstrap compiler versions and
+  # preference functions.
+
+  packages_ghc6104 =
+    packages { ghcPath = ../development/compilers/ghc/6.10.4.nix;
+               prefFun = ghc6104Prefs;
+             };
+
+  packages_ghc6121 =
+    packages { ghcPath =  ../development/compilers/ghc/6.12.1.nix;
+               prefFun = ghc6121Prefs;
+             };
+
+  packages_ghc6122 =
+    packages { ghcPath = ../development/compilers/ghc/6.12.2.nix;
+               prefFun = ghc6122Prefs;
+             };
+
+  packages_ghc6123 =
+    packages { ghcPath = ../development/compilers/ghc/6.12.3.nix;
+               prefFun = ghc6123Prefs;
+             };
+
+  # Will never make it into a platform release, severe bugs; leave at lowPrio.
+  packages_ghc701 =
+    packages { ghcPath = ../development/compilers/ghc/7.0.1.nix;
+               prefFun = ghc701Prefs;
+             };
+
+  packages_ghc702 =
+    packages { ghcPath = ../development/compilers/ghc/7.0.2.nix;
+               prefFun = ghc702Prefs;
+             };
+
+  packages_ghc703 =
+    packages { ghcPath = ../development/compilers/ghc/7.0.3.nix;
+               prefFun = ghc703Prefs;
+             };
+
+  # The following items are a bit convoluted, but they serve the
+  # following purpose:
+  #   - for the default version of GHC, both profiling and
+  #     non-profiling versions should be built by Hydra --
+  #     therefore, the _no_profiling and _profiling calls;
+  #   - however, if a user just upgrades a profile, then the
+  #     cabal/libraryProfiling setting should be respected; i.e.,
+  #     the versions not matching the profiling config setting
+  #     should have low priority -- therefore, the use of
+  #     defaultVersionPrioFun;
+  #   - it should be possible to select library versions that
+  #     respect the config setting using the standard
+  #     packages_ghc704 path -- therefore, the additional
+  #     call in packages_ghc704, without recurseIntoAttrs,
+  #     so that Hydra doesn't build these.
+
+  packages_ghc704 =
+    packages { ghcPath = ../development/compilers/ghc/7.0.4.nix;
+               ghcBinary = ghc6101BinaryDarwin;
+               prefFun = ghc704Prefs;
+             };
+
+  packages_ghc721 =
+    packages { ghcPath = ../development/compilers/ghc/7.2.1.nix;
+               ghcBinary = ghc6121BinaryDarwin;
+               prefFun = ghc721Prefs;
+             };
+
+  packages_ghc722 =
+    packages { ghcPath = ../development/compilers/ghc/7.2.2.nix;
+               ghcBinary = ghc6121BinaryDarwin;
+               prefFun = ghc722Prefs;
+             };
+
+  packages_ghc741 =
+    packages { ghcPath = ../development/compilers/ghc/7.4.1.nix;
+               ghcBinary = ghc6121BinaryDarwin;
+               prefFun = ghc741Prefs;
+             };
+
+  # More strictly adhering to the probable future Haskell Platform.
+  packages_ghc741_pedantic =
+    packages_ghc741.override { prefFun = ghc741Prefs_pedantic; };
+
+  # Stable branch snapshot.
+  packages_ghc742 =
+    packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
+               ghcBinary = ghc6121BinaryDarwin;
+               prefFun = ghcHEADPrefs;
+             };
+
+  # Reasonably current HEAD snapshot. Should *always* be lowPrio.
+  packages_ghcHEAD =
+    packages { ghcPath = ../development/compilers/ghc/head.nix;
+               ghcBinary = # (packages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
+                           ghc704Binary;
+               prefFun = ghcHEADPrefs;
+             };
+  
+}

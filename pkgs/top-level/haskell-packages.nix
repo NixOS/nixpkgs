@@ -7,7 +7,7 @@
 # compiler. They are usually distributed via Hackage, the central Haskell
 # package repository. Since at least the libraries are incompatible between
 # different compiler versions, the whole file is parameterized by the GHC
-# that is being used. GHC itself is defined in all-packages.nix
+# that is being used. GHC itself is composed in haskell-defaults.nix.
 #
 # Note that next to the packages defined here, there is another way to build
 # arbitrary packages from HackageDB in Nix, using the hack-nix tool that is
@@ -74,25 +74,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   final = self;
 
-  # Preferences
-  #
-  # Different versions of GHC need different versions of certain core packages.
-  # We start with a suitable platform version per GHC version.
-
-  emptyPrefs   = super : super // { };
-  ghc6104Prefs = super : super // super.haskellPlatformDefaults_2009_2_0_2 super;
-  ghc6121Prefs = super : super // super.haskellPlatformDefaults_2010_1_0_0 super;
-  ghc6122Prefs = super : super // super.haskellPlatformDefaults_2010_2_0_0 super; # link
-  ghc6123Prefs = super : super // super.haskellPlatformDefaults_2010_2_0_0 super;
-  ghc701Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_0 super; # link
-  ghc702Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_0 super;
-  ghc703Prefs  = super : super // super.haskellPlatformDefaults_2011_2_0_1 super;
-  ghc704Prefs  = super : super // super.haskellPlatformDefaults_2011_4_0_0 super; # link
-  ghc721Prefs  = super : super // super.haskellPlatformDefaults_future super;
-  ghc722Prefs  = super : super // super.haskellPlatformDefaults_future super; #link
-  ghc741Prefs  = super : super // super.haskellPlatformDefaults_HEAD super;
-  ghcHEADPrefs = super : super // super.haskellPlatformDefaults_HEAD super;
-
   # GHC and its wrapper
   #
   # We use a wrapped version of GHC for nearly everything. The wrapped version
@@ -129,6 +110,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   #
   # We try to support several platform versions. For these, we set all
   # versions explicitly.
+  #
+  # DO NOT CHANGE THE VERSIONS LISTED HERE from the actual Haskell
+  # Platform defaults. If you must update the defaults for a particular
+  # GHC version, change the "preferences function" for that GHC version
+  # in haskell-defaults.nix.
 
   # NOTE: 2011.4.0.0 is the current default.
 
@@ -157,25 +143,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
     HTTP         = self.HTTP_4000_2_3;          # 7.4.1 ok
     text         = self.text_0_11_2_0;          # 7.4.1 ok
-    transformers = self.transformers_0_2_2_0;   # 7.4.1 ok
-    mtl          = self.mtl_2_0_1_0;            # 7.4.1 ok
+    transformers = self.transformers_0_3_0_0;   # 7.4.1 ok
+    mtl          = self.mtl_2_1_1;              # 7.4.1 ok
     random       = self.random_1_0_1_1;         # 7.4.1 ok
     cabalInstall = self.cabalInstall_0_14_0;    # 7.4.1 ok
     alex         = self.alex_3_0_1;             # 7.4.1 ok
     happy        = self.happy_1_18_9;           # 7.4.1 ok
     haddock      = self.haddock_2_10_0;         # 7.4.1 ok
   };
-
-  haskellPlatformDefaults_future =
-    self : self.haskellPlatformArgs_future self // {
-      mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
-      binary = null; # now a core package
-    };
-
-  haskellPlatformDefaults_HEAD =
-    self : self.haskellPlatformDefaults_future self // {
-      binary = null; # now a core package
-    };
 
   haskellPlatformArgs_2011_4_0_0 = self : {
     inherit (self) cabal ghc;
@@ -207,15 +182,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     happy        = self.happy_1_18_6;
     haddock      = self.haddock_2_9_2;
   };
-
-  haskellPlatformDefaults_2011_4_0_0 =
-    self : self.haskellPlatformArgs_2011_4_0_0 self // {
-      haskellPlatform = self.haskellPlatform_2011_4_0_0;
-      mtl1 = self.mtl_1_1_1_1;
-      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
-      monadPar = self.monadPar_0_1_0_3;
-    };
 
   haskellPlatform_2011_4_0_0 =
     callPackage ../development/libraries/haskell/haskell-platform/2011.4.0.0.nix
@@ -252,15 +218,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haddock      = self.haddock_2_9_2;
   };
 
-  haskellPlatformDefaults_2011_2_0_1 =
-    self : self.haskellPlatformArgs_2011_2_0_1 self // {
-      haskellPlatform = self.haskellPlatform_2011_2_0_1;
-      mtl1 = self.mtl_1_1_1_1;
-      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
-      monadPar = self.monadPar_0_1_0_3;
-    };
-
   haskellPlatform_2011_2_0_1 =
     callPackage ../development/libraries/haskell/haskell-platform/2011.2.0.1.nix
       (self.haskellPlatformArgs_2011_2_0_1 self);
@@ -296,15 +253,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haddock      = self.haddock_2_9_2;
   };
 
-  haskellPlatformDefaults_2011_2_0_0 =
-    self : self.haskellPlatformArgs_2011_2_0_0 self // {
-      haskellPlatform = self.haskellPlatform_2011_2_0_0;
-      mtl1 = self.mtl_1_1_1_1;
-      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
-      monadPar = self.monadPar_0_1_0_3;
-    };
-
   haskellPlatform_2011_2_0_0 =
     callPackage ../development/libraries/haskell/haskell-platform/2011.2.0.0.nix
       (self.haskellPlatformArgs_2011_2_0_0 self);
@@ -337,16 +285,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haddock      = self.haddock_2_7_2;
   };
 
-  haskellPlatformDefaults_2010_2_0_0 =
-    self : self.haskellPlatformArgs_2010_2_0_0 self // {
-      haskellPlatform = self.haskellPlatform_2010_2_0_0;
-      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
-      monadPar = self.monadPar_0_1_0_3;
-      deepseq = self.deepseq_1_1_0_2;
-      # deviating from Haskell platform here, to make some packages (notably statistics) compile
-    };
-
   haskellPlatform_2010_2_0_0 =
     callPackage ../development/libraries/haskell/haskell-platform/2010.2.0.0.nix
       (self.haskellPlatformArgs_2010_2_0_0 self);
@@ -376,16 +314,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haddock      = self.haddock_2_7_2;
     happy        = self.happy_1_18_4;
   };
-
-  haskellPlatformDefaults_2010_1_0_0 =
-    self : self.haskellPlatformArgs_2010_1_0_0 self // {
-      haskellPlatform = self.haskellPlatform_2010_1_0_0;
-      extensibleExceptions = self.extensibleExceptions_0_1_1_0;
-      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      deepseq = self.deepseq_1_1_0_2;
-      monadPar = self.monadPar_0_1_0_3;
-      # deviating from Haskell platform here, to make some packages (notably statistics) compile
-    };
 
   haskellPlatform_2010_1_0_0 =
     callPackage ../development/libraries/haskell/haskell-platform/2010.1.0.0.nix
@@ -417,18 +345,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     alex         = self.alex_2_3_1;
     happy        = self.happy_1_18_4;
   };
-
-  haskellPlatformDefaults_2009_2_0_2 =
-    self : self.haskellPlatformArgs_2009_2_0_2 self // {
-      haskellPlatform = self.haskellPlatform_2009_2_0_2;
-      extensibleExceptions = self.extensibleExceptions_0_1_1_0;
-      text = self.text_0_11_0_6;
-      repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
-      deepseq = self.deepseq_1_1_0_2;
-      monadPar = self.monadPar_0_1_0_3;
-      # deviating from Haskell platform here, to make some packages (notably statistics) compile
-    };
 
   haskellPlatform_2009_2_0_2 =
     callPackage ../development/libraries/haskell/haskell-platform/2009.2.0.2.nix

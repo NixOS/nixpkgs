@@ -2172,188 +2172,47 @@ let
     };
   };
 
-  # GHC
+  # Haskell and GHC
 
-  # GHC binaries are around for bootstrapping purposes
+  # Import Haskell infrastructure.
 
-  # If we'd want to reactivate the 6.6 and 6.8 series of ghc, we'd
-  # need to reenable an old binary such as this.
-  /*
-  ghc642Binary = lowPrio (import ../development/compilers/ghc/6.4.2-binary.nix {
-    inherit fetchurl stdenv ncurses gmp;
-    readline = if stdenv.system == "i686-linux" then readline4 else readline5;
-    perl = perl58;
-  });
-  */
+  haskell = callPackage ./haskell-defaults.nix { inherit pkgs; };
 
-  ghc6101Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.1-binary.nix {
-    gmp = gmp4;
-  });
-
-  ghc6102Binary = lowPrio (callPackage ../development/compilers/ghc/6.10.2-binary.nix {
-    gmp = gmp4;
-  });
-
-  ghc6121Binary = lowPrio (callPackage ../development/compilers/ghc/6.12.1-binary.nix {
-    gmp = gmp4;
-  });
-
-  ghc704Binary = lowPrio (callPackage ../development/compilers/ghc/7.0.4-binary.nix {
-    gmp = gmp4;
-  });
+  # Available GHC versions.
 
   # For several compiler versions, we export a large set of Haskell-related
   # packages.
-
-  # This should point to the current default version.
-  haskellPackages = haskellPackages_ghc704;
 
   # NOTE (recurseIntoAttrs): After discussion, we originally decided to
   # enable it for all GHC versions. However, this is getting too much,
   # particularly in connection with Hydra builds for all these packages.
   # So we enable it for selected versions only.
 
-  # Helper functions to abstract away from repetitive instantiations.
-  haskellPackagesFun = makeOverridable
-   ({ ghcPath
-    , ghcBinary ? ghc6101Binary
-    , prefFun
-    , extraPrefs ? (x : {})
-    , profExplicit ? false, profDefault ? false
-    , modifyPrio ? lowPrio
-    } :
-      import ./haskell-packages.nix {
-        inherit pkgs newScope modifyPrio;
-        prefFun = self : super : prefFun self super // extraPrefs super;
-        enableLibraryProfiling =
-          if profExplicit then profDefault
-                          else getConfig [ "cabal" "libraryProfiling" ] profDefault;
-        ghc = callPackage ghcPath { ghc = ghcBinary; };
-      });
-
-  # Currently active GHC versions.
-  haskellPackages_ghc6104 =
-    recurseIntoAttrs
-      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/6.10.4.nix;
-                            prefFun = x : x.ghc6104Prefs;
-                          });
-
-  haskellPackages_ghc6121 =
-    haskellPackagesFun { ghcPath =  ../development/compilers/ghc/6.12.1.nix;
-                         prefFun = x : x.ghc6121Prefs;
-                       };
-
-  haskellPackages_ghc6122 =
-    haskellPackagesFun { ghcPath = ../development/compilers/ghc/6.12.2.nix;
-                         prefFun = x : x.ghc6122Prefs;
-                       };
-
-  haskellPackages_ghc6123 =
-    recurseIntoAttrs
-      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/6.12.3.nix;
-                            prefFun = x : x.ghc6123Prefs;
-                          });
-
-  # Will never make it into a platform release, severe bugs; leave at lowPrio.
-  haskellPackages_ghc701 =
-    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.1.nix;
-                         prefFun = x : x.ghc701Prefs;
-                       };
-
-  haskellPackages_ghc702 =
-    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.2.nix;
-                         prefFun = x : x.ghc702Prefs;
-                       };
-
-  haskellPackages_ghc703 =
-    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.3.nix;
-                         prefFun = x : x.ghc703Prefs;
-                       };
-
   # Current default version: 7.0.4.
-  #
-  # The following items are a bit convoluted, but they serve the
-  # following purpose:
-  #   - for the default version of GHC, both profiling and
-  #     non-profiling versions should be built by Hydra --
-  #     therefore, the _no_profiling and _profiling calls;
-  #   - however, if a user just upgrades a profile, then the
-  #     cabal/libraryProfiling setting should be respected; i.e.,
-  #     the versions not matching the profiling config setting
-  #     should have low priority -- therefore, the use of
-  #     haskellDefaultVersionPrioFun;
-  #   - it should be possible to select library versions that
-  #     respect the config setting using the standard
-  #     haskellPackages_ghc704 path -- therefore, the additional
-  #     call in haskellPackages_ghc704, without recurseIntoAttrs,
-  #     so that Hydra doesn't build these.
-  haskellDefaultVersionPrioFun =
-    profDefault :
-    if getConfig [ "cabal" "libraryProfiling" ] false == profDefault
-      then (x : x)
-      else lowPrio;
+  haskellPackages = haskellPackages_ghc704;
 
-  haskellPackages_ghc704_no_profiling =
-    recurseIntoAttrs
-      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.4.nix;
-                            ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
-                            prefFun = x : x.ghc704Prefs;
-                            profExplicit = true;
-                            modifyPrio = haskellDefaultVersionPrioFun false;
-                          });
-
-  haskellPackages_ghc704_profiling =
-    recurseIntoAttrs
-      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.4.nix;
-                            ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
-                            prefFun = x : x.ghc704Prefs;
-                            profExplicit = true;
-                            profDefault = true;
-                            modifyPrio = haskellDefaultVersionPrioFun true;
-                          });
-
-  haskellPackages_ghc704 =
-    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.0.4.nix;
-                         ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
-                         prefFun = x : x.ghc704Prefs;
-                         modifyPrio = x : x;
-                       };
-
-  haskellPackages_ghc721 =
-    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.2.1.nix;
-                         ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
-                         prefFun = x : x.ghc721Prefs;
-                       };
-
-  haskellPackages_ghc722 =
-    haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.2.2.nix;
-                         ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
-                         prefFun = x : x.ghc722Prefs;
-                       };
-
-  haskellPackages_ghc741 =
-    recurseIntoAttrs
-      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.4.1.nix;
-                            ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
-                            prefFun = x : x.ghc741Prefs;
-                          });
-
+  haskellPackages_ghc6104             = recurseIntoAttrs (haskell.packages_ghc6104);
+  haskellPackages_ghc6121             =                   haskell.packages_ghc6121;
+  haskellPackages_ghc6122             =                   haskell.packages_ghc6122;
+  haskellPackages_ghc6123             = recurseIntoAttrs (haskell.packages_ghc6123);
+  haskellPackages_ghc701              =                   haskell.packages_ghc701;
+  haskellPackages_ghc702              =                   haskell.packages_ghc702;
+  haskellPackages_ghc703              =                   haskell.packages_ghc703;
+  # For the default version, we build profiling versions of the libraries, too.
+  # The following three lines achieve that: the first two make Hydra build explicit
+  # profiling and non-profiling versions; the final respects the user-configured
+  # default setting.
+  haskellPackages_ghc704_no_profiling = recurseIntoAttrs (haskell.packages_ghc704.noProfiling);
+  haskellPackages_ghc704_profiling    = recurseIntoAttrs (haskell.packages_ghc704.profiling);
+  haskellPackages_ghc704              =                   haskell.packages_ghc704.highPrio;
+  haskellPackages_ghc721              =                   haskell.packages_ghc721;
+  haskellPackages_ghc722              =                   haskell.packages_ghc722;
+  haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741);
+  haskellPackages_ghc741_pedantic     =                   haskell.packages_ghc741_pedantic;
   # Stable branch snapshot.
-  haskellPackages_ghc742 =
-    recurseIntoAttrs
-      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/7.4.2.nix;
-                            ghcBinary = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
-                            prefFun = x : x.ghcHEADPrefs;
-                          });
-
-  # Reasonably current HEAD snapshot. Should *always* be lowPrio.
-  haskellPackages_ghcHEAD =
-    recurseIntoAttrs
-      (haskellPackagesFun { ghcPath = ../development/compilers/ghc/head.nix;
-                            ghcBinary = # (haskellPackages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
-                                        ghc704Binary;
-                            prefFun = x : x.ghcHEADPrefs;
-                          });
+  haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742);
+  # Reasonably current HEAD snapshot.
+  haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
 
   haxeDist = import ../development/compilers/haxe {
     inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
