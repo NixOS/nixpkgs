@@ -505,7 +505,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeBuilderEnumerator = callPackage ../development/libraries/haskell/blaze-builder-enumerator {};
 
-  blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
+  blazeHtml_0_4_3_4 = callPackage ../development/libraries/haskell/blaze-html/0.4.3.4.nix {};
+  blazeHtml_0_5_0_0 = callPackage ../development/libraries/haskell/blaze-html/0.5.0.0.nix {};
+  blazeHtml = self.blazeHtml_0_4_3_4;
 
   blazeMarkup = callPackage ../development/libraries/haskell/blaze-markup {};
 

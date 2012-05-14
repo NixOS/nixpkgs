@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     colour dlist fgl filepath polyparse text transformers wlPprintText
   ];
+  patchPhase = ''
+    sed -i graphviz.cabal -e 's|transformers == 0.2.\*|transformers|'
+  '';
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";
     description = "Bindings to Graphviz for graph visualisation";
