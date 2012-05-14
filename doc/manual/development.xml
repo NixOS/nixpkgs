@@ -11,6 +11,39 @@ NixOS.</para>
 
 <section>
 
+<title>Hacking on NixOS</title>
+
+<para>By default, NixOS’s <command>nixos-rebuild</command> command
+uses the NixOS and Nixpkgs sources provided by the
+<literal>nixos-unstable</literal> channel (kept in
+<filename>/nix/var/nix/profiles/per-user/root/channels/nixos</filename>).
+To modify NixOS, however, you should check out the latest sources from
+Subversion.  This is done using the following command:
+
+<screen>
+$ nixos-checkout
+</screen>
+
+This will check out the latest NixOS sources to
+<filename>/etc/nixos/nixos</filename> and the Nixpkgs sources to
+<filename>/etc/nixos/nixpkgs</filename>.  If you want to rebuild your
+system using your (modified) sources, you need to tell
+<command>nixos-rebuild</command> about them using the
+<option>-I</option> flag:
+
+<screen>
+$ nixos-rebuild -I /etc/nixos
+</screen>
+
+</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section>
+
 <title>Extending NixOS</title>
 
 <para>NixOS is based on a modular system for declarative configuration.
@@ -49,12 +82,12 @@ NixOS.</para>
 
 <example xml:id='module-syntax'><title>Usual module content</title>
 <programlisting>
-{config, pkgs, ...}: <co xml:id='module-syntax-1' />
+{ config, pkgs, ... }: <co xml:id='module-syntax-1' />
 
 {
-  imports = [
-    <co xml:id='module-syntax-2' />
-  ];
+  imports =
+    [ <co xml:id='module-syntax-2' />
+    ];
 
   options = {
     <co xml:id='module-syntax-3' />
@@ -180,7 +213,7 @@ NixOS.</para>
 
 <example xml:id='locate-example'><title>Locate Module Example</title>
 <programlisting>
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
 
 with pkgs.lib;
 
@@ -200,9 +233,7 @@ let
 in
 
 {
-  imports = [
-    /etc/nixos/nixos/modules/services/scheduling/cron.nix
-  ];
+  imports = [ /etc/nixos/nixos/modules/services/scheduling/cron.nix ];
 
   options = {
     services.locate = {
@@ -402,9 +433,9 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     Nix package manager is installed.</para></footnote> from the NixOS
     source tree as follows:
 
-    <screen>
-      $ nix-build tests/ -A nfs.test
-    </screen>
+<screen>
+$ nix-build tests/ -A nfs.test
+</screen>
 
     This performs an automated test of the NFS client and server
     functionality in the Linux kernel, including file locking
@@ -422,19 +453,19 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     <filename>log.html</filename>, which can be viewed using a web
     browser like this:
 
-    <screen>
-      $ icecat result/log.html
-    </screen>
+<screen>
+$ icecat result/log.html
+</screen>
   </para>
 
   <para>
     It is also possible to run the test environment interactively,
     allowing you to experiment with the VMs.  For example:
 
-    <screen>
-      $ nix-build tests/ -A nfs.driver
-      $ ./result/bin/nixos-run-vms
-    </screen>
+<screen>
+$ nix-build tests/ -A nfs.driver
+$ ./result/bin/nixos-run-vms
+</screen>
 
     The script <command>nixos-run-vms</command> starts the three
     virtual machines defined in the NFS test using QEMU/KVM.  The root
@@ -447,26 +478,26 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
     Finally, the test itself can be run interactively.  This is
     particularly useful when developing or debugging a test:
 
-    <screen>
-      $ nix-build tests/ -A nfs.driver
-      $ ./result/bin/nixos-test-driver
-      starting VDE switch for network 1
-      &gt;
-    </screen>
+<screen>
+$ nix-build tests/ -A nfs.driver
+$ ./result/bin/nixos-test-driver
+starting VDE switch for network 1
+&gt;
+</screen>
 
     Perl statements can now be typed in to start or manipulate the
     VMs:
 
-    <screen>
-      &gt; startAll;
-      (the VMs start booting)
-      &gt; $server-&gt;waitForJob("nfs-kernel-nfsd");
-      &gt; $client1-&gt;succeed("flock -x /data/lock -c 'sleep 100000' &amp;");
-      &gt; $client2-&gt;fail("flock -n -s /data/lock true");
-      &gt; $client1-&gt;shutdown;
-      (this releases client1's lock)
-      &gt; $client2-&gt;succeed("flock -n -s /data/lock true");
-    </screen>
+<screen>
+&gt; startAll;
+(the VMs start booting)
+&gt; $server-&gt;waitForJob("nfs-kernel-nfsd");
+&gt; $client1-&gt;succeed("flock -x /data/lock -c 'sleep 100000' &amp;");
+&gt; $client2-&gt;fail("flock -n -s /data/lock true");
+&gt; $client1-&gt;shutdown;
+(this releases client1's lock)
+&gt; $client2-&gt;succeed("flock -n -s /data/lock true");
+</screen>
 
     The function <command>testScript</command> executes the entire
     test script and drops you back into the test driver command line

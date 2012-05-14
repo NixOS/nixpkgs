@@ -228,19 +228,16 @@ $ reboot</screen>
 <example xml:id='ex-config'><title>NixOS configuration</title>
 <screen>
 {
-  boot.initrd.kernelModules = [ "ata_piix" ];
-  boot.loader.grub.enable = true;
   boot.loader.grub.device = "/dev/sda";
 
-  fileSystems = [
-    { mountPoint = "/";
-      label = "nixos";
-    }
-  ];
+  fileSystems =
+    [ { mountPoint = "/";
+        device = "/dev/disk/by-label/nixos";
+      }
+    ];
 
-  swapDevices = [
-    { label = "swap"; }
-  ];
+  swapDevices =
+    [ { device = "/dev/disk/by-label/swap"; } ];
   
   services.sshd.enable = true;
 }</screen>
@@ -258,15 +255,13 @@ $ reboot</screen>
 
 <para>The file <filename>/etc/nixos/configuration.nix</filename>
 contains the current configuration of your machine.  Whenever you’ve
-changed something to that file, or to the NixOS/Nixpkgs sources in
-<filename>/etc/nixos/nixos</filename> and
-<filename>/etc/nixos/nixpkgs</filename>, respectively, you should do
+changed something to that file, you should do
 
 <screen>
 $ nixos-rebuild switch</screen>
 
 to build the new configuration, make it the default configuration for
-booting, and try to effect the configuration in the running system
+booting, and try to realise the configuration in the running system
 (e.g., by restarting system services).</para>
 
 <para>You can also do 
@@ -296,6 +291,20 @@ $ nixos-rebuild build</screen>
 to build the configuration but nothing more.  This is useful to see
 whether everything compiles cleanly.</para>
 
+<para>If you have a machine that supports hardware virtualisation, you
+can also test the new configuration in a sandbox by building and
+running a <emphasis>virtual machine</emphasis> that contains the
+desired configuration.  Just do
+
+<screen>
+$ nixos-rebuild build-vm
+$ ./result/bin/run-*-vm
+</screen>
+
+The VM does not have use any data from your host system, so your
+existing user accounts and home directories will not be
+available.</para>
+
 </section>
 
 
@@ -304,28 +313,32 @@ whether everything compiles cleanly.</para>
 
 <section>
 
-<title>Keeping NixOS up to date</title>
+<title>Upgrading NixOS</title>
 
-<para>The currently best way to keep your NixOS installation up to
-date is to track the NixOS Subversion repository.  The program
-<command>nixos-checkout</command> does that for you.  It will
-check if the NixOS/NixPkgs sources are present and if they are under a
-version control system (VCS) before updating them to the latest version.  If your
-sources are not under a VCS, then you can rename them before
-running <command>nixos-checkout</command> which will checkout the sources.</para>
+<para>The best way to keep your NixOS installation up to date is to
+use the <literal>nixos-unstable</literal> channel.  (A channel is a
+Nix mechanism for distributing Nix expressions and associated
+binaries.)  The NixOS channel is updated automatically from NixOS’s
+Subversion repository after running certain tests and building most
+packages.</para>
 
-<para>To build the latest and greatest, do
+<para>NixOS automatically subscribes you to the NixOS channel.  If for
+some reason this is not the case, just do
 
 <screen>
-$ nixos-checkout
-$ nixos-rebuild switch</screen>
+$ nix-channel --add http://nixos.org/releases/nixos/channels/nixos-unstable
+</screen>
 
-(Or instead of <literal>switch</literal>, use any of the alternatives
-shown in <xref linkend="sec-changing-config"/>.)</para>
+You can then upgrade NixOS to the latest version in the channel by
+running
+
+<screen>
+$ nix-channel --update
+</screen>
+
+and running the <command>nixos-rebuild</command> command as described
+in <xref linkend="sec-changing-config"/>.</para>
 
 </section>
-
-
-
 
 </chapter>
