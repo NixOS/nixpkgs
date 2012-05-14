@@ -9,20 +9,17 @@ export NIXOS_CONFIG
 
 usage () {
   echo 1>&2 "
-Usage: $0 [--install] [-v] [-d] [-l] [--xml] OPTION_NAME
-       $0 [--install]
+Usage: $0 [-v] [-d] [-l] [--xml] OPTION_NAME
+       $0 --install
 
-This program is used to explore NixOS options by looking at their values or
-by looking at their description.  It is helpful for understanding how your
-configuration is working.
+This program allows you to inspect the current value of NixOS
+configuration options.  It can also generate a basic NixOS
+configuration file.
 
 Options:
 
-  -i | --install        Use the configuration on
-                        ${mountPoint:+$mountPoint/}$NIXOS_CONFIG instead of
-                        the current system configuration.  Generate a
-                        template configuration if no option name is
-                        specified.
+  -i | --install        Write a template NixOS configuration file to
+                        ${mountPoint:+$mountPoint/}$NIXOS_CONFIG.
   -v | --value          Display the current value, based on your
                         configuration.
   -d | --description    Display the default value, the example and the
@@ -197,7 +194,7 @@ if $generate; then
   if test -e "$hardware_config"; then
     echo "A hardware configuration file exists, generation skipped."
   else
-    echo "Scan your hardware to generate a hardware configuration file."
+    echo "Generating a hardware configuration file in $hardware_config..."
     nixos-hardware-scan > "$hardware_config"
   fi
 
@@ -206,71 +203,58 @@ if $generate; then
     exit 1
   fi
 
-  echo "Generate a template configuration that you should edit."
+  echo "Generating a basic configuration file in $NIXOS_CONFIG..."
 
   # Generate a template configuration file where the user has to
   # fill the gaps.
-  echo > "$NIXOS_CONFIG" \
-'# Edit this configuration file which defines what would be installed on the
-# system.  To Help while choosing option value, you can watch at the manual
-# page of configuration.nix or at the last chapter of the manual available
-# on the virtual console 8 (Alt+F8).
+  cat <<EOF > "$NIXOS_CONFIG" \
+# Edit this configuration file to define what should be installed on
+# the system.  Help is available in the configuration.nix(5) man page
+# or the NixOS manual available on virtual console 8 (Alt+F8).
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
 
 {
-  require = [
-    # Include the configuration for part of your system which have been
-    # detected automatically.
-    ./hardware-configuration.nix
-  ];
+  require =
+    [ # Include the results of the hardware scan.
+      ./hardware-configuration.nix
+    ];
 
-  boot.initrd.kernelModules = [
-    # Specify all kernel modules that are necessary for mounting the root
-    # file system.
-    #
-    # "ext4" "ata_piix"
-  ];
+  boot.initrd.kernelModules =
+    [ # Specify all kernel modules that are necessary for mounting the root
+      # filesystem.
+      # "xfs" "ata_piix"
+    ];
+    
+  # Use the GRUB 2 boot loader.
+  boot.loader.grub.enable = true;
+  boot.loader.grub.version = 2;
 
-  boot.loader.grub = {
-    # Use grub 2 as boot loader.
-    enable = true;
-    version = 2;
+  # Define on which hard drive you want to install Grub.
+  # boot.loader.grub.device = "/dev/sda";
 
-    # Define on which hard drive you want to install Grub.
-    # device = "/dev/sda";
-  };
+  # networking.hostName = "nixos"; # Define your hostname.
+  # networking.wireless.enable = true;  # Enables Wireless.
 
-  networking = {
-    # hostName = "nixos"; # Define your hostname.
-    wireless.enable = true;  # Enables Wireless.
-  };
+  # Add filesystem entries for each partition that you want to see
+  # mounted at boot time.  This should include at least the root
+  # filesystem.
+  fileSystems =
+    [ # { mountPoint = "/";
+      #   device = "/dev/disk/by-label/nixos";
+      # }
 
-  # Add file system entries for each partition that you want to see mounted
-  # at boot time.  You can add filesystems which are not mounted at boot by
-  # adding the noauto option.
-  fileSystems = [
-    # Mount the root file system
-    #
-    # { mountPoint = "/";
-    #   device = "/dev/sda2";
-    # }
+      # { mountPoint = "/data"; # where you want to mount the device
+      #   device = "/dev/sdb";  # the device
+      #   fsType = "ext3";      # the type of the partition
+      #   options = "data=journal";
+      # }
+    ];
 
-    # Copy & Paste & Uncomment & Modify to add any other file system.
-    #
-    # { mountPoint = "/data"; # where you want to mount the device
-    #   device = "/dev/sdb"; # the device or the label of the device
-    #   # label = "data";
-    #   fsType = "ext3";      # the type of the partition.
-    #   options = "data=journal";
-    # }
-  ];
-
-  swapDevices = [
-    # List swap partitions that are mounted at boot time.
-    #
-    # { device = "/dev/sda1"; }
-  ];
+  # List swap partitions activated at boot time.
+  swapDevices =
+    [ # { device = "/dev/disk/by-label/swap"; }
+    ];
 
   # Select internationalisation properties.
   # i18n = {
@@ -281,29 +265,28 @@ if $generate; then
 
   # List services that you want to enable:
 
-  # Add an OpenSSH daemon.
+  # Enable the OpenSSH daemon.
   # services.openssh.enable = true;
 
-  # Add CUPS to print documents.
+  # Enable CUPS to print documents.
   # services.printing.enable = true;
 
-  # Add XServer (default if you have used a graphical iso)
-  # services.xserver = {
-  #   enable = true;
-  #   layout = "us";
-  #   xkbOptions = "eurosign:e";
-  # };
+  # Enable the X11 windowing system.
+  # services.xserver.enable = true;
+  # services.xserver.layout = "us";
+  # services.xserver.xkbOptions = "eurosign:e";
 
-  # Add the NixOS Manual on virtual console 8
-  services.nixosManual.showManual = true;
+  # Enable the KDE Desktop Environment.
+  # services.xserver.displayManager.kdm.enable = true;
+  # services.xserver.desktopManager.kde4.enable = true;
 }
-'
+EOF
 
   exit 0
 fi;
 
-# This dupplicate the work made below, but it is useful for processing the
-# output of nixos-option with other tools such as nixos-gui.
+# This duplicates the work made below, but it is useful for processing
+# the output of nixos-option with other tools such as nixos-gui.
 if $xml; then
   evalNix --xml --no-location <<EOF
 let
