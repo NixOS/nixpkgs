@@ -69,7 +69,7 @@ in
         <command>mkdir -p</command> .
       '';
 
-      type = types.nullOr (types.list types.optionSet);
+      type = types.list types.optionSet;
 
       options = {
 

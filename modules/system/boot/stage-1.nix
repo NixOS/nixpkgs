@@ -304,7 +304,7 @@ let
 
     # !!! copy&pasted from upstart-jobs/filesystems.nix.
     mountPoints =
-      if fileSystems == null
+      if fileSystems == []
       then abort "You must specify the fileSystems option!"
       else map (fs: fs.mountPoint) fileSystems;
     devices = map (fs: if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fileSystems;
