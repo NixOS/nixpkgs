@@ -4,7 +4,9 @@ with pkgs.lib;
 
 let
 
-  grub = if config.boot.loader.grub.version == 1 then pkgs.grub else pkgs.grub2;
+  cfg = config.boot.loader.grub;
+
+  grub = if cfg.version == 1 then pkgs.grub else pkgs.grub2;
 
   grubMenuBuilder = pkgs.substituteAll {
     src = ./grub-menu-builder.sh;
@@ -48,15 +50,11 @@ in
         example = "/dev/hda";
         type = with pkgs.lib.types; uniq string;
         description = ''
-          The device on which the boot loader, GRUB, will be
-          installed.  If empty, GRUB won't be installed and it's your
-          responsibility to make the system bootable.  The special
-          value <literal>nodev</literal> means that a GRUB boot menu
-          will be generated, but GRUB itself will not actually be
-          installed.
-
-          To install grub into multiple devices look at
-          <literal>devices</literal>.
+          The device on which the GRUB boot loader will be installed.
+          The special value <literal>nodev</literal> means that a GRUB
+          boot menu will be generated, but GRUB itself will not
+          actually be installed.  To install GRUB on multiple devices,
+          use <literal>boot.loader.grub.devices</literal>.
         '';
       };
 
@@ -67,7 +65,7 @@ in
         description = ''
           The devices on which the boot loader, GRUB, will be
           installed. Can be used instead of <literal>device</literal> to
-          install grub into multiple devices (as softraid arrays holding /boot).
+          install grub into multiple devices (e.g., if as softraid arrays holding /boot).
         '';
       };
 
@@ -197,7 +195,13 @@ in
 
   config = mkIf config.boot.loader.grub.enable {
 
-    system.build.menuBuilder = grubMenuBuilder;
+    boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
+
+    system.build = mkAssert (cfg.devices != [])
+      "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
+      { menuBuilder = grubMenuBuilder;
+        inherit grub;
+      };
 
     # Common attribute for boot loaders so only one of them can be
     # set at once.
@@ -205,8 +209,6 @@ in
     system.boot.loader.kernelFile = pkgs.stdenv.platform.kernelTarget;
 
     environment.systemPackages = mkIf config.boot.loader.grub.enable [ grub ];
-
-    system.build.grub = grub;
 
   };
 

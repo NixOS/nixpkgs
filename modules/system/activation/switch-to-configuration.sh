@@ -26,28 +26,23 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
     
     if [ "@bootLoader@" = "grub" ]; then
         
-      if [ -n '@grubDevices@' ]; then
-          mkdir -m 0700 -p /boot/grub
-          @menuBuilder@ @out@
+        mkdir -m 0700 -p /boot/grub
+        @menuBuilder@ @out@
 
-          # If the GRUB version has changed, then force a reinstall.
-          oldGrubVersion="$(cat /boot/grub/version 2>/dev/null || true)"
-          newGrubVersion="@grubVersion@"
+        # If the GRUB version has changed, then force a reinstall.
+        oldGrubVersion="$(cat /boot/grub/version 2>/dev/null || true)"
+        newGrubVersion="@grubVersion@"
 
-          if [ "$NIXOS_INSTALL_GRUB" = 1 -o "$oldGrubVersion" != "$newGrubVersion" ]; then
-              for dev in @grubDevices@; do
-                  if [ "$dev" != nodev ]; then
-                      echo "installing the GRUB bootloader on $dev..."
-                      @grub@/sbin/grub-install "$(readlink -f "$dev")" --no-floppy
-                  fi
-              done
-              echo "$newGrubVersion" > /boot/grub/version
-          fi
+        if [ "$NIXOS_INSTALL_GRUB" = 1 -o "$oldGrubVersion" != "$newGrubVersion" ]; then
+            for dev in @grubDevices@; do
+                if [ "$dev" != nodev ]; then
+                    echo "installing the GRUB bootloader on $dev..."
+                    @grub@/sbin/grub-install "$(readlink -f "$dev")" --no-floppy
+                fi
+            done
+            echo "$newGrubVersion" > /boot/grub/version
+        fi
           
-      else
-          echo "Warning: don't know how to make this configuration bootable; please set \`boot.loader.grub.device'." 1>&2
-      fi
-      
     elif [ "@bootLoader@" = "generationsDir" ]; then
         @menuBuilder@ @out@
     elif [ "@bootLoader@" = "efiBootStub" ]; then
