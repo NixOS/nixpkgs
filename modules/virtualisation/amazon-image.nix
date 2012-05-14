@@ -146,4 +146,7 @@ with pkgs.lib;
 
   # Force getting the hostname from EC2.
   networking.hostName = mkDefault "";
+
+  # Always include cryptsetup so that Charon can use it.
+  environment.systemPackages = [ pkgs.cryptsetup ];
 }
