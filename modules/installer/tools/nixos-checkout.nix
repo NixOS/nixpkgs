@@ -14,7 +14,12 @@ let
     isExecutable = true;
     src = pkgs.writeScript "nixos-checkout"
       ''
-        cd /etc/nixos
+        #! ${pkgs.stdenv.shell} -e
+        
+        prefix="$1"
+        if [ -z "$prefix" ]; then prefix=/etc/nixos; fi
+        mkdir -p "$prefix"
+        cd "$prefix"
 
         # Move any old nixos or nixpkgs directories out of the way.
         backupTimestamp=$(date "+%Y%m%d%H%M%S")

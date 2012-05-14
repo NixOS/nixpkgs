@@ -21,18 +21,19 @@ To modify NixOS, however, you should check out the latest sources from
 Subversion.  This is done using the following command:
 
 <screen>
-$ nixos-checkout
+$ nixos-checkout <replaceable>/my/sources</replaceable>
 </screen>
 
 This will check out the latest NixOS sources to
-<filename>/etc/nixos/nixos</filename> and the Nixpkgs sources to
-<filename>/etc/nixos/nixpkgs</filename>.  If you want to rebuild your
-system using your (modified) sources, you need to tell
-<command>nixos-rebuild</command> about them using the
+<filename><replaceable>/my/sources</replaceable>/nixos</filename> and
+the Nixpkgs sources to
+<filename><replaceable>/my/sources</replaceable>/nixpkgs</filename>.
+If you want to rebuild your system using your (modified) sources, you
+need to tell <command>nixos-rebuild</command> about them using the
 <option>-I</option> flag:
 
 <screen>
-$ nixos-rebuild -I /etc/nixos
+$ nixos-rebuild switch -I <replaceable>/my/sources</replaceable>
 </screen>
 
 </para>
