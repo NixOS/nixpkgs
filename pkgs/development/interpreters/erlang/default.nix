@@ -1,13 +1,13 @@
 { stdenv, fetchurl, perl, gnum4, ncurses, openssl }:
 
-let version = "R14B02"; in
+let version = "R14B04"; in
 
 stdenv.mkDerivation {
   name = "erlang-" + version;
   
   src = fetchurl {
     url = "http://www.erlang.org/download/otp_src_" + version + ".tar.gz";
-    sha256 = "1g85a85w031jr5pmz9b0x3p11d44glkf7qpy64l9y7l2b45hb7c4";
+    sha256 = "0vlvjlg8vzcy6inb4vj00bnj0aarvpchzxwhmi492nv31s8kb6q9";
   };
   
   buildInputs = [ perl gnum4 ncurses openssl ];
