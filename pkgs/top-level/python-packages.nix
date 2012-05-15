@@ -74,7 +74,7 @@ let pythonPackages = python.modules // rec {
 
     postInstall = ''
       wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file511}/lib
+        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file}/lib
     '';
 
     meta = {
@@ -846,12 +846,12 @@ let pythonPackages = python.modules // rec {
 
 
   magic = pkgs.stdenv.mkDerivation rec {
-    name = "python-${pkgs.file511.name}";
+    name = "python-${pkgs.file.name}";
 
-    src = pkgs.file511.src;
+    src = pkgs.file.src;
 
     patches = [ ../tools/misc/file/python.patch ];
-    buildInputs = [ python pkgs.file511 ];
+    buildInputs = [ python pkgs.file ];
 
     configurePhase = "cd python";
 
