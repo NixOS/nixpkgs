@@ -1,11 +1,11 @@
 { stdenv, fetchurl, freetype, expat }:
 
 stdenv.mkDerivation rec {
-  name = "fontconfig-2.8.0";
+  name = "fontconfig-2.9.0";
   
   src = fetchurl {
     url = "http://fontconfig.org/release/${name}.tar.gz";
-    sha256 = "0d9370qnn1qzq0jidbycin2frkcr1kqj04jbgb79ykb5x9p1qaps";
+    sha256 = "06ml04gyfacasxmrqdjfkckbj5f18d988j3wmz6vsi7h3h3jazna";
   };
   
   buildInputs = [ freetype ];
@@ -17,12 +17,13 @@ stdenv.mkDerivation rec {
   crossArch = if (stdenv ? cross && stdenv.cross != null)
     then stdenv.cross.arch else null;
 
-
   preConfigure = ''
     if test -n "$crossConfig"; then
       configureFlags="$configureFlags --with-arch=$crossArch";
     fi
   '';
+
+  enableParallelBuilding = true;
 
   # Don't try to write to /etc/fonts or /var/cache/fontconfig at install time.
   installFlags = "CONFDIR=$(out)/etc/fonts RUN_FC_CACHE_TEST=false fc_cachedir=$(TMPDIR)/dummy";
