@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-persistent";
-  version = "1.0.0";
-  sha256 = "1dawhs9ab2z5njq9m37p9zrr5wdzrmw4i0ixb2j4rhff8z50hjaf";
+  version = "1.0.0.1";
+  sha256 = "1v4ip4g9x2a5byl0a9a1raad3aba7hs618vx7fnc5n2ajjji84mx";
   buildDepends = [
     persistent persistentTemplate transformers yesodCore
   ];

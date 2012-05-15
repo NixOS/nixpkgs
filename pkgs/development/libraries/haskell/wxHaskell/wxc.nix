@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wxc";
-  version = "0.90.0.2";
-  sha256 = "1vqs9517qacm04d2bxpbpcdgfmlhpblm6af45nmcdikvlfa1v0jp";
+  version = "0.90.0.3";
+  sha256 = "14b8g2w4knwxj5vkp759y8m3nmsi4n1zy57ma1kz7lw6jklb7dlq";
   buildDepends = [ wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
   noHaddock = true;

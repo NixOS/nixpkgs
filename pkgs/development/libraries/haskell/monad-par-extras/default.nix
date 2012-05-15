@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monad-par-extras";
-  version = "0.3";
-  sha256 = "1nrxzqswb265slxq4dhm6bav7zb4zglbrh99w5x6hwx6drgsw10d";
+  version = "0.3.2";
+  sha256 = "1k0j3n803z4lv5impz6xd1nzav35dl5f68nlw2ppgg1bbfpvdv6b";
   buildDepends = [
     abstractPar cereal deepseq mtl random transformers
   ];

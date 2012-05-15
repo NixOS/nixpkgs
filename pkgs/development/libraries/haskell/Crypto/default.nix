@@ -2,12 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "Crypto";
-  version = "4.2.4";
-  sha256 = "05wafv8flrh1893rh208azzig5k5pa022s2fg3f8lrqb23c6v63p";
+  version = "4.2.5";
+  sha256 = "0wv48is2jqia8hda6q65y3mhabxlw9hjzmpk3dx70rzh4w44yxb8";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ HUnit QuickCheck random ];
-  patches = [ ./class-constraints.diff ];
   meta = {
     description = "Collects together existing Haskell cryptographic functions into a package";
     license = "unknown";
