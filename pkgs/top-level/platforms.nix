@@ -48,6 +48,7 @@ rec {
         USB_STORAGE_CYPRESS_ATACB m
 
         IP_PNP y
+        IP_PNP_DHCP y
         NFS_FS y
         ROOT_NFS y
         TUN m
