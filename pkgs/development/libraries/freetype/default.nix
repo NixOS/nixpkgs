@@ -5,12 +5,12 @@
   useEncumberedCode ? false
 }:
 
-stdenv.mkDerivation (rec {
-  name = "freetype-2.4.4";
+stdenv.mkDerivation rec {
+  name = "freetype-2.4.9";
   
   src = fetchurl {
     url = "mirror://sourceforge/freetype/${name}.tar.bz2";
-    sha256 = "1vqg93473j6jma1bxms7mczk32j8is0g9inkcmmmqdsdvk3q30jb";
+    sha256 = "1far9006qbw5gvjn8ph1kyfhly4j7x7vycigb8vx96cfsk0ll864";
   };
 
   configureFlags = "--disable-static";
@@ -21,16 +21,14 @@ stdenv.mkDerivation (rec {
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = stdenv.lib.optionalString stdenv.isArm "-std=gnu99";
 
+  # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
+  buildInputs = stdenv.lib.optional (stdenv.system == "i686-freebsd") gnumake;
+
+  enableParallelBuilding = true;
+
   meta = {
     description = "A font rendering engine";
     homepage = http://www.freetype.org/;
     license = "GPLv2+"; # or the FreeType License (BSD + advertising clause)
   };
 }
-
-//
-
-# FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
-(if stdenv.system == "i686-freebsd"
- then { buildInputs = [ gnumake ]; }
- else {}))
