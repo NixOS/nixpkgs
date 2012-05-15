@@ -153,12 +153,6 @@ NIX_PATH="/mnt$srcs/nixos:nixos-config=/mnt$NIXOS_CONFIG" NIXOS_CONFIG= \
     -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
 
 
-# We're done building/downloading, so we don't need the /etc bind
-# mount anymore.  In fact, below we want to modify the target's /etc.
-umount $mountPoint/etc/nixos
-umount $mountPoint/etc
-
-
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
 # of the NixOS channel.
 echo "copying NixOS/Nixpkgs sources..."
@@ -169,6 +163,12 @@ chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
 mkdir -m 0700 -p $mountPoint/root/.nix-defexpr
 ln -s /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
+
+
+# We're done building/downloading, so we don't need the /etc bind
+# mount anymore.  In fact, below we want to modify the target's /etc.
+umount $mountPoint/etc/nixos
+umount $mountPoint/etc
 
 
 # Grub needs an mtab.
