@@ -2555,7 +2555,7 @@ let
 
   erlang = callPackage ../development/interpreters/erlang { };
 
-  erlangR13B = callPackage ../development/interpreters/erlang/R13B.nix { };
+  erlangR14B04 = callPackage ../development/interpreters/erlang/R14B04.nix { };
 
   groovy = callPackage ../development/interpreters/groovy { };
 
