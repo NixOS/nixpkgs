@@ -4627,10 +4627,10 @@ let
 
   srtp = callPackage ../development/libraries/srtp {};
 
-  sqlite = callPackage ../development/libraries/sqlite {
+  sqlite = lowPrio (callPackage ../development/libraries/sqlite {
     readline = null;
     ncurses = null;
-  };
+  });
 
   sqlite36 = callPackage ../development/libraries/sqlite/3.6.x.nix {
     readline = null;
@@ -4641,9 +4641,9 @@ let
     inherit readline ncurses;
   });
 
-  sqliteFull = callPackage ../development/libraries/sqlite/full.nix {
+  sqliteFull = lowPrio (callPackage ../development/libraries/sqlite/full.nix {
     inherit readline ncurses;
-  };
+  });
 
   stlport = callPackage ../development/libraries/stlport { };
 
