@@ -364,6 +364,7 @@ in
         xorg.xsetroot
         xorg.xprop
         pkgs.xterm
+        pkgs.xdg_utils
       ]
       ++ optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11
       ++ optional (elem "nvidiaLegacy96" driverNames) kernelPackages.nvidia_x11_legacy96
