@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pcre, libxml2, zlib, attr, bzip2 }:
 
 stdenv.mkDerivation {
-  name = "lighttpd-1.4.19";
+  name = "lighttpd-1.4.30";
 
   src = fetchurl {
-    url = http://www.lighttpd.net/download/lighttpd-1.4.19.tar.bz2;
-    sha256 = "1mziqb36ik9z4lf1h5ccm1h4ab7d2hx0cz0g5425lwy374r34fd2";
+    url = http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-1.4.30.tar.xz;
+    sha256 = "c237692366935b19ef8a6a600b2f3c9b259a9c3107271594c081a45902bd9c9b";
   };
 
   buildInputs = [ pcre libxml2 zlib attr bzip2 ];
