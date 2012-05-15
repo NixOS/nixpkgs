@@ -42,6 +42,7 @@ releaseTools.makeSourceTarball {
 
   checkPhase = ''
     export NIX_DB_DIR=$TMPDIR
+    export NIX_STATE_DIR=$TMPDIR
     nix-store --init
   
     # Run the regression tests in `lib'.
