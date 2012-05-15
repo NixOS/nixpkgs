@@ -5675,9 +5675,7 @@ let
         callPackage ../os-specific/linux/aufs-util/3.nix { }
       else null;
 
-    blcr = callPackage ../os-specific/linux/blcr {
-      #libtool = libtool_1_5; # libtool 2 causes a fork bomb
-    };
+    blcr = callPackage ../os-specific/linux/blcr { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
