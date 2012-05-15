@@ -1,6 +1,6 @@
 { stdenv, fetchurl, kernel, perl, makeWrapper }:
 
-assert stdenv.isLinux && builtins.compareVersion kernel.version "2.6.38" != 1;
+assert stdenv.isLinux && builtins.compareVersions kernel.version "2.6.38" != 1;
 
 stdenv.mkDerivation {
   name = "blcr-0.8.4-${kernel.version}";
