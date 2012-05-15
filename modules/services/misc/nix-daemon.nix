@@ -170,7 +170,7 @@ in
       envVars = mkOption {
         internal = true;
         default = "";
-        type = with pkgs.lib.types; string;
+        type = types.string;
         description = "
           Environment variables used by Nix.
         ";
@@ -207,15 +207,9 @@ in
               # in `build-chroot-dirs' - otherwise any builder that uses
               # /bin/sh won't work.
               binshDeps = pkgs.writeReferencesToFile config.system.build.binsh;
-
-              # Likewise, if chroots are turned on, we need Nix's own
-              # closure in the chroot.  Otherwise nix-channel and nix-env
-              # won't work because the dependencies of its builders (like
-              # coreutils and Perl) aren't visible.  Sigh.
-              nixDeps = pkgs.writeReferencesToFile config.environment.nix;
             in
               pkgs.runCommand "nix.conf" {extraOptions = config.nix.extraOptions; } ''
-                extraPaths=$(for i in $(cat ${binshDeps} ${nixDeps}); do if test -d $i; then echo $i; fi; done)
+                extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
                 cat > $out <<END
                 # WARNING: this file is generated.
                 build-users-group = nixbld
@@ -302,7 +296,7 @@ in
         export ftp_proxy=${config.nix.proxy}
       '';
 
-    users.extraUsers = map makeNixBuildUser (pkgs.lib.range 1 config.nix.nrBuildUsers);
+    users.extraUsers = map makeNixBuildUser (range 1 config.nix.nrBuildUsers);
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
