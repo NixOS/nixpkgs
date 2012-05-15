@@ -73,6 +73,8 @@ rec {
         CIFS_FSCACHE y
         CIFS_ACL y
 
+        ZRAM m
+
         # Fail to build
         DRM n
         SCSI_ADVANSYS n
