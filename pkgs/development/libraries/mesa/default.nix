@@ -7,27 +7,24 @@ if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "7.11.2"; in
+let version = "8.0.2"; in
 
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256 = "0msk1fh4yw4yi7z37v75vhpa23z49lkwgin6drczbihbqsl6lx2p";
+    md5 = "a368104e5700707048dc3e8691a9a7a1";
   };
 
-  patches = [ ./swrast-settexbuffer.patch ] ++ stdenv.lib.optional
-    (stdenv.system == "mips64el-linux") ./mips_wmb.patch;
+  patches =
+    stdenv.lib.optional (stdenv.system == "mips64el-linux") ./mips_wmb.patch;
 
   prePatch = "patchShebangs .";
 
-# r300
   configureFlags =
-      " --with-driver=dri --enable-gl-osmesa --enable-gles1"
+      " --enable-gles1 --enable-gles2 --enable-gallium-egl"
     + " --with-gallium-drivers=i915,nouveau,r600,svga,swrast"
-    + " --enable-gles2 --enable-gallium-egl --disable-glx-tls"
-    + " --enable-xcb --enable-egl --disable-glut"
     # Texture floats are patented, see docs/patents.txt
     + stdenv.lib.optionalString enableTextureFloats " --enable-texture-float";
 
