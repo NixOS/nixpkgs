@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, udev }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.34";
+  name = "libdrm-2.4.33";
   
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "1l7qs2qa0kxpbd28yqc2cjl0v2lgmbmyxb4f5xy7n445gh75fs54";
+    sha256 = "1slgi61n4dlsfli47ql354fd1ppj7n40jd94wvnsdqx0mna9syrd";
   };
 
   buildNativeInputs = [ pkgconfig ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = [ "--enable-udev" ]
+  configureFlags = [ "--enable-nouveau-experimental-api" "--enable-udev" ]
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
