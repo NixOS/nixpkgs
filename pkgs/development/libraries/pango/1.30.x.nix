@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng }:
 
 stdenv.mkDerivation rec {
-  name = "pango-1.29.4";
+  name = "pango-1.30.0";
 
   src = fetchurl {
-    url = mirror://gnome/sources/pango/1.29/pango-1.29.4.tar.xz;
-    sha256 = "0zqjq6ccv6mbah74rcvb03ksq1jwan21z37mdmqa56307sax3s3s";
+    url = "mirror://gnome/sources/pango/1.30/${name}.tar.xz";
+    sha256 = "7c6d2ab024affaed0e942f9279b818235f9c6a36d9fc50688f48d387f4102dff";
   };
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin gettext;
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ x11 glib cairo libpng ];
+
+  enableParallelBuilding = true;
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

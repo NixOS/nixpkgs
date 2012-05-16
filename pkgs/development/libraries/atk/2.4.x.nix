@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, perl, glib }:
 
 stdenv.mkDerivation rec {
-  name = "atk-2.2.0";
+  name = "atk-2.4.0";
 
   src = fetchurl {
-    url = mirror://gnome/sources/atk/2.2/atk-2.2.0.tar.xz;
-    sha256 = "17bkqg89l9hxbkgc76cxlin1bwczk7m6ikbccx677lrxh3kz08lb";
+    url = "mirror://gnome/sources/atk/2.4/${name}.tar.xz";
+    sha256 = "091e9ce975a9fbbc7cd8fa64c9c389ffb7fa6cdde58b6d5c01b2c267093d888d";
   };
 
   buildNativeInputs = [ pkgconfig perl ];

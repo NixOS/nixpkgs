@@ -12,11 +12,11 @@
 #       $out/bin/gtester-report' to postInstall if this is solved
 
 stdenv.mkDerivation rec {
-  name = "glib-2.30.3";
+  name = "glib-2.32.3";
 
   src = fetchurl {
-    url = mirror://gnome/sources/glib/2.30/glib-2.30.3.tar.xz;
-    sha256 = "09yxfajynbw78kji48z384lylp67kihfi1g78qrrjif4f5yb5jz6";
+    url = "mirror://gnome/sources/glib/2.32/${name}.tar.xz";
+    sha256 = "b65ceb462807e4a2f91c95e4293ce6bbefca308cb44a1407bcfdd9e40363ff4d";
   };
 
   # configure script looks for d-bus but it is only needed for tests
@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zlib libffi ];
 
   configureFlags = "--with-pcre=system --disable-fam";
+
+  enableParallelBuilding = true;
 
   passthru.gioModuleDir = "lib/gio/modules";
 
