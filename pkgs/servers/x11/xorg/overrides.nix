@@ -188,9 +188,11 @@ in
       '';
   };
 
-  libSM = attrs: attrs // args.stdenv.lib.optionalAttrs (args.stdenv.system == "i686-darwin") {
-    configureFlags = "LIBUUID_CFLAGS='' LIBUUID_LIBS=''";
-  };
+  libSM = attrs: attrs
+    // { propagatedBuildInputs = [ xorg.libICE ]; }
+    // args.stdenv.lib.optionalAttrs (args.stdenv.system == "i686-darwin") {
+      configureFlags = "LIBUUID_CFLAGS='' LIBUUID_LIBS=''";
+    };
 
   lndir = attrs: attrs // {
     preConfigure = ''
