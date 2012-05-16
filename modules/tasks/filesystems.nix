@@ -15,7 +15,7 @@ let
           + " " + fs.fsType
           + " " + fs.options
           + " 0"
-          + " " + (if fs.fsType == "none" || fs.noCheck then "0" else
+          + " " + (if fs.fsType == "none" || fs.fsType == "btrfs" || fs.noCheck then "0" else
                    if fs.mountPoint == "/" then "1" else "2")
           + "\n"
       )}
@@ -117,6 +117,17 @@ in
           '';
         };
 
+        autoFormat = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If the device does not currently contain a filesystem (as
+            determined by <command>blkid</command>, then automatically
+            format it with the filesystem type specified in
+            <option>fsType</option>.  Use with caution.
+          '';
+        };
+
         noCheck = mkOption {
           default = false;
           type = types.bool;
@@ -185,6 +196,17 @@ in
             # Ensure that this job is restarted when fstab changed:
             # ${fstab}
             echo "mounting filesystems..."
+
+            # Format devices.
+            ${flip concatMapStrings config.fileSystems (fs: optionalString fs.autoFormat ''
+              if [ -e "${fs.device}" ]; then
+                type=$(blkid -p -s TYPE -o value "${fs.device}" || true)
+                if [ -z "$type" ]; then
+                  echo "creating ${fs.fsType} filesystem on ${fs.device}..."
+                  mkfs.${fs.fsType} "${fs.device}"
+                fi
+              fi
+            '')}
 
             # Create missing mount points.  Note that this won't work
             # if the mount point is under another mount point.
