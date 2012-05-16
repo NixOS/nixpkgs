@@ -662,10 +662,11 @@ let
 
   expect = callPackage ../tools/misc/expect { };
 
+  fail2ban = callPackage ../tools/security/fail2ban { };
+
   fakeroot = callPackage ../tools/system/fakeroot { };
 
-  fcron = callPackage ../tools/system/fcron {  # see also cron
-  };
+  fcron = callPackage ../tools/system/fcron { };
 
   fdisk = callPackage ../tools/system/fdisk { };
 
