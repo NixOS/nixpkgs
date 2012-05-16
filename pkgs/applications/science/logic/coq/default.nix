@@ -4,7 +4,7 @@
 {stdenv, fetchurl, ocaml, findlib, camlp5, lablgtk, ncurses}:
 
 let
-  version = "8.3pl3";
+  version = "8.3pl4";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://coq.inria.fr/V${version}/files/coq-${version}.tar.gz";
-    sha256 = "0ivrafwr4p8pklb9wfq3zyai19xdk05xr3q16xqk4q9pfad9w9dg";
+    sha256 = "17d3lmchmqir1rawnr52g78srg4wkd7clzpzfsivxc4y1zp6rwkr";
   };
 
   buildInputs = [ ocaml findlib camlp5 ncurses lablgtk ];
@@ -58,5 +58,6 @@ stdenv.mkDerivation {
     '';
     homepage = "http://coq.inria.fr";
     license = "LGPL";
+    maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }
