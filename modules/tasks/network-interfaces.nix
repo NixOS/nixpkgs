@@ -274,7 +274,7 @@ in
 
     jobs.networking = {
       name = "networking";
-      description = "all required interfaces are up";
+      description = "All required interfaces are up";
       startOn = "started network-interfaces";
       stopOn  = "stopping network-interfaces";
       task = true;
