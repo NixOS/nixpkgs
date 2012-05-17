@@ -90,10 +90,10 @@ in
         { source = jailConf;
           target = "fail2ban/jail.conf";
         }
-        { source = "${pkgs.fail2ban}/etc/fail2ban/action.d";
+        { source = "${pkgs.fail2ban}/etc/fail2ban/action.d/*.conf";
           target = "fail2ban/action.d";
         }
-        { source = "${pkgs.fail2ban}/etc/fail2ban/filter.d";
+        { source = "${pkgs.fail2ban}/etc/fail2ban/filter.d/*.conf";
           target = "fail2ban/filter.d";
         }
       ];
