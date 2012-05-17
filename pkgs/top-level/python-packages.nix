@@ -1475,36 +1475,27 @@ let pythonPackages = python.modules // rec {
   });
 
 
-  pycurl =
-    let libcurl = pkgs.stdenv.lib.overrideDerivation pkgs.curl
-      (oldAttrs: {
-        configureFlags =
-          (if oldAttrs ? configureFlags then oldAttrs.configureFlags else "" )
-          + " --enable-static";
-      });
-    in
-  buildPythonPackage (rec {
+  pycurl = buildPythonPackage (rec {
     name = "pycurl-7.19.0";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
+      url = "http://pycurl.sourceforge.net/download/${name}.tar.gz";
       sha256 = "0hh6icdbp7svcq0p57zf520ifzhn7jw64x07k99j7h57qpy2sy7b";
     };
 
-    buildInputs = [ libcurl ];
+    buildInputs = [ pkgs.curl ];
 
     doCheck = false;
 
-    postInstall = ''
-      find $out -name easy-install.pth | xargs rm -v
-      find $out -name 'site.py*' | xargs rm -v
+    preConfigure = ''
+      substituteInPlace setup.py --replace '--static-libs' '--libs'
     '';
+
+    installCommand = "python setup.py install --prefix=$out";
 
     meta = {
       homepage = http://pycurl.sourceforge.net/;
-
       description = "Python wrapper for libcurl";
-
       platforms = stdenv.lib.platforms.linux;
     };
   });
