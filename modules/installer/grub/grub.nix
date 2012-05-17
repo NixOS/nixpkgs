@@ -136,6 +136,14 @@ in
         '';
       };
 
+      ignoreDevicesCheck = mkOption {
+        default = false;
+        description = ''
+          (internal use) Don't throw an error when devices aren't given
+          useful for building nested child configurations
+        '';
+      };
+
       splashImage = mkOption {
         default =
           if config.boot.loader.grub.version == 1
@@ -197,7 +205,7 @@ in
 
     boot.loader.grub.devices = optional (cfg.device != "") cfg.device;
 
-    system.build = mkAssert (cfg.devices != [])
+    system.build = mkAssert (cfg.devices != [] || cfg.ignoreDevicesCheck)
       "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
       { menuBuilder = grubMenuBuilder;
         inherit grub;
