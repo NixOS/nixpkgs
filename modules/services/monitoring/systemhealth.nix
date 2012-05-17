@@ -80,7 +80,7 @@ in
     system.activationScripts.systemhealth = stringAfter [ "var" ]
       ''
         mkdir -p ${rrdDir} ${htmlDir}
-        chown wwwrun.wwwrun ${rrdDir} ${htmlDir}
+        chown wwwrun:wwwrun ${rrdDir} ${htmlDir}
 
         cat >${configFile} << EOF
         [paths]
@@ -110,7 +110,7 @@ in
 
         EOF
 
-        chown wwwrun.wwwrun ${configFile}
+        chown wwwrun:wwwrun ${configFile}
 
         ${pkgs.su}/bin/su -s "/bin/sh" -c "${command} --check" wwwrun
         ${pkgs.su}/bin/su -s "/bin/sh" -c "${command} --html" wwwrun

@@ -80,7 +80,7 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/log/nix/drvs
 
 mkdir -m 1775 -p $mountPoint/nix/store
-chown root.nixbld $mountPoint/nix/store
+chown root:nixbld $mountPoint/nix/store
 
 
 # Get the store paths to copy from the references graph.

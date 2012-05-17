@@ -301,7 +301,7 @@ in
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
         # Set up Nix.
-        chown root.nixbld /nix/store
+        chown root:nixbld /nix/store
         chmod 1775 /nix/store
 
         # Nix initialisation.

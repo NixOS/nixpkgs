@@ -119,7 +119,7 @@ in
         preStart =
           ''
             ${pkgs.coreutils}/bin/mkdir -p /var/run/dovecot /var/run/dovecot/login
-            ${pkgs.coreutils}/bin/chown -R ${cfg.user}.${cfg.group} /var/run/dovecot
+            ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} /var/run/dovecot
           '';
 
         exec = "${pkgs.dovecot}/sbin/dovecot -F -c ${confFile}";
