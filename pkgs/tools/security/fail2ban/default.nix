@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, pythonPackages, unzip }:
+{ stdenv, fetchurl, pythonPackages, unzip, gamin }:
 
 let version = "0.8.6"; in
 
 pythonPackages.buildPythonPackage {
   name = "fail2ban-${version}";
+  namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/fail2ban/fail2ban/zipball/${version}";
@@ -12,6 +13,8 @@ pythonPackages.buildPythonPackage {
   };
 
   buildInputs = [ unzip ];
+
+  pythonPath = [ gamin ];
 
   preConfigure =
     ''
@@ -39,9 +42,6 @@ pythonPackages.buildPythonPackage {
   installCommand =
     ''
       python setup.py install --prefix=$out
-
-      # A wrapper is not needed.
-      wrapPythonProgram() { true; }
     '';
 
   meta = {
