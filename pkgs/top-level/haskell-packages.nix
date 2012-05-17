@@ -592,6 +592,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   explicitException = callPackage ../development/libraries/haskell/explicit-exception {};
 
+  executablePath = callPackage ../development/libraries/haskell/executable-path {};
+
   filepath_1_3_0_0 = callPackage ../development/libraries/haskell/filepath {};
   filepath = null; # a core package in recent GHCs
 
