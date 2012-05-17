@@ -15,7 +15,7 @@ let
       };
 
       devSize = pkgs.lib.mkOption {
-        default = "50%";
+        default = "5%";
         example = "32m";
         description = ''
           Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
@@ -33,7 +33,7 @@ let
       };
 
       runSize = pkgs.lib.mkOption {
-        default = "50%";
+        default = "25%";
         example = "256m";
         description = ''
           Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
