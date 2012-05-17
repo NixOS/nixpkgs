@@ -1126,6 +1126,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   reactiveBanana = callPackage ../development/libraries/haskell/reactive-banana {};
 
+  reactiveBananaWx = callPackage ../development/libraries/haskell/reactive-banana-wx {};
+
   readline = callPackage ../development/libraries/haskell/readline {
     inherit (pkgs) readline;
   };
