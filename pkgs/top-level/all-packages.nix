@@ -7673,6 +7673,8 @@ let
 
   zathura = callPackage ../applications/misc/zathura { };
 
+  zgrviewer = callPackage ../applications/graphics/zgrviewer {};
+
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx { };
 
   ### GAMES
