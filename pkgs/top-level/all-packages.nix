@@ -846,6 +846,8 @@ let
 
   pigz = callPackage ../tools/compression/pigz { };
 
+  haproxy = callPackage ../tools/networking/haproxy { };
+
   hardlink = callPackage ../tools/system/hardlink { };
 
   halibut = callPackage ../tools/typesetting/halibut { };
