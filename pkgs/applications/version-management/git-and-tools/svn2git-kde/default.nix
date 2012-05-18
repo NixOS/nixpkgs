@@ -1,12 +1,12 @@
 { stdenv, fetchgit, qt4, subversion, apr}:
 
 stdenv.mkDerivation rec {
-  name = "svn2git-kde";
+  name = "svn2git-kde-1.0.5";
 
   src = fetchgit {
     url = http://git.gitorious.org/svn2git/svn2git.git;
-    rev = "197979b6a641b8b5fa4856c700b1235491c73a41";
-    sha256 = "7be1a8f5822aff2d4ea7f415dce0b4fa8c6a82310acf24e628c5f1ada2d2d613";
+    rev = "149d6c6e14a1724c96999328683a9264fc508264";
+    sha256 = "818673fe751b00a42b6ed3e78a783549fb09b5245a01dee47b3dded667bfc582";
   };
 
   buildPhase = ''
