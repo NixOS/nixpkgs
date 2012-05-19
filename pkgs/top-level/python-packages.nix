@@ -2266,6 +2266,8 @@ let pythonPackages = python.modules // rec {
       md5 = "1072b66d53c24e019a8f1304ac9d9fc5";
     };
 
+    patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];
+
     doCheck = false;
 
     meta = with stdenv.lib; {
