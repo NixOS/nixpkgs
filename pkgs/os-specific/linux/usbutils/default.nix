@@ -4,8 +4,8 @@ let
 
   # Obtained from http://www.linux-usb.org/usb.ids.bz2.
   usbids = fetchurl {
-    url = http://nixos.org/tarballs/usb.ids.20100720.bz2;
-    sha256 = "0krncssk0b10z6grw305824zma953l3g2rb7jkk25mb78pw5fd5d";
+    url = http://nixos.org/tarballs/usb.ids.20120411.bz2;
+    sha256 = "0rgxancjd1krv9g817w1wlbg7k19i8mwx37qs1vw1f21xz49yvja";
   };
 
 in
