@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb }:
+{ stdenv, fetchurl, pkgconfig, libusb1, zlib, autoconf, automake, libtool }:
 
 let
 
@@ -11,14 +11,16 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "usbutils-0.86";
+  name = "usbutils-005";
   
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/usb/usbutils/${name}.tar.gz";
-    sha256 = "1x0jkiwrgdb8qwy21iwhxpc8k61apxqp1901h866d1ydsakbxcmk";
+    url = mirror://debian/pool/main/u/usbutils/usbutils_005.orig.tar.gz;
+    sha256 = "05sxkm7b7lj8p8kr8kw68m49h66351s803z42233b8lssmc3wlra";
   };
   
-  buildInputs = [ pkgconfig libusb ];
+  buildInputs = [ pkgconfig libusb1 autoconf automake libtool zlib ];
+
+  preConfigure = "autoreconf -i";
   
   preBuild = "bunzip2 < ${usbids} > usb.ids";
 
