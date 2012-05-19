@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb1, zlib, autoconf, automake, libtool }:
+{ stdenv, fetchurl, pkgconfig, libusb1, zlib, autoreconfHook }:
 
 let
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "05sxkm7b7lj8p8kr8kw68m49h66351s803z42233b8lssmc3wlra";
   };
   
-  buildInputs = [ pkgconfig libusb1 autoconf automake libtool zlib ];
+  buildInputs = [ pkgconfig libusb1 autoreconfHook ];
 
   preConfigure = "autoreconf -i";
   

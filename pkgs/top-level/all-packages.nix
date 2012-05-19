@@ -245,6 +245,10 @@ let
     theAttrSet = arg;
   };
 
+  autoreconfHook = makeSetupHook
+    { substitutions = { inherit autoconf automake libtool; }; }
+    ../build-support/setup-hooks/autoreconf.sh;
+
   buildEnv = import ../build-support/buildenv {
     inherit (pkgs) runCommand perl;
   };
@@ -327,7 +331,7 @@ let
     inherit stdenv perl cpio contents ubootChooser;
   };
 
-  makeWrapper = makeSetupHook {} ../build-support/make-wrapper/make-wrapper.sh;
+  makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
   makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
     import ../build-support/kernel/modules-closure.nix {
@@ -5824,9 +5828,7 @@ let
 
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
 
-  mountall = callPackage ../os-specific/linux/mountall {
-    automake = automake111x;
-  };
+  mountall = callPackage ../os-specific/linux/mountall { };
 
   aggregateModules = modules:
     import ../os-specific/linux/module-init-tools/aggregator.nix {
