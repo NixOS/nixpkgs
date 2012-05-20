@@ -139,7 +139,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexPosix   = self.regexPosix_0_95_1;      # 7.4.1 ok
     stm          = self.stm_2_3;                # 7.4.1 ok
     syb          = self.syb_0_3_6_1;            # 7.4.1 ok
-    xhtml        = self.xhtml_3000_2_0_5;       # 7.4.1 ok
+    xhtml        = self.xhtml_3000_2_1;         # 7.4.1 ok
     zlib         = self.zlib_0_5_3_3;           # 7.4.1 ok
     HTTP         = self.HTTP_4000_2_3;          # 7.4.1 ok
     text         = self.text_0_11_2_0;          # 7.4.1 ok
@@ -151,6 +151,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     happy        = self.happy_1_18_9;           # 7.4.1 ok
     haddock      = self.haddock_2_10_0;         # 7.4.1 ok
   };
+
+  # This is still a prerelease.
+  haskellPlatform_2012_2_0_0 =
+    callPackage ../development/libraries/haskell/haskell-platform/2012.2.0.0.nix
+      (self.haskellPlatformArgs_future self);
 
   haskellPlatformArgs_2011_4_0_0 = self : {
     inherit (self) cabal ghc;
@@ -1529,7 +1534,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib_0_5_3_1 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
     inherit (pkgs) zlib;
   };
-  zlib_0_5_3_3 = callPackage ../development/libraries/haskell/zlib/0.5.3.1.nix {
+  zlib_0_5_3_3 = callPackage ../development/libraries/haskell/zlib/0.5.3.3.nix {
     inherit (pkgs) zlib;
   };
   zlib = self.zlib_0_5_3_3;

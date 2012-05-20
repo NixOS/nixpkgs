@@ -19,6 +19,7 @@
 
   ghc741Prefs_pedantic =
     self : self.haskellPlatformArgs_future self // {
+      haskellPlatform = self.haskellPlatform_2012_2_0_0;
       mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
       binary = null; # now a core package
     };
