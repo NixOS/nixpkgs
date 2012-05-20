@@ -1,8 +1,8 @@
-{ cabal, accelerate, accelerateCuda, accelerateIo
-, attoparsec, bmp, bytestringLexing, cmdargs, criterion, cuda
-, deepseq, fclabels, filepath, gloss, hashtables, mtl, mwcRandom
-, pgm, QuickCheck, random, testFramework, testFrameworkQuickcheck2
-, vector, vectorAlgorithms
+{ cabal, accelerate, accelerateCuda, accelerateIo, attoparsec, bmp
+, bytestringLexing, cmdargs, criterion, cuda, deepseq, fclabels
+, filepath, gloss, hashtables, mtl, mwcRandom, pgm, QuickCheck
+, random, testFramework, testFrameworkQuickcheck2, vector
+, vectorAlgorithms
 }:
 
 cabal.mkDerivation (self: {
@@ -12,11 +12,12 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    accelerate accelerateCuda accelerateIo attoparsec
-    bmp bytestringLexing cmdargs criterion cuda deepseq fclabels
-    filepath gloss hashtables mtl mwcRandom pgm QuickCheck random
-    testFramework testFrameworkQuickcheck2 vector vectorAlgorithms
+    accelerate accelerateCuda accelerateIo attoparsec bmp
+    bytestringLexing cmdargs criterion cuda deepseq fclabels filepath
+    gloss hashtables mtl mwcRandom pgm QuickCheck random testFramework
+    testFrameworkQuickcheck2 vector vectorAlgorithms
   ];
+  configureFlags = "-f-opencl";
   meta = {
     homepage = "http://www.cse.unsw.edu.au/~chak/project/accelerate/";
     description = "Examples using the Accelerate library";
