@@ -544,6 +544,10 @@ let
   cron = callPackage ../tools/system/cron {  # see also fcron
   };
 
+  cudatoolkit = callPackage ../development/compilers/cudatoolkit {
+    python = python26;
+  };
+
   curl = makeOverridable (import ../tools/networking/curl) rec {
     fetchurl = fetchurlBoot;
     inherit stdenv zlib openssl libssh2;

@@ -356,6 +356,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrcExts = self.haskellSrcExts_1_11_1;
   };
 
+  accelerate = callPackage ../development/libraries/haskell/accelerate {};
+
+  accelerateCuda = callPackage ../development/libraries/haskell/accelerate-cuda {};
+
+  accelerateExamples = callPackage ../development/libraries/haskell/accelerate-examples {};
+
+  accelerateIo = callPackage ../development/libraries/haskell/accelerate-io {};
+
   ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
 
   abstractDeque = callPackage ../development/libraries/haskell/abstract-deque {};
@@ -447,7 +455,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
 
-  c2hs = callPackage ../development/libraries/haskell/c2hs {};
+  c2hs = callPackage ../development/libraries/haskell/c2hs {
+    languageC = self.languageC_0_3_2_1;
+  };
 
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal = null; # core package in GHC
@@ -522,6 +532,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptoPubkeyTypes = callPackage ../development/libraries/haskell/crypto-pubkey-types {};
 
+  cuda = callPackage ../development/libraries/haskell/cuda {
+    inherit (pkgs.linuxPackages) nvidia_x11;
+  };
+
   csv = callPackage ../development/libraries/haskell/csv {};
 
   cssText = callPackage ../development/libraries/haskell/css-text {};
@@ -591,6 +605,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
   erf = callPackage ../development/libraries/haskell/erf {};
+
+  exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
+
+  exceptionTransformers = callPackage ../development/libraries/haskell/exception-transformers {};
 
   explicitException = callPackage ../development/libraries/haskell/explicit-exception {};
 
@@ -678,8 +696,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
   gloss = callPackage ../development/libraries/haskell/gloss {
-    GLUT   = self.GLUT22;
-    OpenGL = self.OpenGL24;
+    GLUT   = self.GLUT23;
+    OpenGL = self.OpenGL25;
   };
 
   GLURaw = callPackage ../development/libraries/haskell/GLURaw {};
@@ -693,6 +711,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     OpenGL = self.OpenGL_2_5_0_0;
   };
   GLUT22 = self.GLUT_2_2_2_1;
+  GLUT23 = self.GLUT_2_3_0_0;
   GLUT = self.GLUT_2_3_0_0;
 
   gtk = callPackage ../development/libraries/haskell/gtk {
@@ -900,7 +919,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
-  languageC = callPackage ../development/libraries/haskell/language-c {};
+  languageC_0_4_2   = callPackage ../development/libraries/haskell/language-c/0.4.2.nix {};
+  languageC_0_3_2_1 = callPackage ../development/libraries/haskell/language-c/0.3.2.1.nix {};
+  languageC = self.languageC_0_4_2;
+
+  languageCQuote = callPackage ../development/libraries/haskell/language-c-quote/default.nix {};
 
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
@@ -923,6 +946,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
 
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
+
+  mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
 
   maude = callPackage ../development/libraries/haskell/maude {
     parsec = self.parsec3;
@@ -1023,6 +1048,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   OpenGL_2_4_0_2 = callPackage ../development/libraries/haskell/OpenGL/2.4.0.2.nix {};
   OpenGL_2_5_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.5.0.0.nix {};
   OpenGL24 = self.OpenGL_2_4_0_2;
+  OpenGL25 = self.OpenGL_2_5_0_0;
   OpenGL = self.OpenGL_2_5_0_0;
 
   OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
@@ -1070,6 +1096,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
+
+  pgm = callPackage ../development/libraries/haskell/pgm {};
 
   polyparse_1_7 = callPackage ../development/libraries/haskell/polyparse/1.7.nix {};
   polyparse_1_8 = callPackage ../development/libraries/haskell/polyparse/1.8.nix {};
@@ -1202,6 +1230,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   socks = callPackage ../development/libraries/haskell/socks {};
 
+  srcloc = callPackage ../development/libraries/haskell/srcloc {};
+
   stateref = callPackage ../development/libraries/haskell/stateref {};
 
   StateVar = callPackage ../development/libraries/haskell/StateVar {};
@@ -1276,6 +1306,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {
     libc = pkgs.stdenv.gcc.libc;
   };
+
+  symbol = callPackage ../development/libraries/haskell/symbol {};
 
   systemFilepath = callPackage ../development/libraries/haskell/system-filepath {};
 
