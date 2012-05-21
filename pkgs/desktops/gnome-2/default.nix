@@ -111,4 +111,6 @@
 
   libglademm = callPackage ./bindings/libglademm { };
 
+  gnome_python = callPackage ./bindings/gnome-python { };
+
 }
