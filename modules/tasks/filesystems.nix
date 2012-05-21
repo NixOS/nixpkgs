@@ -183,7 +183,7 @@ in
       };
 
     jobs.mountall =
-      { startOn = "started udev";
+      { startOn = "started udev or config-changed";
 
         task = true;
 
