@@ -10,7 +10,7 @@
 
 cabal.mkDerivation (self : {
   pname = "haskell-platform";
-  version = "2011.4.0.0";
+  version = "2012.2.0.0";
   cabalFile = ./haskell-platform-2012.2.0.0.cabal;
   setupFile = ./Setup.hs;
   src = null;
