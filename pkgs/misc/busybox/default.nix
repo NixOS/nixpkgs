@@ -30,9 +30,9 @@ let
     CONFIG_INSTALL_NO_USR y
   '';
 
-  staticConfig = (if enableStatic then ''
-      CONFIG_STATIC y
-    '' else "");
+  staticConfig = stdenv.lib.optionalString enableStatic ''
+    CONFIG_STATIC y
+  '';
 
 in
 
@@ -64,6 +64,8 @@ stdenv.mkDerivation rec {
         CONFIG_IONICE n
       '' else "");
   };
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Tiny versions of common UNIX utilities in a single small executable";

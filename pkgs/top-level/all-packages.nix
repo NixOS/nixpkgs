@@ -8336,9 +8336,7 @@ let
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
-  busybox = callPackage ../misc/busybox {
-    enableStatic = true;
-  };
+  busybox = callPackage ../misc/busybox { };
 
   cups = callPackage ../misc/cups { };
 
