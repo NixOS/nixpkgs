@@ -129,7 +129,7 @@ let
   # work.
   extraUtils = pkgs.runCommand "extra-utils"
     { buildInputs = [pkgs.nukeReferences];
-      allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
+      allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
       doublePatchelf = (pkgs.stdenv.system == "armv5tel-linux");
     }
     ''
@@ -139,28 +139,21 @@ let
       # Copy what we need from Glibc.
       cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
       cp -pv ${pkgs.glibc}/lib/libc.so.* $out/lib
+      cp -pv ${pkgs.glibc}/lib/libm.so.* $out/lib
       cp -pv ${pkgs.glibc}/lib/libpthread.so.* $out/lib
       cp -pv ${pkgs.glibc}/lib/librt.so.* $out/lib
       cp -pv ${pkgs.glibc}/lib/libdl.so.* $out/lib
       cp -pv ${pkgs.gcc.gcc}/lib*/libgcc_s.so.* $out/lib
 
+      # Copy BusyBox.
+      cp -rvd ${pkgs.busybox}/{bin,sbin} $out/
+      chmod -R u+w $out
+
       # Copy some utillinux stuff.
-      cp -v ${pkgs.utillinux}/bin/mount ${pkgs.utillinux}/bin/umount \
-         ${pkgs.utillinux}/sbin/fsck ${pkgs.utillinux}/sbin/switch_root \
-         ${pkgs.utillinux}/sbin/blkid ${pkgs.utillinux}/bin/setsid $out/bin
+      cp -v ${pkgs.utillinux}/sbin/blkid $out/bin
       cp -pdv ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
       cp -pdv ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
-
-      # Copy some coreutils.
-      cp -v ${pkgs.coreutils}/bin/basename $out/bin
-      cp -v ${pkgs.coreutils}/bin/mkdir $out/bin
-      cp -v ${pkgs.coreutils}/bin/mknod $out/bin
-      cp -v ${pkgs.coreutils}/bin/chmod $out/bin
-      cp -v ${pkgs.coreutils}/bin/cat $out/bin
-      cp -v ${pkgs.coreutils}/bin/chroot $out/bin
-      cp -v ${pkgs.coreutils}/bin/sleep $out/bin
-      cp -v ${pkgs.coreutils}/bin/ln $out/bin
-
+      
       # Copy dmsetup and lvm.
       cp -v ${pkgs.lvm2}/sbin/dmsetup $out/bin/dmsetup
       cp -v ${pkgs.lvm2}/sbin/lvm $out/bin/lvm
@@ -174,12 +167,8 @@ let
       cp -v ${pkgs.udev}/lib/udev/*_id $out/bin
       cp -pdv ${pkgs.udev}/lib/libudev.so.* $out/lib
 
-      # Copy bash.
-      cp -v ${pkgs.bash}/bin/bash $out/bin
-      ln -sv bash $out/bin/sh
-
       # Copy modprobe.
-      cp -v ${pkgs.module_init_tools}/sbin/modprobe $out/bin/modprobe.real
+      cp -v ${pkgs.module_init_tools}/sbin/modprobe $out/bin/modprobe
 
       # Maybe copy splashutils.
       ${optionalString enableSplashScreen ''
@@ -187,6 +176,10 @@ let
       ''}
 
       ${config.boot.initrd.extraUtilsCommands}
+
+      # Strip binaries further than normal.
+      chmod -R u+w $out
+      stripDirs "lib bin" "-s"
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
@@ -201,27 +194,15 @@ let
           fi
       done
 
-      # Make the modprobe wrapper that sets $MODULE_DIR.
-      cat > $out/bin/modprobe <<EOF
-      #! $out/bin/bash
-      export MODULE_DIR=${modulesClosure}/lib/modules
-      exec $out/bin/modprobe.real "\$@"
-      EOF
-      chmod u+x $out/bin/modprobe
-
       # Make sure that the patchelf'ed binaries still work.
       echo "testing patched programs..."
-      $out/bin/bash --version | grep "bash, version"
+      $out/bin/ash -c 'echo hello world' | grep "hello world"
       export LD_LIBRARY_PATH=$out/lib
-      $out/bin/mount --version | grep "mount from"
-      $out/bin/umount --version | grep "umount "
+      $out/bin/mount --help 2>&1 | grep "BusyBox"
       $out/bin/udevadm --version
-      $out/bin/blkid -v 2>&1 | tee -a $out/log | grep "blkid from util-linux"
       $out/bin/dmsetup --version 2>&1 | tee -a $out/log | grep "version:"
       LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a $out/log | grep "LVM"
       $out/bin/mdadm --version
-      $out/bin/basename --version
-      $out/bin/modprobe --version
 
       ${config.boot.initrd.extraUtilsCommandsTest}
     ''; # */
@@ -291,25 +272,20 @@ let
   bootStage1 = pkgs.substituteAll {
     src = ./stage-1-init.sh;
 
-    shell = "${extraUtils}/bin/bash";
+    shell = "${extraUtils}/bin/ash";
 
     isExecutable = true;
 
-    inherit udevConf extraUtils;
+    inherit udevConf extraUtils modulesClosure;
 
     inherit (config.boot) resumeDevice devSize runSize;
 
     inherit (config.boot.initrd) checkJournalingFS
       preLVMCommands postDeviceCommands postMountCommands kernelModules;
 
-    # !!! copy&pasted from upstart-jobs/filesystems.nix.
-    mountPoints =
-      if fileSystems == []
-      then abort "You must specify the fileSystems option!"
-      else map (fs: fs.mountPoint) fileSystems;
-    devices = map (fs: if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fileSystems;
-    fsTypes = map (fs: fs.fsType) fileSystems;
-    optionss = map (fs: fs.options) fileSystems;
+    fsInfo =
+      let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType fs.options ];
+      in pkgs.writeText "initrd-fsinfo" (concatStringsSep "\n" (concatMap f fileSystems));
   };
 
 

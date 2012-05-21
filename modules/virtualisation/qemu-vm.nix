@@ -252,10 +252,6 @@ in
     ''
       # We need mke2fs in the initrd.
       cp ${pkgs.e2fsprogs}/sbin/mke2fs $out/bin
-
-      # And `ip' (which needs libresolv.so).
-      cp ${pkgs.iproute}/sbin/ip $out/bin
-      cp ${pkgs.glibc}/lib/libresolv.so.* $out/lib
     '';
 
   boot.initrd.postDeviceCommands =
