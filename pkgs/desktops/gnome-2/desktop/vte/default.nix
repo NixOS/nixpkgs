@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig, glib, gtk, ncurses
-, pythonSupport ? false, python}:
+, pythonSupport ? false, python, pygtk}:
 
 stdenv.mkDerivation rec {
   name = "vte-0.28.0";
@@ -10,12 +10,19 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++
-                stdenv.lib.optional pythonSupport python;
+                stdenv.lib.optionals pythonSupport [python pygtk];
                 
   configureFlags = ''
     ${if pythonSupport then "--enable-python" else "--disable-python"}
   '';
-  
+
+  postInstall = stdenv.lib.optionalString pythonSupport ''
+    cd $(toPythonPath $out)/gtk-2.0
+    for n in *; do
+      ln -s "gtk-2.0/$n" "../$n"
+    done
+  '';
+
   meta = {
     homepage = http://www.gnome.org/;
     description = "A library implementing a terminal emulator widget for GTK+";
