@@ -5953,6 +5953,8 @@ let
 
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
+  systemd = callPackage ../os-specific/linux/systemd { };
+
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
   sysvtools = callPackage ../os-specific/linux/sysvinit {
