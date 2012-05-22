@@ -1,12 +1,12 @@
 {stdenv, fetchurl, zlib, libX11, libpng}:
 
 stdenv.mkDerivation {
-  name = "ploticus-2.40";
+  name = "ploticus-2.41";
 
   builder = ./builder.sh;
   src = fetchurl {
-    url = mirror://sourceforge/ploticus/pl240src.tar.gz;
-    sha256 = "1gwppsmfxajrpidjrplkhvq2yy35r9hmigpwjmjqv4r7dj7cnrw8";
+    url = mirror://sourceforge/ploticus/ploticus/2.41/pl241src.tar.gz;
+    sha256 = "ecccb6afcf0008d5b31da2e9e74c448564101eb7b9bbde758a3dca1f2dc8c580";
   };
 
   buildInputs = [zlib libX11 libpng];

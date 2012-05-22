@@ -1246,7 +1246,9 @@ let
 
   plan9port = callPackage ../tools/system/plan9port { };
 
-  ploticus = callPackage ../tools/graphics/ploticus { };
+  ploticus = callPackage ../tools/graphics/ploticus {
+    libpng = libpng12;
+  };
 
   plotutils = callPackage ../tools/graphics/plotutils { };
 
