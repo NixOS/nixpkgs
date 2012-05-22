@@ -4184,7 +4184,9 @@ let
 
   libunwind = callPackage ../development/libraries/libunwind { };
 
-  libv4l = callPackage ../development/libraries/libv4l { };
+  libv4l = v4l_utils.override {
+    withQt4 = false;
+  };
 
   libva = callPackage ../development/libraries/libva { };
 
@@ -6025,7 +6027,9 @@ let
     inherit ncurses perl;
   };
 
-  v4l_utils = callPackage ../os-specific/linux/v4l-utils {};
+  v4l_utils = callPackage ../os-specific/linux/v4l-utils {
+    withQt4 = true;
+  };
 
   windows = rec {
     w32api = callPackage ../os-specific/windows/w32api {
