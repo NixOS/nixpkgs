@@ -56,7 +56,7 @@ library
     -- Note: newer versions of cgi need monad-catchio.
     cgi                         ==3001.1.7.4,
     fgl                         ==5.4.2.4,
-    GLUT                        ==2.1.2.1,
+    GLUT                        ==2.1.2.2,
     haskell-src                 ==1.0.1.5,
     html                        ==1.0.1.2,
     HTTP                        ==4000.2.3,

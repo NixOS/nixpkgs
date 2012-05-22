@@ -125,7 +125,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;         # 7.4.1 ok
     fgl          = self.fgl_5_4_2_4;            # 7.4.1 ok
-    GLUT         = self.GLUT_2_1_2_1;           # 7.4.1 ok
+    GLUT         = self.GLUT_2_1_2_2;           # 7.4.1 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.1 ok
     html         = self.html_1_0_1_2;           # 7.4.1 ok
     HUnit        = self.HUnit_1_2_4_2;          # 7.4.1 ok
@@ -709,6 +709,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {};
   GLUT_2_1_2_1 = callPackage ../development/libraries/haskell/GLUT/2.1.2.1.nix {};
+  GLUT_2_1_2_2 = callPackage ../development/libraries/haskell/GLUT/2.1.2.2.nix {};
   GLUT_2_2_2_1 = callPackage ../development/libraries/haskell/GLUT/2.2.2.1.nix {
     OpenGL = self.OpenGL_2_4_0_2;
   };
