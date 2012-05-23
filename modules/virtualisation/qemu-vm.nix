@@ -274,6 +274,10 @@ in
 
   boot.initrd.postMountCommands =
     ''
+      # Mark this as a NixOS machinex.
+      mkdir -p $targetRoot/etc
+      echo -n > $targetRoot/etc/NIXOS
+    
       # Fix the permissions on /tmp.
       chmod 1777 $targetRoot/tmp
 
