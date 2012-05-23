@@ -36,7 +36,7 @@ let
     };
 
     system.boot.loader.kernelFile = mkOption {
-      default = "";
+      default = pkgs.stdenv.platform.kernelTarget;
       description = ''
         Name of the kernel file to be passed to the bootloader.
       '';
@@ -152,7 +152,7 @@ let
     inherit children;
     kernelParams =
       config.boot.kernelParams ++ config.boot.extraKernelParams;
-    menuBuilder = config.system.build.menuBuilder;
+    menuBuilder = config.system.build.menuBuilder or "true";
     initScriptBuilder = config.system.build.initScriptBuilder;
     activationScript = config.system.activationScripts.script;
     nixosVersion = config.system.nixosVersion;
