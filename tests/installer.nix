@@ -161,6 +161,9 @@ let
       # Perform the installation.
       $machine->mustSucceed("nixos-install >&2");
 
+      # Do it again to make sure it's idempotent.
+      $machine->mustSucceed("nixos-install >&2");
+
       $machine->shutdown;
 
       # Now see if we can boot the installation.
