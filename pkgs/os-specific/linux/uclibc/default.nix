@@ -84,7 +84,8 @@ stdenv.mkDerivation {
     mkdir -p $out
     make PREFIX=$out VERBOSE=1 install ${crossMakeFlag}
     (cd $out/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
-    sed -i s@/lib/@$out/lib/@g $out/lib/libc.so
+    # libpthread.so may not exist, so I do || true
+    sed -i s@/lib/@$out/lib/@g $out/lib/libc.so $out/lib/libpthread.so || true
   '';
 
   passthru = {
