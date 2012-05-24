@@ -1852,7 +1852,9 @@ let
 
   gccCrossStageStatic = let
       isMingw = (stdenv.cross.libc == "msvcrt");
-      libcCross1 = if isMingw then windows.mingw_headers1 else null;
+      isMingw64 = (stdenv.cross.libc == "msvcrt64");
+      libcCross1 = if isMingw then windows.mingw_headers1 else
+                   if isMingw64 then windows.mingw_w64_headers else null;
     in
       wrapGCCCross {
       gcc = forceBuildDrv (lib.addMetaAttrs { platforms = []; } (
@@ -6074,6 +6076,15 @@ let
     mingw_headers3 = buildEnv {
       name = "mingw-headers-3";
       paths = [ w32api mingw_runtime ];
+    };
+
+    mingw_w64 = callPackage ../os-specific/windows/mingw-w64 {
+      gccCross = gccCrossStageStatic;
+      binutilsCross = binutilsCross;
+    };
+
+    mingw_w64_headers = callPackage ../os-specific/windows/mingw-w64 {
+      onlyHeaders = true;
     };
 
     pthreads = callPackage ../os-specific/windows/pthread-w32 {
