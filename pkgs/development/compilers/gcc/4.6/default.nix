@@ -130,7 +130,11 @@ let version = "4.6.3";
           " --enable-version-specific-runtime-libs" +
           " --disable-libssp" +
           " --disable-nls" +
-          " --with-dwarf2"
+          " --with-dwarf2" +
+          # I think noone uses shared gcc libs in mingw, so we better do the same.
+          # In any case, g++ linking is broken by default with shared libs,
+          # unless adding "-lsupc++" to any linking command. I don't know why.
+          " --disable-shared"
           else
           " --enable-threads=posix" +
           " --enable-nls" +
@@ -426,7 +430,8 @@ stdenv.mkDerivation ({
   installTargets = "install-gcc install-target-libgcc";
 }
 
-// optionalAttrs (!stripped) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
+# Strip kills static libs of other archs (hence cross != null)
+// optionalAttrs (!stripped || cross != null) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
 
 // optionalAttrs langVhdl rec {
   name = "ghdl-0.29";
