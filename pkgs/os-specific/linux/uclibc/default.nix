@@ -46,6 +46,7 @@ let
     DO_C99_MATH y
     UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
     UCLIBC_SUSV4_LEGACY y
+    UCLIBC_HAS_THREADS_NATIVE y
     KERNEL_HEADERS "${linuxHeaders}/include"
   '';
 
