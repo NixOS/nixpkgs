@@ -162,7 +162,7 @@ mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles/per-user/root
 chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
 mkdir -m 0700 -p $mountPoint/root/.nix-defexpr
-ln -s /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
+ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
 
 
 # We're done building/downloading, so we don't need the /etc bind
