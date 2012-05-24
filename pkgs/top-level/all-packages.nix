@@ -1852,9 +1852,9 @@ let
 
   gccCrossStageStatic = let
       isMingw = (stdenv.cross.libc == "msvcrt");
-      isMingw64 = (stdenv.cross.libc == "msvcrt64");
-      libcCross1 = if isMingw then windows.mingw_headers1 else
-                   if isMingw64 then windows.mingw_w64_headers else null;
+      isMingw64 = isMingw && stdenv.cross.config == "x86_64-w64-mingw32";
+      libcCross1 = if isMingw64 then windows.mingw_w64_headers else
+                   if isMingw then windows.mingw_headers1 else null;
     in
       wrapGCCCross {
       gcc = forceBuildDrv (lib.addMetaAttrs { platforms = []; } (
@@ -3528,6 +3528,8 @@ let
   # We can choose:
   libcCrossChooser = name : if (name == "glibc") then glibcCross
     else if (name == "uclibc") then uclibcCross
+    else if (name == "msvcrt" && stdenv.cross.config == "x86_64-w64-mingw32") then
+      windows.mingw_w64
     else if (name == "msvcrt") then windows.mingw_headers3
     else throw "Unknown libc";
 

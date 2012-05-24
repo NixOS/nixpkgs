@@ -164,6 +164,29 @@ in {
   };
 }) // (
 
+/* Test some cross builds on mingw-w64 */
+let
+  crossSystem = {
+      # That's the triplet they use in the mingw-w64 docs,
+      # and it's relevant for nixpkgs conditions.
+      config = "x86_64-w64-mingw32";
+      arch = "x86_64"; # Irrelevant
+      libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
+      platform = {};
+  };
+in {
+  crossMingwW64 = mapTestOnCross crossSystem {
+    coreutils.hostDrv = nativePlatforms;
+    boehmgc.hostDrv = nativePlatforms;
+    gmp.hostDrv = nativePlatforms;
+    guile_1_8.hostDrv = nativePlatforms;
+    libffi.hostDrv = nativePlatforms;
+    libtool.hostDrv = nativePlatforms;
+    libunistring.hostDrv = nativePlatforms;
+    windows.wxMSW.hostDrv = nativePlatforms;
+  };
+}) // (
+
 /* GNU aka. GNU/Hurd.  */
 let
   crossSystem = {
