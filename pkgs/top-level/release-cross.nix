@@ -17,10 +17,9 @@ let
       #xorgserver.hostDrv = nativePlatforms;
     };
     nixUnstable.hostDrv = nativePlatforms;
-    linuxPackages_2_6_32.kernel.hostDrv = linux;
-    linuxPackages_2_6_33.kernel.hostDrv = linux;
-    linuxPackages_2_6_34.kernel.hostDrv = linux;
-    linuxPackages_2_6_35.kernel.hostDrv = linux;
+    linuxPackages_2_6_39.kernel.hostDrv = linux;
+    linuxPackages_3_3.kernel.hostDrv = linux;
+    linuxPackages_3_4.kernel.hostDrv = linux;
   };
 
   /* Basic list of packages to be natively built,
