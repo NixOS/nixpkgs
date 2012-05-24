@@ -36,6 +36,7 @@ let
   archMakeFlag = if (cross != null) then "ARCH=${cross.arch}" else "";
   crossMakeFlag = if (cross != null) then "CROSS=${cross.config}-" else "";
 
+  # UCLIBC_SUSV4_LEGACY defines 'tmpnam', needed for gcc libstdc++ builds.
   nixConfig = ''
     RUNTIME_PREFIX "/"
     DEVEL_PREFIX "/"
@@ -44,6 +45,7 @@ let
     UCLIBC_HAS_RPC y
     DO_C99_MATH y
     UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
+    UCLIBC_SUSV4_LEGACY y
     KERNEL_HEADERS "${linuxHeaders}/include"
   '';
 
