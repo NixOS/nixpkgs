@@ -91,6 +91,7 @@ storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
 echo "copying Nix to $mountPoint...."
 for i in $storePaths; do
     echo "  $i"
+    chattr -R -i $mountPoint/nix/store/$i 2> /dev/null || true # clear immutable bit
     rsync -a $i $mountPoint/nix/store/
 done
 
@@ -124,7 +125,7 @@ ln -sf @shell@ $mountPoint/bin/sh
 
 if test -n "$NIXOS_PREPARE_CHROOT_ONLY"; then
     echo "User requested only to prepare chroot. Exiting."
-    exit 0;
+    exit 0
 fi
 
 
