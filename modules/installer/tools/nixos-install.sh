@@ -38,7 +38,9 @@ fi
 
 # Do a nix-pull to speed up building.
 if test -n "@nixosURL@" -a ${NIXOS_PULL:-1} != 0; then
-    @nix@/bin/nix-pull @nixosURL@/MANIFEST || true
+    mkdir -p /nix/var/nix/channel-cache -m 0755
+    NIX_DOWNLOAD_CACHE=/nix/var/nix/channel-cache \
+        @nix@/bin/nix-pull @nixosURL@/MANIFEST || true
 fi
 
 
