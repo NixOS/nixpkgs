@@ -10,32 +10,24 @@ let
 
   cfg = config.services.printing;
 
-  additionalBackends = pkgs.stdenv.mkDerivation {
-    name = "additional-cups-backends";
-    builder = pkgs.writeScript "additional-backends-builder.sh" ''
-      PATH=${pkgs.coreutils}/bin
-      mkdir -pv $out
+  additionalBackends = pkgs.runCommand "additional-cups-backends" { }
+    ''
+      mkdir -p $out
       if [ ! -e ${pkgs.cups}/lib/cups/backend/smb ]; then
-        mkdir -pv $out/lib/cups/backend
+        mkdir -p $out/lib/cups/backend
         ln -sv ${pkgs.samba}/bin/smbspool $out/lib/cups/backend/smb
       fi
 
       # Provide support for printing via HTTPS.
       if [ ! -e ${pkgs.cups}/lib/cups/backend/https ]; then
-        mkdir -pv $out/lib/cups/backend
+        mkdir -p $out/lib/cups/backend
         ln -sv ${pkgs.cups}/lib/cups/backend/ipp $out/lib/cups/backend/https
       fi
-
-      # Awful hack to get programs needed by some PPDs in CUPS'
-      # hard-coded $PATH.
-      mkdir -p $out/lib/cups/filter
-      ln -s ${pkgs.coreutils}/bin/date ${pkgs.coreutils}/bin/cat ${pkgs.gnused}/bin/sed $out/lib/cups/filter/
 
       # Import filter configuration from Ghostscript.
       mkdir -p $out/share/cups/mime/
       ln -v -s "${pkgs.ghostscript}/etc/cups/"* $out/share/cups/mime/
     '';
-  };
 
   # Here we can enable additional backends, filters, etc. that are not
   # part of CUPS itself, e.g. the SMB backend is part of Samba.  Since
@@ -45,7 +37,7 @@ let
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths = cfg.drivers;
-    pathsToLink = [ "/lib/cups" "/share/cups" ];
+    pathsToLink = [ "/lib/cups" "/share/cups" "/bin" ];
     postBuild = cfg.bindirCmds;
   };
 
@@ -131,8 +123,7 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
-        # !!! Why is config.system.path in here?
-        path = [ cups config.system.path ];
+        path = [ cups ];
 
         preStart =
           ''
@@ -146,7 +137,8 @@ in
         exec = "cupsd -c ${pkgs.writeText "cupsd.conf" cfg.cupsdConf} -F";
       };
 
-    services.printing.drivers = [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends ];
+    services.printing.drivers =
+      [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends pkgs.perl pkgs.coreutils pkgs.gnused ];
 
     services.printing.cupsdConf =
       ''
@@ -164,6 +156,8 @@ in
 
         ServerBin ${bindir}/lib/cups
         DataDir ${bindir}/share/cups
+
+        SetEnv PATH ${bindir}/lib/cups/filter:${bindir}/bin:${bindir}/sbin
 
         AccessLog ${logDir}/access_log
         ErrorLog ${logDir}/error_log
