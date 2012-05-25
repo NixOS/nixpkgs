@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libsigsegv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "gawk-4.0.0";
 
   src = fetchurl {
@@ -37,3 +37,9 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+stdenv.lib.optionalAttrs stdenv.isCygwin {
+  patches = [ ./cygwin-identifiers.patch ];
+})
