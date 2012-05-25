@@ -1,5 +1,5 @@
 # This module contains the basic configuration for building a NixOS
-# installation CD.
+# tarball, that can directly boot, maybe using PXE or unpacking on a fs.
 
 { config, pkgs, ... }:
 
@@ -164,9 +164,19 @@ in
   # To be able to use the systemTarball to catch troubles.
   boot.crashDump = {
     enable = true;
-    # Why not a recent kernel?
-    kernelPackages = pkgs.linuxPackages_3_2;
+    kernelPackages = pkgs.linuxPackages_3_4;
   };
+
+  # No grub for the tarball.
+  boot.loader.grub.enable = false;
+
+  /* fake entry, just to have a happy stage-1. Users
+     may boot without having stage-1 though */
+  fileSystems = [
+    { mountPoint = "/";
+      device = "/dev/something";
+      }
+  ];
 
   nixpkgs.config = {
     packageOverrides = p: rec {
