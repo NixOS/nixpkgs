@@ -127,14 +127,17 @@ let version = "4.6.3";
           " --enable-threads=win32" +
           " --enable-sjlj-exceptions" +
           " --enable-hash-synchronization" +
-          " --enable-version-specific-runtime-libs" +
           " --disable-libssp" +
           " --disable-nls" +
           " --with-dwarf2" +
           # I think noone uses shared gcc libs in mingw, so we better do the same.
-          # In any case, g++ linking is broken by default with shared libs,
+          # In any case, mingw32 g++ linking is broken by default with shared libs,
           # unless adding "-lsupc++" to any linking command. I don't know why.
-          " --disable-shared"
+          " --disable-shared" +
+          (if cross.config == "x86_64-w64-mingw32" then
+            # To keep ABI compatibility with upstream mingw-w64
+            " --enable-fully-dynamic-string"
+            else "")
           else (if cross.libc == "uclibc" then
             # In uclibc cases, libgomp needs an additional '-ldl'
             # and as I don't know how to pass it, I disable libgomp.
