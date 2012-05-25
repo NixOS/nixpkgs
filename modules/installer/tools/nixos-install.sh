@@ -93,7 +93,7 @@ storePaths=$(@perl@/bin/perl @pathsFromGraph@ @nixClosure@)
 echo "copying Nix to $mountPoint...."
 for i in $storePaths; do
     echo "  $i"
-    chattr -R -i $mountPoint/nix/store/$i 2> /dev/null || true # clear immutable bit
+    chattr -R -i $mountPoint/$i 2> /dev/null || true # clear immutable bit
     rsync -a $i $mountPoint/nix/store/
 done
 
