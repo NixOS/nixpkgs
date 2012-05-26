@@ -6,16 +6,17 @@
 , python }:
 
 let
-  rev = "11483";
+  # Ardour 3 Beta 4a
+  rev = "12406";
 in
 
 stdenv.mkDerivation {
   name = "ardour3-svn-${rev}";
 
   src = fetchsvn {
-    url = http://subversion.ardour.org/svn/ardour2/tags/3.0-beta3;
+    url = http://subversion.ardour.org/svn/ardour2/branches/3.0;
     inherit rev;
-    sha256 = "02az11lvfbln475np9jyfkdlrkpp1pszjmk6gl75wq6ws08dd7rd";
+    sha256 = "0a68xb3l36m5908y3airxw1b3bymhrjrf1l492mgcvviq6pn7pmk";
   };
 
   buildInputs = [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec
