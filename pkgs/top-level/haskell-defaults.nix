@@ -26,9 +26,6 @@
 
   ghc741Prefs =
     self : ghc741Prefs_pedantic self // {
-      # These are necessary at the moment to prevent many packages from breaking.
-      mtl          = self.mtl_2_0_1_0;
-      transformers = self.transformers_0_2_2_0;
     };
 
   ghc722Prefs = ghc741Prefs;
@@ -266,5 +263,5 @@
                            ghc704Binary;
                prefFun = ghcHEADPrefs;
              };
-  
+
 }
