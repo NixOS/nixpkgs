@@ -8298,7 +8298,7 @@ let
   spass = callPackage ../applications/science/logic/spass {};
 
   ssreflect = callPackage ../applications/science/logic/ssreflect {
-    camlp5 = ocamlPackages.camlp5_5_transitional;
+    camlp5 = ocamlPackages.camlp5_transitional;
   };
 
   tptp = callPackage ../applications/science/logic/tptp {};
