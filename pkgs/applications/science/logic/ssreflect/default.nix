@@ -33,12 +33,12 @@ stdenv.mkDerivation {
     COQLIB=$out/lib/coq make -f Makefile.coq install -e
     mkdir -p $out/bin
     cp bin/* $out/bin
-#    for i in $out/bin/*; do
-#      wrapProgram "$i" \
-#        --add-flags "-R" \
-#        --add-flags "$out/lib/coq/user-contrib/Ssreflect" \
-#        --add-flags "Ssreflect"
-#    done
+    for i in $out/bin/*; do
+      wrapProgram "$i" \
+        --add-flags "-R" \
+        --add-flags "$out/lib/coq/user-contrib/Ssreflect" \
+        --add-flags "Ssreflect"
+    done
   '';
 
   meta = {
