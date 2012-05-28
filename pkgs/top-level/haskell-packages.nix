@@ -434,9 +434,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeBuilderEnumerator = callPackage ../development/libraries/haskell/blaze-builder-enumerator {};
 
-  blazeHtml_0_4_3_4 = callPackage ../development/libraries/haskell/blaze-html/0.4.3.4.nix {};
-  blazeHtml_0_5_0_0 = callPackage ../development/libraries/haskell/blaze-html/0.5.0.0.nix {};
-  blazeHtml = self.blazeHtml_0_4_3_4;
+  blazeHtml = callPackage ../development/libraries/haskell/blaze-html {};
 
   blazeMarkup = callPackage ../development/libraries/haskell/blaze-markup {};
 
@@ -725,9 +723,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     libc = pkgs.stdenv.gcc.libc;
   };
 
-  gtk2hsBuildtools_0_12_1 = callPackage ../development/libraries/haskell/gtk2hs-buildtools/0.12.1.nix {};
-  gtk2hsBuildtools_0_12_3 = callPackage ../development/libraries/haskell/gtk2hs-buildtools/0.12.3.nix {};
-  gtk2hsBuildtools = self.gtk2hsBuildtools_0_12_1;
+  gtk2hsBuildtools = callPackage ../development/libraries/haskell/gtk2hs-buildtools {};
   gtk2hsC2hs = self.gtk2hsBuildtools;
 
   gtksourceview2 = callPackage ../development/libraries/haskell/gtksourceview2 {
@@ -1074,7 +1070,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   parallel_2_2_0_1 = callPackage ../development/libraries/haskell/parallel/2.2.0.1.nix {};
   parallel_3_1_0_1 = callPackage ../development/libraries/haskell/parallel/3.1.0.1.nix {};
   parallel_3_2_0_2 = callPackage ../development/libraries/haskell/parallel/3.2.0.2.nix {};
-  parallel = self.parallel_3_2_0_2;
+  parallel_3_2_0_3 = callPackage ../development/libraries/haskell/parallel/3.2.0.3.nix {};
+  parallel = self.parallel_3_2_0_3;
 
   parseargs = callPackage ../development/libraries/haskell/parseargs {};
 
@@ -1189,7 +1186,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regexPosix_0_95_1 = callPackage ../development/libraries/haskell/regex-posix/0.95.1.nix {
     regexBase = self.regexBase_0_93_2;
   };
-  regexPosix = self.regexPosix_0_95_1;
+  regexPosix_0_95_2 = callPackage ../development/libraries/haskell/regex-posix/0.95.2.nix {
+    regexBase = self.regexBase_0_93_2;
+  };
+  regexPosix = self.regexPosix_0_95_2;
 
   regexTDFA = callPackage ../development/libraries/haskell/regex-tdfa {};
   regexTdfa = self.regexTDFA;
@@ -1358,7 +1358,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   text_0_11_1_5 = callPackage ../development/libraries/haskell/text/0.11.1.5.nix {};
   text_0_11_1_13 = callPackage ../development/libraries/haskell/text/0.11.1.13.nix {};
   text_0_11_2_0 = callPackage ../development/libraries/haskell/text/0.11.2.0.nix {};
-  text = self.text_0_11_2_0;
+  text_0_11_2_1 = callPackage ../development/libraries/haskell/text/0.11.2.1.nix {};
+  text = self.text_0_11_2_1;
 
   thespian = callPackage ../development/libraries/haskell/thespian {};
 

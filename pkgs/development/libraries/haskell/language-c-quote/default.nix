@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-c-quote";
-  version = "0.3.1.0";
-  sha256 = "0y3zfc43izvalm1lrbk286nmg4s3vgpj5v2j6j2saz3c7l2ly8z6";
+  version = "0.3.1.2";
+  sha256 = "0lqr9z2akx90l07k1qbv3y4wwwlcilj08zva4v9scbqydrwpqxip";
   buildDepends = [
     exceptionMtl exceptionTransformers filepath haskellSrcMeta
     mainlandPretty mtl srcloc syb symbol
