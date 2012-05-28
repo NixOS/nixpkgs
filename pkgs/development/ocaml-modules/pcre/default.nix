@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.ocaml.info/ocaml_sources/pcre-ocaml-${version}.tar.gz";
-    sha256 = "f1774028a4525d22d1f4cf4ce0121c99d85a75aed7a498c3e8ab0f5e39888e47";
+    sha256 = "33ec646d8f35770e90ec333b0d4910a88668be3d53c17f227428c82c5c3c3eb7";
   };
 
   buildInputs = [ocaml findlib];
