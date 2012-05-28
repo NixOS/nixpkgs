@@ -8244,7 +8244,7 @@ let
 
   coq = callPackage ../applications/science/logic/coq {
     inherit (ocamlPackages) findlib lablgtk;
-    camlp5 = ocamlPackages.camlp5_5_transitional;
+    camlp5 = ocamlPackages.camlp5_transitional;
   };
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
