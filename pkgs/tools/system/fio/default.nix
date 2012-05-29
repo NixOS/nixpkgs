@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://git.kernel.dk/?p=fio.git;a=summary;
+    homepage = "http://git.kernel.dk/?p=fio.git;a=summary";
     description = "Flexible IO Tester - an IO benchmark tool";
     license = "GPLv2";
   };
