@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   # Filter out `null' inputs.  This allows users to `.override' the
   # derivation and set optional dependencies to `null'.
   buildInputs = stdenv.lib.filter (x: x != null)
-   [ cairo expat ncurses libX11 ];
+   ([ expat ncurses ]
+     ++  (stdenv.lib.optionals (!stdenv.isCygwin) [ cairo libX11 ]));
 
   doCheck = true;
 
