@@ -1,4 +1,4 @@
-/* This file composes the Nix Packages collection.  That is, it
+/* This file composes the Nix Packages collection.  That is, it gtk3
    imports the functions that build the various packages, and calls
    them with appropriate arguments.  The result is a set of all the
    packages in the Nix Packages collection for some particular
@@ -3597,6 +3597,13 @@ let
     libart = gnome.libart_lgpl;
   };
 
+  goffice_0_9 = callPackage ../development/libraries/goffice/0.9.nix {
+    inherit (gnome) libglade libgnomeui;
+    gconf = gnome.GConf;
+    libart = gnome.libart_lgpl;
+    gtk = gtk3;
+  };
+
   goocanvas = callPackage ../development/libraries/goocanvas { };
 
   google_perftools = callPackage ../development/libraries/google-perftools { };
@@ -6793,6 +6800,11 @@ let
 
   gnome_mplayer = callPackage ../applications/video/gnome-mplayer {
     inherit (gnome) GConf;
+  };
+
+  gnumeric = callPackage ../applications/office/gnumeric {
+    goffice = goffice_0_9;
+    inherit (gnome) libglade scrollkeeper;
   };
 
   gnunet08 = callPackage ../applications/networking/p2p/gnunet/0.8.nix {
