@@ -692,6 +692,8 @@ let
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
 
+  fio = callPackage ../tools/system/fio { };
+
   flvstreamer = callPackage ../tools/networking/flvstreamer { };
 
   libbsd = callPackage ../development/libraries/libbsd { };
