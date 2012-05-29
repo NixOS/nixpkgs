@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation {
   name = "gnumeric-1.11.3";
-  
+
   src = fetchurl {
     url = mirror://gnome/sources/gnumeric/1.11/gnumeric-1.11.3.tar.xz;
     sha256 = "1hblcbba4qzlby094dih6ncclgf2n5ac59lqg9dykpz8ad3hxw72";
