@@ -1,4 +1,4 @@
-/* This file composes the Nix Packages collection.  That is, it gtk3
+/* This file composes the Nix Packages collection.  That is, it
    imports the functions that build the various packages, and calls
    them with appropriate arguments.  The result is a set of all the
    packages in the Nix Packages collection for some particular
