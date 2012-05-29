@@ -1,6 +1,8 @@
 { cabal, filepath, libXrandr, mtl, parsec, stm, time, utf8String
-, X11, X11Xft
+, X11, X11Xft, wirelessSupport ? false, wirelesstools ? null
 }:
+
+assert wirelessSupport -> wirelesstools != null;
 
 cabal.mkDerivation (self: {
   pname = "xmobar";
@@ -10,9 +12,9 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [
     filepath mtl parsec stm time utf8String X11 X11Xft
-  ];
+  ] ++ self.stdenv.lib.optional wirelessSupport wirelesstools;
   extraLibraries = [ libXrandr ];
-  configureFlags = "-fwith_xft";
+  configureFlags = ["-fwith_xft"] ++ self.stdenv.lib.optional wirelessSupport "-fwith_iwlib";
   meta = {
     homepage = "http://projects.haskell.org/xmobar/";
     description = "A Minimalistic Text Based Status Bar";
