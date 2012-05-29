@@ -17,15 +17,11 @@
 
   ghcHEADPrefs = ghc741Prefs;
 
-  ghc741Prefs_pedantic =
+  ghc741Prefs =
     self : self.haskellPlatformArgs_future self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
       mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
       binary = null; # now a core package
-    };
-
-  ghc741Prefs =
-    self : ghc741Prefs_pedantic self // {
     };
 
   ghc722Prefs = ghc741Prefs;
@@ -244,10 +240,6 @@
                ghcBinary = ghc6121BinaryDarwin;
                prefFun = ghc741Prefs;
              };
-
-  # More strictly adhering to the probable future Haskell Platform.
-  packages_ghc741_pedantic =
-    packages_ghc741.override { prefFun = ghc741Prefs_pedantic; };
 
   # Stable branch snapshot.
   packages_ghc742 =

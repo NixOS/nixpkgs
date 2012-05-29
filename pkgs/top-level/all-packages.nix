@@ -2221,7 +2221,6 @@ let
   haskellPackages_ghc721              =                   haskell.packages_ghc721;
   haskellPackages_ghc722              =                   haskell.packages_ghc722;
   haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741);
-  haskellPackages_ghc741_pedantic     =                   haskell.packages_ghc741_pedantic;
   # Stable branch snapshot.
   haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742);
   # Reasonably current HEAD snapshot.
