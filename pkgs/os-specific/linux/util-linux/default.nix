@@ -1,13 +1,11 @@
 { stdenv, fetchurl, zlib, ncurses ? null, perl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.20.1";
+  name = "util-linux-2.21.2";
 
   src = fetchurl {
-    # This used to be mirror://kernel/linux/utils/util-linux, but it
-    # disappeared in the kernel.org meltdown.
-    url = "mirror://gentoo/distfiles/${name}.tar.bz2";
-    sha256 = "1q5vjcvw4f067c63vj2n3xggvk5prm11571x6vnqiav47vdbqvni";
+    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.21/${name}.tar.bz2";
+    sha256 = "0c1xp9pzwizxfk09anvjaz5cv8gvxracvvb6s84xiaxza679svq6";
   };
 
   patches = [ ./linux-specific-header.patch ];
