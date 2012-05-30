@@ -414,19 +414,18 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
   dateutil = buildPythonPackage (rec {
-    name = "dateutil-1.4.1";
+    name = "dateutil-1.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "0mrkh932k8s74h4rpgksvpmwbrrkq8zn78gbgwc22i2vlp31bdkl";
+      sha256 = "02dhw57jf5kjcp7ng1if7vdrbnlpb9yjmz7wygwwvf3gni4766bg";
     };
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
-
       homepage = http://pypi.python.org/pypi/python-dateutil;
-
       license = "BSD-style";
     };
   });
@@ -460,6 +459,58 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
+  django = buildPythonPackage rec {
+    name = "Django-1.3.1";
+
+    src = fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
+      sha256 = "0sqmvqy3y5h76pa3zjcnyiy5x01bzzy03afdp2qdwqx0x321i4dg";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
+  
+  django_evolution = buildPythonPackage rec {
+    name = "django_evolution-0.6.7";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django_evolution/${name}.tar.gz";
+      md5 = "24b8373916f53f74d701b99a6cf41409";
+    };
+
+    propagatedBuildInputs = [ django ];
+
+    meta = {
+      description = "A database schema evolution tool for the Django web framework";
+      homepage = http://code.google.com/p/django-evolution/;
+    };
+  };
+
+  
+  djblets = buildPythonPackage rec {
+    name = "Djblets-0.6.16";
+
+    src = fetchurl {
+      url = "http://downloads.reviewboard.org/releases/Djblets/0.6/Djblets-0.6.16.tar.gz";
+      sha256 = "1793jy0y5w79p8395lvvdlmvdybgwvc5lvgzmk1csf08ba772vc4";
+    };
+
+    propagatedBuildInputs = [ pkgs.pil django ];
+
+    meta = {
+      description = "A collection of useful extensions for Django";
+      homepage = https://github.com/djblets/djblets;
+    };
+  };
+
+  
   dulwich = buildPythonPackage rec {
     name = "dulwich-0.8.1";
 
@@ -480,6 +531,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   hggit = buildPythonPackage rec {
     name = "hg-git-0.3.1";
 
@@ -496,6 +548,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   docutils = buildPythonPackage rec {
     name = "docutils-0.8.1";
 
@@ -584,6 +637,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
   foolscap = buildPythonPackage (rec {
     name = "foolscap-0.6.1";
 
@@ -926,6 +980,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.1.11";
 
@@ -946,6 +1001,21 @@ let pythonPackages = python.modules // rec {
   });
 
 
+  memcached = buildPythonPackage rec {
+    name = "memcached-1.48";
+
+    src = fetchurl {
+      url = "ftp://ftp.tummy.com/pub/python-memcached/old-releases/python-memcached-1.48.tar.gz";
+      sha256 = "1i0h05z9j0zl65rgvw86p4f54pigkxynhzppn4qxby8rjlnwdfv6";
+    };
+
+    meta = {
+      description = "Python API for communicating with the memcached distributed memory object cache daemon";
+      homepage = http://www.tummy.com/Community/software/python-memcached/;
+    };
+  };
+
+  
   mock = buildPythonPackage (rec {
     name = "mock-0.7.0";
 
@@ -1252,17 +1322,16 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  paramiko = buildPythonPackage {
-    name = "paramiko-1.7.6";
+  
+  paramiko = buildPythonPackage rec {
+    name = "paramiko-1.7.7.1";
 
     src = fetchurl {
-      url = "http://www.lag.net/paramiko/download/paramiko-1.7.6.tar.gz";
-      sha256 = "00jhzl3s9xdkbj32h1kq1swk8wpx9zky7qfda40n8mb204xjcn9h";
+      url = "http://www.lag.net/paramiko/download/${name}.tar.gz";
+      sha256 = "1bjy4jn51c50mpq51jbwk0glzd8bxz83gxdfkr9p95dmrd17c7hh";
     };
 
     buildInputs = [ pkgs.pycrypto ];
-
-    doCheck = false;
 
     meta = {
       homepage = "http://www.lag.net/paramiko/";
@@ -1516,15 +1585,16 @@ let pythonPackages = python.modules // rec {
 
 
   pygments = buildPythonPackage rec {
-    name = "Pygments-1.4";
+    name = "Pygments-1.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      md5 = "d77ac8c93a7fb27545f2522abe9cc462";
+      md5 = "ef997066cc9ee7a47d01fb4f3da0b5ff";
     };
+    
     meta = {
       homepage = http://pygments.org/;
-      description = "Pygments is a generic syntax highlighter for general use in all kinds of software such as forum systems, wikis or other applications that need to prettify source code.";
+      description = "A generic syntax highlighter";
     };
   };
 
@@ -1543,6 +1613,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   ldap = buildPythonPackage rec {
     name = "python-ldap-2.4.3";
 
@@ -1555,6 +1626,7 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
+  
   pylint = buildPythonPackage rec {
     name = "pylint-0.23.0";
 
@@ -1565,6 +1637,7 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [astng];
   };
 
+  
   pymacs = pkgs.stdenv.mkDerivation rec {
     version = "v0.24-beta2";
     name = "Pymacs-${version}";
@@ -1593,6 +1666,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   pyopengl =
     let version = "3.0.0b5";
     in
@@ -1621,6 +1695,7 @@ let pythonPackages = python.modules // rec {
         };
       };
 
+      
   pyreport = buildPythonPackage (rec {
     name = "pyreport-0.3.4c";
 
@@ -1742,6 +1817,21 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  pytz = buildPythonPackage rec {
+    name = "pytz-2012c";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.bz2";
+      md5 = "660e0cee7f6c419ca2665db460f65131";
+    };
+
+    meta = {
+      description = "World timezone definitions, modern and historical";
+      homepage = http://pytz.sourceforge.net/;
+    };
+  };
+
+  
   pyutil = buildPythonPackage (rec {
     name = "pyutil-1.7.9";
 
@@ -1775,6 +1865,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
   pyyaml = buildPythonPackage (rec {
     name = "PyYAML-3.09";
 
@@ -1793,17 +1884,35 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  RBTools =  buildPythonPackage rec {
-    name = "RBTools-0.4.1";
+  
+  RBTools = buildPythonPackage rec {
+    name = "rbtools-0.4.1";
+    namePrefix = "";
 
     src = fetchurl {
-      url = "http://downloads.reviewboard.org/releases/RBTools/0.4/${name}.tar.gz";
+      url = "http://downloads.reviewboard.org/releases/RBTools/0.4/RBTools-0.4.1.tar.gz";
       sha256 = "1v0r7rfzrasj56s53mib51wl056g7ykh2y1c6dwv12r6hzqsycgv";
     };
 
     propagatedBuildInputs = [ setuptools ];
   };
 
+  
+  recaptcha_client = buildPythonPackage rec {
+    name = "recaptcha-client-1.0.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/recaptcha-client/${name}.tar.gz";
+      md5 = "74228180f7e1fb76c4d7089160b0d919";
+    };
+
+    meta = {
+      description = "A CAPTCHA for Python using the reCAPTCHA service";
+      homepage = http://recaptcha.net/;
+    };
+  };
+
+  
   reportlab =
    let freetype = pkgs.lib.overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
    in buildPythonPackage rec {
@@ -1823,6 +1932,22 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
+  reviewboard = buildPythonPackage rec {
+    name = "ReviewBoard-1.6.6";
+
+    src = fetchurl {
+      url = "http://downloads.reviewboard.org/releases/ReviewBoard/1.6/${name}.tar.gz";
+      sha256 = "de965f48c9e63198d3c7c2bb2e8404170868e8c0ee4d6ab796abb9b1ccda6c1d";
+    };
+
+    propagatedBuildInputs =
+      [ recaptcha_client pytz memcached dateutil paramiko flup pygments
+        djblets django_evolution pkgs.pycrypto python.modules.sqlite3
+      ];
+  };
+
+  
   rdflib = buildPythonPackage (rec {
     name = "rdflib-3.0.0";
 
@@ -1973,6 +2098,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   setuptoolsTrial = buildPythonPackage {
     name = "setuptools-trial-0.5.12";
 
@@ -1992,6 +2118,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   simplejson = buildPythonPackage (rec {
     name = "simplejson-2.1.3";
 
@@ -2017,6 +2144,24 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
+  six = buildPythonPackage rec {
+    name = "six-1.1.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
+      md5 = "9e8099b57cd27493a6988e9c9b313e23";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A Python 2 and 3 compatibility library";
+      homepage = http://pypi.python.org/pypi/six/;
+    };
+  };
+
+  
   skype4py = buildPythonPackage (rec {
     name = "Skype4Py-1.0.32.0";
 
