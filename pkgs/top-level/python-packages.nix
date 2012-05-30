@@ -1943,7 +1943,8 @@ let pythonPackages = python.modules // rec {
 
     propagatedBuildInputs =
       [ recaptcha_client pytz memcached dateutil paramiko flup pygments
-        djblets django_evolution pkgs.pycrypto python.modules.sqlite3
+        djblets django django_evolution pkgs.pycrypto python.modules.sqlite3
+        pysvn pkgs.pil
       ];
   };
 
