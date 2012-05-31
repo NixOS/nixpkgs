@@ -2302,6 +2302,7 @@ let
   };
 
   llvm = callPackage ../development/compilers/llvm { };
+  llvm_3_1 = callPackage ../development/compilers/llvm/3.1.nix { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
