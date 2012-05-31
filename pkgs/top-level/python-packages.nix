@@ -1616,6 +1616,7 @@ let pythonPackages = python.modules // rec {
   
   ldap = buildPythonPackage rec {
     name = "python-ldap-2.4.3";
+    namePrefix = "";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
