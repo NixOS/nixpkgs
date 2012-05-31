@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gitit";
-  version = "0.9.0.1";
-  sha256 = "1k1z6qvp72c61yhrfma3340wf4ysjkb80f8lqapaqsyhp96qjl3m";
+  version = "0.10";
+  sha256 = "04p0f8my6hb61a26l0pj3dfj3zhbyxc1wamlqfm76a5w7l5pl5zb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
