@@ -19,6 +19,20 @@ stdenv.mkDerivation rec {
      ++  (stdenv.lib.optionals (!stdenv.isCygwin) [ cairo libX11 ])
      ++  (stdenv.lib.optionals stdenv.isLinux [ pciutils numactl ]));
 
+  postInstall =
+    stdenv.lib.optionalString (stdenv.isLinux && numactl != null)
+      '' if [ -d "${numactl}/lib64" ]
+         then
+             numalibdir="${numactl}/lib64"
+         else
+             numalibdir="${numactl}/lib"
+             test -d "$numalibdir"
+         fi
+
+         sed -i "$out/lib/libhwloc.la" \
+             -e "s|-lnuma|-L$numalibdir -lnuna|g"
+      '';
+
   doCheck = true;
 
   meta = {
