@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses, libX11 }:
+{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses, libX11
+, pciutils, numactl }:
 
 stdenv.mkDerivation rec {
   name = "hwloc-1.4.2";
@@ -15,7 +16,8 @@ stdenv.mkDerivation rec {
   # derivation and set optional dependencies to `null'.
   buildInputs = stdenv.lib.filter (x: x != null)
    ([ expat ncurses ]
-     ++  (stdenv.lib.optionals (!stdenv.isCygwin) [ cairo libX11 ]));
+     ++  (stdenv.lib.optionals (!stdenv.isCygwin) [ cairo libX11 ])
+     ++  (stdenv.lib.optionals stdenv.isLinux [ pciutils numactl ]));
 
   doCheck = true;
 
