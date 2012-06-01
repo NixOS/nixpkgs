@@ -2203,6 +2203,8 @@ let
 
   # Current default version: 7.0.4.
   haskellPackages = haskellPackages_ghc704;
+  # Current Haskell platform.
+  haskellPlatform = haskellPackages.haskellPlatform;
 
   haskellPackages_ghc6104             = recurseIntoAttrs (haskell.packages_ghc6104);
   haskellPackages_ghc6121             =                   haskell.packages_ghc6121;
