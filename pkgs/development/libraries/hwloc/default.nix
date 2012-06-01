@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
          fi
 
          sed -i "$out/lib/libhwloc.la" \
-             -e "s|-lnuma|-L$numalibdir -lnuna|g"
+             -e "s|-lnuma|-L$numalibdir -lnuma|g"
       '';
 
   doCheck = true;
