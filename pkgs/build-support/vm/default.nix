@@ -1300,7 +1300,7 @@ rec {
       fullName = "Debian 6.0.4 Squeeze (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-i386/Packages.bz2;
-        sha256 = "5686732aa690d80ba4c390af3f7b9ba3c3c8c17861c89bca3a3694c403d7b7e6";
+        sha256 = "1aih4n1iz4gzzm5cy1j14mpx8i25jj1237994j33k7dm0gnqgr2w";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1311,7 +1311,7 @@ rec {
       fullName = "Debian 6.0.4 Squeeze (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
-        sha256 = "525f919bb48a4d2d0cb3a4fb5b0d4338e7936f68753ca945358ea1c3792ea7b7";
+        sha256 = "1gb3im7kl8dwd7z82xj4wb5g58r86fjj8cirvq0ssrvcm9bqaiz7";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
