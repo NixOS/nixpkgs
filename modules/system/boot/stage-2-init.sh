@@ -56,7 +56,7 @@ fi
 mkdir -m 0755 -p /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
 rm -f /etc/mtab* # not that we care about stale locks
-cat /proc/mounts > /etc/mtab
+ln -s /proc/mounts /etc/mtab
 
 
 # Process the kernel command line.
@@ -184,6 +184,12 @@ if [ -n "$debug2" ]; then
 fi
 
 
-# Start Upstart's init.
-echo "starting Upstart..."
-PATH=/var/run/current-system/upstart/sbin exec init --no-sessions ${debug2:+--verbose}
+# FIXME: auto-loading of kernel modules in systemd doesn't work yet
+# because it uses libkmod.
+"$(cat /proc/sys/kernel/modprobe)" autofs4
+"$(cat /proc/sys/kernel/modprobe)" ipv6
+
+
+# Start systemd.
+echo "starting systemd..."
+PATH=/var/run/current-system/systemd/lib/systemd exec systemd --log-level debug --log-target=console --crash-shell

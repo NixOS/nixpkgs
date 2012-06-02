@@ -198,6 +198,7 @@
   ./system/boot/stage-1.nix
   ./system/boot/stage-1-extratools.nix
   ./system/boot/stage-2.nix
+  ./system/boot/systemd.nix
   ./system/etc/etc.nix
   ./system/upstart-events/control-alt-delete.nix
   ./system/upstart-events/runlevel.nix

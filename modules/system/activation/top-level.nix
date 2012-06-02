@@ -117,12 +117,12 @@ let
 
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
-      ln -s ${config.system.build.upstart} $out/upstart
+      ln -s ${pkgs.systemd} $out/systemd
       ln -s ${config.hardware.firmware} $out/firmware
 
       echo -n "$kernelParams" > $out/kernel-params
       echo -n "$configurationName" > $out/configuration-name
-      echo -n "${toString config.system.build.upstart.interfaceVersion}" > $out/upstart-interface-version
+      #echo -n "${toString config.system.build.upstart.interfaceVersion}" > $out/upstart-interface-version
       echo -n "$nixosVersion" > $out/nixos-version
 
       mkdir $out/fine-tune
@@ -173,7 +173,7 @@ let
         pkgs.gnugrep
         pkgs.findutils
         pkgs.diffutils
-        config.system.build.upstart # for initctl
+        pkgs.systemd
       ];
 
     # Boot loaders

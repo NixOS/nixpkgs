@@ -17,7 +17,6 @@ let
 
   requiredPackages =
     [ config.system.sbin.modprobe # must take precedence over module_init_tools
-      config.system.build.upstart
       config.environment.nix
       pkgs.acl
       pkgs.attr
