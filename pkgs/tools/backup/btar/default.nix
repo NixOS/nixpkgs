@@ -1,10 +1,10 @@
 { stdenv, fetchurl, librsync }:
 
 stdenv.mkDerivation rec {
-  name = "btar-0.9.2";
+  name = "btar-1.0.0";
   src = fetchurl {
     url = "http://vicerveza.homeunix.net/~viric/soft/btar/${name}.tar.gz";
-    sha256 = "113l5qn3qizxnv2r0w8awnm9agjsmf39fl5w9gcvrxqy021f2jd9";
+    sha256 = "0k06zgwccxhzh4y99cxiwr7zylr5cwzf2dgx8bvx0gbb03r6gh9l";
   };
 
   buildInputs = [ librsync ];
