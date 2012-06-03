@@ -2597,4 +2597,106 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  cliapp = buildPythonPackage rec {
+    name = "cliapp-0.29";
+
+    src = fetchurl rec {
+      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_0.29.orig.tar.gz";
+      sha256 = "4a3f2e1705c5e9ac5a80a460ae9bad8e88c0778f7013638eda39e3ee0dd008b2";
+    };
+
+    buildInputs = [ sphinx ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://liw.fi/cliapp/;
+      description = "Python framework for Unix command line programs.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  tracing = buildPythonPackage rec {
+    name = "tracing-0.6";
+
+    src = fetchurl rec {
+      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_0.6.orig.tar.gz";
+      sha256 = "1164cf05891f9bca93fb87413f32d2c4da90348adbf69b0ad36a464b7adcd354";
+    };
+
+    buildInputs = [ sphinx ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://liw.fi/tracing/;
+      description = "Python debug logging helper.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  ttystatus = buildPythonPackage rec {
+    name = "ttystatus-0.18";
+
+    src = fetchurl rec {
+      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.18.orig.tar.gz";
+      sha256 = "9fab747f3e1f474b66101354b06f943120d72d1f1e353b4692e7e6cca226b9cc";
+    };
+
+    buildInputs = [ sphinx ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://liw.fi/ttystatus/;
+      description = "Progress and status updates on terminals for Python.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  larch = buildPythonPackage rec {
+    name = "larch-0.31";
+
+    src = fetchurl rec {
+      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_0.31.orig.tar.gz";
+      sha256 = "18c243a45b35974c304c9b3d8b05718f1272f14c29cd3c9010800cf821064444";
+    };
+
+    buildInputs = [ sphinx ];
+    propagatedBuildInputs = [ tracing ttystatus cliapp ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://liw.fi/larch/;
+      description = "Python B-tree library.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  obnam = buildPythonPackage rec {
+    name = "obnam-1.0";
+
+    src = fetchurl rec {
+      url = "http://code.liw.fi/debian/pool/main/o/obnam/obnam_1.0.orig.tar.gz";
+      sha256 = "b3589aac8d97283e44ed8e8c8cf751c4e9cc0677d433a85e27bd42f0d54da623";
+    };
+
+    buildInputs = [ sphinx pkgs.attr ];
+    propagatedBuildInputs = [ paramiko tracing ttystatus cliapp larch ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://liw.fi/obnam/;
+      description = "A backup program supporting deduplication, compression and encryption.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
 }; in pythonPackages
