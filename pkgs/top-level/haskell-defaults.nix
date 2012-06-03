@@ -18,7 +18,7 @@
   ghcHEADPrefs = ghc741Prefs;
 
   ghc741Prefs =
-    self : self.haskellPlatformArgs_future self // {
+    self : self.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
       mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
       binary = null; # now a core package

@@ -118,10 +118,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # NOTE: 2011.4.0.0 is the current default.
 
-  # These are currently set to versions that will likely be in
-  # the next platform release (May 2012). Please update with
-  # care.
-  haskellPlatformArgs_future = self : {
+  haskellPlatformArgs_2012_2_0_0 = self : {
     inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;         # 7.4.1 ok
     fgl          = self.fgl_5_4_2_4;            # 7.4.1 ok
@@ -152,10 +149,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haddock      = self.haddock_2_10_0;         # 7.4.1 ok
   };
 
-  # This is still a prerelease.
   haskellPlatform_2012_2_0_0 =
     callPackage ../development/libraries/haskell/haskell-platform/2012.2.0.0.nix
-      (self.haskellPlatformArgs_future self);
+      (self.haskellPlatformArgs_2012_2_0_0 self);
 
   haskellPlatformArgs_2011_4_0_0 = self : {
     inherit (self) cabal ghc;
