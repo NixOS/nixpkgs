@@ -3222,6 +3222,8 @@ let
 
   buddy = callPackage ../development/libraries/buddy { };
 
+  bwidget = callPackage ../development/libraries/bwidget { };
+
   caelum = callPackage ../development/libraries/caelum { };
 
   cairomm = callPackage ../development/libraries/cairomm { };
