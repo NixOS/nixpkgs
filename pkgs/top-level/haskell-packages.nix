@@ -1669,7 +1669,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     };
   };
 
-  xmobar = callPackage ../applications/misc/xmobar {};
+  xmobar = callPackage ../applications/misc/xmobar {
+    stm = self.stm_2_3;
+  };
 
   xmonad = callPackage ../applications/window-managers/xmonad {
     X11 = self.X11_1_5_0_1;
