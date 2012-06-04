@@ -4708,6 +4708,8 @@ let
 
   tcllib = callPackage ../development/libraries/tcllib { };
 
+  tcltls = callPackage ../development/libraries/tcltls { };
+
   tcp_wrappers = callPackage ../development/libraries/tcp-wrappers {};
 
   tdb = callPackage ../development/libraries/tdb { };
