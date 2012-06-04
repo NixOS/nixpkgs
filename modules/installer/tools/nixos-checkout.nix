@@ -29,11 +29,11 @@ let
         # Move any old nixos or nixpkgs directories out of the way.
         backupTimestamp=$(date "+%Y%m%d%H%M%S")
 
-        if test -e nixos -a ! -e nixos/.svn; then
+        if [ -e nixos -a ! -e nixos/.git ]; then
             mv nixos nixos-$backupTimestamp
         fi
 
-        if test -e nixpkgs -a ! -e nixpkgs/.svn; then
+        if [ -e nixpkgs -a ! -e nixpkgs/.git ]; then
             mv nixpkgs nixpkgs-$backupTimestamp
         fi
 
