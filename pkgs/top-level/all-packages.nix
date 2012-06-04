@@ -4706,6 +4706,8 @@ let
 
   tclap = callPackage ../development/libraries/tclap {};
 
+  tcllib = callPackage ../development/libraries/tcllib { };
+
   tcp_wrappers = callPackage ../development/libraries/tcp-wrappers {};
 
   tdb = callPackage ../development/libraries/tdb { };
