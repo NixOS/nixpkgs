@@ -14,6 +14,7 @@ in
     ./twm.nix
     ./wmii.nix
     ./xmonad.nix
+    ./i3.nix
   ];
 
   options = {
