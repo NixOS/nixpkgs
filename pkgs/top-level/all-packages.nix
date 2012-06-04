@@ -1555,6 +1555,8 @@ let
 
   time = callPackage ../tools/misc/time { };
 
+  tkabber = callPackage ../applications/networking/instant-messengers/tkabber { };
+
   tm = callPackage ../tools/system/tm { };
 
   trang = callPackage ../tools/text/xml/trang { };
