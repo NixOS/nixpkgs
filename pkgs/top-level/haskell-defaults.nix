@@ -15,7 +15,10 @@
   # Change these if you want to change the default versions of packages being used
   # for a particular GHC version.
 
-  ghcHEADPrefs = ghc741Prefs;
+  ghcHEADPrefs =
+    self : self.haskellPlatformArgs_future self // {
+      binary = null; # now a core package
+    };
 
   ghc741Prefs =
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
