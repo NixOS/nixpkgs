@@ -1,11 +1,11 @@
-{ nixosSrc ? {outPath = ./.; rev = 1234;}
-, nixpkgs ? {outPath = <nixpkgs>; rev = 5678;}
+{ nixosSrc ? {outPath = ./.; revCount = 1234; shortRev = "abcdef"; }
+, nixpkgs ? {outPath = <nixpkgs>; revCount = 5678; shortRev = "fedcba"; }
 }:
 
 let
 
   version = builtins.readFile ./.version;
-  versionSuffix = "pre${toString nixosSrc.rev}-${toString nixpkgs.rev}";
+  versionSuffix = "pre${toString nixosSrc.revCount}_${nixosSrc.shortRev}-${nixpkgs.shortRev}";
 
 
   makeIso =
@@ -85,7 +85,7 @@ let
 
         src = nixosSrc;
 
-        inherit officialRelease version;
+        inherit officialRelease version versionSuffix;
 
         distPhase = ''
           echo -n $VERSION_SUFFIX > .version-suffix
