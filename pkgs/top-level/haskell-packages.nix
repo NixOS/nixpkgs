@@ -1054,7 +1054,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
   network_2_3_0_13 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
-  network_2_3_0_14 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
+  network_2_3_0_14 = callPackage ../development/libraries/haskell/network/2.3.0.14.nix {};
   network = self.network_2_3_0_14;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
