@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xmobar";
-  version = "0.14";
-  sha256 = "1y26b2a5v9hxv1zmjcb4m8j9qkqdn74mqc3q58vgp5cav45rphvh";
+  version = "0.15";
+  sha256 = "1wa141bf3krzr8qcd9cyix3cflbw1yr1l3299ashjs7skqnjadcl";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
