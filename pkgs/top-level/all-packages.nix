@@ -1557,6 +1557,8 @@ let
 
   tkabber = callPackage ../applications/networking/instant-messengers/tkabber { };
 
+  tkabber_plugins = callPackage ../applications/networking/instant-messengers/tkabber-plugins { };
+
   tm = callPackage ../tools/system/tm { };
 
   trang = callPackage ../tools/text/xml/trang { };
