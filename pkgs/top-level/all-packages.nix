@@ -1143,6 +1143,8 @@ let
 
   obexftp = callPackage ../tools/bluetooth/obexftp { };
 
+  obnam = callPackage ../tools/backup/obnam { };
+
   odt2txt = callPackage ../tools/text/odt2txt { };
 
   offlineimap = callPackage ../tools/networking/offlineimap { };
