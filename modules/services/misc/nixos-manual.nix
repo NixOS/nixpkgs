@@ -24,6 +24,7 @@ in
 
     services.nixosManual.enable = mkOption {
       default = true;
+      type = types.bool;
       description = ''
         Whether to build the NixOS manual pages.
       '';
