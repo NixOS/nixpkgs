@@ -3180,6 +3180,8 @@ let
 
   babl = callPackage ../development/libraries/babl { };
 
+  babl_0_1_10 = callPackage ../development/libraries/babl/0.1.10.nix {};
+
   beecrypt = callPackage ../development/libraries/beecrypt { };
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
@@ -3434,6 +3436,10 @@ let
 
   gegl = callPackage ../development/libraries/gegl {
     #  avocodec avformat librsvg
+  };
+
+  gegl_0_2_0 = callPackage ../development/libraries/gegl/0.2.0.nix {
+    babl = babl_0_1_10;
   };
 
   geoclue = callPackage ../development/libraries/geoclue {};
@@ -6761,6 +6767,12 @@ let
 
   gimp = callPackage ../applications/graphics/gimp {
     inherit (gnome) libart_lgpl;
+  };
+
+  gimp_2_8_0 = callPackage ../applications/graphics/gimp/2.8.0.nix {
+    inherit (gnome) libart_lgpl;
+    babl = babl_0_1_10;
+    gegl = gegl_0_2_0;
   };
 
   gimpPlugins = recurseIntoAttrs (import ../applications/graphics/gimp/plugins {
