@@ -1,6 +1,6 @@
 # This module generates the nixos-checkout script, which replaces the
 # NixOS and Nixpkgs source trees in /etc/nixos/{nixos,nixpkgs} with
-# Subversion checkouts.
+# Git checkouts.
 
 {config, pkgs, ...}:
 
@@ -21,6 +21,11 @@ let
         mkdir -p "$prefix"
         cd "$prefix"
 
+        if [ -z "$(type -P git)" ]; then
+            echo "installing Git..."
+            nix-env -iA nixos.pkgs.git || nix-env -i git
+        fi
+
         # Move any old nixos or nixpkgs directories out of the way.
         backupTimestamp=$(date "+%Y%m%d%H%M%S")
 
@@ -33,18 +38,13 @@ let
         fi
 
         # Check out the NixOS and Nixpkgs sources.
-        ${pkgs.subversion}/bin/svn co https://nixos.org/repos/nix/nixos/trunk nixos
-        ${pkgs.subversion}/bin/svn co https://nixos.org/repos/nix/nixpkgs/trunk nixpkgs
+        git clone git://github.com/NixOS/nixos.git nixos
+        git clone git://github.com/NixOS/nixpkgs.git nixpkgs
       '';
    };
 
 in
 
 {
-  environment.systemPackages =
-    [ nixosCheckout
-      # Since the checkout script depends on Subversion, we may as
-      # well put it in $PATH.
-      pkgs.subversion
-    ];
+  environment.systemPackages = [ nixosCheckout ];
 }
