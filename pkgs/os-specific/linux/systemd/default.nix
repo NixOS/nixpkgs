@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, udev, dbus, kmod
-, xz, pam, acl, cryptsetup, libuuid, m4 }:
+, xz, pam, acl, cryptsetup, libuuid, m4, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "systemd-44";
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--localstatedir=/var"
+      "--sysconfdir=/etc"
       "--with-distro=other"
       "--with-rootprefix=$(out)"
       "--with-rootprefix=$(out)"
@@ -25,7 +26,24 @@ stdenv.mkDerivation rec {
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
     ];
 
-  installFlags = "localstatedir=$(TMPDIR)/var";
+  preConfigure =
+    ''
+      for i in units/remount-rootfs.service src/remount-api-vfs.c src/mount.c; do
+        substituteInPlace $i \
+          --replace /bin/mount ${utillinux}/bin/mount \
+          --replace /bin/umount ${utillinux}/bin/umount
+      done
+    '';
+
+  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc";
+
+  # Get rid of configuration-specific data.
+  postInstall =
+    ''
+      mkdir -p $out/example/systemd
+      mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
+      mv $out/lib/systemd/{system,user} $out/example/systemd
+    '';
 
   enableParallelBuilding = true;
   
