@@ -461,11 +461,12 @@ let pythonPackages = python.modules // rec {
 
   
   django = buildPythonPackage rec {
-    name = "Django-1.3.1";
+    name = "Django-${version}";
+    version = "1.4";
 
     src = fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
-      sha256 = "0sqmvqy3y5h76pa3zjcnyiy5x01bzzy03afdp2qdwqx0x321i4dg";
+      url = "http://www.djangoproject.com/m/releases/${version}/${name}.tar.gz";
+      sha256 = "1sc8ajixaqfylb7jmmhn38hgbnqipylh1sqmpicx7rqhxbxvm5n0";
     };
 
     doCheck = false;
