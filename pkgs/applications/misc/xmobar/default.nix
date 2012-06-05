@@ -13,6 +13,9 @@ cabal.mkDerivation (self: {
   ];
   extraLibraries = [ libXrandr wirelesstools ];
   configureFlags = "-fwith_xft -fwith_iwlib";
+  patchPhase = ''
+    sed -i -e 's|mtl ==.*$|mtl,|' xmobar.cabal
+  '';
   meta = {
     homepage = "http://projects.haskell.org/xmobar/";
     description = "A Minimalistic Text Based Status Bar";
