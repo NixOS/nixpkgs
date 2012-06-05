@@ -1025,7 +1025,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mtl_1_1_0_2 = callPackage ../development/libraries/haskell/mtl/1.1.0.2.nix {};
   mtl_1_1_1_1 = callPackage ../development/libraries/haskell/mtl/1.1.1.1.nix {};
-  mtl_2_0_1_0 = callPackage ../development/libraries/haskell/mtl/2.0.1.0.nix {};
+  mtl_2_0_1_0 = callPackage ../development/libraries/haskell/mtl/2.0.1.0.nix {
+    transformers = self.transformers_0_2_2_0;
+  };
   mtl_2_1_1 = callPackage ../development/libraries/haskell/mtl/2.1.1.nix {
     transformers = self.transformers_0_3_0_0;
   };
@@ -1671,6 +1673,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xmobar = callPackage ../applications/misc/xmobar {
     stm = self.stm_2_3;
+    mtl = self.mtl_2_0_1_0;
   };
 
   xmonad = callPackage ../applications/window-managers/xmonad {
