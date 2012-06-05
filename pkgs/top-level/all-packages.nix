@@ -1777,6 +1777,8 @@ let
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
+  cython = callPackage ../development/interpreters/cython { };
+
   dylan = callPackage ../development/compilers/gwydion-dylan {
     dylan = callPackage ../development/compilers/gwydion-dylan/binary.nix {  };
   };
