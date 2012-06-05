@@ -2,12 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "ltk";
-  version = "0.12.0.0";
-  sha256 = "1hlsfi77yypfnvh1alr3rflbffby9pbmc71m507davr6b09v9w9f";
+  version = "0.12.1.0";
+  sha256 = "12x6nba5bll8fgzpxii1cf87j27jk4mn5gf1bx4ahd9v30h1a0h6";
   buildDepends = [ Cabal filepath glib gtk mtl parsec transformers ];
-  patchPhase = ''
-    sed -i -e 's|mtl >=1.1.0.2 && <2.1|mtl|' -e 's|transformers >=0.2.2.0 && <0.3|transformers|' ltk.cabal
-  '';
   meta = {
     homepage = "http://www.leksah.org";
     description = "Leksah tool kit";
