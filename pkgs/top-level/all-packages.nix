@@ -6066,6 +6066,8 @@ let
   };
 
   windows = rec {
+    jom = callPackage ../os-specific/windows/jom { };
+
     w32api = callPackage ../os-specific/windows/w32api {
       gccCross = gccCrossStageStatic;
       binutilsCross = binutilsCross;
