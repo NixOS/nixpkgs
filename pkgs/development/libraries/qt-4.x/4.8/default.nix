@@ -102,6 +102,41 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  crossAttrs = let
+    isMingw = stdenv.cross.config == "i686-pc-mingw32" ||
+      stdenv.cross.config == "x86_64-w64-mingw32";
+  in {
+    # I've not tried any case other than i686-pc-mingw32.
+    # -nomake tools:   it fails linking some asian language symbols
+    # -no-svg: it fails to build on mingw64
+    configureFlags = ''
+      -static -release -confirm-license -opensource
+      -no-opengl -no-phonon
+      -no-svg
+      -make qmake -make libs -nomake tools
+      -nomake demos -nomake examples -nomake docs
+    '' + stdenv.lib.optionalString isMingw " -xplatform win32-g++-4.6";
+    patches = [];
+    preConfigure = ''
+      sed -i -e 's/ g++/ ${stdenv.cross.config}-g++/' \
+        -e 's/ gcc/ ${stdenv.cross.config}-gcc/' \
+        -e 's/ ar/ ${stdenv.cross.config}-ar/' \
+        -e 's/ strip/ ${stdenv.cross.config}-strip/' \
+        -e 's/ windres/ ${stdenv.cross.config}-windres/' \
+        mkspecs/win32-g++/qmake.conf
+    '';
+
+    # I don't know why it does not install qmake
+    postInstall = ''
+      cp bin/qmake* $out/bin
+    '';
+    dontSetConfigureCross = true;
+    dontStrip = true;
+  } // (if isMingw then
+  {
+    propagatedBuildInputs = [ ];
+  } else {});
+
   meta = with stdenv.lib; {
     homepage = http://qt.nokia.com/products;
     description = "A cross-platform application framework for C++";
