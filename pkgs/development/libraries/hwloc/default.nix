@@ -33,7 +33,9 @@ stdenv.mkDerivation rec {
              -e "s|-lnuma|-L$numalibdir -lnuma|g"
       '';
 
-  doCheck = true;
+  # XXX: A test hangs on Cygwin, see
+  # <http://hydra.bordeaux.inria.fr/build/51474/nixlog/1/raw>.
+  doCheck = !stdenv.isCygwin;
 
   meta = {
     description = "hwloc, a portable abstraction of hierarchical architectures for high-performance computing";
