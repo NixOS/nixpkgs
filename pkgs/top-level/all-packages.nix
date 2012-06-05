@@ -2203,8 +2203,8 @@ let
   # particularly in connection with Hydra builds for all these packages.
   # So we enable it for selected versions only.
 
-  # Current default version: 7.0.4.
-  haskellPackages = haskellPackages_ghc704;
+  # Current default version: 7.4.1.
+  haskellPackages = haskellPackages_ghc741;
   # Current Haskell platform.
   haskellPlatform = haskellPackages.haskellPlatform;
 
@@ -2215,16 +2215,16 @@ let
   haskellPackages_ghc701              =                   haskell.packages_ghc701;
   haskellPackages_ghc702              =                   haskell.packages_ghc702;
   haskellPackages_ghc703              =                   haskell.packages_ghc703;
+  haskellPackages_ghc704              = recurseIntoAttrs (haskell.packages_ghc704);
+  haskellPackages_ghc721              =                   haskell.packages_ghc721;
+  haskellPackages_ghc722              =                   haskell.packages_ghc722;
   # For the default version, we build profiling versions of the libraries, too.
   # The following three lines achieve that: the first two make Hydra build explicit
   # profiling and non-profiling versions; the final respects the user-configured
   # default setting.
-  haskellPackages_ghc704_no_profiling = recurseIntoAttrs (haskell.packages_ghc704.noProfiling);
-  haskellPackages_ghc704_profiling    = recurseIntoAttrs (haskell.packages_ghc704.profiling);
-  haskellPackages_ghc704              =                   haskell.packages_ghc704.highPrio;
-  haskellPackages_ghc721              =                   haskell.packages_ghc721;
-  haskellPackages_ghc722              =                   haskell.packages_ghc722;
-  haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741);
+  haskellPackages_ghc741_no_profiling = recurseIntoAttrs (haskell.packages_ghc741.noProfiling);
+  haskellPackages_ghc741_profiling    = recurseIntoAttrs (haskell.packages_ghc741.profiling);
+  haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741.highPrio);
   # Stable branch snapshot.
   haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742);
   # Reasonably current HEAD snapshot.
