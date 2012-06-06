@@ -6709,23 +6709,17 @@ let
 
   firefox36Wrapper = wrapFirefox { browser = firefox36Pkgs.firefox; };
 
-  firefox10Pkgs = callPackage ../applications/networking/browsers/firefox/10.0.nix {
-    inherit (gnome) libIDL;
-  };
-
-  firefox10Wrapper = wrapFirefox { browser = firefox10Pkgs.firefox; };
-
-  firefox11Pkgs = callPackage ../applications/networking/browsers/firefox/11.0.nix {
-    inherit (gnome) libIDL;
-  };
-
-  firefox11Wrapper = wrapFirefox { browser = firefox11Pkgs.firefox; };
-
   firefox12Pkgs = callPackage ../applications/networking/browsers/firefox/12.0.nix {
     inherit (gnome) libIDL;
   };
 
   firefox12Wrapper = wrapFirefox { browser = firefox12Pkgs.firefox; };
+
+  firefox13Pkgs = callPackage ../applications/networking/browsers/firefox/13.0.nix {
+    inherit (gnome) libIDL;
+  };
+
+  firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 

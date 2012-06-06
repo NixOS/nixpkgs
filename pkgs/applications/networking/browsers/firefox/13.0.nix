@@ -15,14 +15,14 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "11.0";
+  firefoxVersion = "13.0";
   
-  xulVersion = "11.0"; # this attribute is used by other packages
+  xulVersion = "13.0"; # this attribute is used by other packages
 
   
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    md5 = "4b07acf47857aff72776d805409cdd1b";
+    sha1 = "f90608874a54883b9fbb90b8d6dd3dc75a305572";
   };
   
   commonConfigureFlags =
@@ -35,7 +35,7 @@ rec {
       "--with-system-nspr"
       # "--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
-      "--enable-system-cairo"
+      # "--enable-system-cairo" # disabled for the moment because our Cairo is too old
       "--enable-system-sqlite"
       "--disable-crashreporter"
       "--disable-tests"
@@ -75,7 +75,11 @@ rec {
         }' ';'
 
         export NIX_LDFLAGS="$NIX_LDFLAGS -L$out/lib/xulrunner-${xulVersion}"
-      '';
+
+        mkdir ../objdir
+        cd ../objdir
+        configureScript=../mozilla-release/configure
+      ''; # */
 
     # !!! Temporary hack.
     preBuild =
