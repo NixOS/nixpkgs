@@ -1,5 +1,9 @@
 { stdenv, fetchurl }:
 
+let
+   inherit (stdenv.lib) optionals;
+in
+
 stdenv.mkDerivation rec {
   name = "apr-1.4.6";
 
@@ -7,6 +11,8 @@ stdenv.mkDerivation rec {
     url = "mirror://apache/apr/${name}.tar.bz2";
     md5 = "ffee70a111fd07372982b0550bbb14b7";
   };
+
+  patches = optionals stdenv.isDarwin [ ./darwin_fix_configure.patch ];
 
   configureFlags =
     # Don't use accept4 because it's only supported on Linux >= 2.6.28.
