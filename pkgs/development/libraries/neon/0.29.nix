@@ -9,6 +9,10 @@ assert compressionSupport -> zlib != null;
 assert sslSupport -> openssl != null;
 assert static || shared;
 
+let
+   inherit (stdenv.lib) optionals;
+in
+
 stdenv.mkDerivation rec {
   name = "neon-0.29.6";
 
@@ -16,6 +20,8 @@ stdenv.mkDerivation rec {
     url = "http://www.webdav.org/neon/${name}.tar.gz";
     sha256 = "0hzbjqdx1z8zw0vmbknf159wjsxbcq8ii0wgwkqhxj3dimr0nr4w";
   };
+
+  patches = optionals stdenv.isDarwin [ ./0.29.6-darwin-fix-configure.patch ];
 
   buildInputs = [libxml2 pkgconfig openssl]
     ++ stdenv.lib.optional compressionSupport zlib;
