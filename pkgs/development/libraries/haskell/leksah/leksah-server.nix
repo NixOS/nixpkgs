@@ -1,18 +1,18 @@
 { cabal, attoparsec, attoparsecEnumerator, binary, binaryShared
 , Cabal, deepseq, enumerator, filepath, haddock, hslogger, ltk
-, network, parsec, processLeksah, time, transformers
+, network, parsec, processLeksah, strict, time, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "leksah-server";
-  version = "0.12.1.0";
-  sha256 = "1jqrlz08ivr521a64cbdkixhgjra69qlfrasch7yac63dvf160i4";
+  version = "0.12.1.1";
+  sha256 = "063pijwj5mpczmjwwcj49dc2zgyc0l2j9j5902f1hgnvj4xg4hq6";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     attoparsec attoparsecEnumerator binary binaryShared Cabal deepseq
     enumerator filepath haddock hslogger ltk network parsec
-    processLeksah time transformers
+    processLeksah strict time transformers
   ];
   meta = {
     homepage = "http://leksah.org";
