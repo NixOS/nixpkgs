@@ -1,17 +1,19 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, udev, dbus, kmod
-, xz, pam, acl, cryptsetup, libuuid, m4, utillinux }:
+, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
+, glib
+}:
 
 stdenv.mkDerivation rec {
-  name = "systemd-44";
+  name = "systemd-185";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "0g138b5yvn419xqrakpk75q2sb4g7pj10br9b6zq4flb9d5sqnks";
+    sha256 = "1iwp41xvpq0x2flhhs8lpyjbfyg1220ahmy7037zdjy26w9g82br";
   };
 
   buildInputs =
     [ pkgconfig intltool gperf libcap udev dbus kmod xz pam acl
-      cryptsetup libuuid m4
+      cryptsetup libuuid m4 usbutils pciutils glib
     ];
 
   configureFlags =
@@ -28,10 +30,15 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-      for i in units/remount-rootfs.service src/remount-api-vfs.c src/mount.c; do
+      # FIXME: patch this in systemd properly (and send upstream).
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c; do
+        test -e $i
         substituteInPlace $i \
           --replace /bin/mount ${utillinux}/bin/mount \
-          --replace /bin/umount ${utillinux}/bin/umount
+          --replace /bin/umount ${utillinux}/bin/umount \
+          --replace /sbin/swapon ${utillinux}/sbin/swapon \
+          --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
+          --replace /sbin/fsck ${utillinux}/sbin/fsck
       done
     '';
 
