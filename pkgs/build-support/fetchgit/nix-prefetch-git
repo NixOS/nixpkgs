@@ -1,8 +1,8 @@
 #! /bin/sh -e
 
-url=$1
-rev=$2
-expHash=$3
+url=
+rev=
+expHash=
 hashType=$NIX_HASH_ALGO
 deepClone=$NIX_PREFETCH_GIT_DEEP_CLONE
 leaveDotGit=$NIX_PREFETCH_GIT_LEAVE_DOT_GIT
