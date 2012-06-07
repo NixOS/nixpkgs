@@ -189,21 +189,19 @@ clone(){
 clone_user_rev() {
     local dir="$1"
     local url="$2"
-    local rev="$3"
+    local rev="${3:-HEAD}"
 
     # Perform the checkout.
     case "$rev" in
         HEAD|refs/*)
             clone "$dir" "$url" "" "$rev" 1>&2;;
-        [0-9a-f]*)
+        *)
             if test -z "$(echo $rev | tr -d 0123456789abcdef)"; then
                 clone "$dir" "$url" "$rev" "" 1>&2;
             else
                 echo 1>&2 "Bad commit hash or bad reference.";
                 exit 1;
             fi;;
-        "")
-            clone "$dir" "$url" "" "HEAD" 1>&2;;
     esac
 
     # Allow doing additional processing before .git removal
