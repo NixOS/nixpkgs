@@ -619,7 +619,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   download = callPackage ../development/libraries/haskell/download {};
 
-  downloadCurl = callPackage ../development/libraries/haskell/download-curl { tagsoup = self.tagsoup_0_10_1; };
+  downloadCurl = callPackage ../development/libraries/haskell/download-curl {};
 
   DSH = callPackage ../development/libraries/haskell/DSH {};
 

@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
   buildInputs = [ncurses] ++ optionals useX11 [ x11 ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
-  patchPhase = ''
+  patches = optionals stdenv.isDarwin [ ./3.12.1-darwin-fix-configure.patch ];
+  preConfigure = ''
     CAT=$(type -tp cat)
     sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
   '';

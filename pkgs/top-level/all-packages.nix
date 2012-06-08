@@ -1229,6 +1229,8 @@ let
 
   pdfread = callPackage ../tools/graphics/pdfread { };
 
+  briss = callPackage ../tools/graphics/briss { };
+
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
@@ -7669,6 +7671,8 @@ let
   xchm = callPackage ../applications/misc/xchm { };
 
   xcompmgr = callPackage ../applications/window-managers/xcompmgr { };
+
+  compton = callPackage ../applications/window-managers/compton { };
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 

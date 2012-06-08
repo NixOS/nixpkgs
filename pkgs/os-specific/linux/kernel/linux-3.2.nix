@@ -234,7 +234,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.2.18";
+    version = "3.2.19";
     testing = false;
 
     modDirVersion = version;
@@ -245,7 +245,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.0/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "0qghi3n2xq2alkcgbjklpngy3pqwbsjm5cls7vah3qr9yw46m1fp";
+      sha256 = "14kym3lhkbxvn1fcavxjsn4siccnyk85ax0n25lsispv0pvyzph1";
     };
 
     config = configWithPlatform stdenv.platform;

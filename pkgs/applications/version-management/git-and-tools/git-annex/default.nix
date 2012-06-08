@@ -1,18 +1,18 @@
 { stdenv, fetchurl, curl, dataenc, findutils, ghc, git, hS3, hslogger, HTTP, hxt
 , ikiwiki, json, libuuid, MissingH, monadControl, mtl, network, pcreLight, perl
 , QuickCheck2, rsync, SHA, testpack, utf8String, which, liftedBase, coreutils
-, IfElse, bloomfilter, editDistance
+, IfElse, bloomfilter, editDistance, openssh
 }:
 
 let
-  version = "3.20120522";
+  version = "3.20120605";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=refs/tags/${version}";
-    sha256 = "4ee3fd31ea96089eade9ea209a4844f87f6de94bafca74870dd71555bb516f37";
+    sha256 = "5c8f6575bc6e1bc9bc19e1fb1b6305d2a1aee3365927ccfaf9aa48a200775900";
     name = "git-annex-${version}.tar.gz";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     curl dataenc findutils ghc git hS3 hslogger HTTP hxt ikiwiki json
     libuuid MissingH monadControl mtl network pcreLight perl QuickCheck2
     rsync SHA testpack utf8String which liftedBase IfElse bloomfilter
-    editDistance
+    editDistance openssh
   ];
 
   checkTarget = "test";
