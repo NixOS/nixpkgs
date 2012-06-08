@@ -44,7 +44,7 @@ in
       };
 
       hostName = mkOption {
-        default = config.networking.hostName;
+        type = types.uniq types.string;
         description = ''Host name advertised on the LAN.'';
       };
 
@@ -92,6 +92,8 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+
+    services.avahi.hostName = mkDefault config.networking.hostName;
 
     users.extraUsers = singleton
       { name = "avahi";
