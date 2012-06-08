@@ -1,4 +1,5 @@
 { stdenv, fetchurl, alsaLib, cmake, freetype, jackaudio, libsndfile, pkgconfig, qt4 }:
+
 stdenv.mkDerivation rec {
   version = "1.2";
   name = "musescore-${version}";
@@ -18,16 +19,14 @@ stdenv.mkDerivation rec {
     cd mscore
     sed -e "s@/usr/include/freetype2@${freetype}/include/freetype2@" \
       -i mscore/CMakeLists.txt
-    
   '';
 
-  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=RELEASE" ];
-
   buildPhase = "make -f Makefile";
-
-  # installPhase = ''
-  #   make package
-  # '';
+  
+  installPhase = ''
+    mkdir -p $out/bin
+    cp mscore/mscore $out/bin
+  '';
 
   meta = with stdenv.lib; {
     description = "Music composition & notation software";
