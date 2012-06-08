@@ -1,7 +1,7 @@
 { stdenv, fetchurl, curl, dataenc, findutils, ghc, git, hS3, hslogger, HTTP, hxt
 , ikiwiki, json, libuuid, MissingH, monadControl, mtl, network, pcreLight, perl
 , QuickCheck2, rsync, SHA, testpack, utf8String, which, liftedBase, coreutils
-, IfElse, bloomfilter, editDistance
+, IfElse, bloomfilter, editDistance, openssh
 }:
 
 let
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     curl dataenc findutils ghc git hS3 hslogger HTTP hxt ikiwiki json
     libuuid MissingH monadControl mtl network pcreLight perl QuickCheck2
     rsync SHA testpack utf8String which liftedBase IfElse bloomfilter
-    editDistance
+    editDistance openssh
   ];
 
   checkTarget = "test";
