@@ -1,0 +1,64 @@
+--- mscore-1.2/mscore/al/CMakeLists.txt
++++ mscore-1.2/mscore/al/CMakeLists.txt
+@@ -42,7 +42,7 @@
+ 
+ set_source_files_properties(
+    dsp.cpp xml.cpp tempo.cpp sig.cpp pos.cpp fraction.cpp
+-   PROPERTIES COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
++   PROPERTIES COMPILE_FLAGS "-include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch"
+    )
+ 
+ set_source_files_properties(dspSSE.cpp
+--- mscore-1.2/mscore/awl/CMakeLists.txt
++++ mscore-1.2/mscore/awl/CMakeLists.txt
+@@ -61,7 +61,7 @@
+ 
+ set_target_properties( awl
+    PROPERTIES COMPILE_FLAGS
+-      "-include ${PROJECT_BINARY_DIR}/all.h -g -Wall -Wextra -Winvalid-pch"
++      "-include ${PROJECT_BINARY_DIR}/all.h -Wall -Wextra -Winvalid-pch"
+    )
+ 
+ ADD_DEPENDENCIES(awl mops1)
+--- mscore-1.2/mscore/CMakeLists.txt
++++ mscore-1.2/mscore/CMakeLists.txt
+@@ -253,9 +253,6 @@
+    WORKING_DIRECTORY ${PROJECT_BINARY_DIR}
+    )
+ 
+-set(CMAKE_CXX_FLAGS_DEBUG   "")
+-set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+-
+ if (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
+       if (MINGW)
+             set(FLAGS -DQT_DEBUG -DQT_DLL)
+@@ -264,9 +261,9 @@
+       endif (MINGW)
+ else (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
+       if (MINGW)
+-            set(FLAGS -O2 -DNDEBUG -DQT_DLL -DQT_NO_DEBUG)
++            set(FLAGS -DNDEBUG -DQT_DLL -DQT_NO_DEBUG)
+       else (MINGW)
+-            set(FLAGS -O2 -DNDEBUG -DQT_NO_DEBUG)
++            set(FLAGS -DNDEBUG -DQT_NO_DEBUG)
+       endif (MINGW)
+ endif (CMAKE_BUILD_TYPE STREQUAL "DEBUG")
+ 
+@@ -276,7 +273,7 @@
+       add_custom_command(
+          OUTPUT ${PROJECT_BINARY_DIR}/all.h.pch
+          COMMAND ${CMAKE_CXX_COMPILER}
+-           -x c++-header -g ${FLAGS}
++           -x c++-header ${FLAGS}
+            -I${QT_INCLUDE_DIR}
+            -o all.h.pch all.h
+          DEPENDS ${PROJECT_BINARY_DIR}/all.h
+@@ -287,7 +284,7 @@
+       add_custom_command(
+          OUTPUT ${PROJECT_BINARY_DIR}/all.h.gch
+          COMMAND ${CMAKE_CXX_COMPILER}
+-           -x c++-header -g  ${FLAGS} -m32
++           -x c++-header ${FLAGS}
+            -I${QT_HEADERS_DIR}
+            -o all.h.gch all.h
+          DEPENDS ${PROJECT_BINARY_DIR}/all.h
