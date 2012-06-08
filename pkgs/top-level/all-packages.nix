@@ -1229,6 +1229,8 @@ let
 
   pdfread = callPackage ../tools/graphics/pdfread { };
 
+  briss = callPackage ../tools/graphics/briss { };
+
   pdnsd = callPackage ../tools/networking/pdnsd { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
@@ -7602,6 +7604,8 @@ let
 
   wings = callPackage ../applications/graphics/wings { };
 
+  dzen2 = callPackage ../applications/misc/dzen { };
+
   # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
   wmiimenu = import ../applications/window-managers/wmii31 {
     libixp = libixp_for_wmii;
@@ -7667,6 +7671,8 @@ let
   xchm = callPackage ../applications/misc/xchm { };
 
   xcompmgr = callPackage ../applications/window-managers/xcompmgr { };
+
+  compton = callPackage ../applications/window-managers/compton { };
 
   xdaliclock = callPackage ../tools/misc/xdaliclock {};
 

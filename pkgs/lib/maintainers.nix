@@ -6,6 +6,7 @@
 
   aforemny = "Alexander Foremny <alexanderforemny@googlemail.com>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
+  amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   bjg = "Brian Gough <bjg@gnu.org>";
