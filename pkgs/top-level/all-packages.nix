@@ -1092,6 +1092,8 @@ let
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
 
+  net_snmp = callPackage ../tools/networking/net-snmp { };
+  
   netboot = callPackage ../tools/networking/netboot {};
 
   netcat = callPackage ../tools/networking/netcat { };
