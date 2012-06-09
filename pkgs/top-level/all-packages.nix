@@ -8091,6 +8091,8 @@ let
 
       kadu = callPackage ../applications/networking/instant-messengers/kadu { };
 
+      kbibtex = callPackage ../applications/office/kbibtex { };
+
       kbluetooth = callPackage ../tools/bluetooth/kbluetooth { };
 
       kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
