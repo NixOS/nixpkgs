@@ -2,12 +2,9 @@
 , qt_gstreamer }:
 
 let
-  version = "0.3.0";
+  version = "0.3.1";
   manifest = import (./. + "/${version}.nix");
-  overrides = {
-    presence_applet = x : (x // { patches = [ ./presence-applet-po.patch ]; });
-    contact_applet = x: (x // { patches = [ ./contact-applet-po.patch ]; });
-  };
+  overrides = { };
   ktpFun = { name, key, sha256 }:
   {
     name = key;
