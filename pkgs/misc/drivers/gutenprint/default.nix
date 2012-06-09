@@ -3,7 +3,7 @@
 , libtiff, libpng, openssl, gimp }:
 
 let
-   version = "5.2.6";
+   version = "5.2.7";
    inherit (composableDerivation) edf wwf;
 in
 
@@ -12,13 +12,14 @@ composableDerivation.composableDerivation {} {
 
   src = fetchurl {
     url = "mirror://sourceforge/gimp-print/gutenprint-${version}.tar.bz2";
-    sha256 = "0znwbv51vqf20p4isc3if4hqsgfav21rsqnsz1d8mixlmasy2i27";
+    sha256 = "1lgf7d9vsszv0bzgsd8j3x5smby1lpk07d8x7isv1sz34y98jk0i";
   };
 
   # gimp, gui is still not working (TODO)
   buildInputs = [ openssl pkgconfig ];
 
   configureFlags = ["--enable-static-genppd"];
+  NIX_CFLAGS_COMPILE="-include stdio.h";
   
   #preConfigure = ''
   #  configureFlags="--with-cups=$out/usr-cups $configureFlags"
@@ -52,7 +53,7 @@ composableDerivation.composableDerivation {} {
         name = "gimp2";
         enable = {
           buildInputs = [gimp gimp.gtk];
-         installArgs = [ "gimp2_plug_indir=$out/${gimp.name}-plugins" ];
+          installArgs = [ "gimp2_plug_indir=$out/${gimp.name}-plugins" ];
         };
       }
       // {
