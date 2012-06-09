@@ -6,7 +6,7 @@
 # All this file is made for the Marvell Sheevaplug
    
 stdenv.mkDerivation {
-  name = "uboot-sheevaplug-3.4.19";
+  name = "uboot-sheevaplug-3.4.27";
    
   src = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-1.1.4.tar.bz2";
@@ -14,14 +14,14 @@ stdenv.mkDerivation {
   };
 
   srcAddon = fetchurl {
-    url = "http://www.plugcomputer.org/data/uboot/u-boot-3.4.19.zip";
-    sha256 = "1wag1l6agr8dbnnfaw6bgcrwynwwgry4ihb3gp438699wmkmy91k";
+    url = "http://www.plugcomputer.org/405/us/plug-basic/uboot/u-boot-3.4.27.zip";
+    sha256 = "1wqxznpdb6d2kx58gral4q0mg5ddxyrv7az8c6v29nr3cd9yrfsg";
   };
 
   postUnpack = ''
-    mv u-boot-1.1.4 u-boot-3.4.19
+    mv u-boot-1.1.4 u-boot-3.4.27
     unzip -o $srcAddon
-    sourceRoot=u-boot-3.4.19
+    sourceRoot=u-boot-3.4.27
   '';
 
   patches = [ ./gas220.patch ];
