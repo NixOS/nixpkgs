@@ -1,5 +1,5 @@
 # This module contains the basic configuration for building a NixOS
-# installation CD.
+# tarball for the sheevaplug.
 
 { config, pkgs, ... }:
 
@@ -87,6 +87,7 @@ in
       pkgs.bvi # binary editor
       pkgs.joe
     ];
+*/
 
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
