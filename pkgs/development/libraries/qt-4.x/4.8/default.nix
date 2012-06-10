@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   name = "qt-${v}";
 
   src = fetchurl {
-    url = "ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${v}.tar.gz";
+    url = "http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-${v}.tar.gz";
     sha256 = "0y93vkkn44md37gyg4y8sc9ylk27xkniaimfcpdcwd090qnjl6wj";
   };
 
