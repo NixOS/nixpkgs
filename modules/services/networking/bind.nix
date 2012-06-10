@@ -78,6 +78,13 @@ in
         ";
       };
 
+      ipv4Only = mkOption {
+        default = false;
+        description = "
+          Only use ipv4, even if the host supports ipv6
+        ";
+      };
+
       zones = mkOption {
         default = [];
         description = "
@@ -121,7 +128,7 @@ in
             ${pkgs.coreutils}/bin/mkdir -p /var/run/named
           '';
 
-        exec = "${pkgs.bind}/sbin/named -c ${cfg.configFile} -f";
+        exec = "${pkgs.bind}/sbin/named ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
       };
 
   };
