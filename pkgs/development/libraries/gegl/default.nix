@@ -1,18 +1,18 @@
 { stdenv, fetchurl, pkgconfig, glib, babl, libpng, cairo, libjpeg
-, librsvg, pango, gtk, bzip2 }:
+, librsvg, pango, gtk, bzip2, intltool }:
         
 stdenv.mkDerivation rec {
-  name = "gegl-0.1.6";
+  name = "gegl-0.2.0";
 
   src = fetchurl {
-    url = "http://ftp.snt.utwente.nl/pub/software/gimp/gegl/0.1/${name}.tar.bz2";
-    sha256 = "1l966ygss2zkksyw62nm139v2abfzbqqrj0psizvbgzf4mb24rm1";
+    url = "ftp://ftp.gtk.org/pub/gegl/0.2/${name}.tar.bz2";
+    sha256 = "df2e6a0d9499afcbc4f9029c18d9d1e0dd5e8710a75e17c9b1d9a6480dd8d426";
   };
 
   # needs fonts otherwise  don't know how to pass them
   configureFlags = "--disable-docs";
 
-  buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk bzip2 ];
+  buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk bzip2 intltool ];
 
   buildNativeInputs = [ pkgconfig ];
 
