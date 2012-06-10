@@ -46,6 +46,7 @@ if [ ! -e /proc/1 ]; then
     mknod -m 0666 /dev/null c 1 3
     mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
     mknod -m 0644 /dev/console c 5 1
+    mknod -m 0644 /dev/ptmx c 5 2 # required by upstart
     mknod -m 0644 /dev/tty1 c 4 1
     mknod -m 0644 /dev/ttyS0 c 4 64
     mknod -m 0644 /dev/ttyS1 c 4 65
