@@ -26,7 +26,9 @@ let
   '';
 
   prayerCfg = pkgs.runCommand "prayer.cf" { } ''
-    cat ${prayer}/etc/prayer.cf ${prayerExtraCfg} > $out
+    # We have to remove the http_port 80, or it will start a server there
+    cat ${prayer}/etc/prayer.cf | grep -v http_port > $out
+    cat ${prayerExtraCfg} >> $out
   '';
 
 in
