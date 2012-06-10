@@ -101,7 +101,7 @@ in
     jobs.fcron =
       { description = "fcron daemon";
 
-        startOn = "startup";
+        startOn = "startup and filesystem";
 
         environment =
           { PATH = "/var/run/current-system/sw/bin";
@@ -114,7 +114,9 @@ in
             ${pkgs.fcron}/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
           '';
 
-        exec = "${pkgs.fcron}/sbin/fcron -f -m ${toString cfg.maxSerialJobs} ${queuelen}";
+        daemonType = "fork";
+
+        exec = "${pkgs.fcron}/sbin/fcron -m ${toString cfg.maxSerialJobs} ${queuelen}";
       };
 
   };
