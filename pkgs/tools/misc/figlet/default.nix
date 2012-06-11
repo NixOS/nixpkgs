@@ -9,6 +9,8 @@ stdenv.mkDerivation {
     sha256 = "19qcmm9cmf78w1z7gbpyj9wmrfjzjl25sax9f2j37sijznrh263f";
   };
 
+  installPhase = "make prefix=$out install";
+
   preConfigure = ''
     mkdir -p $out/{man/man6,bin}
     makeFlags="DESTDIR=$out/bin MANDIR=$out/man/man6 DEFAULTFONTDIR=$out/share/figlet"
