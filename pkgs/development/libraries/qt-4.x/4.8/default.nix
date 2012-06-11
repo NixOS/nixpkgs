@@ -79,8 +79,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes
-      libXv libXi libSM mesa
-    ] ++ (stdenv.lib.optional (buildWebkit || buildMultimedia) alsaLib)
+      libXv libXi libSM
+    ]
+    ++ (stdenv.lib.optional (stdenv.lib.lists.elem stdenv.system
+                              stdenv.lib.platforms.mesaPlatforms)
+         mesa)
+    ++ (stdenv.lib.optional (buildWebkit || buildMultimedia) alsaLib)
     ++ [ zlib libpng openssl dbus.libs freetype fontconfig glib ]
     ++ (stdenv.lib.optionals (buildWebkit || buildMultimedia)
         [ gstreamer gst_plugins_base ]);
