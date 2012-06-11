@@ -6501,7 +6501,7 @@ let
 
   elvis = callPackage ../applications/editors/elvis { };
 
-  emacs = emacs23;
+  emacs = emacs24;
 
   emacs22 = callPackage ../applications/editors/emacs-22 {
     stdenv =
@@ -6542,7 +6542,7 @@ let
     librsvg = null /* if stdenv.isDarwin then null else librsvg */;
   };
 
-  emacs24 = lowPrio (callPackage ../applications/editors/emacs-24 {
+  emacs24 = callPackage ../applications/editors/emacs-24 {
     # use override to select the appropriate gui toolkit
     libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
     Xaw3d = null;
@@ -6553,7 +6553,7 @@ let
     # alsa only on linux
     alsaLib = if stdenv.isLinux then alsaLib else null;
     imagemagick = imagemagickBig;
-  });
+  };
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
@@ -6624,8 +6624,8 @@ let
   };
 
   emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
-  emacs23Packages = recurseIntoAttrs (emacsPackages emacs23 pkgs.emacs23Packages);
-  emacs24Packages = emacsPackages emacs24 pkgs.emacs24Packages;
+  emacs23Packages = emacsPackages emacs23 pkgs.emacs23Packages;
+  emacs24Packages = recurseIntoAttrs (emacsPackages emacs24 pkgs.emacs24Packages);
 
   epdfview = callPackage ../applications/misc/epdfview { };
 
@@ -8296,7 +8296,7 @@ let
 
   isabelle = import ../applications/science/logic/isabelle {
     inherit (pkgs) stdenv fetchurl nettools perl polyml;
-    inherit (pkgs.emacs23Packages) proofgeneral;
+    inherit (pkgs.emacs24Packages) proofgeneral;
   };
 
   iprover = callPackage ../applications/science/logic/iprover {};
