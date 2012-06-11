@@ -1521,6 +1521,8 @@ let
       libXp;
   };
 
+  vobcopy = callPackage ../tools/cd-dvd/vobcopy { };
+
   vorbisgain = callPackage ../tools/misc/vorbisgain { };
 
   vpnc = callPackage ../tools/networking/vpnc { };
