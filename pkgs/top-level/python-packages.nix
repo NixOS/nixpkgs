@@ -33,12 +33,12 @@ let pythonPackages = python.modules // rec {
 
 
   afew = buildPythonPackage rec {
-    rev = "a3ea63d7048faedb6cc58b4abcb6d4ecfddfb5db";
+    rev = "8abd64bfdcd83a486b2a3977c08fe071523b2551";
     name = "afew-1.0pre${rev}";
     src = fetchurl {
       url = "https://github.com/teythoon/afew/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "4e8850242a3845602331cabb47299b5a3af21993036a715c83e8dd698ab5d716";
+      sha256 = "9b140d0eb0e5013419983604bb09a51f087a4abdf0a390c24a9596f867dc8c05";
     };
 
     propagatedBuildInputs = [ notmuch pkgs.dbacl ];
@@ -60,12 +60,13 @@ let pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    name = "alot-0.3";
+    version = "0.3.1";
+    name = "alot-${version}";
 
     src = fetchurl {
-      url = "https://github.com/pazz/alot/tarball/0.3";
+      url = "https://github.com/pazz/alot/tarball/${version}";
       name = "${name}.tar.bz";
-      md5 = "fa4944a1a7e9e380da0ee75ea3571a79";
+      md5 = "6c5986d9192863879e95a3f8f30ccb75";
     };
 
     doCheck = false;
