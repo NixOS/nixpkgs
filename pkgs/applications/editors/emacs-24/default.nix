@@ -9,19 +9,19 @@ assert (libXft != null) -> libpng != null;	# probably a bug
 assert stdenv.isDarwin -> libXaw != null;	# fails to link otherwise
 
 stdenv.mkDerivation rec {
-  name = "emacs-24.0.94";
+  name = "emacs-24.1";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "http://alpha.gnu.org/gnu/emacs/pretest/${name}.tar.gz";
-    sha256 = "1dgy53dxpnwrn6h3i3z8fpcyasms0wlvhqfyih4cwkz712var393";
+    url = "mirror://gnu/emacs/${name}.tar.bz2";
+    sha256 = "eeea272732146e2be9aee2f8d71d6cf07b8654c0282da62a26b921d433f02b7c";
   };
 
-  buildInputs = 
+  buildInputs =
     [ ncurses x11 texinfo libXaw Xaw3d libXpm libpng libjpeg libungif
       libtiff librsvg libXft gconf libxml2 imagemagick gnutls alsaLib
-    ] 
+    ]
     ++ stdenv.lib.optionals (gtk != null) [ gtk pkgconfig ]
     ++ stdenv.lib.optional stdenv.isLinux dbus;
 
@@ -64,7 +64,7 @@ EOF
       separately.
     '';
 
-    homepage = http://www.gnu.org/software/emacs/;
+    homepage = "http://www.gnu.org/software/emacs/";
     license = "GPLv3+";
 
     maintainers = with stdenv.lib.maintainers; [ ludo simons chaoflow ];
