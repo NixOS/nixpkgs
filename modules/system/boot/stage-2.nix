@@ -67,7 +67,7 @@ let
         pkgs.utillinux
         pkgs.udev
         pkgs.sysvtools
-      ];
+      ] ++ pkgs.lib.optional config.boot.cleanTmpDir pkgs.findutils;
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}
