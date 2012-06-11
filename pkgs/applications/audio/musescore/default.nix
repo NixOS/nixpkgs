@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, alsaLib, cmake, freetype, jackaudio, libsndfile, pkgconfig, qt4 }:
+{ stdenv, fetchurl, alsaLib, cmake, freetype, jackaudio, libsndfile
+, pkgconfig, portaudio, qt4 }:
 
 stdenv.mkDerivation rec {
   version = "1.2";
@@ -9,7 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "05h2ika0qyqa5xd03nd45acsfpq8brkd5b4ca4n6n7cljyb0sjrc";
   };
 
-  buildInputs = [ alsaLib cmake freetype libsndfile pkgconfig qt4 jackaudio ];
+  buildInputs = 
+    [ alsaLib cmake freetype libsndfile pkgconfig portaudio qt4
+      jackaudio ];
 
   # Thanks Gentoo!
   # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-sound/musescore/files/musescore-1.2-cflags.patch
@@ -26,6 +29,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp mscore/mscore $out/bin
+    mkdir -p $out/share/mscore-1.2
+    cp -r share/* $out/share/mscore-1.2/
   '';
 
   meta = with stdenv.lib; {
