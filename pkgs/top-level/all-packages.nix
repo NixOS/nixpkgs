@@ -4747,6 +4747,8 @@ let
     inherit (pkgs.pythonPackages) numpy;
   };
 
+  vlock = callPackage ../misc/screensavers/vlock { };
+
   vmime = callPackage ../development/libraries/vmime { };
 
   vrpn = callPackage ../development/libraries/vrpn { };
