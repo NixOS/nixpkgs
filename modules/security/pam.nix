@@ -216,12 +216,12 @@ in
       [ { name = "cups"; }
         { name = "ejabberd"; }
         { name = "ftp"; }
+        { name = "i3lock"; }
         { name = "lshd"; }
         { name = "samba"; }
         { name = "sshd"; }
-        { name = "xlock"; }
         { name = "vlock"; }
-        { name = "i3lock"; }
+        { name = "xlock"; }
       ];
 
   };
