@@ -11,6 +11,7 @@ let
 
 in
 
+if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
 {
 
   ###### interface
@@ -76,3 +77,4 @@ in
   };
 
 }
+else {}
