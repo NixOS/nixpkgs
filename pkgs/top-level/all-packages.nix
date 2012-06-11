@@ -5912,6 +5912,8 @@ let
 
   pam_login = callPackage ../os-specific/linux/pam_login { };
 
+  pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };
+
   pam_unix2 = callPackage ../os-specific/linux/pam_unix2 { };
 
   pam_usb = callPackage ../os-specific/linux/pam_usb { };
