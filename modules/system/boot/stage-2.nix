@@ -40,6 +40,14 @@ let
           for the accepted syntax.
         '';
       };
+
+      cleanTmpDir = pkgs.lib.mkOption {
+        default = false;
+        example = true;
+        description = ''
+          Delete all files in /tmp/ during boot.
+        '';
+      };
     };
 
   };
@@ -51,7 +59,7 @@ let
     src = ./stage-2-init.sh;
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
-    inherit (config.boot) devShmSize runSize;
+    inherit (config.boot) devShmSize runSize cleanTmpDir;
     ttyGid = config.ids.gids.tty;
     upstart = config.system.build.upstart;
     path =
