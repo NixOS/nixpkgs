@@ -7,7 +7,7 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) pam_usb pam_ldap pam_krb5 pam_ccreds;
+  inherit (pkgs) pam_ldap pam_krb5 pam_ccreds;
 
   otherService = pkgs.writeText "other.pam"
     ''
@@ -37,6 +37,10 @@ let
     , # If set, user listed in /etc/pamusb.conf are able to log in with
       # the associated usb key.
       usbAuth ? config.security.pam.usb.enable
+    , # If set, the calling user's SSH agent is used to authenticate
+      # against the keys in the calling user's ~/.ssh/authorized_keys.
+      # This is useful for "sudo" on password-less remote systems.
+      sshAgentAuth ? false
     , # If set, use ConsoleKit's PAM connector module to claim
       # ownership of audio devices etc.
       ownDevices ? false
@@ -70,16 +74,17 @@ let
           # Authentication management.
           ${optionalString rootOK
               "auth sufficient pam_rootok.so"}
+          ${optionalString sshAgentAuth
+              "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys"}
           ${optionalString usbAuth
-              "auth sufficient ${pam_usb}/lib/security/pam_usb.so"}
-          auth sufficient pam_unix.so ${
-            optionalString allowNullPassword "nullok"} likeauth
+              "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
+          auth sufficient pam_unix.so ${optionalString allowNullPassword "nullok"} likeauth
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
-          ${optionalString config.krb5.enable
-''auth [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
-auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
-auth sufficient ${pam_ccreds}/lib/security/pam_ccreds.so action=store use_first_pass
+          ${optionalString config.krb5.enable ''
+            auth [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
+            auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
+            auth sufficient ${pam_ccreds}/lib/security/pam_ccreds.so action=store use_first_pass
           ''}
           auth required   pam_deny.so
 
@@ -181,6 +186,17 @@ in
           <varname>item</varname>, and <varname>value</varname> attribute.
           The syntax and semantics of these attributes must be that described
           in the limits.conf(5) man page.
+        '';
+    };
+
+    security.pam.enableSSHAgentAuth = mkOption {
+      default = false;
+      description =
+        ''
+          Enable sudo logins if the user's SSH agent provides a key
+          present in <filename>~/.ssh/authorized_keys</filename>.
+          This allows machines to exclusively use SSH keys instead of
+          passwords.
         '';
     };
 
