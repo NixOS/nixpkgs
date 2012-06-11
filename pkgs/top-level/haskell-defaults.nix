@@ -17,6 +17,7 @@
 
   ghcHEADPrefs =
     self : self.haskellPlatformArgs_future self // {
+      haskellPlatform = null;
       binary = null; # now a core package
     };
 
