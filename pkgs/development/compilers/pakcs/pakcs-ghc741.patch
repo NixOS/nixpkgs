@@ -1,0 +1,1004 @@
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/AbstractCurry.hs pakcs-new/mccparser/src/AbstractCurry.hs
+--- pakcs/mccparser/src/AbstractCurry.hs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/AbstractCurry.hs	2012-06-10 23:41:02.278126416 -0430
+@@ -29,7 +29,7 @@
+                       readCurry, writeCurry) where
+ 
+ import PathUtils (writeModule,readModule)
+-import List(intersperse)
++import Data.List(intersperse)
+ 
+ ------------------------------------------------------------------------------
+ -- Definition of data types for representing abstract Curry programs:
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/AnsiCodes.hs pakcs-new/mccparser/src/AnsiCodes.hs
+--- pakcs/mccparser/src/AnsiCodes.hs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/AnsiCodes.hs	2012-06-10 23:41:02.278126416 -0430
+@@ -27,8 +27,8 @@
+ 
+   )  where
+ 
+-import Char
+-import List
++import Data.Char
++import Data.List
+ 
+ -- escape character
+ esc = chr 27
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Base.lhs pakcs-new/mccparser/src/Base.lhs
+--- pakcs/mccparser/src/Base.lhs	2011-11-14 09:23:07.000000000 -0430
++++ pakcs-new/mccparser/src/Base.lhs	2012-06-10 23:41:02.302127057 -0430
+@@ -22,12 +22,12 @@
+ > import FlatWithSrcRefs hiding (SrcRef, Fixity(..), TypeExpr, Expr(..))
+ > import Env
+ > import TopEnv
+-> import List
++> import Data.List
+ > import Map
+-> import Monad
++> import Control.Monad
+ > import Set
+ > import Utils
+-> import Maybe
++> import Data.Maybe
+ 
+ > import qualified FlatWithSrcRefs (Fixity(..), TypeExpr)
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Cam.lhs pakcs-new/mccparser/src/Cam.lhs
+--- pakcs/mccparser/src/Cam.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/Cam.lhs	2012-06-10 23:41:02.302127057 -0430
+@@ -10,7 +10,7 @@
+ \begin{verbatim}
+ 
+ > module Cam where
+-> import Char
++> import Data.Char
+ 
+ \end{verbatim}
+ An abstract machine code module consists of a list of import, data,
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CamPP.lhs pakcs-new/mccparser/src/CamPP.lhs
+--- pakcs/mccparser/src/CamPP.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/CamPP.lhs	2012-06-10 23:41:02.303127084 -0430
+@@ -9,7 +9,7 @@
+ 
+ > module CamPP where
+ > import Cam
+-> import Char
++> import Data.Char
+ > import Pretty
+ 
+ > default(Int)
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CaseCompletion.hs pakcs-new/mccparser/src/CaseCompletion.hs
+--- pakcs/mccparser/src/CaseCompletion.hs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/CaseCompletion.hs	2012-06-10 23:41:02.280126456 -0430
+@@ -21,7 +21,7 @@
+ import Position (SrcRef)
+ import OldScopeEnv as ScopeEnv
+ import ILScope
+-import Maybe
++import Data.Maybe
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CCode.lhs pakcs-new/mccparser/src/CCode.lhs
+--- pakcs/mccparser/src/CCode.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/CCode.lhs	2012-06-10 23:41:02.303127084 -0430
+@@ -15,8 +15,8 @@
+ \begin{verbatim}
+ 
+ > module CCode where
+-> import List
+-> import Maybe
++> import Data.List
++> import Data.Maybe
+ > infixl 9 `CElem`,`CField`
+ > infixr 8 `CCast`
+ > infixl 7 `CMul`,`CDiv`,`CMod`
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CGen.lhs pakcs-new/mccparser/src/CGen.lhs
+--- pakcs/mccparser/src/CGen.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/CGen.lhs	2012-06-10 23:41:02.306127165 -0430
+@@ -13,10 +13,10 @@
+ > import CCode
+ > import CPS
+ > import CElim
+-> import Char
+-> import List
++> import Data.Char
++> import Data.List
+ > import Map
+-> import Maybe
++> import Data.Maybe
+ > import Set
+ > import Utils
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Combined.lhs pakcs-new/mccparser/src/Combined.lhs
+--- pakcs/mccparser/src/Combined.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/Combined.lhs	2012-06-10 23:41:02.306127165 -0430
+@@ -19,8 +19,8 @@
+ 
+ > module Combined where
+ > import Error
+-> import Monad
+-> import IO
++> import Control.Monad
++> import System.IO
+ > import IORefCompat
+ 
+ \end{verbatim}
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/config.hs pakcs-new/mccparser/src/config.hs
+--- pakcs/mccparser/src/config.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/config.hs	2012-06-10 23:41:02.280126456 -0430
+@@ -9,9 +9,9 @@
+ -- Martin Engelke (men@informatik.uni-kiel.de)
+ --
+ 
+-import Time
+-import System
+-import Directory
++import System.Time
++import System.Cmd
++import System.Directory
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CPretty.lhs pakcs-new/mccparser/src/CPretty.lhs
+--- pakcs/mccparser/src/CPretty.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/CPretty.lhs	2012-06-10 23:41:02.307127192 -0430
+@@ -18,7 +18,7 @@
+ 
+ > import CCode
+ > import Pretty
+-> import List
++> import Data.List
+ 
+ > ppCFile :: CFile -> Doc
+ > ppCFile = vsep . map ppTopDecl
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CPS.lhs pakcs-new/mccparser/src/CPS.lhs
+--- pakcs/mccparser/src/CPS.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/CPS.lhs	2012-06-10 23:41:02.308127219 -0430
+@@ -12,7 +12,7 @@
+ >            cpsFunction, cpsApply, cpsVars, fromCaseBlock, caseBlockTag,
+ >            fresh) where
+ > import Cam
+-> import List
++> import Data.List
+ > import Set
+ > import SCC
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CurryBuilder.hs pakcs-new/mccparser/src/CurryBuilder.hs
+--- pakcs/mccparser/src/CurryBuilder.hs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/CurryBuilder.hs	2012-06-10 23:46:43.708361686 -0430
+@@ -18,13 +18,13 @@
+ import Ident
+ import PathUtils
+ import Env
+-import System
+-import Directory
+-import Time
+-import Monad
+-import Maybe
+-import List
+-import IO
++import System.Directory
++import System.Exit
++import System.Time
++import Control.Monad
++import Data.Maybe
++import Data.List
++import System.IO
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CurryCompiler.hs pakcs-new/mccparser/src/CurryCompiler.hs
+--- pakcs/mccparser/src/CurryCompiler.hs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/CurryCompiler.hs	2012-06-10 23:46:11.828499672 -0430
+@@ -13,8 +13,8 @@
+ import CurryCompilerOpts
+ import CompilerResults
+ import Modules
+-import System
+-import IO
++import System.Exit
++import System.IO
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CurryDeps.lhs pakcs-new/mccparser/src/CurryDeps.lhs
+--- pakcs/mccparser/src/CurryDeps.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/CurryDeps.lhs	2012-06-10 23:41:02.309127246 -0430
+@@ -20,11 +20,11 @@
+ > import CurryParser(parseHeader)
+ > import SCC
+ > import Env
+-> import List
+-> import Maybe
+-> import Monad
++> import Data.List
++> import Data.Maybe
++> import Control.Monad
+ > import Error
+-> import IO
++> import System.IO
+ > import PathUtils
+ 
+ > data Source = Source FilePath [ModuleIdent]
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CurryEnv.hs pakcs-new/mccparser/src/CurryEnv.hs
+--- pakcs/mccparser/src/CurryEnv.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/CurryEnv.hs	2012-06-10 23:41:02.283126538 -0430
+@@ -15,7 +15,7 @@
+ import Ident
+ import Base
+ import Env
+-import Maybe
++import Data.Maybe
+ 
+ ------------------------------------------------------------------------------
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CurryHtml.hs pakcs-new/mccparser/src/CurryHtml.hs
+--- pakcs/mccparser/src/CurryHtml.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/CurryHtml.hs	2012-06-10 23:48:58.040993372 -0430
+@@ -2,8 +2,8 @@
+ 
+ import SyntaxColoring
+ import Ident
+-import Maybe
+-import Char
++import Data.Maybe
++import Data.Char hiding (Space)
+ import System.Environment
+ import CurryDeps(getCurryPath)
+ import PathUtils (writeModule)
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CurryLexer.lhs pakcs-new/mccparser/src/CurryLexer.lhs
+--- pakcs/mccparser/src/CurryLexer.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/CurryLexer.lhs	2012-06-10 23:41:02.310127273 -0430
+@@ -15,8 +15,8 @@
+ > import LexComb
+ > import Position
+ > import Map
+-> import Char 
+-> import List
++> import Data.Char 
++> import Data.List
+ 
+ \end{verbatim}
+ \paragraph{Tokens} Note that the equality and ordering instances of
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CurrySubdir.hs pakcs-new/mccparser/src/CurrySubdir.hs
+--- pakcs/mccparser/src/CurrySubdir.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/CurrySubdir.hs	2012-06-10 23:41:02.283126538 -0430
+@@ -1,9 +1,9 @@
+ module CurrySubdir where
+ 
+-import Directory
++import System.Directory
+ import System.Time (ClockTime)
+ import Control.Monad (when)
+-import List(intersperse)
++import Data.List(intersperse)
+ 
+ -- some definitions from PathUtils
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/CurrySyntaxTools.lhs pakcs-new/mccparser/src/CurrySyntaxTools.lhs
+--- pakcs/mccparser/src/CurrySyntaxTools.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/CurrySyntaxTools.lhs	2012-06-10 23:41:02.314127381 -0430
+@@ -2,7 +2,7 @@
+ 
+ > import CurrySyntax
+ > import Ident
+-> import Maybe
++> import Data.Maybe
+ 
+ >------------------------------------------------------------------------------
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/cycc.hs pakcs-new/mccparser/src/cycc.hs
+--- pakcs/mccparser/src/cycc.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/cycc.hs	2012-06-10 23:41:02.283126538 -0430
+@@ -7,9 +7,9 @@
+ import PathUtils
+ import Options
+ import GetOpt
+-import Maybe
+-import IO
+-import System
++import Data.Maybe
++import System.IO
++import System.Cmd
+ 
+ main :: IO ()
+ main =
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/cymake.hs pakcs-new/mccparser/src/cymake.hs
+--- pakcs/mccparser/src/cymake.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/cymake.hs	2012-06-10 23:50:08.306892587 -0430
+@@ -14,13 +14,14 @@
+ import GetOpt
+ import CurryBuilder
+ import CurryBuilderOpts
+-import System
+-import Maybe
+-import IO
++import System.Environment
++import System.Exit
++import Data.Maybe
++import System.IO
+ import CurryHtml
+-import List
++import Data.List
+ import Control.Monad (unless)
+-import Char (isDigit)
++import Data.Char (isDigit)
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/cymk.hs pakcs-new/mccparser/src/cymk.hs
+--- pakcs/mccparser/src/cymk.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/cymk.hs	2012-06-10 23:41:02.284126572 -0430
+@@ -7,11 +7,11 @@
+ 
+ import CurryDeps
+ import GetOpt
+-import Maybe
+-import Monad
+-import IO
++import Data.Maybe
++import Control.Monad
++import System.IO
+ import PathUtils
+-import System
++import System.Cmd
+ 
+ data Options =
+   Options{
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/cyxml.hs pakcs-new/mccparser/src/cyxml.hs
+--- pakcs/mccparser/src/cyxml.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/cyxml.hs	2012-06-10 23:41:02.285126603 -0430
+@@ -9,8 +9,8 @@
+ -- Martin Engelke (men@informatik.uni-kiel.de)
+ --
+ 
+-import System
+-import Directory
++import System.Cmd
++import System.Directory
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Desugar.lhs pakcs-new/mccparser/src/Desugar.lhs
+--- pakcs/mccparser/src/Desugar.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/Desugar.lhs	2012-06-10 23:41:02.316127435 -0430
+@@ -64,12 +64,12 @@
+ > import Base
+ > import Combined
+ > import TopEnv (qualRebindTopEnv)
+-> import List
+-> import Monad
++> import Data.List
++> import Control.Monad
+ > import Typing
+ > import Utils
+ > import Ident
+-> import Maybe
++> import Data.Maybe
+ 
+ posE = undefined
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/DTransform.lhs pakcs-new/mccparser/src/DTransform.lhs
+--- pakcs/mccparser/src/DTransform.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/DTransform.lhs	2012-06-10 23:41:02.318127490 -0430
+@@ -18,7 +18,7 @@
+ 
+ > module DTransform(module DTransform) where
+ > import Ident
+-> import List
++> import Data.List
+ > import IL
+ 
+ \end{verbatim}
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Error.lhs pakcs-new/mccparser/src/Error.lhs
+--- pakcs/mccparser/src/Error.lhs	2011-11-14 09:23:08.000000000 -0430
++++ pakcs-new/mccparser/src/Error.lhs	2012-06-10 23:41:02.318127490 -0430
+@@ -13,7 +13,7 @@
+ \begin{verbatim}
+ 
+ > module Error where
+-> import Monad
++> import Control.Monad
+ 
+ > data Error a = Ok a | Error String deriving (Eq,Ord,Show)
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Exports.lhs pakcs-new/mccparser/src/Exports.lhs
+--- pakcs/mccparser/src/Exports.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/Exports.lhs	2012-06-10 23:41:02.319127517 -0430
+@@ -14,9 +14,9 @@
+ 
+ > module Exports(expandInterface,exportInterface) where
+ > import Base
+-> import List
++> import Data.List
+ > import Map
+-> import Maybe
++> import Data.Maybe
+ > import Set
+ > import TopEnv
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/FlatCurry.hs pakcs-new/mccparser/src/FlatCurry.hs
+--- pakcs/mccparser/src/FlatCurry.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/FlatCurry.hs	2012-06-10 23:41:02.286126629 -0430
+@@ -24,8 +24,8 @@
+ 		  writeFlatCurry) where
+ 
+ import PathUtils (writeModule,maybeReadModule)
+-import Directory
+-import List(intersperse)
++import System.Directory
++import Data.List(intersperse)
+ import Control.Monad (liftM)
+ 
+ ------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/FlatCurry.lhs pakcs-new/mccparser/src/FlatCurry.lhs
+--- pakcs/mccparser/src/FlatCurry.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/FlatCurry.lhs	2012-06-10 23:41:02.320127544 -0430
+@@ -19,9 +19,9 @@
+ >                   CaseType(..), CombType(..), Expr(..), BranchExpr(..),
+ >                   Pattern(..), Literal(..)) where
+ 
+-import System
+-import Directory
+-import Char
++import System.Cmd
++import System.Directory
++import Data.Char
+ import ReadShowTerm
+ import PathUtils (doesModuleExist)
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/FlatInfo.lhs pakcs-new/mccparser/src/FlatInfo.lhs
+--- pakcs/mccparser/src/FlatInfo.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/FlatInfo.lhs	2012-06-10 23:41:02.320127544 -0430
+@@ -6,7 +6,7 @@
+ > import CurrySyntax
+ > import qualified IL
+ > import Ident
+-> import Maybe
++> import Data.Maybe
+ 
+ ------------------------------------------------------------------------------
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/FlatWithSrcRefs.hs pakcs-new/mccparser/src/FlatWithSrcRefs.hs
+--- pakcs/mccparser/src/FlatWithSrcRefs.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/FlatWithSrcRefs.hs	2012-06-10 23:41:02.286126629 -0430
+@@ -27,8 +27,8 @@
+ 		  writeFlatCurry,gshowsPrec) where
+ 
+ import PathUtils (writeModule,maybeReadModule)
+-import Directory
+-import List(intersperse)
++import System.Directory
++import Data.List(intersperse)
+ import Control.Monad (liftM)
+ import Data.Generics hiding (Fixity)
+ import Position (SrcRef)
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Frontend.hs pakcs-new/mccparser/src/Frontend.hs
+--- pakcs/mccparser/src/Frontend.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/Frontend.hs	2012-06-10 23:41:02.287126654 -0430
+@@ -33,10 +33,10 @@
+ import Position
+ import PathUtils
+ import Env
+-import List
+-import Maybe
+-import Monad
+-import System
++import Data.List
++import Data.Maybe
++import Control.Monad
++import System.Cmd
+ import Prelude hiding (lex)
+ 
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/GenAbstractCurry.hs pakcs-new/mccparser/src/GenAbstractCurry.hs
+--- pakcs/mccparser/src/GenAbstractCurry.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/GenAbstractCurry.hs	2012-06-10 23:41:02.289126703 -0430
+@@ -18,9 +18,9 @@
+ import Position
+ import TopEnv
+ import Env
+-import Maybe
+-import List
+-import Char
++import Data.Maybe
++import Data.List
++import Data.Char
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/GenFlatCurry.hs pakcs-new/mccparser/src/GenFlatCurry.hs
+--- pakcs/mccparser/src/GenFlatCurry.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/GenFlatCurry.hs	2012-06-10 23:41:02.292126785 -0430
+@@ -37,9 +37,9 @@
+ import TopEnv
+ import Env
+ import Map
+-import Monad
+-import Maybe
+-import List
++import Control.Monad
++import Data.Maybe
++import Data.List
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/GetOpt.hs pakcs-new/mccparser/src/GetOpt.hs
+--- pakcs/mccparser/src/GetOpt.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/GetOpt.hs	2012-06-10 23:41:02.292126785 -0430
+@@ -19,7 +19,7 @@
+ 
+ module GetOpt (ArgOrder(..), OptDescr(..), ArgDescr(..), usageInfo, getOpt) where
+ 
+-import List(isPrefixOf)
++import Data.List(isPrefixOf)
+ 
+ data ArgOrder a                        -- what to do with options following non-options:
+    = RequireOrder                      --    no option processing after first non-option
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/HeaderTable.lhs pakcs-new/mccparser/src/HeaderTable.lhs
+--- pakcs/mccparser/src/HeaderTable.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/HeaderTable.lhs	2012-06-10 23:41:02.321127571 -0430
+@@ -3,7 +3,7 @@
+ > import CurrySyntax
+ > import Ident
+ > import Env
+-> import Maybe
++> import Data.Maybe
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Ident.lhs pakcs-new/mccparser/src/Ident.lhs
+--- pakcs/mccparser/src/Ident.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/Ident.lhs	2012-06-10 23:41:02.322127598 -0430
+@@ -49,9 +49,9 @@
+ >              addPositionIdent, removePositionIdent, positionOfIdent,
+ >              addPositionModuleIdent, removePositionModuleIdent,addRef,addRefId,
+ >              positionOfModuleIdent,positionOfQualIdent,updQualIdent ) where
+-> import Char
+-> import List
+-> import Maybe
++> import Data.Char
++> import Data.List
++> import Data.Maybe
+ > import Position
+ > import Data.Generics
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/ILCompile.lhs pakcs-new/mccparser/src/ILCompile.lhs
+--- pakcs/mccparser/src/ILCompile.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/ILCompile.lhs	2012-06-10 23:41:02.323127625 -0430
+@@ -18,10 +18,10 @@
+ > import IL
+ > import qualified Cam
+ > import Env
+-> import List
++> import Data.List
+ > import Map
+-> import Maybe
+-> import Monad
++> import Data.Maybe
++> import Control.Monad
+ > import SCC
+ > import Combined
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/ILLift.lhs pakcs-new/mccparser/src/ILLift.lhs
+--- pakcs/mccparser/src/ILLift.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/ILLift.lhs	2012-06-10 23:41:02.323127625 -0430
+@@ -20,8 +20,8 @@
+ > import IL
+ > import Ident
+ > import Combined
+-> import List
+-> import Monad
++> import Data.List
++> import Control.Monad
+ > import Utils
+ 
+ > type LiftState a = St [QualIdent] a
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/ILTrans.lhs pakcs-new/mccparser/src/ILTrans.lhs
+--- pakcs/mccparser/src/ILTrans.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/ILTrans.lhs	2012-06-10 23:41:02.325127679 -0430
+@@ -26,8 +26,8 @@
+ > import Env
+ > import Set
+ > import Map
+-> import Maybe
+-> import List
++> import Data.Maybe
++> import Data.List
+ 
+ \end{verbatim}
+ \paragraph{Modules}
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/ILxml.lhs pakcs-new/mccparser/src/ILxml.lhs
+--- pakcs/mccparser/src/ILxml.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/ILxml.lhs	2012-06-10 23:41:02.326127706 -0430
+@@ -25,8 +25,8 @@
+ > import qualified CurrySyntax as CS
+ > import CurryEnv
+ > import Pretty
+-> import Char(chr,ord,isAlphaNum)
+-> import Maybe
++> import Data.Char(chr,ord,isAlphaNum)
++> import Data.Maybe
+ 
+ > -- identation level
+ > level::Int
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Imports.lhs pakcs-new/mccparser/src/Imports.lhs
+--- pakcs/mccparser/src/Imports.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/Imports.lhs	2012-06-10 23:41:02.327127733 -0430
+@@ -14,7 +14,7 @@
+ > import Base
+ > import Env
+ > import TopEnv
+-> import Maybe
++> import Data.Maybe
+ > import Map
+ > import Set
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/InterfaceCheck.hs pakcs-new/mccparser/src/InterfaceCheck.hs
+--- pakcs/mccparser/src/InterfaceCheck.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/InterfaceCheck.hs	2012-06-10 23:41:02.293126815 -0430
+@@ -10,7 +10,7 @@
+ module InterfaceCheck where
+ 
+ import FlatWithSrcRefs
+-import List
++import Data.List
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/IntfCheck.lhs pakcs-new/mccparser/src/IntfCheck.lhs
+--- pakcs/mccparser/src/IntfCheck.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/IntfCheck.lhs	2012-06-10 23:41:02.328127760 -0430
+@@ -16,8 +16,8 @@
+ 
+ > module IntfCheck(intfCheck,fixInterface,intfEquiv) where
+ > import Base
+-> import Maybe
+-> import List(deleteFirstsBy)
++> import Data.Maybe
++> import Data.List(deleteFirstsBy)
+ > import Set
+ 
+ \end{verbatim}
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/KindCheck.lhs pakcs-new/mccparser/src/KindCheck.lhs
+--- pakcs/mccparser/src/KindCheck.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/KindCheck.lhs	2012-06-10 23:41:02.329127787 -0430
+@@ -25,7 +25,7 @@
+ 
+ > module KindCheck(kindCheck,kindCheckGoal) where
+ > import Base hiding (bindArity)
+-> import Maybe
++> import Data.Maybe
+ > import TopEnv
+ 
+ \end{verbatim}
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/LexComb.lhs pakcs-new/mccparser/src/LexComb.lhs
+--- pakcs/mccparser/src/LexComb.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/LexComb.lhs	2012-06-10 23:41:02.329127787 -0430
+@@ -19,7 +19,7 @@
+ > module LexComb where
+ > import Position
+ > import Error
+-> import Char
++> import Data.Char
+ 
+ > infixl 1 `thenP`, `thenP_`
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Lift.lhs pakcs-new/mccparser/src/Lift.lhs
+--- pakcs/mccparser/src/Lift.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/Lift.lhs	2012-06-10 23:41:02.330127814 -0430
+@@ -22,8 +22,8 @@
+ > import Env
+ > import TopEnv
+ > import Set
+-> import List
+-> import Monad
++> import Data.List
++> import Control.Monad
+ > import Combined
+ > import SCC
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/LLParseComb.lhs pakcs-new/mccparser/src/LLParseComb.lhs
+--- pakcs/mccparser/src/LLParseComb.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/LLParseComb.lhs	2012-06-10 23:41:02.330127814 -0430
+@@ -29,8 +29,8 @@
+ > import Position
+ > import Set
+ > import Map
+-> import Maybe
+-> import Monad
++> import Data.Maybe
++> import Control.Monad
+ > import Error
+ > import LexComb
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Map.lhs pakcs-new/mccparser/src/Map.lhs
+--- pakcs/mccparser/src/Map.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/Map.lhs	2012-06-10 23:41:02.331127841 -0430
+@@ -11,7 +11,7 @@
+ 
+ > module Map(FM, nullFM, zeroFM, unitFM, addToFM, deleteFromFM,
+ >            lookupFM, fromListFM, toListFM) where
+-> import List
++> import Data.List
+ 
+ \end{verbatim}
+ A 2-3 tree is either empty or a node with either two or three children
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Modules.lhs pakcs-new/mccparser/src/Modules.lhs
+--- pakcs/mccparser/src/Modules.lhs	2011-11-14 09:23:09.000000000 -0430
++++ pakcs-new/mccparser/src/Modules.lhs	2012-06-10 23:41:02.333127895 -0430
+@@ -55,10 +55,10 @@
+ > import CaseCompletion
+ > import PathUtils
+ > import TypeSubst
+-> import List
+-> import IO
+-> import Maybe
+-> import Monad
++> import Data.List
++> import System.IO
++> import Data.Maybe
++> import Control.Monad
+ > import Pretty
+ > import Error
+ > import Env
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/newer.lhs pakcs-new/mccparser/src/newer.lhs
+--- pakcs/mccparser/src/newer.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/newer.lhs	2012-06-10 23:41:02.333127895 -0430
+@@ -24,10 +24,10 @@
+ code 2.
+ \begin{verbatim}
+ 
+-> import IO
+-> import Directory
+-> import System
+-> import Time
++> import System.IO
++> import System.Directory
++> import System.Cmd
++> import System.Time
+ > import PathUtils (getModuleModTime)
+ 
+ > main =
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/OldScopeEnv.hs pakcs-new/mccparser/src/OldScopeEnv.hs
+--- pakcs/mccparser/src/OldScopeEnv.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/OldScopeEnv.hs	2012-06-10 23:41:02.294126843 -0430
+@@ -8,7 +8,7 @@
+ 
+ import Ident
+ import Env
+-import Maybe
++import Data.Maybe
+ 
+ 
+ -------------------------------------------------------------------------------
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/PathUtils.lhs pakcs-new/mccparser/src/PathUtils.lhs
+--- pakcs/mccparser/src/PathUtils.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/PathUtils.lhs	2012-06-10 23:41:02.334127922 -0430
+@@ -15,8 +15,8 @@
+ >                  listSep, pathList, lookupFile,
+ >                  currySubdir,writeModule,readModule,
+ >                  doesModuleExist,maybeReadModule,getModuleModTime) where
+-> -- import List
+-> import Directory
++> -- import Data.List
++> import System.Directory
+ > import CurrySubdir
+ 
+ \end{verbatim}
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/PrecCheck.lhs pakcs-new/mccparser/src/PrecCheck.lhs
+--- pakcs/mccparser/src/PrecCheck.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/PrecCheck.lhs	2012-06-10 23:41:02.335127950 -0430
+@@ -18,7 +18,7 @@
+ 
+ > module PrecCheck(precCheck,precCheckGoal) where
+ > import Base
+-> import List
++> import Data.List
+ > import Env
+ > import TopEnv
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Pretty.lhs pakcs-new/mccparser/src/Pretty.lhs
+--- pakcs/mccparser/src/Pretty.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/Pretty.lhs	2012-06-10 23:41:02.337128004 -0430
+@@ -180,7 +180,7 @@
+ 
+ -- Don't import Util( assertPanic ) because it makes a loop in the module structure
+ 
+-import Ratio
++import Data.Ratio
+ infixl 6 <> 
+ infixl 6 <+>
+ infixl 5 $$, $+$
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Set.lhs pakcs-new/mccparser/src/Set.lhs
+--- pakcs/mccparser/src/Set.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/Set.lhs	2012-06-10 23:41:02.338128031 -0430
+@@ -11,9 +11,9 @@
+ \begin{verbatim}
+ 
+ > module Set where
+-> import List
++> import Data.List
+ > import Map
+-> import Maybe
++> import Data.Maybe
+ 
+ > infixl 8 `addToSet`, `deleteFromSet`
+ > infixl 7 `unionSet`, `intersectionSet`
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Simplify.lhs pakcs-new/mccparser/src/Simplify.lhs
+--- pakcs/mccparser/src/Simplify.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/Simplify.lhs	2012-06-10 23:41:02.339128058 -0430
+@@ -26,10 +26,10 @@
+ > import Base
+ > import Combined
+ > import Env
+-> import Monad
++> import Control.Monad
+ > import SCC
+ > import Typing
+-> import List (partition)
++> import Data.List (partition)
+ 
+ > type SimplifyState a = StateT ValueEnv (ReaderT EvalEnv (StateT Int Id)) a
+ > type InlineEnv = Env Ident Expression
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/smake.hs pakcs-new/mccparser/src/smake.hs
+--- pakcs/mccparser/src/smake.hs	2011-11-14 09:23:12.000000000 -0430
++++ pakcs-new/mccparser/src/smake.hs	2012-06-10 23:41:02.296126896 -0430
+@@ -22,11 +22,11 @@
+ -- Martin Engelke (men@informatik.uni-kiel.de)
+ --
+ 
+-import System
+-import Directory
+-import Time
+-import Monad
+-import Maybe
++import System.Cmd
++import System.Directory
++import System.Time
++import Control.Monad
++import Data.Maybe
+ import PathUtils (getModuleModTime)
+ 
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/SyntaxCheck.lhs pakcs-new/mccparser/src/SyntaxCheck.lhs
+--- pakcs/mccparser/src/SyntaxCheck.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/SyntaxCheck.lhs	2012-06-10 23:41:02.342128139 -0430
+@@ -24,9 +24,9 @@
+ > import Base
+ > import Env
+ > import NestEnv
+-> import List
+-> import Maybe
+-> import Monad
++> import Data.List
++> import Data.Maybe
++> import Control.Monad
+ > import Combined
+ > import Utils
+ 
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/SyntaxColoring.hs pakcs-new/mccparser/src/SyntaxColoring.hs
+--- pakcs/mccparser/src/SyntaxColoring.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/SyntaxColoring.hs	2012-06-10 23:48:14.526817048 -0430
+@@ -10,9 +10,9 @@
+ import Frontend
+ import Ident
+ import CurrySyntax 
+-import Char
+-import Maybe
+-import List
++import Data.Char hiding (Space)
++import Data.Maybe
++import Data.List
+ import Debug.Trace
+ import Message
+ import Control.Exception
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/TopEnv.lhs pakcs-new/mccparser/src/TopEnv.lhs
+--- pakcs/mccparser/src/TopEnv.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/TopEnv.lhs	2012-06-10 23:41:02.342128139 -0430
+@@ -41,7 +41,7 @@
+ >               allImports,moduleImports,localBindings) where
+ > import Env
+ > import Ident
+-> import Maybe
++> import Data.Maybe
+ > import Utils
+ 
+ > data Source = Local | Import [ModuleIdent] deriving (Eq,Show)
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/TypeCheck.lhs pakcs-new/mccparser/src/TypeCheck.lhs
+--- pakcs/mccparser/src/TypeCheck.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/TypeCheck.lhs	2012-06-10 23:45:05.513706248 -0430
+@@ -33,9 +33,9 @@
+ > import SCC
+ > import TypeSubst
+ > import Utils
+-> import List
+-> import Monad
+-> import Maybe
++> import Data.List
++> import Control.Monad
++> import Data.Maybe
+ 
+ > infixl 5 $-$
+ 
+@@ -1136,9 +1136,6 @@
+ >   where tvs = [tv | tv <- nub (typeVars ty), tv `notElemSet` gvs]
+ >         tvs' = map TypeVariable [0..]
+ 
+-> replicateM :: Monad m => Int -> m a -> m [a]
+-> replicateM n = sequence . replicate n
+-
+ \end{verbatim}
+ \paragraph{Auxiliary Functions}
+ The functions \texttt{constrType}, \texttt{varType}, and
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Types.lhs pakcs-new/mccparser/src/Types.lhs
+--- pakcs/mccparser/src/Types.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/Types.lhs	2012-06-10 23:41:02.346128247 -0430
+@@ -13,8 +13,8 @@
+ 
+ > module Types where
+ > import Ident
+-> import List
+-> import Maybe
++> import Data.List
++> import Data.Maybe
+ 
+ \end{verbatim}
+ A type is either a type variable, an application of a type constructor
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/TypeSubst.lhs pakcs-new/mccparser/src/TypeSubst.lhs
+--- pakcs/mccparser/src/TypeSubst.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/TypeSubst.lhs	2012-06-10 23:41:02.346128247 -0430
+@@ -12,8 +12,8 @@
+ > module TypeSubst(module TypeSubst, idSubst,bindSubst,compose) where
+ > import Base
+ > import TopEnv
+-> import Maybe
+-> import List
++> import Data.Maybe
++> import Data.List
+ > import Subst
+ 
+ > type TypeSubst = Subst Int Type
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Typing.lhs pakcs-new/mccparser/src/Typing.lhs
+--- pakcs/mccparser/src/Typing.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/Typing.lhs	2012-06-10 23:41:02.347128274 -0430
+@@ -12,10 +12,10 @@
+ > import Base
+ > import TypeSubst
+ > import Combined
+-> import Monad
++> import Control.Monad
+ > import TopEnv
+ > import Utils
+-> import Maybe
++> import Data.Maybe
+ 
+ \end{verbatim}
+ During the transformation of Curry source code into the intermediate
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/Unlit.lhs pakcs-new/mccparser/src/Unlit.lhs
+--- pakcs/mccparser/src/Unlit.lhs	2011-11-14 09:23:10.000000000 -0430
++++ pakcs-new/mccparser/src/Unlit.lhs	2012-06-10 23:41:02.347128274 -0430
+@@ -27,7 +27,7 @@
+ \begin{verbatim}
+ 
+ > module Unlit(unlit) where
+-> import Char
++> import Data.Char
+ > import Position
+ 
+ \end{verbatim}
+diff -Naur '--exclude=*.o' '--exclude=*.hi' '--exclude=*~' '--exclude=cymake' pakcs/mccparser/src/WarnCheck.hs pakcs-new/mccparser/src/WarnCheck.hs
+--- pakcs/mccparser/src/WarnCheck.hs	2011-11-14 09:23:11.000000000 -0430
++++ pakcs-new/mccparser/src/WarnCheck.hs	2012-06-10 23:41:02.300127003 -0430
+@@ -17,8 +17,8 @@
+ import ScopeEnv (ScopeEnv)
+ import Message
+ import Env
+-import Monad
+-import List
++import Control.Monad
++import Data.List
+ 
+ 
+ -------------------------------------------------------------------------------
