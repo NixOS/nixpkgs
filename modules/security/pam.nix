@@ -220,6 +220,7 @@ in
         { name = "samba"; }
         { name = "sshd"; }
         { name = "xlock"; }
+        { name = "vlock"; }
         { name = "i3lock"; }
       ];
 
