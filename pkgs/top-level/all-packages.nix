@@ -6625,7 +6625,7 @@ let
 
   emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
   emacs23Packages = recurseIntoAttrs (emacsPackages emacs23 pkgs.emacs23Packages);
-  emacs24Packages = recurseIntoAttrs (emacsPackages emacs24 pkgs.emacs24Packages);
+  emacs24Packages = emacsPackages emacs24 pkgs.emacs24Packages;
 
   epdfview = callPackage ../applications/misc/epdfview { };
 
