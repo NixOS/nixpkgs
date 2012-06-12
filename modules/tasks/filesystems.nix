@@ -22,7 +22,7 @@ let
 
       # Swap devices.
       ${flip concatMapStrings config.swapDevices (sw:
-           "${sw.device} none swap\n"
+          "${sw.device} none swap\n"
       )}
     '';
 
@@ -213,6 +213,17 @@ in
             ${flip concatMapStrings config.fileSystems (fs: optionalString fs.autocreate ''
               mkdir -p -m 0755 '${fs.mountPoint}'
             '')}
+
+            # Create missing swapfiles.
+            # FIXME: support changing the size of existing swapfiles.
+            ${flip concatMapStrings config.swapDevices (sw: optionalString (sw.size != null) ''
+              if [ ! -e "${sw.device}" -a -e "$(dirname "${sw.device}")" ]; then
+                # FIXME: use ‘fallocate’ on filesystems that support it.
+                dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
+                mkswap ${sw.device}
+              fi
+            '')}
+            
           '';
 
         daemonType = "daemon";

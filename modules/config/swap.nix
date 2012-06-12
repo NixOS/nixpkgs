@@ -33,13 +33,22 @@ with pkgs.lib;
 
           device = mkOption {
             example = "/dev/sda3";
-            type = types.string;
+            type = types.uniq types.string;
             description = "Path of the device.";
           };
 
           label = mkOption {
             example = "swap";
-            type = types.string;
+            type = types.uniq types.string;
+            description = ''
+              Label of the device.  Can be used instead of <varname>device</varname>.
+            '';
+          };
+
+          size = mkOption {
+            default = null;
+            example = "swap";
+            type = types.nullOr types.int;
             description = ''
               Label of the device.  Can be used instead of <varname>device</varname>.
             '';
