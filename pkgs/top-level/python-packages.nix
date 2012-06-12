@@ -347,6 +347,26 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  coilmq = buildPythonPackage (rec {
+    name = "coilmq-0.6.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/C/CoilMQ/CoilMQ-0.6.1.tar.gz";
+      md5 = "5f39727415b837abd02651eeb2721749";
+    };
+
+    propagatedBuildInputs = [ stompclient distribute ]; 
+      
+    doCheck = false;
+
+    meta = {
+      description = "Simple, lightweight, and easily extensible STOMP message broker";
+      homepage = http://code.google.com/p/coilmq/;
+      license = pkgs.lib.licenses.asl20;
+      platforms = python.meta.platforms;
+    };
+  });
+
   configobj = buildPythonPackage (rec {
     name = "configobj-4.7.2";
 
@@ -445,6 +465,32 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  distribute = buildPythonPackage (rec {
+    name = "distribute-0.6.26";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/distribute/distribute-0.6.26.tar.gz";
+      md5 = "841f4262a70107f85260362f5def8206"; #"ecd75ea629fee6d59d26f88c39b2d291";
+      
+    };
+
+    buildInputs = [ pkgs.unzip ];
+    
+    installCommand = 
+      ''
+        # ehm, YES, the --verbose flags needs to be there, otherwise it tries to patch setuptools!
+        easy_install --verbose --prefix=$out .
+      '';
+    doCheck = false;
+
+    meta = {
+      description = "Easily download, build, install, upgrade, and uninstall Python packages";
+      homepage = http://packages.python.org/distribute;
+      license = "PSF or ZPL";
+      platforms = python.meta.platforms;
+    };
+  });
+  
 
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-2.26";
@@ -2260,6 +2306,25 @@ let pythonPackages = python.modules // rec {
       description = "Schema migration tools for SQLAlchemy";
     };
   };
+
+  stompclient = buildPythonPackage (rec {
+    name = "stompclient-0.3.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/stompclient/${name}.tar.gz";
+      md5 = "af0a314b6106dd80da24a918c24a1eab";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Lightweight and extensible STOMP messaging client";
+      homepage = http://bitbucket.org/hozn/stompclient;
+      license = pkgs.lib.licenses.asl20;
+      platforms = python.meta.platforms;
+    };
+  });
+
 
   svneverever =  buildPythonPackage rec {
     name = "svneverever-778489a8";
