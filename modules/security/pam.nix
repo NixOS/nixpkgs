@@ -74,7 +74,7 @@ let
           # Authentication management.
           ${optionalString rootOK
               "auth sufficient pam_rootok.so"}
-          ${optionalString sshAgentAuth
+          ${optionalString (config.security.pam.enableSSHAgentAuth && sshAgentAuth)
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys"}
           ${optionalString usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
