@@ -4,7 +4,11 @@
 
 {
 
-  machine = { config, pkgs, ... }: { };
+  machine =
+    { config, pkgs, ... }:
+    { swapDevices = pkgs.lib.mkOverride 0
+        [ { device = "/root/swapfile"; size = 128; } ];
+    };
 
   testScript =
     ''
@@ -22,6 +26,12 @@
       # Regression test for GMP aborts on QEMU.
       subtest "gmp", sub {
           $machine->succeed("expr 1 + 2");
+      };
+
+      # Test that the swap file got created.
+      subtest "swapfile", sub {
+          $machine->waitUntilSucceeds("cat /proc/swaps | grep /root/swapfile");
+          $machine->succeed("ls -l /root/swapfile | grep 134217728");
       };
     '';
 
