@@ -2265,9 +2265,11 @@ let
 
   path64 = callPackage ../development/compilers/path64 { };
 
-  openjdkDarwin = callPackage ../development/compilers/openjdk-darwin { };
-
-  openjdk = callPackage ../development/compilers/openjdk { };
+  openjdk =
+    if stdenv.isDarwin then
+      callPackage ../development/compilers/openjdk-darwin { }
+    else
+      callPackage ../development/compilers/openjdk { };
 
   openjre = callPackage ../development/compilers/openjdk {
     jreOnly = true;
@@ -2283,7 +2285,7 @@ let
     assert system == "i686-linux" || system == "x86_64-linux";
     callPackage ../development/compilers/jdk/default-5.nix { });
 
-  jdk       = if stdenv.isDarwin then openjdkDarwin else jdkdistro true  false;
+  jdk       = if stdenv.isDarwin then openjdk else jdkdistro true false;
   jre       = jdkdistro false false;
 
   jdkPlugin = lowPrio (jdkdistro true true);
@@ -2751,8 +2753,6 @@ let
 
   ecj = callPackage ../development/eclipse/ecj { };
 
-  ecjDarwin = ecj.override { gcj = openjdkDarwin; ant = antDarwin; };
-
   jdtsdk = callPackage ../development/eclipse/jdt-sdk { };
 
   jruby165 = callPackage ../development/interpreters/jruby { };
@@ -2781,20 +2781,16 @@ let
 
   antlr3 = callPackage ../development/tools/parsing/antlr { };
 
-  antDarwin = apacheAnt.override rec { jdk = openjdkDarwin; name = "ant-" + jdk.name; } ;
-
   ant = apacheAnt;
 
-  apacheAnt = callPackage ../development/tools/build-managers/apache-ant {
-    name = "ant-" + jdk.name;
-  };
+  apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
-  apacheAnt14 = callPackage ../development/tools/build-managers/apache-ant {
-    jdk = j2sdk14x;
-    name = "ant-" + j2sdk14x.name;
-  };
+  apacheAntOpenJDK = apacheAnt.override { jdk = openjdk; };
 
-  apacheAntGcj = callPackage ../development/tools/build-managers/apache-ant/from-source.nix {  # must be either pre-built or built with GCJ *alone*
+  apacheAnt14 = apacheAnt.override { jdk = j2sdk14x; };
+
+  apacheAntGcj = callPackage ../development/tools/build-managers/apache-ant/from-source.nix {
+    # must be either pre-built or built with GCJ *alone*
     gcj = gcj.gcc; # use the raw GCJ, which has ${gcj}/lib/jvm
   };
 
