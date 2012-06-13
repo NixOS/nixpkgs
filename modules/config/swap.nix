@@ -47,10 +47,13 @@ with pkgs.lib;
 
           size = mkOption {
             default = null;
-            example = "swap";
+            example = 2048;
             type = types.nullOr types.int;
             description = ''
-              Label of the device.  Can be used instead of <varname>device</varname>.
+              If this option is set, ‘device’ is interpreted as the
+              path of a swapfile that will be created automatically
+              with the indicated size (in megabytes) if it doesn't
+              exist.
             '';
           };
 
