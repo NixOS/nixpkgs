@@ -7488,6 +7488,8 @@ let
     inherit (pkgs.gnome) libsoup;
   };
 
+  telepathy_haze = callPackage ../applications/networking/instant-messengers/telepathy/haze {};
+
   telepathy_logger = callPackage ../applications/networking/instant-messengers/telepathy/logger {};
 
   telepathy_mission_control = callPackage ../applications/networking/instant-messengers/telepathy/mission-control { };
