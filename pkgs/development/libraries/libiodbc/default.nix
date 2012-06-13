@@ -1,14 +1,19 @@
 { stdenv, fetchurl, pkgconfig, gtk, useGTK ? false }:
 
 stdenv.mkDerivation rec {
-  name = "libiodbc-3.52.7";
+  name = "libiodbc-3.52.8";
 
   src = fetchurl {
-    url = "${meta.homepage}/downloads/iODBC/${name}.tar.gz";
-    sha256 = "d7002cc7e566785f1203f6096dcb49b0aad02a9d9946a8eca5d663ac1a85c0c7";
+    url = "mirror://sourceforge/iodbc/${name}.tar.gz";
+    sha256 = "16hjb6fcval85gnkgkxfhw4c5h3pgf86awyh8p2bhnnvzc0ma5hq";
   };
 
   buildInputs = stdenv.lib.optionals useGTK [ gtk pkgconfig ];
+
+  preBuild =
+    ''
+      export NIX_LDFLAGS_BEFORE="-rpath $out/lib"
+    '';
 
   meta = {
     description = "iODBC driver manager";
