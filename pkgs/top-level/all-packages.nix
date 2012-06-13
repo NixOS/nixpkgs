@@ -3050,6 +3050,7 @@ let
      buildNativeInput after the renaming.
      */
   pkgconfig = forceBuildDrv (callPackage ../development/tools/misc/pkgconfig { });
+  pkgconfigUpstream = pkgconfig.override { vanilla = true; };
 
   premake = callPackage ../development/tools/misc/premake { };
 

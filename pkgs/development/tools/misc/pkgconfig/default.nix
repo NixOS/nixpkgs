@@ -1,4 +1,4 @@
-{stdenv, fetchurl, automake}:
+{stdenv, fetchurl, automake, vanilla ? false}:
 
 stdenv.mkDerivation (rec {
   name = "pkg-config-0.23";
@@ -10,7 +10,7 @@ stdenv.mkDerivation (rec {
     sha256 = "0lrvk17724mc2nzpaa0vwybarrl50r7qdnr4h6jijm50srrf1808";
   };
 
-  patches = [
+  patches = if vanilla then [] else [
     # Process Requires.private properly, see
     # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
     ./requires-private.patch
