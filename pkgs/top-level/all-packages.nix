@@ -6546,16 +6546,14 @@ let
   };
 
   emacs24 = callPackage ../applications/editors/emacs-24 {
-    # use override to select the appropriate gui toolkit
+    # use override to enable additional features
     libXaw = if stdenv.isDarwin then xlibs.libXaw else null;
     Xaw3d = null;
     gtk = if stdenv.isDarwin then null else gtk;
-    # TODO: these packages don't build on Darwin.
-    gconf = null /* if stdenv.isDarwin then null else gnome.GConf */;
-    librsvg = if stdenv.isDarwin then null else librsvg;
-    # alsa only on linux
-    alsaLib = if stdenv.isLinux then alsaLib else null;
-    imagemagick = imagemagickBig;
+    gconf = null;
+    librsvg = null;
+    alsaLib = null;
+    imagemagick = null;
   };
 
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
