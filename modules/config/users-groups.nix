@@ -48,7 +48,7 @@ let
       
       shell = mkOption {
         type = with types; uniq string;
-        default = "/noshell";
+        default = "/var/run/current-system/sw/sbin/nologin";
         description = "The path to the user's shell.";
       };
       
