@@ -1,6 +1,6 @@
-{stdenv, fetchurl, libogg, libvorbis, tremor}:
+{stdenv, fetchurl, libogg, libvorbis, tremor, autoconf, automake, libtool}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "libtheora-1.1.1";
   src = fetchurl {
     url = http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.gz;
@@ -14,3 +14,10 @@ stdenv.mkDerivation {
     configureFlags = "--disable-examples";
   };
 }
+
+# It has an old config.guess that doesn't know the mips64el.
+// (if (stdenv.system == "mips64el-linux") then
+{
+  propagatedBuildInputs = [libogg libvorbis autoconf automake libtool];
+  preConfigure = "rm config.guess; sh autogen.sh";
+} else {}))
