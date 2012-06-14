@@ -13,7 +13,7 @@ in
 
   options = {
 
-    services.cntlm= {
+    services.cntlm = {
 
       enable = mkOption {
         default = false;
@@ -39,9 +39,9 @@ in
       };
 
       netbios_hostname = mkOption {
-        default = config.networking.hostName;
+        type = types.uniq types.string;
         description = ''
-          The hostname of your workstation.
+          The hostname of your machine.
         '';
       };
 
@@ -73,28 +73,28 @@ in
   ###### implementation
 
   config = mkIf config.services.cntlm.enable {
+
+    services.cntlm.netbios_hostname = mkDefault config.networking.hostName;
+  
     users.extraUsers = singleton { 
-        name = "cntlm";
-        description = "cntlm system-wide daemon";
-        home = "/var/empty";
+      name = "cntlm";
+      description = "cntlm system-wide daemon";
+      home = "/var/empty";
     };
 
-    jobs.cntlm = {
-        description = "cntlm is an NTLM / NTLM Session Response / NTLMv2 authenticating HTTP proxy.";
+    jobs.cntlm =
+      { description = "CNTLM is an NTLM / NTLM Session Response / NTLMv2 authenticating HTTP proxy";
+      
         startOn = "started network-interfaces";
-        environment = {
-        };
 
-    preStart = '' '';
+        daemonType = "fork";
 
-    daemonType = "fork";
-
-    exec =
-      ''
-        ${pkgs.cntlm}/bin/cntlm -U cntlm \
-        -c ${pkgs.writeText "cntlm_config" cfg.extraConfig}
-      '';
-    };
+        exec =
+          ''
+            ${pkgs.cntlm}/bin/cntlm -U cntlm \
+            -c ${pkgs.writeText "cntlm_config" cfg.extraConfig}
+          '';
+      };
 
     services.cntlm.extraConfig =
       ''
@@ -109,5 +109,7 @@ in
           Listen ${toString port}
         '') cfg.port}
       '';
+      
   };
+  
 }

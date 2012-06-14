@@ -37,7 +37,7 @@ in
     users.defaultUserShell = pkgs.lib.mkOption {
       default = "/var/run/current-system/sw/bin/bash";
       description = ''
-        This option defined the default shell assigned to user
+        This option defines the default shell assigned to user
         accounts.  This must not be a store path, since the path is
         used outside the store (in particular in /etc/passwd).
         Rather, it should be the path of a symlink that points to the

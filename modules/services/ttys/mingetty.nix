@@ -31,7 +31,7 @@ with pkgs.lib;
       };
 
       greetingLine = mkOption {
-        default = ''<<< Welcome to NixOS ${config.system.nixosVersion} (\m) - \s \r (\l) >>>'';
+        default = ''<<< Welcome to NixOS ${config.system.nixosVersion} (\m) - \l >>>'';
         description = ''
           Welcome line printed by mingetty.
         '';

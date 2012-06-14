@@ -25,7 +25,7 @@ let
     + ''
       default_internal_user = ${cfg.user}
 
-      mail_location = maildir:/var/spool/mail/%u
+      mail_location = ${cfg.mailLocation}
 
       maildir_copy_with_hardlinks = yes
 
@@ -74,6 +74,14 @@ in
       group = mkOption {
         default = "dovecot2";
         description = "Dovecot group name.";
+      };
+
+      mailLocation = mkOption {
+        default = "maildir:/var/spool/mail/%u"; /* Same as inbox, as postfix */
+        example = "maildir:~/mail:INBOX=/var/spool/mail/%u";
+        description = ''
+          Location that dovecot will use for mail folders. Dovecot mail_location option.
+        '';
       };
 
       sslServerCert = mkOption {

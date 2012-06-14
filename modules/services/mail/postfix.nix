@@ -307,7 +307,7 @@ in
       # accurate way is unlikely to be better.
       { description = "Postfix mail server";
 
-        startOn = "started networking";
+        startOn = "started networking and filesystem";
 
         daemonType = "none";
 

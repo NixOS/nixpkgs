@@ -11,6 +11,7 @@ let
 
 in
 
+if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
 {
 
   ###### interface
@@ -72,7 +73,11 @@ in
         # should restrict this to logged-in users.
         KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
       '';
-      
+
+    # Make the ACPI Shutdown command to do the right thing.    
+    services.acpid.enable = true;
+    services.acpid.powerEventCommands = "poweroff";
   };
 
 }
+else {}
