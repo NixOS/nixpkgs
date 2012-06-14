@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, udev, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
-, glib
+, glib, kbd
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
       done
     '';
 
+  NIX_CFLAGS_COMPILE = "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\" -DKBD_SETFONT=\"${kbd}/bin/setfont\"";
+
   installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc";
 
   # Get rid of configuration-specific data.
@@ -50,6 +52,13 @@ stdenv.mkDerivation rec {
       mkdir -p $out/example/systemd
       mv $out/lib/{modules-load.d,binfmt.d,sysctl.d,tmpfiles.d} $out/example
       mv $out/lib/systemd/{system,user} $out/example/systemd
+
+      # Install SysV compatibility commands.
+      mkdir -p $out/sbin
+      ln -s $out/lib/systemd/systemd $out/sbin/telinit
+      for i in init halt poweroff runlevel reboot shutdown; do
+        ln -s $out/bin/systemctl $out/sbin/$i 
+      done
     '';
 
   enableParallelBuilding = true;
