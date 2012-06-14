@@ -61,7 +61,6 @@ let
     isExecutable = true;
     inherit (config.boot) devShmSize runSize cleanTmpDir;
     ttyGid = config.ids.gids.tty;
-    upstart = config.system.build.upstart;
     path =
       [ pkgs.coreutils
         pkgs.utillinux

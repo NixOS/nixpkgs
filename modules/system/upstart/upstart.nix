@@ -476,6 +476,7 @@ in
 
     system.build.upstart = upstart;
 
+    /*
     environment.etc =
       flip map (attrValues config.jobs) (job:
         { source = job.jobDrv;
@@ -492,6 +493,7 @@ in
       ${optionalString (job.setuid != "") "chown ${job.setuid} /var/log/upstart/${job.name}"}
       ${optionalString (job.setgid != "") "chown :${job.setgid} /var/log/upstart/${job.name}"}
     '') (attrValues config.jobs));
+    */
 
   };
 

@@ -116,6 +116,32 @@ in
         gid = config.ids.gids.messagebus;
       };
 
+    # FIXME: these are copied verbatim from the dbus source tree.  We
+    # should install and use the originals.
+    boot.systemd.units."dbus.socket" =
+      ''
+        [Unit]
+        Description=D-Bus System Message Bus Socket
+
+        [Socket]
+        ListenStream=/var/run/dbus/system_bus_socket
+      '';
+      
+    boot.systemd.units."dbus.service" =
+      ''
+        [Unit]
+        Description=D-Bus System Message Bus
+        Requires=dbus.socket
+        After=syslog.target
+
+        [Service]
+        ExecStartPre=${pkgs.dbus_tools}/bin/dbus-uuidgen --ensure
+        ExecStartPre=-${pkgs.coreutils}/bin/rm -f /var/run/dbus/pid
+        ExecStart=${pkgs.dbus_daemon}/bin/dbus-daemon --system --address=systemd: --nofork --systemd-activation
+        ExecReload=${pkgs.dbus_tools}/dbus-send --print-reply --system --type=method_call --dest=org.freedesktop.DBus / org.freedesktop.DBus.ReloadConfig
+        OOMScoreAdjust=-900
+      '';
+
     jobs.dbus =
       { startOn = "started udev and started syslogd";
       

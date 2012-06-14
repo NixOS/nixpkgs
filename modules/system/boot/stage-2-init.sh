@@ -90,12 +90,13 @@ mkdir -m 0755 -p /dev/pts
 mount -t devpts -o mode=0600,gid=@ttyGid@ none /dev/pts
 [ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
-mkdir -m 0755 -p /var
+mkdir -m 0755 -p /var /var/log
 mkdir -m 0755 -p /nix/var
 mkdir -m 0700 -p /root
 mkdir -m 0755 -p /bin # for the /bin/sh symlink
 mkdir -m 0755 -p /home
 mkdir -m 0755 -p /etc/nixos
+mkdir -m 0700 -p /var/log/journal
 
 
 # Miscellaneous boot time cleanup.
@@ -195,4 +196,4 @@ fi
 
 # Start systemd.
 echo "starting systemd..."
-PATH=/var/run/current-system/systemd/lib/systemd exec systemd --log-level debug --log-target=console --crash-shell
+PATH=/var/run/current-system/systemd/lib/systemd exec systemd --log-target journal --log-level debug --crash-shell

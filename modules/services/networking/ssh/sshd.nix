@@ -127,6 +127,18 @@ let
       ${userLoop}
     '';
 
+  preStart = pkgs.writeScript "openssh-pre-start"
+    ''
+      #! ${pkgs.stdenv.shell}
+
+      ${mkAuthkeyScript}
+
+      mkdir -m 0755 -p /etc/ssh
+
+      if ! test -f ${cfg.hostKeyPath}; then
+          ssh-keygen -t ${hktn} -b ${toString hktb} -f ${cfg.hostKeyPath} -N ""
+      fi
+    '';
 
 in
 
@@ -305,9 +317,26 @@ in
       }
     ];
 
-    jobs.sshd = {
+    boot.systemd.units."sshd.service" =
+      ''
+        [Unit]
+        Description=SSH daemon
 
-        description = "OpenSSH server";
+        [Service]
+        Environment=PATH=${pkgs.coreutils}/bin:${pkgs.openssh}/bin
+        ExecStartPre=${preStart}
+        ExecStart=\
+          ${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} \
+            -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
+        Restart=always
+        RestartSec=5
+        Type=forking
+        KillMode=process
+        PIDFile=/run/sshd.pid
+      '';
+
+    jobs.sshd =
+      { description = "OpenSSH server";
 
         startOn = "started network-interfaces";
 
@@ -343,6 +372,8 @@ in
 
     services.openssh.extraConfig =
       ''
+        PidFile /run/sshd.pid
+      
         Protocol 2
 
         UsePAM ${if cfg.usePAM then "yes" else "no"}
