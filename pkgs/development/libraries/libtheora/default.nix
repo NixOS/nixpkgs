@@ -16,8 +16,8 @@ stdenv.mkDerivation ({
 }
 
 # It has an old config.guess that doesn't know the mips64el.
-// (if (stdenv.system == "mips64el-linux") then
+// stdenv.lib.optionalAttrs (stdenv.system == "mips64el-linux")
 {
   propagatedBuildInputs = [libogg libvorbis autoconf automake libtool];
   preConfigure = "rm config.guess; sh autogen.sh";
-} else {}))
+})
