@@ -249,7 +249,7 @@
   packages_ghc742 =
     packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
                ghcBinary = ghc6121BinaryDarwin;
-               prefFun = ghcHEADPrefs;
+               prefFun = ghc741Prefs;
              };
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
