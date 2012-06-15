@@ -14,6 +14,8 @@
 }:
 
 let
+  sourceInfo = import ./source.nix;
+
   mkGypFlags = with stdenv.lib; let
     sanitize = value:
       if value == true then "1"
@@ -25,11 +27,11 @@ let
 in stdenv.mkDerivation rec {
   name = "chromium-${version}";
 
-  version = "21.0.1171.0";
+  version = sourceInfo.version;
 
   src = fetchurl {
-    url = "http://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.bz2";
-    sha256 = "3fd9b2d8895750a4435a585b9c2dc7d34b583c6470ba67eb6ea6c2579f126377";
+    url = sourceInfo.url;
+    sha256 = sourceInfo.sha256;
   };
 
   buildInputs = [
