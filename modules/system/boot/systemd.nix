@@ -24,11 +24,19 @@ let
       "syslog.target"
       "time-sync.target"
 
+      # Udev.
+      "systemd-udev-control.socket"
+      "systemd-udev-kernel.socket"
+      "systemd-udev.service"
+      "systemd-udev-settle.service"
+      "systemd-udev-trigger.service"
+
       # Login stuff.
       "systemd-logind.service"
       "autovt@.service"
       "systemd-vconsole-setup.service"
       "systemd-user-sessions.service"
+      "dbus-org.freedesktop.login1.service"
 
       # Journal.
       "systemd-journald.socket"
@@ -149,6 +157,8 @@ in
   ###### implementation
 
   config = {
+
+    system.build.systemd = systemd;
 
     environment.systemPackages = [ systemd ];
   
