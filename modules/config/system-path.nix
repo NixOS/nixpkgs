@@ -16,8 +16,7 @@ let
     '';
 
   requiredPackages =
-    [ config.system.sbin.modprobe # must take precedence over module_init_tools
-      config.environment.nix
+    [ config.environment.nix
       pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
@@ -38,7 +37,6 @@ let
       pkgs.less
       pkgs.libcap
       pkgs.man
-      pkgs.module_init_tools
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat

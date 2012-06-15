@@ -188,12 +188,8 @@ if [ -n "$debug2" ]; then
 fi
 
 
-# FIXME: auto-loading of kernel modules in systemd doesn't work yet
-# because it uses libkmod.
-"$(cat /proc/sys/kernel/modprobe)" autofs4
-"$(cat /proc/sys/kernel/modprobe)" ipv6
-
-
 # Start systemd.
 echo "starting systemd..."
-PATH=/var/run/current-system/systemd/lib/systemd exec systemd --log-target journal --log-level debug --crash-shell
+PATH=/var/run/current-system/systemd/lib/systemd \
+    MODULE_DIR=/var/run/current-system/kernel-modules/lib/modules \
+    exec systemd --log-target journal --log-level debug --crash-shell
