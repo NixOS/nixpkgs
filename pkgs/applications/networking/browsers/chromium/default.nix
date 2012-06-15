@@ -47,14 +47,20 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  gypFlags = mkGypFlags {
+  gypFlags = mkGypFlags ({
     linux_use_gold_binary = false;
     linux_use_gold_flags = false;
     proprietary_codecs = false;
     use_gnome_keyring = gnomeKeyringSupport;
     disable_nacl = !naclSupport;
     use_cups = false;
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.system == "x86_64-linux") {
+    target_arch = "x64";
+  } // stdenv.lib.optionalAttrs (stdenv.system == "i686-linux") {
+    target_arch = "ia32";
+  });
+
+  buildType = "Release";
 
   /* TODO:
   use_system_bzip2 = true;
@@ -80,11 +86,16 @@ in stdenv.mkDerivation rec {
   */
 
   configurePhase = ''
-    python build/gyp_chromium --depth $(pwd) ${gypFlags}
+    python build/gyp_chromium --depth "$(pwd)" ${gypFlags}
   '';
 
+  extraBuildFlags = let
+    CC = "${gcc}/bin/gcc";
+    CXX = "${gcc}/bin/g++";
+  in "CC=\"${CC}\" CXX=\"${CXX}\" CC.host=\"${CC}\" CXX.host=\"${CXX}\" LINK.host=\"${CXX}\"";
+
   buildPhase = ''
-    make CC=${gcc}/bin/gcc BUILDTYPE=Release library=shared_library chrome chrome_sandbox
+    make ${extraBuildFlags} BUILDTYPE=${buildType} library=shared_library chrome chrome_sandbox
   '';
 
   installPhase = ''
