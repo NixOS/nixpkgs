@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ pkgconfig /* xz zlib */ ];
 
-  #configureFlags = [ "--with-xz" "--with-zlib" ];
+  configureFlags = [ "--sysconfdir=/etc" /* "--with-xz" "--with-zlib" */ ];
 
   patches = [ ./module-dir.patch ];
 
