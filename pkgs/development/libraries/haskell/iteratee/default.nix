@@ -1,14 +1,16 @@
-{ cabal, ListLike, MonadCatchIOTransformers, parallel, transformers
+{ cabal, ListLike, MonadCatchIOTransformers, monadControl, parallel
+, transformers, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "iteratee";
-  version = "0.8.8.2";
-  sha256 = "1d76an95y8svaja5ksx8p05fk22z62hp3gfwnd1d917qccffw6ry";
+  version = "0.8.9.1";
+  sha256 = "1yk7jvabmabf0qjcd00imbg7vx84yjf71h7x3zbv4a51ykfy5hax";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    ListLike MonadCatchIOTransformers parallel transformers
+    ListLike MonadCatchIOTransformers monadControl parallel
+    transformers transformersBase
   ];
   meta = {
     homepage = "http://www.tiresiaspress.us/haskell/iteratee";

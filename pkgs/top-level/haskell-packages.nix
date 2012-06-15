@@ -149,7 +149,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     happy        = self.happy_1_18_9;           # 7.4.2 ok
   };
 
-
   haskellPlatformArgs_2012_2_0_0 = self : {
     inherit (self) cabal ghc;
     cgi          = self.cgi_3001_1_7_4;         # 7.4.1 ok
@@ -1278,6 +1277,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   strict = callPackage ../development/libraries/haskell/strict {};
 
   stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
+
+  stringsearch = callPackage ../development/libraries/haskell/stringsearch {};
 
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
   syb_0_3 = callPackage ../development/libraries/haskell/syb/0.3.nix {};

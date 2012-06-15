@@ -245,7 +245,6 @@
                prefFun = ghc741Prefs;
              };
 
-  # Stable branch snapshot.
   packages_ghc742 =
     packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
                ghcBinary = ghc6121BinaryDarwin;
@@ -255,8 +254,7 @@
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   packages_ghcHEAD =
     packages { ghcPath = ../development/compilers/ghc/head.nix;
-               ghcBinary = # (packages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
-                           ghc704Binary;
+               ghcBinary = ghc704Binary;
                prefFun = ghcHEADPrefs;
              };
 
