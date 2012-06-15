@@ -41,7 +41,7 @@ let
       # against the keys in the calling user's ~/.ssh/authorized_keys.
       # This is useful for "sudo" on password-less remote systems.
       sshAgentAuth ? false
-    , # If set, use ConsoleKit's PAM connector module to claim
+    , # If set, use systemd's PAM connector module to claim
       # ownership of audio devices etc.
       ownDevices ? false
     , # Whether to forward XAuth keys between users.  Mostly useful
@@ -104,7 +104,7 @@ let
           ${optionalString config.krb5.enable
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
           ${optionalString ownDevices
-              "session optional ${pkgs.consolekit}/lib/security/pam_ck_connector.so"}
+              "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
           ${optionalString forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
           ${optionalString (limits != [])
