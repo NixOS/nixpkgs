@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
       "--with-dbuspolicydir=$(out)/etc/dbus-1/system.d"
       "--with-dbussystemservicedir=$(out)/share/dbus-1/system-services"
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
+      "--with-firmware-path=/root/test-firmware:/var/run/current-system/firmware"
+      "--with-pci-ids-path=${pciutils}/share/pci.ids"
     ];
 
   preConfigure =
