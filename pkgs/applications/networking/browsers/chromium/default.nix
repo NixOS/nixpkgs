@@ -47,12 +47,15 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
+  patches = stdenv.lib.optional (!useSELinux) ./enable_seccomp.patch;
+
   gypFlags = mkGypFlags ({
     linux_use_gold_binary = false;
     linux_use_gold_flags = false;
     proprietary_codecs = false;
     use_gnome_keyring = gnomeKeyringSupport;
     disable_nacl = !naclSupport;
+    selinux = useSELinux;
     use_cups = false;
   } // stdenv.lib.optionalAttrs (stdenv.system == "x86_64-linux") {
     target_arch = "x64";
@@ -95,7 +98,7 @@ in stdenv.mkDerivation rec {
   in "CC=\"${CC}\" CXX=\"${CXX}\" CC.host=\"${CC}\" CXX.host=\"${CXX}\" LINK.host=\"${CXX}\"";
 
   buildPhase = ''
-    make ${extraBuildFlags} BUILDTYPE=${buildType} library=shared_library chrome chrome_sandbox
+    make ${extraBuildFlags} BUILDTYPE=${buildType} library=shared_library chrome
   '';
 
   installPhase = ''
