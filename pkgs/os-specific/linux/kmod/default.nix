@@ -1,23 +1,26 @@
 { stdenv, fetchurl, xz, zlib, pkgconfig }:
 
-stdenv.mkDerivation {
-  name = "kmod-7";
+stdenv.mkDerivation rec {
+  name = "kmod-8";
 
   src = fetchurl {
-    url = ftp://ftp.kernel.org/pub/linux/utils/kernel/kmod/kmod-7.tar.xz;
-    sha256 = "1xvsy2zcfdimj4j5b5yyxaqx2byabmwq8qlzjm0hqzpyxxgfw1lq";
+    url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
+    sha256 = "0kbkjzcyhkwgcplwa29n0f03ccwpg4df83pdl5nkvsk2rzgx3xrm";
   };
 
-  buildInputs = [ pkgconfig xz zlib ];
+  # Disable xz/zlib support to prevent needing them in the initrd.
+  
+  buildInputs = [ pkgconfig /* xz zlib */ ];
 
-  configureFlags = [ "--with-xz" "--with-zlib" ];
+  #configureFlags = [ "--with-xz" "--with-zlib" ];
 
   patches = [ ./module-dir.patch ];
 
   postInstall = ''
-    for prog in lsmod rmmod insmod modinfo modprobe depmod
-    do
-      ln -sv kmod $out/bin/$prog
+    ln -s kmod $out/bin/lsmod
+    mkdir -p $out/sbin
+    for prog in rmmod insmod modinfo modprobe depmod; do
+      ln -sv $out/bin/kmod $out/sbin/$prog
     done
   '';
 
