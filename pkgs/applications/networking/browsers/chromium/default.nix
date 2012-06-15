@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchsvn
+{ stdenv, fetchurl, fetchsvn, makeWrapper
 , python, perl, pkgconfig
 , nspr, nss, udev, bzip2
 , utillinux, alsaLib
@@ -33,6 +33,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
+    makeWrapper
     python perl pkgconfig
     nspr nss udev bzip2
     utillinux alsaLib
@@ -82,6 +83,28 @@ in stdenv.mkDerivation rec {
 
   buildPhase = ''
     make CC=${gcc}/bin/gcc BUILDTYPE=Release library=shared_library chrome chrome_sandbox
+  '';
+
+  installPhase = ''
+    mkdir -vp "$out/libexec/chrome"
+    cp -v "out/${buildType}/"*.pak "$out/libexec/chrome/"
+    cp -vR "out/${buildType}/locales" "out/${buildType}/resources" "$out/libexec/chrome/"
+
+    cp -v "out/${buildType}/chrome" "$out/libexec/chrome/chrome"
+
+    mkdir -vp "$out/bin"
+    makeWrapper "$out/libexec/chrome/chrome" "$out/bin/chrome"
+
+    mkdir -vp "$out/share/man/man1"
+    cp -v "out/${buildType}/chrome.1" "$out/share/man/man1/chrome.1"
+
+    for icon_file in chrome/app/theme/chromium/product_logo_*[0-9].png; do
+      num_and_suffix="''${icon_file##*logo_}"
+      icon_size="''${num_and_suffix%.*}"
+      logo_output_path="$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps"
+      mkdir -vp "$logo_output_path"
+      cp -v "$icon_file" "$logo_output_path/chrome.png"
+    done
   '';
 
   meta =  with stdenv.lib; {
