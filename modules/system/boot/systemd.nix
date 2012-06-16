@@ -111,7 +111,7 @@ let
 
   nixosUnits = mapAttrsToList makeUnit config.boot.systemd.units;
     
-  systemUnits = pkgs.runCommand "system-units" { }
+  units = pkgs.runCommand "units" { preferLocalBuild = true; }
     ''
       mkdir -p $out/system
       for i in ${toString upstreamUnits}; do
@@ -161,10 +161,12 @@ in
 
     system.build.systemd = systemd;
 
+    system.build.units = units;
+
     environment.systemPackages = [ systemd ];
   
     environment.etc =
-      [ { source = systemUnits;
+      [ { source = units;
           target = "systemd";
         }
       ];
@@ -177,7 +179,7 @@ in
         After=multi-user.target
         Conflicts=rescue.target
         AllowIsolate=yes
-        Wants=sshd.service autovt@tty1.service # FIXME
+        Wants=sshd.service
       '';
     
     boot.systemd.units."getty@.service" =

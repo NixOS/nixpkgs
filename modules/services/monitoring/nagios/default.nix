@@ -159,12 +159,7 @@ in
     environment.systemPackages = [ pkgs.nagios ];
 
     jobs.nagios =
-      { # Run `nagios -v' to check the validity of the configuration file so
-        # that a nixos-rebuild fails *before* we kill the running Nagios
-        # daemon.
-        buildHook = "${pkgs.nagios}/bin/nagios -v ${nagiosCfgFile}";
-
-        description = "Nagios monitoring daemon";
+      { description = "Nagios monitoring daemon";
 
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";

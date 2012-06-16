@@ -174,7 +174,7 @@ in
     system.fsPackages = [ pkgs.dosfstools ];
     
     environment.systemPackages =
-      [ pkgs.ntfs3g pkgs.cifs_utils pkgs.mountall ]
+      [ pkgs.ntfs3g pkgs.cifs_utils ]
       ++ config.system.fsPackages;
 
     environment.etc = singleton
@@ -182,6 +182,7 @@ in
         target = "fstab";
       };
 
+    /*
     jobs.mountall =
       { startOn = "started udev or config-changed";
 
@@ -309,6 +310,7 @@ in
             initctl start --no-wait mountall
           '';
       };
+    */
 
   };
 

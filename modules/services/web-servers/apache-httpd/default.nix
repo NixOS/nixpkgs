@@ -532,18 +532,7 @@ in
       '';
 
     jobs.httpd =
-      { # Statically verify the syntactic correctness of the generated
-        # httpd.conf.  !!! this is impure!  It doesn't just check for
-        # syntax, but also whether the Apache user/group exist,
-        # whether SSL keys exist, etc.
-        buildHook =
-          ''
-            echo
-            echo '=== Checking the generated Apache configuration file ==='
-            ${httpd}/bin/httpd -f ${httpdConf} -t || true
-          '';
-
-        description = "Apache HTTPD";
+      { description = "Apache HTTPD";
 
         startOn = "started networking and filesystem"
           # Hacky.  Some subservices depend on Postgres

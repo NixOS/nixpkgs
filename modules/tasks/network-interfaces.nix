@@ -267,7 +267,8 @@ in
 
             ${optionalString (cfg.interfaces != [] || cfg.localCommands != "") ''
               # Emit the ip-up event (e.g. to start ntpd).
-              initctl emit -n ip-up
+              #FIXME
+              #initctl emit -n ip-up
             ''}
           '';
       };

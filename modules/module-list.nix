@@ -199,9 +199,6 @@
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
   ./system/etc/etc.nix
-  ./system/upstart-events/control-alt-delete.nix
-  ./system/upstart-events/runlevel.nix
-  ./system/upstart-events/shutdown.nix
   ./system/upstart/upstart.nix
   ./tasks/cpu-freq.nix
   ./tasks/filesystems.nix

@@ -67,7 +67,7 @@ in
           '' + optionalString config.services.nscd.enable ''
             # Invalidate the nscd cache whenever resolv.conf is
             # regenerated.
-            libc_restart='${pkgs.upstart}/sbin/start invalidate-nscd'
+            libc_restart='${pkgs.systemd}/bin/systemctl start invalidate-nscd.service'
           '' );
         target = "resolvconf.conf";
       }

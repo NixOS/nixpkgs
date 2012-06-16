@@ -20,15 +20,14 @@ in
 
       enable = mkOption {
         default = true;
-        description = "
-          Whether to enable the Name Service Cache Daemon.
-        ";
+        description = "Whether to enable the Name Service Cache Daemon.";
       };
 
     };
 
   };
 
+  
   ###### implementation
 
   config = mkIf config.services.nscd.enable {

@@ -54,8 +54,10 @@ in
 
     inherit requiredTTYs; # pass it to ./modules/tasks/tty-backgrounds.nix
 
-    environment.systemPackages = [pkgs.kbd];
+    environment.systemPackages = [ pkgs.kbd ];
 
+    /* FIXME - remove; this is handled by systemd now.
+    
     jobs.kbd =
       { description = "Keyboard / console initialisation";
 
@@ -120,6 +122,7 @@ in
           ${pkgs.kbd}/bin/loadkeys '${consoleKeyMap}'
         '';
       };
+    */
 
   };
 

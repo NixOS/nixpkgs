@@ -12,19 +12,90 @@ let
   groupExists = g:
     (g == "") || any (gg: gg.name == g) (attrValues config.users.extraGroups);
 
-  # From a job description, generate an Upstart job file.
-  makeJob = job:
+  # From a job description, generate an systemd unit file.
+  makeUnit = job:
 
     let
       hasMain = job.script != "" || job.exec != "";
 
       env = config.system.upstartEnvironment // job.environment;
 
-      jobText =
-        let log = "/var/log/upstart/${job.name}"; in
+      preStartScript = pkgs.writeScript "${job.name}-pre-start.sh"
         ''
-          # Upstart job `${job.name}'.  This is a generated file.  Do not edit.
+          #! ${pkgs.stdenv.shell} -e
+          ${job.preStart}
+        '';
 
+      startScript = pkgs.writeScript "${job.name}-start.sh"
+        ''
+          #! ${pkgs.stdenv.shell} -e
+          ${if job.script != "" then job.script else ''
+            exec ${job.exec}
+          ''}
+        '';
+
+      postStartScript = pkgs.writeScript "${job.name}-post-start.sh"
+        ''
+          #! ${pkgs.stdenv.shell} -e
+          ${job.postStart}
+        '';
+
+      preStopScript = pkgs.writeScript "${job.name}-pre-stop.sh"
+        ''
+          #! ${pkgs.stdenv.shell} -e
+          ${job.preStop}
+        '';
+
+      postStopScript = pkgs.writeScript "${job.name}-post-stop.sh"
+        ''
+          #! ${pkgs.stdenv.shell} -e
+          ${job.postStop}
+        '';
+
+      text =
+        ''
+          [Unit]
+          Description=${job.description}
+
+          [Service]
+          Environment=PATH=${job.path}
+          ${concatMapStrings (n: "Environment=${n}=\"${getAttr n env}\"\n") (attrNames env)}
+
+          ${optionalString (job.preStart != "" && (job.script != "" || job.exec != "")) ''
+            ExecStartPre=${preStartScript}
+          ''}
+
+          ${optionalString (job.preStart != "" && job.script == "" && job.exec == "") ''
+            ExecStart=${preStartScript}
+          ''}
+
+          ${optionalString (job.script != "" || job.exec != "") ''
+            ExecStart=${startScript}
+          ''}
+          
+          ${optionalString (job.postStart != "") ''
+            ExecStartPost=${postStartScript}
+          ''}
+
+          ${optionalString (job.preStop != "") ''
+            ExecStop=${preStopScript}
+          ''}
+          
+          ${optionalString (job.postStop != "") ''
+            ExecStopPost=${postStopScript}
+          ''}
+
+          ${if job.script == "" && job.exec == "" then "Type=oneshot\nRemainAfterExit=true" else
+            if job.daemonType == "fork" then "Type=forking\nGuessMainPID=true" else
+            if job.daemonType == "none" then "" else
+            throw "invalid daemon type `${job.daemonType}'"}
+
+          ${optionalString (!job.task && job.respawn) "Restart=always"}
+        '';
+
+      /*
+      text =
+        ''
           ${optionalString (job.description != "") ''
             description "${job.description}"
           ''}
@@ -45,9 +116,6 @@ let
           ${optionalString (job.console != "") "console ${job.console}"}
 
           pre-start script
-            ${optionalString (job.console == "") ''
-              exec >> ${log} 2>&1
-            ''}
             ln -sfn "$(readlink -f "/etc/init/${job.name}.conf")" /var/run/upstart-jobs/${job.name}
             ${optionalString (job.preStart != "") ''
               source ${jobHelpers}
@@ -60,9 +128,6 @@ let
             else if job.script != "" then
               ''
                 script
-                  ${optionalString (job.console == "") ''
-                    exec >> ${log} 2>&1
-                  ''}
                   source ${jobHelpers}
                   ${job.script}
                 end script
@@ -70,7 +135,6 @@ let
             else if job.exec != "" && job.console == "" then
               ''
                 script
-                  exec >> ${log} 2>&1
                   exec ${job.exec}
                 end script
               ''
@@ -83,9 +147,6 @@ let
 
           ${optionalString (job.postStart != "") ''
             post-start script
-              ${optionalString (job.console == "") ''
-                exec >> ${log} 2>&1
-              ''}
               source ${jobHelpers}
               ${job.postStart}
             end script
@@ -98,9 +159,6 @@ let
              # (upstart 0.6.5, job.c:562)
             optionalString (job.preStop != "") (assert hasMain; ''
             pre-stop script
-              ${optionalString (job.console == "") ''
-                exec >> ${log} 2>&1
-              ''}
               source ${jobHelpers}
               ${job.preStop}
             end script
@@ -108,9 +166,6 @@ let
 
           ${optionalString (job.postStop != "") ''
             post-stop script
-              ${optionalString (job.console == "") ''
-                exec >> ${log} 2>&1
-              ''}
               source ${jobHelpers}
               ${job.postStop}
             end script
@@ -132,14 +187,9 @@ let
 
           ${job.extraConfig}
         '';
+      */
 
-    in
-      pkgs.runCommand ("upstart-" + job.name + ".conf")
-        { inherit (job) buildHook; inherit jobText; preferLocalBuild = true; }
-        ''
-          eval "$buildHook"
-          echo "$jobText" > $out
-        '';
+    in text;
 
 
   # Shell functions for use in Upstart jobs.
@@ -196,17 +246,6 @@ let
       example = "sshd";
       description = ''
         Name of the Upstart job.
-      '';
-    };
-
-    buildHook = mkOption {
-      type = types.string;
-      default = "true";
-      description = ''
-        Command run while building the Upstart job.  Can be used
-        to perform simple regression tests (e.g., the Apache
-        Upstart job uses it to check the syntax of the generated
-        <filename>httpd.conf</filename>.
       '';
     };
 
@@ -401,13 +440,10 @@ let
 
     options = {
     
-      jobDrv = mkOption {
-        default = makeJob config;
-        type = types.uniq types.package;
-        description = ''
-          Derivation that builds the Upstart job file.  The default
-          value is generated from other options.
-        '';
+      unitText = mkOption {
+        default = makeUnit config;
+        type = types.uniq types.string;
+        description = "Generated text of the systemd unit corresponding to this job.";
       };
       
     };
@@ -448,16 +484,6 @@ in
       options = [ jobOptions upstartJob ];
     };
 
-    tests.upstartJobs = mkOption {
-      internal = true;
-      default = {};
-      description = ''
-        Make it easier to build individual Upstart jobs. (e.g.,
-        <command>nix-build /etc/nixos/nixos -A
-        tests.upstartJobs.xserver</command>).
-      '';
-    };
-
     system.upstartEnvironment = mkOption {
       type = types.attrs;
       default = {};
@@ -476,25 +502,10 @@ in
 
     system.build.upstart = upstart;
 
-    /*
-    environment.etc =
-      flip map (attrValues config.jobs) (job:
-        { source = job.jobDrv;
-          target = "init/${job.name}.conf";
-        } );
-
-    # Upstart can listen on the system bus, allowing normal users to
-    # do status queries.
-    services.dbus.packages = [ upstart ];
-
-    system.activationScripts.chownJobLogs = stringAfter ["var"] 
-    (concatMapStrings (job: ''
-      touch /var/log/upstart/${job.name}
-      ${optionalString (job.setuid != "") "chown ${job.setuid} /var/log/upstart/${job.name}"}
-      ${optionalString (job.setgid != "") "chown :${job.setgid} /var/log/upstart/${job.name}"}
-    '') (attrValues config.jobs));
-    */
-
+    boot.systemd.units =
+      flip mapAttrs' config.jobs (name: job:
+        nameValuePair "${job.name}.service" job.unitText);
+        
   };
 
 }

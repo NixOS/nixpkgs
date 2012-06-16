@@ -192,4 +192,4 @@ fi
 echo "starting systemd..."
 PATH=/var/run/current-system/systemd/lib/systemd \
     MODULE_DIR=/var/run/current-system/kernel-modules/lib/modules \
-    exec systemd --log-target journal --log-level debug --crash-shell
+    exec systemd --log-target journal # --log-level debug --crash-shell

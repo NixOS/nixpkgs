@@ -56,6 +56,7 @@ with pkgs.lib;
   config = {
 
     # Generate a separate job for each tty.
+    /*
     jobs = listToAttrs (map (tty: nameValuePair tty {
 
       startOn =
@@ -72,6 +73,7 @@ with pkgs.lib;
       environment.LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
 
     }) config.services.mingetty.ttys);
+    */
 
     environment.etc = singleton
       { # Friendly greeting on the virtual consoles.

@@ -329,7 +329,6 @@ in
           ${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} \
             -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
         Restart=always
-        RestartSec=5
         Type=forking
         KillMode=process
         PIDFile=/run/sshd.pid
