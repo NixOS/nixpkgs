@@ -2,21 +2,22 @@
 , zlib, openssl }:
 
 let
-  version = "0.8.9";
+  version = "0.9.2";
 in
 stdenv.mkDerivation {
   name = "rtorrent-${version}";
 
   src = fetchurl {
     url = "http://libtorrent.rakshasa.no/downloads/rtorrent-${version}.tar.gz";
-    sha256 = "cca70eb36a0c176bbd6fdb3afe2bc9f163fa4c9377fc33bc29689dec60cf6d84";
+    sha256 = "5c8f8c780bee376afce3c1cde2f5ecb928f40bac23b2b8171deed5cf3c888c3d";
   };
 
   buildInputs = [ libtorrent ncurses pkgconfig libsigcxx curl zlib openssl ];
 
   postInstall = ''
-    mkdir -p $out/share/man/man1
+    mkdir -p $out/share/man/man1 $out/share/rtorrent
     mv doc/rtorrent.1 $out/share/man/man1/rtorrent.1
+    mv doc/rtorrent.rc $out/share/rtorrent/rtorrent.rc
   '';
 
   meta = {
