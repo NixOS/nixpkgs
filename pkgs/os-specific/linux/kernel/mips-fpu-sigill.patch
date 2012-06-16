@@ -1,0 +1,108 @@
+From bf55ef4e3c2f622ac013f196affbd11b67b59223 Mon Sep 17 00:00:00 2001
+From: Mark H Weaver <mhw@netris.org>
+Date: Fri, 28 Oct 2011 13:24:37 -0400
+Subject: [PATCH 2/4] Fix handling of prefx instruction in mips/math-emu
+
+* The instruction is named prefx, not pfetch, and its function
+  field is 0x17, not 0x07.
+
+* Recognize the prefx instruction regardless of what bits happen to be
+  in bits 21-25, which is the format field of the floating-point ops,
+  but holds the base register of the prefx instruction.
+---
+ arch/mips/include/asm/inst.h |    4 ++--
+ arch/mips/math-emu/cp1emu.c  |   16 +++++++---------
+ 2 files changed, 9 insertions(+), 11 deletions(-)
+
+diff --git a/arch/mips/include/asm/inst.h b/arch/mips/include/asm/inst.h
+index ab84064..3048edc 100644
+--- a/arch/mips/include/asm/inst.h
++++ b/arch/mips/include/asm/inst.h
+@@ -161,8 +161,8 @@ enum cop1_sdw_func {
+  */
+ enum cop1x_func {
+ 	lwxc1_op     =  0x00, ldxc1_op     =  0x01,
+-	pfetch_op    =  0x07, swxc1_op     =  0x08,
+-	sdxc1_op     =  0x09, madd_s_op    =  0x20,
++	swxc1_op     =  0x08, sdxc1_op     =  0x09,
++	prefx_op     =  0x17, madd_s_op    =  0x20,
+ 	madd_d_op    =  0x21, madd_e_op    =  0x22,
+ 	msub_s_op    =  0x28, msub_d_op    =  0x29,
+ 	msub_e_op    =  0x2a, nmadd_s_op   =  0x30,
+diff --git a/arch/mips/math-emu/cp1emu.c b/arch/mips/math-emu/cp1emu.c
+index dbf2f93..87ddba1 100644
+--- a/arch/mips/math-emu/cp1emu.c
++++ b/arch/mips/math-emu/cp1emu.c
+@@ -739,7 +739,7 @@ static int fpux_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
+ 			break;
+ 
+ 		default:
+-			return SIGILL;
++			goto SIGILL_unless_prefx_op;
+ 		}
+ 		break;
+ 	}
+@@ -809,19 +809,17 @@ static int fpux_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
+ 			goto copcsr;
+ 
+ 		default:
+-			return SIGILL;
++			goto SIGILL_unless_prefx_op;
+ 		}
+ 		break;
+ 	}
+ 
+-	case 0x7:		/* 7 */
+-		if (MIPSInst_FUNC(ir) != pfetch_op) {
+-			return SIGILL;
+-		}
+-		/* ignore prefx operation */
+-		break;
+-
+ 	default:
++	      SIGILL_unless_prefx_op:
++		if (MIPSInst_FUNC(ir) == prefx_op) {
++			/* ignore prefx operation */
++			break;
++		}
+ 		return SIGILL;
+ 	}
+ 
+-- 
+1.7.5.4
+
+From 97a564e3eddbfb84844b8eccb3bd751c71dfb3eb Mon Sep 17 00:00:00 2001
+From: Mark H Weaver <mhw@netris.org>
+Date: Fri, 28 Oct 2011 13:35:27 -0400
+Subject: [PATCH 3/4] Don't process empty cause flags after simple fp move on
+ mips
+
+---
+ arch/mips/math-emu/cp1emu.c |    4 ++--
+ 1 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/arch/mips/math-emu/cp1emu.c b/arch/mips/math-emu/cp1emu.c
+index 87ddba1..fefcba2 100644
+--- a/arch/mips/math-emu/cp1emu.c
++++ b/arch/mips/math-emu/cp1emu.c
+@@ -912,7 +912,7 @@ static int fpu_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
+ 		case fmov_op:
+ 			/* an easy one */
+ 			SPFROMREG(rv.s, MIPSInst_FS(ir));
+-			goto copcsr;
++			break;
+ 
+ 			/* binary op on handler */
+ 		      scopbop:
+@@ -1099,7 +1099,7 @@ static int fpu_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
+ 		case fmov_op:
+ 			/* an easy one */
+ 			DPFROMREG(rv.d, MIPSInst_FS(ir));
+-			goto copcsr;
++			break;
+ 
+ 			/* binary op on handler */
+ 		      dcopbop:{
+-- 
+1.7.5.4
+

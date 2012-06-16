@@ -353,6 +353,16 @@ rec {
       patch = ./mips_restart.patch;
     };
 
+  mips_fpureg_emu =
+    { name = "mips-fpureg-emulation";
+      patch = ./mips-fpureg-emulation.patch;
+    };
+
+  mips_fpu_sigill =
+    { name = "mips-fpu-sigill";
+      patch = ./mips-fpu-sigill.patch;
+    };
+
   guruplug_defconfig =
     { # Default configuration for the GuruPlug.  From
       # <http://www.openplug.org/plugwiki/images/c/c6/Guruplug-patchset-2.6.33.2.tar.bz2>.
