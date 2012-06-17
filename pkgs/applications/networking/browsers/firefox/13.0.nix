@@ -17,7 +17,7 @@ rec {
 
   firefoxVersion = "13.0.1";
   
-  xulVersion = "13.0"; # this attribute is used by other packages
+  xulVersion = "13.0.1"; # this attribute is used by other packages
 
   
   src = fetchurl {
