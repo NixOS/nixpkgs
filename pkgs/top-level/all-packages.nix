@@ -431,6 +431,8 @@ let
 
   bc = callPackage ../tools/misc/bc { };
 
+  bchunk = callPackage ../tools/cd-dvd/bchunk { };
+  
   bfr = callPackage ../tools/misc/bfr { };
 
   bootchart = callPackage ../tools/system/bootchart { };
