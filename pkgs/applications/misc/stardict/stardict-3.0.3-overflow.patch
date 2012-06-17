@@ -1,0 +1,26 @@
+This patch is stardict-tools-3.0.3-destbufferoverflow.patch from OpenSUSE .src.rpm for:
+
+warning: call to ‘__fgets_chk_warn’ declared with attribute warning: fgets called with bigger size than length of destination buffer [enabled by default]
+
+--- tools/src/myspell2dic.c
++++ tools/src/myspell2dic.c
+@@ -132,7 +132,7 @@ if (argc<3) 
+ 
+ fprintf(stderr, "Enter grammar language [Spanish]: ");
+ fflush(stderr);
+-fgets(lang, 100, stdin);
++fgets(lang, 50, stdin);
+ if ((p=strchr(lang, '\n'))!=NULL) *p=0;
+ if (*lang==0) strcpy(lang, "Spanish");
+ 
+--- tools/src/ooo2dict.c
++++ tools/src/ooo2dict.c
+@@ -71,7 +71,7 @@ current2=malloc(10000);
+ 
+ fprintf(stderr, "Enter thesaurus language [WordNet_English]: ");
+ fflush(stderr);
+-fgets(lang, 100, stdin);
++fgets(lang, 50, stdin);
+ if ((p=strchr(lang, '\n'))!=NULL) *p=0;
+ if (*lang==0) strcpy(lang, "WordNet_English");
+ F=fopen((argc>1)? argv[1]: "/usr/share/myspell/dicts/th_en_US_v2.dat", "rt");
