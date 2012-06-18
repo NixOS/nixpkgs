@@ -9,5 +9,6 @@ cabal.mkDerivation (self: {
     description = "Fast searching, splitting and replacing of ByteStrings";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
