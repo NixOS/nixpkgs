@@ -1414,8 +1414,8 @@ let
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
-  stardict = callPackage ./stardict/stardict.nix { 
-    inherit (gnome) libgnomeui scrollkeeper; 
+  stardict = callPackage ../applications/misc/stardict/stardict.nix {
+    inherit (gnome) libgnomeui scrollkeeper;
   };
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { };
