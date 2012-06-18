@@ -41,7 +41,7 @@ with pkgs.lib;
       helpLine = mkOption {
         default = "";
         description = ''
-           Help line printed by mingetty below the welcome line.
+          Help line printed by mingetty below the welcome line.
           Used by the installation CD to give some hints on
           how to proceed.
         '';
@@ -100,6 +100,7 @@ with pkgs.lib;
         '';
         target = "issue";
       };
+
   };
 
 }
