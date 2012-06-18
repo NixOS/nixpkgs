@@ -234,42 +234,6 @@ let
       KillSignal=SIGHUP
     '';
 
-  gettyService =
-    ''
-      [Unit]
-      Description=Getty on %I
-      Documentation=man:agetty(8)
-      After=systemd-user-sessions.service plymouth-quit-wait.service
-
-      # If additional gettys are spawned during boot then we should make
-      # sure that this is synchronized before getty.target, even though
-      # getty.target didn't actually pull it in.
-      Before=getty.target
-      IgnoreOnIsolate=yes
-
-      [Service]
-      Environment=TERM=linux
-      ExecStart=-${pkgs.utillinux}/sbin/agetty --noclear --login-program ${pkgs.shadow}/bin/login %I 38400
-      Type=idle
-      Restart=always
-      RestartSec=0
-      UtmpIdentifier=%I
-      TTYPath=/dev/%I
-      TTYReset=yes
-      TTYVHangup=yes
-      TTYVTDisallocate=yes
-      KillMode=process
-      IgnoreSIGPIPE=no
-
-      # Unset locale for the console getty since the console has problems
-      # displaying some internationalized messages.
-      Environment=LANG= LANGUAGE= LC_CTYPE= LC_NUMERIC= LC_TIME= LC_COLLATE= LC_MONETARY= LC_MESSAGES= LC_PAPER= LC_NAME= LC_ADDRESS= LC_TELEPHONE= LC_MEASUREMENT= LC_IDENTIFICATION=
-
-      # Some login implementations ignore SIGTERM, so we send SIGHUP
-      # instead, to ensure that login terminates cleanly.
-      KillSignal=SIGHUP
-    '';
-
   serviceToUnit = name: def:
     { inherit (def) wantedBy;
 
@@ -407,9 +371,7 @@ in
       ];
 
     boot.systemd.units =
-      { "rescue.service".text = rescueService;
-        "getty@.service".text = gettyService;
-      }
+      { "rescue.service".text = rescueService; }
       // mapAttrs serviceToUnit cfg.services;
 
   };

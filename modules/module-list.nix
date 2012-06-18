@@ -165,7 +165,7 @@
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
   ./services/ttys/gpm.nix
-  ./services/ttys/mingetty.nix
+  ./services/ttys/agetty.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/tomcat.nix

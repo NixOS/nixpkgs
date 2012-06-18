@@ -10,6 +10,7 @@ with pkgs.lib;
 
     services.mingetty = {
 
+      # FIXME
       ttys = mkOption {
         default =
           if pkgs.stdenv.isArm
@@ -40,7 +41,7 @@ with pkgs.lib;
       helpLine = mkOption {
         default = "";
         description = ''
-          Help line printed by mingetty below the welcome line.
+           Help line printed by mingetty below the welcome line.
           Used by the installation CD to give some hints on
           how to proceed.
         '';
@@ -56,25 +57,39 @@ with pkgs.lib;
   config = {
 
     # Generate a separate job for each tty.
-    /*
-    jobs = listToAttrs (map (tty: nameValuePair tty {
+    boot.systemd.units."getty@.service".text =
+      ''
+        [Unit]
+        Description=Getty on %I
+        Documentation=man:agetty(8)
+        After=systemd-user-sessions.service plymouth-quit-wait.service
 
-      startOn =
-        # On tty1 we should always wait for mountall, since it may
-        # start an emergency-shell job.
-        if config.services.mingetty.waitOnMounts || tty == "tty1"
-        then "stopped udevtrigger and filesystem"
-        else "stopped udevtrigger"; # !!! should start as soon as the tty device is created
+        # If additional gettys are spawned during boot then we should make
+        # sure that this is synchronized before getty.target, even though
+        # getty.target didn't actually pull it in.
+        Before=getty.target
+        IgnoreOnIsolate=yes
 
-      path = [ pkgs.mingetty ];
+        [Service]
+        Environment=TERM=linux
+        Environment=LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
+        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login %I 38400
+        Type=idle
+        Restart=always
+        RestartSec=0
+        UtmpIdentifier=%I
+        TTYPath=/dev/%I
+        TTYReset=yes
+        TTYVHangup=yes
+        TTYVTDisallocate=yes
+        KillMode=process
+        IgnoreSIGPIPE=no
 
-      exec = "mingetty --loginprog=${pkgs.shadow}/bin/login --noclear ${tty}";
-
-      environment.LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
-
-    }) config.services.mingetty.ttys);
-    */
-
+        # Some login implementations ignore SIGTERM, so we send SIGHUP
+        # instead, to ensure that login terminates cleanly.
+        KillSignal=SIGHUP
+      '';
+    
     environment.etc = singleton
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
