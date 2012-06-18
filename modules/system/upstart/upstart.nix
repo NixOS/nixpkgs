@@ -57,6 +57,9 @@ let
         ''
           [Unit]
           Description=${job.description}
+          ${if job.startOn == "stopped udevtrigger" then "After=systemd-udev-settle.service" else
+            if job.startOn == "started udev" then "After=systemd-udev.service"
+            else ""}
 
           [Service]
           Environment=PATH=${job.path}
@@ -94,10 +97,7 @@ let
           ${optionalString (!job.task && job.respawn) "Restart=always"}
         '';
 
-      wantedBy =
-        if job.startOn == "" then [ ]
-        else if job.startOn == "startup" then [ "basic.target" ]
-        else [ "multi-user.target" ];
+      wantedBy = if job.startOn == "" then [ ] else [ "multi-user.target" ];
 
     };
 
