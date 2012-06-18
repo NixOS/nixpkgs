@@ -39,6 +39,7 @@ let
   );
 
   userOptions = {
+  
     openssh.authorizedKeys = {
 
       preserveExistingKeys = mkOption {
@@ -77,6 +78,7 @@ let
       };
 
     };
+    
   };
 
   mkAuthkeyScript =
@@ -125,19 +127,6 @@ let
       }
 
       ${userLoop}
-    '';
-
-  preStart = pkgs.writeScript "openssh-pre-start"
-    ''
-      #! ${pkgs.stdenv.shell}
-
-      ${mkAuthkeyScript}
-
-      mkdir -m 0755 -p /etc/ssh
-
-      if ! test -f ${cfg.hostKeyPath}; then
-          ssh-keygen -t ${hktn} -b ${toString hktb} -f ${cfg.hostKeyPath} -N ""
-      fi
     '';
 
 in
@@ -317,27 +306,52 @@ in
       }
     ];
 
-    boot.systemd.units."sshd.service".text =
-      ''
-        [Unit]
-        Description=SSH daemon
+    boot.systemd.services."set-ssh-keys.service" =
+      { description = "Update authorized SSH keys";
 
-        [Service]
-        Environment=PATH=${pkgs.coreutils}/bin:${pkgs.openssh}/bin
-        Environment=LD_LIBRARY_PATH=${nssModulesPath}
-        Environment=LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
-        ExecStartPre=${preStart}
-        ExecStart=\
-          ${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} \
-            -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
-        Restart=always
-        Type=forking
-        KillMode=process
-        PIDFile=/run/sshd.pid
-      '';
+        wantedBy = [ "multi-user.target" ];
 
-    boot.systemd.units."sshd.service".wantedBy = [ "multi-user.target" ];
+        script = mkAuthkeyScript;
+
+        serviceConfig =
+          ''
+            Type=oneshot
+            RemainAfterExit=true
+          '';
+      };
     
+    boot.systemd.services."sshd.service" =
+      { description = "SSH daemon";
+
+        wantedBy = [ "multi-user.target" ];
+        after = [ "set-ssh-keys.service" ];
+
+        path = [ pkgs.openssh ];
+        
+        environment.LD_LIBRARY_PATH = nssModulesPath;
+        environment.LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
+
+        preStart =
+          ''
+            mkdir -m 0755 -p /etc/ssh
+
+            if ! test -f ${cfg.hostKeyPath}; then
+                ssh-keygen -t ${hktn} -b ${toString hktb} -f ${cfg.hostKeyPath} -N ""
+            fi
+          '';
+
+        serviceConfig =
+          ''
+            ExecStart=\
+              ${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} \
+                -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
+            Restart=always
+            Type=forking
+            KillMode=process
+            PIDFile=/run/sshd.pid
+          '';
+      };
+
     networking.firewall.allowedTCPPorts = cfg.ports;
 
     services.openssh.extraConfig =
