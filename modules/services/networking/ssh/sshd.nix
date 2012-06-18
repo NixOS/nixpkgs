@@ -317,13 +317,15 @@ in
       }
     ];
 
-    boot.systemd.units."sshd.service" =
+    boot.systemd.units."sshd.service".text =
       ''
         [Unit]
         Description=SSH daemon
 
         [Service]
         Environment=PATH=${pkgs.coreutils}/bin:${pkgs.openssh}/bin
+        Environment=LD_LIBRARY_PATH=${nssModulesPath}
+        Environment=LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
         ExecStartPre=${preStart}
         ExecStart=\
           ${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} \
@@ -334,39 +336,8 @@ in
         PIDFile=/run/sshd.pid
       '';
 
-    jobs.sshd =
-      { description = "OpenSSH server";
-
-        startOn = "started network-interfaces";
-
-        environment = {
-          LD_LIBRARY_PATH = nssModulesPath;
-          # Duplicated from bashrc. OpenSSH needs a patch for this.
-          LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
-        };
-
-        path = [ pkgs.openssh pkgs.gnused ];
-
-        preStart =
-          ''
-            ${mkAuthkeyScript}
-
-            mkdir -m 0755 -p /etc/ssh
-
-            if ! test -f ${cfg.hostKeyPath}; then
-                ssh-keygen -t ${hktn} -b ${toString hktb} -f ${cfg.hostKeyPath} -N ""
-            fi
-          '';
-
-        daemonType = "fork";
-
-        exec =
-          ''
-            ${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} \
-              -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
-          '';
-      };
-
+    boot.systemd.units."sshd.service".wantedBy = [ "multi-user.target" ];
+    
     networking.firewall.allowedTCPPorts = cfg.ports;
 
     services.openssh.extraConfig =

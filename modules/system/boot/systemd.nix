@@ -4,10 +4,12 @@ with pkgs.lib;
 
 let
 
+  cfg = config.boot.systemd;
+
   systemd = pkgs.systemd;
 
-  makeUnit = name: text:
-    pkgs.writeTextFile { name = "unit"; inherit text; destination = "/${name}"; };
+  makeUnit = name: unit:
+    pkgs.writeTextFile { name = "unit"; inherit (unit) text; destination = "/${name}"; };
 
   upstreamUnits =
     [ # Targets.
@@ -109,7 +111,7 @@ let
       "shutdown.target.wants"
     ];
 
-  nixosUnits = mapAttrsToList makeUnit config.boot.systemd.units;
+  nixosUnits = mapAttrsToList makeUnit cfg.units;
     
   units = pkgs.runCommand "units" { preferLocalBuild = true; }
     ''
@@ -123,6 +125,7 @@ let
           ln -s $fn $out/system
         fi
       done
+      
       for i in ${toString upstreamWants}; do
         fn=${systemd}/example/systemd/system/$i
         [ -e $fn ]
@@ -134,9 +137,18 @@ let
           if ! [ -e $y ]; then rm -v $y; fi
         done
       done
+      
       for i in ${toString nixosUnits}; do
         cp $i/* $out/system
       done
+
+      ${concatStrings (mapAttrsToList (name: unit:
+          concatMapStrings (name2: ''
+            mkdir -p $out/system/${name2}.wants
+            ln -sfn ../${name} $out/system/${name2}.wants/
+          '') unit.wantedBy) cfg.units)}
+
+      ln -s ${cfg.defaultUnit} $out/system/default.target
     ''; # */
     
 in
@@ -148,10 +160,28 @@ in
   options = {
 
     boot.systemd.units = mkOption {
-      default = {} ;
-      description = "Systemd units.";
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = {
+        text = mkOption {
+          types = types.uniq types.string;
+          description = "Text of this systemd unit.";
+        };
+        wantedBy = mkOption {
+          default = [];
+          types = types.listOf types.string;
+          description = "Units that want (i.e. depend on) this unit.";
+        };
+      };
+      description = "Definition of systemd units.";
     };
 
+    boot.systemd.defaultUnit = mkOption {
+      default = "multi-user.target";
+      type = types.uniq types.string;
+      description = "Default unit started when the system boots.";
+    };
+    
   };
 
   
@@ -171,18 +201,7 @@ in
         }
       ];
 
-    boot.systemd.units."default.target" =
-      ''
-        [Unit]
-        Description=Default System
-        Requires=multi-user.target
-        After=multi-user.target
-        Conflicts=rescue.target
-        AllowIsolate=yes
-        Wants=sshd.service
-      '';
-    
-    boot.systemd.units."getty@.service" =
+    boot.systemd.units."getty@.service".text =
       ''
         [Unit]
         Description=Getty on %I
@@ -218,7 +237,7 @@ in
         KillSignal=SIGHUP
       '';
 
-    boot.systemd.units."rescue.service" =
+    boot.systemd.units."rescue.service".text =
       ''
         [Unit]
         Description=Rescue Shell

@@ -118,7 +118,7 @@ in
 
     # FIXME: these are copied verbatim from the dbus source tree.  We
     # should install and use the originals.
-    boot.systemd.units."dbus.socket" =
+    boot.systemd.units."dbus.socket".text =
       ''
         [Unit]
         Description=D-Bus System Message Bus Socket
@@ -127,7 +127,7 @@ in
         ListenStream=/var/run/dbus/system_bus_socket
       '';
       
-    boot.systemd.units."dbus.service" =
+    boot.systemd.units."dbus.service".text =
       ''
         [Unit]
         Description=D-Bus System Message Bus
@@ -142,6 +142,7 @@ in
         OOMScoreAdjust=-900
       '';
 
+    /*
     jobs.dbus =
       { startOn = "started udev and started syslogd";
       
@@ -164,15 +165,6 @@ in
 
         exec = "dbus-daemon --system";
 
-        /*
-        postStart =
-          ''
-            # Signal Upstart to connect to the system bus.  This
-            # allows ‘initctl’ to work for non-root users.
-            kill -USR1 1
-          '';
-        */
-
         postStop =
           ''
             # !!! Hack: doesn't belong here.
@@ -183,6 +175,7 @@ in
             fi
           '';
       };
+    */    
 
     security.setuidOwners = singleton
       { program = "dbus-daemon-launch-helper";

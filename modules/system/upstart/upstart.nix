@@ -51,6 +51,7 @@ let
           #! ${pkgs.stdenv.shell} -e
           ${job.postStop}
         '';
+    in {
 
       text =
         ''
@@ -92,6 +93,13 @@ let
 
           ${optionalString (!job.task && job.respawn) "Restart=always"}
         '';
+
+      wantedBy =
+        if job.startOn == "" then [ ]
+        else if job.startOn == "startup" then [ "basic.target" ]
+        else [ "multi-user.target" ];
+
+    };
 
       /*
       text =
@@ -188,8 +196,6 @@ let
           ${job.extraConfig}
         '';
       */
-
-    in text;
 
 
   # Shell functions for use in Upstart jobs.
@@ -440,10 +446,9 @@ let
 
     options = {
     
-      unitText = mkOption {
+      unit = mkOption {
         default = makeUnit config;
-        type = types.uniq types.string;
-        description = "Generated text of the systemd unit corresponding to this job.";
+        description = "Generated definition of the systemd unit corresponding to this job.";
       };
       
     };
@@ -504,7 +509,7 @@ in
 
     boot.systemd.units =
       flip mapAttrs' config.jobs (name: job:
-        nameValuePair "${job.name}.service" job.unitText);
+        nameValuePair "${job.name}.service" job.unit);
         
   };
 
