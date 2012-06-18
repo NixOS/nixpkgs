@@ -6,7 +6,7 @@ let
     inherit fetchurl stdenv;
   };
 
-  version = "1.8.0RC1";
+  version = "1.8.4";
 
 in
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   inherit antContrib jdk;
 
   src = fetchurl {
-    url = "http://apache.mirror.transip.nl/ant/binaries/apache-ant-${version}-bin.tar.bz2";
-    sha256 = "0xvmrsghibq7p3wvfkmvmkkg0zzfmw32lrfjl5f6cfzchjjnw9wx";
+    url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
+    sha1 = "d9e3e83dd9664cfe1dcd4841c082db3f559af922";
   };
 }
