@@ -1,6 +1,6 @@
 { stdenv, fetchurl, curl, dataenc, findutils, ghc, git, hS3, hslogger, HTTP, hxt
 , ikiwiki, json, libuuid, MissingH, monadControl, mtl, network, pcreLight, perl
-, QuickCheck2, rsync, SHA, testpack, utf8String, which, liftedBase, coreutils
+, QuickCheck, rsync, SHA, testpack, utf8String, which, liftedBase, coreutils
 , IfElse, bloomfilter, editDistance, openssh
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     curl dataenc findutils ghc git hS3 hslogger HTTP hxt ikiwiki json
-    libuuid MissingH monadControl mtl network pcreLight perl QuickCheck2
+    libuuid MissingH monadControl mtl network pcreLight perl QuickCheck
     rsync SHA testpack utf8String which liftedBase IfElse bloomfilter
     editDistance openssh
   ];
