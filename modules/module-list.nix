@@ -194,8 +194,9 @@
   ./system/boot/kernel.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
-  ./system/boot/stage-1.nix
+  ./system/boot/shutdown.nix
   ./system/boot/stage-1-extratools.nix
+  ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
   ./system/boot/systemd.nix
   ./system/etc/etc.nix
