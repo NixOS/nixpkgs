@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
 , freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
-, yasm, mesa, sqlite, unzip
+, yasm, mesa, sqlite, unzip, makeWrapper
 
 , # If you want the resulting program to call itself "Firefox" instead
   # of "Shiretoko" or whatever, enable this option.  However, those
@@ -56,7 +56,7 @@ rec {
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
         alsaLib nspr /* nss */ libnotify xlibs.pixman yasm mesa
         xlibs.libXScrnSaver xlibs.scrnsaverproto
-        xlibs.libXext xlibs.xextproto sqlite unzip
+        xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
       ];
 
     configureFlags =
@@ -108,10 +108,13 @@ rec {
               echo -e '#! /bin/sh\n"'"$i"'" "$@"' > "$out/bin/$(basename "$i")";
               chmod a+x "$out/bin/$(basename "$i")";
           fi;
-      done;
-      for i in $out/lib/$libDir/{xpcshell,plugin-container,*.so}; do
-              patchelf --set-rpath "$(patchelf --print-rpath "$i"):$out/lib/$libDir" $i || true
-      done;
+      done
+      for i in $out/lib/$libDir/*.so; do
+          patchelf --set-rpath "$(patchelf --print-rpath "$i"):$out/lib/$libDir" $i || true
+      done
+      for i in $out/lib/$libDir/{xpcshell,plugin-container}; do
+          wrapProgram $i --prefix LD_LIBRARY_PATH ':' "$out/lib/$libDir"
+      done
       rm -f $out/bin/run-mozilla.sh
     ''; # */
 
