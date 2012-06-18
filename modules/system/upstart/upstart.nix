@@ -53,18 +53,17 @@ let
         '';
     in {
 
-      text =
+      inherit (job) description path environment;
+
+      after =
+        if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else
+        if job.startOn == "started udev" then [ "systemd-udev.service" ] else
+        [];
+
+      wantedBy = if job.startOn == "" then [ ] else [ "multi-user.target" ];
+
+      serviceConfig =
         ''
-          [Unit]
-          Description=${job.description}
-          ${if job.startOn == "stopped udevtrigger" then "After=systemd-udev-settle.service" else
-            if job.startOn == "started udev" then "After=systemd-udev.service"
-            else ""}
-
-          [Service]
-          Environment=PATH=${job.path}
-          ${concatMapStrings (n: "Environment=${n}=\"${getAttr n env}\"\n") (attrNames env)}
-
           ${optionalString (job.preStart != "" && (job.script != "" || job.exec != "")) ''
             ExecStartPre=${preStartScript}
           ''}
@@ -96,153 +95,8 @@ let
 
           ${optionalString (!job.task && job.respawn) "Restart=always"}
         '';
-
-      wantedBy = if job.startOn == "" then [ ] else [ "multi-user.target" ];
-
     };
 
-      /*
-      text =
-        ''
-          ${optionalString (job.description != "") ''
-            description "${job.description}"
-          ''}
-
-          ${if isList job.startOn then
-              "start on ${concatStringsSep " or " job.startOn}"
-            else if job.startOn != "" then
-              "start on ${job.startOn}"
-            else ""
-          }
-
-          ${optionalString (job.stopOn != "") "stop on ${job.stopOn}"}
-
-          env PATH=${job.path}
-
-          ${concatMapStrings (n: "env ${n}=\"${getAttr n env}\"\n") (attrNames env)}
-
-          ${optionalString (job.console != "") "console ${job.console}"}
-
-          pre-start script
-            ln -sfn "$(readlink -f "/etc/init/${job.name}.conf")" /var/run/upstart-jobs/${job.name}
-            ${optionalString (job.preStart != "") ''
-              source ${jobHelpers}
-              ${job.preStart}
-            ''}
-          end script
-
-          ${if job.script != "" && job.exec != "" then
-              abort "Job ${job.name} has both a `script' and `exec' attribute."
-            else if job.script != "" then
-              ''
-                script
-                  source ${jobHelpers}
-                  ${job.script}
-                end script
-              ''
-            else if job.exec != "" && job.console == "" then
-              ''
-                script
-                  exec ${job.exec}
-                end script
-              ''
-            else if job.exec != "" then
-              ''
-                exec ${job.exec}
-              ''
-            else ""
-          }
-
-          ${optionalString (job.postStart != "") ''
-            post-start script
-              source ${jobHelpers}
-              ${job.postStart}
-            end script
-          ''}
-
-          ${optionalString job.task "task"}
-          ${optionalString (!job.task && job.respawn) "respawn"}
-
-          ${ # preStop is run only if there is exec or script.
-             # (upstart 0.6.5, job.c:562)
-            optionalString (job.preStop != "") (assert hasMain; ''
-            pre-stop script
-              source ${jobHelpers}
-              ${job.preStop}
-            end script
-          '')}
-
-          ${optionalString (job.postStop != "") ''
-            post-stop script
-              source ${jobHelpers}
-              ${job.postStop}
-            end script
-          ''}
-
-          ${if job.daemonType == "fork" then "expect fork" else
-            if job.daemonType == "daemon" then "expect daemon" else
-            if job.daemonType == "stop" then "expect stop" else
-            if job.daemonType == "none" then "" else
-            throw "invalid daemon type `${job.daemonType}'"}
-
-          ${optionalString (job.setuid != "") ''
-            setuid ${job.setuid}
-          ''}
-
-          ${optionalString (job.setgid != "") ''
-            setuid ${job.setgid}
-          ''}
-
-          ${job.extraConfig}
-        '';
-      */
-
-
-  # Shell functions for use in Upstart jobs.
-  jobHelpers = pkgs.writeText "job-helpers.sh"
-    ''
-      # Ensure that an Upstart service is running.
-      ensure() {
-          local job="$1"
-          local status="$(status "$job")"
-
-          # If it's already running, we're happy.
-          [[ "$status" =~ start/running ]] && return 0
-
-          # If its current goal is to stop, start it.
-          [[ "$status" =~ stop/ ]] && { status="$(start "$job")" || true; }
-
-          # The "start" command is synchronous *if* the job is
-          # not already starting.  So if somebody else started
-          # the job in parallel, the "start" above may return
-          # while the job is still starting.  So wait until it
-          # is up or has failed.
-          while true; do
-              [[ "$status" =~ stop/ ]] && { echo "job $job failed to start"; return 1; }
-              [[ "$status" =~ start/running ]] && return 0
-              echo "waiting for job $job to start..."
-              sleep 1
-              status="$(status "$job")"
-          done
-      }
-
-      # Check whether the current job has been stopped.  Used in
-      # post-start jobs to determine if they should continue.
-      stop_check() {
-          local status="$(status)"
-          if [[ "$status" =~ stop/ ]]; then
-              echo "job asked to stop!"
-              return 1
-          fi
-          if [[ "$status" =~ respawn/ ]]; then
-              echo "job respawning unexpectedly!"
-              stop
-              return 1
-          fi
-          return 0
-      }
-    '';
-        
 
   jobOptions = {
 
@@ -418,8 +272,7 @@ let
     };
 
     path = mkOption {
-      default = [ ];
-      apply = ps: "${makeSearchPath "bin" ps}:${makeSearchPath "sbin" ps}";
+      default = [];
       description = ''
         Packages added to the job's <envar>PATH</envar> environment variable.
         Both the <filename>bin</filename> and <filename>sbin</filename>
@@ -507,7 +360,7 @@ in
 
     system.build.upstart = upstart;
 
-    boot.systemd.units =
+    boot.systemd.services =
       flip mapAttrs' config.jobs (name: job:
         nameValuePair "${job.name}.service" job.unit);
         
