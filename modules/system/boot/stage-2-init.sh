@@ -39,7 +39,7 @@ if [ ! -e /proc/1 ]; then
     mkdir -m 0755 -p /sys
     mount -t sysfs none /sys
     mkdir -m 0755 -p /dev
-    mount -t tmpfs -o "mode=0755" none /dev
+    mount -t devtmpfs none /dev
 
     # Create the minimal device nodes needed for the activation scripts
     # and Upstart.

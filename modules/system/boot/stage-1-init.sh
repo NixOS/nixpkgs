@@ -66,16 +66,9 @@ mkdir -p /proc
 mount -t proc none /proc
 mkdir -p /sys
 mount -t sysfs none /sys
-mount -t tmpfs -o "mode=0755,size=@devSize@" none /dev
+mount -t devtmpfs -o "size=@devSize@" none /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
-
-# Some console devices, for the interactivity
-mknod /dev/console c 5 1
-mknod /dev/tty c 5 0
-mknod /dev/tty1 c 4 1
-mknod /dev/ttyS0 c 4 64
-mknod /dev/ttyS1 c 4 65
 
 # Process the kernel command line.
 export stage2Init=/init
@@ -125,10 +118,6 @@ for i in @kernelModules@; do
     echo "loading module $(basename $i)..."
     modprobe $i || true
 done
-
-
-# Create /dev/null.
-mknod /dev/null c 1 3
 
 
 # Create device nodes in /dev.
