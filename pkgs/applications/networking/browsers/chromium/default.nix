@@ -64,7 +64,8 @@ let
   ];
 
 in stdenv.mkDerivation rec {
-  name = "chromium-${version}";
+  name = "${packageName}-${version}";
+  packageName = "chromium";
 
   version = sourceInfo.version;
 
@@ -119,24 +120,24 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -vp "$out/libexec/chrome"
-    cp -v "out/${buildType}/"*.pak "$out/libexec/chrome/"
-    cp -vR "out/${buildType}/locales" "out/${buildType}/resources" "$out/libexec/chrome/"
+    mkdir -vp "$out/libexec/${packageName}"
+    cp -v "out/${buildType}/"*.pak "$out/libexec/${packageName}/"
+    cp -vR "out/${buildType}/locales" "out/${buildType}/resources" "$out/libexec/${packageName}/"
 
-    cp -v "out/${buildType}/chrome" "$out/libexec/chrome/chrome"
+    cp -v "out/${buildType}/chrome" "$out/libexec/${packageName}/${packageName}"
 
     mkdir -vp "$out/bin"
-    makeWrapper "$out/libexec/chrome/chrome" "$out/bin/chrome"
+    makeWrapper "$out/libexec/${packageName}/${packageName}" "$out/bin/${packageName}"
 
     mkdir -vp "$out/share/man/man1"
-    cp -v "out/${buildType}/chrome.1" "$out/share/man/man1/chrome.1"
+    cp -v "out/${buildType}/chrome.1" "$out/share/man/man1/${packageName}.1"
 
     for icon_file in chrome/app/theme/chromium/product_logo_*[0-9].png; do
       num_and_suffix="''${icon_file##*logo_}"
       icon_size="''${num_and_suffix%.*}"
       logo_output_path="$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps"
       mkdir -vp "$logo_output_path"
-      cp -v "$icon_file" "$logo_output_path/chrome.png"
+      cp -v "$icon_file" "$logo_output_path/${packageName}.png"
     done
   '';
 
