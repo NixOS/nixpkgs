@@ -18,6 +18,7 @@
 , useSELinux ? false
 , naclSupport ? false
 , useOpenSSL ? true
+, enableGnomeSupport ? false
 , gnomeKeyringSupport ? false
 , useProprietaryCodecs ? false
 }:
@@ -83,9 +84,10 @@ in stdenv.mkDerivation rec {
     utillinux alsaLib
     gcc bison gperf
     krb5
-    glib gtk gconf libgcrypt dbus_glib
+    glib gtk dbus_glib
     libXScrnSaver libXcursor
-  ] ++ stdenv.lib.optional gnomeKeyringSupport libgnome_keyring;
+  ] ++ stdenv.lib.optional gnomeKeyringSupport libgnome_keyring
+    ++ stdenv.lib.optionals enableGnomeSupport [ gconf libgcrypt ];
 
   opensslPatches = stdenv.lib.optional useOpenSSL openssl.patches;
 
@@ -102,6 +104,8 @@ in stdenv.mkDerivation rec {
     linux_use_gold_flags = false;
     proprietary_codecs = false;
     use_gnome_keyring = gnomeKeyringSupport;
+    use_gconf = enableGnomeSupport;
+    use_gio = enableGnomeSupport;
     disable_nacl = !naclSupport;
     use_openssl = useOpenSSL;
     selinux = useSELinux;
