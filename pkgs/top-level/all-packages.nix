@@ -1468,9 +1468,11 @@ let
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
+  /*
   tcng = callPackage ../tools/networking/tcng {
     kernel = linux_2_6_27;
   };
+  */
 
   telnet = callPackage ../tools/networking/telnet { };
 
@@ -5518,16 +5520,6 @@ let
       ];
   };
 
-  linux_2_6_27 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.27.nix) {
-    inherit fetchurl perl mktemp module_init_tools;
-    stdenv = overrideGCC (overrideInStdenv stdenv [ gnumake381 ]) gcc45;
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_27
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.cifs_timeout_2_6_25
-      ];
-  };
-
   linux_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5546,29 +5538,9 @@ let
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs2_2_6_32
-        kernelPatches.cifs_timeout
+        kernelPatches.cifs_timeout_2_6_29
         kernelPatches.no_xsave
         kernelPatches.dell_rfkill
-      ];
-  };
-
-  linux_2_6_32_systemtap = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    extraConfig =
-      ''
-        DEBUG_KERNEL y
-        KPROBES y # kernel probes (needs `utrace' for process probes)
-        DEBUG_INFO y
-        RELAY y
-        DEBUG_FS y
-      '';
-    dontStrip = true;
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_31
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_2_6_32
-        kernelPatches.tracehook_2_6_32
-        kernelPatches.utrace_2_6_32
       ];
   };
 
@@ -5583,34 +5555,6 @@ let
         kernelPatches.sheevaplug_modules_2_6_35;
   };
 
-  linux_nanonote_jz_2_6_34 = makeOverridable
-    (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.34.nix) {
-      inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
-      kernelPatches =
-        [ kernelPatches.aufs2_2_6_34
-        ];
-    };
-
-  linux_nanonote_jz_2_6_35 = makeOverridable
-    (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.35.nix) {
-      inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
-      kernelPatches =
-        [ kernelPatches.aufs2_2_6_35
-        ];
-    };
-
-  linux_nanonote_jz_2_6_36 = makeOverridable
-    (import ../os-specific/linux/kernel/linux-nanonote-jz-2.6.36.nix) {
-      inherit fetchurl fetchsvn stdenv perl mktemp module_init_tools ubootChooser;
-      kernelPatches =
-        [ #kernelPatches.fbcondecor_2_6_35
-          kernelPatches.sec_perm_2_6_24
-          kernelPatches.aufs2_2_6_36
-          kernelPatches.mips_restart_2_6_36
-          kernelPatches.cifs_timeout_2_6_35
-        ];
-    };
-
   linux_2_6_35_oldI686 = linux_2_6_35.override {
     extraConfig = ''
       HIGHMEM64G? n
@@ -5620,27 +5564,6 @@ let
       platforms = ["i686-linux"];
       maintainers = [lib.maintainers.raskin];
     };
-  };
-
-  linux_2_6_38 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.38.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ kernelPatches.fbcondecor_2_6_38
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_1_2_6_38
-        kernelPatches.cifs_timeout_2_6_38
-      ];
-  };
-
-  linux_2_6_38_ati = linux_2_6_38.override { extraConfig="DRM_RADEON_KMS y"; };
-
-  linux_2_6_39 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.39.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
-    kernelPatches =
-      [ #kernelPatches.fbcondecor_2_6_38
-        kernelPatches.sec_perm_2_6_24
-        kernelPatches.aufs2_1_2_6_39
-      ];
   };
 
   linux_3_0 = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
@@ -5804,19 +5727,11 @@ let
   };
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_2_6_27 = recurseIntoAttrs (linuxPackagesFor linux_2_6_27 pkgs.linuxPackages_2_6_27);
   linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32 pkgs.linuxPackages_2_6_32);
-  linuxPackages_2_6_32_systemtap = linuxPackagesFor linux_2_6_32_systemtap pkgs.linuxPackages_2_6_32_systemtap;
   linuxPackages_2_6_32_xen = linuxPackagesFor linux_2_6_32_xen pkgs.linuxPackages_2_6_32_xen;
   linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);
-  linuxPackages_2_6_38 = recurseIntoAttrs (linuxPackagesFor linux_2_6_38 pkgs.linuxPackages_2_6_38);
-  linuxPackages_2_6_38_ati = linuxPackagesFor linux_2_6_38_ati pkgs.linuxPackages_2_6_38;
-  linuxPackages_2_6_39 = recurseIntoAttrs (linuxPackagesFor linux_2_6_39 pkgs.linuxPackages_2_6_39);
   linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
   linuxPackages_3_1 = recurseIntoAttrs (linuxPackagesFor linux_3_1 pkgs.linuxPackages_3_1);
-  linuxPackages_nanonote_jz_2_6_34 = linuxPackagesFor linux_nanonote_jz_2_6_34 pkgs.linuxPackages_nanonote_jz_2_6_34;
-  linuxPackages_nanonote_jz_2_6_35 = linuxPackagesFor linux_nanonote_jz_2_6_35 pkgs.linuxPackages_nanonote_jz_2_6_35;
-  linuxPackages_nanonote_jz_2_6_36 = linuxPackagesFor linux_nanonote_jz_2_6_36 pkgs.linuxPackages_nanonote_jz_2_6_36;
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 pkgs.linuxPackages_3_2);
   linuxPackages_3_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_3 pkgs.linuxPackages_3_3);
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 pkgs.linuxPackages_3_4);

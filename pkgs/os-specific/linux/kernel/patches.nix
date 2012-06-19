@@ -64,26 +64,6 @@ rec {
       features.secPermPatch = true;
     };
 
-  fbcondecor_2_6_25 =
-    { name = "fbcondecor-0.9.4-2.6.25-rc6";
-      patch = fetchurl {
-        url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.25-rc6.patch;
-        sha256 = "1wm94n7f0qyb8xvafip15r158z5pzw7zb7q8hrgddb092c6ibmq8";
-      };
-      extraConfig = fbcondecorConfig;
-      features.fbConDecor = true;
-    };
-
-  fbcondecor_2_6_27 =
-    { name = "fbcondecor-0.9.4-2.6.27";
-      patch = fetchurl {
-        url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.4-2.6.27.patch;
-        sha256 = "170l9l5fvbgjrr4klqcwbgjg4kwvrrhjpmgbfpqj0scq0s4q4vk6";
-      };
-      extraConfig = fbcondecorConfig;
-      features.fbConDecor = true;
-    };
-
   fbcondecor_2_6_31 =
     { name = "fbcondecor-0.9.6-2.6.31.2";
       patch = fetchurl {
@@ -105,71 +85,12 @@ rec {
       features.fbConDecor = true;
     };
 
-  fbcondecor_2_6_38 =
-    rec {
-      name = "fbcondecor-0.9.6-2.6.38";
-      patch = fetchurl {
-        url = "http://dev.gentoo.org/~spock/projects/fbcondecor/archive/${name}.patch";
-        sha256 = "1l8xqf5z227m5ay6azqba1qw10y26a4cwfhzzapzmmwq1bpr8mlw";
-      };
-      extraConfig = fbcondecorConfig;
-      features.fbConDecor = true;
-    };
-
-  gcov_2_6_28 =
-    { name = "gcov";
-      patch = fetchurl {
-        url = http://buildfarm.st.ewi.tudelft.nl/~eelco/dist/linux-2.6.28-gcov.patch;
-        sha256 = "0ck9misa3pgh3vzyb7714ibf7ix7piyg5dvfa9r42v15scjqiyny";
-      };
-      extraConfig =
-        ''
-          GCOV_PROFILE y
-          GCOV_ALL y
-          GCOV_PROC m
-          GCOV_HAMMER n
-        '';
-    };
-
-  tracehook_2_6_32 =
-    { # From <http://userweb.kernel.org/~frob/utrace/>.
-      name = "tracehook";
-      patch = fetchurl {
-        url = http://userweb.kernel.org/~frob/utrace/2.6.32/tracehook.patch;
-        sha256 = "1y009p8dyqknbjm8ryb495jqmvl372gfhswdn167xh2g1f24xqv8";
-      };
-    };
-
-  utrace_2_6_32 =
-    { # From <http://userweb.kernel.org/~frob/utrace/>, depends on the
-      # `tracehook' patch above.
-      # See also <http://sourceware.org/systemtap/wiki/utrace>.
-      name = "utrace";
-      patch = fetchurl {
-        url = http://userweb.kernel.org/~frob/utrace/2.6.32/utrace.patch;
-        sha256 = "0argf19k9f0asiv4l4cnsxm5hw2xx8d794npaln88vwz87sj5nnq";
-      };
-      extraConfig =
-        '' UTRACE y
-        '';
-    };
-
   aufs2_2_6_32 =
     { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2-32;hb=aufs2-32
       # Note that this merely the patch needed to build AUFS2 as a
       # standalone package.
       name = "aufs2";
       patch = ./aufs2.patch;
-      features.aufsBase = true;
-      features.aufs2 = true;
-    };
-
-  aufs2_2_6_34 =
-    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2-34;hb=aufs2-34
-      # Note that this merely the patch needed to build AUFS2 as a
-      # standalone package.
-      name = "aufs2";
-      patch = ./aufs2-34.patch;
       features.aufsBase = true;
       features.aufs2 = true;
     };
@@ -182,46 +103,6 @@ rec {
       patch = ./aufs2-35.patch;
       features.aufsBase = true;
       features.aufs2 = true;
-    };
-
-  aufs2_2_6_36 =
-    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2.1-36;hb=aufs2.1-36
-      # Note that this merely the patch needed to build AUFS2 as a
-      # standalone package.
-      name = "aufs2";
-      patch = ./aufs2.1-36.patch;
-      features.aufsBase = true;
-      features.aufs2_1 = true;
-    };
-
-  aufs2_1_2_6_38 =
-    { # From http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2.1-38;hb=refs/heads/aufs2.1-38
-      # Note that this merely the patch needed to build AUFS2.1 as a
-      # standalone package.
-      name = "aufs2.1";
-      patch = ./aufs2.1-38.patch;
-      features.aufsBase = true;
-      features.aufs2_1 = true;
-    };
-
-  aufs2_1_2_6_39 =
-    { # From http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2.1-39;hb=refs/heads/aufs2.1-39
-      # Note that this merely the patch needed to build AUFS2.1 as a
-      # standalone package.
-      name = "aufs2.1";
-      patch = ./aufs2.1-39.patch;
-      features.aufsBase = true;
-      features.aufs2_1 = true;
-    };
-
-  aufs2_1_3_0 =
-    { # From http://aufs.git.sourceforge.net/git/gitweb.cgi?p=aufs/aufs2-standalone.git;a=tree;h=ac52a37b0debba539bdfabba101f82b99136b380;hb=ac52a37b0debba539bdfabba101f82b99136b380
-      # Note that this merely the patch needed to build AUFS2.1 as a
-      # standalone package.
-      name = "aufs2.1";
-      patch = ./aufs2.1-3.0.patch;
-      features.aufsBase = true;
-      features.aufs2_1 = true;
     };
 
   aufs3_0 = rec {
@@ -302,12 +183,6 @@ rec {
       features.cifsTimeout = true;
     };
 
-  cifs_timeout_2_6_25 =
-    { name = "cifs-timeout";
-      patch = ./cifs-timeout-2.6.25.patch;
-      features.cifsTimeout = true;
-    };
-
   cifs_timeout_2_6_29 =
     { name = "cifs-timeout";
       patch = ./cifs-timeout-2.6.29.patch;
@@ -325,8 +200,6 @@ rec {
       patch = ./cifs-timeout-2.6.38.patch;
       features.cifsTimeout = true;
     };
-
-  cifs_timeout = cifs_timeout_2_6_29;
 
   no_xsave =
     { name = "no-xsave";
@@ -346,11 +219,6 @@ rec {
   sheevaplug_modules_2_6_35 =
     { name = "sheevaplug_modules-2.6.35";
       patch = ./sheevaplug_modules-2.6.35.patch;
-    };
-
-  mips_restart_2_6_36 =
-    { name = "mips_restart_2_6_36";
-      patch = ./mips_restart.patch;
     };
 
   mips_fpureg_emu =
