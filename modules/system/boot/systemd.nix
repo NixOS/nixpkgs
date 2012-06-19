@@ -194,6 +194,12 @@ let
       "umount.target"
       "final.target"
 
+      # Password entry.
+      "systemd-ask-password-console.path"
+      "systemd-ask-password-console.service"
+      "systemd-ask-password-wall.path"
+      "systemd-ask-password-wall.service"
+
       # Misc.
       "syslog.socket"
     ];
