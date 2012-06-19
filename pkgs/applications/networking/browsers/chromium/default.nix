@@ -8,7 +8,7 @@
 , v8, xdg_utils, yasm, zlib
 
 , python, perl, pkgconfig
-, nspr, udev
+, nspr, nss, udev
 , utillinux, alsaLib
 , gcc, bison, gperf
 , krb5
@@ -17,6 +17,7 @@
 
 , useSELinux ? false
 , naclSupport ? false
+, useOpenSSL ? true
 , gnomeKeyringSupport ? false
 , useProprietaryCodecs ? false
 }:
@@ -59,7 +60,7 @@ let
     bzip2 ffmpeg flac # harfbuzz
     icu libevent expat libjpeg
     libpng libwebp libxml2 libxslt # skia
-    speex sqlite openssl # stlport
+    speex sqlite # stlport
     v8 xdg_utils yasm zlib
   ];
 
@@ -78,6 +79,7 @@ in stdenv.mkDerivation rec {
     which makeWrapper
     python perl pkgconfig
     nspr udev
+    (if useOpenSSL then openssl else nss)
     utillinux alsaLib
     gcc bison gperf
     krb5
@@ -85,7 +87,7 @@ in stdenv.mkDerivation rec {
     libXScrnSaver libXcursor
   ] ++ stdenv.lib.optional gnomeKeyringSupport libgnome_keyring;
 
-  opensslPatches = openssl.patches;
+  opensslPatches = stdenv.lib.optional useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
@@ -101,7 +103,7 @@ in stdenv.mkDerivation rec {
     proprietary_codecs = false;
     use_gnome_keyring = gnomeKeyringSupport;
     disable_nacl = !naclSupport;
-    use_openssl = true;
+    use_openssl = useOpenSSL;
     selinux = useSELinux;
     use_cups = false;
   } // stdenv.lib.optionalAttrs (stdenv.system == "x86_64-linux") {
