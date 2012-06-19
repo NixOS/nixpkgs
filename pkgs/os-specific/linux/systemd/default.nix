@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
       "--with-firmware-path=/root/test-firmware:/var/run/current-system/firmware"
       "--with-pci-ids-path=${pciutils}/share/pci.ids"
+      "--with-tty-gid=3" # tty in NixOS has gid 3
     ];
 
   preConfigure =
