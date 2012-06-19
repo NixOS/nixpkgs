@@ -85,9 +85,15 @@ in stdenv.mkDerivation rec {
     libXScrnSaver libXcursor
   ] ++ stdenv.lib.optional gnomeKeyringSupport libgnome_keyring;
 
+  opensslPatches = openssl.patches;
+
   prePatch = "patchShebangs .";
 
   patches = stdenv.lib.optional (!useSELinux) ./enable_seccomp.patch;
+
+  postPatch = stdenv.lib.optionalString useOpenSSL ''
+    cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
+  '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
     linux_use_gold_binary = false;
