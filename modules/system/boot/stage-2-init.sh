@@ -36,20 +36,8 @@ mount -n -o remount,rw none /
 if [ ! -e /proc/1 ]; then
     mkdir -m 0755 -p /proc
     mount -n -t proc none /proc
-    mkdir -m 0755 -p /sys
-    mount -t sysfs none /sys
     mkdir -m 0755 -p /dev
     mount -t devtmpfs none /dev
-
-    # Create the minimal device nodes needed for the activation scripts
-    # and Upstart.
-    mknod -m 0666 /dev/null c 1 3
-    mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
-    mknod -m 0644 /dev/console c 5 1
-    mknod -m 0644 /dev/ptmx c 5 2 # required by upstart
-    mknod -m 0644 /dev/tty1 c 4 1
-    mknod -m 0644 /dev/ttyS0 c 4 64
-    mknod -m 0644 /dev/ttyS1 c 4 65
 fi
 
 
@@ -87,7 +75,6 @@ done
 mkdir -m 0777 /dev/shm
 mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
 mkdir -m 0755 -p /dev/pts
-mount -t devpts -o mode=0600,gid=@ttyGid@ none /dev/pts
 [ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
 mkdir -m 0755 -p /var /var/log
