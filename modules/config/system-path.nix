@@ -47,7 +47,6 @@ let
       pkgs.procps
       pkgs.rsync
       pkgs.strace
-      pkgs.sysklogd
       pkgs.sysvtools
       pkgs.time
       pkgs.udev

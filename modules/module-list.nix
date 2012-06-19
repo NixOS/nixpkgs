@@ -80,7 +80,7 @@
   ./services/hardware/udev.nix
   ./services/hardware/udisks.nix
   ./services/hardware/upower.nix
-  ./services/logging/klogd.nix
+  #./services/logging/klogd.nix
   ./services/logging/logrotate.nix
   ./services/logging/syslogd.nix
   ./services/mail/dovecot.nix

@@ -96,7 +96,7 @@ in
     jobs.syslogd =
       { description = "Syslog daemon";
 
-        startOn = "started udev";
+        #startOn = "started udev";
 
         environment = { TZ = config.time.timeZone; };
 
