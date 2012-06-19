@@ -1,6 +1,14 @@
 { stdenv, fetchurl, fetchsvn, makeWrapper, which
+
+# default dependencies
+, bzip2, ffmpeg, flac #, harfbuzz
+, icu, libevent, expat, libjpeg
+, libpng, libwebp, libxml2, libxslt #, skia
+, speex, sqlite, openssl #, stlport
+, v8, xdg_utils, yasm, zlib
+
 , python, perl, pkgconfig
-, nspr, nss, udev, bzip2
+, nspr, udev
 , utillinux, alsaLib
 , gcc, bison, gperf
 , krb5
@@ -24,6 +32,37 @@ let
     toFlag = key: value: "-D${key}=${sanitize value}";
   in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
+  gypFlagsUseSystemLibs = {
+    use_system_bzip2 = true;
+    use_system_ffmpeg = false; # FIXME: libavformat...
+    use_system_flac = true;
+    use_system_harfbuzz = false; # TODO
+    use_system_icu = false; # FIXME: wrong version!
+    use_system_libevent = true;
+    use_system_libexpat = true;
+    use_system_libjpeg = true;
+    use_system_libpng = true;
+    use_system_libwebp = false; # See chromium issue #133161
+    use_system_libxml = true;
+    use_system_skia = false; # TODO
+    use_system_speex = true;
+    use_system_sqlite = false; # FIXME
+    use_system_ssl = true;
+    use_system_stlport = true;
+    use_system_v8 = false; # TODO...
+    use_system_xdg_utils = true;
+    use_system_yasm = true;
+    use_system_zlib = true;
+  };
+
+  defaultDependencies = [
+    bzip2 ffmpeg flac # harfbuzz
+    icu libevent expat libjpeg
+    libpng libwebp libxml2 libxslt # skia
+    speex sqlite openssl # stlport
+    v8 xdg_utils yasm zlib
+  ];
+
 in stdenv.mkDerivation rec {
   name = "chromium-${version}";
 
@@ -34,10 +73,10 @@ in stdenv.mkDerivation rec {
     sha256 = sourceInfo.sha256;
   };
 
-  buildInputs = [
+  buildInputs = defaultDependencies ++ [
     which makeWrapper
     python perl pkgconfig
-    nspr nss udev bzip2
+    nspr udev
     utillinux alsaLib
     gcc bison gperf
     krb5
@@ -49,12 +88,13 @@ in stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional (!useSELinux) ./enable_seccomp.patch;
 
-  gypFlags = mkGypFlags ({
+  gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
     linux_use_gold_binary = false;
     linux_use_gold_flags = false;
     proprietary_codecs = false;
     use_gnome_keyring = gnomeKeyringSupport;
     disable_nacl = !naclSupport;
+    use_openssl = true;
     selinux = useSELinux;
     use_cups = false;
   } // stdenv.lib.optionalAttrs (stdenv.system == "x86_64-linux") {
@@ -64,29 +104,6 @@ in stdenv.mkDerivation rec {
   });
 
   buildType = "Release";
-
-  /* TODO:
-  use_system_bzip2 = true;
-  use_system_ffmpeg = true;
-  use_system_flac = true;
-  use_system_harfbuzz = true;
-  use_system_icu = true;
-  use_system_libevent = true;
-  use_system_libexpat = true;
-  use_system_libjpeg = true;
-  use_system_libpng = true;
-  use_system_libwebp = true;
-  use_system_libxml = true;
-  use_system_skia = true;
-  use_system_speex = true;
-  use_system_sqlite = true;
-  use_system_ssl = true;
-  use_system_stlport = true;
-  use_system_v8 = true;
-  use_system_xdg_utils = true;
-  use_system_yasm = true;
-  use_system_zlib = true;
-  */
 
   configurePhase = ''
     python build/gyp_chromium --depth "$(pwd)" ${gypFlags}
