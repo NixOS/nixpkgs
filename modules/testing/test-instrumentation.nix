@@ -21,15 +21,12 @@ in
 
 {
 
-  config =
-  # Require a patch to the kernel to increase the 15s CIFS timeout.
-  mkAssert (config.boot.kernelPackages.kernel.features ? cifsTimeout) "
-    VM tests require that the kernel has the CIFS timeout patch.
-  " {
+  config = {
 
-    jobs.backdoor =
-      { startOn = "started udev";
-        stopOn = "";
+    boot.systemd.services."backdoor.service" =
+      { wantedBy = [ "multi-user.target" ];
+        requires = [ "dev-hvc0.device" ];
+        after = [ "dev-hvc0.device" ];
 
         script =
           ''
@@ -43,8 +40,6 @@ in
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
             ${pkgs.socat}/bin/socat stdio exec:${rootShell}
           '';
-
-        respawn = false;
       };
 
     boot.initrd.postDeviceCommands =

@@ -12,6 +12,23 @@ let
       description = "Description of this unit used in systemd messages and progress indicators.";
     };
 
+    requires = mkOption {
+      default = [];
+      types = types.listOf types.string;
+      description = ''
+        Start the specified units when this unit is started, and stop
+        this unit when the specified units are stopped or fail.
+      '';
+    };
+
+    wants = mkOption {
+      default = [];
+      types = types.listOf types.string;
+      description = ''
+        Start the specified units when this unit is started.
+      '';
+    };
+
     after = mkOption {
       default = [];
       types = types.listOf types.string;
@@ -33,7 +50,7 @@ let
     wantedBy = mkOption {
       default = [];
       types = types.listOf types.string;
-      description = "Units that want (i.e. depend on) this unit.";
+      description = "Start this unit when the specified units are started.";
     };
 
     environment = mkOption {
@@ -249,6 +266,8 @@ let
           ${optionalString (def.description != "") ''
             Description=${def.description}
           ''}
+          Requires=${concatStringsSep " " def.requires}
+          Wants=${concatStringsSep " " def.wants}
           Before=${concatStringsSep " " def.before}
           After=${concatStringsSep " " def.after}
 
