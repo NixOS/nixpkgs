@@ -4,6 +4,8 @@ with pkgs.lib;
 
 let
 
+  cfg = config.nix;
+
   inherit (config.environment) nix;
 
   makeNixBuildUser = nr:
@@ -74,9 +76,7 @@ in
           gc-keep-outputs = true
           gc-keep-derivations = true
         ";
-        description = "
-          This option allows to append lines to nix.conf.
-        ";
+        description = "Additional text appended to <filename>nix.conf<filename>.";
       };
 
       distributedBuilds = mkOption {
@@ -169,11 +169,9 @@ in
       # actually a shell script.
       envVars = mkOption {
         internal = true;
-        default = "";
-        type = types.string;
-        description = "
-          Environment variables used by Nix.
-        ";
+        default = {};
+        type = types.attrs;
+        description = "Environment variables used by Nix.";
       };
 
       nrBuildUsers = mkOption {
@@ -208,14 +206,14 @@ in
               # /bin/sh won't work.
               binshDeps = pkgs.writeReferencesToFile config.system.build.binsh;
             in
-              pkgs.runCommand "nix.conf" {extraOptions = config.nix.extraOptions; } ''
+              pkgs.runCommand "nix.conf" {extraOptions = cfg.extraOptions; } ''
                 extraPaths=$(for i in $(cat ${binshDeps}); do if test -d $i; then echo $i; fi; done)
                 cat > $out <<END
                 # WARNING: this file is generated.
                 build-users-group = nixbld
-                build-max-jobs = ${toString (config.nix.maxJobs)}
-                build-use-chroot = ${if config.nix.useChroot then "true" else "false"}
-                build-chroot-dirs = ${toString config.nix.chrootDirs} $(echo $extraPaths)
+                build-max-jobs = ${toString (cfg.maxJobs)}
+                build-use-chroot = ${if cfg.useChroot then "true" else "false"}
+                build-chroot-dirs = ${toString cfg.chrootDirs} $(echo $extraPaths)
                 $extraOptions
                 END
               '';
@@ -223,7 +221,7 @@ in
         }
       ]
 
-      ++ optional (config.nix.distributedBuilds && !config.nix.manualNixMachines)
+      ++ optional (cfg.distributedBuilds && !cfg.manualNixMachines)
         { # List of machines for distributed Nix builds in the format expected
           # by build-remote.pl.
           source = pkgs.writeText "nix.machines"
@@ -233,37 +231,69 @@ in
               + " ${machine.sshKey} ${toString machine.maxJobs} "
               + (if machine ? speedFactor then toString machine.speedFactor else "1" )
               + "\n"
-            ) config.nix.buildMachines));
+            ) cfg.buildMachines));
           target = "nix.machines";
         };
 
-    jobs.nixDaemon =
-      { name = "nix-daemon";
+    boot.systemd.units."nix-daemon.socket" =
+      { wantedBy = [ "sockets.target" ];
+        text =
+          ''
+            [Unit]
+            Description=Nix Daemon Socket
+            Before=multi-user.target
 
-        startOn = "startup";
+            [Socket]
+            ListenStream=/nix/var/nix/daemon-socket/socket
+          '';
+      };
+     
+    boot.systemd.services."nix-daemon.service" =
+      { description = "Nix Daemon";
 
         path = [ nix pkgs.openssl pkgs.utillinux ]
-          ++ optionals config.nix.distributedBuilds [ pkgs.openssh pkgs.gzip ];
+          ++ optionals cfg.distributedBuilds [ pkgs.openssh pkgs.gzip ];
 
-        script =
-          ''
-            ${config.nix.envVars}
-            exec \
-              nice -n ${builtins.toString config.nix.daemonNiceLevel} \
-              ionice -n ${builtins.toString config.nix.daemonIONiceLevel} \
-              nix-worker --daemon > /dev/null 2>&1
-          '';
+        environment = cfg.envVars;
 
-        extraConfig =
+        serviceConfig =
           ''
-            limit nofile 4096 4096
+            ExecStart=${nix}/bin/nix-worker --daemon
+            KillMode=process
+            PIDFile=/run/sshd.pid
+            Nice=${toString cfg.daemonNiceLevel}
+            IOSchedulingPriority=${toString cfg.daemonIONiceLevel}
+            LimitNOFILE=4096
           '';
+      };
+     
+    nix.envVars =
+      { NIX_CONF_DIR = "/etc/nix";
+
+        # Enable the copy-from-other-stores substituter, which allows builds
+        # to be sped up by copying build results from remote Nix stores.  To
+        # do this, mount the remote file system on a subdirectory of
+        # /var/run/nix/remote-stores.
+        NIX_OTHER_STORES = "/var/run/nix/remote-stores/*/nix";
+      }
+
+      // optionalAttrs cfg.distributedBuilds {
+        NIX_BUILD_HOOK = "${config.environment.nix}/libexec/nix/build-remote.pl";
+        NIX_REMOTE_SYSTEMS = "/etc/nix.machines";
+        NIX_CURRENT_LOAD = "/var/run/nix/current-load";
+      }
+
+      # !!! These should not be defined here, but in some general proxy configuration module!
+      // optionalAttrs (cfg.proxy != "") {
+        http_proxy = cfg.proxy;
+        https_proxy = cfg.proxy;
+        ftp_proxy = cfg.proxy;
       };
 
     environment.shellInit =
       ''
         # Set up the environment variables for running Nix.
-        ${config.nix.envVars}
+        ${concatMapStrings (n: "export ${n}=\"${getAttr n cfg.envVars}\"\n") (attrNames cfg.envVars)}
 
         # Set up secure multi-user builds: non-root users build through the
         # Nix daemon.
@@ -274,29 +304,7 @@ in
         fi
       '';
 
-    nix.envVars =
-      ''
-        export NIX_CONF_DIR=/etc/nix
-
-        # Enable the copy-from-other-stores substituter, which allows builds
-        # to be sped up by copying build results from remote Nix stores.  To
-        # do this, mount the remote file system on a subdirectory of
-        # /var/run/nix/remote-stores.
-        export NIX_OTHER_STORES=/var/run/nix/remote-stores/*/nix
-      '' # */
-      + optionalString config.nix.distributedBuilds ''
-        export NIX_BUILD_HOOK=${config.environment.nix}/libexec/nix/build-remote.pl
-        export NIX_REMOTE_SYSTEMS=/etc/nix.machines
-        export NIX_CURRENT_LOAD=/var/run/nix/current-load
-      ''
-      # !!! These should not be defined here, but in some general proxy configuration module!
-      + optionalString (config.nix.proxy != "") ''
-        export http_proxy=${config.nix.proxy}
-        export https_proxy=${config.nix.proxy}
-        export ftp_proxy=${config.nix.proxy}
-      '';
-
-    users.extraUsers = map makeNixBuildUser (range 1 config.nix.nrBuildUsers);
+    users.extraUsers = map makeNixBuildUser (range 1 cfg.nrBuildUsers);
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
