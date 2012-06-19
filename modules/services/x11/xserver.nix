@@ -377,15 +377,13 @@ in
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
 
-    jobs."xserver-start-check" =
-      { startOn = if cfg.autorun then "filesystem and stopped udevtrigger" else "";
-        stopOn = "";
-        task = true;
-        script = "grep -qv noX11 /proc/cmdline && start xserver || true";
-      };
+    boot.systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
-    jobs.xserver =
-      { restartIfChanged = false;
+    boot.systemd.services."xserver.service" =
+      { wantedBy = [ "graphical.target" ];
+        after = [ "systemd-udev-settle.service" ];
+
+        #restartIfChanged = false;
 
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
