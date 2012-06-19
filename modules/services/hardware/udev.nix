@@ -20,7 +20,6 @@ let
     # Miscellaneous devices.
     KERNEL=="kvm",                  MODE="0666"
     KERNEL=="kqemu",                MODE="0666"
-    KERNEL=="null",                 MODE="0777"
   '';
 
   # Perform substitutions in all udev rules files.
