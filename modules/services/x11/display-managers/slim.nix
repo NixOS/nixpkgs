@@ -115,7 +115,7 @@ in
 
     # Allow null passwords so that the user can login as root on the
     # installation CD.
-    security.pam.services = [ { name = "slim"; allowNullPassword = true; } ];
+    security.pam.services = [ { name = "slim"; allowNullPassword = true; ownDevices = true; } ];
 
   };
 

@@ -53,12 +53,6 @@ let
         fi
       ''}
 
-      # Start a ConsoleKit session so that we get ownership of various
-      # devices.
-      if test -z "$XDG_SESSION_COOKIE"; then
-          exec ${pkgs.consolekit}/bin/ck-launch-session "$0" "$sessionType"
-      fi
-
       # Handle being called by kdm.
       if test "''${1:0:1}" = /; then eval exec "$1"; fi
 
