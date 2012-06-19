@@ -49,7 +49,6 @@ let
       pkgs.strace
       pkgs.sysvtools
       pkgs.time
-      pkgs.udev
       pkgs.usbutils
       pkgs.utillinux
       extraManpages      
