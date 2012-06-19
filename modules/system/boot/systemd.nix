@@ -248,7 +248,7 @@ let
 
           [Service]
           Environment=PATH=${def.path}
-          ${concatMapStrings (n: "Environment=${n}=\"${getAttr n def.environment}\"\n") (attrNames def.environment)}
+          ${concatMapStrings (n: "Environment=${n}=${getAttr n def.environment}\n") (attrNames def.environment)}
           
           ${optionalString (def.preStart != "") ''
             ExecStartPre=${pkgs.writeScript "${name}-prestart.sh" ''
