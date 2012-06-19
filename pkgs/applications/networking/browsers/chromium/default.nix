@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchsvn, makeWrapper
+{ stdenv, fetchurl, fetchsvn, makeWrapper, which
 , python, perl, pkgconfig
 , nspr, nss, udev, bzip2
 , utillinux, alsaLib
@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    makeWrapper
+    which makeWrapper
     python perl pkgconfig
     nspr nss udev bzip2
     utillinux alsaLib
