@@ -14,24 +14,24 @@
 , libXScrnSaver, libXcursor, mesa
 
 # optional dependencies
-, libgnome_keyring # gnomeKeyringSupport
-, gconf # enableGnomeSupport
-, libgcrypt # enableGnomeSupport || enableCUPS
-, nss, openssl # useOpenSSL
-, libselinux # useSELinux
+, libgnome_keyring # config.gnomeKeyring
+, gconf # config.gnome
+, libgcrypt # config.gnome || config.cups
+, nss, openssl # config.openssl
+, libselinux # config.selinux
 }:
 
 let
   mkConfigurable = stdenv.lib.mapAttrs (flag: default: getConfig ["chromium" flag] default);
 
   config = mkConfigurable {
-    useSELinux = false;
-    naclSupport = false;
-    useOpenSSL = true;
-    enableGnomeSupport = false;
-    gnomeKeyringSupport = false;
-    useProprietaryCodecs = true;
-    enableCUPS = false;
+    selinux = false;
+    nacl = false;
+    openssl = true;
+    gnome = false;
+    gnomeKeyring = false;
+    proprietaryCodecs = true;
+    cups = false;
   };
 
   sourceInfo = import ./source.nix;
@@ -89,25 +89,25 @@ in stdenv.mkDerivation rec {
     which makeWrapper
     python perl pkgconfig
     nspr udev
-    (if config.useOpenSSL then openssl else nss)
+    (if config.openssl then openssl else nss)
     utillinux alsaLib
     gcc bison gperf
     krb5
     glib gtk dbus_glib
     libXScrnSaver libXcursor mesa
-  ] ++ stdenv.lib.optional config.gnomeKeyringSupport libgnome_keyring
-    ++ stdenv.lib.optionals config.enableGnomeSupport [ gconf libgcrypt ]
-    ++ stdenv.lib.optional config.useSELinux libselinux
-    ++ stdenv.lib.optional config.enableCUPS libgcrypt;
+  ] ++ stdenv.lib.optional config.gnomeKeyring libgnome_keyring
+    ++ stdenv.lib.optionals config.gnome [ gconf libgcrypt ]
+    ++ stdenv.lib.optional config.selinux libselinux
+    ++ stdenv.lib.optional config.cups libgcrypt;
 
-  opensslPatches = stdenv.lib.optional config.useOpenSSL openssl.patches;
+  opensslPatches = stdenv.lib.optional config.openssl openssl.patches;
 
   prePatch = "patchShebangs .";
 
-  patches = stdenv.lib.optional (!config.useSELinux) ./enable_seccomp.patch
-         ++ stdenv.lib.optional config.enableCUPS ./cups_allow_deprecated.patch;
+  patches = stdenv.lib.optional (!config.selinux) ./enable_seccomp.patch
+         ++ stdenv.lib.optional config.cups ./cups_allow_deprecated.patch;
 
-  postPatch = stdenv.lib.optionalString config.useOpenSSL ''
+  postPatch = stdenv.lib.optionalString config.openssl ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
   '';
 
@@ -115,14 +115,14 @@ in stdenv.mkDerivation rec {
     linux_use_gold_binary = false;
     linux_use_gold_flags = false;
     proprietary_codecs = false;
-    use_gnome_keyring = config.gnomeKeyringSupport;
-    use_gconf = config.enableGnomeSupport;
-    use_gio = config.enableGnomeSupport;
-    disable_nacl = !config.naclSupport;
-    use_openssl = config.useOpenSSL;
-    selinux = config.useSELinux;
-    use_cups = config.enableCUPS;
-  } // stdenv.lib.optionalAttrs config.useProprietaryCodecs {
+    use_gnome_keyring = config.gnomeKeyring;
+    use_gconf = config.gnome;
+    use_gio = config.gnome;
+    disable_nacl = !config.nacl;
+    use_openssl = config.openssl;
+    selinux = config.selinux;
+    use_cups = config.cups;
+  } // stdenv.lib.optionalAttrs config.proprietaryCodecs {
     # enable support for the H.264 codec
     proprietary_codecs = true;
     ffmpeg_branding = "Chrome";
