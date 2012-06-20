@@ -18,6 +18,7 @@
 , gconf # config.gnome
 , libgcrypt # config.gnome || config.cups
 , nss, openssl # config.openssl
+, pulseaudio # config.pulseaudio
 , libselinux # config.selinux
 }:
 
@@ -32,6 +33,7 @@ let
     gnomeKeyring = false;
     proprietaryCodecs = true;
     cups = false;
+    pulseaudio = getConfig ["pulseaudio"] true;
   };
 
   sourceInfo = import ./source.nix;
@@ -98,14 +100,16 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional config.gnomeKeyring libgnome_keyring
     ++ stdenv.lib.optionals config.gnome [ gconf libgcrypt ]
     ++ stdenv.lib.optional config.selinux libselinux
-    ++ stdenv.lib.optional config.cups libgcrypt;
+    ++ stdenv.lib.optional config.cups libgcrypt
+    ++ stdenv.lib.optional config.pulseaudio pulseaudio;
 
   opensslPatches = stdenv.lib.optional config.openssl openssl.patches;
 
   prePatch = "patchShebangs .";
 
   patches = stdenv.lib.optional (!config.selinux) ./enable_seccomp.patch
-         ++ stdenv.lib.optional config.cups ./cups_allow_deprecated.patch;
+         ++ stdenv.lib.optional config.cups ./cups_allow_deprecated.patch
+         ++ stdenv.lib.optional config.pulseaudio ./pulseaudio_array_bounds.patch;
 
   postPatch = stdenv.lib.optionalString config.openssl ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
@@ -118,6 +122,7 @@ in stdenv.mkDerivation rec {
     use_gnome_keyring = config.gnomeKeyring;
     use_gconf = config.gnome;
     use_gio = config.gnome;
+    use_pulseaudio = config.pulseaudio;
     disable_nacl = !config.nacl;
     use_openssl = config.openssl;
     selinux = config.selinux;
