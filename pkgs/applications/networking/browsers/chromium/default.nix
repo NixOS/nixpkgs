@@ -1,20 +1,26 @@
 { stdenv, getConfig, fetchurl, fetchsvn, makeWrapper, which
 
 # default dependencies
-, bzip2, ffmpeg, flac #, harfbuzz
-, icu, libevent, expat, libjpeg
-, libpng, libwebp, libxml2, libxslt #, skia
-, speex, sqlite, openssl #, stlport
+, bzip2, ffmpeg, flac
+, libevent, expat, libjpeg
+, libpng, libxml2, libxslt
+, speex, sqlite
 , v8, xdg_utils, yasm, zlib
 
 , python, perl, pkgconfig
-, nspr, nss, udev
+, nspr, udev
 , utillinux, alsaLib
 , gcc, bison, gperf
 , krb5
-, glib, gtk, gconf, libgcrypt, libgnome_keyring, dbus_glib
+, glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, mesa
-, libselinux
+
+# optional dependencies
+, libgnome_keyring # gnomeKeyringSupport
+, gconf # enableGnomeSupport
+, libgcrypt # enableGnomeSupport || enableCUPS
+, nss, openssl # useOpenSSL
+, libselinux # useSELinux
 }:
 
 let
@@ -43,30 +49,31 @@ let
   gypFlagsUseSystemLibs = {
     use_system_bzip2 = true;
     use_system_flac = true;
-    use_system_harfbuzz = false; # TODO
-    use_system_icu = false; # FIXME: wrong version!
     use_system_libevent = true;
     use_system_libexpat = true;
     use_system_libjpeg = true;
     use_system_libpng = true;
-    use_system_libwebp = false; # See chromium issue #133161
     use_system_libxml = true;
-    use_system_skia = false; # TODO
     use_system_speex = true;
-    use_system_sqlite = false; # FIXME
     use_system_ssl = true;
     use_system_stlport = true;
-    use_system_v8 = false; # TODO...
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = true;
+
+    use_system_harfbuzz = false; # TODO
+    use_system_icu = false; # FIXME: wrong version!
+    use_system_libwebp = false; # See chromium issue #133161
+    use_system_skia = false; # TODO
+    use_system_sqlite = false; # FIXME
+    use_system_v8 = false; # TODO...
   };
 
   defaultDependencies = [
-    bzip2 flac # harfbuzz
-    icu libevent expat libjpeg
-    libpng libwebp libxml2 libxslt # skia
-    speex sqlite # stlport
+    bzip2 flac
+    libevent expat libjpeg
+    libpng libxml2 libxslt
+    speex sqlite
     v8 xdg_utils yasm zlib
   ];
 
