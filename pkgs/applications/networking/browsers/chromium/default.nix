@@ -25,7 +25,7 @@ let
     useOpenSSL = true;
     enableGnomeSupport = false;
     gnomeKeyringSupport = false;
-    useProprietaryCodecs = false;
+    useProprietaryCodecs = true;
     enableCUPS = false;
   };
 
@@ -41,7 +41,6 @@ let
 
   gypFlagsUseSystemLibs = {
     use_system_bzip2 = true;
-    use_system_ffmpeg = false; # FIXME: libavformat...
     use_system_flac = true;
     use_system_harfbuzz = false; # TODO
     use_system_icu = false; # FIXME: wrong version!
@@ -63,7 +62,7 @@ let
   };
 
   defaultDependencies = [
-    bzip2 ffmpeg flac # harfbuzz
+    bzip2 flac # harfbuzz
     icu libevent expat libjpeg
     libpng libwebp libxml2 libxslt # skia
     speex sqlite # stlport
@@ -117,6 +116,10 @@ in stdenv.mkDerivation rec {
     use_openssl = config.useOpenSSL;
     selinux = config.useSELinux;
     use_cups = config.enableCUPS;
+  } // stdenv.lib.optionalAttrs config.useProprietaryCodecs {
+    # enable support for the H.264 codec
+    proprietary_codecs = true;
+    ffmpeg_branding = "Chrome";
   } // stdenv.lib.optionalAttrs (stdenv.system == "x86_64-linux") {
     target_arch = "x64";
   } // stdenv.lib.optionalAttrs (stdenv.system == "i686-linux") {
