@@ -26,6 +26,7 @@ let
     enableGnomeSupport = false;
     gnomeKeyringSupport = false;
     useProprietaryCodecs = false;
+    enableCUPS = false;
   };
 
   sourceInfo = import ./source.nix;
@@ -91,13 +92,15 @@ in stdenv.mkDerivation rec {
     glib gtk dbus_glib
     libXScrnSaver libXcursor mesa
   ] ++ stdenv.lib.optional config.gnomeKeyringSupport libgnome_keyring
-    ++ stdenv.lib.optionals config.enableGnomeSupport [ gconf libgcrypt ];
+    ++ stdenv.lib.optionals config.enableGnomeSupport [ gconf libgcrypt ]
+    ++ stdenv.lib.optional config.enableCUPS libgcrypt;
 
   opensslPatches = stdenv.lib.optional config.useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
-  patches = stdenv.lib.optional (!config.useSELinux) ./enable_seccomp.patch;
+  patches = stdenv.lib.optional (!config.useSELinux) ./enable_seccomp.patch
+         ++ stdenv.lib.optional config.enableCUPS ./cups_allow_deprecated.patch;
 
   postPatch = stdenv.lib.optionalString config.useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
@@ -113,7 +116,7 @@ in stdenv.mkDerivation rec {
     disable_nacl = !config.naclSupport;
     use_openssl = config.useOpenSSL;
     selinux = config.useSELinux;
-    use_cups = false;
+    use_cups = config.enableCUPS;
   } // stdenv.lib.optionalAttrs (stdenv.system == "x86_64-linux") {
     target_arch = "x64";
   } // stdenv.lib.optionalAttrs (stdenv.system == "i686-linux") {
