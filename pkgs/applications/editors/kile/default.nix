@@ -11,6 +11,9 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ cmake gettext ];
   buildInputs = [ kdelibs ];
 
+  # for KDE 4.7 the nl translations fail since kile-2.1.2
+  preConfigure = "rm -r translations/nl";
+
   meta = {
     description = "An integrated LaTeX editor for KDE";
     homepage = http://kile.sourceforge.net;
