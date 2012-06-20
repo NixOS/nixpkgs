@@ -14,6 +14,7 @@
 , krb5
 , glib, gtk, gconf, libgcrypt, libgnome_keyring, dbus_glib
 , libXScrnSaver, libXcursor, mesa
+, libselinux
 }:
 
 let
@@ -92,6 +93,7 @@ in stdenv.mkDerivation rec {
     libXScrnSaver libXcursor mesa
   ] ++ stdenv.lib.optional config.gnomeKeyringSupport libgnome_keyring
     ++ stdenv.lib.optionals config.enableGnomeSupport [ gconf libgcrypt ]
+    ++ stdenv.lib.optional config.useSELinux libselinux
     ++ stdenv.lib.optional config.enableCUPS libgcrypt;
 
   opensslPatches = stdenv.lib.optional config.useOpenSSL openssl.patches;
