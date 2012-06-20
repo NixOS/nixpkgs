@@ -1,17 +1,15 @@
-{ stdenv, getConfig, fetchurl, fetchsvn, makeWrapper, which
+{ stdenv, getConfig, fetchurl, makeWrapper, which
 
 # default dependencies
-, bzip2, ffmpeg, flac
+, bzip2, flac, speex
 , libevent, expat, libjpeg
 , libpng, libxml2, libxslt
-, speex, sqlite
-, v8, xdg_utils, yasm, zlib
+, xdg_utils, yasm, zlib
 
 , python, perl, pkgconfig
-, nspr, udev
+, nspr, udev, krb5
 , utillinux, alsaLib
 , gcc, bison, gperf
-, krb5
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, mesa
 
@@ -61,20 +59,19 @@ let
     use_system_yasm = true;
     use_system_zlib = true;
 
-    use_system_harfbuzz = false; # TODO
-    use_system_icu = false; # FIXME: wrong version!
+    use_system_harfbuzz = false;
+    use_system_icu = false;
     use_system_libwebp = false; # See chromium issue #133161
-    use_system_skia = false; # TODO
-    use_system_sqlite = false; # FIXME
-    use_system_v8 = false; # TODO...
+    use_system_skia = false;
+    use_system_sqlite = false; # See chromium issue #22208
+    use_system_v8 = false;
   };
 
   defaultDependencies = [
-    bzip2 flac
+    bzip2 flac speex
     libevent expat libjpeg
     libpng libxml2 libxslt
-    speex sqlite
-    v8 xdg_utils yasm zlib
+    xdg_utils yasm zlib
   ];
 
 in stdenv.mkDerivation rec {
