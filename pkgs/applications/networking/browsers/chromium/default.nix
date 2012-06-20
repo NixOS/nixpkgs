@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchsvn, makeWrapper, which
+{ stdenv, getConfig, fetchurl, fetchsvn, makeWrapper, which
 
 # default dependencies
 , bzip2, ffmpeg, flac #, harfbuzz
@@ -13,17 +13,21 @@
 , gcc, bison, gperf
 , krb5
 , glib, gtk, gconf, libgcrypt, libgnome_keyring, dbus_glib
-, libXScrnSaver, libXcursor
-
-, useSELinux ? false
-, naclSupport ? false
-, useOpenSSL ? true
-, enableGnomeSupport ? false
-, gnomeKeyringSupport ? false
-, useProprietaryCodecs ? false
+, libXScrnSaver, libXcursor, mesa
 }:
 
 let
+  mkConfigurable = stdenv.lib.mapAttrs (flag: default: getConfig ["chromium" flag] default);
+
+  config = mkConfigurable {
+    useSELinux = false;
+    naclSupport = false;
+    useOpenSSL = true;
+    enableGnomeSupport = false;
+    gnomeKeyringSupport = false;
+    useProprietaryCodecs = false;
+  };
+
   sourceInfo = import ./source.nix;
 
   mkGypFlags = with stdenv.lib; let
@@ -80,22 +84,22 @@ in stdenv.mkDerivation rec {
     which makeWrapper
     python perl pkgconfig
     nspr udev
-    (if useOpenSSL then openssl else nss)
+    (if config.useOpenSSL then openssl else nss)
     utillinux alsaLib
     gcc bison gperf
     krb5
     glib gtk dbus_glib
-    libXScrnSaver libXcursor
-  ] ++ stdenv.lib.optional gnomeKeyringSupport libgnome_keyring
-    ++ stdenv.lib.optionals enableGnomeSupport [ gconf libgcrypt ];
+    libXScrnSaver libXcursor mesa
+  ] ++ stdenv.lib.optional config.gnomeKeyringSupport libgnome_keyring
+    ++ stdenv.lib.optionals config.enableGnomeSupport [ gconf libgcrypt ];
 
-  opensslPatches = stdenv.lib.optional useOpenSSL openssl.patches;
+  opensslPatches = stdenv.lib.optional config.useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
-  patches = stdenv.lib.optional (!useSELinux) ./enable_seccomp.patch;
+  patches = stdenv.lib.optional (!config.useSELinux) ./enable_seccomp.patch;
 
-  postPatch = stdenv.lib.optionalString useOpenSSL ''
+  postPatch = stdenv.lib.optionalString config.useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
   '';
 
@@ -103,12 +107,12 @@ in stdenv.mkDerivation rec {
     linux_use_gold_binary = false;
     linux_use_gold_flags = false;
     proprietary_codecs = false;
-    use_gnome_keyring = gnomeKeyringSupport;
-    use_gconf = enableGnomeSupport;
-    use_gio = enableGnomeSupport;
-    disable_nacl = !naclSupport;
-    use_openssl = useOpenSSL;
-    selinux = useSELinux;
+    use_gnome_keyring = config.gnomeKeyringSupport;
+    use_gconf = config.enableGnomeSupport;
+    use_gio = config.enableGnomeSupport;
+    disable_nacl = !config.naclSupport;
+    use_openssl = config.useOpenSSL;
+    selinux = config.useSELinux;
     use_cups = false;
   } // stdenv.lib.optionalAttrs (stdenv.system == "x86_64-linux") {
     target_arch = "x64";
