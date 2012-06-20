@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "base64-bytestring";
-  version = "0.1.1.3";
-  sha256 = "0gyms4nf5j9ick1l5ys9h7h0nxpsi5vgs4dbynrqyhm9yd09cscg";
+  version = "0.1.2.0";
+  sha256 = "039naasb3z8q42zl067paylxb9i1m1pkp4w6b5yqsc38sbmikv1z";
   meta = {
     homepage = "https://github.com/bos/base64-bytestring";
     description = "Fast base64 encoding and deconding for ByteStrings";
