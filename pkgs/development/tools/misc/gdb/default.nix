@@ -14,7 +14,7 @@ let
   basename =
     if bleedingEdgeVersion
     then "gdb-7.3.20110726"
-    else "gdb-7.4";
+    else "gdb-7.4.1";
 
   # Whether (cross-)building for GNU/Hurd.  This is an approximation since
   # having `stdenv ? cross' doesn't tell us if we're building `hostDrv' and
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
         url = "mirror://gnu/gdb/${basename}.tar.bz2";
         # md5 is provided by the annoucement page
         # http://www.gnu.org/s/gdb/download/ANNOUNCEMENT
-        md5 = "95a9a8305fed4d30a30a6dc28ff9d060";
+        md5 = "8854d34691087ec127d934692639855f";
       };
 
   # I think python is not a native input, but I leave it
