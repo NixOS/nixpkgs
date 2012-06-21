@@ -39,7 +39,7 @@ rec {
   gitFull = appendToName "full" (git.override {
     svnSupport = true;
     guiSupport = true;
-    sendEmailSupport = stdenv.isDarwin == false;
+    sendEmailSupport = !stdenv.isDarwin;
   });
 
   gitAnnex = lib.makeOverridable (import ./git-annex) {
