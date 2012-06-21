@@ -139,18 +139,28 @@ in stdenv.mkDerivation rec {
 
   buildType = "Release";
 
+  enableParallelBuilding = true;
+
   configurePhase = ''
     python build/gyp_chromium --depth "$(pwd)" ${gypFlags}
   '';
 
-  extraBuildFlags = let
+  makeFlags = let
     CC = "${gcc}/bin/gcc";
     CXX = "${gcc}/bin/g++";
-  in "CC=\"${CC}\" CXX=\"${CXX}\" CC.host=\"${CC}\" CXX.host=\"${CXX}\" LINK.host=\"${CXX}\"";
+  in [
+    "CC=${CC}"
+    "CXX=${CXX}"
+    "CC.host=${CC}"
+    "CXX.host=${CXX}"
+    "LINK.host=${CXX}"
+  ];
 
-  buildPhase = ''
-    make ${extraBuildFlags} BUILDTYPE=${buildType} library=shared_library chrome
-  '';
+  buildFlags = [
+    "BUILDTYPE=${buildType}"
+    "library=shared_library"
+    "chrome"
+  ];
 
   installPhase = ''
     mkdir -vp "$out/libexec/${packageName}"
