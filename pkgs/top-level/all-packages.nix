@@ -1094,8 +1094,6 @@ let
 
   ndisc6 = callPackage ../tools/networking/ndisc6 { };
 
-  net_snmp = callPackage ../tools/networking/net-snmp { };
-
   netboot = callPackage ../tools/networking/netboot {};
 
   netcat = callPackage ../tools/networking/netcat { };
@@ -5201,6 +5199,8 @@ let
   };
 
   nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official { };
+
+  net_snmp = callPackage ../servers/monitoring/net-snmp { };
 
   oidentd = callPackage ../servers/identd/oidentd { };
 
