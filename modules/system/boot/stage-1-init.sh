@@ -3,7 +3,7 @@
 targetRoot=/mnt-root
 
 export LD_LIBRARY_PATH=@extraUtils@/lib
-export PATH=@extraUtils@/bin
+export PATH=@extraUtils@/bin:@extraUtils@/sbin
 
 
 fail() {
@@ -50,7 +50,7 @@ EOF
     esac
 }
 
-trap 'fail' ERR
+trap 'fail' 0
 
 
 # Print a greeting.
@@ -60,8 +60,9 @@ echo
 
 
 # Mount special file systems.
-mkdir -p /etc # to shut up mount
-echo -n > /etc/fstab # idem
+mkdir -p /etc
+touch /etc/fstab # to shut up mount
+touch /etc/mtab # to shut up mke2fs
 mkdir -p /proc
 mount -t proc none /proc
 mkdir -p /sys
@@ -113,6 +114,8 @@ done
 
 
 # Load the required kernel modules.
+mkdir -p /lib
+ln -s @modulesClosure@/lib/modules /lib/modules
 echo @extraUtils@/bin/modprobe > /proc/sys/kernel/modprobe
 for i in @kernelModules@; do
     echo "loading module $(basename $i)..."
@@ -248,16 +251,12 @@ mountFS() {
 # Try to find and mount the root device.
 mkdir /mnt-root
 
-mountPoints=(@mountPoints@)
-devices=(@devices@)
-fsTypes=(@fsTypes@)
-optionss=(@optionss@)
+exec 3< @fsInfo@
 
-for ((n = 0; n < ${#mountPoints[*]}; n++)); do
-    mountPoint=${mountPoints[$n]}
-    device=${devices[$n]}
-    fsType=${fsTypes[$n]}
-    options=${optionss[$n]}
+while read -u 3 mountPoint; do
+    read -u 3 device
+    read -u 3 fsType
+    read -u 3 options
 
     # !!! Really quick hack to support bind mounts, i.e., where the
     # "device" should be taken relative to /mnt-root, not /.  Assume
@@ -289,7 +288,7 @@ for ((n = 0; n < ${#mountPoints[*]}; n++)); do
     # that we don't properly recognise.
     if test -z "$pseudoDevice" -a ! -e $device; then
         echo -n "waiting for device $device to appear..."
-        for ((try = 0; try < 20; try++)); do
+        for try in $(seq 1 20); do
             sleep 1
             if test -e $device; then break; fi
             echo -n "."
@@ -315,7 +314,7 @@ udevadm control --exit || true
 
 # Kill any remaining processes, just to be sure we're not taking any
 # with us into stage 2.
-kill -9 -- -1
+pkill -9 -v 1
 
 
 if test -n "$debug1mounts"; then fail; fi

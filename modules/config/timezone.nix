@@ -7,6 +7,7 @@ with pkgs.lib;
 
     time.timeZone = mkOption {
       default = "CET";
+      type = with types; uniq string;
       example = "America/New_York";
       description = "The time zone used when displaying times and dates.";
     };

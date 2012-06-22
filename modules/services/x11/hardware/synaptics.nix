@@ -26,6 +26,11 @@ let cfg = config.services.xserver.synaptics; in
           '';
       };
 
+      accelFactor = mkOption {
+        default = "0.001";
+        description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
+      };
+
       minSpeed = mkOption {
         default = "0.6";
         description = "Cursor speed factor for precision finger motion.";
@@ -96,7 +101,7 @@ let cfg = config.services.xserver.synaptics; in
           Option "MaxTapMove" "220"
           Option "MinSpeed" "${cfg.minSpeed}"
           Option "MaxSpeed" "${cfg.maxSpeed}"
-          Option "AccelFactor" "0.0010"
+          Option "AccelFactor" "${cfg.accelFactor}"
           Option "TapButton1" "${if cfg.tapButtons then "1" else "0"}"
           Option "TapButton2" "${if cfg.tapButtons then "2" else "0"}"
           Option "TapButton3" "${if cfg.tapButtons then "3" else "0"}"
