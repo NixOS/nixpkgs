@@ -6207,6 +6207,8 @@ let
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
+  ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
+
   ucsFonts = callPackage ../data/fonts/ucs-fonts { };
 
   unifont = callPackage ../data/fonts/unifont { };
