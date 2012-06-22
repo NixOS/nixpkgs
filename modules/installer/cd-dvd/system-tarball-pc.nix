@@ -123,7 +123,7 @@ in
 
   # To speed up further installation of packages, include the complete stdenv
   # in the Nix store of the tarball.
-  tarball.storeContents = pkgs2storeContents [ pkgs.stdenv pkgs.klibc pkgs.klibcShrunk ];
+  tarball.storeContents = pkgs2storeContents [ pkgs.stdenv ];
 
   tarball.contents =
     [ { source = config.boot.kernelPackages.kernel + "/" + config.system.boot.loader.kernelFile;

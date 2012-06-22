@@ -157,7 +157,7 @@ rec {
         ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
         wrapProgram $out/bin/nixos-run-vms \
           --add-flags "$vms" \
-          --set tests '"startAll; sleep 1e9;"' \
+          --set tests '"startAll; joinAll;"' \
           --set VLANS '"${toString vlans}"'
       ''; # "
 

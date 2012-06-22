@@ -5,20 +5,6 @@
 
 with pkgs.lib;
 
-let
-
-  # Urgh, `socat' sets the SIGCHLD to ignore.  This wreaks havoc with
-  # some programs.
-  rootShell = pkgs.writeScript "shell.pl"
-    ''
-      #! ${pkgs.perl}/bin/perl
-      $SIG{CHLD} = 'DEFAULT';
-      print "\n";
-      exec "/bin/sh";
-    '';
-
-in
-
 {
 
   config = {
@@ -38,7 +24,8 @@ in
             exec < /dev/hvc0 > /dev/hvc0 2> /dev/ttyS0
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
-            ${pkgs.socat}/bin/socat stdio exec:${rootShell}
+            echo
+            PS1= /bin/sh
           '';
       };
 

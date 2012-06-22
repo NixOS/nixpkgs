@@ -68,6 +68,14 @@ sub startAll {
 }
 
 
+# Wait until all VMs have terminated.
+sub joinAll {
+    $log->nest("waiting for all VMs to finish", sub {
+        $_->waitForShutdown foreach values %vms;
+    });
+}
+
+
 # In interactive tests, this allows the non-interactive test script to
 # be executed conveniently.
 sub testScript {
