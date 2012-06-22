@@ -3,8 +3,7 @@
 stdenv.mkDerivation rec {
   name = "guile-lint-14";
   src = fetchurl {
-    url = "http://www.geocities.com/user42_kevin/guile-lint/"
-            + name + ".tar.bz2.bin";
+    url = "http://download.tuxfamily.org/user42/" + name + ".tar.bz2";
     sha256 = "5bfcf7a623338b2ef81ac097e3e136eaf32856dd0730b7eeaff3161067b5d0be";
   };
 
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Guile-Lint checks syntax and semantics in a Guile program or module";
-    homepage = http://www.geocities.com/user42_kevin/guile-lint/index.html;
+    homepage = http://user42.tuxfamily.org/guile-lint/index.html;
     license = "GPL";
   };
 }
