@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = http://font.ubuntu.com/download/ubuntu-font-family-0.80.zip;
-    sha256 = "107170099bbc3beae8602b97a5c423525d363106c3c24f787d43e09811298e4c";
+    sha256 = "0k4f548riq23gmw4zhn30qqkcpaj4g2ab5rbc3lflfxwkc4p0w8h";
   };
 
   installPhase =
