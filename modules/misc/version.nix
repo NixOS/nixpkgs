@@ -9,7 +9,7 @@ with pkgs.lib;
     system.nixosVersion = mkOption {
       default =
         builtins.readFile ../../.version
-        + (if builtins.pathExists ../../.version-suffix then builtins.readFile ../../.version-suffix else "pre-svn");
+        + (if builtins.pathExists ../../.version-suffix then builtins.readFile ../../.version-suffix else "pre-git");
       description = "NixOS version.";
     };
 
