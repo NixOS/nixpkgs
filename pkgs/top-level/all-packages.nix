@@ -6213,6 +6213,8 @@ let
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
+  ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
+
   wqy_zenhei = callPackage ../data/fonts/wqy-zenhei { };
 
   xhtml1 = callPackage ../data/sgml+xml/schemas/xml-dtd/xhtml1 { };
