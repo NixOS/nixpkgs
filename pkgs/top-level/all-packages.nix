@@ -6340,14 +6340,13 @@ let
     xulrunner = firefox36Pkgs.xulrunner;
   };
 
-  chrome = lowPrio (callPackage ../applications/networking/browsers/chromium {
-    inherit (gnome) GConf;
-    libpng = libpng12;
+  chromium = lowPrio (callPackage ../applications/networking/browsers/chromium {
+    gconf = gnome.GConf;
   });
 
   chromeWrapper = wrapFirefox
-    { browser = chrome; browserName = "chrome"; desktopName = "Chrome";
-      icon = "${chrome}/libexec/chrome/product_logo_48.png";
+    { browser = chromium; browserName = chromium.packageName; desktopName = "Chromium";
+      icon = "${chromium}/share/icons/hicolor/48x48/apps/${chromium.packageName}.png";
     };
 
   cinelerra = callPackage ../applications/video/cinelerra { };
