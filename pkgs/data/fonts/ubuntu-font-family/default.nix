@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ubuntu-font-family-0.80";
   buildInputs = [unzip];
 
