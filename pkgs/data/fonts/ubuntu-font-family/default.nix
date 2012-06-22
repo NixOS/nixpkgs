@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ubuntu-font-family-0.80";
   buildInputs = [unzip];
 
   src = fetchurl {
-    url = http://font.ubuntu.com/download/ubuntu-font-family-0.80.zip;
+    url = "http://font.ubuntu.com/download/${name}.zip";
     sha256 = "0k4f548riq23gmw4zhn30qqkcpaj4g2ab5rbc3lflfxwkc4p0w8h";
   };
 
