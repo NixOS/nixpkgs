@@ -947,6 +947,8 @@ let
 
   less = callPackage ../tools/misc/less { };
 
+  minidlna = callPackage ../tools/networking/minidlna { };
+
   most = callPackage ../tools/misc/most { };
 
   netperf = callPackage ../applications/networking/netperf { };
