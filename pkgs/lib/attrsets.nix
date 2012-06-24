@@ -146,6 +146,18 @@ rec {
     listToAttrs (map (attr: f attr (getAttr attr set)) (attrNames set));
         
 
+  /* Call a function for each attribute in the given set and return
+     the result in a list.
+  
+     Example:
+       mapAttrsToList (name: value: name + value)
+          { x = "a"; y = "b"; }
+       => [ "xa" "yb" ]
+  */
+  mapAttrsToList = f: attrs:
+    map (name: f name (getAttr name attrs)) (attrNames attrs);
+    
+
   /* Like `mapAttrs', except that it recursively applies itself to
      attribute sets.  Also, the first argument of the argument
      function is a *list* of the names of the containing attributes.

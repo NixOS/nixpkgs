@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "accelerate-examples";
-  version = "0.12.0.0";
-  sha256 = "08mkfr46vl8vgcsxvmbs499frvybfq0chbcj1chpb8rwy8w9fa9h";
+  version = "0.12.1.0";
+  sha256 = "0vlax90yy9h4ljm87ffmnqv881nr4ssbc968mbbwi2704hn4chhb";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

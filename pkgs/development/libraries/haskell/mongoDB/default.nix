@@ -1,17 +1,17 @@
 { cabal, binary, bson, cryptohash, liftedBase, monadControl, mtl
-, network, parsec, random, randomShuffle, transformersBase
+, network, parsec, random, randomShuffle, text, transformersBase
 }:
 
 cabal.mkDerivation (self: {
   pname = "mongoDB";
-  version = "1.2.0";
-  sha256 = "0rffa13p889mxbbkj2bmqy3yada3mrhngvp8pp7qvrll1acm7s13";
+  version = "1.3.0";
+  sha256 = "1l6r55bicjdybn8jn9rp94aamjqy5j5qs2775m05aba8svsl4kma";
   buildDepends = [
     binary bson cryptohash liftedBase monadControl mtl network parsec
-    random randomShuffle transformersBase
+    random randomShuffle text transformersBase
   ];
   meta = {
-    homepage = "http://github.com/TonyGen/mongoDB-haskell";
+    homepage = "http://github.com/selectel/mongodb-haskell";
     description = "Driver (client) for MongoDB, a free, scalable, fast, document DBMS";
     license = "unknown";
     platforms = self.ghc.meta.platforms;

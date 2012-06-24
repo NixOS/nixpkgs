@@ -2,6 +2,7 @@ source $stdenv/setup
 
 mkdir -p $out
 
+export VARTEXFONTS=$TMPDIR/texfonts
 export TEXMFCNF=$TMPDIR:
 echo 'max_print_line = 8192' >> $TMPDIR/texmf.cnf
 

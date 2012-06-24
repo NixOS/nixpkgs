@@ -22,6 +22,9 @@ stdenv.mkDerivation (rec {
        # @image{ProofGeneral} fails, so remove it.
        sed -i '94d' doc/PG-adapting.texi
        sed -i '101d' doc/ProofGeneral.texi
+
+       # Emacs 24 compatibility.
+       sed -i 's|interactive-p|called-interactively-p '\'''any|' isar/isabelle-system.el generic/proof-{menu,script,splash}.el lib/scomint.el
     '';
 
   preBuild = ''

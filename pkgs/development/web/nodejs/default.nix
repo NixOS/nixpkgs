@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, python, zlib, v8 }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.18";
+  version = "0.6.19";
   name = "nodejs-${version}";
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "6cf4311ecbc1700e88f4382a31b3a7017c1572cd641fd06e653fc1692c2cffff";
+    sha256 = "1frgnl7i111b8x3fr43lh3zybwsszn0daa661gszq7dhfwj2jcsf";
   };
 
   configureFlags = [
@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf}
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = ''
+    sed -e 's|^#!/usr/bin/env node$|#!'$out'/bin/node|' -i $out/lib/node_modules/npm/bin/npm-cli.js
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libv8.dylib ${v8}/lib/libv8.dylib $out/bin/node
   '';
 

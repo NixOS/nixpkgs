@@ -1,11 +1,11 @@
 { stdenv, fetchurl, kdelibs, kdepimlibs, boost }:
 
 stdenv.mkDerivation rec {
-  name = "zanshin-0.2.2";
+  name = "zanshin-0.2.1";
 
   src = fetchurl {
-    url = "http://files.kde.org/zanshin/zanshin-0.2.0.tar.bz2";
-    sha256 = "0kskk8rj4bwx5zywxw0h2lgl7byw9dxzdcafb6xp5cvdkjkg9j87";
+    url = "http://files.kde.org/zanshin/${name}.tar.bz2";
+    sha256 = "155k72vk7kw0p0x9dhlky6q017kanzcbwvp4dpf1hcbr1dsr55fx";
   };
 
   buildInputs = [ kdelibs kdepimlibs boost ];

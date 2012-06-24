@@ -2,11 +2,11 @@
 , sqlite, libsoup, libnice, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-gabble-0.15.4";
+  name = "telepathy-gabble-0.16.0";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/telepathy-gabble/${name}.tar.gz";
-    sha256 = "0rgqxsdcxds0ljcc01f9ifav26y80p4my37wqzkicr9hmv54h98s";
+    sha256 = "0fk65f7q75z3wm5h4wad7g5sm2j6r8v2845b74ycl29br78ki2hf";
   };
 
   buildNativeInputs = [pkgconfig libxslt];

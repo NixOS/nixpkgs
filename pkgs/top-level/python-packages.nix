@@ -33,12 +33,12 @@ let pythonPackages = python.modules // rec {
 
 
   afew = buildPythonPackage rec {
-    rev = "a3ea63d7048faedb6cc58b4abcb6d4ecfddfb5db";
+    rev = "8abd64bfdcd83a486b2a3977c08fe071523b2551";
     name = "afew-1.0pre${rev}";
     src = fetchurl {
       url = "https://github.com/teythoon/afew/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "4e8850242a3845602331cabb47299b5a3af21993036a715c83e8dd698ab5d716";
+      sha256 = "9b140d0eb0e5013419983604bb09a51f087a4abdf0a390c24a9596f867dc8c05";
     };
 
     propagatedBuildInputs = [ notmuch pkgs.dbacl ];
@@ -60,12 +60,13 @@ let pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    name = "alot-0.3";
+    version = "0.3.1";
+    name = "alot-${version}";
 
     src = fetchurl {
-      url = "https://github.com/pazz/alot/tarball/0.3";
+      url = "https://github.com/pazz/alot/tarball/${version}";
       name = "${name}.tar.bz";
-      md5 = "fa4944a1a7e9e380da0ee75ea3571a79";
+      md5 = "6c5986d9192863879e95a3f8f30ccb75";
     };
 
     doCheck = false;
@@ -346,6 +347,26 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  coilmq = buildPythonPackage (rec {
+    name = "coilmq-0.6.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/C/CoilMQ/CoilMQ-0.6.1.tar.gz";
+      md5 = "5f39727415b837abd02651eeb2721749";
+    };
+
+    propagatedBuildInputs = [ stompclient distribute ]; 
+      
+    doCheck = false;
+
+    meta = {
+      description = "Simple, lightweight, and easily extensible STOMP message broker";
+      homepage = http://code.google.com/p/coilmq/;
+      license = pkgs.lib.licenses.asl20;
+      platforms = python.meta.platforms;
+    };
+  });
+
   configobj = buildPythonPackage (rec {
     name = "configobj-4.7.2";
 
@@ -444,6 +465,32 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  distribute = buildPythonPackage (rec {
+    name = "distribute-0.6.26";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/distribute/distribute-0.6.26.tar.gz";
+      md5 = "841f4262a70107f85260362f5def8206"; #"ecd75ea629fee6d59d26f88c39b2d291";
+      
+    };
+
+    buildInputs = [ pkgs.unzip ];
+    
+    installCommand = 
+      ''
+        # ehm, YES, the --verbose flags needs to be there, otherwise it tries to patch setuptools!
+        easy_install --verbose --prefix=$out .
+      '';
+    doCheck = false;
+
+    meta = {
+      description = "Easily download, build, install, upgrade, and uninstall Python packages";
+      homepage = http://packages.python.org/distribute;
+      license = "PSF or ZPL";
+      platforms = python.meta.platforms;
+    };
+  });
+  
 
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-2.26";
@@ -461,11 +508,12 @@ let pythonPackages = python.modules // rec {
 
   
   django = buildPythonPackage rec {
-    name = "Django-1.3.1";
+    name = "Django-${version}";
+    version = "1.4";
 
     src = fetchurl {
-      url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
-      sha256 = "0sqmvqy3y5h76pa3zjcnyiy5x01bzzy03afdp2qdwqx0x321i4dg";
+      url = "http://www.djangoproject.com/m/releases/${version}/${name}.tar.gz";
+      sha256 = "1sc8ajixaqfylb7jmmhn38hgbnqipylh1sqmpicx7rqhxbxvm5n0";
     };
 
     doCheck = false;
@@ -2258,6 +2306,25 @@ let pythonPackages = python.modules // rec {
       description = "Schema migration tools for SQLAlchemy";
     };
   };
+
+  stompclient = buildPythonPackage (rec {
+    name = "stompclient-0.3.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/stompclient/${name}.tar.gz";
+      md5 = "af0a314b6106dd80da24a918c24a1eab";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Lightweight and extensible STOMP messaging client";
+      homepage = http://bitbucket.org/hozn/stompclient;
+      license = pkgs.lib.licenses.asl20;
+      platforms = python.meta.platforms;
+    };
+  });
+
 
   svneverever =  buildPythonPackage rec {
     name = "svneverever-778489a8";

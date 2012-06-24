@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "leksah-server";
-  version = "0.12.1.1";
-  sha256 = "063pijwj5mpczmjwwcj49dc2zgyc0l2j9j5902f1hgnvj4xg4hq6";
+  version = "0.12.1.2";
+  sha256 = "0fzfyq1g1jrfl40nklgvkahlcv32m4gjbcyw52dky2qzc05b0g6m";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

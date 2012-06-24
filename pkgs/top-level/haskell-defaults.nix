@@ -17,6 +17,7 @@
 
   ghcHEADPrefs =
     self : self.haskellPlatformArgs_future self // {
+      haskellPlatform = null;
       binary = null; # now a core package
     };
 
@@ -83,6 +84,7 @@
   ghc6104Prefs =
     self : self.haskellPlatformArgs_2009_2_0_2 self // {
       haskellPlatform = self.haskellPlatform_2009_2_0_2;
+      mtl = self.mtl_1_1_0_2;
       mtl1 = self.mtl_1_1_0_2;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       text = self.text_0_11_0_6;
@@ -243,18 +245,16 @@
                prefFun = ghc741Prefs;
              };
 
-  # Stable branch snapshot.
   packages_ghc742 =
     packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
                ghcBinary = ghc6121BinaryDarwin;
-               prefFun = ghcHEADPrefs;
+               prefFun = ghc741Prefs;
              };
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   packages_ghcHEAD =
     packages { ghcPath = ../development/compilers/ghc/head.nix;
-               ghcBinary = # (packages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
-                           ghc704Binary;
+               ghcBinary = ghc704Binary;
                prefFun = ghcHEADPrefs;
              };
 

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "accelerate-io";
-  version = "0.12.0.0";
-  sha256 = "0jc6vcxmji11kj041cds6j90by3mvaybswgmsiflxdlf4zlagd6h";
+  version = "0.12.1.0";
+  sha256 = "1hcyshzfh7ldswv7sjklxlw5h1hx7spx6dy23bvdryrkq929gb8a";
   buildDepends = [ accelerate repa vector ];
   meta = {
     homepage = "http://www.cse.unsw.edu.au/~chak/project/accelerate/";

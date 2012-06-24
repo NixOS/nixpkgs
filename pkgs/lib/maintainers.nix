@@ -8,6 +8,7 @@
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
+  antono = "Antono Vasiljev <self@antono.info>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
   bjg = "Brian Gough <bjg@gnu.org>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";

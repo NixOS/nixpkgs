@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "void";
-  version = "0.5.5.1";
-  sha256 = "1j8rss4b5j4213h40n4nl38p12z275lbsk46dvy4x5s96gqyximp";
+  version = "0.5.6";
+  sha256 = "168xp4jxrlhxdw47y3xyr3hi57xharsrll8521a1phh8vzrbpi4z";
   buildDepends = [ semigroups ];
   meta = {
     homepage = "http://github.com/ekmett/void";
