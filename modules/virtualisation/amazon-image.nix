@@ -83,7 +83,7 @@ with pkgs.lib;
       # Force udev to exit to prevent random "Device or resource busy
       # while trying to open /dev/xvda" errors from fsck.
       udevadm control --exit || true
-      kill -9 -- -1
+      kill -9 -1
     '';
     
   # Mount all formatted ephemeral disks and activate all swap devices.
