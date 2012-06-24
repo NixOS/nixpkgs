@@ -1,8 +1,9 @@
 # TODO add plugins having various licenses, see http://www.vamp-plugins.org/download.html
 
-{ stdenv, fetchurl, alsaLib, bzip2, fftw, jackaudio, libX11, liblo,
-libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate,
-libsndfile, makeWrapper, pkgconfig, pulseaudio, qt4, redland, rubberband, vampSDK
+{ stdenv, fetchurl, alsaLib, bzip2, fftw, jackaudio, libX11, liblo
+, libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate
+, libsndfile, makeWrapper, pkgconfig, pulseaudio, qt4, redland
+, rubberband, vampSDK 
 }:
 
 stdenv.mkDerivation rec {
@@ -17,9 +18,9 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libsndfile qt4 fftw /* should be fftw3f ??*/ bzip2 librdf rubberband
       libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
+      pkgconfig
       # optional
       jackaudio
-      pkgconfig
       # portaudio
       pulseaudio
       libmad
@@ -48,8 +49,10 @@ stdenv.mkDerivation rec {
     description = "View and analyse contents of music audio files";
     homepage = http://www.sonicvisualiser.org/;
     license = "GPLv2";
-    maintainers = [ stdenv.lib.maintainers.marcweber 
-      stdenv.lib.maintainers.goibhniu ];
+    maintainers = 
+      [ stdenv.lib.maintainers.marcweber 
+        stdenv.lib.maintainers.goibhniu 
+      ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
