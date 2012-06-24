@@ -11,7 +11,7 @@ let
     # available as a function.
     if ! test -e ${device}; then
         echo -n "waiting 10 seconds for device ${device} to appear..."
-        for ((try = 0; try < 10; try++)); do
+        for try in $(seq 0 9); do
             sleep 1
             if test -e ${device}; then break; fi
             echo -n .
