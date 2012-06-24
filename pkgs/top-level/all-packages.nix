@@ -1555,6 +1555,10 @@ let
 
   time = callPackage ../tools/misc/time { };
 
+  tkabber = callPackage ../applications/networking/instant-messengers/tkabber { };
+
+  tkabber_plugins = callPackage ../applications/networking/instant-messengers/tkabber-plugins { };
+
   tm = callPackage ../tools/system/tm { };
 
   trang = callPackage ../tools/text/xml/trang { };
@@ -3220,6 +3224,8 @@ let
 
   buddy = callPackage ../development/libraries/buddy { };
 
+  bwidget = callPackage ../development/libraries/bwidget { };
+
   caelum = callPackage ../development/libraries/caelum { };
 
   cairomm = callPackage ../development/libraries/cairomm { };
@@ -4701,6 +4707,10 @@ let
   talloc = callPackage ../development/libraries/talloc { };
 
   tclap = callPackage ../development/libraries/tclap {};
+
+  tcllib = callPackage ../development/libraries/tcllib { };
+
+  tcltls = callPackage ../development/libraries/tcltls { };
 
   tcp_wrappers = callPackage ../development/libraries/tcp-wrappers {};
 
@@ -6197,6 +6207,8 @@ let
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
+  ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
+
   ucsFonts = callPackage ../data/fonts/ucs-fonts { };
 
   unifont = callPackage ../data/fonts/unifont { };
@@ -6330,14 +6342,13 @@ let
     xulrunner = firefox36Pkgs.xulrunner;
   };
 
-  chrome = lowPrio (callPackage ../applications/networking/browsers/chromium {
-    inherit (gnome) GConf;
-    libpng = libpng12;
+  chromium = lowPrio (callPackage ../applications/networking/browsers/chromium {
+    gconf = gnome.GConf;
   });
 
   chromeWrapper = wrapFirefox
-    { browser = chrome; browserName = "chrome"; desktopName = "Chrome";
-      icon = "${chrome}/libexec/chrome/product_logo_48.png";
+    { browser = chromium; browserName = chromium.packageName; desktopName = "Chromium";
+      icon = "${chromium}/share/icons/hicolor/48x48/apps/${chromium.packageName}.png";
     };
 
   cinelerra = callPackage ../applications/video/cinelerra { };
@@ -8420,14 +8431,10 @@ let
     stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
 
-  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
     stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
-  */
-
-  nixUnstable = nixStable;
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
