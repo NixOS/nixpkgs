@@ -236,7 +236,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.4.2";
+    version = "3.4.4";
     testing = false;
 
     preConfigure = ''
@@ -245,7 +245,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "0pd96g1qcp2wgdnvk79hljjrpr6xjk0159lks47n181a3yirzf4x";
+      sha256 = "0l4h7amhsmgpnii8rgwi32nd7ajsifk2xckjd39pfzwdifacw5yw";
     };
 
     config = configWithPlatform stdenv.platform;
