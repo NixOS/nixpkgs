@@ -2500,13 +2500,13 @@ let
 
   urweb = callPackage ../development/compilers/urweb { };
 
-  vala14 = callPackage ../development/compilers/vala/14.2.nix { };
+  vala = vala17;
 
   vala15 = callPackage ../development/compilers/vala/15.2.nix { };
 
   vala16 = callPackage ../development/compilers/vala/16.1.nix { };
 
-  vala   = callPackage ../development/compilers/vala/default.nix { };
+  vala17 = callPackage ../development/compilers/vala/default.nix { };
 
   visualcpp = callPackage ../development/compilers/visual-c++ { };
 

@@ -1,10 +1,12 @@
 {stdenv, fetchurl, yacc, flex, pkgconfig, glib, xz}:
 
 stdenv.mkDerivation rec {
-  name = "vala-0.16.1";
+
+  version = "0.16.1";
+  name = "vala-${version}";
 
   src = fetchurl {
-    url = mirror://gnome/sources/vala/0.16/vala-0.16.1.tar.xz;
+    url = "mirror://gnome/sources/vala/0.16/${name}.tar.xz";
     sha256 = "1n708n9ixyy9qrzyv1wf4ybvcclx43ib9ki028wwpvkz6kv8zqlb";
   };
 
