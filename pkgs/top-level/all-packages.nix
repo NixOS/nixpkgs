@@ -437,6 +437,8 @@ let
 
   bootchart = callPackage ../tools/system/bootchart { };
 
+  bsod = callPackage ../misc/emulators/bsod { };
+
   btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
     inherit (pkgs) libuuid zlib acl attr fetchgit e2fsprogs;
   };
