@@ -28,6 +28,7 @@
       <arg choice='plain'><option>pull</option></arg>
     </group>
     <sbr />
+    <arg><option>--upgrade</option></arg>
     <arg><option>--install-grub</option></arg>
     <arg><option>--no-pull</option></arg>
     <arg><option>--no-build-nix</option></arg>
@@ -194,6 +195,14 @@ $ ./result/bin/run-*-vm
 <para>This command accepts the following options:</para>
 
 <variablelist>
+
+  <varlistentry>
+    <term><option>--upgrade</option></term>
+    <listitem>
+      <para>Fetch the latest version of NixOS from the NixOS
+      channel.</para>
+    </listitem>
+  </varlistentry>
 
   <varlistentry>
     <term><option>--install-grub</option></term>

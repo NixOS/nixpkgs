@@ -22,6 +22,7 @@ The operation is one of the following:
 
 Options:
 
+  --upgrade              fetch the latest version of NixOS before rebuilding
   --install-grub         (re-)install the Grub bootloader
   --pull                 do a nix-pull to get the latest NixOS channel
                          manifest
@@ -51,43 +52,47 @@ action=
 pullManifest=
 buildNix=1
 rollback=
+upgrade=
 
 while test "$#" -gt 0; do
     i="$1"; shift 1
     case "$i" in
       --help)
         showSyntax
-      ;;
+        ;;
       switch|boot|test|build|dry-run|build-vm|build-vm-with-bootloader|pull)
         action="$i"
-      ;;
+        ;;
       --install-grub)
         export NIXOS_INSTALL_GRUB=1
-      ;;
+        ;;
       --pull)
         pullManifest=1
-      ;;
+        ;;
       --no-build-nix)
         buildNix=
-      ;;
+        ;;
       --rollback)
         rollback=1
-      ;;
+        ;;
+      --upgrade)
+        upgrade=1
+        ;;
       --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|--fallback)
         extraBuildFlags="$extraBuildFlags $i"
-      ;;
+        ;;
       --max-jobs|-j|--cores|-I)
         j="$1"; shift 1
         extraBuildFlags="$extraBuildFlags $i $j"
-      ;;
+        ;;
       --fast)
         buildNix=
         extraBuildFlags="$extraBuildFlags --show-trace"
-      ;;
+        ;;
       *)
         echo "$0: unknown option \`$i'"
         exit 1
-      ;;
+        ;;
     esac
 done
 
@@ -129,13 +134,19 @@ if [ -n "$pullManifest" -o "$action" = pull ]; then
     done
 fi
 
-if [ "$action" = pull ]; then exit 0; fi 
+if [ "$action" = pull ]; then exit 0; fi
+
+
+# If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.
+if [ -n "$upgrade" ]; then
+    nix-channel --update nixos
+fi
 
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
 # more conservative.
-if test -n "$buildNix"; then
+if [ -n "$buildNix" ]; then
     echo "building Nix..." >&2
     if ! nix-build '<nixos>' -A config.environment.nix -o $tmpDir/nix $extraBuildFlags > /dev/null; then
         if ! nix-build '<nixos>' -A nixFallback -o $tmpDir/nix $extraBuildFlags > /dev/null; then
