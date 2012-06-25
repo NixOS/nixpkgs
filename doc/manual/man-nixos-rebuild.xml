@@ -173,12 +173,11 @@ $ ./result/bin/run-*-vm
   <varlistentry>
     <term><option>pull</option></term>
     <listitem>
-      <para>This operation merely fetches the latest manifest in the
-      Nixpkgs channel to speed up subsequent
-      <command>nix-env</command> operations.  This is useful if you
-      are not using <command>nix-channel</command> but still want to
-      use pre-built binary packages.  It doesn’t reconfigure the
-      system at all.</para>
+      <para>This operation fetches the latest manifest in the Nixpkgs
+      channel to speed up subsequent <command>nix-env</command>
+      operations.  This is useful if you are not using
+      <command>nix-channel</command> but still want to use pre-built
+      binary packages.  It doesn’t reconfigure the system</para>
     </listitem>
   </varlistentry>
 
@@ -207,21 +206,6 @@ $ ./result/bin/run-*-vm
   </varlistentry>
 
   <varlistentry>
-    <term><option>--no-pull</option></term>
-    <listitem>
-      <para>Normally, <command>nixos-rebuild</command> calls
-      <command>nix-pull</command> to obtain the set of available
-      pre-built binaries in the Nixpkgs channel.  This option causes
-      the call to <command>nix-pull</command> to be skipped.  Note
-      that the result of previous invocations of
-      <command>nix-pull</command> may still be available in
-      <filename>/nix/var/nix/manifests</filename>, so to disable the
-      use of pre-built binaries, you should clear that directory in
-      addition to using <option>--no-pull</option>.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
     <term><option>--no-build-nix</option></term>
     <listitem>
       <para>Normally, <command>nixos-rebuild</command> first builds
@@ -236,10 +220,9 @@ $ ./result/bin/run-*-vm
   <varlistentry>
     <term><option>--fast</option></term>
     <listitem>
-      <para>Equivalent to <option>--no-pull</option>
-      <option>--no-build-nix</option> <option>--show-trace</option>.
-      This option is useful if you call
-      <command>nixos-rebuild</command> frequently (e.g. if you’re
+      <para>Equivalent to <option>--no-build-nix</option>
+      <option>--show-trace</option>.  This option is useful if you
+      call <command>nixos-rebuild</command> frequently (e.g. if you’re
       hacking on a NixOS module).</para>
     </listitem>
   </varlistentry>
