@@ -3,14 +3,17 @@
 stdenv.mkDerivation {
   name = "bsod-0.1";
 
-  builder = ./builder.sh;
-
   src = fetchurl {
     url = http://www.vanheusden.com/bsod/bsod-0.1.tgz;
     sha256 = "0hqwacazyq5rhc04j8w8w0j0dgb6ca8k66c9lxf6bsyi6wvbhvmd";
   };
 
   buildInputs = [ ncurses ];
+
+  installPhase = ''
+    ensureDir $out/bin
+    cp bsod $out/bin
+  '';
 
   meta = {
     description = "Blue Screen Of Death emulator for Unix";
