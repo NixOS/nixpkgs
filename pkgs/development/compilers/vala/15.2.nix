@@ -1,11 +1,11 @@
 {stdenv, fetchurl, yacc, flex, pkgconfig, glib, xz}:
 
 stdenv.mkDerivation rec {
-  name = "vala-0.17.2";
+  name = "vala-0.15.2";
 
   src = fetchurl {
-    url = mirror://gnome/sources/vala/0.17/vala-0.17.2.tar.xz;
-    sha256 = "09i2s0dwmrk147ind2dx7nq845g12fp6fsjqrphhrr0dbi0zzgh3";
+    url = mirror://gnome/sources/vala/0.15/vala-0.15.2.tar.xz;
+    sha256 = "0g71zq6dpqrw2f40wfzdf18fdw41ymr17laqniy2kr622hkxdi8w";
   };
 
   buildNativeInputs = [ yacc flex pkgconfig xz ];
