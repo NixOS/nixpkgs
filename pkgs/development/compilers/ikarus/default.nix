@@ -1,10 +1,11 @@
 { stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "ikarus-0.0.3";
+  version = "0.0.3";
+  name = "ikarus-${version}";
 
   src = fetchurl {
-    url = "http://ikarus-scheme.org/${name}.tar.gz";
+    url = "http://launchpad.net/ikarus/0.0/${version}/+download/${name}.tar.gz";
     sha256 = "0d4vqwqfnj39l0gar2di021kcf6bfpkc6g40yapkmxm6sxpdcvjv";
   };
 
