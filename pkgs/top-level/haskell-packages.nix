@@ -839,6 +839,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
 
+  hinotify = callPackage ../development/libraries/haskell/hinotify {};
+
   hint = callPackage ../development/libraries/haskell/hint {};
 
   Hipmunk = callPackage ../development/libraries/haskell/Hipmunk {};
