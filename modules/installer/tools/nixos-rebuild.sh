@@ -130,7 +130,7 @@ if [ -n "$pullManifest" -o "$action" = pull ]; then
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
 
     set -o nopipefail
-    [ "$action" = pull -a $? -ne 0 ] && exit 1
+    if [ $? -ne 0 ]; then exit 1; fi
 
     mkdir -p /nix/var/nix/channel-cache
     for i in $manifests; do
