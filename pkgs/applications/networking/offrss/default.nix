@@ -1,7 +1,7 @@
-{stdenv, fetchurl, curl, libmrss}:
+{ stdenv, fetchurl, curl, libmrss, podofo, libiconv }:
 
 stdenv.mkDerivation {
-  name = "offrss-1.1";
+  name = "offrss-1.3";
 
   installPhase = ''
     mkdir -p $out/bin
@@ -12,11 +12,16 @@ stdenv.mkDerivation {
     makeFlags = "CC=${stdenv.cross.config}-gcc";
   };
 
-  buildInputs = [ curl libmrss ];
+  buildInputs = [ curl libmrss podofo ]
+    ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
+
+  configurePhase = stdenv.lib.optionalString (!stdenv.isLinux) ''
+    sed 's/#EXTRA/EXTRA/' -i Makefile
+  '';
 
   src = fetchurl {
-    url = http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-1.1.tar.gz;
-    sha256 = "1l8c5sw368zbrcfq4wf963fbh29q9lqgsn0lbsiwz3vpybc8plp2";
+    url = http://vicerveza.homeunix.net/~viric/soft/offrss/offrss-1.3.tar.gz;
+    sha256 = "1akw1x84jj2m9z60cvlvmz21qwlaywmw18pl7lgp3bj5nw6250p6";
   };
 
   meta = {
