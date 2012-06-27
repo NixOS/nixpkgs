@@ -97,6 +97,7 @@ stdenv.mkDerivation ({
     "--enable-add-ons"
     "--sysconfdir=/etc"
     "--localedir=/var/run/current-system/sw/lib/locale"
+    "libc_cv_ssp=no"
     (if kernelHeaders != null
      then "--with-headers=${kernelHeaders}/include"
      else "--without-headers")
