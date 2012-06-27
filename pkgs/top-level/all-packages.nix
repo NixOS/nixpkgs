@@ -8601,10 +8601,6 @@ let
     inherit texLive unzip;
   };
 
-  trac = callPackage ../misc/trac {
-    inherit (pythonPackages) pysqlite;
-  };
-
   vice = callPackage ../misc/emulators/vice { };
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
