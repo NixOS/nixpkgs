@@ -158,9 +158,6 @@ in
   services.openssh.enable = true;
   jobs.openssh.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 
-  # To have a nicer initrd, even though the initrd can't mount an nfsroot now
-  boot.initrd.withExtraTools = true;
-
   # To be able to use the systemTarball to catch troubles.
   boot.crashDump = {
     enable = true;
