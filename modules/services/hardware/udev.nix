@@ -73,7 +73,7 @@ let
       echo "OK"
 
       echo -n "Checking that all programs call by absolute paths in udev rules exist ... "
-      import_progs=$(grep 'IMPORT{program}="/' $out/* |
+      import_progs=$(grep 'IMPORT{program}="\/' $out/* |
         sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
       run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="/' |
         sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)
