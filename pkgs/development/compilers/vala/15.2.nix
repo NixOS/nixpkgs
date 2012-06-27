@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
 
-  version = "0.17.2";
+  version = "0.15.2";
   name = "vala-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/vala/0.17/${name}.tar.xz";
-    sha256 = "09i2s0dwmrk147ind2dx7nq845g12fp6fsjqrphhrr0dbi0zzgh3";
+    url = "mirror://gnome/sources/vala/0.15/${name}.tar.xz";
+    sha256 = "0g71zq6dpqrw2f40wfzdf18fdw41ymr17laqniy2kr622hkxdi8w";
   };
 
   buildNativeInputs = [ yacc flex pkgconfig xz ];
