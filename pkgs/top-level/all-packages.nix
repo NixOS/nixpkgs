@@ -7423,8 +7423,6 @@ let
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
 
-  taskwarrior_unstable = callPackage ../applications/misc/taskwarrior/unstable.nix { };
-
   telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble {
     inherit (pkgs.gnome) libsoup;
   };
