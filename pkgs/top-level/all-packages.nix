@@ -7120,6 +7120,8 @@ let
     jackSupport = getConfig [ "mumble" "jackSupport" ] false;
   };
 
+  musescore = callPackage ../applications/audio/musescore { };
+
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
   msmtp = callPackage ../applications/networking/msmtp { };
