@@ -2898,6 +2898,8 @@ let
      wrapGCC (ccache.links extraConfig)) {};
   ccacheStdenv = overrideGCC stdenv ccacheWrapper;
 
+  cgdb = callPackage ../development/tools/misc/cgdb { };
+
   complexity = callPackage ../development/tools/misc/complexity { };
 
   ctags = callPackage ../development/tools/misc/ctags { };
