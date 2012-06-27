@@ -84,7 +84,7 @@ done
 
 
 # More special file systems, initialise required directories.
-mkdir -m 0777 /dev/shm
+mkdir -m 0755 /dev/shm
 mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
 mkdir -m 0755 -p /dev/pts
 mount -t devpts -o mode=0600,gid=@ttyGid@ none /dev/pts
