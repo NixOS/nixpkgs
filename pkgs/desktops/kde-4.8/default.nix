@@ -1,7 +1,7 @@
 { callPackage, callPackageOrig, stdenv, qt48 }:
 
 let
-  release = "4.8.2";
+  release = "4.8.4";
 
   # Need callPackageOrig to avoid infinite cycle
   kde = callPackageOrig ./kde-package {

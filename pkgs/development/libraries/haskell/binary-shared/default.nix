@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "binary-shared";
-  version = "0.8.1";
-  sha256 = "0niq6hgsawsdg3kkjgkwyrgy8w7pfkqfph5d1x5bzcjrcl982jrg";
+  version = "0.8.2";
+  sha256 = "05cqdpclb4xc6ydwdpxfi3bvaaw7syxlmb5r9kxjcp3f6fji5rm2";
   buildDepends = [ binary mtl ];
   meta = {
     homepage = "http://www.leksah.org";

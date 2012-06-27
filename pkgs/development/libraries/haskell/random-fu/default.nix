@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "random-fu";
-  version = "0.2.2.0";
-  sha256 = "1wv2c6ba3ad80zyj75xfds98q7psgjkmaqk2zm0srmipq06mx92r";
+  version = "0.2.3.0";
+  sha256 = "17vn1dz4z00xjpsxjx2dfjnz4qhbn5cbkm2s142kdskiphgxi2f8";
   buildDepends = [
     erf gamma monadLoops mtl randomShuffle randomSource rvar syb
     transformers vector

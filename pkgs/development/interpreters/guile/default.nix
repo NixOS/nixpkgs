@@ -46,7 +46,7 @@
 
   doCheck = true;
 
-  setupHook = ./setup-hook.sh;
+  setupHook = ./setup-hook-2.0.sh;
 
   crossAttrs.preConfigure =
     stdenv.lib.optionalString (stdenv.cross.config == "i586-pc-gnu")

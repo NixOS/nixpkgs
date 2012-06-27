@@ -1,30 +1,24 @@
 { fetchurl, stdenv, openssl, db4, boost, zlib, miniupnpc, qt4 }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.0";
+  version = "0.6.2";
   name = "bitcoin-${version}";
 
   src = fetchurl {
-    url = " https://github.com/bitcoin/bitcoin/tarball/v${version}";
-    sha256 = "1i9wnbjf9yrs9rq5jnh9pk1x5j982qh3xpjm05z8dgd3nympgyy8";
+    url = "mirror://sourceforge/bitcoin/bitcoin-0.6.2-linux.tar.gz";
+    sha256 = "0yhgqz98hmmn6ljk23rd48jsjfvzdii27370vazhbgvjwj8giais";
   };
 
   buildInputs = [ openssl db4 boost zlib miniupnpc qt4 ];
 
-  unpackCmd = "tar xvf $curSrc";
-
-  buildPhase = ''
-    qmake
-    make
+  configurePhase = ''
     cd src
-    make -f makefile.unix
-    cd ..
+    qmake
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp bitcoin-qt $out/bin
-    cp src/bitcoind $out/bin
   '';
 
   meta = { 

@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="tftp-hpa";
-    version="5.1";
+    version="5.2";
     name="${baseName}-${version}";
-    url="mirror://kernel/software/network/tftp/${name}.tar.bz2";
-    hash="0k72s0c7wm4fyb6lqfypdkcy6rimanr49slimx8p0di69w394gzx";
+    url="mirror://kernel/software/network/tftp/tftp-hpa/${name}.tar.xz";
+    hash="afee361df96a2f88344e191f6a25480fd714e1d28d176c3f10cc43fa206b718b";
   };
 in
 rec {

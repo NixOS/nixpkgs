@@ -64,7 +64,7 @@ rec {
 
     string = mkOptionType {
       name = "string";
-      check = lib.traceValIfNot (x: builtins ? isString -> builtins.isString x);
+      check = lib.traceValIfNot builtins.isString;
       merge = lib.concatStrings;
     };
 
@@ -84,6 +84,12 @@ rec {
     package = mkOptionType {
       name = "derivation";
       check = lib.traceValIfNot isDerivation;
+    };
+
+    path = mkOptionType {
+      name = "path";
+      # Hacky: there is no ‘isPath’ primop.
+      check = lib.traceValIfNot (x: builtins.substring 0 1 (toString x) == "/");
     };
 
     listOf = types.list;

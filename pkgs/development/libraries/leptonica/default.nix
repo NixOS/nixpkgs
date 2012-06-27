@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libpng, libtiff, libjpeg, zlib}:
+{stdenv, fetchurl, libpng12, libtiff, libjpeg, zlib}:
 
 stdenv.mkDerivation {
   name = "leptonica-1.68";
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "13qzm24zy46bj9b476jxzbw9qh7p96jikfzxg88kz4dj1p2vdvxc";
   };
 
-  buildInputs = [ libpng libtiff libjpeg zlib ];
+  buildInputs = [ libpng12 libtiff libjpeg zlib ];
 
   meta = {
     description = "Image processing and analysis library";

@@ -7,10 +7,10 @@ Subject: [PATCH] Find virtuoso if virtuoso-t is in PATH
  2 files changed, 23 insertions(+), 10 deletions(-)
 
 diff --git a/backends/virtuoso/virtuosobackend.cpp b/backends/virtuoso/virtuosobackend.cpp
-index c83605d..8c30c81 100644
+index c245101..249958a 100644
 --- a/backends/virtuoso/virtuosobackend.cpp
 +++ b/backends/virtuoso/virtuosobackend.cpp
-@@ -27,6 +27,7 @@
+@@ -28,6 +28,7 @@
  #include "odbcconnectionpool.h"
  
  #include "sopranodirs.h"
@@ -18,7 +18,7 @@ index c83605d..8c30c81 100644
  
  #include <QtCore/QDebug>
  #include <QtCore/QtPlugin>
-@@ -188,19 +189,19 @@ namespace {
+@@ -210,19 +211,19 @@ Soprano::BackendFeatures Soprano::Virtuoso::BackendPlugin::supportedFeatures() c
  
  bool Soprano::Virtuoso::BackendPlugin::isAvailable() const
  {
@@ -29,14 +29,14 @@ index c83605d..8c30c81 100644
 -    }
 -#endif
 -
-     QString virtuosoBin = VirtuosoController::locateVirtuosoBinary();
+     QString virtuosoBin = locateVirtuosoBinary();
      if ( virtuosoBin.isEmpty() ) {
          qDebug() << Q_FUNC_INFO << "could not find virtuoso-t binary";
          return false;
      }
  
 +#ifndef Q_OS_WIN
-+    if ( findVirtuosoDriver(virtuosoBin).isEmpty() ) {
++    if ( findVirtuosoDriver( virtuosoBin ).isEmpty() ) {
 +        qDebug() << Q_FUNC_INFO << "could not find Virtuoso ODBC driver";
 +        return false;
 +    }
@@ -45,17 +45,17 @@ index c83605d..8c30c81 100644
      QString vs = determineVirtuosoVersion( virtuosoBin );
      if ( vs.isEmpty() ) {
          qDebug() << Q_FUNC_INFO << "Failed to determine version of the Virtuoso server at" << virtuosoBin;
-@@ -217,9 +218,21 @@ bool Soprano::Virtuoso::BackendPlugin::isAvailable() const
- 
+@@ -267,9 +268,21 @@ QString Soprano::Virtuoso::BackendPlugin::locateVirtuosoBinary()
  
  #ifndef Q_OS_WIN
--QString Soprano::Virtuoso::BackendPlugin::findVirtuosoDriver() const
-+QString Soprano::Virtuoso::BackendPlugin::findVirtuosoDriver( const QString &virtuosoBinHint ) const
+ // static
+-QString Soprano::Virtuoso::BackendPlugin::findVirtuosoDriver()
++QString Soprano::Virtuoso::BackendPlugin::findVirtuosoDriver( const QString &virtuosoBinHint )
  {
 -    return Soprano::findLibraryPath( "virtodbc_r", QStringList(), QStringList() << QLatin1String( "virtuoso/plugins/" ) << QLatin1String( "odbc/" ) );
 +    QString virtuosoBin;
 +    if (virtuosoBinHint.isEmpty())
-+        virtuosoBin = VirtuosoController::locateVirtuosoBinary();
++        virtuosoBin = locateVirtuosoBinary();
 +    else
 +        virtuosoBin = virtuosoBinHint;
 +
@@ -70,17 +70,17 @@ index c83605d..8c30c81 100644
  #endif
  
 diff --git a/backends/virtuoso/virtuosobackend.h b/backends/virtuoso/virtuosobackend.h
-index 3971b83..0807e5d 100644
+index 646b9f8..535fbb9 100644
 --- a/backends/virtuoso/virtuosobackend.h
 +++ b/backends/virtuoso/virtuosobackend.h
-@@ -50,7 +50,7 @@ namespace Soprano {
+@@ -52,7 +52,7 @@ namespace Soprano {
  
  #ifndef Q_OS_WIN
          private:
--            QString findVirtuosoDriver() const;
-+            QString findVirtuosoDriver(const QString &virtuosoBinHint = QString()) const;
+-            static QString findVirtuosoDriver();
++            static QString findVirtuosoDriver(const QString &virtuosoBinHint = QString());
  #endif
          };
      }
 -- 
-tg: (da390be..) t/find-virtuoso (depends on: master)
+tg: (2321148..) t/find-virtuoso (depends on: master)

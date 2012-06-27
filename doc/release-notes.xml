@@ -5,6 +5,21 @@
 <title>Nixpkgs Release Notes</title>
 
 
+<section><title>Release 0.14 (June 4, 2012)</title>
+
+<para>In preparation for the switch from Subversion to Git, this
+release is mainly the prevent the Nixpkgs version number from going
+backwards.  (This would happen because prerelease version numbers
+produced for the Git repository are lower than those for the
+Subversion repository.)</para>
+
+<para>Since the last release, there have been thousands of changes and
+new packages by numerous contributors.  For details, see the commit
+logs.</para>
+
+</section>
+
+
 <section><title>Release 0.13 (February 5, 2010)</title>
 
 <para>As always, there are many changes.  Some of the most important

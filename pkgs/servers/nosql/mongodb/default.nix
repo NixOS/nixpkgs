@@ -2,12 +2,14 @@
 
 assert useV8 -> v8 != null;
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  name = "mongodb-2.0.4";
+  name = "mongodb-2.0.6";
 
   src = fetchurl {
-    url = "http://downloads.mongodb.org/src/mongodb-src-r2.0.4.tar.gz";
-    sha256 = "1y9qd94qfrp7h1mng7f8hfb36wgj93886d2ifadg8y3pfzr6sab5";
+    url = "http://downloads.mongodb.org/src/mongodb-src-r2.0.6.tar.gz";
+    sha256 = "0kiiz8crx318sdn0wd9d88pzx9s1c6ak2dhd0zw7kl63gmd74wm9";
   };
 
   buildInputs = [scons which boost] ++ stdenv.lib.optional useV8 v8;
@@ -22,11 +24,13 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     export TERM=""
-    scons all --cc=`which gcc` --cxx=`which g++` --libpath=${boost}/lib --cpppath=${boost}/include ${if useV8 then "--usev8" else ""}
+    scons all --cc=`which gcc` --cxx=`which g++` --libpath=${boost}/lib --cpppath=${boost}/include \
+              ${optionalString useV8 "--usev8"}
   '';
 
   installPhase = ''
-    scons install --cc=`which gcc` --cxx=`which g++` --libpath=${boost}/lib --cpppath=${boost}/include --full --prefix=$out
+    scons install --cc=`which gcc` --cxx=`which g++` --libpath=${boost}/lib --cpppath=${boost}/include \
+                  ${optionalString useV8 "--usev8"} --full --prefix=$out
     if [ -d $out/lib64 ]; then
       mv $out/lib64 $out/lib
     fi

@@ -1,0 +1,12 @@
+diff --git a/media/media.gyp b/media/media.gyp
+index 2a8c6c6..66ca767 100644
+--- a/media/media.gyp
++++ b/media/media.gyp
+@@ -399,6 +399,7 @@
+             ['use_pulseaudio == 1', {
+               'cflags': [
+                 '<!@(pkg-config --cflags libpulse)',
++                '-Wno-array-bounds',
+               ],
+               'link_settings': {
+                 'libraries': [

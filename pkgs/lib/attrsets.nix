@@ -126,11 +126,36 @@ rec {
 
      Example:
        mapAttrs (name: value: name + "-" + value)
-          {x = "foo"; y = "bar";}
-       => {x = "x-foo"; y = "y-bar";}
+          { x = "foo"; y = "bar"; }
+       => { x = "x-foo"; y = "y-bar"; }
   */
   mapAttrs = f: set:
     listToAttrs (map (attr: nameValuePair attr (f attr (getAttr attr set))) (attrNames set));
+
+
+  /* Like `mapAttrs', but allows the name of each attribute to be
+     changed in addition to the value.  The applied function should
+     return both the new name and value as a `nameValuePair'.
+     
+     Example:
+       mapAttrs' (name: value: nameValuePair ("foo_" + name) ("bar-" + value))
+          { x = "a"; y = "b"; }
+       => { foo_x = "bar-a"; foo_y = "bar-b"; }
+  */
+  mapAttrs' = f: set:
+    listToAttrs (map (attr: f attr (getAttr attr set)) (attrNames set));
+        
+
+  /* Call a function for each attribute in the given set and return
+     the result in a list.
+  
+     Example:
+       mapAttrsToList (name: value: name + value)
+          { x = "a"; y = "b"; }
+       => [ "xa" "yb" ]
+  */
+  mapAttrsToList = f: attrs:
+    map (name: f name (getAttr name attrs)) (attrNames attrs);
     
 
   /* Like `mapAttrs', except that it recursively applies itself to

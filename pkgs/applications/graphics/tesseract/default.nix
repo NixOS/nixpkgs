@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libtiff }:
+{ stdenv, fetchurl, autoconf, automake, libtool, leptonica, libpng, libtiff }:
 
 let
   f = lang : sha256 : let
@@ -18,14 +18,21 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "tesseract-3.0.0";
+  name = "tesseract-3.0.1";
 
   src = fetchurl {
-    url = http://tesseract-ocr.googlecode.com/files/tesseract-3.00.tar.gz;
-    sha256 = "111r9hy1rcs2ch4kdi9dkzwch3xg38vv379sf3cjpkswkigx8clw";
+    url = http://tesseract-ocr.googlecode.com/files/tesseract-3.01.tar.gz;
+    sha256 = "c24b0bd278291bc93ab242f93841c1d8743689c943bd804afbc5b898dc0a1c9b";
   };
 
-  buildInputs = [ libtiff ];
+  buildInputs = [ autoconf automake libtool leptonica libpng libtiff ];
+
+  preConfigure = ''
+      ./autogen.sh
+      substituteInPlace "configure" \
+        --replace 'LIBLEPT_HEADERSDIR="/usr/local/include /usr/include"' \
+                  'LIBLEPT_HEADERSDIR=${leptonica}/include'
+  '';
 
   postInstall = extraLanguages;
 

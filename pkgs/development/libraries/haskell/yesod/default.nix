@@ -1,21 +1,21 @@
-{ cabal, attoparsec, blazeBuilder, blazeHtml, Cabal, fastLogger
-, filepath, hamlet, httpTypes, monadControl, parsec, shakespeareCss
-, shakespeareJs, shakespeareText, text, time, transformers
-, unixCompat, wai, waiExtra, waiLogger, warp, yesodAuth, yesodCore
-, yesodForm, yesodJson, yesodPersistent
+{ cabal, attoparsec, blazeBuilder, blazeHtml, blazeMarkup, Cabal
+, fastLogger, filepath, hamlet, httpTypes, monadControl, parsec
+, shakespeareCss, shakespeareJs, shakespeareText, text, time
+, transformers, unixCompat, wai, waiExtra, waiLogger, warp
+, yesodAuth, yesodCore, yesodForm, yesodJson, yesodPersistent
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "1.0.1.5";
-  sha256 = "1va0pq5gn10anh333fqv8a99gngjip5w5lwl4i5q7lbparz93iji";
+  version = "1.0.1.6";
+  sha256 = "0w5k5bcv50fjpyja6ydknk78dk50swx6b0myhizj8rcf851xga43";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    attoparsec blazeBuilder blazeHtml Cabal fastLogger filepath hamlet
-    httpTypes monadControl parsec shakespeareCss shakespeareJs
-    shakespeareText text time transformers unixCompat wai waiExtra
-    waiLogger warp yesodAuth yesodCore yesodForm yesodJson
+    attoparsec blazeBuilder blazeHtml blazeMarkup Cabal fastLogger
+    filepath hamlet httpTypes monadControl parsec shakespeareCss
+    shakespeareJs shakespeareText text time transformers unixCompat wai
+    waiExtra waiLogger warp yesodAuth yesodCore yesodForm yesodJson
     yesodPersistent
   ];
   meta = {

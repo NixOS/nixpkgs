@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''configureFlags="--with-cupsbackenddir=$out/lib/cups/backend"'';
 
   buildInputs = [cups];
+  NIX_CFLAGS_COMPILE = "-include stdio.h";
 
   meta = {
     homepage = http://cups-bjnp.sourceforge.net;

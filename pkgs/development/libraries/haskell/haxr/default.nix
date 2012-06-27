@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     blazeBuilder dataenc HaXml HTTP mtl network time utf8String
   ];
+  patchPhase = ''
+    sed -i haxr.cabal -e 's|HaXml == 1.22.\*|HaXml|'
+  '';
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/HaXR";
     description = "XML-RPC client and server library";

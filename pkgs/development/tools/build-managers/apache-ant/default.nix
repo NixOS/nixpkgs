@@ -1,23 +1,26 @@
-{fetchurl, stdenv, jdk, name}:
+{ fetchurl, stdenv, jdk }:
 
-let {
-  body =
-    stdenv.mkDerivation {
-      name = name;
+let
 
-      builder = ./builder.sh;
-      buildInputs = [antContrib jdk];
+  antContrib = import ./ant-contrib.nix {
+    inherit fetchurl stdenv;
+  };
 
-      inherit antContrib jdk;
+  version = "1.8.4";
 
-      src = fetchurl {
-        url = http://apache.mirror.transip.nl/ant/binaries/apache-ant-1.8.0RC1-bin.tar.bz2 ;
-        sha256 = "0xvmrsghibq7p3wvfkmvmkkg0zzfmw32lrfjl5f6cfzchjjnw9wx";
-      };
-    };
+in
 
-  antContrib =
-    (import ./ant-contrib.nix) {
-      inherit fetchurl stdenv;
-    };
+stdenv.mkDerivation {
+  name = "ant-${(builtins.parseDrvName jdk.name).name}-${version}";
+
+  builder = ./builder.sh;
+  
+  buildInputs = [ antContrib jdk ];
+
+  inherit antContrib jdk;
+
+  src = fetchurl {
+    url = "mirror://apache/ant/binaries/apache-ant-${version}-bin.tar.bz2";
+    sha1 = "d9e3e83dd9664cfe1dcd4841c082db3f559af922";
+  };
 }

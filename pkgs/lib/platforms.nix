@@ -11,6 +11,7 @@ rec {
   cygwin = ["i686-cygwin"];
   unix = linux ++ darwin ++ freebsd ++ openbsd;
   all = linux ++ darwin ++ cygwin ++ freebsd ++ openbsd;
+  none = [];
   allBut = platform: lists.filter (x: platform != x) all;
   mesaPlatforms = linux;
 }

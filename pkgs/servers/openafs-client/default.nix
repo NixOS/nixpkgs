@@ -4,11 +4,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation {
-  name = "openafs-1.6.0-${kernel.version}";
+  name = "openafs-1.6.1-${kernel.version}";
 
   src = fetchurl {
-    url = http://www.openafs.org/dl/openafs/1.6.0/openafs-1.6.0-src.tar.bz2;
-    sha256 = "1rj40qp30hswr08p69jigya78ggbn4dc7qnnw2sfjpv52ywa68p7";
+    url = http://www.openafs.org/dl/openafs/1.6.1/openafs-1.6.1-src.tar.bz2;
+    sha256 = "1c7mid0dwl2x0sikr70bi5cs881y6pa4dfwkdmr3jscvx3wgfpnh";
   };
 
   buildInputs = [ autoconf automake flex yacc ncurses perl which ];

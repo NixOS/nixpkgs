@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "libxfcegui4-4.6.4";
   
   src = fetchurl {
-    url = "http://www.xfce.org/archive/xfce-4.6.2/src/${name}.tar.bz2";
+    url = "http://archive.xfce.org/xfce-4.6.2/src/${name}.tar.bz2";
     sha1 = "a12c79f8fa14c5d1fc0fca5615a451b7d23f8695";
   };
 

@@ -1,0 +1,13 @@
+http://bugs.gentoo.org/362299
+
+--- dict/stardict-plugins/stardict-wordnet-plugin/scene.h
++++ dict/stardict-plugins/stardict-wordnet-plugin/scene.h
+@@ -25,6 +25,8 @@
+ #ifndef __PHYSICS_H__
+ #define __PHYSICS_H__
+ 
++#include <cstddef>
++
+ #include "partic.h"
+ #include "spring.h"
+ 

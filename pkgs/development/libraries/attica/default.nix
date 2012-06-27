@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "attica-0.3.0";
+  name = "attica-0.4.0";
   
   src = fetchurl {
     url = "mirror://kde/stable/attica/${name}.tar.bz2";
-    sha256 = "1wfd37mvskn77ppzjdh3x6cb5p9na81ibh05ardfvbwqqn523gd0";
+    sha256 = "172d1z97aw9iscq6wh23i31s4hgq7mmhr3mk4xgifqv0hjcmzyhq";
   };
   
   buildInputs = [ qt4 ];

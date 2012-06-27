@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses, libX11 }:
+{ stdenv, fetchurl, pkgconfig, cairo, expat, ncurses, libX11
+, pciutils, numactl }:
 
 stdenv.mkDerivation rec {
-  name = "hwloc-1.4";
+  name = "hwloc-1.4.2";
 
   src = fetchurl {
     url = "http://www.open-mpi.org/software/hwloc/v1.4/downloads/${name}.tar.bz2";
-    sha256 = "1qcii99vn65jwgqpq8d2k4sksk734kkg223p58ck7v76q27h288y";
+    sha256 = "0xamcnbkrf18v1rj4h6ddx6cn4gffx6zgzjaym8c3k5mlpgigfdw";
   };
 
   # XXX: libX11 is not directly needed, but needed as a propagated dep of Cairo.
@@ -14,9 +15,27 @@ stdenv.mkDerivation rec {
   # Filter out `null' inputs.  This allows users to `.override' the
   # derivation and set optional dependencies to `null'.
   buildInputs = stdenv.lib.filter (x: x != null)
-   [ cairo expat ncurses libX11 ];
+   ([ expat ncurses ]
+     ++  (stdenv.lib.optionals (!stdenv.isCygwin) [ cairo libX11 ])
+     ++  (stdenv.lib.optionals stdenv.isLinux [ pciutils numactl ]));
 
-  doCheck = true;
+  postInstall =
+    stdenv.lib.optionalString (stdenv.isLinux && numactl != null)
+      '' if [ -d "${numactl}/lib64" ]
+         then
+             numalibdir="${numactl}/lib64"
+         else
+             numalibdir="${numactl}/lib"
+             test -d "$numalibdir"
+         fi
+
+         sed -i "$out/lib/libhwloc.la" \
+             -e "s|-lnuma|-L$numalibdir -lnuma|g"
+      '';
+
+  # XXX: A test hangs on Cygwin, see
+  # <http://hydra.bordeaux.inria.fr/build/51474/nixlog/1/raw>.
+  doCheck = !stdenv.isCygwin;
 
   meta = {
     description = "hwloc, a portable abstraction of hierarchical architectures for high-performance computing";

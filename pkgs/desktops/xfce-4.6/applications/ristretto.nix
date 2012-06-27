@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "ristretto-0.0.22";
   
   src = fetchurl {
-    url = "http://www.xfce.org/archive/src/apps/ristretto/0.0/${name}.tar.gz";
+    url = "http://archive.xfce.org/src/apps/ristretto/0.0/${name}.tar.gz";
     sha1 = "bddbc8618ba67699ccf5ee4ea0b538b1be7fdb0a";
   };
 

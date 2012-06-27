@@ -4,19 +4,19 @@
 }:
 
 let
-  version = "3.2.1";
+  version = "3.2.2";
 in
 stdenv.mkDerivation {
   name = "audacious-${version}";
 
   src = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-${version}.tar.bz2";
-    sha256 = "064a8d2887a0f92a1637df9d71b8eefa8064199c04eccfaac725f840cff6eac3";
+    sha256 = "1vj2f3jq67r9wc3s8p51w8338cjhidj3lpxmzyh31lrfikj21766";
   };
 
   pluginsSrc = fetchurl {
     url = "http://distfiles.audacious-media-player.org/audacious-plugins-${version}.tar.bz2";
-    sha256 = "5b7d3e52f6b8903bc01ae15651817e990d3348ae6b9734767f354eb2dbfc8c2d";
+    sha256 = "1z5p4ny0kzszaki4f1fgrvcr0q1j6i19847jhplc07nl1rvycdy6";
   };
 
   # `--enable-amidiplug' is to prevent configure from looking in /proc/asound.

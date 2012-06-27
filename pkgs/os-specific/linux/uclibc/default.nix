@@ -36,6 +36,7 @@ let
   archMakeFlag = if (cross != null) then "ARCH=${cross.arch}" else "";
   crossMakeFlag = if (cross != null) then "CROSS=${cross.config}-" else "";
 
+  # UCLIBC_SUSV4_LEGACY defines 'tmpnam', needed for gcc libstdc++ builds.
   nixConfig = ''
     RUNTIME_PREFIX "/"
     DEVEL_PREFIX "/"
@@ -44,17 +45,19 @@ let
     UCLIBC_HAS_RPC y
     DO_C99_MATH y
     UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
+    UCLIBC_SUSV4_LEGACY y
+    UCLIBC_HAS_THREADS_NATIVE y
     KERNEL_HEADERS "${linuxHeaders}/include"
   '';
 
 in
 stdenv.mkDerivation {
-  name = "uclibc-0.9.31" + stdenv.lib.optionalString (cross != null)
+  name = "uclibc-0.9.33.2" + stdenv.lib.optionalString (cross != null)
     ("-" + cross.config);
 
   src = fetchurl {
-    url = http://www.uclibc.org/downloads/uClibc-0.9.31.tar.bz2;
-    sha256 = "1yk328fnz0abgh2vm2r68y65ckfkx97rdp8hbg4xvmx5s94kblw0";
+    url = http://www.uclibc.org/downloads/uClibc-0.9.33.2.tar.bz2;
+    sha256 = "0qhngsbzj2s6nz92b1s2p0dmvwk8xiqpy58j7ljzw186grvjr3cq";
   };
 
   # 'ftw' needed to build acl, a coreutils dependency
@@ -81,7 +84,8 @@ stdenv.mkDerivation {
     mkdir -p $out
     make PREFIX=$out VERBOSE=1 install ${crossMakeFlag}
     (cd $out/include && ln -s $(ls -d ${linuxHeaders}/include/* | grep -v "scsi$") .)
-    sed -i s@/lib/@$out/lib/@g $out/lib/libc.so
+    # libpthread.so may not exist, so I do || true
+    sed -i s@/lib/@$out/lib/@g $out/lib/libc.so $out/lib/libpthread.so || true
   '';
 
   passthru = {

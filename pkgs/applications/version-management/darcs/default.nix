@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "darcs";
-  version = "2.8.0";
-  sha256 = "10yfab7qb20hzikwrgra7zhx7ad2j0s6l7zksmvczf4xm6hw458l";
+  version = "2.8.1";
+  sha256 = "1fz9k9zihb0fz0w2y55iqa1fd604nxzz48r62sx3ixxn8qqsvrd1";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

@@ -5,6 +5,9 @@ cabal.mkDerivation (self: {
   version = "0.0.1.1";
   sha256 = "00rxgkvgx1rfvk15gjyyg00vqyg4j24d8d19q6rj07j2mgfvdxw6";
   buildDepends = [ transformers ];
+  patchPhase = ''
+    sed -i -e 's|transformers >= 0.2 && < 0.3|transformers|' multiplate.cabal
+  '';
   meta = {
     homepage = "http://haskell.org/haskellwiki/Multiplate";
     description = "Lightweight generic library for mutually recursive data types";

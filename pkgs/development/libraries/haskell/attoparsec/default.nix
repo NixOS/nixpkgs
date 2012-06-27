@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "attoparsec";
-  version = "0.10.1.1";
-  sha256 = "07zl85nkimpswlb4rxycisaphhyrlq4la2limxxi7sk21gyh88b0";
+  version = "0.10.2.0";
+  sha256 = "0hvkx63knhxdc06lkv2avz2dblbvn0hhvckfqyr22ls1qrpgz71c";
   buildDepends = [ deepseq text ];
   meta = {
     homepage = "https://github.com/bos/attoparsec";

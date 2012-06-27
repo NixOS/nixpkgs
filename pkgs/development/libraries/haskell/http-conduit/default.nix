@@ -1,21 +1,21 @@
 { cabal, asn1Data, attoparsec, attoparsecConduit, base64Bytestring
 , blazeBuilder, blazeBuilderConduit, caseInsensitive, certificate
-, conduit, cookie, cprngAes, dataDefault, failure, httpTypes
-, liftedBase, monadControl, mtl, network, regexCompat, resourcet
-, socks, text, time, tls, tlsExtra, transformers, transformersBase
-, utf8String, void, zlibConduit
+, conduit, cookie, cprngAes, dataDefault, deepseq, failure
+, httpTypes, liftedBase, monadControl, mtl, network, regexCompat
+, resourcet, socks, text, time, tls, tlsExtra, transformers
+, transformersBase, utf8String, void, zlibConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "1.4.1.3";
-  sha256 = "15mpha91dfpzy6bz2577jk0866nmyj17rjwnjz3x7zh3x0i06534";
+  version = "1.4.1.9";
+  sha256 = "0c0dnk3iqkx85453spry6qsw66pg3pjvqah0c1m64qqmv869bwbn";
   buildDepends = [
     asn1Data attoparsec attoparsecConduit base64Bytestring blazeBuilder
     blazeBuilderConduit caseInsensitive certificate conduit cookie
-    cprngAes dataDefault failure httpTypes liftedBase monadControl mtl
-    network regexCompat resourcet socks text time tls tlsExtra
-    transformers transformersBase utf8String void zlibConduit
+    cprngAes dataDefault deepseq failure httpTypes liftedBase
+    monadControl mtl network regexCompat resourcet socks text time tls
+    tlsExtra transformers transformersBase utf8String void zlibConduit
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/http-conduit";

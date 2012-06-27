@@ -56,17 +56,24 @@
   and show you a shell with a prefixed prompt.
 */
 
-{ mkDerivation, substituteAll, pkgs } : { stdenv ? pkgs.stdenv, name, buildInputs ? [], cTags ? [], extraCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash"} :
+{ mkDerivation, substituteAll, pkgs }:
+    { stdenv ? pkgs.stdenv, name, buildInputs ? []
+    , propagatedBuildInputs ? [], gcc ? stdenv.gcc, cTags ? [], extraCmds ? ""
+    , shell ? "${pkgs.bashInteractive}/bin/bash"}:
+
 mkDerivation {
   # The setup.sh script from stdenv will expect the native build inputs in
   # the buildNativeInputs environment variable.
-  buildNativeInputs = [ ] ++ buildInputs ;
+  buildNativeInputs = [ ] ++ buildInputs;
+  # Trick to bypass the stdenv usual change of propagatedBuildInputs => propagatedNativeBuildInputs
+  propagatedBuildInputs2 = propagatedBuildInputs;
+
   name = "env-${name}";
   phases = [ "buildPhase" "fixupPhase" ];
   setupNew = substituteAll {
     src = ../../stdenv/generic/setup.sh;
     initialPath= (import ../../stdenv/common-path.nix) { inherit pkgs; };
-    gcc = stdenv.gcc;
+    inherit gcc;
   };
 
   buildPhase = ''
@@ -81,6 +88,7 @@ mkDerivation {
         -i "$s"
     cat >> "$out/dev-envs/''${name/env-/}" << EOF
       buildNativeInputs="$buildNativeInputs"
+      propagatedBuildInputs="$propagatedBuildInputs2"
       # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards
       tmp="\$("${pkgs.coreutils}/bin/mktemp" -d)"
       NIX_BUILD_TOP="\$tmp"

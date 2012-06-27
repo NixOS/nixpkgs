@@ -2,10 +2,10 @@
   pkgconfig, webkit }:
 
 stdenv.mkDerivation {
-  name = "vimprobable2-1.0.0";
+  name = "vimprobable2-1.0.2";
   src = fetchurl {
-    url = "mirror://sourceforge/vimprobable/vimprobable2_1.0.0.tar.bz2";
-    sha256 = "1jlx8ssgk42vg1d70n0aa86lr5zixdkkagmcxjc4c7pjvh8vq3gn";
+    url = "mirror://sourceforge/vimprobable/vimprobable2_1.0.2.tar.bz2";
+    sha256 = "19gwlfv0lczbns73xg3637q7ixly62y3ijccnv0m1bqaqxjl4v8x";
   };
   buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit ];
   installPhase = ''

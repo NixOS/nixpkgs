@@ -103,6 +103,7 @@ stdenv.mkDerivation ({
     "--enable-add-ons"
     "--sysconfdir=/etc"
     "--localedir=/var/run/current-system/sw/lib/locale"
+    "libc_cv_ssp=no"
     (if kernelHeaders != null
      then "--with-headers=${kernelHeaders}/include"
      else "--without-headers")
@@ -112,6 +113,9 @@ stdenv.mkDerivation ({
   ] ++ stdenv.lib.optionals (cross != null) [
     (if cross.withTLS then "--with-tls" else "--without-tls")
     (if cross.float == "soft" then "--without-fp" else "--with-fp")
+  ] ++ stdenv.lib.optionals (cross != null
+        && cross.platform ? kernelMajor
+        && cross.platform.kernelMajor == "2.6") [
     "--enable-kernel=2.6.0"
     "--with-__thread"
   ] ++ stdenv.lib.optionals stdenv.isArm [

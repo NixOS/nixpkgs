@@ -1,5 +1,5 @@
 { stdenv, fetchurl, attr, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
-, libjpeg, libpng, ncurses, python, glib }:
+, libjpeg, libpng, ncurses, python, glib, libaio, mesa }:
 
 assert stdenv.isLinux;
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
-      ncurses python glib
+      ncurses python glib libaio mesa
     ];
 
   postInstall =

@@ -10,6 +10,17 @@ stdenv.mkDerivation rec {
   unpackPhase = "true";
 
   installPhase = ''
+    numversion=$(${ghc}/bin/ghc --numeric-version)
+    majorversion=''${numversion%%.*}
+    minorversion=''${numversion#*.}
+    minorversion=''${minorversion%%.*}
+
+    if [[ $majorversion -gt 6 ]] && [[ $minorversion -gt 4 ]]; then
+      globalConf="--global-package-db"
+    else
+      globalConf="--global-conf"
+    fi
+
     originalTopDir="${ghc}/lib/ghc-${ghc.version}"
     originalPkgDir="$originalTopDir/package.conf.d"
     linkedTopDir="$out/lib"
@@ -57,7 +68,7 @@ stdenv.mkDerivation rec {
     done
 
     echo -n "Generating package cache "
-    ${ghc}/bin/ghc-pkg --global-conf $linkedPkgDir recache
+    ${ghc}/bin/ghc-pkg $globalConf $linkedPkgDir recache
     echo .
 
     echo -n "Generating wrappers "
@@ -73,7 +84,7 @@ stdenv.mkDerivation rec {
     done
 
     for prg in ghc-pkg ghc-pkg-${ghc.version}; do
-      makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "--global-conf $linkedPkgDir"
+      makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "$globalConf $linkedPkgDir"
       echo -n .
     done
 

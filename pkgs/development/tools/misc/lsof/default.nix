@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "lsof-4.85";
+  name = "lsof-4.86";
 
   src = fetchurl {
-    url = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.85.tar.bz2;
-    sha256 = "1hd1aihbzx2c2p4ps4zll6nldyf9l7js59hllnnmpi1r6pk5iaj9";
+    url = ftp://lsof.itap.purdue.edu/pub/tools/unix/lsof/lsof_4.86.tar.bz2;
+    sha256 = "13e52b8e87dddf1b2e219004e315d755c659217ce6ffc6a5f1102969f1c4dd0c";
   };
 
   unpackPhase = "tar xvjf $src; cd lsof_*; tar xvf lsof_*.tar; sourceRoot=$( echo lsof_*/); ";

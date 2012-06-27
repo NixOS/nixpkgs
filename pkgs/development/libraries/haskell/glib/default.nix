@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "glib";
-  version = "0.12.3";
-  sha256 = "1hv7wnxsjzlr2bchl8ir967iv9qjzlv9lnlyvrilagzafr7nximb";
+  version = "0.12.3.1";
+  sha256 = "1k5s1d05kv0amvkjr644pqvicvmcgr5fffsz0xyljbj5jk4iv0py";
   buildTools = [ gtk2hsBuildtools ];
   extraLibraries = [ libc pkgconfig ];
   pkgconfigDepends = [ glib ];

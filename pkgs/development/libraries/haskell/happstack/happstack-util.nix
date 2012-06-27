@@ -12,6 +12,9 @@ cabal.mkDerivation (self: {
     extensibleExceptions filepath hslogger mtl network parsec random
     time unixCompat
   ];
+  patchPhase = ''
+    sed -i -e 's|mtl >= 1.1 && < 2.1|mtl|' happstack-util.cabal
+  '';
   meta = {
     homepage = "http://happstack.com";
     description = "Web framework";
