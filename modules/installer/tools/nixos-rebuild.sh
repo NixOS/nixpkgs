@@ -125,8 +125,12 @@ fi
 # Pull the manifests defined in the configuration (the "manifests"
 # attribute).  Wonderfully hacky.
 if [ -n "$pullManifest" -o "$action" = pull ]; then
+    set -o pipefail
     manifests=$(nix-instantiate --eval-only --xml --strict '<nixos>' -A manifests \
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
+
+    set -o nopipefail
+    [ "$action" = pull -a $? -ne 0 ] && exit 1
 
     mkdir -p /nix/var/nix/channel-cache
     for i in $manifests; do
