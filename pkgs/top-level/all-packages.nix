@@ -5360,6 +5360,8 @@ let
 
   bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
 
+  busybox = callPackage ../os-specific/linux/busybox { };
+
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
 
   cifs_utils = callPackage ../os-specific/linux/cifs-utils { };
@@ -8350,8 +8352,6 @@ let
   ataripp = callPackage ../misc/emulators/atari++ { };
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
-
-  busybox = callPackage ../misc/busybox { };
 
   cups = callPackage ../misc/cups { };
 
