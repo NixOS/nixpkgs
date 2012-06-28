@@ -6312,7 +6312,6 @@ let
   bibletime = callPackage ../applications/misc/bibletime { };
 
   bitcoin = callPackage ../applications/misc/bitcoin {
-    boost = boost144;
     db4 = db48;
   };
 
