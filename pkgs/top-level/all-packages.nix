@@ -3217,10 +3217,12 @@ let
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost148 = callPackage ../development/libraries/boost/1.48.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
-  boost = boost149;
+  boost150 = callPackage ../development/libraries/boost/1.50.nix { };
+  boost = boost150;
 
   boostHeaders149 = callPackage ../development/libraries/boost/1.49-headers.nix { };
-  boostHeaders = boostHeaders149;
+  boostHeaders150 = callPackage ../development/libraries/boost/1.50-headers.nix { };
+  boostHeaders = boostHeaders150;
 
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
   boostFull = appendToName "full" (boost.override {
