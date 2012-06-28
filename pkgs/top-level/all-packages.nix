@@ -7164,6 +7164,8 @@ let
 
   offrss = callPackage ../applications/networking/offrss { };
 
+  ogmtools = callPackage ../applications/video/ogmtools { };
+
   oneteam = callPackage ../applications/networking/instant-messengers/oneteam {};
 
   openbox = callPackage ../applications/window-managers/openbox { };
