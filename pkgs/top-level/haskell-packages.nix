@@ -1028,9 +1028,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mtl_2_1_2 = callPackage ../development/libraries/haskell/mtl/2.1.2.nix {
     transformers = self.transformers_0_3_0_0;
   };
-  mtl1 = self.mtl_1_1_1_1;
-  mtl2 = self.mtl_2_1_2;
-  mtl  = self.mtl2;
+  mtl = self.mtl_2_1_2;
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
