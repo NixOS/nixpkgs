@@ -28,6 +28,7 @@
       <arg choice='plain'><option>pull</option></arg>
     </group>
     <sbr />
+    <arg><option>--upgrade</option></arg>
     <arg><option>--install-grub</option></arg>
     <arg><option>--no-pull</option></arg>
     <arg><option>--no-build-nix</option></arg>
@@ -173,12 +174,11 @@ $ ./result/bin/run-*-vm
   <varlistentry>
     <term><option>pull</option></term>
     <listitem>
-      <para>This operation merely fetches the latest manifest in the
-      Nixpkgs channel to speed up subsequent
-      <command>nix-env</command> operations.  This is useful if you
-      are not using <command>nix-channel</command> but still want to
-      use pre-built binary packages.  It doesn’t reconfigure the
-      system at all.</para>
+      <para>This operation fetches the latest manifest in the Nixpkgs
+      channel to speed up subsequent <command>nix-env</command>
+      operations.  This is useful if you are not using
+      <command>nix-channel</command> but still want to use pre-built
+      binary packages.  It doesn’t reconfigure the system</para>
     </listitem>
   </varlistentry>
 
@@ -197,27 +197,20 @@ $ ./result/bin/run-*-vm
 <variablelist>
 
   <varlistentry>
+    <term><option>--upgrade</option></term>
+    <listitem>
+      <para>Fetch the latest version of NixOS from the NixOS
+      channel.</para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><option>--install-grub</option></term>
     <listitem>
       <para>Causes the GRUB boot loader to be (re)installed on the
       device specified by the
       <varname>boot.loader.grub.device</varname> configuration
       option.</para>
-    </listitem>
-  </varlistentry>
-
-  <varlistentry>
-    <term><option>--no-pull</option></term>
-    <listitem>
-      <para>Normally, <command>nixos-rebuild</command> calls
-      <command>nix-pull</command> to obtain the set of available
-      pre-built binaries in the Nixpkgs channel.  This option causes
-      the call to <command>nix-pull</command> to be skipped.  Note
-      that the result of previous invocations of
-      <command>nix-pull</command> may still be available in
-      <filename>/nix/var/nix/manifests</filename>, so to disable the
-      use of pre-built binaries, you should clear that directory in
-      addition to using <option>--no-pull</option>.</para>
     </listitem>
   </varlistentry>
 
@@ -236,10 +229,9 @@ $ ./result/bin/run-*-vm
   <varlistentry>
     <term><option>--fast</option></term>
     <listitem>
-      <para>Equivalent to <option>--no-pull</option>
-      <option>--no-build-nix</option> <option>--show-trace</option>.
-      This option is useful if you call
-      <command>nixos-rebuild</command> frequently (e.g. if you’re
+      <para>Equivalent to <option>--no-build-nix</option>
+      <option>--show-trace</option>.  This option is useful if you
+      call <command>nixos-rebuild</command> frequently (e.g. if you’re
       hacking on a NixOS module).</para>
     </listitem>
   </varlistentry>

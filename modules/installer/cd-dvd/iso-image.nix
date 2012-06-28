@@ -205,7 +205,9 @@ in
     else
       [ config.boot.kernelPackages.aufs ];
 
-  boot.initrd.kernelModules = [ "aufs" "squashfs" "iso9660" "loop" ];
+  boot.initrd.availableKernelModules = [ "aufs" "squashfs" "iso9660" ];
+
+  boot.initrd.kernelModules = [ "loop" ];
 
   boot.kernelModules = pkgs.stdenv.lib.optional config.isoImage.makeEfiBootable "efivars";
 

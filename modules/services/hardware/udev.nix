@@ -51,7 +51,7 @@ let
           --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount
       done
 
-      echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev ... "
+      echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev... "
       import_progs=$(grep 'IMPORT{program}="[^/$]' $out/* |
         sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
       run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="[^/$]' |
@@ -65,8 +65,8 @@ let
       done
       echo "OK"
 
-      echo -n "Checking that all programs called by absolute paths in udev rules exist ... "
-      import_progs=$(grep 'IMPORT{program}="/' $out/* |
+      echo -n "Checking that all programs called by absolute paths in udev rules exist... "
+      import_progs=$(grep 'IMPORT{program}="\/' $out/* |
         sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
       run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="/' |
         sed -e 's/.*RUN+="\([^ "]*\)[ "].*/\1/' | uniq)

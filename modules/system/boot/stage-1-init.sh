@@ -173,21 +173,28 @@ onACPower() {
 
 # Check the specified file system, if appropriate.
 checkFS() {
+    local device="$1"
+    local fsType="$2"
+    
     # Only check block devices.
-    if ! test -b "$device"; then return 0; fi
-
-    FSTYPE=$(blkid -o value -s TYPE "$device" || true)
+    if [ ! -b "$device" ]; then return 0; fi
 
     # Don't check ROM filesystems.
-    if test "$FSTYPE" = iso9660 -o "$FSTYPE" = udf; then return 0; fi
+    if [ "$fsType" = iso9660 -o "$fsType" = udf ]; then return 0; fi
+
+    # If we couldn't figure out the FS type, then skip fsck.
+    if [ "$fsType" = auto ]; then
+        echo 'cannot check filesystem with type "auto"!'
+        return 0
+    fi
 
     # Optionally, skip fsck on journaling filesystems.  This option is
     # a hack - it's mostly because e2fsck on ext3 takes much longer to
     # recover the journal than the ext3 implementation in the kernel
     # does (minutes versus seconds).
     if test -z "@checkJournalingFS@" -a \
-        \( "$FSTYPE" = ext3 -o "$FSTYPE" = ext4 -o "$FSTYPE" = reiserfs \
-        -o "$FSTYPE" = xfs -o "$FSTYPE" = jfs \)
+        \( "$fsType" = ext3 -o "$fsType" = ext4 -o "$fsType" = reiserfs \
+        -o "$fsType" = xfs -o "$fsType" = jfs \)
     then
         return 0
     fi
@@ -199,7 +206,9 @@ checkFS() {
         return 0
     fi
 
-    FSTAB_FILE="/etc/mtab" fsck -V -C -a "$device"
+    echo "checking $device..."
+
+    fsck -V -a "$device"
     fsckResult=$?
 
     if test $(($fsckResult | 2)) = $fsckResult; then
@@ -229,7 +238,16 @@ mountFS() {
     local options="$3"
     local fsType="$4"
 
-    checkFS "$device"
+    if [ "$fsType" = auto ]; then
+        fsType=$(blkid -o value -s TYPE "$device")
+        if [ -z "$fsType" ]; then fsType=auto; fi
+    fi
+
+    echo "$device /mnt-root$mountPoint $fsType $options" >> /etc/fstab
+
+    checkFS "$device" "$fsType"
+
+    echo "mounting $device on $mountPoint..."
 
     mkdir -p "/mnt-root$mountPoint" || true
 
@@ -239,7 +257,7 @@ mountFS() {
         if [ "$fsType" = "nfs" ]; then
           nfsmount "$device" "/mnt-root$mountPoint" && break
         else
-          mount -t "$fsType" -o "$options" "$device" "/mnt-root$mountPoint" && break
+          mount "/mnt-root$mountPoint" && break
         fi
         if [ "$fsType" != cifs -o "$n" -ge 10 ]; then fail; break; fi
         echo "retrying..."
@@ -299,8 +317,6 @@ while read -u 3 mountPoint; do
     # Wait once more for the udev queue to empty, just in case it's
     # doing something with $device right now.
     udevadm settle || true
-
-    echo "mounting $device on $mountPoint..."
 
     mountFS "$device" "$mountPoint" "$options" "$fsType"
 done
