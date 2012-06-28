@@ -1251,6 +1251,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
 
+  shelly = callPackage ../development/libraries/haskell/shelly {};
+
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
 
   skein = callPackage ../development/libraries/haskell/skein {};
