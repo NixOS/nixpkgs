@@ -189,5 +189,6 @@ in stdenv.mkDerivation rec {
     homepage = http://www.chromium.org/;
     maintainers = with stdenv.lib.maintainers; [ goibhniu chaoflow ];
     license = licenses.bsd3;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
