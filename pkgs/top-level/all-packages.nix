@@ -5320,6 +5320,8 @@ let
 
   afuse = callPackage ../os-specific/linux/afuse { };
 
+  amdUcode = callPackage ../os-specific/linux/firmware/amd-ucode { };
+
   autofs5 = callPackage ../os-specific/linux/autofs/autofs-v5.nix { };
 
   _915resolution = callPackage ../os-specific/linux/915resolution { };
