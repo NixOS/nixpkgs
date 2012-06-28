@@ -127,7 +127,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     html         = self.html_1_0_1_2;           # 7.4.2 ok
     HTTP         = self.HTTP_4000_2_3;          # 7.4.2 ok
     HUnit        = self.HUnit_1_2_4_3;          # 7.4.2 ok
-    mtl          = self.mtl_2_1_1;              # 7.4.2 ok
+    mtl          = self.mtl_2_1_2;              # 7.4.2 ok
     network      = self.network_2_3_0_14;       # 7.4.2 ok
     OpenGL       = self.OpenGL_2_2_3_1;         # 7.4.2 ok
     parallel     = self.parallel_3_2_0_2;       # 7.4.2 ok
@@ -138,7 +138,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexCompat  = self.regexCompat_0_95_1;     # 7.4.2 ok
     regexPosix   = self.regexPosix_0_95_1;      # 7.4.2 ok
     stm          = self.stm_2_3;                # 7.4.2 ok
-    syb          = self.syb_0_3_6_1;            # 7.4.2 ok
+    syb          = self.syb_0_3_6_2;            # 7.4.2 ok
     text         = self.text_0_11_2_2;          # 7.4.2 ok
     transformers = self.transformers_0_3_0_0;   # 7.4.2 ok
     xhtml        = self.xhtml_3000_2_1;         # 7.4.2 ok
@@ -1025,8 +1025,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mtl_2_1_1 = callPackage ../development/libraries/haskell/mtl/2.1.1.nix {
     transformers = self.transformers_0_3_0_0;
   };
+  mtl_2_1_2 = callPackage ../development/libraries/haskell/mtl/2.1.2.nix {
+    transformers = self.transformers_0_3_0_0;
+  };
   mtl1 = self.mtl_1_1_1_1;
-  mtl2 = self.mtl_2_1_1;
+  mtl2 = self.mtl_2_1_2;
   mtl  = self.mtl2;
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
@@ -1285,6 +1288,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   syb_0_3 = callPackage ../development/libraries/haskell/syb/0.3.nix {};
   syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
   syb_0_3_6_1 = callPackage ../development/libraries/haskell/syb/0.3.6.1.nix {};
+  syb_0_3_6_2 = callPackage ../development/libraries/haskell/syb/0.3.6.2.nix {};
   syb = null;  # by default, we assume that syb ships with GHC, which is
                # true for the older GHC versions
 
