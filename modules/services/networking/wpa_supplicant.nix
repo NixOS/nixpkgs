@@ -18,7 +18,7 @@ in
   ###### interface
 
   options = {
-  
+
     networking.WLANInterface = mkOption {
       default = "";
       description = "Obsolete. Use <option>networking.wireless.interfaces</option> instead.";
@@ -82,14 +82,14 @@ in
 
 
   ###### implementation
-  
+
   config = mkIf cfg.enable {
 
     environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
-    jobs.wpa_supplicant = 
+    jobs.wpa_supplicant =
       { startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
@@ -119,13 +119,13 @@ in
             exec wpa_supplicant -s -u ${optionalString (cfg.driver != "") "-D${cfg.driver}"} -c ${configFile} $ifaces
           '';
       };
-  
+
     powerManagement.resumeCommands =
       ''
         ${config.system.build.upstart}/sbin/restart wpa_supplicant
       '';
 
-    assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != []; 
+    assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != [];
                     message = "user controlled wpa_supplicant needs explicit networking.wireless.interfaces";}];
 
   };
