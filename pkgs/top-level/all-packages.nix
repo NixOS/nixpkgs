@@ -812,6 +812,8 @@ let
    */
   graphviz_2_0 = callPackage ../tools/graphics/graphviz/2.0.nix { };
 
+  grive = callPackage ../tools/filesystems/grive { };
+
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
   };
