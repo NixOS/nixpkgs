@@ -437,6 +437,8 @@ let
 
   bootchart = callPackage ../tools/system/bootchart { };
 
+  bsod = callPackage ../misc/emulators/bsod { };
+
   btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
     inherit (pkgs) libuuid zlib acl attr fetchgit e2fsprogs;
   };
@@ -810,6 +812,8 @@ let
    */
   graphviz_2_0 = callPackage ../tools/graphics/graphviz/2.0.nix { };
 
+  grive = callPackage ../tools/filesystems/grive { };
+
   groff = callPackage ../tools/text/groff {
     ghostscript = null;
   };
@@ -946,6 +950,8 @@ let
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
   less = callPackage ../tools/misc/less { };
+
+  minidlna = callPackage ../tools/networking/minidlna { };
 
   most = callPackage ../tools/misc/most { };
 
@@ -2498,7 +2504,13 @@ let
 
   urweb = callPackage ../development/compilers/urweb { };
 
-  vala = callPackage ../development/compilers/vala { };
+  vala = vala17;
+
+  vala15 = callPackage ../development/compilers/vala/15.2.nix { };
+
+  vala16 = callPackage ../development/compilers/vala/16.1.nix { };
+
+  vala17 = callPackage ../development/compilers/vala/default.nix { };
 
   visualcpp = callPackage ../development/compilers/visual-c++ { };
 
@@ -2888,6 +2900,8 @@ let
      wrapGCC (ccache.links extraConfig)) {};
   ccacheStdenv = overrideGCC stdenv ccacheWrapper;
 
+  cgdb = callPackage ../development/tools/misc/cgdb { };
+
   complexity = callPackage ../development/tools/misc/complexity { };
 
   ctags = callPackage ../development/tools/misc/ctags { };
@@ -3205,10 +3219,12 @@ let
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost148 = callPackage ../development/libraries/boost/1.48.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
-  boost = boost149;
+  boost150 = callPackage ../development/libraries/boost/1.50.nix { };
+  boost = boost150;
 
   boostHeaders149 = callPackage ../development/libraries/boost/1.49-headers.nix { };
-  boostHeaders = boostHeaders149;
+  boostHeaders150 = callPackage ../development/libraries/boost/1.50-headers.nix { };
+  boostHeaders = boostHeaders150;
 
   # A Boost build with all library variants enabled.  Very large (about 250 MB).
   boostFull = appendToName "full" (boost.override {
@@ -5181,7 +5197,10 @@ let
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
-  mongodb = callPackage ../servers/nosql/mongodb { useV8 = (getConfig ["mongodb" "useV8"] false); };
+  mongodb = callPackage ../servers/nosql/mongodb {
+    boost = boost147;
+    useV8 = (getConfig ["mongodb" "useV8"] false);
+  };
 
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
@@ -5306,6 +5325,8 @@ let
 
   afuse = callPackage ../os-specific/linux/afuse { };
 
+  amdUcode = callPackage ../os-specific/linux/firmware/amd-ucode { };
+
   autofs5 = callPackage ../os-specific/linux/autofs/autofs-v5.nix { };
 
   _915resolution = callPackage ../os-specific/linux/915resolution { };
@@ -5343,6 +5364,8 @@ let
   beret = callPackage ../games/beret { };
 
   bridge_utils = callPackage ../os-specific/linux/bridge-utils { };
+
+  busybox = callPackage ../os-specific/linux/busybox { };
 
   checkpolicy = callPackage ../os-specific/linux/checkpolicy { };
 
@@ -6207,6 +6230,8 @@ let
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
+  ubuntu_font_family = callPackage ../data/fonts/ubuntu-font-family { };
+
   ucsFonts = callPackage ../data/fonts/ucs-fonts { };
 
   unifont = callPackage ../data/fonts/unifont { };
@@ -6296,7 +6321,6 @@ let
   bibletime = callPackage ../applications/misc/bibletime { };
 
   bitcoin = callPackage ../applications/misc/bitcoin {
-    boost = boost144;
     db4 = db48;
   };
 
@@ -7150,6 +7174,8 @@ let
 
   offrss = callPackage ../applications/networking/offrss { };
 
+  ogmtools = callPackage ../applications/video/ogmtools { };
+
   oneteam = callPackage ../applications/networking/instant-messengers/oneteam {};
 
   openbox = callPackage ../applications/window-managers/openbox { };
@@ -7410,8 +7436,6 @@ let
   };
 
   taskwarrior = callPackage ../applications/misc/taskwarrior { };
-
-  taskwarrior_unstable = callPackage ../applications/misc/taskwarrior/unstable.nix { };
 
   telepathy_gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble {
     inherit (pkgs.gnome) libsoup;
@@ -8334,8 +8358,6 @@ let
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
-  busybox = callPackage ../misc/busybox { };
-
   cups = callPackage ../misc/cups { };
 
   cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
@@ -8587,10 +8609,6 @@ let
 
   texLiveModerncv = builderDefsPackage (import ../tools/typesetting/tex/texlive/moderncv.nix) {
     inherit texLive unzip;
-  };
-
-  trac = callPackage ../misc/trac {
-    inherit (pythonPackages) pysqlite;
   };
 
   vice = callPackage ../misc/emulators/vice { };

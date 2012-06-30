@@ -2825,10 +2825,10 @@ rec {
   };
 
   PerlMagick = buildPerlPackage {
-    name = "PerlMagick-6.74";
+    name = "PerlMagick-6.77";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-6.74.tar.gz;
-      sha256 = "6f2fbd3398610f2f02d5670eb5e0f5cb58079fba0e6b9d26519f469c104b969a";
+      url = mirror://cpan/authors/id/J/JC/JCRISTY/PerlMagick-6.77.tar.gz;
+      sha256 = "0axbj3n5avjxvlxradjs9zxiv84i00drmnjsb7hq9sjn9fzggngg";
     };
     buildInputs = [pkgs.imagemagick];
     preConfigure =

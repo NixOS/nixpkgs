@@ -1,4 +1,4 @@
-{ fetchurl, fetchgit, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo
+{ fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo
 , dejagnu, python, target ? null
 
 # Additional dependencies for GNU/Hurd.
