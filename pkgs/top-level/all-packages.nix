@@ -1533,7 +1533,9 @@ let
 
   vifm = callPackage ../applications/misc/vifm {};
 
-  viking = callPackage ../applications/misc/viking { };
+  viking = callPackage ../applications/misc/viking {
+    inherit (gnome) scrollkeeper;
+  };
 
   vncrec = builderDefsPackage ../tools/video/vncrec {
     inherit (xlibs) imake libX11 xproto gccmakedep libXt
