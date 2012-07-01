@@ -38,6 +38,6 @@ stdenv.mkDerivation (rec {
   crossAttrs =
     # XXX: Temporary workaround to allow GNU/Hurd builds with newer libcs.
     (stdenv.lib.optionalAttrs (stdenv.cross.config == "i586-pc-gnu") {
-      patches = [ ../../misc/coreutils/gets-undeclared.patch ];
+      patches = [ ./gets-undeclared.patch ];
     });
 })
