@@ -1342,6 +1342,8 @@ let
 
   remind = callPackage ../tools/misc/remind { };
 
+  remmina = callPackage ../applications/networking/remote/remmina {};
+
   replace = callPackage ../tools/text/replace { };
 
   rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
