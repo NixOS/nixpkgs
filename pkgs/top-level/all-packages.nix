@@ -834,6 +834,8 @@ let
 
   gt5 = callPackage ../tools/system/gt5 { };
 
+  gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
+
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
