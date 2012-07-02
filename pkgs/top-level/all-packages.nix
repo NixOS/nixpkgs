@@ -654,7 +654,9 @@ let
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
-  enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
+  enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
+    boost = boost149;
+  };
 
   encfs = callPackage ../tools/filesystems/encfs { };
 
