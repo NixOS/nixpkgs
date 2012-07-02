@@ -7940,6 +7940,7 @@ let
 
   ufoai = callPackage ../games/ufoai {
     inherit (gnome) gtksourceview gtkglext;
+    libpng = libpng12;
   };
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
