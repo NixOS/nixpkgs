@@ -1,29 +1,33 @@
 { stdenv, fetchurl, apr, expat
-, bdbSupport ? false, db4 ? null
-, ldapSupport ? !stdenv.isDarwin, openldap
+, sslSupport ? true, openssl
+, bdbSupport ? false, db4
+, ldapSupport ? true, openldap
 }:
 
+assert sslSupport -> openssl != null;
 assert bdbSupport -> db4 != null;
+assert ldapSupport -> openldap != null;
 
 stdenv.mkDerivation rec {
   name = "apr-util-1.4.1";
-  
+
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
     md5 = "52b31b33fb1aa16e65ddaefc76e41151";
   };
-  
+
   configureFlags = ''
     --with-apr=${apr} --with-expat=${expat}
-    ${if bdbSupport then "--with-berkeley-db=${db4}" else ""}
-    ${if ldapSupport then "--with-ldap" else ""}
+    --with-crypto
+    ${stdenv.lib.optionalString sslSupport "--with-openssl=${openssl}"}
+    ${stdenv.lib.optionalString bdbSupport "--with-berkeley-db=${db4}"}
+    ${stdenv.lib.optionalString ldapSupport "--with-ldap"}
   '';
 
   propagatedBuildInputs = stdenv.lib.optional ldapSupport openldap;
-  
+
   passthru = {
-    inherit bdbSupport;
-    inherit ldapSupport;
+    inherit sslSupport bdbSupport ldapSupport;
   };
 
   meta = {
@@ -31,4 +35,3 @@ stdenv.mkDerivation rec {
     description = "A companion library to APR, the Apache Portable Runtime";
   };
 }
-
