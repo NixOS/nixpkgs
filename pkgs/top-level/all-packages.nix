@@ -3213,11 +3213,9 @@ let
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
-  boost142 = callPackage ../development/libraries/boost/1.42.nix { };
   boost144 = callPackage ../development/libraries/boost/1.44.nix { };
   boost146 = callPackage ../development/libraries/boost/1.46.nix { };
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
-  boost148 = callPackage ../development/libraries/boost/1.48.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
   boost150 = callPackage ../development/libraries/boost/1.50.nix { };
   boost = boost150;
