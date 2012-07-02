@@ -953,6 +953,8 @@ let
 
   less = callPackage ../tools/misc/less { };
 
+  klavaro = callPackage ../games/klavaro {};
+
   minidlna = callPackage ../tools/networking/minidlna { };
 
   most = callPackage ../tools/misc/most { };
