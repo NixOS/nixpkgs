@@ -4,7 +4,10 @@ stdenv.mkDerivation rec {
   name = "PyQt-x11-gpl-4.9.1";
   
   src = fetchurl {
-    url = "http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4/${name}.tar.gz";
+    urls = [
+      "http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4/${name}.tar.gz"
+      "http://pkgs.fedoraproject.org/lookaside/pkgs/PyQt4/PyQt-x11-gpl-4.9.1.tar.gz/7f495dc49f71e3bfb64bf942e0d8bb3c/PyQt-x11-gpl-4.9.1.tar.gz"
+    ];
     sha256 = "1ccvc80z8a0k0drvba9ngivsnv2k2nn5317yf86w1zwh45zmb0zj";
   };
   
