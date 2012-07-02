@@ -7470,6 +7470,8 @@ let
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
+  transmission_remote_gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk {};
+
   trayer = callPackage ../applications/window-managers/trayer { };
 
   tree = callPackage ../tools/system/tree { };
