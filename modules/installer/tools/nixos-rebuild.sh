@@ -128,8 +128,7 @@ if [ -n "$pullManifest" -o "$action" = pull ]; then
     set -o pipefail
     manifests=$(nix-instantiate --eval-only --xml --strict '<nixos>' -A manifests \
         | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
-
-    set -o nopipefail
+    set +o pipefail
     if [ $? -ne 0 ]; then exit 1; fi
 
     mkdir -p /nix/var/nix/channel-cache
