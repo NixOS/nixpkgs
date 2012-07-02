@@ -1,9 +1,7 @@
 rec {
-   version="2.15";
-   name="asymptote-2.15";
-   hash="11y8w2r51g48znqvl1wwrg0wsrwz3194r70aq1mlgq1g0xzln0w9";
-   url="http://downloads.sourceforge.net/project/asymptote/asymptote/${version}/asymptote-${version}.src.tgz";
-   advertisedUrl="http://downloads.sourceforge.net/project/asymptote/asymptote/2.15/asymptote-2.15.src.tgz";
-
-
+   version="2.16";
+   name="asymptote-2.16";
+   hash="1yj8dx320s1ypqbpb2116y4kkc8lwg5q4d49n992ds3g59w98djj";
+   url="http://downloads.sourceforge.net/project/asymptote/${version}/asymptote-${version}.src.tgz";
+   advertisedUrl="http://downloads.sourceforge.net/project/asymptote/2.16/asymptote-2.16.src.tgz";
 }

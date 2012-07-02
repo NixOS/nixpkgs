@@ -116,37 +116,37 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # GHC version, change the "preferences function" for that GHC version
   # in haskell-defaults.nix.
 
-  # NOTE: 2011.4.0.0 is the current default.
+  # NOTE: 2012.2.0.0 is the current default.
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
-    cgi          = self.cgi_3001_1_7_4;         # 7.4.2 ok
-    fgl          = self.fgl_5_4_2_4;            # 7.4.2 ok
-    GLUT         = self.GLUT_2_1_2_1;           # 7.4.2 ok
-    haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.4.2 ok
-    html         = self.html_1_0_1_2;           # 7.4.2 ok
-    HTTP         = self.HTTP_4000_2_3;          # 7.4.2 ok
-    HUnit        = self.HUnit_1_2_4_3;          # 7.4.2 ok
-    mtl          = self.mtl_2_1_1;              # 7.4.2 ok
-    network      = self.network_2_3_0_14;       # 7.4.2 ok
-    OpenGL       = self.OpenGL_2_2_3_1;         # 7.4.2 ok
-    parallel     = self.parallel_3_2_0_2;       # 7.4.2 ok
-    parsec       = self.parsec_3_1_3;           # 7.4.2 ok
-    QuickCheck   = self.QuickCheck_2_5;         # 7.4.2 ok
-    random       = self.random_1_0_1_1;         # 7.4.2 ok
-    regexBase    = self.regexBase_0_93_2;       # 7.4.2 ok
-    regexCompat  = self.regexCompat_0_95_1;     # 7.4.2 ok
-    regexPosix   = self.regexPosix_0_95_1;      # 7.4.2 ok
-    stm          = self.stm_2_3;                # 7.4.2 ok
-    syb          = self.syb_0_3_6_1;            # 7.4.2 ok
-    text         = self.text_0_11_2_2;          # 7.4.2 ok
-    transformers = self.transformers_0_3_0_0;   # 7.4.2 ok
-    xhtml        = self.xhtml_3000_2_1;         # 7.4.2 ok
-    zlib         = self.zlib_0_5_3_3;           # 7.4.2 ok
-    cabalInstall = self.cabalInstall_0_14_0;    # 7.4.2 ok
-    alex         = self.alex_3_0_1;             # 7.4.2 ok
-    haddock      = self.haddock_2_10_0;         # 7.4.2 ok
-    happy        = self.happy_1_18_9;           # 7.4.2 ok
+    cgi          = self.cgi_3001_1_7_4;         # 7.5 fail
+    fgl          = self.fgl_5_4_2_4;            # 7.5 ok
+    GLUT         = self.GLUT_2_1_2_1;           # 7.5 fail
+    haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.5 ok
+    html         = self.html_1_0_1_2;           # 7.5 ok
+    HTTP         = self.HTTP_4000_2_3;          # 7.5 ok
+    HUnit        = self.HUnit_1_2_4_3;          # 7.5 ok
+    mtl          = self.mtl_2_1_2;              # 7.5 ok
+    network      = self.network_2_3_0_14;       # 7.5 ok
+    OpenGL       = self.OpenGL_2_2_3_1;         # 7.5 fail
+    parallel     = self.parallel_3_2_0_2;       # 7.5 fail
+    parsec       = self.parsec_3_1_3;           # 7.5 ok
+    QuickCheck   = self.QuickCheck_2_5;         # 7.5 fail
+    random       = self.random_1_0_1_1;         # 7.5 ok
+    regexBase    = self.regexBase_0_93_2;       # 7.5 ok
+    regexCompat  = self.regexCompat_0_95_1;     # 7.5 fail
+    regexPosix   = self.regexPosix_0_95_1;      # 7.5 fail
+    stm          = self.stm_2_3;                # 7.5 ok
+    syb          = self.syb_0_3_6_2;            # 7.5 ok
+    text         = self.text_0_11_2_2;          # 7.5 ok
+    transformers = self.transformers_0_3_0_0;   # 7.5 ok
+    xhtml        = self.xhtml_3000_2_1;         # 7.5 ok
+    zlib         = self.zlib_0_5_3_3;           # 7.5 fail
+    cabalInstall = self.cabalInstall_0_14_0;    # 7.5 ok
+    alex         = self.alex_3_0_1;             # 7.5 ok
+    haddock      = self.haddock_2_10_0;         # 7.5 ok
+    happy        = self.happy_1_18_9;           # 7.5 ok
   };
 
   haskellPlatformArgs_2012_2_0_0 = self : {
@@ -839,6 +839,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
 
+  hinotify = callPackage ../development/libraries/haskell/hinotify {};
+
   hint = callPackage ../development/libraries/haskell/hint {};
 
   Hipmunk = callPackage ../development/libraries/haskell/Hipmunk {};
@@ -1025,9 +1027,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mtl_2_1_1 = callPackage ../development/libraries/haskell/mtl/2.1.1.nix {
     transformers = self.transformers_0_3_0_0;
   };
-  mtl1 = self.mtl_1_1_1_1;
-  mtl2 = self.mtl_2_1_1;
-  mtl  = self.mtl2;
+  mtl_2_1_2 = callPackage ../development/libraries/haskell/mtl/2.1.2.nix {
+    transformers = self.transformers_0_3_0_0;
+  };
+  mtl = self.mtl_2_1_2;
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
@@ -1230,6 +1233,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   regular = callPackage ../development/libraries/haskell/regular {};
 
+  remote = callPackage ../development/libraries/haskell/remote {};
+
   repa = callPackage ../development/libraries/haskell/repa {};
   repaAlgorithms = callPackage ../development/libraries/haskell/repa-algorithms {};
   repaExamples = callPackage ../development/libraries/haskell/repa-examples {};
@@ -1250,6 +1255,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
+
+  shelly = callPackage ../development/libraries/haskell/shelly {};
 
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
 
@@ -1283,6 +1290,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   syb_0_3 = callPackage ../development/libraries/haskell/syb/0.3.nix {};
   syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
   syb_0_3_6_1 = callPackage ../development/libraries/haskell/syb/0.3.6.1.nix {};
+  syb_0_3_6_2 = callPackage ../development/libraries/haskell/syb/0.3.6.2.nix {};
   syb = null;  # by default, we assume that syb ships with GHC, which is
                # true for the older GHC versions
 

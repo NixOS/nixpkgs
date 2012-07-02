@@ -40,7 +40,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "boost-1.48.0";
+  name = "boost-1.50.0";
 
   meta = {
     homepage = "http://boost.org/";
@@ -52,12 +52,9 @@ stdenv.mkDerivation {
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/boost/boost_1_48_0.tar.bz2";
-    sha256 = "1njsircy5xfj5rws10w8vq2s0603z2i31p9wgbawr4wkssr59whv";
+    url = "mirror://sourceforge/boost/boost_1_50_0.tar.bz2";
+    sha256 = "0ac5b82g6b5pdhzypgddql0i3i9vvrwf9iqp3lyp19hzr2wf5b69";
   };
-
-  # See <http://svn.boost.org/trac/boost/ticket/4688>.
-  patches = [ ./boost_filesystem.patch ];
 
   enableParallelBuilding = true;
 

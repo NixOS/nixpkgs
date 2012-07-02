@@ -1,5 +1,8 @@
 { stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto
-, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison }:
+, docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig
+, withGtk ? false, gtk ? null }:
+
+assert withGtk -> gtk != null;
 
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
@@ -14,7 +17,8 @@ stdenv.mkDerivation {
 
   # perf refers both to newt and slang
   buildNativeInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt flex bison ];
-  buildInputs = [ elfutils python perl newt slang ];
+  buildInputs = [ elfutils python perl newt slang pkgconfig] ++
+    stdenv.lib.optional withGtk gtk;
 
   installFlags = "install install-man ASCIIDOC8=1";
 

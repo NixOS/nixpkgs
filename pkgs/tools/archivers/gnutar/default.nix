@@ -37,4 +37,14 @@ stdenv.mkDerivation (rec {
   # cannot be used as a login shell for now.
 // stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux") {
   FORCE_UNSAFE_CONFIGURE = 1;
+}
+
+//
+
+{
+  crossAttrs =
+    # XXX: Temporary workaround to allow GNU/Hurd builds with newer libcs.
+    (stdenv.lib.optionalAttrs (stdenv.cross.config == "i586-pc-gnu") {
+      patches = [ ./gets-undeclared.patch ];
+    });
 })
