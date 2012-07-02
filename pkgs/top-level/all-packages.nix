@@ -7741,7 +7741,9 @@ let
 
   sox = callPackage ../applications/misc/audio/sox { };
 
-  spotify = callPackage ../applications/audio/spotify { };
+  spotify = callPackage ../applications/audio/spotify { 
+    inherit (gnome) GConf;
+  };
 
   libspotify = callPackage ../development/libraries/libspotify {
     apiKey = config.libspotify.apiKey or null;
