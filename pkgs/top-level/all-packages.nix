@@ -5632,6 +5632,12 @@ let
       ];
   };
 
+  linux_3_2_xen = linux_3_2.override {
+    extraConfig = ''
+      XEN_DOM0 y
+    '';
+  };
+
   linux_3_3 = makeOverridable (import ../os-specific/linux/kernel/linux-3.3.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5770,6 +5776,7 @@ let
   linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
   linuxPackages_3_1 = recurseIntoAttrs (linuxPackagesFor linux_3_1 pkgs.linuxPackages_3_1);
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 pkgs.linuxPackages_3_2);
+  linuxPackages_3_2_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_xen pkgs.linuxPackages_3_2_xen);
   linuxPackages_3_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_3 pkgs.linuxPackages_3_3);
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 pkgs.linuxPackages_3_4);
 
