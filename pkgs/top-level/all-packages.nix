@@ -4238,7 +4238,7 @@ let
 
   libva = callPackage ../development/libraries/libva { };
 
-  libvdpau = callPackage ../development/libraries/libvdpau { };
+  libvdpau = callPackage ../development/libraries/libvdpau { inherit (xlibs) libX11; };
 
   libvirt = callPackage ../development/libraries/libvirt { };
 
