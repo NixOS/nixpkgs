@@ -68,6 +68,9 @@ in
             # Invalidate the nscd cache whenever resolv.conf is
             # regenerated.
             libc_restart='${pkgs.upstart}/sbin/start invalidate-nscd'
+          '' + optionalString config.services.bind.enable ''
+            # This hosts runs a full-blown DNS resolver.
+            name_servers='127.0.0.1'
           '' );
         target = "resolvconf.conf";
       }
