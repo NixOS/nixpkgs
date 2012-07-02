@@ -5,13 +5,19 @@ with pkgs.lib;
 {
   options = {
 
-    time.timeZone = mkOption {
-      default = "CET";
-      type = with types; uniq string;
-      example = "America/New_York";
-      description = "The time zone used when displaying times and dates.";
-    };
+    time = {
+      timeZone = mkOption {
+        default = "CET";
+        type = with types; uniq string;
+        example = "America/New_York";
+        description = "The time zone used when displaying times and dates.";
+      };
 
+      clockLocal = mkOption {
+        default = false;
+        description = "Keep the Hardware Clock in local time instead of UTC";
+      };
+    };
   };
 
   config = {
