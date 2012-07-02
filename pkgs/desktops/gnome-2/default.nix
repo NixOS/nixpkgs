@@ -69,6 +69,8 @@
 
   gtkglext = callPackage ./platform/gtkglext { };
 
+  gtkglextmm = callPackage ./platform/gtkglextmm { };
+
 #### DESKTOP
 
   gnome_keyring = callPackage ./desktop/gnome-keyring { };
