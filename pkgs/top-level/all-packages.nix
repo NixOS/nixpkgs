@@ -7067,6 +7067,8 @@ let
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
 
+  mirage = callPackage ../applications/graphics/mirage {};
+
   mmex = callPackage ../applications/office/mmex { };
 
   monodevelop = callPackage ../applications/editors/monodevelop {
