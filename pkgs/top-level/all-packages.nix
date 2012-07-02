@@ -7031,6 +7031,8 @@ let
     pygtk = pyGtkGlade;
   };
 
+  mcomix = callPackage ../applications/graphics/mcomix { };
+
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (pythonPackages) curses;
     guiSupport = false;		# use mercurialFull to get hgk GUI
