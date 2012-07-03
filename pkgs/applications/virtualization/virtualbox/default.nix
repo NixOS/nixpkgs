@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     ++ optional javaBindings jdk
     ++ optional pythonBindings python;
 
-  patchPhase = ''
+  postPatch = ''
     set -x
     MODULES_BUILD_DIR=`echo ${kernel}/lib/modules/*/build`
     sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \
@@ -40,6 +40,21 @@ stdenv.mkDerivation {
     export USER=nix
     set +x
   '';
+
+  patches = [
+    (fetchurl {
+      name = "fix-build-with-3.5-rc2";
+      url = "https://www.virtualbox.org/changeset/41660/vbox?format=diff&new=41660";
+      sha256 = "661f9e9b0e0fc5689d7a2c6511c670596046df7d1f75042b8cc70d8392239ad5";
+    })
+    (fetchurl {
+      name = "fix-build-with-3.5-rc3";
+      url = "https://www.virtualbox.org/changeset/41577/vbox?format=diff&new=41577";
+      sha256 = "a20c9a810b4b478fcdb38d495dff0a49df27463ffe1e4aa96deb6dd328f18f55";
+    })
+  ];
+
+  patchFlags = "-p2";
 
   configurePhase = ''
     ./configure --with-qt4-dir=${qt4} \
