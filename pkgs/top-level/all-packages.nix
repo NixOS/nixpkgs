@@ -6345,6 +6345,10 @@ let
 
   bvi = callPackage ../applications/editors/bvi { };
 
+  calf = callPackage ../applications/audio/calf {
+      inherit (gnome) libglade;
+  };
+
   calibre = callPackage ../applications/misc/calibre { };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
@@ -7029,6 +7033,8 @@ let
   lmms = callPackage ../applications/audio/lmms { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
+
+  lv2 = callPackage ../applications/audio/lv2 { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
