@@ -26,6 +26,7 @@ let
   mkConfigurable = stdenv.lib.mapAttrs (flag: default: getConfig ["chromium" flag] default);
 
   config = mkConfigurable {
+    channel = "stable";
     selinux = false;
     nacl = false;
     openssl = true;
@@ -36,7 +37,7 @@ let
     pulseaudio = getConfig ["pulseaudio"] true;
   };
 
-  sourceInfo = import ./source.nix;
+  sourceInfo = builtins.getAttr config.channel (import ./sources.nix);
 
   mkGypFlags = with stdenv.lib; let
     sanitize = value:
