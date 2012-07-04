@@ -7077,6 +7077,8 @@ let
       icon = "${midori}/share/icons/hicolor/22x22/apps/midori.png";
     };
 
+  mikmod = callPackage ../applications/audio/mikmod { };
+
   minicom = callPackage ../tools/misc/minicom { };
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
