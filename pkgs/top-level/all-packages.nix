@@ -7034,6 +7034,8 @@ let
 
   lmms = callPackage ../applications/audio/lmms { };
 
+  lv2 = callPackage ../applications/audio/lv2 { };
+
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
