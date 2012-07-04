@@ -4624,6 +4624,8 @@ let
 
   librdf = callPackage ../development/libraries/librdf { };
 
+  lv2 = callPackage ../applications/audio/lv2 { };
+
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
   redland = pkgs.librdf_redland;
@@ -7031,8 +7033,6 @@ let
   linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
   lmms = callPackage ../applications/audio/lmms { };
-
-  lv2 = callPackage ../applications/audio/lv2 { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
