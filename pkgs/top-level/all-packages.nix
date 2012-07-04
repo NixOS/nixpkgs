@@ -7032,9 +7032,9 @@ let
 
   lmms = callPackage ../applications/audio/lmms { };
 
-  lxdvdrip = callPackage ../applications/video/lxdvdrip { };
-
   lv2 = callPackage ../applications/audio/lv2 { };
+
+  lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
