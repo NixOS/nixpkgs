@@ -1,14 +1,21 @@
-{ fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline, openssl, perl, libjpeg }:
+{ fetchgit, stdenv, ncurses, curl, pkgconfig, gnutls, readline, openssl, perl, libjpeg
+, libzrtpcpp, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "freeswitch-1.0.7";
+  name = "freeswitch-git-0db52e6";
 
-  src = fetchurl {
-    url = http://latest.freeswitch.org/freeswitch-1.0.7.tar.gz;
-    sha256 = "0r7mqsc50y7aqm8arbwiq75ikwfrrfhhzdf9r070snrf3b8qkj8w";
+  src = fetchgit {
+    url = "git://git.freeswitch.org/freeswitch.git";
+    rev = "0db52e6e556fce584f1850c3a3b87c8f46ff87c5";
+    sha256 = "5cc7161c1ba64c5faf3dda2669e9aafd529eaa66be2fd83f284304444bcab9ff";
   };
 
-  buildInputs = [ ncurses curl pkgconfig gnutls readline openssl perl libjpeg ];
+  preConfigure = ''
+    ./bootstrap.sh
+  '';
+
+  buildInputs = [ ncurses curl pkgconfig gnutls readline openssl perl libjpeg
+    autoconf automake libtool libzrtpcpp ];
 
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";

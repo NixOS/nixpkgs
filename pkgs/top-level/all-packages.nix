@@ -654,7 +654,9 @@ let
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
-  enblendenfuse = callPackage ../tools/graphics/enblend-enfuse { };
+  enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
+    boost = boost149;
+  };
 
   encfs = callPackage ../tools/filesystems/encfs { };
 
@@ -834,6 +836,8 @@ let
 
   gt5 = callPackage ../tools/system/gt5 { };
 
+  gtkdatabox = callPackage ../development/libraries/gtkdatabox {};
+
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
@@ -950,6 +954,8 @@ let
   kismet = callPackage ../applications/networking/sniffers/kismet { };
 
   less = callPackage ../tools/misc/less { };
+
+  klavaro = callPackage ../games/klavaro {};
 
   minidlna = callPackage ../tools/networking/minidlna { };
 
@@ -1342,6 +1348,8 @@ let
 
   remind = callPackage ../tools/misc/remind { };
 
+  remmina = callPackage ../applications/networking/remote/remmina {};
+
   replace = callPackage ../tools/text/replace { };
 
   rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
@@ -1525,7 +1533,9 @@ let
 
   vifm = callPackage ../applications/misc/vifm {};
 
-  viking = callPackage ../applications/misc/viking { };
+  viking = callPackage ../applications/misc/viking {
+    inherit (gnome) scrollkeeper;
+  };
 
   vncrec = builderDefsPackage ../tools/video/vncrec {
     inherit (xlibs) imake libX11 xproto gccmakedep libXt
@@ -3213,11 +3223,9 @@ let
 
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
-  boost142 = callPackage ../development/libraries/boost/1.42.nix { };
   boost144 = callPackage ../development/libraries/boost/1.44.nix { };
   boost146 = callPackage ../development/libraries/boost/1.46.nix { };
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
-  boost148 = callPackage ../development/libraries/boost/1.48.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
   boost150 = callPackage ../development/libraries/boost/1.50.nix { };
   boost = boost150;
@@ -4240,7 +4248,7 @@ let
 
   libva = callPackage ../development/libraries/libva { };
 
-  libvdpau = callPackage ../development/libraries/libvdpau { };
+  libvdpau = callPackage ../development/libraries/libvdpau { inherit (xlibs) libX11; };
 
   libvirt = callPackage ../development/libraries/libvirt { };
 
@@ -6281,6 +6289,7 @@ let
 
   ardour3 =  lowPrio (callPackage ../applications/audio/ardour/ardour3.nix {
     inherit (gnome) libgnomecanvas libgnomecanvasmm;
+    boost = boost149;
   });
 
   arora = callPackage ../applications/networking/browsers/arora { };
@@ -6395,7 +6404,10 @@ let
 
   compiz_plugins_extra = callPackage ../applications/window-managers/compiz/plugins-extra.nix { };
 
-  cinepaint = callPackage ../applications/graphics/cinepaint { };
+  cinepaint = callPackage ../applications/graphics/cinepaint {
+    fltk = fltk13;
+    libpng = libpng12;
+  };
 
   codeville = builderDefsPackage (import ../applications/version-management/codeville/0.8.0.nix) {
     inherit makeWrapper;
@@ -6989,6 +7001,7 @@ let
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
     zip = zip.override { enableNLS = false; };
+    boost = boost149;
     fontsConf = makeFontsConf {
       fontDirectories = [
         freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
@@ -7032,6 +7045,8 @@ let
     pygtk = pyGtkGlade;
   };
 
+  mcomix = callPackage ../applications/graphics/mcomix { };
+
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (pythonPackages) curses;
     guiSupport = false;		# use mercurialFull to get hgk GUI
@@ -7065,6 +7080,8 @@ let
   minicom = callPackage ../tools/misc/minicom { };
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
+
+  mirage = callPackage ../applications/graphics/mirage {};
 
   mmex = callPackage ../applications/office/mmex { };
 
@@ -7470,6 +7487,8 @@ let
   };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
+
+  transmission_remote_gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk {};
 
   trayer = callPackage ../applications/window-managers/trayer { };
 
@@ -7913,6 +7932,7 @@ let
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
     plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
+    libpng = libpng12;
   };
 
   torcs = callPackage ../games/torcs {
@@ -7925,6 +7945,7 @@ let
 
   ufoai = callPackage ../games/ufoai {
     inherit (gnome) gtksourceview gtkglext;
+    libpng = libpng12;
   };
 
   ultimatestunts = callPackage ../games/ultimatestunts { };

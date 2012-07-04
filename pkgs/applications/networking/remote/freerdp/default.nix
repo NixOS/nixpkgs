@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/downloads/FreeRDP/FreeRDP/FreeRDP-${version}.tar.gz";
-    sha256 = "1h7b2ykgsp1b04p67syb3p2xgpsb45i6zl1jvm09h0dr5an85awd";
+    sha256 = "df9f5f3275436f3e413824ca40f1e41733a95121f45e1ed41ab410701c5764cc";
   };
 
   buildInputs = [

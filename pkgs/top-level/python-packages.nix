@@ -525,6 +525,23 @@ let pythonPackages = python.modules // rec {
   };
 
   
+  django_1_3_1 = buildPythonPackage rec {
+    name = "Django-1.3.1";
+
+    src = fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
+      sha256 = "0sqmvqy3y5h76pa3zjcnyiy5x01bzzy03afdp2qdwqx0x321i4dg";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
+  
   django_evolution = buildPythonPackage rec {
     name = "django_evolution-0.6.7";
 
@@ -533,7 +550,7 @@ let pythonPackages = python.modules // rec {
       md5 = "24b8373916f53f74d701b99a6cf41409";
     };
 
-    propagatedBuildInputs = [ django ];
+    propagatedBuildInputs = [ django_1_3_1 ];
 
     meta = {
       description = "A database schema evolution tool for the Django web framework";
@@ -543,14 +560,14 @@ let pythonPackages = python.modules // rec {
 
   
   djblets = buildPythonPackage rec {
-    name = "Djblets-0.6.16";
+    name = "Djblets-0.6.19";
 
     src = fetchurl {
-      url = "http://downloads.reviewboard.org/releases/Djblets/0.6/Djblets-0.6.16.tar.gz";
-      sha256 = "1793jy0y5w79p8395lvvdlmvdybgwvc5lvgzmk1csf08ba772vc4";
+      url = "http://downloads.reviewboard.org/releases/Djblets/0.6/${name}.tar.gz";
+      sha256 = "1hhvpi81yknvlaazq1cpgamp9vf3x1fcr0ba64q3j2yz1kgin1i8";
     };
 
-    propagatedBuildInputs = [ pkgs.pil django ];
+    propagatedBuildInputs = [ pkgs.pil django_1_3_1 ];
 
     meta = {
       description = "A collection of useful extensions for Django";
@@ -1986,17 +2003,17 @@ let pythonPackages = python.modules // rec {
 
   
   reviewboard = buildPythonPackage rec {
-    name = "ReviewBoard-1.6.6";
+    name = "ReviewBoard-1.6.9";
 
     src = fetchurl {
       url = "http://downloads.reviewboard.org/releases/ReviewBoard/1.6/${name}.tar.gz";
-      sha256 = "de965f48c9e63198d3c7c2bb2e8404170868e8c0ee4d6ab796abb9b1ccda6c1d";
+      sha256 = "06pwbmqwsb0g2y8zg5hk5ibaivsl1af7v0vnkqranimf4yaa10mc";
     };
 
     propagatedBuildInputs =
       [ recaptcha_client pytz memcached dateutil paramiko flup pygments
-        djblets django django_evolution pkgs.pycrypto python.modules.sqlite3
-        pysvn pkgs.pil
+        djblets django_1_3_1 django_evolution pkgs.pycrypto python.modules.sqlite3
+        pysvn pkgs.pil psycopg2
       ];
   };
 

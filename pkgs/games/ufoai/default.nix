@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   # for the xvidcore static lib
   NIX_CFLAGS_COMPILE = "-pthread -lm";
 
-  buildInputs = [ SDL mesa SDL_image SDL_ttf SDL_mixer libpng libjpeg zlib curl libvorbis
+  # Order is important, x libs include a libpng version that fails for ufoai
+  buildInputs = [ libpng SDL mesa SDL_image SDL_ttf SDL_mixer libjpeg zlib curl libvorbis
     libtheora xvidcore pkgconfig glib gtk gtkglext gtksourceview libxml2 openal gettext
     p7zip ];
 

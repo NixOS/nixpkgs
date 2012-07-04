@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "gzip-1.4";
 
   src = fetchurl {
@@ -31,3 +31,13 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+{
+  crossAttrs =
+    # XXX: Temporary workaround to allow GNU/Hurd builds with newer libcs.
+    (stdenv.lib.optionalAttrs (stdenv.cross.config == "i586-pc-gnu") {
+      patches = [ ./gets-undeclared.patch ];
+    });
+})

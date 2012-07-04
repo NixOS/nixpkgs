@@ -1,6 +1,6 @@
 {stdenv, fetchurl, coreutils ? null}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation ({
   name = "diffutils-3.2";
   
   src = fetchurl {
@@ -16,3 +16,13 @@ stdenv.mkDerivation {
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
   };
 }
+
+//
+
+{
+  crossAttrs =
+    # XXX: Temporary workaround to allow GNU/Hurd builds with newer libcs.
+    (stdenv.lib.optionalAttrs (stdenv.cross.config == "i586-pc-gnu") {
+      patches = [ ../../misc/coreutils/gets-undeclared.patch ];
+    });
+})

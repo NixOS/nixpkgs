@@ -16,9 +16,10 @@ stdenv.mkDerivation rec {
     cd */
   '';
 
-  buildInputs = [ mesa freeglut libX11 plib openal freealut libXrandr xproto
-    libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib bash 
-    p7zip SDL enet libjpeg cmake];
+  # Order important; it wants libpng12 and some x libs propagate libpng15
+  buildInputs = [ libpng mesa freeglut libX11 plib openal freealut libXrandr xproto
+    libXext libSM libICE libXi libXt libXrender libXxf86vm zlib bash 
+    p7zip SDL enet libjpeg cmake ];
 
   installTargets = "install";
 

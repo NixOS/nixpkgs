@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   inherit libXxf86vm xf86vidmodeproto;
 
   src = fetchurl {
-    url = https://a248.e.akamai.net/f/674/9206/0/www2.ati.com/drivers/linux/ati-driver-installer-10-11-x86.x86_64.run;
+    url = https://www2.ati.com/drivers/linux/ati-driver-installer-10-11-x86.x86_64.run;
     sha256 = "1z33w831ayx1j5lm9d1xv6whkmzsz9v8li3s8c96hwnwki6zpimr";
   };
 
