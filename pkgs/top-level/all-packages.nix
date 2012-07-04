@@ -4624,6 +4624,8 @@ let
 
   librdf = callPackage ../development/libraries/librdf { };
 
+  lv2 = callPackage ../applications/audio/lv2 { };
+
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
   redland = pkgs.librdf_redland;
@@ -6345,6 +6347,10 @@ let
 
   bvi = callPackage ../applications/editors/bvi { };
 
+  calf = callPackage ../applications/audio/calf {
+      inherit (gnome) libglade;
+  };
+
   calibre = callPackage ../applications/misc/calibre { };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
@@ -7027,6 +7033,8 @@ let
   linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
   lmms = callPackage ../applications/audio/lmms { };
+
+  lv2 = callPackage ../applications/audio/lv2 { };
 
   lxdvdrip = callPackage ../applications/video/lxdvdrip { };
 
