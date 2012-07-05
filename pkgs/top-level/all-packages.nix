@@ -4624,6 +4624,10 @@ let
 
   librdf = callPackage ../development/libraries/librdf { };
 
+  lilv = callPackage ../development/libraries/audio/lilv { };
+
+  lv2 = callPackage ../development/libraries/audio/lv2 { };
+
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
   redland = pkgs.librdf_redland;
@@ -4662,6 +4666,8 @@ let
 
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
 
+  serd = callPackage ../development/libraries/serd {};
+ 
   simgear = callPackage ../development/libraries/simgear {};
 
   sfml_git = callPackage ../development/libraries/sfml { };
@@ -4684,6 +4690,8 @@ let
 
   soqt = callPackage ../development/libraries/soqt { };
 
+  sord = callPackage ../development/libraries/sord {};
+
   speechd = callPackage ../development/libraries/speechd { };
 
   speech_tools = callPackage ../development/libraries/speech-tools {};
@@ -4691,6 +4699,8 @@ let
   speex = callPackage ../development/libraries/speex { };
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
+
+  sratom = callPackage ../development/libraries/audio/sratom { };
 
   srtp = callPackage ../development/libraries/srtp {};
 
@@ -4715,6 +4725,8 @@ let
   stlport = callPackage ../development/libraries/stlport { };
 
   strigi = callPackage ../development/libraries/strigi {};
+
+  suil = callPackage ../development/libraries/audio/suil { };
 
   suitesparse = callPackage ../development/libraries/suitesparse { };
 
@@ -6344,6 +6356,10 @@ let
   };
 
   bvi = callPackage ../applications/editors/bvi { };
+
+  calf = callPackage ../applications/audio/calf {
+      inherit (gnome) libglade;
+  };
 
   calibre = callPackage ../applications/misc/calibre { };
 
