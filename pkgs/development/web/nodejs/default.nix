@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8 }:
+{ stdenv, fetchurl, openssl, python, zlib, v8, linkV8Headers ? false }:
 
 stdenv.mkDerivation rec {
   version = "0.6.19";
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     sed -e 's|^#!/usr/bin/env node$|#!'$out'/bin/node|' -i $out/lib/node_modules/npm/bin/npm-cli.js
+  '' + stdenv.lib.optionalString linkV8Headers '' # helps binary npms
+    ln -s ${v8}/include/* $out/include
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libv8.dylib ${v8}/lib/libv8.dylib $out/bin/node
   '';
