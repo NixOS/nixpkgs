@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wxcore";
-  version = "0.90.0.1";
-  sha256 = "031947805bjw32f1a8w2ra8714ysq5k0pxp11cr9hgcc93l9f3pq";
+  version = "0.90.0.3";
+  sha256 = "0d79hr6cz9zj3w57h6630nfnsmfq1w73gz04jjmlhwh8ih557imw";
   buildDepends = [ filepath parsec stm time wxc wxdirect ];
   extraLibraries = [ libX11 mesa wxGTK ];
   meta = {
