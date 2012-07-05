@@ -3953,6 +3953,8 @@ let
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
 
+  libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
+
   libdmtx = callPackage ../development/libraries/libdmtx { };
 
   libdnet = callPackage ../development/libraries/libdnet { };
