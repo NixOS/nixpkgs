@@ -4,16 +4,6 @@ with pkgs.lib;
 
 let
 
-  src_clean_skin = pkgs.fetchurl {
-    url = "http://lastlog.de/misc/clean-1.01.tar.gz";
-    sha256 = "5fb1736b64b33ca3429d035f1358cf8217da2d02019d8a80b14c7985367f659f";
-  };
-
-  src_nixos_skin = pkgs.fetchurl {
-    url = "http://lastlog.de/misc/nixos-1.0.tar.gz";
-    sha256 = "413b0f451bde81ac2dd0bede17dd088f9abcd0f3cea1722279311ca648a855cf";
-  };
-
   mediawikiConfig = pkgs.writeText "LocalSettings.php"
     ''
       <?php
@@ -89,15 +79,14 @@ let
       sha256 = "1d8afbdh3lsg54b69mnh6a47psb3lg978xpp277qs08yz15cjf7q";
     };
 
-    skinTarball = if config.defaultSkin == "clean" then src_clean_skin
-             else if config.defaultSkin == "nixos" then src_nixos_skin
-             else "";
+    skins = config.skins;
 
-    buildPhase = "
-      if [ '${skinTarball}' ]; then
-         tar xfz ${skinTarball} -C skins/;
-      fi
-    ";
+    buildPhase =
+      ''
+        for skin in $skins; do
+          cp -prvd $skin/* skins/
+        done
+      ''; # */
 
     installPhase =
       ''
@@ -257,6 +246,16 @@ in
       default = "";
       example = "nostalgia";
       description = "Set this value to change the default skin used by MediaWiki.";
+    };
+
+    skins = mkOption {
+      default = [];
+      type = types.listOf types.path;
+      description =
+        ''
+          List of paths whose content is copied to the ‘skins’
+          subdirectory of the MediaWiki installation.
+        '';
     };
 
     extraConfig = mkOption {
