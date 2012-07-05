@@ -3898,6 +3898,20 @@ rec {
     };
   };
 
+  WWWCurl = buildPerlPackage rec {
+    name = "WWW-Curl-4.15";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/WWW/${name}.tar.gz";
+      sha256 = "18az7k0jsr642lp6dfy0b2s7vx0cd7sj9dgk93wff73safa09x1y";
+    };
+    buildInputs = [ pkgs.curl ];
+    preConfigure =
+      ''
+        substituteInPlace Makefile.PL --replace '"cpp"' '"gcc -E"'
+      '';
+    doCheck = false; # performs network access
+  };
+
   WWWMechanize = buildPerlPackage rec {
     name = "WWW-Mechanize-1.54";
     src = fetchurl {
