@@ -7,11 +7,11 @@
 assert gtkSupport -> (gtk != null) && (libglade != null);
 
 stdenv.mkDerivation rec {
-  name = "gnunet-0.9.2";
+  name = "gnunet-0.9.3";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${name}.tar.gz";
-    sha256 = "1sa7xc85l7lkd0s7vyxnqhnm7cngnycrvp7zc6yj4b3qjg5z3x94";
+    sha256 = "0ppirvwjb7w7270g0w83z6wyk984cnxv2ydxj7qr0j1cz2j6nn2h";
   };
 
   buildInputs = [
