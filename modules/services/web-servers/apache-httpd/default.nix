@@ -8,6 +8,8 @@ let
 
   httpd = pkgs.apacheHttpd.override { mpm = mainCfg.multiProcessingModule; };
 
+  php = pkgs.php.override { apacheHttpd = httpd; };
+
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
   extraModules = attrByPath ["extraModules"] [] mainCfg;
@@ -308,7 +310,7 @@ let
         allModules =
           concatMap (svc: svc.extraModulesPre) allSubservices
           ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
-          ++ optional enablePHP { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; }
+          ++ optional enablePHP { name = "php5"; path = "${php}/modules/libphp5.so"; }
           ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
       in concatMapStrings load allModules
@@ -379,7 +381,7 @@ let
         ([ mainCfg.phpOptions ] ++ (map (svc: svc.phpOptions) allSubservices));
     }
     ''
-      cat ${pkgs.php}/etc/php-recommended.ini > $out
+      cat ${php}/etc/php-recommended.ini > $out
       echo "$options" >> $out
     '';
 
@@ -410,7 +412,7 @@ in
 
       extraModules = mkOption {
         default = [];
-        example = [ "proxy_connect" { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; } ];
+        example = [ "proxy_connect" { name = "php5"; path = "${php}/modules/libphp5.so"; } ];
         description = ''
           Specifies additional Apache modules.  These can be specified
           as a string in the case of modules distributed with Apache,
