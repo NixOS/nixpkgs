@@ -6,7 +6,7 @@ let
 
   mainCfg = config.services.httpd;
 
-  httpd = pkgs.apacheHttpd;
+  httpd = pkgs.apacheHttpd.override { mpm = mainCfg.multiProcessingModule; };
 
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
@@ -105,10 +105,11 @@ let
       # Other modules.
       "ext_filter" "include" "log_config" "env" "mime_magic"
       "cern_meta" "expires" "headers" "usertrack" /* "unique_id" */ "setenvif"
-      "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
+      "mime" "dav" "status" "autoindex" "asis" "info" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
     ]
+    ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
     ++ extraApacheModules;
 
@@ -282,6 +283,11 @@ let
     ServerRoot ${httpd}
 
     PidFile ${mainCfg.stateDir}/httpd.pid
+
+    ${optionalString (mainCfg.multiProcessingModule != "prefork") ''
+      # mod_cgid requires this.
+      ScriptSock ${mainCfg.stateDir}/cgisock
+    ''}
 
     <IfModule prefork.c>
         MaxClients           ${toString mainCfg.maxClients}
@@ -482,6 +488,23 @@ in
           '';
         description =
           "Options appended to the PHP configuration file <filename>php.ini</filename>.";
+      };
+
+      multiProcessingModule = mkOption {
+        default = "prefork";
+        example = "worker";
+        type = types.uniq types.string;
+        description =
+          ''
+            Multi-processing module to be used by Apache.  Available
+            modules are <literal>prefork</literal> (the default;
+            handles each request in a separate child process),
+            <literal>worker</literal> (hybrid approach that starts a
+            number of child processes each running a number of
+            threads) and <literal>event</literal> (a recent variant of
+            <literal>worker</literal> that handles persistent
+            connections more efficiently).
+          '';
       };
 
       maxClients = mkOption {
