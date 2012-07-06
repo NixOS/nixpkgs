@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, python, cython
-, pygtk, pygobject, pycairo, xlibs, gtk
+, pygtk, pygobject, pycairo, notify, xlibs, gtk
 , ffmpeg, x264, libvpx, makeWrapper}:
 
 stdenv.mkDerivation rec {
