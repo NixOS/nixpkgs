@@ -593,9 +593,7 @@ in
             done
           '';
 
-        daemonType = "fork";
-
-        exec = "httpd -f ${httpdConf}";
+        exec = "httpd -f ${httpdConf} -DNO_DETACH";
 
         preStop =
           ''
