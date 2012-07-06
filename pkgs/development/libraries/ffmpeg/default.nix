@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
     "--enable-gpl"
     "--enable-postproc"
     "--enable-swscale"
-    "--disable-ffserver"
     "--disable-ffplay"
     "--enable-shared"
     "--enable-runtime-cpudetect"
