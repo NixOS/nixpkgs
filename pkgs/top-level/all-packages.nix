@@ -1056,6 +1056,8 @@ let
 
   mpage = callPackage ../tools/text/mpage { };
 
+  mr = callPackage ../applications/version-management/mr { };
+
   mscgen = callPackage ../tools/graphics/mscgen { };
 
   msf = builderDefsPackage (import ../tools/security/metasploit/3.1.nix) {
