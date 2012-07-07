@@ -7509,7 +7509,6 @@ let
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   twinkle = callPackage ../applications/networking/instant-messengers/twinkle {
-    boost = boostFull;
     ccrtp = ccrtp_1_8;
     libzrtpcpp = libzrtpcpp_1_6;
   };
