@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
     optional ldapSupport openldap ++	# there is no --with-ldap flag
     optional libxml2Support libxml2;	# there is --with-libxml2, but it doesn't work
 
+  # Required for ‘pthread_cancel’.
+  NIX_LDFLAGS = "-lgcc_s";
+
   configureFlags = ''
     --with-apr=${apr}
     --with-apr-util=${aprutil}
