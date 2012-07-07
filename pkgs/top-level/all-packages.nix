@@ -5280,6 +5280,11 @@ let
 
   redstore = callPackage ../servers/http/redstore { };
 
+  spamassassin = callPackage ../servers/mail/spamassassin {
+    inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
+      HTTPDate MailDKIM;
+  };
+
   samba = callPackage ../servers/samba { };
 
   # A lightweight Samba, useful for non-Linux-based OSes.
