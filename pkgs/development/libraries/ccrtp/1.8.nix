@@ -10,7 +10,9 @@ stdenv.mkDerivation {
 
   buildInputs = [ openssl pkgconfig libgcrypt commoncpp2 ];
 
-  meta = { 
+  patches = [ ./gcc-4.6-fix.patch ];
+
+  meta = {
     description = "GNU ccRTP is an implementation of RTP, the real-time transport protocol from the IETF";
     homepage = "http://www.gnu.org/software/ccrtp/";
     license = "GPLv2";
