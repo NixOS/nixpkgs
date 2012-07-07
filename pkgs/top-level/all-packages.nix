@@ -5102,9 +5102,15 @@ let
 
   rdf4store = callPackage ../servers/http/4store { };
 
-  apacheHttpd = callPackage ../servers/http/apache-httpd {
+  apacheHttpd = pkgs.apacheHttpd_2_2;
+
+  apacheHttpd_2_2 = callPackage ../servers/http/apache-httpd/2.2.nix {
     sslSupport = true;
   };
+
+  apacheHttpd_2_4 = lowPrio (callPackage ../servers/http/apache-httpd/2.4.nix {
+    sslSupport = true;
+  });
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
