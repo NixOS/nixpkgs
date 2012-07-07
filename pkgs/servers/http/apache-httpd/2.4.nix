@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     --disable-maintainer-mode
     --disable-debugger-mode
     --enable-mods-shared=all
+    --enable-mpms-shared=all
     ${optionalString proxySupport "--enable-proxy"}
     ${optionalString sslSupport "--enable-ssl --with-ssl=${openssl}"}
     ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
