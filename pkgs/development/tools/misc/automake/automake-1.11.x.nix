@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "06476qbd16dlasz29drmljqmr4gwx4qgcl075033b2hc73wx2ijg";
   };
 
+  patches = [ ./fix-test-autoconf-2.69.patch ];
+
   buildInputs = [perl autoconf makeWrapper];
 
   inherit doCheck;
@@ -26,6 +28,9 @@ stdenv.mkDerivation rec {
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;
+
+  # Run the test suite in parallel.
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.gnu.org/software/automake/;
