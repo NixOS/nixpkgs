@@ -5149,7 +5149,7 @@ let
   freeswitch = callPackage ../servers/sip/freeswitch { };
 
   ghostOne = callPackage ../servers/games/ghost-one {
-    boost = boost144;
+    boost = boost144.override { taggedLayout = true; };
   };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
