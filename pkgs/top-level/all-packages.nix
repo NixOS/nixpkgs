@@ -5156,7 +5156,7 @@ let
   freeswitch = callPackage ../servers/sip/freeswitch { };
 
   ghostOne = callPackage ../servers/games/ghost-one {
-    boost = boostFull;
+    boost = boost144;
   };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
