@@ -3327,7 +3327,7 @@ let
   cppunit = callPackage ../development/libraries/cppunit { };
 
   cppnetlib = callPackage ../development/libraries/cppnetlib {
-    boost = boostFull;
+    boost = boostHeaders;
   };
 
   cracklib = callPackage ../development/libraries/cracklib { };
