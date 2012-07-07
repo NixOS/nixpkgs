@@ -2836,10 +2836,6 @@ let
 
   automake = automake111x;
 
-  automake17x = callPackage ../development/tools/misc/automake/automake-1.7.x.nix { };
-
-  automake19x = callPackage ../development/tools/misc/automake/automake-1.9.x.nix { };
-
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
