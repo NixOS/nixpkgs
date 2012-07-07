@@ -3236,13 +3236,6 @@ let
   boostHeaders150 = callPackage ../development/libraries/boost/1.50-headers.nix { };
   boostHeaders = boostHeaders150;
 
-  # A Boost build with all library variants enabled.  Very large (about 250 MB).
-  boostFull = appendToName "full" (boost.override {
-    enableDebug = true;
-    enableSingleThreaded = true;
-    enableStatic = true;
-  });
-
   botan = callPackage ../development/libraries/botan { };
 
   box2d = callPackage ../development/libraries/box2d { };
