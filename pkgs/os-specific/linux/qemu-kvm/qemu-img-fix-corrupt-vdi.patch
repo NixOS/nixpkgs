@@ -1,0 +1,27 @@
+From http://patchwork.ozlabs.org/patch/137186/
+
+diff -ru qemu-kvm-0.15.1-orig/block/vdi.c qemu-kvm-0.15.1/block/vdi.c
+--- qemu-kvm-0.15.1-orig/block/vdi.c	2011-10-19 15:54:48.000000000 +0200
++++ qemu-kvm-0.15.1/block/vdi.c	2012-02-25 18:15:36.114574574 +0100
+@@ -1,7 +1,7 @@
+ /*
+  * Block driver for the Virtual Disk Image (VDI) format
+  *
+- * Copyright (c) 2009 Stefan Weil
++ * Copyright (c) 2009, 2012 Stefan Weil
+  *
+  * This program is free software: you can redistribute it and/or modify
+  * it under the terms of the GNU General Public License as published by
+@@ -767,8 +767,12 @@
+             acb->header_modified = 1;
+         }
+         acb->bmap_last = block_index;
++        /* Copy data to be written to new block and zero unused parts. */
++        memset(block, 0, sector_in_block * SECTOR_SIZE);
+         memcpy(block + sector_in_block * SECTOR_SIZE,
+                acb->buf, n_sectors * SECTOR_SIZE);
++        memset(block + (sector_in_block + n_sectors) * SECTOR_SIZE, 0,
++               (s->block_sectors - n_sectors - sector_in_block) * SECTOR_SIZE);
+         acb->hd_iov.iov_base = (void *)block;
+         acb->hd_iov.iov_len = s->block_size;
+         qemu_iovec_init_external(&acb->hd_qiov, &acb->hd_iov, 1);
