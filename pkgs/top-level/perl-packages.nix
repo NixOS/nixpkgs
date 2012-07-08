@@ -2260,6 +2260,7 @@ rec {
       sha256 = "b1425a540f514c483e80566fb3decc2c1db4162306f6ae8794cef72a2d73557b";
     };
     propagatedBuildInputs = [ CryptOpenSSLRSA NetDNS MailTools ];
+    doCheck = false; # tries to access the domain name system
   };
 
   MailIMAPClient = buildPerlPackage {
