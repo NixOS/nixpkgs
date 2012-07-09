@@ -1198,6 +1198,8 @@ let
 
   optipng = callPackage ../tools/graphics/optipng { };
 
+  ossec = callPackage ../tools/security/ossec {};
+
   p7zip = callPackage ../tools/archivers/p7zip { };
 
   pal = callPackage ../tools/misc/pal { };
