@@ -5133,6 +5133,10 @@ let
     inherit openssl libtool perl;
   };
 
+  couchdb = callPackage ../servers/http/couchdb {
+    spidermonkey = spidermonkey_185;
+  };
+
   dico = callPackage ../servers/dico { };
 
   dict = callPackage ../servers/dict { };
@@ -5152,9 +5156,7 @@ let
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
-  couchdb = callPackage ../servers/http/couchdb {
-    spidermonkey = spidermonkey_185;
-  };
+  elasticmq = callPackage ../servers/elasticmq { };
 
   felix = callPackage ../servers/felix { };
 
