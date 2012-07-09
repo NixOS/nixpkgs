@@ -594,7 +594,8 @@ in
 
         preStart =
           ''
-            mkdir -m 0700 -p ${mainCfg.stateDir}
+            mkdir -m 0750 -p ${mainCfg.stateDir}
+            chown root.wwwrun ${mainCfg.stateDir}
             mkdir -m 0700 -p ${mainCfg.logDir}
 
             ${optionalString (mainCfg.documentRoot != null)
