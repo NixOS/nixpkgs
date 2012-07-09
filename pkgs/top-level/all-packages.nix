@@ -419,6 +419,8 @@ let
     qt4Support = getConfig [ "avahi" "qt4Support" ] false;
   };
 
+  aws = callPackage ../tools/virtualization/aws { };
+  
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
 
   axel = callPackage ../tools/networking/axel { };
