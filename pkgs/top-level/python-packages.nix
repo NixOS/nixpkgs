@@ -33,12 +33,11 @@ let pythonPackages = python.modules // rec {
 
 
   afew = buildPythonPackage rec {
-    rev = "8abd64bfdcd83a486b2a3977c08fe071523b2551";
-    name = "afew-1.0pre${rev}";
+    name = "afew-1.0pre";
     src = fetchurl {
-      url = "https://github.com/teythoon/afew/tarball/${rev}";
+      url = "https://github.com/teythoon/afew/tarball/master";
       name = "${name}.tar.bz";
-      sha256 = "9b140d0eb0e5013419983604bb09a51f087a4abdf0a390c24a9596f867dc8c05";
+      sha256 = "949710f8dcf503f42f2a2d77ea71e48ccf70155a764f75ad29cc93edc120809b";
     };
 
     propagatedBuildInputs = [ notmuch pkgs.dbacl ];
@@ -60,18 +59,17 @@ let pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    version = "0.3.1";
-    name = "alot-${version}";
+    name = "alot-0.3.1";
 
     src = fetchurl {
-      url = "https://github.com/pazz/alot/tarball/${version}";
+      url = "https://github.com/pazz/alot/tarball/master";
       name = "${name}.tar.bz";
-      md5 = "6c5986d9192863879e95a3f8f30ccb75";
+      sha256 = "06683de36688615d3d526198c93133e1131897c888ffa31e83f1ad292eae57af";
     };
 
     doCheck = false;
 
-    propagatedBuildInputs = [ notmuch urwid twisted magic configobj ];
+    propagatedBuildInputs = [ notmuch urwid twisted magic configobj pygpgme ];
 
     postInstall = ''
       wrapProgram $out/bin/alot \
@@ -1663,6 +1661,29 @@ let pythonPackages = python.modules // rec {
     meta = {
       homepage = http://pygments.org/;
       description = "A generic syntax highlighter";
+    };
+  };
+
+
+  pygpgme = buildPythonPackage rec {
+    version = "0.3";
+    name = "pygpgme-${version}";
+
+    src = fetchurl {
+      url = "https://launchpad.net/pygpgme/trunk/${version}/+download/${name}.tar.gz";
+      sha256 = "5fd887c407015296a8fd3f4b867fe0fcca3179de97ccde90449853a3dfb802e1";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = [ pkgs.gpgme ];
+
+    meta = {
+      homepage = "https://launchpad.net/pygpgme";
+      description = "A Python wrapper for the GPGME library.";
+      license = pkgs.lib.licenses.lgpl21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
     };
   };
 
