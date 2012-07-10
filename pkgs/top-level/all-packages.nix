@@ -420,7 +420,7 @@ let
   };
 
   aws = callPackage ../tools/virtualization/aws { };
-  
+
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
 
   axel = callPackage ../tools/networking/axel { };
@@ -4670,7 +4670,7 @@ let
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
 
   serd = callPackage ../development/libraries/serd {};
- 
+
   simgear = callPackage ../development/libraries/simgear {};
 
   sfml_git = callPackage ../development/libraries/sfml { };
