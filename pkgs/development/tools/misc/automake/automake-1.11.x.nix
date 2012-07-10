@@ -1,7 +1,7 @@
 {stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? true}:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.11.2";
+  name = "automake-1.11.6";
 
   # TODO: Remove the `aclocal' wrapper when $ACLOCAL_PATH support is
   # available upstream; see
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/automake/${name}.tar.bz2";
-    sha256 = "06476qbd16dlasz29drmljqmr4gwx4qgcl075033b2hc73wx2ijg";
+    url = "mirror://gnu/automake/${name}.tar.xz";
+    sha256 = "1ffbc6cc41f0ea6c864fbe9485b981679dc5e350f6c4bc6c3512f5a4226936b5";
   };
 
   patches = [ ./fix-test-autoconf-2.69.patch ];
