@@ -8055,6 +8055,11 @@ let
     inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
   };
 
+  gnome3 = callPackage ../desktops/gnome-3 {
+    callPackage = pkgs.newScope pkgs.gnome3;
+    self = pkgs.gnome3;
+  };
+
   gnome = recurseIntoAttrs gnome2;
 
   kde3 = recurseIntoAttrs {
