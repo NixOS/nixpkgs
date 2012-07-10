@@ -26,5 +26,6 @@ in
         ";
       }];
     };
+    environment.x11Packages = [ pkgs.i3 ];
   };
 }
