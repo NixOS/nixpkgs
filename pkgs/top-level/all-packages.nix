@@ -4134,9 +4134,7 @@ let
 
   libmowgli = callPackage ../development/libraries/libmowgli { };
 
-  libmng = callPackage ../development/libraries/libmng {
-    automake = automake111x;
-  };
+  libmng = callPackage ../development/libraries/libmng { };
 
   libmodplug = callPackage ../development/libraries/libmodplug {};
 
