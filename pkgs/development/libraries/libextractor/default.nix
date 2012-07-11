@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs =
-   [ libtool gettext zlib bzip2 flac libvorbis libmpeg2 exiv2 ffmpeg
+   [ libtool gettext zlib bzip2 flac libvorbis exiv2
      libgsf rpm
      pkgconfig
    ] ++ stdenv.lib.optionals gtkSupport [ glib gtk ]
