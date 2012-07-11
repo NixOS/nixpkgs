@@ -856,6 +856,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
+  hoauth = callPackage ../development/libraries/haskell/hoauth {};
+
   hoogle = callPackage ../development/libraries/haskell/hoogle {};
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
