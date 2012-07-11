@@ -1,6 +1,6 @@
 { fetchurl, stdenv, perl, perlXMLParser, pkgconfig, libxml2
-, gettext, intltool, bzip2, python
-, gnomeSupport ? true, glib ? null, gdk_pixbuf ? null
+, gettext, intltool, bzip2, glib, python
+, gnomeSupport ? true,  gdk_pixbuf ? null
 , gnome_vfs ? null, libbonobo ? null }:
 
 assert gnomeSupport -> gdk_pixbuf != null && gnome_vfs != null && libbonobo != null
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ intltool pkgconfig ];
   buildInputs =
-    [ perl perlXMLParser gettext bzip2 gnome_vfs python ]
-    ++ stdenv.lib.optionals gnomeSupport [ gnome_vfs gdk_pixbuf python ];
+    [ perl perlXMLParser gettext bzip2 python ]
+    ++ stdenv.lib.optionals gnomeSupport [ gnome_vfs gdk_pixbuf ];
 
-  propagatedBuildInputs = [ libxml2 ]
-    ++ stdenv.lib.optionals gnomeSupport [ libbonobo glib ];
+  propagatedBuildInputs = [ libxml2 glib ]
+    ++ stdenv.lib.optionals gnomeSupport [ libbonobo ];
 
   doCheck = true;
 
