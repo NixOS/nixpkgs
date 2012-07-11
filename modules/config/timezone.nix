@@ -6,6 +6,7 @@ with pkgs.lib;
   options = {
 
     time = {
+    
       timeZone = mkOption {
         default = "CET";
         type = with types; uniq string;
@@ -13,10 +14,11 @@ with pkgs.lib;
         description = "The time zone used when displaying times and dates.";
       };
 
-      clockLocal = mkOption {
+      hardwareClockInLocalTime = mkOption {
         default = false;
-        description = "Keep the Hardware Clock in local time instead of UTC";
+        description = "If set, keep the hardware clock in local time instead of UTC.";
       };
+      
     };
   };
 

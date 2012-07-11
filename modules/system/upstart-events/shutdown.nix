@@ -73,7 +73,7 @@ with pkgs.lib;
 
           # Set the hardware clock to the system time.
           echo "setting the hardware clock..."
-          hwclock --systohc ${if config.time.clockLocal then "--localtime" else "--utc"}
+          hwclock --systohc ${if config.time.hardwareClockInLocalTime then "--localtime" else "--utc"}
 
 
           # Stop all swap devices.
