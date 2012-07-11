@@ -134,7 +134,7 @@ in
 
       path = [ jre ];
 
-      exec = "java -jar ${logstash} agent -f ${writeText "logstash.conf" ''
+      script = "cd /tmp && exec java -jar ${logstash} agent -f ${writeText "logstash.conf" ''
         input {
           ${exprToConfig cfg.inputConfig}
         }
