@@ -957,6 +957,8 @@ let
 
   less = callPackage ../tools/misc/less { };
 
+  logstash = callPackage ../tools/misc/logstash { };
+
   klavaro = callPackage ../games/klavaro {};
 
   minidlna = callPackage ../tools/networking/minidlna { };
