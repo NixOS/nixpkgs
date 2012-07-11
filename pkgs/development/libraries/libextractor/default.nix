@@ -1,5 +1,8 @@
 { fetchurl, stdenv, libtool, gettext, zlib, bzip2, flac, libvorbis, libmpeg2
-, ffmpeg, exiv2, libgsf, rpm, pkgconfig, glib, gtk }:
+, ffmpeg, exiv2, libgsf, rpm, pkgconfig
+, gtkSupport ? true, glib ? null, gtk ? null}:
+
+assert gtkSupport -> glib != null && gtk != null;
 
 stdenv.mkDerivation rec {
   name = "libextractor-0.6.2";
@@ -18,8 +21,8 @@ stdenv.mkDerivation rec {
   buildInputs =
    [ libtool gettext zlib bzip2 flac libvorbis libmpeg2 exiv2 ffmpeg
      libgsf rpm
-     pkgconfig glib gtk
-   ];
+     pkgconfig
+   ] ++ stdenv.lib.optionals gtkSupport [ glib gtk ];
 
   configureFlags = "--disable-ltdl-install "
     + "--with-ltdl-include=${libtool}/include "
