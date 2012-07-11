@@ -17,7 +17,7 @@ let
       (concatStringsSep ", " (map attrNameToConfigList (attrNames attrs))) +
       " ]";
 
-  valueToConfig = name: value: 
+  valueToConfig = nvpair: let name = nvpair.name; value = nvpair.value; in
     if (isAttrs value) && ((!(value ? __type)) || value.__type == "repeated")
       then ''
         ${name} {
@@ -26,12 +26,15 @@ let
       ''
       else "${name} => ${exprToConfig value}";
 
-  repeatedAttrsToConfig = names: values:
-      concatStringsSep "\n" (zipListsWith valueToConfig names values);
+  repeatedAttrsToConfig = values:
+      concatStringsSep "\n" (map valueToConfig values);
 
   attrsToConfig = attrs:
     let
-      attrToConfig = name: valueToConfig name (getAttr name attrs);
+      attrToConfig = name: valueToConfig {
+        inherit name;
+        value = (getAttr name attrs);
+      };
     in
       concatStringsSep "\n" (map attrToConfig (attrNames attrs));
 
@@ -51,7 +54,7 @@ let
       if isFloat expr then expr.value else
       if isList expr then listToConfig expr else
       if isHash expr then hashToConfig expr.value else
-      if isRepeatedAttrs expr then repeatedAttrsToConfig expr.names expr.values
+      if isRepeatedAttrs expr then repeatedAttrsToConfig expr.values
       else attrsToConfig expr;
 
   mergeConfigs = configs:
@@ -60,14 +63,11 @@ let
         let
           isRepeated = newAttrs ? __type && newAttrs.__type == "repeated";
         in {
-            names = attrs.names ++
-              (if isRepeated then newAttrs.names else attrNames newAttrs);
-
-            values = attrs.values ++
-              (if isRepeated then newAttrs.values else attrValues newAttrs);
+            values = attrs.values ++ (if isRepeated then newAttrs.values else
+              map (name: { inherit name; value = getAttr name newAttrs; })
+              (attrNames newAttrs));
           };
-    in (foldl op { names = []; values = []; } configs) //
-      { __type = "repeated"; };
+    in (foldl op { values = []; } configs) // { __type = "repeated"; };
 
 in
 
@@ -92,7 +92,7 @@ in
           and names are strings that can be repeated. name-value pairs with no
           repeats are represented by attr sets. name-value pairs with repeats
           are represented by an attrset with attr "__type" = "repeated" and
-          attrs "names" and "values" as matching lists pairing name and value.
+          attr "values" as a list of {name; value;} attrsets.
           bools, strings, ints, and arrays are mapped directly. Floats are
           represented as an attrset with attr "__type" = "float" and attr value
           set to the string representation of the float. Hashes are represented
