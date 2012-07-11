@@ -83,6 +83,7 @@
   ./services/hardware/upower.nix
   ./services/logging/klogd.nix
   ./services/logging/logrotate.nix
+  ./services/logging/logstash.nix
   ./services/logging/syslogd.nix
   ./services/mail/dovecot.nix
   ./services/mail/dovecot2.nix
