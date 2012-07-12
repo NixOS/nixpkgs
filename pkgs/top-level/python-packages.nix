@@ -2706,11 +2706,11 @@ let pythonPackages = python.modules // rec {
   };
 
   cliapp = buildPythonPackage rec {
-    name = "cliapp-0.29";
+    name = "cliapp-1.20120630";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_0.29.orig.tar.gz";
-      sha256 = "4a3f2e1705c5e9ac5a80a460ae9bad8e88c0778f7013638eda39e3ee0dd008b2";
+      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_1.20120630.orig.tar.gz";
+      sha256 = "6beeb1fb3077561540094584ce36055266ac67b80f158b9b82fe4075096f4716";
     };
 
     buildInputs = [ sphinx ];
@@ -2746,11 +2746,11 @@ let pythonPackages = python.modules // rec {
   };
 
   ttystatus = buildPythonPackage rec {
-    name = "ttystatus-0.18";
+    name = "ttystatus-0.19";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.18.orig.tar.gz";
-      sha256 = "9fab747f3e1f474b66101354b06f943120d72d1f1e353b4692e7e6cca226b9cc";
+      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.19.orig.tar.gz";
+      sha256 = "7cc112a4783f2e0c354c5244f8e50b18733b5957677b56a755c1016e04c0c28d";
     };
 
     buildInputs = [ sphinx ];
