@@ -34,6 +34,7 @@
   ./misc/crashdump.nix
   ./misc/ids.nix
   ./misc/locate.nix
+  ./misc/lib.nix
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
