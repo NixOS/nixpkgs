@@ -10,7 +10,7 @@ if test -n "$sharedLibrary"; then
     preInstall() {
         mkdir -p $out/lib
         mv libbz2.so* $out/lib
-        (cd $out/lib && ln -s libbz2.so.1.0.? libbz2.so && mv libbz2.so.1.0 libbz2.so.1)
+        (cd $out/lib && ln -s libbz2.so.1.0.? libbz2.so && ln -s libbz2.so.1.0.? libbz2.so.1);
     }
     
 fi
