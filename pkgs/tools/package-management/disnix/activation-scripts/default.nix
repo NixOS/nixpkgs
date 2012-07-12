@@ -19,7 +19,7 @@ stdenv.mkDerivation {
   name = "disnix-activation-scripts-0.3pre30423";
   src = fetchurl {
     url = http://hydra.nixos.org/build/2794103/download/1/disnix-activation-scripts-0.3pre30423.tar.gz;
-    sha256 = "11b569bflknjbjddam4mv07bpmihbfx5acxzxzhnshj6x8sv6064";
+    sha256 = "1x1702isjnrkvwzycryc8rvjgka4qqmd1dk34pwl51y1l2bxymrx";
   };
   
   preConfigure = if enableEjabberdDump then "export PATH=$PATH:${ejabberd}/sbin" else "";
