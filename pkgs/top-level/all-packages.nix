@@ -2964,6 +2964,8 @@ let
 
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
 
+  framac = callPackage ../development/tools/misc/frama-c { };
+
   cppi = callPackage ../development/tools/misc/cppi { };
 
   cproto = callPackage ../development/tools/misc/cproto { };
