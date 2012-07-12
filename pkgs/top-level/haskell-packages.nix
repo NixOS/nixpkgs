@@ -938,6 +938,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ivor = callPackage ../development/libraries/haskell/ivor {};
 
+  JuicyPixels = callPackage ../development/libraries/haskell/JuicyPixels {};
+
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
 
   JsContracts = callPackage ../development/libraries/haskell/JsContracts {
