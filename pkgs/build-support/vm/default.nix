@@ -493,7 +493,7 @@ rec {
     
   fillDiskWithRPMs =
     { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
-    , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , runScripts ? true, createRootFS ? defaultCreateRootFS, mergeUsr ? false
     }:
     
     runInLinuxVM (stdenv.mkDerivation {
@@ -512,6 +512,13 @@ rec {
             ${rpm}/bin/rpm2cpio "$i" | (cd /mnt && ${cpio}/bin/cpio -i --make-directories)
         done
 
+        ${if mergeUsr then "true" else "false"} && for d in bin sbin lib lib64; do
+          test -d /mnt/$d || continue
+          test -L /mnt/$d && continue
+          find /mnt/$d/ -maxdepth 1 -mindepth 1 | xargs --no-run-if-empty mv -t /mnt/usr/$d/
+          rmdir /mnt/$d
+          ln -Ts /usr/$d /mnt/$d
+        done
         eval "$preInstall"
 
         echo "initialising RPM DB..."
@@ -741,10 +748,10 @@ rec {
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? []
     , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"]
-    , runScripts ? true, createRootFS ? defaultCreateRootFS }:
+    , runScripts ? true, createRootFS ? defaultCreateRootFS, mergeUsr ? false }:
 
     fillDiskWithRPMs {
-      inherit name fullName size preInstall postInstall runScripts createRootFS;
+      inherit name fullName size preInstall postInstall runScripts createRootFS mergeUsr;
       rpms = import (rpmClosureGenerator {
         inherit name packagesLists urlPrefixes archs;
         packages = packages ++ extraPackages;
@@ -991,6 +998,32 @@ rec {
       urlPrefix = mirror://fedora/linux/releases/16/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+    };
+
+    fedora17i386 = {
+      name = "fedora-17-i386";
+      fullName = "Fedora 17 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/17/Everything/i386/os/repodata/82dc1ea6d26e53a367dc6e7472113c4454c9a8ac7c98d4bfb11fd0b6f311450f-primary.xml.gz;
+        sha256 = "03s527rvdl0zn6zx963wmjlcjm247h8p4x3fviks6lvfsak1xp42";
+      };
+      urlPrefix = mirror://fedora/linux/releases/17/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      mergeUsr = true;
+    };
+
+    fedora17x86_64 = {
+      name = "fedora-17-x86_64";
+      fullName = "Fedora 17 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/17/Everything/x86_64/os/repodata/7009de56f1a1c399930fa72094a310a40d38153c96d0b5af443914d3d6a7d811-primary.xml.gz;
+        sha256 = "04fqlzbd651r8jpvbl4n7hakh3d422ir88571y9rkhx1y5bdw2bh";
+      };
+      urlPrefix = mirror://fedora/linux/releases/17/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      mergeUsr = true;
     };
 
     opensuse103i386 = {
