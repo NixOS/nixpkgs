@@ -103,25 +103,34 @@ let
         local authKeyFiles="$3"
         local preserveExisting="$4"
 
-        eval authfile=~$userName/.ssh/authorized_keys
-        mkdir -p "$(dirname $authfile)"
-        touch "$authfile"
+        eval homeDir=~$userName
+        if ! [ -d "$homeDir" ]; then
+          echo "User $userName does not exist"
+          return
+        fi
+        if ! [ -d "$homeDir/.ssh" ]; then
+          mkdir -v -m 700 "$homeDir/.ssh"
+          chown "$userName":users "$homeDir/.ssh"
+        fi
+        local authKeysFile="$homeDir/.ssh/authorized_keys"
+        touch "$authKeysFile"
         if [ "$preserveExisting" == false ]; then
-          rm -f "$authfile"
-          echo "${marker2}" > "$authfile"
+          rm -f "$authKeysFile"
+          echo "${marker2}" > "$authKeysFile"
         else
-          sed -i '/${marker1}/ d' "$authfile"
+          sed -i '/${marker1}/ d' "$authKeysFile"
         fi
         IFS=,
         for f in $authKeys; do
-          echo "$f ${marker1}" >> "$authfile"
+          echo "$f ${marker1}" >> "$authKeysFile"
         done
         unset IFS
         for f in $authKeyFiles; do
           if [ -f "$f" ]; then
-            echo "$(cat "$f") ${marker1}" >> "$authfile"
+            echo "$(cat "$f") ${marker1}" >> "$authKeysFile"
           fi
         done
+        chown "$userName" "$authKeysFile"
       }
 
       ${userLoop}
