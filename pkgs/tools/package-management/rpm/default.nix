@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, nspr, nss, popt, db4, xz }:
 
 stdenv.mkDerivation rec {
-  name = "rpm-4.7.2";
+  name = "rpm-4.10.0";
 
   src = fetchurl {
-    url = "http://rpm.org/releases/rpm-4.7.x/${name}.tar.bz2";
-    sha1 = "07b90f653775329ea726ce0005c4c82f56167ca0";
+    url = "http://rpm.org/releases/rpm-4.10.x/${name}.tar.bz2";
+    sha256 = "1ag4pz51npiwf6vcksipjxaypm5afzmy8lj19bp0fk5n6mr26bhf";
   };
 
   buildInputs = [ cpio zlib bzip2 file nspr nss popt db4 xz ];
