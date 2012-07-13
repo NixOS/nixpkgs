@@ -90,7 +90,7 @@ let
       userLoop = flip concatMapStrings usersWithKeys (u:
         let
           authKeys = concatStringsSep "," u.openssh.authorizedKeys.keys;
-          authKeyFiles = concatStringsSep " " u.openssh.authorizedKeys.keyFiles;
+          authKeyFiles = concatStrings (map (x: " ${x}") u.openssh.authorizedKeys.keyFiles);
           preserveExisting = if u.openssh.authorizedKeys.preserveExistingKeys then "true" else "false";
         in ''
           mkAuthKeysFile "${u.name}" "${authKeys}" "${authKeyFiles}" "${preserveExisting}"
