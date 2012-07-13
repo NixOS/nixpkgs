@@ -5395,6 +5395,8 @@ let
     inherit (perlPackages) LocaleGettext TermReadKey RpcXML;
   };
 
+  b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
+
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
   bluez = callPackage ../os-specific/linux/bluez { };
