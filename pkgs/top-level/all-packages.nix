@@ -4673,6 +4673,8 @@ let
 
   serd = callPackage ../development/libraries/serd {};
 
+  silgraphite = callPackage ../development/libraries/silgraphite {};
+
   simgear = callPackage ../development/libraries/simgear {};
 
   sfml_git = callPackage ../development/libraries/sfml { };
@@ -6265,6 +6267,8 @@ let
   tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
 
   terminus_font = callPackage ../data/fonts/terminus-font { };
+
+  tipa = callPackage ../data/fonts/tipa { };
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
@@ -8610,9 +8614,9 @@ let
   texFunctions = import ../tools/typesetting/tex/nix pkgs;
 
   texLive = builderDefsPackage (import ../tools/typesetting/tex/texlive) {
-    inherit builderDefs zlib bzip2 ncurses libpng ed
-      gd t1lib freetype icu perl expat curl
-      libjpeg bison python fontconfig flex;
+    inherit builderDefs zlib bzip2 ncurses libpng ed lesstif
+      gd t1lib freetype icu perl expat curl xz pkgconfig zziplib
+      libjpeg bison python fontconfig flex poppler silgraphite;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
@@ -8621,7 +8625,7 @@ let
 
   texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
     paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
-              texLivePGF texLiveBeamer texLiveModerncv ];
+              texLivePGF texLiveBeamer texLiveModerncv tipa ];
   });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
@@ -8646,7 +8650,7 @@ let
   };
 
   texLiveExtra = builderDefsPackage (import ../tools/typesetting/tex/texlive/extra.nix) {
-    inherit texLive;
+    inherit texLive xz;
   };
 
   texLiveCMSuper = builderDefsPackage (import ../tools/typesetting/tex/texlive/cm-super.nix) {
