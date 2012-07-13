@@ -530,11 +530,19 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   colour = callPackage ../development/libraries/haskell/colour {};
 
+  comonad = callPackage ../development/libraries/haskell/comonad {};
+
+  comonadTransformers = callPackage ../development/libraries/haskell/comonad-transformers {};
+
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
 
   conduit = callPackage ../development/libraries/haskell/conduit {};
 
   ConfigFile = callPackage ../development/libraries/haskell/ConfigFile {};
+
+  configurator = callPackage ../development/libraries/haskell/configurator {};
+
+  contravariant = callPackage ../development/libraries/haskell/contravariant {};
 
   convertible = callPackage ../development/libraries/haskell/convertible {
     time = self.time_1_1_3;
@@ -584,6 +592,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
+  dataLens = callPackage ../development/libraries/haskell/data-lens {};
+
+  dataLensTemplate = callPackage ../development/libraries/haskell/data-lens-template {};
+
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
   datetime = callPackage ../development/libraries/haskell/datetime {};
@@ -609,6 +621,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dimensional = callPackage ../development/libraries/haskell/dimensional {};
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
+
+  distributive = callPackage ../development/libraries/haskell/distributive {};
 
   dlist = callPackage ../development/libraries/haskell/dlist {};
 
@@ -833,6 +847,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HDBCSqlite = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {};
 
+  heist = callPackage ../development/libraries/haskell/heist {};
+
   HFuse = callPackage ../development/libraries/haskell/hfuse {};
 
   HGL = callPackage ../development/libraries/haskell/HGL {};
@@ -976,6 +992,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
+
+  logict = callPackage ../development/libraries/haskell/logict {};
 
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
@@ -1260,6 +1278,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
 
+  semigroupoids = callPackage ../development/libraries/haskell/semigroupoids {};
+
   shelly = callPackage ../development/libraries/haskell/shelly {};
 
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
@@ -1267,6 +1287,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   skein = callPackage ../development/libraries/haskell/skein {};
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
+
+  snap = callPackage ../development/libraries/haskell/snap/snap.nix {};
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
 
@@ -1535,6 +1557,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   xml = callPackage ../development/libraries/haskell/xml {};
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
+
+  xmlhtml = callPackage ../development/libraries/haskell/xmlhtml {};
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
 
