@@ -14,16 +14,10 @@ vmTools.buildRPM (
     name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
 
     preBuild = ''
-      mkdir -p $out/nix-support
-      cat "$diskImage"/nix-support/full-name > $out/nix-support/full-name
-
-      # If `src' is the result of a call to `makeSourceTarball', then it
-      # has a subdirectory containing the actual tarball(s).  If there are
-      # multiple tarballs, just pick the first one.
-      if test -d $src/tarballs; then
-          src=$(ls $src/tarballs/*.tar.bz2 $src/tarballs/*.tar.gz | sort | head -1)
-      fi
-    ''; # */
+      . ${./functions.sh}
+      propagateImageName
+      src=$(findTarballs $src | head -1) # Pick the first tarball.
+    '';
 
     postInstall = ''
       declare -a rpms rpmNames
