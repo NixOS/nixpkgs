@@ -59,13 +59,13 @@ rec {
 
   createDeviceNodes = dev:
     ''
-      mknod ${dev}/null    c 1 3
-      mknod ${dev}/zero    c 1 5
-      mknod ${dev}/random  c 1 8
-      mknod ${dev}/urandom c 1 9
-      mknod ${dev}/tty     c 5 0
-      . /sys/class/block/${hd}/uevent
-      mknod ${dev}/${hd} b $MAJOR $MINOR
+      for type in b c; do
+        for f in /sys/dev/$type*/*; do
+          (. $f/uevent
+           mkdir -p `dirname "${dev}/$DEVNAME"`
+           mknod ${dev}/$DEVNAME $type $MAJOR $MINOR)
+        done
+      done
     '';
 
   teardown = writeScript "vm-teardown" ''
