@@ -66,6 +66,13 @@ rec {
       mknod ${dev}/${hd} b $MAJOR $MINOR
     '';
 
+  teardown = writeScript "vm-teardown" ''
+    #! ${initrdUtils}/bin/ash
+    echo $1 > ./tmp/xchg/in-vm-exit
+    mount -o remount,ro dummy .
+    echo DONE
+    halt -d -p -f
+  '';
 
   stage1Init = writeScript "vm-run-stage1" ''
     #! ${initrdUtils}/bin/ash -e
@@ -119,7 +126,7 @@ rec {
     fi
 
     mkdir -p /fs/dev
-    mount -o bind /dev /fs/dev
+    mount --move /dev /fs/dev
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
@@ -144,13 +151,8 @@ rec {
     echo "Now running: $command"
     test -n "$command"
 
-    set +e
-    chroot /fs $command $out
-    echo $? > /fs/tmp/xchg/in-vm-exit
-
-    mount -o remount,ro dummy /fs
-
-    poweroff -f
+    exec switch_root /fs ${initrdUtils}/bin/bash -c "cd / ; $command $out ; ${teardown} \$?"
+    ${teardown} $?
   '';
 
 
