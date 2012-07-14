@@ -981,9 +981,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
 
-  maude = callPackage ../development/libraries/haskell/maude {
-    parsec = self.parsec3;
-  };
+  maude = callPackage ../development/libraries/haskell/maude {};
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
