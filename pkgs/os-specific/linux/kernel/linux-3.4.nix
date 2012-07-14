@@ -202,6 +202,7 @@ let
       THERMAL_HWMON y # Hardware monitoring support
       USB_DEBUG n
       USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
+      USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
       X86_CHECK_BIOS_CORRUPTION y
       X86_MCE y
 
