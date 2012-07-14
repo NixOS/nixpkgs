@@ -36,7 +36,7 @@ vmTools.buildRPM (
       done
 
       echo "installing ''${rpms[*]}..."
-      rpm -ip ''${rpms[*]} --excludepath /nix/store
+      rpm -Up ''${rpms[*]} --excludepath /nix/store
 
       eval "$postRPMInstall"
       
