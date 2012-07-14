@@ -1446,11 +1446,11 @@ rec {
       ] ++ stdenv.lib.optional stdenv.isLinux LinuxInotify2;
   };
 
-  Filechdir = buildPerlPackage {
-    name = "File-chdir-0.1002";
+  Filechdir = buildPerlPackage rec {
+    name = "File-chdir-0.1006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/File-chdir-0.1002.tar.gz;
-      sha256 = "1fc2l754bxsizli3injm4wqf8dn03iq16rmfn62l99nxpibl5k6p";
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/${name}.tar.gz";
+      sha256 = "b26e91f8b5480544da599412612ff9287007be9703d41c35251f09c5ff19879a";
     };
   };
 
