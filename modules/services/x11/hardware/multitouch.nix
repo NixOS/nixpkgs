@@ -14,6 +14,13 @@ with pkgs.lib;
         description = "Whether to enable multitouch touchpad support.";
       };
 
+      invertScroll = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = "Whether to invert scrolling direction à la OSX Lion";
+      };
+
     };
 
   };
@@ -29,6 +36,10 @@ with pkgs.lib;
           MatchIsTouchpad "on"
           Identifier "Touchpads"
           Driver "mtrack"
+          ${optionalString config.services.xserver.multitouch.invertScroll ''
+            Option "ScrollUpButton" "5"
+            Option "ScrollDownButton" "4"
+          ''}
         EndSection
       '';
 
