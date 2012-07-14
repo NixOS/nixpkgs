@@ -1149,6 +1149,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   primitive = callPackage ../development/libraries/haskell/primitive {};
 
+  processExtras = callPackage ../development/libraries/haskell/process-extras {};
+
   processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
   prolog = callPackage ../development/libraries/haskell/prolog {};
