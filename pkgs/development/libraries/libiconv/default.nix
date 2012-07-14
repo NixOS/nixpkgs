@@ -1,6 +1,6 @@
 { fetchurl, stdenv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libiconv-1.13.1";
 
   src = fetchurl {
@@ -30,3 +30,13 @@ stdenv.mkDerivation rec {
     platforms = [ "i686-cygwin" "i686-darwin" ];
   };
 }
+
+//
+
+stdenv.lib.optionalAttrs stdenv.isCygwin {
+  # On Cygwin, Libtool produces a `.dll.a', which is not a "real" DLL
+  # (Windows' linker would need to be used somehow to produce an actual
+  # DLL.)  Thus, build the static library too, and this is what Gettext
+  # will actually use.
+  configureFlags = [ "--enable-static" ];
+})

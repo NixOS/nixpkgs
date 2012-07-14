@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hsemail";
-  version = "1.7.1";
-  sha256 = "0059015ab93d5facf6060404984a295090ebfc667ae5b84b283163e126805a9e";
+  version = "1.7.2";
+  sha256 = "1bl017gfyvjvxs9z1fns6sknk1l55905r82i31aqbz9qyaj70gzx";
   buildDepends = [ mtl parsec ];
   meta = {
     homepage = "http://gitorious.org/hsemail";

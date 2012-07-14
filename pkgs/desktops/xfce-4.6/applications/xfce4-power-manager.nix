@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "xfce4-power-manager-0.8.5";
   
   src = fetchurl {
-    url = "http://www.xfce.org/archive/src/apps/xfce4-power-manager/0.8/${name}.tar.bz2";
+    url = "http://archive.xfce.org/src/apps/xfce4-power-manager/0.8/${name}.tar.bz2";
     sha1 = "b1ce0f120733ec1a6267d50ba5c2990bbbbccfd4";
   };
 

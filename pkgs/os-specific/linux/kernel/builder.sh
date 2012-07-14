@@ -138,6 +138,7 @@ installPhase() {
             (cd include && cp -a * $includeDir)
         (cd arch/$archDir/include && cp -a * $includeDir || true)
         (cd arch/$archDir/include && cp -a asm/* $includeDir/asm/ || true)
+        (cd arch/$archDir/include && cp -a generated/asm/* $includeDir/asm/ || true)
         (cd arch/$archDir/include/asm/mach-generic && cp -a * $includeDir/ || true)
         fi
     fi

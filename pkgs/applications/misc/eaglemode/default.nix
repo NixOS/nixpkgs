@@ -2,11 +2,11 @@
 librsvg, glib, gtk, libXext, libXxf86vm, poppler }:
 
 stdenv.mkDerivation {
-  name = "eaglemode-0.83.0";
+  name = "eaglemode-0.84.0";
  
   src = fetchurl {
-    url = mirror://sourceforge/eaglemode/eaglemode-0.83.0.tar.bz2;
-    sha256 = "0rlvi9ljf3ml2l4ydkcgjjja8wk9c7h5qlpdr4x4ghh6sqq0q2x3";
+    url = mirror://sourceforge/eaglemode/eaglemode-0.84.0.tar.bz2;
+    sha256 = "0n20b419j0l7h7jr4s3f3n09ka0ysg9nqs8mcwsrx24rcq7nv0cs";
   };
  
   buildInputs = [ perl libX11 xineLib libjpeg libpng libtiff pkgconfig 
@@ -14,9 +14,12 @@ stdenv.mkDerivation {
  
   # The program tries to dlopen both Xxf86vm and Xext, so we use the
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.
+  # I use 'yes y' to skip a build error linking with xineLib, 
+  # because xine stopped exporting "_x_vo_new_port"
+  #  http://sourceforge.net/projects/eaglemode/forums/forum/808824/topic/5115261
   buildPhase = ''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lXxf86vm -lXext"
-    yes n | perl make.pl build
+    yes y | perl make.pl build
   '';
 
   dontPatchELF = true;

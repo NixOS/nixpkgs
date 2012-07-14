@@ -1,12 +1,11 @@
-{ cabal, QuickCheck }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "Vec";
-  version = "0.9.8";
-  sha256 = "0yaqy0p2jh2ajf8897vsxl5w6bmavixn6n5cc7w8kdnybpbdms6v";
-  buildDepends = [ QuickCheck ];
+  version = "1.0";
+  sha256 = "1lyi7di92q1f0k08nj7766nm0ygaqdrjdphnb6imvyrsmjrspaqk";
   meta = {
-    homepage = "http://graphics.cs.ucdavis.edu/~sdillard/Vec";
+    homepage = "http://github.net/sedillard/Vec";
     description = "Fixed-length lists and low-dimensional linear algebra";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

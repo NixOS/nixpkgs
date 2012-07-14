@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cpu";
-  version = "0.1.0";
-  sha256 = "020s1cv3qkhjq0gypxligg2x68izb3z82krv8y1m1k360554nqyg";
+  version = "0.1.1";
+  sha256 = "0ygkxx8ksa0rh63569d3g0w8pzgwg6062sd4yyi3q646zcmryhj6";
   isLibrary = true;
   isExecutable = true;
   meta = {

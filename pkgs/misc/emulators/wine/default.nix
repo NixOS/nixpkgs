@@ -7,16 +7,16 @@ assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
 stdenv.mkDerivation rec {
-  name = "wine-1.3.32";
+  name = "wine-1.5.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "fe1691ef8e9c5c4afeb345ad0f0b364d055cfe67a7e64b0a4a44da4d85cfa8b6";
+    sha256 = "e7d5ba716d2ac47193fa31eff66cc179145ddcb453c6923eaea70596a82b084e";
   };
 
   gecko = fetchurl {
-    url = "mirror://sourceforge/wine/wine_gecko-1.3-x86.msi";
-    sha256 = "1bmm826dhq82jzxdld4x9cyg8mgzg8llkki59n9fvxggi7l5jxab";
+    url = "mirror://sourceforge/wine/wine_gecko-1.5-x86.msi";
+    sha256 = "2e372a1b87ff2a22ad5127400ece4b09e55591d9f84e00bb562d294898a49b5c";
   };
 
   buildInputs = [

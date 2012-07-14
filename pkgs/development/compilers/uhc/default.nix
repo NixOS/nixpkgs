@@ -2,7 +2,11 @@
 , uuagc, mtl, network, binary, llvm, fgl, syb
 }:
 
-stdenv.mkDerivation {
+# this check won't be needed anymore after ghc-wrapper is fixed
+# to show ghc-builtin packages in "ghc-pkg list" output.
+let binaryIsBuiltIn = builtins.compareVersions "7.2.1" ghc.ghcVersion != 1;
+
+in stdenv.mkDerivation {
   name = "uhc-svn-git20120502";
 
   src = fetchgit {
@@ -30,6 +34,8 @@ stdenv.mkDerivation {
     sed -i "s|-fglasgow-exts|-fglasgow-exts -package-conf=$p|g" mk/shared.mk.in
     sed -i "s|/bin/date|${coreutils}/bin/date|g" mk/dist.mk
     sed -i "s|/bin/date|${coreutils}/bin/date|g" mk/config.mk.in
+  '' + stdenv.lib.optionalString binaryIsBuiltIn ''
+    sed -i "s|ghcLibBinary=no|ghcLibBinaryExists=yes|" configure
   '';
 
   meta = {

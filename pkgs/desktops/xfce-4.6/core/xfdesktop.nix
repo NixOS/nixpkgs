@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "xfdesktop-4.6.2";
   
   src = fetchurl {
-    url = "http://www.xfce.org/archive/xfce/4.6.2/src/${name}.tar.bz2";
+    url = "http://archive.xfce.org/xfce/4.6.2/src/${name}.tar.bz2";
     sha1 = "cefcd1c1386d34386d4e900cbf88b7c24ef3bafb";
   };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     url = "ftp://ftp.ruby-lang.org/pub/ruby/1.9/${name}.tar.bz2";
-    sha256 = "09jmxz3lqsi5097233hc1wjnzg6z5f4y7kmlkqhskdaj6125jyn6";
+    sha256 = "1ymq5lhp3fz0j3cs65521aihcnivbfrn76in900ccxd0msgfmld9";
   };
 
   # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     ++ (op opensslSupport openssl)
     ++ (op gdbmSupport gdbm)
     ++ (op yamlSupport libyaml);
+
+  enableParallelBuilding = true;
     
   configureFlags = ["--enable-shared" "--enable-pthread"];
 
@@ -48,7 +50,7 @@ stdenv.mkDerivation rec {
   passthru = rec {
     majorVersion = "1.9";
     minorVersion = "3";
-    patchLevel = "125";
+    patchLevel = "194";
     libPath = "lib/ruby/${majorVersion}";
     gemPath = "lib/ruby/gems/${majorVersion}";
   };

@@ -1,0 +1,17 @@
+diff -Nuar apr-1.4.6/configure apr-1.4.6-darwin-fix-configure/configure
+--- apr-1.4.6/configure	2012-02-08 00:17:57.000000000 +0100
++++ apr-1.4.6-darwin-fix-configure/configure	2012-06-06 23:08:56.000000000 +0200
+@@ -6854,10 +6854,10 @@
+     *-apple-darwin*)
+ 
+   if test "x$CPPFLAGS" = "x"; then
+-    test "x$silent" != "xyes" && echo "  setting CPPFLAGS to \"-DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp\""
+-    CPPFLAGS="-DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp"
++    test "x$silent" != "xyes" && echo "  setting CPPFLAGS to \"-DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK\""
++    CPPFLAGS="-DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK"
+   else
+-    apr_addto_bugger="-DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK -no-cpp-precomp"
++    apr_addto_bugger="-DDARWIN -DSIGPROCMASK_SETS_THREAD_MASK"
+     for i in $apr_addto_bugger; do
+       apr_addto_duplicate="0"
+       for j in $CPPFLAGS; do

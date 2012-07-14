@@ -1,16 +1,11 @@
 {stdenv, fetchurl, pcre, ocaml, findlib}:
 
-let
-  ocaml_version = (builtins.parseDrvName ocaml.name).version;
-  version = "6.2.5";
-in
-
 stdenv.mkDerivation {
-  name = "ocaml-pcre-${version}";
+  name = "ocaml-pcre-6.2.5";
 
   src = fetchurl {
-    url = "http://www.ocaml.info/ocaml_sources/pcre-ocaml-${version}.tar.gz";
-    sha256 = "f1774028a4525d22d1f4cf4ce0121c99d85a75aed7a498c3e8ab0f5e39888e47";
+    url = https://bitbucket.org/mmottl/pcre-ocaml/downloads/pcre-ocaml-6.2.5.tar.gz;
+    sha256 = "0iwfi0wmw3xbx31ri96pmrsmmn4r3h9f0k6gyk8j4pajlhl40xzi";
   };
 
   buildInputs = [ocaml findlib];

@@ -8,15 +8,19 @@
 }:
 
 let
-  version = "1.7.9.5";
+
+  version = "1.7.11";
+  
   svn = subversionClient.override { perlBindings = true; };
+  
 in
+
 stdenv.mkDerivation {
   name = "git-${version}";
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "0nap6z8kfl61hx0h64ylk0x8786fxk31prdv7zk14ljbihs55p9x";
+    sha256 = "0qgi1cj19dnn0sl3n38dbz68nllvyppdvs2jb77ksiar4jb9lsc3";
   };
 
   patches = [ ./docbook2texi.patch ];
@@ -36,7 +40,7 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-      notSupported(){
+      notSupported() {
         echo -e "#\!/bin/sh\necho '`basename $1` not supported, $2'\nexit 1" > "$1"
         chmod +x $1
       }
@@ -68,11 +72,11 @@ stdenv.mkDerivation {
         for i in ${builtins.toString perlLibs} ${svn}; do
           gitperllib=$gitperllib:$i/lib/perl5/site_perl
         done
-        wrapProgram "$out/libexec/git-core/git-svn"     \
-                     --set GITPERLLIB "$gitperllib"     \
+        wrapProgram $out/libexec/git-core/git-svn     \
+                     --set GITPERLLIB "$gitperllib"   \
                      --prefix PATH : "${svn}/bin" ''
        else '' # replace git-svn by notification script
-        notSupported $out/bin/git-svn "reinstall with config git = { svnSupport = true } set"
+        notSupported $out/libexec/git-core/git-svn "reinstall with config git = { svnSupport = true } set"
        '')
 
    + (if sendEmailSupport then
@@ -81,10 +85,10 @@ stdenv.mkDerivation {
         for i in ${builtins.toString smtpPerlLibs}; do
           gitperllib=$gitperllib:$i/lib/perl5/site_perl
         done
-        wrapProgram "$out/libexec/git-core/git-send-email"     \
+        wrapProgram $out/libexec/git-core/git-send-email \
                      --set GITPERLLIB "$gitperllib" ''
        else '' # replace git-send-email by notification script
-        notSupported $out/bin/git-send-email "reinstall with config git = { sendEmailSupport = true } set"
+        notSupported $out/libexec/git-core/git-send-email "reinstall with config git = { sendEmailSupport = true } set"
        '')
 
    + ''# Install man pages and Info manual

@@ -26,24 +26,22 @@ vmTools.buildRPM (
     ''; # */
 
     postInstall = ''
+      declare -a rpms rpmNames
       for i in $out/rpms/*/*.rpm; do
         if echo $i | grep -vq "\.src\.rpm$"; then
           echo "file rpm $i" >> $out/nix-support/hydra-build-products
-          
-          echo "installing $i..."
-          rpm -ip "$i" --excludepath /nix/store
+          rpms+=($i)
+          rpmNames+=("$(rpm -qp "$i")")
         fi
       done
 
+      echo "installing ''${rpms[*]}..."
+      rpm -ip ''${rpms[*]} --excludepath /nix/store
+
       eval "$postRPMInstall"
       
-      for i in $out/rpms/*/*.rpm; do
-        if echo $i | grep -vq "\.src\.rpm$"; then
-          rpmName="$(rpm -qp "$i")"
-          echo "uninstalling $rpmName..."
-          rpm -e "$rpmName"
-        fi
-      done
+      echo "uninstalling ''${rpmNames[*]}..."
+      rpm -e ''${rpmNames[*]}
 
       for i in $out/rpms/*/*.src.rpm; do
         echo "file srpm $i" >> $out/nix-support/hydra-build-products

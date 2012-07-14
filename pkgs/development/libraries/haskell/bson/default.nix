@@ -1,17 +1,16 @@
-{ cabal, binary, compactStringFix, cryptohash, dataBinaryIeee754
-, mtl, network, time
+{ cabal, binary, cryptohash, dataBinaryIeee754, mtl, network, text
+, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "bson";
-  version = "0.1.7";
-  sha256 = "1dmndq0rx22h9kxv31rxwqhwkgsvqg9qy4l0xmvpcvvl101zj4jx";
+  version = "0.2.1";
+  sha256 = "1g5xvkpn5j2yn9figxiv5dindwv6gg90np56k235hy9cwmdicmwq";
   buildDepends = [
-    binary compactStringFix cryptohash dataBinaryIeee754 mtl network
-    time
+    binary cryptohash dataBinaryIeee754 mtl network text time
   ];
   meta = {
-    homepage = "http://github.com/TonyGen/bson-haskell";
+    homepage = "http://github.com/selectel/bson-haskell";
     description = "BSON documents are JSON-like objects with a standard binary encoding";
     license = "unknown";
     platforms = self.ghc.meta.platforms;

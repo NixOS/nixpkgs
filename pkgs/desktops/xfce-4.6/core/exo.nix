@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "exo-0.3.107";
   
   src = fetchurl {
-    url = "http://www.xfce.org/archive/xfce/4.6.2/src/${name}.tar.bz2";
+    url = "http://archive.xfce.org/xfce/4.6.2/src/${name}.tar.bz2";
     sha256 = "18z2xmdl577r60ln2waai10dd7i384k0bxrmf7gchrxd9c9aq4ha";
   };
 

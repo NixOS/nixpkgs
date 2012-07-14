@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     sed -i '68d' configure-pakcs
   '';
 
+  patches = [ ./pakcs-ghc741.patch ];
+
   preConfigure = ''
     # Path to GHC and SWI Prolog
     sed -i 's@GHC=@GHC=${ghc}/bin/ghc@' bin/.pakcs_variables
@@ -43,7 +45,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/share/emacs/site-lisp/curry-pakcs
     for e in "$out/tools/emacs/"*.el ; do
-      ln -s $out/tools/emacs/$e $out/share/emacs/site-lisp/curry-pakcs/;
+      ln -s $e $out/share/emacs/site-lisp/curry-pakcs/;
     done
 
     sed -i 's@which@type -P@' $out/bin/.pakcs_wrapper
