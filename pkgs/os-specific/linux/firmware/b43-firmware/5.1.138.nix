@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Firmware for cards supported by the b43 kernel module";
     homepage = http://wireless.kernel.org/en/users/Drivers/b43;
-    license = stdenv.lib.lisences.proprietary;
+    license = stdenv.lib.licenses.proprietary;
     maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
 }
