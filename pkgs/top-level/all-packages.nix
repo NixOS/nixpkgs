@@ -6954,10 +6954,7 @@ let
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML;
-    gitSupport = false;
-    monotoneSupport = false;
-    extraUtils = [];
+      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree Filechdir;
   };
 
   imagemagick = callPackage ../applications/graphics/ImageMagick {

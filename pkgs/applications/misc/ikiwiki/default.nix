@@ -1,32 +1,46 @@
-{ stdenv, fetchurl, perl, gettext, makeWrapper, lib, PerlMagick, YAML
+{ stdenv, fetchurl, perl, gettext, makeWrapper, PerlMagick, YAML
 , TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate
 , CGISession, CGIFormBuilder, DBFile, LocaleGettext, RpcXML, XMLSimple
-, YAMLLibYAML
+, YAMLLibYAML, which, HTMLTree, python, docutils, Filechdir
 , gitSupport ? false, git ? null
 , monotoneSupport ? false, monotone ? null
+, bazaarSupport ? false, bazaar ? null
+, cvsSupport ? false, cvs ? null, cvsps ? null
+, subversionSupport ? false, subversion ? null
+, mercurialSupport ? false, mercurial ? null
 , extraUtils ? []
 }:
 
 assert gitSupport -> (git != null);
 assert monotoneSupport -> (monotone != null);
+assert bazaarSupport -> (bazaar != null);
+assert cvsSupport -> (cvs != null && cvsps != null);
+assert subversionSupport -> (subversion != null);
+assert mercurialSupport -> (mercurial != null);
 
 let
   name = "ikiwiki";
-  version = "3.20120516";
+  version = "3.20120629";
+
+  lib = stdenv.lib;
 in
 stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
     url = "http://ftp.de.debian.org/debian/pool/main/i/ikiwiki/${name}_${version}.tar.gz";
-    sha256 = "b75097d4f4db79a16f8b74bc4e7f824a586e0e150ecf18103888bbe553a41eb0";
+    sha256 = "7e39cdb727f261ce20fde5f0b05966680589a3d028c569780addd4b530382f07";
   };
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
     TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-    RpcXML XMLSimple PerlMagick YAML YAMLLibYAML ]
-    ++ stdenv.lib.optionals gitSupport [git]
-    ++ stdenv.lib.optionals monotoneSupport [monotone];
+    RpcXML XMLSimple PerlMagick YAML YAMLLibYAML which HTMLTree python docutils ]
+    ++ lib.optionals gitSupport [git]
+    ++ lib.optionals monotoneSupport [monotone]
+    ++ lib.optionals bazaarSupport [bazaar]
+    ++ lib.optionals cvsSupport [cvs cvsps Filechdir]
+    ++ lib.optionals subversionSupport [subversion]
+    ++ lib.optionals mercurialSupport [mercurial];
 
   patchPhase = ''
     sed -i s@/usr/bin/perl@${perl}/bin/perl@ pm_filter mdwn2man
@@ -42,17 +56,26 @@ stdenv.mkDerivation {
   postInstall = ''
     for a in "$out/bin/"*; do
       wrapProgram $a --suffix PERL5LIB : $PERL5LIB --prefix PATH : ${perl}/bin:$out/bin \
-      ${lib.optionalString gitSupport
-        ''--prefix PATH : ${git}/bin \''}
-      ${lib.optionalString monotoneSupport
-        ''--prefix PATH : ${monotone}/bin \''}
+      ${lib.optionalString gitSupport ''--prefix PATH : ${git}/bin \''}
+      ${lib.optionalString monotoneSupport ''--prefix PATH : ${monotone}/bin \''}
+      ${lib.optionalString bazaarSupport ''--prefix PATH : ${bazaar}/bin \''}
+      ${lib.optionalString cvsSupport ''--prefix PATH : ${cvs}/bin \''}
+      ${lib.optionalString cvsSupport ''--prefix PATH : ${cvsps}/bin \''}
+      ${lib.optionalString subversionSupport ''--prefix PATH : ${subversion}/bin \''}
+      ${lib.optionalString mercurialSupport ''--prefix PATH : ${mercurial}/bin \''}
       ${lib.concatMapStrings (x: "--prefix PATH : ${x}/bin ") extraUtils}
     done
   '';
 
+  checkTarget = "test";
+  doCheck = true;
+
   meta = {
     description = "Wiki compiler, storing pages and history in a RCS";
-    homepage = http://ikiwiki.info/;
+    homepage = "http://ikiwiki.info/";
     license = "GPLv2+";
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
