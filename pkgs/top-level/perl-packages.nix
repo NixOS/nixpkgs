@@ -1546,6 +1546,14 @@ rec {
     propagatedBuildInputs = [ TestScript ];
   };
 
+  FontAFM = buildPerlPackage rec {
+    name = "Font-AFM-1.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
+      sha256 = "32671166da32596a0f6baacd0c1233825a60acaf25805d79c81a3f18d6088bc1";
+    };
+  };
+
   FontTTF = buildPerlPackage {
     name = "Font-TTF-0.43";
     src = fetchurl {
