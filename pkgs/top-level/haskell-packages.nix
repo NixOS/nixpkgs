@@ -961,6 +961,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
+  lambdabot = callPackage ../development/libraries/haskell/lambdabot/default.nix {};
+
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
