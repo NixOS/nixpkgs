@@ -36,10 +36,12 @@ postInstall() {
     # global directory, while callers of `aclocal' do not need to pass
     # `-I' options explicitly.
 
-    for prog in $out/bin/aclocal*; do 
+    for prog in $out/bin/aclocal*; do
         wrapAclocal "$prog"
     done
-}
 
+    ln -s aclocal-1.11 $out/share/aclocal
+    ln -s automake-1.11 $out/share/automake
+}
 
 genericBuild

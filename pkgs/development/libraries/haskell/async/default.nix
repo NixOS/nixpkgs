@@ -1,12 +1,13 @@
-{ cabal }:
+{ cabal, stm }:
 
 cabal.mkDerivation (self: {
   pname = "async";
-  version = "1.4";
-  sha256 = "1d24bcvmw687jcf75wgavlhfs55f0va02xhl4xdnj2lrlr19s5dl";
+  version = "2.0.1.1";
+  sha256 = "132xr0sb3j02s134my4p7khj95d3v3jlpxqjrgn6h8brw0gp6wcq";
+  buildDepends = [ stm ];
   meta = {
-    homepage = "http://gitorious.org/async/";
-    description = "Asynchronous Computations";
+    homepage = "https://github.com/simonmar/async";
+    description = "Run IO operations asynchronously and wait for their results";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

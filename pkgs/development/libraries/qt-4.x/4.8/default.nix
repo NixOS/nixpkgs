@@ -12,7 +12,7 @@
 }:
 
 let
-  v = "4.8.1";
+  v = "4.8.2";
 in
 
 # TODO:
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   name = "qt-${v}";
 
   src = fetchurl {
-    url = "ftp://ftp.qt.nokia.com/qt/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "1s3sv2p8q4bjy0h6r81gdnd64apdx8kwm5jc7rxavd21m8v1m1gg";
+    url = "http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-${v}.tar.gz";
+    sha256 = "0y93vkkn44md37gyg4y8sc9ylk27xkniaimfcpdcwd090qnjl6wj";
   };
 
   patches = [ ( substituteAll {
@@ -79,8 +79,12 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes
-      libXv libXi libSM mesa
-    ] ++ (stdenv.lib.optional (buildWebkit || buildMultimedia) alsaLib)
+      libXv libXi libSM
+    ]
+    ++ (stdenv.lib.optional (stdenv.lib.lists.elem stdenv.system
+                              stdenv.lib.platforms.mesaPlatforms)
+         mesa)
+    ++ (stdenv.lib.optional (buildWebkit || buildMultimedia) alsaLib)
     ++ [ zlib libpng openssl dbus.libs freetype fontconfig glib ]
     ++ (stdenv.lib.optionals (buildWebkit || buildMultimedia)
         [ gstreamer gst_plugins_base ]);
@@ -101,6 +105,41 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  crossAttrs = let
+    isMingw = stdenv.cross.config == "i686-pc-mingw32" ||
+      stdenv.cross.config == "x86_64-w64-mingw32";
+  in {
+    # I've not tried any case other than i686-pc-mingw32.
+    # -nomake tools:   it fails linking some asian language symbols
+    # -no-svg: it fails to build on mingw64
+    configureFlags = ''
+      -static -release -confirm-license -opensource
+      -no-opengl -no-phonon
+      -no-svg
+      -make qmake -make libs -nomake tools
+      -nomake demos -nomake examples -nomake docs
+    '' + stdenv.lib.optionalString isMingw " -xplatform win32-g++-4.6";
+    patches = [];
+    preConfigure = ''
+      sed -i -e 's/ g++/ ${stdenv.cross.config}-g++/' \
+        -e 's/ gcc/ ${stdenv.cross.config}-gcc/' \
+        -e 's/ ar/ ${stdenv.cross.config}-ar/' \
+        -e 's/ strip/ ${stdenv.cross.config}-strip/' \
+        -e 's/ windres/ ${stdenv.cross.config}-windres/' \
+        mkspecs/win32-g++/qmake.conf
+    '';
+
+    # I don't know why it does not install qmake
+    postInstall = ''
+      cp bin/qmake* $out/bin
+    '';
+    dontSetConfigureCross = true;
+    dontStrip = true;
+  } // (if isMingw then
+  {
+    propagatedBuildInputs = [ ];
+  } else {});
 
   meta = with stdenv.lib; {
     homepage = http://qt.nokia.com/products;

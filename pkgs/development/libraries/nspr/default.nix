@@ -1,13 +1,13 @@
 { stdenv, fetchurl }:
 
-let version = "4.9"; in
+let version = "4.9.1"; in
 
 stdenv.mkDerivation {
   name = "nspr-${version}";
 
   src = fetchurl {
     url = "http://ftp.mozilla.org/pub/mozilla.org/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    sha1 = "57a6bb09ccb90d14303c3d9a6ec2592d8a5c0752";
+    sha1 = "1d52282668f2f8f5aabf7a5a3e7f6ba9a5df9710";
   };
 
   preConfigure = "cd mozilla/nsprpub";
@@ -18,6 +18,8 @@ stdenv.mkDerivation {
     ''
       find $out -name "*.a" | xargs rm
     '';
+
+  enableParallelBuilding = true;
     
   meta = {
     homepage = http://www.mozilla.org/projects/nspr/;

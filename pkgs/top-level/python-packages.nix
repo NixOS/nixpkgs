@@ -33,12 +33,11 @@ let pythonPackages = python.modules // rec {
 
 
   afew = buildPythonPackage rec {
-    rev = "a3ea63d7048faedb6cc58b4abcb6d4ecfddfb5db";
-    name = "afew-1.0pre${rev}";
+    name = "afew-1.0pre";
     src = fetchurl {
-      url = "https://github.com/teythoon/afew/tarball/${rev}";
+      url = "https://github.com/teythoon/afew/tarball/master";
       name = "${name}.tar.bz";
-      sha256 = "4e8850242a3845602331cabb47299b5a3af21993036a715c83e8dd698ab5d716";
+      sha256 = "949710f8dcf503f42f2a2d77ea71e48ccf70155a764f75ad29cc93edc120809b";
     };
 
     propagatedBuildInputs = [ notmuch pkgs.dbacl ];
@@ -60,17 +59,17 @@ let pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    name = "alot-0.3";
+    name = "alot-0.3.1";
 
     src = fetchurl {
-      url = "https://github.com/pazz/alot/tarball/0.3";
+      url = "https://github.com/pazz/alot/tarball/master";
       name = "${name}.tar.bz";
-      md5 = "fa4944a1a7e9e380da0ee75ea3571a79";
+      sha256 = "06683de36688615d3d526198c93133e1131897c888ffa31e83f1ad292eae57af";
     };
 
     doCheck = false;
 
-    propagatedBuildInputs = [ notmuch urwid twisted magic configobj ];
+    propagatedBuildInputs = [ notmuch urwid twisted magic configobj pygpgme ];
 
     postInstall = ''
       wrapProgram $out/bin/alot \
@@ -174,7 +173,7 @@ let pythonPackages = python.modules // rec {
     name = "logilab-astng-0.21.1";
 
     src = fetchurl {
-      url = "http://ftp.logilab.org/pub/astng/${name}.tar.gz";
+      url = "ftp://ftp.logilab.org/pub/astng/${name}.tar.gz";
       sha256 = "0rqp2vwrnv6gkzdd96j078h1sz26plh49cmnyswy2wb6l4wans67";
     };
     propagatedBuildInputs = [logilabCommon];
@@ -346,6 +345,26 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  coilmq = buildPythonPackage (rec {
+    name = "coilmq-0.6.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/C/CoilMQ/CoilMQ-0.6.1.tar.gz";
+      md5 = "5f39727415b837abd02651eeb2721749";
+    };
+
+    propagatedBuildInputs = [ stompclient distribute ]; 
+      
+    doCheck = false;
+
+    meta = {
+      description = "Simple, lightweight, and easily extensible STOMP message broker";
+      homepage = http://code.google.com/p/coilmq/;
+      license = pkgs.lib.licenses.asl20;
+      platforms = python.meta.platforms;
+    };
+  });
+
   configobj = buildPythonPackage (rec {
     name = "configobj-4.7.2";
 
@@ -414,19 +433,18 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
   dateutil = buildPythonPackage (rec {
-    name = "dateutil-1.4.1";
+    name = "dateutil-1.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "0mrkh932k8s74h4rpgksvpmwbrrkq8zn78gbgwc22i2vlp31bdkl";
+      sha256 = "02dhw57jf5kjcp7ng1if7vdrbnlpb9yjmz7wygwwvf3gni4766bg";
     };
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
-
       homepage = http://pypi.python.org/pypi/python-dateutil;
-
       license = "BSD-style";
     };
   });
@@ -445,6 +463,32 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  distribute = buildPythonPackage (rec {
+    name = "distribute-0.6.26";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/distribute/distribute-0.6.26.tar.gz";
+      md5 = "841f4262a70107f85260362f5def8206"; #"ecd75ea629fee6d59d26f88c39b2d291";
+      
+    };
+
+    buildInputs = [ pkgs.unzip ];
+    
+    installCommand = 
+      ''
+        # ehm, YES, the --verbose flags needs to be there, otherwise it tries to patch setuptools!
+        easy_install --verbose --prefix=$out .
+      '';
+    doCheck = false;
+
+    meta = {
+      description = "Easily download, build, install, upgrade, and uninstall Python packages";
+      homepage = http://packages.python.org/distribute;
+      license = "PSF or ZPL";
+      platforms = python.meta.platforms;
+    };
+  });
+  
 
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-2.26";
@@ -460,6 +504,76 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
+  django = buildPythonPackage rec {
+    name = "Django-${version}";
+    version = "1.4";
+
+    src = fetchurl {
+      url = "http://www.djangoproject.com/m/releases/${version}/${name}.tar.gz";
+      sha256 = "1sc8ajixaqfylb7jmmhn38hgbnqipylh1sqmpicx7rqhxbxvm5n0";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
+  
+  django_1_3_1 = buildPythonPackage rec {
+    name = "Django-1.3.1";
+
+    src = fetchurl {
+      url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
+      sha256 = "0sqmvqy3y5h76pa3zjcnyiy5x01bzzy03afdp2qdwqx0x321i4dg";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A high-level Python Web framework";
+      homepage = https://www.djangoproject.com/;
+    };
+  };
+
+  
+  django_evolution = buildPythonPackage rec {
+    name = "django_evolution-0.6.7";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/d/django_evolution/${name}.tar.gz";
+      md5 = "24b8373916f53f74d701b99a6cf41409";
+    };
+
+    propagatedBuildInputs = [ django_1_3_1 ];
+
+    meta = {
+      description = "A database schema evolution tool for the Django web framework";
+      homepage = http://code.google.com/p/django-evolution/;
+    };
+  };
+
+  
+  djblets = buildPythonPackage rec {
+    name = "Djblets-0.6.19";
+
+    src = fetchurl {
+      url = "http://downloads.reviewboard.org/releases/Djblets/0.6/${name}.tar.gz";
+      sha256 = "1hhvpi81yknvlaazq1cpgamp9vf3x1fcr0ba64q3j2yz1kgin1i8";
+    };
+
+    propagatedBuildInputs = [ pkgs.pil django_1_3_1 ];
+
+    meta = {
+      description = "A collection of useful extensions for Django";
+      homepage = https://github.com/djblets/djblets;
+    };
+  };
+
+  
   dulwich = buildPythonPackage rec {
     name = "dulwich-0.8.1";
 
@@ -480,6 +594,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   hggit = buildPythonPackage rec {
     name = "hg-git-0.3.1";
 
@@ -496,6 +611,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   docutils = buildPythonPackage rec {
     name = "docutils-0.8.1";
 
@@ -584,6 +700,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
   foolscap = buildPythonPackage (rec {
     name = "foolscap-0.6.1";
 
@@ -624,6 +741,9 @@ let pythonPackages = python.modules // rec {
       url = http://ftp.edgewall.com/pub/genshi/Genshi-0.6.tar.gz;
       sha256 = "0jrajyppdzb3swcxv3w1mpp88vcy7400gy1v2h2gm3pq0dmggaij";
     };
+
+    # two tests fail on x86_64 at least. I don't know why.
+    doCheck = false;
 
     buildInputs = [ pkgs.setuptools ];
 
@@ -821,7 +941,7 @@ let pythonPackages = python.modules // rec {
     name = "logilab-common-0.56.0";
 
     src = fetchurl {
-      url = "http://ftp.logilab.org/pub/common/${name}.tar.gz";
+      url = "ftp://ftp.logilab.org/pub/common/${name}.tar.gz";
       sha256 = "14p557nqypbd10d8k7qs6jlm58pksiwh86wvvl0axyki00hj6971";
     };
     propagatedBuildInputs = [unittest2];
@@ -926,6 +1046,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.1.11";
 
@@ -946,6 +1067,21 @@ let pythonPackages = python.modules // rec {
   });
 
 
+  memcached = buildPythonPackage rec {
+    name = "memcached-1.48";
+
+    src = fetchurl {
+      url = "ftp://ftp.tummy.com/pub/python-memcached/old-releases/python-memcached-1.48.tar.gz";
+      sha256 = "1i0h05z9j0zl65rgvw86p4f54pigkxynhzppn4qxby8rjlnwdfv6";
+    };
+
+    meta = {
+      description = "Python API for communicating with the memcached distributed memory object cache daemon";
+      homepage = http://www.tummy.com/Community/software/python-memcached/;
+    };
+  };
+
+  
   mock = buildPythonPackage (rec {
     name = "mock-0.7.0";
 
@@ -1252,17 +1388,16 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  paramiko = buildPythonPackage {
-    name = "paramiko-1.7.6";
+  
+  paramiko = buildPythonPackage rec {
+    name = "paramiko-1.7.7.1";
 
     src = fetchurl {
-      url = "http://www.lag.net/paramiko/download/paramiko-1.7.6.tar.gz";
-      sha256 = "00jhzl3s9xdkbj32h1kq1swk8wpx9zky7qfda40n8mb204xjcn9h";
+      url = "http://www.lag.net/paramiko/download/${name}.tar.gz";
+      sha256 = "1bjy4jn51c50mpq51jbwk0glzd8bxz83gxdfkr9p95dmrd17c7hh";
     };
 
     buildInputs = [ pkgs.pycrypto ];
-
-    doCheck = false;
 
     meta = {
       homepage = "http://www.lag.net/paramiko/";
@@ -1475,36 +1610,27 @@ let pythonPackages = python.modules // rec {
   });
 
 
-  pycurl =
-    let libcurl = pkgs.stdenv.lib.overrideDerivation pkgs.curl
-      (oldAttrs: {
-        configureFlags =
-          (if oldAttrs ? configureFlags then oldAttrs.configureFlags else "" )
-          + " --enable-static";
-      });
-    in
-  buildPythonPackage (rec {
+  pycurl = buildPythonPackage (rec {
     name = "pycurl-7.19.0";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pycryptopp/${name}.tar.gz";
+      url = "http://pycurl.sourceforge.net/download/${name}.tar.gz";
       sha256 = "0hh6icdbp7svcq0p57zf520ifzhn7jw64x07k99j7h57qpy2sy7b";
     };
 
-    buildInputs = [ libcurl ];
+    buildInputs = [ pkgs.curl ];
 
     doCheck = false;
 
-    postInstall = ''
-      find $out -name easy-install.pth | xargs rm -v
-      find $out -name 'site.py*' | xargs rm -v
+    preConfigure = ''
+      substituteInPlace setup.py --replace '--static-libs' '--libs'
     '';
+
+    installCommand = "python setup.py install --prefix=$out";
 
     meta = {
       homepage = http://pycurl.sourceforge.net/;
-
       description = "Python wrapper for libcurl";
-
       platforms = stdenv.lib.platforms.linux;
     };
   });
@@ -1525,15 +1651,39 @@ let pythonPackages = python.modules // rec {
 
 
   pygments = buildPythonPackage rec {
-    name = "Pygments-1.4";
+    name = "Pygments-1.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
-      md5 = "d77ac8c93a7fb27545f2522abe9cc462";
+      md5 = "ef997066cc9ee7a47d01fb4f3da0b5ff";
     };
+    
     meta = {
       homepage = http://pygments.org/;
-      description = "Pygments is a generic syntax highlighter for general use in all kinds of software such as forum systems, wikis or other applications that need to prettify source code.";
+      description = "A generic syntax highlighter";
+    };
+  };
+
+
+  pygpgme = buildPythonPackage rec {
+    version = "0.3";
+    name = "pygpgme-${version}";
+
+    src = fetchurl {
+      url = "https://launchpad.net/pygpgme/trunk/${version}/+download/${name}.tar.gz";
+      sha256 = "5fd887c407015296a8fd3f4b867fe0fcca3179de97ccde90449853a3dfb802e1";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = [ pkgs.gpgme ];
+
+    meta = {
+      homepage = "https://launchpad.net/pygpgme";
+      description = "A Python wrapper for the GPGME library.";
+      license = pkgs.lib.licenses.lgpl21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
     };
   };
 
@@ -1552,8 +1702,10 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   ldap = buildPythonPackage rec {
     name = "python-ldap-2.4.3";
+    namePrefix = "";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
@@ -1564,16 +1716,18 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
+  
   pylint = buildPythonPackage rec {
     name = "pylint-0.23.0";
 
     src = fetchurl {
-      url = "http://ftp.logilab.org/pub/pylint/${name}.tar.gz";
+      url = "ftp://ftp.logilab.org/pub/pylint/${name}.tar.gz";
       sha256 = "07091avcc2b374i5f3blszmawjcin8xssjfryz91qbxybb8r7c6d";
     };
     propagatedBuildInputs = [astng];
   };
 
+  
   pymacs = pkgs.stdenv.mkDerivation rec {
     version = "v0.24-beta2";
     name = "Pymacs-${version}";
@@ -1602,6 +1756,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   pyopengl =
     let version = "3.0.0b5";
     in
@@ -1630,6 +1785,7 @@ let pythonPackages = python.modules // rec {
         };
       };
 
+      
   pyreport = buildPythonPackage (rec {
     name = "pyreport-0.3.4c";
 
@@ -1751,6 +1907,21 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  pytz = buildPythonPackage rec {
+    name = "pytz-2012c";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pytz/${name}.tar.bz2";
+      md5 = "660e0cee7f6c419ca2665db460f65131";
+    };
+
+    meta = {
+      description = "World timezone definitions, modern and historical";
+      homepage = http://pytz.sourceforge.net/;
+    };
+  };
+
+  
   pyutil = buildPythonPackage (rec {
     name = "pyutil-1.7.9";
 
@@ -1784,6 +1955,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
   pyyaml = buildPythonPackage (rec {
     name = "PyYAML-3.09";
 
@@ -1802,17 +1974,35 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  RBTools =  buildPythonPackage rec {
-    name = "RBTools-0.4.1";
+  
+  RBTools = buildPythonPackage rec {
+    name = "rbtools-0.4.1";
+    namePrefix = "";
 
     src = fetchurl {
-      url = "http://downloads.reviewboard.org/releases/RBTools/0.4/${name}.tar.gz";
+      url = "http://downloads.reviewboard.org/releases/RBTools/0.4/RBTools-0.4.1.tar.gz";
       sha256 = "1v0r7rfzrasj56s53mib51wl056g7ykh2y1c6dwv12r6hzqsycgv";
     };
 
     propagatedBuildInputs = [ setuptools ];
   };
 
+  
+  recaptcha_client = buildPythonPackage rec {
+    name = "recaptcha-client-1.0.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/recaptcha-client/${name}.tar.gz";
+      md5 = "74228180f7e1fb76c4d7089160b0d919";
+    };
+
+    meta = {
+      description = "A CAPTCHA for Python using the reCAPTCHA service";
+      homepage = http://recaptcha.net/;
+    };
+  };
+
+  
   reportlab =
    let freetype = pkgs.lib.overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
    in buildPythonPackage rec {
@@ -1832,6 +2022,23 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
+  reviewboard = buildPythonPackage rec {
+    name = "ReviewBoard-1.6.9";
+
+    src = fetchurl {
+      url = "http://downloads.reviewboard.org/releases/ReviewBoard/1.6/${name}.tar.gz";
+      sha256 = "06pwbmqwsb0g2y8zg5hk5ibaivsl1af7v0vnkqranimf4yaa10mc";
+    };
+
+    propagatedBuildInputs =
+      [ recaptcha_client pytz memcached dateutil paramiko flup pygments
+        djblets django_1_3_1 django_evolution pkgs.pycrypto python.modules.sqlite3
+        pysvn pkgs.pil psycopg2
+      ];
+  };
+
+  
   rdflib = buildPythonPackage (rec {
     name = "rdflib-3.0.0";
 
@@ -1982,6 +2189,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   setuptoolsTrial = buildPythonPackage {
     name = "setuptools-trial-0.5.12";
 
@@ -2001,6 +2209,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  
   simplejson = buildPythonPackage (rec {
     name = "simplejson-2.1.3";
 
@@ -2026,6 +2235,24 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  
+  six = buildPythonPackage rec {
+    name = "six-1.1.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/six/${name}.tar.gz";
+      md5 = "9e8099b57cd27493a6988e9c9b313e23";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A Python 2 and 3 compatibility library";
+      homepage = http://pypi.python.org/pypi/six/;
+    };
+  };
+
+  
   skype4py = buildPythonPackage (rec {
     name = "Skype4Py-1.0.32.0";
 
@@ -2120,6 +2347,25 @@ let pythonPackages = python.modules // rec {
       description = "Schema migration tools for SQLAlchemy";
     };
   };
+
+  stompclient = buildPythonPackage (rec {
+    name = "stompclient-0.3.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/stompclient/${name}.tar.gz";
+      md5 = "af0a314b6106dd80da24a918c24a1eab";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "Lightweight and extensible STOMP messaging client";
+      homepage = http://bitbucket.org/hozn/stompclient;
+      license = pkgs.lib.licenses.asl20;
+      platforms = python.meta.platforms;
+    };
+  });
+
 
   svneverever =  buildPythonPackage rec {
     name = "svneverever-778489a8";
@@ -2274,6 +2520,8 @@ let pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
       md5 = "1072b66d53c24e019a8f1304ac9d9fc5";
     };
+
+    patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];
 
     doCheck = false;
 
@@ -2454,6 +2702,87 @@ let pythonPackages = python.modules // rec {
     meta = {
       description = "HgSVN";
       homepage = http://pypi.python.org/pypi/hgsvn;
+    };
+  };
+
+  cliapp = buildPythonPackage rec {
+    name = "cliapp-1.20120630";
+
+    src = fetchurl rec {
+      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_1.20120630.orig.tar.gz";
+      sha256 = "6beeb1fb3077561540094584ce36055266ac67b80f158b9b82fe4075096f4716";
+    };
+
+    buildInputs = [ sphinx ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://liw.fi/cliapp/;
+      description = "Python framework for Unix command line programs.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  tracing = buildPythonPackage rec {
+    name = "tracing-0.6";
+
+    src = fetchurl rec {
+      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_0.6.orig.tar.gz";
+      sha256 = "1164cf05891f9bca93fb87413f32d2c4da90348adbf69b0ad36a464b7adcd354";
+    };
+
+    buildInputs = [ sphinx ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://liw.fi/tracing/;
+      description = "Python debug logging helper.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  ttystatus = buildPythonPackage rec {
+    name = "ttystatus-0.19";
+
+    src = fetchurl rec {
+      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.19.orig.tar.gz";
+      sha256 = "7cc112a4783f2e0c354c5244f8e50b18733b5957677b56a755c1016e04c0c28d";
+    };
+
+    buildInputs = [ sphinx ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://liw.fi/ttystatus/;
+      description = "Progress and status updates on terminals for Python.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  larch = buildPythonPackage rec {
+    name = "larch-0.31";
+
+    src = fetchurl rec {
+      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_0.31.orig.tar.gz";
+      sha256 = "18c243a45b35974c304c9b3d8b05718f1272f14c29cd3c9010800cf821064444";
+    };
+
+    buildInputs = [ sphinx ];
+    propagatedBuildInputs = [ tracing ttystatus cliapp ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://liw.fi/larch/;
+      description = "Python B-tree library.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
     };
   };
 

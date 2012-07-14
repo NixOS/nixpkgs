@@ -14,6 +14,12 @@ buildPhase() {
 
         cd usr/src/nv/
 
+        shopt -s nullglob
+
+        for a in $kpatches; do
+          patch -p1 < $a
+        done
+
         # Workaround: get it to build on kernels that have CONFIG_XEN
         # set.  Disable the test, apply a patch to disable the Xen
         # functionality.

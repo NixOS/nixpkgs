@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cryptocipher";
-  version = "0.3.2";
-  sha256 = "0nw7rwlnakdslzg4z6ik9hfylwnrbn103n677w0xr5b81wj19a5j";
+  version = "0.3.5";
+  sha256 = "02qc1rr9l51dnk0sn7js8zv2w2qhkha3ik828j5s729h80cyw99s";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

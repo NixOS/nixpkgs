@@ -65,6 +65,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
         --fstrans=${if fsTranslation then "yes" else "no"} \
         --requires="${concatStringsSep "," debRequires}" \
         --provides="${concatStringsSep "," debProvides}" \
+        ${optionalString (src ? version) "--pkgversion=$(echo ${src.version} | tr _ -)"} \
         make install
 
       mkdir -p $out/debs

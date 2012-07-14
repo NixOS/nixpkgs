@@ -4,14 +4,11 @@
 
 cabal.mkDerivation (self: {
   pname = "graphviz";
-  version = "2999.13.0.2";
-  sha256 = "17b95zi8j7mnzrp3kybyfyqqpcdhbf0mdrk0sfnw3qp8fbyfrw1i";
+  version = "2999.13.0.3";
+  sha256 = "0rwjlwfa3s1vgh5mwzwmzq4s153iq338zy7jqi0qyxcs52illqq8";
   buildDepends = [
     colour dlist fgl filepath polyparse text transformers wlPprintText
   ];
-  patchPhase = ''
-    sed -i graphviz.cabal -e 's|transformers == 0.2.\*|transformers|'
-  '';
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";
     description = "Bindings to Graphviz for graph visualisation";

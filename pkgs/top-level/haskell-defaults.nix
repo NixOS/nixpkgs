@@ -15,19 +15,16 @@
   # Change these if you want to change the default versions of packages being used
   # for a particular GHC version.
 
-  ghcHEADPrefs = ghc741Prefs;
-
-  ghc741Prefs_pedantic =
+  ghcHEADPrefs =
     self : self.haskellPlatformArgs_future self // {
-      mtl1 = self.mtl_1_1_1_1; # 7.2 ok, 7.3 ok
+      haskellPlatform = null;
       binary = null; # now a core package
     };
 
   ghc741Prefs =
-    self : ghc741Prefs_pedantic self // {
-      # These are necessary at the moment to prevent many packages from breaking.
-      mtl          = self.mtl_2_0_1_0;
-      transformers = self.transformers_0_2_2_0;
+    self : self.haskellPlatformArgs_2012_2_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2012_2_0_0;
+      binary = null; # now a core package
     };
 
   ghc722Prefs = ghc741Prefs;
@@ -37,7 +34,6 @@
   ghc704Prefs =
     self : self.haskellPlatformArgs_2011_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2011_4_0_0;
-      mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
       monadPar = self.monadPar_0_1_0_3;
@@ -46,7 +42,6 @@
   ghc703Prefs =
     self : self.haskellPlatformArgs_2011_2_0_1 self // {
       haskellPlatform = self.haskellPlatform_2011_2_0_1;
-      mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
@@ -57,7 +52,6 @@
   ghc701Prefs =
     self : self.haskellPlatformArgs_2011_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2011_2_0_0;
-      mtl1 = self.mtl_1_1_1_1;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
@@ -68,6 +62,7 @@
   ghc6122Prefs =
     self : self.haskellPlatformArgs_2010_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_2_0_0;
+      mtl1 = self.mtl_1_1_0_2;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
@@ -78,6 +73,7 @@
   ghc6121Prefs =
     self : self.haskellPlatformArgs_2010_1_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_1_0_0;
+      mtl1 = self.mtl_1_1_0_2;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       deepseq = self.deepseq_1_1_0_2;
@@ -88,6 +84,8 @@
   ghc6104Prefs =
     self : self.haskellPlatformArgs_2009_2_0_2 self // {
       haskellPlatform = self.haskellPlatform_2009_2_0_2;
+      mtl = self.mtl_1_1_0_2;
+      mtl1 = self.mtl_1_1_0_2;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       text = self.text_0_11_0_6;
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
@@ -247,23 +245,17 @@
                prefFun = ghc741Prefs;
              };
 
-  # More strictly adhering to the probable future Haskell Platform.
-  packages_ghc741_pedantic =
-    packages_ghc741.override { prefFun = ghc741Prefs_pedantic; };
-
-  # Stable branch snapshot.
   packages_ghc742 =
     packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
                ghcBinary = ghc6121BinaryDarwin;
-               prefFun = ghcHEADPrefs;
+               prefFun = ghc741Prefs;
              };
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   packages_ghcHEAD =
     packages { ghcPath = ../development/compilers/ghc/head.nix;
-               ghcBinary = # (packages_ghc704.ghcWithPackages (self : [ self.alex self.happy ]))
-                           ghc704Binary;
+               ghcBinary = ghc704Binary;
                prefFun = ghcHEADPrefs;
              };
-  
+
 }

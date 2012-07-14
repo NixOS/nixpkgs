@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libsigsegv }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "gawk-4.0.0";
 
   src = fetchurl {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0sss7rhpvizi2a88h6giv0i7w5h07s2fxkw3s6n1hqvcnhrfgbb0";
   };
 
-  doCheck = true;
+  doCheck = !stdenv.isCygwin;      # XXX: `test-dup2' segfaults on Cygwin 6.1
 
   buildInputs = [ libsigsegv ];
 
@@ -37,3 +37,9 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+stdenv.lib.optionalAttrs stdenv.isCygwin {
+  patches = [ ./cygwin-identifiers.patch ];
+})

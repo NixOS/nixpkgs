@@ -1,16 +1,18 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "7.4.1.20120412";
+  version = "7.4.2";
 
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://haskell.org/ghc/dist/stable/dist/${name}-src.tar.bz2";
-    sha256 = "0hpzd51s5nvlsjk3wza45ji5v6m0szqjzch45fvv7wfzllrm595l";
+    url = "http://haskell.org/ghc/dist/7.4.2/${name}-src.tar.bz2";
+    sha256 = "0vc3zmxqi4gflssmj35n5c8idbvyrhd88abi50whbirwlf4i5vpj";
   };
 
   buildInputs = [ ghc perl gmp ncurses ];
+
+  enableParallelBuilding = true;
 
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"

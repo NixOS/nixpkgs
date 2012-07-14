@@ -127,11 +127,21 @@ let version = "4.6.3";
           " --enable-threads=win32" +
           " --enable-sjlj-exceptions" +
           " --enable-hash-synchronization" +
-          " --enable-version-specific-runtime-libs" +
           " --disable-libssp" +
           " --disable-nls" +
-          " --with-dwarf2"
-          else
+          " --with-dwarf2" +
+          # I think noone uses shared gcc libs in mingw, so we better do the same.
+          # In any case, mingw32 g++ linking is broken by default with shared libs,
+          # unless adding "-lsupc++" to any linking command. I don't know why.
+          " --disable-shared" +
+          (if cross.config == "x86_64-w64-mingw32" then
+            # To keep ABI compatibility with upstream mingw-w64
+            " --enable-fully-dynamic-string"
+            else "")
+          else (if cross.libc == "uclibc" then
+            # In uclibc cases, libgomp needs an additional '-ldl'
+            # and as I don't know how to pass it, I disable libgomp.
+            " --disable-libgomp" else "") +
           " --enable-threads=posix" +
           " --enable-nls" +
           " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
@@ -426,7 +436,8 @@ stdenv.mkDerivation ({
   installTargets = "install-gcc install-target-libgcc";
 }
 
-// optionalAttrs (!stripped) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
+# Strip kills static libs of other archs (hence cross != null)
+// optionalAttrs (!stripped || cross != null) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
 
 // optionalAttrs langVhdl rec {
   name = "ghdl-0.29";

@@ -11,7 +11,7 @@ let
     name = "applewmproto-1.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/applewmproto-1.4.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/applewmproto-1.4.2.tar.bz2;
       sha256 = "1zi4p07mp6jmk030p4gmglwxcwp0lzs5mi31y1b4rp8lsqxdxizw";
     };
     buildInputs = [pkgconfig ];
@@ -21,7 +21,7 @@ let
     name = "bdftopcf-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/bdftopcf-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/bdftopcf-1.0.3.tar.bz2;
       sha256 = "02hx981f7jfwylxj21s91yvv4h597nqqzz3vd6ar81zyn84b944w";
     };
     buildInputs = [pkgconfig libXfont ];
@@ -31,7 +31,7 @@ let
     name = "bigreqsproto-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/bigreqsproto-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/bigreqsproto-1.1.2.tar.bz2;
       sha256 = "07hvfm84scz8zjw14riiln2v4w03jlhp756ypwhq27g48jmic8a6";
     };
     buildInputs = [pkgconfig ];
@@ -41,7 +41,7 @@ let
     name = "compositeproto-0.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/compositeproto-0.4.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/compositeproto-0.4.2.tar.bz2;
       sha256 = "1z0crmf669hirw4s7972mmp8xig80kfndja9h559haqbpvq5k4q4";
     };
     buildInputs = [pkgconfig ];
@@ -51,7 +51,7 @@ let
     name = "damageproto-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/damageproto-1.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/damageproto-1.2.1.tar.bz2;
       sha256 = "0nzwr5pv9hg7c21n995pdiv0zqhs91yz3r8rn3aska4ykcp12z2w";
     };
     buildInputs = [pkgconfig ];
@@ -61,7 +61,7 @@ let
     name = "dmxproto-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/dmxproto-2.3.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/dmxproto-2.3.1.tar.bz2;
       sha256 = "02b5x9dkgajizm8dqyx2w6hmqx3v25l67mgf35nj6sz0lgk52877";
     };
     buildInputs = [pkgconfig ];
@@ -71,7 +71,7 @@ let
     name = "dri2proto-2.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/dri2proto-2.6.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/dri2proto-2.6.tar.bz2;
       sha256 = "02drlfqvjm2q7dvkkwli3fs2crb6rdb3kyd13vwx7z0rijrc10md";
     };
     buildInputs = [pkgconfig ];
@@ -81,7 +81,7 @@ let
     name = "encodings-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/encodings-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/encodings-1.0.4.tar.bz2;
       sha256 = "0ffmaw80vmfwdgvdkp6495xgsqszb6s0iira5j0j6pd4i0lk3mnf";
     };
     buildInputs = [pkgconfig ];
@@ -91,7 +91,7 @@ let
     name = "fixesproto-5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/fixesproto-5.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/fixesproto-5.0.tar.bz2;
       sha256 = "1ki4wiq2iivx5g4w5ckzbjbap759kfqd72yg18m3zpbb4hqkybxs";
     };
     buildInputs = [pkgconfig xextproto ];
@@ -101,7 +101,7 @@ let
     name = "font-adobe-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-adobe-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-adobe-100dpi-1.0.3.tar.bz2;
       sha256 = "0m60f5bd0caambrk8ksknb5dks7wzsg7g7xaf0j21jxmx8rq9h5j";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -111,7 +111,7 @@ let
     name = "font-adobe-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-adobe-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-adobe-75dpi-1.0.3.tar.bz2;
       sha256 = "02advcv9lyxpvrjv8bjh1b797lzg6jvhipclz49z8r8y98g4l0n6";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -121,7 +121,7 @@ let
     name = "font-adobe-utopia-100dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-adobe-utopia-100dpi-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-100dpi-1.0.4.tar.bz2;
       sha256 = "19dd9znam1ah72jmdh7i6ny2ss2r6m21z9v0l43xvikw48zmwvyi";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -131,7 +131,7 @@ let
     name = "font-adobe-utopia-75dpi-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-adobe-utopia-75dpi-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-75dpi-1.0.4.tar.bz2;
       sha256 = "152wigpph5wvl4k9m3l4mchxxisgsnzlx033mn5iqrpkc6f72cl7";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -141,7 +141,7 @@ let
     name = "font-adobe-utopia-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-adobe-utopia-type1-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-adobe-utopia-type1-1.0.4.tar.bz2;
       sha256 = "0xw0pdnzj5jljsbbhakc6q9ha2qnca1jr81zk7w70yl9bw83b54p";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -151,7 +151,7 @@ let
     name = "font-alias-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-alias-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-alias-1.0.3.tar.bz2;
       sha256 = "16ic8wfwwr3jicaml7b5a0sk6plcgc1kg84w02881yhwmqm3nicb";
     };
     buildInputs = [pkgconfig ];
@@ -161,7 +161,7 @@ let
     name = "font-arabic-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-arabic-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-arabic-misc-1.0.3.tar.bz2;
       sha256 = "1x246dfnxnmflzf0qzy62k8jdpkb6jkgspcjgbk8jcq9lw99npah";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -171,7 +171,7 @@ let
     name = "font-bh-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-bh-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-bh-100dpi-1.0.3.tar.bz2;
       sha256 = "10cl4gm38dw68jzln99ijix730y7cbx8np096gmpjjwff1i73h13";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -181,7 +181,7 @@ let
     name = "font-bh-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-bh-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-bh-75dpi-1.0.3.tar.bz2;
       sha256 = "073jmhf0sr2j1l8da97pzsqj805f7mf9r2gy92j4diljmi8sm1il";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -191,7 +191,7 @@ let
     name = "font-bh-lucidatypewriter-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-bh-lucidatypewriter-100dpi-1.0.3.tar.bz2;
       sha256 = "1fqzckxdzjv4802iad2fdrkpaxl4w0hhs9lxlkyraq2kq9ik7a32";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -201,7 +201,7 @@ let
     name = "font-bh-lucidatypewriter-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-bh-lucidatypewriter-75dpi-1.0.3.tar.bz2;
       sha256 = "0cfbxdp5m12cm7jsh3my0lym9328cgm7fa9faz2hqj05wbxnmhaa";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -211,7 +211,7 @@ let
     name = "font-bh-ttf-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-bh-ttf-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-bh-ttf-1.0.3.tar.bz2;
       sha256 = "0pyjmc0ha288d4i4j0si4dh3ncf3jiwwjljvddrb0k8v4xiyljqv";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -221,7 +221,7 @@ let
     name = "font-bh-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-bh-type1-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-bh-type1-1.0.3.tar.bz2;
       sha256 = "1hb3iav089albp4sdgnlh50k47cdjif9p4axm0kkjvs8jyi5a53n";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -231,7 +231,7 @@ let
     name = "font-bitstream-100dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-bitstream-100dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-100dpi-1.0.3.tar.bz2;
       sha256 = "1kmn9jbck3vghz6rj3bhc3h0w6gh0qiaqm90cjkqsz1x9r2dgq7b";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -241,7 +241,7 @@ let
     name = "font-bitstream-75dpi-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-bitstream-75dpi-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-75dpi-1.0.3.tar.bz2;
       sha256 = "13plbifkvfvdfym6gjbgy9wx2xbdxi9hfrl1k22xayy02135wgxs";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -251,7 +251,7 @@ let
     name = "font-bitstream-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-bitstream-type1-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-bitstream-type1-1.0.3.tar.bz2;
       sha256 = "1256z0jhcf5gbh1d03593qdwnag708rxqa032izmfb5dmmlhbsn6";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -261,7 +261,7 @@ let
     name = "font-cronyx-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-cronyx-cyrillic-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-cronyx-cyrillic-1.0.3.tar.bz2;
       sha256 = "0ai1v4n61k8j9x2a1knvfbl2xjxk3xxmqaq3p9vpqrspc69k31kf";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -271,7 +271,7 @@ let
     name = "font-cursor-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-cursor-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-cursor-misc-1.0.3.tar.bz2;
       sha256 = "0dd6vfiagjc4zmvlskrbjz85jfqhf060cpys8j0y1qpcbsrkwdhp";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -281,7 +281,7 @@ let
     name = "font-daewoo-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-daewoo-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-daewoo-misc-1.0.3.tar.bz2;
       sha256 = "1s2bbhizzgbbbn5wqs3vw53n619cclxksljvm759h9p1prqdwrdw";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -291,7 +291,7 @@ let
     name = "font-dec-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-dec-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-dec-misc-1.0.3.tar.bz2;
       sha256 = "0yzza0l4zwyy7accr1s8ab7fjqkpwggqydbm2vc19scdby5xz7g1";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -301,7 +301,7 @@ let
     name = "font-ibm-type1-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-ibm-type1-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-ibm-type1-1.0.3.tar.bz2;
       sha256 = "1pyjll4adch3z5cg663s6vhi02k8m6488f0mrasg81ssvg9jinzx";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -311,7 +311,7 @@ let
     name = "font-isas-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-isas-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-isas-misc-1.0.3.tar.bz2;
       sha256 = "0rx8q02rkx673a7skkpnvfkg28i8gmqzgf25s9yi0lar915sn92q";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -321,7 +321,7 @@ let
     name = "font-jis-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-jis-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-jis-misc-1.0.3.tar.bz2;
       sha256 = "0rdc3xdz12pnv951538q6wilx8mrdndpkphpbblszsv7nc8cw61b";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -331,7 +331,7 @@ let
     name = "font-micro-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-micro-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-micro-misc-1.0.3.tar.bz2;
       sha256 = "1dldxlh54zq1yzfnrh83j5vm0k4ijprrs5yl18gm3n9j1z0q2cws";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -341,7 +341,7 @@ let
     name = "font-misc-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-misc-cyrillic-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-misc-cyrillic-1.0.3.tar.bz2;
       sha256 = "0q2ybxs8wvylvw95j6x9i800rismsmx4b587alwbfqiw6biy63z4";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -351,7 +351,7 @@ let
     name = "font-misc-ethiopic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-misc-ethiopic-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-misc-ethiopic-1.0.3.tar.bz2;
       sha256 = "19cq7iq0pfad0nc2v28n681fdq3fcw1l1hzaq0wpkgpx7bc1zjsk";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -361,7 +361,7 @@ let
     name = "font-misc-meltho-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-misc-meltho-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-misc-meltho-1.0.3.tar.bz2;
       sha256 = "148793fqwzrc3bmh2vlw5fdiwjc2n7vs25cic35gfp452czk489p";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -371,7 +371,7 @@ let
     name = "font-misc-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-misc-misc-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-misc-misc-1.1.2.tar.bz2;
       sha256 = "150pq6n8n984fah34n3k133kggn9v0c5k07igv29sxp1wi07krxq";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -381,7 +381,7 @@ let
     name = "font-mutt-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-mutt-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-mutt-misc-1.0.3.tar.bz2;
       sha256 = "13qghgr1zzpv64m0p42195k1kc77pksiv059fdvijz1n6kdplpxx";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -391,7 +391,7 @@ let
     name = "font-schumacher-misc-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-schumacher-misc-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-schumacher-misc-1.1.2.tar.bz2;
       sha256 = "0nkym3n48b4v36y4s927bbkjnsmicajarnf6vlp7wxp0as304i74";
     };
     buildInputs = [pkgconfig bdftopcf fontutil mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -401,7 +401,7 @@ let
     name = "font-screen-cyrillic-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-screen-cyrillic-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-screen-cyrillic-1.0.4.tar.bz2;
       sha256 = "0yayf1qlv7irf58nngddz2f1q04qkpr5jwp4aja2j5gyvzl32hl2";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -411,7 +411,7 @@ let
     name = "font-sony-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-sony-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-sony-misc-1.0.3.tar.bz2;
       sha256 = "1xfgcx4gsgik5mkgkca31fj3w72jw9iw76qyrajrsz1lp8ka6hr0";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -421,7 +421,7 @@ let
     name = "fontsproto-2.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/fontsproto-2.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/fontsproto-2.1.2.tar.bz2;
       sha256 = "1ab8mbqxdwvdz4k5x4xb9c4n5w7i1xw276cbpk4z7a1nlpjrg746";
     };
     buildInputs = [pkgconfig ];
@@ -431,7 +431,7 @@ let
     name = "font-sun-misc-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-sun-misc-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-sun-misc-1.0.3.tar.bz2;
       sha256 = "1q6jcqrffg9q5f5raivzwx9ffvf7r11g6g0b125na1bhpz5ly7s8";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -441,7 +441,7 @@ let
     name = "font-util-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-util-1.3.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-util-1.3.0.tar.bz2;
       sha256 = "15cijajwhjzpy3ydc817zz8x5z4gbkyv3fps687jbq544mbfbafz";
     };
     buildInputs = [pkgconfig ];
@@ -451,7 +451,7 @@ let
     name = "font-winitzki-cyrillic-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-winitzki-cyrillic-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-winitzki-cyrillic-1.0.3.tar.bz2;
       sha256 = "181n1bgq8vxfxqicmy1jpm1hnr6gwn1kdhl6hr4frjigs1ikpldb";
     };
     buildInputs = [pkgconfig bdftopcf mkfontdir ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -461,7 +461,7 @@ let
     name = "font-xfree86-type1-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/font-xfree86-type1-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/font-xfree86-type1-1.0.4.tar.bz2;
       sha256 = "0jp3zc0qfdaqfkgzrb44vi9vi0a8ygb35wp082yz7rvvxhmg9sya";
     };
     buildInputs = [pkgconfig mkfontdir mkfontscale ]; configureFlags = "--with-fontrootdir=$(out)/lib/X11/fonts"; 
@@ -481,7 +481,7 @@ let
     name = "glproto-1.4.15";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/glproto-1.4.15.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/glproto-1.4.15.tar.bz2;
       sha256 = "0wf1vq9g4pyzahb23ywx554pm5bpax49lz188fk6m5p8wbmmc0wr";
     };
     buildInputs = [pkgconfig ];
@@ -491,7 +491,7 @@ let
     name = "iceauth-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/iceauth-1.0.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/iceauth-1.0.5.tar.bz2;
       sha256 = "1aq6v671s2x5rc6zn0rgxb4wddg4vq94mckw3cpwl7ccrjjvd5hl";
     };
     buildInputs = [pkgconfig libICE xproto ];
@@ -511,7 +511,7 @@ let
     name = "inputproto-2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/inputproto-2.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/inputproto-2.2.tar.bz2;
       sha256 = "1c5wqamfsd8g5i8kya5pjfmcac8q5zq1l3vclh6p96f24nmicxfy";
     };
     buildInputs = [pkgconfig ];
@@ -521,7 +521,7 @@ let
     name = "kbproto-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/kbproto-1.0.6.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/kbproto-1.0.6.tar.bz2;
       sha256 = "0yal11hhpiisy3w8wmacsdzzzcnc3xwnswxz8k7zri40xc5aqz03";
     };
     buildInputs = [pkgconfig ];
@@ -531,7 +531,7 @@ let
     name = "libAppleWM-1.4.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libAppleWM-1.4.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libAppleWM-1.4.1.tar.bz2;
       sha256 = "0r8x28n45q89x91mz8mv0zkkcxi8wazkac886fyvflhiv2y8ap2y";
     };
     buildInputs = [pkgconfig applewmproto libX11 libXext xextproto ];
@@ -541,7 +541,7 @@ let
     name = "libFS-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libFS-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libFS-1.0.4.tar.bz2;
       sha256 = "05c3bqgn5m7j4kx8wvy0p36faq6f9jv5yq12m6033m4lflg7cwvh";
     };
     buildInputs = [pkgconfig fontsproto xproto xtrans ];
@@ -551,7 +551,7 @@ let
     name = "libICE-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libICE-1.0.8.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libICE-1.0.8.tar.bz2;
       sha256 = "07mp13pb3s73kj7y490gnx619znzwk91mlf8kdw0rzq29ll93a94";
     };
     buildInputs = [pkgconfig xproto xtrans ];
@@ -561,7 +561,7 @@ let
     name = "libSM-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libSM-1.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libSM-1.2.1.tar.bz2;
       sha256 = "07bzi6xwlhq36f60qfspjbz0qjj7zcgayi1vp4ihgx34kib1vhck";
     };
     buildInputs = [pkgconfig libICE libuuid xproto xtrans ];
@@ -571,18 +571,18 @@ let
     name = "libWindowsWM-1.0.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libWindowsWM-1.0.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libWindowsWM-1.0.1.tar.bz2;
       sha256 = "1p0flwb67xawyv6yhri9w17m1i4lji5qnd0gq8v1vsfb8zw7rw15";
     };
     buildInputs = [pkgconfig windowswmproto libX11 libXext xextproto ];
   })) // {inherit windowswmproto libX11 libXext xextproto ;};
     
   libX11 = (stdenv.mkDerivation ((if overrides ? libX11 then overrides.libX11 else x: x) {
-    name = "libX11-1.4.99.901";
+    name = "libX11-1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libX11-1.4.99.901.tar.bz2;
-      sha256 = "1nr6vgcs9asmxgcml9h79n74f8ik229y0dap4r8rcibyw1lqa8xz";
+      url = mirror://xorg/X11R7.7/src/everything/libX11-1.5.0.tar.bz2;
+      sha256 = "11jdpl15bxwpwv0knpkh990s8jvlybng3dx477pkrz1bx7byz0n3";
     };
     buildInputs = [pkgconfig inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ];
   })) // {inherit inputproto kbproto libxcb xextproto xf86bigfontproto xproto xtrans ;};
@@ -591,7 +591,7 @@ let
     name = "libXScrnSaver-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXScrnSaver-1.2.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXScrnSaver-1.2.2.tar.bz2;
       sha256 = "07ff4r20nkkrj7h08f9fwamds9b3imj8jz5iz6y38zqw6jkyzwcg";
     };
     buildInputs = [pkgconfig scrnsaverproto libX11 libXext xextproto ];
@@ -601,18 +601,18 @@ let
     name = "libXau-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXau-1.0.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXau-1.0.7.tar.bz2;
       sha256 = "12d4f7sdv2pjxhk0lcay0pahccddszkw579dc59daqi37r8bllvi";
     };
     buildInputs = [pkgconfig xproto ];
   })) // {inherit xproto ;};
     
   libXaw = (stdenv.mkDerivation ((if overrides ? libXaw then overrides.libXaw else x: x) {
-    name = "libXaw-1.0.10";
+    name = "libXaw-1.0.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXaw-1.0.10.tar.bz2;
-      sha256 = "1p8vxqwk5gs8dl325fmjvqx165bv5vngayfkj5ffrf1q4vwvr5id";
+      url = mirror://xorg/X11R7.7/src/everything/libXaw-1.0.11.tar.bz2;
+      sha256 = "14ll7ndf5njc30hz2w197qvwp7fqj7y14wq4p1cyxlbipfn79a47";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto libXmu libXpm xproto libXt ];
   })) // {inherit libX11 libXext xextproto libXmu libXpm xproto libXt ;};
@@ -621,7 +621,7 @@ let
     name = "libXcomposite-0.4.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXcomposite-0.4.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXcomposite-0.4.3.tar.bz2;
       sha256 = "1b8sniijb85v4my6v30ma9yqnwl4hkclci9l1hqxnipfyhl4sa9j";
     };
     buildInputs = [pkgconfig compositeproto libX11 libXfixes xproto ];
@@ -631,7 +631,7 @@ let
     name = "libXcursor-1.1.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXcursor-1.1.13.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXcursor-1.1.13.tar.bz2;
       sha256 = "13xd1dyb06gwdwb0bxb22fkgdlmis6wrljm2xk6fhz0v9bg2g27p";
     };
     buildInputs = [pkgconfig fixesproto libX11 libXfixes xproto libXrender ];
@@ -641,7 +641,7 @@ let
     name = "libXdamage-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXdamage-1.1.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXdamage-1.1.3.tar.bz2;
       sha256 = "1a678bwap74sqczbr2z4y4fvbr35km3inkm8bi1igjyk4v46jqdw";
     };
     buildInputs = [pkgconfig damageproto fixesproto libX11 xextproto libXfixes xproto ];
@@ -651,7 +651,7 @@ let
     name = "libXdmcp-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXdmcp-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXdmcp-1.1.1.tar.bz2;
       sha256 = "13highx4xpgkiwykpcl7z2laslrjc4pzi4h617ny9p7r6116vkls";
     };
     buildInputs = [pkgconfig xproto ];
@@ -661,7 +661,7 @@ let
     name = "libXext-1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXext-1.3.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXext-1.3.1.tar.bz2;
       sha256 = "0ng8clhn7srbkadxjc7ih3z3v27v9ny0aa0dqkgddgxpgrhrq8jn";
     };
     buildInputs = [pkgconfig libX11 xextproto xproto ];
@@ -671,7 +671,7 @@ let
     name = "libXfixes-5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXfixes-5.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXfixes-5.0.tar.bz2;
       sha256 = "1qx2rmwhmca2n7rgafy0arp15k5vwhdhhh6v6mx76hlj29328yjk";
     };
     buildInputs = [pkgconfig fixesproto libX11 xextproto xproto ];
@@ -681,28 +681,28 @@ let
     name = "libXfont-1.4.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXfont-1.4.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXfont-1.4.5.tar.bz2;
       sha256 = "0w3irg00k6b6mziddnacln9q2rkf5848b04nvjqwv5bb1fw6zydv";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
   })) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
     
   libXft = (stdenv.mkDerivation ((if overrides ? libXft then overrides.libXft else x: x) {
-    name = "libXft-2.3.0";
+    name = "libXft-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXft-2.3.0.tar.bz2;
-      sha256 = "0i5hb1c5mq3qam4qzchv2crir8n7jvip9m1ncl04fp1aswx3j9il";
+      url = mirror://xorg/X11R7.7/src/everything/libXft-2.3.1.tar.bz2;
+      sha256 = "1gdv6559cdz1lfw73x7wsvax1fkvphmayrymprljhyyb5nwk5kkz";
     };
     buildInputs = [pkgconfig fontconfig freetype libX11 xproto libXrender ];
   })) // {inherit fontconfig freetype libX11 xproto libXrender ;};
     
   libXi = (stdenv.mkDerivation ((if overrides ? libXi then overrides.libXi else x: x) {
-    name = "libXi-1.6.0";
+    name = "libXi-1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXi-1.6.0.tar.bz2;
-      sha256 = "1bx7qi1rak3fazkxgf98lxy9iiflgvlm4wg2pg2hb5169ai6bz5j";
+      url = mirror://xorg/X11R7.7/src/everything/libXi-1.6.1.tar.bz2;
+      sha256 = "029ihw4jq8mng8rx7a3jdvq64jm1zdkqidca93zmxv4jf9yn5qzj";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext xextproto xproto ];
   })) // {inherit inputproto libX11 libXext xextproto xproto ;};
@@ -711,7 +711,7 @@ let
     name = "libXinerama-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXinerama-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXinerama-1.1.2.tar.bz2;
       sha256 = "1b3aq1762hxzchd9ndavdjlksq93991s0g2z6spf8wl3v0pprrx4";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xineramaproto ];
@@ -721,7 +721,7 @@ let
     name = "libXmu-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXmu-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXmu-1.1.1.tar.bz2;
       sha256 = "1pbym8rrznxqd60zwf7w4xpf27sa72bky2knginqcfnca32q343h";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
@@ -741,7 +741,7 @@ let
     name = "libXpm-3.5.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXpm-3.5.10.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXpm-3.5.10.tar.bz2;
       sha256 = "0dd737ch4q9gr151wff1m3q2j7wf3pip4y81601xdrsh8wipxnx6";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xproto libXt ];
@@ -751,7 +751,7 @@ let
     name = "libXrandr-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXrandr-1.3.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXrandr-1.3.2.tar.bz2;
       sha256 = "10cvv78ws8jznma4s45dzqz0ldcxk30qgsqrc4wxfcsjmcba5b3y";
     };
     buildInputs = [pkgconfig randrproto renderproto libX11 libXext xextproto xproto libXrender ];
@@ -761,7 +761,7 @@ let
     name = "libXrender-0.9.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXrender-0.9.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXrender-0.9.7.tar.bz2;
       sha256 = "1rmvja2gkf5v0k2n1bcghw8v98m2kfn3af0rbmsda5dwr69npd7r";
     };
     buildInputs = [pkgconfig renderproto libX11 xproto ];
@@ -771,7 +771,7 @@ let
     name = "libXres-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXres-1.0.6.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXres-1.0.6.tar.bz2;
       sha256 = "1478pm70gdi6l70r4jpkyyg2am9wv6xh53z9ibwq5cg84p4n31pz";
     };
     buildInputs = [pkgconfig resourceproto libX11 libXext xextproto xproto ];
@@ -781,7 +781,7 @@ let
     name = "libXt-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXt-1.1.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXt-1.1.3.tar.bz2;
       sha256 = "1g85gwnhs7lg5f01gfi1cpb916xc3spm1fjlv2f4xz2zzk1r7dcd";
     };
     buildInputs = [pkgconfig libICE kbproto libSM libX11 xproto ];
@@ -791,7 +791,7 @@ let
     name = "libXtst-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXtst-1.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXtst-1.2.1.tar.bz2;
       sha256 = "1q750hjplq1rfyxkr4545z1y2a1wfnc828ynvbws7b4jwdk3xsky";
     };
     buildInputs = [pkgconfig inputproto recordproto libX11 libXext xextproto libXi ];
@@ -801,7 +801,7 @@ let
     name = "libXv-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXv-1.0.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXv-1.0.7.tar.bz2;
       sha256 = "044hllz013afhzywwpxz007l4zjy99bv9im065rqd30zckmllrjx";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto ];
@@ -811,7 +811,7 @@ let
     name = "libXvMC-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXvMC-1.0.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXvMC-1.0.7.tar.bz2;
       sha256 = "18yf6ysc01pqkbk9704914ghalq1sl2hfdjmwggxm8qqhpy8bw18";
     };
     buildInputs = [pkgconfig videoproto libX11 libXext xextproto xproto libXv ];
@@ -821,7 +821,7 @@ let
     name = "libXxf86dga-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXxf86dga-1.1.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXxf86dga-1.1.3.tar.bz2;
       sha256 = "15291ddhyr54sribwbg8hxx2psgzm5gh0pgkw5yrf3zgvdsa67sm";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86dgaproto xproto ];
@@ -841,7 +841,7 @@ let
     name = "libXxf86vm-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libXxf86vm-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libXxf86vm-1.1.2.tar.bz2;
       sha256 = "117w92xz39rcqcahspi48nc04cc9110x1dycpf3vbcb6p0pifr55";
     };
     buildInputs = [pkgconfig libX11 libXext xextproto xf86vidmodeproto xproto ];
@@ -851,7 +851,7 @@ let
     name = "libdmx-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libdmx-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libdmx-1.1.2.tar.bz2;
       sha256 = "1fiq73sfxcbyjval118ialwrzxhzb08xsxmg69adcs47i9j0p1x7";
     };
     buildInputs = [pkgconfig dmxproto libX11 libXext xextproto ];
@@ -861,7 +861,7 @@ let
     name = "libfontenc-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libfontenc-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libfontenc-1.1.1.tar.bz2;
       sha256 = "0zq1483xy31sssq0h3xxf8y1v4q14cp8rv164ayn7fsn30pq2wny";
     };
     buildInputs = [pkgconfig xproto zlib ];
@@ -871,7 +871,7 @@ let
     name = "libpciaccess-0.13.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libpciaccess-0.13.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libpciaccess-0.13.1.tar.bz2;
       sha256 = "11509lkgd5j4g5wy0g13z4sf31h50hqx3jfwb2i4q6k98pv6iar7";
     };
     buildInputs = [pkgconfig zlib ];
@@ -881,7 +881,7 @@ let
     name = "libpthread-stubs-0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libpthread-stubs-0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libpthread-stubs-0.3.tar.bz2;
       sha256 = "16bjv3in19l84hbri41iayvvg4ls9gv1ma0x0qlbmwy67i7dbdim";
     };
     buildInputs = [pkgconfig ];
@@ -891,7 +891,7 @@ let
     name = "libxcb-1.8.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libxcb-1.8.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libxcb-1.8.1.tar.bz2;
       sha256 = "03gspxcdl8r7jwbwg7fyp4cc6zic9z91amp4g5z0wwahx48nix6j";
     };
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
@@ -901,7 +901,7 @@ let
     name = "libxkbfile-1.0.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/libxkbfile-1.0.8.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/libxkbfile-1.0.8.tar.bz2;
       sha256 = "0flg5arw6n3njagmsi4i4l0zl5bfx866a1h9ydc3bi1pqlclxaca";
     };
     buildInputs = [pkgconfig kbproto libX11 ];
@@ -921,7 +921,7 @@ let
     name = "luit-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/luit-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/luit-1.1.1.tar.bz2;
       sha256 = "0dn694mk56x6hdk6y9ylx4f128h5jcin278gnw2gb807rf3ygc1h";
     };
     buildInputs = [pkgconfig libfontenc ];
@@ -931,7 +931,7 @@ let
     name = "makedepend-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/makedepend-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/makedepend-1.0.4.tar.bz2;
       sha256 = "1zpp2b9dfvlnfj2i1mzdyn785rpl7vih5lap7kcpiv80xspbhmmb";
     };
     buildInputs = [pkgconfig xproto ];
@@ -941,7 +941,7 @@ let
     name = "mkfontdir-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/mkfontdir-1.0.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/mkfontdir-1.0.7.tar.bz2;
       sha256 = "0c3563kw9fg15dpgx4dwvl12qz6sdqdns1pxa574hc7i5m42mman";
     };
     buildInputs = [pkgconfig ];
@@ -951,18 +951,18 @@ let
     name = "mkfontscale-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/mkfontscale-1.1.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/mkfontscale-1.1.0.tar.bz2;
       sha256 = "1539h3ws66vcql6sf2831bcs0r4d9b05lcgpswkw33lvcxighmff";
     };
     buildInputs = [pkgconfig libfontenc freetype xproto zlib ];
   })) // {inherit libfontenc freetype xproto zlib ;};
     
   pixman = (stdenv.mkDerivation ((if overrides ? pixman then overrides.pixman else x: x) {
-    name = "pixman-0.24.4";
+    name = "pixman-0.26.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/pixman-0.24.4.tar.bz2;
-      sha256 = "1d9vl8kd10nn6bzzgl8xhpdpd0djh4p5x0y8pn1ab0lyld53hjsz";
+      url = mirror://xorg/individual/lib/pixman-0.26.2.tar.bz2;
+      sha256 = "0z34jb75wpbyj3gxn34icd8j81fk5d6s6qnwp2ncz7m8icf6afqr";
     };
     buildInputs = [pkgconfig libpng perl ];
   })) // {inherit libpng perl ;};
@@ -981,7 +981,7 @@ let
     name = "randrproto-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/randrproto-1.3.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/randrproto-1.3.2.tar.bz2;
       sha256 = "0wfwcq85wbm0g5r0snc7prgki1wi3kxrxhcxinyr54n45ihh03fr";
     };
     buildInputs = [pkgconfig ];
@@ -991,7 +991,7 @@ let
     name = "recordproto-1.14.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/recordproto-1.14.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/recordproto-1.14.2.tar.bz2;
       sha256 = "0w3kgr1zabwf79bpc28dcnj0fpni6r53rpi82ngjbalj5s6m8xx7";
     };
     buildInputs = [pkgconfig ];
@@ -1001,7 +1001,7 @@ let
     name = "renderproto-0.11.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/renderproto-0.11.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/renderproto-0.11.1.tar.bz2;
       sha256 = "0dr5xw6s0qmqg0q5pdkb4jkdhaja0vbfqla79qh5j1xjj9dmlwq6";
     };
     buildInputs = [pkgconfig ];
@@ -1011,7 +1011,7 @@ let
     name = "resourceproto-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/resourceproto-1.2.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/resourceproto-1.2.0.tar.bz2;
       sha256 = "0638iyfiiyjw1hg3139pai0j6m65gkskrvd9684zgc6ydcx00riw";
     };
     buildInputs = [pkgconfig ];
@@ -1021,7 +1021,7 @@ let
     name = "scrnsaverproto-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/scrnsaverproto-1.2.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/scrnsaverproto-1.2.2.tar.bz2;
       sha256 = "0rfdbfwd35d761xkfifcscx56q0n56043ixlmv70r4v4l66hmdwb";
     };
     buildInputs = [pkgconfig ];
@@ -1031,7 +1031,7 @@ let
     name = "sessreg-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/sessreg-1.0.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/sessreg-1.0.7.tar.bz2;
       sha256 = "0lifgjxdvc6lwyjk90slddnr12fsv88ldy6qhklr5av409cfwd47";
     };
     buildInputs = [pkgconfig xproto ];
@@ -1041,7 +1041,7 @@ let
     name = "setxkbmap-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/setxkbmap-1.3.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/setxkbmap-1.3.0.tar.bz2;
       sha256 = "1inygpvlgc6vr5h9laxw9lnvafnccl3fy0g5n9ll28iq3yfmqc1x";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
@@ -1051,7 +1051,7 @@ let
     name = "smproxy-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/smproxy-1.0.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/smproxy-1.0.5.tar.bz2;
       sha256 = "02fn5wa1gs2jap6sr9j9yk6zsvz82j8l61pf74iyqwa99q4wnb67";
     };
     buildInputs = [pkgconfig libICE libSM libXmu libXt ];
@@ -1071,7 +1071,7 @@ let
     name = "util-macros-1.17";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/util-macros-1.17.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/util-macros-1.17.tar.bz2;
       sha256 = "1vbmrcn5n3wp4pyw0n4c3pyvzlc4yf7jzgngavfdq5zwfbgfsybx";
     };
     buildInputs = [pkgconfig ];
@@ -1081,7 +1081,7 @@ let
     name = "videoproto-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/videoproto-2.3.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/videoproto-2.3.1.tar.bz2;
       sha256 = "0nk3i6gwkqq1w8zwn7bxz344pi1dwcjrmf6hr330h7hxjcj6viry";
     };
     buildInputs = [pkgconfig ];
@@ -1091,7 +1091,7 @@ let
     name = "windowswmproto-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/windowswmproto-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/windowswmproto-1.0.4.tar.bz2;
       sha256 = "0syjxgy4m8l94qrm03nvn5k6bkxc8knnlld1gbllym97nvnv0ny0";
     };
     buildInputs = [pkgconfig ];
@@ -1101,7 +1101,7 @@ let
     name = "x11perf-1.5.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/x11perf-1.5.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/x11perf-1.5.4.tar.bz2;
       sha256 = "111iwpxhnxjiq44w96zf0kszg5zpgv1g3ayx18v4nhdzl9bqivi4";
     };
     buildInputs = [pkgconfig libX11 libXext libXft libXmu libXrender ];
@@ -1111,7 +1111,7 @@ let
     name = "xauth-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xauth-1.0.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xauth-1.0.7.tar.bz2;
       sha256 = "1382wdfiakgckbw1xxavzh1nm34q21b1zzy96qp7ws66xc48rxw4";
     };
     buildInputs = [pkgconfig libX11 libXau libXext libXmu ];
@@ -1121,7 +1121,7 @@ let
     name = "xbacklight-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xbacklight-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xbacklight-1.1.2.tar.bz2;
       sha256 = "02b5jfys2msla2yvg5s0knzyxg2104r25czkwd49i8g8kp804bxg";
     };
     buildInputs = [pkgconfig libX11 libXrandr ];
@@ -1131,7 +1131,7 @@ let
     name = "xbitmaps-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xbitmaps-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.1.tar.bz2;
       sha256 = "178ym90kwidia6nas4qr5n5yqh698vv8r02js0r4vg3b6lsb0w9n";
     };
     buildInputs = [pkgconfig ];
@@ -1141,38 +1141,38 @@ let
     name = "xcb-proto-1.7.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xcb-proto-1.7.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xcb-proto-1.7.1.tar.bz2;
       sha256 = "0ds4qg6slidrzyz6q9ckq0a19hn6blzpnvciy4brh741gn49jpdd";
     };
     buildInputs = [pkgconfig python ];
   })) // {inherit python ;};
     
   xcbutil = (stdenv.mkDerivation ((if overrides ? xcbutil then overrides.xcbutil else x: x) {
-    name = "xcb-util-0.3.8";
+    name = "xcb-util-0.3.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xcb/xcb-util-0.3.8.tar.bz2;
-      sha256 = "1fa7njhg7dsqbrkwrzbkfszdp1dmggvlsrb05qshkg2h8wldkvn1";
+      url = mirror://xorg/individual/xcb/xcb-util-0.3.9.tar.bz2;
+      sha256 = "1i0qbhqkcdlbbsj7ifkyjsffl61whj24d3zlg5pxf3xj1af2a4f6";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};
     
   xcbutilimage = (stdenv.mkDerivation ((if overrides ? xcbutilimage then overrides.xcbutilimage else x: x) {
-    name = "xcb-util-image-0.3.8";
+    name = "xcb-util-image-0.3.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xcb/xcb-util-image-0.3.8.tar.bz2;
-      sha256 = "1nd67105lb8qfa7r2lli5sxnipi1p1wnbwa04l9k30kfq8l0afa0";
+      url = mirror://xorg/individual/xcb/xcb-util-image-0.3.9.tar.bz2;
+      sha256 = "1pr1l1nkg197gyl9d0fpwmn72jqpxjfgn9y13q4gawg1m873qnnk";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xcbutil xproto ];
   })) // {inherit gperf m4 libxcb xcbutil xproto ;};
     
   xcbutilkeysyms = (stdenv.mkDerivation ((if overrides ? xcbutilkeysyms then overrides.xcbutilkeysyms else x: x) {
-    name = "xcb-util-keysyms-0.3.8";
+    name = "xcb-util-keysyms-0.3.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xcb/xcb-util-keysyms-0.3.8.tar.bz2;
-      sha256 = "08b1d19gaqv3agpkvh5mgcir11vjy89ywdknva0cb073mzvk4gci";
+      url = mirror://xorg/individual/xcb/xcb-util-keysyms-0.3.9.tar.bz2;
+      sha256 = "0vjwk7vrcfnlhiadv445c6skfxmdrg5v4qf81y8s2s5xagqarqbv";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};
@@ -1188,11 +1188,11 @@ let
   })) // {inherit gperf m4 libxcb xproto ;};
     
   xcbutilwm = (stdenv.mkDerivation ((if overrides ? xcbutilwm then overrides.xcbutilwm else x: x) {
-    name = "xcb-util-wm-0.3.8";
+    name = "xcb-util-wm-0.3.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xcb/xcb-util-wm-0.3.8.tar.bz2;
-      sha256 = "01shwv13rfcxycrsla6c5xlrk1qska7kvvj10n7jcibx9jzanmy5";
+      url = mirror://xorg/individual/xcb/xcb-util-wm-0.3.9.tar.bz2;
+      sha256 = "0c30fj33gvwzwhyz1dhsfwni0ai16bxpvxb4l6c6s7vvj7drp3q3";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
   })) // {inherit gperf m4 libxcb xproto ;};
@@ -1211,7 +1211,7 @@ let
     name = "xcmiscproto-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xcmiscproto-1.2.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xcmiscproto-1.2.2.tar.bz2;
       sha256 = "1pyjv45wivnwap2wvsbrzdvjc5ql8bakkbkrvcv6q9bjjf33ccmi";
     };
     buildInputs = [pkgconfig ];
@@ -1221,7 +1221,7 @@ let
     name = "xcmsdb-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xcmsdb-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xcmsdb-1.0.4.tar.bz2;
       sha256 = "03ms731l3kvaldq7ycbd30j6134b61i3gbll4b2gl022wyzbjq74";
     };
     buildInputs = [pkgconfig libX11 ];
@@ -1231,7 +1231,7 @@ let
     name = "xcursorgen-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xcursorgen-1.0.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xcursorgen-1.0.5.tar.bz2;
       sha256 = "10f5wk1326mm45gvgpf4m2p0j80fcd0i4c52zikahb91zah72wdw";
     };
     buildInputs = [pkgconfig libpng libX11 libXcursor ];
@@ -1241,7 +1241,7 @@ let
     name = "xcursor-themes-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xcursor-themes-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xcursor-themes-1.0.3.tar.bz2;
       sha256 = "1is4bak0qkkhv63mfa5l7492r475586y52yzfxyv3psppn662ilr";
     };
     buildInputs = [pkgconfig libXcursor ];
@@ -1261,7 +1261,7 @@ let
     name = "xdpyinfo-1.3.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xdpyinfo-1.3.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xdpyinfo-1.3.0.tar.bz2;
       sha256 = "0gypsvpmay3lsh3b1dg29pjxv95pkrr21d4w6ys02mrbld24kvi3";
     };
     buildInputs = [pkgconfig libdmx libX11 libxcb libXcomposite libXext libXi libXinerama libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ];
@@ -1271,7 +1271,7 @@ let
     name = "xdriinfo-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xdriinfo-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xdriinfo-1.0.4.tar.bz2;
       sha256 = "076bjix941znyjmh3j5jjsnhp2gv2iq53d0ks29mvvv87cyy9iim";
     };
     buildInputs = [pkgconfig glproto libX11 ];
@@ -1281,7 +1281,7 @@ let
     name = "xev-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xev-1.2.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xev-1.2.0.tar.bz2;
       sha256 = "13xk5z7vy87rnn4574z0jfzymdivyc7pl4axim81sx0pmdysg1ip";
     };
     buildInputs = [pkgconfig libX11 xproto libXrandr ];
@@ -1291,7 +1291,7 @@ let
     name = "xextproto-7.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xextproto-7.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xextproto-7.2.1.tar.bz2;
       sha256 = "06kdanbnprxvgl56l5h0lqj4b0f1fbb1ndha33mv5wvy802v2lvw";
     };
     buildInputs = [pkgconfig ];
@@ -1311,7 +1311,7 @@ let
     name = "xf86bigfontproto-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86bigfontproto-1.2.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86bigfontproto-1.2.0.tar.bz2;
       sha256 = "0j0n7sj5xfjpmmgx6n5x556rw21hdd18fwmavp95wps7qki214ms";
     };
     buildInputs = [pkgconfig ];
@@ -1321,7 +1321,7 @@ let
     name = "xf86dgaproto-2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86dgaproto-2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86dgaproto-2.1.tar.bz2;
       sha256 = "0l4hx48207mx0hp09026r6gy9nl3asbq0c75hri19wp1118zcpmc";
     };
     buildInputs = [pkgconfig ];
@@ -1331,7 +1331,7 @@ let
     name = "xf86driproto-2.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86driproto-2.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86driproto-2.1.1.tar.bz2;
       sha256 = "07v69m0g2dfzb653jni4x656jlr7l84c1k39j8qc8vfb45r8sjww";
     };
     buildInputs = [pkgconfig ];
@@ -1341,7 +1341,7 @@ let
     name = "xf86-input-evdev-2.7.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-input-evdev-2.7.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-input-evdev-2.7.0.tar.bz2;
       sha256 = "1ivf5n821chckrgp89mpb18zi00v1hyrkc1hr82q0x6g1kpgxq9y";
     };
     buildInputs = [pkgconfig inputproto udev xorgserver xproto ];
@@ -1351,7 +1351,7 @@ let
     name = "xf86-input-joystick-1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-input-joystick-1.6.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-input-joystick-1.6.1.tar.bz2;
       sha256 = "1xgpkdmfw4ahjlva97gs9sllzw8nlpa8mxj59g28fxhak67mvv8x";
     };
     buildInputs = [pkgconfig inputproto kbproto xorgserver xproto ];
@@ -1361,7 +1361,7 @@ let
     name = "xf86-input-keyboard-1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-input-keyboard-1.6.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-input-keyboard-1.6.1.tar.bz2;
       sha256 = "1hwc1bjw5mxv186xbrxiky0agfglwqg8fsxqdh4br1vzgxpck7ma";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
@@ -1371,18 +1371,18 @@ let
     name = "xf86-input-mouse-1.7.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-input-mouse-1.7.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-input-mouse-1.7.2.tar.bz2;
       sha256 = "0fs1lwnycyv3d0m6l2wrnlgvbs8qw66d93hwlnmrsswfq5bp6ark";
     };
     buildInputs = [pkgconfig inputproto xorgserver xproto ];
   })) // {inherit inputproto xorgserver xproto ;};
     
   xf86inputsynaptics = (stdenv.mkDerivation ((if overrides ? xf86inputsynaptics then overrides.xf86inputsynaptics else x: x) {
-    name = "xf86-input-synaptics-1.5.99.902";
+    name = "xf86-input-synaptics-1.6.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-input-synaptics-1.5.99.902.tar.bz2;
-      sha256 = "0sz3ipjpm6iwqd2g8kx0nwymxwg2plys7lk38ks5py4cd49gj0vc";
+      url = mirror://xorg/X11R7.7/src/everything/xf86-input-synaptics-1.6.1.tar.bz2;
+      sha256 = "0g5b1s6q1dg38l8y47cwg7cs5nivwj0agmp71g273ws0lfg4bc8s";
     };
     buildInputs = [pkgconfig inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ];
   })) // {inherit inputproto randrproto recordproto libX11 libXi xorgserver xproto libXtst ;};
@@ -1391,7 +1391,7 @@ let
     name = "xf86-input-vmmouse-12.8.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-input-vmmouse-12.8.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-input-vmmouse-12.8.0.tar.bz2;
       sha256 = "16l65mnjb1xxav6c5q0xhhqih81bzify2c5qrhqc2j3waq5yr9m8";
     };
     buildInputs = [pkgconfig inputproto randrproto xorgserver xproto ];
@@ -1401,7 +1401,7 @@ let
     name = "xf86-input-void-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-input-void-1.4.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-input-void-1.4.0.tar.bz2;
       sha256 = "01bmk324fq48wydvy1qrnxbw6qz0fjd0i80g0n4cqr1c4mjmif9a";
     };
     buildInputs = [pkgconfig xorgserver xproto ];
@@ -1421,7 +1421,7 @@ let
     name = "xf86-video-ark-0.7.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-ark-0.7.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-ark-0.7.4.tar.bz2;
       sha256 = "194zc35ivfh3vcxcilf9nbi88c2di8kbh84x535cljlpiajdnk5x";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
@@ -1431,7 +1431,7 @@ let
     name = "xf86-video-ast-0.93.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-ast-0.93.10.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-ast-0.93.10.tar.bz2;
       sha256 = "1q64z8qqa0ix3cymqiwk1s3sphd1fvvz30lvyxhgkgciygz6dm69";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -1441,7 +1441,7 @@ let
     name = "xf86-video-ati-6.14.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-ati-6.14.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-ati-6.14.4.tar.bz2;
       sha256 = "11gg6xn65vym75769hzgzpkjsyhlkrw4zw3ncngriq7vz1g47zjg";
     };
     buildInputs = [pkgconfig fontsproto libdrm udev libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
@@ -1451,7 +1451,7 @@ let
     name = "xf86-video-cirrus-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-cirrus-1.4.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-cirrus-1.4.0.tar.bz2;
       sha256 = "0blnbspj4936wy46lp346s4b08dfcray6yicsxvv5b4699fzl1rb";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -1461,7 +1461,7 @@ let
     name = "xf86-video-dummy-0.3.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-dummy-0.3.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-dummy-0.3.5.tar.bz2;
       sha256 = "0pyr50kqh7g84r4p0x09ay5kxax20dip9sh8h3cbd4xv8cswdbfm";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xf86dgaproto xorgserver xproto ];
@@ -1471,7 +1471,7 @@ let
     name = "xf86-video-fbdev-0.4.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-fbdev-0.4.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-fbdev-0.4.2.tar.bz2;
       sha256 = "1mc23w0bfmak5216411xh58nrs93jlxmi6l412hmqzhxnjs73clk";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xorgserver xproto ];
@@ -1481,7 +1481,7 @@ let
     name = "xf86-video-geode-2.11.13";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-geode-2.11.13.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-geode-2.11.13.tar.bz2;
       sha256 = "09p2cjd2fb7h32k9qs4wp7qvhfn2zv454spv5mfplv7w2jis4863";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
@@ -1491,7 +1491,7 @@ let
     name = "xf86-video-glide-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-glide-1.2.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-glide-1.2.0.tar.bz2;
       sha256 = "0byapm9mnpqk3wijfnnan3d22ii5cw6dmg4xn1625iiz89j5vs1l";
     };
     buildInputs = [pkgconfig xextproto xorgserver xproto ];
@@ -1501,7 +1501,7 @@ let
     name = "xf86-video-glint-1.2.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-glint-1.2.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-glint-1.2.7.tar.bz2;
       sha256 = "0nf36jryabpncqq4m6sfsnmzk00f7gvfmjnl8l8sfy7w6sa6iacs";
     };
     buildInputs = [pkgconfig libpciaccess videoproto xextproto xf86dgaproto xorgserver xproto ];
@@ -1511,18 +1511,18 @@ let
     name = "xf86-video-i128-1.3.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-i128-1.3.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-i128-1.3.5.tar.bz2;
       sha256 = "1sik8ck410hb2885vy7rlc590hw5br8lr2fzxgmv55jyawgfpv9y";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videointel = (stdenv.mkDerivation ((if overrides ? xf86videointel then overrides.xf86videointel else x: x) {
-    name = "xf86-video-intel-2.18.0";
+    name = "xf86-video-intel-2.19.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-intel-2.18.0.tar.bz2;
-      sha256 = "1z4z0dq9abrbqk8mdzhdcwjwbm7dv3gnhrqy3vpkknpsrhrkxrnw";
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-intel-2.19.0.tar.bz2;
+      sha256 = "1g742szymajh88a5dw08sxcr45bmxgc4w3m6hddv9qscn5hks4rj";
     };
     buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess pixman randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ];
   })) // {inherit dri2proto fontsproto libdrm udev libpciaccess pixman randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ;};
@@ -1551,7 +1551,7 @@ let
     name = "xf86-video-mach64-6.9.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-mach64-6.9.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-mach64-6.9.1.tar.bz2;
       sha256 = "0kl3kvpc2ny48z89313i9fi4cxzwb2pllvxcr9j5ly680ygx8slz";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
@@ -1561,7 +1561,7 @@ let
     name = "xf86-video-mga-1.5.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-mga-1.5.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-mga-1.5.0.tar.bz2;
       sha256 = "03l3wz5kz0hmxmzqqbkgn7pf9d956jlag04rb701a0fr1mw3v66a";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
@@ -1571,18 +1571,18 @@ let
     name = "xf86-video-neomagic-1.2.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-neomagic-1.2.6.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-neomagic-1.2.6.tar.bz2;
       sha256 = "124qci48xrk0w2jy91n7vqs7s6q397zyiqqszhmkx6ld7six57mi";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ;};
     
   xf86videonewport = (stdenv.mkDerivation ((if overrides ? xf86videonewport then overrides.xf86videonewport else x: x) {
-    name = "xf86-video-newport-0.2.3";
+    name = "xf86-video-newport-0.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-newport-0.2.3.tar.bz2;
-      sha256 = "0w02rz49gipnfl33vak3zgis8bh9i0v5ykyj8qh9vzddjm7ypjp6";
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-newport-0.2.4.tar.bz2;
+      sha256 = "1yafmp23jrfdmc094i6a4dsizapsc9v0pl65cpc8w1kvn7343k4i";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto videoproto xorgserver xproto ];
   })) // {inherit fontsproto randrproto renderproto videoproto xorgserver xproto ;};
@@ -1591,18 +1591,18 @@ let
     name = "xf86-video-nv-2.1.18";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-nv-2.1.18.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-nv-2.1.18.tar.bz2;
       sha256 = "05glbi9jc7j9nm4sf4qvl3z87s48ibm3i283lqz85kbphg62dxvc";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ];
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videoopenchrome = (stdenv.mkDerivation ((if overrides ? xf86videoopenchrome then overrides.xf86videoopenchrome else x: x) {
-    name = "xf86-video-openchrome-0.2.905";
+    name = "xf86-video-openchrome-0.2.906";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-openchrome-0.2.905.tar.bz2;
-      sha256 = "1llbm020s0fck9chs0906xz7jr4h3whxan4s10ls9046g7xib3qc";
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-openchrome-0.2.906.tar.bz2;
+      sha256 = "0hgzn1r7ig94xbr9dvq0bp1nxqlfp2ki8823jca3f22a2kf8wmg7";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xf86driproto xorgserver xproto libXvMC ];
   })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xf86driproto xorgserver xproto libXvMC ;};
@@ -1611,7 +1611,7 @@ let
     name = "xf86-video-r128-6.8.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-r128-6.8.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-r128-6.8.2.tar.bz2;
       sha256 = "1c84x40k9qz9dnf5qs6nnjcgz7px6mpc3rbk8mj62zhp7mf16hbv";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xf86miscproto xorgserver xproto ];
@@ -1621,7 +1621,7 @@ let
     name = "xf86-video-savage-2.3.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-savage-2.3.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-savage-2.3.4.tar.bz2;
       sha256 = "0jdy4wv3k3ylx3lajjcbsg37z2hf6366a1jvv16sv1ln6dk6lris";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
@@ -1631,7 +1631,7 @@ let
     name = "xf86-video-siliconmotion-1.7.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-siliconmotion-1.7.6.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-siliconmotion-1.7.6.tar.bz2;
       sha256 = "01sdl6ky1vmvmfgx2d44i35rqafi0z07xdy40cvindcr2k91p7x5";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess videoproto xextproto xorgserver xproto ];
@@ -1641,7 +1641,7 @@ let
     name = "xf86-video-sis-0.10.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-sis-0.10.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-sis-0.10.4.tar.bz2;
       sha256 = "03diq0l93lfsipmwkpdb2ysgbxxryl6yakpghzc3fksjxa01112f";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xf86driproto xineramaproto xorgserver xproto ];
@@ -1651,7 +1651,7 @@ let
     name = "xf86-video-suncg6-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-suncg6-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-suncg6-1.1.1.tar.bz2;
       sha256 = "07w0hm63fiy5l3cpcjsl0ig8z84z9r36xm0cmnpiv3g75dy6q8fi";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xorgserver xproto ];
@@ -1661,7 +1661,7 @@ let
     name = "xf86-video-sunffb-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-sunffb-1.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-sunffb-1.2.1.tar.bz2;
       sha256 = "04byax4sc1fn183vyyq0q11q730k16h2by4ggjky7s36wgv7ldzx";
     };
     buildInputs = [pkgconfig fontsproto randrproto renderproto xextproto xorgserver xproto ];
@@ -1671,7 +1671,7 @@ let
     name = "xf86-video-tdfx-1.4.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-tdfx-1.4.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-tdfx-1.4.4.tar.bz2;
       sha256 = "124gsi30rj547jjd7gvv7xykfnwlyrxw0gcacamby7pvl3g33fg0";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
@@ -1681,7 +1681,7 @@ let
     name = "xf86-video-tga-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-tga-1.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-tga-1.2.1.tar.bz2;
       sha256 = "0mdqrn02zzkdnmhg4vh9djaawg6b2p82g5qbj66z8b30yr77b93h";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
@@ -1691,7 +1691,7 @@ let
     name = "xf86-video-trident-1.3.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-trident-1.3.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-trident-1.3.5.tar.bz2;
       sha256 = "02y5pzdp0a1c12jr8gghbrzgbyfbgq67x7kd7n4f323pmf8x1csb";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto videoproto xextproto xf86dgaproto xorgserver xproto ];
@@ -1701,7 +1701,7 @@ let
     name = "xf86-video-v4l-0.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-v4l-0.2.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-v4l-0.2.0.tar.bz2;
       sha256 = "0pcjc75hgbih3qvhpsx8d4fljysfk025slxcqyyhr45dzch93zyb";
     };
     buildInputs = [pkgconfig randrproto videoproto xorgserver xproto ];
@@ -1711,7 +1711,7 @@ let
     name = "xf86-video-vesa-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-vesa-2.3.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-vesa-2.3.1.tar.bz2;
       sha256 = "0wqms28kkz2fvghqhqwp6w8zj7k5cgwnhzvkc7j4v268bf6h78g4";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xorgserver xproto ];
@@ -1721,7 +1721,7 @@ let
     name = "xf86-video-vmware-12.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-vmware-12.0.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-vmware-12.0.2.tar.bz2;
       sha256 = "0isiwx516gww8hfk3vy7js83yziyjym9mq2zjadyq1a8v5gqf9y8";
     };
     buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ];
@@ -1731,7 +1731,7 @@ let
     name = "xf86-video-voodoo-1.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-voodoo-1.2.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-voodoo-1.2.4.tar.bz2;
       sha256 = "0ha748yz92yzn6hp2rhin3il8f4j2rs4vkgdvqkagnv1ryxkh0ph";
     };
     buildInputs = [pkgconfig fontsproto libpciaccess randrproto renderproto xextproto xf86dgaproto xorgserver xproto ];
@@ -1741,7 +1741,7 @@ let
     name = "xf86-video-wsfb-0.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86-video-wsfb-0.4.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86-video-wsfb-0.4.0.tar.bz2;
       sha256 = "0hr8397wpd0by1hc47fqqrnaw3qdqd8aqgwgzv38w5k3l3jy6p4p";
     };
     buildInputs = [pkgconfig xorgserver xproto ];
@@ -1751,7 +1751,7 @@ let
     name = "xf86vidmodeproto-2.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xf86vidmodeproto-2.3.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xf86vidmodeproto-2.3.1.tar.bz2;
       sha256 = "0w47d7gfa8zizh2bshdr2rffvbr4jqjv019mdgyh6cmplyd4kna5";
     };
     buildInputs = [pkgconfig ];
@@ -1771,7 +1771,7 @@ let
     name = "xgamma-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xgamma-1.0.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xgamma-1.0.5.tar.bz2;
       sha256 = "0463sawps86jnxn121ramsz4sicy3az5wa5wsq4rqm8dm3za48p3";
     };
     buildInputs = [pkgconfig libX11 libXxf86vm ];
@@ -1781,7 +1781,7 @@ let
     name = "xhost-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xhost-1.0.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xhost-1.0.5.tar.bz2;
       sha256 = "0l483y6wfrjh37j16b41kpi2nc7ss5rvndafpbaylrs87ygx2w18";
     };
     buildInputs = [pkgconfig libX11 libXau libXmu ];
@@ -1791,28 +1791,28 @@ let
     name = "xineramaproto-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xineramaproto-1.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xineramaproto-1.2.1.tar.bz2;
       sha256 = "0ns8abd27x7gbp4r44z3wc5k9zqxxj8zjnazqpcyr4n17nxp8xcp";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
     
   xinit = (stdenv.mkDerivation ((if overrides ? xinit then overrides.xinit else x: x) {
-    name = "xinit-1.3.0";
+    name = "xinit-1.3.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/xinit-1.3.0.tar.bz2;
-      sha256 = "0k70bw6x2zgvmd0l7xyzbps18pbzfz26yzjva1vcz9s239pf6xms";
+      url = mirror://xorg/individual/app/xinit-1.3.2.tar.bz2;
+      sha256 = "0d821rlqwyn2js7bkzicyp894n9gqv1hahxs285pas1zm3d7z1m1";
     };
     buildInputs = [pkgconfig libX11 ];
   })) // {inherit libX11 ;};
     
   xinput = (stdenv.mkDerivation ((if overrides ? xinput then overrides.xinput else x: x) {
-    name = "xinput-1.5.99.1";
+    name = "xinput-1.6.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xinput-1.5.99.1.tar.bz2;
-      sha256 = "0ldrhzrmphygsrdngv6ibxykvg85c55shyg7kywg86a1l0s5cijf";
+      url = mirror://xorg/X11R7.7/src/everything/xinput-1.6.0.tar.bz2;
+      sha256 = "0zl4cdgnzh9shz20yn7hz889v4nkbyqwx0nb7dh6arn7abchgc2a";
     };
     buildInputs = [pkgconfig inputproto libX11 libXext libXi libXinerama libXrandr ];
   })) // {inherit inputproto libX11 libXext libXi libXinerama libXrandr ;};
@@ -1821,7 +1821,7 @@ let
     name = "xkbcomp-1.2.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xkbcomp-1.2.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xkbcomp-1.2.4.tar.bz2;
       sha256 = "0bas1d2wjiy5zy9d0g92d2p9pwv4aapfbfidi7hxy8ax8jmwkl4i";
     };
     buildInputs = [pkgconfig libX11 libxkbfile xproto ];
@@ -1831,7 +1831,7 @@ let
     name = "xkbevd-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xkbevd-1.1.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xkbevd-1.1.3.tar.bz2;
       sha256 = "05h1xcnbalndbrryyqs8wzy9h3wz655vc0ymhlk2q4aik17licjm";
     };
     buildInputs = [pkgconfig libX11 libxkbfile ];
@@ -1841,18 +1841,18 @@ let
     name = "xkbutils-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xkbutils-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xkbutils-1.0.3.tar.bz2;
       sha256 = "1ga913pw6chssf2016kjyjl6ar2lj83pa497w97ak2kq603sy2g4";
     };
     buildInputs = [pkgconfig inputproto libX11 libXaw xproto libXt ];
   })) // {inherit inputproto libX11 libXaw xproto libXt ;};
     
   xkeyboardconfig = (stdenv.mkDerivation ((if overrides ? xkeyboardconfig then overrides.xkeyboardconfig else x: x) {
-    name = "xkeyboard-config-2.5.1";
+    name = "xkeyboard-config-2.6";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xkeyboard-config-2.5.1.tar.bz2;
-      sha256 = "14ncsbzi8l1dw0ypd36az9kxvrsqfspl3w51zj5p52f373ffi07b";
+      url = mirror://xorg/X11R7.7/src/everything/xkeyboard-config-2.6.tar.bz2;
+      sha256 = "1nmb7ma8rqryicc5xqrn2hm5pwp5lkf7nj28bwbf63mz2r0mk892";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
@@ -1861,7 +1861,7 @@ let
     name = "xkill-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xkill-1.0.3.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xkill-1.0.3.tar.bz2;
       sha256 = "1ac110qbb9a4x1dim3vaghvdk3jc708i2p3f4rmag33458khg0xx";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
@@ -1871,7 +1871,7 @@ let
     name = "xlsatoms-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xlsatoms-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xlsatoms-1.1.1.tar.bz2;
       sha256 = "1y9nfl8s7njxbnci8c20j986xixharasgg40vdw92y593j6dk2rv";
     };
     buildInputs = [pkgconfig libxcb ];
@@ -1881,7 +1881,7 @@ let
     name = "xlsclients-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xlsclients-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xlsclients-1.1.2.tar.bz2;
       sha256 = "1l97j15mg4wfzpm81wlpzagfjff7v4fwn7s2z2rpksk3gfcg7r8w";
     };
     buildInputs = [pkgconfig libxcb ];
@@ -1898,11 +1898,11 @@ let
   })) // {inherit libXaw libXt ;};
     
   xmodmap = (stdenv.mkDerivation ((if overrides ? xmodmap then overrides.xmodmap else x: x) {
-    name = "xmodmap-1.0.6";
+    name = "xmodmap-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xmodmap-1.0.6.tar.bz2;
-      sha256 = "0p9skymavb0pi8jiylwwkdvp9r8say1hl903kcwpr1qiifagr2y5";
+      url = mirror://xorg/X11R7.7/src/everything/xmodmap-1.0.7.tar.bz2;
+      sha256 = "1dg47lay4vhrl9mfq3cfc6741a0m2n8wd4ljagd21ix3qklys8pg";
     };
     buildInputs = [pkgconfig libX11 xproto ];
   })) // {inherit libX11 xproto ;};
@@ -1918,31 +1918,31 @@ let
   })) // {inherit ;};
     
   xorgdocs = (stdenv.mkDerivation ((if overrides ? xorgdocs then overrides.xorgdocs else x: x) {
-    name = "xorg-docs-1.6.99.901";
+    name = "xorg-docs-1.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xorg-docs-1.6.99.901.tar.bz2;
-      sha256 = "0f0kk6za1k4nn1xycmd6hx85rf8mgzdk098f6phl3x2xfax6r43b";
+      url = mirror://xorg/X11R7.7/src/everything/xorg-docs-1.7.tar.bz2;
+      sha256 = "0prphdba6kgr1bxk7r07wxxx6x6pqjw6prr5qclypsb5sf5r3cdr";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
     
   xorgserver = (stdenv.mkDerivation ((if overrides ? xorgserver then overrides.xorgserver else x: x) {
-    name = "xorg-server-1.12.1";
+    name = "xorg-server-1.12.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xorg-server-1.12.1.tar.bz2;
-      sha256 = "0nml86yvvik7a90wpyr08jkjiydzs26wg119hzwmr5v7qzdc27fj";
+      url = mirror://xorg/X11R7.7/src/everything/xorg-server-1.12.2.tar.bz2;
+      sha256 = "1xf57hcq6r17zxyfnx9r1wd0ir1bw13ff8bsiszwrw9jyhi9x7ya";
     };
     buildInputs = [pkgconfig renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ];
   })) // {inherit renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ;};
     
   xorgsgmldoctools = (stdenv.mkDerivation ((if overrides ? xorgsgmldoctools then overrides.xorgsgmldoctools else x: x) {
-    name = "xorg-sgml-doctools-1.10.99.901";
+    name = "xorg-sgml-doctools-1.11";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xorg-sgml-doctools-1.10.99.901.tar.bz2;
-      sha256 = "014ny4z5i69ang0yygvk7yiqb3m4bhmr05qvh2xmi0y0y61nlrjp";
+      url = mirror://xorg/X11R7.7/src/everything/xorg-sgml-doctools-1.11.tar.bz2;
+      sha256 = "0k5pffyi5bx8dmfn033cyhgd3gf6viqj3x769fqixifwhbgy2777";
     };
     buildInputs = [pkgconfig ];
   })) // {inherit ;};
@@ -1951,7 +1951,7 @@ let
     name = "xpr-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xpr-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xpr-1.0.4.tar.bz2;
       sha256 = "1dbcv26w2yand2qy7b3h5rbvw1mdmdd57jw88v53sgdr3vrqvngy";
     };
     buildInputs = [pkgconfig libX11 libXmu xproto ];
@@ -1961,7 +1961,7 @@ let
     name = "xprop-1.2.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xprop-1.2.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xprop-1.2.1.tar.bz2;
       sha256 = "18zi2any13zlb7f34fzyw6lkiwkd6k2scp3b800a1f4rj0c7m407";
     };
     buildInputs = [pkgconfig libX11 xproto ];
@@ -1971,7 +1971,7 @@ let
     name = "xproto-7.0.23";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xproto-7.0.23.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xproto-7.0.23.tar.bz2;
       sha256 = "17lkmi12f89qvg4jj5spqzwzc24fmsqq68dv6kpy7r7b944lmq5d";
     };
     buildInputs = [pkgconfig ];
@@ -1981,7 +1981,7 @@ let
     name = "xrandr-1.3.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xrandr-1.3.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xrandr-1.3.5.tar.bz2;
       sha256 = "03lq1c1q4w5cf2ijs4b34v008lshibha9zv5lw08xpyhk9xgyn8h";
     };
     buildInputs = [pkgconfig libX11 xproto libXrandr libXrender ];
@@ -1991,7 +1991,7 @@ let
     name = "xrdb-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xrdb-1.0.9.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xrdb-1.0.9.tar.bz2;
       sha256 = "1dza5a34nj68fzhlgwf18i5bk0n24ig28yihwpjy7vwn57hh2934";
     };
     buildInputs = [pkgconfig libX11 libXmu ];
@@ -2001,7 +2001,7 @@ let
     name = "xrefresh-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xrefresh-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xrefresh-1.0.4.tar.bz2;
       sha256 = "0ywxzwa4kmnnmf8idr8ssgcil9xvbhnk155zpsh2i8ay93mh5586";
     };
     buildInputs = [pkgconfig libX11 ];
@@ -2011,7 +2011,7 @@ let
     name = "xset-1.2.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xset-1.2.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xset-1.2.2.tar.bz2;
       sha256 = "1s61mvscd0h7y6anljarj7nkii6plhs8ndx1fm8b1f1h00a1qdv1";
     };
     buildInputs = [pkgconfig libX11 libXext libXmu xproto libXxf86misc ];
@@ -2021,7 +2021,7 @@ let
     name = "xsetroot-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xsetroot-1.1.0.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xsetroot-1.1.0.tar.bz2;
       sha256 = "1bazzsf9sy0q2bj4lxvh1kvyrhmpggzb7jg575i15sksksa3xwc8";
     };
     buildInputs = [pkgconfig libX11 xbitmaps libXcursor libXmu ];
@@ -2031,7 +2031,7 @@ let
     name = "xtrans-1.2.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xtrans-1.2.7.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xtrans-1.2.7.tar.bz2;
       sha256 = "19p1bw3qyn0ia1znx6q3gx92rr9rl88ylrfijjclm8vhpa8i30bz";
     };
     buildInputs = [pkgconfig ];
@@ -2041,7 +2041,7 @@ let
     name = "xvinfo-1.1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xvinfo-1.1.1.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xvinfo-1.1.1.tar.bz2;
       sha256 = "119rd93d7661ll1rfcdssn78l0b97326smziyr2f5wdwj2hlmiv0";
     };
     buildInputs = [pkgconfig libX11 libXv ];
@@ -2051,7 +2051,7 @@ let
     name = "xwd-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xwd-1.0.5.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xwd-1.0.5.tar.bz2;
       sha256 = "0fkg6msy2zg7rda2rpxb7j6vmrdmqmk72xsxnyhz97196ykjnx82";
     };
     buildInputs = [pkgconfig libX11 xproto ];
@@ -2061,7 +2061,7 @@ let
     name = "xwininfo-1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xwininfo-1.1.2.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xwininfo-1.1.2.tar.bz2;
       sha256 = "0fmcr5yl03xw7m8p9h1rk67rrj7gp5x16a547xhmg8idw2f6r9lg";
     };
     buildInputs = [pkgconfig libX11 libxcb xproto ];
@@ -2071,7 +2071,7 @@ let
     name = "xwud-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7-RC1/src/everything/xwud-1.0.4.tar.bz2;
+      url = mirror://xorg/X11R7.7/src/everything/xwud-1.0.4.tar.bz2;
       sha256 = "1ggql6maivah58kwsh3z9x1hvzxm1a8888xx4s78cl77ryfa1cyn";
     };
     buildInputs = [pkgconfig libX11 xproto ];

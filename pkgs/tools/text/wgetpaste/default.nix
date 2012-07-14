@@ -10,6 +10,7 @@
 
     prePatch = ''
       substituteInPlace wgetpaste --replace "/usr/bin/env bash" "${bash}/bin/bash"
+      substituteInPlace wgetpaste --replace "LC_ALL=C wget" "LC_ALL=C ${wget}/bin/wget"
     '';
 
     installPhase = ''

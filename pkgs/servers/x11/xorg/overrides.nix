@@ -8,7 +8,33 @@ let
 in
 {
 
+  fontadobe75dpi = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
+  };
+
+  fontadobe100dpi = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
+  };
+
+  fontbh100dpi = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
+  };
+
+  fontbhlucidatypewriter75dpi = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
+  };
+
+  fontbhlucidatypewriter100dpi = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
+  };
+
+  fontcursormisc = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
+  };
+
   fontmiscmisc = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
+
     postInstall =
       ''
         ALIASFILE=${xorg.fontalias}/share/fonts/X11/misc/fonts.alias
@@ -126,7 +152,8 @@ in
 
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
-    buildInputs = attrs.buildInputs ++ [xorg.kbproto xorg.libxkbfile xorg.randrproto];
+    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
+    buildInputs = attrs.buildInputs ++ [xorg.kbproto xorg.libxkbfile xorg.randrproto xorg.pixman];
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
@@ -144,6 +171,11 @@ in
 
   xf86videoati = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
+  };
+
+  xf86videofbdev = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
+    buildInputs = attrs.buildInputs ++ [xorg.pixman];
   };
 
   xf86videoopenchrome = attrs: attrs // rec {
@@ -176,6 +208,7 @@ in
         xorg.xineramaproto xorg.xf86dgaproto
         xorg.dmxproto xorg.libdmx xorg.xf86vidmodeproto
         xorg.recordproto xorg.libXext xorg.pixman xorg.libXfont
+        xorg.damageproto xorg.xcmiscproto xorg.xtrans xorg.bigreqsproto
       ];
     propagatedBuildInputs =
       [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto

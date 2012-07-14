@@ -1,6 +1,8 @@
 { stdenv, fetchurl, kernel, perl, makeWrapper }:
 
-assert stdenv.isLinux && builtins.compareVersions kernel.version "2.6.38" != 1;
+# BLCR 0.8.4 works for kernel version up to 2.6.38 (including 2.6.38.x)
+assert stdenv.isLinux;
+assert builtins.compareVersions "2.6.39" kernel.version == 1;
 
 stdenv.mkDerivation {
   name = "blcr-0.8.4-${kernel.version}";

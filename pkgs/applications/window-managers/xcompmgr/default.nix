@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libXcomposite, libXfixes, libXdamage
-, libXrender }:
+, libXrender, libXext }:
 stdenv.mkDerivation rec {
-  name = "xcompmgr-1.1.5";
+  name = "xcompmgr-1.1.6";
   src = fetchurl {
     url = "http://www.x.org/releases/individual/app/${name}.tar.bz2";
-    sha256 = "bb20737a6f9e0cdf5cfbd5288b6a9a4b16ca18d2be19444549c1d6be2a90b571";
+    sha256 = "c98949d36793b30ed1ed47495c87a05fa245ac0fc2857d2abc54979124687c02";
   };
-  buildInputs = [ pkgconfig libXcomposite libXfixes libXdamage libXrender ];
+  buildInputs = [ pkgconfig libXcomposite libXfixes libXdamage libXrender libXext ];
   meta = {
     homepage = http://www.x.org/;
     description = "A sample compositing manager for X servers";

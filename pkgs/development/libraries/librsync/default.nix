@@ -10,6 +10,10 @@ stdenv.mkDerivation {
 
   configureFlags = if stdenv.isCygwin then "--enable-static" else "--enable-shared";
 
+  crossAttrs = {
+    dontStrip = true;
+  };
+
   meta = {
     homepage = http://librsync.sourceforge.net/;
     license = "LGPLv2+";

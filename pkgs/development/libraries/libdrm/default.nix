@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = [ "--enable-nouveau-experimental-api" "--enable-udev" ]
+  configureFlags = [ "--enable-nouveau-experimental-api"
+                     "--enable-radeon-experimental-api"
+                     "--enable-udev" ]
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];

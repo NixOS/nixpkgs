@@ -194,6 +194,9 @@ let
       CONNECTOR y
       PROC_EVENTS y
 
+      # Devtmpfs support.
+      DEVTMPFS y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';

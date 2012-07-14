@@ -5,7 +5,7 @@ args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
 let
   configWithPlatform = kernelPlatform :
     ''
-      # powermanagement and debugging for powertop
+      # Power management and debugging for powertop.
       DEBUG_KERNEL y
       PM_ADVANCED_DEBUG y
       PM_RUNTIME y
@@ -224,6 +224,9 @@ let
       FUNCTION_TRACER y
       FTRACE_SYSCALLS y
       SCHED_TRACER y
+
+      # Devtmpfs support.
+      DEVTMPFS y
 
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}

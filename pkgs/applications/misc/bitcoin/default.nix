@@ -1,39 +1,33 @@
 { fetchurl, stdenv, openssl, db4, boost, zlib, miniupnpc, qt4 }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.0";
+  version = "0.6.3";
   name = "bitcoin-${version}";
 
   src = fetchurl {
-    url = " https://github.com/bitcoin/bitcoin/tarball/v${version}";
-    sha256 = "1i9wnbjf9yrs9rq5jnh9pk1x5j982qh3xpjm05z8dgd3nympgyy8";
+    url = "mirror://sourceforge/bitcoin/${name}-linux.tar.gz";
+    sha256 = "722d4209ff4a951a9eb5cae26a33ad62770fdcb5dfb5acf0b5c6a8f6f3a8a0ef";
   };
 
   buildInputs = [ openssl db4 boost zlib miniupnpc qt4 ];
 
-  unpackCmd = "tar xvf $curSrc";
-
-  buildPhase = ''
-    qmake
-    make
+  configurePhase = ''
     cd src
-    make -f makefile.unix
-    cd ..
+    qmake
   '';
 
   installPhase = ''
     mkdir -p $out/bin
     cp bitcoin-qt $out/bin
-    cp src/bitcoind $out/bin
   '';
 
-  meta = { 
+  meta = {
       description = "Bitcoin is a peer-to-peer currency";
-      longDescription=''
-Bitcoin is a free open source peer-to-peer electronic cash system that is
-completely decentralized, without the need for a central server or trusted
-parties.  Users hold the crypto keys to their own money and transact directly
-with each other, with the help of a P2P network to check for double-spending.
+      longDescription= ''
+        Bitcoin is a free open source peer-to-peer electronic cash system that is
+        completely decentralized, without the need for a central server or trusted
+        parties.  Users hold the crypto keys to their own money and transact directly
+        with each other, with the help of a P2P network to check for double-spending.
       '';
       homepage = "http://www.bitcoin.org/";
       maintainers = [ stdenv.lib.maintainers.roconnor ];

@@ -5,11 +5,11 @@ assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   name = "yoshimi-${version}";
-  version = "0.060.10";
+  version = "0.060.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/yoshimi/${name}.tar.bz2";
-    sha256 = "0y67w7y515hx2bi5gfjgsw1hdah1bdrrvcfmqyjsvn7jbd0q47v1";
+    sha256 = "14javywkw6af9z9c7jr06rzdgzncyaz2ab6f0v0k6bgdndlcgslc";
   };
 
   buildInputs = [ alsaLib boost fftwSinglePrec fltk jackaudio libsndfile mesa
@@ -17,13 +17,6 @@ stdenv.mkDerivation  rec {
   buildNativeInputs = [ cmake pkgconfig ];
 
   preConfigure = "cd src";
-
-  patches = [
-    (fetchurl {
-      url = http://patch-tracker.debian.org/patch/series/dl/yoshimi/0.060.10-3/02-fluid_1.3.patch;
-      sha256 = "1sywirbaaw4zhn5ypga27j02qvrvqjwv3lw8kvzyj575q4c4qnri";
-    })
-  ];
 
   cmakeFlags = [ "-DFLTK_MATH_LIBRARY=${stdenv.glibc}/lib/libm.so" ];
 

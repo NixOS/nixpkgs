@@ -1,10 +1,16 @@
-# TODO:
-# - coqide compilation should be optional or (better) separate;
+# - coqide compilation can be disabled by setting lablgtk to null;
 
-{stdenv, fetchurl, ocaml, findlib, camlp5, lablgtk, ncurses}:
+{stdenv, fetchurl, ocaml, findlib, camlp5, ncurses, lablgtk ? null}:
 
-let
-  version = "8.3pl3";
+let 
+  version = "8.3pl4";
+  buildIde = lablgtk != null;
+  ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
+  idePatch = if buildIde then ''
+    substituteInPlace scripts/coqmktop.ml --replace \
+    "\"-I\"; \"+lablgtk2\"" \
+    "\"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)\"; \"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/stublibs)\""
+  '' else "";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +18,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://coq.inria.fr/V${version}/files/coq-${version}.tar.gz";
-    sha256 = "0ivrafwr4p8pklb9wfq3zyai19xdk05xr3q16xqk4q9pfad9w9dg";
+    sha256 = "17d3lmchmqir1rawnr52g78srg4wkd7clzpzfsivxc4y1zp6rwkr";
   };
 
   buildInputs = [ ocaml findlib camlp5 ncurses lablgtk ];
@@ -21,9 +27,10 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     configureFlagsArray=(
+      -opt
       -camldir ${ocaml}/bin
       -camlp5dir $(ocamlfind query camlp5)
-      -lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -opt -coqide opt
+      ${ideFlags}
     )
   '';
 
@@ -36,17 +43,16 @@ stdenv.mkDerivation {
     RM=$(type -tp rm)
     substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    substituteInPlace scripts/coqmktop.ml --replace \
-      "\"-I\"; \"+lablgtk2\"" \
-      "\"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)\"; \"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/stublibs)\""
+    ${idePatch}
   '';
 
   # This post install step is needed to build ssrcoqide from the ssreflect package
   # It could be made optional, but I see little harm in including it in the default
   # distribution -- roconnor
-  postInstall = ''
+  # This will likely no longer be necessary for coq >= 8.4. -- roconnor
+  postInstall = if buildIde then ''
    cp ide/*.cmi ide/ide.*a $out/lib/coq/ide/
-  '';
+  '' else "";
 
   meta = {
     description = "Coq proof assistant";
@@ -58,5 +64,6 @@ stdenv.mkDerivation {
     '';
     homepage = "http://coq.inria.fr";
     license = "LGPL";
+    maintainers = [ stdenv.lib.maintainers.roconnor ];
   };
 }

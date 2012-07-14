@@ -44,6 +44,9 @@ rec {
         DM_CRYPT m
         MD y
         REISERFS_FS m
+        BTRFS_FS m
+        XFS_FS m
+        JFS_FS m
         EXT4_FS m
         USB_STORAGE_CYPRESS_ATACB m
 
@@ -75,6 +78,7 @@ rec {
         CIFS_ACL y
 
         ZRAM m
+        NETCONSOLE m
 
         # Fail to build
         DRM n

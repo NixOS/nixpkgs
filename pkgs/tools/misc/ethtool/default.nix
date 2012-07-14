@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "ethtool-6";
+  name = "ethtool-3.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/gkernel/ethtool/6/ethtool-6.tar.gz;
-    sha256 = "1iml9w4lrrxsg366wzdkw1wnrydpyah0lprwqf4zcxyxwxrzaijh";
+    url = mirror://kernel/software/network/ethtool/ethtool-3.2.tar.xz;
+    sha256 = "0g9ldaba3vwlsmf490j33y3fgsmpfzxlzzblwashl448f8lcfap7";
   };
 
 }

@@ -1,10 +1,10 @@
-{ cabal, explicitException, text, transformers, utf8String }:
+{ cabal, explicitException, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "multiarg";
-  version = "0.2.0.0";
-  sha256 = "1jmhlh4ngmkddrkcafx0qcmzwbmi5crkmd6p8b07cfjpaq2pc6yx";
-  buildDepends = [ explicitException text transformers utf8String ];
+  version = "0.4.0.0";
+  sha256 = "04m4ynf6x8rlnlmnl6a7jj42fszjc1bly4h3jyjxxsqjdynrv81q";
+  buildDepends = [ explicitException utf8String ];
   meta = {
     homepage = "https://github.com/massysett/multiarg";
     description = "Combinators to build command line parsers";

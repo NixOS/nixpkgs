@@ -33,6 +33,8 @@
 
   GConf = callPackage ./platform/GConf { };
 
+  gconfmm = callPackage ./platform/gconfmm { };
+
   libgnomecanvas = callPackage ./platform/libgnomecanvas { };
 
   libgnomecanvasmm = callPackage ./platform/libgnomecanvasmm { };
@@ -66,6 +68,8 @@
   libunique = callPackage ./platform/libunique { };
 
   gtkglext = callPackage ./platform/gtkglext { };
+
+  gtkglextmm = callPackage ./platform/gtkglextmm { };
 
 #### DESKTOP
 
@@ -110,5 +114,7 @@
 #### BINDINGS
 
   libglademm = callPackage ./bindings/libglademm { };
+
+  gnome_python = callPackage ./bindings/gnome-python { };
 
 }

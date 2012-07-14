@@ -13,6 +13,9 @@ cabal.mkDerivation (self: {
     QuickCheck syb xhtml zlib
   ];
   buildTools = [ alex happy ];
+  patchPhase = ''
+    sed -i -e 's|mtl == 2.0.\*|mtl|' Agda.cabal
+  '';
   meta = {
     homepage = "http://wiki.portal.chalmers.se/agda/";
     description = "A dependently typed functional programming language and proof assistant";

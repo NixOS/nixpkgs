@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "xfwm4-4.6.2";
   
   src = fetchurl {
-    url = "http://www.xfce.org/archive/xfce/4.6.2/src/${name}.tar.bz2";
+    url = "http://archive.xfce.org/xfce/4.6.2/src/${name}.tar.bz2";
     sha256 = "0a2q2pr5mzp6hsrd0llr90i9wii2qj2054shkpvkain20gp1ja11";
   };
 

@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  enableParallelBuilding = true;
+  /* The build failed with a missing libranlib.la in hydra,
+     but worked on my computer. I think they have concurrency problems */
+  enableParallelBuilding = false;
 
   configureFlags = [ "--enable-readline" "--enable-dl" ];
 

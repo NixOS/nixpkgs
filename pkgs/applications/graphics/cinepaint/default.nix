@@ -2,7 +2,7 @@
   flex, libtiff, libjpeg, libpng, libexif, zlib, perl, libX11,
   perlXMLParser, python, pygtk, gettext, intltool, babl, gegl,
   glib, makedepend, xf86vidmodeproto, xineramaproto, libXmu, openexr,
-  mesa, libXext, libXpm, libXxf86vm, pixman, libpthreadstubs } :
+  mesa, libXext, libXpm, libXau, libXxf86vm, pixman, libpthreadstubs, fltk } :
 
 stdenv.mkDerivation rec {
   name = "cinepaint-1.0";
@@ -12,15 +12,19 @@ stdenv.mkDerivation rec {
     sha256 = "02mbpsykd7sfr9h6c6gxld6i3bdwnsgvm70b5yff01gwi69w2wi7";
   };
 
-  buildInputs = [ gtk freetype fontconfig lcms flex libtiff libjpeg libpng
+  buildInputs = [ libpng gtk freetype fontconfig lcms flex libtiff libjpeg
     libexif zlib perl libX11 perlXMLParser python pygtk gettext intltool babl
     gegl glib makedepend xf86vidmodeproto xineramaproto libXmu openexr mesa
-    libXext libXpm libXxf86vm pixman libpthreadstubs
+    libXext libXpm libXau libXxf86vm pixman libpthreadstubs fltk
   ];
+
+  patches = [ ./install.patch ];
 
   buildNativeInputs = [ cmake pkgconfig ];
 
-  NIX_CFLAGS_COMPILE = "-I.";
+  NIX_LDFLAGS = "-llcms -ljpeg";
+
+  # NIX_CFLAGS_COMPILE = "-I.";
 
   meta = {
     homepage = http://www.cinepaint.org/;
