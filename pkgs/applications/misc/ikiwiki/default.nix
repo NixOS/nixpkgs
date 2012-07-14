@@ -1,20 +1,22 @@
 { stdenv, fetchurl, perl, gettext, makeWrapper, PerlMagick, YAML
 , TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate
 , CGISession, CGIFormBuilder, DBFile, LocaleGettext, RpcXML, XMLSimple
-, YAMLLibYAML, which, HTMLTree, python, docutils, Filechdir
+, YAMLLibYAML, which, HTMLTree
 , gitSupport ? false, git ? null
+, docutilsSupport ? false, python ? null, docutils ? null
 , monotoneSupport ? false, monotone ? null
 , bazaarSupport ? false, bazaar ? null
-, cvsSupport ? false, cvs ? null, cvsps ? null
+, cvsSupport ? false, cvs ? null, cvsps ? null, Filechdir ? null
 , subversionSupport ? false, subversion ? null
 , mercurialSupport ? false, mercurial ? null
 , extraUtils ? []
 }:
 
+assert docutilsSupport -> (python != null && docutils != null);
 assert gitSupport -> (git != null);
 assert monotoneSupport -> (monotone != null);
 assert bazaarSupport -> (bazaar != null);
-assert cvsSupport -> (cvs != null && cvsps != null);
+assert cvsSupport -> (cvs != null && cvsps != null && Filechdir != null);
 assert subversionSupport -> (subversion != null);
 assert mercurialSupport -> (mercurial != null);
 
@@ -34,7 +36,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
     TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-    RpcXML XMLSimple PerlMagick YAML YAMLLibYAML which HTMLTree python docutils ]
+    RpcXML XMLSimple PerlMagick YAML YAMLLibYAML which HTMLTree ]
+    ++ lib.optionals docutilsSupport [python docutils]
     ++ lib.optionals gitSupport [git]
     ++ lib.optionals monotoneSupport [monotone]
     ++ lib.optionals bazaarSupport [bazaar]
