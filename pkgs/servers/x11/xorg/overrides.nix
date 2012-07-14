@@ -176,6 +176,7 @@ in
         xorg.xineramaproto xorg.xf86dgaproto
         xorg.dmxproto xorg.libdmx xorg.xf86vidmodeproto
         xorg.recordproto xorg.libXext xorg.pixman xorg.libXfont
+        xorg.damageproto xorg.xcmiscproto xorg.xtrans xorg.bigreqsproto
       ];
     propagatedBuildInputs =
       [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto
