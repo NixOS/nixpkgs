@@ -76,6 +76,8 @@ let
       HOSTAP_FIRMWARE_NVRAM y
       ATH9K_PCI y # Detect Atheros AR9xxx cards on PCI(e) bus
       ATH9K_AHB y # Ditto, AHB bus
+      B43_PHY_HT y
+      BCMA_HOST_PCI y
 
       # Some settings to make sure that fbcondecor works - in particular,
       # disable tileblitting and the drivers that need it.
