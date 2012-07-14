@@ -1766,11 +1766,11 @@ rec {
     buildInputs = [TestPod];
   };
 
-  HTMLTree = buildPerlPackage {
-    name = "HTML-Tree-3.23";
+  HTMLTree = buildPerlPackage rec {
+    name = "HTML-Tree-4.2";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PETEK/HTML-Tree-3.23.tar.gz;
-      sha256 = "1pn80f4g1wixs030f40b80wrj12kwfinwycrx3f10drg4v7ml5zm";
+      url = "mirror://cpan/authors/id/J/JF/JFEARN/${name}.tar.gz";
+      sha256 = "80e4e3caa5e0e025dee5ed383a8d4cc7479ae4802184c4757dafd147a8fca7c9";
     };
     propagatedBuildInputs = [HTMLParser];
   };
