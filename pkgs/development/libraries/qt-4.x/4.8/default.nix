@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "0y93vkkn44md37gyg4y8sc9ylk27xkniaimfcpdcwd090qnjl6wj";
   };
 
-  patches = [ ( substituteAll {
+  patches = [ ./glib-2.32.patch ( substituteAll {
         src = ./dlopen-absolute-paths.diff;
         inherit cups icu libXfixes;
         glibc = stdenv.gcc.libc;
