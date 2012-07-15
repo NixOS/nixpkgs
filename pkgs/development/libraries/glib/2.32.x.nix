@@ -12,11 +12,11 @@
 #       $out/bin/gtester-report' to postInstall if this is solved
 
 stdenv.mkDerivation rec {
-  name = "glib-2.32.3";
+  name = "glib-2.32.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/2.32/${name}.tar.xz";
-    sha256 = "b65ceb462807e4a2f91c95e4293ce6bbefca308cb44a1407bcfdd9e40363ff4d";
+    sha256 = "1qpscyqi2kfskdqfzm5gp04wilcx979gq34cbabvcbx2znj45mx5";
   };
 
   # configure script looks for d-bus but it is only needed for tests
