@@ -150,6 +150,10 @@ in
     buildInputs = attrs.buildInputs ++ [ args.freetype args.fontconfig ];
   };
 
+  xev = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.libXrender ];
+  };
+
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
     NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
