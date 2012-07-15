@@ -2,6 +2,8 @@
 
 with pkgs.lib;
 
+let cfg = config.services.xserver.multitouch; in
+
 {
 
   options = {
@@ -21,11 +23,18 @@ with pkgs.lib;
         description = "Whether to invert scrolling direction à la OSX Lion";
       };
 
+      ignorePalm = mkOption {
+        default = false;
+        example = true;
+        type = types.bool;
+        description = "Whether to ignore touches detected as being the palm (i.e when typing)";
+      };
+
     };
 
   };
 
-  config = mkIf config.services.xserver.multitouch.enable {
+  config = mkIf cfg.enable {
 
     services.xserver.modules = [ pkgs.xf86_input_mtrack ];
 
@@ -36,7 +45,8 @@ with pkgs.lib;
           MatchIsTouchpad "on"
           Identifier "Touchpads"
           Driver "mtrack"
-          ${optionalString config.services.xserver.multitouch.invertScroll ''
+          Option "IgnorePalm" "${if cfg.ignorePalm then "true" else "false"}"
+          ${optionalString cfg.invertScroll ''
             Option "ScrollUpButton" "5"
             Option "ScrollDownButton" "4"
           ''}
