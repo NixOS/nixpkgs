@@ -6,7 +6,7 @@
 , docbook_xml_dtd_45, libxslt, coreutils}:
 
 let
-  version = "3.4.11";
+  version = "3.4.13";
 in
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
  
   src = fetchurl {
     url = "http://awesome.naquadah.org/download/awesome-${version}.tar.xz";
-    sha256 = "576b4f6d2c3f56dfbe52ad92f2eecece111f0f05816e32126cd03d4b4387761d";
+    sha256 = "0jhsgb8wdzpfmdyl9fxp2w6app7l6zl8b513z3ff513nvdlxj5hr";
   };
  
   buildInputs = [ cmake gperf imagemagick pkgconfig lua glib cairo pango
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
     #  asciidoc: FAILED: <stdin>: line 3: section title expected
     #  make[2]: *** [manpages/ru/man1/awesome.1.xml] Error 1
     substituteInPlace CMakeLists.txt \
-      --replace "set(AWE_MAN_LANGS es fr de ru)" \
-                "set(AWE_MAN_LANGS es fr de)"
+      --replace "set(AWE_MAN_LANGS it es fr de ru)" \
+                "set(AWE_MAN_LANGS it es fr de)"
   '';
 
   # XXX: maybe not needed anymore
@@ -58,3 +58,4 @@ stdenv.mkDerivation rec {
     platforms = with stdenv.lib.platforms; linux;
   };
 }
+
