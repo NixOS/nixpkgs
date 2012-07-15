@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jdk}:
+{stdenv, fetchurl, jdk, makeWrapper}:
 
 assert jdk != null;
 
@@ -10,7 +10,6 @@ stdenv.mkDerivation {
 		url = http://apache.cs.uu.nl/dist/maven/binaries/maven-1.0.2.tar.bz2;
 		md5 = "81a6b4393e550635efe19e95cea38718";
 	};
-	makeWrapper = ../../build-support/make-wrapper/make-wrapper.sh;
 	
-	inherit jdk;
+	inherit jdk makeWrapper;
 }
