@@ -49,6 +49,8 @@ let cfg = config.services.xserver.multitouch; in
           ${optionalString cfg.invertScroll ''
             Option "ScrollUpButton" "5"
             Option "ScrollDownButton" "4"
+            Option "ScrollLeftButton" "7"
+            Option "ScrollLeftButton" "6"
           ''}
         EndSection
       '';
