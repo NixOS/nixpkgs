@@ -70,7 +70,7 @@ let
       environment = {
         LD_LIBRARY_PATH = nssModulesPath;
         TZ = config.time.timeZone;
-        LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
+        LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       };
 
       daemonType = "fork";

@@ -38,7 +38,7 @@ in
   options = {
 
     users.defaultUserShell = pkgs.lib.mkOption {
-      default = "/var/run/current-system/sw/bin/bash";
+      default = "/run/current-system/sw/bin/bash";
       description = ''
         This option defines the default shell assigned to user
         accounts.  This must not be a store path, since the path is

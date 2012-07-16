@@ -312,7 +312,7 @@ in
       # nixos-rebuild also requires a "system" profile and an
       # /etc/NIXOS tag.
       touch /etc/NIXOS
-      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /var/run/current-system
+      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     '';
 
   # Add vfat support to the initrd to enable people to copy the

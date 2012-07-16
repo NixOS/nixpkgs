@@ -65,7 +65,7 @@ in
 
         script = ''
           export LANG=${defaultLocale}
-          export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
+          export LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive
           export PATH=${pkgs.gzip}/bin:$PATH # Needed by setfont
 
           set +e # continue in case of errors

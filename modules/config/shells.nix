@@ -13,6 +13,7 @@ with pkgs.lib;
       { target = "shells";
         source = pkgs.writeText "shells"
           ''
+            /run/current-system/sw/bin/bash
             /var/run/current-system/sw/bin/bash
             /bin/sh
           '';
