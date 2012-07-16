@@ -161,6 +161,11 @@ in
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
+  xf86inputkeyboard = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
+    buildInputs = attrs.buildInputs ++ [xorg.pixman];
+  };
+
   xf86inputmouse = attrs: attrs // {
     NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
     buildInputs = attrs.buildInputs ++ [xorg.pixman];
