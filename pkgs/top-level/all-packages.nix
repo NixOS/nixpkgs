@@ -1785,6 +1785,8 @@ let
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
 
+  cython = callPackage ../development/interpreters/cython { };
+
   dylan = callPackage ../development/compilers/gwydion-dylan {
     dylan = callPackage ../development/compilers/gwydion-dylan/binary.nix {  };
   };
@@ -7725,7 +7727,7 @@ let
   };
 
   xpra = callPackage ../tools/X11/xpra {
-    pyrex = pyrex095;
+    inherit (pythonPackages) notify;
   };
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
