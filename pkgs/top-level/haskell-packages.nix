@@ -932,6 +932,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
 
+  IOSpec = callPackage ../development/libraries/haskell/IOSpec {};
+
   ioStorage = callPackage ../development/libraries/haskell/io-storage {};
 
   irc = callPackage ../development/libraries/haskell/irc {
