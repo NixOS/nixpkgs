@@ -473,7 +473,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
-  brainfuck = callPackage ../development/libraries/haskell/brainfuck/default.nix {};
+  brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
 
   bson = callPackage ../development/libraries/haskell/bson {};
 
@@ -967,7 +967,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
-  lambdabot = callPackage ../development/libraries/haskell/lambdabot/default.nix {};
+  lambdabot = callPackage ../development/libraries/haskell/lambdabot {};
 
   lambdabotUtils = callPackage ../development/libraries/haskell/lambdabot-utils {};
 

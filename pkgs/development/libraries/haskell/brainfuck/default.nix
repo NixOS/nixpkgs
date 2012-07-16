@@ -1,3 +1,5 @@
+{ cabal, mtl }:
+
 cabal.mkDerivation (self: {
   pname = "brainfuck";
   version = "0.1";
@@ -11,3 +13,4 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
   };
 })
+

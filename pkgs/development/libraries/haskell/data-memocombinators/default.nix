@@ -1,3 +1,5 @@
+{ cabal, dataInttrie }:
+
 cabal.mkDerivation (self: {
   pname = "data-memocombinators";
   version = "0.4.3";
@@ -10,3 +12,4 @@ cabal.mkDerivation (self: {
     platforms = self.ghc.meta.platforms;
   };
 })
+
