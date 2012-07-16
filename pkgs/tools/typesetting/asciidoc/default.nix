@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python }:
+{ fetchurl, stdenv, python, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
   name = "asciidoc-8.6.6";
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   preInstall = "mkdir -p $out/etc/vim";
 
   buildInputs = [ python ];
+  propagatedBuildInputs = [ libxml2 libxslt docbook_xsl docbook_xml_dtd_45]; 
 
   meta = {
     longDescription = ''
