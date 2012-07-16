@@ -24,7 +24,7 @@ with pkgs.lib;
             # modules in the current configuration don't match the
             # running kernel.
             if [ ! -d "$MODULE_DIR/$(${pkgs.coreutils}/bin/uname -r)" ]; then
-                MODULE_DIR=/var/run/booted-system/kernel-modules/lib/modules/
+                MODULE_DIR=/run/booted-system/kernel-modules/lib/modules/
             fi
 
             exec ${pkgs.module_init_tools}/sbin/modprobe "$@"
