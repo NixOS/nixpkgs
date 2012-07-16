@@ -407,21 +407,21 @@ in
 
         preStart =
           ''
-            rm -f /var/run/opengl-driver
-            rm -f /var/run/opengl-driver-32
+            rm -f /run/opengl-driver
+            rm -f /run/opengl-driver-32
             ${# !!! The OpenGL driver depends on what's detected at runtime.
               if elem "nvidia" driverNames then
                 ''
-                  ln -sf ${kernelPackages.nvidia_x11} /var/run/opengl-driver
+                  ln -sf ${kernelPackages.nvidia_x11} /run/opengl-driver
                   ${optionalString (pkgs.stdenv.system == "x86_64-linux" && cfg.driSupport32Bit)
-                    "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; } } /var/run/opengl-driver-32"}
+                    "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; } } /run/opengl-driver-32"}
                 ''
               else if elem "nvidiaLegacy96" driverNames then
-                "ln -sf ${kernelPackages.nvidia_x11_legacy96} /var/run/opengl-driver"
+                "ln -sf ${kernelPackages.nvidia_x11_legacy96} /run/opengl-driver"
               else if elem "nvidiaLegacy173" driverNames then
-                "ln -sf ${kernelPackages.nvidia_x11_legacy173} /var/run/opengl-driver"
+                "ln -sf ${kernelPackages.nvidia_x11_legacy173} /run/opengl-driver"
               else if cfg.driSupport then
-                "ln -sf ${pkgs.mesa} /var/run/opengl-driver"
+                "ln -sf ${pkgs.mesa} /run/opengl-driver"
               else ""
             }
 
