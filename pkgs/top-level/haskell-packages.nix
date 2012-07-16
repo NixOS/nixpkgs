@@ -1357,6 +1357,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ShellacReadline = callPackage ../development/libraries/haskell/Shellac/Shellac-readline.nix {};
 
+  show = callPackage ../development/libraries/haskell/show {};
+
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   split = callPackage ../development/libraries/haskell/split {};
