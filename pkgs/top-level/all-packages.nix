@@ -1508,6 +1508,8 @@ let
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
+  trickle = callPackage ../tools/networking/trickle {};
+
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
   ttf2pt1_cl_pdf = callPackage ../tools/misc/ttf2pt1 { };
 
