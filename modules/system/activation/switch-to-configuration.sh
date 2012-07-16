@@ -59,7 +59,7 @@ fi
 # Activate the new configuration.
 if [ "$action" != switch -a "$action" != test ]; then exit 0; fi
 
-oldVersion=$(cat /var/run/current-system/upstart-interface-version 2> /dev/null || echo 0)
+oldVersion=$(cat /run/current-system/upstart-interface-version 2> /dev/null || echo 0)
 newVersion=$(cat @out@/upstart-interface-version 2> /dev/null || echo 0)
 
 if test "$oldVersion" -ne "$newVersion"; then

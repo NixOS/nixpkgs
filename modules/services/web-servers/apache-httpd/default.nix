@@ -6,7 +6,9 @@ let
 
   mainCfg = config.services.httpd;
 
-  httpd = pkgs.apacheHttpd;
+  httpd = pkgs.apacheHttpd.override { mpm = mainCfg.multiProcessingModule; };
+
+  php = pkgs.php.override { apacheHttpd = httpd; };
 
   getPort = cfg: if cfg.port != 0 then cfg.port else if cfg.enableSSL then 443 else 80;
 
@@ -105,10 +107,11 @@ let
       # Other modules.
       "ext_filter" "include" "log_config" "env" "mime_magic"
       "cern_meta" "expires" "headers" "usertrack" /* "unique_id" */ "setenvif"
-      "mime" "dav" "status" "autoindex" "asis" "info" "cgi" "dav_fs"
+      "mime" "dav" "status" "autoindex" "asis" "info" "dav_fs"
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
     ]
+    ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
     ++ extraApacheModules;
 
@@ -283,6 +286,11 @@ let
 
     PidFile ${mainCfg.stateDir}/httpd.pid
 
+    ${optionalString (mainCfg.multiProcessingModule != "prefork") ''
+      # mod_cgid requires this.
+      ScriptSock ${mainCfg.stateDir}/cgisock
+    ''}
+
     <IfModule prefork.c>
         MaxClients           ${toString mainCfg.maxClients}
         MaxRequestsPerChild  ${toString mainCfg.maxRequestsPerChild}
@@ -302,7 +310,7 @@ let
         allModules =
           concatMap (svc: svc.extraModulesPre) allSubservices
           ++ map (name: {inherit name; path = "${httpd}/modules/mod_${name}.so";}) apacheModules
-          ++ optional enablePHP { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; }
+          ++ optional enablePHP { name = "php5"; path = "${php}/modules/libphp5.so"; }
           ++ concatMap (svc: svc.extraModules) allSubservices
           ++ extraForeignModules;
       in concatMapStrings load allModules
@@ -373,7 +381,7 @@ let
         ([ mainCfg.phpOptions ] ++ (map (svc: svc.phpOptions) allSubservices));
     }
     ''
-      cat ${pkgs.php}/etc/php-recommended.ini > $out
+      cat ${php}/etc/php-recommended.ini > $out
       echo "$options" >> $out
     '';
 
@@ -404,7 +412,7 @@ in
 
       extraModules = mkOption {
         default = [];
-        example = [ "proxy_connect" { name = "php5"; path = "${pkgs.php}/modules/libphp5.so"; } ];
+        example = [ "proxy_connect" { name = "php5"; path = "${php}/modules/libphp5.so"; } ];
         description = ''
           Specifies additional Apache modules.  These can be specified
           as a string in the case of modules distributed with Apache,
@@ -484,6 +492,23 @@ in
           "Options appended to the PHP configuration file <filename>php.ini</filename>.";
       };
 
+      multiProcessingModule = mkOption {
+        default = "prefork";
+        example = "worker";
+        type = types.uniq types.string;
+        description =
+          ''
+            Multi-processing module to be used by Apache.  Available
+            modules are <literal>prefork</literal> (the default;
+            handles each request in a separate child process),
+            <literal>worker</literal> (hybrid approach that starts a
+            number of child processes each running a number of
+            threads) and <literal>event</literal> (a recent variant of
+            <literal>worker</literal> that handles persistent
+            connections more efficiently).
+          '';
+      };
+
       maxClients = mkOption {
         default = 150;
         example = 8;
@@ -558,7 +583,8 @@ in
 
         preStart =
           ''
-            mkdir -m 0700 -p ${mainCfg.stateDir}
+            mkdir -m 0750 -p ${mainCfg.stateDir}
+            chown root.wwwrun ${mainCfg.stateDir}
             mkdir -m 0700 -p ${mainCfg.logDir}
 
             ${optionalString (mainCfg.documentRoot != null)
@@ -582,9 +608,7 @@ in
             done
           '';
 
-        daemonType = "fork";
-
-        exec = "httpd -f ${httpdConf}";
+        exec = "httpd -f ${httpdConf} -DNO_DETACH";
 
         preStop =
           ''

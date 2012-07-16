@@ -87,7 +87,7 @@ in
             fcrondeny   =       /etc/fcron.deny
             shell       =       /bin/sh
             sendmail    =       /var/setuid-wrappers/sendmail
-            editor      =       /var/run/current-system/sw/bin/vi
+            editor      =       /run/current-system/sw/bin/vi
           '';
           target = "fcron.conf";
           mode = "0600"; # max allowed is 644
@@ -104,7 +104,7 @@ in
         startOn = "startup and filesystem";
 
         environment =
-          { PATH = "/var/run/current-system/sw/bin";
+          { PATH = "/run/current-system/sw/bin";
           };
 
         preStart =

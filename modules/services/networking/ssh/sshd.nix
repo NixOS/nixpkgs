@@ -92,7 +92,7 @@ let
       userLoop = flip concatMapStrings usersWithKeys (u:
         let
           authKeys = concatStringsSep "," u.openssh.authorizedKeys.keys;
-          authKeyFiles = concatStringsSep " " u.openssh.authorizedKeys.keyFiles;
+          authKeyFiles = concatStrings (map (x: " ${x}") u.openssh.authorizedKeys.keyFiles);
           preserveExisting = if u.openssh.authorizedKeys.preserveExistingKeys then "true" else "false";
         in ''
           mkAuthKeysFile "${u.name}" "${authKeys}" "${authKeyFiles}" "${preserveExisting}"
@@ -105,25 +105,34 @@ let
         local authKeyFiles="$3"
         local preserveExisting="$4"
 
-        eval authfile=~$userName/.ssh/authorized_keys
-        mkdir -p "$(dirname $authfile)"
-        touch "$authfile"
+        eval homeDir=~$userName
+        if ! [ -d "$homeDir" ]; then
+          echo "User $userName does not exist"
+          return
+        fi
+        if ! [ -d "$homeDir/.ssh" ]; then
+          mkdir -v -m 700 "$homeDir/.ssh"
+          chown "$userName":users "$homeDir/.ssh"
+        fi
+        local authKeysFile="$homeDir/.ssh/authorized_keys"
+        touch "$authKeysFile"
         if [ "$preserveExisting" == false ]; then
-          rm -f "$authfile"
-          echo "${marker2}" > "$authfile"
+          rm -f "$authKeysFile"
+          echo "${marker2}" > "$authKeysFile"
         else
-          sed -i '/${marker1}/ d' "$authfile"
+          sed -i '/${marker1}/ d' "$authKeysFile"
         fi
         IFS=,
         for f in $authKeys; do
-          echo "$f ${marker1}" >> "$authfile"
+          echo "$f ${marker1}" >> "$authKeysFile"
         done
         unset IFS
         for f in $authKeyFiles; do
           if [ -f "$f" ]; then
-            echo "$(cat "$f") ${marker1}" >> "$authfile"
+            echo "$(cat "$f") ${marker1}" >> "$authKeysFile"
           fi
         done
+        chown "$userName" "$authKeysFile"
       }
 
       ${userLoop}
@@ -329,7 +338,7 @@ in
         path = [ pkgs.openssh ];
         
         environment.LD_LIBRARY_PATH = nssModulesPath;
-        environment.LOCALE_ARCHIVE = "/var/run/current-system/sw/lib/locale/locale-archive";
+        environment.LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
 
         preStart =
           ''

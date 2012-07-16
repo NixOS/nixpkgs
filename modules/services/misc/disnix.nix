@@ -130,7 +130,7 @@ in
         
           script =
           ''
-            export PATH=/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin
+            export PATH=/run/current-system/sw/bin:/run/current-system/sw/sbin
             export HOME=/root
 
             ${pkgs.disnix}/bin/disnix-service --activation-modules-dir=${disnix_activation_scripts}/libexec/disnix/activation-scripts

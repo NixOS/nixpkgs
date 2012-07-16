@@ -86,8 +86,8 @@ in
         [paths]
         rrdtool = ${pkgs.rrdtool}/bin/rrdtool
         loadavg_rrd = loadavg
-        ps = /var/run/current-system/sw/bin/ps
-        df = /var/run/current-system/sw/bin/df
+        ps = /run/current-system/sw/bin/ps
+        df = /run/current-system/sw/bin/df
         meminfo_rrd = meminfo
         uptime_rrd = uptime
         rrd_path = ${rrdDir}

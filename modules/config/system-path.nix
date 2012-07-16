@@ -1,5 +1,5 @@
 # This module defines the packages that appear in
-# /var/run/current-system/sw.
+# /run/current-system/sw.
 
 { config, pkgs, ... }:
 
@@ -64,7 +64,7 @@ let
         example = "[ pkgs.icecat3 pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
-          /var/run/current-system/sw.  These packages are
+          /run/current-system/sw.  These packages are
           automatically available to all users, and are
           automatically updated every time you rebuild the system
           configuration.  (The latter is the main difference with
@@ -79,7 +79,7 @@ let
         default = [];
         example = ["/"];
         description = "
-          Lists directories to be symlinked in `/var/run/current-system/sw'.
+          Lists directories to be symlinked in `/run/current-system/sw'.
         ";
       };
     };

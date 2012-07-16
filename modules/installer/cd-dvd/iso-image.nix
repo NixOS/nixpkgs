@@ -122,12 +122,12 @@ let
   efiShell = if pkgs.stdenv.isi686 then
     pkgs.fetchurl {
       url = "https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/EdkShellBinPkg/FullShell/Ia32/Shell_Full.efi";
-      sha256 = "0ymm3mbbwx9f6cq0bp2nr7ikyagxgsg4sjs5q1s4xbnms27slwjq";
+      sha256 = "1gv6kyaspczdp7x8qnx5x76ilriaygkfs99ay7ihhdi6riclkhfl";
     }
   else
     pkgs.fetchurl {
       url = "https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/EdkShellBinPkg/FullShell/X64/Shell_Full.efi";
-      sha256 = "1xchy8a05mgqzr82mmahdni0jbxsz6xf6vm2bg1bch9i6l72qgmh";
+      sha256 = "1g18z84rlavxr5gsrh2g942rfr6znv9fs3fqww5m7dhmnysgyv8p";
     };
 
   # The efi boot image
@@ -312,7 +312,7 @@ in
       # nixos-rebuild also requires a "system" profile and an
       # /etc/NIXOS tag.
       touch /etc/NIXOS
-      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /var/run/current-system
+      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     '';
 
   # Add vfat support to the initrd to enable people to copy the

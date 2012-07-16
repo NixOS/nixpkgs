@@ -12,8 +12,8 @@ __ETC_PROFILE_SOURCED=1
 export __ETC_PROFILE_DONE=1
 
 # Initialise a bunch of environment variables.
-export LOCALE_ARCHIVE=/var/run/current-system/sw/lib/locale/locale-archive
-export LD_LIBRARY_PATH=/var/run/opengl-driver/lib:/var/run/opengl-driver-32/lib # !!! only set if needed
+export LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive
+export LD_LIBRARY_PATH=/run/opengl-driver/lib:/run/opengl-driver-32/lib # !!! only set if needed
 export NIXPKGS_CONFIG=/etc/nix/nixpkgs-config.nix
 export NIX_PATH=/nix/var/nix/profiles/per-user/root/channels/nixos:nixpkgs=/etc/nixos/nixpkgs:nixos=/etc/nixos/nixos:nixos-config=/etc/nixos/configuration.nix:services=/etc/nixos/services
 export PAGER="less -R"
@@ -22,7 +22,7 @@ export LOCATE_PATH=/var/cache/locatedb
 
 # Include the various profiles in the appropriate environment variables.
 export NIX_USER_PROFILE_DIR=/nix/var/nix/profiles/per-user/$USER
-export NIX_PROFILES="/var/run/current-system/sw /nix/var/nix/profiles/default $HOME/.nix-profile"
+export NIX_PROFILES="/run/current-system/sw /nix/var/nix/profiles/default $HOME/.nix-profile"
 
 unset PATH INFOPATH PKG_CONFIG_PATH PERL5LIB ALSA_PLUGIN_DIRS GST_PLUGIN_PATH KDEDIRS
 unset QT_PLUGIN_PATH QTWEBKIT_PLUGIN_PATH STRIGI_PLUGIN_PATH XDG_CONFIG_DIRS XDG_DATA_DIRS

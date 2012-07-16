@@ -143,12 +143,12 @@ $systemConfig/activate
 
 
 # Record the boot configuration.
-ln -sfn "$systemConfig" /var/run/booted-system
+ln -sfn "$systemConfig" /run/booted-system
 
 # Prevent the booted system form being garbage-collected If it weren't
 # a gcroot, if we were running a different kernel, switched system,
 # and garbage collected all, we could not load kernel modules anymore.
-ln -sfn /var/run/booted-system /nix/var/nix/gcroots/booted-system
+ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 
 
 # Run any user-specified commands.
@@ -177,6 +177,6 @@ fi
 
 # Start systemd.
 echo "starting systemd..."
-PATH=/var/run/current-system/systemd/lib/systemd \
-    MODULE_DIR=/var/run/current-system/kernel-modules/lib/modules \
+PATH=/run/current-system/systemd/lib/systemd \
+    MODULE_DIR=/run/current-system/kernel-modules/lib/modules \
     exec systemd --log-target journal # --log-level debug --crash-shell

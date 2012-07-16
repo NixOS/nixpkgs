@@ -16,9 +16,9 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     services.xserver.windowManager = {
-      session = mkIf cfg.enable [{
+      session = [{
         name = "i3";
         start = "
           ${pkgs.i3}/bin/i3 &
@@ -26,5 +26,6 @@ in
         ";
       }];
     };
+    environment.x11Packages = [ pkgs.i3 ];
   };
 }

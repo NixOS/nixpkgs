@@ -50,7 +50,7 @@ in
   # script and the top-level system configuration directory.
   tarball.storeContents =
     [ { object = config.system.build.toplevel;
-        symlink = "/var/run/current-system";
+        symlink = "/run/current-system";
       }
     ];
 
@@ -87,6 +87,6 @@ in
       # nixos-rebuild also requires a "system" profile and an
       # /etc/NIXOS tag.
       touch /etc/NIXOS
-      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /var/run/current-system
+      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
     '';
 }

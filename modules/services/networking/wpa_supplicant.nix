@@ -18,7 +18,7 @@ in
   ###### interface
 
   options = {
-  
+
     networking.WLANInterface = mkOption {
       default = "";
       description = "Obsolete. Use <option>networking.wireless.interfaces</option> instead.";
@@ -44,7 +44,9 @@ in
         example = [ "wlan0" "wlan1" ];
         description = ''
           The interfaces <command>wpa_supplicant</command> will use.  If empty, it will
-          automatically use all wireless interfaces.
+          automatically use all wireless interfaces. (Note that auto-detection is currently
+	  broken on Linux 3.4.x kernels. See http://github.com/NixOS/nixos/issues/10 for
+	  further details.)
         '';
       };
 
@@ -80,14 +82,14 @@ in
 
 
   ###### implementation
-  
+
   config = mkIf cfg.enable {
 
     environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
-    jobs.wpa_supplicant = 
+    jobs.wpa_supplicant =
       { startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
@@ -117,13 +119,13 @@ in
             exec wpa_supplicant -s -u ${optionalString (cfg.driver != "") "-D${cfg.driver}"} -c ${configFile} $ifaces
           '';
       };
-  
+
     powerManagement.resumeCommands =
       ''
         ${config.system.build.upstart}/sbin/restart wpa_supplicant
       '';
 
-    assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != []; 
+    assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != [];
                     message = "user controlled wpa_supplicant needs explicit networking.wireless.interfaces";}];
 
   };
