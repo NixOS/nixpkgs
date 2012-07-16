@@ -694,7 +694,7 @@ let pythonPackages = python.modules // rec {
       md5 = "4a89ef2b3ab0f151f781182bd0cc8933";
     };
 
-    buildInputs = [ werkzeug jinja2 ];
+    propagatedBuildInputs = [ werkzeug jinja2 ];
 
     meta = {
       homepage = http://flask.pocoo.org/;
