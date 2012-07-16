@@ -6,7 +6,7 @@ with stdenv.lib;
 
 let
 
-  version = "4.0.3";
+  version = "4.1.2";
 
   libDir = if stdenv.is64bit then "lib64" else "lib";
 
@@ -30,23 +30,24 @@ let
       }
     ];
 
-in 
+  ipxeSrc =
+      { url = http://xenbits.xensource.com/xen-extfiles/ipxe-git-v1.0.0.tar.gz;
+        sha256 = "d3128bfda9a1542049c278755f85bbcbb8441da7bfd702d511ce237fcf86a723";
+      };
+in
 
 stdenv.mkDerivation {
   name = "xen-${version}";
 
   src = fetchurl {
     url = "http://bits.xensource.com/oss-xen/release/${version}/xen-${version}.tar.gz";
-    sha256 = "0p4i7mm8cdsr8i9z3dij6nriyvz6la2rhm7jkyk2n8h62nnxi1b5";
+    sha256 = "7d9c93057cf480d3f1efa792b19285a84fa3c06060ea5c5c453be00887389b0d";
   };
 
   patches =
     [ # Xen looks for headers in /usr/include and for libraries using
       # ldconfig.  Don't do that.
       ./has-header.patch
-
-      # GCC 4.5 compatibility.
-      ./gcc-4.5.patch
     ];
 
   buildInputs =
@@ -102,11 +103,17 @@ stdenv.mkDerivation {
         --replace 'XENDOM_CONFIG=/etc/sysconfig/xendomains' "" \
         --replace /bin/ls ls
 
+      grep -rl /etc/xen * | xargs sed -i 's|/etc/xen|$out/etc/xen|g'
+
       # Xen's stubdoms need various sources that it usually fetches at
       # build time using wget.  We can't have that.
       ${flip concatMapStrings stubdomSrcs (x: let src = fetchurl x; in ''
         cp ${src} stubdom/${src.name}
       '')}
+
+      ${let src = fetchurl ipxeSrc; in ''
+        cp ${src} tools/firmware/etherboot/ipxe.tar.gz
+      ''}
 
       # Hack to get `gcc -m32' to work without having 32-bit Glibc headers.
       mkdir -p tools/include/gnu
