@@ -686,6 +686,24 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  flask = buildPythonPackage {
+    name = "flask-0.9";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/F/Flask/Flask-0.9.tar.gz";
+      md5 = "4a89ef2b3ab0f151f781182bd0cc8933";
+    };
+
+    buildInputs = [ werkzeug jinja2 ];
+
+    meta = {
+      homepage = http://flask.pocoo.org/;
+      description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
+      license = "BSD";
+    };
+  };
+
+
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
 
