@@ -2590,6 +2590,22 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  werkzeug = buildPythonPackage {
+    name = "werkzeug-0.8.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/W/Werkzeug/Werkzeug-0.8.3.tar.gz";
+      md5 = "12aa03e302ce49da98703938f257347a";
+    };
+
+    meta = {
+      homepage = http://werkzeug.pocoo.org/;
+      description = "A WSGI utility library for Python";
+      license = "BSD";
+    };
+  };
+
+
   wxPython = wxPython28;
 
 
