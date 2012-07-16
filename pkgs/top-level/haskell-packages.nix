@@ -473,6 +473,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
+  brainfuck = callPackage ../development/libraries/haskell/brainfuck/default.nix {};
+
   bson = callPackage ../development/libraries/haskell/bson {};
 
   byteorder = callPackage ../development/libraries/haskell/byteorder {};
