@@ -70,6 +70,7 @@ mount -t sysfs none /sys
 mount -t tmpfs -o "mode=0755,size=@devSize@" none /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
+mount -t securityfs none /sys/kernel/security
 
 # Some console devices, for the interactivity
 mknod /dev/console c 5 1
