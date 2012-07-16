@@ -174,7 +174,8 @@ in
   };
 
   xf86videoati = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
+    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
+    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa xorg.pixman];
   };
 
   xf86videocirrus = attrs: attrs // {
