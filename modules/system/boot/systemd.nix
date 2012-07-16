@@ -140,9 +140,9 @@ let
       "time-sync.target"
 
       # Udev.
-      "systemd-udev-control.socket"
-      "systemd-udev-kernel.socket"
-      "systemd-udev.service"
+      "systemd-udevd-control.socket"
+      "systemd-udevd-kernel.socket"
+      "systemd-udevd.service"
       "systemd-udev-settle.service"
       "systemd-udev-trigger.service"
 
@@ -157,6 +157,7 @@ let
       # Journal.
       "systemd-journald.socket"
       "systemd-journald.service"
+      "syslog.socket"
 
       # SysV init compatibility.
       "systemd-initctl.socket"
@@ -178,8 +179,8 @@ let
       "systemd-update-utmp-shutdown.service"
       
       # Filesystems.
-      "fsck@.service"
-      "fsck-root.service"
+      "systemd-fsck@.service"
+      "systemd-fsck-root.service"
       "systemd-remount-fs.service"
       "local-fs.target"
       "local-fs-pre.target"
@@ -194,18 +195,18 @@ let
 
       # Hibernate / suspend.
       "hibernate.target"
-      "hibernate.service"
+      "systemd-hibernate.service"
       "suspend.target"
-      "suspend.service"
+      "systemd-suspend.service"
       "sleep.target"
 
       # Reboot stuff.
       "reboot.target"
-      "reboot.service"
+      "systemd-reboot.service"
       "poweroff.target"
-      "poweroff.service"
+      "systemd-poweroff.service"
       "halt.target"
-      "halt.service"
+      "systemd-halt.service"
       "ctrl-alt-del.target"
       "shutdown.target"
       "umount.target"
@@ -216,9 +217,6 @@ let
       "systemd-ask-password-console.service"
       "systemd-ask-password-wall.path"
       "systemd-ask-password-wall.service"
-
-      # Misc.
-      "syslog.socket"
     ];
 
   upstreamWants =
