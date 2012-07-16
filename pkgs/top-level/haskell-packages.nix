@@ -1129,6 +1129,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   persistent = callPackage ../development/libraries/haskell/persistent {};
 
+  persistentPostgresql = callPackage ../development/libraries/haskell/persistent-postgresql {};
+
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
@@ -1140,6 +1142,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   polyparse = self.polyparse_1_8;
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
+
+  postgresqlLibpq = callPackage ../development/libraries/haskell/postgresql-libpq {
+    postgresql = pkgs.postgresql91;
+  };
+
+  postgresqlSimple = callPackage ../development/libraries/haskell/postgresql-simple {};
 
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
