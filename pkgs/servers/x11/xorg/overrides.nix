@@ -191,6 +191,11 @@ in
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa xorg.libXext];
   };
 
+  xf86videovesa = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
+    buildInputs = attrs.buildInputs ++ [xorg.pixman];
+  };
+
   xdriinfo = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
   };
