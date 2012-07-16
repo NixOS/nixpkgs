@@ -50,7 +50,7 @@ let cfg = config.services.xserver.multitouch; in
             Option "ScrollUpButton" "5"
             Option "ScrollDownButton" "4"
             Option "ScrollLeftButton" "7"
-            Option "ScrollLeftButton" "6"
+            Option "ScrollRightButton" "6"
           ''}
         EndSection
       '';
