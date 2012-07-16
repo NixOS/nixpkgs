@@ -18,7 +18,7 @@ with pkgs.lib;
 
           [Service]
           Type=oneshot
-          ExecStart=${pkgs.utillinux}/sbin/hwclock --systohc --utc
+          ExecStart=${pkgs.utillinux}/sbin/hwclock --systohc ${if config.time.hardwareClockInLocalTime then "--localtime" else "--utc"}
         '';
     };
   
