@@ -1,10 +1,14 @@
-{ fetchurl, stdenv, python, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_45 }:
+{ fetchhg, stdenv, python, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
-  name = "asciidoc-8.6.6";
-  src = fetchurl {
-    url = "mirror://sourceforge/asciidoc/${name}.tar.gz";
-    sha256 = "9d54c11716e4309ff4d942cf6a6d9745d6a28754ff1de01efed0dc659457ac71";
+  ver = "8.6.7";
+  name = "asciidoc-${ver}";
+
+  src = fetchhg {
+    name = "hg";
+    url = https://asciidoc.googlecode.com/;
+    tag = "${ver}";
+    sha256 = "1m0zd9b4qjnhpnhfcn4p3n2ffi1bl39lzh52li0fzxl3xqxqvfq2";
   };
 
   patchPhase = ''
