@@ -5,7 +5,7 @@ with pkgs.lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = { name, device, ... }: ''
+  openCommand = { name, device, allowDiscards, ... }: ''
     # Wait for luksRoot to appear, e.g. if on a usb drive.
     # XXX: copied and adapted from stage-1-init.sh - should be
     # available as a function.
@@ -20,7 +20,7 @@ let
     fi
 
     # open luksRoot and scan for logical volumes
-    cryptsetup luksOpen ${device} ${name}
+    cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"}
   '';
 
   isPreLVM = f: f.preLVM;
@@ -69,6 +69,17 @@ in
           type = types.bool;
           description = "Whether the luksOpen will be attempted before LVM scan or after it.";
         };
+
+        allowDiscards = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Whether to allow TRIM requests to the underlying device. This option
+            has security implications, please read the LUKS documentation before
+            activating in.
+          '';
+        };
+
       };
     };
   };
