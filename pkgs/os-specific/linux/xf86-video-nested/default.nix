@@ -3,13 +3,17 @@
 }:
 
 stdenv.mkDerivation {
-  name = "xf86-video-nested-2012-06-15";
+  name = "xf86-video-nested-2011-09-12";
 
+  # Breaks at 8d80f2e415e9e58ca481fe52ae8f2290e25de898 for Xorg 7.6
   src = fetchgit {
     url = git://anongit.freedesktop.org/xorg/driver/xf86-video-nested;
-    rev = "ad48dc6eb98776a8a886f26f31c0110352fa1da4";
-    sha256 = "43a102405acdcdb346ab197b33c8fa724d2140f33754f8ee3941a0eea152735c"; 
+    rev = "fceee1716625badf698ca27dd5788a4deb8533bc";
+    sha256 = ""; 
   };
+
+  # Fixed in e123277d10337a1c3b853118df0d1becdddf3b77
+  patchPhase = "sed -e 's/Werror/Werror -Wno-extra-portability/g' -i configure.ac";
 
   buildInputs = 
     [ autoconf automake fontsproto libX11 libXext libtool pkgconfig

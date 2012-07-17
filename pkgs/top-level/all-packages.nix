@@ -6151,7 +6151,7 @@ let
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
   xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested {
-    inherit (xorg) fontsproto renderproto utilmacros xorgserver xproto;
+    inherit (xorg) fontsproto renderproto utilmacros xorgserver;
   };
 
   xf86_video_nouveau = callPackage ../os-specific/linux/xf86-video-nouveau {
