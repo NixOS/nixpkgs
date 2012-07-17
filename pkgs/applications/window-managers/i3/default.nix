@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutil bison xcbutilwm
     libstartup_notification libX11 pcre libev yajl flex libXcursor perl ];
 
+  patchPhase = "patchShebangs .";
+
   configurePhase = "makeFlags=PREFIX=$out";
 
   meta = {
