@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ftp/sftp client with readline, autocompletion and bookmarks";
     homepage = http://www.yafc-ftp.com;
-    maintainers = [ "Carles Pagès <page@cubata.homelinux.net>" ];
+    maintainers = [ stdenv.lib.maintainers.page ];
     license = "GPLv2+";
   };
 }
