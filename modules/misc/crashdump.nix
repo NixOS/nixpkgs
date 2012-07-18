@@ -54,7 +54,7 @@ in
       '';
       kernelParams = [
        "crashkernel=64M"
-       "nmi_watchdog=1"
+       "nmi_watchdog=panic"
       ];
       kernelPackages = mkOverride 50 (crashdump.kernelPackages // {
         kernel = crashdump.kernelPackages.kernel.override 
@@ -64,6 +64,8 @@ in
                 CRASH_DUMP y
                 DEBUG_INFO y
                 PROC_VMCORE y
+                LOCKUP_DETECTOR y
+                HARDLOCKUP_DETECTOR y
               '';
           });
       });
