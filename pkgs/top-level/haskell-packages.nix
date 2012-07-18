@@ -730,6 +730,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     OpenGL = self.OpenGL25;
   };
 
+  glpkHs = callPackage ../development/libraries/haskell/glpk-hs {};
+
   GLURaw = callPackage ../development/libraries/haskell/GLURaw {};
 
   GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {};
