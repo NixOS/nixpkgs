@@ -473,6 +473,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
+  brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
+
   bson = callPackage ../development/libraries/haskell/bson {};
 
   byteorder = callPackage ../development/libraries/haskell/byteorder {};
@@ -583,6 +585,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
+
+  dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
+
+  dataMemocombinators = callPackage ../development/libraries/haskell/data-memocombinators {};
 
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
@@ -930,6 +936,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
 
+  IOSpec = callPackage ../development/libraries/haskell/IOSpec {};
+
   ioStorage = callPackage ../development/libraries/haskell/io-storage {};
 
   irc = callPackage ../development/libraries/haskell/irc {
@@ -963,6 +971,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
+  lambdabot = callPackage ../development/libraries/haskell/lambdabot {};
+
+  lambdabotUtils = callPackage ../development/libraries/haskell/lambdabot-utils {};
+
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
@@ -978,6 +990,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
+
+  logict = callPackage ../development/libraries/haskell/logict {};
 
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
@@ -1070,11 +1084,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   NumInstances = callPackage ../development/libraries/haskell/NumInstances {};
 
+  numbers = callPackage ../development/libraries/haskell/numbers {};
+
   numtype = callPackage ../development/libraries/haskell/numtype {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
   ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
+
+  oeis = callPackage ../development/libraries/haskell/oeis {};
 
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
 
@@ -1343,6 +1361,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ShellacReadline = callPackage ../development/libraries/haskell/Shellac/Shellac-readline.nix {};
 
+  show = callPackage ../development/libraries/haskell/show {};
+
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   split = callPackage ../development/libraries/haskell/split {};
@@ -1454,6 +1474,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
+
+  unlambda = callPackage ../development/libraries/haskell/unlambda {};
 
   unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
 
