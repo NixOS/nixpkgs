@@ -165,7 +165,7 @@ rec {
              then []
              else let x = head xs;
                       y = if elem x acc then [] else [x];
-                  in go (y ++ tail xs) (y ++ acc);
+                  in y ++ go (tail xs) (y ++ acc);
     in go inputList acc;
 
   uniqListExt = {inputList, outputList ? [],
