@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, freetype, libXft, pango, fontconfig }:
+
 stdenv.mkDerivation rec {
   version = "2.3.1";
   name = "silgraphite-2.3.1";
@@ -13,8 +14,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2";
 
   meta = {
-    description = ''An advanced font engine'';
-    maintainers = with stdenv.lib.maintainers; [raskin];
-    platforms = with stdenv.lib.maintainers; linux;
+    description = "An advanced font engine";
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
