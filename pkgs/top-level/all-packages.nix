@@ -5445,9 +5445,7 @@ let
     inherit (xlibs) xproto;
   };
 
-  dmraid = builderDefsPackage ../os-specific/linux/dmraid {
-    inherit devicemapper;
-  };
+  dmraid = callPackage ../os-specific/linux/dmraid { };
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
