@@ -2522,6 +2522,8 @@ let
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
 
+  tbb = callPackage ../development/libraries/tbb { };
+
   tinycc = callPackage ../development/compilers/tinycc { };
 
   urweb = callPackage ../development/compilers/urweb { };
