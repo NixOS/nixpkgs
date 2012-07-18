@@ -11,6 +11,6 @@ cabal.mkDerivation (self: {
     description = "Brainfuck interpreter";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
-

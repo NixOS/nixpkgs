@@ -15,5 +15,6 @@ cabal.mkDerivation (self: {
     description = "Utility libraries for the advanced IRC bot, Lambdabot";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
