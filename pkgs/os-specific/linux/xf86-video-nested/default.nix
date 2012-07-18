@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = git://anongit.freedesktop.org/xorg/driver/xf86-video-nested;
     rev = "fceee1716625badf698ca27dd5788a4deb8533bc";
-    sha256 = ""; 
+    sha256 = "6b3544ddcf40602364fd0e528f6e677c37ef8d08f6c4e756caea7e29abf200f7"; 
   };
 
   # Fixed in e123277d10337a1c3b853118df0d1becdddf3b77
