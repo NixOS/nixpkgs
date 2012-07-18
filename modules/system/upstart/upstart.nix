@@ -487,11 +487,11 @@ in
     services.dbus.packages = [ upstart ];
 
     system.activationScripts.chownJobLogs = stringAfter ["var"] 
-    (concatMapStrings (job: ''
-      touch /var/log/upstart/${job.name}
-      ${optionalString (job.setuid != "") "chown ${job.setuid} /var/log/upstart/${job.name}"}
-      ${optionalString (job.setgid != "") "chown :${job.setgid} /var/log/upstart/${job.name}"}
-    '') (attrValues config.jobs));
+      (concatMapStrings (job: optionalString (job.setuid != "" || job.setgid != "") ''
+        touch /var/log/upstart/${job.name}
+        ${optionalString (job.setuid != "") "chown ${job.setuid} /var/log/upstart/${job.name}"}
+        ${optionalString (job.setgid != "") "chown :${job.setgid} /var/log/upstart/${job.name}"}
+      '') (attrValues config.jobs));
 
   };
 
