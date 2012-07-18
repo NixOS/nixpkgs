@@ -7100,7 +7100,7 @@ let
   mcomix = callPackage ../applications/graphics/mcomix { };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    inherit (pythonPackages) curses;
+    inherit (pythonPackages) curses docutils;
     guiSupport = false;		# use mercurialFull to get hgk GUI
   };
 
