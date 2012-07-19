@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     scons PREFIX=$out LIBDIR=$out/lib SHAREDIR=$out/share/libffado \
       PYPKGDIR=$out/$PYLIBSUFFIX install
 
+    sed -e "s#/usr/local#$out#g" -i $out/bin/ffado-diag
+
     PYDIR=$out/$PYLIBSUFFIX
     wrapProgram $out/bin/ffado-mixer --prefix PYTHONPATH : \
       $PYTHONPATH:$PYDIR:${pyqt4}/$LIBSUFFIX:${pythonDBus}/$LIBSUFFIX:

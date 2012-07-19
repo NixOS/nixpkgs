@@ -158,14 +158,15 @@ rec {
         (tail x))))) condList)) ;
         
 
-  # !!! This function has O(n^2) performance, so you probably don't want to use it!
-  uniqList = {inputList, outputList ? []}:
-        if (inputList == []) then outputList else
-        let x=head inputList; 
-        newOutputList = outputList ++
-         (if elem x outputList then [] else [x]);
-        in uniqList {outputList=newOutputList; 
-                inputList = (tail inputList);};
+  # This function has O(n^2) performance.
+  uniqList = {inputList, acc ? []} :
+    let go = xs : acc :
+             if xs == []
+             then []
+             else let x = head xs;
+                      y = if elem x acc then [] else [x];
+                  in y ++ go (tail xs) (y ++ acc);
+    in go inputList acc;
 
   uniqListExt = {inputList, outputList ? [],
     getter ? (x : x), compare ? (x: y: x==y)}:
@@ -214,16 +215,22 @@ rec {
   modifySumArgs = f: x: innerModifySumArgs f x {};
 
 
-  innerClosePropagation = ready: list: if list == [] then ready else
-    if ! isAttrs (head list) then
-      /* builtins.trace ("not an attrSet: ${lib.showVal (head list)}") */
-        innerClosePropagation ready (tail list)
-    else
-      innerClosePropagation 
-        (ready ++ [(head list)])
-        ((tail list) 
-           ++ (maybeAttrNullable "propagatedBuildInputs" [] (head list))
-           ++ (maybeAttrNullable "propagatedBuildNativeInputs" [] (head list)));
+  innerClosePropagation = acc : xs :
+    if xs == []
+    then acc
+    else let y  = head xs;
+             ys = tail xs;
+         in if ! isAttrs y
+            then innerClosePropagation acc ys
+            else let acc' = [y] ++ acc;
+                 in innerClosePropagation
+                      acc'
+                      (uniqList { inputList = (maybeAttrNullable "propagatedBuildInputs" [] y)
+                                           ++ (maybeAttrNullable "propagatedBuildNativeInputs" [] y)
+                                           ++ ys;
+                                  acc = acc';
+                                }
+                      );
 
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 

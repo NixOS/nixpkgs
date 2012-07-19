@@ -18,6 +18,9 @@ cabal.mkDerivation (self: {
     safe SHA syb tagsoup text time url utf8String xhtml xml xssSanitize
     zlib
   ];
+  patchPhase = ''
+    sed -i -e 's|hslogger.*,|hslogger,|' gitit.cabal
+  '';
   meta = {
     homepage = "http://gitit.net";
     description = "Wiki using happstack, git or darcs, and pandoc";

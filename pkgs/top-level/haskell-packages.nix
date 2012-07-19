@@ -126,7 +126,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.5 ok
     html         = self.html_1_0_1_2;           # 7.5 ok
     HTTP         = self.HTTP_4000_2_3;          # 7.5 ok
-    HUnit        = self.HUnit_1_2_4_3;          # 7.5 ok
+    HUnit        = self.HUnit_1_2_5_0;          # 7.5 ok
     mtl          = self.mtl_2_1_2;              # 7.5 ok
     network      = self.network_2_3_0_14;       # 7.5 ok
     OpenGL       = self.OpenGL_2_2_3_1;         # 7.5 fail
@@ -473,6 +473,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
+  brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
+
   bson = callPackage ../development/libraries/haskell/bson {};
 
   byteorder = callPackage ../development/libraries/haskell/byteorder {};
@@ -583,6 +585,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
+
+  dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
+
+  dataMemocombinators = callPackage ../development/libraries/haskell/data-memocombinators {};
 
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
@@ -729,6 +735,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     GLUT   = self.GLUT23;
     OpenGL = self.OpenGL25;
   };
+
+  glpkHs = callPackage ../development/libraries/haskell/glpk-hs {};
 
   GLURaw = callPackage ../development/libraries/haskell/GLURaw {};
 
@@ -908,7 +916,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HUnit_1_2_2_3 = callPackage ../development/libraries/haskell/HUnit/1.2.2.3.nix {};
   HUnit_1_2_4_2 = callPackage ../development/libraries/haskell/HUnit/1.2.4.2.nix {};
   HUnit_1_2_4_3 = callPackage ../development/libraries/haskell/HUnit/1.2.4.3.nix {};
-  HUnit = self.HUnit_1_2_4_3;
+  HUnit_1_2_5_0 = callPackage ../development/libraries/haskell/HUnit/1.2.5.0.nix {};
+  HUnit = self.HUnit_1_2_5_0;
 
   hxt = callPackage ../development/libraries/haskell/hxt {};
 
@@ -927,6 +936,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ioChoice = callPackage ../development/libraries/haskell/io-choice {};
 
   IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
+
+  IOSpec = callPackage ../development/libraries/haskell/IOSpec {};
 
   ioStorage = callPackage ../development/libraries/haskell/io-storage {};
 
@@ -961,6 +972,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
+  lambdabot = callPackage ../development/libraries/haskell/lambdabot {};
+
+  lambdabotUtils = callPackage ../development/libraries/haskell/lambdabot-utils {};
+
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
@@ -976,6 +991,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
+
+  logict = callPackage ../development/libraries/haskell/logict {};
 
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
@@ -1068,11 +1085,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   NumInstances = callPackage ../development/libraries/haskell/NumInstances {};
 
+  numbers = callPackage ../development/libraries/haskell/numbers {};
+
   numtype = callPackage ../development/libraries/haskell/numtype {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
   ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
+
+  oeis = callPackage ../development/libraries/haskell/oeis {};
 
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
 
@@ -1129,6 +1150,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   persistent = callPackage ../development/libraries/haskell/persistent {};
 
+  persistentPostgresql = callPackage ../development/libraries/haskell/persistent-postgresql {};
+
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
@@ -1140,6 +1163,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   polyparse = self.polyparse_1_8;
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
+
+  postgresqlLibpq = callPackage ../development/libraries/haskell/postgresql-libpq {
+    postgresql = pkgs.postgresql91;
+  };
+
+  postgresqlSimple = callPackage ../development/libraries/haskell/postgresql-simple {};
 
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
@@ -1333,6 +1362,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ShellacReadline = callPackage ../development/libraries/haskell/Shellac/Shellac-readline.nix {};
 
+  show = callPackage ../development/libraries/haskell/show {};
+
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   split = callPackage ../development/libraries/haskell/split {};
@@ -1444,6 +1475,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
+
+  unlambda = callPackage ../development/libraries/haskell/unlambda {};
 
   unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
 

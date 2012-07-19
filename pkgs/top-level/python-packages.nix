@@ -686,6 +686,24 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  flask = buildPythonPackage {
+    name = "flask-0.9";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/F/Flask/Flask-0.9.tar.gz";
+      md5 = "4a89ef2b3ab0f151f781182bd0cc8933";
+    };
+
+    propagatedBuildInputs = [ werkzeug jinja2 ];
+
+    meta = {
+      homepage = http://flask.pocoo.org/;
+      description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
+      license = "BSD";
+    };
+  };
+
+
   flup = buildPythonPackage (rec {
     name = "flup-1.0.2";
 
@@ -2586,6 +2604,22 @@ let pythonPackages = python.modules // rec {
     meta = {
       description = "Helper to test WSGI applications";
       homepage = http://pythonpaste.org/webtest/;
+    };
+  };
+
+
+  werkzeug = buildPythonPackage {
+    name = "werkzeug-0.8.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/W/Werkzeug/Werkzeug-0.8.3.tar.gz";
+      md5 = "12aa03e302ce49da98703938f257347a";
+    };
+
+    meta = {
+      homepage = http://werkzeug.pocoo.org/;
+      description = "A WSGI utility library for Python";
+      license = "BSD";
     };
   };
 
