@@ -66,15 +66,8 @@ with pkgs.lib;
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];
 
-    # Send all of /var/log/messages to the serial port.
-    services.syslogd.extraConfig = "*.* /dev/ttyS0";
-
-    # Disable "-- MARK --" messages.  These prevent hanging tests from
-    # being killed after 1 hour of silence.
-    services.syslogd.extraParams = [ "-m 0" ];
-
-    # Don't run klogd.  Kernel messages appear on the serial console anyway.
-    jobs.klogd.startOn = mkOverride 50 "";
+    # Log everything to the serial console.
+    services.journald.console = "/dev/console";
 
     # Prevent tests from accessing the Internet.
     networking.defaultGateway = mkOverride 150 "";

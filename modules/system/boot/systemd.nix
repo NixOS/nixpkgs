@@ -295,21 +295,21 @@ let
     
   units = pkgs.runCommand "units" { preferLocalBuild = true; }
     ''
-      mkdir -p $out/system
+      mkdir -p $out
       for i in ${toString upstreamUnits}; do
         fn=${systemd}/example/systemd/system/$i
         [ -e $fn ]
         if [ -L $fn ]; then
-          cp -pd $fn $out/system/
+          cp -pd $fn $out/
         else
-          ln -s $fn $out/system
+          ln -s $fn $out/
         fi
       done
       
       for i in ${toString upstreamWants}; do
         fn=${systemd}/example/systemd/system/$i
         [ -e $fn ]
-        x=$out/system/$(basename $fn)
+        x=$out/$(basename $fn)
         mkdir $x
         for i in $fn/*; do
           y=$x/$(basename $i)
@@ -319,16 +319,16 @@ let
       done
       
       for i in ${toString nixosUnits}; do
-        cp $i/* $out/system
+        cp $i/* $out/
       done
 
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
-            mkdir -p $out/system/${name2}.wants
-            ln -sfn ../${name} $out/system/${name2}.wants/
+            mkdir -p $out/${name2}.wants
+            ln -sfn ../${name} $out/${name2}.wants/
           '') unit.wantedBy) cfg.units)}
 
-      ln -s ${cfg.defaultUnit} $out/system/default.target
+      ln -s ${cfg.defaultUnit} $out/default.target
     ''; # */
     
 in
@@ -373,6 +373,18 @@ in
       type = types.uniq types.string;
       description = "Default unit started when the system boots.";
     };
+
+    services.journald.logKernelMessages = mkOption {
+      default = true;
+      type = types.bool;
+      description = "Whether to log kernel messages.";
+    };
+    
+    services.journald.console = mkOption {
+      default = "";
+      type = types.uniq types.string;
+      description = "If non-empty, write log messages to the specified TTY device.  Defaults to /dev/console.";
+    };
     
   };
 
@@ -389,7 +401,20 @@ in
   
     environment.etc =
       [ { source = units;
-          target = "systemd";
+          target = "systemd/system";
+        }
+        { source = pkgs.writeText "journald.conf"
+            ''
+              [Journal]
+              ${optionalString (config.services.journald.console != "") ''
+                ForwardToConsole=yes
+                TTYPath=${config.services.journald.console}
+              ''}
+              ${optionalString config.services.journald.logKernelMessages ''
+                ImportKernel=yes
+              ''}
+            '';
+          target = "systemd/journald.conf";
         }
       ];
 
