@@ -1,4 +1,5 @@
 { stdenv, fetchurl, pkgconfig, yasm, zlib, bzip2, alsaLib
+, jackSupport ? false, jackaudio ? null
 , mp3Support ? true, lame ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
@@ -12,6 +13,7 @@
 , x11grabSupport ? false, libXext ? null, libXfixes ? null
 }:
 
+assert jackSupport -> jackaudio != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
 assert vorbisSupport -> libvorbis != null;
@@ -54,6 +56,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib ]
+    ++ stdenv.lib.optional jackSupport jackaudio
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional speexSupport speex
     ++ stdenv.lib.optional theoraSupport libtheora
