@@ -2800,11 +2800,11 @@ let pythonPackages = python.modules // rec {
   };
 
   larch = buildPythonPackage rec {
-    name = "larch-0.31";
+    name = "larch-1.20120527";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_0.31.orig.tar.gz";
-      sha256 = "18c243a45b35974c304c9b3d8b05718f1272f14c29cd3c9010800cf821064444";
+      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_1.20120527.orig.tar.gz";
+      sha256 = "2865a1bfa6bd276bf746e8e7cb73d5199d0b6d00045d8c92e158626687d3bbe1";
     };
 
     buildInputs = [ sphinx ];
