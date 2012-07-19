@@ -104,6 +104,7 @@ in
 
     services.syslogd.extraParams = optional cfg.enableNetworkInput "-r";
 
+    # FIXME: restarting syslog seems to break journal logging.
     boot.systemd.services."syslog.service" =
       { description = "Syslog daemon";
       

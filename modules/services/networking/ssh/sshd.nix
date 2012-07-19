@@ -330,7 +330,7 @@ in
       };
     
     boot.systemd.services."sshd.service" =
-      { description = "SSH daemon";
+      { description = "SSH Daemon";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "set-ssh-keys.service" ];
