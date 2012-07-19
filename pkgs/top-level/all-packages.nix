@@ -131,7 +131,7 @@ let
   # `__overrides' is a magic attribute that causes the attributes in
   # its value to be added to the surrounding `rec'.  We'll remove this
   # eventually.
-  inherit __overrides;
+  inherit __overrides pkgs;
 
 
   # We use `callPackage' to be able to omit function arguments that
