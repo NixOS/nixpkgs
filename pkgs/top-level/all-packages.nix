@@ -1120,6 +1120,8 @@ let
 
   netpbm = callPackage ../tools/graphics/netpbm { };
 
+  netrw = callPackage ../tools/networking/netrw { };
+
   netselect = callPackage ../tools/networking/netselect { };
 
   networkmanager = callPackage ../tools/networking/network-manager { };
