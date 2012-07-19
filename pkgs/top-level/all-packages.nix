@@ -6243,6 +6243,8 @@ let
     inherit fontforge;
   };
 
+  lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
+
   lmodern = callPackage ../data/fonts/lmodern { };
 
   manpages = callPackage ../data/documentation/man-pages { };
