@@ -255,6 +255,8 @@ let
       KillSignal=SIGHUP
     '';
 
+  makeJobScript = name: content: "${pkgs.writeScriptBin name content}/bin/${name}";
+
   serviceToUnit = name: def:
     { inherit (def) wantedBy;
 
@@ -274,14 +276,14 @@ let
           ${concatMapStrings (n: "Environment=${n}=${getAttr n def.environment}\n") (attrNames def.environment)}
           
           ${optionalString (def.preStart != "") ''
-            ExecStartPre=${pkgs.writeScript "${name}-prestart.sh" ''
+            ExecStartPre=${makeJobScript "${name}-prestart.sh" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.preStart}
             ''}
           ''}
 
           ${optionalString (def.script != "") ''
-            ExecStart=${pkgs.writeScript "${name}.sh" ''
+            ExecStart=${makeJobScript "${name}.sh" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.script}
             ''}

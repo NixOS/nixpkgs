@@ -12,6 +12,8 @@ let
   groupExists = g:
     (g == "") || any (gg: gg.name == g) (attrValues config.users.extraGroups);
 
+  makeJobScript = name: content: "${pkgs.writeScriptBin name content}/bin/${name}";
+
   # From a job description, generate an systemd unit file.
   makeUnit = job:
 
@@ -20,13 +22,13 @@ let
 
       env = config.system.upstartEnvironment // job.environment;
 
-      preStartScript = pkgs.writeScript "${job.name}-pre-start.sh"
+      preStartScript = makeJobScript "${job.name}-pre-start.sh"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${job.preStart}
         '';
 
-      startScript = pkgs.writeScript "${job.name}-start.sh"
+      startScript = makeJobScript "${job.name}-start.sh"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${if job.script != "" then job.script else ''
@@ -34,19 +36,19 @@ let
           ''}
         '';
 
-      postStartScript = pkgs.writeScript "${job.name}-post-start.sh"
+      postStartScript = makeJobScript "${job.name}-post-start.sh"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${job.postStart}
         '';
 
-      preStopScript = pkgs.writeScript "${job.name}-pre-stop.sh"
+      preStopScript = makeJobScript "${job.name}-pre-stop.sh"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${job.preStop}
         '';
 
-      postStopScript = pkgs.writeScript "${job.name}-post-stop.sh"
+      postStopScript = makeJobScript "${job.name}-post-stop.sh"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${job.postStop}
