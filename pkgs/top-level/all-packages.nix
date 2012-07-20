@@ -7609,7 +7609,10 @@ let
   };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
-  virtmanager = callPackage ../applications/virtualization/virt-manager {};
+  virtmanager = callPackage ../applications/virtualization/virt-manager {
+    inherit (gnome) gnome_python; 
+  };
+
   virtinst = callPackage ../applications/virtualization/virtinst {};
 
   virtualgl = callPackage ../tools/X11/virtualgl { };

@@ -2521,8 +2521,6 @@ let pythonPackages = python.modules // rec {
 
     propagatedBuildInputs = [ pycurl ];
 
-    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
-
     meta = {
       homepage = "urlgrabber.baseurl.org";
       license = "LGPLv2+";
