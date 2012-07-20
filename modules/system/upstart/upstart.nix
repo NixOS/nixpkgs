@@ -360,7 +360,7 @@ in
 
   config = {
 
-    system.build.upstart = upstart;
+    system.build.upstart = "/no-upstart";
 
     boot.systemd.services =
       flip mapAttrs' config.jobs (name: job:
