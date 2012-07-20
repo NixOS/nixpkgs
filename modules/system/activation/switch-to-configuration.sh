@@ -75,91 +75,15 @@ fi
 # virtual console 1 and we restart the "tty1" job.
 trap "" SIGHUP
 
-jobsDir=$(readlink -f @out@/etc/init)
-
-# Stop all currently running jobs that are not in the new Upstart
-# configuration.  (Here "running" means all jobs that are not in the
-# stop/waiting state.)
-for job in $(initctl list | sed -e '/ stop\/waiting/ d; /^[^a-z]/ d; s/^\([^ ]\+\).*/\1/' | sort); do
-    if ! [ -e "$jobsDir/$job.conf" ] ; then
-        echo "stopping obsolete job ‘$job’..."
-        stop --quiet "$job" || true
-    fi
-done
-
 # Activate the new configuration (i.e., update /etc, make accounts,
 # and so on).
 echo "activating the configuration..."
 @out@/activate @out@
 
-# Make Upstart reload its jobs.
-initctl reload-configuration
+# FIXME: Re-exec systemd if necessary.
 
-# Allow Upstart jobs to react intelligently to a config change.
-initctl emit config-changed
-
-declare -A tasks=(@tasks@)
-declare -A noRestartIfChanged=(@noRestartIfChanged@)
-
-start_() {
-    local job="$1"
-    if start --quiet "$job"; then
-        # Handle services that cancel themselves.
-        if ! [ -n "${tasks[$job]}" ]; then
-            local status=$(status "$job")
-            [[ "$status" =~ start/running ]] || echo "job ‘$job’ failed to start!"
-        fi
-    fi
-}
-
-log() {
-    echo "$@" >&2 || true
-}
-
-# Restart all running jobs that have changed.  (Here "running" means
-# all jobs that don't have a "stop" goal.)  We use the symlinks in
-# /var/run/upstart-jobs (created by each job's pre-start script) to
-# determine if a job has changed.
-for job in @jobs@; do
-    status=$(status "$job")
-    if ! [[ "$status" =~ start/ ]]; then continue; fi
-    if [ "$(readlink -f "$jobsDir/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ]; then continue; fi
-    if [ -n "${noRestartIfChanged[$job]}" ]; then
-        log "not restarting changed service ‘$job’"
-        continue
-    fi
-    log "restarting changed service ‘$job’..."
-    # Note: can't use "restart" here, since that only restarts the
-    # job's main process.
-    stop --quiet "$job" || true
-    start_ "$job" || true
-done
-
-# Start all jobs that are not running but should be.  The "should be"
-# criterion is tricky: the intended semantics is that we end up with
-# the same jobs as after a reboot.  If it's a task, start it if it
-# differs from the previous instance of the same task; if it wasn't
-# previously run, don't run it.  If it's a service, only start it if
-# it has a "start on" condition.
-for job in @jobs@; do
-    status=$(status "$job")
-    if ! [[ "$status" =~ stop/ ]]; then continue; fi
-
-    if [ -n "${tasks[$job]}" ]; then
-        if [ ! -e "/var/run/upstart-jobs/$job" -o \
-            "$(readlink -f "$jobsDir/$job.conf")" = "$(readlink -f "/var/run/upstart-jobs/$job")" ];
-        then continue; fi
-        if [ -n "${noRestartIfChanged[$job]}" ]; then continue; fi
-        log "starting task ‘$job’..."
-        start --quiet "$job" || true
-    else
-        if ! grep -q "^start on" "$jobsDir/$job.conf"; then continue; fi
-        log "starting service ‘$job’..."
-        start_ "$job" || true
-    fi
-    
-done
+# Make systemd reload its jobs.
+systemctl daemon-reload
 
 # Signal dbus to reload its configuration.
-dbusPid=$(initctl status dbus 2> /dev/null | sed -e 's/.*process \([0-9]\+\)/\1/;t;d')
-[ -n "$dbusPid" ] && kill -HUP "$dbusPid"
+systemctl reload dbus.service || true
