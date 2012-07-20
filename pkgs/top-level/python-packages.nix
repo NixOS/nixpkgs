@@ -2067,11 +2067,6 @@ let pythonPackages = python.modules // rec {
 
     doCheck = false;
 
-    postInstall = ''
-      find $out -name easy-install.pth | xargs rm -v
-      find $out -name 'site.py*' | xargs rm -v
-    '';
-
     meta = {
       description = "RDFLib is a Python library for working with RDF, a simple yet powerful language for representing information.";
       homepage = http://www.rdflib.net/;
@@ -2512,6 +2507,30 @@ let pythonPackages = python.modules // rec {
       homepage = http://pypi.python.org/pypi/unittest2;
     };
   };
+
+
+  urlgrabber =  buildPythonPackage rec {
+    name = "urlgrabber-3.9.1";
+
+    src = fetchurl {
+      url = "http://urlgrabber.baseurl.org/download/${name}.tar.gz";
+      sha256 = "4437076c8708e5754ea04540e46c7f4f233734ee3590bb8a96389264fb0650d0";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = [ pycurl ];
+
+    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
+
+    meta = {
+      homepage = "urlgrabber.baseurl.org";
+      license = "LGPLv2+";
+      description = "Python module for downloading files";
+      maintainers = [ stdenv.lib.maintainers.qknight ];
+    };
+  };
+
 
   urwid = buildPythonPackage (rec {
     name = "urwid-1.0.1";
