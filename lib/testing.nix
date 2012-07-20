@@ -158,7 +158,8 @@ rec {
         wrapProgram $out/bin/nixos-run-vms \
           --add-flags "$vms" \
           --set tests '"startAll; joinAll;"' \
-          --set VLANS '"${toString vlans}"'
+          --set VLANS '"${toString vlans}"' \
+          ${lib.optionalString (builtins.length vms == 1) "--set USE_SERIAL 1"}
       ''; # "
 
     test = runTests driver;

@@ -50,6 +50,7 @@ sub new {
         stateDir => "$tmpDir/vm-state-$name",
         monitor => undef,
         log => $args->{log},
+        redirectSerial => $args->{redirectSerial} // 1,
     };
 
     mkdir $self->{stateDir}, 0700;
@@ -117,10 +118,12 @@ sub start {
         close $serialP;
         close $monitorS;
         close $shellS;
-        open NUL, "</dev/null" or die;
-        dup2(fileno(NUL), fileno(STDIN));
-        dup2(fileno($serialC), fileno(STDOUT));
-        dup2(fileno($serialC), fileno(STDERR));
+        if ($self->{redirectSerial}) {
+            open NUL, "</dev/null" or die;
+            dup2(fileno(NUL), fileno(STDIN));
+            dup2(fileno($serialC), fileno(STDOUT));
+            dup2(fileno($serialC), fileno(STDERR));
+        }
         $ENV{TMPDIR} = $self->{stateDir};
         $ENV{USE_TMPDIR} = 1;
         $ENV{QEMU_OPTS} =

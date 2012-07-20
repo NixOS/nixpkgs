@@ -50,7 +50,7 @@ my $context = "";
 
 sub createMachine {
     my ($args) = @_;
-    my $vm = Machine->new({%{$args}, log => $log});
+    my $vm = Machine->new({%{$args}, log => $log, redirectSerial => ($ENV{USE_SERIAL} // "0") ne "1"});
     $vms{$vm->name} = $vm;
     return $vm;
 }
