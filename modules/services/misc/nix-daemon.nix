@@ -76,7 +76,7 @@ in
           gc-keep-outputs = true
           gc-keep-derivations = true
         ";
-        description = "Additional text appended to <filename>nix.conf<filename>.";
+        description = "Additional text appended to <filename>nix.conf</filename>.";
       };
 
       distributedBuilds = mkOption {
