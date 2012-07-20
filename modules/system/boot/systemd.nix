@@ -196,10 +196,12 @@ let
 
       # Hibernate / suspend.
       "hibernate.target"
-      "systemd-hibernate.service"
       "suspend.target"
-      "systemd-suspend.service"
       "sleep.target"
+      "systemd-hibernate.service"
+      "systemd-suspend.service"
+      "systemd-shutdownd.socket"
+      "systemd-shutdownd.service"
 
       # Reboot stuff.
       "reboot.target"
