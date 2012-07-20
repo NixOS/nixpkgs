@@ -87,7 +87,7 @@ with pkgs.lib;
         TTYPath=/dev/%I
         TTYReset=yes
         TTYVHangup=yes
-        TTYVTDisallocate=yes
+        TTYVTDisallocate=yes # set to no to prevent clearing the screen
         KillMode=process
         IgnoreSIGPIPE=no
 
