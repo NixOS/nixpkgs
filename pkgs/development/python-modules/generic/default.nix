@@ -20,6 +20,15 @@
 , installCommand ?
     ''
       easy_install --prefix="$out" .
+
+      # A pth file might have been generated to load the package from
+      # within its own site-packages, rename this package not to
+      # collide with others.
+      eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
+      if [ -e "$eapth" ]; then
+          # move colliding easy_install.pth to specifically named one
+          mv "$eapth" $(dirname "$eapth")/${name}.pth
+      fi
     ''
     
 , buildPhase ? "true"
