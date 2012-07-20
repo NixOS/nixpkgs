@@ -2541,6 +2541,8 @@ let pythonPackages = python.modules // rec {
 
     patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];
 
+    propagatedBuildInputs = [ python.modules.readline python.modules.sqlite3 ];
+
     doCheck = false;
 
     meta = with stdenv.lib; {
