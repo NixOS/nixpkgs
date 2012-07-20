@@ -21,6 +21,7 @@ with pkgs.lib;
         '';
       };
 
+      # FIXME: not implemented with systemd
       waitOnMounts = mkOption {
         default = false;
         description = ''
@@ -56,6 +57,9 @@ with pkgs.lib;
 
   config = {
 
+    # FIXME: these are mostly copy/pasted from the systemd sources,
+    # which some small modifications, which is annoying.
+
     # Generate a separate job for each tty.
     boot.systemd.units."getty@.service".text =
       ''
@@ -69,6 +73,8 @@ with pkgs.lib;
         # getty.target didn't actually pull it in.
         Before=getty.target
         IgnoreOnIsolate=yes
+
+        ConditionPathExists=/dev/tty0
 
         [Service]
         Environment=TERM=linux
@@ -90,6 +96,39 @@ with pkgs.lib;
         KillSignal=SIGHUP
       '';
     
+    boot.systemd.units."serial-getty@.service".text =
+      ''
+        [Unit]
+        Description=Serial Getty on %I
+        Documentation=man:agetty(8) man:systemd-getty-generator(8)
+        BindsTo=dev-%i.device
+        After=dev-%i.device systemd-user-sessions.service plymouth-quit-wait.service
+
+        # If additional gettys are spawned during boot then we should make
+        # sure that this is synchronized before getty.target, even though
+        # getty.target didn't actually pull it in.
+        Before=getty.target
+        IgnoreOnIsolate=yes
+
+        [Service]
+        Environment=TERM=linux
+        Environment=LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive
+        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --login-program ${pkgs.shadow}/bin/login %I 115200,38400,9600
+        Type=idle
+        Restart=always
+        RestartSec=0
+        UtmpIdentifier=%I
+        TTYPath=/dev/%I
+        TTYReset=yes
+        TTYVHangup=yes
+        KillMode=process
+        IgnoreSIGPIPE=no
+
+        # Some login implementations ignore SIGTERM, so we send SIGHUP
+        # instead, to ensure that login terminates cleanly.
+        KillSignal=SIGHUP
+      '';
+
     environment.etc = singleton
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
