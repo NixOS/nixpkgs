@@ -334,6 +334,8 @@ let
           '') unit.wantedBy) cfg.units)}
 
       ln -s ${cfg.defaultUnit} $out/default.target
+
+      ln -s ../getty@tty1.service $out/multi-user.target.wants/
     ''; # */
     
 in
