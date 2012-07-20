@@ -122,7 +122,7 @@ let
 
       echo -n "$kernelParams" > $out/kernel-params
       echo -n "$configurationName" > $out/configuration-name
-      #echo -n "${toString config.system.build.upstart.interfaceVersion}" > $out/upstart-interface-version
+      echo -n "systemd ${toString config.system.build.systemd.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosVersion" > $out/nixos-version
 
       mkdir $out/fine-tune

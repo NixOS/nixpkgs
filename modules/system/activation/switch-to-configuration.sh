@@ -59,16 +59,16 @@ fi
 # Activate the new configuration.
 if [ "$action" != switch -a "$action" != test ]; then exit 0; fi
 
-oldVersion=$(cat /run/current-system/upstart-interface-version 2> /dev/null || echo 0)
-newVersion=$(cat @out@/upstart-interface-version 2> /dev/null || echo 0)
+oldVersion="$(cat /run/current-system/init-interface-version 2> /dev/null || echo "")"
+newVersion="$(cat @out@/init-interface-version)"
 
-if test "$oldVersion" -ne "$newVersion"; then
+if [ "$oldVersion" != "$newVersion" ]; then
         cat <<EOF
-Warning: the new NixOS configuration has an Upstart version that is
-incompatible with the current version.  The new configuration won't
-take effect until you reboot the system.
+Warning: the new NixOS configuration has an ‘init’ that is
+incompatible with the current configuration.  The new configuration
+won't take effect until you reboot the system.
 EOF
-        exit 1
+        exit 100 # denotes "reboot required" to Charon
 fi
 
 # Ignore SIGHUP so that we're not killed if we're running on (say)
