@@ -51,20 +51,19 @@ let
       ''}
 
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
-          # Restart ntpd.  (The "ip-up" event below will trigger the
-          # restart.)  We need to restart it to make sure that it will
-          # actually do something: if ntpd cannot resolve the server
-          # hostnames in its config file, then it will never do
+          # Restart ntpd.  We need to restart it to make sure that it
+          # will actually do something: if ntpd cannot resolve the
+          # server hostnames in its config file, then it will never do
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation.
-          ${config.system.build.upstart}/sbin/initctl stop ntpd
+          ${config.system.build.systemd}/bin/systemctl restart ntpd.service
 
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-up $params
+          #${config.system.build.upstart}/sbin/initctl emit -n ip-up $params
       fi
 
-      if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-down $params
-      fi
+      #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
+      #    ${config.system.build.upstart}/sbin/initctl emit -n ip-down $params
+      #fi
     '';
 
 in
@@ -97,7 +96,9 @@ in
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
-        exec = "dhcpcd --config ${dhcpcdConf} --nobackground";
+        daemonType = "fork";
+
+        exec = "dhcpcd --config ${dhcpcdConf}";
       };
 
     environment.systemPackages = [ dhcpcd ];
