@@ -157,6 +157,7 @@ let
       # Journal.
       "systemd-journald.socket"
       "systemd-journald.service"
+      "systemd-journal-flush.service"
       "syslog.socket"
 
       # SysV init compatibility.
