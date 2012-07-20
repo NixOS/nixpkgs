@@ -1,5 +1,5 @@
 { stdenv, fetchsvn, alsaLib, asio, autoconf, automake, bison
-, jackaudio, libgig, libsndfile, libtool , pkgconfig }:
+, jackaudio, libgig, libsndfile, libtool, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "linuxsampler-svn-${version}";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ 
    alsaLib asio autoconf automake bison jackaudio libgig libsndfile
-   libtool pkgconfig 
+   libtool lv2 pkgconfig
   ];
 
   meta = with stdenv.lib; {

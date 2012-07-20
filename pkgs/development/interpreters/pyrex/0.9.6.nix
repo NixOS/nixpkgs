@@ -1,26 +1,19 @@
-{ stdenv, fetchurl, builderDefs, python }:
+{ stdenv, fetchurl, pythonPackages }:
 
-let
+let version = "0.9.6.4"; in
 
-  localDefs = builderDefs.passthru.function {
+pythonPackages.buildPythonPackage rec {
+  name = "pyrex-${version}";
 
-    src = fetchurl {
-      url = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/oldtar/Pyrex-0.9.6.4.tar.gz;
-      sha256 = "18pd9f8al3l6i27cc0ddhgg7hxf28lnfs75x4a8jzscydxgiq5a8";
-    };
-
-    buildInputs = [python];
-
+  src = fetchurl {
+    url = "http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/oldtar/Pyrex-${version}.tar.gz";
+    sha256 = "18pd9f8al3l6i27cc0ddhgg7hxf28lnfs75x4a8jzscydxgiq5a8";
   };
 
-in with localDefs;
-        
-stdenv.mkDerivation rec {
-  name = "pyrex-0.9.6.4";
-  builder = writeScript (name + "-builder")
-    (textClosure localDefs [installPythonPackage doForceShare]);
+  doCheck = false;
+
   meta = {
-    description = "Python package compiler or something like that";
-    inherit src;
+    homepage = http://www.cosc.canterbury.ac.nz/greg.ewing/python/Pyrex/;
+    description = "A language for writing Python extension modules";
   };
 }

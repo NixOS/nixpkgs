@@ -33,12 +33,11 @@ let pythonPackages = python.modules // rec {
 
 
   afew = buildPythonPackage rec {
-    rev = "8abd64bfdcd83a486b2a3977c08fe071523b2551";
-    name = "afew-1.0pre${rev}";
+    name = "afew-1.0pre";
     src = fetchurl {
-      url = "https://github.com/teythoon/afew/tarball/${rev}";
+      url = "https://github.com/teythoon/afew/tarball/master";
       name = "${name}.tar.bz";
-      sha256 = "9b140d0eb0e5013419983604bb09a51f087a4abdf0a390c24a9596f867dc8c05";
+      sha256 = "949710f8dcf503f42f2a2d77ea71e48ccf70155a764f75ad29cc93edc120809b";
     };
 
     propagatedBuildInputs = [ notmuch pkgs.dbacl ];
@@ -60,18 +59,17 @@ let pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    version = "0.3.1";
-    name = "alot-${version}";
+    name = "alot-0.3.1";
 
     src = fetchurl {
-      url = "https://github.com/pazz/alot/tarball/${version}";
+      url = "https://github.com/pazz/alot/tarball/master";
       name = "${name}.tar.bz";
-      md5 = "6c5986d9192863879e95a3f8f30ccb75";
+      sha256 = "06683de36688615d3d526198c93133e1131897c888ffa31e83f1ad292eae57af";
     };
 
     doCheck = false;
 
-    propagatedBuildInputs = [ notmuch urwid twisted magic configobj ];
+    propagatedBuildInputs = [ notmuch urwid twisted magic configobj pygpgme ];
 
     postInstall = ''
       wrapProgram $out/bin/alot \
@@ -684,6 +682,24 @@ let pythonPackages = python.modules // rec {
     meta = {
       homepage = http://pypi.python.org/pypi/eventlet/;
       description = "A concurrent networking library for Python";
+    };
+  };
+
+
+  flask = buildPythonPackage {
+    name = "flask-0.9";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/F/Flask/Flask-0.9.tar.gz";
+      md5 = "4a89ef2b3ab0f151f781182bd0cc8933";
+    };
+
+    propagatedBuildInputs = [ werkzeug jinja2 ];
+
+    meta = {
+      homepage = http://flask.pocoo.org/;
+      description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
+      license = "BSD";
     };
   };
 
@@ -1667,6 +1683,29 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  pygpgme = buildPythonPackage rec {
+    version = "0.3";
+    name = "pygpgme-${version}";
+
+    src = fetchurl {
+      url = "https://launchpad.net/pygpgme/trunk/${version}/+download/${name}.tar.gz";
+      sha256 = "5fd887c407015296a8fd3f4b867fe0fcca3179de97ccde90449853a3dfb802e1";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = [ pkgs.gpgme ];
+
+    meta = {
+      homepage = "https://launchpad.net/pygpgme";
+      description = "A Python wrapper for the GPGME library.";
+      license = pkgs.lib.licenses.lgpl21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+
   pyparsing = buildPythonPackage rec {
     name = "pyparsing-1.5.6";
 
@@ -2569,6 +2608,22 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  werkzeug = buildPythonPackage {
+    name = "werkzeug-0.8.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/W/Werkzeug/Werkzeug-0.8.3.tar.gz";
+      md5 = "12aa03e302ce49da98703938f257347a";
+    };
+
+    meta = {
+      homepage = http://werkzeug.pocoo.org/;
+      description = "A WSGI utility library for Python";
+      license = "BSD";
+    };
+  };
+
+
   wxPython = wxPython28;
 
 
@@ -2685,11 +2740,11 @@ let pythonPackages = python.modules // rec {
   };
 
   cliapp = buildPythonPackage rec {
-    name = "cliapp-0.29";
+    name = "cliapp-1.20120630";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_0.29.orig.tar.gz";
-      sha256 = "4a3f2e1705c5e9ac5a80a460ae9bad8e88c0778f7013638eda39e3ee0dd008b2";
+      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_1.20120630.orig.tar.gz";
+      sha256 = "6beeb1fb3077561540094584ce36055266ac67b80f158b9b82fe4075096f4716";
     };
 
     buildInputs = [ sphinx ];
@@ -2725,11 +2780,11 @@ let pythonPackages = python.modules // rec {
   };
 
   ttystatus = buildPythonPackage rec {
-    name = "ttystatus-0.18";
+    name = "ttystatus-0.19";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.18.orig.tar.gz";
-      sha256 = "9fab747f3e1f474b66101354b06f943120d72d1f1e353b4692e7e6cca226b9cc";
+      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.19.orig.tar.gz";
+      sha256 = "7cc112a4783f2e0c354c5244f8e50b18733b5957677b56a755c1016e04c0c28d";
     };
 
     buildInputs = [ sphinx ];
@@ -2745,11 +2800,11 @@ let pythonPackages = python.modules // rec {
   };
 
   larch = buildPythonPackage rec {
-    name = "larch-0.31";
+    name = "larch-1.20120527";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_0.31.orig.tar.gz";
-      sha256 = "18c243a45b35974c304c9b3d8b05718f1272f14c29cd3c9010800cf821064444";
+      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_1.20120527.orig.tar.gz";
+      sha256 = "2865a1bfa6bd276bf746e8e7cb73d5199d0b6d00045d8c92e158626687d3bbe1";
     };
 
     buildInputs = [ sphinx ];

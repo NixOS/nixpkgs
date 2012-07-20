@@ -8,6 +8,7 @@
 , xvidSupport ? true, xvidcore ? null
 , vdpauSupport ? true, libvdpau ? null
 , faacSupport ? false, faac ? null
+, dc1394Support ? false, libdc1394 ? null
 }:
 
 assert speexSupport -> speex != null;
@@ -34,7 +35,6 @@ stdenv.mkDerivation rec {
     "--enable-gpl"
     "--enable-postproc"
     "--enable-swscale"
-    "--disable-ffserver"
     "--disable-ffplay"
     "--enable-shared"
     "--enable-runtime-cpudetect"
@@ -47,7 +47,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional x264Support "--enable-libx264"
     ++ stdenv.lib.optional xvidSupport "--enable-libxvid"
     ++ stdenv.lib.optional vdpauSupport "--enable-vdpau"
-    ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree";
+    ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree"
+    ++ stdenv.lib.optional dc1394Support "--enable-libdc1394";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 ]
     ++ stdenv.lib.optional mp3Support lame
@@ -58,7 +59,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional x264Support x264
     ++ stdenv.lib.optional xvidSupport xvidcore
     ++ stdenv.lib.optional vdpauSupport libvdpau
-    ++ stdenv.lib.optional faacSupport faac;
+    ++ stdenv.lib.optional faacSupport faac
+    ++ stdenv.lib.optional dc1394Support libdc1394;
 
   enableParallelBuilding = true;
     

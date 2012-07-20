@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.filter (x: x != null)
    ([ expat ncurses ]
      ++  (stdenv.lib.optionals (!stdenv.isCygwin) [ cairo libX11 ])
-     ++  (stdenv.lib.optionals stdenv.isLinux [ pciutils numactl ]));
+     ++  (stdenv.lib.optionals stdenv.isLinux [ numactl ]));
+
+  propagatedBuildInputs =
+    # Since `libpci' appears in `hwloc.pc', it must be propagated.
+    stdenv.lib.optional stdenv.isLinux pciutils;
 
   postInstall =
     stdenv.lib.optionalString (stdenv.isLinux && numactl != null)

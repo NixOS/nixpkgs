@@ -1,5 +1,8 @@
 { stdenv, getConfig, fetchurl, makeWrapper, which
 
+# this is needed in order to build the versions older than 21.x
+, subversion
+
 # default dependencies
 , bzip2, flac, speex
 , libevent, expat, libjpeg
@@ -26,6 +29,7 @@ let
   mkConfigurable = stdenv.lib.mapAttrs (flag: default: getConfig ["chromium" flag] default);
 
   config = mkConfigurable {
+    channel = "stable";
     selinux = false;
     nacl = false;
     openssl = true;
@@ -36,7 +40,7 @@ let
     pulseaudio = getConfig ["pulseaudio"] true;
   };
 
-  sourceInfo = import ./source.nix;
+  sourceInfo = builtins.getAttr config.channel (import ./sources.nix);
 
   mkGypFlags = with stdenv.lib; let
     sanitize = value:
@@ -69,12 +73,14 @@ let
     use_system_v8 = false;
   };
 
+  needsSubversion = stdenv.lib.versionOlder sourceInfo.version "21.0.0.0";
+
   defaultDependencies = [
     bzip2 flac speex
     libevent expat libjpeg
     libpng libxml2 libxslt
     xdg_utils yasm zlib
-  ];
+  ] ++ stdenv.lib.optional needsSubversion subversion;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";

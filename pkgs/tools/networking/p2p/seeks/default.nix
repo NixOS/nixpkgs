@@ -2,13 +2,13 @@
 , pkgconfig, protobuf, tokyocabinet, tokyotyrant, opencv
 }:
 
-let version = "0.4.0"; in
+let version = "0.4.1"; in
 stdenv.mkDerivation {
   name = "seeks-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/seeks/hippy/seeks-${version}.tar.gz";
-    sha256 = "1y91dmd0b0yj5036x8kk92iy88dsnzdwhhz23ba9lp96vpafd2ky";
+    sha256 = "1ppbbjw1zffxxhyvy64xwsff9xlw9wigqb7qwq5iw5mhbblz545q";
   };
 
   buildInputs =

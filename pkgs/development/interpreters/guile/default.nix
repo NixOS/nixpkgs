@@ -7,11 +7,11 @@
  else stdenv.mkDerivation)
 
 (rec {
-  name = "guile-2.0.5";
+  name = "guile-2.0.6";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "1lycm10x316jzlv1nyag7x9gisn4d3dz8jcmbi6lbdn0z6a9skc2";
+    sha256 = "000ng5qsq3cl1k35jvzvhwxj92wx4q87745n2fppkd4irh58vv5l";
   };
 
   buildNativeInputs = [ makeWrapper gawk pkgconfig ];

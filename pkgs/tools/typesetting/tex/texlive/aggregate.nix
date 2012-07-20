@@ -46,13 +46,14 @@ rec {
 
     rm $out/texmf*/ls-R
     for i in web2c texconfig fonts/map; do
-        cp -r $out/texmf/$i/* $out/texmf-config/$i || true
+        cp -Lr $out/texmf/$i/* $out/texmf-config/$i || true
     done
+    chmod -R u+w $out/texmf-config
 
-    TEXMFCONFIG=$out/texmf-config HOME=$PWD PATH=$PATH:$out/bin updmap --syncwithtrees
-    PATH=$PATH:$out/bin mktexlsr $out/texmf*
-    TEXMFCONFIG=$out/texmf-config HOME=$PWD PATH=$PATH:$out/bin updmap --syncwithtrees
-    PATH=$PATH:$out/bin mktexlsr $out/texmf*
+    yes | TEXMFCONFIG=$out/texmf-config HOME=$PWD PATH=$PATH:$out/bin updmap --syncwithtrees
+    yes | PATH=$PATH:$out/bin mktexlsr $out/texmf*
+    yes | TEXMFCONFIG=$out/texmf-config HOME=$PWD PATH=$PATH:$out/bin updmap --syncwithtrees
+    yes | PATH=$PATH:$out/bin mktexlsr $out/texmf*
   '') ["minInit" "defEnsureDir" "addInputs"];
 
   meta = {

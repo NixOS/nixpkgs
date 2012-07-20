@@ -7,7 +7,7 @@ in
 
 stdenv.mkDerivation {
   name = "broadcom-sta-${version}-${kernel.version}";
-  
+
   src = fetchurl {
     url = "http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_${bits}-v${version}.tar.gz";
     sha256 = if bits == "32"
@@ -16,12 +16,10 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ kernel ];
-  patches = [ ./makefile.patch ./linux-2.6.39.patch ./linux-3.2.patch ];
-    #++ stdenv.lib.optional
-    #(! builtins.lessThan (builtins.compareVersions kernel.version "2.6.37") 0)
-      #[ ./mutex-sema.patch ];
-
-  NIX_CFLAGS_COMPILE = "-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
+  patches =
+    [ ./makefile.patch ./linux-2.6.39.patch ./linux-3.2.patch
+      ./linux-3.4.patch ./license.patch
+    ];
 
   makeFlags = "KDIR=${kernel}/lib/modules/${kernel.modDirVersion}/build";
 

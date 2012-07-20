@@ -3,11 +3,11 @@ libpng, libsamplerate, libtiff, mesa, openal, openexr, openjpeg,
 python, zlib, boost }:
 
 stdenv.mkDerivation rec {
-  name = "blender-2.62";
+  name = "blender-2.63a";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "19xfr5vx66p4p3hnqpglpky6f4bh3ay484mdgh7zg6j9f80dp53q";
+    sha256 = "c479b1abfe5fd8a1a5d04b8d21fdbc0fc960d7855b24785b888c09792bca4c1a";
   };
 
   buildInputs = [ cmake mesa gettext python libjpeg libpng zlib openal
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-iquote ${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}";
 
-  meta = { 
+  meta = {
     description = "3D Creation/Animation/Publishing System";
     homepage = http://www.blender.org;
     # They comment two licenses: GPLv2 and Blender License, but they

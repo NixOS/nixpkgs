@@ -131,7 +131,7 @@ let
   # `__overrides' is a magic attribute that causes the attributes in
   # its value to be added to the surrounding `rec'.  We'll remove this
   # eventually.
-  inherit __overrides;
+  inherit __overrides pkgs;
 
 
   # We use `callPackage' to be able to omit function arguments that
@@ -419,6 +419,8 @@ let
     qt4Support = getConfig [ "avahi" "qt4Support" ] false;
   };
 
+  aws = callPackage ../tools/virtualization/aws { };
+
   aws_mturk_clt = callPackage ../tools/misc/aws-mturk-clt { };
 
   axel = callPackage ../tools/networking/axel { };
@@ -439,9 +441,7 @@ let
 
   bsod = callPackage ../misc/emulators/bsod { };
 
-  btrfsProgs = builderDefsPackage (import ../tools/filesystems/btrfsprogs) {
-    inherit (pkgs) libuuid zlib acl attr fetchgit e2fsprogs;
-  };
+  btrfsProgs = callPackage ../tools/filesystems/btrfsprogs { };
 
   catdoc = callPackage ../tools/text/catdoc { };
 
@@ -955,6 +955,8 @@ let
 
   less = callPackage ../tools/misc/less { };
 
+  logstash = callPackage ../tools/misc/logstash { };
+
   klavaro = callPackage ../games/klavaro {};
 
   minidlna = callPackage ../tools/networking/minidlna { };
@@ -1055,6 +1057,8 @@ let
   };
 
   mpage = callPackage ../tools/text/mpage { };
+
+  mr = callPackage ../applications/version-management/mr { };
 
   mscgen = callPackage ../tools/graphics/mscgen { };
 
@@ -1195,6 +1199,8 @@ let
   openvpn = callPackage ../tools/networking/openvpn { };
 
   optipng = callPackage ../tools/graphics/optipng { };
+
+  ossec = callPackage ../tools/security/ossec {};
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
@@ -1500,6 +1506,8 @@ let
 
   torsocks = callPackage ../tools/security/tor/torsocks.nix { };
 
+  trickle = callPackage ../tools/networking/trickle {};
+
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
   ttf2pt1_cl_pdf = callPackage ../tools/misc/ttf2pt1 { };
 
@@ -1776,6 +1784,8 @@ let
   clean = callPackage ../development/compilers/clean { };
 
   cmucl_binary = callPackage ../development/compilers/cmucl/binary.nix { };
+
+  cython = callPackage ../development/interpreters/cython { };
 
   dylan = callPackage ../development/compilers/gwydion-dylan {
     dylan = callPackage ../development/compilers/gwydion-dylan/binary.nix {  };
@@ -2510,6 +2520,8 @@ let
 
   swiProlog = callPackage ../development/compilers/swi-prolog { };
 
+  tbb = callPackage ../development/libraries/tbb { };
+
   tinycc = callPackage ../development/compilers/tinycc { };
 
   urweb = callPackage ../development/compilers/urweb { };
@@ -2834,11 +2846,7 @@ let
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
 
-  automake = automake111x;
-
-  automake17x = callPackage ../development/tools/misc/automake/automake-1.7.x.nix { };
-
-  automake19x = callPackage ../development/tools/misc/automake/automake-1.9.x.nix { };
+  automake = automake112x;
 
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
@@ -2849,6 +2857,12 @@ let
 
       # One test fails to terminate on FreeBSD: <http://bugs.gnu.org/8788>.
       && !stdenv.isFreeBSD;
+  };
+
+  automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix {
+    doCheck = !stdenv.isArm && !stdenv.isCygwin
+      # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
+      && stdenv.system != "i686-solaris";
   };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
@@ -3234,13 +3248,6 @@ let
   boostHeaders150 = callPackage ../development/libraries/boost/1.50-headers.nix { };
   boostHeaders = boostHeaders150;
 
-  # A Boost build with all library variants enabled.  Very large (about 250 MB).
-  boostFull = appendToName "full" (boost.override {
-    enableDebug = true;
-    enableSingleThreaded = true;
-    enableStatic = true;
-  });
-
   botan = callPackage ../development/libraries/botan { };
 
   box2d = callPackage ../development/libraries/box2d { };
@@ -3325,7 +3332,7 @@ let
   cppunit = callPackage ../development/libraries/cppunit { };
 
   cppnetlib = callPackage ../development/libraries/cppnetlib {
-    boost = boostFull;
+    boost = boostHeaders;
   };
 
   cracklib = callPackage ../development/libraries/cracklib { };
@@ -3952,6 +3959,8 @@ let
   libdevil = callPackage ../development/libraries/libdevil { };
 
   libdiscid = callPackage ../development/libraries/libdiscid { };
+
+  libdivsufsort = callPackage ../development/libraries/libdivsufsort { };
 
   libdmtx = callPackage ../development/libraries/libdmtx { };
 
@@ -4624,6 +4633,10 @@ let
 
   librdf = callPackage ../development/libraries/librdf { };
 
+  lilv = callPackage ../development/libraries/audio/lilv { };
+
+  lv2 = callPackage ../development/libraries/audio/lv2 { };
+
   qrupdate = callPackage ../development/libraries/qrupdate { };
 
   redland = pkgs.librdf_redland;
@@ -4662,6 +4675,10 @@ let
 
   SDL_ttf = callPackage ../development/libraries/SDL_ttf { };
 
+  serd = callPackage ../development/libraries/serd {};
+
+  silgraphite = callPackage ../development/libraries/silgraphite {};
+
   simgear = callPackage ../development/libraries/simgear {};
 
   sfml_git = callPackage ../development/libraries/sfml { };
@@ -4684,6 +4701,8 @@ let
 
   soqt = callPackage ../development/libraries/soqt { };
 
+  sord = callPackage ../development/libraries/sord {};
+
   speechd = callPackage ../development/libraries/speechd { };
 
   speech_tools = callPackage ../development/libraries/speech-tools {};
@@ -4691,6 +4710,8 @@ let
   speex = callPackage ../development/libraries/speex { };
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
+
+  sratom = callPackage ../development/libraries/audio/sratom { };
 
   srtp = callPackage ../development/libraries/srtp {};
 
@@ -4715,6 +4736,8 @@ let
   stlport = callPackage ../development/libraries/stlport { };
 
   strigi = callPackage ../development/libraries/strigi {};
+
+  suil = callPackage ../development/libraries/audio/suil { };
 
   suitesparse = callPackage ../development/libraries/suitesparse { };
 
@@ -5100,14 +5123,24 @@ let
 
   rdf4store = callPackage ../servers/http/4store { };
 
-  apacheHttpd = callPackage ../servers/http/apache-httpd {
+  apacheHttpd = pkgs.apacheHttpd_2_2;
+
+  apacheHttpd_2_2 = callPackage ../servers/http/apache-httpd/2.2.nix {
     sslSupport = true;
   };
+
+  apacheHttpd_2_4 = lowPrio (callPackage ../servers/http/apache-httpd/2.4.nix {
+    sslSupport = true;
+  });
 
   sabnzbd = callPackage ../servers/sabnzbd { };
 
   bind = callPackage ../servers/dns/bind {
     inherit openssl libtool perl;
+  };
+
+  couchdb = callPackage ../servers/http/couchdb {
+    spidermonkey = spidermonkey_185;
   };
 
   dico = callPackage ../servers/dico { };
@@ -5129,9 +5162,7 @@ let
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
-  couchdb = callPackage ../servers/http/couchdb {
-    spidermonkey = spidermonkey_185;
-  };
+  elasticmq = callPackage ../servers/elasticmq { };
 
   felix = callPackage ../servers/felix { };
 
@@ -5146,7 +5177,7 @@ let
   freeswitch = callPackage ../servers/sip/freeswitch { };
 
   ghostOne = callPackage ../servers/games/ghost-one {
-    boost = boostFull;
+    boost = boost144.override { taggedLayout = true; };
   };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
@@ -5206,7 +5237,7 @@ let
   monetdb = callPackage ../servers/sql/monetdb { };
 
   mongodb = callPackage ../servers/nosql/mongodb {
-    boost = boost147;
+    boost = boost149;
     useV8 = (getConfig ["mongodb" "useV8"] false);
   };
 
@@ -5272,6 +5303,11 @@ let
   redis = callPackage ../servers/nosql/redis { };
 
   redstore = callPackage ../servers/http/redstore { };
+
+  spamassassin = callPackage ../servers/mail/spamassassin {
+    inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
+      HTTPDate MailDKIM;
+  };
 
   samba = callPackage ../servers/samba { };
 
@@ -5365,6 +5401,10 @@ let
     inherit (perlPackages) LocaleGettext TermReadKey RpcXML;
   };
 
+  b43Firmware_5_1_138 = callPackage ../os-specific/linux/firmware/b43-firmware/5.1.138.nix { };
+
+  b43FirmwareCutter = callPackage ../os-specific/linux/firmware/b43-firmware-cutter { };
+
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
   bluez = callPackage ../os-specific/linux/bluez { };
@@ -5405,9 +5445,7 @@ let
     inherit (xlibs) xproto;
   };
 
-  dmraid = builderDefsPackage ../os-specific/linux/dmraid {
-    inherit devicemapper;
-  };
+  dmraid = callPackage ../os-specific/linux/dmraid { };
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
@@ -5636,6 +5674,12 @@ let
       ];
   };
 
+  linux_3_2_xen = linux_3_2.override {
+    extraConfig = ''
+      XEN_DOM0 y
+    '';
+  };
+
   linux_3_3 = makeOverridable (import ../os-specific/linux/kernel/linux-3.3.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -5774,6 +5818,7 @@ let
   linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
   linuxPackages_3_1 = recurseIntoAttrs (linuxPackagesFor linux_3_1 pkgs.linuxPackages_3_1);
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 pkgs.linuxPackages_3_2);
+  linuxPackages_3_2_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_xen pkgs.linuxPackages_3_2_xen);
   linuxPackages_3_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_3 pkgs.linuxPackages_3_3);
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 pkgs.linuxPackages_3_4);
 
@@ -6105,6 +6150,10 @@ let
 
   xf86_input_wacom = callPackage ../os-specific/linux/xf86-input-wacom { };
 
+  xf86_video_nested = callPackage ../os-specific/linux/xf86-video-nested {
+    inherit (xorg) fontsproto renderproto utilmacros xorgserver;
+  };
+
   xf86_video_nouveau = callPackage ../os-specific/linux/xf86-video-nouveau {
     inherit (xorg) xorgserver xproto fontsproto xf86driproto renderproto
       videoproto utilmacros;
@@ -6194,6 +6243,8 @@ let
     inherit fontforge;
   };
 
+  lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
+
   lmodern = callPackage ../data/fonts/lmodern { };
 
   manpages = callPackage ../data/documentation/man-pages { };
@@ -6235,6 +6286,8 @@ let
   tempora_lgc = callPackage ../data/fonts/tempora-lgc { };
 
   terminus_font = callPackage ../data/fonts/terminus-font { };
+
+  tipa = callPackage ../data/fonts/tipa { };
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
 
@@ -6344,6 +6397,10 @@ let
   };
 
   bvi = callPackage ../applications/editors/bvi { };
+
+  calf = callPackage ../applications/audio/calf {
+      inherit (gnome) libglade;
+  };
 
   calibre = callPackage ../applications/misc/calibre { };
 
@@ -6916,10 +6973,7 @@ let
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML;
-    gitSupport = false;
-    monotoneSupport = false;
-    extraUtils = [];
+      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree Filechdir;
   };
 
   imagemagick = callPackage ../applications/graphics/ImageMagick {
@@ -7016,7 +7070,9 @@ let
   links = callPackage ../applications/networking/browsers/links { };
 
   ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
-  ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
+  ledger3 = callPackage ../applications/office/ledger/3.0.nix {
+    boost = boost149;
+  };
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
@@ -7048,7 +7104,7 @@ let
   mcomix = callPackage ../applications/graphics/mcomix { };
 
   mercurial = callPackage ../applications/version-management/mercurial {
-    inherit (pythonPackages) curses;
+    inherit (pythonPackages) curses docutils;
     guiSupport = false;		# use mercurialFull to get hgk GUI
   };
 
@@ -7076,6 +7132,8 @@ let
     { browser = midori; browserName = "midori"; desktopName = "Midori";
       icon = "${midori}/share/icons/hicolor/22x22/apps/midori.png";
     };
+
+  mikmod = callPackage ../applications/audio/mikmod { };
 
   minicom = callPackage ../tools/misc/minicom { };
 
@@ -7497,7 +7555,6 @@ let
   tribler = callPackage ../applications/networking/p2p/tribler { };
 
   twinkle = callPackage ../applications/networking/instant-messengers/twinkle {
-    boost = boostFull;
     ccrtp = ccrtp_1_8;
     libzrtpcpp = libzrtpcpp_1_6;
   };
@@ -7680,7 +7737,7 @@ let
   };
 
   xpra = callPackage ../tools/X11/xpra {
-    pyrex = pyrex095;
+    inherit (pythonPackages) notify;
   };
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
@@ -8474,10 +8531,14 @@ let
     stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
 
+  nixUnstable = nix;
+
+  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
     stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
+  */
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
@@ -8573,9 +8634,9 @@ let
   texFunctions = import ../tools/typesetting/tex/nix pkgs;
 
   texLive = builderDefsPackage (import ../tools/typesetting/tex/texlive) {
-    inherit builderDefs zlib bzip2 ncurses libpng ed
-      gd t1lib freetype icu perl expat curl
-      libjpeg bison python fontconfig flex;
+    inherit builderDefs zlib bzip2 ncurses libpng ed lesstif
+      gd t1lib freetype icu perl expat curl xz pkgconfig zziplib
+      libjpeg bison python fontconfig flex poppler silgraphite;
     inherit (xlibs) libXaw libX11 xproto libXt libXpm
       libXmu libXext xextproto libSM libICE;
     ghostscript = ghostscriptX;
@@ -8584,7 +8645,7 @@ let
 
   texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
     paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
-              texLivePGF texLiveBeamer texLiveModerncv ];
+              texLivePGF texLiveBeamer texLiveModerncv tipa ];
   });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
@@ -8609,7 +8670,7 @@ let
   };
 
   texLiveExtra = builderDefsPackage (import ../tools/typesetting/tex/texlive/extra.nix) {
-    inherit texLive;
+    inherit texLive xz;
   };
 
   texLiveCMSuper = builderDefsPackage (import ../tools/typesetting/tex/texlive/cm-super.nix) {

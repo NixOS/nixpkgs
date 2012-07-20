@@ -46,12 +46,12 @@ stdenv.mkDerivation {
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm";
-        sha256 = "1dma067h7qj8rbcnm0n7wy3wd1clkysq9xj4kaxijbb5zrw06k3q";
+        sha256 = "1lgvv6bkdc5knghyn4gsg5gp7h3qyr4rb978gsi39gkvcazksm0b";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://dl.google.com/linux/direct/google-talkplugin_current_i386.rpm";
-        sha256 = "02ymhhbfby0sn9132cvdr6jp9c7sk6hfg0jwg1fc3kzjg7q3y7fs";
+        sha256 = "0k9j27pklwb3vih2cydz9552p9270p73hdi14f0bmn6afxjxd13m";
       }
     else throw "Google Talk does not support your platform.";
 

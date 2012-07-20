@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, libpng, libjpeg, lcms, automake, autoconf, libtool }:
+{ stdenv, fetchurl, zlib, libpng, libjpeg, lcms, automake110x, autoconf, libtool }:
 
 stdenv.mkDerivation rec {
   name = "libmng-1.0.10";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "unmaintained/autogen.sh";
 
-  buildNativeInputs = [ automake autoconf libtool ];
+  buildNativeInputs = [ automake110x autoconf libtool ];
 
   propagatedBuildInputs = [ zlib libpng libjpeg lcms ];
 
-  meta = { 
+  meta = {
     description = "Reference library for reading, displaying, writing and examining Multiple-Image Network Graphics";
     homepage = http://www.libmng.com;
     license = "zlib/libpng";

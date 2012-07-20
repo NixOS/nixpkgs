@@ -2,12 +2,12 @@
 , zlib, curl , pkgconfig, libgcrypt, ruby, lua5, tcl, guile }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.7";
+  version = "0.3.8";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/${name}.tar.gz";
-    sha256 = "1bphyhx5rnirga5l42z4lijw68qx724gffic1z60jdwfxc5dxknl";
+    sha256 = "4293eb9d29f11b8ee8c301049d57e535acbea677bc1dc41ab12fe1bb8af0f10e";
   };
 
   buildInputs = 

@@ -126,7 +126,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.5 ok
     html         = self.html_1_0_1_2;           # 7.5 ok
     HTTP         = self.HTTP_4000_2_3;          # 7.5 ok
-    HUnit        = self.HUnit_1_2_4_3;          # 7.5 ok
+    HUnit        = self.HUnit_1_2_5_0;          # 7.5 ok
     mtl          = self.mtl_2_1_2;              # 7.5 ok
     network      = self.network_2_3_0_14;       # 7.5 ok
     OpenGL       = self.OpenGL_2_2_3_1;         # 7.5 fail
@@ -137,8 +137,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexBase    = self.regexBase_0_93_2;       # 7.5 ok
     regexCompat  = self.regexCompat_0_95_1;     # 7.5 fail
     regexPosix   = self.regexPosix_0_95_1;      # 7.5 fail
-    stm          = self.stm_2_3;                # 7.5 ok
-    syb          = self.syb_0_3_6_2;            # 7.5 ok
+    stm          = self.stm_2_4;                # 7.5 ok
+    syb          = self.syb_0_3_7;              # 7.5 ok
     text         = self.text_0_11_2_2;          # 7.5 ok
     transformers = self.transformers_0_3_0_0;   # 7.5 ok
     xhtml        = self.xhtml_3000_2_1;         # 7.5 ok
@@ -473,6 +473,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
+  brainfuck = callPackage ../development/libraries/haskell/brainfuck {};
+
   bson = callPackage ../development/libraries/haskell/bson {};
 
   byteorder = callPackage ../development/libraries/haskell/byteorder {};
@@ -583,6 +585,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
+
+  dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
+
+  dataMemocombinators = callPackage ../development/libraries/haskell/data-memocombinators {};
 
   dataReify = callPackage ../development/libraries/haskell/data-reify {};
 
@@ -730,6 +736,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     OpenGL = self.OpenGL25;
   };
 
+  glpkHs = callPackage ../development/libraries/haskell/glpk-hs {};
+
   GLURaw = callPackage ../development/libraries/haskell/GLURaw {};
 
   GLUT_2_1_1_2 = callPackage ../development/libraries/haskell/GLUT/2.1.1.2.nix {};
@@ -856,6 +864,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hmatrix = callPackage ../development/libraries/haskell/hmatrix {};
 
+  hoauth = callPackage ../development/libraries/haskell/hoauth {};
+
   hoogle = callPackage ../development/libraries/haskell/hoogle {};
 
   hopenssl = callPackage ../development/libraries/haskell/hopenssl {};
@@ -906,7 +916,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HUnit_1_2_2_3 = callPackage ../development/libraries/haskell/HUnit/1.2.2.3.nix {};
   HUnit_1_2_4_2 = callPackage ../development/libraries/haskell/HUnit/1.2.4.2.nix {};
   HUnit_1_2_4_3 = callPackage ../development/libraries/haskell/HUnit/1.2.4.3.nix {};
-  HUnit = self.HUnit_1_2_4_3;
+  HUnit_1_2_5_0 = callPackage ../development/libraries/haskell/HUnit/1.2.5.0.nix {};
+  HUnit = self.HUnit_1_2_5_0;
 
   hxt = callPackage ../development/libraries/haskell/hxt {};
 
@@ -926,6 +937,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   IORefCAS = callPackage ../development/libraries/haskell/IORefCAS {};
 
+  IOSpec = callPackage ../development/libraries/haskell/IOSpec {};
+
   ioStorage = callPackage ../development/libraries/haskell/io-storage {};
 
   irc = callPackage ../development/libraries/haskell/irc {
@@ -935,6 +948,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   iteratee = callPackage ../development/libraries/haskell/iteratee {};
 
   ivor = callPackage ../development/libraries/haskell/ivor {};
+
+  JuicyPixels = callPackage ../development/libraries/haskell/JuicyPixels {};
 
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
 
@@ -957,6 +972,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   languageHaskellExtract = callPackage ../development/libraries/haskell/language-haskell-extract {};
 
+  lambdabot = callPackage ../development/libraries/haskell/lambdabot {};
+
+  lambdabotUtils = callPackage ../development/libraries/haskell/lambdabot-utils {};
+
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
@@ -973,13 +992,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
 
+  logict = callPackage ../development/libraries/haskell/logict {};
+
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
   mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
 
-  maude = callPackage ../development/libraries/haskell/maude {
-    parsec = self.parsec3;
-  };
+  maude = callPackage ../development/libraries/haskell/maude {};
 
   MaybeT = callPackage ../development/libraries/haskell/MaybeT {};
 
@@ -988,6 +1007,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
 
   mimeMail = callPackage ../development/libraries/haskell/mime-mail {};
+
+  mimeTypes = callPackage ../development/libraries/haskell/mime-types {};
 
   MissingH = callPackage ../development/libraries/haskell/MissingH {};
 
@@ -1064,11 +1085,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   NumInstances = callPackage ../development/libraries/haskell/NumInstances {};
 
+  numbers = callPackage ../development/libraries/haskell/numbers {};
+
   numtype = callPackage ../development/libraries/haskell/numtype {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
   ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
+
+  oeis = callPackage ../development/libraries/haskell/oeis {};
 
   OpenAL = callPackage ../development/libraries/haskell/OpenAL {};
 
@@ -1125,6 +1150,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   persistent = callPackage ../development/libraries/haskell/persistent {};
 
+  persistentPostgresql = callPackage ../development/libraries/haskell/persistent-postgresql {};
+
   persistentSqlite = callPackage ../development/libraries/haskell/persistent-sqlite {};
 
   persistentTemplate = callPackage ../development/libraries/haskell/persistent-template {};
@@ -1137,11 +1164,19 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
+  postgresqlLibpq = callPackage ../development/libraries/haskell/postgresql-libpq {
+    postgresql = pkgs.postgresql91;
+  };
+
+  postgresqlSimple = callPackage ../development/libraries/haskell/postgresql-simple {};
+
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
   prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
 
   primitive = callPackage ../development/libraries/haskell/primitive {};
+
+  processExtras = callPackage ../development/libraries/haskell/process-extras {};
 
   processLeksah = callPackage ../development/libraries/haskell/leksah/process-leksah.nix {};
 
@@ -1291,6 +1326,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   syb_0_3_3 = callPackage ../development/libraries/haskell/syb/0.3.3.nix {};
   syb_0_3_6_1 = callPackage ../development/libraries/haskell/syb/0.3.6.1.nix {};
   syb_0_3_6_2 = callPackage ../development/libraries/haskell/syb/0.3.6.2.nix {};
+  syb_0_3_7 = callPackage ../development/libraries/haskell/syb/0.3.7.nix {};
   syb = null;  # by default, we assume that syb ships with GHC, which is
                # true for the older GHC versions
 
@@ -1326,6 +1362,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ShellacReadline = callPackage ../development/libraries/haskell/Shellac/Shellac-readline.nix {};
 
+  show = callPackage ../development/libraries/haskell/show {};
+
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   split = callPackage ../development/libraries/haskell/split {};
@@ -1336,7 +1374,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   stm_2_1_2_1 = callPackage ../development/libraries/haskell/stm/2.1.2.1.nix {};
   stm_2_2_0_1 = callPackage ../development/libraries/haskell/stm/2.2.0.1.nix {};
   stm_2_3 = callPackage ../development/libraries/haskell/stm/2.3.nix {};
-  stm = self.stm_2_3;
+  stm_2_4 = callPackage ../development/libraries/haskell/stm/2.4.nix {};
+  stm = self.stm_2_4;
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
 
@@ -1436,6 +1475,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
+
+  unlambda = callPackage ../development/libraries/haskell/unlambda {};
 
   unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
 

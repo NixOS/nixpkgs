@@ -1,33 +1,26 @@
-a :  
-let 
-  s = import ./src-for-default.nix;
-  buildInputs = with a; [
-    devicemapper
-  ];
-in
-rec {
-  src = a.fetchUrlFromSrcInfo s;
+{ stdenv, fetchurl, devicemapper }:
 
-  inherit (s) name;
-  inherit buildInputs;
-  configureFlags = [];
+stdenv.mkDerivation rec {
+  name = "dmraid-1.0.0.rc15";
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-  goSrcDir = "cd */";
-      
+  src = fetchurl {
+    url = "http://people.redhat.com/~heinzm/sw/dmraid/src/old/${name}.tar.bz2";
+    sha256 = "01bcaq0sc329ghgj7f182xws7jgjpdc41bvris8fsiprnxc7511h";
+  };
+
+  preConfigure = "cd */";
+
+  buildInputs = [ devicemapper ];
+
   meta = {
-    description = "Old-style RAID configuration utility.";
+    description = "Old-style RAID configuration utility";
     longDescritipn = ''
       Old RAID configuration utility (still under development, though).
       It is fully compatible with modern kernels and mdadm recognizes
       its volumes. May be needed for rescuing an older system or nuking
       the metadata when reformatting.
     '';
-    maintainers = [
-      a.lib.maintainers.raskin
-    ];
-    platforms = with a.lib.platforms; 
-      linux;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
