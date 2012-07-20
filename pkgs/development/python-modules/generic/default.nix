@@ -59,6 +59,8 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
+  buildInputStrings = map toString buildInputs;
+
   pythonPath = [ setuptools] ++ pythonPath;
 
   # XXX: Should we run `easy_install --always-unzip'?  It doesn't seem
@@ -76,7 +78,7 @@ python.stdenv.mkDerivation (attrs // {
   postFixup =
     ''
       wrapPythonPrograms
-    
+
       # If a user installs a Python package, she probably also wants its
       # dependencies in the user environment (since Python modules don't
       # have something like an RPATH, so the only way to find the
@@ -84,5 +86,12 @@ python.stdenv.mkDerivation (attrs // {
       if test -e $out/nix-support/propagated-build-inputs; then
           ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
       fi
+
+      createBuildInputsPth build-inputs "$buildInputStrings"
+      for inputsfile in propagated-build-inputs propagated-build-native-inputs; do
+        if test -e $out/nix-support/$inputsfile; then
+            createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
+        fi
+      done
     '';
 })
