@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
      libgsf rpm
      pkgconfig
    ] ++ stdenv.lib.optionals gtkSupport [ glib gtk ]
-     ++ stdenv.lib.optionals videoSupport [ ffmpeg gtkSupport ];
+     ++ stdenv.lib.optionals videoSupport [ ffmpeg libmpeg2 ];
 
   configureFlags = "--disable-ltdl-install "
     + "--with-ltdl-include=${libtool}/include "
