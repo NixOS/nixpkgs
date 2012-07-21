@@ -35,7 +35,6 @@ in
           # Environment variables to keep for root and %wheel.
           Defaults:root,%wheel env_keep+=LOCALE_ARCHIVE
           Defaults:root,%wheel env_keep+=NIX_PATH
-          Defaults:root,%wheel env_keep+=NIXOS_EXTRA_MODULES
           Defaults:root,%wheel env_keep+=TERMINFO_DIRS
 
           # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
