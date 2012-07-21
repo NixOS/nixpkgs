@@ -282,7 +282,7 @@ let pythonPackages = python.modules // rec {
     name = "bugz-0.9.3";
 
     src = fetchgit {
-      url = "git://github.com/williamh/pybugz.git";
+      url = "https://github.com/williamh/pybugz.git";
       rev = "refs/tags/0.9.3";
     };
 
@@ -1037,6 +1037,9 @@ let pythonPackages = python.modules // rec {
 
     preConfigure = "cp test/secrets.py-dist test/secrets.py";
 
+    # tests fail as of 2012-07-21
+    doCheck = false;
+
     meta = {
       description = "A unified interface to many cloud providers";
       homepage = http://incubator.apache.org/libcloud/;
@@ -1480,7 +1483,7 @@ let pythonPackages = python.modules // rec {
     name = "optfunc-git";
 
     src = pkgs.fetchgit {
-      url = "http://github.com/simonw/optfunc.git";
+      url = "https://github.com/simonw/optfunc.git";
       rev = "e3fa034a545ed94ac5a039cf5b170c7d0ee21b7b";
     };
 
@@ -2699,19 +2702,20 @@ let pythonPackages = python.modules // rec {
   });
 
 
-  svneverever =  buildPythonPackage rec {
-    name = "svneverever-778489a8";
+  # XXX: ValueError: ZIP does not support timestamps before 1980
+  # svneverever =  buildPythonPackage rec {
+  #   name = "svneverever-778489a8";
 
-    src = pkgs.fetchgit {
-      url = git://git.goodpoint.de/svneverever.git;
-      rev = "778489a8c6f07825fb18c9da3892a781c3d659ac";
-      sha256 = "41c9da1dab2be7b60bff87e618befdf5da37c0a56287385cb0cbd3f91e452bb6";
-    };
+  #   src = pkgs.fetchgit {
+  #     url = git://git.goodpoint.de/svneverever.git;
+  #     rev = "778489a8c6f07825fb18c9da3892a781c3d659ac";
+  #     sha256 = "41c9da1dab2be7b60bff87e618befdf5da37c0a56287385cb0cbd3f91e452bb6";
+  #   };
 
-    propagatedBuildInputs = [ pysvn argparse ];
+  #   propagatedBuildInputs = [ pysvn argparse ];
 
-    doCheck = false;
-  };
+  #   doCheck = false;
+  # };
 
   taskcoach = buildPythonPackage rec {
     name = "TaskCoach-1.3.8";
@@ -3134,22 +3138,23 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  hgsvn = buildPythonPackage rec {
-    name = "hgsvn-0.1.8";
-    src = fetchurl rec {
-      name = "hgsvn-0.1.8.tar.gz";
-      url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.tar.gz#md5=56209eae48b955754e09185712123428";
-      sha256 = "18a7bj1i0m4shkxmdvw1ci5i0isq5vqf0bpwgrhnk305rijvbpch";
-    };
+  # XXX: link broken
+  # hgsvn = buildPythonPackage rec {
+  #   name = "hgsvn-0.1.8";
+  #   src = fetchurl rec {
+  #     name = "hgsvn-0.1.8.tar.gz";
+  #     url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.tar.gz#md5=56209eae48b955754e09185712123428";
+  #     sha256 = "18a7bj1i0m4shkxmdvw1ci5i0isq5vqf0bpwgrhnk305rijvbpch";
+  #   };
 
-    buildInputs = [ pkgs.setuptools ];
-    doCheck = false;
+  #   buildInputs = [ pkgs.setuptools ];
+  #   doCheck = false;
 
-    meta = {
-      description = "HgSVN";
-      homepage = http://pypi.python.org/pypi/hgsvn;
-    };
-  };
+  #   meta = {
+  #     description = "HgSVN";
+  #     homepage = http://pypi.python.org/pypi/hgsvn;
+  #   };
+  # };
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-1.20120929";
