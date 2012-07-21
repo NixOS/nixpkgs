@@ -1,12 +1,15 @@
 { configuration ? import ./lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
+, extraModulesPath ? builtins.getEnv "NIXOS_EXTRA_MODULES" 
 , system ? builtins.currentSystem
 }:
 
 let
 
+  extraModules = if extraModulesPath == "" then [] else import extraModulesPath;
+
   eval = import ./lib/eval-config.nix {
     inherit system;
-    modules = [ configuration ];
+    modules = [ configuration ] ++ extraModules;
   };
 
   inherit (eval) config pkgs;
@@ -14,7 +17,7 @@ let
   # This is for `nixos-rebuild build-vm'.
   vmConfig = (import ./lib/eval-config.nix {
     inherit system;
-    modules = [ configuration ./modules/virtualisation/qemu-vm.nix ];
+    modules = [ configuration ./modules/virtualisation/qemu-vm.nix ] ++ extraModules;
   }).config;
 
   # This is for `nixos-rebuild build-vm-with-bootloader'.
@@ -24,7 +27,7 @@ let
       [ configuration
         ./modules/virtualisation/qemu-vm.nix
         { virtualisation.useBootLoader = true; }
-      ];
+      ] ++ extraModules;
   }).config;
 
 in
