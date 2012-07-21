@@ -1,18 +1,18 @@
 {stdenv, fetchurl, python, librsync, gnused }:
 
 stdenv.mkDerivation {
-  name = "rdiff-backup-1.1.14";
+  name = "rdiff-backup-1.2.8";
 
   src = fetchurl {
-    url = http://savannah.nongnu.org/download/rdiff-backup/rdiff-backup-1.1.14.tar.gz;
-    sha256 = "0sh2kz90z47yfa9786dyn3q9ba1xcmjvd65rykvm7mg5apnrg27h";
+    url = http://savannah.nongnu.org/download/rdiff-backup/rdiff-backup-1.2.8.tar.gz;
+    sha256 = "1nwmmh816f96h0ff1jxk95ad38ilbhbdl5dgibx1d4cl81dsi48d";
   };
 
   phases = "unpackPhase installPhase";
   installPhase = ''
     python ./setup.py install --prefix=$out
     sed -i $out/bin/rdiff-backup -e \
-      "/import sys/ asys.path += [ \"$out/lib/python2.4/site-packages/\" ]"
+      "/import sys/ asys.path += [ \"$out/lib/python2.7/site-packages/\" ]"
   '';
 
   buildInputs = [python librsync gnused ];
