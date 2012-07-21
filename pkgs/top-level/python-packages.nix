@@ -278,23 +278,23 @@ let pythonPackages = python.modules // rec {
   };
 
 
-  bugz = buildPythonPackage (rec {
-    name = "bugz-0.9.3";
+  # bugz = buildPythonPackage (rec {
+  #   name = "bugz-0.9.3";
 
-    src = fetchgit {
-      url = "https://github.com/williamh/pybugz.git";
-      rev = "refs/tags/0.9.3";
-    };
+  #   src = fetchgit {
+  #     url = "https://github.com/williamh/pybugz.git";
+  #     rev = "refs/tags/0.9.3";
+  #   };
 
-    propagatedBuildInputs = [ argparse python.modules.ssl ];
+  #   propagatedBuildInputs = [ argparse python.modules.ssl ];
 
-    doCheck = false;
+  #   doCheck = false;
 
-    meta = {
-      homepage = http://www.liquidx.net/pybugz/;
-      description = "Command line interface for Bugzilla";
-    };
-  });
+  #   meta = {
+  #     homepage = http://www.liquidx.net/pybugz/;
+  #     description = "Command line interface for Bugzilla";
+  #   };
+  # });
 
 
   carrot = buildPythonPackage rec {
@@ -1479,27 +1479,27 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  optfunc = buildPythonPackage ( rec {
-    name = "optfunc-git";
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/simonw/optfunc.git";
-      rev = "e3fa034a545ed94ac5a039cf5b170c7d0ee21b7b";
-    };
-
-    installCommand = ''
-      dest=$(toPythonPath $out)/optfunc
-      mkdir -p $dest
-      cp * $dest/
-    '';
-
-    doCheck = false;
-
-    meta = {
-      description = "A new experimental interface to optparse which works by introspecting a function definition";
-      homepage = "http://simonwillison.net/2009/May/28/optfunc/";
-    };
-  });
+  # optfunc = buildPythonPackage ( rec {
+  #   name = "optfunc-git";
+  #
+  #   src = pkgs.fetchgit {
+  #     url = "https://github.com/simonw/optfunc.git";
+  #     rev = "e3fa034a545ed94ac5a039cf5b170c7d0ee21b7b";
+  #   };
+  #
+  #   installCommand = ''
+  #     dest=$(toPythonPath $out)/optfunc
+  #     mkdir -p $dest
+  #     cp * $dest/
+  #   '';
+  #
+  #   doCheck = false;
+  #
+  #   meta = {
+  #     description = "A new experimental interface to optparse which works by introspecting a function definition";
+  #     homepage = "http://simonwillison.net/2009/May/28/optfunc/";
+  #   };
+  # });
 
   ply = buildPythonPackage (rec {
     name = "ply-3.2";
@@ -3146,11 +3146,11 @@ let pythonPackages = python.modules // rec {
   #     url = "http://pypi.python.org/packages/source/h/hgsvn/${name}.tar.gz#md5=56209eae48b955754e09185712123428";
   #     sha256 = "18a7bj1i0m4shkxmdvw1ci5i0isq5vqf0bpwgrhnk305rijvbpch";
   #   };
-
+  #
   #   buildInputs = [ pkgs.setuptools ];
   #   doCheck = false;
-
-  #   meta = {
+  #
+  #     meta = {
   #     description = "HgSVN";
   #     homepage = http://pypi.python.org/pypi/hgsvn;
   #   };
