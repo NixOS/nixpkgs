@@ -7369,7 +7369,7 @@ let
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
-  RealPlayer = callPackage ../applications/video/RealPlayer {
+  RealPlayer = callPackage_i686 ../applications/video/RealPlayer {
     libstdcpp5 = gcc33.gcc;
   };
 
