@@ -4,7 +4,7 @@
     name = "wgetpaste-${version}";
       src = fetchurl {
         url = "http://wgetpaste.zlin.dk/${name}.tar.bz2";
-        sha256 = "0niv1wpj2xhn40c3hffj1fklx5rmnl67jzd872487gm3zibjb0xv";
+        sha256 = "7a53836d02e07cefc3c2978bb129a037fa1e1222ba0e275c4e818230a6d6fb9e";
     };
     # currently zsh-autocompletion support is not installed
 
