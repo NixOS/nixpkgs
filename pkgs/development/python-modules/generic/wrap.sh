@@ -52,7 +52,8 @@ createBuildInputsPth() {
     if [ foo"$inputs" != foo ]; then
         for x in $inputs; do
             if test -d "$x"/lib/@libPrefix@/site-packages; then
-                echo $x >> "$out"/lib/@libPrefix@/site-packages/${name}-nix-python-$category.pth
+                echo $x/lib/@libPrefix@/site-packages \
+                    >> "$out"/lib/@libPrefix@/site-packages/${name}-nix-python-$category.pth
             fi
         done
     fi
