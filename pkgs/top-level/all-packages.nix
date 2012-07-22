@@ -7625,7 +7625,7 @@ let
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
   virtmanager = callPackage ../applications/virtualization/virt-manager {
-    inherit (gnome) gnome_python; 
+    inherit (gnome) gnome_python;
   };
 
   virtinst = callPackage ../applications/virtualization/virtinst {};
