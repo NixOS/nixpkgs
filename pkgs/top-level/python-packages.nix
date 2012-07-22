@@ -13,6 +13,12 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
+    inherit (pkgs) stdenv;
+    inherit python;
+  };
+
+
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
     inherit python wrapPython;
