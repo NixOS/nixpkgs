@@ -21,8 +21,8 @@ NixOS.prototype = {
   nixos: "/etc/nixos/nixos",
   nixpkgs: "/etc/nixos/nixpkgs",
   config: "/etc/nixos/configuration.nix",
-  instantiateBin: "/var/run/current-system/sw/bin/nix-instantiate",
-  optionBin: "/var/run/current-system/sw/bin/nixos-option",
+  instantiateBin: "/run/current-system/sw/bin/nix-instantiate",
+  optionBin: "/run/current-system/sw/bin/nixos-option",
   tmpFile: "nixos-gui",
   option: null
 };
