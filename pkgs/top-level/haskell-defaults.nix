@@ -31,7 +31,7 @@
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
       binary = null; # a core package
-      deepseq = self.deepseq_1_1_0_2;
+      deepseq = self.deepseq_1_3_0_0;
     };
 
   ghc721Prefs = ghc722Prefs;
