@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "benchpress";
-  version = "0.2.2.4";
-  sha256 = "0cabjx0gkbk5blqkm9pmnz8kmi3573367365gny4r3m431iwxgnf";
+  version = "0.2.2.5";
+  sha256 = "0md66nnn9ad8f3y0dd411plnza59fvhfd6nibag3a556bpfa0kgs";
   buildDepends = [ mtl time ];
   patchPhase = ''
-    sed -i -e 's|base .*,|base,|' -e 's|mtl .*,|mtl,|' benchpress.cabal
+    sed -i -e 's|mtl .*,|mtl,|' benchpress.cabal
   '';
   meta = {
     homepage = "http://github.com/tibbe/benchpress";
