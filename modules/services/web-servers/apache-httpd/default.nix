@@ -559,6 +559,7 @@ in
 
     users.extraUsers = singleton
       { name = mainCfg.user;
+        group = mainCfg.group;
         description = "Apache httpd user";
       };
 
