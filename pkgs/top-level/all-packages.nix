@@ -529,6 +529,8 @@ let
 
   usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
 
+  clamav = callPackage ../tools/security/clamav { };
+  
   cloog = callPackage ../development/libraries/cloog { };
 
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
