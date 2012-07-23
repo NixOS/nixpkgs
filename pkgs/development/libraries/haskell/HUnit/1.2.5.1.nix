@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HUnit";
-  version = "1.2.5.0";
-  sha256 = "0yxa3clrrjwg9faa3vsqb44xdzhdgwji56lrh7sa7dgq8bv1h6nr";
+  version = "1.2.5.1";
+  sha256 = "0wa4yqgfyrfxzhdyd04xvzi4qaswbg0rrbywz8sxzkp71v91a35w";
   buildDepends = [ deepseq ];
   meta = {
     homepage = "http://hunit.sourceforge.net/";
