@@ -6,7 +6,7 @@ let
 
   mainCfg = config.services.httpd;
 
-  httpd = mainCfg.apacheHttpd;
+  httpd = mainCfg.package;
 
   httpdConf = mainCfg.configFile;
 
@@ -405,7 +405,7 @@ in
         ";
       };
 
-      apacheHttpd = mkOption {
+      package = mkOption {
         default = pkgs.apacheHttpd.override { mpm = mainCfg.multiProcessingModule; };
 	example = "pkgs.apacheHttpd_2_4";
         description = "
