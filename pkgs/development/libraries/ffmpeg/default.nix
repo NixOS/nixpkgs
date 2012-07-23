@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, yasm, zlib, bzip2
+{ stdenv, fetchurl, pkgconfig, yasm, zlib, bzip2, alsaLib
+, jackSupport ? false, jackaudio ? null
 , mp3Support ? true, lame ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
@@ -9,8 +10,10 @@
 , vdpauSupport ? true, libvdpau ? null
 , faacSupport ? false, faac ? null
 , dc1394Support ? false, libdc1394 ? null
+, x11grabSupport ? false, libXext ? null, libXfixes ? null
 }:
 
+assert jackSupport -> jackaudio != null;
 assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
 assert vorbisSupport -> libvorbis != null;
@@ -19,13 +22,14 @@ assert x264Support -> x264 != null;
 assert xvidSupport -> xvidcore != null;
 assert vdpauSupport -> libvdpau != null;
 assert faacSupport -> faac != null;
+assert x11grabSupport -> libXext != null && libXfixes != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-0.10";
+  name = "ffmpeg-0.11.1";
   
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "1ybzw6d5axr807141izvm2yf4pa0hc1zcywj89nsn3qsdnknlna3";
+    sha256 = "b01ddfb6352c84810879988f43172c5f7be555697edb929625845c7bb953fa96";
   };
   
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
@@ -48,9 +52,11 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xvidSupport "--enable-libxvid"
     ++ stdenv.lib.optional vdpauSupport "--enable-vdpau"
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree"
-    ++ stdenv.lib.optional dc1394Support "--enable-libdc1394";
+    ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
+    ++ stdenv.lib.optional x11grabSupport "--enable-x11grab";
 
-  buildInputs = [ pkgconfig lame yasm zlib bzip2 ]
+  buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib ]
+    ++ stdenv.lib.optional jackSupport jackaudio
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional speexSupport speex
     ++ stdenv.lib.optional theoraSupport libtheora
@@ -60,7 +66,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional xvidSupport xvidcore
     ++ stdenv.lib.optional vdpauSupport libvdpau
     ++ stdenv.lib.optional faacSupport faac
-    ++ stdenv.lib.optional dc1394Support libdc1394;
+    ++ stdenv.lib.optional dc1394Support libdc1394
+    ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ];
 
   enableParallelBuilding = true;
     
