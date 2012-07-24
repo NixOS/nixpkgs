@@ -1,13 +1,13 @@
 {stdenv, fetchurl, openssl, pam, bzip2, zlib}:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.1.7";
+  name = "dovecot-2.1.8";
 
   buildInputs = [openssl pam bzip2 zlib];
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.1/${name}.tar.gz";
-    sha256 = "0lpldhs0nvy6rxabqkp14wzcwf1cx4jvnbp1xcm74izrzxhvrdym";
+    sha256 = "03801f4agcwdpqyg6dfxlga3750pnhk4gaf8m7sjq1qmz2277028";
   };
 
   # It will hardcode this for /var/lib/dovecot.
