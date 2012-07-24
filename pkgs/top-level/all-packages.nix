@@ -718,6 +718,8 @@ let
 
   fortune = callPackage ../tools/misc/fortune { };
 
+  fprot = callPackage ../tools/security/fprot { };
+
   freeipmi = callPackage ../tools/system/freeipmi {};
 
   freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
