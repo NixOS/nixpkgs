@@ -36,7 +36,7 @@ if [ "$action" = "switch" -o "$action" = "boot" ]; then
             for dev in @grubDevices@; do
                 if [ "$dev" != nodev ]; then
                     echo "installing the GRUB bootloader on $dev..."
-                    @grub@/sbin/grub-install "$(readlink -f "$dev")" --no-floppy
+                    @grub@/sbin/grub-install --recheck "$(readlink -f "$dev")" --no-floppy
                 fi
             done
             echo "$newGrubVersion" > /boot/grub/version
