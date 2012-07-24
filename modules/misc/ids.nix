@@ -70,6 +70,7 @@ in
     prayer = 49;
     mpd = 50;
     clamav = 51;
+    fprot = 52;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -120,6 +121,7 @@ in
     prayer = 49;
     mpd = 50;
     clamav = 51;
+    fprot = 52;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
