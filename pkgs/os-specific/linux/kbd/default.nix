@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, bison, flex, autoconf, automake, gzip, bzip2 }:
+{ stdenv, fetchurl, gzip, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "kbd-1.15.2";
+  name = "kbd-1.15.3";
 
   src = fetchurl {
     url = "ftp://ftp.altlinux.org/pub/people/legion/kbd/${name}.tar.gz";
-    sha256 = "0ff674y6d3b6ix08b9l2yzv8igns768biyp5y92vip7iz4xv2p2j";
+    sha256 = "1vcl2791xshjdpi4w88iy87gkb7zv0dbvi83f98v30dvqc9mfl46";
   };
 
-  buildNativeInputs = [ bison flex autoconf automake ];
+  configureFlags = "--disable-nls";  
 
   patchPhase =
     ''
@@ -23,9 +23,6 @@ stdenv.mkDerivation rec {
         sed -i s/-Werror// src/Makefile.am
       ''}
     '';
-
-  # Grrr, kbd 1.15.1 doesn't include a configure script.
-  preConfigure = "autoreconf";
 
   makeFlags = "setowner= ";
 
