@@ -23,10 +23,9 @@ fi
 
 # Install or update the bootloader.
 if [ "$action" = "switch" -o "$action" = "boot" ]; then
-    
+
     if [ "@bootLoader@" = "grub" ]; then
         
-        mkdir -m 0700 -p /boot/grub
         @menuBuilder@ @out@
 
         # If the GRUB version has changed, then force a reinstall.
