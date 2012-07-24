@@ -1,4 +1,3 @@
-
 #! @bash@/bin/sh -e
 
 shopt -s nullglob
@@ -44,7 +43,7 @@ addEntry() {
 
     configurationCounter=$((configurationCounter + 1))
 
-    local stage2=$(readlink $path/init)
+    local stage2=$path/init
 
     content="$(
       echo "#!/bin/sh"
