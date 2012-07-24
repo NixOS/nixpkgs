@@ -29,6 +29,8 @@ my $defaultEntry = int(get("default"));
 
 die "unsupported GRUB version\n" if $grubVersion != 1 && $grubVersion != 2;
 
+print STDERR "updating GRUB $grubVersion menu...\n";
+
 mkpath("/boot/grub", 0, 0700);
 
 
