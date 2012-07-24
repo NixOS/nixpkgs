@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bison, flex, autoconf, automake }:
+{ stdenv, fetchurl, bison, flex, autoconf, automake, gzip, bzip2 }:
 
 stdenv.mkDerivation rec {
   name = "kbd-1.15.2";
@@ -10,13 +10,19 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ bison flex autoconf automake ];
 
-  # We get a warning in armv5tel-linux and the fuloong2f,
-  # so we disable -Werror in it
-  patchPhase = if (stdenv.isArm ||
-    stdenv.system == "mips64el-linux")
-    then ''
-      sed -i s/-Werror// src/Makefile.am
-    '' else "";
+  patchPhase =
+    ''
+      # Fix the path to gzip/bzip2.
+      substituteInPlace src/findfile.c \
+        --replace gzip ${gzip}/bin/gzip \
+        --replace bzip2 ${bzip2}/bin/bzip2 \
+    
+      # We get a warning in armv5tel-linux and the fuloong2f, so we
+      # disable -Werror in it.
+      ${stdenv.lib.optionalString (stdenv.isArm || stdenv.system == "mips64el-linux") ''
+        sed -i s/-Werror// src/Makefile.am
+      ''}
+    '';
 
   # Grrr, kbd 1.15.1 doesn't include a configure script.
   preConfigure = "autoreconf";
