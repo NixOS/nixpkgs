@@ -23,32 +23,8 @@ fi
 
 # Install or update the bootloader.
 if [ "$action" = "switch" -o "$action" = "boot" ]; then
-
-    if [ "@bootLoader@" = "grub" ]; then
-        
-        @menuBuilder@ @out@
-
-        # If the GRUB version has changed, then force a reinstall.
-        oldGrubVersion="$(cat /boot/grub/version 2>/dev/null || true)"
-        newGrubVersion="@grubVersion@"
-
-        if [ "$NIXOS_INSTALL_GRUB" = 1 -o "$oldGrubVersion" != "$newGrubVersion" ]; then
-            for dev in @grubDevices@; do
-                if [ "$dev" != nodev ]; then
-                    echo "installing the GRUB bootloader on $dev..."
-                    @grub@/sbin/grub-install --recheck "$(readlink -f "$dev")" --no-floppy
-                fi
-            done
-            echo "$newGrubVersion" > /boot/grub/version
-        fi
-          
-    elif [ "@bootLoader@" = "generationsDir" ]; then
-        @menuBuilder@ @out@
-    elif [ "@bootLoader@" = "efiBootStub" ]; then
-        @menuBuilder@ @out@
-    else
-        echo "Warning: don't know how to make this configuration bootable; please enable a boot loader." 1>&2
-    fi
+    
+    @installBootLoader@ @out@
 
     if [ -n "@initScriptBuilder@" ]; then
         @initScriptBuilder@ @out@

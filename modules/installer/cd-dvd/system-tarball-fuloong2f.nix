@@ -170,9 +170,6 @@ in
   boot.loader.generationsDir.enable = false;
   system.boot.loader.kernelFile = "vmlinux";
 
-  # Needed for nixos to evaluate
-  system.build.menuBuilder = "true";
-
   nixpkgs.config = {
     platform = pkgs.platforms.fuloong2f_n32;
   };

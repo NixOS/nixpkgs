@@ -63,9 +63,7 @@ in
   ];
 
   system = mkIf config.boot.loader.generationsDir.enable {
-    build = {
-      menuBuilder = generationsDirBuilder;
-    };
+    build.installBootLoader = generationsDirBuilder;
     boot.loader.id = "generationsDir";
     boot.loader.kernelFile = platform.kernelTarget;
   };

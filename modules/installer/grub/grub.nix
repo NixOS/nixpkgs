@@ -13,10 +13,11 @@ let
   grubConfig = pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f config.boot.loader.grub.splashImage;
       grub = f grub;
+      fullVersion = (builtins.parseDrvName config.system.build.grub.name).version;
       inherit (config.boot.loader.grub)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS configurationLimit copyKernels timeout
-        default;
+        default devices;
     });
 
 in
@@ -199,9 +200,9 @@ in
 
     system.build = mkAssert (cfg.devices != [])
       "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
-      { menuBuilder =
+      { installBootLoader =
           "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
-          "${pkgs.perl}/bin/perl ${./grub-menu-builder.pl} ${grubConfig}";
+          "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
         inherit grub;
       };
 

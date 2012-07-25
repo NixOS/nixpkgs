@@ -168,7 +168,6 @@ in
   boot.loader.grub.enable = false;
 
   # !!! Hack - attributes expected by other modules.
-  system.build.menuBuilder = "true";
   system.boot.loader.kernelFile = "bzImage";
   environment.systemPackages = [ pkgs.grub2 ];
 

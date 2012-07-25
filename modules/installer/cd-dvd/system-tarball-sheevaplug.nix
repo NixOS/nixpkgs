@@ -177,9 +177,6 @@ in
   services.ttyBackgrounds.enable = false;
   jobs.openssh.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
 
-  # Needed for nixos to evaluate
-  system.build.menuBuilder = "true";
-
   nixpkgs.config = {
     platform = pkgs.platforms.sheevaplug;
   };

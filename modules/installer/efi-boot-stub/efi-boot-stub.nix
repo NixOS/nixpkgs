@@ -123,9 +123,7 @@ in
   system = mkIf (config.boot.loader.efiBootStub.enable && (assert
     (config.boot.kernelPackages.kernel.features ? efiBootStub &&
     config.boot.kernelPackages.kernel.features.efiBootStub); true)) {
-    build = {
-      menuBuilder = efiBootStubBuilder;
-    };
+    build.installBootLoader = efiBootStubBuilder;
     boot.loader.id = "efiBootStub";
     boot.loader.kernelFile = platform.kernelTarget;
   };

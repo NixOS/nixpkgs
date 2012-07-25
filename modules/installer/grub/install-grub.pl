@@ -5,7 +5,6 @@ use File::Basename;
 use File::Path;
 use File::stat;
 use File::Copy;
-use IO::File;
 use POSIX;
 use Cwd;
 
@@ -14,6 +13,19 @@ my $defaultConfig = $ARGV[1] or die;
 my $dom = XML::LibXML->load_xml(location => $ARGV[0]);
 
 sub get { my ($name) = @_; return $dom->findvalue("/expr/attrs/attr[\@name = '$name']/*/\@value"); }
+
+sub readFile {
+    my ($fn) = @_; local $/ = undef;
+    open FILE, "<$fn" or return undef; my $s = <FILE>; close FILE;
+    local $/ = "\n"; chomp $s; return $s;
+}
+
+sub writeFile {
+    my ($fn, $s) = @_;
+    open FILE, ">$fn" or die "cannot create $fn: $!\n";
+    print FILE $s or die;
+    close FILE or die;
+}
 
 my $grub = get("grub");
 my $grubVersion = int(get("version"));
@@ -151,8 +163,8 @@ sub addEntry {
     my $kernelParams =
         "systemConfig=" . Cwd::abs_path($path) . " " .
         "init=" . Cwd::abs_path("$path/init") . " " .
-        join " ", IO::File->new("$path/kernel-params")->getlines;
-    my $xenParams = $xen && -e "$path/xen-params" ? join " ", IO::File->new("$path/xen-params")->getlines : "";
+        readFile("$path/kernel-params");
+    my $xenParams = $xen && -e "$path/xen-params" ? readFile("$path/xen-params") : "";
 
     if ($grubVersion == 1) {
         $conf .= "title $name\n";
@@ -192,7 +204,7 @@ foreach my $link (@links) {
     my $date = strftime("%F", localtime(lstat($link)->mtime));
     my $version =
         -e "$link/nixos-version"
-        ? IO::File->new("$link/nixos-version")->getline
+        ? readFile("$link/nixos-version")
         : basename((glob(dirname(Cwd::abs_path("$link/kernel")) . "/lib/modules/*"))[0]);
     addEntry("NixOS - Configuration " . nrFromGen($link) . " ($date - $version)", $link);
 }
@@ -203,9 +215,7 @@ $conf .= "}\n" if $grubVersion == 2;
 # Atomically update the GRUB config.
 my $confFile = $grubVersion == 1 ? "/boot/grub/menu.lst" : "/boot/grub/grub.cfg";
 my $tmpFile = $confFile . ".tmp";
-open CONF, ">$tmpFile" or die "cannot open $tmpFile for writing\n";
-print CONF $conf or die;
-close CONF;
+writeFile($tmpFile, $conf);
 rename $tmpFile, $confFile or die "cannot rename $tmpFile to $confFile\n";
 
 
@@ -214,4 +224,19 @@ foreach my $fn (glob "/boot/kernels/*") {
     next if defined $copied{$fn};
     print STDERR "removing obsolete file $fn\n";
     unlink $fn;
+}
+
+
+# Install GRUB if the version changed from the last time we installed
+# it.  FIXME: shouldn't we reinstall if ‘devices’ changed?
+my $prevVersion = readFile("/boot/grub/version") // "";
+if (($ENV{'NIXOS_INSTALL_GRUB'} // "") eq "1" || get("fullVersion") ne $prevVersion) {
+    foreach my $dev ($dom->findnodes('/expr/attrs/attr[@name = "devices"]/list/string/@value')) {
+        $dev = $dev->findvalue(".") or die;
+        next if $dev eq "nodev";
+        print STDERR "installing the GRUB $grubVersion boot loader on $dev...\n";
+        system("$grub/sbin/grub-install", "--recheck", Cwd::abs_path($dev)) == 0
+            or die "$0: installation of GRUB on $dev failed\n";
+    }
+    writeFile("/boot/grub/version", get("fullVersion"));
 }
