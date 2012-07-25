@@ -5004,7 +5004,7 @@ let
     inherit (gnome) libsoup;
   };
 
-  v8 = callPackage ../development/libraries/v8 { };
+  v8 = callPackage ../development/libraries/v8 { inherit (pythonPackages) gyp; };
 
   xalanj = xalanJava;
   xalanJava = callPackage ../development/libraries/java/xalanj {
