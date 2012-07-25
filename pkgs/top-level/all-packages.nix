@@ -830,11 +830,9 @@ let
     buggyBiosCDSupport = getConfig ["grub" "buggyBiosCDSupport"] true;
   };
 
-  grub19x = callPackage ../tools/misc/grub/1.9x.nix { };
+  grub2 = callPackage ../tools/misc/grub/2.0x.nix { };
 
-  grub2 = grub19x;
-
-  grub2_efi = callPackage ../tools/misc/grub/1.9x.nix { EFIsupport = true; };
+  grub2_efi = grub2.override { EFIsupport = true; };
 
   gssdp = callPackage ../development/libraries/gssdp {
     inherit (gnome) libsoup;
