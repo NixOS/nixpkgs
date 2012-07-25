@@ -8,9 +8,11 @@ let
 
   grub = if cfg.version == 1 then pkgs.grub else pkgs.grub2;
 
+  f = x: if x == null then "" else "" + x;
+
   grubConfig = pkgs.writeText "grub-config.xml" (builtins.toXML
-    { splashImage = "" + config.boot.loader.grub.splashImage;
-      grub = "" + grub;
+    { splashImage = f config.boot.loader.grub.splashImage;
+      grub = f grub;
       inherit (config.boot.loader.grub)
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS configurationLimit copyKernels timeout
