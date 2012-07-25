@@ -63,8 +63,6 @@ if ($grubVersion == 1) {
 }
 
 else {
-    copy "$grub/share/grub/unicode.pf2", "/boot/grub/unicode.pf2" or die "cannot copy unicode.pf2 to /boot/grub: $!\n";
-    
     $conf .= "
         if [ -s \$prefix/grubenv ]; then
           load_env
@@ -86,7 +84,7 @@ else {
           set timeout=$timeout
         fi
 
-        if loadfont $bootRoot/grub/unicode.pf2; then
+        if loadfont $bootRoot/grub/fonts/unicode.pf2; then
           set gfxmode=640x480
           insmod gfxterm
           insmod vbe
