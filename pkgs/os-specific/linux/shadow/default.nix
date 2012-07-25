@@ -1,21 +1,25 @@
 { stdenv, fetchurl, pam ? null, glibcCross ? null }:
 
 let
-  glibc = if stdenv ? cross
-          then glibcCross
-          else assert stdenv ? glibc; stdenv.glibc;
+
+  glibc =
+    if stdenv ? cross
+    then glibcCross
+    else assert stdenv ? glibc; stdenv.glibc;
+
 in
+
 stdenv.mkDerivation rec {
-  name = "shadow-4.1.4.2";
+  name = "shadow-4.1.5.1";
 
   src = fetchurl {
     url = "http://pkg-shadow.alioth.debian.org/releases/${name}.tar.bz2";
-    sha256 = "1449ny7pdnwkavg92wvibapnkgdq5pas38nvl1m5xa37g5m7z64p";
+    sha256 = "1yvqx57vzih0jdy3grir8vfbkxp0cl0myql37bnmi2yn90vk6cma";
   };
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
 
-  patches = [ ./no-sanitize-env.patch ./su-name.patch ./keep-path.patch ];
+  patches = [ ./keep-path.patch ];
 
   # Assume System V `setpgrp (void)', which is the default on GNU variants
   # (`AC_FUNC_SETPGRP' is not cross-compilation capable.)
