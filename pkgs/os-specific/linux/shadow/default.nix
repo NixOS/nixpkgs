@@ -30,6 +30,12 @@ stdenv.mkDerivation rec {
       substituteInPlace lib/nscd.c --replace /usr/sbin/nscd ${glibc}/sbin/nscd
     '';
 
+  # Don't install ‘groups’, since coreutils already provides it.
+  postInstall =
+    ''
+      rm $out/bin/groups $out/share/man/man1/groups.*
+    '';
+
   meta = {
     homepage = http://pkg-shadow.alioth.debian.org/;
     description = "Suite containing authentication-related tools such as passwd and su";
