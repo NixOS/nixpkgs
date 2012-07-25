@@ -4,11 +4,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "upower-0.9.16";
+  name = "upower-0.9.17";
 
   src = fetchurl {
     url = "http://upower.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "eb9a3d39a8cb62970fd612e333bc7a43437ab0e7890303578b0a7e3c67c8c212";
+    sha256 = "0a1j2pg44r6ljj9jgzlw8i5fzabpm2b2jk058kxsr77ciz96i7yg";
   };
 
   buildInputs = [ dbus_glib polkit intltool libxslt docbook_xsl udev libusb1 ];
