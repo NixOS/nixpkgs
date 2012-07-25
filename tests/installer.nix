@@ -22,6 +22,7 @@ let
               [ pkgs.glibcLocales
                 pkgs.sudo
                 pkgs.docbook5
+                pkgs.docbook5_xsl
                 pkgs.grub
               ];
           }
