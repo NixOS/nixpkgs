@@ -973,6 +973,10 @@ let
 
   nodejs = callPackage ../development/web/nodejs {};
 
+  nodePackages = recurseIntoAttrs (import ./node-packages.nix {
+    inherit pkgs stdenv nodejs;
+  });
+
   ldns = callPackage ../development/libraries/ldns { };
 
   lftp = callPackage ../tools/networking/lftp { };
@@ -5019,7 +5023,6 @@ let
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
   jquery_ui = callPackage ../development/libraries/javascript/jquery-ui { };
-
 
   ### DEVELOPMENT / PERL MODULES
 
