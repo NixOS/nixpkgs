@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-lens";
-  version = "2.10.0";
-  sha256 = "0y3rl9axakvz6kwmh08aabbz1z7y38wyrygmg4m6xby02cqbq5gk";
+  version = "2.10.1";
+  sha256 = "01n5lsq8nbn2lqsyz6y3md47zwpmdpfvhhlwn4fdpcl2d4hdh6xh";
   buildDepends = [
     comonad comonadTransformers semigroupoids transformers
   ];
