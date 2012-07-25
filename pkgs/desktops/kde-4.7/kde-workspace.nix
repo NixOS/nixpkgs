@@ -27,6 +27,8 @@ kde {
        --replace /usr/share/X11 ${xkeyboard_config}/etc/X11
    '';
 
+  enableParallelBuilding = false;
+  
   meta = {
     description = "KDE workspace components such as Plasma, Kwin and System Settings";
     license = "GPLv2";
