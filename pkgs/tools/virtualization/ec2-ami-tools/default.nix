@@ -1,12 +1,12 @@
 { stdenv, fetchurl, unzip, ruby, openssl, makeWrapper }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ec2-ami-tools-1.4.0.7";
   
   buildInputs = [ unzip makeWrapper ];
   
   src = fetchurl {
-    url = http://s3.amazonaws.com/ec2-downloads/ec2-ami-tools.zip;
+    url = "http://nixos.org/tarballs/${name}.zip";
     sha256 = "0l8c623i1w30bh9k622cdjj5f57rlfc1zs0i01ya016ijyr08qip";
   };
 

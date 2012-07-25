@@ -383,9 +383,9 @@ let
     };
   };
 
-  ec2apitools = callPackage ../tools/virtualization/amazon-ec2-api-tools { };
+  ec2_api_tools = callPackage ../tools/virtualization/ec2-api-tools { };
 
-  ec2amitools = callPackage ../tools/virtualization/amazon-ec2-ami-tools { };
+  ec2_ami_tools = callPackage ../tools/virtualization/ec2-ami-tools { };
 
   altermime = callPackage ../tools/networking/altermime {};
 
