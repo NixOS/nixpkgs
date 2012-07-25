@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "comonad";
-  version = "1.1.1.6";
-  sha256 = "1sg0pa7393mzfm27pl52nchplhkls3k0f4ff8vzk76wzrgvhysg5";
+  version = "3.0.0.1";
+  sha256 = "03xslpfil96v1qgk2g29vi46mb7l0fafy446ng1p4xgq9ddb2yaz";
   buildDepends = [ semigroups transformers ];
   meta = {
     homepage = "http://github.com/ekmett/comonad/";
