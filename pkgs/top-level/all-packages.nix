@@ -974,7 +974,7 @@ let
   nodejs = callPackage ../development/web/nodejs {};
 
   nodePackages = recurseIntoAttrs (import ./node-packages.nix {
-    inherit pkgs stdenv nodejs;
+    inherit pkgs stdenv nodejs fetchurl;
   });
 
   ldns = callPackage ../development/libraries/ldns { };

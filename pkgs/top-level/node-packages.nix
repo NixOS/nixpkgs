@@ -1,10 +1,8 @@
-{ pkgs, stdenv, nodejs }:
+{ pkgs, stdenv, nodejs, fetchurl }:
 
 let buildNodePackage = import ../development/web/nodejs/build-node-package.nix {
   inherit stdenv nodejs;
 }; in
-
-with pkgs;
 
 let self = {
   "coffee-script" = self."coffee-script-1.3.3";
