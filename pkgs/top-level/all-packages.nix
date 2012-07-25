@@ -977,6 +977,10 @@ let
     inherit pkgs stdenv nodejs fetchurl;
   });
 
+  npm2nix = callPackage ../development/tools/node/npm2nix {
+    coffeescript = nodePackages."coffee-script";
+  };
+
   ldns = callPackage ../development/libraries/ldns { };
 
   lftp = callPackage ../tools/networking/lftp { };
