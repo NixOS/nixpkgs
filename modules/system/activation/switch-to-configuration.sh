@@ -23,12 +23,7 @@ fi
 
 # Install or update the bootloader.
 if [ "$action" = "switch" -o "$action" = "boot" ]; then
-    
     @installBootLoader@ @out@
-
-    if [ -n "@initScriptBuilder@" ]; then
-        @initScriptBuilder@ @out@
-    fi
 fi
 
 # Activate the new configuration.

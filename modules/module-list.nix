@@ -23,7 +23,6 @@
   ./hardware/network/rt73.nix
   ./hardware/network/rtl8192c.nix
   ./hardware/pcmcia.nix
-  ./installer/init-script/init-script.nix
   ./installer/tools/nixos-checkout.nix
   ./installer/tools/tools.nix
   ./misc/assertions.nix
@@ -199,6 +198,7 @@
   ./system/boot/loader/generations-dir/generations-dir.nix
   ./system/boot/loader/grub/grub.nix
   ./system/boot/loader/grub/memtest.nix
+  ./system/boot/loader/init-script/init-script.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
   ./system/boot/stage-1.nix

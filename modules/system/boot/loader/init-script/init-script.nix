@@ -41,10 +41,9 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf config.boot.loader.initScript.enable {
 
-    system.build.initScriptBuilder =
-       if config.boot.loader.initScript.enable then initScriptBuilder else "";
+    system.build.installBootLoader = initScriptBuilder;
 
   };
 

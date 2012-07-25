@@ -152,7 +152,6 @@ let
     installBootLoader =
       config.system.build.installBootLoader
       or "echo 'Warning: don't know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
-    initScriptBuilder = config.system.build.initScriptBuilder;
     activationScript = config.system.activationScripts.script;
     nixosVersion = config.system.nixosVersion;
 
