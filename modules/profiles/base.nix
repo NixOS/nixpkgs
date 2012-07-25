@@ -34,7 +34,7 @@
     pkgs.dosfstools
     pkgs.xfsprogs
     pkgs.jfsutils
-    pkgs.jfsrec
+    #pkgs.jfsrec # disabled because of Boost dependency
 
     # Some compression/archiver tools.
     pkgs.unrar
