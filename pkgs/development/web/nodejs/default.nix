@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, linkV8Headers ? false }:
+{ stdenv, fetchurl, openssl, python, zlib, v8, linkV8Headers ? false, utillinux }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.19";
+  version = "0.8.3";
   name = "nodejs-${version}";
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "1frgnl7i111b8x3fr43lh3zybwsszn0daa661gszq7dhfwj2jcsf";
+    sha256 = "0dgcw6qpgvsxcvcbkmvpjz2i9f2r286zcrcg0jnxnds9fj41s2k0";
   };
 
   configureFlags = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.isDarwin ./no-arch-flag.patch;
 
   prePatch = ''
-    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf}
+    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf} configure
   '';
 
   postInstall = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     install_name_tool -change libv8.dylib ${v8}/lib/libv8.dylib $out/bin/node
   '';
 
-  buildInputs = [ python openssl v8 zlib ];
+  buildInputs = [ python openssl v8 zlib ] ++ stdenv.lib.optional stdenv.isLinux utillinux;
 
   meta = with stdenv.lib; {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
