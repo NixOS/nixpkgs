@@ -2848,8 +2848,6 @@ let
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
 
-  autoconf267 = callPackage ../development/tools/misc/autoconf/2.67.nix { };
-
   automake = automake112x;
 
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
@@ -8753,9 +8751,5 @@ let
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 
   bullet = callPackage ../development/libraries/bullet {};
-
-  xbmc = callPackage ../applications/multimedia/xbmc {
-    #autoconf = autoconf267;
-  };
 
 }; in pkgs
