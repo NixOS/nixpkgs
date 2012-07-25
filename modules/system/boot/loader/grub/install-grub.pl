@@ -125,7 +125,6 @@ $conf .= "$extraConfig\n";
 
 
 # Generate the menu entries.
-my $curEntry = 0;
 $conf .= "\n";
 
 my %copied;
@@ -151,7 +150,6 @@ sub copyToKernelsDir {
 
 sub addEntry {
     my ($name, $path) = @_;
-    return if $curEntry++ > $configurationLimit;
     return unless -e "$path/kernel" && -e "$path/initrd";
 
     my $kernel = copyToKernelsDir(Cwd::abs_path("$path/kernel"));
@@ -199,8 +197,10 @@ sub nrFromGen { my ($x) = @_; $x =~ /system-(.*)-link/; return $1; }
 my @links = sort
     { nrFromGen($b) <=> nrFromGen($a) }
     (glob "/nix/var/nix/profiles/system-*-link");
-    
+
+my $curEntry = 0;
 foreach my $link (@links) {
+    last if $curEntry++ >= $configurationLimit;
     my $date = strftime("%F", localtime(lstat($link)->mtime));
     my $version =
         -e "$link/nixos-version"
