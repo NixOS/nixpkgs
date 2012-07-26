@@ -532,7 +532,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   colour = callPackage ../development/libraries/haskell/colour {};
 
+  comonad_1_1_1_6 = callPackage ../development/libraries/haskell/comonad/1.1.1.6.nix {};
+
   comonad = callPackage ../development/libraries/haskell/comonad {};
+
+  comonadTransformers_2_1_2 = callPackage ../development/libraries/haskell/comonad-transformers/2.1.2.nix {
+    comonad = self.comonad_1_1_1_6;
+    semigroupoids = self.semigroupoids_1_3_4;
+  };
 
   comonadTransformers = callPackage ../development/libraries/haskell/comonad-transformers {};
 
@@ -596,7 +603,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
 
-  dataLens = callPackage ../development/libraries/haskell/data-lens {};
+  dataLens = callPackage ../development/libraries/haskell/data-lens {
+    comonadTransformers = self.comonadTransformers_2_1_2;
+    semigroupoids = self.semigroupoids_1_3_4;
+  };
 
   dataLensTemplate = callPackage ../development/libraries/haskell/data-lens-template {};
 
@@ -1306,6 +1316,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
+
+  semigroupoids_1_3_4 = callPackage ../development/libraries/haskell/semigroupoids/1.3.4.nix {
+    comonad = self.comonad_1_1_1_6;
+  };
 
   semigroupoids = callPackage ../development/libraries/haskell/semigroupoids {};
 
