@@ -848,6 +848,27 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  gyp = buildPythonPackage rec {
+    rev = "1435";
+    name = "gyp-r${rev}";
+
+    src = fetchsvn {
+      url = "http://gyp.googlecode.com/svn/trunk";
+      inherit rev;
+      sha256 = "1wmd1svx5344alb8ff9vzdam1ccqdl0h7shp1xnsk843hqwc0fz0";
+    };
+
+    doCheck = false;
+
+    postUnpack = "find . -print0 | xargs -0 touch";
+
+    meta = {
+      homepage = http://code.google.com/p/gyp;
+      description = "Generate Your Projects";
+    };
+  };
+
+
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.6.0";
 

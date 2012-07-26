@@ -534,7 +534,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   comonad_1_1_1_6 = callPackage ../development/libraries/haskell/comonad/1.1.1.6.nix {};
 
-  comonad = callPackage ../development/libraries/haskell/comonad/default.nix {};
+  comonad = callPackage ../development/libraries/haskell/comonad {};
+
+  comonadTransformers_2_1_2 = callPackage ../development/libraries/haskell/comonad-transformers/2.1.2.nix {};
 
   comonadTransformers = callPackage ../development/libraries/haskell/comonad-transformers {};
 
@@ -546,13 +548,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   configurator = callPackage ../development/libraries/haskell/configurator {};
 
-  contravariant = callPackage ../development/libraries/haskell/contravariant {};
-
   convertible = callPackage ../development/libraries/haskell/convertible {
     time = self.time_1_1_3;
   };
 
   continuedFractions = callPackage ../development/libraries/haskell/continued-fractions {};
+
+  contravariant = callPackage ../development/libraries/haskell/contravariant {};
 
   converge = callPackage ../development/libraries/haskell/converge {};
 
@@ -1307,11 +1309,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
-  semigroupoids = callPackage ../development/libraries/haskell/semigroupoids {
-    comonad = self.comonad_1_1_1_6;
+  semigroups = callPackage ../development/libraries/haskell/semigroups {};
+
+  semigroupoids_1_3_4 = callPackage ../development/libraries/haskell/semigroupoids/1.3.4.nix {
+    comonad = self.comonad_1_1_16;
   };
 
-  semigroups = callPackage ../development/libraries/haskell/semigroups {};
+  semigroupoids = callPackage ../development/libraries/haskell/semigroupoids {};
 
   shelly = callPackage ../development/libraries/haskell/shelly {};
 
@@ -1324,6 +1328,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   snap = callPackage ../development/libraries/haskell/snap/snap.nix {};
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
+
+  snapLoaderStatic = callPackage ../development/libraries/haskell/snap/loader-static.nix {};
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
 

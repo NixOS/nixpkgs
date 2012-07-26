@@ -27,9 +27,14 @@
       binary = null; # now a core package
     };
 
-  ghc722Prefs = ghc741Prefs;
+  ghc722Prefs =
+    self : self.haskellPlatformArgs_2012_2_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2012_2_0_0;
+      binary = null; # a core package
+      deepseq = self.deepseq_1_3_0_0;
+    };
 
-  ghc721Prefs = ghc741Prefs;
+  ghc721Prefs = ghc722Prefs;
 
   ghc704Prefs =
     self : self.haskellPlatformArgs_2011_4_0_0 self // {

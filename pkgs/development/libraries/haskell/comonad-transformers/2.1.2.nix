@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "comonad-transformers";
-  version = "3.0";
-  sha256 = "1bjix61rdzmqcd1irh6p91jwy4sz1617sj4zic07p7ng9h7fsz24";
+  version = "2.1.2";
+  sha256 = "0yhpsifnqxrg1p8f9hjslwkrakiaxa2kk9726q923a5sj225cvis";
   buildDepends = [
     comonad contravariant distributive semigroupoids semigroups
     transformers

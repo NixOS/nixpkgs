@@ -205,6 +205,7 @@ let
       USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
       X86_CHECK_BIOS_CORRUPTION y
       X86_MCE y
+      XEN_DOM0 y
 
       # Linux Containers
       RT_GROUP_SCHED? y

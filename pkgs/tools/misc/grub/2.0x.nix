@@ -2,12 +2,16 @@
 , EFIsupport ? false }:
 
 let
-    prefix = "grub${if EFIsupport then "-efi" else ""}";
-    version = "1.99";
-    unifont_bdf = fetchurl {
-      url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
-      sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
-    };
+
+  prefix = "grub${if EFIsupport then "-efi" else ""}";
+  
+  version = "2.00";
+  
+  unifont_bdf = fetchurl {
+    url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
+    sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
+  };
+  
 in
 
 stdenv.mkDerivation rec {
@@ -15,7 +19,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/grub/grub-${version}.tar.xz";
-    sha256 = "06q2a7bg1mbsms604a89fkdnwrc1jg9hr2mmfdmg3il39j6i827k";
+    sha256 = "0n64hpmsccvicagvr0c6v0kgp2yw0kgnd3jvsyd26cnwgs7c6kkq";
   };
 
   buildNativeInputs = [ flex bison ];

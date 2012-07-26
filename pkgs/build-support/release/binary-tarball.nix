@@ -36,13 +36,8 @@ stdenv.mkDerivation (
       mkdir -p $out/nix-support
       echo "$system" > $out/nix-support/system
 
-      # If `src' is the result of a call to `makeSourceTarball', then it
-      # has a subdirectory containing the actual tarball(s).  If there are
-      # multiple tarballs, just pick the first one.
       origSrc=$src
-      if test -d $src/tarballs; then
-          src=$(ls $src/tarballs/*.tar.bz2 $src/tarballs/*.tar.gz | sort | head -1)
-      fi
+      src=$(findTarballs $src | head -1)
 
       if test -e $origSrc/nix-support/hydra-release-name; then
           releaseName=$(cat $origSrc/nix-support/hydra-release-name)
