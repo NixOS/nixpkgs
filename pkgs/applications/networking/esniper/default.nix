@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, curl }:
+{ stdenv, fetchurl, openssl, curl, coreutils, gawk }:
 
 stdenv.mkDerivation {
   name = "esniper-2.27.0";
@@ -11,7 +11,9 @@ stdenv.mkDerivation {
   buildInputs = [openssl curl];
 
   postInstall = ''
-    sed -e  "2i export PATH=\"$out/bin:\$PATH\"" <"frontends/snipe" >"$out/bin/snipe"
+    sed <"frontends/snipe" >"$out/bin/snipe" \
+      -e "2i export PATH=\"$out/bin:${coreutils}/bin:${gawk}/bin\"" \
+      -e "2i alias which='type -p'"
     chmod 555 "$out/bin/snipe"
   '';
 
@@ -24,5 +26,3 @@ stdenv.mkDerivation {
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
-
-
