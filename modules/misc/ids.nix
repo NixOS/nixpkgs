@@ -71,6 +71,7 @@ in
     mpd = 50;
     clamav = 51;
     fprot = 52;
+    bind = 53;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
