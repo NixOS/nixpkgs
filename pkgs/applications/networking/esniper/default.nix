@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     sed <"frontends/snipe" >"$out/bin/snipe" \
-      -e "2i export PATH=\"$out/bin:${coreutils}/bin:${gawk}/bin\"" \
+      -e "2i export PATH=\"$out/bin:${coreutils}/bin:${gawk}/bin:${bash}/bin\"" \
       -e "2i alias which='type -p'"
     chmod 555 "$out/bin/snipe"
   '';
