@@ -93,7 +93,7 @@ in
         { name = "login"; ownDevices = true; allowNullPassword = true; }
       ];
 
-    security.setuidPrograms = [ "passwd" "chfn" "su" ];
+    security.setuidPrograms = [ "passwd" "chfn" "su" "newgrp" ];
 
   };
 
