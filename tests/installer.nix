@@ -32,7 +32,7 @@ let
 
 
   # The configuration to install.
-  config = { fileSystems, testChannel, grubVersion }: pkgs.writeText "configuration.nix"
+  config = { fileSystems, testChannel, grubVersion, grubDevice }: pkgs.writeText "configuration.nix"
     ''
       { config, pkgs, modulesPath, ... }:
 
@@ -45,7 +45,7 @@ let
         ${optionalString (grubVersion == 1) ''
           boot.loader.grub.splashImage = null;
         ''}
-        boot.loader.grub.device = "/dev/vda";
+        boot.loader.grub.device = "${grubDevice}";
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
         boot.initrd.kernelModules = [ "ext3" "virtio_console" ];
 
@@ -95,11 +95,14 @@ let
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems, and a configuration.nix fragment
   # `fileSystems'.
-  testScriptFun = { createPartitions, fileSystems, testChannel, grubVersion }:
+  testScriptFun = { createPartitions, fileSystems, testChannel, grubVersion, grubDevice }:
+    let iface = if grubVersion == 1 then "scsi" else "virtio"; in
     ''
       createDisk("harddisk", 4 * 1024);
 
-      my $machine = createMachine({ hda => "harddisk", cdrom => glob("${iso}/iso/*.iso"),
+      my $machine = createMachine({ hda => "harddisk",
+        hdaInterface => "${iface}",
+        cdrom => glob("${iso}/iso/*.iso"),
         qemuFlags => '${optionalString testChannel (toString (qemuNICFlags 1 1 2))} ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"}'});
       $machine->start;
 
@@ -151,15 +154,9 @@ let
       print STDERR "Result of the hardware scan:\n$cfg\n";
 
       $machine->copyFileFromHost(
-          "${ config { inherit fileSystems testChannel grubVersion; } }",
+          "${ config { inherit fileSystems testChannel grubVersion grubDevice; } }",
           "/mnt/etc/nixos/configuration.nix");
 
-      # Hack to get GRUB 1 to install on virtio.  GRUB 1 has a patch
-      # from Gentoo to support virtio, but it's incomplete: it doesn't
-      # detect /dev/vd* automatically.  And we don't care enough about
-      # GRUB 1 to fix it.
-      $machine->mustSucceed("mkdir -p /mnt/boot/grub; echo '(hd0) /dev/vda' > /mnt/boot/grub/device.map");
-      
       # Perform the installation.
       $machine->mustSucceed("nixos-install >&2");
 
@@ -169,7 +166,7 @@ let
       $machine->shutdown;
 
       # Now see if we can boot the installation.
-      my $machine = createMachine({ hda => "harddisk" });
+      my $machine = createMachine({ hda => "harddisk", hdaInterface => "${iface}" });
 
       # Did /boot get mounted, if appropriate?
       # !!! There is currently no good way to wait for the
@@ -196,11 +193,11 @@ let
     '';
 
 
-  makeTest = { createPartitions, fileSystems, testChannel ? false, grubVersion ? 2 }:
+  makeTest = { createPartitions, fileSystems, testChannel ? false, grubVersion ? 2, grubDevice ? "/dev/vda" }:
     { inherit iso;
       nodes = if testChannel then { inherit webserver; } else { };
       testScript = testScriptFun {
-        inherit createPartitions fileSystems testChannel grubVersion;
+        inherit createPartitions fileSystems testChannel grubVersion grubDevice;
       };
     };
 
@@ -315,18 +312,19 @@ in {
     { createPartitions =
         ''
           $machine->mustSucceed(
-              "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
-              "parted /dev/vda -- mkpart primary ext2 1024M -1s",
+              "parted /dev/sda mklabel msdos",
+              "parted /dev/sda -- mkpart primary linux-swap 1M 1024M",
+              "parted /dev/sda -- mkpart primary ext2 1024M -1s",
               "udevadm settle",
-              "mkswap /dev/vda1 -L swap",
+              "mkswap /dev/sda1 -L swap",
               "swapon -L swap",
-              "mkfs.ext3 -L nixos /dev/vda2",
+              "mkfs.ext3 -L nixos /dev/sda2",
               "mount LABEL=nixos /mnt",
           );
         '';
       fileSystems = rootFS;
       grubVersion = 1;
+      grubDevice = "/dev/sda";
     };
 
   # Rebuild the CD configuration with a little modification.
