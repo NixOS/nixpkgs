@@ -24,6 +24,7 @@ let
                 pkgs.docbook5
                 pkgs.docbook5_xsl
                 pkgs.grub
+                pkgs.perlPackages.XMLLibXML
               ];
           }
         ];
