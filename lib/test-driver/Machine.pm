@@ -29,10 +29,9 @@ sub new {
         $startCommand =
             "qemu-kvm -m 384 " .
             "-net nic,model=virtio \$QEMU_OPTS ";
-        my $iface = $args->{hdaInterface} or "virtio";
+        my $iface = $args->{hdaInterface} || "virtio";
         $startCommand .= "-drive file=" . Cwd::abs_path($args->{hda}) . ",if=$iface,boot=on,werror=report "
             if defined $args->{hda};
-        
         $startCommand .= "-cdrom $args->{cdrom} "
             if defined $args->{cdrom};
         $startCommand .= $args->{qemuFlags} || "";
