@@ -519,6 +519,8 @@ let
 
   cksfv = callPackage ../tools/networking/cksfv { };
 
+  ciopfs = callPackage ../tools/filesystems/ciopfs { };
+
   colordiff = callPackage ../tools/text/colordiff { };
 
   convertlit = callPackage ../tools/text/convertlit { };
