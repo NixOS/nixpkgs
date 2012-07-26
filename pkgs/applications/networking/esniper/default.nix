@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, curl, coreutils, gawk }:
+{ stdenv, fetchurl, openssl, curl, coreutils, gawk, bash }:
 
 stdenv.mkDerivation {
   name = "esniper-2.27.0";
