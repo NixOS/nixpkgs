@@ -70,6 +70,11 @@ stdenv.mkDerivation {
     done
   '';
 
+  preCheck = ''
+    # Git needs some help figuring this out during test suite run.
+    export EMAIL="nobody@example.org"
+  '';
+
   checkTarget = "test";
   doCheck = true;
 
