@@ -43,7 +43,7 @@ stdenv.mkDerivation {
 
       # copy hgweb.cgi to allow use in apache
       mkdir -p $out/share/cgi-bin
-      cp -v hgweb.cgi $out/share/cgi-bin
+      cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
       chmod u+x $out/share/cgi-bin/hgweb.cgi
     '';
 
