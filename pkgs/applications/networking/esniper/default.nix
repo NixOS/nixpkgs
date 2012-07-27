@@ -10,6 +10,9 @@ stdenv.mkDerivation {
 
   buildInputs = [openssl curl];
 
+  # Add support for CURL_CA_BUNDLE variable.
+  patches = [ ./find-ca-bundle.patch ];
+
   postInstall = ''
     sed <"frontends/snipe" >"$out/bin/snipe" \
       -e "2i export PATH=\"$out/bin:${coreutils}/bin:${gawk}/bin:${bash}/bin:${which}/bin:\$PATH\""
