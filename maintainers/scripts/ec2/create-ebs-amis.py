@@ -33,6 +33,7 @@ f.write('''{{
 f.close()
 
 depl = deployment.Deployment("./ebs-creator.json", create=True, nix_exprs=["./ebs-creator.nix", "./ebs-creator-config.nix"])
+depl.load_state()
 if not args.keep: depl.destroy_vms()
 depl.deploy()
 
@@ -163,6 +164,7 @@ f.write(
 f.close()
 
 test_depl = deployment.Deployment("./ebs-test.json", create=True, nix_exprs=["./ebs-test.nix"])
+test_depl.load_state()
 test_depl.deploy(create_only=True)
 test_depl.machines['machine'].run_command("nixos-version")
 if not args.keep: test_depl.destroy_vms()
