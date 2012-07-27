@@ -626,6 +626,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   digestiveFunctors = callPackage ../development/libraries/haskell/digestive-functors {};
 
+  digestiveFunctorsHeist = callPackage ../development/libraries/haskell/digestive-functors-heist {};
+
   digestiveFunctorsSnap = callPackage ../development/libraries/haskell/digestive-functors-snap {};
 
   dimensional = callPackage ../development/libraries/haskell/dimensional {};
