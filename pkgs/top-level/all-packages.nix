@@ -7141,6 +7141,8 @@ let
 
   kermit = callPackage ../tools/misc/kermit { };
 
+  keymon = callPackage ../applications/video/key-mon { };
+
   kino = callPackage ../applications/video/kino {
     inherit (gnome) libglade;
   };
