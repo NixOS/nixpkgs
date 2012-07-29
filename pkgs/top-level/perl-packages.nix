@@ -107,6 +107,15 @@ rec {
     };
   };
 
+  AuthenDecHpwd = buildPerlPackage rec {
+    name = "Authen-DecHpwd-2.006";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
+      sha256 = "67f45fef6a23b7548f387b675cbf7881bf9da62d7d007cbf90d3a4b851b99eb7";
+    };
+    propagatedBuildInputs = [ ScalarString DataInteger DigestCRC ];
+  };
+
   AuthenHtpasswd = buildPerlPackage rec {
     name = "Authen-Htpasswd-0.171";
     src = fetchurl {
@@ -114,6 +123,16 @@ rec {
       sha256 = "0rw06hwpxg388d26l0jvirczx304f768ijvc20l4b2ll7xzg9ymm";
     };
     propagatedBuildInputs = [ ClassAccessor CryptPasswdMD5 DigestSHA1 IOLockedFile ];
+  };
+
+  AuthenPassphrase = buildPerlPackage rec {
+    name = "Authen-Passphrase-0.008";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
+      sha256 = "55db4520617d859d88c0ee54965da815b7226d792b8cdc8debf92073559e0463";
+    };
+    propagatedBuildInputs = [ModuleRuntime ParamsClassify CryptPasswdMD5 CryptDES
+      DataEntropy CryptUnixCryptXS CryptEksblowfish CryptMySQL DigestMD4 AuthenDecHpwd];
   };
 
   AuthenSASL = buildPerlPackage rec {
@@ -721,6 +740,15 @@ rec {
     };
   };
 
+  ClassMix = buildPerlPackage rec {
+    name = "Class-Mix-0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
+      sha256 = "054d0db62df90f22601f2a18fc84e9ca026d81601f5940b2fcc543e39d69b36b";
+    };
+    propagatedBuildInputs = [ParamsClassify];
+  };
+
   ClassMOP = Moose;
 
   ClassSingleton = buildPerlPackage rec {
@@ -907,6 +935,15 @@ rec {
     buildInputs = [CryptCBC];
   };
 
+  CryptEksblowfish = buildPerlPackage rec {
+    name = "Crypt-Eksblowfish-0.009";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
+      sha256 = "3cc7126d5841107237a9be2dc5c7fbc167cf3c4b4ce34678a8448b850757014c";
+    };
+    propagatedBuildInputs = [ClassMix];
+  };
+
   CryptPasswdMD5 = buildPerlPackage {
     name = "Crypt-PasswdMD5-1.3";
     src = fetchurl {
@@ -928,6 +965,23 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/authors/id/J/JD/JDPORTER/${name}.tar.gz";
       sha256 = "0r5w5i81s02x756alad9psxmpqmcxahzjpqxsb3kacsqj8s5br9b";
+    };
+  };
+
+  CryptMySQL = buildPerlPackage rec {
+    name = "Crypt-MySQL-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IK/IKEBE/${name}.tar.gz";
+      sha256 = "93ebdfaaefcfe9ab683f0121c85f24475d8197f0bcec46018219e4111434dde3";
+    };
+    propagatedBuildInputs = [DigestSHA1];
+  };
+
+  CryptRijndael = buildPerlPackage rec {
+    name = "Crypt-Rijndael-1.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
+      sha256 = "8f8833bc8839e0d4aa3c26d86d2f39ceb9b13e52a9f5e4fd928da2e71989d3b4";
     };
   };
 
@@ -994,6 +1048,23 @@ rec {
     };
   };
 
+  DataEntropy = buildPerlPackage rec {
+    name = "Data-Entropy-0.007";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
+      sha256 = "2611c4a1a3038594d79ea4ed14d9e15a9af8f77105f51667795fe4f8a53427e4";
+    };
+    propagatedBuildInputs = [ParamsClassify DataFloat CryptRijndael HTTPLite];
+  };
+
+  DataFloat = buildPerlPackage rec {
+    name = "Data-Float-0.012";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
+      sha256 = "698ecb092a3284e260cd3c3208408feb791d7d0f06a02673f9125ab2d51cc2d8";
+    };
+  };
+
   DataHierarchy = buildPerlPackage {
     name = "Data-Hierarchy-0.34";
     src = fetchurl {
@@ -1001,6 +1072,14 @@ rec {
       sha256 = "1vfrkygdaq0k7006i83jwavg9wgszfcyzbl9b7fp37z2acmyda5k";
     };
     propagatedBuildInputs = [TestException];
+  };
+
+  DataInteger = buildPerlPackage rec {
+    name = "Data-Integer-0.004";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
+      sha256 = "3a52f7717d1ebda3af40036d72cbcadd1984210737743997abdad141d620f67e";
+    };
   };
 
   DataOptList = buildPerlPackage rec {
@@ -1245,6 +1324,14 @@ rec {
     ];
   };
 
+  DigestCRC = buildPerlPackage rec {
+    name = "Digest-CRC-0.18";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLIMAUL/${name}.tar.gz";
+      sha256 = "5c5329f37c46eb79835169508583da8767d9839350b69bb2b48ac6f594f70374";
+    };
+  };
+
   DigestHMAC = buildPerlPackage {
     name = "Digest-HMAC-1.01";
     src = fetchurl {
@@ -1252,6 +1339,14 @@ rec {
       sha256 = "042d6nknc5icxqsy5asrh8v2shmvg7b3vbj95jyk4sbqlqpacwz3";
     };
     propagatedBuildInputs = [DigestSHA1];
+  };
+
+  DigestMD4 = buildPerlPackage rec {
+    name = "Digest-MD4-1.5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MI/MIKEM/DigestMD4/${name}.tar.gz";
+      sha256 = "c7d7a32f5c2710c929b5688a7b057ec8ddbc51cf278f623e771fc02dcabd6a1f";
+    };
   };
 
   DigestSHA = buildPerlPackage rec {
@@ -1820,6 +1915,14 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKSMITH/${name}.tar.gz";
       sha256 = "1vs6sw431nnlnbdy6jii9vqlz30ndlfwdpdgm8a1m6fqngzhzq59";
+    };
+  };
+
+  HTTPLite = buildPerlPackage rec {
+    name = "HTTP-Lite-2.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "66f4fc0f93eeb42c09737f83b21de1944212ae9b2acb784d5103e8208491477b";
     };
   };
 
@@ -3084,6 +3187,14 @@ rec {
     };
   };
 
+  ScalarString = buildPerlPackage rec {
+    name = "Scalar-String-0.002";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
+      sha256 = "d3a45cc137bb9f7d8848d5a10a5142d275a98f8dcfd3adb60593cee9d33fa6ae";
+    };
+  };
+
   ScopeGuard = buildPerlPackage {
     name = "Scope-Guard-0.03";
     src = fetchurl {
@@ -3904,6 +4015,14 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MS/MSCHWERN/UNIVERSAL-require-0.11.tar.gz;
       sha256 = "1rh7i3gva4m96m31g6yfhlqcabszhghbb3k3qwxbgx3mkf5s6x6i";
+    };
+  };
+
+  CryptUnixCryptXS = buildPerlPackage rec {
+    name = "Crypt-UnixCrypt_XS-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BORISZ/${name}.tar.gz";
+      sha256 = "527c32b8b6eb50d52b081ceae4be2d748e718e40ea85940da59a3adeb3a33156";
     };
   };
 
