@@ -103,4 +103,10 @@ stdenv.mkDerivation ({
     mv $sourceRoot $out/lib/modules/${modDirVersion}/source
     mv build $out/lib/modules/${modDirVersion}/build
   '';
+
+  postFixup = ''
+    if [ -z "$dontStrip" ]; then
+        find $out -name "*.ko" -print0 | xargs -0 strip -S
+    fi
+  '';
 })
