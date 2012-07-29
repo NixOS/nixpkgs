@@ -594,10 +594,10 @@ rec {
   };
 
   CGISession = buildPerlPackage rec {
-    name = "CGI-Session-4.42";
+    name = "CGI-Session-4.46";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MA/MARKSTOS/${name}.tar.gz";
-      sha256 = "186lqqmfvisw3i74anvnsaqlbp6ww3wyhlsgdpni0mlcnh56h4gw";
+      sha256 = "c04b725be6a1b9bf22387cc6427eb951408ccba1c52471a43a80306f31e68e1b";
     };
     buildInputs = [ DBFile ];
   };
