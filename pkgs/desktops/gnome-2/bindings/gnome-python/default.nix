@@ -25,7 +25,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     python waf install
+    cp bonobo/* $out/share/pygtk/2.0/defs/
   '';
+  
 
   buildInputs = [ python pkgconfig pygobject pygtk glib gtk GConf libgnome pythonDBus ];
 
