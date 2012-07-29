@@ -101,6 +101,16 @@ stdenv.mkDerivation ({
   buildNativeInputs = [ perl nettools kmod ];
 
   makeFlags = commonMakeFlags;
+
+  meta = {
+    description = "The Linux kernel";
+    license = "GPLv2";
+    homepage = http://www.kernel.org/;
+    maintainers = [
+      maintainers.shlevy
+    ];
+    platforms = lib.platforms.linux;
+  };
 } // optionalAttrs (features ? modular && features.modular) {
   makeFlags = commonMakeFlags ++ [
     "MODLIB=\"$(out)/lib/modules/${modDirVersion}\""
