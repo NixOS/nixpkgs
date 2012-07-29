@@ -1,4 +1,4 @@
-{ stdenv, runCommand, nettools, perl, kmod, writeTextFile, coffeescript }:
+{ stdenv, runCommand, nettools, perl, kmod, writeTextFile }:
 
 with stdenv.lib;
 
@@ -7,66 +7,14 @@ let
   # Function to parse the config file to get the features supported
   readFeatures = config:
     let
-      configParser = writeTextFile { name = "config-parser"; executable=true; text = ''
-        #!${coffeescript}/bin/coffee
-        fs = require "fs"
-        events = require "events"
-
-        lineEmitter = new events.EventEmitter()
-        buffer = new Buffer 0
-        input = fs.createReadStream process.argv[2]
-        input.on 'data', (data) ->
-          nextBuffer = new Buffer buffer.length + data.length
-          buffer.copy(nextBuffer)
-          data.copy(nextBuffer, buffer.length)
-          start = 0
-          offset = buffer.length
-          buffer = nextBuffer
-
-          for i in [1..data.length]
-              if data[i] == '\n'.charCodeAt 0
-                  end = i+offset+1
-                  line = buffer.slice start, end - 1
-                  start = end
-                  lineEmitter.emit "line", line.toString()
-
-          buffer = buffer.slice start
-        input.once 'end', ->
-          input.destroy()
-          if safeToWrite
-            output.end "}"
-            output.destroySoon()
-          else
-            output.once 'drain', ->
-              output.end "}"
-              output.destroySoon()
-
-        output = fs.createWriteStream process.env["out"]
-        output.setMaxListeners 0
-        safeToWrite = output.write "{\n"
-        unless safeToWrite
-          output.once 'drain', ->
-            safeToWrite = true
-
-        escapeNixString = (str) ->
-          str.replace("'''", "''''").replace("''${", "'''''${")
-        lineEmitter.on 'line', (line) ->
-          unless line.length is 0 or line.charAt(0) is '#'
-            split = line.split '='
-            name = split[0].substring "CONFIG_".length
-            value = escapeNixString split.slice(1).join ""
-            lineToWrite = "\"#{name}\" = '''#{value}''';\n"
-            if safeToWrite
-              safeToWrite = output.write lineToWrite
-            else
-              input.pause()
-              output.once 'drain', ->
-                safeToWrite = output.write lineToWrite
-                input.resume()
-      '';};
-
-      configAttrs = import "${runCommand "attrList.nix" {} "${configParser} ${config}"}";
-
+      configAttrs = import "${runCommand "attrList.nix" {} ''
+        grep -E -v '(^#|^$)' < ${config} | \
+          sed 's/CONFIG_// ; s/=/ /' | \
+          awk \
+            'BEGIN { print "{" }
+             END { print "}" }
+             { printf "\"%s\" = '"'''"'%s'"'''"';\n", $1, $2 }' > $out
+      ''}";
       getValue = option:
         if hasAttr option configAttrs then getAttr option configAttrs else null;
 
