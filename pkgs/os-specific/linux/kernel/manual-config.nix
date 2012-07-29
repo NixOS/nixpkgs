@@ -95,8 +95,6 @@ stdenv.mkDerivation ({
     "MODLIB=\"$(out)/lib/modules/${modDirVersion}\""
   ];
 
-  INSTALL_MOD_STRIP = "1";
-
   postInstall = ''
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
