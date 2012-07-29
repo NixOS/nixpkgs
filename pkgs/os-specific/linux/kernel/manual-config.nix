@@ -92,7 +92,9 @@ in
   config,
   # Manually specified features the kernel supports
   # If unspecified, this will be autodetected from the .config
-  features ? readFeatures config
+  features ? optionalAttrs allowImportFromDerivation (readFeatures config),
+  # Whether to utilize the controversial import-from-derivation feature to parse the config
+  allowImportFromDerivation ? false
 }:
 
 let
