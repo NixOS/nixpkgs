@@ -51,6 +51,7 @@ in
   # The kernel .config file
   config,
   # Manually specified features the kernel supports
+  # If unspecified, this will be autodetected from the .config
   features ? readFeatures config
 }:
 
@@ -100,7 +101,7 @@ stdenv.mkDerivation ({
   buildNativeInputs = [ perl nettools kmod ];
 
   makeFlags = commonMakeFlags;
-} // optionalAttrs features.modular {
+} // optionalAttrs (features ? modular && features.modular) {
   makeFlags = commonMakeFlags ++ [
     "MODLIB=\"$(out)/lib/modules/${modDirVersion}\""
   ];
