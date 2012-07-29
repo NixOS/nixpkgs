@@ -68,11 +68,11 @@ stdenv.mkDerivation ({
     runHook postConfigure
   '';
 
-  INSTALL_PATH = "$out";
+  INSTALL_PATH = "$(out)";
 
   buildNativeInputs = [ perl nettools ];
 } // optionalAttrs features.modular {
-  MODLIB = "$out/lib/modules/${modDirVersion}";
+  MODLIB = "$(out)/lib/modules/${modDirVersion}";
 
   INSTALL_MOD_STRIP = "1";
 
