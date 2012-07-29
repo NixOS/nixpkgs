@@ -5856,6 +5856,11 @@ let
   linux = linuxPackages.kernel;
   linuxPackages = linuxPackages_3_2;
 
+  # A function to build a manually-configured kernel
+  linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
+    inherit stdenv runCommand;
+  };
+
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
   libselinux = callPackage ../os-specific/linux/libselinux { };
