@@ -1,4 +1,4 @@
-{ stdenv, runCommand, nettools, perl, kmod }:
+{ stdenv, runCommand, nettools, perl, kmod, writeTextFile }:
 
 with stdenv.lib;
 
@@ -54,7 +54,20 @@ in
   features ? readFeatures config
 }:
 
-let commonMakeFlags = [ "O=../build" ]; in
+let
+  commonMakeFlags = [
+    "O=../build"
+    "INSTALL_PATH=$(out)"
+    "INSTALLKERNEL=${installkernel}"
+  ];
+
+  installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
+    #!/bin/sh
+    mkdir $4
+    mv -v $2 $4
+    mv -v $3 $4
+  '';};
+in
 
 stdenv.mkDerivation ({
   name = "linux-${version}";
@@ -70,9 +83,8 @@ stdenv.mkDerivation ({
   prePatch = ''
     for mf in $(find -name Makefile -o -name Makefile.include); do
         echo "stripping FHS paths in \`$mf'..."
-        sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g'
+        sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
     done
-    sed -i -e 's|/sbin/depmod|${kmod}/sbin/depmod|' Makefile
   '';
 
   configurePhase = ''
@@ -85,19 +97,7 @@ stdenv.mkDerivation ({
     runHook postConfigure
   '';
 
-  INSTALL_PATH = "$(out)";
-
-  buildNativeInputs = [ perl nettools ];
-
-  installPhase = ''
-    runHook preInstall
-    mkdir $out
-    mv -v ../build/System.map $out
-    # !!! Assumes x86
-    mv -v ../build/arch/x86/boot/bzImage $out
-    mv -v ../build/vmlinux $out
-    runHook postInstall
-  '';
+  buildNativeInputs = [ perl nettools kmod ];
 
   makeFlags = commonMakeFlags;
 } // optionalAttrs features.modular {
