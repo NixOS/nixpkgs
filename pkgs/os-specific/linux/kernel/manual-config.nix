@@ -1,4 +1,4 @@
-{ stdenv, runCommand, nettools, perl, kmod, writeTextFile }:
+{ stdenv, runCommand, nettools, perl, kmod, writeTextFile, coffeescript }:
 
 with stdenv.lib;
 
@@ -7,25 +7,65 @@ let
   # Function to parse the config file to get the features supported
   readFeatures = config:
     let
-      # !!! Original causes recursion too deep, need to import from derivation
-      # linesWithComments = splitString "\n" (builtins.readFile config);
-      lines = import "${runCommand "lines.nix" {} ''
-        echo "[" >> $out
-        while read line; do
-            if [ -n "$line" ] && [ "#" != ''${line:0:1} ]; then
-                echo "'''" >> $out
-                echo $(echo $line | sed "s/'''/''''/g")"'''" >> $out
-            fi
-        done < ${config} 
-        echo "]" >> $out
-      ''}";
+      configParser = writeTextFile { name = "config-parser"; executable=true; text = ''
+        #!${coffeescript}/bin/coffee
+        fs = require "fs"
+        events = require "events"
 
-      nvpairs = map (s: let split = splitString "=" s; fst = head split; in {
-        name = substring (stringLength "CONFIG_") (stringLength fst) fst;
-        value = head (tail split);
-      }) lines;
+        lineEmitter = new events.EventEmitter()
+        buffer = new Buffer 0
+        input = fs.createReadStream process.argv[2]
+        input.on 'data', (data) ->
+          nextBuffer = new Buffer buffer.length + data.length
+          buffer.copy(nextBuffer)
+          data.copy(nextBuffer, buffer.length)
+          start = 0
+          offset = buffer.length
+          buffer = nextBuffer
 
-      configAttrs = listToAttrs nvpairs;
+          for i in [1..data.length]
+              if data[i] == '\n'.charCodeAt 0
+                  end = i+offset+1
+                  line = buffer.slice start, end - 1
+                  start = end
+                  lineEmitter.emit "line", line.toString()
+
+          buffer = buffer.slice start
+        input.once 'end', ->
+          input.destroy()
+          if safeToWrite
+            output.end "}"
+            output.destroySoon()
+          else
+            output.once 'drain', ->
+              output.end "}"
+              output.destroySoon()
+
+        output = fs.createWriteStream process.env["out"]
+        output.setMaxListeners 0
+        safeToWrite = output.write "{\n"
+        unless safeToWrite
+          output.once 'drain', ->
+            safeToWrite = true
+
+        escapeNixString = (str) ->
+          str.replace("'''", "''''").replace("''${", "'''''${")
+        lineEmitter.on 'line', (line) ->
+          unless line.length is 0 or line.charAt(0) is '#'
+            split = line.split '='
+            name = split[0].substring "CONFIG_".length
+            value = escapeNixString split.slice(1).join ""
+            lineToWrite = "\"#{name}\" = '''#{value}''';\n"
+            if safeToWrite
+              safeToWrite = output.write lineToWrite
+            else
+              input.pause()
+              output.once 'drain', ->
+                safeToWrite = output.write lineToWrite
+                input.resume()
+      '';};
+
+      configAttrs = import "${runCommand "attrList.nix" {} "${configParser} ${config}"}";
 
       getValue = option:
         if hasAttr option configAttrs then getAttr option configAttrs else null;
@@ -52,7 +92,9 @@ in
   config,
   # Manually specified features the kernel supports
   # If unspecified, this will be autodetected from the .config
-  features ? readFeatures config
+  features ? optionalAttrs allowImportFromDerivation (readFeatures config),
+  # Whether to utilize the controversial import-from-derivation feature to parse the config
+  allowImportFromDerivation ? false
 }:
 
 let

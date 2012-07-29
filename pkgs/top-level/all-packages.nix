@@ -5858,7 +5858,8 @@ let
 
   # A function to build a manually-configured kernel
   linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
-    inherit stdenv runCommand nettools perl kmod writeTextFile;
+    inherit (pkgs) stdenv runCommand nettools perl kmod writeTextFile;
+    coffeescript = pkgs.nodePackages."coffee-script";
   };
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
