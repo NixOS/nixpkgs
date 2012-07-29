@@ -41,6 +41,9 @@ let
 
   features = readFeatures config;
 
+  commonMakeFlags = [
+    "O=../build"
+  ];
 in
 
 stdenv.mkDerivation ({
@@ -54,8 +57,8 @@ stdenv.mkDerivation ({
 
   inherit patches src;
 
-  postPatch = ''
-    for mf in $(find -name Makefile); do
+  prePatch = ''
+    for mf in $(find -name Makefile -o -name Makefile.include); do
         echo "stripping FHS paths in \`$mf'..."
         sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g'
     done
@@ -63,9 +66,11 @@ stdenv.mkDerivation ({
 
   configurePhase = ''
     runHook preConfigure
-    ln -sv ${config} .config
-    make oldconfig
-    rm .config.old
+    mkdir ../build
+    make $makeFlags "''${makeFlagsArray[@]}" mrproper
+    ln -sv ${config} ../build/.config
+    make $makeFlags "''${makeFlagsArray[@]}" oldconfig
+    rm ../build/.config.old
     runHook postConfigure
   '';
 
@@ -76,14 +81,18 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
     mkdir $out
-    mv -v System.map $out
+    mv -v ../build/System.map $out
     # !!! Assumes x86
-    mv -v arch/x86/boot/bzImage $out
-    mv -v vmlinux $out
+    mv -v ../build/arch/x86/boot/bzImage $out
+    mv -v ../build/vmlinux $out
     runHook postInstall
   '';
+
+  makeFlags = commonMakeFlags;
 } // optionalAttrs features.modular {
-  makeFlags = [ "MODLIB=\"$(out)/lib/modules/${modDirVersion}\"" ];
+  makeFlags = commonMakeFlags ++ [
+    "MODLIB=\"$(out)/lib/modules/${modDirVersion}\""
+  ];
 
   INSTALL_MOD_STRIP = "1";
 
@@ -92,7 +101,7 @@ stdenv.mkDerivation ({
       $installFlags "''${installFlagsArray[@]}"
     rm -f $out/lib/modules/${modDirVersion}/{build,source}
     cd ..
-    mv $sourceRoot $out/lib/modules/${modDirVersion}/build
-    ln -sv $out/lib/modules/${modDirVersion}/{build,source}
+    mv $sourceRoot $out/lib/modules/${modDirVersion}/source
+    mv build $out/lib/modules/${modDirVersion}/build
   '';
 })
