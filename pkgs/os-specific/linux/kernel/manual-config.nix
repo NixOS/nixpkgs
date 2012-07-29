@@ -1,7 +1,5 @@
 { stdenv, runCommand, nettools, perl, kmod }:
 
-{ version, modDirVersion ? version, src, patches ? [], config }:
-
 with stdenv.lib;
 
 let
@@ -39,12 +37,24 @@ let
       modular = isYes "MODULES";
     };
 
-  features = readFeatures config;
-
-  commonMakeFlags = [
-    "O=../build"
-  ];
 in
+
+{
+  # The kernel version
+  version,
+  # The version of the kernel module directory
+  modDirVersion ? version,
+  # The kernel source (tarball, git checkout, etc.)
+  src,
+  # Any patches
+  patches ? [],
+  # The kernel .config file
+  config,
+  # Manually specified features the kernel supports
+  features ? readFeatures config
+}:
+
+let commonMakeFlags = [ "O=../build" ]; in
 
 stdenv.mkDerivation ({
   name = "linux-${version}";
