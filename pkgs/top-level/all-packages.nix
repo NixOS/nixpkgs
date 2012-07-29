@@ -5858,7 +5858,7 @@ let
 
   # A function to build a manually-configured kernel
   linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
-    inherit stdenv runCommand nettools perl;
+    inherit stdenv runCommand nettools perl kmod;
   };
 
   keyutils = callPackage ../os-specific/linux/keyutils { };

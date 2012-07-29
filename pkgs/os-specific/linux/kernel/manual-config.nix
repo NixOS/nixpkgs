@@ -1,4 +1,4 @@
-{ stdenv, runCommand, nettools, perl }:
+{ stdenv, runCommand, nettools, perl, kmod }:
 
 { version, modDirVersion ? version, src, patches ? [], config }:
 
@@ -62,6 +62,7 @@ stdenv.mkDerivation ({
         echo "stripping FHS paths in \`$mf'..."
         sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g'
     done
+    sed -i -e 's|/sbin/depmod|${kmod}/sbin/depmod|' Makefile
   '';
 
   configurePhase = ''
