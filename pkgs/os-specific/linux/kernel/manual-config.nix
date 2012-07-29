@@ -71,6 +71,16 @@ stdenv.mkDerivation ({
   INSTALL_PATH = "$(out)";
 
   buildNativeInputs = [ perl nettools ];
+
+  installPhase = ''
+    runHook preInstall
+    mkdir $out
+    mv -v System.map $out
+    # !!! Assumes x86
+    mv -v arch/x86/boot/bzImage $out
+    mv -v vmlinux $out
+    runHook postInstall
+  '';
 } // optionalAttrs features.modular {
   MODLIB = "$(out)/lib/modules/${modDirVersion}";
 
