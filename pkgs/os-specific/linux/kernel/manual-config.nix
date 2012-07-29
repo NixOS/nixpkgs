@@ -14,9 +14,9 @@ let
       lines = import "${runCommand "lines.nix" {} ''
         echo "[" >> $out
         while read line; do
-            if [ -n "$line" ] && [ `expr index "$line" "#"` -ne 1 ]; then
-                echo "${"''"}" >> $out
-                echo $(echo $line | sed "s@${"''"}@\$\{\"${"''"}\"}@g")"${"''"}" >> $out
+            if [ -n "$line" ] && [ "#" != ''${line:0:1} ]; then
+                echo "'''" >> $out
+                echo $(echo $line | sed "s/'''/''''/g")"'''" >> $out
             fi
         done < ${config} 
         echo "]" >> $out
