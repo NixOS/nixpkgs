@@ -65,6 +65,7 @@ stdenv.mkDerivation ({
     runHook preConfigure
     ln -sv ${config} .config
     make oldconfig
+    rm .config.old
     runHook postConfigure
   '';
 
@@ -89,5 +90,9 @@ stdenv.mkDerivation ({
   postInstall = ''
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
+    rm -f $out/lib/modules/${modDirVersion}/{build,source}
+    cd ..
+    mv $sourceRoot $out/lib/modules/${modDirVersion}/build
+    ln -sv $out/lib/modules/${modDirVersion}/{build,source}
   '';
 })
