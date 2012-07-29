@@ -1,4 +1,4 @@
-{ stdenv, runCommand }:
+{ stdenv, runCommand, nettools, perl }:
 
 { version, modDirVersion ? version, src, patches ? [], config }:
 
@@ -69,6 +69,8 @@ stdenv.mkDerivation ({
   '';
 
   INSTALL_PATH = "$out";
+
+  buildNativeInputs = [ perl nettools ];
 } // optionalAttrs features.modular {
   MODLIB = "$out/lib/modules/${modDirVersion}";
 
