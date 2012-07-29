@@ -113,6 +113,8 @@ stdenv.mkDerivation ({
     cd ..
     mv $sourceRoot $out/lib/modules/${modDirVersion}/source
     mv build $out/lib/modules/${modDirVersion}/build
+    unlink $out/lib/modules/${modDirVersion}/build/source
+    ln -sv $out/lib/modules/${modDirVersion}/{,build/}source
   '';
 
   postFixup = ''
