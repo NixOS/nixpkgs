@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, gettext, makeWrapper, PerlMagick, YAML
 , TextMarkdown, URI, HTMLParser, HTMLScrubber, HTMLTemplate, TimeDate
 , CGISession, CGIFormBuilder, DBFile, LocaleGettext, RpcXML, XMLSimple
-, YAMLLibYAML, which, HTMLTree
+, YAMLLibYAML, which, HTMLTree, AuthenPassphrase
 , gitSupport ? false, git ? null
 , docutilsSupport ? false, python ? null, docutils ? null
 , monotoneSupport ? false, monotone ? null
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl TextMarkdown URI HTMLParser HTMLScrubber HTMLTemplate
     TimeDate gettext makeWrapper DBFile CGISession CGIFormBuilder LocaleGettext
-    RpcXML XMLSimple PerlMagick YAML YAMLLibYAML which HTMLTree ]
+    RpcXML XMLSimple PerlMagick YAML YAMLLibYAML which HTMLTree AuthenPassphrase ]
     ++ lib.optionals docutilsSupport [python docutils]
     ++ lib.optionals gitSupport [git]
     ++ lib.optionals monotoneSupport [monotone]
