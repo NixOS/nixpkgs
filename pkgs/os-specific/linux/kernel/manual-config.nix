@@ -82,7 +82,7 @@ stdenv.mkDerivation ({
     runHook postInstall
   '';
 } // optionalAttrs features.modular {
-  MODLIB = "$(out)/lib/modules/${modDirVersion}";
+  makeFlags = [ "MODLIB=\"$(out)/lib/modules/${modDirVersion}\"" ];
 
   INSTALL_MOD_STRIP = "1";
 
