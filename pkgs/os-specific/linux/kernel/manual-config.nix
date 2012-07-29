@@ -87,7 +87,7 @@ stdenv.mkDerivation ({
   INSTALL_MOD_STRIP = "1";
 
   postInstall = ''
-    make modules_install $makeFlags "$\{makeFlagsArray[@]}" \
-      $installFlags "$\{installFlagsArray[@]}"
+    make modules_install $makeFlags "''${makeFlagsArray[@]}" \
+      $installFlags "''${installFlagsArray[@]}"
   '';
 })
