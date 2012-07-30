@@ -1,4 +1,4 @@
-{ config, pkgs, serverInfo, ... }:
+{ config, pkgs, serverInfo, php, ... }:
 
 with pkgs.lib;
 
@@ -101,7 +101,7 @@ let
     ''
       ensureDir $out/bin
       for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php; do
-        makeWrapper ${pkgs.php}/bin/php $out/bin/mediawiki-${config.id}-$(basename $i .php) \
+        makeWrapper ${php}/bin/php $out/bin/mediawiki-${config.id}-$(basename $i .php) \
           --add-flags ${mediawikiRoot}/maintenance/$i
       done
     '';

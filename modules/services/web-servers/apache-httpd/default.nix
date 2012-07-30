@@ -74,7 +74,7 @@ let
           phpOptions = "";
           options = {};
         };
-        res = defaults // svcFunction { inherit config pkgs serverInfo; };
+        res = defaults // svcFunction { inherit config pkgs serverInfo php; };
       in res;
     in map f defs;
 
