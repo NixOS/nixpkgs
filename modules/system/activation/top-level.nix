@@ -151,7 +151,7 @@ let
       config.boot.kernelParams ++ config.boot.extraKernelParams;
     installBootLoader =
       config.system.build.installBootLoader
-      or "echo 'Warning: don't know how to make this configuration bootable; please enable a boot loader.' 1>&2; true";
+      or "echo \"Warning: don't know how to make this configuration bootable; please enable a boot loader.\" 1>&2; true";
     activationScript = config.system.activationScripts.script;
     nixosVersion = config.system.nixosVersion;
 
@@ -159,11 +159,11 @@ let
 
     # Pass the names of all Upstart tasks to the activation script.
     tasks = attrValues (mapAttrs (n: v: if v.task then ["[${v.name}]=1"] else []) config.jobs);
-    
+
     # Pass the names of all Upstart jobs that shouldn't be restarted
     # to the activation script.
     noRestartIfChanged = attrValues (mapAttrs (n: v: if v.restartIfChanged then [] else ["[${v.name}]=1"]) config.jobs);
-    
+
     # Most of these are needed by grub-install.
     path =
       [ pkgs.coreutils
