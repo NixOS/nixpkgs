@@ -5224,6 +5224,8 @@ let
 
   memcached = callPackage ../servers/memcached {};
 
+  mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
+
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
   mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
