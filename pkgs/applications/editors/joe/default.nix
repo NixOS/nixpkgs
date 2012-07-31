@@ -1,10 +1,11 @@
 {stdenv, fetchurl} :
 
-stdenv.mkDerivation {
-  name = "joe-3.3";
+stdenv.mkDerivation rec {
+  name = "joe-3.7";
+
   src = fetchurl {
-    url = mirror://sourceforge/joe-editor/joe-3.3.tar.gz;
-    md5 = "02221716679c039c5da00c275d61dbf4";
+    url = "mirror://sourceforge/joe-editor/${name}.tar.gz";
+    sha256 = "0vqhffdjn3xwsfa383i6kdrpfwilq8b382ljjhy1v32smphmdr6a";
   };
 
   meta = {
