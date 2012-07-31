@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ndh7wpm9qh12vm5avjrq2xv1j681j9qq6j2fyj6a2shl67dp687";
   };
 
-  buildInputs = [ pkgconfig dbus.libs dbus_glib gtk glib ];
+  buildInputs = [ pkgconfig dbus dbus_glib gtk glib ];
 
   meta = {
     homepage = http://galago-project.org/;

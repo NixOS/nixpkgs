@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, dbus_libs, pkgconfig, libnl1 }:
+{ stdenv, fetchurl, openssl, dbus, pkgconfig, libnl1 }:
 
 stdenv.mkDerivation rec {
   version = "0.7.3";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace /usr/local $out
   '';
 
-  buildInputs = [ openssl dbus_libs libnl1 ];
+  buildInputs = [ openssl dbus libnl1 ];
 
   buildNativeInputs = [ pkgconfig ];
 

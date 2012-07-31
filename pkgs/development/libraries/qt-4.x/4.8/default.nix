@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
                               stdenv.lib.platforms.mesaPlatforms)
          mesa)
     ++ (stdenv.lib.optional (buildWebkit || buildMultimedia) alsaLib)
-    ++ [ zlib libpng openssl dbus.libs freetype fontconfig glib ]
+    ++ [ zlib libpng openssl dbus freetype fontconfig glib ]
     ++ (stdenv.lib.optionals (buildWebkit || buildMultimedia)
         [ gstreamer gst_plugins_base ]);
 

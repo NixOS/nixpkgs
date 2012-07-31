@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     libXmu
     libXv
     openssl
-    dbus.libs
+    dbus
     cups
     pkgconfig
     libXext

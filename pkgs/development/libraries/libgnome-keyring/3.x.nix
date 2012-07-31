@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, dbus_libs, libgcrypt, pkgconfig,
+{ stdenv, fetchurl, glib, dbus, libgcrypt, pkgconfig,
 intltool }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1cxd2vb1lzm8smq1q45dsn13s6kdqdb60lashdk7hwv035xy9jrb";
   };
 
-  propagatedBuildInputs = [ glib dbus_libs libgcrypt ];
+  propagatedBuildInputs = [ glib dbus libgcrypt ];
   buildNativeInputs = [ pkgconfig intltool ];
 
   meta = {

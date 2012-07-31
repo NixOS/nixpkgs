@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, telepathy_qt, kdelibs, kde_workspace, gettext, dbus_libs
+{ stdenv, fetchurl, fetchgit, telepathy_qt, kdelibs, kde_workspace, gettext, dbus
 , pkgconfigUpstream , qt_gstreamer, telepathy_glib, telepathy_logger, qjson, flex, bison }:
 
 let
@@ -8,7 +8,7 @@ let
 
   overrides = {
     telepathy_logger_qt = x : x // {
-      NIX_CFLAGS_COMPILE = "-I${dbus_libs}/include/dbus-1.0";
+      NIX_CFLAGS_COMPILE = "-I${dbus}/include/dbus-1.0";
     };
   };
 

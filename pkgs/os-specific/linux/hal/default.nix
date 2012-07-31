@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    pkgconfig python pciutils expat libusb dbus.libs dbus_glib glib
+    pkgconfig python pciutils expat libusb dbus dbus_glib glib
     libuuid perl perlXMLParser gettext zlib gperf
     consolekit policykit
   ];

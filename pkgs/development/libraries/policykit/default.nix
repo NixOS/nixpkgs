@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig glib dbus_glib pam intltool gettext libxslt ];
 
-  propagatedBuildInputs = [ expat dbus.libs ];
+  propagatedBuildInputs = [ expat dbus ];
 
   configureFlags = "--localstatedir=/var --sysconfdir=/etc";
 
