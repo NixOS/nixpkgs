@@ -4679,6 +4679,8 @@ let
     inherit (vamp) vampSDK;
   };
 
+  sbc = callPackage ../development/libraries/sbc { };
+
   schroedinger = callPackage ../development/libraries/schroedinger { };
 
   SDL = callPackage ../development/libraries/SDL {
