@@ -405,6 +405,7 @@ rec {
         CatalystDevel DBIxClassSchemaLoader MooseXNonMoose
         NamespaceClean HashMerge DBIxClassCursorCached
       ];
+    meta.platforms = stdenv.lib.platforms.linux;
   };
 
   CatalystRuntime = buildPerlPackage rec{
@@ -1201,7 +1202,7 @@ rec {
   };
 
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
-    inherit fetchurl buildPerlPackage DBI;
+    inherit stdenv fetchurl buildPerlPackage DBI;
     inherit (pkgs) sqlite;
   };
 
@@ -1211,7 +1212,7 @@ rec {
   };
 
   DBDPg = import ../development/perl-modules/DBD-Pg {
-    inherit fetchurl buildPerlPackage DBI;
+    inherit stdenv fetchurl buildPerlPackage DBI;
     inherit (pkgs) postgresql;
   };
 
