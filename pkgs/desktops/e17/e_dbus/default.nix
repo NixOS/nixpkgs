@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, zlib, libjpeg, expat, ecore, eina, evas
-, dbus_libs }:
+, dbus }:
 stdenv.mkDerivation rec {
   name = "e_dbus-${version}";
   version = "1.2.0-alpha";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kky76v7yydsjihgi1hbwpyqhdmbxmxj2dw4p7kiqbl67dmsjhxg";
   };
   buildInputs = [ pkgconfig zlib libjpeg expat ecore eina evas ];
-  propagatedBuildInputs = [ dbus_libs ];
+  propagatedBuildInputs = [ dbus ];
   configureFlags = ''
     --disable-edbus-test
     --disable-edbus-test-client

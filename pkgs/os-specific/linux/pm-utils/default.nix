@@ -1,10 +1,10 @@
 { stdenv, fetchurl, coreutils, gnugrep, utillinux, module_init_tools
-, procps, kbd, dbus_tools }:
+, procps, kbd, dbus }:
 
 let
 
   binPath = stdenv.lib.makeSearchPath "bin"
-    [ coreutils gnugrep utillinux module_init_tools procps kbd dbus_tools ];
+    [ coreutils gnugrep utillinux module_init_tools procps kbd dbus ];
 
   sbinPath = stdenv.lib.makeSearchPath "sbin"
     [ procps ];

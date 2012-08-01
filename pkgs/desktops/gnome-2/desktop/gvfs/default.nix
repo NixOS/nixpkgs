@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, dbus_libs, samba, libarchive, fuse, libgphoto2
+{ stdenv, fetchurl, pkgconfig, dbus, samba, libarchive, fuse, libgphoto2
 , libcdio, libxml2, libtool, glib, intltool, GConf, libgnome_keyring, libsoup
 , udev, avahi}:
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ glib dbus_libs udev samba libarchive fuse libgphoto2 libcdio libxml2 GConf
+    [ glib dbus udev samba libarchive fuse libgphoto2 libcdio libxml2 GConf
       libgnome_keyring libsoup avahi libtool
     ];
 

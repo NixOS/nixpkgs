@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, udev, pkgconfig, dbus_libs }:
+{ stdenv, fetchurl, udev, pkgconfig, dbus }:
 
 stdenv.mkDerivation rec {
   name = "pcsclite-1.7.4";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     configureFlags="$configureFlags --enable-confdir=$out/etc"
   '';
 
-  buildInputs = [ udev dbus_libs ];
+  buildInputs = [ udev dbus ];
 
   buildNativeInputs = [ pkgconfig ];
 
