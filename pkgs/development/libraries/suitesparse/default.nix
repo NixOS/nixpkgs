@@ -1,9 +1,10 @@
 { stdenv, fetchurl, blas, liblapack, gfortran } :
-stdenv.mkDerivation {
-  name = "suitesparse";
+stdenv.mkDerivation rec {
+  version = "4.0.0";
+  name = "suitesparse-${version}";
   src = fetchurl {
-    url = http://www.cise.ufl.edu/research/sparse/SuiteSparse/SuiteSparse-3.5.0.tar.gz ;
-    sha256 = "0npn7c1j5qag5m2r0cmh3bwc42c1jk8k2yg2cfyxlcrp0h7wn4rc";  			
+    url = "http://www.cise.ufl.edu/research/sparse/SuiteSparse/SuiteSparse-${version}.tar.gz" ;
+    sha256 = "1nvbdw10wa6654k8sa2vhr607q6fflcywyji5xd767cqpwag4v5j";  			
   };
   buildInputs = [blas liblapack gfortran] ;
   patches = [./disable-metis.patch];
@@ -13,6 +14,8 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     mkdir -p $out/include
   '';
+
+  makeFlags = ''PREFIX=\"$(out)\" INSTALL_LIB=$(out)/lib INSTALL_INCLUDE=$(out)/include'';
 
   NIX_CFLAGS = "-fPIC";
 
