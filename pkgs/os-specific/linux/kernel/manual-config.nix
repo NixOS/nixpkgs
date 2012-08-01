@@ -108,8 +108,8 @@ stdenv.mkDerivation {
     "O=../build"
     "INSTALL_PATH=$(out)"
     "INSTALLKERNEL=${installkernel}"
-  ] ++ (optional isModular "MODLIB=\"$(out)/lib/modules/${modDirVersion}\"")
-  ++ optional installsFirmware "INSTALL_FW_PATH=\"$(out)/lib/firmware\"";
+  ] ++ (optional isModular "MODLIB=$(out)/lib/modules/${modDirVersion}")
+  ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
   postInstall = if isModular then ''
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
