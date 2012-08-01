@@ -507,11 +507,11 @@ let pythonPackages = python.modules // rec {
   
   django = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.4";
+    version = "1.4.1";
 
     src = fetchurl {
       url = "http://www.djangoproject.com/m/releases/${version}/${name}.tar.gz";
-      sha256 = "1sc8ajixaqfylb7jmmhn38hgbnqipylh1sqmpicx7rqhxbxvm5n0";
+      sha256 = "16s0anvpaccbqmdrhl71z73k0dy2sl166nnc2fbd5lshlgmj13ad";
     };
 
     doCheck = false;
@@ -523,12 +523,12 @@ let pythonPackages = python.modules // rec {
   };
 
   
-  django_1_3_1 = buildPythonPackage rec {
-    name = "Django-1.3.1";
+  django_1_3 = buildPythonPackage rec {
+    name = "Django-1.3.2";
 
     src = fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
-      sha256 = "0sqmvqy3y5h76pa3zjcnyiy5x01bzzy03afdp2qdwqx0x321i4dg";
+      sha256 = "0r6pdm33x96aba9x36jvqpkh2bf1zixnzvr12mcc8qq8wc7hii3j";
     };
 
     doCheck = false;
@@ -548,7 +548,7 @@ let pythonPackages = python.modules // rec {
       md5 = "24b8373916f53f74d701b99a6cf41409";
     };
 
-    propagatedBuildInputs = [ django_1_3_1 ];
+    propagatedBuildInputs = [ django_1_3 ];
 
     meta = {
       description = "A database schema evolution tool for the Django web framework";
@@ -565,7 +565,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "1hhvpi81yknvlaazq1cpgamp9vf3x1fcr0ba64q3j2yz1kgin1i8";
     };
 
-    propagatedBuildInputs = [ pkgs.pil django_1_3_1 ];
+    propagatedBuildInputs = [ pkgs.pil django_1_3 ];
 
     meta = {
       description = "A collection of useful extensions for Django";
@@ -2072,7 +2072,7 @@ let pythonPackages = python.modules // rec {
 
     propagatedBuildInputs =
       [ recaptcha_client pytz memcached dateutil paramiko flup pygments
-        djblets django_1_3_1 django_evolution pkgs.pycrypto python.modules.sqlite3
+        djblets django_1_3 django_evolution pkgs.pycrypto python.modules.sqlite3
         pysvn pkgs.pil psycopg2
       ];
   };
