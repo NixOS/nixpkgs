@@ -523,7 +523,7 @@ let pythonPackages = python.modules // rec {
   };
 
   
-  django_1_3_2 = buildPythonPackage rec {
+  django_1_3 = buildPythonPackage rec {
     name = "Django-1.3.2";
 
     src = fetchurl {
@@ -548,7 +548,7 @@ let pythonPackages = python.modules // rec {
       md5 = "24b8373916f53f74d701b99a6cf41409";
     };
 
-    propagatedBuildInputs = [ django_1_3_2 ];
+    propagatedBuildInputs = [ django_1_3 ];
 
     meta = {
       description = "A database schema evolution tool for the Django web framework";
@@ -565,7 +565,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "1hhvpi81yknvlaazq1cpgamp9vf3x1fcr0ba64q3j2yz1kgin1i8";
     };
 
-    propagatedBuildInputs = [ pkgs.pil django_1_3_2 ];
+    propagatedBuildInputs = [ pkgs.pil django_1_3 ];
 
     meta = {
       description = "A collection of useful extensions for Django";
@@ -2072,7 +2072,7 @@ let pythonPackages = python.modules // rec {
 
     propagatedBuildInputs =
       [ recaptcha_client pytz memcached dateutil paramiko flup pygments
-        djblets django_1_3_2 django_evolution pkgs.pycrypto python.modules.sqlite3
+        djblets django_1_3 django_evolution pkgs.pycrypto python.modules.sqlite3
         pysvn pkgs.pil psycopg2
       ];
   };
