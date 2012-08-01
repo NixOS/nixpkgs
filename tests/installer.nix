@@ -250,32 +250,28 @@ in {
     };
 
   # Create two physical LVM partitions combined into one volume group
-  # that contains the logical swap and root partitions.  Uses a 
+  # that contains the logical swap and root partitions.
   lvm = makeTest
     { createPartitions =
         ''
           $machine->mustSucceed(
               "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary ext2 1M 30MB", # /boot
-              "parted /dev/vda -- mkpart primary 31M 2048M", # first PV
+              "parted /dev/vda -- mkpart primary 1M 2048M", # first PV
               "parted /dev/vda -- set 1 lvm on",
               "parted /dev/vda -- mkpart primary 2048M -1s", # second PV
               "parted /dev/vda -- set 2 lvm on",
               "udevadm settle",
-              "pvcreate /dev/vda2 /dev/vda3",
-              "vgcreate MyVolGroup /dev/vda2 /dev/vda3",
+              "pvcreate /dev/vda1 /dev/vda2",
+              "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
               "lvcreate --size 1G --name swap MyVolGroup",
               "lvcreate --size 2G --name nixos MyVolGroup",
               "mkswap -f /dev/MyVolGroup/swap -L swap",
               "swapon -L swap",
               "mkfs.xfs -L nixos /dev/MyVolGroup/nixos",
               "mount LABEL=nixos /mnt",
-              "mkfs.ext4 -L boot /dev/vda1",
-              "mkdir /mnt/boot",
-              "mount LABEL=boot /mnt/boot",
           );
         '';
-      fileSystems = rootFS + bootFS;
+      fileSystems = rootFS;
     };
 
   swraid = makeTest
