@@ -71,7 +71,7 @@ let
   isModular = config.isYes "MODULES";
 
   installsFirmware = (config.isEnabled "FW_LOADER") &&
-    (isModular || (config.isNo "FIRMWARE_IN_KERNEL"));
+    (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
 in
 
 stdenv.mkDerivation {
