@@ -111,7 +111,9 @@ stdenv.mkDerivation {
   ] ++ (optional isModular "MODLIB=$(out)/lib/modules/${modDirVersion}")
   ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
-  postInstall = if isModular then ''
+  postInstall = stdenv.lib.optionalString installsFirmware ''
+    mkdir -p $out/lib/firmware
+  '' + (if isModular then ''
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
     rm -f $out/lib/modules/${modDirVersion}/{build,source}
@@ -123,7 +125,7 @@ stdenv.mkDerivation {
   '' else optionalString installsFirmware ''
     make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
-  '';
+  '');
 
   postFixup = optionalString isModular ''
     if [ -z "$dontStrip" ]; then
