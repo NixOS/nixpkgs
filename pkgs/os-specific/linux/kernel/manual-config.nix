@@ -61,10 +61,10 @@ in
 }:
 
 let
-  installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
+  installkernel = name: writeTextFile { name = "installkernel"; executable=true; text = ''
     #!/bin/sh
     mkdir $4
-    mv -v $2 $4
+    mv -v $2 $4/${name}
     mv -v $3 $4
   '';};
 
@@ -72,6 +72,12 @@ let
 
   installsFirmware = (config.isEnabled "FW_LOADER") &&
     (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
+
+  commonMakeFlags = [
+    "O=../build"
+    "INSTALL_PATH=$(out)"
+  ] ++ (optional isModular "MODLIB=$(out)/lib/modules/${modDirVersion}")
+  ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 in
 
 stdenv.mkDerivation {
@@ -86,7 +92,7 @@ stdenv.mkDerivation {
   inherit patches src;
 
   prePatch = ''
-    for mf in $(find -name Makefile -o -name Makefile.include); do
+    for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
         echo "stripping FHS paths in \`$mf'..."
         sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
     done
@@ -104,12 +110,15 @@ stdenv.mkDerivation {
 
   buildNativeInputs = [ perl nettools ] ++ optional isModular kmod;
 
-  makeFlags = [
-    "O=../build"
-    "INSTALL_PATH=$(out)"
-    "INSTALLKERNEL=${installkernel}"
-  ] ++ (optional isModular "MODLIB=$(out)/lib/modules/${modDirVersion}")
-  ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
+  makeFlags = commonMakeFlags ++ [
+   "INSTALLKERNEL=${installkernel stdenv.platform.kernelTarget}"
+  ];
+
+  crossAttrs = {
+    makeFlags = commonMakeFlags ++ [
+     "INSTALLKERNEL=${installkernel stdenv.cross.platform.kernelTarget}"
+    ];
+  };
 
   postInstall = stdenv.lib.optionalString installsFirmware ''
     mkdir -p $out/lib/firmware
