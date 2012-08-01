@@ -2024,20 +2024,23 @@ let
     binutilsCross = null;
   }));
 
-  gcc47 = lowPrio (wrapGCC (lib.overrideDerivation gcc46_debug.gcc (a: {
-    name = "gcc-debug-4.7.1";
-    src = fetchurl {
-      url = "mirror://gnu/gcc/gcc-4.7.1/gcc-4.7.1.tar.bz2";
-      sha256 = "0vs0v89zzgkngkw2p8kdynyk7j8ky4wf6zyrg3rsschpl1pky28n";
-    };
+  gcc47_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
+    inherit noSysDirs;
 
-    configureFlags = a.configureFlags
-      # This flag replaces `no-sys-dirs.patch'.
-      + (lib.optionalString (stdenv ? glibc)
-          " --with-native-system-header-dir=${stdenv.glibc}/include");
+    # bootstrapping a profiled compiler does not work in the sheevaplug:
+    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
+    profiledCompiler = if stdenv.isArm then false else true;
 
-    patches = [];
-  })));
+    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+    libpthreadCross =
+      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+      then gnu.libpthreadCross
+      else null;
+  }));
 
   gccApple =
     wrapGCC (makeOverridable
