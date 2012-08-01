@@ -612,21 +612,26 @@ rec {
     buildPhase = ''
       eval "$preBuild"
 
-      # Hacky: RPM looks for <basename>.spec inside the tarball, so
-      # strip off the hash.
-      stripHash "$src"
-      srcName="$strippedName"
-      cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
-
       export HOME=/tmp/home
       mkdir $HOME
 
       rpmout=/tmp/rpmout
-      mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS
+      mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS $rpmout/SOURCES
+
+      # Hacky: RPM looks for <basename>.spec inside the tarball; strip the hash.
+      stripHash "$src"
+      srcName="$strippedName"
+      # `ln' doesn't work always work: RPM requires that the file is owned by root
+      cp "$src" $rpmout/SOURCES/"$srcName"
 
       echo "%_topdir $rpmout" >> $HOME/.rpmmacros
-      
-      rpmbuild -vv -ta "$srcName"
+
+      mkdir /tmp/build && cd /tmp/build
+      # this is less efficient than rpmbuild -ta but it actually works
+      tar xvzf "$rpmout/SOURCES/$srcName"
+      cd *
+      chown root:root -R .
+      rpmbuild -vv -ba *.spec
 
       eval "$postBuild"
     '';
