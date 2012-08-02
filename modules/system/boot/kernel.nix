@@ -230,6 +230,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "MODULES")
       (isYes "BLK_DEV_INITRD")
+      (isYes "BINFMT_ELF")
     ];
 
     # nixpkgs kernels are assumed to have all required features
