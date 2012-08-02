@@ -27,7 +27,7 @@ in
   options = {
 
     environment.nix = mkOption {
-      default = pkgs.nixUnstable;
+      default = pkgs.nix;
       merge = mergeOneOption;
       description = ''
         This option specifies the Nix package instance to use throughout the system.
