@@ -1888,6 +1888,8 @@ let
 
   gcc46 = gcc46_real;
 
+  gcc47 = gcc47_real;
+
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.5) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
@@ -2029,6 +2031,7 @@ let
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
+    # To be reviewed. Maybe it is fixed already in 4.7.
     profiledCompiler = if stdenv.isArm then false else true;
 
     # When building `gcc.hostDrv' (a "Canadian cross", with host == target
