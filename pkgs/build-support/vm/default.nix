@@ -14,13 +14,14 @@ rec {
   # The 15 second CIFS timeout is too short if the host if heavily
   # loaded (e.g., in the Hydra build farm when it's running many jobs
   # in parallel).  So apply a patch to increase the timeout to 120s.
-  kernel = assert pkgs.linux.features.cifsTimeout; linuxKernel;
+  nixpkgsKernel = assert pkgs.linux.features.cifsTimeout; linuxKernel;
 
   kvm = pkgs.qemu_kvm;
 
 
-  modulesClosure = makeModulesClosure {
+  modulesClosure = kernel: makeModulesClosure {
     inherit kernel rootModules;
+    allowMissing = true;
   };
 
 
@@ -29,7 +30,7 @@ rec {
 
   initrdUtils = runCommand "initrd-utils"
     { buildInputs = [ nukeReferences ];
-      allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
+      allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
     }
     ''
       mkdir -p $out/bin
@@ -43,11 +44,13 @@ rec {
 
       # Copy some utillinux stuff.
       cp ${utillinux}/bin/mount ${utillinux}/bin/umount $out/bin
+      cp ${utillinux}/sbin/switch_root $out/bin
       cp -pd ${utillinux}/lib/libblkid*.so.* $out/lib
       cp -pd ${utillinux}/lib/libuuid*.so.* $out/lib
 
       # Copy some coreutils.
       cp ${coreutils}/bin/basename $out/bin
+      cp ${coreutils}/bin/dirname $out/bin
       cp ${coreutils}/bin/mkdir $out/bin
       cp ${coreutils}/bin/mknod $out/bin
       cp ${coreutils}/bin/cat $out/bin
@@ -73,15 +76,25 @@ rec {
     
   createDeviceNodes = dev:
     ''
-      mknod ${dev}/null c 1 3
-      mknod ${dev}/zero c 1 5
-      mknod ${dev}/tty  c 5 0
-      . /sys/class/block/${hd}/uevent
-      mknod ${dev}/${hd} b $MAJOR $MINOR
+      for type in b c; do
+        for f in /sys/dev/$type*/*; do
+          (. $f/uevent
+           mkdir -p `dirname "${dev}/$DEVNAME"`
+           mknod ${dev}/$DEVNAME $type $MAJOR $MINOR)
+        done
+      done
     '';
 
   
-  stage1Init = writeScript "vm-run-stage1" ''
+  teardown = writeScript "vm-teardown" ''
+    #! ${initrdUtils}/bin/bash
+    echo $1 > ./tmp/xchg/in-vm-exit
+    mount -o remount,ro dummy .
+    echo DONE
+    halt -d -p -f
+  '';
+
+  stage1Init = kernel: writeScript "vm-run-stage1" ''
     #! ${initrdUtils}/bin/bash -e
     echo START
 
@@ -109,7 +122,7 @@ rec {
       esac
     done
 
-    for i in $(cat ${modulesClosure}/insmod-list); do
+    for i in $(cat ${modulesClosure kernel}/insmod-list); do
       args=
       case $i in
         */cifs.ko)
@@ -134,7 +147,7 @@ rec {
     fi
 
     mkdir -p /fs/dev
-    mount -o bind /dev /fs/dev
+    mount --move /dev /fs/dev
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
@@ -159,20 +172,14 @@ rec {
     echo "Now running: $command"
     test -n "$command"
 
-    set +e
-    chroot /fs $command $out
-    echo $? > /fs/tmp/xchg/in-vm-exit
-
-    mount -o remount,ro dummy /fs
-
-    echo DONE
-    halt -d -p -f
+    exec switch_root /fs ${initrdUtils}/bin/bash -c "cd / ; $command $out ; ${teardown} \$?"
+    ${teardown} $?
   '';
 
   
-  initrd = makeInitrd {
+  initrd = kernel: makeInitrd {
     contents = [
-      { object = stage1Init;
+      { object = stage1Init kernel;
         symlink = "/init";
       }
     ];
@@ -210,7 +217,7 @@ rec {
   '';
 
 
-  qemuCommandLinux = ''
+  qemuCommandLinux = kernel: ''
     ${kvm}/bin/qemu-kvm \
       ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
       -nographic -no-reboot \
@@ -219,7 +226,7 @@ rec {
       -net user,guestfwd=tcp:10.0.2.4:445-chardev:samba \
       -drive file=$diskImage,if=virtio,cache=writeback,werror=report \
       -kernel ${kernel}/${img} \
-      -initrd ${initrd}/initrd \
+      -initrd ${initrd kernel}/initrd \
       -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk" \
       $QEMU_OPTS
   '';
@@ -343,14 +350,16 @@ rec {
      `run-vm' will be left behind in the temporary build directory
      that allows you to boot into the VM and debug it interactively. */
      
-  runInLinuxVM = drv: lib.overrideDerivation drv (attrs: {
-    requiredSystemFeatures = [ "kvm" ];
-    builder = "${bash}/bin/sh";
-    args = ["-e" (vmRunCommand qemuCommandLinux)];
-    origArgs = attrs.args;
-    origBuilder = attrs.builder;
-    QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
-  });
+  runInLinuxVM = drv: let
+        kernel = if drv ? kernel then drv.kernel else nixpkgsKernel;
+    in lib.overrideDerivation drv (attrs: {
+        requiredSystemFeatures = [ "kvm" ];
+        builder = "${bash}/bin/sh";
+        args = ["-e" (vmRunCommand (qemuCommandLinux kernel))];
+        origArgs = attrs.args;
+        origBuilder = attrs.builder;
+        QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
+      });
 
   
   extractFs = {file, fs ? null} :
@@ -493,7 +502,7 @@ rec {
     
   fillDiskWithRPMs =
     { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
-    , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , runScripts ? true, createRootFS ? defaultCreateRootFS, mergeUsr ? false
     }:
     
     runInLinuxVM (stdenv.mkDerivation {
@@ -512,6 +521,13 @@ rec {
             ${rpm}/bin/rpm2cpio "$i" | (cd /mnt && ${cpio}/bin/cpio -i --make-directories)
         done
 
+        ${if mergeUsr then "true" else "false"} && for d in bin sbin lib lib64; do
+          test -d /mnt/$d || continue
+          test -L /mnt/$d && continue
+          find /mnt/$d/ -maxdepth 1 -mindepth 1 | xargs --no-run-if-empty mv -t /mnt/usr/$d/
+          rmdir /mnt/$d
+          ln -Ts /usr/$d /mnt/$d
+        done
         eval "$preInstall"
 
         echo "initialising RPM DB..."
@@ -563,7 +579,7 @@ rec {
     mkdir $TMPDIR/xchg
     export > $TMPDIR/xchg/saved-env
     mountDisk=1
-    ${qemuCommandLinux}
+    ${qemuCommandLinux nixpkgsKernel}
   '';
 
 
@@ -596,21 +612,26 @@ rec {
     buildPhase = ''
       eval "$preBuild"
 
-      # Hacky: RPM looks for <basename>.spec inside the tarball, so
-      # strip off the hash.
-      stripHash "$src"
-      srcName="$strippedName"
-      cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
-
       export HOME=/tmp/home
       mkdir $HOME
 
       rpmout=/tmp/rpmout
-      mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS
+      mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS $rpmout/SOURCES
+
+      # Hacky: RPM looks for <basename>.spec inside the tarball; strip the hash.
+      stripHash "$src"
+      srcName="$strippedName"
+      # `ln' doesn't work always work: RPM requires that the file is owned by root
+      cp "$src" $rpmout/SOURCES/"$srcName"
 
       echo "%_topdir $rpmout" >> $HOME/.rpmmacros
-      
-      rpmbuild -vv -ta "$srcName"
+
+      mkdir /tmp/build && cd /tmp/build
+      # this is less efficient than rpmbuild -ta but it actually works
+      tar xvzf "$rpmout/SOURCES/$srcName"
+      cd *
+      chown root:root -R .
+      rpmbuild -vv -ba *.spec
 
       eval "$postBuild"
     '';
@@ -741,15 +762,50 @@ rec {
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? []
     , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"]
-    , runScripts ? true, createRootFS ? defaultCreateRootFS }:
+    , runScripts ? true, createRootFS ? defaultCreateRootFS, mergeUsr ? false }:
 
     fillDiskWithRPMs {
-      inherit name fullName size preInstall postInstall runScripts createRootFS;
+      inherit name fullName size preInstall postInstall runScripts createRootFS mergeUsr;
       rpms = import (rpmClosureGenerator {
         inherit name packagesLists urlPrefixes archs;
         packages = packages ++ extraPackages;
       }) { inherit fetchurl; };
     };
+
+  rpm2kernel = rpms: stdenv.mkDerivation {
+    name = "rpm2kernel";
+    inherit rpms;
+    builder = writeScript "rpm2kernel-builder" ''
+      source $stdenv/setup
+      ensureDir $out
+      cd $out
+      for r in $rpms; do
+        echo $r | grep "kernel-[0-9]" || continue
+        ${rpm}/bin/rpm2cpio $r | ${cpio}/bin/cpio -i --make-directories
+      done
+      cd $out
+      ln -s boot/vmlinuz* bzImage
+      ln -s boot/System.map* System.map
+      ln -s boot/config* config
+      cd lib/modules
+      ver=`echo *`
+      cd $ver
+      ${module_init_tools}/sbin/depmod -ae -F $out/System.map $ver -b $out
+    '';
+  };
+
+  makeKernelFromRPMDist =
+    { urlPrefix ? "", urlPrefixes ? [urlPrefix]
+    , packagesList ? "", packagesLists ? [packagesList]
+    , archs ? ["noarch" "i386"]
+    , ...}:
+
+    rpm2kernel (
+      import (rpmClosureGenerator {
+        inherit packagesLists urlPrefixes archs;
+        name = "kernel";
+        packages = "kernel";
+      }) { inherit fetchurl; });
 
 
   /* Like `rpmClosureGenerator', but now for Debian/Ubuntu releases
@@ -991,6 +1047,32 @@ rec {
       urlPrefix = mirror://fedora/linux/releases/16/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+    };
+
+    fedora17i386 = {
+      name = "fedora-17-i386";
+      fullName = "Fedora 17 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/17/Everything/i386/os/repodata/82dc1ea6d26e53a367dc6e7472113c4454c9a8ac7c98d4bfb11fd0b6f311450f-primary.xml.gz;
+        sha256 = "03s527rvdl0zn6zx963wmjlcjm247h8p4x3fviks6lvfsak1xp42";
+      };
+      urlPrefix = mirror://fedora/linux/releases/17/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      mergeUsr = true;
+    };
+
+    fedora17x86_64 = {
+      name = "fedora-17-x86_64";
+      fullName = "Fedora 17 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/17/Everything/x86_64/os/repodata/7009de56f1a1c399930fa72094a310a40d38153c96d0b5af443914d3d6a7d811-primary.xml.gz;
+        sha256 = "04fqlzbd651r8jpvbl4n7hakh3d422ir88571y9rkhx1y5bdw2bh";
+      };
+      urlPrefix = mirror://fedora/linux/releases/17/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      mergeUsr = true;
     };
 
     opensuse103i386 = {
