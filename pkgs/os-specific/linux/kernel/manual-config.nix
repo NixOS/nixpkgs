@@ -140,7 +140,7 @@ stdenv.mkDerivation {
 
   postFixup = optionalString isModular ''
     if [ -z "$dontStrip" ]; then
-        find $out -name "*.ko" -print0 | xargs -0 strip -S
+        find $out -name "*.ko" -print0 | xargs -0 -r strip -S
     fi
   '';
 
