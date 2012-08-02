@@ -2,7 +2,9 @@
 
 use strict;
 use warnings;
+use File::Basename;
 use File::Slurp;
+use Cwd 'abs_path';
 
 my $action = shift @ARGV;
 
@@ -40,6 +42,41 @@ EOF
 # virtual console 1 and we restart the "tty1" unit.
 $SIG{PIPE} = "IGNORE";
 
+sub getActiveUnits {
+    # FIXME: use D-Bus or whatever to query this, since parsing the
+    # output of list-units is likely to break.
+    my $lines = `@systemd@/bin/systemctl list-units --full`;
+    my $res = {};
+    foreach my $line (split '\n', $lines) {
+        chomp $line;
+        last if $line eq "";
+        $line =~ /^(\S+)\s+(\S+)\s+(\S+)\s+(\S+)\s/ or next;
+        next if $1 eq "UNIT";
+        $res->{$1} = { load => $2, state => $3, substate => $4 };
+    }
+    return $res;
+}
+
+# Stop all services that no longer exist or have changed in the new
+# configuration.
+# FIXME: handle template units (e.g. getty@.service).
+my $active = getActiveUnits;
+foreach my $unitFile (glob "/etc/systemd/system/*") {
+    next unless -f "$unitFile";
+    my $unit = basename $unitFile;
+    my $state = $active->{$unit};
+    if (defined $state && ($state->{state} eq "active" || $state->{state} eq "activating")) {
+        my $newUnitFile = "@out@/etc/systemd/system/$unit";
+        if (! -e $newUnitFile) {
+            print STDERR "stopping obsolete unit ‘$unit’...\n";
+            system("@systemd@/bin/systemctl", "stop", $unit); # FIXME: ignore errors?
+        } elsif (abs_path($unitFile) ne abs_path($newUnitFile)) {
+            print STDERR "stopping changed unit ‘$unit’...\n";
+            system("@systemd@/bin/systemctl", "stop", $unit); # FIXME: ignore errors?
+        }
+    }
+}
+
 # Activate the new configuration (i.e., update /etc, make accounts,
 # and so on).
 my $res = 0;
@@ -50,6 +87,11 @@ system("@out@/activate", "@out@") == 0 or $res = 2;
 
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
+
+# Start all units required by the default target.  This should start
+# all changed units we stopped above as well as any new dependencies.
+print STDERR "starting default target...\n";
+system("@systemd@/bin/systemctl", "start", "default.target") == 0 or $res = 3;
 
 # Signal dbus to reload its configuration.
 system("@systemd@/bin/systemctl", "reload", "dbus.service");

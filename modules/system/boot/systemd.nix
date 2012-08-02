@@ -324,7 +324,7 @@ let
       done
       
       for i in ${toString nixosUnits}; do
-        cp $i/* $out/
+        ln -s $i/* $out/
       done
 
       ${concatStrings (mapAttrsToList (name: unit:
