@@ -5816,8 +5816,10 @@ let
       linuxHeaders = glibc.kernelHeaders;
     };
 
-    splashutils =
-      if kernel.features ? fbConDecor then pkgs.splashutils else null;
+    splashutils = let hasFbConDecor = if kernel ? features
+      then kernel.features ? fbConDecor
+      else kernel.config.isEnabled "FB_CON_DECOR";
+    in if hasFbConDecor then pkgs.splashutils else null;
 
     /* compiles but has to be integrated into the kernel somehow
       Let's have it uncommented and finish it..
