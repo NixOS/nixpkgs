@@ -212,6 +212,7 @@ let
         kde4 = t.kde4.test;
         login = t.login.test;
         misc = t.misc.test;
+        minimal_kernel = t.minimal_kernel.test;
         mpich = t.mpich.test;
         mysql = t.mysql.test;
         mysql_replication = t.mysql_replication.test;
