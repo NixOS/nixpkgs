@@ -19,7 +19,7 @@ let
         echo "ok"
     fi
 
-    ${optionalString (keyFile != "") ''
+    ${optionalString (keyFile != null) ''
     if ! test -e ${keyFile}; then
         echo -n "waiting 10 seconds for key file ${keyFile} to appear..."
         for try in $(seq 10); do
