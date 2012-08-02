@@ -7,11 +7,14 @@
       configfile = builtins.storePath (builtins.toFile "config" (pkgs.lib.concatStringsSep "\n"
           (map (builtins.getAttr "configLine") config.system.requiredKernelConfig)));
 
-      kernel = pkgs.lib.overrideDerivation (pkgs.linuxManualConfig {
+      origKernel = pkgs.linuxManualConfig {
         inherit (pkgs.linux) src version;
         inherit configfile;
         allowImportFromDerivation = true;
-      }) (attrs: {
+        kernelPatches = [ pkgs.kernelPatches.cifs_timeout_2_6_38 ];
+      };
+
+      kernel = origKernel //(derivation (origKernel.drvAttrs // {
          configurePhase = ''
            runHook preConfigure
            mkdir ../build
@@ -19,7 +22,7 @@
            make $makeFlags "''${makeFlagsArray[@]}" KCONFIG_ALLCONFIG=${configfile} allnoconfig
            runHook postConfigure
          '';
-       });
+       }));
 
        kernelPackages = pkgs.linuxPackagesFor kernel kernelPackages;
     in {
