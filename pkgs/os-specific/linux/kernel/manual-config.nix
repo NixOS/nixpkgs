@@ -50,7 +50,7 @@ in
   # The kernel source (tarball, git checkout, etc.)
   src,
   # Any patches
-  patches ? [],
+  kernelPatches ? [],
   # The kernel .config file
   configfile,
   # Manually specified nixexpr representing the config
@@ -86,10 +86,12 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit version modDirVersion config;
+    inherit version modDirVersion config kernelPatches;
   };
 
-  inherit patches src;
+  inherit src;
+
+  patches = map (p: p.patch) kernelPatches;
 
   prePatch = ''
     for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
