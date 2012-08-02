@@ -135,7 +135,7 @@ sub runTests {
             # Figure out where to put the *.gcda files so that the
             # report generator can find the corresponding kernel
             # sources.
-            my $kernelDir = $vm->mustSucceed("echo \$(dirname \$(readlink -f /var/run/current-system/kernel))/.build/linux-*");
+            my $kernelDir = $vm->mustSucceed("echo \$(dirname \$(readlink -f /run/current-system/kernel))/.build/linux-*");
             chomp $kernelDir;
             my $coverageDir = "/tmp/xchg/coverage-data/$kernelDir";
 

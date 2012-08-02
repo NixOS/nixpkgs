@@ -70,6 +70,7 @@ mount -t sysfs none /sys
 mount -t devtmpfs -o "size=@devSize@" none /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
+mount -t securityfs none /sys/kernel/security
 
 # Process the kernel command line.
 export stage2Init=/init
@@ -350,10 +351,10 @@ fi
 
 mkdir -m 0755 -p $targetRoot/proc $targetRoot/sys $targetRoot/dev $targetRoot/run
 
-mount --bind /proc $targetRoot/proc
-mount --bind /sys $targetRoot/sys
-mount --bind /dev $targetRoot/dev
-mount --bind /run $targetRoot/run
+mount --move /proc $targetRoot/proc
+mount --move /sys $targetRoot/sys
+mount --move /dev $targetRoot/dev
+mount --move /run $targetRoot/run
 
 exec switch_root "$targetRoot" "$stage2Init"
 

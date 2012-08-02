@@ -281,7 +281,7 @@ the Nix manual for details.</para>
 <variablelist>
 
   <varlistentry>
-    <term><filename>/var/run/current-system</filename></term>
+    <term><filename>/run/current-system</filename></term>
     <listitem>
       <para>A symlink to the currently active system configuration in
       the Nix store.</para>

@@ -19,7 +19,7 @@ let
               point to the current generation's kernel image, initial RAM
               disk, and other bootstrap files.
 
-              This optional is not necessary with bootloads such as GNU GRUB
+              This optional is not necessary with boot loaders such as GNU GRUB
               for which the menu is updated to point to the latest bootstrap
               files.  However, it is needed for U-Boot on platforms where the
               boot command line is stored in flash memory rather than in a
@@ -63,9 +63,7 @@ in
   ];
 
   system = mkIf config.boot.loader.generationsDir.enable {
-    build = {
-      menuBuilder = generationsDirBuilder;
-    };
+    build.installBootLoader = generationsDirBuilder;
     boot.loader.id = "generationsDir";
     boot.loader.kernelFile = platform.kernelTarget;
   };

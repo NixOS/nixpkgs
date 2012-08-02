@@ -30,7 +30,7 @@ with pkgs.lib;
           mknod /dev/vda1 b $MAJOR $MINOR
 
           # Create an empty filesystem and mount it.
-          ${pkgs.e2fsprogs}/sbin/mkfs.ext3 -L nixos /dev/vda1
+          ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L nixos /dev/vda1
           ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
           mkdir /mnt
           mount /dev/vda1 /mnt
@@ -78,7 +78,7 @@ with pkgs.lib;
     ];
 
   boot.loader.grub.version = 2;
-  boot.loader.grub.device = "/dev/vda";
+  boot.loader.grub.device = "/dev/sda";
 
   services.virtualbox.enable = true;
 }

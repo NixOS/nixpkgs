@@ -5,7 +5,7 @@ with pkgs.lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = { name, device, ... }: ''
+  openCommand = { name, device, keyFile, keyFileSize, allowDiscards, ... }: ''
     # Wait for luksRoot to appear, e.g. if on a usb drive.
     # XXX: copied and adapted from stage-1-init.sh - should be
     # available as a function.
@@ -19,8 +19,21 @@ let
         echo "ok"
     fi
 
+    ${optionalString (keyFile != null) ''
+    if ! test -e ${keyFile}; then
+        echo -n "waiting 10 seconds for key file ${keyFile} to appear..."
+        for try in $(seq 10); do
+            sleep 1
+            if test -e ${keyFile}; then break; fi
+            echo -n .
+        done
+        echo "ok"
+    fi
+    ''}
+
     # open luksRoot and scan for logical volumes
-    cryptsetup luksOpen ${device} ${name}
+    cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
+      ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"}
   '';
 
   isPreLVM = f: f.preLVM;
@@ -64,11 +77,46 @@ in
           description = "Path of the underlying block device.";
         };
 
+        keyFile = mkOption {
+          default = null;
+          example = "/dev/sdb1";
+          type = types.nullOr types.string;
+          description = ''
+            The name of the file (can be a raw device or a partition) that
+            should be used as the decryption key for the encrypted device. If
+            not specified, you will be prompted for a passphrase instead.
+          '';
+        };
+
+        keyFileSize = mkOption {
+          default = null;
+          example = 4096;
+          type = types.nullOr types.int;
+          description = ''
+            The size of the key file. Use this if only the beginning of the
+            key file should be used as a key (often the case if a raw device
+            or partition is used as key file). If not specified, the whole
+            <literal>keyFile</literal> will be used decryption, instead of just
+            the first <literal>keyFileSize</literal> bytes.
+          '';
+        };
+
         preLVM = mkOption {
           default = true;
           type = types.bool;
           description = "Whether the luksOpen will be attempted before LVM scan or after it.";
         };
+
+        allowDiscards = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Whether to allow TRIM requests to the underlying device. This option
+            has security implications, please read the LUKS documentation before
+            activating in.
+          '';
+        };
+
       };
     };
   };

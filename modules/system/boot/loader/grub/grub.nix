@@ -8,16 +8,17 @@ let
 
   grub = if cfg.version == 1 then pkgs.grub else pkgs.grub2;
 
-  grubMenuBuilder = pkgs.substituteAll {
-    src = ./grub-menu-builder.sh;
-    isExecutable = true;
-    inherit grub;
-    inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
-    inherit (config.boot.loader.grub) copyKernels extraPrepareConfig
-      extraConfig extraEntries extraEntriesBeforeNixOS extraPerEntryConfig
-      splashImage configurationLimit version default timeout;
-  };
+  f = x: if x == null then "" else "" + x;
+
+  grubConfig = pkgs.writeText "grub-config.xml" (builtins.toXML
+    { splashImage = f config.boot.loader.grub.splashImage;
+      grub = f grub;
+      fullVersion = (builtins.parseDrvName config.system.build.grub.name).version;
+      inherit (config.boot.loader.grub)
+        version extraConfig extraPerEntryConfig extraEntries
+        extraEntriesBeforeNixOS configurationLimit copyKernels timeout
+        default devices;
+    });
 
 in
 
@@ -199,7 +200,9 @@ in
 
     system.build = mkAssert (cfg.devices != [])
       "You must set the ‘boot.loader.grub.device’ option to make the system bootable."
-      { menuBuilder = grubMenuBuilder;
+      { installBootLoader =
+          "PERL5LIB=${makePerlPath [ pkgs.perlPackages.XMLLibXML pkgs.perlPackages.XMLSAX ]} " +
+          "${pkgs.perl}/bin/perl ${./install-grub.pl} ${grubConfig}";
         inherit grub;
       };
 

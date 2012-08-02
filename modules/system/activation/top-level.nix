@@ -101,9 +101,6 @@ let
 
       ln -s ${kernelPath} $out/kernel
       ln -s ${config.system.modulesTree} $out/kernel-modules
-      if [ -n "$grub" ]; then
-        ln -s $grub $out/grub
-      fi
 
       ln -s ${config.system.build.initialRamdisk}/initrd $out/initrd
 
@@ -152,8 +149,9 @@ let
     inherit children;
     kernelParams =
       config.boot.kernelParams ++ config.boot.extraKernelParams;
-    menuBuilder = config.system.build.menuBuilder or "true";
-    initScriptBuilder = config.system.build.initScriptBuilder;
+    installBootLoader =
+      config.system.build.installBootLoader
+      or "echo \"Warning: don't know how to make this configuration bootable; please enable a boot loader.\" 1>&2; true";
     activationScript = config.system.activationScripts.script;
     nixosVersion = config.system.nixosVersion;
 
@@ -161,11 +159,11 @@ let
 
     # Pass the names of all Upstart tasks to the activation script.
     tasks = attrValues (mapAttrs (n: v: if v.task then ["[${v.name}]=1"] else []) config.jobs);
-    
+
     # Pass the names of all Upstart jobs that shouldn't be restarted
     # to the activation script.
     noRestartIfChanged = attrValues (mapAttrs (n: v: if v.restartIfChanged then [] else ["[${v.name}]=1"]) config.jobs);
-    
+
     # Most of these are needed by grub-install.
     path =
       [ pkgs.coreutils
@@ -176,20 +174,6 @@ let
         pkgs.systemd
       ];
 
-    # Boot loaders
-    bootLoader = config.system.boot.loader.id;
-    grub =
-      if config.boot.loader.grub.enable
-      then config.system.build.grub
-      else null;
-    grubVersion =
-      if config.boot.loader.grub.enable
-      then (builtins.parseDrvName config.system.build.grub.name).version
-      else "";
-    grubDevices =
-      let
-        wrapQuotes = s: "\"" + s + "\"";
-      in map wrapQuotes config.boot.loader.grub.devices;
     configurationName = config.boot.loader.grub.configurationName;
   };
 

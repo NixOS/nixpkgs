@@ -1,4 +1,3 @@
-
 #! @bash@/bin/sh -e
 
 shopt -s nullglob
@@ -7,7 +6,7 @@ export PATH=/empty
 for i in @path@; do PATH=$PATH:$i/bin; done
 
 if test $# -ne 1; then
-    echo "Usage: grub-menu-builder.sh DEFAULT-CONFIG"
+    echo "Usage: init-script-builder.sh DEFAULT-CONFIG"
     exit 1
 fi
 
@@ -44,7 +43,7 @@ addEntry() {
 
     configurationCounter=$((configurationCounter + 1))
 
-    local stage2=$(readlink $path/init)
+    local stage2=$path/init
 
     content="$(
       echo "#!/bin/sh"

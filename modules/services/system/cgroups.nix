@@ -37,14 +37,14 @@ in
       default =
         ''
           mount {
-            cpu = /dev/cgroup/cpu;
+            cpu = /sys/fs/cgroup/cpu;
           }
         '';
       example =
         ''
           mount {
-            cpu = /dev/cgroup/cpu;
-            cpuacct = /dev/cgroup/cpuacct;
+            cpu = /sys/fs/cgroup/cpu;
+            cpuacct = /sys/fs/cgroup/cpuacct;
           }
 
           # Create a "www" cgroup with a lower share of the CPU (the
@@ -105,10 +105,16 @@ in
 
         description = "Control groups daemon";
 
-        path = [ pkgs.libcgroup pkgs.procps ];
+        path = [ pkgs.libcgroup pkgs.procps pkgs.utillinux ];
       
         preStart =
           ''
+            if [ -d /sys/fs/cgroup ]; then
+              if ! mountpoint -q /sys/fs/cgroup; then
+                mount -t tmpfs -o mode=755 /dev/cgroup /sys/fs/cgroup
+              fi
+            fi
+          
             cgclear || true
 
             # Mount the cgroup hierarchies.  Note: we refer to the

@@ -65,21 +65,15 @@ in
       description = "ipv6 tunnel";
       startOn = optionalString cfg.autorun "starting networking";
       stopOn = "stopping network-interfaces";
-      script = "cd /var/lib/gogoc; exec gogoc -y -f /etc/gogoc.conf";
+      preStart = ''
+        mkdir -p /var/lib/gogoc
+        chmod 700 /var/lib/gogoc
+        cat ${pkgs.gogoclient}/share/${pkgs.gogoclient.name}/gogoc.conf.sample | ${pkgs.gnused}/bin/sed -e "s|^userid=|&${cfg.username}|;s|^passwd=|&${if cfg.password == "" then "" else "$(cat ${cfg.password})"}|;s|^server=.*|server=${cfg.server}|;s|^auth_method=.*|auth_method=${if cfg.password == "" then "anonymous" else "any"}|;s|^#log_file=|log_file=1|" > /var/lib/gogoc/gogoc.conf
+      '';
+      script = "cd /var/lib/gogoc; exec gogoc -y -f ./gogoc.conf";
       path = [pkgs.gogoclient];
     };
 
-    system.activationScripts.gogoClientConf = ''
-      mkdir -p /var/lib/gogoc
-      chmod 700 /var/lib/gogoc
-      install -m400 ${pkgs.gogoclient}/share/${pkgs.gogoclient.name}/gogoc.conf.sample /etc/gogoc.conf.default
-      ${pkgs.gnused}/bin/sed -i -e "s|^userid=|&${cfg.username}|" /etc/gogoc.conf.default
-      ${pkgs.gnused}/bin/sed -i -e "s|^passwd=|&${if cfg.password == "" then "" else "$(cat ${cfg.password})"}|" /etc/gogoc.conf.default
-      ${pkgs.gnused}/bin/sed -i -e "s|^server=.*|server=${cfg.server}|" /etc/gogoc.conf.default
-      ${pkgs.gnused}/bin/sed -i -e "s|^auth_method=.*|auth_method=${if cfg.password == "" then "anonymous" else "any"}|" /etc/gogoc.conf.default
-      ${pkgs.gnused}/bin/sed -i -e "s|^#log_file=|log_file=1|" /etc/gogoc.conf.default
-      mv /etc/gogoc.conf.default /etc/gogoc.conf
-    '';
   };
 
 }

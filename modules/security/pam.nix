@@ -238,6 +238,7 @@ in
         { name = "sshd"; }
         { name = "vlock"; }
         { name = "xlock"; }
+        { name = "xscreensaver"; }
       ];
 
   };

@@ -57,12 +57,14 @@ in rec {
         ${pkgs.docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
         ./manual.xml
 
-      ln -s ${pkgs.docbook5_xsl}/xml/xsl/docbook/images $dst/
+      mkdir -p $dst/images/callouts
+      cp ${pkgs.docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
+      
       cp ${./style.css} $dst/style.css
 
       ensureDir $out/nix-support
       echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
-    '';
+    ''; # */
   };
 
   # Generate the NixOS manpages.

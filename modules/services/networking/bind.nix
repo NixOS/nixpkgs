@@ -6,6 +6,8 @@ let
 
   cfg = config.services.bind;
 
+  bindUser = "named";
+
   confFile = pkgs.writeText "named.conf"
     ''
       acl cachenetworks { ${concatMapStrings (entry: " ${entry}; ") cfg.cacheNetworks} };
@@ -118,6 +120,12 @@ in
 
   config = mkIf config.services.bind.enable {
 
+    users.extraUsers = singleton
+      { name = bindUser;
+        uid = config.ids.uids.bind;
+        description = "BIND daemon user";
+      };
+
     jobs.bind =
       { description = "BIND name server job";
 
@@ -126,9 +134,10 @@ in
         preStart =
           ''
             ${pkgs.coreutils}/bin/mkdir -p /var/run/named
+            chown ${bindUser} /var/run/named
           '';
 
-        exec = "${pkgs.bind}/sbin/named ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
+        exec = "${pkgs.bind}/sbin/named -u ${bindUser} ${optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} -f";
       };
 
   };
