@@ -1325,6 +1325,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   snapCore = callPackage ../development/libraries/haskell/snap/core.nix {};
 
+  snapLoaderDynamic = callPackage ../development/libraries/haskell/snap/loader-dynamic {};
+
   snapLoaderStatic = callPackage ../development/libraries/haskell/snap/loader-static.nix {};
 
   snapServer = callPackage ../development/libraries/haskell/snap/server.nix {};
