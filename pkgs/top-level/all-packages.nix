@@ -2028,11 +2028,9 @@ let
 
   gcc47_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
     inherit noSysDirs;
-
-    # bootstrapping a profiled compiler does not work in the sheevaplug:
-    # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    # To be reviewed. Maybe it is fixed already in 4.7.
-    profiledCompiler = if stdenv.isArm then false else true;
+    # I'm not sure if profiling with enableParallelBuilding helps a lot.
+    # We can enable it back some day. This makes the *gcc* builds faster now.
+    profiledCompiler = false;
 
     # When building `gcc.hostDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
@@ -2211,6 +2209,13 @@ let
   gccgo = gccgo46;
 
   gccgo46 = wrapGCC (gcc46_real.gcc.override {
+    name = "gccgo";
+    langCC = true; #required for go
+    langC = true;
+    langGo = true;
+  });
+
+  gccgo47 = wrapGCC (gcc47_real.gcc.override {
     name = "gccgo";
     langCC = true; #required for go
     langC = true;
