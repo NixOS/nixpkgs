@@ -72,7 +72,6 @@ in
     clamav = 51;
     fprot = 52;
     bind = 53;
-    wwwrun = 54;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -124,9 +123,6 @@ in
     mpd = 50;
     clamav = 51;
     fprot = 52;
-    # Group id 53 is still free! I didn't use it, because I wanted the
-    # the same numeric value for the 'wwwrun' user and group.
-    wwwrun = 54;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
