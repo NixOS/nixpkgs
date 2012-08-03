@@ -46,6 +46,10 @@ in
   # The kernel version
   version,
   # The version of the kernel module directory
+  # Note that, unlike with the normal kernel builder, it shouldn't be necessary
+  # to specify this for releases with 2 version numbers, e.g. if you're building
+  # Linux 3.5 the modules will happily be installed in $out/lib/modules/3.5/, but
+  # this is provided for compatability.
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
   src,
