@@ -1324,9 +1324,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   semigroupoids_1_3_4 = callPackage ../development/libraries/haskell/semigroupoids/1.3.4.nix {
     comonad = self.comonad_1_1_1_6;
   };
-
   semigroupoids_3_0 = callPackage ../development/libraries/haskell/semigroupoids/3.0.nix {};
-
   semigroupoids = self.semigroupoids_3_0;
 
   shelly = callPackage ../development/libraries/haskell/shelly {};
