@@ -133,7 +133,7 @@ if (scalar @failed > 0) {
     print STDERR "warning: the following units failed: ", join(", ", sort(@failed)), "\n";
     foreach my $unit (@failed) {
         print STDERR "\n";
-        system("@systemd@/bin/systemctl status '$unit' >&2");
+        system("COLUMNS=1000 @systemd@/bin/systemctl status --no-pager '$unit' >&2");
     }
     $res = 4;
 }
