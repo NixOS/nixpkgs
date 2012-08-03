@@ -67,18 +67,17 @@ system("@systemd@/bin/systemctl", "reset-failed");
 # Stop all services that no longer exist or have changed in the new
 # configuration.
 my @unitsToStop;
-my $active = getActiveUnits;
-while (my ($unit, $state) = each %{$active}) {
-    my $state = $active->{$unit};
+my $activePrev = getActiveUnits;
+while (my ($unit, $state) = each %{$activePrev}) {
     my $baseUnit = $unit;
     # Recognise template instances.
     $baseUnit = "$1\@.$2" if $unit =~ /^(.*)@[^\.]*\.(.*)$/;
-    my $curUnitFile = "/etc/systemd/system/$baseUnit";
-    if (-e $curUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
+    my $prevUnitFile = "/etc/systemd/system/$baseUnit";
+    if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         my $newUnitFile = "@out@/etc/systemd/system/$baseUnit";
         if (! -e $newUnitFile) {
             push @unitsToStop, $unit;
-        } elsif (abs_path($curUnitFile) ne abs_path($newUnitFile)) {
+        } elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
             # Record that this unit needs to be started below.  We
             # write this to a file to ensure that the service gets
             # restarted if we're interrupted.
@@ -88,9 +87,10 @@ while (my ($unit, $state) = each %{$active}) {
     }
 }
 
-print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
-system("@systemd@/bin/systemctl", "stop", @unitsToStop)
-    if scalar @unitsToStop > 0; # FIXME: ignore errors?
+if (scalar @unitsToStop > 0) {
+    print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
+    system("@systemd@/bin/systemctl", "stop", @unitsToStop); # FIXME: ignore errors?
+}
 
 # Activate the new configuration (i.e., update /etc, make accounts,
 # and so on).
@@ -123,12 +123,17 @@ if (scalar @stopped > 0) {
 # Signal dbus to reload its configuration.
 system("@systemd@/bin/systemctl", "reload", "dbus.service");
 
-# Check all the failed services.
-$active = getActiveUnits;
-my @failed;
-while (my ($unit, $state) = each %{$active}) {
+# Print failed and new units.
+my (@failed, @new);
+my $activeNew = getActiveUnits;
+while (my ($unit, $state) = each %{$activeNew}) {
     push @failed, $unit if $state->{state} eq "failed";
+    push @new, $unit if $state->{state} ne "failed" && !defined $activePrev->{$unit};
 }
+
+print STDERR "the following new units were started: ", join(", ", sort(@new)), "\n"
+    if scalar @new > 0;
+
 if (scalar @failed > 0) {
     print STDERR "warning: the following units failed: ", join(", ", sort(@failed)), "\n";
     foreach my $unit (@failed) {
