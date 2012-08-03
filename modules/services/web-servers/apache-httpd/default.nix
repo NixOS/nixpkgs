@@ -561,10 +561,12 @@ in
       { name = "wwwrun";
         group = "wwwrun";
         description = "Apache httpd user";
+        uid = config.ids.uids.wwwrun;
       };
 
     users.extraGroups = optionalAttrs (mainCfg.group == "wwwrun") singleton
       { name = "wwwrun";
+        gid = config.ids.gids.wwwrun;
       };
 
     environment.systemPackages = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;
