@@ -30,14 +30,14 @@ in
 
   config = mkIf cfg.enable {
 
-    # This makes comfortable for users to run 'spamassassin'.
+    # Allow users to run 'spamc'.
     environment.systemPackages = [ pkgs.spamassassin ];
 
     jobs.spamd = {
       description = "Spam Assassin Server";
       startOn = "started networking and filesystem";
       environment.TZ = config.time.timeZone;
-      exec = "spamd -C /etc/spamassassin/init.pre --siteconfigpath=/etc/spamassassin --debug --pidfile=/var/run/spamd.pid";
+      exec = "${pkgs.spamassassin}/bin/spamd -C /etc/spamassassin/init.pre --siteconfigpath=/etc/spamassassin --debug --pidfile=/var/run/spamd.pid";
     };
 
   };
