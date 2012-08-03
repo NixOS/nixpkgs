@@ -1400,10 +1400,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Shellac = callPackage ../development/libraries/haskell/Shellac/Shellac.nix {};
 
-  ShellacHaskeline = callPackage ../development/libraries/haskell/Shellac/Shellac-haskeline.nix {};
-
-  ShellacReadline = callPackage ../development/libraries/haskell/Shellac/Shellac-readline.nix {};
-
   show = callPackage ../development/libraries/haskell/show {};
 
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
