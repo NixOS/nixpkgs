@@ -20,6 +20,7 @@ stdenv.mkDerivation {
     cp acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc
     mkdir -p $out/bin
     cp test_off.sh $out/bin/test_discrete_video_off.sh
+    chmod a+x $out/bin/test_discrete_video_off.sh
   '';
 
   meta = {
