@@ -408,7 +408,11 @@ stdenv.mkDerivation ({
   passthru = { inherit langC langCC langAda langFortran langVhdl
       langGo enableMultilib version; };
 
-  enableParallelBuilding = true;
+  /* From gccinstall.info:
+     "parallel make is currently not supported since collisions in profile
+     collecting may occur"
+  */
+  enableParallelBuilding = !profiledCompiler;
 
   meta = {
     homepage = http://gcc.gnu.org/;
