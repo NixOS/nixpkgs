@@ -88,6 +88,7 @@
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
   ./services/mail/postfix.nix
+  ./services/mail/spamassassin.nix
   ./services/misc/autofs.nix
   ./services/misc/disnix.nix
   ./services/misc/felix.nix
