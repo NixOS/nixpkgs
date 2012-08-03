@@ -43,6 +43,9 @@ assert libelf != null -> zlib != null;
 # Make sure we get GNU sed.
 assert stdenv.isDarwin -> gnused != null;
 
+# The go frontend is written in c++
+assert langGo -> langCC;
+
 with stdenv.lib;
 with builtins;
 
