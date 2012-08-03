@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Vec";
-  version = "1.0";
-  sha256 = "1lyi7di92q1f0k08nj7766nm0ygaqdrjdphnb6imvyrsmjrspaqk";
+  version = "1.0.1";
+  sha256 = "1v0v0ph881vynx8q8xwmn9da6qrd16g83q5i132nxys3ynl5s76m";
   meta = {
     homepage = "http://github.net/sedillard/Vec";
     description = "Fixed-length lists and low-dimensional linear algebra";
