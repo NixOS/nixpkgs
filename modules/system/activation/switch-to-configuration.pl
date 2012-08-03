@@ -57,6 +57,9 @@ sub getActiveUnits {
     return $res;
 }
 
+# Forget about previously failed services.
+system("@systemd@/bin/systemctl", "reset-failed");
+
 # Stop all services that no longer exist or have changed in the new
 # configuration.
 # FIXME: handle template units (e.g. getty@.service).
@@ -91,9 +94,24 @@ system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 # Start all units required by the default target.  This should start
 # all changed units we stopped above as well as any new dependencies.
 print STDERR "starting default target...\n";
-system("@systemd@/bin/systemctl", "start", "default.target") == 0 or $res = 3;
+system("@systemd@/bin/systemctl", "start", "default.target") == 0 or $res = 4;
 
 # Signal dbus to reload its configuration.
 system("@systemd@/bin/systemctl", "reload", "dbus.service");
+
+# Check all the failed services.
+$active = getActiveUnits;
+my @failed;
+while (my ($unit, $state) = each %{$active}) {
+    push @failed, $unit if $state->{state} eq "failed";
+}
+if (scalar @failed > 0) {
+    print STDERR "warning: the following units failed: ", join(", ", @failed), "\n";
+    foreach my $unit (@failed) {
+        print STDERR "\n";
+        system("@systemd@/bin/systemctl status '$unit' >&2");
+    }
+    $res = 4;
+}
 
 exit $res;
