@@ -64,19 +64,19 @@ system("@systemd@/bin/systemctl", "reset-failed");
 
 # Stop all services that no longer exist or have changed in the new
 # configuration.
-# FIXME: handle template units (e.g. getty@.service).
 my @unitsToStop;
 my $active = getActiveUnits;
 while (my ($unit, $state) = each %{$active}) {
     my $state = $active->{$unit};
-    my $curUnitFile = "/etc/systemd/system/$unit";
+    my $baseUnit = $unit;
+    # Recognise template instances.
+    $baseUnit = "$1\@.$2" if $unit =~ /^(.*)@[^\.]*\.(.*)$/;
+    my $curUnitFile = "/etc/systemd/system/$baseUnit";
     if (-e $curUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
-        my $newUnitFile = "@out@/etc/systemd/system/$unit";
+        my $newUnitFile = "@out@/etc/systemd/system/$baseUnit";
         if (! -e $newUnitFile) {
-            print STDERR "stopping obsolete unit ‘$unit’...\n";
             push @unitsToStop, $unit;
         } elsif (abs_path($curUnitFile) ne abs_path($newUnitFile)) {
-            print STDERR "stopping changed unit ‘$unit’...\n";
             # Record that this unit needs to be started below.  We
             # write this to a file to ensure that the service gets
             # restarted if we're interrupted.
@@ -86,6 +86,7 @@ while (my ($unit, $state) = each %{$active}) {
     }
 }
 
+print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
 system("@systemd@/bin/systemctl", "stop", @unitsToStop)
     if scalar @unitsToStop > 0; # FIXME: ignore errors?
 
@@ -110,9 +111,10 @@ system("@systemd@/bin/systemctl", "start", "default.target") == 0 or $res = 4;
 # manually started).
 my @stopped = split '\n', read_file($restartListFile, err_mode => 'quiet') // "";
 if (scalar @stopped > 0) {
-    print STDERR "restarting the following units: ", join(" ", @stopped), "\n";
     my %unique = map { $_, 1 } @stopped;
-    system("@systemd@/bin/systemctl", "start", keys(%unique)) == 0 or $res = 4;
+    my @unique = sort(keys(%unique));
+    print STDERR "restarting the following units: ", join(", ", @unique), "\n";
+    system("@systemd@/bin/systemctl", "start", @unique) == 0 or $res = 4;
     unlink($restartListFile);
 }
 
@@ -126,7 +128,7 @@ while (my ($unit, $state) = each %{$active}) {
     push @failed, $unit if $state->{state} eq "failed";
 }
 if (scalar @failed > 0) {
-    print STDERR "warning: the following units failed: ", join(", ", @failed), "\n";
+    print STDERR "warning: the following units failed: ", join(", ", sort(@failed)), "\n";
     foreach my $unit (@failed) {
         print STDERR "\n";
         system("@systemd@/bin/systemctl status '$unit' >&2");
