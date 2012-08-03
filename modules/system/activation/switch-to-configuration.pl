@@ -24,8 +24,10 @@ EOF
 die "This is not a NixOS installation (/etc/NIXOS is missing)!\n" unless -f "/etc/NIXOS";
 
 # Install or update the bootloader.
-#system("@installBootLoader@ @out@") == 0 or exit 1 if $action eq "switch" || $action eq "boot";
-exit 0 if $action eq "boot";
+if ($action eq "switch" || $action eq "boot") {
+    system("@installBootLoader@ @out@") == 0 or exit 1;
+    exit 0 if $action eq "boot";
+}
 
 # Check if we can activate the new configuration.
 my $oldVersion = read_file("/run/current-system/init-interface-version", err_mode => 'quiet') // "";
