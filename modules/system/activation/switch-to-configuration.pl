@@ -6,6 +6,8 @@ use File::Basename;
 use File::Slurp;
 use Cwd 'abs_path';
 
+my $restartListFile = "/run/systemd/restart-list";
+
 my $action = shift @ARGV;
 
 if (!defined $action || ($action ne "switch" && $action ne "boot" && $action ne "test")) {
@@ -75,6 +77,10 @@ foreach my $unitFile (glob "/etc/systemd/system/*") {
             system("@systemd@/bin/systemctl", "stop", $unit); # FIXME: ignore errors?
         } elsif (abs_path($unitFile) ne abs_path($newUnitFile)) {
             print STDERR "stopping changed unit ‘$unit’...\n";
+            # Record that this unit needs to be started below.  We
+            # write this to a file to ensure that the service gets
+            # restarted if we're interrupted.
+            write_file($restartListFile, { append => 1 }, "$unit\n");
             system("@systemd@/bin/systemctl", "stop", $unit); # FIXME: ignore errors?
         }
     }
@@ -92,9 +98,20 @@ system("@out@/activate", "@out@") == 0 or $res = 2;
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
 # Start all units required by the default target.  This should start
-# all changed units we stopped above as well as any new dependencies.
+# most changed units we stopped above as well as any new dependencies.
 print STDERR "starting default target...\n";
 system("@systemd@/bin/systemctl", "start", "default.target") == 0 or $res = 4;
+
+# Start changed units we stopped above.  This is necessary because
+# some may not be dependencies of the default target (i.e., they were
+# manually started).
+my @stopped = split '\n', read_file($restartListFile, err_mode => 'quiet') // "";
+if (scalar @stopped > 0) {
+    print STDERR "restarting unit(s) ", join(" ", @stopped), "...\n";
+    my %unique = map { $_, 1 } @stopped;
+    system("@systemd@/bin/systemctl", "start", keys(%unique)) == 0 or $res = 4;
+    unlink($restartListFile);
+}
 
 # Signal dbus to reload its configuration.
 system("@systemd@/bin/systemctl", "reload", "dbus.service");
