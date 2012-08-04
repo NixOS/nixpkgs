@@ -1,6 +1,6 @@
-{ system }:
+{ system, minimal ? false }:
 
-with import ./build-vms.nix { inherit system; };
+with import ./build-vms.nix { inherit system minimal; };
 with pkgs;
 
 rec {

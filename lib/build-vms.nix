@@ -1,4 +1,4 @@
-{ system }:
+{ system, minimal ? false }:
 
 let pkgs = import <nixpkgs> { config = {}; inherit system; }; in
 
@@ -27,7 +27,7 @@ rec {
         [ ../modules/virtualisation/qemu-vm.nix
           ../modules/testing/test-instrumentation.nix # !!! should only get added for automated test runs
           { key = "no-manual"; services.nixosManual.enable = false; }
-        ];
+        ] ++ lib.optional minimal ../modules/testing/minimal-kernel.nix;
       extraArgs = { inherit nodes; };
     };
 

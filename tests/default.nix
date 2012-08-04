@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem, minimal ? false }:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system minimal; };
 
 {
   avahi = makeTest (import ./avahi.nix);
@@ -11,7 +11,6 @@ with import ../lib/testing.nix { inherit system; };
   ipv6 = makeTest (import ./ipv6.nix);
   kde4 = makeTest (import ./kde4.nix);
   login = makeTest (import ./login.nix);
-  minimal_kernel = makeTest (import ./minimal-kernel.nix);
   misc = makeTest (import ./misc.nix);
   mpich = makeTest (import ./mpich.nix);
   mysql = makeTest (import ./mysql.nix);
