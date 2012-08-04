@@ -5750,7 +5750,7 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-        #kernelPatches.aufs3_4
+        kernelPatches.aufs3_5
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
