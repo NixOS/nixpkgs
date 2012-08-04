@@ -40,18 +40,18 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "google-talk-plugin-2.9.10.0";
+  name = "google-talk-plugin-3.2.4.0";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm";
-        sha256 = "1lgvv6bkdc5knghyn4gsg5gp7h3qyr4rb978gsi39gkvcazksm0b";
+        sha256 = "0gf1bsd52pa47h53x5n1ljn07xc23pzvdc7q3lbqy12zf9szqq2c";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://dl.google.com/linux/direct/google-talkplugin_current_i386.rpm";
-        sha256 = "0k9j27pklwb3vih2cydz9552p9270p73hdi14f0bmn6afxjxd13m";
+        sha256 = "055572zi1j3w16lj4cdk686abyhz1xd43445bwk6v38qr4f188dd";
       }
     else throw "Google Talk does not support your platform.";
 
