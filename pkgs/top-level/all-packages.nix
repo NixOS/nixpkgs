@@ -492,6 +492,8 @@ let
     inherit (haskellPackages) pandoc;
   };
 
+  atool = callPackage ../tools/archivers/atool { };
+
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
   cabextract = callPackage ../tools/archivers/cabextract { };
