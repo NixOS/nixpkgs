@@ -5494,6 +5494,8 @@ let
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
+  dstat = callPackage ../os-specific/linux/dstat { };
+
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (utillinux // {
