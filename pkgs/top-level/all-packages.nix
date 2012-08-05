@@ -6685,6 +6685,8 @@ let
 
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
 
+    logito = callPackage ../applications/editors/emacs-modes/logito { };
+
     magit = callPackage ../applications/editors/emacs-modes/magit { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
