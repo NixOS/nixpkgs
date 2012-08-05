@@ -6669,6 +6669,8 @@ let
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
 
+    gh = callPackage ../applications/editors/emacs-modes/gh { };
+
     jdee = callPackage ../applications/editors/emacs-modes/jdee {
       # Requires Emacs 23, for `avl-tree'.
     };
