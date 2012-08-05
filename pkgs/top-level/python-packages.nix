@@ -752,6 +752,24 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  fuse = buildPythonPackage (rec {
+    baseName = "fuse";
+    version = "0.2.1";
+    name = "${baseName}-${version}";
+
+    src = fetchurl {
+      url = "http://downloads.sourceforge.net/sourceforge/fuse/fuse-python-${version}.tar.gz";
+      sha256 = "06rmp1ap6flh64m81j0n3a357ij2vj9zwcvvw0p31y6hz1id9shi";
+    };
+
+    buildInputs = [ pkgs.pkgconfig pkgs.fuse ];
+
+    meta = {
+      description = "Python bindings for FUSE.";
+      license = stdenv.lib.licenses.lgpl21;
+    };
+  });
+
   genshi = buildPythonPackage {
     name = "genshi-0.6";
 
