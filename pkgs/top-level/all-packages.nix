@@ -8595,9 +8595,7 @@ let
 
   lazylist = callPackage ../tools/typesetting/tex/lazylist { };
 
-  lilypond = callPackage ../misc/lilypond {
-    guile = guile_1_8;
-  };
+  lilypond = callPackage ../misc/lilypond { };
 
   martyr = callPackage ../development/libraries/martyr { };
 
