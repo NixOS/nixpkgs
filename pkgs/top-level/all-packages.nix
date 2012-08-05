@@ -6691,6 +6691,8 @@ let
 
     logito = callPackage ../applications/editors/emacs-modes/logito { };
 
+    loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
+
     magit = callPackage ../applications/editors/emacs-modes/magit { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
