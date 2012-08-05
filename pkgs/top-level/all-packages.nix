@@ -7556,6 +7556,7 @@ let
 
   surf = callPackage ../applications/misc/surf {
     libsoup = gnome.libsoup;
+    webkit = webkit_gtk2;
   };
 
   svk = perlPackages.SVK;
