@@ -1755,7 +1755,26 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
-  
+
+  pylibacl = buildPythonPackage (rec {
+    name = "pylibacl-0.5.1";
+
+    src = fetchurl {
+      url = "https://github.com/downloads/iustin/pylibacl/${name}.tar.gz";
+      sha256 = "1idks7j9bn62xzsaxkvhl7bdq6ws8kv8aa0wahfh7724qlbbcf1k";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ pkgs.acl ];
+
+    meta = {
+      description = "A Python extension module for POSIX ACLs. It can be used to query, list, add, and remove ACLs from files and directories under operating systems that support them.";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  });
+
+
   pylint = buildPythonPackage rec {
     name = "pylint-0.23.0";
 
