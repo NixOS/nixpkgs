@@ -488,7 +488,8 @@ let
   btar = callPackage ../tools/backup/btar { };
 
   bup = callPackage ../tools/backup/bup {
-    pandoc = haskellPackages.pandoc;
+    inherit (pythonPackages) pyxattr pylibacl setuptools fuse;
+    inherit (haskellPackages) pandoc;
   };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
