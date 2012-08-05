@@ -4,10 +4,10 @@ let
   usedLibExtension = if shared then ".so" else ".a";
 in
 stdenv.mkDerivation {
-  name = "liblapack-3.4.0";
+  name = "liblapack-3.4.1";
   src = fetchurl {
-    url = "http://www.netlib.org/lapack/lapack-3.4.0.tgz";
-    sha256 = "1sf30v1ps5icg67dvw5sbx5yhypx13am470gqg2f7l04f3wrw4x7";
+    url = "http://www.netlib.org/lapack/lapack-3.4.1.tgz";
+    sha256 = "93b910f94f6091a2e71b59809c4db4a14655db527cfc5821ade2e8c8ab75380f";
   };
 
   propagatedBuildInputs = [ atlasMaybeShared ];

@@ -1,9 +1,9 @@
-{stdenv, fetchurl, openssl, pam, bzip2, zlib}:
+{stdenv, fetchurl, openssl, pam, bzip2, zlib, inotifyTools, openldap}:
 
 stdenv.mkDerivation rec {
   name = "dovecot-2.1.8";
 
-  buildInputs = [openssl pam bzip2 zlib];
+  buildInputs = [openssl pam bzip2 zlib inotifyTools openldap];
 
   src = fetchurl {
     url = "http://dovecot.org/releases/2.1/${name}.tar.gz";
@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
 
   # It will hardcode this for /var/lib/dovecot.
   # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=626211
-  configureFlags = [ "--localstatedir=/var" ];
+  configureFlags = [
+    "--localstatedir=/var"
+    "--with-ldap"
+  ];
 
   meta = {
     homepage = http://dovecot.org/;

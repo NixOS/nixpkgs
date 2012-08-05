@@ -532,7 +532,7 @@ let
   usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
 
   clamav = callPackage ../tools/security/clamav { };
-  
+
   cloog = callPackage ../development/libraries/cloog { };
 
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
@@ -1410,7 +1410,9 @@ let
 
   s3cmd = callPackage ../tools/networking/s3cmd { };
 
-  s3sync = callPackage ../tools/networking/s3sync { };
+  s3sync = callPackage ../tools/networking/s3sync {
+    ruby = ruby18;
+  };
 
   sablotron = callPackage ../tools/text/xml/sablotron { };
 
@@ -1886,6 +1888,8 @@ let
 
   gcc46 = gcc46_real;
 
+  gcc47 = gcc47_real;
+
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.5) {
       inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
@@ -2022,20 +2026,22 @@ let
     binutilsCross = null;
   }));
 
-  gcc47 = lowPrio (wrapGCC (lib.overrideDerivation gcc46_debug.gcc (a: {
-    name = "gcc-debug-4.7.1";
-    src = fetchurl {
-      url = "mirror://gnu/gcc/gcc-4.7.1/gcc-4.7.1.tar.bz2";
-      sha256 = "0vs0v89zzgkngkw2p8kdynyk7j8ky4wf6zyrg3rsschpl1pky28n";
-    };
+  gcc47_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
+    inherit noSysDirs;
+    # I'm not sure if profiling with enableParallelBuilding helps a lot.
+    # We can enable it back some day. This makes the *gcc* builds faster now.
+    profiledCompiler = false;
 
-    configureFlags = a.configureFlags
-      # This flag replaces `no-sys-dirs.patch'.
-      + (lib.optionalString (stdenv ? glibc)
-          " --with-native-system-header-dir=${stdenv.glibc}/include");
-
-    patches = [];
-  })));
+    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+    libpthreadCross =
+      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+      then gnu.libpthreadCross
+      else null;
+  }));
 
   gccApple =
     wrapGCC (makeOverridable
@@ -2200,11 +2206,12 @@ let
     inherit fetchurl stdenv;
   });
 
-  gccgo = gccgo46;
+  # gccgo46 does not work. I set 4.7 then.
+  gccgo = gccgo47;
 
-  gccgo46 = wrapGCC (gcc46_real.gcc.override {
+  gccgo47 = wrapGCC (gcc47_real.gcc.override {
     name = "gccgo";
-    langCC = true; #required for go
+    langCC = true; #required for go.
     langC = true;
     langGo = true;
   });
@@ -2357,7 +2364,13 @@ let
 
   jikes = callPackage ../development/compilers/jikes { };
 
-  julia = callPackage ../development/compilers/julia { };
+  julia = callPackage ../development/compilers/julia {
+    llvm = llvm_3_1;
+    pcre = pcre_8_30;
+    liblapack = liblapack.override {shared = true;};
+    fftw = fftw.override {pthreads = true;};
+    fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
+  };
 
   lazarus = builderDefsPackage (import ../development/compilers/fpc/lazarus.nix) {
     inherit makeWrapper gtk glib pango atk gdk_pixbuf;
@@ -2393,6 +2406,8 @@ let
   ocaml_3_11_2 = callPackage ../development/compilers/ocaml/3.11.2.nix { };
 
   ocaml_3_12_1 = callPackage ../development/compilers/ocaml/3.12.1.nix { };
+
+  ocaml_4_00_0 = callPackage ../development/compilers/ocaml/4.00.0.nix { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
@@ -2489,6 +2504,7 @@ let
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
   ocamlPackages_3_11_2 = mkOcamlPackages ocaml_3_11_2 pkgs.ocamlPackages_3_11_2;
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
+  ocamlPackages_4_00_0 = mkOcamlPackages ocaml_4_00_0 pkgs.ocamlPackages_4_00_0;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
@@ -2961,6 +2977,8 @@ let
   cmakeWithGui = cmakeCurses.override { useQt4 = true; };
 
   coccinelle = callPackage ../development/tools/misc/coccinelle { };
+
+  framac = callPackage ../development/tools/misc/frama-c { };
 
   cppi = callPackage ../development/tools/misc/cppi { };
 
@@ -4539,6 +4557,11 @@ let
     cplusplusSupport = !stdenv ? isDietLibC;
   };
 
+  pcre_8_30 = callPackage ../development/libraries/pcre/8.30.nix {
+    unicodeSupport = getConfig ["pcre" "unicode"] true;
+    cplusplusSupport = !stdenv ? isDietLibC;
+  };
+
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
   phonon = callPackage ../development/libraries/phonon { };
@@ -4671,6 +4694,8 @@ let
     fftw = fftwSinglePrec;
     inherit (vamp) vampSDK;
   };
+
+  sbc = callPackage ../development/libraries/sbc { };
 
   schroedinger = callPackage ../development/libraries/schroedinger { };
 
@@ -5217,6 +5242,8 @@ let
 
   memcached = callPackage ../servers/memcached {};
 
+  mod_evasive = callPackage ../servers/http/apache-modules/mod_evasive { };
+
   mod_python = callPackage ../servers/http/apache-modules/mod_python { };
 
   mod_fastcgi = callPackage ../servers/http/apache-modules/mod_fastcgi { };
@@ -5723,7 +5750,7 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-        #kernelPatches.aufs3_4
+        kernelPatches.aufs3_5
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -5805,8 +5832,10 @@ let
       linuxHeaders = glibc.kernelHeaders;
     };
 
-    splashutils =
-      if kernel.features ? fbConDecor then pkgs.splashutils else null;
+    splashutils = let hasFbConDecor = if kernel ? features
+      then kernel.features ? fbConDecor
+      else kernel.config.isEnabled "FB_CON_DECOR";
+    in if hasFbConDecor then pkgs.splashutils else null;
 
     /* compiles but has to be integrated into the kernel somehow
       Let's have it uncommented and finish it..
@@ -5855,6 +5884,11 @@ let
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
   linuxPackages = linuxPackages_3_2;
+
+  # A function to build a manually-configured kernel
+  linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
+    inherit (pkgs) stdenv runCommand nettools perl kmod writeTextFile;
+  };
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
@@ -6635,6 +6669,10 @@ let
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
 
+    gh = callPackage ../applications/editors/emacs-modes/gh { };
+
+    gist = callPackage ../applications/editors/emacs-modes/gist { };
+
     jdee = callPackage ../applications/editors/emacs-modes/jdee {
       # Requires Emacs 23, for `avl-tree'.
     };
@@ -6651,6 +6689,10 @@ let
 
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
 
+    logito = callPackage ../applications/editors/emacs-modes/logito { };
+
+    loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
+
     magit = callPackage ../applications/editors/emacs-modes/magit { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
@@ -6662,6 +6704,8 @@ let
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
     # we want it to have higher precedence.
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
+
+    pcache = callPackage ../applications/editors/emacs-modes/pcache { };
 
     phpMode = callPackage ../applications/editors/emacs-modes/php { };
 
@@ -7000,10 +7044,13 @@ let
 
   id3v2 = callPackage ../applications/audio/id3v2 { };
 
+  ii = callPackage ../applications/networking/irc/ii { };
+
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
-      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree Filechdir;
+      RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree Filechdir
+      AuthenPassphrase;
   };
 
   imagemagick = callPackage ../applications/graphics/ImageMagick {
@@ -8340,6 +8387,7 @@ let
 
   liblapack = callPackage ../development/libraries/science/math/liblapack { };
 
+  openblas = callPackage ../development/libraries/science/math/openblas { };
 
   ### SCIENCE/LOGIC
 

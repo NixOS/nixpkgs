@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cmdargs";
-  version = "0.9.5";
-  sha256 = "0ihanswhq5d29d9ll5q4grkbaq64dwfsayws7y4xa387d5s9p3iv";
+  version = "0.9.6";
+  sha256 = "0xmzx7iglygks11qmnwz9jjj0jim2sjq7x3xf39symzs986pswlk";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath transformers ];

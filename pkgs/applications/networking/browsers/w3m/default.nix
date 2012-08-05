@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}";
 
   preConfigure = ''
+    substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
     substituteInPlace ./configure --replace /usr /no-such-path
   '';
 

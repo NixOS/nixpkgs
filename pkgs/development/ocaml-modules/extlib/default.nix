@@ -8,6 +8,7 @@ stdenv.mkDerivation {
     sha256 = "ca6d69adeba4242ce41c02a23746ba1e464c0bbec66e2d16b02c3c6e85dc10aa";
   };
 
+  patches = [ ./hashtable-ocaml4-compat.patch ];
   buildInputs = [ocaml findlib];
 
   createFindlibDestdir = true;

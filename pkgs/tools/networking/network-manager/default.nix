@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     homepage = http://projects.gnome.org/NetworkManager/;
     description = "Network configuration and management in an easy way. Desktop environment independent.";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.phreedom maintainers.urkud ];
+    maintainers = with maintainers; [ phreedom urkud rickynils ];
     platforms = platforms.linux;
   };
 }

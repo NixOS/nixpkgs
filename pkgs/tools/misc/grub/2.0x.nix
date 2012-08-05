@@ -1,5 +1,5 @@
 { fetchurl, stdenv, flex, bison, gettext, ncurses, libusb, freetype, qemu
-, EFIsupport ? false }:
+, devicemapper, EFIsupport ? false }:
 
 let
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   };
 
   buildNativeInputs = [ flex bison ];
-  buildInputs = [ ncurses libusb freetype gettext ]
+  buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ stdenv.lib.optional doCheck qemu;
 
   preConfigure =
