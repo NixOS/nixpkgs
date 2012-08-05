@@ -1994,7 +1994,26 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
+  pyxattr = buildPythonPackage (rec {
+    name = "pyxattr-0.5.1";
+
+    src = fetchurl {
+      url = "https://github.com/downloads/iustin/pyxattr/${name}.tar.gz";
+      sha256 = "0jmkffik6hdzs7ng8c65bggss2ai40nm59jykswdf5lpd36cxddq";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ pkgs.attr ];
+
+    meta = {
+      description = "A Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems.";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  });
+
+
   pyyaml = buildPythonPackage (rec {
     name = "PyYAML-3.09";
 
