@@ -6671,6 +6671,8 @@ let
 
     gh = callPackage ../applications/editors/emacs-modes/gh { };
 
+    gist = callPackage ../applications/editors/emacs-modes/gist { };
+
     jdee = callPackage ../applications/editors/emacs-modes/jdee {
       # Requires Emacs 23, for `avl-tree'.
     };
