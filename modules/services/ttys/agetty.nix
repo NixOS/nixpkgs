@@ -2,18 +2,6 @@
 
 with pkgs.lib;
 
-let
-
-  issueFile = pkgs.writeText "issue" ''
-
-    [1;32m${config.services.mingetty.greetingLine}[0m
-    xyzzy6
-    ${config.services.mingetty.helpLine}
-
-  '';
-
-in
-
 {
 
   ###### interface
@@ -91,7 +79,7 @@ in
         [Service]
         Environment=TERM=linux
         Environment=LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive
-        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --noclear -f ${issueFile} --login-program ${pkgs.shadow}/bin/login %I 38400
+        ExecStart=@${pkgs.utillinux}/sbin/agetty agetty --noclear --login-program ${pkgs.shadow}/bin/login %I 38400
         Type=idle
         Restart=always
         RestartSec=0
@@ -107,7 +95,7 @@ in
         # instead, to ensure that login terminates cleanly.
         KillSignal=SIGHUP
       '';
-
+    
     boot.systemd.units."serial-getty@.service".text =
       ''
         [Unit]
@@ -143,7 +131,12 @@ in
 
     environment.etc = singleton
       { # Friendly greeting on the virtual consoles.
-        source = issueFile;
+        source = pkgs.writeText "issue" ''
+
+          [1;32m${config.services.mingetty.greetingLine}[0m
+          ${config.services.mingetty.helpLine}
+
+        '';
         target = "issue";
       };
 
