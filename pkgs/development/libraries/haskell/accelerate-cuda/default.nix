@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "accelerate-cuda";
-  version = "0.12.1.0";
-  sha256 = "1y6viivizv4frdh3xk5wqhs7wwnhqyjr9wid1y1d5l42mz41vp84";
+  version = "0.12.1.1";
+  sha256 = "1kj9i6djjb46ad3dnzk72mf33r8h1mjxljs7x5rf2d658hqk5yfv";
   buildDepends = [
     accelerate binary blazeBuilder cryptohash cuda fclabels filepath
     hashable hashtables languageCQuote mainlandPretty mtl srcloc
