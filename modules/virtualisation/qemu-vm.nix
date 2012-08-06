@@ -386,8 +386,14 @@ in
   # Wireless won't work in the VM.
   networking.wireless.enable = mkOverride 50 false;
 
-  system.requiredKernelConfig = optional (!cfg.graphics) (with config.lib.kernelConfig; [
+  system.requiredKernelConfig = with config.lib.kernelConfig; [
+    (isEnabled "VIRTIO_BLK")
+    (isEnabled "VIRTIO_PCI")
+    (isYes "BLK_DEV")
+    (isYes "PCI")
+    (isYes "EXPERIMENTAL")
+  ] ++ optional (!cfg.graphics) [
     (isYes "SERIAL_8250_CONSOLE")
     (isYes "SERIAL_8250")
-  ]);
+  ];
 }
