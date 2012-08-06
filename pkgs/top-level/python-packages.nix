@@ -2257,6 +2257,34 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  selenium =
+    buildPythonPackage rec {
+      name = "selenium-2.25.0";
+      src = pkgs.fetchurl {
+        url = http://pypi.python.org/packages/source/s/selenium/selenium-2.25.0.tar.gz;
+        sha256 = "0iinpry1vr4dydh44sc0ny22sa9fqhy2302hf56pf8fakvza9m0a";
+      };
+
+      buildInputs = [pkgs.xlibs.libX11];
+
+      # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
+      # absolute paths. Replaced by relative path so it is found when used in nix.
+      x_ignore_nofocus =
+        pkgs.fetchsvn {
+          url = http://selenium.googlecode.com/svn/tags/selenium-2.25.0/cpp/linux-specific;
+          rev = 17641;
+          sha256 = "1wif9r6307qhlcp2zbg6n05yvxxn9ppkxh8gpsplcbyh22zi7bcd";
+        };
+
+      preInstallPhases = "preInstall";
+      preInstall = ''
+        cp ${x_ignore_nofocus}/* .
+        sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
+        gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
+        gcc -shared -Wl,-soname,x_ignore_nofocus.so -o x_ignore_nofocus.so  x_ignore_nofocus.o
+        cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
+      '';
+    };
 
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
