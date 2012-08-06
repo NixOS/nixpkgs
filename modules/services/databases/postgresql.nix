@@ -36,7 +36,7 @@ let
     '';
 
   pre84 = versionOlder (builtins.parseDrvName postgresql.name).version "8.4";
-  
+
 in
 
 {
@@ -139,7 +139,7 @@ in
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '';
-        
+
     users.extraUsers = singleton
       { name = "postgres";
         description = "PostgreSQL server user";
@@ -181,20 +181,19 @@ in
         postStart =
           ''
             while ! psql postgres -c ""; do
-                stop_check
                 sleep 1
             done
           '';
 
-        extraConfig =
+        serviceConfig =
           ''
-            # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See 
+            # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
             # http://www.postgresql.org/docs/current/static/server-shutdown.html
-            kill signal INT
+            KillSignal=SIGINT
 
             # Give Postgres a decent amount of time to clean up after
-            # receiving Upstart's SIGINT.
-            kill timeout 60
+            # receiving systemd's SIGINT.
+            TimeoutSec=60
           '';
       };
 

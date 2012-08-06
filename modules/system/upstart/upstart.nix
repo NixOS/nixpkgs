@@ -1,10 +1,9 @@
 { config, pkgs, ... }:
 
 with pkgs.lib;
+with import ../boot/systemd-unit-options.nix { inherit config pkgs; };
 
 let
-
-  upstart = pkgs.upstart;
 
   userExists = u:
     (u == "") || any (uu: uu.name == u) (attrValues config.users.extraUsers);
@@ -66,6 +65,8 @@ let
 
       serviceConfig =
         ''
+          ${job.serviceConfig}
+
           ${optionalString (job.preStart != "" && (job.script != "" || job.exec != "")) ''
             ExecStartPre=${preStartScript}
           ''}
@@ -77,7 +78,7 @@ let
           ${optionalString (job.script != "" || job.exec != "") ''
             ExecStart=${startScript}
           ''}
-          
+
           ${optionalString (job.postStart != "") ''
             ExecStartPost=${postStartScript}
           ''}
@@ -85,7 +86,7 @@ let
           ${optionalString (job.preStop != "") ''
             ExecStop=${preStopScript}
           ''}
-          
+
           ${optionalString (job.postStop != "") ''
             ExecStopPost=${postStopScript}
           ''}
@@ -100,7 +101,7 @@ let
     };
 
 
-  jobOptions = {
+  jobOptions = serviceOptions // {
 
     name = mkOption {
       # !!! The type should ensure that this could be a filename.
@@ -108,14 +109,6 @@ let
       example = "sshd";
       description = ''
         Name of the Upstart job.
-      '';
-    };
-
-    description = mkOption {
-      type = types.string;
-      default = "";
-      description = ''
-        A short description of this job.
       '';
     };
 
@@ -134,15 +127,6 @@ let
       default = "starting shutdown";
       description = ''
         The Upstart event that triggers this job to be stopped.
-      '';
-    };
-
-    preStart = mkOption {
-      type = types.string;
-      default = "";
-      description = ''
-        Shell commands executed before the job is started
-        (i.e. before the job's main process is started).
       '';
     };
 
@@ -186,15 +170,6 @@ let
       '';
     };
 
-    script = mkOption {
-      type = types.string;
-      default = "";
-      description = ''
-        Shell commands executed as the job's main process.  Can be
-        specified instead of the <varname>exec</varname> attribute.
-      '';
-    };
-
     respawn = mkOption {
       type = types.bool;
       default = true;
@@ -220,15 +195,6 @@ let
         Whether this job is a task rather than a service.  Tasks
         are executed only once, while services are restarted when
         they exit.
-      '';
-    };
-
-    environment = mkOption {
-      type = types.attrs;
-      default = {};
-      example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
-      description = ''
-        Environment variables passed to the job's processes.
       '';
     };
 
@@ -264,15 +230,6 @@ let
       '';
     };
 
-    extraConfig = mkOption {
-      type = types.string;
-      default = "";
-      example = "limit nofile 4096 4096";
-      description = ''
-        Additional Upstart stanzas not otherwise supported.
-      '';
-    };
-
     path = mkOption {
       default = [];
       description = ''
@@ -282,46 +239,25 @@ let
       '';
     };
 
-    console = mkOption {
-      default = "";
-      example = "console";
-      description = ''
-        If set to <literal>output</literal>, job output is written to
-        the console.  If it's <literal>owner</literal>, additionally
-        the job becomes owner of the console.  It it's empty (the
-        default), output is written to
-        <filename>/var/log/upstart/<replaceable>jobname</replaceable></filename>
-      '';  
-    };
-
   };
 
 
-  upstartJob = {name, config, ...}: {
+  upstartJob = { name, config, ... }: {
 
     options = {
-    
+
       unit = mkOption {
         default = makeUnit config;
         description = "Generated definition of the systemd unit corresponding to this job.";
       };
-      
+
     };
 
     config = {
-    
+
       # The default name is the name extracted from the attribute path.
       name = mkDefaultValue name;
-      
-      # Default path for Upstart jobs.  Should be quite minimal.
-      path =
-        [ pkgs.coreutils
-          pkgs.findutils
-          pkgs.gnugrep
-          pkgs.gnused
-          upstart
-        ];
-      
+
     };
 
   };
@@ -365,7 +301,7 @@ in
     boot.systemd.services =
       flip mapAttrs' config.jobs (name: job:
         nameValuePair "${job.name}.service" job.unit);
-        
+
   };
 
 }

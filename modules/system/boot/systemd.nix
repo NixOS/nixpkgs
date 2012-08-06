@@ -1,121 +1,9 @@
 { config, pkgs, ... }:
 
 with pkgs.lib;
+with import ./systemd-unit-options.nix { inherit config pkgs; };
 
 let
-
-  servicesOptions = {
-
-    description = mkOption {
-      default = "";
-      types = types.uniq types.string;
-      description = "Description of this unit used in systemd messages and progress indicators.";
-    };
-
-    requires = mkOption {
-      default = [];
-      types = types.listOf types.string;
-      description = ''
-        Start the specified units when this unit is started, and stop
-        this unit when the specified units are stopped or fail.
-      '';
-    };
-
-    wants = mkOption {
-      default = [];
-      types = types.listOf types.string;
-      description = ''
-        Start the specified units when this unit is started.
-      '';
-    };
-
-    after = mkOption {
-      default = [];
-      types = types.listOf types.string;
-      description = ''
-        If the specified units are started at the same time as
-        this unit, delay this unit until they have started.
-      '';
-    };
-
-    before = mkOption {
-      default = [];
-      types = types.listOf types.string;
-      description = ''
-        If the specified units are started at the same time as
-        this unit, delay them until this unit has started.
-      '';
-    };
-
-    wantedBy = mkOption {
-      default = [];
-      types = types.listOf types.string;
-      description = "Start this unit when the specified units are started.";
-    };
-
-    environment = mkOption {
-      default = {};
-      type = types.attrs;
-      example = { PATH = "/foo/bar/bin"; LANG = "nl_NL.UTF-8"; };
-      description = "Environment variables passed to the services's processes.";
-    };
-
-    path = mkOption {
-      default = [];
-      apply = ps: "${makeSearchPath "bin" ps}:${makeSearchPath "sbin" ps}";
-      description = ''
-        Packages added to the service's <envar>PATH</envar>
-        environment variable.  Both the <filename>bin</filename>
-        and <filename>sbin</filename> subdirectories of each
-        package are added.
-      '';
-    };
-
-    serviceConfig = mkOption {
-      default = "";
-      type = types.string;
-      description = ''
-        Contents of the <literal>[Service]</literal> section of the unit.
-        See <citerefentry><refentrytitle>systemd.unit</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
-      '';
-    };
-
-    script = mkOption {
-      type = types.uniq types.string;
-      default = "";
-      description = "Shell commands executed as the service's main process.";
-    };
-
-    preStart = mkOption {
-      type = types.string;
-      default = "";
-      description = ''
-        Shell commands executed before the service's main process
-        is started.
-      '';
-    };
-
-  };
-
-
-  servicesConfig = { name, config, ... }: {
-
-    config = {
-
-      # Default path for systemd services.  Should be quite minimal.
-      path = 
-        [ pkgs.coreutils
-          pkgs.findutils
-          pkgs.gnugrep
-          pkgs.gnused
-          systemd
-        ];
-
-    };
-
-  };
-  
 
   cfg = config.boot.systemd;
 
@@ -178,7 +66,7 @@ let
       # Utmp maintenance.
       "systemd-update-utmp-runlevel.service"
       "systemd-update-utmp-shutdown.service"
-      
+
       # Filesystems.
       "systemd-fsck@.service"
       "systemd-fsck-root.service"
@@ -260,6 +148,19 @@ let
 
   makeJobScript = name: content: "${pkgs.writeScriptBin name content}/bin/${name}";
 
+  serviceConfig = { name, config, ... }: {
+    config = {
+      # Default path for systemd services.  Should be quite minimal.
+      path =
+        [ pkgs.coreutils
+          pkgs.findutils
+          pkgs.gnugrep
+          pkgs.gnused
+          systemd
+        ];
+    };
+  };
+
   serviceToUnit = name: def:
     { inherit (def) wantedBy;
 
@@ -277,7 +178,7 @@ let
           [Service]
           Environment=PATH=${def.path}
           ${concatMapStrings (n: "Environment=${n}=${getAttr n def.environment}\n") (attrNames def.environment)}
-          
+
           ${optionalString (def.preStart != "") ''
             ExecStartPre=${makeJobScript "${name}-prestart.sh" ''
               #! ${pkgs.stdenv.shell} -e
@@ -297,7 +198,7 @@ let
     };
 
   nixosUnits = mapAttrsToList makeUnit cfg.units;
-    
+
   units = pkgs.runCommand "units" { preferLocalBuild = true; }
     ''
       mkdir -p $out
@@ -310,7 +211,7 @@ let
           ln -s $fn $out/
         fi
       done
-      
+
       for i in ${toString upstreamWants}; do
         fn=${systemd}/example/systemd/system/$i
         [ -e $fn ]
@@ -322,7 +223,7 @@ let
           if ! [ -e $y ]; then rm -v $y; fi
         done
       done
-      
+
       for i in ${toString nixosUnits}; do
         ln -s $i/* $out/
       done
@@ -337,7 +238,7 @@ let
 
       ln -s ../getty@tty1.service $out/multi-user.target.wants/
     ''; # */
-    
+
 in
 
 {
@@ -350,29 +251,24 @@ in
       description = "Definition of systemd units.";
       default = {};
       type = types.attrsOf types.optionSet;
-      
       options = {
-      
         text = mkOption {
           types = types.uniq types.string;
           description = "Text of this systemd unit.";
         };
-        
         wantedBy = mkOption {
           default = [];
           types = types.listOf types.string;
           description = "Units that want (i.e. depend on) this unit.";
         };
-        
       };
-      
     };
 
     boot.systemd.services = mkOption {
       description = "Definition of systemd services.";
       default = {};
       type = types.attrsOf types.optionSet;
-      options = [ servicesOptions servicesConfig ];
+      options = [ serviceOptions serviceConfig ];
     };
 
     boot.systemd.defaultUnit = mkOption {
@@ -386,16 +282,16 @@ in
       type = types.bool;
       description = "Whether to log kernel messages.";
     };
-    
+
     services.journald.console = mkOption {
       default = "";
       type = types.uniq types.string;
       description = "If non-empty, write log messages to the specified TTY device.  Defaults to /dev/console.";
     };
-    
+
   };
 
-  
+
   ###### implementation
 
   config = {
@@ -405,7 +301,7 @@ in
     system.build.units = units;
 
     environment.systemPackages = [ systemd ];
-  
+
     environment.etc =
       [ { source = units;
           target = "systemd/system";
