@@ -385,4 +385,9 @@ in
 
   # Wireless won't work in the VM.
   networking.wireless.enable = mkOverride 50 false;
+
+  system.requiredKernelConfig = optional (!cfg.graphics) (with config.lib.kernelConfig; [
+    (isYes "SERIAL_8250_CONSOLE")
+    (isYes "SERIAL_8250")
+  ]);
 }
