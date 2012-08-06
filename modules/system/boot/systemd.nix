@@ -67,6 +67,9 @@ let
       "systemd-update-utmp-runlevel.service"
       "systemd-update-utmp-shutdown.service"
 
+      # Kernel module loading.
+      "systemd-modules-load.service" 
+
       # Filesystems.
       "systemd-fsck@.service"
       "systemd-fsck-root.service"

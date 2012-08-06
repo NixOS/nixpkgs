@@ -173,6 +173,18 @@ let kernel = config.boot.kernelPackages.kernel; in
     # The Linux kernel >= 2.6.27 provides firmware.
     hardware.firmware = [ "${kernel}/lib/firmware" ];
 
+    # Create /etc/modules-load.d/nixos.conf, which is read by
+    # systemd-modules-load.service to load required kernel modules.
+    # FIXME: ensure that systemd-modules-load.service is restarted if
+    # this file changes.
+    environment.etc = singleton
+      { target = "modules-load.d/nixos.conf";
+        source = pkgs.writeText "nixos.conf"
+          ''
+            ${concatStringsSep "\n" config.boot.kernelModules}
+          '';
+      };
+
   };
 
 }
