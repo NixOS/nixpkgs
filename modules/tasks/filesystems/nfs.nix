@@ -40,12 +40,6 @@ in
 
     boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
 
-    boot.initrd.extraUtilsCommands = mkIf inInitrd
-      ''
-        # !!! Uh, why don't we just install mount.nfs?
-        cp -v ${pkgs.klibc}/lib/klibc/bin.static/nfsmount $out/bin
-      '';
-
     # Ensure that statd and idmapd are started before mountall.
     jobs.mountall.preStart =
       ''
