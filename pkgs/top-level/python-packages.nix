@@ -510,7 +510,7 @@ let pythonPackages = python.modules // rec {
     version = "1.4.1";
 
     src = fetchurl {
-      url = "http://www.djangoproject.com/m/releases/${version}/${name}.tar.gz";
+      url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
       sha256 = "16s0anvpaccbqmdrhl71z73k0dy2sl166nnc2fbd5lshlgmj13ad";
     };
 
