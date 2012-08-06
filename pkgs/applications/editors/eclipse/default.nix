@@ -158,6 +158,20 @@ in {
         };
   };
 
-
+  eclipse_sdk_42 = buildEclipse {
+    name = "eclipse-sdk-4.2";
+    description = "Eclipse Classic";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://eclipse.ialto.com/eclipse/downloads/drops4/R-4.2-201206081400/eclipse-SDK-4.2-linux-gtk-x86_64.tar.gz;
+          sha256 = "1vcr49qm6rsbgzi9d43ggmby68pdigqcy55l5vy1gmixqks3g6s0";
+        }
+      else
+        fetchurl {
+          url = http://eclipse.ialto.com/eclipse/downloads/drops4/R-4.2-201206081400/eclipse-SDK-4.2-linux-gtk.tar.gz;
+          sha256 = "1zlv80idkkdda05ks4biknbkczp24b2xki81ik5nygrjg29jqgnz";
+        };
+    };
 }
 
