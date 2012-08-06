@@ -7073,6 +7073,8 @@ let
     inherit (pythonPackages) lxml;
   };
 
+  intellij_idea_ce_11 = callPackage ../applications/editors/intellij-idea { };
+
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5;
   };
