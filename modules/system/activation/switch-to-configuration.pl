@@ -124,10 +124,10 @@ if (scalar @stopped > 0) {
 system("@systemd@/bin/systemctl", "reload", "dbus.service");
 
 # Print failed and new units.
-my (@failed, @new);
+my (@failed, @new, @restarting);
 my $activeNew = getActiveUnits;
 while (my ($unit, $state) = each %{$activeNew}) {
-    push @failed, $unit if $state->{state} eq "failed";
+    push @failed, $unit if $state->{state} eq "failed" || $state->{substate} eq "auto-restart";
     push @new, $unit if $state->{state} ne "failed" && !defined $activePrev->{$unit};
 }
 
