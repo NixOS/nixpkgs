@@ -54,14 +54,15 @@ let
         '';
     in {
 
-      inherit (job) description path environment;
+      inherit (job) description requires wants before environment path;
 
       after =
-        if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else
-        if job.startOn == "started udev" then [ "systemd-udev.service" ] else
-        [];
+        (if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else
+         if job.startOn == "started udev" then [ "systemd-udev.service" ] else
+         []) ++ job.after;
 
-      wantedBy = if job.startOn == "" then [ ] else [ "multi-user.target" ];
+      wantedBy =
+        (if job.startOn == "" then [ ] else [ "multi-user.target" ]) ++ job.wantedBy;
 
       serviceConfig =
         ''
