@@ -447,6 +447,8 @@ let
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
+  enca = callPackage ../tools/text/enca { };
+
   mcrl = callPackage ../tools/misc/mcrl { };
 
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
