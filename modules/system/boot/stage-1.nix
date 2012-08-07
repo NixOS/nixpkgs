@@ -321,4 +321,7 @@ in {
   system.build.initialRamdisk = initialRamdisk;
   system.build.extraUtils = extraUtils;
 
+  system.requiredKernelConfig = with config.lib.kernelConfig; [
+    (isYes "TMPFS")
+  ];
 }
