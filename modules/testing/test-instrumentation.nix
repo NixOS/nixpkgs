@@ -97,6 +97,7 @@ in
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SERIAL_8250_CONSOLE")
       (isYes "SERIAL_8250")
+      (isEnabled "VIRTIO_CONSOLE")
     ];
   };
 
