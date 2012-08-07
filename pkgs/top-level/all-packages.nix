@@ -1738,6 +1738,8 @@ let
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
 
+  xvfb_run = callPackage ../tools/misc/xvfb-run {};
+
   youtubeDL = callPackage ../tools/misc/youtube-dl { };
 
   zbar = callPackage ../tools/graphics/zbar {};
