@@ -3782,7 +3782,7 @@ let
   mpfr = callPackage ../development/libraries/mpfr { };
 
   gst_all = {
-    inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
+    inherit (pkgs) gstreamer gnonlin qt_gstreamer;
     gstPluginsBase = pkgs.gst_plugins_base;
     gstPluginsBad = pkgs.gst_plugins_bad;
     gstPluginsGood = pkgs.gst_plugins_good;
@@ -3801,8 +3801,6 @@ let
   gst_plugins_ugly = callPackage ../development/libraries/gstreamer/gst-plugins-ugly {};
 
   gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {};
-
-  gst_python = callPackage ../development/libraries/gstreamer/gst-python {};
 
   gnonlin = callPackage ../development/libraries/gstreamer/gnonlin {};
 
@@ -8780,7 +8778,7 @@ let
   gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
     inherit perl intltool pyGtkGlade gettext pkgconfig makeWrapper pygobject
       pyopenssl gtkspell libsexy pycrypto aspell pythonDBus pythonSexy
-      docutils gtk farstream gst_plugins_bad gstreamer gst_ffmpeg gst_python;
+      docutils gtk farstream gst_plugins_bad gstreamer gst_ffmpeg;
     dbus = dbus.libs;
     inherit (gnome) libglade;
     inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libnice, pkgconfig, python, gstreamer, gst_plugins_base
-, pygobject, gst_python, gupnp_igd
+, pygobject, gupnp_igd
 , gst_plugins_good, gst_plugins_bad, gst_ffmpeg
 }:
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ gstreamer gst_plugins_base gst_python 
+  propagatedBuildInputs = [ gstreamer gst_plugins_base
     gst_plugins_good gst_plugins_bad gst_ffmpeg
     ];
 
