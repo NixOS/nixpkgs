@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, perl, bison, flex, pkgconfig, glib, libxml2 }:
+{ fetchurl, stdenv, perl, python, bison, flex, pkgconfig, glib, libxml2 }:
 
 stdenv.mkDerivation rec {
   name = "gstreamer-0.11.92";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "5e41428eea3f62711bede6fd9457ac836874215fcfe5d6775c3f2000452da281";
   };
 
-  buildInputs = [ perl bison flex pkgconfig ];
+  buildInputs = [ perl python bison flex pkgconfig ];
   propagatedBuildInputs = [ glib libxml2 ];
 
   patchPhase = ''
