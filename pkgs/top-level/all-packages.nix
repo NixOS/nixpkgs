@@ -1738,7 +1738,7 @@ let
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
 
-  xvfb_run = callPackage ../tools/misc/xvfb-run {};
+  xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
   youtubeDL = callPackage ../tools/misc/youtube-dl { };
 

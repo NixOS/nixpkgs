@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, xkbcomp, xorgserver, getopt, xkeyboard_config}:
+{ stdenv, fetchurl, makeWrapper, xkbcomp, xorgserver, getopt, xkeyboard_config, xauth, utillinux, which, fontsConf}:
 let
   xvfb_run = fetchurl {
     url = https://projects.archlinux.org/svntogit/packages.git/plain/trunk/xvfb-run?h=packages/xorg-server;
@@ -16,6 +16,7 @@ stdenv.mkDerivation {
     chmod a+x $out/bin/xvfb-run
     wrapProgram $out/bin/xvfb-run \
       --set XKB_BINDIR "${xkbcomp}/bin" \
-      --prefix PATH : ${getopt}/bin:${xorgserver}/bin
+      --set FONTCONFIG_FILE "${fontsConf}" \
+      --prefix PATH : ${getopt}/bin:${xorgserver}/bin:${xauth}/bin:${which}/bin:${utillinux}/bin
   '';
 }
