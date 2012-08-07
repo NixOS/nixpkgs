@@ -7479,7 +7479,6 @@ let
 
   scribus = callPackage ../applications/office/scribus {
     inherit (gnome) libart_lgpl;
-    qt = qt4;
   };
 
   seeks = callPackage ../tools/networking/p2p/seeks {
