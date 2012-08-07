@@ -69,22 +69,8 @@ rec {
     inherit stdenv fetchurl unzip;
   };
 
-  tig = stdenv.mkDerivation {
-    name = "tig-0.16";
-    src = fetchurl {
-      url = "http://jonas.nitro.dk/tig/releases/tig-0.16.tar.gz";
-      sha256 = "167kak44n66wqjj6jrv8q4ijjac07cw22rlpqjqz3brlhx4cb3ix";
-    };
-    buildInputs = [ncurses asciidoc xmlto docbook_xsl];
-    installPhase = ''
-      make install
-      make install-doc
-    '';
-    meta = {
-      description = "console git repository browser that additionally can act as a pager for output from various git commands";
-      homepage = http://jonas.nitro.dk/tig/;
-      license = "GPLv2";
-    };
+  tig = import ./tig {
+    inherit stdenv fetchurl ncurses asciidoc xmlto docbook_xsl;
   };
 
   gitFastExport = import ./fast-export {

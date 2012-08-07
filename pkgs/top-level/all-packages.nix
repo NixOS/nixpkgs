@@ -6887,6 +6887,7 @@ let
   git = gitAndTools.git;
   gitFull = gitAndTools.gitFull;
   gitSVN = gitAndTools.gitSVN;
+  tig = gitAndTools.tig;
 
   giv = callPackage ../applications/graphics/giv {
     pcre = pcre.override { unicodeSupport = true; };
