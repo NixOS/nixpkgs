@@ -389,6 +389,7 @@ in
   system.requiredKernelConfig = with config.lib.kernelConfig; [
     (isEnabled "VIRTIO_BLK")
     (isEnabled "VIRTIO_PCI")
+    (isEnabled "EXT3_FS")
     (isYes "BLK_DEV")
     (isYes "PCI")
     (isYes "EXPERIMENTAL")
