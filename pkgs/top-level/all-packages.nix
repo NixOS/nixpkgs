@@ -3744,7 +3744,7 @@ let
   mpfr = callPackage ../development/libraries/mpfr { };
 
   gst_all = {
-    inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
+    inherit (pkgs) gstreamer gnonlin qt_gstreamer;
     gstPluginsBase = pkgs.gst_plugins_base;
     gstPluginsBad = pkgs.gst_plugins_bad;
     gstPluginsGood = pkgs.gst_plugins_good;
@@ -3763,8 +3763,6 @@ let
   gst_plugins_ugly = callPackage ../development/libraries/gstreamer/gst-plugins-ugly {};
 
   gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {};
-
-  gst_python = callPackage ../development/libraries/gstreamer/gst-python {};
 
   gnonlin = callPackage ../development/libraries/gstreamer/gnonlin {};
 
