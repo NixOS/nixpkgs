@@ -488,7 +488,8 @@ let
   btar = callPackage ../tools/backup/btar { };
 
   bup = callPackage ../tools/backup/bup {
-    pandoc = haskellPackages.pandoc;
+    inherit (pythonPackages) pyxattr pylibacl setuptools fuse;
+    inherit (haskellPackages) pandoc;
   };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
@@ -1736,6 +1737,8 @@ let
   xsel = callPackage ../tools/misc/xsel { };
 
   xtreemfs = callPackage ../tools/filesystems/xtreemfs {};
+
+  xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
   youtubeDL = callPackage ../tools/misc/youtube-dl { };
 
@@ -5493,6 +5496,8 @@ let
 
   drbd = callPackage ../os-specific/linux/drbd { };
 
+  dstat = callPackage ../os-specific/linux/dstat { };
+
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (utillinux // {
@@ -5750,7 +5755,7 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-        #kernelPatches.aufs3_4
+        kernelPatches.aufs3_5
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -6669,6 +6674,10 @@ let
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
 
+    gh = callPackage ../applications/editors/emacs-modes/gh { };
+
+    gist = callPackage ../applications/editors/emacs-modes/gist { };
+
     jdee = callPackage ../applications/editors/emacs-modes/jdee {
       # Requires Emacs 23, for `avl-tree'.
     };
@@ -6685,6 +6694,10 @@ let
 
     htmlize = callPackage ../applications/editors/emacs-modes/htmlize { };
 
+    logito = callPackage ../applications/editors/emacs-modes/logito { };
+
+    loremIpsum = callPackage ../applications/editors/emacs-modes/lorem-ipsum { };
+
     magit = callPackage ../applications/editors/emacs-modes/magit { };
 
     maudeMode = callPackage ../applications/editors/emacs-modes/maude { };
@@ -6696,6 +6709,8 @@ let
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
     # we want it to have higher precedence.
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
+
+    pcache = callPackage ../applications/editors/emacs-modes/pcache { };
 
     phpMode = callPackage ../applications/editors/emacs-modes/php { };
 
@@ -7487,6 +7502,8 @@ let
     usePulseAudio = getConfig [ "pulseaudio" ] false; # disabled by default (the 100% cpu bug)
   };
 
+  st = callPackage ../applications/misc/st { };
+
   dropbox = callPackage ../applications/networking/dropbox { };
 
   slim = callPackage ../applications/display-managers/slim { };
@@ -7543,6 +7560,7 @@ let
 
   surf = callPackage ../applications/misc/surf {
     libsoup = gnome.libsoup;
+    webkit = webkit_gtk2;
   };
 
   svk = perlPackages.SVK;
@@ -8581,9 +8599,7 @@ let
 
   lazylist = callPackage ../tools/typesetting/tex/lazylist { };
 
-  lilypond = callPackage ../misc/lilypond {
-    guile = guile_1_8;
-  };
+  lilypond = callPackage ../misc/lilypond { };
 
   martyr = callPackage ../development/libraries/martyr { };
 

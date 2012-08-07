@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.3";
+  version = "2.0.4";
   name = "lyx-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.0.x/${name}.tar.xz";
-    sha256 = "1j2sl22w41h4vrgnxv2n0s7d11k6zchjbggjw3ai9yxcahvrj72f";
+    sha256 = "137dzmz1z6aqz9mdj8gmmi0k60s9sfn6gy916j175cwzq6hpncb8";
   };
 
   buildInputs = [texLive qt python makeWrapper pkgconfig ];

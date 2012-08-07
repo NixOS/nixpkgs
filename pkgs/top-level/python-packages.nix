@@ -510,7 +510,7 @@ let pythonPackages = python.modules // rec {
     version = "1.4.1";
 
     src = fetchurl {
-      url = "http://www.djangoproject.com/m/releases/${version}/${name}.tar.gz";
+      url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
       sha256 = "16s0anvpaccbqmdrhl71z73k0dy2sl166nnc2fbd5lshlgmj13ad";
     };
 
@@ -749,6 +749,24 @@ let pythonPackages = python.modules // rec {
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
       platforms = python.meta.platforms;
+    };
+  });
+
+  fuse = buildPythonPackage (rec {
+    baseName = "fuse";
+    version = "0.2.1";
+    name = "${baseName}-${version}";
+
+    src = fetchurl {
+      url = "http://downloads.sourceforge.net/sourceforge/fuse/fuse-python-${version}.tar.gz";
+      sha256 = "06rmp1ap6flh64m81j0n3a357ij2vj9zwcvvw0p31y6hz1id9shi";
+    };
+
+    buildInputs = [ pkgs.pkgconfig pkgs.fuse ];
+
+    meta = {
+      description = "Python bindings for FUSE.";
+      license = stdenv.lib.licenses.lgpl21;
     };
   });
 
@@ -1755,7 +1773,26 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
-  
+
+  pylibacl = buildPythonPackage (rec {
+    name = "pylibacl-0.5.1";
+
+    src = fetchurl {
+      url = "https://github.com/downloads/iustin/pylibacl/${name}.tar.gz";
+      sha256 = "1idks7j9bn62xzsaxkvhl7bdq6ws8kv8aa0wahfh7724qlbbcf1k";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ pkgs.acl ];
+
+    meta = {
+      description = "A Python extension module for POSIX ACLs. It can be used to query, list, add, and remove ACLs from files and directories under operating systems that support them.";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  });
+
+
   pylint = buildPythonPackage rec {
     name = "pylint-0.23.0";
 
@@ -1994,7 +2031,26 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
+  pyxattr = buildPythonPackage (rec {
+    name = "pyxattr-0.5.1";
+
+    src = fetchurl {
+      url = "https://github.com/downloads/iustin/pyxattr/${name}.tar.gz";
+      sha256 = "0jmkffik6hdzs7ng8c65bggss2ai40nm59jykswdf5lpd36cxddq";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ pkgs.attr ];
+
+    meta = {
+      description = "A Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems.";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  });
+
+
   pyyaml = buildPythonPackage (rec {
     name = "PyYAML-3.09";
 
@@ -2201,6 +2257,34 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  selenium =
+    buildPythonPackage rec {
+      name = "selenium-2.25.0";
+      src = pkgs.fetchurl {
+        url = http://pypi.python.org/packages/source/s/selenium/selenium-2.25.0.tar.gz;
+        sha256 = "0iinpry1vr4dydh44sc0ny22sa9fqhy2302hf56pf8fakvza9m0a";
+      };
+
+      buildInputs = [pkgs.xlibs.libX11];
+
+      # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
+      # absolute paths. Replaced by relative path so it is found when used in nix.
+      x_ignore_nofocus =
+        pkgs.fetchsvn {
+          url = http://selenium.googlecode.com/svn/tags/selenium-2.25.0/cpp/linux-specific;
+          rev = 17641;
+          sha256 = "1wif9r6307qhlcp2zbg6n05yvxxn9ppkxh8gpsplcbyh22zi7bcd";
+        };
+
+      preInstallPhases = "preInstall";
+      preInstall = ''
+        cp ${x_ignore_nofocus}/* .
+        sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
+        gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
+        gcc -shared -Wl,-soname,x_ignore_nofocus.so -o x_ignore_nofocus.so  x_ignore_nofocus.o
+        cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
+      '';
+    };
 
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";

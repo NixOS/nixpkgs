@@ -44,6 +44,7 @@ stdenv.mkDerivation {
     sed -i '/TestHostname/areturn' src/pkg/os/os_test.go
   '';
 
+  patches = [ ./cacert.patch ];
 
   GOOS = "linux";
   GOARCH = if (stdenv.system == "i686-linux") then "386"

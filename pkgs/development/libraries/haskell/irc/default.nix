@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "irc";
-  version = "0.5.0.0";
-  sha256 = "0bid9iqgrppkl7hl1cd2m1pvvk5qva53fqfl0v5ld52j904c50sr";
+  version = "0.5.1.0";
+  sha256 = "1xkgqcjxlxqg60qlv26ypmvf9x288sjz1n47rb7zfvjhdimws8gj";
   buildDepends = [ parsec ];
   meta = {
     description = "A small library for parsing IRC messages";
