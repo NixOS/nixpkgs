@@ -2,7 +2,7 @@
 
 let
   baseName = "gobject-introspection";
-  v = "0.10.8";
+  v = "1.33.4";
 in
 
 stdenv.mkDerivation rec {
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-tests";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${baseName}/0.10/${name}.tar.bz2";
-    sha256 = "5b1387ff37f03db880a2b1cbd6c6b6dfb923a29468d4d8367c458abf7704c61e";
+    url = "mirror://gnome/sources/${baseName}/1.33/${name}.tar.xz";
+    sha256 = "f8daf7d1bc76bd19062408c6f31caca452596a184df9f3ddd74d595f52068959";
   };
 
   postInstall = "rm -rf $out/share/gtk-doc";
