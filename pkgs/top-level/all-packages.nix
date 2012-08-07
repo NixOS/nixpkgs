@@ -7802,6 +7802,8 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
+  transmageddon = callPackage ../applications/video/transmageddon { };
+
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
   transmission_remote_gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk {};
