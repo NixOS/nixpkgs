@@ -46,10 +46,6 @@ in
   # The kernel version
   version,
   # The version of the kernel module directory
-  # Note that, unlike with the normal kernel builder, it shouldn't be necessary
-  # to specify this for releases with 2 version numbers, e.g. if you're building
-  # Linux 3.5 the modules will happily be installed in $out/lib/modules/3.5/, but
-  # this is provided for compatability.
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
   src,
@@ -68,8 +64,8 @@ let
   installkernel = name: writeTextFile { name = "installkernel"; executable=true; text = ''
     #!/bin/sh
     mkdir $4
-    mv -v $2 $4/${name}
-    mv -v $3 $4
+    cp -av $2 $4/${name}
+    cp -av $3 $4
   '';};
 
   isModular = config.isYes "MODULES";
@@ -80,7 +76,7 @@ let
   commonMakeFlags = [
     "O=../build"
     "INSTALL_PATH=$(out)"
-  ] ++ (optional isModular "MODLIB=$(out)/lib/modules/${modDirVersion}")
+  ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
   ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 in
 
@@ -102,6 +98,7 @@ stdenv.mkDerivation {
         echo "stripping FHS paths in \`$mf'..."
         sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
     done
+    sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
   '';
 
   configurePhase = ''
@@ -114,7 +111,7 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  buildNativeInputs = [ perl nettools ] ++ optional isModular kmod;
+  buildNativeInputs = [ perl nettools ];
 
   makeFlags = commonMakeFlags ++ [
    "INSTALLKERNEL=${installkernel stdenv.platform.kernelTarget}"
@@ -126,7 +123,7 @@ stdenv.mkDerivation {
     ];
   };
 
-  postInstall = stdenv.lib.optionalString installsFirmware ''
+  postInstall = optionalString installsFirmware ''
     mkdir -p $out/lib/firmware
   '' + (if isModular then ''
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
