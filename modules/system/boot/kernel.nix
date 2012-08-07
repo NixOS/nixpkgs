@@ -228,8 +228,8 @@ let kernel = config.boot.kernelPackages.kernel; in
 
     # The config options that all modules can depend upon
     system.requiredKernelConfig = with config.lib.kernelConfig; [
+      # !!! Should this really be needed?
       (isYes "MODULES")
-      (isYes "BLK_DEV_INITRD")
       (isYes "BINFMT_ELF")
     ];
 
