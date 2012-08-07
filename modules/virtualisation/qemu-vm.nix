@@ -389,10 +389,13 @@ in
   system.requiredKernelConfig = with config.lib.kernelConfig; [
     (isEnabled "VIRTIO_BLK")
     (isEnabled "VIRTIO_PCI")
+    (isEnabled "VIRTIO_NET")
     (isEnabled "EXT3_FS")
     (isYes "BLK_DEV")
     (isYes "PCI")
     (isYes "EXPERIMENTAL")
+    (isYes "NETDEVICES")
+    (isYes "NET_CORE")
   ] ++ optional (!cfg.graphics) [
     (isYes "SERIAL_8250_CONSOLE")
     (isYes "SERIAL_8250")
