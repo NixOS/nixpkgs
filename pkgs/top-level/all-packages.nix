@@ -7170,9 +7170,7 @@ let
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
-  lyx = callPackage ../applications/misc/lyx {
-   qt = qt4;
-  };
+  lyx = callPackage ../applications/misc/lyx { };
 
   makeself = callPackage ../applications/misc/makeself { };
 
