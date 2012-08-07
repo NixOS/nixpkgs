@@ -1,16 +1,18 @@
-{ fetchurl, stdenv, pkgconfig, gst_plugins_base, bzip2, yasm
+{ fetchgit, stdenv, autoconf, automake, libtool, pkgconfig
+, gst_plugins_base, bzip2, yasm
 , useInternalFfmpeg ? false, ffmpeg ? null }:
 
 stdenv.mkDerivation rec {
-  name = "gst-ffmpeg-0.10.12";
+  name = "gst-ffmpeg-${version}";
+  version = "0.11.92";
 
-  src = fetchurl {
-    urls = [
-      "http://gstreamer.freedesktop.org/src/gst-ffmpeg/${name}.tar.bz2"
-      "mirror://gentoo/distfiles/${name}.tar.bz2"
-      ];
-    sha256 = "0fyppl8q18g71jd2r0mbiqk8hhrdxq43dglma06mxyjb5c80fxxi";
+  src = fetchgit {
+    url = "git://anongit.freedesktop.org/gstreamer/gst-ffmpeg";
+    rev = "refs/tags/RELEASE-${version}";
+    sha256 = "cd0fb825bfceaea64581272e3db812595a7ee1644281bdc466dc1ecc9c46f8b6";
   };
+
+  preConfigure = "autoreconf -vfi";
 
   # Upstream strongly recommends against using --with-system-ffmpeg,
   # but we do it anyway because we're so hardcore (and we don't want
@@ -18,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optionalString (!useInternalFfmpeg) "--with-system-ffmpeg";
 
   buildInputs =
-    [ pkgconfig bzip2 gst_plugins_base ]
+    [ autoconf automake libtool pkgconfig bzip2 gst_plugins_base ]
     ++ (if useInternalFfmpeg then [ yasm ] else [ ffmpeg ]);
 
   meta = {
