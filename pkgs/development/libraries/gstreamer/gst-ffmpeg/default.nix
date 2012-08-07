@@ -1,6 +1,6 @@
 { fetchgit, stdenv, autoconf, automake, libtool, pkgconfig
 , gst_plugins_base, bzip2, yasm
-, useInternalFfmpeg ? false, ffmpeg ? null }:
+, useInternalLibAV ? false, libav ? null }:
 
 stdenv.mkDerivation rec {
   name = "gst-ffmpeg-${version}";
@@ -17,11 +17,11 @@ stdenv.mkDerivation rec {
   # Upstream strongly recommends against using --with-system-ffmpeg,
   # but we do it anyway because we're so hardcore (and we don't want
   # multiple copies of ffmpeg).
-  configureFlags = stdenv.lib.optionalString (!useInternalFfmpeg) "--with-system-ffmpeg";
+  configureFlags = stdenv.lib.optionalString (!useInternalLibAV) "--with-system-libav";
 
   buildInputs =
     [ autoconf automake libtool pkgconfig bzip2 gst_plugins_base ]
-    ++ (if useInternalFfmpeg then [ yasm ] else [ ffmpeg ]);
+    ++ (if useInternalLibAV then [ yasm ] else [ libav ]);
 
   meta = {
     homepage = "http://gstreamer.freedesktop.org/releases/gst-ffmpeg";
