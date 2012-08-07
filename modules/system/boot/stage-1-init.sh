@@ -329,6 +329,8 @@ while read -u 3 mountPoint; do
     mountFS "$device" "$mountPoint" "$options" "$fsType"
 done
 
+exec 3>&-
+
 
 @postMountCommands@
 
