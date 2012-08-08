@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     ghostscript
   ];
 
+  patches = [ ./0001-Fix-a-crash-with-documents-containing-an-invalid-Pag.patch ./0002-Allocate-at-least-1-page-in-doc-pages.patch ];
+
   doCheck = true;
 
   meta = {
