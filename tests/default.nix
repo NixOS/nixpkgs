@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem }:
+{ system ? builtins.currentSystem, minimal ? false }:
 
-with import ../lib/testing.nix { inherit system; };
+with import ../lib/testing.nix { inherit system minimal; };
 
 {
   avahi = makeTest (import ./avahi.nix);

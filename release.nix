@@ -1,5 +1,6 @@
 { nixosSrc ? {outPath = ./.; revCount = 1234; shortRev = "abcdef"; }
 , nixpkgs ? {outPath = <nixpkgs>; revCount = 5678; shortRev = "fedcba"; }
+, minimal ? false
 }:
 
 let
@@ -194,8 +195,8 @@ let
 
     tests =
       let
-        t = import ./tests { system = "i686-linux"; };
-        t_64 = import ./tests { system = "x86_64-linux"; };
+        t = import ./tests { system = "i686-linux"; inherit minimal; };
+        t_64 = import ./tests { system = "x86_64-linux"; inherit minimal; };
       in {
         avahi = t.avahi.test;
         bittorrent = t.bittorrent.test;

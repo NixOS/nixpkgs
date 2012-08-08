@@ -263,6 +263,11 @@ in
           '';
       };
 
+    system.requiredKernelConfig = with config.lib.kernelConfig; [
+      (isEnabled "UNIX")
+      (isYes "INOTIFY_USER")
+      (isYes "NET")
+    ];
   };
 
 }

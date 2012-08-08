@@ -5,11 +5,18 @@
 
 with pkgs.lib;
 
+let
+  kernel = config.boot.kernelPackages.kernel;
+
+  hasCIFSTimeout = if kernel ? features then kernel.features ? cifsTimeout
+    else (filter (p: p.name == "cifs-timeout") kernel.kernelPatches) != [];
+in
+
 {
 
   config =
   # Require a patch to the kernel to increase the 15s CIFS timeout.
-  mkAssert (config.boot.kernelPackages.kernel.features ? cifsTimeout) "
+  mkAssert hasCIFSTimeout "
     VM tests require that the kernel has the CIFS timeout patch.
   " {
 
@@ -87,6 +94,11 @@ with pkgs.lib;
 
     system.upstartEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
 
+    system.requiredKernelConfig = with config.lib.kernelConfig; [
+      (isYes "SERIAL_8250_CONSOLE")
+      (isYes "SERIAL_8250")
+      (isEnabled "VIRTIO_CONSOLE")
+    ];
   };
 
 }

@@ -73,4 +73,10 @@ with pkgs.lib;
 
   };
 
+  config = mkIf ((length config.swapDevices) != 0) {
+    system.requiredKernelConfig = with config.lib.kernelConfig; [
+      (isYes "SWAP")
+    ];
+  };
+
 }
