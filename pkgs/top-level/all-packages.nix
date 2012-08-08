@@ -4651,6 +4651,8 @@ let
 
   qjson = callPackage ../development/libraries/qjson { };
 
+  qoauth = callPackage ../development/libraries/qoauth { };
+
   qt3 = callPackage ../development/libraries/qt-3 {
     openglSupport = mesaSupported;
   };
