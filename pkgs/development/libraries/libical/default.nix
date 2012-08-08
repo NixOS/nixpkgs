@@ -1,10 +1,13 @@
-{stdenv, fetchurl, perl}:
+{stdenv, fetchsvn, perl, cmake}:
 
 stdenv.mkDerivation rec {
-  name = "libical-0.48";
-  src = fetchurl {
-    url = "mirror://sourceforge/freeassociation/${name}.tar.gz";
-    sha256 = "1w6znkh0xxhbcm717mbzfva9ycrqs2lajhng391i7pghaw3qprra";
+  name = "libical-0.48-p20120623";
+  src = fetchsvn {
+    url = "https://freeassociation.svn.sourceforge.net/svnroot/freeassociation/trunk/libical";
+    rev = "1130";
+    sha256 = "56caf19abdf44807fda75a67ef0886319551e53c4e4ece4da4fc862e34c64e1a";
   };
-  buildNativeInputs = [ perl ];
+  buildNativeInputs = [ perl cmake ];
+
+  patches = [ ./respect-env-tzdir.patch ];
 }
