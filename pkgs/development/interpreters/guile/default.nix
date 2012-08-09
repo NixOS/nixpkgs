@@ -81,6 +81,17 @@
 
 //
 
+(stdenv.lib.optionalAttrs stdenv.isSunOS {
+  # Make sure the right <gmp.h> is found, and not the incompatible
+  # /usr/include/mp.h from OpenSolaris.  See
+  # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+  # for details.
+  # TODO: Move me above.
+  configureFlags = [ "--with-libgmp-prefix=${gmp}" ];
+})
+
+//
+
 (if stdenv.isFreeBSD
  then {
    # XXX: Thread support is currently broken on FreeBSD (namely the
