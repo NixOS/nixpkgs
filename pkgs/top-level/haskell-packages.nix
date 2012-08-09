@@ -1516,6 +1516,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
+  unixTime = callPackage ../development/libraries/haskell/unix-time {};
+
   unlambda = callPackage ../development/libraries/haskell/unlambda {};
 
   unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
