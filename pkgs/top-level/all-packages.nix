@@ -437,6 +437,8 @@ let
 
   bfr = callPackage ../tools/misc/bfr { };
 
+  boomerang = callPackage ../development/tools/boomerang { };
+
   bootchart = callPackage ../tools/system/bootchart { };
 
   bsod = callPackage ../misc/emulators/bsod { };
