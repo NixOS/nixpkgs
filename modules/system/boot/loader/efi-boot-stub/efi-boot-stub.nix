@@ -113,6 +113,7 @@ let
   platform = pkgs.stdenv.platform;
 in
 {
+  assertions = [ { assertion = ! config.boot.kernelPackages.kernel ? features || config.boot.kernelPackages.kernel.features ? efiBootStub; message = "This kernel does not support the EFI boot stub"; } ];
   require = [
     options
 
@@ -120,11 +121,13 @@ in
     # ../system/system-options.nix
   ];
 
-  system = mkIf (config.boot.loader.efiBootStub.enable && (assert
-    (config.boot.kernelPackages.kernel.features ? efiBootStub &&
-    config.boot.kernelPackages.kernel.features.efiBootStub); true)) {
+  system = {
     build.installBootLoader = efiBootStubBuilder;
     boot.loader.id = "efiBootStub";
     boot.loader.kernelFile = platform.kernelTarget;
+    requiredKernelConfig = with config.lib.kernelConfig; [
+      (isYes "EFI_STUB")
+    ];
   };
+
 }
