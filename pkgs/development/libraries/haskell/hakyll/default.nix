@@ -12,6 +12,9 @@ cabal.mkDerivation (self: {
     mtl pandoc parsec regexBase regexTdfa snapCore snapServer tagsoup
     text time
   ];
+  patchPhase = ''
+    sed -i hakyll.cabal -e 's|hamlet.*,|hamlet,|'
+  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
