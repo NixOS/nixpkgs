@@ -113,7 +113,8 @@ let
   platform = pkgs.stdenv.platform;
 in
 {
-  assertions = [ { assertion = ! config.boot.kernelPackages.kernel ? features || config.boot.kernelPackages.kernel.features ? efiBootStub; message = "This kernel does not support the EFI boot stub"; } ];
+  #assertions = [ { assertion = ! config.boot.kernelPackages.kernel ? features || config.boot.kernelPackages.kernel.features ? efiBootStub; message = "This kernel does not support the EFI boot stub"; } ];
+  
   require = [
     options
 
