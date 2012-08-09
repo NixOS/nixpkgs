@@ -2,13 +2,13 @@
 
 cabal.mkDerivation (self: {
   pname = "vacuum";
-  version = "1.0.0.2";
-  sha256 = "1amlzd89952fvw1sbajf9kv3f2s2i6xbqs1zjxw442achg465y7i";
+  version = "2.0.0.0";
+  sha256 = "0a810ql4lp1pyvys9a5aw28gxn7h2p4hkc0by4pmpw5d7kdhn9y3";
   extraLibraries = [ ghcPaths ];
   meta = {
-    homepage = "http://web.archive.org/web/20100410115820/http://moonpatio.com/vacuum/";
-    description = "Extract graph representations of ghc heap values";
-    license = "LGPL";
+    homepage = "http://thoughtpolice.github.com/vacuum";
+    description = "Graph representation of the GHC heap";
+    license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
