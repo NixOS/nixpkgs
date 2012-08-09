@@ -4504,6 +4504,7 @@ let
   openbabel = callPackage ../development/libraries/openbabel { };
 
   opencascade = callPackage ../development/libraries/opencascade {
+    automake = automake111x;
     ftgl = ftgl212;
   };
 
