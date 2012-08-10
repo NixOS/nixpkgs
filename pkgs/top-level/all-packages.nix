@@ -6656,6 +6656,8 @@ let
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
+    autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
+
     bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
 
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
