@@ -15,9 +15,9 @@ stdenv.mkDerivation {
   '';
 
   src = fetchgit {
-    url = "git://github.com/andrew-aladev/boomerang.git";
-    rev = "c0ad5c1f64091725b4ca7f63c57edd3d3bc74a57";
-    sha256 = "76d8512db672bad1322943172046e4b450c5fa509e4141457b3dc60493852fcc";
+    url = "git://github.com/aszlig/boomerang.git";
+    rev = "d0b147a5dfc915a5fa8fe6c517e66a049a37bf22";
+    sha256 = "6cfd95a3539ff45c18b17de76407568b0d0c17fde4e45dda54486c7eac113969";
   };
 
   meta = {
