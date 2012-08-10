@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, udev, dbus, kmod
+{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
 , glib, kbd
 }:
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fail-after-reaching-respawn-limit.patch ];
 
   buildInputs =
-    [ pkgconfig intltool gperf libcap udev dbus kmod xz pam acl
+    [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
       cryptsetup libuuid m4 usbutils pciutils glib
     ];
 
