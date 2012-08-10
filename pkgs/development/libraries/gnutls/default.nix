@@ -1,15 +1,15 @@
 { fetchurl, stdenv, zlib, lzo, libtasn1, nettle
-, guileBindings, guile, perl, psmisc }:
+, guileBindings, guile, perl }:
 
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation rec {
 
-  name = "gnutls-3.0.18";
+  name = "gnutls-3.0.22";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.xz";
-    sha256 = "1ynqnj1j6rrzplk2i64dik34829r0y7lwk4qlvjx993q3mj7z863";
+    sha256 = "1pp90fm27qi5cd0pq18xcmnl79xcbfwxc54bg1xi1wv0vryqdpcr";
   };
 
   configurePhase = ''
@@ -29,13 +29,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 
-  # XXX: Disable tests on non-Linux because of the `mini-loss-time' hack
-  # below, which is Linux-specific.
-  doCheck = stdenv.isLinux;
-
-  postCheck =
-    # Kill a process that's left behind.
-    stdenv.lib.optionalString doCheck "${psmisc}/bin/killall mini-loss-time";
+  doCheck = true;
 
   meta = {
     description = "The GNU Transport Layer Security Library";
