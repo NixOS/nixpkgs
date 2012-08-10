@@ -1,0 +1,19 @@
+commit 699ae6ef085c699dd5f3fb460b0f8a2408cc2860
+Author: Simon Josefsson <simon@josefsson.org>
+Date:   Thu Aug 9 15:24:11 2012 +0200
+
+    Add gnulib -I's to guile-snarf command.
+
+diff --git a/guile/src/Makefile.am b/guile/src/Makefile.am
+index 7b55500..f52eee9 100644
+--- a/guile/src/Makefile.am
++++ b/guile/src/Makefile.am
+@@ -95,7 +95,7 @@ priorities.i.c: $(srcdir)/make-session-priorities.scm
+ # `$(GUILE_CFLAGS)' may contain a series of `-I' switches so it must be
+ # included here, even though we'd really want `$(GUILE_CPPFLAGS)'.
+ snarfcppopts = $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) \
+-              $(CFLAGS) $(AM_CFLAGS) $(GUILE_CFLAGS)
++              $(CFLAGS) $(guile_gnutls_v_2_la_CFLAGS)
+ 
+ .c.x: $(BUILT_SOURCES)
+        $(guile_snarf) -o $@ $< $(snarfcppopts)

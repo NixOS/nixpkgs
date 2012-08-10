@@ -3,7 +3,7 @@
 
 assert guileBindings -> guile != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
 
   name = "gnutls-3.0.22";
 
@@ -54,3 +54,10 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+(stdenv.lib.optionalAttrs stdenv.isFreeBSD {
+  # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
+  patches = [ ./guile-gnulib-includes.patch ];
+}))
