@@ -936,6 +936,17 @@ rec {
     buildInputs = [CryptCBC];
   };
 
+  CryptDHGMP = buildPerlPackage rec {
+    name = "Crypt-DH-GMP-0.00010";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id//D/DM/DMAKI/${name}.tar.gz";
+      sha256 = "7d947cd48a98880df4fb5b0785758bef9ae1357eba7c376ad0fca3fd262a5fe9";
+    };
+    buildInputs = [ DevelChecklib TestRequires pkgs.gmp ];
+    NIX_CFLAGS_COMPILE = "-I${pkgs.gmp}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.gmp}/lib -lgmp";
+  };
+
   CryptEksblowfish = buildPerlPackage rec {
     name = "Crypt-Eksblowfish-0.009";
     src = fetchurl {
@@ -983,6 +994,14 @@ rec {
     src = fetchurl {
       url = "mirror://cpan/authors/id/B/BD/BDFOY/${name}.tar.gz";
       sha256 = "8f8833bc8839e0d4aa3c26d86d2f39ceb9b13e52a9f5e4fd928da2e71989d3b4";
+    };
+  };
+
+  CryptUnixCryptXS = buildPerlPackage rec {
+    name = "Crypt-UnixCrypt_XS-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BO/BORISZ/${name}.tar.gz";
+      sha256 = "527c32b8b6eb50d52b081ceae4be2d748e718e40ea85940da59a3adeb3a33156";
     };
   };
 
@@ -1199,6 +1218,15 @@ rec {
     };
     buildInputs = [ TestOutput ];
     propagatedBuildInputs = [ ClassLoad ClassSingleton ParamsValidate TryTiny ];
+  };
+
+  DevelChecklib = buildPerlPackage rec {
+    name = "Devel-CheckLib-0.98";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MATTN/${name}.tar.gz";
+      sha256 = "2b6b62665403bcdce67b53eb3bee7b57b6576026640c01aa57c7126e32ce20da";
+    };
+    propagatedBuildInputs = [ IOCaptureOutput ];
   };
 
   DBDSQLite = import ../development/perl-modules/DBD-SQLite {
@@ -1945,6 +1973,15 @@ rec {
     buildInputs = [ TestMore ];
   };
 
+  HTTPRequest = buildPerlPackage rec {
+    name = "HTTP-Message-6.03";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/HTTP/${name}.tar.gz";
+      sha256 = "c736e083bdf0eea1bb73e2dc3b66db0a8283942c0f69063afadb9a7cfa80011b";
+    };
+    propagatedBuildInputs = [ HTTPDate URI HTMLParser LWP ];
+  };
+
   HTTPRequestAsCGI = buildPerlPackage rec {
     name = "HTTP-Request-AsCGI-1.2";
     src = fetchurl {
@@ -1978,6 +2015,14 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SB/SBURKE/I18N-LangTags-0.35.tar.gz;
       sha256 = "0idwfi7k8l44d9akpdj6ygdz3q8zxr690m18s7w23ms9d55bh3jy";
+    };
+  };
+
+  IOCaptureOutput = buildPerlPackage rec {
+    name = "IO-CaptureOutput-1.1102";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
+      sha256 = "2ea16dbecb21a3c2be49a93fb1e7e51275bed3f7ef3ac30cbdbff5d0178d43c7";
     };
   };
 
@@ -2852,6 +2897,24 @@ rec {
       url = "mirror://cpan/authors/id/J/JM/JMCNAMARA/${name}.tar.gz";
       sha256 = "179cxwqxb0f9dpx8954nvwjmggxxi5ndnang41yav1dx6mf0abp7";
     };
+  };
+
+  NetOpenIDCommon = buildPerlPackage rec {
+    name = "Net-OpenID-Common-1.14";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/W/WR/WROG/${name}.tar.gz";
+      sha256 = "24ac83539b188d85bd2c7bd67e355aab0ede3f98170b23cb50bd30b11b4387ff";
+    };
+    propagatedBuildInputs = [ CryptDHGMP URI HTMLParser HTTPRequest XMLSimple ];
+  };
+
+  NetOpenIDConsumer = buildPerlPackage rec {
+    name = "Net-OpenID-Consumer-1.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/W/WR/WROG/${name}.tar.gz";
+      sha256 = "4ab927b6756366fa4cef2b54088645849f32fc7e0cd8de0a50001bbf62946fd8";
+    };
+    propagatedBuildInputs = [ NetOpenIDCommon JSON ];
   };
 
   PackageDeprecationManager = buildPerlPackage rec {
@@ -4016,14 +4079,6 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/M/MS/MSCHWERN/UNIVERSAL-require-0.11.tar.gz;
       sha256 = "1rh7i3gva4m96m31g6yfhlqcabszhghbb3k3qwxbgx3mkf5s6x6i";
-    };
-  };
-
-  CryptUnixCryptXS = buildPerlPackage rec {
-    name = "Crypt-UnixCrypt_XS-0.09";
-    src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BO/BORISZ/${name}.tar.gz";
-      sha256 = "527c32b8b6eb50d52b081ceae4be2d748e718e40ea85940da59a3adeb3a33156";
     };
   };
 
