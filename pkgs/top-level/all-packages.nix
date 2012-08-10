@@ -7061,7 +7061,7 @@ let
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
       RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree Filechdir
-      AuthenPassphrase NetOpenIDConsumer;
+      AuthenPassphrase NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay;
   };
 
   imagemagick = callPackage ../applications/graphics/ImageMagick {

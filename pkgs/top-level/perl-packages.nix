@@ -2406,6 +2406,16 @@ rec {
     doCheck = false; # tries to connect to https://www.apache.org/.
   };
 
+  LWPxParanoidAgent = buildPerlPackage rec {
+    name = "LWPx-ParanoidAgent-1.07";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BR/BRADFITZ/${name}.tar.gz";
+      sha256 = "bd7ccbe6ed6b64195a967e9b2b04c185b7b97e8ec5a8835bb45dbcd42a18e76a";
+    };
+    doCheck = false; # 3 tests fail, probably because they try to connect to the network
+    propagatedBuildInputs = [ LWP NetDNS ];
+  };
+
   maatkit = import ../development/perl-modules/maatkit {
     inherit fetchurl buildPerlPackage stdenv DBDmysql;
   };
