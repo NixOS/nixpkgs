@@ -26,6 +26,7 @@ let
       "nss-user-lookup.target"
       "syslog.target"
       "time-sync.target"
+      #"cryptsetup.target"
 
       # Udev.
       "systemd-udevd-control.socket"
@@ -68,7 +69,7 @@ let
       "systemd-update-utmp-shutdown.service"
 
       # Kernel module loading.
-      "systemd-modules-load.service" 
+      "systemd-modules-load.service"
 
       # Filesystems.
       "systemd-fsck@.service"
@@ -177,6 +178,7 @@ let
           Wants=${concatStringsSep " " def.wants}
           Before=${concatStringsSep " " def.before}
           After=${concatStringsSep " " def.after}
+          ${def.unitConfig}
 
           [Service]
           Environment=PATH=${def.path}
@@ -207,7 +209,7 @@ let
       mkdir -p $out
       for i in ${toString upstreamUnits}; do
         fn=${systemd}/example/systemd/system/$i
-        [ -e $fn ]
+        if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         if [ -L $fn ]; then
           cp -pd $fn $out/
         else
@@ -217,7 +219,7 @@ let
 
       for i in ${toString upstreamWants}; do
         fn=${systemd}/example/systemd/system/$i
-        [ -e $fn ]
+        if ! [ -e $fn ]; then echo "missing $fn"; false; fi
         x=$out/$(basename $fn)
         mkdir $x
         for i in $fn/*; do
@@ -239,7 +241,7 @@ let
 
       ln -s ${cfg.defaultUnit} $out/default.target
 
-      ln -s ../getty@tty1.service $out/multi-user.target.wants/
+      #ln -s ../getty@tty1.service $out/multi-user.target.wants/
     ''; # */
 
 in

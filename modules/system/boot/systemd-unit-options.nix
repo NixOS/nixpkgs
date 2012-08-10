@@ -71,12 +71,22 @@ with pkgs.lib;
       '';
     };
 
+    unitConfig = mkOption {
+      default = "";
+      type = types.string;
+      description = ''
+        Contents of the <literal>[Unit]</literal> section of the unit.
+        See <citerefentry><refentrytitle>systemd.unit</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     serviceConfig = mkOption {
       default = "";
       type = types.string;
       description = ''
         Contents of the <literal>[Service]</literal> section of the unit.
-        See <citerefentry><refentrytitle>systemd.unit</refentrytitle>
+        See <citerefentry><refentrytitle>systemd.service</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
