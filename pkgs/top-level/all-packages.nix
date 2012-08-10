@@ -6680,6 +6680,8 @@ let
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
 
+    flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
+
     gh = callPackage ../applications/editors/emacs-modes/gh { };
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
