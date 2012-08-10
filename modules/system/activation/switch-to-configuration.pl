@@ -92,11 +92,15 @@ while (my ($unit, $state) = each %{$activePrev}) {
         if (! -e $newUnitFile) {
             push @unitsToStop, $unit;
         } elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
-            if ($unit =~ /\.target$/) {
+            if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
+                # Do nothing.  These cannot be restarted directly.
+            } elsif ($unit =~ /\.target$/) {
                 write_file($restartListFile, { append => 1 }, "$unit\n");
             } elsif ($unit =~ /\.mount$/) {
                 # Reload the changed mount unit to force a remount.
                 write_file($reloadListFile, { append => 1 }, "$unit\n");
+            } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/) {
+                # FIXME: do something?
             } else {
                 # Record that this unit needs to be started below.  We
                 # write this to a file to ensure that the service gets
@@ -170,6 +174,9 @@ sub unique {
 # - Changed units we stopped above.  This is necessary because some
 #   may not be dependencies of the default target (i.e., they were
 #   manually started).
+# FIXME: detect units that are symlinks to other units.  We shouldn't
+# start both at the same time because we'll get a "Failed to add path
+# to set" error from systemd.
 my @start = unique(
     "default.target", "local-fs.target",
     split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
