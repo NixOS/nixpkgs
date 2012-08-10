@@ -28,7 +28,7 @@ setPath "@path@"
 # However, in some environments (such as Amazon EC2), stage 2 is
 # executed directly, and the root is read-only.  So make it writable
 # here.
-mount -n -o remount,rw none /
+mount -n -o remount,rw /
 
 
 # Likewise, stage 1 mounts /proc, /dev and /sys, so if we don't have a
