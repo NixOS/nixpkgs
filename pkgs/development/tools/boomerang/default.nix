@@ -14,6 +14,8 @@ stdenv.mkDerivation {
     install -vD boomerang "$out/bin/boomerang"
   '';
 
+  patches = [ ./dlopen_path.patch ];
+
   src = fetchgit {
     url = "git://github.com/aszlig/boomerang.git";
     rev = "d0b147a5dfc915a5fa8fe6c517e66a049a37bf22";
