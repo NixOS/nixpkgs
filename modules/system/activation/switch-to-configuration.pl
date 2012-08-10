@@ -7,6 +7,7 @@ use File::Slurp;
 use Cwd 'abs_path';
 
 my $restartListFile = "/run/systemd/restart-list";
+my $reloadListFile = "/run/systemd/reload-list";
 
 my $action = shift @ARGV;
 
@@ -61,6 +62,19 @@ sub getActiveUnits {
     return $res;
 }
 
+sub parseFstab {
+    my ($filename) = @_;
+    my %res;
+    foreach my $line (read_file($filename, err_mode => 'quiet')) {
+        chomp $line;
+        $line =~ s/#.*//;
+        next if $line =~ /^\s*$/;
+        my @xs = split / /, $line;
+        $res{$xs[1]} = { device => $xs[0], fsType => $xs[2], options => $xs[3] };
+    }
+    return %res;
+}
+
 # Forget about previously failed services.
 system("@systemd@/bin/systemctl", "reset-failed");
 
@@ -73,23 +87,64 @@ while (my ($unit, $state) = each %{$activePrev}) {
     # Recognise template instances.
     $baseUnit = "$1\@.$2" if $unit =~ /^(.*)@[^\.]*\.(.*)$/;
     my $prevUnitFile = "/etc/systemd/system/$baseUnit";
+    my $newUnitFile = "@out@/etc/systemd/system/$baseUnit";
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
-        my $newUnitFile = "@out@/etc/systemd/system/$baseUnit";
         if (! -e $newUnitFile) {
             push @unitsToStop, $unit;
         } elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
-            # Record that this unit needs to be started below.  We
-            # write this to a file to ensure that the service gets
-            # restarted if we're interrupted.
-            write_file($restartListFile, { append => 1 }, "$unit\n");
-            push @unitsToStop, $unit;
+            if ($unit =~ /\.target$/) {
+                write_file($restartListFile, { append => 1 }, "$unit\n");
+            } elsif ($unit =~ /\.mount$/) {
+                # Reload the changed mount unit to force a remount.
+                write_file($reloadListFile, { append => 1 }, "$unit\n");
+            } else {
+                # Record that this unit needs to be started below.  We
+                # write this to a file to ensure that the service gets
+                # restarted if we're interrupted.
+                write_file($restartListFile, { append => 1 }, "$unit\n");
+                push @unitsToStop, $unit;
+            }
         }
+    }
+}
+
+sub pathToUnitName {
+    my ($path) = @_;
+    die unless substr($path, 0, 1) eq "/";
+    return "-" if $path eq "/";
+    $path = substr($path, 1);
+    $path =~ s/\//-/g;
+    # FIXME: handle - and unprintable characters.
+    return $path;
+}
+
+# Compare the previous and new fstab to figure out which filesystems
+# need a remount or need to be unmounted.  New filesystems are mounted
+# automatically by starting local-fs.target.  FIXME: might be nicer if
+# we generated units for all mounts; then we could unify this with the
+# unit checking code above.
+my %prevFstab = parseFstab "/etc/fstab";
+my %newFstab = parseFstab "@out@/etc/fstab";
+foreach my $mountPoint (keys %prevFstab) {
+    my $prev = $prevFstab{$mountPoint};
+    my $new = $newFstab{$mountPoint};
+    my $unit = pathToUnitName($mountPoint). ".mount";
+    if (!defined $new) {
+        # Entry disappeared, so unmount it.
+        push @unitsToStop, $unit;
+    } elsif ($prev->{fsType} ne $new->{fsType} || $prev->{device} ne $new->{device}) {
+        # Filesystem type or device changed, so unmount and mount it.
+        write_file($restartListFile, { append => 1 }, "$unit\n");
+        push @unitsToStop, $unit;
+    } elsif ($prev->{options} ne $new->{options}) {
+        # Mount options changes, so remount it.
+        write_file($reloadListFile, { append => 1 }, "$unit\n");
     }
 }
 
 if (scalar @unitsToStop > 0) {
     print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
-    system("@systemd@/bin/systemctl", "stop", @unitsToStop); # FIXME: ignore errors?
+    system("@systemd@/bin/systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
 }
 
 # Activate the new configuration (i.e., update /etc, make accounts,
@@ -103,21 +158,32 @@ system("@out@/activate", "@out@") == 0 or $res = 2;
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
-# Start all units required by the default target.  This should start
-# most changed units we stopped above as well as any new dependencies.
-print STDERR "starting default target...\n";
-system("@systemd@/bin/systemctl", "start", "default.target") == 0 or $res = 4;
+sub unique {
+    my %unique = map { $_, 1 } @_;
+    return sort(keys(%unique));
+}
 
-# Start changed units we stopped above.  This is necessary because
-# some may not be dependencies of the default target (i.e., they were
-# manually started).
-my @stopped = split '\n', read_file($restartListFile, err_mode => 'quiet') // "";
-if (scalar @stopped > 0) {
-    my %unique = map { $_, 1 } @stopped;
-    my @unique = sort(keys(%unique));
-    print STDERR "restarting the following units: ", join(", ", @unique), "\n";
-    system("@systemd@/bin/systemctl", "start", @unique) == 0 or $res = 4;
-    unlink($restartListFile);
+# Start the following units:
+# - The default target.  This should start most changed units we
+#   stopped above as well as any new dependencies.
+# - local-fs.target.  This mounts any missing local filesystems.
+# - Changed units we stopped above.  This is necessary because some
+#   may not be dependencies of the default target (i.e., they were
+#   manually started).
+my @start = unique(
+    "default.target", "local-fs.target",
+    split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
+print STDERR "starting the following units: ", join(", ", @start), "\n";
+system("@systemd@/bin/systemctl", "start", "--", @start) == 0 or $res = 4;
+unlink($restartListFile);
+
+# Reload units that need it.  This includes remounting changed mount
+# units.
+my @reload = unique(split '\n', read_file($reloadListFile, err_mode => 'quiet') // "");
+if (scalar @reload > 0) {
+    print STDERR "reloading the following units: ", join(", ", @reload), "\n";
+    system("@systemd@/bin/systemctl", "reload", "--", @reload) == 0 or $res = 4;
+    unlink($reloadListFile);
 }
 
 # Signal dbus to reload its configuration.
