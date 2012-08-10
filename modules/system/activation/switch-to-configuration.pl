@@ -70,7 +70,7 @@ sub parseFstab {
         $line =~ s/#.*//;
         next if $line =~ /^\s*$/;
         my @xs = split / /, $line;
-        $res{$xs[1]} = { device => $xs[0], fsType => $xs[2], options => $xs[3] };
+        $res{$xs[1]} = { device => $xs[0], fsType => $xs[2], options => $xs[3] // "" };
     }
     return %res;
 }
@@ -124,18 +124,26 @@ sub pathToUnitName {
 
 # Compare the previous and new fstab to figure out which filesystems
 # need a remount or need to be unmounted.  New filesystems are mounted
-# automatically by starting local-fs.target.  FIXME: might be nicer if
-# we generated units for all mounts; then we could unify this with the
-# unit checking code above.
+# automatically by starting local-fs.target.  Also handles swap
+# devices.  FIXME: might be nicer if we generated units for all
+# mounts; then we could unify this with the unit checking code above.
 my %prevFstab = parseFstab "/etc/fstab";
 my %newFstab = parseFstab "@out@/etc/fstab";
 foreach my $mountPoint (keys %prevFstab) {
     my $prev = $prevFstab{$mountPoint};
     my $new = $newFstab{$mountPoint};
-    my $unit = pathToUnitName($mountPoint). ".mount";
+    my $unit = pathToUnitName($mountPoint). ".mount" if $prev->{fsType} ne "swap";
     if (!defined $new) {
-        # Entry disappeared, so unmount it.
-        push @unitsToStop, $unit;
+        if ($prev->{fsType} eq "swap") {
+            # Swap entry disappeared, so turn it off.  Can't use
+            # "systemctl stop" here because systemd has lots of alias
+            # units that prevent a stop from actually calling
+            # "swapoff".
+            system("@utillinux@/sbin/swapoff", $prev->{device});
+        } else {
+            # Filesystem entry disappeared, so unmount it.
+            push @unitsToStop, $unit;
+        }
     } elsif ($prev->{fsType} ne $new->{fsType} || $prev->{device} ne $new->{device}) {
         # Filesystem type or device changed, so unmount and mount it.
         write_file($restartListFile, { append => 1 }, "$unit\n");
@@ -178,7 +186,7 @@ sub unique {
 # start both at the same time because we'll get a "Failed to add path
 # to set" error from systemd.
 my @start = unique(
-    "default.target", "local-fs.target",
+    "default.target", "local-fs.target", "swap.target",
     split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
 print STDERR "starting the following units: ", join(", ", @start), "\n";
 system("@systemd@/bin/systemctl", "start", "--", @start) == 0 or $res = 4;

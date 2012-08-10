@@ -147,7 +147,7 @@ let
     preferLocalBuild = true;
     buildCommand = systemBuilder;
 
-    inherit (pkgs) systemd;
+    inherit (pkgs) systemd utillinux;
 
     inherit children;
     kernelParams =
