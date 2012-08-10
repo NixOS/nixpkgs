@@ -208,6 +208,7 @@ in
       users = { };
       nixbld = { };
       utmp = { };
+      adm = { }; # expected by journald
     };
 
     system.activationScripts.rootPasswd = stringAfter [ "etc" ]
