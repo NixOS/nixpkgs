@@ -7,7 +7,7 @@ assert withGtk -> gtk != null;
 stdenv.mkDerivation {
   name = "perf-linux-${kernel.version}";
 
-  inherit (kernel) src;
+  inherit (kernel) src patches;
 
   preConfigure = ''
     cd tools/perf
