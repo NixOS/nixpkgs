@@ -6662,6 +6662,8 @@ let
 
     calfw = callPackage ../applications/editors/emacs-modes/calfw { };
 
+    coffee = callPackage ../applications/editors/emacs-modes/coffee { };
+
     cua = callPackage ../applications/editors/emacs-modes/cua { };
 
     ecb = callPackage ../applications/editors/emacs-modes/ecb { };
