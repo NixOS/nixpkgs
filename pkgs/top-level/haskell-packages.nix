@@ -1020,6 +1020,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
 
+  lrucache = callPackage ../development/libraries/haskell/lrucache {};
+
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
