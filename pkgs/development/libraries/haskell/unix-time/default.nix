@@ -2,11 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unix-time";
-  version = "0.1.0";
-  sha256 = "063mssiq57g4bsalp653fa4yj9wmaynvg0x7vk67gds2l2zpd2gy";
-  patchPhase = ''
-    sed -i Setup.hs -e 's|main = defaultMain|main = defaultMainWithHooks autoconfUserHooks|'
-  '';
+  version = "0.1.1";
+  sha256 = "1b7njfs33vqmprpmbpi8hvy1lc5ryvdiy5526q8s7vkzsi2iky1p";
   meta = {
     description = "Unix time parser/formatter and utilities";
     license = self.stdenv.lib.licenses.bsd3;
