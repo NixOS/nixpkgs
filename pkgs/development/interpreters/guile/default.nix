@@ -94,12 +94,15 @@
       # Same for these (?).
       "--with-libreadline-prefix=${readline}"
       "--with-libunistring-prefix=${libunistring}"
+
+      # See below.
+      "--without-threads"
     ];
 })
 
 //
 
-(if (stdenv.isFreeBSD || stdenv.isSunOS)
+(if stdenv.isFreeBSD
  then {
    # XXX: Thread support is currently broken on FreeBSD and Solaris (namely
    # the `SCM_I_IS_THREAD' assertion in `scm_spawn_thread' is hit.)
