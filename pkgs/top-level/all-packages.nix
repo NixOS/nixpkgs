@@ -6045,8 +6045,6 @@ let
 
   rt2870fw = callPackage ../os-specific/linux/firmware/rt2870 { };
 
-  rt73fw = callPackage ../os-specific/linux/firmware/rt73 { };
-
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
   rtl8192cfw = callPackage ../os-specific/linux/firmware/rtl8192c { };
