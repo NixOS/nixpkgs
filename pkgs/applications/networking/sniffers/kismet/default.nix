@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libpcap, ncurses, expat, pcre}:
 
 stdenv.mkDerivation {
-  name = "kismet-2010-01-r1";
+  name = "kismet-2011-03-r2";
 
   src = fetchurl {
-    url = http://www.kismetwireless.net/code/kismet-2010-01-R1.tar.gz;
-    sha256 = "106qird64x1v29nz6k5zs9dxxdq6q7fb7d6np0pnwm3dd2p1w7cx";
+    url = http://www.kismetwireless.net/code/kismet-2011-03-R2.tar.gz;
+    sha256 = "0r1admlaiq7k0v13d9ci9i9mf5m25i1r5r18bkawsla9fbxrk83i";
   };
 
   buildInputs = [libpcap ncurses expat pcre];
