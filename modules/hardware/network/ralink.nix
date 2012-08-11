@@ -6,7 +6,7 @@
 
   options = {
 
-    networking.enableRT73Firmware = pkgs.lib.mkOption {
+    networking.enableRalinkFirmware = pkgs.lib.mkOption {
       default = false;
       type = pkgs.lib.types.bool;
       description = ''
@@ -19,8 +19,8 @@
 
   ###### implementation
 
-  config = pkgs.lib.mkIf config.networking.enableRT73Firmware {
-    hardware.firmware = [ pkgs.rt73fw ];
+  config = pkgs.lib.mkIf config.networking.enableRalinkFirmware {
+    hardware.firmware = [ pkgs.ralink_fw ];
   };
 
 }

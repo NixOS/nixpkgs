@@ -20,7 +20,7 @@
   ./hardware/network/intel-2100bg.nix
   ./hardware/network/intel-2200bg.nix
   ./hardware/network/intel-3945abg.nix
-  ./hardware/network/rt73.nix
+  ./hardware/network/ralink.nix
   ./hardware/network/rtl8192c.nix
   ./hardware/pcmcia.nix
   ./installer/tools/nixos-checkout.nix
