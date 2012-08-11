@@ -19,6 +19,6 @@ with pkgs.lib;
   config = mkDefault {
     # That wireless card firmware not enabled because the corresponding
     # build expression 'rt73fw' is broken.
-    networking.enableRT73Firmware = false;
+    networking.enableRalinkFirmware = false;
   };
 }
