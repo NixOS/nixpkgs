@@ -5577,6 +5577,8 @@ let
 
   ipw2200fw = callPackage ../os-specific/linux/firmware/ipw2200 { };
 
+  iw = callPackage ../os-specific/linux/iw { };
+
   iwlwifi1000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-1000-ucode { };
 
   iwlwifi3945ucode = callPackage ../os-specific/linux/firmware/iwlwifi-3945-ucode { };
