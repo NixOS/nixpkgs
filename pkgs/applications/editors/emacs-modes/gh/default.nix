@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/sigma/gh.el.git";
-    rev = "v0.5.3";
+    rev = "ef03b63d063ec22f03af449aa955c98dfad7f80e";
     sha256 = "efa231e0091e8c7785385149dc97b2d8dc24aba65f4b0974b8ed7f62b7596ad3";
   };
 
