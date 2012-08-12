@@ -27,15 +27,6 @@ let
       ";
     };
 
-    boot.initrd.loadConsoleKeyMap = mkOption {
-      default = false;
-      type = with types; bool;
-      description = ''
-        Load i18n.consoleKeyMap at boot time. This is especially useful if you
-        bring together a non-QWERTY keyboard with a LUKS password prompt.
-      '';
-    };
-
     boot.initrd.checkJournalingFS = mkOption {
       default = true;
       type = types.bool;
@@ -293,17 +284,12 @@ let
 
     isExecutable = true;
 
-    inherit udevConf extraUtils modulesClosure;
+    inherit udevConf busyboxKeymap extraUtils modulesClosure;
 
     inherit (config.boot) resumeDevice devSize runSize;
 
     inherit (config.boot.initrd) checkJournalingFS
-      postDeviceCommands postMountCommands kernelModules;
-
-    preLVMCommands = (optionalString config.boot.initrd.loadConsoleKeyMap ''
-        # load boot-time keymap before any LVM/LUKS initialization
-        ${extraUtils}/bin/busybox loadkmap < "${busyboxKeymap}"
-      '') + config.boot.initrd.preLVMCommands;
+      preLVMCommands postDeviceCommands postMountCommands kernelModules;
 
     fsInfo =
       let f = fs: [ fs.mountPoint (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}") fs.fsType fs.options ];
