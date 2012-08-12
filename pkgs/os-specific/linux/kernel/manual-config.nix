@@ -80,51 +80,48 @@ let
   ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 in
 
-let self = stdenv.mkDerivation {
+stdenv.mkDerivation {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
 
   passthru = {
     inherit version modDirVersion config kernelPatches src;
+  };
 
-    source = stdenv.mkDerivation {
-      name = "linux-${version}-source";
+  sourceRoot = stdenv.mkDerivation {
+    name = "linux-${version}-source";
 
-      inherit src;
+    inherit src;
 
-      patches = map (p: p.patch) kernelPatches;
+    patches = map (p: p.patch) kernelPatches;
 
-      phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+    phases = [ "unpackPhase" "patchPhase" "installPhase" ]; 
 
-      prePatch = ''
-        for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
-            echo "stripping FHS paths in \`$mf'..."
-            sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
-        done
-        sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
-      '';
+    prePatch = ''
+      for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
+          echo "stripping FHS paths in \`$mf'..."
+          sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
+      done
+      sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
+    '';
 
-      installPhase = ''
-        cd ..
-        mv $sourceRoot $out
-      '';
-    };
+    installPhase = ''
+      cd ..
+      mv $sourceRoot $out
+    '';
   };
 
   unpackPhase = ''
-    export sourceRoot="${self.source}"
     mkdir build
     export buildRoot="$(pwd)/build"
+    ln -sv ${configfile} $buildRoot/.config
     cd $sourceRoot
   '';
 
   configurePhase = ''
     runHook preConfigure
-    make $makeFlags "''${makeFlagsArray[@]}" mrproper
-    ln -sv ${configfile} $buildRoot/.config
     make $makeFlags "''${makeFlagsArray[@]}" oldconfig
-    rm $buildRoot/.config.old
     runHook postConfigure
   '';
 
@@ -146,7 +143,6 @@ let self = stdenv.mkDerivation {
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
     rm -f $out/lib/modules/${modDirVersion}/build
-    cd $buildRoot/..
     mv $buildRoot $out/lib/modules/${modDirVersion}/build
   '' else optionalString installsFirmware ''
     make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
@@ -168,4 +164,4 @@ let self = stdenv.mkDerivation {
     ];
     platforms = lib.platforms.linux;
   };
-}; in self
+}
