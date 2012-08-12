@@ -46,14 +46,6 @@ with pkgs.lib;
         '';
       };
 
-      dontRestart = mkOption {
-        default = false;
-        description = ''
-          Don't restart mingetty processes as this will result in active
-          sessions to be logged out, for example on activation of the system's
-          configuration.
-        '';
-      };
     };
 
   };
@@ -77,7 +69,7 @@ with pkgs.lib;
 
       exec = "mingetty --loginprog=${pkgs.shadow}/bin/login --noclear ${tty}";
 
-      restartIfChanged = !config.services.mingetty.dontRestart;
+      restartIfChanged = false;
 
       environment.LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
 
