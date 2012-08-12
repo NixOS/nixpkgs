@@ -113,8 +113,7 @@ let self = stdenv.mkDerivation {
   };
 
   unpackPhase = ''
-    ln -sv ${self.source} src
-    export sourceRoot="$(pwd)/src"
+    export sourceRoot="${self.source}"
     mkdir build
     export buildRoot="$(pwd)/build"
     cd $sourceRoot
@@ -146,12 +145,9 @@ let self = stdenv.mkDerivation {
   '' + (if isModular then ''
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
-    rm -f $out/lib/modules/${modDirVersion}/{build,source}
-    cd ..
-    mv $sourceRoot $out/lib/modules/${modDirVersion}/source
+    rm -f $out/lib/modules/${modDirVersion}/build
+    cd $buildRoot/..
     mv $buildRoot $out/lib/modules/${modDirVersion}/build
-    unlink $out/lib/modules/${modDirVersion}/build/source
-    ln -sv ${self.source} $out/lib/modules/${modDirVersion}/build/source
   '' else optionalString installsFirmware ''
     make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
