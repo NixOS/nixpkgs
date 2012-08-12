@@ -74,40 +74,58 @@ let
     (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
 
   commonMakeFlags = [
-    "O=../build"
+    "O=$(buildRoot)"
     "INSTALL_PATH=$(out)"
   ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
   ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 in
 
-stdenv.mkDerivation {
+let self = stdenv.mkDerivation {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
 
   passthru = {
-    inherit version modDirVersion config kernelPatches;
+    inherit version modDirVersion config kernelPatches src;
+
+    source = stdenv.mkDerivation {
+      name = "linux-${version}-source";
+
+      inherit src;
+
+      patches = map (p: p.patch) kernelPatches;
+
+      phases = [ "unpackPhase" "patchPhase" "installPhase" ];
+
+      prePatch = ''
+        for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
+            echo "stripping FHS paths in \`$mf'..."
+            sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
+        done
+        sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
+      '';
+
+      installPhase = ''
+        cd ..
+        mv $sourceRoot $out
+      '';
+    };
   };
 
-  inherit src;
-
-  patches = map (p: p.patch) kernelPatches;
-
-  prePatch = ''
-    for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
-        echo "stripping FHS paths in \`$mf'..."
-        sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
-    done
-    sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
+  unpackPhase = ''
+    ln -sv ${self.source} src
+    export sourceRoot="$(pwd)/src"
+    mkdir build
+    export buildRoot="$(pwd)/build"
+    cd $sourceRoot
   '';
 
   configurePhase = ''
     runHook preConfigure
-    mkdir ../build
     make $makeFlags "''${makeFlagsArray[@]}" mrproper
-    ln -sv ${configfile} ../build/.config
+    ln -sv ${configfile} $buildRoot/.config
     make $makeFlags "''${makeFlagsArray[@]}" oldconfig
-    rm ../build/.config.old
+    rm $buildRoot/.config.old
     runHook postConfigure
   '';
 
@@ -131,9 +149,9 @@ stdenv.mkDerivation {
     rm -f $out/lib/modules/${modDirVersion}/{build,source}
     cd ..
     mv $sourceRoot $out/lib/modules/${modDirVersion}/source
-    mv build $out/lib/modules/${modDirVersion}/build
+    mv $buildRoot $out/lib/modules/${modDirVersion}/build
     unlink $out/lib/modules/${modDirVersion}/build/source
-    ln -sv $out/lib/modules/${modDirVersion}/{,build/}source
+    ln -sv ${self.source} $out/lib/modules/${modDirVersion}/build/source
   '' else optionalString installsFirmware ''
     make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
@@ -154,4 +172,4 @@ stdenv.mkDerivation {
     ];
     platforms = lib.platforms.linux;
   };
-}
+}; in self
