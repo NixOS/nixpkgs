@@ -2295,6 +2295,8 @@ let
   haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741.highPrio);
   # Stable branch snapshot.
   haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742);
+  # Release candidate.
+  haskellPackages_ghc761              =                   haskell.packages_ghc761;
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
 
