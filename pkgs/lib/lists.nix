@@ -126,13 +126,6 @@ rec {
   all = pred: fold (x: y: if pred x then y else false) true;
 
 
-  # Return true if each element of a list is equal, false otherwise.
-  eqLists = xs: ys:
-    if xs == [] && ys == [] then true
-    else if xs == [] || ys == [] then false
-    else head xs == head ys && eqLists (tail xs) (tail ys);
-
-    
   # Return a singleton list or an empty list, depending on a boolean
   # value.  Useful when building lists with optional elements
   # (e.g. `++ optional (system == "i686-linux") flashplayer').
