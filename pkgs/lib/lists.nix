@@ -1,7 +1,7 @@
 # General list operations.
 
 rec {
-  inherit (builtins) head tail length isList;
+  inherit (builtins) elemAt head tail length isList add sub lessThan;
 
 
   # Create a list consisting of a single element.  `singleton x' is
@@ -14,20 +14,46 @@ rec {
   # `list' with `nul' as the starting value, i.e., `fold op nul [x_1
   # x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))'.  (This is
   # Haskell's foldr).
-  fold = op: nul: list:
-    if list == []
-    then nul
-    else op (head list) (fold op nul (tail list));
+  fold =
+    if builtins ? elemAt
+    then op: nul: list:
+      let
+        len = length list;
+        fold' = n:
+          if n == len
+          then nul
+          else op (elemAt list n) (fold' (add n 1));
+      in fold' 0
+    else op: nul:
+      let fold' = list:
+        if list == []
+        then nul
+        else op (head list) (fold' (tail list));
+      in fold';
 
     
   # Left fold: `fold op nul [x_1 x_2 ... x_n] == op (... (op (op nul
   # x_1) x_2) ... x_n)'.
-  foldl = op: nul: list:
-    if list == []
-    then nul
-    else foldl op (op nul (head list)) (tail list);
+  foldl =
+    if builtins ? elemAt
+    then op: nul: list:
+      let
+        len = length list;
+        foldl' = n:
+          if n == minus1
+          then nul
+          else op (foldl' (sub n 1)) (elemAt list n);
+      in foldl' (sub (length list) 1)
+    else op:
+      let foldl' = nul: list:
+        if list == []
+        then nul
+        else foldl' (op nul (head list)) (tail list);
+      in foldl';
 
-    
+  minus1 = sub 0 1;
+
+
   # map with index: `imap (i: v: "${v}-${toString i}") ["a" "b"] ==
   # ["a-1" "b-2"]'
   imap = f: list:
@@ -92,18 +118,12 @@ rec {
 
   # Return true iff function `pred' returns true for at least element
   # of `list'.
-  any = pred: list:
-    if list == [] then false
-    else if pred (head list) then true
-    else any pred (tail list);
+  any = pred: fold (x: y: if pred x then true else y) false;
 
 
   # Return true iff function `pred' returns true for all elements of
   # `list'.
-  all = pred: list:
-    if list == [] then true
-    else if pred (head list) then all pred (tail list)
-    else false;
+  all = pred: fold (x: y: if pred x then y else false) true;
 
 
   # Return true if each element of a list is equal, false otherwise.
