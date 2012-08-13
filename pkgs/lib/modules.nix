@@ -44,9 +44,9 @@ rec {
       delayedModule = delayProperties m;
       getImports =
         if m ? config || m ? options then
-          attrByPath ["imports"] [] m
+          m.imports or []
         else
-          toList (rmProperties (attrByPath ["require"] [] delayedModule));
+          toList (rmProperties (delayedModule.require or []));
 
       getImportedPaths = filter isPath getImports;
       getImportedSets = filter (x: !isPath x) getImports;
@@ -92,7 +92,7 @@ rec {
             else newModuleName origin index;
         };
 
-      getImports = m: attrByPath ["imports"] [] m;
+      getImports = m: m.imports or [];
 
       newModuleName = origin: index:
         "${origin.key}:<import-${toString index}>";
@@ -110,8 +110,8 @@ rec {
   selectDeclsAndDefs = modules:
     lib.concatMap (m:
       if m ? config || m ? options then
-         [ (attrByPath ["options"] {} m) ]
-      ++ [ (attrByPath ["config"] {} m) ]
+         [ (m.options or {}) ]
+      ++ [ (m.config or {}) ]
       else
         [ m ]
     ) modules;

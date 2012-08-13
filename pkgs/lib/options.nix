@@ -152,13 +152,11 @@ rec {
         opt1 // opt2
         // optionalAttrs (opt1 ? options || opt2 ? options) {
             options =
-               (toList (attrByPath ["options"] [] opt1))
-            ++ (toList (attrByPath ["options"] [] opt2));
+               (toList (opt1.options or []))
+            ++ (toList (opt2.options or []));
           }
         // optionalAttrs (opt1 ? extraConfigs || opt2 ? extraConfigs) {
-            extraConfigs =
-               (attrByPath ["extraConfigs"] [] opt1)
-            ++ (attrByPath ["extraConfigs"] [] opt2);
+            extraConfigs = opt1.extraConfigs or [] ++ opt2.extraConfigs or [];
           }
       )) {} opts;
 
