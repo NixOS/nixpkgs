@@ -2,7 +2,7 @@
 
 let lib = import ./default.nix; in
 
-with { inherit (builtins) head tail; };
+with { inherit (builtins) head; };
 with import ./trivial.nix;
 with import ./lists.nix;
 with import ./misc.nix;
@@ -64,7 +64,7 @@ rec {
           config = getConfig;
         } // (
           if getImportedSets != [] then
-            assert tail getImportedSets == [];
+            assert length getImportedSets == 1;
             { options = head getImportedSets; }
           else
             {}

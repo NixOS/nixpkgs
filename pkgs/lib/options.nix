@@ -2,7 +2,7 @@
 
 let lib = import ./default.nix; in
 
-with { inherit (builtins) head tail; };
+with { inherit (builtins) head length; };
 with import ./trivial.nix;
 with import ./lists.nix;
 with import ./misc.nix;
@@ -133,7 +133,7 @@ rec {
   # separate the merge & apply fields from the interface.
   mergeOptionDecls = opts:
     if opts == [] then {}
-    else if tail opts == [] then
+    else if length opts == 1 then
       let opt = head opts; in
       if opt ? options then
         opt // { options = toList opt.options; }
@@ -189,7 +189,7 @@ rec {
     ) (attrNames defs));
 
   mergeDefaultOption = list:
-    if list != [] && tail list == [] then head list
+    if length list == 1 then head list
     else if all builtins.isFunction list then x: mergeDefaultOption (map (f: f x) list)
     else if all isList list then concatLists list
     else if all isAttrs list then fold lib.mergeAttrs {} list
@@ -214,7 +214,7 @@ rec {
 
   mergeOneOption = list:
     if list == [] then abort "This case should never happen."
-    else if tail list != [] then throw "Multiple definitions. Only one is allowed for this option."
+    else if length list != 1 then throw "Multiple definitions. Only one is allowed for this option."
     else head list;
 
 

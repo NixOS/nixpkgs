@@ -169,11 +169,11 @@ rec {
   # order.  The implementation does a quick-sort.
   sort = strictLess: list:
     let
-      # This implementation only have one element lists on the left hand
+      # This implementation only has one element list on the left hand
       # side of the concatenation operator.
       qs = l: concat:
         if l == [] then concat
-        else if tail l == [] then l ++ concat
+        else if length l == 1 then l ++ concat
         else let
           part = partition (strictLess (head l)) (tail l);
         in
