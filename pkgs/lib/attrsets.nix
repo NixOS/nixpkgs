@@ -5,7 +5,7 @@ with {
   inherit (import ./trivial.nix) or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
-  inherit (import ./lists.nix) concatMap;
+  inherit (import ./lists.nix) concatMap concatLists;
   inherit (import ./misc.nix) eqStrict;
 };
 
@@ -66,7 +66,7 @@ rec {
        catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
        => [1 2]
   */
-  catAttrs = attr: l: fold (s: l: if hasAttr attr s then [(getAttr attr s)] ++ l else l) [] l;
+  catAttrs = attr: l: concatLists (map (s: if hasAttr attr s then [(getAttr attr s)] else []) l);
 
 
   /* Filter an attribute set by removing all attributes for which the

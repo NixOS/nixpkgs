@@ -35,7 +35,7 @@ rec {
 
     
   # Concatenate a list of lists.
-  concatLists = fold (x: y: x ++ y) [];
+  concatLists = builtins.concatLists or (fold (x: y: x ++ y) []);
 
 
   # Map and concatenate the result.
@@ -53,20 +53,24 @@ rec {
     
   # Filter a list using a predicate; that is, return a list containing
   # every element from `list' for which `pred' returns true.
-  filter = pred: list:
-    fold (x: y: if pred x then [x] ++ y else y) [] list;
+  filter =
+    builtins.filter or
+    (pred: list:
+      fold (x: y: if pred x then [x] ++ y else y) [] list);
 
     
-  # Remove elements 'e' from a list. Useful for buildInputs
+  # Remove elements equal to 'e' from a list.  Useful for buildInputs.
   remove = e: filter (x: x != e);
 
   
   # Given two lists, removes all elements of the first list from the second list
   removeList = l: filter (x: elem x l);
 
-  
-  # Return true if `list' has an element `x':
-  elem = x: list: fold (a: bs: x == a || bs) false list;
+
+  # Return true if `list' has an element `x'.
+  elem =
+    builtins.elem or
+    (x: list: fold (a: bs: x == a || bs) false list);
 
 
   # Find the sole element in the list matching the specified
