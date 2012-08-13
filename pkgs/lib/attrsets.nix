@@ -6,7 +6,6 @@ with {
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
   inherit (import ./lists.nix) concatMap concatLists;
-  inherit (import ./misc.nix) eqStrict;
 };
 
 rec {
@@ -292,9 +291,9 @@ rec {
   matchAttrs = pattern: attrs:
     fold or false (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
       let pat = head values; val = head (tail values); in
-      if tail values == [] then false
+      if length values == 1 then false
       else if isAttrs pat then isAttrs val && matchAttrs head values
-      else eqStrict pat val
+      else pat == val
     ) [pattern attrs]));
 
   # override only the attributes that are already present in the old set

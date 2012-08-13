@@ -390,18 +390,4 @@ rec {
       else if isInt x then "int"
       else "string";
 
-  # deep, strict equality testing. This should be implemented as primop
-  eqStrict = a : b :
-    let eqListStrict = a : b :
-      if (a == []) != (b == []) then false
-      else if a == [] then true
-      else eqStrict (head a) (head b) && eqListStrict (tail a) (tail b);
-    in
-    if nixType a != nixType b then false
-      else if isList a then eqListStrict a b
-        else if isAttrs a then
-          (eqListStrict (attrNames a) (attrNames b))
-          && (eqListStrict (lib.attrValues a) (lib.attrValues b))
-        else a == b; # FIXME !
-
 }
