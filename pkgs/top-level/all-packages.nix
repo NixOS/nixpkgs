@@ -6688,6 +6688,8 @@ let
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
 
+    jade = callPackage ../applications/editors/emacs-modes/jade { };
+
     jdee = callPackage ../applications/editors/emacs-modes/jdee {
       # Requires Emacs 23, for `avl-tree'.
     };
