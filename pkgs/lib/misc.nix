@@ -322,10 +322,6 @@ rec {
     // listToAttrs (map (n : nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" "postInstall" ])
   ;
 
-  # returns atribute values as a list 
-  flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
-  mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
-
   # prepareDerivationArgs tries to make writing configurable derivations easier
   # example:
   #  prepareDerivationArgs {
@@ -365,7 +361,7 @@ rec {
         flagName = name : "${name}Support";
         cfgWithDefaults = (listToAttrs (map (n : nameValuePair (flagName n) false) (attrNames args2.flags)))
                           // args2.cfg;
-        opts = flattenAttrs (mapAttrs (a : v :
+        opts = attrValues (mapAttrs (a : v :
                 let v2 = if (v ? set || v ? unset) then v else { set = v; };
                     n = if (getAttr (flagName a) cfgWithDefaults) then "set" else "unset";
                     attr = maybeAttr n {} v2; in
