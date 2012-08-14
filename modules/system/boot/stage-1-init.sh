@@ -126,10 +126,10 @@ done
 
 # Create device nodes in /dev.
 echo "running udev..."
-export UDEV_CONFIG_FILE=@udevConf@
-mkdir -p /dev/.udev # !!! bug in udev?
+mkdir -p /etc/udev
+ln -sfn @udevRules@ /etc/udev/rules.d
 mkdir -p /dev/.mdadm
-udevd --daemon
+systemd-udevd --daemon
 udevadm trigger --action=add
 udevadm settle || true
 modprobe scsi_wait_scan || true

@@ -9,6 +9,8 @@ with pkgs.lib;
 
 let
 
+  udev = config.system.build.systemd;
+
   options = {
 
     boot.resumeDevice = mkOption {
@@ -153,7 +155,7 @@ let
       cp -v ${pkgs.utillinux}/sbin/blkid $out/bin
       cp -pdv ${pkgs.utillinux}/lib/libblkid*.so.* $out/lib
       cp -pdv ${pkgs.utillinux}/lib/libuuid*.so.* $out/lib
-      
+
       # Copy dmsetup and lvm.
       cp -v ${pkgs.lvm2}/sbin/dmsetup $out/bin/dmsetup
       cp -v ${pkgs.lvm2}/sbin/lvm $out/bin/lvm
@@ -163,9 +165,12 @@ let
       cp -v ${pkgs.mdadm}/sbin/mdadm $out/bin/mdadm
 
       # Copy udev.
-      cp -v ${pkgs.udev}/sbin/udevd ${pkgs.udev}/sbin/udevadm $out/bin
-      cp -v ${pkgs.udev}/lib/udev/*_id $out/bin
-      cp -pdv ${pkgs.udev}/lib/libudev.so.* $out/lib
+      cp -v ${udev}/lib/systemd/systemd-udevd ${udev}/bin/udevadm $out/bin
+      cp -v ${udev}/lib/udev/*_id $out/bin
+      cp -pdv ${udev}/lib/libudev.so.* $out/lib
+      cp -v ${pkgs.kmod}/lib/libkmod.so.* $out/lib
+      cp -v ${pkgs.acl}/lib/libacl.so.* $out/lib
+      cp -v ${pkgs.attr}/lib/libattr.so.* $out/lib
 
       # Copy modprobe.
       cp -v ${pkgs.module_init_tools}/sbin/modprobe $out/bin/modprobe
@@ -223,26 +228,21 @@ let
 
       echo 'ENV{LD_LIBRARY_PATH}="${extraUtils}/lib"' > $out/00-env.rules
 
-      cp -v ${pkgs.udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
-      cp -v ${pkgs.udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
-      cp -v ${pkgs.udev}/lib/udev/rules.d/80-drivers.rules $out/
+      cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
+      cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
+      cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
       cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
       cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
 
       for i in $out/*.rules; do
           substituteInPlace $i \
             --replace ata_id ${extraUtils}/bin/ata_id \
-            --replace usb_id ${extraUtils}/bin/usb_id \
             --replace scsi_id ${extraUtils}/bin/scsi_id \
-            --replace path_id ${extraUtils}/bin/path_id \
-            --replace vol_id ${extraUtils}/bin/vol_id \
             --replace cdrom_id ${extraUtils}/bin/cdrom_id \
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
-            --replace /sbin/modprobe ${extraUtils}/bin/modprobe \
-            --replace 'ENV{DM_SBIN_PATH}="${pkgs.lvm2}/sbin"' 'ENV{DM_SBIN_PATH}="${extraUtils}/bin"' \
+            --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
             --replace /sbin/mdadm ${extraUtils}/bin/mdadm
       done
-      # !!! Remove this after merging the x-updates branch:
 
       # Work around a bug in QEMU, which doesn't implement the "READ
       # DISC INFORMATION" SCSI command:
@@ -260,13 +260,6 @@ let
   };
 
 
-  # The udev configuration file for in the initrd.
-  udevConf = pkgs.writeText "udev-initrd.conf" ''
-    udev_rules="${udevRules}"
-    #udev_log="debug"
-  '';
-
-
   # The init script of boot stage 1 (loading kernel modules for
   # mounting the root FS).
   bootStage1 = pkgs.substituteAll {
@@ -276,7 +269,7 @@ let
 
     isExecutable = true;
 
-    inherit udevConf extraUtils modulesClosure;
+    inherit udevRules extraUtils modulesClosure;
 
     inherit (config.boot) resumeDevice devSize runSize;
 
