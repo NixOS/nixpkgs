@@ -27,6 +27,7 @@ let
       "syslog.target"
       "time-sync.target"
       #"cryptsetup.target"
+      "sigpwr.target"
 
       # Udev.
       "systemd-udevd-control.socket"
@@ -34,6 +35,12 @@ let
       "systemd-udevd.service"
       "systemd-udev-settle.service"
       "systemd-udev-trigger.service"
+
+      # Hardware (started by udev when a relevant device is plugged in).
+      "sound.target"
+      "bluetooth.target"
+      "printer.target"
+      "smartcard.target"
 
       # Login stuff.
       "systemd-logind.service"
@@ -106,6 +113,7 @@ let
       "shutdown.target"
       "umount.target"
       "final.target"
+      "kexec.target"
 
       # Password entry.
       "systemd-ask-password-console.path"
@@ -249,6 +257,7 @@ let
       ln -s ${cfg.defaultUnit} $out/default.target
 
       #ln -s ../getty@tty1.service $out/multi-user.target.wants/
+      ln -s ../remote-fs.target $out/multi-user.target.wants/
     ''; # */
 
 in
