@@ -273,15 +273,6 @@ in
           '';
       };
 
-    jobs.networking = {
-      name = "networking";
-      description = "All required interfaces are up";
-      startOn = "started network-interfaces";
-      stopOn  = "stopping network-interfaces";
-      task = true;
-      exec = "true";
-    };
-
     # Set the host name in the activation script.  Don't clear it if
     # it's not configured in the NixOS configuration, since it may
     # have been set by dhclient in the meantime.
