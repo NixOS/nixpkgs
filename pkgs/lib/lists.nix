@@ -1,14 +1,14 @@
 # General list operations.
 
 rec {
-  inherit (builtins) elemAt head tail length isList add sub lessThan;
+  inherit (builtins) head tail length isList add sub lessThan;
 
 
   # Create a list consisting of a single element.  `singleton x' is
   # sometimes more convenient with respect to indentation than `[x]'
   # when x spans multiple lines.
   singleton = x: [x];
-  
+
 
   # "Fold" a binary function `op' between successive elements of
   # `list' with `nul' as the starting value, i.e., `fold op nul [x_1
@@ -22,7 +22,7 @@ rec {
         fold' = n:
           if n == len
           then nul
-          else op (elemAt list n) (fold' (add n 1));
+          else op (builtins.elemAt list n) (fold' (add n 1));
       in fold' 0
     else op: nul:
       let fold' = list:
@@ -42,7 +42,7 @@ rec {
         foldl' = n:
           if n == minus1
           then nul
-          else op (foldl' (sub n 1)) (elemAt list n);
+          else op (foldl' (sub n 1)) (builtins.elemAt list n);
       in foldl' (sub (length list) 1)
     else op:
       let foldl' = nul: list:
