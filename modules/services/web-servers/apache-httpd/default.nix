@@ -581,12 +581,8 @@ in
     jobs.httpd =
       { description = "Apache HTTPD";
 
-        startOn = "started networking and filesystem"
-          # Hacky.  Some subservices depend on Postgres
-          # (e.g. Mediawiki), but they don't have a way to declare
-          # that dependency.  So just start httpd after postgresql if
-          # the latter is enabled.
-          + optionalString config.services.postgresql.enable " and started postgresql";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" "fs.target" "postgresql.service" ];
 
         path =
           [ httpd pkgs.coreutils pkgs.gnugrep ]

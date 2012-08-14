@@ -153,7 +153,8 @@ in
     jobs.postgresql =
       { description = "PostgreSQL server";
 
-        startOn = "started network-interfaces and filesystem";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" "fs.target" ];
 
         environment =
           { TZ = config.time.timeZone;
