@@ -59,7 +59,9 @@ let
       after =
         (if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else
          if job.startOn == "started udev" then [ "systemd-udev.service" ] else
-         []) ++ job.after;
+         if job.startOn == "" || job.startOn == "startup" then [ ] else
+         builtins.trace "Warning: job ‘${job.name}’ has unknown startOn value ‘${job.startOn}’." []
+        ) ++ job.after;
 
       wantedBy =
         (if job.startOn == "" then [ ] else [ "multi-user.target" ]) ++ job.wantedBy;
