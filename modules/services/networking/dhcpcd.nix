@@ -92,7 +92,8 @@ in
   config = mkIf config.networking.useDHCP {
 
     jobs.dhcpcd =
-      { startOn = "started network-interfaces";
+      { wantedBy = [ "multi-user.target" ];
+        after = [ "network-interfaces.service" ];
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 

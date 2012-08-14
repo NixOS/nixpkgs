@@ -58,18 +58,11 @@ in
 
         daemonType = "fork";
 
-        serviceConfig = "PIDFile=/run/nscd/nscd.pid";
-      };
-
-    # Flush nscd's ‘hosts’ database when the network comes up or the
-    # system configuration changes to get rid of any negative entries.
-    jobs.invalidate_nscd =
-      { name = "invalidate-nscd";
-        description = "Invalidate NSCD cache";
-        startOn = "ip-up or config-changed";
-        after = [ "nscd.service" ];
-        task = true;
-        exec = "${pkgs.glibc}/sbin/nscd --invalidate hosts";
+        serviceConfig =
+          ''
+            PIDFile=/run/nscd/nscd.pid
+            ExecReload=${pkgs.glibc}/sbin/nscd --invalidate hosts
+          '';
       };
 
   };

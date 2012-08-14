@@ -21,5 +21,5 @@ with pkgs.lib;
           ExecStart=${pkgs.utillinux}/sbin/hwclock --systohc ${if config.time.hardwareClockInLocalTime then "--localtime" else "--utc"}
         '';
     };
-  
+
 }
