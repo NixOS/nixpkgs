@@ -19,8 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [perl autoconf makeWrapper];
 
-  # Bug in a test in automake. Upstream git already fixed it removing the test.
-  doCheck = if stdenv.isMips then false else doCheck;
+  inherit doCheck;
 
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.

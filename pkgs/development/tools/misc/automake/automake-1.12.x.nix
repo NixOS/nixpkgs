@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|t/aclocal7.sh||' Makefile.in
   '';
 
-  # Bug in a test in automake. Upstream git already fixed it removing the test.
-  doCheck = if stdenv.isMips then false else doCheck;
+  inherit doCheck;
 
   # The test suite can run in parallel.
   enableParallelBuilding = true;
