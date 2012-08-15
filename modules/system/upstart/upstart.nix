@@ -54,17 +54,20 @@ let
         '';
     in {
 
-      inherit (job) description requires wants before environment path;
+      inherit (job) description requires wants before partOf environment path;
 
       after =
         (if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else
          if job.startOn == "started udev" then [ "systemd-udev.service" ] else
-         if job.startOn == "" || job.startOn == "startup" then [ ] else
+         if job.startOn == "ip-up" then [] else
+         if job.startOn == "" || job.startOn == "startup" then [] else
          builtins.trace "Warning: job ‘${job.name}’ has unknown startOn value ‘${job.startOn}’." []
         ) ++ job.after;
 
       wantedBy =
-        (if job.startOn == "" then [ ] else [ "multi-user.target" ]) ++ job.wantedBy;
+        (if job.startOn == "" then [] else
+         if job.startOn == "ip-up" then [ "ip-up.target" ] else
+         [ "multi-user.target" ]) ++ job.wantedBy;
 
       serviceConfig =
         ''

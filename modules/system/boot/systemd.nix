@@ -191,8 +191,9 @@ let
           ''}
           Requires=${concatStringsSep " " def.requires}
           Wants=${concatStringsSep " " def.wants}
-          Before=${concatStringsSep " " def.before}
           After=${concatStringsSep " " def.after}
+          Before=${concatStringsSep " " def.before}
+          PartOf=${concatStringsSep " " def.partOf}
           ${def.unitConfig}
 
           [Service]

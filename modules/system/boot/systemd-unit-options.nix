@@ -47,6 +47,15 @@ with pkgs.lib;
       '';
     };
 
+    partOf = mkOption {
+      default = [];
+      types = types.listOf types.string;
+      description = ''
+        If the specified units are stopped or restarted, then this
+        unit is stopped or restarted as well.
+      '';
+    };
+
     wantedBy = mkOption {
       default = [];
       types = types.listOf types.string;
