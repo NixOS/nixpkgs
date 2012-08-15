@@ -195,10 +195,12 @@ in
 
     security.setuidPrograms = [ "ping" "ping6" ];
 
-    jobs.networkInterfaces =
-      { name = "network-interfaces";
+    jobs."network-interfaces" =
+      { description = "Static Network Interfaces";
 
-        startOn = "stopped udevtrigger";
+        after = [ "systemd-udev-settle.service" ];
+        before = [ "network.target" ];
+        wantedBy = [ "network.target" ];
 
         path = [ pkgs.iproute ];
 
@@ -266,9 +268,8 @@ in
             ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands}
 
             ${optionalString (cfg.interfaces != [] || cfg.localCommands != "") ''
-              # Emit the ip-up event (e.g. to start ntpd).
-              #FIXME
-              #initctl emit -n ip-up
+              # Start the ip-up target (e.g. to start ntpd).
+              ${config.system.build.systemd}/bin/systemctl start ip-up.target
             ''}
           '';
       };

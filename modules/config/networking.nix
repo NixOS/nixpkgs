@@ -75,4 +75,10 @@ in
         target = "resolvconf.conf";
       }
     ];
+
+  boot.systemd.units."ip-up.target".text =
+    ''
+      [Unit]
+      Description=Services Requiring IP Connectivity
+    '';
 }

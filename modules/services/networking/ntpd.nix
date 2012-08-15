@@ -68,7 +68,8 @@ in
     jobs.ntpd =
       { description = "NTP daemon";
 
-        startOn = "ip-up";
+        wantedBy = [ "ip-up.target" ];
+        partOf = [ "ip-up.target" ];
 
         path = [ ntp ];
 

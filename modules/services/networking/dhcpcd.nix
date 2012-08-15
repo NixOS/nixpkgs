@@ -56,9 +56,9 @@ let
           # server hostnames in its config file, then it will never do
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation.
-          ${config.system.build.systemd}/bin/systemctl restart ntpd.service
+          ${config.system.build.systemd}/bin/systemctl try-restart ntpd.service
 
-          #${config.system.build.upstart}/sbin/initctl emit -n ip-up $params
+          ${config.system.build.systemd}/bin/systemctl start ip-up.target
       fi
 
       #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
@@ -92,7 +92,9 @@ in
   config = mkIf config.networking.useDHCP {
 
     jobs.dhcpcd =
-      { wantedBy = [ "multi-user.target" ];
+      { description = "DHCP Client";
+
+        wantedBy = [ "multi-user.target" ];
         after = [ "network-interfaces.service" ];
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
