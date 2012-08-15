@@ -20,7 +20,7 @@ let
         '';
     };
 
-  postgresql = postgresqlAndPlugins pkgs.postgresql;
+  postgresql = postgresqlAndPlugins cfg.package;
 
   run = "su -s ${pkgs.stdenv.shell} postgres";
 
@@ -51,6 +51,13 @@ in
         default = false;
         description = ''
           Whether to run PostgreSQL.
+        '';
+      };
+
+      package = mkOption {
+        default = pkgs.postgresql;
+        description = ''
+          PostgreSQL package to use.
         '';
       };
 
