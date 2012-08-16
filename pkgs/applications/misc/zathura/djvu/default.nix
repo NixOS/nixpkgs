@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
 
   meta = {
-    homepage = https://pwmt.org/zathura/;
+    homepage = http://pwmt.org/projects/zathura/;
     description = "A zathura DJVU plugin";
     longDescription = ''
 	  The zathura-djvu plugin adds DjVu support to zathura by using the

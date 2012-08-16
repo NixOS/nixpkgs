@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   makeFlags = "PREFIX=$(out)";
 
   meta = {
-    homepage = https://pwmt.org/zathura/;
-	description = "A core component for zathura PDF viewer";
+    homepage = http://pwmt.org/projects/zathura/;
+    description = "A core component for zathura PDF viewer";
     license = "free";
     platforms = stdenv.lib.platforms.linux;
 

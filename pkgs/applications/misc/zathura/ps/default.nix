@@ -15,12 +15,12 @@ stdenv.mkDerivation rec {
   makeFlags = "PREFIX=$(out) PLUGINDIR=$(out)/lib";
 
   meta = {
-    homepage = https://pwmt.org/zathura/;
+    homepage = http://pwmt.org/projects/zathura/;
     description = "A zathura PS plugin";
     longDescription = ''
-	  The zathura-ps plugin adds PS support to zathura by using the
-	  libspectre library.
-    '';
+      The zathura-ps plugin adds PS support to zathura by using the
+      libspectre library.
+      '';
     license = "free";
     platforms = stdenv.lib.platforms.linux;
   };

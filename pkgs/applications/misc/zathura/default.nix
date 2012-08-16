@@ -26,7 +26,7 @@ rec {
     builder = ./builder.sh;
 
     meta = {
-      homepage = https://pwmt.org/zathura/;
+      homepage = http://pwmt.org/projects/zathura/;
       description = "A highly customizable and functional PDF viewer";
       longDescription = ''
         Zathura is a highly customizable and functional PDF viewer based on the
