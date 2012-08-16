@@ -13,18 +13,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutil bison xcbutilwm
     libstartup_notification libX11 pcre libev yajl flex libXcursor perl ];
 
-  prePatch = ''
-    sed s,/usr/bin/env,${coreutils}/bin/env, -i generate-command-parser.pl
-    sed s,/usr/bin/env,${coreutils}/bin/env, -i i3-migrate-config-to-v4
-    sed s,/usr/bin/env,${coreutils}/bin/env, -i i3-wsbar
-  '';
+  patchPhase = "patchShebangs .";
 
-  makeFlags = "all";
-  installFlags = "PREFIX=\${out}";
+  configurePhase = "makeFlags=PREFIX=$out";
 
   meta = {
     description = "i3 is a tiling window manager";
-    homepage = http://i3wm.org;
+    homepage = "http://i3wm.org";
     maintainers = [ stdenv.lib.maintainers.garbas ];
     license = stdenv.lib.licenses.bsd3;
   };

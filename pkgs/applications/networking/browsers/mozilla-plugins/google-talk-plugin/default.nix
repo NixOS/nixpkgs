@@ -7,6 +7,8 @@ with stdenv.lib;
 
 let
 
+  baseURL = "http://dl.google.com/linux/talkplugin/deb/pool/main/g/google-talkplugin";
+
   rpathPlugin = makeLibraryPath
     [ mesa
       xorg.libXt
@@ -39,28 +41,26 @@ let
 
 in
 
-stdenv.mkDerivation {
-  name = "google-talk-plugin-2.9.10.0";
+stdenv.mkDerivation rec {
+  name = "google-talk-plugin-${version}";
+  version = "3.2.4.0";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://dl.google.com/linux/direct/google-talkplugin_current_x86_64.rpm";
-        sha256 = "1lgvv6bkdc5knghyn4gsg5gp7h3qyr4rb978gsi39gkvcazksm0b";
+        url = "${baseURL}/google-talkplugin_${version}-1_amd64.deb";
+        sha256 = "0hd8iyv092fr4bz760xjawiad581hphddv608d0dvzy2bhnl17g1";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://dl.google.com/linux/direct/google-talkplugin_current_i386.rpm";
-        sha256 = "0k9j27pklwb3vih2cydz9552p9270p73hdi14f0bmn6afxjxd13m";
+        url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
+        sha256 = "13vqs4k16a6bzc5i4zpnakh31nkdqp7m9cv7p16r1sq5smv1331i";
       }
     else throw "Google Talk does not support your platform.";
 
-  buildInputs = [ rpm cpio ];
-      
-  unpackPhase =
-    ''
-      rpm2cpio $src | cpio -i --make-directories -v
-    '';
+  unpackPhase = ''
+    ar p "$src" data.tar.gz | tar xz
+  '';
 
   installPhase =
     ''

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HsOpenSSL";
-  version = "0.10.3.1";
-  sha256 = "0dilmaibx18mfg4c8g96c1svhynhkrq4i5zzv3wg0a550g3xc0py";
+  version = "0.10.3.2";
+  sha256 = "15mlllzw8ahvrx259bz5vwisdig7bvkany1qjhmz6y8v2rcplr7f";
   buildDepends = [ network time ];
   extraLibraries = [ openssl ];
   meta = {

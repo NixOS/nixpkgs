@@ -27,9 +27,14 @@
       binary = null; # now a core package
     };
 
-  ghc722Prefs = ghc741Prefs;
+  ghc722Prefs =
+    self : self.haskellPlatformArgs_2012_2_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2012_2_0_0;
+      binary = null; # a core package
+      deepseq = self.deepseq_1_3_0_0;
+    };
 
-  ghc721Prefs = ghc741Prefs;
+  ghc721Prefs = ghc722Prefs;
 
   ghc704Prefs =
     self : self.haskellPlatformArgs_2011_4_0_0 self // {
@@ -249,6 +254,12 @@
     packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
                ghcBinary = ghc6121BinaryDarwin;
                prefFun = ghc741Prefs;
+             };
+
+  packages_ghc761 =
+    packages { ghcPath = ../development/compilers/ghc/7.6.1.nix;
+               ghcBinary = ghc704Binary;
+               prefFun = ghcHEADPrefs;
              };
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.

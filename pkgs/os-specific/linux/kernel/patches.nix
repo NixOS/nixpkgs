@@ -175,6 +175,20 @@ rec {
     features.aufs3 = true;
   };
 
+  aufs3_5 = rec {
+    name = "aufs3.5";
+    version = "3.5.20120813";
+    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
+    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
+    patch = makeAufs3StandalonePatch {
+      inherit version;
+      rev = "85b5f7059bc8a1759989408a13fc56f92e0d6d31";
+      sha256 = "2be13407a2291c7e69658f10a6fb7672751c906a27ac700a2e5e05dbada97cc5";
+    };
+    features.aufsBase = true;
+    features.aufs3 = true;
+  };
+
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
   # make CIFS more resilient to high load on the CIFS server.
   cifs_timeout_2_6_15 =
@@ -210,6 +224,11 @@ rec {
   dell_rfkill =
     { name = "dell-rfkill";
       patch = ./dell-rfkill.patch;
+    };
+
+  perf3_5 =
+    { name = "perf-3.5";
+      patch = ./perf-3.5.patch;
     };
 
   sheevaplug_modules_2_6_35 =

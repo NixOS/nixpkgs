@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPerlPackage, perl, HTMLParser, NetDNS, NetAddrIP, DBFile
-, HTTPDate, MailDKIM
+, HTTPDate, MailDKIM, makeWrapper
 }:
 
 # TODO:
@@ -20,12 +20,20 @@ buildPerlPackage rec {
     sha256 = "01d2jcpy423zfnhg123wlhzysih1hmb93nxfspiaajzh9r5rn8y7";
   };
 
-  propagatedBuildInputs = [ HTMLParser NetDNS NetAddrIP DBFile
-    HTTPDate MailDKIM ];
+  buildInputs = [ makeWrapper HTMLParser NetDNS NetAddrIP DBFile HTTPDate
+    MailDKIM ];
 
-  makeFlags = "PERL_BIN=${perl}/bin/perl";
+  # Enabling 'taint' mode is desirable, but that flag disables support
+  # for the PERL5LIB environment variable. Needs further investigation.
+  makeFlags = "PERL_BIN=${perl}/bin/perl PERL_TAINT=no";
 
   doCheck = false;
+
+  postInstall = ''
+    for n in "$out/bin/"*; do
+      wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB"
+    done
+  '';
 
   meta = {
     homepage = "http://spamassassin.apache.org/";

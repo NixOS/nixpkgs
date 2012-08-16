@@ -23,6 +23,11 @@ let
            ./gnu.patch                # submitted upstream
          ]
 
+    ++ stdenv.lib.optionals (stdenv.system == "x86_64-kfreebsd-gnu")
+        [ ./gnu.patch
+          ./kfreebsd-gnu.patch
+        ]
+
     ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
   
 in

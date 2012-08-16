@@ -66,7 +66,7 @@ sub findFiles {
 
     unless (-d $target && ($oldTarget eq "" || -d $oldTarget)) {
         if ($ignoreCollisions) {
-            warn "collision between `$target' and `$oldTarget'";
+            warn "collision between `$target' and `$oldTarget'" if $ignoreCollisions == 1;
             return;
         } else {
             die "collision between `$target' and `$oldTarget'";
@@ -122,7 +122,7 @@ while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 1);
+        addPkg($pkgDir, 2);
     }
 }
 

@@ -18,10 +18,6 @@ cabal.mkDerivation (self: {
     description = "Preprocessor for typesetting Haskell sources with LaTeX";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
-

@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ freetype zlib pkgconfig ]
-    ++ stdenv.lib.optional x11Support [ libX11 libXext mesa ]
+    ++ stdenv.lib.optionals x11Support [ libX11 libXext mesa ]
     ++ stdenv.lib.optional alsaSupport alsaLib
     ++ stdenv.lib.optional xvSupport libXv
     ++ stdenv.lib.optional theoraSupport libtheora

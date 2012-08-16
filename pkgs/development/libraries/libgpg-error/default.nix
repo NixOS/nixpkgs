@@ -1,6 +1,6 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, bash }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libgpg-error-1.10";
 
   src = fetchurl {
@@ -26,3 +26,16 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+(stdenv.lib.optionalAttrs stdenv.isSunOS {
+  # For some reason, /bin/sh on OpenIndiana leads to this at the end of the
+  # `config.status' run:
+  #   ./config.status[1401]: shift: (null): bad number
+  # (See <http://hydra.nixos.org/build/2931046/nixlog/1/raw>.)
+  # Thus, re-run it with Bash.
+  postConfigure =
+    '' ${bash}/bin/sh config.status
+    '';
+}))

@@ -5,12 +5,11 @@ with {
   inherit (import ./trivial.nix) or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
-  inherit (import ./lists.nix) concatMap;
-  inherit (import ./misc.nix) eqStrict;
+  inherit (import ./lists.nix) concatMap concatLists;
 };
 
 rec {
-  inherit (builtins) attrNames listToAttrs hasAttr isAttrs;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr;
 
 
   /* Return an attribute from nested attribute sets.  For instance
@@ -32,15 +31,6 @@ rec {
     else listToAttrs [(
       nameValuePair (head attrPath) (setAttrByPath (tail attrPath) value)
     )];
-
-      
-  /* Backwards compatibility hack: lib.attrByPath used to be called
-     lib.getAttr, which was confusing given that there was also a
-     builtins.getAttr.  Eventually we'll drop this hack and
-     lib.getAttr will just be an alias for builtins.getAttr. */
-  getAttr = a: b: if isString a
-    then builtins.getAttr a b
-    else c: builtins.trace "Deprecated use of lib.getAttr!" (attrByPath a b c);
 
 
   getAttrFromPath = attrPath: set:
@@ -75,7 +65,7 @@ rec {
        catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
        => [1 2]
   */
-  catAttrs = attr: l: fold (s: l: if hasAttr attr s then [(getAttr attr s)] ++ l else l) [] l;
+  catAttrs = attr: l: concatLists (map (s: if hasAttr attr s then [(getAttr attr s)] else []) l);
 
 
   /* Filter an attribute set by removing all attributes for which the
@@ -301,9 +291,9 @@ rec {
   matchAttrs = pattern: attrs:
     fold or false (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
       let pat = head values; val = head (tail values); in
-      if tail values == [] then false
+      if length values == 1 then false
       else if isAttrs pat then isAttrs val && matchAttrs head values
-      else eqStrict pat val
+      else pat == val
     ) [pattern attrs]));
 
   # override only the attributes that are already present in the old set

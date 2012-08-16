@@ -3,7 +3,7 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "cap_pam.so-${libcap.version}";
+  name = "libcap-pam-${libcap.version}";
 
   inherit (libcap) src;
 

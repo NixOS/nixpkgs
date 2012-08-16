@@ -54,5 +54,7 @@ stdenv.mkDerivation rec {
     license = "GPLv3+";
 
     maintainers = with stdenv.lib.maintainers; [ ludo urkud ];
+
+    platforms = stdenv.lib.platforms.all;
   };
 }

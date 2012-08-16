@@ -1,6 +1,6 @@
 { fetchurl, stdenv, gmp, gnum4 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "nettle-2.4";
 
   src = fetchurl {
@@ -51,3 +51,13 @@ stdenv.mkDerivation rec {
      platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+stdenv.lib.optionalAttrs stdenv.isSunOS {
+  # Make sure the right <gmp.h> is found, and not the incompatible
+  # /usr/include/mp.h from OpenSolaris.  See
+  # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+  # for details.
+  configureFlags = [ "--with-include-path=${gmp}/include" ];
+})

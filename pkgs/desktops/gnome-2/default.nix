@@ -44,6 +44,8 @@
 
   gnome_mime_data = callPackage ./platform/gnome-mime-data { };
 
+  gnome_python = callPackage ./bindings/gnome-python { };
+
   gnome_vfs = callPackage ./platform/gnome-vfs { };
 
   gnome_vfs_monikers = callPackage ./platform/gnome-vfs-monikers { };
@@ -114,7 +116,5 @@
 #### BINDINGS
 
   libglademm = callPackage ./bindings/libglademm { };
-
-  gnome_python = callPackage ./bindings/gnome-python { };
 
 }

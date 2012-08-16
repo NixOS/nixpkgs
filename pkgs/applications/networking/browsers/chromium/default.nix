@@ -172,6 +172,7 @@ in stdenv.mkDerivation rec {
     mkdir -vp "$out/libexec/${packageName}"
     cp -v "out/${buildType}/"*.pak "$out/libexec/${packageName}/"
     cp -vR "out/${buildType}/locales" "out/${buildType}/resources" "$out/libexec/${packageName}/"
+    cp -v out/${buildType}/libffmpegsumo.so "$out/libexec/${packageName}/"
 
     cp -v "out/${buildType}/chrome" "$out/libexec/${packageName}/${packageName}"
 

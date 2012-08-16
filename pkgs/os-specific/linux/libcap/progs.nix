@@ -11,5 +11,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "cd progs";
 
+  installFlags = "RAISE_SETFCAP=no";
+
   postInstall = libcap.postinst name;
 }

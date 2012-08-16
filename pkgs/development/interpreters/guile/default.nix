@@ -81,10 +81,31 @@
 
 //
 
+(stdenv.lib.optionalAttrs stdenv.isSunOS {
+  # TODO: Move me above.
+  configureFlags =
+    [
+      # Make sure the right <gmp.h> is found, and not the incompatible
+      # /usr/include/mp.h from OpenSolaris.  See
+      # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+      # for details.
+      "--with-libgmp-prefix=${gmp}"
+
+      # Same for these (?).
+      "--with-libreadline-prefix=${readline}"
+      "--with-libunistring-prefix=${libunistring}"
+
+      # See below.
+      "--without-threads"
+    ];
+})
+
+//
+
 (if stdenv.isFreeBSD
  then {
-   # XXX: Thread support is currently broken on FreeBSD (namely the
-   # `SCM_I_IS_THREAD' assertion in `scm_spawn_thread' is hit.)
+   # XXX: Thread support is currently broken on FreeBSD and Solaris (namely
+   # the `SCM_I_IS_THREAD' assertion in `scm_spawn_thread' is hit.)
    configureFlags = [ "--without-threads" ];
  }
  else {}))

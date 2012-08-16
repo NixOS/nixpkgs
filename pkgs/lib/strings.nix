@@ -2,12 +2,12 @@
 
 let lib = import ./default.nix;
 
-inherit (builtins) add sub lessThan;
+inherit (builtins) add sub lessThan length;
 
 in
 
 rec {
-  inherit (builtins) stringLength substring head tail lessThan sub;
+  inherit (builtins) stringLength substring head tail;
 
 
   # Concatenate a list of strings.
@@ -22,7 +22,7 @@ rec {
   # Place an element between each element of a list, e.g.,
   # `intersperse "," ["a" "b" "c"]' returns ["a" "," "b" "," "c"].
   intersperse = separator: list:
-    if list == [] || tail list == []
+    if list == [] || length list == 1
     then list
     else [(head list) separator]
          ++ (intersperse separator (tail list));

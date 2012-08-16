@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, glib }:
 
 let
-  name = "nbd-3.1.1";
+  name = "nbd-3.2";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://sourceforge/nbd/${name}.tar.bz2";
-    sha256 = "5cd150b874f966aacf4a9dfe1e9de9b2139b295241ce89bae9f70f9aa844220b";
+    sha256 = "e297c1883133f04a55d8e9527a2e4344e577a54046cf81694ffabe13f73793db";
   };
 
   buildInputs = [ pkgconfig glib ] ++ stdenv.lib.optional (stdenv ? glibc) stdenv.glibc.kernelHeaders;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     cp README "$out/share/doc/${name}/README"
   '';
 
-  # The test suite doesn't succeed on Hydra.
+  # The test suite doesn't succeed in chroot builds.
   doCheck = false;
 
   # Glib calls `clock_gettime', which is in librt. Linking that library

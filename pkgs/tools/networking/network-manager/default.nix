@@ -1,15 +1,19 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
 , udev, libnl1, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
-, libgcrypt, dnsmasq, avahi, substituteAll }:
+, libgcrypt, dnsmasq, avahi, bind, perl, substituteAll }:
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "0.9.2.0";
+  version = "0.9.4.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
-    sha256 = "1pvd49ji7mh8ww2rfbvq6hmmjms5mb7w10fr7ihgzqbg589zjyj3";
+    sha256 = "eb4f124008b3d855a37205d03ef035b7218639cd7332bdae5567095977e93e0f";
   };
+
+  preConfigure = ''
+    substituteInPlace tools/glib-mkenums --replace /usr/bin/perl ${perl}/bin/perl
+  '';
 
   # Right now we hardcode quite a few paths at build time. Probably we should
   # patch networkmanager to allow passing these path in config file. This will
@@ -36,7 +40,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ( substituteAll {
         src = ./nixos-purity.patch;
-        inherit avahi dnsmasq ppp;
+        inherit avahi dnsmasq ppp bind;
         glibc = stdenv.gcc.libc;
       })
     ];
@@ -46,11 +50,16 @@ stdenv.mkDerivation rec {
       installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" )
     '';
 
+  postInstall =
+    ''
+      mkdir -p $out/lib/NetworkManager
+    '';
+
   meta = with stdenv.lib; {
     homepage = http://projects.gnome.org/NetworkManager/;
     description = "Network configuration and management in an easy way. Desktop environment independent.";
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.phreedom maintainers.urkud ];
+    maintainers = with maintainers; [ phreedom urkud rickynils ];
     platforms = platforms.linux;
   };
 }

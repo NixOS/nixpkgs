@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, gdk_pixbuf, gtk, libXmu }:
 
 stdenv.mkDerivation rec {
-  name = "trayer-1.1.3";
+  name = "trayer-1.1.5";
 
   buildInputs = [ pkgconfig gdk_pixbuf gtk libXmu ];
 
   src = fetchurl {
           url = "https://github.com/sargon/trayer-srg/tarball/${name}";
           name = "${name}.tar.gz";
-          sha256 = "03be5ea47278ecdb6ffb1d3b5115a855a6eccd6aa6702b84e89ee047ddd76558";
+          sha256 = "98804500188c0bb99c7389ebea4b2e4dfffa2f3d06dc97e633b4934cf7c29757";
         };
 
   makeFlags = [ "PREFIX=$(out)" ];

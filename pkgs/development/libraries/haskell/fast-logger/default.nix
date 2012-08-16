@@ -1,10 +1,10 @@
-{ cabal, blazeBuilder, filepath }:
+{ cabal, blazeBuilder, filepath, text, unixTime }:
 
 cabal.mkDerivation (self: {
   pname = "fast-logger";
-  version = "0.0.2";
-  sha256 = "1pwxhgcy4lmc63dnr9fihkmiclf60hrnsv8wzbsdg0jcj4qi0zr7";
-  buildDepends = [ blazeBuilder filepath ];
+  version = "0.2.1";
+  sha256 = "12avan85dkwipp8hqsya8yslirykz2yvqmns3wjhwl9j30idj7r3";
+  buildDepends = [ blazeBuilder filepath text unixTime ];
   meta = {
     description = "A fast logging system";
     license = self.stdenv.lib.licenses.bsd3;

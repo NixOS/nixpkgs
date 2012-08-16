@@ -1,33 +1,59 @@
 # General list operations.
 
 rec {
-  inherit (builtins) head tail length isList;
+  inherit (builtins) head tail length isList add sub lessThan;
 
 
   # Create a list consisting of a single element.  `singleton x' is
   # sometimes more convenient with respect to indentation than `[x]'
   # when x spans multiple lines.
   singleton = x: [x];
-  
+
 
   # "Fold" a binary function `op' between successive elements of
   # `list' with `nul' as the starting value, i.e., `fold op nul [x_1
   # x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))'.  (This is
   # Haskell's foldr).
-  fold = op: nul: list:
-    if list == []
-    then nul
-    else op (head list) (fold op nul (tail list));
+  fold =
+    if builtins ? elemAt
+    then op: nul: list:
+      let
+        len = length list;
+        fold' = n:
+          if n == len
+          then nul
+          else op (builtins.elemAt list n) (fold' (add n 1));
+      in fold' 0
+    else op: nul:
+      let fold' = list:
+        if list == []
+        then nul
+        else op (head list) (fold' (tail list));
+      in fold';
 
     
   # Left fold: `fold op nul [x_1 x_2 ... x_n] == op (... (op (op nul
   # x_1) x_2) ... x_n)'.
-  foldl = op: nul: list:
-    if list == []
-    then nul
-    else foldl op (op nul (head list)) (tail list);
+  foldl =
+    if builtins ? elemAt
+    then op: nul: list:
+      let
+        len = length list;
+        foldl' = n:
+          if n == minus1
+          then nul
+          else op (foldl' (sub n 1)) (builtins.elemAt list n);
+      in foldl' (sub (length list) 1)
+    else op:
+      let foldl' = nul: list:
+        if list == []
+        then nul
+        else foldl' (op nul (head list)) (tail list);
+      in foldl';
 
-    
+  minus1 = sub 0 1;
+
+
   # map with index: `imap (i: v: "${v}-${toString i}") ["a" "b"] ==
   # ["a-1" "b-2"]'
   imap = f: list:
@@ -35,7 +61,7 @@ rec {
 
     
   # Concatenate a list of lists.
-  concatLists = fold (x: y: x ++ y) [];
+  concatLists = builtins.concatLists or (fold (x: y: x ++ y) []);
 
 
   # Map and concatenate the result.
@@ -53,20 +79,24 @@ rec {
     
   # Filter a list using a predicate; that is, return a list containing
   # every element from `list' for which `pred' returns true.
-  filter = pred: list:
-    fold (x: y: if pred x then [x] ++ y else y) [] list;
+  filter =
+    builtins.filter or
+    (pred: list:
+      fold (x: y: if pred x then [x] ++ y else y) [] list);
 
     
-  # Remove elements 'e' from a list. Useful for buildInputs
+  # Remove elements equal to 'e' from a list.  Useful for buildInputs.
   remove = e: filter (x: x != e);
 
   
   # Given two lists, removes all elements of the first list from the second list
   removeList = l: filter (x: elem x l);
 
-  
-  # Return true if `list' has an element `x':
-  elem = x: list: fold (a: bs: x == a || bs) false list;
+
+  # Return true if `list' has an element `x'.
+  elem =
+    builtins.elem or
+    (x: list: fold (a: bs: x == a || bs) false list);
 
 
   # Find the sole element in the list matching the specified
@@ -88,27 +118,14 @@ rec {
 
   # Return true iff function `pred' returns true for at least element
   # of `list'.
-  any = pred: list:
-    if list == [] then false
-    else if pred (head list) then true
-    else any pred (tail list);
+  any = pred: fold (x: y: if pred x then true else y) false;
 
 
   # Return true iff function `pred' returns true for all elements of
   # `list'.
-  all = pred: list:
-    if list == [] then true
-    else if pred (head list) then all pred (tail list)
-    else false;
+  all = pred: fold (x: y: if pred x then y else false) true;
 
 
-  # Return true if each element of a list is equal, false otherwise.
-  eqLists = xs: ys:
-    if xs == [] && ys == [] then true
-    else if xs == [] || ys == [] then false
-    else head xs == head ys && eqLists (tail xs) (tail ys);
-
-    
   # Return a singleton list or an empty list, depending on a boolean
   # value.  Useful when building lists with optional elements
   # (e.g. `++ optional (system == "i686-linux") flashplayer').
@@ -165,11 +182,11 @@ rec {
   # order.  The implementation does a quick-sort.
   sort = strictLess: list:
     let
-      # This implementation only have one element lists on the left hand
+      # This implementation only has one element list on the left hand
       # side of the concatenation operator.
       qs = l: concat:
         if l == [] then concat
-        else if tail l == [] then l ++ concat
+        else if length l == 1 then l ++ concat
         else let
           part = partition (strictLess (head l)) (tail l);
         in
@@ -195,7 +212,7 @@ rec {
     let loop = l: if tail l == [] then head l else loop (tail l); in
     loop list;
 
-    
+
   # Zip two lists together.
   zipTwoLists = xs: ys:
     if xs != [] && ys != [] then

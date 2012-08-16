@@ -1,18 +1,18 @@
 args : with args;
 rec {
   src = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2009.orig.tar.gz;
-    sha256 = "0ywc8h4jnig53fs0bji2ivw5f9j6zlgdy477jqw7xvpc7migjpw7";
+    url = mirror://debian/pool/main/t/texlive-bin/texlive-bin_2012.20120628.orig.tar.xz;
+    sha256 = "0k94df3lfvghngzdzi2d4fz2z0gs8iglz7h3w2lxvlhiwwpmx601";
   };
 
   texmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2009.orig.tar.gz;
-    sha256 = "130z907xcxr10yrzbbmp9l8a00dabvi4bi702s5jxamjzav17cmf";
+    url = mirror://debian/pool/main/t/texlive-base/texlive-base_2012.20120611.orig.tar.xz;
+    sha256 = "116zm0qdq9rd4vakhd2py9q7lq3ihspc7hy33bh8wy5v1rgiqsm6";
   };
 
   langTexmfSrc = fetchurl {
-    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2009.orig.tar.gz;
-    sha256 = "10shnsc71n95zy9ys938pljdid9ampmc50k4lji9wv53hm14laic";
+    url = mirror://debian/pool/main/t/texlive-lang/texlive-lang_2012.20120611.orig.tar.xz;
+    sha256 = "0zh9svszfkbjx72i7sa9gg0gak93wf05845mxpjv56h8qwk4bffv";
   };
 
   setupHook = ./setup-hook.sh;
@@ -44,15 +44,23 @@ rec {
   '') ["minInit" "doUnpack" "addInputs" "defEnsureDir"];
 
   doPostInstall = fullDepEntry(''
-    mv $out/bin $out/libexec
+    mkdir -p $out/libexec/
+    mv $out/bin $out/libexec/$(uname -m)
     mkdir -p $out/bin
-    for i in "$out/libexec/"*"/"*; do
-        test \( \! -d "$i" \) -a -x "$i" || continue
-        echo -ne "#! $SHELL\\nexec $i \"\$@\"" >$out/bin/$(basename $i)
-        chmod a+x $out/bin/$(basename $i)
+    for i in "$out/libexec/"* "$out/libexec/"*/* ; do
+        test \( \! -d "$i" \) -a \( -x "$i" -o -L "$i" \) || continue
+	if [ -x "$i" ]; then
+	    echo -ne "#! $SHELL\\nexec $i \"\$@\"" >$out/bin/$(basename $i)
+            chmod a+x $out/bin/$(basename $i)
+	else
+	    mv "$i" "$out/libexec"
+	    ln -s "$(readlink -f "$out/libexec/$(basename "$i")")" "$out/bin/$(basename "$i")";
+	    ln -sf "$(readlink -f "$out/libexec/$(basename "$i")")" "$out/libexec/$(uname -m)/$(basename "$i")";
+            rm "$out/libexec/$(basename "$i")"
+	fi;
     done
     [ -d $out/texmf-config ] || ln -s $out/texmf $out/texmf-config
-    ln -s "$out/"*texmf* "$out/share/"
+    ln -s -v "$out/"*texmf* "$out/share/" || true
 
     sed -e 's/.*pyhyph.*/=&/' -i $out/texmf-config/tex/generic/config/language.dat
 
@@ -79,16 +87,20 @@ rec {
     zlib bzip2 ncurses libpng flex bison libX11 libICE
     xproto freetype t1lib gd libXaw icu ghostscript ed
     libXt libXpm libXmu libXext xextproto perl libSM
-    ruby expat curl libjpeg python fontconfig
+    ruby expat curl libjpeg python fontconfig xz
+    pkgconfig poppler silgraphite lesstif zziplib
   ];
 
   configureFlags = [ "--with-x11"
-    "--enable-ipc" "--with-mktexfmt"
+    "--enable-ipc" "--with-mktexfmt" "--enable-shared"
+    "--disable-native-texlive-build" "--with-system-zziplib"
+    "--with-system-icu" "--with-system-libgs" "--with-system-t1lib"
+    "--with-system-freetype2"
   ];
 
   phaseNames = ["addInputs" "doMainBuild" "doMakeInstall" "doPostInstall"];
 
-  name = "texlive-core-2009";
+  name = "texlive-core-2012";
   meta = {
     description = "A TeX distribution";
     maintainers = [ args.lib.maintainers.raskin ];
