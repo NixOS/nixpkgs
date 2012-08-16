@@ -7881,7 +7881,13 @@ let
     fltk = fltk13;
   };
 
-  zathura = callPackage ../applications/misc/zathura { };
+  zathuraCollection = recurseIntoAttrs
+    (let callPackage = newScope pkgs.zathuraCollection; in
+      import ../applications/misc/zathura { inherit callPackage pkgs; });
+
+  zathura = zathuraCollection.zathuraWrapper;
+
+  girara = callPackage ../applications/misc/girara { };
 
   zgrviewer = callPackage ../applications/graphics/zgrviewer {};
 
