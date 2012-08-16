@@ -177,13 +177,13 @@ rec {
 
   aufs3_5 = rec {
     name = "aufs3.5";
-    version = "3.5";
+    version = "3.5.20120813";
     utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
     utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
     patch = makeAufs3StandalonePatch {
       inherit version;
-      rev = "4a5e660ed7f5c1d0467c81c535d0fedcfe62d15f";
-      sha256 = "c474573fc03725053e68db481478be74de98abe2c23be60fe08e2f5f2ab3b188";
+      rev = "85b5f7059bc8a1759989408a13fc56f92e0d6d31";
+      sha256 = "2be13407a2291c7e69658f10a6fb7672751c906a27ac700a2e5e05dbada97cc5";
     };
     features.aufsBase = true;
     features.aufs3 = true;
