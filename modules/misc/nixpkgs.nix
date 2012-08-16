@@ -70,4 +70,14 @@ in
     };
 
   };
+
+  config = {
+
+    # FIXME
+    nixpkgs.config.packageOverrides = pkgs: {
+      #udev = pkgs.systemd;
+      lvm2 = pkgs.lvm2.override { udev = pkgs.systemd; };
+    };
+
+  };
 }
