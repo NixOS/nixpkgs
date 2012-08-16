@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   versionMajor = "2.5";
-  versionMinor = "3";
+  versionMinor = "4";
   name = "atk-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/atk/${versionMajor}/atk-${versionMajor}.${versionMinor}.tar.xz";
-    sha256 = "04v3hzdgp2cajpgkbgr36wlxcdbpzzywyl6g2fhhyjgm9vrqw4dc";
+    sha256 = "1asaq6y9cdnmji5czl9xj4cp86w9d7g78sa7ya5k6gslqj76svdg";
   };
 
   buildNativeInputs = [ pkgconfig perl ];
