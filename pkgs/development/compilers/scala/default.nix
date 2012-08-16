@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     rm bin/*.bat
+    patchShebangs bin
     mv * $out
   '';
 
