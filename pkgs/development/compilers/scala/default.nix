@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     mv * $out
   '';
 
-  phases = "unpackPhase installPhase";
-
   meta = {
     description = "Scala is a general purpose programming language";
     longDescription = ''
