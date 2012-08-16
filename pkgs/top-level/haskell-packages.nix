@@ -139,7 +139,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexPosix   = self.regexPosix_0_95_1;      # 7.5 fail
     stm          = self.stm_2_4;                # 7.5 ok
     syb          = self.syb_0_3_7;              # 7.5 ok
-    text         = self.text_0_11_2_2;          # 7.5 ok
+    text         = self.text_0_11_2_3;          # 7.5 ok
     transformers = self.transformers_0_3_0_0;   # 7.5 ok
     xhtml        = self.xhtml_3000_2_1;         # 7.5 ok
     zlib         = self.zlib_0_5_3_3;           # 7.5 fail
@@ -1478,8 +1478,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   text_0_11_1_5 = callPackage ../development/libraries/haskell/text/0.11.1.5.nix {};
   text_0_11_1_13 = callPackage ../development/libraries/haskell/text/0.11.1.13.nix {};
   text_0_11_2_0 = callPackage ../development/libraries/haskell/text/0.11.2.0.nix {};
-  text_0_11_2_2 = callPackage ../development/libraries/haskell/text/0.11.2.2.nix {};
-  text = self.text_0_11_2_2;
+  text_0_11_2_3 = callPackage ../development/libraries/haskell/text/0.11.2.3.nix {};
+  text = self.text_0_11_2_3;
 
   thespian = callPackage ../development/libraries/haskell/thespian {};
 
