@@ -8,9 +8,12 @@ use POSIX qw(dup2);
 use FileHandle;
 use Cwd;
 use File::Basename;
+use File::Path qw(make_path);
 
 
 my $showGraphics = defined $ENV{'DISPLAY'};
+
+my $sharedDir;
 
 
 sub new {
@@ -40,7 +43,11 @@ sub new {
     }
 
     my $tmpDir = $ENV{'TMPDIR'} || "/tmp";
-    
+    unless (defined $sharedDir) {
+        $sharedDir = $tmpDir . "/xchg-shared";
+        make_path($sharedDir, { mode => 0700, owner => $< });
+    }
+
     my $self = {
         startCommand => $startCommand,
         name => $name,
@@ -123,6 +130,7 @@ sub start {
         dup2(fileno($serialC), fileno(STDOUT));
         dup2(fileno($serialC), fileno(STDERR));
         $ENV{TMPDIR} = $self->{stateDir};
+        $ENV{SHARED_DIR} = $sharedDir;
         $ENV{USE_TMPDIR} = 1;
         $ENV{QEMU_OPTS} =
             "-no-reboot -monitor unix:./monitor -chardev socket,id=shell,path=./shell " .

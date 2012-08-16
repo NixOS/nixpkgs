@@ -155,6 +155,14 @@ let
       cd $TMPDIR
       mkdir -p $TMPDIR/xchg
 
+      EXTRA_SAMBA_CONF="
+        [shared]
+          force user = $WHO
+          path = ''${SHARED_DIR:-$TMPDIR/xchg}
+          read only = no
+          guest ok = yes
+      "
+
       ${pkgs.vmTools.startSamba}
 
       # Start QEMU.
@@ -324,6 +332,12 @@ in
       }
       { mountPoint = "/tmp/xchg";
         device = "//10.0.2.4/xchg";
+        fsType = "cifs";
+        options = "guest,sec=none,noperm,noacl";
+        neededForBoot = true;
+      }
+      { mountPoint = "/tmp/shared";
+        device = "//10.0.2.4/shared";
         fsType = "cifs";
         options = "guest,sec=none,noperm,noacl";
         neededForBoot = true;
