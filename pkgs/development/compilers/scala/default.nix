@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    rm bin/*.bat
+    rm "bin/"*.bat
     mv * $out
   '';
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       common programming patterns in a concise, elegant, and type-safe way.
       It smoothly integrates features of object-oriented and functional
       languages, enabling Java and other programmers to be more productive.
-      Code sizes are typically reduced by a factor of two to three when 
+      Code sizes are typically reduced by a factor of two to three when
       compared to an equivalent Java application.
     '';
     homepage = http://www.scala-lang.org/;
