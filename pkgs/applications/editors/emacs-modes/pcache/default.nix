@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://github.com/sigma/pcache.git";
-    rev = "v0.2.3";
+    rev = "fa8f863546e2e8f2fc0a70f5cc766a7f584e01b6";
     sha256 = "f7cdad5a729b24f96ec69db4adfd19daf45c27aaf3a0267385b252cb2e59daa0";
   };
 

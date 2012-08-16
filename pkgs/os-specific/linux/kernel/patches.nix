@@ -226,6 +226,11 @@ rec {
       patch = ./dell-rfkill.patch;
     };
 
+  perf3_5 =
+    { name = "perf-3.5";
+      patch = ./perf-3.5.patch;
+    };
+
   sheevaplug_modules_2_6_35 =
     { name = "sheevaplug_modules-2.6.35";
       patch = ./sheevaplug_modules-2.6.35.patch;

@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export PATH_CP=$(type -tp cp)
     export PATH_CHKCONFIG=/no-such-program
-    makeFlagsArray=(SA_DIR=$out/var/log/sa SYSCONFIG_DIR=$out/etc CHOWN=true IGNORE_MAN_GROUP=y)
+    makeFlagsArray=(SA_DIR=/var/log/sa SYSCONFIG_DIR=$out/etc CHOWN=true IGNORE_MAN_GROUP=y)
   '';
+
+  patches = [ ./no-install-statedir.patch ];
 
   meta = {
     homepage = http://sebastien.godard.pagesperso-orange.fr/;

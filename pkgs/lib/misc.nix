@@ -322,10 +322,6 @@ rec {
     // listToAttrs (map (n : nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" "postInstall" ])
   ;
 
-  # returns atribute values as a list 
-  flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
-  mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
-
   # prepareDerivationArgs tries to make writing configurable derivations easier
   # example:
   #  prepareDerivationArgs {
@@ -365,7 +361,7 @@ rec {
         flagName = name : "${name}Support";
         cfgWithDefaults = (listToAttrs (map (n : nameValuePair (flagName n) false) (attrNames args2.flags)))
                           // args2.cfg;
-        opts = flattenAttrs (mapAttrs (a : v :
+        opts = attrValues (mapAttrs (a : v :
                 let v2 = if (v ? set || v ? unset) then v else { set = v; };
                     n = if (getAttr (flagName a) cfgWithDefaults) then "set" else "unset";
                     attr = maybeAttr n {} v2; in
@@ -389,19 +385,5 @@ rec {
       else if x == null then "null"
       else if isInt x then "int"
       else "string";
-
-  # deep, strict equality testing. This should be implemented as primop
-  eqStrict = a : b :
-    let eqListStrict = a : b :
-      if (a == []) != (b == []) then false
-      else if a == [] then true
-      else eqStrict (head a) (head b) && eqListStrict (tail a) (tail b);
-    in
-    if nixType a != nixType b then false
-      else if isList a then eqListStrict a b
-        else if isAttrs a then
-          (eqListStrict (attrNames a) (attrNames b))
-          && (eqListStrict (lib.attrValues a) (lib.attrValues b))
-        else a == b; # FIXME !
 
 }

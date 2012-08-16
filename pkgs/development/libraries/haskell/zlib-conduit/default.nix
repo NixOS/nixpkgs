@@ -1,10 +1,10 @@
-{ cabal, conduit, transformers, zlibBindings }:
+{ cabal, conduit, transformers, void, zlibBindings }:
 
 cabal.mkDerivation (self: {
   pname = "zlib-conduit";
-  version = "0.4.0.2";
-  sha256 = "1pwgyawc308rm1xcvzfz96ar11mngx79any7lragffj6f132qlm7";
-  buildDepends = [ conduit transformers zlibBindings ];
+  version = "0.5.0";
+  sha256 = "0mba63wx11vb9xir4fbp031ay71xv8b3rnj8gnihsxf3yqq09b99";
+  buildDepends = [ conduit transformers void zlibBindings ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Streaming compression/decompression via conduits";

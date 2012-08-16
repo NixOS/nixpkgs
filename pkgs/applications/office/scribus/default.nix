@@ -1,21 +1,24 @@
 { stdenv, fetchurl, pkgconfig, freetype, lcms, libtiff, libxml2
-, libart_lgpl, qt, python, cups, fontconfig, libjpeg
-, zlib, libpng, xorg, cairo, podofo, aspell, boost, cmake }:
-stdenv.mkDerivation {
-  name = "scribus-1.4.0rc6";
+, libart_lgpl, qt4, python, cups, fontconfig, libjpeg
+, zlib, libpng, xorg, cairo, podofo, aspell, boostHeaders, cmake }:
+
+stdenv.mkDerivation rec {
+  name = "scribus-1.4.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/scribus/scribus/scribus-1.4.0.rc6.tar.bz2;
-    sha256 = "1rrnzxjzhqj4lgyfswly501xlyvm4hsnnq7zw008v0cnkx31icli";
+    url = "mirror://sourceforge/scribus/scribus/${name}.tar.xz";
+    sha256 = "1n67z2bk5ca2sxvv43jvj7yygfr4d2x5yc69zk70v38prm0gqlv8";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs =
-    [ pkgconfig cmake freetype lcms libtiff libxml2 libart_lgpl qt
+  buildInputs = with xorg;
+    [ pkgconfig cmake freetype lcms libtiff libxml2 libart_lgpl qt4
       python cups fontconfig
-      xorg.libXaw xorg.libXext xorg.libX11 xorg.libXtst xorg.libXi xorg.libXinerama
       libjpeg zlib libpng podofo aspell cairo
+      boostHeaders # for internal 2geom library
+      libXaw libXext libX11 libXtst libXi libXinerama
+      libpthreadstubs libXau libXdmcp
     ];
 
   meta = {

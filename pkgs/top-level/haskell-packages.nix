@@ -1020,6 +1020,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
 
+  lrucache = callPackage ../development/libraries/haskell/lrucache {};
+
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
@@ -1055,6 +1057,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   monadcryptorandom = callPackage ../development/libraries/haskell/monadcryptorandom {};
 
   monadLoops = callPackage ../development/libraries/haskell/monad-loops {};
+
+  monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
 
   monadPar_0_1_0_3 = callPackage ../development/libraries/haskell/monad-par/0.1.0.3.nix {};
   monadPar_0_3 = callPackage ../development/libraries/haskell/monad-par/0.3.nix {};
@@ -1515,6 +1519,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
+
+  unixTime = callPackage ../development/libraries/haskell/unix-time {};
 
   unlambda = callPackage ../development/libraries/haskell/unlambda {};
 

@@ -492,6 +492,8 @@ let
     inherit (haskellPackages) pandoc;
   };
 
+  atool = callPackage ../tools/archivers/atool { };
+
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
   cabextract = callPackage ../tools/archivers/cabextract { };
@@ -2295,6 +2297,8 @@ let
   haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741.highPrio);
   # Stable branch snapshot.
   haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742);
+  # Release candidate.
+  haskellPackages_ghc761              =                   haskell.packages_ghc761;
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
 
@@ -2886,7 +2890,7 @@ let
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
-    doCheck = !stdenv.isArm && !stdenv.isCygwin
+    doCheck = !stdenv.isArm && !stdenv.isCygwin && !stdenv.isMips
       # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
       && stdenv.system != "i686-solaris"
 
@@ -2895,7 +2899,7 @@ let
   };
 
   automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix {
-    doCheck = !stdenv.isArm && !stdenv.isCygwin
+    doCheck = !stdenv.isArm && !stdenv.isCygwin && !stdenv.isMips
       # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
       && stdenv.system != "i686-solaris";
   };
@@ -4504,6 +4508,7 @@ let
   openbabel = callPackage ../development/libraries/openbabel { };
 
   opencascade = callPackage ../development/libraries/opencascade {
+    automake = automake111x;
     ftgl = ftgl212;
   };
 
@@ -5576,6 +5581,8 @@ let
 
   ipw2200fw = callPackage ../os-specific/linux/firmware/ipw2200 { };
 
+  iw = callPackage ../os-specific/linux/iw { };
+
   iwlwifi1000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-1000-ucode { };
 
   iwlwifi3945ucode = callPackage ../os-specific/linux/firmware/iwlwifi-3945-ucode { };
@@ -5756,6 +5763,7 @@ let
       [
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs3_5
+        kernelPatches.perf3_5
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -6042,8 +6050,6 @@ let
   rt2860fw = callPackage ../os-specific/linux/firmware/rt2860 { };
 
   rt2870fw = callPackage ../os-specific/linux/firmware/rt2870 { };
-
-  rt73fw = callPackage ../os-specific/linux/firmware/rt73 { };
 
   rtkit = callPackage ../os-specific/linux/rtkit { };
 
@@ -6656,11 +6662,15 @@ let
   emacsPackages = emacs: self: let callPackage = newScope self; in rec {
     inherit emacs;
 
+    autoComplete = callPackage ../applications/editors/emacs-modes/auto-complete { };
+
     bbdb = callPackage ../applications/editors/emacs-modes/bbdb { };
 
     cedet = callPackage ../applications/editors/emacs-modes/cedet { };
 
     calfw = callPackage ../applications/editors/emacs-modes/calfw { };
+
+    coffee = callPackage ../applications/editors/emacs-modes/coffee { };
 
     cua = callPackage ../applications/editors/emacs-modes/cua { };
 
@@ -6674,9 +6684,13 @@ let
 
     emms = callPackage ../applications/editors/emacs-modes/emms { };
 
+    flymakeCursor = callPackage ../applications/editors/emacs-modes/flymake-cursor { };
+
     gh = callPackage ../applications/editors/emacs-modes/gh { };
 
     gist = callPackage ../applications/editors/emacs-modes/gist { };
+
+    jade = callPackage ../applications/editors/emacs-modes/jade { };
 
     jdee = callPackage ../applications/editors/emacs-modes/jdee {
       # Requires Emacs 23, for `avl-tree'.
@@ -7055,7 +7069,7 @@ let
     inherit (perlPackages) TextMarkdown URI HTMLParser HTMLScrubber
       HTMLTemplate TimeDate CGISession DBFile CGIFormBuilder LocaleGettext
       RpcXML XMLSimple PerlMagick YAML YAMLLibYAML HTMLTree Filechdir
-      AuthenPassphrase;
+      AuthenPassphrase NetOpenIDConsumer LWPxParanoidAgent CryptSSLeay;
   };
 
   imagemagick = callPackage ../applications/graphics/ImageMagick {
@@ -7172,9 +7186,7 @@ let
 
   lynx = callPackage ../applications/networking/browsers/lynx { };
 
-  lyx = callPackage ../applications/misc/lyx {
-   qt = qt4;
-  };
+  lyx = callPackage ../applications/misc/lyx { };
 
   makeself = callPackage ../applications/misc/makeself { };
 
@@ -7483,7 +7495,6 @@ let
 
   scribus = callPackage ../applications/office/scribus {
     inherit (gnome) libart_lgpl;
-    qt = qt4;
   };
 
   seeks = callPackage ../tools/networking/p2p/seeks {
@@ -7810,9 +7821,15 @@ let
 
   xineUI = callPackage ../applications/video/xine-ui { };
 
-  xneur = callPackage ../applications/misc/xneur { };
+  xneur_0_13 = callPackage ../applications/misc/xneur { };
 
   xneur_0_8 = callPackage ../applications/misc/xneur/0.8.nix { };
+
+  xneur = xneur_0_13;
+
+  gxneur = callPackage ../applications/misc/gxneur  {
+    inherit (gnome) libglade GConf;
+  };
 
   xournal = callPackage ../applications/graphics/xournal {
     inherit (gnome) libgnomeprint libgnomeprintui libgnomecanvas;

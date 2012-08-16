@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "terminfo";
-  version = "0.3.2.4";
-  sha256 = "06kwyp8maf9ylhz8rypy086dfdfs1k1h1b8xyyfvz1bzxsw63k7y";
+  version = "0.3.2.5";
+  sha256 = "1hadb1gv28c43xq78scalb4zzvbs6im2s0hq7ycrbsdgm6iryhbg";
   extraLibraries = [ ncurses ];
   meta = {
     homepage = "http://code.haskell.org/terminfo";

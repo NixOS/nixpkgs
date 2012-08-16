@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-types";
-  version = "0.6.11";
-  sha256 = "1waxhicqwp0nmvmpmfadpq9gdldbcx9wh6jz717ghi6y9l485vhf";
+  version = "0.7.1";
+  sha256 = "1vfaffraiqdsjbw4b0xwk8h8d4pl94mbxlwyqk8ry786v9aafyqx";
   buildDepends = [ blazeBuilder caseInsensitive text ];
   meta = {
     homepage = "https://github.com/aristidb/http-types";

@@ -46,10 +46,6 @@ in
   # The kernel version
   version,
   # The version of the kernel module directory
-  # Note that, unlike with the normal kernel builder, it shouldn't be necessary
-  # to specify this for releases with 2 version numbers, e.g. if you're building
-  # Linux 3.5 the modules will happily be installed in $out/lib/modules/3.5/, but
-  # this is provided for compatability.
   modDirVersion ? version,
   # The kernel source (tarball, git checkout, etc.)
   src,
@@ -68,8 +64,8 @@ let
   installkernel = name: writeTextFile { name = "installkernel"; executable=true; text = ''
     #!/bin/sh
     mkdir $4
-    mv -v $2 $4/${name}
-    mv -v $3 $4
+    cp -av $2 $4/${name}
+    cp -av $3 $4
   '';};
 
   isModular = config.isYes "MODULES";
@@ -78,9 +74,9 @@ let
     (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
 
   commonMakeFlags = [
-    "O=../build"
+    "O=$(buildRoot)"
     "INSTALL_PATH=$(out)"
-  ] ++ (optional isModular "MODLIB=$(out)/lib/modules/${modDirVersion}")
+  ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
   ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 in
 
@@ -90,31 +86,46 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit version modDirVersion config kernelPatches;
+    inherit version modDirVersion config kernelPatches src;
   };
 
-  inherit src;
+  sourceRoot = stdenv.mkDerivation {
+    name = "linux-${version}-source";
 
-  patches = map (p: p.patch) kernelPatches;
+    inherit src;
 
-  prePatch = ''
-    for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
-        echo "stripping FHS paths in \`$mf'..."
-        sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
-    done
+    patches = map (p: p.patch) kernelPatches;
+
+    phases = [ "unpackPhase" "patchPhase" "installPhase" ]; 
+
+    prePatch = ''
+      for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
+          echo "stripping FHS paths in \`$mf'..."
+          sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
+      done
+      sed -i Makefile -e 's|= depmod|= ${kmod}/sbin/depmod|'
+    '';
+
+    installPhase = ''
+      cd ..
+      mv $sourceRoot $out
+    '';
+  };
+
+  unpackPhase = ''
+    mkdir build
+    export buildRoot="$(pwd)/build"
+    ln -sv ${configfile} $buildRoot/.config
+    cd $sourceRoot
   '';
 
   configurePhase = ''
     runHook preConfigure
-    mkdir ../build
-    make $makeFlags "''${makeFlagsArray[@]}" mrproper
-    ln -sv ${configfile} ../build/.config
     make $makeFlags "''${makeFlagsArray[@]}" oldconfig
-    rm ../build/.config.old
     runHook postConfigure
   '';
 
-  buildNativeInputs = [ perl nettools ] ++ optional isModular kmod;
+  buildNativeInputs = [ perl nettools ];
 
   makeFlags = commonMakeFlags ++ [
    "INSTALLKERNEL=${installkernel stdenv.platform.kernelTarget}"
@@ -126,17 +137,13 @@ stdenv.mkDerivation {
     ];
   };
 
-  postInstall = stdenv.lib.optionalString installsFirmware ''
+  postInstall = optionalString installsFirmware ''
     mkdir -p $out/lib/firmware
   '' + (if isModular then ''
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
-    rm -f $out/lib/modules/${modDirVersion}/{build,source}
-    cd ..
-    mv $sourceRoot $out/lib/modules/${modDirVersion}/source
-    mv build $out/lib/modules/${modDirVersion}/build
-    unlink $out/lib/modules/${modDirVersion}/build/source
-    ln -sv $out/lib/modules/${modDirVersion}/{,build/}source
+    rm -f $out/lib/modules/${modDirVersion}/build
+    mv $buildRoot $out/lib/modules/${modDirVersion}/build
   '' else optionalString installsFirmware ''
     make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, udev, dbus, kmod
+{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
 , glib, kbd
 }:
@@ -6,15 +6,17 @@
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-187";
+  name = "systemd-188";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "1m7fzcqqgwqdjrrdp41i81q6y0cgjbknrznsvjqwh7nc027k6fqs";
+    sha256 = "0nr1cg1mizbwcafjcqw3c30mx6xdv596jpbgjlxr6myvc5hfsfg8";
   };
 
+  patches = [ ./fail-after-reaching-respawn-limit.patch ];
+
   buildInputs =
-    [ pkgconfig intltool gperf libcap udev dbus kmod xz pam acl
+    [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
       cryptsetup libuuid m4 usbutils pciutils glib
     ];
 
@@ -47,7 +49,8 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  NIX_CFLAGS_COMPILE = "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\" -DKBD_SETFONT=\"${kbd}/bin/setfont\"";
+  # ‘-fstack-protector’ is necessary to build the PAM module correctly.
+  NIX_CFLAGS_COMPILE = "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\" -DKBD_SETFONT=\"${kbd}/bin/setfont\" -fstack-protector";
 
   makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include";
 
@@ -64,12 +67,12 @@ stdenv.mkDerivation rec {
       mkdir -p $out/sbin
       ln -s $out/lib/systemd/systemd $out/sbin/telinit
       for i in init halt poweroff runlevel reboot shutdown; do
-        ln -s $out/bin/systemctl $out/sbin/$i 
+        ln -s $out/bin/systemctl $out/sbin/$i
       done
     '';
 
   enableParallelBuilding = true;
-  
+
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
   # fine, of course.)  It should be increased whenever systemd changes

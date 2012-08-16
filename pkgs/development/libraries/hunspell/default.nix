@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, readline }:
 
 stdenv.mkDerivation rec {
-  name = "hunspell-1.2.12";
+  name = "hunspell-1.3.2";
 
   src = fetchurl {
     url = "mirror://sf/hunspell/${name}.tar.gz";
-    sha256 = "0s8fh8zanhks6bgkb7dzwscy97fb6wl4ymvjqz7188fz29qjlnaz";
+    sha256 = "1gfxdajnqk2civkshkfjx5ldg7kjdgj76m5khpsbjk4lxsjd9vdl";
   };
 
   propagatedBuildInputs = [ ncurses readline ];

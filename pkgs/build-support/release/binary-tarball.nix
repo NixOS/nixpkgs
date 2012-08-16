@@ -35,6 +35,7 @@ stdenv.mkDerivation (
     postHook = ''
       mkdir -p $out/nix-support
       echo "$system" > $out/nix-support/system
+      . ${./functions.sh}
 
       origSrc=$src
       src=$(findTarballs $src | head -1)
