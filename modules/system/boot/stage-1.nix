@@ -230,6 +230,7 @@ let
       cp -v ${pkgs.mdadm}/lib/udev/rules.d/*.rules $out/
 
       for i in $out/*.rules; do
+      
           substituteInPlace $i \
             --replace ata_id ${extraUtils}/bin/ata_id \
             --replace usb_id ${extraUtils}/bin/usb_id \
@@ -237,9 +238,10 @@ let
             --replace path_id ${extraUtils}/bin/path_id \
             --replace vol_id ${extraUtils}/bin/vol_id \
             --replace cdrom_id ${extraUtils}/bin/cdrom_id \
+            --replace ${pkgs.utillinux}/sbin/blkid ${extraUtils}/bin/blkid \
             --replace /sbin/blkid ${extraUtils}/bin/blkid \
             --replace /sbin/modprobe ${extraUtils}/bin/modprobe \
-            --replace 'ENV{DM_SBIN_PATH}="${pkgs.lvm2}/sbin"' 'ENV{DM_SBIN_PATH}="${extraUtils}/bin"' \
+            --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
             --replace /sbin/mdadm ${extraUtils}/bin/mdadm
       done
       # !!! Remove this after merging the x-updates branch:
