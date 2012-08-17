@@ -29,9 +29,9 @@ in
 
       enableOSSEmulation = mkOption {
         default = true;
-	description = ''
-	  Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).
-	'';
+        description = ''
+          Whether to enable ALSA OSS emulation (with certain cards sound mixing may not work!).
+        '';
       };
 
     };
@@ -48,7 +48,9 @@ in
     boot.kernelModules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
 
     jobs.alsa =
-      { startOn = "stopped udevtrigger";
+      { description = "ALSA Volume Settings";
+
+        startOn = "stopped udevtrigger";
 
         preStart =
           ''
