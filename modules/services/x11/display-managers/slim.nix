@@ -17,7 +17,6 @@ let
       halt_cmd ${config.system.build.systemd}/sbin/shutdown -h now
       reboot_cmd ${config.system.build.systemd}/sbin/shutdown -r now
       ${optionalString (cfg.defaultUser != "") ("default_user " + cfg.defaultUser)}
-      ${optionalString cfg.hideCursor "hidecursor true"}
       ${optionalString cfg.autoLogin "auto_login yes"}
     '';
 
@@ -73,14 +72,6 @@ in
           The default user to load. If you put a username here you
           get it automatically loaded into the username field, and
           the focus is placed on the password.
-        '';
-      };
-
-      hideCursor = mkOption {
-        default = false;
-        example = true;
-        description = ''
-          Hide the mouse cursor on the login screen.
         '';
       };
 
