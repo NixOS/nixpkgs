@@ -54,7 +54,7 @@ let
         '';
     in {
 
-      inherit (job) description requires wants before partOf environment path;
+      inherit (job) description requires wants before partOf environment path restartIfChanged;
 
       after =
         (if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else
@@ -185,15 +185,6 @@ let
       '';
     };
 
-    restartIfChanged = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        Whether the job should be restarted if it has changed after a
-        NixOS configuration switch.
-      '';
-    };
-
     task = mkOption {
       type = types.bool;
       default = false;
@@ -301,8 +292,6 @@ in
   ###### implementation
 
   config = {
-
-    system.build.upstart = "/no-upstart";
 
     boot.systemd.services =
       flip mapAttrs' config.jobs (name: job:

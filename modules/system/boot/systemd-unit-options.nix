@@ -115,6 +115,15 @@ with pkgs.lib;
       '';
     };
 
+    restartIfChanged = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether the service should be restarted during a NixOS
+        configuration switch if its definition has changed.
+      '';
+    };
+
   };
 
 }

@@ -199,6 +199,7 @@ let
           [Service]
           Environment=PATH=${def.path}
           ${concatMapStrings (n: "Environment=${n}=${getAttr n def.environment}\n") (attrNames def.environment)}
+          ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
 
           ${optionalString (def.preStart != "") ''
             ExecStartPre=${makeJobScript "${name}-prestart.sh" ''

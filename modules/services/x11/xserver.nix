@@ -383,7 +383,7 @@ in
       { wantedBy = [ "graphical.target" ];
         after = [ "systemd-udev-settle.service" ];
 
-        #restartIfChanged = false;
+        restartIfChanged = false;
 
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup

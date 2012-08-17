@@ -75,12 +75,23 @@ sub parseFstab {
     return %res;
 }
 
+sub parseUnit {
+    my ($filename) = @_;
+    my $info = {};
+    foreach my $line (read_file($filename)) {
+        # FIXME: not quite correct.
+        $line =~ /^([^=]+)=(.*)$/ or next;
+        $info->{$1} = $2;
+    }
+    return $info;
+}
+
 # Forget about previously failed services.
 system("@systemd@/bin/systemctl", "reset-failed");
 
 # Stop all services that no longer exist or have changed in the new
 # configuration.
-my @unitsToStop;
+my (@unitsToStop, @unitsToSkip);
 my $activePrev = getActiveUnits;
 while (my ($unit, $state) = each %{$activePrev}) {
     my $baseUnit = $unit;
@@ -102,11 +113,16 @@ while (my ($unit, $state) = each %{$activePrev}) {
             } elsif ($unit =~ /\.socket$/ || $unit =~ /\.path$/) {
                 # FIXME: do something?
             } else {
-                # Record that this unit needs to be started below.  We
-                # write this to a file to ensure that the service gets
-                # restarted if we're interrupted.
-                write_file($restartListFile, { append => 1 }, "$unit\n");
-                push @unitsToStop, $unit;
+                my $unitInfo = parseUnit($newUnitFile);
+                if ($unitInfo->{'X-RestartIfChanged'} eq "false") {
+                    push @unitsToSkip, $unit;
+                } else {
+                    # Record that this unit needs to be started below.  We
+                    # write this to a file to ensure that the service gets
+                    # restarted if we're interrupted.
+                    write_file($restartListFile, { append => 1 }, "$unit\n");
+                    push @unitsToStop, $unit;
+                }
             }
         }
     }
@@ -158,6 +174,9 @@ if (scalar @unitsToStop > 0) {
     print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
     system("@systemd@/bin/systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
 }
+
+print STDERR "NOT restarting the following units: ", join(", ", sort(@unitsToSkip)), "\n"
+    if scalar @unitsToSkip > 0;
 
 # Activate the new configuration (i.e., update /etc, make accounts,
 # and so on).
