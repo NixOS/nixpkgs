@@ -69,6 +69,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
+    srcroot="$(pwd)"
     libexec=$out/libexec/virtualbox
 
     # Install VirtualBox files
@@ -77,9 +78,8 @@ stdenv.mkDerivation {
     cp -av * $libexec
 
     # Install kernel modules
-    curdir="$(pwd)"
-    for makefile in $curdir/out/linux.*/release/bin/src/*/Makefile \
-                    $curdir/out/linux.*/release/bin/additions/src/*/Makefile
+    for makefile in $srcroot/out/linux.*/release/bin/src/*/Makefile \
+                    $srcroot/out/linux.*/release/bin/additions/src/*/Makefile
     do
       mod="$(dirname "$makefile")"
       name="$(basename "$mod")"
