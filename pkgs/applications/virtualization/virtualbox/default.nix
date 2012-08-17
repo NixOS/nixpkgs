@@ -85,7 +85,7 @@ stdenv.mkDerivation {
       name="$(basename "$mod")"
       export INSTALL_MOD_PATH="$out"
       export INSTALL_MOD_DIR=misc
-      make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD= modules_install
+      make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD=/do_not_use_depmod modules_install
     done
 
     # Create wrapper script
