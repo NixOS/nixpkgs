@@ -45,7 +45,7 @@ stdenv.mkDerivation {
     ./configure --with-qt4-dir=${qt4} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
-      --disable-pulse --disable-hardening \
+      --disable-pulse --disable-hardening --disable-kmods \
       --with-mkisofs=${xorriso}/bin/xorrisofs
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
@@ -63,51 +63,43 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  preBuild = ''
+  buildPhase = ''
     source env.sh
     kmk
-    cd out/linux.*/release/bin/src
-    export KERN_DIR=${kernel}/lib/modules/*/build
   '';
 
-  postBuild = ''
-    cd ../../../../..
-  '';
-    
   installPhase = ''
     libexec=$out/libexec/virtualbox
-  
+
     # Install VirtualBox files
     cd out/linux.*/release/bin
     mkdir -p $libexec
     cp -av * $libexec
-    
-    # Install kernel module
-    cd src
-    kernelVersion=$(cd ${kernel}/lib/modules; ls)
-    export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
-    
-    # Remove root ownership stuff, since this does not work in a chroot environment
-    for i in `find . -name Makefile`; do
-	sed -i -e "s|-o root||g" \
-               -e "s|-g root||g" $i
-    done
-    
+
     # Install kernel modules
-    make install
-    
+    curdir="$(pwd)"
+    for makefile in $curdir/out/linux.*/release/bin/src/*/Makefile \
+                    $curdir/out/linux.*/release/bin/additions/src/*/Makefile
+    do
+      mod="$(dirname "$makefile")"
+      name="$(basename "$mod")"
+      export INSTALL_MOD_PATH="$out"
+      export INSTALL_MOD_DIR=misc
+      make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD= modules_install
+    done
+
     # Create wrapper script
     mkdir -p $out/bin
     for file in VirtualBox VBoxManage VBoxSDL VBoxBalloonCtrl VBoxBFE VBoxHeadless; do
         ln -s "$libexec/$file" $out/bin/$file
     done
-    
+
     # Create and fix desktop item
     mkdir -p $out/share/applications
     sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
     ln -sfv $libexec/virtualbox.desktop $out/share/applications
   '';
-  
+
   meta = {
     description = "PC emulator";
     homepage = http://www.virtualbox.org/;
