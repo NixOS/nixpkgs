@@ -39,7 +39,7 @@ let
   );
 
   userOptions = {
-  
+
     openssh.authorizedKeys = {
 
       preserveExistingKeys = mkOption {
@@ -78,7 +78,7 @@ let
       };
 
     };
-    
+
   };
 
   mkAuthkeyScript =
@@ -256,11 +256,11 @@ in
           The set of system-wide known SSH hosts.
         '';
         example = [
-          { 
+          {
             hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
             publicKeyFile = ./pubkeys/myhost_ssh_host_dsa_key.pub;
           }
-          { 
+          {
             hostNames = [ "myhost2" ];
             publicKeyFile = ./pubkeys/myhost2_ssh_host_dsa_key.pub;
           }
@@ -327,7 +327,7 @@ in
             RemainAfterExit=true
           '';
       };
-    
+
     boot.systemd.services."sshd.service" =
       { description = "SSH Daemon";
 
@@ -335,7 +335,7 @@ in
         after = [ "set-ssh-keys.service" ];
 
         path = [ pkgs.openssh ];
-        
+
         environment.LD_LIBRARY_PATH = nssModulesPath;
         environment.LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
 
@@ -362,10 +362,12 @@ in
 
     networking.firewall.allowedTCPPorts = cfg.ports;
 
+    security.pam.services = optional cfg.usePAM { name = "sshd"; startSession = true; };
+
     services.openssh.extraConfig =
       ''
         PidFile /run/sshd.pid
-      
+
         Protocol 2
 
         UsePAM ${if cfg.usePAM then "yes" else "no"}

@@ -111,7 +111,7 @@ in
         logsXsession = true;
       };
 
-    security.pam.services = [ { name = "kde"; allowNullPassword = true; ownDevices = true; } ];
+    security.pam.services = [ { name = "kde"; allowNullPassword = true; startSession = true; } ];
 
     users.extraUsers = singleton
       { name = "kdm";

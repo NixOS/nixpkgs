@@ -90,7 +90,7 @@ in
         { name = "groupmod"; rootOK = true; }
         { name = "groupmems"; rootOK = true; }
         { name = "groupdel"; rootOK = true; }
-        { name = "login"; ownDevices = true; allowNullPassword = true; }
+        { name = "login"; startSession = true; allowNullPassword = true; }
       ];
 
     security.setuidPrograms = [ "passwd" "chfn" "su" "newgrp" ];
