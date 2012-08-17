@@ -46,7 +46,6 @@
   ./security/ca.nix
   ./security/pam.nix
   ./security/pam_usb.nix
-  ./security/policykit.nix
   ./security/polkit.nix
   ./security/rtkit.nix
   ./security/setuid-wrappers.nix
