@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/desktop-file-utils;
     description = "Command line utilities for working with .desktop files";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
