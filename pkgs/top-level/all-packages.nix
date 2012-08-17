@@ -6674,6 +6674,8 @@ let
 
     coffee = callPackage ../applications/editors/emacs-modes/coffee { };
 
+    colorTheme = callPackage ../applications/editors/emacs-modes/color-theme { };
+
     cua = callPackage ../applications/editors/emacs-modes/cua { };
 
     ecb = callPackage ../applications/editors/emacs-modes/ecb { };
