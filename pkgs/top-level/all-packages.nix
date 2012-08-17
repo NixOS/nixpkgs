@@ -7520,7 +7520,9 @@ let
 
   dropbox = callPackage ../applications/networking/dropbox { };
 
-  slim = callPackage ../applications/display-managers/slim { };
+  slim = callPackage ../applications/display-managers/slim {
+    consolekit = null;
+  };
 
   sndBase = builderDefsPackage (import ../applications/audio/snd) {
     inherit fetchurl stdenv stringsWithDeps lib fftw;
