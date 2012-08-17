@@ -827,7 +827,7 @@ rec {
   };
 
   CompressRawZlib = import ../development/perl-modules/Compress-Raw-Zlib {
-    inherit fetchurl buildPerlPackage;
+    inherit fetchurl buildPerlPackage stdenv;
     inherit (pkgs) zlib;
   };
 
