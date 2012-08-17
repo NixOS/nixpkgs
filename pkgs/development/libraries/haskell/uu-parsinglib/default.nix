@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uu-parsinglib";
-  version = "2.7.3.2";
-  sha256 = "0z53s9wvk57g3d9x3iswjydwm7nw5vfrj7k08v75fw6rwldkal60";
+  version = "2.7.3.4";
+  sha256 = "1f582cr17qxwrhxx6pdv503ldm4ccbnbv9pcksibgparfyc25bnv";
   buildDepends = [ ListLike time ];
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/bin/view/HUT/ParserCombinators";
