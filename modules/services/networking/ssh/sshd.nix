@@ -173,14 +173,13 @@ in
       };
 
       permitRootLogin = mkOption {
-        default = "yes";
+        default = "without-password";
         check = permitRootLoginCheck;
         description = ''
           Whether the root user can login using ssh. Valid values are
           <literal>yes</literal>, <literal>without-password</literal>,
           <literal>forced-commands-only</literal> or
           <literal>no</literal>.
-          If without-password doesn't work try <literal>yes</literal>.
         '';
       };
 
