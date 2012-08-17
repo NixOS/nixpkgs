@@ -62,7 +62,7 @@ let
       fi
 
       #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
-      #    ${config.system.build.upstart}/sbin/initctl emit -n ip-down $params
+      #    ${config.system.build.systemd}/bin/systemctl start ip-down.target
       #fi
     '';
 
@@ -102,6 +102,11 @@ in
         daemonType = "fork";
 
         exec = "dhcpcd --config ${dhcpcdConf}";
+
+        serviceConfig =
+          ''
+            ExecReload=${dhcpcd}/sbin/dhcpcd --rebind
+          '';
       };
 
     environment.systemPackages = [ dhcpcd ];
@@ -115,8 +120,7 @@ in
     powerManagement.resumeCommands =
       ''
         # Tell dhcpcd to rebind its interfaces if it's running.
-        status="$(${config.system.build.upstart}/sbin/status dhcpcd)"
-        [[ "$status" =~ start/running ]] && ${dhcpcd}/sbin/dhcpcd --rebind
+        ${config.system.build.systemctl}/bin/systemctl reload dhcpcd.service
       '';
 
   };
