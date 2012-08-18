@@ -8,9 +8,19 @@
 
 with stdenv.lib;
 
-let version = "4.1.18"; in
-
-stdenv.mkDerivation {
+let
+  version = "4.1.18";
+  forEachModule = action: ''
+    for makefile in $sourcedir/out/linux.*/release/bin/src/*/Makefile \
+                    $sourcedir/out/linux.*/release/bin/additions/src/*/Makefile
+    do
+      mod="$(dirname "$makefile")"
+      export INSTALL_MOD_PATH="$out"
+      export INSTALL_MOD_DIR=misc
+      make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD=/do_not_use_depmod ${action}
+    done
+  '';
+in stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
 
   NIX_CFLAGS_COMPILE="-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
@@ -42,6 +52,7 @@ stdenv.mkDerivation {
   '';
 
   configurePhase = ''
+    sourcedir="$(pwd)"
     ./configure --with-qt4-dir=${qt4} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
@@ -66,6 +77,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     source env.sh
     kmk
+    ${forEachModule "modules"}
   '';
 
   installPhase = ''
@@ -78,15 +90,7 @@ stdenv.mkDerivation {
     cp -av * $libexec
 
     # Install kernel modules
-    for makefile in $srcroot/out/linux.*/release/bin/src/*/Makefile \
-                    $srcroot/out/linux.*/release/bin/additions/src/*/Makefile
-    do
-      mod="$(dirname "$makefile")"
-      name="$(basename "$mod")"
-      export INSTALL_MOD_PATH="$out"
-      export INSTALL_MOD_DIR=misc
-      make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD=/do_not_use_depmod modules_install
-    done
+    ${forEachModule "modules_install"}
 
     # Create wrapper script
     mkdir -p $out/bin
