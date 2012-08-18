@@ -157,9 +157,11 @@ rec {
     echo "Now running: $command"
     test -n "$command"
 
-    exec switch_root /fs ${initrdUtils}/bin/bash -c "cd / ; $command $out ; ${teardown} \$?"
+    exec switch_root /fs ${bash}/bin/bash -c "cd / ; $command $out ; ${teardown} \$?"
     ${teardown} $?
   '';
+
+  definitrd = initrd linuxKernel;
 
   initrd = kernel: makeInitrd {
     contents = [
