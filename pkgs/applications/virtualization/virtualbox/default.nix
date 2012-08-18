@@ -11,8 +11,7 @@ with stdenv.lib;
 let
   version = "4.1.18";
   forEachModule = action: ''
-    for makefile in $sourcedir/out/linux.*/release/bin/src/*/Makefile \
-                    $sourcedir/out/linux.*/release/bin/additions/src/*/Makefile
+    for makefile in $sourcedir/out/linux.*/release/bin/src/*/Makefile
     do
       mod="$(dirname "$makefile")"
       export INSTALL_MOD_PATH="$out"
