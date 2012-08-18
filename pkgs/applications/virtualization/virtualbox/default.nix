@@ -23,8 +23,6 @@ let
 in stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
 
-  NIX_CFLAGS_COMPILE="-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
-
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
     sha256 = "e650e4fdc23581b9edc0e5d5705cc596c76796851ebf65ccda0edb8e413fa3b7";
