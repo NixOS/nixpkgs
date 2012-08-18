@@ -30,12 +30,12 @@ vmTools.buildRPM (
       done
 
       echo "installing ''${rpms[*]}..."
-      rpm -Up ''${rpms[*]} --excludepath /nix/store
+      rpm -Up ''${rpms[*]} --excludepath /nix/store || touch $out/nix-support/failed
 
       eval "$postRPMInstall"
 
       echo "uninstalling ''${rpmNames[*]}..."
-      rpm -e ''${rpmNames[*]} --nodeps
+      rpm -e ''${rpmNames[*]} --nodeps || touch $out/nix-support/failed
 
       for i in $out/rpms/*/*.src.rpm; do
         echo "file srpm $i" >> $out/nix-support/hydra-build-products
