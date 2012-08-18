@@ -8642,14 +8642,10 @@ let
     stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
 
-  nixUnstable = nix;
-
-  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = getConfig [ "nix" "storeDir" ] "/nix/store";
     stateDir = getConfig [ "nix" "stateDir" ] "/nix/var";
   };
-  */
 
   nixCustomFun = src: preConfigure: enableScripts: configureFlags:
     import ../tools/package-management/nix/custom.nix {
