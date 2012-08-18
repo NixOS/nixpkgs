@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "dev86-0.16.18";
   
   src = fetchurl {
-    url = http://www.debath.co.uk/dev86/Dev86src-0.16.18.tar.gz;
-    sha256 = "1wcg2x8i2fq7kqgazx2il3qfmikyi4kfb23vm45yxlwq72l55604";
+    url = http://www.debath.co.uk/dev86/Dev86src-0.16.19.tar.gz;
+    sha256 = "03nhp0bswyzrqqva1jzdlmnz8jimyzr5kkv282gbdql5ra3qnf9k";
   };
 
   makeFlags = "PREFIX=$(out)";
