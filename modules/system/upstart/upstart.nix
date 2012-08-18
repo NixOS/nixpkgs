@@ -45,9 +45,7 @@ let
           ${optionalString (job.console != "") "console ${job.console}"}
 
           pre-start script
-            ${optionalString (job.console == "") ''
-              exec >> ${log} 2>&1
-            ''}
+            ${optionalString (job.console != "") "echo || "} exec >> ${log} 2>&1
             ln -sfn "$(readlink -f "/etc/init/${job.name}.conf")" /var/run/upstart-jobs/${job.name}
             ${optionalString (job.preStart != "") ''
               source ${jobHelpers}
@@ -60,9 +58,7 @@ let
             else if job.script != "" then
               ''
                 script
-                  ${optionalString (job.console == "") ''
-                    exec >> ${log} 2>&1
-                  ''}
+                  ${optionalString (job.console != "") "echo || "} exec >> ${log} 2>&1
                   source ${jobHelpers}
                   ${job.script}
                 end script
@@ -83,9 +79,7 @@ let
 
           ${optionalString (job.postStart != "") ''
             post-start script
-              ${optionalString (job.console == "") ''
-                exec >> ${log} 2>&1
-              ''}
+              ${optionalString (job.console != "") "echo || "} exec >> ${log} 2>&1
               source ${jobHelpers}
               ${job.postStart}
             end script
@@ -98,9 +92,7 @@ let
              # (upstart 0.6.5, job.c:562)
             optionalString (job.preStop != "") (assert hasMain; ''
             pre-stop script
-              ${optionalString (job.console == "") ''
-                exec >> ${log} 2>&1
-              ''}
+              ${optionalString (job.console != "") "echo || "} exec >> ${log} 2>&1
               source ${jobHelpers}
               ${job.preStop}
             end script
@@ -108,9 +100,7 @@ let
 
           ${optionalString (job.postStop != "") ''
             post-stop script
-              ${optionalString (job.console == "") ''
-                exec >> ${log} 2>&1
-              ''}
+              ${optionalString (job.console != "") "echo || "} exec >> ${log} 2>&1
               source ${jobHelpers}
               ${job.postStop}
             end script
