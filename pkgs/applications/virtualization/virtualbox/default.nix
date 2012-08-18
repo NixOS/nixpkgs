@@ -11,11 +11,18 @@ with stdenv.lib;
 let
   version = "4.1.18";
   forEachModule = action: ''
-    for makefile in $sourcedir/out/linux.*/release/bin/src/*/Makefile
+    for mod in \
+      $sourcedir/out/linux.*/release/bin/src/vboxdrv \
+      $sourcedir/out/linux.*/release/bin/src/vboxpci \
+      $sourcedir/out/linux.*/release/bin/src/vboxnetadp \
+      $sourcedir/out/linux.*/release/bin/src/vboxnetflt
     do
-      mod="$(dirname "$makefile")"
-      export INSTALL_MOD_PATH="$out"
-      export INSTALL_MOD_DIR=misc
+      if [ "x$(basename "$mod")" != xvboxdrv -a ! -e "$mod/Module.symvers" ]
+      then
+        cp -v $sourcedir/out/linux.*/release/bin/src/vboxdrv/Module.symvers \
+              "$mod/Module.symvers"
+      fi
+      INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=misc \
       make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD=/do_not_use_depmod ${action}
     done
   '';
