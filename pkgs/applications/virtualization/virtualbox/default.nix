@@ -85,7 +85,6 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    srcroot="$(pwd)"
     libexec=$out/libexec/virtualbox
 
     # Install VirtualBox files
