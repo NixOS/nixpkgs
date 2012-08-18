@@ -152,6 +152,8 @@ rec {
     mkdir -p /fs/etc
     ln -sf /proc/mounts /fs/etc/mtab
 
+    mkdir -p /fs/run
+
     echo "Now running: $command"
     test -n "$command"
 
