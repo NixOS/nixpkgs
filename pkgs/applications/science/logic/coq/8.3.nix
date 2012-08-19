@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   buildFlags = "world"; # Debug with "world VERBOSE=1";
 
-  patches = [ ./configure.patch ];
+  patches = [ ./configure.8.3.patch ];
 
   postPatch = ''
     UNAME=$(type -tp uname)
