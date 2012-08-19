@@ -110,6 +110,8 @@ stdenv.mkDerivation ({
     (if profilingLibraries
      then "--enable-profile"
      else "--disable-profile")
+  ] ++ stdenv.lib.optionals (cross == null) [
+    "--enable-kernel=${kernelHeaders.versionForGlibc}"
   ] ++ stdenv.lib.optionals (cross != null) [
     (if cross.withTLS then "--with-tls" else "--without-tls")
     (if cross.float == "soft" then "--without-fp" else "--with-fp")

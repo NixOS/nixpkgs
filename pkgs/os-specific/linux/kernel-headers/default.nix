@@ -59,4 +59,8 @@ stdenv.mkDerivation {
       ln -s asm $out/include/asm-x86
     fi
   '';
+
+  passthru = {
+    versionForGlibc = "2.6.35";
+  };
 }
