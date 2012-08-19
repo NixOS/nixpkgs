@@ -8428,6 +8428,11 @@ let
     camlp5 = ocamlPackages.camlp5_transitional;
   };
 
+  coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
+    inherit (ocamlPackages) findlib lablgtk;
+    camlp5 = ocamlPackages.camlp5_transitional;
+  };
+
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
 
   eprover = callPackage ../applications/science/logic/eProver {
@@ -8481,6 +8486,7 @@ let
   spass = callPackage ../applications/science/logic/spass {};
 
   ssreflect = callPackage ../applications/science/logic/ssreflect {
+    coq = coq_8_3;
     camlp5 = ocamlPackages.camlp5_transitional;
   };
 
