@@ -2050,6 +2050,15 @@ let
       else null;
   }));
 
+  gcc47_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
+    stripped = false;
+
+    inherit noSysDirs;
+    cross = null;
+    libcCross = null;
+    binutilsCross = null;
+  }));
+
   gccApple =
     wrapGCC (makeOverridable
       (if stdenv.system == "i686-darwin"
