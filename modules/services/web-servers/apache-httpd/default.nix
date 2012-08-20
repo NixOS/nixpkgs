@@ -557,14 +557,16 @@ in
 
   config = mkIf config.services.httpd.enable {
 
-    users.extraUsers = singleton
-      { name = mainCfg.user;
-        group = mainCfg.group;
+    users.extraUsers = optionalAttrs (mainCfg.user == "wwwrun") singleton
+      { name = "wwwrun";
+        group = "wwwrun";
         description = "Apache httpd user";
+        uid = config.ids.uids.wwwrun;
       };
 
-    users.extraGroups = singleton
-      { name = mainCfg.group;
+    users.extraGroups = optionalAttrs (mainCfg.group == "wwwrun") singleton
+      { name = "wwwrun";
+        gid = config.ids.gids.wwwrun;
       };
 
     environment.systemPackages = [httpd] ++ concatMap (svc: svc.extraPath) allSubservices;

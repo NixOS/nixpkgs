@@ -72,6 +72,7 @@ in
     clamav = 51;
     fprot = 52;
     bind = 53;
+    wwwrun = 54;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -123,6 +124,7 @@ in
     mpd = 50;
     clamav = 51;
     fprot = 52;
+    wwwrun = 54;
     adm = 55;
 
     # When adding a gid, make sure it doesn't match an existing uid.

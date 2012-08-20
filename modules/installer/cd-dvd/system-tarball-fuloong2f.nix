@@ -128,7 +128,7 @@ in
     '';
 
   # Include the firmware for various wireless cards.
-  networking.enableRT73Firmware = true;
+  networking.enableRalinkFirmware = true;
   networking.enableIntel2200BGFirmware = true;
 
   # To speed up further installation of packages, include the complete stdenv

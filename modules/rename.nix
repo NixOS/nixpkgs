@@ -69,6 +69,7 @@ in zipModules ([]
 
 ++ rename obsolete "security.extraSetuidPrograms" "security.setuidPrograms"
 ++ rename obsolete "networking.enableWLAN" "networking.wireless.enable"
+++ rename obsolete "networking.enableRT73Firmware" "networking.enableRalinkFirmware"
 
 # Old Grub-related options.
 ++ rename obsolete "boot.copyKernels" "boot.loader.grub.copyKernels"

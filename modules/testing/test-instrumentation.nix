@@ -5,6 +5,8 @@
 
 with pkgs.lib;
 
+let kernel = config.boot.kernelPackages.kernel; in
+
 {
 
   config = {
@@ -74,6 +76,12 @@ with pkgs.lib;
     networking.nameservers = mkOverride 150 [ ];
 
     system.upstartEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
+
+    system.requiredKernelConfig = with config.lib.kernelConfig; [
+      (isYes "SERIAL_8250_CONSOLE")
+      (isYes "SERIAL_8250")
+      (isEnabled "VIRTIO_CONSOLE")
+    ];
 
   };
 

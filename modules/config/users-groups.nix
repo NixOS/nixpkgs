@@ -266,15 +266,11 @@ in
                 oldIFS="$IFS"; IFS=:; set -- $curEnt; IFS="$oldIFS"
                 prevUid=$3
                 prevHome=$6
-                # Don't change the UID if it's the same, otherwise usermod
-                # will complain.
-                if test "$prevUid" = "$uid"; then unset uid; fi
                 # Don't change the home directory if it's the same to prevent
                 # unnecessary warnings about logged in users.
                 if test "$prevHome" = "$home"; then unset home; fi
                 usermod \
                     --comment "$description" \
-                    ''${uid:+--uid $uid} \
                     --gid "$group" \
                     --groups "$extraGroups" \
                     ''${home:+--home "$home"} \
@@ -297,13 +293,6 @@ in
                 groupadd --system \
                     ''${gid:+--gid $gid} \
                     "$name"
-            else
-                #echo "updating group $name..."
-                oldIFS="$IFS"; IFS=:; set -- $curEnt; IFS="$oldIFS"
-                prevGid=$3
-                if test -n "$gid" -a "$prevGid" != "$gid"; then
-                    groupmod --gid $gid "$name"
-                fi
             fi
         }
 

@@ -1,5 +1,6 @@
 { nixosSrc ? {outPath = ./.; revCount = 1234; shortRev = "abcdef"; }
 , nixpkgs ? {outPath = <nixpkgs>; revCount = 5678; shortRev = "fedcba"; }
+#, minimal ? false
 }:
 
 let

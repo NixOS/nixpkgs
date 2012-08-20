@@ -155,6 +155,14 @@ let
       cd $TMPDIR
       mkdir -p $TMPDIR/xchg
 
+      EXTRA_SAMBA_CONF="
+        [shared]
+          force user = $WHO
+          path = ''${SHARED_DIR:-$TMPDIR/xchg}
+          read only = no
+          guest ok = yes
+      "
+
       ${pkgs.vmTools.startSamba}
 
       # Start QEMU.
@@ -211,7 +219,7 @@ let
           . /sys/class/block/vda1/uevent
           mknod /dev/vda1 b $MAJOR $MINOR
           . /sys/class/block/vda/uevent
-          ${pkgs.e2fsprogs}/sbin/mkfs.ext3 -L boot /dev/vda1
+          ${pkgs.e2fsprogs}/sbin/mkfs.ext4 -L boot /dev/vda1
           ${pkgs.e2fsprogs}/sbin/tune2fs -c 0 -i 0 /dev/vda1
 
           # Mount /boot.
@@ -264,7 +272,7 @@ in
       # initialise.
       FSTYPE=$(blkid -o value -s TYPE /dev/vda || true)
       if test -z "$FSTYPE"; then
-          mke2fs -t ext3 /dev/vda
+          mke2fs -t ext4 /dev/vda
       fi
     '';
 
@@ -328,10 +336,16 @@ in
         options = "guest,sec=none,noperm,noacl";
         neededForBoot = true;
       }
+      { mountPoint = "/tmp/shared";
+        device = "//10.0.2.4/shared";
+        fsType = "cifs";
+        options = "guest,sec=none,noperm,noacl";
+        neededForBoot = true;
+      }
     ] ++ optional cfg.useBootLoader
       { mountPoint = "/boot";
         device = "/dev/disk/by-label/boot";
-        fsType = "ext3";
+        fsType = "ext4";
         options = "ro";
         noCheck = true; # fsck fails on a r/o filesystem
       });
@@ -385,4 +399,22 @@ in
 
   # Wireless won't work in the VM.
   networking.wireless.enable = mkOverride 50 false;
+
+  system.requiredKernelConfig = with config.lib.kernelConfig;
+    [ (isEnabled "VIRTIO_BLK")
+      (isEnabled "VIRTIO_PCI")
+      (isEnabled "VIRTIO_NET")
+      (isEnabled "EXT4_FS")
+      (isEnabled "CIFS")
+      (isYes "BLK_DEV")
+      (isYes "PCI")
+      (isYes "EXPERIMENTAL")
+      (isYes "NETDEVICES")
+      (isYes "NET_CORE")
+      (isYes "INET")
+      (isYes "NETWORK_FILESYSTEMS")
+    ] ++ optional (!cfg.graphics) [
+      (isYes "SERIAL_8250_CONSOLE")
+      (isYes "SERIAL_8250")
+    ];
 }
