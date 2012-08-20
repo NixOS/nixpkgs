@@ -10,24 +10,31 @@ let virtualbox = config.boot.kernelPackages.virtualbox; in
   environment.systemPackages = [ virtualbox ];
 
   users.extraGroups = singleton { name = "vboxusers"; };
-  
+
   services.udev.extraRules =
     ''
-      KERNEL=="vboxdrv",    OWNER="root", GROUP="vboxusers", MODE="0660"
-      KERNEL=="vboxnetctl", OWNER="root", GROUP="root",      MODE="0600"
+      KERNEL=="vboxdrv",    OWNER="root", GROUP="vboxusers", MODE="0660", TAG+="systemd"
+      KERNEL=="vboxnetctl", OWNER="root", GROUP="root",      MODE="0600", TAG+="systemd"
     '';
 
   # Since we lack the right setuid binaries, set up a host-only network by default.
-  
-  jobs."create-vboxnet0" =
-    { task = true;
+
+  jobs."vboxnet0" =
+    { description = "VirtualBox vboxnet0 Interface";
+      requires = [ "dev-vboxnetctl.device" ];
+      after = [ "dev-vboxnetctl.device" ];
+      before = [ "network-interfaces.service" ];
+      wantedBy = [ "multi-user.target" ];
       path = [ virtualbox ];
-      startOn = "starting network-interfaces";
-      script =
+      preStart =
         ''
           if ! [ -e /sys/class/net/vboxnet0 ]; then
             VBoxManage hostonlyif create
           fi
+        '';
+      postStop =
+        ''
+          VBoxManage hostonlyif remove vboxnet0
         '';
     };
 
