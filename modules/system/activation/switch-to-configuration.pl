@@ -86,6 +86,11 @@ sub parseUnit {
     return $info;
 }
 
+sub boolIsTrue {
+    my ($s) = @_;
+    return $s eq "yes" || $s eq "true";
+}
+
 # Forget about previously failed services.
 system("@systemd@/bin/systemctl", "reset-failed");
 
@@ -102,11 +107,18 @@ while (my ($unit, $state) = each %{$activePrev}) {
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         if (! -e $newUnitFile) {
             push @unitsToStop, $unit;
+        } elsif ($unit =~ /\.target$/) {
+            # Cause all active target units to be restarted below.
+            # This should start most changed units we stop here as
+            # well as any new dependencies (including new mounts and
+            # swap devices).
+            my $unitInfo = parseUnit($newUnitFile);
+            unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "false")) {
+                write_file($restartListFile, { append => 1 }, "$unit\n");
+            }
         } elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
             if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
                 # Do nothing.  These cannot be restarted directly.
-            } elsif ($unit =~ /\.target$/) {
-                write_file($restartListFile, { append => 1 }, "$unit\n");
             } elsif ($unit =~ /\.mount$/) {
                 # Reload the changed mount unit to force a remount.
                 write_file($reloadListFile, { append => 1 }, "$unit\n");
@@ -114,7 +126,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
-                if (($unitInfo->{'X-RestartIfChanged'} // "true") eq "false") {
+                if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "true")) {
                     push @unitsToSkip, $unit;
                 } else {
                     # Record that this unit needs to be started below.  We
@@ -194,19 +206,13 @@ sub unique {
     return sort(keys(%unique));
 }
 
-# Start the following units:
-# - The default target.  This should start most changed units we
-#   stopped above as well as any new dependencies.
-# - local-fs.target.  This mounts any missing local filesystems.
-# - Changed units we stopped above.  This is necessary because some
-#   may not be dependencies of the default target (i.e., they were
-#   manually started).
-# FIXME: detect units that are symlinks to other units.  We shouldn't
-# start both at the same time because we'll get a "Failed to add path
-# to set" error from systemd.
-my @start = unique(
-    "default.target", "local-fs.target", "swap.target",
-    split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
+# Start all active targets, as well as changed units we stopped above.
+# The latter is necessary because some may not be dependencies of the
+# targets (i.e., they were manually started).  FIXME: detect units
+# that are symlinks to other units.  We shouldn't start both at the
+# same time because we'll get a "Failed to add path to set" error from
+# systemd.
+my @start = unique("default.target", split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
 print STDERR "starting the following units: ", join(", ", @start), "\n";
 system("@systemd@/bin/systemctl", "start", "--", @start) == 0 or $res = 4;
 unlink($restartListFile);
