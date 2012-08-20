@@ -533,8 +533,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   colour = callPackage ../development/libraries/haskell/colour {};
 
   comonad_1_1_1_6 = callPackage ../development/libraries/haskell/comonad/1.1.1.6.nix {};
-  comonad_3_0_0_1 = callPackage ../development/libraries/haskell/comonad/3.0.0.1.nix {};
-  comonad = self.comonad_3_0_0_1;
+  comonad_3_0_0_2 = callPackage ../development/libraries/haskell/comonad/3.0.0.2.nix {};
+  comonad = self.comonad_3_0_0_2;
 
   comonadTransformers_2_1_2 = callPackage ../development/libraries/haskell/comonad-transformers/2.1.2.nix {
     comonad = self.comonad_1_1_1_6;
