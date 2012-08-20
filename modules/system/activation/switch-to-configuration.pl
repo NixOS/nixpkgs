@@ -114,7 +114,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
-                if ($unitInfo->{'X-RestartIfChanged'} eq "false") {
+                if (($unitInfo->{'X-RestartIfChanged'} // "true") eq "false") {
                     push @unitsToSkip, $unit;
                 } else {
                     # Record that this unit needs to be started below.  We
