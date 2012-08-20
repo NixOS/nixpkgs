@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, nspr, perl, zlib, includeTools ? false}:
+{ stdenv, fetchurl, nspr, perl, zlib, sqlite
+, includeTools ? false
+}:
 
 let
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "f7e90727e0ecc1c29de10da39a79bc9c53b814ccfbf40720e053b29c683d43a0";
   };
 
-  buildInputs = [nspr perl zlib];
+  buildInputs = [ nspr perl zlib sqlite ];
 
   patches = [ ./nss-3.12.5-gentoo-fixups.diff ];
 
@@ -38,7 +40,7 @@ stdenv.mkDerivation rec {
 
   makeFlags =
     [ "NSPR_CONFIG_STATUS=" "NSDISTMODE=copy" "BUILD_OPT=1" "SOURCE_PREFIX=\$(out)"
-      "NSS_ENABLE_ECC=1"
+      "NSS_ENABLE_ECC=1" "NSS_USE_SYSTEM_SQLITE=1"
     ]
     ++ stdenv.lib.optional stdenv.is64bit "USE_64=1";
 
