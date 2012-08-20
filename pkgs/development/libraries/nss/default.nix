@@ -9,12 +9,16 @@ let
 
 in
 
-stdenv.mkDerivation {
-  name = "nss-3.13.3";
+stdenv.mkDerivation rec {
+  name = "nss-${version}";
+  version = "3.13.6";
 
-  src = fetchurl {
-    url = http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_13_3_RTM/src/nss-3.13.3.tar.gz;
-    sha256 = "efa10f2c70da4bddabf1a6081964969bb23359b93d6eadbf4739274a77bc3587";
+  src = let
+    uscoreVersion = stdenv.lib.replaceChars ["."] ["_"] version;
+    releasePath = "releases/NSS_${uscoreVersion}_RTM/src/nss-${version}.tar.gz";
+  in fetchurl {
+    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/${releasePath}";
+    sha256 = "f7e90727e0ecc1c29de10da39a79bc9c53b814ccfbf40720e053b29c683d43a0";
   };
 
   buildInputs = [nspr perl zlib];
