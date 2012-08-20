@@ -76,6 +76,7 @@ in
     # FIXME
     nixpkgs.config.packageOverrides = pkgs: {
       #udev = pkgs.systemd;
+      slim = pkgs.slim.override { consolekit = null; };
       lvm2 = pkgs.lvm2.override { udev = pkgs.systemd; };
     };
 
