@@ -120,7 +120,7 @@ in
     powerManagement.resumeCommands =
       ''
         # Tell dhcpcd to rebind its interfaces if it's running.
-        ${config.system.build.systemctl}/bin/systemctl reload dhcpcd.service
+        ${config.system.build.systemd}/bin/systemctl reload dhcpcd.service
       '';
 
   };
