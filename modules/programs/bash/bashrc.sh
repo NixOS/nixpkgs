@@ -31,13 +31,9 @@ fi
 # programmable completion. If we do, and if the current user has
 # installed the package 'bash-completion' in her $HOME/.nix-profile,
 # then completion is enabled automatically.
-if [ -f "$HOME/.nix-profile/etc/bash_completion" ]; then
-    if [ -d "$HOME/.nix-profile/etc/bash_completion.d" ]; then
-        if shopt -q progcomp &>/dev/null; then
-            BASH_COMPLETION_DIR="$HOME/.nix-profile/etc/bash_completion.d"
-            BASH_COMPLETION="$HOME/.nix-profile/etc/bash_completion"
-            . "$BASH_COMPLETION"
-        fi
+if [ -f "$HOME/.nix-profile/etc/profile.d/bash_completion.sh" ]; then
+    if shopt -q progcomp &>/dev/null; then
+        . "$HOME/.nix-profile/etc/profile.d/bash_completion.sh"
     fi
 fi
 
