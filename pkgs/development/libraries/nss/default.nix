@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nspr, perl, zlib, sqlite
+{ stdenv, fetchurl, fetchgit, nspr, perl, zlib, sqlite
 , includeTools ? false
 }:
 
@@ -7,6 +7,12 @@ let
   nssConfig = fetchurl {
     url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/dev-libs/nss/files/3.12-nss-config.in?rev=1.2";
     sha256 = "1ck9q68fxkjq16nflixbqi4xc6bmylmj994h3f1j42g8mp0xf0vd";
+  };
+
+  nssPEM = fetchgit {
+    url = "git://git.fedorahosted.org/git/nss-pem.git";
+    rev = "07a683505d4a0a1113c4085c1ce117425d0afd80";
+    sha256 = "e4a9396d90e50e8b3cceff45f312eda9aaf356423f4eddd354a0e1afbbfd4cf8";
   };
 
 in
@@ -25,12 +31,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ nspr perl zlib sqlite ];
 
+  postUnpack = ''
+    cp -rdv "${nssPEM}/mozilla/security/nss/lib/ckfw/pem" \
+            "$sourceRoot/mozilla/security/nss/lib/ckfw/"
+    chmod -R u+w "$sourceRoot/mozilla/security/nss/lib/ckfw/pem"
+  '';
+
   patches = [ ./nss-3.12.5-gentoo-fixups.diff ];
 
   # Based on the build instructions at
   # http://www.mozilla.org/projects/security/pki/nss/nss-3.11.4/nss-3.11.4-build.html
 
   postPatch = ''
+    sed -i -e 's/^DIRS.*$/& pem/' mozilla/security/nss/lib/ckfw/manifest.mn
     sed -i -e "/^PREFIX =/s:= /usr:= $out:" mozilla/security/nss/config/Makefile
   '';
 
