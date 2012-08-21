@@ -6751,6 +6751,8 @@ let
 
     quack = callPackage ../applications/editors/emacs-modes/quack { };
 
+    rectMark = callPackage ../applications/editors/emacs-modes/rect-mark { };
+
     remember = callPackage ../applications/editors/emacs-modes/remember { };
 
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
