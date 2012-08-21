@@ -250,6 +250,10 @@ let
         ln -s $i/* $out/
       done
 
+      for i in ${toString cfg.packages}; do
+        ln -s $i/etc/systemd/system/* $out/
+      done
+
       ${concatStrings (mapAttrsToList (name: unit:
           concatMapStrings (name2: ''
             mkdir -p $out/${name2}.wants
@@ -288,11 +292,17 @@ in
       };
     };
 
+    boot.systemd.packages = mkOption {
+      default = [];
+      type = types.listOf types.package;
+      description = "Packages providing systemd units.";
+    };
+
     boot.systemd.services = mkOption {
-      description = "Definition of systemd services.";
       default = {};
       type = types.attrsOf types.optionSet;
       options = [ serviceOptions serviceConfig ];
+      description = "Definition of systemd services.";
     };
 
     boot.systemd.defaultUnit = mkOption {
