@@ -39,9 +39,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./nss-3.12.5-gentoo-fixups.diff ];
 
-  # Based on the build instructions at
-  # http://www.mozilla.org/projects/security/pki/nss/nss-3.11.4/nss-3.11.4-build.html
-
   postPatch = ''
     sed -i -e 's/^DIRS.*$/& pem/' mozilla/security/nss/lib/ckfw/manifest.mn
     sed -i -e "/^PREFIX =/s:= /usr:= $out:" mozilla/security/nss/config/Makefile
@@ -49,26 +46,17 @@ stdenv.mkDerivation rec {
 
   preConfigure = "cd mozilla/security/nss";
 
-  BUILD_OPT = "1";
+  makeFlags = [
+    "NSPR_INCLUDE_DIR=${nspr}/include/nspr"
+    "NSPR_LIB_DIR=${nspr}/lib"
+    "NSDISTMODE=copy"
+    "BUILD_OPT=1"
+    "SOURCE_PREFIX=\$(out)"
+    "NSS_ENABLE_ECC=1"
+    "NSS_USE_SYSTEM_SQLITE=1"
+  ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1";
 
-  makeFlags =
-    [ "NSPR_CONFIG_STATUS=" "NSDISTMODE=copy" "BUILD_OPT=1" "SOURCE_PREFIX=\$(out)"
-      "NSS_ENABLE_ECC=1" "NSS_USE_SYSTEM_SQLITE=1"
-    ]
-    ++ stdenv.lib.optional stdenv.is64bit "USE_64=1";
-
-  buildFlags = "nss_build_all";
-
-  NIX_CFLAGS_COMPILE = "-I${nspr}/include/nspr";
-
-  preBuild =
-    ''
-      # Fool it into thinking NSPR has already been built.
-      touch build_nspr
-
-      # Hack to make -lz dependencies work.
-      touch cmd/signtool/-lz cmd/modutil/-lz
-    '';
+  buildFlags = [ "build_coreconf" "build_dbm" "all" ];
 
   postInstall =
     ''
