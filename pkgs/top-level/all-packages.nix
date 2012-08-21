@@ -4146,7 +4146,7 @@ let
 
   libiconvOrEmpty = if (libiconvOrNull == null) then [] else libiconv;
 
-  libiconvOrNull = if gcc ? libc then null else libiconv;
+  libiconvOrNull = if ((gcc ? libc) || stdenv.isGlibc) then null else libiconv;
 
   libiconvOrLibc = if (libiconvOrNull == null) then gcc.libc else libiconv;
 
