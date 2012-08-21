@@ -98,7 +98,7 @@ let
         isGNU = result.system == "i686-gnu";      # GNU/Hurd
         isGlibc = isGNU                           # useful for `stdenvNative'
                || isLinux
-               || result.system = "x86_64-kfreebsd-gnu";
+               || result.system == "x86_64-kfreebsd-gnu";
         isSunOS = result.system == "i686-solaris"
                || result.system == "x86_64-solaris";
         isCygwin = result.system == "i686-cygwin";
