@@ -30,7 +30,7 @@ let
           lib.filter lib.isDerivation initialPath;
       }
 
-      // {
+      // rec {
 
         meta = {
           description = "The default build environment for Unix packages in Nixpkgs";
@@ -96,6 +96,9 @@ let
                || result.system == "armv7l-linux"
                || result.system == "mips64el-linux";
         isGNU = result.system == "i686-gnu";      # GNU/Hurd
+        isGlibc = isGNU                           # useful for `stdenvNative'
+               || isLinux
+               || result.system = "x86_64-kfreebsd-gnu";
         isSunOS = result.system == "i686-solaris"
                || result.system == "x86_64-solaris";
         isCygwin = result.system == "i686-cygwin";
