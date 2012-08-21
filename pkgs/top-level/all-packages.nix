@@ -6758,6 +6758,8 @@ let
     rudel = callPackage ../applications/editors/emacs-modes/rudel { };
 
     scalaMode = callPackage ../applications/editors/emacs-modes/scala-mode { };
+
+    sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
   };
 
   emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
