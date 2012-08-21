@@ -86,4 +86,12 @@ stdenv.mkDerivation rec {
         --subst-var-by includedir $out/include/nss \
         --subst-var-by libdir $out/lib
     ''; # */
+
+  postFixup = ''
+    for libname in freebl3 nssdbm3 softokn3
+    do
+      libfile="$out/lib/lib$libname.so"
+      LD_LIBRARY_PATH=$out/lib $out/bin/shlibsign -v -i "$libfile"
+    done
+  '';
 }
