@@ -1,13 +1,13 @@
 { pkgs, stdenv, nodejs, fetchurl }:
 
-let buildNodePackage = import ../development/web/nodejs/build-node-package.nix {
-  inherit stdenv nodejs;
-}; in
-
 let self = {
+  buildNodePackage = import ../development/web/nodejs/build-node-package.nix {
+    inherit stdenv nodejs;
+  };
+
   "coffee-script" = self."coffee-script-1.3.3";
 
-  "coffee-script-1.3.3" = buildNodePackage rec {
+  "coffee-script-1.3.3" = self.buildNodePackage rec {
     name = "coffee-script-1.3.3";
     src = fetchurl {
       url = "http://registry.npmjs.org/coffee-script/-/${name}.tgz";
