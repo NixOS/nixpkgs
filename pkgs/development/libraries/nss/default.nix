@@ -15,9 +15,12 @@ let
     sha256 = "e4a9396d90e50e8b3cceff45f312eda9aaf356423f4eddd354a0e1afbbfd4cf8";
   };
 
-in
+  secLoadPatch = fetchurl {
+    url = "http://patch-tracker.debian.org/patch/series/dl/nss/2:3.13.5-1/85_security_load.patch";
+    sha256 = "8a8d0ae4ebbd7c389973fa5d26d8bc5f473046c6cb1d8283cb9a3c1f4c565c47";
+  };
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "nss-${version}";
   version = "3.13.6";
 
@@ -37,7 +40,11 @@ stdenv.mkDerivation rec {
     chmod -R u+w "$sourceRoot/mozilla/security/nss/lib/ckfw/pem"
   '';
 
-  patches = [ ./nss-3.12.5-gentoo-fixups.diff ];
+  patches = [
+    ./nss-3.12.5-gentoo-fixups.diff
+    secLoadPatch
+    ./nix_secload_fixup.patch
+  ];
 
   postPatch = ''
     sed -i -e 's/^DIRS.*$/& pem/' mozilla/security/nss/lib/ckfw/manifest.mn
