@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   inherit installjdk;
 
   buildInputs = [unzip makeWrapper];
-  
+
   /**
    * libXt is only needed on amd64
    */

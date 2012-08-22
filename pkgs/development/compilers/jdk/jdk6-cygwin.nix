@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   name = "jdk-1.6.0_20";
 
   src = fetchurl {
-    url = file:///tmp/jdk-6u20-windows-i586.exe ;
+    url = file:///tmp/jdk-6u20-windows-i586.exe;
     sha256 = "0w4afz8a9gi1iyhh47gvhiy59dfrzx0fnmywdff3v5cx696w25fh";
   };
 

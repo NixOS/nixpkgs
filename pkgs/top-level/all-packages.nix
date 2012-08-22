@@ -2352,18 +2352,8 @@ let
     jreOnly = true;
   };
 
-  j2sdk14x = (
-    assert system == "i686-linux";
-    import ../development/compilers/jdk/default-1.4.nix {
-      inherit fetchurl stdenv;
-    });
-
-  jdk5 = (
-    assert system == "i686-linux" || system == "x86_64-linux";
-    callPackage ../development/compilers/jdk/default-5.nix { });
-
-  jdk       = if stdenv.isDarwin then openjdk else jdkdistro true false;
-  jre       = jdkdistro false false;
+  jdk = if stdenv.isDarwin then openjdk else jdkdistro true false;
+  jre = jdkdistro false false;
 
   jdkPlugin = lowPrio (jdkdistro true true);
   jrePlugin = lowPrio (jdkdistro false true);
@@ -2371,8 +2361,7 @@ let
   supportsJDK =
     system == "i686-linux" ||
     system == "x86_64-linux" ||
-    system == "i686-cygwin" ||
-    system == "powerpc-linux";
+    system == "i686-cygwin";
 
   jdkdistro = installjdk: pluginSupport:
        (assert supportsJDK;
@@ -2882,8 +2871,6 @@ let
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
   apacheAntOpenJDK = apacheAnt.override { jdk = openjdk; };
-
-  apacheAnt14 = apacheAnt.override { jdk = j2sdk14x; };
 
   apacheAntGcj = callPackage ../development/tools/build-managers/apache-ant/from-source.nix {
     # must be either pre-built or built with GCJ *alone*
@@ -5033,9 +5020,7 @@ let
 
   javasvn = callPackage ../development/libraries/java/javasvn { };
 
-  jclasslib = callPackage ../development/tools/java/jclasslib {
-    ant = apacheAnt14;
-  };
+  jclasslib = callPackage ../development/tools/java/jclasslib { };
 
   jdom = callPackage ../development/libraries/java/jdom { };
 
@@ -5304,7 +5289,7 @@ let
 
   rpcbind = callPackage ../servers/rpcbind { };
 
-  monetdb = callPackage ../servers/sql/monetdb { };
+  #monetdb = callPackage ../servers/sql/monetdb { };
 
   mongodb = callPackage ../servers/nosql/mongodb {
     boost = boost149;
