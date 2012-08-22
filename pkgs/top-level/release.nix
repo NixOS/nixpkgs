@@ -104,7 +104,7 @@ with (import ./release-lib.nix);
   ghdl = linux;
   ghostscript = linux;
   ghostscriptX = linux;
-  gimp = linux;
+  gimp28 = linux;
   git = linux;
   gitFull = linux;
   glibc = linux;
