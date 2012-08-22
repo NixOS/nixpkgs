@@ -2684,6 +2684,8 @@ let
 
   guile = guile_2_0;
 
+  hadoop = callPackage ../applications/networking/cluster/hadoop { };
+
   io = callPackage ../development/interpreters/io { };
 
   j = callPackage ../development/interpreters/j {};
