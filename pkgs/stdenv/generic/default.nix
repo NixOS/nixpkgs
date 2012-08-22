@@ -42,30 +42,23 @@ let
           (derivation (
             (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
             // (let
-                buildInputs = if attrs ? buildInputs then attrs.buildInputs
-                    else [];
-                buildNativeInputs = if attrs ? buildNativeInputs then
-                    attrs.buildNativeInputs else [];
-                propagatedBuildInputs = if attrs ? propagatedBuildInputs then
-                    attrs.propagatedBuildInputs else [];
-                propagatedBuildNativeInputs = if attrs ?
-                    propagatedBuildNativeInputs then
-                    attrs.propagatedBuildNativeInputs else [];
-                crossConfig = if (attrs ? crossConfig) then attrs.crossConfig else
-                   null;
+              buildInputs = attrs.buildInputs or [];
+              buildNativeInputs = attrs.buildNativeInputs or [];
+              propagatedBuildInputs = attrs.propagatedBuildInputs or [];
+              propagatedBuildNativeInputs = attrs.propagatedBuildNativeInputs or [];
+              crossConfig = attrs.crossConfig or null;
             in
             {
-              builder = if attrs ? realBuilder then attrs.realBuilder else shell;
-              args = if attrs ? args then attrs.args else
-                ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
+              builder = attrs.realBuilder or shell;
+              args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
               stdenv = result;
               system = result.system;
 
-              # That build by the cross compiler
+              # Inputs built by the cross compiler.
               buildInputs = lib.optionals (crossConfig != null) buildInputs;
               propagatedBuildInputs = lib.optionals (crossConfig != null)
                   propagatedBuildInputs;
-              # That build by the usual native compiler
+              # Inputs built by the usual native compiler.
               buildNativeInputs = buildNativeInputs ++ lib.optionals
                 (crossConfig == null) buildInputs;
               propagatedBuildNativeInputs = propagatedBuildNativeInputs ++
@@ -77,13 +70,11 @@ let
           # passed to the builder and is not a dependency.  But since we
           # include it in the result, it *is* available to nix-env for
           # queries.
-          //
-          { meta = if attrs ? meta then attrs.meta else {}; }
+          // { meta = attrs.meta or {}; }
           # Pass through extra attributes that are not inputs, but
           # should be made available to Nix expressions using the
           # derivation (e.g., in assertions).
-          //
-          (if attrs ? passthru then attrs.passthru else {});
+          // (attrs.passthru or {});
 
         # Utility flags to test the type of platform.
         isDarwin = result.system == "i686-darwin"
