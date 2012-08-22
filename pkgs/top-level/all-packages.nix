@@ -7344,6 +7344,8 @@ let
 
   navit = callPackage ../applications/misc/navit { };
 
+  ncdu = callPackage ../tools/misc/ncdu { };
+
   nedit = callPackage ../applications/editors/nedit {
       motif = lesstif;
   };
