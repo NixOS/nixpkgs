@@ -67,4 +67,6 @@ stdenv.mkDerivation {
   inherit (xlibs) libX11;
 
   mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
+
+  meta.license = "unfree";
 }

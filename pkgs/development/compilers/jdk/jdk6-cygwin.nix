@@ -43,4 +43,6 @@ stdenv.mkDerivation rec {
        ./jre/lib/ext/localedata.pack \
        ./lib/tools.pack
   '';
+
+  meta.license = "unfree";
 }
