@@ -32,4 +32,8 @@ stdenv.mkDerivation ({
     fi
     runHook postInstall
   '';
+
+  preFixup = ''
+    find $out -type f -print0 | xargs -0 sed -i 's|${src}|${src.name}|g'
+  '';
 } // args)
