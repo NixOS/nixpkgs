@@ -32,7 +32,7 @@ let
     channel = "stable";
     selinux = false;
     nacl = false;
-    openssl = true;
+    openssl = false;
     gnome = false;
     gnomeKeyring = false;
     proprietaryCodecs = true;
@@ -59,7 +59,7 @@ let
     use_system_libpng = true;
     use_system_libxml = true;
     use_system_speex = true;
-    use_system_ssl = true;
+    use_system_ssl = config.openssl;
     use_system_stlport = true;
     use_system_xdg_utils = true;
     use_system_yasm = true;
