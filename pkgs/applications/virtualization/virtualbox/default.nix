@@ -36,7 +36,7 @@ in stdenv.mkDerivation {
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
-      libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk
+      libcap glib kernel python alsaLib curl pam xorriso makeself perl
       pkgconfig which libXmu ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python;
@@ -70,7 +70,9 @@ in stdenv.mkDerivation {
     cat >> AutoConfig.kmk << END_PATHS
     VBOX_PATH_APP_PRIVATE := $out
     VBOX_PATH_APP_DOCS := $out/doc
-    VBOX_JAVA_HOME := ${jdk}
+    ${optionalString javaBindings ''
+      VBOX_JAVA_HOME := ${jdk}
+    ''}
     END_PATHS
     echo "VBOX_WITH_DOCS :=" >> LocalConfig.kmk
     echo "VBOX_WITH_WARNINGS_AS_ERRORS :=" >> LocalConfig.kmk
