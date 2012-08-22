@@ -4148,7 +4148,7 @@ let
 
   libiconv = callPackage ../development/libraries/libiconv { };
 
-  libiconvOrEmpty = if (libiconvOrNull == null) then [] else libiconv;
+  libiconvOrEmpty = if (libiconvOrNull == null) then [] else [libiconv];
 
   libiconvOrNull =
     if ((gcc ? libc && (gcc.libc != null)) || stdenv.isGlibc)
