@@ -3787,7 +3787,7 @@ let
     gstPluginsBad = pkgs.gst_plugins_bad;
     gstPluginsGood = pkgs.gst_plugins_good;
     gstPluginsUgly = pkgs.gst_plugins_ugly;
-    gstFfmpeg = pkgs.gst_ffmpeg;
+    gstLibAV = pkgs.gst_libav;
   };
 
   gstreamer = callPackage ../development/libraries/gstreamer/gstreamer {};
@@ -3800,7 +3800,7 @@ let
 
   gst_plugins_ugly = callPackage ../development/libraries/gstreamer/gst-plugins-ugly {};
 
-  gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {};
+  gst_libav = callPackage ../development/libraries/gstreamer/gst-libav {};
 
   gnonlin = callPackage ../development/libraries/gstreamer/gnonlin {};
 
@@ -5000,7 +5000,7 @@ let
         icu cairo intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue mesa;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
+      inherit gstreamer gst_plugins_base gst_libav
         gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender kbproto;
       libpng = libpng12;
@@ -5016,7 +5016,7 @@ let
         icu cairo intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
+      inherit gstreamer gst_plugins_base gst_libav
         gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender;
       libpng = libpng12;
@@ -5032,7 +5032,7 @@ let
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
+      inherit gstreamer gst_plugins_base gst_libav
         gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender;
       libpng = libpng12;
@@ -8780,7 +8780,7 @@ let
   gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
     inherit perl intltool pyGtkGlade gettext pkgconfig makeWrapper pygobject
       pyopenssl gtkspell libsexy pycrypto aspell pythonDBus pythonSexy
-      docutils gtk farstream gst_plugins_bad gstreamer gst_ffmpeg;
+      docutils gtk farstream gst_plugins_bad gstreamer gst_libav;
     dbus = dbus.libs;
     inherit (gnome) libglade;
     inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11

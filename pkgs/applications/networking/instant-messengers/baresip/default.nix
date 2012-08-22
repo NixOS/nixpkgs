@@ -1,5 +1,5 @@
 {stdenv, fetchurl, zlib, openssl, libre, librem, pkgconfig
-, cairo, mpg123, gstreamer, gst_ffmpeg, gst_plugins_base, gst_plugins_bad
+, cairo, mpg123, gstreamer, gst_libav, gst_plugins_base, gst_plugins_bad
 , gst_plugins_good, alsaLib, SDL, libv4l, celt, libsndfile, srtp, ffmpeg
 , gsm, speex, portaudio, spandsp, libuuid
 }:
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "3ac15b3d3cf17b2417ba871e7eaaaf41ab10cb30b900adcee357d5e91ea033e7";
   };
   buildInputs = [zlib openssl libre librem pkgconfig
-    cairo mpg123 gstreamer gst_ffmpeg gst_plugins_base gst_plugins_bad gst_plugins_good
+    cairo mpg123 gstreamer gst_libav gst_plugins_base gst_plugins_bad gst_plugins_good
     alsaLib SDL libv4l celt libsndfile srtp ffmpeg gsm speex portaudio spandsp libuuid
     ];
   makeFlags = [
