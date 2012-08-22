@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   patches = [ ./smb-tmpdir.patch ];
 
   postPatch =
-    '' for i in $(find kvm -type f)
+    '' for i in $(find . -type f)
        do
          sed -i "$i" \
              -e 's|/bin/bash|/bin/sh|g ;
