@@ -33,7 +33,7 @@ rec {
       "--with-system-zlib"
       "--with-system-bz2"
       "--with-system-nspr"
-      # "--with-system-nss"
+      "--with-system-nss"
       # "--with-system-png" # <-- "--with-system-png won't work because the system's libpng doesn't have APNG support"
       # "--enable-system-cairo" # disabled for the moment because our Cairo is too old
       "--enable-system-sqlite"
@@ -54,7 +54,7 @@ rec {
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-        alsaLib nspr /* nss */ libnotify xlibs.pixman yasm mesa
+        alsaLib nspr nss libnotify xlibs.pixman yasm mesa
         xlibs.libXScrnSaver xlibs.scrnsaverproto
         xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
       ];
@@ -136,7 +136,7 @@ rec {
       
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
-        dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
+        dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
         xlibs.pixman yasm mesa sqlite file unzip
       ];
 
