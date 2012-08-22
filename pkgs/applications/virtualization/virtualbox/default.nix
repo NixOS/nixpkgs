@@ -9,7 +9,9 @@
 with stdenv.lib;
 
 let
-  version = "4.1.18";
+
+  version = "4.1.20";
+
   forEachModule = action: ''
     for mod in \
       $sourcedir/out/linux.*/release/bin/src/vboxdrv \
@@ -26,12 +28,13 @@ let
       make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD=/do_not_use_depmod ${action}
     done
   '';
+
 in stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "e650e4fdc23581b9edc0e5d5705cc596c76796851ebf65ccda0edb8e413fa3b7";
+    sha256 = "b132dbc5c6e9ed77aba737ec35b488ac152aa362c3ad49d466897bc410324aeb";
   };
 
   buildInputs =
@@ -48,8 +51,8 @@ in stdenv.mkDerivation {
         -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
         -i configure
-    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 
-    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 
+    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2
+    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2
     find . -type f | xargs sed 's/depmod -a/true/' -i
     export USER=nix
     set +x
