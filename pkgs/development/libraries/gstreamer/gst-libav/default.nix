@@ -1,4 +1,4 @@
-{ fetchgit, stdenv, autoconf, automake, libtool, pkgconfig
+{ fetchurl, stdenv, autoconf, automake, libtool, pkgconfig
 , gst_plugins_base, bzip2, yasm
 , useInternalLibAV ? false, libav ? null }:
 
@@ -6,10 +6,12 @@ stdenv.mkDerivation rec {
   name = "gst-libav-${version}";
   version = "0.11.92";
 
-  src = fetchgit {
-    url = "git://anongit.freedesktop.org/gstreamer/gst-ffmpeg";
-    rev = "refs/tags/RELEASE-${version}";
-    sha256 = "cd0fb825bfceaea64581272e3db812595a7ee1644281bdc466dc1ecc9c46f8b6";
+  src = fetchurl {
+    urls = [
+      "${meta.homepage}/src/gst-libav/${name}.tar.xz"
+      "mirror://gentoo/distfiles/${name}.tar.xz"
+    ];
+    sha256 = "6376c421e14e3281ec86fcbf3fc62a5296a9705b025dbf0e5841ddf90c8ec2b7";
   };
 
   preConfigure = "autoreconf -vfi";
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     ++ (if useInternalLibAV then [ yasm ] else [ libav ]);
 
   meta = {
-    homepage = "http://gstreamer.freedesktop.org/releases/gst-ffmpeg";
+    homepage = http://gstreamer.freedesktop.org;
     description = "GStreamer's plug-in using LibAV";
     license = "GPLv2+";
   };
