@@ -3,7 +3,7 @@
 , useInternalLibAV ? false, libav ? null }:
 
 stdenv.mkDerivation rec {
-  name = "gst-ffmpeg-${version}";
+  name = "gst-libav-${version}";
   version = "0.11.92";
 
   src = fetchgit {
@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -vfi";
 
-  # Upstream strongly recommends against using --with-system-ffmpeg,
+  # Upstream strongly recommends against using --with-system-libav,
   # but we do it anyway because we're so hardcore (and we don't want
-  # multiple copies of ffmpeg).
+  # multiple copies of libav).
   configureFlags = stdenv.lib.optionalString (!useInternalLibAV) "--with-system-libav";
 
   buildInputs =
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://gstreamer.freedesktop.org/releases/gst-ffmpeg";
-    description = "GStreamer's plug-in using FFmpeg";
+    description = "GStreamer's plug-in using LibAV";
     license = "GPLv2+";
   };
 }
