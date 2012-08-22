@@ -2355,7 +2355,6 @@ let
   jdk = if stdenv.isDarwin then openjdk else jdkdistro true false;
   jre = jdkdistro false false;
 
-  jdkPlugin = lowPrio (jdkdistro true true);
   jrePlugin = lowPrio (jdkdistro false true);
 
   supportsJDK =
