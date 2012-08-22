@@ -65,7 +65,6 @@ in stdenv.mkDerivation rec {
     mv $out/public $out/include
     mv $out/*.OBJ/* $out/
     rmdir $out/*.OBJ
-    ${if includeTools then "" else "rm -rf $out/bin; mkdir $out/bin"}
 
     cp -av config/nss-config $out/bin/nss-config
   '';
@@ -76,5 +75,7 @@ in stdenv.mkDerivation rec {
       libfile="$out/lib/lib$libname.so"
       LD_LIBRARY_PATH=$out/lib $out/bin/shlibsign -v -i "$libfile"
     done
+  '' + stdenv.lib.optionalString (!includeTools) ''
+    find $out/bin -type f \( -name nss-config -o -delete \)
   '';
 }
