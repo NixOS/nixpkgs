@@ -1,12 +1,21 @@
 { stdenv, fetchurl, openssl, python, zlib, v8, linkV8Headers ? false, utillinux }:
 
+let
+
+  espipe_patch = fetchurl {
+    url = https://github.com/joyent/libuv/commit/0ac2fdc55455794e057e4999a2e785ca8fbfb1b2.patch;
+    sha256 = "0mqgbsz23b3zp19dwk12ys14b031hssmlp40dylb7psj937qcpzi";
+  };
+
+in
+
 stdenv.mkDerivation rec {
-  version = "0.8.7";
+  version = "0.8.8";
   name = "nodejs-${version}";
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "014x3r5vayb1zhmv4cdd9kwdcz408g2yjgvdwfk8xl3s6j4995zs";
+    sha256 = "0cri5r191l5pw8a8pf3gs7hfjm3rrz6kdnm3l8wghmp9p12p0aq9";
   };
 
   configureFlags = [
@@ -21,6 +30,9 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf} configure
+    pushd deps/uv
+    patch -p 1 < ${espipe_patch}
+    popd
   '';
 
   postInstall = ''
