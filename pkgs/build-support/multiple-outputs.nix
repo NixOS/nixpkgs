@@ -34,6 +34,12 @@ stdenv.mkDerivation (args // {
         echo "$propagatedBuildNativeInputs $out" > "$dev/nix-support/propagated-build-native-inputs"
         propagatedBuildNativeInputs=
       fi
+
+      if [ -n "$bin" ]; then
+        prefix="$bin" stripDirs "bin sbin" "${stripDebugFlags:--S}"
+        prefix="$bin" patchELF
+        patchShebangs "$bin"
+      fi
     ''; # */
 
 })

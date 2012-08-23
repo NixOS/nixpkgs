@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, fftw, libsndfile }:
+{ stdenv, fetchurl, multipleOutputs, pkgconfig, fftw, libsndfile }:
 
-stdenv.mkDerivation rec {
+multipleOutputs rec {
   name = "libsamplerate-0.1.7";
 
   src = fetchurl {
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   # maybe interesting configure flags:
   #--disable-fftw          disable usage of FFTW
   #--disable-cpu-clip      disable tricky cpu specific clipper
+
+  outputs = [ "dev" "bin" "out" ];
 
   meta = {
     description = "Sample Rate Converter for audio";
