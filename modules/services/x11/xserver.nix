@@ -379,7 +379,7 @@ in
 
     boot.systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
-    boot.systemd.services."display-manager.service" =
+    boot.systemd.services."display-manager" =
       { after = [ "systemd-udev-settle.service" ];
 
         restartIfChanged = false;

@@ -297,7 +297,7 @@ in
 
     boot.systemd.services =
       flip mapAttrs' config.jobs (name: job:
-        nameValuePair "${job.name}.service" job.unit);
+        nameValuePair job.name job.unit);
 
   };
 

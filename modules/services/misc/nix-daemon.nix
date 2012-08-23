@@ -248,7 +248,7 @@ in
           '';
       };
      
-    boot.systemd.services."nix-daemon.service" =
+    boot.systemd.services."nix-daemon" =
       { description = "Nix Daemon";
 
         path = [ nix pkgs.openssl pkgs.utillinux ]

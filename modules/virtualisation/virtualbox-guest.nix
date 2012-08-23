@@ -39,7 +39,7 @@ if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
     boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
     jobs.virtualbox =
-      { description = "VirtualBox service";
+      { description = "VirtualBox Guest Services";
 
         wantedBy = [ "multi-user.target" ];
         requires = [ "dev-vboxguest.device" ];

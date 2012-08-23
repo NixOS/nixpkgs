@@ -314,7 +314,7 @@ in
       }
     ];
 
-    boot.systemd.services."set-ssh-keys.service" =
+    boot.systemd.services."set-ssh-keys" =
       { description = "Update authorized SSH keys";
 
         wantedBy = [ "multi-user.target" ];
@@ -328,7 +328,7 @@ in
           '';
       };
 
-    boot.systemd.services."sshd.service" =
+    boot.systemd.services.sshd =
       { description = "SSH Daemon";
 
         wantedBy = [ "multi-user.target" ];

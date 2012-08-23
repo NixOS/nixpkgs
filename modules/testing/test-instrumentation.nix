@@ -11,7 +11,7 @@ let kernel = config.boot.kernelPackages.kernel; in
 
   config = {
 
-    boot.systemd.services."backdoor.service" =
+    boot.systemd.services.backdoor =
       { wantedBy = [ "multi-user.target" ];
         requires = [ "dev-hvc0.device" ];
         after = [ "dev-hvc0.device" ];

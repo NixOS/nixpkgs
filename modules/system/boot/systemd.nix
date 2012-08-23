@@ -358,7 +358,7 @@ in
     boot.systemd.units =
       { "rescue.service".text = rescueService; }
       // { "fs.target" = { text = fsTarget; wantedBy = [ "multi-user.target" ]; }; }
-      // mapAttrs serviceToUnit cfg.services;
+      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services;
 
   };
 
