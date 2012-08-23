@@ -111,10 +111,14 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # Cause all active target units to be restarted below.
             # This should start most changed units we stop here as
             # well as any new dependencies (including new mounts and
-            # swap devices).
-            my $unitInfo = parseUnit($newUnitFile);
-            unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "false")) {
-                write_file($restartListFile, { append => 1 }, "$unit\n");
+            # swap devices).  FIXME: the suspend target is sometimes
+            # active after the system has resumed, which probably
+            # should not be the case.  Just ignore it.
+            if ($unit ne "suspend.target" && $unit ne "hibernate.target") {
+                my $unitInfo = parseUnit($newUnitFile);
+                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "false")) {
+                    write_file($restartListFile, { append => 1 }, "$unit\n");
+                }
             }
         } elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
             if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
