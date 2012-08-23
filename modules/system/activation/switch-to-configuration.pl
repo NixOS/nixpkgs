@@ -130,7 +130,9 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
-                if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "true")) {
+                if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "true")
+                    || $unit eq "systemd-user-sessions.service")
+                {
                     push @unitsToSkip, $unit;
                 } else {
                     # Record that this unit needs to be started below.  We
