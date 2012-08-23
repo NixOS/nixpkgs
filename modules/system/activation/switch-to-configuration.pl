@@ -91,23 +91,27 @@ sub boolIsTrue {
     return $s eq "yes" || $s eq "true";
 }
 
-# Forget about previously failed services.
-system("@systemd@/bin/systemctl", "reset-failed");
-
 # Stop all services that no longer exist or have changed in the new
 # configuration.
 my (@unitsToStop, @unitsToSkip);
 my $activePrev = getActiveUnits;
 while (my ($unit, $state) = each %{$activePrev}) {
     my $baseUnit = $unit;
+
     # Recognise template instances.
     $baseUnit = "$1\@.$2" if $unit =~ /^(.*)@[^\.]*\.(.*)$/;
     my $prevUnitFile = "/etc/systemd/system/$baseUnit";
     my $newUnitFile = "@out@/etc/systemd/system/$baseUnit";
+
+    my $baseName = $baseUnit;
+    $baseName =~ s/\.[a-z]*$//;
+
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         if (! -e $newUnitFile) {
             push @unitsToStop, $unit;
-        } elsif ($unit =~ /\.target$/) {
+        }
+
+        elsif ($unit =~ /\.target$/) {
             # Cause all active target units to be restarted below.
             # This should start most changed units we stop here as
             # well as any new dependencies (including new mounts and
@@ -120,7 +124,9 @@ while (my ($unit, $state) = each %{$activePrev}) {
                     write_file($restartListFile, { append => 1 }, "$unit\n");
                 }
             }
-        } elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
+        }
+
+        elsif (abs_path($prevUnitFile) ne abs_path($newUnitFile)) {
             if ($unit eq "sysinit.target" || $unit eq "basic.target" || $unit eq "multi-user.target" || $unit eq "graphical.target") {
                 # Do nothing.  These cannot be restarted directly.
             } elsif ($unit =~ /\.mount$/) {
@@ -131,14 +137,26 @@ while (my ($unit, $state) = each %{$activePrev}) {
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
                 if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "true")
-                    || $unit eq "systemd-user-sessions.service")
+                    || $unit eq "systemd-user-sessions.service"
+                    || $unit eq "systemd-journald.service")
                 {
                     push @unitsToSkip, $unit;
                 } else {
+                    # If this unit has a corresponding socket unit,
+                    # then stop the socket unit as well, and restart
+                    # the socket instead of the service.
+                    if ($unit =~ /\.service$/ && defined $activePrev->{"$baseName.socket"}) {
+                        push @unitsToStop, "$baseName.socket";
+                        write_file($restartListFile, { append => 1 }, "$baseName.socket\n");
+                    }
+
                     # Record that this unit needs to be started below.  We
                     # write this to a file to ensure that the service gets
                     # restarted if we're interrupted.
-                    write_file($restartListFile, { append => 1 }, "$unit\n");
+                    else {
+                        write_file($restartListFile, { append => 1 }, "$unit\n");
+                    }
+
                     push @unitsToStop, $unit;
                 }
             }
@@ -154,6 +172,17 @@ sub pathToUnitName {
     $path =~ s/\//-/g;
     # FIXME: handle - and unprintable characters.
     return $path;
+}
+
+sub unique {
+    my %seen;
+    my @res;
+    foreach my $name (@_) {
+        next if $seen{$name};
+        $seen{$name} = 1;
+        push @res, $name;
+    }
+    return @res;
 }
 
 # Compare the previous and new fstab to figure out which filesystems
@@ -189,6 +218,7 @@ foreach my $mountPoint (keys %prevFstab) {
 }
 
 if (scalar @unitsToStop > 0) {
+    @unitsToStop = unique(@unitsToStop);
     print STDERR "stopping the following units: ", join(", ", sort(@unitsToStop)), "\n";
     system("@systemd@/bin/systemctl", "stop", "--", @unitsToStop); # FIXME: ignore errors?
 }
@@ -204,13 +234,11 @@ system("@out@/activate", "@out@") == 0 or $res = 2;
 
 # FIXME: Re-exec systemd if necessary.
 
+# Forget about previously failed services.
+system("@systemd@/bin/systemctl", "reset-failed");
+
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
-
-sub unique {
-    my %unique = map { $_, 1 } @_;
-    return sort(keys(%unique));
-}
 
 # Start all active targets, as well as changed units we stopped above.
 # The latter is necessary because some may not be dependencies of the
@@ -219,7 +247,7 @@ sub unique {
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
 my @start = unique("default.target", split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
-print STDERR "starting the following units: ", join(", ", @start), "\n";
+print STDERR "starting the following units: ", join(", ", sort(@start)), "\n";
 system("@systemd@/bin/systemctl", "start", "--", @start) == 0 or $res = 4;
 unlink($restartListFile);
 
@@ -227,7 +255,7 @@ unlink($restartListFile);
 # units.
 my @reload = unique(split '\n', read_file($reloadListFile, err_mode => 'quiet') // "");
 if (scalar @reload > 0) {
-    print STDERR "reloading the following units: ", join(", ", @reload), "\n";
+    print STDERR "reloading the following units: ", join(", ", sort(@reload)), "\n";
     system("@systemd@/bin/systemctl", "reload", "--", @reload) == 0 or $res = 4;
     unlink($reloadListFile);
 }
