@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, xz }:
+{ stdenv, fetchurl, multipleOutputs, xz }:
 
-stdenv.mkDerivation rec {
+multipleOutputs rec {
   name = "libogg-1.3.0";
 
   src = fetchurl {
@@ -11,19 +11,6 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ xz ];
 
   outputs = [ "dev" "doc" "out" ];
-
-  configureFlags = [ "--includedir=$(dev)/include" ];
-
-  installFlags = [ "pkgconfigdir=$(dev)/lib/pkgconfig" ];
-
-  postInstall =
-    ''
-      mkdir -p $doc/share/doc
-      mv $out/share/doc/* $doc/share/doc
-
-      mkdir -p $dev/nix-support
-      echo $out > $dev/nix-support/propagated-build-native-inputs
-    ''; # */
 
   meta = {
     homepage = http://xiph.org/ogg/;

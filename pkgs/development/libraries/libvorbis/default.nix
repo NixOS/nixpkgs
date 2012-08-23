@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, libogg, xz }:
+{ stdenv, fetchurl, multipleOutputs, libogg, xz }:
 
-stdenv.mkDerivation rec {
+multipleOutputs rec {
   name = "libvorbis-1.3.3";
 
   src = fetchurl {
@@ -12,20 +12,6 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libogg ];
 
   outputs = [ "dev" "out" "doc" ];
-
-  configureFlags = [ "--includedir=$(dev)/include" ];
-
-  installFlags = [ "pkgconfigdir=$(dev)/lib/pkgconfig" ];
-
-  postInstall =
-    ''
-      mkdir -p $doc/share/doc
-      mv $out/share/doc/* $doc/share/doc
-
-      mkdir -p "$dev/nix-support"
-      echo "$propagatedBuildNativeInputs $out" > "$dev/nix-support/propagated-build-native-inputs"
-      propagatedBuildNativeInputs=
-    ''; # */
 
   meta = {
     homepage = http://xiph.org/vorbis/;

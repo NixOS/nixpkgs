@@ -327,6 +327,8 @@ let
     inherit stdenv perl cpio contents ubootChooser;
   };
 
+  multipleOutputs = import ../build-support/multiple-outputs.nix { inherit (pkgs) stdenv; };
+
   makeWrapper = makeSetupHook {} ../build-support/make-wrapper/make-wrapper.sh;
 
   makeModulesClosure = {kernel, rootModules, allowMissing ? false}:

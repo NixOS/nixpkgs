@@ -1,6 +1,6 @@
-{stdenv, fetchurl, flac, libogg, libvorbis, pkgconfig }:
+{ stdenv, fetchurl, multipleOutputs, flac, libogg, libvorbis, pkgconfig }:
 
-stdenv.mkDerivation rec {
+multipleOutputs rec {
   name = "libsndfile-1.0.23";
 
   src = fetchurl {
@@ -8,24 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0k9x4804gfh9d9zd4rm1v2izm8l716rzk4d6jlrjcf45b5sw7jal";
   };
 
-  buildInputs = [pkgconfig flac libogg libvorbis];
+  buildInputs = [ pkgconfig flac libogg libvorbis ];
 
   enableParallelBuilding = true;
 
   outputs = [ "dev" "out" "bin" "doc" ];
-
-  configureFlags = [ "--bindir=$(bin)/bin" "--includedir=$(dev)/include" "--mandir=$(bin)/share/man" ];
-
-  installFlags = [ "pkgconfigdir=$(dev)/lib/pkgconfig m4datadir=$(dev)/share/aclocal" ];
-
-  postInstall =
-    ''
-      if [ -e $out/share/doc ]; then
-        mkdir -p $doc/share/doc
-        mv $out/share/doc/* $doc/share/doc
-        rmdir $out/share/doc
-      fi
-    ''; # */
 
   meta = {
     description = "Libsndfile, a C library for reading and writing files containing sampled sound";
