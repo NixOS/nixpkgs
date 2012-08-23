@@ -3142,6 +3142,8 @@ let
 
   premake = callPackage ../development/tools/misc/premake { };
 
+  pstack = callPackage ../development/tools/misc/gdb/pstack.nix { };
+
   radare = callPackage ../development/tools/analysis/radare {
     inherit (gnome) vte;
     lua = lua5;
