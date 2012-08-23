@@ -32,15 +32,12 @@ with pkgs.lib;
 
         startOn = "started udev";
 
-        task = true;
-
-        script = ''
+        preStart = ''
           for i in $(seq 0 $(($(nproc) - 1))); do
             ${pkgs.cpufrequtils}/bin/cpufreq-set -g ${config.powerManagement.cpuFreqGovernor} -c $i
           done
         '';
       };
-      
   };
 
 }
