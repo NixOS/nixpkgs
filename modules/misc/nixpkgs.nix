@@ -80,6 +80,7 @@ in
       lvm2 = pkgs.lvm2.override { udev = pkgs.systemd; };
       upower = pkgs.upower.override { useSystemd = true; };
       polkit = pkgs.polkit.override { useSystemd = true; };
+      consolekit = null;
     };
 
   };
