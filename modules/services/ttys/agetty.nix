@@ -94,6 +94,8 @@ with pkgs.lib;
         # Some login implementations ignore SIGTERM, so we send SIGHUP
         # instead, to ensure that login terminates cleanly.
         KillSignal=SIGHUP
+
+        X-RestartIfChanged=false
       '';
     
     boot.systemd.units."serial-getty@.service".text =
@@ -127,6 +129,8 @@ with pkgs.lib;
         # Some login implementations ignore SIGTERM, so we send SIGHUP
         # instead, to ensure that login terminates cleanly.
         KillSignal=SIGHUP
+        
+        X-RestartIfChanged=false
       '';
 
     environment.etc = singleton
