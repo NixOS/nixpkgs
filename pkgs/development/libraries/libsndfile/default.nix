@@ -10,6 +10,23 @@ stdenv.mkDerivation rec {
 
   buildInputs = [pkgconfig flac libogg libvorbis];
 
+  enableParallelBuilding = true;
+
+  outputs = [ "dev" "out" "bin" "doc" ];
+
+  configureFlags = [ "--bindir=$(bin)/bin" "--includedir=$(dev)/include" "--mandir=$(bin)/share/man" ];
+
+  installFlags = [ "pkgconfigdir=$(dev)/lib/pkgconfig m4datadir=$(dev)/share/aclocal" ];
+
+  postInstall =
+    ''
+      if [ -e $out/share/doc ]; then
+        mkdir -p $doc/share/doc
+        mv $out/share/doc/* $doc/share/doc
+        rmdir $out/share/doc
+      fi
+    ''; # */
+
   meta = {
     description = "Libsndfile, a C library for reading and writing files containing sampled sound";
 

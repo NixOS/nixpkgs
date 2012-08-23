@@ -18,6 +18,23 @@ stdenv.mkDerivation rec {
       })
     ];
 
+  enableParallelBuilding = true;
+
+  outputs = [ "dev" "out" "bin" "doc" ];
+
+  configureFlags = [ "--bindir=$(bin)/bin" "--includedir=$(dev)/include" "--mandir=$(bin)/share/man" ];
+
+  installFlags = [ "pkgconfigdir=$(dev)/lib/pkgconfig m4datadir=$(dev)/share/aclocal" ];
+
+  postInstall =
+    ''
+      if [ -e $out/share/doc ]; then
+        mkdir -p $doc/share/doc
+        mv $out/share/doc/* $doc/share/doc
+        rmdir $out/share/doc
+      fi
+    ''; # */
+
   meta = {
     homepage = http://flac.sourceforge.net;
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
