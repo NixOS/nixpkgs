@@ -3,6 +3,7 @@
 let
   loader386 = "${glibc}/lib/ld-linux.so.2";
   loaderAmd64 = "${glibc}/lib/ld-linux-x86-64.so.2";
+  loaderArm = "${glibc}/lib/ld-linux.so.3";
 in
 
 stdenv.mkDerivation {
@@ -28,6 +29,7 @@ stdenv.mkDerivation {
     # !!! substituteInPlace does not seems to be effective.
     sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
     sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c
+    sed -i 's,/lib64/ld-linux-x86-64.so.3,${loaderArm},' src/cmd/5l/asm.c
     sed -i 's,/usr/share/zoneinfo/,${glibc}/share/zoneinfo/,' src/pkg/time/zoneinfo_unix.go
 
     #sed -i -e 's,/bin/cat,${coreutils}/bin/cat,' \
@@ -49,7 +51,9 @@ stdenv.mkDerivation {
   GOOS = "linux";
   GOARCH = if (stdenv.system == "i686-linux") then "386"
           else if (stdenv.system == "x86_64-linux") then "amd64"
+          else if (stdenv.system == "armv5tel-linux") then "arm"
           else throw "Unsupported system";
+  GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
 
   installPhase = ''
     mkdir -p "$out/bin"
