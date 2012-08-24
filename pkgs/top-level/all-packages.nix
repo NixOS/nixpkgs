@@ -7117,6 +7117,8 @@ let
 
   bip = callPackage ../applications/networking/irc/bip { };
 
+  jack_capture = callPackage ../applications/audio/jack-capture { };
+
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
   jedit = callPackage ../applications/editors/jedit { };
