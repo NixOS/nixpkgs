@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, multipleOutputs, pkgconfig, fftw, libsndfile }:
+{ stdenv, fetchurl, multipleOutputs, pkgconfig, libsndfile }:
 
 multipleOutputs rec {
   name = "libsamplerate-0.1.7";
@@ -9,7 +9,7 @@ multipleOutputs rec {
   };
 
   buildInputs = [ pkgconfig ];
-  propagatedBuildInputs = [ fftw libsndfile ];
+  propagatedBuildInputs = [ libsndfile ];
 
   # maybe interesting configure flags:
   #--disable-fftw          disable usage of FFTW
