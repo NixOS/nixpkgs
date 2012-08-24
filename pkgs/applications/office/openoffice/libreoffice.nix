@@ -144,6 +144,8 @@ stdenv.mkDerivation rec {
     "--without-system-nss"
     "--without-system-sampleicc"
     "--without-system-libexttextcat"
+
+    "--with-java-target-version=1.6" # The default 1.7 not supported
   ];
 
   buildInputs = [
