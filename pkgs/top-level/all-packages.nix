@@ -966,6 +966,8 @@ let
 
   less = callPackage ../tools/misc/less { };
 
+  lockfileProgs = callPackage ../tools/misc/lockfile-progs { };
+
   logstash = callPackage ../tools/misc/logstash { };
 
   klavaro = callPackage ../games/klavaro {};
