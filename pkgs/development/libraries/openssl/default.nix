@@ -45,8 +45,8 @@ stdenv.mkDerivation {
 
   patches = patchesCross false;
 
-  # TODO: separate lib and bin.
-  outputs = [ "out" "man" ];
+  # TODO: separate lib.
+  outputs = [ "out" "man" "bin" ];
 
   buildNativeInputs = [ perl ];
 
@@ -66,6 +66,11 @@ stdenv.mkDerivation {
       if [ -n "$(echo $out/lib/*.so)" ]; then
           rm $out/lib/*.a
       fi
+
+      mkdir -p $bin
+      mv $out/bin $bin/
+
+      rm -rf $out/ssl/misc
     ''; # */
 
   crossAttrs = {
