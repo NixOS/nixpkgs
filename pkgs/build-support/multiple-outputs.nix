@@ -9,12 +9,16 @@ stdenv.mkDerivation (args // {
   configureFlags =
     optionals (elem "bin" outputs)
       [ "--bindir=$(bin)/bin" "--mandir=$(bin)/share/man" ]
+    ++ optionals (elem "lib" outputs)
+      [ "--libdir=$(lib)/lib" ]
     ++ optional (elem "dev" outputs)
-      "--includedir=$(dev)/include";
+      "--includedir=$(dev)/include"
+    ++ args.configureFlags or [];
 
   installFlags =
     optionals (elem "dev" outputs)
-      [ "pkgconfigdir=$(dev)/lib/pkgconfig" "m4datadir=$(dev)/share/aclocal" ];
+      [ "pkgconfigdir=$(dev)/lib/pkgconfig" "m4datadir=$(dev)/share/aclocal" "aclocaldir=$(dev)/share/aclocal" ]
+    ++ args.installFlags or [];
 
   postInstall =
     ''
@@ -31,15 +35,17 @@ stdenv.mkDerivation (args // {
           echo "$propagatedBuildInputs" > "$dev/nix-support/propagated-build-inputs"
           propagatedBuildInputs=
         fi
-        echo "$propagatedBuildNativeInputs $out" > "$dev/nix-support/propagated-build-native-inputs"
+        echo "$out $lib $propagatedBuildNativeInputs" > "$dev/nix-support/propagated-build-native-inputs"
         propagatedBuildNativeInputs=
+      elif [ -n "$out" ]; then
+        propagatedBuildNativeInputs="$lib $propagatedBuildNativeInputs"
       fi
 
-      if [ -n "$bin" ]; then
-        prefix="$bin" stripDirs "bin sbin" "${stripDebugFlags:--S}"
-        prefix="$bin" patchELF
-        patchShebangs "$bin"
-      fi
+      for i in $bin $lib; do
+        prefix="$i" stripDirs "lib lib64 libexec bin sbin" "${stripDebugFlags:--S}"
+        prefix="$i" patchELF
+        patchShebangs "$i"
+      done
     ''; # */
 
 })
