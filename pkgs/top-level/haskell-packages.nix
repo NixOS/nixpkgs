@@ -1811,6 +1811,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {
     X11 = self.X11_1_5_0_1;
+    split = self.split_0_1;
   };
 
   # Tools.
