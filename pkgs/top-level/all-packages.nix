@@ -327,7 +327,9 @@ let
     inherit stdenv perl cpio contents ubootChooser;
   };
 
-  multipleOutputs = import ../build-support/multiple-outputs.nix { inherit (pkgs) stdenv; };
+  stdenvMulti = stdenv // {
+    mkDerivation = import ../build-support/multiple-outputs.nix { inherit (pkgs) stdenv; };
+  };
 
   makeWrapper = makeSetupHook {} ../build-support/make-wrapper/make-wrapper.sh;
 
@@ -4133,7 +4135,9 @@ let
 
   libQGLViewer = callPackage ../development/libraries/libqglviewer { };
 
-  libsamplerate = callPackage ../development/libraries/libsamplerate { };
+  libsamplerate = callPackage ../development/libraries/libsamplerate {
+    stdenv = stdenvMulti;
+  };
 
   libspectre = callPackage ../development/libraries/libspectre { };
 
@@ -4226,7 +4230,9 @@ let
 
   libofx = callPackage ../development/libraries/libofx { };
 
-  libogg = callPackage ../development/libraries/libogg { };
+  libogg = callPackage ../development/libraries/libogg {
+    stdenv = stdenvMulti;
+  };
 
   liboggz = callPackage ../development/libraries/liboggz { };
 
@@ -4267,7 +4273,9 @@ let
   # To bootstrap SBCL, I need CLisp 2.44.1; it needs libsigsegv 2.5
   libsigsegv_25 = callPackage ../development/libraries/libsigsegv/2.5.nix { };
 
-  libsndfile = callPackage ../development/libraries/libsndfile { };
+  libsndfile = callPackage ../development/libraries/libsndfile {
+    stdenv = stdenvMulti;
+  };
 
   libsoup = callPackage ../development/libraries/libsoup { };
 
@@ -4330,7 +4338,9 @@ let
 
   libvterm = callPackage ../development/libraries/libvterm { };
 
-  libvorbis = callPackage ../development/libraries/libvorbis { };
+  libvorbis = callPackage ../development/libraries/libvorbis {
+    stdenv = stdenvMulti;
+  };
 
   libwebp = callPackage ../development/libraries/libwebp { };
 
@@ -6860,7 +6870,9 @@ let
 
   firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
-  flac = callPackage ../applications/audio/flac { };
+  flac = callPackage ../applications/audio/flac {
+    stdenv = stdenvMulti;
+  };
 
   flashplayer = flashplayer11;
 

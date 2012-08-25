@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, multipleOutputs, xz }:
+{ stdenv, fetchurl, xz }:
 
-multipleOutputs rec {
+stdenv.mkDerivation rec {
   name = "libogg-1.3.0";
 
   src = fetchurl {

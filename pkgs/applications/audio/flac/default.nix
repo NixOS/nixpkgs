@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, multipleOutputs, libogg }:
+{ stdenv, fetchurl, libogg }:
 
-multipleOutputs rec {
+stdenv.mkDerivation rec {
   name = "flac-1.2.1";
 
   src = fetchurl {

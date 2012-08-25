@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, multipleOutputs, libogg, xz }:
+{ stdenv, fetchurl, libogg, xz }:
 
-multipleOutputs rec {
+stdenv.mkDerivation rec {
   name = "libvorbis-1.3.3";
 
   src = fetchurl {

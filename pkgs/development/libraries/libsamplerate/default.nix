@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, multipleOutputs, pkgconfig, libsndfile }:
+{ stdenv, fetchurl, pkgconfig, libsndfile }:
 
-multipleOutputs rec {
+stdenv.mkDerivation rec {
   name = "libsamplerate-0.1.7";
 
   src = fetchurl {

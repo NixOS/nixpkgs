@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, multipleOutputs, flac, libogg, libvorbis, pkgconfig }:
+{ stdenv, fetchurl, flac, libogg, libvorbis, pkgconfig }:
 
-multipleOutputs rec {
+stdenv.mkDerivation rec {
   name = "libsndfile-1.0.23";
 
   src = fetchurl {
