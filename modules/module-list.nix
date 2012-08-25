@@ -80,6 +80,7 @@
   ./services/hardware/udisks.nix
   ./services/hardware/upower.nix
   ./services/logging/klogd.nix
+  ./services/logging/logcheck.nix
   ./services/logging/logrotate.nix
   ./services/logging/logstash.nix
   ./services/logging/syslogd.nix
