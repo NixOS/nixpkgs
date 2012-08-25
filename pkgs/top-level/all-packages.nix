@@ -4122,6 +4122,8 @@ let
 
   liblqr1 = callPackage ../development/libraries/liblqr-1 { };
 
+  liblockfile = callPackage ../development/libraries/liblockfile { };
+
   libmhash = callPackage ../development/libraries/libmhash {};
 
   libmtp = callPackage ../development/libraries/libmtp { };
