@@ -5,7 +5,7 @@ let
   options = "-Dbuild.compiler=gcj";   # FIXME: We assume GCJ here.
 
   xbeans  = fetchurl {
-    url = "http://www.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
+    url = "http://archive.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
     sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
   };
 in
