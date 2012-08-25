@@ -29,7 +29,7 @@ let
         ]
 
     ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
-  
+
 in
 
 stdenv.mkDerivation {
@@ -45,6 +45,9 @@ stdenv.mkDerivation {
 
   patches = patchesCross false;
 
+  # TODO: separate lib and bin.
+  outputs = [ "out" "man" ];
+
   buildNativeInputs = [ perl ];
 
   # On x86_64-darwin, "./config" misdetects the system as
@@ -54,7 +57,7 @@ stdenv.mkDerivation {
 
   configureFlags = "shared --libdir=lib";
 
-  makeFlags = "MANDIR=$(out)/share/man";
+  makeFlags = "MANDIR=$(man)/share/man";
 
   postInstall =
     ''
