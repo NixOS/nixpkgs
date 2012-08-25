@@ -3234,7 +3234,9 @@ let
 
   aalib = callPackage ../development/libraries/aalib { };
 
-  acl = callPackage ../development/libraries/acl { };
+  acl = callPackage ../development/libraries/acl {
+    stdenv = stdenvMulti;
+  };
 
   adns = callPackage ../development/libraries/adns { };
 
@@ -3271,7 +3273,9 @@ let
 
   attica = callPackage ../development/libraries/attica { };
 
-  attr = callPackage ../development/libraries/attr { };
+  attr = callPackage ../development/libraries/attr {
+    stdenv = stdenvMulti;
+  };
 
   aqbanking = callPackage ../development/libraries/aqbanking { };
 
@@ -4783,7 +4787,9 @@ let
 
   speech_tools = callPackage ../development/libraries/speech-tools {};
 
-  speex = callPackage ../development/libraries/speex { };
+  speex = callPackage ../development/libraries/speex {
+    stdenv = stdenvMulti;
+  };
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
 

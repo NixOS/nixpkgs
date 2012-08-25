@@ -13,15 +13,19 @@ stdenv.mkDerivation (args // {
       [ "--libdir=$(lib)/lib" ]
     ++ optional (elem "dev" outputs)
       "--includedir=$(dev)/include"
-    ++ args.configureFlags or [];
+    ++ [ (toString args.configureFlags or []) ];
 
   installFlags =
     optionals (elem "dev" outputs)
       [ "pkgconfigdir=$(dev)/lib/pkgconfig" "m4datadir=$(dev)/share/aclocal" "aclocaldir=$(dev)/share/aclocal" ]
-    ++ args.installFlags or [];
+    ++ [ (toString args.installFlags or []) ];
 
-  postInstall =
+  #postPhases = [ "fixupOutputsPhase" ] ++ args.postPhases or [];
+
+  preFixup =
     ''
+      runHook preFixupOutputs
+
       if [ -n "$doc" -a -e $out/share/doc ]; then
         mkdir -p $doc/share/doc
         mv $out/share/doc/* $doc/share/doc
@@ -42,10 +46,12 @@ stdenv.mkDerivation (args // {
       fi
 
       for i in $bin $lib; do
-        prefix="$i" stripDirs "lib lib64 libexec bin sbin" "${stripDebugFlags:--S}"
+        prefix="$i" stripDirs "lib lib64 libexec bin sbin" "''${stripDebugFlags:--S}"
         prefix="$i" patchELF
         patchShebangs "$i"
       done
+
+      runHook postFixupOutputs
     ''; # */
 
 })
