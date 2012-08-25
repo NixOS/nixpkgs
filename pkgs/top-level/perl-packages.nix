@@ -2219,6 +2219,14 @@ rec {
     };
   };
 
+  IPCSignal = buildPerlPackage rec {
+    name = "IPC-Signal-1.00";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROSCH/${name}.tar.gz";
+      sha256 = "1l3g0zrcwf2whwjhbpwdcridb7c77mydwxvfykqg1h6hqb4gj8bw";
+    };
+  };
+
   JSON = buildPerlPackage rec {
     name = "JSON-2.53";
     src = fetchurl {
@@ -2462,6 +2470,15 @@ rec {
       url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
       sha256 = "1gi2zyxwkkmyng8jawfnbxpsybvybz6h6ryq0wfdljmmjpjbmzzc";
     };
+  };
+
+  mimeConstruct = buildPerlPackage rec {
+    name = "mime-construct-1.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RO/ROSCH/${name}.tar.gz";
+      sha256 = "00wk9950i9q6qwp1vdq9xdddgk54lqd0bhcq2hnijh8xnmhvpmsc";
+    };
+    buildInputs = [ ProcWaitStat ];
   };
 
   MIMETypes = buildPerlPackage rec {
@@ -3127,6 +3144,15 @@ rec {
       TestNoWarnings TestObject TestSubCalls
     ];
     doCheck = false;
+  };
+
+  ProcWaitStat = buildPerlPackage rec {
+    name = "Proc-WaitStat-1.00";
+    src = fetchurl {
+      url = "mirror://cpan//authors/id/R/RO/ROSCH/${name}.tar.gz";
+      sha256 = "1g3l8jzx06x4l4p0x7fyn4wvg6plfzl420irwwb9v447wzsn6xfh";
+    };
+    propagatedBuildInputs = [ IPCSignal ];
   };
 
   PSGI = buildPerlPackage rec {
