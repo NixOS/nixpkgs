@@ -2342,11 +2342,16 @@ let
 
   path64 = callPackage ../development/compilers/path64 { };
 
+  openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix {};
+
   openjdk =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin { }
     else
-      callPackage ../development/compilers/openjdk { };
+      callPackage ../development/compilers/openjdk {
+        jdk = pkgs.openjdkBootstrap;
+        ant = pkgs.ant.override { jdk = pkgs.openjdkBootstrap; };
+      };
 
   openjre = callPackage ../development/compilers/openjdk {
     jreOnly = true;
