@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://www.impredicative.com/ur/;
-    license = "bsd";
+    license = stdenv.lib.licenses.bsd3;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
