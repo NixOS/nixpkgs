@@ -5,6 +5,9 @@ cabal.mkDerivation (self: {
   version = "7.0.1";
   sha256 = "13ayypl2x402h6a7yq7fvgd2mn21gl5gcw2hk7f5vr2bdlvwv53n";
   buildDepends = [ hamlet happstackServer text ];
+  patchPhase = ''
+    sed -i -e 's|hamlet .*,|hamlet,|' happstack-hamlet.cabal
+  '';
   meta = {
     homepage = "http://www.happstack.com/";
     description = "Support for Hamlet HTML templates in Happstack";

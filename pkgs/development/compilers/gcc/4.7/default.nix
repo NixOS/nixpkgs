@@ -163,7 +163,7 @@ stdenv.mkDerivation ({
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "http://ftp.gnu.org/gnu/gcc/gcc-4.7.1/gcc-4.7.1.tar.bz2";
+    url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
     sha256 = "0vs0v89zzgkngkw2p8kdynyk7j8ky4wf6zyrg3rsschpl1pky28n";
   };
 

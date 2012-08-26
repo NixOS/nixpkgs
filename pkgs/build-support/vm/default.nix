@@ -250,6 +250,7 @@ rec {
         path = $TMPDIR/xchg
         read only = no
         guest ok = yes
+      $EXTRA_SAMBA_CONF
       SMB
 
       rm -f ./samba

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
-      cryptsetup libuuid m4 usbutils pciutils glib
+      /* cryptsetup */ libuuid m4 usbutils pciutils glib
     ];
 
   configureFlags =
@@ -49,8 +49,14 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  # ‘-fstack-protector’ is necessary to build the PAM module correctly.
-  NIX_CFLAGS_COMPILE = "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\" -DKBD_SETFONT=\"${kbd}/bin/setfont\" -fstack-protector";
+  NIX_CFLAGS_COMPILE =
+    [ "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\""
+      "-DKBD_SETFONT=\"${kbd}/bin/setfont\""
+      # Can't say ${polkit}/bin/pkttyagent here because that would
+      # lead to a cyclic dependency.
+      "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+      "-fno-stack-protector"
+    ];
 
   makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include";
 

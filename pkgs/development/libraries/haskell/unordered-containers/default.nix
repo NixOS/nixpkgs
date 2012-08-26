@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unordered-containers";
-  version = "0.2.1.0";
-  sha256 = "0zk2ip32h6faqa1pfmiw242fdarr63lds4j828ix7qhrjifwiw4p";
+  version = "0.2.2.0";
+  sha256 = "1418vr7swk2p1xjxyj86arln6niwgpfjfqdknnkh31m4h83f0q5r";
   buildDepends = [ deepseq hashable ];
   meta = {
     description = "Efficient hashing-based container types";

@@ -1,15 +1,13 @@
 # - coqide compilation can be disabled by setting lablgtk to null;
 
-{stdenv, fetchurl, ocaml, findlib, camlp5, ncurses, lablgtk ? null}:
+{stdenv, fetchurl, pkgconfig, ocaml, findlib, camlp5, ncurses, lablgtk ? null}:
 
 let 
-  version = "8.3pl4";
+  version = "8.4";
   buildIde = lablgtk != null;
   ideFlags = if buildIde then "-lablgtkdir ${lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
-  idePatch = if buildIde then ''
-    substituteInPlace scripts/coqmktop.ml --replace \
-    "\"-I\"; \"+lablgtk2\"" \
-    "\"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)\"; \"-I\"; \"$(echo "${lablgtk}"/lib/ocaml/*/site-lib/stublibs)\""
+  idePath = if buildIde then ''
+    CAML_LD_LIBRARY_PATH=${lablgtk}/lib/ocaml/3.12.1/site-lib/stublibs
   '' else "";
 in
 
@@ -17,24 +15,11 @@ stdenv.mkDerivation {
   name = "coq-${version}";
 
   src = fetchurl {
-    url = "http://coq.inria.fr/V${version}/files/coq-${version}.tar.gz";
-    sha256 = "17d3lmchmqir1rawnr52g78srg4wkd7clzpzfsivxc4y1zp6rwkr";
+    url = "http://pauillac.inria.fr/~herbelin/coq/distrib/V${version}/files/coq-${version}.tar.gz";
+    sha256 = "0ka2lak9il4hlblk461awf0hbi3mxqhc1wz6kllxradyy2vfaspl";
   };
 
-  buildInputs = [ ocaml findlib camlp5 ncurses lablgtk ];
-
-  prefixKey = "-prefix ";
-
-  preConfigure = ''
-    configureFlagsArray=(
-      -opt
-      -camldir ${ocaml}/bin
-      -camlp5dir $(ocamlfind query camlp5)
-      ${ideFlags}
-    )
-  '';
-
-  buildFlags = "world"; # Debug with "world VERBOSE=1";
+  buildInputs = [ pkgconfig ocaml findlib camlp5 ncurses lablgtk ];
 
   patches = [ ./configure.patch ];
 
@@ -43,16 +28,21 @@ stdenv.mkDerivation {
     RM=$(type -tp rm)
     substituteInPlace configure --replace "/bin/uname" "$UNAME"
     substituteInPlace tools/beautify-archive --replace "/bin/rm" "$RM"
-    ${idePatch}
   '';
 
-  # This post install step is needed to build ssrcoqide from the ssreflect package
-  # It could be made optional, but I see little harm in including it in the default
-  # distribution -- roconnor
-  # This will likely no longer be necessary for coq >= 8.4. -- roconnor
-  postInstall = if buildIde then ''
-   cp ide/*.cmi ide/ide.*a $out/lib/coq/ide/
-  '' else "";
+  preConfigure = ''
+    buildFlagsArray=(${idePath})
+    configureFlagsArray=(
+      -opt
+      -camldir ${ocaml}/bin
+      -camlp5dir $(ocamlfind query camlp5)
+      ${ideFlags}
+    )
+  '';
+
+  prefixKey = "-prefix ";
+
+  buildFlags = "revision coq coqide";
 
   meta = {
     description = "Coq proof assistant";

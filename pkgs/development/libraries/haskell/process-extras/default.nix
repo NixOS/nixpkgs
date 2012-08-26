@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "process-extras";
-  version = "0.1.1";
-  sha256 = "0qnkclmjd5y0jpdxp4y2ynqlcdlsvck65269k0j4hy5zkyydbpv6";
+  version = "0.1.3";
+  sha256 = "16hm1w34qnrpb6x8gaqv1bs1cd4p98kayf23275s6vd48kw9v0b0";
   buildDepends = [ text ];
   meta = {
     homepage = "https://github.com/davidlazar/process-extras";

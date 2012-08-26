@@ -157,7 +157,7 @@ rec {
     uniq = elemType: mkOptionType {
       inherit (elemType) name check iter fold docPath hasOptions;
       merge = list:
-        if tail list == [] then
+        if length list == 1 then
           head list
         else
           throw "Multiple definitions. Only one is allowed for this option.";

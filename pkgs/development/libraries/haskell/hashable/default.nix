@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hashable";
-  version = "1.1.2.3";
-  sha256 = "19v94b34c2j6f9d9xii2hg0mjxdkq51aifkcqw6hbicn97kfcxls";
+  version = "1.1.2.5";
+  sha256 = "0gbiaj5ck2bvvinndp2pg7qsm2h2izbnz9wi97dbm7i8r4qd9d9z";
   buildDepends = [ text ];
   meta = {
     homepage = "http://github.com/tibbe/hashable";

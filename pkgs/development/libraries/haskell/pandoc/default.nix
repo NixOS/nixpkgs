@@ -15,6 +15,9 @@ cabal.mkDerivation (self: {
     highlightingKate HTTP json mtl network pandocTypes parsec random
     syb tagsoup temporary texmath time utf8String xml zipArchive zlib
   ];
+  patchPhase = ''
+    sed -i -e 's|base64-bytestring.*,|base64-bytestring,|' pandoc.cabal
+  '';
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Conversion between markup formats";
