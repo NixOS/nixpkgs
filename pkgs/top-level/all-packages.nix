@@ -1295,6 +1295,8 @@ let
 
   plotutils = callPackage ../tools/graphics/plotutils { };
 
+  plowshare = callPackage ../tools/misc/plowshare { };
+
   pngcrush = callPackage ../tools/graphics/pngcrush { };
 
   pngnq = callPackage ../tools/graphics/pngnq { };
