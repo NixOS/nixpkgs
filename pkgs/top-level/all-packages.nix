@@ -2363,8 +2363,12 @@ let
     jreOnly = true;
   };
 
-  jdk = if stdenv.isDarwin then openjdk else jdkdistro true false;
-  jre = jdkdistro false false;
+  jdk = if (stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+    then openjdk
+    else jdkdistro true false;
+  jre = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+    then openjre
+    else jdkdistro false false;
 
   jrePlugin = lowPrio (jdkdistro false true);
 
