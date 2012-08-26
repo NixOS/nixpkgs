@@ -18,9 +18,9 @@ let self = {
     ];
   };
 
-  "semver" = self."semver-1.0.14";
+  "semver" = self."semver-1";
 
-  "semver-1.0.14" = self.buildNodePackage rec {
+  "semver-1" = self.buildNodePackage rec {
     name = "semver-1.0.14";
     src = fetchurl {
       url = "http://registry.npmjs.org/semver/-/${name}.tgz";
@@ -31,17 +31,17 @@ let self = {
     ];
   };
 
-  "npm2nix" = self."npm2nix-0.1.1";
+  "npm2nix" = self."npm2nix-0.1.2";
 
-  "npm2nix-0.1.1" = self.buildNodePackage rec {
-    name = "npm2nix-0.1.1";
+  "npm2nix-0.1.2" = self.buildNodePackage rec {
+    name = "npm2nix-0.1.2";
     src = fetchurl {
-      url = https://bitbucket.org/shlevy/npm2nix/get/0.1.1.tar.gz;
-      sha256 = "0rrvlavx6myl8792y2xfz79a3khww3yak81by1f5axm0g1mcwiw7";
+      url = https://bitbucket.org/shlevy/npm2nix/get/0.1.2.tar.gz;
+      sha256 = "0wmgdbjvvwqv47113xdipzkmdafsca9av1s0fq605jf97wrpvbw3";
       name = "${name}.tgz";
     };
     deps = [
-      self."semver-1.0.14"
+      self."semver-1"
     ];
   };
 };
