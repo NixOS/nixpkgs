@@ -24,6 +24,12 @@ stdenv.mkDerivation {
   '';
 
   prePatch = ''
+    cd ..
+    if [ ! -d go ]; then
+      mv * go
+    fi
+    cd go
+
     patchShebangs ./ # replace /bin/bash
     # !!! substituteInPlace does not seems to be effective.
     sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
@@ -67,7 +73,8 @@ stdenv.mkDerivation {
     # libraries.
     for a in go gofmt godoc; do
 	    wrapProgram "$out/bin/$a" \
-	      --set "GOROOT" "$out/share/go/"
+	      --set "GOROOT" $out/share/go \
+        ${if (stdenv.system == "armv5tel-linux") then "--set GOARM $GOARM" else ""}
     done
 
     # Copy the emacs configuration for Go files.
