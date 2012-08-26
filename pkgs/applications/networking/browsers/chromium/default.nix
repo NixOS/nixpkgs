@@ -77,6 +77,10 @@ let
     xdg_utils yasm zlib
   ];
 
+  needSeccompPatch =
+    stdenv.lib.versionOlder sourceInfo.version "22.0.0.0"
+    && !config.selinux;
+
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
   packageName = "chromium";
@@ -108,7 +112,7 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  patches = stdenv.lib.optional (!config.selinux) ./enable_seccomp.patch
+  patches = stdenv.lib.optional needSeccompPatch ./enable_seccomp.patch
          ++ stdenv.lib.optional config.cups ./cups_allow_deprecated.patch
          ++ stdenv.lib.optional config.pulseaudio ./pulseaudio_array_bounds.patch;
 
