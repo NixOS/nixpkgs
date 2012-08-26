@@ -1,8 +1,5 @@
 { stdenv, getConfig, fetchurl, makeWrapper, which
 
-# this is needed in order to build the versions older than 21.x
-, subversion
-
 # default dependencies
 , bzip2, flac, speex
 , libevent, expat, libjpeg
@@ -73,14 +70,12 @@ let
     use_system_v8 = false;
   };
 
-  needsSubversion = stdenv.lib.versionOlder sourceInfo.version "21.0.0.0";
-
   defaultDependencies = [
     bzip2 flac speex
     libevent expat libjpeg
     libpng libxml2 libxslt
     xdg_utils yasm zlib
-  ] ++ stdenv.lib.optional needsSubversion subversion;
+  ];
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
