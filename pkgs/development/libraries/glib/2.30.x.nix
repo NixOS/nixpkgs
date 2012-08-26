@@ -19,11 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "09yxfajynbw78kji48z384lylp67kihfi1g78qrrjif4f5yb5jz6";
   };
 
+  enableParallelBuilding = true;
+
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   # configure script looks for d-bus but it is only needed for tests
-  buildInputs = [ pcre ]
-    ++ (if libiconvOrNull != null
-        then [ libiconvOrNull ]
-        else []);
+  buildInputs = [ pcre ] ++ stdenv.lib.optional (libiconvOrNull != null) libiconvOrNull;
 
   buildNativeInputs = [ perl pkgconfig gettext python ];
 
@@ -32,8 +33,6 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-pcre=system --disable-fam";
 
   passthru.gioModuleDir = "lib/gio/modules";
-
-  postInstall = ''rm -rvf $out/share/gtk-doc'';
 
   meta = {
     description = "GLib, a C library of programming buildings blocks";
