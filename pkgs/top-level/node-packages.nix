@@ -17,6 +17,19 @@ let self = {
 
     ];
   };
+
+  "semver" = self."semver-1.0.14";
+
+  "semver-1.0.14" = self.buildNodePackage rec {
+    name = "semver-1.0.14";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/semver/-/${name}.tgz";
+      sha256 = "560df522ae0e8834d8b07f6ca9c60bd8836e844642361abde108018cbe9ca82f";
+    };
+    deps = [
+
+    ];
+  };
 };
 
 in self
