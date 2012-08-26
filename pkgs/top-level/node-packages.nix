@@ -30,6 +30,20 @@ let self = {
 
     ];
   };
+
+  "npm2nix" = self."npm2nix-0.1.1";
+
+  "npm2nix-0.1.1" = self.buildNodePackage rec {
+    name = "npm2nix-0.1.1";
+    src = fetchurl {
+      url = https://bitbucket.org/shlevy/npm2nix/get/0.1.1.tar.gz;
+      sha256 = "0rrvlavx6myl8792y2xfz79a3khww3yak81by1f5axm0g1mcwiw7";
+      name = "${name}.tgz";
+    };
+    deps = [
+      self."semver-1.0.14"
+    ];
+  };
 };
 
 in self
