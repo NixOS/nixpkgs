@@ -6791,6 +6791,8 @@ let
 
   espeak = callPackage ../applications/audio/espeak { };
 
+  espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
+
   esniper = callPackage ../applications/networking/esniper { };
 
   etherape = callPackage ../applications/networking/sniffers/etherape {
