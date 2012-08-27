@@ -34,7 +34,7 @@ rec {
     ''
       mkdir -p $out/bin
       mkdir -p $out/lib
-      
+
       # Copy what we need from Glibc.
       cp -p ${pkgs.stdenv.glibc}/lib/ld-linux*.so.? $out/lib
       cp -p ${pkgs.stdenv.glibc}/lib/libc.so.* $out/lib
@@ -60,7 +60,7 @@ rec {
       cp ${module_init_tools}/sbin/insmod $out/bin/insmod
       cp ${nettools}/sbin/ifconfig $out/bin
       cp ${sysvinit}/sbin/halt $out/bin
-            
+
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
 
@@ -70,7 +70,7 @@ rec {
       done
     ''; # */
 
-    
+
   createDeviceNodes = dev:
     ''
       mknod ${dev}/null    c 1 3
@@ -82,7 +82,7 @@ rec {
       mknod ${dev}/${hd} b $MAJOR $MINOR
     '';
 
-  
+
   stage1Init = writeScript "vm-run-stage1" ''
     #! ${initrdUtils}/bin/bash -e
     echo START
@@ -124,7 +124,7 @@ rec {
 
     mount -t tmpfs none /dev
     ${createDeviceNodes "/dev"}
-    
+
     ifconfig eth0 up 10.0.2.15
 
     mkdir /fs
@@ -157,7 +157,7 @@ rec {
 
     mkdir -p /fs/etc
     ln -sf /proc/mounts /fs/etc/mtab
-    
+
     echo "Now running: $command"
     test -n "$command"
 
@@ -171,7 +171,7 @@ rec {
     halt -d -p -f
   '';
 
-  
+
   initrd = makeInitrd {
     contents = [
       { object = stage1Init;
@@ -180,11 +180,11 @@ rec {
     ];
   };
 
-  
+
   stage2Init = writeScript "vm-run-stage2" ''
     #! ${bash}/bin/sh
     source /tmp/xchg/saved-env
-    
+
     export NIX_STORE=/nix/store
     export NIX_BUILD_TOP=/tmp
     export TMPDIR=/tmp
@@ -288,12 +288,12 @@ rec {
 
     chmod +x ./run-vm
     source ./run-vm
-    
+
     if ! test -e xchg/in-vm-exit; then
       echo "Virtual machine didn't produce an exit code."
       exit 1
     fi
-    
+
     eval "$postVM"
 
     exit $(cat xchg/in-vm-exit)
@@ -345,7 +345,7 @@ rec {
      If the build fails and Nix is run with the `-K' option, a script
      `run-vm' will be left behind in the temporary build directory
      that allows you to boot into the VM and debug it interactively. */
-     
+
   runInLinuxVM = drv: lib.overrideDerivation drv (attrs: {
     requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
@@ -355,7 +355,7 @@ rec {
     QEMU_OPTS = "-m ${toString (if attrs ? memSize then attrs.memSize else 256)}";
   });
 
-  
+
   extractFs = {file, fs ? null} :
     with pkgs; runInLinuxVM (
     stdenv.mkDerivation {
@@ -381,7 +381,7 @@ rec {
       '';
     });
 
-    
+
   extractMTDfs = {file, fs ? null} :
     with pkgs; runInLinuxVM (
     stdenv.mkDerivation {
@@ -408,7 +408,7 @@ rec {
       '';
     });
 
-    
+
   qemuCommandGeneric = ''
     PATH="${samba}/sbin:$PATH" \
     ${kvm}/bin/qemu-kvm \
@@ -417,7 +417,7 @@ rec {
       $QEMU_OPTS
   '';
 
-  
+
   /* Run a command in an x86 virtual machine image containing an
      arbitrary OS.  The VM should be configured to do the following:
 
@@ -462,7 +462,7 @@ rec {
      the Nix store, but using the tools provided by /bin, /usr/bin
      etc. from the specified filesystem image, which typically is a
      filesystem containing a non-NixOS Linux distribution. */
-     
+
   runInLinuxImage = attrs: runInLinuxVM (attrs // {
     mountDisk = true;
 
@@ -493,12 +493,12 @@ rec {
 
   /* Create a filesystem image of the specified size and fill it with
      a set of RPM packages. */
-    
+
   fillDiskWithRPMs =
     { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
     , runScripts ? true, createRootFS ? defaultCreateRootFS
     }:
-    
+
     runInLinuxVM (stdenv.mkDerivation {
       inherit name preInstall postInstall rpms;
       memSize = 512;
@@ -508,7 +508,7 @@ rec {
         ${createRootFS}
 
         chroot=$(type -tP chroot)
-        
+
         echo "unpacking RPMs..."
         for i in $rpms; do
             echo "$i..."
@@ -527,19 +527,19 @@ rec {
         mkdir -p /mnt/nix/store
         ${utillinux}/bin/mount -o bind /nix/store /mnt/nix/store
         ${utillinux}/bin/mount -o bind /tmp /mnt/tmp
-        
+
         echo "installing RPMs..."
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
           rpm -iv ${if runScripts then "" else "--noscripts"} $rpms
 
         echo "running post-install script..."
         eval "$postInstall"
-        
+
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt/nix/store 
-        ${utillinux}/bin/umount /mnt/tmp 
-        ${utillinux}/bin/umount /mnt 
+        ${utillinux}/bin/umount /mnt/nix/store
+        ${utillinux}/bin/umount /mnt/tmp
+        ${utillinux}/bin/umount /mnt
       '';
 
       passthru = { inherit fullName; };
@@ -548,7 +548,7 @@ rec {
 
   /* Generate a script that can be used to run an interactive session
      in the given image. */
-     
+
   makeImageTestScript = image: writeScript "image-test" ''
     #! ${bash}/bin/sh
     if test -z "$1"; then
@@ -573,7 +573,7 @@ rec {
   /* Build RPM packages from the tarball `src' in the Linux
      distribution installed in the filesystem `diskImage'.  The
      tarball must contain an RPM specfile. */
-  
+
   buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
     phases = "prepareImagePhase sysInfoPhase buildPhase installPhase";
 
@@ -586,7 +586,7 @@ rec {
         done
       fi
     '';
-  
+
     sysInfoPhase = ''
       echo "System/kernel: $(uname -a)"
       if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
@@ -595,7 +595,7 @@ rec {
       rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
       stopNest
     '';
-    
+
     buildPhase = ''
       eval "$preBuild"
 
@@ -612,7 +612,7 @@ rec {
       mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS
 
       echo "%_topdir $rpmout" >> $HOME/.rpmmacros
-      
+
       rpmbuild -vv -ta "$srcName"
 
       eval "$postBuild"
@@ -642,7 +642,7 @@ rec {
 
   fillDiskWithDebs =
     { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS }:
-    
+
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall;
 
@@ -658,7 +658,7 @@ rec {
         # Unpack the .debs.  We do this to prevent pre-install scripts
         # (which have lots of circular dependencies) from barfing.
         echo "unpacking Debs..."
-        
+
         for deb in $debs; do
           if test "$deb" != "|"; then
             echo "$deb..."
@@ -671,7 +671,7 @@ rec {
         ${utillinux}/bin/mount -o bind /nix/store /mnt/inst/nix/store
         ${utillinux}/bin/mount -o bind /proc /mnt/proc
         ${utillinux}/bin/mount -o bind /dev /mnt/dev
-        
+
         # Misc. files/directories assumed by various packages.
         echo "initialising Dpkg DB..."
         touch /mnt/etc/shells
@@ -685,7 +685,7 @@ rec {
         echo "installing Debs..."
 
         export DEBIAN_FRONTEND=noninteractive
-        
+
         oldIFS="$IFS"
         IFS="|"
         for component in $debs; do
@@ -700,13 +700,13 @@ rec {
           PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
             /usr/bin/dpkg --install --force-all $debs < /dev/null || true
         done
-        
+
         echo "running post-install script..."
         eval "$postInstall"
         ln -sf dash /mnt/bin/sh
 
         rm /mnt/.debug
-        
+
         ${utillinux}/bin/umount /mnt/inst/nix/store
         ${utillinux}/bin/umount /mnt/proc
         ${utillinux}/bin/umount /mnt/dev
@@ -720,7 +720,7 @@ rec {
   /* Generate a Nix expression containing fetchurl calls for the
      closure of a set of top-level RPM packages from the
      `primary.xml.gz' file of a Fedora or openSUSE distribution. */
-     
+
   rpmClosureGenerator =
     {name, packagesLists, urlPrefixes, packages, archs ? []}:
     assert (builtins.length packagesLists) == (builtins.length urlPrefixes) ;
@@ -737,7 +737,7 @@ rec {
   /* Helper function that combines rpmClosureGenerator and
      fillDiskWithRPMs to generate a disk image from a set of package
      names. */
-     
+
   makeImageFromRPMDist =
     { name, fullName, size ? 4096
     , urlPrefix ? "", urlPrefixes ? [urlPrefix]
@@ -760,7 +760,7 @@ rec {
 
   debClosureGenerator =
     {name, packagesList, urlPrefix, packages}:
-    
+
     runCommand "${name}.nix" {} ''
       bunzip2 < ${packagesList} > ./Packages
 
@@ -770,12 +770,12 @@ rec {
       ${perl}/bin/perl -I${dpkg} -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
     '';
-  
+
 
   /* Helper function that combines debClosureGenerator and
      fillDiskWithDebs to generate a disk image from a set of package
      names. */
-     
+
   makeImageFromDebDist =
     { name, fullName, size ? 4096, urlPrefix, packagesList
     , packages, extraPackages ? [], postInstall ? "" }:
@@ -793,7 +793,7 @@ rec {
 
 
   /* The set of supported RPM-based distributions. */
-      
+
   rpmDistros = {
 
     fedora2i386 = {
@@ -820,7 +820,7 @@ rec {
       runScripts = false;
       packages = commonFedoraPackages;
     };
-    
+
     fedora5i386 = {
       name = "fedora-core-5-i386";
       fullName = "Fedora Core 5 (i386)";
@@ -831,7 +831,7 @@ rec {
       urlPrefix = mirror://fedora/linux/core/5/i386/os;
       packages = commonFedoraPackages ++ [ "util-linux" ];
     };
-    
+
     fedora7i386 = {
       name = "fedora-7-i386";
       fullName = "Fedora 7 (i386)";
@@ -842,7 +842,7 @@ rec {
       urlPrefix = mirror://fedora/linux/releases/7/Everything/i386/os;
       packages = commonFedoraPackages;
     };
-    
+
     fedora8i386 = {
       name = "fedora-8-i386";
       fullName = "Fedora 8 (i386)";
@@ -1060,9 +1060,9 @@ rec {
 
 
   /* The set of supported Dpkg-based distributions. */
-      
+
   debDistros = {
-  
+
     # Interestingly, the SHA-256 hashes provided by Ubuntu in
     # http://nl.archive.ubuntu.com/ubuntu/dists/{gutsy,hardy}/Release are
     # wrong, but the SHA-1 and MD5 hashes are correct.  Intrepid is fine.
@@ -1077,7 +1077,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebianPackages;
     };
-        
+
     ubuntu804i386 = {
       name = "ubuntu-8.04-hardy-i386";
       fullName = "Ubuntu 8.04 Hardy (i386)";
@@ -1088,7 +1088,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebianPackages;
     };
-         
+
     ubuntu804x86_64 = {
       name = "ubuntu-8.04-hardy-amd64";
       fullName = "Ubuntu 8.04 Hardy (amd64)";
@@ -1099,7 +1099,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebianPackages;
     };
-         
+
     ubuntu810i386 = {
       name = "ubuntu-8.10-intrepid-i386";
       fullName = "Ubuntu 8.10 Intrepid (i386)";
@@ -1110,7 +1110,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebianPackages;
     };
- 
+
     ubuntu810x86_64 = {
       name = "ubuntu-8.10-intrepid-amd64";
       fullName = "Ubuntu 8.10 Intrepid (amd64)";
@@ -1132,7 +1132,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebianPackages;
     };
- 
+
     ubuntu904x86_64 = {
       name = "ubuntu-9.04-jaunty-amd64";
       fullName = "Ubuntu 9.04 Jaunty (amd64)";
@@ -1154,7 +1154,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diff" "mktemp" ];
     };
- 
+
     ubuntu910x86_64 = {
       name = "ubuntu-9.10-karmic-amd64";
       fullName = "Ubuntu 9.10 Karmic (amd64)";
@@ -1176,7 +1176,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
     };
- 
+
     ubuntu1004x86_64 = {
       name = "ubuntu-10.04-lucid-amd64";
       fullName = "Ubuntu 10.04 Lucid (amd64)";
@@ -1198,7 +1198,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
- 
+
     ubuntu1010x86_64 = {
       name = "ubuntu-10.04-maverick-amd64";
       fullName = "Ubuntu 10.04 Maverick (amd64)";
@@ -1220,7 +1220,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
- 
+
     ubuntu1110x86_64 = {
       name = "ubuntu-11.10-oneiric-amd64";
       fullName = "Ubuntu 11.10 Oneiric (amd64)";
@@ -1242,7 +1242,7 @@ rec {
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
- 
+
     ubuntu1204x86_64 = {
       name = "ubuntu-12.04-oneiric-amd64";
       fullName = "Ubuntu 12.04 Precise (amd64)";
@@ -1264,7 +1264,7 @@ rec {
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
-        
+
     debian40x86_64 = {
       name = "debian-4.0r9-etch-amd64";
       fullName = "Debian 4.0r9 Etch (amd64)";
@@ -1308,7 +1308,7 @@ rec {
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
-        
+
     debian60x86_64 = {
       name = "debian-6.0.4-squeeze-amd64";
       fullName = "Debian 6.0.4 Squeeze (amd64)";
@@ -1346,7 +1346,7 @@ rec {
     "unzip"
   ];
 
-  
+
   /* Common packages for openSUSE images. */
   commonOpenSUSEPackages = [
     "aaa_base"
@@ -1390,7 +1390,7 @@ rec {
     "patch"
     "locales"
     # Needed by checkinstall:
-    "util-linux" 
+    "util-linux"
     "file"
     "dpkg-dev"
     "pkg-config"
@@ -1400,7 +1400,7 @@ rec {
   ];
 
   commonDebianPackages = commonDebPackages ++ [ "sysvinit" "diff" "mktemp" ];
-  
+
 
   /* A set of functions that build the Linux distributions specified
      in `rpmDistros' and `debDistros'.  For instance,
@@ -1414,29 +1414,29 @@ rec {
      `diskImageFuns.ubuntu1004x86_64 { extraPackages = ["firefox"];
      size = 8192; }' builds an 8 GiB image containing Firefox in
      addition to the default packages. */
-  diskImageFuns = 
+  diskImageFuns =
     (lib.mapAttrs (name: as: as2: makeImageFromRPMDist (as // as2)) rpmDistros) //
     (lib.mapAttrs (name: as: as2: makeImageFromDebDist (as // as2)) debDistros);
 
-    
+
   /* Shorthand for `diskImageFuns.<attr> { extraPackages = ... }'. */
   diskImageExtraFuns =
     lib.mapAttrs (name: f: extraPackages: f { inherit extraPackages; }) diskImageFuns;
 
-    
+
   /* Default disk images generated from the `rpmDistros' and
      `debDistros' sets (along with Red Hat 9 and SuSE 9.0 images). */
 
   diskImages =
     lib.mapAttrs (name: f: f {}) diskImageFuns //
-    
+
     { redhat9i386 = fillDiskWithRPMs {
         name = "redhat-9-i386";
         fullName = "Red Hat Linux 9 (i386)";
         size = 1024;
         rpms = import ./rpm/redhat-9-i386.nix {inherit fetchurl;};
       };
-    
+
       suse90i386 = fillDiskWithRPMs {
         name = "suse-9.0-i386";
         fullName = "SUSE Linux 9.0 (i386)";
@@ -1456,7 +1456,7 @@ rec {
           echo 'video:x:33:' >> /mnt/etc/group
         '';
       };
-      
+
     };
-    
+
 }
