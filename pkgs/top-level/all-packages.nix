@@ -6960,6 +6960,8 @@ let
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
+  praat = callPackage ../applications/audio/praat { };
+
   quvi = callPackage ../applications/video/quvi/tool.nix { };
 
   quvi_scripts = callPackage ../applications/video/quvi/scripts.nix { };
