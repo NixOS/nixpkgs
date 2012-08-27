@@ -53,6 +53,8 @@ foreach my $cdata (values %packages) {
     my @provides = getDeps(Dpkg::Deps::parse($cdata->{Provides}));
     foreach my $name (@provides) {
         #die "conflicting provide: $name\n" if defined $provides{$name};
+        #warn "provide by $cdata->{Package} conflicts with package with the same name: $name\n";
+        next if defined $packages{$name};
         $provides{$name} = $cdata->{Package};
     }
 }

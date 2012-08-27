@@ -723,7 +723,7 @@ rec {
 
   rpmClosureGenerator =
     {name, packagesLists, urlPrefixes, packages, archs ? []}:
-    assert (builtins.length packagesLists) == (builtins.length urlPrefixes) ;
+    assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
     runCommand "${name}.nix" {buildInputs = [perl perlPackages.XMLSimple]; inherit archs;} ''
       ${lib.concatImapStrings (i: pl: ''
         gunzip < ${pl} > ./packages_${toString i}.xml
@@ -759,10 +759,13 @@ rec {
      (i.e. generate a closure from a Packages.bz2 file). */
 
   debClosureGenerator =
-    {name, packagesList, urlPrefix, packages}:
+    {name, packagesLists, urlPrefix, packages}:
 
     runCommand "${name}.nix" {} ''
-      bunzip2 < ${packagesList} > ./Packages
+      for i in ${toString packagesLists}; do
+        echo "adding $i..."
+        bunzip2 < $i >> ./Packages
+      done
 
       # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
       sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
@@ -777,12 +780,13 @@ rec {
      names. */
 
   makeImageFromDebDist =
-    { name, fullName, size ? 4096, urlPrefix, packagesList
+    { name, fullName, size ? 4096, urlPrefix
+    , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? [], postInstall ? "" }:
 
     let
       expr = debClosureGenerator {
-        inherit name packagesList urlPrefix;
+        inherit name packagesLists urlPrefix;
         packages = packages ++ extraPackages;
       };
     in
@@ -1158,7 +1162,7 @@ rec {
     ubuntu910x86_64 = {
       name = "ubuntu-9.10-karmic-amd64";
       fullName = "Ubuntu 9.10 Karmic (amd64)";
-      packagesList = fetchurl {
+     packagesList = fetchurl {
         url = mirror://ubuntu/dists/karmic/main/binary-amd64/Packages.bz2;
         sha256 = "3a604fcb0c135eeb8b95da3e90a8fd4cfeff519b858cd3c9e62ea808cb9fec40";
       };
@@ -1233,23 +1237,35 @@ rec {
     };
 
     ubuntu1204i386 = {
-      name = "ubuntu-12.04-oneiric-i386";
+      name = "ubuntu-12.04-precise-i386";
       fullName = "Ubuntu 12.04 Precise (i386)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/precise/main/binary-i386/Packages.bz2;
-        sha256 = "18ns9h4qhvjfcip9z55grzi371racxavgqkp6b5kfkdq2wwwax2d";
-      };
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/precise/main/binary-i386/Packages.bz2;
+            sha256 = "18ns9h4qhvjfcip9z55grzi371racxavgqkp6b5kfkdq2wwwax2d";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/precise/universe/binary-i386/Packages.bz2;
+            sha256 = "085lkzbnzkc74kfdmwdc32sfqyfz8dr0rbiifk8kx9jih3xjw2jk";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
     ubuntu1204x86_64 = {
-      name = "ubuntu-12.04-oneiric-amd64";
+      name = "ubuntu-12.04-precise-amd64";
       fullName = "Ubuntu 12.04 Precise (amd64)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/precise/main/binary-amd64/Packages.bz2;
-        sha256 = "1aabpn0hdih6cbabyn87yvhccqj44q9k03mqmjsb920iqlckl3fc";
-      };
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/precise/main/binary-amd64/Packages.bz2;
+            sha256 = "1aabpn0hdih6cbabyn87yvhccqj44q9k03mqmjsb920iqlckl3fc";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/precise/universe/binary-amd64/Packages.bz2;
+            sha256 = "0x4hz5aplximgb7gnpvrhkw8m7a40s80rkm5b8hil0afblwlg4vr";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
