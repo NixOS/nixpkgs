@@ -4795,6 +4795,11 @@ let
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
 
+  spice = callPackage ../development/libraries/spice {
+    celt = celt_0_5_1;
+    inherit (xlibs) libXrandr libXfixes libXext libXrender libXinerama;
+  };
+
   spiceProtocol = callPackage ../development/libraries/spice-protocol { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
