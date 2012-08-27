@@ -11,6 +11,7 @@ let
       mkdir $out
       cp -prd ${pkgs.logcheck}/etc/logcheck/* $out/
       rm $out/logcheck.*
+      chmod u+w $out/*
     '' + optionalString (! builtins.isNull cfg.extraRulesDir) ''
       cp -prd ${cfg.extraRulesDir}/* $out/
     '' );
