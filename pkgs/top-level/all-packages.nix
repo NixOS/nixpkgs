@@ -3434,6 +3434,8 @@ let
 
   dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix { };
 
+  dxflib = callPackage ../development/libraries/dxflib {};
+
   eigen = callPackage ../development/libraries/eigen {};
 
   enchant = callPackage ../development/libraries/enchant { };
@@ -7488,6 +7490,8 @@ let
     inherit (xorg) libXpm libXft;
     fltk = fltk13;
   };
+
+  rapcad = callPackage ../applications/graphics/rapcad {};
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 
