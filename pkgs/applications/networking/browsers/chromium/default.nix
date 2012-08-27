@@ -77,9 +77,9 @@ let
     xdg_utils yasm zlib
   ];
 
-  needSeccompPatch =
-    stdenv.lib.versionOlder sourceInfo.version "22.0.0.0"
-    && !config.selinux;
+  seccompPatch = let
+    pre22 = stdenv.lib.versionOlder sourceInfo.version "22.0.0.0";
+  in if pre22 then ./enable_seccomp.patch else ./enable_seccomp22.patch;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -112,7 +112,7 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  patches = stdenv.lib.optional needSeccompPatch ./enable_seccomp.patch
+  patches = stdenv.lib.optional (!config.selinux) seccompPatch
          ++ stdenv.lib.optional config.cups ./cups_allow_deprecated.patch
          ++ stdenv.lib.optional config.pulseaudio ./pulseaudio_array_bounds.patch;
 
