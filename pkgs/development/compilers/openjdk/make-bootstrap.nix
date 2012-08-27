@@ -1,6 +1,6 @@
 { runCommand, openjdk, nukeReferences }:
 
-let arch = if openjdk.system == "x86_64-linux" then "amd64" else "i386"; in
+let arch = openjdk.architecture; in
 
 runCommand "${openjdk.name}-bootstrap.tar.xz" {} ''
   mkdir -p openjdk-bootstrap/bin
