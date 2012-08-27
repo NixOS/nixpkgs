@@ -55,7 +55,7 @@ stdenv.mkDerivation {
   inherit installjdk;
 
   buildInputs = [unzip makeWrapper];
-  
+
   /**
    * libXt is only needed on amd64
    */
@@ -67,4 +67,6 @@ stdenv.mkDerivation {
   inherit (xlibs) libX11;
 
   mozillaPlugin = if installjdk then "/jre/lib/${architecture}/plugins" else "/lib/${architecture}/plugins";
+
+  meta.license = "unfree";
 }

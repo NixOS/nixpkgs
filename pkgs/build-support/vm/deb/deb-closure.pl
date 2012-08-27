@@ -53,6 +53,8 @@ foreach my $cdata (values %packages) {
     my @provides = getDeps(Dpkg::Deps::parse($cdata->{Provides}));
     foreach my $name (@provides) {
         #die "conflicting provide: $name\n" if defined $provides{$name};
+        #warn "provide by $cdata->{Package} conflicts with package with the same name: $name\n";
+        next if defined $packages{$name};
         $provides{$name} = $cdata->{Package};
     }
 }
@@ -67,7 +69,7 @@ sub closePackage {
     my $pkgName = shift;
     print STDERR ">>> $pkgName\n";
     my $cdata = $packages{$pkgName};
-    
+
     if (!defined $cdata) {
         die "unknown (virtual) package $pkgName"
             unless defined $provides{$pkgName};
@@ -75,7 +77,7 @@ sub closePackage {
         $pkgName = $provides{$pkgName};
         $cdata = $packages{$pkgName};
     }
-    
+
     die "unknown package $pkgName" unless defined $cdata;
     return if defined $donePkgs{$pkgName};
     $donePkgs{$pkgName} = 1;
@@ -85,9 +87,9 @@ sub closePackage {
             $provides{$name} = $cdata->{Package};
         }
     }
-    
+
     my @depNames = ();
-    
+
     if (defined $cdata->{Depends}) {
         print STDERR "    $pkgName: $cdata->{Depends}\n";
         my $deps = Dpkg::Deps::parse($cdata->{Depends});
@@ -141,7 +143,7 @@ foreach my $pkgName (@order) {
     my $origName = basename $cdata->{Filename};
     my $cleanedName = $origName;
     $cleanedName =~ s/~//g;
-    
+
     print "    (fetchurl {\n";
     print "      url = $urlPrefix/$cdata->{Filename};\n";
     print "      sha256 = \"$cdata->{SHA256}\";\n";
@@ -165,4 +167,3 @@ if ($newComponent != 1) {
     print STDERR "argh: ", keys %forward, "\n";
     exit 1;
 }
-    

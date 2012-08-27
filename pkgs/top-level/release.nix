@@ -104,7 +104,7 @@ with (import ./release-lib.nix);
   ghdl = linux;
   ghostscript = linux;
   ghostscriptX = linux;
-  gimp = linux;
+  gimp_2_8 = linux;
   git = linux;
   gitFull = linux;
   glibc = linux;
@@ -448,7 +448,7 @@ with (import ./release-lib.nix);
     xlsclients = linux;
     xmessage = linux;
     xorgserver = linux;
-    xprop = linux;    
+    xprop = linux;
     xrandr = linux;
     xrdb = linux;
     xset = linux;
@@ -474,4 +474,3 @@ with (import ./release-lib.nix);
   };
 
 } ))
-

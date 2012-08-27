@@ -7,14 +7,14 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20120801";
+  date = "20120818";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
   dsfmt_ver = "2.1";
   openblas_ver = "v0.2.2";
   lapack_ver = "3.4.1";
-  arpack_ver = "3.1.1";
+  arpack_ver = "3.1.2";
   clp_ver = "1.14.5";
   lighttpd_ver = "1.4.29";
 
@@ -33,9 +33,9 @@ stdenv.mkDerivation rec {
     sha256 = "19ffec70f9678f5c159feadc036ca47720681b782910fbaa95aa3867e7e86d8e";
   };
   arpack_src = fetchurl {
-    url = "http://forge.scilab.org/index.php/p/arpack-ng/downloads/417/get/";
+    url = "http://forge.scilab.org/index.php/p/arpack-ng/downloads/497/get/";
     name = "arpack-ng_${arpack_ver}.tar.gz";
-    sha256 = "be250947a7d6eac7dff8c058102fce9922c524aa06be2a090b6e0bb2d1e228cd";
+    sha256 = "1wk06bdjgap4hshx0lswzi7vxy2lrdx353y1k7yvm97mpsjvsf4k";
   };
   lapack_src = fetchurl {
     url = "http://www.netlib.org/lapack/lapack-${lapack_ver}.tgz";
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "3b413ec24957e400c984002f7cdf6232f5391a7e";
-    sha256 = "c019b724df9203899a1da5815f85d79291778191bbffc1361d2213ff7d2bbc1d";
+    rev = "4f692899688f500c77d768f67748f4b7335c90eb";
+    sha256 = "a60e684a5283e80619f28ec8ff16fdc76c549e8463059507b0819db09dae6688";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline 

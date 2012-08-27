@@ -1,8 +1,5 @@
 { stdenv, getConfig, fetchurl, makeWrapper, which
 
-# this is needed in order to build the versions older than 21.x
-, subversion
-
 # default dependencies
 , bzip2, flac, speex
 , libevent, expat, libjpeg
@@ -32,7 +29,7 @@ let
     channel = "stable";
     selinux = false;
     nacl = false;
-    openssl = true;
+    openssl = false;
     gnome = false;
     gnomeKeyring = false;
     proprietaryCodecs = true;
@@ -59,7 +56,7 @@ let
     use_system_libpng = true;
     use_system_libxml = true;
     use_system_speex = true;
-    use_system_ssl = true;
+    use_system_ssl = config.openssl;
     use_system_stlport = true;
     use_system_xdg_utils = true;
     use_system_yasm = true;
@@ -73,14 +70,16 @@ let
     use_system_v8 = false;
   };
 
-  needsSubversion = stdenv.lib.versionOlder sourceInfo.version "21.0.0.0";
-
   defaultDependencies = [
     bzip2 flac speex
     libevent expat libjpeg
     libpng libxml2 libxslt
     xdg_utils yasm zlib
-  ] ++ stdenv.lib.optional needsSubversion subversion;
+  ];
+
+  seccompPatch = let
+    pre22 = stdenv.lib.versionOlder sourceInfo.version "22.0.0.0";
+  in if pre22 then ./enable_seccomp.patch else ./enable_seccomp22.patch;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -113,7 +112,7 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  patches = stdenv.lib.optional (!config.selinux) ./enable_seccomp.patch
+  patches = stdenv.lib.optional (!config.selinux) seccompPatch
          ++ stdenv.lib.optional config.cups ./cups_allow_deprecated.patch
          ++ stdenv.lib.optional config.pulseaudio ./pulseaudio_array_bounds.patch;
 

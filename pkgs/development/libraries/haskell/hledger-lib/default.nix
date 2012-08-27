@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     cmdargs csv filepath HUnit mtl parsec regexpr safe shakespeareText
     split time transformers utf8String
   ];
+  patchPhase = ''
+    sed -i -e 's|,split.*|,split|' hledger-lib.cabal
+  '';
   meta = {
     homepage = "http://hledger.org";
     description = "Core data types, parsers and utilities for the hledger accounting tool";

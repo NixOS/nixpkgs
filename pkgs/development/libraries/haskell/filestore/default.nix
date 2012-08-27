@@ -11,6 +11,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     Diff filepath HUnit mtl parsec split time utf8String xml
   ];
+  patchPhase = ''
+    sed -i -e 's|split.*,|split,|' filestore.cabal
+  '';
   noHaddock = true;
   meta = {
     description = "Interface for versioning file stores";

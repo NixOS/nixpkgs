@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "MonadCatchIO-mtl";
-  version = "0.3.0.4";
-  sha256 = "0wzdrfplwa4v9miv88rg3jvf7l6gphc29lpdp5qjm5873y57jxm7";
+  version = "0.3.0.5";
+  sha256 = "01c2xif4aly2lmg2qkri791ignq3r2qg4xbc8m06cdm6gh5a2dqp";
   buildDepends = [ extensibleExceptions mtl ];
   meta = {
     homepage = "http://darcsden.com/jcpetruzza/MonadCatchIO-mtl";

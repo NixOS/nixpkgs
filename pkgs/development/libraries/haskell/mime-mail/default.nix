@@ -7,6 +7,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     base64Bytestring blazeBuilder filepath random text
   ];
+  patchPhase = ''
+    sed -i -e 's|, base64-bytestring.*|, base64-bytestring|' mime-mail.cabal
+  '';
   meta = {
     homepage = "http://github.com/snoyberg/mime-mail";
     description = "Compose MIME email messages";
