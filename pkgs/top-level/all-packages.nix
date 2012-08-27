@@ -4795,6 +4795,8 @@ let
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
 
+  spiceProtocol = callPackage ../development/libraries/spice-protocol { };
+
   sratom = callPackage ../development/libraries/audio/sratom { };
 
   srtp = callPackage ../development/libraries/srtp {};
