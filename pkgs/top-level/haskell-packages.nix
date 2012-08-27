@@ -1758,13 +1758,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     QuickCheck = self.QuickCheck2;
   };
 
-  mathblog = callPackage ../applications/misc/mathblog {
-    testFramework = self.testFramework_0_5;
-    testFrameworkHunit = self.testFrameworkHunit.override {
-      testFramework = self.testFramework_0_5;
-    };
-  };
-
   xmobar = callPackage ../applications/misc/xmobar {
     stm = self.stm_2_3;
   };
