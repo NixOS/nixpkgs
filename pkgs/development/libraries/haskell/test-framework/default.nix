@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "test-framework";
-  version = "0.6";
-  sha256 = "1ah5q3fwd5dmh2zb4rphdpz7hs39m4g1khvxjjwfzwyd9pxiz723";
+  version = "0.6.1";
+  sha256 = "1rx2c3yckw50vrydswb61ngvp27yxcimm5q6jcyqpn16fpkvxijw";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
