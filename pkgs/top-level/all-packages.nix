@@ -2366,6 +2366,10 @@ let
     then openjre
     else jdkdistro false false;
 
+  oraclejdk = jdkdistro true false;
+
+  oraclejre = jdkdistro false false;
+
   jrePlugin = lowPrio (jdkdistro false true);
 
   supportsJDK =
