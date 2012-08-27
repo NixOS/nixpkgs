@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1q5vjcvw4f067c63vj2n3xggvk5prm11571x6vnqiav47vdbqvni";
   };
 
+  outputs = [ "dev" "out" "bin" ];
+
   patches = [ ./linux-specific-header.patch ];
 
   crossAttrs = {

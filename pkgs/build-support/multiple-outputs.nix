@@ -2,13 +2,16 @@
 
 with stdenv.lib;
 
-{ outputs, ... } @ args:
+{ outputs ? [ "out" ], ... } @ args:
 
 stdenv.mkDerivation (args // {
 
   #postPhases = [ "fixupOutputsPhase" ] ++ args.postPhases or [];
 
   preHook =
+    optionalString (elem "man" outputs) ''
+      configureFlags="--mandir=$man/share/man $configureFlags"
+    '' +
     ''
       ${optionalString (elem "bin" outputs) ''
         configureFlags="--bindir=$bin/bin --mandir=$bin/share/man $configureFlags"
@@ -43,7 +46,7 @@ stdenv.mkDerivation (args // {
           echo "$propagatedBuildInputs" > "$dev/nix-support/propagated-build-inputs"
           propagatedBuildInputs=
         fi
-        echo "$out $lib $propagatedBuildNativeInputs" > "$dev/nix-support/propagated-build-native-inputs"
+        echo "$out $lib $bin $propagatedBuildNativeInputs" > "$dev/nix-support/propagated-build-native-inputs"
         propagatedBuildNativeInputs=
       elif [ -n "$out" ]; then
         propagatedBuildNativeInputs="$lib $propagatedBuildNativeInputs"

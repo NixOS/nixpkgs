@@ -9,6 +9,10 @@ stdenv.mkDerivation {
     sha256 = "1qdywh1r75lalb7z6s9pm6pmqx82chrrxqb8cdqi629nvc03yyns";
   };
 
+  outputs = [ "dev" "out" "bin" "doc" ];
+
+  enableParallelBuilding = true;
+
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
   buildInputs = [ libX11 ];
 
@@ -17,8 +21,6 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
   configureFlags = "--with-libjasper --with-x11";
-
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     description = "A library for image loading and manipulation";

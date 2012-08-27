@@ -21,10 +21,12 @@ stdenv.mkDerivation {
       ./old-icons.patch
     ];
 
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   enableParallelBuilding = true;
-  
+
   buildNativeInputs = [ perl pkgconfig ];
-  
+
   propagatedBuildInputs =
     [ xlibs.xlibs glib atk pango gdk_pixbuf cairo
       xlibs.libXrandr xlibs.libXrender xlibs.libXcomposite xlibs.libXi
@@ -34,8 +36,6 @@ stdenv.mkDerivation {
 
   configureFlags = "--with-xinput=yes";
 
-  postInstall = "rm -rf $out/share/gtk-doc";
-  
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
 

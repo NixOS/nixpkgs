@@ -3516,7 +3516,9 @@ let
 
   freeglut = callPackage ../development/libraries/freeglut { };
 
-  freetype = callPackage ../development/libraries/freetype { };
+  freetype = callPackage ../development/libraries/freetype {
+    stdenv = stdenvMulti;
+  };
 
   fribidi = callPackage ../development/libraries/fribidi { };
 
@@ -3681,7 +3683,9 @@ let
 
   glpk = callPackage ../development/libraries/glpk { };
 
-  gmime = callPackage ../development/libraries/gmime { };
+  gmime = callPackage ../development/libraries/gmime {
+    stdenv = stdenvMulti;
+  };
 
   gmm = callPackage ../development/libraries/gmm { };
 
@@ -3799,19 +3803,29 @@ let
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
-  atk = callPackage ../development/libraries/atk/2.2.x.nix { };
+  atk = callPackage ../development/libraries/atk/2.2.x.nix {
+    stdenv = stdenvMulti;
+  };
 
   atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
 
-  cairo = callPackage ../development/libraries/cairo { };
+  cairo = callPackage ../development/libraries/cairo {
+    stdenv = stdenvMulti;
+  };
 
-  pango = callPackage ../development/libraries/pango/1.29.x.nix { };
+  pango = callPackage ../development/libraries/pango/1.29.x.nix {
+    stdenv = stdenvMulti;
+  };
 
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
 
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
+  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix {
+    stdenv = stdenvMulti;
+  };
 
-  gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+  gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix {
+    stdenv = stdenvMulti;
+  };
 
   gtk = pkgs.gtk2;
 
@@ -4297,7 +4311,9 @@ let
 
   libtheora = callPackage ../development/libraries/libtheora { };
 
-  libtiff = callPackage ../development/libraries/libtiff { };
+  libtiff = callPackage ../development/libraries/libtiff {
+    stdenv = stdenvMulti;
+  };
 
   libtiger = callPackage ../development/libraries/libtiger { };
 
@@ -5432,7 +5448,7 @@ let
   xinetd = callPackage ../servers/xinetd { };
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
-    inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
+    inherit fetchurl fetchsvn stdenv stdenvMulti pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
       xkeyboard_config dbus libuuid openssl gperf m4
       autoconf libtool xmlto asciidoc udev flex bison python;
@@ -6174,10 +6190,12 @@ let
   utillinux = lowPrio (callPackage ../os-specific/linux/util-linux {
     ncurses = null;
     perl = null;
+    stdenv = stdenvMulti;
   });
 
   utillinuxCurses = utillinux.override {
     inherit ncurses perl;
+    stdenv = stdenvMulti;
   };
 
   v4l_utils = callPackage ../os-specific/linux/v4l-utils {

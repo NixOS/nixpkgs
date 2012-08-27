@@ -2,12 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "gmime-2.4.24";
-  
+
   src = fetchurl {
     url = "mirror://gnome/sources/gmime/2.4/${name}.tar.gz";
     sha256 = "2f538d68e215f075d16575a6da9acb87983db9e2df0d7d403858048881a0dd15";
   };
-  
+
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   buildInputs = [ pkgconfig glib zlib ];
 
   meta = {

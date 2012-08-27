@@ -8,13 +8,15 @@ stdenv.mkDerivation rec {
     sha256 = "0zqjq6ccv6mbah74rcvb03ksq1jwan21z37mdmqa56307sax3s3s";
   };
 
+  enableParallelBuilding = true;
+
+  outputs = [ "dev" "out" "bin" "doc" ];
+
   buildInputs = stdenv.lib.optional stdenv.isDarwin gettext;
 
   buildNativeInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ x11 glib cairo libpng ];
-
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     description = "A library for laying out and rendering of text, with an emphasis on internationalization";

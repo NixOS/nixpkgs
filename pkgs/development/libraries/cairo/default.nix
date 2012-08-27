@@ -14,11 +14,15 @@ assert xcbSupport -> libxcb != null && xcbutil != null;
 
 stdenv.mkDerivation rec {
   name = "cairo-1.10.2";
-  
+
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.gz";
     sha1 = "ccce5ae03f99c505db97c286a0c9a90a926d3c6e";
   };
+
+  enableParallelBuilding = true;
+
+  outputs = [ "dev" "out" "bin" "doc" ];
 
   buildInputs =
     [ pkgconfig x11 fontconfig xlibs.libXrender ]
@@ -32,7 +36,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional gobjectSupport glib ++
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
-    
+
   configureFlags =
     [ "--enable-tee" ]
     ++ stdenv.lib.optional xcbSupport "--enable-xcb"
@@ -44,9 +48,6 @@ stdenv.mkDerivation rec {
     sed -i "src/cairo.pc.in" \
         -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
   '';
-
-  # The default `--disable-gtk-doc' is ignored.
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     description = "A 2D graphics library with support for multiple output devices";

@@ -8,11 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "17bkqg89l9hxbkgc76cxlin1bwczk7m6ikbccx677lrxh3kz08lb";
   };
 
+  enableParallelBuilding = true;
+
+  outputs = [ "dev" "out" "doc" ];
+
   buildNativeInputs = [ pkgconfig perl ];
 
   propagatedBuildInputs = [ glib ];
-
-  postInstall = "rm -rf $out/share/gtk-doc";
 
   meta = {
     description = "ATK, the accessibility toolkit";

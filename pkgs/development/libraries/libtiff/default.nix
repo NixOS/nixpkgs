@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "libtiff-3.9.4";
-  
+
   src = fetchurl {
     urls =
       [ ftp://ftp.remotesensing.org/pub/libtiff/tiff-3.9.4.tar.gz
@@ -10,7 +10,11 @@ stdenv.mkDerivation {
       ];
     sha256 = "19hxd773yxcs4lxlc3zfdkz5aiv705vj2jvy5srpqkxpbw3nvdv7";
   };
-  
+
+  outputs = [ "dev" "out" "bin" "doc" ];
+
+  enableParallelBuilding = true;
+
   propagatedBuildInputs = [ zlib libjpeg ];
 
   meta = {
