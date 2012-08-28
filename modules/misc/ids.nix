@@ -73,6 +73,7 @@ in
     fprot = 52;
     bind = 53;
     wwwrun = 54;
+    spamd = 55;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 

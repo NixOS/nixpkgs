@@ -33,11 +33,17 @@ in
     # Allow users to run 'spamc'.
     environment.systemPackages = [ pkgs.spamassassin ];
 
+    users.extraUsers = singleton
+      { name = "spamd";
+        description = "Spam Assassin Daemon";
+        uid = config.ids.uids.spamd;
+      };
+
     jobs.spamd = {
       description = "Spam Assassin Server";
       startOn = "started networking and filesystem";
       environment.TZ = config.time.timeZone;
-      exec = "${pkgs.spamassassin}/bin/spamd -C /etc/spamassassin/init.pre --siteconfigpath=/etc/spamassassin --debug --pidfile=/var/run/spamd.pid";
+      exec = "${pkgs.spamassassin}/bin/spamd -C /etc/spamassassin/init.pre --siteconfigpath=/etc/spamassassin --username=spamd --pidfile=/var/run/spamd.pid";
     };
 
   };
