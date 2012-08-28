@@ -1,13 +1,13 @@
-{ cabal, fclabels, hashable, QuickCheck, transformers
-, unorderedContainers, vault
+{ cabal, hashable, QuickCheck, transformers, unorderedContainers
+, vault
 }:
 
 cabal.mkDerivation (self: {
   pname = "reactive-banana";
-  version = "0.7.0.0";
-  sha256 = "0f25zr4l2v73yr3mww0ri9n0kq97sakd0mifvll0kmsh0cz124xz";
+  version = "0.7.0.1";
+  sha256 = "0nd6j2782x7i12xw480qgk42jkya9qi0xdas15ik6cmg4c9z1dyk";
   buildDepends = [
-    fclabels hashable QuickCheck transformers unorderedContainers vault
+    hashable QuickCheck transformers unorderedContainers vault
   ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/Reactive-banana";
