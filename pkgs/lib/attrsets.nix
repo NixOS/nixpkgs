@@ -5,7 +5,8 @@ with {
   inherit (import ./trivial.nix) or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
-  inherit (import ./lists.nix) concatMap concatLists;
+  inherit (import ./lists.nix) concatMap concatLists all;
+  inherit (import ./misc.nix) maybeAttr;
 };
 
 rec {
@@ -78,6 +79,16 @@ rec {
   filterAttrs = pred: set:
     listToAttrs (fold (n: ys: let v = getAttr n set; in if pred n v then [(nameValuePair n v)] ++ ys else ys) [] (attrNames set));
 
+  /* foldAttrs: apply fold functions to values grouped by key. Eg accumulate values as list:
+     foldAttrs (n: a: [n] ++ a) [] [{ a = 2; } { a = 3; }]
+     => { a = [ 2 3 ]; }
+  */
+  foldAttrs = op: nul: list_of_attrs:
+    fold (n: a:
+        fold (name: o:
+          o // (listToAttrs [{inherit name; value = op (getAttr name n) (maybeAttr name nul a); }])
+        ) a (attrNames n)
+    ) {} list_of_attrs;
 
   /* Recursively collect sets that verify a given predicate named `pred'
      from the set `attrs'.  The recursion is stopped when the predicate is

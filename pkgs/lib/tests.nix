@@ -58,6 +58,13 @@ runTests {
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
   ];
 
+  testFoldAttrs = {
+    expr = foldAttrs (n: a: [n] ++ a) [] [
+    { a = 2; b = 7; }
+    { a = 3;        c = 8; }
+    ];
+    expected = { a = [ 2 3 ]; b = [7]; c = [8];};
+  };
 
   testOverridableDelayableArgsTest = {
     expr = 
