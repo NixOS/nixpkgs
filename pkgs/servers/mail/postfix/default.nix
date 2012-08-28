@@ -4,11 +4,11 @@
 
 assert stdenv.isLinux;
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "postfix-2.8.6";
 
   src = fetchurl {
-    url = ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/postfix-2.8.6.tar.gz;
+    url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
     sha256 = "1rfsfhna5hy5lc6hkg1zc2862pdc5c1y9z6aiy8rinlmzrfplhlb";
   };
 
