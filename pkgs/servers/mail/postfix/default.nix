@@ -6,7 +6,7 @@ assert stdenv.isLinux;
 
 stdenv.mkDerivation {
   name = "postfix-2.8.6";
-  
+
   src = fetchurl {
     url = ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/postfix-2.8.6.tar.gz;
     sha256 = "1rfsfhna5hy5lc6hkg1zc2862pdc5c1y9z6aiy8rinlmzrfplhlb";
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [db4 openssl cyrus_sasl bison perl];
-  
+
   patches = [ ./postfix-2.2.9-db.patch  ./postfix-2.2.9-lib.patch ./db-linux3.patch ];
 
   postPatch = ''
@@ -55,6 +55,6 @@ stdenv.mkDerivation {
       -e s,/usr/sbin,/var/run/current-system/sw/sbin, \
       -e s,:/sbin,, src/util/sys_defs.h
   '';
-  
+
   inherit glibc;
 }
