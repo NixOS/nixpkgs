@@ -54,6 +54,14 @@ stdenv.mkDerivation {
     sed -i -e s,/usr/bin,/var/run/current-system/sw/bin, \
       -e s,/usr/sbin,/var/run/current-system/sw/sbin, \
       -e s,:/sbin,, src/util/sys_defs.h
+
+  meta = {
+    homepage = "http://www.postfix.org/";
+    description = "a fast, easy to administer, and secure mail server";
+    license = stdenv.lib.licenses.bsdOriginal;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
   '';
 
   inherit glibc;
