@@ -19,7 +19,7 @@ cabal.mkDerivation (self: {
     zlib
   ];
   patchPhase = ''
-    sed -i -e 's|hslogger.*,|hslogger,|' gitit.cabal
+    sed -i -e 's|hslogger.*,|hslogger,|' -e 's|base64-bytestring.*,|base64-bytestring,|' gitit.cabal
   '';
   meta = {
     homepage = "http://gitit.net";
