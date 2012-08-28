@@ -17,6 +17,9 @@ cabal.mkDerivation (self: {
     monadControl mtl network regexCompat resourcet socks text time tls
     tlsExtra transformers transformersBase utf8String void zlibConduit
   ];
+  patchPhase = ''
+    sed -i http-conduit.cabal -e 's|, base64-bytestring.*|, base64-bytestring|' -e 's|, asn1-data.*|, asn1-data|'
+  '';
   meta = {
     homepage = "http://www.yesodweb.com/book/http-conduit";
     description = "HTTP client package with conduit interface and HTTPS support";
