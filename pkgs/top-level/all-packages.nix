@@ -3368,6 +3368,8 @@ let
 
   clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) { };
 
+  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
+
   clucene_core = callPackage ../development/libraries/clucene-core { };
 
   cluceneCore = clucene_core; # !!! remove this
