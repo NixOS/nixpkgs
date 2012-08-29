@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash }:
+{ stdenv, fetchurl, makeWrapper, curl }:
 
 let
 
@@ -13,13 +13,16 @@ in stdenv.mkDerivation {
     sha256 = "0clryfssaa4rjvsy760p51ppq1275lwvhm9jh3g4mi973xv4n8si";
   };
 
-  phases = [ "unpackPhase" "installPhase" "postInstallPhase" ];
+  buildInputs = [ makeWrapper curl ];
 
-  installPhase = ''make PREFIX="$out" install'';
+  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
-  postInstallPhase = ''
-    find "$out" -name "*.sh" -exec \
-        sed -i "s@#!/bin/bash@#!${bash}/bin/bash@" '{}' \;
+  installPhase = ''
+    make PREFIX="$out" install
+
+    for fn in plow{del,down,list,up}; do
+      wrapProgram "$out/bin/$fn" --prefix PATH
+    done
   '';
 
   meta = {
