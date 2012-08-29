@@ -5,6 +5,7 @@ with pkgs.lib;
 let
 
   cfg = config.networking;
+  hasVirtuals = any (i: i.virtual) cfg.interfaces;
 
 in
 
@@ -119,6 +120,26 @@ in
           '';
         };
 
+        virtual = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Whether this interface is virtual and should be created by tunctl.
+            This is mainly useful for creating bridges between a host a virtual
+            network such as VPN or a virtual machine.
+
+            Defaults to tap device, unless interface contains "tun" in its name.
+          '';
+        };
+
+        virtualOwner = mkOption {
+          default = "root";
+          type = types.uniq types.string;
+          description = ''
+            In case of a virtual device, the user who owns it.
+          '';
+        };
+
       };
 
     };
@@ -179,7 +200,7 @@ in
 
   config = {
 
-    boot.kernelModules = optional cfg.enableIPv6 "ipv6";
+    boot.kernelModules = optional cfg.enableIPv6 "ipv6" ++ optional hasVirtuals "tun";
 
     environment.systemPackages =
       [ pkgs.host
@@ -191,6 +212,7 @@ in
         pkgs.openresolv
       ]
       ++ optional (cfg.bridges != {}) pkgs.bridge_utils
+      ++ optional hasVirtuals pkgs.tunctl
       ++ optional cfg.enableIPv6 pkgs.ndisc6;
 
     security.setuidPrograms = [ "ping" "ping6" ];
@@ -205,6 +227,15 @@ in
         preStart =
           ''
             set +e # continue in case of errors
+
+            # Create virtual network interfaces
+            ${flip concatMapStrings cfg.interfaces (i:
+              optionalString i.virtual
+                ''
+                  echo "Creating virtual network interface ${i.name}..."
+                  ${pkgs.tunctl}/bin/tunctl -t "${i.name}" -u "${i.virtualOwner}"
+                '')
+            }
 
             # Set MAC addresses of interfaces, if desired.
             ${flip concatMapStrings cfg.interfaces (i:
