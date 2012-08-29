@@ -3990,6 +3990,8 @@ let
 
   libcdio = callPackage ../development/libraries/libcdio { };
 
+  libcdr = callPackage ../development/libraries/libcdr { };
+
   libchamplain = callPackage ../development/libraries/libchamplain {
     inherit (gnome) libsoup;
   };
