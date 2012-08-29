@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
 
     maintainers = [ maintainers.bluescreen303 ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
