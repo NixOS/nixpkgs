@@ -4335,6 +4335,8 @@ let
 
   libvirt = callPackage ../development/libraries/libvirt { };
 
+  libvisio = callPackage ../development/libraries/libvisio { };
+
   libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
     inherit libtool libjpeg openssl zlib;
     inherit (xlibs) xproto libX11 damageproto libXdamage
