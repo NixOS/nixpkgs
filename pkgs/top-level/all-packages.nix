@@ -4485,6 +4485,8 @@ let
 
   mysocketw = callPackage ../development/libraries/mysocketw { };
 
+  mythes = callPackage ../development/libraries/mythes { };
+
   ncurses = makeOverridable (import ../development/libraries/ncurses) {
     inherit fetchurl;
     unicode = system != "i686-cygwin";
