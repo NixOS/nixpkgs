@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.spice-space.org;
     license = stdenv.lib.licenses.bsd3;
 
-    maintainers = [ stdenv.lib.maintainers.bluescreen303.nl ];
+    maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
