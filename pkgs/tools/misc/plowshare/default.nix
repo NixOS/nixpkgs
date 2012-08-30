@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
     make PREFIX="$out" install
 
     for fn in plow{del,down,list,up}; do
-      wrapProgram "$out/bin/$fn" --prefix PATH
+      wrapProgram "$out/bin/$fn" --prefix PATH : ${curl}/bin
     done
   '';
 
