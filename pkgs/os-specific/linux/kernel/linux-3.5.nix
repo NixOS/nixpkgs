@@ -257,6 +257,7 @@ import ./generic.nix (
 
     features.iwlwifi = true;
     features.efiBootStub = true;
+    features.needsCifsUtils = true;
   }
 
   // removeAttrs args ["extraConfig"]
