@@ -130,7 +130,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     mtl          = self.mtl_2_1_2;              # 7.5 ok
     network      = self.network_2_3_1_0;        # 7.5 ok
     OpenGL       = self.OpenGL_2_2_3_1;         # 7.5 fail
-    parallel     = self.parallel_3_2_0_2;       # 7.5 fail
+    parallel     = self.parallel_3_2_0_3;       # 7.5 ok
     parsec       = self.parsec_3_1_3;           # 7.5 ok
     QuickCheck   = self.QuickCheck_2_5;         # 7.5 fail
     random       = self.random_1_0_1_1;         # 7.5 ok
