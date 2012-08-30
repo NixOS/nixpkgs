@@ -12,6 +12,7 @@ stdenv.mkDerivation (rec {
     sha256 = "1pp90fm27qi5cd0pq18xcmnl79xcbfwxc54bg1xi1wv0vryqdpcr";
   };
 
+  # FIXME: Turn into a Nix list.
   configurePhase = ''
     ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
@@ -19,6 +20,8 @@ stdenv.mkDerivation (rec {
       --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
       ${if guileBindings
         then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
+        else ""}${if stdenv.isSunOS            # TODO: this for all platforms
+        then " --with-libnettle-prefix=${nettle}"
         else ""}
   '';
 
