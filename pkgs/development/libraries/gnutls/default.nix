@@ -1,5 +1,5 @@
 { fetchurl, stdenv, zlib, lzo, libtasn1, nettle
-, guileBindings, guile, perl }:
+, guileBindings, guile, perl, gmp }:
 
 assert guileBindings -> guile != null;
 
@@ -20,8 +20,11 @@ stdenv.mkDerivation (rec {
       --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
       ${if guileBindings
         then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
-        else ""}${if stdenv.isSunOS            # TODO: this for all platforms
-        then " --with-libnettle-prefix=${nettle}"
+        else ""}${if stdenv.isSunOS
+          # TODO: Use `--with-libnettle-prefix' on all platforms
+          # Note: GMP is a dependency of Nettle, whose public headers include
+          # GMP headers, hence the hack.
+        then " --with-libnettle-prefix=${nettle} CPPFLAGS=-I${gmp}/include"
         else ""}
   '';
 
