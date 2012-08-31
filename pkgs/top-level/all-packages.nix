@@ -4097,6 +4097,8 @@ let
     libmpeg2 = mpeg2dec;
   };
 
+  libexttextcat = callPackage ../development/libraries/libexttextcat {};
+
   libf2c = callPackage ../development/libraries/libf2c {};
 
   libfixposix = callPackage ../development/libraries/libfixposix {};
