@@ -1493,6 +1493,8 @@ let
 
   su = shadow;
 
+  surfraw = callPackage ../tools/networking/surfraw { };
+
   swec = callPackage ../tools/networking/swec {
     inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
   };
