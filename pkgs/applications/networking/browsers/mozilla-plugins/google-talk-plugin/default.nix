@@ -1,13 +1,13 @@
 { stdenv, fetchurl, rpm, cpio, mesa, xorg, cairo
 , libpng12, gtk, glib, gdk_pixbuf, fontconfig, freetype, curl
-, dbus_glib, alsaLib, pulseaudio, udev
+, dbus_glib, alsaLib, pulseaudio, udev, pango
 }:
 
 with stdenv.lib;
 
 let
 
-  baseURL = "http://dl.google.com/linux/talkplugin/deb/pool/main/g/google-talkplugin";
+  baseURL = "http://dl.google.com/linux/direct/";
 
   rpathPlugin = makeLibraryPath
     [ mesa
@@ -37,24 +37,26 @@ let
       dbus_glib
       udev
       curl
+      pango
+      cairo
     ];
 
 in
 
 stdenv.mkDerivation rec {
   name = "google-talk-plugin-${version}";
-  version = "3.2.4.0";
+  version = "3.5.1.0";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "${baseURL}/google-talkplugin_${version}-1_amd64.deb";
-        sha256 = "0hd8iyv092fr4bz760xjawiad581hphddv608d0dvzy2bhnl17g1";
+        url = "${baseURL}/google-talkplugin_current_amd64.deb";
+        sha256 = "0ml4yirzdcladw11fq5d8lwqfqgb1fh9vpbzbzmhplvyj6mvkqrj";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
-        sha256 = "13vqs4k16a6bzc5i4zpnakh31nkdqp7m9cv7p16r1sq5smv1331i";
+        url = "${baseURL}/google-talkplugin_current_i386.deb";
+        sha256 = "1kfd26zygb76iqnr8n3f7k7n9h5bz0rf716n80crqzyasv51mn57";
       }
     else throw "Google Talk does not support your platform.";
 
