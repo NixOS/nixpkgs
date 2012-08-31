@@ -30,5 +30,6 @@ in stdenv.mkDerivation {
       A command-line download/upload tool for popular file sharing websites
     '';
     license = stdenv.lib.licenses.gpl3;
+    maintainers = [ stdenv.lib.maintainers.aforemny ];
   };
 }
