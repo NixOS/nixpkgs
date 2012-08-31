@@ -13,7 +13,7 @@ in stdenv.mkDerivation {
     sha256 = "0clryfssaa4rjvsy760p51ppq1275lwvhm9jh3g4mi973xv4n8si";
   };
 
-  buildInputs = [ makeWrapper curl ];
+  buildInputs = [ makeWrapper ];
 
   phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
 
