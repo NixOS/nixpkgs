@@ -974,6 +974,25 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  pylast = buildPythonPackage rec {
+    name = "pylast-${version}";
+    version = "0.5.11";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pylast/${name}.tar.gz";
+      md5 = "506cf1b13020b3ed2f3c845ea0c9830e";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/pylast/;
+      description = "A python interface to last.fm (and compatibles)";
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
+
+
   libcloud = buildPythonPackage (rec {
     name = "libcloud-0.3.1";
 
