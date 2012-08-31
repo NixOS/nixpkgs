@@ -138,6 +138,20 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  area53 = buildPythonPackage (rec {
+    name = "area53-b2c9cdcabd";
+
+    src = fetchgit {
+      url = git://github.com/mariusv/Area53.git;
+      rev = "b2c9cdcabd";
+      sha256 = "b0c12b8c48ed9180c7475fab18de50d63e1b517cfb46da4d2c66fc406fe902bc";
+    };
+    installCommand = "python setup.py install --prefix=$out";
+    doCheck = false;
+    propagatedBuildInputs = [ boto ];
+  });
+
+
   argparse = buildPythonPackage (rec {
     name = "argparse-1.1";
 
@@ -168,6 +182,7 @@ let pythonPackages = python.modules // rec {
       '';
     };
   });
+
 
   astng = buildPythonPackage rec {
     name = "logilab-astng-0.21.1";

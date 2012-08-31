@@ -1,25 +1,23 @@
-{stdenv, fetchurl, emacs}:
+{stdenv, fetchgit, emacs}:
 
 stdenv.mkDerivation rec {
-  name = "sunrise-commander-6";
+  name = "sunrise-commander-6r435";
 
-  src = fetchurl {
-    url = "http://www.emacswiki.org/emacs/download/sunrise-commander.el";
-    sha256 = "1bbpm00nc7ry0f2k4zaqbvp6w9py31asfcr9hddggc138pnfajvq";
+  src = fetchgit {
+    url = https://github.com/escherdragon/sunrise-commander.git;
+    rev = "7a44ca7abd9fe79f87934c78d00dc2a91419a4f1";
+    sha256 = "2909beccc9daaa79e70876ac6547088c2459b624c364dda1886fe4d7adc7708b";
   };
-
-  phases = [ "buildPhase" "installPhase"];
 
   buildInputs = [ emacs ];
 
   buildPhase = ''
-    cp $src sunrise-commander.el
-    emacs --batch -f batch-byte-compile sunrise-commander.el
+    emacs -L . --batch -f batch-byte-compile *.el
   '';
 
   installPhase = ''
-    install -d $out/share/emacs/site-lisp
-    install sunrise-commander.el* $out/share/emacs/site-lisp
+    mkdir -p $out/share/emacs/site-lisp
+    install *.el* $out/share/emacs/site-lisp
   '';
 
   meta = {

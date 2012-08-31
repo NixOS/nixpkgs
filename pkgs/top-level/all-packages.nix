@@ -21,10 +21,12 @@
   # null, the default standard environment is used.
   bootStdenv ? null
 
-, # Darwin is an "impure" platform, with its libc outside of the store.
-  # Thus, GCC, GFortran, & co. must always look for files in standard system
-  # directories (/usr/include, etc.)
-  noSysDirs ? (system != "x86_64-darwin" && system != "i686-darwin")
+, # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
+  # outside of the store.  Thus, GCC, GFortran, & co. must always look for
+  # files in standard system directories (/usr/include, etc.)
+  noSysDirs ? (system != "x86_64-darwin" && system != "i686-darwin"
+               && system != "x86_64-freebsd" && system != "i686-freebsd"
+               && system != "x86_64-kfreebsd-gnu")
 
   # More flags for the bootstrapping of stdenv.
 , gccWithCC ? true
@@ -986,10 +988,6 @@ let
     inherit pkgs stdenv nodejs fetchurl;
   });
 
-  npm2nix = callPackage ../development/tools/node/npm2nix {
-    coffeescript = nodePackages."coffee-script";
-  };
-
   ldns = callPackage ../development/libraries/ldns { };
 
   lftp = callPackage ../tools/networking/lftp { };
@@ -1498,6 +1496,8 @@ let
   stunnel = callPackage ../tools/networking/stunnel { };
 
   su = shadow;
+
+  surfraw = callPackage ../tools/networking/surfraw { };
 
   swec = callPackage ../tools/networking/swec {
     inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
@@ -2365,8 +2365,16 @@ let
     jreOnly = true;
   };
 
-  jdk = if stdenv.isDarwin then openjdk else jdkdistro true false;
-  jre = jdkdistro false false;
+  jdk = if (stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+    then openjdk
+    else jdkdistro true false;
+  jre = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+    then openjre
+    else jdkdistro false false;
+
+  oraclejdk = jdkdistro true false;
+
+  oraclejre = jdkdistro false false;
 
   jrePlugin = lowPrio (jdkdistro false true);
 
@@ -3329,6 +3337,7 @@ let
 
   celt = callPackage ../development/libraries/celt {};
   celt_0_7 = callPackage ../development/libraries/celt/0.7.nix {};
+  celt_0_5_1 = callPackage ../development/libraries/celt/0.5.1.nix {};
 
   cgal = callPackage ../development/libraries/CGAL {};
 
@@ -3364,6 +3373,8 @@ let
   cln = callPackage ../development/libraries/cln { };
 
   clppcre = builderDefsPackage (import ../development/libraries/cl-ppcre) { };
+
+  clucene_core_2 = callPackage ../development/libraries/clucene-core/2.x.nix { };
 
   clucene_core = callPackage ../development/libraries/clucene-core { };
 
@@ -3439,6 +3450,8 @@ let
   dssi = callPackage ../development/libraries/dssi {};
 
   dragonegg = callPackage ../development/compilers/llvm/dragonegg.nix { };
+
+  dxflib = callPackage ../development/libraries/dxflib {};
 
   eigen = callPackage ../development/libraries/eigen {};
 
@@ -3985,6 +3998,8 @@ let
 
   libcdio = callPackage ../development/libraries/libcdio { };
 
+  libcdr = callPackage ../development/libraries/libcdr { };
+
   libchamplain = callPackage ../development/libraries/libchamplain {
     inherit (gnome) libsoup;
   };
@@ -4087,6 +4102,8 @@ let
   libextractor = callPackage ../development/libraries/libextractor {
     libmpeg2 = mpeg2dec;
   };
+
+  libexttextcat = callPackage ../development/libraries/libexttextcat {};
 
   libf2c = callPackage ../development/libraries/libf2c {};
 
@@ -4330,6 +4347,8 @@ let
 
   libvirt = callPackage ../development/libraries/libvirt { };
 
+  libvisio = callPackage ../development/libraries/libvisio { };
+
   libvncserver = builderDefsPackage (import ../development/libraries/libvncserver) {
     inherit libtool libjpeg openssl zlib;
     inherit (xlibs) xproto libX11 damageproto libXdamage
@@ -4416,6 +4435,8 @@ let
 
   lzo = callPackage ../development/libraries/lzo { };
 
+  mdds = callPackage ../development/libraries/mdds { };
+
   # failed to build
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
 
@@ -4471,6 +4492,8 @@ let
   myguiSvn = callPackage ../development/libraries/mygui/svn.nix {};
 
   mysocketw = callPackage ../development/libraries/mysocketw { };
+
+  mythes = callPackage ../development/libraries/mythes { };
 
   ncurses = makeOverridable (import ../development/libraries/ncurses) {
     inherit fetchurl;
@@ -4653,6 +4676,8 @@ let
 
   qjson = callPackage ../development/libraries/qjson { };
 
+  qoauth = callPackage ../development/libraries/qoauth { };
+
   qt3 = callPackage ../development/libraries/qt-3 {
     openglSupport = mesaSupported;
   };
@@ -4787,6 +4812,13 @@ let
   speex = callPackage ../development/libraries/speex { };
 
   sphinxbase = callPackage ../development/libraries/sphinxbase { };
+
+  spice = callPackage ../development/libraries/spice {
+    celt = celt_0_5_1;
+    inherit (xlibs) libXrandr libXfixes libXext libXrender libXinerama;
+  };
+
+  spiceProtocol = callPackage ../development/libraries/spice-protocol { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
 
@@ -6785,6 +6817,8 @@ let
 
   espeak = callPackage ../applications/audio/espeak { };
 
+  espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
+
   esniper = callPackage ../applications/networking/esniper { };
 
   etherape = callPackage ../applications/networking/sniffers/etherape {
@@ -6951,6 +6985,8 @@ let
   qcad = callPackage ../applications/misc/qcad { };
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
+
+  praat = callPackage ../applications/audio/praat { };
 
   quvi = callPackage ../applications/video/quvi/tool.nix { };
 
@@ -7492,6 +7528,8 @@ let
     inherit (xorg) libXpm libXft;
     fltk = fltk13;
   };
+
+  rapcad = callPackage ../applications/graphics/rapcad {};
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
 

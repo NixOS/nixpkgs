@@ -21,6 +21,21 @@
 , jreOnly ? false
 }:
 
+let
+
+  /**
+   * The JRE libraries are in directories that depend on the CPU.
+   */
+  architecture =
+    if stdenv.system == "i686-linux" then
+      "i386"
+    else if stdenv.system == "x86_64-linux" then
+      "amd64"
+    else
+      throw "openjdk requires i686-linux or x86_64 linux";
+
+in
+
 stdenv.mkDerivation rec {
   name = "openj${if jreOnly then "re" else "dk"}-7b127";
 
@@ -137,5 +152,7 @@ stdenv.mkDerivation rec {
 
     platforms = stdenv.lib.platforms.linux;
   };
+
+  passthru = { inherit architecture; };
 }
 
