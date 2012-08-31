@@ -1551,6 +1551,23 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  pep8 = buildPythonPackage rec {
+    name = "pep8-${version}";
+    version = "1.3.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
+      md5 = "093a99ced0cc3b58c01549d7350f5a73";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/pep8/;
+      description = "Python style guide checker";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   pexpect = buildPythonPackage {
     name = "pexpect-2.3";
 
