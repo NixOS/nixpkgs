@@ -7,7 +7,7 @@ with stdenv.lib;
 
 let
 
-  baseURL = "http://dl.google.com/linux/direct/";
+  baseURL = "http://dl.google.com/linux/talkplugin/deb/pool/main/g/google-talkplugin";
 
   rpathPlugin = makeLibraryPath
     [ mesa
@@ -50,12 +50,12 @@ stdenv.mkDerivation rec {
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "${baseURL}/google-talkplugin_current_amd64.deb";
+        url = "${baseURL}/google-talkplugin_${version}-1_amd64.deb";
         sha256 = "0ml4yirzdcladw11fq5d8lwqfqgb1fh9vpbzbzmhplvyj6mvkqrj";
       }
     else if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "${baseURL}/google-talkplugin_current_i386.deb";
+        url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
         sha256 = "1kfd26zygb76iqnr8n3f7k7n9h5bz0rf716n80crqzyasv51mn57";
       }
     else throw "Google Talk does not support your platform.";
