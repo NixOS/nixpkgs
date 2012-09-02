@@ -1796,6 +1796,30 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  pyinotify = pkgs.stdenv.mkDerivation rec {
+    name = "python-pyinotify-${version}";
+    version = "0.9.3";
+
+    src = fetchgit {
+      url = "git://github.com/seb-m/pyinotify.git";
+      rev = "refs/tags/${version}";
+      sha256 = "d38ce95e4af00391e58246a8d7fe42bdb51d63054b09809600b2faef2a803472";
+    };
+
+    buildInputs = [ python ];
+
+    installPhase = ''
+      python setup.py install --prefix=$out
+    '';
+
+    meta = {
+      homepage = https://github.com/seb-m/pyinotify/wiki;
+      description = "Monitor filesystems events on Linux platforms with inotify";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   pyparsing = buildPythonPackage rec {
     name = "pyparsing-1.5.6";
 
