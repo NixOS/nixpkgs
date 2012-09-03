@@ -386,6 +386,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Agda = callPackage ../development/libraries/haskell/Agda {
     haskellSrcExts = self.haskellSrcExts_1_11_1;
+    haskeline = self.haskeline_0_6_4_7;
   };
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
@@ -811,7 +812,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hashtables = callPackage ../development/libraries/haskell/hashtables {};
 
-  haskeline = callPackage ../development/libraries/haskell/haskeline {};
+  haskeline_0_6_4_7 = callPackage ../development/libraries/haskell/haskeline/0.6.4.7.nix {};
+  haskeline_0_7_0_2 = callPackage ../development/libraries/haskell/haskeline/0.7.0.2.nix {};
+  haskeline = self.haskeline_0_7_0_2;
 
   haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
 
@@ -879,7 +882,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hjsmin = callPackage ../development/libraries/haskell/hjsmin {};
 
-  hledger = callPackage ../development/libraries/haskell/hledger {};
+  hledger = callPackage ../development/libraries/haskell/hledger {
+    haskeline = self.haskeline_0_6_4_7;
+  };
   hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
   hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
@@ -1739,6 +1744,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   darcs = callPackage ../applications/version-management/darcs {
     tar = self.tar_0_3_2_0;
+    haskeline = self.haskeline_0_6_4_7;
   };
 
   leksah = callPackage ../applications/editors/leksah {
