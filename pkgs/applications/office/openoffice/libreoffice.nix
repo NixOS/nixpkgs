@@ -83,11 +83,13 @@ stdenv.mkDerivation rec {
   QT4DIR = qt4;
   KDE4DIR = kde4.kdelibs;
 
+  # I set --with-num-cpus=$NIX_BUILD_CORES, as it's the equivalent of
+  # enableParallelBuilding=true in this build system.
   preConfigure = ''
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
 
-    configureFlagsArray=("--with-lang=${langsSpaces}")
+    configureFlagsArray=("--with-lang=${langsSpaces}" "--with-num-cpus=$NIX_BUILD_CORES")
   '';
 
   makeFlags = "SHELL=${bash}/bin/bash";
@@ -117,7 +119,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     #"--enable-verbose"
-    "--with-max-jobs=1" "--with-num-cpus=1"
 
     # Without these, configure does not finish
     "--without-junit"
