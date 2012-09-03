@@ -16,8 +16,8 @@ let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "3";
   minor = "6";
-  patch = "0";
-  tweak = "4";
+  patch = "1";
+  tweak = "2";
   subdir = "${major}.${minor}.${patch}";
   version = "${subdir}.${tweak}";
   fetchThirdParty = {name, md5}: fetchurl {
@@ -36,17 +36,17 @@ let
       }) ] ++ (map fetchThirdParty (import ./libreoffice-srcs.nix));
     translations = fetchSrc {
       name = "translations";
-      sha256 = "e1603dbaa90ef027ea73e81a9ffa1ec86d311a40fd7aee6b08edd3fa86a19edb";
+      sha256 = "0id4ad8h3fl4s2ax6r4w4af74xvagkv0qwy50f483lqq3a3pl7fl";
     };
 
     help = fetchSrc {
       name = "help";
-      sha256 = "30b79e3b4cb5b2167d1f3c17b8781e8940665f861197ee9021a6ac8c64d508f8";
+      sha256 = "0jd3l3rkhmdvrvgklkmrh9zsg9hlv3vhy6s97fnzhpzr90sjqrs1";
     };
 
     core = fetchSrc {
       name = "core";
-      sha256 = "b301eac605830ed6423cbab49d99ff5ca3999ed8ad53f51766c715d49d09cd4d";
+      sha256 = "12zc0zviy1p3gk1v5nm4ks4rzscn68lpnl3kis4q693zhsk8jyh3";
     };
   };
 in

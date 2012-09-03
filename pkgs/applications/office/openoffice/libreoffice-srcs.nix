@@ -367,4 +367,8 @@
   name = "lcms2-2.3.tar.gz";
   md5 = "327348d67c979c88c2dec59a23a17d85";
 }
+{
+  name = "libvisio-0.0.19.tar.bz2";
+  md5 = "94e7f271e38c976462558b4278590178";
+}
 ]
