@@ -22,9 +22,11 @@ let kernelVersion = config.boot.kernelPackages.kernel.version; in
   ###### implementation
 
   config = pkgs.lib.mkIf config.networking.enableB43Firmware {
-    hardware.firmware = if builtins.lessThan (builtins.compareVersions kernelVersion "3.2") 0 then
-      throw "b43 firmware for kernels older than 3.2 not packaged yet!" else
-      [ pkgs.b43Firmware_5_1_138 ];
+    assertions = [ {
+      assertion = builtins.lessThan (builtins.compareVersions kernelVersion "3.2") 0;
+      message = "b43 firmware for kernels older than 3.2 not packaged yet!";
+    } ];
+    hardware.firmware = [ pkgs.b43Firmware_5_1_138 ];
   };
 
 }
