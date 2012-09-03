@@ -11,7 +11,7 @@ cabal.mkDerivation (self: {
     split time transformers utf8String
   ];
   patchPhase = ''
-    sed -i -e 's|,split.*|,split|' hledger-lib.cabal
+    sed -i -e 's|,split.*|,split|' -e 's|,cmdargs.*|,cmdargs|' hledger-lib.cabal
   '';
   meta = {
     homepage = "http://hledger.org";

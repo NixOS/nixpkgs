@@ -14,7 +14,7 @@ cabal.mkDerivation (self: {
     regexpr safe shakespeareText split text time utf8String
   ];
   patchPhase = ''
-    sed -i -e 's|,split.*|,split|' hledger.cabal
+    sed -i -e 's|,split.*|,split|' -e 's|,cmdargs.*|,cmdargs|' hledger.cabal
   '';
   meta = {
     homepage = "http://hledger.org";
