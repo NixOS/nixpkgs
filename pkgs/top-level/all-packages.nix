@@ -978,6 +978,8 @@ let
 
   minidlna = callPackage ../tools/networking/minidlna { };
 
+  mmv = callPackage ../tools/misc/mmv { };
+
   most = callPackage ../tools/misc/most { };
 
   netperf = callPackage ../applications/networking/netperf { };
