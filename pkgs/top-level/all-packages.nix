@@ -5613,6 +5613,8 @@ let
 
   iwlwifi1000ucode = callPackage ../os-specific/linux/firmware/iwlwifi-1000-ucode { };
 
+  iwlwifi2030ucode = callPackage ../os-specific/linux/firmware/iwlwifi-2030-ucode { };
+
   iwlwifi3945ucode = callPackage ../os-specific/linux/firmware/iwlwifi-3945-ucode { };
 
   iwlwifi4965ucodeV1 = callPackage ../os-specific/linux/firmware/iwlwifi-4965-ucode { };
