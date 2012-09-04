@@ -7471,6 +7471,8 @@ let
 
   pianobooster = callPackage ../applications/audio/pianobooster { };
 
+  picard = callPackage ../applications/audio/picard { };
+
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
     openssl = if (getConfig ["pidgin" "openssl"] true) then openssl else null;
     gnutls = if (getConfig ["pidgin" "gnutls"] false) then gnutls else null;
