@@ -1,37 +1,59 @@
 { stdenv, fetchurl, pam, python, tcsh, libxslt, perl, ArchiveZip
-, CompressZlib, zlib, libjpeg, expat, pkgconfig, freetype, libwpd
+, CompressZlib, zlib, libjpeg, expat, pkgconfigUpstream, freetype, libwpd
 , libxml2, db4, sablotron, curl, libXaw, fontconfig, libsndfile, neon
 , bison, flex, zip, unzip, gtk, libmspack, getopt, file, cairo, which
 , icu, boost, jdk, ant, libXext, libX11, libXtst, libXi, cups
 , libXinerama, openssl, gperf, cppunit, GConf, ORBit2, poppler
 , librsvg, gnome_vfs, gstreamer, gst_plugins_base, mesa
-, autoconf, automake, openldap, bash
+, autoconf, automake, openldap, bash, hunspell, librdf_redland, nss, nspr
+, libwpg, dbus_glib, qt4, kde4, clucene_core_2, libcdr, lcms2, vigra
+, libiodbc, mdds, saneBackends, mythes, libexttextcat, libvisio
 , fontsConf
 , langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" ]
 }:
 
 let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
+  major = "3";
+  minor = "6";
+  patch = "1";
+  tweak = "2";
+  subdir = "${major}.${minor}.${patch}";
+  version = "${subdir}.${tweak}";
+  fetchThirdParty = {name, md5}: fetchurl {
+    inherit name md5;
+    url = "http://dev-www.libreoffice.org/src/${md5}-${name}";
+  };
+  fetchSrc = {name, sha256}: fetchurl {
+    url = "http://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
+    inherit sha256;
+  };
+  srcs = {
+    third_party = [ (fetchurl rec {
+        url = "http://dev-www.libreoffice.org/extern/${md5}-${name}";
+        md5 = "185d60944ea767075d27247c3162b3bc";
+        name = "unowinreg.dll";
+      }) ] ++ (map fetchThirdParty (import ./libreoffice-srcs.nix));
+    translations = fetchSrc {
+      name = "translations";
+      sha256 = "0id4ad8h3fl4s2ax6r4w4af74xvagkv0qwy50f483lqq3a3pl7fl";
+    };
+
+    help = fetchSrc {
+      name = "help";
+      sha256 = "0jd3l3rkhmdvrvgklkmrh9zsg9hlv3vhy6s97fnzhpzr90sjqrs1";
+    };
+
+    core = fetchSrc {
+      name = "core";
+      sha256 = "12zc0zviy1p3gk1v5nm4ks4rzscn68lpnl3kis4q693zhsk8jyh3";
+    };
+  };
 in
 stdenv.mkDerivation rec {
-  name = "libreoffice-3.5.1.2";
+  name = "libreoffice-${version}";
 
-  srcs_download = import ./libreoffice-srcs.nix { inherit fetchurl; };
-
-  src_translation = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/3.5.1/libreoffice-translations-3.5.1.2.tar.xz";
-    sha256 = "cf8ed662f7d0a679bd3a242a7f88cf445b769afdcd8a3d3df655d774f296972a";
-  };
-
-  src_help = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/3.5.1/libreoffice-help-3.5.1.2.tar.xz";
-    sha256 = "43b07225854b1c8b3195b252453b8e97d2d58d83909bf4b5f920cb08b7f33e30";
-  };
-
-  src = fetchurl {
-    url = "http://download.documentfoundation.org/libreoffice/src/3.5.1/libreoffice-core-3.5.1.2.tar.xz";
-    sha256 = "61cd12e20fb9460178fc6f08100a9a189c2390c21e2e47eb66e07a5b0ce5cd94";
-  };
+  src = srcs.core;
 
   # Openoffice will open libcups dynamically, so we link it directly
   # to make its dlopen work.
@@ -40,47 +62,44 @@ stdenv.mkDerivation rec {
   # If we call 'configure', 'make' will then call configure again without parameters.
   # It's their system.
   configureScript = "./autogen.sh";
+  dontUseCmakeConfigure = true;
 
-  preConfigure = ''
-    tar xf $src_translation
-    # Libreoffice expects by default the translations in ./translations
-    mv libreoffice-translations-3.5.1.2/translations .
-    tar xf $src_help
-    # Libreoffice expects by default the help in ./helpcontent2
-    mv libreoffice-help-3.5.1.2/helpcontent2 .
+  postUnpack = ''
+    mkdir -v $sourceRoot/src
+  '' + (stdenv.lib.concatMapStrings (f: "ln -sv ${f} $sourceRoot/src/${f.outputHash}-${f.name}\n") srcs.third_party)
+  + ''
+    ln -sv ${srcs.help} $sourceRoot/src/${srcs.help.name}
+    ln -sv ${srcs.translations} $sourceRoot/src/${srcs.translations.name}
+  '';
 
-    sed -i 's,/bin/bash,${bash}/bin/bash,' sysui/desktop/share/makefile.mk solenv/bin/localize
-    sed -i 's,/usr/bin/env bash,${bash}/bin/bash,' bin/unpack-sources \
-      solenv/bin/install-gdb-printers solenv/bin/striplanguagetags.sh
-
-    sed -i 's,/usr/bin/env perl,${perl}/bin/perl,' solenv/bin/concat-deps.pl solenv/bin/ooinstall
+  patchPhase = ''
+    find . -type f -print0 | xargs -0 sed -i \
+      -e 's,! */bin/bash,!${bash}/bin/bash,' -e 's,\(!\|SHELL=\) */usr/bin/env bash,\1${bash}/bin/bash,' \
+      -e 's,! */usr/bin/perl,!${perl}/bin/perl,' -e 's,! */usr/bin/env perl,!${perl}/bin/perl,' \
+      -e 's,! */usr/bin/python,!${python}/bin/python,' -e 's,! */usr/bin/env python,!${python}/bin/python,'
     sed -i 's,ANT_OPTS+="\(.*\)",ANT_OPTS+=\1,' apache-commons/java/*/makefile.mk
+  '';
 
+  QT4DIR = qt4;
+  KDE4DIR = kde4.kdelibs;
+
+  # I set --with-num-cpus=$NIX_BUILD_CORES, as it's the equivalent of
+  # enableParallelBuilding=true in this build system.
+  preConfigure = ''
     # Needed to find genccode
     PATH=$PATH:${icu}/sbin
 
-    configureFlagsArray=("--with-lang=${langsSpaces}")
+    configureFlagsArray=("--with-lang=${langsSpaces}" "--with-num-cpus=$NIX_BUILD_CORES")
   '';
+
+  makeFlags = "SHELL=${bash}/bin/bash";
 
   buildPhase = ''
     # This is required as some cppunittests require fontconfig configured
     export FONTCONFIG_FILE=${fontsConf}
-    mkdir src
-    for a in $srcs_download; do
-      FILE=$(basename $a)
-      # take out the hash
-      cp -v $a src/$(echo $FILE | sed 's/[^-]*-//')
-    done
-
-    # Remove an exit 1, ignoring the lack of wget or curl
-    sed '/wget nor curl/{n;d}' -i download
-    ./download
 
     # Fix sysui: wants to create a tar for root
     sed -i -e 's,--own.*root,,' sysui/desktop/slackware/makefile.mk
-    # Fix redland: wants to set rpath to /usr/local/lib
-    sed -i -e 's,^CONFIGURE_FLAGS.*,& --prefix='$TMPDIR, redland/redland/makefile.mk \
-      redland/raptor/makefile.mk redland/rasqal/makefile.mk
 
     # This to aovid using /lib:/usr/lib at linking
     sed -i '/gb_LinkTarget_LDFLAGS/{ n; /rpath-link/d;}' solenv/gbuild/platform/unxgcc.mk
@@ -99,27 +118,29 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-verbose"
+    #"--enable-verbose"
 
     # Without these, configure does not finish
     "--without-junit"
-    "--without-system-mythes"
 
     # Without this, it wants to download
+    "--enable-python=system"
+    "--enable-dbus"
+    "--enable-kde4"
+    "--disable-odk"
     "--with-system-cairo"
     "--with-system-libs"
-    "--enable-python=system"
-    "--with-system-boost"
+    "--with-boost-libdir=${boost}/lib"
     "--with-system-db"
+    "--with-openldap" "--enable-ldap"
+    "--without-system-libwps"
+    "--without-doxygen"
 
     # I imagine this helps. Copied from go-oo.
     "--disable-epm"
     "--disable-mathmldtd"
     "--disable-mozilla"
-    "--disable-odk"
-    "--disable-dbus"
     "--disable-kde"
-    "--disable-kde4"
     "--disable-postgresql-sdbc"
     "--with-package-format=native"
     "--with-jdk-home=${jdk}"
@@ -131,31 +152,25 @@ stdenv.mkDerivation rec {
     "--without-system-beanshell"
     "--without-system-hsqldb"
     "--without-system-jars"
-    "--without-system-hunspell"
     "--without-system-altlinuxhyph"
     "--without-system-lpsolve"
     "--without-system-graphite"
-    "--without-system-mozilla"
-    "--without-system-libwps"
-    "--without-system-libwpg"
-    "--without-system-redland"
-    "--without-system-libvisio"
+    "--without-system-mozilla-headers"
     "--without-system-libcmis"
-    "--without-system-nss"
-    "--without-system-sampleicc"
-    "--without-system-libexttextcat"
 
     "--with-java-target-version=1.6" # The default 1.7 not supported
   ];
 
-  buildInputs = [
-    pam python tcsh libxslt perl ArchiveZip CompressZlib zlib 
-    libjpeg expat pkgconfig freetype libwpd libxml2 db4 sablotron curl 
-    libXaw fontconfig libsndfile neon bison flex zip unzip gtk libmspack 
-    getopt file jdk cairo which icu boost libXext libX11 libXtst libXi mesa
-    cups libXinerama openssl gperf GConf ORBit2 gnome_vfs gstreamer gst_plugins_base
-    ant autoconf openldap cppunit poppler librsvg automake
-  ];
+  buildInputs =
+    [ ant ArchiveZip autoconf automake bison boost cairo clucene_core_2
+      CompressZlib cppunit cups curl db4 dbus_glib expat file flex fontconfig
+      freetype GConf getopt gnome_vfs gperf gst_plugins_base gstreamer gtk
+      hunspell icu jdk kde4.kdelibs lcms2 libcdr libexttextcat libiodbc libjpeg
+      libmspack librdf_redland librsvg libsndfile libvisio libwpd libwpg libX11
+      libXaw libXext libXi libXinerama libxml2 libxslt libXtst mdds mesa mythes
+      neon nspr nss openldap openssl ORBit2 pam perl pkgconfigUpstream poppler
+      python sablotron saneBackends tcsh unzip vigra which zip zlib
+    ];
 
   meta = {
     description = "Libre-office, variant of openoffice.org";

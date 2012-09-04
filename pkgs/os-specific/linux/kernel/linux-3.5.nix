@@ -240,7 +240,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.5.2";
+    version = "3.5.3";
     testing = false;
 
     preConfigure = ''
@@ -249,7 +249,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "13dzx7gqm0n7s73bq87ibhmydrfsngyps9sczkcy1sh56rrkv0x6";
+      sha256 = "1p8imlvka3mjm74k09535lyqgdrl1jxrldzd7c8k4qlh5s8fz13w";
     };
 
     config = configWithPlatform stdenv.platform;
@@ -257,6 +257,7 @@ import ./generic.nix (
 
     features.iwlwifi = true;
     features.efiBootStub = true;
+    features.needsCifsUtils = true;
   }
 
   // removeAttrs args ["extraConfig"]

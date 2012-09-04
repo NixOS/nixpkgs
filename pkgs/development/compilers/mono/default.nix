@@ -23,7 +23,8 @@ stdenv.mkDerivation {
   # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
   dontStrip = true;
 
-  enableParallelBuilding = true;
+  # Parallel building doesn't work, as shows http://hydra.nixos.org/build/2983601
+  enableParallelBuilding = false;
 
   preBuild = "
     makeFlagsArray=(INSTALL=`type -tp install`)

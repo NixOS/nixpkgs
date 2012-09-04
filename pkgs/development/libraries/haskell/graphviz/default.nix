@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "graphviz";
-  version = "2999.14.0.0";
-  sha256 = "1dnjw7r2zg2qhjxnmdryi0839ggrb3l3bpx8asfpr0bza70kjdf3";
+  version = "2999.14.1.0";
+  sha256 = "13fni5sf6cdfvgyh7kqjjdhmjxkhbgl3gbi0cbq90n8blzg4q1ql";
   buildDepends = [
     colour dlist fgl filepath polyparse text transformers wlPprintText
   ];

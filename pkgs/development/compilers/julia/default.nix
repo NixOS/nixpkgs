@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre
+{ stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
  } :
@@ -7,7 +7,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20120818";
+  date = "20120904";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
@@ -54,17 +54,17 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "4f692899688f500c77d768f67748f4b7335c90eb";
-    sha256 = "a60e684a5283e80619f28ec8ff16fdc76c549e8463059507b0819db09dae6688";
+    rev = "b842bf4ae4d80f28803ec54f3da412a0248046a9";
+    sha256 = "4d67f4f4d35c76ea8981198e42feb1c30a50ac7e1e15b752fa41b26ebadcd828";
   };
 
-  buildInputs = [ gfortran perl m4 gmp pcre llvm readline 
+  buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
     openblas liblapack
     ];
 
   configurePhase = ''
-    for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD; 
+    for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB; 
     do 
       sed -e "s@USE_SYSTEM_$i=0@USE_SYSTEM_$i=1@" -i Make.inc; 
     done
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     copy_kill_hash "${dsfmt_src}" deps/random
 
     ${if realGcc ==null then "" else 
-    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring "''}
+    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz "''}
 
     sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
 

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Graphalyze";
-  version = "0.13.0.0";
-  sha256 = "1xh6xg2rw43cbi83rmpb0c2yib9cfj0pwg66nx5x5a0al2c9pdsr";
+  version = "0.13.0.1";
+  sha256 = "1yk7iglsspbj0kxh5rhjkc6q65vz07vpygiig07w86g2s6gad8am";
   buildDepends = [
     bktrees fgl filepath graphviz pandoc random text time
   ];

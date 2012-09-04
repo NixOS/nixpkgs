@@ -5,14 +5,14 @@ stdenv.mkDerivation rec {
   name = pname + "-" + version;
 
   pname = "ktorrent";
-  version = "4.1.3";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${version}/${name}.tar.bz2";
-    sha256 = "0ih68bml6ic3mxk5l4ypgmxwyg9mglp57gw5igrnm5yszm7jz19g";
+    sha256 = "1b6w7i1vvq8mlw9yrlxvb51hvaj6rpl8lv9b9zagyl3wcanz73zd";
   };
 
-  patches = [ ./find-workspace.diff ./drop-taskmanager-dependency.patch ];
+  patches = [ ./find-workspace.diff ];
 
   KDEDIRS = libktorrent;
 
