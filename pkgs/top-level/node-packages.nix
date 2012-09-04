@@ -5,6 +5,14 @@ let self = {
     inherit stdenv nodejs;
   };
 
+  patchLatest = srcAttrs:
+                  let src = fetchurl srcAttrs; in
+                  pkgs.runCommand src.name {} ''
+                    tar xf ${src}
+                    sed -i -e "s/: \"latest\"/: \"*\"/" package/package.json
+                    tar cf $out package
+                  '';
+
   "abbrev" = self."abbrev-1";
 
   "abbrev-1" = self.buildNodePackage rec {
