@@ -7224,6 +7224,8 @@ let
     fftw = fftwSinglePrec;
   };
 
+  lastwatch = callPackage ../applications/audio/lastwatch { };
+
   lci = callPackage ../applications/science/logic/lci {};
 
   ldcpp = callPackage ../applications/networking/p2p/ldcpp {
