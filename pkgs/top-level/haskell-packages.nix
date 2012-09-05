@@ -527,7 +527,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   clientsession = callPackage ../development/libraries/haskell/clientsession {};
 
-  cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
+  cmdargs_0_9_7 = callPackage ../development/libraries/haskell/cmdargs/0.9.7.nix {};
+  cmdargs_0_10 = callPackage ../development/libraries/haskell/cmdargs/0.10.nix {};
+  cmdargs = self.cmdargs_0_10;
 
   cmdlib = callPackage ../development/libraries/haskell/cmdlib {};
 
