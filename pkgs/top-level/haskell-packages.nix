@@ -397,6 +397,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   accelerateIo = callPackage ../development/libraries/haskell/accelerate-io {};
 
+  active = callPackage ../development/libraries/haskell/active {};
+
   ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
 
   abstractDeque = callPackage ../development/libraries/haskell/abstract-deque {};
