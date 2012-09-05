@@ -1016,6 +1016,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
+  liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
+
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
