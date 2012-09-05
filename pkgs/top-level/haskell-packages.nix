@@ -1016,6 +1016,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
+  liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
+
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
@@ -1408,7 +1410,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
-  split = callPackage ../development/libraries/haskell/split {};
+  split_0_1_4_3 = callPackage ../development/libraries/haskell/split/0.1.4.3.nix {};
+  split_0_2 = callPackage ../development/libraries/haskell/split/0.2.nix {};
+  split = self.split_0_2;
 
   stbImage = callPackage ../development/libraries/haskell/stb-image {};
 
@@ -1521,6 +1525,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
 
   url = callPackage ../development/libraries/haskell/url {};
+
+  urlencoded = callPackage ../development/libraries/haskell/urlencoded { split = self.split_0_1_4_3; };
 
   utf8Light = callPackage ../development/libraries/haskell/utf8-light {};
 

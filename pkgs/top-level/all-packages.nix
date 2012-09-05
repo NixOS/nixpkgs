@@ -6980,7 +6980,6 @@ let
   git = gitAndTools.git;
   gitFull = gitAndTools.gitFull;
   gitSVN = gitAndTools.gitSVN;
-  tig = gitAndTools.tig;
 
   giv = callPackage ../applications/graphics/giv {
     pcre = pcre.override { unicodeSupport = true; };
@@ -7718,6 +7717,8 @@ let
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/11.x.nix {
     inherit (gnome) libIDL;
   };
+
+  tig = gitAndTools.tig;
 
   timidity = callPackage ../tools/misc/timidity { };
 
