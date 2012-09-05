@@ -540,13 +540,13 @@ let self = {
     ];
   };
 
-  "npm2nix" = self."npm2nix-0.1.2";
+  "npm2nix" = self."npm2nix-0.1.3";
 
-  "npm2nix-0.1.2" = self.buildNodePackage rec {
-    name = "npm2nix-0.1.2";
+  "npm2nix-0.1.3" = self.buildNodePackage rec {
+    name = "npm2nix-0.1.3";
     src = fetchurl {
-      url = https://bitbucket.org/shlevy/npm2nix/get/0.1.2.tar.gz;
-      sha256 = "0wmgdbjvvwqv47113xdipzkmdafsca9av1s0fq605jf97wrpvbw3";
+      url = https://bitbucket.org/shlevy/npm2nix/get/0.1.3.tar.gz;
+      sha256 = "1728fzmixcyg4g8mqcgn5yf7d4nin9zyqv8bs8b6660swhfdn4il";
       name = "${name}.tgz";
     };
     deps = [
