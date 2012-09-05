@@ -1556,6 +1556,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
+  vectorSpacePoints = callPackage ../development/libraries/haskell/vector-space-points {};
+
   void = callPackage ../development/libraries/haskell/void {};
 
   vty = callPackage ../development/libraries/haskell/vty {};
