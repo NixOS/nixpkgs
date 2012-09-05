@@ -627,6 +627,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   derp = callPackage ../development/libraries/haskell/derp {};
 
+  diagrams = callPackage ../development/libraries/haskell/diagrams {};
+
   diagramsCairo = callPackage ../development/libraries/haskell/diagrams-cairo {
     split = self.split_0_1_4_3;
     cmdargs = self.cmdargs_0_9_7;
