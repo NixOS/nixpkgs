@@ -1121,6 +1121,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
+  newtype = callPackage ../development/libraries/haskell/newtype {};
+
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
   numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
