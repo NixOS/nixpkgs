@@ -1,12 +1,15 @@
 { stdenv, fetchurl
 , sslSupport ? true
 , graphicsSupport ? false
+, mouseSupport ? false
 , ncurses, openssl ? null, boehmgc, gettext, zlib
 , imlib2 ? null, x11 ? null, fbcon ? null
+, gpm ? null
 }:
 
 assert sslSupport -> openssl != null;
 assert graphicsSupport -> imlib2 != null && (x11 != null || fbcon != null);
+assert mouseSupport -> gpm != null;
 
 stdenv.mkDerivation rec {
   name = "w3m-0.5.3";
@@ -22,6 +25,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ncurses boehmgc gettext zlib]
     ++ stdenv.lib.optional sslSupport openssl
+    ++ stdenv.lib.optional mouseSupport gpm
     ++ stdenv.lib.optionals graphicsSupport [imlib2 x11 fbcon];
 
   configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}"
