@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.5";
   sha256 = "163h2fg3gpmsfm57gjyja2rxh9pl6s3xnzlidfdy201zbk1mzdg5";
   buildDepends = [ diagramsCairo diagramsCore diagramsLib ];
+  noHaddock = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Embedded domain-specific language for declarative vector graphics";
