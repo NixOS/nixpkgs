@@ -2,11 +2,11 @@
 , sslSupport ? true
 , graphicsSupport ? false
 , ncurses, openssl ? null, boehmgc, gettext, zlib
-, imlib2 ? null, x11 ? null
+, imlib2 ? null, x11 ? null, fbcon ? null
 }:
 
 assert sslSupport -> openssl != null;
-assert graphicsSupport -> x11 != null;
+assert graphicsSupport -> imlib2 != null && (x11 != null || fbcon != null);
 
 stdenv.mkDerivation rec {
   name = "w3m-0.5.3";
@@ -22,9 +22,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ncurses boehmgc gettext zlib]
     ++ stdenv.lib.optional sslSupport openssl
-    ++ stdenv.lib.optionals graphicsSupport [imlib2 x11];
+    ++ stdenv.lib.optionals graphicsSupport [imlib2 x11 fbcon];
 
-  configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}";
+  configureFlags = "--with-ssl=${openssl} --with-gc=${boehmgc}"
+    + stdenv.lib.optionalString graphicsSupport " --enable-image=x11,fb";
 
   preConfigure = ''
     substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
