@@ -625,6 +625,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   derp = callPackage ../development/libraries/haskell/derp {};
 
+  diagramsLib = callPackage ../development/libraries/haskell/diagrams-lib {};
+
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
   digest = callPackage ../development/libraries/haskell/digest {
