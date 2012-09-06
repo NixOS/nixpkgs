@@ -9,7 +9,7 @@ assert cupsSupport -> cups != null;
 
 let
   meta = {
-    homepage = http://www.gnu.org/software/ghostscript/;
+    homepage = "http://www.gnu.org/software/ghostscript/";
     description = "GNU Ghostscript, a PostScript interpreter";
 
     longDescription = ''
@@ -41,11 +41,11 @@ let
   mainlineSrc = {
     name = "ghostscript-9.05";
     src = fetchurl {
-      url = http://downloads.ghostscript.com/public/ghostscript-9.05.tar.bz2;
+      url = "http://downloads.ghostscript.com/public/ghostscript-9.05.tar.bz2";
       sha256 = "1b6fi76x6pn9dmr9k9lh8kimn968dmh91k824fmm59d5ycm22h8g";
     };
     meta = meta // {
-      homepage = http://www.ghostscript.com/;
+      homepage = "http://www.ghostscript.com/";
       description = "GPL Ghostscript, a PostScript interpreter";
     };
 
@@ -64,11 +64,11 @@ stdenv.mkDerivation rec {
 
   fonts = [
     (fetchurl {
-      url = mirror://gnu/ghostscript/gnu-gs-fonts-std-6.0.tar.gz;
+      url = "mirror://gnu/ghostscript/gnu-gs-fonts-std-6.0.tar.gz";
       sha256 = "1lxr1y52r26qjif8kdqkfhsb5llakdcx3f5b9ppdyn59bb83ivsc";
     })
     (fetchurl {
-      url = mirror://gnu/ghostscript/gnu-gs-fonts-other-6.0.tar.gz;
+      url = "mirror://gnu/ghostscript/gnu-gs-fonts-other-6.0.tar.gz";
       sha256 = "1cxaah3r52qq152bbkiyj2f7dx1rf38vsihlhjmrvzlr8v6cqil1";
     })
     # ... add other fonts here
