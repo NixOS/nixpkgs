@@ -12,9 +12,6 @@ cabal.mkDerivation (self: {
     hashable hashtables languageCQuote mainlandPretty mtl srcloc
     transformers unorderedContainers
   ];
-  patchPhase = ''
-    sed -i -e 's|\<defaultMain\>|defaultMainWithHooks autoconfUserHooks|' Setup.hs
-  '';
   meta = {
     homepage = "http://www.cse.unsw.edu.au/~chak/project/accelerate/";
     description = "Accelerate backend for NVIDIA GPUs";

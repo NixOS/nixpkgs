@@ -19,9 +19,7 @@ cabal.mkDerivation (self: {
     snapServer stm syb text time transformers unorderedContainers
     utf8String vector vectorAlgorithms xmlhtml
   ];
-  patchPhase = ''
-    sed -i snap.cabal -e 's|clientsession.*,|clientsession,|'
-  '';
+  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "Snap: A Haskell Web Framework: project starter executable and glue code library";
