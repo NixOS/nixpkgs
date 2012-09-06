@@ -27,7 +27,7 @@ let
     maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.viric ];
   };
 
-  gnuForkData = rec {
+  gnuForkSrc = rec {
     name = "ghostscript-9.04.1";
     src = fetchurl {
       url = "mirror://gnu/ghostscript/gnu-${name}.tar.bz2";
@@ -38,7 +38,7 @@ let
     patches = [ ./purity.patch ];
   };
 
-  mainlineData = {
+  mainlineSrc = {
     name = "ghostscript-9.05";
     src = fetchurl {
       url = http://downloads.ghostscript.com/public/ghostscript-9.05.tar.bz2;
@@ -55,7 +55,7 @@ let
     patches = [ ./purity-9.05.patch ];
   };
 
-  variant = if gnuFork then gnuForkData else mainlineData;
+  variant = if gnuFork then gnuForkSrc else mainlineSrc;
 
 in
 
