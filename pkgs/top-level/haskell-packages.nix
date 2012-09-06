@@ -1526,7 +1526,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   url = callPackage ../development/libraries/haskell/url {};
 
-  urlencoded = callPackage ../development/libraries/haskell/urlencoded { split = self.split_0_1_4_3; };
+  urlencoded = callPackage ../development/libraries/haskell/urlencoded {};
 
   utf8Light = callPackage ../development/libraries/haskell/utf8-light {};
 

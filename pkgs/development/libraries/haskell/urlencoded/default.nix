@@ -7,6 +7,9 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl network split ];
+  patchPhase = ''
+    sed -i -e 's|split.*|split|' urlencoded.cabal
+  '';
   meta = {
     homepage = "https://github.com/pheaver/urlencoded";
     description = "Generate or process x-www-urlencoded data";
