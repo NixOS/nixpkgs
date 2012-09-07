@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, wirelesstools, pkgconfig, dbus_glib, xz
-, udev, libnl1, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
+, udev, libnl, libuuid, polkit, gnutls, ppp, dhcp, dhcpcd, iptables
 , libgcrypt, dnsmasq, avahi, bind, perl, substituteAll }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
     "--with-crypto=gnutls" "--disable-more-warnings" ];
 
-  buildInputs = [ wirelesstools udev libnl1 libuuid polkit ppp xz ];
+  buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
