@@ -5348,7 +5348,6 @@ let
   #monetdb = callPackage ../servers/sql/monetdb { };
 
   mongodb = callPackage ../servers/nosql/mongodb {
-    boost = boost149;
     useV8 = (getConfig ["mongodb" "useV8"] false);
   };
 
