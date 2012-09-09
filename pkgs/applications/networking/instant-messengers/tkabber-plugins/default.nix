@@ -1,4 +1,4 @@
-{stdenv, fetchurl, tkabber}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "tkabber-plugins-${version}";
@@ -10,9 +10,6 @@ stdenv.mkDerivation rec {
   };
 
   configurePhase = ''
-    mkdir -p $out/bin
     sed -e "s@/usr/local@$out@" -i Makefile
   '';
-
-  buildInputs = [tkabber];
 }
