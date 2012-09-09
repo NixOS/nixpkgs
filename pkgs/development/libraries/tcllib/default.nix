@@ -14,4 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ tcl ];
+
+  meta = {
+    homepage = "http://tcl.activestate.com/software/tcllib/";
+    description = "Tcl-only library of standard routines for Tcl";
+    license = stdenv.lib.licenses.tcltk;
+  };
 }
