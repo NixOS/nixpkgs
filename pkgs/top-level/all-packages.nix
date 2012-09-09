@@ -6784,6 +6784,8 @@ let
     # we want it to have higher precedence.
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
 
+    org2blog = callPackage ../applications/editors/emacs-modes/org2blog { };
+
     pcache = callPackage ../applications/editors/emacs-modes/pcache { };
 
     phpMode = callPackage ../applications/editors/emacs-modes/php { };
