@@ -43,5 +43,6 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = "http://tkabber.jabber.ru/";
     description = "A GUI client for the XMPP (Jabber) instant messaging protocol";
+    license = stdenv.lib.licenses.gpl2;
   };
 }
