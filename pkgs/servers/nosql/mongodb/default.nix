@@ -2,6 +2,12 @@
 
 with stdenv.lib;
 
+let installerPatch = fetchurl {
+      url = "https://jira.mongodb.org/secure/attachment/18160/SConscript.client.patch";
+      sha256 = "0n60fh2r8i7m6g113k0iw4adc8jv2by4ahrd780kxg47kzfgw06a";
+    };
+
+in
 stdenv.mkDerivation rec {
   name = "mongodb-2.2.0";
 
@@ -12,9 +18,11 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ scons which ];
 
+  patches = [ installerPatch ];
+
   enableParallelBuilding = true;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace SConstruct --replace "Environment( BUILD_DIR" "Environment( ENV = os.environ, BUILD_DIR"
   '' + optionalString useV8 ''
     substituteInPlace SConstruct --replace "#/../v8" "${v8}" \
@@ -37,6 +45,6 @@ stdenv.mkDerivation rec {
     license = "AGPLv3";
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
