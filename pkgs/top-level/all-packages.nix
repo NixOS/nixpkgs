@@ -6807,6 +6807,8 @@ let
     scalaMode = callPackage ../applications/editors/emacs-modes/scala-mode { };
 
     sunriseCommander = callPackage ../applications/editors/emacs-modes/sunrise-commander { };
+
+    xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
   };
 
   emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
