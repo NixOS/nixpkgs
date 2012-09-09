@@ -12,9 +12,13 @@ stdenv.mkDerivation rec {
   dontBuild = true;
 
   installPhase = ''
-    ensureDir "$out/tcltk"
-    cp -R *.tcl lang images "$out/tcltk/"
+    ensureDir "$out/lib/${passthru.libPrefix}"
+    cp -R *.tcl lang images "$out/lib/${passthru.libPrefix}"
   '';
 
-  buildInputs = [tcl];
+  passthru = {
+    libPrefix = "bwidget${version}";
+  };
+
+  buildInputs = [ tcl ];
 }

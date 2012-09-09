@@ -9,5 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "11052fgfmv9vyswzjjgfvh3pi0k3fnfnl9ri6nl4vc6f6z5ry56x";
   };
 
-  buildInputs = [tcl];
+  passthru = {
+    libPrefix = "tcllib${version}";
+  };
+
+  buildInputs = [ tcl ];
 }

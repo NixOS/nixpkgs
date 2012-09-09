@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/tkabber --set TCLLIBPATH "${bwidget}/tcltk\ ${tcllib}/lib/tcllib${tcllib.version}\ ${tcltls}/lib/tls${tcltls.version}"
+    wrapProgram $out/bin/tkabber --set TCLLIBPATH "${bwidget}/lib/${bwidget.libPrefix}\ ${tcllib}/lib/${tcllib.libPrefix}\ ${tcltls}/lib/${tcltls.libPrefix}"
   '';
 
-  buildInputs = [tcl tk tcllib tcltls bwidget x11 makeWrapper];
+  buildInputs = [ tcl tk tcllib tcltls bwidget x11 makeWrapper ];
 
   meta = {
     homepage = "http://tkabber.jabber.ru/";
