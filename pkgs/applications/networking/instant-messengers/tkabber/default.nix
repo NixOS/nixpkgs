@@ -1,5 +1,5 @@
 { stdenv, fetchurl, tcl, tk, tcllib, tcltls, tclgpg
-, bwidget, cacert, makeWrapper, x11 }:
+, bwidget, makeWrapper, x11 }:
 
 let
   tclLibraries = [ bwidget tcllib tcltls tclgpg ];
@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace login.tcl --replace \
       "custom::defvar loginconf(sslcacertstore) \"\"" \
-      "custom::defvar loginconf(sslcacertstore) \"${cacert}/etc/ca-bundle.crt\""
+      "custom::defvar loginconf(sslcacertstore) \$env(OPENSSL_X509_CERT_FILE)"
 
     sed -i '/^if.*load_default_xrdb/,/^}$/ {
         s@option readfile \(\[fullpath [^]]*\]\)@option readfile "'"$out/share/doc/tkabber/examples/xrdb/${defaultTheme}.xrdb"'"@
