@@ -12,4 +12,10 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     sed -e "s@/usr/local@$out@" -i Makefile
   '';
+
+  meta = {
+    homepage = "http://tkabber.jabber.ru/tkabber-plugins";
+    description = "Plugins for the Tkabber instant messenger";
+    license = stdenv.lib.licenses.gpl2;
+  };
 }
