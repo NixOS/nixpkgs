@@ -35,7 +35,9 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/tkabber --set TCLLIBPATH '"${tclLibPaths}"'
+    wrapProgram $out/bin/tkabber \
+      --set TCLLIBPATH '"${tclLibPaths}"' \
+      --set TKABBER_SITE_PLUGINS '$HOME/.nix-profile/share/tkabber-plugins'
   '';
 
   buildInputs = [ tcl tk x11 makeWrapper ] ++ tclLibraries;
