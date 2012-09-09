@@ -1427,7 +1427,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
-  split = callPackage ../development/libraries/haskell/split {};
+  split_0_1_4_3 = callPackage ../development/libraries/haskell/split/0.1.4.3.nix {};
+  split_0_2 = callPackage ../development/libraries/haskell/split/0.2.nix {};
+  split = self.split_0_2;
 
   stbImage = callPackage ../development/libraries/haskell/stb-image {};
 
