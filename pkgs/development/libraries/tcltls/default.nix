@@ -22,4 +22,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ tcl openssl ];
+
+  meta = {
+    homepage = "http://tls.sourceforge.net/";
+    description = "An OpenSSL / RSA-bsafe Tcl extension";
+    license = stdenv.lib.licenses.tcltk;
+  };
 }
