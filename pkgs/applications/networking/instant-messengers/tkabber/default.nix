@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, tcl, tk, tcllib, tcltls, bwidget, cacert, makeWrapper, x11 }:
+{ stdenv, fetchurl, tcl, tk, tcllib, tcltls, tclgpg
+, bwidget, cacert, makeWrapper, x11 }:
 
 stdenv.mkDerivation rec {
   name = "tkabber-0.11.1";
@@ -26,10 +27,10 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/tkabber --set TCLLIBPATH "${bwidget}/lib/${bwidget.libPrefix}\ ${tcllib}/lib/${tcllib.libPrefix}\ ${tcltls}/lib/${tcltls.libPrefix}"
+    wrapProgram $out/bin/tkabber --set TCLLIBPATH "${bwidget}/lib/${bwidget.libPrefix}\ ${tcllib}/lib/${tcllib.libPrefix}\ ${tcltls}/lib/${tcltls.libPrefix}\ ${tclgpg}/lib/${tclgpg.libPrefix}"
   '';
 
-  buildInputs = [ tcl tk tcllib tcltls bwidget x11 makeWrapper ];
+  buildInputs = [ tcl tk tcllib tcltls tclgpg bwidget x11 makeWrapper ];
 
   meta = {
     homepage = "http://tkabber.jabber.ru/";
