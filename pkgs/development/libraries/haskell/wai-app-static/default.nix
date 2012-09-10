@@ -13,10 +13,8 @@ cabal.mkDerivation (self: {
     cryptoConduit cryptohash fileEmbed httpDate httpTypes mimeTypes
     systemFileio systemFilepath text time transformers unixCompat wai
   ];
-  patchPhase = ''
-    sed -i -e 's|, base64-bytestring.*|, base64-bytestring|' wai-app-static.cabal
-  '';
-    meta = {
+  jailbreak = true;
+  meta = {
     homepage = "http://www.yesodweb.com/book/wai";
     description = "WAI application for static serving";
     license = self.stdenv.lib.licenses.mit;

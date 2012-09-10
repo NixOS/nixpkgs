@@ -12,9 +12,7 @@ cabal.mkDerivation (self: {
     httpTypes systemFilepath text transformers unixCompat wai
     waiAppStatic yesodCore
   ];
-  patchPhase = ''
-    sed -i yesod-static.cabal -e 's|, base64-bytestring.*|, base64-bytestring|'
-  '';
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Static file serving subsite for Yesod Web Framework";

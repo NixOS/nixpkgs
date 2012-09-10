@@ -7,9 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary mtl ];
-  patchPhase = ''
-    sed -i -e 's|mtl *>=.*$|mtl,|' ghc-events.cabal
-  '';
+  jailbreak = true;
   noHaddock = true;
   meta = {
     description = "Library and tool for parsing .eventlog files from GHC";
