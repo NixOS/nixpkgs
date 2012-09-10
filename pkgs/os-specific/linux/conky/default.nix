@@ -13,8 +13,6 @@ stdenv.mkDerivation rec {
     (map (x: "--disable-${x}") [ "x11" "xdamage" "own-window" "xft" "lua" "ncurses" ])
     ++ (map (x: "--enable-${x}") [ "mpd" "double-buffer" "wlan" "rss" ]);
 
-  patches = [ ./curl-types-h.patch ];
-
   meta = {
     homepage = http://conky.sourceforge.net/;
     description = "Conky is an advanced, highly configurable system monitor complied without X based on torsmo";
