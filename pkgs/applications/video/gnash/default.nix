@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , SDL, SDL_mixer, gstreamer, gst_plugins_base, gst_plugins_good
-, gst_ffmpeg, speex
+, gst_libav, speex
 , libogg, libxml2, libjpeg, mesa, libpng, libungif, libtool
 , boost, freetype, agg, dbus, curl, pkgconfig, gettext
 , glib, gtk, gtkglext, x11, ming, dejagnu, python, perl
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # XXX: KDE is supported as well so we could make it available optionally.
   buildInputs = [
     gettext x11 SDL SDL_mixer gstreamer gst_plugins_base gst_plugins_good
-    gst_ffmpeg speex libtool
+    gst_libav speex libtool
     libogg libxml2 libjpeg mesa libpng libungif boost freetype agg
     dbus curl pkgconfig glib gtk gtkglext
     xulrunner
@@ -84,12 +84,12 @@ stdenv.mkDerivation rec {
     make install-plugins
 
     # Wrap programs so the find the GStreamer plug-ins they need
-    # (e.g., gst-ffmpeg is needed to watch movies such as YouTube's).
+    # (e.g., gst-libav is needed to watch movies such as YouTube's).
     for prog in "$out/bin/"*
     do
       wrapProgram "$prog" --prefix                                            \
         GST_PLUGIN_PATH ":"                                                     \
-        "${gst_plugins_base}/lib/gstreamer-0.10:${gst_plugins_good}/lib/gstreamer-0.10:${gst_ffmpeg}/lib/gstreamer-0.10"
+        "${gst_plugins_base}/lib/gstreamer-0.10:${gst_plugins_good}/lib/gstreamer-0.10:${gst_libav}/lib/gstreamer-0.10"
     done
   '';
 

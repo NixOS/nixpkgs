@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-good-0.10.30";
+  name = "gst-plugins-good-0.11.93";
 
   src = fetchurl {
     urls = [
-      "${meta.homepage}/src/gst-plugins-good/${name}.tar.bz2"
-      "mirror://gentoo/distfiles/${name}.tar.bz2"
+      "${meta.homepage}/src/gst-plugins-good/${name}.tar.xz"
+      "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "1xlmw211fcn60y2m5gxrryb3knqril4kk2c01b6j713xna8blb5i";
+    sha256 = "6ef9b537284f0cd9e727d31f36eef907333d16e7deb6d61a93df738f00c5c93c";
   };
 
   configureFlags = "--disable-oss";

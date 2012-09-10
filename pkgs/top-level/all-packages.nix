@@ -3744,12 +3744,12 @@ let
   mpfr = callPackage ../development/libraries/mpfr { };
 
   gst_all = {
-    inherit (pkgs) gstreamer gnonlin gst_python qt_gstreamer;
+    inherit (pkgs) gstreamer gnonlin qt_gstreamer;
     gstPluginsBase = pkgs.gst_plugins_base;
     gstPluginsBad = pkgs.gst_plugins_bad;
     gstPluginsGood = pkgs.gst_plugins_good;
     gstPluginsUgly = pkgs.gst_plugins_ugly;
-    gstFfmpeg = pkgs.gst_ffmpeg;
+    gstLibAV = pkgs.gst_libav;
   };
 
   gstreamer = callPackage ../development/libraries/gstreamer/gstreamer {};
@@ -3762,9 +3762,7 @@ let
 
   gst_plugins_ugly = callPackage ../development/libraries/gstreamer/gst-plugins-ugly {};
 
-  gst_ffmpeg = callPackage ../development/libraries/gstreamer/gst-ffmpeg {};
-
-  gst_python = callPackage ../development/libraries/gstreamer/gst-python {};
+  gst_libav = callPackage ../development/libraries/gstreamer/gst-libav {};
 
   gnonlin = callPackage ../development/libraries/gstreamer/gnonlin {};
 
@@ -3810,7 +3808,7 @@ let
       gtkmm;
   };
 
-  glib = callPackage ../development/libraries/glib/2.30.x.nix { };
+  glib = callPackage ../development/libraries/glib { };
 
   glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
 
@@ -4937,7 +4935,7 @@ let
         icu cairo intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
+      inherit gstreamer gst_plugins_base gst_libav
         gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender kbproto;
       libpng = libpng12;
@@ -4953,7 +4951,7 @@ let
         icu cairo intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
+      inherit gstreamer gst_plugins_base gst_libav
         gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender;
       libpng = libpng12;
@@ -4969,7 +4967,7 @@ let
         icu cairo perl intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
         python ruby which flex geoclue;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
+      inherit gstreamer gst_plugins_base gst_libav
         gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender;
       libpng = libpng12;
@@ -7729,6 +7727,8 @@ let
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     wrapPython = pythonPackages.wrapPython;
   };
+
+  transmageddon = callPackage ../applications/video/transmageddon { };
 
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
