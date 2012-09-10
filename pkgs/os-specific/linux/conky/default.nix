@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig libxml2 curl wirelesstools glib openssl ncurses ];
   configureFlags =
     (map (x: "--disable-${x}") [ "x11" "xdamage" "own-window" "xft" "lua" ])
-    ++ (map (x: "--enable-${x}") [ "mpd" "double-buffer" "wlan" "rss" ]);
+    ++ (map (x: "--enable-${x}") [ "mpd" "double-buffer" "wlan" "rss"
+                                   "weather-metar" "weather-xoap" ]);
 
   meta = {
     homepage = http://conky.sourceforge.net/;
