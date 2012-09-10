@@ -397,6 +397,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   accelerateIo = callPackage ../development/libraries/haskell/accelerate-io {};
 
+  active = callPackage ../development/libraries/haskell/active {};
+
   ACVector = callPackage ../development/libraries/haskell/AC-Vector {};
 
   abstractDeque = callPackage ../development/libraries/haskell/abstract-deque {};
@@ -622,6 +624,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   derive = callPackage ../development/libraries/haskell/derive {};
 
   derp = callPackage ../development/libraries/haskell/derp {};
+
+  diagrams = callPackage ../development/libraries/haskell/diagrams/diagrams.nix {};
+
+  diagramsCairo = callPackage ../development/libraries/haskell/diagrams/cairo.nix {};
+
+  diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {};
+
+  diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {};
 
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
@@ -1117,6 +1127,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
+  newtype = callPackage ../development/libraries/haskell/newtype {};
+
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
 
   numericPrelude = callPackage ../development/libraries/haskell/numeric-prelude {};
@@ -1551,6 +1563,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
 
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
+
+  vectorSpacePoints = callPackage ../development/libraries/haskell/vector-space-points {};
 
   void = callPackage ../development/libraries/haskell/void {};
 
