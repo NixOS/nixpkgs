@@ -1792,9 +1792,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
   cabalInstall = self.cabalInstall_0_14_0;
 
-  jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {
-    Cabal = self.Cabal_1_14_0;
-  };
+  jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {};
 
   lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 
