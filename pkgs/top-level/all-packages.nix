@@ -3314,7 +3314,7 @@ let
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
   boost150 = callPackage ../development/libraries/boost/1.50.nix { };
   boost151 = callPackage ../development/libraries/boost/1.51.nix { };
-  boost = boost150;
+  boost = boost151;
 
   boostHeaders149 = callPackage ../development/libraries/boost/1.49-headers.nix { };
   boostHeaders150 = callPackage ../development/libraries/boost/1.50-headers.nix { };
