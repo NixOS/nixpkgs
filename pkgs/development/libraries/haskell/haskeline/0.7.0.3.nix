@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskeline";
-  version = "0.7.0.2";
-  sha256 = "0mmflw8mslvif8w1app4zwrlpynpfvzqdb9srs6bgicawwgkb2r0";
+  version = "0.7.0.3";
+  sha256 = "10xc229ddk4g87i78vgjbfr7sii28fx00qwnggb5x7sfigfca8sg";
   buildDepends = [ filepath terminfo transformers ];
   configureFlags = "-fterminfo";
   meta = {

@@ -815,8 +815,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   hashtables = callPackage ../development/libraries/haskell/hashtables {};
 
   haskeline_0_6_4_7 = callPackage ../development/libraries/haskell/haskeline/0.6.4.7.nix {};
-  haskeline_0_7_0_2 = callPackage ../development/libraries/haskell/haskeline/0.7.0.2.nix {};
-  haskeline = self.haskeline_0_7_0_2;
+  haskeline_0_7_0_3 = callPackage ../development/libraries/haskell/haskeline/0.7.0.3.nix {};
+  haskeline = self.haskeline_0_7_0_3;
 
   haskelineClass = callPackage ../development/libraries/haskell/haskeline-class {};
 
