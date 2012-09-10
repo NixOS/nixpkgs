@@ -10,9 +10,7 @@ cabal.mkDerivation (self: {
     base64Bytestring cereal cprngAes cryptoApi cryptocipher entropy
     skein tagged
   ];
-  patchPhase = ''
-    sed -i -e 's|, base64-bytestring.*|, base64-bytestring|' clientsession.cabal
-  '';
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/yesodweb/clientsession/tree/master";
     description = "Securely store session data in a client-side cookie";

@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     mainlandPretty mtl srcloc syb symbol
   ];
   buildTools = [ alex happy ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";
     description = "C/CUDA/OpenCL quasiquoting library";

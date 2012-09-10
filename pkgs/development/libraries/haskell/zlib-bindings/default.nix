@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zlib-bindings";
-  version = "0.1.1";
-  sha256 = "0hgqr7sh3pri482191gd9qrz2nbgxw1aqdx1x6lc9s0bbw68isai";
+  version = "0.1.1.1";
+  sha256 = "1r502gskbm36smd5nj0f53ildv9rkm3k79zmwdmrskg6z1n7jmfh";
   buildDepends = [ zlib ];
   meta = {
     homepage = "http://github.com/snoyberg/zlib-bindings";

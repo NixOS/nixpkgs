@@ -974,6 +974,25 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  pylast = buildPythonPackage rec {
+    name = "pylast-${version}";
+    version = "0.5.11";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pylast/${name}.tar.gz";
+      md5 = "506cf1b13020b3ed2f3c845ea0c9830e";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/pylast/;
+      description = "A python interface to last.fm (and compatibles)";
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
+
+
   libcloud = buildPythonPackage (rec {
     name = "libcloud-0.3.1";
 
@@ -1532,6 +1551,23 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  pep8 = buildPythonPackage rec {
+    name = "pep8-${version}";
+    version = "1.3.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
+      md5 = "093a99ced0cc3b58c01549d7350f5a73";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/pep8/;
+      description = "Python style guide checker";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   pexpect = buildPythonPackage {
     name = "pexpect-2.3";
 
@@ -1756,6 +1792,30 @@ let pythonPackages = python.modules // rec {
       license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
       platforms = python.meta.platforms;
+    };
+  };
+
+
+  pyinotify = pkgs.stdenv.mkDerivation rec {
+    name = "python-pyinotify-${version}";
+    version = "0.9.3";
+
+    src = fetchgit {
+      url = "git://github.com/seb-m/pyinotify.git";
+      rev = "refs/tags/${version}";
+      sha256 = "d38ce95e4af00391e58246a8d7fe42bdb51d63054b09809600b2faef2a803472";
+    };
+
+    buildInputs = [ python ];
+
+    installPhase = ''
+      python setup.py install --prefix=$out
+    '';
+
+    meta = {
+      homepage = https://github.com/seb-m/pyinotify/wiki;
+      description = "Monitor filesystems events on Linux platforms with inotify";
+      license = pkgs.lib.licenses.mit;
     };
   };
 

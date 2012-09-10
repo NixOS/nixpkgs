@@ -19,6 +19,7 @@
     self : self.haskellPlatformArgs_future self // {
       haskellPlatform = null;
       binary = null; # now a core package
+      extensibleExceptions = self.extensibleExceptions_0_1_1_4;
     };
 
   ghc741Prefs =
@@ -42,6 +43,7 @@
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
 
   ghc703Prefs =
@@ -50,6 +52,7 @@
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
 
   ghc702Prefs = ghc701Prefs;
@@ -60,6 +63,7 @@
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
 
   ghc6123Prefs = ghc6122Prefs;
@@ -73,6 +77,7 @@
       monadPar = self.monadPar_0_1_0_3;
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
 
   ghc6121Prefs =
@@ -83,6 +88,7 @@
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
@@ -97,6 +103,7 @@
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
