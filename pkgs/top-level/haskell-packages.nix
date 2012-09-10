@@ -145,7 +145,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     zlib         = self.zlib_0_5_3_3;           # 7.5 fail
     cabalInstall = self.cabalInstall_0_14_0;    # 7.5 ok
     alex         = self.alex_3_0_1;             # 7.5 ok
-    haddock      = self.haddock_2_10_0;         # 7.5 ok
+    haddock      = self.haddock_2_12_0;         # 7.5 ok
     happy        = self.happy_1_18_9;           # 7.5 ok
   };
 
@@ -1712,7 +1712,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haddock_2_9_2 = callPackage ../development/tools/documentation/haddock/2.9.2.nix {};
   haddock_2_9_4 = callPackage ../development/tools/documentation/haddock/2.9.4.nix {};
   haddock_2_10_0 = callPackage ../development/tools/documentation/haddock/2.10.0.nix {};
-  haddock = self.haddock_2_10_0;
+  haddock_2_11_0 = callPackage ../development/tools/documentation/haddock/2.11.0.nix {};
+  haddock_2_12_0 = callPackage ../development/tools/documentation/haddock/2.12.0.nix {};
+  haddock = self.haddock_2_12_0;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
