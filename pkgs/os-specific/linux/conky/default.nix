@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vxvjmi3cdvnp994sv5zcdyncfn0mlxa71p2wm9zpyrmy58bbwds";
   };
 
+  patches = [ ./stdbool.patch ];
+
   buildInputs = [ pkgconfig libxml2 curl wirelesstools glib openssl ];
   configureFlags =
     (map (x: "--disable-${x}") [ "x11" "xdamage" "own-window" "xft" "lua" "ncurses" ])
