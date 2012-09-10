@@ -1,4 +1,5 @@
-{stdenv, fetchurl, pkgconfig, libxml2, curl, wirelesstools, glib, openssl}:
+{ stdenv, fetchurl, pkgconfig, libxml2, curl, wirelesstools, glib, openssl
+, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "conky-1.9.0";
@@ -10,9 +11,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./stdbool.patch ];
 
-  buildInputs = [ pkgconfig libxml2 curl wirelesstools glib openssl ];
+  buildInputs = [ pkgconfig libxml2 curl wirelesstools glib openssl ncurses ];
   configureFlags =
-    (map (x: "--disable-${x}") [ "x11" "xdamage" "own-window" "xft" "lua" "ncurses" ])
+    (map (x: "--disable-${x}") [ "x11" "xdamage" "own-window" "xft" "lua" ])
     ++ (map (x: "--enable-${x}") [ "mpd" "double-buffer" "wlan" "rss" ]);
 
   meta = {
