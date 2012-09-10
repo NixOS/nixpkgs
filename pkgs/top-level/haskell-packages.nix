@@ -1483,6 +1483,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   thLift = callPackage ../development/libraries/haskell/th-lift {};
 
+  thOrphans = callPackage ../development/libraries/haskell/th-orphans {};
+
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
 
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
