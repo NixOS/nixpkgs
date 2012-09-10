@@ -8575,7 +8575,6 @@ let
   spass = callPackage ../applications/science/logic/spass {};
 
   ssreflect = callPackage ../applications/science/logic/ssreflect {
-    coq = coq_8_3;
     camlp5 = ocamlPackages.camlp5_transitional;
   };
 
