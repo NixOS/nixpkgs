@@ -7,8 +7,8 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary mtl ];
-  jailbreak = true;
   noHaddock = true;
+  jailbreak = true;
   meta = {
     description = "Library and tool for parsing .eventlog files from GHC";
     license = self.stdenv.lib.licenses.bsd3;
