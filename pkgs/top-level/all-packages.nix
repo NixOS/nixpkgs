@@ -2893,6 +2893,7 @@ let
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
   apacheAntOpenJDK = apacheAnt.override { jdk = openjdk; };
+  apacheAntOracleJDK = ant.override { jdk = pkgs.oraclejdk; };
 
   apacheAntGcj = callPackage ../development/tools/build-managers/apache-ant/from-source.nix {
     # must be either pre-built or built with GCJ *alone*
