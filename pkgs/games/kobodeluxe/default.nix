@@ -9,6 +9,12 @@ stdenv.mkDerivation {
 
   buildInputs = [ SDL SDL_image];
 
+  prePatch = ''
+    sed -e 's/char \*tok/const char \*tok/' -i graphics/window.cpp
+  '';
+
+  patches = [ ./glibc29.patch ];
+
   meta = {
     homepage = http://olofson.net/kobodl/;
     description = "Enhanced version of Akira Higuchi's game XKobo  for Un*x systems with X11";

@@ -103,7 +103,7 @@ interpretation:</para>
     &lt;alice@example.org>" "Bob &lt;bob@example.com>"]</literal>.  If
     you are the maintainer of multiple packages, you may want to add
     yourself to <link
-    xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/lib/maintainers.nix"><filename>pkgs/lib/maintainers.nix</filename></link>
+    xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/lib/maintainers.nix"><filename>pkgs/lib/maintainers.nix</filename></link>
     and write something like <literal>[stdenv.lib.maintainers.alice
     stdenv.lib.maintainers.bob]</literal>.</para></listitem>
   </varlistentry>

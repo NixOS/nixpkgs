@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "benchpress";
-  version = "0.2.2.4";
-  sha256 = "0cabjx0gkbk5blqkm9pmnz8kmi3573367365gny4r3m431iwxgnf";
+  version = "0.2.2.6";
+  sha256 = "19ygaf2g4yqkfbc6bw6fmf9jsymbj1iallzvl0zw3vjx860rchfg";
   buildDepends = [ mtl time ];
   meta = {
     homepage = "http://github.com/tibbe/benchpress";

@@ -1,50 +1,64 @@
-{ stdenv, fetchhg, bison, glibc, ed, which, bash, coreutils, makeWrapper, perl }:
+{ stdenv, fetchurl, bison, glibc, bash, coreutils, makeWrapper}:
 
 let
-  version = "2010-06-09";
-  sha256 = "b607879b333ef100466c726a13cc69ed143566a3c1af59f6d33a6e90b9d0c917";
-
   loader386 = "${glibc}/lib/ld-linux.so.2";
   loaderAmd64 = "${glibc}/lib/ld-linux-x86-64.so.2";
+  loaderArm = "${glibc}/lib/ld-linux.so.3";
 in
 
 stdenv.mkDerivation {
-  name = "go-" + version;
+  name = "go-1.0.2";
 
-  # No tarball yet.
-  src = fetchhg {
-    url = https://go.googlecode.com/hg/;
-    tag = "release." + version;
-    inherit sha256;
+  src = fetchurl {
+    url = http://go.googlecode.com/files/go1.0.2.src.tar.gz;
+    sha256 = "1a4mpkb3bd9dwp0r3fgrfcyk5lgw0f0cfrbskg2lrhc7a12zpz3h";
   };
 
-  buildInputs = [ bison glibc ed which bash makeWrapper ];
+  buildInputs = [ bison glibc bash makeWrapper ];
+
+  # I'm not sure what go wants from its 'src', but the go installation manual
+  # describes an installation keeping the src.
+  preUnpack = ''
+    mkdir -p $out/share
+    cd $out/share
+  '';
 
   prePatch = ''
+    cd ..
+    if [ ! -d go ]; then
+      mv * go
+    fi
+    cd go
+
     patchShebangs ./ # replace /bin/bash
-    # only for 386 build
     # !!! substituteInPlace does not seems to be effective.
     sed -i 's,/lib/ld-linux.so.2,${loader386},' src/cmd/8l/asm.c
     sed -i 's,/lib64/ld-linux-x86-64.so.2,${loaderAmd64},' src/cmd/6l/asm.c
-    sed -i 's,/usr/share/zoneinfo/,${glibc}/share/zoneinfo/,' src/pkg/time/zoneinfo.go
-    sed -i 's,/bin/ed,${ed}/bin/ed,' src/cmd/6l/mkenam
+    sed -i 's,/lib64/ld-linux-x86-64.so.3,${loaderArm},' src/cmd/5l/asm.c
+    sed -i 's,/usr/share/zoneinfo/,${glibc}/share/zoneinfo/,' src/pkg/time/zoneinfo_unix.go
 
-    sed -i -e 's,/bin/cat,${coreutils}/bin/cat,' \
-      -e 's,/bin/echo,${coreutils}/bin/echo,' \
-      src/pkg/exec/exec_test.go
+    #sed -i -e 's,/bin/cat,${coreutils}/bin/cat,' \
+    #  -e 's,/bin/echo,${coreutils}/bin/echo,' \
+    #  src/pkg/exec/exec_test.go
 
     # Disabling the 'os/http/net' tests (they want files not available in
     # chroot builds)
-    sed -i -e '/^NOTEST=/a\\tos\\\n\thttp\\\n\tnet\\' src/pkg/Makefile
-
-    sed -i -e 's,/bin:/usr/bin:/usr/local/bin,'$PATH, test/run
-    sed -i -e 's,/usr/bin/perl,${perl}/bin/perl,' test/errchk
+    rm src/pkg/net/{multicast_test.go,parse_test.go,port_test.go}
+    # The os test wants to read files in an existing path. Just it don't be /usr/bin.
+    sed -i 's,/usr/bin,'"`pwd`", src/pkg/os/os_test.go
+    sed -i 's,/bin/pwd,'"`type -P pwd`", src/pkg/os/os_test.go
+    # Disable the hostname test
+    sed -i '/TestHostname/areturn' src/pkg/os/os_test.go
   '';
+
+  patches = [ ./cacert.patch ];
 
   GOOS = "linux";
   GOARCH = if (stdenv.system == "i686-linux") then "386"
           else if (stdenv.system == "x86_64-linux") then "amd64"
+          else if (stdenv.system == "armv5tel-linux") then "arm"
           else throw "Unsupported system";
+  GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
 
   installPhase = ''
     mkdir -p "$out/bin"
@@ -55,28 +69,17 @@ stdenv.mkDerivation {
     ./all.bash
     cd -
 
-    # Handle Libraries and make them availabale under /share/go.
-    export GOLIB="pkg/"$GOOS"_"$GOARCH
-    mkdir -p "$out/lib/go/$GOLIB"
-    cp -r ./$GOLIB $out/lib/go/pkg/
-
-    # this line set $AS $CC $GC $LD
-    source ./src/Make.$GOARCH
-
-    # Wrap the compiler and the linker to define the location of the
+    # Wrap the tools to define the location of the
     # libraries.
-    wrapProgram "$out/bin/$GC" \
-      --add-flags "-I" \
-      --add-flags "$out/lib/go/$GOLIB"
-
-    wrapProgram "$out/bin/$LD" \
-      --set "GOROOT" "$out/lib/go/" \
-      --set "GOOS" "$GOOS" \
-      --set "GOARCH" "$GOARCH"
+    for a in go gofmt godoc; do
+	    wrapProgram "$out/bin/$a" \
+	      --set "GOROOT" $out/share/go \
+        ${if (stdenv.system == "armv5tel-linux") then "--set GOARM $GOARM" else ""}
+    done
 
     # Copy the emacs configuration for Go files.
     mkdir -p "$out/share/emacs/site-lisp"
-    cp ./misc/emacs/* $out/share/emacs/site-lisp/ # */
+    cp ./misc/emacs/* $out/share/emacs/site-lisp/
   '';
 
   meta = {

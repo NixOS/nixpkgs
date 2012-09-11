@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     highlightingKate HTTP json mtl network pandocTypes parsec random
     syb tagsoup temporary texmath time utf8String xml zipArchive zlib
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Conversion between markup formats";

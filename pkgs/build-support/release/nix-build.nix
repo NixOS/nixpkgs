@@ -58,13 +58,9 @@ stdenv.mkDerivation (
     name = name + (if src ? version then "-" + src.version else "");
   
     postHook = ''
-      # If `src' is the result of a call to `makeSourceTarball', then it
-      # has a subdirectory containing the actual tarball(s).  If there are
-      # multiple tarballs, just pick the first one.
+      . ${./functions.sh}
       origSrc=$src
-      if test -d $src/tarballs; then
-          src=$(ls $src/tarballs/*.tar.bz2 $src/tarballs/*.tar.gz $src/tarballs/*.tar.xz | sort | head -1)
-      fi
+      src=$(findTarballs $src | head -1)
 
       # Set GCC flags for coverage analysis, if desired.
       if test -n "${toString doCoverageAnalysis}"; then

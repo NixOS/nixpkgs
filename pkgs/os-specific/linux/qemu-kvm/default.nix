@@ -1,5 +1,6 @@
 { stdenv, fetchurl, attr, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
-, libjpeg, libpng, ncurses, python, glib, libaio, mesa }:
+, libjpeg, libpng, ncurses, python, glib, libaio, mesa
+, spice, spiceProtocol, spiceSupport ? false }:
 
 assert stdenv.isLinux;
 
@@ -23,19 +24,24 @@ stdenv.mkDerivation rec {
                  s|/usr/bin/python|${python}/bin/python|g ;
                  s|/bin/rm|rm|g'
        done
+    '' + stdenv.lib.optionalString spiceSupport ''
+       for i in configure spice-qemu-char.c ui/spice-input.c ui/spice-core.c ui/qemu-spice.h
+       do
+         substituteInPlace $i --replace '#include <spice.h>' '#include <spice/spice.h>'
+       done
     '';
 
   configureFlags =
     [ "--audio-drv-list=alsa"
       "--smbd=smbd"                               # use `smbd' from $PATH
-    ];
+    ] ++ stdenv.lib.optional spiceSupport "--enable-spice";
 
   enableParallelBuilding = true;
 
   buildInputs =
     [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
       ncurses python glib libaio mesa
-    ];
+    ] ++ stdenv.lib.optionals spiceSupport [ spiceProtocol spice ];
 
   postInstall =
     ''

@@ -1,0 +1,46 @@
+commit 9979970f05f25329100168d85a5c4cdc8c084b7a
+Author: Yury G. Kudryashov <urkud.urkud@gmail.com>
+Date:   Thu Aug 30 12:32:53 2012 +0400
+
+    FindMySQLAmarok.cmake: use PATH_SUFFIXES
+
+diff --git a/cmake/modules/FindMySQLAmarok.cmake b/cmake/modules/FindMySQLAmarok.cmake
+index 910b434..4c8b8e8 100644
+--- a/cmake/modules/FindMySQLAmarok.cmake
++++ b/cmake/modules/FindMySQLAmarok.cmake
+@@ -13,18 +13,17 @@
+ # For details see the accompanying COPYING-CMAKE-SCRIPTS file.
+ 
+ if(NOT WIN32)
+-    find_program(MYSQLCONFIG_EXECUTABLE NAMES mysql_config mysql_config5 PATHS ${BIN_INSTALL_DIR} ~/usr/bin /usr/local/bin)
++    find_program(MYSQLCONFIG_EXECUTABLE NAMES mysql_config mysql_config5 HINTS ${BIN_INSTALL_DIR})
+ endif(NOT WIN32)
+ 
+ find_path(MYSQL_INCLUDE_DIR mysql.h
+-    /opt/local/include/mysql5/mysql
++    PATHS
++    /opt/local/include
+     /opt/mysql/mysql/include
+-    /opt/mysqle/include/mysql
+-    /opt/ports/include/mysql5/mysql
+-    /usr/include/mysql
+-    /usr/local/include/mysql
+-    /usr/mysql/include/mysql
+-    ~/usr/include/mysql
++    /opt/mysqle/include
++    /opt/ports/include
++    /usr/mysql/include
++    PATH_SUFFIXES mysql mysql5/mysql
+ )
+ 
+ if(MYSQLCONFIG_EXECUTABLE)
+@@ -40,8 +39,7 @@ if(MYSQLCONFIG_EXECUTABLE)
+ 
+     find_library(MYSQLD_PIC_SEPARATE
+         mysqld_pic
+-        PATHS
+-        /usr/lib/mysql
++        PATH_SUFFIXES mysql
+     )
+ 
+     if(MYSQLD_PIC_SEPARATE)

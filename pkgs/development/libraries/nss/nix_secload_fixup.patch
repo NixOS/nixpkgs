@@ -1,0 +1,50 @@
+diff --git a/mozilla/security/coreconf/config.mk b/mozilla/security/coreconf/config.mk
+index 72557c6..bdcbf88 100644
+--- a/mozilla/security/coreconf/config.mk
++++ b/mozilla/security/coreconf/config.mk
+@@ -207,3 +207,5 @@ endif
+ DEFINES += -DUSE_UTIL_DIRECTLY
+ USE_UTIL_DIRECTLY = 1
+ 
++# nix specific stuff:
++DEFINES += -DNIX_NSS_LIBDIR=\"$(out)/lib/\"
+diff --git a/mozilla/security/nss/cmd/shlibsign/shlibsign.c b/mozilla/security/nss/cmd/shlibsign/shlibsign.c
+index 5ce626e..e1e8039 100644
+--- a/mozilla/security/nss/cmd/shlibsign/shlibsign.c
++++ b/mozilla/security/nss/cmd/shlibsign/shlibsign.c
+@@ -770,7 +770,7 @@ int main(int argc, char **argv)
+     assert(libname != NULL);
+     lib = PR_LoadLibrary(libname);
+     if (!lib)
+-        lib = PR_LoadLibrary("/usr/lib/nss/libsoftokn3.so");
++        lib = PR_LoadLibrary(NIX_NSS_LIBDIR"libsoftokn3.so");
+     assert(lib != NULL);
+     PR_FreeLibraryName(libname);
+ 
+diff --git a/mozilla/security/nss/lib/util/secload.c b/mozilla/security/nss/lib/util/secload.c
+index 7d6fc22..0b7759b 100644
+--- a/mozilla/security/nss/lib/util/secload.c
++++ b/mozilla/security/nss/lib/util/secload.c
+@@ -105,9 +105,9 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
+     /* Remove the trailing filename from referencePath and add the new one */
+     c = strrchr(referencePath, PR_GetDirectorySeparator());
+     if (!c) { /* referencePath doesn't contain a / means that dladdr gave us argv[0]
+-               * and program was called from $PATH. Hack to get libs from /usr/lib */
+-        referencePath = "/usr/lib/";
+-        c = &referencePath[8]; /* last / */
++               * and program was called from $PATH. Hack to get libs from NIX_NSS_LIBDIR */
++        referencePath = NIX_NSS_LIBDIR;
++        c = &referencePath[sizeof(NIX_NSS_LIBDIR) - 1]; /* last / */
+     }
+     if (c) {
+         size_t referencePathSize = 1 + c - referencePath;
+@@ -125,8 +125,7 @@ loader_LoadLibInReferenceDir(const char *referencePath, const char *name)
+                 (strncmp(fullName + referencePathSize - 4, "bin", 3) == 0)) {
+                 memcpy(fullName + referencePathSize -4, "lib", 3);
+             }
+-            strcpy(fullName + referencePathSize, "nss/");
+-            strcpy(fullName + referencePathSize + 4, name);
++            strcpy(fullName + referencePathSize, name);
+             dlh = PR_LoadLibraryWithFlags(libSpec, PR_LD_NOW | PR_LD_LOCAL
+ #ifdef PR_LD_ALT_SEARCH_PATH
+             /* allow library's dependencies to be found in the same directory

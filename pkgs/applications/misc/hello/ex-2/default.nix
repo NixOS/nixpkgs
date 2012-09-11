@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "hello-2.7";
+  name = "hello-2.8";
 
   src = fetchurl {
     url = "mirror://gnu/hello/${name}.tar.gz";
-    sha256 = "1h17p5lgg47lbr2cnp4qqkr0q0f0rpffyzmvs7bvc6vdrxdknngx";
+    sha256 = "0wqd8sjmxfskrflaxywc7gqw7sfawrfvdxd9skxawzfgyy0pzdz6";
   };
 
   doCheck = true;

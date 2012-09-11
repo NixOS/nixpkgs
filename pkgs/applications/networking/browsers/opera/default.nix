@@ -9,22 +9,22 @@
 assert stdenv.isLinux && stdenv.gcc.gcc != null && stdenv.gcc.libc != null;
 
 let
-  mirror = ftp://ftp.ussg.iu.edu/pub/opera;
+  mirror = http://get.geo.opera.com/pub/opera;
 in
 
 stdenv.mkDerivation rec {
-  name = "opera-11.64-1403";
+  name = "opera-12.00-1467";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "${mirror}/linux/1164/${name}.i386.linux.tar.xz";
-        sha256 = "8b7998586b1b3f8f5722beef7ebb621c0f15915c260b096249e9db5973e30d82";
+        url = "${mirror}/linux/1200/${name}.i386.linux.tar.xz";
+        sha256 = "d5683f5a4cf0cfd9ce715359b77909c7923c85bcec98513907c1844285356fdc";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "${mirror}/linux/1164/${name}.x86_64.linux.tar.xz";
-        sha256 = "3b2012cbab826a04417deb56b85d8d31f9c17130071304736bcfa572f78b4c69";
+        url = "${mirror}/linux/1200/${name}.x86_64.linux.tar.xz";
+        sha256 = "7c3dbe122b1fd20123f1b48a420dea080cc24ede4183d47d66b383c2b7ca5051";
       }
     else throw "Opera is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 

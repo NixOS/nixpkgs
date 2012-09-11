@@ -2,12 +2,12 @@
 , fftwSinglePrec, flac, glib, glibmm, gtk, gtkmm, jackaudio
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, makeWrapper, pango, perl, pkgconfig
-, python }:
+, libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
+, perl, pkgconfig, python, serd, sord, sratom, suil }:
 
 let
-  # Ardour 3 Beta 4a
-  rev = "12406";
+  # Ardour 3 Beta 5
+  rev = "13072";
 in
 
 stdenv.mkDerivation {
@@ -16,14 +16,17 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = http://subversion.ardour.org/svn/ardour2/branches/3.0;
     inherit rev;
-    sha256 = "0a68xb3l36m5908y3airxw1b3bymhrjrf1l492mgcvviq6pn7pmk";
+    sha256 = "17k990kdb5q17z6jcz5b60imvvfbjw9zfxzy9fk0vg8gd6yq7736";
   };
 
-  buildInputs = [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec
-    flac glib glibmm gtk gtkmm jackaudio libgnomecanvas
-    libgnomecanvasmm liblo libmad libogg librdf librdf_raptor
-    librdf_rasqal libsamplerate libsigcxx libsndfile libusb libuuid
-    libxml2 libxslt pango perl pkgconfig python ];
+  buildInputs = 
+    [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec
+      flac glib glibmm gtk gtkmm jackaudio libgnomecanvas
+      libgnomecanvasmm liblo libmad libogg librdf librdf_raptor
+      librdf_rasqal libsamplerate libsigcxx libsndfile libusb libuuid
+      libxml2 libxslt lilv lv2 pango perl pkgconfig python serd sord
+      sratom suil
+    ];
 
   patchPhase = ''
     printf '#include "ardour/svn_revision.h"\nnamespace ARDOUR { const char* svn_revision = \"${rev}\"; }\n' > libs/ardour/svn_revision.cc

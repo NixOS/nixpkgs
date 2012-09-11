@@ -89,7 +89,7 @@ rec {
     path = mkOptionType {
       name = "path";
       # Hacky: there is no ‘isPath’ primop.
-      check = lib.traceValIfNot (x: builtins.substring 0 1 (toString x) == "/");
+      check = lib.traceValIfNot (x: builtins.unsafeDiscardStringContext (builtins.substring 0 1 (toString x)) == "/");
     };
 
     listOf = types.list;
@@ -157,7 +157,7 @@ rec {
     uniq = elemType: mkOptionType {
       inherit (elemType) name check iter fold docPath hasOptions;
       merge = list:
-        if tail list == [] then
+        if length list == 1 then
           head list
         else
           throw "Multiple definitions. Only one is allowed for this option.";

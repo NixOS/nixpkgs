@@ -7,11 +7,11 @@
  else stdenv.mkDerivation)
 
 (rec {
-  name = "guile-2.0.5";
+  name = "guile-2.0.6";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "1lycm10x316jzlv1nyag7x9gisn4d3dz8jcmbi6lbdn0z6a9skc2";
+    sha256 = "000ng5qsq3cl1k35jvzvhwxj92wx4q87745n2fppkd4irh58vv5l";
   };
 
   buildNativeInputs = [ makeWrapper gawk pkgconfig ];
@@ -81,10 +81,31 @@
 
 //
 
+(stdenv.lib.optionalAttrs stdenv.isSunOS {
+  # TODO: Move me above.
+  configureFlags =
+    [
+      # Make sure the right <gmp.h> is found, and not the incompatible
+      # /usr/include/mp.h from OpenSolaris.  See
+      # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+      # for details.
+      "--with-libgmp-prefix=${gmp}"
+
+      # Same for these (?).
+      "--with-libreadline-prefix=${readline}"
+      "--with-libunistring-prefix=${libunistring}"
+
+      # See below.
+      "--without-threads"
+    ];
+})
+
+//
+
 (if stdenv.isFreeBSD
  then {
-   # XXX: Thread support is currently broken on FreeBSD (namely the
-   # `SCM_I_IS_THREAD' assertion in `scm_spawn_thread' is hit.)
+   # XXX: Thread support is currently broken on FreeBSD and Solaris (namely
+   # the `SCM_I_IS_THREAD' assertion in `scm_spawn_thread' is hit.)
    configureFlags = [ "--without-threads" ];
  }
  else {}))

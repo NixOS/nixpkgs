@@ -1,11 +1,11 @@
 { fetchurl, stdenv, ncurses, pkgconfig, emacs}:
 
 stdenv.mkDerivation rec {
-  name = "cscope-15.7a";
+  name = "cscope-15.8a";
 
   src = fetchurl {
-    url = "mirror://sourceforge/cscope/${name}.tar.bz2";
-    sha256 = "0dv0r66x31y2xxvad54x0wal8yb1krwbx3gjc82qpg4hlz5qnqq2";
+    url = "mirror://sourceforge/cscope/${name}.tar.gz";
+    sha256 = "07jdhxvp3dv7acvp0pwsdab1g2ncxjlcf838lj7vxgjs1p26lwzb";
   };
 
   preConfigure = ''

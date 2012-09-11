@@ -8,7 +8,7 @@ in
 
 composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.3.13";
+  version = "5.3.15";
 
   name = "php-${version}";
 
@@ -149,15 +149,12 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
   installPhase = ''
     unset installPhase; installPhase;
-    cp php.ini-${ if builtins.lessThan (builtins.compareVersions version "5.3") 0
-        then "recommended" /* < PHP 5.3 */
-        else "production" /* >= PHP 5.3 */
-    } $iniFile
+    cp php.ini-production $iniFile
   '';
 
   src = args.fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    sha256 = "16yr678bgks6hlhmmmi5s9ivhcx1f1bhvxkk3zrlkr3bn4sp46pg";
+    sha256 = "1vzij845n2akh2lkpacgdc5r0f7nw6pk9l9vi1h8l8k4krjjbdzr";
     name = "php-${version}.tar.bz2";
   };
 

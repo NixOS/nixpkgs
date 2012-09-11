@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "srcloc";
-  version = "0.1.1.1";
-  sha256 = "131g83sa0kjwy4bz6hcaxplywqd0899sw5r5x0nr0bffkhk91k60";
+  version = "0.1.2";
+  sha256 = "08awipz6al7jk7d974am5v9fkp87i5dy6d457mx1rv7lczlyhws9";
   buildDepends = [ syb symbol ];
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";

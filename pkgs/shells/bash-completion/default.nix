@@ -1,21 +1,22 @@
 { stdenv, fetchurl }:
 
 let
-  version = "1.3";
+  version = "2.0";
 in
 stdenv.mkDerivation {
   name = "bash-completion-${version}";
 
   src = fetchurl {
     url = "http://bash-completion.alioth.debian.org/files/bash-completion-${version}.tar.bz2";
-    sha256 = "8ebe30579f0f3e1a521013bcdd183193605dab353d7a244ff2582fb3a36f7bec";
+    sha256 = "e5a490a4301dfb228361bdca2ffca597958e47dd6056005ef9393a5852af5804";
   };
 
   postInstall = ''
-    rm $out/etc/profile.d/bash_completion.sh
-    rmdir $out/etc/profile.d
-    sed -i -e "s|/etc/bash_completion|$out/etc/bash_completion|g" $out/etc/bash_completion
+    sed -i "$out/share/bash-completion/bash_completion" \
+        -e 's|: .{BASH_COMPLETION_COMPAT_DIR:=.*}|BASH_COMPLETION_COMPAT_DIR="$HOME/.nix-profile/etc/bash_completion.d"|'
   '';
+
+  doCheck = true;
 
   meta = {
     homepage = "http://bash-completion.alioth.debian.org/";

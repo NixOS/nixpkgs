@@ -1,19 +1,27 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, gtk, expat, curl
-, gpsd, bc, file }:
+, gpsd, bc, file, gnome_doc_utils, libexif, libxml2, libxslt, scrollkeeper
+, docbook_xml_dtd_412 }:
 
-stdenv.mkDerivation rec {
-  name = "viking-0.9.8";
+let version = "1.3"; in
+stdenv.mkDerivation {
+  name = "viking-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/viking/${name}.tar.gz";
-    sha256 = "1is8g6ld5pd13iiv9qm8526q1cblg01pqyakg52sd6k7fys7dz2d";
+    url = "mirror://sourceforge/viking/viking/${version}/viking-${version}.tar.gz";
+    sha256 = "1psgy1myx9xn7zgpvqrpricsv041sz41mm82hj5i28k72fq47p2l";
   };
 
-  patches = [
-    ./test-bc.patch ./gpsdclient.patch ./implicit-declaration.patch
-  ];
+  buildInputs =
+   [ pkgconfig intltool gettext gtk expat curl gpsd bc file gnome_doc_utils
+     libexif libxml2 libxslt scrollkeeper docbook_xml_dtd_412
+   ];
 
-  buildInputs = [ pkgconfig intltool gettext gtk expat curl gpsd bc file ];
+  configureFlags = [ "--disable-scrollkeeper" ];
+
+  preBuild =
+    '' sed -i help/Makefile \
+           -e 's|--noout|--noout --nonet --path "${scrollkeeper}/share/xml/scrollkeeper/dtds"|g'
+    '';
 
   doCheck = true;
 

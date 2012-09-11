@@ -1,17 +1,18 @@
 { fetchurl, stdenv, zlib, lzo, libtasn1, nettle
-, guileBindings, guile, perl, psmisc }:
+, guileBindings, guile, perl, gmp }:
 
 assert guileBindings -> guile != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
 
-  name = "gnutls-3.0.18";
+  name = "gnutls-3.0.22";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.xz";
-    sha256 = "1ynqnj1j6rrzplk2i64dik34829r0y7lwk4qlvjx993q3mj7z863";
+    sha256 = "1pp90fm27qi5cd0pq18xcmnl79xcbfwxc54bg1xi1wv0vryqdpcr";
   };
 
+  # FIXME: Turn into a Nix list.
   configurePhase = ''
     ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
@@ -19,6 +20,11 @@ stdenv.mkDerivation rec {
       --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
       ${if guileBindings
         then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
+        else ""}${if stdenv.isSunOS
+          # TODO: Use `--with-libnettle-prefix' on all platforms
+          # Note: GMP is a dependency of Nettle, whose public headers include
+          # GMP headers, hence the hack.
+        then " --with-libnettle-prefix=${nettle} CPPFLAGS=-I${gmp}/include"
         else ""}
   '';
 
@@ -29,13 +35,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 
-  # XXX: Disable tests on non-Linux because of the `mini-loss-time' hack
-  # below, which is Linux-specific.
-  doCheck = stdenv.isLinux;
-
-  postCheck =
-    # Kill a process that's left behind.
-    stdenv.lib.optionalString doCheck "${psmisc}/bin/killall mini-loss-time";
+  # XXX: Gnulib's `test-select' fails on FreeBSD:
+  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
+  doCheck = (!stdenv.isFreeBSD);
 
   meta = {
     description = "The GNU Transport Layer Security Library";
@@ -60,3 +62,10 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+(stdenv.lib.optionalAttrs stdenv.isFreeBSD {
+  # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
+  patches = [ ./guile-gnulib-includes.patch ];
+}))

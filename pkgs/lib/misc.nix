@@ -158,14 +158,15 @@ rec {
         (tail x))))) condList)) ;
         
 
-  # !!! This function has O(n^2) performance, so you probably don't want to use it!
-  uniqList = {inputList, outputList ? []}:
-        if (inputList == []) then outputList else
-        let x=head inputList; 
-        newOutputList = outputList ++
-         (if elem x outputList then [] else [x]);
-        in uniqList {outputList=newOutputList; 
-                inputList = (tail inputList);};
+  # This function has O(n^2) performance.
+  uniqList = {inputList, acc ? []} :
+    let go = xs : acc :
+             if xs == []
+             then []
+             else let x = head xs;
+                      y = if elem x acc then [] else [x];
+                  in y ++ go (tail xs) (y ++ acc);
+    in go inputList acc;
 
   uniqListExt = {inputList, outputList ? [],
     getter ? (x : x), compare ? (x: y: x==y)}:
@@ -214,16 +215,22 @@ rec {
   modifySumArgs = f: x: innerModifySumArgs f x {};
 
 
-  innerClosePropagation = ready: list: if list == [] then ready else
-    if ! isAttrs (head list) then
-      /* builtins.trace ("not an attrSet: ${lib.showVal (head list)}") */
-        innerClosePropagation ready (tail list)
-    else
-      innerClosePropagation 
-        (ready ++ [(head list)])
-        ((tail list) 
-           ++ (maybeAttrNullable "propagatedBuildInputs" [] (head list))
-           ++ (maybeAttrNullable "propagatedBuildNativeInputs" [] (head list)));
+  innerClosePropagation = acc : xs :
+    if xs == []
+    then acc
+    else let y  = head xs;
+             ys = tail xs;
+         in if ! isAttrs y
+            then innerClosePropagation acc ys
+            else let acc' = [y] ++ acc;
+                 in innerClosePropagation
+                      acc'
+                      (uniqList { inputList = (maybeAttrNullable "propagatedBuildInputs" [] y)
+                                           ++ (maybeAttrNullable "propagatedBuildNativeInputs" [] y)
+                                           ++ ys;
+                                  acc = acc';
+                                }
+                      );
 
   closePropagation = list: (uniqList {inputList = (innerClosePropagation [] list);});
 
@@ -315,10 +322,6 @@ rec {
     // listToAttrs (map (n : nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" "postInstall" ])
   ;
 
-  # returns atribute values as a list 
-  flattenAttrs = set : map ( attr : builtins.getAttr attr set) (attrNames set);
-  mapIf = cond : f :  fold ( x : l : if (cond x) then [(f x)] ++ l else l) [];
-
   # prepareDerivationArgs tries to make writing configurable derivations easier
   # example:
   #  prepareDerivationArgs {
@@ -358,7 +361,7 @@ rec {
         flagName = name : "${name}Support";
         cfgWithDefaults = (listToAttrs (map (n : nameValuePair (flagName n) false) (attrNames args2.flags)))
                           // args2.cfg;
-        opts = flattenAttrs (mapAttrs (a : v :
+        opts = attrValues (mapAttrs (a : v :
                 let v2 = if (v ? set || v ? unset) then v else { set = v; };
                     n = if (getAttr (flagName a) cfgWithDefaults) then "set" else "unset";
                     attr = maybeAttr n {} v2; in
@@ -382,19 +385,5 @@ rec {
       else if x == null then "null"
       else if isInt x then "int"
       else "string";
-
-  # deep, strict equality testing. This should be implemented as primop
-  eqStrict = a : b :
-    let eqListStrict = a : b :
-      if (a == []) != (b == []) then false
-      else if a == [] then true
-      else eqStrict (head a) (head b) && eqListStrict (tail a) (tail b);
-    in
-    if nixType a != nixType b then false
-      else if isList a then eqListStrict a b
-        else if isAttrs a then
-          (eqListStrict (attrNames a) (attrNames b))
-          && (eqListStrict (lib.attrValues a) (lib.attrValues b))
-        else a == b; # FIXME !
 
 }

@@ -7,6 +7,7 @@
 , enableStatic ? false
 , enablePIC ? false
 , enableExceptions ? false
+, taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 }:
 
 let
@@ -24,10 +25,7 @@ let
      stdenv.lib.optional enableStatic "static");
 
   # To avoid library name collisions
-  finalLayout = if ((enableRelease && enableDebug) ||
-    (enableSingleThreaded && enableMultiThreaded) ||
-    (enableShared && enableStatic)) then
-    "tagged" else "system";
+  layout = if taggedLayout then "tagged" else "system";
 
   cflags = if (enablePIC && enableExceptions) then
              "cflags=-fPIC -fexceptions cxxflags=-fPIC linkflags=-fPIC"
@@ -63,7 +61,7 @@ stdenv.mkDerivation {
   configureScript = "./bootstrap.sh";
   configureFlags = "--with-icu=${icu} --with-python=${python}/bin/python";
 
-  buildPhase = "./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${finalLayout} variant=${variant} threading=${threading} link=${link} ${cflags} install";
+  buildPhase = "./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install";
 
   installPhase = ":";
 
@@ -82,7 +80,7 @@ stdenv.mkDerivation {
       cat << EOF > user-config.jam
       using gcc : cross : $crossConfig-g++ ;
       EOF
-      ./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat.hostDrv}/include -sEXPAT_LIBPATH=${expat.hostDrv}/lib --layout=${finalLayout} --user-config=user-config.jam toolset=gcc-cross variant=${variant} threading=${threading} link=${link} ${cflags} --without-python install
+      ./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat.hostDrv}/include -sEXPAT_LIBPATH=${expat.hostDrv}/lib --layout=${layout} --user-config=user-config.jam toolset=gcc-cross variant=${variant} threading=${threading} link=${link} ${cflags} --without-python install
     '';
   };
 }

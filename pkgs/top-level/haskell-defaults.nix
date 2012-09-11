@@ -19,6 +19,7 @@
     self : self.haskellPlatformArgs_future self // {
       haskellPlatform = null;
       binary = null; # now a core package
+      extensibleExceptions = self.extensibleExceptions_0_1_1_4;
     };
 
   ghc741Prefs =
@@ -27,9 +28,14 @@
       binary = null; # now a core package
     };
 
-  ghc722Prefs = ghc741Prefs;
+  ghc722Prefs =
+    self : self.haskellPlatformArgs_2012_2_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2012_2_0_0;
+      binary = null; # a core package
+      deepseq = self.deepseq_1_3_0_0;
+    };
 
-  ghc721Prefs = ghc741Prefs;
+  ghc721Prefs = ghc722Prefs;
 
   ghc704Prefs =
     self : self.haskellPlatformArgs_2011_4_0_0 self // {
@@ -37,6 +43,7 @@
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
 
   ghc703Prefs =
@@ -45,6 +52,7 @@
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
 
   ghc702Prefs = ghc701Prefs;
@@ -55,6 +63,7 @@
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
 
   ghc6123Prefs = ghc6122Prefs;
@@ -68,6 +77,7 @@
       monadPar = self.monadPar_0_1_0_3;
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
 
   ghc6121Prefs =
@@ -78,6 +88,7 @@
       repaExamples = null;      # don't pick this version of 'repa-examples' during nix-env -u
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
@@ -92,6 +103,7 @@
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
@@ -249,6 +261,12 @@
     packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
                ghcBinary = ghc6121BinaryDarwin;
                prefFun = ghc741Prefs;
+             };
+
+  packages_ghc761 =
+    packages { ghcPath = ../development/compilers/ghc/7.6.1.nix;
+               ghcBinary = ghc704Binary;
+               prefFun = ghcHEADPrefs;
              };
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.

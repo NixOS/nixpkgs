@@ -1,11 +1,11 @@
 {stdenv, fetchurl, bison, flex}:
 
 stdenv.mkDerivation rec {
-  name = "libnl-3.0";
+  name = "libnl-3.2.13";
 
   src = fetchurl {
     url = "${meta.homepage}files/${name}.tar.gz";
-    sha256 = "1vac10m3w0m5lsypjcrhs2dzwng82nkbzqz8g8kyzkxb3qz5ql3s";
+    sha256 = "1ydw42lsd572qwrfgws97n76hyvjdpanwrxm03lysnhfxkna1ssd";
   };
 
   buildInputs = [ bison flex ];

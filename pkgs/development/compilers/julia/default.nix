@@ -1,35 +1,46 @@
-{ stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, blas, liblapack
+{ stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
- , ncurses, libunistring, lighttpd, patchelf
+ , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
  } :
 let
-  liblapackShared = liblapack.override{shared=true;};
   realGcc = stdenv.gcc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20120501";
+  date = "20120904";
   name = "${pname}-git-${date}";
 
-  grisu_ver = "1.1";
+  grisu_ver = "1.1.1";
   dsfmt_ver = "2.1";
-  arpack_ver = "3.1.0";
+  openblas_ver = "v0.2.2";
+  lapack_ver = "3.4.1";
+  arpack_ver = "3.1.2";
   clp_ver = "1.14.5";
   lighttpd_ver = "1.4.29";
 
   grisu_src = fetchurl {
     url = "http://double-conversion.googlecode.com/files/double-conversion-${grisu_ver}.tar.gz";
-    sha256 = "addee31d11350e4dde2b19c749eda648cb0ab38a68b0dd0d0a45dc49c7346fe7";
+    sha256 = "e1cabb73fd69e74f145aea91100cde483aef8b79dc730fcda0a34466730d4d1d";
   };
   dsfmt_src = fetchurl {
     url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmt_ver}.tar.gz";
     name = "dsfmt-${dsfmt_ver}.tar.gz";
     sha256 = "e9d3e04bc984ec3b14033342f5ebdcd5202d8d8e40128dd737f566945612378f";
   };
+  openblas_src = fetchurl {
+    url = "https://github.com/xianyi/OpenBLAS/tarball/${openblas_ver}";
+    name = "openblas-${openblas_ver}.tar.gz";
+    sha256 = "19ffec70f9678f5c159feadc036ca47720681b782910fbaa95aa3867e7e86d8e";
+  };
   arpack_src = fetchurl {
-    url = "http://forge.scilab.org/index.php/p/arpack-ng/downloads/376/get/";
+    url = "http://forge.scilab.org/index.php/p/arpack-ng/downloads/497/get/";
     name = "arpack-ng_${arpack_ver}.tar.gz";
-    sha256 = "65b7856126f06ecbf9ec450d50df92ca9260d4b0d21baf02497554ac230d6feb";
+    sha256 = "1wk06bdjgap4hshx0lswzi7vxy2lrdx353y1k7yvm97mpsjvsf4k";
+  };
+  lapack_src = fetchurl {
+    url = "http://www.netlib.org/lapack/lapack-${lapack_ver}.tgz";
+    name = "lapack-${lapack_ver}.tgz";
+    sha256 = "93b910f94f6091a2e71b59809c4db4a14655db527cfc5821ade2e8c8ab75380f";
   };
   clp_src = fetchurl {
     url = "http://www.coin-or.org/download/source/Clp/Clp-${clp_ver}.tgz";
@@ -43,16 +54,17 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "990ffabb00f0e51d326911888facdbc473fb634d";
-    sha256 = "dfcf41b2d7b62dd490bfd6f6fb962713c920de3f00afaee47423bd26eba7e3b2";
+    rev = "b842bf4ae4d80f28803ec54f3da412a0248046a9";
+    sha256 = "4d67f4f4d35c76ea8981198e42feb1c30a50ac7e1e15b752fa41b26ebadcd828";
   };
 
-  buildInputs = [ gfortran perl m4 gmp pcre llvm blas liblapackShared readline 
+  buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
+    openblas liblapack
     ];
 
   configurePhase = ''
-    for i in GMP LLVM PCRE BLAS LAPACK READLINE FFTW LIBUNWIND SUITESPARSE GLPK; 
+    for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB; 
     do 
       sed -e "s@USE_SYSTEM_$i=0@USE_SYSTEM_$i=1@" -i Make.inc; 
     done
@@ -62,52 +74,44 @@ stdenv.mkDerivation rec {
       cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"
     }
 
-    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${clp_src}" "${lighttpd_src}" ; do
+    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${clp_src}" ; do
       copy_kill_hash "$i" deps
     done
     copy_kill_hash "${dsfmt_src}" deps/random
 
-    sed -e '/cd SuiteSparse-SYSTEM/,+1s@find /lib /usr/lib /usr/local/lib@find ${suitesparse}/lib@' -i deps/Makefile
-
     ${if realGcc ==null then "" else 
-    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring "''}
+    ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz "''}
 
     sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
 
-    sed -e '1s@#! */bin/bash@#!${stdenv.shell}@' -i deps/*.sh
-
     export LDFLAGS="-L${suitesparse}/lib"
+
+    export GLPK_PREFIX="${glpk}/include"
 
     mkdir -p "$out/lib"
     sed -e "s@/usr/local/lib@$out/lib@g" -i deps/Makefile
     sed -e "s@/usr/lib@$out/lib@g" -i deps/Makefile
     
-    sed -e '/libumfpack.a/s@find @find ${suitesparse}/lib @' -i deps/Makefile
-
-    export makeFlags="$makeFlags PREFIX=\"$out\" USR=\"$out\""
-
-    sed -e 's@openblas@blas@' -i base/*.jl
-
-    sed -e '/install -v julia-release-webserver/d' -i Makefile
+    export makeFlags="$makeFlags PREFIX=$out" 
 
     export dontPatchELF=1
   '';
 
+  preBuild = ''
+    make -C test/unicode all
+    make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX"
+  '';
+
   postInstall = ''
-   ln -s "$out/share/julia/julia" "$out/bin"
+   ld -E --whole-archive --shared ${suitesparse}/lib/lib*[a-z].a -o "$out"/lib/libsuitesparse-shared.so
+   for i in umfpack cholmod amd camd colamd ; do
+     ln -s "libsuitesparse-shared.so" "$out/lib/lib$i.so"
+   done
+   ln -s "${lighttpd}/sbin/lighttpd" "$out/sbin/"
+   ln -s "${lighttpd}/lib/"* "$out/lib/"
 
-   mkdir -p "$out/share/julia/ui/"
-   cp -r ui/website "$out/share/julia/ui/"
-   cp deps/lighttpd.conf "$out/share/julia/ui/"
-
-   mkdir -p "$out/share/julia/ui/webserver/"
-   cp -r ui/webserver/{*.jl,*.h} "$out/share/julia/ui/webserver/"
-
-   echo -e '#!/bin/sh' >> "$out/bin/julia-webserver"
-   echo -e "cd \"$out/share/julia\"" >> "$out/bin/julia-webserver"
-   echo -e '${lighttpd}/sbin/lighttpd -D -f ./ui/lighttpd.conf &' >> "$out/bin/julia-webserver"
-   echo -e "'$out/bin/julia-release-webserver' -p 2001" >> "$out/bin/julia-webserver"
-   chmod a+x "$out/bin/julia-webserver"
+   cp -r test examples "$out/lib/julia"
+   ls -R > "$out/ls-R"
   '';
 
   meta = {

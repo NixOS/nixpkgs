@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hscolour";
-  version = "1.20.2";
-  sha256 = "0jl2m2bpsqg2hnf9mmwwrpa7af8wqwaajfp2h3nnnmy5qks10ad5";
+  version = "1.20.3";
+  sha256 = "15ix93sw4p7g5ln2halcgqppdc0i0vmkzcjzxvqzkk9yp9pq3nrs";
   isLibrary = true;
   isExecutable = true;
   meta = {

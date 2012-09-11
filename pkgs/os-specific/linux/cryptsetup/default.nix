@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, devicemapper, libgcrypt, libuuid, pkgconfig, popt, udev }:
+{ stdenv, fetchurl, devicemapper, libgcrypt, libuuid, pkgconfig, popt }:
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-1.4.2";
-  
+  name = "cryptsetup-1.5.0";
+
   src = fetchurl {
     url = "http://cryptsetup.googlecode.com/files/${name}.tar.bz2";
-    sha256 = "1ryzc36wfbfqi69c3xzx2x6jr7l5xp7xwip4s9jkyjyj35xhvs0z";
+    sha256 = "1l7qcmaq092k28k8sbw845hs6jwn0f05h68rmb7iwh52232m8wa0";
   };
+
+  configureFlags = "--enable-cryptsetup-reencrypt";
 
   buildInputs = [ devicemapper libgcrypt libuuid pkgconfig popt ];
 

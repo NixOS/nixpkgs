@@ -76,6 +76,8 @@ let
       HOSTAP_FIRMWARE_NVRAM y
       ATH9K_PCI y # Detect Atheros AR9xxx cards on PCI(e) bus
       ATH9K_AHB y # Ditto, AHB bus
+      B43_PHY_HT y
+      BCMA_HOST_PCI y
 
       # Some settings to make sure that fbcondecor works - in particular,
       # disable tileblitting and the drivers that need it.
@@ -200,6 +202,7 @@ let
       THERMAL_HWMON y # Hardware monitoring support
       USB_DEBUG n
       USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
+      USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
       X86_CHECK_BIOS_CORRUPTION y
       X86_MCE y
 
@@ -236,7 +239,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.4.4";
+    version = "3.4.10";
     testing = false;
 
     preConfigure = ''
@@ -245,7 +248,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "0l4h7amhsmgpnii8rgwi32nd7ajsifk2xckjd39pfzwdifacw5yw";
+      sha256 = "03xfiyhv6zl3wn78bgm7a30w4hs2p328s447slilp0z2w09jqn4q";
     };
 
     config = configWithPlatform stdenv.platform;
@@ -253,6 +256,7 @@ import ./generic.nix (
 
     features.iwlwifi = true;
     features.efiBootStub = true;
+    features.needsCifsUtils = true;
   }
 
   // removeAttrs args ["extraConfig"]

@@ -1,19 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, udev, dbus, kmod
+{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
 , glib, kbd
 }:
 
+assert stdenv.gcc.libc or null != null;
+
 stdenv.mkDerivation rec {
-  name = "systemd-185";
+  name = "systemd-188";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "1iwp41xvpq0x2flhhs8lpyjbfyg1220ahmy7037zdjy26w9g82br";
+    sha256 = "0nr1cg1mizbwcafjcqw3c30mx6xdv596jpbgjlxr6myvc5hfsfg8";
   };
 
+  patches = [ ./fail-after-reaching-respawn-limit.patch ];
+
   buildInputs =
-    [ pkgconfig intltool gperf libcap udev dbus kmod xz pam acl
-      cryptsetup libuuid m4 usbutils pciutils glib
+    [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
+      /* cryptsetup */ libuuid m4 usbutils pciutils glib
     ];
 
   configureFlags =
@@ -45,7 +49,16 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  NIX_CFLAGS_COMPILE = "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\" -DKBD_SETFONT=\"${kbd}/bin/setfont\"";
+  NIX_CFLAGS_COMPILE =
+    [ "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\""
+      "-DKBD_SETFONT=\"${kbd}/bin/setfont\""
+      # Can't say ${polkit}/bin/pkttyagent here because that would
+      # lead to a cyclic dependency.
+      "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+      "-fno-stack-protector"
+    ];
+
+  makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include";
 
   installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc";
 
@@ -60,12 +73,20 @@ stdenv.mkDerivation rec {
       mkdir -p $out/sbin
       ln -s $out/lib/systemd/systemd $out/sbin/telinit
       for i in init halt poweroff runlevel reboot shutdown; do
-        ln -s $out/bin/systemctl $out/sbin/$i 
+        ln -s $out/bin/systemctl $out/sbin/$i
       done
     '';
 
   enableParallelBuilding = true;
-  
+
+  # The interface version prevents NixOS from switching to an
+  # incompatible systemd at runtime.  (Switching across reboots is
+  # fine, of course.)  It should be increased whenever systemd changes
+  # in a backwards-incompatible way.  If the interface version of two
+  # systemd builds is the same, then we can switch between them at
+  # runtime; otherwise we can't and we need to reboot.
+  passthru.interfaceVersion = 2;
+
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";

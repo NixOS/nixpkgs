@@ -26,7 +26,6 @@ with (import ./release-lib.nix);
   autoconf = all;
   automake110x = all;
   automake111x = all;
-  automake19x = all;
   avahi = allBut "i686-cygwin";  # Cygwin builds fail
   bash = all;
   bashInteractive = all;
@@ -103,7 +102,7 @@ with (import ./release-lib.nix);
   ghdl = linux;
   ghostscript = linux;
   ghostscriptX = linux;
-  gimp = linux;
+  gimp_2_8 = linux;
   git = linux;
   gitFull = linux;
   glibc = linux;
@@ -360,6 +359,7 @@ with (import ./release-lib.nix);
   firefox36Pkgs.firefox = linux;
   firefox12Pkgs.firefox = linux;
   firefox13Pkgs.firefox = linux;
+  firefox15Pkgs.firefox = linux;
 
   gnome = {
     gnome_panel = linux;
@@ -447,7 +447,7 @@ with (import ./release-lib.nix);
     xlsclients = linux;
     xmessage = linux;
     xorgserver = linux;
-    xprop = linux;    
+    xprop = linux;
     xrandr = linux;
     xrdb = linux;
     xset = linux;
@@ -473,4 +473,3 @@ with (import ./release-lib.nix);
   };
 
 } ))
-

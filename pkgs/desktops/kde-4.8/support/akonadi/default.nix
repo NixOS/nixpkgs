@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, qt4, shared_mime_info, libxslt, boost, automoc4, soprano }:
 
 stdenv.mkDerivation rec {
-  name = "akonadi-1.7.0";
+  name = "akonadi-1.7.2";
   
   src = fetchurl {
     url = "mirror://kde/stable/akonadi/src/${name}.tar.bz2";
-    sha256 = "105mjr6n1g6kl0djp2l8jr8b7j4s9gy2ls43g1wf3py1hf6j5fdz";
+    sha256 = "07rbhc8aa3d896j2r64ljv3amd6s4xhlbgq7kx99m1f68yl1fwjb";
   };
 
   buildInputs = [ qt4 soprano libxslt boost ];
