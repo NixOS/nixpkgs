@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pool-conduit";
-  version = "0.1.0.2";
-  sha256 = "1fs2kskvsvck9n011f2pv0s3mxd2hh71p61dxrskz79mfvks5yky";
+  version = "0.1.0.3";
+  sha256 = "0q95b4770xfd9ancbzbisslqax3pcvg1yf3kkplnvp335ffxbax9";
   buildDepends = [ resourcePool resourcet transformers ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
