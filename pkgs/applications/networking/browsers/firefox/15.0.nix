@@ -15,16 +15,16 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "15.0";
-  
-  xulVersion = "15.0"; # this attribute is used by other packages
+  firefoxVersion = "15.0.1";
 
-  
+  xulVersion = "15.0.1"; # this attribute is used by other packages
+
+
   src = fetchurl {
     url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "12f7dgcksb9d79hj0a8lxn3s81id6l2gd1pb7ls4d60kmgbg05jl";
+    sha1 = "bdbc4b6656c59b926e18f99b3335484427d08641";
   };
-  
+
   commonConfigureFlags =
     [ "--enable-optimize"
       "--disable-debug"
@@ -40,14 +40,14 @@ rec {
       "--disable-crashreporter"
       "--disable-tests"
       "--disable-necko-wifi" # maybe we want to enable this at some point
-      "--disable-installer" 
+      "--disable-installer"
       "--disable-updater"
     ];
 
 
   xulrunner = stdenv.mkDerivation rec {
     name = "xulrunner-${xulVersion}";
-    
+
     inherit src;
 
     buildInputs =
@@ -65,7 +65,7 @@ rec {
       ] ++ commonConfigureFlags;
 
     enableParallelBuilding = true;
-      
+
     preConfigure =
       ''
         export NIX_LDFLAGS="$NIX_LDFLAGS -L$out/lib/xulrunner-${xulVersion}"
@@ -85,9 +85,9 @@ rec {
       cd $out/bin
       rm xulrunner
 
-      for i in $out/lib/$libDir/*; do 
+      for i in $out/lib/$libDir/*; do
           file $i;
-          if file $i | grep executable &>/dev/null; then 
+          if file $i | grep executable &>/dev/null; then
               echo -e '#! /bin/sh\n"'"$i"'" "$@"' > "$out/bin/$(basename "$i")";
               chmod a+x "$out/bin/$(basename "$i")";
           fi;
@@ -116,7 +116,7 @@ rec {
     inherit src;
 
     enableParallelBuilding = true;
-      
+
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
         dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
@@ -142,7 +142,7 @@ rec {
     preConfigure =
       ''
         find . -name Makefile.in -execdir sed -i '{}' -e '1ivpath %.so ${
-          stdenv.lib.concatStringsSep ":" 
+          stdenv.lib.concatStringsSep ":"
             (map (s : s + "/lib") (buildInputs ++ [stdenv.gcc.libc]))
         }' ';'
       '';
@@ -150,19 +150,19 @@ rec {
     postInstall =
       ''
         ln -s ${xulrunner}/lib/xulrunner-${xulrunner.version} $(echo $out/lib/firefox-*)/xulrunner
-        for j in $out/bin/*; do 
-	    i="$(readlink "$j")";
+        for j in $out/bin/*; do
+            i="$(readlink "$j")";
             file $i;
-            if file $i | grep executable &>/dev/null; then 
-	        rm "$out/bin/$(basename "$i")"
+            if file $i | grep executable &>/dev/null; then
+                rm "$out/bin/$(basename "$i")"
                 echo -e '#! /bin/sh\nexec "'"$i"'" "$@"' > "$out/bin/$(basename "$i")"
                 chmod a+x "$out/bin/$(basename "$i")"
             fi;
         done;
-	cd "$out/lib/"firefox-*
-	rm firefox
-	echo -e '#!${stdenv.shell}\n${xulrunner}/bin/xulrunner "'"$PWD"'/application.ini" "$@"' > firefox
-	chmod a+x firefox
+        cd "$out/lib/"firefox-*
+        rm firefox
+        echo -e '#!${stdenv.shell}\n${xulrunner}/bin/xulrunner "'"$PWD"'/application.ini" "$@"' > firefox
+        chmod a+x firefox
       ''; # */
 
     meta = {
