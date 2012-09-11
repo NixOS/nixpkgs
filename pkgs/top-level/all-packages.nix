@@ -4869,6 +4869,8 @@ let
 
   tclap = callPackage ../development/libraries/tclap {};
 
+  tclgpg = callPackage ../development/libraries/tclgpg { };
+
   tcllib = callPackage ../development/libraries/tcllib { };
 
   tcltls = callPackage ../development/libraries/tcltls { };
