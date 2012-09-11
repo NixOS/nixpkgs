@@ -4,13 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "clientsession";
-  version = "0.8.0";
-  sha256 = "1ypd5ki4lvwriw922p65hmj41sargawah1gnwi0q08vc7iagq64k";
+  version = "0.8.0.1";
+  sha256 = "0r6j15wkyp4akhaxvimjxlwdka7cbm3c3nfk5bvkqan1nrip5rxv";
   buildDepends = [
     base64Bytestring cereal cprngAes cryptoApi cryptocipher entropy
     skein tagged
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://github.com/yesodweb/clientsession/tree/master";
     description = "Securely store session data in a client-side cookie";
