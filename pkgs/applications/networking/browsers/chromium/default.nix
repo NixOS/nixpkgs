@@ -81,6 +81,18 @@ let
     pre22 = stdenv.lib.versionOlder sourceInfo.version "22.0.0.0";
   in if pre22 then ./enable_seccomp.patch else ./enable_seccomp22.patch;
 
+  # XXX: this reverts r151720 to prevent http://crbug.com/143623
+  maybeRevertZlibChanges = let
+    below22 = stdenv.lib.versionOlder sourceInfo.version "22.0.0.0";
+    patch = fetchurl {
+      name = "revert-r151720";
+      url = "http://git.chromium.org/gitweb/?p=chromium.git;a=commitdiff_plain;"
+          + "hp=4419ec6414b33b6b19bb2e380b4998ed5193ecab;"
+          + "h=0fabb4fda7059a8757422e8a44e70deeab28e698";
+      sha256 = "0n0d6mkg89g8q63cifapzpg9dxfs2n6xvk4k13szhymvf67b77pf";
+    };
+  in stdenv.lib.optional (!below22) patch;
+
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
   packageName = "chromium";
@@ -114,7 +126,8 @@ in stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional (!config.selinux) seccompPatch
          ++ stdenv.lib.optional config.cups ./cups_allow_deprecated.patch
-         ++ stdenv.lib.optional config.pulseaudio ./pulseaudio_array_bounds.patch;
+         ++ stdenv.lib.optional config.pulseaudio ./pulseaudio_array_bounds.patch
+         ++ maybeRevertZlibChanges;
 
   postPatch = stdenv.lib.optionalString config.openssl ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
