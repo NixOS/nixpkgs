@@ -16,6 +16,7 @@
   ./config/users-groups.nix
   ./hardware/all-firmware.nix
   ./hardware/cpu/intel-microcode.nix
+  ./hardware/cpu/amd-microcode.nix
   ./hardware/network/b43.nix
   ./hardware/network/intel-2100bg.nix
   ./hardware/network/intel-2200bg.nix
