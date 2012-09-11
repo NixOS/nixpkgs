@@ -15,7 +15,7 @@ let
           + " " + fs.fsType
           + " " + fs.options
           + " 0"
-          + " " + (if fs.fsType == "none" || fs.fsType == "btrfs" || fs.noCheck then "0" else
+          + " " + (if fs.fsType == "none" || fs.device == "none" || fs.fsType == "btrfs" || fs.fsType == "tmpfs" || fs.noCheck then "0" else
                    if fs.mountPoint == "/" then "1" else "2")
           + "\n"
       )}
