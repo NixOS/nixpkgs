@@ -90,5 +90,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
+    platforms = stdenv.lib.platforms.linux;
   };
 }
