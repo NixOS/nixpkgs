@@ -86,8 +86,8 @@
             configurePhase = ''
               eval "$preConfigure"
 
-              ${lib.optionalString (lib.attrByPath ["jailbreak"] false self) "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal && "
-              }for i in Setup.hs Setup.lhs; do
+              ${lib.optionalString (lib.attrByPath ["jailbreak"] false self) "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
+              for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
 
