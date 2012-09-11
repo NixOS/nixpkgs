@@ -121,7 +121,7 @@ if ! mountpoint -q /run; then
     mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
 fi
 
-mkdir -m 0700 -p /run/lock
+mkdir -m 0755 -p /run/lock
 
 
 # For backwards compatibility, symlink /var/run to /run, and /var/lock

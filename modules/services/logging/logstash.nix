@@ -141,6 +141,7 @@ in
 
     jobs.logstash = with pkgs; {
       description = "Logstash daemon";
+      startOn = "started networking and filesystem";
 
       path = [ jre ];
 

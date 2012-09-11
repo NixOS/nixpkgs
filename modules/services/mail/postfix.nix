@@ -80,6 +80,9 @@ let
 
       recipientDelimiter = ${cfg.recipientDelimiter}
     ''
+    + optionalString (cfg.virtual != "") ''
+      virtual_alias_maps = hash:/etc/postfix/virtual
+    ''
     + cfg.extraConfig;
 
   aliases =
@@ -93,6 +96,7 @@ let
   ;
 
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
+  virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
 
 in
@@ -255,6 +259,13 @@ in
         ";
       };
 
+      virtual = mkOption {
+        default = "";
+        description = "
+          Entries for the virtual alias map.
+        ";
+      };
+
     };
 
   };
@@ -338,9 +349,11 @@ in
             ln -sf ${pkgs.postfix}/share/postfix/conf/* /var/postfix/conf
 
             ln -sf ${aliasesFile} /var/postfix/conf/aliases
+            ln -sf ${virtualFile} /var/postfix/conf/virtual
             ln -sf ${mainCfFile} /var/postfix/conf/main.cf
 
             ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
+            ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
 
             exec ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
           ''; # */

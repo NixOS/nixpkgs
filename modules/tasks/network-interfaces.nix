@@ -5,6 +5,7 @@ with pkgs.lib;
 let
 
   cfg = config.networking;
+  hasVirtuals = any (i: i.virtual) cfg.interfaces;
 
 in
 
@@ -119,6 +120,44 @@ in
           '';
         };
 
+        virtual = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Whether this interface is virtual and should be created by tunctl.
+            This is mainly useful for creating bridges between a host a virtual
+            network such as VPN or a virtual machine.
+
+            Defaults to tap device, unless interface contains "tun" in its name.
+          '';
+        };
+
+        virtualOwner = mkOption {
+          default = "root";
+          type = types.uniq types.string;
+          description = ''
+            In case of a virtual device, the user who owns it.
+          '';
+        };
+
+        proxyARP = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            Turn on proxy_arp for this device (and proxy_ndp for ipv6).
+            This is mainly useful for creating pseudo-bridges between a real
+            interface and a virtual network such as VPN or a virtual machine for
+            interfaces that don't support real bridging (most wlan interfaces).
+            As ARP proxying acts slightly above the link-layer, below-ip traffic
+            isn't bridged, so things like DHCP won't work. The advantage above
+            using NAT lies in the fact that no IP addresses are shared, so all
+            hosts are reachable/routeable.
+
+            WARNING: turns on ip-routing, so if you have multiple interfaces, you
+            should think of the consequence and setup firewall rules to limit this.
+          '';
+        };
+
       };
 
     };
@@ -179,7 +218,7 @@ in
 
   config = {
 
-    boot.kernelModules = optional cfg.enableIPv6 "ipv6";
+    boot.kernelModules = optional cfg.enableIPv6 "ipv6" ++ optional hasVirtuals "tun";
 
     environment.systemPackages =
       [ pkgs.host
@@ -191,6 +230,7 @@ in
         pkgs.openresolv
       ]
       ++ optional (cfg.bridges != {}) pkgs.bridge_utils
+      ++ optional hasVirtuals pkgs.tunctl
       ++ optional cfg.enableIPv6 pkgs.ndisc6;
 
     security.setuidPrograms = [ "ping" "ping6" ];
@@ -207,6 +247,15 @@ in
         preStart =
           ''
             set +e # continue in case of errors
+
+            # Create virtual network interfaces
+            ${flip concatMapStrings cfg.interfaces (i:
+              optionalString i.virtual
+                ''
+                  echo "Creating virtual network interface ${i.name}..."
+                  ${pkgs.tunctl}/bin/tunctl -t "${i.name}" -u "${i.virtualOwner}"
+                '')
+            }
 
             # Set MAC addresses of interfaces, if desired.
             ${flip concatMapStrings cfg.interfaces (i:
@@ -246,6 +295,14 @@ in
                   echo "Configuring interface ${i.name}..."
                   ip addr add "${i.ipAddress}""${optionalString (i.subnetMask != "") ("/" + i.subnetMask)}" \
                     dev "${i.name}"
+                '' +
+              optionalString i.proxyARP
+                ''
+                  echo 1 > /proc/sys/net/ipv4/conf/${i.name}/proxy_arp
+                '' +
+              optionalString (i.proxyARP && cfg.enableIPv6)
+                ''
+                  echo 1 > /proc/sys/net/ipv6/conf/${i.name}/proxy_ndp
                 '')
             }
 
@@ -262,6 +319,11 @@ in
             # Set the default gateway.
             ${optionalString (cfg.defaultGateway != "") ''
                 ip route add default via "${cfg.defaultGateway}"
+            ''}
+
+            # turn on forwarding if any interface has enabled proxy_arp
+            ${optionalString (any (i: i.proxyARP) cfg.interfaces) ''
+              echo 1 > /proc/sys/net/ipv4/ip_forward
             ''}
 
             # Run any user-specified commands.
