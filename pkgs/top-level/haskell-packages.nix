@@ -940,6 +940,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
+  hspec = callPackage ../development/libraries/haskell/hspec {};
+
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
   hsyslog = callPackage ../development/libraries/haskell/hsyslog {};
