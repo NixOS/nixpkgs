@@ -712,6 +712,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   filestore = callPackage ../development/libraries/haskell/filestore {};
 
+  filesystemConduit = callPackage ../development/libraries/haskell/filesystem-conduit {};
+
   fgl_5_4_2_2 = callPackage ../development/libraries/haskell/fgl/5.4.2.2.nix {};
   fgl_5_4_2_3 = callPackage ../development/libraries/haskell/fgl/5.4.2.3.nix {};
   fgl_5_4_2_4 = callPackage ../development/libraries/haskell/fgl/5.4.2.4.nix {};
@@ -940,10 +942,16 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hsloggerTemplate = callPackage ../development/libraries/haskell/hslogger-template {};
 
+  hspec = callPackage ../development/libraries/haskell/hspec {};
+
+  hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
+
   hsyslog = callPackage ../development/libraries/haskell/hsyslog {};
 
   html_1_0_1_2 = callPackage ../development/libraries/haskell/html/1.0.1.2.nix {};
   html = self.html_1_0_1_2;
+
+  htmlConduit = callPackage ../development/libraries/haskell/html-conduit {};
 
   httpConduit = callPackage ../development/libraries/haskell/http-conduit {};
 
@@ -1347,6 +1355,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
 
+  silently = callPackage ../development/libraries/haskell/silently {};
+
   skein = callPackage ../development/libraries/haskell/skein {};
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
@@ -1458,6 +1468,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   tagged = callPackage ../development/libraries/haskell/tagged {};
 
   tagsoup = callPackage ../development/libraries/haskell/tagsoup {};
+
+  tagstreamConduit = callPackage ../development/libraries/haskell/tagstream-conduit {};
 
   temporary = callPackage ../development/libraries/haskell/temporary {};
 
@@ -1578,6 +1590,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   waiLogger = callPackage ../development/libraries/haskell/wai-logger {};
 
+  waiTest = callPackage ../development/libraries/haskell/wai-test {};
+
   warp = callPackage ../development/libraries/haskell/warp {};
 
   WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {
@@ -1658,6 +1672,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   yesodRoutes = callPackage ../development/libraries/haskell/yesod-routes {};
 
   yesodStatic = callPackage ../development/libraries/haskell/yesod-static {};
+
+  yesodTest = callPackage ../development/libraries/haskell/yesod-test {};
 
   yst = callPackage ../development/libraries/haskell/yst {};
 
