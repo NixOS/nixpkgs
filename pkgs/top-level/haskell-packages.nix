@@ -1673,6 +1673,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yesodStatic = callPackage ../development/libraries/haskell/yesod-static {};
 
+  yesodTest = callPackage ../development/libraries/haskell/yesod-test {};
+
   yst = callPackage ../development/libraries/haskell/yst {};
 
   zeromqHaskell = callPackage ../development/libraries/haskell/zeromq-haskell {};
