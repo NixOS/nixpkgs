@@ -17,6 +17,11 @@ buildPerlPackage rec {
     ./external-sqlite.patch
   ];
 
+  preBuild =
+    ''
+      substituteInPlace Makefile --replace -L/usr/lib ""
+    '';
+
   postInstall =
     ''
       # Prevent warnings from `strip'.
