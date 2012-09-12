@@ -951,6 +951,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   html_1_0_1_2 = callPackage ../development/libraries/haskell/html/1.0.1.2.nix {};
   html = self.html_1_0_1_2;
 
+  htmlConduit = callPackage ../development/libraries/haskell/html-conduit {};
+
   httpConduit = callPackage ../development/libraries/haskell/http-conduit {};
 
   httpdShed = callPackage ../development/libraries/haskell/httpd-shed {};
