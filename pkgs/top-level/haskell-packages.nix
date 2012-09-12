@@ -1590,6 +1590,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   waiLogger = callPackage ../development/libraries/haskell/wai-logger {};
 
+  waiTest = callPackage ../development/libraries/haskell/wai-test {};
+
   warp = callPackage ../development/libraries/haskell/warp {};
 
   WebBits_1_0 = callPackage ../development/libraries/haskell/WebBits/1.0.nix {
