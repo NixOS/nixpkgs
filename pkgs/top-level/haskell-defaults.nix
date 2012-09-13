@@ -20,6 +20,7 @@
       haskellPlatform = null;
       binary = null; # now a core package
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
+      regexCompat = self.regexCompat_0_95_1.override { regexPosix = self.regexPosix_0_95_2; };
     };
 
   ghc741Prefs =

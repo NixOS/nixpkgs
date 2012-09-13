@@ -135,8 +135,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     QuickCheck   = self.QuickCheck_2_5;         # 7.6 ok
     random       = self.random_1_0_1_1;         # 7.6 ok
     regexBase    = self.regexBase_0_93_2;       # 7.6 ok
-    regexCompat  = self.regexCompat_0_95_1;     # 7.6 fail
-    regexPosix   = self.regexPosix_0_95_1;      # 7.6 fail
+    regexCompat  = self.regexCompat_0_95_1;     # 7.6 ok
+    regexPosix   = self.regexPosix_0_95_2;      # 7.6 ok
     stm          = self.stm_2_4;                # 7.6 ok
     syb          = self.syb_0_3_7;              # 7.6 ok
     text         = self.text_0_11_2_3;          # 7.6 ok
