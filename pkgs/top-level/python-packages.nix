@@ -213,8 +213,6 @@ let pythonPackages = python.modules // rec {
       description = "Undemanding HTML/XML parser";
     };
   });
-  beautifulsoap = builtins.trace "beatifulsoap is a typo" beautifulsoup;
-
 
   # euca2ools (and maybe Nova) needs boto 1.9, 2.0 doesn't work.
   boto_1_9 = buildPythonPackage (rec {
