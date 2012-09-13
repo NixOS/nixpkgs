@@ -2824,6 +2824,24 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  wokkel = buildPythonPackage (rec {
+    url = "http://wokkel.ik.nu/releases/0.7.0/wokkel-0.7.0.tar.gz";
+    name = pkgs.lib.nameFromURL url ".tar";
+    src = fetchurl {
+      inherit url;
+      sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
+    };
+
+    buildInputs = [twisted dateutil];
+
+    meta = {
+      description = "Some (mainly XMPP-related) additions to twisted";
+      homepage = "http://wokkel.ik.nu/";
+      license = stdenv.lib.licenses.mit;
+    };
+  });
+
+
   wxPython = wxPython28;
 
 
