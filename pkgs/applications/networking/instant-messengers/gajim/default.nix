@@ -24,6 +24,7 @@ rec {
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pyGtkGlade})/gtk-2.0"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pygobject})/gtk-2.0"
     sed -e '/-L[$]x_libraries/d' -i configure
+    sed -e 's@tmpfd.close()@os.close(tmpfd)@' -i src/common/latex.py
   '') ["addInputs" "doUnpack"];
 
   fixScriptNames = a.fullDepEntry (''
@@ -34,19 +35,14 @@ rec {
       name="''${name##*/.}"
       mv "$i" "$out/bin-wrapped/$name"
       sed -e 's^'"$i"'^'"$out/bin-wrapped/$name"'^' -i "$out/bin/$name"
-      sed -e "2aexport LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${a.gtkspell}/lib:${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
+      sed -e "2aexport LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}${a.gtkspell}/lib:${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
       sed -e "2aexport NIX_LDFLAGS=\"\$NIX_LDFLAGS -L${a.gtkspell}/lib -L${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
     done
   '') ["wrapBinContentsPython"];
 
-  deploySource = a.fullDepEntry (''
-    mkdir -p "$out/share/gajim/src"
-    cp -r *  "$out/share/gajim/src"
-  '') ["minInit"];
-
   /* doConfigure should be removed if not needed */
   phaseNames = ["preConfigure" (a.doDump "1") "doConfigure" "doMakeInstall" 
-    "wrapBinContentsPython" "fixScriptNames" "deploySource"];
+    "wrapBinContentsPython" "fixScriptNames"];
 
   name = "gajim-" + version;
   meta = {
