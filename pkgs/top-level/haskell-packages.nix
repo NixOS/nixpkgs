@@ -1630,8 +1630,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   X11_1_5_0_1 = callPackage ../development/libraries/haskell/X11/1.5.0.1.nix {};
-  X11_1_6_0_1 = callPackage ../development/libraries/haskell/X11/1.6.0.1.nix {};
-  X11 = self.X11_1_6_0_1;
+  X11_1_6_0_2 = callPackage ../development/libraries/haskell/X11/1.6.0.2.nix {};
+  X11 = self.X11_1_6_0_2;
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {};
 

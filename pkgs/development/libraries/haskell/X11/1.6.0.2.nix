@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "X11";
-  version = "1.6.0.1";
-  sha256 = "0crbprh4m48l4yvbamgvvzrmm1d94lgbyqv1xsd37r4a3xh7qakz";
+  version = "1.6.0.2";
+  sha256 = "0z1g93k2zbkb9is2zy6pfwp13bv11cvs30b9cz253wjv2liphshw";
   extraLibraries = [
     libX11 libXext libXinerama libXrandr libXrender
   ];
