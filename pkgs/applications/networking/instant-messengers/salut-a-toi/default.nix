@@ -1,4 +1,4 @@
-{stdenv, fetchurl, python, pythonPackages, pygobject}: 
+{stdenv, fetchurl, python, pythonPackages, pygobject, pythonDBus}: 
 stdenv.mkDerivation rec {
   url = "ftp://ftp.goffi.org/sat/sat-0.2.0.tar.bz2";
   name = stdenv.lib.nameFromURL url ".tar";
@@ -10,11 +10,13 @@ stdenv.mkDerivation rec {
   buildInputs = with pythonPackages; 
     [
       python twisted urwid beautifulsoup wxPython distribute pygobject
-      wokkel
+      wokkel pythonDBus
     ];
 
   configurePhase = ''
     sed -e "s@sys.prefix@'$out'@g" -i setup.py
+    sed -e "1aexport PATH=\"\$PATH\":\"$out/bin\":\"${pythonPackages.twisted}/bin\"" -i src/sat.sh
+    sed -e "1aexport PYTHONPATH=\"\$PYTHONPATHPATH\":\"$PYTHONPATH\":"$out/lib/${python.libPrefix}/site-packages"" -i src/sat.sh
 
     echo 'import wokkel.muc' | python 
   '';
