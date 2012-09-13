@@ -1,8 +1,9 @@
-{ pkgs, stdenv, nodejs, fetchurl }:
+{ pkgs, stdenv, nodejs, fetchurl, neededNatives }:
 
 let self = {
   buildNodePackage = import ../development/web/nodejs/build-node-package.nix {
-    inherit stdenv nodejs;
+    inherit stdenv nodejs neededNatives;
+    inherit (pkgs) runCommand;
   };
 
   patchLatest = srcAttrs:
