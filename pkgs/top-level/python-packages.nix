@@ -1765,6 +1765,7 @@ let pythonPackages = python.modules // rec {
       inherit url;
       sha256 = "1h4msq573m7wm46h3cqlx4rsn99f0l11rhdqgf50lv17j8a8vvy1";
     };
+    propagatedBuildInputs = [xe];
 
     # tests not described in setup.py
     doCheck = false;
@@ -2865,6 +2866,23 @@ let pythonPackages = python.modules // rec {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit pythonPackages;
     wxGTK = pkgs.wxGTK28;
+  };
+
+  xe = buildPythonPackage rec {
+    url = "http://www.blarg.net/%7Esteveha/xe-0.7.4.tar.gz";
+    name = stdenv.lib.nameFromURL url ".tar";
+    src = fetchurl {
+      inherit url;
+      sha256 = "0v9878cl0y9cczdsr6xjy8v9l139lc23h4m5f86p4kpf2wlnpi42";
+    };
+
+    # tests not described in setup.py
+    doCheck = false;
+
+    meta = {
+      homepage = "http://home.blarg.net/~steveha/xe.html";
+      description = "XML elements";
+    };
   };
 
   xlib = buildPythonPackage (rec {
