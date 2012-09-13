@@ -173,6 +173,10 @@
     gmp = pkgs.gmp4;
   });
 
+  ghc742Binary = lowPrio (callPackage ../development/compilers/ghc/7.4.2-binary.nix {
+    gmp = pkgs.gmp4;
+  });
+
   ghc6101BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6101Binary;
   ghc6121BinaryDarwin = if stdenv.isDarwin then ghc704Binary else ghc6121Binary;
 
