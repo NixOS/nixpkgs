@@ -1758,6 +1758,22 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  pyfeed = buildPythonPackage rec {
+    url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
+    name = stdenv.lib.nameFromURL url ".tar";
+    src = fetchurl {
+      inherit url;
+      sha256 = "1h4msq573m7wm46h3cqlx4rsn99f0l11rhdqgf50lv17j8a8vvy1";
+    };
+
+    # tests not described in setup.py
+    doCheck = false;
+
+    meta = {
+      homepage = "http://home.blarg.net/~steveha/pyfeed.html";
+      description = "Tools for syndication feeds";
+    };
+  };
 
   pygments = buildPythonPackage rec {
     name = "Pygments-1.5";
