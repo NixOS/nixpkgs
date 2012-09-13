@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     description = "A multi-frontend XMPP client";
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
-    license = stdenv.lib.licenses.gpl3plus;
+    license = stdenv.lib.licenses.gpl3Plus;
   };
 }
