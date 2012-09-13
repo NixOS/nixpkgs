@@ -2,7 +2,7 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "0.14.1" a; 
+  version = a.lib.attrByPath ["version"] "0.15.1" a; 
   buildInputs = with a; [
     python pyGtkGlade gtk perl intltool dbus gettext
     pkgconfig makeWrapper libglade pyopenssl libXScrnSaver
@@ -13,8 +13,8 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://www.gajim.org/downloads/0.14/gajim-${version}.tar.gz";
-    sha256 = "ef757572acf3f3d59408fd95b7ec99bc0e39c5b8c66bc61c78ba65e71c3d8e18";
+    url = "http://www.gajim.org/downloads/0.15/gajim-${version}.tar.gz";
+    sha256 = "b315d4a600da0c5f8248e8f887a41ce2630c49995b36cbad8fb2cd81cc8d2e8b";
   };
 
   inherit buildInputs;
