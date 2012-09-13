@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cgi";
-  version = "3001.1.8.2";
-  sha256 = "09ly7bn5ck563jq1wip5w628g74xj4p1ha9rllfdck33pqrl2mgz";
+  version = "3001.1.8.3";
+  sha256 = "1pacv0qxfs7l71xvf9amd7qsw5g725qbrm8r6fgdb2awyl925sf4";
   buildDepends = [
     extensibleExceptions MonadCatchIOMtl mtl network parsec xhtml
   ];
