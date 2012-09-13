@@ -8696,6 +8696,7 @@ let
     inherit (gnome) libglade;
     inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11
       scrnsaverproto;
+    inherit (pythonPackages) pyasn1;
     python = pythonFull;
   };
 

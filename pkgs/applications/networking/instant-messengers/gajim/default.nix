@@ -8,7 +8,7 @@ let
     pkgconfig makeWrapper libglade pyopenssl libXScrnSaver
     libXt xproto libXext xextproto libX11 gtkspell aspell
     scrnsaverproto pycrypto pythonDBus pythonSexy 
-    docutils
+    docutils pyasn1
   ];
 in
 rec {
@@ -37,8 +37,14 @@ rec {
     done
   '') ["wrapBinContentsPython"];
 
+  deploySource = a.fullDepEntry (''
+    mkdir -p "$out/share/gajim/src"
+    cp -r *  "$out/share/gajim/src"
+  '') ["minInit"];
+
   /* doConfigure should be removed if not needed */
-  phaseNames = ["preConfigure" (a.doDump "1") "doConfigure" "doMakeInstall" "wrapBinContentsPython" "fixScriptNames"];
+  phaseNames = ["preConfigure" (a.doDump "1") "doConfigure" "doMakeInstall" 
+    "wrapBinContentsPython" "fixScriptNames" "deploySource"];
 
   name = "gajim-" + version;
   meta = {
