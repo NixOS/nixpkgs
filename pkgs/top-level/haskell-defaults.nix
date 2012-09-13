@@ -276,7 +276,7 @@
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   packages_ghcHEAD =
     packages { ghcPath = ../development/compilers/ghc/head.nix;
-               ghcBinary = ghc704Binary;
+               ghcBinary = ghc742Binary;
                prefFun = ghcHEADPrefs;
              };
 
