@@ -1193,8 +1193,8 @@ rec {
     };
 
     ubuntu1010i386 = {
-      name = "ubuntu-10.04-maverick-i386";
-      fullName = "Ubuntu 10.04 Maverick (i386)";
+      name = "ubuntu-10.10-maverick-i386";
+      fullName = "Ubuntu 10.10 Maverick (i386)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/maverick/main/binary-i386/Packages.bz2;
         sha256 = "1qjs4042y03bxbxwjs3pgrs99ba6vqvjaaz6zhaxxaqj1r12dwa0";
@@ -1204,8 +1204,8 @@ rec {
     };
 
     ubuntu1010x86_64 = {
-      name = "ubuntu-10.04-maverick-amd64";
-      fullName = "Ubuntu 10.04 Maverick (amd64)";
+      name = "ubuntu-10.10-maverick-amd64";
+      fullName = "Ubuntu 10.10 Maverick (amd64)";
       packagesList = fetchurl {
         url = mirror://ubuntu/dists/maverick/main/binary-amd64/Packages.bz2;
         sha256 = "1p0i4gp1bxd3zvckgnh1hx4vfc23rfgzd19dk5rmi61lzbzzqbgc";
