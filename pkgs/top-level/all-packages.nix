@@ -1167,6 +1167,8 @@ let
     inherit (pythonPackages) pysqlite;
   };
 
+  nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
+
   ntfs3g = callPackage ../tools/filesystems/ntfs-3g { };
 
   # ntfsprogs are merged into ntfs-3g
