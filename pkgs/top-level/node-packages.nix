@@ -96,14 +96,15 @@ let self = {
     ];
   };
 
-  "bson" = self."bson-0.1.0";
+  "bson" = self."bson-0.1.3";
 
-  "bson-0.1.0" = self.buildNodePackage rec {
-    name = "bson-0.1.0";
+  "bson-0.1.3" = self.buildNodePackage rec {
+    name = "bson-0.1.3";
     src = fetchurl {
       url = "http://registry.npmjs.org/bson/-/${name}.tgz";
-      sha256 = "32618266420f4d2688e957a6a145aab6a1402c950b7b7c7c1d0520cbd08251c9";
+      sha256 = "86ed2b1465e30a4089c8c88dee3d97fafcd7deb60edc3819c00a0604c84d5040";
     };
+    flags = [ "mongodb:native" ];
     deps = [
 
     ];
@@ -477,16 +478,16 @@ let self = {
     ];
   };
 
-  "mongodb" = self."mongodb-1.1.0-beta";
+  "mongodb" = self."mongodb-1.1.7";
 
-  "mongodb-1.1.0-beta" = self.buildNodePackage rec {
-    name = "mongodb-1.1.0-beta";
+  "mongodb-1.1.7" = self.buildNodePackage rec {
+    name = "mongodb-1.1.7";
     src = fetchurl {
       url = "http://registry.npmjs.org/mongodb/-/${name}.tgz";
-      sha256 = "05e5a798d4c3a499af1e77a33eb13a31d4fb688a63e97b3fe970a3bccea39ab3";
+      sha256 = "10ed2903b839907e854a4ae4508940207f260500bfaff028497e9df865ead475";
     };
     deps = [
-      self."bson-0.1.0"
+      self."bson-0.1.3"
     ];
   };
 
