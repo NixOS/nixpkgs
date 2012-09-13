@@ -2832,7 +2832,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
     };
 
-    buildInputs = [twisted dateutil];
+    propagatedBuildInputs = [twisted dateutil];
 
     meta = {
       description = "Some (mainly XMPP-related) additions to twisted";
