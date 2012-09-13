@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   buildInputs = with pythonPackages; 
     [
       python twisted urwid beautifulsoup wxPython distribute pygobject
-      wokkel pythonDBus pyfeed
+      wokkel pythonDBus pyfeed wrapPython
     ];
 
   configurePhase = ''
@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     python setup.py install --prefix="$out" 
+
+    for i in "$out/bin"/*; do
+      head -n 1 "$i" | grep -E '[/ ]python( |$)' && {
+        wrapProgram "$i" --prefix PYTHONPATH : "$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages"
+      } || true 
+    done
   '';
   
   meta = {
