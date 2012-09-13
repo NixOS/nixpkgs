@@ -4824,7 +4824,7 @@ let
     inherit (xlibs) libXrandr libXfixes libXext libXrender libXinerama;
   };
 
-  spiceProtocol = callPackage ../development/libraries/spice-protocol { };
+  spice_protocol = callPackage ../development/libraries/spice-protocol { };
 
   sratom = callPackage ../development/libraries/audio/sratom { };
 

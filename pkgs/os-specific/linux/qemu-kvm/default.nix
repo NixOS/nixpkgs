@@ -1,6 +1,6 @@
 { stdenv, fetchurl, attr, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
 , libjpeg, libpng, ncurses, python, glib, libaio, mesa
-, spice, spiceProtocol, spiceSupport ? false }:
+, spice, spice_protocol, spiceSupport ? false }:
 
 assert stdenv.isLinux;
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
       ncurses python glib libaio mesa
-    ] ++ stdenv.lib.optionals spiceSupport [ spiceProtocol spice ];
+    ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
 
   postInstall =
     ''
