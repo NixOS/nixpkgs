@@ -34,8 +34,8 @@ rec {
       name="''${name##*/.}"
       mv "$i" "$out/bin-wrapped/$name"
       sed -e 's^'"$i"'^'"$out/bin-wrapped/$name"'^' -i "$out/bin/$name"
-      sed -e "2aexport LD_LIBRARY_PATH=\"$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${a.gtkspell}/lib:${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
-      sed -e "2aexport NIX_LDFLAGS=\"$NIX_LDFLAGS -L${a.gtkspell}/lib -L${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
+      sed -e "2aexport LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${a.gtkspell}/lib:${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
+      sed -e "2aexport NIX_LDFLAGS=\"\$NIX_LDFLAGS -L${a.gtkspell}/lib -L${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
     done
   '') ["wrapBinContentsPython"];
 
