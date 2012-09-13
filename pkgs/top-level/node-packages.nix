@@ -285,6 +285,19 @@ let self = {
     ];
   };
 
+  "faye-websocket" = self."faye-websocket-0.4.0";
+
+  "faye-websocket-0.4.0" = self.buildNodePackage rec {
+    name = "faye-websocket-0.4.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/faye-websocket/-/${name}.tgz";
+      sha256 = "853b8d2f4611013da89faf45b6c9f6e440ad6c46616e405b8cf59b4302e78e2f";
+    };
+    deps = [
+
+    ];
+  };
+
   "formidable" = self."formidable-1.0.11";
 
   "formidable-1.0.11" = self.buildNodePackage rec {
@@ -529,6 +542,19 @@ let self = {
     ];
   };
 
+  "node-uuid" = self."node-uuid-1.3.3";
+
+  "node-uuid-1.3.3" = self.buildNodePackage rec {
+    name = "node-uuid-1.3.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/node-uuid/-/${name}.tgz";
+      sha256 = "a3fbccc904944a9c8eadc59e55aaac908cc458569f539b50077d9672a84587a8";
+    };
+    deps = [
+
+    ];
+  };
+
   "nopt" = self."nopt-2";
 
   "nopt-2" = self.buildNodePackage rec {
@@ -656,6 +682,22 @@ let self = {
     };
     deps = [
 
+    ];
+  };
+
+  "rbytes" = self."rbytes-0.0.2";
+
+  "rbytes-0.0.2" = self.buildNodePackage rec {
+    name = "rbytes-0.0.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/rbytes/-/${name}.tgz";
+      sha256 = "0fd4697be996ee12c65f8fb13b2edc7a554d22c31d1a344539bc611ce73b69aa";
+    };
+    deps = [
+
+    ];
+    nativeDeps = [
+      pkgs.openssl
     ];
   };
 
@@ -793,6 +835,21 @@ let self = {
     ];
   };
 
+  "sockjs" = self."sockjs-0.3.1";
+
+  "sockjs-0.3.1" = self.buildNodePackage rec {
+    name = "sockjs-0.3.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/sockjs/-/${name}.tgz";
+      sha256 = "056476f23dbe2e2182e5edea755108a8b6dbaea4b675b228172e876c8649efdf";
+    };
+    deps = [
+      self."node-uuid-1.3.3"
+      self."faye-websocket-0.4.0"
+      self."rbytes-0.0.2"
+    ];
+  };
+
   "tar" = self."tar-~0.1.12";
 
   "tar-~0.1.12" = self.buildNodePackage rec {
@@ -900,8 +957,9 @@ let self = {
   };
 
   "ws" = self."ws-0.4.x";
+  "ws-0.4.x" = self."ws-0.4.21";
 
-  "ws-0.4.x" = self.buildNodePackage rec {
+  "ws-0.4.21" = self.buildNodePackage rec {
     name = "ws-0.4.21";
     src = self.patchLatest {
       url = "http://registry.npmjs.org/ws/-/${name}.tgz";
