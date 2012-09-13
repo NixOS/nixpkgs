@@ -1431,6 +1431,8 @@ let
 
   sablotron = callPackage ../tools/text/xml/sablotron { };
 
+  salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
+
   screen = callPackage ../tools/misc/screen { };
 
   scrot = callPackage ../tools/graphics/scrot { };
