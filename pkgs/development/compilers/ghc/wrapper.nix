@@ -1,4 +1,4 @@
-{stdenv, ghc, makeWrapper, coreutils}:
+{ stdenv, ghc, makeWrapper, coreutils }:
 
 stdenv.mkDerivation {
   name = "ghc-${ghc.version}-wrapper";
