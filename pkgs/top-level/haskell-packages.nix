@@ -142,7 +142,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     text         = self.text_0_11_2_3;          # 7.6 ok
     transformers = self.transformers_0_3_0_0;   # 7.6 ok
     xhtml        = self.xhtml_3000_2_1;         # 7.6 ok
-    zlib         = self.zlib_0_5_3_3;           # 7.6 ok
+    zlib         = self.zlib_0_5_4_0;           # 7.6 ok
     cabalInstall = self.cabalInstall_0_14_0;    # 7.6 ok
     alex         = self.alex_3_0_1;             # 7.6 ok
     haddock      = self.haddock_2_12_0;         # 7.6 ok
@@ -1695,7 +1695,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib_0_5_3_3 = callPackage ../development/libraries/haskell/zlib/0.5.3.3.nix {
     inherit (pkgs) zlib;
   };
-  zlib = self.zlib_0_5_3_3;
+  zlib_0_5_4_0 = callPackage ../development/libraries/haskell/zlib/0.5.4.0.nix {
+    inherit (pkgs) zlib;
+  };
+  zlib = self.zlib_0_5_4_0;
 
   zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
 
