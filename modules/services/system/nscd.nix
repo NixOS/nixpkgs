@@ -64,7 +64,12 @@ in
         description = "Invalidate NSCD cache";
         startOn = "ip-up or config-changed";
         task = true;
-        exec = "${pkgs.glibc}/sbin/nscd --invalidate hosts";
+        path = [ pkgs.glibc ];
+        exec = ''
+          nscd --invalidate=passwd
+          nscd --invalidate=group
+          nscd --invalidate=hosts
+        '';
       };
 
   };
