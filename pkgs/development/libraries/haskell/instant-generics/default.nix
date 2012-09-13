@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "instant-generics";
-  version = "0.3.5";
-  sha256 = "15j41krvabf541vm4vpn2jvlg3nbi6pywcig9zbjjpckzwp5vj9x";
+  version = "0.3.6";
+  sha256 = "0rwxj30p4s8imwfsrrrb26dvxax74cr77yzrm5s9yj7hc7hr0c5p";
   buildDepends = [ syb ];
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/GenericProgramming/InstantGenerics";
