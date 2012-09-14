@@ -7109,6 +7109,8 @@ let
 
   hello = callPackage ../applications/misc/hello/ex-2 { };
 
+  hexedit = callPackage ../applications/editors/hexedit { };
+
   homebank = callPackage ../applications/office/homebank { };
 
   htmldoc = callPackage ../applications/misc/htmldoc {
