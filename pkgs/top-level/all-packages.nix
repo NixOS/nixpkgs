@@ -6474,6 +6474,8 @@ let
 
   adobeReader = callPackage_i686 ../applications/misc/adobe-reader { };
 
+  aewan = callPackage ../applications/editors/aewan { };
+
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
   antiword = callPackage ../applications/office/antiword {};
