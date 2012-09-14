@@ -36,10 +36,10 @@ Options:
 Various nix-build options are also accepted, in particular:
 
   --show-trace           show a detailed stack trace for evaluation errors
- 
+
 Environment variables affecting nixos-rebuild:
 
-  \$NIX_PATH              Nix expression search path 
+  \$NIX_PATH              Nix expression search path
   \$NIXOS_CONFIG          path to the NixOS system configuration specification
 EOF
     exit 1
@@ -84,6 +84,11 @@ while test "$#" -gt 0; do
       --max-jobs|-j|--cores|-I)
         j="$1"; shift 1
         extraBuildFlags="$extraBuildFlags $i $j"
+        ;;
+      --option)
+        j="$1"; shift 1
+        k="$1"; shift 1
+        extraBuildFlags="$extraBuildFlags $i $j $k"
         ;;
       --fast)
         buildNix=
@@ -202,7 +207,7 @@ fi
 if test "$action" = switch -o "$action" = boot -o "$action" = test; then
     # Just in case the new configuration hangs the system, do a sync now.
     sync
-    
+
     $pathToConfig/bin/switch-to-configuration "$action"
 fi
 
