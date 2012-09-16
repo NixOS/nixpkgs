@@ -230,15 +230,15 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.0.31";
-  
+    version = "3.0.43";
+
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
     '';
 
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
-      sha256 = "1b5ix1fc55m6vsr28dh5xi89fphl3m3kmvaniq9div5rj8f6kv0f";
+      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
+      sha256 = "1mrsdqsphkixvd5x97nz465r490hr679rq6f98jbyr0g5m4fyc29";
     };
 
     config = configWithPlatform stdenv.platform;
