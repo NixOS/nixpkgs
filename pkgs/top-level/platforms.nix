@@ -99,6 +99,18 @@ rec {
 
         # nixos mounts some cgroup
         CGROUPS y
+
+        # Latencytop 
+        LATENCYTOP y
+
+        # Ubi for the mtd
+        MTD_UBI y
+        UBIFS_FS y
+        UBIFS_FS_XATTR y
+        UBIFS_FS_ADVANCED_COMPR y
+        UBIFS_FS_LZO y
+        UBIFS_FS_ZLIB y
+        UBIFS_FS_DEBUG n
       '';
     kernelTarget = "uImage";
     uboot = "sheevaplug";
