@@ -91,4 +91,6 @@ rec {
   gitSubtree = import ./git-subtree {
     inherit stdenv fetchurl git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt;
   };
+
+  darcsToGit = callPackage ./darcs-to-git { };
 }
