@@ -1,4 +1,4 @@
-{ cabal, base64Bytestring, blazeHtml, citeprocHs
+{ cabal, base64Bytestring, blazeHtml, blazeMarkup, citeprocHs
 , extensibleExceptions, filepath, highlightingKate, HTTP, json, mtl
 , network, pandocTypes, parsec, random, syb, tagsoup, temporary
 , texmath, time, utf8String, xml, zipArchive, zlib
@@ -11,10 +11,12 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    base64Bytestring blazeHtml citeprocHs extensibleExceptions filepath
-    highlightingKate HTTP json mtl network pandocTypes parsec random
-    syb tagsoup temporary texmath time utf8String xml zipArchive zlib
+    base64Bytestring blazeHtml blazeMarkup citeprocHs
+    extensibleExceptions filepath highlightingKate HTTP json mtl
+    network pandocTypes parsec random syb tagsoup temporary texmath
+    time utf8String xml zipArchive zlib
   ];
+  configureFlags = "-fblaze_html_0_5";
   jailbreak = true;
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
