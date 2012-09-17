@@ -125,7 +125,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     GLUT         = self.GLUT_2_3_0_0;           # 7.6 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 fail
     html         = self.html_1_0_1_2;           # 7.6 ok
-    HTTP         = self.HTTP_4000_2_4;          # 7.6 ok
+    HTTP         = self.HTTP_4000_2_5;          # 7.6 ok
     HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
     network      = self.network_2_3_1_0;        # 7.6 ok
@@ -858,8 +858,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_2_1 = callPackage ../development/libraries/haskell/HTTP/4000.2.1.nix {};
   HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
   HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
-  HTTP_4000_2_4 = callPackage ../development/libraries/haskell/HTTP/4000.2.4.nix {};
-  HTTP = self.HTTP_4000_2_4;
+  HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
+  HTTP = self.HTTP_4000_2_5;
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
