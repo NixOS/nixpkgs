@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "tagstream-conduit";
-  version = "0.5.2";
-  sha256 = "12hg9khc670499c3ymc0s4xd2sg71grlk21ykqmby972dva77vxr";
+  version = "0.5.3";
+  sha256 = "08g34dbb59mrpj0lym5a0zlygvj7in57nkhbk84kxvggrhl0jndl";
   buildDepends = [
     attoparsec blazeBuilder blazeBuilderConduit conduit text
   ];
