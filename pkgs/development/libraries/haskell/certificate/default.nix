@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "certificate";
-  version = "1.2.6";
-  sha256 = "1li65r4zbff7r7p533p5xw2z3rd0xnlb2bbwqdldrnswy4mvlakx";
+  version = "1.2.7";
+  sha256 = "02fsip23k97p6wx94d867z5v37yfamrlxv4qvv9wcgjzmh2694ay";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ asn1Data cryptoPubkeyTypes mtl pem time ];
