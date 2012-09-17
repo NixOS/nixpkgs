@@ -23,8 +23,6 @@ stdenv.mkDerivation rec {
       darcs-to-git
   '';
 
-  propagatedBuildInputs = [ ruby ];
-
   installPhase = ''
     install -vD darcs-to-git "$out/bin/darcs-to-git"
   '';
