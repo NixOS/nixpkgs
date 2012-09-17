@@ -4,9 +4,9 @@
 
 cabal.mkDerivation (self: {
   pname = "stylish-haskell";
-  version = "0.4.0.0";
-  sha256 = "1d5a7a5f1lbyf7if0sb9vhmnbi5ry28wakhsgh75hvgzd999vbhx";
-  isLibrary = false;
+  version = "0.5.0.2";
+  sha256 = "0am63hw24c1yja1sb2xsbi1bcyfxb1qsypszkpaylvks797czmc7";
+  isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson cmdargs filepath haskellSrcExts mtl strict syb yaml
