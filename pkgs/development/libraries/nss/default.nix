@@ -11,7 +11,11 @@ let
   };
 
   secLoadPatch = fetchurl {
-    url = "http://patch-tracker.debian.org/patch/series/dl/nss/2:3.13.5-1/85_security_load.patch";
+    name = "security_load.patch";
+    urls = [
+      "http://patch-tracker.debian.org/patch/series/dl/nss/2:3.13.6-1/85_security_load.patch"
+      "http://anonscm.debian.org/gitweb/?p=pkg-mozilla/nss.git;a=blob_plain;f=debian/patches/85_security_load.patch;hb=HEAD"
+    ];
     sha256 = "8a8d0ae4ebbd7c389973fa5d26d8bc5f473046c6cb1d8283cb9a3c1f4c565c47";
   };
 
