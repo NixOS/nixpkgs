@@ -5334,6 +5334,8 @@ let
 
   nginx = callPackage ../servers/http/nginx { };
 
+  popa3d = callPackage ../servers/mail/popa3d { };
+
   postfix = callPackage ../servers/mail/postfix { };
 
   pulseaudio = callPackage ../servers/pulseaudio {
