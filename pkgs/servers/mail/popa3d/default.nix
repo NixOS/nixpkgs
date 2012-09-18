@@ -11,7 +11,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl ];
 
-  patches = [ ./fix-mail-spool-path.patch ./use-openssl.patch ./use-glibc-crypt.patch ];
+  patches = [
+    ./fix-mail-spool-path.patch
+    ./use-openssl.patch
+    ./use-glibc-crypt.patch
+    ./enable-standalone-mode.patch
+  ];
 
   configurePhase = ''makeFlags="PREFIX=$out MANDIR=$out/share/man"'';
 
