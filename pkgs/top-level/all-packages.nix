@@ -2959,8 +2959,6 @@ let
 
   bison26 = callPackage ../development/tools/parsing/bison/bison-2.6.nix { };
 
-  bison26 = callPackage ../development/tools/parsing/bison/bison-2.6.nix { };
-
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted;
   };
