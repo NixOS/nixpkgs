@@ -1,14 +1,16 @@
 { stdenv, fetchurl, ed }:
 
-stdenv.mkDerivation (rec {
-  name = "patch-2.6.1";
+stdenv.mkDerivation rec {
+  name = "patch-2.7";
 
   src = fetchurl {
     url = "mirror://gnu/patch/${name}.tar.gz";
-    sha256 = "1fc1jyq80nswkf492fiqdbl2bhvlw2wb44ghqlfd3zngx4qkfmni";
+    sha256 = "0j10lq37ywcc4qiakan6wpm00abfrnnccq3ags129ad0z9b9zhjr";
   };
 
-  buildInputs = (stdenv.lib.optional doCheck ed);
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-fix.patch;
+
+  buildInputs = stdenv.lib.optional doCheck ed;
 
   crossAttrs = {
     configureFlags = [ "ac_cv_func_strnlen_working=yes" ];
@@ -33,9 +35,3 @@ stdenv.mkDerivation (rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-
-//
-
-(stdenv.lib.optionalAttrs stdenv.isDarwin {
-  patches = [ ./darwin-fix.patch ];
-}))
