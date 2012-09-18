@@ -1835,6 +1835,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   myhasktags = callPackage ../tools/misc/myhasktags {};
 
+  timeplot = callPackage ../development/tools/haskell/timeplot {};
+
   # Games.
 
   LambdaHack = callPackage ../games/LambdaHack {};
