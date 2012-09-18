@@ -3586,28 +3586,6 @@ let
 
   glibcCross = glibc213Cross;
 
-  glibc25 = callPackage ../development/libraries/glibc/2.5 {
-    kernelHeaders = linuxHeaders_2_6_28;
-    installLocales = false;
-  };
-
-  glibc27 = callPackage ../development/libraries/glibc/2.7 {
-    kernelHeaders = linuxHeaders;
-    #installLocales = false;
-  };
-
-  glibc29 = callPackage ../development/libraries/glibc/2.9 {
-    kernelHeaders = linuxHeaders;
-    installLocales = getConfig [ "glibc" "locales" ] false;
-  };
-
-  glibc29Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.9) {
-    inherit stdenv fetchurl;
-    gccCross = gccCrossStageStatic;
-    kernelHeaders = linuxHeadersCross;
-    installLocales = getConfig [ "glibc" "locales" ] false;
-  });
-
   glibc213 = (callPackage ../development/libraries/glibc/2.13 {
     kernelHeaders = linuxHeaders;
     installLocales = getConfig [ "glibc" "locales" ] false;
