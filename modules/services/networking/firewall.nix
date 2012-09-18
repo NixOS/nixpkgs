@@ -33,7 +33,9 @@ let
       # Helper command to manipulate both the IPv4 and IPv6 tables.
       ip46tables() {
         iptables "$@"
-        ip6tables "$@"
+        ${optionalString config.networking.enableIPv6 ''
+          ip6tables "$@"
+        ''}
       }
     '';
 
