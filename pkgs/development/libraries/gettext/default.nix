@@ -8,6 +8,8 @@ stdenv.mkDerivation (rec {
     sha256 = "1sa3ch12qxa4h3ya6hkz119yclcccmincl9j20dhrdx5mykp3b4k";
   };
 
+  patches = [ ./no-gets.patch ];
+
   configureFlags = [ "--disable-csharp" ]
      ++ (stdenv.lib.optionals stdenv.isCygwin
           [ # We have a static libiconv, so we can only build the static lib.
