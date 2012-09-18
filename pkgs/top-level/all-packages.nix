@@ -3608,27 +3608,6 @@ let
         inherit fetchgit;
       }));
 
-  glibc214 = (callPackage ../development/libraries/glibc/2.14 {
-    kernelHeaders = linuxHeaders;
-    installLocales = getConfig [ "glibc" "locales" ] false;
-    machHeaders = null;
-    hurdHeaders = null;
-    gccCross = null;
-  }) // (lib.optionalAttrs (crossSystem != null) { hostDrv = glibc214Cross; });
-
-  glibc214Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.14)
-    (let crossGNU = (crossSystem != null && crossSystem.config == "i586-pc-gnu");
-     in {
-       inherit stdenv fetchurl;
-       gccCross = gccCrossStageStatic;
-       kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
-       installLocales = getConfig [ "glibc" "locales" ] false;
-     }
-     // lib.optionalAttrs crossGNU {
-        inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
-        inherit fetchgit;
-      }));
-
   glibc216 = callPackage ../development/libraries/glibc/2.16 {
     kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
