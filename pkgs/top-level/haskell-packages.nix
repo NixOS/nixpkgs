@@ -1389,6 +1389,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   stringsearch = callPackage ../development/libraries/haskell/stringsearch {};
 
+  strptime = callPackage ../development/libraries/haskell/strptime {};
+
   stylishHaskell = callPackage ../development/libraries/haskell/stylish-haskell {};
 
   syb_0_2_2 = callPackage ../development/libraries/haskell/syb/0.2.2.nix {};
