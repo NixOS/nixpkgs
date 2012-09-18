@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, openssl, lua5, curl, readline, bison, expat}:
+{ stdenv, fetchurl,  openssl }:
 
 stdenv.mkDerivation rec {
 
@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0zvspgnlrx4jhhkb5b1p280nsf9d558jijgpvwfyvdp4q4v460z7";
   };
 
-  configurePhase = ''makeFlags="LIBS=-lcrypt PREFIX=$out MANDIR=$out/share/man"'';
+  buildInputs = [ openssl ];
+
+  patches = [ ./fix-mail-spool-path.patch ./use-openssl.patch ./use-glibc-crypt.patch ];
+
+  configurePhase = ''makeFlags="PREFIX=$out MANDIR=$out/share/man"'';
 
   meta = {
     homepage = "http://www.openwall.com/popa3d/";
