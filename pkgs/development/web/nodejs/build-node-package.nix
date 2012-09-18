@@ -1,6 +1,6 @@
 { stdenv, runCommand, nodejs, neededNatives}:
 
-args @ { src, deps ? [], nativeDeps ? [], flags ? [], ... }:
+args @ { src, deps ? [], flags ? [], ... }:
 
 with stdenv.lib;
 
@@ -31,7 +31,6 @@ stdenv.mkDerivation ({
   '';
 
   buildNativeInputs = neededNatives;
-  buildInputs = nativeDeps;
 
   installPhase = ''
     runHook preInstall

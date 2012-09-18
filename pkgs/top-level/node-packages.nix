@@ -66,6 +66,19 @@ let self = {
     ];
   };
 
+  "bindings" = self."bindings-1";
+
+  "bindings-1" = self.buildNodePackage rec {
+    name = "bindings-1.0.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/bindings/-/${name}.tgz";
+      sha256 = "cb211ac856d135af5ee864762fae9e554225a613ea1fd815c20b8fdd1679c9ed";
+    };
+    deps = [
+
+    ];
+  };
+
   "block-stream" = self."block-stream-*";
 
   "block-stream-*" = self.buildNodePackage rec {
@@ -120,6 +133,23 @@ let self = {
     };
     deps = [
 
+    ];
+  };
+
+  "cipher-block-size" = self."cipher-block-size-0.0.0";
+
+  "cipher-block-size-0.0.0" = self.buildNodePackage rec {
+    name = "cipher-block-size-0.0.0";
+    src = fetchurl {
+      url = https://bitbucket.org/shlevy/node-cipher-block-size/get/0.0.0.tar.gz;
+      sha256 = "0j4i19ckb9ab9aqd4w3j0vrvcw7c6icq279x4fx8xs1h9massxng";
+      name = "${name}.tgz";
+    };
+    deps = [
+      self."bindings-1"
+    ];
+    buildInputs = [
+      pkgs.openssl
     ];
   };
 
@@ -696,7 +726,7 @@ let self = {
     deps = [
 
     ];
-    nativeDeps = [
+    buildInputs = [
       pkgs.openssl
     ];
   };
