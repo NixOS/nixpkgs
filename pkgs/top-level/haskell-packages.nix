@@ -1570,6 +1570,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vault = callPackage ../development/libraries/haskell/vault {};
 
+  vcsRevision = callPackage ../development/libraries/haskell/vcs-revision {};
+
   Vec = callPackage ../development/libraries/haskell/Vec {};
 
   vector = callPackage ../development/libraries/haskell/vector {};
