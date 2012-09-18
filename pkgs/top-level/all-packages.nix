@@ -2727,11 +2727,13 @@ let
 
   perl510 = callPackage ../development/interpreters/perl/5.10 { };
 
-  perl514 = callPackage ../development/interpreters/perl/5.14 {
+  perl514 = callPackage ../development/interpreters/perl/5.14 { };
+
+  perl516 = callPackage ../development/interpreters/perl/5.16 {
     fetchurl = fetchurlBoot;
   };
 
-  perl = if system != "i686-cygwin" then perl514 else sysPerl;
+  perl = if system != "i686-cygwin" then perl516 else sysPerl;
 
   php = php5_3;
 
