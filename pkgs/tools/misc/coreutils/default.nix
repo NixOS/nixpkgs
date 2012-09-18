@@ -4,14 +4,14 @@
 }:
 
 assert aclSupport -> acl != null;
-assert selinuxSupport -> ( (libselinux != null) && (libsepol != null) );
+assert selinuxSupport -> libselinux != null && libsepol != null;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.15";
+  name = "coreutils-8.19";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "176lgw810xw84c6fz5xwhydxggkndmzggl0pxqzldbjf85vv6zl3";
+    sha256 = "1rx9x3fp848w4nny7irdkcpkan9fcx24d99v5dkwgkyq7wc76f5d";
   };
 
   buildNativeInputs = [ perl ];
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
   # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
-  doCheck = (stdenv ? glibc);
+  doCheck = stdenv ? glibc;
 
   enableParallelBuilding = true;
 
