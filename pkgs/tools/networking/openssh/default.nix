@@ -13,11 +13,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-6.0p1";
+  name = "openssh-6.1p1";
 
   src = fetchurl {
     url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
-    sha1 = "f691e53ef83417031a2854b8b1b661c9c08e4422";
+    sha1 = "751c92c912310c3aa9cadc113e14458f843fc7b3";
   };
 
   prePatch = stdenv.lib.optionalString hpnSupport
