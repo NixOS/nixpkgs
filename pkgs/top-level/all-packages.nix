@@ -2950,13 +2950,6 @@ let
 
   bison1875 = callPackage ../development/tools/parsing/bison/bison-1.875.nix { };
 
-  # These attributes are unused and should be removed as well as the
-  # corresponding nix files:
-  #
-  # bison23 = callPackage ../development/tools/parsing/bison/bison-2.3.nix { };
-  # bison24 = callPackage ../development/tools/parsing/bison/bison-2.4.nix { };
-  # bison25 = callPackage ../development/tools/parsing/bison/bison-2.5.nix { };
-
   bison26 = callPackage ../development/tools/parsing/bison/bison-2.6.nix { };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
