@@ -3555,6 +3555,7 @@ let
   gegl_0_0_22 = callPackage ../development/libraries/gegl/0_0_22.nix {
     #  avocodec avformat librsvg
   };
+
   geoclue = callPackage ../development/libraries/geoclue {};
 
   geoip = builderDefsPackage ../development/libraries/geoip {
@@ -3582,7 +3583,7 @@ let
 
   glfw = callPackage ../development/libraries/glfw { };
 
-  glibc = glibc213;
+  glibc = glibc216;
 
   glibcCross = glibc213Cross;
 
@@ -3627,6 +3628,14 @@ let
         inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
         inherit fetchgit;
       }));
+
+  glibc216 = callPackage ../development/libraries/glibc/2.16 {
+    kernelHeaders = linuxHeaders;
+    installLocales = config.glibc.locales or false;
+    machHeaders = null;
+    hurdHeaders = null;
+    gccCross = null;
+  };
 
   # We can choose:
   libcCrossChooser = name : if (name == "glibc") then glibcCross

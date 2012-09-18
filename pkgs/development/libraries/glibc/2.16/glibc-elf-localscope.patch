@@ -1,0 +1,82 @@
+diff -ru a/elf/dl-close.c b/elf/dl-close.c
+--- a/elf/dl-close.c	2011-02-04 00:35:03.000000000 +0100
++++ b/elf/dl-close.c	2011-02-22 02:16:12.367883000 +0100
+@@ -180,24 +186,28 @@
+       /* Signal the object is still needed.  */
+       l->l_idx = IDX_STILL_USED;
+ 
++#define mark_used(dmap) \
++  do {								\
++    if ((dmap)->l_idx != IDX_STILL_USED)			\
++      {								\
++	assert ((dmap)->l_idx >= 0 && (dmap)->l_idx < nloaded);	\
++								\
++	if (!used[(dmap)->l_idx])				\
++	  {							\
++	    used[(dmap)->l_idx] = 1;				\
++	    if ((dmap)->l_idx - 1 < done_index)			\
++	      done_index = (dmap)->l_idx - 1;			\
++	  }							\
++      }								\
++  } while (0)
++
+       /* Mark all dependencies as used.  */
+       if (l->l_initfini != NULL)
+ 	{
+ 	  struct link_map **lp = &l->l_initfini[1];
+ 	  while (*lp != NULL)
+ 	    {
+-	      if ((*lp)->l_idx != IDX_STILL_USED)
+-		{
+-		  assert ((*lp)->l_idx >= 0 && (*lp)->l_idx < nloaded);
+-
+-		  if (!used[(*lp)->l_idx])
+-		    {
+-		      used[(*lp)->l_idx] = 1;
+-		      if ((*lp)->l_idx - 1 < done_index)
+-			done_index = (*lp)->l_idx - 1;
+-		    }
+-		}
+-
++	      mark_used(*lp);
+ 	      ++lp;
+ 	    }
+ 	}
+@@ -206,19 +216,25 @@
+ 	for (unsigned int j = 0; j < l->l_reldeps->act; ++j)
+ 	  {
+ 	    struct link_map *jmap = l->l_reldeps->list[j];
+-
+-	    if (jmap->l_idx != IDX_STILL_USED)
+-	      {
+-		assert (jmap->l_idx >= 0 && jmap->l_idx < nloaded);
+-
+-		if (!used[jmap->l_idx])
+-		  {
+-		    used[jmap->l_idx] = 1;
+-		    if (jmap->l_idx - 1 < done_index)
+-		      done_index = jmap->l_idx - 1;
+-		  }
+-	      }
++	    mark_used(jmap);
+ 	  }
++      /* And the same for owners of our scopes; normally, our last
++	 scope provider would render us unused, but this can be
++	 prevented by the NODELETE flag. */
++      if (__builtin_expect(l->l_type == lt_loaded
++	                   && (l->l_flags_1 & DF_1_NODELETE), 0))
++	for (size_t cnt = 0; l->l_scope[cnt] != NULL; ++cnt)
++	  /* This relies on l_scope[] entries being always set either
++	     to its own l_symbolic_searchlist address, or some map's
++	     l_searchlist address.  */
++	  if (l->l_scope[cnt] != &l->l_symbolic_searchlist)
++	    {
++	      struct link_map *ls = (struct link_map *)
++		((char *) l->l_scope[cnt]
++		 - offsetof (struct link_map, l_searchlist));
++	      assert (ls->l_ns == nsid);
++	      mark_used(ls);
++	    }
+     }
+ 
+   /* Sort the entries.  */
