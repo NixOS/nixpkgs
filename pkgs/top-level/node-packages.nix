@@ -895,6 +895,19 @@ let self = {
     ];
   };
 
+  "temp" = self."temp-*";
+
+  "temp-*" = self.buildNodePackage rec {
+    name = "temp-0.4.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/temp/-/${name}.tgz";
+      sha256 = "ca8274250d36d94e670b8773bf062a28bc43eb342ae47ff629fbb627d48d710b";
+    };
+    deps = [
+
+    ];
+  };
+
   "timerstub" = self."timerstub-*";
 
   "timerstub-*" = self.buildNodePackage rec {
