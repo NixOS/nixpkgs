@@ -8,7 +8,7 @@
 # The actual Haskell packages are composed in haskell-packages.nix. There is
 # more documentation in there.
 
-{ makeOverridable, lowPrio, stdenv, pkgs, newScope, getConfig, callPackage } : rec {
+{ makeOverridable, lowPrio, stdenv, pkgs, newScope, config, callPackage } : rec {
 
   # Preferences functions.
   #
@@ -123,13 +123,13 @@
         # prefFun = self : super : self;
         enableLibraryProfiling =
           if profExplicit then profDefault
-                          else getConfig [ "cabal" "libraryProfiling" ] profDefault;
+                          else config.cabal.libraryProfiling or profDefault;
         ghc = callPackage ghcPath { ghc = ghcBinary; };
       });
 
   defaultVersionPrioFun =
     profDefault :
-    if getConfig [ "cabal" "libraryProfiling" ] false == profDefault
+    if config.cabal.libraryProfiling or false == profDefault
       then (x : x)
       else lowPrio;
 
