@@ -206,8 +206,7 @@ let
 
   defaultStdenv = allStdenvs.stdenv // { inherit platform; };
 
-  stdenvCross = makeStdenvCross defaultStdenv crossSystem binutilsCross
-    gccCrossStageFinal;
+  stdenvCross = lowPrio (makeStdenvCross defaultStdenv crossSystem binutilsCross gccCrossStageFinal);
 
   stdenv =
     if bootStdenv != null then (bootStdenv // {inherit platform;}) else
@@ -233,11 +232,11 @@ let
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
   # just the plain stdenv.
-  stdenv_32bit =
+  stdenv_32bit = lowPrio (
     if system == "x86_64-linux" then
       overrideGCC stdenv gcc43_multi
     else
-      stdenv;
+      stdenv);
 
 
   ### BUILD SUPPORT
@@ -1821,7 +1820,7 @@ let
   clang = wrapClang clangUnwrapped;
 
   #Use this instead of stdenv to build with clang
-  clangStdenv = stdenvAdapters.overrideGCC stdenv clang;
+  clangStdenv = lowPrio (stdenvAdapters.overrideGCC stdenv clang);
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -2991,7 +2990,7 @@ let
   #
   ccacheWrapper = makeOverridable ({ extraConfig ? "" }:
      wrapGCC (ccache.links extraConfig)) {};
-  ccacheStdenv = overrideGCC stdenv ccacheWrapper;
+  ccacheStdenv = lowPrio (overrideGCC stdenv ccacheWrapper);
 
   cgdb = callPackage ../development/tools/misc/cgdb { };
 
