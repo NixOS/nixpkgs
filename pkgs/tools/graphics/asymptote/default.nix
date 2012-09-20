@@ -3,11 +3,11 @@ a @ {
   boehmgc,mesa,ncurses,readline,gsl,libsigsegv,
   python,zlib, perl, texLive, texinfo, lzma,
 
-  noDepEntry, fullDepEntry, fetchUrlFromSrcInfo, 
+  noDepEntry, fullDepEntry, fetchUrlFromSrcInfo,
   lib,
 
   ...}:
-let 
+let
   s = import ./src-for-default.nix;
   buildInputs = with a; [
     freeglut ghostscriptX imagemagick fftw boehmgc
@@ -54,8 +54,9 @@ rec {
     description = "A tool for programming graphics intended to replace Metapost";
     maintainers = [
       a.lib.maintainers.raskin
+      a.lib.maintainers.simons
     ];
-    platforms = with a.lib.platforms; 
+    platforms = with a.lib.platforms;
       linux;
   };
 }
