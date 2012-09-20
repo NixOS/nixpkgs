@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-app-static";
-  version = "1.3.0.1";
-  sha256 = "0rgbqbcj4jd6xpjm3nqa5hdf3an7208in536dl6x9n88w9a6qngp";
+  version = "1.3.0.2";
+  sha256 = "0z49s4kc365q3brfkgdnja964h3h3yc3wypccnkj71dl11n040zq";
   buildDepends = [
     base64Bytestring blazeBuilder blazeHtml blazeMarkup cereal
     cryptoConduit cryptohash fileEmbed httpDate httpTypes mimeTypes
