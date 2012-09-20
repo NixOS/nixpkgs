@@ -7,7 +7,7 @@ with stdenv.lib;
 let npmFlags = concatStringsSep " " (map (v: "--${v}") flags);
     sources = runCommand "node-sources" {} ''
       tar xf ${nodejs.src}
-      mv node-v${nodejs.version} $out
+      mv *node* $out
     '';
 
 in
