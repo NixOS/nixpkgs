@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     transformers unixCompat unorderedContainers wai waiExtra warp yaml
     yesodAuth yesodCore yesodForm yesodJson yesodPersistent zlib
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";
