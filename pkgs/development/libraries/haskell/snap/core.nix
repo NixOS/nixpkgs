@@ -1,22 +1,21 @@
-{ cabal, attoparsec, attoparsecEnumerator, base16Bytestring
-, blazeBuilder, blazeBuilderEnumerator, bytestringMmap
-, bytestringNums, caseInsensitive, deepseq, dlist, enumerator
-, filepath, HUnit, MonadCatchIOTransformers, mtl, mwcRandom
-, regexPosix, text, time, transformers, unixCompat
+{ cabal, attoparsec, attoparsecEnumerator, blazeBuilder
+, blazeBuilderEnumerator, bytestringMmap, caseInsensitive, deepseq
+, enumerator, filepath, HUnit, MonadCatchIOTransformers, mtl
+, random, regexPosix, text, time, transformers, unixCompat
 , unorderedContainers, vector, zlibEnum
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap-core";
-  version = "0.9.0";
-  sha256 = "1fsjamv9sl19in2ws97v246sbvlnj05rm9dljc0pz7kasawyqsb7";
+  version = "0.9.2";
+  sha256 = "04c1i5ccsb76yw7nyj8sxxnwq3ym14iygc3immdn2lqrm424vkkp";
   buildDepends = [
-    attoparsec attoparsecEnumerator base16Bytestring blazeBuilder
-    blazeBuilderEnumerator bytestringMmap bytestringNums
-    caseInsensitive deepseq dlist enumerator filepath HUnit
-    MonadCatchIOTransformers mtl mwcRandom regexPosix text time
+    attoparsec attoparsecEnumerator blazeBuilder blazeBuilderEnumerator
+    bytestringMmap caseInsensitive deepseq enumerator filepath HUnit
+    MonadCatchIOTransformers mtl random regexPosix text time
     transformers unixCompat unorderedContainers vector zlibEnum
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "Snap: A Haskell Web Framework (core interfaces and types)";
