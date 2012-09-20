@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     mtl systemFileio systemFilepath text time unixCompat
   ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/yesodweb/Shelly.hs";
     description = "shell-like (systems) programming in Haskell";
