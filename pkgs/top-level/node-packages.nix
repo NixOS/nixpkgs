@@ -625,6 +625,19 @@ let self = {
     ];
   };
 
+  "optimist" = self."optimist-*";
+
+  "optimist-*" = self.buildNodePackage rec {
+    name = "optimist-0.3.4";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/optimist/-/${name}.tgz";
+      sha256 = "add88b473a660ad8a9ff88a3eec49a74d9c64f592acbcd219ff4c0d7249f4d60";
+    };
+    deps = [
+      self."wordwrap-~0.0.2"
+    ];
+  };
+
   "options" = self."options-*";
 
   "options-*" = self.buildNodePackage rec {
@@ -993,6 +1006,19 @@ let self = {
     src = fetchurl {
       url = "http://registry.npmjs.org/which/-/${name}.tgz";
       sha256 = "e26f39d7b152c700636472ab4da57bfb9af17972c49a9e2a06f9ff347d8fad42";
+    };
+    deps = [
+
+    ];
+  };
+
+  "wordwrap" = self."wordwrap-~0.0.2";
+
+  "wordwrap-~0.0.2" = self.buildNodePackage rec {
+    name = "wordwrap-0.0.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/wordwrap/-/${name}.tgz";
+      sha256 = "66a2fa688509738922c3ad62a6159fe3c93268bd3bca2bff24df4bc02cc31582";
     };
     deps = [
 
