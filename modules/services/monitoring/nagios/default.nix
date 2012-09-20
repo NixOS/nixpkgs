@@ -184,12 +184,7 @@ in
           '';
       };
 
-    services.httpd = mkIf cfg.enableWebInterface {
-      extraConfig = mkThenElse {
-        thenPart = extraHttpdConfig;
-        elsePart = "";
-      };
-    };
+    services.httpd.extraConfig = optionalString cfg.enableWebInterface extraHttpdConfig;
 
   };
 
