@@ -6,15 +6,14 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-server";
-  version = "0.9.2.2";
-  sha256 = "1yfm09w1zybdsbn1rj9gdbrbh63lhmrykyg9rc2ys7fcaszvsx7c";
+  version = "0.9.2.3";
+  sha256 = "0wl7clzwrd34d32sikd6vkj3pla9yni26mmdsnrjw1s3lq412yqd";
   buildDepends = [
     attoparsec attoparsecEnumerator binary blazeBuilder
     blazeBuilderEnumerator caseInsensitive directoryTree enumerator
     filepath MonadCatchIOTransformers mtl network snapCore text time
     transformers unixCompat
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "A fast, iteratee-based, epoll-enabled web server for the Snap Framework";
