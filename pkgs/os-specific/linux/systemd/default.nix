@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1p3pf8gvx43g62l9x85l8ym12wc373cmaysi41sahjndp2agicig";
   };
 
-  patches = [ ./name_to_handle_at.patch ];
+  patches = [ ./name_to_handle_at.patch ./reexec.patch ];
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
