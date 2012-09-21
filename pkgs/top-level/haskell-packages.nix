@@ -425,7 +425,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
 
-  attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binarbinary {};
+  attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
 
   attoparsecConduit = callPackage ../development/libraries/haskell/attoparsec-conduit {};
 
