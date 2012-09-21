@@ -8437,10 +8437,6 @@ let
 
   xfce = xfce48;
 
-  xfce46 = recurseIntoAttrs
-    (let callPackage = newScope pkgs.xfce46; in
-     import ../desktops/xfce-4.6 { inherit callPackage pkgs; });
-
   xfce48 = recurseIntoAttrs
     (let callPackage = newScope pkgs.xfce48; in
      import ../desktops/xfce-4.8 { inherit callPackage pkgs; });
