@@ -14,9 +14,10 @@ let
     ''
     + (if cfg.sslServerCert!="" then
     ''
-      ssl_cert_file = ${cfg.sslServerCert}
-      ssl_key_file = ${cfg.sslServerKey}
-      ssl_ca_file = ${cfg.sslCACert}
+      ssl_cert = <${cfg.sslServerCert}
+      ssl_key = <${cfg.sslServerKey}
+      ssl_ca = <${cfg.sslCACert}
+      disable_plaintext_auth = yes
     '' else ''
       ssl = no
       disable_plaintext_auth = no
@@ -40,14 +41,9 @@ let
         driver = pam
         args = dovecot2
       }
-      #auth_debug = yes
-      #auth_verbose = yes
-      #debug_log_path = /tmp/dovecot2debug.log
 
       pop3_uidl_format = %08Xv%08Xu
-
-      log_path = /var/log/dovecot2.log
-    '';
+    '' + cfg.extraConfig;
 
   confFile = pkgs.writeText "dovecot.conf" dovecotConf;
 
@@ -74,6 +70,12 @@ in
       group = mkOption {
         default = "dovecot2";
         description = "Dovecot group name.";
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        example = "mail_debug = yes";
+        description = "Additional entries to put verbatim into Dovecot's config file.";
       };
 
       mailLocation = mkOption {
