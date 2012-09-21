@@ -2,7 +2,7 @@
 
 let
 
-  libc = stdenv.gcc.libc or "/usr";
+  libc = if stdenv.gcc.libc or null != null then stdenv.gcc.libc else "/usr";
 
 in
 
