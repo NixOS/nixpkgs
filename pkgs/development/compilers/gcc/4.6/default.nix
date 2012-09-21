@@ -51,7 +51,10 @@ let version = "4.6.3";
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = cross != null && cross.config == "i586-pc-gnu";
 
-    patches = [ ]
+    patches =
+      [ # Fix building on Glibc 2.16.
+        ./siginfo_t_fix.patch
+      ]
       ++ optional (cross != null) ./libstdc++-target.patch
       ++ optional noSysDirs ./no-sys-dirs.patch
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
