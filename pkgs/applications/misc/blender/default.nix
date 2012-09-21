@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
     "-DPYTHON_LIBPATH=${python}/lib"
   ];
 
-  NIX_CFLAGS_COMPILE = "-iquote ${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "3D Creation/Animation/Publishing System";
