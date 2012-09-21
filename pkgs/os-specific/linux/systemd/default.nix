@@ -1,23 +1,23 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
-, glib, kbd
+, glib, kbd, libxslt
 }:
 
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-188";
+  name = "systemd-190";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "0nr1cg1mizbwcafjcqw3c30mx6xdv596jpbgjlxr6myvc5hfsfg8";
+    sha256 = "1p3pf8gvx43g62l9x85l8ym12wc373cmaysi41sahjndp2agicig";
   };
 
-  patches = [ ./fail-after-reaching-respawn-limit.patch ];
+  patches = [ ./name_to_handle_at.patch ];
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
-      /* cryptsetup */ libuuid m4 usbutils pciutils glib
+      /* cryptsetup */ libuuid m4 usbutils pciutils glib libxslt
     ];
 
   configureFlags =
