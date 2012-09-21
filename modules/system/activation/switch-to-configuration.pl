@@ -232,7 +232,11 @@ my $res = 0;
 print STDERR "activating the configuration...\n";
 system("@out@/activate", "@out@") == 0 or $res = 2;
 
-# FIXME: Re-exec systemd if necessary.
+# Restart systemd if necessary.
+if (abs_path("/proc/1/exe") ne abs_path("@systemd@/lib/systemd/systemd")) {
+    print STDERR "restarting systemd...\n";
+    system("@systemd@/bin/systemctl", "daemon-reexec") == 0 or $res = 2;
+}
 
 # Forget about previously failed services.
 system("@systemd@/bin/systemctl", "reset-failed");
