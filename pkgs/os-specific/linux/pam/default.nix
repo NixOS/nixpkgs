@@ -1,14 +1,15 @@
 { stdenv, fetchurl, flex, cracklib, libxcrypt }:
 
 stdenv.mkDerivation rec {
-  name = "linux-pam-1.1.1";
+  name = "linux-pam-1.1.6";
 
   src = fetchurl {
-    url = mirror://kernel/linux/libs/pam/library/Linux-PAM-1.1.1.tar.bz2;
-    sha256 = "015r3xdkjpqwcv4lvxavq0nybdpxhfjycqpzbx8agqd5sywkx3b0";
+    url = https://fedorahosted.org/releases/l/i/linux-pam/Linux-PAM-1.1.6.tar.bz2;
+    sha256 = "1hlz2kqvbjisvwyicdincq7nz897b9rrafyzccwzqiqg53b8gf5s";
   };
 
   buildNativeInputs = [ flex ];
+
   buildInputs = [ cracklib ]
     ++ stdenv.lib.optional
       (!stdenv.isArm && stdenv.system != "mips64el-linux")
@@ -27,13 +28,13 @@ stdenv.mkDerivation rec {
     '';
     postConfigure = ''
       sed -e "s@ $PWD/libyywrap-target.o@ $PWD/libyywrap-host.o@" -i doc/specs/Makefile
-    ''; 
+    '';
   };
 
   postInstall = ''
     mv -v $out/sbin/unix_chkpwd{,.orig}
     ln -sv /var/setuid-wrappers/unix_chkpwd $out/sbin/unix_chkpwd
-    '';
+  '';
 
   preConfigure = ''
     configureFlags="$configureFlags --includedir=$out/include/security"
