@@ -40,13 +40,8 @@ let
         driver = pam
         args = dovecot2
       }
-      #auth_debug = yes
-      #auth_verbose = yes
-      #debug_log_path = /tmp/dovecot2debug.log
 
       pop3_uidl_format = %08Xv%08Xu
-
-      log_path = /var/log/dovecot2.log
     '';
 
   confFile = pkgs.writeText "dovecot.conf" dovecotConf;
