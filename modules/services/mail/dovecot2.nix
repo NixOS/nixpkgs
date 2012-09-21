@@ -17,6 +17,7 @@ let
       ssl_cert_file = ${cfg.sslServerCert}
       ssl_key_file = ${cfg.sslServerKey}
       ssl_ca_file = ${cfg.sslCACert}
+      disable_plaintext_auth = yes
     '' else ''
       ssl = no
       disable_plaintext_auth = no
