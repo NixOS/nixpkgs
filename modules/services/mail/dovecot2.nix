@@ -43,7 +43,7 @@ let
       }
 
       pop3_uidl_format = %08Xv%08Xu
-    '';
+    '' + cfg.extraConfig;
 
   confFile = pkgs.writeText "dovecot.conf" dovecotConf;
 
@@ -70,6 +70,12 @@ in
       group = mkOption {
         default = "dovecot2";
         description = "Dovecot group name.";
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        example = "mail_debug = yes";
+        description = "Additional entries to put verbatim into Dovecot's config file.";
       };
 
       mailLocation = mkOption {
