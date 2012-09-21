@@ -299,7 +299,6 @@ with (import ./release-lib.nix);
   tinycc = ["i686-linux"];
   uae = linux;
   udev = linux;
-  uml = ["i686-linux"];
   unrar = linux;
   upstart = linux;
   usbutils = linux;

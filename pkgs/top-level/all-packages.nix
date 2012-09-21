@@ -6189,14 +6189,6 @@ let
 
   udisks = callPackage ../os-specific/linux/udisks { };
 
-  uml = linux.override {
-    userModeLinux = true;
-  };
-
-  umlutilities = callPackage ../os-specific/linux/uml-utilities {
-    tunctl = true; mconsole = true;
-  };
-
   untie = callPackage ../os-specific/linux/untie { };
 
   upower = callPackage ../os-specific/linux/upower { };
