@@ -75,7 +75,8 @@ in
 
         environment.TZ = config.time.timeZone;
 
-        startOn = "started syslogd";
+        wantedBy = [ "multi-user.target" ];
+        partOf = [ "multi-user.target" ];
 
         path = [ pkgs.smartmontools ];
 
