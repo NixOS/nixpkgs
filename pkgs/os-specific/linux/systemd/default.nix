@@ -6,14 +6,14 @@
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-190";
+  name = "systemd-191";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "1p3pf8gvx43g62l9x85l8ym12wc373cmaysi41sahjndp2agicig";
+    sha256 = "0r0xz8dksacm20516kakqf6xchydhcc1lkvz3m75z1gbl6sa581g";
   };
 
-  patches = [ ./name_to_handle_at.patch ./reexec.patch ];
+  patches = [ ./reexec.patch ];
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
