@@ -445,6 +445,19 @@ let self = {
     ];
   };
 
+  "knox" = self."knox-*";
+
+  "knox-*" = self.buildNodePackage rec {
+    name = "knox-0.3.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/knox/-/${name}.tgz";
+      sha256 = "d62623482cc2f8b2fe08ff0c0cf2ed7f35a320e806ebdfa6ac36df5486018517";
+    };
+    deps = [
+      self."mime"
+    ];
+  };
+
   "less" = self."less-1.3.0";
 
   "less-1.3.0" = self.buildNodePackage rec {
