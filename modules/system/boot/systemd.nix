@@ -340,6 +340,13 @@ in
       [ { source = units;
           target = "systemd/system";
         }
+        { source = pkgs.writeText "systemd.conf"
+            ''
+              [Manager]
+              JoinControllers=cpu,cpuacct net_cls,netprio
+            '';
+          target = "systemd/system.conf";
+        }
         { source = pkgs.writeText "journald.conf"
             ''
               [Journal]
