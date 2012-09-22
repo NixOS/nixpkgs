@@ -471,24 +471,26 @@ let self = {
     ];
   };
 
-  "mime" = self."mime-1.2.6";
+  "mime" = self."mime-*";
 
-  "mime->= 0.0.1" = self.buildNodePackage rec {
-    name = "mime-1.2.7";
-    src = fetchurl {
-      url = "http://registry.npmjs.org/mime/-/${name}.tgz";
-      sha256 = "a80244918c9c75fa4d0b37f311920c7d5270aab9a05aca9a74783764ad152df6";
-    };
-    deps = [
-
-    ];
-  };
+  "mime->= 0.0.1" = self."mime-*";
 
   "mime-1.2.6" = self.buildNodePackage rec {
     name = "mime-1.2.6";
     src = fetchurl {
       url = "http://registry.npmjs.org/mime/-/${name}.tgz";
       sha256 = "7460134d6b4686d64fd1e7b878d34e2bdd258ad29b6665cf62e6d92659e81591";
+    };
+    deps = [
+
+    ];
+  };
+
+  "mime-*" = self.buildNodePackage rec {
+    name = "mime-1.2.7";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/mime/-/${name}.tgz";
+      sha256 = "a80244918c9c75fa4d0b37f311920c7d5270aab9a05aca9a74783764ad152df6";
     };
     deps = [
 
@@ -545,6 +547,20 @@ let self = {
     deps = [
 
     ];
+  };
+
+  "node-expat" = self."node-expat-*";
+
+  "node-expat-*" = self.buildNodePackage rec {
+    name = "node-expat-1.6.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/node-expat/-/${name}.tgz";
+      sha256 = "15c0566889ef8a54b2b626956b7dfc160469eb6c0d44a582a0b1077fadf034d2";
+    };
+    deps = [
+
+    ];
+    buildInputs = [ pkgs.expat ];
   };
 
   "node-gyp" = self."node-gyp-*";
