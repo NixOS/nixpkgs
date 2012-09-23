@@ -4605,6 +4605,10 @@ let
 
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
+    cryptodevHeaders = linuxPackages.cryptodev.override {
+      fetchurl = fetchurlBoot;
+      onlyHeaders = true;
+    };
   };
 
   ortp = callPackage ../development/libraries/ortp { };
@@ -5868,6 +5872,8 @@ let
       else null;
 
     blcr = callPackage ../os-specific/linux/blcr { };
+
+    cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
@@ -8683,7 +8689,7 @@ let
   gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
     inherit perl intltool pyGtkGlade gettext pkgconfig makeWrapper pygobject
       pyopenssl gtkspell libsexy pycrypto aspell pythonDBus pythonSexy
-      docutils gtk;
+      docutils gtk farstream gst_plugins_bad gstreamer gst_ffmpeg gst_python;
     dbus = dbus.libs;
     inherit (gnome) libglade;
     inherit (xlibs) libXScrnSaver libXt xproto libXext xextproto libX11
