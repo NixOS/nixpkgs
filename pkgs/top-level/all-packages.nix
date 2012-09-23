@@ -7491,6 +7491,8 @@ let
 
   picard = callPackage ../applications/audio/picard { };
 
+  picocom = callPackage ../tools/misc/picocom { };
+
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
     openssl = if (config.pidgin.openssl or true) then openssl else null;
     gnutls = if (config.pidgin.gnutls or false) then gnutls else null;
