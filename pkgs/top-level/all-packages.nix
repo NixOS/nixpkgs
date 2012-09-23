@@ -1066,8 +1066,6 @@ let
 
   mktemp = callPackage ../tools/security/mktemp { };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
-
   modemmanager = callPackage ../tools/networking/modemmanager {};
 
   monit = builderDefsPackage ../tools/system/monit {
@@ -2483,6 +2481,8 @@ let
     };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
+
+    mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
 
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries {
       camomile = camomile_0_8_2;

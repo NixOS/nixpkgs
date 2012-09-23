@@ -2,7 +2,7 @@
 
 let
    useX11 = !stdenv.isArm && !stdenv.isMips;
-   useNativeCompilers = !stdenv.isArm && !stdenv.isMips;
+   useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
 in
 
