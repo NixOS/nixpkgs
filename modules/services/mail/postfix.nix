@@ -85,6 +85,45 @@ let
     ''
     + cfg.extraConfig;
 
+  masterCf = ''
+    # ==========================================================================
+    # service type  private unpriv  chroot  wakeup  maxproc command + args
+    #               (yes)   (yes)   (yes)   (never) (100)
+    # ==========================================================================
+    smtp      inet  n       -       n       -       -       smtpd
+    #submission inet n       -       n       -       -       smtpd
+    #  -o smtpd_tls_security_level=encrypt
+    #  -o smtpd_sasl_auth_enable=yes
+    #  -o smtpd_client_restrictions=permit_sasl_authenticated,reject
+    #  -o milter_macro_daemon_name=ORIGINATING
+    pickup    fifo  n       -       n       60      1       pickup
+    cleanup   unix  n       -       n       -       0       cleanup
+    qmgr      fifo  n       -       n       300     1       qmgr
+    tlsmgr    unix  -       -       n       1000?   1       tlsmgr
+    rewrite   unix  -       -       n       -       -       trivial-rewrite
+    bounce    unix  -       -       n       -       0       bounce
+    defer     unix  -       -       n       -       0       bounce
+    trace     unix  -       -       n       -       0       bounce
+    verify    unix  -       -       n       -       1       verify
+    flush     unix  n       -       n       1000?   0       flush
+    proxymap  unix  -       -       n       -       -       proxymap
+    proxywrite unix -       -       n       -       1       proxymap
+    smtp      unix  -       -       n       -       -       smtp
+    relay     unix  -       -       n       -       -       smtp
+    	      -o smtp_fallback_relay=
+    #       -o smtp_helo_timeout=5 -o smtp_connect_timeout=5
+    showq     unix  n       -       n       -       -       showq
+    error     unix  -       -       n       -       -       error
+    retry     unix  -       -       n       -       -       error
+    discard   unix  -       -       n       -       -       discard
+    local     unix  -       n       n       -       -       local
+    virtual   unix  -       n       n       -       -       virtual
+    lmtp      unix  -       -       n       -       -       lmtp
+    anvil     unix  -       -       n       -       1       anvil
+    scache    unix  -       -       n       -       1       scache
+    ${cfg.extraMasterConf}
+  '';
+
   aliases =
     optionalString (cfg.postmasterAlias != "") ''
       postmaster: ${cfg.postmasterAlias}
@@ -98,6 +137,7 @@ let
   aliasesFile = pkgs.writeText "postfix-aliases" aliases;
   virtualFile = pkgs.writeText "postfix-virtual" cfg.virtual;
   mainCfFile = pkgs.writeText "postfix-main.cf" mainCf;
+  masterCfFile = pkgs.writeText "postfix-master.cf" masterCf;
 
 in
 
@@ -232,7 +272,7 @@ in
       extraConfig = mkOption {
         default = "";
         description = "
-          Extra configuration, will be added verbatim to the configuration file.
+          Extra lines to be added verbatim to the main.cf configuration file.
         ";
       };
 
@@ -264,6 +304,12 @@ in
         description = "
           Entries for the virtual alias map.
         ";
+      };
+
+      extraMasterConf = mkOption {
+        default = "";
+        example = "submission inet n - n - - smtpd";
+        description = "Extra lines to append to the generated master.cf file.";
       };
 
     };
@@ -346,17 +392,18 @@ in
             ${pkgs.coreutils}/bin/chown root:root /var/spool/mail
             ${pkgs.coreutils}/bin/chmod a+rwxt /var/spool/mail
 
-            ln -sf ${pkgs.postfix}/share/postfix/conf/* /var/postfix/conf
+            ln -sf "${pkgs.postfix}/share/postfix/conf/"* /var/postfix/conf
 
             ln -sf ${aliasesFile} /var/postfix/conf/aliases
             ln -sf ${virtualFile} /var/postfix/conf/virtual
             ln -sf ${mainCfFile} /var/postfix/conf/main.cf
+            ln -sf ${masterCfFile} /var/postfix/conf/master.cf
 
             ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
             ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
 
             exec ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
-          ''; # */
+          '';
 
         preStop = ''
             exec ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf stop
