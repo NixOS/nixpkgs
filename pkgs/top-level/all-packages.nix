@@ -4605,6 +4605,10 @@ let
 
   openssl = callPackage ../development/libraries/openssl {
     fetchurl = fetchurlBoot;
+    cryptodevHeaders = linuxPackages.cryptodev.override {
+      fetchurl = fetchurlBoot;
+      onlyHeaders = true;
+    };
   };
 
   ortp = callPackage ../development/libraries/ortp { };
@@ -5868,6 +5872,8 @@ let
       else null;
 
     blcr = callPackage ../os-specific/linux/blcr { };
+
+    cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
     e1000e = callPackage ../os-specific/linux/e1000e {};
 
