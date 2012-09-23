@@ -54,8 +54,9 @@ in
           ''
             mkdir -m 0755 -p $(dirname ${soundState})
 
-            # Restore the sound state.
-            ${alsaUtils}/sbin/alsactl --ignore -f ${soundState} restore
+            # Try to restore the sound state.
+            ${alsaUtils}/sbin/alsactl --ignore init || true
+            ${alsaUtils}/sbin/alsactl --ignore -f ${soundState} restore || true
           '';
 
         postStop =
