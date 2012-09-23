@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
 
   buildPhase = if (!onlyHeaders) then ''
     make -C ${kernel}/lib/modules/${kernel.modDirVersion}/build \
-      INSTALL_PATH=$out
+      SUBDIRS=`pwd` INSTALL_PATH=$out
   '' else ":";
 
   installPhase = stdenv.lib.optionalString (!onlyHeaders) ''
     make -C ${kernel}/lib/modules/${kernel.modDirVersion}/build \
-      INSTALL_PATH=$out SUBDIRS=`pwd` modules_install
+      INSTALL_MOD_PATH=$out SUBDIRS=`pwd` modules_install
   '' + ''
     mkdir -p $out/include/crypto
     cp crypto/cryptodev.h $out/include/crypto
