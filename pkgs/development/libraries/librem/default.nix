@@ -10,10 +10,11 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "LIBRE_MK=${libre}/share/re/re.mk"
     "LIBRE_INC=${libre}/include/re"
-    "SYSROOT=${stdenv.gcc.libc}"
-    "SYSROOT_ALT=${stdenv.gcc.gcc}"
     ''PREFIX=$(out)''
-  ];
+  ]
+  ++ stdenv.lib.optional (stdenv.gcc.gcc != null) "SYSROOT_ALT=${stdenv.gcc.gcc}"
+  ++ stdenv.lib.optional (stdenv.gcc.libc != null) "SYSROOT=${stdenv.gcc.libc}"
+  ;
   meta = {
     homepage = "http://www.creytiv.com/rem.html";
     platforms = with stdenv.lib.platforms; linux;

@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
   buildInputs = [zlib openssl];
   makeFlags = [
     "USE_ZLIB=1" "USE_OPENSSL=1" 
-    "SYSROOT=${stdenv.gcc.libc}"
-    "SYSROOT_ALT=${stdenv.gcc.gcc}"
     ''PREFIX=$(out)''
-  ];
+  ]
+  ++ stdenv.lib.optional (stdenv.gcc.gcc != null) "SYSROOT_ALT=${stdenv.gcc.gcc}"
+  ++ stdenv.lib.optional (stdenv.gcc.libc != null) "SYSROOT=${stdenv.gcc.libc}"
+  ;
   meta = {
     homepage = "http://www.creytiv.com/re.html";
     platforms = with stdenv.lib.platforms; linux;

@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
     "LIBRE_INC=${libre}/include/re"
     "LIBRE_SO=${libre}/lib"
     "LIBREM_PATH=${librem}"
-    "SYSROOT=${stdenv.gcc.libc}"
-    "SYSROOT_ALT=${stdenv.gcc.gcc}"
     ''PREFIX=$(out)''
     "USE_VIDEO=1"
 
@@ -33,7 +31,10 @@ stdenv.mkDerivation rec {
 
     "USE_BV32=" "USE_COREAUDIO=" "USE_G711=" "USE_G722=" "USE_G722_1=" 
     "USE_ILBC=" "USE_OPUS=" "USE_SILK=" 
-  ];
+  ]
+  ++ stdenv.lib.optional (stdenv.gcc.gcc != null) "SYSROOT_ALT=${stdenv.gcc.gcc}"
+  ++ stdenv.lib.optional (stdenv.gcc.libc != null) "SYSROOT=${stdenv.gcc.libc}"
+  ;
   NIX_CFLAGS_COMPILE='' -I${librem}/include/rem -I${gsm}/include/gsm '';
   meta = {
     homepage = "http://www.creytiv.com/baresip.html";
