@@ -2,10 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "attoparsec-binary";
-  version = "0.1.0.1";
-  sha256 = "1d3zjr8bh6d44v1vid0cvrrbyhn7xj4bn96vy36dzk7h7p87bzxa";
+  version = "0.2";
+  sha256 = "02vswxsgayw50xli7mbacsjmk1diifzkfgnyfn9ck5mk41dl9rh5";
   buildDepends = [ attoparsec ];
-  patches = [ ./attoparsec-binary-ghc7.6.1.patch ];
   meta = {
     description = "Binary processing extensions to Attoparsec";
     license = self.stdenv.lib.licenses.bsd3;

@@ -1,16 +1,17 @@
 {stdenv, fetchurl, alsaLib, gettext, ncurses}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-utils-1.0.25";
-  
+  name = "alsa-utils-1.0.26";
+
   src = fetchurl {
-    url = "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2";
-    sha256 = "0b1hbdq1bdkbz72zdfy5cgp75jqpysb0mqb0n9wy5gsbccpnlrrf";
+    # url = "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2";
+    url = "http://alsa.cybermirror.org/utils/${name}.tar.bz2";
+    sha256 = "1rw1n3w8syqky9i7kwy5xd2rzfdbihxas32vwfxpb177lqx2lpzq";
   };
-  
+
   buildInputs = [ alsaLib ncurses ];
   buildNativeInputs = [ gettext ];
-  
+
   configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
 
   installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";

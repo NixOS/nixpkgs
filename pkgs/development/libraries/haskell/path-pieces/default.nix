@@ -2,11 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "path-pieces";
-  version = "0.1.1";
-  sha256 = "17ymk2azgz2c1hwnzqd9xy77hh51mvrgz4zs7lz4ik6rnvvihraz";
+  version = "0.1.2";
+  sha256 = "1cxsa8lq1f2jf86iv6f17nraiav8k2vzjxln1y7z45qhcp1sbbaa";
   buildDepends = [ text time ];
   meta = {
-    homepage = "http://github.com/snoyberg/path-pieces";
     description = "Components of paths";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

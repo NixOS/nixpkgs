@@ -9,7 +9,7 @@
 
 let
 
-  version = "1.7.12";
+  version = "1.7.12.1";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "3b8661782dc280d3d4be5193bcb8a1895c1ba272cf02efb70857bbcc4415f505";
+    sha256 = "a0c2b7e122ac2e40fe5b69baeeaac24b237a1341f08ba848cadaa835a0dbcfcd";
   };
 
   patches = [ ./docbook2texi.patch ];

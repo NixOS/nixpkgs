@@ -13,7 +13,13 @@ stdenv.mkDerivation rec {
     sha256 = "0r0xz8dksacm20516kakqf6xchydhcc1lkvz3m75z1gbl6sa581g";
   };
 
-  patches = [ ./reexec.patch ];
+  patches = [ ./reexec.patch ] ++
+            # Remove this patch after the next update.
+            stdenv.lib.optional (stdenv.system == "i686-linux") (fetchurl {
+              url = "https://bugs.freedesktop.org/attachment.cgi?id=67621";
+	      name = "fix-32-bit-build.patch";
+	      sha256 = "1i4xn6lc6iapaasd2lz717b1zrq5ds5g18i7m509fgfwy7w7x95l";
+            });
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
