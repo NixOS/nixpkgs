@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "0j10lq37ywcc4qiakan6wpm00abfrnnccq3ags129ad0z9b9zhjr";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./darwin-fix.patch;
-
   buildInputs = stdenv.lib.optional doCheck ed;
 
   crossAttrs = {
