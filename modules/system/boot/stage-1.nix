@@ -292,7 +292,8 @@ let
   busyboxKeymap = pkgs.runCommand "boottime-keymap"
     { preferLocalBuild = true; }
     ''
-      ${pkgs.kbd}/bin/loadkeys -qb "${config.i18n.consoleKeyMap}" > $out
+      ${pkgs.kbd}/bin/loadkeys -qb "${config.i18n.consoleKeyMap}" > $out ||
+        ${pkgs.kbd}/bin/loadkeys -qbu "${config.i18n.consoleKeyMap}" > $out
     '';
 
 
