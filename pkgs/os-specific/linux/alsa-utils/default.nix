@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     # url = "ftp://ftp.alsa-project.org/pub/utils/${name}.tar.bz2";
-    url = "http://gd.tuwien.ac.at/opsys/linux/alsa/utils/${name}.tar.bz2";
+    url = "http://alsa.cybermirror.org/utils/${name}.tar.bz2";
     sha256 = "1rw1n3w8syqky9i7kwy5xd2rzfdbihxas32vwfxpb177lqx2lpzq";
   };
 
