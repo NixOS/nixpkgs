@@ -31,7 +31,6 @@ with (import ./release-lib.nix);
   binutils = linux;
   bind = linux;
   bison26 = linux;
-  boostFull = all;
   bsdiff = all;
   bzip2 = all;
   classpath = linux;
