@@ -4167,6 +4167,9 @@ let
 
   libQGLViewer = callPackage ../development/libraries/libqglviewer { };
 
+  libre = callPackage ../development/libraries/libre {};
+  librem = callPackage ../development/libraries/librem {};
+
   libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
   libspectre = callPackage ../development/libraries/libspectre { };
@@ -4812,6 +4815,8 @@ let
   soqt = callPackage ../development/libraries/soqt { };
 
   sord = callPackage ../development/libraries/sord {};
+
+  spandsp = callPackage ../development/libraries/spandsp {};
 
   speechd = callPackage ../development/libraries/speechd { };
 
@@ -6505,6 +6510,8 @@ let
     lua = lua5;
     cairo = cairo.override { xcbSupport = true; };
   };
+
+  baresip = callPackage ../applications/networking/instant-messengers/baresip {};
 
   batik = callPackage ../applications/graphics/batik { };
 
