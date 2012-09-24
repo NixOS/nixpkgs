@@ -2027,10 +2027,10 @@ rec {
   };
 
   IOCompress = buildPerlPackage rec {
-    name = "IO-Compress-2.037";
+    name = "IO-Compress-2.055";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
-      sha256 = "07hs3afzg9ry6ir2f9rf3fg8b129cihs989mr0nh9wdvxgxqmr1q";
+      sha256 = "0hxgic4m4wdwgwa15w5f2fhn9hd8jyrimd2rvhiav321zw9w3jg7";
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     # Work around a self-referencing Makefile variable.
