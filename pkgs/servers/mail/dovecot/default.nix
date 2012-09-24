@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://dovecot.org/;
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [viric simons];
     platforms = with stdenv.lib.platforms; linux;
   };
-  
+
 }
