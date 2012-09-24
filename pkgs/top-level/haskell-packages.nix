@@ -1516,6 +1516,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
 
+  threads = callPackage ../development/libraries/haskell/threads {};
+
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
   time_1_1_3   = callPackage ../development/libraries/haskell/time/1.1.3.nix {};
   time_1_2_0_3 = callPackage ../development/libraries/haskell/time/1.2.0.3.nix {};
