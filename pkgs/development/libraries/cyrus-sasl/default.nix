@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     configureFlagsArray=( --with-plugindir=$out/lib/sasl2
                           --with-configdir=$out/lib/sasl2
+			  --with-saslauthd=/run/saslauthd
 			  --enable-login
 			)
   '';
