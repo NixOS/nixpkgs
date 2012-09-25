@@ -5425,6 +5425,8 @@ let
 
   redstore = callPackage ../servers/http/redstore { };
 
+  restund = callPackage ../servers/restund {};
+
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
       HTTPDate MailDKIM;
