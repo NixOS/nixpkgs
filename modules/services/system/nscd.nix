@@ -38,10 +38,10 @@ in
         description = "Name service cache daemon user";
       };
 
-    jobs.nscd =
+    boot.systemd.services.nscd =
       { description = "Name Service Cache Daemon";
 
-        startOn = "startup";
+        wantedBy = [ "multi-user.target" ];
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
@@ -52,15 +52,12 @@ in
             mkdir -m 0755 -p /var/db/nscd
           '';
 
-        path = [ pkgs.glibc ];
-
-        exec = "nscd -f ${./nscd.conf}";
-
-        daemonType = "fork";
-
         serviceConfig =
           ''
+            ExecStart=@${pkgs.glibc}/sbin/nscd nscd -f ${./nscd.conf}
+            Type=forking
             PIDFile=/run/nscd/nscd.pid
+            Restart=always
             ExecReload=${pkgs.glibc}/sbin/nscd --invalidate hosts
           '';
       };
