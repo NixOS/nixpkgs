@@ -15,6 +15,10 @@ cabal.mkDerivation (self: {
     zlib
   ];
   extraLibraries = [ curl ];
+  postInstall = ''
+    mkdir -p $out/etc/bash_completion.d
+    mv contrib/darcs_completion $out/etc/bash_completion.d/darcs
+  '';
   meta = {
     homepage = "http://darcs.net/";
     description = "a distributed, interactive, smart revision control system";
