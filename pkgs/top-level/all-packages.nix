@@ -4674,6 +4674,8 @@ let
 
   protobuf = callPackage ../development/libraries/protobuf { };
 
+  protobufc = callPackage ../development/libraries/protobufc { };
+
   pth = callPackage ../development/libraries/pth { };
 
   ptlib = callPackage ../development/libraries/ptlib {};
@@ -7766,6 +7768,8 @@ let
     ccrtp = ccrtp_1_8;
     libzrtpcpp = libzrtpcpp_1_6;
   };
+
+  umurmur = callPackage ../applications/networking/umurmur { };
 
   unison = callPackage ../applications/networking/sync/unison {
     inherit (ocamlPackages) lablgtk;
