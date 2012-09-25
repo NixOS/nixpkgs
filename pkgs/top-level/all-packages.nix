@@ -4270,6 +4270,8 @@ let
 
   liboop = callPackage ../development/libraries/liboop { };
 
+  libopus = callPackage ../development/libraries/libopus { };
+
   libosip = callPackage ../development/libraries/osip {};
 
   libotr = callPackage ../development/libraries/libotr { };
