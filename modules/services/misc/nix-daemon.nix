@@ -183,6 +183,17 @@ in
           you should increase this value.
         '';
       };
+
+      readOnlyStore = mkOption {
+        default = false;
+        description = ''
+          If set, NixOS will enforce the immutability of the Nix store
+          by making <filename>/nix/store</filename> a read-only bind
+          mount.  Nix will automatically make the store writable when
+          needed.
+        '';
+      };
+
     };
   };
 

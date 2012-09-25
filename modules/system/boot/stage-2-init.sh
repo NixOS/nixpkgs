@@ -41,6 +41,17 @@ if [ ! -e /proc/1 ]; then
 fi
 
 
+# Make /nix/store a read-only bind mount to enforce immutability of
+# the Nix store.
+if [ -n "@readOnlyStore@" ]; then
+    if ! mountpoint /nix/store; then
+        mkdir -p /nix/rw-store
+        mount --bind /nix/store /nix/store
+        mount -o remount,ro,bind /nix/store
+    fi
+fi
+
+
 # Provide a /etc/mtab.
 mkdir -m 0755 -p /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount

@@ -60,6 +60,7 @@ let
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
     inherit (config.boot) devShmSize runSize cleanTmpDir;
+    inherit (config.nix) readOnlyStore;
     ttyGid = config.ids.gids.tty;
     path =
       [ pkgs.coreutils
