@@ -85,7 +85,7 @@
   ./services/logging/logrotate.nix
   ./services/logging/logstash.nix
   ./services/logging/syslogd.nix
-  ./services/mail/dovecot2.nix
+  ./services/mail/dovecot.nix
   ./services/mail/freepops.nix
   ./services/mail/mail.nix
   ./services/mail/postfix.nix
