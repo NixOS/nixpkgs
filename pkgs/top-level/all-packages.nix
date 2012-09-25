@@ -3317,8 +3317,8 @@ let
   boost = boost151;
 
   boostHeaders149 = callPackage ../development/libraries/boost/1.49-headers.nix { };
-  boostHeaders150 = callPackage ../development/libraries/boost/1.50-headers.nix { };
-  boostHeaders = boostHeaders150;
+  boostHeaders151 = callPackage ../development/libraries/boost/1.51-headers.nix { };
+  boostHeaders = boostHeaders151;
 
   botan = callPackage ../development/libraries/botan { };
 
