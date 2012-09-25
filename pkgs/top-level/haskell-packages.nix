@@ -123,16 +123,16 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     cgi          = self.cgi_3001_1_8_3;         # 7.6 ok
     fgl          = self.fgl_5_4_2_4;            # 7.6 ok
     GLUT         = self.GLUT_2_3_0_0;           # 7.6 ok
-    haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 fail
+    haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
     html         = self.html_1_0_1_2;           # 7.6 ok
     HTTP         = self.HTTP_4000_2_5;          # 7.6 ok
     HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
-    network      = self.network_2_4_0_0;        # 7.6 ok
+    network      = self.network_2_4_0_1;        # 7.6 ok
     OpenGL       = self.OpenGL_2_5_0_0;         # 7.6 ok
     parallel     = self.parallel_3_2_0_3;       # 7.6 ok
     parsec       = self.parsec_3_1_3;           # 7.6 ok
-    QuickCheck   = self.QuickCheck_2_5;         # 7.6 ok
+    QuickCheck   = self.QuickCheck_2_5_1_1;     # 7.6 ok
     random       = self.random_1_0_1_1;         # 7.6 ok
     regexBase    = self.regexBase_0_93_2;       # 7.6 ok
     regexCompat  = self.regexCompat_0_95_1;     # 7.6 ok
@@ -146,7 +146,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     cabalInstall = self.cabalInstall_0_14_0;    # 7.6 ok
     alex         = self.alex_3_0_1;             # 7.6 ok
     haddock      = self.haddock_2_12_0;         # 7.6 ok
-    happy        = self.happy_1_18_9;           # 7.6 fail
+    happy        = self.happy_1_18_10;          # 7.6 ok
   };
 
   haskellPlatformArgs_2012_2_0_0 = self : {
@@ -425,6 +425,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
 
+  attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
+
   attoparsecConduit = callPackage ../development/libraries/haskell/attoparsec-conduit {};
 
   attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec/enumerator.nix {};
@@ -495,6 +497,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
+  Cabal_1_16_0 = callPackage ../development/libraries/haskell/Cabal/1.16.0.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal = null; # core package in GHC
 
   cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};
@@ -1130,8 +1133,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
   network_2_3_0_13 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
-  network_2_4_0_0 = callPackage ../development/libraries/haskell/network/2.4.0.0.nix {};
-  network = self.network_2_4_0_0;
+  network_2_4_0_1 = callPackage ../development/libraries/haskell/network/2.4.0.1.nix {};
+  network = self.network_2_4_0_1;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
@@ -1258,9 +1261,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   QuickCheck_2_4_0_1 = callPackage ../development/libraries/haskell/QuickCheck/2.4.0.1.nix {};
   QuickCheck_2_4_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.4.1.1.nix {};
   QuickCheck_2_4_2 = callPackage ../development/libraries/haskell/QuickCheck/2.4.2.nix {};
-  QuickCheck_2_5 = callPackage ../development/libraries/haskell/QuickCheck/2.5.nix {};
+  QuickCheck_2_5_1_1 = callPackage ../development/libraries/haskell/QuickCheck/2.5.1.1.nix {};
   QuickCheck1 = self.QuickCheck_1_2_0_1;
-  QuickCheck2 = self.QuickCheck_2_5;
+  QuickCheck2 = self.QuickCheck_2_5_1_1;
   QuickCheck  = self.QuickCheck2;
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
@@ -1513,6 +1516,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   threadmanager = callPackage ../development/libraries/haskell/threadmanager {};
 
+  threads = callPackage ../development/libraries/haskell/threads {};
+
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
   time_1_1_3   = callPackage ../development/libraries/haskell/time/1.1.3.nix {};
   time_1_2_0_3 = callPackage ../development/libraries/haskell/time/1.2.0.3.nix {};
@@ -1760,7 +1765,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happy_1_18_6 = callPackage ../development/tools/parsing/happy/1.18.6.nix {};
   happy_1_18_8 = callPackage ../development/tools/parsing/happy/1.18.8.nix {};
   happy_1_18_9 = callPackage ../development/tools/parsing/happy/1.18.9.nix {};
-  happy = self.happy_1_18_9;
+  happy_1_18_10 = callPackage ../development/tools/parsing/happy/1.18.10.nix {};
+  happy = self.happy_1_18_10;
 
   happyMeta = callPackage ../development/tools/haskell/happy-meta {};
 

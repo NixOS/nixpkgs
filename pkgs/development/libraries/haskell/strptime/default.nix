@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "strptime";
-  version = "1.0.6";
-  sha256 = "1brzh22nrs2mg5h815vj8vlz0qn2jwm4y4sdp5zlszjxfsqc2hp7";
+  version = "1.0.8";
+  sha256 = "0cd4wzrg9zpnwrfpp6lxs1ib06h0fcsdqd3idsw663wr5lllfgdq";
   buildDepends = [ time ];
   meta = {
     description = "Efficient parsing of LocalTime using a binding to C's strptime, with some extra features (i.e. fractional seconds)";

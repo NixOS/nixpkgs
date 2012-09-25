@@ -1,18 +1,18 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "boost-1.50.0-headers";
+  name = "boost-1.51.0-headers";
 
   src = fetchurl {
-    url = "mirror://sourceforge/boost/boost_1_50_0.tar.bz2";
-    sha256 = "0ac5b82g6b5pdhzypgddql0i3i9vvrwf9iqp3lyp19hzr2wf5b69";
+    url = "mirror://sourceforge/boost/boost_1_51_0.tar.bz2";
+    sha256 = "fb2d2335a29ee7fe040a197292bfce982af84a645c81688a915c84c925b69696";
   };
 
   phases = [ "installPhase" ];
 
   installPhase = ''
     mkdir -p $out/include
-    tar xvf $src -C $out/include --strip-components=1 boost_1_50_0/boost
+    tar xf $src -C $out/include --strip-components=1 ./boost_1_51_0/boost
   '';
 
   meta = {

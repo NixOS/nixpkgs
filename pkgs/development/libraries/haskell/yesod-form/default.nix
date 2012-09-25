@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-form";
-  version = "1.1.1.1";
-  sha256 = "0239sbnpl022g53iwbg9pnphiyadxysdwrqz3f8spf6x3w2gs6vg";
+  version = "1.1.3";
+  sha256 = "1af1wdzwbw1a2bf991pgx52d9dap3cqpsr5h4yy4mid6p980slrb";
   buildDepends = [
     attoparsec blazeBuilder blazeHtml blazeMarkup cryptoApi dataDefault
     emailValidate hamlet network persistent shakespeareCss

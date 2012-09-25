@@ -9,6 +9,10 @@ cabal.mkDerivation (self: {
   buildDepends = [
     Cabal filepath HTTP mtl network random time zlib
   ];
+  postInstall = ''
+    mkdir $out/etc
+    mv bash-completion $out/etc/bash_completion.d
+  '';
   meta = {
     homepage = "http://www.haskell.org/cabal/";
     description = "The command-line interface for Cabal and Hackage";

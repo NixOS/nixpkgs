@@ -1,20 +1,18 @@
-{ cabal, attoparsec, attoparsecEnumerator, base16Bytestring
-, blazeBuilder, blazeBuilderEnumerator, bytestringMmap
-, bytestringNums, caseInsensitive, deepseq, dlist, enumerator
-, filepath, HUnit, MonadCatchIOTransformers, mtl, mwcRandom
-, regexPosix, text, time, transformers, unixCompat
+{ cabal, attoparsec, attoparsecEnumerator, blazeBuilder
+, blazeBuilderEnumerator, bytestringMmap, caseInsensitive, deepseq
+, enumerator, filepath, HUnit, MonadCatchIOTransformers, mtl
+, random, regexPosix, text, time, transformers, unixCompat
 , unorderedContainers, vector, zlibEnum
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap-core";
-  version = "0.9.0";
-  sha256 = "1fsjamv9sl19in2ws97v246sbvlnj05rm9dljc0pz7kasawyqsb7";
+  version = "0.9.2.1";
+  sha256 = "18i0hfzc37q12nyp7g4sc87s4xcqz1crjwpnhh4y5fw66glzmq3q";
   buildDepends = [
-    attoparsec attoparsecEnumerator base16Bytestring blazeBuilder
-    blazeBuilderEnumerator bytestringMmap bytestringNums
-    caseInsensitive deepseq dlist enumerator filepath HUnit
-    MonadCatchIOTransformers mtl mwcRandom regexPosix text time
+    attoparsec attoparsecEnumerator blazeBuilder blazeBuilderEnumerator
+    bytestringMmap caseInsensitive deepseq enumerator filepath HUnit
+    MonadCatchIOTransformers mtl random regexPosix text time
     transformers unixCompat unorderedContainers vector zlibEnum
   ];
   meta = {
