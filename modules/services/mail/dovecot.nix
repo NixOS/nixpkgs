@@ -141,10 +141,10 @@ in
             ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} /var/run/dovecot2
           '';
 
-        exec = "${pkgs.dovecot_2_0}/sbin/dovecot -F -c ${confFile}";
+        exec = "${pkgs.dovecot}/sbin/dovecot -F -c ${confFile}";
       };
 
-    environment.systemPackages = [ pkgs.dovecot_2_0 ];
+    environment.systemPackages = [ pkgs.dovecot ];
 
   };
 
