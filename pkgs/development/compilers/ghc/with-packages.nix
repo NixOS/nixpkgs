@@ -59,6 +59,11 @@ stdenv.mkDerivation rec {
           ln -s $f $out/bin
           echo -n .
         done
+        for f in "$currentPath/etc/bash_completion.d/"*; do
+	  mkdir -p $out/etc/bash_completion.d
+          ln -s $f $out/etc/bash_completion.d/
+          echo -n .
+        done
         for f in "$currentPkgDir/"*.conf; do
           ln -s $f $linkedPkgDir
           echo -n .
