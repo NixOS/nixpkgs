@@ -7473,6 +7473,8 @@ let
     inherit (pkgs.kde4) kdelibs;
   };
 
+  opusTools = callPackage ../applications/audio/opus-tools { };
+
   pan = callPackage ../applications/networking/newsreaders/pan {
     spellChecking = false;
   };
