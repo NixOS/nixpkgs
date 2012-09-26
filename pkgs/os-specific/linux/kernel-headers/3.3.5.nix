@@ -14,8 +14,8 @@ stdenv.mkDerivation {
   name = "linux-headers-${version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
-    sha256 = "0i74jn47f6vs5kcvk8abvz3k08z32c9bbqw0sdjkdxwvr4jbczpv";
+    url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
+    sha256 = "0144qc3ginldm2i6sy8g55y4k1yw3dy3dnl1hiv7v7rlqnljx5d5";
   };
 
   targetConfig = if (cross != null) then cross.config else null;
@@ -33,15 +33,15 @@ stdenv.mkDerivation {
 
   extraIncludeDirs =
     if cross != null then
-	(if cross.arch == "powerpc" then ["ppc"] else [])
+        (if cross.arch == "powerpc" then ["ppc"] else [])
     else if stdenv.system == "powerpc-linux" then ["ppc"] else [];
 
   buildPhase = ''
     if test -n "$targetConfig"; then
        export ARCH=$platform
     fi
-    make ${kernelHeadersBaseConfig}
-    make mrproper headers_check
+    make ${kernelHeadersBaseConfig} SHELL=bash
+    make mrproper headers_check SHELL=bash
   '';
 
   installPhase = ''

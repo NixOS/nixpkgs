@@ -5642,7 +5642,7 @@ let
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
-  linuxHeaders = callPackage ../os-specific/linux/kernel-headers { };
+  linuxHeaders = linuxHeaders33;
 
   linuxHeaders33 = callPackage ../os-specific/linux/kernel-headers/3.3.5.nix { };
 
