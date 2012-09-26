@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, perlXMLParser, xkbcomp, gettext, intltool  }:
 
 stdenv.mkDerivation rec {
-  name = "xkeyboard-config-2.5.1";
+  name = "xkeyboard-config-2.7";
 
   src = fetchurl {
-    url = "mirror://xorg/individual/data/${name}.tar.bz2";
-    sha256 = "14ncsbzi8l1dw0ypd36az9kxvrsqfspl3w51zj5p52f373ffi07b";
+    url = "mirror://xorg/individual/data/xkeyboard-config/${name}.tar.bz2";
+    sha256 = "08c3mjdgp7c2v6lj5bymaczcazklsd7s1lxslxbngzmh5yhphd74";
   };
 
   buildInputs = [ gettext ];
