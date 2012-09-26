@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "freetype-2.4.9";
-  
+  name = "freetype-2.4.10";
+
   src = fetchurl {
     url = "mirror://sourceforge/freetype/${name}.tar.bz2";
-    sha256 = "1far9006qbw5gvjn8ph1kyfhly4j7x7vycigb8vx96cfsk0ll864";
+    sha256 = "0bwrkqpygayfc1rf6rr1nb8l3svgn1fmjz8davg2hnf46cn293hc";
   };
 
   configureFlags = "--disable-static";
