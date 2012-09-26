@@ -7876,20 +7876,21 @@ let
       inherit stdenv makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
       plugins =
         let
-          enableAdobeFlash = config.browserNameenableAdobeFlash or true;
-          enableGnash = config.browserNameenableGnash or false;
+          cfg = stdenv.lib.attrByPath [ browserName ] {} config;
+          enableAdobeFlash = cfg.enableAdobeFlash or true;
+          enableGnash = cfg.enableGnash or false;
         in
          assert !(enableGnash && enableAdobeFlash);
          ([ ]
           ++ lib.optional enableGnash gnash
           ++ lib.optional enableAdobeFlash flashplayer
           # RealPlayer is disabled by default for legal reasons.
-          ++ lib.optional (system != "i686-linux" && config.browserNameenableRealPlayer or false) RealPlayer
-          ++ lib.optional (config.browserNameenableDjvu or false) (djview4)
-          ++ lib.optional (config.browserNameenableMPlayer or false) (MPlayerPlugin browser)
-          ++ lib.optional (config.browserNameenableGeckoMediaPlayer or false) gecko_mediaplayer
-          ++ lib.optional (supportsJDK && config.browserNamejre or false && jrePlugin ? mozillaPlugin) jrePlugin
-          ++ lib.optional (config.browserNameenableGoogleTalkPlugin or false) google_talk_plugin
+          ++ lib.optional (system != "i686-linux" && cfg.enableRealPlayer or false) RealPlayer
+          ++ lib.optional (cfg.enableDjvu or false) (djview4)
+          ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
+          ++ lib.optional (cfg.enableGeckoMediaPlayer or false) gecko_mediaplayer
+          ++ lib.optional (supportsJDK && cfg.jre or false && jrePlugin ? mozillaPlugin) jrePlugin
+          ++ lib.optional (cfg.eenableGoogleTalkPlugin or false) google_talk_plugin
          );
       libs =
         if config.browserNameenableQuakeLive or false
