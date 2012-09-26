@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, db4, gettext }:
+{ stdenv, fetchurl, openssl, db4, gettext, pam }:
 
 stdenv.mkDerivation rec {
   name = "cyrus-sasl-2.1.25";
@@ -8,12 +8,13 @@ stdenv.mkDerivation rec {
     sha256 = "418c16e6240a4f9b637cbe3d62937b9675627bad27c622191d47de8686fe24fe";
   };
 
-  buildInputs = [ openssl db4 gettext ];
+  buildInputs = [ openssl db4 gettext ] ++ stdenv.lib.optional stdenv.isLinux pam;
 
   # Set this variable at build-time to make sure $out can be evaluated.
   preConfigure = ''
     configureFlagsArray=( --with-plugindir=$out/lib/sasl2
                           --with-configdir=$out/lib/sasl2
+			  --with-saslauthd=/run/saslauthd
 			  --enable-login
 			)
   '';

@@ -1066,8 +1066,6 @@ let
 
   mktemp = callPackage ../tools/security/mktemp { };
 
-  mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
-
   modemmanager = callPackage ../tools/networking/modemmanager {};
 
   monit = builderDefsPackage ../tools/system/monit {
@@ -2484,6 +2482,8 @@ let
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
+    mldonkey = callPackage ../applications/networking/p2p/mldonkey { };
+
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries {
       camomile = camomile_0_8_2;
     };
@@ -3313,13 +3313,12 @@ let
   boost146 = callPackage ../development/libraries/boost/1.46.nix { };
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
-  boost150 = callPackage ../development/libraries/boost/1.50.nix { };
   boost151 = callPackage ../development/libraries/boost/1.51.nix { };
   boost = boost151;
 
   boostHeaders149 = callPackage ../development/libraries/boost/1.49-headers.nix { };
-  boostHeaders150 = callPackage ../development/libraries/boost/1.50-headers.nix { };
-  boostHeaders = boostHeaders150;
+  boostHeaders151 = callPackage ../development/libraries/boost/1.51-headers.nix { };
+  boostHeaders = boostHeaders151;
 
   botan = callPackage ../development/libraries/botan { };
 
@@ -4167,6 +4166,9 @@ let
 
   libQGLViewer = callPackage ../development/libraries/libqglviewer { };
 
+  libre = callPackage ../development/libraries/libre {};
+  librem = callPackage ../development/libraries/librem {};
+
   libsamplerate = callPackage ../development/libraries/libsamplerate { };
 
   libspectre = callPackage ../development/libraries/libspectre { };
@@ -4267,6 +4269,8 @@ let
   liboil = callPackage ../development/libraries/liboil { };
 
   liboop = callPackage ../development/libraries/liboop { };
+
+  libopus = callPackage ../development/libraries/libopus { };
 
   libosip = callPackage ../development/libraries/osip {};
 
@@ -4672,6 +4676,8 @@ let
 
   protobuf = callPackage ../development/libraries/protobuf { };
 
+  protobufc = callPackage ../development/libraries/protobufc { };
+
   pth = callPackage ../development/libraries/pth { };
 
   ptlib = callPackage ../development/libraries/ptlib {};
@@ -4812,6 +4818,8 @@ let
   soqt = callPackage ../development/libraries/soqt { };
 
   sord = callPackage ../development/libraries/sord {};
+
+  spandsp = callPackage ../development/libraries/spandsp {};
 
   speechd = callPackage ../development/libraries/speechd { };
 
@@ -5271,10 +5279,7 @@ let
     inherit stdenv lib dict;
   };
 
-  dovecot = callPackage ../servers/mail/dovecot/1.0.3.nix { };
-  dovecot_1_1_1 = callPackage ../servers/mail/dovecot/1.1.1.nix { };
-  dovecot_2 = callPackage ../servers/mail/dovecot/2.x.nix { };
-  dovecot_2_0 = pkgs.dovecot_2; # Actually, 2.1
+  dovecot = callPackage ../servers/mail/dovecot { };
 
   ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
@@ -5422,6 +5427,8 @@ let
   redis = callPackage ../servers/nosql/redis { };
 
   redstore = callPackage ../servers/http/redstore { };
+
+  restund = callPackage ../servers/restund {};
 
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
@@ -6509,6 +6516,8 @@ let
     cairo = cairo.override { xcbSupport = true; };
   };
 
+  baresip = callPackage ../applications/networking/instant-messengers/baresip {};
+
   batik = callPackage ../applications/graphics/batik { };
 
   bazaar = callPackage ../applications/version-management/bazaar { };
@@ -7464,6 +7473,8 @@ let
     inherit (pkgs.kde4) kdelibs;
   };
 
+  opusTools = callPackage ../applications/audio/opus-tools { };
+
   pan = callPackage ../applications/networking/newsreaders/pan {
     spellChecking = false;
   };
@@ -7485,6 +7496,8 @@ let
   pianobooster = callPackage ../applications/audio/pianobooster { };
 
   picard = callPackage ../applications/audio/picard { };
+
+  picocom = callPackage ../tools/misc/picocom { };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
     openssl = if (config.pidgin.openssl or true) then openssl else null;
@@ -7759,6 +7772,8 @@ let
     ccrtp = ccrtp_1_8;
     libzrtpcpp = libzrtpcpp_1_6;
   };
+
+  umurmur = callPackage ../applications/networking/umurmur { };
 
   unison = callPackage ../applications/networking/sync/unison {
     inherit (ocamlPackages) lablgtk;

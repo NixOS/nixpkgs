@@ -50,6 +50,9 @@ rec {
         EXT4_FS m
         USB_STORAGE_CYPRESS_ATACB m
 
+        # mv cesa requires this sw fallback, for mv-sha1
+        CRYPTO_SHA1 y
+
         IP_PNP y
         IP_PNP_DHCP y
         NFS_FS y
