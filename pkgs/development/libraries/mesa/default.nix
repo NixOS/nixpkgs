@@ -7,14 +7,14 @@ if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "8.0.2"; in
+let version = "8.0.4"; in
 
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    md5 = "a368104e5700707048dc3e8691a9a7a1";
+    md5 = "d546f988adfdf986cff45b1efa2d8a46";
   };
 
   patches =
@@ -41,7 +41,6 @@ stdenv.mkDerivation {
     description = "An open source implementation of OpenGL";
     homepage = http://www.mesa3d.org/;
     license = "bsd";
-
     platforms = stdenv.lib.platforms.mesaPlatforms;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
