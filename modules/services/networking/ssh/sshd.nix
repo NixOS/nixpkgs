@@ -351,10 +351,10 @@ in
         serviceConfig =
           ''
             ExecStart=\
-              ${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} \
+              ${pkgs.openssh}/sbin/sshd -D -h ${cfg.hostKeyPath} \
                 -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
             Restart=always
-            Type=forking
+            Type=simple
             KillMode=process
             PIDFile=/run/sshd.pid
           '';
