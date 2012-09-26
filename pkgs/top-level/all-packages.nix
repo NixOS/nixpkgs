@@ -3820,7 +3820,7 @@ let
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
-  atk = callPackage ../development/libraries/atk/2.4.x.nix { };
+  atk = callPackage ../development/libraries/atk/2.6.x.nix { };
 
   atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
 
