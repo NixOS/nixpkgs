@@ -138,6 +138,20 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  area53 = buildPythonPackage (rec {
+    name = "area53-b2c9cdcabd";
+
+    src = fetchgit {
+      url = git://github.com/mariusv/Area53.git;
+      rev = "b2c9cdcabd";
+      sha256 = "b0c12b8c48ed9180c7475fab18de50d63e1b517cfb46da4d2c66fc406fe902bc";
+    };
+    installCommand = "python setup.py install --prefix=$out";
+    doCheck = false;
+    propagatedBuildInputs = [ boto ];
+  });
+
+
   argparse = buildPythonPackage (rec {
     name = "argparse-1.1";
 
@@ -169,6 +183,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+
   astng = buildPythonPackage rec {
     name = "logilab-astng-0.21.1";
 
@@ -179,8 +194,8 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [logilabCommon];
   };
 
-  beautifulsoap = buildPythonPackage (rec {
-    name = "beautifulsoap-3.0.8";
+  beautifulsoup = buildPythonPackage (rec {
+    name = "beautifulsoup-3.0.8";
 
     src = fetchurl {
       url = "http://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.0.8.tar.gz";
@@ -198,7 +213,6 @@ let pythonPackages = python.modules // rec {
       description = "Undemanding HTML/XML parser";
     };
   });
-
 
   # euca2ools (and maybe Nova) needs boto 1.9, 2.0 doesn't work.
   boto_1_9 = buildPythonPackage (rec {
@@ -353,8 +367,8 @@ let pythonPackages = python.modules // rec {
       md5 = "5f39727415b837abd02651eeb2721749";
     };
 
-    propagatedBuildInputs = [ stompclient distribute ]; 
-      
+    propagatedBuildInputs = [ stompclient distribute ];
+
     doCheck = false;
 
     meta = {
@@ -433,7 +447,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   dateutil = buildPythonPackage (rec {
     name = "dateutil-1.5";
 
@@ -469,12 +483,12 @@ let pythonPackages = python.modules // rec {
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/distribute/distribute-0.6.26.tar.gz";
       md5 = "841f4262a70107f85260362f5def8206"; #"ecd75ea629fee6d59d26f88c39b2d291";
-      
+
     };
 
     buildInputs = [ pkgs.unzip ];
-    
-    installCommand = 
+
+    installCommand =
       ''
         # ehm, YES, the --verbose flags needs to be there, otherwise it tries to patch setuptools!
         easy_install --verbose --prefix=$out .
@@ -488,7 +502,7 @@ let pythonPackages = python.modules // rec {
       platforms = python.meta.platforms;
     };
   });
-  
+
 
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-2.26";
@@ -504,14 +518,14 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   django = buildPythonPackage rec {
     name = "Django-${version}";
-    version = "1.4";
+    version = "1.4.1";
 
     src = fetchurl {
-      url = "http://www.djangoproject.com/m/releases/${version}/${name}.tar.gz";
-      sha256 = "1sc8ajixaqfylb7jmmhn38hgbnqipylh1sqmpicx7rqhxbxvm5n0";
+      url = "http://www.djangoproject.com/m/releases/1.4/${name}.tar.gz";
+      sha256 = "16s0anvpaccbqmdrhl71z73k0dy2sl166nnc2fbd5lshlgmj13ad";
     };
 
     doCheck = false;
@@ -522,13 +536,13 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
-  django_1_3_1 = buildPythonPackage rec {
-    name = "Django-1.3.1";
+
+  django_1_3 = buildPythonPackage rec {
+    name = "Django-1.3.2";
 
     src = fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
-      sha256 = "0sqmvqy3y5h76pa3zjcnyiy5x01bzzy03afdp2qdwqx0x321i4dg";
+      sha256 = "0r6pdm33x96aba9x36jvqpkh2bf1zixnzvr12mcc8qq8wc7hii3j";
     };
 
     doCheck = false;
@@ -539,7 +553,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   django_evolution = buildPythonPackage rec {
     name = "django_evolution-0.6.7";
 
@@ -548,7 +562,7 @@ let pythonPackages = python.modules // rec {
       md5 = "24b8373916f53f74d701b99a6cf41409";
     };
 
-    propagatedBuildInputs = [ django_1_3_1 ];
+    propagatedBuildInputs = [ django_1_3 ];
 
     meta = {
       description = "A database schema evolution tool for the Django web framework";
@@ -556,7 +570,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   djblets = buildPythonPackage rec {
     name = "Djblets-0.6.19";
 
@@ -565,7 +579,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "1hhvpi81yknvlaazq1cpgamp9vf3x1fcr0ba64q3j2yz1kgin1i8";
     };
 
-    propagatedBuildInputs = [ pkgs.pil django_1_3_1 ];
+    propagatedBuildInputs = [ pkgs.pil django_1_3 ];
 
     meta = {
       description = "A collection of useful extensions for Django";
@@ -573,7 +587,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   dulwich = buildPythonPackage rec {
     name = "dulwich-0.8.1";
 
@@ -594,7 +608,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   hggit = buildPythonPackage rec {
     name = "hg-git-0.3.1";
 
@@ -611,7 +625,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   docutils = buildPythonPackage rec {
     name = "docutils-0.8.1";
 
@@ -718,7 +732,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   foolscap = buildPythonPackage (rec {
     name = "foolscap-0.6.1";
 
@@ -749,6 +763,24 @@ let pythonPackages = python.modules // rec {
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
       platforms = python.meta.platforms;
+    };
+  });
+
+  fuse = buildPythonPackage (rec {
+    baseName = "fuse";
+    version = "0.2.1";
+    name = "${baseName}-${version}";
+
+    src = fetchurl {
+      url = "http://downloads.sourceforge.net/sourceforge/fuse/fuse-python-${version}.tar.gz";
+      sha256 = "06rmp1ap6flh64m81j0n3a357ij2vj9zwcvvw0p31y6hz1id9shi";
+    };
+
+    buildInputs = [ pkgs.pkgconfig pkgs.fuse ];
+
+    meta = {
+      description = "Python bindings for FUSE.";
+      license = stdenv.lib.licenses.lgpl21;
     };
   });
 
@@ -848,6 +880,27 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  gyp = buildPythonPackage rec {
+    rev = "1435";
+    name = "gyp-r${rev}";
+
+    src = fetchsvn {
+      url = "http://gyp.googlecode.com/svn/trunk";
+      inherit rev;
+      sha256 = "1wmd1svx5344alb8ff9vzdam1ccqdl0h7shp1xnsk843hqwc0fz0";
+    };
+
+    doCheck = false;
+
+    postUnpack = "find . -print0 | xargs -0 touch";
+
+    meta = {
+      homepage = http://code.google.com/p/gyp;
+      description = "Generate Your Projects";
+    };
+  };
+
+
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.6.0";
 
@@ -916,6 +969,25 @@ let pythonPackages = python.modules // rec {
         Django inspired non-XML syntax but supports inline expressions and
         an optional sandboxed environment.
       '';
+    };
+  };
+
+
+  pylast = buildPythonPackage rec {
+    name = "pylast-${version}";
+    version = "0.5.11";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pylast/${name}.tar.gz";
+      md5 = "506cf1b13020b3ed2f3c845ea0c9830e";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/pylast/;
+      description = "A python interface to last.fm (and compatibles)";
+      license = pkgs.lib.licenses.asl20;
     };
   };
 
@@ -1064,7 +1136,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.1.11";
 
@@ -1099,7 +1171,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   mock = buildPythonPackage (rec {
     name = "mock-0.7.0";
 
@@ -1406,7 +1478,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   paramiko = buildPythonPackage rec {
     name = "paramiko-1.7.7.1";
 
@@ -1474,6 +1546,23 @@ let pythonPackages = python.modules // rec {
     meta = {
       description = "Load, configure, and compose WSGI applications and servers";
       homepage = http://pythonpaste.org/deploy/;
+    };
+  };
+
+
+  pep8 = buildPythonPackage rec {
+    name = "pep8-${version}";
+    version = "1.3.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
+      md5 = "093a99ced0cc3b58c01549d7350f5a73";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/pep8/;
+      description = "Python style guide checker";
+      license = pkgs.lib.licenses.mit;
     };
   };
 
@@ -1667,6 +1756,23 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  pyfeed = buildPythonPackage rec {
+    url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
+    name = stdenv.lib.nameFromURL url ".tar";
+    src = fetchurl {
+      inherit url;
+      sha256 = "1h4msq573m7wm46h3cqlx4rsn99f0l11rhdqgf50lv17j8a8vvy1";
+    };
+    propagatedBuildInputs = [xe];
+
+    # tests not described in setup.py
+    doCheck = false;
+
+    meta = {
+      homepage = "http://home.blarg.net/~steveha/pyfeed.html";
+      description = "Tools for syndication feeds";
+    };
+  };
 
   pygments = buildPythonPackage rec {
     name = "Pygments-1.5";
@@ -1675,7 +1781,7 @@ let pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/P/Pygments/${name}.tar.gz";
       md5 = "ef997066cc9ee7a47d01fb4f3da0b5ff";
     };
-    
+
     meta = {
       homepage = http://pygments.org/;
       description = "A generic syntax highlighter";
@@ -1706,6 +1812,30 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  pyinotify = pkgs.stdenv.mkDerivation rec {
+    name = "python-pyinotify-${version}";
+    version = "0.9.3";
+
+    src = fetchgit {
+      url = "git://github.com/seb-m/pyinotify.git";
+      rev = "refs/tags/${version}";
+      sha256 = "d38ce95e4af00391e58246a8d7fe42bdb51d63054b09809600b2faef2a803472";
+    };
+
+    buildInputs = [ python ];
+
+    installPhase = ''
+      python setup.py install --prefix=$out
+    '';
+
+    meta = {
+      homepage = https://github.com/seb-m/pyinotify/wiki;
+      description = "Monitor filesystems events on Linux platforms with inotify";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   pyparsing = buildPythonPackage rec {
     name = "pyparsing-1.5.6";
 
@@ -1720,7 +1850,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   ldap = buildPythonPackage rec {
     name = "python-ldap-2.4.3";
     namePrefix = "";
@@ -1734,7 +1864,26 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [pkgs.openldap pkgs.cyrus_sasl pkgs.openssl];
   };
 
-  
+
+  pylibacl = buildPythonPackage (rec {
+    name = "pylibacl-0.5.1";
+
+    src = fetchurl {
+      url = "https://github.com/downloads/iustin/pylibacl/${name}.tar.gz";
+      sha256 = "1idks7j9bn62xzsaxkvhl7bdq6ws8kv8aa0wahfh7724qlbbcf1k";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ pkgs.acl ];
+
+    meta = {
+      description = "A Python extension module for POSIX ACLs. It can be used to query, list, add, and remove ACLs from files and directories under operating systems that support them.";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  });
+
+
   pylint = buildPythonPackage rec {
     name = "pylint-0.23.0";
 
@@ -1745,7 +1894,7 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [astng];
   };
 
-  
+
   pymacs = pkgs.stdenv.mkDerivation rec {
     version = "v0.24-beta2";
     name = "Pymacs-${version}";
@@ -1774,7 +1923,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   pyopengl =
     let version = "3.0.0b5";
     in
@@ -1803,7 +1952,7 @@ let pythonPackages = python.modules // rec {
         };
       };
 
-      
+
   pyreport = buildPythonPackage (rec {
     name = "pyreport-0.3.4c";
 
@@ -1939,7 +2088,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   pyutil = buildPythonPackage (rec {
     name = "pyutil-1.7.9";
 
@@ -1973,7 +2122,26 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
+  pyxattr = buildPythonPackage (rec {
+    name = "pyxattr-0.5.1";
+
+    src = fetchurl {
+      url = "https://github.com/downloads/iustin/pyxattr/${name}.tar.gz";
+      sha256 = "0jmkffik6hdzs7ng8c65bggss2ai40nm59jykswdf5lpd36cxddq";
+    };
+
+    doCheck = false;
+
+    buildInputs = [ pkgs.attr ];
+
+    meta = {
+      description = "A Python extension module which gives access to the extended attributes for filesystem objects available in some operating systems.";
+      license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  });
+
+
   pyyaml = buildPythonPackage (rec {
     name = "PyYAML-3.09";
 
@@ -1992,7 +2160,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   RBTools = buildPythonPackage rec {
     name = "rbtools-0.4.1";
     namePrefix = "";
@@ -2005,7 +2173,7 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [ setuptools ];
   };
 
-  
+
   recaptcha_client = buildPythonPackage rec {
     name = "recaptcha-client-1.0.6";
 
@@ -2020,7 +2188,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   reportlab =
    let freetype = pkgs.lib.overrideDerivation pkgs.freetype (args: { configureFlags = "--enable-static --enable-shared"; });
    in buildPythonPackage rec {
@@ -2040,7 +2208,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-1.6.9";
 
@@ -2051,12 +2219,12 @@ let pythonPackages = python.modules // rec {
 
     propagatedBuildInputs =
       [ recaptcha_client pytz memcached dateutil paramiko flup pygments
-        djblets django_1_3_1 django_evolution pkgs.pycrypto python.modules.sqlite3
+        djblets django_1_3 django_evolution pkgs.pycrypto python.modules.sqlite3
         pysvn pkgs.pil psycopg2
       ];
   };
 
-  
+
   rdflib = buildPythonPackage (rec {
     name = "rdflib-3.0.0";
 
@@ -2066,11 +2234,6 @@ let pythonPackages = python.modules // rec {
     };
 
     doCheck = false;
-
-    postInstall = ''
-      find $out -name easy-install.pth | xargs rm -v
-      find $out -name 'site.py*' | xargs rm -v
-    '';
 
     meta = {
       description = "RDFLib is a Python library for working with RDF, a simple yet powerful language for representing information.";
@@ -2185,6 +2348,34 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  selenium =
+    buildPythonPackage rec {
+      name = "selenium-2.25.0";
+      src = pkgs.fetchurl {
+        url = http://pypi.python.org/packages/source/s/selenium/selenium-2.25.0.tar.gz;
+        sha256 = "0iinpry1vr4dydh44sc0ny22sa9fqhy2302hf56pf8fakvza9m0a";
+      };
+
+      buildInputs = [pkgs.xlibs.libX11];
+
+      # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
+      # absolute paths. Replaced by relative path so it is found when used in nix.
+      x_ignore_nofocus =
+        pkgs.fetchsvn {
+          url = http://selenium.googlecode.com/svn/tags/selenium-2.25.0/cpp/linux-specific;
+          rev = 17641;
+          sha256 = "1wif9r6307qhlcp2zbg6n05yvxxn9ppkxh8gpsplcbyh22zi7bcd";
+        };
+
+      preInstallPhases = "preInstall";
+      preInstall = ''
+        cp ${x_ignore_nofocus}/* .
+        sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
+        gcc -c -fPIC x_ignore_nofocus.c -o x_ignore_nofocus.o
+        gcc -shared -Wl,-soname,x_ignore_nofocus.so -o x_ignore_nofocus.so  x_ignore_nofocus.o
+        cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
+      '';
+    };
 
   setuptoolsDarcs = buildPythonPackage {
     name = "setuptools-darcs-1.2.9";
@@ -2207,7 +2398,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   setuptoolsTrial = buildPythonPackage {
     name = "setuptools-trial-0.5.12";
 
@@ -2227,7 +2418,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   simplejson = buildPythonPackage (rec {
     name = "simplejson-2.1.3";
 
@@ -2253,7 +2444,7 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  
+
   six = buildPythonPackage rec {
     name = "six-1.1.0";
 
@@ -2270,7 +2461,7 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  
+
   skype4py = buildPythonPackage (rec {
     name = "Skype4Py-1.0.32.0";
 
@@ -2513,6 +2704,28 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+
+  urlgrabber =  buildPythonPackage rec {
+    name = "urlgrabber-3.9.1";
+
+    src = fetchurl {
+      url = "http://urlgrabber.baseurl.org/download/${name}.tar.gz";
+      sha256 = "4437076c8708e5754ea04540e46c7f4f233734ee3590bb8a96389264fb0650d0";
+    };
+
+    doCheck = false;
+
+    propagatedBuildInputs = [ pycurl ];
+
+    meta = {
+      homepage = "urlgrabber.baseurl.org";
+      license = "LGPLv2+";
+      description = "Python module for downloading files";
+      maintainers = [ stdenv.lib.maintainers.qknight ];
+    };
+  };
+
+
   urwid = buildPythonPackage (rec {
     name = "urwid-1.0.1";
 
@@ -2540,6 +2753,8 @@ let pythonPackages = python.modules // rec {
     };
 
     patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];
+
+    propagatedBuildInputs = [ python.modules.readline python.modules.sqlite3 ];
 
     doCheck = false;
 
@@ -2624,6 +2839,24 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  wokkel = buildPythonPackage (rec {
+    url = "http://wokkel.ik.nu/releases/0.7.0/wokkel-0.7.0.tar.gz";
+    name = pkgs.lib.nameFromURL url ".tar";
+    src = fetchurl {
+      inherit url;
+      sha256 = "0rnshrzw8605x05mpd8ndrx3ri8h6cx713mp8sl4f04f4gcrz8ml";
+    };
+
+    propagatedBuildInputs = [twisted dateutil];
+
+    meta = {
+      description = "Some (mainly XMPP-related) additions to twisted";
+      homepage = "http://wokkel.ik.nu/";
+      license = stdenv.lib.licenses.mit;
+    };
+  });
+
+
   wxPython = wxPython28;
 
 
@@ -2631,6 +2864,23 @@ let pythonPackages = python.modules // rec {
     inherit (pkgs) stdenv fetchurl pkgconfig;
     inherit pythonPackages;
     wxGTK = pkgs.wxGTK28;
+  };
+
+  xe = buildPythonPackage rec {
+    url = "http://www.blarg.net/%7Esteveha/xe-0.7.4.tar.gz";
+    name = stdenv.lib.nameFromURL url ".tar";
+    src = fetchurl {
+      inherit url;
+      sha256 = "0v9878cl0y9cczdsr6xjy8v9l139lc23h4m5f86p4kpf2wlnpi42";
+    };
+
+    # tests not described in setup.py
+    doCheck = false;
+
+    meta = {
+      homepage = "http://home.blarg.net/~steveha/xe.html";
+      description = "XML elements";
+    };
   };
 
   xlib = buildPythonPackage (rec {
@@ -2800,11 +3050,11 @@ let pythonPackages = python.modules // rec {
   };
 
   larch = buildPythonPackage rec {
-    name = "larch-0.31";
+    name = "larch-1.20120527";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_0.31.orig.tar.gz";
-      sha256 = "18c243a45b35974c304c9b3d8b05718f1272f14c29cd3c9010800cf821064444";
+      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_1.20120527.orig.tar.gz";
+      sha256 = "2865a1bfa6bd276bf746e8e7cb73d5199d0b6d00045d8c92e158626687d3bbe1";
     };
 
     buildInputs = [ sphinx ];

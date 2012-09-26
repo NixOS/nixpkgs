@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libuuid, popt, icu, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "gptfdisk-0.8.0";
+  name = "gptfdisk-0.8.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/gptfdisk/${name}.tar.gz";
-    sha256 = "096qmlqcsvjklihggwphdmd0y78jz4ghf7gf4fvjnskp7mg4ng31";
+    sha256 = "1yaax2mga7n847x1ihbgvv4drzvndgnn4mii0mz1ab1150gnkk0m";
   };
 
   buildInputs = [ libuuid popt icu ncurses ];

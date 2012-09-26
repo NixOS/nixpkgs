@@ -39,16 +39,6 @@ stdenv.mkDerivation rec {
       --replace "set(AWE_MAN_LANGS it es fr de ru)" \
                 "set(AWE_MAN_LANGS it es fr de)"
   '';
-
-  # XXX: maybe not needed anymore
-  # Somehow libev does not get into the rpath, although it should.
-  # Something may be wrong in the gcc wrapper.
-  preBuild = ''
-    export NIX_LDFLAGS_BEFORE="-lev";
-  '';
-
-  # Cmake fails strangely at finding lua. Looks to me like a cmake 2.8 error.
-  cmakeFlags = [ "-DLUA_LIBRARIES=${lua}/lib/liblua.a" ];
  
   meta = {
     homepage = http://awesome.naquadah.org/;

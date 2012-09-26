@@ -2,17 +2,19 @@
 
 # Take the list of files from the main package, ooo.lst.in
 
-echo '{fetchurl} : ['
+cat <<EOF
+[
+EOF
 
-while read a; do
-
-  URL=http://dev-www.libreoffice.org/src/$a
-
-  MD5=${a::32}
-  echo '(fetchurl {'
-  echo "  url = \"$URL\";"
-  echo "  md5 = \"$MD5\";"
-  echo '})'
+read file
+while read file; do
+  if [[ "$file" == @* ]]; then
+    break
+  fi
+  echo '{'
+  echo "  name = \"${file:33}\";"
+  echo "  md5 = \"${file:0:32}\";"
+  echo '}'
 done
 
 echo ']'

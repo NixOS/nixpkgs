@@ -1,0 +1,14 @@
+GNU libc on GNU/Hurd doesn't define `__SIGRTMIN'.
+From <http://patch-tracker.debian.org/patch/series/view/gcc-4.6/4.6.3-1/hurd-fixes.diff>.
+
+--- a/libgcc/generic-morestack.c	2011-12-19 21:14:52.000000000 +0100
++++ b/libgcc/generic-morestack.c	2011-12-19 21:15:35.000000000 +0100
+@@ -507,7 +507,7 @@
+   sigemptyset (&__morestack_initial_sp.mask);
+ 
+   sigfillset (&__morestack_fullmask);
+-#ifdef __GLIBC__
++#if defined(__GLIBC__) && defined(__SIGRTMIN)
+   /* In glibc, the first two real time signals are used by the NPTL
+      threading library.  By taking them out of the set of signals, we
+      avoiding copying the signal mask in pthread_sigmask.  More

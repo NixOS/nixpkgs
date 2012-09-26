@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     cabalFileTh cmdargs filepath haskeline hledgerLib HUnit mtl parsec
     regexpr safe shakespeareText split text time utf8String
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://hledger.org";
     description = "The main command-line interface for the hledger accounting tool";

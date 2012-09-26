@@ -1,15 +1,19 @@
-{ fetchurl, stdenv, zlib, expat }:
+{ fetchurl, stdenv, zlib, expat, which }:
 
-stdenv.mkDerivation rec {
-  name = "gpsbabel-1.3.6";
+let version = "1.4.3"; in
+stdenv.mkDerivation {
+  name = "gpsbabel-${version}";
 
   src = fetchurl {
-    url = "http://www.gpsbabel.org/plan9.php?dl=${name}.tar.gz";
-    name = "${name}.tar.gz";
-    sha256 = "1dm9lpcdsj0vz699zz932xc1vphvap627wl0qp61izlkzh25vg88";
+    # gpgbabel.org makes it hard to get the source tarball automatically, so
+    # get it from elsewhere.
+    url = "mirror://debian/pool/main/g/gpsbabel/gpsbabel_${version}.orig.tar.gz";
+    sha256 = "1s31xa36ivf836h89m1f3qiaz3c3znvqjdm0bnh8vr2jjlrz9jdi";
   };
 
-  buildInputs = [ zlib expat ];
+  # FIXME: Would need libxml2 for one of the tests, but that in turns require
+  # network access for the XML schemas.
+  buildInputs = [ zlib expat which ];
 
   /* FIXME: Building the documentation, with "make doc", requires this:
 
@@ -17,7 +21,10 @@ stdenv.mkDerivation rec {
 
     But FOP isn't packaged yet.  */
 
-  configureFlags = "--with-zlib=system";
+  preConfigure = "cd gpsbabel";
+  configureFlags = [ "--with-zlib=system" ];
+
+  doCheck = true;
 
   meta = {
     description = "GPSBabel, a tool to convert, upload and download data from GPS and Map programs";
@@ -44,5 +51,8 @@ stdenv.mkDerivation rec {
     homepage = http://www.gpsbabel.org/;
 
     license = "GPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.ludo ];
+    platforms = stdenv.lib.platforms.gnu;         # arbitrary choice
   };
 }

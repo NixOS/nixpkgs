@@ -121,23 +121,23 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
     };
 
   cfg = {
-    mysqlSupport = getConfig ["php" "mysql"] true;
-    mysqliSupport = getConfig ["php" "mysqli"] true;
-    pdo_mysqlSupport = getConfig ["php" "pdo_mysql"] true;
-    libxml2Support = getConfig ["php" "libxml2"] true;
-    apxs2Support = getConfig ["php" "apxs2"] true;
-    bcmathSupport = getConfig ["php" "bcmath"] true;
-    socketsSupport = getConfig ["php" "sockets"] true;
-    curlSupport = getConfig ["php" "curl"] true;
-    gettextSupport = getConfig ["php" "gettext"] true;
-    postgresqlSupport = getConfig ["php" "postgresql"] true;
-    readlineSupport = getConfig ["php" "readline"] true;
-    sqliteSupport = getConfig ["php" "sqlite"] true;
-    soapSupport = getConfig ["php" "soap"] true;
-    zlibSupport = getConfig ["php" "zlib"] true;
-    opensslSupport = getConfig ["php" "openssl"] true;
-    mbstringSupport = getConfig ["php" "mbstring"] true;
-    gdSupport = getConfig ["php" "gd"] true;
+    mysqlSupport = config.php.mysql or true;
+    mysqliSupport = config.php.mysqli or true;
+    pdo_mysqlSupport = config.php.pdo_mysql or true;
+    libxml2Support = config.php.libxml2 or true;
+    apxs2Support = config.php.apxs2 or true;
+    bcmathSupport = config.php.bcmath or true;
+    socketsSupport = config.php.sockets or true;
+    curlSupport = config.php.curl or true;
+    gettextSupport = config.php.gettext or true;
+    postgresqlSupport = config.php.postgresql or true;
+    readlineSupport = config.php.readline or true;
+    sqliteSupport = config.php.sqlite or true;
+    soapSupport = config.php.soap or true;
+    zlibSupport = config.php.zlib or true;
+    opensslSupport = config.php.openssl or true;
+    mbstringSupport = config.php.mbstring or true;
+    gdSupport = config.php.gd or true;
   };
 
   configurePhase = ''

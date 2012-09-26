@@ -1,19 +1,29 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, udev, dbus, kmod
+{ stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
-, glib, kbd
+, glib, kbd, libxslt
 }:
 
+assert stdenv.gcc.libc or null != null;
+
 stdenv.mkDerivation rec {
-  name = "systemd-186";
+  name = "systemd-192";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "0zmj8r7a1xb5f3lvyfgw7095rq3yvr0ibw1730j54blm07sh3hmj";
+    sha256 = "03y3y1w3x7bx67jvdxryhns3h1g6nrllln46gqipp35n99alki2m";
   };
 
+  patches = [ ./reexec.patch ] ++
+            # Remove this patch after the next update.
+            stdenv.lib.optional (stdenv.system == "i686-linux") (fetchurl {
+              url = "https://bugs.freedesktop.org/attachment.cgi?id=67621";
+              name = "fix-32-bit-build.patch";
+              sha256 = "1i4xn6lc6iapaasd2lz717b1zrq5ds5g18i7m509fgfwy7w7x95l";
+            });
+
   buildInputs =
-    [ pkgconfig intltool gperf libcap udev dbus kmod xz pam acl
-      cryptsetup libuuid m4 usbutils pciutils glib
+    [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
+      /* cryptsetup */ libuuid m4 usbutils pciutils glib libxslt
     ];
 
   configureFlags =
@@ -45,7 +55,16 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  NIX_CFLAGS_COMPILE = "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\" -DKBD_SETFONT=\"${kbd}/bin/setfont\"";
+  NIX_CFLAGS_COMPILE =
+    [ "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\""
+      "-DKBD_SETFONT=\"${kbd}/bin/setfont\""
+      # Can't say ${polkit}/bin/pkttyagent here because that would
+      # lead to a cyclic dependency.
+      "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+      "-fno-stack-protector"
+    ];
+
+  makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include";
 
   installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc";
 
@@ -60,14 +79,23 @@ stdenv.mkDerivation rec {
       mkdir -p $out/sbin
       ln -s $out/lib/systemd/systemd $out/sbin/telinit
       for i in init halt poweroff runlevel reboot shutdown; do
-        ln -s $out/bin/systemctl $out/sbin/$i 
+        ln -s $out/bin/systemctl $out/sbin/$i
       done
     '';
 
   enableParallelBuilding = true;
-  
+
+  # The interface version prevents NixOS from switching to an
+  # incompatible systemd at runtime.  (Switching across reboots is
+  # fine, of course.)  It should be increased whenever systemd changes
+  # in a backwards-incompatible way.  If the interface version of two
+  # systemd builds is the same, then we can switch between them at
+  # runtime; otherwise we can't and we need to reboot.
+  passthru.interfaceVersion = 2;
+
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
+    platforms = stdenv.lib.platforms.linux;
   };
 }

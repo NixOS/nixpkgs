@@ -10,7 +10,10 @@ cabal.mkDerivation (self: {
     hint libmpd mtl network parsec random regexPosix split X11 xmonad
     xmonadContrib
   ];
-  configureFlags = "-f-with_hlist";
+  patchPhase = ''
+    sed -i xmonad-extras.cabal -e 's|split .*|split|'
+  '';
+  configureFlags = "-f-with_hlist -fwith_split -fwith_parsec";
   meta = {
     homepage = "http://projects.haskell.org/xmonad-extras";
     description = "Third party extensions for xmonad with wacky dependencies";

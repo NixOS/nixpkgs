@@ -1,4 +1,4 @@
-{ fetchurl, buildPerlPackage, zlib }:
+{ fetchurl, buildPerlPackage, zlib, stdenv }:
 
 buildPerlPackage rec {
   name = "Compress-Raw-Zlib-2.051";
@@ -17,4 +17,6 @@ buildPerlPackage rec {
       GZIP_OS_CODE = AUTO_DETECT
     EOF
   '';
+
+  doCheck = !stdenv.isDarwin;
 }

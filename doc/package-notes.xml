@@ -16,7 +16,7 @@ Linux kernel or X.org.</para>
 <title>Linux kernel</title>
 
 <para>The Nix expressions to build the Linux kernel are in <link
-xlink:href="https://svn.nixos.org/repos/nix/nixpkgs/trunk/pkgs/os-specific/linux/kernel"><filename>pkgs/os-specific/linux/kernel</filename></link>.</para>
+xlink:href="https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/kernel"><filename>pkgs/os-specific/linux/kernel</filename></link>.</para>
 
 <para>The function that builds the kernel has an argument
 <varname>kernelPatches</varname> which should be a list of
@@ -49,7 +49,7 @@ modulesTree = [kernel]
 <orderedlist>
 
   <listitem>
-    <para>Copy (<command>svn cp</command>) the old Nix expression
+    <para>Copy the old Nix expression
     (e.g. <filename>linux-2.6.21.nix</filename>) to the new one
     (e.g. <filename>linux-2.6.22.nix</filename>) and update it.</para>
   </listitem>
@@ -69,7 +69,7 @@ modulesTree = [kernel]
       <orderedlist>
 
         <listitem>
-          <para>Make an <command>svn copy</command> from the old
+          <para>Make an copy from the old
           config (e.g. <filename>config-2.6.21-i686-smp</filename>) to
           the new one
           (e.g. <filename>config-2.6.22-i686-smp</filename>).</para>

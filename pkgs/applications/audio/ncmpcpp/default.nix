@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "ncmpcpp-${version}";
 
   src = fetchurl {
-    url = "http://unkart.ovh.org/ncmpcpp/ncmpcpp-${version}.tar.bz2";
+    url = "http://ncmpcpp.rybczak.net/stable/ncmpcpp-${version}.tar.bz2";
     sha256 = "1kbkngs4fhf9z53awskqiwdl94i5slvxmjiajkrayi99373fallx";
   };
 

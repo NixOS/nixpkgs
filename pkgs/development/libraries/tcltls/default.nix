@@ -17,5 +17,15 @@ stdenv.mkDerivation rec {
     sha256 = "adec50143a9ad634a671d24f7c7bbf2455487eb5f12d290f41797c32a98b93f3";
   };
 
-  buildInputs = [tcl openssl];
+  passthru = {
+    libPrefix = "tls${version}";
+  };
+
+  buildInputs = [ tcl openssl ];
+
+  meta = {
+    homepage = "http://tls.sourceforge.net/";
+    description = "An OpenSSL / RSA-bsafe Tcl extension";
+    license = stdenv.lib.licenses.tcltk;
+  };
 }

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "regular";
-  version = "0.3.4";
-  sha256 = "10gfid99xcqv3i9rp4x8hykk91qq3h7b7lxzsl7ii58vmifa4kgq";
+  version = "0.3.4.2";
+  sha256 = "0fshjpbgabdcsa9a4cjmvfrzy7db4s679rprdbrhhfwf5xiszs2s";
   meta = {
     description = "Generic programming library for regular datatypes";
     license = self.stdenv.lib.licenses.bsd3;

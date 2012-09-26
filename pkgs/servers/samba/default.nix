@@ -18,16 +18,15 @@
 assert useKerberos -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "samba-3.6.5";
+  name = "samba-3.6.7";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "1i40mf5rvz055zp7fy5rqp1lwlsm65g8k6n8jxw5w5f1p3rmzxla";
+    sha256 = "1jnl9v6axz30ymh6in1fwan7zjy9n5n7x70vi1afazxs27qa0n5q";
   };
 
   patches =
-    [
-      # Allow cross-builds for GNU/Hurd.
+    [ # Allow cross-builds for GNU/Hurd.
       ./libnss-wins-pthread.patch
     ];
 

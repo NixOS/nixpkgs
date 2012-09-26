@@ -2,11 +2,11 @@
 , makeWrapper, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mosh-1.1.3";
+  name = "mosh-1.2.2";
 
   src = fetchurl {
     url = "https://github.com/downloads/keithw/mosh/${name}.tar.gz";
-    sha256 = "1vkf7h8mcmfn9dgcwrww05mdijrl7321xv9wlhf7j99nwmklc8sk";
+    sha256 = "1763s6f398hmdgy73brpknwahnys28zk3pm37n66sr8iyz2cq8xp";
   };
 
   buildInputs = [ boost protobuf ncurses zlib pkgconfig IOTty makeWrapper perl ];

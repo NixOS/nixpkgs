@@ -22,7 +22,7 @@ cabal.mkDerivation (self: {
     homepage = "http://www.cse.unsw.edu.au/~chak/project/accelerate/";
     description = "Examples using the Accelerate library";
     license = self.stdenv.lib.licenses.bsd3;
-    platforms = self.ghc.meta.platforms;
+    platforms = self.stdenv.lib.platforms.none;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

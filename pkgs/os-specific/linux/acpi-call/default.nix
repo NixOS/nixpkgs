@@ -5,21 +5,22 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = "git://github.com/mkottman/acpi_call.git";
-    rev = "4f71ce83392bc52b3497";
-    sha256 = "1f20516dc7d42bc7d9d71eaa54f48f38cd56b8683062f81d6f3857990056bdd3";
+    rev = "b570c3b6c7016174107558464e864391d8bbd176";
+    sha256 = "a89c62d391b721bb87a094f81cefc77d9c80de4bb314bb6ea449c3ef2decad5e";
   };
   
   preBuild = ''
     sed -e 's/break/true/' -i test_off.sh
     sed -e 's@/bin/bash@.bin/sh@' -i test_off.sh
-    sed -e "s@/lib/modules/\$(.*)@${kernel}/lib/modules/${kernel.version}@" -i Makefile
+    sed -e "s@/lib/modules/\$(.*)@${kernel}/lib/modules/${kernel.modDirVersion}@" -i Makefile
   '';
  
   installPhase = ''
-    mkdir -p $out/lib/modules/${kernel.version}/misc
-    cp acpi_call.ko $out/lib/modules/${kernel.version}/misc
+    mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
+    cp acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc
     mkdir -p $out/bin
     cp test_off.sh $out/bin/test_discrete_video_off.sh
+    chmod a+x $out/bin/test_discrete_video_off.sh
   '';
 
   meta = {

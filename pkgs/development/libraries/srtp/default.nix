@@ -27,8 +27,12 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
+  phaseNames = ["setVars" "doConfigure" "doMakeInstall"];
+
+  setVars = a.fullDepEntry ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
+  '' ["minInit"];
+
   meta = {
     description = "Secure RTP";
     maintainers = with a.lib.maintainers;

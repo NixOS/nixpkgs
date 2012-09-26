@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   pname = "ntfs-3g_ntfsprogs";
-  version = "2011.4.12";
+  version = "2012.1.15";
   name = "${pname}-${version}";
 
   buildInputs = [libuuid] ++ stdenv.lib.optionals crypto [gnutls libgcrypt];
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://tuxera.com/opensource/${name}.tgz";
-    sha256 = "01gfn94f4fdrl1rjhhxjvjbarr1mipdi4pmhhwirp0gy1dzp935a";
+    sha256 = "09gvfgvqm4dswzxmwvg3r23bv39cp8y8b6qs2jcwmrqd032i25kg";
   };
 
   patchPhase = ''

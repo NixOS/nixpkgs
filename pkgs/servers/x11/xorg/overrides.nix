@@ -232,6 +232,7 @@ in
   };
 
   xorgserver = attrs: attrs // {
+    configureFlags = "--enable-xcsecurity"; # enable SECURITY extension
     patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch];
     buildInputs = attrs.buildInputs ++
       [ args.zlib args.udev args.mesa args.dbus.libs

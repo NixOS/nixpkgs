@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "b1022da052254581aae51fb634345920364439f715a2c786abcd0b828c2ce697";
   };
 
-  patches = [ ./sexp-3.10-compat.patch ];
+  patches = [ ./sexp-3.10-compat.patch ./sexplib-7.0.5-patch-ocamlbuild-ocaml4.patch ];
   buildInputs = [ocaml findlib ocaml_typeconv ];
 
   createFindlibDestdir = true;

@@ -1,33 +1,21 @@
---- ssreflect1.3pl4/Make	(revision 3823)
-+++ ssreflect1.3pl4/Make	(working copy)
-@@ -1,18 +1,18 @@
- ## Uncomment for static linking
- ## <static>
--#
--#-custom "$(COQBIN)coqmktop -opt -o bin/ssrcoq src/ssreflect.cmx" "src/ssreflect.cmx" bin/ssrcoq
--#-custom "$(COQBIN)coqmktop -o bin/ssrcoq.byte src/ssreflect.cmo" "src/ssreflect.cmo bin/ssrcoq" bin/ssrcoq.byte
+--- ssreflect1.4-coq8.4/Make	(revision 3823)
++++ ssreflect1.4-coq8.4/Make	(working copy)
+@@ -1,10 +1,10 @@
+-### Uncomment for static linking
+-##
+-#-custom "$(COQBIN)coqmktop -coqlib `$(COQBIN)coqtop -where` -opt -o bin/ssrcoq src/ssrmatching.cmx src/ssreflect.cmx" "src/ssrmatching.cmx src/ssreflect.cmx" bin/ssrcoq
+-#-custom "$(COQBIN)coqmktop -coqlib `$(COQBIN)coqtop -where` -o bin/ssrcoq.byte src/ssrmatching.cmo src/ssreflect.cmo" "src/ssrmatching.cmo src/ssreflect.cmo" bin/ssrcoq.byte
 -#-custom "$(SSRCOQ) $(COQFLAGS) -compile $*" "%.v $(SSRCOQ)" "%.vo"
 -#SSRCOQ = bin/ssrcoq
--#
-+
-+-custom "$(COQBIN)coqmktop -opt -o bin/ssrcoq src/ssreflect.cmx" "src/ssreflect.cmx" bin/ssrcoq
-+-custom "$(COQBIN)coqmktop -o bin/ssrcoq.byte src/ssreflect.cmo" "src/ssreflect.cmo bin/ssrcoq" bin/ssrcoq.byte
+-##
++## Uncomment for static linking
++#
++-custom "$(COQBIN)coqmktop -coqlib `$(COQBIN)coqtop -where` -opt -o bin/ssrcoq src/ssrmatching.cmx src/ssreflect.cmx" "src/ssrmatching.cmx src/ssreflect.cmx" bin/ssrcoq
++-custom "$(COQBIN)coqmktop -coqlib `$(COQBIN)coqtop -where` -o bin/ssrcoq.byte src/ssrmatching.cmo src/ssreflect.cmo" "src/ssrmatching.cmo src/ssreflect.cmo" bin/ssrcoq.byte
 +-custom "$(SSRCOQ) $(COQFLAGS) -compile $*" "%.v $(SSRCOQ)" "%.vo"
 +SSRCOQ = bin/ssrcoq
-+
- ## </static>
- 
- ## Uncomment for dynamic linking
- ## <dynamic>
--
---I src
--
 +#
-+#-I src
-+#
- ## </dynamic>
  
  ## What follows should be left untouched by the final user of ssreflect
-Common subdirectories: old/src and new/src
-Common subdirectories: old/test and new/test
-Common subdirectories: old/theories and new/theories
+ -R theories Ssreflect
+

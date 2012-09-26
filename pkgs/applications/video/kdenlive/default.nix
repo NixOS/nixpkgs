@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, cmake, qt4, perl, kdelibs, automoc4, phonon
 , mlt, gettext , qimageblitz, qjson, shared_mime_info, soprano
-, pkgconfig }:
+, pkgconfig, shared_desktop_ontologies }:
 
 stdenv.mkDerivation rec {
   name = "kdenlive-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = 
     [ cmake qt4 perl kdelibs automoc4 phonon mlt gettext qimageblitz
-      qjson shared_mime_info soprano pkgconfig 
+      qjson shared_mime_info soprano pkgconfig shared_desktop_ontologies
     ];
 
   meta = {

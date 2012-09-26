@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
-    url = "http://releases.mozilla.org/pub/mozilla.org/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
+    url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/11.0.1/source/thunderbird-${version}.source.tar.bz2";
     sha1 = "037344b451b1c031472d92f96d401b15d8e3e7d3";
   };
 

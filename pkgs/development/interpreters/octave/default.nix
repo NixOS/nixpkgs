@@ -3,10 +3,10 @@ libX11, graphicsmagick, pcre, liblapack, texLive, pkgconfig, mesa, fltk,
 fftw, fftwSinglePrec, zlib, curl, qrupdate }:
 
 stdenv.mkDerivation rec {
-  name = "octave-3.6.1";
+  name = "octave-3.6.2";
   src = fetchurl {
     url = "mirror://gnu/octave/${name}.tar.bz2";
-    sha256 = "1xmd9rqpwzn6z808i3brw1w9lh083vpjg046cj4gg3qdazkkw1zq";
+    sha256 = "1bn48ldhx585iyrylnz59b6mb3wlpvmz2i3ri8q75s5ys29rpdhb";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11

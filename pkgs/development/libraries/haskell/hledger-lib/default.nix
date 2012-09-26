@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     cmdargs csv filepath HUnit mtl parsec regexpr safe shakespeareText
     split time transformers utf8String
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://hledger.org";
     description = "Core data types, parsers and utilities for the hledger accounting tool";

@@ -2,7 +2,7 @@
 
 let lib = import ./default.nix; in
 
-with { inherit (builtins) head tail; };
+with { inherit (builtins) head; };
 with import ./trivial.nix;
 with import ./lists.nix;
 with import ./misc.nix;
@@ -44,9 +44,9 @@ rec {
       delayedModule = delayProperties m;
       getImports =
         if m ? config || m ? options then
-          attrByPath ["imports"] [] m
+          m.imports or []
         else
-          toList (rmProperties (attrByPath ["require"] [] delayedModule));
+          toList (rmProperties (delayedModule.require or []));
 
       getImportedPaths = filter isPath getImports;
       getImportedSets = filter (x: !isPath x) getImports;
@@ -64,7 +64,7 @@ rec {
           config = getConfig;
         } // (
           if getImportedSets != [] then
-            assert tail getImportedSets == [];
+            assert length getImportedSets == 1;
             { options = head getImportedSets; }
           else
             {}
@@ -92,7 +92,7 @@ rec {
             else newModuleName origin index;
         };
 
-      getImports = m: attrByPath ["imports"] [] m;
+      getImports = m: m.imports or [];
 
       newModuleName = origin: index:
         "${origin.key}:<import-${toString index}>";
@@ -110,8 +110,8 @@ rec {
   selectDeclsAndDefs = modules:
     lib.concatMap (m:
       if m ? config || m ? options then
-         [ (attrByPath ["options"] {} m) ]
-      ++ [ (attrByPath ["config"] {} m) ]
+         [ (m.options or {}) ]
+      ++ [ (m.config or {}) ]
       else
         [ m ]
     ) modules;

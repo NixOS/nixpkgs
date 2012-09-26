@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mwc-random";
-  version = "0.12.0.0";
-  sha256 = "0c1gzf5nkcbfi2zlhh7ly8b4g2gcr0c1b76awk38g9as9qibgivr";
+  version = "0.12.0.1";
+  sha256 = "1sq4yxi231ka8rzwsihqziibs7amvl27ycr018wymm3yz36vsy7c";
   buildDepends = [ primitive time vector ];
   meta = {
     homepage = "https://github.com/bos/mwc-random";

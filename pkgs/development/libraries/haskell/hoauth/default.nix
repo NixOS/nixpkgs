@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hoauth";
-  version = "0.3.4";
-  sha256 = "0a8a77smzhxmynfi0ayvsgibpw9aav2f7pi9j3dxjas14zg9qv2k";
+  version = "0.3.5";
+  sha256 = "06vk3dv2dby7wadxg4qq2bzy10hl8ix2x4vpxggwd13xy3kpzjqp";
   buildDepends = [
     binary cryptoPubkeyTypes curl dataenc entropy mtl random RSA SHA
     time utf8String

@@ -8,8 +8,8 @@
 , antProperties ? []
 , antBuildInputs ? []
 , buildfile ? "build.xml"
-, ant ? pkgs.ant
-, jre ? pkgs.jre
+, ant ? pkgs.apacheAntOpenJDK
+, jre ? pkgs.openjdk
 , hydraAntLogger ? pkgs.hydraAntLogger
 , ... } @ args:
 
@@ -100,15 +100,10 @@ stdenv.mkDerivation (
     postHook = ''
       mkdir -p $out/nix-support
       echo "$system" > $out/nix-support/system
+      . ${./functions.sh}
 
-      # If `src' is the result of a call to `makeSourceTarball', then it
-      # has a subdirectory containing the actual tarball(s).  If there are
-      # multiple tarballs, just pick the first one.
       origSrc=$src
-      if test -d $src/tarballs; then
-          src=$(ls $src/tarballs/*.tar.bz2 $src/tarballs/*.tar.gz | sort | head -1)
-      fi
-
+      src=$(findTarballs $src | head -1)
     ''; 
   }
 )

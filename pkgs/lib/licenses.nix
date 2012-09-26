@@ -175,6 +175,12 @@
     shortName = "Proprietary";
     fullName = "Proprietary (non redistributable) license";
   };
+
+  tcltk = {
+    shortName = "Tcl/Tk";
+    fullName = "Tcl/Tk license";
+    url = http://www.tcl.tk/software/tcltk/license.html;
+  };
   
   zlib = {
     shortName = "zlib";

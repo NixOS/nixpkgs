@@ -1,4 +1,4 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
@@ -237,7 +237,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.2.23";
+    version = "3.2.30";
     testing = false;
 
     modDirVersion = version;
@@ -248,7 +248,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.0/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "1fmxr9qdz239aqf63j1648rvfngysqqk8qzwb1wjsn5hzrahsxmw";
+      sha256 = "1yg353alkk7vddd8b2d7dlgpwaxjigk8i9qq1xifln3i842zinvw";
     };
 
     config = configWithPlatform stdenv.platform;
