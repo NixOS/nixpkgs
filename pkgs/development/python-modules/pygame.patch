@@ -1,0 +1,17 @@
+diff --git a/config_unix.py b/config_unix.py
+index a95c951..0e5c8b3 100644
+--- a/config_unix.py
++++ b/config_unix.py
+@@ -159,10 +159,8 @@ def main():
+     else:
+         incdirs = []
+         libdirs = []
+-    incdirs += ["/usr"+d for d in origincdirs]
+-    libdirs += ["/usr"+d for d in origlibdirs]
+-    incdirs += ["/usr/local"+d for d in origincdirs]
+-    libdirs += ["/usr/local"+d for d in origlibdirs]
++    incdirs += [x[2:] for x in os.environ['NIX_CFLAGS_COMPILE'].split(" ") if x[0:2] == "-I"]
++    libdirs += [x[2:] for x in os.environ['NIX_LDFLAGS'].split(" ") if x[0:2] == "-L"]
+ 
+     for arg in DEPS[0].cflags.split():
+         if arg[:2] == '-I':

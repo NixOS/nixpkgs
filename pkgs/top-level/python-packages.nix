@@ -790,7 +790,9 @@ let pythonPackages = python.modules // rec {
       url = http://www.pygame.org/ftp/pygame-1.9.1release.tar.gz;
       sha256 = "0cyl0ww4fjlf289pjxa53q4klyn55ajvkgymw0qrdgp4593raq52";
     };
-    patches = [ ./pygame.patch ];
+
+    patches = [ ./development/python-modules/pygame.patch ];
+
     # auto confirming missing dependencies:
     # PORTMIDI and PORTTIME still missing
     patchPhase = ''
