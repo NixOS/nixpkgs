@@ -652,6 +652,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
+  distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
+
+  distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
+
   distributive = callPackage ../development/libraries/haskell/distributive {};
 
   dlist = callPackage ../development/libraries/haskell/dlist {};
@@ -1138,6 +1142,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
+  networkTransport = callPackage ../development/libraries/haskell/network-transport {};
+
   newtype = callPackage ../development/libraries/haskell/newtype {};
 
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
@@ -1276,6 +1282,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   randomSource = callPackage ../development/libraries/haskell/random-source {};
 
   randomShuffle = callPackage ../development/libraries/haskell/random-shuffle {};
+
+  rank1dynamic = callPackage ../development/libraries/haskell/rank1dynamic {};
 
   ranges = callPackage ../development/libraries/haskell/ranges {};
 
