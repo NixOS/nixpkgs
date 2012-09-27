@@ -1,16 +1,14 @@
 { stdenv, fetchurl, makeWrapper, curl }:
 
-let
+stdenv.mkDerivation rec {
 
-  v  = "20120807";
+  name = "plowshare-${version}";
 
-in stdenv.mkDerivation {
-
-  name = "plowshare-git${v}";
+  version = "git20120916";
 
   src = fetchurl {
-    url = "http://plowshare.googlecode.com/files/plowshare-snapshot-git${v}.tar.gz";
-    sha256 = "0clryfssaa4rjvsy760p51ppq1275lwvhm9jh3g4mi973xv4n8si";
+    url = "http://plowshare.googlecode.com/files/plowshare-snapshot-${version}.tar.gz";
+    sha256 = "eccdb28d49ac47782abc8614202b3a88426cd587371641ecf2ec008880dc6067";
   };
 
   buildInputs = [ makeWrapper ];
