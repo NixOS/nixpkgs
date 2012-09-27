@@ -5432,7 +5432,7 @@ let
 
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
-      HTTPDate MailDKIM;
+      HTTPDate MailDKIM LWP IOSocketSSL IOSocketInet6;
   };
 
   samba = callPackage ../servers/samba { };
