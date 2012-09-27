@@ -109,21 +109,19 @@ in
   compositeproto = attrs: attrs // {
     propagatedBuildInputs = [ xorg.fixesproto ];
   };
-  
+
   libXcomposite = attrs: attrs // {
     propagatedBuildInputs = [ xorg.libXfixes ];
   };
-  
+
   libXaw = attrs: attrs // {
     propagatedBuildInputs = [ xorg.libXmu ];
   };
-  
+
   libXft = attrs: attrs // {
     buildInputs = attrs.buildInputs ++
       [ xorg.xproto xorg.libX11 xorg.renderproto ];
-    # probably, fontconfig and freetype could be added
-    # pkgconfig seems to be nice, too...
-    propagatedBuildInputs = [ xorg.libXrender ];
+    propagatedBuildInputs = [ xorg.libXrender args.freetype args.fontconfig ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
 

@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postInstall =
+    ''
+      ln -s freetype2/freetype $out/include/freetype
+    '';
+
   meta = {
     description = "A font rendering engine";
     homepage = http://www.freetype.org/;
