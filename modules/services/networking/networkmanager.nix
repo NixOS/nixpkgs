@@ -3,12 +3,47 @@
 with pkgs.lib;
 
 let
+  cfg = config.networking.networkmanager;
 
-  stateDir = "/var/lib/NetworkManager";
+  stateDirs = "/var/lib/NetworkManager /var/lib/dhclient";
 
-in
+  configFile = pkgs.writeText "NetworkManager.conf" ''
+    [main]
+    plugins=keyfile
 
-{
+    [keyfile]
+    ${optionalString (config.networking.hostName != "") ''
+      hostname=${config.networking.hostName}
+    ''}
+
+    [logging]
+    level=WARN
+  '';
+
+  polkitConf = ''
+    [network-manager]
+    Identity=unix-group:networkmanager
+    Action=org.freedesktop.NetworkManager.*
+    ResultAny=yes
+    ResultInactive=no
+    ResultActive=yes
+
+    [modem-manager]
+    Identity=unix-group:networkmanager
+    Action=org.freedesktop.ModemManager.*
+    ResultAny=yes
+    ResultInactive=no
+    ResultActive=yes
+  '';
+
+  ipUpScript = pkgs.writeScript "01nixos-ip-up" ''
+    #!/bin/sh
+    if test "$2" = "up"; then
+      ${pkgs.upstart}/sbin/initctl emit ip-up "IFACE=$1"
+    fi
+  '';
+
+in {
 
   ###### interface
 
@@ -20,61 +55,62 @@ in
       description = ''
         Whether to use NetworkManager to obtain an IP adress and other
         configuration for all network interfaces that are not manually
-        configured.
+        configured. If enabled, a group <literal>networkmanager</literal>
+        will be created. Add all users that should have permission
+        to change network settings to this group.
       '';
     };
 
     networking.networkmanager.packages = mkOption {
-      default = [ pkgs.networkmanager ];
-      description =
-        ''
-          Packages providing NetworkManager plugins.
-        '';
+      default = [ ];
+      description = ''
+        Extra packages that provide NetworkManager plugins.
+      '';
+      merge = mergeListOption;
+      apply = list: [ pkgs.networkmanager pkgs.modemmanager ] ++ list;
     };
   };
 
 
   ###### implementation
 
-  config = mkIf config.networking.networkmanager.enable {
+  config = mkIf cfg.enable {
 
-    jobs.networkmanager =
-      { startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+    environment.etc = singleton {
+      source = ipUpScript;
+      target = "NetworkManager/dispatcher.d/01nixos-ip-up";
+    };
 
-        script =
-          ''
-            mkdir -m 755 -p /etc/NetworkManager
-            mkdir -m 700 -p /etc/NetworkManager/system-connections
-            mkdir -m 755 -p ${stateDir}
+    environment.systemPackages = cfg.packages;
 
-            if [[ ! -f /etc/NetworkManager/NetworkManager.conf ]]; then
-            cat <<-EOF > /etc/NetworkManager/NetworkManager.conf
-            [main]
-            plugins=keyfile
-            EOF
-            fi
+    users.extraGroups = singleton {
+      name = "networkmanager";
+      gid = config.ids.gids.networkmanager;
+    };
 
-            exec ${pkgs.networkmanager}/sbin/NetworkManager --no-daemon
-          '';
-      };
+    jobs.networkmanager = {
+      startOn = "started network-interfaces";
+      stopOn = "stopping network-interfaces";
 
-    environment.systemPackages = config.networking.networkmanager.packages;
-    services.dbus.packages = config.networking.networkmanager.packages;
+      path = [ pkgs.networkmanager ];
+
+      preStart = ''
+        mkdir -m 755 -p /etc/NetworkManager
+        mkdir -m 700 -p /etc/NetworkManager/system-connections
+        mkdir -m 755 -p ${stateDirs}
+      '';
+
+       exec = "NetworkManager --config=${configFile} --no-daemon";
+    };
+
     networking.useDHCP = false;
 
-    environment.etc = [
-      {
-        source = pkgs.writeScript "01nixos-ip-up"
-          ''
-          #!/bin/sh
-          if test "$2" = "up"; then
-            ${pkgs.upstart}/sbin/initctl emit ip-up "IFACE=$1"
-          fi
-          '';
-        target = "NetworkManager/dispatcher.d/01nixos-ip-up";
-      }
-    ];
+    networking.wireless.enable = true;
+
+    security.polkit.permissions = polkitConf;
+
+    services.dbus.packages = cfg.packages;
+
+    services.udev.packages = cfg.packages;
   };
 }
-
