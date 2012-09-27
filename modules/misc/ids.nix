@@ -126,6 +126,7 @@ in
     clamav = 51;
     fprot = 52;
     wwwrun = 54;
+    spamd = 55;
     networkmanager = 56;
 
     # When adding a gid, make sure it doesn't match an existing uid.
