@@ -3814,7 +3814,7 @@ let
       gtkmm;
   };
 
-  glib = callPackage ../development/libraries/glib/2.32.x.nix { };
+  glib = callPackage ../development/libraries/glib/2.34.x.nix { };
 
   glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
 
