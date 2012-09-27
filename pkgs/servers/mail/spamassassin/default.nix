@@ -27,9 +27,13 @@ buildPerlPackage rec {
   # for the PERL5LIB environment variable. Needs further investigation.
   makeFlags = "PERL_BIN=${perl}/bin/perl PERL_TAINT=no";
 
+  makeMakerFlags = "CONFDIR=/etc/spamassassin LOCALSTATEDIR=/var/lib/spamassassin";
+
   doCheck = false;
 
   postInstall = ''
+    mv "rules/"* $out/share/spamassassin/
+
     for n in "$out/bin/"*; do
       wrapProgram "$n" --prefix PERL5LIB : "$PERL5LIB"
     done
