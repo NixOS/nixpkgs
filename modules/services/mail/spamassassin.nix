@@ -21,6 +21,11 @@ in
         description = "Whether to run the SpamAssassin daemon.";
       };
 
+      debug = mkOption {
+        default = false;
+        description = "Whether to run the SpamAssassin daemon in debug mode.";
+      };
+
     };
 
   };
@@ -43,7 +48,7 @@ in
       description = "Spam Assassin Server";
       startOn = "started networking and filesystem";
       environment.TZ = config.time.timeZone;
-      exec = "${pkgs.spamassassin}/bin/spamd -D --username=spamd --pidfile=/var/run/spamd.pid";
+      exec = "${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --pidfile=/var/run/spamd.pid";
     };
 
   };
