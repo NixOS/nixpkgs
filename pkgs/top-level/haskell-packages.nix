@@ -654,6 +654,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
 
+  distributedProcessSimplelocalnet = callPackage ../development/libraries/haskell/distributed-process-simplelocalnet {};
+
   distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
 
   distributive = callPackage ../development/libraries/haskell/distributive {};
@@ -1142,7 +1144,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
+  networkMulticast = callPackage ../development/libraries/haskell/network-multicast {};
+
   networkTransport = callPackage ../development/libraries/haskell/network-transport {};
+
+  networkTransportTcp = callPackage ../development/libraries/haskell/network-transport-tcp {};
 
   newtype = callPackage ../development/libraries/haskell/newtype {};
 
