@@ -3871,6 +3871,8 @@ let
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
 
+  harfbuzz = callPackage ../development/libraries/harfbuzz { };
+
   hawknl = callPackage ../development/libraries/hawknl { };
 
   heimdal = callPackage ../development/libraries/kerberos/heimdal.nix { };
