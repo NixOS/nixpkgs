@@ -784,36 +784,6 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  game = buildPythonPackage rec {
-    name = "pygame-1.9.1";
-    src = fetchurl {
-      url = http://www.pygame.org/ftp/pygame-1.9.1release.tar.gz;
-      sha256 = "0cyl0ww4fjlf289pjxa53q4klyn55ajvkgymw0qrdgp4593raq52";
-    };
-    patches = [ ./pygame.patch ];
-    # auto confirming missing dependencies:
-    # PORTMIDI and PORTTIME still missing
-    patchPhase = ''
-      sed -i 's@raw_input(.*@"1"@' config_unix.py
-      unset patchPhase
-      patchPhase
-    '';
-    installCommand = "python setup.py install --prefix=$out";
-
-    propagatedBuildInputs = [
-      pkgs.SDL 
-      pkgs.SDL_mixer
-      pkgs.SDL_gfx
-      pkgs.SDL_net
-      pkgs.SDL_sound
-      pkgs.SDL_ttf
-      pkgs.SDL_image
-      pkgs.smpeg
-      pkgs.libpng
-      pkgs.libjpeg
-    ];
-  };
-
   genshi = buildPythonPackage {
     name = "genshi-0.6";
 
@@ -3036,15 +3006,6 @@ let pythonPackages = python.modules // rec {
       description = "Python framework for Unix command line programs.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
       platforms = python.meta.platforms;
-    };
-  };
-
-  serial = buildPythonPackage rec {
-    name = "pyserial-2.5";
-    doCheck = false;
-    src = fetchurl {
-      url = http://heanet.dl.sourceforge.net/project/pyserial/pyserial/2.5/pyserial-2.5.tar.gz;
-      sha256 = "04gmpfb43ppc8cf1bvkz8r1gl0nrxc38kpfdqs40ib0d1ql25pgd";
     };
   };
 
