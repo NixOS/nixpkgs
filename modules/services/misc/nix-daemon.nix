@@ -319,10 +319,6 @@ in
 
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
-        # Set up Nix.
-        chown root:nixbld /nix/store
-        chmod 1775 /nix/store
-
         # Nix initialisation.
         mkdir -m 0755 -p \
           /nix/var/nix/gcroots \
@@ -334,9 +330,10 @@ in
           /nix/var/log/nix/drvs \
           /nix/var/nix/channel-cache \
           /nix/var/nix/chroots
-        mkdir -m 1777 -p /nix/var/nix/gcroots/per-user
-        mkdir -m 1777 -p /nix/var/nix/profiles/per-user
-        mkdir -m 1777 -p /nix/var/nix/gcroots/tmp
+        mkdir -m 1777 -p \
+          /nix/var/nix/gcroots/per-user \
+          /nix/var/nix/profiles/per-user \
+          /nix/var/nix/gcroots/tmp
 
         ln -sf /nix/var/nix/profiles /nix/var/nix/gcroots/
         ln -sf /nix/var/nix/manifests /nix/var/nix/gcroots/

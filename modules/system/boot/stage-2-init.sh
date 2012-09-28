@@ -43,6 +43,8 @@ fi
 
 # Make /nix/store a read-only bind mount to enforce immutability of
 # the Nix store.
+chown root:nixbld /nix/store
+chmod 1775 /nix/store
 if [ -n "@readOnlyStore@" ]; then
     if ! mountpoint /nix/store; then
         mkdir -p /nix/rw-store
