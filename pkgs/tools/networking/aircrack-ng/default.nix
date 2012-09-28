@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url = "http://trac.aircrack-ng.org/svn/trunk";
     inherit rev;
-    sha256 = "0rwj2nk4nyy0l9dg6rpg2h5gpvcygs5irj4i6fdcsr8xf0blq7yw";
+    sha256 = "d16fd3a4e918fd6a855c0d0ae0c863247a45189e6ec35c0c7082d3d07b6438db";
   };
 
   buildInputs = [libpcap openssl zlib];
