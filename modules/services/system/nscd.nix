@@ -58,6 +58,8 @@ in
             Type=forking
             PIDFile=/run/nscd/nscd.pid
             Restart=always
+            ExecReload=${pkgs.glibc}/sbin/nscd --invalidate passwd
+            ExecReload=${pkgs.glibc}/sbin/nscd --invalidate group
             ExecReload=${pkgs.glibc}/sbin/nscd --invalidate hosts
           '';
       };

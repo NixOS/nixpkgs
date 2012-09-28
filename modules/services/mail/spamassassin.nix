@@ -21,6 +21,11 @@ in
         description = "Whether to run the SpamAssassin daemon.";
       };
 
+      debug = mkOption {
+        default = false;
+        description = "Whether to run the SpamAssassin daemon in debug mode.";
+      };
+
     };
 
   };
@@ -33,17 +38,23 @@ in
     # Allow users to run 'spamc'.
     environment.systemPackages = [ pkgs.spamassassin ];
 
-    users.extraUsers = singleton
-      { name = "spamd";
-        description = "Spam Assassin Daemon";
-        uid = config.ids.uids.spamd;
-      };
+    users.extraUsers = singleton {
+    name = "spamd";
+      description = "Spam Assassin Daemon";
+      uid = config.ids.uids.spamd;
+      group = "spamd";
+    };
+
+    users.extraGroups = singleton {
+      name = "spamd";
+      gid = config.ids.gids.spamd;
+    };
 
     jobs.spamd = {
       description = "Spam Assassin Server";
       startOn = "started networking and filesystem";
       environment.TZ = config.time.timeZone;
-      exec = "${pkgs.spamassassin}/bin/spamd -C /etc/spamassassin/init.pre --siteconfigpath=/etc/spamassassin --username=spamd --pidfile=/var/run/spamd.pid";
+      exec = "${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --nouser-config --virtual-config-dir=/var/lib/spamassassin/user-%u --allow-tell --pidfile=/var/run/spamd.pid";
     };
 
   };

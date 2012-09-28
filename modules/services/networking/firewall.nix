@@ -33,7 +33,9 @@ let
       # Helper command to manipulate both the IPv4 and IPv6 tables.
       ip46tables() {
         iptables "$@"
-        ip6tables "$@"
+        ${optionalString config.networking.enableIPv6 ''
+          ip6tables "$@"
+        ''}
       }
     '';
 
@@ -96,6 +98,15 @@ in
         '';
     };
 
+    networking.firewall.trustedInterfaces = mkOption {
+      type = types.list types.string;
+      description =
+        ''
+          Traffic coming in from these interfaces will be accepted
+          unconditionally.
+        '';
+    };
+
     networking.firewall.allowedTCPPorts = mkOption {
       default = [];
       example = [ 22 80 ];
@@ -152,6 +163,8 @@ in
   # they are changed, regardless of whether the start condition
   # holds).
   config = mkIf cfg.enable {
+
+    networking.firewall.trustedInterfaces = [ "lo" ];
 
     environment.systemPackages = [ pkgs.iptables ];
 
@@ -220,8 +233,10 @@ in
             # The "nixos-fw" chain does the actual work.
             ip46tables -N nixos-fw
 
-            # Accept all traffic on the loopback interface.
-            ip46tables -A nixos-fw -i lo -j nixos-fw-accept
+            # Accept all traffic on the trusted interfaces.
+            ${flip concatMapStrings cfg.trustedInterfaces (iface: ''
+              ip46tables -A nixos-fw -i ${iface} -j nixos-fw-accept
+            '')}
 
             # Accept packets from established or related connections.
             ip46tables -A nixos-fw -m conntrack --ctstate ESTABLISHED,RELATED -j nixos-fw-accept

@@ -7,8 +7,6 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.xfce;
 
-  isXfce48 = pkgs.xfce ? libxfce4ui;
-
 in
 
 {
@@ -45,8 +43,7 @@ in
       };
 
     environment.systemPackages =
-      [
-        pkgs.gtk # To get GTK+'s themes.
+      [ pkgs.gtk # To get GTK+'s themes.
         pkgs.hicolor_icon_theme
         pkgs.shared_mime_info
         pkgs.which # Needed by the xfce's xinitrc script.
@@ -70,8 +67,6 @@ in
         # "utilities-terminal" and "accessories-text-editor".
         pkgs.gnome.gnomeicontheme
         pkgs.desktop_file_utils
-      ]
-      ++ optionals isXfce48 [
         pkgs.xfce.libxfce4ui
         pkgs.xfce.garcon
         pkgs.xfce.thunar_volman
@@ -83,14 +78,14 @@ in
     environment.pathsToLink =
       [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" ];
 
-    environment.shellInit = optionalString isXfce48
+    environment.shellInit =
       ''
         export GIO_EXTRA_MODULES=${pkgs.xfce.gvfs}/lib/gio/modules
       '';
 
     # Enable helpful DBus services.
-    services.udisks = mkIf isXfce48 { enable = true; };
-    services.upower = mkIf (isXfce48 && config.powerManagement.enable) { enable = true; };
+    services.udisks.enable = true;
+    services.upower.enable = config.powerManagement.enable;
 
   };
 
