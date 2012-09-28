@@ -170,7 +170,6 @@ with (import ./release-lib.nix);
   libsmbios = linux;
   libtool = all;
   libtool_2 = all;
-  libxml2 = all;
   libxslt = all;
   lout = linux;
   lsh = linux;
