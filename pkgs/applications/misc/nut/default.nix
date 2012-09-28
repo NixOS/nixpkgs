@@ -1,13 +1,14 @@
-{stdenv, fetchurl, pkgconfig, neon, libusb, hal, openssl, udev}:
+{ stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev }:
 
 stdenv.mkDerivation {
   name = "nut-2.6.1";
+
   src = fetchurl {
     url = http://www.networkupstools.org/source/2.6/nut-2.6.1.tar.gz;
     sha256 = "f5c46b856c0cf5b7f0e4b22d82b670af64cc98717a90eaac8723dd402a181c00";
   };
 
-  buildInputs = [pkgconfig neon libusb hal openssl udev];
+  buildInputs = [ pkgconfig neon libusb openssl udev ];
 
   configureFlags = [
     "--with-all"

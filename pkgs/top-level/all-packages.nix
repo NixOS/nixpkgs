@@ -5624,14 +5624,6 @@ let
 
   gpm = callPackage ../servers/gpm { };
 
-  hal = callPackage ../os-specific/linux/hal { };
-
-  halevt = callPackage ../os-specific/linux/hal/hal-evt.nix { };
-
-  hal_info = callPackage ../os-specific/linux/hal/info.nix { };
-
-  hal_info_synaptics = callPackage ../os-specific/linux/hal/synaptics.nix { };
-
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
   hibernate = callPackage ../os-specific/linux/hibernate { };
