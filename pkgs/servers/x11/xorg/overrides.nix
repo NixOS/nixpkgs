@@ -235,15 +235,15 @@ in
     buildInputs = attrs.buildInputs ++
       [ args.zlib args.udev args.mesa args.dbus.libs
         xorg.xf86bigfontproto xorg.glproto xorg.xf86driproto
-        xorg.compositeproto xorg.scrnsaverproto xorg.resourceproto
-        xorg.xineramaproto xorg.xf86dgaproto
+        xorg.compositeproto xorg.xf86dgaproto
         xorg.dmxproto xorg.libdmx xorg.xf86vidmodeproto
         xorg.recordproto xorg.libXext xorg.pixman xorg.libXfont
         xorg.damageproto xorg.xcmiscproto xorg.xtrans xorg.bigreqsproto
       ];
     propagatedBuildInputs =
       [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto
-        xorg.dri2proto xorg.kbproto
+        xorg.dri2proto xorg.kbproto xorg.xineramaproto xorg.resourceproto
+        xorg.scrnsaverproto xorg.videoproto
       ];
     postInstall =
       ''

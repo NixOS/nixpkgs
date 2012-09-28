@@ -1928,11 +1928,11 @@ let
   })) // {inherit ;};
     
   xorgserver = (stdenv.mkDerivation ((if overrides ? xorgserver then overrides.xorgserver else x: x) {
-    name = "xorg-server-1.12.4";
+    name = "xorg-server-1.13.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.12.4.tar.bz2;
-      sha256 = "1xscr6rf0q15hv3hmm51xhwk0c0rx7a2swkj14ygp8vb60sprh4a";
+      url = mirror://xorg/individual/xserver/xorg-server-1.13.0.tar.bz2;
+      sha256 = "12pjis236ss3402cg1iy749cylajjp27m3j2jbwd8yh8075r32sl";
     };
     buildInputs = [pkgconfig renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ];
   })) // {inherit renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ;};
