@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     binary deepseq filepath HUnit hxtCharproperties hxtRegexXmlschema
     hxtUnicode mtl network parsec
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.fh-wedel.de/~si/HXmlToolbox/index.html";
     description = "A collection of tools for processing XML with Haskell";
