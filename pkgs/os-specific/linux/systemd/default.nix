@@ -6,11 +6,11 @@
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-192";
+  name = "systemd-193";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "03y3y1w3x7bx67jvdxryhns3h1g6nrllln46gqipp35n99alki2m";
+    sha256 = "1k8fmii15127y4b2kc9id2vkmrjdsbq3kv6fi308k72azbhnpnxr";
   };
 
   patches = [ ./reexec.patch ];
@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.freedesktop.org/wiki/Software/systemd";
     description = "A system and service manager for Linux";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
   };
 }
