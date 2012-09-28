@@ -1199,6 +1199,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   parallel_3_2_0_3 = callPackage ../development/libraries/haskell/parallel/3.2.0.3.nix {};
   parallel = self.parallel_3_2_0_3;
 
+  parallelIo = callPackage ../development/libraries/haskell/parallel-io {};
+
   parseargs = callPackage ../development/libraries/haskell/parseargs {};
 
   parsec_2_1_0_1 = callPackage ../development/libraries/haskell/parsec/2.1.0.1.nix {};
