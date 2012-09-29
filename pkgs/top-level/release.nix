@@ -136,8 +136,6 @@ with (import ./release-lib.nix);
   guile = linux;  # tests fail on Cygwin
   gv = linux;
   gzip = all;
-  hal = linux;
-  hal_info = linux;
   hddtemp = linux;
   hello = all;
   host = linux;

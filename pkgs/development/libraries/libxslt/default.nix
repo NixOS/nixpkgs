@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "A C library and tools to do XSL transformations";
     license = "bsd";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.platforms.eelco ];
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

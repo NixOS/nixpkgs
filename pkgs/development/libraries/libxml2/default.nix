@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     description = "A XML parsing library for C";
     license = "bsd";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.platforms.eelco ];
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }
