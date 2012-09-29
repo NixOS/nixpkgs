@@ -1,27 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, libusb1, zlib, autoreconfHook }:
+{ stdenv, fetchurl, pkgconfig, libusb1 }:
 
 let
 
   # Obtained from http://www.linux-usb.org/usb.ids.bz2.
   usbids = fetchurl {
-    url = http://nixos.org/tarballs/usb.ids.20120411.bz2;
-    sha256 = "0rgxancjd1krv9g817w1wlbg7k19i8mwx37qs1vw1f21xz49yvja";
+    url = http://nixos.org/tarballs/usb.ids.20120920.bz2;
+    sha256 = "0sz860g7grf6kx22p49s6j8h85c69ymcw16a8110klzfl9hl9hli";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  name = "usbutils-005";
-  
-  src = fetchurl {
-    url = mirror://debian/pool/main/u/usbutils/usbutils_005.orig.tar.gz;
-    sha256 = "05sxkm7b7lj8p8kr8kw68m49h66351s803z42233b8lssmc3wlra";
-  };
-  
-  buildInputs = [ pkgconfig libusb1 autoreconfHook ];
+  name = "usbutils-006";
 
-  preConfigure = "autoreconf -i";
-  
+  src = fetchurl {
+    url = mirror://kernel/linux/utils/usb/usbutils/usbutils-006.tar.xz;
+    sha256 = "03pd57vv8c6x0hgjqcbrxnzi14h8hcghmapg89p8k5zpwpkvbdfr";
+  };
+
+  buildInputs = [ pkgconfig libusb1 ];
+
   preBuild = "bunzip2 < ${usbids} > usb.ids";
 
   meta = {
