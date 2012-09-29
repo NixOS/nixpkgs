@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optionalString pythonSupport "--with-python=${python}";
 
+  buildInputs = stdenv.lib.optional pythonSupport [ python ];
+
   propagatedBuildInputs = [ zlib ];
 
   setupHook = ./setup-hook.sh;
