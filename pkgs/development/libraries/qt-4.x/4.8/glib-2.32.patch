@@ -10,15 +10,3 @@ diff -Naur qt-everywhere-opensource-src-4.8.2-orig/src/3rdparty/javascriptcore/J
  typedef struct _GCond GCond;
  #endif
  
-diff -Naur qt-everywhere-opensource-src-4.8.2-orig/src/3rdparty/webkit/Source/JavaScriptCore/wtf/gobject/GTypedefs.h qt-everywhere-opensource-src-4.8.2/src/3rdparty/webkit/Source/JavaScriptCore/wtf/gobject/GTypedefs.h
---- qt-everywhere-opensource-src-4.8.2-orig/src/3rdparty/webkit/Source/JavaScriptCore/wtf/gobject/GTypedefs.h	2012-04-26 15:46:14.000000000 -0400
-+++ qt-everywhere-opensource-src-4.8.2/src/3rdparty/webkit/Source/JavaScriptCore/wtf/gobject/GTypedefs.h	2012-07-14 22:46:24.671138454 -0400
-@@ -52,7 +52,7 @@
- typedef struct _GHashTable GHashTable;
- typedef struct _GInputStream GInputStream;
- typedef struct _GList GList;
--typedef struct _GMutex GMutex;
-+typedef union _GMutex GMutex;
- typedef struct _GPatternSpec GPatternSpec;
- typedef struct _GPollableOutputStream GPollableOutputStream;
- typedef struct _GSocketClient GSocketClient;
