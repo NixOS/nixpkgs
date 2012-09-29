@@ -65,7 +65,7 @@ in
         startOn = "ip-up or config-changed";
         task = true;
         path = [ pkgs.glibc ];
-        exec = ''
+        script = ''
           nscd --invalidate=passwd
           nscd --invalidate=group
           nscd --invalidate=hosts
