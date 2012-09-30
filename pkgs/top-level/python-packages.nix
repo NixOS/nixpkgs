@@ -33,11 +33,13 @@ let pythonPackages = python.modules // rec {
 
 
   afew = buildPythonPackage rec {
-    name = "afew-1.0pre";
+    rev = "6bb3915636aaf86f046a017ffffd9a4ef395e199";
+    name = "afew-1.0_${rev}";
+
     src = fetchurl {
-      url = "https://github.com/teythoon/afew/tarball/master";
+      url = "https://github.com/teythoon/afew/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "949710f8dcf503f42f2a2d77ea71e48ccf70155a764f75ad29cc93edc120809b";
+      sha256 = "74926d9ddfa69534cfbd08a82f0acccab2c649558062654d5d2ff2999d201384";
     };
 
     propagatedBuildInputs = [ notmuch pkgs.dbacl ];
@@ -59,12 +61,13 @@ let pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    name = "alot-0.3.1";
+    rev = "27c91058c49d8755d2813d5b78094f40f36ec905";
+    name = "alot-0.3.3_${rev}";
 
     src = fetchurl {
-      url = "https://github.com/pazz/alot/tarball/master";
+      url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "06683de36688615d3d526198c93133e1131897c888ffa31e83f1ad292eae57af";
+      sha256 = "67e1033aa91818b7fa4c3911430a4da0f73aca92c3e3832c010038cbf263eec2";
     };
 
     doCheck = false;
@@ -73,7 +76,7 @@ let pythonPackages = python.modules // rec {
 
     postInstall = ''
       wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file511}/lib
+        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file511}/lib:${pkgs.gpgme}/lib
     '';
 
     meta = {
@@ -698,6 +701,26 @@ let pythonPackages = python.modules // rec {
       description = "A concurrent networking library for Python";
     };
   };
+
+
+  flake8 = buildPythonPackage (rec {
+    name = "flake8-1.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
+      md5 = "64acc2c905178f6d6817d88574407fb5";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "code checking using pep8 and pyflakes.";
+      homepage = http://pypi.python.org/pypi/flake8;
+      license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
+    };
+  });
 
 
   flask = buildPythonPackage {
@@ -2727,13 +2750,13 @@ let pythonPackages = python.modules // rec {
 
 
   urwid = buildPythonPackage (rec {
-    name = "urwid-1.0.1";
+    name = "urwid-1.0.2";
 
     doCheck = false;
 
     src = fetchurl {
       url = "http://excess.org/urwid/${name}.tar.gz";
-      md5 = "828f7144b94920205e755c249d2e297f";
+      md5 = "00542bbd15fae7ea60b02a7570edee2b";
     };
 
     meta = {

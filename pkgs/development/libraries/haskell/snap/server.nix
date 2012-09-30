@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     filepath MonadCatchIOTransformers mtl network snapCore text time
     transformers unixCompat
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "A fast, iteratee-based, epoll-enabled web server for the Snap Framework";

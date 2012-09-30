@@ -6,20 +6,14 @@
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-191";
+  name = "systemd-193";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "0r0xz8dksacm20516kakqf6xchydhcc1lkvz3m75z1gbl6sa581g";
+    sha256 = "1k8fmii15127y4b2kc9id2vkmrjdsbq3kv6fi308k72azbhnpnxr";
   };
 
-  patches = [ ./reexec.patch ] ++
-            # Remove this patch after the next update.
-            stdenv.lib.optional (stdenv.system == "i686-linux") (fetchurl {
-              url = "https://bugs.freedesktop.org/attachment.cgi?id=67621";
-	      name = "fix-32-bit-build.patch";
-	      sha256 = "1i4xn6lc6iapaasd2lz717b1zrq5ds5g18i7m509fgfwy7w7x95l";
-            });
+  patches = [ ./reexec.patch ];
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
@@ -94,8 +88,9 @@ stdenv.mkDerivation rec {
   passthru.interfaceVersion = 2;
 
   meta = {
-    homepage = http://www.freedesktop.org/wiki/Software/systemd;
+    homepage = "http://www.freedesktop.org/wiki/Software/systemd";
     description = "A system and service manager for Linux";
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco stdenv.lib.maintainers.simons ];
   };
 }
