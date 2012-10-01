@@ -2,9 +2,9 @@
 
 with pkgs.lib;
 
-{
+rec {
 
-  serviceOptions = {
+  unitOptions = {
 
     description = mkOption {
       default = "";
@@ -62,6 +62,22 @@ with pkgs.lib;
       description = "Units that want (i.e. depend on) this unit.";
     };
 
+    unitConfig = mkOption {
+      default = {};
+      example = { RequiresMountsFor = "/data"; };
+      type = types.attrs;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Unit]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.unit</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+  serviceOptions = unitOptions // {
+
     environment = mkOption {
       default = {};
       type = types.attrs;
@@ -77,18 +93,6 @@ with pkgs.lib;
         environment variable.  Both the <filename>bin</filename>
         and <filename>sbin</filename> subdirectories of each
         package are added.
-      '';
-    };
-
-    unitConfig = mkOption {
-      default = {};
-      example = { RequiresMountsFor = "/data"; };
-      type = types.attrs;
-      description = ''
-        Each attribute in this set specifies an option in the
-        <literal>[Unit]</literal> section of the unit.  See
-        <citerefentry><refentrytitle>systemd.unit</refentrytitle>
-        <manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 

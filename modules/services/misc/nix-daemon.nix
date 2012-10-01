@@ -246,17 +246,11 @@ in
           target = "nix.machines";
         };
 
-    boot.systemd.units."nix-daemon.socket" =
-      { wantedBy = [ "sockets.target" ];
-        text =
-          ''
-            [Unit]
-            Description=Nix Daemon Socket
-            Before=multi-user.target
-
-            [Socket]
-            ListenStream=/nix/var/nix/daemon-socket/socket
-          '';
+    boot.systemd.sockets."nix-daemon" =
+      { description = "Nix Daemon Socket";
+        wantedBy = [ "sockets.target" ];
+        before = [ "multi-user.target" ];
+        socketConfig.ListenStream = "/nix/var/nix/daemon-socket/socket";
       };
 
     boot.systemd.services."nix-daemon" =

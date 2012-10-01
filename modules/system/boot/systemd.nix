@@ -202,9 +202,17 @@ let
         (if isList value then value else [value]))
         as));
 
+  targetToUnit = name: def:
+    { inherit (def) wantedBy;
+      text =
+        ''
+          [Unit]
+          ${attrsToSection def.unitConfig}
+        '';
+    };
+
   serviceToUnit = name: def:
     { inherit (def) wantedBy;
-
       text =
         ''
           [Unit]
@@ -237,6 +245,18 @@ let
           ''}
 
           ${attrsToSection def.serviceConfig}
+        '';
+    };
+
+  socketToUnit = name: def:
+    { inherit (def) wantedBy;
+      text =
+        ''
+          [Unit]
+          ${attrsToSection def.unitConfig}
+
+          [Socket]
+          ${attrsToSection def.socketConfig}
         '';
     };
 
@@ -319,11 +339,37 @@ in
       description = "Packages providing systemd units.";
     };
 
+    boot.systemd.targets = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = unitOptions;
+      description = "Definition of systemd target units.";
+    };
+
     boot.systemd.services = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
       options = [ serviceOptions serviceConfig ];
-      description = "Definition of systemd services.";
+      description = "Definition of systemd service units.";
+    };
+
+    boot.systemd.sockets = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = unitOptions // {
+        socketConfig = mkOption {
+          default = {};
+          example = { ListenStream = "/run/my-socket"; };
+          type = types.attrs;
+          description = ''
+            Each attribute in this set specifies an option in the
+            <literal>[Socket]</literal> section of the unit.  See
+            <citerefentry><refentrytitle>systemd.socket</refentrytitle>
+            <manvolnum>5</manvolnum></citerefentry> for details.
+          '';
+        };
+      };
+      description = "Definition of systemd socket units.";
     };
 
     boot.systemd.defaultUnit = mkOption {
@@ -385,7 +431,9 @@ in
     boot.systemd.units =
       { "rescue.service".text = rescueService; }
       // { "fs.target" = { text = fsTarget; wantedBy = [ "multi-user.target" ]; }; }
-      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services;
+      // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
+      // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
+      // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets;
 
   };
 
