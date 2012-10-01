@@ -1,7 +1,7 @@
 {stdenv, fetchgit, python}:
 
 let pkgname = "youtube-dl";
-    pkgver  = "2012.02.27";
+    pkgver  = "2012.09.27";
     
 in
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchgit {
     url = "git://github.com/rg3/${pkgname}";
     rev = "refs/tags/${pkgver}";
-    sha256 = "17270ba14f42e8f2813bc6a0eb3674e51592eede69612e156e7d99a96fd147ce";
+    sha256 = "a98f3339301324ddd6620f7b1353abed807cd8dea5586d6901d7fe69bc6a397c";
   };
 
   buildInputs = [python];
