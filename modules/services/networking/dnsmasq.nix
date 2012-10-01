@@ -49,7 +49,7 @@ in
 
         daemonType = "daemon";
 
-        exec = "${dnsmasq}/bin/dnsmasq -R ${serversParam}";
+        exec = "${dnsmasq}/bin/dnsmasq -R ${serversParam} -o";
       };
 
   };
