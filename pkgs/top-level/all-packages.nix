@@ -5699,6 +5699,8 @@ let
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
+  linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
+
   linuxHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
   linuxHeaders33 = callPackage ../os-specific/linux/kernel-headers/3.3.5.nix { };
