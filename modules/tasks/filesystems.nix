@@ -64,9 +64,6 @@ in
         specify a volume label (<literal>label</literal>) for file
         systems that support it, such as ext2/ext3 (see <command>mke2fs
         -L</command>).
-
-        <literal>autocreate</literal> forces <literal>mountPoint</literal> to be created with
-        <command>mkdir -p</command> .
       '';
 
       type = types.list types.optionSet;
@@ -106,15 +103,6 @@ in
           type = types.string;
           merge = pkgs.lib.concatStringsSep ",";
           description = "Options used to mount the file system.";
-        };
-
-        autocreate = mkOption {
-          default = false;
-          type = types.bool;
-          description = ''
-            Automatically create the mount point defined in
-            <option>fileSystems.*.mountPoint</option>.
-          '';
         };
 
         autoFormat = mkOption {
@@ -217,12 +205,6 @@ in
                   mkfs.${fs.fsType} "${fs.device}"
                 fi
               fi
-            '')}
-
-            # Create missing mount points.  Note that this won't work
-            # if the mount point is under another mount point.
-            ${flip concatMapStrings config.fileSystems (fs: optionalString fs.autocreate ''
-              mkdir -p -m 0755 '${fs.mountPoint}'
             '')}
 
             # Create missing swapfiles.
