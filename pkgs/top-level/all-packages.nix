@@ -3504,6 +3504,10 @@ let
     vpxSupport = if !stdenv.isMips then true else false;
   };
 
+  ffmpeg_1_0 = callPackage ../development/libraries/ffmpeg/1.0.nix {
+    vpxSupport = if !stdenv.isMips then true else false;
+  };
+
   fftw = callPackage ../development/libraries/fftw {
     singlePrecision = false;
   };
@@ -5438,7 +5442,7 @@ let
 
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
-      HTTPDate MailDKIM;
+      HTTPDate MailDKIM LWP IOSocketSSL IOSocketInet6;
   };
 
   samba = callPackage ../servers/samba { };
@@ -5842,6 +5846,19 @@ let
       ];
   };
 
+  linux_3_6 = makeOverridable (import ../os-specific/linux/kernel/linux-3.6.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [
+        kernelPatches.sec_perm_2_6_24
+#       kernelPatches.aufs3_5
+#       kernelPatches.perf3_5
+      ] ++ lib.optionals (platform.kernelArch == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+      ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -5967,6 +5984,7 @@ let
   linuxPackages_3_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_3 pkgs.linuxPackages_3_3);
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 pkgs.linuxPackages_3_4);
   linuxPackages_3_5 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_5 pkgs.linuxPackages_3_5);
+  linuxPackages_3_6 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6 pkgs.linuxPackages_3_6);
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -6907,7 +6925,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox12Pkgs;
+  firefoxPkgs = pkgs.firefox15Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
@@ -6920,12 +6938,6 @@ let
   };
 
   firefox12Wrapper = wrapFirefox { browser = firefox12Pkgs.firefox; };
-
-  firefox13Pkgs = callPackage ../applications/networking/browsers/firefox/13.0.nix {
-    inherit (gnome) libIDL;
-  };
-
-  firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
   firefox15Pkgs = callPackage ../applications/networking/browsers/firefox/15.0.nix {
     inherit (gnome) libIDL;
@@ -7872,20 +7884,21 @@ let
       inherit stdenv makeWrapper makeDesktopItem browser browserName desktopName nameSuffix icon;
       plugins =
         let
-          enableAdobeFlash = config.browserNameenableAdobeFlash or true;
-          enableGnash = config.browserNameenableGnash or false;
+          cfg = stdenv.lib.attrByPath [ browserName ] {} config;
+          enableAdobeFlash = cfg.enableAdobeFlash or true;
+          enableGnash = cfg.enableGnash or false;
         in
          assert !(enableGnash && enableAdobeFlash);
          ([ ]
           ++ lib.optional enableGnash gnash
           ++ lib.optional enableAdobeFlash flashplayer
           # RealPlayer is disabled by default for legal reasons.
-          ++ lib.optional (system != "i686-linux" && config.browserNameenableRealPlayer or false) RealPlayer
-          ++ lib.optional (config.browserNameenableDjvu or false) (djview4)
-          ++ lib.optional (config.browserNameenableMPlayer or false) (MPlayerPlugin browser)
-          ++ lib.optional (config.browserNameenableGeckoMediaPlayer or false) gecko_mediaplayer
-          ++ lib.optional (supportsJDK && config.browserNamejre or false && jrePlugin ? mozillaPlugin) jrePlugin
-          ++ lib.optional (config.browserNameenableGoogleTalkPlugin or false) google_talk_plugin
+          ++ lib.optional (system != "i686-linux" && cfg.enableRealPlayer or false) RealPlayer
+          ++ lib.optional (cfg.enableDjvu or false) (djview4)
+          ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
+          ++ lib.optional (cfg.enableGeckoMediaPlayer or false) gecko_mediaplayer
+          ++ lib.optional (supportsJDK && cfg.jre or false && jrePlugin ? mozillaPlugin) jrePlugin
+          ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
          );
       libs =
         if config.browserNameenableQuakeLive or false

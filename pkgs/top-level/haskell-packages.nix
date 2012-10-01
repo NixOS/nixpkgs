@@ -652,6 +652,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
+  distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
+
+  distributedProcessSimplelocalnet = callPackage ../development/libraries/haskell/distributed-process-simplelocalnet {};
+
+  distributedStatic = callPackage ../development/libraries/haskell/distributed-static {};
+
   distributive = callPackage ../development/libraries/haskell/distributive {};
 
   dlist = callPackage ../development/libraries/haskell/dlist {};
@@ -1138,6 +1144,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
+  networkMulticast = callPackage ../development/libraries/haskell/network-multicast {};
+
+  networkTransport = callPackage ../development/libraries/haskell/network-transport {};
+
+  networkTransportTcp = callPackage ../development/libraries/haskell/network-transport-tcp {};
+
   newtype = callPackage ../development/libraries/haskell/newtype {};
 
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
@@ -1186,6 +1198,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   parallel_3_2_0_2 = callPackage ../development/libraries/haskell/parallel/3.2.0.2.nix {};
   parallel_3_2_0_3 = callPackage ../development/libraries/haskell/parallel/3.2.0.3.nix {};
   parallel = self.parallel_3_2_0_3;
+
+  parallelIo = callPackage ../development/libraries/haskell/parallel-io {};
 
   parseargs = callPackage ../development/libraries/haskell/parseargs {};
 
@@ -1276,6 +1290,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   randomSource = callPackage ../development/libraries/haskell/random-source {};
 
   randomShuffle = callPackage ../development/libraries/haskell/random-shuffle {};
+
+  rank1dynamic = callPackage ../development/libraries/haskell/rank1dynamic {};
 
   ranges = callPackage ../development/libraries/haskell/ranges {};
 
