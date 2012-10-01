@@ -343,7 +343,6 @@ in
         { source = pkgs.writeText "systemd.conf"
             ''
               [Manager]
-              JoinControllers=cpu,cpuacct net_cls,netprio
             '';
           target = "systemd/system.conf";
         }
