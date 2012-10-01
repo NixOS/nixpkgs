@@ -156,7 +156,7 @@ in
     environment.systemPackages = [postgresql];
 
     boot.systemd.services.postgresql =
-      { description = "PostgreSQL server";
+      { description = "PostgreSQL";
 
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" "fs.target" ];
@@ -200,7 +200,7 @@ in
         postStart =
           ''
             while ! psql postgres -c ""; do
-                sleep 1
+                sleep 0.1
             done
           '';
 
