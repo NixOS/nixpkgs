@@ -22,8 +22,6 @@ let
 
   postgresql = postgresqlAndPlugins cfg.package;
 
-  run = "su -s ${pkgs.stdenv.shell} postgres";
-
   flags = optional cfg.enableTCPIP "-i";
 
   # The main PostgreSQL configuration file.
@@ -157,7 +155,7 @@ in
 
     environment.systemPackages = [postgresql];
 
-    jobs.postgresql =
+    boot.systemd.services.postgresql =
       { description = "PostgreSQL server";
 
         wantedBy = [ "multi-user.target" ];
@@ -176,14 +174,27 @@ in
             if ! test -e ${cfg.dataDir}; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R postgres ${cfg.dataDir}
-                ${run} -c 'initdb -U root'
+                su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
                 rm -f ${cfg.dataDir}/*.conf
             fi
 
             ln -sfn ${configFile} ${cfg.dataDir}/postgresql.conf
           ''; # */
 
-        exec = "${run} -c 'postgres ${toString flags}'";
+        serviceConfig =
+          { ExecStart = "@${postgresql}/bin/postgres postgres ${toString flags}";
+            User = "postgres";
+            Group = "postgres";
+            PermissionsStartOnly = true;
+
+            # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
+            # http://www.postgresql.org/docs/current/static/server-shutdown.html
+            KillSignal = "SIGINT";
+
+            # Give Postgres a decent amount of time to clean up after
+            # receiving systemd's SIGINT.
+            TimeoutSec = 60;
+          };
 
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
@@ -192,16 +203,6 @@ in
                 sleep 1
             done
           '';
-
-        serviceConfig =
-          { # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
-            # http://www.postgresql.org/docs/current/static/server-shutdown.html
-            KillSignal = "SIGINT";
-
-            # Give Postgres a decent amount of time to clean up after
-            # receiving systemd's SIGINT.
-            TimeoutSec = 60;
-          };
       };
 
   };
