@@ -53,15 +53,16 @@ in
           '';
 
         serviceConfig =
-          ''
-            ExecStart=@${pkgs.glibc}/sbin/nscd nscd -f ${./nscd.conf}
-            Type=forking
-            PIDFile=/run/nscd/nscd.pid
-            Restart=always
-            ExecReload=${pkgs.glibc}/sbin/nscd --invalidate passwd
-            ExecReload=${pkgs.glibc}/sbin/nscd --invalidate group
-            ExecReload=${pkgs.glibc}/sbin/nscd --invalidate hosts
-          '';
+          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${./nscd.conf}";
+            Type = "forking";
+            PIDFile = "/run/nscd/nscd.pid";
+            Restart = "always";
+            ExecReload =
+              [ "${pkgs.glibc}/sbin/nscd --invalidate passwd"
+                "${pkgs.glibc}/sbin/nscd --invalidate group"
+                "${pkgs.glibc}/sbin/nscd --invalidate hosts"
+              ];
+          };
       };
 
   };

@@ -177,8 +177,30 @@ let
           pkgs.gnused
           systemd
         ];
+      unitConfig =
+        { Requires = concatStringsSep " " config.requires;
+          Wants = concatStringsSep " " config.wants;
+          After = concatStringsSep " " config.after;
+          Before = concatStringsSep " " config.before;
+          PartOf = concatStringsSep " " config.partOf;
+        } // optionalAttrs (config.description != "")
+          { Description = config.description;
+          };
     };
   };
+
+  toOption = x:
+    if x == true then "true"
+    else if x == false then "false"
+    else toString x;
+
+  attrsToSection = as:
+    concatStrings (concatLists (mapAttrsToList (name: value:
+      map (x: ''
+          ${name}=${toOption x}
+        '')
+        (if isList value then value else [value]))
+        as));
 
   serviceToUnit = name: def:
     { inherit (def) wantedBy;
@@ -186,15 +208,7 @@ let
       text =
         ''
           [Unit]
-          ${optionalString (def.description != "") ''
-            Description=${def.description}
-          ''}
-          Requires=${concatStringsSep " " def.requires}
-          Wants=${concatStringsSep " " def.wants}
-          After=${concatStringsSep " " def.after}
-          Before=${concatStringsSep " " def.before}
-          PartOf=${concatStringsSep " " def.partOf}
-          ${def.unitConfig}
+          ${attrsToSection def.unitConfig}
 
           [Service]
           Environment=PATH=${def.path}
@@ -215,7 +229,7 @@ let
             ''}
           ''}
 
-          ${def.serviceConfig}
+          ${attrsToSection def.serviceConfig}
         '';
     };
 

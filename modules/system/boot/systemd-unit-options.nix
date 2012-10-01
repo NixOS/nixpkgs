@@ -81,21 +81,28 @@ with pkgs.lib;
     };
 
     unitConfig = mkOption {
-      default = "";
-      type = types.string;
+      default = {};
+      example = { RequiresMountsFor = "/data"; };
+      type = types.attrs;
       description = ''
-        Contents of the <literal>[Unit]</literal> section of the unit.
-        See <citerefentry><refentrytitle>systemd.unit</refentrytitle>
+        Each attribute in this set specifies an option in the
+        <literal>[Unit]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.unit</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
     serviceConfig = mkOption {
-      default = "";
-      type = types.string;
+      default = {};
+      example =
+        { StartLimitInterval = 10;
+          RestartSec = 5;
+        };
+      type = types.attrs;
       description = ''
-        Contents of the <literal>[Service]</literal> section of the unit.
-        See <citerefentry><refentrytitle>systemd.service</refentrytitle>
+        Each attribute in this set specifies an option in the
+        <literal>[Service]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.service</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };

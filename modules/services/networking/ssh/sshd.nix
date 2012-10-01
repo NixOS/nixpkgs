@@ -321,11 +321,8 @@ in
 
         script = mkAuthkeyScript;
 
-        serviceConfig =
-          ''
-            Type=oneshot
-            RemainAfterExit=true
-          '';
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
       };
 
     boot.systemd.services.sshd =
@@ -349,15 +346,14 @@ in
           '';
 
         serviceConfig =
-          ''
-            ExecStart=\
-              ${pkgs.openssh}/sbin/sshd -D -h ${cfg.hostKeyPath} \
-                -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
-            Restart=always
-            Type=simple
-            KillMode=process
-            PIDFile=/run/sshd.pid
-          '';
+          { ExecStart =
+              "${pkgs.openssh}/sbin/sshd -D -h ${cfg.hostKeyPath} " +
+              "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
+            Restart = "always";
+            Type = "simple";
+            KillMode = "process";
+            PIDFile = "/run/sshd.pid";
+          };
       };
 
     networking.firewall.allowedTCPPorts = cfg.ports;

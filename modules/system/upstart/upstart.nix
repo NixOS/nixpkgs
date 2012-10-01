@@ -54,7 +54,7 @@ let
         '';
     in {
 
-      inherit (job) description requires wants before partOf environment path restartIfChanged;
+      inherit (job) description requires wants before partOf environment path restartIfChanged unitConfig;
 
       after =
         (if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else
@@ -72,40 +72,23 @@ let
          [ "multi-user.target" ]) ++ job.wantedBy;
 
       serviceConfig =
-        ''
-          ${job.serviceConfig}
-
-          ${optionalString (job.preStart != "" && (job.script != "" || job.exec != "")) ''
-            ExecStartPre=${preStartScript}
-          ''}
-
-          ${optionalString (job.preStart != "" && job.script == "" && job.exec == "") ''
-            ExecStart=${preStartScript}
-          ''}
-
-          ${optionalString (job.script != "" || job.exec != "") ''
-            ExecStart=${startScript}
-          ''}
-
-          ${optionalString (job.postStart != "") ''
-            ExecStartPost=${postStartScript}
-          ''}
-
-          ${optionalString (job.preStop != "") ''
-            ExecStop=${preStopScript}
-          ''}
-
-          ${optionalString (job.postStop != "") ''
-            ExecStopPost=${postStopScript}
-          ''}
-
-          ${if job.script == "" && job.exec == "" then "Type=oneshot\nRemainAfterExit=true" else
-            if job.daemonType == "fork" then "Type=forking\nGuessMainPID=true" else
-            if job.daemonType == "none" then "" else
-            throw "invalid daemon type `${job.daemonType}'"}
-
-          ${optionalString (!job.task && job.respawn) "Restart=always"}
-        '';
+        job.serviceConfig
+        // optionalAttrs (job.preStart != "" && (job.script != "" || job.exec != ""))
+          { ExecStartPre = preStartScript; }
+        // optionalAttrs (job.script != "" || job.exec != "")
+          { ExecStart = startScript; }
+        // optionalAttrs (job.postStart != "")
+          { ExecStartPost = postStartScript; }
+        // optionalAttrs (job.preStop != "")
+          { ExecStop = preStopScript; }
+        // optionalAttrs (job.postStop != "")
+          { ExecStopPost = postStopScript; }
+        // (if job.script == "" && job.exec == "" then { Type = "oneshot"; RemainAfterExit = true; } else
+            if job.daemonType == "fork" then { Type = "forking"; GuessMainPID = true; } else
+            if job.daemonType == "none" then { } else
+            throw "invalid daemon type `${job.daemonType}'")
+        // optionalAttrs (!job.task && job.respawn)
+          { Restart = "always"; };
     };
 
 

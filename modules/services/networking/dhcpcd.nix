@@ -91,7 +91,7 @@ in
 
   config = mkIf config.networking.useDHCP {
 
-    jobs.dhcpcd =
+    boot.systemd.services.dhcpcd =
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ];
@@ -99,14 +99,12 @@ in
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
-        daemonType = "fork";
-
-        exec = "dhcpcd --config ${dhcpcdConf}";
-
         serviceConfig =
-          ''
-            ExecReload=${dhcpcd}/sbin/dhcpcd --rebind
-          '';
+          { Type = "forking";
+            PIDFile = "/run/dhcpcd.pid";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --config ${dhcpcdConf}";
+            ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
+          };
       };
 
     environment.systemPackages = [ dhcpcd ];

@@ -258,7 +258,7 @@ in
             ListenStream=/nix/var/nix/daemon-socket/socket
           '';
       };
-     
+
     boot.systemd.services."nix-daemon" =
       { description = "Nix Daemon";
 
@@ -268,16 +268,14 @@ in
         environment = cfg.envVars;
 
         serviceConfig =
-          ''
-            ExecStart=${nix}/bin/nix-worker --daemon
-            KillMode=process
-            PIDFile=/run/sshd.pid
-            Nice=${toString cfg.daemonNiceLevel}
-            IOSchedulingPriority=${toString cfg.daemonIONiceLevel}
-            LimitNOFILE=4096
-          '';
+          { ExecStart = "${nix}/bin/nix-worker --daemon";
+            KillMode = "process";
+            Nice = cfg.daemonNiceLevel;
+            IOSchedulingPriority = cfg.daemonIONiceLevel;
+            LimitNOFILE = 4096;
+          };
       };
-     
+
     nix.envVars =
       { NIX_CONF_DIR = "/etc/nix";
 

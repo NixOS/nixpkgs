@@ -106,8 +106,8 @@ in
 
     # FIXME: restarting syslog seems to break journal logging.
     boot.systemd.services.syslog =
-      { description = "Syslog daemon";
-      
+      { description = "Syslog Daemon";
+
         requires = [ "syslog.socket" ];
 
         wantedBy = [ "multi-user.target" "syslog.target" ];
@@ -115,11 +115,10 @@ in
         environment.TZ = config.time.timeZone;
 
         serviceConfig =
-          ''
-            ExecStart=${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n
+          { ExecStart = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
             # Prevent syslogd output looping back through journald.
-            StandardOutput=null
-          '';
+            StandardOutput = "null";
+          };
       };
 
   };

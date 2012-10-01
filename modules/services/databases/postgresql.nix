@@ -194,15 +194,14 @@ in
           '';
 
         serviceConfig =
-          ''
-            # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
+          { # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
             # http://www.postgresql.org/docs/current/static/server-shutdown.html
-            KillSignal=SIGINT
+            KillSignal = "SIGINT";
 
             # Give Postgres a decent amount of time to clean up after
             # receiving systemd's SIGINT.
-            TimeoutSec=60
-          '';
+            TimeoutSec = 60;
+          };
       };
 
   };
