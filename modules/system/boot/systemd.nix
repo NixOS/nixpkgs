@@ -229,6 +229,13 @@ let
             ''}
           ''}
 
+          ${optionalString (def.postStart != "") ''
+            ExecStartPost=${makeJobScript "${name}-poststart.sh" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${def.postStart}
+            ''}
+          ''}
+
           ${attrsToSection def.serviceConfig}
         '';
     };

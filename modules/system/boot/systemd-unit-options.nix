@@ -122,6 +122,15 @@ with pkgs.lib;
       '';
     };
 
+    postStart = mkOption {
+      type = types.string;
+      default = "";
+      description = ''
+        Shell commands executed after the service's main process
+        is started.
+      '';
+    };
+
     restartIfChanged = mkOption {
       type = types.bool;
       default = true;
