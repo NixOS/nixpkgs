@@ -75,6 +75,8 @@ let
         job.serviceConfig
         // optionalAttrs (job.preStart != "" && (job.script != "" || job.exec != ""))
           { ExecStartPre = preStartScript; }
+        // optionalAttrs (job.preStart != "" && job.script == "" && job.exec == "")
+          { ExecStart = preStartScript; }
         // optionalAttrs (job.script != "" || job.exec != "")
           { ExecStart = startScript; }
         // optionalAttrs (job.postStart != "")
