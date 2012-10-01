@@ -203,6 +203,8 @@ in
                 sleep 1
             done
           '';
+
+        unitConfig.RequiresMountsFor = "${cfg.dataDir}";
       };
 
   };
