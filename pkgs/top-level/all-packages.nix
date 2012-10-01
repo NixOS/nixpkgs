@@ -3500,6 +3500,10 @@ let
     vpxSupport = if !stdenv.isMips then true else false;
   };
 
+  ffmpeg_1_0 = callPackage ../development/libraries/ffmpeg/1.0.nix {
+    vpxSupport = if !stdenv.isMips then true else false;
+  };
+
   fftw = callPackage ../development/libraries/fftw {
     singlePrecision = false;
   };
