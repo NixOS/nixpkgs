@@ -925,18 +925,21 @@ let pythonPackages = python.modules // rec {
 
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.6.0";
+    name = "httplib2-0.7.6";
 
     src = fetchurl {
       url = "http://httplib2.googlecode.com/files/${name}.tar.gz";
-      sha256 = "134pldyxayc0x4akzzvkciz2kj1w2dsim1xvd9b1qrpmba70dpjq";
+      sha256 = "baa7bf431fa9d3c1016562de717e1ebb322a99df72a2918f6b5b8f65fa65bc2e";
     };
 
     doCheck = false; # doesn't have a test
 
     meta = {
-      homepage = http://code.google.com/p/httplib2/;
+      homepage = "http://code.google.com/p/httplib2";
       description = "A comprehensive HTTP client library";
+      license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
     };
   };
 
@@ -1442,6 +1445,26 @@ let pythonPackages = python.modules // rec {
     meta = {
       description = "Scientific tools for Python";
       homepage = "http://numpy.scipy.org/";
+    };
+  });
+
+  oauth2 = buildPythonPackage (rec {
+    name = "auth2-1.5.211";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/o/oauth2/oauth2-1.5.211.tar.gz";
+      sha256 = "82a38f674da1fa496c0fc4df714cbb058540bed72a30c50a2e344b0d984c4d21";
+    };
+
+    propagatedBuildInputs = [ httplib2  ];
+    doCheck = false;
+
+    meta = {
+      homepage = "https://github.com/simplegeo/python-oauth2";
+      description = "library for OAuth version 1.0";
+      license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = stdenv.lib.platforms.linux;
     };
   });
 
@@ -2678,6 +2701,45 @@ let pythonPackages = python.modules // rec {
       license = "BSD";
     };
   };
+
+  turses = buildPythonPackage (rec {
+    name = "turses-0.2.5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
+      sha256 = "fbbc0ca93324535bcafa8434395caded8047e40c25d7a4004806415dd6ca023f";
+    };
+
+    propagatedBuildInputs = [ oauth2 urwid tweepy ];
+    doCheck = false;
+
+    meta = {
+      homepage = "https://github.com/alejandrogomez/turses";
+      description = "A Twitter client for the console.";
+      license = pkgs.lib.licenses.gpl3;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  });
+
+  tweepy = buildPythonPackage (rec {
+    name = "tweepy-1.11";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
+      sha256 = "2b9fa225e9254e2cbbb01e59c6e92d9c42e5d41d97e8c74dee93eb09babffde5";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "https://github.com/tweepy/tweepy";
+      description = "Twitter library for python";
+      license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = stdenv.lib.platforms.linux;
+    };
+  });
 
   twisted = buildPythonPackage rec {
     name = "twisted-10.2.0";

@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
       pkgconfig python pythonDBus
     ] ++ (stdenv.lib.optional firewireSupport ffado);
 
+  patches = ./ffado_setbuffsize-jack2.patch;
+
   configurePhase = ''
     cd jack-1.9.8
     python waf configure --prefix=$out --dbus --alsa ${if firewireSupport then "--firewire" else ""}
