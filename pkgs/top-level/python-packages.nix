@@ -1650,6 +1650,25 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  polib = buildPythonPackage rec {
+    name = "polib-${version}";
+    version = "1.0.1";
+
+    src = fetchurl {
+      url = "http://bitbucket.org/izi/polib/downloads/${name}.tar.gz";
+      sha256 = "1sr2bb3g7rl7gr6156j5qv71kg06q1x01r1lbps9ksnyz37djn2q";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "A library to manipulate gettext files (po and mo files)";
+      homepage = "http://bitbucket.org/izi/polib/";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   prettytable = buildPythonPackage rec {
     name = "prettytable-0.5";
 
