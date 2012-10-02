@@ -54,7 +54,7 @@ let
         '';
     in {
 
-      inherit (job) description requires wants before partOf environment path restartIfChanged unitConfig;
+      inherit (job) description wants before partOf environment path restartIfChanged unitConfig;
 
       after =
         (if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else
@@ -65,6 +65,10 @@ let
          if job.startOn == "" || job.startOn == "startup" then [] else
          builtins.trace "Warning: job ‘${job.name}’ has unknown startOn value ‘${job.startOn}’." []
         ) ++ job.after;
+
+      requires = 
+        (if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else []
+        ) ++ job.requires;
 
       wantedBy =
         (if job.startOn == "" then [] else
