@@ -3496,15 +3496,15 @@ let
   fcgi = callPackage ../development/libraries/fcgi { };
 
   ffmpeg = callPackage ../development/libraries/ffmpeg {
-    vpxSupport = if !stdenv.isMips then true else false;
+    vpxSupport = !stdenv.isMips;
   };
 
   ffmpeg_0_6_90 = callPackage ../development/libraries/ffmpeg/0.6.90.nix {
-    vpxSupport = if !stdenv.isMips then true else false;
+    vpxSupport = !stdenv.isMips;
   };
 
   ffmpeg_1_0 = callPackage ../development/libraries/ffmpeg/1.0.nix {
-    vpxSupport = if !stdenv.isMips then true else false;
+    vpxSupport = !stdenv.isMips;
   };
 
   fftw = callPackage ../development/libraries/fftw {
