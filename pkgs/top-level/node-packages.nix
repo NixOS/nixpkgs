@@ -821,6 +821,21 @@ let self = {
     ];
   };
 
+  "requirejs" = self."requirejs-0.26.0";
+
+  "requirejs-==0.26.0" = self."requirejs-0.26.0";
+
+  "requirejs-0.26.0" = self.buildNodePackage rec {
+    name = "requirejs-0.26.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/requirejs/-/${name}.tgz";
+      sha256 = "5ec7264031784fd1b5844aba813ace9045918a0b004a52fafa6b52e9e9760407";
+    };
+    deps = [
+
+    ];
+  };
+
   "rimraf" = self."rimraf-2";
 
   "rimraf-2" = self.buildNodePackage rec {
@@ -919,6 +934,19 @@ let self = {
       self."node-uuid-1.3.3"
       self."faye-websocket-0.4.0"
       self."rbytes-0.0.2"
+    ];
+  };
+
+  "source-map" = self."source-map-0.1.2";
+
+  "source-map-0.1.2" = self.buildNodePackage rec {
+    name = "source-map-0.1.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/source-map/-/${name}.tgz";
+      sha256 = "4465bb3a293c0e86092affb7cbdd6d9356cad69231c56f6e73bba7750497035f";
+    };
+    deps = [
+      self."requirejs-==0.26.0"
     ];
   };
 
