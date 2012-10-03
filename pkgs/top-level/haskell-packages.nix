@@ -1492,8 +1492,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   tagstreamConduit = callPackage ../development/libraries/haskell/tagstream-conduit {};
 
-  templateHaskell = callPackage ../development/libraries/haskell/template-haskell {};
-
   temporary = callPackage ../development/libraries/haskell/temporary {};
 
   Tensor = callPackage ../development/libraries/haskell/Tensor {};
