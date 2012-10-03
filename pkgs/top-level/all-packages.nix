@@ -2317,6 +2317,7 @@ let
   haskellPackages_ghc741_profiling    = recurseIntoAttrs (haskell.packages_ghc741.profiling);
   haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741.highPrio);
   haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742);
+  haskellPackages_ghc742_pedantic     =                   haskell.packages_ghc742_pedantic;
   haskellPackages_ghc761              = recurseIntoAttrs (haskell.packages_ghc761);
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
