@@ -7854,7 +7854,9 @@ let
     inherit (xlibs) libX11;
   };
 
-  vlc = callPackage ../applications/video/vlc { };
+  vlc = callPackage ../applications/video/vlc {
+    ffmpeg = ffmpeg_1_0;
+  };
 
   vnstat = callPackage ../applications/networking/vnstat { };
 
