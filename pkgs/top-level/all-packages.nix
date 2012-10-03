@@ -5697,6 +5697,8 @@ let
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
+  linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
+
   linuxHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
   linuxHeaders33 = callPackage ../os-specific/linux/kernel-headers/3.3.5.nix { };
@@ -7698,6 +7700,8 @@ let
 
   svk = perlPackages.SVK;
 
+  swh_lv2 = callPackage ../applications/audio/swh-lv2 { };
+
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed {
     sslSupport = true;
     gpgSupport = true;
@@ -7901,7 +7905,7 @@ let
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
          );
       libs =
-        if config.browserNameenableQuakeLive or false
+        if config.browserName.enableQuakeLive or false
         then with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]
         else [ ];
     };

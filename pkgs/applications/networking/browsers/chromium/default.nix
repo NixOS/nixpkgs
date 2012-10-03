@@ -86,7 +86,7 @@ let
 
   # XXX: this reverts r151720 to prevent http://crbug.com/143623
   maybeRevertZlibChanges = let
-    below22 = versionOlder sourceInfo.version "22.0.0.0";
+    below22_91 = versionOlder sourceInfo.version "22.0.1229.91";
     patch = fetchurl {
       name = "revert-r151720";
       url = "http://git.chromium.org/gitweb/?p=chromium.git;a=commitdiff_plain;"
@@ -94,7 +94,7 @@ let
           + "h=0fabb4fda7059a8757422e8a44e70deeab28e698";
       sha256 = "0n0d6mkg89g8q63cifapzpg9dxfs2n6xvk4k13szhymvf67b77pf";
     };
-  in optional (!below22) patch;
+  in optional (below22_91) patch;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
