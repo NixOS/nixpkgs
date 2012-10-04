@@ -2,12 +2,17 @@
 
 # Note: zlib is not required; MySQL can use an internal zlib.
 
-stdenv.mkDerivation {
-  name = "mysql-5.5.23";
+stdenv.mkDerivation rec {
+  name = "mysql-${version}";
+  version = "5.5.28";
 
   src = fetchurl {
-    url = ftp://ftp.inria.fr/pub/MySQL/Downloads/MySQL-5.5/mysql-5.5.23.tar.gz;
-    sha256 = "0sklcz6miff7nb6bi1pqncgjv819255y7if6jxcqgiqs50z319i0";
+    urls = [
+      "mirror://sourceforge/mysql.mirror/${name}.tar.gz"
+      "http://mysql.linux.cz/Downloads/MySQL-5.5/${name}.tar.gz"
+      "http://ftp.gwdg.de/pub/misc/mysql/Downloads/MySQL-5.5/${name}.tar.gz"
+    ];
+    sha256 = "13y7bhjmx4daidvyqjz88yffbswb6rc1khkmiqm896fx3lglkcpr";
   };
 
   buildInputs = [ cmake bison ncurses openssl readline zlib ];
