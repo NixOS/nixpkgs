@@ -35,7 +35,15 @@ with pkgs.lib;
 
     services.udev.packages = [ pkgs.upower ];
 
-    boot.systemd.packages = [ pkgs.upower ];
+    boot.systemd.services.upower =
+      { description = "Power Management Daemon";
+        path = [ pkgs.glib ]; # needed for gdbus
+        serviceConfig =
+          { Type = "dbus";
+            BusName = "org.freedesktop.UPower";
+            ExecStart = "@${pkgs.upower}/libexec/upowerd upowerd";
+          };
+      };
 
     system.activationScripts.upower =
       ''
