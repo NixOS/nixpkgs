@@ -2355,31 +2355,36 @@ let
 
   openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix {};
 
+  openjdkStage1 = callPackage ../development/compilers/openjdk {
+    jdk = pkgs.openjdkBootstrap;
+    ant = pkgs.ant.override { jdk = pkgs.openjdkBootstrap; };
+  };
+
   openjdk =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin { }
     else
       callPackage ../development/compilers/openjdk {
-        jdk = pkgs.openjdkBootstrap;
-        ant = pkgs.ant.override { jdk = pkgs.openjdkBootstrap; };
+        jdk = pkgs.openjdkStage1;
+        ant = pkgs.ant.override { jdk = pkgs.openjdkStage1; };
       };
 
-  openjre = callPackage ../development/compilers/openjdk {
+  openjre = pkgs.openjdk.override {
     jreOnly = true;
   };
 
   jdk = if (stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
-    then openjdk
-    else jdkdistro true false;
+    then pkgs.openjdk
+    else pkgs.oraclejdk;
   jre = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
-    then openjre
-    else jdkdistro false false;
+    then pkgs.openjre
+    else pkgs.oraclejre;
 
-  oraclejdk = jdkdistro true false;
+  oraclejdk = pkgs.jdkdistro true false;
 
-  oraclejre = jdkdistro false false;
+  oraclejre = pkgs.jdkdistro false false;
 
-  jrePlugin = lowPrio (jdkdistro false true);
+  jrePlugin = lowPrio (pkgs.jdkdistro false true);
 
   supportsJDK =
     system == "i686-linux" ||
