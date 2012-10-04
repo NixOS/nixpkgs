@@ -81,6 +81,10 @@ rec {
         CIFS_FSCACHE y
         CIFS_ACL y
 
+        WATCHDOG y
+        WATCHDOG_CORE y
+        ORION_WATCHDOG m
+
         ZRAM m
         NETCONSOLE m
 
