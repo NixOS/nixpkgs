@@ -73,19 +73,19 @@ in
 
     boot.extraTTYs = mkIf cfg.showManual ["tty${cfg.ttyNumber}"];
 
-    jobs = mkIf cfg.showManual
-      { nixosManual =
-        { name = "nixos-manual";
-
-          description = "NixOS manual";
-
-          startOn = "started udev";
-
-          exec =
-            ''
-              ${cfg.browser} ${manual.manual}/share/doc/nixos/manual.html \
-                < /dev/tty${toString cfg.ttyNumber} > /dev/tty${toString cfg.ttyNumber} 2>&1
-            '';
+    boot.systemd.services = optionalAttrs cfg.showManual
+      { "nixos-manual" =
+        { description = "NixOS Manual";
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig =
+            { ExecStart = "${cfg.browser} ${manual.manual}/share/doc/nixos/manual.html";
+              StandardInput = "tty";
+              StandardOutput = "tty";
+              TTYPath = "/dev/tty${cfg.ttyNumber}";
+              TTYReset = true;
+              TTYVTDisallocate = true;
+              Restart = "always";
+            };
         };
       };
 

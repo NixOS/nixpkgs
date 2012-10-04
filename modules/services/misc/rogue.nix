@@ -50,6 +50,7 @@ in
             TTYPath = "/dev/${cfg.tty}";
             TTYReset = true;
             TTYVTDisallocate = true;
+            Restart = "always";
           };
       };
 
