@@ -73,6 +73,7 @@ rec {
         IP_NF_TARGET_LOG y
         IP_NF_MANGLE y
         IPV6 m
+        VLAN_8021Q m
 
         CIFS y
         CIFS_XATTR y
