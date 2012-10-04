@@ -1385,6 +1385,8 @@ let
 
   replace = callPackage ../tools/text/replace { };
 
+  reptyr = callPackage ../os-specific/linux/reptyr {};
+
   rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
 
   ripmime = callPackage ../tools/networking/ripmime {};
