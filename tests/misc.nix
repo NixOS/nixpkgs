@@ -30,7 +30,7 @@
 
       # Test that the swap file got created.
       subtest "swapfile", sub {
-          $machine->waitUntilSucceeds("cat /proc/swaps | grep /root/swapfile");
+          $machine->waitForUnit("root-swapfile.swap");
           $machine->succeed("ls -l /root/swapfile | grep 134217728");
       };
     '';

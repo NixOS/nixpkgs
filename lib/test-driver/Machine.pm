@@ -352,15 +352,36 @@ sub mustFail {
 }
 
 
-# Wait for an Upstart job to reach the "running" state.
-sub waitForJob {
-    my ($self, $jobName) = @_;
-    $self->nest("waiting for job ‘$jobName’", sub {
+sub getUnitInfo {
+    my ($self, $unit) = @_;
+    my ($status, $lines) = $self->execute("systemctl --no-pager show '$unit'");
+    return undef if $status != 0;
+    my $info = {};
+    foreach my $line (split '\n', $lines) {
+        $line =~ /^([^=]+)=(.*)$/ or next;
+        $info->{$1} = $2;
+    }
+    return $info;
+}
+
+
+# Wait for a systemd unit to reach the "active" state.
+sub waitForUnit {
+    my ($self, $unit) = @_;
+    $self->nest("waiting for unit ‘$unit’", sub {
         retry sub {
-            my ($status, $out) = $self->execute("initctl status $jobName");
-            return 1 if $out =~ /start\/running/;
+            my $info = $self->getUnitInfo($unit);
+            my $state = $info->{ActiveState};
+            die "unit ‘$unit’ reached state ‘$state’\n" if $state eq "failed";
+            return 1 if $state eq "active";
         };
     });
+}
+
+
+sub waitForJob {
+    my ($self, $jobName) = @_;
+    return $self->waitForUnit($jobName . ".service");
 }
 
 
@@ -377,16 +398,13 @@ sub waitForFile {
 
 sub startJob {
     my ($self, $jobName) = @_;
-    $self->execute("initctl start $jobName");
-    my ($status, $out) = $self->execute("initctl status $jobName");
-    die "failed to start $jobName" unless $out =~ /start\/running/;
+    $self->execute("systemctl stop $jobName.service");
+    # FIXME: check result
 }
 
 sub stopJob {
     my ($self, $jobName) = @_;
-    $self->execute("initctl stop $jobName");
-    my ($status, $out) = $self->execute("initctl status $jobName");
-    die "failed to stop $jobName" unless $out =~ /stop\/waiting/;
+    $self->execute("systemctl stop $jobName.service");
 }
 
 

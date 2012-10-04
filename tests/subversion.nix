@@ -41,7 +41,7 @@ in
           services.httpd.enable = true;
           services.httpd.adminAddr = "e.dolstra@tudelft.nl";
           services.httpd.extraSubservices =
-            [ { serviceType = "subversion";
+            [ { function = import <services/subversion>;
                 urlPrefix = "";
                 dataDir = "/data/subversion";
                 userCreationDomain = "192.168.0.0/16";
