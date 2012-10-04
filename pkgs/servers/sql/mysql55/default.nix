@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake bison ncurses openssl readline zlib ];
 
+  enableParallelBuilding = true;
+
   cmakeFlags = "-DWITH_SSL=yes -DWITH_READLINE=yes -DWITH_EMBEDDED_SERVER=yes -DWITH_ZLIB=yes -DINSTALL_SCRIPTDIR=bin -DHAVE_IPV6=yes";
   
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
