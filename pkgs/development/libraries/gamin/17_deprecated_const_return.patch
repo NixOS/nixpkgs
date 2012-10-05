@@ -1,0 +1,56 @@
+Description: Don't use deprecated G_CONST_RETURN. Fixes building with newer glib versions.
+Author: Matthias Klose <doko@ubuntu.com>
+Bug-Ubuntu: https://launchpad.net/bugs/829504
+
+Index: gamin/server/gam_node.c
+===================================================================
+--- gamin.orig/server/gam_node.c	2011-10-18 16:09:04.873780685 +0200
++++ gamin/server/gam_node.c	2011-10-18 16:09:01.965780543 +0200
+@@ -122,7 +122,7 @@
+  * it has finished with the string.  If it must keep it longer, it
+  * should makes its own copy.  The returned string must not be freed.
+  */
+-G_CONST_RETURN char *
++const char *
+ gam_node_get_path(GamNode * node)
+ {
+     g_assert(node);
+Index: gamin/server/gam_node.h
+===================================================================
+--- gamin.orig/server/gam_node.h	2011-10-18 16:09:04.729780677 +0200
++++ gamin/server/gam_node.h	2011-10-18 16:09:01.961780544 +0200
+@@ -58,7 +58,7 @@
+ void                  gam_node_set_is_dir          (GamNode         *node,
+ 						   gboolean        is_dir);
+ 	
+-G_CONST_RETURN char  *gam_node_get_path            (GamNode         *node);
++const char  *gam_node_get_path            (GamNode         *node);
+ 
+ GList                *gam_node_get_subscriptions   (GamNode         *node);
+ 
+Index: gamin/server/gam_subscription.c
+===================================================================
+--- gamin.orig/server/gam_subscription.c	2011-10-18 16:09:04.817780682 +0200
++++ gamin/server/gam_subscription.c	2011-10-18 16:09:01.965780543 +0200
+@@ -141,7 +141,7 @@
+  * @param sub the GamSubscription
+  * @returns The path being monitored.  It should not be freed.
+  */
+-G_CONST_RETURN char *
++const char *
+ gam_subscription_get_path(GamSubscription * sub)
+ {
+     if (sub == NULL)
+Index: gamin/server/gam_subscription.h
+===================================================================
+--- gamin.orig/server/gam_subscription.h	2011-10-18 16:09:04.929780687 +0200
++++ gamin/server/gam_subscription.h	2011-10-18 16:09:01.965780543 +0200
+@@ -21,7 +21,7 @@
+ 
+ int                  gam_subscription_get_reqno    (GamSubscription *sub);
+ 
+-G_CONST_RETURN char *gam_subscription_get_path     (GamSubscription *sub);
++const char *gam_subscription_get_path     (GamSubscription *sub);
+ 
+ GamListener         *gam_subscription_get_listener (GamSubscription *sub);
+ 
