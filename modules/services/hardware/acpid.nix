@@ -105,6 +105,8 @@ in
         daemonType = "fork";
 
         exec = "acpid --confdir ${acpiConfDir}";
+
+        unitConfig.ConditionPathExists = [ "/proc/acpi" ];
       };
 
   };
