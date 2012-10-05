@@ -2,6 +2,7 @@
 , libIDL, dbus_glib, bzip2, alsaLib, nspr, yasm, mesa, nss
 , libnotify, cairo, pixman, fontconfig
 , libjpeg
+, pythonPackages
 
 , # If you want the resulting program to call itself "Thunderbird"
   # instead of "Shredder", enable this option.  However, those
@@ -9,46 +10,25 @@
   # Mozilla Foundation, see
   # http://www.mozilla.org/foundation/trademarks/.
   enableOfficialBranding ? false
-
 }:
 
-let version = "11.0.1";
-
-    # This patch may become necessary when we use a more recent version of libpng
-    # for now, it's actually not needed
-    # pngPatch = fetchurl {
-    #   url = http://www.linuxfromscratch.org/patches/blfs/svn/thunderbird-9.0.1-libpng-1.5-1.patch;
-    #   sha256 = "8454bdde3be8dc37c9f5e6f597914f0a585ff4b357d3fc86c6c9f80208b6068d";
-    # };
-in
+let version = "15.0.1"; in
 
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
-    url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/11.0.1/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "037344b451b1c031472d92f96d401b15d8e3e7d3";
+    url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
+    sha1 = "688bed2b48abda000b489f3c84de0ba9f93818f0";
   };
 
   enableParallelBuilding = true;
 
   buildInputs =
     [ pkgconfig perl python zip unzip bzip2 gtk dbus_glib alsaLib libIDL nspr
-      libnotify cairo pixman fontconfig yasm mesa /* nss */
-      libjpeg
+      libnotify cairo pixman fontconfig yasm mesa nss
+      libjpeg pythonPackages.sqlite3
     ];
-
-  # fix some paths in pngPatch
-  # prePatch = ''
-  #   substitute ${pngPatch} png.patch --replace "mozilla-release/modules/" "comm-release/mozilla/modules/"
-  #   '';
-
-  patches = [
-    # "png.patch" # produced by postUnpack
-
-    # Fix weird dependencies such as a so file which depends on "-lpthread".
-    # ./thunderbird-build-deps.patch
-  ];
 
   configureFlags =
     [ "--enable-application=mail"
@@ -58,11 +38,13 @@ stdenv.mkDerivation {
       "--enable-strip"
       "--with-pthreads"
       "--with-system-jpeg"
-      # "--with-system-png"  # png 1.5.x not merged in nixpkgs yet
+      #"--with-system-png"
       "--with-system-zlib"
       "--with-system-bz2"
       "--with-system-nspr"
-      "--enable-system-cairo"
+      "--with-system-nss"
+      # Broken: https://bugzilla.mozilla.org/show_bug.cgi?id=722975
+      #"--enable-system-cairo"
       "--disable-crashreporter"
       "--disable-necko-wifi"
       "--disable-webm"
@@ -84,10 +66,7 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-      # Fix some references to /bin paths in the Xulrunner shell script.
-      substituteInPlace $out/lib/thunderbird-*/thunderbird \
-          --replace /bin/pwd "$(type -tP pwd)" \
-          --replace /bin/ls "$(type -tP ls)"
+      rm -rf $out/include $out/lib/thunderbird-devel-* $out/share/idl
 
       # Create a desktop item.
       mkdir -p $out/share/applications
@@ -109,7 +88,7 @@ stdenv.mkDerivation {
       # Official branding implies thunderbird name and logo cannot be reuse,
       # see http://www.mozilla.org/foundation/licensing.html
       if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
-    maintainers = with maintainers; [ pierron ];
-    platforms = with platforms; linux;
+    maintainers = maintainers.pierron;
+    platforms = platforms.linux;
   };
 }
