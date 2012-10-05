@@ -67,6 +67,8 @@ rec {
     inherit (pkgs.gnome) vte;
   };
 
+  gigolo = callPackage ./applications/gigolo.nix { };
+
   mousepad = callPackage ./applications/mousepad.nix { };
 
   ristretto = callPackage ./applications/ristretto.nix { };
