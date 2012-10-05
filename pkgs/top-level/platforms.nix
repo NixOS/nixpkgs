@@ -73,12 +73,17 @@ rec {
         IP_NF_TARGET_LOG y
         IP_NF_MANGLE y
         IPV6 m
+        VLAN_8021Q m
 
         CIFS y
         CIFS_XATTR y
         CIFS_POSIX y
         CIFS_FSCACHE y
         CIFS_ACL y
+
+        WATCHDOG y
+        WATCHDOG_CORE y
+        ORION_WATCHDOG m
 
         ZRAM m
         NETCONSOLE m

@@ -232,6 +232,10 @@ let
       # Devtmpfs support.
       DEVTMPFS y
 
+      # Media support
+      MEDIA_CAMERA_SUPPORT? y
+      MEDIA_RC_SUPPORT? y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
