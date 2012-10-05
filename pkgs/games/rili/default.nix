@@ -20,5 +20,6 @@ stdenv.mkDerivation {
     homepage = http://ri-li.sourceforge.net;
     license = "GPL2+";
     description = "Ri-li is an arcade game licensed under the GPL (General Public License). You drive a toy wood engine in many levels and you must collect all the coaches to win.";
+    maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }

@@ -67,5 +67,6 @@ stdenv.mkDerivation rec {
     description = ''Urquan Masters is an open source clone of the Classic top-down space battle Star Cotnrol '';
     homepage = http://sc2.sourceforge.net/;
     license = "GPLv2";
+    maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }

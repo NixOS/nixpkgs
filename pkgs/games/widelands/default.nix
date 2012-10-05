@@ -56,6 +56,7 @@ rec {
     maintainers = with a.lib.maintainers;
     [
       raskin
+      jcumming
     ];
     platforms = with a.lib.platforms;
       linux;
