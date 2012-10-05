@@ -6,7 +6,7 @@ with pkgs.lib;
   ###### interface
 
   options = {
-  
+
     powerManagement.scsiLinkPolicy = mkOption {
       default = "";
       example = "min_power";
@@ -16,7 +16,7 @@ with pkgs.lib;
         the kernel configures "max_performance".
       '';
     };
-    
+
   };
 
 
@@ -25,19 +25,20 @@ with pkgs.lib;
   config = mkIf (config.powerManagement.scsiLinkPolicy != "") {
 
     jobs."scsi-link-pm" =
-      { description = "Set SCSI link power management policy";
+      { description = "SCSI Link Power Management Policy";
 
-        startOn = "started udev";
+        startOn = "stopped udevtrigger";
 
         task = true;
 
         script = ''
+          shopt -s nullglob
           for x in /sys/class/scsi_host/host*/link_power_management_policy; do
             echo ${config.powerManagement.scsiLinkPolicy} > $x
           done
         '';
       };
-      
+
   };
 
 }
