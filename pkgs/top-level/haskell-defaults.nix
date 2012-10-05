@@ -20,8 +20,19 @@
       haskellPlatform = null;
       binary = null; # now a core package
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
-      regexCompat = self.regexCompat_0_95_1.override { regexPosix = self.regexPosix_0_95_2; };
     };
+
+  ghc742Prefs_pedantic =
+    self : self.haskellPlatformArgs_2012_4_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2012_4_0_0;
+      binary = null; # now a core package
+    };
+
+  # until the Haskell Platform for 7.4.2 is released, this works fine/better;
+  # mainly because the Haskell Platform 2012.4.0.0 release candidate mandates
+  # vector 0.10 and primitive 0.5, which at this time aren't supported widely
+  # by other packages
+  ghc742Prefs = ghc741Prefs;
 
   ghc741Prefs =
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
@@ -259,8 +270,11 @@
   packages_ghc742 =
     packages { ghcPath = ../development/compilers/ghc/7.4.2.nix;
                ghcBinary = ghc6121BinaryDarwin;
-               prefFun = ghc741Prefs;
+               prefFun = ghc742Prefs;
              };
+
+  packages_ghc742_pedantic =
+    packages_ghc742.override { prefFun = ghc742Prefs_pedantic; };
 
   packages_ghc761 =
     packages { ghcPath = ../development/compilers/ghc/7.6.1.nix;

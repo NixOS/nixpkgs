@@ -64,6 +64,10 @@
   md5 = "0be45d54cc5e1c2e3102e32b8c190346";
 }
 {
+  name = "liberation-fonts-ttf-2.00.0.tar.gz";
+  md5 = "cfbf1ac6f61bf6cf45342a0cc9381be5";
+}
+{
   name = "swingExSrc.zip";
   md5 = "35c94d2df8893241173de1d16b6034c0";
 }
