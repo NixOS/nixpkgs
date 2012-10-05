@@ -5964,8 +5964,6 @@ let
 
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
-    spl = callPackage ../os-specific/linux/spl/default.nix { };
-
     sysprof = callPackage ../development/tools/profiling/sysprof {
       inherit (gnome) libglade;
     };
@@ -5985,8 +5983,6 @@ let
     };
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
-
-    zfs = callPackage ../os-specific/linux/zfs/default.nix { };
   };
 
   # Build the kernel modules for the some of the kernels.
