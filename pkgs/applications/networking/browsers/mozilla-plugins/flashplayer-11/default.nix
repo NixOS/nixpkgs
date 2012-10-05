@@ -11,8 +11,9 @@
 , libX11
 , libXext
 , libXrender
+, libXcursor
 , libXt
-, gtk 
+, gtk
 , glib
 , pango
 , cairo
@@ -65,7 +66,7 @@ stdenv.mkDerivation {
   name = "flashplayer-${src.version}";
 
   builder = ./builder.sh;
-  
+
   src = fetchurl { inherit (src) url sha256; };
 
   inherit zlib alsaLib;
@@ -76,7 +77,7 @@ stdenv.mkDerivation {
 
   rpath = stdenv.lib.makeLibraryPath
     [ zlib alsaLib curl nss nspr fontconfig freetype expat libX11
-      libXext libXrender libXt gtk glib pango atk cairo gdk_pixbuf
+      libXext libXrender libXcursor libXt gtk glib pango atk cairo gdk_pixbuf
     ];
 
   buildPhase = ":";
