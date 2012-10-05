@@ -1,18 +1,27 @@
-{stdenv, fetchurl, SDL, libpng, zlib}:
+{stdenv, fetchurl, pkgconfig, SDL, libpng, zlib, xz, freetype, fontconfig}:
 
 stdenv.mkDerivation rec {
   name = "openttd-${version}";
-  version = "0.6.0";
+  version = "1.2.2";
 
   src = fetchurl {
-    url = "mirror://sf/openttd/${name}-source.tar.bz2";
-    md5 = "dcf63687c73ff56887049fedaf6c6019";
+    url = "http://binaries.openttd.org/releases/${version}/${name}-source.tar.xz";
+    sha256 = "158znfx389bhs9gd2hadnbc2a32z4ma1vz8704cmw9yh0fmhbcap";
   };
 
-  buildInputs = [SDL libpng];
+  buildInputs = [SDL libpng pkgconfig xz zlib freetype fontconfig];
   prefixKey = "--prefix-dir=";
-  configureFlags = "--with-zlib=${zlib}/lib/libz.a";
+
+  configureFlags = ''
+    --with-zlib=${zlib}/lib/libz.a 
+    --without-liblzo2
+  '';
+
   makeFlags = "INSTALL_PERSONAL_DIR=";
+
+  postInstall = ''
+    mv $out/games/ $out/bin
+  '';
 
   meta = {
     description = ''OpenTTD is an open source clone of the Microprose game "Transport Tycoon Deluxe".'';
