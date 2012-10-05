@@ -17,7 +17,7 @@ in
     powerManagement = {
 
       enable = mkOption {
-        default = false;
+        default = true;
         description =
           ''
             Whether to enable power management.  This includes support
