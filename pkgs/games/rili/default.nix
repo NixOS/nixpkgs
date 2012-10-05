@@ -12,6 +12,7 @@ stdenv.mkDerivation {
 
   preConfigure = ''
     export CPPFLAGS="-I${SDL}/include -I${SDL}/include/SDL -I${SDL_mixer}/include"
+    autoreconf -i
   '';
   
   buildInputs = [SDL SDL_mixer autoconf automake];
