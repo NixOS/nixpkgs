@@ -77,6 +77,8 @@ rec {
 
   xfce4mixer = callPackage ./applications/xfce4-mixer.nix { };
 
+  xfce4_taskmanager = callPackage ./applications/xfce4-taskmanager.nix { };
+
   
   #### ART
 
