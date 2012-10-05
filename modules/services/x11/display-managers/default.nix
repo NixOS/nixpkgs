@@ -35,7 +35,7 @@ let
       # since presumably the desktop environment will handle these.
       if [ -z "$_INHIBITION_LOCK_TAKEN" ]; then
         export _INHIBITION_LOCK_TAKEN=1
-        ${config.system.build.systemd}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key "$0" "$sessionType"
+        exec ${config.system.build.systemd}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key "$0" "$sessionType"
       fi
 
       ${optionalString cfg.startOpenSSHAgent ''
