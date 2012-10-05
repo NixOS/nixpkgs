@@ -347,10 +347,10 @@ in
 
         serviceConfig =
           { ExecStart =
-              "${pkgs.openssh}/sbin/sshd -D -h ${cfg.hostKeyPath} " +
+              "${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} " +
               "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
             Restart = "always";
-            Type = "simple";
+            Type = "forking";
             KillMode = "process";
             PIDFile = "/run/sshd.pid";
           };
