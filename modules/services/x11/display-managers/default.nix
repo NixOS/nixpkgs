@@ -31,6 +31,13 @@ let
         exec > ~/.xsession-errors 2>&1
       ''}
 
+      # Stop systemd from handling the power button and lid switch,
+      # since presumably the desktop environment will handle these.
+      if [ -z "$_INHIBITION_LOCK_TAKEN" ]; then
+        export _INHIBITION_LOCK_TAKEN=1
+        ${config.system.build.systemd}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key "$0" "$sessionType"
+      fi
+
       ${optionalString cfg.startOpenSSHAgent ''
         if test -z "$SSH_AUTH_SOCK"; then
             # Restart this script as a child of the SSH agent.  (It is
