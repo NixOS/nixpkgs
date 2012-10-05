@@ -53,6 +53,12 @@ rec {
 
   meta = {
     description = "Widelands RTS with multiple-goods economy";
+    longDescription = ''
+      Widelands is a real time strategy game based on "The Settlers" and "The
+      Settlers II". It has a single player campaign mode, as well as a networked
+      multiplayer mode. 
+    '';
+
     maintainers = with a.lib.maintainers;
     [
       raskin
