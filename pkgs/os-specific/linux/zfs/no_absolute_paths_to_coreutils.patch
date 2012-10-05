@@ -1,0 +1,25 @@
+*** git-export/module/Makefile.in.old	Tue Mar  6 01:04:48 2012
+--- git-export/module/Makefile.in	Tue Mar  6 01:04:59 2012
+***************
+*** 11,20 ****
+  	@# installed devel headers, or they may be in the module
+  	@# subdirectory when building against the spl source tree.
+  	@if [ -f @SPL_OBJ@/@SPL_SYMBOLS@ ]; then \
+! 		/bin/cp -f @SPL_OBJ@/@SPL_SYMBOLS@ .; \
+  		chmod +w @SPL_SYMBOLS@ .; \
+  	elif [ -f @SPL_OBJ@/module/@SPL_SYMBOLS@ ]; then \
+! 		/bin/cp -f @SPL_OBJ@/module/@SPL_SYMBOLS@ .; \
+  		chmod +w @SPL_SYMBOLS@ .; \
+  	else \
+  		echo -e "\n" \
+--- 11,20 ----
+  	@# installed devel headers, or they may be in the module
+  	@# subdirectory when building against the spl source tree.
+  	@if [ -f @SPL_OBJ@/@SPL_SYMBOLS@ ]; then \
+! 		cp -f @SPL_OBJ@/@SPL_SYMBOLS@ .; \
+  		chmod +w @SPL_SYMBOLS@ .; \
+  	elif [ -f @SPL_OBJ@/module/@SPL_SYMBOLS@ ]; then \
+! 		cp -f @SPL_OBJ@/module/@SPL_SYMBOLS@ .; \
+  		chmod +w @SPL_SYMBOLS@ .; \
+  	else \
+  		echo -e "\n" \

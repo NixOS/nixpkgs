@@ -1,0 +1,19 @@
+*** spl-0.6.0-rc10/Makefile.am.old	Fri Aug 17 14:49:16 2012
+--- spl-0.6.0-rc10/Makefile.am	Fri Aug 17 14:51:06 2012
+***************
+*** 32,38 ****
+  if CONFIG_KERNEL
+  install-data-local:
+  	release=$(SPL_META_VERSION)-$(SPL_META_RELEASE); \
+! 	instdest=$(DESTDIR)/usr/src/spl-$$release/$(LINUX_VERSION); \
+  	for instfile in $(noinst_HEADERS) module/$(LINUX_SYMBOLS); do \
+  		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
+  	done
+--- 32,38 ----
+  if CONFIG_KERNEL
+  install-data-local:
+  	release=$(SPL_META_VERSION)-$(SPL_META_RELEASE); \
+! 	instdest=$(DESTDIR)/@libexecdir@/spl/$(LINUX_VERSION); \
+  	for instfile in $(noinst_HEADERS) module/$(LINUX_SYMBOLS); do \
+  		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
+  	done
