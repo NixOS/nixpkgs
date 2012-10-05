@@ -79,5 +79,12 @@ rec {
   #### ART
 
   xfce4icontheme = callPackage ./art/xfce4-icon-theme.nix { };
+  xfce4themes = callPackage ./art/xfce4-themes.nix {};
+
+
+  #### PANEL PLUGINS
+  
+  xfce4_systemload_plugin = callPackage ./panel-plugins/xfce4-systemload-plugin.nix {};
+  xfce4_cpufreq_plugin = callPackage ./panel-plugins/xfce4-cpufreq-plugin.nix {};
   
 }
