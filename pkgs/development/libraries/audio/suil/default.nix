@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lv2, pkgconfig, python, serd, sord, sratom }:
+{ stdenv, fetchurl, gtk, lv2, pkgconfig, python, serd, sord, sratom, qt4 }:
 
 stdenv.mkDerivation rec {
   name = "suil-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rqi16zqnaf30gr2gwb8wbhg8a2l3m5fllf7rabldmgj4b4jlyzp";
   };
 
-  buildInputs = [ lv2 pkgconfig python serd sord sratom ];
+  buildInputs = [ gtk lv2 pkgconfig python qt4 serd sord sratom ];
 
   configurePhase = "python waf configure --prefix=$out";
 
