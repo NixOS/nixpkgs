@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
 
   installFlags = "ASOUND_STATE_DIR=$(TMPDIR)/dummy";
 
+  preConfigure =
+    ''
+      # Ensure that ‘90-alsa-restore.rules.in’ gets rebuilt.
+      rm alsactl/90-alsa-restore.rules
+    '';
+
   meta = {
     description = "ALSA, the Advanced Linux Sound Architecture utils";
 

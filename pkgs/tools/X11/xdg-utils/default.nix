@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, file }:
 
 stdenv.mkDerivation rec {
   name = "xdg-utils-1.0.2";
@@ -7,6 +7,10 @@ stdenv.mkDerivation rec {
     url = "http://portland.freedesktop.org/download/${name}.tgz";
     sha256 = "1b019d3r1379b60p33d6z44kx589xjgga62ijz9vha95dg8vgbi1";
   };
+
+  postInstall = ''
+    substituteInPlace $out/bin/xdg-mime --replace /usr/bin/file ${file}/bin/file
+  '';
   
   meta = {
     homepage = http://portland.freedesktop.org/wiki/;

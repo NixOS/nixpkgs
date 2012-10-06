@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "DSH";
-  version = "0.7.8.1";
-  sha256 = "1yz8rh3hkqc465slfzi7jqhjd1xrmcghjxl7zprxw082p2qvj8g5";
+  version = "0.7.8.2";
+  sha256 = "1rs42c05q4s46a1a03srzdq0aijwalhilzifc8ryq4qwjgh7vkwz";
   buildDepends = [
     convertible csv FerryCore HaXml HDBC json mtl Pathfinder syb text
     xhtml
