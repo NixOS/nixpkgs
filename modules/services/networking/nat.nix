@@ -1,4 +1,6 @@
 # This module enables Network Address Translation (NAT).
+# XXX: todo: support multiple upstream links
+# see http://yesican.chsoft.biz/lartc/MultihomedLinuxNetworking.html
 
 { config, pkgs, ... }:
 
@@ -25,11 +27,11 @@ in
     };
 
     networking.nat.internalIPs = mkOption {
-      example = "192.168.1.0/24";
+      example = [ "192.168.1.0/24" ] ;
       description =
         ''
-          The IP address range for which to perform NAT.  Packets
-          coming from these addresses and destined for the external
+          The IP address ranges for which to perform NAT.  Packets
+          coming from these networks and destined for the external
           interface will be rewritten.
         '';
     };
@@ -76,13 +78,17 @@ in
           ''
             iptables -t nat -F POSTROUTING
             iptables -t nat -X
-
+          '' 
+          + (concatMapStrings (network: 
+            ''
             iptables -t nat -A POSTROUTING \
-              -s ${cfg.internalIPs} -o ${cfg.externalInterface} \
+              -s ${network} -o ${cfg.externalInterface} \
               ${if cfg.externalIP == ""
                 then "-j MASQUERADE"
                 else "-j SNAT --to-source ${cfg.externalIP}"}
-
+            ''
+          ) cfg.internalIPs) +
+          ''
             echo 1 > /proc/sys/net/ipv4/ip_forward
           '';
 
@@ -91,7 +97,5 @@ in
             iptables -t nat -F POSTROUTING
           '';
       };
-
   };
-
 }
