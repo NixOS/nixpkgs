@@ -1841,8 +1841,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   tar_0_3_2_0 = callPackage ../development/tools/haskell/tar/0.3.2.0.nix {};
-  tar_0_4_0_0 = callPackage ../development/tools/haskell/tar/0.4.0.0.nix {};
-  tar = self.tar_0_4_0_0;
+  tar_0_4_0_1 = callPackage ../development/tools/haskell/tar/0.4.0.1.nix {};
+  tar = self.tar_0_4_0_1;
 
   threadscope = callPackage ../development/tools/haskell/threadscope {};
 
