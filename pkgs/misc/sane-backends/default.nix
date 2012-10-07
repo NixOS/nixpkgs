@@ -1,21 +1,27 @@
-{ stdenv, fetchurl, hotplugSupport ? true, libusb ? null
+{ stdenv, fetchurl, hotplugSupport ? true, libusb ? null, libv4l ? null
+, pkgconfig ? null
 , gt68xxFirmware ? null }:
 let
   firmware = gt68xxFirmware {inherit fetchurl;};
 in
 assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
 
-stdenv.mkDerivation {
-  name = "sane-backends-1.0.22";
+stdenv.mkDerivation rec {
+  version = "1.0.23";
+  name = "sane-backends-${version}";
   
   src = fetchurl {
-    url = http://alioth.debian.org/frs/download.php/3503/sane-backends-1.0.22.tar.gz;
-    sha256 = "0m0cz4ljw9asqvpryl6gx1ndwf7ll2qinlvql9whnzs901la314z";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/sane-backends_${version}.orig.tar.gz";
+    sha256 = "4d4f5b2881615af7fc0ed75fdde7dc623a749e80e40f3f792fe4010163cbb029";
   };
   
   udevSupport = hotplugSupport;
 
-  buildInputs = if libusb != null then [libusb] else [];
+  buildInputs = []
+    ++ stdenv.lib.optional (libusb != null) libusb
+    ++ stdenv.lib.optional (libv4l != null) libv4l
+    ++ stdenv.lib.optional (pkgconfig != null) pkgconfig
+    ;
 
   postInstall = ''
     if test "$udevSupport" = "1"; then

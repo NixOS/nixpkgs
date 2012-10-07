@@ -3200,6 +3200,11 @@ let
 
   sloccount = callPackage ../development/tools/misc/sloccount { };
 
+  smatch = callPackage ../development/tools/analysis/smatch {
+    buildllvmsparse = false;
+    buildc2xml = false;
+  };
+
   sparse = callPackage ../development/tools/analysis/sparse { };
 
   spin = callPackage ../development/tools/analysis/spin { };
@@ -7758,7 +7763,7 @@ let
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/11.x.nix {
+  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/15.x.nix {
     inherit (gnome) libIDL;
   };
 
