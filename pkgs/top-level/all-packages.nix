@@ -2280,6 +2280,11 @@ let
     };
   };
 
+  jhc = callPackage ../development/compilers/jhc {
+    inherit (haskellPackages_ghc6123) ghc binary zlib utf8String readline fgl
+    regexCompat HsSyck random;
+  };
+
   # Haskell and GHC
 
   # Import Haskell infrastructure.
