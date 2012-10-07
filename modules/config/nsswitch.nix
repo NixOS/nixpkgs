@@ -62,17 +62,4 @@ in
   # a valid IP address.  It returns all locally configured IP
   # addresses, or ::1 and 127.0.0.2 as fallbacks.
   system.nssModules = [ pkgs.nss_myhostname ];
-
-  environment.shellInit =
-    if config.system.nssModules.path != "" then
-      ''
-        LD_LIBRARY_PATH=${config.system.nssModules.path}:$LD_LIBRARY_PATH
-      ''
-    else "";
-
-  # NSS modules need to be in `systemPath' so that (i) the builder
-  # chroot gets to seem them, and (ii) applications can benefit from
-  # changes in the list of NSS modules at run-time, without requiring
-  # a reboot.
-  environment.systemPackages = [ config.system.nssModules.list ];
 }
