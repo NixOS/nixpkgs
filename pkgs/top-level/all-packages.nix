@@ -2442,7 +2442,7 @@ let
 
   ocaml_3_12_1 = callPackage ../development/compilers/ocaml/3.12.1.nix { };
 
-  ocaml_4_00_0 = callPackage ../development/compilers/ocaml/4.00.0.nix { };
+  ocaml_4_00_1 = callPackage ../development/compilers/ocaml/4.00.1.nix { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
