@@ -1,13 +1,15 @@
 # Configuration for the Name Service Switch (/etc/nsswitch.conf).
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
   options = {
 
     # NSS modules.  Hacky!
-    system.nssModules = pkgs.lib.mkOption {
+    system.nssModules = mkOption {
       internal = true;
       default = [];
       description = "
@@ -15,34 +17,43 @@ let
         several DNS resolution methods to be specified via
         <filename>/etc/nsswitch.conf</filename>.
       ";
-      merge = pkgs.lib.mergeListOption;
+      merge = mergeListOption;
       apply = list:
         let
           list2 =
             list
             # !!! this should be in the LDAP module
-            ++ pkgs.lib.optional config.users.ldap.enable pkgs.nss_ldap;
+            ++ optional config.users.ldap.enable pkgs.nss_ldap;
         in {
           list = list2;
-          path = pkgs.lib.makeLibraryPath list2;
+          path = makeLibraryPath list2;
         };
     };
 
   };
 
+  inherit (config.services.avahi) nssmdns;
+
 in
 
 {
-  require = [options];
+  require = [ options ];
 
   environment.etc =
     [ # Name Service Switch configuration file.  Required by the C library.
       # !!! Factor out the mdns stuff.  The avahi module should define
       # an option used by this module.
-      { source =
-          if config.services.avahi.nssmdns
-          then ./nsswitch-mdns.conf
-          else ./nsswitch.conf;
+      { source = pkgs.writeText "nsswitch.conf"
+          ''
+            passwd:    files ldap
+            group:     files ldap
+            shadow:    files ldap
+            hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"}
+            networks:  files dns
+            ethers:    files
+            services:  files
+            protocols: files
+          '';
         target = "nsswitch.conf";
       }
     ];
@@ -58,5 +69,5 @@ in
   # chroot gets to seem them, and (ii) applications can benefit from
   # changes in the list of NSS modules at run-time, without requiring
   # a reboot.
-  environment.systemPackages = [config.system.nssModules.list];
+  environment.systemPackages = [ config.system.nssModules.list ];
 }
