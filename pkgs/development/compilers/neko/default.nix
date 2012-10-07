@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
     ' src/tools/install.neko
     sed -i -e '/allocated = strdup/s|"[^"]*"|"'"$out/lib/neko:$out/bin"'"|' \
       vm/load.c
+    # temporarily, fixed in 1.8.3
+    sed -i -e 's/^#if defined(_64BITS)/& || defined(__x86_64__)/' vm/neko.h
 
     for disabled_mod in mod_neko{,2} mod_tora{,2} mysql ui; do
       sed -i -e '/^libs/,/^}/{/^\s*'"$disabled_mod"'\s*=>/,/^\s*}/d}' \
