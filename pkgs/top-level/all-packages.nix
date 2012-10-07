@@ -587,6 +587,10 @@ let
 
   dcraw = callPackage ../tools/graphics/dcraw { };
 
+  debian_devscripts = callPackage ../tools/misc/debian-devscripts {
+    inherit (perlPackages) CryptSSLeay LWP TimeDate DBFile FileDesktopEntry;
+  };
+
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
   detox = callPackage ../tools/misc/detox { };
