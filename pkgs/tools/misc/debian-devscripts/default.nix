@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
   '';
   meta = {
     description = ''Debian package maintenance scripts'';
-    license = "GPL (variuous)"; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only...
+    license = "GPL (various)"; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only...
+    maintainers = with stdenv.lib.maintainers; [raskin];
   };
 }
