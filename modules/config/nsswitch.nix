@@ -48,7 +48,7 @@ in
             passwd:    files ldap
             group:     files ldap
             shadow:    files ldap
-            hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"}
+            hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} myhostname
             networks:  files dns
             ethers:    files
             services:  files
@@ -57,6 +57,11 @@ in
         target = "nsswitch.conf";
       }
     ];
+
+  # Use nss-myhostname to ensure that our hostname always resolves to
+  # a valid IP address.  It returns all locally configured IP
+  # addresses, or ::1 and 127.0.0.2 as fallbacks.
+  system.nssModules = [ pkgs.nss_myhostname ];
 
   environment.shellInit =
     if config.system.nssModules.path != "" then
