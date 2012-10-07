@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gnu-efi-3.0p";
+  name = "gnu-efi-3.0r";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnu-efi/gnu-efi_3.0p.orig.tar.gz";
-    sha256 = "1pm4wk1gma7mb8z19js7kb5y31a0zk308mkafmq6gb0b2a0i39cn";
+    url = "mirror://sourceforge/gnu-efi/gnu-efi_3.0r.orig.tar.gz";
+    sha256 = "1zi298wsg8v29xj4azcawqfjbxqi2w7l60agf7x2ph2lnqlga2v5";
   };
 
   meta = {
