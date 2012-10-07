@@ -43,6 +43,7 @@ in
         source = pkgs.writeText "hosts"
           ''
             127.0.0.1 localhost
+            ::1 localhost
             ${cfg.extraHosts}
           '';
         target = "hosts";
