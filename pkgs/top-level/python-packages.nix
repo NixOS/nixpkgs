@@ -1735,6 +1735,32 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+
+  pyaudio = pkgs.stdenv.mkDerivation rec {
+    name = "python-pyaudio-${version}";
+    version = "0.2.4";
+
+    src = fetchurl {
+      url = "http://people.csail.mit.edu/hubert/pyaudio/packages/pyaudio-${version}.tar.gz";
+      md5 = "623809778f3d70254a25492bae63b575";
+    };
+
+    buildInputs = [ python pkgs.portaudio ];
+
+    installPhase = ''
+      python setup.py install --prefix=$out
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "Python bindings for PortAudio";
+      homepage = "http://people.csail.mit.edu/hubert/pyaudio/";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+
   Babel = buildPythonPackage (rec {
     name = "Babel-0.9.6";
 
