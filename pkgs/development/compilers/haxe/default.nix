@@ -14,11 +14,15 @@ stdenv.mkDerivation {
     sed -i -e 's|com.class_path <- \[|&"'"$out/lib/haxe/std/"'";|' main.ml
   '';
 
+  postBuild = ''
+    find std/tools -name '*.n' -delete
+    rm std/tools/haxedoc/haxedoc std/tools/haxelib/haxelib
+  '';
+
   installPhase = ''
     install -vd "$out/bin" "$out/lib/haxe/std"
     install -vt "$out/bin" haxe haxelib haxedoc
-    find std -mindepth 1 -maxdepth 1 -path std/tools -o \
-      -exec cp -vr '{}' "$out/lib/haxe/std" \;
+    cp -vr std "$out/lib/haxe"
   '';
 
   dontStrip = true;
