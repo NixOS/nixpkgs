@@ -3120,11 +3120,11 @@ let pythonPackages = python.modules // rec {
   };
 
   cliapp = buildPythonPackage rec {
-    name = "cliapp-1.20120630";
+    name = "cliapp-1.20120929";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_1.20120630.orig.tar.gz";
-      sha256 = "6beeb1fb3077561540094584ce36055266ac67b80f158b9b82fe4075096f4716";
+      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_1.20120929.orig.tar.gz";
+      sha256 = "30d5077e53b3e45f892b1c49feaaf4f47e4664400ed71435e77a82a2b823a0f8";
     };
 
     buildInputs = [ sphinx ];
@@ -3140,11 +3140,11 @@ let pythonPackages = python.modules // rec {
   };
 
   tracing = buildPythonPackage rec {
-    name = "tracing-0.6";
+    name = "tracing-0.7";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_0.6.orig.tar.gz";
-      sha256 = "1164cf05891f9bca93fb87413f32d2c4da90348adbf69b0ad36a464b7adcd354";
+      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_0.7.orig.tar.gz";
+      sha256 = "9954a1b0cc6b957d15975b048f929bbdd46766d397a6fa51bf8f6498b9459276";
     };
 
     buildInputs = [ sphinx ];
@@ -3160,11 +3160,11 @@ let pythonPackages = python.modules // rec {
   };
 
   ttystatus = buildPythonPackage rec {
-    name = "ttystatus-0.19";
+    name = "ttystatus-0.21";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.19.orig.tar.gz";
-      sha256 = "7cc112a4783f2e0c354c5244f8e50b18733b5957677b56a755c1016e04c0c28d";
+      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.21.orig.tar.gz";
+      sha256 = "4a1f3a41c9bd3b5d2bd8e6f093890857301e590aa1d428fc9a6dca591227244c";
     };
 
     buildInputs = [ sphinx ];
@@ -3180,11 +3180,11 @@ let pythonPackages = python.modules // rec {
   };
 
   larch = buildPythonPackage rec {
-    name = "larch-1.20120527";
+    name = "larch-1.20121006";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_1.20120527.orig.tar.gz";
-      sha256 = "2865a1bfa6bd276bf746e8e7cb73d5199d0b6d00045d8c92e158626687d3bbe1";
+      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_1.20121006.orig.tar.gz";
+      sha256 = "b4482981010e9c22ee3fce6fdc664b8fc0a1a3a18ed30b40f247f3b44437ccfa";
     };
 
     buildInputs = [ sphinx ];
