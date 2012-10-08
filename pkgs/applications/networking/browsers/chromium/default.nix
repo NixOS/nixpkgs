@@ -87,6 +87,14 @@ let
      else if pre23 then ./enable_seccomp22.patch
      else ./enable_seccomp23.patch;
 
+  maybeBpfTemporaryFix = let
+    patch = fetchurl {
+      url = "https://chromiumcodereview.appspot.com/download/issue11032056_1_2.diff";
+      sha256 = "eb13dc627940ad56939837ad1093b2c388f6cf79f1f25cdc1b2e25e987c73d1c";
+    };
+    needPatch = !versionOlder sourceInfo.version "23.0.1271.0";
+  in optional needPatch patch;
+
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
   packageName = "chromium";
@@ -120,7 +128,8 @@ in stdenv.mkDerivation rec {
 
   patches = optional (!cfg.selinux) seccompPatch
          ++ optional cfg.cups ./cups_allow_deprecated.patch
-         ++ optional cfg.pulseaudio ./pulseaudio_array_bounds.patch;
+         ++ optional cfg.pulseaudio ./pulseaudio_array_bounds.patch
+         ++ maybeBpfTemporaryFix;
 
   postPatch = optionalString cfg.openssl ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
