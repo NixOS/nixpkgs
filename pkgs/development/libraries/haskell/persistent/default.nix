@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     unorderedContainers vector
   ];
   extraLibraries = [ sqlite ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
     description = "Type-safe, multi-backend data serialization";

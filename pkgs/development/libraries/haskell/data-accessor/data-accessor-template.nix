@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-accessor-template";
-  version = "0.2.1.9";
-  sha256 = "14zp2zjxlkdi33cjif9lc1kl8m0x4brh0pk3d34wk1g1bfzynijc";
+  version = "0.2.1.10";
+  sha256 = "11a4c0g74ppl7nls0dhx6xs47dfcq1wp7bd8qgdba6hhn645afzy";
   buildDepends = [ dataAccessor utilityHt ];
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Record_access";

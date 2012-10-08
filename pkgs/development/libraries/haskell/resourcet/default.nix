@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     liftedBase monadControl mtl transformers transformersBase
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Deterministic allocation and freeing of scarce resources";

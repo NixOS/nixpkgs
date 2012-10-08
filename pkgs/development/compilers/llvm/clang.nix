@@ -1,6 +1,6 @@
 { stdenv, fetchurl, perl, groff, llvm, cmake }:
 
-let version = "3.0"; in
+let version = "3.1"; in
 
 stdenv.mkDerivation {
   name = "clang-${version}";
@@ -10,20 +10,19 @@ stdenv.mkDerivation {
   patches = stdenv.lib.optionals (stdenv.gcc.libc != null) 
     [ ./clang-include-paths.patch ./clang-ld-flags.patch ];
 
-  postPatch = stdenv.lib.optionalString (stdenv.gcc.libc != null) ''
-    sed -i -e 's,C_INCLUDE_PATH,"${stdenv.gcc.libc}/include/",' \
-      -e 's,CPP_HOST,"'$(${stdenv.gcc}/bin/cc -dumpmachine)'",' \
-      -e 's,CPP_INCLUDE_PATH,"${stdenv.gcc.gcc}/include/c++/${stdenv.gcc.gcc.version}",' \
-      lib/Driver/ToolChains.cpp
-  '';
-
-  cmakeFlags = [ "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}" "-DCMAKE_BUILD_TYPE=Release" "-DLLVM_TARGETS_TO_BUILD=all"];
+  cmakeFlags = [
+    "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DLLVM_TARGETS_TO_BUILD=all"
+  ] ++ stdenv.lib.optionals (stdenv.gcc.libc != null) [
+    "-DC_INCLUDE_DIRS=${stdenv.gcc.libc}/include/"
+  ];
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-      url = "http://llvm.org/releases/${version}/clang-${version}.tar.gz";
-      sha256 = "0v8j9rgmb7w74ihc44zfxa22q17c946n5b6prwl38z3d6pd74kmn";
+      url = "http://llvm.org/releases/${version}/clang-${version}.src.tar.gz";
+      sha256 = "11m7sm9f8qcrayckfg3z91zb3fimilpm0f7azn7q7qnkvhay4qzz";
   };
 
   passthru = { gcc = stdenv.gcc.gcc; };
