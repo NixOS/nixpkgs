@@ -8691,6 +8691,8 @@ let
 
   cups = callPackage ../misc/cups { };
 
+  cups_pdf_filter = callPackage ../misc/cups/pdf-filter.nix { };
+
   gutenprint = callPackage ../misc/drivers/gutenprint { };
 
   gutenprintBin = callPackage ../misc/drivers/gutenprint/bin.nix { };
