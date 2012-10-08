@@ -2,12 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "parallel-io";
-  version = "0.3.2";
-  sha256 = "1n9y1d1lcdwvhjsfqdlxknl89fxncq17kgin43wlki0c39cgirga";
+  version = "0.3.2.1";
+  sha256 = "0wrmz0i5s8p87840pacdnpf2fi12nips4yc72vymifrc1wvlc42q";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ extensibleExceptions random ];
-  jailbreak = true;
   meta = {
     homepage = "http://batterseapower.github.com/parallel-io";
     description = "Combinators for executing IO actions in parallel on a thread pool";

@@ -1578,12 +1578,39 @@ rec {
     };
   };
 
+  FileBaseDir = buildPerlPackage rec {
+    version = "0.03";
+    name = "File-BaseDir-${version}";
+    configurePhase = ''
+      preConfigure || true
+      perl Build.PL PREFIX="$out" prefix="$out"
+    '';
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
+      sha256 = "0029cba7a3b5d8aa5f7d03cb1b7ba2bcf2829382f7f26aa3bee06fce8611a886";
+    };
+  };
+
   FileCopyRecursive = buildPerlPackage rec {
     name = "File-Copy-Recursive-0.38";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DM/DMUEY/${name}.tar.gz";
       sha256 = "1syyyvylr51iicialdmv0dw06q49xzv8zrkb5cn8ma4l73gvvk44";
     };
+  };
+
+  FileDesktopEntry = buildPerlPackage rec {
+    version = "0.04";
+    name = "File-DesktopEntry-${version}";
+    configurePhase = ''
+      preConfigure || true
+      perl Build.PL PREFIX="$out" prefix="$out"
+    '';
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
+      sha256 = "d7f80d8bd303651a43dc1810c73740d38a0d2b158fb33cd3b6ca4d3a566da7cb";
+    };
+    propagatedBuildInputs = [ FileBaseDir ];
   };
 
   FileFindRule = buildPerlPackage rec {
