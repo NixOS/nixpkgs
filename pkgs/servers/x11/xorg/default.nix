@@ -888,11 +888,11 @@ let
   })) // {inherit ;};
     
   libxcb = (stdenv.mkDerivation ((if overrides ? libxcb then overrides.libxcb else x: x) {
-    name = "libxcb-1.8.1";
+    name = "libxcb-1.9";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/libxcb-1.8.1.tar.bz2;
-      sha256 = "03gspxcdl8r7jwbwg7fyp4cc6zic9z91amp4g5z0wwahx48nix6j";
+      url = mirror://xorg/individual/xcb/libxcb-1.9.tar.bz2;
+      sha256 = "15icn78x610dvvgnji6b3pyn8nd88lz68hq0w73pcadf78mycmw8";
     };
     buildInputs = [pkgconfig libxslt libpthreadstubs python libXau xcbproto libXdmcp ];
   })) // {inherit libxslt libpthreadstubs python libXau xcbproto libXdmcp ;};
@@ -1138,11 +1138,11 @@ let
   })) // {inherit ;};
     
   xcbproto = (stdenv.mkDerivation ((if overrides ? xcbproto then overrides.xcbproto else x: x) {
-    name = "xcb-proto-1.7.1";
+    name = "xcb-proto-1.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/X11R7.7/src/everything/xcb-proto-1.7.1.tar.bz2;
-      sha256 = "0ds4qg6slidrzyz6q9ckq0a19hn6blzpnvciy4brh741gn49jpdd";
+      url = mirror://xorg/individual/xcb/xcb-proto-1.8.tar.bz2;
+      sha256 = "1c11652h9sjynw3scm1pn5z3a6ci888pq7hij8q5n8qrl33icg93";
     };
     buildInputs = [pkgconfig python ];
   })) // {inherit python ;};

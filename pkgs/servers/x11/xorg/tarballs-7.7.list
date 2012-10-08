@@ -60,7 +60,7 @@ mirror://xorg/X11R7.7/src/everything/libWindowsWM-1.0.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libX11-1.5.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXau-1.0.7.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXaw-1.0.11.tar.bz2
-mirror://xorg/X11R7.7/src/everything/libxcb-1.8.1.tar.bz2
+mirror://xorg/individual/xcb/libxcb-1.9.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXcomposite-0.4.3.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXcursor-1.1.13.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libXdamage-1.1.3.tar.bz2
@@ -103,7 +103,7 @@ mirror://xorg/X11R7.7/src/everything/x11perf-1.5.4.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xauth-1.0.7.tar.bz2
 mirror://xorg/individual/app/xbacklight-1.2.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.1.tar.bz2
-mirror://xorg/X11R7.7/src/everything/xcb-proto-1.7.1.tar.bz2
+mirror://xorg/individual/xcb/xcb-proto-1.8.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xcmiscproto-1.2.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xcmsdb-1.0.4.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xcursorgen-1.0.5.tar.bz2
