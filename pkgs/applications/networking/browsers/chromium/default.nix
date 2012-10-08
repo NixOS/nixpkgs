@@ -81,10 +81,8 @@ let
   ];
 
   maybeSeccompPatch = let
-    pre22 = versionOlder sourceInfo.version "22.0.0.0";
     pre23 = versionOlder sourceInfo.version "23.0.0.0";
-    patch = if pre22 then ./enable_seccomp.patch else ./enable_seccomp22.patch;
-  in optional pre23 patch;
+  in optional pre23 ./enable_seccomp.patch;
 
   maybeBpfTemporaryFix = let
     patch = fetchurl {
