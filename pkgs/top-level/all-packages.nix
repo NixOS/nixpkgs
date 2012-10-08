@@ -2402,7 +2402,6 @@ let
   jikes = callPackage ../development/compilers/jikes { };
 
   julia = callPackage ../development/compilers/julia {
-    llvm = llvm_3_1;
     pcre = pcre_8_30;
     liblapack = liblapack.override {shared = true;};
     fftw = fftw.override {pthreads = true;};
@@ -2416,7 +2415,6 @@ let
   };
 
   llvm = callPackage ../development/compilers/llvm { };
-  llvm_3_1 = callPackage ../development/compilers/llvm/3.1.nix { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
