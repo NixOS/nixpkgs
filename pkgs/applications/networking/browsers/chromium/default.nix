@@ -82,7 +82,10 @@ let
 
   seccompPatch = let
     pre22 = versionOlder sourceInfo.version "22.0.0.0";
-  in if pre22 then ./enable_seccomp.patch else ./enable_seccomp22.patch;
+    pre23 = versionOlder sourceInfo.version "23.0.0.0";
+  in if pre22 then ./enable_seccomp.patch
+     else if pre23 then ./enable_seccomp22.patch
+     else ./enable_seccomp23.patch;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
