@@ -5,6 +5,7 @@
 , libevent, expat, libjpeg
 , libpng, libxml2, libxslt
 , xdg_utils, yasm, zlib
+, libexif
 
 , python, perl, pkgconfig
 , nspr, udev, krb5
@@ -55,6 +56,7 @@ let
     use_system_flac = true;
     use_system_libevent = true;
     use_system_libexpat = true;
+    use_system_libexif = true;
     use_system_libjpeg = true;
     use_system_libpng = true;
     use_system_libxml = true;
@@ -78,6 +80,7 @@ let
     libevent expat libjpeg
     libpng libxml2 libxslt
     xdg_utils yasm zlib
+    libexif
   ];
 
   maybeSeccompPatch = let
