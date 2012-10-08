@@ -378,12 +378,6 @@ in
       description = "Default unit started when the system boots.";
     };
 
-    services.journald.logKernelMessages = mkOption {
-      default = true;
-      type = types.bool;
-      description = "Whether to log kernel messages.";
-    };
-
     services.journald.console = mkOption {
       default = "";
       type = types.uniq types.string;
@@ -419,9 +413,6 @@ in
               ${optionalString (config.services.journald.console != "") ''
                 ForwardToConsole=yes
                 TTYPath=${config.services.journald.console}
-              ''}
-              ${optionalString config.services.journald.logKernelMessages ''
-                ImportKernel=yes
               ''}
             '';
           target = "systemd/journald.conf";
