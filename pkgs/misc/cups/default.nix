@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, zlib, pam, openssl, dbus, libusb1, acl }:
+{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam, openssl
+, dbus, libusb, acl }:
 
 let version = "1.6.1"; in
 
@@ -12,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "143pk8a0kqqr7m9j0b8c9h2nn0zf6awpivk7wq7iclz68h8snhjq";
   };
 
-  buildInputs = [ pkgconfig zlib libusb1 ]
+  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb ]
     ++ stdenv.lib.optionals stdenv.isLinux [ pam dbus acl ] ;
 
   propagatedBuildInputs = [ openssl ];
