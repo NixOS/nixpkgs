@@ -80,12 +80,11 @@ let
     xdg_utils yasm zlib
   ];
 
-  seccompPatch = let
+  maybeSeccompPatch = let
     pre22 = versionOlder sourceInfo.version "22.0.0.0";
     pre23 = versionOlder sourceInfo.version "23.0.0.0";
-  in if pre22 then ./enable_seccomp.patch
-     else if pre23 then ./enable_seccomp22.patch
-     else ./enable_seccomp23.patch;
+    patch = if pre22 then ./enable_seccomp.patch else ./enable_seccomp22.patch;
+  in optional pre23 patch;
 
   maybeBpfTemporaryFix = let
     patch = fetchurl {
@@ -126,9 +125,9 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  patches = optional (!cfg.selinux) seccompPatch
-         ++ optional cfg.cups ./cups_allow_deprecated.patch
+  patches = optional cfg.cups ./cups_allow_deprecated.patch
          ++ optional cfg.pulseaudio ./pulseaudio_array_bounds.patch
+         ++ maybeSeccompPatch
          ++ maybeBpfTemporaryFix;
 
   postPatch = optionalString cfg.openssl ''
