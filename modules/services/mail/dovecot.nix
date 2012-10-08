@@ -10,7 +10,7 @@ let
     ''
       base_dir = /var/run/dovecot2/
 
-      protocols = imap pop3
+      protocols = ${optionalString cfg.enableImap "imap"} ${optionalString cfg.enablePop3 "pop3"}
     ''
     + (if cfg.sslServerCert!="" then
     ''
@@ -60,6 +60,16 @@ in
       enable = mkOption {
         default = false;
         description = "Whether to enable the Dovecot 2.x POP3/IMAP server.";
+      };
+
+      enablePop3 = mkOption {
+        default = true;
+        description = "Start the POP3 listener (when Dovecot is enabled).";
+      };
+
+      enableImap = mkOption {
+        default = true;
+        description = "Start the IMAP listener (when Dovecot is enabled).";
       };
 
       user = mkOption {
@@ -145,6 +155,9 @@ in
       };
 
     environment.systemPackages = [ pkgs.dovecot ];
+
+    assertions = [{ assertion = cfg.enablePop3 || cfg.enableImap;
+                    message = "dovecot needs at least one of the IMAP or POP3 listeners enabled";}];
 
   };
 
