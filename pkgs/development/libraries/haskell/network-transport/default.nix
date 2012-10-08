@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-transport";
-  version = "0.2.0.2";
-  sha256 = "1pipykqwbjmbkgkmk0ss2pvfp72rkxwmz49d1j5xi8b0rlfgw05c";
+  version = "0.3.0";
+  sha256 = "1i6sn5x3z1r9l7xwag68s5gsii137d5dajwr0abcbv6143ph3bvm";
   buildDepends = [ binary transformers ];
   meta = {
     homepage = "http://github.com/haskell-distributed/distributed-process";
