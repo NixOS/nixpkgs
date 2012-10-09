@@ -1523,6 +1523,7 @@ let
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
 
+
   privoxy = callPackage ../tools/networking/privoxy {
     autoconf = autoconf213;
   };
@@ -7724,6 +7725,8 @@ let
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
+
+  sxiv = callPackage ../applications/graphics/sxiv {};
 
   tabbed = callPackage ../applications/window-managers/tabbed { };
 
