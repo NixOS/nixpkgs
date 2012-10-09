@@ -14,6 +14,5 @@ stdenv.mkDerivation rec {
     homepage = http://www.xfce.org/;
     description = "Themes for Xfce";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }
