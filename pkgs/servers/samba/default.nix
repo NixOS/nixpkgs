@@ -18,11 +18,11 @@
 assert useKerberos -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "samba-3.6.7";
+  name = "samba-3.6.8";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "1jnl9v6axz30ymh6in1fwan7zjy9n5n7x70vi1afazxs27qa0n5q";
+    sha256 = "1phl6mmrc72jyvbyrw6cv6b92cxq3v2pbn1fh97nnb4hild1fnjg";
   };
 
   patches =
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out
       mv $TMPDIR/inst/$out/* $out/
-  
+
       mkdir -pv $out/lib/cups/backend
       ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
       mkdir -pv $out/etc/openldap/schema
