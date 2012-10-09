@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     sed -re "s@/etc( |$|/)@$out/etc\\1@" -i Makefile* */Makefile*
   '';
   postInstall = ''
+    sed -re 's@(^|[ !`"])/bin/bash@\1${stdenv.shell}@g' -i "$out/bin"/*
     for i in "$out/bin"/*; do
       wrapProgram "$i" \
         --prefix PERL5LIB : "$PERL5LIB" \
