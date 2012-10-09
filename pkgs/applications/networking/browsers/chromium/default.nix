@@ -5,6 +5,7 @@
 , libevent, expat, libjpeg
 , libpng, libxml2, libxslt
 , xdg_utils, yasm, zlib
+, libusb1, libexif
 
 , python, perl, pkgconfig
 , nspr, udev, krb5
@@ -55,21 +56,23 @@ let
     use_system_flac = true;
     use_system_libevent = true;
     use_system_libexpat = true;
+    use_system_libexif = true;
     use_system_libjpeg = true;
     use_system_libpng = true;
+    use_system_libusb = true;
     use_system_libxml = true;
     use_system_speex = true;
     use_system_ssl = cfg.openssl;
     use_system_stlport = true;
     use_system_xdg_utils = true;
     use_system_yasm = true;
-    use_system_zlib = true;
+    use_system_zlib = false; # http://crbug.com/143623
 
     use_system_harfbuzz = false;
     use_system_icu = false;
-    use_system_libwebp = false; # See chromium issue #133161
+    use_system_libwebp = false; # http://crbug.com/133161
     use_system_skia = false;
-    use_system_sqlite = false; # See chromium issue #22208
+    use_system_sqlite = false; # http://crbug.com/22208
     use_system_v8 = false;
   };
 
@@ -78,23 +81,20 @@ let
     libevent expat libjpeg
     libpng libxml2 libxslt
     xdg_utils yasm zlib
+    libusb1 libexif
   ];
 
-  seccompPatch = let
-    pre22 = versionOlder sourceInfo.version "22.0.0.0";
-  in if pre22 then ./enable_seccomp.patch else ./enable_seccomp22.patch;
+  maybeSeccompPatch = let
+    pre23 = versionOlder sourceInfo.version "23.0.0.0";
+  in optional pre23 ./enable_seccomp.patch;
 
-  # XXX: this reverts r151720 to prevent http://crbug.com/143623
-  maybeRevertZlibChanges = let
-    below22_91 = versionOlder sourceInfo.version "22.0.1229.91";
+  maybeBpfTemporaryFix = let
     patch = fetchurl {
-      name = "revert-r151720";
-      url = "http://git.chromium.org/gitweb/?p=chromium.git;a=commitdiff_plain;"
-          + "hp=4419ec6414b33b6b19bb2e380b4998ed5193ecab;"
-          + "h=0fabb4fda7059a8757422e8a44e70deeab28e698";
-      sha256 = "0n0d6mkg89g8q63cifapzpg9dxfs2n6xvk4k13szhymvf67b77pf";
+      url = "https://chromiumcodereview.appspot.com/download/issue11032056_1_2.diff";
+      sha256 = "eb13dc627940ad56939837ad1093b2c388f6cf79f1f25cdc1b2e25e987c73d1c";
     };
-  in optional (below22_91) patch;
+    needPatch = !versionOlder sourceInfo.version "23.0.1271.0";
+  in optional needPatch patch;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -127,10 +127,10 @@ in stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  patches = optional (!cfg.selinux) seccompPatch
-         ++ optional cfg.cups ./cups_allow_deprecated.patch
+  patches = optional cfg.cups ./cups_allow_deprecated.patch
          ++ optional cfg.pulseaudio ./pulseaudio_array_bounds.patch
-         ++ maybeRevertZlibChanges;
+         ++ maybeSeccompPatch
+         ++ maybeBpfTemporaryFix;
 
   postPatch = optionalString cfg.openssl ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
