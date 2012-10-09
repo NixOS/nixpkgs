@@ -1523,7 +1523,6 @@ let
 
   sitecopy = callPackage ../tools/networking/sitecopy { };
 
-
   privoxy = callPackage ../tools/networking/privoxy {
     autoconf = autoconf213;
   };

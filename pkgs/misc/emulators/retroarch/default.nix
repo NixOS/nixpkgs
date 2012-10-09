@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    homepage = "http://themaister.net/retroarch.html";
     description = "A multi-system emulator for Linux, Windows, Mac OS X and *BSD";
     license = "GPLv3+";
   };
