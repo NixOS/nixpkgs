@@ -17,11 +17,11 @@ assert x264Support -> x264 != null;
 assert xvidSupport -> xvidcore != null;
 
 stdenv.mkDerivation rec {
-  name = "libav-0.7";
+  name = "libav-0.8.3";
   
   src = fetchurl {
     url = "http://libav.org/releases/${name}.tar.xz";
-    sha256 = "04pl6y53xh6xmwzz0f12mg5vh62ylp5zwwinj6dxzd8pnbjg4lsz";
+    sha256 = "107ha49d0bwy02k0ishwyvgss52sfhzh3fxghw2cnvg5nn5zra9p";
   };
 
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
@@ -31,8 +31,6 @@ stdenv.mkDerivation rec {
     "--enable-gpl"
     "--enable-postproc"
     "--enable-swscale"
-    "--disable-ffserver"
-    "--disable-ffplay"
     "--enable-shared"
     "--enable-runtime-cpudetect"
   ]

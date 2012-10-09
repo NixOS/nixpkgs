@@ -1393,6 +1393,8 @@ let
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
 
+  retroarch = callPackage ../misc/emulators/retroarch {};
+
   rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
 
   ripmime = callPackage ../tools/networking/ripmime {};
@@ -7724,6 +7726,8 @@ let
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
+
+  sxiv = callPackage ../applications/graphics/sxiv {};
 
   tabbed = callPackage ../applications/window-managers/tabbed { };
 
