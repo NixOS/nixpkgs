@@ -167,6 +167,20 @@ let
 
   makeJobScript = name: content: "${pkgs.writeScriptBin name content}/bin/${name}";
 
+  unitConfig = { name, config, ... }: {
+    config = {
+      unitConfig =
+        { Requires = concatStringsSep " " config.requires;
+          Wants = concatStringsSep " " config.wants;
+          After = concatStringsSep " " config.after;
+          Before = concatStringsSep " " config.before;
+          PartOf = concatStringsSep " " config.partOf;
+        } // optionalAttrs (config.description != "") {
+          Description = config.description;
+        };
+    };
+  };
+
   serviceConfig = { name, config, ... }: {
     config = {
       # Default path for systemd services.  Should be quite minimal.
@@ -177,15 +191,6 @@ let
           pkgs.gnused
           systemd
         ];
-      unitConfig =
-        { Requires = concatStringsSep " " config.requires;
-          Wants = concatStringsSep " " config.wants;
-          After = concatStringsSep " " config.after;
-          Before = concatStringsSep " " config.before;
-          PartOf = concatStringsSep " " config.partOf;
-        } // optionalAttrs (config.description != "")
-          { Description = config.description;
-          };
     };
   };
 
@@ -342,33 +347,21 @@ in
     boot.systemd.targets = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
-      options = unitOptions;
+      options = [ unitOptions unitConfig ];
       description = "Definition of systemd target units.";
     };
 
     boot.systemd.services = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
-      options = [ serviceOptions serviceConfig ];
+      options = [ serviceOptions unitConfig serviceConfig ];
       description = "Definition of systemd service units.";
     };
 
     boot.systemd.sockets = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
-      options = unitOptions // {
-        socketConfig = mkOption {
-          default = {};
-          example = { ListenStream = "/run/my-socket"; };
-          type = types.attrs;
-          description = ''
-            Each attribute in this set specifies an option in the
-            <literal>[Socket]</literal> section of the unit.  See
-            <citerefentry><refentrytitle>systemd.socket</refentrytitle>
-            <manvolnum>5</manvolnum></citerefentry> for details.
-          '';
-        };
-      };
+      options = [ socketOptions unitConfig ];
       description = "Definition of systemd socket units.";
     };
 

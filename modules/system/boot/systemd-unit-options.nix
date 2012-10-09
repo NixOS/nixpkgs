@@ -76,6 +76,7 @@ rec {
 
   };
 
+
   serviceOptions = unitOptions // {
 
     environment = mkOption {
@@ -141,6 +142,23 @@ rec {
       description = ''
         Whether the service should be restarted during a NixOS
         configuration switch if its definition has changed.
+      '';
+    };
+
+  };
+
+
+  socketOptions = unitOptions // {
+
+    socketConfig = mkOption {
+      default = {};
+      example = { ListenStream = "/run/my-socket"; };
+      type = types.attrs;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Socket]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.socket</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
       '';
     };
 
