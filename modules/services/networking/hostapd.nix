@@ -52,7 +52,7 @@ in
       enable = mkOption {
         default = false;
         description = ''
-          enable putting a wireless interface into infrastructure mode,
+          Enable putting a wireless interface into infrastructure mode,
           allowing other wireless devices to associate with the wireless interface and do
           wireless networking. A simple access point will enable hostapd.wpa, and
           hostapd.wpa_passphrase, hostapd.ssid, dhcpd on the wireless interface to
@@ -107,19 +107,24 @@ in
         example = "network";
         type = types.string;
         description = "members of this group can control hostapd";
-        };
+      };
 
       wpa = mkOption {
         default = true;
         description = "enable WPA (IEEE 802.11i/D3.0) to authenticate to the access point";
-        };
+      };
 
       wpaPassphrase = mkOption {
         default = "my_sekret";
         example = "any_64_char_string";
         type = types.string;
-        description = "WPA-PSK (pre-shared-key) passphrase. Clients will need this passphrase to associate with this access point";
-        };
+        description = 
+          ''
+          WPA-PSK (pre-shared-key) passphrase. Clients will need this
+          passphrase to associate with this access point. Warning: This passphrase will
+          get put into a world-readable file in the nix store. 
+          '';
+      };
 
       extraCfg = mkOption {
         default = "";
@@ -130,9 +135,9 @@ in
           '';
         type = types.string;
         description = "Extra configuration options to put in the hostapd.conf";
-        };
       };
     };
+  };
 
 
   ###### implementation
@@ -144,11 +149,7 @@ in
     jobs.hostapd =
       { startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
-
-        script =
-          ''
-            exec ${pkgs.hostapd}/bin/hostapd ${configFile}
-          '';
+        exec = "${pkgs.hostapd}/bin/hostapd ${configFile}";
       };
   };
 }
