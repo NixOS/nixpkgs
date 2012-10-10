@@ -178,7 +178,6 @@ in
         preStart =
           ''
             ${helpers}
-            set -x
 
             # Flush the old firewall rules.  !!! Ideally, updating the
             # firewall would be atomic.  Apparently that's possible
