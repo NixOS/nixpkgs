@@ -7,14 +7,14 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "smartmontools-5.43";
+  name = "smartmontools-6.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
-    sha256 = "d845187d1500b87ef8d2c43772bd0218a59114fe58474a903c56777c9175351e";
+    sha256 = "9fe4ff2b7bcd00fde19db82bba168f5462ed6e857d3ef439495e304e3231d3a6";
   };
 
-  patchPhase = "cp ${driverdb} drivedb.h";
+  # patchPhase = "cp ${driverdb} drivedb.h";
 
   meta = {
     description = "Tools for monitoring the health of hard drivers";

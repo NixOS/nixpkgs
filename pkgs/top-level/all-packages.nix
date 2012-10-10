@@ -2720,10 +2720,9 @@ let
   love = callPackage ../development/interpreters/love {};
 
   lua4 = callPackage ../development/interpreters/lua-4 { };
-
   lua5 = callPackage ../development/interpreters/lua-5 { };
-
   lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
+  lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
 
   maude = callPackage ../development/interpreters/maude { };
 
