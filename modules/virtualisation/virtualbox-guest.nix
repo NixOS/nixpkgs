@@ -11,7 +11,7 @@ let
 
 in
 
-if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
+optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
 {
 
   ###### interface
@@ -85,4 +85,3 @@ if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
   };
 
 }
-else {}
