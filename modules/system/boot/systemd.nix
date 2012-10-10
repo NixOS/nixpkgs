@@ -174,6 +174,7 @@ let
           Wants = concatStringsSep " " config.wants;
           After = concatStringsSep " " config.after;
           Before = concatStringsSep " " config.before;
+          BindsTo = concatStringsSep " " config.bindsTo;
           PartOf = concatStringsSep " " config.partOf;
         } // optionalAttrs (config.description != "") {
           Description = config.description;

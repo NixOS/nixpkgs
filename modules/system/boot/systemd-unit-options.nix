@@ -47,6 +47,15 @@ rec {
       '';
     };
 
+    bindsTo = mkOption {
+      default = [];
+      types = types.listOf types.string;
+      description = ''
+        Like ‘requires’, but in addition, if the specified units
+        unexpectedly disappear, this unit will be stopped as well.
+      '';
+    };
+
     partOf = mkOption {
       default = [];
       types = types.listOf types.string;
