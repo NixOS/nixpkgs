@@ -250,6 +250,13 @@ let
             ''}
           ''}
 
+          ${optionalString (def.postStop != "") ''
+            ExecStopPost=${makeJobScript "${name}-poststop.sh" ''
+              #! ${pkgs.stdenv.shell} -e
+              ${def.postStop}
+            ''}
+          ''}
+
           ${attrsToSection def.serviceConfig}
         '';
     };

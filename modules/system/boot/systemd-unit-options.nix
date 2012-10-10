@@ -145,6 +145,15 @@ rec {
       '';
     };
 
+    postStop = mkOption {
+      type = types.string;
+      default = "";
+      description = ''
+        Shell commands executed after the service's main process
+        has exited.
+      '';
+    };
+
     restartIfChanged = mkOption {
       type = types.bool;
       default = true;
