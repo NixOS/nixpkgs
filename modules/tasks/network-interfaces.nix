@@ -248,64 +248,6 @@ in
           ''
             set +e # continue in case of errors
 
-            # Create virtual network interfaces
-            ${flip concatMapStrings cfg.interfaces (i:
-              optionalString i.virtual
-                ''
-                  echo "Creating virtual network interface ${i.name}..."
-                  ${pkgs.tunctl}/bin/tunctl -t "${i.name}" -u "${i.virtualOwner}"
-                '')
-            }
-
-            # Set MAC addresses of interfaces, if desired.
-            ${flip concatMapStrings cfg.interfaces (i:
-              optionalString (i.macAddress != "")
-                ''
-                  echo "Setting MAC address of ${i.name} to ${i.macAddress}..."
-                  ip link set "${i.name}" address "${i.macAddress}"
-                '')
-            }
-
-            for i in $(cd /sys/class/net && ls -d *); do
-                echo "Bringing up network device $i..."
-                ip link set "$i" up
-            done
-
-            # Create bridge devices.
-            ${concatStrings (attrValues (flip mapAttrs cfg.bridges (n: v: ''
-                echo "Creating bridge ${n}..."
-                ${pkgs.bridge_utils}/sbin/brctl addbr "${n}"
-
-                # Set bridge's hello time to 0 to avoid startup delays.
-                ${pkgs.bridge_utils}/sbin/brctl setfd "${n}" 0
-
-                ${flip concatMapStrings v.interfaces (i: ''
-                  ${pkgs.bridge_utils}/sbin/brctl addif "${n}" "${i}"
-                  ip addr flush dev "${i}"
-                '')}
-
-                # !!! Should delete (brctl delif) any interfaces that
-                # no longer belong to the bridge.
-            '')))}
-
-            # Configure the manually specified interfaces.
-            ${flip concatMapStrings cfg.interfaces (i:
-              optionalString (i.ipAddress != "")
-                ''
-                  echo "Configuring interface ${i.name}..."
-                  ip addr add "${i.ipAddress}""${optionalString (i.subnetMask != "") ("/" + i.subnetMask)}" \
-                    dev "${i.name}"
-                '' +
-              optionalString i.proxyARP
-                ''
-                  echo 1 > /proc/sys/net/ipv4/conf/${i.name}/proxy_arp
-                '' +
-              optionalString (i.proxyARP && cfg.enableIPv6)
-                ''
-                  echo 1 > /proc/sys/net/ipv6/conf/${i.name}/proxy_ndp
-                '')
-            }
-
             # Set the static DNS configuration, if given.
             cat | ${pkgs.openresolv}/sbin/resolvconf -a static <<EOF
             ${optionalString (cfg.nameservers != [] && cfg.domain != "") ''
@@ -318,23 +260,116 @@ in
 
             # Set the default gateway.
             ${optionalString (cfg.defaultGateway != "") ''
-                ip route add default via "${cfg.defaultGateway}"
+              ip route add default via "${cfg.defaultGateway}"
             ''}
 
-            # turn on forwarding if any interface has enabled proxy_arp
+            # Turn on forwarding if any interface has enabled proxy_arp.
             ${optionalString (any (i: i.proxyARP) cfg.interfaces) ''
               echo 1 > /proc/sys/net/ipv4/ip_forward
             ''}
 
             # Run any user-specified commands.
             ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands}
-
-            ${optionalString (cfg.interfaces != [] || cfg.localCommands != "") ''
-              # Start the ip-up target (e.g. to start ntpd).
-              ${config.system.build.systemd}/bin/systemctl start ip-up.target
-            ''}
           '';
       };
+
+    boot.systemd.services =
+      let
+
+        # For each interface <foo>, create a job ‘<foo>-cfg.service"
+        # that performs static configuration.  It has a "wants"
+        # dependency on ‘<foo>.service’, which is supposed to create
+        # the interface and need not exist (i.e. for hardware
+        # interfaces).  It has a binds-to dependency on the actual
+        # network device, so it only gets started after the interface
+        # has appeared, and it's stopped when the interface
+        # disappears.
+        configureInterface = i: nameValuePair "${i.name}-cfg"
+          { description = "Configuration of ${i.name}";
+            wantedBy = [ "network.target" ];
+            wants = [ "${i.name}.service" ];
+            bindsTo = [ "sys-subsystem-net-devices-${i.name}.device" ];
+            after = [ "${i.name}.service" "sys-subsystem-net-devices-${i.name}.device" ];
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.iproute ];
+            script =
+              ''
+                echo "bringing up interface..."
+                ip link set "${i.name}" up
+              ''
+              + optionalString (i.macAddress != "")
+                ''
+                  echo "setting MAC address to ${i.macAddress}..."
+                  ip link set "${i.name}" address "${i.macAddress}"
+                ''
+              + optionalString (i.ipAddress != "")
+                ''
+                  echo "configuring interface..."
+                  ip addr flush dev "${i.name}"
+                  ip addr add "${i.ipAddress}""${optionalString (i.subnetMask != "") ("/" + i.subnetMask)}" \
+                    dev "${i.name}"
+                  ${config.system.build.systemd}/bin/systemctl start ip-up.target
+                ''
+              + optionalString i.proxyARP
+                ''
+                  echo 1 > /proc/sys/net/ipv4/conf/${i.name}/proxy_arp
+                ''
+              + optionalString (i.proxyARP && cfg.enableIPv6)
+                ''
+                  echo 1 > /proc/sys/net/ipv6/conf/${i.name}/proxy_ndp
+                '';
+          };
+
+        createTunDevice = i: nameValuePair "${i.name}"
+          { description = "Virtual Network Interface ${i.name}";
+            wantedBy = [ "network.target" ];
+            serviceConfig =
+              { Type = "oneshot";
+                RemainAfterExit = true;
+                ExecStart = "${pkgs.tunctl}/bin/tunctl -t '${i.name}' -u '${i.virtualOwner}'";
+                ExecStop = "${pkgs.tunctl}/bin/tunctl -d '${i.name}'";
+              };
+          };
+
+        createBridgeDevice = n: v:
+          let
+            deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
+          in
+          { description = "Bridge Interface ${n}";
+            wantedBy = [ "network.target" ];
+            wants = map (i: "${i}.service") v.interfaces;
+            bindsTo = deps;
+            after = deps;
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+            path = [ pkgs.bridge_utils pkgs.iproute ];
+            script =
+              ''
+                brctl addbr "${n}"
+
+                # Set bridge's hello time to 0 to avoid startup delays.
+                brctl setfd "${n}" 0
+
+                ${flip concatMapStrings v.interfaces (i: ''
+                  brctl addif "${n}" "${i}"
+                  ip addr flush dev "${i}"
+                '')}
+
+                # !!! Should delete (brctl delif) any interfaces that
+                # no longer belong to the bridge.
+              '';
+            postStop =
+              ''
+                ip link set "${n}" down
+                brctl delbr "${n}"
+              '';
+          };
+
+      in listToAttrs (
+           map configureInterface cfg.interfaces ++
+           map createTunDevice (filter (i: i.virtual) cfg.interfaces))
+         // mapAttrs createBridgeDevice cfg.bridges;
 
     # Set the host name in the activation script.  Don't clear it if
     # it's not configured in the NixOS configuration, since it may
