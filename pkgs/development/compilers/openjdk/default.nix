@@ -17,6 +17,9 @@
 , libXrender
 , libXtst
 , libXi
+, libXinerama
+, libXcursor
+, fontconfig
 , cpio
 , jreOnly ? false
 }:
@@ -82,7 +85,12 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXi
+    libXinerama
+    libXcursor
+    fontconfig
   ];
+
+  NIX_LDFLAGS = "-lfontconfig -lXcursor -lXinerama";
 
   postUnpack = ''
     mkdir -p drops
