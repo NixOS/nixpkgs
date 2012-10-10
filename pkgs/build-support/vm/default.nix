@@ -33,6 +33,7 @@ rec {
     }
     ''
       mkdir -p $out/bin
+      mkdir -p $out/sbin
       mkdir -p $out/lib
 
       # Copy what we need from Glibc.
@@ -42,11 +43,12 @@ rec {
 
       # Copy BusyBox.
       cp -pd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin
+      cp ${cifs_utils}/sbin/mount.cifs $out/sbin
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
 
-      for i in $out/bin/*; do
+      for i in $out/bin/* $out/sbin/*; do
           if [ -f "$i" -a ! -L "$i" ]; then
               echo "patching $i..."
               patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
