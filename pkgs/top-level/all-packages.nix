@@ -6124,10 +6124,6 @@ let
     config = config.pcmciaUtils.config or null;
   };
 
-  phat = callPackage ../development/libraries/phat {
-    inherit (gnome) libgnomecanvas;
-  };
-
   pmount = callPackage ../os-specific/linux/pmount { };
 
   pmutils = callPackage ../os-specific/linux/pm-utils { };
