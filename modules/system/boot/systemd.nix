@@ -76,7 +76,7 @@ let
       "systemd-update-utmp-shutdown.service"
 
       # Kernel module loading.
-      "systemd-modules-load.service"
+      #"systemd-modules-load.service"
 
       # Filesystems.
       "systemd-fsck@.service"

@@ -2,7 +2,16 @@
 
 with pkgs.lib;
 
-let kernel = config.boot.kernelPackages.kernel; in
+let
+
+  kernel = config.boot.kernelPackages.kernel;
+
+  kernelModulesConf = pkgs.writeText "nixos.conf"
+    ''
+      ${concatStringsSep "\n" config.boot.kernelModules}
+    '';
+
+in
 
 {
 
@@ -197,10 +206,27 @@ let kernel = config.boot.kernelPackages.kernel; in
     # this file changes.
     environment.etc = singleton
       { target = "modules-load.d/nixos.conf";
-        source = pkgs.writeText "nixos.conf"
-          ''
-            ${concatStringsSep "\n" config.boot.kernelModules}
-          '';
+        source = kernelModulesConf;
+      };
+
+    # Sigh.  This overrides systemd's systemd-modules-load.service
+    # just so we can set a restart trigger.  Also make
+    # multi-user.target pull it in so that it gets started if it
+    # failed earlier.
+    boot.systemd.services."systemd-modules-load" =
+      { description = "Load Kernel Modules";
+        wantedBy = [ "sysinit.target" "multi-user.target" ];
+        before = [ "sysinit.target" "shutdown.target" ];
+        unitConfig =
+          { DefaultDependencies = "no";
+            Conflicts = "shutdown.target";
+          };
+        serviceConfig =
+          { Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${config.system.build.systemd}/lib/systemd/systemd-modules-load";
+          };
+        restartTriggers = [ kernelModulesConf ];
       };
 
     lib.kernelConfig = {
