@@ -176,6 +176,7 @@ let
           Before = concatStringsSep " " config.before;
           BindsTo = concatStringsSep " " config.bindsTo;
           PartOf = concatStringsSep " " config.partOf;
+          "X-Restart-Triggers" = toString config.restartTriggers;
         } // optionalAttrs (config.description != "") {
           Description = config.description;
         };

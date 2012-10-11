@@ -83,6 +83,15 @@ rec {
       '';
     };
 
+    restartTriggers = mkOption {
+      default = [];
+      description = ''
+        An arbitrary list of items such as derivations.  If any item
+        in the list changes between reconfigurations, the service will
+        be restarted.
+      '';
+    };
+
   };
 
 
