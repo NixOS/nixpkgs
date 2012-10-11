@@ -1525,8 +1525,6 @@ let
     autoconf = autoconf213;
   };
 
-  task = callPackage ../tools/misc/task { };
-
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
   /*
