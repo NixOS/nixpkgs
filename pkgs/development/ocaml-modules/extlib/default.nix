@@ -4,11 +4,10 @@ stdenv.mkDerivation {
   name = "ocaml-extlib-1.5.2";
 
   src = fetchurl {
-    url = "http://ocaml-extlib.googlecode.com/files/extlib-1.5.2.tar.gz";
-    sha256 = "ca6d69adeba4242ce41c02a23746ba1e464c0bbec66e2d16b02c3c6e85dc10aa";
+    url = http://ocaml-extlib.googlecode.com/files/extlib-1.5.3.tar.gz;
+    sha256 = "c095eef4202a8614ff1474d4c08c50c32d6ca82d1015387785cf03d5913ec021";
   };
 
-  patches = [ ./hashtable-ocaml4-compat.patch ];
   buildInputs = [ocaml findlib];
 
   createFindlibDestdir = true;
@@ -19,9 +18,9 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://code.google.com/p/ocaml-extlib/";
+    homepage = http://code.google.com/p/ocaml-extlib/;
     description = "Enhancements to the OCaml Standard Library modules";
-    license = "LGPL";
+    license = stdenv.lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms;
   };
 }

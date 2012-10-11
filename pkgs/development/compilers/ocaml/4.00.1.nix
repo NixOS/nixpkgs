@@ -8,11 +8,11 @@ in
 
 stdenv.mkDerivation rec {
   
-  name = "ocaml-4.00.0";
+  name = "ocaml-4.00.1";
   
   src = fetchurl {
     url = "http://caml.inria.fr/pub/distrib/ocaml-4.00/${name}.tar.bz2";
-    sha256 = "ec886d7bc587ce472fcbdf294feb4b1fa2d8e7ef78ab6a4e66551699435d5cd7";
+    sha256 = "33c3f4acff51685f5bfd7c260f066645e767d4e865877bf1613c176a77799951";
   };
 
   prefixKey = "-prefix ";

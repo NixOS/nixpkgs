@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "temporary";
-  version = "1.1.2.3";
-  sha256 = "1x4jljggbcdq90h578yyvc8z1i9zmlhvqfz2dym8kj8pq4qiwixd";
+  version = "1.1.2.4";
+  sha256 = "1j8kc22rz2wqg90n5wcxb06ylqv3lnz764077kvwhrw7mhmbp7jz";
   buildDepends = [ filepath ];
   meta = {
     homepage = "http://www.github.com/batterseapower/temporary";

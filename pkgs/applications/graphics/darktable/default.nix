@@ -3,17 +3,17 @@
 , libgnome_keyring, gphoto2, gtk, ilmbase, intltool, lcms, lcms2
 , lensfun, libXau, libXdmcp, libexif, libglade, libgphoto2, libjpeg
 , libpng, libpthreadstubs, libraw1394, librsvg, libtiff, libxcb
-, openexr, pixman, pkgconfig, sqlite }:
+, openexr, pixman, pkgconfig, sqlite, bash }:
 
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.0.5";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/darktable/darktable-${version}.tar.gz";
-    sha256 = "0wjv2x62kf25db61ivbn8y8xr9hr8hdlcjq6l1qxfqn2bn8a3qkm";
+    sha256 = "0c18530446d2f2459fe533a1ef6fc2711300efe7466f36c23168ec2230fb5fbd";
   };
 
   buildInputs =
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${atk}/include/atk-1.0"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${ilmbase}/include/OpenEXR"
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${openexr}/include/OpenEXR"
+
+    substituteInPlace tools/create_preferences.sh.in --replace '#!/usr/bin/env bash' '#!${bash}/bin/bash'
   '';
 
   cmakeFlags = [

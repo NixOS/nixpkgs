@@ -14,8 +14,8 @@ edk2 = stdenv.mkDerivation {
   
   src = fetchsvn {
     url = https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2;
-    rev = "13094";
-    sha256 = "1qfpal0y4sas204ydg3pg3634dm25q1vr94mpgmbdh6yqcviah3h";
+    rev = "13783";
+    sha256 = "18sx0nwcnghij7737xdnmgwk5vm0ax4p0v3ybggqqs8cdhzfghil";
   };
 
   buildInputs = [ libuuid pythonFull ];
