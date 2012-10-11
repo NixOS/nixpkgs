@@ -8193,6 +8193,8 @@ let
     mygui = myguiSvn;
   };
 
+  rili = callPackage ../games/rili { }; 
+
   rogue = callPackage ../games/rogue { };
 
   sauerbraten = callPackage ../games/sauerbraten {};
@@ -8272,6 +8274,8 @@ let
   ultrastardx = callPackage ../games/ultrastardx {
     lua = lua5;
   };
+
+  uqm = callPackage ../games/uqm { };
 
   urbanterror = callPackage ../games/urbanterror { };
 
