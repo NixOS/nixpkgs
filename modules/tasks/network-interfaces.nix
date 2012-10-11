@@ -351,6 +351,8 @@ in
 
         createTunDevice = i: nameValuePair "${i.name}"
           { description = "Virtual Network Interface ${i.name}";
+            requires = [ "dev-net-tun.device" ];
+            after = [ "dev-net-tun.device" ];
             wantedBy = [ "network.target" "sys-subsystem-net-devices-${i.name}.device" ];
             serviceConfig =
               { Type = "oneshot";
@@ -405,6 +407,11 @@ in
     system.activationScripts.hostname =
       optionalString (config.networking.hostName != "") ''
         hostname "${config.networking.hostName}"
+      '';
+
+    services.udev.extraRules =
+      ''
+        KERNEL=="tun", TAG+="systemd"
       '';
 
   };
