@@ -95,7 +95,7 @@ in
       { description = "DHCP Client";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.service" ];
+        after = [ "network-interfaces.target" ];
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 

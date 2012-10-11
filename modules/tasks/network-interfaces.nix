@@ -246,46 +246,53 @@ in
 
     security.setuidPrograms = [ "ping" "ping6" ];
 
-    jobs."network-interfaces" =
-      { description = "Static Network Interfaces";
-
-        after = [ "systemd-udev-settle.service" ];
-        before = [ "network.target" ];
+    boot.systemd.targets."network-interfaces" =
+      { description = "All Network Interfaces";
         wantedBy = [ "network.target" ];
-
-        path = [ pkgs.iproute ];
-
-        preStart =
-          ''
-            set +e # continue in case of errors
-
-            # Set the static DNS configuration, if given.
-            cat | ${pkgs.openresolv}/sbin/resolvconf -a static <<EOF
-            ${optionalString (cfg.nameservers != [] && cfg.domain != "") ''
-              domain ${cfg.domain}
-            ''}
-            ${flip concatMapStrings cfg.nameservers (ns: ''
-              nameserver ${ns}
-            '')}
-            EOF
-
-            # Set the default gateway.
-            ${optionalString (cfg.defaultGateway != "") ''
-              ip route add default via "${cfg.defaultGateway}"
-            ''}
-
-            # Turn on forwarding if any interface has enabled proxy_arp.
-            ${optionalString (any (i: i.proxyARP) cfg.interfaces) ''
-              echo 1 > /proc/sys/net/ipv4/ip_forward
-            ''}
-
-            # Run any user-specified commands.
-            ${pkgs.stdenv.shell} ${pkgs.writeText "local-net-cmds" cfg.localCommands}
-          '';
       };
 
     boot.systemd.services =
       let
+
+        networkSetup =
+          { description = "Networking Setup";
+
+            after = [ "network-interfaces.target" ];
+            before = [ "network.target" ];
+            wantedBy = [ "network.target" ];
+
+            path = [ pkgs.iproute ];
+
+            serviceConfig.Type = "oneshot";
+            serviceConfig.RemainAfterExit = true;
+
+            script =
+              ''
+                # Set the static DNS configuration, if given.
+                cat | ${pkgs.openresolv}/sbin/resolvconf -a static <<EOF
+                ${optionalString (cfg.nameservers != [] && cfg.domain != "") ''
+                  domain ${cfg.domain}
+                ''}
+                ${flip concatMapStrings cfg.nameservers (ns: ''
+                  nameserver ${ns}
+                '')}
+                EOF
+
+                # Set the default gateway.
+                ${optionalString (cfg.defaultGateway != "") ''
+                  # FIXME: get rid of "|| true" (necessary to make it idempotent).
+                  ip route add default via "${cfg.defaultGateway}" || true
+                ''}
+
+                # Turn on forwarding if any interface has enabled proxy_arp.
+                ${optionalString (any (i: i.proxyARP) cfg.interfaces) ''
+                  echo 1 > /proc/sys/net/ipv4/ip_forward
+                ''}
+
+                # Run any user-specified commands.
+                ${cfg.localCommands}
+              '';
+          };
 
         # For each interface <foo>, create a job ‘<foo>-cfg.service"
         # that performs static configuration.  It has a "wants"
@@ -301,7 +308,7 @@ in
                 if i.subnetMask != "" then i.subnetMask else "32";
           in
           { description = "Configuration of ${i.name}";
-            wantedBy = [ "network.target" ];
+            wantedBy = [ "network-interfaces.target" ];
             bindsTo = [ "sys-subsystem-net-devices-${i.name}.device" ];
             after = [ "sys-subsystem-net-devices-${i.name}.device" ];
             serviceConfig.Type = "oneshot";
@@ -389,7 +396,8 @@ in
       in listToAttrs (
            map configureInterface cfg.interfaces ++
            map createTunDevice (filter (i: i.virtual) cfg.interfaces))
-         // mapAttrs createBridgeDevice cfg.bridges;
+         // mapAttrs createBridgeDevice cfg.bridges
+         // { "network-setup" = networkSetup; };
 
     # Set the host name in the activation script.  Don't clear it if
     # it's not configured in the NixOS configuration, since it may

@@ -59,7 +59,7 @@ let
       after =
         (if job.startOn == "stopped udevtrigger" then [ "systemd-udev-settle.service" ] else
          if job.startOn == "started udev" then [ "systemd-udev.service" ] else
-         if job.startOn == "started network-interfaces" then [ "network-interfaces.service" ] else
+         if job.startOn == "started network-interfaces" then [ "network-interfaces.target" ] else
          if job.startOn == "started networking" then [ "network.target" ] else
          if job.startOn == "ip-up" then [] else
          if job.startOn == "" || job.startOn == "startup" then [] else

@@ -23,7 +23,6 @@ let virtualbox = config.boot.kernelPackages.virtualbox; in
     { description = "VirtualBox vboxnet0 Interface";
       requires = [ "dev-vboxnetctl.device" ];
       after = [ "dev-vboxnetctl.device" ];
-      before = [ "network-interfaces.service" ];
       wantedBy = [ "network.target" "sys-subsystem-net-devices-vboxnet0.device" ];
       path = [ virtualbox ];
       preStart =
