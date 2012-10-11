@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
-, glib, kbd, libxslt, coreutils
+, glib, kbd, libxslt, coreutils, libgcrypt
 }:
 
 assert stdenv.gcc.libc or null != null;
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
-      /* cryptsetup */ libuuid m4 usbutils pciutils glib libxslt
+      /* cryptsetup */ libuuid m4 usbutils pciutils glib libxslt libgcrypt
     ];
 
   configureFlags =
@@ -56,6 +56,9 @@ stdenv.mkDerivation rec {
       # lead to a cyclic dependency.
       "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
       "-fno-stack-protector"
+      # Work around our kernel headers being too old.  FIXME: remove
+      # this after the next stdenv update.
+      "-DFS_NOCOW_FL=0x00800000"
     ];
 
   makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include";
