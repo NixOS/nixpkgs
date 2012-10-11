@@ -1292,7 +1292,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   primitive_0_4_1 = callPackage ../development/libraries/haskell/primitive/0.4.1.nix {};
   primitive_0_5   = callPackage ../development/libraries/haskell/primitive/0.5.nix   {};
-  primitive = self.primitive_0_4_1;
+  primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
+  primitive = self.primitive_0_5_0_1;
 
   processExtras = callPackage ../development/libraries/haskell/process-extras {};
 
