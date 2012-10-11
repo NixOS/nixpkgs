@@ -1,15 +1,10 @@
-{ cabal, convertible, csv, FerryCore, HaXml, HDBC, json, mtl
-, Pathfinder, syb, text, xhtml
-}:
+{ cabal, csv, FerryCore, HaXml, HDBC, mtl, Pathfinder, text }:
 
 cabal.mkDerivation (self: {
   pname = "DSH";
-  version = "0.7.8.2";
-  sha256 = "1rs42c05q4s46a1a03srzdq0aijwalhilzifc8ryq4qwjgh7vkwz";
-  buildDepends = [
-    convertible csv FerryCore HaXml HDBC json mtl Pathfinder syb text
-    xhtml
-  ];
+  version = "0.8.0.1";
+  sha256 = "08bwn7jpnkzvyj2dlpk6zx97iwsjb085vbnc8hwvxnhf9y8wl96s";
+  buildDepends = [ csv FerryCore HaXml HDBC mtl Pathfinder text ];
   meta = {
     description = "Database Supported Haskell";
     license = self.stdenv.lib.licenses.bsd3;
