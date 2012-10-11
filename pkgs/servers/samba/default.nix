@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   postPatch =
     # XXX: Awful hack to allow cross-compilation.
     '' sed -i source3/configure \
-           -e 's/^as_fn_error \("cannot run test program while cross compiling\)/$as_echo \1/g'
+           -e 's/^as_fn_error .. \("cannot run test program while cross compiling\)/$as_echo \1/g'
     ''; # "
 
   preConfigure =
