@@ -287,9 +287,8 @@ in
         configureInterface = i: nameValuePair "${i.name}-cfg"
           { description = "Configuration of ${i.name}";
             wantedBy = [ "network.target" ];
-            wants = [ "${i.name}.service" ];
             bindsTo = [ "sys-subsystem-net-devices-${i.name}.device" ];
-            after = [ "${i.name}.service" "sys-subsystem-net-devices-${i.name}.device" ];
+            after = [ "sys-subsystem-net-devices-${i.name}.device" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -323,7 +322,7 @@ in
 
         createTunDevice = i: nameValuePair "${i.name}"
           { description = "Virtual Network Interface ${i.name}";
-            wantedBy = [ "network.target" ];
+            wantedBy = [ "network.target" "sys-subsystem-net-devices-${i.name}.device" ];
             serviceConfig =
               { Type = "oneshot";
                 RemainAfterExit = true;
@@ -337,8 +336,7 @@ in
             deps = map (i: "sys-subsystem-net-devices-${i}.device") v.interfaces;
           in
           { description = "Bridge Interface ${n}";
-            wantedBy = [ "network.target" ];
-            wants = map (i: "${i}.service") v.interfaces;
+            wantedBy = [ "network.target" "sys-subsystem-net-devices-${n}.device" ];
             bindsTo = deps;
             after = deps;
             serviceConfig.Type = "oneshot";
