@@ -2584,11 +2584,11 @@ let pythonPackages = python.modules // rec {
   });
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.0.7";
+    name = "Sphinx-1.1.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      md5 = "42c722d48e52d4888193965dd473adb5";
+      md5 = "8f55a6d4f87fc6d528120c5d1f983e98";
     };
 
     propagatedBuildInputs = [docutils jinja2 pygments];
