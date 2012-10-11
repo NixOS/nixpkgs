@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     sed -e "s#xsltproc#${libxslt}/bin/xsltproc#" -i Makefile
     sed -e "s#PREFIX = /usr/local#PREFIX = $out#" -i Makefile
+    sed -e "s#/etc/HybridReverb2#$out/etc/Hybridreverb2#" \
+      -i ports/hybridreverb2/source/SystemConfig.cpp
+    sed -e "s#/usr#$out#" -i ports/hybridreverb2/data/HybridReverb2.conf
   '';
 
   buildInputs = [
@@ -38,6 +41,12 @@ stdenv.mkDerivation rec {
     cp bin/standalone/* $out/bin/
     mkdir -p $out/lib/lv2
     cp -a bin/lv2/* $out/lib/lv2/
+
+    # HybridReverb2 data
+    mkdir -p $out/etc/HybridReverb2
+    cp ports/hybridreverb2/data/HybridReverb2.conf $out/etc/HybridReverb2/
+    mkdir -p $out/share
+    cp -a ports/hybridreverb2/data/HybridReverb2 $out/share/
   '';
 
   meta = with stdenv.lib; {

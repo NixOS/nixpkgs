@@ -2286,6 +2286,11 @@ let
     };
   };
 
+  jhc = callPackage ../development/compilers/jhc {
+    inherit (haskellPackages_ghc6123) ghc binary zlib utf8String readline fgl
+    regexCompat HsSyck random;
+  };
+
   # Haskell and GHC
 
   # Import Haskell infrastructure.
@@ -2442,7 +2447,7 @@ let
 
   ocaml_3_12_1 = callPackage ../development/compilers/ocaml/3.12.1.nix { };
 
-  ocaml_4_00_0 = callPackage ../development/compilers/ocaml/4.00.0.nix { };
+  ocaml_4_00_1 = callPackage ../development/compilers/ocaml/4.00.1.nix { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
@@ -2541,7 +2546,7 @@ let
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
   ocamlPackages_3_11_2 = mkOcamlPackages ocaml_3_11_2 pkgs.ocamlPackages_3_11_2;
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
-  ocamlPackages_4_00_0 = mkOcamlPackages ocaml_4_00_0 pkgs.ocamlPackages_4_00_0;
+  ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
@@ -2716,10 +2721,9 @@ let
   love = callPackage ../development/interpreters/love {};
 
   lua4 = callPackage ../development/interpreters/lua-4 { };
-
   lua5 = callPackage ../development/interpreters/lua-5 { };
-
   lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
+  lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
 
   maude = callPackage ../development/interpreters/maude { };
 
@@ -5431,6 +5435,10 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
+  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc {
+    postgresql = postgresql91;
+  };
+
   pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
     inherit xmpppy pythonIRClib python makeWrapper;
   };
@@ -5870,8 +5878,7 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-#       kernelPatches.aufs3_5
-#       kernelPatches.perf3_5
+        kernelPatches.aufs3_6
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -6120,10 +6127,6 @@ let
   pcmciaUtils = callPackage ../os-specific/linux/pcmciautils {
     firmware = config.pcmciaUtils.firmware or [];
     config = config.pcmciaUtils.config or null;
-  };
-
-  phat = callPackage ../development/libraries/phat {
-    inherit (gnome) libgnomecanvas;
   };
 
   pmount = callPackage ../os-specific/linux/pmount { };
@@ -6969,6 +6972,13 @@ let
 
   firefox15Wrapper = lowPrio (wrapFirefox { browser = firefox15Pkgs.firefox; });
 
+  firefox16Pkgs = callPackage ../applications/networking/browsers/firefox/16.0.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
+  firefox16Wrapper = lowPrio (wrapFirefox { browser = firefox16Pkgs.firefox; });
+
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
@@ -7449,6 +7459,8 @@ let
   };
 
   navit = callPackage ../applications/misc/navit { };
+
+  netbeans = callPackage ../applications/editors/netbeans { };
 
   ncdu = callPackage ../tools/misc/ncdu { };
 
@@ -8186,6 +8198,8 @@ let
     mygui = myguiSvn;
   };
 
+  rili = callPackage ../games/rili { }; 
+
   rogue = callPackage ../games/rogue { };
 
   sauerbraten = callPackage ../games/sauerbraten {};
@@ -8265,6 +8279,8 @@ let
   ultrastardx = callPackage ../games/ultrastardx {
     lua = lua5;
   };
+
+  uqm = callPackage ../games/uqm { };
 
   urbanterror = callPackage ../games/urbanterror { };
 

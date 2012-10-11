@@ -1,20 +1,18 @@
-{ cabal, attoparsec, attoparsecEnumerator, binary, blazeBuilder
-, blazeBuilderEnumerator, caseInsensitive, directoryTree
-, enumerator, filepath, MonadCatchIOTransformers, mtl, network
-, snapCore, text, time, transformers, unixCompat
+{ cabal, attoparsec, attoparsecEnumerator, blazeBuilder
+, blazeBuilderEnumerator, caseInsensitive, enumerator
+, MonadCatchIOTransformers, mtl, network, snapCore, text, time
+, unixCompat
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap-server";
-  version = "0.9.2.3";
-  sha256 = "0wl7clzwrd34d32sikd6vkj3pla9yni26mmdsnrjw1s3lq412yqd";
+  version = "0.9.2.4";
+  sha256 = "1kwmrlk9dr033h6q05afnr916wnw5wlxrr87z1myv0a6nzqmdhzl";
   buildDepends = [
-    attoparsec attoparsecEnumerator binary blazeBuilder
-    blazeBuilderEnumerator caseInsensitive directoryTree enumerator
-    filepath MonadCatchIOTransformers mtl network snapCore text time
-    transformers unixCompat
+    attoparsec attoparsecEnumerator blazeBuilder blazeBuilderEnumerator
+    caseInsensitive enumerator MonadCatchIOTransformers mtl network
+    snapCore text time unixCompat
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "A fast, iteratee-based, epoll-enabled web server for the Snap Framework";

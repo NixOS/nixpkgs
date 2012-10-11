@@ -1,10 +1,13 @@
 { stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt }:
+
 stdenv.mkDerivation rec {
-  name = "nginx-1.1.7";
+  name = "nginx-1.2.4";
+
   src = fetchurl {
     url = "http://nginx.org/download/${name}.tar.gz";
-    sha256 = "1y0bzmrgnyqw8ghc508nipy5k46byrxc2sycqp35fdx0jmjz3h51";
+    sha256 = "0hvcv4lgfcrsl40azkd3rxhf73l05jzzgflclpkdvjd95xgw51y5";
   };
+
   buildInputs = [ openssl zlib pcre libxml2 libxslt ];
 
   configureFlags = [
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
     "--with-http_gzip_static_module"
     "--with-http_secure_link_module"
     # Install destination problems
-    # "--with-http_perl_module" 
+    # "--with-http_perl_module"
   ];
 
   preConfigure = ''
@@ -27,11 +30,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "nginx - 'engine x' - reverse proxy and lightweight webserver";
-    maintainers = [
-      stdenv.lib.maintainers.raskin
-    ];
-    platforms = with stdenv.lib.platforms; 
-      all;
+    description = "A reverse proxy and lightweight webserver";
+    maintainers = [ stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.all;
   };
 }
