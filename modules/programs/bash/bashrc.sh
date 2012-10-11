@@ -42,6 +42,9 @@ alias ls="ls --color=tty"
 alias ll="ls -l"
 alias l="ls -alh"
 alias which="type -P"
+
+# Convenience for people used to Upstart.
 alias start="systemctl start"
 alias stop="systemctl stop"
+alias restart="systemctl restart"
 alias status="systemctl status"
