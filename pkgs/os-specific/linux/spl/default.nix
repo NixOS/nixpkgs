@@ -31,6 +31,22 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Kernel module driver for solaris porting layer (needed by in-kernel zfs)";
+
+    longDescription = ''
+      This kernel module is a porting layer for ZFS to work inside the linux kernel. 
+
+      LICENSE NOTE: the Linux kernel is licensed under the GNU General Public
+      License which is incompatible with ZFS which is licensed under the Sun CDDL.
+      While both the GPL and CDDL are open source licenses their terms are such that
+      it is impossible to simultaneously satisfy both licenses. This means that a
+      single derived work of the Linux kernel and ZFS cannot be legally distributed.
+
+      The ZFS code can be modified to build as a CDDL licensed kernel module
+      which is not distributed as part of the Linux kernel. This makes a Native ZFS
+      on Linux implementation possible if you are willing to download and build it
+      yourself.
+    '';
+
     homepage = http://zfsonlinux.org/;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.cddl;
