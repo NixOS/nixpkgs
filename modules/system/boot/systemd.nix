@@ -7,7 +7,7 @@ let
 
   cfg = config.boot.systemd;
 
-  systemd = pkgs.systemd_tmp;
+  systemd = pkgs.systemd;
 
   makeUnit = name: unit:
     pkgs.writeTextFile { name = "unit"; inherit (unit) text; destination = "/${name}"; };
