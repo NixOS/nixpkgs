@@ -189,6 +189,21 @@ rec {
     features.aufs3 = true;
   };
 
+  # not officially released yet, but 3.x seems to work fine
+  aufs3_6 = rec {
+    name = "aufs3.6";
+    version = "3.x.20120827";
+    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
+    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
+    patch = makeAufs3StandalonePatch {
+      inherit version;
+      rev = "46660ad144289fa1f0aca59bd00d592b560d0dbb";
+      sha256 = "823b7b4c011c103d63711900b3213008de3c9e408b909e0cc2b8697c1e82b67d";
+    };
+    features.aufsBase = true;
+    features.aufs3 = true;
+  };
+
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
   # make CIFS more resilient to high load on the CIFS server.
   cifs_timeout_2_6_15 =
@@ -226,6 +241,7 @@ rec {
       patch = ./dell-rfkill.patch;
     };
 
+  # seems no longer necessary on 3.6
   perf3_5 =
     { name = "perf-3.5";
       patch = ./perf-3.5.patch;

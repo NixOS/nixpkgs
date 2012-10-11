@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "BNFC-meta";
-  version = "0.3.0.3";
-  sha256 = "06k8jnb4gw96gc0ffmczbywn4q2n87zwqa0pl0ada3ldvwaagv4l";
+  version = "0.3.0.5";
+  sha256 = "0blssa72r2ff4avbibw9a4p8gxy228f3lb1vc9aqr881v79b2cpp";
   buildDepends = [ alexMeta happyMeta haskellSrcMeta syb ];
   noHaddock = true;
   meta = {

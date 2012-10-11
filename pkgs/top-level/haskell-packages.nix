@@ -143,7 +143,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     transformers = self.transformers_0_3_0_0;   # 7.6 ok
     xhtml        = self.xhtml_3000_2_1;         # 7.6 ok
     zlib         = self.zlib_0_5_4_0;           # 7.6 ok
-    cabalInstall = self.cabalInstall_0_14_0;    # 7.6 ok
+    cabalInstall = self.cabalInstall_1_16_0;    # 7.6 ok
     alex         = self.alex_3_0_1;             # 7.6 ok
     haddock      = self.haddock_2_12_0;         # 7.6 ok
     happy        = self.happy_1_18_10;          # 7.6 ok
@@ -537,7 +537,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
-  Cabal_1_16_0 = callPackage ../development/libraries/haskell/Cabal/1.16.0.nix { cabal = self.cabal.override { Cabal = null; }; };
+  Cabal_1_16_0_1 = callPackage ../development/libraries/haskell/Cabal/1.16.0.1.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal = null; # core package in GHC
 
   cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};
@@ -1292,7 +1292,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   primitive_0_4_1 = callPackage ../development/libraries/haskell/primitive/0.4.1.nix {};
   primitive_0_5   = callPackage ../development/libraries/haskell/primitive/0.5.nix   {};
-  primitive = self.primitive_0_4_1;
+  primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
+  primitive = self.primitive_0_5_0_1;
 
   processExtras = callPackage ../development/libraries/haskell/process-extras {};
 
@@ -1634,8 +1635,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   Vec = callPackage ../development/libraries/haskell/Vec {};
 
   vector_0_9_1 = callPackage ../development/libraries/haskell/vector/0.9.1.nix {};
-  vector_0_10  = callPackage ../development/libraries/haskell/vector/0.10.nix  {};
-  vector = self.vector_0_9_1;
+  vector_0_10 = callPackage ../development/libraries/haskell/vector/0.10.nix  {};
+  vector_0_10_0_1  = callPackage ../development/libraries/haskell/vector/0.10.0.1.nix  {};
+  vector = self.vector_0_10_0_1;
 
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
 
@@ -1841,8 +1843,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   tar_0_3_2_0 = callPackage ../development/tools/haskell/tar/0.3.2.0.nix {};
-  tar_0_4_0_0 = callPackage ../development/tools/haskell/tar/0.4.0.0.nix {};
-  tar = self.tar_0_4_0_0;
+  tar_0_4_0_1 = callPackage ../development/tools/haskell/tar/0.4.0.1.nix {};
+  tar = self.tar_0_4_0_1;
 
   threadscope = callPackage ../development/tools/haskell/threadscope {};
 
@@ -1889,7 +1891,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_0_8_2  = callPackage ../tools/package-management/cabal-install/0.8.2.nix  {};
   cabalInstall_0_10_2 = callPackage ../tools/package-management/cabal-install/0.10.2.nix {};
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
-  cabalInstall = self.cabalInstall_0_14_0;
+  cabalInstall_1_16_0 = callPackage ../tools/package-management/cabal-install/1.16.0.nix {};
+  cabalInstall = self.cabalInstall_1_16_0;
 
   jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {};
 

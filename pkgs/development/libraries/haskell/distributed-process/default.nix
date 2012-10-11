@@ -5,8 +5,10 @@
 
 cabal.mkDerivation (self: {
   pname = "distributed-process";
-  version = "0.3.1";
-  sha256 = "048j27mpdmknz2s4ja3q2mla1d2sjbvrpmzx0lz2qas123qz1siq";
+  version = "0.4.0.1";
+  sha256 = "0yi0403665l01gkqbsix9f4hj8c8m4i42nwjq2i63x259qz2njwi";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
     binary dataAccessor distributedStatic mtl networkTransport random
     rank1dynamic stm syb time transformers

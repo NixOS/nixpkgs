@@ -587,6 +587,10 @@ let
 
   dcraw = callPackage ../tools/graphics/dcraw { };
 
+  debian_devscripts = callPackage ../tools/misc/debian-devscripts {
+    inherit (perlPackages) CryptSSLeay LWP TimeDate DBFile FileDesktopEntry;
+  };
+
   debootstrap = callPackage ../tools/misc/debootstrap { };
 
   detox = callPackage ../tools/misc/detox { };
@@ -1160,6 +1164,8 @@ let
   nmap = callPackage ../tools/security/nmap {
     inherit (pythonPackages) pysqlite;
   };
+
+  nss_myhostname = callPackage ../tools/networking/nss-myhostname {};
 
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
 
@@ -2280,6 +2286,11 @@ let
     };
   };
 
+  jhc = callPackage ../development/compilers/jhc {
+    inherit (haskellPackages_ghc6123) ghc binary zlib utf8String readline fgl
+    regexCompat HsSyck random;
+  };
+
   # Haskell and GHC
 
   # Import Haskell infrastructure.
@@ -2324,11 +2335,7 @@ let
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
 
-  haxeDist = import ../development/compilers/haxe {
-    inherit fetchurl sourceFromHead stdenv lib ocaml zlib makeWrapper neko;
-  };
-  haxe = haxeDist.haxe;
-  haxelib = haxeDist.haxelib;
+  haxe = callPackage ../development/compilers/haxe { };
 
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
     inherit cmake;
@@ -2400,7 +2407,6 @@ let
   jikes = callPackage ../development/compilers/jikes { };
 
   julia = callPackage ../development/compilers/julia {
-    llvm = llvm_3_1;
     pcre = pcre_8_30;
     liblapack = liblapack.override {shared = true;};
     fftw = fftw.override {pthreads = true;};
@@ -2414,7 +2420,6 @@ let
   };
 
   llvm = callPackage ../development/compilers/llvm { };
-  llvm_3_1 = callPackage ../development/compilers/llvm/3.1.nix { };
 
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
@@ -2442,7 +2447,7 @@ let
 
   ocaml_3_12_1 = callPackage ../development/compilers/ocaml/3.12.1.nix { };
 
-  ocaml_4_00_0 = callPackage ../development/compilers/ocaml/4.00.0.nix { };
+  ocaml_4_00_1 = callPackage ../development/compilers/ocaml/4.00.1.nix { };
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
@@ -2541,7 +2546,7 @@ let
   ocamlPackages_3_10_0 = mkOcamlPackages ocaml_3_10_0 pkgs.ocamlPackages_3_10_0;
   ocamlPackages_3_11_2 = mkOcamlPackages ocaml_3_11_2 pkgs.ocamlPackages_3_11_2;
   ocamlPackages_3_12_1 = mkOcamlPackages ocaml_3_12_1 pkgs.ocamlPackages_3_12_1;
-  ocamlPackages_4_00_0 = mkOcamlPackages ocaml_4_00_0 pkgs.ocamlPackages_4_00_0;
+  ocamlPackages_4_00_1 = mkOcamlPackages ocaml_4_00_1 pkgs.ocamlPackages_4_00_1;
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
@@ -2716,10 +2721,9 @@ let
   love = callPackage ../development/interpreters/love {};
 
   lua4 = callPackage ../development/interpreters/lua-4 { };
-
   lua5 = callPackage ../development/interpreters/lua-5 { };
-
   lua5_0 = callPackage ../development/interpreters/lua-5/5.0.3.nix { };
+  lua5_1 = callPackage ../development/interpreters/lua-5/5.1.nix { };
 
   maude = callPackage ../development/interpreters/maude { };
 
@@ -3030,6 +3034,8 @@ let
 
   csslint = callPackage ../development/web/csslint { };
 
+  libcxx = callPackage ../development/libraries/libc++ { stdenv = pkgs.clangStdenv; };
+
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
   ddd = callPackage ../development/tools/misc/ddd { };
@@ -3199,6 +3205,11 @@ let
   simpleBuildTool = callPackage ../development/tools/build-managers/simple-build-tool { };
 
   sloccount = callPackage ../development/tools/misc/sloccount { };
+
+  smatch = callPackage ../development/tools/analysis/smatch {
+    buildllvmsparse = false;
+    buildc2xml = false;
+  };
 
   sparse = callPackage ../development/tools/analysis/sparse { };
 
@@ -5424,6 +5435,10 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
+  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc {
+    postgresql = postgresql91;
+  };
+
   pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
     inherit xmpppy pythonIRClib python makeWrapper;
   };
@@ -5444,7 +5459,7 @@ let
 
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
-      HTTPDate MailDKIM LWP IOSocketSSL IOSocketInet6;
+      HTTPDate MailDKIM LWP IOSocketSSL;
   };
 
   samba = callPackage ../servers/samba { };
@@ -5863,8 +5878,7 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-#       kernelPatches.aufs3_5
-#       kernelPatches.perf3_5
+        kernelPatches.aufs3_6
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -6117,10 +6131,6 @@ let
   pcmciaUtils = callPackage ../os-specific/linux/pcmciautils {
     firmware = config.pcmciaUtils.firmware or [];
     config = config.pcmciaUtils.config or null;
-  };
-
-  phat = callPackage ../development/libraries/phat {
-    inherit (gnome) libgnomecanvas;
   };
 
   pmount = callPackage ../os-specific/linux/pmount { };
@@ -6681,6 +6691,8 @@ let
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
   };
 
+  distrho = callPackage ../applications/audio/distrho {};
+
   djvulibre = callPackage ../applications/misc/djvulibre { };
 
   djview = callPackage ../applications/graphics/djview { };
@@ -6963,6 +6975,13 @@ let
   };
 
   firefox15Wrapper = lowPrio (wrapFirefox { browser = firefox15Pkgs.firefox; });
+
+  firefox16Pkgs = callPackage ../applications/networking/browsers/firefox/16.0.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
+  firefox16Wrapper = lowPrio (wrapFirefox { browser = firefox16Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7445,6 +7464,8 @@ let
 
   navit = callPackage ../applications/misc/navit { };
 
+  netbeans = callPackage ../applications/editors/netbeans { };
+
   ncdu = callPackage ../tools/misc/ncdu { };
 
   nedit = callPackage ../applications/editors/nedit {
@@ -7762,7 +7783,7 @@ let
 
   thinkingRock = callPackage ../applications/misc/thinking-rock { };
 
-  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/11.x.nix {
+  thunderbird = callPackage ../applications/networking/mailreaders/thunderbird/15.x.nix {
     inherit (gnome) libIDL;
   };
 

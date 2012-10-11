@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR
   buildPhase = ''
     export PYLIBSUFFIX=lib/${python.libPrefix}/site-packages
-    scons PYPKGDIR=$out/$PYLIBSUFFIX
+    scons PYPKGDIR=$out/$PYLIBSUFFIX DEBUG=False
     sed -e "s#/usr/local#$out#" -i support/mixer-qt4/ffado/config.py
     '';
 

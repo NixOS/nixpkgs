@@ -64,7 +64,13 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    description = ''Urquan Masters is an open source clone of the Classic top-down space battle Star Cotnrol '';
+    description = "Remake of Star Control II";
+    longDescription = ''
+    The goals for the The Ur-Quan Masters project are:
+      - to bring Star Control II to modern platforms, thereby making a lot of people happy
+      - to make game translations easy, thereby making even more people happy
+      - to adapt the code so that people can more easily make their own spin-offs, thereby making zillions more people happy!
+    '';
     homepage = http://sc2.sourceforge.net/;
     license = "GPLv2";
     maintainers = with stdenv.lib.maintainers; [ jcumming ];

@@ -7,11 +7,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.0.2";
+  name = "go-1.0.3";
 
   src = fetchurl {
-    url = http://go.googlecode.com/files/go1.0.2.src.tar.gz;
-    sha256 = "1a4mpkb3bd9dwp0r3fgrfcyk5lgw0f0cfrbskg2lrhc7a12zpz3h";
+    url = http://go.googlecode.com/files/go1.0.3.src.tar.gz;
+    sha256 = "1pz31az3icwqfqfy3avms05jnqr0qrbrx9yqsclkdwbjs4rkbfkz";
   };
 
   buildInputs = [ bison glibc bash makeWrapper ];
