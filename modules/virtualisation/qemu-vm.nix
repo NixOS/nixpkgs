@@ -363,6 +363,7 @@ in
   networking.interfaces = singleton
     { name = "eth0";
       ipAddress = "10.0.2.15";
+      prefixLength = 24;
     };
 
   # Don't run ntpd in the guest.  It should get the correct time from KVM.

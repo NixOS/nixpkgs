@@ -101,13 +101,24 @@ in
           '';
         };
 
+        prefixLength = mkOption {
+          default = null;
+          example = 24;
+          type = types.nullOr types.int;
+          description = ''
+            Subnet mask of the interface, specified as the number of
+            bits in the prefix (<literal>24</literal>).
+          '';
+        };
+
         subnetMask = mkOption {
           default = "";
           example = "255.255.255.0";
           type = types.string;
           description = ''
-            Subnet mask of the interface.  Leave empty to use the
-            default subnet mask.
+            Subnet mask of the interface, specified as a bitmask.
+            This is deprecated; use <option>prefixLength</option>
+            instead.
           '';
         };
 
@@ -285,13 +296,17 @@ in
         # has appeared, and it's stopped when the interface
         # disappears.
         configureInterface = i: nameValuePair "${i.name}-cfg"
+          (let mask =
+                if i.prefixLength != null then toString i.prefixLength else
+                if i.subnetMask != "" then i.subnetMask else "32";
+          in
           { description = "Configuration of ${i.name}";
             wantedBy = [ "network.target" ];
             bindsTo = [ "sys-subsystem-net-devices-${i.name}.device" ];
             after = [ "sys-subsystem-net-devices-${i.name}.device" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
-            path = [ pkgs.iproute ];
+            path = [ pkgs.iproute pkgs.gawk ];
             script =
               ''
                 echo "bringing up interface..."
@@ -304,10 +319,17 @@ in
                 ''
               + optionalString (i.ipAddress != "")
                 ''
-                  echo "configuring interface..."
-                  ip addr flush dev "${i.name}"
-                  ip addr add "${i.ipAddress}""${optionalString (i.subnetMask != "") ("/" + i.subnetMask)}" \
-                    dev "${i.name}"
+                  cur=$(ip -4 -o a show dev "${i.name}" | awk '{print $4}')
+                  # Only do a flush/add if it's necessary.  This is
+                  # useful when the Nix store is accessed via this
+                  # interface (e.g. in a QEMU VM test).
+                  if [ "$cur" != "${i.ipAddress}/${mask}" ]; then
+                    echo "configuring interface..."
+                    ip -4 addr flush dev "${i.name}"
+                    ip -4 addr add "${i.ipAddress}/${mask}" dev "${i.name}"
+                  else
+                    echo "skipping configuring interface"
+                  fi
                   ${config.system.build.systemd}/bin/systemctl start ip-up.target
                 ''
               + optionalString i.proxyARP
@@ -318,7 +340,7 @@ in
                 ''
                   echo 1 > /proc/sys/net/ipv6/conf/${i.name}/proxy_ndp
                 '';
-          };
+          });
 
         createTunDevice = i: nameValuePair "${i.name}"
           { description = "Virtual Network Interface ${i.name}";
