@@ -1,0 +1,12 @@
+diff --git a/panel/panel-module-factory.c b/panel/panel-module-factory.c
+index 529fe85..8c792b7 100644
+--- a/panel/panel-module-factory.c
++++ b/panel/panel-module-factory.c
+@@ -39,6 +39,7 @@
+ #include <panel/panel-module.h>
+ #include <panel/panel-module-factory.h>
+ 
++#define DATADIR "/run/current-system/sw/share/xfce4"
+ #define PANEL_PLUGINS_DATA_DIR     (DATADIR G_DIR_SEPARATOR_S "panel" G_DIR_SEPARATOR_S "plugins")
+ #define PANEL_PLUGINS_DATA_DIR_OLD (DATADIR G_DIR_SEPARATOR_S "panel-plugins")
+ 
