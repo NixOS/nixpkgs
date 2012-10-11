@@ -1,0 +1,24 @@
+*** zfs-0.6.0-rc4.old/cmd/mount_zfs/Makefile.in	Thu May  5 15:12:25 2011
+--- zfs-0.6.0-rc4/cmd/mount_zfs/Makefile.in	Fri Jun  3 16:42:41 2011
+***************
+*** 285,296 ****
+  prefix = @prefix@
+  program_transform_name = @program_transform_name@
+  psdir = @psdir@
+! 
+! #
+! # Ignore the prefix for the mount helper.  It must be installed in /sbin/
+! # because this path is hardcoded in the mount(8) for security reasons.
+! #
+! sbindir = /sbin
+  sharedstatedir = @sharedstatedir@
+  srcdir = @srcdir@
+  sysconfdir = @sysconfdir@
+--- 285,291 ----
+  prefix = @prefix@
+  program_transform_name = @program_transform_name@
+  psdir = @psdir@
+! sbindir = @sbindir@
+  sharedstatedir = @sharedstatedir@
+  srcdir = @srcdir@
+  sysconfdir = @sysconfdir@
