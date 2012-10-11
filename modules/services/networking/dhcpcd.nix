@@ -94,8 +94,7 @@ in
     boot.systemd.services.dhcpcd =
       { description = "DHCP Client";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
+        wantedBy = [ "network.target" ];
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
