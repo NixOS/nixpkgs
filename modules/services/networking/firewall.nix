@@ -39,6 +39,11 @@ let
       }
     '';
 
+  kernelPackages = config.boot.kernelPackages;
+  kernelHasRPFilter = kernelPackages.kernel ? features
+                   && kernelPackages.kernel.features ? netfilterRPFilter
+                   && kernelPackages.kernel.features.netfilterRPFilter;
+
 in
 
 {
@@ -140,6 +145,22 @@ in
         '';
     };
 
+    networking.firewall.checkReversePath = mkOption {
+      default = kernelHasRPFilter;
+      type = types.bool;
+      description =
+        ''
+          Performs a reverse path filter test on a packet.
+          If a reply to the packet would not be sent via the same interface
+          that the packet arrived on, it is refused.
+
+          If using asymmetric routing or other complicated routing,
+          disable this setting and setup your own counter-measures.
+
+          (needs kernel 3.3+)
+        '';
+    };
+
     networking.firewall.extraCommands = mkOption {
       default = "";
       example = "iptables -A INPUT -p icmp -j ACCEPT";
@@ -169,6 +190,9 @@ in
     environment.systemPackages = [ pkgs.iptables ];
 
     boot.kernelModules = [ "nf_conntrack_ftp" ];
+
+    assertions = [ { assertion = ! cfg.checkReversePath || kernelHasRPFilter;
+                     message = "This kernel does not support rpfilter"; } ];
 
     jobs.firewall =
       { startOn = "started network-interfaces";
@@ -232,6 +256,12 @@ in
 
             # The "nixos-fw" chain does the actual work.
             ip46tables -N nixos-fw
+
+            # Perform a reverse-path test to refuse spoofers
+            # For now, we just drop, as the raw table doesn't have a log-refuse yet
+            ${optionalString (kernelHasRPFilter && cfg.checkReversePath) ''
+              ip46tables -A PREROUTING -t raw -m rpfilter --invert -j DROP
+            ''}
 
             # Accept all traffic on the trusted interfaces.
             ${flip concatMapStrings cfg.trustedInterfaces (iface: ''
