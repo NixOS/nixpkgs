@@ -225,6 +225,11 @@ in
           { Type = "oneshot";
             RemainAfterExit = true;
             ExecStart = "${config.system.build.systemd}/lib/systemd/systemd-modules-load";
+            # Ignore failed module loads.  Typically some of the
+            # modules in ‘boot.kernelModules’ are "nice to have but
+            # not required" (e.g. acpi-cpufreq), so we don't want to
+            # barf on those.
+            SuccessExitStatus = "0 1";
           };
         restartTriggers = [ kernelModulesConf ];
       };
