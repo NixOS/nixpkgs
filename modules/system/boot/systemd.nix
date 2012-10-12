@@ -224,28 +224,28 @@ let
           ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
 
           ${optionalString (def.preStart != "") ''
-            ExecStartPre=${makeJobScript "${name}-prestart.sh" ''
+            ExecStartPre=${makeJobScript "prestart.sh" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.preStart}
             ''}
           ''}
 
           ${optionalString (def.script != "") ''
-            ExecStart=${makeJobScript "${name}.sh" ''
+            ExecStart=${makeJobScript "start.sh" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.script}
             ''}
           ''}
 
           ${optionalString (def.postStart != "") ''
-            ExecStartPost=${makeJobScript "${name}-poststart.sh" ''
+            ExecStartPost=${makeJobScript "poststart.sh" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.postStart}
             ''}
           ''}
 
           ${optionalString (def.postStop != "") ''
-            ExecStopPost=${makeJobScript "${name}-poststop.sh" ''
+            ExecStopPost=${makeJobScript "poststop.sh" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.postStop}
             ''}
@@ -311,7 +311,7 @@ let
       ln -s ${cfg.defaultUnit} $out/default.target
 
       #ln -s ../getty@tty1.service $out/multi-user.target.wants/
-      ln -s ../remote-fs.target ../network.target ../swap.target $out/multi-user.target.wants/
+      ln -s ../local-fs.target ../remote-fs.target ../network.target ../swap.target $out/multi-user.target.wants/
     ''; # */
 
 in
