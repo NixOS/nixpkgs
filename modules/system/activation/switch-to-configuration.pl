@@ -64,15 +64,19 @@ sub getActiveUnits {
 
 sub parseFstab {
     my ($filename) = @_;
-    my %res;
+    my ($fss, $swaps);
     foreach my $line (read_file($filename, err_mode => 'quiet')) {
         chomp $line;
         $line =~ s/#.*//;
         next if $line =~ /^\s*$/;
         my @xs = split / /, $line;
-        $res{$xs[1]} = { device => $xs[0], fsType => $xs[2], options => $xs[3] // "" };
+        if ($xs[2] eq "swap") {
+            $swaps->{$xs[0]} = { options => $xs[3] // "" };
+        } else {
+            $fss->{$xs[1]} = { device => $xs[0], fsType => $xs[2], options => $xs[3] // "" };
+        }
     }
-    return %res;
+    return ($fss, $swaps);
 }
 
 sub parseUnit {
@@ -187,26 +191,18 @@ sub unique {
 
 # Compare the previous and new fstab to figure out which filesystems
 # need a remount or need to be unmounted.  New filesystems are mounted
-# automatically by starting local-fs.target.  Also handles swap
-# devices.  FIXME: might be nicer if we generated units for all
-# mounts; then we could unify this with the unit checking code above.
-my %prevFstab = parseFstab "/etc/fstab";
-my %newFstab = parseFstab "@out@/etc/fstab";
-foreach my $mountPoint (keys %prevFstab) {
-    my $prev = $prevFstab{$mountPoint};
-    my $new = $newFstab{$mountPoint};
-    my $unit = pathToUnitName($mountPoint). ".mount" if $prev->{fsType} ne "swap";
+# automatically by starting local-fs.target.  FIXME: might be nicer if
+# we generated units for all mounts; then we could unify this with the
+# unit checking code above.
+my ($prevFss, $prevSwaps) = parseFstab "/etc/fstab";
+my ($newFss, $newSwaps) = parseFstab "@out@/etc/fstab";
+foreach my $mountPoint (keys ${prevFss}) {
+    my $prev = $prevFss->{$mountPoint};
+    my $new = $newFss->{$mountPoint};
+    my $unit = pathToUnitName($mountPoint) . ".mount";
     if (!defined $new) {
-        if ($prev->{fsType} eq "swap") {
-            # Swap entry disappeared, so turn it off.  Can't use
-            # "systemctl stop" here because systemd has lots of alias
-            # units that prevent a stop from actually calling
-            # "swapoff".
-            system("@utillinux@/sbin/swapoff", $prev->{device});
-        } else {
-            # Filesystem entry disappeared, so unmount it.
-            push @unitsToStop, $unit;
-        }
+        # Filesystem entry disappeared, so unmount it.
+        push @unitsToStop, $unit;
     } elsif ($prev->{fsType} ne $new->{fsType} || $prev->{device} ne $new->{device}) {
         # Filesystem type or device changed, so unmount and mount it.
         write_file($restartListFile, { append => 1 }, "$unit\n");
@@ -215,6 +211,21 @@ foreach my $mountPoint (keys %prevFstab) {
         # Mount options changes, so remount it.
         write_file($reloadListFile, { append => 1 }, "$unit\n");
     }
+}
+
+# Also handles swap devices.
+foreach my $device (keys ${prevSwaps}) {
+    my $prev = $prevSwaps->{$device};
+    my $new = $newSwaps->{$device};
+    if (!defined $new) {
+        # Swap entry disappeared, so turn it off.  Can't use
+        # "systemctl stop" here because systemd has lots of alias
+        # units that prevent a stop from actually calling
+        # "swapoff".
+        print STDERR "stopping swap device: $device\n";
+        system("@utillinux@/sbin/swapoff", $device);
+    }
+    # FIXME: update swap options (i.e. its priority).
 }
 
 if (scalar @unitsToStop > 0) {
