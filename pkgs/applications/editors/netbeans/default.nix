@@ -1,4 +1,4 @@
-{stdenv, fetchurl, oraclejdk, unzip, which, makeWrapper, makeDesktopItem}:
+{stdenv, fetchurl, jdk, unzip, which, makeWrapper, makeDesktopItem}:
 
 let
   desktopItem = makeDesktopItem {
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     # Create a wrapper capable of starting it
     mkdir -p $out/bin
     makeWrapper $out/netbeans/bin/netbeans $out/bin/netbeans \
-      --prefix PATH : ${oraclejdk}/bin:${which}/bin
+      --prefix PATH : ${jdk}/bin:${which}/bin
       
     # Create desktop item, so we can pick it from the KDE/GNOME menu
     mkdir -p $out/share/applications

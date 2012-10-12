@@ -90,8 +90,8 @@ let
 
   maybeBpfTemporaryFix = let
     patch = fetchurl {
-      url = "https://chromiumcodereview.appspot.com/download/issue11032056_1_2.diff";
-      sha256 = "eb13dc627940ad56939837ad1093b2c388f6cf79f1f25cdc1b2e25e987c73d1c";
+      url = "https://chromiumcodereview.appspot.com/download/issue11073003_6001_7001.diff";
+      sha256 = "bf61871cdaa8fea27ce15482a17048f67b426a55813c3832f9bd39ec47a9eb06";
     };
     needPatch = !versionOlder sourceInfo.version "23.0.1271.0";
   in optional needPatch patch;

@@ -4,12 +4,11 @@
 
 cabal.mkDerivation (self: {
   pname = "resourcet";
-  version = "0.4.0.1";
-  sha256 = "0idyb2xvjk9cbz9gy1gr6sw1mz6v9d8fgk0kw778n6k3h488dw9x";
+  version = "0.4.0.2";
+  sha256 = "0w4hm29dig6m4jm6y9zmyfnhwii7b88hqjqlvl6xmk5zxp1q7hc2";
   buildDepends = [
     liftedBase monadControl mtl transformers transformersBase
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Deterministic allocation and freeing of scarce resources";

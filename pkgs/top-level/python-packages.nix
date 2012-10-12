@@ -187,14 +187,15 @@ let pythonPackages = python.modules // rec {
   });
 
 
-  astng = buildPythonPackage rec {
-    name = "logilab-astng-0.21.1";
+  logilab_astng = buildPythonPackage rec {
+    name = "logilab-astng-0.24.1";
 
     src = fetchurl {
-      url = "ftp://ftp.logilab.org/pub/astng/${name}.tar.gz";
-      sha256 = "0rqp2vwrnv6gkzdd96j078h1sz26plh49cmnyswy2wb6l4wans67";
+      url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
+      sha256 = "00qxaxsax80sknwv25xl1r49lc4gbhkxs1kjywji4ad8y1npax0s";
     };
-    propagatedBuildInputs = [logilabCommon];
+
+    propagatedBuildInputs = [ logilab_common ];
   };
 
   beautifulsoup = buildPythonPackage (rec {
@@ -1053,14 +1054,15 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  logilabCommon = buildPythonPackage rec {
-    name = "logilab-common-0.56.0";
+  logilab_common = buildPythonPackage rec {
+    name = "logilab-common-0.58.2";
 
     src = fetchurl {
-      url = "ftp://ftp.logilab.org/pub/common/${name}.tar.gz";
-      sha256 = "14p557nqypbd10d8k7qs6jlm58pksiwh86wvvl0axyki00hj6971";
+      url = "http://download.logilab.org/pub/common/${name}.tar.gz";
+      sha256 = "0qfdyj2is0scpnkgpnqm12lh4yl27617l0irlilhk25cpgbbfbf9";
     };
-    propagatedBuildInputs = [unittest2];
+
+    propagatedBuildInputs = [ unittest2 ];
   };
 
   lxml = buildPythonPackage ( rec {
@@ -1976,13 +1978,20 @@ let pythonPackages = python.modules // rec {
 
 
   pylint = buildPythonPackage rec {
-    name = "pylint-0.23.0";
+    name = "pylint-0.26.0";
+    namePrefix = "";
 
     src = fetchurl {
       url = "ftp://ftp.logilab.org/pub/pylint/${name}.tar.gz";
-      sha256 = "07091avcc2b374i5f3blszmawjcin8xssjfryz91qbxybb8r7c6d";
+      sha256 = "1mg1ywpj0klklv63s2hwn5xwxi3wfwgnyz9d4pz32hzb53azq835";
     };
-    propagatedBuildInputs = [astng];
+
+    propagatedBuildInputs = [ logilab_astng ];
+
+    meta = {
+      homepage = http://www.logilab.org/project/pylint;
+      description = "A bug and style checker for Python";
+    };
   };
 
 
@@ -2584,11 +2593,11 @@ let pythonPackages = python.modules // rec {
   });
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.0.7";
+    name = "Sphinx-1.1.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      md5 = "42c722d48e52d4888193965dd473adb5";
+      md5 = "8f55a6d4f87fc6d528120c5d1f983e98";
     };
 
     propagatedBuildInputs = [docutils jinja2 pygments];
