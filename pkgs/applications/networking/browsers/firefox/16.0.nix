@@ -21,11 +21,13 @@ rec {
 
 
   src = fetchurl {
-    # Use this url for official releases.
-    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    # Use this url only for versions not available at releases.mozilla.org, to take load off Mozilla's ftp server.
-    #url = "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha256 = "1rrg2rmhczcwx5p5gilavqp4cvlig40ipw9avbgczahqjw89ivap";
+    urls = [
+        # It is better to use this url for official releases, to take load off Mozilla's ftp server.
+        "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
+        # Fall back to this url for versions not available at releases.mozilla.org.
+        "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
+    ];
+    sha1 = "ad5723fcf4ec6c6734e2022cecad174290fa425e";
   };
 
   commonConfigureFlags =
