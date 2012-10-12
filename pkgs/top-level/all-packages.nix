@@ -8145,8 +8145,12 @@ let
     inherit (gnome) gnomedocutils;
   };
 
-  gtypist = callPackage ../games/gtypist { };
+  gsmartcontrol = callPackage ../tools/misc/gsmartcontrol {
+    inherit (gnome) libglademm;
+  };
 
+  gtypist = callPackage ../games/gtypist { };
+ 
   hexen = callPackage ../games/hexen { };
 
   icbm3d = callPackage ../games/icbm3d { };
