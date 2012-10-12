@@ -83,8 +83,6 @@ rec {
   #### ART
 
   xfce4icontheme = callPackage ./art/xfce4-icon-theme.nix { };
-  xfce4themes = callPackage ./art/xfce4-themes.nix {};
-
 
   #### PANEL PLUGINS
   
