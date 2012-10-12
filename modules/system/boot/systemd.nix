@@ -158,13 +158,6 @@ let
       KillSignal=SIGHUP
     '';
 
-  fsTarget =
-    ''
-      [Unit]
-      Description=All File Systems
-      Wants=local-fs.target remote-fs.target
-    '';
-
   makeJobScript = name: content: "${pkgs.writeScriptBin name content}/bin/${name}";
 
   unitConfig = { name, config, ... }: {
@@ -423,7 +416,6 @@ in
 
     boot.systemd.units =
       { "rescue.service".text = rescueService; }
-      // { "fs.target" = { text = fsTarget; wantedBy = [ "multi-user.target" ]; }; }
       // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets;

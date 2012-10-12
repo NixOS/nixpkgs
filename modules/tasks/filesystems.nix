@@ -180,6 +180,12 @@ in
         target = "fstab";
       };
 
+    # Provide a target that pulls in all filesystems.
+    boot.systemd.targets.fs =
+      { description = "All File Systems";
+        wants = [ "local-fs.target" "remote-fs.target" ];
+      };
+
     /*
     jobs.mountall =
       { startOn = "started udev or config-changed";
