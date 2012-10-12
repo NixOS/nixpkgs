@@ -382,6 +382,7 @@ in
 
                 ${flip concatMapStrings v.interfaces (i: ''
                   brctl addif "${n}" "${i}"
+                  ip link set "${i}" up
                   ip addr flush dev "${i}"
                 '')}
 
