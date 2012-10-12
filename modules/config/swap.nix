@@ -101,10 +101,9 @@ with utils;
                   mkswap ${sw.device}
                 fi
               '';
-            unitConfig.RequiresMountsFor = "${dirOf sw.device}";
+            unitConfig.RequiresMountsFor = [ "${dirOf sw.device}" ];
             unitConfig.DefaultDependencies = false; # needed to prevent a cycle
             serviceConfig.Type = "oneshot";
-            serviceConfig.RemainAfterExit = true;
           };
 
       in listToAttrs (map createSwapDevice (filter (sw: sw.size != null) config.swapDevices));

@@ -1,6 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, utils, ... }:
 
 with pkgs.lib;
+with utils;
 
 let
 
@@ -27,7 +28,7 @@ let
     '';
 
 in
-    
+
 {
 
   ###### interface
@@ -170,7 +171,7 @@ in
 
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
-    
+
     environment.systemPackages =
       [ pkgs.ntfs3g pkgs.cifs_utils ]
       ++ config.system.fsPackages;
@@ -186,119 +187,37 @@ in
         wants = [ "local-fs.target" "remote-fs.target" ];
       };
 
-    /*
-    jobs.mountall =
-      { startOn = "started udev or config-changed";
+    # Emit systemd services to format requested filesystems.
+    boot.systemd.services =
+      let
 
-        task = true;
-
-        path = [ pkgs.utillinux pkgs.mountall ] ++ config.system.fsPackages;
-
-        console = "output";
-
-        preStart =
-          ''
-            # Ensure that this job is restarted when fstab changed:
-            # ${fstab}
-            echo "mounting filesystems..."
-
-            # Format devices.
-            ${flip concatMapStrings config.fileSystems (fs: optionalString fs.autoFormat ''
-              if [ -e "${fs.device}" ]; then
+        formatDevice = fs:
+          let
+            mountPoint' = escapeSystemdPath fs.mountPoint;
+            device' = escapeSystemdPath fs.device;
+          in nameValuePair "mkfs-${device'}"
+          { description = "Initialisation of Filesystem ${fs.device}";
+            wantedBy = [ "${mountPoint'}.mount" ];
+            before = [ "${mountPoint'}.mount" ];
+            require = [ "${device'}.device" ];
+            after = [ "${device'}.device" ];
+            path = [ pkgs.utillinux ] ++ config.system.fsPackages;
+            script =
+              ''
+                if ! [ -e "${fs.device}" ]; then exit 1; fi
+                # FIXME: this is scary.  The test could be more robust.
                 type=$(blkid -p -s TYPE -o value "${fs.device}" || true)
                 if [ -z "$type" ]; then
                   echo "creating ${fs.fsType} filesystem on ${fs.device}..."
                   mkfs.${fs.fsType} "${fs.device}"
                 fi
-              fi
-            '')}
+              '';
+            unitConfig.RequiresMountsFor = [ "${dirOf fs.device}" ];
+            unitConfig.DefaultDependencies = false; # needed to prevent a cycle
+            serviceConfig.Type = "oneshot";
+          };
 
-          '';
-
-        daemonType = "daemon";
-          
-        exec = "mountall --daemon";
-      };
-
-    # The `mount-failed' event is emitted synchronously, but we don't
-    # want `mountall' to wait for the emergency shell.  So use this
-    # intermediate job to make the event asynchronous.
-    jobs."mount-failed" =
-      { task = true;
-        startOn = "mount-failed";
-        restartIfChanged = false;
-        script =
-          ''
-            # Don't start the emergency shell if the X server is
-            # running.  The user won't see it, and the "console owner"
-            # stanza breaks VT switching and causes the X server to go
-            # to 100% CPU time.
-            status="$(status xserver || true)"
-            [[ "$status" =~ start/ ]] && exit 0
-
-            stop ${config.boot.ttyEmergency} || true
-            
-            start --no-wait emergency-shell \
-              DEVICE="$DEVICE" MOUNTPOINT="$MOUNTPOINT"
-          '';
-      };
-
-    # On an `ip-up' event, notify mountall so that it retries mounting
-    # remote filesystems.
-    jobs."mountall-ip-up" =
-      {
-        task = true;
-        startOn = "ip-up";
-        restartIfChanged = false;
-        script =
-          ''
-            # Send USR1 to the mountall process.  Can't use "pkill
-            # mountall" here because that has a race condition: we may
-            # accidentally send USR1 to children of mountall (such as
-            # fsck) just before they do execve().
-            status="$(status mountall)"
-            if [[ "$status" =~ "start/running, process "([0-9]+) ]]; then
-                pid=''${BASH_REMATCH[1]}
-                echo "sending USR1 to $pid..."
-                kill -USR1 "$pid"
-            fi
-          '';
-      };
-
-    jobs."emergency-shell" =
-      { task = true;
-
-        restartIfChanged = false;
-
-        console = "owner";
-
-        script =
-          ''
-            cat <<EOF
-
-            [1;31m<<< Emergency shell >>>[0m
-
-            The filesystem \`$DEVICE' could not be mounted on \`$MOUNTPOINT'.
-
-            Please do one of the following:
-
-            - Repair the filesystem (\`fsck $DEVICE') and exit the emergency
-              shell to resume booting.
-
-            - Ignore any failed filesystems and continue booting by running
-              \`initctl emit filesystem'.
-
-            - Remove the failed filesystem from the system configuration in
-              /etc/nixos/configuration.nix and run \`nixos-rebuild switch'.
-
-            EOF
-
-            ${pkgs.shadow}/bin/login root || false
-
-            initctl start --no-wait mountall
-          '';
-      };
-    */
+      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) config.fileSystems));
 
   };
 
