@@ -1,6 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, utils, ... }:
 
 with pkgs.lib;
+with utils;
 
 {
 
@@ -84,13 +85,13 @@ with pkgs.lib;
     boot.systemd.services =
       let
 
-        escapePath = s: # FIXME: slow
-          replaceChars ["/" "-"] ["-" "\\x2d"] (substring 1 (stringLength s) s);
-
-        createSwapDevice = sw: assert sw.device != ""; nameValuePair "mkswap-${escapePath sw.device}"
+        createSwapDevice = sw:
+          assert sw.device != "";
+          let device' = escapeSystemdPath sw.device; in
+          nameValuePair "mkswap-${escapeSystemdPath sw.device}"
           { description = "Initialisation of Swapfile ${sw.device}";
-            wantedBy = [ "${escapePath sw.device}.swap" ];
-            before = [ "${escapePath sw.device}.swap" ];
+            wantedBy = [ "${device'}.swap" ];
+            before = [ "${device'}.swap" ];
             path = [ pkgs.utillinux ];
             script =
               ''
