@@ -258,6 +258,7 @@ import ./generic.nix (
     features.iwlwifi = true;
     features.efiBootStub = true;
     features.needsCifsUtils = true;
+    features.canDisableNetfilterConntrackHelpers = true;
     features.netfilterRPFilter = true;
   }
 
