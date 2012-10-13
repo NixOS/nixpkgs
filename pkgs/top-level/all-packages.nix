@@ -4257,6 +4257,8 @@ let
 
   libmng = callPackage ../development/libraries/libmng { };
 
+  libmnl = callPackage ../development/libraries/libmnl { };
+
   libmodplug = callPackage ../development/libraries/libmodplug {};
 
   libmpcdec = callPackage ../development/libraries/libmpcdec { };
