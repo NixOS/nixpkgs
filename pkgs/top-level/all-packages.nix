@@ -4275,6 +4275,8 @@ let
 
   libmusicbrainz = libmusicbrainz3;
 
+  libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
+
   libnih = callPackage ../development/libraries/libnih { };
 
   libnova = callPackage ../development/libraries/libnova { };
