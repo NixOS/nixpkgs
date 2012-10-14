@@ -273,4 +273,7 @@ in
     buildInputs = attrs.buildInputs ++ [xorg.libXrender];
   };
 
+  xinput = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [xorg.libXrender];
+  };
 }
