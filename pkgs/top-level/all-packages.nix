@@ -1642,6 +1642,8 @@ let
 
   ttmkfdir = callPackage ../tools/misc/ttmkfdir { };
 
+  unac = callPackage ../development/libraries/unac { };
+
   unclutter = callPackage ../tools/misc/unclutter { };
 
   unbound = callPackage ../tools/networking/unbound { };
@@ -6990,6 +6992,8 @@ let
   firefox16Wrapper = lowPrio (wrapFirefox { browser = firefox16Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
+
+  flactag = callPackage ../applications/audio/flactag { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
     debug = config.flashplayer.debug or false;
