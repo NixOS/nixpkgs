@@ -22,6 +22,7 @@ stdenv.mkDerivation {
     --with-linux=${kernel}/lib/modules/${kernel.version}/build 
     --with-linux-obj=${kernel}/lib/modules/${kernel.version}/build 
     --with-spl=${spl}/libexec/spl/${kernel.version}
+    ${if stdenv.system == "i686-linux"  then "--enable-atomic-spinlocks" else ""}
   '';
 
   meta = {
