@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeBuildDir=true;
 
   src = fetchurl {
-    url = https://github.com/downloads/metabrainz/libmusicbrainz/libmusicbrainz-5.0.1.tar.gz;
+    url = "https://github.com/downloads/metabrainz/libmusicbrainz/${name}.tar.gz";
     sha256 = "1ca75e1c5059a3620b0d82633b1f468acc2a65fcc4305f844ec44f6fb5db82d5";
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       The libmusicbrainz (also known as mb_client or MusicBrainz Client
       Library) is a development library geared towards developers who wish to
       add MusicBrainz lookup capabilities to their applications.'';
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = [ stdenv.lib.maintainers.urkud stdenv.lib.maintainers.jcumming ];
     platforms = stdenv.lib.platforms.all;
   };
 }

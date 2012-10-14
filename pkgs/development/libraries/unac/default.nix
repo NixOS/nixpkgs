@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "unac-1.7.0";
 
   src = fetchurl {
-    url = http://download.savannah.gnu.org/releases/unac/unac-1.7.0.tar.gz;
+    url = "http://download.savannah.gnu.org/releases/unac/${name}.tar.gz";
     sha256 = "1r54dzgcgrmllps1wzivzwx1dzjxcs7v2swwf7jrlp125154k0jy";
   };
 
