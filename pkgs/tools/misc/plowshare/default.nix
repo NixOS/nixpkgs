@@ -4,10 +4,10 @@ stdenv.mkDerivation rec {
 
   name = "plowshare-${version}";
 
-  version = "git20120916";
+  version = "20120916";
 
   src = fetchurl {
-    url = "http://plowshare.googlecode.com/files/plowshare-snapshot-${version}.tar.gz";
+    url = "http://plowshare.googlecode.com/files/plowshare-snapshot-git${version}.tar.gz";
     sha256 = "eccdb28d49ac47782abc8614202b3a88426cd587371641ecf2ec008880dc6067";
   };
 

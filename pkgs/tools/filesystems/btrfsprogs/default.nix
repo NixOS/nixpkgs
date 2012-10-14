@@ -1,14 +1,14 @@
 { stdenv, fetchgit, zlib, libuuid, acl, attr, e2fsprogs }:
 
-let version = "0.19-20120328"; in
+let version = "0.20pre20121005"; in
 
 stdenv.mkDerivation {
   name = "btrfs-progs-${version}";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/linux/kernel/git/mason/btrfs-progs.git";
-    rev = "1957076ab4fefa47b6efed3da541bc974c83eed7";
-    sha256 = "566d863c5500652e999d0d6b823365fb06f2f8f9523e65e69eaa3e993e9b26e1";
+    rev = "91d9eec1ff044394f2b98ee7fcb76713dd33b994";
+    sha256 = "72d4cd4fb23d876a17146d6231ad40a2151fa47c648485c54cf7478239b43764";
   };
 
   buildInputs = [ zlib libuuid acl attr e2fsprogs ];

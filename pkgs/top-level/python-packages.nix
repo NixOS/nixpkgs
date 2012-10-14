@@ -187,14 +187,15 @@ let pythonPackages = python.modules // rec {
   });
 
 
-  astng = buildPythonPackage rec {
-    name = "logilab-astng-0.21.1";
+  logilab_astng = buildPythonPackage rec {
+    name = "logilab-astng-0.24.1";
 
     src = fetchurl {
-      url = "ftp://ftp.logilab.org/pub/astng/${name}.tar.gz";
-      sha256 = "0rqp2vwrnv6gkzdd96j078h1sz26plh49cmnyswy2wb6l4wans67";
+      url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
+      sha256 = "00qxaxsax80sknwv25xl1r49lc4gbhkxs1kjywji4ad8y1npax0s";
     };
-    propagatedBuildInputs = [logilabCommon];
+
+    propagatedBuildInputs = [ logilab_common ];
   };
 
   beautifulsoup = buildPythonPackage (rec {
@@ -1053,14 +1054,15 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  logilabCommon = buildPythonPackage rec {
-    name = "logilab-common-0.56.0";
+  logilab_common = buildPythonPackage rec {
+    name = "logilab-common-0.58.2";
 
     src = fetchurl {
-      url = "ftp://ftp.logilab.org/pub/common/${name}.tar.gz";
-      sha256 = "14p557nqypbd10d8k7qs6jlm58pksiwh86wvvl0axyki00hj6971";
+      url = "http://download.logilab.org/pub/common/${name}.tar.gz";
+      sha256 = "0qfdyj2is0scpnkgpnqm12lh4yl27617l0irlilhk25cpgbbfbf9";
     };
-    propagatedBuildInputs = [unittest2];
+
+    propagatedBuildInputs = [ unittest2 ];
   };
 
   lxml = buildPythonPackage ( rec {
@@ -1735,6 +1737,32 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+
+  pyaudio = pkgs.stdenv.mkDerivation rec {
+    name = "python-pyaudio-${version}";
+    version = "0.2.4";
+
+    src = fetchurl {
+      url = "http://people.csail.mit.edu/hubert/pyaudio/packages/pyaudio-${version}.tar.gz";
+      md5 = "623809778f3d70254a25492bae63b575";
+    };
+
+    buildInputs = [ python pkgs.portaudio ];
+
+    installPhase = ''
+      python setup.py install --prefix=$out
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "Python bindings for PortAudio";
+      homepage = "http://people.csail.mit.edu/hubert/pyaudio/";
+      license = stdenv.lib.licenses.mit;
+    };
+  };
+
+
   Babel = buildPythonPackage (rec {
     name = "Babel-0.9.6";
 
@@ -1950,13 +1978,20 @@ let pythonPackages = python.modules // rec {
 
 
   pylint = buildPythonPackage rec {
-    name = "pylint-0.23.0";
+    name = "pylint-0.26.0";
+    namePrefix = "";
 
     src = fetchurl {
       url = "ftp://ftp.logilab.org/pub/pylint/${name}.tar.gz";
-      sha256 = "07091avcc2b374i5f3blszmawjcin8xssjfryz91qbxybb8r7c6d";
+      sha256 = "1mg1ywpj0klklv63s2hwn5xwxi3wfwgnyz9d4pz32hzb53azq835";
     };
-    propagatedBuildInputs = [astng];
+
+    propagatedBuildInputs = [ logilab_astng ];
+
+    meta = {
+      homepage = http://www.logilab.org/project/pylint;
+      description = "A bug and style checker for Python";
+    };
   };
 
 
@@ -2558,11 +2593,11 @@ let pythonPackages = python.modules // rec {
   });
 
   sphinx = buildPythonPackage (rec {
-    name = "Sphinx-1.0.7";
+    name = "Sphinx-1.1.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/S/Sphinx/${name}.tar.gz";
-      md5 = "42c722d48e52d4888193965dd473adb5";
+      md5 = "8f55a6d4f87fc6d528120c5d1f983e98";
     };
 
     propagatedBuildInputs = [docutils jinja2 pygments];
@@ -3094,11 +3129,11 @@ let pythonPackages = python.modules // rec {
   };
 
   cliapp = buildPythonPackage rec {
-    name = "cliapp-1.20120630";
+    name = "cliapp-1.20120929";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_1.20120630.orig.tar.gz";
-      sha256 = "6beeb1fb3077561540094584ce36055266ac67b80f158b9b82fe4075096f4716";
+      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_1.20120929.orig.tar.gz";
+      sha256 = "30d5077e53b3e45f892b1c49feaaf4f47e4664400ed71435e77a82a2b823a0f8";
     };
 
     buildInputs = [ sphinx ];
@@ -3114,11 +3149,11 @@ let pythonPackages = python.modules // rec {
   };
 
   tracing = buildPythonPackage rec {
-    name = "tracing-0.6";
+    name = "tracing-0.7";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_0.6.orig.tar.gz";
-      sha256 = "1164cf05891f9bca93fb87413f32d2c4da90348adbf69b0ad36a464b7adcd354";
+      url = "http://code.liw.fi/debian/pool/main/p/python-tracing/python-tracing_0.7.orig.tar.gz";
+      sha256 = "9954a1b0cc6b957d15975b048f929bbdd46766d397a6fa51bf8f6498b9459276";
     };
 
     buildInputs = [ sphinx ];
@@ -3134,11 +3169,11 @@ let pythonPackages = python.modules // rec {
   };
 
   ttystatus = buildPythonPackage rec {
-    name = "ttystatus-0.19";
+    name = "ttystatus-0.21";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.19.orig.tar.gz";
-      sha256 = "7cc112a4783f2e0c354c5244f8e50b18733b5957677b56a755c1016e04c0c28d";
+      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.21.orig.tar.gz";
+      sha256 = "4a1f3a41c9bd3b5d2bd8e6f093890857301e590aa1d428fc9a6dca591227244c";
     };
 
     buildInputs = [ sphinx ];
@@ -3154,11 +3189,11 @@ let pythonPackages = python.modules // rec {
   };
 
   larch = buildPythonPackage rec {
-    name = "larch-1.20120527";
+    name = "larch-1.20121006";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_1.20120527.orig.tar.gz";
-      sha256 = "2865a1bfa6bd276bf746e8e7cb73d5199d0b6d00045d8c92e158626687d3bbe1";
+      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_1.20121006.orig.tar.gz";
+      sha256 = "b4482981010e9c22ee3fce6fdc664b8fc0a1a3a18ed30b40f247f3b44437ccfa";
     };
 
     buildInputs = [ sphinx ];

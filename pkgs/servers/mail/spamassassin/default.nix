@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPerlPackage, perl, HTMLParser, NetDNS, NetAddrIP, DBFile
-, HTTPDate, MailDKIM, LWP, IOSocketSSL, IOSocketInet6, makeWrapper, gnupg1
+, HTTPDate, MailDKIM, LWP, IOSocketSSL, makeWrapper, gnupg1
 }:
 
 # TODO: Add the Perl modules ...
@@ -21,7 +21,7 @@ buildPerlPackage rec {
   };
 
   buildInputs = [ makeWrapper HTMLParser NetDNS NetAddrIP DBFile HTTPDate MailDKIM
-    LWP IOSocketSSL IOSocketInet6 ];
+    LWP IOSocketSSL ];
 
   # Enabling 'taint' mode is desirable, but that flag disables support
   # for the PERL5LIB environment variable. Needs further investigation.
