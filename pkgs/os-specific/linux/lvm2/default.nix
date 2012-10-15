@@ -12,6 +12,8 @@ stdenv.mkDerivation {
     sha256 = "0r6q6z8ip6q5qgkzng0saljassp4912k6i21ra10vq7pzrc0l0vi";
   };
 
+  patches = [ ./assume-uevent-generated.patch ];
+
   configureFlags =
     "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib";
 
