@@ -1518,11 +1518,11 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videointel = (stdenv.mkDerivation ((if overrides ? xf86videointel then overrides.xf86videointel else x: x) {
-    name = "xf86-video-intel-2.20.8";
+    name = "xf86-video-intel-2.20.10";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-intel-2.20.8.tar.bz2;
-      sha256 = "1rw3rb3zjvx3qyppynj3mi8zs4rpx2b193znxssrv39vp4mnn4ia";
+      url = mirror://xorg/individual/driver/xf86-video-intel-2.20.10.tar.bz2;
+      sha256 = "1kfd6qiqxyqhjp8g1xcipkldsf7xa47q8zfdhxg3qzw77n6a4hfz";
     };
     buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess pixman randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ];
   })) // {inherit dri2proto fontsproto libdrm udev libpciaccess pixman randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ;};
