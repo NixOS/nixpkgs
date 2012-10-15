@@ -32,7 +32,7 @@ rec {
 
   commonConfigureFlags =
     [ "--enable-optimize"
-      "--enable-profiling"
+      #"--enable-profiling"
       "--disable-debug"
       "--enable-strip"
       "--with-system-jpeg"
