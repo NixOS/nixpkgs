@@ -1189,6 +1189,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
+  networkInfo = callPackage ../development/libraries/haskell/network-info {};
+
   networkMulticast = callPackage ../development/libraries/haskell/network-multicast {};
 
   networkTransport = callPackage ../development/libraries/haskell/network-transport {};
