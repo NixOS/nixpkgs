@@ -8362,15 +8362,15 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde47;
 
-  kde47 = kdePackagesFor (pkgs.kde47 // {boost = boost149;}) "4.7";
+  kde47 = kdePackagesFor (pkgs.kde47 // {boost = boost149;}) ../desktops/kde-4.7;
 
-  kde48 = kdePackagesFor (pkgs.kde48 // {boost = boost149;}) "4.8";
+  kde48 = kdePackagesFor (pkgs.kde48 // {boost = boost149;}) ../desktops/kde-4.8;
 
-  kdePackagesFor = self: version:
+  kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
     let
       callPackage = newScope self;
-      kde4 = callPackageOrig (../desktops/kde- + version) {
+      kde4 = callPackageOrig dir {
         inherit callPackage callPackageOrig;
       };
     in kde4 // {
