@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "alex-meta";
-  version = "0.3.0.4";
-  sha256 = "0d0ii1djigydj2papcilkr8mazp70vg6hy179h28j9i1bshp3anp";
+  version = "0.3.0.5";
+  sha256 = "0f41q5l6z1dcpfx8rxacv4f544zcw7pgvq935mnzzha9fvsxqzk4";
   buildDepends = [ haskellSrcMeta QuickCheck ];
   noHaddock = true;
   meta = {
