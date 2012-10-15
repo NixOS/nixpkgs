@@ -1939,7 +1939,13 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc_realCross = gcc46_realCross;
+  gcc_realCross =
+    if crossSystem.config == "i686-pc-mingw32"
+    then 
+         # gcc46 targeting 32bit builds executables, but they segfault
+         # gcc45 which seems to work
+         gcc45_realCross
+    else gcc46_realCross;
 
   gccCrossStageStatic = let
       isMingw = (stdenv.cross.libc == "msvcrt");

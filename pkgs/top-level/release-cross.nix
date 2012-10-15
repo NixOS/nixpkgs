@@ -150,6 +150,7 @@ let
       arch = "x86";
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
+      openssl.system = "mingw";
   };
 in {
   crossMingw32 = mapTestOnCross crossSystem {
@@ -173,6 +174,7 @@ let
       arch = "x86_64"; # Irrelevant
       libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
       platform = {};
+      openssl.system = "mingw64";
   };
 in {
   crossMingwW64 = mapTestOnCross crossSystem {

@@ -4,20 +4,22 @@
 let
   name = "openssl-1.0.0i";
 
+  inherit (stdenv.lib) elem optional optionals attrByPath;
+
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
-    (throw "openssl needs its platform name cross building" null)
+    (throw "openssl needs its platform name when cross building" null)
     stdenv.cross;
 
   patchesCross = isCross:
-    [ # Allow the location of the X509 certificate file (the CA
+    (optional (!isCross || !elem opensslCrossSystem ["mingw" "mingw64"])
+      # Allow the location of the X509 certificate file (the CA
       # bundle) to be set through the environment variable
       # ‘OPENSSL_X509_CERT_FILE’.  This is necessary because the
       # default location ($out/ssl/cert.pem) doesn't exist, and
       # hardcoding something like /etc/ssl/cert.pem is impure and
       # cannot be overriden per-process.  For security, the
       # environment variable is ignored for setuid binaries.
-      ./cert-file.patch
-    ]
+      ./cert-file.patch)
 
     ++ stdenv.lib.optionals (isCross && opensslCrossSystem == "hurd-x86")
          [ ./cert-file-path-max.patch # merge with `cert-file.patch' eventually
@@ -43,6 +45,9 @@ stdenv.mkDerivation {
     ];
     sha1 = "b7aa11cbd7d264c2b1f44e3d55b334fb33f7b674";
   };
+
+  # doesn't make a difference:
+  # enableParalellBuilding = true;
 
   patches = patchesCross false;
 
