@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     ensureDir $out/bin
     pwd
     cp ../bin/synergyc $out/bin
-   	cp ../bin/synergys $out/bin
-   	cp ../bin/synergyd $out/bin
+    cp ../bin/synergys $out/bin
+    cp ../bin/synergyd $out/bin
   '';
 
   meta = { 
