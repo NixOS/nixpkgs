@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "flactag-${ver}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/flactag/v$ver}/${name}.tar.gz";
+    url = "mirror://sourceforge/flactag/v${ver}/${name}.tar.gz";
     sha256 = "c96718ac3ed3a0af494a1970ff64a606bfa54ac78854c5d1c7c19586177335b2";
   };
 
