@@ -1089,6 +1089,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
 
+  libxmlSax = callPackage ../development/libraries/haskell/libxml-sax {};
+
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
