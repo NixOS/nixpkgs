@@ -24,7 +24,7 @@ in
   };
 
   mkfontdir = attrs: attrs // {
-    preBuild = "substituteInPlace mkfontdir.cpp --replace BINDIR ${xorg.mkfontscale}/bin";
+    preBuild = "substituteInPlace mkfontdir.in --replace @bindir@ ${xorg.mkfontscale}/bin";
   };
 
   libxcb = attrs : attrs // {
