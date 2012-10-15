@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hjsmin";
-  version = "0.1.2";
-  sha256 = "04yk383504blg8x10x5j1fd5mzyybqkhz7jfsyimvz2wz2v86qsb";
+  version = "0.1.3";
+  sha256 = "0lz7qsm74hbs8qa5d3khw43ipiimjbvxsrqqmxvp44605ib22y4d";
   buildDepends = [ blazeBuilder languageJavascript text ];
   meta = {
     homepage = "http://github.com/alanz/hjsmin";
