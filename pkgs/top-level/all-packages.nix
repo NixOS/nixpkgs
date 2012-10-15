@@ -2750,21 +2750,7 @@ let
 
   perl = if system != "i686-cygwin" then perl514 else sysPerl;
 
-  php = php5_3;
-
-  php5_2 = makeOverridable (import ../development/interpreters/php/5.2.nix) {
-    inherit
-      stdenv fetchurl lib composableDerivation autoconf automake
-      flex bison apacheHttpd mysql libxml2 readline
-      zlib curl gd postgresql openssl pkgconfig sqlite config libiconv libjpeg libpng;
-  };
-
-  php5_3 = makeOverridable (import ../development/interpreters/php/5.3.nix) {
-    inherit
-      stdenv fetchurl lib composableDerivation autoconf automake
-      flex bison apacheHttpd mysql libxml2 readline
-      zlib curl gd postgresql openssl pkgconfig sqlite config libiconv libjpeg libpng;
-  };
+  php = callPackage ../development/interpreters/php/5.3.nix { };
 
   php_apc = callPackage ../development/libraries/php-apc { };
 
