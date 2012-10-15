@@ -4249,6 +4249,8 @@ let
 
   libmng = callPackage ../development/libraries/libmng { };
 
+  libmnl = callPackage ../development/libraries/libmnl { };
+
   libmodplug = callPackage ../development/libraries/libmodplug {};
 
   libmpcdec = callPackage ../development/libraries/libmpcdec { };
@@ -4266,6 +4268,10 @@ let
   libmusicbrainz3 = callPackage ../development/libraries/libmusicbrainz { };
 
   libmusicbrainz = libmusicbrainz3;
+
+  libnetfilter_conntrack = callPackage ../development/libraries/libnetfilter_conntrack { };
+
+  libnfnetlink = callPackage ../development/libraries/libnfnetlink { };
 
   libnih = callPackage ../development/libraries/libnih { };
 
@@ -8127,8 +8133,12 @@ let
     inherit (gnome) gnomedocutils;
   };
 
-  gtypist = callPackage ../games/gtypist { };
+  gsmartcontrol = callPackage ../tools/misc/gsmartcontrol {
+    inherit (gnome) libglademm;
+  };
 
+  gtypist = callPackage ../games/gtypist { };
+ 
   hexen = callPackage ../games/hexen { };
 
   icbm3d = callPackage ../games/icbm3d { };

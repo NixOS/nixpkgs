@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "DSH";
-  version = "0.8.0.1";
-  sha256 = "08bwn7jpnkzvyj2dlpk6zx97iwsjb085vbnc8hwvxnhf9y8wl96s";
+  version = "0.8.1.0";
+  sha256 = "13mkpcm34jg7hqc272phiak7rg590hxb6ma3s9lwvp6izcv7vccq";
   buildDepends = [ csv FerryCore HaXml HDBC mtl Pathfinder text ];
   meta = {
     description = "Database Supported Haskell";

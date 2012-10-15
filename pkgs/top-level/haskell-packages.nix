@@ -120,6 +120,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
+    async        = self.async_2_0_1_3;          # 7.6 ok
     cgi          = self.cgi_3001_1_8_3;         # 7.6 ok
     fgl          = self.fgl_5_4_2_4;            # 7.6 ok
     GLUT         = self.GLUT_2_3_0_0;           # 7.6 ok
@@ -137,16 +138,19 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexBase    = self.regexBase_0_93_2;       # 7.6 ok
     regexCompat  = self.regexCompat_0_95_1;     # 7.6 ok
     regexPosix   = self.regexPosix_0_95_2;      # 7.6 ok
+    split        = self.split_0_2_1_1;          # 7.6 ok
     stm          = self.stm_2_4;                # 7.6 ok
     syb          = self.syb_0_3_7;              # 7.6 ok
     text         = self.text_0_11_2_3;          # 7.6 ok
     transformers = self.transformers_0_3_0_0;   # 7.6 ok
+    vector       = self.vector_0_10;            # 7.6 ok
     xhtml        = self.xhtml_3000_2_1;         # 7.6 ok
     zlib         = self.zlib_0_5_4_0;           # 7.6 ok
     cabalInstall = self.cabalInstall_1_16_0;    # 7.6 ok
-    alex         = self.alex_3_0_1;             # 7.6 ok
-    haddock      = self.haddock_2_12_0;         # 7.6 ok
+    alex         = self.alex_3_0_2;             # 7.6 ok
+    haddock      = self.haddock_2_13_1;         # 7.6 ok
     happy        = self.happy_1_18_10;          # 7.6 ok
+    primitive    = self.primitive_0_5_0_1; # semi-official, but specified
   };
 
   haskellPlatformArgs_2012_4_0_0 = self : {
@@ -1816,7 +1820,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haddock_2_10_0 = callPackage ../development/tools/documentation/haddock/2.10.0.nix {};
   haddock_2_11_0 = callPackage ../development/tools/documentation/haddock/2.11.0.nix {};
   haddock_2_12_0 = callPackage ../development/tools/documentation/haddock/2.12.0.nix {};
-  haddock = self.haddock_2_12_0;
+  haddock_2_13_1 = callPackage ../development/tools/documentation/haddock/2.13.1.nix {};
+  haddock = self.haddock_2_13_1;
 
   happy_1_18_4 = callPackage ../development/tools/parsing/happy/1.18.4.nix {};
   happy_1_18_5 = callPackage ../development/tools/parsing/happy/1.18.5.nix {};
