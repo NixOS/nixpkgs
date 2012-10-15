@@ -196,7 +196,7 @@ sub unique {
 # unit checking code above.
 my ($prevFss, $prevSwaps) = parseFstab "/etc/fstab";
 my ($newFss, $newSwaps) = parseFstab "@out@/etc/fstab";
-foreach my $mountPoint (keys ${prevFss}) {
+foreach my $mountPoint (keys %$prevFss) {
     my $prev = $prevFss->{$mountPoint};
     my $new = $newFss->{$mountPoint};
     my $unit = pathToUnitName($mountPoint) . ".mount";
@@ -214,7 +214,7 @@ foreach my $mountPoint (keys ${prevFss}) {
 }
 
 # Also handles swap devices.
-foreach my $device (keys ${prevSwaps}) {
+foreach my $device (keys %$prevSwaps) {
     my $prev = $prevSwaps->{$device};
     my $new = $newSwaps->{$device};
     if (!defined $new) {
