@@ -8,33 +8,7 @@ let
 in
 {
 
-  fontadobe75dpi = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
-  };
-
-  fontadobe100dpi = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
-  };
-
-  fontbh100dpi = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
-  };
-
-  fontbhlucidatypewriter75dpi = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
-  };
-
-  fontbhlucidatypewriter100dpi = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
-  };
-
-  fontcursormisc = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
-  };
-
   fontmiscmisc = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
-
     postInstall =
       ''
         ALIASFILE=${xorg.fontalias}/share/fonts/X11/misc/fonts.alias
