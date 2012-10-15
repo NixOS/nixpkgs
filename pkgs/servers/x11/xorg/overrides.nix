@@ -8,6 +8,10 @@ let
 in
 {
 
+  fontcursormisc = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
+  };
+
   fontmiscmisc = attrs: attrs // {
     postInstall =
       ''
