@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "iptables-1.4.10";
+  name = "iptables-1.4.16.2";
 
   src = fetchurl {
     url = "http://www.netfilter.org/projects/iptables/files/${name}.tar.bz2";
-    md5 = "f382fe693f0b59d87bd47bea65eca198";
+    md5 = "57220bb26866a713073e5614f88071fc";
   };
 
   # Install header files required by miniupnpd.

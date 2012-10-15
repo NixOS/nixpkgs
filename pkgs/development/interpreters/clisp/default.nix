@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
       --with-module=clx/new-clx --with-module=i18n --with-module=bindings/glibc
       --with-module=pcre --with-module=rawsock --with-module=readline
       --with-module=syscalls --with-module=wildcard --with-module=zlib
+      --with-threads=POSIX_THREADS
     '';
 
   preBuild = ''
