@@ -1,11 +1,11 @@
-{ cabal, blazeBuilder, happy, mtl, utf8Light, utf8String }:
+{ cabal, alex, blazeBuilder, happy, mtl, utf8Light, utf8String }:
 
 cabal.mkDerivation (self: {
   pname = "language-javascript";
-  version = "0.5.4";
-  sha256 = "0hjx12n3pkxcdkppqalv6sl68vjlib37gby89ksay807ndslvb9q";
+  version = "0.5.5";
+  sha256 = "1p02n6rh98nvkh7g5kj18ggcnyvds8lqbgjwgzm83bnd5ayizrw7";
   buildDepends = [ blazeBuilder mtl utf8Light utf8String ];
-  buildTools = [ happy ];
+  buildTools = [ alex happy ];
   meta = {
     homepage = "http://github.com/alanz/language-javascript";
     description = "Parser for JavaScript";
