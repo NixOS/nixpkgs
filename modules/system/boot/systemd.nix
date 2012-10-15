@@ -158,7 +158,9 @@ let
       KillSignal=SIGHUP
     '';
 
-  makeJobScript = name: content: "${pkgs.writeScriptBin name content}/bin/${name}";
+  makeJobScript = name: text:
+    let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${name}"; inherit text; };
+    in "${x}/bin/${name}";
 
   unitConfig = { name, config, ... }: {
     config = {
@@ -224,28 +226,28 @@ let
           ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
 
           ${optionalString (def.preStart != "") ''
-            ExecStartPre=${makeJobScript "prestart.sh" ''
+            ExecStartPre=${makeJobScript "${name}-pre-start" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.preStart}
             ''}
           ''}
 
           ${optionalString (def.script != "") ''
-            ExecStart=${makeJobScript "start.sh" ''
+            ExecStart=${makeJobScript "${name}-start" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.script}
             ''}
           ''}
 
           ${optionalString (def.postStart != "") ''
-            ExecStartPost=${makeJobScript "poststart.sh" ''
+            ExecStartPost=${makeJobScript "${name}-post-start" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.postStart}
             ''}
           ''}
 
           ${optionalString (def.postStop != "") ''
-            ExecStopPost=${makeJobScript "poststop.sh" ''
+            ExecStopPost=${makeJobScript "${name}-post-stop" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.postStop}
             ''}

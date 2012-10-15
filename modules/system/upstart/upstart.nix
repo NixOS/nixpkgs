@@ -21,13 +21,13 @@ let
 
       env = config.system.upstartEnvironment // job.environment;
 
-      preStartScript = makeJobScript "${job.name}-pre-start.sh"
+      preStartScript = makeJobScript "${job.name}-pre-start"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${job.preStart}
         '';
 
-      startScript = makeJobScript "${job.name}-start.sh"
+      startScript = makeJobScript "${job.name}-start"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${if job.script != "" then job.script else ''
@@ -35,19 +35,19 @@ let
           ''}
         '';
 
-      postStartScript = makeJobScript "${job.name}-post-start.sh"
+      postStartScript = makeJobScript "${job.name}-post-start"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${job.postStart}
         '';
 
-      preStopScript = makeJobScript "${job.name}-pre-stop.sh"
+      preStopScript = makeJobScript "${job.name}-pre-stop"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${job.preStop}
         '';
 
-      postStopScript = makeJobScript "${job.name}-post-stop.sh"
+      postStopScript = makeJobScript "${job.name}-post-stop"
         ''
           #! ${pkgs.stdenv.shell} -e
           ${job.postStop}
