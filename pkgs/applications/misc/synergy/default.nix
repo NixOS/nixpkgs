@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
   
   installPhase = ''
     ensureDir $out/bin
-    pwd
     cp ../bin/synergyc $out/bin
     cp ../bin/synergys $out/bin
     cp ../bin/synergyd $out/bin
