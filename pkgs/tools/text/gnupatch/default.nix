@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ed }:
 
 stdenv.mkDerivation rec {
-  name = "patch-2.7";
+  name = "patch-2.7.1";
 
   src = fetchurl {
     url = "mirror://gnu/patch/${name}.tar.gz";
-    sha256 = "0j10lq37ywcc4qiakan6wpm00abfrnnccq3ags129ad0z9b9zhjr";
+    sha256 = "1m9r83b5c154xnxbvgjg4lfff58xjapanj6dmmivqx1liik2hpy0";
   };
 
   buildInputs = stdenv.lib.optional doCheck ed;
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     configureFlags = [ "ac_cv_func_strnlen_working=yes" ];
   };
 
-  doCheck = true;
+  # Tests fail on FreeBSD due to a Bashism in the tests.
+  doCheck = !stdenv.isFreeBSD;
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";
