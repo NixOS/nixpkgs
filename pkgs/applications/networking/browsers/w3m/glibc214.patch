@@ -1,0 +1,60 @@
+http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/www-client/w3m/files/w3m-0.5.3-glibc214.patch?revision=1.1
+
+--- a/istream.c.~1.27.~	2011-01-04 18:22:22.000000000 +0900
++++ b/istream.c	2011-06-24 08:15:23.522990618 +0900
+@@ -22,8 +22,8 @@
+ static void basic_close(int *handle);
+ static int basic_read(int *handle, char *buf, int len);
+ 
+-static void file_close(struct file_handle *handle);
+-static int file_read(struct file_handle *handle, char *buf, int len);
++static void file_close(struct afile_handle *handle);
++static int file_read(struct afile_handle *handle, char *buf, int len);
+ 
+ static int str_read(Str handle, char *buf, int len);
+ 
+@@ -114,7 +114,7 @@
+     stream = New(union input_stream);
+     init_base_stream(&stream->base, STREAM_BUF_SIZE);
+     stream->file.type = IST_FILE;
+-    stream->file.handle = New(struct file_handle);
++    stream->file.handle = New(struct afile_handle);
+     stream->file.handle->f = f;
+     if (closep)
+ 	stream->file.handle->close = closep;
+@@ -658,13 +658,13 @@
+ }
+ 
+ static void
+-file_close(struct file_handle *handle)
++file_close(struct afile_handle *handle)
+ {
+     handle->close(handle->f);
+ }
+ 
+ static int
+-file_read(struct file_handle *handle, char *buf, int len)
++file_read(struct afile_handle *handle, char *buf, int len)
+ {
+     return fread(buf, 1, len, handle->f);
+ }
+--- a/istream.h.~1.12.~	2003-10-21 01:41:56.000000000 +0900
++++ b/istream.h	2011-06-24 08:15:54.392991144 +0900
+@@ -20,7 +20,7 @@
+ 
+ typedef struct stream_buffer *StreamBuffer;
+ 
+-struct file_handle {
++struct afile_handle {
+     FILE *f;
+     void (*close) ();
+ };
+@@ -53,7 +53,7 @@
+ 
+ struct file_stream {
+     struct stream_buffer stream;
+-    struct file_handle *handle;
++    struct afile_handle *handle;
+     char type;
+     char iseos;
+     int (*read) ();
