@@ -7051,6 +7051,8 @@ let
     pcre = pcre.override { unicodeSupport = true; };
   };
 
+  gmrun = callPackage ../applications/misc/gmrun {};
+
   gnucash = callPackage ../applications/office/gnucash {
     inherit (gnome) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint;
     gconf = gnome.GConf;
