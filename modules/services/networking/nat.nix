@@ -34,6 +34,9 @@ in
           coming from these networks and destined for the external
           interface will be rewritten.
         '';
+      # Backward compatibility: this used to be a single range instead
+      # of a list.
+      apply = x: if isList x then x else [x];
     };
 
     networking.nat.externalInterface = mkOption {
@@ -78,8 +81,8 @@ in
           ''
             iptables -t nat -F POSTROUTING
             iptables -t nat -X
-          '' 
-          + (concatMapStrings (network: 
+          ''
+          + (concatMapStrings (network:
             ''
             iptables -t nat -A POSTROUTING \
               -s ${network} -o ${cfg.externalInterface} \
