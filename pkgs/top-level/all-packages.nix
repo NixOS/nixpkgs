@@ -2912,20 +2912,9 @@ let
 
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
-  automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
-    doCheck = !stdenv.isArm && !stdenv.isCygwin && !stdenv.isMips
-      # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
-      && stdenv.system != "i686-solaris"
+  automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
-      # One test fails to terminate on FreeBSD: <http://bugs.gnu.org/8788>.
-      && !stdenv.isFreeBSD;
-  };
-
-  automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix {
-    doCheck = !stdenv.isArm && !stdenv.isCygwin && !stdenv.isMips
-      # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
-      && stdenv.system != "i686-solaris";
-  };
+  automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix { };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 

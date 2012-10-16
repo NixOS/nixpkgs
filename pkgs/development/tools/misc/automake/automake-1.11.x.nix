@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, autoconf, makeWrapper, doCheck ? true}:
+{ stdenv, fetchurl, perl, autoconf, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "automake-1.11.6";
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-test-autoconf-2.69.patch ];
 
   buildInputs = [perl autoconf makeWrapper];
-
-  inherit doCheck;
 
   # Disable indented log output from Make, otherwise "make.test" will
   # fail.
