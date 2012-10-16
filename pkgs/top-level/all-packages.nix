@@ -729,6 +729,7 @@ let
   fortune = callPackage ../tools/misc/fortune { };
 
   fox = callPackage ../development/libraries/fox/default.nix { };
+  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
 
   fprot = callPackage ../tools/security/fprot { };
 
@@ -7982,6 +7983,8 @@ let
   xdotool = callPackage ../tools/X11/xdotool { };
 
   xen = callPackage ../applications/virtualization/xen { };
+
+  xfe = callPackage ../applications/misc/xfe { };
 
   xfig = callPackage ../applications/graphics/xfig {
     stdenv = overrideGCC stdenv gcc34;
