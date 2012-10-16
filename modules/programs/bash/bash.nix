@@ -17,11 +17,11 @@ let
       shopt -s nullglob
       for p in $NIX_PROFILES /run/current-system/sw; do
         for m in "$p/etc/bash_completion.d/"*; do
-          echo enable bash completion module $m
           . $m
         done
       done
       eval "$nullglobStatus"
+      unset nullglobStatus p m
     fi
   '';
 
