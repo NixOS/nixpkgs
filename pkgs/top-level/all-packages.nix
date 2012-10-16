@@ -728,6 +728,8 @@ let
 
   fortune = callPackage ../tools/misc/fortune { };
 
+  fox = callPackage ../development/libraries/fox/default.nix { };
+
   fprot = callPackage ../tools/security/fprot { };
 
   freeipmi = callPackage ../tools/system/freeipmi {};
