@@ -7608,6 +7608,8 @@ let
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
+  qtcreator = callPackage ../development/qtcreator { };
+
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = callPackage ../applications/audio/qtractor { };
