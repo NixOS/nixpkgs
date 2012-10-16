@@ -627,7 +627,7 @@ checkPhase() {
     make ${makefile:+-f $makefile} \
         ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}} \
         $makeFlags "${makeFlagsArray[@]}" \
-        $checkFlags "${checkFlagsArray[@]}" ${checkTarget:-check}
+        ${checkFlags:-VERBOSE=y} "${checkFlagsArray[@]}" ${checkTarget:-check}
 
     runHook postCheck
 }
