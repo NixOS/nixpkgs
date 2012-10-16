@@ -13,11 +13,11 @@ assert pngSupport -> libpng != null;
 assert xcbSupport -> libxcb != null && xcbutil != null;
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.12.2";
-  
+  name = "cairo-1.12.4";
+
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha1 = "bc2ee50690575f16dab33af42a2e6cdc6451e3f9";
+    sha1 = "f4158981ed01e73c94fb8072074b17feee61a68b";
   };
 
   buildInputs =
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional gobjectSupport glib ++
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
-    
+
   configureFlags =
     [ "--enable-tee" ]
     ++ stdenv.lib.optional xcbSupport "--enable-xcb"
