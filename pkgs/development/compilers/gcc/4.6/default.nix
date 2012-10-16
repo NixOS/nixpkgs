@@ -406,6 +406,8 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
+  inherit (stdenv) is64bit;
+
   meta = {
     homepage = http://gcc.gnu.org/;
     license = "GPLv3+";  # runtime support libraries are typically LGPLv3+
