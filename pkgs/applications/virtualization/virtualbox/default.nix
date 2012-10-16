@@ -110,6 +110,12 @@ in stdenv.mkDerivation {
     mkdir -p $out/share/applications
     sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
     ln -sfv $libexec/virtualbox.desktop $out/share/applications
+    # Icons
+    mkdir -p $out/share/icons/hicolor
+    for size in `ls -1 $libexec/icons`; do
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      cp $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
+    done
   '';
 
   meta = {
