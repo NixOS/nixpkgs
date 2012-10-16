@@ -8316,6 +8316,12 @@ let
     libpng = libpng12;
   };
 
+  worldofgoo = callPackage ../games/worldofgoo { };
+
+  worldofgoofull = callPackage ../games/worldofgoo {
+    demo = false;
+  };
+
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
       libICE libXmu libXext libXpm;
