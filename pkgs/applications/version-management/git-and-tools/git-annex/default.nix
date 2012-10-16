@@ -1,27 +1,35 @@
-{ stdenv, fetchurl, curl, dataenc, findutils, ghc, git, hS3, hslogger, HTTP, hxt
-, ikiwiki, json, libuuid, MissingH, monadControl, mtl, network, pcreLight, perl
-, QuickCheck, rsync, SHA, testpack, utf8String, which, liftedBase, coreutils
-, IfElse, bloomfilter, editDistance, openssh, stm, hinotify
+{ stdenv, ghc, fetchurl, perl, coreutils, git, libuuid, rsync
+, findutils, curl, ikiwiki, which, openssh
+, blazeBuilder, blazeHtml, bloomfilter, caseInsensitive
+, clientsession, cryptoApi, dataDefault, dataenc, dbus
+, editDistance, extensibleExceptions, filepath, hamlet, hinotify
+, hS3, hslogger, HTTP, httpTypes, IfElse, json, liftedBase
+, MissingH, monadControl, mtl, network, networkInfo
+, networkMulticast, pcreLight, QuickCheck, SHA, stm, text, time
+, transformers, transformersBase, utf8String, wai, waiLogger, warp
+, yesod, yesodDefault, yesodStatic, testpack
 }:
 
 let
-  version = "3.20120825";
+  version = "3.20121010";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=refs/tags/${version}";
-    sha256 = "edffe6a99d07599f62d4d5f6823de8a830abe8977c7671fd6eb21aeaebc0b8d0";
+    sha256 = "4db543af6cbcb2d92c808c01969425d1fd1a916b37386dcdfe1a3101876ccde2";
     name = "git-annex-${version}.tar.gz";
   };
 
-  buildInputs = [
-    curl dataenc findutils ghc git hS3 hslogger HTTP hxt ikiwiki json
-    libuuid MissingH monadControl mtl network pcreLight perl QuickCheck
-    rsync SHA testpack utf8String which liftedBase IfElse bloomfilter
-    editDistance openssh stm hinotify
-  ];
+  buildInputs = [ ghc git libuuid rsync findutils curl ikiwiki which
+    openssh blazeBuilder blazeHtml bloomfilter caseInsensitive
+    clientsession cryptoApi dataDefault dataenc dbus editDistance
+    extensibleExceptions filepath hamlet hinotify hS3 hslogger HTTP
+    httpTypes IfElse json liftedBase MissingH monadControl mtl network
+    networkInfo networkMulticast pcreLight QuickCheck SHA stm text time
+    transformers transformersBase utf8String wai waiLogger warp yesod
+    yesodDefault yesodStatic testpack ];
 
   checkTarget = "test";
   doCheck = true;
@@ -29,7 +37,7 @@ stdenv.mkDerivation {
   # The 'add_url' test fails because it attempts to use the network.
   preConfigure = ''
     makeFlagsArray=( PREFIX=$out )
-    sed -i -e 's|#!/usr/bin/perl|#!${perl}/bin/perl|' mdwn2man
+    sed -i -e 's|#!/usr/bin/perl|#!${perl}/bin/perl|' Build/mdwn2man
     sed -i -e 's|"cp |"${coreutils}/bin/cp |' -e 's|"rm -f |"${coreutils}/bin/rm -f |' test.hs
   '';
 

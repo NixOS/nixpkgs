@@ -660,6 +660,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   datetime = callPackage ../development/libraries/haskell/datetime {};
 
+  dbus = callPackage ../development/libraries/haskell/dbus {};
+
   deepseq_1_1_0_0 = callPackage ../development/libraries/haskell/deepseq/1.1.0.0.nix {};
   deepseq_1_1_0_2 = callPackage ../development/libraries/haskell/deepseq/1.1.0.2.nix {};
   deepseq_1_2_0_1 = callPackage ../development/libraries/haskell/deepseq/1.2.0.1.nix {};
@@ -1089,6 +1091,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
 
+  libxmlSax = callPackage ../development/libraries/haskell/libxml-sax {};
+
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
@@ -1188,6 +1192,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network = self.network_2_4_0_1;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
+
+  networkInfo = callPackage ../development/libraries/haskell/network-info {};
 
   networkMulticast = callPackage ../development/libraries/haskell/network-multicast {};
 
