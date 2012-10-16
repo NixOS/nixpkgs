@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "10ib8bpar2pl68aqksfinvfmqknwnk7i35ibq6yjl8dpb0cxj9dd";
   };
 
+  patches = [ ./pthread-once-init.patch ];
+
   configureFlags = stdenv.lib.optionalString pythonSupport "--with-python=${python}";
 
   buildInputs = stdenv.lib.optional pythonSupport [ python ];
@@ -19,6 +21,8 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   passthru = { inherit pythonSupport; };
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://xmlsoft.org/;
