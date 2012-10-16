@@ -49,6 +49,8 @@ let
         # Create desktop item.
         mkdir -p $out/share/applications
         cp ${desktopItem}/share/applications/* $out/share/applications
+        mkdir -p $out/share/pixmaps
+        cp $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
       ''; # */
 
       meta = {
