@@ -53,6 +53,19 @@ let self = {
     ];
   };
 
+  "async" = self."async-0.1.22";
+
+  "async-0.1.22" = self.buildNodePackage rec {
+    name = "async-0.1.22";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/async/-/${name}.tgz";
+      sha256 = "6fd2750cd519a754b0e32ef3423e64768055129e00a95d9297005bda29fdef18";
+    };
+    deps = [
+
+    ];
+  };
+
   "backbone" = self."backbone-0.9.2";
 
   "backbone-0.9.2" = self.buildNodePackage rec {
@@ -109,15 +122,14 @@ let self = {
     ];
   };
 
-  "bson" = self."bson-0.1.4";
+  "bson" = self."bson-0.1.5";
 
-  "bson-0.1.4" = self.buildNodePackage rec {
-    name = "bson-0.1.4";
+  "bson-0.1.5" = self.buildNodePackage rec {
+    name = "bson-0.1.5";
     src = fetchurl {
       url = "http://registry.npmjs.org/bson/-/${name}.tgz";
-      sha256 = "deb8d960c849d1cadbb692ce93a6f4678f5431f98965869806f8f26f3db81919";
+      sha256 = "3fad2209466740ea81d0bc285b92d940efe5104a6314946ea40180c431a19692";
     };
-    flags = [ "mongodb:native" ];
     deps = [
 
     ];
@@ -536,16 +548,16 @@ let self = {
     ];
   };
 
-  "mongodb" = self."mongodb-1.1.8";
+  "mongodb" = self."mongodb-1.1.11";
 
-  "mongodb-1.1.8" = self.buildNodePackage rec {
-    name = "mongodb-1.1.8";
+  "mongodb-1.1.11" = self.buildNodePackage rec {
+    name = "mongodb-1.1.11";
     src = fetchurl {
       url = "http://registry.npmjs.org/mongodb/-/${name}.tgz";
-      sha256 = "af99f0e13d5286b4335378c958cfc9773ada0732ef7242b25cb01aac288cbec1";
+      sha256 = "fedd14b097a58ae5c2c83e5cb0af85a191ad00c2ce8d6db46520ee6cc1650277";
     };
     deps = [
-      self."bson-0.1.4"
+      self."bson-0.1.5"
     ];
   };
 
@@ -1028,14 +1040,14 @@ let self = {
     ];
   };
 
-  "underscore" = self."underscore-1.3.3";
-  "underscore->=1.3.1" = self."underscore-1.3.3";
+  "underscore" = self."underscore-1.4.2";
+  "underscore->=1.3.1" = self."underscore-1.4.2";
 
-  "underscore-1.3.3" = self.buildNodePackage rec {
-    name = "underscore-1.3.3";
+  "underscore-1.4.2" = self.buildNodePackage rec {
+    name = "underscore-1.4.2";
     src = fetchurl {
       url = "http://registry.npmjs.org/underscore/-/${name}.tgz";
-      sha256 = "e710644e53f5a6d75a41a3e19d8c35eedbce0db1e886e470daf9f909c9d1ea8a";
+      sha256 = "329ab22ba9b37be4a0c694ca21b9ed85b99256a45c2e0cf3624c4719443366d6";
     };
     deps = [
 
@@ -1095,6 +1107,19 @@ let self = {
       self."commander-~0.6.1"
       self."tinycolor-0.x"
       self."options"
+    ];
+  };
+
+  "wu" = self."wu-0.1.8";
+
+  "wu-0.1.8" = self.buildNodePackage rec {
+    name = "wu-0.1.8";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/wu/-/${name}.tgz";
+      sha256 = "2400d0ca7da862a9063a6a8d914bb4e585f81a5121b0fda8e40b1f6e782c72c6";
+    };
+    deps = [
+
     ];
   };
 
