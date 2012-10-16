@@ -117,7 +117,9 @@ let
                || result.system == "x86_64-freebsd"
                || result.system == "x86_64-openbsd";
         is64bit = result.system == "x86_64-linux"
-                || result.system == "x86_64-darwin";
+                || result.system == "x86_64-darwin"
+                || result.system == "x86_64-freebsd"
+                || result.system == "x86_64-openbsd";
         isMips = result.system == "mips-linux"
                 || result.system == "mips64el-linux";
         isArm = result.system == "armv5tel-linux"
