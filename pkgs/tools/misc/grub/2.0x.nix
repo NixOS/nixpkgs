@@ -51,6 +51,8 @@ stdenv.mkDerivation rec {
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
 
+  patches = [ ./fix-bash-completion.patch ];
+
   configureFlags =
     let arch = if stdenv.system == "i686-linux" then "i386"
                else if stdenv.system == "x86_64-linux" then "x86_64"
