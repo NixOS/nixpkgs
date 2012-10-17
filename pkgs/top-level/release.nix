@@ -136,8 +136,6 @@ with (import ./release-lib.nix);
   guile = linux;  # tests fail on Cygwin
   gv = linux;
   gzip = all;
-  hal = linux;
-  hal_info = linux;
   hddtemp = linux;
   hello = all;
   host = linux;
@@ -170,8 +168,6 @@ with (import ./release-lib.nix);
   libsmbios = linux;
   libtool = all;
   libtool_2 = all;
-  libxml2 = all;
-  libxslt = all;
   lout = linux;
   lsh = linux;
   lsof = linux;

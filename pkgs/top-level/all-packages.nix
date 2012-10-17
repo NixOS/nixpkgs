@@ -242,6 +242,10 @@ let
     theAttrSet = arg;
   };
 
+  autoreconfHook = makeSetupHook
+    { substitutions = { inherit autoconf automake libtool; }; }
+    ../build-support/setup-hooks/autoreconf.sh;
+
   buildEnv = import ../build-support/buildenv {
     inherit (pkgs) runCommand perl;
   };
@@ -324,7 +328,7 @@ let
     inherit stdenv perl cpio contents ubootChooser;
   };
 
-  makeWrapper = makeSetupHook {} ../build-support/make-wrapper/make-wrapper.sh;
+  makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
   makeModulesClosure = {kernel, rootModules, allowMissing ? false}:
     import ../build-support/kernel/modules-closure.nix {
@@ -2746,21 +2750,7 @@ let
 
   perl = if system != "i686-cygwin" then perl514 else sysPerl;
 
-  php = php5_3;
-
-  php5_2 = makeOverridable (import ../development/interpreters/php/5.2.nix) {
-    inherit
-      stdenv fetchurl lib composableDerivation autoconf automake
-      flex bison apacheHttpd mysql libxml2 readline
-      zlib curl gd postgresql openssl pkgconfig sqlite config libiconv libjpeg libpng;
-  };
-
-  php5_3 = makeOverridable (import ../development/interpreters/php/5.3.nix) {
-    inherit
-      stdenv fetchurl lib composableDerivation autoconf automake
-      flex bison apacheHttpd mysql libxml2 readline
-      zlib curl gd postgresql openssl pkgconfig sqlite config libiconv libjpeg libpng;
-  };
+  php = callPackage ../development/interpreters/php/5.3.nix { };
 
   php_apc = callPackage ../development/libraries/php-apc { };
 
@@ -3833,23 +3823,23 @@ let
       gtkmm;
   };
 
-  glib = callPackage ../development/libraries/glib/2.30.x.nix { };
+  glib = callPackage ../development/libraries/glib/2.34.x.nix { };
 
   glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
-  atk = callPackage ../development/libraries/atk/2.2.x.nix { };
+  atk = callPackage ../development/libraries/atk/2.6.x.nix { };
 
   atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
 
   cairo = callPackage ../development/libraries/cairo { };
 
-  pango = callPackage ../development/libraries/pango/1.29.x.nix { };
+  pango = callPackage ../development/libraries/pango/1.30.x.nix { };
 
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
 
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.24.x.nix { };
+  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.26.x.nix { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
 
@@ -3889,6 +3879,8 @@ let
 
   # TODO : Add MIT Kerberos and let admin choose.
   kerberos = heimdal;
+
+  harfbuzz = callPackage ../development/libraries/harfbuzz { };
 
   hawknl = callPackage ../development/libraries/hawknl { };
 
@@ -4980,7 +4972,7 @@ let
         libjpeg libtiff libxml2 libxslt sqlite
         icu cairo intltool automake libtool
         pkgconfig autoconf bison libproxy enchant
-        python ruby which flex geoclue;
+        python ruby which flex geoclue mesa;
       inherit gstreamer gst_plugins_base gst_ffmpeg
         gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender kbproto;
@@ -5511,7 +5503,7 @@ let
     inherit fetchurl fetchsvn stdenv pkgconfig freetype fontconfig
       libxslt expat libdrm libpng zlib perl mesa
       xkeyboard_config dbus libuuid openssl gperf m4
-      autoconf libtool xmlto asciidoc udev flex bison python;
+      autoconf libtool xmlto asciidoc udev flex bison python mtdev;
     automake = automake110x;
   });
 
@@ -5650,14 +5642,6 @@ let
   fxload = callPackage ../os-specific/linux/fxload { };
 
   gpm = callPackage ../servers/gpm { };
-
-  hal = callPackage ../os-specific/linux/hal { };
-
-  halevt = callPackage ../os-specific/linux/hal/hal-evt.nix { };
-
-  hal_info = callPackage ../os-specific/linux/hal/info.nix { };
-
-  hal_info_synaptics = callPackage ../os-specific/linux/hal/synaptics.nix { };
 
   hdparm = callPackage ../os-specific/linux/hdparm { };
 
@@ -6083,9 +6067,7 @@ let
 
   module_init_tools = callPackage ../os-specific/linux/module-init-tools { };
 
-  mountall = callPackage ../os-specific/linux/mountall {
-    automake = automake111x;
-  };
+  mountall = callPackage ../os-specific/linux/mountall { };
 
   aggregateModules = modules:
     import ../os-specific/linux/module-init-tools/aggregator.nix {
@@ -8376,15 +8358,15 @@ let
 
   kde4 = recurseIntoAttrs pkgs.kde47;
 
-  kde47 = kdePackagesFor pkgs.kde47 "4.7";
+  kde47 = kdePackagesFor (pkgs.kde47 // {boost = boost149;}) ../desktops/kde-4.7;
 
-  kde48 = kdePackagesFor pkgs.kde48 "4.8";
+  kde48 = kdePackagesFor (pkgs.kde48 // {boost = boost149;}) ../desktops/kde-4.8;
 
-  kdePackagesFor = self: version:
+  kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
     let
       callPackage = newScope self;
-      kde4 = callPackageOrig (../desktops/kde- + version) {
+      kde4 = callPackageOrig dir {
         inherit callPackage callPackageOrig;
       };
     in kde4 // {

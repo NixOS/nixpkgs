@@ -13,7 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "0cgnnl6kqaz3als5y9g8jvsvbs4c8ccp0vl4s1g8rwk69w2cwxd2";
   };
 
-  patches = [ ./reexec.patch ./ignore-duplicates.patch ./fix-device-aliases.patch ];
+  patches =
+    [ ./reexec.patch
+      ./ignore-duplicates.patch
+      ./fix-device-aliases.patch
+      ./crypt-devices-are-ready.patch
+    ];
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl

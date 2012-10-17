@@ -1,0 +1,471 @@
+diff -Naur dia-0.97.2-orig/app/app_procs.c dia-0.97.2/app/app_procs.c
+--- dia-0.97.2-orig/app/app_procs.c	2011-03-20 07:18:13.000000000 -0400
++++ dia-0.97.2/app/app_procs.c	2012-07-15 10:49:08.192726306 -0400
+@@ -50,7 +50,7 @@
+ #include <libxml/parser.h>
+ #include <libxml/xmlerror.h>
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "app_procs.h"
+diff -Naur dia-0.97.2-orig/app/dia-win-remote.c dia-0.97.2/app/dia-win-remote.c
+--- dia-0.97.2-orig/app/dia-win-remote.c	2010-08-03 11:35:35.000000000 -0400
++++ dia-0.97.2/app/dia-win-remote.c	2012-07-15 10:49:08.159726316 -0400
+@@ -35,7 +35,7 @@
+ #include <shellapi.h>
+ #include <Shlwapi.h>
+ #include <glib.h>
+-#include <glib/gprintf.h>
++#include <glib.h>
+ 
+ /**
+  * PROTOTYPES:
+diff -Naur dia-0.97.2-orig/app/filedlg.c dia-0.97.2/app/filedlg.c
+--- dia-0.97.2-orig/app/filedlg.c	2009-11-07 12:13:53.000000000 -0500
++++ dia-0.97.2/app/filedlg.c	2012-07-15 10:49:08.227726294 -0400
+@@ -28,7 +28,7 @@
+ #include <unistd.h>
+ #endif
+ #include <stdio.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #undef GTK_DISABLE_DEPRECATED /* gtk_file_chooser_dialog_new_with_backend */
+ #include <gtk/gtk.h>
+diff -Naur dia-0.97.2-orig/app/load_save.c dia-0.97.2/app/load_save.c
+--- dia-0.97.2-orig/app/load_save.c	2011-09-25 07:55:11.000000000 -0400
++++ dia-0.97.2/app/load_save.c	2012-07-15 10:49:08.203726303 -0400
+@@ -30,7 +30,7 @@
+ #include <string.h>
+ 
+ #include <glib.h>
+-#include <glib/gstdio.h> /* g_access() and friends */
++#include <glib.h> /* g_access() and friends */
+ #include <errno.h>
+ 
+ #ifndef W_OK
+diff -Naur dia-0.97.2-orig/app/sheets_dialog_callbacks.c dia-0.97.2/app/sheets_dialog_callbacks.c
+--- dia-0.97.2-orig/app/sheets_dialog_callbacks.c	2009-11-07 12:13:53.000000000 -0500
++++ dia-0.97.2/app/sheets_dialog_callbacks.c	2012-07-15 10:49:08.201726302 -0400
+@@ -44,7 +44,7 @@
+ #endif
+ #endif
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ #include <gmodule.h>
+ 
+ #undef GTK_DISABLE_DEPRECATED /* GtkOptionMenu */
+diff -Naur dia-0.97.2-orig/ChangeLog.pre-git dia-0.97.2/ChangeLog.pre-git
+--- dia-0.97.2-orig/ChangeLog.pre-git	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/ChangeLog.pre-git	2012-07-15 10:49:08.384726247 -0400
+@@ -4137,7 +4137,7 @@
+ 	  plug-ins/vdx/vdx-export.c plug-ins/vdx/vdx-import.c 
+ 	  plug-ins/wmf/wmf.cpp plug-ins/wpg/wpg.c 
+ 	  plug-ins/xfig/xfig-export.c plug-ins/xfig/xfig-import.c
+-	  plug-ins/xslt/xslt.c : use <glib/gstdio.h> to match GLib's filename
++	  plug-ins/xslt/xslt.c : use <glib.h> to match GLib's filename
+ 	encoding to the io functions used, that is: g_open, g_fopen, g_stat, 
+ 	g_unlink, g_mkdir, g_rename (, g_access, g_lstat, g_remove, g_freopen, 
+ 	g_chdir, g_rmdir). Also replace gzopen() with gzdopen(g_open(), ...)
+@@ -5995,7 +5995,7 @@
+ 	Also special case strings starting with \tex - i.e. dont escape them -
+ 	to keep the use-case of direct tex input.
+ 	
+-	* lib/debug.c : #include <glib/gprintf.h> not just <gprintf.h>
++	* lib/debug.c : #include <glib.h>
+ 
+ 
+ 2006-01-14  Hans Breuer  <hans@breuer.org>
+@@ -6207,7 +6207,7 @@
+ 	* lib/makefile.msc : build debug.obj
+ 
+ 	* plug-ins/makefile.msc : building pgf in the right alphabetical order
+-	* plug-ins/pgf/render_pgf.c : include <glib/gprintf.h>
++	* plug-ins/pgf/render_pgf.c : include <glib.h>
+ 	
+ 2005-12-08  Lars Clausen  <lars@raeder.dk>
+ 
+diff -Naur dia-0.97.2-orig/lib/debug.c dia-0.97.2/lib/debug.c
+--- dia-0.97.2-orig/lib/debug.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/lib/debug.c	2012-07-15 10:49:06.813726730 -0400
+@@ -21,7 +21,7 @@
+ #include <config.h>
+ 
+ #include <stdio.h>
+-#include <glib/gprintf.h>
++#include <glib.h>
+ #include <stdarg.h>
+ 
+ #include "debug.h"
+diff -Naur dia-0.97.2-orig/lib/dia_dirs.c dia-0.97.2/lib/dia_dirs.c
+--- dia-0.97.2-orig/lib/dia_dirs.c	2009-11-07 12:13:53.000000000 -0500
++++ dia-0.97.2/lib/dia_dirs.c	2012-07-15 10:49:06.740726750 -0400
+@@ -30,7 +30,7 @@
+ #include <sys/stat.h>
+ #include <sys/types.h>
+ #endif
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ /** Get the name of a subdirectory of our data directory.
+  *  This function does not create the subdirectory, just make the correct name.
+diff -Naur dia-0.97.2-orig/lib/dia_xml.c dia-0.97.2/lib/dia_xml.c
+--- dia-0.97.2-orig/lib/dia_xml.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/lib/dia_xml.c	2012-07-15 10:49:06.770726743 -0400
+@@ -25,7 +25,7 @@
+ #include <fcntl.h>
+ 
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include <libxml/parser.h>
+ #include <libxml/parserInternals.h>
+diff -Naur dia-0.97.2-orig/objects/custom/shape_typeinfo.c dia-0.97.2/objects/custom/shape_typeinfo.c
+--- dia-0.97.2-orig/objects/custom/shape_typeinfo.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/objects/custom/shape_typeinfo.c	2012-07-15 10:49:06.639726783 -0400
+@@ -27,8 +27,8 @@
+ #include "custom_util.h"
+ #include <string.h>
+ #include <stdarg.h>
+-#include <glib/gstrfuncs.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
++#include <glib.h>
+ #include <libxml/parser.h>
+ 
+ /*
+diff -Naur dia-0.97.2-orig/objects/SISSI/sissi.c dia-0.97.2/objects/SISSI/sissi.c
+--- dia-0.97.2-orig/objects/SISSI/sissi.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/objects/SISSI/sissi.c	2012-07-15 10:49:06.570726804 -0400
+@@ -42,7 +42,7 @@
+ #include "dia_xml_libxml.h"
+ 
+ #include <string.h>
+-#include <glib/gprintf.h>
++#include <glib.h>
+ 
+ #define DEFAULT_WIDTH  1.0
+ #define DEFAULT_HEIGHT 1.0
+diff -Naur dia-0.97.2-orig/objects/standard/image.c dia-0.97.2/objects/standard/image.c
+--- dia-0.97.2-orig/objects/standard/image.c	2009-11-07 12:13:53.000000000 -0500
++++ dia-0.97.2/objects/standard/image.c	2012-07-15 10:49:06.683726770 -0400
+@@ -25,7 +25,7 @@
+ #ifdef HAVE_UNIST_H
+ #include <unistd.h>
+ #endif
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/cairo/diacairo.c dia-0.97.2/plug-ins/cairo/diacairo.c
+--- dia-0.97.2-orig/plug-ins/cairo/diacairo.c	2009-11-07 12:13:53.000000000 -0500
++++ dia-0.97.2/plug-ins/cairo/diacairo.c	2012-07-15 10:49:06.433726846 -0400
+@@ -28,7 +28,7 @@
+ #include <errno.h>
+ #define G_LOG_DOMAIN "DiaCairo"
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ /*
+  * To me the following looks rather suspicious. Why do we need to compile
+diff -Naur dia-0.97.2-orig/plug-ins/cairo/diacairo-renderer.c dia-0.97.2/plug-ins/cairo/diacairo-renderer.c
+--- dia-0.97.2-orig/plug-ins/cairo/diacairo-renderer.c	2011-01-07 06:54:21.000000000 -0500
++++ dia-0.97.2/plug-ins/cairo/diacairo-renderer.c	2012-07-15 10:49:06.435726846 -0400
+@@ -28,7 +28,7 @@
+ #include <errno.h>
+ #define G_LOG_DOMAIN "DiaCairo"
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #ifdef HAVE_PANGOCAIRO_H
+ #include <pango/pangocairo.h>
+diff -Naur dia-0.97.2-orig/plug-ins/cgm/cgm.c dia-0.97.2/plug-ins/cgm/cgm.c
+--- dia-0.97.2-orig/plug-ins/cgm/cgm.c	2009-12-27 11:22:38.000000000 -0500
++++ dia-0.97.2/plug-ins/cgm/cgm.c	2012-07-15 10:49:06.425726846 -0400
+@@ -31,7 +31,7 @@
+ #include <glib.h>
+ #include <errno.h>
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/drs/dia-render-script.c dia-0.97.2/plug-ins/drs/dia-render-script.c
+--- dia-0.97.2-orig/plug-ins/drs/dia-render-script.c	2009-11-07 12:13:53.000000000 -0500
++++ dia-0.97.2/plug-ins/drs/dia-render-script.c	2012-07-15 10:49:06.427726848 -0400
+@@ -54,7 +54,7 @@
+ 
+ #define G_LOG_DOMAIN "DiaRenderScript"
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "filter.h"
+diff -Naur dia-0.97.2-orig/plug-ins/dxf/dxf-export.c dia-0.97.2/plug-ins/dxf/dxf-export.c
+--- dia-0.97.2-orig/plug-ins/dxf/dxf-export.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/plug-ins/dxf/dxf-export.c	2012-07-15 10:49:06.421726850 -0400
+@@ -29,7 +29,7 @@
+ #include <math.h>
+ #include <glib.h>
+ #include <errno.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "autocad_pal.h"
+ 
+diff -Naur dia-0.97.2-orig/plug-ins/dxf/dxf-import.c dia-0.97.2/plug-ins/dxf/dxf-import.c
+--- dia-0.97.2-orig/plug-ins/dxf/dxf-import.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/plug-ins/dxf/dxf-import.c	2012-07-15 10:49:06.419726851 -0400
+@@ -30,7 +30,7 @@
+ #include <string.h>
+ #include <math.h>
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/hpgl/hpgl.c dia-0.97.2/plug-ins/hpgl/hpgl.c
+--- dia-0.97.2-orig/plug-ins/hpgl/hpgl.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/plug-ins/hpgl/hpgl.c	2012-07-15 10:49:06.487726830 -0400
+@@ -37,7 +37,7 @@
+ #include <errno.h>
+ 
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/libart/export_png.c dia-0.97.2/plug-ins/libart/export_png.c
+--- dia-0.97.2-orig/plug-ins/libart/export_png.c	2011-07-03 06:56:08.000000000 -0400
++++ dia-0.97.2/plug-ins/libart/export_png.c	2012-07-15 10:49:06.415726849 -0400
+@@ -29,7 +29,7 @@
+ #include <errno.h>
+ #include <stdlib.h>
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ #include <gtk/gtk.h>
+ 
+ #include "intl.h"
+diff -Naur dia-0.97.2-orig/plug-ins/metapost/render_metapost.c dia-0.97.2/plug-ins/metapost/render_metapost.c
+--- dia-0.97.2-orig/plug-ins/metapost/render_metapost.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/plug-ins/metapost/render_metapost.c	2012-07-15 10:49:06.396726857 -0400
+@@ -43,7 +43,7 @@
+ #endif
+ #include <errno.h>
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "render_metapost.h"
+diff -Naur dia-0.97.2-orig/plug-ins/pgf/render_pgf.c dia-0.97.2/plug-ins/pgf/render_pgf.c
+--- dia-0.97.2-orig/plug-ins/pgf/render_pgf.c	2011-01-07 07:11:34.000000000 -0500
++++ dia-0.97.2/plug-ins/pgf/render_pgf.c	2012-07-15 10:49:06.445726842 -0400
+@@ -61,8 +61,8 @@
+ #endif
+ #include <errno.h>
+ 
+-#include <glib/gprintf.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "render_pgf.h"
+diff -Naur dia-0.97.2-orig/plug-ins/postscript/paginate_psprint.c dia-0.97.2/plug-ins/postscript/paginate_psprint.c
+--- dia-0.97.2-orig/plug-ins/postscript/paginate_psprint.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/plug-ins/postscript/paginate_psprint.c	2012-07-15 10:49:06.451726838 -0400
+@@ -31,7 +31,7 @@
+ #include <errno.h>
+ #include <sys/stat.h>
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/postscript/render_eps.c dia-0.97.2/plug-ins/postscript/render_eps.c
+--- dia-0.97.2-orig/plug-ins/postscript/render_eps.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/plug-ins/postscript/render_eps.c	2012-07-15 10:49:06.451726838 -0400
+@@ -55,7 +55,7 @@
+ #include <locale.h>
+ #include <errno.h>
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "render_eps.h"
+diff -Naur dia-0.97.2-orig/plug-ins/pstricks/render_pstricks.c dia-0.97.2/plug-ins/pstricks/render_pstricks.c
+--- dia-0.97.2-orig/plug-ins/pstricks/render_pstricks.c	2011-01-07 07:11:34.000000000 -0500
++++ dia-0.97.2/plug-ins/pstricks/render_pstricks.c	2012-07-15 10:49:06.410726853 -0400
+@@ -50,7 +50,7 @@
+ #endif
+ #include <errno.h>
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "render_pstricks.h"
+diff -Naur dia-0.97.2-orig/plug-ins/python/pydia-render.c dia-0.97.2/plug-ins/python/pydia-render.c
+--- dia-0.97.2-orig/plug-ins/python/pydia-render.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/plug-ins/python/pydia-render.c	2012-07-15 10:49:06.503726822 -0400
+@@ -21,7 +21,7 @@
+ 
+ #include <Python.h>
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include <locale.h>
+ 
+diff -Naur dia-0.97.2-orig/plug-ins/shape/shape-export.c dia-0.97.2/plug-ins/shape/shape-export.c
+--- dia-0.97.2-orig/plug-ins/shape/shape-export.c	2009-11-08 06:14:56.000000000 -0500
++++ dia-0.97.2/plug-ins/shape/shape-export.c	2012-07-15 10:49:06.489726827 -0400
+@@ -40,7 +40,7 @@
+ #include <unistd.h>
+ #endif
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ /* the dots per centimetre to render this diagram at */
+ /* this matches the setting `100%' setting in dia. */
+diff -Naur dia-0.97.2-orig/plug-ins/svg/render_svg.c dia-0.97.2/plug-ins/svg/render_svg.c
+--- dia-0.97.2-orig/plug-ins/svg/render_svg.c	2011-12-17 11:30:38.000000000 -0500
++++ dia-0.97.2/plug-ins/svg/render_svg.c	2012-07-15 10:49:06.392726859 -0400
+@@ -30,7 +30,7 @@
+ #endif
+ 
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include <libxml/entities.h>
+ #include <libxml/tree.h>
+diff -Naur dia-0.97.2-orig/plug-ins/vdx/vdx-export.c dia-0.97.2/plug-ins/vdx/vdx-export.c
+--- dia-0.97.2-orig/plug-ins/vdx/vdx-export.c	2009-12-27 11:22:38.000000000 -0500
++++ dia-0.97.2/plug-ins/vdx/vdx-export.c	2012-07-15 10:55:17.066579728 -0400
+@@ -32,11 +32,12 @@
+ 
+ #include <string.h>
+ #include <math.h>
++#include <sys/stat.h>
+ #include <glib.h>
+ #include <stdlib.h>
+ #include <errno.h>
+ #include <locale.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/vdx/vdx-import.c dia-0.97.2/plug-ins/vdx/vdx-import.c
+--- dia-0.97.2-orig/plug-ins/vdx/vdx-import.c	2009-12-27 11:22:38.000000000 -0500
++++ dia-0.97.2/plug-ins/vdx/vdx-import.c	2012-07-15 10:49:06.466726836 -0400
+@@ -28,7 +28,7 @@
+ #include <string.h>
+ #include <math.h>
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ #include <stdlib.h>
+ #include <ctype.h>
+ #include <libxml/tree.h>
+diff -Naur dia-0.97.2-orig/plug-ins/wmf/wmf.cpp dia-0.97.2/plug-ins/wmf/wmf.cpp
+--- dia-0.97.2-orig/plug-ins/wmf/wmf.cpp	2011-03-13 09:07:48.000000000 -0400
++++ dia-0.97.2/plug-ins/wmf/wmf.cpp	2012-07-15 10:49:06.482726831 -0400
+@@ -25,7 +25,7 @@
+ #include <string.h>
+ #include <math.h>
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/wpg/wpg.c dia-0.97.2/plug-ins/wpg/wpg.c
+--- dia-0.97.2-orig/plug-ins/wpg/wpg.c	2009-11-07 09:28:34.000000000 -0500
++++ dia-0.97.2/plug-ins/wpg/wpg.c	2012-07-15 10:49:06.406726855 -0400
+@@ -40,7 +40,7 @@
+ #include <errno.h>
+ 
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/xfig/xfig-export.c dia-0.97.2/plug-ins/xfig/xfig-export.c
+--- dia-0.97.2-orig/plug-ins/xfig/xfig-export.c	2011-12-17 11:30:38.000000000 -0500
++++ dia-0.97.2/plug-ins/xfig/xfig-export.c	2012-07-15 10:49:06.400726856 -0400
+@@ -16,7 +16,7 @@
+ #include <locale.h>
+ 
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/xfig/xfig-import.c dia-0.97.2/plug-ins/xfig/xfig-import.c
+--- dia-0.97.2-orig/plug-ins/xfig/xfig-import.c	2009-11-07 12:13:53.000000000 -0500
++++ dia-0.97.2/plug-ins/xfig/xfig-import.c	2012-07-15 10:49:06.402726853 -0400
+@@ -40,7 +40,7 @@
+ #include <locale.h>
+ 
+ #include <glib.h>
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "intl.h"
+ #include "message.h"
+diff -Naur dia-0.97.2-orig/plug-ins/xslt/xslt.c dia-0.97.2/plug-ins/xslt/xslt.c
+--- dia-0.97.2-orig/plug-ins/xslt/xslt.c	2009-11-07 12:13:53.000000000 -0500
++++ dia-0.97.2/plug-ins/xslt/xslt.c	2012-07-15 10:49:06.440726844 -0400
+@@ -27,7 +27,7 @@
+ #include <string.h>
+ #include <errno.h>
+ 
+-#include <glib/gstdio.h>
++#include <glib.h>
+ 
+ #include "filter.h"
+ #include "intl.h"
+diff -Naur dia-0.97.2-orig/tests/test-boundingbox.c dia-0.97.2/tests/test-boundingbox.c
+--- dia-0.97.2-orig/tests/test-boundingbox.c	2009-11-07 09:28:35.000000000 -0500
++++ dia-0.97.2/tests/test-boundingbox.c	2012-07-15 10:49:06.986726677 -0400
+@@ -29,7 +29,7 @@
+ #include <glib-object.h>
+ 
+ #if GLIB_CHECK_VERSION(2,16,0)
+-#include <glib/gtestutils.h>
++#include <glib.h>
+ #endif
+ #include "dialib.h"
+ 
+diff -Naur dia-0.97.2-orig/tests/test-objects.c dia-0.97.2/tests/test-objects.c
+--- dia-0.97.2-orig/tests/test-objects.c	2009-11-07 09:28:35.000000000 -0500
++++ dia-0.97.2/tests/test-objects.c	2012-07-15 10:49:06.985726677 -0400
+@@ -29,7 +29,7 @@
+ #include <glib-object.h>
+ 
+ #if GLIB_CHECK_VERSION(2,16,0)
+-#include <glib/gtestutils.h>
++#include <glib.h>
+ #endif
+ 
+ #include "object.h"

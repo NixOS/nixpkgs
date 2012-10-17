@@ -1,0 +1,35 @@
+http://git.gnome.org/browse/libxml2/commit/?id=3f6cfbd1d38d0634a2ddcb9a0a13e1b5a2195a5e
+
+From 3f6cfbd1d38d0634a2ddcb9a0a13e1b5a2195a5e Mon Sep 17 00:00:00 2001
+From: Friedrich Haubensak <hsk@fli-leibniz.de>
+Date: Wed, 12 Sep 2012 15:34:53 +0000
+Subject: Fix a thread portability problem
+
+cannot compile libxml2-2.9.0 using studio 12.1 compiler on solaris 10
+
+I.M.O. structure initializer (as PTHREAD_ONCE_INIT) cannot be used in
+a structure assignment anyway
+---
+diff --git a/threads.c b/threads.c
+index f206149..7e85a26 100644
+--- a/threads.c
++++ b/threads.c
+@@ -146,6 +146,7 @@ struct _xmlRMutex {
+ static pthread_key_t globalkey;
+ static pthread_t mainthread;
+ static pthread_once_t once_control = PTHREAD_ONCE_INIT;
++static pthread_once_t once_control_init = PTHREAD_ONCE_INIT;
+ static pthread_mutex_t global_init_lock = PTHREAD_MUTEX_INITIALIZER;
+ #elif defined HAVE_WIN32_THREADS
+ #if defined(HAVE_COMPILER_TLS)
+@@ -915,7 +916,7 @@ xmlCleanupThreads(void)
+ #ifdef HAVE_PTHREAD_H
+     if ((libxml_is_threaded)  && (pthread_key_delete != NULL))
+         pthread_key_delete(globalkey);
+-    once_control = PTHREAD_ONCE_INIT;
++    once_control = once_control_init;
+ #elif defined(HAVE_WIN32_THREADS) && !defined(HAVE_COMPILER_TLS) && (!defined(LIBXML_STATIC) || defined(LIBXML_STATIC_FOR_DLL))
+     if (globalkey != TLS_OUT_OF_INDEXES) {
+         xmlGlobalStateCleanupHelperParams *p;
+--
+cgit v0.9.0.2

@@ -14,7 +14,7 @@ rec {
     sqlite icu gperf bison flex autoconf automake libtool 
     perl intltool pkgconfig libsoup gtkdoc libXt libproxy
     enchant python ruby which renderproto libXrender geoclue
-    kbproto
+    kbproto mesa
     ];
 
   propagatedBuildInputs = [
@@ -54,7 +54,7 @@ rec {
     ];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["setVars" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
+  phaseNames = ["setVars" "fixConfigure" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
     "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
 
   setVars = fullDepEntry (''
@@ -76,6 +76,13 @@ rec {
       
   paranoidFixComments = fullDepEntry (''
     sed -re 's@( |^)//.*@/* & */@' -i $(find . -name '*.c' -o -name '*.h')
+  '') ["minInit" "doUnpack"];
+
+  # See http://archive.linuxfromscratch.org/mail-archives/blfs-dev/2012-April/022893.html
+  fixConfigure = fullDepEntry (''
+    sed   -i -e 's/=GSTREAMER_0_10_REQUIRED_VERSION/=\$GSTREAMER_0_10_REQUIRED_VERSION/' \
+      -e 's/=GSTREAMER_0_10_PLUGINS_BASE_REQUIRED_VERSION/=\$GSTREAMER_0_10_PLUGINS_BASE_REQUIRED_VERSION/' \
+      configure{,.ac}
   '') ["minInit" "doUnpack"];
 
   name = s.name;

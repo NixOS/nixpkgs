@@ -6,8 +6,6 @@
 , libxkbfile, libXfont, libpciaccess
 }:
 
-
-
 with stdenv.lib;
 
 stdenv.mkDerivation rec {

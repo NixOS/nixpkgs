@@ -13,11 +13,11 @@ assert pngSupport -> libpng != null;
 assert xcbSupport -> libxcb != null && xcbutil != null;
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.10.2";
-  
+  name = "cairo-1.12.4";
+
   src = fetchurl {
-    url = "http://cairographics.org/releases/${name}.tar.gz";
-    sha1 = "ccce5ae03f99c505db97c286a0c9a90a926d3c6e";
+    url = "http://cairographics.org/releases/${name}.tar.xz";
+    sha1 = "f4158981ed01e73c94fb8072074b17feee61a68b";
   };
 
   buildInputs =
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional gobjectSupport glib ++
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
-    
+
   configureFlags =
     [ "--enable-tee" ]
     ++ stdenv.lib.optional xcbSupport "--enable-xcb"
@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
     sed -i "src/cairo.pc.in" \
         -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
   '';
+
+  enableParallelBuilding = true;
 
   # The default `--disable-gtk-doc' is ignored.
   postInstall = "rm -rf $out/share/gtk-doc";

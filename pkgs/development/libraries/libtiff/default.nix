@@ -1,17 +1,21 @@
 { stdenv, fetchurl, zlib, libjpeg }:
 
-stdenv.mkDerivation {
-  name = "libtiff-3.9.4";
-  
+let version = "3.9.7"; in
+
+stdenv.mkDerivation rec {
+  name = "libtiff-${version}";
+
   src = fetchurl {
     urls =
-      [ ftp://ftp.remotesensing.org/pub/libtiff/tiff-3.9.4.tar.gz
-        http://download.osgeo.org/libtiff/tiff-3.9.4.tar.gz
+      [ "ftp://ftp.remotesensing.org/pub/libtiff/tiff-${version}.tar.gz"
+        "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz"
       ];
-    sha256 = "19hxd773yxcs4lxlc3zfdkz5aiv705vj2jvy5srpqkxpbw3nvdv7";
+    sha256 = "0spg1hr5rsrmg88sfzb05qnf0haspq7r5hvdkxg5zib1rva4vmpm";
   };
-  
+
   propagatedBuildInputs = [ zlib libjpeg ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Library and utilities for working with the TIFF image file format";
