@@ -3,16 +3,23 @@
   , ...} @ x:
 builderDefsPackage (a :  
 let 
-  s = import ./src-for-default.nix;
   propagatedBuildInputs = with a; [
     gmp mpfr
   ];
   buildInputs = [ gmp libffi mpfr ];
 in
 rec {
-  src = a.fetchUrlFromSrcInfo s;
+  mainVersion = "12.7";
+  revision = "1";
+  version = "${mainVersion}.${revision}";
 
-  inherit (s) name;
+  name = "ecl-${version}";
+
+  src = a.fetchurl {
+    url = "mirror://sourceforge/project/ecls/ecls/${mainVersion}/${name}.tar.gz";
+    sha256 = "0k8ww142g3bybvvnlijqsbidl8clbs1pb4ympk2ds07z5swvy2ap";
+  };
+
   inherit buildInputs propagatedBuildInputs;
   configureFlags = [
     "--enable-threads"
