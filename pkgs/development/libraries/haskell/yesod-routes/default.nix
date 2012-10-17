@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-routes";
-  version = "1.1.0.1";
-  sha256 = "1b248ry96p1nyp21c3r9rd3awpdhpqrwj3s6d66pmjf8p0gl5vda";
+  version = "1.1.0.2";
+  sha256 = "07nrxqkpc5z32c8lk5wz9m6ql703hdhyd86pfk704frvbic02xly";
   buildDepends = [ pathPieces text vector ];
   meta = {
     homepage = "http://www.yesodweb.com/";

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hxt";
-  version = "9.3.1.0";
-  sha256 = "0nv7d7ffwq81671c7gyzaqx7xgrgs42svbq5xraij4jbq5406719";
+  version = "9.3.1.1";
+  sha256 = "1x0z85vx49s2b9bgjm14c2152cwr0vzf02rlxrla5dj5g565985y";
   buildDepends = [
     binary deepseq filepath HUnit hxtCharproperties hxtRegexXmlschema
     hxtUnicode mtl network parsec

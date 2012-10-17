@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "numbers";
-  version = "3000.1.0.0";
-  sha256 = "0iqpch8j2i2pnjq8waqb5y95jpmvbzx2r6zsvkja7sl4d578fgpn";
+  version = "3000.1.0.1";
+  sha256 = "0r2s47nfdxasnp8j7giwpxls9v48f6ld0gc2hg2p7y2ar5xfrcc4";
   meta = {
     homepage = "https://github.com/DanBurton/numbers";
     description = "Various number types";

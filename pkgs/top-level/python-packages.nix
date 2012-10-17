@@ -1718,6 +1718,23 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  publicsuffix = buildPythonPackage rec {
+    name = "publicsuffix-${version}";
+    version = "1.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/publicsuffix/${name}.tar.gz";
+      md5 = "f86babf56f6e58b564d3853adebcf37a";
+    };
+
+    meta = {
+      description = "Allows to get the public suffix of a domain name";
+      homepage = "http://pypi.python.org/pypi/publicsuffix/";
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   pyasn1 = buildPythonPackage ({
     name = "pyasn1-0.0.11a";
 

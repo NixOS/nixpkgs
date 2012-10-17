@@ -1,11 +1,5 @@
 {stdenv, fetchurl, perl, readline, ncurses, gmp}:
 
-let
-  supportedPlatforms = ["i686-darwin" "x86_64-linux" "i686-linux"];
-in
-
-assert stdenv.lib.elem stdenv.system supportedPlatforms;
-
 stdenv.mkDerivation {
   name = if stdenv.system == "i686-darwin" then "ghc-6.6.1-binary" else "ghc-6.4.2-binary";
 
@@ -68,5 +62,5 @@ stdenv.mkDerivation {
 
   '' else "";
 
-  meta.platforms = supportedPlatforms;
+  meta.platforms = ["i686-darwin" "x86_64-linux" "i686-linux"];
 }
