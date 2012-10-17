@@ -116,11 +116,27 @@ let
     ]
     ++ optionals (!versionOlder httpd.version "2.4") [
       "mpm_${mainCfg.multiProcessingModule}"
+      "authz_core"
       "unixd"
     ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
     ++ extraApacheModules;
+
+
+  allDenied = if versionOlder httpd.version "2.4" then ''
+    Order deny,allow
+    Deny from all
+  '' else ''
+    Require all denied
+  '';
+
+  allGranted = if versionOlder httpd.version "2.4" then ''
+    Order allow,deny
+    Allow from all
+  '' else ''
+    Require all granted
+  '';
 
 
   loggingConf = ''
@@ -191,8 +207,7 @@ let
       <Directory "${documentRoot}">
           Options Indexes FollowSymLinks
           AllowOverride None
-          Order allow,deny
-          Allow from all
+          ${allGranted}
       </Directory>
     '';
 
@@ -246,12 +261,10 @@ let
           AllowOverride FileInfo AuthConfig Limit Indexes
           Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
           <Limit GET POST OPTIONS>
-              Order allow,deny
-              Allow from all
+              ${allGranted}
           </Limit>
           <LimitExcept GET POST OPTIONS>
-              Order deny,allow
-              Deny from all
+              ${allDenied}
           </LimitExcept>
       </Directory>
 
@@ -273,8 +286,7 @@ let
             Alias ${elem.urlPath} ${elem.dir}/
             <Directory ${elem.dir}>
                 Options +Indexes
-                Order allow,deny
-                Allow from all
+                ${allGranted}
                 AllowOverride All
             </Directory>
           '';
@@ -326,8 +338,7 @@ let
     AddHandler type-map var
 
     <Files ~ "^\.ht">
-        Order allow,deny
-        Deny from all
+        ${allDenied}
     </Files>
 
     ${mimeConf}
@@ -345,16 +356,14 @@ let
     <Directory />
         Options FollowSymLinks
         AllowOverride None
-        Order deny,allow
-        Deny from all
+        ${allDenied}
     </Directory>
 
     # But do allow access to files in the store so that we don't have
     # to generate <Directory> clauses for every generated file that we
     # want to serve.
     <Directory /nix/store>
-        Order allow,deny
-        Allow from all
+        ${allGranted}
     </Directory>
 
     # Generate directives for the main server.
