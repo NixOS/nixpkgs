@@ -114,7 +114,7 @@ in stdenv.mkDerivation {
     mkdir -p $out/share/icons/hicolor
     for size in `ls -1 $libexec/icons`; do
       mkdir -p $out/share/icons/hicolor/$size/apps
-      cp $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
+      ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
     done
   '';
 
