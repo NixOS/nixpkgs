@@ -29,23 +29,10 @@ stdenv.mkDerivation {
   meta = {
     description = "ZFS Filesystem Linux Kernel module";
     longDescription = ''
-
       ZFS is a filesystem that combines a logical volume manager with a
       Copy-On-Write filesystem with data integrity detection and repair,
       snapshotting, cloning, block devices, deduplication, and more. 
-
-      LICENSE NOTE: the Linux kernel is licensed under the GNU General Public
-      License which is incompatible with ZFS which is licensed under the Sun CDDL.
-      While both the GPL and CDDL are open source licenses their terms are such that
-      it is impossible to simultaneously satisfy both licenses. This means that a
-      single derived work of the Linux kernel and ZFS cannot be legally distributed.
-
-      The ZFS code can be modified to build as a CDDL licensed kernel module
-      which is not distributed as part of the Linux kernel. This makes a Native ZFS
-      on Linux implementation possible if you are willing to download and build it
-      yourself.
       '';
-          
     homepage = http://zfsonlinux.org/;
     license = stdenv.lib.licenses.cddl;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
