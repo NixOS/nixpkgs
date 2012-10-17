@@ -37,6 +37,7 @@ stdenv.mkDerivation {
       '';
     homepage = http://zfsonlinux.org/;
     license = stdenv.lib.licenses.cddl;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }
