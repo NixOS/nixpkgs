@@ -8316,11 +8316,11 @@ let
     libpng = libpng12;
   };
 
-  worldofgoo = callPackage ../games/worldofgoo { };
-
-  worldofgoofull = callPackage ../games/worldofgoo {
-    demo = false;
+  worldofgoo_demo = callPackage ../games/worldofgoo {
+    demo = true;
   };
+
+  worldofgoo = callPackage ../games/worldofgoo { };
 
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
