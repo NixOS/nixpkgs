@@ -1,6 +1,6 @@
-{ stdenv, config, requireFile
+{ stdenv, config, requireFile, fetchurl
 , libX11, libXext, libXau, libxcb, libXdmcp , SDL, SDL_mixer, libvorbis, mesa
-, demo ? true }:
+, demo ? false }:
 
 # TODO: add i686 support
 
@@ -9,35 +9,28 @@ stdenv.mkDerivation rec {
     then "WorldOfGooDemo-1.41"
     else "WorldofGoo-1.41";
 
-  src = if stdenv.system == "x86_64-linux"
-    then if demo 
-      then 
-        requireFile {
-           message = ''
-             We cannot download the demo version automatically, please go to 
-             http://worldofgoo.com/dl2.php?lk=demo, then add it to your nix store.
-             You can do this by using "nix-prefetch-url file://WorldOfGooDemo.1.41.tar.gz" in the
-             directory where you saved it.
-             '';
-           name = "WorldOfGooDemo.1.41.tar.gz";
-           sha256 = "0ndcix1ckvcj47sgndncr3hxjcg402cbd8r16rhq4cc43ibbaxri";
-         }
-      else
-        requireFile {
-           message = ''
-             We cannot download the commercial version automatically, as you require a license.
-             Once you bought a license, you need to add your downloaded version to the nix store.
-             You can do this by using "nix-prefetch-url file://WorldOfGooSetup.1.41.tar.gz" in the
-             directory where you saved it.
-             '';
-           name = "WorldOfGooSetup.1.41.tar.gz";
-           sha256 = "0rj5asx4a2x41ncwdby26762my1lk1gaqar2rl8dijfnpq8qlnk7";
-         }
+  goBuyItNow = '' 
+    We cannot download the full version automatically, as you require a license.
+    Once you bought a license, you need to add your downloaded version to the nix store.
+    You can do this by using "nix-prefetch-url file://WorldOfGooSetup.1.41.tar.gz" in the
+    directory where you saved it.
+
+    Or you can install the demo version: 'nix-env -i -A pkgs.worldofgoo_demo'. 
+  ''; 
+
+  src = if demo 
+    then 
+      fetchurl {
+        url = "http://worldofgoo.com/dl2.php?lk=demo&filename=WorldOfGooDemo.1.41.tar.gz";
+        name = "WorldOfGooDemo.1.41.tar.gz";
+        sha256 = "0ndcix1ckvcj47sgndncr3hxjcg402cbd8r16rhq4cc43ibbaxri";
+       }
     else
-      throw ''
-        This World of Goo nix package only supports linux and x86-64 cpus. i686
-        binaries exist, but this expression needs to be updated to support them.
-      '';
+      requireFile {
+        message = goBuyItNow;
+        name = "WorldOfGooSetup.1.41.tar.gz";
+        sha256 = "0rj5asx4a2x41ncwdby26762my1lk1gaqar2rl8dijfnpq8qlnk7";
+      };
 
   phases = "unpackPhase installPhase";
 
@@ -72,9 +65,9 @@ stdenv.mkDerivation rec {
       game, or that they are extremely delicious.
     '';
     homepage = http://worldofgoo.com;
-    license = [ "proprietary" ];
+    license = [ "unfree" ];
     maintainers = with stdenv.lib.maintainers; [ jcumming ];
-    #platforms = with stdenv.lib.platforms; linux; // no hydra builds
+    platforms = [ "x86_64-linux"] ;
   };
 
 }
