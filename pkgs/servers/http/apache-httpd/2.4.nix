@@ -38,6 +38,9 @@ stdenv.mkDerivation rec {
     --disable-debugger-mode
     --enable-mods-shared=all
     --enable-mpms-shared=all
+    --enable-cern-meta
+    --enable-imagemap
+    --enable-cgi
     ${optionalString proxySupport "--enable-proxy"}
     ${optionalString sslSupport "--enable-ssl --with-ssl=${openssl}"}
     ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
