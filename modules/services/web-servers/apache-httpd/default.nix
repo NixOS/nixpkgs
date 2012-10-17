@@ -114,7 +114,10 @@ let
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
     ]
-    ++ optional (!versionOlder httpd.version "2.4") "mpm_${mainCfg.multiProcessingModule}"
+    ++ optionals (!versionOlder httpd.version "2.4") [
+      "mpm_${mainCfg.multiProcessingModule}"
+      "unixd"
+    ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
     ++ extraApacheModules;
