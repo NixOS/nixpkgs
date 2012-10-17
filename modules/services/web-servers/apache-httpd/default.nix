@@ -8,6 +8,8 @@ let
 
   httpd = mainCfg.package;
 
+  version24 = !versionOlder httpd.version "2.4";
+
   httpdConf = mainCfg.configFile;
 
   php = pkgs.php.override { apacheHttpd = httpd; };
@@ -102,7 +104,7 @@ let
 
       # Authentication: is the user who he claims to be?
       "authn_file" "authn_dbm" "authn_anon"
-      (if versionOlder httpd.version "2.3" then "authn_alias" else "authn_core")
+      (if version24 then "authn_core" else "authn_alias")
 
       # Authorization: is the user allowed access?
       "authz_user" "authz_groupfile" "authz_host"
@@ -114,7 +116,7 @@ let
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
     ]
-    ++ optionals (!versionOlder httpd.version "2.4") [
+    ++ optionals version24 [
       "mpm_${mainCfg.multiProcessingModule}"
       "authz_core"
       "unixd"
@@ -124,18 +126,18 @@ let
     ++ extraApacheModules;
 
 
-  allDenied = if versionOlder httpd.version "2.4" then ''
+  allDenied = if version24 then ''
+    Require all denied
+  '' else ''
     Order deny,allow
     Deny from all
-  '' else ''
-    Require all denied
   '';
 
-  allGranted = if versionOlder httpd.version "2.4" then ''
+  allGranted = if version24 then ''
+    Require all granted
+  '' else ''
     Order allow,deny
     Allow from all
-  '' else ''
-    Require all granted
   '';
 
 
@@ -303,7 +305,7 @@ let
 
     ServerRoot ${httpd}
 
-    ${optionalString (!versionOlder httpd.version "2.4") ''
+    ${optionalString version24 ''
       DefaultRuntimeDir ${mainCfg.stateDir}/runtime
     ''}
 
@@ -377,9 +379,8 @@ let
     ${let
         ports = map getPort allHosts;
         uniquePorts = uniqList {inputList = ports;};
-        isNeeded = versionOlder httpd.version "2.4";
         directives = concatMapStrings (port: "NameVirtualHost *:${toString port}\n") uniquePorts;
-      in optionalString isNeeded directives
+      in optionalString (!version24) directives
     }
 
     ${let
@@ -640,7 +641,7 @@ in
           ''
             mkdir -m 0750 -p ${mainCfg.stateDir}
             chown root.${mainCfg.group} ${mainCfg.stateDir}
-            ${optionalString (!versionOlder httpd.version "2.4") ''
+            ${optionalString version24 ''
               mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
               chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
             ''}
