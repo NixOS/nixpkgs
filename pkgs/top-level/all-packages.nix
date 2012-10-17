@@ -1025,6 +1025,7 @@ let
   lshw = callPackage ../tools/system/lshw { };
 
   lxc = callPackage ../applications/virtualization/lxc { };
+  lxc_0_8 = callPackage ../applications/virtualization/lxc/0.8.nix { };
 
   lzma = xz;
 
