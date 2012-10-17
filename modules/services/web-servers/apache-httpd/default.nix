@@ -101,7 +101,8 @@ let
       "auth_basic" "auth_digest"
 
       # Authentication: is the user who he claims to be?
-      "authn_file" "authn_dbm" "authn_anon" "authn_alias"
+      "authn_file" "authn_dbm" "authn_anon"
+      (if versionOlder httpd.version "2.3" then "authn_alias" else "authn_core")
 
       # Authorization: is the user allowed access?
       "authz_user" "authz_groupfile" "authz_host"
