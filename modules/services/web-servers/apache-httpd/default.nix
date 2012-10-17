@@ -303,6 +303,10 @@ let
 
     ServerRoot ${httpd}
 
+    ${optionalString (!versionOlder httpd.version "2.4") ''
+      DefaultRuntimeDir ${mainCfg.stateDir}/runtime
+    ''}
+
     PidFile ${mainCfg.stateDir}/httpd.pid
 
     ${optionalString (mainCfg.multiProcessingModule != "prefork") ''
@@ -636,6 +640,10 @@ in
           ''
             mkdir -m 0750 -p ${mainCfg.stateDir}
             chown root.${mainCfg.group} ${mainCfg.stateDir}
+            ${optionalString (!versionOlder httpd.version "2.4") ''
+              mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
+              chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
+            ''}
             mkdir -m 0700 -p ${mainCfg.logDir}
 
             ${optionalString (mainCfg.documentRoot != null)
