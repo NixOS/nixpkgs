@@ -1,4 +1,4 @@
-{ stdenv, config, requireFile, makeWrapper
+{ stdenv, config, requireFile
 , libX11, libXext, libXau, libxcb, libXdmcp , SDL, SDL_mixer, libvorbis, mesa
 , demo ? true }:
 
@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
       '';
 
   phases = "unpackPhase installPhase";
-  buildInputs = [ makeWrapper ];
 
   # XXX: stdenv.lib.makeLibraryPath doesn't pick up /lib64
   libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.gcc.libc ] 
@@ -55,7 +54,14 @@ stdenv.mkDerivation rec {
 
     cp -r * $out/libexec/2dboy/WorldOfGoo/
 
-    makeWrapper $out/libexec/2dboy/WorldOfGoo/WorldOfGoo.bin64 $out/bin/WorldOfGoo
+    #makeWrapper doesn't do cd. :(
+
+    cat > $out/bin/WorldofGoo << EOF
+    #!/bin/sh
+    cd $out/libexec/2dboy/WorldOfGoo
+    exec ./WorldOfGoo.bin64
+    EOF
+    chmod +x $out/bin/WorldofGoo
   '';
 
   meta = {
