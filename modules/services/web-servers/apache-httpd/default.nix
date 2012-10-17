@@ -373,7 +373,9 @@ let
     ${let
         ports = map getPort allHosts;
         uniquePorts = uniqList {inputList = ports;};
-      in concatMapStrings (port: "NameVirtualHost *:${toString port}\n") uniquePorts
+        isNeeded = versionOlder httpd.version "2.4";
+        directives = concatMapStrings (port: "NameVirtualHost *:${toString port}\n") uniquePorts;
+      in optionalString isNeeded directives
     }
 
     ${let
