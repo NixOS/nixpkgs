@@ -12,7 +12,7 @@
 }:
 
 let
-  v = "4.8.2";
+  v = "4.8.3";
 in
 
 # TODO:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "0y93vkkn44md37gyg4y8sc9ylk27xkniaimfcpdcwd090qnjl6wj";
+    md5 = "a663b6c875f8d7caa8ac9c30e4a4ec3b";
   };
 
   patches = [ ( substituteAll {
@@ -142,10 +142,10 @@ stdenv.mkDerivation rec {
   } else {});
 
   meta = with stdenv.lib; {
-    homepage = http://qt.nokia.com/products;
+    homepage = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
-    maintainers = with maintainers; [ urkud sander ];
+    maintainers = with maintainers; [ urkud sander bbenoist ];
     platforms = platforms.linux;
   };
 }
