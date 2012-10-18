@@ -47,8 +47,11 @@ stdenv.mkDerivation rec {
 
   # On FreeBSD, `-ldl' doesn't exist.
   + (stdenv.lib.optionalString stdenv.isFreeBSD
-       '' cat util/cairo-fdr/Makefile.in | sed -es/-ldl//g > t
-          mv t util/cairo-fdr/Makefile.in
+       '' for i in "util/"*"/Makefile.in" boilerplate/Makefile.in
+          do
+            cat "$i" | sed -es/-ldl//g > t
+            mv t "$i"
+          done
        '');
 
   enableParallelBuilding = true;
