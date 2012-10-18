@@ -11,7 +11,7 @@
 #     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
 #       $out/bin/gtester-report' to postInstall if this is solved
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "glib-2.34.0";
 
   src = fetchurl {
@@ -52,3 +52,13 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
+
+//
+
+(stdenv.lib.optionalAttrs stdenv.isDarwin {
+  # XXX: Disable the NeXTstep back-end because stdenv.gcc doesn't support
+  # Objective-C.
+  postConfigure =
+    '' sed -i configure -e's/glib_have_cocoa=yes/glib_have_cocoa=no/g'
+    '';
+}))
