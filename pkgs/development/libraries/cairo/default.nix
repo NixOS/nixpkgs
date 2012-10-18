@@ -43,7 +43,13 @@ stdenv.mkDerivation rec {
     # `-I' flags to be propagated.
     sed -i "src/cairo.pc.in" \
         -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
-  '';
+  ''
+
+  # On FreeBSD, `-ldl' doesn't exist.
+  + (stdenv.lib.optionalString stdenv.isFreeBSD
+       '' cat util/cairo-fdr/Makefile.in | sed -es/-ldl//g > t
+          mv t util/cairo-fdr/Makefile.in
+       '');
 
   enableParallelBuilding = true;
 
