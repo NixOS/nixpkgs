@@ -1936,6 +1936,16 @@ let
     };
     buildInputs = [pkgconfig renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ];
   })) // {inherit renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv ;};
+
+  xorgserver_1_13_0 = (stdenv.mkDerivation ((if overrides ? xorgserver_1_13_0 then overrides.xorgserver_1_13_0 else x: x) {
+    name = "xorg-server-1.13.0";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/xserver/xorg-server-1.13.0.tar.bz2;
+      sha256 = "12pjis236ss3402cg1iy749cylajjp27m3j2jbwd8yh8075r32sl";
+    };
+    buildInputs = [pkgconfig renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv pixman glproto ];
+  })) // {inherit renderproto libdrm openssl libX11 libXau libXaw libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt libXv pixman glproto ;};
     
   xorgsgmldoctools = (stdenv.mkDerivation ((if overrides ? xorgsgmldoctools then overrides.xorgsgmldoctools else x: x) {
     name = "xorg-sgml-doctools-1.11";
