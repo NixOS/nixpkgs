@@ -146,18 +146,29 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 {
                     push @unitsToSkip, $unit;
                 } else {
-                    # If this unit has a corresponding socket unit,
-                    # then stop the socket unit as well, and restart
-                    # the socket instead of the service.
-                    if ($unit =~ /\.service$/ && defined $activePrev->{"$baseName.socket"}) {
-                        push @unitsToStop, "$baseName.socket";
-                        write_file($restartListFile, { append => 1 }, "$baseName.socket\n");
+                    # If this unit is socket-activated, then stop the
+                    # socket unit(s) as well, and restart the
+                    # socket(s) instead of the service.
+                    my $socketActivated = 0;
+                    if ($unit =~ /\.service$/) {
+                        my @sockets = split / /, ($unitInfo->{Sockets} // "");
+                        if (scalar @sockets == 0) {
+                            @sockets = ("$baseName.socket");
+                        }
+                        foreach my $socket (@sockets) {
+                            if (defined $activePrev->{$socket}) {
+                                push @unitsToStop, $socket;
+                                write_file($restartListFile, { append => 1 }, "$socket\n");
+                                $socketActivated = 1;
+                            }
+                        }
                     }
 
-                    # Record that this unit needs to be started below.  We
-                    # write this to a file to ensure that the service gets
-                    # restarted if we're interrupted.
-                    else {
+                    # Otherwise, record that this unit needs to be
+                    # started below.  We write this to a file to
+                    # ensure that the service gets restarted if we're
+                    # interrupted.
+                    if (!$socketActivated) {
                         write_file($restartListFile, { append => 1 }, "$unit\n");
                     }
 
