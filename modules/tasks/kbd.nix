@@ -13,6 +13,12 @@ let
   consoleFont = config.i18n.consoleFont;
   consoleKeyMap = config.i18n.consoleKeyMap;
 
+  vconsoleConf = pkgs.writeText "vconsole.conf"
+    ''
+      KEYMAP=${consoleKeyMap}
+      FONT=${consoleFont}
+    '';
+
 in
 
 {
@@ -61,11 +67,27 @@ in
     # systemd-vconsole-setup.service if /etc/vconsole.conf changes.
     environment.etc = singleton
       { target = "vconsole.conf";
-        source = pkgs.writeText "vconsole.conf"
-          ''
-            KEYMAP=${consoleKeyMap}
-            FONT=${consoleFont}
-          '';
+        source = vconsoleConf;
+      };
+
+    # This is identical to the systemd-vconsole-setup.service unit
+    # shipped with systemd, except that it uses /dev/tty1 instead of
+    # /dev/tty0 to prevent putting the X server in non-raw mode, and
+    # it has a restart trigger.
+    boot.systemd.services."systemd-vconsole-setup" =
+      { description = "Setup Virtual Console";
+        before = [ "sysinit.target" "shutdown.target" ];
+        unitConfig =
+          { DefaultDependencies = "no";
+            Conflicts = "shutdown.target";
+            ConditionPathExists = "/dev/tty1";
+          };
+        serviceConfig =
+          { Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${config.system.build.systemd}/lib/systemd/systemd-vconsole-setup /dev/tty1";
+          };
+        restartTriggers = [ vconsoleConf ];
       };
 
   };

@@ -47,11 +47,11 @@ let
           The keyboard mapping table for the virtual consoles.
         ";
       };
-      
+
     };
-    
+
   };
-  
+
 ###### implementation
 
   glibcLocales = pkgs.glibcLocales.override {
