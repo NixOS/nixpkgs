@@ -135,6 +135,19 @@ let self = {
     ];
   };
 
+  "buffertools" = self."buffertools-~1";
+
+  "buffertools-~1" = self.buildNodePackage rec {
+    name = "buffertools-1.1.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/buffertools/-/${name}.tgz";
+      sha256 = "a0520dbf39eedbd8c685ac4989bf822ac57cc161924abf82ba567234620380a5";
+    };
+    deps = [
+
+    ];
+  };
+
   "bytes" = self."bytes-0.1.0";
 
   "bytes-0.1.0" = self.buildNodePackage rec {
