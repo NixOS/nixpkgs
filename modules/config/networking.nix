@@ -3,7 +3,9 @@
 {config, pkgs, ...}:
 
 with pkgs.lib;
+
 let
+
   cfg = config.networking;
 
   options = {
@@ -43,7 +45,9 @@ in
         source = pkgs.writeText "hosts"
           ''
             127.0.0.1 localhost
-            ::1 localhost
+            ${optionalString cfg.enableIPv6 ''
+              ::1 localhost
+            ''}
             ${cfg.extraHosts}
           '';
         target = "hosts";

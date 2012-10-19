@@ -278,6 +278,9 @@ in
                 '')}
                 EOF
 
+                # Disable or enable IPv6.
+                echo ${if cfg.enableIPv6 then "0" else "1"} > /proc/sys/net/ipv6/conf/all/disable_ipv6
+
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != "") ''
                   # FIXME: get rid of "|| true" (necessary to make it idempotent).
