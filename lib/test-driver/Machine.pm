@@ -381,7 +381,7 @@ sub waitForUnit {
 
 sub waitForJob {
     my ($self, $jobName) = @_;
-    return $self->waitForUnit($jobName . ".service");
+    return $self->waitForUnit($jobName);
 }
 
 
@@ -398,13 +398,13 @@ sub waitForFile {
 
 sub startJob {
     my ($self, $jobName) = @_;
-    $self->execute("systemctl stop $jobName.service");
+    $self->execute("systemctl stop $jobName");
     # FIXME: check result
 }
 
 sub stopJob {
     my ($self, $jobName) = @_;
-    $self->execute("systemctl stop $jobName.service");
+    $self->execute("systemctl stop $jobName");
 }
 
 
