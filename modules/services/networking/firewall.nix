@@ -340,9 +340,11 @@ in
             # Accept all ICMPv6 messages except redirects and node
             # information queries (type 139).  See RFC 4890, section
             # 4.4.
-            ip6tables -A nixos-fw -p icmpv6 --icmpv6-type redirect -j DROP
-            ip6tables -A nixos-fw -p icmpv6 --icmpv6-type 139 -j DROP
-            ip6tables -A nixos-fw -p icmpv6 -j nixos-fw-accept
+            ${optionalString config.networking.enableIPv6 ''
+              ip6tables -A nixos-fw -p icmpv6 --icmpv6-type redirect -j DROP
+              ip6tables -A nixos-fw -p icmpv6 --icmpv6-type 139 -j DROP
+              ip6tables -A nixos-fw -p icmpv6 -j nixos-fw-accept
+            ''}
 
             ${cfg.extraCommands}
 
