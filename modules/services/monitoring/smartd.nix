@@ -24,7 +24,7 @@ let
 
   smartdConf = pkgs.writeText "smartd.conf" (concatMapStrings (device:
     ''
-      ${device} -a -m root -M exec ${smartdMail}
+      ${device} -a -m root -M exec ${smartdMail} ${cfg.deviceOpts}
     ''
     ) cfg.devices);
 
@@ -47,6 +47,17 @@ in
           Run smartd from the smartmontools package. Note that e-mail
           notifications will not be enabled unless you configure the list of
           devices with <varname>services.smartd.devices</varname> as well.
+        '';
+      };
+
+      deviceOpts = mkOption {
+        default = "";
+        type = types.string;
+        example = "-o on -s (S/../.././02|L/../../7/04)";
+        description = ''
+          Additional options for each device that is monitored. The example
+          turns on SMART Automatic Offline Testing on startup, and schedules short
+          self-tests daily, and long self-tests weekly. 
         '';
       };
 

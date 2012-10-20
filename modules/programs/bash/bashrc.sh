@@ -27,15 +27,7 @@ if test "$TERM" = "xterm"; then
     PS1="\[\033]2;\h:\u:\w\007\]$PS1"
 fi
 
-# Check whether we're running a version of Bash that has support for
-# programmable completion. If we do, and if the current user has
-# installed the package 'bash-completion' in her $HOME/.nix-profile,
-# then completion is enabled automatically.
-if [ -f "$HOME/.nix-profile/etc/profile.d/bash_completion.sh" ]; then
-    if shopt -q progcomp &>/dev/null; then
-        . "$HOME/.nix-profile/etc/profile.d/bash_completion.sh"
-    fi
-fi
+@initBashCompletion@
 
 # Some aliases.
 alias ls="ls --color=tty"

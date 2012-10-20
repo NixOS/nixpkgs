@@ -8,6 +8,8 @@ let
 
   httpd = mainCfg.package;
 
+  version24 = !versionOlder httpd.version "2.4";
+
   httpdConf = mainCfg.configFile;
 
   php = pkgs.php.override { apacheHttpd = httpd; };
@@ -101,7 +103,8 @@ let
       "auth_basic" "auth_digest"
 
       # Authentication: is the user who he claims to be?
-      "authn_file" "authn_dbm" "authn_anon" "authn_alias"
+      "authn_file" "authn_dbm" "authn_anon"
+      (if version24 then "authn_core" else "authn_alias")
 
       # Authorization: is the user allowed access?
       "authz_user" "authz_groupfile" "authz_host"
@@ -113,9 +116,29 @@ let
       "vhost_alias" "negotiation" "dir" "imagemap" "actions" "speling"
       "userdir" "alias" "rewrite" "proxy" "proxy_http"
     ]
+    ++ optionals version24 [
+      "mpm_${mainCfg.multiProcessingModule}"
+      "authz_core"
+      "unixd"
+    ]
     ++ (if mainCfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
     ++ optional enableSSL "ssl"
     ++ extraApacheModules;
+
+
+  allDenied = if version24 then ''
+    Require all denied
+  '' else ''
+    Order deny,allow
+    Deny from all
+  '';
+
+  allGranted = if version24 then ''
+    Require all granted
+  '' else ''
+    Order allow,deny
+    Allow from all
+  '';
 
 
   loggingConf = ''
@@ -186,8 +209,7 @@ let
       <Directory "${documentRoot}">
           Options Indexes FollowSymLinks
           AllowOverride None
-          Order allow,deny
-          Allow from all
+          ${allGranted}
       </Directory>
     '';
 
@@ -241,12 +263,10 @@ let
           AllowOverride FileInfo AuthConfig Limit Indexes
           Options MultiViews Indexes SymLinksIfOwnerMatch IncludesNoExec
           <Limit GET POST OPTIONS>
-              Order allow,deny
-              Allow from all
+              ${allGranted}
           </Limit>
           <LimitExcept GET POST OPTIONS>
-              Order deny,allow
-              Deny from all
+              ${allDenied}
           </LimitExcept>
       </Directory>
 
@@ -268,8 +288,7 @@ let
             Alias ${elem.urlPath} ${elem.dir}/
             <Directory ${elem.dir}>
                 Options +Indexes
-                Order allow,deny
-                Allow from all
+                ${allGranted}
                 AllowOverride All
             </Directory>
           '';
@@ -285,6 +304,10 @@ let
   confFile = pkgs.writeText "httpd.conf" ''
 
     ServerRoot ${httpd}
+
+    ${optionalString version24 ''
+      DefaultRuntimeDir ${mainCfg.stateDir}/runtime
+    ''}
 
     PidFile ${mainCfg.stateDir}/httpd.pid
 
@@ -321,8 +344,7 @@ let
     AddHandler type-map var
 
     <Files ~ "^\.ht">
-        Order allow,deny
-        Deny from all
+        ${allDenied}
     </Files>
 
     ${mimeConf}
@@ -340,16 +362,14 @@ let
     <Directory />
         Options FollowSymLinks
         AllowOverride None
-        Order deny,allow
-        Deny from all
+        ${allDenied}
     </Directory>
 
     # But do allow access to files in the store so that we don't have
     # to generate <Directory> clauses for every generated file that we
     # want to serve.
     <Directory /nix/store>
-        Order allow,deny
-        Allow from all
+        ${allGranted}
     </Directory>
 
     # Generate directives for the main server.
@@ -359,7 +379,8 @@ let
     ${let
         ports = map getPort allHosts;
         uniquePorts = uniqList {inputList = ports;};
-      in concatMapStrings (port: "NameVirtualHost *:${toString port}\n") uniquePorts
+        directives = concatMapStrings (port: "NameVirtualHost *:${toString port}\n") uniquePorts;
+      in optionalString (!version24) directives
     }
 
     ${let
@@ -620,6 +641,10 @@ in
           ''
             mkdir -m 0750 -p ${mainCfg.stateDir}
             chown root.${mainCfg.group} ${mainCfg.stateDir}
+            ${optionalString version24 ''
+              mkdir -m 0750 -p "${mainCfg.stateDir}/runtime"
+              chown root.${mainCfg.group} "${mainCfg.stateDir}/runtime"
+            ''}
             mkdir -m 0700 -p ${mainCfg.logDir}
 
             ${optionalString (mainCfg.documentRoot != null)

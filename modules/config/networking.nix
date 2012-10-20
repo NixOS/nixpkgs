@@ -18,13 +18,6 @@ let
 
   };
 
-  localhostWithDomain = optionalString (cfg.domain != "")
-    "localhost.${cfg.domain}";
-
-  hostnameWithDomain = optionalString
-    (cfg.domain != "" && cfg.hostName != "")
-    "${cfg.hostName}.${cfg.domain}";
-
 in
 
 {
@@ -49,9 +42,8 @@ in
       { # /etc/hosts: Hostname-to-IP mappings.
         source = pkgs.writeText "hosts"
           ''
-            ${optionalString (cfg.hostName != "")
-              "127.0.0.1 ${hostnameWithDomain} ${cfg.hostName}"}
-            127.0.0.1 localhost ${localhostWithDomain}
+            127.0.0.1 localhost
+            ::1 localhost
             ${cfg.extraHosts}
           '';
         target = "hosts";

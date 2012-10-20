@@ -5,16 +5,13 @@ with pkgs.lib;
 let
   cfg = config.services.logcheck;
 
-  rulesDir = pkgs.runCommand "logcheck-rules-dir"
-    {} (
-    ''
-      mkdir $out
-      cp -prd ${pkgs.logcheck}/etc/logcheck/* $out/
-      rm $out/logcheck.*
-      chmod u+w $out/*
-    '' + optionalString (! builtins.isNull cfg.extraRulesDir) ''
-      cp -prd ${cfg.extraRulesDir}/* $out/
-    '' );
+  defaultRules = pkgs.runCommand "logcheck-default-rules" {} ''
+                   cp -prd ${pkgs.logcheck}/etc/logcheck $out
+                   chmod u+w $out
+                   rm $out/logcheck.*
+                 '';
+
+  rulesDir = pkgs.symlinkJoin "logcheck-rules-dir" ([ defaultRules ] ++ cfg.extraRulesDirs);
 
   configFile = pkgs.writeText "logcheck.conf" cfg.config;
 
@@ -32,6 +29,74 @@ let
     @reboot   logcheck env PATH=/var/setuid-wrappers:$PATH nice -n10 ${pkgs.logcheck}/sbin/logcheck -R ${flags}
     2 ${cfg.timeOfDay} * * * logcheck env PATH=/var/setuid-wrappers:$PATH nice -n10 ${pkgs.logcheck}/sbin/logcheck ${flags}
   '';
+
+  writeIgnoreRule = name: {level, regex, ...}:
+    pkgs.writeTextFile
+      { inherit name;
+        destination = "/ignore.d.${level}/${name}";
+        text = ''
+          ^\w{3} [ :[:digit:]]{11} [._[:alnum:]-]+ ${regex}
+        '';
+      };
+
+  writeIgnoreCronRule = name: {level, user, regex, cmdline, ...}:
+    let escapeRegex = escape (stringToCharacters "\\[]{}()^$?*+|.");
+        cmdline_ = builtins.unsafeDiscardStringContext cmdline;
+        re = if regex != "" then regex else if cmdline_ == "" then ".*" else escapeRegex cmdline_;
+    in writeIgnoreRule "cron-${name}" {
+      inherit level;
+      regex = ''
+        (/usr/bin/)?cron\[[0-9]+\]: \(${user}\) CMD \(${re}\)$
+      '';
+    };
+
+  levelOption = mkOption {
+    default = "server";
+    type = types.uniq types.string;
+    description = ''
+      Set the logcheck level. Either "workstation", "server", or "paranoid".
+    '';
+  };
+
+  ignoreOptions = {
+    level = levelOption;
+
+    regex = mkOption {
+      default = "";
+      type = types.uniq types.string;
+      description = ''
+        Regex specifying which log lines to ignore.
+      '';
+    };
+  };
+
+  ignoreCronOptions = {
+    user = mkOption {
+      default = "root";
+      type = types.uniq types.string;
+      description = ''
+        User that runs the cronjob.
+      '';
+    };
+
+    cmdline = mkOption {
+      default = "";
+      type = types.uniq types.string;
+      description = ''
+        Command line for the cron job. Will be turned into a regex for the logcheck ignore rule.
+      '';
+    };
+
+    timeArgs = mkOption {
+      default = null;
+      type = types.nullOr (types.uniq types.string);
+      example = "02 06 * * *";
+      description = ''
+        "min hr dom mon dow" crontab time args, to auto-create a cronjob too.
+        Leave at null to not do this and just add a logcheck ignore rule.
+      '';
+    };
+  };
 
 in
 {
@@ -98,14 +163,31 @@ in
         '';
       };
 
-      extraRulesDir = mkOption {
-        default = null;
+      extraRulesDirs = mkOption {
+        default = [];
         example = "/etc/logcheck";
-        type = types.nullOr types.path;
+        type = types.listOf types.path;
         description = ''
-          Directory with extra rules.
-          Will be merged with bundled rules, so it's possible to override certain behaviour.
+          Directories with extra rules.
         '';
+      };
+
+      ignore = mkOption {
+        default = {};
+        description = ''
+          This option defines extra ignore rules.
+        '';
+        type = types.loaOf types.optionSet;
+        options = [ ignoreOptions ];
+      };
+
+      ignoreCron = mkOption {
+        default = {};
+        description = ''
+          This option defines extra ignore rules for cronjobs.
+        '';
+        type = types.loaOf types.optionSet;
+        options = [ ignoreOptions ignoreCronOptions ];
       };
 
       extraGroups = mkOption {
@@ -122,6 +204,10 @@ in
   };
 
   config = mkIf cfg.enable {
+    services.logcheck.extraRulesDirs =
+        mapAttrsToList writeIgnoreRule cfg.ignore
+        ++ mapAttrsToList writeIgnoreCronRule cfg.ignoreCron;
+
     users.extraUsers = singleton
       { name = cfg.user;
         shell = "/bin/sh";
@@ -134,6 +220,12 @@ in
       chown ${cfg.user} /var/{lib,lock}/logcheck
     '';
 
-    services.cron.systemCronJobs = [ cronJob ];
+    services.cron.systemCronJobs =
+        let withTime = name: {timeArgs, ...}: ! (builtins.isNull timeArgs);
+            mkCron = name: {user, cmdline, timeArgs, ...}: ''
+              ${timeArgs} ${user} ${cmdline}
+            '';
+        in mapAttrsToList mkCron (filterAttrs withTime cfg.ignoreCron)
+           ++ [ cronJob ];
   };
 }

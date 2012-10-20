@@ -1,13 +1,15 @@
 # Configuration for the Name Service Switch (/etc/nsswitch.conf).
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
+
+with pkgs.lib;
 
 let
 
   options = {
 
     # NSS modules.  Hacky!
-    system.nssModules = pkgs.lib.mkOption {
+    system.nssModules = mkOption {
       internal = true;
       default = [];
       description = "
@@ -15,48 +17,49 @@ let
         several DNS resolution methods to be specified via
         <filename>/etc/nsswitch.conf</filename>.
       ";
-      merge = pkgs.lib.mergeListOption;
+      merge = mergeListOption;
       apply = list:
         let
           list2 =
             list
             # !!! this should be in the LDAP module
-            ++ pkgs.lib.optional config.users.ldap.enable pkgs.nss_ldap;
+            ++ optional config.users.ldap.enable pkgs.nss_ldap;
         in {
           list = list2;
-          path = pkgs.lib.makeLibraryPath list2;
+          path = makeLibraryPath list2;
         };
     };
 
   };
 
+  inherit (config.services.avahi) nssmdns;
+
 in
 
 {
-  require = [options];
+  require = [ options ];
 
   environment.etc =
     [ # Name Service Switch configuration file.  Required by the C library.
       # !!! Factor out the mdns stuff.  The avahi module should define
       # an option used by this module.
-      { source =
-          if config.services.avahi.nssmdns
-          then ./nsswitch-mdns.conf
-          else ./nsswitch.conf;
+      { source = pkgs.writeText "nsswitch.conf"
+          ''
+            passwd:    files ldap
+            group:     files ldap
+            shadow:    files ldap
+            hosts:     files ${optionalString nssmdns "mdns_minimal [NOTFOUND=return]"} dns ${optionalString nssmdns "mdns"} myhostname
+            networks:  files dns
+            ethers:    files
+            services:  files
+            protocols: files
+          '';
         target = "nsswitch.conf";
       }
     ];
 
-  environment.shellInit =
-    if config.system.nssModules.path != "" then
-      ''
-        LD_LIBRARY_PATH=${config.system.nssModules.path}:$LD_LIBRARY_PATH
-      ''
-    else "";
-
-  # NSS modules need to be in `systemPath' so that (i) the builder
-  # chroot gets to seem them, and (ii) applications can benefit from
-  # changes in the list of NSS modules at run-time, without requiring
-  # a reboot.
-  environment.systemPackages = [config.system.nssModules.list];
+  # Use nss-myhostname to ensure that our hostname always resolves to
+  # a valid IP address.  It returns all locally configured IP
+  # addresses, or ::1 and 127.0.0.2 as fallbacks.
+  system.nssModules = [ pkgs.nss_myhostname ];
 }
