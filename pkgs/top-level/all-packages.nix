@@ -1270,6 +1270,8 @@ let
            { hurd = gnu.hurdCrossIntermediate; })
     else null;
 
+  ipsecTools = callPackage ../os-specific/linux/ipsec-tools { };
+
   patch = gnupatch;
 
   pbzip2 = callPackage ../tools/compression/pbzip2 { };
