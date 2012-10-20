@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
       ln -s freetype2/freetype $out/include/freetype
     '';
 
+  crossAttrs = {
+    # Somehow it calls the unwrapped gcc, "i686-pc-linux-gnu-gcc", instead
+    # of gcc. I think it's due to the unwrapped gcc being in the PATH. I don't
+    # know why it's on the PATH.
+    configureFlags = "--disable-static CC_BUILD=gcc";
+  };
+
   meta = {
     description = "A font rendering engine";
     homepage = http://www.freetype.org/;
