@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
     then "WorldOfGooDemo-1.41"
     else "WorldofGoo-1.41";
 
+  arch = if stdenv.system == "x86_64-linux" then "supported"
+    else throw "Sorry. World of Goo only is only supported on x86_64 now.";
+
   goBuyItNow = '' 
     We cannot download the full version automatically, as you require a license.
     Once you bought a license, you need to add your downloaded version to the nix store.
@@ -18,12 +21,19 @@ stdenv.mkDerivation rec {
     Or you can install the demo version: 'nix-env -i -A pkgs.worldofgoo_demo'. 
   ''; 
 
+  getTheDemo = ''
+    We cannot download the demo version automatically, please go to
+    http://worldofgoo.com/dl2.php?lk=demo, then add it to your nix store.
+    You can do this by using "nix-prefetch-url file://WorldOfGooDemo.1.41.tar.gz" in the
+    directory where you saved it.
+  '';
+
   src = if demo 
     then 
-      fetchurl {
-        url = "http://worldofgoo.com/dl2.php?lk=demo&filename=WorldOfGooDemo.1.41.tar.gz";
-        name = "WorldOfGooDemo.1.41.tar.gz";
-        sha256 = "0ndcix1ckvcj47sgndncr3hxjcg402cbd8r16rhq4cc43ibbaxri";
+      requireFile {
+         message = getTheDemo;
+         name = "WorldOfGooDemo.1.41.tar.gz";
+         sha256 = "0ndcix1ckvcj47sgndncr3hxjcg402cbd8r16rhq4cc43ibbaxri";
        }
     else
       requireFile {
