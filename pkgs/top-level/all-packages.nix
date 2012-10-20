@@ -1025,7 +1025,6 @@ let
   lshw = callPackage ../tools/system/lshw { };
 
   lxc = callPackage ../applications/virtualization/lxc { };
-  lxc_0_8 = callPackage ../applications/virtualization/lxc/0.8.nix { };
 
   lzma = xz;
 
@@ -8143,7 +8142,7 @@ let
   };
 
   gtypist = callPackage ../games/gtypist { };
- 
+
   hexen = callPackage ../games/hexen { };
 
   icbm3d = callPackage ../games/icbm3d { };
@@ -8199,7 +8198,7 @@ let
     mygui = myguiSvn;
   };
 
-  rili = callPackage ../games/rili { }; 
+  rili = callPackage ../games/rili { };
 
   rogue = callPackage ../games/rogue { };
 
