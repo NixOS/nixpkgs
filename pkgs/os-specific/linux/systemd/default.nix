@@ -1,23 +1,28 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
-, glib, kbd, libxslt
+, glib, kbd, libxslt, coreutils, libgcrypt
 }:
 
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-193";
+  name = "systemd-194";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "1k8fmii15127y4b2kc9id2vkmrjdsbq3kv6fi308k72azbhnpnxr";
+    sha256 = "0cgnnl6kqaz3als5y9g8jvsvbs4c8ccp0vl4s1g8rwk69w2cwxd2";
   };
 
-  patches = [ ./reexec.patch ];
+  patches =
+    [ ./reexec.patch
+      ./ignore-duplicates.patch
+      ./fix-device-aliases.patch
+      ./crypt-devices-are-ready.patch
+    ];
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
-      /* cryptsetup */ libuuid m4 usbutils pciutils glib libxslt
+      /* cryptsetup */ libuuid m4 usbutils pciutils glib libxslt libgcrypt
     ];
 
   configureFlags =
@@ -56,6 +61,9 @@ stdenv.mkDerivation rec {
       # lead to a cyclic dependency.
       "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
       "-fno-stack-protector"
+      # Work around our kernel headers being too old.  FIXME: remove
+      # this after the next stdenv update.
+      "-DFS_NOCOW_FL=0x00800000"
     ];
 
   makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include";
@@ -75,7 +83,12 @@ stdenv.mkDerivation rec {
       for i in init halt poweroff runlevel reboot shutdown; do
         ln -s $out/bin/systemctl $out/sbin/$i
       done
-    '';
+
+      # Fix reference to /bin/false in the D-Bus services.
+      for i in $out/share/dbus-1/system-services/*.service; do
+        substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
+      done
+    ''; # */
 
   enableParallelBuilding = true;
 

@@ -1,24 +1,16 @@
-{ stdenv, fetchurl, SDL, SDL_ttf, SDL_image, mesa, lua5_0 }:
+{ stdenv, fetchurl, SDL, SDL_ttf, SDL_image, mesa, lua5_1, automake, autoconf }:
 
-let
-  name = "gravit-0.4.2";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "gravit-0.5.0";
 
   src = fetchurl {
-    url = "http://gravit.slowchop.com/dist/${name}.tar.gz";
-    sha256 = "f37f3ac256a4acbf575f709addaae8cb01eda4f85537affa28c45f2df6fddb07";
+    url = "http://gravit.slowchop.com/media/downloads/${name}.tgz";
+    sha256 = "0lyw0skrkb04s16vgz7ggswjrdxk1h23v5s85s09gjxzjp1xd3xp";
   };
 
-  buildInputs = [mesa SDL SDL_ttf SDL_image lua5_0];
+  buildInputs = [mesa SDL SDL_ttf SDL_image lua5_1 automake autoconf];
 
-  configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3";
-
-  postInstall = ''
-    mv $out/etc/gravit $out/share/gravit/sample-config
-    rmdir $out/etc
-  '';
+  preConfigure = "sh autogen.sh";
 
   meta = {
     homepage = "http://gravit.slowchop.com";

@@ -16,10 +16,10 @@ let
   langsSpaces = stdenv.lib.concatStringsSep " " langs;
   major = "3";
   minor = "6";
-  patch = "1";
+  patch = "2";
   tweak = "2";
   subdir = "${major}.${minor}.${patch}";
-  version = "${subdir}.${tweak}";
+  version = "${subdir}${if tweak == "" then "" else "."}${tweak}";
   fetchThirdParty = {name, md5}: fetchurl {
     inherit name md5;
     url = "http://dev-www.libreoffice.org/src/${md5}-${name}";
@@ -36,17 +36,17 @@ let
       }) ] ++ (map fetchThirdParty (import ./libreoffice-srcs.nix));
     translations = fetchSrc {
       name = "translations";
-      sha256 = "0id4ad8h3fl4s2ax6r4w4af74xvagkv0qwy50f483lqq3a3pl7fl";
+      sha256 = "a6ef65d5acfe9be19a3d4d743cd23a1017733f651ffc57f5773a24704a282c33";
     };
 
     help = fetchSrc {
       name = "help";
-      sha256 = "0jd3l3rkhmdvrvgklkmrh9zsg9hlv3vhy6s97fnzhpzr90sjqrs1";
+      sha256 = "55ec6ef5eef4bbf2298c3b864f67c8424ebb5ccbe7bcd6ca59abba2867989e31";
     };
 
     core = fetchSrc {
       name = "core";
-      sha256 = "12zc0zviy1p3gk1v5nm4ks4rzscn68lpnl3kis4q693zhsk8jyh3";
+      sha256 = "5ec07ffacec09c4dcee9246cb132f7a59a618b395835e781735fd61bf47e8d37";
     };
   };
 in

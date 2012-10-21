@@ -53,6 +53,19 @@ let self = {
     ];
   };
 
+  "async" = self."async-0.1.22";
+
+  "async-0.1.22" = self.buildNodePackage rec {
+    name = "async-0.1.22";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/async/-/${name}.tgz";
+      sha256 = "6fd2750cd519a754b0e32ef3423e64768055129e00a95d9297005bda29fdef18";
+    };
+    deps = [
+
+    ];
+  };
+
   "backbone" = self."backbone-0.9.2";
 
   "backbone-0.9.2" = self.buildNodePackage rec {
@@ -109,15 +122,27 @@ let self = {
     ];
   };
 
-  "bson" = self."bson-0.1.3";
+  "bson" = self."bson-0.1.5";
 
-  "bson-0.1.3" = self.buildNodePackage rec {
-    name = "bson-0.1.3";
+  "bson-0.1.5" = self.buildNodePackage rec {
+    name = "bson-0.1.5";
     src = fetchurl {
       url = "http://registry.npmjs.org/bson/-/${name}.tgz";
-      sha256 = "86ed2b1465e30a4089c8c88dee3d97fafcd7deb60edc3819c00a0604c84d5040";
+      sha256 = "3fad2209466740ea81d0bc285b92d940efe5104a6314946ea40180c431a19692";
     };
-    flags = [ "mongodb:native" ];
+    deps = [
+
+    ];
+  };
+
+  "buffertools" = self."buffertools-~1";
+
+  "buffertools-~1" = self.buildNodePackage rec {
+    name = "buffertools-1.1.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/buffertools/-/${name}.tgz";
+      sha256 = "a0520dbf39eedbd8c685ac4989bf822ac57cc161924abf82ba567234620380a5";
+    };
     deps = [
 
     ];
@@ -536,16 +561,16 @@ let self = {
     ];
   };
 
-  "mongodb" = self."mongodb-1.1.7";
+  "mongodb" = self."mongodb-1.1.11";
 
-  "mongodb-1.1.7" = self.buildNodePackage rec {
-    name = "mongodb-1.1.7";
+  "mongodb-1.1.11" = self.buildNodePackage rec {
+    name = "mongodb-1.1.11";
     src = fetchurl {
       url = "http://registry.npmjs.org/mongodb/-/${name}.tgz";
-      sha256 = "10ed2903b839907e854a4ae4508940207f260500bfaff028497e9df865ead475";
+      sha256 = "fedd14b097a58ae5c2c83e5cb0af85a191ad00c2ce8d6db46520ee6cc1650277";
     };
     deps = [
-      self."bson-0.1.3"
+      self."bson-0.1.5"
     ];
   };
 
@@ -821,6 +846,21 @@ let self = {
     ];
   };
 
+  "requirejs" = self."requirejs-0.26.0";
+
+  "requirejs-==0.26.0" = self."requirejs-0.26.0";
+
+  "requirejs-0.26.0" = self.buildNodePackage rec {
+    name = "requirejs-0.26.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/requirejs/-/${name}.tgz";
+      sha256 = "5ec7264031784fd1b5844aba813ace9045918a0b004a52fafa6b52e9e9760407";
+    };
+    deps = [
+
+    ];
+  };
+
   "rimraf" = self."rimraf-2";
 
   "rimraf-2" = self.buildNodePackage rec {
@@ -922,6 +962,19 @@ let self = {
     ];
   };
 
+  "source-map" = self."source-map-0.1.2";
+
+  "source-map-0.1.2" = self.buildNodePackage rec {
+    name = "source-map-0.1.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/source-map/-/${name}.tgz";
+      sha256 = "4465bb3a293c0e86092affb7cbdd6d9356cad69231c56f6e73bba7750497035f";
+    };
+    deps = [
+      self."requirejs-==0.26.0"
+    ];
+  };
+
   "tar" = self."tar-~0.1.12";
 
   "tar-~0.1.12" = self.buildNodePackage rec {
@@ -1000,14 +1053,14 @@ let self = {
     ];
   };
 
-  "underscore" = self."underscore-1.3.3";
-  "underscore->=1.3.1" = self."underscore-1.3.3";
+  "underscore" = self."underscore-1.4.2";
+  "underscore->=1.3.1" = self."underscore-1.4.2";
 
-  "underscore-1.3.3" = self.buildNodePackage rec {
-    name = "underscore-1.3.3";
+  "underscore-1.4.2" = self.buildNodePackage rec {
+    name = "underscore-1.4.2";
     src = fetchurl {
       url = "http://registry.npmjs.org/underscore/-/${name}.tgz";
-      sha256 = "e710644e53f5a6d75a41a3e19d8c35eedbce0db1e886e470daf9f909c9d1ea8a";
+      sha256 = "329ab22ba9b37be4a0c694ca21b9ed85b99256a45c2e0cf3624c4719443366d6";
     };
     deps = [
 
@@ -1067,6 +1120,19 @@ let self = {
       self."commander-~0.6.1"
       self."tinycolor-0.x"
       self."options"
+    ];
+  };
+
+  "wu" = self."wu-0.1.8";
+
+  "wu-0.1.8" = self.buildNodePackage rec {
+    name = "wu-0.1.8";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/wu/-/${name}.tgz";
+      sha256 = "2400d0ca7da862a9063a6a8d914bb4e585f81a5121b0fda8e40b1f6e782c72c6";
+    };
+    deps = [
+
     ];
   };
 

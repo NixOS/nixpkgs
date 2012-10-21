@@ -4,14 +4,14 @@
 }:
 
 let
-  version = "1.6.2";
+  version = "1.8.3";
 in
 stdenv.mkDerivation {
   name = "wireshark-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wireshark/wireshark-${version}.tar.bz2";
-    sha256 = "0zqy8ws05xz36y49azf5lrwzgfz26h7f8d27xjc89hlqrqagahsk";
+    sha256 = "1crg59kkxb7lw1wpfg52hd4l00hq56pyg7f40c7sgqmm0vsmza43";
   };
 
   buildInputs = [perl pkgconfig gtk libpcap flex bison gnutls libgcrypt

@@ -1,12 +1,12 @@
-{ cabal, cryptoApi, mtl, transformers }:
+{ cabal, cryptoApi, mtl, tagged, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "monadcryptorandom";
-  version = "0.4.1";
-  sha256 = "01x3zfr4m93bgx062rhxqk1d8qhn6s7rkfkm4yf00p89fclyjsg1";
-  buildDepends = [ cryptoApi mtl transformers ];
+  version = "0.5";
+  sha256 = "19sb9mgfvmmmx1sn0aiq6dn5nl0201xwgs6xqakn7pz5vsqcww2b";
+  buildDepends = [ cryptoApi mtl tagged transformers ];
   meta = {
-    homepage = "http://trac.haskell.org/crypto-api/wiki";
+    homepage = "https://github.com/TomMD/monadcryptorandom";
     description = "A monad for using CryptoRandomGen";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

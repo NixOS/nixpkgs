@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [perl] ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
-    optional libxml2Support libxml2;    # there is --with-libxml2, but it doesn't work
+    optional libxml2Support libxml2;
 
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = "-lgcc_s";
@@ -38,9 +38,13 @@ stdenv.mkDerivation rec {
     --disable-debugger-mode
     --enable-mods-shared=all
     --enable-mpms-shared=all
+    --enable-cern-meta
+    --enable-imagemap
+    --enable-cgi
     ${optionalString proxySupport "--enable-proxy"}
     ${optionalString sslSupport "--enable-ssl --with-ssl=${openssl}"}
     ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
+    ${optionalString libxml2Support "--with-libxml2=${libxml2}/include/libxml2"}
   '';
 
   postInstall = ''

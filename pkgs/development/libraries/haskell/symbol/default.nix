@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "symbol";
-  version = "0.1.3";
-  sha256 = "1kz4kzbv6bara31pv4vc75r6wvjln6md8gjlsxx8hf50ab8vb68j";
+  version = "0.1.4";
+  sha256 = "00318syprv1ixfbr4v7xq86z10f0psxk0b8kaxvawvacm8hp61bn";
   buildDepends = [ deepseq syb ];
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";

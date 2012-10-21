@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
 
+  patches = [ ./glib-top-level-header.patch ];
+
   meta = {
     description = "Gnome Diagram drawing software";
     homepage = http://live.gnome.org/Dia;

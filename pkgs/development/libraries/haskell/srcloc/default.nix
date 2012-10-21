@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "srcloc";
-  version = "0.2.1";
-  sha256 = "03b0ra5g7mqcjjfnhm84mv4ph454j08pb9dwxrv9zfwk1kiqb2ss";
+  version = "0.3.0";
+  sha256 = "1ymk8k0r9ckk7dalz3virvvpyrf4nw8xvb23cs6ibdjjbzsphpiz";
   buildDepends = [ syb ];
   noHaddock = true;
   meta = {
