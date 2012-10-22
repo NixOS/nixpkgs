@@ -10,7 +10,7 @@ with stdenv.lib;
 
 let
 
-  version = "4.2.0";
+  version = "4.2.2";
 
   forEachModule = action: ''
     for mod in \
@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "895426ecac371bef4c070e8bcc9306f0c57dcbd6be25188d915b63ddde6f49e6";
+    sha256 = "943daa13694605d5d0a23ffef27c398b5e72ada669de89bad4b98f000f029700";
   };
 
   buildInputs =
@@ -44,7 +44,9 @@ in stdenv.mkDerivation {
     ++ optional javaBindings jdk
     ++ optional pythonBindings python;
 
-  patchPhase = ''
+  patches = [ ./remove_fa_ir.patch ];
+
+  postPatch = ''
     set -x
     MODULES_BUILD_DIR=`echo ${kernel}/lib/modules/*/build`
     sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \
