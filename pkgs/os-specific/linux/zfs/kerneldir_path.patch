@@ -1,140 +1,85 @@
-diff -rc zfs-0.6.0-rc10.old/Makefile.in zfs-0.6.0-rc10/Makefile.in
-*** zfs-0.6.0-rc10.old/Makefile.in	Tue Aug 14 12:35:34 2012
---- zfs-0.6.0-rc10/Makefile.in	Fri Aug 17 15:21:18 2012
-***************
-*** 1121,1127 ****
-  
-  @CONFIG_KERNEL_TRUE@install-data-local:
-  @CONFIG_KERNEL_TRUE@	release=$(ZFS_META_VERSION)-$(ZFS_META_RELEASE); \
-! @CONFIG_KERNEL_TRUE@	instdest=$(DESTDIR)/usr/src/zfs-$$release/$(LINUX_VERSION); \
-  @CONFIG_KERNEL_TRUE@	for instfile in $(noinst_HEADERS) module/$(LINUX_SYMBOLS); do \
-  @CONFIG_KERNEL_TRUE@		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
-  @CONFIG_KERNEL_TRUE@	done
---- 1121,1127 ----
-  
-  @CONFIG_KERNEL_TRUE@install-data-local:
-  @CONFIG_KERNEL_TRUE@	release=$(ZFS_META_VERSION)-$(ZFS_META_RELEASE); \
-! @CONFIG_KERNEL_TRUE@	instdest=$(DESTDIR)/@libexecdir@/zfs/$(LINUX_VERSION); \
-  @CONFIG_KERNEL_TRUE@	for instfile in $(noinst_HEADERS) module/$(LINUX_SYMBOLS); do \
-  @CONFIG_KERNEL_TRUE@		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
-  @CONFIG_KERNEL_TRUE@	done
-diff -rc zfs-0.6.0-rc10.old/include/Makefile.in zfs-0.6.0-rc10/include/Makefile.in
-*** zfs-0.6.0-rc10.old/include/Makefile.in	Tue Aug 14 12:35:32 2012
---- zfs-0.6.0-rc10/include/Makefile.in	Fri Aug 17 15:20:50 2012
-***************
-*** 402,408 ****
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-recursive
-  
---- 402,408 ----
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = $(DESTDIR)/@libexecdir@/zfs/$(LINUX_VERSION)
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-recursive
-  
-diff -rc zfs-0.6.0-rc10.old/include/linux/Makefile.in zfs-0.6.0-rc10/include/linux/Makefile.in
-*** zfs-0.6.0-rc10.old/include/linux/Makefile.in	Tue Aug 14 12:35:32 2012
---- zfs-0.6.0-rc10/include/linux/Makefile.in	Fri Aug 17 15:20:53 2012
-***************
-*** 337,343 ****
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/linux
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/linux
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-am
-  
---- 337,343 ----
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/linux
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = $(DESTDIR)/@libexecdir@/zfs/$(LINUX_VERSION)/linux
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-am
-  
-diff -rc zfs-0.6.0-rc10.old/include/sys/Makefile.in zfs-0.6.0-rc10/include/sys/Makefile.in
-*** zfs-0.6.0-rc10.old/include/sys/Makefile.in	Tue Aug 14 12:35:32 2012
---- zfs-0.6.0-rc10/include/sys/Makefile.in	Fri Aug 17 15:20:57 2012
-***************
-*** 590,596 ****
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/sys
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-recursive
-  
---- 590,596 ----
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/sys
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = $(DESTDIR)/@libexecdir@/zfs/$(LINUX_VERSION)/sys
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-recursive
-  
-diff -rc zfs-0.6.0-rc10.old/include/sys/fm/Makefile.in zfs-0.6.0-rc10/include/sys/fm/Makefile.in
-*** zfs-0.6.0-rc10.old/include/sys/fm/Makefile.in	Tue Aug 14 12:35:32 2012
---- zfs-0.6.0-rc10/include/sys/fm/Makefile.in	Fri Aug 17 15:21:00 2012
-***************
-*** 374,380 ****
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/sys/fm
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys/fm
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-recursive
-  
---- 374,380 ----
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/sys/fm
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = $(DESTDIR)/@libexecdir@/zfs/$(LINUX_VERSION)/sys/fm
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-recursive
-  
-diff -rc zfs-0.6.0-rc10.old/include/sys/fm/fs/Makefile.in zfs-0.6.0-rc10/include/sys/fm/fs/Makefile.in
-*** zfs-0.6.0-rc10.old/include/sys/fm/fs/Makefile.in	Tue Aug 14 12:35:32 2012
---- zfs-0.6.0-rc10/include/sys/fm/fs/Makefile.in	Fri Aug 17 15:21:03 2012
-***************
-*** 332,338 ****
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/sys/fm/fs
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys/fm/fs
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-am
-  
---- 332,338 ----
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/sys/fm/fs
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = $(DESTDIR)/@libexecdir@/zfs/$(LINUX_VERSION)/sys/fm/fs
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-am
-  
-diff -rc zfs-0.6.0-rc10.old/include/sys/fs/Makefile.in zfs-0.6.0-rc10/include/sys/fs/Makefile.in
-*** zfs-0.6.0-rc10.old/include/sys/fs/Makefile.in	Tue Aug 14 12:35:32 2012
---- zfs-0.6.0-rc10/include/sys/fs/Makefile.in	Fri Aug 17 15:21:06 2012
-***************
-*** 332,338 ****
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/sys/fs
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys/fs
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-am
-  
---- 332,338 ----
-  EXTRA_DIST = $(COMMON_H) $(KERNEL_H) $(USER_H)
-  @CONFIG_USER_TRUE@libzfsdir = $(includedir)/libzfs/sys/fs
-  @CONFIG_USER_TRUE@libzfs_HEADERS = $(COMMON_H) $(USER_H)
-! @CONFIG_KERNEL_TRUE@kerneldir = $(DESTDIR)/@libexecdir@/zfs/$(LINUX_VERSION)/sys/fs
-  @CONFIG_KERNEL_TRUE@kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
-  all: all-am
-  
+diff --git a/Makefile.am b/Makefile.am
+index 9ffd6be..8e51412 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -34,7 +34,7 @@ distclean-local::
+ if CONFIG_KERNEL
+ install-data-local:
+ 	release=$(ZFS_META_VERSION)-$(ZFS_META_RELEASE); \
+-	instdest=$(DESTDIR)/usr/src/zfs-$$release/$(LINUX_VERSION); \
++	instdest=$(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION); \
+ 	for instfile in $(noinst_HEADERS) module/$(LINUX_SYMBOLS); do \
+ 		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
+ 	done
+diff --git a/include/Makefile.am b/include/Makefile.am
+index 8f9c8d7..5fc44d5 100644
+--- a/include/Makefile.am
++++ b/include/Makefile.am
+@@ -27,6 +27,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/linux/Makefile.am b/include/linux/Makefile.am
+index 6e481a1..1107809 100644
+--- a/include/linux/Makefile.am
++++ b/include/linux/Makefile.am
+@@ -16,6 +16,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/linux
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/sys/Makefile.am b/include/sys/Makefile.am
+index 651e68b..b80bb55 100644
+--- a/include/sys/Makefile.am
++++ b/include/sys/Makefile.am
+@@ -89,6 +89,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/sys/fm/Makefile.am b/include/sys/fm/Makefile.am
+index 900ed93..8d9bed2 100644
+--- a/include/sys/fm/Makefile.am
++++ b/include/sys/fm/Makefile.am
+@@ -16,6 +16,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys/fm
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/sys/fm/fs/Makefile.am b/include/sys/fm/fs/Makefile.am
+index d82d076..b4ae3ee 100644
+--- a/include/sys/fm/fs/Makefile.am
++++ b/include/sys/fm/fs/Makefile.am
+@@ -13,6 +13,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys/fm/fs
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/sys/fs/Makefile.am b/include/sys/fs/Makefile.am
+index b702679..3c747f4 100644
+--- a/include/sys/fs/Makefile.am
++++ b/include/sys/fs/Makefile.am
+@@ -13,6 +13,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys/fs
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif

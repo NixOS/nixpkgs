@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, spl, perl, zlib, libuuid, coreutils, utillinux }:
+{ stdenv, fetchurl, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
   name = "zfs-0.6.0-rc11";
@@ -7,13 +7,15 @@ stdenv.mkDerivation {
     sha256 = "0wx0srn2k31j9xdk3nvk7l847r0diyb7ph6hd006ax9l5p9zj0a7";
   };
 
-  patches = [ ./module_perm_prefix.patch ./mount_zfs_prefix.patch ./kerneldir_path.patch ./no_absolute_paths_to_coreutils.patch ];
+  patches = [ ./module_perm_prefix.patch ./mount_zfs_prefix.patch ./kerneldir_path.patch ./no_absolute_paths_to_coreutils.patch ./linux-3.6.patch ];
 
-  buildInputs = [ kernel spl perl zlib libuuid coreutils ];
+  buildInputs = [ kernel spl perl autoconf automake libtool zlib libuuid coreutils ];
 
   NIX_CFLAGS_COMPILE = "-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
 
   preConfigure = ''
+    ./autogen.sh
+
     substituteInPlace ./module/zfs/zfs_ctldir.c  --replace "umount -t zfs"   "${utillinux}/bin/umount -t zfs"
     substituteInPlace ./module/zfs/zfs_ctldir.c  --replace "mount -t zfs"    "${utillinux}/bin/mount -t zfs"
     substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/umount"   "${utillinux}/bin/umount"
