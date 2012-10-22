@@ -3,7 +3,7 @@
 
 # need pkgconfig so that libshout installs ${out}/lib/pkgconfig/shout.pc
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
 	name = "libshout-2.3.1";
 
 	src = fetchurl {
