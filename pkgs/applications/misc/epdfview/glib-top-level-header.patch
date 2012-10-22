@@ -1,0 +1,12 @@
+diff -Naur epdfview-0.1.8-orig/src/gtk/StockIcons.h epdfview-0.1.8/src/gtk/StockIcons.h
+--- epdfview-0.1.8-orig/src/gtk/StockIcons.h	2011-05-28 06:24:57.000000000 -0400
++++ epdfview-0.1.8/src/gtk/StockIcons.h	2012-07-15 11:02:43.946339253 -0400
+@@ -18,7 +18,7 @@
+ #if !defined (__STOCK_ICONS_H__)
+ #define __STOCK_ICONS_H__
+ 
+-#include <glib/gmacros.h>
++#include <glib.h>
+ 
+ G_BEGIN_DECLS
+ 

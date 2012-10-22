@@ -169,7 +169,7 @@ while (<>) {
     }
 
     if ($file =~ /XORG_FONT_UCS2ANY/) {
-        push @requires, "fontutil";
+        push @requires, "fontutil", "mkfontscale";
         $isFont = 1;
     }
 

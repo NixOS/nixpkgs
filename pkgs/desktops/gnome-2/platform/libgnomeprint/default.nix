@@ -1,11 +1,8 @@
-{stdenv, fetchurl, pkgconfig, gtk, gettext, libxml2, intltool, libart_lgpl, libgnomecups, bison,
-flex }:
+{ stdenv, fetchurl, pkgconfig, gtk, gettext, libxml2, intltool, libart_lgpl
+, libgnomecups, bison, flex }:
 
-let
+stdenv.mkDerivation rec {
   name = "libgnomeprint-2.18.8";
-in
-stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgnomeprint/2.18/${name}.tar.bz2";
@@ -15,5 +12,6 @@ stdenv.mkDerivation {
   patches = [ ./bug653388.patch ];
 
   buildInputs = [ pkgconfig gtk gettext intltool libart_lgpl libgnomecups bison flex ];
+
   propagatedBuildInputs = [ libxml2 ];
 }

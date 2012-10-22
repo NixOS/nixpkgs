@@ -54,13 +54,11 @@ stdenv.mkDerivation rec {
 
     chmod +x $out/bin/skype
 
-    # Desktop icon for Skype
-    patch skype.desktop << EOF
-    5c5
-    < Icon=skype.png
-    ---
-    > Icon=$out/opt/skype/icons/SkypeBlue_48x48.png
-    EOF
+    # Fixup desktop file
+    substituteInPlace skype.desktop --replace \
+      "Icon=skype.png" "Icon=$out/opt/skype/icons/SkypeBlue_48x48.png"
+    substituteInPlace skype.desktop --replace \
+      "Terminal=0" "Terminal=false"
     mkdir -p $out/share/applications
     mv skype.desktop $out/share/applications
   '';

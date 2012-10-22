@@ -1,25 +1,23 @@
-args: with args;
+{ stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
+, apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql
+, openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng }:
 
-let
+composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  inherit (args.composableDerivation) composableDerivation edf wwf;
-
-in
-
-composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
-
-  version = "5.3.15";
+  version = "5.3.17";
 
   name = "php-${version}";
+
+  enableParallelBuilding = true;
 
   buildInputs = ["flex" "bison" "pkgconfig"];
 
   flags = {
 
-# much left to do here...
+    # much left to do here...
 
     # SAPI modules:
-    
+
       apxs2 = {
         configureFlags = ["--with-apxs2=${apacheHttpd}/bin/apxs"];
         buildInputs = [apacheHttpd];
@@ -28,12 +26,12 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
       # Extensions
 
       curl = {
-        configureFlags = ["--with-curl=${args.curl}" "--with-curlwrappers"];
+        configureFlags = ["--with-curl=${curl}" "--with-curlwrappers"];
         buildInputs = [curl openssl];
       };
-      
+
       zlib = {
-        configureFlags = ["--with-zlib=${args.zlib}"];
+        configureFlags = ["--with-zlib=${zlib}"];
         buildInputs = [zlib];
       };
 
@@ -44,7 +42,7 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
           ];
         buildInputs = [ libxml2 ];
       };
-    
+
       readline = {
         configureFlags = ["--with-readline=${readline}"];
         buildInputs = [ readline ];
@@ -54,12 +52,12 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
         configureFlags = ["--with-pdo-sqlite=${sqlite}"];
         buildInputs = [ sqlite ];
       };
-    
+
       postgresql = {
         configureFlags = ["--with-pgsql=${postgresql}"];
         buildInputs = [ postgresql ];
       };
-    
+
       mysql = {
         configureFlags = ["--with-mysql=${mysql}"];
         buildInputs = [ mysql ];
@@ -80,13 +78,13 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
         configureFlags = ["--with-pdo-mysql=${mysql}"];
         buildInputs = [ mysql ];
       };
-    
+
       bcmath = {
         configureFlags = ["--enable-bcmath"];
       };
 
       gd = {
-        configureFlags = ["--with-gd=${args.gd}"];
+        configureFlags = ["--with-gd=${gd}"];
         buildInputs = [gd libpng libjpeg ];
       };
 
@@ -99,7 +97,7 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
       };
 
       openssl = {
-        configureFlags = ["--with-openssl=${args.openssl}"];
+        configureFlags = ["--with-openssl=${openssl}"];
         buildInputs = ["openssl"];
       };
 
@@ -152,9 +150,9 @@ composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
     cp php.ini-production $iniFile
   '';
 
-  src = args.fetchurl {
+  src = fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    sha256 = "1vzij845n2akh2lkpacgdc5r0f7nw6pk9l9vi1h8l8k4krjjbdzr";
+    sha256 = "02bmjlznnfhxhyd4wvk8ky9vpqwl9rbyng803r7ygf84sibyi1dd";
     name = "php-${version}.tar.bz2";
   };
 

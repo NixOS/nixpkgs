@@ -2,11 +2,11 @@
 , gnomeSupport ? true, libgnome_keyring, sqlite, glib_networking }:
 
 stdenv.mkDerivation {
-  name = "libsoup-2.36.1";
+  name = "libsoup-2.38.1";
 
   src = fetchurl {
-    url = mirror://gnome/sources/libsoup/2.36/libsoup-2.36.1.tar.xz;
-    sha256 = "0r8zkr0a328jkww4dv9z1q691rw59nh4lf5f5pzzr9szzw3j8wkk";
+    url = mirror://gnome/sources/libsoup/2.38/libsoup-2.38.1.tar.xz;
+    sha256 = "16iza4y8pmc4sn90iid88fgminvgcqypy3s2qnmzkzm5qwzr5f3i";
   };
 
 

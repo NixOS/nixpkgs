@@ -6,6 +6,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w7qybh8ssl4dffi5qfajq8mndw7ipsd92vkim03nywxgjp4i1ll";
   };
   buildInputs = [ pkgconfig gtk poppler ];
+  patches = [ ./glib-top-level-header.patch ];
   meta = {
     homepage = http://trac.emma-soft.com/epdfview/;
     description = "A lightweight PDF document viewer using Poppler and GTK+";

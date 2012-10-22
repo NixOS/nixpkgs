@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "network-info";
-  version = "0.2.0.2";
-  sha256 = "132cna6dc8azpll3rm2y4wv6sdcavwjq3x9f8m4p2952vr53bw3m";
+  version = "0.2.0.3";
+  sha256 = "04nwl5akrsppxkqqq7a7qi5sixvrzvj4njl8rbz7sglbh9393rs2";
   meta = {
     homepage = "http://github.com/jystic/network-info";
     description = "Access the local computer's basic network configuration";
