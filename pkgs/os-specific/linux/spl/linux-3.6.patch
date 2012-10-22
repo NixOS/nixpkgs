@@ -1,0 +1,251 @@
+commit bcb15891ab394e11615eee08bba1fd85ac32e158
+Author: Yuxuan Shui <yshuiv7@gmail.com>
+Date:   Thu Oct 11 22:41:33 2012 +0800
+
+    Linux 3.6 compat, kern_path_locked() added
+    
+    The kern_path_parent() function was removed from Linux 3.6 because
+    it was observed that all the callers just want the parent dentry.
+    The simpler kern_path_locked() function replaces kern_path_parent()
+    and does the lookup while holding the ->i_mutex lock.
+    
+    This is good news for the vn implementation because it removes the
+    need for us to handle the locking.  However, it makes it harder to
+    implement a single readable vn_remove()/vn_rename() function which
+    is usually what we prefer.
+    
+    Therefore, we implement a new version of vn_remove()/vn_rename()
+    for Linux 3.6 and newer kernels.  This allows us to leave the
+    existing working implementation untouched, and to add a simpler
+    version for newer kernels.
+    
+    Long term I would very much like to see all of the vn code removed
+    since what this code enabled is generally frowned upon in the kernel.
+    But that can't happen util we either abondon the zpool.cache file
+    or implement alternate infrastructure to update is correctly in
+    user space.
+    
+    Signed-off-by: Yuxuan Shui <yshuiv7@gmail.com>
+    Signed-off-by: Richard Yao <ryao@cs.stonybrook.edu>
+    Signed-off-by: Brian Behlendorf <behlendorf1@llnl.gov>
+    Closes #154
+
+diff --git a/config/spl-build.m4 b/config/spl-build.m4
+index 0c7a03c..eb644a1 100644
+--- a/config/spl-build.m4
++++ b/config/spl-build.m4
+@@ -86,6 +86,7 @@ AC_DEFUN([SPL_AC_CONFIG_KERNEL], [
+ 	SPL_AC_SHRINK_ICACHE_MEMORY
+ 	SPL_AC_KERN_PATH_PARENT_HEADER
+ 	SPL_AC_KERN_PATH_PARENT_SYMBOL
++	SPL_AC_KERN_PATH_LOCKED
+ 	SPL_AC_2ARGS_ZLIB_DEFLATE_WORKSPACESIZE
+ 	SPL_AC_SHRINK_CONTROL_STRUCT
+ 	SPL_AC_RWSEM_SPINLOCK_IS_RAW
+@@ -2188,6 +2189,21 @@ AC_DEFUN([SPL_AC_KERN_PATH_PARENT_SYMBOL],
+ ])
+ 
+ dnl #
++dnl # 3.6 API compat,
++dnl # The kern_path_parent() function was replaced by the kern_path_locked()
++dnl # function to eliminate all struct nameidata usage outside fs/namei.c.
++dnl #
++AC_DEFUN([SPL_AC_KERN_PATH_LOCKED], [
++	SPL_CHECK_SYMBOL_HEADER(
++		[kern_path_locked],
++		[struct dentry \*kern_path_locked(const char \*, struct path \*)],
++		[include/linux/namei.h],
++		[AC_DEFINE(HAVE_KERN_PATH_LOCKED, 1,
++		[kern_path_locked() is available])],
++		[])
++])
++
++dnl #
+ dnl # 2.6.39 API compat,
+ dnl # The function zlib_deflate_workspacesize() now take 2 arguments.
+ dnl # This was done to avoid always having to allocate the maximum size
+diff --git a/include/linux/file_compat.h b/include/linux/file_compat.h
+index 2b5b7d2..27819d5 100644
+--- a/include/linux/file_compat.h
++++ b/include/linux/file_compat.h
+@@ -83,6 +83,12 @@ extern kern_path_parent_t kern_path_parent_fn;
+ # define spl_kern_path_parent(path, nd)	path_lookup(path, LOOKUP_PARENT, nd)
+ #endif /* HAVE_KERN_PATH_PARENT_HEADER */
+ 
++#ifdef HAVE_KERN_PATH_LOCKED
++typedef struct dentry * (*kern_path_locked_t)(const char *, struct path *);
++extern kern_path_locked_t kern_path_locked_fn;
++# define spl_kern_path_locked(name, path)	kern_path_locked_fn(name, path)
++#endif /* HAVE_KERN_PATH_LOCKED */
++
+ #ifndef HAVE_CLEAR_CLOSE_ON_EXEC
+ #define __clear_close_on_exec(fd, fdt)	FD_CLR(fd, fdt->close_on_exec)
+ #endif
+diff --git a/module/spl/spl-vnode.c b/module/spl/spl-vnode.c
+index f5fc65d..a0fed32 100644
+--- a/module/spl/spl-vnode.c
++++ b/module/spl/spl-vnode.c
+@@ -50,6 +50,10 @@ EXPORT_SYMBOL(kern_path_parent_fn);
+ #endif /* HAVE_KERN_PATH_PARENT_SYMBOL */
+ #endif /* HAVE_KERN_PATH_PARENT_HEADER */
+ 
++#ifdef HAVE_KERN_PATH_LOCKED
++kern_path_locked_t kern_path_locked_fn = SYMBOL_POISON;
++#endif /* HAVE_KERN_PATH_LOCKED */
++
+ vtype_t
+ vn_mode_to_vtype(mode_t mode)
+ {
+@@ -298,6 +302,128 @@ vn_seek(vnode_t *vp, offset_t ooff, offset_t *noffp, void *ct)
+ }
+ EXPORT_SYMBOL(vn_seek);
+ 
++#ifdef HAVE_KERN_PATH_LOCKED
++/* Based on do_unlinkat() from linux/fs/namei.c */
++int
++vn_remove(const char *path, uio_seg_t seg, int flags)
++{
++	struct dentry *dentry;
++	struct path parent;
++	struct inode *inode = NULL;
++	int rc = 0;
++	SENTRY;
++
++	ASSERT(seg == UIO_SYSSPACE);
++	ASSERT(flags == RMFILE);
++
++	dentry = spl_kern_path_locked(path, &parent);
++	rc = PTR_ERR(dentry);
++	if (!IS_ERR(dentry)) {
++		if (parent.dentry->d_name.name[parent.dentry->d_name.len])
++			SGOTO(slashes, rc = 0);
++
++		inode = dentry->d_inode;
++		if (!inode)
++			SGOTO(slashes, rc = 0);
++
++		if (inode)
++			ihold(inode);
++
++		rc = vfs_unlink(parent.dentry->d_inode, dentry);
++exit1:
++		dput(dentry);
++	}
++
++	spl_inode_unlock(parent.dentry->d_inode);
++	if (inode)
++		iput(inode);    /* truncate the inode here */
++
++	path_put(&parent);
++	SRETURN(-rc);
++
++slashes:
++	rc = !dentry->d_inode ? -ENOENT :
++	    S_ISDIR(dentry->d_inode->i_mode) ? -EISDIR : -ENOTDIR;
++	SGOTO(exit1, rc);
++} /* vn_remove() */
++EXPORT_SYMBOL(vn_remove);
++
++/* Based on do_rename() from linux/fs/namei.c */
++int
++vn_rename(const char *oldname, const char *newname, int x1)
++{
++	struct dentry *old_dir, *new_dir;
++	struct dentry *old_dentry, *new_dentry;
++	struct dentry *trap;
++	struct path old_parent, new_parent;
++	int rc = 0;
++	SENTRY;
++
++	old_dentry = spl_kern_path_locked(oldname, &old_parent);
++	if (IS_ERR(old_dentry))
++		SGOTO(exit, rc = PTR_ERR(old_dentry));
++
++	spl_inode_unlock(old_parent.dentry->d_inode);
++
++	new_dentry = spl_kern_path_locked(newname, &new_parent);
++	if (IS_ERR(new_dentry))
++		SGOTO(exit2, rc = PTR_ERR(new_dentry));
++
++	spl_inode_unlock(new_parent.dentry->d_inode);
++
++	rc = -EXDEV;
++	if (old_parent.mnt != new_parent.mnt)
++		SGOTO(exit3, rc);
++
++	old_dir = old_parent.dentry;
++	new_dir = new_parent.dentry;
++	trap = lock_rename(new_dir, old_dir);
++
++	/* source should not be ancestor of target */
++	rc = -EINVAL;
++	if (old_dentry == trap)
++		SGOTO(exit4, rc);
++
++	/* target should not be an ancestor of source */
++	rc = -ENOTEMPTY;
++	if (new_dentry == trap)
++		SGOTO(exit4, rc);
++
++	/* source must exist */
++	rc = -ENOENT;
++	if (!old_dentry->d_inode)
++		SGOTO(exit4, rc);
++
++	/* unless the source is a directory trailing slashes give -ENOTDIR */
++	if (!S_ISDIR(old_dentry->d_inode->i_mode)) {
++		rc = -ENOTDIR;
++		if (old_dentry->d_name.name[old_dentry->d_name.len])
++			SGOTO(exit4, rc);
++		if (new_dentry->d_name.name[new_dentry->d_name.len])
++			SGOTO(exit4, rc);
++	}
++
++#ifdef HAVE_4ARGS_VFS_RENAME
++	rc = vfs_rename(old_dir->d_inode, old_dentry,
++			new_dir->d_inode, new_dentry);
++#else
++	rc = vfs_rename(old_dir->d_inode, old_dentry, oldnd.nd_mnt,
++			new_dir->d_inode, new_dentry, newnd.nd_mnt);
++#endif /* HAVE_4ARGS_VFS_RENAME */
++exit4:
++	unlock_rename(new_dir, old_dir);
++exit3:
++	dput(new_dentry);
++	path_put(&new_parent);
++exit2:
++	dput(old_dentry);
++	path_put(&old_parent);
++exit:
++	SRETURN(-rc);
++}
++EXPORT_SYMBOL(vn_rename);
++
++#else
+ static struct dentry *
+ vn_lookup_hash(struct nameidata *nd)
+ {
+@@ -458,6 +584,7 @@ exit:
+         SRETURN(-rc);
+ }
+ EXPORT_SYMBOL(vn_rename);
++#endif /* HAVE_KERN_PATH_LOCKED */
+ 
+ int
+ vn_getattr(vnode_t *vp, vattr_t *vap, int flags, void *x3, void *x4)
+@@ -862,6 +989,15 @@ int spl_vn_init_kallsyms_lookup(void)
+ #endif /* HAVE_KERN_PATH_PARENT_SYMBOL */
+ #endif /* HAVE_KERN_PATH_PARENT_HEADER */
+ 
++#ifdef HAVE_KERN_PATH_LOCKED
++        kern_path_locked_fn = (kern_path_locked_t)
++                spl_kallsyms_lookup_name("kern_path_locked");
++        if (!kern_path_locked_fn) {
++                printk(KERN_ERR "Error: Unknown symbol kern_path_locked\n");
++                return -EFAULT;
++        }
++#endif
++
+ 	return (0);
+ }
+ 
