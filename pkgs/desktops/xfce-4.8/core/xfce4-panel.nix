@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
     sha1 = "332fc968332e6271e1bb65d6de8de2524b0440ec";
   };
 
+  patches = [ ./xfce4-panel-datadir.patch ];
+  patchFlags = "-p1";
+
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util garcon libxfce4ui xfconf
       exo libwnck
