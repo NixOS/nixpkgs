@@ -1,0 +1,833 @@
+*** unac-1.7.0.orig/unactest1.c	Wed Jul  3 00:41:54 2002
+--- unac-1.7.0/unactest1.c	Sun Jul 15 11:27:19 2012
+***************
+*** 26,439 ****
+  
+  #include "unac.h"
+  
+! static char* longstr_expected = " 
+! 
+! Senga - Catalog software
+! 
+! 
+! 
+! 
+! 
+! 
+!    
+!     
+!  
+! 
+!     
+!   
+!    
+!      
+!        
+! 
+!   
+!   
+!    senga.org
+!    
+! 
+!   
+! 
+! 
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+! 
+! 
+! 
+! 
+! 
+! December 28, 2000 
+!      
+!       January 27, 2000
+!       Catalog-1.02 
+!         is available. 
+!       
+!        The dmoz loading process has been dramatically simplified. It is
+!           now only available as a command. No more fancy web interface that
+! 	  confuses everyone. In addition the convert_dmoz script now generates
+! 	  text files that can be directly loaded into Catalog instead of the
+! 	  intermediate XML file. The whole loading process now takes from 
+! 	  one to two hours depending on your machine. It took around 10 hours
+! 	  with the previous version. 
+!        The -exclude option was added to convert_dmoz to get rid of 
+!           a whole branch of the catalog at load time. Typical usage would
+! 	  be convert_dmoz -exclude '^/Adult' -what content content.rdf.gz.
+!        A lot more sanity checks and repair have been added to deal with
+!           duplicates, category id conflicts and the like.
+!        Hopefully this new method will also be more understandable and 
+!           generate less traffic on the mailing list. There is room for 
+! 	  improvements and contributors are welcome. 
+!       
+!       A new set of software is available in the 
+!       download directory under the RedHat-6.1 section. These
+!       are the most up to date versions on which Catalog depends. Although the
+!       binaries depend on RedHat-6.1 the perl modules are source and can be
+!       used on any platform.
+!       
+!       September 7, 1999
+!       Catalog-1.01 
+!         is available. 
+!       This is a maintainance release.
+!       
+!         Various bug fixes. All easy
+! 	  to fix bugs have been fixed. Take a look at Bug Track to see what hasn't been fixed.
+!         The _PATHTEXT_ and _PATHFILE_ 
+! 	  tags syntax has been extended to specify a range of path component.
+!           
+!         Graham Barr added a recursive
+! 	  template feature for a catalog root page. This allows to show sub-categories
+! 	  of the root categories in the root page of a catalog.
+!           
+!       
+!       Don't hesitate to submit bugs
+!         or ideas to bug track. Hopefully the next version of Catalog will have
+! 	a fast full text indexing mechanism and I'll be able to implement new
+! 	functionalities.
+!         
+!       Have fun !
+!       July 3, 1999
+!       Catalog-1.00 
+!         is available. 
+!       This release includes PHP3 
+!         code to display a catalog. The author is Weston Bustraan (weston@infinityteldata.net). 
+!         The main motivation to jump directly to version 1.00 is to avoid version 
+!         number problems on CPAN. 
+!       July 2, 1999
+!       Catalog-0.19 
+!         is available. 
+!       This is a minor release. The 
+!         most noticeable addition is the new search mechanism.
+!       
+!         Searching : two search modes 
+!           are now available. AltaVista simple syntax and AltaVista advanced syntax. 
+!           Both use the Text-Query and Text-Query-SQL perl modules. 
+!         Dmoz loading is much more 
+!           fault tolerant. In addition it can handle compressed versions of content.rdf 
+!           and structure.rdf. The comments are now stored in text fields instead 
+!           of char(255).
+!         The template system was 
+!           extended with the pre_fill and post_fill parameters.
+!         Searching associated to 
+!           a catalog dumped to static pages is now possible using the 'static' 
+!           mode.
+!         Fixed two security weakness 
+!           in confedit and recursive cgi handling.
+!         Many sql queries have been 
+!           optimized.
+!         The configuration was changed 
+!           a bit to fix bugs and to isolate database dependencies.
+!         The tests were updated to 
+!           isolate database dependencies. 
+!         Fixed numerous minor bugs, 
+!           check ChangeLog if you're interested in details.
+!       
+!       Many thanks to Tim Bunce for 
+!         his numerous contributions and ideas. He is the architect of the Text-Query 
+!         and Text-Query-SQL modules, Eric Bohlman and Loic Dachary did the programming. 
+!         
+!       Thanks to Eric Bohlman for 
+!         his help on the Text-Query module. He was very busy but managed to spend 
+!         the time needed to release it. 
+!       There is not yet anything usable 
+!         for full text indexing but we keep working on it. The storage management 
+!         is now handled by the reiserfs file system thanks to Hans Reiser who is 
+!         working full time on this. Loic Dachary does his best to get something 
+!         working, if you're interested go to http://www.senga.org/mifluz/. 
+!       For some mysterious reason 
+!         CPAN lost track of Catalog name. In order to install catalog you should 
+!         use perl -MCPAN -e 'install Catalog::db'. Weird but temporary.
+!       Have fun !
+!        The Senga Team
+!         Ecila
+!         100 Av. du General Leclerc
+!         93 500 Pantin
+!         Tel: 33 1 56 96 09 80
+!         Fax: 33 1 56 96 09 81
+!         WEB: http://www.senga.org/
+!         Mail: senga@senga.org
+!       
+!     
+!   
+!   
+!      
+!     
+!       
+! 
+! [
+! Catalog |
+! webbase |
+! mifluz |
+! unac |
+! Search-Mifluz |
+! Text-Query |
+! uri |
+! Statistics |
+! News
+! ]
+! 
+! 
+!     
+!   
+! 
+! 
+! 
+  ";
+  
+! static char* longstr = " 
+! 
+! Senga - Catalog software
+! 
+! 
+! 
+! 
+! 
+! 
+!    
+!     
+!  
+! 
+!     
+!   
+!    
+!      
+!        
+! 
+!   
+!   
+!    senga.org
+!    
+! 
+!   
+! 
+! 
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+!    
+!     
+!   
+! 
+! 
+! 
+! 
+! 
+! December 28, 2000 
+!      
+!       January 27, 2000
+!       Catalog-1.02 
+!         is available. 
+!       
+!        The dmoz loading process has been dramatically simplified. It is
+!           now only available as a command. No more fancy web interface that
+! 	  confuses everyone. In addition the convert_dmoz script now generates
+! 	  text files that can be directly loaded into Catalog instead of the
+! 	  intermediate XML file. The whole loading process now takes from 
+! 	  one to two hours depending on your machine. It took around 10 hours
+! 	  with the previous version. 
+!        The -exclude option was added to convert_dmoz to get rid of 
+!           a whole branch of the catalog at load time. Typical usage would
+! 	  be convert_dmoz -exclude '^/Adult' -what content content.rdf.gz.
+!        A lot more sanity checks and repair have been added to deal with
+!           duplicates, category id conflicts and the like.
+!        Hopefully this new method will also be more understandable and 
+!           generate less traffic on the mailing list. There is room for 
+! 	  improvements and contributors are welcome. 
+!       
+!       A new set of software is available in the 
+!       download directory under the RedHat-6.1 section. These
+!       are the most up to date versions on which Catalog depends. Although the
+!       binaries depend on RedHat-6.1 the perl modules are source and can be
+!       used on any platform.
+!       
+!       September 7, 1999
+!       Catalog-1.01 
+!         is available. 
+!       This is a maintainance release.
+!       
+!         Various bug fixes. All easy
+! 	  to fix bugs have been fixed. Take a look at Bug Track to see what hasn't been fixed.
+!         The _PATHTEXT_ and _PATHFILE_ 
+! 	  tags syntax has been extended to specify a range of path component.
+!           
+!         Graham Barr added a recursive
+! 	  template feature for a catalog root page. This allows to show sub-categories
+! 	  of the root categories in the root page of a catalog.
+!           
+!       
+!       Don't hesitate to submit bugs
+!         or ideas to bug track. Hopefully the next version of Catalog will have
+! 	a fast full text indexing mechanism and I'll be able to implement new
+! 	functionalities.
+!         
+!       Have fun !
+!       July 3, 1999
+!       Catalog-1.00 
+!         is available. 
+!       This release includes PHP3 
+!         code to display a catalog. The author is Weston Bustraan (weston@infinityteldata.net). 
+!         The main motivation to jump directly to version 1.00 is to avoid version 
+!         number problems on CPAN. 
+!       July 2, 1999
+!       Catalog-0.19 
+!         is available. 
+!       This is a minor release. The 
+!         most noticeable addition is the new search mechanism.
+!       
+!         Searching : two search modes 
+!           are now available. AltaVista simple syntax and AltaVista advanced syntax. 
+!           Both use the Text-Query and Text-Query-SQL perl modules. 
+!         Dmoz loading is much more 
+!           fault tolerant. In addition it can handle compressed versions of content.rdf 
+!           and structure.rdf. The comments are now stored in text fields instead 
+!           of char(255).
+!         The template system was 
+!           extended with the pre_fill and post_fill parameters.
+!         Searching associated to 
+!           a catalog dumped to static pages is now possible using the 'static' 
+!           mode.
+!         Fixed two security weakness 
+!           in confedit and recursive cgi handling.
+!         Many sql queries have been 
+!           optimized.
+!         The configuration was changed 
+!           a bit to fix bugs and to isolate database dependencies.
+!         The tests were updated to 
+!           isolate database dependencies. 
+!         Fixed numerous minor bugs, 
+!           check ChangeLog if you're interested in details.
+!       
+!       Many thanks to Tim Bunce for 
+!         his numerous contributions and ideas. He is the architect of the Text-Query 
+!         and Text-Query-SQL modules, Eric Bohlman and Loic Dachary did the programming. 
+!         
+!       Thanks to Eric Bohlman for 
+!         his help on the Text-Query module. He was very busy but managed to spend 
+!         the time needed to release it. 
+!       There is not yet anything usable 
+!         for full text indexing but we keep working on it. The storage management 
+!         is now handled by the reiserfs file system thanks to Hans Reiser who is 
+!         working full time on this. Loic Dachary does his best to get something 
+!         working, if you're interested go to http://www.senga.org/mifluz/. 
+!       For some mysterious reason 
+!         CPAN lost track of Catalog name. In order to install catalog you should 
+!         use perl -MCPAN -e 'install Catalog::db'. Weird but temporary.
+!       Have fun !
+!        The Senga Team
+!         Ecila
+!         100 Av. du Général Leclerc
+!         93 500 Pantin
+!         Tel: 33 1 56 96 09 80
+!         Fax: 33 1 56 96 09 81
+!         WEB: http://www.senga.org/
+!         Mail: senga@senga.org
+!       
+!     
+!   
+!   
+!      
+!     
+!       
+! 
+! [
+! Catalog |
+! webbase |
+! mifluz |
+! unac |
+! Search-Mifluz |
+! Text-Query |
+! uri |
+! Statistics |
+! News
+! ]
+! 
+! 
+!     
+!   
+! 
+! 
+! 
+  ";
+  
+  int main() {
+--- 26,439 ----
+  
+  #include "unac.h"
+  
+! static char* longstr_expected = " \n\
+! \n\
+! Senga - Catalog software\n\
+! \n\
+! \n\
+! \n\
+! \n\
+! \n\
+! \n\
+!    \n\
+!     \n\
+!  \n\
+! \n\
+!     \n\
+!   \n\
+!    \n\
+!      \n\
+!        \n\
+! \n\
+!   \n\
+!   \n\
+!    senga.org\n\
+!    \n\
+! \n\
+!   \n\
+! \n\
+! \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+! \n\
+! \n\
+! \n\
+! \n\
+! \n\
+! December 28, 2000 \n\
+!      \n\
+!       January 27, 2000\n\
+!       Catalog-1.02 \n\
+!         is available. \n\
+!       \n\
+!        The dmoz loading process has been dramatically simplified. It is\n\
+!           now only available as a command. No more fancy web interface that\n\
+! 	  confuses everyone. In addition the convert_dmoz script now generates\n\
+! 	  text files that can be directly loaded into Catalog instead of the\n\
+! 	  intermediate XML file. The whole loading process now takes from \n\
+! 	  one to two hours depending on your machine. It took around 10 hours\n\
+! 	  with the previous version. \n\
+!        The -exclude option was added to convert_dmoz to get rid of \n\
+!           a whole branch of the catalog at load time. Typical usage would\n\
+! 	  be convert_dmoz -exclude '^/Adult' -what content content.rdf.gz.\n\
+!        A lot more sanity checks and repair have been added to deal with\n\
+!           duplicates, category id conflicts and the like.\n\
+!        Hopefully this new method will also be more understandable and \n\
+!           generate less traffic on the mailing list. There is room for \n\
+! 	  improvements and contributors are welcome. \n\
+!       \n\
+!       A new set of software is available in the \n\
+!       download directory under the RedHat-6.1 section. These\n\
+!       are the most up to date versions on which Catalog depends. Although the\n\
+!       binaries depend on RedHat-6.1 the perl modules are source and can be\n\
+!       used on any platform.\n\
+!       \n\
+!       September 7, 1999\n\
+!       Catalog-1.01 \n\
+!         is available. \n\
+!       This is a maintainance release.\n\
+!       \n\
+!         Various bug fixes. All easy\n\
+! 	  to fix bugs have been fixed. Take a look at Bug Track to see what hasn't been fixed.\n\
+!         The _PATHTEXT_ and _PATHFILE_ \n\
+! 	  tags syntax has been extended to specify a range of path component.\n\
+!           \n\
+!         Graham Barr added a recursive\n\
+! 	  template feature for a catalog root page. This allows to show sub-categories\n\
+! 	  of the root categories in the root page of a catalog.\n\
+!           \n\
+!       \n\
+!       Don't hesitate to submit bugs\n\
+!         or ideas to bug track. Hopefully the next version of Catalog will have\n\
+! 	a fast full text indexing mechanism and I'll be able to implement new\n\
+! 	functionalities.\n\
+!         \n\
+!       Have fun !\n\
+!       July 3, 1999\n\
+!       Catalog-1.00 \n\
+!         is available. \n\
+!       This release includes PHP3 \n\
+!         code to display a catalog. The author is Weston Bustraan (weston@infinityteldata.net). \n\
+!         The main motivation to jump directly to version 1.00 is to avoid version \n\
+!         number problems on CPAN. \n\
+!       July 2, 1999\n\
+!       Catalog-0.19 \n\
+!         is available. \n\
+!       This is a minor release. The \n\
+!         most noticeable addition is the new search mechanism.\n\
+!       \n\
+!         Searching : two search modes \n\
+!           are now available. AltaVista simple syntax and AltaVista advanced syntax. \n\
+!           Both use the Text-Query and Text-Query-SQL perl modules. \n\
+!         Dmoz loading is much more \n\
+!           fault tolerant. In addition it can handle compressed versions of content.rdf \n\
+!           and structure.rdf. The comments are now stored in text fields instead \n\
+!           of char(255).\n\
+!         The template system was \n\
+!           extended with the pre_fill and post_fill parameters.\n\
+!         Searching associated to \n\
+!           a catalog dumped to static pages is now possible using the 'static' \n\
+!           mode.\n\
+!         Fixed two security weakness \n\
+!           in confedit and recursive cgi handling.\n\
+!         Many sql queries have been \n\
+!           optimized.\n\
+!         The configuration was changed \n\
+!           a bit to fix bugs and to isolate database dependencies.\n\
+!         The tests were updated to \n\
+!           isolate database dependencies. \n\
+!         Fixed numerous minor bugs, \n\
+!           check ChangeLog if you're interested in details.\n\
+!       \n\
+!       Many thanks to Tim Bunce for \n\
+!         his numerous contributions and ideas. He is the architect of the Text-Query \n\
+!         and Text-Query-SQL modules, Eric Bohlman and Loic Dachary did the programming. \n\
+!         \n\
+!       Thanks to Eric Bohlman for \n\
+!         his help on the Text-Query module. He was very busy but managed to spend \n\
+!         the time needed to release it. \n\
+!       There is not yet anything usable \n\
+!         for full text indexing but we keep working on it. The storage management \n\
+!         is now handled by the reiserfs file system thanks to Hans Reiser who is \n\
+!         working full time on this. Loic Dachary does his best to get something \n\
+!         working, if you're interested go to http://www.senga.org/mifluz/. \n\
+!       For some mysterious reason \n\
+!         CPAN lost track of Catalog name. In order to install catalog you should \n\
+!         use perl -MCPAN -e 'install Catalog::db'. Weird but temporary.\n\
+!       Have fun !\n\
+!        The Senga Team\n\
+!         Ecila\n\
+!         100 Av. du General Leclerc\n\
+!         93 500 Pantin\n\
+!         Tel: 33 1 56 96 09 80\n\
+!         Fax: 33 1 56 96 09 81\n\
+!         WEB: http://www.senga.org/\n\
+!         Mail: senga@senga.org\n\
+!       \n\
+!     \n\
+!   \n\
+!   \n\
+!      \n\
+!     \n\
+!       \n\
+! \n\
+! [\n\
+! Catalog |\n\
+! webbase |\n\
+! mifluz |\n\
+! unac |\n\
+! Search-Mifluz |\n\
+! Text-Query |\n\
+! uri |\n\
+! Statistics |\n\
+! News\n\
+! ]\n\
+! \n\
+! \n\
+!     \n\
+!   \n\
+! \n\
+! \n\
+! \n\
+  ";
+  
+! static char* longstr = " \n\
+! \n\
+! Senga - Catalog software\n\
+! \n\
+! \n\
+! \n\
+! \n\
+! \n\
+! \n\
+!    \n\
+!     \n\
+!  \n\
+! \n\
+!     \n\
+!   \n\
+!    \n\
+!      \n\
+!        \n\
+! \n\
+!   \n\
+!   \n\
+!    senga.org\n\
+!    \n\
+! \n\
+!   \n\
+! \n\
+! \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+!    \n\
+!     \n\
+!   \n\
+! \n\
+! \n\
+! \n\
+! \n\
+! \n\
+! December 28, 2000 \n\
+!      \n\
+!       January 27, 2000\n\
+!       Catalog-1.02 \n\
+!         is available. \n\
+!       \n\
+!        The dmoz loading process has been dramatically simplified. It is\n\
+!           now only available as a command. No more fancy web interface that\n\
+! 	  confuses everyone. In addition the convert_dmoz script now generates\n\
+! 	  text files that can be directly loaded into Catalog instead of the\n\
+! 	  intermediate XML file. The whole loading process now takes from \n\
+! 	  one to two hours depending on your machine. It took around 10 hours\n\
+! 	  with the previous version. \n\
+!        The -exclude option was added to convert_dmoz to get rid of \n\
+!           a whole branch of the catalog at load time. Typical usage would\n\
+! 	  be convert_dmoz -exclude '^/Adult' -what content content.rdf.gz.\n\
+!        A lot more sanity checks and repair have been added to deal with\n\
+!           duplicates, category id conflicts and the like.\n\
+!        Hopefully this new method will also be more understandable and \n\
+!           generate less traffic on the mailing list. There is room for \n\
+! 	  improvements and contributors are welcome. \n\
+!       \n\
+!       A new set of software is available in the \n\
+!       download directory under the RedHat-6.1 section. These\n\
+!       are the most up to date versions on which Catalog depends. Although the\n\
+!       binaries depend on RedHat-6.1 the perl modules are source and can be\n\
+!       used on any platform.\n\
+!       \n\
+!       September 7, 1999\n\
+!       Catalog-1.01 \n\
+!         is available. \n\
+!       This is a maintainance release.\n\
+!       \n\
+!         Various bug fixes. All easy\n\
+! 	  to fix bugs have been fixed. Take a look at Bug Track to see what hasn't been fixed.\n\
+!         The _PATHTEXT_ and _PATHFILE_ \n\
+! 	  tags syntax has been extended to specify a range of path component.\n\
+!           \n\
+!         Graham Barr added a recursive\n\
+! 	  template feature for a catalog root page. This allows to show sub-categories\n\
+! 	  of the root categories in the root page of a catalog.\n\
+!           \n\
+!       \n\
+!       Don't hesitate to submit bugs\n\
+!         or ideas to bug track. Hopefully the next version of Catalog will have\n\
+! 	a fast full text indexing mechanism and I'll be able to implement new\n\
+! 	functionalities.\n\
+!         \n\
+!       Have fun !\n\
+!       July 3, 1999\n\
+!       Catalog-1.00 \n\
+!         is available. \n\
+!       This release includes PHP3 \n\
+!         code to display a catalog. The author is Weston Bustraan (weston@infinityteldata.net). \n\
+!         The main motivation to jump directly to version 1.00 is to avoid version \n\
+!         number problems on CPAN. \n\
+!       July 2, 1999\n\
+!       Catalog-0.19 \n\
+!         is available. \n\
+!       This is a minor release. The \n\
+!         most noticeable addition is the new search mechanism.\n\
+!       \n\
+!         Searching : two search modes \n\
+!           are now available. AltaVista simple syntax and AltaVista advanced syntax. \n\
+!           Both use the Text-Query and Text-Query-SQL perl modules. \n\
+!         Dmoz loading is much more \n\
+!           fault tolerant. In addition it can handle compressed versions of content.rdf \n\
+!           and structure.rdf. The comments are now stored in text fields instead \n\
+!           of char(255).\n\
+!         The template system was \n\
+!           extended with the pre_fill and post_fill parameters.\n\
+!         Searching associated to \n\
+!           a catalog dumped to static pages is now possible using the 'static' \n\
+!           mode.\n\
+!         Fixed two security weakness \n\
+!           in confedit and recursive cgi handling.\n\
+!         Many sql queries have been \n\
+!           optimized.\n\
+!         The configuration was changed \n\
+!           a bit to fix bugs and to isolate database dependencies.\n\
+!         The tests were updated to \n\
+!           isolate database dependencies. \n\
+!         Fixed numerous minor bugs, \n\
+!           check ChangeLog if you're interested in details.\n\
+!       \n\
+!       Many thanks to Tim Bunce for \n\
+!         his numerous contributions and ideas. He is the architect of the Text-Query \n\
+!         and Text-Query-SQL modules, Eric Bohlman and Loic Dachary did the programming. \n\
+!         \n\
+!       Thanks to Eric Bohlman for \n\
+!         his help on the Text-Query module. He was very busy but managed to spend \n\
+!         the time needed to release it. \n\
+!       There is not yet anything usable \n\
+!         for full text indexing but we keep working on it. The storage management \n\
+!         is now handled by the reiserfs file system thanks to Hans Reiser who is \n\
+!         working full time on this. Loic Dachary does his best to get something \n\
+!         working, if you're interested go to http://www.senga.org/mifluz/. \n\
+!       For some mysterious reason \n\
+!         CPAN lost track of Catalog name. In order to install catalog you should \n\
+!         use perl -MCPAN -e 'install Catalog::db'. Weird but temporary.\n\
+!       Have fun !\n\
+!        The Senga Team\n\
+!         Ecila\n\
+!         100 Av. du Général Leclerc\n\
+!         93 500 Pantin\n\
+!         Tel: 33 1 56 96 09 80\n\
+!         Fax: 33 1 56 96 09 81\n\
+!         WEB: http://www.senga.org/\n\
+!         Mail: senga@senga.org\n\
+!       \n\
+!     \n\
+!   \n\
+!   \n\
+!      \n\
+!     \n\
+!       \n\
+! \n\
+! [\n\
+! Catalog |\n\
+! webbase |\n\
+! mifluz |\n\
+! unac |\n\
+! Search-Mifluz |\n\
+! Text-Query |\n\
+! uri |\n\
+! Statistics |\n\
+! News\n\
+! ]\n\
+! \n\
+! \n\
+!     \n\
+!   \n\
+! \n\
+! \n\
+! \n\
+  ";
+  
+  int main() {
