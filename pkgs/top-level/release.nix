@@ -354,7 +354,6 @@ with (import ./release-lib.nix);
   };
 
   firefox36Pkgs.firefox = linux;
-  firefox12Pkgs.firefox = linux;
   firefox15Pkgs.firefox = linux;
   firefox16Pkgs.firefox = linux;
 
