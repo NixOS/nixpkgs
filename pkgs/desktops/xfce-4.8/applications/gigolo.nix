@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python gettext intltool gtk pkgconfig gvfs];
 
+  preConfigure = ''
+    sed -i "waf" -e "1 s^.*/env[ ]*python^#!${python}/bin/python^";
+  '';
+
   meta = {
     homepage = http://goodies.xfce.org/projects/applications/gigolo;
     description = "Gigolo is a frontend to easily manage connections to remote filesystems";
