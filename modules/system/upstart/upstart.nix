@@ -94,7 +94,9 @@ let
             if job.daemonType == "none" then { } else
             throw "invalid daemon type `${job.daemonType}'")
         // optionalAttrs (!job.task && job.respawn)
-          { Restart = "always"; };
+          { Restart = "always"; }
+        // optionalAttrs job.task
+          { Type = "oneshot"; RemainAfterExit = false; };
     };
 
 
