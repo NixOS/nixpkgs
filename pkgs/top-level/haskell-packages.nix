@@ -1083,6 +1083,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   lambdabotUtils = callPackage ../development/libraries/haskell/lambdabot-utils {};
 
+  lambdacubeEngine = callPackage ../development/libraries/haskell/lambdacube-engine {};
+
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
@@ -1645,6 +1647,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   vcsRevision = callPackage ../development/libraries/haskell/vcs-revision {};
 
   Vec = callPackage ../development/libraries/haskell/Vec {};
+
+  vect = callPackage ../development/libraries/haskell/vect {};
 
   vector_0_9_1 = callPackage ../development/libraries/haskell/vector/0.9.1.nix {};
   vector_0_10 = callPackage ../development/libraries/haskell/vector/0.10.nix  {};
