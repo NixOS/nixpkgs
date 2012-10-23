@@ -16,6 +16,18 @@ let
       '';
     };
 
+    networking.dnsSingleRequest = pkgs.lib.mkOption {
+      default = false;
+      description = ''
+        Recent versions of glibc will issue both ipv4 (A) and ipv6 (AAAA)
+        address queries at the same time, from the same port. Sometimes upstream
+        routers will systemically drop the ipv4 queries. The symptom of this problem is
+        that 'getent hosts example.com' only returns ipv6 (or perhaps only ipv4) addresses. The
+        workaround for this is to specify the option 'single-request' in
+        /etc/resolve.conf. This option enables that. 
+      '';
+    };
+
   };
 
 in
@@ -60,6 +72,9 @@ in
             # Invalidate the nscd cache whenever resolv.conf is
             # regenerated.
             libc_restart='${pkgs.upstart}/sbin/start invalidate-nscd'
+          '' + optionalString cfg.dnsSingleRequest ''
+            # only send one DNS request at a time
+            resolv_conf_options='single-request'
           '' + optionalString config.services.bind.enable ''
             # This hosts runs a full-blown DNS resolver.
             name_servers='127.0.0.1'
