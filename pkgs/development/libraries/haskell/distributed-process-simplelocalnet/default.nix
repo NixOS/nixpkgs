@@ -5,8 +5,10 @@
 
 cabal.mkDerivation (self: {
   pname = "distributed-process-simplelocalnet";
-  version = "0.2.0.6";
-  sha256 = "1mgsmxxy1fcbxh8p82078c70fj7iv6wr8g47r4d0c3jwz84xya57";
+  version = "0.2.0.7";
+  sha256 = "0jxbxacvdg4pf65s6r48nck45g8dfsarks3m2pdn73gjn4cd81c7";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
     binary dataAccessor distributedProcess network networkMulticast
     networkTransport networkTransportTcp transformers
