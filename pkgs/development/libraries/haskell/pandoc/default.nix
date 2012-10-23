@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.9.4.2";
-  sha256 = "1zr2qx6bimyhzia5maqpb454hgdwjvgs234mcki4f1z3dgbq0lsk";
+  version = "1.9.4.5";
+  sha256 = "05k8i537756m07xlb6kgshpfxa4sp2jxidb1c8m72ilpai13r6fb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -17,7 +17,6 @@ cabal.mkDerivation (self: {
     time utf8String xml zipArchive zlib
   ];
   configureFlags = "-fblaze_html_0_5";
-  jailbreak = true;
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Conversion between markup formats";
