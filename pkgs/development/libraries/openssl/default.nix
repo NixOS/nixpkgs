@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 
 let
-  name = "openssl-1.0.0j";
+  name = "openssl-1.0.1c";
 
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha1 = "31e6e8bbf1de2f59fbd53382c34214887ccc1318";
+    sha256 = "1gjy6a7d8nszi9wq8jdzx3cffn0nss23h3cw2ywlw4cb9v6v77ia";
   };
 
   patches = patchesCross false;
