@@ -934,7 +934,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HDBCPostgresql = callPackage ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {};
 
-  HDBCSqlite = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {};
+  HDBCSqlite3 = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {};
 
   heist = callPackage ../development/libraries/haskell/heist {};
 
