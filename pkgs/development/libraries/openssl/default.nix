@@ -29,7 +29,7 @@ let
         ]
 
     ++ stdenv.lib.optional stdenv.isDarwin ./darwin-arch.patch;
-  
+
 in
 
 stdenv.mkDerivation {
