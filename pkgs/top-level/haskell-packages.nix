@@ -724,6 +724,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   editline = callPackage ../development/libraries/haskell/editline {};
 
+  elerea = callPackage ../development/libraries/haskell/elerea {};
+
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
 
   enumerator = callPackage ../development/libraries/haskell/enumerator {};
