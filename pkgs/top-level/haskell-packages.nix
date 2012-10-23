@@ -120,7 +120,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
-    async        = self.async_2_0_1_3;          # 7.6 ok
+    async        = self.async_2_0_1_4;          # 7.6 ok
     cgi          = self.cgi_3001_1_8_3;         # 7.6 ok
     fgl          = self.fgl_5_4_2_4;            # 7.6 ok
     GLUT         = self.GLUT_2_3_0_0;           # 7.6 ok
@@ -155,7 +155,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellPlatformArgs_2012_4_0_0 = self : {
     inherit (self) cabal ghc;
-    async        = self.async_2_0_1_3;
+    async        = self.async_2_0_1_4;
     cgi          = self.cgi_3001_1_7_4;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_1_2_1;
@@ -462,8 +462,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
 
-  async_2_0_1_3 = callPackage ../development/libraries/haskell/async/2.0.1.3.nix {};
-  async = self.async_2_0_1_3;
+  async_2_0_1_4 = callPackage ../development/libraries/haskell/async/2.0.1.4.nix {};
+  async = self.async_2_0_1_4;
 
   attempt = callPackage ../development/libraries/haskell/attempt {};
 
