@@ -5830,7 +5830,7 @@ let
 
     broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
-    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
+    kernelHeaders = linuxHeaders;
 
     nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
