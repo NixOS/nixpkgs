@@ -2937,11 +2937,7 @@ let
     cross = assert crossSystem != null; crossSystem;
   });
 
-  bison = bison26;
-
-  bison1875 = callPackage ../development/tools/parsing/bison/bison-1.875.nix { };
-
-  bison26 = callPackage ../development/tools/parsing/bison/bison-2.6.nix { };
+  bison = callPackage ../development/tools/parsing/bison { };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted;
