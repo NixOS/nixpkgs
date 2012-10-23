@@ -29,6 +29,8 @@ let
                  concatStringsSep " " [ domain type item value ])
                 limits));
 
+  motd = pkgs.writeText "motd" config.users.motd;
+
   makePAMService =
     { name
     , # If set, root doesn't need to authenticate (e.g. for the "chsh"
@@ -58,6 +60,8 @@ let
       allowNullPassword ? false
     , # The limits, as per limits.conf(5).
       limits ? config.security.pam.loginLimits
+    , # Whether to show the message of the day.
+      showMotd ? false
     }:
 
     { source = pkgs.writeText "${name}.pam"
@@ -110,6 +114,8 @@ let
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
           ${optionalString (limits != [])
               "session required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf limits}"}
+          ${optionalString (showMotd && config.users.motd != null)
+              "session optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}"}
         '';
       target = "pam.d/${name}";
     };
@@ -199,6 +205,13 @@ in
           This allows machines to exclusively use SSH keys instead of
           passwords.
         '';
+    };
+
+    users.motd = mkOption {
+      default = null;
+      example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
+      type = types.nullOr types.string;
+      description = "Message of the day shown to users when they log in.";
     };
 
   };

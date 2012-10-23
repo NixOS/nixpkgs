@@ -358,7 +358,7 @@ in
 
     networking.firewall.allowedTCPPorts = cfg.ports;
 
-    security.pam.services = optional cfg.usePAM { name = "sshd"; startSession = true; };
+    security.pam.services = optional cfg.usePAM { name = "sshd"; startSession = true; showMotd = true; };
 
     services.openssh.extraConfig =
       ''
@@ -390,10 +390,13 @@ in
         GatewayPorts ${cfg.gatewayPorts}
         PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
         ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
+
+        PrintMotd no # handled by pam_motd
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}];
+
   };
 
 }
