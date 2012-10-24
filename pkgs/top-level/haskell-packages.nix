@@ -155,13 +155,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellPlatformArgs_2012_4_0_0 = self : {
     inherit (self) cabal ghc;
-    async        = self.async_2_0_1_4;
+    async        = self.async_2_0_1_3;
     cgi          = self.cgi_3001_1_7_4;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_1_2_1;
     haskellSrc   = self.haskellSrc_1_0_1_5;
     html         = self.html_1_0_1_2;
-    HTTP         = self.HTTP_4000_2_6;
+    HTTP         = self.HTTP_4000_2_5;
     HUnit        = self.HUnit_1_2_5_1;
     mtl          = self.mtl_2_1_2;
     network      = self.network_2_3_1_0;
@@ -461,6 +461,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
 
+  async_2_0_1_3 = callPackage ../development/libraries/haskell/async/2.0.1.3.nix {};
   async_2_0_1_4 = callPackage ../development/libraries/haskell/async/2.0.1.4.nix {};
   async = self.async_2_0_1_4;
 
@@ -914,6 +915,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_2_1 = callPackage ../development/libraries/haskell/HTTP/4000.2.1.nix {};
   HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
   HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
+  HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
   HTTP_4000_2_6 = callPackage ../development/libraries/haskell/HTTP/4000.2.6.nix {};
   HTTP = self.HTTP_4000_2_6;
 
