@@ -41,7 +41,7 @@
       $walled->succeed("ping -c 1 attacker >&2");
 
       # If we stop the firewall, then connections should succeed.
-      $walled->succeed("stop firewall");
+      $walled->stopJob("firewall");
       $attacker->succeed("curl -v http://walled/ >&2");
     '';
 

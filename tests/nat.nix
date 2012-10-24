@@ -63,7 +63,7 @@
       $router->succeed("ping -c 1 client >&2");
 
       # If we turn off NAT, the client shouldn't be able to reach the server.
-      $router->succeed("stop nat");
+      $router->stopJob("nat");
       $client->fail("curl --fail --connect-timeout 5 http://server/ >&2");
       $client->fail("ping -c 1 server >&2");
 
