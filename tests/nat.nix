@@ -41,12 +41,12 @@
 
       # The router should have access to the server.
       $server->waitForJob("httpd");
-      $router->waitForJob("network-interfaces");
+      $router->waitForJob("network.target");
       $router->succeed("curl --fail http://server/ >&2");
 
       # The client should be also able to connect via the NAT router.
       $router->waitForJob("nat");
-      $client->waitForJob("network-interfaces");
+      $client->waitForJob("network.target");
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
 

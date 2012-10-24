@@ -22,13 +22,13 @@ with pkgs;
     '' startAll;
 
        # mDNS.
-       $one->waitForJob("network-interfaces");
+       $one->waitForJob("network.target");
        $one->mustSucceed("avahi-resolve-host-name one.local | tee out >&2");
        $one->mustSucceed("test \"`cut -f1 < out`\" = one.local");
        $one->mustSucceed("avahi-resolve-host-name two.local | tee out >&2");
        $one->mustSucceed("test \"`cut -f1 < out`\" = two.local");
 
-       $two->waitForJob("network-interfaces");
+       $two->waitForJob("network.target");
        $two->mustSucceed("avahi-resolve-host-name one.local | tee out >&2");
        $two->mustSucceed("test \"`cut -f1 < out`\" = one.local");
        $two->mustSucceed("avahi-resolve-host-name two.local | tee out >&2");

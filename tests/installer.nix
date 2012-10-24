@@ -169,13 +169,12 @@ let
       my $machine = createMachine({ hda => "harddisk", hdaInterface => "${iface}" });
 
       # Did /boot get mounted, if appropriate?
-      # !!! There is currently no good way to wait for the
-      # `filesystems' task to finish.
-      $machine->waitForFile("/boot/grub");
+      $machine->waitForUnit("local-fs.target");
+      $machine->succeed("test -e /boot/grub");
 
       # Did the swap device get activated?
-      # !!! Idem.
-      $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
+      $machine->waitForUnit("swap.target");
+      $machine->succeed("cat /proc/swaps | grep -q /dev");
 
       $machine->mustSucceed("nix-env -i coreutils >&2");
       $machine->mustSucceed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
@@ -188,7 +187,7 @@ let
       # And just to be sure, check that the machine still boots after
       # "nixos-rebuild switch".
       my $machine = createMachine({ hda => "harddisk", hdaInterface => "${iface}" });
-      $machine->waitForJob("network-interfaces");
+      $machine->waitForJob("network.target");
       $machine->shutdown;
     '';
 

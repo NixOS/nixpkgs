@@ -27,7 +27,7 @@
 
       $walled->waitForJob("firewall");
       $walled->waitForJob("httpd");
-      $attacker->waitForJob("network-interfaces");
+      $attacker->waitForJob("network.target");
 
       # Local connections should still work.
       $walled->succeed("curl -v http://localhost/ >&2");

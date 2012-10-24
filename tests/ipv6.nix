@@ -35,8 +35,8 @@
 
       startAll;
 
-      $client->waitForJob("network-interfaces");
-      $server->waitForJob("network-interfaces");
+      $client->waitForJob("network.target");
+      $server->waitForJob("network.target");
 
       # Wait until the given interface has a non-tentative address of
       # the desired scope (i.e. has completed Duplicate Address

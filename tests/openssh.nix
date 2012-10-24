@@ -29,7 +29,7 @@
     $client->copyFileFromHost("key", "/root/.ssh/id_dsa");
     $client->mustSucceed("chmod 600 /root/.ssh/id_dsa");
 
-    $client->waitForJob("network-interfaces");
+    $client->waitForJob("network.target");
     $client->mustSucceed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2");
   '';
 }
