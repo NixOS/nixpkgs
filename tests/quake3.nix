@@ -45,7 +45,7 @@ rec {
     ''
       startAll;
 
-      $server->waitForJob("quake3-server");
+      $server->waitForUnit("quake3-server");
       $client1->waitForX;
       $client2->waitForX;
 

@@ -64,7 +64,7 @@ in
       startAll;
 
       # Enable NAT on the router and start miniupnpd.
-      $router->waitForJob("nat");
+      $router->waitForUnit("nat");
       $router->succeed(
           "iptables -t nat -N MINIUPNPD",
           "iptables -t nat -A PREROUTING -i eth1 -j MINIUPNPD",
@@ -79,7 +79,7 @@ in
       $tracker->succeed("chmod 644 /tmp/test.torrent");
 
       # Start the tracker.  !!! use a less crappy tracker
-      $tracker->waitForJob("network.target");
+      $tracker->waitForUnit("network.target");
       $tracker->succeed("bittorrent-tracker --port 6969 --dfile /tmp/dstate >&2 &");
       $tracker->waitForOpenPort(6969);
 
@@ -87,8 +87,8 @@ in
       my $pid = $tracker->succeed("transmission-cli /tmp/test.torrent -M -w /tmp/data >&2 & echo \$!");
 
       # Now we should be able to download from the client behind the NAT.
-      $tracker->waitForJob("httpd");
-      $client1->waitForJob("network.target");
+      $tracker->waitForUnit("httpd");
+      $client1->waitForUnit("network.target");
       $client1->succeed("transmission-cli http://tracker/test.torrent -w /tmp >&2 &");
       $client1->waitForFile("/tmp/test.tar.bz2");
       $client1->succeed("cmp /tmp/test.tar.bz2 ${file}");
@@ -98,7 +98,7 @@ in
 
       # Now download from the second client.  This can only succeed if
       # the first client created a NAT hole in the router.
-      $client2->waitForJob("network.target");
+      $client2->waitForUnit("network.target");
       $client2->succeed("transmission-cli http://tracker/test.torrent -M -w /tmp >&2 &");
       $client2->waitForFile("/tmp/test.tar.bz2");
       $client2->succeed("cmp /tmp/test.tar.bz2 ${file}");

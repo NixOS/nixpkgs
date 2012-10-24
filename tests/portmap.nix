@@ -11,7 +11,7 @@
     ''
        # The `portmap' service must be registered once for TCP and once for
        # UDP.
-       $machine->mustSucceed("test `rpcinfo -p | grep portmapper | wc -l` -eq 2");
+       $machine->succeed("test `rpcinfo -p | grep portmapper | wc -l` -eq 2");
     '';
 
 }

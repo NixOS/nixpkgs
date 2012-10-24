@@ -31,7 +31,7 @@
       $machine->waitForWindow(qr/plasma-desktop/);
 
       # Check that logging in has given the user ownership of devices.
-      $machine->mustSucceed("getfacl /dev/snd/timer | grep -q alice");
+      $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
 
       $machine->execute("su - alice -c 'DISPLAY=:0.0 kwrite /var/log/messages &'");
       $machine->execute("su - alice -c 'DISPLAY=:0.0 konqueror http://localhost/ &'");

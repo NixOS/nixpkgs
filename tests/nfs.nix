@@ -34,16 +34,16 @@ in
 
   testScript =
     ''
-      $server->waitForJob("nfsd");
-      $server->waitForJob("network.target");
+      $server->waitForUnit("nfsd");
+      $server->waitForUnit("network.target");
 
       startAll;
 
-      $client1->waitForJob("data.mount");
+      $client1->waitForUnit("data.mount");
       $client1->succeed("echo bla > /data/foo");
       $server->succeed("test -e /data/foo");
 
-      $client2->waitForJob("data.mount");
+      $client2->waitForUnit("data.mount");
       $client2->succeed("echo bla > /data/bar");
       $server->succeed("test -e /data/bar");
 
@@ -67,7 +67,7 @@ in
       $client2->waitForFile("locked");
 
       # Test whether locks survive a reboot of the server.
-      $client1->waitForJob("data.mount");
+      $client1->waitForUnit("data.mount");
       $server->shutdown;
       $server->start;
       $client1->succeed("touch /data/xyzzy");

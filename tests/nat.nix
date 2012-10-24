@@ -40,18 +40,18 @@
       startAll;
 
       # The router should have access to the server.
-      $server->waitForJob("httpd");
-      $router->waitForJob("network.target");
+      $server->waitForUnit("httpd");
+      $router->waitForUnit("network.target");
       $router->succeed("curl --fail http://server/ >&2");
 
       # The client should be also able to connect via the NAT router.
-      $router->waitForJob("nat");
-      $client->waitForJob("network.target");
+      $router->waitForUnit("nat");
+      $client->waitForUnit("network.target");
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
 
       # Test whether passive FTP works.
-      $server->waitForJob("vsftpd");
+      $server->waitForUnit("vsftpd");
       $server->succeed("echo Hello World > /home/ftp/foo.txt");
       $client->succeed("curl -v ftp://server/foo.txt >&2");
 

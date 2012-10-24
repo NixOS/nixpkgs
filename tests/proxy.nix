@@ -62,33 +62,33 @@ in
     ''
       startAll;
 
-      $proxy->waitForJob("httpd");
-      $backend1->waitForJob("httpd");
-      $backend2->waitForJob("httpd");
+      $proxy->waitForUnit("httpd");
+      $backend1->waitForUnit("httpd");
+      $backend2->waitForUnit("httpd");
 
       # With the back-ends up, the proxy should work.
-      $client->mustSucceed("curl --fail http://proxy/");
+      $client->succeed("curl --fail http://proxy/");
 
-      $client->mustSucceed("curl --fail http://proxy/server-status");
+      $client->succeed("curl --fail http://proxy/server-status");
 
       # Block the first back-end.
       $backend1->block;
 
       # The proxy should still work.
-      $client->mustSucceed("curl --fail http://proxy/");
+      $client->succeed("curl --fail http://proxy/");
 
-      $client->mustSucceed("curl --fail http://proxy/");
+      $client->succeed("curl --fail http://proxy/");
 
       # Block the second back-end.
       $backend2->block;
 
       # Now the proxy should fail as well.
-      $client->mustFail("curl --fail http://proxy/");
+      $client->fail("curl --fail http://proxy/");
 
       # But if the second back-end comes back, the proxy should start
       # working again.
       $backend2->unblock;
-      $client->mustSucceed("curl --fail http://proxy/");
+      $client->succeed("curl --fail http://proxy/");
     '';
 
 }
