@@ -954,9 +954,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hjsmin = callPackage ../development/libraries/haskell/hjsmin {};
 
-  hledger = callPackage ../development/libraries/haskell/hledger {
-    haskeline = self.haskeline_0_6_4_7;
-  };
+  hledger = callPackage ../development/libraries/haskell/hledger {};
   hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
   hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
