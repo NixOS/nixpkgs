@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = true;
-  enableParallelBuilding = true;
 
   meta = {
     homepage = "http://www.gnu.org/software/gprolog/";
