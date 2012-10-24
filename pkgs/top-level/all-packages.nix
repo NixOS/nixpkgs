@@ -5088,7 +5088,8 @@ let
     static = true;
   }));
 
-  zeromq = callPackage ../development/libraries/zeromq {};
+  zeromq2 = callPackage ../development/libraries/zeromq/2.x.nix {};
+  zeromq3 = callPackage ../development/libraries/zeromq/3.x.nix {};
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
