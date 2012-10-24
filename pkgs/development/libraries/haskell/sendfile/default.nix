@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "sendfile";
-  version = "0.7.6";
-  sha256 = "0wqbnr07s3g7f6p4x27ips9nzjjz1ii5hw1q54i31g40jzv8rs7z";
+  version = "0.7.7";
+  sha256 = "0pwzgmgc87xms4r7pqymq56qgi601pk195kj62rll05qip6mrba0";
   buildDepends = [ network ];
   meta = {
-    homepage = "http://patch-tag.com/r/mae/sendfile";
+    homepage = "http://hub.darcs.net/stepcut/sendfile";
     description = "A portable sendfile library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

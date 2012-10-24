@@ -88,14 +88,6 @@ let
     pre23 = versionOlder sourceInfo.version "23.0.0.0";
   in optional pre23 ./enable_seccomp.patch;
 
-  maybeBpfTemporaryFix = let
-    patch = fetchurl {
-      url = "https://chromiumcodereview.appspot.com/download/issue11073003_6001_7001.diff";
-      sha256 = "bf61871cdaa8fea27ce15482a17048f67b426a55813c3832f9bd39ec47a9eb06";
-    };
-    needPatch = !versionOlder sourceInfo.version "23.0.1271.0";
-  in optional needPatch patch;
-
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
   packageName = "chromium";
@@ -129,8 +121,7 @@ in stdenv.mkDerivation rec {
 
   patches = optional cfg.cups ./cups_allow_deprecated.patch
          ++ optional cfg.pulseaudio ./pulseaudio_array_bounds.patch
-         ++ maybeSeccompPatch
-         ++ maybeBpfTemporaryFix;
+         ++ maybeSeccompPatch;
 
   postPatch = optionalString cfg.openssl ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl

@@ -67,6 +67,8 @@ rec {
     inherit (pkgs.gnome) vte;
   };
 
+  gigolo = callPackage ./applications/gigolo.nix { };
+
   mousepad = callPackage ./applications/mousepad.nix { };
 
   ristretto = callPackage ./applications/ristretto.nix { };
@@ -75,9 +77,16 @@ rec {
 
   xfce4mixer = callPackage ./applications/xfce4-mixer.nix { };
 
+  xfce4_taskmanager = callPackage ./applications/xfce4-taskmanager.nix { };
+
   
   #### ART
 
   xfce4icontheme = callPackage ./art/xfce4-icon-theme.nix { };
+
+  #### PANEL PLUGINS
+  
+  xfce4_systemload_plugin = callPackage ./panel-plugins/xfce4-systemload-plugin.nix {};
+  xfce4_cpufreq_plugin = callPackage ./panel-plugins/xfce4-cpufreq-plugin.nix {};
   
 }

@@ -120,13 +120,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
-    async        = self.async_2_0_1_3;          # 7.6 ok
+    async        = self.async_2_0_1_4;          # 7.6 ok
     cgi          = self.cgi_3001_1_8_3;         # 7.6 ok
     fgl          = self.fgl_5_4_2_4;            # 7.6 ok
     GLUT         = self.GLUT_2_3_0_0;           # 7.6 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
     html         = self.html_1_0_1_2;           # 7.6 ok
-    HTTP         = self.HTTP_4000_2_5;          # 7.6 ok
+    HTTP         = self.HTTP_4000_2_6;          # 7.6 ok
     HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
     network      = self.network_2_4_0_1;        # 7.6 ok
@@ -155,13 +155,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   haskellPlatformArgs_2012_4_0_0 = self : {
     inherit (self) cabal ghc;
-    async        = self.async_2_0_1_3;
+    async        = self.async_2_0_1_4;
     cgi          = self.cgi_3001_1_7_4;
     fgl          = self.fgl_5_4_2_4;
     GLUT         = self.GLUT_2_1_2_1;
     haskellSrc   = self.haskellSrc_1_0_1_5;
     html         = self.html_1_0_1_2;
-    HTTP         = self.HTTP_4000_2_5;
+    HTTP         = self.HTTP_4000_2_6;
     HUnit        = self.HUnit_1_2_5_1;
     mtl          = self.mtl_2_1_2;
     network      = self.network_2_3_1_0;
@@ -429,7 +429,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Agda = callPackage ../development/libraries/haskell/Agda {
     haskellSrcExts = self.haskellSrcExts_1_11_1;
-    haskeline = self.haskeline_0_6_4_7;
   };
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
@@ -462,8 +461,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
 
-  async_2_0_1_3 = callPackage ../development/libraries/haskell/async/2.0.1.3.nix {};
-  async = self.async_2_0_1_3;
+  async_2_0_1_4 = callPackage ../development/libraries/haskell/async/2.0.1.4.nix {};
+  async = self.async_2_0_1_4;
 
   attempt = callPackage ../development/libraries/haskell/attempt {};
 
@@ -724,6 +723,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   editline = callPackage ../development/libraries/haskell/editline {};
 
+  elerea = callPackage ../development/libraries/haskell/elerea {};
+
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
 
   enumerator = callPackage ../development/libraries/haskell/enumerator {};
@@ -913,8 +914,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_2_1 = callPackage ../development/libraries/haskell/HTTP/4000.2.1.nix {};
   HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
   HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
-  HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
-  HTTP = self.HTTP_4000_2_5;
+  HTTP_4000_2_6 = callPackage ../development/libraries/haskell/HTTP/4000.2.6.nix {};
+  HTTP = self.HTTP_4000_2_6;
 
   hackageDb = callPackage ../development/libraries/haskell/hackage-db {};
 
@@ -934,7 +935,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HDBCPostgresql = callPackage ../development/libraries/haskell/HDBC/HDBC-postgresql.nix {};
 
-  HDBCSqlite = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {};
+  HDBCSqlite3 = callPackage ../development/libraries/haskell/HDBC/HDBC-sqlite3.nix {};
 
   heist = callPackage ../development/libraries/haskell/heist {};
 
@@ -952,9 +953,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hjsmin = callPackage ../development/libraries/haskell/hjsmin {};
 
-  hledger = callPackage ../development/libraries/haskell/hledger {
-    haskeline = self.haskeline_0_6_4_7;
-  };
+  hledger = callPackage ../development/libraries/haskell/hledger {};
   hledgerLib = callPackage ../development/libraries/haskell/hledger-lib {};
   hledgerInterest = callPackage ../applications/office/hledger-interest {};
   hledgerWeb = callPackage ../development/libraries/haskell/hledger-web {};
@@ -1080,6 +1079,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   lambdabot = callPackage ../development/libraries/haskell/lambdabot {};
 
   lambdabotUtils = callPackage ../development/libraries/haskell/lambdabot-utils {};
+
+  lambdacubeEngine = callPackage ../development/libraries/haskell/lambdacube-engine {};
 
   largeword = callPackage ../development/libraries/haskell/largeword {};
 
@@ -1645,6 +1646,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   vcsRevision = callPackage ../development/libraries/haskell/vcs-revision {};
 
   Vec = callPackage ../development/libraries/haskell/Vec {};
+
+  vect = callPackage ../development/libraries/haskell/vect {};
 
   vector_0_9_1 = callPackage ../development/libraries/haskell/vector/0.9.1.nix {};
   vector_0_10 = callPackage ../development/libraries/haskell/vector/0.10.nix  {};

@@ -4,13 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "hledger-lib";
-  version = "0.18.2";
-  sha256 = "0lcs58bdix4m7sslrdi38rqw5x5fb4ip0n5is0phxdrbp0nggd4z";
+  version = "0.19";
+  sha256 = "1kbjal838b3k0rmvdrndmyjngvyfwpmzh6y8kir4l2nf31jxwjbs";
   buildDepends = [
     cmdargs csv filepath HUnit mtl parsec regexpr safe shakespeareText
     split time transformers utf8String
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://hledger.org";
     description = "Core data types, parsers and utilities for the hledger accounting tool";

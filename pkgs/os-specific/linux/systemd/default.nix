@@ -6,17 +6,16 @@
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-194";
+  name = "systemd-195";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "0cgnnl6kqaz3als5y9g8jvsvbs4c8ccp0vl4s1g8rwk69w2cwxd2";
+    sha256 = "00v3haymdxhjk71pqp17irw9pm5ivfvz35ibvw41v5zdhj5il179";
   };
 
   patches =
     [ ./reexec.patch
       ./ignore-duplicates.patch
-      ./fix-device-aliases.patch
       ./crypt-devices-are-ready.patch
     ];
 
@@ -68,7 +67,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include";
 
-  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc";
+  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc sysvinitdir=$(TMPDIR)/etc/init.d";
 
   # Get rid of configuration-specific data.
   postInstall =
