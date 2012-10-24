@@ -1761,7 +1761,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yst = callPackage ../development/libraries/haskell/yst {};
 
-  zeromqHaskell = callPackage ../development/libraries/haskell/zeromq-haskell {};
+  zeromqHaskell = callPackage ../development/libraries/haskell/zeromq-haskell { zeromq = pkgs.zeromq2; };
+
+  zeromq3Haskell = callPackage ../development/libraries/haskell/zeromq3-haskell { zeromq = pkgs.zeromq3; };
 
   zipArchive = callPackage ../development/libraries/haskell/zip-archive {};
 
