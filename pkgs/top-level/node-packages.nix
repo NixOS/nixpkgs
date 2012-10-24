@@ -327,6 +327,19 @@ let self = {
     ];
   };
 
+  "escape-html" = self."escape-html-0.0.1";
+
+  "escape-html-0.0.1" = self.buildNodePackage rec {
+    name = "escape-html-0.0.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/escape-html/-/${name}.tgz";
+      sha256 = "03c24a492f80659c25f788809ae64277408a4c12594cff62f89db4b3259c6b58";
+    };
+    deps = [
+
+    ];
+  };
+
   "eyes" = self."eyes->=0.1.6";
 
   "eyes->=0.1.6" = self.buildNodePackage rec {
