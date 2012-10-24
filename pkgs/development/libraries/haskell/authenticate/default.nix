@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "authenticate";
-  version = "1.3.1.2";
-  sha256 = "1hcil0hmv47jvjvkm9plaizpyrd8z5xazwb3spsa29q0pf3isaxi";
+  version = "1.3.2";
+  sha256 = "1bvgfri0c2nyz06r59rm3slpvm1b0s242s4mznmndpdclgg33d9m";
   buildDepends = [
     aeson attoparsec blazeBuilder blazeBuilderConduit caseInsensitive
     conduit httpConduit httpTypes monadControl network resourcet
