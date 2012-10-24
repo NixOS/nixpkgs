@@ -33,8 +33,7 @@
         fileSystems = pkgs.lib.mkOverride 50
           [ { mountPoint = "/repos";
               device = "storage:/repos";
-	      fsType = "nfs";
-	      options = "bootwait";
+              fsType = "nfs";
             }
           ];
 
