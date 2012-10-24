@@ -1100,6 +1100,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
 
+  ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
+
   lrucache = callPackage ../development/libraries/haskell/lrucache {};
 
   ltk = callPackage ../development/libraries/haskell/ltk {};
