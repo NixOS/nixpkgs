@@ -143,7 +143,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     syb          = self.syb_0_3_7;              # 7.6 ok
     text         = self.text_0_11_2_3;          # 7.6 ok
     transformers = self.transformers_0_3_0_0;   # 7.6 ok
-    vector       = self.vector_0_10;            # 7.6 ok
+    vector       = self.vector_0_10_0_1;        # 7.6 ok
     xhtml        = self.xhtml_3000_2_1;         # 7.6 ok
     zlib         = self.zlib_0_5_4_0;           # 7.6 ok
     cabalInstall = self.cabalInstall_1_16_0;    # 7.6 ok
@@ -178,14 +178,14 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     syb          = self.syb_0_3_7;
     text         = self.text_0_11_2_3;
     transformers = self.transformers_0_3_0_0;
-    vector       = self.vector_0_10;
+    vector       = self.vector_0_10_0_1;
     xhtml        = self.xhtml_3000_2_1;
     zlib         = self.zlib_0_5_4_0;
     cabalInstall = self.cabalInstall_0_14_0;
     alex         = self.alex_3_0_2;
     haddock      = self.haddock_2_11_0;
     happy        = self.happy_1_18_10;
-    primitive    = self.primitive_0_5; # semi-official, but specified
+    primitive    = self.primitive_0_5_0_1; # semi-official, but specified
   };
 
   haskellPlatform_2012_4_0_0 =
