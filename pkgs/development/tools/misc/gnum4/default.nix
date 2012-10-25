@@ -10,8 +10,7 @@ stdenv.mkDerivation {
 
   doCheck = !stdenv.isDarwin
     && !stdenv.isCygwin                    # XXX: `test-dup2' fails on Cygwin
-    && !stdenv.isSunOS                     # XXX: `test-setlocale2.sh' fails
-    && !stdenv.isArm;                      # XXX: `diversions' fails on SheevaPlug
+    && !stdenv.isSunOS;                    # XXX: `test-setlocale2.sh' fails
 
   # Upstream is aware of it; it may be in the next release.
   patches = [ ./s_isdir.patch ./readlink-EINVAL.patch ];
