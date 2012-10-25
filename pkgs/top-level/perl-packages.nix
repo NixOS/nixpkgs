@@ -2898,6 +2898,15 @@ rec {
     propagatedBuildInputs = [IOSocketSSL];
   };
 
+  NetSMTPTLS = buildPerlPackage {
+    name = "Net-SMTP-TLS-0.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AW/AWESTHOLM/Net-SMTP-TLS-0.12.tar.gz;
+      sha256 = "19g48kabj22v66jbf69q78xplhi7r1y2kdbddfwh4xy3g9k75rzg";
+    };
+    propagatedBuildInputs = [IOSocketSSL DigestHMAC];
+  };
+
   NetSSLeay = buildPerlPackage rec {
     name = "Net-SSLeay-1.42";
     src = fetchurl {
