@@ -124,7 +124,7 @@ mirror://xorg/individual/driver/xf86-input-vmmouse-12.9.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-input-void-1.4.0.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-ark-0.7.4.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-ast-0.93.10.tar.bz2
-mirror://xorg/individual/driver/xf86-video-ati-6.14.6.tar.bz2
+mirror://xorg/individual/driver/xf86-video-ati-6.14.4.tar.bz2
 mirror://xorg/individual/driver/xf86-video-cirrus-1.5.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/xf86-video-dummy-0.3.5.tar.bz2
 mirror://xorg/individual/driver/xf86-video-fbdev-0.4.3.tar.bz2
