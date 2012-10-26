@@ -146,7 +146,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     vector       = self.vector_0_10_0_1;        # 7.6 ok
     xhtml        = self.xhtml_3000_2_1;         # 7.6 ok
     zlib         = self.zlib_0_5_4_0;           # 7.6 ok
-    cabalInstall = self.cabalInstall_1_16_0;    # 7.6 ok
+    cabalInstall = self.cabalInstall_1_16_0_1;  # 7.6 ok
     alex         = self.alex_3_0_2;             # 7.6 ok
     haddock      = self.haddock_2_13_1;         # 7.6 ok
     happy        = self.happy_1_18_10;          # 7.6 ok
@@ -1911,8 +1911,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_0_8_2  = callPackage ../tools/package-management/cabal-install/0.8.2.nix  {};
   cabalInstall_0_10_2 = callPackage ../tools/package-management/cabal-install/0.10.2.nix {};
   cabalInstall_0_14_0 = callPackage ../tools/package-management/cabal-install/0.14.0.nix {};
-  cabalInstall_1_16_0 = callPackage ../tools/package-management/cabal-install/1.16.0.nix {};
-  cabalInstall = self.cabalInstall_1_16_0;
+  cabalInstall_1_16_0_1 = callPackage ../tools/package-management/cabal-install/1.16.0.1.nix {};
+  cabalInstall = self.cabalInstall_1_16_0_1;
 
   jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {};
 
