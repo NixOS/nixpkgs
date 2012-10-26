@@ -541,7 +541,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   Cabal_1_14_0 = callPackage ../development/libraries/haskell/Cabal/1.14.0.nix { cabal = self.cabal.override { Cabal = null; }; };
-  Cabal_1_16_0_1 = callPackage ../development/libraries/haskell/Cabal/1.16.0.1.nix { cabal = self.cabal.override { Cabal = null; }; };
+  Cabal_1_16_0_2 = callPackage ../development/libraries/haskell/Cabal/1.16.0.2.nix { cabal = self.cabal.override { Cabal = null; }; };
   Cabal = null; # core package in GHC
 
   cabalFileTh = callPackage ../development/libraries/haskell/cabal-file-th {};

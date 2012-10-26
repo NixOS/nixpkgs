@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Cabal";
-  version = "1.16.0.1";
-  sha256 = "03h0fsdm00i5pq37j3d7rjw3gnqkmacvgvdhcrmmamn5q81qld5g";
+  version = "1.16.0.2";
+  sha256 = "1yqzcml460ya98b0ylik1591zwinr8pa3q3wgw894x7m55g321db";
   buildDepends = [ filepath ];
   meta = {
     homepage = "http://www.haskell.org/cabal/";
