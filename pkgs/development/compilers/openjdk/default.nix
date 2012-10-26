@@ -142,7 +142,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
-    pushd $out/lib/security
+    pushd $out/lib/security || pushd $out/jre/lib/security
     rm cacerts
     perl ${./generate-cacerts.pl} $out/bin/keytool ${cacert}/etc/ca-bundle.crt
     popd
