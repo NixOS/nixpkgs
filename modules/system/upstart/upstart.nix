@@ -90,7 +90,7 @@ let
         // optionalAttrs (job.postStop != "")
           { ExecStopPost = postStopScript; }
         // (if job.script == "" && job.exec == "" then { Type = "oneshot"; RemainAfterExit = true; } else
-            if job.daemonType == "fork" then { Type = "forking"; GuessMainPID = true; } else
+            if job.daemonType == "fork" || job.daemonType == "daemon" then { Type = "forking"; GuessMainPID = true; } else
             if job.daemonType == "none" then { } else
             throw "invalid daemon type `${job.daemonType}'")
         // optionalAttrs (!job.task && job.respawn)
