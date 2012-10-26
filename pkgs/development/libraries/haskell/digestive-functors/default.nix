@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "digestive-functors";
-  version = "0.5.0.3";
-  sha256 = "176wpnwg4zpfwphl0ifb3zdm0dhw5xyd3vr81rc98s4db5y9csl0";
+  version = "0.5.0.4";
+  sha256 = "0diaj1pmfmhwbyjmw49kna59f7dckwrp16cbar5xpcn9k2pf19nv";
   buildDepends = [ mtl text ];
   meta = {
     homepage = "http://github.com/jaspervdj/digestive-functors";
