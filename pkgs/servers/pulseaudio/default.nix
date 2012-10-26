@@ -4,16 +4,17 @@
 , jackaudioSupport ? false, jackaudio ? null
 , x11Support ? false, xlibs
 , json_c
+, useSystemd ? false, systemd ? null
 }:
 
 assert jackaudioSupport -> jackaudio != null;
 
 stdenv.mkDerivation rec {
-  name = "pulseaudio-1.1";
+  name = "pulseaudio-2.1";
 
   src = fetchurl {
-    url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-1.1.tar.xz";
-    sha256 = "1vpm0681zj2jvhbabvnmrmfxr3172k4x58kjb39y5g3fdw9k3rbg";
+    url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-2.1.tar.xz";
+    sha256 = "0zyal2mix7lzhxmr3pxlmss5kjca061iapvrh20bkgvsyixk8szg";
   };
 
   # Since `libpulse*.la' contain `-lgdbm', it must be propagated.
@@ -26,13 +27,10 @@ stdenv.mkDerivation rec {
       #gtk gconf 
     ]
     ++ stdenv.lib.optional jackaudioSupport jackaudio
-    ++ stdenv.lib.optionals x11Support [ xlibs.xlibs xlibs.libXtst xlibs.libXi ];
+    ++ stdenv.lib.optionals x11Support [ xlibs.xlibs xlibs.libXtst xlibs.libXi ]
+    ++ stdenv.lib.optional useSystemd systemd;
 
   preConfigure = ''
-    # Change the `padsp' script so that it contains the full path to
-    # `libpulsedsp.so'.
-    sed -i "src/utils/padsp" \
-        -e "s|libpulsedsp\.so|$out/lib/libpulsedsp.so|g"
 
     # Move the udev rules under $(prefix).
     sed -i "src/Makefile.in" \
