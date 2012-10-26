@@ -10,11 +10,11 @@ assert sslSupport -> openssl != null;
 assert scpSupport -> libssh2 != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.27.0";
+  name = "curl-7.28.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "164k2vw8v4ppsgqgk4gwhl26h70c8x3rgnl4c2s711626lhmi9db";
+    sha256 = "b7f510db60f520ba0bc8a39cccee7e913362205b4a7709e16af2cba14093099b";
   };
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
+    homepage = "http://curl.haxx.se/";
     description = "A command line tool for transferring files with URL syntax";
-    homepage = http://curl.haxx.se/;
   };
 }
