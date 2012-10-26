@@ -116,9 +116,8 @@ in
         # jobs.  Used to determine which jobs need to be restarted
         # when switching to a new configuration.
         mkdir -m 0700 -p /var/run/upstart-jobs
-        
+
         mkdir -m 0755 -p /var/log
-        mkdir -m 0755 -p /var/log/upstart
 
         touch /var/log/wtmp # must exist
         chmod 644 /var/log/wtmp

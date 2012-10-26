@@ -101,7 +101,7 @@ mkdir -m 0700 -p /var/log/journal
 
 
 # Miscellaneous boot time cleanup.
-rm -rf /var/run /var/lock /var/log/upstart
+rm -rf /var/run /var/lock
 rm -f /etc/resolv.conf
 
 if test -n "@cleanTmpDir@"; then
