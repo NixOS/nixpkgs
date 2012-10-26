@@ -160,7 +160,6 @@
   ./services/security/frandom.nix
   ./services/security/tor.nix
   ./services/security/torsocks.nix
-  ./services/system/cgroups.nix
   ./services/system/dbus.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
