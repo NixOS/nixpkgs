@@ -4,7 +4,7 @@
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.3.17";
+  version = "5.3.18";
 
   name = "php-${version}";
 
@@ -152,7 +152,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    sha256 = "02bmjlznnfhxhyd4wvk8ky9vpqwl9rbyng803r7ygf84sibyi1dd";
+    sha256 = "0bqsdwil13m1r449c4rhrc8cmx2a09k8h2g107qqxfwanzndwrgh";
     name = "php-${version}.tar.bz2";
   };
 
