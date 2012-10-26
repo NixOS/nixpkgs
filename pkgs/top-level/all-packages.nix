@@ -1521,6 +1521,8 @@ let
 
   svnfs = callPackage ../tools/filesystems/svnfs { };
 
+  sysbench = callPackage ../development/tools/misc/sysbench {};
+
   system_config_printer = callPackage ../tools/misc/system-config-printer {
     libxml2 = libxml2Python;
    };
