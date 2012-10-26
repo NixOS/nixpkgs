@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     '';
 
   # One test fails on mips.
-  doCheck = if stdenv.isMips then false else true;
+  doCheck = !stdenv.isMips;
 
   meta = {
     description = "Linux user-space NFS utilities";
