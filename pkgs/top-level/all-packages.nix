@@ -5512,6 +5512,8 @@ let
     inherit stdenv lib dict;
   };
 
+  dictdWiktionary = callPackage ../servers/dict/dictd-wiktionary.nix {};
+
   dictdWordnet = callPackage ../servers/dict/dictd-wordnet.nix {};
 
   dovecot = callPackage ../servers/mail/dovecot { };
