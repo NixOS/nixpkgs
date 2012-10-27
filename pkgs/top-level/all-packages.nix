@@ -7584,6 +7584,8 @@ let
 
   mmex = callPackage ../applications/office/mmex { };
 
+  monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
+
   monodevelop = callPackage ../applications/editors/monodevelop {
     inherit (gnome) gnome_vfs libbonobo libglade libgnome GConf;
     mozilla = firefox;
