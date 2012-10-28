@@ -8226,7 +8226,7 @@ let
   # You still can override by passing more arguments.
   spaceOrbit = callPackage ../games/orbit { };
 
-  spring = callPackage ../games/spring { };
+  spring = callPackage ../games/spring { boost = boost149;};
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
 
