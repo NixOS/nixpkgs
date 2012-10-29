@@ -40,6 +40,7 @@
       startAll;
 
       # The router should have access to the server.
+      $server->waitForUnit("network.target");
       $server->waitForUnit("httpd");
       $router->waitForUnit("network.target");
       $router->succeed("curl --fail http://server/ >&2");
@@ -68,7 +69,7 @@
       $client->fail("ping -c 1 server >&2");
 
       # And make sure that restarting the NAT job works.
-      $router->succeed("start nat");
+      $router->succeed("systemctl start nat");
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
     '';

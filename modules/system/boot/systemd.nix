@@ -10,7 +10,14 @@ let
   systemd = pkgs.systemd;
 
   makeUnit = name: unit:
-    pkgs.writeTextFile { name = "unit"; inherit (unit) text; destination = "/${name}"; };
+    pkgs.runCommand "unit" { inherit (unit) text; }
+      (if unit.enable then  ''
+        mkdir -p $out
+        echo -n "$text" > $out/${name}
+      '' else ''
+        mkdir -p $out
+        ln -s /dev/null $out/${name}
+      '');
 
   upstreamUnits =
     [ # Targets.
@@ -205,7 +212,7 @@ let
         as));
 
   targetToUnit = name: def:
-    { inherit (def) wantedBy;
+    { inherit (def) wantedBy enable;
       text =
         ''
           [Unit]
@@ -214,7 +221,7 @@ let
     };
 
   serviceToUnit = name: def:
-    { inherit (def) wantedBy;
+    { inherit (def) wantedBy enable;
       text =
         ''
           [Unit]
@@ -258,7 +265,7 @@ let
     };
 
   socketToUnit = name: def:
-    { inherit (def) wantedBy;
+    { inherit (def) wantedBy enable;
       text =
         ''
           [Unit]
@@ -332,6 +339,16 @@ in
         text = mkOption {
           types = types.uniq types.string;
           description = "Text of this systemd unit.";
+        };
+        enable = mkOption {
+          default = true;
+          types = types.bool;
+          description = ''
+            If set to false, this unit will be a symlink to
+            /dev/null. This is primarily useful to prevent specific
+            template instances (e.g. <literal>serial-getty@ttyS0</literal>)
+            from being started.
+          '';
         };
         wantedBy = mkOption {
           default = [];

@@ -13,9 +13,8 @@ let kernel = config.boot.kernelPackages.kernel; in
 
     boot.systemd.services.backdoor =
       { wantedBy = [ "multi-user.target" ];
-        requires = [ "dev-hvc0.device" ];
-        after = [ "dev-hvc0.device" ];
-
+        requires = [ "dev-hvc0.device" "dev-ttyS0.device" ];
+        after = [ "dev-hvc0.device" "dev-ttyS0.device" ];
         script =
           ''
             export USER=root
@@ -27,9 +26,14 @@ let kernel = config.boot.kernelPackages.kernel; in
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
             echo
-            PS1= /bin/sh
+            PS1= exec /bin/sh
           '';
       };
+
+    # Prevent agetty from being instantiated on ttyS0, since it
+    # interferes with the backdoor (writes to ttyS0 will randomly fail
+    # with EIO).
+    boot.systemd.services."serial-getty@ttyS0".enable = false;
 
     boot.initrd.postDeviceCommands =
       ''

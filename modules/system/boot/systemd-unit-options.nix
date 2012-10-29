@@ -6,6 +6,17 @@ rec {
 
   unitOptions = {
 
+    enable = mkOption {
+      default = true;
+      types = types.bool;
+      description = ''
+        If set to false, this unit will be a symlink to
+        /dev/null. This is primarily useful to prevent specific
+        template instances (e.g. <literal>serial-getty@ttyS0</literal>)
+        from being started.
+      '';
+    };
+
     description = mkOption {
       default = "";
       types = types.uniq types.string;
