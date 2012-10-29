@@ -145,16 +145,6 @@ in
       description = "Names of supported filesystem types in the initial ramdisk.";
     };
 
-    boot.ttyEmergency = mkOption {
-      default =
-        if pkgs.stdenv.isArm
-          then "ttyS0" # presumably an embedded platform such as a plug
-        else "tty1";
-      description = ''
-        The tty that will be stopped in case an emergency shell is spawned
-        at boot.
-        '';
-    };
   };
 
 

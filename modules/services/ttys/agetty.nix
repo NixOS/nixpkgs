@@ -10,28 +10,6 @@ with pkgs.lib;
 
     services.mingetty = {
 
-      # FIXME
-      ttys = mkOption {
-        default =
-          if pkgs.stdenv.isArm
-          then [ "ttyS0" ] # presumably an embedded platform such as a plug
-          else [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
-        description = ''
-          The list of tty devices on which to start a login prompt.
-        '';
-      };
-
-      # FIXME: not implemented with systemd
-      waitOnMounts = mkOption {
-        default = false;
-        description = ''
-          Whether the login prompts on the virtual consoles will be
-          started before or after all file systems have been mounted.  By
-          default we don't wait, but if for example your /home is on a
-          separate partition, you may want to turn this on.
-        '';
-      };
-
       greetingLine = mkOption {
         default = ''<<< Welcome to NixOS ${config.system.nixosVersion} (\m) - \l >>>'';
         description = ''

@@ -396,8 +396,6 @@ in
       VertRefresh 50-160
     '';
 
-  services.mingetty.ttys = ttys ++ optional (!cfg.graphics) "ttyS0";
-
   # Wireless won't work in the VM.
   networking.wireless.enable = mkOverride 50 false;
 
