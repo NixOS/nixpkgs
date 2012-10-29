@@ -42,6 +42,7 @@ in
       [ { # SSH configuration.  Slight duplication of the sshd_config
           # generation in the sshd service.
           source = pkgs.writeText "ssh_config" ''
+            AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
             ${optionalString cfg.setXAuthLocation ''
               XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
             ''}
