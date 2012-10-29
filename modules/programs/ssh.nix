@@ -46,11 +46,7 @@ in
             ${optionalString cfg.setXAuthLocation ''
               XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
             ''}
-            ${if cfg.forwardX11 then ''
-              ForwardX11 yes
-            '' else ''
-              ForwardX11 no
-            ''}
+            ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
           '';
           target = "ssh/ssh_config";
         }
