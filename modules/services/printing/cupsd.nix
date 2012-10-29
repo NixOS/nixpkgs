@@ -138,7 +138,7 @@ in
       };
 
     services.printing.drivers =
-      [ pkgs.cups /* pkgs.cups_pdf_filter */ pkgs.ghostscript additionalBackends pkgs.perl pkgs.coreutils pkgs.gnused ];
+      [ pkgs.cups pkgs.cups_pdf_filter pkgs.ghostscript additionalBackends pkgs.perl pkgs.coreutils pkgs.gnused ];
 
     services.printing.cupsdConf =
       ''
