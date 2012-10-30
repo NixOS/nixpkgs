@@ -25,8 +25,23 @@ let
     fi
   '';
 
-
   options = {
+
+    environment.promptInit =  mkOption {
+        default = ''
+          # Provide a nice prompt.
+          PROMPT_COLOR="1;31m"
+          let $UID && PROMPT_COLOR="1;32m"
+          PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
+          if test "$TERM" = "xterm"; then
+            PS1="\[\033]2;\h:\u:\w\007\]$PS1"
+          fi
+        '';
+        description = "
+          Script used to initialized shell prompt.
+        ";
+        type = with pkgs.lib.types; string;
+      };
 
     environment.shellInit = mkOption {
         default = "";
@@ -65,6 +80,7 @@ in
         # configured properly.
          source = pkgs.substituteAll {
            src = ./bashrc.sh;
+           inherit (config.environment) promptInit;
            inherit initBashCompletion;
          };
          target = "bashrc";
