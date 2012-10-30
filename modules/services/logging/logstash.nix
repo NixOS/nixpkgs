@@ -136,13 +136,15 @@ in
       mkNameValuePairs = mergeConfigs;
     };
   } ( mkIf cfg.enable {
-    jobs.logstash = with pkgs; {
+    boot.systemd.services.logstash = with pkgs; {
       description = "Logstash daemon";
-      startOn = "started networking and filesystem";
+
+      wantedBy = [ "multi-user.target" ];
+      environment.TZ = config.time.timeZone;
 
       path = [ jre ];
 
-      script = "cd /tmp && exec java -jar ${logstash} agent -f ${writeText "logstash.conf" ''
+      script = "cd /tmp && exec java -jar ${logstash} agent -f ${writeText "logstash.conf" &> /var/log/logstash.log ''
         input {
           ${exprToConfig cfg.inputConfig}
         }
