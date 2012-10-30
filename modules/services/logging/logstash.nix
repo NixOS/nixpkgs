@@ -144,7 +144,7 @@ in
 
       path = [ jre ];
 
-      script = "cd /tmp && exec java -jar ${logstash} agent -f ${writeText "logstash.conf" &> /var/log/logstash.log ''
+      script = "cd /tmp && exec java -jar ${logstash} agent -f ${writeText "logstash.conf" ''
         input {
           ${exprToConfig cfg.inputConfig}
         }
@@ -156,7 +156,7 @@ in
         output {
           ${exprToConfig cfg.outputConfig}
         }
-      ''}";
+      ''} &> /var/log/logstash.log";
     };
   })];
 }
