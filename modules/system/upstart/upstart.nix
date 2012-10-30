@@ -19,7 +19,7 @@ let
     let
       hasMain = job.script != "" || job.exec != "";
 
-      env = config.system.upstartEnvironment // job.environment;
+      env = job.environment;
 
       preStartScript = makeJobScript "${job.name}-pre-start"
         ''
@@ -268,15 +268,6 @@ in
       '';
       type = types.loaOf types.optionSet;
       options = [ jobOptions upstartJob ];
-    };
-
-    system.upstartEnvironment = mkOption {
-      type = types.attrs;
-      default = {};
-      example = { TZ = "CET"; };
-      description = ''
-        Environment variables passed to <emphasis>all</emphasis> Upstart jobs.
-      '';
     };
 
   };

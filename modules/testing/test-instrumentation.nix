@@ -55,10 +55,6 @@ let kernel = config.boot.kernelPackages.kernel; in
 
         # Coverage data is written into /tmp/coverage-data.
         mkdir -p /tmp/xchg/coverage-data
-
-        # Mount debugfs to gain access to the kernel coverage data (if
-        # available).
-        mount -t debugfs none /sys/kernel/debug || true
       '';
 
     # If the kernel has been built with coverage instrumentation, make
@@ -80,7 +76,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     networking.defaultGateway = mkOverride 150 "";
     networking.nameservers = mkOverride 150 [ ];
 
-    system.upstartEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
+    boot.systemd.globalEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SERIAL_8250_CONSOLE")

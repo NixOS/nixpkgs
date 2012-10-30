@@ -229,7 +229,8 @@ let
 
           [Service]
           Environment=PATH=${def.path}
-          ${concatMapStrings (n: "Environment=${n}=${getAttr n def.environment}\n") (attrNames def.environment)}
+          ${let env = cfg.globalEnvironment // def.environment;
+            in concatMapStrings (n: "Environment=${n}=${getAttr n env}\n") (attrNames env)}
           ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
 
           ${optionalString (def.preStart != "") ''
@@ -389,6 +390,15 @@ in
       default = "multi-user.target";
       type = types.uniq types.string;
       description = "Default unit started when the system boots.";
+    };
+
+    boot.systemd.globalEnvironment = mkOption {
+      type = types.attrs;
+      default = {};
+      example = { TZ = "CET"; };
+      description = ''
+        Environment variables passed to <emphasis>all</emphasis> systemd units.
+      '';
     };
 
     services.journald.console = mkOption {
