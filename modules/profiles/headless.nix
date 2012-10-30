@@ -10,7 +10,10 @@ with pkgs.lib;
   boot.vesa = false;
   boot.initrd.enableSplashScreen = false;
   services.ttyBackgrounds.enable = false;
-  services.mingetty.ttys = [ ];
+
+  # Don't start a tty on the serial consoles.
+  boot.systemd.services."serial-getty@ttyS0".enable = false;
+  boot.systemd.services."serial-getty@hvc0".enable = false;
 
   # Since we can't manually respond to a panic, just reboot.
   boot.kernelParams = [ "panic=1" "stage1panic=1" ];
