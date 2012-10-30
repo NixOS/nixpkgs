@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, sqlite, pkgconfig
+{ stdenv, fetchgit, sqlite, pkgconfig, perl
 , buildllvmsparse ? true
 , buildc2xml ? true
 , llvm ? null, libxml2 ? null
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     sha256 = "09a44967d4cff026c67062f778e251d0b432af132e9d59a47b7d3167f379adfa";
   };
 
-  buildInputs = [sqlite pkgconfig]
+  buildInputs = [sqlite pkgconfig perl]
    ++ stdenv.lib.optional buildllvmsparse llvm
    ++ stdenv.lib.optional buildc2xml libxml2;
 
