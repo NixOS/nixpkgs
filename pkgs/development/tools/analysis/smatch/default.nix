@@ -20,7 +20,10 @@ stdenv.mkDerivation {
    ++ stdenv.lib.optional buildllvmsparse llvm
    ++ stdenv.lib.optional buildc2xml libxml2;
 
-  installFlags = "DESTDIR=$(out)";
+  preBuild =
+    '' sed -i Makefile \
+           -e "s|^PREFIX=.*|PREFIX = $out|g"
+    '';
 
   meta = {
     description = "A semantic analysis tool for C";
