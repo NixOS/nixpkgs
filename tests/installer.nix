@@ -120,7 +120,7 @@ let
 
       # Make sure that we get a login prompt etc.
       $machine->succeed("echo hello");
-      $machine->waitForUnit("tty1");
+      $machine->waitForUnit('getty@tty2');
       $machine->waitForUnit("rogue");
       $machine->waitForUnit("nixos-manual");
       $machine->waitForUnit("dhcpcd");
