@@ -1,7 +1,8 @@
-{ stdenv, fetchsvn, ncurses, gtk, pkgconfig, autoconf, automake, perl, halibut }:
+{ stdenv, fetchsvn, ncurses, gtk, pkgconfig, autoconf, automake, perl, halibut
+, libtool }:
  
 let
-  rev = 8934;
+  rev = 9690;
 in
 stdenv.mkDerivation {
   name = "putty-${toString rev}";
@@ -10,10 +11,11 @@ stdenv.mkDerivation {
   preConfigure = ''
     perl mkfiles.pl
     ( cd doc ; make );
+    sed '/AM_PATH_GTK(/d' -i unix/configure.ac
+    sed '/AC_OUTPUT/iAM_PROG_CC_C_O' -i unix/configure.ac
+    sed '/AC_OUTPUT/iAM_PROG_AR' -i unix/configure.ac
+    ./mkauto.sh
     cd unix
-    sed '/AM_PATH_GTK(/d' -i configure.ac
-    cp ${automake}/share/automake-*/install-sh .
-    autoreconf -vf
   '';
   
   # The hash is going to change on new snapshot.
@@ -21,8 +23,8 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = svn://svn.tartarus.org/sgt/putty;
     rev = rev;
-    sha256 = "f5d9870dde7166afd277f7501914c6515b35ee7bb42965ccd22fe977ee5d1b0d";
+    sha256 = "e1fb49766e0724a12776ec3d6cd0bd420e03ebdc3383a01a12dbfd30983f81ef";
   };
 
-  buildInputs = [ gtk ncurses pkgconfig autoconf automake perl halibut ];
+  buildInputs = [ gtk ncurses pkgconfig autoconf automake perl halibut libtool ];
 }
