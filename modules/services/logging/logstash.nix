@@ -136,9 +136,6 @@ in
       mkNameValuePairs = mergeConfigs;
     };
   } ( mkIf cfg.enable {
-    # Always log to stdout
-    services.logstash.outputConfig = { stdout = {}; };
-
     jobs.logstash = with pkgs; {
       description = "Logstash daemon";
       startOn = "started networking and filesystem";
