@@ -434,7 +434,7 @@ sub shutdown {
     my ($self) = @_;
     return unless $self->{booted};
 
-    $self->execute("poweroff");
+    print { $self->{socket} } ("poweroff\n");
 
     $self->waitForShutdown;
 }
