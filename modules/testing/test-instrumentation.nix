@@ -28,6 +28,7 @@ let kernel = config.boot.kernelPackages.kernel; in
             echo
             PS1= exec /bin/sh
           '';
+        serviceConfig.KillSignal = "SIGHUP";
       };
 
     # Prevent agetty from being instantiated on ttyS0, since it
