@@ -188,7 +188,7 @@ in
           in nameValuePair "mkfs-${device'}"
           { description = "Initialisation of Filesystem ${fs.device}";
             wantedBy = [ "${mountPoint'}.mount" ];
-            before = [ "${mountPoint'}.mount" ];
+            before = [ "${mountPoint'}.mount" "systemd-fsck@${device'}.service" ];
             require = [ "${device'}.device" ];
             after = [ "${device'}.device" ];
             path = [ pkgs.utillinux ] ++ config.system.fsPackages;
