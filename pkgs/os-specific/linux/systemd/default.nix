@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     [ ./reexec.patch
       ./ignore-duplicates.patch
       ./crypt-devices-are-ready.patch
+      ./listunitfiles-abort.patch
     ];
 
   buildInputs =
