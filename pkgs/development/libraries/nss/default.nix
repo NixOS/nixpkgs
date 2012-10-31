@@ -21,14 +21,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.13.6";
+  version = "3.14";
 
-  src = let
-    uscoreVersion = stdenv.lib.replaceChars ["."] ["_"] version;
-    releasePath = "releases/NSS_${uscoreVersion}_RTM/src/nss-${version}.tar.gz";
-  in fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/${releasePath}";
-    sha256 = "f7e90727e0ecc1c29de10da39a79bc9c53b814ccfbf40720e053b29c683d43a0";
+  src = fetchurl {
+    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_14_RTM/src/${name}.tar.gz";
+    sha1 = "ace3642fb2ca67854ea7075d053ca01a6d81e616";
   };
 
   buildInputs = [ nspr perl zlib sqlite ];
