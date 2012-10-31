@@ -3,8 +3,8 @@
    compiler. */
 
 {dietlibc, fetchurl, runCommand}:
-   
-   
+
+
 rec {
 
 
@@ -14,7 +14,7 @@ rec {
       inherit gcc;
     };
 
-    
+
   # Add some arbitrary packages to buildInputs for specific packages.
   # Used to override packages in stdenv like Make.  Should not be used
   # for other dependencies.
@@ -65,7 +65,7 @@ rec {
       isDietLibC = true;
     } // {inherit fetchurl;};
 
-    
+
   # Return a modified stdenv that uses klibc to create small
   # statically linked binaries.
   useKlibc = stdenv: klibc: stdenv //
@@ -94,7 +94,7 @@ rec {
       isStatic = true;
     } // {inherit fetchurl;};
 
-    
+
   # Return a modified stdenv that tries to build statically linked
   # binaries.
   makeStaticBinaries = stdenv: stdenv //
@@ -108,7 +108,7 @@ rec {
       isStatic = true;
     } // {inherit fetchurl;};
 
-    
+
   # Return a modified stdenv that builds static libraries instead of
   # shared libraries.
   makeStaticLibraries = stdenv: stdenv //
@@ -120,7 +120,7 @@ rec {
       });
     } // {inherit fetchurl;};
 
-    
+
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
@@ -185,7 +185,7 @@ rec {
       inherit cross gccCross binutilsCross;
     };
 
-    
+
   /* Modify a stdenv so that the specified attributes are added to
      every derivation returned by its mkDerivation function.
 
@@ -202,7 +202,7 @@ rec {
   /* Return a modified stdenv that performs the build under $out/.build
      instead of in $TMPDIR.  Thus, the sources are kept available.
      This is useful for things like debugging or generation of
-     dynamic analysis reports. */ 
+     dynamic analysis reports. */
   keepBuildTree = stdenv:
     addAttrsToDerivation
       { prePhases = "moveBuildDir";
@@ -230,12 +230,12 @@ rec {
               \( -name "*.c" -o -name "*.h" -o -name "*.gcno" \) \
               | xargs rm -f --
 
-            for i in $(find $out/.build/ -name ".tmp_*.gcno"); do 
+            for i in $(find $out/.build/ -name ".tmp_*.gcno"); do
                 mv "$i" "$(echo $i | sed s/.tmp_//)"
             done
           '';
-      } stdenv;          
-      
+      } stdenv;
+
 
   /* Return a modified stdenv that builds packages with GCC's coverage
      instrumentation.  The coverage note files (*.gcno) are stored in
@@ -258,7 +258,7 @@ rec {
             export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -O0 --coverage"
           '';
       }
-      
+
       # Object files instrumented with coverage analysis write
       # runtime coverage data to <path>/<object>.gcda, where <path>
       # is the location where gcc originally created the object
@@ -269,7 +269,7 @@ rec {
       # we need the source code.  So we have to use the
       # `keepBuildTree' adapter as well.
       (cleanupBuildTree (keepBuildTree stdenv));
-      
+
 
   /* Replace the meta.maintainers field of a derivation.  This is useful
      when you want to fork to update some packages without disturbing other
@@ -311,7 +311,7 @@ rec {
         };
     };
 
-    
+
   /* Abort if the license predicate is not verified for a derivation
      declared with mkDerivation.
 
@@ -355,4 +355,16 @@ rec {
           drvPath = validate pkg.drvPath;
         };
     };
+
+
+  /* Modify a stdenv so that it produces debug builds; that is,
+     binaries have debug info, and compiler optimisations are
+     disabled. */
+  keepDebugInfo = stdenv: stdenv //
+    { mkDerivation = args: stdenv.mkDerivation (args // {
+        dontStrip = true;
+        NIX_CFLAGS_COMPILE = toString (args.NIX_CFLAGS_COMPILE or "") + " -g -O0";
+      });
+    };
+
 }
