@@ -908,6 +908,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hastache = callPackage ../development/libraries/haskell/hastache {};
 
+  hexpat = callPackage ../development/libraries/haskell/hexpat {};
+
   HTTP_4000_0_6 = callPackage ../development/libraries/haskell/HTTP/4000.0.6.nix {};
   HTTP_4000_0_9 = callPackage ../development/libraries/haskell/HTTP/4000.0.9.nix {};
   HTTP_4000_1_1 = callPackage ../development/libraries/haskell/HTTP/4000.1.1.nix {};
