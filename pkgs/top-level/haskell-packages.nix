@@ -1098,6 +1098,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   liftedBase = callPackage ../development/libraries/haskell/lifted-base {};
 
+  List = callPackage ../development/libraries/haskell/List {};
+
   ListLike = callPackage ../development/libraries/haskell/ListLike {};
 
   ListZipper = callPackage ../development/libraries/haskell/ListZipper {};
