@@ -442,6 +442,11 @@ in
         }
       ];
 
+    # Target for ‘charon send-keys’ to hook into.
+    boot.systemd.targets.keys =
+      { description = "Security Keys";
+      };
+
     boot.systemd.units =
       { "rescue.service".text = rescueService; }
       // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
