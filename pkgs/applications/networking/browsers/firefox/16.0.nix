@@ -27,7 +27,7 @@ rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "842d852b31a388d4cf3ac59bc89e8611474e2ec7";
+    sha1 = "0ffe96896583e92561b341330ab09ddc50140dd1";
   };
 
   commonConfigureFlags =
