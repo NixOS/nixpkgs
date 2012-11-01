@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "3.4.2.1";
-  sha256 = "0h2xs4qwy2lqdg4v7zbzfmkvr411j34fba3dm05skq7d908wjji0";
+  version = "3.5.0.0";
+  sha256 = "18mvnhhf03qq2zr85vyg3h87kf2ny0jrj0zjp0886i6qvmbrjwlj";
   buildDepends = [
     binary blazeHtml blazeMarkup citeprocHs cryptohash filepath hamlet
     lrucache mtl pandoc parsec regexBase regexTdfa snapCore snapServer
