@@ -101,7 +101,7 @@ in
         serviceConfig =
           { Type = "forking";
             PIDFile = "/run/dhcpcd.pid";
-            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --config ${dhcpcdConf} --background";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             StandardError = "null";
           };

@@ -13,6 +13,7 @@ with pkgs.lib;
 
       wantedBy = [ "multi-user.target" ];
       before = [ "sshd.service" ];
+      after = [ "dhcpcd.service" ];
 
       path = [ pkgs.curl pkgs.iproute ];
 
