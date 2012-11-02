@@ -25,9 +25,8 @@ setPath "@path@"
 
 
 # Normally, stage 1 mounts the root filesystem read/writable.
-# However, in some environments (such as Amazon EC2), stage 2 is
-# executed directly, and the root is read-only.  So make it writable
-# here.
+# However, in some environments, stage 2 is executed directly, and the
+# root is read-only.  So make it writable here.
 mount -n -o remount,rw /
 
 
