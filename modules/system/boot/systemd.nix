@@ -404,7 +404,7 @@ in
     services.journald.console = mkOption {
       default = "";
       type = types.uniq types.string;
-      description = "If non-empty, write log messages to the specified TTY device.  Defaults to /dev/console.";
+      description = "If non-empty, write log messages to the specified TTY device.";
     };
 
   };
