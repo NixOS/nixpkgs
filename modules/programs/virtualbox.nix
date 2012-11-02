@@ -37,5 +37,5 @@ let virtualbox = config.boot.kernelPackages.virtualbox; in
         '';
     };
 
-  networking.interfaces = [ { name = "vboxnet0"; ipAddress = "192.168.56.1"; prefixLength = 24; } ];
+  networking.interfaces.vboxnet0 = { ipAddress = "192.168.56.1"; prefixLength = 24; };
 }

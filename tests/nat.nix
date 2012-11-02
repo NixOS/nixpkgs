@@ -13,7 +13,7 @@
         { config, pkgs, nodes, ... }:
         { virtualisation.vlans = [ 1 ];
           networking.defaultGateway =
-            nodes.router.config.networking.ifaces.eth2.ipAddress;
+            nodes.router.config.networking.interfaces.eth2.ipAddress;
         };
 
       router =

@@ -5,7 +5,104 @@ with pkgs.lib;
 let
 
   cfg = config.networking;
-  hasVirtuals = any (i: i.virtual) cfg.interfaces;
+  interfaces = attrValues cfg.interfaces;
+  hasVirtuals = any (i: i.virtual) interfaces;
+
+  interfaceOpts = { name, ... }: {
+
+    options = {
+
+      name = mkOption {
+        example = "eth0";
+        type = types.string;
+        description = "Name of the interface.";
+      };
+
+      ipAddress = mkOption {
+        default = null;
+        example = "10.0.0.1";
+        type = types.nullOr types.string;
+        description = ''
+          IP address of the interface.  Leave empty to configure the
+          interface using DHCP.
+        '';
+      };
+
+      prefixLength = mkOption {
+        default = null;
+        example = 24;
+        type = types.nullOr types.int;
+        description = ''
+          Subnet mask of the interface, specified as the number of
+          bits in the prefix (<literal>24</literal>).
+        '';
+      };
+
+      subnetMask = mkOption {
+        default = "";
+        example = "255.255.255.0";
+        type = types.string;
+        description = ''
+          Subnet mask of the interface, specified as a bitmask.
+          This is deprecated; use <option>prefixLength</option>
+          instead.
+        '';
+      };
+
+      macAddress = mkOption {
+        default = null;
+        example = "00:11:22:33:44:55";
+        type = types.nullOr types.string;
+        description = ''
+          MAC address of the interface. Leave empty to use the default.
+        '';
+      };
+
+      virtual = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Whether this interface is virtual and should be created by tunctl.
+          This is mainly useful for creating bridges between a host a virtual
+          network such as VPN or a virtual machine.
+
+          Defaults to tap device, unless interface contains "tun" in its name.
+        '';
+      };
+
+      virtualOwner = mkOption {
+        default = "root";
+        type = types.uniq types.string;
+        description = ''
+          In case of a virtual device, the user who owns it.
+        '';
+      };
+
+      proxyARP = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Turn on proxy_arp for this device (and proxy_ndp for ipv6).
+          This is mainly useful for creating pseudo-bridges between a real
+          interface and a virtual network such as VPN or a virtual machine for
+          interfaces that don't support real bridging (most wlan interfaces).
+          As ARP proxying acts slightly above the link-layer, below-ip traffic
+          isn't bridged, so things like DHCP won't work. The advantage above
+          using NAT lies in the fact that no IP addresses are shared, so all
+          hosts are reachable/routeable.
+
+          WARNING: turns on ip-routing, so if you have multiple interfaces, you
+          should think of the consequence and setup firewall rules to limit this.
+        '';
+      };
+
+    };
+
+    config = {
+      name = mkDefault name;
+    };
+
+  };
 
 in
 
@@ -66,121 +163,20 @@ in
     };
 
     networking.interfaces = mkOption {
-      default = [];
-      example = [
-        { name = "eth0";
-          ipAddress = "131.211.84.78";
-          subnetMask = "255.255.255.128";
-        }
-      ];
+      default = {};
+      example =
+        { eth0 = {
+            ipAddress = "131.211.84.78";
+            subnetMask = "255.255.255.128";
+          };
+        };
       description = ''
         The configuration for each network interface.  If
         <option>networking.useDHCP</option> is true, then every
         interface not listed here will be configured using DHCP.
       '';
-
-      type = types.list types.optionSet;
-
-      options = {
-
-        name = mkOption {
-          example = "eth0";
-          type = types.string;
-          description = ''
-            Name of the interface.
-          '';
-        };
-
-        ipAddress = mkOption {
-          default = "";
-          example = "10.0.0.1";
-          type = types.string;
-          description = ''
-            IP address of the interface.  Leave empty to configure the
-            interface using DHCP.
-          '';
-        };
-
-        prefixLength = mkOption {
-          default = null;
-          example = 24;
-          type = types.nullOr types.int;
-          description = ''
-            Subnet mask of the interface, specified as the number of
-            bits in the prefix (<literal>24</literal>).
-          '';
-        };
-
-        subnetMask = mkOption {
-          default = "";
-          example = "255.255.255.0";
-          type = types.string;
-          description = ''
-            Subnet mask of the interface, specified as a bitmask.
-            This is deprecated; use <option>prefixLength</option>
-            instead.
-          '';
-        };
-
-        macAddress = mkOption {
-          default = "";
-          example = "00:11:22:33:44:55";
-          type = types.string;
-          description = ''
-            MAC address of the interface. Leave empty to use the default.
-          '';
-        };
-
-        virtual = mkOption {
-          default = false;
-          type = types.bool;
-          description = ''
-            Whether this interface is virtual and should be created by tunctl.
-            This is mainly useful for creating bridges between a host a virtual
-            network such as VPN or a virtual machine.
-
-            Defaults to tap device, unless interface contains "tun" in its name.
-          '';
-        };
-
-        virtualOwner = mkOption {
-          default = "root";
-          type = types.uniq types.string;
-          description = ''
-            In case of a virtual device, the user who owns it.
-          '';
-        };
-
-        proxyARP = mkOption {
-          default = false;
-          type = types.bool;
-          description = ''
-            Turn on proxy_arp for this device (and proxy_ndp for ipv6).
-            This is mainly useful for creating pseudo-bridges between a real
-            interface and a virtual network such as VPN or a virtual machine for
-            interfaces that don't support real bridging (most wlan interfaces).
-            As ARP proxying acts slightly above the link-layer, below-ip traffic
-            isn't bridged, so things like DHCP won't work. The advantage above
-            using NAT lies in the fact that no IP addresses are shared, so all
-            hosts are reachable/routeable.
-
-            WARNING: turns on ip-routing, so if you have multiple interfaces, you
-            should think of the consequence and setup firewall rules to limit this.
-          '';
-        };
-
-      };
-
-    };
-
-    networking.ifaces = mkOption {
-      default = listToAttrs
-        (map (iface: { name = iface.name; value = iface; }) config.networking.interfaces);
-      internal = true;
-      description = ''
-        The network interfaces in <option>networking.interfaces</option>
-        as an attribute set keyed on the interface name.
-      '';
+      type = types.loaOf types.optionSet;
+      options = [ interfaceOpts ];
     };
 
     networking.bridges = mkOption {
@@ -288,7 +284,7 @@ in
                 ''}
 
                 # Turn on forwarding if any interface has enabled proxy_arp.
-                ${optionalString (any (i: i.proxyARP) cfg.interfaces) ''
+                ${optionalString (any (i: i.proxyARP) interfaces) ''
                   echo 1 > /proc/sys/net/ipv4/ip_forward
                 ''}
 
@@ -322,12 +318,12 @@ in
                 echo "bringing up interface..."
                 ip link set "${i.name}" up
               ''
-              + optionalString (i.macAddress != "")
+              + optionalString (i.macAddress != null)
                 ''
                   echo "setting MAC address to ${i.macAddress}..."
                   ip link set "${i.name}" address "${i.macAddress}"
                 ''
-              + optionalString (i.ipAddress != "")
+              + optionalString (i.ipAddress != null)
                 ''
                   cur=$(ip -4 -o a show dev "${i.name}" | awk '{print $4}')
                   # Only do a flush/add if it's necessary.  This is
@@ -400,8 +396,8 @@ in
           };
 
       in listToAttrs (
-           map configureInterface cfg.interfaces ++
-           map createTunDevice (filter (i: i.virtual) cfg.interfaces))
+           map configureInterface interfaces ++
+           map createTunDevice (filter (i: i.virtual) interfaces))
          // mapAttrs createBridgeDevice cfg.bridges
          // { "network-setup" = networkSetup; };
 

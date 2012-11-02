@@ -9,7 +9,7 @@ let
   # Don't start dhclient on explicitly configured interfaces or on
   # interfaces that are part of a bridge.
   ignoredInterfaces =
-    map (i: i.name) (filter (i: i ? ipAddress && i.ipAddress != "" ) config.networking.interfaces)
+    map (i: i.name) (filter (i: i.ipAddress != null) (attrValues config.networking.interfaces))
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
     ++ config.networking.dhcpcd.denyInterfaces;
 
@@ -104,6 +104,7 @@ in
             ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --config ${dhcpcdConf}";
             ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
             StandardError = "null";
+            Restart = "always";
           };
       };
 

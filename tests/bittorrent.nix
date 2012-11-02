@@ -16,7 +16,7 @@ let
   miniupnpdConf = nodes: pkgs.writeText "miniupnpd.conf"
     ''
       ext_ifname=eth1
-      listening_ip=${nodes.router.config.networking.ifaces.eth2.ipAddress}/24
+      listening_ip=${nodes.router.config.networking.interfaces.eth2.ipAddress}/24
       allow 1024-65535 192.168.2.0/24 1024-65535
     '';
 
@@ -49,7 +49,7 @@ in
         { environment.systemPackages = [ pkgs.transmission ];
           virtualisation.vlans = [ 2 ];
           networking.defaultGateway =
-            nodes.router.config.networking.ifaces.eth2.ipAddress;
+            nodes.router.config.networking.interfaces.eth2.ipAddress;
         };
 
       client2 =
