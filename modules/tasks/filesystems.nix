@@ -5,12 +5,14 @@ with utils;
 
 let
 
+  fileSystems = attrValues config.fileSystems;
+
   fstab = pkgs.writeText "fstab"
     ''
       # This is a generated file.  Do not edit!
 
       # Filesystems.
-      ${flip concatMapStrings config.fileSystems (fs:
+      ${flip concatMapStrings fileSystems (fs:
           (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
           + " " + fs.mountPoint
           + " " + fs.fsType
@@ -27,6 +29,70 @@ let
       )}
     '';
 
+  fileSystemOpts = { name, ... }: {
+
+    options = {
+
+      mountPoint = mkOption {
+        example = "/mnt/usb";
+        type = types.uniq types.string;
+        description = "Location of the mounted the file system.";
+      };
+
+      device = mkOption {
+        default = null;
+        example = "/dev/sda";
+        type = types.uniq (types.nullOr types.string);
+        description = "Location of the device.";
+      };
+
+      label = mkOption {
+        default = null;
+        example = "root-partition";
+        type = types.uniq (types.nullOr types.string);
+        description = "Label of the device (if any).";
+      };
+
+      fsType = mkOption {
+        default = "auto";
+        example = "ext3";
+        type = types.uniq types.string;
+        description = "Type of the file system.";
+      };
+
+      options = mkOption {
+        default = "defaults,relatime";
+        example = "data=journal";
+        type = types.string;
+        merge = pkgs.lib.concatStringsSep ",";
+        description = "Options used to mount the file system.";
+      };
+
+      autoFormat = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If the device does not currently contain a filesystem (as
+          determined by <command>blkid</command>, then automatically
+          format it with the filesystem type specified in
+          <option>fsType</option>.  Use with caution.
+        '';
+      };
+
+      noCheck = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Disable running fsck on this filesystem.";
+      };
+
+    };
+
+    config = {
+      mountPoint = mkDefault name;
+    };
+
+  };
+
 in
 
 {
@@ -36,20 +102,17 @@ in
   options = {
 
     fileSystems = mkOption {
-      example = [
-        { mountPoint = "/";
-          device = "/dev/hda1";
-        }
-        { mountPoint = "/data";
+      example = {
+        "/".device = "/dev/hda1";
+        "/data" = {
           device = "/dev/hda2";
           fsType = "ext3";
           options = "data=journal";
-        }
-        { mountPoint = "/bigdisk";
-          label = "bigdisk";
-        }
-      ];
-
+        };
+        "/bigdisk".label = "bigdisk";
+      };
+      type = types.loaOf types.optionSet;
+      options = [ fileSystemOpts ];
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = \"/\"</literal>).  Each
@@ -66,63 +129,6 @@ in
         systems that support it, such as ext2/ext3 (see <command>mke2fs
         -L</command>).
       '';
-
-      type = types.list types.optionSet;
-
-      options = {
-
-        mountPoint = mkOption {
-          example = "/mnt/usb";
-          type = types.uniq types.string;
-          description = "Location of the mounted the file system.";
-        };
-
-        device = mkOption {
-          default = null;
-          example = "/dev/sda";
-          type = types.uniq (types.nullOr types.string);
-          description = "Location of the device.";
-        };
-
-        label = mkOption {
-          default = null;
-          example = "root-partition";
-          type = types.uniq (types.nullOr types.string);
-          description = "Label of the device (if any).";
-        };
-
-        fsType = mkOption {
-          default = "auto";
-          example = "ext3";
-          type = types.uniq types.string;
-          description = "Type of the file system.";
-        };
-
-        options = mkOption {
-          default = "defaults,relatime";
-          example = "data=journal";
-          type = types.string;
-          merge = pkgs.lib.concatStringsSep ",";
-          description = "Options used to mount the file system.";
-        };
-
-        autoFormat = mkOption {
-          default = false;
-          type = types.bool;
-          description = ''
-            If the device does not currently contain a filesystem (as
-            determined by <command>blkid</command>, then automatically
-            format it with the filesystem type specified in
-            <option>fsType</option>.  Use with caution.
-          '';
-        };
-
-        noCheck = mkOption {
-          default = false;
-          type = types.bool;
-          description = "Disable running fsck on this filesystem.";
-        };
-      };
     };
 
     system.fsPackages = mkOption {
@@ -152,12 +158,11 @@ in
 
   config = {
 
-    boot.supportedFilesystems =
-      map (fs: fs.fsType) config.fileSystems;
+    boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
     boot.initrd.supportedFilesystems =
       map (fs: fs.fsType)
-        (filter (fs: fs.mountPoint == "/" || fs.neededForBoot) config.fileSystems);
+        (filter (fs: fs.mountPoint == "/" || fs.neededForBoot) fileSystems);
 
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
@@ -207,7 +212,7 @@ in
             serviceConfig.Type = "oneshot";
           };
 
-      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) config.fileSystems));
+      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
 
   };
 

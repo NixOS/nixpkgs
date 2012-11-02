@@ -184,17 +184,13 @@ in
   # Note that /dev/root is a symlink to the actual root device
   # specified on the kernel command line, created in the stage 1 init
   # script.
-  fileSystems =
-    [ { mountPoint = "/";
-        device = "/dev/root";
-      }
-      { mountPoint = "/nix/store";
-        fsType = "squashfs";
-        device = "/nix-store.squashfs";
-        options = "loop";
-        neededForBoot = true;
-      }
-    ];
+  fileSystems."/".device = "/dev/root";
+
+  fileSystems."/nix/store" =
+    { fsType = "squashfs";
+      device = "/nix-store.squashfs";
+      options = "loop";
+    };
 
   # We need squashfs in the initrd to mount the compressed Nix store,
   # and aufs to make the root filesystem appear writable.

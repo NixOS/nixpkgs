@@ -68,11 +68,7 @@ with pkgs.lib;
         ''
     );
 
-  fileSystems =
-    [ { mountPoint = "/";
-        device = "/dev/disk/by-label/nixos";
-      }
-    ];
+  fileSystems."/".device = "/dev/disk/by-label/nixos";
 
   boot.kernelParams = [ "console=ttyS0" ];
 

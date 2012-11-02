@@ -320,35 +320,33 @@ in
   # where the regular value for the `fileSystems' attribute should be
   # disregarded for the purpose of building a VM test image (since
   # those filesystems don't exist in the VM).
-  fileSystems = mkOverride 50 (
-    [ { mountPoint = "/";
-        device = "/dev/vda";
-      }
-      { mountPoint = "/nix/store";
-        device = "//10.0.2.4/store";
-        fsType = "cifs";
-        options = "guest,sec=none,noperm,noacl";
-        neededForBoot = true;
-      }
-      { mountPoint = "/tmp/xchg";
-        device = "//10.0.2.4/xchg";
-        fsType = "cifs";
-        options = "guest,sec=none,noperm,noacl";
-        neededForBoot = true;
-      }
-      { mountPoint = "/tmp/shared";
-        device = "//10.0.2.4/shared";
-        fsType = "cifs";
-        options = "guest,sec=none,noperm,noacl";
-        neededForBoot = true;
-      }
-    ] ++ optional cfg.useBootLoader
-      { mountPoint = "/boot";
-        device = "/dev/disk/by-label/boot";
-        fsType = "ext4";
-        options = "ro";
-        noCheck = true; # fsck fails on a r/o filesystem
-      });
+  fileSystems =
+    { "/".device = "/dev/vda";
+      "/nix/store" =
+        { device = "//10.0.2.4/store";
+          fsType = "cifs";
+          options = "guest,sec=none,noperm,noacl";
+        };
+      "/tmp/xchg" =
+        { device = "//10.0.2.4/xchg";
+          fsType = "cifs";
+          options = "guest,sec=none,noperm,noacl";
+          neededForBoot = true;
+        };
+      "/tmp/shared" =
+        { device = "//10.0.2.4/shared";
+          fsType = "cifs";
+          options = "guest,sec=none,noperm,noacl";
+          neededForBoot = true;
+        };
+    } // optionalAttrs cfg.useBootLoader
+    { "/boot" =
+        { device = "/dev/disk/by-label/boot";
+          fsType = "ext4";
+          options = "ro";
+          noCheck = true; # fsck fails on a r/o filesystem
+        };
+    };
 
   swapDevices = mkOverride 50 [ ];
 

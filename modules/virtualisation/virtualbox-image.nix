@@ -71,11 +71,7 @@ with pkgs.lib;
         ''
     );
 
-  fileSystems =
-    [ { mountPoint = "/";
-        device = "/dev/disk/by-label/nixos";
-      }
-    ];
+  fileSystems."/".device = "/dev/disk/by-label/nixos";
 
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/sda";

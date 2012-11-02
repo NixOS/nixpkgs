@@ -62,11 +62,7 @@ with pkgs.lib;
         ''
     );
 
-  fileSystems =
-    [ { mountPoint = "/";
-        device = "/dev/disk/by-label/nixos";
-      }
-    ];
+  fileSystems."/".device = "/dev/disk/by-label/nixos";
 
   boot.initrd.kernelModules = [ "xen-blkfront" "aufs" ];
   boot.kernelModules = [ "xen-netfront" ];

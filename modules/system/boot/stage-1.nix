@@ -99,9 +99,12 @@ let
       options.neededForBoot = mkOption {
         default = false;
         type = types.bool;
-        description = "
-          Mount this file system to boot on NixOS.
-        ";
+        description = ''
+          If set, this file system will be mounted in the initial
+          ramdisk.  By default, this applies to the root file system
+          and to the file system containing
+          <filename>/nix/store</filename>.
+        '';
       };
     };
 
@@ -236,8 +239,8 @@ let
   # booting (such as the FS containing /nix/store, or an FS needed for
   # mounting /, like / on a loopback).
   fileSystems = filter
-    (fs: fs.mountPoint == "/" || fs.neededForBoot)
-    config.fileSystems;
+    (fs: fs.mountPoint == "/" || fs.mountPoint == "/nix" || fs.mountPoint == "/nix/store" || fs.neededForBoot)
+    (attrValues config.fileSystems);
 
 
   udevRules = pkgs.stdenv.mkDerivation {
