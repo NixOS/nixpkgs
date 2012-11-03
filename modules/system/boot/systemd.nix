@@ -453,6 +453,8 @@ in
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets;
 
+    system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
+      "CGROUPS" "AUTOFS4_FS" "DEVTMPFS"
+    ];
   };
-
 }
