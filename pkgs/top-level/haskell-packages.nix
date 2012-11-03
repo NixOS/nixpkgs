@@ -526,6 +526,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bson = callPackage ../development/libraries/haskell/bson {};
 
+  boomerang = callPackage ../development/libraries/haskell/boomerang {};
+
   byteorder = callPackage ../development/libraries/haskell/byteorder {};
 
   bytestringNums = callPackage ../development/libraries/haskell/bytestring-nums {};
