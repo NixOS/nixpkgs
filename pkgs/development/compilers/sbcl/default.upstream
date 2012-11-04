@@ -1,0 +1,9 @@
+name sbcl
+target default.nix
+url http://sf.net/projects/sbcl/files/sbcl/
+version_link '/sbcl/[0-9.]+/$'
+link "source.tar.bz2"
+version '.*/sbcl-([0-9.]+)-source.*' '\1'
+redirect
+process 'http://[a-z]+[.]dl[.]sourceforge[.]net/' 'mirror://sourceforge/'
+process '[?].*' ''
