@@ -16,6 +16,8 @@
 , x264Support ? false, x264 ? null
 , jackaudioSupport ? false, jackaudio ? null
 , pulseSupport ? false, pulseaudio ? null
+# For screenshots
+, libpngSupport ? true, libpng ? null
 }:
 
 assert x11Support -> (libX11 != null && libXext != null && mesa != null);
@@ -35,7 +37,7 @@ assert theoraSupport -> libtheora != null;
 assert x264Support -> x264 != null;
 assert jackaudioSupport -> jackaudio != null;
 assert pulseSupport -> pulseaudio != null;
-
+assert libpngSupport -> libpng != null;
 
 let
 
@@ -109,7 +111,9 @@ stdenv.mkDerivation rec {
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional lameSupport lame
     ++ optional vdpauSupport libvdpau
-    ++ optional speexSupport speex;
+    ++ optional speexSupport speex
+    ++ optional libpngSupport libpng
+    ;
 
   buildNativeInputs = [ yasm ];
 
