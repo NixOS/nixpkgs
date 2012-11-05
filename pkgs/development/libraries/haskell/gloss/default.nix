@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "1.7.6.5";
   sha256 = "0s02vbcyfqzlmjw68kp3arn3vvmldh04460gm050vbc6rqpc8dkv";
   buildDepends = [ bmp GLUT OpenGL ];
+  jailbreak = true;
   meta = {
     homepage = "http://gloss.ouroborus.net";
     description = "Painless 2D vector graphics, animations and simulations";
