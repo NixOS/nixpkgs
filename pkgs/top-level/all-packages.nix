@@ -3331,11 +3331,13 @@ let
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
   boost151 = callPackage ../development/libraries/boost/1.51.nix { };
-  boost = boost151;
+  boost152 = callPackage ../development/libraries/boost/1.52.nix { };
+  boost = boost152;
 
   boostHeaders149 = callPackage ../development/libraries/boost/1.49-headers.nix { };
   boostHeaders151 = callPackage ../development/libraries/boost/1.51-headers.nix { };
-  boostHeaders = boostHeaders151;
+  boostHeaders152 = callPackage ../development/libraries/boost/1.52-headers.nix { };
+  boostHeaders = boostHeaders152;
 
   botan = callPackage ../development/libraries/botan { };
 
