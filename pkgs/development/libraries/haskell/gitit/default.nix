@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gitit";
-  version = "0.10.0.1";
-  sha256 = "0dx4jq7j0s6h5lfl8qrr4qnyb3j0cnnc1c786yf8kcmhk04n028f";
+  version = "0.10.0.2";
+  sha256 = "0cnql35h4laqpaymg32dmszwzc74qmbmmjas44gcsd8v5n6f701i";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -18,7 +18,6 @@ cabal.mkDerivation (self: {
     safe SHA syb tagsoup text time url utf8String xhtml xml xssSanitize
     zlib
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://gitit.net";
     description = "Wiki using happstack, git or darcs, and pandoc";
