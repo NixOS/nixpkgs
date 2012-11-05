@@ -21,6 +21,7 @@ let
     ''
       #! /bin/sh
 
+      . /etc/profile
       cd "$HOME"
 
       # The first argument of this script is the session type.
