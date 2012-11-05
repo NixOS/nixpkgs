@@ -1439,10 +1439,10 @@ rec {
   };
 
   EmailSender = buildPerlPackage rec {
-    name = "Email-Sender-0.110001";
+    name = "Email-Sender-0.120002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "0z4nl7aizbailraqwkkqhx6k3hdz67wxszjfhd5yg2vn06ybsjwj";
+      sha256 = "1cp735ndmh76xzijsm1hd0yh0m9yj34jc8akjhidkn677h2021dc";
     };
     buildInputs = [ TestMore ];
     propagatedBuildInputs =
