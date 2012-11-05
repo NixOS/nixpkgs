@@ -4,10 +4,11 @@
 
 cabal.mkDerivation (self: {
   pname = "OpenGL";
-  version = "2.5.0.0";
-  sha256 = "1kpakn5i4aka67mqcpfq9jpl38h409x63zd14y35abpm6h3x8m3j";
+  version = "2.6.0.0";
+  sha256 = "0rbdx73gcjx4ksqdjishlnn1ibxj21cqg5pxphy8bsphlygzc76l";
   buildDepends = [ GLURaw ObjectName OpenGLRaw StateVar Tensor ];
   extraLibraries = [ libX11 mesa ];
+  noHaddock = true;
   meta = {
     homepage = "http://www.haskell.org/haskellwiki/Opengl";
     description = "A binding for the OpenGL graphics system";
