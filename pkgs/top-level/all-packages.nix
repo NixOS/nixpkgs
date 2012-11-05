@@ -5871,6 +5871,7 @@ let
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
       ];
   };
 
@@ -5883,6 +5884,7 @@ let
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
       ];
   };
 

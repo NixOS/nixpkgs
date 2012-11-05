@@ -262,6 +262,11 @@ rec {
       patch = ./mips-fpu-sigill.patch;
     };
 
+  mips_ext3_n32 =
+    { name = "mips-ext3-n32";
+      patch = ./mips-ext3-n32.patch;
+    };
+
   guruplug_defconfig =
     { # Default configuration for the GuruPlug.  From
       # <http://www.openplug.org/plugwiki/images/c/c6/Guruplug-patchset-2.6.33.2.tar.bz2>.
