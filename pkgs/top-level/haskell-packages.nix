@@ -1243,6 +1243,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
 
+  optparse_applicative = callPackage ../development/libraries/haskell/optparse-applicative {};
+
   pathPieces = callPackage ../development/libraries/haskell/path-pieces {};
 
   pandoc = callPackage ../development/libraries/haskell/pandoc {};
@@ -1569,6 +1571,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   testFrameworkQuickcheck2 = callPackage ../development/libraries/haskell/test-framework-quickcheck2 {};
 
   testFrameworkTh = callPackage ../development/libraries/haskell/test-framework-th {};
+
+  testFrameworkThPrime = callPackage ../development/libraries/haskell/test-framework-th-prime {};
 
   testpack = callPackage ../development/libraries/haskell/testpack {};
 
