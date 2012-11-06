@@ -5,7 +5,6 @@ cabal.mkDerivation (self: {
   version = "0.3.0";
   sha256 = "1ymk8k0r9ckk7dalz3virvvpyrf4nw8xvb23cs6ibdjjbzsphpiz";
   buildDepends = [ syb ];
-  noHaddock = true;
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";
     description = "Data types for managing source code locations";

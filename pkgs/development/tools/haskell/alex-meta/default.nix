@@ -5,7 +5,6 @@ cabal.mkDerivation (self: {
   version = "0.3.0.5";
   sha256 = "0f41q5l6z1dcpfx8rxacv4f544zcw7pgvq935mnzzha9fvsxqzk4";
   buildDepends = [ haskellSrcMeta QuickCheck ];
-  noHaddock = true;
   meta = {
     description = "Quasi-quoter for Alex lexers";
     license = self.stdenv.lib.licenses.bsd3;
