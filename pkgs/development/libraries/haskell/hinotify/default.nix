@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hinotify";
-  version = "0.3.3";
-  sha256 = "0z8pd5zva25zii5kkh807kdkn4j9w9z74f2dw4kyflwidn0063fr";
+  version = "0.3.4";
+  sha256 = "05iqy4llf42k20a4hdc7p3hx30v030ljwi469ps8xxx36c9c5kmf";
   meta = {
     homepage = "https://github.com/kolmodin/hinotify.git";
     description = "Haskell binding to inotify";
