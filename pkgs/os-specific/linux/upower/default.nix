@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, dbus_tools, polkit
 , intltool, libxslt, docbook_xsl, udev, libusb1, pmutils
-, useSystemd ? false, systemd ? null
+, useSystemd ? true, systemd
 }:
 
 assert stdenv.isLinux;
