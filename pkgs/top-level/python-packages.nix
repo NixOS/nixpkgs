@@ -61,13 +61,13 @@ let pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    rev = "27c91058c49d8755d2813d5b78094f40f36ec905";
+    rev = "5ed59825ffaeaacea90ea10be4b932c60428ed8e";
     name = "alot-0.3.3_${rev}";
 
     src = fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "67e1033aa91818b7fa4c3911430a4da0f73aca92c3e3832c010038cbf263eec2";
+      sha256 = "1b724d47bf766ba3ca7cb6d27c7bb597dbc67dcae1347c5a0f01f80c2246ca07";
     };
 
     doCheck = false;
@@ -705,11 +705,11 @@ let pythonPackages = python.modules // rec {
 
 
   flake8 = buildPythonPackage (rec {
-    name = "flake8-1.4";
+    name = "flake8-1.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      md5 = "64acc2c905178f6d6817d88574407fb5";
+      md5 = "525be5c7fcaf85f6819c77752cb2ee72";
     };
 
     doCheck = false;
@@ -1458,7 +1458,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "82a38f674da1fa496c0fc4df714cbb058540bed72a30c50a2e344b0d984c4d21";
     };
 
-    propagatedBuildInputs = [ httplib2  ];
+    propagatedBuildInputs = [ httplib2 ];
     doCheck = false;
 
     meta = {
@@ -2774,7 +2774,7 @@ let pythonPackages = python.modules // rec {
   };
 
   turses = buildPythonPackage (rec {
-    name = "turses-0.2.5";
+    name = "turses-0.2.8";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
