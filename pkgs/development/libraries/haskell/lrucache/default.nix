@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lrucache";
-  version = "1.1.1.1";
-  sha256 = "0w310wsvin5hw3awpicnzddyifcq0844h52jwjcqnin81l2lqrfw";
+  version = "1.1.1.2";
+  sha256 = "1s4yrjfmndsrxbfrn8xcxyif65nsdx4b34ki3ajznrsvsl1cc137";
   meta = {
     homepage = "http://github.com/chowells79/lrucache";
     description = "a simple, pure LRU cache";
