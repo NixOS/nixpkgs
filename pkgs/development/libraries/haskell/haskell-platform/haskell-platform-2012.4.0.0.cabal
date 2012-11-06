@@ -108,6 +108,6 @@ library
     -- hscolour                 ==1.19   -- ???
     -- haddock                  ==2.11.0 -- need to use the one shipped with ghc
 
--- N.B.: The begin/end comment annocations are used to build the source
+-- N.B.: The begin/end comment annotations are used to build the source
 -- installer: Packages that are part of the core are checked at build time.
 -- Source of packages that are part of the platform are included in the tarball.
