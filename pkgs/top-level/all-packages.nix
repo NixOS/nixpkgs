@@ -6700,7 +6700,9 @@ let
   djview = callPackage ../applications/graphics/djview { };
   djview4 = pkgs.djview;
 
-  dmenu = callPackage ../applications/misc/dmenu { };
+  dmenu = callPackage ../applications/misc/dmenu {
+    enableXft = config.dmenu.enableXft or false;
+  };
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
     inherit libpng libtiff libjpeg imagemagick librsvg
