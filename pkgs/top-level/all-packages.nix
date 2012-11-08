@@ -7829,10 +7829,11 @@ let
   uwimap = callPackage ../tools/networking/uwimap { };
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
-    inherit pkgconfig webkit makeWrapper glib_networking;
-    inherit gtk3 glib;
+    inherit pkgconfig webkit makeWrapper glib_networking python3;
+    inherit glib pango cairo gdk_pixbuf atk;
     inherit (xlibs) libX11 kbproto;
     inherit (gnome) libsoup;
+    gtk = gtk3;
   };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
