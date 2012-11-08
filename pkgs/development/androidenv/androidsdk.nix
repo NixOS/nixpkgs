@@ -22,8 +22,8 @@ stdenv.mkDerivation {
     else throw "platform not ${stdenv.system} supported!";
   
   buildCommand = ''
-    mkdir -p $out
-    cd $out
+    mkdir -p $out/libexec
+    cd $out/libexec
     unpackFile $src;
     
     cd android-sdk-*/tools
@@ -147,6 +147,34 @@ stdenv.mkDerivation {
         ''
       else ""
     ) platformVersions}
+    
+    # Create wrappers to the most important tools and platform tools so that we can run them if the SDK is in our PATH
+    
+    ensureDir $out/bin
+
+    for i in $out/libexec/android-sdk-*/tools/*
+    do
+        if [ ! -d $i ] && [ -x $i ]
+        then
+            ( echo '#! ${stdenv.shell} -e'
+              echo "cd $out/libexec/android-sdk-*/tools"
+              echo "./$(basename $i) \"\$@\"" ) > $out/bin/$(basename $i)
+          
+              chmod +x $out/bin/$(basename $i)
+        fi
+    done
+    
+    for i in $out/libexec/android-sdk-*/platform-tools/*
+    do
+        if [ ! -d $i ] && [ -x $i ]
+        then
+            ( echo '#! ${stdenv.shell} -e'
+              echo "cd $out/libexec/android-sdk-*/platform-tools"
+              echo "./$(basename $i) \"\$@\"") > $out/bin/$(basename $i)
+          
+              chmod +x $out/bin/$(basename $i)
+        fi
+    done
   '';
   
   buildInputs = [ shebangfix unzip makeWrapper ];

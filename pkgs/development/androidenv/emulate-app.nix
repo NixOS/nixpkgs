@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     
     for i in $(seq 5554 2 5584)
     do
-        if [ -z "$(${androidsdkComposition}/android-sdk-*/platform-tools/adb devices | grep emulator-$i)" ]
+        if [ -z "$(${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb devices | grep emulator-$i)" ]
         then
             port=$i
             break
@@ -46,27 +46,27 @@ stdenv.mkDerivation {
     export ANDROID_SERIAL="emulator-$port"
     
     # Create a virtual android device
-    ${androidsdkComposition}/android-sdk-*/tools/android create avd -n device -t ${if useGoogleAPIs then "'Google Inc.:Google APIs:"+platformVersion+"'" else "android-"+platformVersion}
+    ${androidsdkComposition}/libexec/android-sdk-*/tools/android create avd -n device -t ${if useGoogleAPIs then "'Google Inc.:Google APIs:"+platformVersion+"'" else "android-"+platformVersion}
     
     # Launch the emulator
-    ${androidsdkComposition}/android-sdk-*/tools/emulator -avd device -no-boot-anim -port $port &
+    ${androidsdkComposition}/libexec/android-sdk-*/tools/emulator -avd device -no-boot-anim -port $port &
 
     # Wait until the device has completely booted
     
     echo "Waiting until the emulator has booted the device and the package manager is ready..."
     
-    ${androidsdkComposition}/android-sdk-*/platform-tools/adb -s emulator-$port wait-for-device
+    ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port wait-for-device
     
     echo "Device state has been reached"
     
-    while [ -z "$(${androidsdkComposition}/android-sdk-*/platform-tools/adb -s emulator-$port shell getprop dev.bootcomplete | grep 1)" ]
+    while [ -z "$(${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell getprop dev.bootcomplete | grep 1)" ]
     do
         sleep 5
     done
     
     echo "dev.bootcomplete property is 1"
     
-    #while [ -z "$(${androidsdkComposition}/android-sdk-*/platform-tools/adb -s emulator-$port shell getprop sys.boot_completed | grep 1)" ]
+    #while [ -z "$(${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell getprop sys.boot_completed | grep 1)" ]
     #do
         #sleep 5
     #done
@@ -76,10 +76,10 @@ stdenv.mkDerivation {
     echo "ready"
     
     # Install the App through the debugger
-    ${androidsdkComposition}/android-sdk-*/platform-tools/adb -s emulator-$port install ${app}/*.apk
+    ${androidsdkComposition}/android-sdk-*/libexec/platform-tools/adb -s emulator-$port install ${app}/*.apk
     
     # Start the application
-    ${androidsdkComposition}/android-sdk-*/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/.${activity}
+    ${androidsdkComposition}/android-sdk-*/libexec/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/.${activity}
     EOF
     
     chmod +x $out/bin/run-test-emulator

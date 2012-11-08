@@ -15,7 +15,7 @@ in
 stdenv.mkDerivation {
   inherit name src;
   
-  ANDROID_HOME = "${androidsdkComposition}/android-sdk-${platformName}";
+  ANDROID_HOME = "${androidsdkComposition}/libexec/android-sdk-${platformName}";
 
   buildInputs = [ jdk ant ];
   
