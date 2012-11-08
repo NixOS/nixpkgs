@@ -92,8 +92,19 @@ retrieve_version () {
   PACKAGED_VERSION="$(nix-instantiate --eval-only '<nixpkgs>' -A "$CURRENT_NAME".meta.version | xargs)"
 }
 
+directory_of () {
+  cd "$(dirname "$1")"; pwd
+}
+
+full_path () {
+  echo "$(directory_of "$1")/$(basename "$1")"
+}
+
 target () {
   CURRENT_TARGET="$1"
+  test -e "$CURRENT_TARGET" || 
+    { [ "$CURRENT_TARGET" = "${CURRENT_TARGET#/}" ] && CURRENT_TARGET="$CONFIG_DIR/$CURRENT_TARGET"; }
+  echo "Target set to: $CURRENT_TARGET"
 }
 
 update_found () {
@@ -118,12 +129,9 @@ do_overwrite () {
   mv "$1.new.tmp" "$1"
 }
 
-full_path () {
-  echo "$(cd "$(dirname "$1")"; pwd)/$(basename "$1")"
-}
-
 process_config () {
-  source "$(full_path "$1")"
+  CONFIG_DIR="$(directory_of "$1")"
+  source "$CONFIG_DIR/$(basename "$1")"
   retrieve_version
   ensure_version
   update_found && do_overwrite "$CURRENT_TARGET"
