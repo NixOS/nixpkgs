@@ -1,80 +1,12 @@
-diff -rc ddclient-3.8.0/ddclient ddclient-3.8.0-new/ddclient
-*** ddclient-3.8.0/ddclient	2009-01-27 20:14:02.000000000 +0100
---- ddclient-3.8.0-new/ddclient	2009-09-16 12:56:43.720654327 +0200
-***************
-*** 307,313 ****
-  my %variables = (
-      'global-defaults'    => {
-  	'daemon'              => setv(T_DELAY, 0, 0, 1, 0,                    interval('60s')),
-! 	'file'                => setv(T_FILE,  0, 0, 1, "$etc$program.conf",  undef),
-  	'cache'               => setv(T_FILE,  0, 0, 1, "$cachedir$program.cache", undef),
-  	'pid'                 => setv(T_FILE,  0, 0, 1, "",                   undef),
-  	'proxy'               => setv(T_FQDNP, 0, 0, 1, '',                   undef),
---- 307,314 ----
-  my %variables = (
-      'global-defaults'    => {
-  	'daemon'              => setv(T_DELAY, 0, 0, 1, 0,                    interval('60s')),
-!         'foreground'          => setv(T_BOOL,  0, 0, 1, 0,                    undef),	
-!         'file'                => setv(T_FILE,  0, 0, 1, "$etc$program.conf",  undef),
-  	'cache'               => setv(T_FILE,  0, 0, 1, "$cachedir$program.cache", undef),
-  	'pid'                 => setv(T_FILE,  0, 0, 1, "",                   undef),
-  	'proxy'               => setv(T_FQDNP, 0, 0, 1, '',                   undef),
-***************
-*** 535,540 ****
---- 536,542 ----
-      "usage: ${program} [options]",
-      "options are:",
-      [ "daemon",      "=s", "-daemon delay         : run as a daemon, specify delay as an interval." ],
-+     [ "foreground",  "!",  "-foreground           : do not fork" ],
-      [ "proxy",       "=s", "-proxy host           : use 'host' as the HTTP proxy" ],
-      [ "server",      "=s", "-server host          : update DNS information on 'host'" ],
-      [ "protocol",    "=s", "-protocol type        : update protocol used" ],
-***************
-*** 623,629 ****
-  $SIG{'HUP'}    = sub { $caught_hup  = 1; };
-  $SIG{'TERM'}   = sub { $caught_term = 1; };
-  $SIG{'KILL'}   = sub { $caught_kill = 1; };
-! if (opt('daemon') && !opt('force')) {
-      $SIG{'CHLD'}   = 'IGNORE';
-      my $pid = fork;
-      if ($pid < 0) {
---- 625,634 ----
-  $SIG{'HUP'}    = sub { $caught_hup  = 1; };
-  $SIG{'TERM'}   = sub { $caught_term = 1; };
-  $SIG{'KILL'}   = sub { $caught_kill = 1; };
-! # don't fork() if foreground or force is on
-! if (opt('foreground') || opt('force')) {
-!     ;
-! } elsif (opt('daemon')) {
-      $SIG{'CHLD'}   = 'IGNORE';
-      my $pid = fork;
-      if ($pid < 0) {
-***************
-*** 633,644 ****
-  	exit 0;
-      }
-      $SIG{'CHLD'}   = 'DEFAULT';
--     $opt{'syslog'} = 1;
-      open(STDOUT, ">/dev/null");
-      open(STDERR, ">/dev/null");
-      open(STDIN,  "</dev/null");
-! 
-!     write_pid();
-  }
-  
-  umask 077;
---- 638,650 ----
-  	exit 0;
-      }
-      $SIG{'CHLD'}   = 'DEFAULT';
-      open(STDOUT, ">/dev/null");
-      open(STDERR, ">/dev/null");
-      open(STDIN,  "</dev/null");
-! }
-! if(opt('daemon')) {
-!      write_pid();
-!     $opt{'syslog'} = 1;
-  }
-  
-  umask 077;
-Only in ddclient-3.8.0-new: ddclient~
+diff -u ddclient-3.8.1/ddclient ddclient-3.8.1.patched/ddclient
+--- ddclient-3.8.1/ddclient	2011-07-11 23:04:21.000000000 +0200
++++ ddclient-3.8.1.patched/ddclient	2012-11-08 11:52:31.930647236 +0100
+@@ -574,7 +574,7 @@
+     "usage: ${program} [options]",
+     "options are:",
+     [ "daemon",      "=s", "-daemon delay         : run as a daemon, specify delay as an interval." ],
+-+     [ "foreground",  "!",  "-foreground           : do not fork" ],
++    [ "foreground",  "!",  "-foreground           : do not fork" ],
+     [ "proxy",       "=s", "-proxy host           : use 'host' as the HTTP proxy" ],
+     [ "server",      "=s", "-server host          : update DNS information on 'host'" ],
+     [ "protocol",    "=s", "-protocol type        : update protocol used" ],
