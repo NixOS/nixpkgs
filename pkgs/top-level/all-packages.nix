@@ -1967,7 +1967,19 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc_realCross = gcc46_realCross;
+  gcc47_realCross = lib.addMetaAttrs { platforms = []; }
+    (makeOverridable (import ../development/compilers/gcc/4.7) {
+      inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+        cloog ppl gettext which noSysDirs;
+      binutilsCross = binutilsCross;
+      libcCross = libcCross;
+      profiledCompiler = false;
+      enableMultilib = false;
+      crossStageStatic = false;
+      cross = assert crossSystem != null; crossSystem;
+    });
+
+  gcc_realCross = gcc47_realCross;
 
   gccCrossStageStatic = let
       isMingw = (stdenv.cross.libc == "msvcrt");
