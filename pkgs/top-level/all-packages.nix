@@ -2956,11 +2956,11 @@ let
     gold = true;
   };
 
-  binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
+  binutilsCross = lowPrio (forceBuildDrv (import ../development/tools/misc/binutils {
     inherit stdenv fetchurl zlib;
     noSysDirs = true;
     cross = assert crossSystem != null; crossSystem;
-  });
+  }));
 
   bison = bison25;
 
@@ -3242,9 +3242,9 @@ let
     inherit (gnu) mig;
   };
 
-  gdbCross = callPackage ../development/tools/misc/gdb {
+  gdbCross = lowPrio (callPackage ../development/tools/misc/gdb {
     target = crossSystem;
-  };
+  });
 
   valgrind = callPackage ../development/tools/analysis/valgrind {
     stdenv =
@@ -6236,12 +6236,12 @@ let
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
-  uclibcCross = callPackage ../os-specific/linux/uclibc {
+  uclibcCross = lowPrio (callPackage ../os-specific/linux/uclibc {
     inherit fetchurl stdenv libiconv;
     linuxHeaders = linuxHeadersCross;
     gccCross = gccCrossStageStatic;
     cross = assert crossSystem != null; crossSystem;
-  };
+  });
 
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
   udev173 = callPackage ../os-specific/linux/udev/173.nix { };
