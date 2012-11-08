@@ -579,6 +579,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cipherAes = callPackage ../development/libraries/haskell/cipher-aes {};
 
+  classyPrelude = callPackage ../development/libraries/haskell/classy-prelude {};
+
+  classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
+
   clientsession = callPackage ../development/libraries/haskell/clientsession {};
 
   cmdargs = callPackage ../development/libraries/haskell/cmdargs {};
