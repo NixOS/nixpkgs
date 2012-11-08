@@ -1720,6 +1720,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   wlPprintText = callPackage ../development/libraries/haskell/wl-pprint-text {};
 
+  word8 = callPackage ../development/libraries/haskell/word8 {};
+
   wx = callPackage ../development/libraries/haskell/wxHaskell/wx.nix {};
 
   wxc = callPackage ../development/libraries/haskell/wxHaskell/wxc.nix {
