@@ -76,6 +76,10 @@ version () {
   echo "Version: $CURRENT_VERSION" >&2
 }
 
+ensure_version () {
+  [ -z "$CURRENT_VERSION" ] && version '.*-([0-9.]+)[-._].*' '\1'
+}
+
 hash () {
   CURRENT_HASH="$(nix-prefetch-url "$CURRENT_URL")"
 }
@@ -121,6 +125,7 @@ full_path () {
 process_config () {
   source "$(full_path "$1")"
   retrieve_version
+  ensure_version
   update_found && do_overwrite "$CURRENT_TARGET"
 }
 

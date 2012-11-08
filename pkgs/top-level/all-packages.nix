@@ -7487,6 +7487,8 @@ let
 
   novaclient = callPackage ../applications/virtualization/nova/client.nix { };
 
+  nspluginwrapper = callPackage ../applications/networking/browsers/mozilla-plugins/nspluginwrapper {};
+
   nvi = callPackage ../applications/editors/nvi { };
 
   ocrad = callPackage ../applications/graphics/ocrad { };
