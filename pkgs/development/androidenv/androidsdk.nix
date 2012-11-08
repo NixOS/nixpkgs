@@ -8,7 +8,7 @@
 {platformVersions, useGoogleAPIs}:
 
 stdenv.mkDerivation {
-  name = "android-sdk-linux-20.0.3";
+  name = "android-sdk-20.0.3";
   
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {

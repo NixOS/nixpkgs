@@ -407,6 +407,8 @@ let
     pkgs_i686 = pkgsi686Linux;
   };
 
+  inherit (androidenv) androidsdk_4_1;
+
   aria = builderDefsPackage (import ../tools/networking/aria) { };
 
   aria2 = callPackage ../tools/networking/aria2 { };
