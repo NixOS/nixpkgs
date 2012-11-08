@@ -2,7 +2,7 @@
 
 rec {
   platformTools = import ./platform-tools.nix {
-    inherit (pkgs) stdenv fetchurl unzip shebangfix;
+    inherit (pkgs) stdenv fetchurl unzip;
     inherit (pkgs_i686) zlib ncurses;
     stdenv_32bit = pkgs_i686.stdenv;
   };
@@ -30,7 +30,7 @@ rec {
   };
 
   androidsdk = import ./androidsdk.nix {
-    inherit (pkgs) stdenv fetchurl unzip shebangfix makeWrapper;
+    inherit (pkgs) stdenv fetchurl unzip makeWrapper;
     inherit (pkgs) freetype fontconfig gtk atk;
     inherit (pkgs.xorg) libX11 libXext libXrender;
     

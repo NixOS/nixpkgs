@@ -1,4 +1,4 @@
-{stdenv, stdenv_32bit, fetchurl, unzip, shebangfix, zlib, ncurses}:
+{stdenv, stdenv_32bit, fetchurl, unzip, zlib, ncurses}:
 
 stdenv.mkDerivation {
   name = "android-platform-tools-r15_rc7";
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
         patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib llvm-rs-cc
     ''}
     
-    shebangfix dx
+    patchShebangs .
   '';
   
-  buildInputs = [ unzip shebangfix ];
+  buildInputs = [ unzip ];
 }

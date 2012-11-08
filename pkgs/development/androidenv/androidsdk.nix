@@ -1,4 +1,4 @@
-{ stdenv, stdenv_32bit, fetchurl, unzip, shebangfix, makeWrapper
+{ stdenv, stdenv_32bit, fetchurl, unzip, makeWrapper
 , platformTools, support, platforms, sysimages, addons
 , zlib_32bit
 , libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit
@@ -54,14 +54,9 @@ stdenv.mkDerivation {
             --prefix LD_LIBRARY_PATH : `pwd`/lib:${libX11_32bit}/lib:${libxcb_32bit}/lib:${libXau_32bit}/lib:${libXdmcp_32bit}/lib:${libXext_32bit}/lib
       done
     ''}
-    
-    # These are shell scripts with a reference to #!/bin/bash, which must be patched
-    
-    for i in ddms draw9patch monkeyrunner monitor lint traceview
-    do
-        shebangfix $i
-    done
 
+    patchShebangs .
+    
     ${if stdenv.system == "i686-linux" then
       ''
         # The monitor requires some more patching
@@ -158,7 +153,7 @@ stdenv.mkDerivation {
         then
             ( echo '#! ${stdenv.shell} -e'
               echo "cd $out/libexec/android-sdk-*/tools"
-              echo "./$(basename $i) \"\$@\"" ) > $out/bin/$(basename $i)
+              echo "exec ./$(basename $i) \"\$@\"" ) > $out/bin/$(basename $i)
           
               chmod +x $out/bin/$(basename $i)
         fi
@@ -177,5 +172,5 @@ stdenv.mkDerivation {
     done
   '';
   
-  buildInputs = [ shebangfix unzip makeWrapper ];
+  buildInputs = [ unzip makeWrapper ];
 }
