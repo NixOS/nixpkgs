@@ -1643,6 +1643,15 @@ let
 
   tkabber_plugins = callPackage ../applications/networking/instant-messengers/tkabber-plugins { };
 
+  tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix {
+    inherit (xlibs) libX11 imake xproto gccmakedep;
+  };
+
+  # The newer package is low-priority because it segfaults at startup.
+  tkgate2 = lowPrio (callPackage ../applications/science/electronics/tkgate/2.x.nix {
+    inherit (xlibs) libX11;
+  });
+
   tm = callPackage ../tools/system/tm { };
 
   trang = callPackage ../tools/text/xml/trang { };
