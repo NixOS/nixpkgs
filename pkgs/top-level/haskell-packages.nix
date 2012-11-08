@@ -789,6 +789,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
+  fsnotify = callPackage ../development/libraries/haskell/fsnotify {};
+
   gamma = callPackage ../development/libraries/haskell/gamma {};
 
   gd = callPackage ../development/libraries/haskell/gd {
