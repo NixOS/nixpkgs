@@ -45,6 +45,11 @@ rec {
     libXext_32bit = pkgs_i686.xorg.libXext;
   };
   
+  androidsdk_4_1 = androidsdk {
+    platformVersions = [ "16" ];
+    useGoogleAPIs = true;
+  };
+  
   buildApp = import ./build-app.nix {
     inherit (pkgs) stdenv jdk ant;
     inherit androidsdk;
