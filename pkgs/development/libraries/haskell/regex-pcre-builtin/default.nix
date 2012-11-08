@@ -1,12 +1,13 @@
-{ cabal, regexBase }:
+{ cabal, pcre, regexBase }:
 
 cabal.mkDerivation (self: {
   pname = "regex-pcre-builtin";
-  version = "0.94.2.1.7.7";
-  sha256 = "1c4zxfild1fbpxwqcp2jnf6iwfs0z6nc8dry09gmjykxlhisxi8s";
+  version = "0.94.4.1.8.31";
+  sha256 = "1g17yndavskv0v4zkpkqkl99ls03aqz028xcf5xvd3ak1q8mscx4";
   buildDepends = [ regexBase ];
+  extraLibraries = [ pcre ];
   meta = {
-    homepage = "http://sourceforge.net/projects/lazy-regex";
+    homepage = "http://hackage.haskell.org/package/regex-pcre";
     description = "Replaces/Enhances Text.Regex";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
