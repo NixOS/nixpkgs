@@ -76,10 +76,10 @@ stdenv.mkDerivation {
     echo "ready"
     
     # Install the App through the debugger
-    ${androidsdkComposition}/android-sdk-*/libexec/platform-tools/adb -s emulator-$port install ${app}/*.apk
+    ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port install ${app}/*.apk
     
     # Start the application
-    ${androidsdkComposition}/android-sdk-*/libexec/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/.${activity}
+    ${androidsdkComposition}/libexec/android-sdk-*/platform-tools/adb -s emulator-$port shell am start -a android.intent.action.MAIN -n ${package}/.${activity}
     EOF
     
     chmod +x $out/bin/run-test-emulator
