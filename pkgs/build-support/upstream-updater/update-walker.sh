@@ -107,20 +107,36 @@ target () {
   echo "Target set to: $CURRENT_TARGET"
 }
 
+marker () {
+  BEGIN_EXPRESSION="$1"
+}
+
 update_found () {
   echo "Compare: $CURRENT_VERSION vs $PACKAGED_VERSION"
   [ "$CURRENT_VERSION" != "$PACKAGED_VERSION" ]
 }
 
+do_write_expression () {
+  echo "${1}rec {"
+  echo "${1}  baseName=\"$CURRENT_NAME\";"
+  echo "${1}  version=\"$CURRENT_VERSION\";"
+  echo "${1}  name=\"$CURRENT_NAME-$CURRENT_VERSION\";"
+  echo "${1}  hash=\"$CURRENT_HASH\";"
+  echo "${1}  url=\"$CURRENT_URL\";"
+  echo "${1}  sha256=\"$CURRENT_HASH\";"
+  echo "$2"
+}
+
 do_regenerate () {
-  cat "$1" | grep -F '# Generated upstream information' -B 999999;
-  echo "  rec {"
-  echo "    baseName=\"$CURRENT_NAME\";"
-  echo "    version=\"$CURRENT_VERSION\";"
-  echo '    name="${baseName}-${version}";'
-  echo "    hash=\"$CURRENT_HASH\";"
-  echo "    url=\"$CURRENT_URL\";"
-  cat "$1" | grep -F '# Generated upstream information' -A 999999 | grep -E '^ *[}]; *$' -A 999999;
+  BEFORE="$(cat "$1" | grep -F "$BEGIN_EXPRESSION" -B 999999;)"
+  AFTER_EXPANDED="$(cat "$1" | grep -F "$BEGIN_EXPRESSION" -A 999999 | grep -E '^ *[}] *; *$' -A 999999;)"
+  AFTER="$(echo "$AFTER_EXPANDED" | tail -n +2)"
+  CLOSE_BRACE="$(echo "$AFTER_EXPANDED" | head -n 1)"
+  SPACING="$(echo "$CLOSE_BRACE" | sed -re 's/[^ ].*//')"
+
+  echo "$BEFORE"
+  do_write_expression "$SPACING" "$CLOSE_BRACE"
+  echo "$AFTER"
 }
 
 do_overwrite () {
@@ -132,6 +148,7 @@ do_overwrite () {
 process_config () {
   CONFIG_DIR="$(directory_of "$1")"
   source "$CONFIG_DIR/$(basename "$1")"
+  BEGIN_EXPRESSION='# Generated upstream information';
   retrieve_version
   ensure_version
   update_found && do_overwrite "$CURRENT_TARGET"
