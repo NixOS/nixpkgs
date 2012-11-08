@@ -117,6 +117,7 @@ stdenv.mkDerivation rec {
     ./cppflags-include-fix.patch
     ./printf-fix.patch
     ./linux-version-check-fix.patch
+    ./no-crypto-restrictions.patch
   ];
 
   makeFlags = [
