@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hexpat";
-  version = "0.20.2";
-  sha256 = "1v96xiys1664cdspbd9mps9m1ia4xwykzsg4z62pklqnf21wna7j";
+  version = "0.20.3";
+  sha256 = "13dh0cvcmp6yi4nncsn6q9pkisld9xvz6j4xabng5ax67vdgdvrs";
   buildDepends = [
     deepseq extensibleExceptions List text transformers utf8String
   ];
