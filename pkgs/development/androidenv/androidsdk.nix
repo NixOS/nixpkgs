@@ -165,7 +165,7 @@ stdenv.mkDerivation {
         then
             ( echo '#! ${stdenv.shell} -e'
               echo "cd $out/libexec/android-sdk-*/platform-tools"
-              echo "./$(basename $i) \"\$@\"") > $out/bin/$(basename $i)
+              echo "exec ./$(basename $i) \"\$@\"") > $out/bin/$(basename $i)
           
               chmod +x $out/bin/$(basename $i)
         fi
