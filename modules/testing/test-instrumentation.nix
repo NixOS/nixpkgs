@@ -33,8 +33,9 @@ let kernel = config.boot.kernelPackages.kernel; in
 
     # Prevent agetty from being instantiated on ttyS0, since it
     # interferes with the backdoor (writes to ttyS0 will randomly fail
-    # with EIO).
+    # with EIO).  Likewise for hvc0.
     boot.systemd.services."serial-getty@ttyS0".enable = false;
+    boot.systemd.services."serial-getty@hvc0".enable = false;
 
     boot.initrd.postDeviceCommands =
       ''
