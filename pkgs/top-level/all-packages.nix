@@ -7735,6 +7735,8 @@ let
     clisp = clisp_2_44_1;
   };
 
+  sublime = callPackage ../applications/editors/sublime { };
+
   subversion = callPackage ../applications/version-management/subversion/default.nix {
     neon = pkgs.neon029;
     bdbSupport = true;
