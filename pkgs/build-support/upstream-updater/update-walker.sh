@@ -16,11 +16,13 @@ version_unpack () {
     s/-(gamma)/ -2 \1 /g; 
     s/-(beta)/ -3 \1 /g; 
     s/-(alpha)/ -4 \1 /g;
+    s/[-]/ - /g; 
     '
 }
 
 version_repack () {
   sed -re '
+    s/ - /-/g;
     s/ -[0-9]+ ([a-z]+) /-\1/g;
     s@ / @/@g
     s/ /./g; 
@@ -29,7 +31,7 @@ version_repack () {
 
 version_sort () {
   version_unpack | 
-    sort -t ' ' -k 1n -k 2n -k 3n -k 4n -k 5n -k 6n -k 7n -n | tac |
+    sort -t ' ' -n $(for i in $(seq 30); do echo " -k${i}n" ; done) | tac |
     version_repack
 }
 
@@ -80,6 +82,10 @@ ensure_version () {
   [ -z "$CURRENT_VERSION" ] && version '.*-([0-9.]+)[-._].*' '\1'
 }
 
+ensure_target () {
+  [ -z "$CURRENT_TARGET" ] && target default.nix
+}
+
 hash () {
   CURRENT_HASH="$(nix-prefetch-url "$CURRENT_URL")"
 }
@@ -127,6 +133,36 @@ do_write_expression () {
   echo "$2"
 }
 
+line_position () {
+  file="$1"
+  regexp="$2"
+  count="${3:-1}"
+  grep -E "$regexp" -m "$count" -B 999999 "$file" | wc -l
+}
+
+replace_once () {
+  file="$1"
+  regexp="$2"
+  replacement="$3"
+  instance="${4:-1}"
+
+  position="$(line_position "$file" "$regexp" "$instance")"
+  sed -re "${position}s	$regexp	$replacement	" -i "$file"
+}
+
+set_var_value () {
+  var="${1}"
+  value="${2}"
+  instance="${3:-1}"
+  file="${4:-$CURRENT_TARGET}"
+  no_quotes="${5:-0}"
+
+  quote='"'
+  let "$no_quotes" && quote=""
+
+  replace_once "$file" "${var} *= *.*" "${var} = ${quote}${value}${quote};"
+}
+
 do_regenerate () {
   BEFORE="$(cat "$1" | grep -F "$BEGIN_EXPRESSION" -B 999999;)"
   AFTER_EXPANDED="$(cat "$1" | grep -F "$BEGIN_EXPRESSION" -A 999999 | grep -E '^ *[}] *; *$' -A 999999;)"
@@ -151,7 +187,10 @@ process_config () {
   BEGIN_EXPRESSION='# Generated upstream information';
   retrieve_version
   ensure_version
+  ensure_target
   update_found && do_overwrite "$CURRENT_TARGET"
 }
+
+source "$own_dir/update-walker-service-specific.sh"
 
 process_config "$1"
