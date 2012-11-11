@@ -19,7 +19,7 @@
 
 , installCommand ?
     ''
-      easy_install --prefix="$out" .
+      easy_install --no-deps --prefix="$out" . 
     ''
     
 , buildPhase ? "true"
