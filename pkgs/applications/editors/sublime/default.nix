@@ -2,6 +2,8 @@
 let
   libPath = stdenv.lib.makeLibraryPath [glib xlibs.libX11 gtk cairo];
 in
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
+
 stdenv.mkDerivation rec {
   name = "sublimetext-2.0.1";
   src = fetchurl {
@@ -24,5 +26,6 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sublime Text is a sophisticated text editor for code, markup and prose.";
+    license = "unfree";
   };
 }
