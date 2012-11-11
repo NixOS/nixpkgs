@@ -1,5 +1,7 @@
 { stdenv, fetchurl, tcl, tk, libX11, libiconvOrLibc }:
 
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
+
 stdenv.mkDerivation rec {
   name = "tkgate-2.0-b10";
 
