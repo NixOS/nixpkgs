@@ -1643,6 +1643,8 @@ let
 
   tkabber_plugins = callPackage ../applications/networking/instant-messengers/tkabber-plugins { };
 
+  qfsm = callPackage ../applications/science/electronics/qfsm { };
+
   tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix {
     inherit (xlibs) libX11 imake xproto gccmakedep;
   };
