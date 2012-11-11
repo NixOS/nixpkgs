@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-conduit";
-  version = "1.0.3.2";
-  sha256 = "0vli0pj0d8nn4f7i8aihv6l931am0h0xsmh7k5pkh8lzvdgwihfi";
+  version = "1.0.3.3";
+  sha256 = "0jw1r4vmcbxj8kgkdj4pgibihcdmbdj15g06i9p8mdklmmd7gqnz";
   buildDepends = [
     attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
     blazeHtml blazeMarkup conduit dataDefault failure monadControl
