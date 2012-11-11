@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ random repa repaAlgorithms repaIo vector ];
   extraLibraries = [ llvm ];
+  jailbreak = true;
   meta = {
     homepage = "http://repa.ouroborus.net";
     description = "Examples using the Repa array library";

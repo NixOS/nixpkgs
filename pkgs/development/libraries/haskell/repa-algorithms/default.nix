@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1g6cf70bmkglx0b92kxazaaap75s55fqpp1g7qiskbj2vzvppsg3";
   buildDepends = [ repa vector ];
   extraLibraries = [ llvm ];
+  jailbreak = true;
   meta = {
     homepage = "http://repa.ouroborus.net";
     description = "Algorithms using the Repa array library";
