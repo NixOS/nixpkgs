@@ -28,35 +28,35 @@ let
   options = {
 
     environment.promptInit =  mkOption {
-        default = ''
-          # Provide a nice prompt.
-          PROMPT_COLOR="1;31m"
-          let $UID && PROMPT_COLOR="1;32m"
-          PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
-          if test "$TERM" = "xterm"; then
-            PS1="\[\033]2;\h:\u:\w\007\]$PS1"
-          fi
-        '';
-        description = "
-          Script used to initialized shell prompt.
-        ";
-        type = with pkgs.lib.types; string;
-      };
+      default = ''
+        # Provide a nice prompt.
+        PROMPT_COLOR="1;31m"
+        let $UID && PROMPT_COLOR="1;32m"
+        PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
+        if test "$TERM" = "xterm"; then
+          PS1="\[\033]2;\h:\u:\w\007\]$PS1"
+        fi
+      '';
+      description = "
+        Script used to initialized shell prompt.
+      ";
+      type = with pkgs.lib.types; string;
+    };
 
     environment.shellInit = mkOption {
-        default = "";
-        example = ''export PATH=/godi/bin/:$PATH'';
-        description = "
-          Script used to initialized user shell environments.
-        ";
-        type = with pkgs.lib.types; string;
-      };
+      default = "";
+      example = ''export PATH=/godi/bin/:$PATH'';
+      description = "
+        Script used to initialized user shell environments.
+      ";
+      type = with pkgs.lib.types; string;
+    };
 
     environment.enableBashCompletion = mkOption {
-        default = false;
-        description = "Enable bash-completion for all interactive shells.";
-        type = with pkgs.lib.types; bool;
-      };
+      default = false;
+      description = "Enable bash-completion for all interactive shells.";
+      type = with pkgs.lib.types; bool;
+    };
 
   };
 
