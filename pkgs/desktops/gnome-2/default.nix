@@ -58,6 +58,8 @@
 
   libbonoboui = callPackage ./platform/libbonoboui { };
 
+  python_rsvg = callPackage ./bindings/python-rsvg { };
+
   at_spi = callPackage ./platform/at-spi { };
 
   gtkhtml = callPackage ./platform/gtkhtml { };
