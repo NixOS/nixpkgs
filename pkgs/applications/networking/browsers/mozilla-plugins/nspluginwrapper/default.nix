@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   inherit (srcData) name version;
 
   src = fetchurl{
-    inherit(srcData) url;
+    inherit (srcData) url;
     sha256 = srcData.hash;
   };
 
