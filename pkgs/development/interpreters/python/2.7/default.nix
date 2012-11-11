@@ -74,6 +74,7 @@ let
     postInstall =
       ''
         rm -rf "$out/lib/python${majorVersion}/test"
+        cp ${./distutils.cfg} "$out/lib/python${majorVersion}/distutils/distutils.cfg"
       '';
 
     passthru = {
