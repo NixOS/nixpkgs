@@ -10,7 +10,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  inherit(srcData) name version;
+  inherit (srcData) name version;
 
   src = fetchurl{
     inherit(srcData) url;
@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     description = ''A wrapper to run browser plugins out-of-process'';
     homepage = "http://nspluginwrapper.org/";
     license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainer; [raskin];
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     inherit (srcData) version;
   };
 }
