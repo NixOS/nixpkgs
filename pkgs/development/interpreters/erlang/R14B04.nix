@@ -20,4 +20,21 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = "--with-ssl=${openssl}";
+
+  meta = {
+    homepage = "http://www.erlang.org/";
+    description = "Programming language used for massively scalable soft real-time systems";
+
+    longDescription = ''
+      Erlang is a programming language used to build massively scalable
+      soft real-time systems with requirements on high availability.
+      Some of its uses are in telecoms, banking, e-commerce, computer
+      telephony and instant messaging. Erlang's runtime system has
+      built-in support for concurrency, distribution and fault
+      tolerance.
+    '';
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
 }
