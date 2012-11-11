@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "blaze-builder-conduit";
-  version = "0.5.0.1";
-  sha256 = "1avbgrgqzryqv717714s0418lknm0lqzkis3hia00qhy762amlcn";
+  version = "0.5.0.2";
+  sha256 = "0ynkz822zxp1m02fp9l572d8j8xi5r9j1bg6zs2671m81h22d4in";
   buildDepends = [ blazeBuilder conduit text transformers ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
