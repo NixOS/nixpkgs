@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     echo ${libPath}
     patchelf \
       --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-      --set-rpath ${libPath}:${stdenv.gcc.gcc}/lib64 \
+      --set-rpath ${libPath}:${stdenv.gcc.gcc}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
       $out/sublime/sublime_text
   '';
 
