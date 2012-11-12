@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   name = "erlang-" + version;
 
   src = fetchurl {
-    url = "http://www.erlang.org/download/otp_src_${version}.tar.gz";
+    url = "http://www.erlang.org/download/otp_src_R${version}.tar.gz";
     sha256 = "03eb0bd640916666ff83df1330912225fbf555e0c8cf58bb35d8307a314f1158";
   };
 
