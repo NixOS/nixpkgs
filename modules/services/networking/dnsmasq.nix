@@ -8,6 +8,10 @@ let
 
   serversParam = concatMapStrings (s: "-S ${s} ") cfg.servers;
 
+  dnsmasqConf = pkgs.writeText "dnsmasq.conf" ''
+    ${cfg.extraConfig}
+  '';
+
 in
 
 {
@@ -33,6 +37,15 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.string;
+        default = "";
+        description = ''
+          Extra configuration directives that should be added to
+          <literal>dnsmasq.conf</literal>
+        '';
+      };
+
     };
 
   };
@@ -49,7 +62,7 @@ in
 
         daemonType = "daemon";
 
-        exec = "${dnsmasq}/bin/dnsmasq -R ${serversParam} -o";
+        exec = "${dnsmasq}/bin/dnsmasq -R ${serversParam} -o -C ${dnsmasqConf}";
       };
 
   };
