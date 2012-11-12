@@ -793,6 +793,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   gamma = callPackage ../development/libraries/haskell/gamma {};
 
+  geniplate = callPackage ../development/libraries/haskell/geniplate {};
+
   gd = callPackage ../development/libraries/haskell/gd {
     inherit (pkgs) gd zlib;
   };
