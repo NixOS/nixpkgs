@@ -84,8 +84,9 @@ in
 {
   options = {
 
+    # FIXME: remove this option once we're using Nix 1.2.
     installer.nixosURL = pkgs.lib.mkOption {
-      default = http://nixos.org/releases/nixos/channels/nixos-unstable;
+      default = http://nixos.org/channels/nixos-unstable;
       example = http://nixos.org/releases/nixos/nixos-0.1pre1234;
       description = ''
         URL of the Nixpkgs distribution to use when building the
@@ -93,11 +94,12 @@ in
       '';
     };
 
+    # FIXME: idem.
     installer.manifests = pkgs.lib.mkOption {
-      default = [ http://nixos.org/releases/nixos/channels/nixos-unstable/MANIFEST ];
+      default = [ http://nixos.org/channels/nixos-unstable/MANIFEST ];
       example =
-        [ http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST
-          http://nixos.org/releases/nixos/channels/nixos-stable/MANIFEST
+        [ http://nixos.org/channels/nixpkgs-unstable/MANIFEST
+          http://nixos.org/channels/nixos-stable/MANIFEST
         ];
       description = ''
         URLs of manifests to be downloaded when you run

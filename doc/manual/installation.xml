@@ -322,7 +322,7 @@ packages.</para>
 some reason this is not the case, just do
 
 <screen>
-$ nix-channel --add http://nixos.org/releases/nixos/channels/nixos-unstable
+$ nix-channel --add http://nixos.org/channels/nixos-unstable
 </screen>
 
 You can then upgrade NixOS to the latest version in the channel by

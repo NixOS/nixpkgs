@@ -79,7 +79,7 @@ let
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
       services.httpd.servedDirs = singleton
-        { urlPath = "/releases/nixos/channels/nixos-unstable";
+        { urlPath = "/channels/nixos-unstable";
           dir = "/tmp/channel";
         };
 
@@ -114,7 +114,7 @@ let
         $webserver->succeed("mkdir /tmp/channel");
         $webserver->succeed(
             "nix-push file:///tmp/channel " .
-            "http://nixos.org/releases/nixos/channels/nixos-unstable " .
+            "http://nixos.org/channels/nixos-unstable " .
             "file:///tmp/channel/MANIFEST ${toString channelContents} >&2");
       ''}
 

@@ -87,7 +87,7 @@ fi
 
 # Subscribe the root user to the NixOS channel by default.
 if [ "$USER" = root -a ! -e $HOME/.nix-channels ]; then
-    echo "http://nixos.org/releases/nixos/channels/nixos-unstable nixos" > $HOME/.nix-channels
+    echo "http://nixos.org/channels/nixos-unstable nixos" > $HOME/.nix-channels
 fi
 
 # Create the per-user garbage collector roots directory.
