@@ -542,11 +542,11 @@ let pythonPackages = python.modules // rec {
 
 
   django_1_3 = buildPythonPackage rec {
-    name = "Django-1.3.2";
+    name = "Django-1.3.3";
 
     src = fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
-      sha256 = "0r6pdm33x96aba9x36jvqpkh2bf1zixnzvr12mcc8qq8wc7hii3j";
+      sha256 = "0snlrcvk92qj1v0n9dpycn6sw56w4zns4mpc30837q6yi7ylrx4f";
     };
 
     doCheck = false;
@@ -576,11 +576,11 @@ let pythonPackages = python.modules // rec {
 
 
   djblets = buildPythonPackage rec {
-    name = "Djblets-0.6.19";
+    name = "Djblets-0.6.23";
 
     src = fetchurl {
       url = "http://downloads.reviewboard.org/releases/Djblets/0.6/${name}.tar.gz";
-      sha256 = "1hhvpi81yknvlaazq1cpgamp9vf3x1fcr0ba64q3j2yz1kgin1i8";
+      sha256 = "1d8vg5a9q2ldnbxqap1893lqb66jwcsli2brbjx7mcnqrzcz449x";
     };
 
     propagatedBuildInputs = [ pkgs.pil django_1_3 ];
@@ -2327,11 +2327,11 @@ let pythonPackages = python.modules // rec {
 
 
   reviewboard = buildPythonPackage rec {
-    name = "ReviewBoard-1.6.9";
+    name = "ReviewBoard-1.6.13";
 
     src = fetchurl {
       url = "http://downloads.reviewboard.org/releases/ReviewBoard/1.6/${name}.tar.gz";
-      sha256 = "06pwbmqwsb0g2y8zg5hk5ibaivsl1af7v0vnkqranimf4yaa10mc";
+      sha256 = "06q9vgvmmwiyqj6spw6sbhrcxwds02pvqir50psbpps74nxn2mph";
     };
 
     propagatedBuildInputs =
