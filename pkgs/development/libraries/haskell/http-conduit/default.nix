@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "1.8.2.1";
-  sha256 = "1kkc50lxcv9997sahsa4hf08my942fc5mf11d7169z02y6gik6k2";
+  version = "1.8.3";
+  sha256 = "09lvfin2fzjzn83iz3d3d0s2yy76xq6x7k8jpan421yvjs37l1s2";
   buildDepends = [
     asn1Data attoparsec attoparsecConduit base64Bytestring blazeBuilder
     blazeBuilderConduit caseInsensitive certificate conduit cookie
