@@ -277,9 +277,9 @@ rec {
       );
     in f [] [rhs lhs];
 
-  /* Does the same as the update operator '//' and keep siblings attribute.
-     This recusion stop when one of the attribute value is not an attribute
-     set, in which case the right hand side value takes precedence over the
+  /* A recursive variant of the update operator ‘//’.  The recusion
+     stops when one of the attribute values is not an attribute set,
+     in which case the right hand side value takes precedence over the
      left hand side value.
 
      Example:
