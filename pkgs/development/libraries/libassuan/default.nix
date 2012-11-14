@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "06xckkvxxlx7cj77803m8x58gxksap4k8yhspc5cqsy7fhinimds";
   };
 
-  propagatedBuildInputs = [ pth libgpgerror ];
+  propagatedBuildInputs = [ libgpgerror ]
+    ++ stdenv.lib.optional pth.supported pth;
 
   doCheck = true;
 

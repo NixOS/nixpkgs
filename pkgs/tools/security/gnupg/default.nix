@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "08n636sfffs5qvg9ppiprvsh00q0dmdw425psg3m3nssja53m8pg";
   };
 
-  buildInputs = [ readline zlib libgpgerror pth libgcrypt libassuan libksba ]
+  buildInputs = [ readline zlib libgpgerror libgcrypt libassuan libksba ]
+    ++ stdenv.lib.optional pth.supported pth
     ++ stdenv.lib.optional useLdap openldap
     ++ stdenv.lib.optional useBzip2 bzip2
     ++ stdenv.lib.optional useUsb libusb

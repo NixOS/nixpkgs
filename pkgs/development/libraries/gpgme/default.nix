@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m7l7nicn6gd952cgspv9xr8whqivbg33nbg8kbpj3dffnl2gvqm";
   };
   
-  propagatedBuildInputs = [ libgpgerror glib pth libassuan ];
+  propagatedBuildInputs = [ libgpgerror glib libassuan ]
+    ++ stdenv.lib.optional pth.supported pth;
 
   buildNativeInputs = [ pkgconfig ];
 
