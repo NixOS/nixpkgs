@@ -60,8 +60,7 @@ let version = "4.7.2";
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
       ++ optional langAda ./gnat-cflags.patch
-      ++ optional langFortran ./gfortran-driving.patch
-      ++ optional (stdenv.isGNU || crossGNU) ./hurd-sigrtmin.patch;
+      ++ optional langFortran ./gfortran-driving.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -308,7 +307,6 @@ stdenv.mkDerivation ({
     else "install";
 
   crossAttrs = {
-    patches = patches ++ [ ./hurd-sigrtmin.patch ];
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
     CC = "${stdenv.cross.config}-gcc";
