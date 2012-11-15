@@ -15,7 +15,6 @@ stdenv.mkDerivation {
   buildInputs = [m4 ncurses ocaml];
 
   patches = [ ./ldconf.patch ./install_topfind.patch ];
-  patchFlags = "-p0";
 
   dontAddPrefix=true;
 
