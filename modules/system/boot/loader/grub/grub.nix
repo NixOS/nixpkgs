@@ -18,6 +18,7 @@ let
         version extraConfig extraPerEntryConfig extraEntries
         extraEntriesBeforeNixOS configurationLimit copyKernels timeout
         default devices;
+      path = makeSearchPath "bin" [ pkgs.coreutils pkgs.gnused pkgs.findutils pkgs.gnugrep ];
     });
 
 in
