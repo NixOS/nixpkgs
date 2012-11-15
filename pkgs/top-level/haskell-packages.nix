@@ -1066,6 +1066,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ioStorage = callPackage ../development/libraries/haskell/io-storage {};
 
+  iproute = callPackage ../development/libraries/haskell/iproute {};
+
   irc = callPackage ../development/libraries/haskell/irc {
     parsec = self.parsec2;
   };
