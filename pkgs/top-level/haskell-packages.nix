@@ -719,6 +719,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dlist = callPackage ../development/libraries/haskell/dlist {};
 
+  dns = callPackage ../development/libraries/haskell/dns {};
+
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
   doubleConversion = callPackage ../development/libraries/haskell/double-conversion {};
