@@ -1,15 +1,17 @@
---- a/src/gui/styles/qgtkstyle_p.cpp	2011-12-08 09:06:02.000000000 +0400
-+++ b/src/gui/styles/qgtkstyle_p.cpp	2011-12-24 17:56:46.000000000 +0400
-@@ -312,7 +312,7 @@
+diff --git a/src/gui/styles/qgtkstyle_p.cpp b/src/gui/styles/qgtkstyle_p.cpp
+index 3b128e6..39434db 100644
+--- a/src/gui/styles/qgtkstyle_p.cpp
++++ b/src/gui/styles/qgtkstyle_p.cpp
+@@ -312,7 +312,7 @@ GtkStyle* QGtkStylePrivate::gtkStyle(const QHashableLatin1Literal &path)
  void QGtkStylePrivate::resolveGtk() const
  {
      // enforce the "0" suffix, so we'll open libgtk-x11-2.0.so.0
 -    QLibrary libgtk(QLS("gtk-x11-2.0"), 0, 0);
 +    QLibrary libgtk(QLS("@gtk@/lib/libgtk-x11-2.0"), 0, 0);
+     libgtk.setLoadHints(QLibrary::ImprovedSearchHeuristics);
  
      gtk_init = (Ptr_gtk_init)libgtk.resolve("gtk_init");
-     gtk_window_new = (Ptr_gtk_window_new)libgtk.resolve("gtk_window_new");
-@@ -434,8 +434,8 @@
+@@ -435,8 +435,8 @@ void QGtkStylePrivate::resolveGtk() const
      pango_font_description_get_family = (Ptr_pango_font_description_get_family)libgtk.resolve("pango_font_description_get_family");
      pango_font_description_get_style = (Ptr_pango_font_description_get_style)libgtk.resolve("pango_font_description_get_style");
  
@@ -20,7 +22,7 @@
  }
  
  /* \internal
-@@ -607,9 +607,9 @@
+@@ -608,9 +608,9 @@ void QGtkStylePrivate::cleanupGtkWidgets()
  static bool resolveGConf()
  {
      if (!QGtkStylePrivate::gconf_client_get_default) {
