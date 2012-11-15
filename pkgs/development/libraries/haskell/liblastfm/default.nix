@@ -7,6 +7,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     aeson curl mtl pureMD5 urlencoded utf8String xml
   ];
+  patchPhase = ''
+    sed -i -e 's|curl == .*,|curl,|' -e 's|urlencoded .*,|urlencoded,|' liblastfm.cabal
+  '';
   meta = {
     description = "Wrapper to Lastfm API";
     license = self.stdenv.lib.licenses.mit;
