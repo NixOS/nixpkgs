@@ -864,6 +864,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   gnuidn = callPackage ../development/libraries/haskell/gnuidn {};
 
+  gnutls = callPackage ../development/libraries/haskell/gnutls { inherit (pkgs) gnutls; };
+
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs) gtk;
     libc = pkgs.stdenv.gcc.libc;
