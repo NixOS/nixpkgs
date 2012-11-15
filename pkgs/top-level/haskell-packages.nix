@@ -862,6 +862,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
   GLUT = self.GLUT_2_3_1_0;
 
+  gnuidn = callPackage ../development/libraries/haskell/gnuidn {};
+
   gtk = callPackage ../development/libraries/haskell/gtk {
     inherit (pkgs) gtk;
     libc = pkgs.stdenv.gcc.libc;
