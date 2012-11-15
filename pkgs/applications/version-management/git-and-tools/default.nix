@@ -48,7 +48,8 @@ rec {
       blazeBuilder blazeHtml caseInsensitive IfElse json liftedBase MissingH monadControl mtl
       network pcreLight SHA stm utf8String networkInfo dbus clientsession cryptoApi dataDefault
       extensibleExceptions filepath hamlet httpTypes networkMulticast text time transformers
-      transformersBase wai waiLogger warp yesod yesodDefault yesodStatic testpack QuickCheck;
+      transformersBase wai waiLogger warp yesod yesodDefault yesodStatic testpack QuickCheck
+      SafeSemaphore networkPprotocolXmpp async dns;
   };
 
   qgit = import ./qgit {
