@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1mipy6v63y8z3c5chn813x8c2r8mwyja1v19dvars3j85105xf1y";
   };
 
-  patches = [ ./module_perm_prefix.patch ./mount_zfs_prefix.patch ./kerneldir_path.patch ./no_absolute_paths_to_coreutils.patch ./linux-3.6.patch ];
+  patches = [ ./module_perm_prefix.patch ./mount_zfs_prefix.patch ./kerneldir_path.patch ./no_absolute_paths_to_coreutils.patch ];
 
   buildInputs = [ kernel spl perl autoconf automake libtool zlib libuuid coreutils ];
 
