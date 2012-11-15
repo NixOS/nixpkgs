@@ -49,7 +49,7 @@ let
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
         boot.initrd.kernelModules = [ "ext3" "ext4" "xfs" "virtio_console" ];
 
-        fileSystems = [ ${fileSystems} ];
+        ${fileSystems}
         swapDevices = [ { label = "swap"; } ];
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
@@ -58,16 +58,12 @@ let
 
   rootFS =
     ''
-      { mountPoint = "/";
-        device = "/dev/disk/by-label/nixos";
-      }
+      fileSystems."/".device = "/dev/disk/by-label/nixos";
     '';
 
   bootFS =
     ''
-      { mountPoint = "/boot";
-        device = "/dev/disk/by-label/boot";
-      }
+      fileSystems."/boot".device = "/dev/disk/by-label/boot";
     '';
 
 
