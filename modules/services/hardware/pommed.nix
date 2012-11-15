@@ -13,7 +13,7 @@ with pkgs.lib;
     };
 
     configFile = mkOption {
-      default = builtins.toPath "${pkgs.pommed}/etc/pommed.conf";
+      default = "${pkgs.pommed}/etc/pommed.conf";
       description = ''
         The contents of the pommed.conf file.
       '';
