@@ -1440,6 +1440,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   safe = callPackage ../development/libraries/haskell/safe {};
 
+  SafeSemaphore = callPackage ../development/libraries/haskell/SafeSemaphore {};
+
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
