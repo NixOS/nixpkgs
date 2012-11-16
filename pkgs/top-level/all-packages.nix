@@ -6847,6 +6847,8 @@ let
 
     gh = callPackage ../applications/editors/emacs-modes/gh { };
 
+    graphvizDot = callPackage ../applications/editors/emacs-modes/graphviz-dot { };
+
     gist = callPackage ../applications/editors/emacs-modes/gist { };
 
     jade = callPackage ../applications/editors/emacs-modes/jade { };
