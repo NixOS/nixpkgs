@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-json";
-  version = "1.1.1";
-  sha256 = "1qim3grxbfpq8z3sc9f0zcxwfwaacwiq6hrd2431wvzvbhh6xlbw";
+  version = "1.1.2";
+  sha256 = "0vbjg038vgdwd5a4w7r5261xgvylzzk4gikk4285ns471x8n0vrf";
   buildDepends = [
     aeson attoparsecConduit blazeBuilder conduit safe shakespeareJs
     text transformers vector wai waiExtra yesodCore yesodRoutes
