@@ -107,11 +107,9 @@ let
         # to simulate the Nixpkgs channel.
         $webserver->start;
         $webserver->waitForUnit("httpd");
-        $webserver->succeed("mkdir /tmp/channel");
         $webserver->succeed(
-            "nix-push file:///tmp/channel " .
-            "http://nixos.org/channels/nixos-unstable " .
-            "file:///tmp/channel/MANIFEST ${toString channelContents} >&2");
+            "nix-push --bzip2 --dest /tmp/channel --manifest --url-prefix http://nixos.org/channels/nixos-unstable " .
+            "${toString channelContents} >&2");
       ''}
 
       # Make sure that we get a login prompt etc.
