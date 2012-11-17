@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ReadArgs";
-  version = "1.2";
-  sha256 = "0qkrg9kii15gl5pqzk63vmcs2w3clwdsxzlc5g224cwi3rnc6flp";
+  version = "1.2.1";
+  sha256 = "099gg6nq70yf2pl5ya8f083lw8x5rncnv54y2p5jlkdwfwmpmbnv";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ systemFilepath text ];
