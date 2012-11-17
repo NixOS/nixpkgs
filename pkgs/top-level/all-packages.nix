@@ -7942,6 +7942,8 @@ let
 
   wings = callPackage ../applications/graphics/wings { };
 
+  wmname = callPackage ../applications/misc/wmname { };
+
   # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
   wmiimenu = import ../applications/window-managers/wmii31 {
     libixp = libixp_for_wmii;
