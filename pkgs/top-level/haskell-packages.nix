@@ -139,7 +139,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexCompat  = self.regexCompat_0_95_1;     # 7.6 ok
     regexPosix   = self.regexPosix_0_95_2;      # 7.6 ok
     split        = self.split_0_2_1_1;          # 7.6 ok
-    stm          = self.stm_2_4;                # 7.6 ok
+    stm          = self.stm_2_4_2;              # 7.6 ok
     syb          = self.syb_0_3_7;              # 7.6 ok
     text         = self.text_0_11_2_3;          # 7.6 ok
     transformers = self.transformers_0_3_0_0;   # 7.6 ok
@@ -1555,7 +1555,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   stm_2_2_0_1 = callPackage ../development/libraries/haskell/stm/2.2.0.1.nix {};
   stm_2_3 = callPackage ../development/libraries/haskell/stm/2.3.nix {};
   stm_2_4 = callPackage ../development/libraries/haskell/stm/2.4.nix {};
-  stm = self.stm_2_4;
+  stm_2_4_2 = callPackage ../development/libraries/haskell/stm/2.4.2.nix {};
+  stm = self.stm_2_4_2;
 
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
 
