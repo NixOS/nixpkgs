@@ -158,6 +158,7 @@ in
   };
 
   xf86videosis = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
   };
 
