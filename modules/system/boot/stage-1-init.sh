@@ -40,10 +40,10 @@ EOF
 
     case $reply in
         f)
-            exec setsid @shell@ < /dev/$console >/dev/$console 2>/dev/$console ;;
+            exec setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" ;;
         i)
             echo "Starting interactive shell..."
-            setsid @shell@ < /dev/$console >/dev/$console 2>/dev/$console || fail
+            setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
             ;;
         *)
             echo "Continuing...";;

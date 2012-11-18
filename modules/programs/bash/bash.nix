@@ -7,6 +7,25 @@ with pkgs.lib;
 
 let
 
+  initBashCompletion = optionalString config.environment.enableBashCompletion ''
+    # Check whether we're running a version of Bash that has support for
+    # programmable completion. If we do, enable all modules installed in
+    # the system (and user profile).
+    if shopt -q progcomp &>/dev/null; then
+      . "${pkgs.bashCompletion}/etc/profile.d/bash_completion.sh"
+      nullglobStatus=$(shopt -p nullglob)
+      shopt -s nullglob
+      for p in $NIX_PROFILES; do
+        for m in "$p/etc/bash_completion.d/"*; do
+          . $m
+        done
+      done
+      eval "$nullglobStatus"
+      unset nullglobStatus p m
+    fi
+  '';
+
+
   options = {
 
     environment.shellInit = mkOption {
@@ -16,6 +35,12 @@ let
           Script used to initialized user shell environments.
         ";
         type = with pkgs.lib.types; string;
+      };
+
+    environment.enableBashCompletion = mkOption {
+        default = false;
+        description = "Enable bash-completion for all interactive shells.";
+        type = with pkgs.lib.types; bool;
       };
 
   };
@@ -38,7 +63,10 @@ in
       { # /etc/bashrc: executed every time a bash starts. Sources
         # /etc/profile to ensure that the system environment is
         # configured properly.
-         source = ./bashrc.sh;
+         source = pkgs.substituteAll {
+           src = ./bashrc.sh;
+           inherit initBashCompletion;
+         };
          target = "bashrc";
       }
 
@@ -59,4 +87,5 @@ in
       mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
     '';
 
+  environment.pathsToLink = optional config.environment.enableBashCompletion "/etc/bash_completion.d";
 }

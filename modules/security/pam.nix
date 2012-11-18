@@ -235,6 +235,7 @@ in
         { name = "i3lock"; }
         { name = "lshd"; }
         { name = "samba"; }
+        { name = "screen"; }
         { name = "sshd"; }
         { name = "vlock"; }
         { name = "xlock"; }

@@ -60,54 +60,7 @@ let
     }
   '';
 
-  readme = pkgs.writeText "readme.txt" ''
-    Let all the files in the system tarball sit in a directory served by NFS (the NFS root)
-    like this in exportfs:
-      /home/pcroot    192.168.1.0/24(rw,no_root_squash,no_all_squash)
-
-    Run "exportfs -a" after editing /etc/exportfs, for the nfs server to be aware of the
-    changes.
-
-    Use a tftp server serving the root of boot/ (from the system tarball).
-
-    In order to have PXE boot, use the boot/dhcpd.conf-example file for your dhcpd server,
-    as it will point your PXE clients to pxelinux.0 from the tftp server. Adapt the
-    configuration to your network.
-
-    Adapt the pxelinux configuration (boot/pxelinux.cfg/default) to set the path to your
-    nfrroot. If you use ip=dhcp in the kernel, the nfs server ip will be taken from
-    dhcp and so you don't have to specify it.
-
-    The linux in bzImage includes network drivers for some usual cards.
-
-
-    QEMU Testing
-    ---------------
-
-    You can test qemu pxe boot without having a DHCP server adapted, but having nfsroot,
-    like this:
-      qemu-system-x86_64 -tftp /home/pcroot/boot -net nic -net user,bootfile=pxelinux.0 -boot n
-
-    I don't know how to use NFS through the qemu '-net user' though.
-
-
-    QEMU Testing with NFS root and bridged network
-    -------------------------------------------------
-
-    This allows testing with qemu as any other host in your LAN.
-
-    Testing with the real dhcpd server requires setting up a bridge and having a tap device.
-      tunctl -t tap0
-      brctl addbr br0
-      brctl addif br0 eth0
-      brctl addif tap0 eth0
-      ifconfig eth0 0.0.0.0 up
-      ifconfig tap0 0.0.0.0 up
-      ifconfig br0 up # With your ip configuration
-
-    Then you can run qemu:
-      qemu-system-x86_64 -boot n -net tap,ifname=tap0,script=no -net nic,model=e1000
-  '';
+  readme = builtins.readFile ./system-tarball-pc-readme.txt;
 
 in
 
