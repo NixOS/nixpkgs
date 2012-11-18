@@ -1,9 +1,16 @@
 { stdenv, fetchurl, writeTextFile, oraclejre, makeWrapper, licenseAccepted ? false }:
 
-  # If you happen to use this software on the XMonad window manager, you will have issues with
-  # grey windows, no resizing, menus not showing and other glitches.
-  # This can be fixed by setting a different WM name:
-  # http://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_questions#Using_SetWMName
+# If you happen to use this software on the XMonad window manager, you will have issues with
+# grey windows, no resizing, menus not showing and other glitches.
+# This can be fixed by setting a different WM name:
+# http://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_questions#Using_SetWMName
+
+if !licenseAccepted then throw ''
+    You have to accept the neoload EULA at
+    https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
+    by setting nixpkgs config option 'neoload.accept_license = true';
+  ''
+else assert licenseAccepted;
 
 # the installer is very picky and demands 1.6.0.29
 let dotInstall4j = writeTextFile { name = "dot-install4j"; text = ''
@@ -11,9 +18,7 @@ let dotInstall4j = writeTextFile { name = "dot-install4j"; text = ''
       JRE_INFO	${oraclejre}	0
     ''; };
 
-    # the presence of this unattended response-file implies the installer accepts the EULA
-    # so we mandate users to manually enable a config option for that.
-    responseVarfile = if licenseAccepted then writeTextFile { name = "response.varfile"; text = ''
+    responseVarfile = writeTextFile { name = "response.varfile"; text = ''
       sys.programGroupDisabled$Boolean=false
       sys.component.Monitor\ Agent$Boolean=true
       sys.component.Common$Boolean=true
@@ -23,11 +28,7 @@ let dotInstall4j = writeTextFile { name = "dot-install4j"; text = ''
       sys.installationTypeId=Controller
       sys.installationDir=INSTALLDIR/lib/neoload
       sys.symlinkDir=INSTALLDIR/bin
-    ''; } else throw ''
-      You have to accept the neoload EULA at
-      https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
-      by setting nixpkgs config option 'neoload.accept_license = true';
-    '';
+    ''; };
 
 in stdenv.mkDerivation rec {
   name = "neoload-4.0.4";
