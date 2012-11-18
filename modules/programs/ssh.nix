@@ -16,11 +16,15 @@ in
     programs.ssh = {
 
       forwardX11 = mkOption {
-        default = cfgd.forwardX11;
+        default = false;
         description = ''
           Whether to request X11 forwarding on outgoing connections by default.
           This is useful for running graphical programs on the remote machine and have them display to your local X11 server.
           Historically, this value has depended on the value used by the local sshd daemon, but there really isn't a relation between the two.
+          Note: there are some security risks to forwarding an X11 connection.
+          NixOS's X server is built with the SECURITY extension, which prevents some obvious attacks.
+          To enable or disable forwarding on a per-connection basis, see the -X and -x options to ssh.
+          The -Y option to ssh enables trusted forwarding, which bypasses the SECURITY extension.
         '';
       };
 
