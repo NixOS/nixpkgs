@@ -3182,6 +3182,10 @@ let
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
+  neoload = callPackage ../development/tools/neoload {
+    licenseAccepted = (config.neoload.accept_license or false);
+  };
+
   noweb = callPackage ../development/tools/literate-programming/noweb { };
 
   omake = callPackage ../development/tools/ocaml/omake { };
