@@ -2100,10 +2100,10 @@ rec {
   };
 
   IOSocketSSL = buildPerlPackage rec {
-    name = "IO-Socket-SSL-1.44";
+    name = "IO-Socket-SSL-1.77";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
-      sha256 = "1xbgx1ij34a3dlwv94zjh3a02cj2lyhwzxcmv59harl784xn1mlg";
+      sha256 = "2a090167a0d13cdefdac7fb25ca49decd5fd925f37d032bca98c73c4856570a9";
     };
     propagatedBuildInputs = [ URI NetSSLeay ];
   };
