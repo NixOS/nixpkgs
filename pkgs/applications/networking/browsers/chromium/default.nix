@@ -84,10 +84,6 @@ let
     libusb1 libexif
   ];
 
-  maybeSeccompPatch = let
-    pre23 = versionOlder sourceInfo.version "23.0.0.0";
-  in optional pre23 ./enable_seccomp.patch;
-
   maybeFixPulseAudioBuild = let
     post23 = !versionOlder sourceInfo.version "24.0.0.0";
   in optional (post23 && cfg.pulseaudio) (fetchurl {
@@ -128,7 +124,6 @@ in stdenv.mkDerivation rec {
 
   patches = optional cfg.cups ./cups_allow_deprecated.patch
          ++ optional cfg.pulseaudio ./pulseaudio_array_bounds.patch
-         ++ maybeSeccompPatch
          ++ maybeFixPulseAudioBuild;
 
   postPatch = optionalString cfg.openssl ''
