@@ -25,6 +25,9 @@ let
     fi
   '';
 
+  shellAliases = concatStringsSep "\n" (
+    mapAttrsFlatten (k: v: "alias ${k}='${v}'") config.environment.shellAliases
+  );
 
   options = {
 
@@ -63,11 +66,11 @@ in
       { # /etc/bashrc: executed every time a bash starts. Sources
         # /etc/profile to ensure that the system environment is
         # configured properly.
-         source = pkgs.substituteAll {
-           src = ./bashrc.sh;
-           inherit initBashCompletion;
-         };
-         target = "bashrc";
+        source = pkgs.substituteAll {
+          src = ./bashrc.sh;
+          inherit initBashCompletion shellAliases;
+        };
+        target = "bashrc";
       }
 
       { # Configuration for readline in bash.
@@ -75,6 +78,13 @@ in
         target = "inputrc";
       }
     ];
+
+  environment.shellAliases = {
+    ls = "ls --color=tty";
+    ll = "ls -l";
+    l = "ls -alh";
+    which = "type -P";
+  };
 
   system.build.binsh = pkgs.bashInteractive;
 

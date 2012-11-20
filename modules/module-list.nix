@@ -39,6 +39,7 @@
   ./programs/blcr.nix
   ./programs/info.nix
   ./programs/shadow.nix
+  ./programs/shell.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/wvdial.nix

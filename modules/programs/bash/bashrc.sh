@@ -29,8 +29,4 @@ fi
 
 @initBashCompletion@
 
-# Some aliases.
-alias ls="ls --color=tty"
-alias ll="ls -l"
-alias l="ls -alh"
-alias which="type -P"
+@shellAliases@
