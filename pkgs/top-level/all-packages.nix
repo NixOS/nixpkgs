@@ -739,6 +739,9 @@ let
 
   fortune = callPackage ../tools/misc/fortune { };
 
+  fox = callPackage ../development/libraries/fox/default.nix { };
+  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
+
   fprot = callPackage ../tools/security/fprot { };
 
   freeipmi = callPackage ../tools/system/freeipmi {};
@@ -6966,6 +6969,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  geany = callPackage ../applications/editors/geany { };
+
   goldendict = callPackage ../applications/misc/goldendict { };
 
   grass = import ../applications/misc/grass {
@@ -7086,6 +7091,8 @@ let
   giv = callPackage ../applications/graphics/giv {
     pcre = pcre.override { unicodeSupport = true; };
   };
+
+  gmrun = callPackage ../applications/misc/gmrun {};
 
   gnucash = callPackage ../applications/office/gnucash {
     inherit (gnome) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint;
@@ -7648,6 +7655,8 @@ let
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
+  qtcreator = callPackage ../development/qtcreator { };
+
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = callPackage ../applications/audio/qtractor { };
@@ -8028,6 +8037,8 @@ let
   xdotool = callPackage ../tools/X11/xdotool { };
 
   xen = callPackage ../applications/virtualization/xen { };
+
+  xfe = callPackage ../applications/misc/xfe { };
 
   xfig = callPackage ../applications/graphics/xfig {
     stdenv = overrideGCC stdenv gcc34;
