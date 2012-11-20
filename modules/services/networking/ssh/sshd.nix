@@ -40,102 +40,44 @@ let
 
   userOptions = {
     openssh.authorizedKeys = {
-
-      preserveExistingKeys = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          If this option is enabled, the keys specified in
-          <literal>keys</literal> and/or <literal>keyFiles</literal> will be
-          placed in a special section of the user's authorized_keys file
-          and any existing keys will be preserved. That section will be
-          regenerated each time NixOS is activated. However, if
-          <literal>preserveExisting</literal> isn't enabled, the complete file
-          will be generated, and any user modifications will be wiped out.
-        '';
-      };
-
       keys = mkOption {
         type = types.listOf types.string;
         default = [];
         description = ''
-          A list of verbatim OpenSSH public keys that should be inserted into the
-          user's authorized_keys file. You can combine the <literal>keys</literal> and
+          A list of verbatim OpenSSH public keys that should be added to the
+          user's authorized keys. The keys are added to a file that the SSH
+          daemon reads in addition to the the user's authorized_keys file.
+          You can combine the <literal>keys</literal> and
           <literal>keyFiles</literal> options.
         '';
       };
 
       keyFiles = mkOption {
-        #type = types.listOf types.string;
         default = [];
         description = ''
-          A list of files each containing one OpenSSH public keys that should be
-          inserted into the user's authorized_keys file. You can combine
-          the <literal>keyFiles</literal> and
-          <literal>keys</literal> options.
+          A list of files each containing one OpenSSH public key that should be
+          added to the user's authorized keys. The contents of the files are
+          read at build time and added to a file that the SSH daemon reads in
+          addition to the the user's authorized_keys file. You can combine the
+          <literal>keyFiles</literal> and <literal>keys</literal> options.
         '';
       };
-
     };
   };
 
-  mkAuthkeyScript =
-    let
-      marker1 = "### NixOS auto-added key. Do not edit!";
-      marker2 = "### NixOS will regenerate this file. Do not edit!";
-      users = map (userName: getAttr userName config.users.extraUsers) (attrNames config.users.extraUsers);
-      usersWithKeys = flip filter users (u:
-        length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
-      );
-      userLoop = flip concatMapStrings usersWithKeys (u:
-        let
-          authKeys = concatStringsSep "," u.openssh.authorizedKeys.keys;
-          authKeyFiles = concatStrings (map (x: " ${x}") u.openssh.authorizedKeys.keyFiles);
-          preserveExisting = if u.openssh.authorizedKeys.preserveExistingKeys then "true" else "false";
-        in ''
-          mkAuthKeysFile "${u.name}" "${authKeys}" "${authKeyFiles}" "${preserveExisting}"
-        ''
-      );
-    in ''
-      mkAuthKeysFile() {
-        local userName="$1"
-        local authKeys="$2"
-        local authKeyFiles="$3"
-        local preserveExisting="$4"
-
-        eval homeDir=~$userName
-        if ! [ -d "$homeDir" ]; then
-          echo "User $userName does not exist"
-          return
-        fi
-        if ! [ -d "$homeDir/.ssh" ]; then
-          mkdir -v -m 700 "$homeDir/.ssh"
-          chown "$userName":users "$homeDir/.ssh"
-        fi
-        local authKeysFile="$homeDir/.ssh/authorized_keys"
-        touch "$authKeysFile"
-        if [ "$preserveExisting" == false ]; then
-          rm -f "$authKeysFile"
-          echo "${marker2}" > "$authKeysFile"
-        else
-          sed -i '/${marker1}/ d' "$authKeysFile"
-        fi
-        IFS=,
-        for f in $authKeys; do
-          echo "$f ${marker1}" >> "$authKeysFile"
-        done
-        unset IFS
-        for f in $authKeyFiles; do
-          if [ -f "$f" ]; then
-            echo "$(cat "$f") ${marker1}" >> "$authKeysFile"
-          fi
-        done
-        chown "$userName" "$authKeysFile"
-      }
-
-      ${userLoop}
-    '';
-
+  authKeysFiles = with {
+    mkAuthKeyFile = u: {
+      target = "ssh/authorized_keys.d/${u.name}";
+      mode = "0444";
+      source = pkgs.writeText "${u.name}-authorized_keys" ''
+        ${concatStringsSep "\n" u.openssh.authorizedKeys.keys}
+        ${concatMapStrings (f: builtins.readFile f + "\n") u.openssh.authorizedKeys.keyFiles}
+      '';
+    };
+    usersWithKeys = attrValues (flip filterAttrs config.users.extraUsers (n: u:
+      length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
+    ));
+  }; map mkAuthKeyFile usersWithKeys;
 
 in
 
@@ -305,7 +247,7 @@ in
         home = "/var/empty";
       };
 
-    environment.etc = [
+    environment.etc = authKeysFiles ++ [
       { source = "${pkgs.openssh}/etc/ssh/moduli";
         target = "ssh/moduli";
       }
@@ -326,12 +268,10 @@ in
           LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
         };
 
-        path = [ pkgs.openssh pkgs.gnused ];
+        path = [ pkgs.openssh ];
 
         preStart =
           ''
-            ${mkAuthkeyScript}
-
             mkdir -m 0755 -p /etc/ssh
 
             if ! test -f ${cfg.hostKeyPath}; then
@@ -379,6 +319,8 @@ in
         GatewayPorts ${cfg.gatewayPorts}
         PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
         ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
+
+        AuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys2 /etc/ssh/authorized_keys.d/%u
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
