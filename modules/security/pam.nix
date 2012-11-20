@@ -7,7 +7,9 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) pam_ldap pam_krb5 pam_ccreds;
+  inherit (pkgs) pam_krb5 pam_ccreds;
+
+  pam_ldap = if config.users.ldap.daemon.enable then pkgs.nss_pam_ldapd else pkgs.pam_ldap;
 
   otherService = pkgs.writeText "other.pam"
     ''
