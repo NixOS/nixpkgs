@@ -2775,6 +2775,30 @@ rec {
     };
   };
 
+  MusicBrainzDiscID = buildModule rec {
+    name = "MusicBrainz-DiscID-0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NJ/NJH/${name}.tar.gz";
+      sha256 = "0fjph2q3yp0aa87gckv3391s47m13wbyylj7jb7vqx7hv0pzj0jh";
+    };
+    # Build.PL in this package uses which to find pkg-config -- make it use path instead
+    patchPhase = ''sed -ie 's/`which pkg-config`/"pkg-config"/' Build.PL'';
+    doCheck = false; # The main test performs network access
+    #buildInputs = [ TestMore TestPod ];
+    buildInputs = [ pkgs.pkgconfig ];
+    propagatedBuildInputs = [ pkgs.libdiscid ];
+  };
+
+  MusicBrainz = buildPerlPackage rec {
+    name = "WebService-MusicBrainz-0.93";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BF/BFAIST/${name}.tar.gz";
+      sha256 = "1gg62x6qv4jj73jsqh0sb237k96i22blj29afpbp1scp3m7i5g61";
+    };
+    propagatedBuildInputs = [ XMLLibXML LWP ClassAccessor URI ];
+    doCheck = false; # Test performs network access.
+  };
+
   NamespaceAutoclean = buildPerlPackage rec {
     name = "namespace-autoclean-0.12";
     src = fetchurl {
@@ -4345,13 +4369,13 @@ rec {
     };
   };
 
-  XSLoader = buildPerlPackage {
-    name = "XSLoader-0.08";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.08.tar.gz;
-      sha256 = "0mr4l3givrpyvz1kg0kap2ds8g0rza2cim9kbnjy8hi64igkixi5";
-    };
-  };
+  # XSLoader = buildPerlPackage {
+  #   name = "XSLoader-0.08";
+  #   src = fetchurl {
+  #     url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.08.tar.gz;
+  #     sha256 = "0mr4l3givrpyvz1kg0kap2ds8g0rza2cim9kbnjy8hi64igkixi5";
+  #   };
+  # };
 
   YAML = buildPerlPackage rec {
     name = "YAML-0.80";
