@@ -22,17 +22,11 @@
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
     };
 
-  ghc742Prefs_pedantic =
+  ghc742Prefs =
     self : self.haskellPlatformArgs_2012_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_4_0_0;
       binary = null; # now a core package
     };
-
-  # until the Haskell Platform for 7.4.2 is released, this works fine/better;
-  # mainly because the Haskell Platform 2012.4.0.0 release candidate mandates
-  # vector 0.10 and primitive 0.5, which at this time aren't supported widely
-  # by other packages
-  ghc742Prefs = ghc741Prefs;
 
   ghc741Prefs =
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
@@ -272,9 +266,6 @@
                ghcBinary = ghc6121BinaryDarwin;
                prefFun = ghc742Prefs;
              };
-
-  packages_ghc742_pedantic =
-    packages_ghc742.override { prefFun = ghc742Prefs_pedantic; };
 
   packages_ghc761 =
     packages { ghcPath = ../development/compilers/ghc/7.6.1.nix;

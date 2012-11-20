@@ -1,21 +1,18 @@
-{stdenv, fetchurl, perl, zlib, bzip2, xz}:
+{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper }:
 
-let version = "1.16.8"; in
+let version = "1.16.9"; in
 
 stdenv.mkDerivation {
   name = "dpkg-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "4a1f4611390d93f1f198d910d3a4e4913b3cf81702b31f585a1872ca98df0eaa";
+    sha256 = "0ykby9x4x2zb7rfj30lfjcsrq2q32z2lnsrl8pbdvb2l9sx7zkbk";
   };
 
-  configureFlags = "--disable-dselect --with-admindir=/var/lib/dpkg ";
+  configureFlags = "--disable-dselect --with-admindir=/var/lib/dpkg PERL_LIBDIR=$(out)/${perl.libPrefix}";
 
   preConfigure = ''
-    # Can't use substitute pending resolution of NIXPKGS-89.
-    sed -s 's^/usr/bin/perl^${perl}/bin/perl^' -i scripts/dpkg-architecture.pl
-
     # Nice: dpkg has a circular dependency on itself.  Its configure
     # script calls scripts/dpkg-architecture, which calls "dpkg" in
     # $PATH.  It doesn't actually use its result, but fails if it
@@ -24,15 +21,25 @@ stdenv.mkDerivation {
     chmod +x $TMPDIR/dpkg
     PATH=$TMPDIR:$PATH
 
-    for i in $(find . -name Makefile.in); do 
+    for i in $(find . -name Makefile.in); do
       substituteInPlace $i --replace "install-data-local:" "disabled:" ;
     done
   '';
 
-  buildInputs = [ perl zlib bzip2 xz ];
+  buildInputs = [ perl zlib bzip2 xz makeWrapper ];
+
+  postInstall =
+    ''
+      for i in $out/bin/*; do
+        if head -n 1 $i | grep -q perl; then
+          wrapProgram $i --prefix PERL5LIB : $out/${perl.libPrefix}
+        fi
+      done # */
+    '';
 
   meta = {
     description = "The Debian package manager";
     homepage = http://wiki.debian.org/Teams/Dpkg;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

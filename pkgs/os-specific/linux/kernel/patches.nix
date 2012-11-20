@@ -230,6 +230,12 @@ rec {
       features.cifsTimeout = true;
     };
 
+  cifs_timeout_3_5_7 =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout-3.5.7.patch;
+      features.cifsTimeout = true;
+    };
+
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
@@ -260,6 +266,11 @@ rec {
   mips_fpu_sigill =
     { name = "mips-fpu-sigill";
       patch = ./mips-fpu-sigill.patch;
+    };
+
+  mips_ext3_n32 =
+    { name = "mips-ext3-n32";
+      patch = ./mips-ext3-n32.patch;
     };
 
   guruplug_defconfig =

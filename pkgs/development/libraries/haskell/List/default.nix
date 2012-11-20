@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "List";
-  version = "0.4.4";
-  sha256 = "1dmri9l2mzq1kwy2539z9z21a61rr5ldy990kcixngi4wnaymdbz";
+  version = "0.5.1";
+  sha256 = "1hgkal8jh035bs0z6z8i899dc0888fhdx8940y27aaxxbmlzfy1p";
   buildDepends = [ transformers ];
   meta = {
     homepage = "http://github.com/yairchu/generator/tree";

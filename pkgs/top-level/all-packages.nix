@@ -402,6 +402,13 @@ let
     client = true;
   });
 
+  androidenv = import ../development/androidenv {
+    inherit pkgs;
+    pkgs_i686 = pkgsi686Linux;
+  };
+
+  inherit (androidenv) androidsdk_4_1;
+
   aria = builderDefsPackage (import ../tools/networking/aria) { };
 
   aria2 = callPackage ../tools/networking/aria2 { };
@@ -731,6 +738,9 @@ let
   };
 
   fortune = callPackage ../tools/misc/fortune { };
+
+  fox = callPackage ../development/libraries/fox/default.nix { };
+  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
 
   fprot = callPackage ../tools/security/fprot { };
 
@@ -1441,6 +1451,8 @@ let
 
   sablotron = callPackage ../tools/text/xml/sablotron { };
 
+  safecopy = callPackage ../tools/system/safecopy { };
+
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
   screen = callPackage ../tools/misc/screen { };
@@ -1635,6 +1647,17 @@ let
   tkabber = callPackage ../applications/networking/instant-messengers/tkabber { };
 
   tkabber_plugins = callPackage ../applications/networking/instant-messengers/tkabber-plugins { };
+
+  qfsm = callPackage ../applications/science/electronics/qfsm { };
+
+  tkgate = callPackage ../applications/science/electronics/tkgate/1.x.nix {
+    inherit (xlibs) libX11 imake xproto gccmakedep;
+  };
+
+  # The newer package is low-priority because it segfaults at startup.
+  tkgate2 = lowPrio (callPackage ../applications/science/electronics/tkgate/2.x.nix {
+    inherit (xlibs) libX11;
+  });
 
   tm = callPackage ../tools/system/tm { };
 
@@ -1951,7 +1974,19 @@ let
       cross = assert crossSystem != null; crossSystem;
     });
 
-  gcc_realCross = gcc46_realCross;
+  gcc47_realCross = lib.addMetaAttrs { platforms = []; }
+    (makeOverridable (import ../development/compilers/gcc/4.7) {
+      inherit fetchurl stdenv texinfo gmp mpfr mpc libelf zlib
+        cloog ppl gettext which noSysDirs;
+      binutilsCross = binutilsCross;
+      libcCross = libcCross;
+      profiledCompiler = false;
+      enableMultilib = false;
+      crossStageStatic = false;
+      cross = assert crossSystem != null; crossSystem;
+    });
+
+  gcc_realCross = gcc47_realCross;
 
   gccCrossStageStatic = let
       isMingw = (stdenv.cross.libc == "msvcrt");
@@ -2319,9 +2354,9 @@ let
   # particularly in connection with Hydra builds for all these packages.
   # So we enable it for selected versions only.
 
-  # Current default version: 7.4.1.
-  haskellPackages = haskellPackages_ghc741;
-  # Current Haskell platform.
+  # Current default version: 7.4.2.
+  haskellPackages = haskellPackages_ghc742;
+  # Current Haskell Platform: 2012.4.0.0
   haskellPlatform = haskellPackages.haskellPlatform;
 
   haskellPackages_ghc6104             = recurseIntoAttrs (haskell.packages_ghc6104);
@@ -2338,11 +2373,10 @@ let
   # The following three lines achieve that: the first two make Hydra build explicit
   # profiling and non-profiling versions; the final respects the user-configured
   # default setting.
-  haskellPackages_ghc741_no_profiling = recurseIntoAttrs (haskell.packages_ghc741.noProfiling);
-  haskellPackages_ghc741_profiling    = recurseIntoAttrs (haskell.packages_ghc741.profiling);
-  haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741.highPrio);
-  haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742);
-  haskellPackages_ghc742_pedantic     =                   haskell.packages_ghc742_pedantic;
+  haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741);
+  haskellPackages_ghc742_no_profiling = recurseIntoAttrs (haskell.packages_ghc741.noProfiling);
+  haskellPackages_ghc742_profiling    = recurseIntoAttrs (haskell.packages_ghc741.profiling);
+  haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742.highPrio);
   haskellPackages_ghc761              = recurseIntoAttrs (haskell.packages_ghc761);
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
@@ -2708,9 +2742,9 @@ let
     clooj = clooj_standalone_binary;
   };
 
-  erlang = callPackage ../development/interpreters/erlang { };
-
   erlangR14B04 = callPackage ../development/interpreters/erlang/R14B04.nix { };
+  erlangR15B02 = callPackage ../development/interpreters/erlang/R15B02.nix { };
+  erlang = erlangR15B02;
 
   groovy = callPackage ../development/interpreters/groovy { };
 
@@ -2952,11 +2986,11 @@ let
     gold = true;
   };
 
-  binutilsCross = forceBuildDrv (import ../development/tools/misc/binutils {
+  binutilsCross = lowPrio (forceBuildDrv (import ../development/tools/misc/binutils {
     inherit stdenv fetchurl zlib;
     noSysDirs = true;
     cross = assert crossSystem != null; crossSystem;
-  });
+  }));
 
   bison = bison25;
 
@@ -3151,6 +3185,10 @@ let
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
+  neoload = callPackage ../development/tools/neoload {
+    licenseAccepted = (config.neoload.accept_license or false);
+  };
+
   noweb = callPackage ../development/tools/literate-programming/noweb { };
 
   omake = callPackage ../development/tools/ocaml/omake { };
@@ -3238,9 +3276,9 @@ let
     inherit (gnu) mig;
   };
 
-  gdbCross = callPackage ../development/tools/misc/gdb {
+  gdbCross = lowPrio (callPackage ../development/tools/misc/gdb {
     target = crossSystem;
-  };
+  });
 
   valgrind = callPackage ../development/tools/analysis/valgrind {
     stdenv =
@@ -3331,11 +3369,13 @@ let
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
   boost151 = callPackage ../development/libraries/boost/1.51.nix { };
-  boost = boost151;
+  boost152 = callPackage ../development/libraries/boost/1.52.nix { };
+  boost = boost152;
 
   boostHeaders149 = callPackage ../development/libraries/boost/1.49-headers.nix { };
   boostHeaders151 = callPackage ../development/libraries/boost/1.51-headers.nix { };
-  boostHeaders = boostHeaders151;
+  boostHeaders152 = callPackage ../development/libraries/boost/1.52-headers.nix { };
+  boostHeaders = boostHeaders152;
 
   botan = callPackage ../development/libraries/botan { };
 
@@ -3808,7 +3848,9 @@ let
   gnutls_without_guile = gnutls.override { guileBindings = false; };
   gnutls2_without_guile = gnutls2.override { guileBindings = false; };
 
-  gpgme = callPackage ../development/libraries/gpgme { };
+  gpgme = callPackage ../development/libraries/gpgme {
+    gnupg1 = gnupg1orig;
+  };
 
   grantlee = callPackage ../development/libraries/grantlee { };
 
@@ -4967,6 +5009,8 @@ let
 
   vtk = callPackage ../development/libraries/vtk { };
 
+  vtkWithQt4 = vtk.override { useQt4 = true; };
+
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;
   };
@@ -5866,9 +5910,11 @@ let
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs3_5
         kernelPatches.perf3_5
+        kernelPatches.cifs_timeout_3_5_7
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
       ];
   };
 
@@ -5881,6 +5927,7 @@ let
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
       ];
   };
 
@@ -6228,12 +6275,12 @@ let
 
   uclibc = callPackage ../os-specific/linux/uclibc { };
 
-  uclibcCross = callPackage ../os-specific/linux/uclibc {
+  uclibcCross = lowPrio (callPackage ../os-specific/linux/uclibc {
     inherit fetchurl stdenv libiconv;
     linuxHeaders = linuxHeadersCross;
     gccCross = gccCrossStageStatic;
     cross = assert crossSystem != null; crossSystem;
-  };
+  });
 
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
   udev173 = callPackage ../os-specific/linux/udev/173.nix { };
@@ -6510,7 +6557,9 @@ let
 
   aangifte2011 = callPackage_i686 ../applications/taxes/aangifte-2011 { };
 
-  abcde = callPackage ../applications/audio/abcde { };
+  abcde = callPackage ../applications/audio/abcde { 
+    inherit (perlPackages) DigestSHA MusicBrainz MusicBrainzDiscID;
+  };
 
   abiword = callPackage ../applications/office/abiword {
     inherit (gnome) libglade libgnomecanvas;
@@ -6697,7 +6746,9 @@ let
   djview = callPackage ../applications/graphics/djview { };
   djview4 = pkgs.djview;
 
-  dmenu = callPackage ../applications/misc/dmenu { };
+  dmenu = callPackage ../applications/misc/dmenu {
+    enableXft = config.dmenu.enableXft or false;
+  };
 
   dmtx = builderDefsPackage (import ../tools/graphics/dmtx) {
     inherit libpng libtiff libjpeg imagemagick librsvg
@@ -6809,6 +6860,8 @@ let
 
     gh = callPackage ../applications/editors/emacs-modes/gh { };
 
+    graphvizDot = callPackage ../applications/editors/emacs-modes/graphviz-dot { };
+
     gist = callPackage ../applications/editors/emacs-modes/gist { };
 
     jade = callPackage ../applications/editors/emacs-modes/jade { };
@@ -6918,6 +6971,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  geany = callPackage ../applications/editors/geany { };
+
   goldendict = callPackage ../applications/misc/goldendict { };
 
   grass = import ../applications/misc/grass {
@@ -6961,6 +7016,12 @@ let
   };
 
   firefox36Wrapper = wrapFirefox { browser = firefox36Pkgs.firefox; };
+
+  firefox13Pkgs = callPackage ../applications/networking/browsers/firefox/13.0.nix {
+    inherit (gnome) libIDL;
+  };
+
+  firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
   firefox15Pkgs = callPackage ../applications/networking/browsers/firefox/15.0.nix {
     inherit (gnome) libIDL;
@@ -7032,6 +7093,8 @@ let
   giv = callPackage ../applications/graphics/giv {
     pcre = pcre.override { unicodeSupport = true; };
   };
+
+  gmrun = callPackage ../applications/misc/gmrun {};
 
   gnucash = callPackage ../applications/office/gnucash {
     inherit (gnome) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint;
@@ -7256,6 +7319,8 @@ let
 
   kermit = callPackage ../tools/misc/kermit { };
 
+  keymon = callPackage ../applications/video/key-mon { };
+
   kino = callPackage ../applications/video/kino {
     inherit (gnome) libglade;
   };
@@ -7477,6 +7542,8 @@ let
 
   novaclient = callPackage ../applications/virtualization/nova/client.nix { };
 
+  nspluginwrapper = callPackage ../applications/networking/browsers/mozilla-plugins/nspluginwrapper {};
+
   nvi = callPackage ../applications/editors/nvi { };
 
   ocrad = callPackage ../applications/graphics/ocrad { };
@@ -7590,6 +7657,8 @@ let
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
+  qtcreator = callPackage ../development/qtcreator { };
+
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = callPackage ../applications/audio/qtractor { };
@@ -7655,7 +7724,7 @@ let
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  skype_linux = callPackage_i686 ../applications/networking/instant-messengers/skype {
+  skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
     usePulseAudio = config.pulseaudio or false; # disabled by default (the 100% cpu bug)
   };
 
@@ -7693,6 +7762,8 @@ let
     inherit texinfo;
     clisp = clisp_2_44_1;
   };
+
+  sublime = callPackage ../applications/editors/sublime { };
 
   subversion = callPackage ../applications/version-management/subversion/default.nix {
     neon = pkgs.neon029;
@@ -7819,10 +7890,11 @@ let
   uwimap = callPackage ../tools/networking/uwimap { };
 
   uzbl = builderDefsPackage (import ../applications/networking/browsers/uzbl) {
-    inherit pkgconfig webkit makeWrapper glib_networking;
-    inherit gtk3 glib;
+    inherit pkgconfig webkit makeWrapper glib_networking python3;
+    inherit glib pango cairo gdk_pixbuf atk;
     inherit (xlibs) libX11 kbproto;
     inherit (gnome) libsoup;
+    gtk = gtk3;
   };
 
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
@@ -7888,6 +7960,8 @@ let
   weechat = callPackage ../applications/networking/irc/weechat { };
 
   wings = callPackage ../applications/graphics/wings { };
+
+  wmname = callPackage ../applications/misc/wmname { };
 
   # I'm keen on wmiimenu only  >wmii-3.5 no longer has it...
   wmiimenu = import ../applications/window-managers/wmii31 {
@@ -7965,6 +8039,8 @@ let
   xdotool = callPackage ../tools/X11/xdotool { };
 
   xen = callPackage ../applications/virtualization/xen { };
+
+  xfe = callPackage ../applications/misc/xfe { };
 
   xfig = callPackage ../applications/graphics/xfig {
     stdenv = overrideGCC stdenv gcc34;

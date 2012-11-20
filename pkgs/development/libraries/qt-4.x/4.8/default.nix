@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://qt.nokia.com/products;
+    homepage = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
     maintainers = with maintainers; [ urkud sander ];

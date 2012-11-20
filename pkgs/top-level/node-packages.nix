@@ -998,6 +998,19 @@ let self = {
       self."requirejs-==0.26.0"
     ];
   };
+  
+  "swig" = self."swig-0.13.2";
+  
+  "swig-0.13.2" = self.buildNodePackage rec {
+    name = "swig-0.13.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/swig/-/${name}.tgz";
+      sha256 = "1fxc1cg0g5bn0ksm4gddx75ff5yzzbhqn4yqh6xqa5ag73nvxiyg";
+    };
+    deps = [
+      self."underscore"
+    ];
+  };
 
   "tar" = self."tar-~0.1.12";
 

@@ -80,7 +80,8 @@ stdenv.mkDerivation ({
     ++ optional noSysDirs ./no-sys-dirs.patch
     ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch
     ++ optional langJava ./java-jvgenmain-link.patch
-    ++ optional langVhdl ./ghdl-ortho-cflags.patch;
+    ++ optional langVhdl ./ghdl-ortho-cflags.patch
+    ++ optional langVhdl ./ghdl-runtime-o2.patch;
     
   inherit noSysDirs profiledCompiler staticCompiler crossStageStatic
     binutilsCross libcCross;

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-channels_url="http://omahaproxy.appspot.com/";
+channels_url="http://omahaproxy.appspot.com/all?csv=1";
 bucket_url="http://commondatastorage.googleapis.com/chromium-browser-official/";
 output_file="$(cd "$(dirname "$0")" && pwd)/sources.nix";
 

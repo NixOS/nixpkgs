@@ -1439,10 +1439,10 @@ rec {
   };
 
   EmailSender = buildPerlPackage rec {
-    name = "Email-Sender-0.110001";
+    name = "Email-Sender-0.120002";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "0z4nl7aizbailraqwkkqhx6k3hdz67wxszjfhd5yg2vn06ybsjwj";
+      sha256 = "1cp735ndmh76xzijsm1hd0yh0m9yj34jc8akjhidkn677h2021dc";
     };
     buildInputs = [ TestMore ];
     propagatedBuildInputs =
@@ -2100,10 +2100,10 @@ rec {
   };
 
   IOSocketSSL = buildPerlPackage rec {
-    name = "IO-Socket-SSL-1.44";
+    name = "IO-Socket-SSL-1.77";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
-      sha256 = "1xbgx1ij34a3dlwv94zjh3a02cj2lyhwzxcmv59harl784xn1mlg";
+      sha256 = "2a090167a0d13cdefdac7fb25ca49decd5fd925f37d032bca98c73c4856570a9";
     };
     propagatedBuildInputs = [ URI NetSSLeay ];
   };
@@ -2773,6 +2773,30 @@ rec {
       url = "mirror://cpan/authors/id/F/FL/FLORA/${name}.tar.gz";
       sha256 = "0p2hl0cygcds3jjq3awackd72j3vzidfyjacj7gxdlqh65a2fjq7";
     };
+  };
+
+  MusicBrainzDiscID = buildModule rec {
+    name = "MusicBrainz-DiscID-0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NJ/NJH/${name}.tar.gz";
+      sha256 = "0fjph2q3yp0aa87gckv3391s47m13wbyylj7jb7vqx7hv0pzj0jh";
+    };
+    # Build.PL in this package uses which to find pkg-config -- make it use path instead
+    patchPhase = ''sed -ie 's/`which pkg-config`/"pkg-config"/' Build.PL'';
+    doCheck = false; # The main test performs network access
+    #buildInputs = [ TestMore TestPod ];
+    buildInputs = [ pkgs.pkgconfig ];
+    propagatedBuildInputs = [ pkgs.libdiscid ];
+  };
+
+  MusicBrainz = buildPerlPackage rec {
+    name = "WebService-MusicBrainz-0.93";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BF/BFAIST/${name}.tar.gz";
+      sha256 = "1gg62x6qv4jj73jsqh0sb237k96i22blj29afpbp1scp3m7i5g61";
+    };
+    propagatedBuildInputs = [ XMLLibXML LWP ClassAccessor URI ];
+    doCheck = false; # Test performs network access.
   };
 
   NamespaceAutoclean = buildPerlPackage rec {
@@ -4345,13 +4369,13 @@ rec {
     };
   };
 
-  XSLoader = buildPerlPackage {
-    name = "XSLoader-0.08";
-    src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.08.tar.gz;
-      sha256 = "0mr4l3givrpyvz1kg0kap2ds8g0rza2cim9kbnjy8hi64igkixi5";
-    };
-  };
+  # XSLoader = buildPerlPackage {
+  #   name = "XSLoader-0.08";
+  #   src = fetchurl {
+  #     url = mirror://cpan/authors/id/S/SA/SAPER/XSLoader-0.08.tar.gz;
+  #     sha256 = "0mr4l3givrpyvz1kg0kap2ds8g0rza2cim9kbnjy8hi64igkixi5";
+  #   };
+  # };
 
   YAML = buildPerlPackage rec {
     name = "YAML-0.80";

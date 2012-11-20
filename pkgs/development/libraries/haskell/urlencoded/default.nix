@@ -2,12 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "urlencoded";
-  version = "0.3.0.1";
-  sha256 = "1i6r05d5libcilngsa6illcazfv6g4rhibzgk8c2jsjq9cg53ihz";
+  version = "0.4.0";
+  sha256 = "0idh70apfxx8bkbsxda4xhb0b5xf4x237dwi4v55ildrhxx4b68k";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ mtl network split ];
-  jailbreak = true;
   meta = {
     homepage = "https://github.com/pheaver/urlencoded";
     description = "Generate or process x-www-urlencoded data";

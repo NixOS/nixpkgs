@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hackage-db";
-  version = "1.3";
-  sha256 = "17l2aw2kzjpjzyrg0c5vlaglx0vl475g3wxwavvzrd60z9lb3cp9";
+  version = "1.4";
+  sha256 = "12z1ak21xc9v373j956gz8l4ryj0582lgbl9ykp8q46n9b8sxfph";
   buildDepends = [ Cabal filepath tar ];
   meta = {
     homepage = "http://github.com/peti/hackage-db";

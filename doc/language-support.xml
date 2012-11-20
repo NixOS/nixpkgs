@@ -196,17 +196,18 @@ twisted = buildPythonPackage {
 </section>
 
 
-<!--
-<section><title>Haskell</title>
+<section><title>Java</title>
 
-<para>TODO</para>
+<para>Java packages should install JAR files in
+<filename>$out/lib/java</filename>.</para>
 
 </section>
 
 
-<section><title>Java</title>
+<!--
+<section><title>Haskell</title>
 
-<para>TODO; Java support needs lots of improvement</para>
+<para>TODO</para>
 
 </section>
 

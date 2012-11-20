@@ -7,7 +7,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20120922";
+  date = "20121106";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "e1ba1ebf09da42a5bd7f4ed18f1595ae06032b4c";
-    sha256 = "187e67a7c6bf44469e0e0dda41072ac8f3a40380ea9364ed07a4cadc08965663";
+    rev = "8f4d073881beb42c9f272b9327efa0a5715bd31c";
+    sha256 = "2df2ba800bd4fd9b0297a0b8cff53174a7c05ffbc889a7df5830a014fed8c433";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
@@ -92,14 +92,14 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr/local/lib@$out/lib@g" -i deps/Makefile
     sed -e "s@/usr/lib@$out/lib@g" -i deps/Makefile
     
-    export makeFlags="$makeFlags PREFIX=$out" 
+    export makeFlags="$makeFlags PREFIX=$out SHELL=${stdenv.shell}"
 
     export dontPatchELF=1
   '';
 
   preBuild = ''
-    make -C test/unicode all
-    make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX"
+    make -C test/unicode all SHELL="${stdenv.shell}"
+    make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX" SHELL="${stdenv.shell}"
   '';
 
   postInstall = ''
