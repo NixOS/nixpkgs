@@ -5,7 +5,7 @@
 , libevent, expat, libjpeg
 , libpng, libxml2, libxslt
 , xdg_utils, yasm, zlib
-, libusb1, libexif
+, libusb1, libexif, pciutils
 
 , python, perl, pkgconfig
 , nspr, udev, krb5
@@ -84,9 +84,10 @@ let
     libusb1 libexif
   ];
 
-  maybeFixPulseAudioBuild = let
-    post23 = !versionOlder sourceInfo.version "24.0.0.0";
-  in optional (post23 && cfg.pulseaudio) (fetchurl {
+  post23 = !versionOlder sourceInfo.version "24.0.0.0";
+  post24 = !versionOlder sourceInfo.version "25.0.0.0";
+
+  maybeFixPulseAudioBuild = optional (post23 && cfg.pulseaudio) (fetchurl {
     url = http://archrepo.jeago.com/sources/chromium-dev/pulse_audio_fix.patch;
     sha256 = "1w91mirrkqigdhsj892mqxlc0nlv1dsp5shc46w9xf8nl96jxgfb";
   });
@@ -116,7 +117,8 @@ in stdenv.mkDerivation rec {
     ++ optionals cfg.gnome [ gconf libgcrypt ]
     ++ optional cfg.selinux libselinux
     ++ optional cfg.cups libgcrypt
-    ++ optional cfg.pulseaudio pulseaudio;
+    ++ optional cfg.pulseaudio pulseaudio
+    ++ optional post24 pciutils;
 
   opensslPatches = optional cfg.openssl openssl.patches;
 
