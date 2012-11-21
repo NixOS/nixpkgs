@@ -1119,6 +1119,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
+  lens = callPackage ../development/libraries/haskell/lens {};
+
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
