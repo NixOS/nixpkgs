@@ -5,8 +5,19 @@
 { config, pkgs, ... }:
 
 with pkgs.lib;
-
+let
+  options = {
+    ec2.metadata = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to allow access to EC2 metadata.
+      '';
+    };
+  };
+in
 {
+  require = [options];
 
   jobs.fetchEC2Data =
     { name = "fetch-ec2-data";
@@ -56,9 +67,11 @@ with pkgs.lib;
               echo "$key_pub" > /etc/ssh/ssh_host_dsa_key.pub
           fi
 
+          ${optionalString (! config.ec2.metadata) ''
           # Since the user data is sensitive, prevent it from being
           # accessed from now on.
           ip route add blackhole 169.254.169.254/32
+          ''}
         '';
     };
 
