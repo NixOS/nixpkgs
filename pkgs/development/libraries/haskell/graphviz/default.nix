@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     colour dlist fgl filepath polyparse text transformers wlPprintText
   ];
+  patchPhase = "sed -i -e 's|bytestring.*,|bytestring,|' graphviz.cabal";
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";
     description = "Bindings to Graphviz for graph visualisation";
