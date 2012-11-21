@@ -6635,6 +6635,8 @@ let
     python = python32;
   };
 
+  bristol = callPackage ../applications/audio/bristol { };
+
   bvi = callPackage ../applications/editors/bvi { };
 
   calf = callPackage ../applications/audio/calf {
