@@ -427,10 +427,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Haskell libraries.
 
-  Agda = callPackage ../development/libraries/haskell/Agda {
-    haskellSrcExts = self.haskellSrcExts_1_11_1;
-    QuickCheck = self.QuickCheck_2_4_2;
-  };
+  Agda = callPackage ../development/libraries/haskell/Agda {};
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
 
