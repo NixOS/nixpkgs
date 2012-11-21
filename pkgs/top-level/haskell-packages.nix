@@ -1777,6 +1777,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
 
+  xmlHamlet = callPackage ../development/libraries/haskell/xml-hamlet {};
+
   xmlhtml = callPackage ../development/libraries/haskell/xmlhtml {};
 
   xmlTypes = callPackage ../development/libraries/haskell/xml-types {};
