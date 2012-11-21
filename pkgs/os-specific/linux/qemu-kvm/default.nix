@@ -1,23 +1,21 @@
 { stdenv, fetchurl, attr, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
 , libjpeg, libpng, ncurses, python, glib, libaio, mesa
-, spice, spiceProtocol, spiceSupport ? false }:
+, spice, spice_protocol, spiceSupport ? false }:
 
 assert stdenv.isLinux;
 
-let version = "1.0.1"; in
+let version = "1.2.0"; in
 
 stdenv.mkDerivation rec {
   name = "qemu-kvm-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/kvm/qemu-kvm/${version}/${name}.tar.gz";
-    sha256 = "0kxzwaw8h71mqcm46angpyx8gd58ascrxnr861k068xg89ix5g2p";
+    sha256 = "018vb5nmk2fsm143bs2bl2wirhasd4b10d7jchl32zik4inbk2p9";
   };
 
-  patches = [ ./smb-tmpdir.patch ./qemu-img-fix-corrupt-vdi.patch ];
-
   postPatch =
-    '' for i in $(find kvm -type f)
+    '' for i in $(find . -type f)
        do
          sed -i "$i" \
              -e 's|/bin/bash|/bin/sh|g ;
@@ -41,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
       ncurses python glib libaio mesa
-    ] ++ stdenv.lib.optionals spiceSupport [ spiceProtocol spice ];
+    ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
 
   postInstall =
     ''

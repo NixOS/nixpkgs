@@ -1,0 +1,24 @@
+diff -crN '--exclude=.git' zfs-0.60-rc11/cmd/mount_zfs/Makefile.am zfs/cmd/mount_zfs/Makefile.am
+*** zfs-0.60-rc11/cmd/mount_zfs/Makefile.am 2012-10-22 10:26:07.066205000 -0700
+--- zfs/cmd/mount_zfs/Makefile.am 2012-10-22 11:16:21.859286000 -0700
+***************
+*** 7,14 ****
+  #
+  # Ignore the prefix for the mount helper.  It must be installed in /sbin/
+  # because this path is hardcoded in the mount(8) for security reasons.
+  #
+- sbindir=/sbin
+  sbin_PROGRAMS = mount.zfs
+
+  mount_zfs_SOURCES = \
+--- 7,16 ----
+  #
+  # Ignore the prefix for the mount helper.  It must be installed in /sbin/
+  # because this path is hardcoded in the mount(8) for security reasons.
++ #
++ # ... except on nixos, where it really is /var/run/current-system/sw/sbin,
++ # which is where this will end up if we put it in ${out}/sbin.
+  #
+  sbin_PROGRAMS = mount.zfs
+
+  mount_zfs_SOURCES = \

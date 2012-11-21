@@ -1173,10 +1173,16 @@ rec {
     ubuntu1004i386 = {
       name = "ubuntu-10.04-lucid-i386";
       fullName = "Ubuntu 10.04 Lucid (i386)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/lucid/main/binary-i386/Packages.bz2;
-        sha256 = "0e46596202a68caa754dfe0883f46047525309880c492cdd5e2d0970fcf626aa";
-      };
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/lucid/main/binary-i386/Packages.bz2;
+            sha256 = "0e46596202a68caa754dfe0883f46047525309880c492cdd5e2d0970fcf626aa";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/lucid/universe/binary-i386/Packages.bz2;
+            sha256 = "13nvsb7na9igps2fdbbfpq4y8ihccmcs6x35pfyfp6rkhjgpzigy";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
     };
@@ -1184,32 +1190,50 @@ rec {
     ubuntu1004x86_64 = {
       name = "ubuntu-10.04-lucid-amd64";
       fullName = "Ubuntu 10.04 Lucid (amd64)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/lucid/main/binary-amd64/Packages.bz2;
-        sha256 = "74a8f3192b0eda397d65316e0fa6cd34d5358dced41639e07d9f1047971bfef0";
-      };
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/lucid/main/binary-amd64/Packages.bz2;
+            sha256 = "74a8f3192b0eda397d65316e0fa6cd34d5358dced41639e07d9f1047971bfef0";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/lucid/universe/binary-amd64/Packages.bz2;
+            sha256 = "112lbnf8rcsbbh89aci4m6gwac0jy16838aij0av8n076zwkvlj9";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
     };
 
     ubuntu1010i386 = {
-      name = "ubuntu-10.04-maverick-i386";
-      fullName = "Ubuntu 10.04 Maverick (i386)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/maverick/main/binary-i386/Packages.bz2;
-        sha256 = "1qjs4042y03bxbxwjs3pgrs99ba6vqvjaaz6zhaxxaqj1r12dwa0";
-      };
+      name = "ubuntu-10.10-maverick-i386";
+      fullName = "Ubuntu 10.10 Maverick (i386)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/maverick/main/binary-i386/Packages.bz2;
+            sha256 = "1qjs4042y03bxbxwjs3pgrs99ba6vqvjaaz6zhaxxaqj1r12dwa0";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/maverick/universe/binary-i386/Packages.bz2;
+            sha256 = "1g5pnhx730wj32221ic8p2q6zcka23knpyg190mvq9x7kflcbfzy";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
     ubuntu1010x86_64 = {
-      name = "ubuntu-10.04-maverick-amd64";
-      fullName = "Ubuntu 10.04 Maverick (amd64)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/maverick/main/binary-amd64/Packages.bz2;
-        sha256 = "1p0i4gp1bxd3zvckgnh1hx4vfc23rfgzd19dk5rmi61lzbzzqbgc";
-      };
+      name = "ubuntu-10.10-maverick-amd64";
+      fullName = "Ubuntu 10.10 Maverick (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/maverick/main/binary-amd64/Packages.bz2;
+            sha256 = "1p0i4gp1bxd3zvckgnh1hx4vfc23rfgzd19dk5rmi61lzbzzqbgc";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/maverick/universe/binary-amd64/Packages.bz2;
+            sha256 = "0m26viwah29gh47p8m3jpnx6l84dhpwnms29m9bvqn1vwcrgjh0s";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
@@ -1217,10 +1241,16 @@ rec {
     ubuntu1110i386 = {
       name = "ubuntu-11.10-oneiric-i386";
       fullName = "Ubuntu 11.10 Oneiric (i386)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/oneiric/main/binary-i386/Packages.bz2;
-        sha256 = "11r1s76ppi7rwz08i20d7n4ndaj9lb9wsl9k8ww4s1c6agzpwv8a";
-      };
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/oneiric/main/binary-i386/Packages.bz2;
+            sha256 = "11r1s76ppi7rwz08i20d7n4ndaj9lb9wsl9k8ww4s1c6agzpwv8a";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/oneiric/universe/binary-i386/Packages.bz2;
+            sha256 = "1dr59j8pjdhk07fpc0x73afcd9630kkdsbabx3bj92q71104yigz";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
@@ -1228,10 +1258,16 @@ rec {
     ubuntu1110x86_64 = {
       name = "ubuntu-11.10-oneiric-amd64";
       fullName = "Ubuntu 11.10 Oneiric (amd64)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/oneiric/main/binary-amd64/Packages.bz2;
-        sha256 = "07k784gxwaqmyggmzczy9hjkgfp6p6dcs8rhkxw5hfzn0jaf8l2s";
-      };
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/oneiric/main/binary-amd64/Packages.bz2;
+            sha256 = "07k784gxwaqmyggmzczy9hjkgfp6p6dcs8rhkxw5hfzn0jaf8l2s";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/oneiric/universe/binary-amd64/Packages.bz2;
+            sha256 = "1v3ldxn5jnnfgs863ryd6wl3fsb3glainr1ma2zn2l5vpzhpi2h1";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };

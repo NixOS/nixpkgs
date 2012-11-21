@@ -1,16 +1,16 @@
-{ cabal, csv, filepath, HsSyck, HStringTemplate, pandoc, parsec
-, split, time, utf8String, xhtml
+{ cabal, csv, filepath, HDBC, HDBCSqlite3, HsSyck, HStringTemplate
+, pandoc, parsec, split, time, utf8String, xhtml
 }:
 
 cabal.mkDerivation (self: {
   pname = "yst";
-  version = "0.2.4.1";
-  sha256 = "0y620p6kn1mky30fia63na5idppfjfmc828jcaa0ads08rmj5wgy";
+  version = "0.3.0.1";
+  sha256 = "17jp9vdbpp82wzsj8rhp5nh6fbmgm2xrclfnb7jl4gjwls7xggrv";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    csv filepath HsSyck HStringTemplate pandoc parsec split time
-    utf8String xhtml
+    csv filepath HDBC HDBCSqlite3 HsSyck HStringTemplate pandoc parsec
+    split time utf8String xhtml
   ];
   meta = {
     homepage = "http://github.com/jgm/yst";

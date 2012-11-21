@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, ...}:
 
 stdenv.mkDerivation {
   name = "openjdk6-b16-24_apr_2009-r1";

@@ -76,7 +76,7 @@ stdenv.mkDerivation {
       with dynamic web pages, prototyping embedded systems).
     '';
 
-    maintainers = [ stdenv.lib.maintainers.kkallio stdenv.lib.maintainers.simons ];
+    maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

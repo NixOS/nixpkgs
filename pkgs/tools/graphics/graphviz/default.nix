@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
       pango gd gts
     ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender ];
 
+  patches = [ ./fix-broken-memcp-signature.patch ];
+
   configureFlags =
     [ "--with-pngincludedir=${libpng}/include"
       "--with-pnglibdir=${libpng}/lib"

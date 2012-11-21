@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, pixman, celt, alsaLib, openssl
 , libXrandr, libXfixes, libXext, libXrender, libXinerama, libjpeg, zlib
-, spiceProtocol }:
+, spice_protocol }:
 
 with stdenv.lib;
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
                   libXrandr libXfixes libXrender libXext libXinerama
                 ];
 
-  buildNativeInputs = [ pkgconfig spiceProtocol ];
+  buildNativeInputs = [ pkgconfig spice_protocol ];
 
   # NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 

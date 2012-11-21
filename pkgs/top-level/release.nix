@@ -134,8 +134,6 @@ with (import ./release-lib.nix);
   guile = linux;  # tests fail on Cygwin
   gv = linux;
   gzip = all;
-  hal = linux;
-  hal_info = linux;
   hddtemp = linux;
   hello = all;
   host = linux;
@@ -168,8 +166,6 @@ with (import ./release-lib.nix);
   libsmbios = linux;
   libtool = all;
   libtool_2 = all;
-  libxml2 = all;
-  libxslt = all;
   lout = linux;
   lsh = linux;
   lsof = linux;
@@ -297,7 +293,6 @@ with (import ./release-lib.nix);
   tinycc = ["i686-linux"];
   uae = linux;
   udev = linux;
-  uml = ["i686-linux"];
   unrar = linux;
   upstart = linux;
   usbutils = linux;
@@ -357,9 +352,8 @@ with (import ./release-lib.nix);
   };
 
   firefox36Pkgs.firefox = linux;
-  firefox12Pkgs.firefox = linux;
-  firefox13Pkgs.firefox = linux;
   firefox15Pkgs.firefox = linux;
+  firefox16Pkgs.firefox = linux;
 
   gnome = {
     gnome_panel = linux;

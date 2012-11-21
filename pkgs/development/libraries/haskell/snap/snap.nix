@@ -2,14 +2,14 @@
 , dataLens, dataLensTemplate, directoryTree, filepath, hashable
 , heist, logict, MonadCatchIOTransformers, mtl, mwcRandom
 , pwstoreFast, snapCore, snapServer, stm, syb, text, time
-, transformers, unorderedContainers, utf8String, vector
-, vectorAlgorithms, xmlhtml
+, transformers, unorderedContainers, vector, vectorAlgorithms
+, xmlhtml
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap";
-  version = "0.9.1.1";
-  sha256 = "1g8jvnwrhna5g064dmv4v4khrpwwn0vcqw8l7rcpkp75l46fq29z";
+  version = "0.9.2.2";
+  sha256 = "1ql9c8b9arcd8zwlwsiipl4diah87sp339ljc5bc7yls1g4d9zsw";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -17,12 +17,11 @@ cabal.mkDerivation (self: {
     dataLensTemplate directoryTree filepath hashable heist logict
     MonadCatchIOTransformers mtl mwcRandom pwstoreFast snapCore
     snapServer stm syb text time transformers unorderedContainers
-    utf8String vector vectorAlgorithms xmlhtml
+    vector vectorAlgorithms xmlhtml
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
-    description = "Snap: A Haskell Web Framework: project starter executable and glue code library";
+    description = "Top-level package for the Snap Web Framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

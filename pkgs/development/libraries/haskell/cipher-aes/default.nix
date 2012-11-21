@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cipher-aes";
-  version = "0.1.1";
-  sha256 = "0pyiqsdvvq0qhlin17rijqjq0sc0i9nl9rdwbql01fr4pw46cwwg";
+  version = "0.1.2";
+  sha256 = "1c8drabfmx5wc519kxsr64bdvakfvxwzhfh7ym01kk1dpja0nlnq";
   isLibrary = true;
   isExecutable = true;
   meta = {

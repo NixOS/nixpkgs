@@ -1,7 +1,14 @@
 a :  
 let 
   fetchurl = a.fetchurl;
-  s= import ./src-for-default.nix;
+  s= # Generated upstream information
+  rec {
+    baseName="sbcl";
+    version="1.1.1";
+    name="${baseName}-${version}";
+    hash="1gkwz0248zl2nhx79ck5wiyxj8407c10gcrpgg1c67102pgyiikv";
+    url="mirror://sourceforge/project/sbcl/sbcl/1.1.1/sbcl-1.1.1-source.tar.bz2";
+  };
   buildInputs = with a; [
     clisp makeWrapper
   ];
@@ -73,12 +80,14 @@ rec {
   '') ["doBuild" "minInit" "addInputs"];
 
   inherit(s) name;
+  inherit(s) version;
   meta = {
     description = "Lisp compiler";
     homepage = "http://www.sbcl.org";
     license = "bsd";
     maintainers = [a.lib.maintainers.raskin];
     platforms = with a.lib.platforms; all;
+    inherit(s) version;
   };
 }
 

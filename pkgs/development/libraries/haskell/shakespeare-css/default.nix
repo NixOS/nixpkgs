@@ -1,10 +1,10 @@
-{ cabal, parsec, shakespeare, text }:
+{ cabal, parsec, shakespeare, text, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-css";
-  version = "1.0.1.4";
-  sha256 = "0avixf7z3hcvgcijgrm7hisr8i8waa8nb435gv8lv5vvz8yq3k0n";
-  buildDepends = [ parsec shakespeare text ];
+  version = "1.0.2";
+  sha256 = "02sk9ql357ybj1h5a4xjn06di5zdafibabhy32j5vs9kpyamvck3";
+  buildDepends = [ parsec shakespeare text transformers ];
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "Stick your haskell variables into css at compile time";

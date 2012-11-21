@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.2pre2793_d950cfe";
+  name = "nix-1.2pre2980_9de6bc5";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/2955697/download/4/${name}.tar.bz2";
-    sha256 = "f91367d8e7ed795b2bc9a47fb3ecff00d005633f248ecaafa25e8e101a5dc682";
+    url = "http://hydra.nixos.org/build/3338447/download/4/${name}.tar.bz2";
+    sha256 = "b767c2b75a0036edfc6be209dcaab23643887b192e3788640380ac27298b08d0";
   };
 
   buildNativeInputs = [ perl pkgconfig ];
@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
   configureFlags =
     ''
       --with-store-dir=${storeDir} --localstatedir=${stateDir}
-      --with-dbi=${perlPackages.DBI}/lib/perl5/site_perl
-      --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
+      --with-dbi=${perlPackages.DBI}/${perl.libPrefix}
+      --with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}
+      --with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}
       --disable-init-state
       --enable-gc
       CFLAGS=-O3 CXXFLAGS=-O3
@@ -45,15 +46,16 @@ stdenv.mkDerivation rec {
     configureFlags =
       ''
         --with-store-dir=${storeDir} --localstatedir=${stateDir}
-        --with-dbi=${perlPackages.DBI}/lib/perl5/site_perl
-        --with-dbd-sqlite=${perlPackages.DBDSQLite}/lib/perl5/site_perl
+        --with-dbi=${perlPackages.DBI}/${perl.libPrefix}
+        --with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}
+        --with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}
         --disable-init-state
         --enable-gc
         CFLAGS=-O3 CXXFLAGS=-O3
       '' + stdenv.lib.optionalString (
           stdenv.cross ? nix && stdenv.cross.nix ? system
       ) ''--with-system=${stdenv.cross.nix.system}'';
-      
+
     doInstallCheck = false;
   };
 

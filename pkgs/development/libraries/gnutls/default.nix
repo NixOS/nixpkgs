@@ -5,28 +5,28 @@ assert guileBindings -> guile != null;
 
 stdenv.mkDerivation (rec {
 
-  name = "gnutls-3.0.22";
+  name = "gnutls-3.1.3";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.xz";
-    sha256 = "1pp90fm27qi5cd0pq18xcmnl79xcbfwxc54bg1xi1wv0vryqdpcr";
+    sha256 = "0fff9frz0ycbnppfn0w4a2s9x27k21l4hh9zbax3v7a8cg33dcpw";
   };
 
-  # FIXME: Turn into a Nix list.
+  # Note: GMP is a dependency of Nettle, whose public headers include
+  # GMP headers, hence the hack.
   configurePhase = ''
     ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
       --without-p11-kit                                         \
-      --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
+      --with-lzo --with-libtasn1-prefix="${libtasn1}"           \
+      --with-libnettle-prefix="${nettle}"                       \
+      CPPFLAGS="-I${gmp}/include"                               \
       ${if guileBindings
         then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
-        else ""}${if stdenv.isSunOS
-          # TODO: Use `--with-libnettle-prefix' on all platforms
-          # Note: GMP is a dependency of Nettle, whose public headers include
-          # GMP headers, hence the hack.
-        then " --with-libnettle-prefix=${nettle} CPPFLAGS=-I${gmp}/include"
         else ""}
   '';
+
+  enableParallelBuilding = true;
 
   buildInputs = [ zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;

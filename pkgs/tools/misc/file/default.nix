@@ -1,5 +1,5 @@
 {stdenv, fetchurl, zlib}:
- 
+
 stdenv.mkDerivation rec {
   name = "file-5.11";
 

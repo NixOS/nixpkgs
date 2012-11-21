@@ -4,11 +4,11 @@
 , gsl, python, pyxml, lxml, poppler, imagemagick, libwpg }:
 
 stdenv.mkDerivation rec {
-  name = "inkscape-0.48.2";
+  name = "inkscape-0.48.3.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/inkscape/${name}.tar.bz2";
-    sha256 = "10v7ixdz7f8vgk2wv0m81zli9p0f446cm1f4aqlvni1ndsx44fi2";
+    sha256 = "126vfsafkfj6z65i5vp6g5dg9hvp3dd1zppjhms78257ns2zafq7";
   };
 
   patches = [ ./configure-python-libs.patch ./libpng-1.5.patch ];

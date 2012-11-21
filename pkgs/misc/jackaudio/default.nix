@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
   version = "1.9.8";
 
   src = fetchurl {
-    url = "http://www.grame.fr/~letz/jack-1.9.8.tgz";
+    urls = [
+      "http://pkgs.fedoraproject.org/lookaside/pkgs/jack-audio-connection-kit/jack-1.9.8.tgz/1dd2ff054cab79dfc11d134756f27165/jack-1.9.8.tgz"
+      "http://www.grame.fr/~letz/jack-1.9.8.tgz"
+    ];
     sha256 = "0788092zxrivcfnfg15brpjkf14x8ma8cwjz4k0b9xdxajn2wwac";
   };
 
@@ -17,6 +20,8 @@ stdenv.mkDerivation rec {
     [ alsaLib dbus expat libsamplerate libsndfile makeWrapper
       pkgconfig python pythonDBus
     ] ++ (stdenv.lib.optional firewireSupport ffado);
+
+  patches = ./ffado_setbuffsize-jack2.patch;
 
   configurePhase = ''
     cd jack-1.9.8

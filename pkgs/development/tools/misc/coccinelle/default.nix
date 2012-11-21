@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig }:
+{ fetchurl, stdenv, python, ncurses, ocamlPackages, pkgconfig, makeWrapper }:
 
 let
 
@@ -17,6 +17,7 @@ in stdenv.mkDerivation {
     ocaml findlib menhir
     ocaml_pcre pycaml
     python ncurses pkgconfig
+    makeWrapper
   ];
 
   # TODO: is the generation of this wrapper truly/still needed?

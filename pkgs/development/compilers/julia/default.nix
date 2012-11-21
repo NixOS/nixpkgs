@@ -7,11 +7,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20120904";
+  date = "20121106";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
-  dsfmt_ver = "2.1";
+  dsfmt_ver = "2.2";
   openblas_ver = "v0.2.2";
   lapack_ver = "3.4.1";
   arpack_ver = "3.1.2";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   dsfmt_src = fetchurl {
     url = "http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/SFMT/dSFMT-src-${dsfmt_ver}.tar.gz";
     name = "dsfmt-${dsfmt_ver}.tar.gz";
-    sha256 = "e9d3e04bc984ec3b14033342f5ebdcd5202d8d8e40128dd737f566945612378f";
+    sha256 = "bc3947a9b2253a869fcbab8ff395416cb12958be9dba10793db2cd7e37b26899";
   };
   openblas_src = fetchurl {
     url = "https://github.com/xianyi/OpenBLAS/tarball/${openblas_ver}";
@@ -54,8 +54,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "b842bf4ae4d80f28803ec54f3da412a0248046a9";
-    sha256 = "4d67f4f4d35c76ea8981198e42feb1c30a50ac7e1e15b752fa41b26ebadcd828";
+    rev = "8f4d073881beb42c9f272b9327efa0a5715bd31c";
+    sha256 = "2df2ba800bd4fd9b0297a0b8cff53174a7c05ffbc889a7df5830a014fed8c433";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
@@ -92,14 +92,14 @@ stdenv.mkDerivation rec {
     sed -e "s@/usr/local/lib@$out/lib@g" -i deps/Makefile
     sed -e "s@/usr/lib@$out/lib@g" -i deps/Makefile
     
-    export makeFlags="$makeFlags PREFIX=$out" 
+    export makeFlags="$makeFlags PREFIX=$out SHELL=${stdenv.shell}"
 
     export dontPatchELF=1
   '';
 
   preBuild = ''
-    make -C test/unicode all
-    make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX"
+    make -C test/unicode all SHELL="${stdenv.shell}"
+    make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX" SHELL="${stdenv.shell}"
   '';
 
   postInstall = ''

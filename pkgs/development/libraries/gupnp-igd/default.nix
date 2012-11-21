@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "gupnp-igd-0.2.1";
 
   src = fetchurl {
-    url = "http://www.gupnp.org/sites/all/files/sources/${name}.tar.gz";
+    url = https://launchpad.net/ubuntu/+archive/primary/+files/gupnp-igd_0.2.1.orig.tar.gz;
     sha256 = "18ia8l24hbylz3dnbg2jf848bmbx0hjkq4fkwzzfn57z021f0fh2";
   };
 

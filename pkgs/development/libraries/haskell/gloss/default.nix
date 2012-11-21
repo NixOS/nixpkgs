@@ -2,9 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "gloss";
-  version = "1.7.5.2";
-  sha256 = "1lasq106slq57k832pqhaq5wh7hwxn5bzg7rjk95rf3rrq5xb9f5";
+  version = "1.7.6.6";
+  sha256 = "1by8zr1194mjnnia0ackhd48yqxh79k752c5jwxx6nsk1diwrvl9";
   buildDepends = [ bmp GLUT OpenGL ];
+  jailbreak = true;
   meta = {
     homepage = "http://gloss.ouroborus.net";
     description = "Painless 2D vector graphics, animations and simulations";

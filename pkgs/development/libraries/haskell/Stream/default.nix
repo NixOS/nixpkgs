@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Stream";
-  version = "0.4.6";
-  sha256 = "0ppjcddm8dxxd260dsnzrdijifg4pa66lm401qj4fiddw0b50wzb";
+  version = "0.4.6.1";
+  sha256 = "19z052rd0varq5cbw0i0f0vkbpb40kqg6i93kz2brk6a101q5llp";
   buildDepends = [ lazysmallcheck QuickCheck ];
   meta = {
     description = "A library for manipulating infinite lists";

@@ -1,19 +1,18 @@
-{ cabal, cabalFileTh, cmdargs, filepath, haskeline, hledgerLib
-, HUnit, mtl, parsec, regexpr, safe, shakespeareText, split, text
-, time, utf8String
+{ cabal, cmdargs, filepath, haskeline, hledgerLib, HUnit, mtl
+, parsec, regexpr, safe, shakespeareText, split, text, time
+, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "hledger";
-  version = "0.18.2";
-  sha256 = "1i0rix3h5vrq9j01fzgwyhs2n8nfzhidi4rjlvn402ps0w6j15ld";
+  version = "0.19.1";
+  sha256 = "0ad7wmcpwi7a9nag4j27rhffhai6a5zgzaafss7sfr7yia00cpgg";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    cabalFileTh cmdargs filepath haskeline hledgerLib HUnit mtl parsec
-    regexpr safe shakespeareText split text time utf8String
+    cmdargs filepath haskeline hledgerLib HUnit mtl parsec regexpr safe
+    shakespeareText split text time utf8String
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://hledger.org";
     description = "The main command-line interface for the hledger accounting tool";

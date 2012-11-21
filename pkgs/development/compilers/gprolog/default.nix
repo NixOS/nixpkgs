@@ -1,14 +1,14 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gprolog-1.4.0";
+  name = "gprolog-1.4.1";
 
   src = fetchurl {
     urls = [
       "mirror://gnu/gprolog/${name}.tar.gz"
       "http://www.gprolog.org/${name}.tar.gz"
     ];
-    sha256 = "1l66k66ryfw1nfi2wlvsyq4cmr6mm95f4iay1fxdk3hdk3fjyjl0";
+    sha256 = "e2819ed9c426138d3191e4d97ae5121cf97e132eecf102400f87f1e372a05b72";
   };
 
   configurePhase = "cd src ;"
@@ -17,16 +17,17 @@ stdenv.mkDerivation rec {
     + "--with-examples-dir=$out/share/doc/${name}/examples "
     + "--with-doc-dir=$out/share/doc/${name}";
 
-  doCheck = true;
-
   postInstall = ''
     ln -vs "$out/share/${name}/include" "$out/include"
+    ln -vs "$out/share/${name}/lib" "$out/lib"
   '';
 
-  meta = {
-    homepage = http://www.gnu.org/software/gprolog/;
+  doCheck = true;
 
+  meta = {
+    homepage = "http://www.gnu.org/software/gprolog/";
     description = "GNU Prolog, a free Prolog compiler with constraint solving over finite domains";
+    license = "GPLv2+";
 
     longDescription = ''
       GNU Prolog is a free Prolog compiler with constraint solving
@@ -51,8 +52,6 @@ stdenv.mkDerivation rec {
       the user combining the power of constraint programming to the
       declarativity of logic programming.
     '';
-
-    license = "GPLv2+";
 
     maintainers = [ stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.gnu;

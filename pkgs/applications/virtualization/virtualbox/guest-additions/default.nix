@@ -1,15 +1,18 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor}:
 
-let version = "4.1.22"; in
+let version = "4.2.2"; in
 
 stdenv.mkDerivation {
   name = "VirtualBox-GuestAdditions-${version}";
+
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "5c7d9a4a31c8a926ba6dbae2b9704a561638e94ea0fc4f805a9231dd4f932d46";
+    sha256 = "26f5390b36a3bb9855846d194dcd287b8e53613b599c6ffd7aff1b451cc7f1f1";
   };
+
   KERN_DIR = "${kernel}/lib/modules/*/build";
+
   buildInputs = [ patchelf cdrkit makeWrapper ];
 
   installPhase = ''
@@ -101,9 +104,7 @@ stdenv.mkDerivation {
 
     # Install Xorg drivers
     mkdir -p $out/lib/xorg/modules/{drivers,input}
-    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_19.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
-    # There doesn't appear to be a vboxmouse driver for Xorg 1.9. Was there ever?
-    #install -m 644 lib/VBoxGuestAdditions/vboxmouse_drv_19.so $out/lib/xorg/modules/input/vboxmouse_drv.so
+    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_112.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
 
     # Install kernel modules
     cd src

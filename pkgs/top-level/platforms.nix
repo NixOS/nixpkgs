@@ -50,6 +50,9 @@ rec {
         EXT4_FS m
         USB_STORAGE_CYPRESS_ATACB m
 
+        # mv cesa requires this sw fallback, for mv-sha1
+        CRYPTO_SHA1 y
+
         IP_PNP y
         IP_PNP_DHCP y
         NFS_FS y
@@ -70,12 +73,17 @@ rec {
         IP_NF_TARGET_LOG y
         IP_NF_MANGLE y
         IPV6 m
+        VLAN_8021Q m
 
         CIFS y
         CIFS_XATTR y
         CIFS_POSIX y
         CIFS_FSCACHE y
         CIFS_ACL y
+
+        WATCHDOG y
+        WATCHDOG_CORE y
+        ORION_WATCHDOG m
 
         ZRAM m
         NETCONSOLE m
@@ -99,6 +107,18 @@ rec {
 
         # nixos mounts some cgroup
         CGROUPS y
+
+        # Latencytop 
+        LATENCYTOP y
+
+        # Ubi for the mtd
+        MTD_UBI y
+        UBIFS_FS y
+        UBIFS_FS_XATTR y
+        UBIFS_FS_ADVANCED_COMPR y
+        UBIFS_FS_LZO y
+        UBIFS_FS_ZLIB y
+        UBIFS_FS_DEBUG n
       '';
     kernelTarget = "uImage";
     uboot = "sheevaplug";
