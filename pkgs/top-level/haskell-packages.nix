@@ -597,6 +597,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   comonad = callPackage ../development/libraries/haskell/comonad {};
 
+  comonadsFd = callPackage ../development/libraries/haskell/comonads-fd {};
+
   comonadTransformers = callPackage ../development/libraries/haskell/comonad-transformers {};
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
