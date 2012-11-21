@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
     sha256 = "10k8kgrprll9hxfm9gc3jl7kkq79g6l2pygn5snqwqg5v80zy4zb";
   };
 
+  # Remove this patch after the next busybox update.
+  patches = [ ./include-missing-sys-resource-header.patch ];
+
   configurePhase = ''
     make defconfig
     ${configParser}
