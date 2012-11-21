@@ -673,6 +673,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   datetime = callPackage ../development/libraries/haskell/datetime {};
 
+  DAV = callPackage ../development/libraries/haskell/DAV {};
+
   dbus = callPackage ../development/libraries/haskell/dbus {};
 
   deepseq_1_1_0_0 = callPackage ../development/libraries/haskell/deepseq/1.1.0.0.nix {};
