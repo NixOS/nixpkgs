@@ -2394,7 +2394,6 @@ let
 
   julia = callPackage ../development/compilers/julia {
     llvm = llvm_3_1;
-    pcre = pcre_8_30;
     liblapack = liblapack.override {shared = true;};
     fftw = fftw.override {pthreads = true;};
     fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
@@ -4559,11 +4558,6 @@ let
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
   pcre = callPackage ../development/libraries/pcre {
-    unicodeSupport = getConfig ["pcre" "unicode"] true;
-    cplusplusSupport = !stdenv ? isDietLibC;
-  };
-
-  pcre_8_30 = callPackage ../development/libraries/pcre/8.30.nix {
     unicodeSupport = getConfig ["pcre" "unicode"] true;
     cplusplusSupport = !stdenv ? isDietLibC;
   };
