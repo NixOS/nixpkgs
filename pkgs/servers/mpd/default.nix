@@ -2,16 +2,18 @@
 , flacSupport ? true, flac, vorbisSupport ? true, libvorbis
 , madSupport ? true, libmad, id3tagSupport ? true, libid3tag
 , mikmodSupport ? true, libmikmod, cueSupport ? true, libcue
+, shoutSupport ? true, libshout
 }:
 let
   opt = stdenv.lib.optional;
 in
 stdenv.mkDerivation rec {
-  name = "mpd-0.16.3";
+  name = "mpd-0.16.8";
   src = fetchurl {
     url = "mirror://sourceforge/musicpd/${name}.tar.bz2";
-    sha256 = "1liihxj58f944gapdqg15firl6phbxh3y3vjxq9m8dlvm37pkpsq";
+    sha256 = "35183ae4a706391f5d739e4378b74f516952adda09a260fecfd531a58b0fff17";
   };
+
   buildInputs = [ pkgconfig glib ]
     ++ opt alsaSupport alsaLib
     ++ opt flacSupport flac
@@ -19,7 +21,9 @@ stdenv.mkDerivation rec {
     ++ opt madSupport libmad
     ++ opt id3tagSupport libid3tag
     ++ opt mikmodSupport libmikmod
-    ++ opt cueSupport libcue;
+    ++ opt cueSupport libcue
+    ++ opt shoutSupport libshout;
+
   configureFlags = ''
     ${if alsaSupport then "--enable-alsa" else "--disable-alsa"}
     ${if flacSupport then "--enable-flac" else "--disable-flac"}
@@ -28,7 +32,13 @@ stdenv.mkDerivation rec {
     ${if mikmodSupport then "--enable-mikmod" else "--disable-mikmod"}
     ${if id3tagSupport then "--enable-id3" else "--disable-id3"}
     ${if cueSupport then "--enable-cue" else "--disable-cue"}
+    ${if shoutSupport then "--enable-shout" else "--disable-shout"}
   '';
+
+  NIX_LDFLAGS = ''
+    ${if shoutSupport then "-lshout" else ""}
+  '';
+
   meta = {
     description = "A flexible, powerful daemon for playing music";
     longDescription = ''
