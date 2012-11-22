@@ -272,6 +272,14 @@ in
     buildInputs = attrs.buildInputs ++ [xorg.libXrender];
   };
 
+  xinit = attrs: attrs // {
+    configureFlags = "--with-xserver=${xorg.xorgserver}/bin/X";
+    propagatedBuildInputs = [ xorg.xauth ];
+    prePatch = ''
+      sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
+    '';
+  };
+
   xwd = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXt];
   };
