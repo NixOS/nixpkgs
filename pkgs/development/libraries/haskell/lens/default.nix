@@ -1,16 +1,16 @@
 { cabal, comonad, comonadsFd, comonadTransformers, filepath
 , hashable, mtl, parallel, semigroups, split, text, transformers
-, unorderedContainers, vector, void
+, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "3.3";
-  sha256 = "0gq24y1727ml5lpr0b67hqw3vwanvx6hpk3lsfx3nk6csscn1lvk";
+  version = "3.4";
+  sha256 = "19f5kmd6b1jnimvfm56dpgqzhnlpi0anar1ii9am38lg5yaqbgs4";
   buildDepends = [
     comonad comonadsFd comonadTransformers filepath hashable mtl
     parallel semigroups split text transformers unorderedContainers
-    vector void
+    vector
   ];
   noHaddock = true;
   meta = {
