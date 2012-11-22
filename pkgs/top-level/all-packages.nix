@@ -1417,6 +1417,8 @@ let
 
   ripmime = callPackage ../tools/networking/ripmime {};
 
+  rng_tools = callPackage ../tools/security/rng-tools { };
+
   rsnapshot = callPackage ../tools/backup/rsnapshot {
     # For the `logger' command, we can use either `utillinux' or
     # GNU Inetutils.  The latter is more portable.
