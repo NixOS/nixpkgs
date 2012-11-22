@@ -47,7 +47,7 @@ EOF
 
 
 # Parse the command line.
-extraBuildFlags=
+extraBuildFlags=()
 action=
 pullManifest=
 buildNix=1
@@ -79,20 +79,20 @@ while test "$#" -gt 0; do
         upgrade=1
         ;;
       --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|--fallback)
-        extraBuildFlags="$extraBuildFlags $i"
+        extraBuildFlags+=("$i")
         ;;
       --max-jobs|-j|--cores|-I)
         j="$1"; shift 1
-        extraBuildFlags="$extraBuildFlags $i $j"
+        extraBuildFlags+=("$i" "$j")
         ;;
       --option)
         j="$1"; shift 1
         k="$1"; shift 1
-        extraBuildFlags="$extraBuildFlags $i $j $k"
+        extraBuildFlags+=("$i" "$j" "$k")
         ;;
       --fast)
         buildNix=
-        extraBuildFlags="$extraBuildFlags --show-trace"
+        extraBuildFlags+=(--show-trace)
         ;;
       *)
         echo "$0: unknown option \`$i'"
@@ -104,7 +104,7 @@ done
 if test -z "$action"; then showSyntax; fi
 
 if test "$action" = dry-run; then
-    extraBuildFlags="$extraBuildFlags --dry-run"
+    extraBuildFlags+=(--dry-run)
 fi
 
 if test -n "$rollback"; then
@@ -156,9 +156,9 @@ fi
 # more conservative.
 if [ -n "$buildNix" ]; then
     echo "building Nix..." >&2
-    if ! nix-build '<nixos>' -A config.environment.nix -o $tmpDir/nix $extraBuildFlags > /dev/null; then
-        if ! nix-build '<nixos>' -A nixFallback -o $tmpDir/nix $extraBuildFlags > /dev/null; then
-            nix-build '<nixpkgs>' -A nixUnstable -o $tmpDir/nix $extraBuildFlags > /dev/null
+    if ! nix-build '<nixos>' -A config.environment.nix -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
+        if ! nix-build '<nixos>' -A nixFallback -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
+            nix-build '<nixpkgs>' -A nixUnstable -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null
         fi
     fi
     PATH=$tmpDir/nix/bin:$PATH
@@ -171,16 +171,16 @@ fi
 if test -z "$rollback"; then
     echo "building the system configuration..." >&2
     if test "$action" = switch -o "$action" = boot; then
-        nix-env $extraBuildFlags -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
+        nix-env "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
         pathToConfig=/nix/var/nix/profiles/system
     elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
-        nix-build '<nixos>' -A system -K -k $extraBuildFlags > /dev/null
+        nix-build '<nixos>' -A system -K -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm ]; then
-        nix-build '<nixos>' -A vm -K -k $extraBuildFlags > /dev/null
+        nix-build '<nixos>' -A vm -K -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm-with-bootloader ]; then
-        nix-build '<nixos>' -A vmWithBootLoader -K -k $extraBuildFlags > /dev/null
+        nix-build '<nixos>' -A vmWithBootLoader -K -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     else
         showSyntax

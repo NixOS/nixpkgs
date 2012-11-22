@@ -29,12 +29,12 @@ if ! grep -F -q " $mountPoint " /proc/mounts; then
     echo "$mountPoint doesn't appear to be a mount point"
     exit 1
 fi
-    
+
 if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
     echo "configuration file $NIXOS_CONFIG doesn't exist"
     exit 1
 fi
-    
+
 
 # Do a nix-pull to speed up building.
 if test -n "@nixosURL@" -a ${NIXOS_PULL:-1} != 0; then
