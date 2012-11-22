@@ -48,6 +48,7 @@
   ./security/pam.nix
   ./security/pam_usb.nix
   ./security/polkit.nix
+  ./security/rngd.nix
   ./security/rtkit.nix
   ./security/setuid-wrappers.nix
   ./security/sudo.nix
