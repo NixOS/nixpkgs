@@ -19,7 +19,7 @@
 
 , installCommand ?
     ''
-      easy_install --prefix="$out" .
+      easy_install --always-unzip --prefix="$out" .
 
       # A pth file might have been generated to load the package from
       # within its own site-packages, rename this package not to
@@ -63,8 +63,6 @@ python.stdenv.mkDerivation (attrs // {
 
   pythonPath = [ setuptools] ++ pythonPath;
 
-  # XXX: Should we run `easy_install --always-unzip'?  It doesn't seem
-  # to have a noticeable impact on small scripts.
   installPhase = ''
     mkdir -p "$out/lib/${python.libPrefix}/site-packages"
 
