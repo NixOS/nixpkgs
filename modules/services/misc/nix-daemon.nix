@@ -194,7 +194,29 @@ in
         '';
       };
 
+      binaryCaches = mkOption {
+        default = [ http://nixos.org/binary-cache ];
+        type = types.list types.string;
+        description = ''
+          List of binary cache URLs used to obtain pre-built binaries
+          of Nix packages.
+        '';
+      };
+
+      trustedBinaryCaches = mkOption {
+        default = [ ];
+        example = [ http://hydra.nixos.org/ ];
+        type = types.list types.string;
+        description = ''
+          List of binary cache URLs that non-root users can use (in
+          addition to those specified using
+          <option>nix.binaryCaches</option> by passing
+          <literal>--option binary-caches</literal> to Nix commands.
+        '';
+      };
+
     };
+
   };
 
 
@@ -225,6 +247,8 @@ in
                 build-max-jobs = ${toString (cfg.maxJobs)}
                 build-use-chroot = ${if cfg.useChroot then "true" else "false"}
                 build-chroot-dirs = ${toString cfg.chrootDirs} $(echo $extraPaths)
+                binary-caches = ${toString config.nix.binaryCaches}
+                trusted-binary-caches = ${toString config.nix.trustedBinaryCaches}
                 $extraOptions
                 END
               '';
