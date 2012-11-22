@@ -1,13 +1,14 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
+ , tcl, tk
  } :
 let
   realGcc = stdenv.gcc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20121106";
+  date = "20121122";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
@@ -54,8 +55,8 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "8f4d073881beb42c9f272b9327efa0a5715bd31c";
-    sha256 = "2df2ba800bd4fd9b0297a0b8cff53174a7c05ffbc889a7df5830a014fed8c433";
+    rev = "51076ef4c1b269de738b6185865b389601627eb7";
+    sha256 = "1hbhxdiymkv0pd4dhr9wbvh1566ivfffhmafsjh8jcwh2f9fz90b";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
@@ -84,17 +85,19 @@ stdenv.mkDerivation rec {
 
     sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
 
-    export LDFLAGS="-L${suitesparse}/lib"
+    export LDFLAGS="-L${suitesparse}/lib -L$out/lib/julia -Wl,-rpath,$out/lib/julia"
 
     export GLPK_PREFIX="${glpk}/include"
 
     mkdir -p "$out/lib"
     sed -e "s@/usr/local/lib@$out/lib@g" -i deps/Makefile
     sed -e "s@/usr/lib@$out/lib@g" -i deps/Makefile
-    
+
     export makeFlags="$makeFlags PREFIX=$out SHELL=${stdenv.shell}"
 
     export dontPatchELF=1
+
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/usr/lib:$PWD/usr/lib/julia"
   '';
 
   preBuild = ''
@@ -104,14 +107,11 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
    ld -E --whole-archive --shared ${suitesparse}/lib/lib*[a-z].a -o "$out"/lib/libsuitesparse-shared.so
-   for i in umfpack cholmod amd camd colamd ; do
+   for i in umfpack cholmod amd camd colamd btf cxsparse ldl rbio spqr suitesparseconfig; do
      ln -s "libsuitesparse-shared.so" "$out/lib/lib$i.so"
    done
    ln -s "${lighttpd}/sbin/lighttpd" "$out/sbin/"
    ln -s "${lighttpd}/lib/"* "$out/lib/"
-
-   cp -r test examples "$out/lib/julia"
-   ls -R > "$out/ls-R"
   '';
 
   meta = {
