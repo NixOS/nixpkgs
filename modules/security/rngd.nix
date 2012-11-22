@@ -5,11 +5,11 @@ with pkgs.lib;
 {
   options = {
     security.rngd.enable = mkOption {
-      default = true;
+      default = false;
       description = ''
         Whether to enable the rng daemon, which adds entropy from
         hardware sources of randomness to the kernel entropy pool when
-        available. It is strongly recommended to keep this enabled!
+        available.
       '';
     };
   };
