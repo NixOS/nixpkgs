@@ -921,6 +921,8 @@ let
 
   iasl = callPackage ../development/compilers/iasl { };
 
+  icecast = callPackage ../servers/icecast { };
+
   icoutils = callPackage ../tools/graphics/icoutils { };
 
   idutils = callPackage ../tools/misc/idutils { };
@@ -1013,6 +1015,8 @@ let
   libconfig = callPackage ../development/libraries/libconfig { };
 
   libtirpc = callPackage ../development/libraries/ti-rpc { };
+
+  libshout = callPackage ../development/libraries/libshout { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
