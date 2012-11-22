@@ -1999,7 +1999,7 @@ let pythonPackages = python.modules // rec {
     namePrefix = "";
 
     src = fetchurl {
-      url = "ftp://ftp.logilab.org/pub/pylint/${name}.tar.gz";
+      url = "http://download.logilab.org/pub/pylint/${name}.tar.gz";
       sha256 = "1mg1ywpj0klklv63s2hwn5xwxi3wfwgnyz9d4pz32hzb53azq835";
     };
 
