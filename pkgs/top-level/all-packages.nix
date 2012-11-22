@@ -7424,7 +7424,9 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
-  MPlayer = callPackage ../applications/video/MPlayer { };
+  MPlayer = callPackage ../applications/video/MPlayer {
+    pulseSupport = config.pulseaudio or false;
+  };
 
   MPlayerPlugin = browser:
     import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
