@@ -7,7 +7,7 @@ with pkgs.lib;
     security.rngd.enable = mkOption {
       default = true;
       description = ''
-        Whether tho enable the rng daemon, which adds entropy from
+        Whether to enable the rng daemon, which adds entropy from
         hardware sources of randomness to the kernel entropy pool when
         available. It is strongly recommended to keep this enabled!
       '';
@@ -16,7 +16,7 @@ with pkgs.lib;
 
   config = mkIf config.security.rngd.enable {
     boot.systemd.services.rngd = {
-      wantedBy = [ config.boot.systemd.defaultUnit ];
+      wantedBy = [ "multi-user.target" ];
 
       description = "Hardware RNG Entropy Gatherer Daemon";
 
