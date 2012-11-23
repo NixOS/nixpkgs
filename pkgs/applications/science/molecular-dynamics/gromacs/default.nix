@@ -5,9 +5,6 @@
 }:
 
 
-let meta = import ./meta.nix;
-in
-
 stdenv.mkDerivation {
   name = "gromacs-4.5.5";
 
