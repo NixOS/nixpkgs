@@ -47,7 +47,7 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputStrings = map toString buildInputs;
 
-  builder = ./builder.sh
+  builder = ./builder.sh;
 
   pythonPath = [ setuptools] ++ pythonPath;
 
