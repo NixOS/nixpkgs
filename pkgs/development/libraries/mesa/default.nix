@@ -7,14 +7,14 @@ if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "8.0.4"; in
+let version = "8.0.5"; in
 
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    md5 = "d546f988adfdf986cff45b1efa2d8a46";
+    md5 = "01305591073a76b65267f69f27d635a3";
   };
 
   patches =
