@@ -18,6 +18,10 @@ let pythonPackages = python.modules // rec {
     inherit python wrapPython;
   };
 
+  offlineDistutils = import ../development/python-modules/offline-distutils {
+    inherit (pkgs) stdenv;
+    inherit python;
+  };
 
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl;
