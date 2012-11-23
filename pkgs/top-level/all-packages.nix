@@ -9067,6 +9067,7 @@ let
 
   xsane = callPackage ../misc/xsane {
     libpng = libpng12;
+    saneBackends = saneBackendsSnapshot;
   };
 
   yafc = callPackage ../applications/networking/yafc { };
