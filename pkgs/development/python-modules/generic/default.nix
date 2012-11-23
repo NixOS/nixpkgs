@@ -45,7 +45,7 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
-  builder = ./builder.sh
+  builder = ./builder.sh;
 
   pythonPath = [ setuptools] ++ pythonPath;
 
