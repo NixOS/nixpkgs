@@ -7036,6 +7036,13 @@ let
 
   firefox16Wrapper = lowPrio (wrapFirefox { browser = firefox16Pkgs.firefox; });
 
+  firefox17Pkgs = callPackage ../applications/networking/browsers/firefox/17.0.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
+  firefox17Wrapper = lowPrio (wrapFirefox { browser = firefox17Pkgs.firefox; });
+
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
