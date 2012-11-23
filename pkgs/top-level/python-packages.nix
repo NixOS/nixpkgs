@@ -9,7 +9,7 @@ let pythonPackages = python.modules // rec {
 
   buildPythonPackage = import ../development/python-modules/generic {
     inherit (pkgs) lib;
-    inherit python wrapPython setuptools;
+    inherit python wrapPython setuptools offlineDistutils;
   };
 
 
@@ -24,6 +24,10 @@ let pythonPackages = python.modules // rec {
     inherit python wrapPython;
   };
 
+  offlineDistutils = import ../development/python-modules/offline-distutils {
+    inherit (pkgs) stdenv;
+    inherit python;
+  };
 
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl;

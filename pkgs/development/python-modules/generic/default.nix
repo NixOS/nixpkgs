@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, wrapPython, lib }:
+{ python, setuptools, wrapPython, lib, offlineDistutils }:
 
 { name, namePrefix ? "python-"
 
@@ -46,6 +46,8 @@ python.stdenv.mkDerivation (attrs // {
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
   buildInputStrings = map toString buildInputs;
+
+  builder = ./builder.sh
 
   pythonPath = [ setuptools] ++ pythonPath;
 
