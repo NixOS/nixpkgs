@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "filesystem-conduit";
-  version = "0.5.0.1";
-  sha256 = "1rpyrvs9hsi86zj6rghv91jn5lcx9wppg1wa4gp976kmagd4wl93";
+  version = "0.5.0.2";
+  sha256 = "0vpxl32k6734vli8nky9cwyabw9alvpjm0g5q822yj9rk2439yfq";
   buildDepends = [
     conduit systemFileio systemFilepath text transformers
   ];

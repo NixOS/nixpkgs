@@ -10,6 +10,7 @@
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   antono = "Antono Vasiljev <self@antono.info>";
   astsmtl = "Alexander Tsamutali <astsmtl@yandex.ru>";
+  bbenoist = "Baptist BENOIST <return_0@live.com>";
   bjg = "Brian Gough <bjg@gnu.org>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";

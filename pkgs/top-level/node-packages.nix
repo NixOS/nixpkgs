@@ -494,6 +494,19 @@ let self = {
     ];
   };
 
+  "jsontool" = self."jsontool-*";
+
+  "jsontool-*" = self.buildNodePackage rec {
+    name = "jsontool-5.1.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/jsontool/-/${name}.tgz";
+      sha256 = "f7c12a0de635905f8134dfc8385f237135494d8c99fc0a5f112ee9735c2b6d05";
+    };
+    deps = [
+
+    ];
+  };
+
   "knox" = self."knox-*";
 
   "knox-*" = self.buildNodePackage rec {
@@ -996,6 +1009,19 @@ let self = {
     };
     deps = [
       self."requirejs-==0.26.0"
+    ];
+  };
+  
+  "swig" = self."swig-0.13.2";
+  
+  "swig-0.13.2" = self.buildNodePackage rec {
+    name = "swig-0.13.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/swig/-/${name}.tgz";
+      sha256 = "1fxc1cg0g5bn0ksm4gddx75ff5yzzbhqn4yqh6xqa5ag73nvxiyg";
+    };
+    deps = [
+      self."underscore"
     ];
   };
 

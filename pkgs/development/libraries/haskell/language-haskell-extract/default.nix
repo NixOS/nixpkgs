@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "language-haskell-extract";
-  version = "0.2.1";
-  sha256 = "0lmg16g3z8cx0vb037bk4j2nr3qvybfcqfsr8l6jk57b2nz3yhbf";
+  version = "0.2.3";
+  sha256 = "0fz1nin596ihlh77pafzpdf46br1k3pxcxyml2rvly6g0h3yjgpr";
   buildDepends = [ haskellSrcExts regexPosix ];
   meta = {
     homepage = "http://github.com/finnsson/template-helper";

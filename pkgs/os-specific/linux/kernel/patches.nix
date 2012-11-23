@@ -230,6 +230,12 @@ rec {
       features.cifsTimeout = true;
     };
 
+  cifs_timeout_3_5_7 =
+    { name = "cifs-timeout";
+      patch = ./cifs-timeout-3.5.7.patch;
+      features.cifsTimeout = true;
+    };
+
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;

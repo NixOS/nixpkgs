@@ -60,8 +60,7 @@ let version = "4.7.2";
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
       ++ optional langAda ./gnat-cflags.patch
-      ++ optional langFortran ./gfortran-driving.patch
-      ++ optional (stdenv.isGNU || crossGNU) ./hurd-sigrtmin.patch;
+      ++ optional langFortran ./gfortran-driving.patch;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -206,8 +205,6 @@ stdenv.mkDerivation ({
            echo "setting \`NATIVE_SYSTEM_HEADER_DIR' and \`STANDARD_INCLUDE_DIR' to \`${libc}/include'..."
            sed -i "${gnu_h}" \
                -es'|#define STANDARD_INCLUDE_DIR.*$|#define STANDARD_INCLUDE_DIR "${libc}/include"|g'
-           sed -i gcc/config/t-gnu \
-               -es'|NATIVE_SYSTEM_HEADER_DIR.*$|NATIVE_SYSTEM_HEADER_DIR = ${libc}/include|g'
         ''
     else if cross != null || stdenv.gcc.libc != null then
       # On NixOS, use the right path to the dynamic linker instead of
@@ -308,7 +305,6 @@ stdenv.mkDerivation ({
     else "install";
 
   crossAttrs = {
-    patches = patches ++ [ ./hurd-sigrtmin.patch ];
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
     CC = "${stdenv.cross.config}-gcc";

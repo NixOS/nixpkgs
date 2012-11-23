@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "rank1dynamic";
-  version = "0.1.0.1";
-  sha256 = "18rlih5bndlm5v4nnv8g2rgvab5n22vd8mcjd0m4wq8fmqkb3x9d";
+  version = "0.1.0.2";
+  sha256 = "1341hhbdm6y0mj0qjda0ckqsla51fxiy1yfpbwfvsmpi2bkzgxn6";
   buildDepends = [ binary ];
   meta = {
     homepage = "http://github.com/haskell-distributed/distributed-process";
