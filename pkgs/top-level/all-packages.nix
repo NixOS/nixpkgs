@@ -8661,6 +8661,21 @@ let
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
 
+
+  ### SCIENCE/MOLECULAR-DYNAMICS
+
+  gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = true;
+    fftw = fftwSinglePrec;
+    cmake = cmakeCurses;
+  };
+
+  gromacsDouble = callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = false;
+    fftw = fftw;
+    cmake = cmakeCurses;
+  };
+
   ### SCIENCE/LOGIC
 
   coq = callPackage ../applications/science/logic/coq {
