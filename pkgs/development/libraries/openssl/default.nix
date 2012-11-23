@@ -55,10 +55,13 @@ stdenv.mkDerivation {
   configureScript =
     if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc" else "./config";
 
-  configureFlags = "shared --libdir=lib" +
+  configureFlags = "shared --libdir=lib --openssldir=etc/ssl" +
     stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS";
 
   makeFlags = "MANDIR=$(out)/share/man";
+
+  # Parallel building is broken in OpenSSL.
+  #enableParallelBuilding = true;
 
   postInstall =
     ''
