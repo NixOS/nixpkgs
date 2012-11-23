@@ -8668,11 +8668,11 @@ let
     cmake = cmakeCurses;
   };
 
-  gromacsDouble = callPackage ../applications/science/molecular-dynamics/gromacs {
+  gromacsDouble = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
     singlePrec = false;
     fftw = fftw;
     cmake = cmakeCurses;
-  };
+  });
 
   ### SCIENCE/LOGIC
 
