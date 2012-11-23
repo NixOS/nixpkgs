@@ -43,7 +43,7 @@ stdenv.mkDerivation {
       reference or manual for details), but there are also quite a
       few features that make it stand out from the competition.
 
-	See: http://www.gromacs.org/About_Gromacs for details.
+      See: http://www.gromacs.org/About_Gromacs for details.
     '';
   };
 }
