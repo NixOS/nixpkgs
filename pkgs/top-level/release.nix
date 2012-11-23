@@ -346,7 +346,6 @@ with (import ./release-lib.nix);
     ecb = linux;
     emacsw3m = linux;
     emms = linux;
-    nxml = all;
   };
 
   emacs23Packages = emacs22Packages // {
