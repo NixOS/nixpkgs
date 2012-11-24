@@ -32,6 +32,7 @@
       python setup.py test
       runHook postCheck
     ''
+, configurePhase ? "true"
 
 , postInstall ? ""
 
@@ -45,7 +46,12 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
-  builder = ./builder.sh;
+  buildInputStrings = map toString buildInputs;
+
+  configurePhase = ''
+    export PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}:$PYTHONPATH"
+    ${configurePhase}
+  '';
 
   pythonPath = [ setuptools] ++ pythonPath;
 
