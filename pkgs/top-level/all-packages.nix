@@ -739,6 +739,9 @@ let
 
   fortune = callPackage ../tools/misc/fortune { };
 
+  fox = callPackage ../development/libraries/fox/default.nix { };
+  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
+
   fprot = callPackage ../tools/security/fprot { };
 
   freeipmi = callPackage ../tools/system/freeipmi {};
@@ -918,6 +921,8 @@ let
 
   iasl = callPackage ../development/compilers/iasl { };
 
+  icecast = callPackage ../servers/icecast { };
+
   icoutils = callPackage ../tools/graphics/icoutils { };
 
   idutils = callPackage ../tools/misc/idutils { };
@@ -1010,6 +1015,8 @@ let
   libconfig = callPackage ../development/libraries/libconfig { };
 
   libtirpc = callPackage ../development/libraries/ti-rpc { };
+
+  libshout = callPackage ../development/libraries/libshout { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
@@ -1409,6 +1416,8 @@ let
   rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
 
   ripmime = callPackage ../tools/networking/ripmime {};
+
+  rng_tools = callPackage ../tools/security/rng-tools { };
 
   rsnapshot = callPackage ../tools/backup/rsnapshot {
     # For the `logger' command, we can use either `utillinux' or
@@ -5006,6 +5015,8 @@ let
 
   vtk = callPackage ../development/libraries/vtk { };
 
+  vtkWithQt4 = vtk.override { useQt4 = true; };
+
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;
   };
@@ -6552,7 +6563,9 @@ let
 
   aangifte2011 = callPackage_i686 ../applications/taxes/aangifte-2011 { };
 
-  abcde = callPackage ../applications/audio/abcde { };
+  abcde = callPackage ../applications/audio/abcde {
+    inherit (perlPackages) DigestSHA MusicBrainz MusicBrainzDiscID;
+  };
 
   abiword = callPackage ../applications/office/abiword {
     inherit (gnome) libglade libgnomecanvas;
@@ -6627,6 +6640,8 @@ let
   blender = callPackage  ../applications/misc/blender {
     python = python32;
   };
+
+  bristol = callPackage ../applications/audio/bristol { };
 
   bvi = callPackage ../applications/editors/bvi { };
 
@@ -6885,8 +6900,6 @@ let
 
     notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
 
-    nxml = callPackage ../applications/editors/emacs-modes/nxml { };
-
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
     # we want it to have higher precedence.
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
@@ -6901,8 +6914,8 @@ let
 
     proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral {
       texLive = pkgs.texLiveAggregationFun {
-                  paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
-                };
+        paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
+      };
     };
 
     quack = callPackage ../applications/editors/emacs-modes/quack { };
@@ -6964,6 +6977,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  geany = callPackage ../applications/editors/geany { };
+
   goldendict = callPackage ../applications/misc/goldendict { };
 
   grass = import ../applications/misc/grass {
@@ -7014,19 +7029,19 @@ let
 
   firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
-  firefox15Pkgs = callPackage ../applications/networking/browsers/firefox/15.0.nix {
-    inherit (gnome) libIDL;
-    inherit (pythonPackages) pysqlite;
-  };
-
-  firefox15Wrapper = lowPrio (wrapFirefox { browser = firefox15Pkgs.firefox; });
-
   firefox16Pkgs = callPackage ../applications/networking/browsers/firefox/16.0.nix {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
 
   firefox16Wrapper = lowPrio (wrapFirefox { browser = firefox16Pkgs.firefox; });
+
+  firefox17Pkgs = callPackage ../applications/networking/browsers/firefox/17.0.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
+  firefox17Wrapper = lowPrio (wrapFirefox { browser = firefox17Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7084,6 +7099,8 @@ let
   giv = callPackage ../applications/graphics/giv {
     pcre = pcre.override { unicodeSupport = true; };
   };
+
+  gmrun = callPackage ../applications/misc/gmrun {};
 
   gnucash = callPackage ../applications/office/gnucash {
     inherit (gnome) libgnomeui libgtkhtml gtkhtml libbonoboui libgnomeprint;
@@ -7646,6 +7663,8 @@ let
 
   qsynth = callPackage ../applications/audio/qsynth { };
 
+  qtcreator = callPackage ../development/qtcreator { };
+
   qtpfsgui = callPackage ../applications/graphics/qtpfsgui { };
 
   qtractor = callPackage ../applications/audio/qtractor { };
@@ -8026,6 +8045,8 @@ let
   xdotool = callPackage ../tools/X11/xdotool { };
 
   xen = callPackage ../applications/virtualization/xen { };
+
+  xfe = callPackage ../applications/misc/xfe { };
 
   xfig = callPackage ../applications/graphics/xfig {
     stdenv = overrideGCC stdenv gcc34;
@@ -9046,6 +9067,7 @@ let
 
   xsane = callPackage ../misc/xsane {
     libpng = libpng12;
+    saneBackends = saneBackendsSnapshot;
   };
 
   yafc = callPackage ../applications/networking/yafc { };

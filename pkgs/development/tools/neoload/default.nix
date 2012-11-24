@@ -73,6 +73,8 @@ in stdenv.mkDerivation rec {
       sed -e 's|/lib/neoload/bin|/bin|' "$i" > "$out/share/applications/$name"
     done
     rm $out/lib/neoload/*.desktop $out/lib/neoload/uninstall
+
+    ln -s ${oraclejre}/bin $out/lib/neoload/jre
   '';
 
   meta = {

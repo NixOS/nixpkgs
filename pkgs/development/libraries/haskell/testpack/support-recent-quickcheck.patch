@@ -1,0 +1,22 @@
+diff --git a/src/Test/HUnit/Tools.hs b/src/Test/HUnit/Tools.hs
+index 01fac30..0de5526 100644
+--- a/src/Test/HUnit/Tools.hs
++++ b/src/Test/HUnit/Tools.hs
+@@ -128,7 +128,7 @@ Often used like this:
+ >        q "Integer -> Int (safe bounds)" prop_integer_to_int_pass]
+ -}
+ qc2hu :: QC.Testable a => Int -> String -> a -> HU.Test
+-qc2hu maxTest = qccheck (stdArgs {maxSuccess = maxTest, maxDiscard = 20000})
++qc2hu maxTest = qccheck (stdArgs {maxSuccess = maxTest})
+ 
+ {- | Run verbose tests.  Example:
+ 
+@@ -174,7 +174,7 @@ localquickCheckWithResult args p =
+               Just (rnd,_) -> return rnd
+      test MkState{ terminal          = tm
+                  , maxSuccessTests   = maxSuccess args
+-                 , maxDiscardedTests = maxDiscard args
++                 , maxDiscardedTests = 20000
+                  , computeSize       = case replay args of
+                                          Nothing    -> \n d -> (n * maxSize args)
+                                                          `div` maxSuccess args

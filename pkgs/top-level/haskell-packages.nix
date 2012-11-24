@@ -427,10 +427,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Haskell libraries.
 
-  Agda = callPackage ../development/libraries/haskell/Agda {
-    haskellSrcExts = self.haskellSrcExts_1_11_1;
-    QuickCheck = self.QuickCheck_2_4_2;
-  };
+  Agda = callPackage ../development/libraries/haskell/Agda {};
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
 
@@ -597,6 +594,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   comonad = callPackage ../development/libraries/haskell/comonad {};
 
+  comonadsFd = callPackage ../development/libraries/haskell/comonads-fd {};
+
   comonadTransformers = callPackage ../development/libraries/haskell/comonad-transformers {};
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
@@ -670,6 +669,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dateCache = callPackage ../development/libraries/haskell/date-cache {};
 
   datetime = callPackage ../development/libraries/haskell/datetime {};
+
+  DAV = callPackage ../development/libraries/haskell/DAV {};
 
   dbus = callPackage ../development/libraries/haskell/dbus {};
 
@@ -1117,6 +1118,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
 
+  lens = callPackage ../development/libraries/haskell/lens {};
+
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
   liblastfm = callPackage ../development/libraries/haskell/liblastfm {};
@@ -1427,8 +1430,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   regexPCRE = callPackage ../development/libraries/haskell/regex-pcre {};
   regexPcre = self.regexPCRE;
 
-  regexPcreBuiltin = callPackage ../development/libraries/haskell/regex-pcre-builtin {};
-
   regexpr = callPackage ../development/libraries/haskell/regexpr {};
 
   regular = callPackage ../development/libraries/haskell/regular {};
@@ -1606,9 +1607,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   testFrameworkThPrime = callPackage ../development/libraries/haskell/test-framework-th-prime {};
 
-  testpack = callPackage ../development/libraries/haskell/testpack {
-    QuickCheck = self.QuickCheck_2_4_2;
-  };
+  testpack = callPackage ../development/libraries/haskell/testpack {};
 
   texmath = callPackage ../development/libraries/haskell/texmath {};
 
@@ -1774,6 +1773,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   xml = callPackage ../development/libraries/haskell/xml {};
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
+
+  xmlHamlet = callPackage ../development/libraries/haskell/xml-hamlet {};
 
   xmlhtml = callPackage ../development/libraries/haskell/xmlhtml {};
 

@@ -1,16 +1,12 @@
-{ cabal, binary, QuickCheck, testFramework
-, testFrameworkQuickcheck2
-}:
+{ cabal, binary }:
 
 cabal.mkDerivation (self: {
   pname = "SHA";
-  version = "1.6.0";
-  sha256 = "0i5x2irk08yr4p428wyqvdysz22jqc3q5qn08wc38pw2xhmc0zzk";
+  version = "1.6.1";
+  sha256 = "1v3a2skkbr64y7x1aqpq1qz03isc42l9hd1viqcsv4qlld595fgx";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [
-    binary QuickCheck testFramework testFrameworkQuickcheck2
-  ];
+  buildDepends = [ binary ];
   meta = {
     description = "Implementations of the SHA suite of message digest functions";
     license = self.stdenv.lib.licenses.bsd3;
