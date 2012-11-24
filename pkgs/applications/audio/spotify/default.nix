@@ -1,28 +1,38 @@
-{ fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl }:
+{
+  fetchurl, stdenv, dpkg, xlibs, qt4, alsaLib, makeWrapper, openssl, glib,
+  freetype, gdk_pixbuf, gtk, cairo, pango, atk, nss
+}:
 
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
-let version = "0.8.3.278"; in
+let version = "0.8.4.103";
+    
+    revision = "g9cb177b.260-1";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "spotify-${version}";
 
   src =
     if stdenv.system == "i686-linux" then 
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.g21c7566.632-1_i386.deb";
-        sha256 = "7f587585365498c5182bd7f3beafaf511d883102f5cece66cf84f4f94077765b";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.${revision}_i386.deb";
+        sha256 = "1iri6pgavgb06nx0l3myqryx7zd7cf22my8vh2v6w4kbvaajjl31";
       }
     else if stdenv.system == "x86_64-linux" then 
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.g21c7566.632-1_amd64.deb";
-        sha256 = "a37a13b1c1a8088a811054c732d85b9d6ccf0bd92ad4da75bfee6d70dc344b5e";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.${revision}_amd64.deb";
+        sha256 = "0y5kyfa1gk16d9z67hgssam8hgzw6g5f7xsxk0lz3ak487xdwl6k";
       }
     else throw "Spotify not supported on this platform.";
 
   buildInputs = [ dpkg makeWrapper ];
 
   unpackPhase = "true";
+
+  libraryPath = stdenv.lib.makeLibraryPath [
+    alsaLib freetype glib gdk_pixbuf gtk openssl qt4 stdenv.gcc.gcc
+    xlibs.libX11 xlibs.libXScrnSaver cairo pango atk nss
+  ];
   
   installPhase =
     ''
@@ -36,10 +46,11 @@ stdenv.mkDerivation {
       mkdir $out/lib
       ln -s ${openssl}/lib/libssl.so $out/lib/libssl.so.0.9.8
       ln -s ${openssl}/lib/libcrypto.so $out/lib/libcrypto.so.0.9.8
+      ln -s ${nss}/lib/libnss3.so $out/lib/libnss3.so.1d
 
       patchelf \
         --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath ${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib openssl stdenv.gcc.gcc ]}:${stdenv.gcc.gcc}/lib64:$out/lib \
+        --set-rpath $out/lib:$libraryPath:${stdenv.gcc.gcc}/lib64:$out/share/spotify \
         $out/bin/spotify
 
       preload=$out/libexec/spotify/libpreload.so
