@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "0lx7kkrsg401zrgj8s4ziqds1jsha3szsh44v57mq4pkq0fijph9";
+    sha256 = "095e191dc0f3125c4fd98440fdf55050cba01b8e9f68245ffe0190a7f39ca753";
   };
 
   buildInputs = [ bash emacs gdb glib gmime gnupg1 pkgconfig talloc xapian ];
