@@ -705,11 +705,11 @@ let pythonPackages = python.modules // rec {
 
 
   flake8 = buildPythonPackage (rec {
-    name = "flake8-1.5";
+    name = "flake8-1.6.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      md5 = "525be5c7fcaf85f6819c77752cb2ee72";
+      md5 = "abfdbb25d37c28e9da05f1b5c3596d1a";
     };
 
     doCheck = false;
