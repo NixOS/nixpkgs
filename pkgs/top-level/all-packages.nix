@@ -3987,6 +3987,7 @@ let
   iniparser = callPackage ../development/libraries/iniparser { };
 
   intltool = gnome.intltool;
+  intltool_standalone = callPackage ../development/tools/misc/intltool {};
 
   irrlicht3843 = callPackage ../development/libraries/irrlicht { };
 
@@ -6690,25 +6691,16 @@ let
 
   cmus = callPackage ../applications/audio/cmus { };
 
-  compiz = callPackage ../applications/window-managers/compiz/core.nix { };
-
-  compiz_ccsm = callPackage ../applications/window-managers/compiz/ccsm.nix { };
-
-  compizconfig_python = callPackage ../applications/window-managers/compiz/config-python.nix { };
+  compiz = callPackage ../applications/window-managers/compiz { 
+    inherit (gnome) GConf ORBit2;
+    intltool = intltool_standalone;
+  };
 
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome) libgnomeui GConf;
   };
 
   csound = callPackage ../applications/audio/csound { };
-
-  libcompizconfig = callPackage ../applications/window-managers/compiz/libcompizconfig.nix { };
-
-  compiz_bcop = callPackage ../applications/window-managers/compiz/bcop.nix { };
-
-  compiz_plugins_main = callPackage ../applications/window-managers/compiz/plugins-main.nix { };
-
-  compiz_plugins_extra = callPackage ../applications/window-managers/compiz/plugins-extra.nix { };
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
