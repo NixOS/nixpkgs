@@ -2774,11 +2774,11 @@ let pythonPackages = python.modules // rec {
   };
 
   turses = buildPythonPackage (rec {
-    name = "turses-0.2.8";
+    name = "turses-0.2.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
-      sha256 = "fbbc0ca93324535bcafa8434395caded8047e40c25d7a4004806415dd6ca023f";
+      sha256 = "c0f32fa31e2c5fa42f5cc19f3dba4e73f0438bf36bf756ba137f2423c0ac4637";
     };
 
     propagatedBuildInputs = [ oauth2 urwid tweepy ];
