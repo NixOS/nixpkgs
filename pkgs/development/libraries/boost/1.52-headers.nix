@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/include
-    tar xf $src -C $out/include --strip-components=1 ./boost_1_52_0/boost
+    tar xf $src -C $out/include --strip-components=1 boost_1_52_0/boost
   '';
 
   meta = {
