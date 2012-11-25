@@ -8,6 +8,7 @@
 , hicolor_icon_theme, libjpeg_turbo, libsigcxx, protobuf, pygtk, pythonDBus
 , xdg_utils
 , gettext, boost, pyrex
+, makeWrapper
 }:
 let
   s = # Generated upstream information
@@ -29,6 +30,7 @@ let
     hicolor_icon_theme libjpeg_turbo libsigcxx protobuf pygtk pythonDBus
     xdg_utils
     gettext boost pyrex
+    makeWrapper 
     ];
   in
 stdenv.mkDerivation rec {
@@ -39,6 +41,11 @@ stdenv.mkDerivation rec {
   inherit buildInputs;
 
   NIX_CFLAGS_COMPILE=" -Wno-error ";
+  postInstall = ''
+    wrapProgram "$out/bin/ccsm" \
+      --prefix PYTHONPATH : "$PYTHONPATH" \
+      --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages"
+  '';
 
   meta = {
     description = "Compoziting window manager";
