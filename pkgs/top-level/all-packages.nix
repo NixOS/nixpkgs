@@ -8950,16 +8950,17 @@ let
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
-  saneBackends = callPackage ../misc/sane-backends {
+  saneBackends = callPackage ../applications/graphics/sane/backends.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     hotplugSupport = config.sane.hotplugSupport or true;
   };
 
-  saneBackendsSnapshot = callPackage ../misc/sane-backends/snapshot.nix {
+  saneBackendsGit = callPackage ../applications/graphics/sane/backends-git.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
+    hotplugSupport = config.sane.hotplugSupport or true;
   };
 
-  saneFrontends = callPackage ../misc/sane-front { };
+  saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
   slock = callPackage ../misc/screensavers/slock { };
 
@@ -9058,9 +9059,9 @@ let
 
   xosd = callPackage ../misc/xosd { };
 
-  xsane = callPackage ../misc/xsane {
+  xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;
-    saneBackends = saneBackendsSnapshot;
+    saneBackends = saneBackends;
   };
 
   yafc = callPackage ../applications/networking/yafc { };
