@@ -20,6 +20,7 @@ rec {
   phaseNames = ["preConfigure" "doConfigure" "preBuild" "doMakeInstall"];
 
   preConfigure = a.fullDepEntry (''
+    sed -e 's/getline/my_getline/' -i score.c
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.libXpm}/include/X11"
     for i in  $NIX_CFLAGS_COMPILE; do echo $i; ls ''${i#-I}; done
     chmod a+rw config.h
