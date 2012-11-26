@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Translation helper tool";
     homepage = "http://launchpad.net/intltool/";
-    license = stdenv.lib.licenses.gpl2plus;
+    license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     inherit (s) version;
