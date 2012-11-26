@@ -2894,6 +2894,7 @@ let
 
   xulrunner = pkgs.firefoxPkgs.xulrunner;
 
+
   ### DEVELOPMENT / MISC
 
   avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {};

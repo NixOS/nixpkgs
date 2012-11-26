@@ -70,7 +70,7 @@ rec {
         "--disable-javaxpcom"
       ] ++ commonConfigureFlags;
 
-    enableParallelBuilding = true;
+    enableParallelBuilding = false;
 
     preConfigure =
       ''
