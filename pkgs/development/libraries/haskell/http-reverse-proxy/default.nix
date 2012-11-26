@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "http-reverse-proxy";
-  version = "0.1.0.5";
-  sha256 = "1x1m9vklgg6x8niry8c5fxcjpmsmrpxv7j2i5h38hp1hbka3mpr0";
+  version = "0.1.0.6";
+  sha256 = "0ybhzyim8b2k1kv5bz0qbignj5lwf8pbpqmrp1vrvyz8a2iy71c8";
   buildDepends = [
     blazeBuilder caseInsensitive classyPreludeConduit conduit
     httpConduit httpTypes liftedBase monadControl network
