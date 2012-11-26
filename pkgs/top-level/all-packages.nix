@@ -6692,7 +6692,7 @@ let
 
   cmus = callPackage ../applications/audio/cmus { };
 
-  compiz = callPackage ../applications/window-managers/compiz { 
+  compiz = callPackage ../applications/window-managers/compiz {
     inherit (gnome) GConf ORBit2;
     intltool = intltool_standalone;
   };
