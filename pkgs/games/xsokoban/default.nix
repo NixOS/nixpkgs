@@ -28,8 +28,8 @@ rec {
     echo '#define OWNER "'$(whoami)'"' >> config.h
     echo '#define ROOTDIR "'$out/lib/xsokoban'"' >> config.h
     echo '#define ANYLEVEL 1' >> config.h
-    echo '#define SCOREFILE "/tmp/.xsokoban-score"' >> config.h
-    echo '#define LOCKFILE "/tmp/.xsokoban-score-lock"' >> config.h
+    echo '#define SCOREFILE ".xsokoban-score"' >> config.h
+    echo '#define LOCKFILE ".xsokoban-score-lock"' >> config.h
 
     sed -e 's/getpass[(][^)]*[)]/PASSWORD/' -i main.c
     sed -e '/if [(]owner[)]/iowner=1;' -i main.c
