@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qt4 }:
 
 let
-  version = "2.5.2";
+  version = "2.6.0";
 in
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://origin.releases.qt-project.org/qtcreator/${version}/qt-creator-${version}-src.tar.gz";
-    md5 = "4a9c09cdf4609753283c31451c84ceb8";
+    md5 = "9bf01098f84a0fe930b2718d11124204";
   };
 
   buildInputs = [ qt4 ];
