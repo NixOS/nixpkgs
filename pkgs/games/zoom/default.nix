@@ -3,7 +3,7 @@
 # !!! assert freetype == xlibs.freetype
 
 stdenv.mkDerivation {
-  name = "zoom-1.0.2alpha1";
+  name = "zoom-1.1.5";
   
   src = fetchurl {
     url = http://www.logicalshift.co.uk/unix/zoom/zoom-1.1.5.tar.gz;
