@@ -1,11 +1,13 @@
-{ cabal, aeson, curl, mtl, pureMD5, urlencoded, utf8String, xml }:
+{ cabal, aeson, attoparsec, curl, mtl, pureMD5, urlencoded
+, utf8String, xml
+}:
 
 cabal.mkDerivation (self: {
   pname = "liblastfm";
-  version = "0.0.3.6";
-  sha256 = "0xmrciv489dvksgpg9g83kna34x1amsx45wvpngcpnx4m44fcp4w";
+  version = "0.0.3.7";
+  sha256 = "004mi6515gd6vhk7fjd63rwwnf3micm3z1kwcn1f73hi70p27ma0";
   buildDepends = [
-    aeson curl mtl pureMD5 urlencoded utf8String xml
+    aeson attoparsec curl mtl pureMD5 urlencoded utf8String xml
   ];
   patchPhase = ''
     sed -i -e 's|curl == .*,|curl,|' -e 's|urlencoded .*,|urlencoded,|' liblastfm.cabal
