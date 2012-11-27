@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtk, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "girara-0.1.2";
+  name = "girara-0.1.4";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/girara/download/${name}.tar.gz";
-    sha256 = "89231d0da3c790e0765ad85d74f64cf50051b8bafe6065882e34e378ab14ec99";
+    sha256 = "831cf523b131bfa1c182efbf146d68fb642fe62d22ee199caf0cd71408a85739";
   };
 
   buildInputs = [ pkgconfig gtk gettext ];

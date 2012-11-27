@@ -44,12 +44,12 @@ rec {
 
   gitAnnex = lib.makeOverridable (import ./git-annex) {
     inherit stdenv fetchurl perl coreutils git libuuid rsync findutils curl ikiwiki which openssh;
-    inherit (haskellPackages_ghc741) ghc bloomfilter dataenc editDistance hinotify hS3 hslogger HTTP
+    inherit (haskellPackages) ghc bloomfilter dataenc editDistance hinotify hS3 hslogger HTTP
       blazeBuilder blazeHtml caseInsensitive IfElse json liftedBase MissingH monadControl mtl
       network pcreLight SHA stm utf8String networkInfo dbus clientsession cryptoApi dataDefault
       extensibleExceptions filepath hamlet httpTypes networkMulticast text time transformers
       transformersBase wai waiLogger warp yesod yesodDefault yesodStatic testpack QuickCheck
-      SafeSemaphore networkPprotocolXmpp async dns;
+      SafeSemaphore networkPprotocolXmpp async dns DAV;
   };
 
   qgit = import ./qgit {

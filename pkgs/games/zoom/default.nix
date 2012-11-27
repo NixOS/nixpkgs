@@ -3,11 +3,11 @@
 # !!! assert freetype == xlibs.freetype
 
 stdenv.mkDerivation {
-  name = "zoom-1.0.2alpha1";
+  name = "zoom-1.1.5";
   
   src = fetchurl {
-    url = http://www.logicalshift.demon.co.uk/unix/zoom/zoom-1.0.2alpha1.tar.gz;
-    md5 = "91b2fe444028178aa3b23bd0e3ae1a61";
+    url = http://www.logicalshift.co.uk/unix/zoom/zoom-1.1.5.tar.gz;
+    sha256 = "1g6van7f7sg3zfcz80mncnnbccyg2hnm0hq4x558vpsm0lf7z5pj";
   };
   
   buildInputs = [perl expat x11 freetype];

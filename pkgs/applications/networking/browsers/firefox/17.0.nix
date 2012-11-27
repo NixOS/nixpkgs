@@ -15,18 +15,24 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "15.0.1";
+  firefoxVersion = "17.0";
 
-  xulVersion = "15.0.1"; # this attribute is used by other packages
+  xulVersion = "17.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
-    url = "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "bdbc4b6656c59b926e18f99b3335484427d08641";
+    urls = [
+        # It is better to use this url for official releases, to take load off Mozilla's ftp server.
+        "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
+        # Fall back to this url for versions not available at releases.mozilla.org.
+        "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
+    ];
+    sha1 = "4f5f175c1662d67f70e78403607d8eda600efd8b";
   };
 
   commonConfigureFlags =
     [ "--enable-optimize"
+      #"--enable-profiling"
       "--disable-debug"
       "--enable-strip"
       "--with-system-jpeg"
@@ -64,7 +70,7 @@ rec {
         "--disable-javaxpcom"
       ] ++ commonConfigureFlags;
 
-    enableParallelBuilding = true;
+    enableParallelBuilding = false;
 
     preConfigure =
       ''
@@ -88,7 +94,7 @@ rec {
       for i in $out/lib/$libDir/*; do
           file $i;
           if file $i | grep executable &>/dev/null; then
-              echo -e '#! /bin/sh\n"'"$i"'" "$@"' > "$out/bin/$(basename "$i")";
+              echo -e '#! /bin/sh\nexec "'"$i"'" "$@"' > "$out/bin/$(basename "$i")";
               chmod a+x "$out/bin/$(basename "$i")";
           fi;
       done
@@ -150,18 +156,9 @@ rec {
     postInstall =
       ''
         ln -s ${xulrunner}/lib/xulrunner-${xulrunner.version} $(echo $out/lib/firefox-*)/xulrunner
-        for j in $out/bin/*; do
-            i="$(readlink "$j")";
-            file $i;
-            if file $i | grep executable &>/dev/null; then
-                rm "$out/bin/$(basename "$i")"
-                echo -e '#! /bin/sh\nexec "'"$i"'" "$@"' > "$out/bin/$(basename "$i")"
-                chmod a+x "$out/bin/$(basename "$i")"
-            fi;
-        done;
         cd "$out/lib/"firefox-*
         rm firefox
-        echo -e '#!${stdenv.shell}\n${xulrunner}/bin/xulrunner "'"$PWD"'/application.ini" "$@"' > firefox
+        echo -e '#!${stdenv.shell}\nexec ${xulrunner}/bin/xulrunner "'"$PWD"'/application.ini" "$@"' > firefox
         chmod a+x firefox
       ''; # */
 

@@ -705,11 +705,11 @@ let pythonPackages = python.modules // rec {
 
 
   flake8 = buildPythonPackage (rec {
-    name = "flake8-1.5";
+    name = "flake8-1.6.2";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      md5 = "525be5c7fcaf85f6819c77752cb2ee72";
+      md5 = "abfdbb25d37c28e9da05f1b5c3596d1a";
     };
 
     doCheck = false;
@@ -1999,7 +1999,7 @@ let pythonPackages = python.modules // rec {
     namePrefix = "";
 
     src = fetchurl {
-      url = "ftp://ftp.logilab.org/pub/pylint/${name}.tar.gz";
+      url = "http://download.logilab.org/pub/pylint/${name}.tar.gz";
       sha256 = "1mg1ywpj0klklv63s2hwn5xwxi3wfwgnyz9d4pz32hzb53azq835";
     };
 
@@ -2774,11 +2774,11 @@ let pythonPackages = python.modules // rec {
   };
 
   turses = buildPythonPackage (rec {
-    name = "turses-0.2.8";
+    name = "turses-0.2.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
-      sha256 = "fbbc0ca93324535bcafa8434395caded8047e40c25d7a4004806415dd6ca023f";
+      sha256 = "c0f32fa31e2c5fa42f5cc19f3dba4e73f0438bf36bf756ba137f2423c0ac4637";
     };
 
     propagatedBuildInputs = [ oauth2 urwid tweepy ];

@@ -26,19 +26,22 @@
     self : self.haskellPlatformArgs_2012_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_4_0_0;
       binary = null; # now a core package
+      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
     };
 
   ghc741Prefs =
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
       binary = null; # now a core package
+      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
     };
 
   ghc722Prefs =
     self : self.haskellPlatformArgs_2012_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_2_0_0;
       binary = null; # a core package
-      deepseq = self.deepseq_1_3_0_0;
+      deepseq = self.deepseq_1_3_0_1;
+      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
     };
 
   ghc721Prefs = ghc722Prefs;
@@ -47,6 +50,7 @@
     self : self.haskellPlatformArgs_2011_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2011_4_0_0;
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
+      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
@@ -55,6 +59,7 @@
     self : self.haskellPlatformArgs_2011_2_0_1 self // {
       haskellPlatform = self.haskellPlatform_2011_2_0_1;
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
@@ -65,6 +70,7 @@
     self : self.haskellPlatformArgs_2011_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2011_2_0_0;
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
+      cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
     };
@@ -75,7 +81,6 @@
     self : self.haskellPlatformArgs_2010_2_0_0 self // {
       haskellPlatform = self.haskellPlatform_2010_2_0_0;
       mtl1 = self.mtl_1_1_0_2;
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
@@ -100,7 +105,6 @@
       mtl1 = self.mtl_1_1_0_2;
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       text = self.text_0_11_0_6;
-      cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };

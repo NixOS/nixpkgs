@@ -8,18 +8,18 @@
 , networkMulticast, pcreLight, QuickCheck, SHA, stm, text, time
 , transformers, transformersBase, utf8String, wai, waiLogger, warp
 , yesod, yesodDefault, yesodStatic, testpack, SafeSemaphore
-, networkPprotocolXmpp, async, dns
+, networkPprotocolXmpp, async, dns, DAV
 }:
 
 let
-  version = "3.20121112";
+  version = "3.20121112-161-gb27d9eb";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
-    url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=refs/tags/${version}";
-    sha256 = "1ch91jvzm3di5p024kwx0ikgf588lk7bp36hlgj4ar9aa2fdl7yr";
+    url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;h=b27d9ebd0f63bdc449440f2529224d5b655ddbb3;sf=tgz";
+    sha256 = "507efc50e33566a51a6abf688920d30fc55ce984c9c35be085e6df0767686b3a";
     name = "git-annex-${version}.tar.gz";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     networkInfo networkMulticast pcreLight QuickCheck SHA stm text time
     transformers transformersBase utf8String wai waiLogger warp yesod
     yesodDefault yesodStatic testpack SafeSemaphore networkPprotocolXmpp
-    async dns ];
+    async dns DAV ];
 
   checkTarget = "test";
   doCheck = true;

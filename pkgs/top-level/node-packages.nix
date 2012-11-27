@@ -494,6 +494,19 @@ let self = {
     ];
   };
 
+  "jsontool" = self."jsontool-*";
+
+  "jsontool-*" = self.buildNodePackage rec {
+    name = "jsontool-5.1.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/jsontool/-/${name}.tgz";
+      sha256 = "f7c12a0de635905f8134dfc8385f237135494d8c99fc0a5f112ee9735c2b6d05";
+    };
+    deps = [
+
+    ];
+  };
+
   "knox" = self."knox-*";
 
   "knox-*" = self.buildNodePackage rec {

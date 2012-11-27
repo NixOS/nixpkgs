@@ -921,6 +921,8 @@ let
 
   iasl = callPackage ../development/compilers/iasl { };
 
+  icecast = callPackage ../servers/icecast { };
+
   icoutils = callPackage ../tools/graphics/icoutils { };
 
   idutils = callPackage ../tools/misc/idutils { };
@@ -1013,6 +1015,8 @@ let
   libconfig = callPackage ../development/libraries/libconfig { };
 
   libtirpc = callPackage ../development/libraries/ti-rpc { };
+
+  libshout = callPackage ../development/libraries/libshout { };
 
   libtorrent = callPackage ../tools/networking/p2p/libtorrent { };
 
@@ -1412,6 +1416,8 @@ let
   rdiff_backup = callPackage ../tools/backup/rdiff-backup { };
 
   ripmime = callPackage ../tools/networking/ripmime {};
+
+  rng_tools = callPackage ../tools/security/rng-tools { };
 
   rsnapshot = callPackage ../tools/backup/rsnapshot {
     # For the `logger' command, we can use either `utillinux' or
@@ -2888,6 +2894,7 @@ let
 
   xulrunner = pkgs.firefoxPkgs.xulrunner;
 
+
   ### DEVELOPMENT / MISC
 
   avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {};
@@ -3981,6 +3988,7 @@ let
   iniparser = callPackage ../development/libraries/iniparser { };
 
   intltool = gnome.intltool;
+  intltool_standalone = callPackage ../development/tools/misc/intltool {};
 
   irrlicht3843 = callPackage ../development/libraries/irrlicht { };
 
@@ -6557,7 +6565,7 @@ let
 
   aangifte2011 = callPackage_i686 ../applications/taxes/aangifte-2011 { };
 
-  abcde = callPackage ../applications/audio/abcde { 
+  abcde = callPackage ../applications/audio/abcde {
     inherit (perlPackages) DigestSHA MusicBrainz MusicBrainzDiscID;
   };
 
@@ -6635,6 +6643,8 @@ let
     python = python32;
   };
 
+  bristol = callPackage ../applications/audio/bristol { };
+
   bvi = callPackage ../applications/editors/bvi { };
 
   calf = callPackage ../applications/audio/calf {
@@ -6682,25 +6692,16 @@ let
 
   cmus = callPackage ../applications/audio/cmus { };
 
-  compiz = callPackage ../applications/window-managers/compiz/core.nix { };
-
-  compiz_ccsm = callPackage ../applications/window-managers/compiz/ccsm.nix { };
-
-  compizconfig_python = callPackage ../applications/window-managers/compiz/config-python.nix { };
+  compiz = callPackage ../applications/window-managers/compiz {
+    inherit (gnome) GConf ORBit2;
+    intltool = intltool_standalone;
+  };
 
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome) libgnomeui GConf;
   };
 
   csound = callPackage ../applications/audio/csound { };
-
-  libcompizconfig = callPackage ../applications/window-managers/compiz/libcompizconfig.nix { };
-
-  compiz_bcop = callPackage ../applications/window-managers/compiz/bcop.nix { };
-
-  compiz_plugins_main = callPackage ../applications/window-managers/compiz/plugins-main.nix { };
-
-  compiz_plugins_extra = callPackage ../applications/window-managers/compiz/plugins-extra.nix { };
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
@@ -6892,8 +6893,6 @@ let
 
     notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
 
-    nxml = callPackage ../applications/editors/emacs-modes/nxml { };
-
     # This is usually a newer version of Org-Mode than that found in GNU Emacs, so
     # we want it to have higher precedence.
     org = hiPrio (callPackage ../applications/editors/emacs-modes/org { });
@@ -6908,8 +6907,8 @@ let
 
     proofgeneral = callPackage ../applications/editors/emacs-modes/proofgeneral {
       texLive = pkgs.texLiveAggregationFun {
-                  paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
-                };
+        paths = [ pkgs.texLive pkgs.texLiveCMSuper ];
+      };
     };
 
     quack = callPackage ../applications/editors/emacs-modes/quack { };
@@ -7009,7 +7008,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox16Pkgs;
+  firefoxPkgs = pkgs.firefox17Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
@@ -7023,19 +7022,19 @@ let
 
   firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
-  firefox15Pkgs = callPackage ../applications/networking/browsers/firefox/15.0.nix {
-    inherit (gnome) libIDL;
-    inherit (pythonPackages) pysqlite;
-  };
-
-  firefox15Wrapper = lowPrio (wrapFirefox { browser = firefox15Pkgs.firefox; });
-
   firefox16Pkgs = callPackage ../applications/networking/browsers/firefox/16.0.nix {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
 
   firefox16Wrapper = lowPrio (wrapFirefox { browser = firefox16Pkgs.firefox; });
+
+  firefox17Pkgs = callPackage ../applications/networking/browsers/firefox/17.0.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
+  firefox17Wrapper = lowPrio (wrapFirefox { browser = firefox17Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -8951,16 +8950,17 @@ let
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
-  saneBackends = callPackage ../misc/sane-backends {
+  saneBackends = callPackage ../applications/graphics/sane/backends.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     hotplugSupport = config.sane.hotplugSupport or true;
   };
 
-  saneBackendsSnapshot = callPackage ../misc/sane-backends/snapshot.nix {
+  saneBackendsGit = callPackage ../applications/graphics/sane/backends-git.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
+    hotplugSupport = config.sane.hotplugSupport or true;
   };
 
-  saneFrontends = callPackage ../misc/sane-front { };
+  saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
   slock = callPackage ../misc/screensavers/slock { };
 
@@ -9059,8 +9059,9 @@ let
 
   xosd = callPackage ../misc/xosd { };
 
-  xsane = callPackage ../misc/xsane {
+  xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;
+    saneBackends = saneBackends;
   };
 
   yafc = callPackage ../applications/networking/yafc { };
@@ -9070,7 +9071,9 @@ let
     inherit (stdenv) mkDerivation;
   };
 
-  zsnes = callPackage_i686 ../misc/emulators/zsnes { };
+  zsnes = callPackage_i686 ../misc/emulators/zsnes {
+    libpng = libpng12;
+  };
 
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 

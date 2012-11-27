@@ -427,10 +427,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Haskell libraries.
 
-  Agda = callPackage ../development/libraries/haskell/Agda {
-    haskellSrcExts = self.haskellSrcExts_1_11_1;
-    QuickCheck = self.QuickCheck_2_4_2;
-  };
+  Agda = callPackage ../development/libraries/haskell/Agda {};
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
 
@@ -490,9 +487,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   basicPrelude = callPackage ../development/libraries/haskell/basic-prelude {};
 
-  benchpress = callPackage ../development/libraries/haskell/benchpress {
-    time = self.time_1_1_3;
-  };
+  benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
@@ -597,6 +592,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   comonad = callPackage ../development/libraries/haskell/comonad {};
 
+  comonadsFd = callPackage ../development/libraries/haskell/comonads-fd {};
+
   comonadTransformers = callPackage ../development/libraries/haskell/comonad-transformers {};
 
   compactStringFix = callPackage ../development/libraries/haskell/compact-string-fix {};
@@ -607,9 +604,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   configurator = callPackage ../development/libraries/haskell/configurator {};
 
-  convertible = callPackage ../development/libraries/haskell/convertible {
-    time = self.time_1_1_3;
-  };
+  convertible = callPackage ../development/libraries/haskell/convertible {};
 
   continuedFractions = callPackage ../development/libraries/haskell/continued-fractions {};
 
@@ -670,6 +665,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dateCache = callPackage ../development/libraries/haskell/date-cache {};
 
   datetime = callPackage ../development/libraries/haskell/datetime {};
+
+  DAV = callPackage ../development/libraries/haskell/DAV {};
 
   dbus = callPackage ../development/libraries/haskell/dbus {};
 
@@ -1116,6 +1113,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   lazysmallcheck = callPackage ../development/libraries/haskell/lazysmallcheck {};
 
   leksahServer = callPackage ../development/libraries/haskell/leksah/leksah-server.nix {};
+
+  lens = callPackage ../development/libraries/haskell/lens {};
 
   libmpd = callPackage ../development/libraries/haskell/libmpd {};
 
@@ -1604,9 +1603,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   testFrameworkThPrime = callPackage ../development/libraries/haskell/test-framework-th-prime {};
 
-  testpack = callPackage ../development/libraries/haskell/testpack {
-    QuickCheck = self.QuickCheck_2_4_2;
-  };
+  testpack = callPackage ../development/libraries/haskell/testpack {};
 
   texmath = callPackage ../development/libraries/haskell/texmath {};
 
@@ -1631,10 +1628,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   threads = callPackage ../development/libraries/haskell/threads {};
 
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
-  time_1_1_3   = callPackage ../development/libraries/haskell/time/1.1.3.nix {};
-  time_1_2_0_3 = callPackage ../development/libraries/haskell/time/1.2.0.3.nix {};
-  time_1_2_0_5 = callPackage ../development/libraries/haskell/time/1.2.0.5.nix {};
-  time_1_4_0_1 = callPackage ../development/libraries/haskell/time/1.4.0.1.nix {};
+  time_1_4_0_2 = callPackage ../development/libraries/haskell/time/1.4.0.2.nix {};
   # time is in the core package set. It should only be necessary to
   # pass it explicitly in rare circumstances.
   time = null;
@@ -1753,9 +1747,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     wxGTK = pkgs.wxGTK29;
   };
 
-  wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {
-    time = self.time_1_2_0_5;
-  };
+  wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
 
   X11_1_5_0_1 = callPackage ../development/libraries/haskell/X11/1.5.0.1.nix {};
   X11_1_6_0_2 = callPackage ../development/libraries/haskell/X11/1.6.0.2.nix {};
@@ -1772,6 +1764,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   xml = callPackage ../development/libraries/haskell/xml {};
 
   xmlConduit = callPackage ../development/libraries/haskell/xml-conduit {};
+
+  xmlHamlet = callPackage ../development/libraries/haskell/xml-hamlet {};
 
   xmlhtml = callPackage ../development/libraries/haskell/xmlhtml {};
 
