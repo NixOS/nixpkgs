@@ -1852,11 +1852,10 @@ let pythonPackages = python.modules // rec {
 
     doCheck = false;
 
-    preConfigure = ''
-      substituteInPlace setup.py --replace '--static-libs' '--libs'
+    installCommand = ''
+       substituteInPlace setup.py --replace '--static-libs' '--libs'
+       python setup.py install --prefix=$out
     '';
-
-    installCommand = "python setup.py install --prefix=$out";
 
     meta = {
       homepage = http://pycurl.sourceforge.net/;
