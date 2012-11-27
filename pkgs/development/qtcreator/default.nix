@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, qt4 }:
+{ stdenv, fetchurl, qt4_for_qtcreator }:
 
 let
   version = "2.6.0";
@@ -12,13 +12,16 @@ stdenv.mkDerivation rec {
     md5 = "9bf01098f84a0fe930b2718d11124204";
   };
 
-  buildInputs = [ qt4 ];
+  buildInputs = [ qt4_for_qtcreator ];
 
   doCheck = false;
 
   enableParallelBuilding = true;
 
-  preConfigure = "qmake";
+  preConfigure = ''
+    qmake -spec linux-g++ "QT_PRIVATE_HEADERS=${qt4_for_qtcreator}/include" qtcreator.pro
+  '';
+
   installFlags = "INSTALL_ROOT=$(out)";
 
   meta = {
