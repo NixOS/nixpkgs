@@ -4795,6 +4795,10 @@ let
     gst_plugins_base = null;
   };
 
+  qt4_for_qtcreator = qt48.override {
+    developerBuild = true;
+  };
+
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
