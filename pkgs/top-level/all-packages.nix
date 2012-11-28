@@ -614,6 +614,8 @@ let
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
 
+  despotify = callPackage ../development/libraries/despotify { };
+
   dev86 = callPackage ../development/compilers/dev86 {
     /* Using GNU Make 3.82 leads to this:
          make[4]: *** No rule to make target `__ldivmod.o)'
