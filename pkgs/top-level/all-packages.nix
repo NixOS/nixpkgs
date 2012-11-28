@@ -373,6 +373,11 @@ let
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
+  arduino_core = callPackage ../development/arduino/arduino-core {
+    jdk = jdk;
+    jre = jdk;
+  };
+
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
     inherit freeglut ghostscriptX imagemagick fftw boehmgc
       mesa ncurses readline gsl libsigsegv python zlib perl
@@ -3163,6 +3168,8 @@ let
   };
 
   indent = callPackage ../development/tools/misc/indent { };
+
+  ino = callPackage ../development/arduino/ino { };
 
   inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
 
