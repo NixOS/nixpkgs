@@ -518,7 +518,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
-  bmp = callPackage ../development/libraries/haskell/bmp {};
+  bmp_1_2_2_1 = callPackage ../development/libraries/haskell/bmp/1.2.2.1.nix {};
+  bmp_1_2_3_2 = callPackage ../development/libraries/haskell/bmp/1.2.3.2.nix {};
+  bmp = self.bmp_1_2_2_1;       # later versions work only with ghc 7.6 and beyond
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
@@ -1207,7 +1209,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   multirec = callPackage ../development/libraries/haskell/multirec {};
 
-  multiset = callPackage ../development/libraries/haskell/multiset {};
+  multiset_0_2_1 = callPackage ../development/libraries/haskell/multiset/0.2.1.nix {};
+  multiset_0_2_2 = callPackage ../development/libraries/haskell/multiset/0.2.2.nix {};
+  multiset = self.multiset_0_2_1;   # later versions work only with ghc 7.6 and beyond
 
   murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 

@@ -12,14 +12,14 @@
 }:
 
 let
-  version = "3.20121112-161-gb27d9eb";
+  version = "3.20121126";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
-    url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;h=b27d9ebd0f63bdc449440f2529224d5b655ddbb3;sf=tgz";
-    sha256 = "507efc50e33566a51a6abf688920d30fc55ce984c9c35be085e6df0767686b3a";
+    url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=${version}";
+    sha256 = "7db662ac1869582dda7bfa7d6218a61a962219ea4c94c27153877fa02000be33";
     name = "git-annex-${version}.tar.gz";
   };
 
@@ -36,7 +36,6 @@ stdenv.mkDerivation {
   checkTarget = "test";
   doCheck = true;
 
-  # The 'add_url' test fails because it attempts to use the network.
   preConfigure = ''
     makeFlagsArray=( PREFIX=$out )
     sed -i -e 's|#!/usr/bin/perl|#!${perl}/bin/perl|' Build/mdwn2man

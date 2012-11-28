@@ -614,6 +614,8 @@ let
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
 
+  despotify = callPackage ../development/libraries/despotify { };
+
   dev86 = callPackage ../development/compilers/dev86 {
     /* Using GNU Make 3.82 leads to this:
          make[4]: *** No rule to make target `__ldivmod.o)'
@@ -4795,6 +4797,10 @@ let
     gst_plugins_base = null;
   };
 
+  qt4_for_qtcreator = qt48.override {
+    developerBuild = true;
+  };
+
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
@@ -7102,8 +7108,6 @@ let
     slibGuile = slibGuile.override { scheme = guile_1_8; };
   };
 
-  qcad = callPackage ../applications/misc/qcad { };
-
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   praat = callPackage ../applications/audio/praat { };
@@ -8651,6 +8655,21 @@ let
   liblapack = callPackage ../development/libraries/science/math/liblapack { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
+
+
+  ### SCIENCE/MOLECULAR-DYNAMICS
+
+  gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = true;
+    fftw = fftwSinglePrec;
+    cmake = cmakeCurses;
+  };
+
+  gromacsDouble = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = false;
+    fftw = fftw;
+    cmake = cmakeCurses;
+  });
 
   ### SCIENCE/LOGIC
 
