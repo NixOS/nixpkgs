@@ -37,5 +37,6 @@ stdenv.mkDerivation rec {
     description = "Arduino libraries";
     homepage = http://arduino.cc/;
     license = "GPL";
+    maintainers = [ stdenv.lib.maintainers.antono ];
   }; 
 }
