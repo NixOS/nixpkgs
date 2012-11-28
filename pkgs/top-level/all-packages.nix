@@ -7108,8 +7108,6 @@ let
     slibGuile = slibGuile.override { scheme = guile_1_8; };
   };
 
-  qcad = callPackage ../applications/misc/qcad { };
-
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
   praat = callPackage ../applications/audio/praat { };
