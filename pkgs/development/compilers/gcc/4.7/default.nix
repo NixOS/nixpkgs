@@ -181,7 +181,7 @@ stdenv.mkDerivation ({
       let
         libc = if libcCross != null then libcCross else stdenv.glibc;
         gnu_h = "gcc/config/gnu.h";
-        i386_gnu_h = "gcc/config/i386/gnu.h";
+        i386_gnu_h = "gcc/config/i386/gnu-user.h";
         extraCPPDeps =
              libc.propagatedBuildInputs
           ++ stdenv.lib.optional (libpthreadCross != null) libpthreadCross
