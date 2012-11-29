@@ -24,7 +24,7 @@
 , # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for
   # files in standard system directories (/usr/include, etc.)
-  noSysDirs ? (system != "x86_64-darwin" && system != "i686-darwin"
+  noSysDirs ? (system != "x86_64-darwin"
                && system != "x86_64-freebsd" && system != "i686-freebsd"
                && system != "x86_64-kfreebsd-gnu")
 
@@ -556,13 +556,10 @@ let
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  coreutils = callPackage (if stdenv ? isDietLibC
-      then ../tools/misc/coreutils-5
-      else ../tools/misc/coreutils)
-    {
-      # TODO: Add ACL support for cross-Linux.
-      aclSupport = crossSystem == null && stdenv.isLinux;
-    };
+  coreutils = callPackage ../tools/misc/coreutils {
+    # TODO: Add ACL support for cross-Linux.
+    aclSupport = crossSystem == null && stdenv.isLinux;
+  };
 
   cpio = callPackage ../tools/archivers/cpio { };
 
@@ -718,12 +715,7 @@ let
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
-  findutils =
-    if stdenv.isDarwin
-    then findutils4227
-    else callPackage ../tools/misc/findutils { };
-
-  findutils4227 = callPackage ../tools/misc/findutils/4.2.27.nix { };
+  findutils = callPackage ../tools/misc/findutils { };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
 
@@ -1559,12 +1551,6 @@ let
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
-  /*
-  tcng = callPackage ../tools/networking/tcng {
-    kernel = linux_2_6_27;
-  };
-  */
-
   telnet = callPackage ../tools/networking/telnet { };
 
   texmacs = callPackage ../applications/editors/texmacs {
@@ -2135,17 +2121,14 @@ let
   }));
 
   gccApple =
-    wrapGCC (makeOverridable
-      (if stdenv.system == "i686-darwin"
-       then import ../development/compilers/gcc/4.2-apple32
-       else import ../development/compilers/gcc/4.2-apple64) {
-         inherit fetchurl noSysDirs;
-         profiledCompiler = true;
-
-         # Since it fails to build with GCC 4.6, build it with the "native"
-         # Apple-GCC.
-         stdenv = allStdenvs.stdenvNative;
-       });
+    assert stdenv.isDarwin;
+    wrapGCC (makeOverridable (import ../development/compilers/gcc/4.2-apple64) {
+      inherit fetchurl noSysDirs;
+      profiledCompiler = true;
+      # Since it fails to build with GCC 4.6, build it with the "native"
+      # Apple-GCC.
+      stdenv = allStdenvs.stdenvNative;
+    });
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
@@ -2410,8 +2393,6 @@ let
 
   ikarus = callPackage ../development/compilers/ikarus { };
 
-  #TODO add packages http://cvs.haskell.org/Hugs/downloads/2006-09/packages/ and test
-  # commented out because it's using the new configuration style proposal which is unstable
   hugs = callPackage ../development/compilers/hugs { };
 
   path64 = callPackage ../development/compilers/path64 { };
@@ -2450,14 +2431,12 @@ let
 
   supportsJDK =
     system == "i686-linux" ||
-    system == "x86_64-linux" ||
-    system == "i686-cygwin";
+    system == "x86_64-linux";
 
   jdkdistro = installjdk: pluginSupport:
-       (assert supportsJDK;
-    (if pluginSupport then appendToName "plugin" else x: x) (import ../development/compilers/jdk {
-      inherit fetchurl stdenv unzip installjdk xlibs pluginSupport makeWrapper cabextract;
-    }));
+    assert supportsJDK;
+    (if pluginSupport then appendToName "plugin" else x: x)
+      (callPackage ../development/compilers/jdk/jdk6-linux.nix { });
 
   jikes = callPackage ../development/compilers/jikes { };
 
@@ -2903,10 +2882,6 @@ let
   avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {};
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
-
-  /*
-  toolbus = callPackage ../development/interpreters/toolbus { };
-  */
 
   sourceFromHead = import ../build-support/source-from-head-fun.nix {
     inherit config;
@@ -3748,26 +3723,26 @@ let
   glibcInfo = callPackage ../development/libraries/glibc/2.13/info.nix { };
 
   glibc_multi =
-      runCommand "${glibc.name}-multi"
-        { glibc64 = glibc;
-          glibc32 = (import ./all-packages.nix {system = "i686-linux";}).glibc;
-        }
-        ''
-          mkdir -p $out
-          ln -s $glibc64/* $out/
+    runCommand "${glibc.name}-multi"
+      { glibc64 = glibc;
+        glibc32 = (import ./all-packages.nix {system = "i686-linux";}).glibc;
+      }
+      ''
+        mkdir -p $out
+        ln -s $glibc64/* $out/
 
-          rm $out/lib $out/lib64
-          mkdir -p $out/lib
-          ln -s $glibc64/lib/* $out/lib
-          ln -s $glibc32/lib $out/lib/32
-          ln -s lib $out/lib64
+        rm $out/lib $out/lib64
+        mkdir -p $out/lib
+        ln -s $glibc64/lib/* $out/lib
+        ln -s $glibc32/lib $out/lib/32
+        ln -s lib $out/lib64
 
-          rm $out/include
-          cp -rs $glibc32/include $out
-          chmod -R u+w $out/include
-          cp -rsf $glibc64/include $out
-        '' # */
-        ;
+        rm $out/include
+        cp -rs $glibc32/include $out
+        chmod -R u+w $out/include
+        cp -rsf $glibc64/include $out
+      '' # */
+      ;
 
   glpk = callPackage ../development/libraries/glpk { };
 
@@ -3775,22 +3750,14 @@ let
 
   gmm = callPackage ../development/libraries/gmm { };
 
-  gmp =
-    if stdenv.system == "i686-darwin" then
-      # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
-      callPackage ../development/libraries/gmp/4.3.1.nix { }
-    else
-      callPackage ../development/libraries/gmp/5.0.5.nix { };
+  gmp = gmp5;
 
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
-  gmp4 =
-    if stdenv.system == "i686-darwin" then
-      # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
-      callPackage ../development/libraries/gmp/4.3.1.nix { }
-    else
-      callPackage ../development/libraries/gmp/4.3.2.nix { };
+  gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { };
+
+  gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
@@ -4533,8 +4500,7 @@ let
   mesaSupported =
     system == "i686-linux" ||
     system == "x86_64-linux" ||
-    system == "x86_64-darwin" ||
-    system == "i686-darwin";
+    system == "x86_64-darwin";
 
   mesa = callPackage ../development/libraries/mesa { };
 
@@ -5325,12 +5291,6 @@ let
 
   ZopeInterface = pythonPackages.zopeInterface;
 
-  /*
-  zope = callPackage ../development/python-modules/zope {
-    python = python24;
-  };
-  */
-
 
   ### SERVERS
 
@@ -5868,7 +5828,6 @@ let
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
         kernelPatches.aufs3_0
-        #kernelPatches.aufs2_1_3_0
       ];
   };
 
@@ -5965,8 +5924,6 @@ let
     aufs =
       if kernel.features ? aufs2 then
         callPackage ../os-specific/linux/aufs/2.nix { }
-      else if kernel.features ? aufs2_1 then
-        callPackage ../os-specific/linux/aufs/2.1.nix { }
       else if kernel.features ? aufs3 then
         callPackage ../os-specific/linux/aufs/3.nix { }
       else null;
@@ -5974,8 +5931,6 @@ let
     aufs_util =
       if kernel.features ? aufs2 then
         callPackage ../os-specific/linux/aufs-util/2.nix { }
-      else if kernel.features ? aufs2_1 then
-        callPackage ../os-specific/linux/aufs-util/2.1.nix { }
       else if kernel.features ? aufs3 then
         callPackage ../os-specific/linux/aufs-util/3.nix { }
       else null;
@@ -7510,8 +7465,7 @@ let
 
   msmtp = callPackage ../applications/networking/msmtp { };
 
-  mupdf = callPackage ../applications/misc/mupdf {
-  };
+  mupdf = callPackage ../applications/misc/mupdf { };
 
   mythtv = callPackage ../applications/video/mythtv { };
 
@@ -7521,8 +7475,7 @@ let
 
   nano = callPackage ../applications/editors/nano { };
 
-  navipowm = callPackage ../applications/misc/navipowm {
-  };
+  navipowm = callPackage ../applications/misc/navipowm { };
 
   navit = callPackage ../applications/misc/navit { };
 
@@ -7531,15 +7484,15 @@ let
   ncdu = callPackage ../tools/misc/ncdu { };
 
   nedit = callPackage ../applications/editors/nedit {
-      motif = lesstif;
+    motif = lesstif;
   };
 
   netsurfBrowser = netsurf.browser;
   netsurf = recurseIntoAttrs (import ../applications/networking/browsers/netsurf { inherit pkgs; });
 
   notmuch = callPackage ../applications/networking/mailreaders/notmuch {
-      # use emacsPackages.notmuch if you want emacs support
-      emacs = null;
+    # use emacsPackages.notmuch if you want emacs support
+    emacs = null;
   };
 
   nova = callPackage ../applications/virtualization/nova { };
@@ -7650,10 +7603,6 @@ let
   qemu = callPackage ../applications/virtualization/qemu/0.15.nix { };
 
   qemu_1_0 = callPackage ../applications/virtualization/qemu/1.0.nix { };
-
-  qemu_0_13 = callPackage ../applications/virtualization/qemu/0.13.nix { };
-
-  qemuSVN = callPackage ../applications/virtualization/qemu/svn-6642.nix { };
 
   qemuImage = callPackage ../applications/virtualization/qemu/linux-img { };
 
@@ -8182,13 +8131,6 @@ let
     libpng = libpng12;
   };
 
-  /*
-  exultSnapshot = lowPrio (import ../games/exult/snapshot.nix {
-    inherit fetchurl stdenv SDL SDL_mixer zlib libpng unzip
-      autoconf automake libtool flex bison;
-  });
-  */
-
   flightgear = callPackage ../games/flightgear {};
 
   freeciv = callPackage ../games/freeciv { };
@@ -8634,8 +8576,6 @@ let
 
   paml = callPackage ../applications/science/biology/paml { };
 
-  /* slr = callPackage ../applications/science/biology/slr { }; */
-
   pal2nal = callPackage ../applications/science/biology/pal2nal { };
 
 
@@ -8908,16 +8848,6 @@ let
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
-
-  nixCustomFun = src: preConfigure: enableScripts: configureFlags:
-    import ../tools/package-management/nix/custom.nix {
-      inherit fetchurl stdenv perl curl bzip2 openssl src preConfigure automake
-        autoconf libtool configureFlags enableScripts lib libxml2 boehmgc
-        pkgconfig flex bison sqlite perlPackages;
-      aterm = aterm25;
-      db4 = db45;
-      inherit docbook5_xsl libxslt docbook5 docbook_xml_dtd_43 w3m;
-    };
 
   nut = callPackage ../applications/misc/nut { };
 
