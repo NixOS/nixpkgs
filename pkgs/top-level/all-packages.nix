@@ -2416,20 +2416,19 @@ let
 
   path64 = callPackage ../development/compilers/path64 { };
 
-  openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix {};
-
-  openjdkStage1 = callPackage ../development/compilers/openjdk {
-    jdk = pkgs.openjdkBootstrap;
-    ant = pkgs.ant.override { jdk = pkgs.openjdkBootstrap; };
-  };
-
   openjdk =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin { }
     else
-      callPackage ../development/compilers/openjdk {
-        jdk = pkgs.openjdkStage1;
-        ant = pkgs.ant.override { jdk = pkgs.openjdkStage1; };
+      let
+        openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix {};
+        openjdkStage1 = callPackage ../development/compilers/openjdk {
+          jdk = openjdkBootstrap;
+          ant = pkgs.ant.override { jdk = openjdkBootstrap; };
+        };
+      in callPackage ../development/compilers/openjdk {
+        jdk = openjdkStage1;
+        ant = pkgs.ant.override { jdk = openjdkStage1; };
       };
 
   openjre = pkgs.openjdk.override {
