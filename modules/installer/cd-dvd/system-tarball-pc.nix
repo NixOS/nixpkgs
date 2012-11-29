@@ -60,7 +60,7 @@ let
     }
   '';
 
-  readme = builtins.readFile ./system-tarball-pc-readme.txt;
+  readme = ./system-tarball-pc-readme.txt;
 
 in
 
