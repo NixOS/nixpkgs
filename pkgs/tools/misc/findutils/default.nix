@@ -10,10 +10,7 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [coreutils];
 
-  patches = [ ./findutils-path.patch ./change_echo_path.patch ]
-    # Note: the dietlibc patch is just to get findutils to compile.
-    # The locate command probably won't work though.
-    ++ stdenv.lib.optional (stdenv ? isDietLibC) ./dietlibc-hack.patch;
+  patches = [ ./findutils-path.patch ./change_echo_path.patch ];
 
   doCheck = true;
 
