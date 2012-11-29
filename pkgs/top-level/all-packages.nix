@@ -538,6 +538,8 @@ let
 
   colordiff = callPackage ../tools/text/colordiff { };
 
+  connect = callPackage ../tools/networking/connect { };
+
   convertlit = callPackage ../tools/text/convertlit { };
 
   cowsay = callPackage ../tools/misc/cowsay { };
