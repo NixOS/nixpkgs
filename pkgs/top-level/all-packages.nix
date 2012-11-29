@@ -565,17 +565,15 @@ let
 
   cromfs = callPackage ../tools/archivers/cromfs { };
 
-  cron = callPackage ../tools/system/cron {  # see also fcron
-  };
+  cron = callPackage ../tools/system/cron { };
 
   cudatoolkit = callPackage ../development/compilers/cudatoolkit {
     python = python26;
   };
 
-  curl = makeOverridable (import ../tools/networking/curl) rec {
+  curl = callPackage ../tools/networking/curl rec {
     fetchurl = fetchurlBoot;
-    inherit stdenv zlib openssl libssh2;
-    zlibSupport = ! ((stdenv ? isDietLibC) || (stdenv ? isStatic));
+    zlibSupport = true;
     sslSupport = zlibSupport;
     scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
   };
@@ -584,8 +582,7 @@ let
 
   curlftpfs = callPackage ../tools/filesystems/curlftpfs { };
 
-  dadadodo = builderDefsPackage (import ../tools/text/dadadodo) {
-  };
+  dadadodo = builderDefsPackage (import ../tools/text/dadadodo) { };
 
   dar = callPackage ../tools/archivers/dar { };
 
@@ -675,8 +672,7 @@ let
 
   ecryptfs = callPackage ../tools/security/ecryptfs { };
 
-  edk2 = callPackage ../development/compilers/edk2 {
-  };
+  edk2 = callPackage ../development/compilers/edk2 { };
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
@@ -4134,8 +4130,7 @@ let
 
   liblscp = callPackage ../development/libraries/liblscp { };
 
-  libev = builderDefsPackage ../development/libraries/libev {
-  };
+  libev = builderDefsPackage ../development/libraries/libev { };
 
   libevent = callPackage ../development/libraries/libevent { };
 
@@ -4598,8 +4593,7 @@ let
 
   ntrack = callPackage ../development/libraries/ntrack { };
 
-  ode = builderDefsPackage (import ../development/libraries/ode) {
-  };
+  ode = builderDefsPackage (import ../development/libraries/ode) { };
 
   ogre = callPackage ../development/libraries/ogre {};
 
@@ -4671,12 +4665,10 @@ let
 
   pcre = callPackage ../development/libraries/pcre {
     unicodeSupport = config.pcre.unicode or true;
-    cplusplusSupport = !stdenv ? isDietLibC;
   };
 
   pcre_8_30 = callPackage ../development/libraries/pcre/8.30.nix {
     unicodeSupport = config.pcre.unicode or true;
-    cplusplusSupport = !stdenv ? isDietLibC;
   };
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
@@ -5110,20 +5102,19 @@ let
     fetchurl = fetchurlBoot;
   };
 
-  zlibStatic = lowPrio (appendToName "static" (import ../development/libraries/zlib {
-    inherit fetchurl stdenv;
+  zlibStatic = lowPrio (appendToName "static" (callPackage ../development/libraries/zlib {
     static = true;
   }));
 
   zeromq2 = callPackage ../development/libraries/zeromq/2.x.nix {};
   zeromq3 = callPackage ../development/libraries/zeromq/3.x.nix {};
 
+
   ### DEVELOPMENT / LIBRARIES / JAVA
 
 
   atermjava = callPackage ../development/libraries/java/aterm {
     stdenv = overrideInStdenv stdenv [gnumake380];
-
   };
 
   commonsFileUpload = callPackage ../development/libraries/java/jakarta-commons/file-upload { };
@@ -5616,10 +5607,7 @@ let
 
   dmtcp = callPackage ../os-specific/linux/dmtcp { };
 
-  dietlibc = callPackage ../os-specific/linux/dietlibc {
-    # Dietlibc 0.30 doesn't compile on PPC with GCC 4.1, bus GCC 3.4 works.
-    stdenv = if stdenv.system == "powerpc-linux" then overrideGCC stdenv gcc34 else stdenv;
-  };
+  dietlibc = callPackage ../os-specific/linux/dietlibc { };
 
   directvnc = builderDefsPackage ../os-specific/linux/directvnc {
     inherit libjpeg pkgconfig zlib directfb;
@@ -6376,8 +6364,7 @@ let
 
   anonymousPro = callPackage ../data/fonts/anonymous-pro {};
 
-  arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) {
-  };
+  arkpandora_ttf = builderDefsPackage (import ../data/fonts/arkpandora) { };
 
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
@@ -6564,8 +6551,7 @@ let
 
   autopanosiftc = callPackage ../applications/graphics/autopanosiftc { };
 
-  avidemux = callPackage ../applications/video/avidemux {
-  };
+  avidemux = callPackage ../applications/video/avidemux { };
 
   avogadro = callPackage ../applications/science/chemistry/avogadro { };
 
@@ -7359,7 +7345,7 @@ let
 
   mercurial = callPackage ../applications/version-management/mercurial {
     inherit (pythonPackages) curses docutils;
-    guiSupport = false;		# use mercurialFull to get hgk GUI
+    guiSupport = false; # use mercurialFull to get hgk GUI
   };
 
   mercurialFull = lowPrio (appendToName "full" (pkgs.mercurial.override { guiSupport = true; }));
@@ -8020,8 +8006,7 @@ let
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
-  libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix {
-  };
+  libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xpra = callPackage ../tools/X11/xpra {
     inherit (pythonPackages) notify;
@@ -8229,8 +8214,7 @@ let
 
   scummvm = callPackage ../games/scummvm { };
 
-  scorched3d = callPackage ../games/scorched3d {
-  };
+  scorched3d = callPackage ../games/scorched3d { };
 
   sgtpuzzles = builderDefsPackage (import ../games/sgt-puzzles) {
     inherit pkgconfig fetchsvn perl gtk;
