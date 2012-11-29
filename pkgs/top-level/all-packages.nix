@@ -4916,8 +4916,6 @@ let
 
   tcltls = callPackage ../development/libraries/tcltls { };
 
-  tcp_wrappers = callPackage ../development/libraries/tcp-wrappers {};
-
   tdb = callPackage ../development/libraries/tdb { };
 
   tecla = callPackage ../development/libraries/tecla { };
@@ -6193,7 +6191,7 @@ let
   };
 
   # FIXME: `tcp-wrapper' is actually not OS-specific.
-  tcpWrapper = callPackage ../os-specific/linux/tcp-wrapper { };
+  tcp_wrappers = callPackage ../os-specific/linux/tcp-wrappers { };
 
   trackballs = callPackage ../games/trackballs {
     debug = false;
