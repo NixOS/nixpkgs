@@ -723,7 +723,7 @@ let
 
   flvtool2 = callPackage ../tools/video/flvtool2 { };
 
-  fontforge = callPackage ../tools/misc/fontforge { };
+  fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
 
   fontforgeX = callPackage ../tools/misc/fontforge {
     withX11 = true;
@@ -1564,7 +1564,6 @@ let
   trickle = callPackage ../tools/networking/trickle {};
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
-  ttf2pt1_cl_pdf = callPackage ../tools/misc/ttf2pt1 { };
 
   ucl = callPackage ../development/libraries/ucl { };
 
@@ -1683,7 +1682,7 @@ let
 
   unzip = callPackage ../tools/archivers/unzip { };
 
-  unzipNLS = unzip.override { enableNLS = true; };
+  unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
   uptimed = callPackage ../tools/system/uptimed { };
 
@@ -1816,8 +1815,6 @@ let
   bashCompletion = callPackage ../shells/bash-completion { };
 
   dash = callPackage ../shells/dash { };
-
-  ipython = callPackage ../shells/ipython { };
 
   tcsh = callPackage ../shells/tcsh { };
 
@@ -2421,7 +2418,7 @@ let
 
   oraclejdk = pkgs.jdkdistro true false;
 
-  oraclejre = pkgs.jdkdistro false false;
+  oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   jrePlugin = lowPrio (pkgs.jdkdistro false true);
 
@@ -2962,10 +2959,10 @@ let
     inherit noSysDirs;
   };
 
-  binutils_gold = callPackage ../development/tools/misc/binutils {
+  binutils_gold = lowPrio (callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
     gold = true;
-  };
+  });
 
   binutilsCross = lowPrio (forceBuildDrv (import ../development/tools/misc/binutils {
     inherit stdenv fetchurl zlib;
@@ -3193,7 +3190,7 @@ let
      buildNativeInput after the renaming.
      */
   pkgconfig = forceBuildDrv (callPackage ../development/tools/misc/pkgconfig { });
-  pkgconfigUpstream = pkgconfig.override { vanilla = true; };
+  pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
 
   premake = callPackage ../development/tools/misc/premake { };
 
@@ -4126,7 +4123,7 @@ let
 
   liblo = callPackage ../development/libraries/liblo { };
 
-  liblrdf = callPackage ../development/libraries/liblrdf {};
+  liblrdf = librdf;
 
   liblscp = callPackage ../development/libraries/liblscp { };
 
@@ -4389,9 +4386,9 @@ let
 
   libunwind = callPackage ../development/libraries/libunwind { };
 
-  libv4l = v4l_utils.override {
+  libv4l = lowPrio (v4l_utils.override {
     withQt4 = false;
-  };
+  });
 
   libva = callPackage ../development/libraries/libva { };
 
@@ -4443,9 +4440,9 @@ let
     pythonSupport = false;
   };
 
-  libxml2Python = libxml2.override {
+  libxml2Python = lowPrio (libxml2.override {
     pythonSupport = true;
-  };
+  });
 
   libxmlxx = callPackage ../development/libraries/libxmlxx { };
 
@@ -4585,7 +4582,7 @@ let
 
   nspr = callPackage ../development/libraries/nspr { };
 
-  nss = callPackage ../development/libraries/nss { };
+  nss = lowPrio (callPackage ../development/libraries/nss { });
 
   nssTools = callPackage ../development/libraries/nss {
     includeTools = true;
@@ -5482,16 +5479,15 @@ let
   samba = callPackage ../servers/samba { };
 
   # A lightweight Samba, useful for non-Linux-based OSes.
-  samba_light = callPackage ../servers/samba {
+  samba_light = lowPrio (callPackage ../servers/samba {
     pam = null;
     fam = null;
     cups = null;
     acl = null;
     openldap = null;
-
     # libunwind 1.0.1 is not ported to GNU/Hurd.
     libunwind = null;
-  };
+  });
 
   shishi = callPackage ../servers/shishi { };
 
@@ -5651,7 +5647,7 @@ let
     inherit fontconfig gpm freetype pkgconfig ncurses;
   };
 
-  fbtermStdenv = callPackage ../os-specific/linux/fbterm/stdenv.nix { };
+  fbtermStdenv = lowPrio (callPackage ../os-specific/linux/fbterm/stdenv.nix { });
 
   fuse = callPackage ../os-specific/linux/fuse { };
 
@@ -7216,7 +7212,7 @@ let
     librsvg = null;
   };
 
-  imagemagickBig = callPackage ../applications/graphics/ImageMagick { };
+  imagemagickBig = lowPrio (callPackage ../applications/graphics/ImageMagick { });
 
   # Impressive, formerly known as "KeyJNote".
   impressive = callPackage ../applications/office/impressive {
@@ -8092,10 +8088,10 @@ let
 
   castle_combat = callPackage ../games/castle-combat { };
 
-  construoBase = callPackage ../games/construo {
+  construoBase = lowPrio (callPackage ../games/construo {
     mesa = null;
     freeglut = null;
-  };
+  });
 
   construo = construoBase.override {
     inherit mesa freeglut;

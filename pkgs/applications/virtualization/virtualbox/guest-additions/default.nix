@@ -4,7 +4,7 @@
 let version = "4.2.2"; in
 
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-${version}";
+  name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
