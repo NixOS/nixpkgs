@@ -20,6 +20,7 @@ rec {
   phaseNames = ["preConfigure" "doConfigure" "preBuild" "doMakeInstall"];
 
   preConfigure = a.fullDepEntry (''
+    sed -e 's/getline/my_getline/' -i score.c
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${a.libXpm}/include/X11"
     for i in  $NIX_CFLAGS_COMPILE; do echo $i; ls ''${i#-I}; done
     chmod a+rw config.h
@@ -28,8 +29,8 @@ rec {
     echo '#define OWNER "'$(whoami)'"' >> config.h
     echo '#define ROOTDIR "'$out/lib/xsokoban'"' >> config.h
     echo '#define ANYLEVEL 1' >> config.h
-    echo '#define SCOREFILE "/tmp/.xsokoban-score"' >> config.h
-    echo '#define LOCKFILE "/tmp/.xsokoban-score-lock"' >> config.h
+    echo '#define SCOREFILE ".xsokoban-score"' >> config.h
+    echo '#define LOCKFILE ".xsokoban-score-lock"' >> config.h
 
     sed -e 's/getpass[(][^)]*[)]/PASSWORD/' -i main.c
     sed -e '/if [(]owner[)]/iowner=1;' -i main.c

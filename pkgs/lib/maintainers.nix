@@ -15,7 +15,7 @@
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
-  eelco = "Eelco Dolstra <e.dolstra@tudelft.nl>";
+  eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
   garbas = "Rok Garbas <rok@garbas.si>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";

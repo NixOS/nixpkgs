@@ -70,7 +70,7 @@ rec {
         "--disable-javaxpcom"
       ] ++ commonConfigureFlags;
 
-    enableParallelBuilding = true;
+    enableParallelBuilding = false;
 
     preConfigure =
       ''
@@ -94,7 +94,7 @@ rec {
       for i in $out/lib/$libDir/*; do
           file $i;
           if file $i | grep executable &>/dev/null; then
-              echo -e '#! /bin/sh\n"'"$i"'" "$@"' > "$out/bin/$(basename "$i")";
+              echo -e '#! /bin/sh\nexec "'"$i"'" "$@"' > "$out/bin/$(basename "$i")";
               chmod a+x "$out/bin/$(basename "$i")";
           fi;
       done
@@ -156,18 +156,9 @@ rec {
     postInstall =
       ''
         ln -s ${xulrunner}/lib/xulrunner-${xulrunner.version} $(echo $out/lib/firefox-*)/xulrunner
-        for j in $out/bin/*; do
-            i="$(readlink "$j")";
-            file $i;
-            if file $i | grep executable &>/dev/null; then
-                rm "$out/bin/$(basename "$i")"
-                echo -e '#! /bin/sh\nexec "'"$i"'" "$@"' > "$out/bin/$(basename "$i")"
-                chmod a+x "$out/bin/$(basename "$i")"
-            fi;
-        done;
         cd "$out/lib/"firefox-*
         rm firefox
-        echo -e '#!${stdenv.shell}\n${xulrunner}/bin/xulrunner "'"$PWD"'/application.ini" "$@"' > firefox
+        echo -e '#!${stdenv.shell}\nexec ${xulrunner}/bin/xulrunner "'"$PWD"'/application.ini" "$@"' > firefox
         chmod a+x firefox
       ''; # */
 

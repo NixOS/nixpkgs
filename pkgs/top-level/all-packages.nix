@@ -538,6 +538,8 @@ let
 
   colordiff = callPackage ../tools/text/colordiff { };
 
+  connect = callPackage ../tools/networking/connect { };
+
   convertlit = callPackage ../tools/text/convertlit { };
 
   cowsay = callPackage ../tools/misc/cowsay { };
@@ -613,6 +615,8 @@ let
   ddrescue = callPackage ../tools/system/ddrescue { };
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
+
+  despotify = callPackage ../development/libraries/despotify { };
 
   dev86 = callPackage ../development/compilers/dev86 {
     /* Using GNU Make 3.82 leads to this:
@@ -2412,20 +2416,19 @@ let
 
   path64 = callPackage ../development/compilers/path64 { };
 
-  openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix {};
-
-  openjdkStage1 = callPackage ../development/compilers/openjdk {
-    jdk = pkgs.openjdkBootstrap;
-    ant = pkgs.ant.override { jdk = pkgs.openjdkBootstrap; };
-  };
-
   openjdk =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk-darwin { }
     else
-      callPackage ../development/compilers/openjdk {
-        jdk = pkgs.openjdkStage1;
-        ant = pkgs.ant.override { jdk = pkgs.openjdkStage1; };
+      let
+        openjdkBootstrap = callPackage ../development/compilers/openjdk/bootstrap.nix {};
+        openjdkStage1 = callPackage ../development/compilers/openjdk {
+          jdk = openjdkBootstrap;
+          ant = pkgs.ant.override { jdk = openjdkBootstrap; };
+        };
+      in callPackage ../development/compilers/openjdk {
+        jdk = openjdkStage1;
+        ant = pkgs.ant.override { jdk = openjdkStage1; };
       };
 
   openjre = pkgs.openjdk.override {
@@ -2893,6 +2896,7 @@ let
     };
 
   xulrunner = pkgs.firefoxPkgs.xulrunner;
+
 
   ### DEVELOPMENT / MISC
 
@@ -3987,6 +3991,7 @@ let
   iniparser = callPackage ../development/libraries/iniparser { };
 
   intltool = gnome.intltool;
+  intltool_standalone = callPackage ../development/tools/misc/intltool {};
 
   irrlicht3843 = callPackage ../development/libraries/irrlicht { };
 
@@ -4791,6 +4796,10 @@ let
     flashplayerFix = false;
     gstreamer = null;
     gst_plugins_base = null;
+  };
+
+  qt4_for_qtcreator = qt48.override {
+    developerBuild = true;
   };
 
   qtscriptgenerator = callPackage ../development/libraries/qtscriptgenerator { };
@@ -6690,25 +6699,16 @@ let
 
   cmus = callPackage ../applications/audio/cmus { };
 
-  compiz = callPackage ../applications/window-managers/compiz/core.nix { };
-
-  compiz_ccsm = callPackage ../applications/window-managers/compiz/ccsm.nix { };
-
-  compizconfig_python = callPackage ../applications/window-managers/compiz/config-python.nix { };
+  compiz = callPackage ../applications/window-managers/compiz {
+    inherit (gnome) GConf ORBit2;
+    intltool = intltool_standalone;
+  };
 
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome) libgnomeui GConf;
   };
 
   csound = callPackage ../applications/audio/csound { };
-
-  libcompizconfig = callPackage ../applications/window-managers/compiz/libcompizconfig.nix { };
-
-  compiz_bcop = callPackage ../applications/window-managers/compiz/bcop.nix { };
-
-  compiz_plugins_main = callPackage ../applications/window-managers/compiz/plugins-main.nix { };
-
-  compiz_plugins_extra = callPackage ../applications/window-managers/compiz/plugins-extra.nix { };
 
   cinepaint = callPackage ../applications/graphics/cinepaint {
     fltk = fltk13;
@@ -7015,7 +7015,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox16Pkgs;
+  firefoxPkgs = pkgs.firefox17Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
@@ -7108,8 +7108,6 @@ let
     guile = guile_1_8;
     slibGuile = slibGuile.override { scheme = guile_1_8; };
   };
-
-  qcad = callPackage ../applications/misc/qcad { };
 
   libquvi = callPackage ../applications/video/quvi/library.nix { };
 
@@ -8385,6 +8383,12 @@ let
     libpng = libpng12;
   };
 
+  worldofgoo_demo = callPackage ../games/worldofgoo {
+    demo = true;
+  };
+
+  worldofgoo = callPackage ../games/worldofgoo { };
+
   xboard = builderDefsPackage (import ../games/xboard) {
     inherit (xlibs) libX11 xproto libXt libXaw libSM
       libICE libXmu libXext libXpm;
@@ -8658,6 +8662,21 @@ let
   liblapack = callPackage ../development/libraries/science/math/liblapack { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
+
+
+  ### SCIENCE/MOLECULAR-DYNAMICS
+
+  gromacs = callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = true;
+    fftw = fftwSinglePrec;
+    cmake = cmakeCurses;
+  };
+
+  gromacsDouble = lowPrio (callPackage ../applications/science/molecular-dynamics/gromacs {
+    singlePrec = false;
+    fftw = fftw;
+    cmake = cmakeCurses;
+  });
 
   ### SCIENCE/LOGIC
 
@@ -8957,16 +8976,17 @@ let
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
 
-  saneBackends = callPackage ../misc/sane-backends {
+  saneBackends = callPackage ../applications/graphics/sane/backends.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
     hotplugSupport = config.sane.hotplugSupport or true;
   };
 
-  saneBackendsSnapshot = callPackage ../misc/sane-backends/snapshot.nix {
+  saneBackendsGit = callPackage ../applications/graphics/sane/backends-git.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
+    hotplugSupport = config.sane.hotplugSupport or true;
   };
 
-  saneFrontends = callPackage ../misc/sane-front { };
+  saneFrontends = callPackage ../applications/graphics/sane/frontends.nix { };
 
   slock = callPackage ../misc/screensavers/slock { };
 
@@ -9065,9 +9085,9 @@ let
 
   xosd = callPackage ../misc/xosd { };
 
-  xsane = callPackage ../misc/xsane {
+  xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;
-    saneBackends = saneBackendsSnapshot;
+    saneBackends = saneBackends;
   };
 
   yafc = callPackage ../applications/networking/yafc { };
@@ -9077,7 +9097,9 @@ let
     inherit (stdenv) mkDerivation;
   };
 
-  zsnes = callPackage_i686 ../misc/emulators/zsnes { };
+  zsnes = callPackage_i686 ../misc/emulators/zsnes {
+    libpng = libpng12;
+  };
 
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 

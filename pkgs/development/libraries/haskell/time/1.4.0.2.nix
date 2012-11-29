@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "time";
-  version = "1.4.0.1";
-  sha256 = "046jyz2xnbg2s94d9xhpphgq93mqlky7bc50vss40wdk6l7w8aws";
+  version = "1.4.0.2";
+  sha256 = "0p4ncankr9968lp4fnbq6pc5xwv2198gxhbds656da9jbv74w7j8";
   buildDepends = [ deepseq ];
   meta = {
     homepage = "http://semantic.org/TimeLib/";

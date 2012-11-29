@@ -3,6 +3,7 @@
 own_dir="$(cd "$(dirname "$0")"; pwd)"
 
 CURRENT_URL=
+NEED_TO_CHOOSE_URL=1
 
 url () {
   CURRENT_URL="$1"
@@ -45,12 +46,14 @@ matching_links () {
 
 link () {
   CURRENT_URL="$(matching_links "$1" | position_choice "$2" "$3")"
+  unset NEED_TO_CHOOSE_URL
   echo "Linked by: $*"
   echo "URL: $CURRENT_URL" >&2
 }
 
 version_link () {
   CURRENT_URL="$(matching_links "$1" | version_sort | position_choice "$2" "$3")"
+  unset NEED_TO_CHOOSE_URL
   echo "Linked version by: $*"
   echo "URL: $CURRENT_URL" >&2
 }
@@ -84,6 +87,23 @@ ensure_version () {
 
 ensure_target () {
   [ -z "$CURRENT_TARGET" ] && target default.nix
+}
+
+ensure_name () {
+  [ -z "$CURRENT_NAME" ] && name "$(basename "$CONFIG_DIR")"
+  echo "Resulting name: $CURRENT_NAME"
+}
+
+ensure_choice () {
+  [ -n "NEED_TO_CHOOSE_URL" ] && {
+    version_link '[.]tar[.]([^./])+$'
+    unset NEED_TO_CHOOSE_URL
+  }
+  [ -z "$CURRENT_URL" ] && {
+    echo "Error: empty CURRENT_URL"
+    echo "Error: empty CURRENT_URL" >&2
+    exit 1
+  }
 }
 
 hash () {
@@ -183,9 +203,11 @@ do_overwrite () {
 
 process_config () {
   CONFIG_DIR="$(directory_of "$1")"
-  source "$CONFIG_DIR/$(basename "$1")"
   BEGIN_EXPRESSION='# Generated upstream information';
+  source "$CONFIG_DIR/$(basename "$1")"
+  ensure_name
   retrieve_version
+  ensure_choice
   ensure_version
   ensure_target
   update_found && do_overwrite "$CURRENT_TARGET"

@@ -1,15 +1,14 @@
-{ cabal, aeson, curl, mtl, pureMD5, urlencoded, utf8String, xml }:
+{ cabal, aeson, attoparsec, curl, mtl, pureMD5, urlencoded
+, utf8String, xml
+}:
 
 cabal.mkDerivation (self: {
   pname = "liblastfm";
-  version = "0.0.3.6";
-  sha256 = "0xmrciv489dvksgpg9g83kna34x1amsx45wvpngcpnx4m44fcp4w";
+  version = "0.0.3.8";
+  sha256 = "0icx86x3w85z0pqdxcch583j6jk5id5aw9gf24266mgfg5k6iwdy";
   buildDepends = [
-    aeson curl mtl pureMD5 urlencoded utf8String xml
+    aeson attoparsec curl mtl pureMD5 urlencoded utf8String xml
   ];
-  patchPhase = ''
-    sed -i -e 's|curl == .*,|curl,|' -e 's|urlencoded .*,|urlencoded,|' liblastfm.cabal
-  '';
   meta = {
     description = "Wrapper to Lastfm API";
     license = self.stdenv.lib.licenses.mit;

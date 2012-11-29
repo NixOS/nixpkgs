@@ -5,11 +5,12 @@ in
 assert hotplugSupport -> (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux");
 
 stdenv.mkDerivation {
-  name = "sane-backends-1.0.22.git20121123";
+  name = "sane-backends-1.0.22.482-g071f226";
 
-  src = fetchurl {
-    url = "http://www.sane-project.org/snapshots/sane-backends-git20121123.tar.gz";
-    sha256 = "d13a8c9e85af52f7be2e45c70cb93a76ec04b76e7fc983809e7d70389b6e7ae5";
+  src = fetchgit {
+    url = "http://git.debian.org/git/sane/sane-backends.git";
+    rev = "071f2269cd68d3411cbfa05a3d028b74496db970";
+    sha256 = "178xkv30m6irk4k0gqnfcl5kramm1qyj24dar8gp32428z1444xf";
   };
 
   udevSupport = hotplugSupport;
@@ -29,4 +30,13 @@ stdenv.mkDerivation {
       "mkdir -p \${out}/share/sane/gt68xx ; ln -s " + firmware.fw +
       " \${out}/share/sane/gt68xx/" + firmware.name
     else "";
+
+  meta = {
+    homepage = "http://www.sane-project.org/";
+    description = "Scanner Access Now Easy";
+    license = "GPLv2+";
+
+    maintainers = [ stdenv.lib.maintainers.simons ];
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

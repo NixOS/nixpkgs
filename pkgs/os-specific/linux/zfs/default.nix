@@ -11,6 +11,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ kernel spl perl autoconf automake libtool zlib libuuid coreutils ];
 
+  # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
+  NIX_CFLAGS_LINK = "-lgcc_s";
   NIX_CFLAGS_COMPILE = "-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
 
   preConfigure = ''

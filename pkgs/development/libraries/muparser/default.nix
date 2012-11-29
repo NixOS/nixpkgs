@@ -1,11 +1,13 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-	name = "muparser-1.34";
+	name = "muparser-2.2.2";
 	src = fetchurl {
-		url = mirror://sourceforge/muparser/muparser_v134.tar.gz;
-		sha256 = "0xi27xjj7bwwf5nw3n2lynpr76al3vp204zwh71wkfnhwbzksg8f";
+		url = mirror://sourceforge/muparser/muparser_v2_2_2.zip;
+		sha256 = "0pncvjzzbwcadgpwnq5r7sl9v5r2y9gjgfnlw0mrs9wj206dbhx9";
 	};
+
+  buildInputs = [ unzip ];
 
   meta = {
     homepage = http://muparser.sourceforge.net;

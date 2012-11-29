@@ -1,12 +1,11 @@
 { cabal }:
 
 cabal.mkDerivation (self: {
-  pname = "time";
-  version = "1.2.0.3";
-  sha256 = "acb1e3cf2b98a73632d35b0665808b05df6c03fcefd62796fe291f5b2ef4348e";
+  pname = "multiset";
+  version = "0.2.2";
+  sha256 = "1g14c1zm4rdc8nxvb69k98h542wi24q2lpba1gpqjqspk4d0sjmn";
   meta = {
-    homepage = "http://semantic.org/TimeLib/";
-    description = "A time library";
+    description = "The Data.MultiSet container type";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
