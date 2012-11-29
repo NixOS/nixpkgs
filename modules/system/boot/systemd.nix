@@ -442,6 +442,18 @@ in
         }
       ];
 
+    system.activationScripts.systemd =
+      ''
+        mkdir -p /var/lib/udev -m 0755
+
+        # Regenerate the hardware database /var/lib/udev/hwdb.bin
+        # whenever systemd changes.
+        if [ ! -e /var/lib/udev/prev-systemd -o "$(readlink /var/lib/udev/prev-systemd)" != ${systemd} ]; then
+          echo "regenerating udev hardware database..."
+          ${systemd}/bin/udevadm hwdb --update && ln -sfn ${systemd} /var/lib/udev/prev-systemd
+        fi
+      '';
+
     # Target for ‘charon send-keys’ to hook into.
     boot.systemd.targets.keys =
       { description = "Security Keys";
@@ -456,5 +468,6 @@ in
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
       "CGROUPS" "AUTOFS4_FS" "DEVTMPFS"
     ];
+
   };
 }
