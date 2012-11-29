@@ -22,6 +22,8 @@
       easy_install --always-unzip --prefix="$out" .
     ''
     
+, preConfigure ? "true"
+
 , buildPhase ? "true"
 
 , doCheck ? true
@@ -32,8 +34,6 @@
       python setup.py test
       runHook postCheck
     ''
-, configurePhase ? "true"
-
 , postInstall ? ""
 
 , ... } @ attrs:
@@ -48,12 +48,12 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputStrings = map toString buildInputs;
 
-  configurePhase = ''
-    export PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}:$PYTHONPATH"
-    ${configurePhase}
-  '';
+  pythonPath = [ setuptools ] ++ pythonPath;
 
-  pythonPath = [ setuptools] ++ pythonPath;
+  preConfigure = ''
+    PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+    ${preConfigure}
+  '';
 
   installPhase = ''
     mkdir -p "$out/lib/${python.libPrefix}/site-packages"
