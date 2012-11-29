@@ -4742,17 +4742,6 @@ let
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
   };
 
-  qt4_for_skype = qt48.override {
-    mysql = null;
-    postgresql = null;
-    libtiff = null;
-    libmng = null;
-    cups = null;
-    flashplayerFix = false;
-    gstreamer = null;
-    gst_plugins_base = null;
-  };
-
   qt4_for_qtcreator = qt48.override {
     developerBuild = true;
   };
