@@ -61,13 +61,13 @@ let pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    rev = "5ed59825ffaeaacea90ea10be4b932c60428ed8e";
+    rev = "09804636609b4245cde4faceddffdb5361f3d390";
     name = "alot-0.3.3_${rev}";
 
     src = fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "1b724d47bf766ba3ca7cb6d27c7bb597dbc67dcae1347c5a0f01f80c2246ca07";
+      sha256 = "b5239c4dfcd9882608fb48ef80fe9ba9223949ab7e6a2c1abe970ac307ebcd4a";
     };
 
     doCheck = false;
@@ -926,11 +926,11 @@ let pythonPackages = python.modules // rec {
 
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.7.6";
+    name = "httplib2-0.7.7";
 
     src = fetchurl {
       url = "http://httplib2.googlecode.com/files/${name}.tar.gz";
-      sha256 = "baa7bf431fa9d3c1016562de717e1ebb322a99df72a2918f6b5b8f65fa65bc2e";
+      sha256 = "2e2ce18092c32d1ec54f8a447e14e33585e30f240b883bfeeca65f12b3bcfaf6";
     };
 
     doCheck = false; # doesn't have a test
@@ -2794,11 +2794,11 @@ let pythonPackages = python.modules // rec {
   });
 
   tweepy = buildPythonPackage (rec {
-    name = "tweepy-1.11";
+    name = "tweepy-1.12";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
-      sha256 = "2b9fa225e9254e2cbbb01e59c6e92d9c42e5d41d97e8c74dee93eb09babffde5";
+      sha256 = "66d728527ab3d5f5e4d6725654783f99169172678105f609d14353f6626c1315";
     };
 
     doCheck = false;
@@ -2883,13 +2883,13 @@ let pythonPackages = python.modules // rec {
 
 
   urwid = buildPythonPackage (rec {
-    name = "urwid-1.0.2";
+    name = "urwid-1.1.1";
 
     doCheck = false;
 
     src = fetchurl {
       url = "http://excess.org/urwid/${name}.tar.gz";
-      md5 = "00542bbd15fae7ea60b02a7570edee2b";
+      md5 = "eca2e0413cf7216b01c84b99e0f2576d";
     };
 
     meta = {
