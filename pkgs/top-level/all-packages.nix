@@ -718,12 +718,7 @@ let
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
-  findutils =
-    if stdenv.isDarwin
-    then findutils4227
-    else callPackage ../tools/misc/findutils { };
-
-  findutils4227 = callPackage ../tools/misc/findutils/4.2.27.nix { };
+  findutils = callPackage ../tools/misc/findutils { };
 
   finger_bsd = callPackage ../tools/networking/bsd-finger { };
 
