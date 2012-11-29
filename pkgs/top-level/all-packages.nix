@@ -24,7 +24,7 @@
 , # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for
   # files in standard system directories (/usr/include, etc.)
-  noSysDirs ? (system != "x86_64-darwin" && system != "i686-darwin"
+  noSysDirs ? (system != "x86_64-darwin"
                && system != "x86_64-freebsd" && system != "i686-freebsd"
                && system != "x86_64-kfreebsd-gnu")
 
@@ -2121,17 +2121,14 @@ let
   }));
 
   gccApple =
-    wrapGCC (makeOverridable
-      (if stdenv.system == "i686-darwin"
-       then import ../development/compilers/gcc/4.2-apple32
-       else import ../development/compilers/gcc/4.2-apple64) {
-         inherit fetchurl noSysDirs;
-         profiledCompiler = true;
-
-         # Since it fails to build with GCC 4.6, build it with the "native"
-         # Apple-GCC.
-         stdenv = allStdenvs.stdenvNative;
-       });
+    assert stdenv.isDarwin;
+    wrapGCC (makeOverridable (import ../development/compilers/gcc/4.2-apple64) {
+      inherit fetchurl noSysDirs;
+      profiledCompiler = true;
+      # Since it fails to build with GCC 4.6, build it with the "native"
+      # Apple-GCC.
+      stdenv = allStdenvs.stdenvNative;
+    });
 
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
@@ -3753,18 +3750,12 @@ let
 
   gmm = callPackage ../development/libraries/gmm { };
 
-  # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
-  gmp = if stdenv.system == "i686-darwin" then gmp4 else gmp5;
+  gmp = gmp5;
 
   gmpxx = appendToName "with-cxx" (gmp.override { cxx = true; });
 
   # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
-  gmp4 =
-    if stdenv.system == "i686-darwin" then
-      # GMP 4.3.2 is broken on Darwin, so use 4.3.1.
-      callPackage ../development/libraries/gmp/4.3.1.nix { }
-    else
-      callPackage ../development/libraries/gmp/4.3.2.nix { };
+  gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { };
 
   gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
 
@@ -4509,8 +4500,7 @@ let
   mesaSupported =
     system == "i686-linux" ||
     system == "x86_64-linux" ||
-    system == "x86_64-darwin" ||
-    system == "i686-darwin";
+    system == "x86_64-darwin";
 
   mesa = callPackage ../development/libraries/mesa { };
 
