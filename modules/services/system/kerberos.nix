@@ -41,7 +41,7 @@ in
         flags = "REUSE NAMEINARGS";
         protocol = "tcp";
         user = "root";
-        server = "${pkgs.tcpWrapper}/sbin/tcpd";
+        server = "${pkgs.tcp_wrappers}/sbin/tcpd";
         serverArgs = "${pkgs.heimdal}/sbin/kadmind";
       };
 

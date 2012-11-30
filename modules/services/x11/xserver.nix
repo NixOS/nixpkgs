@@ -343,7 +343,8 @@ in
       optional (elem "virtualbox" driverNames) kernelPackages.virtualboxGuestAdditions ++
       optional (elem "ati_unfree" driverNames) kernelPackages.ati_drivers_x11;
 
-    environment.etc = optionals cfg.exportConfiguration
+    environment.etc =
+    (optionals cfg.exportConfiguration
       [ { source = "${configFile}";
           target = "X11/xorg.conf";
         }
@@ -351,7 +352,15 @@ in
         { source = "${pkgs.xkeyboard_config}/etc/X11/xkb";
           target = "X11/xkb";
         }
-      ];
+      ])
+    ++ (optionals (elem "ati_unfree" driverNames) [
+
+        # according toiive on #ati you don't need the pcs, it is like registry... keeps old stuff to make your
+        # life harder ;) Still it seems to be required
+        { source = "${kernelPackages.ati_drivers_x11}/etc/ati";
+          target = "ati";
+        }
+    ]);
 
     environment.x11Packages =
       [ xorg.xorgserver
@@ -417,6 +426,8 @@ in
                 "ln -sf ${kernelPackages.nvidia_x11_legacy96} /run/opengl-driver"
               else if elem "nvidiaLegacy173" driverNames then
                 "ln -sf ${kernelPackages.nvidia_x11_legacy173} /run/opengl-driver"
+              else if elem "ati_unfree" driverNames then
+                "ln -sf ${kernelPackages.ati_drivers_x11} /run/opengl-driver"
               else if cfg.driSupport then
                 "ln -sf ${pkgs.mesa} /run/opengl-driver"
               else ""

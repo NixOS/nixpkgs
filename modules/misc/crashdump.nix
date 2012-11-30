@@ -6,6 +6,7 @@ let
   crashdump = config.boot.crashDump;
 
   kernelParams = concatStringsSep " " crashdump.kernelParams;
+
 in
 ###### interface
 {
@@ -55,6 +56,8 @@ in
       kernelParams = [
        "crashkernel=64M"
        "nmi_watchdog=panic"
+       "softlockup_panic=1"
+       "idle=poll"
       ];
       kernelPackages = mkOverride 50 (crashdump.kernelPackages // {
         kernel = crashdump.kernelPackages.kernel.override 

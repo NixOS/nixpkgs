@@ -469,5 +469,12 @@ in
       "CGROUPS" "AUTOFS4_FS" "DEVTMPFS"
     ];
 
+    environment.shellAliases =
+      { start = "systemctl start";
+        stop = "systemctl stop";
+        restart = "systemctl restart";
+        status = "systemctl status";
+      };
+
   };
 }
