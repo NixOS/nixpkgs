@@ -21,11 +21,13 @@ rec {
   || builtins.isList x
   );
 
+
   importIfPath = path:
     if isPath path then
       import path
     else
       path;
+
 
   applyIfFunction = f: arg:
     if builtins.isFunction f then
@@ -33,9 +35,11 @@ rec {
     else
       f;
 
+
   isModule = m:
        (m ? config && isAttrs m.config && ! isOption m.config)
     || (m ? options && isAttrs m.options && ! isOption m.options);
+
 
   # Convert module to a set which has imports / options and config
   # attributes.
@@ -107,15 +111,6 @@ rec {
         operator = m: imap (moduleImport m) (getImports m);
       });
 
-  selectDeclsAndDefs = modules:
-    lib.concatMap (m:
-      if m ? config || m ? options then
-         [ (m.options or {}) ]
-      ++ [ (m.config or {}) ]
-      else
-        [ m ]
-    ) modules;
-
 
   moduleApply = funs: module:
     lib.mapAttrs (name: value:
@@ -125,6 +120,7 @@ rec {
       else
         value
     ) module;
+
 
   # Handle mkMerge function left behind after a delay property.
   moduleFlattenMerge = module:
@@ -137,6 +133,7 @@ rec {
     else
       [ module ];
 
+
   # Handle mkMerge attributes which are left behind by previous delay
   # properties and convert them into a list of modules. Delay properties
   # inside the config attribute of a module and create a second module if a
@@ -145,6 +142,7 @@ rec {
   # Module -> [ Module ]
   delayModule = module:
     map (moduleApply { config = delayProperties; }) (moduleFlattenMerge module);
+
 
   evalDefinitions = opt: values:
     if opt ? type && opt.type.delayOnGlobalEval then
@@ -171,16 +169,19 @@ rec {
       map (selectModule name) modules
     );
 
+
   modulesNames = modules:
     lib.concatMap (m: []
     ++ optionals (m ? options) (lib.attrNames m.options)
     ++ optionals (m ? config) (lib.attrNames m.config)
     ) modules;
 
+
   moduleZip = funs: modules:
     lib.mapAttrs (name: fun:
       fun (catAttrs name modules)
     ) funs;
+
 
   moduleMerge = path: modules:
     let modules_ = modules; in
@@ -342,15 +343,15 @@ rec {
 
   fixMergeModules = initModules: {...}@args:
     lib.fix (result:
-      # This trick avoid an infinite loop because names of attribute are
-      # know and it is not require to evaluate the result of moduleMerge to
-      # know which attribute are present as argument.
+      # This trick avoids an infinite loop because names of attribute
+      # are know and it is not required to evaluate the result of
+      # moduleMerge to know which attributes are present as arguments.
       let module = { inherit (result) options config; }; in
-
       moduleMerge "" (
         moduleClosure initModules (module // args)
       )
     );
+
 
   # Visit all definitions to raise errors related to undeclared options.
   checkModule = path: {config, options, ...}@m:
