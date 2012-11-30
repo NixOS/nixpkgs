@@ -8143,6 +8143,8 @@ let
     inherit libpng zlib;
   };
 
+  lincity_ng = callPackage ../games/lincity/ng.nix {};
+
   mars = callPackage ../games/mars { };
 
   micropolis = callPackage ../games/micropolis { };
