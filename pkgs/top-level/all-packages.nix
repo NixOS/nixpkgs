@@ -6953,13 +6953,6 @@ let
 
   firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
-  firefox16Pkgs = callPackage ../applications/networking/browsers/firefox/16.0.nix {
-    inherit (gnome) libIDL;
-    inherit (pythonPackages) pysqlite;
-  };
-
-  firefox16Wrapper = lowPrio (wrapFirefox { browser = firefox16Pkgs.firefox; });
-
   firefox17Pkgs = callPackage ../applications/networking/browsers/firefox/17.0.nix {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
