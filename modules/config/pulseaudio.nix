@@ -28,64 +28,65 @@ let cfg = config.hardware.pulseaudio; in
   };
 
 
-  config = mkIf cfg.enable {
+  config = mkMerge
+    [ # Create pulse/client.conf even if PulseAudio is disabled so
+      # that we can disable the autospawn feature in programs that
+      # are built with PulseAudio support (like KDE).
+      { environment.etc = singleton
+          { target = "pulse/client.conf";
+            source = pkgs.writeText "client.conf"
+              ''
+                autospawn=${if cfg.enable then "yes" else "no"}
+                ${optionalString cfg.enable ''
+                  daemon-binary=${cfg.package}/bin/pulseaudio
+                ''}
+              '';
+          };
+      }
 
-    environment.systemPackages =
-      [ cfg.package ];
+      (mkIf cfg.enable {
 
-    environment.etc = mkAlways (
-      [ # Create pulse/client.conf even if PulseAudio is disabled so
-        # that we can disable the autospawn feature in programs that
-        # are built with PulseAudio support (like KDE).
-        { target = "pulse/client.conf";
-          source = pkgs.writeText "client.conf"
-            ''
-              autospawn=${if cfg.enable then "yes" else "no"}
-              ${optionalString cfg.enable ''
-                daemon-binary=${cfg.package}/bin/pulseaudio
-              ''}
-            '';
-        }
+        environment.systemPackages = [ cfg.package ];
 
-      ] ++ optionals cfg.enable
-      [ # Write an /etc/asound.conf that causes all ALSA applications to
-        # be re-routed to the PulseAudio server through ALSA's Pulse
-        # plugin.
-        { target = "asound.conf";
-          source = pkgs.writeText "asound.conf"
-            ''
-              pcm_type.pulse {
-                lib ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so
-              }
+        environment.etc =
+          [ # Write an /etc/asound.conf that causes all ALSA applications to
+            # be re-routed to the PulseAudio server through ALSA's Pulse
+            # plugin.
+            { target = "asound.conf";
+              source = pkgs.writeText "asound.conf"
+                ''
+                  pcm_type.pulse {
+                    lib ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_pcm_pulse.so
+                  }
 
-              pcm.!default {
-                type pulse
-                hint.description "Default Audio Device (via PulseAudio)"
-              }
+                  pcm.!default {
+                    type pulse
+                    hint.description "Default Audio Device (via PulseAudio)"
+                  }
 
-              ctl_type.pulse {
-                lib ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so
-              }
+                  ctl_type.pulse {
+                    lib ${pkgs.alsaPlugins}/lib/alsa-lib/libasound_module_ctl_pulse.so
+                  }
 
-              ctl.!default {
-                type pulse
-              }
-            '';
-        }
+                  ctl.!default {
+                    type pulse
+                  }
+                '';
+            }
 
-        { target = "pulse/default.pa";
-          source = "${cfg.package}/etc/pulse/default.pa";
-        }
+            { target = "pulse/default.pa";
+              source = "${cfg.package}/etc/pulse/default.pa";
+            }
 
-        { target = "pulse/system.pa";
-          source = "${cfg.package}/etc/pulse/system.pa";
-        }
+            { target = "pulse/system.pa";
+              source = "${cfg.package}/etc/pulse/system.pa";
+            }
+          ];
 
-      ]);
+        # Allow PulseAudio to get realtime priority using rtkit.
+        security.rtkit.enable = true;
 
-    # Allow PulseAudio to get realtime priority using rtkit.
-    security.rtkit.enable = true;
-
-  };
+      })
+    ];
 
 }

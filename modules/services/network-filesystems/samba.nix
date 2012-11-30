@@ -154,23 +154,23 @@ in
 
       defaultShare = {
         enable = mkOption {
-	  description = "Whether to share /home/smbd as 'default'.";
-	  default = false;
-	};
+          description = "Whether to share /home/smbd as 'default'.";
+          default = false;
+        };
         writeable = mkOption {
-	  description = "Whether to allow write access to default share.";
-	  default = false;
-	};
+          description = "Whether to allow write access to default share.";
+          default = false;
+        };
         guest = mkOption {
-	  description = "Whether to allow guest access to default share.";
-	  default = true;
-	};
+          description = "Whether to allow guest access to default share.";
+          default = true;
+        };
       };
 
       securityType = mkOption {
         description = "Samba security type";
-	default = "user";
-	example = "share";
+        default = "user";
+        example = "share";
       };
 
     };
@@ -180,43 +180,45 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.samba.enable {
+  config = mkMerge
+    [ { # Always provide a smb.conf to shut up programs like smbclient and smbspool.
+        environment.etc = singleton
+          { source =
+              if cfg.enable then configFile
+              else pkgs.writeText "smb-dummy.conf" "# Samba is disabled.";
+            target = "samba/smb.conf";
+          };
+      }
 
-    users.extraUsers = singleton
-      { name = user;
-        description = "Samba service user";
-        group = group;
-      };
+      (mkIf config.services.samba.enable {
+        users.extraUsers = singleton
+          { name = user;
+            description = "Samba service user";
+            group = group;
+          };
 
-    users.extraGroups = singleton
-      { name = group;
-      };
+        users.extraGroups = singleton
+          { name = group;
+          };
 
-    # always provide a smb.conf to shut up programs like smbclient and smbspool.
-    environment.etc = mkAlways (singleton
-      { source =
-          if cfg.enable then configFile
-          else pkgs.writeText "smb-dummy.conf" "# Samba is disabled.";
-        target = "samba/smb.conf";
-      });
 
-    # Dummy job to start the real Samba daemons (nmbd, smbd, winbindd).
-    jobs.sambaControl =
-      { name = "samba";
-        description = "Samba server";
+        # Dummy job to start the real Samba daemons (nmbd, smbd, winbindd).
+        jobs.sambaControl =
+          { name = "samba";
+            description = "Samba server";
 
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+            startOn = "started network-interfaces";
+            stopOn = "stopping network-interfaces";
 
-        preStart = setupScript;
-      };
+            preStart = setupScript;
+          };
 
-    jobs.nmbd = daemonJob "nmbd" "-D";
+        jobs.nmbd = daemonJob "nmbd" "-D";
 
-    jobs.smbd = daemonJob "smbd" "-D";
+        jobs.smbd = daemonJob "smbd" "-D";
 
-    jobs.winbindd = daemonJob "winbindd" "-D";
-
-  };
+        jobs.winbindd = daemonJob "winbindd" "-D";
+      })
+    ];
 
 }

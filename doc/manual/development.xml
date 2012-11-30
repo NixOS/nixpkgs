@@ -150,7 +150,7 @@ $ nixos-rebuild switch -I <replaceable>/my/sources</replaceable>
   definitions.  This conditional values can be distinguished in two
   categories.  The condition which are local to the current configuration
   and conditions which are dependent on others configurations.  Local
-  properties are <varname>mkIf</varname>, <varname>mkAlways</varname>
+  properties are <varname>mkIf</varname>
   and <varname>mkAssert</varname>.  Global properties
   are <varname>mkOverride</varname>, <varname>mkDefault</varname>
   and <varname>mkOrder</varname>.</para>
@@ -158,12 +158,7 @@ $ nixos-rebuild switch -I <replaceable>/my/sources</replaceable>
 <para><varname>mkIf</varname> is used to remove the option definitions which
   are below it if the condition is evaluated to
   false.  <varname>mkAssert</varname> expects the condition to be evaluated
-  to true otherwise it raises an error message.  <varname>mkAlways</varname>
-  is used to ignore all the <varname>mkIf</varname>
-  and <varname>mkAssert</varname> which have been made
-  previously.  <varname>mkAlways</varname> and <varname>mkAssert</varname>
-  are often used together to set an option value and to ensure that it has
-  not been masked by another one.</para>
+  to true otherwise it raises an error message.</para>
 
 <para><varname>mkOverride</varname> is used to mask previous definitions if
   the current value has a lower mask number.  The mask value is 100 (default)
@@ -223,14 +218,6 @@ let
   locatedb = "/var/cache/locatedb";
   logfile = "/var/log/updatedb";
   cmd =''root  updatedb --localuser=nobody --output=${locatedb} > ${logfile}'';
-
-  mkCheck = x:
-    mkIf cfg.enable (
-      mkAssert config.services.cron.enable ''
-        The cron daemon is not enabled, required by services.locate.enable.
-      ''
-      x
-    )
 in
 
 {
@@ -260,9 +247,9 @@ in
     };
   };
 
-  config = mkCheck {
+  config = mkIf cfg.enable {
     services.cron = {
-      enable = mkAlways cfg.enable;
+      enable = true;
       systemCronJobs = "${cfg.period}  root ${cmd}";
     };
   };
