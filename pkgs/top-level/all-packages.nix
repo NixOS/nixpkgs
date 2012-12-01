@@ -8163,6 +8163,8 @@ let
 
   opentyrian = callPackage ../games/opentyrian { };
 
+  pingus = callPackage ../games/pingus {};
+
   pioneers = callPackage ../games/pioneers { };
 
   pong3d = callPackage ../games/pong3d { };
