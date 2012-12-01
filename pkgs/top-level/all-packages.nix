@@ -3207,6 +3207,8 @@ let
 
   ragel = callPackage ../development/tools/parsing/ragel { };
 
+  re2c = callPackage ../development/tools/parsing/re2c { };
+
   remake = callPackage ../development/tools/build-managers/remake { };
 
   # couldn't find the source yet
