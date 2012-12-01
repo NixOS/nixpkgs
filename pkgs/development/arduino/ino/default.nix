@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, minicom, avrdude, arduino_core, avrgcclibc }:
+{ stdenv, fetchurl, buildPythonPackage, minicom, avrdude, arduino_core }:
 
 buildPythonPackage {
   name = "ino-0.3.4";
@@ -9,7 +9,8 @@ buildPythonPackage {
     sha256 = "1v7z3da31cv212k28aci269qkg92p377fm7i76rymjjpjra7payv";
   };
 
-  propagatedBuildInputs = [ minicom avrdude arduino_core avrgcclibc ];
+  # TODO: add avrgcclibc, it must be rebuild with C++ support
+  propagatedBuildInputs = [ minicom avrdude arduino_core ];
 
   patchPhase = ''
     echo "Patching Arduino distribution path"
