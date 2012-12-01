@@ -165,7 +165,7 @@ let
   x11 = xlibsWrapper;
 
   # `xlibs' is the set of X library components.  This used to be the
-  # old modular X libraries project (called `xlibs') but now it's just
+  # old modular X llibraries project (called `xlibs') but now it's just
   # the set of packages in the modular X.org tree (which also includes
   # non-library components like the server, drivers, fonts, etc.).
   xlibs = xorg // {xlibs = xlibsWrapper;};
@@ -3952,6 +3952,8 @@ let
 
   iniparser = callPackage ../development/libraries/iniparser { };
 
+  inteltbb = callPackage ../development/libraries/intel-tbb { };
+
   intltool = gnome.intltool;
   intltool_standalone = callPackage ../development/tools/misc/intltool {};
 
@@ -4103,6 +4105,8 @@ let
 
   libdvdread = callPackage ../development/libraries/libdvdread { };
 
+  libdwarf = callPackage ../development/libraries/libdwarf { };
+
   libebml = callPackage ../development/libraries/libebml { };
 
   libedit = callPackage ../development/libraries/libedit { };
@@ -4131,6 +4135,7 @@ let
 
   libev = builderDefsPackage ../development/libraries/libev { };
 
+  libevent14 = callPackage ../development/libraries/libevent/1.4.nix { };
   libevent = callPackage ../development/libraries/libevent { };
 
   libewf = callPackage ../development/libraries/libewf { };
@@ -4188,6 +4193,8 @@ let
   liblqr1 = callPackage ../development/libraries/liblqr-1 { };
 
   liblockfile = callPackage ../development/libraries/liblockfile { };
+
+  libmcrypt = callPackage ../development/libraries/libmcrypt {};
 
   libmhash = callPackage ../development/libraries/libmhash {};
 
@@ -4258,6 +4265,8 @@ let
   libmatroska = callPackage ../development/libraries/libmatroska { };
 
   libmcs = callPackage ../development/libraries/libmcs { };
+
+  libmemcached = callPackage ../development/libraries/libmemcached { };
 
   libmicrohttpd = callPackage ../development/libraries/libmicrohttpd { };
 
@@ -4597,6 +4606,8 @@ let
   ogre = callPackage ../development/libraries/ogre {};
 
   ogrepaged = callPackage ../development/libraries/ogrepaged { };
+
+  oniguruma = callPackage ../development/libraries/oniguruma { };
 
   openal = callPackage ../development/libraries/openal { };
 
