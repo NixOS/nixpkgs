@@ -7969,6 +7969,13 @@ let
 
   weechat = callPackage ../applications/networking/irc/weechat { };
 
+  weston = callPackage ../applications/window-managers/weston {
+    cairo = cairo.override {
+      xcbSupport = true;
+      glSupport = true;
+    };
+  };
+
   wings = callPackage ../applications/graphics/wings { };
 
   wmname = callPackage ../applications/misc/wmname { };
