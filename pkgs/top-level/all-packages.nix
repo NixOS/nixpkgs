@@ -4126,6 +4126,11 @@ let
     inherit (xorg) libpthreadstubs;
   };
 
+  libdrm2_4_39 = callPackage ../development/libraries/libdrm/2.4.39.nix {
+    inherit fetchurl stdenv pkgconfig;
+    inherit (xorg) libpthreadstubs;
+  };
+
   libdv = callPackage ../development/libraries/libdv { };
 
   libdvbpsi = callPackage ../development/libraries/libdvbpsi { };
@@ -4534,6 +4539,8 @@ let
     system == "i686-darwin";
 
   mesa = callPackage ../development/libraries/mesa { };
+
+  mesa90x = callPackage ../development/libraries/mesa/9.0.x.nix { };
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
