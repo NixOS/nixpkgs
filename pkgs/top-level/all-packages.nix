@@ -2369,6 +2369,11 @@ let
 
   haxe = callPackage ../development/compilers/haxe { };
 
+  hiphopvm = callPackage ../development/interpreters/hiphopvm {
+    libevent = libevent14;
+    boost = boost149;
+  };
+
   falcon = builderDefsPackage (import ../development/interpreters/falcon) {
     inherit cmake;
   };
