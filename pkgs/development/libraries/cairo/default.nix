@@ -2,15 +2,17 @@
 , pdfSupport ? true
 , pngSupport ? true
 , xcbSupport ? false
+, glSupport ? false
 , gobjectSupport ? true, glib
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype, xlibs
-, zlib, libpng, pixman, libxcb ? null, xcbutil ? null
+, zlib, libpng, pixman, libxcb ? null, xcbutil ? null, mesa ? null
 , gettext, libiconvOrEmpty
 }:
 
 assert postscriptSupport -> zlib != null;
 assert pngSupport -> libpng != null;
 assert xcbSupport -> libxcb != null && xcbutil != null;
+assert glSupport -> mesa != null;
 
 stdenv.mkDerivation rec {
   name = "cairo-1.12.4";
@@ -23,6 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig x11 fontconfig xlibs.libXrender ]
     ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
+    ++ stdenv.lib.optionals glSupport [ mesa ]
 
     # On non-GNU systems we need GNU Gettext for libintl.
     ++ stdenv.lib.optional (!stdenv.isLinux) gettext
@@ -38,6 +41,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-tee" ]
     ++ stdenv.lib.optional xcbSupport "--enable-xcb"
+    ++ stdenv.lib.optional glSupport "--enable-gl"
     ++ stdenv.lib.optional pdfSupport "--enable-pdf";
 
   preConfigure = ''
