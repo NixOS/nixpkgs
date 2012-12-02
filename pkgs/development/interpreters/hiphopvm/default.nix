@@ -3,7 +3,6 @@
 , expat, libcap, oniguruma, libdwarf, libmcrypt, inteltbb, google_perftools
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam
 }:
-
 assert stdenv.system == "x86_64-linux";
 let
   src = fetchgit {
@@ -59,6 +58,6 @@ stdenv.mkDerivation {
   meta = {
     description = "HipHop is a high performance PHP toolchain.";
     homepage = https://github.com/facebook/hiphop-php;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = ["x86_64-linux"];
   };
 }
