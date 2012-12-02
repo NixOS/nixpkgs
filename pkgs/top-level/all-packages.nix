@@ -5537,6 +5537,10 @@ let
     inherit fetchurl stdenv pkgconfig postgresql curl openssl zlib;
   });
 
+  zabbix20 = recurseIntoAttrs (import ../servers/monitoring/zabbix {
+    inherit fetchurl stdenv pkgconfig postgresql curl openssl zlib gettext;
+  });
+
 
   ### OS-SPECIFIC
 
