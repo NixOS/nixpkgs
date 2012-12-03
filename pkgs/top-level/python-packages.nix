@@ -1374,47 +1374,46 @@ let pythonPackages = python.modules // rec {
   };
 
 
-# 404 Error
-#  nevow = buildPythonPackage (rec {
-#    name = "nevow-${version}";
-#    version = "0.10.0";
-#
-#    src = fetchurl {
-#      url = "http://divmod.org/trac/attachment/wiki/SoftwareReleases/Nevow-${version}.tar.gz?format=raw";
-#      sha256 = "90631f68f626c8934984908d3df15e7c198939d36be7ead1305479dfc67ff6d0";
-#      name = "${name}.tar.gz";
-#    };
-#
-#    propagatedBuildInputs = [ twisted ];
-#
-#    postInstall = "twistd --help > /dev/null";
-#
-#    meta = {
-#      description = "Nevow, a web application construction kit for Python";
-#
-#      longDescription = ''
-#        Nevow - Pronounced as the French "nouveau", or "noo-voh", Nevow
-#        is a web application construction kit written in Python.  It is
-#        designed to allow the programmer to express as much of the view
-#        logic as desired in Python, and includes a pure Python XML
-#        expression syntax named stan to facilitate this.  However it
-#        also provides rich support for designer-edited templates, using
-#        a very small XML attribute language to provide bi-directional
-#        template manipulation capability.
-#
-#        Nevow also includes formless, a declarative syntax for
-#        specifying the types of method parameters and exposing these
-#        methods to the web.  Forms can be rendered automatically, and
-#        form posts will be validated and input coerced, rendering error
-#        pages if appropriate.  Once a form post has validated
-#        successfully, the method will be called with the coerced values.
-#      '';
-#
-#      homepage = http://divmod.org/trac/wiki/DivmodNevow;
-#
-#      license = "BSD-style";
-#    };
-#  });
+  nevow = buildPythonPackage (rec {
+    name = "nevow-${version}";
+    version = "0.10.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/N/Nevow/Nevow-${version}.tar.gz";
+      sha256 = "90631f68f626c8934984908d3df15e7c198939d36be7ead1305479dfc67ff6d0";
+      name = "${name}.tar.gz";
+    };
+
+   propagatedBuildInputs = [ twisted ];
+
+   postInstall = "twistd --help > /dev/null";
+
+   meta = {
+     description = "Nevow, a web application construction kit for Python";
+
+     longDescription = ''
+       Nevow - Pronounced as the French "nouveau", or "noo-voh", Nevow
+       is a web application construction kit written in Python.  It is
+       designed to allow the programmer to express as much of the view
+       logic as desired in Python, and includes a pure Python XML
+       expression syntax named stan to facilitate this.  However it
+       also provides rich support for designer-edited templates, using
+       a very small XML attribute language to provide bi-directional
+       template manipulation capability.
+
+       Nevow also includes formless, a declarative syntax for
+       specifying the types of method parameters and exposing these
+       methods to the web.  Forms can be rendered automatically, and
+       form posts will be validated and input coerced, rendering error
+       pages if appropriate.  Once a form post has validated
+       successfully, the method will be called with the coerced values.
+     '';
+
+     homepage = http://divmod.org/trac/wiki/DivmodNevow;
+
+     license = "BSD-style";
+   };
+ });
 
   nose = buildPythonPackage rec {
     name = "nose-1.0.0";
