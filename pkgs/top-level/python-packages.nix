@@ -39,6 +39,9 @@ let pythonPackages = python.modules // rec {
     inherit buildPythonPackage pythonPackages;
   };
 
+  pil = import ../development/python-modules/pil {
+    inherit (pkgs) fetchurl stdenv python libjpeg zlib freetype;
+  };
 
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;

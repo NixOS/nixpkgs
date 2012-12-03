@@ -5236,7 +5236,7 @@ let
 
   numeric = callPackage ../development/python-modules/numeric { };
 
-  pil = callPackage ../development/python-modules/pil { };
+  pil = python27Packages.pil;
 
   psyco = callPackage ../development/python-modules/psyco { };
 
