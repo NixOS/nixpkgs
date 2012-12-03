@@ -47,6 +47,8 @@ python.stdenv.mkDerivation (attrs // {
 
   name = namePrefix + name;
 
+  phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase";
+
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
   # setuptoolsSite is responsible for loading pth files
