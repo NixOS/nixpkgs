@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "gst-libav-${version}";
-  version = "0.11.93";
+  version = "1.0.3";
 
   src = fetchurl {
     urls = [
       "${meta.homepage}/src/gst-libav/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
     ];
-    sha256 = "d991612a12230c0efdbe54e97597acb554524c056bb0b2c7fd3838a88d9e5cf2";
+    sha256 = "5193f158e2554a9450325dbb0c60e8f4b6b8a9244ae10ea07d0f7418a0e07959";
   };
 
   preConfigure = "autoreconf -vfi";
