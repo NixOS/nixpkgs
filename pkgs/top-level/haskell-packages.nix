@@ -632,6 +632,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptoPubkeyTypes = callPackage ../development/libraries/haskell/crypto-pubkey-types {};
 
+  cryptoRandomApi = callPackage ../development/libraries/haskell/crypto-random-api {};
+
   cuda = callPackage ../development/libraries/haskell/cuda {
     inherit (pkgs.linuxPackages) nvidia_x11;
   };
