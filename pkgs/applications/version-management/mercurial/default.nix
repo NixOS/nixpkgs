@@ -45,8 +45,6 @@ stdenv.mkDerivation {
       chmod u+x $out/share/cgi-bin/hgweb.cgi
     '';
 
-  doCheck = false;  # The test suite fails, unfortunately. Not sure why.
-
   meta = {
     description = "A fast, lightweight SCM system for very large distributed projects";
     homepage = "http://www.selenic.com/mercurial/";
