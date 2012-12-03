@@ -5242,7 +5242,7 @@ let
 
   pycairo = callPackage ../development/python-modules/pycairo { };
 
-  pycrypto = callPackage ../development/python-modules/pycrypto { };
+  pycrypto = python27Packages.pycrypto;
 
   pycups = callPackage ../development/python-modules/pycups { };
 

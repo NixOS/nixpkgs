@@ -44,6 +44,11 @@ let pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pycrypto = import ../development/python-modules/pycrypto {
+    inherit (pkgs) fetchurl stdenv gmp;
+    inherit python buildPythonPackage;
+  };
+
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
@@ -1590,7 +1595,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "1bjy4jn51c50mpq51jbwk0glzd8bxz83gxdfkr9p95dmrd17c7hh";
     };
 
-    buildInputs = [ pkgs.pycrypto ];
+    buildInputs = [ pycrypto ];
 
     meta = {
       homepage = "http://www.lag.net/paramiko/";
