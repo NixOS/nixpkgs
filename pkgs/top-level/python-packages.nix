@@ -644,7 +644,7 @@ let pythonPackages = python.modules // rec {
     '';
 
     # For some reason "python setup.py test" doesn't work with Python 2.6.
-    doCheck = "${python.majorVersion}" != "2.6";
+    doCheck = python.majorVersion != "2.6";
 
     meta = {
       description = "Simple Python implementation of the Git file formats and protocols.";
@@ -882,7 +882,8 @@ let pythonPackages = python.modules // rec {
       sha256 = "0bhiyx41kilvy04cgjbvjy2r4b6l7zz31fbrg3l6lvnqm26nihb0";
     };
 
-    buildInputs = [ pkgs.setuptools ];
+    buildInputs = [ pkgs.setuptools ] ++
+                  (if python.majorVersion == "2.6" then [ argparse ] else []);
 
     meta = {
       description = "automatically generated zsh completion function for Python's option parser modules";
@@ -917,6 +918,9 @@ let pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ nose mox ];
+
+    # tests fail for python2.6
+    doCheck = python.majorVersion != "2.6";
 
     propagatedBuildInputs = [ gflags sqlalchemy webob routes eventlet ];
 
