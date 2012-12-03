@@ -21,6 +21,8 @@
 , nss, openssl # config.openssl
 , pulseaudio # config.pulseaudio
 , libselinux # config.selinux
+
+, channel ? "stable"
 }:
 
 with stdenv.lib;
@@ -29,7 +31,6 @@ let
   mkConfigurable = mapAttrs (flag: default: attrByPath ["chromium" flag] default config);
 
   cfg = mkConfigurable {
-    channel = "stable";
     selinux = false;
     nacl = false;
     openssl = false;
@@ -40,7 +41,7 @@ let
     pulseaudio = config.pulseaudio or true;
   };
 
-  sourceInfo = builtins.getAttr cfg.channel (import ./sources.nix);
+  sourceInfo = builtins.getAttr channel (import ./sources.nix);
 
   mkGypFlags =
     let
