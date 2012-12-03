@@ -3,11 +3,13 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, wrapPython, lib, offlineDistutils }:
+{ python, setuptools, wrapPython, lib, offlineDistutils, setuptoolsSite }:
 
 { name, namePrefix ? "python-"
 
 , buildInputs ? []
+
+, propagatedBuildInputs ? []
 
 , # List of packages that should be added to the PYTHONPATH
   # environment variable in programs built by this function.  Packages
@@ -46,6 +48,9 @@ python.stdenv.mkDerivation (attrs // {
   name = namePrefix + name;
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
+
+  # setuptoolsSite is responsible for loading pth files
+  propagatedBuildInputs = propagatedBuildInputs ++ [ setuptoolsSite ];
 
   buildInputStrings = map toString buildInputs;
 
