@@ -2403,8 +2403,8 @@ let pythonPackages = python.modules // rec {
 
     propagatedBuildInputs =
       [ recaptcha_client pytz memcached dateutil paramiko flup pygments
-        djblets django_1_3 django_evolution pkgs.pycrypto python.modules.sqlite3
-        pysvn pkgs.pil psycopg2
+        djblets django_1_3 django_evolution pycrypto python.modules.sqlite3
+        pysvn pil psycopg2
       ];
   };
 
@@ -2858,7 +2858,9 @@ let pythonPackages = python.modules // rec {
       sha256 = "c0f32fa31e2c5fa42f5cc19f3dba4e73f0438bf36bf756ba137f2423c0ac4637";
     };
 
-    propagatedBuildInputs = [ oauth2 urwid tweepy ];
+    propagatedBuildInputs = [ oauth2 urwid tweepy ] ++
+                            (if python.majorVersion == "2.6" then [ argparse ]
+                                                             else []);
 
     #buildInputs = [ tox ];
     # needs tox
