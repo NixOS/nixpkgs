@@ -6634,6 +6634,7 @@ let
   chromium = lowPrio (callPackage ../applications/networking/browsers/chromium {
     channel = "stable";
     gconf = gnome.GConf;
+    pulseSupport = config.pulseaudio or false;
   });
 
   chromiumBeta = chromium.override { channel = "beta"; };
