@@ -159,8 +159,7 @@ let pythonPackages = python.modules // rec {
 
     buildInputs = [ pkgs.unzip pkgs.sqlite ];
 
-    # ImportError: No module named apsw
-    # XXX: Looks bad
+    # python: double free or corruption (fasttop): 0x0000000002fd4660 ***
     doCheck = false;
 
     meta = {
@@ -536,10 +535,6 @@ let pythonPackages = python.modules // rec {
         easy_install --verbose --prefix=$out .
       '';
 
-    # FAIL: test_bad_urls (setuptools.tests.test_packageindex.TestPackageIndex)
-    # AssertionError: False is not true
-    doCheck = false;
-
     meta = {
       description = "Easily download, build, install, upgrade, and uninstall Python packages";
       homepage = http://packages.python.org/distribute;
@@ -649,6 +644,7 @@ let pythonPackages = python.modules // rec {
     '';
 
     # For some reason "python setup.py test" doesn't work with Python 2.6.
+    # pretty sure that is about import behaviour.
     doCheck = python.majorVersion != "2.6";
 
     meta = {
@@ -758,7 +754,9 @@ let pythonPackages = python.modules // rec {
       md5 = "abfdbb25d37c28e9da05f1b5c3596d1a";
     };
 
-    # AttributeError: 'NoneType' object has no attribute 'clone'
+    buildInputs = [ nose ];
+
+    # 3 failing tests
     doCheck = false;
 
     meta = {
@@ -1080,10 +1078,6 @@ let pythonPackages = python.modules // rec {
     buildInputs = [ zopeInterface mock ];
 
     preConfigure = "cp test/secrets.py-dist test/secrets.py";
-
-    # ERROR: test_list_locations (test.test_softlayer.SoftLayerTests)
-    # AttributeError: MockSoftLayerTransport instance has no attribute '_parse_response'
-    doCheck = false;
 
     meta = {
       description = "A unified interface to many cloud providers";
@@ -1518,7 +1512,8 @@ let pythonPackages = python.modules // rec {
 
     propagatedBuildInputs = [ httplib2 ];
 
-    # AttributeError: 'NoneType' object has no attribute 'clone'
+    #buildInputs = [ mock coverage ];
+    # needs coverage
     doCheck = false;
 
     meta = {
