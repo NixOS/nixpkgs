@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   buildInputs = with pythonPackages; 
     [
       python twisted urwid beautifulsoup wxPython distribute pygobject
-      wokkel pythonDBus pyfeed pythonPackages.setuptools wrapPython
+      wokkel pythonDBus pyfeed wrapPython
     ];
 
   configurePhase = ''

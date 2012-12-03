@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, makeWrapper, docutils, setuptools, unzip
+{ stdenv, fetchurl, python, makeWrapper, docutils, unzip
 , guiSupport ? false, tk ? null, curses }:
 
 let
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   inherit python; # pass it so that the same version can be used in hg2git
   pythonPackages = [ curses ];
 
-  buildInputs = [ python makeWrapper docutils setuptools unzip ];
+  buildInputs = [ python makeWrapper docutils unzip ];
 
   makeFlags = "PREFIX=$(out)";
 

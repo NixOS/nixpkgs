@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       fontconfig podofo qt4 pil chmlib icu
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
       pythonPackages.cssutils pythonPackages.beautifulsoup
-      pythonPackages.setuptools pythonPackages.sqlite3 sqlite
+      pythonPackages.sqlite3 sqlite
     ];
 
   installPhase = ''
