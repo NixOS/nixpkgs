@@ -1637,6 +1637,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   # pass it explicitly in rare circumstances.
   time = null;
 
+  timeCompat = callPackage ../development/libraries/haskell/time-compat {};
+
   tls = callPackage ../development/libraries/haskell/tls {};
 
   tlsExtra = callPackage ../development/libraries/haskell/tls-extra {};
