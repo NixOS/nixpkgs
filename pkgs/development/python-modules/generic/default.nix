@@ -34,6 +34,7 @@
       python setup.py test
       runHook postCheck
     ''
+
 , postInstall ? ""
 
 , ... } @ attrs:
@@ -48,7 +49,7 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputStrings = map toString buildInputs;
 
-  pythonPath = [ setuptools ] ++ pythonPath;
+  pythonPath = [ setuptools] ++ pythonPath;
 
   preConfigure = ''
     PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"

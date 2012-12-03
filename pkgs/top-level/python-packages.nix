@@ -284,16 +284,16 @@ let pythonPackages = python.modules // rec {
 
   # bugz = buildPythonPackage (rec {
   #   name = "bugz-0.9.3";
-
+  #
   #   src = fetchgit {
   #     url = "https://github.com/williamh/pybugz.git";
   #     rev = "refs/tags/0.9.3";
   #   };
-
+  #
   #   propagatedBuildInputs = [ argparse python.modules.ssl ];
-
+  #
   #   doCheck = false;
-
+  #
   #   meta = {
   #     homepage = http://www.liquidx.net/pybugz/;
   #     description = "Command line interface for Bugzilla";
@@ -2709,15 +2709,15 @@ let pythonPackages = python.modules // rec {
   # XXX: ValueError: ZIP does not support timestamps before 1980
   # svneverever =  buildPythonPackage rec {
   #   name = "svneverever-778489a8";
-
+  #
   #   src = pkgs.fetchgit {
   #     url = git://git.goodpoint.de/svneverever.git;
   #     rev = "778489a8c6f07825fb18c9da3892a781c3d659ac";
   #     sha256 = "41c9da1dab2be7b60bff87e618befdf5da37c0a56287385cb0cbd3f91e452bb6";
   #   };
-
+  #
   #   propagatedBuildInputs = [ pysvn argparse ];
-
+  #
   #   doCheck = false;
   # };
 
