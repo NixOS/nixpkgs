@@ -40,7 +40,8 @@ let pythonPackages = python.modules // rec {
   };
 
   pil = import ../development/python-modules/pil {
-    inherit (pkgs) fetchurl stdenv python libjpeg zlib freetype;
+    inherit (pkgs) fetchurl stdenv libjpeg zlib freetype;
+    inherit python buildPythonPackage;
   };
 
   wrapPython = pkgs.makeSetupHook
@@ -620,7 +621,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "1d8vg5a9q2ldnbxqap1893lqb66jwcsli2brbjx7mcnqrzcz449x";
     };
 
-    propagatedBuildInputs = [ pkgs.pil django_1_3 ];
+    propagatedBuildInputs = [ pil django_1_3 ];
 
     meta = {
       description = "A collection of useful extensions for Django";
