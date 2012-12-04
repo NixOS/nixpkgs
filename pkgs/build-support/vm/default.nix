@@ -761,7 +761,7 @@ rec {
   debClosureGenerator =
     {name, packagesLists, urlPrefix, packages}:
 
-    runCommand "${name}.nix" {} ''
+    runCommand "${name}.nix" { buildInputs = [ perl dpkg ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         bunzip2 < $i >> ./Packages
@@ -770,7 +770,7 @@ rec {
       # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
       sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
 
-      ${perl}/bin/perl -I${dpkg} -w ${deb/deb-closure.pl} \
+      perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
     '';
 
