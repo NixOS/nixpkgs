@@ -28,8 +28,8 @@ installPhase() {
 
     # Install libGL and friends.
     mkdir -p $out/lib
-    cp -prd libcuda.* libGL.* libnvidia-cfg.* libnvidia-compiler.* libnvidia-tls.* libnvidia-glcore.* libOpenCL.* libXv* libvdpau_nvidia* tls $out/lib/
-    
+    cp -prd libcuda.* libGL.* libnvidia-cfg.* libnvidia-compiler.* libnvidia-tls.* libnvidia-glcore.* libOpenCL.* libvdpau_nvidia* tls $out/lib/
+
     ln -snf libnvidia-glcore.so.$versionNumber $out/lib/libnvidia-glcore.so
     ln -snf libnvidia-glcore.so.$versionNumber $out/lib/libnvidia-glcore.so.1
     ln -snf libGL.so.$versionNumber $out/lib/libGL.so
@@ -37,18 +37,16 @@ installPhase() {
     ln -snf libnvidia-cfg.so.$versionNumber $out/lib/libnvidia-cfg.so.1
     ln -snf libnvidia-tls.so.$versionNumber $out/lib/libnvidia-tls.so.1
     ln -snf libnvidia-tls.so.$versionNumber $out/lib/tls/libnvidia-tls.so.1
-    ln -snf libXvMCNVIDIA.so.$versionNumber $out/lib/libXvMCNVIDIA_dynamic.so.1
     ln -snf libcuda.so.$versionNumber $out/lib/libcuda.so.1
     ln -snf libcuda.so.1 $out/lib/libcuda.so
     ln -snf libvdpau_nvidia.so.$versionNumber $out/lib/libvdpau_nvidia.so
 
     patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
-    patchelf --set-rpath $out/lib:$glPath $out/lib/libXvMCNVIDIA.so.*.*
     patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
     patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
-    
+
     if test -z "$libsOnly"; then
-        
+
         # Install the kernel module.
         mkdir -p $out/lib/modules/$kernelVersion/misc
         cp kernel/nvidia.ko $out/lib/modules/$kernelVersion/misc
@@ -74,7 +72,7 @@ installPhase() {
 	    patchelf --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
 	        --set-rpath $out/lib:$programPath:$glPath $out/bin/$i
         done
-    
+
         # Header files etc.
         mkdir -p $out/include/nvidia
         cp -p *.h $out/include/nvidia

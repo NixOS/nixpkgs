@@ -1,28 +1,27 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
-, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, usbutils, pciutils
+, xz, pam, acl, cryptsetup, libuuid, m4, utillinux
 , glib, kbd, libxslt, coreutils, libgcrypt
 }:
 
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-195";
+  name = "systemd-196";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "00v3haymdxhjk71pqp17irw9pm5ivfvz35ibvw41v5zdhj5il179";
+    sha256 = "1gz4an5havzwzp7xsinn01prwvf51hgipb8pbciri0fxlmcadm3b";
   };
 
   patches =
     [ ./reexec.patch
       ./ignore-duplicates.patch
       ./crypt-devices-are-ready.patch
-      ./listunitfiles-abort.patch
     ];
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
-      /* cryptsetup */ libuuid m4 usbutils pciutils glib libxslt libgcrypt
+      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
     ];
 
   configureFlags =
@@ -36,7 +35,6 @@ stdenv.mkDerivation rec {
       "--with-dbussystemservicedir=$(out)/share/dbus-1/system-services"
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
       "--with-firmware-path=/root/test-firmware:/var/run/current-system/firmware"
-      "--with-pci-ids-path=${pciutils}/share/pci.ids"
       "--with-tty-gid=3" # tty in NixOS has gid 3
     ];
 
@@ -52,6 +50,9 @@ stdenv.mkDerivation rec {
           --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
           --replace /sbin/fsck ${utillinux}/sbin/fsck
       done
+
+      substituteInPlace src/journal/catalog.c \
+        --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
     '';
 
   NIX_CFLAGS_COMPILE =
@@ -66,7 +67,12 @@ stdenv.mkDerivation rec {
       "-DFS_NOCOW_FL=0x00800000"
     ];
 
-  makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include";
+  # Use /var/lib/udev rather than /etc/udev for the generated hardware
+  # database.  Upstream doesn't want this (see commit
+  # 1e1954f53386cb773e2a152748dd31c4d36aa2d8) because using /var is
+  # forbidden in early boot, but in NixOS the initrd guarantees that
+  # /var is mounted.
+  makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include hwdb_bin=/var/lib/udev/hwdb.bin";
 
   installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc sysvinitdir=$(TMPDIR)/etc/init.d";
 
@@ -88,6 +94,8 @@ stdenv.mkDerivation rec {
       for i in $out/share/dbus-1/system-services/*.service; do
         substituteInPlace $i --replace /bin/false ${coreutils}/bin/false
       done
+
+      rm -rf $out/etc/rpm
     ''; # */
 
   enableParallelBuilding = true;

@@ -1,18 +1,17 @@
 { cabal, comonad, comonadsFd, comonadTransformers, filepath
 , hashable, mtl, parallel, semigroups, split, text, transformers
-, unorderedContainers, vector, void
+, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "3.3";
-  sha256 = "0gq24y1727ml5lpr0b67hqw3vwanvx6hpk3lsfx3nk6csscn1lvk";
+  version = "3.6";
+  sha256 = "1zl52hj0ccx21qwlqrscfjmc7i0g2prikmd3lgbfbgjqlh7wnqdq";
   buildDepends = [
     comonad comonadsFd comonadTransformers filepath hashable mtl
     parallel semigroups split text transformers unorderedContainers
-    vector void
+    vector
   ];
-  noHaddock = true;
   meta = {
     homepage = "http://github.com/ekmett/lens/";
     description = "Lenses, Folds and Traversals";

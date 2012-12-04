@@ -1,7 +1,8 @@
 { stdenv, fetchurl, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
-  name = "zfs-0.6.0-rc12";
+  name = "zfs-0.6.0-rc12-${kernel.version}";
+
   src = fetchurl {
     url = http://github.com/downloads/zfsonlinux/zfs/zfs-0.6.0-rc12.tar.gz;
     sha256 = "1mipy6v63y8z3c5chn813x8c2r8mwyja1v19dvars3j85105xf1y";
@@ -11,6 +12,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ kernel spl perl autoconf automake libtool zlib libuuid coreutils ];
 
+  # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
+  NIX_CFLAGS_LINK = "-lgcc_s";
   NIX_CFLAGS_COMPILE = "-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
 
   preConfigure = ''

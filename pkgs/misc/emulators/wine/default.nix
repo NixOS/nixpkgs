@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
 , ncurses, libpng, libjpeg, lcms, freetype, fontconfig, fontforge
-, libxml2, libxslt, openssl, gnutls
+, libxml2, libxslt, openssl, gnutls, cups
 }:
 
 assert stdenv.isLinux;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
     alsaLib ncurses libpng libjpeg lcms fontforge
-    libxml2 libxslt openssl gnutls
+    libxml2 libxslt openssl gnutls cups
   ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     freetype fontconfig stdenv.gcc.gcc mesa mesa.libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
-    openssl gnutls
+    openssl gnutls cups
   ];
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH

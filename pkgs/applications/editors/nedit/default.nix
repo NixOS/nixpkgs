@@ -1,6 +1,6 @@
 {stdenv, fetchurl, x11, motif, libXpm}:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.isLinux;
 
 stdenv.mkDerivation {
   name = "nedit-5.5";
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   inherit motif;
   buildInputs = [x11 motif libXpm];
 
-  buildFlags = if stdenv.system == "i686-linux" then "linux" else "";
+  buildFlags = if stdenv.isLinux then "linux" else "";
 
   meta = {
     homepage = http://www.nedit.org;

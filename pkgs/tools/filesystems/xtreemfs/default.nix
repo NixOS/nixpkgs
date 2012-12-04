@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="XtreemFS";
-    version="1.3.0";
+    version="1.4";
     name="${baseName}-${version}";
     url="http://xtreemfs.googlecode.com/files/${name}.tar.gz";
-    hash="15rg3dh22kb2g94fmbb6r32a9qfl3yr4ql17rwj50l4y8wrcx0hf";
+    hash="1hzd6anplxdcl4cg6xwriqk9b34541r7ah1ab2xavv149a2ll25s";
   };
 in
 rec {

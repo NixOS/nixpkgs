@@ -104,5 +104,10 @@ runTests {
         ];
     expected = true;
   };
+
+  testSort = {
+    expr = sort builtins.lessThan [ 40 2 30 42 ];
+    expected = [2 30 40 42];
+  };
   
 }

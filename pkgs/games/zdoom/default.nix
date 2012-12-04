@@ -1,11 +1,19 @@
-{stdenv, fetchsvn, cmake, SDL, nasm, p7zip, zlib, flac, fmod, libjpeg}:
+{stdenv, fetchurl, cmake, SDL, nasm, p7zip, zlib, flac, fmod, libjpeg}:
 
 stdenv.mkDerivation {
-  name = "zdoom-svn-1424";
-  src = fetchsvn {
-    url = http://mancubus.net/svn/hosted/zdoom/zdoom/trunk;
-    rev = 1424;
+  name = "zdoom-2.6.1";
+  src = fetchurl {
+    url = http://zdoom.org/files/zdoom/2.6/zdoom-2.6.1-src.7z;
+    sha256 = "1ha7hygwf243vkgw0dfh4dxphf5vffb3kkci1p1p75a7r1g1bir8";
   };
+
+  # XXX: shouldn't inclusion of p7zip handle this?
+  unpackPhase = ''
+  mkdir zdoom
+  cd zdoom
+  7z x $src
+  '';
+
   buildInputs = [cmake nasm SDL p7zip zlib flac fmod libjpeg];
 
   cmakeFlags = [ "-DSDL_INCLUDE_DIR=${SDL}/include/SDL" ];

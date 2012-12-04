@@ -1,13 +1,14 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
+ , tcl, tk
  } :
 let
   realGcc = stdenv.gcc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20121106";
+  date = "20121122";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
@@ -17,6 +18,7 @@ stdenv.mkDerivation rec {
   arpack_ver = "3.1.2";
   clp_ver = "1.14.5";
   lighttpd_ver = "1.4.29";
+  patchelf_ver = "0.6";
 
   grisu_src = fetchurl {
     url = "http://double-conversion.googlecode.com/files/double-conversion-${grisu_ver}.tar.gz";
@@ -51,11 +53,15 @@ stdenv.mkDerivation rec {
     url = "http://download.lighttpd.net/lighttpd/releases-1.4.x/lighttpd-${lighttpd_ver}.tar.gz";
     sha256 = "ff9f4de3901d03bb285634c5b149191223d17f1c269a16c863bac44238119c85";
   };
+  patchelf_src = fetchurl {
+    url = "http://hydra.nixos.org/build/1524660/download/2/patchelf-${patchelf_ver}.tar.bz2";
+    sha256 = "00bw29vdsscsili65wcb5ay0gvg1w0ljd00sb5xc6br8bylpyzpw";
+  };
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "8f4d073881beb42c9f272b9327efa0a5715bd31c";
-    sha256 = "2df2ba800bd4fd9b0297a0b8cff53174a7c05ffbc889a7df5830a014fed8c433";
+    rev = "53598b026b6fd9f79eba02cbc4e2d6c38ca32bd7";
+    sha256 = "159yasgfbbj6px16kgwf7bg478giv8zbm5hg90ipncp1ls2lv3jy";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
@@ -74,44 +80,47 @@ stdenv.mkDerivation rec {
       cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"
     }
 
-    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${clp_src}" ; do
+    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${clp_src}" "${patchelf_src}" ; do
       copy_kill_hash "$i" deps
     done
     copy_kill_hash "${dsfmt_src}" deps/random
 
     ${if realGcc ==null then "" else 
     ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz "''}
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC "
 
     sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
 
-    export LDFLAGS="-L${suitesparse}/lib"
+    export LDFLAGS="-L${suitesparse}/lib -L$out/lib/julia -Wl,-rpath,$out/lib/julia"
 
     export GLPK_PREFIX="${glpk}/include"
 
     mkdir -p "$out/lib"
     sed -e "s@/usr/local/lib@$out/lib@g" -i deps/Makefile
     sed -e "s@/usr/lib@$out/lib@g" -i deps/Makefile
-    
+
     export makeFlags="$makeFlags PREFIX=$out SHELL=${stdenv.shell}"
 
     export dontPatchELF=1
+
+    export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$PWD/usr/lib:$PWD/usr/lib/julia"
   '';
 
   preBuild = ''
     make -C test/unicode all SHELL="${stdenv.shell}"
     make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX" SHELL="${stdenv.shell}"
+
+    mkdir -p usr/lib
+    ln -s libuv.a usr/lib/uv.a
   '';
 
   postInstall = ''
    ld -E --whole-archive --shared ${suitesparse}/lib/lib*[a-z].a -o "$out"/lib/libsuitesparse-shared.so
-   for i in umfpack cholmod amd camd colamd ; do
+   for i in umfpack cholmod amd camd colamd btf cxsparse ldl rbio spqr suitesparseconfig; do
      ln -s "libsuitesparse-shared.so" "$out/lib/lib$i.so"
    done
    ln -s "${lighttpd}/sbin/lighttpd" "$out/sbin/"
    ln -s "${lighttpd}/lib/"* "$out/lib/"
-
-   cp -r test examples "$out/lib/julia"
-   ls -R > "$out/ls-R"
   '';
 
   meta = {

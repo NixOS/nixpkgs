@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeTextFile, oraclejre, makeWrapper, licenseAccepted ? false }:
+{ stdenv, fetchurl, writeTextFile, jre, makeWrapper, licenseAccepted ? false }:
 
 # If you happen to use this software on the XMonad window manager, you will have issues with
 # grey windows, no resizing, menus not showing and other glitches.
@@ -12,10 +12,10 @@ if !licenseAccepted then throw ''
   ''
 else assert licenseAccepted;
 
-# the installer is very picky and demands 1.6.0.29
+# the installer is very picky and demands 1.7.0.07
 let dotInstall4j = writeTextFile { name = "dot-install4j"; text = ''
-      JRE_VERSION	${oraclejre}	1	6	0	29
-      JRE_INFO	${oraclejre}	0
+      JRE_VERSION	${jre}	1	7	0	7
+      JRE_INFO	${jre}	94
     ''; };
 
     responseVarfile = writeTextFile { name = "response.varfile"; text = ''
@@ -31,15 +31,15 @@ let dotInstall4j = writeTextFile { name = "dot-install4j"; text = ''
     ''; };
 
 in stdenv.mkDerivation rec {
-  name = "neoload-4.0.4";
+  name = "neoload-4.1.1";
 
   src = fetchurl (
     if stdenv.system == "x86_64-linux" then
-      { url = http://www.neotys.com/documents/download/neoload/v4.0/neoload_4_0_4_linux_x64.sh;
-        sha256 = "1w5pqik1998irpamx6y4rf2v5v34nm8xm6cwa1a8j0agawv992w2"; }
+      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_1_linux_x64.sh;
+        sha256 = "1gik80pvrj95jcpvqk16alvldf2zc604zn3xz3nszgmpv9dgmjk6"; }
     else
-      { url = http://www.neotys.com/documents/download/neoload/v4.0/neoload_4_0_4_linux_x86.sh;
-        sha256 = "0k49kcwnimax9q7d2kychcbhh4zlixlx4ak9jgrm901zpkhw2f3b"; } );
+      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_1_linux_x86.sh;
+        sha256 = "1m42xqy2gsk4khcaps287b4bsamn14grcy8wdz07hk8wvcfncd3d"; } );
 
   buildInputs = [ makeWrapper ];
   phases = [ "installPhase" ];
@@ -47,6 +47,9 @@ in stdenv.mkDerivation rec {
   # TODO: load generator / monitoring agent only builds
 
   installPhase = ''
+    mkdir -p $out/lib/neoload
+    ln -s ${jre} $out/lib/neoload/jre
+
     # the installer wants to use its internal JRE
     # disable this. The extra spaces are needed because the installer carries
     # a binary payload, so should not change in size
@@ -59,8 +62,8 @@ in stdenv.mkDerivation rec {
     sed -e "s|INSTALLDIR|$out|" ${responseVarfile} > response.varfile
 
     export HOME=`pwd`
-    export INSTALL4J_JAVA_HOME=${oraclejre}
-    ./installer -q -varfile response.varfile
+    export INSTALL4J_JAVA_HOME=${jre}
+    bash -ic './installer -q -varfile response.varfile'
 
     for i in $out/bin/*; do
       wrapProgram $i --run 'cp ${dotInstall4j} ~/.install4j' \
@@ -74,7 +77,6 @@ in stdenv.mkDerivation rec {
     done
     rm $out/lib/neoload/*.desktop $out/lib/neoload/uninstall
 
-    ln -s ${oraclejre}/bin $out/lib/neoload/jre
   '';
 
   meta = {

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
 
-  version = "0.1.2";
+  version = "0.2.1";
 
   name = "zathura-core-${version}";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha256 = "a496c25071e54f675b65ee5eab02fd002c04c2d7d5cf4aa8a1cb517cc13beaef";
+    sha256 = "075b9def201c77ca738dc9e15b252bc23c085b7c4671a1810d1d962e8d0bd790";
   };
 
   buildInputs = [ pkgconfig gtk girara gettext ];

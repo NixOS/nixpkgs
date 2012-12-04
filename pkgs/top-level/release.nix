@@ -344,7 +344,6 @@ with (import ./release-lib.nix);
     ecb = linux;
     emacsw3m = linux;
     emms = linux;
-    nxml = all;
   };
 
   emacs23Packages = emacs22Packages // {
@@ -352,8 +351,7 @@ with (import ./release-lib.nix);
   };
 
   firefox36Pkgs.firefox = linux;
-  firefox15Pkgs.firefox = linux;
-  firefox16Pkgs.firefox = linux;
+  firefox17Pkgs.firefox = linux;
 
   gnome = {
     gnome_panel = linux;
