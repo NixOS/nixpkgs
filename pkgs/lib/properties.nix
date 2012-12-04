@@ -100,12 +100,10 @@ rec {
   triggerPropertiesDelay = name: attrs:
     let
       callOnDelay = p@{property, ...}:
-        lib.addErrorContext "while calling an `onDelay' function:" (
-          if property ? onDelay then
-            property.onDelay name p
-          else
-            p
-        );
+        if property ? onDelay then
+          property.onDelay name p
+        else
+          p;
     in
       foldProperty callOnDelay id attrs;
 
@@ -123,9 +121,7 @@ rec {
       };
 
       callOnGlobalDelay = property: content:
-        lib.addErrorContext "while calling an `onGlobalDelay' function:" (
-          property.onGlobalDelay name content
-        );
+        property.onGlobalDelay name content;
     in
       fold callOnGlobalDelay attrs globalDelayFuns;
 
@@ -136,28 +132,25 @@ rec {
   evalProperties = valList:
     if valList != [] then
       filter (x: !isNotdef x) (
-        lib.addErrorContext "while evaluating properties:" (
-          triggerPropertiesGlobalEval (
-            evalLocalProperties valList
-      )))
+        triggerPropertiesGlobalEval (
+          evalLocalProperties valList
+        )
+      )
     else
       valList;
 
   evalLocalProperties = valList:
     filter (x: !isNotdef x) (
-      lib.addErrorContext "while evaluating local properties:" (
-        map triggerPropertiesEval valList
-    ));
+      map triggerPropertiesEval valList
+    );
 
   # Call onEval function
   triggerPropertiesEval = val:
     foldProperty (p@{property, ...}:
-      lib.addErrorContext "while calling an `onEval' function:" (
-        if property ? onEval then
-          property.onEval p
-        else
-          p
-      )
+      if property ? onEval then
+        property.onEval p
+      else
+        p
     ) id val;
 
   # Call onGlobalEval function
@@ -176,10 +169,7 @@ rec {
           ) [] valList;
       };
 
-      callOnGlobalEval = property: valList:
-        lib.addErrorContext "while calling an `onGlobalEval' function:" (
-          property.onGlobalEval valList
-        );
+      callOnGlobalEval = property: valList: property.onGlobalEval valList;
     in
       fold callOnGlobalEval valList globalEvalFuns;
 
