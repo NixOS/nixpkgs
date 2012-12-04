@@ -7,9 +7,9 @@ let s = # Generated upstream information
     baseName="lincity";
     version="2.0";
     name="lincity-2.0";
-    hash="01k6n304qj0z5zmqr49gqirp0jmx2b0cpisgkxk1ga67vyjhdcm6";
-    url="http://download.berlios.de/lincity-ng/lincity-ng-2.0.tar.bz2";
-    sha256="01k6n304qj0z5zmqr49gqirp0jmx2b0cpisgkxk1ga67vyjhdcm6";
+    hash="1ykdf3y4d19jmb0q0jdcdawy3qv5p70k06gpcxgylrm2910rz3ij";
+    url="http://prdownload.berlios.de/lincity-ng/lincity-ng-2.0.tar.bz2";
+    sha256="1ykdf3y4d19jmb0q0jdcdawy3qv5p70k06gpcxgylrm2910rz3ij";
   };
   buildInputs = [zlib jam pkgconfig gettext libxml2 libxslt xproto libX11 mesa 
     SDL SDL_mixer SDL_image SDL_ttf SDL_gfx physfs];
