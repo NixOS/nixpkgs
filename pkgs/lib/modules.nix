@@ -92,8 +92,7 @@ rec {
           # used by generic closure to avoid duplicated imports.
           key =
             if isPath m then m
-            else if m' ? key then m'.key
-            else newModuleName origin index;
+            else m'.key or (newModuleName origin index);
         };
 
       getImports = m: m.imports or [];
@@ -145,7 +144,7 @@ rec {
 
 
   evalDefinitions = opt: values:
-    if opt ? type && opt.type.delayOnGlobalEval then
+    if opt.type.delayOnGlobalEval or false then
       map (delayPropertiesWithIter opt.type.iter opt.name)
         (evalLocalProperties values)
     else
@@ -235,7 +234,6 @@ rec {
               source = m.key;
             }) declarations;
 
-
           hasOptions = values != [];
           isOption = any lib.isOption values;
 
@@ -304,8 +302,7 @@ rec {
               let opt = option.decl; in
               opt.apply (
                 if isNotDefined then
-                  if opt ? default then opt.default
-                  else throw "Not defined."
+                  opt.default or (throw "Not defined.")
                 else opt.merge defs
               )
             );
