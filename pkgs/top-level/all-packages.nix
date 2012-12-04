@@ -5654,11 +5654,7 @@ let
 
   ffado = callPackage ../os-specific/linux/ffado { };
 
-  fbterm = builderDefsPackage (import ../os-specific/linux/fbterm) {
-    inherit fontconfig gpm freetype pkgconfig ncurses;
-  };
-
-  fbtermStdenv = lowPrio (callPackage ../os-specific/linux/fbterm/stdenv.nix { });
+  fbterm = callPackage ../os-specific/linux/fbterm { };
 
   fuse = callPackage ../os-specific/linux/fuse { };
 
