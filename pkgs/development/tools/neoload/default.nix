@@ -31,15 +31,15 @@ let dotInstall4j = writeTextFile { name = "dot-install4j"; text = ''
     ''; };
 
 in stdenv.mkDerivation rec {
-  name = "neoload-4.1.0";
+  name = "neoload-4.1.1";
 
   src = fetchurl (
     if stdenv.system == "x86_64-linux" then
-      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_0_linux_x64.sh;
-        sha256 = "07r2pkspdylwi1ba36mqswxsz0xadkw6qn59ljkyw2hsvazd2824"; }
+      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_1_linux_x64.sh;
+        sha256 = "1gik80pvrj95jcpvqk16alvldf2zc604zn3xz3nszgmpv9dgmjk6"; }
     else
-      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_0_linux_x86.sh;
-        sha256 = "1sd6fc35881dqr8m8qsgbblsfx97agam50w9iasd9hxmws7n6pfs"; } );
+      { url = http://www.neotys.com/documents/download/neoload/v4.1/neoload_4_1_1_linux_x86.sh;
+        sha256 = "1m42xqy2gsk4khcaps287b4bsamn14grcy8wdz07hk8wvcfncd3d"; } );
 
   buildInputs = [ makeWrapper ];
   phases = [ "installPhase" ];
