@@ -14,9 +14,10 @@ in
 
   config = mkIf (any (fs: fs == "zfs") config.boot.supportedFilesystems) {
 
-    boot.kernelModules = [ "spl" "zavl" "zcommon" "zfs" "zlib_deflate" "znvpair" "zunicode" ] ;
+    boot.kernelModules = [ "spl" "zfs" ] ;
+    boot.extraModulePackages = [ kernel.zfs kernel.spl ];
 
-    boot.initrd.kernelModules = mkIf inInitrd [ "spl" "zavl" "zcommon" "zfs" "zlib_deflate" "znvpair" "zunicode" ] ;
+    boot.initrd.kernelModules = mkIf inInitrd [ "spl" "zfs" ] ;
 
     boot.initrd.extraUtilsCommands = mkIf inInitrd
       ''
