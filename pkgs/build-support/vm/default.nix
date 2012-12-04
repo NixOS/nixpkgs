@@ -1306,6 +1306,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
+    ubuntu1210i386 = {
+      name = "ubuntu-12.10-quantal-i386";
+      fullName = "Ubuntu 12.10 Quantal (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/quantal/main/binary-i386/Packages.bz2;
+            sha256 = "bee3200ac8f037700ccd2311fb8b0de665bd02d46bdb2ae946cf50c5885001c3";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/quantal/universe/binary-i386/Packages.bz2;
+            sha256 = "323036e81c8bf409f71d3bc5cf37cfba72fe1d0fc82e9b5418d4d0cb516646e1";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+
+    ubuntu1210x86_64 = {
+      name = "ubuntu-12.10-quantal-amd64";
+      fullName = "Ubuntu 12.10 Quantal (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/quantal/main/binary-amd64/Packages.bz2;
+            sha256 = "ef14073f335ef118ebe1c7d45f5a0c17ef28f72abb57c10b9082ab5e04b5d003";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/quantal/universe/binary-amd64/Packages.bz2;
+            sha256 = "c762bd4ed063326577a62ff783cf9720e772b03d4a2aa38048918ee6287b96ce";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
