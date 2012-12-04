@@ -522,6 +522,7 @@ let
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
     inherit libpng bison flex;
+    ffmpeg = ffmpeg_1_0;
   };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
