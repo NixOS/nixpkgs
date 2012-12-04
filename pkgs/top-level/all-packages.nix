@@ -455,6 +455,8 @@ let
 
   catdoc = callPackage ../tools/text/catdoc { };
 
+  dlx = callPackage ../misc/emulators/dlx { };
+
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
   enca = callPackage ../tools/text/enca { };
@@ -777,9 +779,7 @@ let
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  glusterfs = builderDefsPackage ../tools/filesystems/glusterfs {
-    inherit fuse flex bison;
-  };
+  glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 

@@ -1,3 +1,4 @@
 target ng.nix
 url https://fedorahosted.org/LinCity-NG/wiki/Downloads
 version_link tar.bz2
+version_link tar.bz2
