@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1lsf0ln0h3mnm2y0mwgrfk0lyfi7bnm4r886acvdrrsvc7pypaia";
   };
 
-  patches = [ ../../misc/coreutils/gets-undeclared.patch ];
+  patches = [ ./gets-undeclared.patch ];
 
   /* If no explicit coreutils is given, use the one from stdenv. */
   buildNativeInputs = [ coreutils ];
