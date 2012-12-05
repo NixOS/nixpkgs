@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     mkdir -p $out/include/dlx $out/share/dlx/{examples,doc} $out/bin
     mv -v masm mon dasm $out/bin/
     mv -v *.i auto.a $out/include/dlx/
-    mv -v *.a hp.m $out/share/dlx/examples/
+    mv -v *.a *.m $out/share/dlx/examples/
     mv -v README.txt MANUAL.TXT $out/share/dlx/doc/
   '';
 
