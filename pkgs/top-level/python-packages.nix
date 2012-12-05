@@ -402,6 +402,23 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+  coverage = buildPythonPackage rec {
+    name = "coverage-3.5.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/coverage/${name}.tar.gz";
+      md5 = "5f1f523940c473faa8a9f6ca29f78efc";
+    };
+
+    meta = {
+      description = "Code coverage measurement for python";
+      homepage = http://nedbatchelder.com/code/coverage/;
+      license = pkgs.lib.licenses.bsd3;
+      maintainers = [ stdenv.lib.maintainers.shlevy ];
+      platforms = python.meta.platforms;
+    };
+  };
+
   cssutils = buildPythonPackage (rec {
     name = "cssutils-0.9.9";
 
