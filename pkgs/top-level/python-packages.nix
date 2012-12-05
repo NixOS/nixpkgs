@@ -1383,23 +1383,18 @@ let pythonPackages = python.modules // rec {
   });
 
   nose = buildPythonPackage rec {
-    name = "nose-1.0.0";
+    name = "nose-1.2.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose/${name}.tar.gz";
-      md5 = "47a4784c817afa6ef11a505b574584ed";
+      md5 = "735e3f1ce8b07e70ee1b742a8a53585a";
     };
-
-    # Fails with ‘This platform lacks a functioning sem_open
-    # implementation, therefore, the required synchronization
-    # primitives needed will not function, see issue 3770.’ However,
-    # our Python does seem to be built with the necessary
-    # functionality.
-    doCheck = false;
 
     meta = {
       description = "A unittest-based testing framework for python that makes writing and running tests easier";
     };
+
+    buildInputs = [ pythonPackages.coverage ];
   };
 
   notify = pkgs.stdenv.mkDerivation (rec {
