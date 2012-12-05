@@ -24,7 +24,8 @@ let
       option classless_static_routes, ntp_servers, interface_mtu
 
       # A ServerID is required by RFC2131.
-      require dhcp_server_identifier
+      # Commented out because of many non-compliant DHCP servers in the wild :(
+      #require dhcp_server_identifier
 
       # A hook script is provided to lookup the hostname if not set by
       # the DHCP server, but it should not be run by default.
