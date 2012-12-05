@@ -4883,6 +4883,7 @@ let
   spice = callPackage ../development/libraries/spice {
     celt = celt_0_5_1;
     inherit (xlibs) libXrandr libXfixes libXext libXrender libXinerama;
+    inherit (pythonPackages) pyparsing;
   };
 
   spice_protocol = callPackage ../development/libraries/spice-protocol { };
