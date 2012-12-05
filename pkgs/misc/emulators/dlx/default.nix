@@ -10,6 +10,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip ];
 
+  makeFlags = "LINK=gcc CFLAGS=-O2";
+
   installPhase = ''
     mkdir -p $out/include/dlx $out/share/dlx/{examples,doc} $out/bin
     mv -v masm mon dasm $out/bin/
