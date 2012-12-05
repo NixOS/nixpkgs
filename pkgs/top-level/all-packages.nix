@@ -5233,13 +5233,13 @@ let
 
   numeric = callPackage ../development/python-modules/numeric { };
 
-  pil = callPackage ../development/python-modules/pil { };
+  pil = python27Packages.pil;
 
   psyco = callPackage ../development/python-modules/psyco { };
 
   pycairo = callPackage ../development/python-modules/pycairo { };
 
-  pycrypto = callPackage ../development/python-modules/pycrypto { };
+  pycrypto = python27Packages.pycrypto;
 
   pycups = callPackage ../development/python-modules/pycups { };
 
