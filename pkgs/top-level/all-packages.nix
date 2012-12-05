@@ -6687,7 +6687,7 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = haskellPackages.darcs;
+  darcs = lib.setName "darcs-${haskellPackages.darcs.version}" haskellPackages.darcs;
 
   darktable = callPackage ../applications/graphics/darktable {
     inherit (gnome) GConf libglade;
