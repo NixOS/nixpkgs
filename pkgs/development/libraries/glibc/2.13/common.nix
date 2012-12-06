@@ -8,7 +8,7 @@ cross :
 , machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
 , mig ? null, fetchgit ? null
 , profilingLibraries ? false, meta
-, preConfigure ? "", ... }@args :
+, preConfigure ? "", recentGcc ? true, ... }@args :
 
 let
   # For GNU/Hurd, see below.
@@ -120,10 +120,20 @@ stdenv.mkDerivation ({
         && cross.platform.kernelMajor == "2.6") [
     "--enable-kernel=2.6.0"
     "--with-__thread"
-  ] ++ stdenv.lib.optionals stdenv.isArm [
+  ] ++ stdenv.lib.optionals (cross == null &&
+       (stdenv.system == "armv5tel-linux") ||
+       (!recentGcc && stdenv.platform.name == "raspberrypi")) [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"
+
+    # To avoid linking with -lgcc_s (dynamic link)
+    # so the glibc does not depend on its compiler store path
+    "libc_cv_as_needed=no"
+  ] ++ stdenv.lib.optionals (cross == null && recentGcc && stdenv.platform.name == "raspberrypi") [
+    "--host=arm-linux-gnueabihf"
+    "--build=arm-linux-gnueabihf"
+    "--with-fp"
 
     # To avoid linking with -lgcc_s (dynamic link)
     # so the glibc does not depend on its compiler store path
@@ -192,6 +202,10 @@ stdenv.mkDerivation ({
     configureScript="`pwd`/../$sourceRoot/configure"
 
     ${preConfigure}
+  '' + stdenv.lib.optionalString (cross == null
+        && recentGcc
+        && stdenv.platform.name == "raspberrypi") ''
+    configureFlagsArray=("CFLAGS=-march=armv6 -mfpu=vfp -mhard-float")
   '';
 
   meta = {

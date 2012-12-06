@@ -5,6 +5,7 @@
 , profilingLibraries ? false
 , gccCross ? null
 , debugSymbols ? false
+, recentGcc ? true
 }:
 
 assert stdenv.gcc.gcc != null;
@@ -19,7 +20,7 @@ in
       + stdenv.lib.optionalString debugSymbols "-debug";
 
     inherit fetchurl stdenv kernelHeaders installLocales profilingLibraries
-      gccCross;
+      gccCross recentGcc;
 
     builder = ./builder.sh;
 

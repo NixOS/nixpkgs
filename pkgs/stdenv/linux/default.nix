@@ -16,6 +16,7 @@ rec {
     else if system == "x86_64-linux" then import ./bootstrap/x86_64
     else if system == "powerpc-linux" then import ./bootstrap/powerpc
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
+    else if system == "armv6l-linux" then import ./bootstrap/armv5tel
     else if system == "armv7l-linux" then import ./bootstrap/armv5tel
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f
     else abort "unsupported platform for the pure Linux stdenv";
@@ -57,7 +58,7 @@ rec {
     builder = bootstrapFiles.sh;
     
     args =
-      if system == "armv5tel-linux"
+      if (system == "armv5tel-linux" || system == "arm6l-linux")
       then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ ./scripts/unpack-bootstrap-tools.sh ];
     
@@ -189,7 +190,7 @@ rec {
   
   # 5) Build Glibc with the bootstrap tools.  The result is the full,
   #    dynamically linked, final Glibc.
-  stdenvLinuxGlibc = stdenvLinuxBoot2Pkgs.glibc;
+  stdenvLinuxGlibc = stdenvLinuxBoot2Pkgs.glibc.override { recentGcc = false; };
 
   
   # 6) Construct a third stdenv identical to the 2nd, except that
@@ -201,19 +202,23 @@ rec {
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
     };
-    overrides = pkgs: {
+    overrides = pkgs: ({
       glibc = stdenvLinuxGlibc;
       inherit (stdenvLinuxBoot1Pkgs) perl;
+    } // (if (platform ? name && platform.name != "raspberrypi") then {
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
+
+      # On raspberry pi we can't do that, because libgcc/libstdc++ are made
+      # without hardfp, and can't be linked with the new hardfp code in gcc.
       gmp = pkgs.gmp.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       mpfr = pkgs.mpfr.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       mpc = pkgs.mpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       isl = pkgs.isl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       ppl = pkgs.ppl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-    };
+    } else {}));
     inherit fetchurl;
   };
 
