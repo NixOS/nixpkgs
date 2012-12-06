@@ -1098,6 +1098,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
+  kansasLava = callPackage ../development/libraries/haskell/kansas-lava {};
+
   languageC_0_4_2   = callPackage ../development/libraries/haskell/language-c/0.4.2.nix {};
   languageC_0_3_2_1 = callPackage ../development/libraries/haskell/language-c/0.3.2.1.nix {};
   languageC = self.languageC_0_4_2;
@@ -1222,6 +1224,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
+
+  netlist = callPackage ../development/libraries/haskell/netlist {};
+
+  netlistToVhdl = callPackage ../development/libraries/haskell/netlist-to-vhdl {};
 
   network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
@@ -1472,6 +1478,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
 
   silently = callPackage ../development/libraries/haskell/silently {};
+
+  sizedTypes = callPackage ../development/libraries/haskell/sized-types {};
 
   skein = callPackage ../development/libraries/haskell/skein {};
 
