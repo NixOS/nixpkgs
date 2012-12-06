@@ -131,6 +131,7 @@ in
     spamd = 56;
     networkmanager = 57;
     nslcd = 58;
+    scanner = 59;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 
