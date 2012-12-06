@@ -19,11 +19,13 @@ stdenv.mkDerivation {
   preConfigure = ''
     ./autogen.sh
 
-    substituteInPlace ./module/zfs/zfs_ctldir.c  --replace "umount -t zfs"   "${utillinux}/bin/umount -t zfs"
-    substituteInPlace ./module/zfs/zfs_ctldir.c  --replace "mount -t zfs"    "${utillinux}/bin/mount -t zfs"
-    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/umount"   "${utillinux}/bin/umount"
-    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/mount"    "${utillinux}/bin/mount"
-    substituteInPlace ./udev/rules.d/*           --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
+    substituteInPlace ./module/zfs/zfs_ctldir.c    --replace "umount -t zfs"     "${utillinux}/bin/umount -t zfs"
+    substituteInPlace ./module/zfs/zfs_ctldir.c    --replace "mount -t zfs"      "${utillinux}/bin/mount -t zfs"
+    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/umount"       "${utillinux}/bin/umount"
+    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/mount"        "${utillinux}/bin/mount"
+    substituteInPlace ./udev/rules.d/*             --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
+    substituteInPlace ./cmd/ztest/ztest.c          --replace "/usr/sbin/ztest"   "$out/sbin/ztest"
+    substituteInPlace ./cmd/ztest/ztest.c          --replace "/usr/sbin/zdb"     "$out/sbin/zdb"
   '';
 
   configureFlags = ''
