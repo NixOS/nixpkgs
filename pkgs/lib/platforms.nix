@@ -12,5 +12,5 @@ rec {
   all = linux ++ darwin ++ cygwin ++ freebsd ++ openbsd;
   none = [];
   allBut = platform: lists.filter (x: platform != x) all;
-  mesaPlatforms = linux;
+  mesaPlatforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
 }
