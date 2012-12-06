@@ -4508,10 +4508,7 @@ let
   # failed to build
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
 
-  mesaSupported =
-    system == "i686-linux" ||
-    system == "x86_64-linux" ||
-    system == "x86_64-darwin";
+  mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesa = callPackage ../development/libraries/mesa { };
 
