@@ -10,7 +10,7 @@ with pkgs.lib;
 
 let
 
-  cfgSpl = config.environment.spl;
+  cfgSpl = config.boot.spl;
   inInitrd = any (fs: fs == "zfs") config.boot.initrd.supportedFilesystems;
   inSystem = any (fs: fs == "zfs") config.boot.supportedFilesystems;
   kernel = config.boot.kernelPackages;
@@ -22,7 +22,7 @@ in
   ###### interface
   
   options = { 
-    environment.spl.hostid = mkOption { 
+    boot.spl.hostid = mkOption { 
       default = "";
       example = "0xdeadbeef";
       description = ''
