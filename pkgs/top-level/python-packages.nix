@@ -407,9 +407,11 @@ let pythonPackages = python.modules // rec {
 
     propagatedBuildInputs = [ stompclient distribute ];
 
-    #buildInputs = [ coverage ];
-    # needs coverage
-    doCheck = false;
+    buildInputs = [ coverage sqlalchemy ];
+
+    # ValueError: Could not parse auth file:
+    # /tmp/nix-build-.../CoilMQ-0.6.1/coilmq/tests/resources/auth.ini
+    #doCheck = false;
 
     meta = {
       description = "Simple, lightweight, and easily extensible STOMP message broker";
@@ -1457,7 +1459,7 @@ let pythonPackages = python.modules // rec {
       description = "A unittest-based testing framework for python that makes writing and running tests easier";
     };
 
-    buildInputs = [ pythonPackages.coverage ];
+    buildInputs = [ coverage ];
   };
 
   notify = pkgs.stdenv.mkDerivation (rec {
@@ -1537,9 +1539,10 @@ let pythonPackages = python.modules // rec {
 
     propagatedBuildInputs = [ httplib2 ];
 
-    #buildInputs = [ mock coverage ];
-    # needs coverage
-    doCheck = false;
+    buildInputs = [ mock coverage ];
+
+    # ServerNotFoundError: Unable to find the server at oauth-sandbox.sevengoslings.net
+    #doCheck = false;
 
     meta = {
       homepage = "https://github.com/simplegeo/python-oauth2";
