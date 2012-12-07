@@ -97,6 +97,7 @@ if test "$noSysDirs" = "1"; then
             glibc_libdir="$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/lib"
 
             extraFlags="-I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
+            extraFlags="-mcpu=armv6 -mfpu=vfp -mhard-float -marm $extraFlags"
             extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
             EXTRA_TARGET_CFLAGS="$extraFlags"
