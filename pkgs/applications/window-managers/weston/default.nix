@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "autoreconf -vfi";
 
+  # prevent install target to chown root weston-launch, which fails
+  configureFlags = ''
+    --disable-setuid-install
+  '';
+
   meta = {
     description = "Reference implementation of a Wayland compositor";
     homepage = http://wayland.freedesktop.org/;
