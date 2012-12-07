@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "13y7bhjmx4daidvyqjz88yffbswb6rc1khkmiqm896fx3lglkcpr";
   };
 
-  buildInputs = [ cmake bison ncurses openssl readline zlib ];
+  buildInputs = [ cmake bison ncurses openssl readline zlib ]
+     ++ stdenv.lib.optional stdenv.isDarwin perl;
+
 
   enableParallelBuilding = true;
 
@@ -23,6 +25,9 @@ stdenv.mkDerivation rec {
   
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
+  prePatch = ''
+    sed -i -e "s|/usr/bin/libtool|libtool|" cmake/libutils.cmake
+  '';
   postInstall = ''
     sed -i -e "s|basedir=\"\"|basedir=\"$out\"|" $out/bin/mysql_install_db
     rm -rf $out/mysql-test $out/sql-bench
