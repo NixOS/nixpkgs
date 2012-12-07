@@ -75,7 +75,11 @@ if test "$noSysDirs" = "1"; then
         fi
     else
         if test -z "$NIX_GCC_CROSS"; then
-            EXTRA_TARGET_CFLAGS="$EXTRA_FLAGS"
+            if $system == "armv6l-linux"; then
+                EXTRA_TARGET_CFLAGS="-mcpu=armv6 -mfpu=vfp -mhard-float -marm $EXTRA_FLAGS"
+            else
+                EXTRA_TARGET_CFLAGS="$EXTRA_FLAGS"
+            fi
             EXTRA_TARGET_LDFLAGS="$EXTRA_LDFLAGS"
         else
             # This the case of cross-building the gcc.
@@ -97,7 +101,6 @@ if test "$noSysDirs" = "1"; then
             glibc_libdir="$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/lib"
 
             extraFlags="-I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
-            extraFlags="-mcpu=armv6 -mfpu=vfp -mhard-float -marm $extraFlags"
             extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
 
             EXTRA_TARGET_CFLAGS="$extraFlags"
