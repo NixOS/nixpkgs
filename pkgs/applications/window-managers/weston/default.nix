@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, wayland, mesa90x, libxkbcommon, pixman
 , cairo, libxcb, libXcursor, x11, udev, libdrm2_4_39, mtdev
-, libjpeg, pam }:
+, libjpeg, pam, autoconf, automake, libtool }:
 
 let version = "1.0.2"; in
 
@@ -12,9 +12,16 @@ stdenv.mkDerivation rec {
     sha256 = "1496l8hmpxx7pivdpp14pv0hi30q18dmnaxz471v9jiqsnnrr11k";
   };
 
+  patches = [
+    ./screenshooter-client-protocol_h.patch
+    ./makefile.patch
+  ];
+
   buildInputs = [ pkgconfig wayland mesa90x libxkbcommon pixman
     cairo libxcb libXcursor x11 udev libdrm2_4_39 mtdev
-    libjpeg pam ];
+    libjpeg pam autoconf automake libtool ];
+
+  preConfigure = "autoreconf -vfi";
 
   meta = {
     description = "Reference implementation of a Wayland compositor";
