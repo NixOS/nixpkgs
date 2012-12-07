@@ -239,7 +239,8 @@ rec {
       inherit (stdenvLinuxBoot3Pkgs) binutils;
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
+      gcc = stdenvLinuxBoot3Pkgs.gcc.gcc.override (if platform.name == "raspberrypi" then
+	{ ppl = null; cloog = null; } else {});
       name = "";
     };
     extraPath = [ stdenvLinuxBoot3Pkgs.xz ];
@@ -278,7 +279,7 @@ rec {
       inherit (stdenvLinuxBoot3Pkgs) binutils;
       inherit (stdenvLinuxBoot4Pkgs) coreutils;
       libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
+      gcc = stdenvLinuxBoot4.gcc.gcc;
       shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
       name = "";
     };
