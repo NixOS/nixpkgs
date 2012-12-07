@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "13y7bhjmx4daidvyqjz88yffbswb6rc1khkmiqm896fx3lglkcpr";
   };
 
-  buildInputs = [ cmake bison ncurses openssl readline zlib perl ];
+  buildInputs = if stdenv.isDarwin
+    then [ cmake bison ncurses openssl readline zlib perl ]
+    else [ cmake bison ncurses openssl readline zlib ];
 
   enableParallelBuilding = true;
 
