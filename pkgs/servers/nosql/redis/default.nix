@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = "PREFIX=$(out)";
 
-  patches = if stdenv.isDarwin then [ ./darwin.patch ] else [];
+  # commented out until the patch is found
+  # patches = if stdenv.isDarwin then [ ./darwin.patch ] else [];
   meta = {
     homepage = http://redis.io;
     description = "An open source, advanced key-value store";
