@@ -1,7 +1,7 @@
 # This module generates nixos-install, nixos-rebuild,
 # nixos-hardware-scan, etc.
 
-{config, pkgs, modulesPath, ...}:
+{ config, pkgs, modulesPath, ... }:
 
 let
   ### implementation
@@ -23,7 +23,6 @@ let
 
     inherit (pkgs) perl pathsFromGraph;
     nix = config.environment.nix;
-    nixosURL = cfg.nixosURL;
 
     nixClosure = pkgs.runCommand "closure"
       { exportReferencesGraph = ["refs" config.environment.nix]; }
@@ -83,27 +82,6 @@ in
 
 {
   options = {
-
-    installer.nixosURL = pkgs.lib.mkOption {
-      default = http://nixos.org/releases/nixos/channels/nixos-unstable;
-      example = http://nixos.org/releases/nixos/nixos-0.1pre1234;
-      description = ''
-        URL of the Nixpkgs distribution to use when building the
-        installation CD.
-      '';
-    };
-
-    installer.manifests = pkgs.lib.mkOption {
-      default = [ http://nixos.org/releases/nixos/channels/nixos-unstable/MANIFEST ];
-      example =
-        [ http://nixos.org/releases/nixpkgs/channels/nixpkgs-unstable/MANIFEST
-          http://nixos.org/releases/nixos/channels/nixos-stable/MANIFEST
-        ];
-      description = ''
-        URLs of manifests to be downloaded when you run
-        <command>nixos-rebuild</command> to speed up builds.
-      '';
-    };
 
     installer.enableGraphicalTools = pkgs.lib.mkOption {
       default = false;

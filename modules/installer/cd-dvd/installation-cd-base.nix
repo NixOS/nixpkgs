@@ -42,8 +42,6 @@ in
 
   isoImage.volumeID = "NIXOS_${config.system.nixosVersion}";
 
-  installer.nixosURL = "http://nixos.org/releases/nixos/nixos-${config.system.nixosVersion}";
-
   boot.postBootCommands =
     ''
       # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
