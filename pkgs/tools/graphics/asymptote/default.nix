@@ -59,6 +59,7 @@ rec {
   '' ["minInit" "addInputs" "doUnpack"];
 
   meta = {
+    inherit (s) version;
     description = "A tool for programming graphics intended to replace Metapost";
     maintainers = [
       a.lib.maintainers.raskin
