@@ -8634,7 +8634,7 @@ let
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
 
-  eprover = callPackage ../applications/science/logic/eProver {
+  eprover = callPackage ../applications/science/logic/eprover {
     texLive = texLiveAggregationFun {
       paths = [
         texLive texLiveExtra
