@@ -60,13 +60,13 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "5e984360db6ab528938b470d31352f2c3999c681";
-    sha256 = "1kpywih2zz5nfih3byhdqfh09jqb68llq1dsbwkdwmvqv34dd67k";
+    rev = "27b950f62aeb3664ab76e5d827b30b4885a9efb9";
+    sha256 = "0khx8ln2zq3vpj0g66hnsdhw04hxl79fq43rc06ggsmc1j4xrifb";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
-    openblas liblapack tcl tk xproto libX11
+    openblas liblapack tcl tk xproto libX11 
     ];
 
   configurePhase = ''
@@ -108,9 +108,11 @@ stdenv.mkDerivation rec {
     ln -s libuv.a usr/lib/uv.a
   '';
 
-  postInstall = ''
-   make -C deps install-tk-wrapper
+  preInstall = ''
+    make -C deps install-tk-wrapper
+  '';
 
+  postInstall = ''
    (
    cd $out/share/julia/test/ 
    $out/bin/julia runtests.jl all
