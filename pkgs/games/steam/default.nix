@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, xz }:
+{ stdenv, fetchurl, dpkg, makeWrapper, xz, libX11, gcc
+,patchelf }:
 
 assert stdenv.system == "i686-linux";
 
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mx92f9hjjpg3blgmgp8sz0f3jg7m9hssdscipwybks258k8926m";
   };
 
-  buildInputs = [ dpkg makeWrapper xz ];
+  buildInputs = [ dpkg makeWrapper ];
 
   phases = "installPhase";
 
@@ -25,8 +26,22 @@ stdenv.mkDerivation rec {
     substituteInPlace "$out/bin/steam" --replace "/usr/" "$out/"
     substituteInPlace "$out/bin/steam" --replace "\`basename \$0\`" "steam"
     sed -i '/jockey-common/d' $out/bin/steam
-    wrapProgram "$out/bin/steam" --prefix PATH ":" \
-      "${xz}/bin"
+    wrapProgram "$out/bin/steam" \
+      --prefix PATH ":" "${xz}/bin" \
+      --prefix LD_LIBRARY_PATH : ${libX11}/lib:${gcc.gcc}/lib
+
+    mkdir -p $out/patches
+    cat > $out/patches/post-install.sh << EOF
+    #!${stdenv.shell}
+
+    # post-install script to patch stuff at \$HOME
+    PATH=\$PATH:${patchelf}/bin
+    sed -i 's/bash/sh/' \$HOME/.local/share/Steam/steam.sh
+    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
+        \$HOME/.local/share/Steam/ubuntu12_32/steam
+    EOF
+
+    chmod +x $out/patches/post-install.sh
   '';
 
   meta = {
