@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     lrucache mtl pandoc parsec regexBase regexTdfa snapCore snapServer
     tagsoup text time
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
