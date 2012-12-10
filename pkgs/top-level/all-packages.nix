@@ -7297,6 +7297,8 @@ let
 
   librecad = callPackage ../applications/misc/librecad { };
 
+  librecad2 = callPackage ../applications/misc/librecad/2.0.nix { };
+
   libreoffice = callPackage ../applications/office/openoffice/libreoffice.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
