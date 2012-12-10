@@ -1,23 +1,23 @@
-{ cabal, aeson, attoparsec, cereal, clientsession, configurator
-, dataLens, dataLensTemplate, directoryTree, filepath, hashable
-, heist, logict, MonadCatchIOTransformers, mtl, mwcRandom
-, pwstoreFast, snapCore, snapServer, stm, syb, text, time
-, transformers, unorderedContainers, vector, vectorAlgorithms
+{ cabal, aeson, attoparsec, cereal, clientsession, comonad
+, configurator, directoryTree, dlist, errors, filepath, hashable
+, heist, lens, logict, MonadCatchIOTransformers, mtl, mwcRandom
+, pwstoreFast, regexPosix, snapCore, snapServer, stm, syb, text
+, time, transformers, unorderedContainers, vector, vectorAlgorithms
 , xmlhtml
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap";
-  version = "0.9.2.2";
-  sha256 = "1ql9c8b9arcd8zwlwsiipl4diah87sp339ljc5bc7yls1g4d9zsw";
+  version = "0.10.0";
+  sha256 = "1nr9izh8p2jwhp2qcqhh1v2z01y5rhsx458b202hk3iqhrd9n6l8";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aeson attoparsec cereal clientsession configurator dataLens
-    dataLensTemplate directoryTree filepath hashable heist logict
-    MonadCatchIOTransformers mtl mwcRandom pwstoreFast snapCore
-    snapServer stm syb text time transformers unorderedContainers
-    vector vectorAlgorithms xmlhtml
+    aeson attoparsec cereal clientsession comonad configurator
+    directoryTree dlist errors filepath hashable heist lens logict
+    MonadCatchIOTransformers mtl mwcRandom pwstoreFast regexPosix
+    snapCore snapServer stm syb text time transformers
+    unorderedContainers vector vectorAlgorithms xmlhtml
   ];
   meta = {
     homepage = "http://snapframework.com/";
