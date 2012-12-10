@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, tcpWrapper, utillinux, libcap, libtirpc, libevent, libnfsidmap
+{ fetchurl, stdenv, tcp_wrappers, utillinux, libcap, libtirpc, libevent, libnfsidmap
 , lvm2, e2fsprogs }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ tcpWrapper utillinux libcap libtirpc libevent libnfsidmap
+    [ tcp_wrappers utillinux libcap libtirpc libevent libnfsidmap
       lvm2 e2fsprogs
     ];
 

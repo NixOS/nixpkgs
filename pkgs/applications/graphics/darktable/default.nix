@@ -3,24 +3,24 @@
 , libgnome_keyring, gphoto2, gtk, ilmbase, intltool, lcms, lcms2
 , lensfun, libXau, libXdmcp, libexif, libglade, libgphoto2, libjpeg
 , libpng, libpthreadstubs, libraw1394, librsvg, libtiff, libxcb
-, openexr, pixman, pkgconfig, sqlite, bash }:
+, openexr, pixman, pkgconfig, sqlite, bash, libxslt }:
 
 assert stdenv ? glibc;
 
 stdenv.mkDerivation rec {
-  version = "1.0.5";
+  version = "1.1";
   name = "darktable-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/darktable/darktable-${version}.tar.gz";
-    sha256 = "0c18530446d2f2459fe533a1ef6fc2711300efe7466f36c23168ec2230fb5fbd";
+    sha256 = "8f2401422ab3e0bb038b3fedf411aaf69994d679674757ee7886b6146b9fdd4f";
   };
 
   buildInputs =
     [ GConf atk cairo cmake curl dbus_glib exiv2 glib libgnome_keyring gtk
       ilmbase intltool lcms lcms2 lensfun libXau libXdmcp libexif
       libglade libgphoto2 libjpeg libpng libpthreadstubs libraw1394
-      librsvg libtiff libxcb openexr pixman pkgconfig sqlite
+      librsvg libtiff libxcb openexr pixman pkgconfig sqlite libxslt
     ];
 
   preConfigure = ''

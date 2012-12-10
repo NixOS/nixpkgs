@@ -1,14 +1,19 @@
-{stdenv, fetchurl, cmake, zlib, libgcrypt}:
+{ stdenv, fetchurl, cmake, zlib, libgcrypt }:
 
 stdenv.mkDerivation rec {
-  name = "libssh-0.5.2";
+  name = "libssh-0.5.3";
+
   src = fetchurl {
-    url = "http://www.libssh.org/files/0.5/${name}.tar.gz";
-    sha256 = "09xjb8ja8k3j3a0y3zjphhxwrnh1y618afcbbri48x87mz0vks21";
+    url = "https://red.libssh.org/attachments/download/38/${name}.tar.gz";
+    sha256 = "1w6s217vjq0w3v5i0c5ql6m0ki1yz05g9snah3azxfkl9k4schpd";
   };
+
   buildInputs = [ zlib libgcrypt ];
+
   buildNativeInputs = [ cmake ];
+
   cmakeFlags = "-DWITH_GCRYPT=ON";
+
   meta = {
     description = "SSH client library";
     license = "LGPL";

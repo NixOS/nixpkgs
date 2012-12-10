@@ -483,13 +483,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   base64Bytestring = callPackage ../development/libraries/haskell/base64-bytestring {};
 
+  base64Conduit = callPackage ../development/libraries/haskell/base64-conduit {};
+
   baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
 
   basicPrelude = callPackage ../development/libraries/haskell/basic-prelude {};
 
-  benchpress = callPackage ../development/libraries/haskell/benchpress {
-    time = self.time_1_1_3;
-  };
+  benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
@@ -520,7 +520,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
-  bmp = callPackage ../development/libraries/haskell/bmp {};
+  bmp_1_2_2_1 = callPackage ../development/libraries/haskell/bmp/1.2.2.1.nix {};
+  bmp_1_2_3_2 = callPackage ../development/libraries/haskell/bmp/1.2.3.2.nix {};
+  bmp = self.bmp_1_2_2_1;       # later versions work only with ghc 7.6 and beyond
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
 
@@ -606,9 +608,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   configurator = callPackage ../development/libraries/haskell/configurator {};
 
-  convertible = callPackage ../development/libraries/haskell/convertible {
-    time = self.time_1_1_3;
-  };
+  convertible = callPackage ../development/libraries/haskell/convertible {};
 
   continuedFractions = callPackage ../development/libraries/haskell/continued-fractions {};
 
@@ -633,6 +633,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
   cryptoPubkeyTypes = callPackage ../development/libraries/haskell/crypto-pubkey-types {};
+
+  cryptoRandomApi = callPackage ../development/libraries/haskell/crypto-random-api {};
 
   cuda = callPackage ../development/libraries/haskell/cuda {
     inherit (pkgs.linuxPackages) nvidia_x11;
@@ -1096,6 +1098,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   jsonTypes = callPackage ../development/libraries/haskell/jsonTypes {};
 
+  kansasLava = callPackage ../development/libraries/haskell/kansas-lava {};
+
   languageC_0_4_2   = callPackage ../development/libraries/haskell/language-c/0.4.2.nix {};
   languageC_0_3_2_1 = callPackage ../development/libraries/haskell/language-c/0.3.2.1.nix {};
   languageC = self.languageC_0_4_2;
@@ -1211,13 +1215,19 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   multirec = callPackage ../development/libraries/haskell/multirec {};
 
-  multiset = callPackage ../development/libraries/haskell/multiset {};
+  multiset_0_2_1 = callPackage ../development/libraries/haskell/multiset/0.2.1.nix {};
+  multiset_0_2_2 = callPackage ../development/libraries/haskell/multiset/0.2.2.nix {};
+  multiset = self.multiset_0_2_1;   # later versions work only with ghc 7.6 and beyond
 
   murmurHash = callPackage ../development/libraries/haskell/murmur-hash {};
 
   mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
+
+  netlist = callPackage ../development/libraries/haskell/netlist {};
+
+  netlistToVhdl = callPackage ../development/libraries/haskell/netlist-to-vhdl {};
 
   network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
@@ -1469,6 +1479,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   silently = callPackage ../development/libraries/haskell/silently {};
 
+  sizedTypes = callPackage ../development/libraries/haskell/sized-types {};
+
   skein = callPackage ../development/libraries/haskell/skein {};
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
@@ -1632,13 +1644,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   threads = callPackage ../development/libraries/haskell/threads {};
 
   time_1_1_2_4 = callPackage ../development/libraries/haskell/time/1.1.2.4.nix {};
-  time_1_1_3   = callPackage ../development/libraries/haskell/time/1.1.3.nix {};
-  time_1_2_0_3 = callPackage ../development/libraries/haskell/time/1.2.0.3.nix {};
-  time_1_2_0_5 = callPackage ../development/libraries/haskell/time/1.2.0.5.nix {};
-  time_1_4_0_1 = callPackage ../development/libraries/haskell/time/1.4.0.1.nix {};
+  time_1_4_0_2 = callPackage ../development/libraries/haskell/time/1.4.0.2.nix {};
   # time is in the core package set. It should only be necessary to
   # pass it explicitly in rare circumstances.
   time = null;
+
+  timeCompat = callPackage ../development/libraries/haskell/time-compat {};
 
   tls = callPackage ../development/libraries/haskell/tls {};
 
@@ -1754,9 +1765,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     wxGTK = pkgs.wxGTK29;
   };
 
-  wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {
-    time = self.time_1_2_0_5;
-  };
+  wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
 
   X11_1_5_0_1 = callPackage ../development/libraries/haskell/X11/1.5.0.1.nix {};
   X11_1_6_0_2 = callPackage ../development/libraries/haskell/X11/1.6.0.2.nix {};

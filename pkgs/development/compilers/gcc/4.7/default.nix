@@ -181,7 +181,6 @@ stdenv.mkDerivation ({
       let
         libc = if libcCross != null then libcCross else stdenv.glibc;
         gnu_h = "gcc/config/gnu.h";
-        i386_gnu_h = "gcc/config/i386/gnu.h";
         extraCPPDeps =
              libc.propagatedBuildInputs
           ++ stdenv.lib.optional (libpthreadCross != null) libpthreadCross
@@ -194,8 +193,8 @@ stdenv.mkDerivation ({
           then "-L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}"
           else "-L${libpthread}/lib";
       in
-        '' echo "augmenting \`CPP_SPEC' in \`${i386_gnu_h}' with \`${extraCPPSpec}'..."
-           sed -i "${i386_gnu_h}" \
+        '' echo "augmenting \`CPP_SPEC' in \`${gnu_h}' with \`${extraCPPSpec}'..."
+           sed -i "${gnu_h}" \
                -es'|CPP_SPEC *"\(.*\)$|CPP_SPEC "${extraCPPSpec} \1|g'
 
            echo "augmenting \`LIB_SPEC' in \`${gnu_h}' with \`${extraLibSpec}'..."
@@ -289,7 +288,9 @@ stdenv.mkDerivation ({
         )
       )
     }
-    ${if (stdenv ? glibc) then " --with-native-system-header-dir=${stdenv.glibc}/include" else ""}
+    ${if (stdenv ? glibc && cross == null)
+      then " --with-native-system-header-dir=${stdenv.glibc}/include"
+      else ""}
     ${ # Trick that should be taken out once we have a mips64el-linux not loongson2f
       if cross == null && stdenv.system == "mips64el-linux" then "--with-arch=loongson2f" else ""}
     ${if langAda then " --enable-libada" else ""}

@@ -13,7 +13,7 @@ rec {
 
   zathuraWrapper = stdenv.mkDerivation rec {
 
-    name = "zathura-0.1.2";
+    name = "zathura-${zathura_core.version}";
 
     plugins_path = stdenv.lib.makeSearchPath "lib" [
       zathura_pdf_poppler

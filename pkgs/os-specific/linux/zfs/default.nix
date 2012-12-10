@@ -1,7 +1,8 @@
 { stdenv, fetchurl, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
-  name = "zfs-0.6.0-rc12";
+  name = "zfs-0.6.0-rc12-${kernel.version}";
+
   src = fetchurl {
     url = http://github.com/downloads/zfsonlinux/zfs/zfs-0.6.0-rc12.tar.gz;
     sha256 = "1mipy6v63y8z3c5chn813x8c2r8mwyja1v19dvars3j85105xf1y";
@@ -11,16 +12,20 @@ stdenv.mkDerivation {
 
   buildInputs = [ kernel spl perl autoconf automake libtool zlib libuuid coreutils ];
 
+  # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
+  NIX_CFLAGS_LINK = "-lgcc_s";
   NIX_CFLAGS_COMPILE = "-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
 
   preConfigure = ''
     ./autogen.sh
 
-    substituteInPlace ./module/zfs/zfs_ctldir.c  --replace "umount -t zfs"   "${utillinux}/bin/umount -t zfs"
-    substituteInPlace ./module/zfs/zfs_ctldir.c  --replace "mount -t zfs"    "${utillinux}/bin/mount -t zfs"
-    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/umount"   "${utillinux}/bin/umount"
-    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/mount"    "${utillinux}/bin/mount"
-    substituteInPlace ./udev/rules.d/*           --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
+    substituteInPlace ./module/zfs/zfs_ctldir.c    --replace "umount -t zfs"     "${utillinux}/bin/umount -t zfs"
+    substituteInPlace ./module/zfs/zfs_ctldir.c    --replace "mount -t zfs"      "${utillinux}/bin/mount -t zfs"
+    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/umount"       "${utillinux}/bin/umount"
+    substituteInPlace ./lib/libzfs/libzfs_mount.c  --replace "/bin/mount"        "${utillinux}/bin/mount"
+    substituteInPlace ./udev/rules.d/*             --replace "/lib/udev/vdev_id" "$out/lib/udev/vdev_id"
+    substituteInPlace ./cmd/ztest/ztest.c          --replace "/usr/sbin/ztest"   "$out/sbin/ztest"
+    substituteInPlace ./cmd/ztest/ztest.c          --replace "/usr/sbin/zdb"     "$out/sbin/zdb"
   '';
 
   configureFlags = ''

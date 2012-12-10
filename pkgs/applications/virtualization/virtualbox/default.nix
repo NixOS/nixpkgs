@@ -10,7 +10,7 @@ with stdenv.lib;
 
 let
 
-  version = "4.2.2";
+  version = "4.2.4";
 
   forEachModule = action: ''
     for mod in \
@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "943daa13694605d5d0a23ffef27c398b5e72ada669de89bad4b98f000f029700";
+    sha256 = "a7c607523c1c10b7b978ab39a92bb646517316548aa4a1a74b6e434ac2bf0adc";
   };
 
   buildInputs =

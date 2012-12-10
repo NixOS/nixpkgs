@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "editline";
-  version = "0.2.1.0";
-  sha256 = "83618e5f86074fdc11d7f5033aa2886284462941be38fa02966acc92712c46e1";
+  version = "0.2.1.1";
+  sha256 = "101zhzja14n8bhbrly7w2aywx3sxyzgyjdrmgpg4gn4alf4lzdlz";
   extraLibraries = [ libedit ];
   meta = {
     homepage = "http://code.haskell.org/editline";

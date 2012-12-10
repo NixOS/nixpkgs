@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, python, gmp }:
+{ stdenv, fetchurl, python, buildPythonPackage, gmp }:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   name = "pycrypto-2.6";
+  namePrefix = "";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/p/pycrypto/${name}.tar.gz";
@@ -10,13 +11,15 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python gmp ];
 
-  buildPhase = "true";
-
-  installPhase =
+  buildPhase =
     ''
       python ./setup.py build_ext --library-dirs=${gmp}/lib
-      python ./setup.py install --prefix=$out
     '';
+
+#  installPhase =
+#    ''
+#      python ./setup.py install --prefix=$out
+#    '';
 
   meta = {
     homepage = "http://www.pycrypto.org/";

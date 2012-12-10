@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
 
-  name = "plowshare-${version}";
+  name = "plowshare4-${version}";
 
-  version = "20120916";
+  version = "20121126.47e4480";
 
   src = fetchurl {
-    url = "http://plowshare.googlecode.com/files/plowshare-snapshot-git${version}.tar.gz";
-    sha256 = "eccdb28d49ac47782abc8614202b3a88426cd587371641ecf2ec008880dc6067";
+    url = "http://plowshare.googlecode.com/files/plowshare4-snapshot-git${version}.tar.gz";
+    sha256 = "1p7bqqfbgcy41hiickgr8cilspyvrrql12rdmfasz0dmgf7nx1x6";
   };
 
   buildInputs = [ makeWrapper ];

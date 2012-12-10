@@ -3,6 +3,7 @@
 own_dir="$(cd "$(dirname "$0")"; pwd)"
 
 CURRENT_URL=
+NEED_TO_CHOOSE_URL=1
 
 url () {
   CURRENT_URL="$1"
@@ -45,12 +46,14 @@ matching_links () {
 
 link () {
   CURRENT_URL="$(matching_links "$1" | position_choice "$2" "$3")"
+  unset NEED_TO_CHOOSE_URL
   echo "Linked by: $*"
   echo "URL: $CURRENT_URL" >&2
 }
 
 version_link () {
   CURRENT_URL="$(matching_links "$1" | version_sort | position_choice "$2" "$3")"
+  unset NEED_TO_CHOOSE_URL
   echo "Linked version by: $*"
   echo "URL: $CURRENT_URL" >&2
 }
@@ -79,23 +82,64 @@ version () {
 }
 
 ensure_version () {
+  echo "Ensuring version. CURRENT_VERSION: $CURRENT_VERSION" >&2
   [ -z "$CURRENT_VERSION" ] && version '.*-([0-9.]+)[-._].*' '\1'
 }
 
 ensure_target () {
+  echo "Ensuring target. CURRENT_TARGET: $CURRENT_TARGET" >&2
   [ -z "$CURRENT_TARGET" ] && target default.nix
+}
+
+ensure_name () {
+  echo "Ensuring name. CURRENT_NAME: $CURRENT_NAME" >&2
+  [ -z "$CURRENT_NAME" ] && name "$(basename "$CONFIG_DIR")"
+  echo "Resulting name: $CURRENT_NAME"
+}
+
+ensure_attribute_name () {
+  echo "Ensuring attribute name. CURRENT_ATTRIBUTE_NAME: $CURRENT_ATTRIBUTE_NAME" >&2
+  [ -z "$CURRENT_ATTRIBUTE_NAME" ] && attribute_name "$CURRENT_NAME"
+  echo "Resulting attribute name: $CURRENT_ATTRIBUTE_NAME"
+}
+
+ensure_choice () {
+  echo "Ensuring that choice is made." >&2
+  echo "NEED_TO_CHOOSE_URL: [$NEED_TO_CHOOSE_URL]." >&2
+  echo "CURRENT_URL: $CURRENT_URL" >&2
+  [ -n "$NEED_TO_CHOOSE_URL" ] && {
+    version_link '[.]tar[.]([^./])+$'
+    unset NEED_TO_CHOOSE_URL
+  }
+  [ -z "$CURRENT_URL" ] && {
+    echo "Error: empty CURRENT_URL"
+    echo "Error: empty CURRENT_URL" >&2
+    exit 1
+  }
+}
+
+ensure_hash () {
+  echo "Ensuring hash. CURRENT_HASH: $CURRENT_HASH" >&2
+  [ -z "$CURRENT_HASH" ] && hash
 }
 
 hash () {
   CURRENT_HASH="$(nix-prefetch-url "$CURRENT_URL")"
+  echo "CURRENT_HASH: $CURRENT_HASH" >&2
 }
 
 name () {
   CURRENT_NAME="$1"
+  echo "CURRENT_NAME: $CURRENT_NAME" >&2
+}
+
+attribute_name () {
+  CURRENT_ATTRIBUTE_NAME="$1"
+  echo "CURRENT_ATTRIBUTE_NAME: $CURRENT_ATTRIBUTE_NAME" >&2
 }
 
 retrieve_version () {
-  PACKAGED_VERSION="$(nix-instantiate --eval-only '<nixpkgs>' -A "$CURRENT_NAME".meta.version | xargs)"
+  PACKAGED_VERSION="$(nix-instantiate --eval-only '<nixpkgs>' -A "$CURRENT_ATTRIBUTE_NAME".meta.version | xargs)"
 }
 
 directory_of () {
@@ -126,7 +170,7 @@ do_write_expression () {
   echo "${1}rec {"
   echo "${1}  baseName=\"$CURRENT_NAME\";"
   echo "${1}  version=\"$CURRENT_VERSION\";"
-  echo "${1}  name=\"$CURRENT_NAME-$CURRENT_VERSION\";"
+  echo "${1}  name=\"\${baseName}-\${version}\";"
   echo "${1}  hash=\"$CURRENT_HASH\";"
   echo "${1}  url=\"$CURRENT_URL\";"
   echo "${1}  sha256=\"$CURRENT_HASH\";"
@@ -176,16 +220,19 @@ do_regenerate () {
 }
 
 do_overwrite () {
-  hash
+  ensure_hash
   do_regenerate "$1" > "$1.new.tmp"
   mv "$1.new.tmp" "$1"
 }
 
 process_config () {
   CONFIG_DIR="$(directory_of "$1")"
-  source "$CONFIG_DIR/$(basename "$1")"
   BEGIN_EXPRESSION='# Generated upstream information';
+  source "$CONFIG_DIR/$(basename "$1")"
+  ensure_name
+  ensure_attribute_name
   retrieve_version
+  ensure_choice
   ensure_version
   ensure_target
   update_found && do_overwrite "$CURRENT_TARGET"

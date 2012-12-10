@@ -43,13 +43,13 @@ rec {
   # Linux standard environment.
   stdenvLinux = (import ./linux {inherit system allPackages platform;}).stdenvLinux;
 
-    
+
   # MinGW/MSYS standard environment.
   stdenvMinGW = import ./mingw {
     inherit system;
   };
 
-  
+
   # Select the appropriate stdenv for the platform `system'.
   stdenv =
     if stdenvType == "i686-linux" then stdenvLinux else
@@ -59,7 +59,6 @@ rec {
     if stdenvType == "mips64el-linux" then stdenvLinux else
     if stdenvType == "powerpc-linux" then /* stdenvLinux */ stdenvNative else
     if stdenvType == "i686-mingw" then stdenvMinGW else
-    if stdenvType == "i686-darwin" then stdenvNix else
     if stdenvType == "x86_64-darwin" then stdenvNix else
     stdenvNative;
 }
