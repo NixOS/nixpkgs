@@ -750,6 +750,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   erf = callPackage ../development/libraries/haskell/erf {};
 
+  errors = callPackage ../development/libraries/haskell/errors {};
+
+  either = callPackage ../development/libraries/haskell/either {};
+
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
 
   exceptionTransformers = callPackage ../development/libraries/haskell/exception-transformers {};
