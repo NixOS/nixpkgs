@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, xz, libX11, gcc
+{ stdenv, fetchurl, dpkg, makeWrapper, xz, libX11, gcc, glibc215
 ,patchelf }:
 
 assert stdenv.system == "i686-linux";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     sed -i '/jockey-common/d' $out/bin/steam
     wrapProgram "$out/bin/steam" \
       --prefix PATH ":" "${xz}/bin" \
-      --prefix LD_LIBRARY_PATH : ${libX11}/lib:${gcc.gcc}/lib
+      --prefix LD_LIBRARY_PATH : ${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib
 
     mkdir -p $out/patches
     cat > $out/patches/post-install.sh << EOF
