@@ -63,7 +63,12 @@ stdenv.mkDerivation {
 
   buildPhase = "./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install";
 
-  installPhase = ":";
+  # normal install does not install bjam, this is a separate step
+  installPhase = ''
+    cd tools/build/v2
+    sh bootstrap.sh
+    ./b2 -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat}/include -sEXPAT_LIBPATH=${expat}/lib --layout=${layout} variant=${variant} threading=${threading} link=${link} ${cflags} install
+  '';
 
   crossAttrs = rec {
     buildInputs = [ expat.hostDrv zlib.hostDrv bzip2.hostDrv ];
