@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = http://xcalib.sourceforge.net/;
     description = "A tiny monitor calibration loader for X and MS-Windows";
     license = licenses.gpl2;
-    maintainers = [ rickynils ];
+    maintainers = [ maintainers.rickynils ];
     platforms = platforms.linux;
   };
 }
