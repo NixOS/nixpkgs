@@ -18,14 +18,11 @@ The operation is one of the following:
   build-vm-with-bootloader:
             like build-vm, but include a boot loader in the VM
   dry-run:  just show what store paths would be built/downloaded
-  pull:     just pull the NixOS channel manifest and exit
 
 Options:
 
   --upgrade              fetch the latest version of NixOS before rebuilding
   --install-grub         (re-)install the Grub bootloader
-  --pull                 do a nix-pull to get the latest NixOS channel
-                         manifest
   --no-build-nix         don't build the latest Nix from Nixpkgs before
                          building NixOS
   --rollback             restore the previous NixOS configuration (only
@@ -49,7 +46,6 @@ EOF
 # Parse the command line.
 extraBuildFlags=()
 action=
-pullManifest=
 buildNix=1
 rollback=
 upgrade=
@@ -60,14 +56,11 @@ while test "$#" -gt 0; do
       --help)
         showSyntax
         ;;
-      switch|boot|test|build|dry-run|build-vm|build-vm-with-bootloader|pull)
+      switch|boot|test|build|dry-run|build-vm|build-vm-with-bootloader)
         action="$i"
         ;;
       --install-grub)
         export NIXOS_INSTALL_GRUB=1
-        ;;
-      --pull)
-        pullManifest=1
         ;;
       --no-build-nix)
         buildNix=
@@ -125,24 +118,6 @@ trap 'rm -rf "$tmpDir"' EXIT
 if initctl status nix-daemon 2>&1 | grep -q 'running'; then
     export NIX_REMOTE=${NIX_REMOTE:-daemon}
 fi
-
-
-# Pull the manifests defined in the configuration (the "manifests"
-# attribute).  Wonderfully hacky.
-if [ -n "$pullManifest" -o "$action" = pull ]; then
-    set -o pipefail
-    manifests=$(nix-instantiate --eval-only --xml --strict '<nixos>' -A manifests \
-        | grep '<string'  | sed 's^.*"\(.*\)".*^\1^g')
-    set +o pipefail
-    if [ $? -ne 0 ]; then exit 1; fi
-
-    mkdir -p /nix/var/nix/channel-cache
-    for i in $manifests; do
-        NIX_DOWNLOAD_CACHE=/nix/var/nix/channel-cache nix-pull $i || true
-    done
-fi
-
-if [ "$action" = pull ]; then exit 0; fi
 
 
 # If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.

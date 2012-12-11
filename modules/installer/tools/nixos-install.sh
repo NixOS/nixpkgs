@@ -5,7 +5,6 @@
 # - copy closure of Nix to target device
 # - register validity
 # - with a chroot to the target device:
-#   * do a nix-pull
 #   * nix-env -p /nix/var/nix/profiles/system -i <nix-expr for the configuration>
 #   * run the activation script of the configuration (also installs Grub)
 
@@ -35,13 +34,6 @@ if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
     exit 1
 fi
 
-
-# Do a nix-pull to speed up building.
-if test -n "@nixosURL@" -a ${NIXOS_PULL:-1} != 0; then
-    mkdir -p /nix/var/nix/channel-cache -m 0755
-    NIX_DOWNLOAD_CACHE=/nix/var/nix/channel-cache \
-        @nix@/bin/nix-pull @nixosURL@/MANIFEST || true
-fi
 
 
 # Mount some stuff in the target root directory.  We bind-mount /etc
@@ -116,6 +108,7 @@ export LC_TIME=
 # Create a temporary Nix config file that causes the nixbld users to
 # be used.
 echo "build-users-group = nixbld" > $mountPoint/tmp/nix.conf
+grep binary-caches /etc/nix/nix.conf >> $mountPoint/tmp/nix.conf
 export NIX_CONF_DIR=/tmp
 
 

@@ -75,7 +75,7 @@ let
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
       services.httpd.servedDirs = singleton
-        { urlPath = "/channels/nixos-unstable";
+        { urlPath = "/binary-cache";
           dir = "/tmp/channel";
         };
 
@@ -125,7 +125,6 @@ let
             "rm /etc/hosts",
             "echo 192.168.1.1 nixos.org > /etc/hosts",
             "ifconfig eth1 up 192.168.1.2",
-            "nixos-rebuild pull",
         );
 
         # Test nix-env.

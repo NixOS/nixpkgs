@@ -29,6 +29,12 @@ with pkgs.lib;
       in mkIf config.hardware.sane.enable {
            environment.systemPackages = [ pkg ];
            services.udev.packages = [ pkg ];
+           
+           users.extraGroups = singleton {
+             name = "scanner";
+             gid = config.ids.gids.scanner;
+           };
+
       };
 
 }

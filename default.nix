@@ -40,7 +40,6 @@ in
 
   # The following are used by nixos-rebuild.
   nixFallback = pkgs.nixUnstable;
-  manifests = config.installer.manifests;
 
   tests = config.tests;
 }

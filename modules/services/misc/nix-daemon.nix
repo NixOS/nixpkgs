@@ -247,8 +247,8 @@ in
                 build-max-jobs = ${toString (cfg.maxJobs)}
                 build-use-chroot = ${if cfg.useChroot then "true" else "false"}
                 build-chroot-dirs = ${toString cfg.chrootDirs} $(echo $extraPaths)
-                binary-caches = ${toString config.nix.binaryCaches}
-                trusted-binary-caches = ${toString config.nix.trustedBinaryCaches}
+                binary-caches = ${toString cfg.binaryCaches}
+                trusted-binary-caches = ${toString cfg.trustedBinaryCaches}
                 $extraOptions
                 END
               '';
