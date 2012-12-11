@@ -81,7 +81,6 @@ in
       upower = pkgs.upower.override { useSystemd = true; };
       polkit = pkgs.polkit.override { useSystemd = true; };
       consolekit = null;
-      nix = pkgs.nixUnstable;
     };
 
   };
