@@ -7980,6 +7980,8 @@ let
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
 
+  xcalib = callPackage ../tools/X11/xcalib { };
+
   xchat = callPackage ../applications/networking/irc/xchat { };
 
   xchm = callPackage ../applications/misc/xchm { };
