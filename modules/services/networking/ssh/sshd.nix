@@ -65,7 +65,7 @@ let
     };
   };
 
-  authKeysFiles = with {
+  authKeysFiles = let
     mkAuthKeyFile = u: {
       target = "ssh/authorized_keys.d/${u.name}";
       mode = "0444";
@@ -77,7 +77,7 @@ let
     usersWithKeys = attrValues (flip filterAttrs config.users.extraUsers (n: u:
       length u.openssh.authorizedKeys.keys != 0 || length u.openssh.authorizedKeys.keyFiles != 0
     ));
-  }; map mkAuthKeyFile usersWithKeys;
+  in map mkAuthKeyFile usersWithKeys;
 
 in
 
@@ -198,11 +198,11 @@ in
           The set of system-wide known SSH hosts.
         '';
         example = [
-          { 
+          {
             hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
             publicKeyFile = ./pubkeys/myhost_ssh_host_dsa_key.pub;
           }
-          { 
+          {
             hostNames = [ "myhost2" ];
             publicKeyFile = ./pubkeys/myhost2_ssh_host_dsa_key.pub;
           }
