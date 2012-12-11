@@ -1498,9 +1498,9 @@ let
 
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
-  socat2pre = builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
+  socat2pre = lowPrio (builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
     inherit fetchurl stdenv openssl;
-  };
+  });
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
