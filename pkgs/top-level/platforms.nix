@@ -14,7 +14,7 @@ rec {
       ''
         # Virtualisation (KVM, Xen...).
         PARAVIRT_GUEST y
-        KVM_CLOCK y
+        KVM_CLOCK? y #Part of KVM_GUEST since linux 3.7
         KVM_GUEST y
         XEN y
         KSM y
