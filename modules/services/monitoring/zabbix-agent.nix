@@ -88,6 +88,7 @@ in
 
         serviceConfig.ExecStart = "@${pkgs.zabbix.agent}/sbin/zabbix_agentd zabbix_agentd --config ${configFile}";
         serviceConfig.Type = "forking";
+        serviceConfig.RemainAfterExit = true;
         serviceConfig.Restart = "always";
         serviceConfig.RestartSec = 2;
       };
