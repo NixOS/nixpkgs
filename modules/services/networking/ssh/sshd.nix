@@ -186,6 +186,11 @@ in
         '';
       };
 
+      authorizedKeysFiles = mkOption {
+        default = [];
+        description = "Files from with authorized keys are read.";
+      };
+
       extraConfig = mkOption {
         default = "";
         description = "Verbatim contents of <filename>sshd_config</filename>.";
@@ -290,6 +295,9 @@ in
 
     networking.firewall.allowedTCPPorts = cfg.ports;
 
+    services.openssh.authorizedKeysFiles =
+      [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
+
     services.openssh.extraConfig =
       ''
         Protocol 2
@@ -320,7 +328,7 @@ in
         PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
         ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
 
-        AuthorizedKeysFile .ssh/authorized_keys .ssh/authorized_keys2 /etc/ssh/authorized_keys.d/%u
+        AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
