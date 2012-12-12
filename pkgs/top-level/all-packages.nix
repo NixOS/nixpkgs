@@ -8352,11 +8352,7 @@ let
 
   worldofgoo = callPackage ../games/worldofgoo { };
 
-  xboard = builderDefsPackage (import ../games/xboard) {
-    inherit (xlibs) libX11 xproto libXt libXaw libSM
-      libICE libXmu libXext libXpm;
-    inherit gnuchess texinfo;
-  };
+  xboard =  callPackage ../games/xboard { };
 
   xconq = callPackage ../games/xconq {};
 
