@@ -20,6 +20,8 @@ stdenv.mkDerivation {
     sed -i -e 's/--no-undefined //' src/Makefile*
   '';
 
+  enableParallelBuilding = true;
+
   buildInputs =
     [ pkgconfig gtk libglade librsvg bzip2 libgnomecanvas fribidi libpng popt
       libgsf enchant wv libjpeg
