@@ -8259,6 +8259,8 @@ let
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
+  scid = callPackage ../games/scid { };
+
   scummvm = callPackage ../games/scummvm { };
 
   scorched3d = callPackage ../games/scorched3d { };
