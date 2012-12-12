@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "ed-1.6";
+  name = "ed-1.7";
 
   src = fetchurl {
     url = "mirror://gnu/ed/${name}.tar.gz";
-    sha256 = "0rcay0wci2kiwil2h505b674cblmn4nq8pqw9g9pgqmaqjq6f711";
+    sha256 = "0c908wb5pm48rjrrfbm5dhrqzys8f1dbvi90dn0vgwjzk80l2hl9";
   };
 
   /* FIXME: Tests currently fail on Darwin:
