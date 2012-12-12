@@ -516,6 +516,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeMarkup = callPackage ../development/libraries/haskell/blaze-markup {};
 
+  blazeSvg = callPackage ../development/libraries/haskell/blaze-svg {};
+
   blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
 
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
@@ -689,12 +691,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   derp = callPackage ../development/libraries/haskell/derp {};
 
   diagrams = callPackage ../development/libraries/haskell/diagrams/diagrams.nix {};
-
   diagramsCairo = callPackage ../development/libraries/haskell/diagrams/cairo.nix {};
-
   diagramsCore = callPackage ../development/libraries/haskell/diagrams/core.nix {};
-
+  diagramsContrib = callPackage ../development/libraries/haskell/diagrams/contrib.nix {};
   diagramsLib = callPackage ../development/libraries/haskell/diagrams/lib.nix {};
+  diagramsSvg = callPackage ../development/libraries/haskell/diagrams/svg.nix {};
 
   Diff = callPackage ../development/libraries/haskell/Diff {};
 
@@ -736,6 +737,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dstring = callPackage ../development/libraries/haskell/dstring {};
 
+  dualTree = callPackage ../development/libraries/haskell/dual-tree {};
+
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
 
   editline = callPackage ../development/libraries/haskell/editline {};
@@ -749,6 +752,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   entropy = callPackage ../development/libraries/haskell/entropy {};
 
   erf = callPackage ../development/libraries/haskell/erf {};
+
+  errors = callPackage ../development/libraries/haskell/errors {};
+
+  either = callPackage ../development/libraries/haskell/either {};
 
   exceptionMtl = callPackage ../development/libraries/haskell/exception-mtl {};
 
@@ -795,6 +802,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   fglVisualize = callPackage ../development/libraries/haskell/fgl-visualize {};
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
+
+  forceLayout = callPackage ../development/libraries/haskell/force-layout {};
 
   fsnotify = callPackage ../development/libraries/haskell/fsnotify {};
 
@@ -1158,6 +1167,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
 
+  minimorph = callPackage ../development/libraries/haskell/minimorph {};
+
+  miniutter = callPackage ../development/libraries/haskell/miniutter {};
+
   mimeMail = callPackage ../development/libraries/haskell/mime-mail {};
 
   mimeTypes = callPackage ../development/libraries/haskell/mime-types {};
@@ -1191,6 +1204,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   MonadRandom = callPackage ../development/libraries/haskell/MonadRandom {};
 
   monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
+
+  monoidExtras = callPackage ../development/libraries/haskell/monoid-extras {};
 
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
