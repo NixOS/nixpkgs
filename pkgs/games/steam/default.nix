@@ -1,5 +1,8 @@
 { stdenv, fetchurl, dpkg, makeWrapper, xz, libX11, gcc, glibc215
-,patchelf }:
+, libselinux, libXrandr, pango, freetype, fontconfig, glib, gtk
+, gdk_pixbuf, cairo, libXi, alsaLib, libXrender, nss, nspr, zlib
+, dbus, libpng12, libXfixes, cups, libgcrypt, openal, pulseaudio
+, patchelf }:
 
 assert stdenv.system == "i686-linux";
 
@@ -28,7 +31,7 @@ stdenv.mkDerivation rec {
     sed -i '/jockey-common/d' $out/bin/steam
     wrapProgram "$out/bin/steam" \
       --prefix PATH ":" "${xz}/bin" \
-      --prefix LD_LIBRARY_PATH : ${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib
+      --prefix LD_LIBRARY_PATH : ${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib:${libselinux}/lib:${libXrandr}/lib:${pango}/lib:${freetype}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${gdk_pixbuf}/lib:${cairo}/lib:${libXi}/lib:${alsaLib}/lib:${libXrender}/lib:${nss}/lib:${nspr}/lib:${zlib}/lib:${dbus}/lib:${libpng12}/lib:${libXfixes}/lib:${cups}/lib:${libgcrypt}/lib:${openal}/lib:${pulseaudio}/lib
 
     mkdir -p $out/patches
     cat > $out/patches/post-install.sh << EOF
