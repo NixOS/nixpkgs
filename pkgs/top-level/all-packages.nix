@@ -1616,6 +1616,8 @@ let
 
   vtun = callPackage ../tools/networking/vtun { };
 
+  wbox = callPackage ../tools/networking/wbox {};
+
   welkin = callPackage ../tools/graphics/welkin {};
 
   testdisk = callPackage ../tools/misc/testdisk { };
