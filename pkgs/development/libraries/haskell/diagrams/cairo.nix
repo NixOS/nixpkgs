@@ -1,15 +1,15 @@
-{ cabal, cairo, cmdargs, diagramsCore, diagramsLib, filepath, gtk
-, mtl, split
+{ cabal, cairo, cmdargs, colour, diagramsCore, diagramsLib
+, filepath, mtl, split, time
 }:
 
 cabal.mkDerivation (self: {
   pname = "diagrams-cairo";
-  version = "0.5.0.2";
-  sha256 = "1wwk65c2cx7rkhmai5spms791fjhl3snwhj0w9399q8pgj6g4lj8";
+  version = "0.6";
+  sha256 = "0fxqwkv2cpgpkr80q828rm91ybn7j0dwj1p5ysc3648w28jvhkil";
   buildDepends = [
-    cairo cmdargs diagramsCore diagramsLib filepath gtk mtl split
+    cairo cmdargs colour diagramsCore diagramsLib filepath mtl split
+    time
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Cairo backend for diagrams drawing EDSL";

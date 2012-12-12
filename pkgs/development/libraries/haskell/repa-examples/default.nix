@@ -8,11 +8,11 @@ cabal.mkDerivation (self: {
   sha256 = "1lflgpnig2ks2mwp7bywyjqr2v426gbk1675mkkvjncgr5ahf11g";
   isLibrary = false;
   isExecutable = true;
-  jailbreak = true;
   buildDepends = [
     QuickCheck random repa repaAlgorithms repaIo vector
   ];
   extraLibraries = [ llvm ];
+  jailbreak = true;
   meta = {
     homepage = "http://repa.ouroborus.net";
     description = "Examples using the Repa array library";

@@ -76,6 +76,11 @@ rec {
     inherit stdenv fetchurl ncurses asciidoc xmlto docbook_xsl;
   };
 
+  hub = import ./hub {
+    inherit (rubyLibs) rake;
+    inherit stdenv fetchgit groff makeWrapper;
+  };
+
   gitFastExport = import ./fast-export {
     inherit fetchgit stdenv mercurial coreutils git makeWrapper subversion;
   };

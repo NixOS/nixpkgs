@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "iproute";
-  version = "1.2.7";
-  sha256 = "07ixxq45w5wzvfrvsv2b206kygiqn1v3bcclkd98afjpc6mv3ld3";
+  version = "1.2.9";
+  sha256 = "0r0g8dd0f5n462kil3m2lhycl84ygd0ayh900h9x8phgwzfxzv8i";
   buildDepends = [ appar byteorder network ];
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/iproute/";

@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     shakespeareJs shakespeareText text time transformers wai waiExtra
     warp yaml yesod yesodCore yesodDefault yesodForm yesodStatic
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://hledger.org";
     description = "A web interface for the hledger accounting tool";

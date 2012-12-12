@@ -1,14 +1,14 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
- , tcl, tk
+ , tcl, tk, xproto, libX11
  } :
 let
   realGcc = stdenv.gcc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20121122";
+  date = "20121209";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
@@ -60,21 +60,20 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "53598b026b6fd9f79eba02cbc4e2d6c38ca32bd7";
-    sha256 = "159yasgfbbj6px16kgwf7bg478giv8zbm5hg90ipncp1ls2lv3jy";
+    rev = "27b950f62aeb3664ab76e5d827b30b4885a9efb9";
+    sha256 = "0khx8ln2zq3vpj0g66hnsdhw04hxl79fq43rc06ggsmc1j4xrifb";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
-    openblas liblapack
+    openblas liblapack tcl tk xproto libX11 
     ];
 
   configurePhase = ''
     for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB; 
     do 
-      sed -e "s@USE_SYSTEM_$i=0@USE_SYSTEM_$i=1@" -i Make.inc; 
+      makeFlags="$makeFlags USE_SYSTEM_$i=1 "
     done
-    sed -e 's@-lcurses@@g' -i Make.inc
 
     copy_kill_hash(){
       cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"
@@ -88,8 +87,6 @@ stdenv.mkDerivation rec {
     ${if realGcc ==null then "" else 
     ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz "''}
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC "
-
-    sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
 
     export LDFLAGS="-L${suitesparse}/lib -L$out/lib/julia -Wl,-rpath,$out/lib/julia"
 
@@ -107,20 +104,19 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    make -C test/unicode all SHELL="${stdenv.shell}"
-    make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX" SHELL="${stdenv.shell}"
-
     mkdir -p usr/lib
     ln -s libuv.a usr/lib/uv.a
   '';
 
+  preInstall = ''
+    make -C deps install-tk-wrapper
+  '';
+
   postInstall = ''
-   ld -E --whole-archive --shared ${suitesparse}/lib/lib*[a-z].a -o "$out"/lib/libsuitesparse-shared.so
-   for i in umfpack cholmod amd camd colamd btf cxsparse ldl rbio spqr suitesparseconfig; do
-     ln -s "libsuitesparse-shared.so" "$out/lib/lib$i.so"
-   done
-   ln -s "${lighttpd}/sbin/lighttpd" "$out/sbin/"
-   ln -s "${lighttpd}/lib/"* "$out/lib/"
+   (
+   cd $out/share/julia/test/ 
+   $out/bin/julia runtests.jl all
+   ) || true
   '';
 
   meta = {

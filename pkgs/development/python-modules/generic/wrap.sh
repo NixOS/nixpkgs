@@ -45,3 +45,16 @@ _addToPythonPath() {
         done
     fi
 }
+
+createBuildInputsPth() {
+    local category="$1"
+    local inputs="$2"
+    if [ foo"$inputs" != foo ]; then
+        for x in $inputs; do
+            if test -d "$x"/lib/@libPrefix@/site-packages; then
+                echo $x/lib/@libPrefix@/site-packages \
+                    >> "$out"/lib/@libPrefix@/site-packages/${name}-nix-python-$category.pth
+            fi
+        done
+    fi
+}

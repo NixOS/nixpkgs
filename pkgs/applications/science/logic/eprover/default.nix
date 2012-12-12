@@ -1,12 +1,21 @@
 { stdenv, fetchurl, which, texLive }:
-
+let
+  s = # Generated upstream information
+  rec {
+    baseName="eprover";
+    version="1.6";
+    name="${baseName}-${version}";
+    hash="140cnw4qck1hancrqdh0f77yfba5ljhdnfxdxsl0a86a6y7ydbwi";
+    url="http://www4.in.tum.de/~schulz/WORK/E_DOWNLOAD/V_1.6/E.tgz";
+    sha256="140cnw4qck1hancrqdh0f77yfba5ljhdnfxdxsl0a86a6y7ydbwi";
+  };
+in
 stdenv.mkDerivation {
-  name = "EProver-1.4";
+  inherit (s) name;
 
   src = fetchurl {
-    name = "E-1.4.tar.gz";
-    url = "http://www4.informatik.tu-muenchen.de/~schulz/WORK/E_DOWNLOAD/V_1.4/E.tgz";
-    sha256 = "1hxkr21xqkkh4bzqip6qf70w9xvvb8p20zzkvyin631ffgvyvr93";
+    name = "E-${s.version}.tar.gz";
+    inherit (s) url sha256;
   };
 
   buildInputs = [which texLive];
@@ -27,6 +36,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    inherit (s) version;
     description = "E automated theorem prover";
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.all;

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "silently";
-  version = "1.2.4";
-  sha256 = "0ac75b4n9566vpvv6jfcqafnyplv8dd7bgak89b16wy032z1xl5j";
+  version = "1.2.4.1";
+  sha256 = "035dw3zg680ykyz5rqkkrjn51wkznbc4jb45a8l2gh3vgqzgbf52";
   buildDepends = [ deepseq ];
   meta = {
     homepage = "https://github.com/trystan/silently";

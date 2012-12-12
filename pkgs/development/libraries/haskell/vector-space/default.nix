@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vector-space";
-  version = "0.8.4";
-  sha256 = "1hrilbv44lrqm9p3z97xw8nlgxam98abll4iqik8a4d6ky225bwq";
+  version = "0.8.6";
+  sha256 = "03kz2qhnynbgs4vk7348zjkkakzzwvxhbasl0lcazj1cx1ay7c4l";
   buildDepends = [ Boolean MemoTrie NumInstances ];
   meta = {
     description = "Vector & affine spaces, linear maps, and derivatives";

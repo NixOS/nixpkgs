@@ -97,6 +97,12 @@ ensure_name () {
   echo "Resulting name: $CURRENT_NAME"
 }
 
+ensure_attribute_name () {
+  echo "Ensuring attribute name. CURRENT_ATTRIBUTE_NAME: $CURRENT_ATTRIBUTE_NAME" >&2
+  [ -z "$CURRENT_ATTRIBUTE_NAME" ] && attribute_name "$CURRENT_NAME"
+  echo "Resulting attribute name: $CURRENT_ATTRIBUTE_NAME"
+}
+
 ensure_choice () {
   echo "Ensuring that choice is made." >&2
   echo "NEED_TO_CHOOSE_URL: [$NEED_TO_CHOOSE_URL]." >&2
@@ -127,8 +133,13 @@ name () {
   echo "CURRENT_NAME: $CURRENT_NAME" >&2
 }
 
+attribute_name () {
+  CURRENT_ATTRIBUTE_NAME="$1"
+  echo "CURRENT_ATTRIBUTE_NAME: $CURRENT_ATTRIBUTE_NAME" >&2
+}
+
 retrieve_version () {
-  PACKAGED_VERSION="$(nix-instantiate --eval-only '<nixpkgs>' -A "$CURRENT_NAME".meta.version | xargs)"
+  PACKAGED_VERSION="$(nix-instantiate --eval-only '<nixpkgs>' -A "$CURRENT_ATTRIBUTE_NAME".meta.version | xargs)"
 }
 
 directory_of () {
@@ -159,7 +170,7 @@ do_write_expression () {
   echo "${1}rec {"
   echo "${1}  baseName=\"$CURRENT_NAME\";"
   echo "${1}  version=\"$CURRENT_VERSION\";"
-  echo "${1}  name=\"$CURRENT_NAME-$CURRENT_VERSION\";"
+  echo "${1}  name=\"\${baseName}-\${version}\";"
   echo "${1}  hash=\"$CURRENT_HASH\";"
   echo "${1}  url=\"$CURRENT_URL\";"
   echo "${1}  sha256=\"$CURRENT_HASH\";"
@@ -219,6 +230,7 @@ process_config () {
   BEGIN_EXPRESSION='# Generated upstream information';
   source "$CONFIG_DIR/$(basename "$1")"
   ensure_name
+  ensure_attribute_name
   retrieve_version
   ensure_choice
   ensure_version

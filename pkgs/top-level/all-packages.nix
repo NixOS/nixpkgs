@@ -373,6 +373,8 @@ let
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
+  ascii = callPackage ../tools/text/ascii { };
+
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
     inherit freeglut ghostscriptX imagemagick fftw boehmgc
       mesa ncurses readline gsl libsigsegv python zlib perl
@@ -778,9 +780,7 @@ let
 
   gifsicle = callPackage ../tools/graphics/gifsicle { };
 
-  glusterfs = builderDefsPackage ../tools/filesystems/glusterfs {
-    inherit fuse flex bison;
-  };
+  glusterfs = callPackage ../tools/filesystems/glusterfs { };
 
   glxinfo = callPackage ../tools/graphics/glxinfo { };
 
@@ -903,6 +903,8 @@ let
   };
 
   host = callPackage ../tools/networking/host { };
+
+  hping = callPackage ../tools/networking/hping { };
 
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
@@ -1455,6 +1457,8 @@ let
 
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
+  samplicator = callPackage ../tools/networking/samplicator { };
+
   screen = callPackage ../tools/misc/screen { };
 
   scrot = callPackage ../tools/graphics/scrot { };
@@ -1499,9 +1503,9 @@ let
 
   sourceHighlight = callPackage ../tools/text/source-highlight { };
 
-  socat2pre = builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
+  socat2pre = lowPrio (builderDefsPackage ../tools/networking/socat/2.0.0-b3.nix {
     inherit fetchurl stdenv openssl;
-  };
+  });
 
   squashfsTools = callPackage ../tools/filesystems/squashfs { };
 
@@ -1614,6 +1618,8 @@ let
   vpnc = callPackage ../tools/networking/vpnc { };
 
   vtun = callPackage ../tools/networking/vtun { };
+
+  wbox = callPackage ../tools/networking/wbox {};
 
   welkin = callPackage ../tools/graphics/welkin {};
 
@@ -4455,10 +4461,7 @@ let
   # failed to build
   mediastreamer = callPackage ../development/libraries/mediastreamer { };
 
-  mesaSupported =
-    system == "i686-linux" ||
-    system == "x86_64-linux" ||
-    system == "x86_64-darwin";
+  mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesa = callPackage ../development/libraries/mesa { };
 
@@ -4826,6 +4829,7 @@ let
   spice = callPackage ../development/libraries/spice {
     celt = celt_0_5_1;
     inherit (xlibs) libXrandr libXfixes libXext libXrender libXinerama;
+    inherit (pythonPackages) pyparsing;
   };
 
   spice_protocol = callPackage ../development/libraries/spice-protocol { };
@@ -5175,13 +5179,13 @@ let
 
   numeric = callPackage ../development/python-modules/numeric { };
 
-  pil = callPackage ../development/python-modules/pil { };
+  pil = python27Packages.pil;
 
   psyco = callPackage ../development/python-modules/psyco { };
 
   pycairo = callPackage ../development/python-modules/pycairo { };
 
-  pycrypto = callPackage ../development/python-modules/pycrypto { };
+  pycrypto = python27Packages.pycrypto;
 
   pycups = callPackage ../development/python-modules/pycups { };
 
@@ -5416,7 +5420,12 @@ let
 
   radius = callPackage ../servers/radius { };
 
-  redis = callPackage ../servers/nosql/redis { };
+  redis = callPackage ../servers/nosql/redis {
+    stdenv =
+      if stdenv.isDarwin
+      then overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   redstore = callPackage ../servers/http/redstore { };
 
@@ -5838,6 +5847,19 @@ let
       ];
   };
 
+  linux_3_7 = makeOverridable (import ../os-specific/linux/kernel/linux-3.7.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [
+        kernelPatches.sec_perm_2_6_24
+        #kernelPatches.aufs3_6
+      ] ++ lib.optionals (platform.kernelArch == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -5898,6 +5920,7 @@ let
 
     nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
     nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
+    nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
 
     openafsClient = callPackage ../servers/openafs-client { };
 
@@ -5964,6 +5987,7 @@ let
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 pkgs.linuxPackages_3_4);
   linuxPackages_3_5 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_5 pkgs.linuxPackages_3_5);
   linuxPackages_3_6 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6 pkgs.linuxPackages_3_6);
+  linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7 pkgs.linuxPackages_3_7);
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -6575,13 +6599,18 @@ let
   };
 
   chromium = lowPrio (callPackage ../applications/networking/browsers/chromium {
+    channel = "stable";
     gconf = gnome.GConf;
+    pulseSupport = config.pulseaudio or false;
   });
 
-  chromeWrapper = wrapFirefox
-    { browser = chromium; browserName = chromium.packageName; desktopName = "Chromium";
-      icon = "${chromium}/share/icons/hicolor/48x48/apps/${chromium.packageName}.png";
-    };
+  chromiumBeta = chromium.override { channel = "beta"; };
+  chromiumBetaWrapper = wrapChromium chromiumBeta;
+
+  chromiumDev = chromium.override { channel = "dev"; };
+  chromiumDevWrapper = wrapChromium chromiumDev;
+
+  chromiumWrapper = wrapChromium chromium;
 
   cinelerra = callPackage ../applications/video/cinelerra { };
 
@@ -6625,7 +6654,7 @@ let
 
   d4x = callPackage ../applications/misc/d4x { };
 
-  darcs = haskellPackages.darcs;
+  darcs = lib.setName "darcs-${haskellPackages.darcs.version}" haskellPackages.darcs;
 
   darktable = callPackage ../applications/graphics/darktable {
     inherit (gnome) GConf libglade;
@@ -7232,6 +7261,8 @@ let
 
   librecad = callPackage ../applications/misc/librecad { };
 
+  librecad2 = callPackage ../applications/misc/librecad/2.0.nix { };
+
   libreoffice = callPackage ../applications/office/openoffice/libreoffice.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome) GConf ORBit2 gnome_vfs;
@@ -7778,6 +7809,8 @@ let
     gtk = gtk3;
   };
 
+  vbindiff = callPackage ../applications/editors/vbindiff { };
+
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   veracity = callPackage ../applications/version-management/veracity {};
@@ -7860,6 +7893,13 @@ let
 
   wordnet = callPackage ../applications/misc/wordnet { };
 
+  wrapChromium = browser: wrapFirefox {
+    inherit browser;
+    browserName = browser.packageName;
+    desktopName = "Chromium";
+    icon = "${browser}/share/icons/hicolor/48x48/apps/${browser.packageName}.png";
+  };
+
   wrapFirefox =
     { browser, browserName ? "firefox", desktopName ? "Firefox", nameSuffix ? ""
     , icon ? "${browser}/lib/${browser.name}/icons/mozicon128.png" }:
@@ -7904,6 +7944,8 @@ let
   xawtv = callPackage ../applications/video/xawtv { };
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
+
+  xcalib = callPackage ../tools/X11/xcalib { };
 
   xchat = callPackage ../applications/networking/irc/xchat { };
 
@@ -8158,6 +8200,8 @@ let
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
+  scid = callPackage ../games/scid { };
+
   scummvm = callPackage ../games/scummvm { };
 
   scorched3d = callPackage ../games/scorched3d { };
@@ -8261,11 +8305,7 @@ let
 
   worldofgoo = callPackage ../games/worldofgoo { };
 
-  xboard = builderDefsPackage (import ../games/xboard) {
-    inherit (xlibs) libX11 xproto libXt libXaw libSM
-      libICE libXmu libXext libXpm;
-    inherit gnuchess texinfo;
-  };
+  xboard =  callPackage ../games/xboard { };
 
   xconq = callPackage ../games/xconq {};
 
@@ -8562,7 +8602,7 @@ let
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
 
-  eprover = callPackage ../applications/science/logic/eProver {
+  eprover = callPackage ../applications/science/logic/eprover {
     texLive = texLiveAggregationFun {
       paths = [
         texLive texLiveExtra
@@ -8774,10 +8814,14 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
+  nixUnstable = nixStable;
+
+  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
+  */
 
   nut = callPackage ../applications/misc/nut { };
 
@@ -8835,6 +8879,15 @@ let
   rssglx = callPackage ../misc/screensavers/rss-glx { };
 
   xlockmore = callPackage ../misc/screensavers/xlockmore { };
+
+  samsungUnifiedLinuxDriver = import ../misc/cups/drivers/samsung {
+    inherit fetchurl stdenv;
+    inherit cups ghostscript glibc patchelf;
+    gcc = import ../development/compilers/gcc/4.4 {
+      inherit stdenv fetchurl texinfo gmp mpfr noSysDirs gettext which;
+      profiledCompiler = true;
+    };
+  };
 
   saneBackends = callPackage ../applications/graphics/sane/backends.nix {
     gt68xxFirmware = config.sane.gt68xxFirmware or null;
