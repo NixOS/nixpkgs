@@ -903,6 +903,8 @@ let
 
   host = callPackage ../tools/networking/host { };
 
+  hping = callPackage ../tools/networking/hping { };
+
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   # FIXME: This Hydra snapshot is outdated and depends on the `nixPerl',
