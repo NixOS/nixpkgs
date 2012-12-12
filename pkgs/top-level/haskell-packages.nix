@@ -799,6 +799,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   fingertree = callPackage ../development/libraries/haskell/fingertree {};
 
+  forceLayout = callPackage ../development/libraries/haskell/force-layout {};
+
   fsnotify = callPackage ../development/libraries/haskell/fsnotify {};
 
   gamma = callPackage ../development/libraries/haskell/gamma {};
