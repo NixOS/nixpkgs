@@ -1195,6 +1195,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   monadsTf = callPackage ../development/libraries/haskell/monads-tf {};
 
+  monoidExtras = callPackage ../development/libraries/haskell/monoid-extras {};
+
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
