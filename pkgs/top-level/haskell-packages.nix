@@ -735,6 +735,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dstring = callPackage ../development/libraries/haskell/dstring {};
 
+  dualTree = callPackage ../development/libraries/haskell/dual-tree {};
+
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
 
   editline = callPackage ../development/libraries/haskell/editline {};
