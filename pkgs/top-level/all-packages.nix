@@ -7866,6 +7866,8 @@ let
     gtk = gtk3;
   };
 
+  vbindiff = callPackage ../applications/editors/vbindiff { };
+
   vdpauinfo = callPackage ../tools/X11/vdpauinfo { };
 
   veracity = callPackage ../applications/version-management/veracity {};
