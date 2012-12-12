@@ -516,6 +516,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   blazeMarkup = callPackage ../development/libraries/haskell/blaze-markup {};
 
+  blazeSvg = callPackage ../development/libraries/haskell/blaze-svg {};
+
   blazeTextual = callPackage ../development/libraries/haskell/blaze-textual {};
 
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
