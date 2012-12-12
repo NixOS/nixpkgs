@@ -373,6 +373,8 @@ let
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
+  ascii = callPackage ../tools/text/ascii { };
+
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
     inherit freeglut ghostscriptX imagemagick fftw boehmgc
       mesa ncurses readline gsl libsigsegv python zlib perl
