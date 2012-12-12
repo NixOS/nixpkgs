@@ -1578,6 +1578,7 @@ rec {
     "rpm-build"
     "tar"
     "unzip"
+    "kernel"
   ];
 
 
