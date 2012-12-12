@@ -1161,6 +1161,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mersenneRandomPure64 = callPackage ../development/libraries/haskell/mersenne-random-pure64 {};
 
+  minimorph = callPackage ../development/libraries/haskell/minimorph {};
+
+  miniutter = callPackage ../development/libraries/haskell/miniutter {};
+
   mimeMail = callPackage ../development/libraries/haskell/mime-mail {};
 
   mimeTypes = callPackage ../development/libraries/haskell/mime-types {};
