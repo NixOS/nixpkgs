@@ -1456,6 +1456,8 @@ let
 
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
 
+  samplicator = callPackage ../tools/networking/samplicator { };
+
   screen = callPackage ../tools/misc/screen { };
 
   scrot = callPackage ../tools/graphics/scrot { };
