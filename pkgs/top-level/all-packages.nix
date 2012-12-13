@@ -7020,7 +7020,6 @@ let
   };
 
   freecad = callPackage ../applications/graphics/freecad {
-    boost = boost146;
   };
 
   freemind = callPackage ../applications/misc/freemind {
