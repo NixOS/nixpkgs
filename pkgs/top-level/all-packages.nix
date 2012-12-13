@@ -3449,8 +3449,6 @@ let
 
   confuse = callPackage ../development/libraries/confuse { };
 
-  consolekit = callPackage ../development/libraries/consolekit { };
-
   coredumper = callPackage ../development/libraries/coredumper { };
 
   ctl = callPackage ../development/libraries/ctl { };
@@ -7703,9 +7701,7 @@ let
 
   dropbox = callPackage ../applications/networking/dropbox { };
 
-  slim = callPackage ../applications/display-managers/slim {
-    consolekit = null;
-  };
+  slim = callPackage ../applications/display-managers/slim { };
 
   sndBase = builderDefsPackage (import ../applications/audio/snd) {
     inherit fetchurl stdenv stringsWithDeps lib fftw;
