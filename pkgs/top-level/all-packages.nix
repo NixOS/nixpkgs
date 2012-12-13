@@ -3004,6 +3004,8 @@ let
 
   byacc = callPackage ../development/tools/parsing/byacc { };
 
+  casperjs = callPackage ../development/tools/casperjs { };
+
   cbrowser = callPackage ../development/tools/misc/cbrowser { };
 
   ccache = callPackage ../development/tools/misc/ccache { };
