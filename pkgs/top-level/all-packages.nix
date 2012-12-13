@@ -4846,6 +4846,8 @@ let
 
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
+  libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
+
   libgeotiff = callPackage ../development/libraries/libgeotiff { };
 
   libunistring = callPackage ../development/libraries/libunistring { };
