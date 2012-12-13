@@ -3197,6 +3197,8 @@ let
 
   peg = callPackage ../development/tools/parsing/peg { };
 
+  phantomjs = callPackage ../development/tools/phantomjs { };
+
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
   /* Make pkgconfig always return a buildDrv, never a proper hostDrv,
