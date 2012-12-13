@@ -373,6 +373,8 @@ let
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
+  argyllcms = callPackage ../tools/graphics/argyllcms {};
+
   ascii = callPackage ../tools/text/ascii { };
 
   asymptote = builderDefsPackage ../tools/graphics/asymptote {
