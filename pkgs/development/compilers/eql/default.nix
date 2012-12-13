@@ -12,9 +12,9 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     method = "fetchgit";
-    rev = "14f62c94f952104d27d920ea662c8a61b370abe8";
+    rev = "9097bf98446ee33c07bb155d800395775ce0d9b2";
     url = "git://gitorious.org/eql/eql";
-    hash = "1ca31f0ad8cbc45d2fdf7b1e4059b1e612523c043f4688d7147c7e16fa5ba9ca";
+    hash = "1fp88xmmk1sa0iqxahfiv818bp2sbf66vqrd4xq9jb731ybdvsb8";
     version = rev;
     name = "eql-git-${version}";
   };
@@ -30,7 +30,7 @@ rec {
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
-  phaseNames = ["setVars" "fixPaths" "firstMetaTypeId" "buildEQLLib" "doQMake" "doMake" "doDeploy"];
+  phaseNames = ["setVars" "fixPaths" "doQMake" "doMake" "doDeploy"];
 
   setVars = a.fullDepEntry (''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC"
@@ -40,27 +40,13 @@ rec {
     sed -re 's@[(]in-home "gui/.command-history"[)]@(concatenate '"'"'string (ext:getenv "HOME") "/.eql-gui-command-history")@' -i gui/gui.lisp
   '') ["minInit" "doUnpack"];
 
-  firstMetaTypeId = a.fullDepEntry (''
-    cd src 
-    qmake first_metatype_id.pro
-    make
-    TMP=.
-    TMPDIR=.
-    XKB_BINDIR="${xkbcomp}/bin" Xvfb -once -reset -terminate :2 -xkbdir ${xkeyboard_config}/etc/X11/xkb &
-    sleep 10;
-    DISPLAY=:2 ./first_metatype_id
-  '') ["doUnpack" "addInputs"];
-
-  buildEQLLib = a.fullDepEntry (''
-    ecl -shell make-eql-lib.lisp
-    qmake eql_lib.pro
-    make
-  '') ["doUnpack" "addInputs" "firstMetaTypeId"];
-
   doQMake = a.fullDepEntry (''
+    cd src
     qmake eql_exe.pro
     make
-  '') ["addInputs" "firstMetaTypeId" "buildEQLLib"];
+    cd ..
+    cd src
+  '') ["addInputs" "doUnpack" "buildEQLLib"];
 
   doDeploy = a.fullDepEntry (''
     cd ..
@@ -70,7 +56,16 @@ rec {
     ln -s $out/lib/eql/build-dir/src/*.h $out/include
     ln -s $out/lib/eql/build-dir/src/gen/*.h $out/include/gen
     ln -s $out/lib/eql/build-dir/libeql*.so* $out/lib
-  '') ["minInit" "defEnsureDir"];
+  '') ["minInit"];
+
+  buildEQLLib = a.fullDepEntry (''
+    cd src
+    ecl -shell make-eql-lib.lisp
+    qmake eql_lib.pro
+    make
+    cd ..
+  '') ["doUnpack" "addInputs"];
+
 
   meta = {
     description = "Embedded Qt Lisp (ECL+Qt)";
