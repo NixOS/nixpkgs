@@ -21,10 +21,11 @@ stdenv.mkDerivation rec {
             sha256 = "1m14czhi3b388didn0a881glsx8bnsg9gnxgj5lghr4l5mgqyrd7";
           };
 
-  buildNativeInputs = [ upx ];
+  buildNativeInputs = stdenv.lib.optional (stdenv.system == "x86_64-linux") upx;
 
-  buildPhase = ''
+  buildPhase = stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
     upx -d bin/phantomjs
+  '' + ''
     patchelf \
       --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
       --set-rpath ${freetype}/lib:${fontconfig}/lib:${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib \
