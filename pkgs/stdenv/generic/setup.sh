@@ -445,7 +445,7 @@ unpackFile() {
         *)
             if [ -d "$curSrc" ]; then
                 stripHash $curSrc
-                cp -prd $curSrc $strippedName
+                cp -prd --no-preserve=timestamps $curSrc $strippedName
             else
                 if [ -z "$unpackCmd" ]; then
                     echo "source archive $curSrc has unknown type"
