@@ -6591,7 +6591,9 @@ let
 
   avidemux = callPackage ../applications/video/avidemux { };
 
-  avogadro = callPackage ../applications/science/chemistry/avogadro { };
+  avogadro = callPackage ../applications/science/chemistry/avogadro {
+    eigen = eigen2;
+  };
 
   awesome = callPackage ../applications/window-managers/awesome {
     lua = lua5;
