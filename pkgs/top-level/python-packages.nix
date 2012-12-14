@@ -9,7 +9,7 @@ let pythonPackages = python.modules // rec {
 
   buildPythonPackage = import ../development/python-modules/generic {
     inherit (pkgs) lib;
-    inherit python wrapPython setuptools setuptoolsSite offlineDistutils;
+    inherit python wrapPython setuptools recursivePthLoader offlineDistutils;
   };
 
 

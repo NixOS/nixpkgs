@@ -3,7 +3,7 @@
    (http://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
-{ python, setuptools, wrapPython, lib, offlineDistutils, setuptoolsSite }:
+{ python, setuptools, wrapPython, lib, offlineDistutils, recursivePthLoader }:
 
 { name, namePrefix ? "python-"
 
@@ -51,8 +51,8 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
-  # setuptoolsSite is responsible for loading pth files
-  propagatedBuildInputs = propagatedBuildInputs ++ [ setuptoolsSite ];
+  # recursivePthLoader is responsible for loading pth files
+  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
 
   buildInputStrings = map toString buildInputs;
 
