@@ -1542,7 +1542,7 @@ let pythonPackages = python.modules // rec {
     buildInputs = [ mock coverage ];
 
     # ServerNotFoundError: Unable to find the server at oauth-sandbox.sevengoslings.net
-    #doCheck = false;
+    doCheck = false;
 
     meta = {
       homepage = "https://github.com/simplegeo/python-oauth2";
