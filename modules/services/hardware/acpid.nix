@@ -8,11 +8,11 @@ let
     ''
       ensureDir $out
       ${
-        # Generate a .conf file for each event. (You can't have
+        # Generate a configuration file for each event. (You can't have
         # multiple events in one config file...)
         let f = event:
           ''
-            fn=$out/${event.name}.conf
+            fn=$out/${event.name}
             echo "event=${event.event}" > $fn
             echo "action=${pkgs.writeScript "${event.name}.sh" event.action}" >> $fn
           '';
