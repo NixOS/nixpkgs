@@ -32,10 +32,16 @@ f.write('''{{
 '''.format(args.region, key_name, ebs_size))
 f.close()
 
-depl = deployment.Deployment("./ebs-creator.json", create=True, nix_exprs=["./ebs-creator.nix", "./ebs-creator-config.nix"])
-depl.load_state()
-if not args.keep: depl.destroy_vms()
-depl.deploy()
+db = deployment.open_database("./ebs-creator.charon")
+try:
+    depl = deployment.open_deployment(db, "ebs-creator")
+except Exception:
+    depl = deployment.create_deployment(db)
+    depl.name = "ebs-creator"
+depl.auto_response = "y"
+depl.nix_exprs = ["./ebs-creator.nix", "./ebs-creator-config.nix"]
+if not args.keep: depl.destroy_resources()
+depl.deploy(allow_reboot=True)
 
 m = depl.machines['machine']
 
@@ -52,8 +58,16 @@ m.run_command("mkdir -p /mnt")
 m.run_command("mount {0} /mnt".format(device))
 m.run_command("touch /mnt/.ebs")
 m.run_command("mkdir -p /mnt/etc/nixos")
-m.run_command("nix-channel --add http://nixos.org/channels/nixos-unstable")
-m.run_command("nix-channel --update")
+# Kind of hacky until the nixos channel is updated to systemd
+#m.run_command("nix-channel --add http://nixos.org/channels/nixos-unstable")
+#m.run_command("nix-channel --update")
+m.run_command("mkdir unpack")
+m.run_command("cd unpack; (curl -L http://hydra.nixos.org/job/nixos/systemd/channel/latest/download | bzcat | tar xv)")
+m.run_command("mkdir nixos")
+m.run_command("mv unpack/*/* nixos")
+m.run_command("mv nixos unpack/*")
+m.run_command("nix-env -p /nix/var/nix/profiles/per-user/root/channels -i $(nix-store --add unpack/*)")
+m.run_command("rm -fR unpack")
 m.run_command("nixos-rebuild switch")
 version = m.run_command("nixos-version", capture_stdout=True).replace('"', '').rstrip()
 print >> sys.stderr, "NixOS version is {0}".format(version)
@@ -84,7 +98,7 @@ def check():
     return status == '100%'
 
 m.connect()
-volume = m._conn.get_all_volumes([], filters={'attachment.instance-id': m._instance_id, 'attachment.device': "/dev/sdg"})[0]
+volume = m._conn.get_all_volumes([], filters={'attachment.instance-id': m.resource_id, 'attachment.device': "/dev/sdg"})[0]
 if args.hvm:
     instance = m._conn.run_instances( image_id="ami-6a9e4503"
                                     , instance_type=instance_type
@@ -117,7 +131,7 @@ else:
 
     m._conn.create_tags([snapshot.id], {'Name': ami_name})
 
-    if not args.keep: depl.destroy_vms()
+    if not args.keep: depl.destroy_resources()
 
      # Register the image.
     aki = m._conn.get_all_images(filters={'manifest-location': '*pv-grub-hd0_1.03-x86_64*'})[0]
@@ -163,11 +177,15 @@ f.write(
     '''.format(args.region, ami_id, instance_type, key_name))
 f.close()
 
-test_depl = deployment.Deployment("./ebs-test.json", create=True, nix_exprs=["./ebs-test.nix"])
-test_depl.load_state()
+test_depl = deployment.create_deployment(db)
+test_depl.auto_response = "y"
+test_depl.name = "ebs-creator-test"
+test_depl.nix_exprs = [ "./ebs-test.nix" ]
 test_depl.deploy(create_only=True)
 test_depl.machines['machine'].run_command("nixos-version")
-if not args.keep: test_depl.destroy_vms()
+if not args.keep:
+    test_depl.destroy_resources()
+    test_depl.delete()
 
 # Log the AMI ID.
 f = open("{0}.ebs.ami-id".format(args.region), "w")
