@@ -286,12 +286,12 @@ in
       mkdir -p $targetRoot/boot
       mount -o remount,ro $targetRoot/nix/store
       ${optionalString cfg.writableStore ''
-        mkdir -p /unionfs-chroot$targetRoot
-        mount --rbind $targetRoot /unionfs-chroot$targetRoot
+        mkdir -p /unionfs-chroot/ro-store
+        mount --rbind $targetRoot/nix/store /unionfs-chroot/ro-store
 
-        mkdir /unionfs-chroot/mnt-store-tmpfs
-        mount -t tmpfs -o "mode=755" none /unionfs-chroot/mnt-store-tmpfs
-        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /mnt-store-tmpfs=RW:$targetRoot/nix/store=RO $targetRoot/nix/store
+        mkdir /unionfs-chroot/rw-store
+        mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
+        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-store=RW:/ro-store=RO $targetRoot/nix/store
       ''}
     '';
 

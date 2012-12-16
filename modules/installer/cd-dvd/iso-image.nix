@@ -202,20 +202,20 @@ in
   # /nix/store (the squashfs image) to make this a live CD.
   boot.initrd.postMountCommands =
     ''
-      mkdir -p /unionfs-chroot$targetRoot
-      mount --rbind $targetRoot /unionfs-chroot$targetRoot
+      mkdir -p /unionfs-chroot/ro-root
+      mount --rbind $targetRoot /unionfs-chroot/ro-root
 
-      mkdir /unionfs-chroot/mnt-root-tmpfs
-      mount -t tmpfs -o "mode=755" none /unionfs-chroot/mnt-root-tmpfs
+      mkdir /unionfs-chroot/rw-root
+      mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-root
       mkdir /mnt-root-union
-      unionfs -o allow_other,cow,chroot=/unionfs-chroot /mnt-root-tmpfs=RW:$targetRoot=RO /mnt-root-union
+      unionfs -o allow_other,cow,chroot=/unionfs-chroot /rw-root=RW:/ro-root=RO /mnt-root-union
       oldTargetRoot=$targetRoot
       targetRoot=/mnt-root-union
 
-      mkdir /unionfs-chroot/mnt-store-tmpfs
-      mount -t tmpfs -o "mode=755" none /unionfs-chroot/mnt-store-tmpfs
+      mkdir /unionfs-chroot/rw-store
+      mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
       mkdir -p $oldTargetRoot/nix/store
-      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /mnt-store-tmpfs=RW:$oldTargetRoot/nix/store=RO /mnt-root-union/nix/store
+      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-store=RW:/ro-root/nix/store=RO /mnt-root-union/nix/store
     '';
 
   # Closures to be copied to the Nix store on the CD, namely the init
