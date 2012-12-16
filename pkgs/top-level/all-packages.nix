@@ -553,6 +553,8 @@ let
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
+  unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
+
   usb_modeswitch = callPackage ../development/tools/misc/usb-modeswitch { };
 
   clamav = callPackage ../tools/security/clamav { };
