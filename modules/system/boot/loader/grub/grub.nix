@@ -13,10 +13,11 @@ let
   grubConfig = pkgs.writeText "grub-config.xml" (builtins.toXML
     { splashImage = f config.boot.loader.grub.splashImage;
       grub = f grub;
+      shell = "${pkgs.stdenv.shell}";
       fullVersion = (builtins.parseDrvName config.system.build.grub.name).version;
       inherit (config.boot.loader.grub)
         version extraConfig extraPerEntryConfig extraEntries
-        extraEntriesBeforeNixOS configurationLimit copyKernels timeout
+        extraEntriesBeforeNixOS extraPrepareConfig configurationLimit copyKernels timeout
         default devices;
     });
 
