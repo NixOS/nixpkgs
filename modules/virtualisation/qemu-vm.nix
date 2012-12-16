@@ -95,7 +95,7 @@ let
         description =
           ''
             If enabled, the Nix store in the VM is made writable by
-            layering an AUFS/tmpfs filesystem on top of the host's Nix
+            layering a unionfs-fuse/tmpfs filesystem on top of the host's Nix
             store.
           '';
       };
@@ -250,16 +250,18 @@ in
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
   boot.initrd.availableKernelModules =
-    [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" ]
-    ++ optional cfg.writableStore [ "aufs" ];
+    [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" ];
 
-  boot.extraModulePackages =
-    optional cfg.writableStore config.boot.kernelPackages.aufs;
+  # unionfs-fuse expects fuse to be loaded
+  boot.initrd.kernelModules = optional cfg.writableStore [ "fuse" ];
 
   boot.initrd.extraUtilsCommands =
     ''
       # We need mke2fs in the initrd.
       cp ${pkgs.e2fsprogs}/sbin/mke2fs $out/bin
+    '' + optionalString cfg.writableStore ''
+      cp -v ${pkgs.fuse}/lib/libfuse* $out/lib
+      cp -v ${pkgs.unionfs-fuse}/bin/unionfs $out/bin
     '';
 
   boot.initrd.postDeviceCommands =
@@ -288,9 +290,17 @@ in
       mkdir -p $targetRoot/boot
       mount -o remount,ro $targetRoot/nix/store
       ${optionalString cfg.writableStore ''
-        mkdir /mnt-store-tmpfs
-        mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
-        mount -t aufs -o dirs=/mnt-store-tmpfs=rw:$targetRoot/nix/store=rr none $targetRoot/nix/store
+        # Hacky!!! fuse hard-codes the path to mount
+        mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
+        ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
+        ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
+
+        mkdir -p /unionfs-chroot$targetRoot
+        mount --rbind $targetRoot /unionfs-chroot$targetRoot
+
+        mkdir /unionfs-chroot/mnt-store-tmpfs
+        mount -t tmpfs -o "mode=755" none /unionfs-chroot/mnt-store-tmpfs
+        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /mnt-store-tmpfs=RW:$targetRoot/nix/store=RO $targetRoot/nix/store
       ''}
     '';
 
