@@ -3,7 +3,7 @@
 , img ? "bzImage"
 , rootModules ?
     [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3"
-      "unix" "hmac" "md4" "ecb" "des_generic"
+      "ext4" "unix" "hmac" "md4" "ecb" "des_generic"
     ]
 }:
 
