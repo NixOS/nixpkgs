@@ -192,34 +192,41 @@ in
       options = "loop";
     };
 
-  # We need squashfs in the initrd to mount the compressed Nix store,
-  # and aufs to make the root filesystem appear writable.
-  boot.extraModulePackages =
-    if config.boot.kernelPackages.aufs == null then
-      abort "This kernel doesn't have aufs enabled"
-    else
-      [ config.boot.kernelPackages.aufs ];
+  boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
 
-  boot.initrd.availableKernelModules = [ "aufs" "squashfs" "iso9660" ];
-
-  boot.initrd.kernelModules = [ "loop" ];
+  boot.initrd.kernelModules = [ "loop" "fuse" ];
 
   boot.kernelModules = pkgs.stdenv.lib.optional config.isoImage.makeEfiBootable "efivars";
+
+  # Need unionfs-fuse
+  boot.initrd.extraUtilsCommands = ''
+    cp -v ${pkgs.fuse}/lib/libfuse* $out/lib
+    cp -v ${pkgs.unionfs-fuse}/bin/unionfs $out/bin
+  '';
 
   # In stage 1, mount a tmpfs on top of / (the ISO image) and
   # /nix/store (the squashfs image) to make this a live CD.
   boot.initrd.postMountCommands =
     ''
-      mkdir /mnt-root-tmpfs
-      mount -t tmpfs -o "mode=755" none /mnt-root-tmpfs
+      # Hacky!!! fuse hard-codes the path to mount
+      mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
+      ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
+      ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
+
+      mkdir -p /unionfs-chroot$targetRoot
+      mount --rbind $targetRoot /unionfs-chroot$targetRoot
+
+      mkdir /unionfs-chroot/mnt-root-tmpfs
+      mount -t tmpfs -o "mode=755" none /unionfs-chroot/mnt-root-tmpfs
       mkdir /mnt-root-union
-      mount -t aufs -o dirs=/mnt-root-tmpfs=rw:$targetRoot=ro none /mnt-root-union
+      unionfs -o allow_other,cow,chroot=/unionfs-chroot /mnt-root-tmpfs=RW:$targetRoot=RO /mnt-root-union
+      oldTargetRoot=$targetRoot
       targetRoot=/mnt-root-union
 
-      mkdir /mnt-store-tmpfs
-      mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
-      mkdir -p $targetRoot/nix/store
-      mount -t aufs -o dirs=/mnt-store-tmpfs=rw:/mnt-root/nix/store=ro none /mnt-root-union/nix/store
+      mkdir /unionfs-chroot/mnt-store-tmpfs
+      mount -t tmpfs -o "mode=755" none /unionfs-chroot/mnt-store-tmpfs
+      mkdir -p $oldTargetRoot/nix/store
+      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /mnt-store-tmpfs=RW:$oldTargetRoot/nix/store=RO /mnt-root-union/nix/store
     '';
 
   # Closures to be copied to the Nix store on the CD, namely the init

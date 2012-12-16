@@ -332,8 +332,8 @@ exec 3>&-
 udevadm control --exit || true
 
 # Kill any remaining processes, just to be sure we're not taking any
-# with us into stage 2.
-pkill -9 -v 1
+# with us into stage 2. unionfs-fuse mounts require the unionfs process.
+pkill -9 -v '(1|unionfs)'
 
 
 if test -n "$debug1mounts"; then fail; fi
