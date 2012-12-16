@@ -407,6 +407,30 @@ in
       description = "If non-empty, write log messages to the specified TTY device.";
     };
 
+    services.journald.rateLimitInterval = mkOption {
+      default = "10s";
+      type = types.uniq types.string;
+      description = ''
+        Configures the rate limiting interval that is applied to all
+        messages generated on the system. This rate limiting is applied
+        per-service, so that two services which log do not interfere with
+        each other's limit. The value may be specified in the following
+        units: s, min, h, ms, us. To turn off any kind of rate limiting,
+        set either value to 0.
+      '';
+    };
+
+    services.journald.rateLimitBurst = mkOption {
+      default = 100;
+      type = types.uniq types.int;
+      description = ''
+        Configures the rate limiting burst limit (number of messages per
+        interval) that is applied to all messages generated on the system.
+        This rate limiting is applied per-service, so that two services
+        which log do not interfere with each other's limit.
+      '';
+    };
+
   };
 
 
@@ -433,6 +457,8 @@ in
         { source = pkgs.writeText "journald.conf"
             ''
               [Journal]
+              RateLimitInterval=${config.services.journald.rateLimitInterval}
+              RateLimitBurst=${toString config.services.journald.rateLimitBurst}
               ${optionalString (config.services.journald.console != "") ''
                 ForwardToConsole=yes
                 TTYPath=${config.services.journald.console}
