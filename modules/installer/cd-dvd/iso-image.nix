@@ -194,25 +194,14 @@ in
 
   boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
 
-  boot.initrd.kernelModules = [ "loop" "fuse" ];
+  boot.initrd.kernelModules = [ "loop" ];
 
   boot.kernelModules = pkgs.stdenv.lib.optional config.isoImage.makeEfiBootable "efivars";
-
-  # Need unionfs-fuse
-  boot.initrd.extraUtilsCommands = ''
-    cp -v ${pkgs.fuse}/lib/libfuse* $out/lib
-    cp -v ${pkgs.unionfs-fuse}/bin/unionfs $out/bin
-  '';
 
   # In stage 1, mount a tmpfs on top of / (the ISO image) and
   # /nix/store (the squashfs image) to make this a live CD.
   boot.initrd.postMountCommands =
     ''
-      # Hacky!!! fuse hard-codes the path to mount
-      mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
-      ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
-      ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
-
       mkdir -p /unionfs-chroot$targetRoot
       mount --rbind $targetRoot /unionfs-chroot$targetRoot
 
@@ -318,7 +307,7 @@ in
     '';
 
   # Add vfat support to the initrd to enable people to copy the
-  # contents of the CD to a bootable USB stick.
-  boot.initrd.supportedFilesystems = [ "vfat" ];
+  # contents of the CD to a bootable USB stick. Need unionfs-fuse for union mounts
+  boot.initrd.supportedFilesystems = [ "vfat" "unionfs-fuse" ];
     
 }

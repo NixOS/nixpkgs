@@ -252,16 +252,12 @@ in
   boot.initrd.availableKernelModules =
     [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" ];
 
-  # unionfs-fuse expects fuse to be loaded
-  boot.initrd.kernelModules = optional cfg.writableStore [ "fuse" ];
+  boot.initrd.supportedFilesystems = optional cfg.writableStore "unionfs-fuse";
 
   boot.initrd.extraUtilsCommands =
     ''
       # We need mke2fs in the initrd.
       cp ${pkgs.e2fsprogs}/sbin/mke2fs $out/bin
-    '' + optionalString cfg.writableStore ''
-      cp -v ${pkgs.fuse}/lib/libfuse* $out/lib
-      cp -v ${pkgs.unionfs-fuse}/bin/unionfs $out/bin
     '';
 
   boot.initrd.postDeviceCommands =
@@ -290,11 +286,6 @@ in
       mkdir -p $targetRoot/boot
       mount -o remount,ro $targetRoot/nix/store
       ${optionalString cfg.writableStore ''
-        # Hacky!!! fuse hard-codes the path to mount
-        mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
-        ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
-        ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
-
         mkdir -p /unionfs-chroot$targetRoot
         mount --rbind $targetRoot /unionfs-chroot$targetRoot
 

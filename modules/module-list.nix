@@ -214,6 +214,7 @@
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/reiserfs.nix
+  ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vfat.nix
   ./tasks/filesystems/xfs.nix
   ./tasks/kbd.nix
