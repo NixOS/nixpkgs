@@ -10,4 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake fuse ];
+
+  meta = {
+    description = "FUSE UnionFS implementation";
+    homepage = http://podgorny.cz/moin/UnionFsFuse;
+    license = stdenv.lib.licenses.bsd3;
+    maintainers = [ stdenv.lib.maintainers.shlevy ];
+  };
 }
