@@ -74,7 +74,7 @@ print >> sys.stderr, "NixOS version is {0}".format(version)
 m.run_command("cp -f $(nix-instantiate --find-file nixos/modules/virtualisation/amazon-config.nix) /mnt/etc/nixos/configuration.nix")
 m.run_command("nixos-install")
 if args.hvm:
-    m.run_command('cp /nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
+    m.run_command('cp /mnt/nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
     m.run_command('sed -i "s|hd0|hd0,0|" /mnt/boot/grub/menu.lst')
     m.run_command('echo "(hd1) /dev/xvdg" > device.map')
     m.run_command('echo -e "root (hd1,0)\nsetup (hd1)" | grub --device-map=device.map --batch')
@@ -103,7 +103,7 @@ if args.hvm:
     instance = m._conn.run_instances( image_id="ami-6a9e4503"
                                     , instance_type=instance_type
                                     , key_name=key_name
-                                    , placement=m._zone
+                                    , placement=m.zone
                                     , security_groups=["eelco-test"]).instances[0]
     charon.util.check_wait(lambda: instance.update() == 'running', max_tries=120)
     instance.stop()
