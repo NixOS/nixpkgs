@@ -1,14 +1,16 @@
 { stdenv, fetchurl, pam, openssl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "pam_ssh_agent_auth-0.9.3";
+  name = "pam_ssh_agent_auth-0.9.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/pamsshagentauth/${name}.tar.bz2";
-    sha256 = "19p5mzplnr9g9vlp16nipf5rjw4v8zncvimarwgix958yml7j08h";
+    sha256 = "1a8cv223f30mvkxnyh9hk6kya0ynkwwkc5nhlz3rcqhxfw0fcva9";
   };
 
   buildInputs = [ pam openssl perl ];
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://pamsshagentauth.sourceforge.net/;
