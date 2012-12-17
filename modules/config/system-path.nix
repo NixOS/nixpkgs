@@ -50,7 +50,7 @@ let
       pkgs.sysvtools
       pkgs.time
       pkgs.usbutils
-      pkgs.utillinux
+      pkgs.utillinuxCurses
       extraManpages      
     ];
 

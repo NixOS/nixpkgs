@@ -22,17 +22,17 @@ in
     extraEntries = if config.boot.loader.grub.version == 2 then
       ''
         menuentry "${memtest86.name}" {
-          linux16 $bootRoot/memtest.bin
+          linux16 @bootRoot@/memtest.bin
         }
       ''
       else
       ''
         menuentry "${memtest86.name}"
-          linux16 $bootRoot/memtest.bin
+          linux16 @bootRoot@/memtest.bin
       '';
     extraPrepareConfig =
       ''
-        cp ${memtest86}/memtest.bin /boot/memtest.bin;
+        ${pkgs.coreutils}/bin/cp ${memtest86}/memtest.bin /boot/memtest.bin;
       '';
   };
 }

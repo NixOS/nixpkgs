@@ -30,6 +30,7 @@ sub writeFile {
 my $grub = get("grub");
 my $grubVersion = int(get("version"));
 my $extraConfig = get("extraConfig");
+my $extraPrepareConfig = get("extraPrepareConfig");
 my $extraPerEntryConfig = get("extraPerEntryConfig");
 my $extraEntries = get("extraEntries");
 my $extraEntriesBeforeNixOS = get("extraEntriesBeforeNixOS") eq "true";
@@ -189,6 +190,8 @@ addEntry("NixOS - Default", $defaultConfig);
 
 $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 
+# extraEntries could refer to @bootRoot@, which we have to substitute
+$conf =~ s/\@bootRoot\@/$bootRoot/g;
 
 # Add entries for all previous generations of the system profile.
 $conf .= "submenu \"NixOS - Old configurations\" {\n" if $grubVersion == 2;
@@ -212,6 +215,10 @@ foreach my $link (@links) {
 
 $conf .= "}\n" if $grubVersion == 2;
 
+# Run extraPrepareConfig in sh
+if ($extraPrepareConfig ne "") {
+  system((get("shell"), "-c", $extraPrepareConfig));
+}
 
 # Atomically update the GRUB config.
 my $confFile = $grubVersion == 1 ? "/boot/grub/menu.lst" : "/boot/grub/grub.cfg";

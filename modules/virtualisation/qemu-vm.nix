@@ -166,6 +166,7 @@ let
       ${pkgs.vmTools.startSamba}
 
       # Start QEMU.
+      # "-boot menu=on" is there, because I don't know how to make qemu boot from 2nd hd.
       exec ${pkgs.qemu_kvm}/bin/qemu-kvm \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
@@ -174,8 +175,9 @@ let
           -chardev socket,id=samba,path=./samba \
           -net user,vlan=0,guestfwd=tcp:10.0.2.4:445-chardev:samba''${QEMU_NET_OPTS:+,$QEMU_NET_OPTS} \
           ${if cfg.useBootLoader then ''
-            -drive index=0,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
-            -drive index=1,file=${bootDisk}/disk.img,if=virtio,boot=on,readonly \
+            -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
+            -drive index=1,id=drive2,file=${bootDisk}/disk.img,if=virtio,readonly \
+            -boot menu=on
           '' else ''
             -drive file=$NIX_DISK_IMAGE,if=virtio,cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
