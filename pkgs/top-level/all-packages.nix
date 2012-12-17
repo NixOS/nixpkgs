@@ -7907,7 +7907,7 @@ let
     inherit (pkgs) python perl tcl ruby /*x11*/;
     lua = pkgs.lua5;
     # optional features by flags
-    flags = [ "X11" ]; # only flag "X11" by now
+    flags = [ "python" "X11" ]; # only flag "X11" by now
   };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
