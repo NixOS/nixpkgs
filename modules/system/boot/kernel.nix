@@ -64,7 +64,7 @@ in
 
     boot.extraModulePackages = mkOption {
       default = [];
-      # !!! example = [pkgs.aufs pkgs.nvidia_x11];
+      # !!! example = [pkgs.nvidia_x11];
       description = "A list of additional packages supplying kernel modules.";
     };
 

@@ -64,10 +64,8 @@ with pkgs.lib;
 
   fileSystems."/".device = "/dev/disk/by-label/nixos";
 
-  boot.initrd.kernelModules = [ "xen-blkfront" "aufs" ];
+  boot.initrd.kernelModules = [ "xen-blkfront" ];
   boot.kernelModules = [ "xen-netfront" ];
-
-  boot.extraModulePackages = [ config.boot.kernelPackages.aufs ];
 
   # Generate a GRUB menu.  Amazon's pv-grub uses this to boot our kernel/initrd.
   boot.loader.grub.device = "nodev";
@@ -89,12 +87,12 @@ with pkgs.lib;
   # while "m1.large" has two ephemeral filesystems and no swap
   # devices).  Also, put /tmp and /var on /disk0, since it has a lot
   # more space than the root device.  Similarly, "move" /nix to /disk0
-  # by layering an AUFS on top of it so we have a lot more space for
+  # by layering a unionfs-fuse mount on top of it so we have a lot more space for
   # Nix operations.
   boot.initrd.postMountCommands =
     ''
       diskNr=0
-      diskForAufs=
+      diskForUnionfs=
       for device in /dev/xvd[abcde]*; do
           if [ "$device" = /dev/xvda -o "$device" = /dev/xvda1 ]; then continue; fi
           fsType=$(blkid -o value -s TYPE "$device" || true)
@@ -106,25 +104,31 @@ with pkgs.lib;
               diskNr=$((diskNr + 1))
               echo "mounting $device on $mp..."
               if mountFS "$device" "$mp" "" ext3; then
-                  if [ -z "$diskForAufs" ]; then diskForAufs="$mp"; fi
+                  if [ -z "$diskForUnionfs" ]; then diskForUnionfs="$mp"; fi
               fi
           else
               echo "skipping unknown device type $device"
           fi
       done
 
-      if [ -n "$diskForAufs" ]; then
-          mkdir -m 755 -p $targetRoot/$diskForAufs/root
+      if [ -n "$diskForUnionfs" ]; then
+          mkdir -m 755 -p $targetRoot/$diskForUnionfs/root
 
-          mkdir -m 1777 -p $targetRoot/$diskForAufs/root/tmp $targetRoot/tmp
-          mount --bind $targetRoot/$diskForAufs/root/tmp $targetRoot/tmp
+          mkdir -m 1777 -p $targetRoot/$diskForUnionfs/root/tmp $targetRoot/tmp
+          mount --bind $targetRoot/$diskForUnionfs/root/tmp $targetRoot/tmp
 
           if [ ! -e $targetRoot/.ebs ]; then
-              mkdir -m 755 -p $targetRoot/$diskForAufs/root/var $targetRoot/var
-              mount --bind $targetRoot/$diskForAufs/root/var $targetRoot/var
+              mkdir -m 755 -p $targetRoot/$diskForUnionfs/root/var $targetRoot/var
+              mount --bind $targetRoot/$diskForUnionfs/root/var $targetRoot/var
 
-              mkdir -m 755 -p $targetRoot/$diskForAufs/root/nix
-              mount -t aufs -o dirs=$targetRoot/$diskForAufs/root/nix=rw:$targetRoot/nix=rr none $targetRoot/nix
+              mkdir -p /unionfs-chroot/ro-nix
+              mount --rbind $targetRoot/nix /unionfs-chroot/ro-nix
+
+              mkdir -m 755 -p $targetRoot/$diskForUnionfs/root/nix
+              mkdir -p /unionfs-chroot/rw-nix
+              mount --rbind $targetRoot/$diskForUnionfs/root/nix /unionfs-chroot/rw-nix
+
+              unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-nix=RW:/ro-nix=RO $targetRoot/nix
           fi
       fi
     '';
@@ -149,4 +153,6 @@ with pkgs.lib;
 
   # Always include cryptsetup so that Charon can use it.
   environment.systemPackages = [ pkgs.cryptsetup ];
+
+  boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];
 }

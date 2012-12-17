@@ -192,15 +192,7 @@ in
       options = "loop";
     };
 
-  # We need squashfs in the initrd to mount the compressed Nix store,
-  # and aufs to make the root filesystem appear writable.
-  boot.extraModulePackages =
-    if config.boot.kernelPackages.aufs == null then
-      abort "This kernel doesn't have aufs enabled"
-    else
-      [ config.boot.kernelPackages.aufs ];
-
-  boot.initrd.availableKernelModules = [ "aufs" "squashfs" "iso9660" ];
+  boot.initrd.availableKernelModules = [ "squashfs" "iso9660" ];
 
   boot.initrd.kernelModules = [ "loop" ];
 
@@ -210,16 +202,20 @@ in
   # /nix/store (the squashfs image) to make this a live CD.
   boot.initrd.postMountCommands =
     ''
-      mkdir /mnt-root-tmpfs
-      mount -t tmpfs -o "mode=755" none /mnt-root-tmpfs
+      mkdir -p /unionfs-chroot/ro-root
+      mount --rbind $targetRoot /unionfs-chroot/ro-root
+
+      mkdir /unionfs-chroot/rw-root
+      mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-root
       mkdir /mnt-root-union
-      mount -t aufs -o dirs=/mnt-root-tmpfs=rw:$targetRoot=ro none /mnt-root-union
+      unionfs -o allow_other,cow,chroot=/unionfs-chroot /rw-root=RW:/ro-root=RO /mnt-root-union
+      oldTargetRoot=$targetRoot
       targetRoot=/mnt-root-union
 
-      mkdir /mnt-store-tmpfs
-      mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
-      mkdir -p $targetRoot/nix/store
-      mount -t aufs -o dirs=/mnt-store-tmpfs=rw:/mnt-root/nix/store=ro none /mnt-root-union/nix/store
+      mkdir /unionfs-chroot/rw-store
+      mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
+      mkdir -p $oldTargetRoot/nix/store
+      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-store=RW:/ro-root/nix/store=RO /mnt-root-union/nix/store
     '';
 
   # Closures to be copied to the Nix store on the CD, namely the init
@@ -311,7 +307,7 @@ in
     '';
 
   # Add vfat support to the initrd to enable people to copy the
-  # contents of the CD to a bootable USB stick.
-  boot.initrd.supportedFilesystems = [ "vfat" ];
+  # contents of the CD to a bootable USB stick. Need unionfs-fuse for union mounts
+  boot.initrd.supportedFilesystems = [ "vfat" "unionfs-fuse" ];
     
 }
