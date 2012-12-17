@@ -8,6 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "1a8cv223f30mvkxnyh9hk6kya0ynkwwkc5nhlz3rcqhxfw0fcva9";
   };
 
+  patches =
+    [ # Allow multiple colon-separated authorized keys files to be
+      # specified in the file= option.
+      ./multiple-key-files.patch
+    ];
+
   buildInputs = [ pam openssl perl ];
 
   enableParallelBuilding = true;
