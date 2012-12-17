@@ -82,7 +82,7 @@ let
           ${optionalString rootOK
               "auth sufficient pam_rootok.so"}
           ${optionalString (config.security.pam.enableSSHAgentAuth && sshAgentAuth)
-              "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys"}
+              "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           auth sufficient pam_unix.so ${optionalString allowNullPassword "nullok"} likeauth
