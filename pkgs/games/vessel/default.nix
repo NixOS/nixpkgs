@@ -1,4 +1,4 @@
-{ stdenv, requireFile, SDL }:
+{ stdenv, requireFile, SDL, pulseaudio, alsaLib }:
 
 stdenv.mkDerivation rec {
   name = "vessel-12082012";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ld_preload = ./isatty.c;
 
   libPath = stdenv.lib.makeLibraryPath [ stdenv.gcc.gcc stdenv.gcc.libc ] 
-    + ":" + stdenv.lib.makeLibraryPath [ SDL ] ;
+    + ":" + stdenv.lib.makeLibraryPath [ SDL pulseaudio alsaLib ] ;
 
   installPhase = ''
     ensureDir $out/libexec/strangeloop/vessel/
