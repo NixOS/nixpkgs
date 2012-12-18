@@ -97,17 +97,16 @@ in
 
     users.extraUsers = singleton
       { name = cfg.user;
-        shell = "/bin/sh";
         description = "MongoDB server user";
       };
 
-    environment.systemPackages = [mongodb];
+    environment.systemPackages = [ mongodb ];
 
-    jobs.mongodb =
+    boot.systemd.services.mongodb =
       { description = "MongoDB server";
-        daemonType = "daemon";
 
-        startOn = "filesystem";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
         preStart =
           ''
@@ -117,11 +116,10 @@ in
             fi
           '';
 
-        path = [mongodb];
-        exec = "mongod --config ${mongoCnf} --fork";
-        setuid = cfg.user;
-
-        extraConfig = "kill timeout 10";
+        serviceConfig = {
+          ExecStart = "${mongodb}/bin/mongod --quiet --config ${mongoCnf}";
+          User = cfg.user;
+        };
       };
 
   };
