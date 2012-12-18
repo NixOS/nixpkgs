@@ -67,7 +67,7 @@ stdenv.mkDerivation {
     ''
       # If we're building dynamic libraries, then don't install static
       # libraries.
-      if [ -n "$(echo $out/lib/*.so)" ]; then
+      if [ -n "$(echo $out/lib/*.so $out/lib/*.dylib)" ]; then
           rm $out/lib/*.a
       fi
     ''; # */
