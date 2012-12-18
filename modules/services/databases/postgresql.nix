@@ -156,10 +156,10 @@ in
     environment.systemPackages = [postgresql];
 
     boot.systemd.services.postgresql =
-      { description = "PostgreSQL";
+      { description = "PostgreSQL Server";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" "fs.target" ];
+        after = [ "network.target" ];
 
         environment =
           { TZ = config.time.timeZone;
