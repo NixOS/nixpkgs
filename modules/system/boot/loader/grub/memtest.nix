@@ -13,7 +13,7 @@ in
       default = false;
       type = types.bool;
       description = ''
-        Add a menu entry in grub for memtest86+
+        Add a menu entry in grub for memtest86
       '';
     };
   };
