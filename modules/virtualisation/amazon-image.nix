@@ -50,6 +50,10 @@ with pkgs.lib;
           mkdir -p /mnt/etc
           touch /mnt/etc/NIXOS
 
+          # `switch-to-configuration' requires a /bin/sh
+          mkdir -p /mnt/bin
+          ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
+
           # Install a configuration.nix.
           mkdir -p /mnt/etc/nixos
           cp ${./amazon-config.nix} /mnt/etc/nixos/configuration.nix

@@ -1,6 +1,7 @@
 #! /bin/sh -e
 
-revision=$(svnversion "$NIXOS")
+nixos=$(nix-instantiate --find-file nixos)
+revision=$(cd $nixos; git rev-parse --short HEAD)
 echo "NixOS revision is $revision"
 
 buildAndUploadFor() {
@@ -8,7 +9,7 @@ buildAndUploadFor() {
     arch="$2"
 
     echo "building $system image..."
-    NIXOS_CONFIG=$NIXOS/modules/virtualisation/amazon-config.nix nix-build "$NIXOS" \
+    NIXOS_CONFIG=$nixos/modules/virtualisation/amazon-config.nix nix-build "$nixos" \
         -A config.system.build.amazonImage --argstr system "$system" -o ec2-ami
 
     ec2-bundle-image -i ./ec2-ami/nixos.img --user "$AWS_ACCOUNT" --arch "$arch" \
