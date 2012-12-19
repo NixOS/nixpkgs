@@ -199,7 +199,8 @@ in
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            while ! psql postgres -c ""; do
+            while ! psql postgres -c "" 2> /dev/null; do
+                if ! kill -0 "$MAINPID"; then exit 1; fi
                 sleep 0.1
             done
           '';
