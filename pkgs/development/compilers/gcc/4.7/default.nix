@@ -89,9 +89,11 @@ let version = "4.7.2";
     gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null cross;
     gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null cross;
     gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null cross;
+    gccFpu = stdenv.lib.attrByPath [ "gcc" "fpu" ] null cross;
     withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
     withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
     withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
+    withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
     crossMingw = (cross != null && cross.libc == "msvcrt");
 
     crossConfigureFlags =
@@ -99,6 +101,7 @@ let version = "4.7.2";
       withArch +
       withCpu +
       withAbi +
+      withFpu +
       (if (crossMingw && crossStageStatic) then
         " --with-headers=${libcCross}/include" +
         " --with-gcc" +
