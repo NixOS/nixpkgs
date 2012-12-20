@@ -186,7 +186,8 @@ rec {
         args: elemType.iter f path (v args);
       fold = op: nul: v:
         args: elemType.fold op nul (v args);
-      inherit (elemType) hasOptions delayOnGlobalEval;
+      inherit (elemType) delayOnGlobalEval;
+      hasOptions = false;
     };
 
     # !!! this should be a type constructor that takes the options as
