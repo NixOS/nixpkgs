@@ -180,7 +180,7 @@ rec {
       name = "function that evaluates to a(n) ${elemType.name}";
       check = lib.traceValIfNot builtins.isFunction;
       merge = fns:
-        args: elemType.merge (map (fn: fn args) fns)
+        args: elemType.merge (map (fn: fn args) fns);
       # These are guesses, I don't fully understand iter, fold, delayOnGlobalEval
       iter = f: path: v:
         args: elemType.iter f path (v args);
