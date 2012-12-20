@@ -115,7 +115,7 @@ trap 'rm -rf "$tmpDir"' EXIT
 # This matters if the new Nix in Nixpkgs has a schema change.  It
 # would upgrade the schema, which should only happen once we actually
 # switch to the new configuration.
-if initctl status nix-daemon 2>&1 | grep -q 'running'; then
+if systemctl show nix-daemon.socket nix-daemon.service | grep -q ActiveState=active; then
     export NIX_REMOTE=${NIX_REMOTE:-daemon}
 fi
 
