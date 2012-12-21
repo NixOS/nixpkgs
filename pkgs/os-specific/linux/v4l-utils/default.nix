@@ -4,11 +4,11 @@
 assert withQt4 -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "v4l-utils-0.8.8";
+  name = "v4l-utils-0.9.3";
 
   src = fetchurl {
     url = "http://linuxtv.org/downloads/v4l-utils/${name}.tar.bz2";
-    sha256 = "0zx8f1npsl6g5vjah1gwydg1j5azl74kr83ifbjhshgmnvscd92z";
+    sha256 = "0gaag38x47wlvmp4j60wgf9ma1rxzfyg7i12zxxxi4m3cpcb0bah";
   };
 
   buildInputs = [ libjpeg which ] ++ stdenv.lib.optional withQt4 qt4;
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # The keytable wants to touch /etc files and udev scripts in /lib.
   # I skip it.
   patchPhase = ''
-    sed -i s/keytable// utils/Makefile
+    sed -i s/keytable// utils/Makefile.in
   '';
 
   installPhase = ''
