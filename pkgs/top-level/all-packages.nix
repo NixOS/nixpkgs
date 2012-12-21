@@ -7868,7 +7868,6 @@ let
   vwm = callPackage ../applications/window-managers/vwm { };
 
   w3m = callPackage ../applications/networking/browsers/w3m {
-    stdenv = overrideInStdenv stdenv [ gnumake381 ];
     graphicsSupport = false;
   };
 
