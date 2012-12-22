@@ -1,13 +1,12 @@
-{ stdenv, fetchurl, popt, avahi, pkgconfig, python, gtk
+{ stdenv, fetchurl, popt, avahi, pkgconfig, python, gtk, runCommand, gcc
 , sysconfDir ? ""   # set this parameter to override the default value $out/etc
 , static ? false
 }:
 
-let name    = "distcc";
-    version = "3.1";
-in
-
-stdenv.mkDerivation {
+let
+name    = "distcc";
+version = "3.1";
+distcc = stdenv.mkDerivation {
   name = "${name}-${version}";
   src = fetchurl {
     url = "http://distcc.googlecode.com/files/${name}-${version}.tar.bz2";
@@ -36,6 +35,32 @@ stdenv.mkDerivation {
   # The test suite fails because it uses hard-coded paths, i.e. /usr/bin/gcc.
   doCheck = false;
 
+  passthru = {
+    # A derivation that provides gcc and g++ commands, but that
+    # will end up calling distcc for the given cacheDir
+    links = extraConfig : (runCommand "distcc-links"
+        { inherit (gcc) langC langCC; }
+      ''
+        mkdir -p $out/bin
+        if [ $langC -eq 1 ]; then
+          cat > $out/bin/gcc << EOF
+          #!/bin/sh
+          ${extraConfig}
+          exec ${distcc}/bin/distcc gcc "\$@"
+        EOF
+          chmod +x $out/bin/gcc
+        fi
+        if [ $langCC -eq 1 ]; then
+          cat > $out/bin/g++ << EOF
+          #!/bin/sh
+          ${extraConfig}
+          exec ${distcc}/bin/distcc g++ "\$@"
+        EOF
+          chmod +x $out/bin/g++
+        fi
+      '');
+  };
+
   meta = {
     description = "a fast, free distributed C/C++ compiler";
     homepage = "http://distcc.org";
@@ -44,4 +69,6 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
-}
+};
+in
+distcc
