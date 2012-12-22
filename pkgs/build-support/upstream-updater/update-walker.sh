@@ -152,8 +152,7 @@ full_path () {
 
 target () {
   CURRENT_TARGET="$1"
-  test -e "$CURRENT_TARGET" || 
-    { [ "$CURRENT_TARGET" = "${CURRENT_TARGET#/}" ] && CURRENT_TARGET="$CONFIG_DIR/$CURRENT_TARGET"; }
+  { [ "$CURRENT_TARGET" = "${CURRENT_TARGET#/}" ] && CURRENT_TARGET="$CONFIG_DIR/$CURRENT_TARGET"; }
   echo "Target set to: $CURRENT_TARGET"
 }
 
@@ -190,6 +189,12 @@ replace_once () {
   replacement="$3"
   instance="${4:-1}"
 
+  echo "Replacing once:"
+  echo "file: [[$file]]"
+  echo "regexp: [[$regexp]]"
+  echo "replacement: [[$replacement]]"
+  echo "instance: [[$instance]]"
+
   position="$(line_position "$file" "$regexp" "$instance")"
   sed -re "${position}s	$regexp	$replacement	" -i "$file"
 }
@@ -204,7 +209,7 @@ set_var_value () {
   quote='"'
   let "$no_quotes" && quote=""
 
-  replace_once "$file" "${var} *= *.*" "${var} = ${quote}${value}${quote};"
+  replace_once "$file" "${var} *= *.*" "${var} = ${quote}${value}${quote};" "$instance"
 }
 
 do_regenerate () {
