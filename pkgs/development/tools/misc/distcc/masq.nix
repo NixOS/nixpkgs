@@ -13,8 +13,9 @@ stdenv.mkDerivation {
     if [ -f $bin/gcc ]; then
       ln -s $bin/gcc $out/bin
     else
-      for a in $bin/*-g++; do
+      for a in $bin/*-gcc; do
         ln -s $bin/*-gcc $out/bin/gcc
+        ln -s $bin/*-gcc $out/bin/cc
       done
     fi
 
@@ -23,6 +24,7 @@ stdenv.mkDerivation {
     else
       for a in $bin/*-g++; do
         ln -sf $bin/*-g++ $out/bin/g++
+        ln -sf $bin/*-g++ $out/bin/c++
       done
     fi
   '';
