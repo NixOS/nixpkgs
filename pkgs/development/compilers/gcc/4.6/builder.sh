@@ -75,11 +75,7 @@ if test "$noSysDirs" = "1"; then
         fi
     else
         if test -z "$NIX_GCC_CROSS"; then
-            if [ $system == "armv6l-linux" ]; then
-                EXTRA_TARGET_CFLAGS="-mcpu=armv6 -mfpu=vfp -mhard-float -marm $EXTRA_FLAGS"
-            else
-                EXTRA_TARGET_CFLAGS="$EXTRA_FLAGS"
-            fi
+            EXTRA_TARGET_CFLAGS="$EXTRA_FLAGS"
             EXTRA_TARGET_LDFLAGS="$EXTRA_LDFLAGS"
         else
             # This the case of cross-building the gcc.

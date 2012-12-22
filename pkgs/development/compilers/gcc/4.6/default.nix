@@ -298,7 +298,7 @@ stdenv.mkDerivation ({
     ${if (cross == null && stdenv.isi686) then "--with-arch=i686" else ""}
     ${if cross != null then crossConfigureFlags else ""}
   " + (if (cross == null && stdenv.platform.name == "raspberrypi") then
-      "--with-arch=armv6 --with-fpu=vfp --with-float=hard --with-mode=arm --build=armv6l-linux-gnueabi --host=armv6l-linux-gnueabihf" else "");
+      "--with-arch=armv6 --with-fpu=vfp --with-float=hard --with-mode=arm --build=arm-linux-gnueabi --host=arm-linux-gnueabihf" else "");
   # ^ This above is out of "" because we don't want to rebuild stdenv in other archs
 
   targetConfig = if (cross != null) then cross.config else null;
