@@ -1,4 +1,4 @@
-{ stdenv, gccRaw }:
+{ stdenv, gccRaw, binutils }:
 
 stdenv.mkDerivation {
   name = "distcc-masq-${gccRaw.name}";
@@ -27,5 +27,15 @@ stdenv.mkDerivation {
         ln -sf $bin/*-g++ $out/bin/c++
       done
     fi
+
+    bbin=${binutils}/bin
+    if [ -f $bbin/as ]; then
+      ln -s $bbin/as $out/bin
+    else
+      for a in $bbin/*-as; do
+        ln -sf $bbin/*-as $out/bin/as
+      done
+    fi
+    
   '';
 }

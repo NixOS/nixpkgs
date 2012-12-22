@@ -3094,6 +3094,7 @@ let
 
   distccMasquerade = callPackage ../development/tools/misc/distcc/masq.nix {
     gccRaw = gcc.gcc;
+    binutils = binutils;
   };
 
   docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
