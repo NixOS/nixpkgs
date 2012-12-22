@@ -96,7 +96,7 @@ if test "$noSysDirs" = "1"; then
 
             # The path to the Glibc binaries such as `crti.o'.
             glibc_dir="$(cat $NIX_GCC_CROSS/nix-support/orig-libc)"
-            glibc_libdir="$glibc_dir/nix-support/orig-libc)/lib"
+            glibc_libdir="$glibc_dir/lib"
             configureFlags="$configureFlags --with-native-system-header-dir=$glibc_dir/include"
 
             extraFlags="-I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
