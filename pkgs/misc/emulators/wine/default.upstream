@@ -1,13 +1,8 @@
-name wine
 url http://sourceforge.net/projects/wine/files/Source/
-version_link 'wine-[0-9.]+[.]tar[.][0-9a-z]+/download$'
+version_link '[.]tar[.][^./]+/download$'
 SF_redirect
-
-do_regenerate () {
-  set_var_value name "$CURRENT_NAME-"'${meta.version}'
+do_overwrite () {
+  ensure_hash
   set_var_value version "$CURRENT_VERSION"
-  set_var_value url 'mirror://sourceforge/wine/${name}.tar.bz2' 1
   set_var_value sha256 "$CURRENT_HASH"
-  cat "$CURRENT_TARGET"
 }
-

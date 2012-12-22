@@ -182,5 +182,17 @@ in
       };
     };
     
+  google_apis_17 = buildGoogleApis {
+    name = "google_apis-17";
+      src = fetchurl {
+        url = https://dl-ssl.google.com/android/repository/google_apis-17_r01.zip;
+        sha1 = "62cb086f11e15713878c8834d58ef1a2454c19a4";
+      };
+      meta = {
+        description = "Android + Google APIs";
+        
+      };
+    };
+    
 }
   

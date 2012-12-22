@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "repa-io";
-  version = "3.2.2.3";
-  sha256 = "1rzis7gp9dq06czqmnj9p7hpyfkdbirx2bldhg5mz3glmqf4xvw5";
+  version = "3.2.3.1";
+  sha256 = "19dnz8xa18yydprnwzgdcbrndi6akwc53rs1104z0awffh83iynm";
   buildDepends = [ binary bmp repa vector ];
   jailbreak = true;
   meta = {

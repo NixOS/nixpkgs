@@ -3,8 +3,8 @@ x@{builderDefsPackage
   glib, libxml2, pcre, avahi,
   readline, ncurses, expat,
   zlib, pkgconfig, which,
-  perl,
-  db_dir ? "/var/lib/4store"
+  perl, libuuid, gmp, mpfr
+  , db_dir ? "/var/lib/4store"
   , ...}:
 builderDefsPackage
 (a :  
@@ -28,9 +28,9 @@ rec {
   doFixConfigure = a.fullDepEntry ''
     sed -e 's@#! */bin/bash@#! ${a.stdenv.shell}@' -i configure
     find . -name Makefile -exec sed -e "s@/usr/local@$out@g" -i '{}' ';'
-    sed -e '/\/var\/lib\/4store/d' -i src/utilities/Makefile
     
     sed -e 's@/var/lib/4store@${db_dir}@g' -i src/common/params.h src/utilities/*
+    sed -e '/FS_STORE_ROOT/d' -i src/utilities/Makefile*
   '' ["minInit" "doUnpack"];
 
   fixInterpreter = (a.doPatchShebangs "$out/bin");
@@ -46,4 +46,3 @@ rec {
       linux;
   };
 }) x
-

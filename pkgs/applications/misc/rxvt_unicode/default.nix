@@ -23,7 +23,7 @@ stdenv.mkDerivation (rec {
 
   preConfigure =
     ''
-      configureFlags="${if perlSupport then "--enable-perl" else "--disable-perl"}";
+      configureFlags="--with-terminfo=$out/share/terminfo ${if perlSupport then "--enable-perl" else "--disable-perl"}";
       export TERMINFO=$out/share/terminfo # without this the terminfo won't be compiled by tic, see man tic
       NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I${freetype}/include/freetype2"
       NIX_LDFLAGS="$NIX_LDFLAGS -lfontconfig -lXrender "
@@ -36,10 +36,6 @@ stdenv.mkDerivation (rec {
 
   meta = {
     description = "A clone of the well-known terminal emulator rxvt";
-    longDescription = "
-      You should put this into your ~/.bashrc:
-      export TERMINFO=~/.nix-profile/share/terminfo
-    ";
     homepage = "http://software.schmorp.de/pkg/rxvt-unicode.html";
   };
 })

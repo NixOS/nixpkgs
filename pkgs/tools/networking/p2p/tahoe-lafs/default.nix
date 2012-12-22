@@ -71,10 +71,9 @@ buildPythonPackage {
     find "$out/share/doc/${name}" -name Makefile -exec rm -v {} \;
 
     # Run the tests once everything is installed.
-    # FIXME: Some of the tests want to run $out/bin/tahoe, which isn't usable
-    # yet because it gets wrapped later on, in `postFixup'.
     export PYTHON_EGG_CACHE="$TMPDIR"
-    : python setup.py trial
+    python setup.py build
+    python setup.py trial
   '';
 
   meta = {

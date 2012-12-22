@@ -1,7 +1,7 @@
 { stdenv, fetchurl, kernel, perl, autoconf, automake, libtool, coreutils, gawk }:
 
 stdenv.mkDerivation {
-  name = "spl-0.6.0-rc12";
+  name = "spl-0.6.0-rc12-${kernel.version}";
   src = fetchurl {
     url = http://github.com/downloads/zfsonlinux/spl/spl-0.6.0-rc12.tar.gz;
     sha256 = "166853pqa294f78mn4j4x9pri79lyv3j2h8m9fzhfy7d7gxfqljk";
