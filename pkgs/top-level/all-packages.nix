@@ -3092,6 +3092,10 @@ let
      wrapGCC (distcc.links extraConfig)) {};
   distccStdenv = lowPrio (overrideGCC stdenv distccWrapper);
 
+  distccMasquerade = callPackage ../development/tools/misc/distcc/masq.nix {
+    gccRaw = gcc.gcc;
+  };
+
   docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
     inherit python pil makeWrapper;
   };
