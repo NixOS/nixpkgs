@@ -73,7 +73,7 @@ let
   patch = pkgs.patch.hostDrv;
   patchelf = pkgs.patchelf.hostDrv;
   replace = pkgs.replace.hostDrv;
-  gcc = pkgs.gcc;
+  gcc = pkgs.gcc47;
   gmp = pkgs.gmp.hostDrv;
   mpfr = pkgs.mpfr.hostDrv;
   #ppl = pkgs.ppl.hostDrv;
