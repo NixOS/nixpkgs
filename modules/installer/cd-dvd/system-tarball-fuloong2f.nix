@@ -46,9 +46,8 @@ in
 
 {
   require =
-    [ options
+    [
       ./system-tarball.nix
-      ../../hardware/network/rt73.nix
     ];
 
 
@@ -106,8 +105,8 @@ in
   boot.initrd.availableKernelModules =
     [ "vfat" "reiserfs" ];
 
-  boot.kernelPackages = pkgs.linuxPackages_2_6_35;
-  boot.kernelParams = [ "console=tty" ];
+  boot.kernelPackages = pkgs.linuxPackages_3_6;
+  boot.kernelParams = [ "console=tty1" ];
 
   boot.postBootCommands =
     ''
