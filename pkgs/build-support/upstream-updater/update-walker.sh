@@ -88,7 +88,7 @@ ensure_version () {
 
 ensure_target () {
   echo "Ensuring target. CURRENT_TARGET: $CURRENT_TARGET" >&2
-  [ -z "$CURRENT_TARGET" ] && target default.nix
+  [ -z "$CURRENT_TARGET" ] && target "$(basename "$CONFIG_NAME" .upstream).nix"
 }
 
 ensure_name () {
@@ -227,8 +227,9 @@ do_overwrite () {
 
 process_config () {
   CONFIG_DIR="$(directory_of "$1")"
+  CONFIG_NAME="$(basename "$1")"
   BEGIN_EXPRESSION='# Generated upstream information';
-  source "$CONFIG_DIR/$(basename "$1")"
+  source "$CONFIG_DIR/$CONFIG_NAME"
   ensure_name
   ensure_attribute_name
   retrieve_version
