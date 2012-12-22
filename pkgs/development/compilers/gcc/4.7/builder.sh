@@ -71,7 +71,7 @@ if test "$noSysDirs" = "1"; then
         unset CPATH
         if test -z "$crossStageStatic"; then
             EXTRA_TARGET_CFLAGS="-B${libcCross}/lib -idirafter ${libcCross}/include"
-            EXTRA_TARGET_LDFLAGS="-Wl,-L${libcCross}/lib"
+            EXTRA_TARGET_LDFLAGS="-Wl,-L${libcCross}/lib -Wl,-rpath,${libcCross}/lib -Wl,-rpath-link,${libcCross}/lib"
         fi
     else
         if test -z "$NIX_GCC_CROSS"; then
