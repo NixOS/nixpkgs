@@ -27,6 +27,7 @@ stdenv.mkDerivation {
                           --with${if gtk != null then "" else "out"}-gtk
                           --without-gnome
                           --enable-rfc2553
+                          --disable-Werror   # a must on gcc 4.6
                          )
     installFlags="sysconfdir=$out/etc";
   '';
