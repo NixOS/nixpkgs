@@ -39,14 +39,17 @@ rec {
   gitFull = appendToName "full" (git.override {
     svnSupport = true;
     guiSupport = true;
-    sendEmailSupport = stdenv.isDarwin == false;
+    sendEmailSupport = !stdenv.isDarwin;
   });
 
   gitAnnex = lib.makeOverridable (import ./git-annex) {
-    inherit stdenv fetchurl libuuid rsync findutils curl perl git ikiwiki which coreutils openssh;
-    inherit (haskellPackages_ghc741) ghc MissingH utf8String pcreLight SHA dataenc
-      HTTP testpack hS3 mtl network hslogger hxt json liftedBase monadControl IfElse
-      QuickCheck2 bloomfilter editDistance;
+    inherit stdenv fetchurl perl coreutils git libuuid rsync findutils curl ikiwiki which openssh;
+    inherit (haskellPackages) ghc bloomfilter dataenc editDistance hinotify hS3 hslogger HTTP
+      blazeBuilder blazeHtml caseInsensitive IfElse json liftedBase MissingH monadControl mtl
+      network pcreLight SHA stm utf8String networkInfo dbus clientsession cryptoApi dataDefault
+      extensibleExceptions filepath hamlet httpTypes networkMulticast text time transformers
+      transformersBase wai waiLogger warp yesod yesodDefault yesodStatic testpack QuickCheck
+      SafeSemaphore networkPprotocolXmpp async dns DAV;
   };
 
   qgit = import ./qgit {
@@ -69,22 +72,13 @@ rec {
     inherit stdenv fetchurl unzip;
   };
 
-  tig = stdenv.mkDerivation {
-    name = "tig-0.16";
-    src = fetchurl {
-      url = "http://jonas.nitro.dk/tig/releases/tig-0.16.tar.gz";
-      sha256 = "167kak44n66wqjj6jrv8q4ijjac07cw22rlpqjqz3brlhx4cb3ix";
-    };
-    buildInputs = [ncurses asciidoc xmlto docbook_xsl];
-    installPhase = ''
-      make install
-      make install-doc
-    '';
-    meta = {
-      description = "console git repository browser that additionally can act as a pager for output from various git commands";
-      homepage = http://jonas.nitro.dk/tig/;
-      license = "GPLv2";
-    };
+  tig = import ./tig {
+    inherit stdenv fetchurl ncurses asciidoc xmlto docbook_xsl;
+  };
+
+  hub = import ./hub {
+    inherit (rubyLibs) rake;
+    inherit stdenv fetchgit groff makeWrapper;
   };
 
   gitFastExport = import ./fast-export {
@@ -105,4 +99,6 @@ rec {
   gitSubtree = import ./git-subtree {
     inherit stdenv fetchurl git asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt;
   };
+
+  darcsToGit = callPackage ./darcs-to-git { };
 }

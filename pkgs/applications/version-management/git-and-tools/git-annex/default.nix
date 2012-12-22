@@ -1,36 +1,47 @@
-{ stdenv, fetchurl, curl, dataenc, findutils, ghc, git, hS3, hslogger, HTTP, hxt
-, ikiwiki, json, libuuid, MissingH, monadControl, mtl, network, pcreLight, perl
-, QuickCheck2, rsync, SHA, testpack, utf8String, which, liftedBase, coreutils
-, IfElse, bloomfilter, editDistance, openssh
+{ stdenv, ghc, fetchurl, perl, coreutils, git, libuuid, rsync
+, findutils, curl, ikiwiki, which, openssh
+, blazeBuilder, blazeHtml, bloomfilter, caseInsensitive
+, clientsession, cryptoApi, dataDefault, dataenc, dbus
+, editDistance, extensibleExceptions, filepath, hamlet, hinotify
+, hS3, hslogger, HTTP, httpTypes, IfElse, json, liftedBase
+, MissingH, monadControl, mtl, network, networkInfo
+, networkMulticast, pcreLight, QuickCheck, SHA, stm, text, time
+, transformers, transformersBase, utf8String, wai, waiLogger, warp
+, yesod, yesodDefault, yesodStatic, testpack, SafeSemaphore
+, networkPprotocolXmpp, async, dns, DAV
 }:
 
 let
-  version = "3.20120614";
+  version = "3.20121211";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
-    url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=refs/tags/${version}";
-    sha256 = "ecb3b144a75a2eeb27061c46f3300c5117a5df260dddb36349eb8e75b6eebb16";
+    url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=${version}";
+    sha256 = "1l5sffcn6mcfk0s808z490s30dbq8m4wi8a11ard35hyf599zawq";
     name = "git-annex-${version}.tar.gz";
   };
 
-  buildInputs = [
-    curl dataenc findutils ghc git hS3 hslogger HTTP hxt ikiwiki json
-    libuuid MissingH monadControl mtl network pcreLight perl QuickCheck2
-    rsync SHA testpack utf8String which liftedBase IfElse bloomfilter
-    editDistance openssh
-  ];
+  buildInputs = [ ghc git libuuid rsync findutils curl ikiwiki which
+    openssh blazeBuilder blazeHtml bloomfilter caseInsensitive
+    clientsession cryptoApi dataDefault dataenc dbus editDistance
+    extensibleExceptions filepath hamlet hinotify hS3 hslogger HTTP
+    httpTypes IfElse json liftedBase MissingH monadControl mtl network
+    networkInfo networkMulticast pcreLight QuickCheck SHA stm text time
+    transformers transformersBase utf8String wai waiLogger warp yesod
+    yesodDefault yesodStatic testpack SafeSemaphore networkPprotocolXmpp
+    async dns DAV ];
 
   checkTarget = "test";
   doCheck = true;
 
-  # The 'add_url' test fails because it attempts to use the network.
   preConfigure = ''
     makeFlagsArray=( PREFIX=$out )
-    sed -i -e 's|#!/usr/bin/perl|#!${perl}/bin/perl|' mdwn2man
+    sed -i -e 's|#!/usr/bin/perl|#!${perl}/bin/perl|' Build/mdwn2man
     sed -i -e 's|"cp |"${coreutils}/bin/cp |' -e 's|"rm -f |"${coreutils}/bin/rm -f |' test.hs
+    # Remove this patch after the next update!
+    sed -i -e '9i #define WITH_OLD_URI' Utility/Url.hs
   '';
 
   meta = {

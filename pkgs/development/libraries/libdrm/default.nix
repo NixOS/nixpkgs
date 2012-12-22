@@ -1,22 +1,24 @@
-{stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, cairo, udev}:
+{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, udev }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.29";
+  name = "libdrm-2.4.33";
   
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "0bj5ihmnzpbbgdrvp5f8bgsk0k19haixr893449pjd4k7v4jshz2";
+    sha256 = "1slgi61n4dlsfli47ql354fd1ppj7n40jd94wvnsdqx0mna9syrd";
   };
 
   buildNativeInputs = [ pkgconfig ];
-  buildInputs = [ libpthreadstubs libpciaccess cairo udev ];
+  buildInputs = [ libpthreadstubs libpciaccess udev ];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
 
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
-  "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
+    "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = [ "--enable-nouveau-experimental-api" "--enable-udev" ]
+  configureFlags = [ "--enable-nouveau-experimental-api"
+                     "--enable-radeon-experimental-api"
+                     "--enable-udev" ]
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];

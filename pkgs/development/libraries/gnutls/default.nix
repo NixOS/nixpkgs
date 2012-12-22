@@ -1,26 +1,35 @@
 { fetchurl, stdenv, zlib, lzo, libtasn1, nettle
-, guileBindings, guile, perl, psmisc }:
+, guileBindings, guile, perl, gmp }:
 
 assert guileBindings -> guile != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
 
-  name = "gnutls-3.0.18";
+  name = "gnutls-3.1.3";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.xz";
-    sha256 = "1ynqnj1j6rrzplk2i64dik34829r0y7lwk4qlvjx993q3mj7z863";
+    sha256 = "0fff9frz0ycbnppfn0w4a2s9x27k21l4hh9zbax3v7a8cg33dcpw";
   };
 
+  # Note: GMP is a dependency of Nettle, whose public headers include
+  # GMP headers, hence the hack.
   configurePhase = ''
     ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
       --without-p11-kit                                         \
-      --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
+      --with-lzo --with-libtasn1-prefix="${libtasn1}"           \
+      --with-libnettle-prefix="${nettle}"                       \
+      CPPFLAGS="-I${gmp}/include"                               \
       ${if guileBindings
         then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
         else ""}
   '';
+
+  # Build of the Guile bindings is not parallel-safe.  See
+  # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
+  # for the actual fix.
+  enableParallelBuilding = false;
 
   buildInputs = [ zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;
@@ -29,13 +38,9 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 
-  # XXX: Disable tests on non-Linux because of the `mini-loss-time' hack
-  # below, which is Linux-specific.
-  doCheck = stdenv.isLinux;
-
-  postCheck =
-    # Kill a process that's left behind.
-    stdenv.lib.optionalString doCheck "${psmisc}/bin/killall mini-loss-time";
+  # XXX: Gnulib's `test-select' fails on FreeBSD:
+  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
+  doCheck = (!stdenv.isFreeBSD);
 
   meta = {
     description = "The GNU Transport Layer Security Library";
@@ -60,3 +65,10 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
+
+//
+
+(stdenv.lib.optionalAttrs stdenv.isFreeBSD {
+  # FreeBSD doesn't have <alloca.h>, and Gnulib's `alloca' module isn't used.
+  patches = [ ./guile-gnulib-includes.patch ];
+}))

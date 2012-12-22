@@ -1,0 +1,57 @@
+diff -rc minidlna-1.0.24/genconfig.sh minidlna-1.0.24-new/genconfig.sh
+*** minidlna-1.0.24/genconfig.sh	2012-06-24 20:08:26.697884140 +0200
+--- minidlna-1.0.24-new/genconfig.sh	2012-06-24 20:10:44.742874979 +0200
+***************
+*** 38,68 ****
+  
+  ${RM} ${CONFIGFILE}
+  
+- # Detect if there are missing headers
+- # NOTE: This check only works with a normal distro
+- [ ! -e "/usr/include/sqlite3.h" ] && MISSING="libsqlite3 $MISSING"
+- [ ! -e "/usr/include/jpeglib.h" ] && MISSING="libjpeg $MISSING"
+- [ ! -e "/usr/include/libexif/exif-loader.h" ] && MISSING="libexif $MISSING"
+- [ ! -e "/usr/include/id3tag.h" ] && MISSING="libid3tag $MISSING"
+- [ ! -e "/usr/include/ogg/ogg.h" ] && MISSING="libogg $MISSING"
+- [ ! -e "/usr/include/vorbis/codec.h" ] && MISSING="libvorbis $MISSING"
+- [ ! -e "/usr/include/FLAC/metadata.h" ] && MISSING="libflac $MISSING"
+- [ ! -e "/usr/include/ffmpeg/avutil.h" -a \
+-   ! -e "/usr/include/libavutil/avutil.h" -a \
+-   ! -e "/usr/include/ffmpeg/libavutil/avutil.h" ] && MISSING="libavutil $MISSING"
+- [ ! -e "/usr/include/ffmpeg/avformat.h" -a \
+-   ! -e "/usr/include/libavformat/avformat.h" -a \
+-   ! -e "/usr/include/ffmpeg/libavformat/avformat.h" ] && MISSING="libavformat $MISSING"
+- [ ! -e "/usr/include/ffmpeg/avcodec.h" -a \
+-   ! -e "/usr/include/libavcodec/avcodec.h" -a \
+-   ! -e "/usr/include/ffmpeg/libavcodec/avcodec.h" ] && MISSING="libavcodec $MISSING"
+- if [ -n "$MISSING" ]; then
+- 	echo -e "\nERROR!  Cannot continue."
+- 	echo -e "The following required libraries are either missing, or are missing development headers:\n"
+- 	echo -e "$MISSING\n"
+- 	exit 1
+- fi
+- 
+  echo "/* MiniDLNA Project" >> ${CONFIGFILE}
+  echo " * http://sourceforge.net/projects/minidlna/" >> ${CONFIGFILE}
+  echo " * (c) 2008-2009 Justin Maggard" >> ${CONFIGFILE}
+--- 38,43 ----
+diff -rc minidlna-1.0.24/Makefile minidlna-1.0.24-new/Makefile
+*** minidlna-1.0.24/Makefile	2012-06-24 20:16:08.673195909 +0200
+--- minidlna-1.0.24-new/Makefile	2012-06-24 20:16:18.615267052 +0200
+***************
+*** 64,70 ****
+  	$(INSTALL) -d $(ETCINSTALLDIR)
+  	$(INSTALL) --mode=0644 minidlna.conf $(ETCINSTALLDIR)
+  
+! minidlna:	$(BASEOBJS) $(LNXOBJS) $(LIBS)
+  	@echo Linking $@
+  	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(BASEOBJS) $(LNXOBJS) $(LIBS)
+  
+--- 64,70 ----
+  	$(INSTALL) -d $(ETCINSTALLDIR)
+  	$(INSTALL) --mode=0644 minidlna.conf $(ETCINSTALLDIR)
+  
+! minidlna:	$(BASEOBJS) $(LNXOBJS) 
+  	@echo Linking $@
+  	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(BASEOBJS) $(LNXOBJS) $(LIBS)
+  

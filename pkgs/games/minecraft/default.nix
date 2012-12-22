@@ -2,11 +2,11 @@
 , mesa, openal}:
 
 stdenv.mkDerivation {
-  name = "minecraft-1.2.5";
+  name = "minecraft-1.3.1";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/MinecraftDownload/launcher/minecraft.jar";
-    sha256 = "0yp3wgy93wm746dkv6kbljhmzdqbcg4qhwkvnaaq4ml84mvvjp38";
+    sha256 = "0j8a889w174vwgcxl4yqgp2kbqqha3x505fn7izz38srlx59gnwj";
   };
 
   phases = "installPhase";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   meta = {
       description = "A sandbox-building game";
       homepage = http://www.minecraft.net;
-      maintainers = [ "Carles Pagès <page@cubata.homelinux.net>" stdenv.lib.maintainers.shlevy ];
+      maintainers = [ stdenv.lib.maintainers.page stdenv.lib.maintainers.shlevy ];
       license = "unfree-redistributable";
   };
 }

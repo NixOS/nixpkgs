@@ -14,10 +14,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional (stdenv.system != "i686-cygwin") ./dll.patch;
 
 
-  buildInputs = [ unzip ]
-
-    # For some reason the makefile sets "AR = libtool" on Darwin.
-    ++ stdenv.lib.optional (stdenv.system == "i686-darwin") libtool;
+  buildInputs = [ unzip ];
 
   # Unpack the thing in a subdirectory.
   unpackPhase = ''

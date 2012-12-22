@@ -1,11 +1,11 @@
 { stdenv, fetchurl, nettools, iputils, iproute, makeWrapper, coreutils, gnused }:
 
 stdenv.mkDerivation rec {
-  name = "dhcp-4.1.2-P1";
+  name = "dhcp-4.1-ESV-R6";
   
   src = fetchurl {
-    url = "http://ftp.isc.org/isc/dhcp/${name}.tar.gz";
-    sha256 = "1kcdsylyx0ai0wlmc6rc6b1qi2fsndqh1pvgvddd3i4hmbhi6vmz";
+    url = http://ftp.isc.org/isc/dhcp/4.1-ESV-R6/dhcp-4.1-ESV-R6.tar.gz;
+    sha256 = "17md1vml07szl9dx4875gfg4sgnb3z73glpbq1si7p82mfhnddny";
   };
 
   patches =

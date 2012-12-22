@@ -1,18 +1,18 @@
-{stdenv, fetchurl, attr, perl}:
+{ stdenv, fetchurl, attr, perl }:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "libcap-${version}";
-  version = "2.19";
+  version = "2.22";
   
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/security/linux-privs/kernel-2.6/${name}.tar.gz";
-    sha256 = "0fdsz9j741npvh222f8p1y6l516z9liibiwdpdr3a4zg53m0pw45";
+    url = "mirror://gentoo/distfiles/${name}.tar.bz2";
+    sha256 = "03q50j6bg65cc501q87qh328ncav1i8qw2bjig99vxmmfx4bvsvk";
   };
   
-  buildNativeInputs = [perl];
-  propagatedBuildInputs = [attr];
+  buildNativeInputs = [ perl ];
+  propagatedBuildInputs = [ attr ];
 
   preConfigure = "cd libcap";
 
@@ -26,4 +26,9 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = passthru.postinst name;
+
+  meta = {
+    description = "Library for working with POSIX capabilities";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

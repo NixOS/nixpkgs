@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libstdcpp5, glib, pango, atk, gtk, libX11}:
+{stdenv, fetchurl, libstdcpp5, glib, pango, atk, gtk, libX11, makeWrapper}:
 
 # Note that RealPlayer 10 need libstdc++.so.5, i.e., GCC 3.3, not 3.4.
 
@@ -13,9 +13,7 @@ assert stdenv.system == "i686-linux";
     md5 = "d28b31261059231a3e93c7466f8153e6";
   };
 
-  makeWrapper = ../../../build-support/make-wrapper/make-wrapper.sh;
-
-  inherit libstdcpp5;
+  inherit libstdcpp5 makeWrapper;
   libPath = [libstdcpp5 glib pango atk gtk libX11];
   
 }) // {mozillaPlugin = "/real/mozilla";}

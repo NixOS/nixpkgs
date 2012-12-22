@@ -11,10 +11,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="TPTP";
-    version="5.3.0";
+    version="5.4.0";
     name="${baseName}-${version}";
     url="http://www.cs.miami.edu/~tptp/TPTP/Distribution/TPTP-v${version}.tgz";
-    hash="0xzybh332x53q4cmb3i47ygln0x6rd2nx810la1hmja9d1ixnz9b";
+    hash="0nyq2kkiphwgj3hczc7zglzqjj6hxxsh6zcygpy4yhxh9a9rpkg1";
   };
 in
 rec {

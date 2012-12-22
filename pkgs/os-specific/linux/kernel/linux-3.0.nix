@@ -1,11 +1,11 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
 let
   configWithPlatform = kernelPlatform :
     ''
-      # powermanagement and debugging for powertop
+      # Power management and debugging for powertop.
       DEBUG_KERNEL y
       PM_ADVANCED_DEBUG y
       PM_RUNTIME y
@@ -219,6 +219,9 @@ let
       CONNECTOR y
       PROC_EVENTS y
 
+      # Devtmpfs support.
+      DEVTMPFS y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -227,15 +230,15 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.0.31";
-  
+    version = "3.0.57";
+
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
     '';
 
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
-      sha256 = "1b5ix1fc55m6vsr28dh5xi89fphl3m3kmvaniq9div5rj8f6kv0f";
+      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
+      sha256 = "12rf48ymwsgr133d6cydsajjxb3zihrcrfhpdv185x07dbri9nbl";
     };
 
     config = configWithPlatform stdenv.platform;

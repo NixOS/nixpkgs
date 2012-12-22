@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hmatrix";
-  version = "0.14.0.1";
-  sha256 = "057ii711qsh5307bp3jqpvlhwp2iacr83whhjm5053b5psinj4z5";
+  version = "0.14.1.0";
+  sha256 = "10fvbk3k2fgac46a86mc8g0s5gsw1p1bz4k57gn6dzgwh73mxjx7";
   buildDepends = [ binary random storableComplex vector ];
   extraLibraries = [ blas gsl liblapack ];
   meta = {

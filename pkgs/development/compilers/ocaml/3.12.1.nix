@@ -1,8 +1,8 @@
 { stdenv, fetchurl, ncurses, x11 }:
 
 let
-   useX11 = !stdenv.isArm;
-   useNativeCompilers = !stdenv.isArm;
+   useX11 = !stdenv.isArm && !stdenv.isMips;
+   useNativeCompilers = !stdenv.isMips;
    inherit (stdenv.lib) optionals optionalString;
 in
 
@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
   '';
+
+  passthru = {
+    nativeCompilers = useNativeCompilers;
+  };
 
   meta = {
     homepage = http://caml.inria.fr/ocaml;

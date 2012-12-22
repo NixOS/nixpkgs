@@ -1,7 +1,7 @@
 {stdenv, fetchurl, kernel}:
 
 stdenv.mkDerivation {
-  name = "ov511-2.30";
+  name = "ov511-2.30-${kernel.version}";
   builder = ./ov511-2.30-builder.sh;
   src = fetchurl {
     url = http://nixos.org/tarballs/ov511-2.30.tar.bz2;

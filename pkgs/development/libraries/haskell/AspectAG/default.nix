@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "AspectAG";
-  version = "0.3.4.1";
-  sha256 = "12iaf27crynwnnd7qm1zvvaj6zw6i6c05mb4dsq55dnhph2l356g";
+  version = "0.3.6.1";
+  sha256 = "01pglvf38v5ii2w03kdlgngxbb3ih0j5bsilv5qwc9vrh2iwirhf";
   buildDepends = [ HList mtl ];
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/bin/view/Center/AspectAG";

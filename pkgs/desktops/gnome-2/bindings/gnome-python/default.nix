@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
 
   phases = "unpackPhase configurePhase buildPhase installPhase";
 
-  # You should be using WAF instead; see the file INSTALL.WAF
+  # WAF is probably the biggest crap on this planet, btw i removed the /gtk-2.0 path thingy
   configurePhase = ''
+    sed -e "s@{PYTHONDIR}/gtk-2.0@{PYTHONDIR}/@" -i gconf/wscript
     python waf configure --prefix=$out
   '';
 
@@ -24,6 +25,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     python waf install
+    cp bonobo/*.{py,defs} $out/share/pygtk/2.0/defs/
   '';
 
   buildInputs = [ python pkgconfig pygobject pygtk glib gtk GConf libgnome pythonDBus ];

@@ -17,15 +17,37 @@
 , libXrender
 , libXtst
 , libXi
+, libXinerama
+, libXcursor
+, fontconfig
 , cpio
+, cacert
 , jreOnly ? false
+, perl
 }:
 
+let
+
+  /**
+   * The JRE libraries are in directories that depend on the CPU.
+   */
+  architecture =
+    if stdenv.system == "i686-linux" then
+      "i386"
+    else if stdenv.system == "x86_64-linux" then
+      "amd64"
+    else
+      throw "openjdk requires i686-linux or x86_64 linux";
+
+  build = "147";
+
+in
+
 stdenv.mkDerivation rec {
-  name = "openj${if jreOnly then "re" else "dk"}-7b127";
+  name = "openj${if jreOnly then "re" else "dk"}-7b${build}";
 
   src = fetchurl {
-    url = http://www.java.net/download/openjdk/jdk7/promoted/b147/openjdk-7-fcs-src-b147-27_jun_2011.zip;
+    url = "http://www.java.net/download/openjdk/jdk7/promoted/b${build}/openjdk-7-fcs-src-b${build}-27_jun_2011.zip";
     sha256 = "1qhwlz9y5qmwmja4qnxg6sn3pgsg1i11fb9j41w8l26acyhk34rs";
   };
 
@@ -67,7 +89,13 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXi
+    libXinerama
+    libXcursor
+    fontconfig
+    perl
   ];
+
+  NIX_LDFLAGS = "-lfontconfig -lXcursor -lXinerama";
 
   postUnpack = ''
     mkdir -p drops
@@ -91,6 +119,7 @@ stdenv.mkDerivation rec {
     ./cppflags-include-fix.patch
     ./printf-fix.patch
     ./linux-version-check-fix.patch
+    ./no-crypto-restrictions.patch
   ];
 
   makeFlags = [
@@ -99,7 +128,7 @@ stdenv.mkDerivation rec {
     "FREETYPE_HEADERS_PATH=${freetype}/include"
     "FREETYPE_LIB_PATH=${freetype}/lib"
     "MILESTONE=release"
-    "BUILD_NUMBER=b127"
+    "BUILD_NUMBER=b${build}"
     "CUPS_HEADERS_PATH=${cups}/include"
     "USRBIN_PATH="
     "COMPILER_PATH="
@@ -116,6 +145,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
+    pushd $out/${if ! jreOnly then "jre/" else ""}lib/security
+    rm cacerts
+    perl ${./generate-cacerts.pl} $out/bin/keytool ${cacert}/etc/ca-bundle.crt
+    popd
   '';
 #  '' + (if jreOnly then "" else ''
 #    if [ -z $jre ]; then
@@ -136,5 +169,7 @@ stdenv.mkDerivation rec {
 
     platforms = stdenv.lib.platforms.linux;
   };
+
+  passthru = { inherit architecture; };
 }
 

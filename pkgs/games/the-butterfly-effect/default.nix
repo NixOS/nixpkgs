@@ -41,7 +41,7 @@ rec {
     mkdir -p "$out/share/tbe"
     cp -r . "$out/share/tbe/build-dir"
     mkdir -p "$out/bin"
-    echo '#! /bin/sh' >> "$out/bin/tbe"
+    echo '#!${a.stdenv.shell}' >> "$out/bin/tbe"
     echo "$out/share/tbe/build-dir/tbe \"\$@\"" >> "$out/bin/tbe"
     chmod a+x "$out/bin/tbe"
   '' ["minInit" "doMake" "defEnsureDir"];

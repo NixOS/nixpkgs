@@ -9,8 +9,8 @@
    The documentation is availible at http://github.com/MarcWeber/nix-repository-manager/raw/master/README
 
 */
-{ getConfig }:
+{ config }:
   localTarName: publishedSrcSnapshot:
-  if getConfig ["sourceFromHead" "useLocalRepos"] false then
-    "${getConfig ["sourceFromHead" "managedRepoDir"] "/set/sourceFromHead.managedRepoDir/please"}/dist/${localTarName}"
+  if config.sourceFromHead.useLocalRepos or false then
+    "${config.sourceFromHead.managedRepoDir or "/set/sourceFromHead.managedRepoDir/please"}/dist/${localTarName}"
   else publishedSrcSnapshot

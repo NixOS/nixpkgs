@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "prolog";
-  version = "0.1";
-  sha256 = "00791fb1f84wq42wvacnjl290fbn28x9hknxsic3ksi3f7psladm";
+  version = "0.2.0.1";
+  sha256 = "073sd3rhcfqw9csm0qsbc57ix57dv3k5yjr9hcc33b9zq5y10sp0";
   buildDepends = [ mtl parsec syb thLift transformers ];
   meta = {
     homepage = "https://github.com/Erdwolf/prolog";

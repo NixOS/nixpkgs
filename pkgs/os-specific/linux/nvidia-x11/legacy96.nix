@@ -26,6 +26,16 @@ stdenv.mkDerivation {
 
   inherit versionNumber kernel;
 
+  # Only for kernels 3.4 and over
+  # Patches taken from arch linux AUR 
+  # https://aur.archlinux.org/packages.php?ID=57698
+  kpatches = stdenv.lib.optionals (stdenv.lib.strings.versionOlder "3.4" kernel.version)
+    [ ./acpixf.patch
+      ./generated.patch
+      ./patchlevel.patch
+      ./switch_to.patch
+    ];
+
   dontStrip = true;
 
   glPath = stdenv.lib.makeLibraryPath [xlibs.libXext xlibs.libX11 xlibs.libXrandr];

@@ -33,6 +33,8 @@
 
   GConf = callPackage ./platform/GConf { };
 
+  gconfmm = callPackage ./platform/gconfmm { };
+
   libgnomecanvas = callPackage ./platform/libgnomecanvas { };
 
   libgnomecanvasmm = callPackage ./platform/libgnomecanvasmm { };
@@ -41,6 +43,8 @@
   gnome_common = callPackage platform/gnome-common { };
 
   gnome_mime_data = callPackage ./platform/gnome-mime-data { };
+
+  gnome_python = callPackage ./bindings/gnome-python { };
 
   gnome_vfs = callPackage ./platform/gnome-vfs { };
 
@@ -54,6 +58,8 @@
 
   libbonoboui = callPackage ./platform/libbonoboui { };
 
+  python_rsvg = callPackage ./bindings/python-rsvg { };
+
   at_spi = callPackage ./platform/at-spi { };
 
   gtkhtml = callPackage ./platform/gtkhtml { };
@@ -66,6 +72,8 @@
   libunique = callPackage ./platform/libunique { };
 
   gtkglext = callPackage ./platform/gtkglext { };
+
+  gtkglextmm = callPackage ./platform/gtkglextmm { };
 
 #### DESKTOP
 
@@ -110,7 +118,5 @@
 #### BINDINGS
 
   libglademm = callPackage ./bindings/libglademm { };
-
-  gnome_python = callPackage ./bindings/gnome-python { };
 
 }

@@ -3,11 +3,11 @@
 assert jdk != null;
 
 stdenv.mkDerivation {
-	name = "apache-maven-2.2.1";
+	name = "apache-maven-3.0.4";
 	builder = ./builder.sh;
 	src = fetchurl {
-		url = mirror://apache/maven/binaries/apache-maven-2.2.1-bin.tar.gz;
-		sha256 = "0xnk08ndf1jx458sr5dfr8rh7wi92kyn887vqyzjm1ka91cnb8xr";
+		url = mirror://apache/maven/binaries/apache-maven-3.0.4-bin.tar.gz;
+		sha256 = "0bxa7x8ifm8590nxifhsh3sxzm6aicbczyx21vibg3606ih8fnnk";
 	};
 	
         buildInputs = [makeWrapper]; 

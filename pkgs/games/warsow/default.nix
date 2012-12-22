@@ -1,32 +1,31 @@
-{ stdenv, fetchurl, unzip, pkgconfig, zlib, curl, libjpeg, libvorbis
-, libXxf86dga, libXxf86vm, libXinerama, SDL, mesa, openal
+{ stdenv, fetchurl, unzip, pkgconfig, zlib, curl, libjpeg, libpng, libvorbis
+, libtheora, libXxf86dga, libXxf86vm, libXinerama, SDL, mesa, openal
 }:
 stdenv.mkDerivation rec {
   name = "warsow-${version}";
-  version = "0.62";
-  mversion = "0.61";  # sometimes only engine is updated
+  version = "1.02";
+  mversion = "1.02";  # sometimes only engine is updated
   src1 = fetchurl {
-    url = "http://www.zcdn.org/dl/warsow_${version}_sdk.zip";
-    sha256 = "0nb1z55lzmwarnn71dcyg9b3k7r7wxagqxks8a7rnlq7acsnra71";
+    url = "http://www.warsow.net:1337/~warsow/1.02/warsow_1.02_sdk.tar.gz";
+    sha256 = "0b5vra4qihkkcw4jn54r8l2lyl2mp67b4y1m76nyz7f34vng1hdy";
   };
   src2 = fetchurl {
-    url = "http://www.zcdn.org/dl/warsow_${mversion}_unified.zip";
-    sha256 = "1b5bv4dsly7i7c4fqlkckv4da1knxl9m3kg8nlgkgr8waczgvazv";
+    url = "http://www.warsow.net:1337/~warsow/1.02/warsow_1.02.tar.gz";
+    sha256 = "0ai5v1h5g9nq21ixz23v0qsj9dr7dbiz7l8r34mq4c3z6ili8zpy";
   };
   unpackPhase = ''
-    mkdir warsow_${version}_sdk
+    tar xf "$src1"
     cd warsow_${version}_sdk
-    unzip $src1
-    unzip $src2
+    tar xf "$src2"
     mkdir -p source/release/
-    mv warsow_${mversion}_unified/basewsw source/release/
+    mv warsow_${mversion}/basewsw source/release/
     cd source
   '';
   patchPhase = ''
     substituteInPlace snd_openal/snd_main.c --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
   '';
-  buildInputs = [ unzip pkgconfig zlib curl libjpeg libvorbis libXxf86dga
-                  libXxf86vm libXinerama SDL mesa openal ];
+  buildInputs = [ unzip pkgconfig zlib curl libjpeg libpng libvorbis libtheora
+                  libXxf86dga libXxf86vm libXinerama SDL mesa openal ];
   installPhase = ''
     dest=$out/opt/warsow
     cd release

@@ -1,9 +1,10 @@
 args : with args; 
 rec {
-  version = "0.9.30.4";
+  version = "1.0.2";
+  versionSuffix = "-0";
   src = fetchurl {
-    url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${version}/lazarus-${version}-src.tar.bz2";
-    sha256 = "0kndg4xf32r6w5hb58d9qvzkyiphhysgnhs2rd9bmlc8sy8c7zmv";
+    url = "mirror://sourceforge/lazarus/Lazarus%20Zip%20_%20GZip/Lazarus%20${version}/lazarus-${version}${versionSuffix}.tar.gz";
+    sha256 = "17a94wig8b4yrkq42wng4qbal7n77axkynwh78wday5whsp7div8";
   };
 
   buildInputs = [fpc gtk glib libXi inputproto 

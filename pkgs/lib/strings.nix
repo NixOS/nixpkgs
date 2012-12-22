@@ -2,12 +2,12 @@
 
 let lib = import ./default.nix;
 
-inherit (builtins) add sub lessThan;
+inherit (builtins) add sub lessThan length;
 
 in
 
 rec {
-  inherit (builtins) stringLength substring head tail lessThan sub;
+  inherit (builtins) stringLength substring head tail;
 
 
   # Concatenate a list of strings.
@@ -22,7 +22,7 @@ rec {
   # Place an element between each element of a list, e.g.,
   # `intersperse "," ["a" "b" "c"]' returns ["a" "," "b" "," "c"].
   intersperse = separator: list:
-    if list == [] || tail list == []
+    if list == [] || length list == 1
     then list
     else [(head list) separator]
          ++ (intersperse separator (tail list));
@@ -154,5 +154,21 @@ rec {
 
   # Return true iff string v1 denotes a version older than v2.
   versionOlder = v1: v2: builtins.compareVersions v2 v1 == 1;
+
+
+  # Get the version of the specified derivation, as specified in its
+  # ‘name’ attribute.
+  getVersion = drv: (builtins.parseDrvName drv.name).version;
+
+
+  # Extract name with version from URL. Ask for separator which is 
+  # supposed to start extension
+  nameFromURL = url: sep: let
+    components = splitString "/" url;
+    filename = lib.last components;
+    name = builtins.head (splitString sep filename);
+  in
+  assert ! eqStrings name filename;
+  name;
 
 }

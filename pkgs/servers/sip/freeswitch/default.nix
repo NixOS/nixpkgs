@@ -1,14 +1,16 @@
-{ fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline, openssl, perl, libjpeg }:
+{ fetchurl, stdenv, ncurses, curl, pkgconfig, gnutls, readline, openssl, perl, libjpeg
+, libzrtpcpp }:
 
 stdenv.mkDerivation rec {
-  name = "freeswitch-1.0.7";
+  name = "freeswitch-1.2.3";
 
   src = fetchurl {
-    url = http://latest.freeswitch.org/freeswitch-1.0.7.tar.gz;
-    sha256 = "0r7mqsc50y7aqm8arbwiq75ikwfrrfhhzdf9r070snrf3b8qkj8w";
+    url = http://files.freeswitch.org/freeswitch-1.2.3.tar.bz2;
+    sha256 = "0kfvn5f75c6r6yp18almjz9p6llvpm66gpbxcjswrg3ddgbkzg0k";
   };
 
-  buildInputs = [ ncurses curl pkgconfig gnutls readline openssl perl libjpeg ];
+  buildInputs = [ ncurses curl pkgconfig gnutls readline openssl perl libjpeg
+    libzrtpcpp ];
 
   meta = {
     description = "Cross-Platform Scalable FREE Multi-Protocol Soft Switch";

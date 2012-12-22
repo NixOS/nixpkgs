@@ -1,11 +1,11 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
 let
   configWithPlatform = kernelPlatform :
     ''
-      # powermanagement and debugging for powertop
+      # Power management and debugging for powertop.
       DEBUG_KERNEL y
       PM_ADVANCED_DEBUG y
       PM_RUNTIME y
@@ -225,6 +225,9 @@ let
       FTRACE_SYSCALLS y
       SCHED_TRACER y
 
+      # Devtmpfs support.
+      DEVTMPFS y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -233,7 +236,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.3.6";
+    version = "3.3.8";
     testing = false;
 
     preConfigure = ''
@@ -242,7 +245,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "04hplilmy9ks6nxi4292mcqwil6b5vinx90w23m41bll1x32gbq8";
+      sha256 = "0bgppngf711mlxp0jcsnv5xc0xxc8vs5rzc1czkv2igrfb1kvrnz";
     };
 
     config = configWithPlatform stdenv.platform;
@@ -250,6 +253,7 @@ import ./generic.nix (
 
     features.iwlwifi = true;
     features.efiBootStub = true;
+    features.netfilterRPFilter = true;
   }
 
   // removeAttrs args ["extraConfig"]

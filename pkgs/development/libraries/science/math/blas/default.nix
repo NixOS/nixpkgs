@@ -32,10 +32,14 @@ stdenv.mkDerivation {
     echo >>make.inc "RANLIB = ranlib"
     make
   '';
- 
-  installPhase = ''
-    install -D -m755 libblas.a "$out/lib/libblas.a"
-    install -D -m755 libblas.so.3.0.3 "$out/lib/libblas.so.3.0.3"
+
+  installPhase =
+    # FreeBSD's stdenv doesn't use Coreutils.
+    let dashD = if stdenv.isFreeBSD then "" else "-D"; in
+    (stdenv.lib.optionalString stdenv.isFreeBSD "mkdir -p $out/lib ;")
+    + ''
+    install ${dashD} -m755 libblas.a "$out/lib/libblas.a"
+    install ${dashD} -m755 libblas.so.3.0.3 "$out/lib/libblas.so.3.0.3"
     ln -s libblas.so.3.0.3 "$out/lib/libblas.so.3"
     ln -s libblas.so.3.0.3 "$out/lib/libblas.so"
   '';

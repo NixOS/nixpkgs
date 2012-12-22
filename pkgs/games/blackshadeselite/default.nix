@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   NIX_LDFLAGS = "-lSDL_image";
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   buildInputs = [ SDL SDL_image mesa openal libvorbis freealut popt ];
 

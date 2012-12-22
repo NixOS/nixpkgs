@@ -1,24 +1,21 @@
 { stdenv, fetchurl, libextractor, libmicrohttpd, libgcrypt
 , zlib, gmp, curl, libtool, adns, sqlite, pkgconfig
 , libxml2, ncurses, gettext, libunistring
-, gtkSupport ? false, gtk ? null, libglade ? null
 , makeWrapper }:
 
-assert gtkSupport -> (gtk != null) && (libglade != null);
-
 stdenv.mkDerivation rec {
-  name = "gnunet-0.9.2";
+  name = "gnunet-0.9.3";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/${name}.tar.gz";
-    sha256 = "1sa7xc85l7lkd0s7vyxnqhnm7cngnycrvp7zc6yj4b3qjg5z3x94";
+    sha256 = "0ppirvwjb7w7270g0w83z6wyk984cnxv2ydxj7qr0j1cz2j6nn2h";
   };
 
   buildInputs = [
     libextractor libmicrohttpd libgcrypt gmp curl libtool
     zlib adns sqlite libxml2 ncurses
     pkgconfig gettext libunistring makeWrapper
-  ] ++ (if gtkSupport then [ gtk libglade ] else []);
+  ];
 
   preConfigure = ''
     # Brute force: since nix-worker chroots don't provide

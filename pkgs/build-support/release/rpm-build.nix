@@ -14,16 +14,10 @@ vmTools.buildRPM (
     name = name + "-" + diskImage.name + (if src ? version then "-" + src.version else "");
 
     preBuild = ''
-      mkdir -p $out/nix-support
-      cat "$diskImage"/nix-support/full-name > $out/nix-support/full-name
-
-      # If `src' is the result of a call to `makeSourceTarball', then it
-      # has a subdirectory containing the actual tarball(s).  If there are
-      # multiple tarballs, just pick the first one.
-      if test -d $src/tarballs; then
-          src=$(ls $src/tarballs/*.tar.bz2 $src/tarballs/*.tar.gz | sort | head -1)
-      fi
-    ''; # */
+      . ${./functions.sh}
+      propagateImageName
+      src=$(findTarballs $src | head -1) # Pick the first tarball.
+    '';
 
     postInstall = ''
       declare -a rpms rpmNames
@@ -36,12 +30,12 @@ vmTools.buildRPM (
       done
 
       echo "installing ''${rpms[*]}..."
-      rpm -ip ''${rpms[*]} --excludepath /nix/store
+      rpm -Up ''${rpms[*]} --excludepath /nix/store
 
       eval "$postRPMInstall"
       
       echo "uninstalling ''${rpmNames[*]}..."
-      rpm -e ''${rpmNames[*]}
+      rpm -e ''${rpmNames[*]} --nodeps
 
       for i in $out/rpms/*/*.src.rpm; do
         echo "file srpm $i" >> $out/nix-support/hydra-build-products

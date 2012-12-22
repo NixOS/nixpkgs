@@ -9,44 +9,43 @@ stdenv.mkDerivation rec {
     sha256 = "7391079db20b8613eecfd81d64d243edc9d3c586750c8f2da2bb9db14d260f03";
   };
 
-  patches =
-    [ (fetchurl {
-         url = "http://git.savannah.gnu.org/cgit/ratpoison.git/patch/?id=4ad0b38fb53506d613c4b4f7268dadfcedae9b8e";
-         sha256 = "118c5b481fa22b8fefbe34e3dbb157f621a3bf5de0c7beb540001c99ff403a5f";
-       })
-    ];
-
-  preConfigure = "autoreconf -vf";	# needed because of the patch above
-
-  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2"; # urgh
-  
   buildInputs =
     [ libX11 inputproto libXt libXpm libXft fontconfig freetype libXtst
       xextproto readline libXi pkgconfig perl autoconf automake
     ];
 
+  NIX_CFLAGS_COMPILE = "-I${freetype}/include/freetype2"; # urgh
+
+  preConfigure = "autoreconf -vf";      # needed because of the patch above
+
+  patches = [ ./glibc-fix.patch ];
+
+  postInstall = ''
+    mkdir -p $out/share/emacs/site-lisp
+    mv "$out/share/ratpoison/"*.el $out/share/emacs/site-lisp/
+  '';
+
   meta = {
+    homepage = "http://www.nongnu.org/ratpoison/";
     description = "Ratpoison, a simple mouse-free tiling window manager";
-    longDescription =
-      '' Ratpoison is a simple window manager with no fat library
-         dependencies, no fancy graphics, no window decorations, and no
-         rodent dependence.  It is largely modelled after GNU Screen which
-         has done wonders in the virtual terminal market.
-
-         The screen can be split into non-overlapping frames.  All windows
-         are kept maximized inside their frames to take full advantage of
-         your precious screen real estate.
-
-         All interaction with the window manager is done through keystrokes.
-         Ratpoison has a prefix map to minimize the key clobbering that
-         cripples Emacs and other quality pieces of software.
-      '';
-
     license = "GPLv2+";
 
-    homepage = http://www.nongnu.org/ratpoison/;
+    longDescription = ''
+       Ratpoison is a simple window manager with no fat library
+       dependencies, no fancy graphics, no window decorations, and no
+       rodent dependence.  It is largely modelled after GNU Screen which
+       has done wonders in the virtual terminal market.
+
+       The screen can be split into non-overlapping frames.  All windows
+       are kept maximized inside their frames to take full advantage of
+       your precious screen real estate.
+
+       All interaction with the window manager is done through keystrokes.
+       Ratpoison has a prefix map to minimize the key clobbering that
+       cripples Emacs and other quality pieces of software.
+    '';
 
     maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    platforms = stdenv.lib.platforms.linux;
   };
 }

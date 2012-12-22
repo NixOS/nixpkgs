@@ -1,11 +1,11 @@
 { stdenv, fetchurl, xz, zlib, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "kmod-8";
+  name = "kmod-9";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/kernel/kmod/${name}.tar.xz";
-    sha256 = "0kbkjzcyhkwgcplwa29n0f03ccwpg4df83pdl5nkvsk2rzgx3xrm";
+    sha256 = "1kyfplx0gygzxp5dn81yk3cn8zzraqm497vis04r1g1dnry2c1q6";
   };
 
   # Disable xz/zlib support to prevent needing them in the initrd.

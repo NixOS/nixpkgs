@@ -1,0 +1,8 @@
+url http://sourceforge.net/projects/wine/files/Source/
+version_link '[.]tar[.][^./]+/download$'
+SF_redirect
+do_overwrite () {
+  ensure_hash
+  set_var_value version "$CURRENT_VERSION"
+  set_var_value sha256 "$CURRENT_HASH"
+}

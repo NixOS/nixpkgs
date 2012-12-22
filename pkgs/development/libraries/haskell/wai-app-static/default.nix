@@ -1,15 +1,17 @@
-{ cabal, base64Bytestring, blazeBuilder, blazeHtml, cryptohash
-, fileEmbed, httpDate, httpTypes, text, time, transformers
+{ cabal, base64Bytestring, blazeBuilder, blazeHtml, blazeMarkup
+, cereal, cryptoConduit, cryptohash, fileEmbed, httpDate, httpTypes
+, mimeTypes, systemFileio, systemFilepath, text, time, transformers
 , unixCompat, wai
 }:
 
 cabal.mkDerivation (self: {
   pname = "wai-app-static";
-  version = "1.2.0.3";
-  sha256 = "1hn4k28aa15vwvvay62rvi796fma7p3j31z6bfa9im0dxdy7sf9l";
+  version = "1.3.0.5";
+  sha256 = "1fz2a30f3imn0m5q6hjkm2xan0ddalhfbzx78pklz4g7k79s1ncn";
   buildDepends = [
-    base64Bytestring blazeBuilder blazeHtml cryptohash fileEmbed
-    httpDate httpTypes text time transformers unixCompat wai
+    base64Bytestring blazeBuilder blazeHtml blazeMarkup cereal
+    cryptoConduit cryptohash fileEmbed httpDate httpTypes mimeTypes
+    systemFileio systemFilepath text time transformers unixCompat wai
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/wai";

@@ -9,10 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "26061fd52ab0ab593c093ff94b5f5c09b956d7deda96b47019ff11932111397f";
   };
 
-  buildInputs = [ cmake gtk glib libjpeg libpng libtiff jasper ffmpeg pkgconfig
+  # The order is important; libpng should go before X libs, because they
+  # propagate the libpng 1.5 (and opencv wants libpng 1.2)
+  buildInputs = [ cmake libpng gtk glib libjpeg libtiff jasper ffmpeg pkgconfig
     xineLib gstreamer ];
 
   enableParallelBuilding = true;
+
+  patchPhase = ''
+    sed -i 's/ptrdiff_t/std::ptrdiff_t/' include/opencv/*
+  '';
 
   preConfigure = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -D__STDC_CONSTANT_MACROS "

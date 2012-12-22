@@ -1,16 +1,17 @@
 { cabal, attoparsec, attoparsecConduit, blazeBuilder
-, blazeBuilderConduit, conduit, dataDefault, failure, monadControl
-, resourcet, systemFilepath, text, transformers, xmlTypes
+, blazeBuilderConduit, blazeHtml, blazeMarkup, conduit, dataDefault
+, failure, monadControl, resourcet, systemFilepath, text
+, transformers, xmlTypes
 }:
 
 cabal.mkDerivation (self: {
   pname = "xml-conduit";
-  version = "0.7.0.3";
-  sha256 = "143cd8mjxckknlza327cmn63prw89ypnw32bk762s72vbqm1xvvv";
+  version = "1.0.3.3";
+  sha256 = "0jw1r4vmcbxj8kgkdj4pgibihcdmbdj15g06i9p8mdklmmd7gqnz";
   buildDepends = [
     attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
-    conduit dataDefault failure monadControl resourcet systemFilepath
-    text transformers xmlTypes
+    blazeHtml blazeMarkup conduit dataDefault failure monadControl
+    resourcet systemFilepath text transformers xmlTypes
   ];
   meta = {
     homepage = "http://github.com/snoyberg/xml";

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8 }:
+{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.18";
+  version = "0.8.15";
   name = "nodejs-${version}";
 
   src = fetchurl {
     url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "6cf4311ecbc1700e88f4382a31b3a7017c1572cd641fd06e653fc1692c2cffff";
+    sha256 = "1ccjaw0lqspnrmzcb9jbnh1mf74ny7874m2q4vz83q7kdnf66n0p";
   };
 
   configureFlags = [
@@ -20,14 +20,17 @@ stdenv.mkDerivation rec {
   patches = stdenv.lib.optional stdenv.isDarwin ./no-arch-flag.patch;
 
   prePatch = ''
-    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf}
+    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf} configure
   '';
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+  postInstall = ''
+
+    sed -e 's|^#!/usr/bin/env node$|#!'$out'/bin/node|' -i $out/lib/node_modules/npm/bin/npm-cli.js
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libv8.dylib ${v8}/lib/libv8.dylib $out/bin/node
   '';
 
-  buildInputs = [ python openssl v8 zlib ];
+  buildInputs = [ python openssl v8 zlib ] ++ stdenv.lib.optional stdenv.isLinux utillinux;
 
   meta = with stdenv.lib; {
     description = "Event-driven I/O framework for the V8 JavaScript engine";

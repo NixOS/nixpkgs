@@ -3,7 +3,7 @@
 , documentation ? false # build documentation
 , avahiSupport ? false # build support for Avahi in libinfinity
 , stdenv, fetchurl, pkgconfig, glib, libxml2, gnutls, gsasl
-, gtk ? null, gtkdoc ? null, avahi ? null, libdaemon ? null }:
+, gtk ? null, gtkdoc ? null, avahi ? null, libdaemon ? null, libidn, gss }:
 
 let
   edf = flag: feature: (if flag then "--with-" else "--without-") + feature;
@@ -11,13 +11,13 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "libinfinity-0.4.1";
+  name = "libinfinity-0.5.3";
   src = fetchurl {
     url = "http://releases.0x539.de/libinfinity/${name}.tar.gz";
-    sha256 = "1vdyj6xvwkisrc222i84mq93gasywad4i0ismafdjq2wapxn30r6";
+    sha256 = "04qa3ky2skhc9b5f9i9sc8hci3ykklqznmgy616yzs3n22bmax9j";
   };
 
-  buildInputs = [ pkgconfig glib libxml2 gsasl ]
+  buildInputs = [ pkgconfig glib libxml2 gsasl libidn gss ]
     ++ optional gtkWidgets gtk
     ++ optional documentation gtkdoc
     ++ optional avahiSupport avahi

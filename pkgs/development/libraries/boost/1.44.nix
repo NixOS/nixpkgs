@@ -6,6 +6,7 @@
 , enableShared ? true
 , enableStatic ? false
 , enablePIC ? false
+, taggedLayout ? false
 }:
 
 let
@@ -23,7 +24,7 @@ let
      stdenv.lib.optional enableStatic "static");
 
   # To avoid library name collisions
-  finalLayout = if ((enableRelease && enableDebug) ||
+  finalLayout = if (taggedLayout || (enableRelease && enableDebug) ||
     (enableSingleThreaded && enableMultiThreaded) ||
     (enableShared && enableStatic)) then
     "tagged" else "system";
@@ -63,12 +64,12 @@ stdenv.mkDerivation {
     # Patch to get rid of following error, experienced by some packages like encfs, bitcoin:
     #    terminate called after throwing an instance of 'std::runtime_error'
     #    what():  locale::facet::_S_create_c_locale name not valid
-    (fetchurl { 
+    (fetchurl {
        url = https://svn.boost.org/trac/boost/raw-attachment/ticket/4688/boost_filesystem.patch ;
-       sha256 = "15k91ihzs6190pnryh4cl0b3c2pjpl9d790mr14x16zq52y7px2d"; 
+       sha256 = "15k91ihzs6190pnryh4cl0b3c2pjpl9d790mr14x16zq52y7px2d";
      })
   ];
-  
+
   crossAttrs = rec {
     buildInputs = [ expat.hostDrv zlib.hostDrv bzip2.hostDrv ];
     # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to

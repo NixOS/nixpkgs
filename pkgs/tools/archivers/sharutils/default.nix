@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  crossAttrs = {
+    patches = [ ./sharutils-4.11.1-cross-binary-mode-popen.patch ];
+  };
+
   meta = {
     description = "GNU Sharutils, tools for remote synchronization and `shell archives'";
 

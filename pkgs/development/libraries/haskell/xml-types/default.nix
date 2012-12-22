@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-types";
-  version = "0.3.1";
-  sha256 = "0ffmmidb9a1hqfbmvjxjvij2wfrqqlyjc7m7n81czrcrrsmyc1kc";
+  version = "0.3.3";
+  sha256 = "0jvchgzmqsnc0dax73nh7wa7x6n07qnl4wr1d58v21rlbqcklgcn";
   buildDepends = [ text ];
   meta = {
     homepage = "https://john-millikin.com/software/haskell-xml/";

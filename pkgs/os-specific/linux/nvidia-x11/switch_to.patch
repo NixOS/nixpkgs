@@ -1,0 +1,24 @@
+diff -pur 173.14.31-3.3/conftest.sh 173.14.31-3.4/conftest.sh
+--- 173.14.31-3.3/conftest.sh	2012-04-09 19:33:34.407928432 +0400
++++ 173.14.31-3.4/conftest.sh	2012-04-10 19:50:36.052346728 +0400
+@@ -465,7 +465,7 @@ compile_test() {
+             # and if it as an 'event' member.
+             #
+             echo "$CONFTEST_PREAMBLE
+-            #include <asm/system.h>
++            #include <asm/switch_to.h>
+             #include <linux/pm.h>
+             void conftest_pm_message_t(pm_message_t state) {
+                 pm_message_t *p = &state;
+diff -pur 173.14.31-3.3/nv-linux.h 173.14.31-3.4/nv-linux.h
+--- 173.14.31-3.3/nv-linux.h	2011-07-18 09:49:58.000000000 +0400
++++ 173.14.31-3.4/nv-linux.h	2012-04-10 19:53:04.853776013 +0400
+@@ -92,7 +92,7 @@
+ #include <linux/timer.h>
+ 
+ #include <asm/div64.h>              /* do_div()                         */
+-#include <asm/system.h>             /* cli, sli, save_flags             */
++#include <asm/switch_to.h>          /* cli, sli, save_flags             */
+ #include <asm/io.h>                 /* ioremap, virt_to_phys            */
+ #include <asm/uaccess.h>            /* access_ok                        */
+ #include <asm/page.h>               /* PAGE_OFFSET                      */

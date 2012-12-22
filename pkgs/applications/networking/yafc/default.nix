@@ -1,21 +1,18 @@
-{stdenv, fetchurl, readline, openssh}:
+{stdenv, fetchurl, readline, libssh, intltool}:
 
-stdenv.mkDerivation {
-  name = "yafc-1.1.1";
+stdenv.mkDerivation rec {
+  name = "yafc-1.2.3";
   src = fetchurl {
-    url = mirror://sourceforge/yafc/yafc-1.1.1.tar.bz2;
-    sha256 = "ab72b2ed89fb75dbe8ebd119458cf513392225f367cccfad881e9780aefcd7e6";
+    url = "https://github.com/downloads/sebastinas/yafc/${name}.tar.xz";
+    sha256 = "11h5r9ragfpil338kq981wxnifacflqfwgydhmy00b3fbdlnxzsi";
   };
 
-  buildInputs = [readline openssh];
-
-  patchPhase = "
-    sed -e 's@/usr/bin/ssh@${openssh}/bin/ssh@' -i src/main.c
-  ";
+  buildInputs = [ readline libssh intltool ];
 
   meta = {
     description = "ftp/sftp client with readline, autocompletion and bookmarks";
-    homepage = http://yafc.sourceforge.net;
+    homepage = http://www.yafc-ftp.com;
+    maintainers = [ stdenv.lib.maintainers.page ];
     license = "GPLv2+";
   };
 }

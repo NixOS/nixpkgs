@@ -1,36 +1,43 @@
-{ alsaSupport ? true, xvSupport ? true, theoraSupport ? true, cacaSupport ? true
-, xineramaSupport ? true, randrSupport ? true, dvdnavSupport ? true
-, stdenv, fetchurl, fetchsvn, fetchgit, x11, freetype, fontconfig, zlib
-, alsaLib ? null, libXv ? null, libtheora ? null, libcaca ? null
-, libXinerama ? null, libXrandr ? null, libdvdnav ? null
-, cdparanoia ? null, cddaSupport ? true
-, amrnb ? null, amrwb ? null, amrSupport ? false
-, x11Support ? true, libX11 ? null, libXext ? null
-, jackaudioSupport ? false, jackaudio ? null
-, x264Support ? false, x264 ? null
-, xvidSupport ? false, xvidcore ? null
+{ stdenv, fetchurl, freetype, pkgconfig, yasm, freefont_ttf
+, x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
+, xineramaSupport ? true, libXinerama ? null
+, xvSupport ? true, libXv ? null
+, alsaSupport ? true, alsaLib ? null
+, screenSaverSupport ? true, libXScrnSaver ? null
+, vdpauSupport ? false, libvdpau ? null
+, cddaSupport ? true, cdparanoia ? null
+, dvdnavSupport ? true, libdvdnav ? null
+, bluraySupport ? true, libbluray ? null
+, amrSupport ? false, amrnb ? null, amrwb ? null
+, cacaSupport ? true, libcaca ? null
 , lameSupport ? true, lame ? null
 , speexSupport ? true, speex ? null
-, screenSaverSupport ? true, libXScrnSaver
-, pulseSupport ? false, pulseaudio
-, mesa, pkgconfig, unzip, yasm, freefont_ttf
-, vdpauSupport ? false, libvdpau ? null
+, theoraSupport ? true, libtheora ? null
+, x264Support ? false, x264 ? null
+, jackaudioSupport ? false, jackaudio ? null
+, pulseSupport ? false, pulseaudio ? null
+# For screenshots
+, libpngSupport ? true, libpng ? null
 }:
 
-assert alsaSupport -> alsaLib != null;
-assert x11Support -> libX11 != null;
-assert xvSupport -> (libXv != null && x11Support);
-assert theoraSupport -> libtheora != null;
-assert cacaSupport -> libcaca != null;
+assert x11Support -> (libX11 != null && libXext != null && mesa != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
-assert randrSupport -> (libXrandr != null && x11Support);
-assert dvdnavSupport -> libdvdnav != null;
-assert cddaSupport -> cdparanoia != null;
-assert jackaudioSupport -> jackaudio != null;
-assert amrSupport -> (amrnb != null && amrwb != null);
+assert xvSupport -> (libXv != null && x11Support);
+assert alsaSupport -> alsaLib != null;
 assert screenSaverSupport -> libXScrnSaver != null;
 assert vdpauSupport -> libvdpau != null;
+assert cddaSupport -> cdparanoia != null;
+assert dvdnavSupport -> libdvdnav != null;
+assert bluraySupport -> libbluray != null;
+assert amrSupport -> (amrnb != null && amrwb != null);
+assert cacaSupport -> libcaca != null;
+assert lameSupport -> lame != null;
 assert speexSupport -> speex != null;
+assert theoraSupport -> libtheora != null;
+assert x264Support -> x264 != null;
+assert jackaudioSupport -> jackaudio != null;
+assert pulseSupport -> pulseaudio != null;
+assert libpngSupport -> libpng != null;
 
 let
 
@@ -64,20 +71,12 @@ let
     };
   } else null;
 
-  ffmpegGit = fetchgit {
-    url = "git://git.videolan.org/ffmpeg.git";
-    rev = "9e53f62be1a171eaf9620958c225d42cf5142a30";
-    sha256 = "be0ef2a394c82a0eee0be66bc0b943d37efb90f74ce1030aa89606109434c943";
-  };
-
-  mplayerRev = "34586";
-
 in
 
 stdenv.mkDerivation rec {
-  name = "mplayer-${mplayerRev}";
+  name = "mplayer-1.1";
 
-  src = fetchsvn {
+  src = fetchurl {
     # Old kind of URL:
     # url = http://nixos.org/tarballs/mplayer-snapshot-20101227.tar.bz2;
     # Snapshot I took on 20110423
@@ -86,64 +85,74 @@ stdenv.mkDerivation rec {
     #url = http://www.mplayerhq.hu/MPlayer/releases/mplayer-export-snapshot.tar.bz2;
     #sha256 = "cc1b3fda75b172f02c3f46581cfb2c17f4090997fe9314ad046e464a76b858bb";
 
-    url = "svn://svn.mplayerhq.hu/mplayer/trunk";
-    rev = "${mplayerRev}";
-    sha256 = "5688add3256b5de8e0410194232aaaeb01531bb507459ffe4f07e69cb2d81bd7";
+    url = "http://www.mplayerhq.hu/MPlayer/releases/MPlayer-1.1.tar.xz";
+    sha256 = "173cmsfz7ckzy1hay9mpnc5as51127cfnxl20b521d2jvgm4gjvn";
   };
 
   prePatch = ''
     sed -i /^_install_strip/d configure
   '';
 
-  buildInputs =
-    [ freetype zlib pkgconfig ]
-    ++ stdenv.lib.optional x11Support [ libX11 libXext mesa ]
-    ++ stdenv.lib.optional alsaSupport alsaLib
-    ++ stdenv.lib.optional xvSupport libXv
-    ++ stdenv.lib.optional theoraSupport libtheora
-    ++ stdenv.lib.optional cacaSupport libcaca
-    ++ stdenv.lib.optional xineramaSupport libXinerama
-    ++ stdenv.lib.optional randrSupport libXrandr
-    ++ stdenv.lib.optionals dvdnavSupport [ libdvdnav libdvdnav.libdvdread ]
-    ++ stdenv.lib.optional cddaSupport cdparanoia
-    ++ stdenv.lib.optional jackaudioSupport jackaudio
-    ++ stdenv.lib.optionals amrSupport [ amrnb amrwb ]
-    ++ stdenv.lib.optional x264Support x264
-    ++ stdenv.lib.optional xvidSupport xvidcore
-    ++ stdenv.lib.optional pulseSupport pulseaudio
-    ++ stdenv.lib.optional screenSaverSupport libXScrnSaver
-    ++ stdenv.lib.optional lameSupport lame
-    ++ stdenv.lib.optional vdpauSupport libvdpau
-    ++ stdenv.lib.optional speexSupport speex;
+  buildInputs = with stdenv.lib;
+    [ freetype pkgconfig ]
+    ++ optionals x11Support [ libX11 libXext mesa ]
+    ++ optional alsaSupport alsaLib
+    ++ optional xvSupport libXv
+    ++ optional theoraSupport libtheora
+    ++ optional cacaSupport libcaca
+    ++ optional xineramaSupport libXinerama
+    ++ optional dvdnavSupport libdvdnav
+    ++ optional bluraySupport libbluray
+    ++ optional cddaSupport cdparanoia
+    ++ optional jackaudioSupport jackaudio
+    ++ optionals amrSupport [ amrnb amrwb ]
+    ++ optional x264Support x264
+    ++ optional pulseSupport pulseaudio
+    ++ optional screenSaverSupport libXScrnSaver
+    ++ optional lameSupport lame
+    ++ optional vdpauSupport libvdpau
+    ++ optional speexSupport speex
+    ++ optional libpngSupport libpng
+    ;
 
   buildNativeInputs = [ yasm ];
-
-  preConfigure = ''
-    cp -r ${ffmpegGit} ffmpeg
-    chmod u+w -R ffmpeg
-    sed -ie '1i#include "libavutil/intreadwrite.h"' ffmpeg/libavcodec/libmp3lame.c
-  '';
 
   postConfigure = ''
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
-  configureFlags = ''
-    ${if cacaSupport then "--enable-caca" else "--disable-caca"}
-    ${if dvdnavSupport then "--enable-dvdnav --enable-dvdread --disable-dvdread-internal" else ""}
-    ${if x264Support then "--enable-x264 --extra-libs=-lx264" else ""}
-    ${if codecs != null then "--codecsdir=${codecs}" else ""}
-    ${if (stdenv.isi686 || stdenv.isx86_64) then "--enable-runtime-cpudetection" else ""}
-    ${if x11Support then "--enable-x11" else ""}
-    ${stdenv.lib.optionalString speexSupport "--enable-speex"}
-    --disable-xanim
-    --disable-ivtv
-    --enable-vidix
-    --enable-fbdev
-    --disable-ossaudio
-  '';
+  configureFlags = with stdenv.lib;
+    ''
+      ${if x11Support then "--enable-x11 --enable-gl" else "--disable-x11 --disable-gl"}
+      ${if xineramaSupport then "--enable-xinerama" else "--disable-xinerama"}
+      ${if xvSupport then "--enable-xv" else "--disable-xv"}
+      ${if alsaSupport then "--enable-alsa" else "--disable-alsa"}
+      ${if screenSaverSupport then "--enable-xss" else "--disable-xss"}
+      ${if vdpauSupport then "--enable-vdpau" else "--disable-vdpau"}
+      ${if cddaSupport then "--enable-cdparanoia" else "--disable-cdparanoia"}
+      ${if dvdnavSupport then "--enable-dvdnav" else "--disable-dvdnav"}
+      ${if bluraySupport then "--enable-bluray" else "--disable-bluray"}
+      ${if amrSupport then "--enable-libopencore_amrnb" else "--disable-libopencore_amrnb"}
+      ${if cacaSupport then "--enable-caca" else "--disable-caca"}
+      ${if lameSupport then "--enable-mp3lame --disable-mp3lame-lavc" else "--disable-mp3lame --enable-mp3lame-lavc"}
+      ${if speexSupport then "--enable-speex" else "--disable-speex"}
+      ${if theoraSupport then "--enable-theora" else "--disable-theora"}
+      ${if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc"}
+      ${if jackaudioSupport then "--enable-jack" else "--disable-jack"}
+      ${if pulseSupport then "--enable-pulse" else "--disable-pulse"}
 
-  NIX_LDFLAGS = if x11Support then "-lX11 -lXext" else "";
+      ${optionalString (codecs != null) "--codecsdir=${codecs}"}
+      ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}
+      --enable-freetype
+      --disable-xanim
+      --disable-ivtv
+      --disable-xvid --disable-xvid-lavc
+      --enable-vidix
+      --enable-fbdev
+      --disable-ossaudio
+    '';
+
+  NIX_LDFLAGS = stdenv.lib.optionalString x11Support "-lX11 -lXext";
 
   # Provide a reasonable standard font.  Maybe we should symlink here.
   postInstall =
@@ -155,7 +164,7 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     dontSetConfigureCross = true;
     # Some things (vidix) are nanonote specific. Once someone cares, we can make options from them.
-    preConfigure = preConfigure + ''
+    preConfigure = ''
       configureFlags="`echo $configureFlags |
         sed -e 's/--codecsdir[^ ]\+//' \
         -e 's/--enable-runtime-cpudetection//' `"

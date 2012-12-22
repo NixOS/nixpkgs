@@ -1,11 +1,12 @@
 use strict;
-use Dpkg::Cdata;
+use Dpkg::Control;
 use Dpkg::Deps;
 use File::Basename;
 
 my $packagesFile = shift @ARGV;
 my $urlPrefix = shift @ARGV;
 my @toplevelPkgs = @ARGV;
+
 
 my %packages;
 
@@ -14,10 +15,10 @@ my %packages;
 open PACKAGES, "<$packagesFile" or die;
 
 while (1) {
-    my $cdata = parsecdata(\*PACKAGES, $packagesFile);
-    last unless defined $cdata;
-    #print $cdata->{Package}, "\n";
+    my $cdata = Dpkg::Control->new(type => CTRL_INFO_PKG);
+    last if not $cdata->parse(\*PACKAGES, $packagesFile);
     die unless defined $cdata->{Package};
+    #print STDERR $cdata->{Package}, "\n";
     $packages{$cdata->{Package}} = $cdata;
 }
 
@@ -50,9 +51,11 @@ my %provides;
 
 foreach my $cdata (values %packages) {
     next unless defined $cdata->{Provides};
-    my @provides = getDeps(Dpkg::Deps::parse($cdata->{Provides}));
+    my @provides = getDeps(Dpkg::Deps::deps_parse($cdata->{Provides}));
     foreach my $name (@provides) {
         #die "conflicting provide: $name\n" if defined $provides{$name};
+        #warn "provide by $cdata->{Package} conflicts with package with the same name: $name\n";
+        next if defined $packages{$name};
         $provides{$name} = $cdata->{Package};
     }
 }
@@ -67,7 +70,7 @@ sub closePackage {
     my $pkgName = shift;
     print STDERR ">>> $pkgName\n";
     my $cdata = $packages{$pkgName};
-    
+
     if (!defined $cdata) {
         die "unknown (virtual) package $pkgName"
             unless defined $provides{$pkgName};
@@ -75,29 +78,29 @@ sub closePackage {
         $pkgName = $provides{$pkgName};
         $cdata = $packages{$pkgName};
     }
-    
+
     die "unknown package $pkgName" unless defined $cdata;
     return if defined $donePkgs{$pkgName};
     $donePkgs{$pkgName} = 1;
 
     if (defined $cdata->{Provides}) {
-        foreach my $name (getDeps(Dpkg::Deps::parse($cdata->{Provides}))) {
+        foreach my $name (getDeps(Dpkg::Deps::deps_parse($cdata->{Provides}))) {
             $provides{$name} = $cdata->{Package};
         }
     }
-    
+
     my @depNames = ();
-    
+
     if (defined $cdata->{Depends}) {
         print STDERR "    $pkgName: $cdata->{Depends}\n";
-        my $deps = Dpkg::Deps::parse($cdata->{Depends});
+        my $deps = Dpkg::Deps::deps_parse($cdata->{Depends});
         die unless defined $deps;
         push @depNames, getDeps($deps);
     }
 
     if (defined $cdata->{'Pre-Depends'}) {
         print STDERR "    $pkgName: $cdata->{'Pre-Depends'}\n";
-        my $deps = Dpkg::Deps::parse($cdata->{'Pre-Depends'});
+        my $deps = Dpkg::Deps::deps_parse($cdata->{'Pre-Depends'});
         die unless defined $deps;
         push @depNames, getDeps($deps);
     }
@@ -141,7 +144,7 @@ foreach my $pkgName (@order) {
     my $origName = basename $cdata->{Filename};
     my $cleanedName = $origName;
     $cleanedName =~ s/~//g;
-    
+
     print "    (fetchurl {\n";
     print "      url = $urlPrefix/$cdata->{Filename};\n";
     print "      sha256 = \"$cdata->{SHA256}\";\n";
@@ -165,4 +168,3 @@ if ($newComponent != 1) {
     print STDERR "argh: ", keys %forward, "\n";
     exit 1;
 }
-    

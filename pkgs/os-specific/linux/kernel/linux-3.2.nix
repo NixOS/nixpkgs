@@ -1,11 +1,11 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
 let
   configWithPlatform = kernelPlatform :
     ''
-      # powermanagement and debugging for powertop
+      # Power management and debugging for powertop.
       DEBUG_KERNEL y
       PM_ADVANCED_DEBUG y
       PM_RUNTIME y
@@ -226,6 +226,9 @@ let
       FTRACE_SYSCALLS y
       SCHED_TRACER y
 
+      # Devtmpfs support.
+      DEVTMPFS y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -234,7 +237,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.2.20";
+    version = "3.2.35";
     testing = false;
 
     modDirVersion = version;
@@ -245,7 +248,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.0/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "11j36vg96ic0qvx78ilpgy6yc8pax5wdwkc3k93pr5ca9dnax891";
+      sha256 = "0p665msvhmjmcvgravi10yyfbnvn6bm9xfhsflj61qj0frj0lzn9";
     };
 
     config = configWithPlatform stdenv.platform;

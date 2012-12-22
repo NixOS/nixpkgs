@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Hipmunk";
-  version = "5.2.0.8";
-  sha256 = "0xsckndxmzbp32fqb8i90k21rz0xjj3smxjijw742l637p3mv5zw";
+  version = "5.2.0.10";
+  sha256 = "0kq6dlx1g7dra7nsfmrc13yvnl7wh00fadmgln9v2vyf0ww82x95";
   buildDepends = [ StateVar transformers ];
   meta = {
     homepage = "http://patch-tag.com/r/felipe/hipmunk/home";

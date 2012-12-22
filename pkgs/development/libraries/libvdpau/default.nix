@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, xlibs }:
+{ stdenv, fetchurl, pkgconfig, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "libvdpau-0.4.1";
@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "16zmmbawfnvrxjqvgfwxjfd1wh3vyz2cmvxza6cgf4j9qs36y6q6";
   };
 
-  buildInputs = [ pkgconfig xlibs.libX11 ];
+  buildInputs = [ pkgconfig libX11 ];
+
+  propagatedBuildInputs = [ libX11 ];
 
   meta = {
     homepage = http://people.freedesktop.org/~aplattner/vdpau/;

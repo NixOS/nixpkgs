@@ -4,48 +4,78 @@
 , xorriso, makeself, perl, pkgconfig
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
+, enableExtensionPack ? false, requireFile ? null, patchelf ? null
 }:
 
 with stdenv.lib;
 
-let version = "4.1.16"; in
+let
 
-stdenv.mkDerivation {
+  version = "4.2.4";
+  extpackRevision = "81684";
+
+  forEachModule = action: ''
+    for mod in \
+      $sourcedir/out/linux.*/release/bin/src/vboxdrv \
+      $sourcedir/out/linux.*/release/bin/src/vboxpci \
+      $sourcedir/out/linux.*/release/bin/src/vboxnetadp \
+      $sourcedir/out/linux.*/release/bin/src/vboxnetflt
+    do
+      if [ "x$(basename "$mod")" != xvboxdrv -a ! -e "$mod/Module.symvers" ]
+      then
+        cp -v $sourcedir/out/linux.*/release/bin/src/vboxdrv/Module.symvers \
+              "$mod/Module.symvers"
+      fi
+      INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=misc \
+      make -C "$MODULES_BUILD_DIR" "M=$mod" DEPMOD=/do_not_use_depmod ${action}
+    done
+  '';
+
+  extensionPack = requireFile {
+    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}"
+         + ".vbox-extpack";
+    # Has to be base16 because it's used as an input to VBoxExtPackHelperApp!
+    sha256 = "62078e057a4ab56aec5ac086746522b3d94787333d0444169471fa5152c609ed";
+    url = "https://www.virtualbox.org/wiki/Downloads";
+  };
+
+in stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
-
-  NIX_CFLAGS_COMPILE="-I${kernel}/lib/modules/${kernel.modDirVersion}/build/include/generated";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "0kl21wqz822qgdcilfail5qqgsbhgzixwbbwpkmsh6670jc4jw5n";
+    sha256 = "a7c607523c1c10b7b978ab39a92bb646517316548aa4a1a74b6e434ac2bf0adc";
   };
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
-      libcap glib kernel python alsaLib curl pam xorriso makeself perl jdk
+      libcap glib kernel python alsaLib curl pam xorriso makeself perl
       pkgconfig which libXmu ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python;
 
-  patchPhase = ''
+  patches = [ ./remove_fa_ir.patch ];
+
+  postPatch = ''
     set -x
     MODULES_BUILD_DIR=`echo ${kernel}/lib/modules/*/build`
     sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \
         -e 's@MKISOFS --version@MKISOFS -version@' \
         -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
         -i configure
-    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 
-    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 
+    ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2
+    ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2
     find . -type f | xargs sed 's/depmod -a/true/' -i
     export USER=nix
     set +x
   '';
 
   configurePhase = ''
+    sourcedir="$(pwd)"
     ./configure --with-qt4-dir=${qt4} \
       ${optionalString (!javaBindings) "--disable-java"} \
       ${optionalString (!pythonBindings) "--disable-python"} \
-      --disable-pulse --disable-hardening \
+      --disable-pulse --disable-hardening --disable-kmods \
       --with-mkisofs=${xorriso}/bin/xorrisofs
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
@@ -55,7 +85,9 @@ stdenv.mkDerivation {
     cat >> AutoConfig.kmk << END_PATHS
     VBOX_PATH_APP_PRIVATE := $out
     VBOX_PATH_APP_DOCS := $out/doc
-    VBOX_JAVA_HOME := ${jdk}
+    ${optionalString javaBindings ''
+      VBOX_JAVA_HOME := ${jdk}
+    ''}
     END_PATHS
     echo "VBOX_WITH_DOCS :=" >> LocalConfig.kmk
     echo "VBOX_WITH_WARNINGS_AS_ERRORS :=" >> LocalConfig.kmk
@@ -63,51 +95,50 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  preBuild = ''
+  buildPhase = ''
     source env.sh
     kmk
-    cd out/linux.*/release/bin/src
-    export KERN_DIR=${kernel}/lib/modules/*/build
+    ${forEachModule "modules"}
   '';
 
-  postBuild = ''
-    cd ../../../../..
-  '';
-    
   installPhase = ''
     libexec=$out/libexec/virtualbox
-  
+
     # Install VirtualBox files
     cd out/linux.*/release/bin
     mkdir -p $libexec
     cp -av * $libexec
-    
-    # Install kernel module
-    cd src
-    kernelVersion=$(cd ${kernel}/lib/modules; ls)
-    export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
-    
-    # Remove root ownership stuff, since this does not work in a chroot environment
-    for i in `find . -name Makefile`; do
-	sed -i -e "s|-o root||g" \
-               -e "s|-g root||g" $i
-    done
-    
+
     # Install kernel modules
-    make install
-    
+    ${forEachModule "modules_install"}
+
     # Create wrapper script
     mkdir -p $out/bin
     for file in VirtualBox VBoxManage VBoxSDL VBoxBalloonCtrl VBoxBFE VBoxHeadless; do
         ln -s "$libexec/$file" $out/bin/$file
     done
-    
+
+    ${optionalString enableExtensionPack ''
+      "$libexec/VBoxExtPackHelperApp" install \
+        --base-dir "$libexec/ExtensionPacks" \
+        --cert-dir "$libexec/ExtPackCertificates" \
+        --name "Oracle VM VirtualBox Extension Pack" \
+        --tarball "${extensionPack}"
+        --sha-256 "${extensionPack.outputHash}"
+    ''}
+
     # Create and fix desktop item
     mkdir -p $out/share/applications
     sed -i -e "s|Icon=VBox|Icon=$libexec/VBox.png|" $libexec/virtualbox.desktop
     ln -sfv $libexec/virtualbox.desktop $out/share/applications
+    # Icons
+    mkdir -p $out/share/icons/hicolor
+    for size in `ls -1 $libexec/icons`; do
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      ln -s $libexec/icons/$size/*.png $out/share/icons/hicolor/$size/apps
+    done
   '';
-  
+
   meta = {
     description = "PC emulator";
     homepage = http://www.virtualbox.org/;

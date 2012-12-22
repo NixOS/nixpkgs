@@ -1,5 +1,5 @@
 { stdenv, fetchsvn, alsaLib, asio, autoconf, automake, bison
-, jackaudio, libgig, libsndfile, libtool , pkgconfig }:
+, jackaudio, libgig, libsndfile, libtool, lv2, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "linuxsampler-svn-${version}";
@@ -11,13 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "0zsrvs9dwwhjx733m45vfi11yjkqv33z8qxn2i9qriq5zs1f0kd7";
   };
 
-  patchPhase = "sed -e 's/which/type -P/g' -i scripts/generate_parser.sh";
+  patches = ./linuxsampler_lv2_sfz_fix.diff;
 
-  preConfigure = "make -f Makefile.cvs";
+  preConfigure = ''
+    sed -e 's/which/type -P/g' -i scripts/generate_parser.sh
+    make -f Makefile.cvs
+  '';
 
   buildInputs = [ 
    alsaLib asio autoconf automake bison jackaudio libgig libsndfile
-   libtool pkgconfig 
+   libtool lv2 pkgconfig
   ];
 
   meta = with stdenv.lib; {
@@ -34,7 +37,8 @@ stdenv.mkDerivation rec {
       have questions on the subject, that are not yet covered by the
       FAQ, please contact us.
     ''; 
-    license = licenses.gpl2;
+    license = licenses.proprietary;
     maintainers = [ maintainers.goibhniu ];
+    platforms = platforms.linux;
   };
 }

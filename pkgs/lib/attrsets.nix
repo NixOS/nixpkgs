@@ -5,12 +5,12 @@ with {
   inherit (import ./trivial.nix) or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
-  inherit (import ./lists.nix) concatMap;
-  inherit (import ./misc.nix) eqStrict;
+  inherit (import ./lists.nix) concatMap concatLists all;
+  inherit (import ./misc.nix) maybeAttr;
 };
 
 rec {
-  inherit (builtins) attrNames listToAttrs hasAttr isAttrs;
+  inherit (builtins) attrNames listToAttrs hasAttr isAttrs getAttr;
 
 
   /* Return an attribute from nested attribute sets.  For instance
@@ -24,7 +24,7 @@ rec {
       then attrByPath (tail attrPath) default (getAttr attr e)
       else default;
 
-      
+
   /* Return nested attribute set in which an attribute is set.  For instance
      ["x" "y"] applied with some value v returns `x.y = v;' */
   setAttrByPath = attrPath: value:
@@ -33,20 +33,11 @@ rec {
       nameValuePair (head attrPath) (setAttrByPath (tail attrPath) value)
     )];
 
-      
-  /* Backwards compatibility hack: lib.attrByPath used to be called
-     lib.getAttr, which was confusing given that there was also a
-     builtins.getAttr.  Eventually we'll drop this hack and
-     lib.getAttr will just be an alias for builtins.getAttr. */
-  getAttr = a: b: if isString a
-    then builtins.getAttr a b
-    else c: builtins.trace "Deprecated use of lib.getAttr!" (attrByPath a b c);
-
 
   getAttrFromPath = attrPath: set:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
     in attrByPath attrPath (abort errorMsg) set;
-      
+
 
   /* Return the specified attributes from a set.
 
@@ -75,7 +66,7 @@ rec {
        catAttrs "a" [{a = 1;} {b = 0;} {a = 2;}]
        => [1 2]
   */
-  catAttrs = attr: l: fold (s: l: if hasAttr attr s then [(getAttr attr s)] ++ l else l) [] l;
+  catAttrs = attr: l: concatLists (map (s: if hasAttr attr s then [(getAttr attr s)] else []) l);
 
 
   /* Filter an attribute set by removing all attributes for which the
@@ -87,6 +78,18 @@ rec {
   */
   filterAttrs = pred: set:
     listToAttrs (fold (n: ys: let v = getAttr n set; in if pred n v then [(nameValuePair n v)] ++ ys else ys) [] (attrNames set));
+
+
+  /* foldAttrs: apply fold functions to values grouped by key. Eg accumulate values as list:
+     foldAttrs (n: a: [n] ++ a) [] [{ a = 2; } { a = 3; }]
+     => { a = [ 2 3 ]; }
+  */
+  foldAttrs = op: nul: list_of_attrs:
+    fold (n: a:
+        fold (name: o:
+          o // (listToAttrs [{inherit name; value = op (getAttr name n) (maybeAttr name nul a); }])
+        ) a (attrNames n)
+    ) {} list_of_attrs;
 
 
   /* Recursively collect sets that verify a given predicate named `pred'
@@ -118,7 +121,7 @@ rec {
      builtins.listToAttrs. */
   nameValuePair = name: value: { inherit name value; };
 
-  
+
   /* Apply a function to each element in an attribute set.  The
      function takes two arguments --- the attribute name and its value
      --- and returns the new value for the attribute.  The result is a
@@ -136,7 +139,7 @@ rec {
   /* Like `mapAttrs', but allows the name of each attribute to be
      changed in addition to the value.  The applied function should
      return both the new name and value as a `nameValuePair'.
-     
+
      Example:
        mapAttrs' (name: value: nameValuePair ("foo_" + name) ("bar-" + value))
           { x = "a"; y = "b"; }
@@ -144,11 +147,11 @@ rec {
   */
   mapAttrs' = f: set:
     listToAttrs (map (attr: f attr (getAttr attr set)) (attrNames set));
-        
+
 
   /* Call a function for each attribute in the given set and return
      the result in a list.
-  
+
      Example:
        mapAttrsToList (name: value: name + value)
           { x = "a"; y = "b"; }
@@ -156,7 +159,7 @@ rec {
   */
   mapAttrsToList = f: attrs:
     map (name: f name (getAttr name attrs)) (attrNames attrs);
-    
+
 
   /* Like `mapAttrs', except that it recursively applies itself to
      attribute sets.  Also, the first argument of the argument
@@ -173,7 +176,7 @@ rec {
   */
   mapAttrsRecursive = mapAttrsRecursiveCond (as: true);
 
-  
+
   /* Like `mapAttrsRecursive', but it takes an additional predicate
      function that tells it whether to recursive into an attribute
      set.  If it returns false, `mapAttrsRecursiveCond' does not
@@ -257,7 +260,7 @@ rec {
 
        returns: {
          foo.bar = 1; # 'foo.*' from the second set
-         foo.quz = 2; # 
+         foo.quz = 2; #
          bar = 3;     # 'bar' from the first set
          baz = 4;     # 'baz' from the second set
        }
@@ -274,9 +277,9 @@ rec {
       );
     in f [] [rhs lhs];
 
-  /* Does the same as the update operator '//' and keep siblings attribute.
-     This recusion stop when one of the attribute value is not an attribute
-     set, in which case the right hand side value takes precedence over the
+  /* A recursive variant of the update operator ‘//’.  The recusion
+     stops when one of the attribute values is not an attribute set,
+     in which case the right hand side value takes precedence over the
      left hand side value.
 
      Example:
@@ -301,9 +304,9 @@ rec {
   matchAttrs = pattern: attrs:
     fold or false (attrValues (zipAttrsWithNames (attrNames pattern) (n: values:
       let pat = head values; val = head (tail values); in
-      if tail values == [] then false
+      if length values == 1 then false
       else if isAttrs pat then isAttrs val && matchAttrs head values
-      else eqStrict pat val
+      else pat == val
     ) [pattern attrs]));
 
   # override only the attributes that are already present in the old set

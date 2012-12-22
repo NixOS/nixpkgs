@@ -3,15 +3,16 @@ let
   fetchgit = a.fetchgit;
 
   buildInputs = with a; [
-    libsoup pkgconfig webkit gtk3 makeWrapper
-    kbproto
+    libsoup pkgconfig webkit gtk makeWrapper
+    kbproto glib pango cairo gdk_pixbuf atk
+    python3
   ];
 in
 rec {
   src = fetchgit {
     url = "https://github.com/Dieterbe/uzbl.git";
-    rev = "dcb3b4e1fcff682b412cfe5875f7054b97380d08";
-    sha256 = "f7b2b2903c01c9cfbd99bd94783002e1580d8092ff6022bb5aed3f999ff6e468";
+    rev = "refs/tags/2012.05.14";
+    sha256 = "1crvikb0qqsx5qb003i4w7ywh72psl37gjslrj5hx2fd2f215l0l";
   };
 
   name = "uzbl-git";
@@ -35,7 +36,7 @@ rec {
       --prefix GIO_EXTRA_MODULES : ${a.glib_networking}/lib/gio/modules
     '';
 
-  installFlags = "PREFIX=$out";
+  installFlags = "PREFIX=$out PYINSTALL_EXTRA=\"--prefix=$out\"";
       
   meta = {
     description = "Tiny externally controllable webkit browser";

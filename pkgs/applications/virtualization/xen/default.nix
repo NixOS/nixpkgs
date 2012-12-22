@@ -79,6 +79,9 @@ stdenv.mkDerivation {
       substituteInPlace tools/xenstat/Makefile \
         --replace /usr/include/curses.h ${ncurses}/include/curses.h
 
+      substituteInPlace tools/ioemu-qemu-xen/xen-hooks.mak \
+        --replace /usr/include/pci ${pciutils}/include/pci
+
       # Work around a bug in our GCC wrapper: `gcc -MF foo -v' doesn't
       # print the GCC version number properly.
       substituteInPlace xen/Makefile \

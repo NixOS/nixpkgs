@@ -1,10 +1,10 @@
-{ cabal, shakespeare, text }:
+{ cabal, aeson, shakespeare, text }:
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-js";
-  version = "1.0.0.3";
-  sha256 = "00x5xvjlaivl42q75cvbwbh055kgvk9i8s4y3xcmk4h7lnpfyzd6";
-  buildDepends = [ shakespeare text ];
+  version = "1.1.0";
+  sha256 = "0rb1fim6xvpgc2in71drxgimh1z75p72zj0k6hwh2hyfwkj2yh9p";
+  buildDepends = [ aeson shakespeare text ];
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "Stick your haskell variables into javascript/coffeescript at compile time";

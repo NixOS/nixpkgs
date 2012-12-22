@@ -1,10 +1,10 @@
 {stdenv, fetchurl, unzip, portaudio }:
 
 stdenv.mkDerivation {
-  name = "espeak-1.44.03";
+  name = "espeak-1.46.02";
   src = fetchurl {
-    url = mirror://sourceforge/espeak/espeak-1.44.03-source.zip;
-    sha256 = "0lnv89xmsq3bax0qpabd0z2adaag7mdl973bkw3gdszidafmfyx4";
+    url = mirror://sourceforge/espeak/espeak-1.46.02-source.zip;
+    sha256 = "1fjlv5fm0gzvr5wzy1dp4nspw04k0bqv3jymha2p2qfjbfifp2zg";
   };
 
   buildInputs = [ unzip portaudio ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   configurePhase = ''
     cd src
-    makeFlags="PREFIX=$out"
+    makeFlags="PREFIX=$out DATADIR=$out/share/espeak-data"
   '';
 
   meta = {

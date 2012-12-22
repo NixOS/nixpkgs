@@ -1,17 +1,19 @@
-{stdenv, fetchurl, pkgconfig, python, pyrex, pygtk, xlibs, gtk, makeWrapper}:
+{ stdenv, fetchurl, pkgconfig, python, cython
+, pygtk, pygobject, pycairo, notify, xlibs, gtk
+, ffmpeg, x264, libvpx, makeWrapper}:
 
-stdenv.mkDerivation {
-  name = "xpra-0.0.3";
+stdenv.mkDerivation rec {
+  name = "xpra-0.3.2";
   
   src = fetchurl {
-    url = http://partiwm.org/static/downloads/parti-all-0.0.3.tar.gz;
-    sha256 = "17inksd4cc7mba2vfs17gz1yk3h6x6wf06pm3hcbs5scq8rr5bkp";
+    url = http://xpra.org/src/xpra-0.3.2.tar.bz2;
+    sha256 = "1s1z6r0r78qvf59ci3vxammjz7lj5m64jyk0bfn7yxd5jl3sy41y";
   };
 
-  #src = /home/eelco/Dev/nixpkgs/parti-all-0.0.3;
+  buildNativeInputs = [ cython ];
 
   buildInputs = [
-    pkgconfig python pyrex pygtk gtk makeWrapper
+    pkgconfig python pygtk gtk ffmpeg x264 libvpx makeWrapper
     xlibs.inputproto xlibs.libXcomposite xlibs.libXdamage xlibs.libXtst
   ];
 
@@ -21,19 +23,26 @@ stdenv.mkDerivation {
     ./do-build
   '';
 
+  pythonPaths = [
+    "$out/lib/python"
+    "$(toPythonPath ${pygtk})/gtk-2.0"
+  ] ++ map (i: "$(toPythonPath ${i})") [
+    pygobject pycairo notify
+  ];
+
   installPhase = ''
     mkdir -p $out
     cp -r install/* $out
 
     for i in $(cd $out/bin && ls); do
         wrapProgram $out/bin/$i \
-            --set PYTHONPATH "$out/lib/python:$(toPythonPath ${pygtk})/gtk-2.0:$PYTHONPATH" \
+            --set PYTHONPATH "${stdenv.lib.concatStringsSep ":" pythonPaths}" \
             --prefix PATH : "${xlibs.xauth}/bin:${xlibs.xorgserver}/bin:${xlibs.xmodmap}/bin"
     done
   '';
   
   meta = {
-    homepage = http://partiwm.org/wiki/xpra;
+    homepage = http://xpra.org/;
     description = "Persistent remote applications for X";
   };
 }

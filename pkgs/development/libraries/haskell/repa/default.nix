@@ -2,9 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "repa";
-  version = "3.2.1.1";
-  sha256 = "0jzcy3xdlwmcjq1mpfqh0axcgbj3i03nxg7blw2sly8qrgfl0ri1";
+  version = "3.2.3.1";
+  sha256 = "0r5z781h9v6ri2m3ih7jbymvc3i2m26qaf29pxwmaks0sdlp4qmr";
   buildDepends = [ QuickCheck vector ];
+  jailbreak = true;
   meta = {
     homepage = "http://repa.ouroborus.net";
     description = "High performance, regular, shape polymorphic parallel arrays";

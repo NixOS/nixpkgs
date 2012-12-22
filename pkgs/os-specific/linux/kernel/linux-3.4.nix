@@ -1,11 +1,11 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
 let
   configWithPlatform = kernelPlatform :
     ''
-      # powermanagement and debugging for powertop
+      # Power management and debugging for powertop.
       DEBUG_KERNEL y
       PM_ADVANCED_DEBUG y
       PM_RUNTIME y
@@ -76,6 +76,8 @@ let
       HOSTAP_FIRMWARE_NVRAM y
       ATH9K_PCI y # Detect Atheros AR9xxx cards on PCI(e) bus
       ATH9K_AHB y # Ditto, AHB bus
+      B43_PHY_HT y
+      BCMA_HOST_PCI y
 
       # Some settings to make sure that fbcondecor works - in particular,
       # disable tileblitting and the drivers that need it.
@@ -200,6 +202,7 @@ let
       THERMAL_HWMON y # Hardware monitoring support
       USB_DEBUG n
       USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
+      USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
       X86_CHECK_BIOS_CORRUPTION y
       X86_MCE y
 
@@ -225,6 +228,9 @@ let
       FTRACE_SYSCALLS y
       SCHED_TRACER y
 
+      # Devtmpfs support.
+      DEVTMPFS y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -233,7 +239,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.4.2";
+    version = "3.4.24";
     testing = false;
 
     preConfigure = ''
@@ -242,7 +248,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "0pd96g1qcp2wgdnvk79hljjrpr6xjk0159lks47n181a3yirzf4x";
+      sha256 = "1vxyb68ckzgm88jj7xzmwr2hmj5vdry5irvfr89klgqr95mmhkd1";
     };
 
     config = configWithPlatform stdenv.platform;
@@ -250,6 +256,8 @@ import ./generic.nix (
 
     features.iwlwifi = true;
     features.efiBootStub = true;
+    features.needsCifsUtils = true;
+    features.netfilterRPFilter = true;
   }
 
   // removeAttrs args ["extraConfig"]

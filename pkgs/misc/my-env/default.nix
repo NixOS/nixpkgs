@@ -95,6 +95,8 @@ mkDerivation {
       phases=
       # only do all the setup stuff in nix-support/*
       set +e
+      # This prevents having -rpath /lib in NIX_LDFLAGS
+      export NIX_NO_SELF_RPATH=1
       if [[ -z "\$ZSH_VERSION" ]]; then
         source "$s"
       else

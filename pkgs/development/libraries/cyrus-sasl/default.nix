@@ -1,16 +1,28 @@
-{ stdenv, fetchurl, openssl, db4, gettext, automake} :
+{ stdenv, fetchurl, openssl, db4, gettext, pam }:
 
-stdenv.mkDerivation {
-  name = "cyrus-sasl-2.1.23";
+stdenv.mkDerivation rec {
+  name = "cyrus-sasl-2.1.25";
 
   src = fetchurl {
-    url = ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/cyrus-sasl-2.1.23.tar.gz;
-    sha256 = "0dmi41hfy015pzks8n93qsshgvi0az7pv81nls4nxayb810crvr0";
+    url = "ftp://ftp.andrew.cmu.edu/pub/cyrus-mail/${name}.tar.gz";
+    sha256 = "418c16e6240a4f9b637cbe3d62937b9675627bad27c622191d47de8686fe24fe";
   };
-  preConfigure=''
-    configureFlags="--with-openssl=${openssl} --with-plugindir=$out/lib/sasl2 --with-configdir=$out/lib/sasl2 --enable-login"
-    cp ${automake}/share/automake*/config.{sub,guess} config
+
+  buildInputs = [ openssl db4 gettext ] ++ stdenv.lib.optional stdenv.isLinux pam;
+
+  # Set this variable at build-time to make sure $out can be evaluated.
+  preConfigure = ''
+    configureFlagsArray=( --with-plugindir=$out/lib/sasl2
+                          --with-configdir=$out/lib/sasl2
+			  --with-saslauthd=/run/saslauthd
+			  --enable-login
+			)
   '';
-  buildInputs = [ openssl db4 gettext ];
-  patches = [ ./cyrus-sasl-2.1.22-bad-elif.patch ];
+
+  meta = {
+    homepage = "http://cyrusimap.web.cmu.edu/";
+    description = "library for adding authentication support to connection-based protocols";
+    platforms = stdenv.lib.platforms.unix;
+    maintainers = [ stdenv.lib.maintainers.simons ];
+  };
 }

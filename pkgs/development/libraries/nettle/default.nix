@@ -1,18 +1,19 @@
 { fetchurl, stdenv, gmp, gnum4 }:
 
-stdenv.mkDerivation rec {
-  name = "nettle-2.4";
+stdenv.mkDerivation (rec {
+  name = "nettle-2.5";
 
   src = fetchurl {
-    # Eventually use `mirror://gnu/'.
-    url = "ftp://ftp.lysator.liu.se/pub/security/lsh/${name}.tar.gz";
-    sha256 = "0gwwcipmjxkv7p2p01m19n4c3jiczg682w58l5dgg0b8vw494056";
+    url = "mirror://gnu/nettle/${name}.tar.gz";
+    sha256 = "0wicr7amx01l03rm0pzgr1qvw3f9blaw17vjsy1301dh13ll58aa";
   };
 
   buildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
   doCheck = (stdenv.system != "i686-cygwin");
+
+  enableParallelBuilding = true;
 
   patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
               ./cygwin.patch;
@@ -51,3 +52,13 @@ stdenv.mkDerivation rec {
      platforms = stdenv.lib.platforms.all;
   };
 }
+
+//
+
+stdenv.lib.optionalAttrs stdenv.isSunOS {
+  # Make sure the right <gmp.h> is found, and not the incompatible
+  # /usr/include/mp.h from OpenSolaris.  See
+  # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
+  # for details.
+  configureFlags = [ "--with-include-path=${gmp}/include" ];
+})

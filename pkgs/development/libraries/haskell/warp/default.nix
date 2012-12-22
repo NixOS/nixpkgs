@@ -1,16 +1,16 @@
 { cabal, blazeBuilder, blazeBuilderConduit, caseInsensitive
-, conduit, httpTypes, liftedBase, network, networkConduit
-, simpleSendfile, transformers, unixCompat, wai
+, conduit, hashable, httpTypes, liftedBase, network, networkConduit
+, simpleSendfile, transformers, unixCompat, void, wai
 }:
 
 cabal.mkDerivation (self: {
   pname = "warp";
-  version = "1.2.1.1";
-  sha256 = "1bgdvqa6c2ccxmgdsg5hjvc3mss8zgjj4xzqr5r5jdl338857xzg";
+  version = "1.3.6";
+  sha256 = "0aw5m7apj7l6fjb0w59bmgiy4j0rmdwjil4ppgp5qz2q2njqbbnj";
   buildDepends = [
-    blazeBuilder blazeBuilderConduit caseInsensitive conduit httpTypes
-    liftedBase network networkConduit simpleSendfile transformers
-    unixCompat wai
+    blazeBuilder blazeBuilderConduit caseInsensitive conduit hashable
+    httpTypes liftedBase network networkConduit simpleSendfile
+    transformers unixCompat void wai
   ];
   meta = {
     homepage = "http://github.com/yesodweb/wai";

@@ -1,4 +1,4 @@
-{stdenv, getConfig, fetchurl, callPackage}:
+{ stdenv, config, fetchurl, callPackage }:
 
 let
   inherit (stdenv.lib) fold optional;
@@ -36,7 +36,7 @@ in
           if builtins.pathExists file then import (builtins.toPath file)
           else null;
       in
-      getConfig [ "gems" name ] fallback;
+      stdenv.lib.attrByPath [ "gems" name ] fallback config;
   in
 {
   generated = getLocalGemFun "generated";

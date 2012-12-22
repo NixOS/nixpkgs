@@ -1,11 +1,11 @@
 diff --git a/src/backends/NetworkManagerExherbo.c b/src/backends/NetworkManagerExherbo.c
-index d7e24cf..aa64210 100644
+index d027789..ef6b646 100644
 --- a/src/backends/NetworkManagerExherbo.c
 +++ b/src/backends/NetworkManagerExherbo.c
-@@ -56,9 +56,9 @@ void nm_system_enable_loopback (void)
-  */
- void nm_system_update_dns (void)
- {
+@@ -41,9 +41,9 @@ void nm_backend_update_dns (void)
+ 	/* Make glibc/nscd aware of any changes to the resolv.conf file by
+ 	 * restarting nscd. Only restart if already running.
+ 	 */
 -	if (g_file_test ("/usr/sbin/nscd", G_FILE_TEST_IS_EXECUTABLE)) {
 +	if (g_file_test ("@glibc@/sbin/nscd", G_FILE_TEST_IS_EXECUTABLE)) {
  		nm_log_info (LOGD_DNS, "Clearing nscd hosts cache.");
@@ -15,7 +15,7 @@ index d7e24cf..aa64210 100644
  }
  
 diff --git a/src/dhcp-manager/nm-dhcp-dhclient.c b/src/dhcp-manager/nm-dhcp-dhclient.c
-index 88136a9..b4113a9 100644
+index 0932139..5b5aee8 100644
 --- a/src/dhcp-manager/nm-dhcp-dhclient.c
 +++ b/src/dhcp-manager/nm-dhcp-dhclient.c
 @@ -68,10 +68,6 @@ const char *
@@ -44,8 +44,23 @@ index 237661f..48bc33f 100644
  		NULL
  	};
  	const char **path = dhcpcd_paths;
+diff --git a/src/dns-manager/nm-dns-bind.c b/src/dns-manager/nm-dns-bind.c
+index 1a3243b..a47dccd 100644
+--- a/src/dns-manager/nm-dns-bind.c
++++ b/src/dns-manager/nm-dns-bind.c
+@@ -51,9 +51,7 @@ static inline const char *
+ find_bind (void)
+ {
+ 	static const char *paths[] = {
+-		"/usr/local/sbin/named",
+-		"/usr/sbin/named",
+-		"/sbin/named",
++		"@bind@/sbin/named",
+ 		NULL
+ 	};
+ 	const char **binary = paths;
 diff --git a/src/dns-manager/nm-dns-dnsmasq.c b/src/dns-manager/nm-dns-dnsmasq.c
-index 2767208..6562015 100644
+index 8e216f4..6e00210 100644
 --- a/src/dns-manager/nm-dns-dnsmasq.c
 +++ b/src/dns-manager/nm-dns-dnsmasq.c
 @@ -52,9 +52,7 @@ static inline const char *
@@ -60,7 +75,7 @@ index 2767208..6562015 100644
  	};
  	const char **binary = paths;
 diff --git a/src/dnsmasq-manager/nm-dnsmasq-manager.c b/src/dnsmasq-manager/nm-dnsmasq-manager.c
-index ca2f9dc..7afb118 100644
+index ca2f9dc..ce718d0 100644
 --- a/src/dnsmasq-manager/nm-dnsmasq-manager.c
 +++ b/src/dnsmasq-manager/nm-dnsmasq-manager.c
 @@ -170,9 +170,7 @@ static inline const char *
@@ -75,11 +90,11 @@ index ca2f9dc..7afb118 100644
  	};
  
 diff --git a/src/nm-device.c b/src/nm-device.c
-index 3522ea4..75b2db3 100644
+index 1dc94ee..e60f3c8 100644
 --- a/src/nm-device.c
 +++ b/src/nm-device.c
-@@ -1285,8 +1285,7 @@ aipd_exec (NMDevice *self, GError **error)
- 	gboolean success = FALSE;
+@@ -1321,8 +1321,7 @@ aipd_start (NMDevice *self, NMDeviceStateReason *reason)
+ 	char *argv[6], *cmdline;
  	const char **aipd_binary = NULL;
  	static const char *aipd_paths[] = {
 -		"/usr/sbin/avahi-autoipd",
@@ -88,7 +103,7 @@ index 3522ea4..75b2db3 100644
  		NULL
  	};
  	int i = 0;
-@@ -2446,7 +2445,7 @@ share_init (void)
+@@ -2555,7 +2554,7 @@ share_init (void)
  	}
  
  	for (iter = modules; *iter; iter++) {
@@ -98,7 +113,7 @@ index 3522ea4..75b2db3 100644
  		GError *error = NULL;
  
 diff --git a/src/ppp-manager/nm-ppp-manager.c b/src/ppp-manager/nm-ppp-manager.c
-index e863aab..27c14e2 100644
+index 59698c3..7dba0f7 100644
 --- a/src/ppp-manager/nm-ppp-manager.c
 +++ b/src/ppp-manager/nm-ppp-manager.c
 @@ -661,9 +661,7 @@ static inline const char *
@@ -112,7 +127,7 @@ index e863aab..27c14e2 100644
  		NULL
  	};
  
-@@ -992,7 +990,7 @@ nm_ppp_manager_start (NMPPPManager *manager,
+@@ -988,7 +986,7 @@ nm_ppp_manager_start (NMPPPManager *manager,
  
  	/* Make sure /dev/ppp exists (bgo #533064) */
  	if (stat ("/dev/ppp", &st) || !S_ISCHR (st.st_mode))

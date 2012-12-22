@@ -30,18 +30,10 @@ stdenv.mkDerivation rec {
 
   buildPhase = "python setup.py build";
 
-  PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
-
-#      substituteInPlace nova/api/ec2/cloud.py \
-#        --replace 'sh genrootca.sh' $out/libexec/nova/genrootca.sh
-#    '';
-
   installPhase =
     ''    
        python setup.py install --prefix="$out";
     '';
-
-  #checkPhase = "python setup.py test";
 
   meta = {
     homepage = http://virt-manager.org;

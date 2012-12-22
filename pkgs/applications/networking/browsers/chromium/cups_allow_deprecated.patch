@@ -1,0 +1,14 @@
+diff --git a/printing/printing.gyp b/printing/printing.gyp
+index 19fa1b2..f11d76e 100644
+--- a/printing/printing.gyp
++++ b/printing/printing.gyp
+@@ -26,6 +26,9 @@
+       'include_dirs': [
+         '..',
+       ],
++      'cflags': [
++        '-Wno-deprecated-declarations',
++      ],
+       'sources': [
+         'backend/print_backend.cc',
+         'backend/print_backend.h',

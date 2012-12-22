@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "random-shuffle";
-  version = "0.0.3";
-  sha256 = "120yh2k1n57vc9mi4dlnvv9dr79qaz4dsbvl3qp3y82mdz8maifw";
+  version = "0.0.4";
+  sha256 = "0586bnlh0g2isc44jbjvafkcl4yw6lp1db8x6vr0pza0y08l8w2j";
   buildDepends = [ MonadRandom random ];
   meta = {
     description = "Random shuffle implementation";

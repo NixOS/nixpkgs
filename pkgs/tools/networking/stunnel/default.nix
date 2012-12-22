@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation {
-  name = "stunnel-4.26";
+  name = "stunnel-4.53";
   
   src = fetchurl {
-    url = http://www.stunnel.org/download/stunnel/src/stunnel-4.26.tar.gz;
-    sha256 = "1lvbd25krcz1sqk5pj2fv3r32h0160qdxrbzlqqs0kz8f987krp9";
+    url = http://www.stunnel.org/downloads/stunnel-4.53.tar.gz;
+    sha256 = "3e640aa4c96861d10addba758b66e99e7c5aec8697764f2a59ca2268901b8e57";
   };
 
   buildInputs = [openssl];

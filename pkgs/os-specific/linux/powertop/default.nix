@@ -1,13 +1,13 @@
-{ stdenv, fetchurl, gettext, libnl1, ncurses, pciutils, pkgconfig, zlib }:
+{ stdenv, fetchurl, gettext, libnl, ncurses, pciutils, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "powertop-2.0";
+  name = "powertop-2.1";
   src = fetchurl {
-    url = "https://01.org/powertop/sites/default/files/downloads/${name}.tar.bz2";
-    sha256 = "7af51d320856b3446bcc314c9414385f3b05b9360f650883b0210cd3b12c5c1c";
+    url = "https://01.org/powertop/sites/default/files/downloads/${name}.tar.gz";
+    sha256 = "16161nlah4i4hq8vyx7ds1vq7icdzwm7gmyjg0xhcrs1r9n83m1x";
   };
 
-  buildInputs = [ gettext libnl1 ncurses pciutils pkgconfig zlib ];
+  buildInputs = [ gettext libnl ncurses pciutils pkgconfig zlib ];
 
   meta = {
     description = "Analyze power consumption on Intel-based laptops";

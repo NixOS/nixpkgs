@@ -1,10 +1,10 @@
-{ cabal, syb }:
+{ cabal, deepseq, syb }:
 
 cabal.mkDerivation (self: {
   pname = "symbol";
-  version = "0.1.1.1";
-  sha256 = "1vda97jh9jrvb4l9v9m3xzv8z96jdwf5fji643i6ff3n3h9ysn77";
-  buildDepends = [ syb ];
+  version = "0.1.4";
+  sha256 = "00318syprv1ixfbr4v7xq86z10f0psxk0b8kaxvawvacm8hp61bn";
+  buildDepends = [ deepseq syb ];
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";
     description = "A 'Symbol' type for fast symbol comparison";

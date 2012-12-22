@@ -1,15 +1,16 @@
 { cabal, base64Bytestring, cereal, conduit, cryptoConduit
-, cryptohash, fileEmbed, httpTypes, text, transformers, unixCompat
-, wai, waiAppStatic, yesodCore
+, cryptohash, fileEmbed, httpTypes, systemFilepath, text
+, transformers, unixCompat, wai, waiAppStatic, yesodCore
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-static";
-  version = "1.0.0.3";
-  sha256 = "1nl7cf8yw5akldlrkamnkbypwnj7g1pjkx7nkmlc38jbx58izf5d";
+  version = "1.1.1.1";
+  sha256 = "1wp3ijiwsai9npf6zl0bq3fi4rbh0qjy8bii3d178sariv7588js";
   buildDepends = [
     base64Bytestring cereal conduit cryptoConduit cryptohash fileEmbed
-    httpTypes text transformers unixCompat wai waiAppStatic yesodCore
+    httpTypes systemFilepath text transformers unixCompat wai
+    waiAppStatic yesodCore
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

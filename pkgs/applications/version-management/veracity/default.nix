@@ -63,7 +63,7 @@ rec {
     export SGNEEDS_DIR="$out"/sgneeds/
     export VVTHIRDPARTY="$out"/sgneeds/
 
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$out/sgneeds/include"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I"$out/sgneeds/include" -Wno-error"
   '') ["minInit" "defEnsureDir"];
 
   prepareMakefiles = a.fullDepEntry ''

@@ -1,9 +1,6 @@
 {stdenv, fetchurl, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper, ncurses
 , enableX11 ? true}:
 
-let
-  nativeCode = if stdenv.isArm then false else true;
-in
 stdenv.mkDerivation (rec {
 
   name = "unison-2.40.63";
@@ -19,7 +16,7 @@ stdenv.mkDerivation (rec {
   '' else "";
 
   makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else "")
-    + (if ! nativeCode then " NATIVE=false" else "");
+    + (if ! ocaml.nativeCompilers then " NATIVE=false" else "");
 
   preInstall = "mkdir -p $out/bin";
 
@@ -30,7 +27,7 @@ stdenv.mkDerivation (rec {
     done
   '' else "";
 
-  dontStrip = if ! nativeCode then true else false;
+  dontStrip = if ! ocaml.nativeCompilers then true else false;
 
   meta = {
     homepage = http://www.cis.upenn.edu/~bcpierce/unison/;

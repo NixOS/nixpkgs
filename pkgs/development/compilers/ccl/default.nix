@@ -5,13 +5,13 @@ let
   ];
 in
 rec {
-  version = "1.4";
+  version = "1.8";
   name = "ccl-${version}";
 
   /* There are also MacOS and FreeBSD and Windows versions */
   src = a.fetchurl {
     url = "ftp://ftp.clozure.com/pub/release/${version}/${name}-linuxx86.tar.gz";
-    sha256 = "1z4x4kxjj2ligb2vfrx5mjww20gdkxbvgw1ax5l9c8ha802bfyg8";
+    sha256 = "1dgg6a8i2csa6xidsq66hbw7zx62gm2178hpkp88yyzgxylszp01";
   };
   
   inherit buildInputs;

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monads-tf";
-  version = "0.1.0.0";
-  sha256 = "1d38rddm9h8crs96zhzj87a3ygix0ipyxy0qcyas88k60fgavg5i";
+  version = "0.1.0.1";
+  sha256 = "19za12iazwrbqwpxy6lkj01dwm921386ryxgdqvcqisn8cj6jm1v";
   buildDepends = [ transformers ];
   meta = {
     description = "Monad classes, using type families";

@@ -34,6 +34,12 @@
     url = https://fedoraproject.org/wiki/Licensing/BSD;
   };
 
+  cddl = {
+    shortName = "CDDL";
+    fullName = "Common Development Distribution License ";
+    url = http://www.opensolaris.org/os/licensing/cddllicense.txt;
+  };
+
   cpl10 = {
     shortName = "CPL 1.0";
     fullName = "Common Public License version 1.0";
@@ -174,6 +180,12 @@
   proprietary = {
     shortName = "Proprietary";
     fullName = "Proprietary (non redistributable) license";
+  };
+
+  tcltk = {
+    shortName = "Tcl/Tk";
+    fullName = "Tcl/Tk license";
+    url = http://www.tcl.tk/software/tcltk/license.html;
   };
   
   zlib = {

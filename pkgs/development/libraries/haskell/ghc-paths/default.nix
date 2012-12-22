@@ -2,8 +2,9 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-paths";
-  version = "0.1.0.8";
-  sha256 = "0mhc5zhbybp1vmkjsqbca51993vkpx5g8hql160m8m95apkc2wl6";
+  version = "0.1.0.9";
+  sha256 = "0ibrr1dxa35xx20cpp8jzgfak1rdmy344dfwq4vlq013c6w8z9mg";
+  patches = [ ./ghc-paths-nix.patch ];
   meta = {
     description = "Knowledge of GHC's installation directories";
     license = self.stdenv.lib.licenses.bsd3;

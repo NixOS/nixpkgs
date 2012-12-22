@@ -24,9 +24,6 @@ rec {
 
   # GNU (http://www.gnu.org/prep/ftp.html).
   gnu = [
-    # This one is the master repository, and thus it's always up-to-date.
-    http://ftp.gnu.org/pub/gnu/
-
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
     # mirror.
     http://ftpmirror.gnu.org/
@@ -37,6 +34,9 @@ rec {
     ftp://ftp.cs.tu-berlin.de/pub/gnu/
     ftp://ftp.chg.ru/pub/gnu/
     ftp://ftp.funet.fi/pub/mirrors/ftp.gnu.org/gnu/
+
+    # This one is the master repository, and thus it's always up-to-date.
+    http://ftp.gnu.org/pub/gnu/
   ];
 
   # GCC.
@@ -248,8 +248,6 @@ rec {
   ];
 
   postgresql = [
-    http://ftp2.nl.postgresql.org/
-    ftp://ftp.nl.postgresql.org/pub/mirror/postgresql/
     ftp://ftp.postgresql.org/pub/
     ftp://ftp-archives.postgresql.org/pub/
   ];

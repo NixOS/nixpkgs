@@ -2,14 +2,14 @@
 
 let
 
-  version = "6.36.0";
-  sha256 = "7c9a771d79bf945050dc7530957f4b61669976177818185e64c002cbfd75e3a2";
+  version = "6.37.0";
+  sha256 = "99ff58080ed154cc4bd70f915fe4760dffb026a1c0447caa0b3bdb982b24b0a8";
 
 in stdenv.mkDerivation {
   name = "ocaml-make-${version}";
 
   src = fetchurl {
-    url = "http://hg.ocaml.info/release/ocaml-make/archive/release-${version}.tar.bz2";
+    url = "http://bitbucket.org/mmottl/ocaml-makefile/downloads/ocaml-makefile-${version}.tar.gz";
     inherit sha256;
   };
 

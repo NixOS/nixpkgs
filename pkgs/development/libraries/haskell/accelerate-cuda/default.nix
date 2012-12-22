@@ -1,15 +1,15 @@
-{ cabal, accelerate, binary, blazeBuilder, cryptohash, cuda
-, fclabels, filepath, hashable, hashtables, languageCQuote
-, mainlandPretty, mtl, srcloc, transformers, unorderedContainers
+{ cabal, accelerate, binary, cryptohash, cuda, fclabels, filepath
+, hashable, hashtables, languageCQuote, mainlandPretty, mtl, srcloc
+, text, transformers, unorderedContainers
 }:
 
 cabal.mkDerivation (self: {
   pname = "accelerate-cuda";
-  version = "0.12.1.0";
-  sha256 = "1y6viivizv4frdh3xk5wqhs7wwnhqyjr9wid1y1d5l42mz41vp84";
+  version = "0.12.1.2";
+  sha256 = "184rxdp9idvhrqa0k3fqcm3nrgjcs3f53dz7wrhhpfa3iqrr6vd4";
   buildDepends = [
-    accelerate binary blazeBuilder cryptohash cuda fclabels filepath
-    hashable hashtables languageCQuote mainlandPretty mtl srcloc
+    accelerate binary cryptohash cuda fclabels filepath hashable
+    hashtables languageCQuote mainlandPretty mtl srcloc text
     transformers unorderedContainers
   ];
   meta = {

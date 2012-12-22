@@ -1,22 +1,22 @@
 { stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
 , ncurses, libpng, libjpeg, lcms, freetype, fontconfig, fontforge
-, libxml2, libxslt, openssl, gnutls
+, libxml2, libxslt, openssl, gnutls, cups
 }:
 
 assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
 stdenv.mkDerivation rec {
-  name = "wine-1.3.32";
+  name = "wine-${meta.version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "fe1691ef8e9c5c4afeb345ad0f0b364d055cfe67a7e64b0a4a44da4d85cfa8b6";
+    sha256 = "0c14paj2j3sswl6mpjjmy9bxnpijk095ks58x9dsycx9c8x0gqvm";
   };
 
   gecko = fetchurl {
-    url = "mirror://sourceforge/wine/wine_gecko-1.3-x86.msi";
-    sha256 = "1bmm826dhq82jzxdld4x9cyg8mgzg8llkki59n9fvxggi7l5jxab";
+    url = "mirror://sourceforge/wine/wine_gecko-1.5-x86.msi";
+    sha256 = "2e372a1b87ff2a22ad5127400ece4b09e55591d9f84e00bb562d294898a49b5c";
   };
 
   buildInputs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     xlibs.libXcursor xlibs.libXinerama xlibs.libXrandr
     xlibs.libXrender xlibs.libXxf86vm xlibs.libXcomposite
     alsaLib ncurses libpng libjpeg lcms fontforge
-    libxml2 libxslt openssl gnutls
+    libxml2 libxslt openssl gnutls cups
   ];
 
   # Wine locates a lot of libraries dynamically through dlopen().  Add
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     freetype fontconfig stdenv.gcc.gcc mesa mesa.libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
-    openssl gnutls
+    openssl gnutls cups
   ];
 
   # Don't shrink the ELF RPATHs in order to keep the extra RPATH
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    version = "1.5.20";
     homepage = "http://www.winehq.org/";
     license = "LGPL";
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";

@@ -10,6 +10,8 @@ let
 
   lib = import ../../lib;
 
+  disallowUnfree = builtins.getEnv "HYDRA_DISALLOW_UNFREE" == "1";
+
   stdenvGenerator = setupScript: rec {
 
     # The stdenv that we are producing.
@@ -30,7 +32,7 @@ let
           lib.filter lib.isDerivation initialPath;
       }
 
-      // {
+      // rec {
 
         meta = {
           description = "The default build environment for Unix packages in Nixpkgs";
@@ -39,33 +41,29 @@ let
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.
         mkDerivation = attrs:
+          if disallowUnfree && attrs.meta.license or "" == "unfree" then
+            throw "package ‘${attrs.name}’ has an unfree license, refusing to evaluate"
+          else
           (derivation (
             (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
             // (let
-                buildInputs = if attrs ? buildInputs then attrs.buildInputs
-                    else [];
-                buildNativeInputs = if attrs ? buildNativeInputs then
-                    attrs.buildNativeInputs else [];
-                propagatedBuildInputs = if attrs ? propagatedBuildInputs then
-                    attrs.propagatedBuildInputs else [];
-                propagatedBuildNativeInputs = if attrs ?
-                    propagatedBuildNativeInputs then
-                    attrs.propagatedBuildNativeInputs else [];
-                crossConfig = if (attrs ? crossConfig) then attrs.crossConfig else
-                   null;
+              buildInputs = attrs.buildInputs or [];
+              buildNativeInputs = attrs.buildNativeInputs or [];
+              propagatedBuildInputs = attrs.propagatedBuildInputs or [];
+              propagatedBuildNativeInputs = attrs.propagatedBuildNativeInputs or [];
+              crossConfig = attrs.crossConfig or null;
             in
             {
-              builder = if attrs ? realBuilder then attrs.realBuilder else shell;
-              args = if attrs ? args then attrs.args else
-                ["-e" (if attrs ? builder then attrs.builder else ./default-builder.sh)];
+              builder = attrs.realBuilder or shell;
+              args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
               stdenv = result;
               system = result.system;
 
-              # That build by the cross compiler
+              # Inputs built by the cross compiler.
               buildInputs = lib.optionals (crossConfig != null) buildInputs;
               propagatedBuildInputs = lib.optionals (crossConfig != null)
                   propagatedBuildInputs;
-              # That build by the usual native compiler
+              # Inputs built by the usual native compiler.
               buildNativeInputs = buildNativeInputs ++ lib.optionals
                 (crossConfig == null) buildInputs;
               propagatedBuildNativeInputs = propagatedBuildNativeInputs ++
@@ -77,18 +75,14 @@ let
           # passed to the builder and is not a dependency.  But since we
           # include it in the result, it *is* available to nix-env for
           # queries.
-          //
-          { meta = if attrs ? meta then attrs.meta else {}; }
+          // { meta = attrs.meta or {}; }
           # Pass through extra attributes that are not inputs, but
           # should be made available to Nix expressions using the
           # derivation (e.g., in assertions).
-          //
-          (if attrs ? passthru then attrs.passthru else {});
+          // (attrs.passthru or {});
 
         # Utility flags to test the type of platform.
-        isDarwin = result.system == "i686-darwin"
-               || result.system == "powerpc-darwin"
-               || result.system == "x86_64-darwin";
+        isDarwin = result.system == "x86_64-darwin";
         isLinux = result.system == "i686-linux"
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
@@ -96,6 +90,9 @@ let
                || result.system == "armv7l-linux"
                || result.system == "mips64el-linux";
         isGNU = result.system == "i686-gnu";      # GNU/Hurd
+        isGlibc = isGNU                           # useful for `stdenvNative'
+               || isLinux
+               || result.system == "x86_64-kfreebsd-gnu";
         isSunOS = result.system == "i686-solaris"
                || result.system == "x86_64-solaris";
         isCygwin = result.system == "i686-cygwin";
@@ -109,7 +106,6 @@ let
                || result.system == "x86_64-openbsd";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-gnu"
-               || result.system == "i686-darwin"
                || result.system == "i686-freebsd"
                || result.system == "i686-openbsd"
                || result.system == "i386-sunos";

@@ -1,18 +1,20 @@
-{ cabal, blazeBuilder, blazeHtml, blazeMarkup, dataDefault
-, emailValidate, hamlet, network, persistent, shakespeareCss
-, shakespeareJs, text, time, transformers, wai, xssSanitize
-, yesodCore, yesodPersistent
+{ cabal, aeson, attoparsec, blazeBuilder, blazeHtml, blazeMarkup
+, cryptoApi, dataDefault, emailValidate, hamlet, network
+, persistent, shakespeareCss, shakespeareJs, text, time
+, transformers, wai, xssSanitize, yesodCore, yesodPersistent
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-form";
-  version = "1.0.0.4";
-  sha256 = "1wc7nrsf7r9zs24q2amy1zij5sfycs1arnrf8g769c7gihjhdqfd";
+  version = "1.2.0.2";
+  sha256 = "0a3172rgvma420l98hkgvl17ks2a2jkys3rh4qd2bbm9p7qknv3y";
   buildDepends = [
-    blazeBuilder blazeHtml blazeMarkup dataDefault emailValidate hamlet
-    network persistent shakespeareCss shakespeareJs text time
-    transformers wai xssSanitize yesodCore yesodPersistent
+    aeson attoparsec blazeBuilder blazeHtml blazeMarkup cryptoApi
+    dataDefault emailValidate hamlet network persistent shakespeareCss
+    shakespeareJs text time transformers wai xssSanitize yesodCore
+    yesodPersistent
   ];
+  noHaddock = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Form handling support for Yesod Web Framework";

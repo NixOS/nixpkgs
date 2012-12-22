@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "prolog-graph-lib";
-  version = "0.1";
-  sha256 = "1gryhk0jd8bvmjbjkz6n7sfnsa6iwzkckpgi51xsj5f2nwdxbl6g";
+  version = "0.2.0.1";
+  sha256 = "02xa4hqmhmsv7vkdy3m3dr1w3z88kc8ly0jjn7q6pba5yarci7nr";
   buildDepends = [ fgl graphviz mtl prolog text ];
   meta = {
     homepage = "https://github.com/Erdwolf/prolog";

@@ -1,0 +1,32 @@
+*** git-export/include/Makefile.am	Tue Mar  6 00:05:28 2012
+--- git-export/include/Makefile.am.new	Tue Mar  6 00:04:46 2012
+***************
+*** 16,22 ****
+  
+  install-data-local:
+  	release=$(SPL_META_VERSION)-$(SPL_META_RELEASE); \
+! 	instdest=$(DESTDIR)/usr/src/spl-$$release/$(LINUX_VERSION); \
+  	instfiles=`find . -name '*.h'`; \
+          for instfile in $$instfiles; do \
+  		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
+--- 16,22 ----
+  
+  install-data-local:
+  	release=$(SPL_META_VERSION)-$(SPL_META_RELEASE); \
+! 	instdest=$(DESTDIR)/@libexecdir@/spl/$(LINUX_VERSION); \
+  	instfiles=`find . -name '*.h'`; \
+          for instfile in $$instfiles; do \
+  		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
+***************
+*** 24,28 ****
+  
+  uninstall-local:
+  	release=$(SPL_META_VERSION)-$(SPL_META_RELEASE); \
+! 	instdest=$(DESTDIR)/usr/src/spl-$$release/$(LINUX_VERSION); \
+  	$(RM) -R $$instdest
+--- 24,28 ----
+  
+  uninstall-local:
+  	release=$(SPL_META_VERSION)-$(SPL_META_RELEASE); \
+! 	instdest=$(DESTDIR)/@libexecdir@/spl/$(LINUX_VERSION); \
+  	$(RM) -R $$instdest

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "double-conversion";
-  version = "0.2.0.4";
-  sha256 = "00rb8n2ky20ah9ry398jagi9gb0gz40yjfalh35cpckmg30z199x";
+  version = "0.2.0.5";
+  sha256 = "1z23a8sfnq5lady8n2kcina9a7df8lmsliscf85x84dxkd3a1ahf";
   buildDepends = [ text ];
   meta = {
     homepage = "https://github.com/bos/double-conversion";

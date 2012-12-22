@@ -1,10 +1,10 @@
-{ cabal, parsec, text }:
+{ cabal, filepath, processExtras, temporary, text, xml }:
 
 cabal.mkDerivation (self: {
   pname = "maude";
-  version = "0.3.0";
-  sha256 = "1z9bk4fzkbfiqqx4mv4cdlckchvcli2gcp40d04ravvj7x6yaghg";
-  buildDepends = [ parsec text ];
+  version = "0.6.1";
+  sha256 = "0qadqpj5vzg84mqh29p6vr2ffih7y69ds0jdpxmr17am5bh3mhql";
+  buildDepends = [ filepath processExtras temporary text xml ];
   meta = {
     homepage = "https://github.com/davidlazar/maude-hs";
     description = "An interface to the Maude rewriting system";

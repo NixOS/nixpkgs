@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ListLike";
-  version = "3.1.5";
-  sha256 = "0hxpjmj5qdyb55wda2bgd3crkg9q6dklhj2kff7qz6wkx5fdbvjs";
+  version = "3.1.7.1";
+  sha256 = "1g3i8iz71x3j41ji9xsbh84v5hj3mxls0zqnx27sb31mx6bic4w1";
   isLibrary = true;
   isExecutable = true;
   meta = {

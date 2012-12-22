@@ -1,14 +1,14 @@
 { stdenv, fetchurl, cmake, gtk, libjpeg, libpng, libtiff, jasper, ffmpeg
 , pkgconfig, gstreamer, xineLib, glib }:
 
-let v = "2.3.1a"; in
+let v = "2.4.3"; in
 
 stdenv.mkDerivation rec {
   name = "opencv-${v}";
 
   src = fetchurl {
     url = "mirror://sourceforge/opencvlibrary/OpenCV-${v}.tar.bz2";
-    sha256 = "0325s7pa2npcw2gc06pr6q5ik4xdyf08rvkfc0myn10w20lzb8m9";
+    sha256 = "16zmyr383x9ka81mp6h2s9hlfzd383njddf3x1rswkldjy2ykyzq";
   };
 
   buildInputs = [ gtk glib libjpeg libpng libtiff jasper ffmpeg xineLib gstreamer ];

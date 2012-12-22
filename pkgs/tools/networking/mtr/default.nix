@@ -10,10 +10,10 @@ let
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
     baseName="mtr";
-    version="0.80";
+    version="0.82";
     name="${baseName}-${version}";
     url="ftp://ftp.bitwizard.nl/${baseName}/${name}.tar.gz";
-    hash="1h0fzxy5cwml3p2nq749sq8mk2dsvm4qb1ah7a9hbf7kzabxvfvn";
+    hash="185nx4y6xn7vv6l3pbyc0ljmwfl4si4zszwad1jkbq1scb4mgd7k";
   };
 in
 rec {

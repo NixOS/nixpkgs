@@ -1,16 +1,22 @@
-{ stdenv, fetchurl }:
+{stdenv, fetchurl, cmake}:
 
 stdenv.mkDerivation {
-  name = "task-warrior-1.9.4";
+  name = "taskwarrior-2.1.2";
+
+  enableParallelBuilding = true;
 
   src = fetchurl {
-    url = http://www.taskwarrior.org/download/task-1.9.4.tar.gz;
-    sha256 = "0jnk30k1b2j3nx39il70jmj6p49wxp6cl4awd8hw71gqkcf6480h";
+    url = http://www.taskwarrior.org/download/task-2.1.2.tar.gz;
+    sha256 = "0diy72sgiyvfl6bdy7k3qwv3ijx2z1y477smkk6jsbbd9fsp2lfg";
   };
 
+  buildNativeInputs = [ cmake ];
+
   meta = {
-    description = "Command-line todo list manager";
-    homepage = http://taskwarrior.org/;
-    license = "GPLv2+";
+    description = "GTD (getting things done) implementation";
+    homepage = http://taskwarrior.org;
+    license = stdenv.lib.licenses.mit;
+    maintainers = [stdenv.lib.maintainers.marcweber];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

@@ -81,8 +81,8 @@ rec {
 
     sed -e 's/\r//g' -i "$TARGET/bin"/*
 
-    echo -e '#! /bin/sh\nls "'"$TARGET"'"/bin' > "$out/bin/jena-list-commands"
-    echo '#! /bin/sh' >> "$out/bin/jena-command"
+    echo -e '#! ${a.stdenv.shell}\nls "'"$TARGET"'"/bin' > "$out/bin/jena-list-commands"
+    echo '#! ${a.stdenv.shell}' >> "$out/bin/jena-command"
     echo 'export JENAROOT="'"$TARGET"'"' >> "$out/bin/jena-command"
     echo 'export JOSEKIROOT="'"$TARGET"'"' >> "$out/bin/jena-command"
     echo 'export TDBROOT="'"$TARGET"'"' >> "$out/bin/jena-command"

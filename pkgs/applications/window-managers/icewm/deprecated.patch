@@ -1,0 +1,23 @@
+http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-wm/icewm/files/icewm-1.2.37-libX11-1.5.0-deprecated.patch?revision=1.1
+
+Description: Don't use "deprecated" as identifier, will FTBFS if another
+ library defines functions as deprecated.
+Author: Andreas Moog <amoog@ubuntu.com>
+Bug: https://sourceforge.net/tracker/?func=detail&aid=3494034&group_id=31&atid=100031
+Bug-Ubuntu: https://bugs.launchpad.net/bugs/935179
+Forwarded: Yes
+
+--- icewm-1.3.7.orig/src/base.h
++++ icewm-1.3.7/src/base.h
+@@ -2,9 +2,9 @@
+ #define __BASE_H
+ 
+ #if ( __GNUC__ == 3 && __GNUC_MINOR__ > 0 ) || __GNUC__ > 3
+-#define deprecated __attribute__((deprecated))
++#define ICEWM_deprecated __attribute__((deprecated))
+ #else
+-#define deprecated
++#define ICEWM_deprecated
+ #endif
+ 
+ /*** Atomar Data Types ********************************************************/

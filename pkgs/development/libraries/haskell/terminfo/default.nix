@@ -1,10 +1,9 @@
-{ cabal, extensibleExceptions, ncurses }:
+{ cabal, ncurses }:
 
 cabal.mkDerivation (self: {
   pname = "terminfo";
-  version = "0.3.2.3";
-  sha256 = "06y2vx7d4hl55p3p1c7yj2lx8yaw14c5h2qclj8m5xg2wkifnf5f";
-  buildDepends = [ extensibleExceptions ];
+  version = "0.3.2.5";
+  sha256 = "1hadb1gv28c43xq78scalb4zzvbs6im2s0hq7ycrbsdgm6iryhbg";
   extraLibraries = [ ncurses ];
   meta = {
     homepage = "http://code.haskell.org/terminfo";
