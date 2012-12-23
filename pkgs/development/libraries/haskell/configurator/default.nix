@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "configurator";
-  version = "0.2.0.1";
-  sha256 = "02w6f5q2xkpc3kgqz6a58g7yr0q4xd8ck1b6lr64ahvqwsjbxy6p";
+  version = "0.2.0.2";
+  sha256 = "011rgd48gv4idkh2dwg4mlyx3s6pgm1263xq5ixsa4sg3jqh9d8b";
   buildDepends = [
     attoparsec hashable text unixCompat unorderedContainers
   ];
