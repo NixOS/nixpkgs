@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "3.7.1";
-  sha256 = "16rgfv21f7sl7n6gqn4750i3yv7w972ybn883yr474y4xwhhyh6w";
+  version = "3.7.1.2";
+  sha256 = "1hapcnmyqyc3645gsy1ikwzm2srbbznps6yrfr02y2lcbnjpn3g6";
   buildDepends = [
     comonad comonadsFd comonadTransformers filepath hashable mtl
     parallel semigroups split text transformers unorderedContainers
