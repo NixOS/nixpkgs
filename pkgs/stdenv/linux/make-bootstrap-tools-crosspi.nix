@@ -76,8 +76,12 @@ let
   gcc = pkgs.gcc47;
   gmp = pkgs.gmp.hostDrv;
   mpfr = pkgs.mpfr.hostDrv;
-  #ppl = pkgs.ppl.hostDrv;
-  #cloogppl = pkgs.cloogppl.hostDrv;
+  ppl = pkgs.ppl.hostDrv;
+  cloogppl = pkgs.cloogppl.hostDrv;
+  cloog = pkgs.cloog.hostDrv;
+  zlib = pkgs.zlib.hostDrv;
+  isl = pkgs.isl.hostDrv;
+  mpc = pkgs.mpc.hostDrv;
   binutils = pkgs.binutils.hostDrv;
   klibc = pkgs.klibc.hostDrv;
 
@@ -98,6 +102,8 @@ rec {
     inherit (pkgsuclibc) fetchurl;
     linkStatic = true;
   };
+
+  inherit pkgs;
 
   build = 
 
@@ -178,6 +184,12 @@ rec {
 
         cp -d ${gmp}/lib/libgmp*.so* $out/lib
         cp -d ${mpfr}/lib/libmpfr*.so* $out/lib
+        cp -d ${cloogppl}/lib/libcloog*.so* $out/lib
+        cp -d ${cloog}/lib/libcloog*.so* $out/lib
+        cp -d ${ppl}/lib/libppl*.so* $out/lib
+        cp -d ${isl}/lib/libisl*.so* $out/lib
+        cp -d ${mpc}/lib/libmpc*.so* $out/lib
+        cp -d ${zlib}/lib/libz.so* $out/lib
         
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
