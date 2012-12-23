@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, minicom, avrdude, arduino_core }:
+{ stdenv, fetchurl, buildPythonPackage, minicom, avrdude, arduino_core, avrgcclibc }:
 
 buildPythonPackage {
   name = "ino-0.3.4";
@@ -16,7 +16,7 @@ buildPythonPackage {
     echo "Patching Arduino distribution path"
     sed -i 's@/usr/local/share/arduino@${arduino_core}/share/arduino@g' ino/environment.py
   '';
-
+ 
   doCheck = false;
 
   meta = {
