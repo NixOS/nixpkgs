@@ -373,6 +373,11 @@ let
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
+  arduino_core = callPackage ../development/arduino/arduino-core {
+    jdk = jdk;
+    jre = jdk;
+  };
+
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
   ascii = callPackage ../tools/text/ascii { };
@@ -3154,6 +3159,8 @@ let
   };
 
   indent = callPackage ../development/tools/misc/indent { };
+
+  ino = callPackage ../development/arduino/ino { };
 
   inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
 
