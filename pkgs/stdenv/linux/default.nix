@@ -190,7 +190,7 @@ rec {
   
   # 5) Build Glibc with the bootstrap tools.  The result is the full,
   #    dynamically linked, final Glibc.
-  stdenvLinuxGlibc = stdenvLinuxBoot2Pkgs.glibc.override { recentGcc = false; };
+  stdenvLinuxGlibc = stdenvLinuxBoot2Pkgs.glibc;
 
   
   # 6) Construct a third stdenv identical to the 2nd, except that
