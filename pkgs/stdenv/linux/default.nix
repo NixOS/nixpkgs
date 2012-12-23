@@ -16,7 +16,7 @@ rec {
     else if system == "x86_64-linux" then import ./bootstrap/x86_64
     else if system == "powerpc-linux" then import ./bootstrap/powerpc
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
-    else if system == "armv6l-linux" then import ./bootstrap/armv5tel
+    else if system == "armv6l-linux" then import ./bootstrap/armv6l
     else if system == "armv7l-linux" then import ./bootstrap/armv5tel
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f
     else abort "unsupported platform for the pure Linux stdenv";
@@ -58,7 +58,7 @@ rec {
     builder = bootstrapFiles.sh;
     
     args =
-      if (system == "armv5tel-linux" || system == "arm6l-linux")
+      if (system == "armv5tel-linux" || system == "armv6l-linux")
       then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ ./scripts/unpack-bootstrap-tools.sh ];
     

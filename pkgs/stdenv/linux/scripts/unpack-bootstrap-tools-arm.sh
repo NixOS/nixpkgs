@@ -14,21 +14,23 @@ LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? $out/bin/cp $out/bin/patchelf .
 
 for i in $out/bin/* $out/libexec/gcc/*/*/* $out/lib/librt*; do
     echo patching $i
-    if ! test -L $i; then
-         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
-         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
-    fi
+    if test ${i%.la} != $i; then continue; fi
+    if test ${i%*.so*} != $i; then continue; fi
+    if ! test -f $i; then continue; fi
+    if test -L $i; then continue; fi
+    LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
+        $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
+    LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
+        $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
 done
-for i in $out/lib/libppl* $out/lib/libgmp*; do
+for i in $out/lib/librt* $out/lib/libcloog* $out/lib/libppl* $out/lib/libgmp*; do
     echo patching $i
-    if ! test -L $i; then
-         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
-         LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
-             $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
-    fi
+    if ! test -f $i; then continue; fi
+    if test -L $i; then continue; fi
+    LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
+        $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
+    LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
+        $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
 done
 
 # Fix the libc linker script.
