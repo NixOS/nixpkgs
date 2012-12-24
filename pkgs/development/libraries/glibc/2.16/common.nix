@@ -170,8 +170,7 @@ stdenv.mkDerivation ({
 
     configureScript="`pwd`/../$sourceRoot/configure"
 
-    # Needed to build rpcgen.
-    export LD_LIBRARY_PATH=${stdenv.gcc.libc}/lib
+    makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.gcc.libc}/lib"
 
     ${preConfigure}
   '';
