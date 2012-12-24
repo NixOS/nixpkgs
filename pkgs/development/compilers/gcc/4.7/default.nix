@@ -308,7 +308,16 @@ stdenv.mkDerivation ({
     then "install-strip"
     else "install";
 
-  crossAttrs = {
+  crossAttrs = let
+    xgccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null stdenv.cross;
+    xgccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null stdenv.cross;
+    xgccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null stdenv.cross;
+    xgccFpu = stdenv.lib.attrByPath [ "gcc" "fpu" ] null stdenv.cross;
+    xwithArch = if xgccArch != null then " --with-arch=${xgccArch}" else "";
+    xwithCpu = if xgccCpu != null then " --with-cpu=${xgccCpu}" else "";
+    xwithAbi = if xgccAbi != null then " --with-abi=${xgccAbi}" else "";
+    xwithFpu = if xgccFpu != null then " --with-fpu=${xgccFpu}" else "";
+  in {
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
     CC = "${stdenv.cross.config}-gcc";
@@ -347,9 +356,11 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
-      ${if (cross == null && stdenv.isi686) then "--with-arch=i686" else ""}
-      ${if cross != null then crossConfigureFlags else ""}
       --target=${stdenv.cross.config}
+      ${xwithArch}
+      ${xwithCpu}
+      ${xwithAbi}
+      ${xwithFpu}
     '';
   };
 
