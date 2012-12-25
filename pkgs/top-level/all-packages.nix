@@ -4492,6 +4492,8 @@ let
 
   libxslt = callPackage ../development/libraries/libxslt { };
 
+  libxtc_dxtn = callPackage ../development/libraries/libxtc_dxtn { };
+
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
     inherit fetchurl stdenv;
   });
