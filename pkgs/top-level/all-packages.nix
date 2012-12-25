@@ -4490,6 +4490,8 @@ let
 
   libxslt = callPackage ../development/libraries/libxslt { };
 
+  libxtc_dxtn = callPackage ../development/libraries/libxtc_dxtn { };
+
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
     inherit fetchurl stdenv;
   });
@@ -8584,6 +8586,12 @@ let
 
 
   ### SCIENCE
+
+  celestia = callPackage ../applications/science/astronomy/celestia {
+    lua = lua5_1;
+    inherit (xlibs) libXmu;
+    inherit (pkgs.gnome) gtkglext;
+  };
 
   xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
