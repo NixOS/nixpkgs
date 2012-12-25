@@ -1052,8 +1052,6 @@ let
 
   lzop = callPackage ../tools/compression/lzop { };
 
-  mu0 = callPackage ../tools/networking/mu0 { };
-
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
   };
@@ -4573,6 +4571,8 @@ let
   mpich2 = callPackage ../development/libraries/mpich2 { };
 
   mtdev = callPackage ../development/libraries/mtdev { };
+
+  mu = callPackage ../tools/networking/mu { };
 
   muparser = callPackage ../development/libraries/muparser { };
 
