@@ -3075,6 +3075,28 @@ let
 
   distcc = callPackage ../development/tools/misc/distcc { };
 
+  # distccWrapper: wrapper that works as gcc or g++
+  # It can be used by setting in nixpkgs config like this, for example:
+  #    replaceStdenv = { pkgs }: pkgs.distccStdenv;
+  # But if you build in chroot, a default 'nix' will create
+  # a new net namespace, and won't have network access.
+  # You can use an override in packageOverrides to set extraConfig:
+  #    packageOverrides = pkgs: {
+  #     distccWrapper = pkgs.distccWrapper.override {
+  #       extraConfig = ''
+  #         DISTCC_HOSTS="myhost1 myhost2"
+  #       '';
+  #     };
+  #
+  distccWrapper = makeOverridable ({ extraConfig ? "" }:
+     wrapGCC (distcc.links extraConfig)) {};
+  distccStdenv = lowPrio (overrideGCC stdenv distccWrapper);
+
+  distccMasquerade = callPackage ../development/tools/misc/distcc/masq.nix {
+    gccRaw = gcc.gcc;
+    binutils = binutils;
+  };
+
   docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
     inherit python pil makeWrapper;
   };
