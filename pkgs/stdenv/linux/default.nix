@@ -94,6 +94,7 @@ rec {
       initialPath = [bootstrapTools] ++ extraPath;
       fetchurlBoot = fetchurl;
       inherit gcc;
+      withNixImpure = if platform ? nixImpure then platform.nixImpure else false;
       # Having the proper 'platform' in all the stdenvs allows getting proper
       # linuxHeaders for example.
       extraAttrs = extraAttrs // { inherit platform; };
