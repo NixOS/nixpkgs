@@ -7,7 +7,7 @@
   curl = ../armv5tel/curl.bz2;
 
   bootstrapTools = {
-    url = "file:///root/v6/bootstrap-tools.cpio.bz2";
+    url = http://viric.name/tmp/nix/pi/bootstrap-tools.cpio.bz2;
     sha256 = "01s4z461jv9plsxwkspjakdvjxzd5pd84i73nc2ynag5hmjyj63d";
   };
 }
