@@ -1,11 +1,14 @@
+Partly taken from:
 http://gcc.gnu.org/git/?p=gcc.git;a=patch;h=5617a3db5d04630d0bfb71a3578894b4442f266d
+
+Adapted to gcc 4.6.3. Original commit text follows.
 
 From 5617a3db5d04630d0bfb71a3578894b4442f266d Mon Sep 17 00:00:00 2001
 From: tschwinge <tschwinge@138bc75d-0d04-0410-961f-82ee72b054a4>
 Date: Fri, 20 Apr 2012 07:44:50 +0000
 Subject: [PATCH] 	struct siginfo vs. siginfo_t
 
-libgcc/
+gcc/
 	* config/alpha/linux-unwind.h (alpha_fallback_frame_state): Use
 	siginfo_t instead of struct siginfo.
 	* config/bfin/linux-unwind.h (bfin_fallback_frame_state): Likewise.
@@ -16,52 +19,14 @@ libgcc/
 	* config/pa/linux-unwind.h (pa32_fallback_frame_state): Likewise.
 	* config/sh/linux-unwind.h (shmedia_fallback_frame_state)
 	(sh_fallback_frame_state): Likewise.
-	* config/tilepro/linux-unwind.h (tile_fallback_frame_state): Likewise.
 	* config/xtensa/linux-unwind.h (xtensa_fallback_frame_state): Likewise.
 
 git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk@186610 138bc75d-0d04-0410-961f-82ee72b054a4
----
- libgcc/ChangeLog                     |   17 +++++++++++++++++
- libgcc/config/alpha/linux-unwind.h   |    4 ++--
- libgcc/config/bfin/linux-unwind.h    |    6 +++---
- libgcc/config/i386/linux-unwind.h    |    6 +++---
- libgcc/config/ia64/linux-unwind.h    |    6 +++---
- libgcc/config/mips/linux-unwind.h    |    5 +++--
- libgcc/config/pa/linux-unwind.h      |    4 ++--
- libgcc/config/sh/linux-unwind.h      |    9 +++++----
- libgcc/config/tilepro/linux-unwind.h |    2 +-
- libgcc/config/xtensa/linux-unwind.h  |    4 ++--
- 10 files changed, 41 insertions(+), 22 deletions(-)
 
-diff --git a/libgcc/ChangeLog b/libgcc/ChangeLog
-index 354b3ce..401fc62 100644
---- a/libgcc/ChangeLog
-+++ b/libgcc/ChangeLog
-@@ -1,3 +1,20 @@
-+2012-04-20  Thomas Schwinge  <thomas@codesourcery.com>
-+
-+	struct siginfo vs. siginfo_t
-+
-+	* config/alpha/linux-unwind.h (alpha_fallback_frame_state): Use
-+	siginfo_t instead of struct siginfo.
-+	* config/bfin/linux-unwind.h (bfin_fallback_frame_state): Likewise.
-+	* config/i386/linux-unwind.h (x86_fallback_frame_state): Likewise.
-+	* config/ia64/linux-unwind.h (ia64_fallback_frame_state)
-+	(ia64_handle_unwabi): Likewise.
-+	* config/mips/linux-unwind.h (mips_fallback_frame_state): Likewise.
-+	* config/pa/linux-unwind.h (pa32_fallback_frame_state): Likewise.
-+	* config/sh/linux-unwind.h (shmedia_fallback_frame_state)
-+	(sh_fallback_frame_state): Likewise.
-+	* config/tilepro/linux-unwind.h (tile_fallback_frame_state): Likewise.
-+	* config/xtensa/linux-unwind.h (xtensa_fallback_frame_state): Likewise.
-+
- 2012-04-02  H.J. Lu  <hongjiu.lu@intel.com>
- 
- 	* config/i386/linux-unwind.h (RT_SIGRETURN_SYSCALL): Update x32
-diff --git a/libgcc/config/alpha/linux-unwind.h b/libgcc/config/alpha/linux-unwind.h
+diff --git a/gcc/config/alpha/linux-unwind.h b/gcc/config/alpha/linux-unwind.h
 index 4c811dc..8c04b3b 100644
---- a/libgcc/config/alpha/linux-unwind.h
-+++ b/libgcc/config/alpha/linux-unwind.h
+--- a/gcc/config/alpha/linux-unwind.h
++++ b/gcc/config/alpha/linux-unwind.h
 @@ -1,5 +1,5 @@
  /* DWARF2 EH unwinding support for Alpha Linux.
 -   Copyright (C) 2004, 2005, 2009, 2011 Free Software Foundation, Inc.
@@ -78,10 +43,10 @@ index 4c811dc..8c04b3b 100644
  	struct ucontext uc;
        } *rt_ = context->cfa;
        sc = &rt_->uc.uc_mcontext;
-diff --git a/libgcc/config/bfin/linux-unwind.h b/libgcc/config/bfin/linux-unwind.h
+diff --git a/gcc/config/bfin/linux-unwind.h b/gcc/config/bfin/linux-unwind.h
 index 88c8285..15bb2f1 100644
---- a/libgcc/config/bfin/linux-unwind.h
-+++ b/libgcc/config/bfin/linux-unwind.h
+--- a/gcc/config/bfin/linux-unwind.h
++++ b/gcc/config/bfin/linux-unwind.h
 @@ -1,5 +1,5 @@
  /* DWARF2 EH unwinding support for Blackfin.
 -   Copyright (C) 2007, 2009 Free Software Foundation, Inc.
@@ -102,17 +67,10 @@ index 88c8285..15bb2f1 100644
  	struct ucontext uc;
        } *rt_ = context->cfa;
  
-diff --git a/libgcc/config/i386/linux-unwind.h b/libgcc/config/i386/linux-unwind.h
+diff --git a/gcc/config/i386/linux-unwind.h b/gcc/config/i386/linux-unwind.h
 index ad0ccfa..02b1897 100644
---- a/libgcc/config/i386/linux-unwind.h
-+++ b/libgcc/config/i386/linux-unwind.h
-@@ -1,5 +1,5 @@
- /* DWARF2 EH unwinding support for AMD x86-64 and x86.
--   Copyright (C) 2004, 2005, 2006, 2009, 2010, 2011
-+   Copyright (C) 2004, 2005, 2006, 2009, 2010, 2011, 2012
-    Free Software Foundation, Inc.
- 
- This file is part of GCC.
+--- a/gcc/config/i386/linux-unwind.h
++++ b/gcc/config/i386/linux-unwind.h
 @@ -136,9 +136,9 @@ x86_fallback_frame_state (struct _Unwind_Context *context,
      {
        struct rt_sigframe {
@@ -125,10 +83,10 @@ index ad0ccfa..02b1897 100644
  	struct ucontext uc;
        } *rt_ = context->cfa;
        /* The void * cast is necessary to avoid an aliasing warning.
-diff --git a/libgcc/config/ia64/linux-unwind.h b/libgcc/config/ia64/linux-unwind.h
+diff --git a/gcc/config/ia64/linux-unwind.h b/gcc/config/ia64/linux-unwind.h
 index 93f762d..da31259 100644
---- a/libgcc/config/ia64/linux-unwind.h
-+++ b/libgcc/config/ia64/linux-unwind.h
+--- a/gcc/config/ia64/linux-unwind.h
++++ b/gcc/config/ia64/linux-unwind.h
 @@ -1,5 +1,5 @@
  /* DWARF2 EH unwinding support for IA64 Linux.
 -   Copyright (C) 2004, 2005, 2009 Free Software Foundation, Inc.
@@ -154,10 +112,10 @@ index 93f762d..da31259 100644
  	struct sigcontext *sc;
        } *frame = (struct sigframe *)context->psp;
        struct sigcontext *sc = frame->sc;
-diff --git a/libgcc/config/mips/linux-unwind.h b/libgcc/config/mips/linux-unwind.h
+diff --git a/gcc/config/mips/linux-unwind.h b/gcc/config/mips/linux-unwind.h
 index 02f7cd5..094ff58 100644
---- a/libgcc/config/mips/linux-unwind.h
-+++ b/libgcc/config/mips/linux-unwind.h
+--- a/gcc/config/mips/linux-unwind.h
++++ b/gcc/config/mips/linux-unwind.h
 @@ -1,5 +1,6 @@
  /* DWARF2 EH unwinding support for MIPS Linux.
 -   Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
@@ -175,10 +133,10 @@ index 02f7cd5..094ff58 100644
  	_sig_ucontext_t uc;
        } *rt_ = context->cfa;
        sc = &rt_->uc.uc_mcontext;
-diff --git a/libgcc/config/pa/linux-unwind.h b/libgcc/config/pa/linux-unwind.h
+diff --git a/gcc/config/pa/linux-unwind.h b/gcc/config/pa/linux-unwind.h
 index a0560e9..38b4eda 100644
---- a/libgcc/config/pa/linux-unwind.h
-+++ b/libgcc/config/pa/linux-unwind.h
+--- a/gcc/config/pa/linux-unwind.h
++++ b/gcc/config/pa/linux-unwind.h
 @@ -1,5 +1,5 @@
  /* DWARF2 EH unwinding support for PA Linux.
 -   Copyright (C) 2004, 2005, 2009 Free Software Foundation, Inc.
@@ -195,10 +153,10 @@ index a0560e9..38b4eda 100644
      struct ucontext uc;
    } *frame;
  
-diff --git a/libgcc/config/sh/linux-unwind.h b/libgcc/config/sh/linux-unwind.h
+diff --git a/gcc/config/sh/linux-unwind.h b/gcc/config/sh/linux-unwind.h
 index 94ed95d..5a78e31 100644
---- a/libgcc/config/sh/linux-unwind.h
-+++ b/libgcc/config/sh/linux-unwind.h
+--- a/gcc/config/sh/linux-unwind.h
++++ b/gcc/config/sh/linux-unwind.h
 @@ -1,5 +1,6 @@
  /* DWARF2 EH unwinding support for SH Linux.
 -   Copyright (C) 2004, 2005, 2006, 2007, 2009 Free Software Foundation, Inc.
@@ -228,23 +186,10 @@ index 94ed95d..5a78e31 100644
  	struct ucontext uc;
        } *rt_ = context->cfa;
        /* The void * cast is necessary to avoid an aliasing warning.
-diff --git a/libgcc/config/tilepro/linux-unwind.h b/libgcc/config/tilepro/linux-unwind.h
-index 0ed662c..27a6c43 100644
---- a/libgcc/config/tilepro/linux-unwind.h
-+++ b/libgcc/config/tilepro/linux-unwind.h
-@@ -61,7 +61,7 @@ tile_fallback_frame_state (struct _Unwind_Context *context,
- 
-   struct rt_sigframe {
-     unsigned char save_area[C_ABI_SAVE_AREA_SIZE];
--    struct siginfo info;
-+    siginfo_t info;
-     struct ucontext uc;
-   } *rt_;
- 
-diff --git a/libgcc/config/xtensa/linux-unwind.h b/libgcc/config/xtensa/linux-unwind.h
+diff --git a/gcc/config/xtensa/linux-unwind.h b/gcc/config/xtensa/linux-unwind.h
 index 32e9349..2456497 100644
---- a/libgcc/config/xtensa/linux-unwind.h
-+++ b/libgcc/config/xtensa/linux-unwind.h
+--- a/gcc/config/xtensa/linux-unwind.h
++++ b/gcc/config/xtensa/linux-unwind.h
 @@ -1,5 +1,5 @@
  /* DWARF2 EH unwinding support for Xtensa.
 -   Copyright (C) 2008, 2009 Free Software Foundation, Inc.
