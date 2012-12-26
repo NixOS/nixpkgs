@@ -130,8 +130,8 @@ stdenv.mkDerivation ({
     # so the glibc does not depend on its compiler store path
     "libc_cv_as_needed=no"
   ] ++ stdenv.lib.optionals (cross == null && stdenv.platform.name == "raspberrypi") [
-    "--host=arm-linux-gnueabihf"
-    "--build=arm-linux-gnueabihf"
+    "--host=arm-linux-gnueabi"
+    "--build=arm-linux-gnueabi"
     "--with-fp"
 
     # To avoid linking with -lgcc_s (dynamic link)
