@@ -270,6 +270,10 @@ elif [ "$NIX_BUILD_CORES" -le 0 ]; then
 fi
 export NIX_BUILD_CORES
 
+# Allow impure overrides of environment (distcc, ccache)
+if [ -f /niximpure/impure.sh ]; then
+  . /niximpure/impure.sh
+fi
 
 ######################################################################
 # Misc. helper functions.
