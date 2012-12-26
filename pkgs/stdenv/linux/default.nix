@@ -94,6 +94,7 @@ rec {
       initialPath = [bootstrapTools] ++ extraPath;
       fetchurlBoot = fetchurl;
       inherit gcc;
+      withNixImpure = if platform ? nixImpure then platform.nixImpure else false;
       # Having the proper 'platform' in all the stdenvs allows getting proper
       # linuxHeaders for example.
       extraAttrs = extraAttrs // { inherit platform; };
@@ -264,7 +265,7 @@ rec {
     inherit system;
     
     preHook = commonPreHook;
-    
+
     initialPath = 
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})
       ++ [stdenvLinuxBoot4Pkgs.patchelf];
@@ -281,6 +282,8 @@ rec {
     shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
     
     fetchurlBoot = fetchurl;
+
+    withNixImpure = if platform ? nixImpure then platform.nixImpure else false;
     
     extraAttrs = {
       inherit (stdenvLinuxBoot3Pkgs) glibc;
