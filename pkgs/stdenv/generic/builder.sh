@@ -13,6 +13,10 @@ sed -e "s^@initialPath@^$initialPath^g" \
     -e "s^@gcc@^$gcc^g" \
     -e "s^@shell@^$shell^g" \
     < $out/setup > $out/setup.tmp
+if [ -n "$withNixImpure" ]; then
+    sed -i -e 's^@niximpure@^test -f /niximupure/impure.sh && . /niximpure/impure.sh^g' \
+      $out/setup.tmp
+fi
 mv $out/setup.tmp $out/setup
 
 # Allow the user to install stdenv using nix-env and get the packages
