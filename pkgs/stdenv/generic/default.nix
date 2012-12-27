@@ -1,5 +1,6 @@
 { system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
 , extraAttrs ? {}, overrides ? (pkgs: {})
+, withNixImpure ? false
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -26,7 +27,7 @@ let
 
         setup = setupScript;
 
-        inherit preHook initialPath gcc shell;
+        inherit preHook initialPath gcc shell withNixImpure;
 
         propagatedUserEnvPkgs = [gcc] ++
           lib.filter lib.isDerivation initialPath;
