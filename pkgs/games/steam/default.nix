@@ -52,10 +52,11 @@ stdenv.mkDerivation rec {
       export LD_LIBRARY_PATH="\$STEAMBINDIR:\$LD_LIBRARY_PATH"
       export SDL_VIDEO_X11_DGAMOUSE=0
       cd "\$STEAMROOT"
-      cp ${glibc215}/lib/ld-linux.so.2 "\$STEAMBINDIR"
-      chmod u+w "\$STEAMBINDIR/ld-linux.so.2"
+      LDSO="\$STEAMBINDIR\ld.so"
+      cp ${glibc215}/lib/ld-linux.so.2 "\$LDSO"
+      chmod u+w "\$LDSO"
       echo \$\$ > "\$PIDFILE" # pid of the shell will become pid of steam
-      exec "\$STEAMBINDIR/ld-linux.so.2" "\$STEAMBINDIR/steam"
+      exec "\$LDSO" "\$STEAMBINDIR/steam"
     else
       export PATH=${xz}/bin:\$PATH
       exec $out/bin/.steam-wrapped
