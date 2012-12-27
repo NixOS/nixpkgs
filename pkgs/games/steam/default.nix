@@ -4,7 +4,7 @@
 , dbus, libpng12, libXfixes, cups, libgcrypt, openal, pulseaudio
 , SDL # World of Goo
 , libvorbis # Osmos
-, curl # Superbrothers: S&S EP
+, curl, mesa # Superbrothers: S&S EP
 , patchelf }:
 
 assert stdenv.system == "i686-linux";
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       STEAMBIN64LINK="\$STEAMCONFIG/bin64"
       STEAMROOTLINK="\$STEAMCONFIG/root"
       STEAMSTARTING="\$STEAMCONFIG/starting"
-      export LD_LIBRARY_PATH="\$STEAMBINDIR:\$LD_LIBRARY_PATH"
+      export LD_LIBRARY_PATH="\$STEAMBINDIR:\$LD_LIBRARY_PATH:${mesa}/lib"
       export SDL_VIDEO_X11_DGAMOUSE=0
       cd "\$STEAMROOT"
       LDSO="\$STEAMBINDIR\ld.so"
