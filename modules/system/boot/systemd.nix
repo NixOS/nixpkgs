@@ -321,7 +321,8 @@ let
       ln -s ${cfg.defaultUnit} $out/default.target
 
       #ln -s ../getty@tty1.service $out/multi-user.target.wants/
-      ln -s ../local-fs.target ../remote-fs.target ../network.target ../swap.target $out/multi-user.target.wants/
+      ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
+            ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
     ''; # */
 
 in

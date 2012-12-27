@@ -41,7 +41,7 @@ in
     boot.systemd.services.nscd =
       { description = "Name Service Cache Daemon";
 
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "nss-lookup.target" "nss-user-lookup.target" ];
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
