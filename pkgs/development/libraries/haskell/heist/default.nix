@@ -5,13 +5,14 @@
 
 cabal.mkDerivation (self: {
   pname = "heist";
-  version = "0.10.0";
-  sha256 = "0cabn1yw57qa7psmypqa20k4viis140al5zm31jlpmz599rkbi9z";
+  version = "0.10.1";
+  sha256 = "1rwik8x2bfb0474vc1wzbqlhjgas3089g1rvphs7irfbmyki1646";
   buildDepends = [
     aeson attoparsec blazeBuilder blazeHtml directoryTree dlist errors
     filepath hashable MonadCatchIOTransformers mtl random text time
     unorderedContainers vector xmlhtml
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "An Haskell template system supporting both HTML5 and XML";

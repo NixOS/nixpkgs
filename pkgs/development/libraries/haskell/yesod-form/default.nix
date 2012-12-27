@@ -14,7 +14,6 @@ cabal.mkDerivation (self: {
     shakespeareJs text time transformers wai xssSanitize yesodCore
     yesodPersistent
   ];
-  noHaddock = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Form handling support for Yesod Web Framework";

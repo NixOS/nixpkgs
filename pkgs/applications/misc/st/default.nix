@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   name = "st-0.3";
   
   src = fetchurl {
-    url = http://hg.suckless.org/st/archive/0.3.tar.gz;
-    sha256 = "12ypldjjpsq3nvhszgjsk4wgqkwcvz06qiqw8k5npv3rd1nbx9cl";
+    url = "http://dl.suckless.org/st/${name}.tar.gz";
+    sha256 = "0d0fjixiis4ixbz4l18rqhnssa7cy2bap3jkjyphqlqhl7lahv3d";
   };
   
   buildInputs = [ libX11 ncurses libXext libXft ];

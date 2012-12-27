@@ -88,7 +88,7 @@ ensure_version () {
 
 ensure_target () {
   echo "Ensuring target. CURRENT_TARGET: $CURRENT_TARGET" >&2
-  [ -z "$CURRENT_TARGET" ] && target default.nix
+  [ -z "$CURRENT_TARGET" ] && target "$(basename "$CONFIG_NAME" .upstream).nix"
 }
 
 ensure_name () {
@@ -152,8 +152,7 @@ full_path () {
 
 target () {
   CURRENT_TARGET="$1"
-  test -e "$CURRENT_TARGET" || 
-    { [ "$CURRENT_TARGET" = "${CURRENT_TARGET#/}" ] && CURRENT_TARGET="$CONFIG_DIR/$CURRENT_TARGET"; }
+  { [ "$CURRENT_TARGET" = "${CURRENT_TARGET#/}" ] && CURRENT_TARGET="$CONFIG_DIR/$CURRENT_TARGET"; }
   echo "Target set to: $CURRENT_TARGET"
 }
 
@@ -190,6 +189,12 @@ replace_once () {
   replacement="$3"
   instance="${4:-1}"
 
+  echo "Replacing once:"
+  echo "file: [[$file]]"
+  echo "regexp: [[$regexp]]"
+  echo "replacement: [[$replacement]]"
+  echo "instance: [[$instance]]"
+
   position="$(line_position "$file" "$regexp" "$instance")"
   sed -re "${position}s	$regexp	$replacement	" -i "$file"
 }
@@ -204,7 +209,7 @@ set_var_value () {
   quote='"'
   let "$no_quotes" && quote=""
 
-  replace_once "$file" "${var} *= *.*" "${var} = ${quote}${value}${quote};"
+  replace_once "$file" "${var} *= *.*" "${var} = ${quote}${value}${quote};" "$instance"
 }
 
 do_regenerate () {
@@ -227,8 +232,9 @@ do_overwrite () {
 
 process_config () {
   CONFIG_DIR="$(directory_of "$1")"
+  CONFIG_NAME="$(basename "$1")"
   BEGIN_EXPRESSION='# Generated upstream information';
-  source "$CONFIG_DIR/$(basename "$1")"
+  source "$CONFIG_DIR/$CONFIG_NAME"
   ensure_name
   ensure_attribute_name
   retrieve_version

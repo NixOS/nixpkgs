@@ -1,15 +1,15 @@
 {stdenv, stdenv_32bit, fetchurl, unzip, zlib, ncurses}:
 
 stdenv.mkDerivation {
-  name = "android-platform-tools-r15_rc7";
+  name = "android-platform-tools-r16";
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = https://dl-ssl.google.com/android/repository/platform-tools_r15_rc7-linux.zip;
-      sha1 = "444e12ba413341282cd810d2e4bdb49975c95758";
+      url = https://dl-ssl.google.com/android/repository/platform-tools_r16-linux.zip;
+      sha1 = "84d563ae5e324f223f335f11bf511bf6207c05fb";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = https://dl-ssl.google.com/android/repository/platform-tools_r15_rc7-macosx.zip;
-      sha1 = "974eac4afbe404278fcda8f8cd39b55c82be012d";
+      url = https://dl-ssl.google.com/android/repository/platform-tools_r16-macosx.zip;
+      sha1 = "fbb0f8d2786a83b8c3eb6df402e706e136db8fed";
     }
     else throw "System ${stdenv.system} not supported!";
   

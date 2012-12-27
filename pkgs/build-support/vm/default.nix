@@ -3,7 +3,7 @@
 , img ? "bzImage"
 , rootModules ?
     [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3"
-      "unix" "hmac" "md4" "ecb" "des_generic"
+      "ext4" "unix" "hmac" "md4" "ecb" "des_generic"
     ]
 }:
 
@@ -38,35 +38,19 @@ rec {
       # Copy what we need from Glibc.
       cp -p ${pkgs.stdenv.glibc}/lib/ld-linux*.so.? $out/lib
       cp -p ${pkgs.stdenv.glibc}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/librt.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/libdl.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc}/lib/libm.so.* $out/lib
 
-      # Copy some utillinux stuff.
-      cp ${utillinux}/bin/mount ${utillinux}/bin/umount $out/bin
-      cp -pd ${utillinux}/lib/libblkid*.so.* $out/lib
-      cp -pd ${utillinux}/lib/libuuid*.so.* $out/lib
-
-      # Copy some coreutils.
-      cp ${coreutils}/bin/basename $out/bin
-      cp ${coreutils}/bin/mkdir $out/bin
-      cp ${coreutils}/bin/mknod $out/bin
-      cp ${coreutils}/bin/cat $out/bin
-      cp ${coreutils}/bin/chroot $out/bin
-      cp ${coreutils}/bin/sleep $out/bin
-      cp ${coreutils}/bin/ln $out/bin
-
-      # Copy some other tools.
-      cp ${bash}/bin/bash $out/bin
-      cp ${module_init_tools}/sbin/insmod $out/bin/insmod
-      cp ${nettools}/sbin/ifconfig $out/bin
-      cp ${sysvinit}/sbin/halt $out/bin
+      # Copy BusyBox.
+      cp -pd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
 
       for i in $out/bin/*; do
-          echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+          if [ -f "$i" -a ! -L "$i" ]; then
+              echo "patching $i..."
+              patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+          fi
       done
     ''; # */
 
@@ -84,8 +68,7 @@ rec {
 
 
   stage1Init = writeScript "vm-run-stage1" ''
-    #! ${initrdUtils}/bin/bash -e
-    echo START
+    #! ${initrdUtils}/bin/ash -e
 
     export PATH=${initrdUtils}/bin
 
@@ -167,8 +150,7 @@ rec {
 
     mount -o remount,ro dummy /fs
 
-    echo DONE
-    halt -d -p -f
+    poweroff -f
   '';
 
 

@@ -1,5 +1,12 @@
 { stdenv, fetchurl, readline}:
 
+let
+  dsoPatch = fetchurl {
+    url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/lua-arch.patch?h=packages/lua51";
+    sha256 = "11fcyb4q55p4p7kdb8yp85xlw8imy14kzamp2khvcyxss4vw8ipw";
+    name = "lua-arch.patch";
+  };
+in
 stdenv.mkDerivation rec {
   name = "lua-5.1.5";
 
@@ -10,7 +17,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ readline ];
 
-  configurePhase = "makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux )";
+  patches = [ dsoPatch ];
+
+  configurePhase = ''
+    makeFlagsArray=( INSTALL_TOP=$out INSTALL_MAN=$out/share/man/man1 PLAT=linux CFLAGS="-O2 -fPIC" LDLAGS="-fPIC" )
+    installFlagsArray=( TO_BIN="lua luac" TO_LIB="liblua.a liblua.so liblua.so.5.1" INSTALL_DATA='cp -d' )
+  '';
+
+  postInstall = ''
+    mkdir -p "$out/share/doc/lua" "$out/lib/pkgconfig"
+    mv "etc/lua.pc" "$out/lib/pkgconfig/"
+    mv "doc/"*.{gif,png,css,html} "$out/share/doc/lua/"
+    rmdir $out/{share,lib}/lua/5.1 $out/{share,lib}/lua
+  '';
 
   meta = {
     homepage = "http://www.lua.org";
@@ -25,6 +44,6 @@ stdenv.mkDerivation rec {
     '';
     license = "MIT";
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
