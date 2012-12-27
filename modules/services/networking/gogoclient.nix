@@ -59,13 +59,14 @@ in
     networking.enableIPv6 = true;
 
     boot.systemd.services.gogoclient = {
-
       description = "ipv6 tunnel";
 
       after = [ "network.target" ];
+      requires = [ "network.target" ];
 
-      preStart = let authMethod = if cfg.password == "" then "anonymous" else "any"; in
-      ''
+      unitConfig.RequiresMountsFor = "/var/lib/gogoc";
+
+      script = let authMethod = if cfg.password == "" then "anonymous" else "any"; in ''
         mkdir -p -m 700 /var/lib/gogoc
         cat ${pkgs.gogoclient}/share/${pkgs.gogoclient.name}/gogoc.conf.sample | \
           ${pkgs.gnused}/bin/sed \
@@ -74,18 +75,12 @@ in
             -e "s|^server=.*|server=${cfg.server}|" \
             -e "s|^auth_method=.*|auth_method=${authMethod}|" \
             -e "s|^#log_file=|log_file=1|" > /var/lib/gogoc/gogoc.conf
+        cd /var/lib/gogoc
+        exec ${pkgs.gogoclient}/bin/gogoc -y -f /var/lib/gogoc/gogoc.conf
       '';
-
-      serviceConfig.ExecStart = "${pkgs.gogoclient}/bin/gogoc -y -f /var/lib/gogoc/gogoc.conf";
-
-      restartTriggers = attrValues cfg;
-
     } // optionalAttrs cfg.autorun {
-
       wantedBy = [ "ip-up.target" ];
-
       partOf = [ "ip-up.target" ];
-
     };
 
   };
