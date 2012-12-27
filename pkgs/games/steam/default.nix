@@ -9,7 +9,7 @@
 
 assert stdenv.system == "i686-linux";
 
-let version = "1.0.0.16"; in
+let version = "1.0.0.18"; in
 
 stdenv.mkDerivation rec {
   name = "steam-${version}";
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     cat > $out/bin/steam << EOF
     #!${stdenv.shell}
 
-    export PATH=${xz}/bin:\$PATH
     export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib:${libselinux}/lib:${libXrandr}/lib:${pango}/lib:${freetype}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${gdk_pixbuf}/lib:${cairo}/lib:${libXi}/lib:${alsaLib}/lib:${libXrender}/lib:${nss}/lib:${nspr}/lib:${zlib}/lib:${dbus}/lib:${libpng12}/lib:${libXfixes}/lib:${cups}/lib:${libgcrypt}/lib:${openal}/lib:${pulseaudio}/lib:${SDL}/lib:${libvorbis}/lib:${curl}/lib
     STEAMBOOTSTRAP=\$HOME/.steam/steam/steam.sh
     if [ -f \$STEAMBOOTSTRAP ]; then
@@ -58,6 +57,7 @@ stdenv.mkDerivation rec {
       echo \$\$ > "\$PIDFILE" # pid of the shell will become pid of steam
       exec "\$STEAMBINDIR/ld-linux.so.2" "\$STEAMBINDIR/steam"
     else
+      export PATH=${xz}/bin:\$PATH
       exec $out/bin/.steam-wrapped
     fi
     EOF
