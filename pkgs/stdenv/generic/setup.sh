@@ -270,6 +270,7 @@ elif [ "$NIX_BUILD_CORES" -le 0 ]; then
 fi
 export NIX_BUILD_CORES
 
+@niximpure@
 
 ######################################################################
 # Misc. helper functions.
