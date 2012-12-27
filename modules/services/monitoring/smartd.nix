@@ -57,7 +57,7 @@ in
         description = ''
           Additional options for each device that is monitored. The example
           turns on SMART Automatic Offline Testing on startup, and schedules short
-          self-tests daily, and long self-tests weekly. 
+          self-tests daily, and long self-tests weekly.
         '';
       };
 
@@ -81,18 +81,16 @@ in
 
   config = mkIf cfg.enable {
 
-    jobs.smartd = {
-        description = "S.M.A.R.T. Daemon";
+    boot.systemd.services.smartd = {
+      description = "S.M.A.R.T. Daemon";
 
-        environment.TZ = config.time.timeZone;
+      environment.TZ = config.time.timeZone;
 
-        wantedBy = [ "multi-user.target" ];
-        partOf = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
+      partOf = [ "multi-user.target" ];
 
-        path = [ pkgs.smartmontools ];
-
-        exec = "smartd --no-fork --pidfile=/var/run/smartd.pid ${smartdFlags}";
-      };
+      serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd --no-fork ${smartdFlags}";
+    };
 
   };
 
