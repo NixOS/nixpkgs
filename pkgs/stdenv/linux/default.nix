@@ -203,23 +203,19 @@ rec {
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
     };
-    overrides = pkgs: ({
+    overrides = pkgs: {
       glibc = stdenvLinuxGlibc;
       inherit (stdenvLinuxBoot1Pkgs) perl;
-    } // (if (platform ? name && platform.name != "raspberrypi") then {
       # Link GCC statically against GMP etc.  This makes sense because
       # these builds of the libraries are only used by GCC, so it
       # reduces the size of the stdenv closure.
-
-      # On raspberry pi we can't do that, because libgcc/libstdc++ are made
-      # without hardfp, and can't be linked with the new hardfp code in gcc.
       gmp = pkgs.gmp.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       mpfr = pkgs.mpfr.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       mpc = pkgs.mpc.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       isl = pkgs.isl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       ppl = pkgs.ppl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
-    } else {}));
+    };
     inherit fetchurl;
   };
 
@@ -240,8 +236,7 @@ rec {
       inherit (stdenvLinuxBoot3Pkgs) binutils;
       coreutils = bootstrapTools;
       libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot3Pkgs.gcc.gcc.override (if platform.name == "raspberrypi" then
-	{ ppl = null; cloog = null; } else {});
+      gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
       name = "";
     };
     extraPath = [ stdenvLinuxBoot3Pkgs.xz ];
