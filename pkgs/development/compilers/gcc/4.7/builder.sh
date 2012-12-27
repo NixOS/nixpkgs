@@ -237,13 +237,4 @@ postInstall() {
     eval "$postInstallGhdl"
 }
 
-
-if test -z "$targetConfig" && test -z "$crossConfig"; then
-    if test -z "$profiledCompiler"; then
-        buildFlags="bootstrap $buildFlags"
-    else    
-        buildFlags="profiledbootstrap $buildFlags"
-    fi
-fi
-
 genericBuild

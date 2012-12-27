@@ -151,6 +151,8 @@ let version = "4.7.2";
       "-stage-final";
     crossNameAddon = if (cross != null) then "-${cross.config}" + stageNameAddon else "";
 
+  bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
+
 in
 
 # We need all these X libraries when building AWT with GTK+.
@@ -222,7 +224,7 @@ stdenv.mkDerivation ({
         ''
     else null;
 
-  inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
+  inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
   buildNativeInputs = [ texinfo which gettext ]
@@ -296,9 +298,14 @@ stdenv.mkDerivation ({
     ${if langAda then " --enable-libada" else ""}
     ${if (cross == null && stdenv.isi686) then "--with-arch=i686" else ""}
     ${if cross != null then crossConfigureFlags else ""}
+    ${if !bootstrap then "--disable-bootstrap" else ""}
   ";
 
   targetConfig = if (cross != null) then cross.config else null;
+
+  buildFlags = if bootstrap then
+    (if profiledCompiler then "profiledbootstrap" else "bootstrap")
+    else "";
 
   installTargets =
     if stripped
@@ -348,6 +355,7 @@ stdenv.mkDerivation ({
       ${if cross != null then crossConfigureFlags else ""}
       --target=${stdenv.cross.config}
     '';
+    buildFlags = "";
   };
 
 
