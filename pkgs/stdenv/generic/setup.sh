@@ -725,7 +725,7 @@ fixupPhase() {
 
     # TODO: strip _only_ ELF executables, and return || fail here...
     if [ -z "$dontStrip" ]; then
-        stripDebugList=${stripDebugList:-lib lib64 libexec bin sbin}
+        stripDebugList=${stripDebugList:-lib lib32 lib64 libexec bin sbin}
         if [ -n "$stripDebugList" ]; then
             stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
         fi
