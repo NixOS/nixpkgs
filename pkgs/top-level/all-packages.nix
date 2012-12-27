@@ -8093,6 +8093,8 @@ let
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
 
+  xkb_switch = callPackage ../tools/X11/xkb-switch { };
+
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
   xpra = callPackage ../tools/X11/xpra {
