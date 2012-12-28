@@ -223,7 +223,7 @@ let
         defaultStdenv;
 
   forceBuildDrv = drv : if (crossSystem == null) then drv else
-    (drv // { hostDrv = drv.buildDrv; });
+    (drv // { crossDrv = drv.nativeDrv; });
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
@@ -1276,7 +1276,7 @@ let
                 gettext = null;
                 readline = null;
                 devicemapper = null;
-              }).hostDrv)
+              }).crossDrv)
            { hurd = gnu.hurdCrossIntermediate; })
     else null;
 
@@ -2045,7 +2045,7 @@ let
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
     profiledCompiler = if stdenv.isArm then false else true;
 
-    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
@@ -2074,7 +2074,7 @@ let
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
     profiledCompiler = if stdenv.isArm then false else true;
 
-    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
@@ -2101,7 +2101,7 @@ let
     # We can enable it back some day. This makes the *gcc* builds faster now.
     profiledCompiler = false;
 
-    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
@@ -3176,7 +3176,7 @@ let
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
-  /* Make pkgconfig always return a buildDrv, never a proper hostDrv,
+  /* Make pkgconfig always return a nativeDrv, never a proper crossDrv,
      because most usage of pkgconfig as buildInput (inheritance of
      pre-cross nixpkgs) means using it using as buildNativeInput
      cross_renaming: we should make all programs use pkgconfig as
@@ -3634,7 +3634,7 @@ let
     machHeaders = null;
     hurdHeaders = null;
     gccCross = null;
-  }) // (if crossSystem != null then { hostDrv = glibc213Cross; } else {});
+  }) // (if crossSystem != null then { crossDrv = glibc213Cross; } else {});
 
   glibc213Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.13)
     (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
@@ -5583,7 +5583,7 @@ let
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (utillinux // {
-      hostDrv = lib.overrideDerivation utillinux.hostDrv (args: {
+      crossDrv = lib.overrideDerivation utillinux.crossDrv (args: {
         # `libblkid' fails to build on GNU/Hurd.
         configureFlags = args.configureFlags
           + " --disable-libblkid --disable-mount --disable-libmount"

@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # We should refer to the cross built openssl
     # For the 'urandom', maybe it should be a cross-system option
     configureFlags = ''
-      ${if sslSupport then "--with-ssl=${openssl.hostDrv}" else "--without-ssl"}
+      ${if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl"}
       ${if linkStatic then "--enable-static --disable-shared" else ""}
       --with-random /dev/urandom
     '';

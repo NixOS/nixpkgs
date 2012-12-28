@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     postInstall = "";
-    propagatedBuildInputs = [ ncurses.hostDrv ];
+    propagatedBuildInputs = [ ncurses.crossDrv ];
   };
 
   meta = {

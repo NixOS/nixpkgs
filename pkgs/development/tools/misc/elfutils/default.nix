@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
     /* Having bzip2 will harm, because anything using elfutils 
        as buildInput cross-building, will not be able to run 'bzip2' */
-    propagatedBuildInputs = [ zlib.hostDrv ];
+    propagatedBuildInputs = [ zlib.crossDrv ];
 
     # This program does not cross-build fine. So I only cross-build some parts
     # I need for the linux perf tool.

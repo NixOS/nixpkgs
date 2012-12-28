@@ -189,13 +189,13 @@ stdenv.mkDerivation ({
     configureFlags = "
       ${if enableMultilib then "" else "--disable-multilib"}
       ${if enableShared then "" else "--disable-shared"}
-      ${if ppl != null then "--with-ppl=${ppl.hostDrv}" else ""}
-      ${if cloogppl != null then "--with-cloog=${cloogppl.hostDrv}" else ""}
-      ${if langJava then "--with-ecj-jar=${javaEcj.hostDrv}" else ""}
+      ${if ppl != null then "--with-ppl=${ppl.crossDrv}" else ""}
+      ${if cloogppl != null then "--with-cloog=${cloogppl.crossDrv}" else ""}
+      ${if langJava then "--with-ecj-jar=${javaEcj.crossDrv}" else ""}
       ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
-      ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.hostDrv}" else ""}
-      --with-gmp=${gmp.hostDrv}
-      --with-mpfr=${mpfr.hostDrv}
+      ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.crossDrv}" else ""}
+      --with-gmp=${gmp.crossDrv}
+      --with-mpfr=${mpfr.crossDrv}
       --disable-libstdcxx-pch
       --without-included-gettext
       --with-system-zlib

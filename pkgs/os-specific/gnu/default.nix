@@ -16,7 +16,7 @@ let
       inherit fetchgit stdenv autoconf libtool texinfo
         glibcCross hurdPartedCross;
       inherit (gnu) machHeaders mig;
-      libuuid = libuuid.hostDrv;
+      libuuid = libuuid.crossDrv;
       automake = automake111x;
       headersOnly = false;
       cross = assert crossSystem != null; crossSystem;
@@ -85,7 +85,7 @@ let
       stdenv = (forceSystem "i686-linux").stdenv;
     };
 
-    # XXX: Use this one for its `.hostDrv'.  Using the one above from
+    # XXX: Use this one for its `.crossDrv'.  Using the one above from
     # `x86_64-linux' leads to building a different cross-toolchain because of
     # the `forceSystem'.
     mig_raw = callPackage ./mig {};

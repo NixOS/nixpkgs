@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   inherit fontDirectories;
 
   patchPhase = ''
-    sed -i -e 's,$(includedir)/pixman-1,${if stdenv ? cross then pixman.hostDrv else pixman}/include/pixman-1,' unix/xserver/hw/vnc/Makefile.am
-    sed -i -e '/^$pidFile/a$ENV{XKB_BINDIR}="${if stdenv ? cross then xkbcomp.hostDrv else xkbcomp}/bin";' unix/vncserver 
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${if stdenv ? cross then xkeyboard_config.hostDrv else xkeyboard_config}/etc/X11/xkb";' unix/vncserver 
+    sed -i -e 's,$(includedir)/pixman-1,${if stdenv ? cross then pixman.crossDrv else pixman}/include/pixman-1,' unix/xserver/hw/vnc/Makefile.am
+    sed -i -e '/^$pidFile/a$ENV{XKB_BINDIR}="${if stdenv ? cross then xkbcomp.crossDrv else xkbcomp}/bin";' unix/vncserver 
+    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${if stdenv ? cross then xkeyboard_config.crossDrv else xkeyboard_config}/etc/X11/xkb";' unix/vncserver 
 
     fontPath=
     for i in $fontDirectories; do
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = {
-    buildInputs = (map (x : x.hostDrv) (buildInputs ++ [
+    buildInputs = (map (x : x.crossDrv) (buildInputs ++ [
       fixesproto damageproto xcmiscproto bigreqsproto randrproto renderproto
       fontsproto videoproto compositeproto scrnsaverproto resourceproto
       libxkbfile libXfont libpciaccess xineramaproto

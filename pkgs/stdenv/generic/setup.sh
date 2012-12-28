@@ -197,7 +197,7 @@ addToCrossEnv() {
     local pkg=$1
 
     # Some programs put important build scripts (freetype-config and similar)
-    # into their hostDrv bin path. Intentionally these should go after
+    # into their crossDrv bin path. Intentionally these should go after
     # the nativePkgs in PATH.
     if [ -d $1/bin ]; then
         addToSearchPath _PATH $1/bin

@@ -5,21 +5,21 @@ let
   /* Basic list of packages to cross-build */
   basicHostDrv = {
     gccCrossStageFinal = nativePlatforms;
-    bison.hostDrv = nativePlatforms;
-    busybox.hostDrv = nativePlatforms;
-    coreutils.hostDrv = nativePlatforms;
-    dropbear.hostDrv = nativePlatforms;
-    tigervnc.hostDrv = nativePlatforms;
-    #openoffice.hostDrv = nativePlatforms;
-    wxGTK.hostDrv = nativePlatforms;
+    bison.crossDrv = nativePlatforms;
+    busybox.crossDrv = nativePlatforms;
+    coreutils.crossDrv = nativePlatforms;
+    dropbear.crossDrv = nativePlatforms;
+    tigervnc.crossDrv = nativePlatforms;
+    #openoffice.crossDrv = nativePlatforms;
+    wxGTK.crossDrv = nativePlatforms;
     #firefox = nativePlatforms;
     xorg = {
-      #xorgserver.hostDrv = nativePlatforms;
+      #xorgserver.crossDrv = nativePlatforms;
     };
-    nixUnstable.hostDrv = nativePlatforms;
-    linuxPackages_3_3.kernel.hostDrv = linux;
-    linuxPackages_3_4.kernel.hostDrv = linux;
-    linuxPackages_3_6.kernel.hostDrv = linux;
+    nixUnstable.crossDrv = nativePlatforms;
+    linuxPackages_3_3.kernel.crossDrv = linux;
+    linuxPackages_3_4.kernel.crossDrv = linux;
+    linuxPackages_3_6.kernel.crossDrv = linux;
   };
 
   /* Basic list of packages to be natively built,
@@ -50,7 +50,7 @@ in {
   crossSheevaplugLinux = mapTestOnCross crossSystem (
     basic //
     {
-      ubootSheevaplug.hostDrv = nativePlatforms;
+      ubootSheevaplug.crossDrv = nativePlatforms;
     });
 }) // (
 
@@ -79,7 +79,7 @@ in {
   crossSheevaplugLinuxUclibc = mapTestOnCross crossSystem (
     basic //
     {
-      ubootSheevaplug.hostDrv = nativePlatforms;
+      ubootSheevaplug.crossDrv = nativePlatforms;
     });
 }) // (
 
@@ -153,14 +153,14 @@ let
   };
 in {
   crossMingw32 = mapTestOnCross crossSystem {
-    coreutils.hostDrv = nativePlatforms;
-    boehmgc.hostDrv = nativePlatforms;
-    gmp.hostDrv = nativePlatforms;
-    guile_1_8.hostDrv = nativePlatforms;
-    libffi.hostDrv = nativePlatforms;
-    libtool.hostDrv = nativePlatforms;
-    libunistring.hostDrv = nativePlatforms;
-    windows.wxMSW.hostDrv = nativePlatforms;
+    coreutils.crossDrv = nativePlatforms;
+    boehmgc.crossDrv = nativePlatforms;
+    gmp.crossDrv = nativePlatforms;
+    guile_1_8.crossDrv = nativePlatforms;
+    libffi.crossDrv = nativePlatforms;
+    libtool.crossDrv = nativePlatforms;
+    libunistring.crossDrv = nativePlatforms;
+    windows.wxMSW.crossDrv = nativePlatforms;
   };
 }) // (
 
@@ -176,14 +176,14 @@ let
   };
 in {
   crossMingwW64 = mapTestOnCross crossSystem {
-    coreutils.hostDrv = nativePlatforms;
-    boehmgc.hostDrv = nativePlatforms;
-    gmp.hostDrv = nativePlatforms;
-    guile_1_8.hostDrv = nativePlatforms;
-    libffi.hostDrv = nativePlatforms;
-    libtool.hostDrv = nativePlatforms;
-    libunistring.hostDrv = nativePlatforms;
-    windows.wxMSW.hostDrv = nativePlatforms;
+    coreutils.crossDrv = nativePlatforms;
+    boehmgc.crossDrv = nativePlatforms;
+    gmp.crossDrv = nativePlatforms;
+    guile_1_8.crossDrv = nativePlatforms;
+    libffi.crossDrv = nativePlatforms;
+    libtool.crossDrv = nativePlatforms;
+    libunistring.crossDrv = nativePlatforms;
+    windows.wxMSW.crossDrv = nativePlatforms;
   };
 }) // (
 
@@ -202,34 +202,34 @@ let
 in {
   crossGNU = mapTestOnCross crossSystem {
     gnu.hurdCross = nativePlatforms;
-    gnu.mach.hostDrv = nativePlatforms;
+    gnu.mach.crossDrv = nativePlatforms;
     gnu.mig = nativePlatforms;
-    gnu.smbfs.hostDrv = nativePlatforms;
+    gnu.smbfs.crossDrv = nativePlatforms;
 
-    coreutils.hostDrv = nativePlatforms;
-    ed.hostDrv = nativePlatforms;
-    grub2.hostDrv = nativePlatforms;
-    inetutils.hostDrv = nativePlatforms;
-    boehmgc.hostDrv = nativePlatforms;
-    findutils.hostDrv = nativePlatforms;
-    gcc.hostDrv = nativePlatforms;
-    gcc46.hostDrv = nativePlatforms;
-    gdb.hostDrv = nativePlatforms;
-    gmp.hostDrv = nativePlatforms;
-    gnugrep.hostDrv = nativePlatforms;
-    gnumake.hostDrv = nativePlatforms;
-    gnused.hostDrv = nativePlatforms;
-    guile_1_8.hostDrv = nativePlatforms;
-    guile.hostDrv = nativePlatforms;
-    libffi.hostDrv = nativePlatforms;
-    libtool.hostDrv = nativePlatforms;
-    libunistring.hostDrv = nativePlatforms;
-    lsh.hostDrv = nativePlatforms;
-    nixUnstable.hostDrv = nativePlatforms;
-    openssl.hostDrv = nativePlatforms;            # dependency of Nix
-    patch.hostDrv = nativePlatforms;
-    samba_light.hostDrv = nativePlatforms;      # needed for `runInGenericVM'
-    zile.hostDrv = nativePlatforms;
+    coreutils.crossDrv = nativePlatforms;
+    ed.crossDrv = nativePlatforms;
+    grub2.crossDrv = nativePlatforms;
+    inetutils.crossDrv = nativePlatforms;
+    boehmgc.crossDrv = nativePlatforms;
+    findutils.crossDrv = nativePlatforms;
+    gcc.crossDrv = nativePlatforms;
+    gcc46.crossDrv = nativePlatforms;
+    gdb.crossDrv = nativePlatforms;
+    gmp.crossDrv = nativePlatforms;
+    gnugrep.crossDrv = nativePlatforms;
+    gnumake.crossDrv = nativePlatforms;
+    gnused.crossDrv = nativePlatforms;
+    guile_1_8.crossDrv = nativePlatforms;
+    guile.crossDrv = nativePlatforms;
+    libffi.crossDrv = nativePlatforms;
+    libtool.crossDrv = nativePlatforms;
+    libunistring.crossDrv = nativePlatforms;
+    lsh.crossDrv = nativePlatforms;
+    nixUnstable.crossDrv = nativePlatforms;
+    openssl.crossDrv = nativePlatforms;            # dependency of Nix
+    patch.crossDrv = nativePlatforms;
+    samba_light.crossDrv = nativePlatforms;      # needed for `runInGenericVM'
+    zile.crossDrv = nativePlatforms;
   };
 }) // (
 
@@ -261,13 +261,13 @@ let
 in {
   fuloongminipc = mapTestOnCross crossSystem {
 
-    coreutils.hostDrv = nativePlatforms;
-    ed.hostDrv = nativePlatforms;
-    grub2.hostDrv = nativePlatforms;
-    inetutils.hostDrv = nativePlatforms;
-    nixUnstable.hostDrv = nativePlatforms;
-    patch.hostDrv = nativePlatforms;
-    zile.hostDrv = nativePlatforms;
+    coreutils.crossDrv = nativePlatforms;
+    ed.crossDrv = nativePlatforms;
+    grub2.crossDrv = nativePlatforms;
+    inetutils.crossDrv = nativePlatforms;
+    nixUnstable.crossDrv = nativePlatforms;
+    patch.crossDrv = nativePlatforms;
+    zile.crossDrv = nativePlatforms;
   };
 }) // (
 
@@ -321,20 +321,20 @@ let
 in {
   nanonote = mapTestOnCross crossSystem {
 
-    coreutils.hostDrv = nativePlatforms;
-    ed.hostDrv = nativePlatforms;
-    inetutils.hostDrv = nativePlatforms;
-    nixUnstable.hostDrv = nativePlatforms;
-    patch.hostDrv = nativePlatforms;
-    zile.hostDrv = nativePlatforms;
-    prboom.hostDrv = nativePlatforms;
-    vim.hostDrv = nativePlatforms;
-    lynx.hostDrv = nativePlatforms;
-    patchelf.hostDrv = nativePlatforms;
-    nix.hostDrv = nativePlatforms;
-    fossil.hostDrv = nativePlatforms;
-    binutils.hostDrv = nativePlatforms;
-    mpg123.hostDrv = nativePlatforms;
-    yacas.hostDrv = nativePlatforms;
+    coreutils.crossDrv = nativePlatforms;
+    ed.crossDrv = nativePlatforms;
+    inetutils.crossDrv = nativePlatforms;
+    nixUnstable.crossDrv = nativePlatforms;
+    patch.crossDrv = nativePlatforms;
+    zile.crossDrv = nativePlatforms;
+    prboom.crossDrv = nativePlatforms;
+    vim.crossDrv = nativePlatforms;
+    lynx.crossDrv = nativePlatforms;
+    patchelf.crossDrv = nativePlatforms;
+    nix.crossDrv = nativePlatforms;
+    fossil.crossDrv = nativePlatforms;
+    binutils.crossDrv = nativePlatforms;
+    mpg123.crossDrv = nativePlatforms;
+    yacas.crossDrv = nativePlatforms;
   };
 })
