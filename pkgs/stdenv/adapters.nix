@@ -20,7 +20,7 @@ rec {
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args //
-        { buildInputs = (if args ? buildInputs then args.buildInputs else []) ++ pkgs; }
+        { buildInputs = args.buildInputs or [] ++ pkgs; }
       );
     };
 
@@ -48,11 +48,11 @@ rec {
         # These are added *after* the command-line flags, so we'll
         # always optimise for size.
         NIX_CFLAGS_COMPILE =
-          (if args ? NIX_CFLAGS_COMPILE then args.NIX_CFLAGS_COMPILE else "")
+          args.NIX_CFLAGS_COMPILE or ""
           + " -Os -s -D_BSD_SOURCE=1";
 
         configureFlags =
-          (if args ? configureFlags then args.configureFlags else "")
+          args.configureFlags or ""
           + " --disable-shared"; # brrr...
 
         NIX_GCC = import ../build-support/gcc-wrapper {
@@ -75,12 +75,10 @@ rec {
         # These are added *after* the command-line flags, so we'll
         # always optimise for size.
         NIX_CFLAGS_COMPILE =
-          (if args ? NIX_CFLAGS_COMPILE then args.NIX_CFLAGS_COMPILE else "")
-          + " -Os -s";
+          args.NIX_CFLAGS_COMPILE or "" + " -Os -s";
 
         configureFlags =
-          (if args ? configureFlags then args.configureFlags else "")
-          + " --disable-shared"; # brrr...
+          args.configureFlags or "" + " --disable-shared"; # brrr...
 
         NIX_GCC = runCommand "klibc-wrapper" {} ''
           mkdir -p $out/bin
@@ -100,9 +98,8 @@ rec {
   makeStaticBinaries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         NIX_CFLAGS_LINK = "-static";
-
         configureFlags =
-          (if args ? configureFlags then toString args.configureFlags else "")
+          toString args.configureFlags or ""
           + " --disable-shared"; # brrr...
       });
       isStatic = true;
@@ -115,7 +112,7 @@ rec {
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontDisableStatic = true;
         configureFlags =
-          (if args ? configureFlags then toString args.configureFlags else "")
+          toString args.configureFlags or ""
           + " --enable-static --disable-shared";
       });
     } // {inherit fetchurl;};
@@ -133,8 +130,8 @@ rec {
 
             # In nixpkgs, sometimes 'null' gets in as a buildInputs element,
             # and we handle that through isAttrs.
-            getBuildDrv = drv : if (builtins.isAttrs drv && drv ? nativeDrv) then drv.nativeDrv else drv;
-            getHostDrv = drv : if (builtins.isAttrs drv && drv ? crossDrv) then drv.crossDrv else drv;
+            getBuildDrv = drv: drv.nativeDrv or drv;
+            getHostDrv = drv: drv.crossDrv or drv;
             nativeBuildInputsDrvs = map (getBuildDrv) nativeBuildInputs;
             buildInputsDrvs = map (getHostDrv) buildInputs;
             buildInputsDrvsAsBuildInputs = map (getBuildDrv) buildInputs;
@@ -177,7 +174,7 @@ rec {
                     propagatedNativeBuildInputs = propagatedNativeBuildInputsDrvs;
 
                     crossConfig = cross.config;
-                } // (if args ? crossAttrs then args.crossAttrs else {}));
+                } // args.crossAttrs or {});
         in nativeDrv // {
             inherit crossDrv nativeDrv;
         };
@@ -297,14 +294,9 @@ rec {
           pkg = stdenv.mkDerivation args;
           printDrvPath = val: let
             drvPath = builtins.unsafeDiscardStringContext pkg.drvPath;
-            license =
-              if pkg ? meta && pkg.meta ? license then
-                pkg.meta.license
-              else
-                null;
+            license = pkg.meta.license or null;
           in
-            builtins.trace "@:drv:${toString drvPath}:${builtins.toString license}:@"
-              val;
+            builtins.trace "@:drv:${toString drvPath}:${builtins.toString license}:@" val;
         in pkg // {
           outPath = printDrvPath pkg.outPath;
           drvPath = printDrvPath pkg.drvPath;
@@ -333,15 +325,12 @@ rec {
           pkg = stdenv.mkDerivation args;
           drv = builtins.unsafeDiscardStringContext pkg.drvPath;
           license =
-            if pkg ? meta && pkg.meta ? license then
-              pkg.meta.license
-            else if pkg ? outputHash then
+            pkg.meta.license or
               # Fixed-output derivations such as source tarballs usually
               # don't have licensing information, but that's OK.
-              null
-            else
-              builtins.trace
-                "warning: ${drv} lacks licensing information" null;
+              (pkg.outputHash or
+                (builtins.trace
+                  "warning: ${drv} lacks licensing information" null));
 
           validate = arg:
             if licensePred license then arg
