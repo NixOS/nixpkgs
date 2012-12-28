@@ -37,7 +37,7 @@ _addToPythonPath() {
     pythonPathsSeen[$dir]=1
     addToSearchPath program_PYTHONPATH $dir/lib/@libPrefix@/site-packages
     addToSearchPath program_PATH $dir/bin
-    local prop="$dir/nix-support/propagated-build-native-inputs"
+    local prop="$dir/nix-support/propagated-native-build-inputs"
     if [ -e $prop ]; then
         local i
         for i in $(cat $prop); do

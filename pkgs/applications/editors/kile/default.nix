@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nx5fmjrxrndnzvknxnybd8qh15jzfxzbny2rljq3amjw02y9lc2";
   };
 
-  buildNativeInputs = [ cmake gettext ];
+  nativeBuildInputs = [ cmake gettext ];
   buildInputs = [ kdelibs ];
 
   # for KDE 4.7 the nl translations fail since kile-2.1.2

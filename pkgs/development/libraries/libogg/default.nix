@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jy79ffkl34vycnwfsj4svqsdg1lwy2l1rr49y8r4d44kh12a5r3";
   };
 
-  buildNativeInputs = [ xz ];
+  nativeBuildInputs = [ xz ];
 
   meta = {
     homepage = http://xiph.org/ogg/;

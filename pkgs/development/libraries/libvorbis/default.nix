@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gby6hapz9njx4l9g0pndyk4q83z5fgrgc30mfwfgx7bllspsk43";
   };
 
-  buildNativeInputs = [ xz ];
+  nativeBuildInputs = [ xz ];
   propagatedBuildInputs = [ libogg ];
 
   meta = {

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   configureFlags = baseConfigureFlags;
 
   # Note: Bison is needed because the patches above modify parse.y.
-  buildNativeInputs = [bison]
+  nativeBuildInputs = [bison]
     ++ stdenv.lib.optional (texinfo != null) texinfo
     ++ stdenv.lib.optional interactive readline;
 

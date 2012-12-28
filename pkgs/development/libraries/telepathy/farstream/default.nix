@@ -13,5 +13,5 @@ stdenv.mkDerivation rec {
   buildInputs = [ gst_plugins_base gst_python pygobject ];
 
   propagatedBuildInputs = [ dbus_glib farstream telepathy_glib gstreamer ];
-  buildNativeInputs = [ pkgconfig python libxslt];
+  nativeBuildInputs = [ pkgconfig python libxslt];
 }

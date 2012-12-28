@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   # Perl is only for the documentation
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   patches = [ ./gcc43.patch ];
 

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "10kcdpg080m393f1vz0km41kd3483fkyabprm59gvjwklxkcp3bp";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pango glibmm cairomm libpng ];
 
   meta = {

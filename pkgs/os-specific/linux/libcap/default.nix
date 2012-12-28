@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "03q50j6bg65cc501q87qh328ncav1i8qw2bjig99vxmmfx4bvsvk";
   };
   
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
   propagatedBuildInputs = [ attr ];
 
   preConfigure = "cd libcap";

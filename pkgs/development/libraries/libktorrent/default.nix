@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b4ibkba27ivvjsh5s93xwlcgzvvwsgl6mcd8g96d1al05n2ccw9";
   };
 
-  buildNativeInputs = [ cmake automoc4 gettext ];
+  nativeBuildInputs = [ cmake automoc4 gettext ];
   buildInputs = [ kdelibs phonon gmp qca2 boost libgcrypt ];
 
   enableParallelBuilding = true;

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-static-libgcc";
 
   crossAttrs = {
-    dontStrip = if static then true else false;
+    dontStrip = static;
   } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
     configurePhase=''
       installFlags="BINARY_PATH=$out/bin INCLUDE_PATH=$out/include LIBRARY_PATH=$out/lib"

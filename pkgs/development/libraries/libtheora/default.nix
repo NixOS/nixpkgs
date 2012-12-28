@@ -10,7 +10,7 @@ stdenv.mkDerivation ({
   propagatedBuildInputs = [libogg libvorbis];
 
   crossAttrs = {
-    propagatedBuildInputs = [libogg.hostDrv tremor.hostDrv];
+    propagatedBuildInputs = [libogg.crossDrv tremor.crossDrv];
     configureFlags = "--disable-examples";
   };
 }

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ghostscript ];
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   doCheck = true;
 

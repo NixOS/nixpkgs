@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "02dwy0vsn2dp31f15vxd3yxxr1rgy25ab7ncavyh73i290qnsadf";
   };
 
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   patchPhase = ''
     sed s,-Werror,, -i CMakeLists.txt

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ apr aprutil subversion db4 kdelibs ];
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   meta = {
     description = "KDE SVN front-end";

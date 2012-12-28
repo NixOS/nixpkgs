@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches = [ ./gets-undeclared.patch ];
 
   /* If no explicit coreutils is given, use the one from stdenv. */
-  buildNativeInputs = [ coreutils ];
+  nativeBuildInputs = [ coreutils ];
 
   meta = {
     homepage = http://www.gnu.org/software/diffutils/diffutils.html;

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ udev dbus_libs ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     description = "Middleware to access a smart card using SCard API (PC/SC)";

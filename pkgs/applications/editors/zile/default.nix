@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses boehmgc ];
-  buildNativeInputs = [ help2man perl ];
+  nativeBuildInputs = [ help2man perl ];
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.

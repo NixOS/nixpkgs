@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "14h20s0kwqr1nsj90dgjwzs0r3h7z1cpmnivrikd0rrg4m2jvcsr";
   };
   
-  buildNativeInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [ libtool libjpeg ];
 
   # These are mentioned in the Requires line of libgphoto's pkg-config file.

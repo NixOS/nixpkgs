@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     pango libX11 xproto zlib poppler poppler_data
   ];
 
-  buildNativeInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
   # Build with poppler-0.18.x
   patchFlags = "-p0";

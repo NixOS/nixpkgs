@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1s1z6r0r78qvf59ci3vxammjz7lj5m64jyk0bfn7yxd5jl3sy41y";
   };
 
-  buildNativeInputs = [ cython ];
+  nativeBuildInputs = [ cython ];
 
   buildInputs = [
     pkgconfig python pygtk gtk ffmpeg x264 libvpx makeWrapper

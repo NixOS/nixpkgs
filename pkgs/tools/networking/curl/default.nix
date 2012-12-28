@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ${if linkStatic then "--enable-static --disable-shared" else ""}
   '';
 
-  dontDisableStatic = if linkStatic then true else false;
+  dontDisableStatic = linkStatic;
 
   CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
   LDFLAGS = if linkStatic then "-static" else "";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # We should refer to the cross built openssl
     # For the 'urandom', maybe it should be a cross-system option
     configureFlags = ''
-      ${if sslSupport then "--with-ssl=${openssl.hostDrv}" else "--without-ssl"}
+      ${if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl"}
       ${if linkStatic then "--enable-static --disable-shared" else ""}
       --with-random /dev/urandom
     '';

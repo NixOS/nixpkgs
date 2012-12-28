@@ -104,7 +104,7 @@ let version = "4.6.3";
       withCpu +
       withAbi +
       withFpu +
-      (if (crossMingw && crossStageStatic) then
+      (if crossMingw && crossStageStatic then
         " --with-headers=${libcCross}/include" +
         " --with-gcc" +
         " --with-gnu-as" +
@@ -152,9 +152,9 @@ let version = "4.6.3";
           " --enable-nls" +
           " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
         );
-    stageNameAddon = if (crossStageStatic) then "-stage-static" else
+    stageNameAddon = if crossStageStatic then "-stage-static" else
       "-stage-final";
-    crossNameAddon = if (cross != null) then "-${cross.config}" + stageNameAddon else "";
+    crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
 
   bootstrap = cross == null && !stdenv.isArm && !stdenv.isMips;
 
@@ -177,7 +177,7 @@ stdenv.mkDerivation ({
 
   postPatch =
     if (stdenv.isGNU
-        || (libcCross != null                  # e.g., building `gcc.hostDrv'
+        || (libcCross != null                  # e.g., building `gcc.crossDrv'
             && libcCross ? crossConfig
             && libcCross.crossConfig == "i586-pc-gnu")
         || (crossGNU && libcCross != null))
@@ -219,7 +219,7 @@ stdenv.mkDerivation ({
       # On NixOS, use the right path to the dynamic linker instead of
       # `/lib/ld*.so'.
       let
-        libc = if (libcCross != null) then libcCross else stdenv.gcc.libc;
+        libc = if libcCross != null then libcCross else stdenv.gcc.libc;
       in
         '' echo "fixing the \`GLIBC_DYNAMIC_LINKER' and \`UCLIBC_DYNAMIC_LINKER' macros..."
            for header in "gcc/config/"*-gnu.h "gcc/config/"*"/"*.h
@@ -235,7 +235,7 @@ stdenv.mkDerivation ({
   inherit noSysDirs staticCompiler langJava crossStageStatic
     libcCross crossMingw;
 
-  buildNativeInputs = [ texinfo which gettext ]
+  nativeBuildInputs = [ texinfo which gettext ]
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkgconfig);
 
@@ -278,7 +278,7 @@ stdenv.mkDerivation ({
     --with-gmp=${gmp}
     --with-mpfr=${mpfr}
     --with-mpc=${mpc}
-    ${if (libelf != null) then "--with-libelf=${libelf}" else ""}
+    ${if libelf != null then "--with-libelf=${libelf}" else ""}
     --disable-libstdcxx-pch
     --without-included-gettext
     --with-system-zlib
@@ -297,12 +297,12 @@ stdenv.mkDerivation ({
     ${ # Trick that should be taken out once we have a mips64el-linux not loongson2f
       if cross == null && stdenv.system == "mips64el-linux" then "--with-arch=loongson2f" else ""}
     ${if langAda then " --enable-libada" else ""}
-    ${if (cross == null && stdenv.isi686) then "--with-arch=i686" else ""}
+    ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
     ${if cross != null then crossConfigureFlags else ""}
     ${if !bootstrap then "--disable-bootstrap" else ""}
   ";
 
-  targetConfig = if (cross != null) then cross.config else null;
+  targetConfig = if cross != null then cross.config else null;
 
   buildFlags = if bootstrap then
     (if profiledCompiler then "profiledbootstrap" else "bootstrap")
@@ -330,13 +330,13 @@ stdenv.mkDerivation ({
     configureFlags = ''
       ${if enableMultilib then "" else "--disable-multilib"}
       ${if enableShared then "" else "--disable-shared"}
-      ${if ppl != null then "--with-ppl=${ppl.hostDrv}" else ""}
-      ${if cloog != null then "--with-cloog=${cloog.hostDrv} --enable-cloog-backend=isl" else ""}
-      ${if langJava then "--with-ecj-jar=${javaEcj.hostDrv}" else ""}
+      ${if ppl != null then "--with-ppl=${ppl.crossDrv}" else ""}
+      ${if cloog != null then "--with-cloog=${cloog.crossDrv} --enable-cloog-backend=isl" else ""}
+      ${if langJava then "--with-ecj-jar=${javaEcj.crossDrv}" else ""}
       ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
-      ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.hostDrv}" else ""}
-      --with-gmp=${gmp.hostDrv}
-      --with-mpfr=${mpfr.hostDrv}
+      ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.crossDrv}" else ""}
+      --with-gmp=${gmp.crossDrv}
+      --with-mpfr=${mpfr.crossDrv}
       --disable-libstdcxx-pch
       --without-included-gettext
       --with-system-zlib
@@ -353,7 +353,7 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
-      ${if (cross == null && stdenv.isi686) then "--with-arch=i686" else ""}
+      ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
       ${if cross != null then crossConfigureFlags else ""}
       --target=${stdenv.cross.config}
     '';

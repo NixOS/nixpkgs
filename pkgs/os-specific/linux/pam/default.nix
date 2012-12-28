@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hlz2kqvbjisvwyicdincq7nz897b9rrafyzccwzqiqg53b8gf5s";
   };
 
-  buildNativeInputs = [ flex ];
+  nativeBuildInputs = [ flex ];
 
   buildInputs = [ cracklib ]
     ++ stdenv.lib.optional
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     # Skip libxcrypt cross-building, as it fails for mips and arm
-    propagatedBuildInputs = [ flex.hostDrv cracklib.hostDrv ];
+    propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
     preConfigure = preConfigure + ''
-      ar x ${flex.hostDrv}/lib/libfl.a
+      ar x ${flex.crossDrv}/lib/libfl.a
       mv libyywrap.o libyywrap-target.o
       ar x ${flex}/lib/libfl.a
       mv libyywrap.o libyywrap-host.o

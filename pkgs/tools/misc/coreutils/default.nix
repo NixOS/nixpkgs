@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rx9x3fp848w4nny7irdkcpkan9fcx24d99v5dkwgkyq7wc76f5d";
   };
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
   buildInputs = [ gmp ]
     ++ stdenv.lib.optional aclSupport acl
     ++ stdenv.lib.optional selinuxSupport libselinux
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   crossAttrs = ({
     buildInputs = [ gmp ]
-      ++ stdenv.lib.optional aclSupport acl.hostDrv
-      ++ stdenv.lib.optional selinuxSupport libselinux.hostDrv
-      ++ stdenv.lib.optional selinuxSupport libsepol.hostDrv
+      ++ stdenv.lib.optional aclSupport acl.crossDrv
+      ++ stdenv.lib.optional selinuxSupport libselinux.crossDrv
+      ++ stdenv.lib.optional selinuxSupport libsepol.crossDrv
       ++ stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
-        stdenv.gccCross.libc.libiconv.hostDrv;
+        stdenv.gccCross.libc.libiconv.crossDrv;
 
     # Needed for fstatfs()
     # I don't know why it is not properly detected cross building with glibc.

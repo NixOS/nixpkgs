@@ -14,7 +14,7 @@ composableDerivation.composableDerivation {} {
 
   propagatedBuildInputs = [ x11 inputproto libXi freeglut ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   flags =
     # this could be tidied up (?).. eg why does it require freeglut without glSupport?

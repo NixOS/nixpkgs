@@ -7,7 +7,7 @@ kde {
     jasper libidn mediastreamer msilbc libxml2 libxslt giflib libgadu boost qca2
     gpgme sqlite ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   KDEDIRS = libktorrent;
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n64hpmsccvicagvr0c6v0kgp2yw0kgnd3jvsyd26cnwgs7c6kkq";
   };
 
-  buildNativeInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ stdenv.lib.optional doCheck qemu;
 

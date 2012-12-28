@@ -1,4 +1,4 @@
-{ system, allPackages ? import ../../.. }:
+{ system, allPackages ? import ../../.., config }:
 
 rec {
 
@@ -98,7 +98,7 @@ rec {
 
       fetchurlBoot = fetchurl;
 
-      inherit system shell gcc overrides;
+      inherit system shell gcc overrides config;
     };
 
 

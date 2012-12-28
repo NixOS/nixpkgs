@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals enableX11 [ libX11 libXau libXt ]
     ++ stdenv.lib.optional enableDirectFB [ directfb ];
 
-  buildNativeInputs = [ pkgconfig bzip2 ];
+  nativeBuildInputs = [ pkgconfig bzip2 ];
 
   configureFlags = [ "--with-ssl" ]
     ++ stdenv.lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"

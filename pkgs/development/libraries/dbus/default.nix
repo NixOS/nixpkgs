@@ -17,7 +17,7 @@ in rec {
   libs = stdenv.mkDerivation {
     name = "dbus-library-" + version;
 
-    buildNativeInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
 
     buildInputs = [ expat ];
 
@@ -48,7 +48,7 @@ in rec {
 
     configureFlags = "${configureFlags} --with-dbus-daemondir=${daemon}/bin";
 
-    buildNativeInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
 
     buildInputs = [ expat libs ]
       ++ stdenv.lib.optionals useX11 [ libX11 libICE libSM ];
