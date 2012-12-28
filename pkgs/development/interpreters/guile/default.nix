@@ -14,7 +14,7 @@
     sha256 = "0f53pxkia4v17n0avwqlcjpy0n89hkazm2xsa6p84lv8k6k8y9vg";
   };
 
-  buildNativeInputs = [ makeWrapper gawk pkgconfig ];
+  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
   propagatedBuildInputs = [ gmp boehmgc ]
 
@@ -25,7 +25,7 @@
     ++ [ libtool libunistring ];
 
   # A native Guile 2.0 is needed to cross-build Guile.
-  selfBuildNativeInput = true;
+  selfNativeBuildInput = true;
 
   enableParallelBuilding = true;
 

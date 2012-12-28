@@ -102,7 +102,7 @@ python.stdenv.mkDerivation (attrs // {
       fi
 
       createBuildInputsPth build-inputs "$buildInputStrings"
-      for inputsfile in propagated-build-inputs propagated-build-native-inputs; do
+      for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
         if test -e $out/nix-support/$inputsfile; then
             createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
         fi

@@ -47,9 +47,9 @@ let
       " --enable-threads=posix" +
       " --enable-nls"
       );
-  stageNameAddon = if (crossStageStatic) then "-stage-static" else
+  stageNameAddon = if crossStageStatic then "-stage-static" else
     "-stage-final";
-  crossNameAddon = if (cross != null) then "-${cross.config}" + stageNameAddon else "";
+  crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
 in
 
 stdenv.mkDerivation ({
@@ -85,7 +85,7 @@ stdenv.mkDerivation ({
     
   inherit noSysDirs profiledCompiler staticCompiler crossStageStatic
     binutilsCross libcCross;
-  targetConfig = if (cross != null) then cross.config else null;
+  targetConfig = if cross != null then cross.config else null;
 
   buildInputs = [texinfo gmp mpfr]
     ++ (optionals langTreelang [bison flex])
@@ -129,7 +129,7 @@ stdenv.mkDerivation ({
       enableMultilib; };
 
   # ghdl does not build fine with parallel building
-  enableParallelBuilding = if langVhdl then false else true;
+  enableParallelBuilding = !langVhdl;
 
   meta = {
     homepage = "http://gcc.gnu.org/";

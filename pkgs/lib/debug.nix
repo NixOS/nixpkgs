@@ -95,7 +95,7 @@ rec {
           else if isInt x then true
           else if x == null then true
           else true; # a (store) path?
-    in if (traverse x) then x else throw "else never reached";
+    in if traverse x then x else throw "else never reached";
 
   # example: (traceCallXml "myfun" id 3) will output something like
   # calling myfun arg 1: 3 result: 3

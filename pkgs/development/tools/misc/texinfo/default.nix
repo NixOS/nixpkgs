@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
-  buildNativeInputs = [ lzma ];
+  nativeBuildInputs = [ lzma ];
 
   # Disabled because we don't have zdiff in the stdenv bootstrap.
   #doCheck = true;

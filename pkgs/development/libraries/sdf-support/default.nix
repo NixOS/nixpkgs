@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = if isMingw then [./mingw.patch] else [];
 
   buildInputs = [aterm toolbuslib errorSupport ptSupport];
-  buildNativeInputs = [pkgconfig];  
+  nativeBuildInputs = [pkgconfig];  
 
   dontStrip = isMingw;
 } 

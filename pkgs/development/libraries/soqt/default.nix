@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ coin3d qt4 ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://www.coin3d.org/;

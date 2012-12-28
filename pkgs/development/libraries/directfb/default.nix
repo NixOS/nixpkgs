@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   patches = [ ./ftbfs.patch ];
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [ zlib libjpeg freetype giflib libpng ]
     ++ stdenv.lib.optional enableSDL SDL

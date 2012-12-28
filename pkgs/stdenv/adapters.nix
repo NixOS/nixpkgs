@@ -20,7 +20,7 @@ rec {
   # for other dependencies.
   overrideInStdenv = stdenv: pkgs: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args //
-        { buildInputs = (if args ? buildInputs then args.buildInputs else []) ++ pkgs; }
+        { buildInputs = args.buildInputs or [] ++ pkgs; }
       );
     };
 
@@ -48,11 +48,11 @@ rec {
         # These are added *after* the command-line flags, so we'll
         # always optimise for size.
         NIX_CFLAGS_COMPILE =
-          (if args ? NIX_CFLAGS_COMPILE then args.NIX_CFLAGS_COMPILE else "")
+          args.NIX_CFLAGS_COMPILE or ""
           + " -Os -s -D_BSD_SOURCE=1";
 
         configureFlags =
-          (if args ? configureFlags then args.configureFlags else "")
+          args.configureFlags or ""
           + " --disable-shared"; # brrr...
 
         NIX_GCC = import ../build-support/gcc-wrapper {
@@ -75,12 +75,10 @@ rec {
         # These are added *after* the command-line flags, so we'll
         # always optimise for size.
         NIX_CFLAGS_COMPILE =
-          (if args ? NIX_CFLAGS_COMPILE then args.NIX_CFLAGS_COMPILE else "")
-          + " -Os -s";
+          args.NIX_CFLAGS_COMPILE or "" + " -Os -s";
 
         configureFlags =
-          (if args ? configureFlags then args.configureFlags else "")
-          + " --disable-shared"; # brrr...
+          args.configureFlags or "" + " --disable-shared"; # brrr...
 
         NIX_GCC = runCommand "klibc-wrapper" {} ''
           mkdir -p $out/bin
@@ -100,9 +98,8 @@ rec {
   makeStaticBinaries = stdenv: stdenv //
     { mkDerivation = args: stdenv.mkDerivation (args // {
         NIX_CFLAGS_LINK = "-static";
-
         configureFlags =
-          (if args ? configureFlags then toString args.configureFlags else "")
+          toString args.configureFlags or ""
           + " --disable-shared"; # brrr...
       });
       isStatic = true;
@@ -115,7 +112,7 @@ rec {
     { mkDerivation = args: stdenv.mkDerivation (args // {
         dontDisableStatic = true;
         configureFlags =
-          (if args ? configureFlags then toString args.configureFlags else "")
+          toString args.configureFlags or ""
           + " --enable-static --disable-shared";
       });
     } // {inherit fetchurl;};
@@ -124,62 +121,60 @@ rec {
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
-    { mkDerivation = {name ? "", buildInputs ? [], buildNativeInputs ? [],
-            propagatedBuildInputs ? [], propagatedBuildNativeInputs ? [],
-            selfBuildNativeInput ? false, ...}@args: let
+    { mkDerivation = {name ? "", buildInputs ? [], nativeBuildInputs ? [],
+            propagatedBuildInputs ? [], propagatedNativeBuildInputs ? [],
+            selfNativeBuildInput ? false, ...}@args: let
 
             # *BuildInputs exists temporarily as another name for
             # *HostInputs.
 
             # In nixpkgs, sometimes 'null' gets in as a buildInputs element,
             # and we handle that through isAttrs.
-            getBuildDrv = drv : if (builtins.isAttrs drv && drv ? buildDrv) then drv.buildDrv else drv;
-            getHostDrv = drv : if (builtins.isAttrs drv && drv ? hostDrv) then drv.hostDrv else drv;
-            buildNativeInputsDrvs = map (getBuildDrv) buildNativeInputs;
-            buildInputsDrvs = map (getHostDrv) buildInputs;
-            buildInputsDrvsAsBuildInputs = map (getBuildDrv) buildInputs;
-            propagatedBuildInputsDrvs = map (getHostDrv) (propagatedBuildInputs);
-            propagatedBuildNativeInputsDrvs = map (getBuildDrv)
-                (propagatedBuildNativeInputs);
+            getNativeDrv = drv: drv.nativeDrv or drv;
+            getCrossDrv = drv: drv.crossDrv or drv;
+            nativeBuildInputsDrvs = map getNativeDrv nativeBuildInputs;
+            buildInputsDrvs = map getCrossDrv buildInputs;
+            buildInputsDrvsAsBuildInputs = map getNativeDrv buildInputs;
+            propagatedBuildInputsDrvs = map getCrossDrv propagatedBuildInputs;
+            propagatedNativeBuildInputsDrvs = map getNativeDrv propagatedNativeBuildInputs;
 
-            # The base stdenv already knows that buildNativeInputs and
+            # The base stdenv already knows that nativeBuildInputs and
             # buildInputs should be built with the usual gcc-wrapper
             # And the same for propagatedBuildInputs.
-            buildDrv = stdenv.mkDerivation args;
+            nativeDrv = stdenv.mkDerivation args;
 
             # Temporary expression until the cross_renaming, to handle the
             # case of pkgconfig given as buildInput, but to be used as
-            # buildNativeInput.
-            hostAsBuildDrv = drv: builtins.unsafeDiscardStringContext
-                drv.buildDrv.drvPath == builtins.unsafeDiscardStringContext
-                drv.hostDrv.drvPath;
+            # nativeBuildInput.
+            hostAsNativeDrv = drv:
+                builtins.unsafeDiscardStringContext drv.nativeDrv.drvPath
+                == builtins.unsafeDiscardStringContext drv.crossDrv.drvPath;
             buildInputsNotNull = stdenv.lib.filter
-                (drv: builtins.isAttrs drv && drv ? buildDrv) buildInputs;
-            nativeInputsFromBuildInputs = stdenv.lib.filter (hostAsBuildDrv) buildInputsNotNull;
+                (drv: builtins.isAttrs drv && drv ? nativeDrv) buildInputs;
+            nativeInputsFromBuildInputs = stdenv.lib.filter hostAsNativeDrv buildInputsNotNull;
 
-            # We should overwrite the input attributes in hostDrv, to overwrite
+            # We should overwrite the input attributes in crossDrv, to overwrite
             # the defaults for only-native builds in the base stdenv
-            hostDrv = if (cross == null) then buildDrv else
+            crossDrv = if cross == null then nativeDrv else
                 stdenv.mkDerivation (args // {
                     name = name + "-" + cross.config;
-                    buildNativeInputs = buildNativeInputsDrvs
+                    nativeBuildInputs = nativeBuildInputsDrvs
                       ++ nativeInputsFromBuildInputs
                       ++ [ gccCross binutilsCross ] ++
-                      stdenv.lib.optional selfBuildNativeInput buildDrv;
+                      stdenv.lib.optional selfNativeBuildInput nativeDrv;
 
                     # Cross-linking dynamic libraries, every buildInput should
                     # be propagated because ld needs the -rpath-link to find
                     # any library needed to link the program dynamically at
                     # loader time. ld(1) explains it.
                     buildInputs = [];
-                    propagatedBuildInputs = propagatedBuildInputsDrvs ++
-                      buildInputsDrvs;
-                    propagatedBuildNativeInputs = propagatedBuildNativeInputsDrvs;
+                    propagatedBuildInputs = propagatedBuildInputsDrvs ++ buildInputsDrvs;
+                    propagatedNativeBuildInputs = propagatedNativeBuildInputsDrvs;
 
                     crossConfig = cross.config;
-                } // (if args ? crossAttrs then args.crossAttrs else {}));
-        in buildDrv // {
-            inherit hostDrv buildDrv;
+                } // args.crossAttrs or {});
+        in nativeDrv // {
+          inherit crossDrv nativeDrv;
         };
     } // {
       inherit cross gccCross binutilsCross;
@@ -297,14 +292,9 @@ rec {
           pkg = stdenv.mkDerivation args;
           printDrvPath = val: let
             drvPath = builtins.unsafeDiscardStringContext pkg.drvPath;
-            license =
-              if pkg ? meta && pkg.meta ? license then
-                pkg.meta.license
-              else
-                null;
+            license = pkg.meta.license or null;
           in
-            builtins.trace "@:drv:${toString drvPath}:${builtins.toString license}:@"
-              val;
+            builtins.trace "@:drv:${toString drvPath}:${builtins.toString license}:@" val;
         in pkg // {
           outPath = printDrvPath pkg.outPath;
           drvPath = printDrvPath pkg.drvPath;
@@ -333,15 +323,12 @@ rec {
           pkg = stdenv.mkDerivation args;
           drv = builtins.unsafeDiscardStringContext pkg.drvPath;
           license =
-            if pkg ? meta && pkg.meta ? license then
-              pkg.meta.license
-            else if pkg ? outputHash then
+            pkg.meta.license or
               # Fixed-output derivations such as source tarballs usually
               # don't have licensing information, but that's OK.
-              null
-            else
-              builtins.trace
-                "warning: ${drv} lacks licensing information" null;
+              (pkg.outputHash or
+                (builtins.trace
+                  "warning: ${drv} lacks licensing information" null));
 
           validate = arg:
             if licensePred license then arg

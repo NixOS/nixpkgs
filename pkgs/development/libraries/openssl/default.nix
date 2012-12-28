@@ -48,7 +48,7 @@ stdenv.mkDerivation {
 
   buildInputs = stdenv.lib.optional withCryptodev cryptodevHeaders;
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   # On x86_64-darwin, "./config" misdetects the system as
   # "darwin-i386-cc".  So specify the system type explicitly.

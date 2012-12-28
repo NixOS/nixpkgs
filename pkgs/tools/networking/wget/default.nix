@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
        done
     '';
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
   buildInputs =
     stdenv.lib.optionals doCheck [ perl LWP ]
     ++ stdenv.lib.optional (gnutls != null) gnutls;

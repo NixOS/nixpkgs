@@ -2,7 +2,7 @@
 
 kde {
   buildInputs = [ smokeqt perl ];
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   patches =
     # The order is important

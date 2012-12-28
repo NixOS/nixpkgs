@@ -46,7 +46,7 @@ stdenv.mkDerivation {
        make install -C doc
     '';
 
-  buildNativeInputs = [ gnum4 texinfo texLive automake ];
+  nativeBuildInputs = [ gnum4 texinfo texLive automake ];
 
   # XXX: The `check' target doesn't exist.
   doCheck = false;

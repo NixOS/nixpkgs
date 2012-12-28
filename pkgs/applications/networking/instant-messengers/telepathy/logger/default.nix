@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ dbus_glib libxml2 sqlite telepathy_glib pkgconfig intltool ];
 
-  buildNativeInputs = [ libxslt ];
+  nativeBuildInputs = [ libxslt ];
 
   configureFlags = "--enable-call";
 

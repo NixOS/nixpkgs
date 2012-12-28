@@ -1,6 +1,5 @@
 { system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
-, extraAttrs ? {}, overrides ? (pkgs: {})
-, withNixImpure ? false
+, extraAttrs ? {}, overrides ? (pkgs: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -27,7 +26,7 @@ let
 
         setup = setupScript;
 
-        inherit preHook initialPath gcc shell withNixImpure;
+        inherit preHook initialPath gcc shell;
 
         propagatedUserEnvPkgs = [gcc] ++
           lib.filter lib.isDerivation initialPath;
@@ -49,9 +48,9 @@ let
             (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
             // (let
               buildInputs = attrs.buildInputs or [];
-              buildNativeInputs = attrs.buildNativeInputs or [];
+              nativeBuildInputs = attrs.nativeBuildInputs or [];
               propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-              propagatedBuildNativeInputs = attrs.propagatedBuildNativeInputs or [];
+              propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
               crossConfig = attrs.crossConfig or null;
             in
             {
@@ -59,15 +58,16 @@ let
               args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
               stdenv = result;
               system = result.system;
+              userHook = config.stdenv.userHook or null;
 
               # Inputs built by the cross compiler.
               buildInputs = lib.optionals (crossConfig != null) buildInputs;
               propagatedBuildInputs = lib.optionals (crossConfig != null)
                   propagatedBuildInputs;
               # Inputs built by the usual native compiler.
-              buildNativeInputs = buildNativeInputs ++ lib.optionals
+              nativeBuildInputs = nativeBuildInputs ++ lib.optionals
                 (crossConfig == null) buildInputs;
-              propagatedBuildNativeInputs = propagatedBuildNativeInputs ++
+              propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
                 lib.optionals (crossConfig == null) propagatedBuildInputs;
             }))
           )

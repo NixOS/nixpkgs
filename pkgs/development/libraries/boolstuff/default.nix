@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0akwb57lnzq1ak32k6mdxbma2gj0pqhj8y9m6hq79djb9s3mxvmn";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = { 
     description = "Library for operations on boolean expression binary trees";

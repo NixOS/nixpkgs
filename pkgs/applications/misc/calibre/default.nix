@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   inherit python;
 
-  buildNativeInputs = [ makeWrapper pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   buildInputs =
     [ python pyqt4 sip popplerQt4 libpng imagemagick libjpeg

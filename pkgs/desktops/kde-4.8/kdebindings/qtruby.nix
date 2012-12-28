@@ -2,7 +2,7 @@
 
 kde {
   buildInputs = [ smokeqt ruby ];
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   # The second patch is not ready for upstream submmission. I should add an
   # option() instead.

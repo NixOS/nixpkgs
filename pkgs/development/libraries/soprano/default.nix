@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   # We disable the Java backend, since we do not need them and they make the closure size much bigger
   buildInputs = [ qt4 clucene_core librdf_redland libiodbc ];
 
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
     homepage = http://soprano.sourceforge.net/;

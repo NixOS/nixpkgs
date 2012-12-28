@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "2f7c2d27e240b6a43ebfba330127072e3fb1473c17dbfc5e9662ea589dfd16e5";
   };
 
-  buildNativeInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ curl openssl boehmgc sqlite ];
 
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     postUnpack =
-      '' export CPATH="${bzip2.hostDrv}/include"
-         export NIX_CROSS_LDFLAGS="-L${bzip2.hostDrv}/lib -rpath-link ${bzip2.hostDrv}/lib $NIX_CROSS_LDFLAGS"
+      '' export CPATH="${bzip2.crossDrv}/include"
+         export NIX_CROSS_LDFLAGS="-L${bzip2.crossDrv}/lib -rpath-link ${bzip2.crossDrv}/lib $NIX_CROSS_LDFLAGS"
       '';
 
     configureFlags =

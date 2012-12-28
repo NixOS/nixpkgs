@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "08x1p8xhl65r79a6gn1fi63z1lspd5j55l05diiyzcwfxvqwsm47";
   };
   
-  buildNativeInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [ libgphoto2 libexif popt libjpeg readline libtool ];
   
   meta = {

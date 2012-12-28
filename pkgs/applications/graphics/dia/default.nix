@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       libxslt docbook_xsl libart_lgpl
     ] ++ stdenv.lib.optional withGNOME libgnomeui;
 
-  buildNativeInputs = [ pkgconfig intltool perl ];
+  nativeBuildInputs = [ pkgconfig intltool perl ];
 
   configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
 

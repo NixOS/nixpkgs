@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "12v0cpq9j2gmagr9pbw08karqwqgl4j9r223w7x7sx5cfvj2cih8";
   };
 
-  buildNativeInputs = [ scons which ];
+  nativeBuildInputs = [ scons which ];
 
   patches = [ installerPatch ];
 

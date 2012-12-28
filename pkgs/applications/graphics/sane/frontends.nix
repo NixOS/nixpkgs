@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [saneBackends libX11 gtk pkgconfig] ++
-	(if (libusb != null) then [libusb] else []);
+	(if libusb != null then [libusb] else []);
 
   meta = {
     homepage = "http://www.sane-project.org/";

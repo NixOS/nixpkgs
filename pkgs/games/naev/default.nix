@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ SDL SDL_mixer openal libxml2 libvorbis libpng mesa zlib ];
 
-  buildNativeInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
   NIX_CFLAGS_COMPILE="-include ${zlib}/include/zlib.h";
 

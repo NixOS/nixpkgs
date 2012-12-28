@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   
   propagatedBuildInputs = [ libgpgerror glib libassuan pth ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = "--with-gpg=${gpgPath}";
 }

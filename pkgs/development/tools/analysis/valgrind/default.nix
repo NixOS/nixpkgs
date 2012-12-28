@@ -10,7 +10,7 @@ stdenv.mkDerivation (rec {
 
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
   buildInputs = stdenv.lib.optional (!stdenv.isDarwin) gdb;
 
   configureFlags =

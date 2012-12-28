@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     --enable-final
   '';
 
-  buildNativeInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig perl ];
 
   buildInputs =
     [glib kdelibs libX11 libXext zlib libjpeg libpng qt3];

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   # BUILD_OUL wants old linux headers for videodev.h, not available
   # in stdenv linux headers
   cmakeFlags = "-DBUILD_TESTING=OFF -DBUILD_OUL=OFF "
-    + (if (stdenv.system == "x86_64-linux") then
+    + (if stdenv.system == "x86_64-linux" then
       "-DCMAKE_CXX_FLAGS=-fPIC -DCMAKE_C_FLAGS=-fPIC"
     else
       "");

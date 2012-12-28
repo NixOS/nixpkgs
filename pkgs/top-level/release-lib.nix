@@ -65,7 +65,7 @@ rec {
 
   /* Similar to the testOn function, but with an additional 'crossSystem'
    * parameter for allPackages, defining the target platform for cross builds,
-   * and triggering the build of the host derivation (cross built - hostDrv). */
+   * and triggering the build of the host derivation (cross built - crossDrv). */
   mapTestOnCross = crossSystem: pkgs.lib.mapAttrsRecursiveCond
     (as: !(as ? type && as.type == "job"))
     (path: value:

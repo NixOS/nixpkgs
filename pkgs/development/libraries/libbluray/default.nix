@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     sha256 = "551b623e76c2dba44b5490fb42ccdc491b28cd42841de28237b8edbed0f0711c";
   };
 
-  buildNativeInputs = [autoconf automake libtool];
+  nativeBuildInputs = [autoconf automake libtool];
   buildInputs = stdenv.lib.optionals withAACS [jdk ant libaacs];
   NIX_LDFLAGS = stdenv.lib.optionalString withAACS "-laacs";
 

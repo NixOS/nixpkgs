@@ -15,7 +15,7 @@ kde {
       libusb python libqalculate consolekit kdepimlibs pam prison akonadi
     ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   preConfigure =
    ''

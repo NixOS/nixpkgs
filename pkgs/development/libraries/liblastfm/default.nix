@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   prefixKey = "--prefix ";
   propagatedBuildInputs = [ qt4 libsamplerate fftwSinglePrec ];
-  buildNativeInputs = [ ruby pkgconfig which ];
+  nativeBuildInputs = [ ruby pkgconfig which ];
 
   configureFlags = "--release";
 

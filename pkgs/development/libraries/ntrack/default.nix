@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libnl qt4 ];
 
-  buildNativeInputs = [ pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig python ];
 
   configureFlags = "--without-gobject CFLAGS=--std=gnu99";
 
