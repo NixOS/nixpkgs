@@ -7,7 +7,9 @@
   curl = ../armv5tel/curl.bz2;
 
   bootstrapTools = {
+    # Built from make-bootstrap-tools-crosspi.nix
+    # nixpkgs rev f2f50c42d2c705dc59465c070f5259a4ad00cf4c
     url = http://viric.name/tmp/nix/pi/bootstrap-tools.cpio.bz2;
-    sha256 = "01s4z461jv9plsxwkspjakdvjxzd5pd84i73nc2ynag5hmjyj63d";
+    sha256 = "1mpl4qgij43xiqhn173glz3ysrf3l3bnwvz07fiqr7lfmd7g54p5";
   };
 }
