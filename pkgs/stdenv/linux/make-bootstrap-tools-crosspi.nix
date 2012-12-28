@@ -1,49 +1,49 @@
 {system ? builtins.currentSystem}:
 
 let
-  pkgsFun = import <nixpkgs/default.nix>;   # The root nixpkgs default.nix
+  pkgsFun = import ../../top-level/all-packages.nix;
   pkgsNoParams = pkgsFun {};
   raspberrypiCrossSystem = {
     crossSystem = {
-        config = "armv6l-unknown-linux-gnueabi";  
-        bigEndian = false;
-        arch = "arm";
-        float = "hard";
+      config = "armv6l-unknown-linux-gnueabi";  
+      bigEndian = false;
+      arch = "arm";
+      float = "hard";
+      fpu = "vfp";
+      withTLS = true;
+      libc = "glibc";
+      platform = pkgsNoParams.platforms.raspberrypi;
+      openssl.system = "linux-generic32";
+      gcc = {
+        arch = "armv6";
         fpu = "vfp";
-        withTLS = true;
-        libc = "glibc";
-        platform = pkgsNoParams.platforms.raspberrypi;
-        openssl.system = "linux-generic32";
-	gcc = {
-          arch = "armv6";
-          fpu = "vfp";
-          float = "hard";
-	};
+        float = "hard";
+      };
     };
   };
 
   raspberrypiCrossSystemUclibc = {
     crossSystem = {
-        config = "armv6l-unknown-linux-gnueabi";  
-        bigEndian = false;
-        arch = "arm";
-        float = "hard";
+      config = "armv6l-unknown-linux-gnueabi";  
+      bigEndian = false;
+      arch = "arm";
+      float = "hard";
+      fpu = "vfp";
+      withTLS = true;
+      libc = "uclibc";
+      platform = pkgsNoParams.platforms.raspberrypi;
+      openssl.system = "linux-generic32";
+      gcc = {
+        arch = "armv6";
         fpu = "vfp";
-        withTLS = true;
-        libc = "uclibc";
-        platform = pkgsNoParams.platforms.raspberrypi;
-        openssl.system = "linux-generic32";
-	gcc = {
-          arch = "armv6";
-          fpu = "vfp";
-          float = "hard";
-	};
-	uclibc.extraConfig = ''
-	  ARCH_WANTS_BIG_ENDIAN n
-	  ARCH_BIG_ENDIAN n
-	  ARCH_WANTS_LITTLE_ENDIAN y
-	  ARCH_LITTLE_ENDIAN y
-	'';
+        float = "hard";
+      };
+      uclibc.extraConfig = ''
+        ARCH_WANTS_BIG_ENDIAN n
+        ARCH_BIG_ENDIAN n
+        ARCH_WANTS_LITTLE_ENDIAN y
+        ARCH_LITTLE_ENDIAN y
+      '';
     };
   };
 
