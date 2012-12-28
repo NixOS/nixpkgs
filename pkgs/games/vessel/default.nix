@@ -51,6 +51,13 @@ stdenv.mkDerivation rec {
       --set-rpath $libPath:$out/libexec/strangeloop/vessel/x86/ \
       $out/libexec/strangeloop/vessel/x86/vessel.x86
 
+    # we need to libs to find their deps
+    for lib in $out/libexec/strangeloop/vessel/x86/lib* ; do
+    patchelf \
+      --set-rpath $libPath:$out/libexec/strangeloop/vessel/x86/ \
+      $lib
+    done
+
     cat > $out/bin/Vessel << EOW
     #!/bin/sh
     cd $out/libexec/strangeloop/vessel/
