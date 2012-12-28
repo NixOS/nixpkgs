@@ -1,7 +1,7 @@
 # Run the named hook, either by calling the function with that name or
 # by evaluating the variable with that name.  This allows convenient
 # setting of hooks both from Nix expressions (as attributes /
-# environment variables) and from shell scripts (as functions). 
+# environment variables) and from shell scripts (as functions).
 runHook() {
     local hookName="$1"
     case "$(type -t $hookName)" in
@@ -29,10 +29,10 @@ exitHandler() {
         # - system time for all child processes
         echo "build time elapsed: " ${times[*]}
     fi
-    
+
     if [ $exitCode != 0 ]; then
         runHook failureHook
-    
+
         # If the builder had a non-zero exit code and
         # $succeedOnFailure is set, create the file
         # `$out/nix-support/failed' to signal failure, and exit
@@ -43,11 +43,11 @@ exitHandler() {
             echo -n $exitCode > "$out/nix-support/failed"
             exit 0
         fi
-        
+
     else
         runHook exitHook
     fi
-    
+
     exit $exitCode
 }
 
@@ -462,7 +462,7 @@ unpackFile() {
 
 unpackPhase() {
     runHook preUnpack
-    
+
     if [ -z "$srcs" ]; then
         if [ -z "$src" ]; then
             echo 'variable $src or $srcs should point to the source'
@@ -529,9 +529,9 @@ unpackPhase() {
 
 patchPhase() {
     runHook prePatch
-    
+
     if [ -z "$patchPhase" -a -z "$patches" ]; then return; fi
-    
+
     for i in $patches; do
         header "applying patch $i" 3
         local uncompress=cat
@@ -728,7 +728,7 @@ fixupPhase() {
         if [ -n "$stripDebugList" ]; then
             stripDirs "$stripDebugList" "${stripDebugFlags:--S}"
         fi
-        
+
         stripAllList=${stripAllList:-}
         if [ -n "$stripAllList" ]; then
             stripDirs "$stripAllList" "${stripAllFlags:--s}"
@@ -844,7 +844,7 @@ genericBuild() {
 
         showPhaseHeader "$curPhase"
         dumpVars
-        
+
         # Evaluate the variable named $curPhase if it exists, otherwise the
         # function named $curPhase.
         eval "${!curPhase:-$curPhase}"
@@ -852,7 +852,7 @@ genericBuild() {
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
         fi
-        
+
         if [ -n "$tracePhases" ]; then
             echo
             echo "@ phase-succeeded $out $curPhase"
