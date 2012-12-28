@@ -222,7 +222,7 @@ let
       else
         defaultStdenv;
 
-  forceNativeDrv = drv : if (crossSystem == null) then drv else
+  forceNativeDrv = drv : if crossSystem == null then drv else
     (drv // { crossDrv = drv.nativeDrv; });
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
@@ -2422,10 +2422,10 @@ let
     jreOnly = true;
   };
 
-  jdk = if (stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+  jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjdk
     else pkgs.oraclejdk;
-  jre = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+  jre = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjre
     else pkgs.oraclejre;
 
@@ -3658,11 +3658,11 @@ let
   };
 
   # We can choose:
-  libcCrossChooser = name : if (name == "glibc") then glibcCross
-    else if (name == "uclibc") then uclibcCross
-    else if (name == "msvcrt" && stdenv.cross.config == "x86_64-w64-mingw32") then
+  libcCrossChooser = name : if name == "glibc" then glibcCross
+    else if name == "uclibc" then uclibcCross
+    else if name == "msvcrt" && stdenv.cross.config == "x86_64-w64-mingw32" then
       windows.mingw_w64
-    else if (name == "msvcrt") then windows.mingw_headers3
+    else if name == "msvcrt" then windows.mingw_headers3
     else throw "Unknown libc";
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
@@ -4184,14 +4184,14 @@ let
 
   libiconv = callPackage ../development/libraries/libiconv { };
 
-  libiconvOrEmpty = if (libiconvOrNull == null) then [] else [libiconv];
+  libiconvOrEmpty = if libiconvOrNull == null then [] else [libiconv];
 
   libiconvOrNull =
-    if ((gcc ? libc && (gcc.libc != null)) || stdenv.isGlibc)
+    if gcc.libc or null != null || stdenv.isGlibc
     then null
     else libiconv;
 
-  libiconvOrLibc = if (libiconvOrNull == null) then gcc.libc else libiconv;
+  libiconvOrLibc = if libiconvOrNull == null then gcc.libc else libiconv;
 
   libid3tag = callPackage ../development/libraries/libid3tag { };
 
@@ -5699,8 +5699,8 @@ let
   });
 
   # We can choose:
-  linuxHeadersCrossChooser = ver : if (ver == "2.4") then linuxHeaders24Cross
-    else if (ver == "2.6") then linuxHeaders26Cross
+  linuxHeadersCrossChooser = ver : if ver == "2.4" then linuxHeaders24Cross
+    else if ver == "2.6" then linuxHeaders26Cross
     else throw "Unknown linux kernel version";
 
   linuxHeadersCross = assert crossSystem != null;
@@ -5905,10 +5905,10 @@ let
     iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
     iwlwifi4965ucode =
-      (if (builtins.compareVersions kernel.version "2.6.27" == 0)
-          || (builtins.compareVersions kernel.version "2.6.27" == 1)
-       then iwlwifi4965ucodeV2
-       else iwlwifi4965ucodeV1);
+      if (builtins.compareVersions kernel.version "2.6.27" == 0)
+         || (builtins.compareVersions kernel.version "2.6.27" == 1)
+      then iwlwifi4965ucodeV2
+      else iwlwifi4965ucodeV1;
 
     atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
@@ -6188,10 +6188,10 @@ let
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
-  ubootChooser = name : if (name == "upstream") then ubootUpstream
-    else if (name == "sheevaplug") then ubootSheevaplug
-    else if (name == "guruplug") then ubootGuruplug
-    else if (name == "nanonote") then ubootNanonote
+  ubootChooser = name : if name == "upstream" then ubootUpstream
+    else if name == "sheevaplug" then ubootSheevaplug
+    else if name == "guruplug" then ubootGuruplug
+    else if name == "nanonote" then ubootNanonote
     else throw "Unknown uboot";
 
   ubootUpstream = callPackage ../misc/uboot { };
@@ -7515,9 +7515,9 @@ let
   picocom = callPackage ../tools/misc/picocom { };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
-    openssl = if (config.pidgin.openssl or true) then openssl else null;
-    gnutls = if (config.pidgin.gnutls or false) then gnutls else null;
-    libgcrypt = if (config.pidgin.gnutls or false) then libgcrypt else null;
+    openssl = if config.pidgin.openssl or true then openssl else null;
+    gnutls = if config.pidgin.gnutls or false then gnutls else null;
+    libgcrypt = if config.pidgin.gnutls or false then libgcrypt else null;
     inherit (gnome) startupnotification;
   };
 

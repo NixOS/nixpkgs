@@ -27,11 +27,11 @@ let
   # To avoid library name collisions
   layout = if taggedLayout then "tagged" else "system";
 
-  cflags = if (enablePIC && enableExceptions) then
+  cflags = if enablePIC && enableExceptions then
              "cflags=-fPIC -fexceptions cxxflags=-fPIC linkflags=-fPIC"
-           else if (enablePIC) then
+           else if enablePIC then
              "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC"
-           else if (enableExceptions) then
+           else if enableExceptions then
              "cflags=-fexceptions"
            else
              "";

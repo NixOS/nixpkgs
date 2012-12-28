@@ -29,7 +29,7 @@ let
     (enableShared && enableStatic)) then
     "tagged" else "system";
 
-  cflags = if (enablePIC) then "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC" else "";
+  cflags = if enablePIC then "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC" else "";
 
 in
 

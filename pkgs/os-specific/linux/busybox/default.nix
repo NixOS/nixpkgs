@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     extraCrossConfig = ''
       CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cross.config}-"
     '' +
-      (if (stdenv.cross.platform.kernelMajor == "2.4") then ''
+      (if stdenv.cross.platform.kernelMajor == "2.4" then ''
         CONFIG_IONICE n
       '' else "");
   };

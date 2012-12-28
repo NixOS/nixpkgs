@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "13hybl5p0ck0vgi2gxmiwa2810gcfk78kdy17ai8nczj8il15mn0";
   };
 
-  buildPhase = if (!onlyHeaders) then ''
+  buildPhase = if !onlyHeaders then ''
     make -C ${kernel}/lib/modules/${kernel.modDirVersion}/build \
       SUBDIRS=`pwd` INSTALL_PATH=$out
   '' else ":";

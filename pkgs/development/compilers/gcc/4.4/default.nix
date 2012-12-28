@@ -84,9 +84,9 @@ let version = "4.4.6";
         " --enable-nls" +
         " --disable-decimal-float" # No final libdecnumber (it may work only in 386)
         );
-    stageNameAddon = if (crossStageStatic) then "-stage-static" else
+    stageNameAddon = if crossStageStatic then "-stage-static" else
       "-stage-final";
-    crossNameAddon = if (cross != null) then "-${cross.config}" + stageNameAddon else "";
+    crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
 
 in
 
@@ -163,11 +163,11 @@ stdenv.mkDerivation ({
       )
     }
     ${if langAda then " --enable-libada" else ""}
-    ${if (cross == null && stdenv.isi686) then "--with-arch=i686" else ""}
+    ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
     ${if cross != null then crossConfigureFlags else ""}
   ";
 
-  targetConfig = if (cross != null) then cross.config else null;
+  targetConfig = if cross != null then cross.config else null;
 
   # Needed for the cross compilation to work
   AR = "ar";
@@ -211,7 +211,7 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
-      ${if (cross == null && stdenv.isi686) then "--with-arch=i686" else ""}
+      ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
       ${if cross != null then crossConfigureFlags else ""}
       --target=${stdenv.cross.config}
     ";

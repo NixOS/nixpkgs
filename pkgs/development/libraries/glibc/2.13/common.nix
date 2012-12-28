@@ -39,7 +39,7 @@ stdenv.mkDerivation ({
   inherit kernelHeaders installLocales;
 
   # The host/target system.
-  crossConfig = if (cross != null) then cross.config else null;
+  crossConfig = if cross != null then cross.config else null;
 
   inherit (stdenv) is64bit;
 

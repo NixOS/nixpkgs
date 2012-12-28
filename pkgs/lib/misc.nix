@@ -53,7 +53,7 @@ rec {
           f :        # the function applied to the arguments
           initial :  # you pass attrs, the functions below are passing a function taking the fix argument
     let
-        takeFixed = if (isFunction initial) then initial else (fixed : initial); # transform initial to an expression always taking the fixed argument
+        takeFixed = if isFunction initial then initial else (fixed : initial); # transform initial to an expression always taking the fixed argument
         tidy = args : 
             let # apply all functions given in "applyPreTidy" in sequence
                 applyPreTidyFun = fold ( n : a : x : n ( a x ) ) lib.id (maybeAttr "applyPreTidy" [] args);
@@ -106,11 +106,11 @@ rec {
   # shortcut for attrByPath ["name"] default attrs
   maybeAttrNullable = name: default: attrs:
     if attrs == null then default else 
-    if (__hasAttr name attrs) then (__getAttr name attrs) else default;
+    if __hasAttr name attrs then (__getAttr name attrs) else default;
 
   # shortcut for attrByPath ["name"] default attrs
   maybeAttr = name: default: attrs:
-    if (__hasAttr name attrs) then (__getAttr name attrs) else default;
+    if __hasAttr name attrs then (__getAttr name attrs) else default;
 
 
   # Return the second argument if the first one is true or the empty version
@@ -120,14 +120,14 @@ rec {
     else if builtins.isList val then []
     else if builtins.isAttrs val then {}
     # else if builtins.isString val then ""
-    else if (val == true || val == false) then false
+    else if val == true || val == false then false
     else null;
 
     
   # Return true only if there is an attribute and it is true.
   checkFlag = attrSet: name:
-        if (name == "true") then true else
-        if (name == "false") then false else
+        if name == "true" then true else
+        if name == "false" then false else
         if (elem name (attrByPath ["flags"] [] attrSet)) then true else
         attrByPath [name] false attrSet ;
 
@@ -170,7 +170,7 @@ rec {
 
   uniqListExt = {inputList, outputList ? [],
     getter ? (x : x), compare ? (x: y: x==y)}:
-        if (inputList == []) then outputList else
+        if inputList == [] then outputList else
         let x=head inputList; 
         isX = y: (compare (getter y) (getter x));
         newOutputList = outputList ++
@@ -362,7 +362,7 @@ rec {
         cfgWithDefaults = (listToAttrs (map (n : nameValuePair (flagName n) false) (attrNames args2.flags)))
                           // args2.cfg;
         opts = attrValues (mapAttrs (a : v :
-                let v2 = if (v ? set || v ? unset) then v else { set = v; };
+                let v2 = if v ? set || v ? unset then v else { set = v; };
                     n = if (getAttr (flagName a) cfgWithDefaults) then "set" else "unset";
                     attr = maybeAttr n {} v2; in
                 if (maybeAttr "assertion" true attr)
