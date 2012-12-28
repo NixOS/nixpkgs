@@ -32,7 +32,7 @@ rec {
   androidsdk = import ./androidsdk.nix {
     inherit (pkgs) stdenv fetchurl unzip makeWrapper;
     inherit (pkgs) freetype fontconfig gtk atk;
-    inherit (pkgs.xorg) libX11 libXext libXrender;
+    inherit (pkgs.xorg) libX11 libXext libXrender libxcb libXau libXdmcp;
     
     inherit platformTools support platforms sysimages addons;
     

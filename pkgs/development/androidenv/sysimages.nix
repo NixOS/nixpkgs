@@ -38,5 +38,13 @@ in
     };
   };
     
+  sysimg_17 = buildSystemImage {
+    name = "armeabi-v7a-17";
+    src = fetchurl {
+      url = https://dl-ssl.google.com/android/repository/sysimg_armv7a-17_r01.zip;
+      sha1 = "45b9344473e0a6d063c2b1fe58d8cd47d307905e";
+    };
+  };
+    
 }
   

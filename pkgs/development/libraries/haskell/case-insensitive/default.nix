@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "case-insensitive";
-  version = "0.4.0.3";
-  sha256 = "1lpfxfwfxiimvh5nxqrnjqj2687dp7rmv9wkrpmw2zm5wkxwcmzf";
+  version = "0.4.0.4";
+  sha256 = "1xzpri688vbd6fvvxczqx8bv53009ygzws7vbjmj2q97wcm8nmwd";
   buildDepends = [ hashable text ];
   meta = {
     homepage = "https://github.com/basvandijk/case-insensitive";

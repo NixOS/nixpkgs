@@ -2,22 +2,22 @@
 , platformTools, support, platforms, sysimages, addons
 , zlib_32bit
 , libX11_32bit, libxcb_32bit, libXau_32bit, libXdmcp_32bit, libXext_32bit
-, libX11, libXext, libXrender
+, libX11, libXext, libXrender, libxcb, libXau, libXdmcp
 , freetype, fontconfig, gtk, atk
 }:
 {platformVersions, useGoogleAPIs}:
 
 stdenv.mkDerivation {
-  name = "android-sdk-20.0.3";
+  name = "android-sdk-21";
   
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r20.0.3-linux.tgz;
-      sha256 = "0xfb41xsjaf7n6b9gsrxm24jwg2fi1hzn73y69rlqm55bw1vxhc1";
+      url = http://dl.google.com/android/android-sdk_r21-linux.tgz;
+      md5 = "7f8d73b629f808cdcfc9f9900bbd7580";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = http://dl.google.com/android/android-sdk_r20.0.3-macosx.zip;
-      sha256 = "0eecaa04950d5c540f36ab4183a4cbaef3ae6a7434467bfc32febaeb796a8ff2";
+      url = http://dl.google.com/android/android-sdk_r21-macosx.zip;
+      md5 = "67e46adca90dd18d7291443f6c15d6af";
     }
     else throw "platform not ${stdenv.system} supported!";
   
@@ -32,12 +32,22 @@ stdenv.mkDerivation {
     ''
       # There are a number of native binaries. We must patch them to let them find the interpreter and libstdc++
     
-      for i in dmtracedump emulator emulator-arm emulator-x86 hprof-conv mksdcard sqlite3
+      for i in dmtracedump emulator emulator-arm emulator-mips emulator-x86 hprof-conv mksdcard sqlite3
       do
           patchelf --set-interpreter ${stdenv_32bit.gcc.libc}/lib/ld-linux.so.2 $i
           patchelf --set-rpath ${stdenv_32bit.gcc.gcc}/lib $i
       done
     
+      ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
+        # We must also patch the 64-bit emulator instances, if needed
+        
+        for i in emulator64-arm emulator64-mips emulator64-x86
+        do
+            patchelf --set-interpreter ${stdenv.gcc.libc}/lib/ld-linux-x86-64.so.2 $i
+            patchelf --set-rpath ${stdenv.gcc.gcc}/lib64 $i
+        done
+      ''}
+      
       # These tools also need zlib in addition to libstdc++
     
       for i in etc1tool zipalign
@@ -48,11 +58,19 @@ stdenv.mkDerivation {
     
       # The emulators need additional libraries, which are not in the RPATH => let's wrap them
     
-      for i in emulator emulator-arm emulator-x86
+      for i in emulator emulator-arm emulator-mips emulator-x86
       do
           wrapProgram `pwd`/$i \
             --prefix LD_LIBRARY_PATH : `pwd`/lib:${libX11_32bit}/lib:${libxcb_32bit}/lib:${libXau_32bit}/lib:${libXdmcp_32bit}/lib:${libXext_32bit}/lib
       done
+      
+      ${stdenv.lib.optionalString (stdenv.system == "x86_64-linux") ''
+        for i in emulator64-arm emulator64-mips emulator64-x86
+        do
+            wrapProgram `pwd`/$i \
+            --prefix LD_LIBRARY_PATH : `pwd`/lib:${libX11}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${libXext}/lib
+        done
+      ''}
     ''}
 
     patchShebangs .
