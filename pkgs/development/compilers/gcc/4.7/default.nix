@@ -95,7 +95,7 @@ let version = "4.7.2";
     withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
     withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
     withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
-    withFloat = if gccFpu != null then " --with-float=${gccFloat}" else "";
+    withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
     crossMingw = (cross != null && cross.libc == "msvcrt");
 
     crossConfigureFlags =
@@ -328,7 +328,7 @@ stdenv.mkDerivation ({
     xwithCpu = if xgccCpu != null then " --with-cpu=${xgccCpu}" else "";
     xwithAbi = if xgccAbi != null then " --with-abi=${xgccAbi}" else "";
     xwithFpu = if xgccFpu != null then " --with-fpu=${xgccFpu}" else "";
-    xwithFloat = if xgccFpu != null then " --with-float=${xgccFloat}" else "";
+    xwithFloat = if xgccFloat != null then " --with-float=${xgccFloat}" else "";
   in {
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
@@ -373,6 +373,7 @@ stdenv.mkDerivation ({
       ${xwithCpu}
       ${xwithAbi}
       ${xwithFpu}
+      ${xwithFloat}
     '';
     buildFlags = "";
   };
