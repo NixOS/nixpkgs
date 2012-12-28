@@ -1,15 +1,15 @@
 { cabal, blazeBuilder, caseInsensitive, classyPreludeConduit
-, conduit, httpConduit, httpTypes, liftedBase, monadControl
-, network, networkConduit, text, wai, warp, word8
+, conduit, dataDefault, httpConduit, httpTypes, liftedBase
+, monadControl, network, networkConduit, text, wai, warp, word8
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-reverse-proxy";
-  version = "0.1.0.7";
-  sha256 = "1fshng7bcpzjq5iqnvl2qsyia9yi80b8sbif18a3w86gsw5xcakk";
+  version = "0.1.1";
+  sha256 = "0p04zpw1v0zhzri7wpikc0b8g7n21kgl8j8238vv7xqxapkal0pc";
   buildDepends = [
     blazeBuilder caseInsensitive classyPreludeConduit conduit
-    httpConduit httpTypes liftedBase monadControl network
+    dataDefault httpConduit httpTypes liftedBase monadControl network
     networkConduit text wai warp word8
   ];
   meta = {

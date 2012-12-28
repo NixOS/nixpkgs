@@ -6,13 +6,18 @@ stdenv.mkDerivation {
   name = "avr-gcc-libc";
 
   srcBinutils = fetchurl {
-    url = "mirror://gnu/binutils/binutils-2.21.tar.bz2";
-    sha256 = "1iyhc42zfa0j2gaxy4zvpk47sdqj4rqvib0mb8597ss8yidyrav0";
+    url = "mirror://gnu/binutils/binutils-2.21.1.tar.bz2";
+    sha256 = "0m7nmd7gc9d9md43wbrv65hz6lbi2crqwryzpigv19ray1lzmv6d";
   };
 
   srcGCC = fetchurl {
-    url = "mirror://gcc/releases/gcc-4.6.1/gcc-core-4.6.1.tar.bz2";
-    sha256 = "0bbb8f754a31f29013f6e9ad4c755d92bb0f154a665c4b623e86ae7174d98e33";
+    url = "mirror://gcc/releases/gcc-4.6.3/gcc-core-4.6.3.tar.bz2";
+    sha256 = "1hai090f0svf886nyhn4glmfw54v9lz88w2izkx5iqhd3j400gi8";
+  };
+
+  srcGCCGPP = fetchurl {
+    url = "mirror://gcc/releases/gcc-4.6.3/gcc-g++-4.6.3.tar.bz2";
+    sha256 = "1s199gb6p65r5k69cdfqqcz5hgifw9bhyj65n2b91s80x4rwgq5k";
   };
 
   srcAVRLibc = fetchurl {
@@ -55,10 +60,11 @@ stdenv.mkDerivation {
 
     cd $TMP
     tar jxf $srcGCC
+    tar jxf $srcGCCGPP
       cd gcc-*
       mkdir obj-avr
       cd obj-avr
-      ../configure --target=avr --prefix="$prefix" --disable-nls --enable-languages=c --disable-libssp --with-dwarf2
+      ../configure --target=avr --prefix="$prefix" --disable-nls --enable-languages=c,c++ --disable-libssp --with-dwarf2
       make $MAKE_FLAGS
       make install
 

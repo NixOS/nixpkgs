@@ -79,7 +79,12 @@ stdenv.mkDerivation rec {
     echo -n "Generating wrappers "
 
     for prg in ghc ghci ghc-${ghc.version} ghci-${ghc.version}; do
-      makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "-B$linkedTopDir"
+      # The NIX env-vars are picked up by our patched version of ghc-paths.
+      makeWrapper ${ghc}/bin/$prg $out/bin/$prg \
+        --add-flags "-B$linkedTopDir" \
+        --set "NIX_GHC"        "$out/bin/ghc"     \
+        --set "NIX_GHCPKG"     "$out/bin/ghc-pkg" \
+        --set "NIX_GHC_LIBDIR" "$linkedTopDir"
       echo -n .
     done
 

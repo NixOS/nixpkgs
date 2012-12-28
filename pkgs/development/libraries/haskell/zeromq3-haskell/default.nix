@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "zeromq3-haskell";
-  version = "0.1.4";
-  sha256 = "026b18ligbrfbg4x7vivk6r2gj9rj3vy6pm3h0s81571h6lk3dhx";
+  version = "0.2";
+  sha256 = "12qljfkcd4l9h3l80jibxgw2an6v782w0sxwvzxqmma29jv6hvky";
   extraLibraries = [ zeromq ];
   meta = {
     homepage = "http://github.com/twittner/zeromq-haskell/";
