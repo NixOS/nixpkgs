@@ -90,10 +90,12 @@ let version = "4.7.2";
     gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null cross;
     gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null cross;
     gccFpu = stdenv.lib.attrByPath [ "gcc" "fpu" ] null cross;
+    gccFloat = stdenv.lib.attrByPath [ "gcc" "float" ] null cross;
     withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
     withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
     withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
     withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
+    withFloat = if gccFpu != null then " --with-float=${gccFloat}" else "";
     crossMingw = (cross != null && cross.libc == "msvcrt");
 
     crossConfigureFlags =
@@ -102,6 +104,7 @@ let version = "4.7.2";
       withCpu +
       withAbi +
       withFpu +
+      withFloat +
       (if (crossMingw && crossStageStatic) then
         " --with-headers=${libcCross}/include" +
         " --with-gcc" +
@@ -320,10 +323,12 @@ stdenv.mkDerivation ({
     xgccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null stdenv.cross;
     xgccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null stdenv.cross;
     xgccFpu = stdenv.lib.attrByPath [ "gcc" "fpu" ] null stdenv.cross;
+    xgccFloat = stdenv.lib.attrByPath [ "gcc" "float" ] null stdenv.cross;
     xwithArch = if xgccArch != null then " --with-arch=${xgccArch}" else "";
     xwithCpu = if xgccCpu != null then " --with-cpu=${xgccCpu}" else "";
     xwithAbi = if xgccAbi != null then " --with-abi=${xgccAbi}" else "";
     xwithFpu = if xgccFpu != null then " --with-fpu=${xgccFpu}" else "";
+    xwithFloat = if xgccFpu != null then " --with-float=${xgccFloat}" else "";
   in {
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
