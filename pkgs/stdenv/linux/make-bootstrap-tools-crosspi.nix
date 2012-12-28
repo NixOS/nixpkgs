@@ -57,33 +57,33 @@ let
     aclSupport = false;
   });
 
-  coreutils_ = coreutils_base.hostDrv;
+  coreutils_ = coreutils_base.crossDrv;
 
   glibc = pkgs.libcCross;
-  bash = pkgs.bash.hostDrv;
-  findutils = pkgs.findutils.hostDrv;
-  diffutils = pkgs.diffutils.hostDrv;
-  gnused = pkgs.gnused.hostDrv;
-  gnugrep = pkgs.gnugrep.hostDrv;
-  gawk = pkgs.gawk.hostDrv;
-  gnutar = pkgs.gnutar.hostDrv;
-  gzip = pkgs.gzip.hostDrv;
-  bzip2 = pkgs.bzip2.hostDrv;
-  gnumake = pkgs.gnumake.hostDrv;
-  patch = pkgs.patch.hostDrv;
-  patchelf = pkgs.patchelf.hostDrv;
-  replace = pkgs.replace.hostDrv;
+  bash = pkgs.bash.crossDrv;
+  findutils = pkgs.findutils.crossDrv;
+  diffutils = pkgs.diffutils.crossDrv;
+  gnused = pkgs.gnused.crossDrv;
+  gnugrep = pkgs.gnugrep.crossDrv;
+  gawk = pkgs.gawk.crossDrv;
+  gnutar = pkgs.gnutar.crossDrv;
+  gzip = pkgs.gzip.crossDrv;
+  bzip2 = pkgs.bzip2.crossDrv;
+  gnumake = pkgs.gnumake.crossDrv;
+  patch = pkgs.patch.crossDrv;
+  patchelf = pkgs.patchelf.crossDrv;
+  replace = pkgs.replace.crossDrv;
   gcc = pkgs.gcc47;
-  gmp = pkgs.gmp.hostDrv;
-  mpfr = pkgs.mpfr.hostDrv;
-  ppl = pkgs.ppl.hostDrv;
-  cloogppl = pkgs.cloogppl.hostDrv;
-  cloog = pkgs.cloog.hostDrv;
-  zlib = pkgs.zlib.hostDrv;
-  isl = pkgs.isl.hostDrv;
-  mpc = pkgs.mpc.hostDrv;
-  binutils = pkgs.binutils.hostDrv;
-  klibc = pkgs.klibc.hostDrv;
+  gmp = pkgs.gmp.crossDrv;
+  mpfr = pkgs.mpfr.crossDrv;
+  ppl = pkgs.ppl.crossDrv;
+  cloogppl = pkgs.cloogppl.crossDrv;
+  cloog = pkgs.cloog.crossDrv;
+  zlib = pkgs.zlib.crossDrv;
+  isl = pkgs.isl.crossDrv;
+  mpc = pkgs.mpc.crossDrv;
+  binutils = pkgs.binutils.crossDrv;
+  klibc = pkgs.klibc.crossDrv;
 
 in
 
@@ -159,15 +159,15 @@ rec {
         cp ${patchelf}/bin/* $out/bin
         cp ${replace}/bin/* $out/bin
 
-        cp -d ${gnugrep.pcre.hostDrv}/lib/libpcre*.so* $out/lib # needed by grep
+        cp -d ${gnugrep.pcre.crossDrv}/lib/libpcre*.so* $out/lib # needed by grep
         
         # Copy what we need of GCC.
-        cp -d ${gcc.gcc.hostDrv}/bin/gcc $out/bin
-        cp -d ${gcc.gcc.hostDrv}/bin/cpp $out/bin
-        cp -d ${gcc.gcc.hostDrv}/bin/g++ $out/bin
-        cp -d ${gcc.gcc.hostDrv}/lib*/libgcc_s.so* $out/lib
-        cp -d ${gcc.gcc.hostDrv}/lib*/libstdc++.so* $out/lib
-        cp -rd ${gcc.gcc.hostDrv}/lib/gcc $out/lib
+        cp -d ${gcc.gcc.crossDrv}/bin/gcc $out/bin
+        cp -d ${gcc.gcc.crossDrv}/bin/cpp $out/bin
+        cp -d ${gcc.gcc.crossDrv}/bin/g++ $out/bin
+        cp -d ${gcc.gcc.crossDrv}/lib*/libgcc_s.so* $out/lib
+        cp -d ${gcc.gcc.crossDrv}/lib*/libstdc++.so* $out/lib
+        cp -rd ${gcc.gcc.crossDrv}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
@@ -175,9 +175,9 @@ rec {
         rm -f $out/lib/gcc/*/*/include-fixed/asm
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
-        cp -rd ${gcc.gcc.hostDrv}/libexec/* $out/libexec
+        cp -rd ${gcc.gcc.crossDrv}/libexec/* $out/libexec
         mkdir $out/include
-        cp -rd ${gcc.gcc.hostDrv}/include/c++ $out/include
+        cp -rd ${gcc.gcc.crossDrv}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
@@ -223,8 +223,8 @@ rec {
         cp ${klibc}/lib/klibc/bin.static/cpio $out/in-nixpkgs
         cp ${klibc}/lib/klibc/bin.static/mkdir $out/in-nixpkgs
         cp ${klibc}/lib/klibc/bin.static/ln $out/in-nixpkgs
-        cp ${curlStatic.hostDrv}/bin/curl $out/in-nixpkgs
-        cp ${bzip2Static.hostDrv}/bin/bzip2 $out/in-nixpkgs
+        cp ${curlStatic.crossDrv}/bin/curl $out/in-nixpkgs
+        cp ${bzip2Static.crossDrv}/bin/bzip2 $out/in-nixpkgs
         chmod u+w $out/in-nixpkgs/*
         $crossConfig-strip $out/in-nixpkgs/*
         nuke-refs $out/in-nixpkgs/*
