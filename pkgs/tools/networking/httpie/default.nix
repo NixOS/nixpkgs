@@ -12,7 +12,7 @@ buildPythonPackage {
   doCheck = false;
 
   meta = {
-    description = "HTTPie is a command line HTTP client whose goal is to make CLI human-friendly.";
+    description = "A command line HTTP client whose goal is to make CLI human-friendly";
     homepage = http://httpie.org/;
     license = "BSD";
     maintainers = [ stdenv.lib.maintainers.antono ];
