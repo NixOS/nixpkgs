@@ -11,24 +11,12 @@ cross:
 , preConfigure ? "", ... }@args:
 
 let
-  version = "2.16.0";
 
-  needsPortsNative = stdenv.isMips || stdenv.isArm;
-  needsPortsCross = cross.arch == "mips" || cross.arch == "arm";
-  needsPorts =
-    if stdenv.cross or null != null && hurdHeaders == null then true
-    else if cross == null then needsPortsNative
-    else needsPortsCross;
-
-  srcPorts = fetchurl {
-    url = "mirror://gnu/glibc/glibc-ports-${version}.tar.bz2";
-    sha256 = "0qw4n71rqykl83ybq0c92w1n8afsx079sw3hn5nyib5nw6iphrfm";
-  };
+  version = "2.17";
 
 in
 
 assert cross != null -> gccCross != null;
-
 assert mig != null -> machHeaders != null;
 assert machHeaders != null -> hurdHeaders != null;
 assert hurdHeaders != null -> libpthreadHeaders != null;
@@ -151,7 +139,7 @@ stdenv.mkDerivation ({
 
   src = fetchurl {
     url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
-    sha256 = "0vlz4x6cgz7h54qq4528q526qlhnsjzbsvgc4iizn76cb0bfanx7";
+    sha256 = "0ym3zk9ii64279wgw7pw9xkbxczy2ci7ka6mnfs05rhlainhicm3";
   };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.
@@ -162,8 +150,6 @@ stdenv.mkDerivation ({
         # built yet in the bootstrap.
         sed -i "$i" -e "s^/bin/pwd^$PWD_P^g"
     done
-
-    ${if needsPorts then "tar xvf ${srcPorts}" else ""}
 
     mkdir ../build
     cd ../build
