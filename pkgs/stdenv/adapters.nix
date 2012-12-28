@@ -132,12 +132,11 @@ rec {
             # and we handle that through isAttrs.
             getBuildDrv = drv: drv.nativeDrv or drv;
             getHostDrv = drv: drv.crossDrv or drv;
-            nativeBuildInputsDrvs = map (getBuildDrv) nativeBuildInputs;
-            buildInputsDrvs = map (getHostDrv) buildInputs;
-            buildInputsDrvsAsBuildInputs = map (getBuildDrv) buildInputs;
-            propagatedBuildInputsDrvs = map (getHostDrv) (propagatedBuildInputs);
-            propagatedNativeBuildInputsDrvs = map (getBuildDrv)
-                (propagatedNativeBuildInputs);
+            nativeBuildInputsDrvs = map getBuildDrv nativeBuildInputs;
+            buildInputsDrvs = map getHostDrv buildInputs;
+            buildInputsDrvsAsBuildInputs = map getBuildDrv buildInputs;
+            propagatedBuildInputsDrvs = map getHostDrv propagatedBuildInputs;
+            propagatedNativeBuildInputsDrvs = map getBuildDrv propagatedNativeBuildInputs;
 
             # The base stdenv already knows that nativeBuildInputs and
             # buildInputs should be built with the usual gcc-wrapper
@@ -147,16 +146,16 @@ rec {
             # Temporary expression until the cross_renaming, to handle the
             # case of pkgconfig given as buildInput, but to be used as
             # nativeBuildInput.
-            hostAsBuildDrv = drv: builtins.unsafeDiscardStringContext
-                drv.nativeDrv.drvPath == builtins.unsafeDiscardStringContext
-                drv.crossDrv.drvPath;
+            hostAsBuildDrv = drv:
+                builtins.unsafeDiscardStringContext drv.nativeDrv.drvPath
+                == builtins.unsafeDiscardStringContext drv.crossDrv.drvPath;
             buildInputsNotNull = stdenv.lib.filter
                 (drv: builtins.isAttrs drv && drv ? nativeDrv) buildInputs;
-            nativeInputsFromBuildInputs = stdenv.lib.filter (hostAsBuildDrv) buildInputsNotNull;
+            nativeInputsFromBuildInputs = stdenv.lib.filter hostAsBuildDrv buildInputsNotNull;
 
             # We should overwrite the input attributes in crossDrv, to overwrite
             # the defaults for only-native builds in the base stdenv
-            crossDrv = if (cross == null) then nativeDrv else
+            crossDrv = if cross == null then nativeDrv else
                 stdenv.mkDerivation (args // {
                     name = name + "-" + cross.config;
                     nativeBuildInputs = nativeBuildInputsDrvs
@@ -169,14 +168,13 @@ rec {
                     # any library needed to link the program dynamically at
                     # loader time. ld(1) explains it.
                     buildInputs = [];
-                    propagatedBuildInputs = propagatedBuildInputsDrvs ++
-                      buildInputsDrvs;
+                    propagatedBuildInputs = propagatedBuildInputsDrvs ++ buildInputsDrvs;
                     propagatedNativeBuildInputs = propagatedNativeBuildInputsDrvs;
 
                     crossConfig = cross.config;
                 } // args.crossAttrs or {});
         in nativeDrv // {
-            inherit crossDrv nativeDrv;
+          inherit crossDrv nativeDrv;
         };
     } // {
       inherit cross gccCross binutilsCross;
