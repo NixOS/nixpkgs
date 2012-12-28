@@ -222,7 +222,7 @@ let
       else
         defaultStdenv;
 
-  forceBuildDrv = drv : if (crossSystem == null) then drv else
+  forceNativeDrv = drv : if (crossSystem == null) then drv else
     (drv // { crossDrv = drv.nativeDrv; });
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
@@ -1992,7 +1992,7 @@ let
                    if isMingw then windows.mingw_headers1 else null;
     in
       wrapGCCCross {
-      gcc = forceBuildDrv (lib.addMetaAttrs { platforms = []; } (
+      gcc = forceNativeDrv (lib.addMetaAttrs { platforms = []; } (
         gcc_realCross.override {
           crossStageStatic = true;
           langCC = false;
@@ -2013,7 +2013,7 @@ let
   };
 
   gccCrossStageFinal = wrapGCCCross {
-    gcc = forceBuildDrv (gcc_realCross.override {
+    gcc = forceNativeDrv (gcc_realCross.override {
       libpthreadCross =
         # FIXME: Don't explicitly refer to `i586-pc-gnu'.
         if crossSystem != null && crossSystem.config == "i586-pc-gnu"
@@ -2683,7 +2683,7 @@ let
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
 
-    forceBuildDrv (import ../build-support/gcc-cross-wrapper {
+    forceNativeDrv (import ../build-support/gcc-cross-wrapper {
       nativeTools = false;
       nativeLibc = false;
       noLibc = (libc == null);
@@ -2967,7 +2967,7 @@ let
     gold = true;
   });
 
-  binutilsCross = lowPrio (forceBuildDrv (import ../development/tools/misc/binutils {
+  binutilsCross = lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
     inherit stdenv fetchurl zlib;
     noSysDirs = true;
     cross = assert crossSystem != null; crossSystem;
@@ -3182,7 +3182,7 @@ let
      cross_renaming: we should make all programs use pkgconfig as
      nativeBuildInput after the renaming.
      */
-  pkgconfig = forceBuildDrv (callPackage ../development/tools/misc/pkgconfig { });
+  pkgconfig = forceNativeDrv (callPackage ../development/tools/misc/pkgconfig { });
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
 
   premake = callPackage ../development/tools/misc/premake { };
@@ -3636,7 +3636,7 @@ let
     gccCross = null;
   }) // (if crossSystem != null then { crossDrv = glibc213Cross; } else {});
 
-  glibc213Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.13)
+  glibc213Cross = forceNativeDrv (makeOverridable (import ../development/libraries/glibc/2.13)
     (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
      in {
        inherit stdenv fetchurl;
@@ -5688,12 +5688,12 @@ let
 
   linuxHeaders35 = callPackage ../os-specific/linux/kernel-headers/3.5.nix { };
 
-  linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
+  linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
     cross = assert crossSystem != null; crossSystem;
   });
 
-  linuxHeaders24Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
+  linuxHeaders24Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
     inherit stdenv fetchurl perl;
     cross = assert crossSystem != null; crossSystem;
   });

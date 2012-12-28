@@ -3,7 +3,7 @@ let
   nativePlatforms = linux;
 
   /* Basic list of packages to cross-build */
-  basicHostDrv = {
+  basicCrossDrv = {
     gccCrossStageFinal = nativePlatforms;
     bison.crossDrv = nativePlatforms;
     busybox.crossDrv = nativePlatforms;
@@ -24,11 +24,11 @@ let
 
   /* Basic list of packages to be natively built,
      but need a crossSystem defined to get meaning */
-  basicBuildDrv = {
+  basicNativeDrv = {
     gdbCross = nativePlatforms;
   };
 
-  basic = basicHostDrv // basicBuildDrv;
+  basic = basicCrossDrv // basicNativeDrv;
 
 in
 (

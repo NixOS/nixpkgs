@@ -3,7 +3,7 @@
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba_light
 , gccCrossStageStatic, gccCrossStageFinal
-, forceBuildDrv, forceSystem, newScope, platform, config, crossSystem
+, forceNativeDrv, forceSystem, newScope, platform, config, crossSystem
 , overrides ? {} }:
 
 with args;
@@ -12,7 +12,7 @@ let
   callPackage = newScope gnu;
 
   gnu = {
-    hurdCross = forceBuildDrv(callPackage ./hurd {
+    hurdCross = forceNativeDrv (callPackage ./hurd {
       inherit fetchgit stdenv autoconf libtool texinfo
         glibcCross hurdPartedCross;
       inherit (gnu) machHeaders mig;
@@ -23,7 +23,7 @@ let
       gccCross = gccCrossStageFinal;
     });
 
-    hurdCrossIntermediate = forceBuildDrv(callPackage ./hurd {
+    hurdCrossIntermediate = forceNativeDrv (callPackage ./hurd {
       inherit fetchgit stdenv autoconf libtool texinfo glibcCross;
       inherit (gnu) machHeaders mig;
       hurdPartedCross = null;
@@ -58,7 +58,7 @@ let
       hurd = null;
     };
 
-    libpthreadCross = forceBuildDrv(callPackage ./libpthread {
+    libpthreadCross = forceNativeDrv (callPackage ./libpthread {
       inherit fetchgit stdenv autoconf automake libtool glibcCross;
       inherit (gnu) machHeaders hurdHeaders;
       hurd = gnu.hurdCrossIntermediate;
