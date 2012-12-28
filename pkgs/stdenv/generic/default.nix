@@ -1,5 +1,5 @@
 { system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
-, extraAttrs ? {}, overrides ? (pkgs: {})
+, extraAttrs ? {}, overrides ? (pkgs: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -58,6 +58,7 @@ let
               args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
               stdenv = result;
               system = result.system;
+              userHook = config.stdenv.userHook or null;
 
               # Inputs built by the cross compiler.
               buildInputs = lib.optionals (crossConfig != null) buildInputs;

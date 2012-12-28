@@ -869,4 +869,10 @@ genericBuild() {
 runHook postHook
 
 
+# Execute the global user hook (defined through the Nixpkgs
+# configuration option ‘stdenv.userHook’).  This can be used to set
+# global compiler optimisation flags, for instance.
+runHook userHook
+
+
 dumpVars
