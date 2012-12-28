@@ -129,7 +129,7 @@ stdenv.mkDerivation ({
       enableMultilib; };
 
   # ghdl does not build fine with parallel building
-  enableParallelBuilding = if langVhdl then false else true;
+  enableParallelBuilding = !langVhdl;
 
   meta = {
     homepage = "http://gcc.gnu.org/";

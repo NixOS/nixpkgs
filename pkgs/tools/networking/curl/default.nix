@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ${if linkStatic then "--enable-static --disable-shared" else ""}
   '';
 
-  dontDisableStatic = if linkStatic then true else false;
+  dontDisableStatic = linkStatic;
 
   CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
   LDFLAGS = if linkStatic then "-static" else "";

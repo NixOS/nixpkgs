@@ -74,7 +74,7 @@ stdenv.mkDerivation {
   '';
 
   # Cross stripping hurts.
-  dontStrip = if cross != null then true else false;
+  dontStrip = cross != null;
 
   makeFlags = [ crossMakeFlag "VERBOSE=1" ];
 

@@ -2043,7 +2043,7 @@ let
       gettext which noSysDirs;
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = if stdenv.isArm then false else true;
+    profiledCompiler = !stdenv.isArm;
 
     # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
@@ -2064,7 +2064,7 @@ let
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
+    profiledCompiler = !stdenv.system == "armv5tel-linux";
   }));
 
   gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
@@ -2072,7 +2072,7 @@ let
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = if stdenv.isArm then false else true;
+    profiledCompiler = !stdenv.isArm;
 
     # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
@@ -8254,14 +8254,14 @@ let
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
-    plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
+    plib = plib.override { enablePIC = !stdenv.isi686; };
     libpng = libpng12;
   };
 
   torcs = callPackage ../games/torcs {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
-    plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
+    plib = plib.override { enablePIC = !stdenv.isi686; };
   };
 
   trigger = callPackage ../games/trigger { };
