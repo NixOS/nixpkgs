@@ -198,6 +198,19 @@ let
     };
   };
 
+  mountConfig = { name, config, ... }: {
+    config = {
+      mountConfig =
+        { What = config.what;
+          Where = config.where;
+        } // optionalAttrs (config.type != "") {
+          Type = config.type;
+        } // optionalAttrs (config.options != "") {
+          Options = config.options;
+        };
+    };
+  };
+
   toOption = x:
     if x == true then "true"
     else if x == false then "false"
@@ -274,6 +287,29 @@ let
 
           [Socket]
           ${attrsToSection def.socketConfig}
+        '';
+    };
+
+  # this is by no means the full escaping-logic systemd uses
+  # so feel free to extend this further.
+  mountName = path:
+    let escaped = replaceChars [ "-"    " "    "/" ]
+                               [ "\x2d" "\x20" "-" ] (toString path);
+    in if (substring 0 1 escaped == "-")
+       then substring 1 (sub (stringLength escaped) 1) escaped
+       else escaped;
+
+  mountToUnit = name: def:
+    assert def.mountConfig.What != "";
+    assert def.mountConfig.Where != "";
+    { inherit (def) wantedBy enable;
+      text =
+        ''
+          [Unit]
+          ${attrsToSection def.unitConfig}
+
+          [Mount]
+          ${attrsToSection def.mountConfig}
         '';
     };
 
@@ -385,6 +421,17 @@ in
       type = types.attrsOf types.optionSet;
       options = [ socketOptions unitConfig ];
       description = "Definition of systemd socket units.";
+    };
+
+    boot.systemd.mounts = mkOption {
+      default = [];
+      type = types.listOf types.optionSet;
+      options = [ mountOptions unitConfig mountConfig ];
+      description = ''
+        Definition of systemd mount units.
+        This is a list instead of an attrSet, because systemd mandates the names to be derived from
+        the 'where' attribute.
+      '';
     };
 
     boot.systemd.defaultUnit = mkOption {
@@ -501,7 +548,10 @@ in
       { "rescue.service".text = rescueService; }
       // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
-      // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets;
+      // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets
+      // listToAttrs (map
+                   (v: let n = mountName v.where;
+                       in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts);
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
       "CGROUPS" "AUTOFS4_FS" "DEVTMPFS"

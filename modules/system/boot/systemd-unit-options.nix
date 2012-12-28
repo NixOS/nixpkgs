@@ -202,4 +202,51 @@ rec {
 
   };
 
+  mountOptions = unitOptions // {
+
+    what = mkOption {
+      default = "";
+      example = "/dev/sda1";
+      type = types.uniq types.string;
+      description = "Absolute path of device node, file or other resource. (Mandatory)";
+    };
+
+    where = mkOption {
+      default = "";
+      example = "/mnt";
+      type = types.uniq types.string;
+      description = ''
+        Absolute path of a directory of the mount point.
+        Will be created if it doesn't exist. (Mandatory)
+      '';
+    };
+
+    type = mkOption {
+      default = "";
+      example = "ext4";
+      type = types.uniq types.string;
+      description = "File system type.";
+    };
+
+    options = mkOption {
+      default = "";
+      example = "noatime";
+      type = types.string;
+      merge = concatStringsSep ",";
+      description = "Options used to mount the file system.";
+    };
+
+    mountConfig = mkOption {
+      default = {};
+      example = { DirectoryMode = "0775"; };
+      type = types.attrs;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Mount]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.mount</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+  };
+
 }
