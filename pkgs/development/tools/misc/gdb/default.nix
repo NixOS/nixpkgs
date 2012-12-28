@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   # I think python is not a native input, but I leave it
   # here while I will not need it cross building
-  buildNativeInputs = [ texinfo python ]
+  nativeBuildInputs = [ texinfo python ]
     ++ stdenv.lib.optional isGNU mig;
 
   buildInputs = [ ncurses readline gmp mpfr expat ]

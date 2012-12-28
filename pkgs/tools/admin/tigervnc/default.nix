@@ -82,13 +82,13 @@ stdenv.mkDerivation rec {
       libXinerama libXcursor libxcrypt
     ];
   
-  buildNativeInputs = 
+  nativeBuildInputs = 
     [ autoconf automake cvs utilmacros fontutil libtool flex bison 
       cmake
     ] 
-      ++ xorgserver.buildNativeInputs;
+      ++ xorgserver.nativeBuildInputs;
 
-  propagatedBuildNativeInputs = xorgserver.propagatedBuildNativeInputs;
+  propagatedNativeBuildInputs = xorgserver.propagatedNativeBuildInputs;
 
   meta = {
     homepage = http://www.tigervnc.org/;

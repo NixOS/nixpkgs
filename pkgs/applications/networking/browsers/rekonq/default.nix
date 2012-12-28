@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs qca2 qoauth ];
 
-  buildNativeInputs = [ gettext pkgconfig shared_desktop_ontologies ];
+  nativeBuildInputs = [ gettext pkgconfig shared_desktop_ontologies ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

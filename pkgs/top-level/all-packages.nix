@@ -3178,9 +3178,9 @@ let
 
   /* Make pkgconfig always return a nativeDrv, never a proper crossDrv,
      because most usage of pkgconfig as buildInput (inheritance of
-     pre-cross nixpkgs) means using it using as buildNativeInput
+     pre-cross nixpkgs) means using it using as nativeBuildInput
      cross_renaming: we should make all programs use pkgconfig as
-     buildNativeInput after the renaming.
+     nativeBuildInput after the renaming.
      */
   pkgconfig = forceBuildDrv (callPackage ../development/tools/misc/pkgconfig { });
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });

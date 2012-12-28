@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   # TODO : separate lib and apps
   buildInputs = [ zlib libxml2 eigen python cairo ];
 
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
     platforms = stdenv.lib.platforms.all;

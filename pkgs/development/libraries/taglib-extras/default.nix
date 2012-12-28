@@ -7,5 +7,5 @@ stdenv.mkDerivation rec {
     sha256 = "0cln49ws9svvvals5fzxjxlzqm0fzjfymn7yfp4jfcjz655nnm7y";
   };
   buildInputs = [ taglib ];
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 }

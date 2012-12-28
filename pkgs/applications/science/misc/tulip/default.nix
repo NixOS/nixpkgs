@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxml2 freetype glew mesa qt4 libjpeg ];
 
-  buildNativeInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake makeWrapper ];
 
   # FIXME: "make check" needs Docbook's DTD 4.4, among other things.
   doCheck = false;

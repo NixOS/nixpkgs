@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [x11 libXpm libXmu libXi libXp Xaw3d libpng libjpeg];
 
-  buildNativeInputs = [ imake makeWrapper ];
+  nativeBuildInputs = [ imake makeWrapper ];
 
   NIX_CFLAGS_COMPILE = "-I${libXpm}/include/X11";
 

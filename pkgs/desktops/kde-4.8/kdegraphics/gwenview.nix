@@ -6,7 +6,7 @@ kde {
   buildInputs =
     [ kdelibs exiv2 shared_desktop_ontologies kde_baseapps libkipi libjpeg ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     description = "Gwenview, the KDE image viewer";

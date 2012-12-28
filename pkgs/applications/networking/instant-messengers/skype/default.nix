@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     cp -r * $out/libexec/skype/
 
     fullPath=
-    for i in $buildNativeInputs; do
+    for i in $nativeBuildInputs; do
       fullPath=$fullPath''${fullPath:+:}$i/lib
     done
 

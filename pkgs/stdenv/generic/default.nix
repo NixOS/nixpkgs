@@ -48,9 +48,9 @@ let
             (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
             // (let
               buildInputs = attrs.buildInputs or [];
-              buildNativeInputs = attrs.buildNativeInputs or [];
+              nativeBuildInputs = attrs.nativeBuildInputs or [];
               propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-              propagatedBuildNativeInputs = attrs.propagatedBuildNativeInputs or [];
+              propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
               crossConfig = attrs.crossConfig or null;
             in
             {
@@ -65,9 +65,9 @@ let
               propagatedBuildInputs = lib.optionals (crossConfig != null)
                   propagatedBuildInputs;
               # Inputs built by the usual native compiler.
-              buildNativeInputs = buildNativeInputs ++ lib.optionals
+              nativeBuildInputs = nativeBuildInputs ++ lib.optionals
                 (crossConfig == null) buildInputs;
-              propagatedBuildNativeInputs = propagatedBuildNativeInputs ++
+              propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
                 lib.optionals (crossConfig == null) propagatedBuildInputs;
             }))
           )

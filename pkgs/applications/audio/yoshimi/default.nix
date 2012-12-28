@@ -14,7 +14,7 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [ alsaLib boost fftwSinglePrec fltk jackaudio libsndfile mesa
     minixml zlib ];
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   preConfigure = "cd src";
 

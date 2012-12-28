@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hlz2kqvbjisvwyicdincq7nz897b9rrafyzccwzqiqg53b8gf5s";
   };
 
-  buildNativeInputs = [ flex ];
+  nativeBuildInputs = [ flex ];
 
   buildInputs = [ cracklib ]
     ++ stdenv.lib.optional

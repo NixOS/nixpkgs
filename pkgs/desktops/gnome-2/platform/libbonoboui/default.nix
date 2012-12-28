@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kbgqh7bw0fdx4f1a1aqwpff7gp5mwhbaz60c6c98bc4djng5dgs";
   };
 
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [ bison popt gtk libxml2 GConf libglade libtool ];
   propagatedBuildInputs = [ libbonobo libgnomecanvas libgnome ];
 }

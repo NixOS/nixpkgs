@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ kdelibs phonon soprano shared_desktop_ontologies kdemultimedia taglib gettext ];
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "A media player for KDE based on Nepomuk and Phonon";

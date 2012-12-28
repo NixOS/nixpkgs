@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ alsaLib ncurses ];
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   configureFlags = "--disable-xmlto --with-udev-rules-dir=$(out)/lib/udev/rules.d";
 

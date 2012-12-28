@@ -226,7 +226,7 @@ rec {
                  in innerClosePropagation
                       acc'
                       (uniqList { inputList = (maybeAttrNullable "propagatedBuildInputs" [] y)
-                                           ++ (maybeAttrNullable "propagatedBuildNativeInputs" [] y)
+                                           ++ (maybeAttrNullable "propagatedNativeBuildInputs" [] y)
                                            ++ ys;
                                   acc = acc';
                                 }
@@ -317,7 +317,7 @@ rec {
   mergeAttrsByFuncDefaults = foldl mergeAttrByFunc { inherit mergeAttrBy; };
   # sane defaults (same name as attr name so that inherit can be used)
   mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
-    listToAttrs (map (n : nameValuePair n lib.concat) [ "buildNativeInputs" "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" ])
+    listToAttrs (map (n : nameValuePair n lib.concat) [ "nativeBuildInputs" "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" ])
     // listToAttrs (map (n : nameValuePair n lib.mergeAttrs) [ "passthru" "meta" "cfg" "flags" ])
     // listToAttrs (map (n : nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" "postInstall" ])
   ;

@@ -13,5 +13,5 @@ stdenv.mkDerivation {
     [ dbus_glib gtk libXau libXtst inputproto libglade startup_notification
       GConf upower
     ];
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 }

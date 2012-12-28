@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ zlib openssl readline sqlite ];
-  buildNativeInputs = [ tcl ];
+  nativeBuildInputs = [ tcl ];
 
   doCheck = true;
 

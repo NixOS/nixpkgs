@@ -124,9 +124,9 @@ rec {
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
   makeStdenvCross = stdenv: cross: binutilsCross: gccCross: stdenv //
-    { mkDerivation = {name ? "", buildInputs ? [], buildNativeInputs ? [],
-            propagatedBuildInputs ? [], propagatedBuildNativeInputs ? [],
-            selfBuildNativeInput ? false, ...}@args: let
+    { mkDerivation = {name ? "", buildInputs ? [], nativeBuildInputs ? [],
+            propagatedBuildInputs ? [], propagatedNativeBuildInputs ? [],
+            selfNativeBuildInput ? false, ...}@args: let
 
             # *BuildInputs exists temporarily as another name for
             # *HostInputs.
@@ -135,21 +135,21 @@ rec {
             # and we handle that through isAttrs.
             getBuildDrv = drv : if (builtins.isAttrs drv && drv ? nativeDrv) then drv.nativeDrv else drv;
             getHostDrv = drv : if (builtins.isAttrs drv && drv ? crossDrv) then drv.crossDrv else drv;
-            buildNativeInputsDrvs = map (getBuildDrv) buildNativeInputs;
+            nativeBuildInputsDrvs = map (getBuildDrv) nativeBuildInputs;
             buildInputsDrvs = map (getHostDrv) buildInputs;
             buildInputsDrvsAsBuildInputs = map (getBuildDrv) buildInputs;
             propagatedBuildInputsDrvs = map (getHostDrv) (propagatedBuildInputs);
-            propagatedBuildNativeInputsDrvs = map (getBuildDrv)
-                (propagatedBuildNativeInputs);
+            propagatedNativeBuildInputsDrvs = map (getBuildDrv)
+                (propagatedNativeBuildInputs);
 
-            # The base stdenv already knows that buildNativeInputs and
+            # The base stdenv already knows that nativeBuildInputs and
             # buildInputs should be built with the usual gcc-wrapper
             # And the same for propagatedBuildInputs.
             nativeDrv = stdenv.mkDerivation args;
 
             # Temporary expression until the cross_renaming, to handle the
             # case of pkgconfig given as buildInput, but to be used as
-            # buildNativeInput.
+            # nativeBuildInput.
             hostAsBuildDrv = drv: builtins.unsafeDiscardStringContext
                 drv.nativeDrv.drvPath == builtins.unsafeDiscardStringContext
                 drv.crossDrv.drvPath;
@@ -162,10 +162,10 @@ rec {
             crossDrv = if (cross == null) then nativeDrv else
                 stdenv.mkDerivation (args // {
                     name = name + "-" + cross.config;
-                    buildNativeInputs = buildNativeInputsDrvs
+                    nativeBuildInputs = nativeBuildInputsDrvs
                       ++ nativeInputsFromBuildInputs
                       ++ [ gccCross binutilsCross ] ++
-                      stdenv.lib.optional selfBuildNativeInput nativeDrv;
+                      stdenv.lib.optional selfNativeBuildInput nativeDrv;
 
                     # Cross-linking dynamic libraries, every buildInput should
                     # be propagated because ld needs the -rpath-link to find
@@ -174,7 +174,7 @@ rec {
                     buildInputs = [];
                     propagatedBuildInputs = propagatedBuildInputsDrvs ++
                       buildInputsDrvs;
-                    propagatedBuildNativeInputs = propagatedBuildNativeInputsDrvs;
+                    propagatedNativeBuildInputs = propagatedNativeBuildInputsDrvs;
 
                     crossConfig = cross.config;
                 } // (if args ? crossAttrs then args.crossAttrs else {}));

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   # perf refers both to newt and slang
-  buildNativeInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt flex bison ];
+  nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt flex bison ];
   buildInputs = [ elfutils python perl newt slang pkgconfig] ++
     stdenv.lib.optional withGtk gtk;
 

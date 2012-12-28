@@ -124,7 +124,7 @@ stdenv.mkDerivation ({
   inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
     libcCross;
 
-  buildNativeInputs = [ texinfo which ];
+  nativeBuildInputs = [ texinfo which ];
 
   buildInputs = [ gmp mpfr gettext ]
     ++ (optional (ppl != null) ppl)

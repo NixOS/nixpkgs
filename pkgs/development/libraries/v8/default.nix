@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       ln -sv ${gyp}/bin/gyp build/gyp/gyp
     '';
 
-    buildNativeInputs = stdenv.lib.optional (system == "i686-linux") which;
+    nativeBuildInputs = stdenv.lib.optional (system == "i686-linux") which;
     buildInputs = [ readline python ];
 
     buildFlags = [

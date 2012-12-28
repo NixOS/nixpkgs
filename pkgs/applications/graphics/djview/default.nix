@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [djvulibre qt4];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   patches = [ ./djview4-qt-4.8.patch ];
 

@@ -169,8 +169,8 @@ for i in $buildInputs $propagatedBuildInputs; do
 done
 
 nativePkgs=""
-for i in $buildNativeInputs $propagatedBuildNativeInputs; do
-    findInputs $i nativePkgs propagated-build-native-inputs
+for i in $nativeBuildInputs $propagatedNativeBuildInputs; do
+    findInputs $i nativePkgs propagated-native-build-inputs
 done
 
 
@@ -748,9 +748,9 @@ fixupPhase() {
         echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
     fi
 
-    if [ -n "$propagatedBuildNativeInputs" ]; then
+    if [ -n "$propagatedNativeBuildInputs" ]; then
         mkdir -p "$out/nix-support"
-        echo "$propagatedBuildNativeInputs" > "$out/nix-support/propagated-build-native-inputs"
+        echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
     fi
 
     if [ -n "$propagatedUserEnvPkgs" ]; then

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ qt48 ];
-  buildNativeInputs = [ flex /*cmake*/ ];
+  nativeBuildInputs = [ flex /*cmake*/ ];
 
   QTDIR = qt48;
   configurePhase = ''

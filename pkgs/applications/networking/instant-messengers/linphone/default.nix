@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk libglade libosip libexosip readline mediastreamer speex ];
 
-  buildNativeInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig ];
 
   configureFlags = "--enable-external-ortp --enable-external-mediastreamer";
 

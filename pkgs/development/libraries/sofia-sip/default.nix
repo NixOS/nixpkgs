@@ -9,5 +9,5 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ glib openssl ];
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 }

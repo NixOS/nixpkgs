@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sed -e "s@${glib}/lib/gio/modules@$out/lib/gio/modules@g" -i $(find . -name Makefile)
   '';
 
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
   propagatedBuildInputs =
     [ glib libtool gnutls2 libproxy libgcrypt libtasn1 gsettings_desktop_schemas ];
 }

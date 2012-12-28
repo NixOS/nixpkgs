@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdevplatform kdebase_workspace okteta ];
 
-  buildNativeInputs = [ cmake pkgconfig automoc4 shared_mime_info gettext perl ];
+  nativeBuildInputs = [ cmake pkgconfig automoc4 shared_mime_info gettext perl ];
 
   patches =
     [ ( fetchurl {

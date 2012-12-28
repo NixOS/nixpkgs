@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "b767c2b75a0036edfc6be209dcaab23643887b192e3788640380ac27298b08d0";
   };
 
-  buildNativeInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ curl openssl boehmgc sqlite ];
 

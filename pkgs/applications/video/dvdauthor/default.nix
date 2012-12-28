@@ -9,7 +9,7 @@ stdenv.mkDerivation rec{
   };
 
   buildInputs = [ libpng freetype libdvdread libxml2 zlib fribidi imagemagick ];
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     description = "Tools for generating DVD files to be played on standalone DVD players";

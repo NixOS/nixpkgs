@@ -83,7 +83,7 @@ stdenv.mkDerivation {
   # For UML and non-PC, just ignore all options that don't apply (We are lazy).
   ignoreConfigErrors = stdenv.platform.name != "pc";
 
-  buildNativeInputs = [ perl mktemp ];
+  nativeBuildInputs = [ perl mktemp ];
   buildInputs = lib.optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
 

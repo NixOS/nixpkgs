@@ -11,5 +11,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib gettext ];
 
-  buildNativeInputs = [ flex bison pkgconfig ];
+  nativeBuildInputs = [ flex bison pkgconfig ];
 }
