@@ -24,7 +24,7 @@ for i in $out/bin/* $out/libexec/gcc/*/*/* $out/lib/librt*; do
         $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
 done
 for i in $out/lib/librt* $out/lib/libcloog* $out/lib/libppl* $out/lib/libgmp* \
-      $out/lib/libstdc++* $out/lib/libmudflap*; do
+      $out/lib/libstdc++*.so; do
     echo patching $i
     if ! test -f $i; then continue; fi
     if test -L $i; then continue; fi
