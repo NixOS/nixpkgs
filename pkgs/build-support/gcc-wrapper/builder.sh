@@ -31,7 +31,7 @@ if test -z "$nativeLibc"; then
     # The dynamic linker is passed in `ldflagsBefore' to allow
     # explicit overrides of the dynamic linker by callers to gcc/ld
     # (the *last* value counts, so ours should come first).
-    echo "-dynamic-linker $dynamicLinker" > $out/nix-support/libc-ldflags-before
+    echo "-dynamic-linker" $dynamicLinker > $out/nix-support/libc-ldflags-before
 fi
 
 if test -n "$nativeTools"; then
