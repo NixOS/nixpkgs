@@ -120,7 +120,6 @@ rec {
   ];
 
   savannah = [
-    ftp://ftp.twaren.net/Unix/NonGNU/
     ftp://mirror.csclub.uwaterloo.ca/nongnu/
     ftp://mirror.publicns.net/pub/nongnu/
     ftp://savannah.c3sl.ufpr.br/
