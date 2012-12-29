@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, pandoc }:
+{ stdenv, fetchurl, python, pandoc, zip }:
 
 let
   version = "2012.12.11";
@@ -11,7 +11,13 @@ stdenv.mkDerivation {
     sha256 = "03zv3z8p0fi122nqj7ff8hkgqscir4s7psm03rq7dfpg1z35klmn";
   };
 
-  buildInputs = [ python pandoc ];
+  buildInputs = [ python ];
+  buildNativeInputs = [ pandoc zip ];
+
+  patchPhase = ''
+    rm youtube-dl
+    substituteInPlace Makefile --replace "#!/usr/bin/env python" "#!${python}/bin/python"
+  '';
 
   configurePhase = ''
     makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc )
@@ -20,6 +26,6 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://rg3.github.com/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
-    maintainers = [ stdenv.lib.maintainers.bluescreen303 stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ bluescreen303 simons ];
   };
 }
