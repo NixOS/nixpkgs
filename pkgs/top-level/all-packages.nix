@@ -3661,7 +3661,7 @@ let
 
   glfw = callPackage ../development/libraries/glfw { };
 
-  glibc = glibc216;
+  glibc = glibc217;
 
   glibcCross = glibc213Cross;
 
@@ -3686,7 +3686,7 @@ let
         inherit fetchgit;
       }));
 
-  glibc216 = callPackage ../development/libraries/glibc/2.16 {
+  glibc217 = callPackage ../development/libraries/glibc/2.17 {
     kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
     machHeaders = null;
@@ -5725,11 +5725,11 @@ let
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
-  linuxHeaders = linuxHeaders35;
+  linuxHeaders = linuxHeaders37;
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
-  linuxHeaders35 = callPackage ../os-specific/linux/kernel-headers/3.5.nix { };
+  linuxHeaders37 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
 
   linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
