@@ -5682,11 +5682,11 @@ let
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
-  linuxHeaders = linuxHeaders35;
+  linuxHeaders = linuxHeaders37;
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
-  linuxHeaders35 = callPackage ../os-specific/linux/kernel-headers/3.5.nix { };
+  linuxHeaders37 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
 
   linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
