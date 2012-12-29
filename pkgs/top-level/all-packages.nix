@@ -373,6 +373,11 @@ let
 
   archivemount = callPackage ../tools/filesystems/archivemount { };
 
+  arduino_core = callPackage ../development/arduino/arduino-core {
+    jdk = jdk;
+    jre = jdk;
+  };
+
   argyllcms = callPackage ../tools/graphics/argyllcms {};
 
   ascii = callPackage ../tools/text/ascii { };
@@ -911,6 +916,8 @@ let
 
   hping = callPackage ../tools/networking/hping { };
 
+  httpie = callPackage ../tools/networking/httpie { };
+
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   # FIXME: This Hydra snapshot is outdated and depends on the `nixPerl',
@@ -1046,8 +1053,6 @@ let
   xz = callPackage ../tools/compression/xz { };
 
   lzop = callPackage ../tools/compression/lzop { };
-
-  mu0 = callPackage ../tools/networking/mu0 { };
 
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
@@ -1801,7 +1806,7 @@ let
 
   xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
-  youtubeDL = callPackage ../tools/misc/youtube-dl { };
+  youtubeDL = callPackage ../tools/misc/youtube-dl { inherit (haskellPackages) pandoc; };
 
   zbar = callPackage ../tools/graphics/zbar {};
 
@@ -3072,6 +3077,28 @@ let
 
   distcc = callPackage ../development/tools/misc/distcc { };
 
+  # distccWrapper: wrapper that works as gcc or g++
+  # It can be used by setting in nixpkgs config like this, for example:
+  #    replaceStdenv = { pkgs }: pkgs.distccStdenv;
+  # But if you build in chroot, a default 'nix' will create
+  # a new net namespace, and won't have network access.
+  # You can use an override in packageOverrides to set extraConfig:
+  #    packageOverrides = pkgs: {
+  #     distccWrapper = pkgs.distccWrapper.override {
+  #       extraConfig = ''
+  #         DISTCC_HOSTS="myhost1 myhost2"
+  #       '';
+  #     };
+  #
+  distccWrapper = makeOverridable ({ extraConfig ? "" }:
+     wrapGCC (distcc.links extraConfig)) {};
+  distccStdenv = lowPrio (overrideGCC stdenv distccWrapper);
+
+  distccMasquerade = callPackage ../development/tools/misc/distcc/masq.nix {
+    gccRaw = gcc.gcc;
+    binutils = binutils;
+  };
+
   docutils = builderDefsPackage (import ../development/tools/documentation/docutils) {
     inherit python pil makeWrapper;
   };
@@ -3154,6 +3181,8 @@ let
   };
 
   indent = callPackage ../development/tools/misc/indent { };
+
+  ino = callPackage ../development/arduino/ino { };
 
   inotifyTools = callPackage ../development/tools/misc/inotify-tools { };
 
@@ -4485,6 +4514,8 @@ let
 
   libxslt = callPackage ../development/libraries/libxslt { };
 
+  libxtc_dxtn = callPackage ../development/libraries/libxtc_dxtn { };
+
   libixp_for_wmii = lowPrio (import ../development/libraries/libixp_for_wmii {
     inherit fetchurl stdenv;
   });
@@ -4566,6 +4597,8 @@ let
   mpich2 = callPackage ../development/libraries/mpich2 { };
 
   mtdev = callPackage ../development/libraries/mtdev { };
+
+  mu = callPackage ../tools/networking/mu { };
 
   muparser = callPackage ../development/libraries/muparser { };
 
@@ -7909,7 +7942,7 @@ let
     inherit (pkgs) python perl tcl ruby /*x11*/;
     lua = pkgs.lua5;
     # optional features by flags
-    flags = [ "X11" ]; # only flag "X11" by now
+    flags = [ "python" "X11" ]; # only flag "X11" by now
   };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
@@ -8061,6 +8094,8 @@ let
     motif = lesstif;
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
+
+  xkb_switch = callPackage ../tools/X11/xkb-switch { };
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
@@ -8578,6 +8613,12 @@ let
 
   ### SCIENCE
 
+  celestia = callPackage ../applications/science/astronomy/celestia {
+    lua = lua5_1;
+    inherit (xlibs) libXmu;
+    inherit (pkgs.gnome) gtkglext;
+  };
+
   xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
@@ -8705,6 +8746,8 @@ let
   iprover = callPackage ../applications/science/logic/iprover {};
 
   leo2 = callPackage ../applications/science/logic/leo2 {};
+
+  logisim = callPackage ../applications/science/logic/logisim {};
 
   matita = callPackage ../applications/science/logic/matita {
     ocaml = ocaml_3_11_2;
