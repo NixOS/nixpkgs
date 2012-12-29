@@ -13,21 +13,21 @@ echo Patching the bootstrap tools...
 LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? $out/bin/cp $out/bin/patchelf .
 
 for i in $out/bin/* $out/libexec/gcc/*/*/* $out/lib/librt*; do
-    echo patching $i
     if test ${i%.la} != $i; then continue; fi
     if test ${i%*.so*} != $i; then continue; fi
     if ! test -f $i; then continue; fi
     if test -L $i; then continue; fi
+    echo patching $i
     LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
         $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
     LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
         $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
 done
 for i in $out/lib/librt* $out/lib/libcloog* $out/lib/libppl* $out/lib/libgmp* \
-      $out/lib/libstdc++*.so; do
-    echo patching $i
+      $out/lib/libstdc++*.so*[0-9]; do
     if ! test -f $i; then continue; fi
     if test -L $i; then continue; fi
+    echo patching $i
     LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
         $out/bin/patchelf --set-rpath $out/lib --force-rpath $i
     LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
