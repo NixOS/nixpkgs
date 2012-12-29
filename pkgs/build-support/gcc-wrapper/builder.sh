@@ -152,6 +152,8 @@ fi
 
 mkGccWrapper $out/bin/gcj $gccPath/gcj || true
 
+mkGccWrapper $out/bin/gccgo $gccPath/gccgo || true
+
 mkGccWrapper $out/bin/gnatgcc $gccPath/gnatgcc || true
 mkGnatWrapper $out/bin/gnatmake $gccPath/gnatmake || true
 mkGnatWrapper $out/bin/gnatbind $gccPath/gnatbind || true

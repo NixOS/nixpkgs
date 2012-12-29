@@ -25,7 +25,7 @@ let
   langGo = if nativeTools then false else gcc ? langGo && gcc.langGo;
 in
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   name =
     (if name != "" then name else gccName + "-wrapper") +
     (if gcc != null && gccVersion != "" then "-" + gccVersion else "");
@@ -91,9 +91,3 @@ stdenv.mkDerivation ({
        abort "don't know the name of the dynamic linker for this platform")
     else "";
 }
-#  This go wrapper should be reworked in stdenv-updates.
-// (if langGo then
-{
-  inherit langGo;
-  builder = ./buildergo.sh;
-} else {}))
