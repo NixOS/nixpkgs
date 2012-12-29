@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unix-compat";
-  version = "0.4.0.0";
-  sha256 = "0xhhvqdjcmcyavf0g2q2sjghj2h4si1ijg4nc4s8kidbd957z9r8";
+  version = "0.4.1.0";
+  sha256 = "155m3zg692zbfyck4njx1vzvb5vgs0dkzyzlqf2x78ds6j9bzjzi";
   meta = {
     homepage = "http://github.com/jystic/unix-compat";
     description = "Portable POSIX-compatibility layer";

@@ -44,7 +44,9 @@
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
             src = fetchurl {
-              url = "http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz";
+              # cannot use mirrors system because of subtly different directory structures
+              urls = ["http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz"
+                      "http://hdiff.luite.com/packages/archive/${self.pname}/${self.fname}.tar.gz"];
               inherit (self) sha256;
             };
 

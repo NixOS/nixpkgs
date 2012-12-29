@@ -1,0 +1,12 @@
+diff -ru redis-2.4.7/deps/hiredis/Makefile redis-2.4.7.patched/deps/hiredis/Makefile
+--- redis-2.4.7/deps/hiredis/Makefile	2012-02-02 14:29:24.000000000 +0000
++++ redis-2.4.7.patched/deps/hiredis/Makefile	2012-12-07 17:14:43.000000000 +0000
+@@ -20,7 +20,7 @@
+   CFLAGS?=-std=c99 -pedantic $(OPTIMIZATION) -fPIC -Wall -W -Wstrict-prototypes -Wwrite-strings $(ARCH) $(PROF)
+   CCLINK?=-lm -pthread
+   LDFLAGS?=-L. -Wl,-rpath,.
+-  OBJARCH?=-arch i386 -arch x86_64
++  #OBJARCH?=-arch i386 -arch x86_64
+   DYLIBNAME?=libhiredis.dylib
+   DYLIB_MAKE_CMD?=libtool -dynamic -o ${DYLIBNAME} -lm ${DEBUG} - ${OBJ}
+   STLIBNAME?=libhiredis.a

@@ -194,5 +194,17 @@ in
     };
   };
     
+  platform_17 = buildPlatform {
+    name = "android-platform-4.2";
+    src = fetchurl {
+      url = https://dl-ssl.google.com/android/repository/android-17_r01.zip;
+      sha1 = "c2e7c8c8db40e06b804ddb1725ac2c3555b55025";
+    };
+    meta = {
+      description = "Android SDK Platform 4.2";
+      
+    };
+  };
+    
 }
   

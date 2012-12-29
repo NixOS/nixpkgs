@@ -411,7 +411,7 @@ let pythonPackages = python.modules // rec {
 
     # ValueError: Could not parse auth file:
     # /tmp/nix-build-.../CoilMQ-0.6.1/coilmq/tests/resources/auth.ini
-    #doCheck = false;
+    doCheck = false;
 
     meta = {
       description = "Simple, lightweight, and easily extensible STOMP message broker";
@@ -1542,7 +1542,7 @@ let pythonPackages = python.modules // rec {
     buildInputs = [ mock coverage ];
 
     # ServerNotFoundError: Unable to find the server at oauth-sandbox.sevengoslings.net
-    #doCheck = false;
+    doCheck = false;
 
     meta = {
       homepage = "https://github.com/simplegeo/python-oauth2";

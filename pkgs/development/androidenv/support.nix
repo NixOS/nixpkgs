@@ -1,10 +1,10 @@
 {stdenv, fetchurl, unzip}:
 
 stdenv.mkDerivation {
-  name = "android-support";
+  name = "android-support-r11";
   src = fetchurl {
-    url = https://dl-ssl.google.com/android/repository/support_r10.zip;
-    sha1 = "7c62e542d46ac3bdb89e1b90503d6afae557cf7d";
+    url = https://dl-ssl.google.com/android/repository/support_r11.zip;
+    sha1 = "d30d182d8e4c86bb4464c03a83ccffce7bc84ecd";
   };
   
   buildCommand = ''

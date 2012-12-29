@@ -523,7 +523,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
   bmp_1_2_2_1 = callPackage ../development/libraries/haskell/bmp/1.2.2.1.nix {};
-  bmp_1_2_3_2 = callPackage ../development/libraries/haskell/bmp/1.2.3.2.nix {};
+  bmp_1_2_3_4 = callPackage ../development/libraries/haskell/bmp/1.2.3.4.nix {};
   bmp = self.bmp_1_2_2_1;       # later versions work only with ghc 7.6 and beyond
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
@@ -910,7 +910,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
 
-  hashable = callPackage ../development/libraries/haskell/hashable {};
+  hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
+  hashable_1_3_0_2 = callPackage ../development/libraries/haskell/hashable/1.2.0.2.nix {};
+  hashable = self.hashable_1_1_2_5;
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
