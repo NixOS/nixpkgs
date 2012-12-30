@@ -11,6 +11,8 @@ stdenv.mkDerivation {
     sha256 = "72d4cd4fb23d876a17146d6231ad40a2151fa47c648485c54cf7478239b43764";
   };
 
+  patches = [ ./subvol-listing.patch ];
+
   buildInputs = [ zlib libuuid acl attr e2fsprogs ];
 
   makeFlags = "prefix=$(out)";
