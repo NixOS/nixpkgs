@@ -23,8 +23,7 @@ for i in $out/bin/* $out/libexec/gcc/*/*/* $out/lib/librt*; do
     LD_LIBRARY_PATH=$out/lib $out/lib/ld-linux*.so.? \
         $out/bin/patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib --force-rpath $i
 done
-for i in $out/lib/librt* $out/lib/libcloog* $out/lib/libppl* $out/lib/libgmp* \
-      $out/lib/libstdc++*.so*[0-9]; do
+for i in $out/lib/librt* $out/lib/libcloog* $out/lib/libppl* $out/lib/libgmp*; do
     if ! test -f $i; then continue; fi
     if test -L $i; then continue; fi
     echo patching $i
