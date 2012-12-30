@@ -222,6 +222,11 @@ rec {
     uboot = "sheevaplug";
     # Only for uboot = uboot :
     ubootConfig = "sheevaplug_config";
+    gcc = {
+      arch = "armv6";
+      fpu = "vfp";
+      float = "hard";
+    };
   };
 
   guruplug = sheevaplug // {

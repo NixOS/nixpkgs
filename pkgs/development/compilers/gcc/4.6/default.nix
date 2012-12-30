@@ -87,18 +87,37 @@ let version = "4.6.3";
 
     javaAwtGtk = langJava && gtk != null;
 
-    /* Cross-gcc settings */
-    gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null cross;
-    gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null cross;
-    gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null cross;
-    gccFpu = stdenv.lib.attrByPath [ "gcc" "fpu" ] null cross;
-    withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
-    withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
-    withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
-    withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
-    crossMingw = (cross != null && cross.libc == "msvcrt");
+    /* Platform flags */
+    platformFlags = let
+        gccArch = stdenv.lib.attrByPath [ "platform" "gcc" "arch" ] null stdenv;
+        gccCpu = stdenv.lib.attrByPath [ "platform" "gcc" "cpu" ] null stdenv;
+        gccAbi = stdenv.lib.attrByPath [ "platform" "gcc" "abi" ] null stdenv;
+        gccFpu = stdenv.lib.attrByPath [ "platform" "gcc" "fpu" ] null stdenv;
+        gccFloat = stdenv.lib.attrByPath [ "platform" "gcc" "float" ] null stdenv;
+        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
+        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
+        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
+        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
+        withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
+      in 
+        (withArch +
+        withCpu +
+        withAbi +
+        withFpu +
+        withFloat);
 
-    crossConfigureFlags =
+    /* Cross-gcc settings */
+    crossMingw = (cross != null && cross.libc == "msvcrt");
+    crossConfigureFlags = let
+        gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null cross;
+        gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null cross;
+        gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null cross;
+        gccFpu = stdenv.lib.attrByPath [ "gcc" "fpu" ] null cross;
+        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
+        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
+        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
+        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
+      in
       "--target=${cross.config}" +
       withArch +
       withCpu +
@@ -300,6 +319,7 @@ stdenv.mkDerivation ({
     ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
     ${if cross != null then crossConfigureFlags else ""}
     ${if !bootstrap then "--disable-bootstrap" else ""}
+    ${if cross == null then platformFlags else ""}
   ";
 
   targetConfig = if cross != null then cross.config else null;
