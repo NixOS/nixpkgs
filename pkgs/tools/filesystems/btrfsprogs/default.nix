@@ -20,6 +20,18 @@ stdenv.mkDerivation {
 
   buildInputs = [ zlib libuuid acl attr e2fsprogs ];
 
+  postPatch = ''
+    cp ${./btrfs-set-received-uuid.c} btrfs-set-received-uuid.c
+  '';
+
+  postBuild = ''
+    gcc -O2 -luuid -o btrfs-set-received-uuid send-utils.o rbtree.o btrfs-list.o btrfs-set-received-uuid.c
+  '';
+
+  postInstall = ''
+    cp btrfs-set-received-uuid $out/bin
+  '';
+
   makeFlags = "prefix=$(out)";
 
   meta = {
