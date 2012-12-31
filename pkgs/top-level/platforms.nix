@@ -378,5 +378,6 @@ rec {
       '';
     kernelTarget = "vmlinux";
     uboot = null;
+    gcc.arch = "loongson2f";
   };
 }

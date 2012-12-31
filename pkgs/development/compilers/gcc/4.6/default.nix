@@ -313,8 +313,6 @@ stdenv.mkDerivation ({
         )
       )
     }
-    ${ # Trick that should be taken out once we have a mips64el-linux not loongson2f
-      if cross == null && stdenv.system == "mips64el-linux" then "--with-arch=loongson2f" else ""}
     ${if langAda then " --enable-libada" else ""}
     ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
     ${if cross != null then crossConfigureFlags else ""}
