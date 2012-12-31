@@ -85,77 +85,99 @@ let version = "4.7.2";
 
     javaAwtGtk = langJava && gtk != null;
 
-    /* Cross-gcc settings */
-    gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null cross;
-    gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null cross;
-    gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null cross;
-    gccFpu = stdenv.lib.attrByPath [ "gcc" "fpu" ] null cross;
-    gccFloat = stdenv.lib.attrByPath [ "gcc" "float" ] null cross;
-    gccMode = stdenv.lib.attrByPath [ "gcc" "mode" ] null cross;
-    withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
-    withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
-    withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
-    withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
-    withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
-    withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
-    crossMingw = (cross != null && cross.libc == "msvcrt");
+    /* Platform flags */
+    platformFlags = let
+        gccArch = stdenv.lib.attrByPath [ "platform" "gcc" "arch" ] null stdenv;
+        gccCpu = stdenv.lib.attrByPath [ "platform" "gcc" "cpu" ] null stdenv;
+        gccAbi = stdenv.lib.attrByPath [ "platform" "gcc" "abi" ] null stdenv;
+        gccFpu = stdenv.lib.attrByPath [ "platform" "gcc" "fpu" ] null stdenv;
+        gccFloat = stdenv.lib.attrByPath [ "platform" "gcc" "float" ] null stdenv;
+        gccMode = stdenv.lib.attrByPath [ "platform" "gcc" "mode" ] null stdenv;
+        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
+        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
+        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
+        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
+        withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
+        withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
+      in 
+        (withArch +
+        withCpu +
+        withAbi +
+        withFpu +
+        withFloat +
+        withMode);
 
-    crossConfigureFlags =
-      "--target=${cross.config}" +
-      withArch +
-      withCpu +
-      withAbi +
-      withFpu +
-      withFloat +
-      withMode +
-      (if crossMingw && crossStageStatic then
-        " --with-headers=${libcCross}/include" +
-        " --with-gcc" +
-        " --with-gnu-as" +
-        " --with-gnu-ld" +
-        " --with-gnu-ld" +
-        " --disable-shared" +
-        " --disable-nls" +
-        " --disable-debug" +
-        " --enable-sjlj-exceptions" +
-        " --enable-threads=win32" +
-        " --disable-win32-registry"
-        else if crossStageStatic then
-        " --disable-libssp --disable-nls" +
-        " --without-headers" +
-        " --disable-threads " +
-        " --disable-libmudflap " +
-        " --disable-libgomp " +
-        " --disable-libquadmath" +
-        " --disable-shared" +
-        " --disable-decimal-float" # libdecnumber requires libc
-        else
-        " --with-headers=${libcCross}/include" +
-        " --enable-__cxa_atexit" +
-        " --enable-long-long" +
-        (if crossMingw then
-          " --enable-threads=win32" +
-          " --enable-sjlj-exceptions" +
-          " --enable-hash-synchronization" +
-          " --disable-libssp" +
-          " --disable-nls" +
-          " --with-dwarf2" +
-          # I think noone uses shared gcc libs in mingw, so we better do the same.
-          # In any case, mingw32 g++ linking is broken by default with shared libs,
-          # unless adding "-lsupc++" to any linking command. I don't know why.
+    /* Cross-gcc settings */
+    crossMingw = (cross != null && cross.libc == "msvcrt");
+    crossConfigureFlags = let
+        gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null cross;
+        gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null cross;
+        gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null cross;
+        gccFpu = stdenv.lib.attrByPath [ "gcc" "fpu" ] null cross;
+        gccFloat = stdenv.lib.attrByPath [ "gcc" "float" ] null cross;
+        gccMode = stdenv.lib.attrByPath [ "gcc" "mode" ] null cross;
+        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
+        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
+        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
+        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
+        withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
+        withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
+      in
+        "--target=${cross.config}" +
+        withArch +
+        withCpu +
+        withAbi +
+        withFpu +
+        withFloat +
+        withMode +
+        (if crossMingw && crossStageStatic then
+          " --with-headers=${libcCross}/include" +
+          " --with-gcc" +
+          " --with-gnu-as" +
+          " --with-gnu-ld" +
+          " --with-gnu-ld" +
           " --disable-shared" +
-          (if cross.config == "x86_64-w64-mingw32" then
-            # To keep ABI compatibility with upstream mingw-w64
-            " --enable-fully-dynamic-string"
-            else "")
-          else (if cross.libc == "uclibc" then
-            # In uclibc cases, libgomp needs an additional '-ldl'
-            # and as I don't know how to pass it, I disable libgomp.
-            " --disable-libgomp" else "") +
-          " --enable-threads=posix" +
-          " --enable-nls" +
-          " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
-        );
+          " --disable-nls" +
+          " --disable-debug" +
+          " --enable-sjlj-exceptions" +
+          " --enable-threads=win32" +
+          " --disable-win32-registry"
+          else if crossStageStatic then
+          " --disable-libssp --disable-nls" +
+          " --without-headers" +
+          " --disable-threads " +
+          " --disable-libmudflap " +
+          " --disable-libgomp " +
+          " --disable-libquadmath" +
+          " --disable-shared" +
+          " --disable-decimal-float" # libdecnumber requires libc
+          else
+          " --with-headers=${libcCross}/include" +
+          " --enable-__cxa_atexit" +
+          " --enable-long-long" +
+          (if crossMingw then
+            " --enable-threads=win32" +
+            " --enable-sjlj-exceptions" +
+            " --enable-hash-synchronization" +
+            " --disable-libssp" +
+            " --disable-nls" +
+            " --with-dwarf2" +
+            # I think noone uses shared gcc libs in mingw, so we better do the same.
+            # In any case, mingw32 g++ linking is broken by default with shared libs,
+            # unless adding "-lsupc++" to any linking command. I don't know why.
+            " --disable-shared" +
+            (if cross.config == "x86_64-w64-mingw32" then
+              # To keep ABI compatibility with upstream mingw-w64
+              " --enable-fully-dynamic-string"
+              else "")
+            else (if cross.libc == "uclibc" then
+              # In uclibc cases, libgomp needs an additional '-ldl'
+              # and as I don't know how to pass it, I disable libgomp.
+              " --disable-libgomp" else "") +
+            " --enable-threads=posix" +
+            " --enable-nls" +
+            " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
+          );
     stageNameAddon = if crossStageStatic then "-stage-static" else
       "-stage-final";
     crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
@@ -308,6 +330,7 @@ stdenv.mkDerivation ({
     ${if cross == null && stdenv.isi686 then "--with-arch=i686" else ""}
     ${if cross != null then crossConfigureFlags else ""}
     ${if !bootstrap then "--disable-bootstrap" else ""}
+    ${if cross == null then platformFlags else ""}
   ";
 
   targetConfig = if cross != null then cross.config else null;

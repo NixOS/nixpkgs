@@ -118,59 +118,59 @@ let version = "4.6.3";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
         withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
       in
-      "--target=${cross.config}" +
-      withArch +
-      withCpu +
-      withAbi +
-      withFpu +
-      (if crossMingw && crossStageStatic then
-        " --with-headers=${libcCross}/include" +
-        " --with-gcc" +
-        " --with-gnu-as" +
-        " --with-gnu-ld" +
-        " --with-gnu-ld" +
-        " --disable-shared" +
-        " --disable-nls" +
-        " --disable-debug" +
-        " --enable-sjlj-exceptions" +
-        " --enable-threads=win32" +
-        " --disable-win32-registry"
-        else if crossStageStatic then
-        " --disable-libssp --disable-nls" +
-        " --without-headers" +
-        " --disable-threads " +
-        " --disable-libmudflap " +
-        " --disable-libgomp " +
-        " --disable-libquadmath" +
-        " --disable-shared" +
-        " --disable-decimal-float" # libdecnumber requires libc
-        else
-        " --with-headers=${libcCross}/include" +
-        " --enable-__cxa_atexit" +
-        " --enable-long-long" +
-        (if crossMingw then
-          " --enable-threads=win32" +
-          " --enable-sjlj-exceptions" +
-          " --enable-hash-synchronization" +
-          " --disable-libssp" +
-          " --disable-nls" +
-          " --with-dwarf2" +
-          # I think noone uses shared gcc libs in mingw, so we better do the same.
-          # In any case, mingw32 g++ linking is broken by default with shared libs,
-          # unless adding "-lsupc++" to any linking command. I don't know why.
+        "--target=${cross.config}" +
+        withArch +
+        withCpu +
+        withAbi +
+        withFpu +
+        (if crossMingw && crossStageStatic then
+          " --with-headers=${libcCross}/include" +
+          " --with-gcc" +
+          " --with-gnu-as" +
+          " --with-gnu-ld" +
+          " --with-gnu-ld" +
           " --disable-shared" +
-          (if cross.config == "x86_64-w64-mingw32" then
-            # To keep ABI compatibility with upstream mingw-w64
-            " --enable-fully-dynamic-string"
-            else "")
-          else (if cross.libc == "uclibc" then
-            # In uclibc cases, libgomp needs an additional '-ldl'
-            # and as I don't know how to pass it, I disable libgomp.
-            " --disable-libgomp" else "") +
-          " --enable-threads=posix" +
-          " --enable-nls" +
-          " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
-        );
+          " --disable-nls" +
+          " --disable-debug" +
+          " --enable-sjlj-exceptions" +
+          " --enable-threads=win32" +
+          " --disable-win32-registry"
+          else if crossStageStatic then
+          " --disable-libssp --disable-nls" +
+          " --without-headers" +
+          " --disable-threads " +
+          " --disable-libmudflap " +
+          " --disable-libgomp " +
+          " --disable-libquadmath" +
+          " --disable-shared" +
+          " --disable-decimal-float" # libdecnumber requires libc
+          else
+          " --with-headers=${libcCross}/include" +
+          " --enable-__cxa_atexit" +
+          " --enable-long-long" +
+          (if crossMingw then
+            " --enable-threads=win32" +
+            " --enable-sjlj-exceptions" +
+            " --enable-hash-synchronization" +
+            " --disable-libssp" +
+            " --disable-nls" +
+            " --with-dwarf2" +
+            # I think noone uses shared gcc libs in mingw, so we better do the same.
+            # In any case, mingw32 g++ linking is broken by default with shared libs,
+            # unless adding "-lsupc++" to any linking command. I don't know why.
+            " --disable-shared" +
+            (if cross.config == "x86_64-w64-mingw32" then
+              # To keep ABI compatibility with upstream mingw-w64
+              " --enable-fully-dynamic-string"
+              else "")
+            else (if cross.libc == "uclibc" then
+              # In uclibc cases, libgomp needs an additional '-ldl'
+              # and as I don't know how to pass it, I disable libgomp.
+              " --disable-libgomp" else "") +
+            " --enable-threads=posix" +
+            " --enable-nls" +
+            " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
+          );
     stageNameAddon = if crossStageStatic then "-stage-static" else
       "-stage-final";
     crossNameAddon = if cross != null then "-${cross.config}" + stageNameAddon else "";
