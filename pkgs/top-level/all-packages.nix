@@ -7038,6 +7038,8 @@ let
 
   feh = callPackage ../applications/graphics/feh { };
 
+  filezilla = callPackage ../applications/networking/ftp/filezilla { };
+
   firefox = pkgs.firefoxPkgs.firefox;
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
