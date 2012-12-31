@@ -38,6 +38,8 @@ if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
 
     boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
 
+    users.extraGroups = singleton { name = "vboxsf"; };
+
     jobs.virtualbox =
       { description = "VirtualBox service";
 
