@@ -85,7 +85,8 @@ stdenv.mkDerivation {
     if !nativeLibc then
       (if stdenv.system == "i686-linux" then "ld-linux.so.2" else
        if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2" else
-       if stdenv.isArm then "ld-linux.so.3" else
+       # ARM with a wildcard, which can be "" or "-armhf".
+       if stdenv.isArm then "ld-linux*.so.3" else
        if stdenv.system == "powerpc-linux" then "ld.so.1" else
        if stdenv.system == "mips64el-linux" then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform")
