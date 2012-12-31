@@ -214,6 +214,9 @@ rec {
       cloog = pkgs.cloog.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
       ppl = pkgs.ppl.override { stdenv = pkgs.makeStaticLibraries pkgs.stdenv; };
     };
+    extraAttrs = {
+      glibc = stdenvLinuxGlibc;   # Required by gcc47 build
+    };
     inherit fetchurl;
   };
 
