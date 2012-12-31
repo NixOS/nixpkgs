@@ -120,10 +120,19 @@ stdenv.mkDerivation ({
         && cross.platform.kernelMajor == "2.6") [
     "--enable-kernel=2.6.0"
     "--with-__thread"
-  ] ++ stdenv.lib.optionals stdenv.isArm [
+  ] ++ stdenv.lib.optionals (cross == null &&
+       (stdenv.system == "armv5tel-linux")) [
     "--host=arm-linux-gnueabi"
     "--build=arm-linux-gnueabi"
     "--without-fp"
+
+    # To avoid linking with -lgcc_s (dynamic link)
+    # so the glibc does not depend on its compiler store path
+    "libc_cv_as_needed=no"
+  ] ++ stdenv.lib.optionals (cross == null && stdenv.platform.name == "raspberrypi") [
+    "--host=arm-linux-gnueabi"
+    "--build=arm-linux-gnueabi"
+    "--with-fp"
 
     # To avoid linking with -lgcc_s (dynamic link)
     # so the glibc does not depend on its compiler store path

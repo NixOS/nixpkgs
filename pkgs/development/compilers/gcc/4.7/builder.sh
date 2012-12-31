@@ -71,7 +71,7 @@ if test "$noSysDirs" = "1"; then
         unset CPATH
         if test -z "$crossStageStatic"; then
             EXTRA_TARGET_CFLAGS="-B${libcCross}/lib -idirafter ${libcCross}/include"
-            EXTRA_TARGET_LDFLAGS="-Wl,-L${libcCross}/lib"
+            EXTRA_TARGET_LDFLAGS="-Wl,-L${libcCross}/lib -Wl,-rpath,${libcCross}/lib -Wl,-rpath-link,${libcCross}/lib"
         fi
     else
         if test -z "$NIX_GCC_CROSS"; then
@@ -95,7 +95,9 @@ if test "$noSysDirs" = "1"; then
             NIX_FIXINC_DUMMY_CROSS=$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/include
 
             # The path to the Glibc binaries such as `crti.o'.
-            glibc_libdir="$(cat $NIX_GCC_CROSS/nix-support/orig-libc)/lib"
+            glibc_dir="$(cat $NIX_GCC_CROSS/nix-support/orig-libc)"
+            glibc_libdir="$glibc_dir/lib"
+            configureFlags="$configureFlags --with-native-system-header-dir=$glibc_dir/include"
 
             extraFlags="-I$NIX_FIXINC_DUMMY_CROSS $extraFlags"
             extraLDFlags="-L$glibc_libdir -rpath $glibc_libdir $extraLDFlags"
