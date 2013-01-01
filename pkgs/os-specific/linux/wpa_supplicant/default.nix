@@ -1,13 +1,13 @@
 { stdenv, fetchurl, openssl, dbus_libs, pkgconfig, libnl }:
 
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.1";
 
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "171b9027rbzy64zaal4832ix9i3mm6ypwmynbpia5bss793ivm4i";
+    sha256 = "00lyifj8cz7qyal6dy1dxbpk3g3bywvdarik8gbj9ds7zmfbwkd5";
   };
 
   preBuild = ''
