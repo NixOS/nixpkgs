@@ -205,14 +205,12 @@ rec {
   mountOptions = unitOptions // {
 
     what = mkOption {
-      default = "";
       example = "/dev/sda1";
       type = types.uniq types.string;
       description = "Absolute path of device node, file or other resource. (Mandatory)";
     };
 
     where = mkOption {
-      default = "";
       example = "/mnt";
       type = types.uniq types.string;
       description = ''

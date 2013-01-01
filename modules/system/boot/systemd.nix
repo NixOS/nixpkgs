@@ -292,8 +292,6 @@ let
     };
 
   mountToUnit = name: def:
-    assert def.mountConfig.What != "";
-    assert def.mountConfig.Where != "";
     { inherit (def) wantedBy enable;
       text =
         ''
