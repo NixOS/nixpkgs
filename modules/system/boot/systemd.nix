@@ -1,6 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, utils, ... }:
 
 with pkgs.lib;
+with utils;
 with import ./systemd-unit-options.nix { inherit config pkgs; };
 
 let
@@ -290,15 +291,6 @@ let
         '';
     };
 
-  # this is by no means the full escaping-logic systemd uses
-  # so feel free to extend this further.
-  mountName = path:
-    let escaped = replaceChars [ "-"    " "    "/" ]
-                               [ "\x2d" "\x20" "-" ] (toString path);
-    in if (substring 0 1 escaped == "-")
-       then substring 1 (sub (stringLength escaped) 1) escaped
-       else escaped;
-
   mountToUnit = name: def:
     assert def.mountConfig.What != "";
     assert def.mountConfig.Where != "";
@@ -550,7 +542,7 @@ in
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets
       // listToAttrs (map
-                   (v: let n = mountName v.where;
+                   (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts);
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
