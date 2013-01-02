@@ -570,10 +570,15 @@ let
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  coreutils = callPackage ../tools/misc/coreutils {
-    # TODO: Add ACL support for cross-Linux.
-    aclSupport = crossSystem == null && stdenv.isLinux;
-  };
+  coreutils = if stdenv.isDarwin then
+      # 8.20 doesn't build on Darwin
+      (callPackage ../tools/misc/coreutils/8.19) 
+    else
+      (callPackage ../tools/misc/coreutils)
+    {
+      # TODO: Add ACL support for cross-Linux.
+      aclSupport = crossSystem == null && stdenv.isLinux;
+    };
 
   cpio = callPackage ../tools/archivers/cpio { };
 
