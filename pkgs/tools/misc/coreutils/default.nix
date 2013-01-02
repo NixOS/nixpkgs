@@ -7,11 +7,11 @@ assert aclSupport -> acl != null;
 assert selinuxSupport -> libselinux != null && libsepol != null;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.19";
+  name = "coreutils-8.20";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "1rx9x3fp848w4nny7irdkcpkan9fcx24d99v5dkwgkyq7wc76f5d";
+    sha256 = "1cly97xdy3v4nbbx631k43smqw0nnpn651kkprs0yyl2cj3pkjyv";
   };
 
   nativeBuildInputs = [ perl ];
