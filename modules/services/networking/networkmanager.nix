@@ -1,13 +1,14 @@
 { config, pkgs, ... }:
 
 with pkgs.lib;
+with pkgs;
 
 let
   cfg = config.networking.networkmanager;
 
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient";
 
-  configFile = pkgs.writeText "NetworkManager.conf" ''
+  configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
 
@@ -36,7 +37,7 @@ let
     ResultActive=yes
   '';
 
-  ipUpScript = pkgs.writeScript "01nixos-ip-up" ''
+  ipUpScript = writeScript "01nixos-ip-up" ''
     #!/bin/sh
     if test "$2" = "up"; then
       ${config.systemd.package}/bin/systemctl start ip-up.target
@@ -67,7 +68,7 @@ in {
         Extra packages that provide NetworkManager plugins.
       '';
       merge = mergeListOption;
-      apply = list: [ pkgs.networkmanager pkgs.modemmanager ] ++ list;
+      apply = list: [ networkmanager modemmanager wpa_supplicant ] ++ list;
     };
   };
 
@@ -76,10 +77,14 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.etc = singleton {
-      source = ipUpScript;
-      target = "NetworkManager/dispatcher.d/01nixos-ip-up";
-    };
+    environment.etc = [
+      { source = ipUpScript;
+        target = "NetworkManager/dispatcher.d/01nixos-ip-up";
+      }
+      { source = configFile;
+        target = "NetworkManager/NetworkManager.conf";
+      }
+    ];
 
     environment.systemPackages = cfg.packages;
 
@@ -88,24 +93,31 @@ in {
       gid = config.ids.gids.networkmanager;
     };
 
-    jobs.networkmanager = {
-      startOn = "started network-interfaces";
-      stopOn = "stopping network-interfaces";
+    systemd.packages = cfg.packages;
 
-      path = [ pkgs.networkmanager ];
-
-      preStart = ''
-        mkdir -m 755 -p /etc/NetworkManager
+    # Create an initialisation service that both starts
+    # NetworkManager when network.target is reached,
+    # and sets up necessary directories for NM.
+    systemd.services."NetworkManager-init" = {
+      description = "NetworkManager initialisation";
+      wantedBy = [ "network.target" ];
+      partOf = [ "NetworkManager.service" ];
+      wants = [ "NetworkManager.service" ];
+      before = [ "NetworkManager.service" ];
+      script = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
         mkdir -m 755 -p ${stateDirs}
       '';
-
-       exec = "NetworkManager --config=${configFile} --no-daemon";
+      serviceConfig = {
+        Type = "oneshot";
+      };
     };
 
-    networking.useDHCP = false;
-
-    networking.wireless.enable = true;
+    # Turn off NixOS' network management
+    networking = {
+      useDHCP = false;
+      wireless.enable = false;
+    };
 
     security.polkit.permissions = polkitConf;
 
