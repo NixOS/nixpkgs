@@ -2118,23 +2118,19 @@ let pythonPackages = python.modules // rec {
 
 
   pymacs = pkgs.stdenv.mkDerivation rec {
-    version = "v0.24-beta2";
+    version = "v0.25";
     name = "Pymacs-${version}";
 
     src = fetchurl {
       url = "https://github.com/pinard/Pymacs/tarball/${version}";
       name = "${name}.tar.gz";
-      sha256 = "0nzb3wrxwy0cmmj087pszkwgj2v22x0y5m4vxb6axz94zfl02r8j";
+      sha256 = "1hmy76c5igm95rqbld7gvk0az24smvc8hplfwx2f5rhn6frj3p2i";
     };
 
     buildInputs = [ python ];
 
-    configurePhase = ''
-      python p4 -C p4config.py *.in Pymacs contrib tests
-    '';
-
-    installPhase = ''
-      python setup.py install --prefix=$out
+    patchPhase = ''
+      sed -e "s@ install@ install --prefix=$out@g" -i Makefile
     '';
 
     meta = with stdenv.lib; {
