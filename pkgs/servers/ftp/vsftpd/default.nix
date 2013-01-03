@@ -14,9 +14,13 @@ stdenv.mkDerivation (rec {
     sed -i -e 's/-idirafter.*//' Makefile
   '';
   
-  preBuild =''
-    makeFlagsArray=( "LIBS=${if sslEnable then "-lcrypt -lssl -lcrypto " else ""}-lpam -lcap" )
-  '';
+  preBuild = let
+      sslLibs = if sslEnable then "-lcrypt -lssl -lcrypto " else "";
+    in ''
+      makeFlagsArray=( "LIBS=${sslLibs}-lpam -lcap -fstack-protector" )
+    '';
+
+  # It won't link without this flag, used in CFLAGS
 
   buildInputs = [ openssl libcap pam ];
 
