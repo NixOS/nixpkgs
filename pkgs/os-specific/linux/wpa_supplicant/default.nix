@@ -38,10 +38,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man5 $out/share/man/man8
     cp -v doc/docbook/*.5 $out/share/man/man5/
     cp -v doc/docbook/*.8 $out/share/man/man8/
-    mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services
+    mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
     cp -v dbus/*service $out/share/dbus-1/system-services
     sed -e "s@/sbin/wpa_supplicant@$out&@" -i $out/share/dbus-1/system-services/*
     cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
+    cp -v systemd/*.service $out/etc/systemd/system
   ''; # */
 
   meta = {
