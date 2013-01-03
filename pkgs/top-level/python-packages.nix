@@ -1047,6 +1047,22 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  jedi = buildPythonPackage (rec {
+    name = "jedi-0.5b5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/j/jedi/${name}.tar.gz";
+      sha256 = "10xqdhda9kdbc22h4dphxqjncpdb80s1crxsirr5h016rw9czsa4";
+    };
+
+    meta = {
+      homepage = "https://github.com/davidhalter/jedi";
+      description = "An autocompletion tool for Python that can be used for text editors.";
+      license = pkgs.lib.licenses.lgpl3Plus;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
+    };
+  });
 
   jinja2 = buildPythonPackage {
     name = "jinja2-2.6";
