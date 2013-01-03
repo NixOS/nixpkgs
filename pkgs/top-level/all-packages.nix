@@ -916,6 +916,8 @@ let
 
   hping = callPackage ../tools/networking/hping { };
 
+  httpie = callPackage ../tools/networking/httpie { };
+
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   # FIXME: This Hydra snapshot is outdated and depends on the `nixPerl',
@@ -1804,7 +1806,7 @@ let
 
   xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
-  youtubeDL = callPackage ../tools/misc/youtube-dl { };
+  youtubeDL = callPackage ../tools/misc/youtube-dl { inherit (haskellPackages) pandoc; };
 
   zbar = callPackage ../tools/graphics/zbar {};
 
@@ -4992,6 +4994,10 @@ let
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
 
+  tinyxml = tinyxml2;
+  
+  tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
+
   tk = callPackage ../development/libraries/tk { };
 
   tnt = callPackage ../development/libraries/tnt { };
@@ -7029,6 +7035,8 @@ let
 
   feh = callPackage ../applications/graphics/feh { };
 
+  filezilla = callPackage ../applications/networking/ftp/filezilla { };
+
   firefox = pkgs.firefoxPkgs.firefox;
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
@@ -7077,6 +7085,10 @@ let
   freerdp = callPackage ../applications/networking/remote/freerdp { };
 
   freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix { };
+
+  freicoin = callPackage ../applications/misc/freicoin {
+    db4 = db48;
+  };
 
   fspot = callPackage ../applications/graphics/f-spot {
     inherit (gnome) libgnome libgnomeui;
@@ -7937,7 +7949,7 @@ let
     inherit (pkgs) python perl tcl ruby /*x11*/;
     lua = pkgs.lua5;
     # optional features by flags
-    flags = [ "X11" ]; # only flag "X11" by now
+    flags = [ "python" "X11" ]; # only flag "X11" by now
   };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
@@ -8089,6 +8101,8 @@ let
     motif = lesstif;
     base14Fonts = "${ghostscript}/share/ghostscript/fonts";
   };
+
+  xkb_switch = callPackage ../tools/X11/xkb-switch { };
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
@@ -8739,6 +8753,8 @@ let
   iprover = callPackage ../applications/science/logic/iprover {};
 
   leo2 = callPackage ../applications/science/logic/leo2 {};
+
+  logisim = callPackage ../applications/science/logic/logisim {};
 
   matita = callPackage ../applications/science/logic/matita {
     ocaml = ocaml_3_11_2;

@@ -2916,7 +2916,7 @@ let pythonPackages = python.modules // rec {
   });
 
   twisted = buildPythonPackage rec {
-    name = "twisted-10.2.0";
+    name = "twisted-12.3.0";
 
     src = fetchurl {
       url = http://tmrc.mit.edu/mirror/twisted/Twisted/10.2/Twisted-10.2.0.tar.bz2;
@@ -3253,11 +3253,12 @@ let pythonPackages = python.modules // rec {
   # };
 
   cliapp = buildPythonPackage rec {
-    name = "cliapp-1.20120929";
+    name = "cliapp-${version}";
+    version = "1.20121216";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_1.20120929.orig.tar.gz";
-      sha256 = "30d5077e53b3e45f892b1c49feaaf4f47e4664400ed71435e77a82a2b823a0f8";
+      url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
+      sha256 = "1bzvc4aj3w8g85qycwz1jxa73jj8rl6zrgd4hi78kr4dgslcfns5";
     };
 
     buildInputs = [ sphinx ];
@@ -3316,11 +3317,12 @@ let pythonPackages = python.modules // rec {
   };
 
   larch = buildPythonPackage rec {
-    name = "larch-1.20121006";
+    name = "larch-${version}";
+    version = "1.20121216";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_1.20121006.orig.tar.gz";
-      sha256 = "b4482981010e9c22ee3fce6fdc664b8fc0a1a3a18ed30b40f247f3b44437ccfa";
+      url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_${version}.orig.tar.gz";
+      sha256 = "0w4hirs8wkp1hji6nxfmq4rahkd5rgw4cavvdhpdfr4mddycbis3";
     };
 
     buildInputs = [ sphinx ];
@@ -3332,6 +3334,90 @@ let pythonPackages = python.modules // rec {
     meta = {
       homepage = http://liw.fi/larch/;
       description = "Python B-tree library.";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  whisper = buildPythonPackage rec {
+    name = "whisper-${version}";
+    version = "0.9.10";
+
+    src = fetchurl rec {
+      url = "https://launchpad.net/graphite/0.9/${version}/+download/${name}.tar.gz";
+      sha256 = "1zy4z4hrbiqj4ipcv2m9197hf03d4xphllqav9w4c8i6fn8zmd9n";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      homepage = http://graphite.wikidot.com/;
+      description = "Fixed size round-robin style database";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  carbon = buildPythonPackage rec {
+    name = "carbon-${version}";
+    version = "0.9.10";
+
+    src = fetchurl rec {
+      url = "https://launchpad.net/graphite/0.9/${version}/+download/${name}.tar.gz";
+      sha256 = "0wjhd87pvpcpvaj3wql2d92g8lpp33iwmxdkp7npic5mjl2y0dsg";
+    };
+
+    buildInputs = [ txamqp zopeInterface twisted ];
+    propagatedBuildInputs = [ whisper ];
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      homepage = http://graphite.wikidot.com/;
+      description = "Backend data caching and persistence daemon for Graphite";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  txamqp = buildPythonPackage rec {
+    name = "txamqp-${version}";
+    version = "0.3";
+
+    src = fetchurl rec {
+      url = "https://launchpad.net/txamqp/trunk/${version}/+download/python-txamqp_${version}.orig.tar.gz";
+      sha256 = "1r2ha0r7g14i4b5figv2spizjrmgfpspdbl1m031lw9px2hhm463";
+    };
+
+    buildInputs = [ twisted ];
+
+    meta = {
+      homepage = https://launchpad.net/txamqp;
+      description = "Library for communicating with AMQP peers and brokers using Twisted";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+      platforms = python.meta.platforms;
+    };
+  };
+
+  graphite_web = buildPythonPackage rec {
+    name = "graphite-web-${version}";
+    version = "0.9.10";
+
+    src = fetchurl rec {
+      url = "https://launchpad.net/graphite/0.9/${version}/+download/${name}.tar.gz";
+      sha256 = "1gj8i6j2i172cldqw98395235bn78ciagw6v17fgv01rmind3lag";
+    };
+
+    buildInputs = [ django pkgs.pycairo ldap memcached python.modules.sqlite3 ];
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      homepage = http://graphite.wikidot.com/;
+      description = "Enterprise scalable realtime graphing";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
       platforms = python.meta.platforms;
     };

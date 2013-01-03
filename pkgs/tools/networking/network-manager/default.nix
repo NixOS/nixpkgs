@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "network-manager-${version}";
-  version = "0.9.4.0";
+  version = "0.9.6.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/NetworkManager/0.9/NetworkManager-${version}.tar.xz";
-    sha256 = "eb4f124008b3d855a37205d03ef035b7218639cd7332bdae5567095977e93e0f";
+    sha256 = "1sx7h29j9h13qszcppja1p27zq2m7vdrylbcyb47n62x0lg426si";
   };
 
   preConfigure = ''
@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc" "--localstatedir=/var"
     "--with-dbus-sys-dir=\${out}/etc/dbus-1/system.d"
     "--with-crypto=gnutls" "--disable-more-warnings"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/systemd" ];
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+    "--with-kernel-firmware-dir=/run/current-system/firmware" ];
 
   buildInputs = [ wirelesstools udev libnl libuuid polkit ppp xz ];
 

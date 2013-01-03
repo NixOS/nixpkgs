@@ -119,6 +119,11 @@ rec {
         UBIFS_FS_LZO y
         UBIFS_FS_ZLIB y
         UBIFS_FS_DEBUG n
+
+        # Kdb, for kernel troubles
+        KGDB y
+        KGDB_SERIAL_CONSOLE y
+        KGDB_KDB y
       '';
     kernelTarget = "uImage";
     uboot = "sheevaplug";

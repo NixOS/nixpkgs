@@ -1,5 +1,6 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor}:
+, libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor
+, dbus }:
 
 let version = "4.2.4"; in
 
@@ -13,7 +14,7 @@ stdenv.mkDerivation {
 
   KERN_DIR = "${kernel}/lib/modules/*/build";
 
-  buildInputs = [ patchelf cdrkit makeWrapper ];
+  buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 
   installPhase = ''
     mkdir -p $out
@@ -56,7 +57,7 @@ stdenv.mkDerivation {
     cd ..
 
     # Change the interpreter for various binaries
-    for i in sbin/VBoxService bin/{VBoxClient,VBoxControl}
+    for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} lib/VBoxGuestAdditions/mount.vboxsf
     do
         ${if stdenv.system == "i686-linux" then ''
           patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $i
@@ -66,14 +67,12 @@ stdenv.mkDerivation {
         ''
         else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
         }
+        patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${dbus}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib $i
     done
-
-    # Change rpath for various binaries and libraries
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib bin/VBoxClient
 
     for i in lib/VBoxOGL*.so
     do
-        patchelf --set-rpath $out/lib $i
+        patchelf --set-rpath $out/lib:${dbus}/lib $i
     done
 
     # Remove references to /usr from various scripts and files
@@ -82,6 +81,7 @@ stdenv.mkDerivation {
 
     # Install binaries
     mkdir -p $out/sbin
+    install -m 4755 lib/VBoxGuestAdditions/mount.vboxsf $out/sbin/mount.vboxsf
     install -m 755 sbin/VBoxService $out/sbin
 
     mkdir -p $out/bin
