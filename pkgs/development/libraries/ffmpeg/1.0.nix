@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, yasm, zlib, bzip2
+{ stdenv, fetchurl, pkgconfig, yasm, zlib, bzip2, alsaLib
 , mp3Support ? true, lame ? null
 , speexSupport ? true, speex ? null
 , theoraSupport ? true, libtheora ? null
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
     ++ stdenv.lib.optional x11grabSupport "--enable-x11grab";
 
-  buildInputs = [ pkgconfig lame yasm zlib bzip2 ]
+  buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib ]
     ++ stdenv.lib.optional mp3Support lame
     ++ stdenv.lib.optional speexSupport speex
     ++ stdenv.lib.optional theoraSupport libtheora
