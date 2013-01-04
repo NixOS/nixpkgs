@@ -8166,6 +8166,8 @@ let
 
   andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
 
+  anki = callPackage ../games/anki { };
+
   asc = callPackage ../games/asc {
     lua = lua5;
     libsigcxx = libsigcxx12;
