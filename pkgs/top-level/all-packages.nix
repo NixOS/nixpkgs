@@ -1054,6 +1054,8 @@ let
 
   lzop = callPackage ../tools/compression/lzop { };
 
+  maildrop = callPackage ../tools/networking/maildrop { };
+
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
   };
