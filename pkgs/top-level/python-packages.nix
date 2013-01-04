@@ -2461,20 +2461,14 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  rope = pkgs.stdenv.mkDerivation rec {
-    version = "0.9.3";
+  rope = buildPythonPackage rec {
+    version = "0.9.4";
     name = "rope-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/rope/${name}.tar.gz";
-      sha256 = "1092rlsfna7rm1jkdanilsmw7rr3hlkgyji02xfd02wfcm8xa2i7";
+      sha256 = "1fm6ahff50b10mlnc0ar4x1fv9sxmcp1g651myyqy7c50hk39h1d";
     };
-
-    buildInputs = [ python ];
-
-    installPhase = ''
-      python setup.py install --prefix=$out
-    '';
 
     meta = with stdenv.lib; {
       description = "python refactoring library";
@@ -2484,20 +2478,16 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  ropemacs = pkgs.stdenv.mkDerivation rec {
-    version = "0.6";
+  ropemacs = buildPythonPackage rec {
+    version = "0.7";
     name = "ropemacs-${version}";
 
     src = fetchurl {
-      url = "mirror://sourceforge/rope/${name}.tar.gz";
-      sha256 = "1afqybmjn7fqkwx8y8kx1kfx181ix73cbq3a0d5n7ryjm7k1r0s4";
+      url = "http://pypi.python.org/packages/source/r/ropemacs/${name}.tar.gz";
+      sha256 = "1x5qf1drcdz9jfiiakc60kzqkb3ahsg9j902c5byf3gjfacdrmqj";
     };
 
-    buildInputs = [ python ];
-
-    installPhase = ''
-      python setup.py install --prefix=$out
-    '';
+    propagatedBuildInputs = [ ropemode ];
 
      meta = with stdenv.lib; {
        description = "a plugin for performing python refactorings in emacs";
@@ -2506,6 +2496,26 @@ let pythonPackages = python.modules // rec {
        license = licenses.gpl2;
      };
   };
+
+  ropemode = buildPythonPackage rec {
+    version = "0.2";
+    name = "ropemode-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/ropemode/${name}.tar.gz";
+      sha256 = "0jw6h1wvk6wk0wknqdf7s9pw76m8472jv546lqdd88jbl2scgcjl";
+    };
+
+    propagatedBuildInputs = [ rope ];
+
+     meta = with stdenv.lib; {
+       description = "a plugin for performing python refactorings in emacs";
+       homepage = http://rope.sf.net;
+       maintainers = [ maintainers.goibhniu ];
+       license = licenses.gpl2;
+     };
+  };
+
 
 
   routes = buildPythonPackage rec {
