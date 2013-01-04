@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     xmonadContrib
   ];
   configureFlags = "-f-with_hlist -fwith_split -fwith_parsec";
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/xmonad-extras";
     description = "Third party extensions for xmonad with wacky dependencies";

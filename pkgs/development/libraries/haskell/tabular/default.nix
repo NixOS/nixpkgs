@@ -2,12 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "tabular";
-  version = "0.2.2.3";
-  sha256 = "cf6d9f1928ec6981edcbb06c4dcbaea7a96deef5272192ad4290caa18711ea76";
+  version = "0.2.2.4";
+  sha256 = "103fqbypsgykv6z29jp1s75pd99vra9sfa70krcnlhbk9kbvdyjk";
   buildDepends = [ csv html mtl ];
-  jailbreak = true;
   meta = {
-    homepage = "http://patch-tag.com/r/kowey/tabular";
+    homepage = "http://hub.darcs.net/kowey/tabular";
     description = "Two-dimensional data tables with rendering functions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

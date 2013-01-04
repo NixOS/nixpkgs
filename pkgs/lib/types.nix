@@ -11,7 +11,7 @@ with import ./trivial.nix;
 rec {
 
   hasType = x: isAttrs x && x ? _type;
-  typeOf = x: if hasType x then x._type else "";
+  typeOf = x: x._type or "";
 
   setType = typeName: value: value // {
     _type = typeName;

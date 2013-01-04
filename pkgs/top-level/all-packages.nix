@@ -920,6 +920,8 @@ let
 
   hping = callPackage ../tools/networking/hping { };
 
+  httpie = callPackage ../tools/networking/httpie { };
+
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   # FIXME: This Hydra snapshot is outdated and depends on the `nixPerl',
@@ -1055,6 +1057,8 @@ let
   xz = callPackage ../tools/compression/xz { };
 
   lzop = callPackage ../tools/compression/lzop { };
+
+  maildrop = callPackage ../tools/networking/maildrop { };
 
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
@@ -2963,6 +2967,8 @@ let
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
   automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix { };
+
+  automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
@@ -4940,6 +4946,10 @@ let
   telepathy_farstream = callPackage ../development/libraries/telepathy/farstream {};
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
+
+  tinyxml = tinyxml2;
+
+  tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
   tk = callPackage ../development/libraries/tk { };
 
@@ -6984,6 +6994,8 @@ let
 
   feh = callPackage ../applications/graphics/feh { };
 
+  filezilla = callPackage ../applications/networking/ftp/filezilla { };
+
   firefox = pkgs.firefoxPkgs.firefox;
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
@@ -7032,6 +7044,10 @@ let
   freerdp = callPackage ../applications/networking/remote/freerdp { };
 
   freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix { };
+
+  freicoin = callPackage ../applications/misc/freicoin {
+    db4 = db48;
+  };
 
   fspot = callPackage ../applications/graphics/f-spot {
     inherit (gnome) libgnome libgnomeui;
@@ -8103,6 +8119,8 @@ let
   alienarena = callPackage ../games/alienarena { };
 
   andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
+
+  anki = callPackage ../games/anki { };
 
   asc = callPackage ../games/asc {
     lua = lua5;
