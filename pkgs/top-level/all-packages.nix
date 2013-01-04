@@ -1082,6 +1082,8 @@ let
 
   minecraft = callPackage ../games/minecraft { };
 
+  minetest = callPackage ../games/minetest { };
+
   miniupnpc = callPackage ../tools/networking/miniupnpc { };
 
   miniupnpd = callPackage ../tools/networking/miniupnpd { };
