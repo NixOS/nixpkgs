@@ -1054,6 +1054,8 @@ let
 
   lzop = callPackage ../tools/compression/lzop { };
 
+  maildrop = callPackage ../tools/networking/maildrop { };
+
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
   };
@@ -8163,6 +8165,8 @@ let
   alienarena = callPackage ../games/alienarena { };
 
   andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
+
+  anki = callPackage ../games/anki { };
 
   asc = callPackage ../games/asc {
     lua = lua5;
