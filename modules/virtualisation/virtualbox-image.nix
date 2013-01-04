@@ -63,6 +63,10 @@ with pkgs.lib;
           mkdir -p /mnt/etc/nixos
           cp ${./nova-config.nix} /mnt/etc/nixos/configuration.nix
 
+          # `switch-to-configuration' requires a /bin/sh
+          mkdir -p /mnt/bin
+          ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
+
           # Generate the GRUB menu.
           chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
