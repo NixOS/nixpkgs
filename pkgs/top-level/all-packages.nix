@@ -2974,6 +2974,8 @@ let
       && stdenv.system != "i686-solaris";
   };
 
+  automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
+
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
