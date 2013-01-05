@@ -50,7 +50,7 @@
 #define HAVE_HWSLIP 1
 #define HAVE_HWPPP 1
 #define HAVE_HWTUNNEL 1
-#define HAVE_HWSTRIP 1
+#define HAVE_HWSTRIP 0
 #define HAVE_HWTR 0
 #define HAVE_HWAX25 0
 #define HAVE_HWROSE 0
