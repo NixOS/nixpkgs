@@ -3,7 +3,6 @@
 with pkgs.lib;
 
 let
-  nix = config.environment.nix;
   cfg = config.nix.gc;
 in
 
@@ -54,8 +53,8 @@ in
 
     boot.systemd.services."nix-gc" =
       { description = "Nix Garbage Collector";
-        serviceConfig.ExecStart =
-          "@${nix}/bin/nix-collect-garbage nix-collect-garbage ${cfg.options}";
+        path  = [ config.environment.nix ];
+        script = "exec nix-collect-garbage ${cfg.options}";
       };
 
   };
