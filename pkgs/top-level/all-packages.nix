@@ -8064,6 +8064,8 @@ let
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
 
+  xbmc = callPackage ../applications/video/xbmc { };
+
   xcalib = callPackage ../tools/X11/xcalib { };
 
   xchat = callPackage ../applications/networking/irc/xchat { };
