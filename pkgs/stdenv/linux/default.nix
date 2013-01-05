@@ -17,7 +17,7 @@ rec {
     else if system == "powerpc-linux" then import ./bootstrap/powerpc
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
     else if system == "armv6l-linux" then import ./bootstrap/armv6l
-    else if system == "armv7l-linux" then import ./bootstrap/armv5tel
+    else if system == "armv7l-linux" then import ./bootstrap/armv6l
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f
     else abort "unsupported platform for the pure Linux stdenv";
 
