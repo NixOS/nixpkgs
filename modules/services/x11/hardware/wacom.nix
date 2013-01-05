@@ -16,18 +16,41 @@ in
 
       enable = mkOption {
         default = false;
-        description = "Whether to enable the Wacom touchscreen/digitizer.";
+        description = "Whether to enable the Wacom touchscreen/digitizer/tablet.";
       };
 
       device = mkOption {
-        default = "/dev/ttyS0";
-        description = "Device to use.";
+        default = null;
+        example = "/dev/ttyS0";
+        description = "Device to use. Set to null for autodetect (think USB tablet).";
       };
 
       forceDeviceType = mkOption {
-        default = "ISDV4";
-        example = null;
-        description = "Some models (think touchscreen) require the device type to be specified.";
+        default = null;
+        example = "ISDV4";
+        description = "Some models (think touchscreen) require the device type to be specified. Set to null for autodetect (think USB tablet).";
+      };
+
+      stylusExtraConfig = mkOption {
+        default = "";
+        example = ''
+            Option "Button1" "2"
+          '';
+        description = "Lines to be added to Wacom_stylus InputDevice section.";
+      };
+
+      eraserExtraConfig = mkOption {
+        default = "";
+        example = ''
+            Option "Button2" "3"
+          '';
+        description = "Lines to be added to Wacom_eraser InputDevice section.";
+      };
+
+      cursorExtraConfig = mkOption {
+        default = "";
+        example = "";
+        description = "Lines to be added to Wacom_cursor InputDevice section.";
       };
 
     };
@@ -44,8 +67,8 @@ in
     services.xserver.serverLayoutSection =
       ''
         InputDevice "Wacom_stylus"
-        InputDevice "Wacom_cursor"
         InputDevice "Wacom_eraser"
+        InputDevice "Wacom_cursor"
       '';
 
     services.xserver.config =
@@ -53,33 +76,40 @@ in
         Section "InputDevice"
           Driver "wacom"
           Identifier "Wacom_stylus"
-          Option "Device" "${cfg.device}"
+          ${optionalString (cfg.device != null) ''
+            Option "Device" "${cfg.device}"
+          ''}
           Option "Type" "stylus"
           ${optionalString (cfg.forceDeviceType != null) ''
             Option "ForceDevice" "${cfg.forceDeviceType}"
           ''}
-          Option "Button2" "3"
+          ${cfg.stylusExtraConfig}
         EndSection
 
         Section "InputDevice"
           Driver "wacom"
           Identifier "Wacom_eraser"
-          Option "Device" "${cfg.device}"
+          ${optionalString (cfg.device != null) ''
+            Option "Device" "${cfg.device}"
+          ''}
           Option "Type" "eraser"
           ${optionalString (cfg.forceDeviceType != null) ''
             Option "ForceDevice" "${cfg.forceDeviceType}"
           ''}
-          Option "Button1" "2"
+          ${cfg.eraserExtraConfig}
         EndSection
 
         Section "InputDevice"
           Driver "wacom"
           Identifier "Wacom_cursor"
-          Option "Device" "${cfg.device}"
+          ${optionalString (cfg.device != null) ''
+            Option "Device" "${cfg.device}"
+          ''}
           Option "Type" "cursor"
           ${optionalString (cfg.forceDeviceType != null) ''
             Option "ForceDevice" "${cfg.forceDeviceType}"
           ''}
+          ${cfg.cursorExtraConfig}
         EndSection
       '';
 
