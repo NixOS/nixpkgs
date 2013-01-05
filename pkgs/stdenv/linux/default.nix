@@ -58,10 +58,10 @@ rec {
     builder = bootstrapFiles.sh;
 
     args =
-      if (system == "armv5tel-linux" || system == "armv6l-linux" 
-        || system == "armv7l-linux")
-      then ./scripts/unpack-bootstrap-tools-arm.sh
-      else ./scripts/unpack-bootstrap-tools.sh;
+      if system == "armv5tel-linux" || system == "armv6l-linux" 
+        || system == "armv7l-linux"
+      then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
+      else [ ./scripts/unpack-bootstrap-tools.sh ];
 
     inherit (bootstrapFiles) bzip2 mkdir curl cpio;
 
