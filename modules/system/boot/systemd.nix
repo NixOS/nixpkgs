@@ -246,6 +246,7 @@ let
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n: "Environment=${n}=${getAttr n env}\n") (attrNames env)}
           ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
+          ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
 
           ${optionalString (def.preStart != "") ''
             ExecStartPre=${makeJobScript "${name}-pre-start" ''
