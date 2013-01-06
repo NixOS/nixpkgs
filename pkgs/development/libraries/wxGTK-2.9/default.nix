@@ -7,12 +7,15 @@ assert withMesa -> mesa != null;
 
 with stdenv.lib;
 
+let
+  version = "2.9.4";
+in
 stdenv.mkDerivation {
-  name = "wxwidgets-2.9.3";
+  name = "wxwidgets-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wxwindows/wxWidgets-2.9.3.tar.bz2";
-    sha256 = "739c31a360b5c46b55904a7fb086f5cdfff0816efbc491d8263349210bf323b2";
+    url = "mirror://sourceforge/wxwindows/wxWidgets-${version}.tar.bz2";
+    sha256 = "04jda4bns7cmp7xy68qz112yg0lribpc6xs5k9gilfqcyhshqlvc";
   };
 
   buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst_plugins_base GConf ]

@@ -86,13 +86,13 @@ let pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    rev = "09804636609b4245cde4faceddffdb5361f3d390";
+    rev = "5b5dbecb5a03840b751219db90bcf4dcffda315e";
     name = "alot-0.3.3_${rev}";
 
     src = fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "b5239c4dfcd9882608fb48ef80fe9ba9223949ab7e6a2c1abe970ac307ebcd4a";
+      sha256 = "156q7x4wilhcgmaap7rjci3cgwm5ia85ddgx6xm6lfp5hkf5300v";
     };
 
     # error: invalid command 'test'
@@ -1047,6 +1047,22 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  jedi = buildPythonPackage (rec {
+    name = "jedi-0.5b5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/j/jedi/${name}.tar.gz";
+      sha256 = "10xqdhda9kdbc22h4dphxqjncpdb80s1crxsirr5h016rw9czsa4";
+    };
+
+    meta = {
+      homepage = "https://github.com/davidhalter/jedi";
+      description = "An autocompletion tool for Python that can be used for text editors.";
+      license = pkgs.lib.licenses.lgpl3Plus;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+      platforms = python.meta.platforms;
+    };
+  });
 
   jinja2 = buildPythonPackage {
     name = "jinja2-2.6";
@@ -2102,23 +2118,19 @@ let pythonPackages = python.modules // rec {
 
 
   pymacs = pkgs.stdenv.mkDerivation rec {
-    version = "v0.24-beta2";
+    version = "v0.25";
     name = "Pymacs-${version}";
 
     src = fetchurl {
       url = "https://github.com/pinard/Pymacs/tarball/${version}";
       name = "${name}.tar.gz";
-      sha256 = "0nzb3wrxwy0cmmj087pszkwgj2v22x0y5m4vxb6axz94zfl02r8j";
+      sha256 = "1hmy76c5igm95rqbld7gvk0az24smvc8hplfwx2f5rhn6frj3p2i";
     };
 
     buildInputs = [ python ];
 
-    configurePhase = ''
-      python p4 -C p4config.py *.in Pymacs contrib tests
-    '';
-
-    installPhase = ''
-      python setup.py install --prefix=$out
+    patchPhase = ''
+      sed -e "s@ install@ install --prefix=$out@g" -i Makefile
     '';
 
     meta = with stdenv.lib; {
@@ -2449,20 +2461,14 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  rope = pkgs.stdenv.mkDerivation rec {
-    version = "0.9.3";
+  rope = buildPythonPackage rec {
+    version = "0.9.4";
     name = "rope-${version}";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/rope/${name}.tar.gz";
-      sha256 = "1092rlsfna7rm1jkdanilsmw7rr3hlkgyji02xfd02wfcm8xa2i7";
+      sha256 = "1fm6ahff50b10mlnc0ar4x1fv9sxmcp1g651myyqy7c50hk39h1d";
     };
-
-    buildInputs = [ python ];
-
-    installPhase = ''
-      python setup.py install --prefix=$out
-    '';
 
     meta = with stdenv.lib; {
       description = "python refactoring library";
@@ -2472,20 +2478,16 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  ropemacs = pkgs.stdenv.mkDerivation rec {
-    version = "0.6";
+  ropemacs = buildPythonPackage rec {
+    version = "0.7";
     name = "ropemacs-${version}";
 
     src = fetchurl {
-      url = "mirror://sourceforge/rope/${name}.tar.gz";
-      sha256 = "1afqybmjn7fqkwx8y8kx1kfx181ix73cbq3a0d5n7ryjm7k1r0s4";
+      url = "http://pypi.python.org/packages/source/r/ropemacs/${name}.tar.gz";
+      sha256 = "1x5qf1drcdz9jfiiakc60kzqkb3ahsg9j902c5byf3gjfacdrmqj";
     };
 
-    buildInputs = [ python ];
-
-    installPhase = ''
-      python setup.py install --prefix=$out
-    '';
+    propagatedBuildInputs = [ ropemode ];
 
      meta = with stdenv.lib; {
        description = "a plugin for performing python refactorings in emacs";
@@ -2494,6 +2496,26 @@ let pythonPackages = python.modules // rec {
        license = licenses.gpl2;
      };
   };
+
+  ropemode = buildPythonPackage rec {
+    version = "0.2";
+    name = "ropemode-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/ropemode/${name}.tar.gz";
+      sha256 = "0jw6h1wvk6wk0wknqdf7s9pw76m8472jv546lqdd88jbl2scgcjl";
+    };
+
+    propagatedBuildInputs = [ rope ];
+
+     meta = with stdenv.lib; {
+       description = "a plugin for performing python refactorings in emacs";
+       homepage = http://rope.sf.net;
+       maintainers = [ maintainers.goibhniu ];
+       license = licenses.gpl2;
+     };
+  };
+
 
 
   routes = buildPythonPackage rec {

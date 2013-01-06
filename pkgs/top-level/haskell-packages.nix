@@ -1784,9 +1784,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
 
-  X11_1_5_0_1 = callPackage ../development/libraries/haskell/X11/1.5.0.1.nix {};
-  X11_1_6_0_2 = callPackage ../development/libraries/haskell/X11/1.6.0.2.nix {};
-  X11 = self.X11_1_6_0_2;
+  X11 = callPackage ../development/libraries/haskell/X11 {};
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {};
 
@@ -1960,18 +1958,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     stm = self.stm_2_3;
   };
 
-  xmonad = callPackage ../applications/window-managers/xmonad {
-    X11 = self.X11_1_5_0_1;
-  };
+  xmonad = callPackage ../applications/window-managers/xmonad {};
 
-  xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {
-    X11 = self.X11_1_5_0_1;
-    X11Xft = self.X11Xft.override { X11 = self.X11_1_5_0_1; };
-  };
+  xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
 
-  xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {
-    X11 = self.X11_1_5_0_1;
-  };
+  xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {};
 
   # Tools.
 
@@ -1982,7 +1973,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     transformers = self.transformers_0_2_2_0;
     tar          = self.tar_0_3_2_0;
   };
-
 
   cabalGhci = callPackage ../development/tools/haskell/cabal-ghci {};
 
