@@ -5,6 +5,10 @@ with pkgs.lib;
 let
 
   cfg = config.networking;
+
+  windowSize = if cfg.defaultGatewayWindowSize != "" then 
+    "window ${cfg.defaultGatewayWindowSize}" else "";
+
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
 
@@ -132,6 +136,15 @@ in
       example = "131.211.84.1";
       description = ''
         The default gateway.  It can be left empty if it is auto-detected through DHCP.
+      '';
+    };
+
+    networking.defaultGatewayWindowSize = mkOption {
+      default = "";
+      example = "524288";
+      description = ''
+        The window size of the default gateway. It limits maximal data bursts that TCP peers
+        are allowed to send to us.
       '';
     };
 
@@ -282,7 +295,7 @@ in
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != "") ''
                   # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip route add default via "${cfg.defaultGateway}" || true
+                  ip route add default via "${cfg.defaultGateway}" ${windowSize} || true
                 ''}
 
                 # Turn on forwarding if any interface has enabled proxy_arp.
