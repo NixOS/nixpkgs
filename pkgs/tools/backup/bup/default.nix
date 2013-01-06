@@ -1,4 +1,7 @@
-{ stdenv, fetchgit, python, pyxattr, pylibacl, setuptools, fuse, git, perl, pandoc, makeWrapper }:
+{ stdenv, fetchgit, python, pyxattr, pylibacl, setuptools, fuse, git, perl, pandoc, makeWrapper
+, par2cmdline, par2Support ? false }:
+
+assert par2Support -> par2cmdline != null;
 
 with stdenv.lib;
 
@@ -26,6 +29,8 @@ stdenv.mkDerivation {
       substituteInPlace $f --replace "/usr/bin/env python" "${python}/bin/python"
     done
     substituteInPlace Makefile --replace "./format-subst.pl" "perl ./format-subst.pl"
+  '' + optionalString par2Support ''
+    substituteInPlace cmd/fsck-cmd.py --replace "['par2'" "['${par2cmdline}/bin/par2'"
   '';
 
   makeFlags = [
