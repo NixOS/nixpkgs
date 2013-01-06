@@ -6758,7 +6758,7 @@ let
 
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
     inherit cmake patchelf;
-    imagemagick=imagemagick;
+    imagemagick = imagemagick;
   };
 
   cvs = callPackage ../applications/version-management/cvs { };
