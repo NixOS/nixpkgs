@@ -12,6 +12,9 @@ cabal.mkDerivation (self: {
     parallel semigroups split text transformers unorderedContainers
     vector
   ];
+  patchPhase = ''
+    sed -i -e 's|semigroups.*,|semigroups,|' lens.cabal
+  '';
   meta = {
     homepage = "http://github.com/ekmett/lens/";
     description = "Lenses, Folds and Traversals";
