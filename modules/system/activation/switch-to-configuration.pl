@@ -117,6 +117,8 @@ while (my ($unit, $state) = each %{$activePrev}) {
         }
 
         elsif ($unit =~ /\.target$/) {
+            my $unitInfo = parseUnit($newUnitFile);
+
             # Cause all active target units to be restarted below.
             # This should start most changed units we stop here as
             # well as any new dependencies (including new mounts and
@@ -124,10 +126,24 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
             if ($unit ne "suspend.target" && $unit ne "hibernate.target") {
-                my $unitInfo = parseUnit($newUnitFile);
                 unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "false")) {
                     write_file($startListFile, { append => 1 }, "$unit\n");
                 }
+            }
+
+            # Stop targets that have X-StopOnReconfiguration set.
+            # This is necessary to respect dependency orderings
+            # involving targets: if unit X starts after target Y and
+            # target Y starts after unit Z, then if X and Z have both
+            # changed, then X should be restarted after Z.  However,
+            # if target Y is in the "active" state, X and Z will be
+            # restarted at the same time because X's dependency on Y
+            # is already satisfied.  Thus, we need to stop Y first.
+            # Stopping a target generally has no effect on other units
+            # (unless there is a PartOf dependency), so this is just a
+            # bookkeeping thing to get systemd to do the right thing.
+            if (boolIsTrue($unitInfo->{'X-StopOnReconfiguration'} // "false")) {
+                push @unitsToStop, $unit;
             }
         }
 

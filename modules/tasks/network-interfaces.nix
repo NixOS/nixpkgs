@@ -255,6 +255,7 @@ in
     boot.systemd.targets."network-interfaces" =
       { description = "All Network Interfaces";
         wantedBy = [ "network.target" ];
+        unitConfig.X-StopOnReconfiguration = true;
       };
 
     boot.systemd.services =
