@@ -411,10 +411,12 @@ let
     client = true;
   });
 
-  androidenv = import ../development/androidenv {
+  androidenv = import ../development/mobile/androidenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
+  
+  xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   inherit (androidenv) androidsdk_4_1;
 

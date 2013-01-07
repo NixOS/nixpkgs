@@ -1,7 +1,7 @@
 { stdenv, fetchurl, apr, expat
 , sslSupport ? true, openssl
 , bdbSupport ? false, db4
-, ldapSupport ? true, openldap
+, ldapSupport ? false, openldap
 }:
 
 assert sslSupport -> openssl != null;

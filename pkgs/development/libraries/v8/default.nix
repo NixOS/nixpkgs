@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     };
 
     configurePhase = ''
+      ${stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "export PATH=/usr/bin:$PATH"}
       mkdir build/gyp
       ln -sv ${gyp}/bin/gyp build/gyp/gyp
     '';
@@ -37,7 +38,11 @@ stdenv.mkDerivation rec {
       mkdir -p $out/bin
       mkdir -p $out/lib
       mv -v out/${arch}.release/d8 $out/bin
-      mv -v out/${arch}.release/lib.target/libv8.so $out/lib
+
+      ${if stdenv.system == "x86_64-darwin" then
+        "mv -v out/${arch}.release/libv8.dylib $out/lib"
+      else
+        "mv -v out/${arch}.release/lib.target/libv8.so $out/lib"}
       mv -v include $out/
     '';
 }

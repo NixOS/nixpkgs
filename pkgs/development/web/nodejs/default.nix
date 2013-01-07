@@ -12,20 +12,23 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--openssl-includes=${openssl}/include"
     "--openssl-libpath=${openssl}/lib"
-    "--shared-v8"
-    "--shared-v8-includes=${v8}/includes"
-    "--shared-v8-libpath=${v8}/lib"
+    #"--shared-v8"
+    #"--shared-v8-includes=${v8}/includes"
+    #"--shared-v8-libpath=${v8}/lib"
   ];
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./no-arch-flag.patch;
+  #patches = stdenv.lib.optional stdenv.isDarwin ./no-arch-flag.patch;
 
   prePatch = ''
-    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf} configure
+    sed=$(type -p sed)
+    export PATH=/usr/bin:$PATH
+
+    $sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf} configure
   '';
 
   postInstall = ''
 
-    sed -e 's|^#!/usr/bin/env node$|#!'$out'/bin/node|' -i $out/lib/node_modules/npm/bin/npm-cli.js
+    $sed -e 's|^#!/usr/bin/env node$|#!'$out'/bin/node|' -i $out/lib/node_modules/npm/bin/npm-cli.js
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     install_name_tool -change libv8.dylib ${v8}/lib/libv8.dylib $out/bin/node
   '';
