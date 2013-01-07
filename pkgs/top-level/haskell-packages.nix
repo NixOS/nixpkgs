@@ -1242,6 +1242,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
+  nats = callPackage ../development/libraries/haskell/nats {};
+
   netlist = callPackage ../development/libraries/haskell/netlist {};
 
   netlistToVhdl = callPackage ../development/libraries/haskell/netlist-to-vhdl {};
