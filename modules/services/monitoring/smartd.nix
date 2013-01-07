@@ -87,7 +87,6 @@ in
       environment.TZ = config.time.timeZone;
 
       wantedBy = [ "multi-user.target" ];
-      partOf = [ "multi-user.target" ];
 
       serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd --no-fork ${smartdFlags}";
     };
