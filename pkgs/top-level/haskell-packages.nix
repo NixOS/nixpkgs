@@ -1680,6 +1680,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   transformersBase = callPackage ../development/libraries/haskell/transformers-base {};
 
+  transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
+
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
   typeEquality = callPackage ../development/libraries/haskell/type-equality {};
