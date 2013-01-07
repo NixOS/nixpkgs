@@ -347,6 +347,9 @@ in
                     echo "configuring interface..."
                     ip -4 addr flush dev "${i.name}"
                     ip -4 addr add "${i.ipAddress}/${mask}" dev "${i.name}"
+                    # Ensure that the default gateway remains set.
+                    # (Flushing this interface may have removed it.)
+                    ${config.system.build.systemd}/bin/systemctl try-restart --no-block network-setup.service
                   else
                     echo "skipping configuring interface"
                   fi
