@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
     };
 
     configurePhase = ''
-      ${stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") "export PATH=/usr/bin:$PATH"}
       mkdir build/gyp
       ln -sv ${gyp}/bin/gyp build/gyp/gyp
     '';

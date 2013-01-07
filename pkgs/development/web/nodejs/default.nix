@@ -12,18 +12,15 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--openssl-includes=${openssl}/include"
     "--openssl-libpath=${openssl}/lib"
-    #"--shared-v8"
-    #"--shared-v8-includes=${v8}/includes"
-    #"--shared-v8-libpath=${v8}/lib"
+    "--shared-v8"
+    "--shared-v8-includes=${v8}/includes"
+    "--shared-v8-libpath=${v8}/lib"
   ];
 
   #patches = stdenv.lib.optional stdenv.isDarwin ./no-arch-flag.patch;
 
   prePatch = ''
-    sed=$(type -p sed)
-    export PATH=/usr/bin:$PATH
-
-    $sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf} configure
+    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf} configure
   '';
 
   postInstall = ''
