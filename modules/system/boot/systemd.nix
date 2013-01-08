@@ -23,7 +23,7 @@ let
   upstreamUnits =
     [ # Targets.
       "basic.target"
-      #"sysinit.target"
+      "sysinit.target"
       "sockets.target"
       "graphical.target"
       "multi-user.target"
@@ -522,17 +522,6 @@ in
     # Target for ‘charon send-keys’ to hook into.
     boot.systemd.targets.keys =
       { description = "Security Keys";
-      };
-
-    # This is like the upstream sysinit.target, except that it doesn't
-    # depend on local-fs.target and swap.target.  If services need to
-    # be started after some filesystem (local or otherwise) has been
-    # mounted, they should use the RequiresMountsFor option.
-    boot.systemd.targets.sysinit =
-      { description = "System Initialization";
-        after = [ "emergency.service" "emergency.target" ];
-        unitConfig.Conflicts = "emergency.service emergency.target";
-        unitConfig.RefuseManualStart = true;
       };
 
     boot.systemd.units =
