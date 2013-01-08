@@ -1,14 +1,14 @@
-{ fetchsvn, stdenv, autoconf, automake, pkgconfig, m4, curl,
+{ fetchgit, stdenv, autoconf, automake, pkgconfig, m4, curl,
 mesa, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK,
 sqlite, gtk, patchelf, libXScrnSaver, libnotify, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "boinc-6.12.39";
+  name = "boinc-7.0.44";
 
-  src = fetchsvn {
-    url = "http://boinc.berkeley.edu/svn/tags/boinc_core_release_6_12_39";
-    rev = 24341;
-    sha256 = "158fkm4mr7wljsy8gav20km8jamf00mxjk1wsiqw6kx62bih37yb";
+  src = fetchgit {
+    url = "git://boinc.berkeley.edu/boinc.git";
+    rev = "7c449b1fb8a681ceb27d6895751b62a2b3adf0f2";
+    sha256 = "0hdramyl9nip3gadp7xiaz8ngyld15i93d8ai1nsd04bmrvdfqia";
   };
 
   buildInputs = [ libtool automake autoconf m4 pkgconfig curl mesa libXmu libXi
