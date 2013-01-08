@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
       ./0003-Start-device-units-for-uninitialised-encrypted-devic.patch
       ./0004-Set-switch-to-configuration-hints-for-some-units.patch
       ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
+      ./0006-Don-t-call-plymouth-quit.patch
     ];
 
   buildInputs =
