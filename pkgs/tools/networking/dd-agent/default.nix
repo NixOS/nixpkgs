@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
 
     buildInputs = [ python ];
 
-    propagatedUserEnvPkgs = [ sysstat ];
-
     postUnpack = "export sourceRoot=$sourceRoot/packaging";
 
     makeFlags = [ "BUILD=$(out)" ];
