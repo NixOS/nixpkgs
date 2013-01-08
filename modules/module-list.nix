@@ -100,6 +100,7 @@
   ./services/misc/rogue.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/monitoring/dd-agent.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/nagios/default.nix
   ./services/monitoring/smartd.nix
