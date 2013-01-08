@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     active colour dataDefault diagramsCore monoidExtras newtype
     NumInstances semigroups vectorSpace
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Embedded domain-specific language for declarative graphics";

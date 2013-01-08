@@ -911,7 +911,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
 
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
-  hashable_1_3_0_2 = callPackage ../development/libraries/haskell/hashable/1.2.0.2.nix {};
+  hashable_1_2_0_3 = callPackage ../development/libraries/haskell/hashable/1.2.0.3.nix {};
   hashable = self.hashable_1_1_2_5;
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
@@ -1241,6 +1241,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   mwcRandom = callPackage ../development/libraries/haskell/mwc-random {};
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
+
+  nats = callPackage ../development/libraries/haskell/nats {};
 
   netlist = callPackage ../development/libraries/haskell/netlist {};
 
@@ -1677,6 +1679,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   transformers = self.transformers_0_3_0_0;
 
   transformersBase = callPackage ../development/libraries/haskell/transformers-base {};
+
+  transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
 
   tuple = callPackage ../development/libraries/haskell/tuple {};
 

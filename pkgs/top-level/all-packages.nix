@@ -411,7 +411,14 @@ let
     client = true;
   });
 
-  androidenv = import ../development/androidenv {
+  androidenv = import ../development/mobile/androidenv {
+    inherit pkgs;
+    pkgs_i686 = pkgsi686Linux;
+  };
+  
+  xcodeenv = callPackage ../development/mobile/xcodeenv { };
+  
+  titaniumenv = import ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
@@ -7317,6 +7324,8 @@ let
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5;
   };
+
+  ipe = callPackage ../applications/graphics/ipe { };
 
   iptraf = callPackage ../applications/networking/iptraf { };
 

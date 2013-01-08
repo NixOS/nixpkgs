@@ -1,0 +1,74 @@
+From b40d8783f94666035baae567882c0d4be82cda01 Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+Date: Tue, 8 Jan 2013 15:48:19 +0100
+Subject: [PATCH 4/5] Set switch-to-configuration hints for some units
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Target units like local-fs.target need ‘X-StopOnReconfiguration=yes’
+to ensure dependencies *on* that target properly take into account the
+dependencies *of* the target.
+
+‘X-RestartIfChanged=no’ is necessary for systemd-journald.service
+because restarting it causes services connected to journald to stop
+logging.
+
+‘X-RestartIfChanged=no’ is necessary for systemd-user-sessions.service
+to prevent all user sessions from being killed when this unit changes.
+---
+ units/local-fs.target                  | 2 ++
+ units/remote-fs.target                 | 2 ++
+ units/systemd-journald.service.in      | 5 +++++
+ units/systemd-user-sessions.service.in | 3 +++
+ 4 files changed, 12 insertions(+)
+
+diff --git a/units/local-fs.target b/units/local-fs.target
+index dd92b17..dfcbc7b 100644
+--- a/units/local-fs.target
++++ b/units/local-fs.target
+@@ -10,3 +10,5 @@ Description=Local File Systems
+ Documentation=man:systemd.special(7)
+ OnFailure=emergency.target
+ OnFailureIsolate=yes
++
++X-StopOnReconfiguration=yes
+diff --git a/units/remote-fs.target b/units/remote-fs.target
+index 9e68878..85a53d7 100644
+--- a/units/remote-fs.target
++++ b/units/remote-fs.target
+@@ -9,5 +9,7 @@
+ Description=Remote File Systems
+ Documentation=man:systemd.special(7)
+ 
++X-StopOnReconfiguration=yes
++
+ [Install]
+ WantedBy=multi-user.target
+diff --git a/units/systemd-journald.service.in b/units/systemd-journald.service.in
+index ab2e50c..9563a7d 100644
+--- a/units/systemd-journald.service.in
++++ b/units/systemd-journald.service.in
+@@ -24,3 +24,8 @@ CapabilityBoundingSet=CAP_SYS_ADMIN CAP_DAC_OVERRIDE CAP_SYS_PTRACE CAP_SYSLOG C
+ # Increase the default a bit in order to allow many simultaneous
+ # services being run since we keep one fd open per service.
+ LimitNOFILE=16384
++
++# Don't restart journald, since that causes services connected to
++# journald to stop logging (see
++# https://bugs.freedesktop.org/show_bug.cgi?id=56043).
++X-RestartIfChanged=no
+diff --git a/units/systemd-user-sessions.service.in b/units/systemd-user-sessions.service.in
+index 0869e73..b6ed958 100644
+--- a/units/systemd-user-sessions.service.in
++++ b/units/systemd-user-sessions.service.in
+@@ -15,3 +15,6 @@ Type=oneshot
+ RemainAfterExit=yes
+ ExecStart=@rootlibexecdir@/systemd-user-sessions start
+ ExecStop=@rootlibexecdir@/systemd-user-sessions stop
++
++# Restart kills all active sessions.
++X-RestartIfChanged=no
+-- 
+1.8.0.1
+
