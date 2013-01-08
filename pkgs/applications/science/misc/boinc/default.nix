@@ -1,6 +1,6 @@
 { fetchgit, stdenv, autoconf, automake, pkgconfig, m4, curl,
-mesa, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK,
-sqlite, gtk, patchelf, libXScrnSaver, libnotify, libX11 }:
+mesa, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK, xcbutil,
+sqlite, gtk, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 stdenv.mkDerivation rec {
   name = "boinc-7.0.44";
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libtool automake autoconf m4 pkgconfig curl mesa libXmu libXi
-    freeglut libjpeg wxGTK sqlite gtk libXScrnSaver libnotify patchelf libX11 ];
+    freeglut libjpeg wxGTK sqlite gtk libXScrnSaver libnotify patchelf libX11 
+    libxcb xcbutil
+  ];
 
   postConfigure = ''
     sed -i -e s,/etc,$out/etc, client/scripts/Makefile
@@ -27,17 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = "--disable-server --disable-fast-install";
-
-  postInstall = "
-    # Remove a leading rpath to /tmp/... I don't know how it got there
-    # I could not manage to get rid of that through autotools.
-    for a in $out/bin/*; do
-      RPATH=$(patchelf --print-rpath $a)
-      NEWRPATH=$(echo $RPATH | sed 's/^[^:]*://')
-      patchelf --set-rpath $out/lib:$NEWRPATH $a
-    done
-  ";
+  configureFlags = "--disable-server";
 
   meta = {
     description = "Free software for distributed and grid computing";
