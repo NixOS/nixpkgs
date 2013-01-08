@@ -126,7 +126,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
             if ($unit ne "suspend.target" && $unit ne "hibernate.target") {
-                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "false")) {
+                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no")) {
                     write_file($startListFile, { append => 1 }, "$unit\n");
                 }
             }
@@ -142,7 +142,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # Stopping a target generally has no effect on other units
             # (unless there is a PartOf dependency), so this is just a
             # bookkeeping thing to get systemd to do the right thing.
-            if (boolIsTrue($unitInfo->{'X-StopOnReconfiguration'} // "false")) {
+            if (boolIsTrue($unitInfo->{'X-StopOnReconfiguration'} // "no")) {
                 push @unitsToStop, $unit;
             }
         }
@@ -157,10 +157,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
-                if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "true")
-                    || $unit eq "systemd-user-sessions.service"
-                    || $unit eq "systemd-journald.service")
-                {
+                if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes")) {
                     push @unitsToSkip, $unit;
                 } else {
                     # If this unit is socket-activated, then stop the
@@ -181,7 +178,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                         }
                     }
 
-                    if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "true")) {
+                    if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {
 
                         # This unit should be restarted instead of
                         # stopped and started.
