@@ -14,4 +14,9 @@ stdenv.mkDerivation rec {
     makeFlags = [ "BUILD=$(out)" ];
 
     installTargets = [ "install_base" "install_full" ];
+
+    postInstall = ''
+      mv $out/usr/* $out
+      rmdir $out/usr
+    '';
 }
