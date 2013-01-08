@@ -62,19 +62,11 @@ ln -s /proc/mounts /etc/mtab
 
 
 # Process the kernel command line.
-debug2=
 for o in $(cat /proc/cmdline); do
     case $o in
         debugtrace)
             # Show each command.
             set -x
-            ;;
-        debug2)
-            debug2=1
-            ;;
-        S|s|single)
-            # !!! argh, can't pass a startup event to Upstart yet.
-            exec @shell@
             ;;
         resume=*)
             set -- $(IFS==; echo $o)
@@ -166,26 +158,6 @@ ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 
 # Run any user-specified commands.
 @shell@ @postBootCommands@
-
-
-# For debugging Upstart.
-if [ -n "$debug2" ]; then
-    # Get the console from the kernel cmdline
-    console=tty1
-    for o in $(cat /proc/cmdline); do
-      case $o in
-        console=*)
-          set -- $(IFS==; echo $o)
-          params=$2
-          set -- $(IFS=,; echo $params)
-          console=$1
-          ;;
-      esac
-    done
-
-    echo "Debug shell called from @out@"
-    setsid @shellDebug@ < /dev/$console >/dev/$console 2>/dev/$console
-fi
 
 
 # Start systemd.
