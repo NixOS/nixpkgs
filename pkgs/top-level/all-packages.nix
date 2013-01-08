@@ -6782,6 +6782,8 @@ let
     inherit (gnome) GConf libglade;
   };
 
+  "dd-agent" = callPackage ../tools/networking/dd-agent { };
+
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
   };
