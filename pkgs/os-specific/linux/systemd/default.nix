@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ ./reexec.patch
-      ./ignore-duplicates.patch
-      ./crypt-devices-are-ready.patch
+    [ ./0001-Make-systemctl-daemon-reexec-do-the-right-thing-on-N.patch
+      ./0002-Ignore-duplicate-paths-in-systemctl-start.patch
+      ./0003-Start-device-units-for-uninitialised-encrypted-devic.patch
+      ./0004-Set-switch-to-configuration-hints-for-some-units.patch
+      ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
     ];
 
   buildInputs =
