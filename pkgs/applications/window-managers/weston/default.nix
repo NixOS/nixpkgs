@@ -2,18 +2,17 @@
 , cairo, libxcb, libXcursor, x11, udev, libdrm2_4_39, mtdev
 , libjpeg, pam, autoconf, automake, libtool }:
 
-let version = "1.0.2"; in
+let version = "1.0.3"; in
 
 stdenv.mkDerivation rec {
   name = "weston-${version}";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "1496l8hmpxx7pivdpp14pv0hi30q18dmnaxz471v9jiqsnnrr11k";
+    sha256 = "0ls8w1l8k9fx0hjlw7qzjb98l911agigf5s2dna3xsjlyv9afdii";
   };
 
   patches = [
-    ./screenshooter-client-protocol_h.patch
     ./makefile.patch
   ];
 
