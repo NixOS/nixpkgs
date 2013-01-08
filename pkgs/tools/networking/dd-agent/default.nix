@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, python }:
+{ stdenv, fetchgit, python, sysstat }:
 
 stdenv.mkDerivation rec {
     name = "dd-agent-ab14fde6f9";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     };
 
     buildInputs = [ python ];
+
+    propagatedUserEnvPkgs = [ sysstat ];
 
     postUnpack = "export sourceRoot=$sourceRoot/packaging";
 
