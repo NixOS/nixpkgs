@@ -28,7 +28,6 @@ let
       "graphical.target"
       "multi-user.target"
       "getty.target"
-      "rescue.target"
       "network.target"
       "nss-lookup.target"
       "nss-user-lookup.target"
@@ -36,6 +35,12 @@ let
       "time-sync.target"
       #"cryptsetup.target"
       "sigpwr.target"
+
+      # Rescue/emergency.
+      "rescue.target"
+      "rescue.service"
+      "emergency.target"
+      "emergency.service"
 
       # Udev.
       "systemd-udevd-control.socket"
@@ -138,33 +143,6 @@ let
       "multi-user.target.wants"
       "shutdown.target.wants"
     ];
-
-  rescueService =
-    ''
-      [Unit]
-      Description=Rescue Shell
-      DefaultDependencies=no
-      Conflicts=shutdown.target
-      After=sysinit.target
-      Before=shutdown.target
-
-      [Service]
-      Environment=HOME=/root
-      WorkingDirectory=/root
-      ExecStartPre=-${pkgs.coreutils}/bin/echo 'Welcome to rescue mode. Use "systemctl default" or ^D to enter default mode.'
-      #ExecStart=-/sbin/sulogin
-      ExecStart=-${pkgs.bashInteractive}/bin/bash --login
-      ExecStopPost=-${systemd}/bin/systemctl --fail --no-block default
-      Type=idle
-      StandardInput=tty-force
-      StandardOutput=inherit
-      StandardError=inherit
-      KillMode=process
-
-      # Bash ignores SIGTERM, so we send SIGHUP instead, to ensure that bash
-      # terminates cleanly.
-      KillSignal=SIGHUP
-    '';
 
   makeJobScript = name: text:
     let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${name}"; inherit text; };
@@ -347,6 +325,8 @@ let
 
       ln -s ${cfg.defaultUnit} $out/default.target
 
+      ln -s rescue.target $out/kbrequest.target
+
       #ln -s ../getty@tty1.service $out/multi-user.target.wants/
       ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
             ../nss-user-lookup.target ../swap.target $out/multi-user.target.wants/
@@ -525,8 +505,7 @@ in
       };
 
     boot.systemd.units =
-      { "rescue.service".text = rescueService; }
-      // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
+      mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets
       // listToAttrs (map
