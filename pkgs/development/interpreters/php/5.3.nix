@@ -1,6 +1,6 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
-, apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql
-, openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng }:
+, apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
+, openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype }:
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
@@ -84,8 +84,8 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       };
 
       gd = {
-        configureFlags = ["--with-gd=${gd}"];
-        buildInputs = [gd libpng libjpeg ];
+        configureFlags = ["--with-gd=${gd} --with-freetype-dir=${freetype}"];
+        buildInputs = [gd libpng libjpeg freetype];
       };
 
       soap = {
@@ -103,6 +103,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
       mbstring = {
         configureFlags = ["--enable-mbstring"];
+      };
+
+      gettext = {
+        configureFlags = ["--with-gettext=${gettext}"];
+        buildInputs = [gettext];
       };
 
       /*

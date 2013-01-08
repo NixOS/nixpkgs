@@ -37,8 +37,7 @@ stdenv.mkDerivation {
     description = "Another Unionfs implementation for Linux (third generation)";
     homepage = http://aufs.sourceforge.net/;
     maintainers = [ stdenv.lib.maintainers.eelco
-                    stdenv.lib.maintainers.raskin
-                    stdenv.lib.maintainers.shlevy ];
+                    stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

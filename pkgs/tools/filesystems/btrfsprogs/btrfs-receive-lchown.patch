@@ -1,0 +1,12 @@
+diff --git a/cmds-receive.c b/cmds-receive.c
+index 6b7cf12..a6a6a5b 100644
+--- a/cmds-receive.c
++++ b/cmds-receive.c
+@@ -731,7 +731,7 @@  static int process_chown(const char *path, u64 uid, u64 gid, void *user)
+ 		fprintf(stderr, "chown %s - uid=%llu, gid=%llu\n", path,
+ 				uid, gid);
+
+-	ret = chown(full_path, uid, gid);
++	ret = lchown(full_path, uid, gid);
+ 	if (ret < 0) {
+ 		ret = -errno;

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "classy-prelude";
-  version = "0.4.1";
-  sha256 = "14s1qirss8qbicdw4bc7smdnk1xrpp1xsii8kgmrb1z4ji0h9bf1";
+  version = "0.4.3";
+  sha256 = "1k2iszja03s8azypl8lpkdjvvqsgzg73cl1wp4jl2fqp1psqv36q";
   buildDepends = [
     basicPrelude hashable systemFilepath text transformers
     unorderedContainers vector

@@ -1,24 +1,19 @@
-{ cabal, extensibleExceptions, mtl, utf8String, X11, xmessage }:
+{ cabal, extensibleExceptions, filepath, mtl, utf8String, X11 }:
 
 cabal.mkDerivation (self: {
   pname = "xmonad";
-  version = "0.10";
-  sha256 = "19z5y36pybsm93x6hlj5hzyys9r4ag7hkdib5spsnryk2mv72xj6";
+  version = "0.11";
+  sha256 = "1nsv88y2b206n3s5hrsp5ginvz1bj818ns7jmikavb2g33akdgg5";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ extensibleExceptions mtl utf8String X11 ];
+  buildDepends = [
+    extensibleExceptions filepath mtl utf8String X11
+  ];
   meta = {
     homepage = "http://xmonad.org";
     description = "A tiling window manager";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
-
-  preConfigure = ''
-    substituteInPlace XMonad/Core.hs --replace \
-      '"xmessage"' '"${xmessage}/bin/xmessage"'
-  '';
 })

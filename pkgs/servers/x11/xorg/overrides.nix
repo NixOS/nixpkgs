@@ -251,10 +251,7 @@ in
   };
 
   libSM = attrs: attrs
-    // { propagatedBuildInputs = [ xorg.libICE ]; }
-    // args.stdenv.lib.optionalAttrs (args.stdenv.system == "i686-darwin") {
-      configureFlags = "LIBUUID_CFLAGS='' LIBUUID_LIBS=''";
-    };
+    // { propagatedBuildInputs = [ xorg.libICE ]; };
 
   lndir = attrs: attrs // {
     preConfigure = ''
@@ -273,6 +270,14 @@ in
 
   xinput = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXrender];
+  };
+
+  xinit = attrs: attrs // {
+    configureFlags = "--with-xserver=${xorg.xorgserver}/bin/X";
+    propagatedBuildInputs = [ xorg.xauth ];
+    prePatch = ''
+      sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
+    '';
   };
 
   xwd = attrs: attrs // {

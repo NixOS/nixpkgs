@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation {
 
-  name = "kadu-0.10.1";
+  name = "kadu-0.12.2";
 
   src = fetchurl {
-    url = http://download.kadu.im/stable/kadu-0.10.1.tar.bz2;
-    sha256 = "0j88pyp2nqpc57j38zr135ypfiv4v329gfgiz9rdbqi8j26cyp7g";
+    url = http://download.kadu.im/stable/kadu-0.12.2.tar.bz2;
+    sha256 = "0rqhkiyn8c7jigpxmvwh7daxsgjxlvd16zjdss1azdzd9x2dbym1";
   };
 
   buildInputs = [ cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2 phonon pkgconfig
@@ -21,8 +21,12 @@ stdenv.mkDerivation {
     patchShebangs .
   '';
 
-  # because I was not able to get those working
-  patches = [ ./disable_some_plugins.patch ];
+  # Disable the kadu plugins I wasn't able to get to work
+  patchPhase = ''
+    sed -i -e '/mpd_mediaplayer/d' \
+           -e '/encryption_ng/d'   \
+           -e '/encryption_ng_simlite/d' Plugins.cmake
+  '';
 
   NIX_LDFLAGS="-lX11";
 

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "parallel-io";
-  version = "0.3.2.1";
-  sha256 = "0wrmz0i5s8p87840pacdnpf2fi12nips4yc72vymifrc1wvlc42q";
+  version = "0.3.3";
+  sha256 = "0i86x3bf8pjlg6mdg1zg5lcrjpg75pbqs2mrgrbp4z4bkcmw051s";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ extensibleExceptions random ];

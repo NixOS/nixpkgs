@@ -14,7 +14,7 @@ rec {
       ''
         # Virtualisation (KVM, Xen...).
         PARAVIRT_GUEST y
-        KVM_CLOCK y
+        KVM_CLOCK? y #Part of KVM_GUEST since linux 3.7
         KVM_GUEST y
         XEN y
         KSM y
@@ -119,6 +119,11 @@ rec {
         UBIFS_FS_LZO y
         UBIFS_FS_ZLIB y
         UBIFS_FS_DEBUG n
+
+        # Kdb, for kernel troubles
+        KGDB y
+        KGDB_SERIAL_CONSOLE y
+        KGDB_KDB y
       '';
     kernelTarget = "uImage";
     uboot = "sheevaplug";

@@ -4,13 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "language-c-quote";
-  version = "0.4.3";
-  sha256 = "13xpmj3jrqkcgilkh4p8ycxhlk5yvfsisx4c1ax7n7aafg1n7phf";
+  version = "0.4.4";
+  sha256 = "1g233ja3qy64xcimy9irfb3n8zys00vg1d0s4g3hr48ilc95dl8l";
   buildDepends = [
     exceptionMtl exceptionTransformers filepath haskellSrcMeta
     mainlandPretty mtl srcloc syb symbol
   ];
   buildTools = [ alex happy ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.eecs.harvard.edu/~mainland/";
     description = "C/CUDA/OpenCL quasiquoting library";

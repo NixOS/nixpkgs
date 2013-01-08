@@ -8,16 +8,13 @@ let
   readConfig = configFile:
     let
       configAttrs = import "${runCommand "config.nix" {} ''
-        (. ${configFile}
-        echo "{"
-        for var in `set`; do
-            if [[ "$var" =~ ^CONFIG_ ]]; then
-                IFS="="
-                set -- $var
-                echo "\"$1\" = \"''${*:2}\";"
-            fi
-        done
-        echo "}") > $out
+        echo "{" > "$out"
+        while IFS='=' read key val; do
+          [ "x''${key#CONFIG_}" != "x$key" ] || continue
+          no_firstquote="''${val#\"}";
+          echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
+        done < "${configFile}"
+        echo "}" >> $out
       ''}";
 
       config = configAttrs // rec {

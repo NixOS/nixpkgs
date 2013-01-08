@@ -1,37 +1,33 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
-  
-  buildInputs = with a; [
-    gpm freetype fontconfig pkgconfig ncurses
-  ];
-  s = import ./src-for-default.nix; 
+{stdenv, fetchurl, gpm, freetype, fontconfig, pkgconfig, ncurses}:
+let
+  s = # Generated upstream information
+  rec {
+    baseName="fbterm";
+    version="1.7.0";
+    name="fbterm-1.7.0";
+    hash="0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
+    url="http://fbterm.googlecode.com/files/fbterm-1.7.0.tar.gz";
+    sha256="0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
+  };
+  buildInputs = [gpm freetype fontconfig pkgconfig ncurses];
 in
-rec {
-  src = a.fetchUrlFromSrcInfo s; 
-  inherit(s) name;
+stdenv.mkDerivation {
+  inherit (s) name version;
+  src = fetchurl {
+    inherit (s) url sha256;
+  };
   inherit buildInputs;
-  configureFlags = [];
-
-  fixInc = a.fullDepEntry (''
+  preConfigure = ''
     sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
-  '') ["doUnpack" "minInit"];
-
-  fixMakeInstall = a.fullDepEntry (''
     sed -e '/install-exec-hook:/,/^[^\t]/{d}; /.NOEXPORT/iinstall-exec-hook:\
     ' -i src/Makefile.in
-  '') ["doUnpack" "minInit"];
-
-  setVars = a.noDepEntry (''
     export HOME=$PWD;
     export NIX_LDFLAGS="$NIX_LDFLAGS -lfreetype"
-  '') ;
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "fixInc" "fixMakeInstall" "doConfigure" "doMakeInstall"];
-      
+  '';
   meta = {
+    inherit (s) version;
     description = "Framebuffer terminal emulator";
-    maintainers = [a.lib.maintainers.raskin];
+    maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.linux;
   };
 }

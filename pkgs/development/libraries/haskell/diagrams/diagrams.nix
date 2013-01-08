@@ -1,10 +1,12 @@
-{ cabal, diagramsCairo, diagramsCore, diagramsLib }:
+{ cabal, diagramsContrib, diagramsCore, diagramsLib, diagramsSvg }:
 
 cabal.mkDerivation (self: {
   pname = "diagrams";
-  version = "0.5";
-  sha256 = "163h2fg3gpmsfm57gjyja2rxh9pl6s3xnzlidfdy201zbk1mzdg5";
-  buildDepends = [ diagramsCairo diagramsCore diagramsLib ];
+  version = "0.6";
+  sha256 = "1i62jbixjzw82y622ymp6lrp4kzgn7iv55arivvh0y46bbmybqvh";
+  buildDepends = [
+    diagramsContrib diagramsCore diagramsLib diagramsSvg
+  ];
   noHaddock = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";

@@ -26,7 +26,10 @@ stdenv.mkDerivation (rec {
         else ""}
   '';
 
-  enableParallelBuilding = true;
+  # Build of the Guile bindings is not parallel-safe.  See
+  # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
+  # for the actual fix.
+  enableParallelBuilding = false;
 
   buildInputs = [ zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;

@@ -134,6 +134,7 @@ stdenv.mkDerivation {
     homepage = http://www.kernel.org/;
     maintainers = [
       lib.maintainers.eelco
+      lib.maintainers.shlevy
       lib.maintainers.chaoflow
     ];
     platforms = lib.platforms.linux;

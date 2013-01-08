@@ -4,13 +4,15 @@
 , xorriso, makeself, perl, pkgconfig
 , javaBindings ? false, jdk ? null
 , pythonBindings ? false, python ? null
+, enableExtensionPack ? false, requireFile ? null, patchelf ? null
 }:
 
 with stdenv.lib;
 
 let
 
-  version = "4.2.2";
+  version = "4.2.4";
+  extpackRevision = "81684";
 
   forEachModule = action: ''
     for mod in \
@@ -29,12 +31,20 @@ let
     done
   '';
 
+  extensionPack = requireFile {
+    name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}"
+         + ".vbox-extpack";
+    # Has to be base16 because it's used as an input to VBoxExtPackHelperApp!
+    sha256 = "62078e057a4ab56aec5ac086746522b3d94787333d0444169471fa5152c609ed";
+    url = "https://www.virtualbox.org/wiki/Downloads";
+  };
+
 in stdenv.mkDerivation {
   name = "virtualbox-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "943daa13694605d5d0a23ffef27c398b5e72ada669de89bad4b98f000f029700";
+    sha256 = "a7c607523c1c10b7b978ab39a92bb646517316548aa4a1a74b6e434ac2bf0adc";
   };
 
   buildInputs =
@@ -107,6 +117,15 @@ in stdenv.mkDerivation {
     for file in VirtualBox VBoxManage VBoxSDL VBoxBalloonCtrl VBoxBFE VBoxHeadless; do
         ln -s "$libexec/$file" $out/bin/$file
     done
+
+    ${optionalString enableExtensionPack ''
+      "$libexec/VBoxExtPackHelperApp" install \
+        --base-dir "$libexec/ExtensionPacks" \
+        --cert-dir "$libexec/ExtPackCertificates" \
+        --name "Oracle VM VirtualBox Extension Pack" \
+        --tarball "${extensionPack}"
+        --sha-256 "${extensionPack.outputHash}"
+    ''}
 
     # Create and fix desktop item
     mkdir -p $out/share/applications

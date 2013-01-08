@@ -37,6 +37,7 @@
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   shlevy = "Shea Levy <shea@shealevy.com>";
   simons = "Peter Simons <simons@cryp.to>";
+  smironov = "Sergey Mironov <ierton@gmail.com>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
