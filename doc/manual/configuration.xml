@@ -2,7 +2,7 @@
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="ch-configuration">
 
-<title>Configuration</title>
+<title>Configuring NixOS</title>
 
 <para>This chapter describes how to configure various aspects of a
 NixOS machine through the configuration file
@@ -164,6 +164,10 @@ networking.localCommands =
 
 
 </section>
+
+
+<!-- TODO: declarative package installation; X11; user management;
+     Apache; libvirtd virtualisation -->
 
 
 </chapter>

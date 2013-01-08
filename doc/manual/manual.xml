@@ -51,6 +51,7 @@
 
   <xi:include href="installation.xml" />
   <xi:include href="configuration.xml" />
+  <xi:include href="running.xml" />
   <!-- <xi:include href="userconfiguration.xml" /> -->
   <xi:include href="troubleshooting.xml" />
   <xi:include href="development.xml" />
