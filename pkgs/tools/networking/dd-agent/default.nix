@@ -23,4 +23,16 @@ stdenv.mkDerivation rec {
       mv $out/usr/* $out
       rmdir $out/usr
     '';
+
+    meta = {
+      description = "Event collector for the DataDog analysis service";
+
+      homepage = http://www.datadoghq.com;
+
+      maintainers = [ stdenv.lib.maintainers.shlevy ];
+
+      license = stdenv.lib.licenses.bsd3;
+
+      platforms = stdenv.lib.platforms.all;
+    };
 }
