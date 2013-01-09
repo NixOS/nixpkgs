@@ -5,7 +5,7 @@
 with pkgs.lib;
 let
   isEnabled = config.boot.loader.grub.memtest86;
-  memtest86 = pkgs.memtest86;
+  memtest86 = pkgs.memtest86plus;
 in
 {
   options = {

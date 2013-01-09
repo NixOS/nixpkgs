@@ -267,6 +267,8 @@ in
 
         wantedBy = [ "multi-user.target" ];
 
+        stopIfChanged = false;
+
         path = [ pkgs.openssh ];
 
         environment.LD_LIBRARY_PATH = nssModulesPath;

@@ -183,6 +183,21 @@ rec {
       '';
     };
 
+    stopIfChanged = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        If set, a changed unit is restarted by calling
+        <command>systemctl stop</command> in the old configuration,
+        then <command>systemctl start</command> in the new one.
+        Otherwise, it is restarted in a single step using
+        <command>systemctl restart</command> in the new configuration.
+        The latter is less correct because it runs the
+        <literal>ExecStop</literal> commands from the new
+        configuration.
+      '';
+    };
+
   };
 
 

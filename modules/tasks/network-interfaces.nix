@@ -135,6 +135,16 @@ in
       '';
     };
 
+    networking.defaultGatewayWindowSize = mkOption {
+      default = null;
+      example = 524288;
+      type = types.nullOr types.int;
+      description = ''
+        The window size of the default gateway. It limits maximal data bursts that TCP peers
+        are allowed to send to us.
+      '';
+    };
+
     networking.nameservers = mkOption {
       default = [];
       example = ["130.161.158.4" "130.161.33.17"];
@@ -245,6 +255,7 @@ in
     boot.systemd.targets."network-interfaces" =
       { description = "All Network Interfaces";
         wantedBy = [ "network.target" ];
+        unitConfig.X-StopOnReconfiguration = true;
       };
 
     boot.systemd.services =
@@ -282,7 +293,9 @@ in
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != "") ''
                   # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip route add default via "${cfg.defaultGateway}" || true
+                  ip route add default via "${cfg.defaultGateway}" ${
+                    optionalString (cfg.defaultGatewayWindowSize != null)
+                      "window ${cfg.defaultGatewayWindowSize}"} || true
                 ''}
 
                 # Turn on forwarding if any interface has enabled proxy_arp.
@@ -335,6 +348,9 @@ in
                     echo "configuring interface..."
                     ip -4 addr flush dev "${i.name}"
                     ip -4 addr add "${i.ipAddress}/${mask}" dev "${i.name}"
+                    # Ensure that the default gateway remains set.
+                    # (Flushing this interface may have removed it.)
+                    ${config.system.build.systemd}/bin/systemctl try-restart --no-block network-setup.service
                   else
                     echo "skipping configuring interface"
                   fi

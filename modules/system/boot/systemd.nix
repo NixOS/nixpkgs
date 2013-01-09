@@ -23,12 +23,11 @@ let
   upstreamUnits =
     [ # Targets.
       "basic.target"
-      #"sysinit.target"
+      "sysinit.target"
       "sockets.target"
       "graphical.target"
       "multi-user.target"
       "getty.target"
-      "rescue.target"
       "network.target"
       "nss-lookup.target"
       "nss-user-lookup.target"
@@ -36,6 +35,12 @@ let
       "time-sync.target"
       #"cryptsetup.target"
       "sigpwr.target"
+
+      # Rescue/emergency.
+      "rescue.target"
+      "rescue.service"
+      "emergency.target"
+      "emergency.service"
 
       # Udev.
       "systemd-udevd-control.socket"
@@ -139,33 +144,6 @@ let
       "shutdown.target.wants"
     ];
 
-  rescueService =
-    ''
-      [Unit]
-      Description=Rescue Shell
-      DefaultDependencies=no
-      Conflicts=shutdown.target
-      After=sysinit.target
-      Before=shutdown.target
-
-      [Service]
-      Environment=HOME=/root
-      WorkingDirectory=/root
-      ExecStartPre=-${pkgs.coreutils}/bin/echo 'Welcome to rescue mode. Use "systemctl default" or ^D to enter default mode.'
-      #ExecStart=-/sbin/sulogin
-      ExecStart=-${pkgs.bashInteractive}/bin/bash --login
-      ExecStopPost=-${systemd}/bin/systemctl --fail --no-block default
-      Type=idle
-      StandardInput=tty-force
-      StandardOutput=inherit
-      StandardError=inherit
-      KillMode=process
-
-      # Bash ignores SIGTERM, so we send SIGHUP instead, to ensure that bash
-      # terminates cleanly.
-      KillSignal=SIGHUP
-    '';
-
   makeJobScript = name: text:
     let x = pkgs.writeTextFile { name = "unit-script"; executable = true; destination = "/bin/${name}"; inherit text; };
     in "${x}/bin/${name}";
@@ -246,6 +224,7 @@ let
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n: "Environment=${n}=${getAttr n env}\n") (attrNames env)}
           ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
+          ${optionalString (!def.stopIfChanged) "X-StopIfChanged=false"}
 
           ${optionalString (def.preStart != "") ''
             ExecStartPre=${makeJobScript "${name}-pre-start" ''
@@ -345,6 +324,8 @@ let
           '') unit.wantedBy) cfg.units)}
 
       ln -s ${cfg.defaultUnit} $out/default.target
+
+      ln -s rescue.target $out/kbrequest.target
 
       #ln -s ../getty@tty1.service $out/multi-user.target.wants/
       ln -s ../local-fs.target ../remote-fs.target ../network.target ../nss-lookup.target \
@@ -523,20 +504,8 @@ in
       { description = "Security Keys";
       };
 
-    # This is like the upstream sysinit.target, except that it doesn't
-    # depend on local-fs.target and swap.target.  If services need to
-    # be started after some filesystem (local or otherwise) has been
-    # mounted, they should use the RequiresMountsFor option.
-    boot.systemd.targets.sysinit =
-      { description = "System Initialization";
-        after = [ "emergency.service" "emergency.target" ];
-        unitConfig.Conflicts = "emergency.service emergency.target";
-        unitConfig.RefuseManualStart = true;
-      };
-
     boot.systemd.units =
-      { "rescue.service".text = rescueService; }
-      // mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
+      mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets
       // listToAttrs (map

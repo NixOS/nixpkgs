@@ -6,6 +6,7 @@ use File::Basename;
 use File::Slurp;
 use Cwd 'abs_path';
 
+my $startListFile = "/run/systemd/start-list";
 my $restartListFile = "/run/systemd/restart-list";
 my $reloadListFile = "/run/systemd/reload-list";
 
@@ -116,6 +117,8 @@ while (my ($unit, $state) = each %{$activePrev}) {
         }
 
         elsif ($unit =~ /\.target$/) {
+            my $unitInfo = parseUnit($newUnitFile);
+
             # Cause all active target units to be restarted below.
             # This should start most changed units we stop here as
             # well as any new dependencies (including new mounts and
@@ -123,10 +126,24 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
             if ($unit ne "suspend.target" && $unit ne "hibernate.target") {
-                my $unitInfo = parseUnit($newUnitFile);
-                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "false")) {
-                    write_file($restartListFile, { append => 1 }, "$unit\n");
+                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no")) {
+                    write_file($startListFile, { append => 1 }, "$unit\n");
                 }
+            }
+
+            # Stop targets that have X-StopOnReconfiguration set.
+            # This is necessary to respect dependency orderings
+            # involving targets: if unit X starts after target Y and
+            # target Y starts after unit Z, then if X and Z have both
+            # changed, then X should be restarted after Z.  However,
+            # if target Y is in the "active" state, X and Z will be
+            # restarted at the same time because X's dependency on Y
+            # is already satisfied.  Thus, we need to stop Y first.
+            # Stopping a target generally has no effect on other units
+            # (unless there is a PartOf dependency), so this is just a
+            # bookkeeping thing to get systemd to do the right thing.
+            if (boolIsTrue($unitInfo->{'X-StopOnReconfiguration'} // "no")) {
+                push @unitsToStop, $unit;
             }
         }
 
@@ -140,10 +157,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                 # FIXME: do something?
             } else {
                 my $unitInfo = parseUnit($newUnitFile);
-                if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "true")
-                    || $unit eq "systemd-user-sessions.service"
-                    || $unit eq "systemd-journald.service")
-                {
+                if (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes")) {
                     push @unitsToSkip, $unit;
                 } else {
                     # If this unit is socket-activated, then stop the
@@ -158,21 +172,31 @@ while (my ($unit, $state) = each %{$activePrev}) {
                         foreach my $socket (@sockets) {
                             if (defined $activePrev->{$socket}) {
                                 push @unitsToStop, $socket;
-                                write_file($restartListFile, { append => 1 }, "$socket\n");
+                                write_file($startListFile, { append => 1 }, "$socket\n");
                                 $socketActivated = 1;
                             }
                         }
                     }
 
-                    # Otherwise, record that this unit needs to be
-                    # started below.  We write this to a file to
-                    # ensure that the service gets restarted if we're
-                    # interrupted.
-                    if (!$socketActivated) {
-                        write_file($restartListFile, { append => 1 }, "$unit\n");
-                    }
+                    if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {
 
-                    push @unitsToStop, $unit;
+                        # This unit should be restarted instead of
+                        # stopped and started.
+                        write_file($restartListFile, { append => 1 }, "$unit\n");
+
+                    } else {
+
+                        # If the unit is not socket-activated, record
+                        # that this unit needs to be started below.
+                        # We write this to a file to ensure that the
+                        # service gets restarted if we're interrupted.
+                        if (!$socketActivated) {
+                            write_file($startListFile, { append => 1 }, "$unit\n");
+                        }
+
+                        push @unitsToStop, $unit;
+
+                    }
                 }
             }
         }
@@ -216,7 +240,7 @@ foreach my $mountPoint (keys %$prevFss) {
         push @unitsToStop, $unit;
     } elsif ($prev->{fsType} ne $new->{fsType} || $prev->{device} ne $new->{device}) {
         # Filesystem type or device changed, so unmount and mount it.
-        write_file($restartListFile, { append => 1 }, "$unit\n");
+        write_file($startListFile, { append => 1 }, "$unit\n");
         push @unitsToStop, $unit;
     } elsif ($prev->{options} ne $new->{options}) {
         # Mount options changes, so remount it.
@@ -266,16 +290,25 @@ system("@systemd@/bin/systemctl", "reset-failed");
 # Make systemd reload its units.
 system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
 
+# Restart changed services (those that have to be restarted rather
+# than stopped and started).
+my @restart = unique(split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
+if (scalar @restart > 0) {
+    print STDERR "restarting the following units: ", join(", ", sort(@restart)), "\n";
+    system("@systemd@/bin/systemctl", "restart", "--", @restart) == 0 or $res = 4;
+    unlink($restartListFile);
+}
+
 # Start all active targets, as well as changed units we stopped above.
 # The latter is necessary because some may not be dependencies of the
 # targets (i.e., they were manually started).  FIXME: detect units
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
-my @start = unique("default.target", split('\n', read_file($restartListFile, err_mode => 'quiet') // ""));
+my @start = unique("default.target", split('\n', read_file($startListFile, err_mode => 'quiet') // ""));
 print STDERR "starting the following units: ", join(", ", sort(@start)), "\n";
 system("@systemd@/bin/systemctl", "start", "--", @start) == 0 or $res = 4;
-unlink($restartListFile);
+unlink($startListFile);
 
 # Reload units that need it.  This includes remounting changed mount
 # units.

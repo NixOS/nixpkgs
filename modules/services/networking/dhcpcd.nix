@@ -97,6 +97,11 @@ in
 
         wantedBy = [ "network.target" ];
 
+        # Stopping dhcpcd during a reconfiguration is undesirable
+        # because it brings down the network interfaces configured by
+        # dhcpcd.  So do a "systemctl restart" instead.
+        stopIfChanged = false;
+
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
         serviceConfig =

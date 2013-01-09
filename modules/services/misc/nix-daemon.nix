@@ -286,7 +286,7 @@ in
         environment = cfg.envVars;
 
         serviceConfig =
-          { ExecStart = "${nix}/bin/nix-worker --daemon";
+          { ExecStart = "@${nix}/bin/nix-daemon nix-daemon";
             KillMode = "process";
             Nice = cfg.daemonNiceLevel;
             IOSchedulingPriority = cfg.daemonIONiceLevel;
