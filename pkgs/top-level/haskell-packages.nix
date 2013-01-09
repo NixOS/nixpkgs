@@ -1246,6 +1246,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   nats = callPackage ../development/libraries/haskell/nats {};
 
+  naturals = callPackage ../development/libraries/haskell/naturals {};
+
   netlist = callPackage ../development/libraries/haskell/netlist {};
 
   netlistToVhdl = callPackage ../development/libraries/haskell/netlist-to-vhdl {};
