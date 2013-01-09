@@ -1749,6 +1749,8 @@ let
 
   wv2 = callPackage ../tools/misc/wv2 { };
 
+  x86info = callPackage ../os-specific/linux/x86info { };
+
   x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
 
   xbursttools = assert stdenv ? glibc; import ../tools/misc/xburst-tools {
