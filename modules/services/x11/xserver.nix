@@ -281,6 +281,25 @@ in
         description = "Lines to be added to every Display subsection of the Screen section.";
       };
 
+      extraXorgOptions = mkOption {
+        default = "";
+        example = ''
+          Section "Monitor"
+            Identifier "left monitor"
+          EndSection
+
+          Section "Monitor"
+            Identifier "right monitor"
+            Option "RightOf" "left monitor"
+          EndSection
+        '';
+        type = types.string;
+        description = ''
+          Additional options you want to append to your X server configuration
+          file.
+        '';
+      };
+
       defaultDepth = mkOption {
         default = 0;
         example = 8;
@@ -552,6 +571,8 @@ in
 
           EndSection
         '')}
+
+        ${cfg.extraXorgOptions}
       '';
 
   });
