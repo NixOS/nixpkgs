@@ -1287,6 +1287,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
+  numtypeTf = callPackage ../development/libraries/haskell/numtype-tf {};
+
   ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
 
   oeis = callPackage ../development/libraries/haskell/oeis {};
