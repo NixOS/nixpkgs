@@ -1690,6 +1690,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   typeEquality = callPackage ../development/libraries/haskell/type-equality {};
 
+  typeLlevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
+
   unbound = callPackage ../development/libraries/haskell/unbound {};
 
   uniplate = callPackage ../development/libraries/haskell/uniplate {};
