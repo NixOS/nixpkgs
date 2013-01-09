@@ -1,16 +1,16 @@
 { cabal, comonad, comonadsFd, comonadTransformers, filepath
-, hashable, mtl, parallel, semigroups, split, text, transformers
-, unorderedContainers, vector
+, hashable, mtl, nats, parallel, semigroups, split, text
+, transformers, transformersCompat, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "3.7.2";
-  sha256 = "14kc9yhq7niv49gpdcl55priwnvisawa9jsp8hnplk48p11i2xs3";
+  version = "3.7.3";
+  sha256 = "0mvwczviszfv52ylymvrz3zk6s05ngmqc2g1k4r6pym8s9cmgmzz";
   buildDepends = [
-    comonad comonadsFd comonadTransformers filepath hashable mtl
-    parallel semigroups split text transformers unorderedContainers
-    vector
+    comonad comonadsFd comonadTransformers filepath hashable mtl nats
+    parallel semigroups split text transformers transformersCompat
+    unorderedContainers vector
   ];
   patchPhase = ''
     sed -i -e 's|semigroups.*,|semigroups,|' lens.cabal
