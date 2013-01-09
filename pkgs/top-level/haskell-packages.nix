@@ -711,6 +711,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dimensional = callPackage ../development/libraries/haskell/dimensional {};
 
+  dimensionalTf = callPackage ../development/libraries/haskell/dimensional-tf {};
+
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
@@ -1285,9 +1287,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   numtype = callPackage ../development/libraries/haskell/numtype {};
 
-  OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
-
   numtypeTf = callPackage ../development/libraries/haskell/numtype-tf {};
+
+  OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
   ObjectName = callPackage ../development/libraries/haskell/ObjectName {};
 
