@@ -81,26 +81,26 @@ for o in $(cat /proc/cmdline); do
             set -- $(IFS==; echo $o)
             stage2Init=$2
             ;;
-        debugtrace)
+        boot.trace|debugtrace)
             # Show each command.
             set -x
             ;;
-        initrd.shell_on_fail)
+        boot.shell_on_fail)
             allowShell=1
             ;;
-        debug1) # stop right away
+        boot.debug1|debug1) # stop right away
             allowShell=1
             fail
             ;;
-        debug1devices) # stop after loading modules and creating device nodes
+        boot.debug1devices) # stop after loading modules and creating device nodes
             allowShell=1
             debug1devices=1
             ;;
-        debug1mounts) # stop after mounting file systems
+        boot.debug1mounts) # stop after mounting file systems
             allowShell=1
             debug1mounts=1
             ;;
-        stage1panic=1)
+        boot.panic_on_fail|stage1panic=1)
             panicOnFail=1
             ;;
         root=*)

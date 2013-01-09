@@ -16,5 +16,5 @@ with pkgs.lib;
   boot.systemd.services."serial-getty@hvc0".enable = false;
 
   # Since we can't manually respond to a panic, just reboot.
-  boot.kernelParams = [ "panic=1" "stage1panic=1" ];
+  boot.kernelParams = [ "panic=1" "boot.panic_on_fail" ];
 }

@@ -50,7 +50,7 @@ in
 
     boot.extraKernelParams = mkOption {
       default = [ ];
-      example = [ "debugtrace" ];
+      example = [ "boot.trace" ];
       description = "Additional user-defined kernel parameters.";
     };
 

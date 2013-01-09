@@ -64,7 +64,7 @@ ln -s /proc/mounts /etc/mtab
 # Process the kernel command line.
 for o in $(cat /proc/cmdline); do
     case $o in
-        debugtrace)
+        boot.debugtrace)
             # Show each command.
             set -x
             ;;
