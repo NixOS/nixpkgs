@@ -9,6 +9,17 @@
 */
 with (import ./release-lib.nix);
 
+let
+  jobsForDerivations = attrset: pkgs.lib.attrsets.listToAttrs
+    (map
+      (name: { inherit name;
+               value = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };})
+      (builtins.attrNames
+        (pkgs.lib.attrsets.filterAttrs
+          (n: v: (v.type or null) == "derivation")
+          attrset)));
+
+in
 {
 
   tarball = import ./make-tarball.nix;
@@ -1469,15 +1480,8 @@ with (import ./release-lib.nix);
   python27 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   python26Full = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   python27Full = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  python26Packages = pkgs.lib.attrsets.listToAttrs
-    (map
-      (name: { inherit name;
-               value = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };})
-      (builtins.attrNames
-        (pkgs.lib.attrsets.filterAttrs
-          (n: v: (v.type or null) == "derivation")
-          pkgs.python26Packages)));
-  python27Packages = python26Packages;
+  python26Packages = jobsForDerivations pkgs.python26Packages;
+  python27Packages = jobsForDerivations pkgs.python27Packages;
   python3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pythonDBus = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   pythonIRClib = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
