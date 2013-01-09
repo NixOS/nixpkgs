@@ -37,6 +37,7 @@
       runHook postCheck
     ''
 
+, preInstall ? ""
 , postInstall ? ""
 
 , ... } @ attrs:
@@ -63,7 +64,7 @@ python.stdenv.mkDerivation (attrs // {
     ${preConfigure}
   '';
 
-  installPhase = ''
+  installPhase = preInstall + ''
     mkdir -p "$out/lib/${python.libPrefix}/site-packages"
 
     echo "installing \`${name}' with \`easy_install'..."

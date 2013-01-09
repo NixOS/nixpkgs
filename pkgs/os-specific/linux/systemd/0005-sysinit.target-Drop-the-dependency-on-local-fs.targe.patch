@@ -1,0 +1,33 @@
+From c5c8ac3a0420fb42ba2f629368fd5bd6ea1e753b Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+Date: Tue, 8 Jan 2013 15:56:03 +0100
+Subject: [PATCH 5/6] sysinit.target: Drop the dependency on local-fs.target
+ and swap.target
+
+Having all services with DefaultDependencies=yes depend on
+local-fs.target is annoying, because some of those services might be
+necessary to mount local filesystems.  For instance, Charon's
+send-keys feature requires sshd to be running in order to receive LUKS
+encryption keys, which in turn requires dhcpcd, and so on.  So we drop
+this dependency (and swap.target as well for consistency).  If
+services require a specific mount, they should use RequiresMountsFor
+in any case.
+---
+ units/sysinit.target | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/units/sysinit.target b/units/sysinit.target
+index 8f4fb8f..e0f0147 100644
+--- a/units/sysinit.target
++++ b/units/sysinit.target
+@@ -9,6 +9,5 @@
+ Description=System Initialization
+ Documentation=man:systemd.special(7)
+ Conflicts=emergency.service emergency.target
+-Wants=local-fs.target swap.target
+-After=local-fs.target swap.target emergency.service emergency.target
++After=emergency.service emergency.target
+ RefuseManualStart=yes
+-- 
+1.8.0.1
+

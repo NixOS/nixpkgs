@@ -1,12 +1,12 @@
 {stdenv, fetchurl, zlib, ncurses}:
 
 stdenv.mkDerivation rec {
-  version = "1.27-3";
+  version = "2.0.2";
   name = "atop-${version}";
 
   src = fetchurl {
     url = "http://www.atoptool.nl/download/atop-${version}.tar.gz";
-    sha256 = "bce36e0b50f0e03995d86d25dbc9ab4a289f6755ce3558844f96d41b0bba563f";
+    sha256 = "029lfa2capz1lg3m3rnyrgb8v6jm4znin84vjh2f0zkwvvhdn856";
   };
 
   buildInputs = [zlib ncurses];

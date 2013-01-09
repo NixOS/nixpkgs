@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "--shared-v8-libpath=${v8}/lib"
   ];
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./no-arch-flag.patch;
+  #patches = stdenv.lib.optional stdenv.isDarwin ./no-arch-flag.patch;
 
   prePatch = ''
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf} configure
