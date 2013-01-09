@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
-, glib, kbd, libxslt, coreutils, libgcrypt
+, glib, kbd, libxslt, coreutils, libgcrypt, sysvtools
 }:
 
 assert stdenv.gcc.libc or null != null;
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
       ./0003-Start-device-units-for-uninitialised-encrypted-devic.patch
       ./0004-Set-switch-to-configuration-hints-for-some-units.patch
       ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
+      ./0006-Don-t-call-plymouth-quit.patch
     ];
 
   buildInputs =
@@ -42,14 +43,17 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       # FIXME: patch this in systemd properly (and send upstream).
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c; do
+      # FIXME: use sulogin from util-linux once updated.
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in; do
         test -e $i
         substituteInPlace $i \
           --replace /bin/mount ${utillinux}/bin/mount \
           --replace /bin/umount ${utillinux}/bin/umount \
           --replace /sbin/swapon ${utillinux}/sbin/swapon \
           --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
-          --replace /sbin/fsck ${utillinux}/sbin/fsck
+          --replace /sbin/fsck ${utillinux}/sbin/fsck \
+          --replace /bin/echo ${coreutils}/bin/echo \
+          --replace /sbin/sulogin ${sysvtools}/sbin/sulogin
       done
 
       substituteInPlace src/journal/catalog.c \
