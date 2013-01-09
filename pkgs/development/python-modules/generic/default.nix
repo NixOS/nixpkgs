@@ -53,6 +53,9 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
+  # recursivePthLoader is responsible for loading pth files
+  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
+
   buildInputStrings = map toString buildInputs;
 
   pythonPath = [ setuptools ] ++ pythonPath;
