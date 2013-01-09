@@ -16,13 +16,24 @@ systemd:
 
 <variablelist>
 
+  <varlistentry><term><literal>initrd.shell_on_fail</literal></term>
+    <listitem><para>Start a root shell if something goes wrong in
+    stage 1 of the boot process (the initial ramdisk).  This is
+    disabled by default because there is no authentication for the
+    root shell.</para></listitem>
+  </varlistentry>
+
   <varlistentry><term><literal>debug1</literal></term>
-    <listitem><para>Request an interactive shell in stage 1 of the
-    boot process (the initial ramdisk).  The shell gets started before
+    <listitem><para>Start an interactive shell in stage 1 before
     anything useful has been done.  That is, no modules have been
     loaded and no file systems have been mounted, except for
     <filename>/proc</filename> and
     <filename>/sys</filename>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry><term><literal>debugtrace</literal></term>
+    <listitem><para>Print every shell command executed by the stage 1
+    and 2 boot scripts.</para></listitem>
   </varlistentry>
 
   <varlistentry><term><literal>single</literal></term>
