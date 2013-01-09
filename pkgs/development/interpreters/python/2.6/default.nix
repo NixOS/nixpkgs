@@ -53,6 +53,10 @@ let
         for i in /usr /sw /opt /pkg; do
           substituteInPlace ./setup.py --replace $i /no-such-path
         done
+      '' + optionalString (stdenv ? gcc && stdenv.gcc.libc != null) ''
+        for i in Lib/plat-*/regen; do
+          substituteInPlace $i --replace /usr/include/ ${stdenv.gcc.libc}/include/
+        done
       '';
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
