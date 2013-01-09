@@ -29,6 +29,8 @@ let
     '';
   };
 
+  check = mkAssert (!(config.services.rpcbind.enable && config.services.portmap.enable))
+    "Portmap and rpcbind cannot both be enabled.";
 
 in
 
@@ -57,7 +59,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.rpcbind.enable {
+  config = mkIf config.services.rpcbind.enable (check {
 
     environment.systemPackages = [ pkgs.rpcbind ];
 
@@ -77,6 +79,6 @@ in
         serviceConfig.ExecStart = "@${pkgs.rpcbind}/bin/rpcbind rpcbind";
       };
 
-  };
+  });
 
 }
