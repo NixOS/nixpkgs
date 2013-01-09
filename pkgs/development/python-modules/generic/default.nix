@@ -47,6 +47,7 @@ python.stdenv.mkDerivation (attrs // {
 
   name = namePrefix + name;
 
+  # checkPhase after installPhase to run tests on installed packages
   phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase";
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
