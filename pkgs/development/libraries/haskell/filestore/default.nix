@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "filestore";
-  version = "0.5.0.1";
-  sha256 = "1wbiw3skbbcqi9p97xnhg5lnakq3vyan9v4f68wd3g4swk09xp7l";
+  version = "0.6";
+  sha256 = "1bmsqxrkiqw791h0xwasry3jm56rjsyvl9l5r78209bhiv5v6xk0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

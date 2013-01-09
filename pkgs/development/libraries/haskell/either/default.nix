@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "either";
-  version = "3.0.2";
-  sha256 = "1s3rpxxqc9052hrmiznwqwxhl4826qzbgpivpv5acxfhm0w06lhg";
+  version = "3.0.3";
+  sha256 = "02kpb8xd19n00ll61haqr6k3hy8qmbdf73gr4zs59q9xh0739qxc";
   buildDepends = [ semigroupoids semigroups transformers ];
   meta = {
     homepage = "http://github.com/ekmett/either/";

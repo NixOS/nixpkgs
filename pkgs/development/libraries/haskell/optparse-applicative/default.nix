@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "optparse-applicative";
-  version = "0.4.3";
-  sha256 = "1zsydxgq3lcgzrf9iwas3gkjy0vxn4z2cj6h3m63h0qqa26sfcwz";
+  version = "0.5.2.1";
+  sha256 = "0w4mk851mx8dch8lnck0g82asmzrsc47xrf34jygh0f6v4kbj40i";
   buildDepends = [ transformers ];
   meta = {
     homepage = "https://github.com/pcapriotti/optparse-applicative";

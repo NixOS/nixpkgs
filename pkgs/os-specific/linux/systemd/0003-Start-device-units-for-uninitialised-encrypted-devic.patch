@@ -1,9 +1,16 @@
-Do start device units for uninitialised encrypted devices, because the
-service that initialises the filesystem depends on the appearance of
-the device unit.  Also, this makes more sense to me: the device is
-ready; it's the filesystem that's not, but taking care of that is the
-responsibility of the mount unit.  (However, this ignores the fsck
-unit, so it's not perfect...)
+From a013beb84f135cebf1c8c9363d5676c1c0a6be7a Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+Date: Tue, 8 Jan 2013 15:46:30 +0100
+Subject: [PATCH 3/5] Start device units for uninitialised encrypted devices
+
+This is necessary because the NixOS service that initialises the
+filesystem depends on the appearance of the device unit.  Also, this
+makes more sense to me: the device is ready; it's the filesystem
+that's not, but taking care of that is the responsibility of the mount
+unit.  (However, this ignores the fsck unit, so it's not perfect...)
+---
+ rules/99-systemd.rules.in | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/rules/99-systemd.rules.in b/rules/99-systemd.rules.in
 index d17bdd9..040b10e 100644
@@ -20,3 +27,6 @@ index d17bdd9..040b10e 100644
  # Ignore raid devices that are not yet assembled and started
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", TEST!="md/array_state", ENV{SYSTEMD_READY}="0"
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", ATTR{md/array_state}=="|clear|inactive", ENV{SYSTEMD_READY}="0"
+-- 
+1.8.0.1
+

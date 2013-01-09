@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "persistent";
-  version = "1.1.0.1";
-  sha256 = "07b9d9fcah3k03r2pm6mfl3qsdp4s9gbb376by3122nvc26w6sjc";
+  version = "1.1.3.2";
+  sha256 = "1q8p5nxsf9fjhsyy1lha852f7vssp9mz6l24gg47mgv6y5mm9myv";
   buildDepends = [
     aeson attoparsec base64Bytestring blazeHtml blazeMarkup conduit
     liftedBase monadControl monadLogger pathPieces poolConduit
