@@ -90,8 +90,10 @@ in
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
     jobs.wpa_supplicant =
-      { startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+      { description = "WPA Supplicant";
+
+        wantedBy = [ "network.target" ];
+        after = [ "systemd-udev-settle.service" ];
 
         path = [ pkgs.wpa_supplicant ];
 
