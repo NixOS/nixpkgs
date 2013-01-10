@@ -79,10 +79,8 @@ let
   post23 = !versionOlder sourceInfo.version "24.0.0.0";
   post24 = !versionOlder sourceInfo.version "25.0.0.0";
 
-  maybeFixPulseAudioBuild = optional (post23 && pulseSupport) (fetchurl {
-    url = http://archrepo.jeago.com/sources/chromium-dev/pulse_audio_fix.patch;
-    sha256 = "1w91mirrkqigdhsj892mqxlc0nlv1dsp5shc46w9xf8nl96jxgfb";
-  });
+  maybeFixPulseAudioBuild = optional (post23 && pulseSupport)
+    ./pulse_audio_fix.patch;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -197,7 +195,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Chromium, an open source web browser";
     homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ goibhniu chaoflow ];
+    maintainers = with maintainers; [ goibhniu chaoflow aszlig ];
     license = licenses.bsd3;
     platforms = platforms.linux;
   };
