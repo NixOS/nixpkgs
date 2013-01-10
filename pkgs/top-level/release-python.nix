@@ -62,7 +62,6 @@ in
   apparmor = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   aqbanking = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   arb = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  ardour = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ardour3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   arora = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   asc = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -141,9 +140,7 @@ in
   castle_combat = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   cbrowser = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   cc1394 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  ccid = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   cdrdao = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  centerim = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   cflow = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   cgal = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   cgui = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -184,7 +181,6 @@ in
   consolekit = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   construo = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   construoBase = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  content = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   coq = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   coq_8_3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   coriander = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1742,7 +1738,6 @@ in
   virtmanager = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   virtualgl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   virtviewer = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  VisualBoyAdvance = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vite = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vkeybd = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vlc = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
