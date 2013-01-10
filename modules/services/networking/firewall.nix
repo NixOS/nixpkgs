@@ -236,7 +236,9 @@ in
                  ];
 
     jobs.firewall =
-      { startOn = "started network-interfaces";
+      { description = "Firewall";
+
+        startOn = "started network-interfaces";
 
         path = [ pkgs.iptables ];
 

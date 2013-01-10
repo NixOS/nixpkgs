@@ -118,7 +118,7 @@ in
     boot.blacklistedKernelModules = [ "usblp" ];
 
     jobs.cupsd =
-      { description = "CUPS printing daemon";
+      { description = "CUPS Printing Daemon";
 
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";

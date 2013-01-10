@@ -64,7 +64,7 @@ in
       };
 
     jobs.atd =
-      { description = "at daemon (atd)";
+      { description = "Job Execution Daemon (atd)";
 
         startOn = "stopped udevtrigger";
 

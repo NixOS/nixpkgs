@@ -86,7 +86,7 @@ in
     environment.systemPackages = [ cronNixosPkg ];
 
     jobs.cron =
-      { description = "Cron daemon";
+      { description = "Cron Daemon";
 
         startOn = "startup";
 

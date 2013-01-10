@@ -389,7 +389,9 @@ in
     boot.systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
     boot.systemd.services."display-manager" =
-      { after = [ "systemd-udev-settle.service" "local-fs.target" ];
+      { description = "X11 Server";
+
+        after = [ "systemd-udev-settle.service" "local-fs.target" ];
 
         restartIfChanged = false;
 
