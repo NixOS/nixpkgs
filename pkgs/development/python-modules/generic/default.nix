@@ -56,7 +56,7 @@ python.stdenv.mkDerivation (attrs // {
   # recursivePthLoader is responsible for loading pth files
   propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
 
-  buildInputStrings = map toString buildInputs;
+  #buildInputStrings = map toString buildInputs;
 
   pythonPath = [ setuptools ] ++ pythonPath;
 
