@@ -6519,7 +6519,7 @@ let
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
   libertine = builderDefsPackage (import ../data/fonts/libertine) {
-    inherit fontforge;
+    inherit fetchurl fontforge lib;
   };
 
   lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
