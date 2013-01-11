@@ -75,4 +75,10 @@ stdenv.mkDerivation rec {
       cp ../examples/LDAP/samba.schema $out/etc/openldap/schema
     '' # */
     + stdenv.lib.optionalString (configDir == "") "touch $out/lib/smb.conf";
+
+  meta = {
+    homepage = http://www.samba.org/;
+    description = "The standard Windows interoperability suite of programs for Linux and Unix";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }

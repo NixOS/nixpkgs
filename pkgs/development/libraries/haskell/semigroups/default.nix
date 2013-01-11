@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, nats }:
 
 cabal.mkDerivation (self: {
   pname = "semigroups";
-  version = "0.8.5";
-  sha256 = "0dnxqqxfyxj0mpy524nvgwagsp6ynadmh2yr4k5159rzbg2xgz90";
+  version = "0.9";
+  sha256 = "0cwyjjlr9zgpxryzdf26pb58dmad0cp8d0493rarhh5zmgighh90";
+  buildDepends = [ nats ];
   meta = {
     homepage = "http://github.com/ekmett/semigroups/";
     description = "Haskell 98 semigroups";

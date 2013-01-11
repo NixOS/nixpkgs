@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xmonad-extras";
-  version = "0.10.1.2";
-  sha256 = "1v0yhi3sw7qks8d13amps0qs5p90j3prjh5abm02wblcd0bm1xay";
+  version = "0.11";
+  sha256 = "09r64z09mfdz86k7v5c6zds9ng0fjcp44kd8f5qg1sz40yblrny5";
   buildDepends = [
     hint libmpd mtl network parsec random regexPosix split X11 xmonad
     xmonadContrib

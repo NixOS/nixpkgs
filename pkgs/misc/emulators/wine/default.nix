@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "0c14paj2j3sswl6mpjjmy9bxnpijk095ks58x9dsycx9c8x0gqvm";
+    sha256 = "0l5kr3iq1lkv3gcw8ljzfjcfnsh9b5crdd4i0dzwdk1i3bfw2xxc";
   };
 
   gecko = fetchurl {
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    version = "1.5.20";
+    version = "1.5.21";
     homepage = "http://www.winehq.org/";
     license = "LGPL";
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";

@@ -27,19 +27,23 @@ buildPhase() {
 installPhase() {
 
     # Install libGL and friends.
-    mkdir -p $out/lib
-    cp -prd libcuda.* libGL.* libnvidia-cfg.* libnvidia-compiler.* libnvidia-tls.* libnvidia-glcore.* libOpenCL.* libvdpau_nvidia* tls $out/lib/
+    mkdir -p $out/lib/vendors
 
-    ln -snf libnvidia-glcore.so.$versionNumber $out/lib/libnvidia-glcore.so
-    ln -snf libnvidia-glcore.so.$versionNumber $out/lib/libnvidia-glcore.so.1
-    ln -snf libGL.so.$versionNumber $out/lib/libGL.so
-    ln -snf libGL.so.$versionNumber $out/lib/libGL.so.1
-    ln -snf libnvidia-cfg.so.$versionNumber $out/lib/libnvidia-cfg.so.1
-    ln -snf libnvidia-tls.so.$versionNumber $out/lib/libnvidia-tls.so.1
-    ln -snf libnvidia-tls.so.$versionNumber $out/lib/tls/libnvidia-tls.so.1
-    ln -snf libcuda.so.$versionNumber $out/lib/libcuda.so.1
-    ln -snf libcuda.so.1 $out/lib/libcuda.so
-    ln -snf libvdpau_nvidia.so.$versionNumber $out/lib/libvdpau_nvidia.so
+    for f in \
+      libcuda libGL libnvcuvid libnvidia-cfg libnvidia-compiler \
+      libnvidia-encode libnvidia-glcore libnvidia-ml libnvidia-opencl \
+      libnvidia-tls libOpenCL libnvidia-tls libvdpau_nvidia
+    do
+      cp -prd $f.* $out/lib/
+      ln -snf $f.so.$versionNumber $out/lib/$f.so
+      ln -snf $f.so.$versionNumber $out/lib/$f.so.1
+    done
+
+    cp -p nvidia.icd $out/lib/vendors/
+    cp -prd tls $out/lib/
+    cp -prd libOpenCL.so.1.0.0 $out/lib/
+    ln -snf libOpenCL.so.1.0.0 $out/lib/libOpenCL.so
+    ln -snf libOpenCL.so.1.0.0 $out/lib/libOpenCL.so.1
 
     patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
     patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*

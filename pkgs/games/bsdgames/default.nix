@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, openssl, flex, bison, miscfiles}:
+{stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles}:
 
 stdenv.mkDerivation {
   name = "bsd-games-2.17";
@@ -26,12 +26,19 @@ stdenv.mkDerivation {
     bsd_games_cfg_fortune_dir=$out/share/games/fortune
     bsd_games_cfg_quiz_dir=$out/share/games/quiz
     bsd_games_cfg_gamesdir=$out/bin
+    bsd_games_cfg_sbindir=$out/bin
+    bsd_games_cfg_usrbindir=$out/bin
+    bsd_games_cfg_libexecdir=$out/lib/games/dm
+    bsd_games_cfg_docdir=$out/share/doc/bsd-games
+    bsd_games_cfg_sharedir=$out/share/games
+    bsd_games_cfg_varlibdir=.
     bsd_games_cfg_non_interactive=y
     bsd_games_cfg_no_build_dirs="dab hack phantasia sail"
     bsd_games_cfg_dictionary_src=${miscfiles}/share/dict/words
+    bsd_games_cfg_pager=${less}
     EOF
 
-    sed -e s/getline/sdgames_local_getline/g -i $(grep getline -rl .)
+    sed -e s/getline/bsdgames_local_getline/g -i $(grep getline -rl .)
   '';
 
   postConfigure = ''

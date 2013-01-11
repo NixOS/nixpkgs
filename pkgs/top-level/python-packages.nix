@@ -2599,7 +2599,6 @@ let pythonPackages = python.modules // rec {
           sha256 = "1wif9r6307qhlcp2zbg6n05yvxxn9ppkxh8gpsplcbyh22zi7bcd";
         };
 
-      preInstallPhases = "preInstall";
       preInstall = ''
         cp ${x_ignore_nofocus}/* .
         sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
