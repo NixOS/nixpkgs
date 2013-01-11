@@ -1,19 +1,20 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor}:
+, libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor
+, dbus }:
 
-let version = "4.2.2"; in
+let version = "4.2.6"; in
 
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-${version}";
+  name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "26f5390b36a3bb9855846d194dcd287b8e53613b599c6ffd7aff1b451cc7f1f1";
+    sha256 = "1lry4hjjk8p69km1bi3mpmyarlnxz9izs2c0s8pq5rjzv1bd7bxr";
   };
 
   KERN_DIR = "${kernel}/lib/modules/*/build";
 
-  buildInputs = [ patchelf cdrkit makeWrapper ];
+  buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 
   installPhase = ''
     mkdir -p $out
@@ -56,7 +57,7 @@ stdenv.mkDerivation {
     cd ..
 
     # Change the interpreter for various binaries
-    for i in sbin/VBoxService bin/{VBoxClient,VBoxControl}
+    for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} lib/VBoxGuestAdditions/mount.vboxsf
     do
         ${if stdenv.system == "i686-linux" then ''
           patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $i
@@ -66,14 +67,12 @@ stdenv.mkDerivation {
         ''
         else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
         }
+        patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${dbus}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib $i
     done
-
-    # Change rpath for various binaries and libraries
-    patchelf --set-rpath ${stdenv.gcc.gcc}/lib:${libX11}/lib:${libXt}/lib:${libXext}/lib:${libXmu}/lib:${libXfixes}/lib:${libXrandr}/lib:${libXcursor}/lib bin/VBoxClient
 
     for i in lib/VBoxOGL*.so
     do
-        patchelf --set-rpath $out/lib $i
+        patchelf --set-rpath $out/lib:${dbus}/lib $i
     done
 
     # Remove references to /usr from various scripts and files
@@ -82,6 +81,7 @@ stdenv.mkDerivation {
 
     # Install binaries
     mkdir -p $out/sbin
+    install -m 4755 lib/VBoxGuestAdditions/mount.vboxsf $out/sbin/mount.vboxsf
     install -m 755 sbin/VBoxService $out/sbin
 
     mkdir -p $out/bin

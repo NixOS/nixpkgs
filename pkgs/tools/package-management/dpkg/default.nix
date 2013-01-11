@@ -10,6 +10,8 @@ stdenv.mkDerivation {
     sha256 = "0ykby9x4x2zb7rfj30lfjcsrq2q32z2lnsrl8pbdvb2l9sx7zkbk";
   };
 
+  patches = [ ./cache-arch.patch ];
+
   configureFlags = "--disable-dselect --with-admindir=/var/lib/dpkg PERL_LIBDIR=$(out)/${perl.libPrefix}";
 
   preConfigure = ''

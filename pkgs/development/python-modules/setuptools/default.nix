@@ -1,7 +1,9 @@
 { stdenv, fetchurl, python, wrapPython }:
 
 stdenv.mkDerivation rec {
-  name = "setuptools-0.6c11";
+  name = "setuptools-" + version;
+
+  version = "0.6c11";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/s/setuptools/${name}.tar.gz";

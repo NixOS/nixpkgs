@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xmobar";
-  version = "0.15";
-  sha256 = "1wa141bf3krzr8qcd9cyix3cflbw1yr1l3299ashjs7skqnjadcl";
+  version = "0.16";
+  sha256 = "1dx4kwygzp4c5j4jj4lsfgjfvhh863v68s106lmwc86a30h60p8i";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -13,9 +13,6 @@ cabal.mkDerivation (self: {
   ];
   extraLibraries = [ libXrandr wirelesstools ];
   configureFlags = "-fwith_xft -fwith_iwlib";
-  patchPhase = ''
-    sed -i -e 's|mtl ==.*$|mtl,|' xmobar.cabal
-  '';
   meta = {
     homepage = "http://projects.haskell.org/xmobar/";
     description = "A Minimalistic Text Based Status Bar";

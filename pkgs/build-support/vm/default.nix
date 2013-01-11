@@ -3,7 +3,7 @@
 , img ? "bzImage"
 , rootModules ?
     [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3"
-      "unix" "hmac" "md4" "ecb" "des_generic"
+      "ext4" "unix" "hmac" "md4" "ecb" "des_generic"
     ]
 }:
 
@@ -38,35 +38,19 @@ rec {
       # Copy what we need from Glibc.
       cp -p ${pkgs.stdenv.glibc}/lib/ld-linux*.so.? $out/lib
       cp -p ${pkgs.stdenv.glibc}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/librt.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/libdl.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc}/lib/libm.so.* $out/lib
 
-      # Copy some utillinux stuff.
-      cp ${utillinux}/bin/mount ${utillinux}/bin/umount $out/bin
-      cp -pd ${utillinux}/lib/libblkid*.so.* $out/lib
-      cp -pd ${utillinux}/lib/libuuid*.so.* $out/lib
-
-      # Copy some coreutils.
-      cp ${coreutils}/bin/basename $out/bin
-      cp ${coreutils}/bin/mkdir $out/bin
-      cp ${coreutils}/bin/mknod $out/bin
-      cp ${coreutils}/bin/cat $out/bin
-      cp ${coreutils}/bin/chroot $out/bin
-      cp ${coreutils}/bin/sleep $out/bin
-      cp ${coreutils}/bin/ln $out/bin
-
-      # Copy some other tools.
-      cp ${bash}/bin/bash $out/bin
-      cp ${module_init_tools}/sbin/insmod $out/bin/insmod
-      cp ${nettools}/sbin/ifconfig $out/bin
-      cp ${sysvinit}/sbin/halt $out/bin
+      # Copy BusyBox.
+      cp -pd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
 
       for i in $out/bin/*; do
-          echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+          if [ -f "$i" -a ! -L "$i" ]; then
+              echo "patching $i..."
+              patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+          fi
       done
     ''; # */
 
@@ -84,8 +68,7 @@ rec {
 
 
   stage1Init = writeScript "vm-run-stage1" ''
-    #! ${initrdUtils}/bin/bash -e
-    echo START
+    #! ${initrdUtils}/bin/ash -e
 
     export PATH=${initrdUtils}/bin
 
@@ -167,8 +150,7 @@ rec {
 
     mount -o remount,ro dummy /fs
 
-    echo DONE
-    halt -d -p -f
+    poweroff -f
   '';
 
 
@@ -761,7 +743,7 @@ rec {
   debClosureGenerator =
     {name, packagesLists, urlPrefix, packages}:
 
-    runCommand "${name}.nix" {} ''
+    runCommand "${name}.nix" { buildInputs = [ perl dpkg ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         bunzip2 < $i >> ./Packages
@@ -770,7 +752,7 @@ rec {
       # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
       sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
 
-      ${perl}/bin/perl -I${dpkg} -w ${deb/deb-closure.pl} \
+      perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
     '';
 
@@ -1306,6 +1288,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
+    ubuntu1210i386 = {
+      name = "ubuntu-12.10-quantal-i386";
+      fullName = "Ubuntu 12.10 Quantal (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/quantal/main/binary-i386/Packages.bz2;
+            sha256 = "bee3200ac8f037700ccd2311fb8b0de665bd02d46bdb2ae946cf50c5885001c3";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/quantal/universe/binary-i386/Packages.bz2;
+            sha256 = "323036e81c8bf409f71d3bc5cf37cfba72fe1d0fc82e9b5418d4d0cb516646e1";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+
+    ubuntu1210x86_64 = {
+      name = "ubuntu-12.10-quantal-amd64";
+      fullName = "Ubuntu 12.10 Quantal (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/quantal/main/binary-amd64/Packages.bz2;
+            sha256 = "ef14073f335ef118ebe1c7d45f5a0c17ef28f72abb57c10b9082ab5e04b5d003";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/quantal/universe/binary-amd64/Packages.bz2;
+            sha256 = "c762bd4ed063326577a62ff783cf9720e772b03d4a2aa38048918ee6287b96ce";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1351,22 +1367,22 @@ rec {
     };
 
     debian60i386 = {
-      name = "debian-6.0.4-squeeze-i386";
-      fullName = "Debian 6.0.4 Squeeze (i386)";
+      name = "debian-6.0.6-squeeze-i386";
+      fullName = "Debian 6.0.6 Squeeze (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-i386/Packages.bz2;
-        sha256 = "1aih4n1iz4gzzm5cy1j14mpx8i25jj1237994j33k7dm0gnqgr2w";
+        sha256 = "18c0473jacd877nkky1x21dkmp4992d8qra6wj07sq0yz5gdc9c4";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian60x86_64 = {
-      name = "debian-6.0.4-squeeze-amd64";
-      fullName = "Debian 6.0.4 Squeeze (amd64)";
+      name = "debian-6.0.6-squeeze-amd64";
+      fullName = "Debian 6.0.6 Squeeze (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
-        sha256 = "1gb3im7kl8dwd7z82xj4wb5g58r86fjj8cirvq0ssrvcm9bqaiz7";
+        sha256 = "1n1h3pz6axcaraxq8gfzq0jywlpdrqand1dnd4q79dy6cl788bi2";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

@@ -248,8 +248,6 @@ rec {
   ];
 
   postgresql = [
-    http://ftp2.nl.postgresql.org/
-    ftp://ftp.nl.postgresql.org/pub/mirror/postgresql/
     ftp://ftp.postgresql.org/pub/
     ftp://ftp-archives.postgresql.org/pub/
   ];

@@ -1,16 +1,16 @@
-{ cabal, aeson, attoparsec, curl, mtl, pureMD5, urlencoded
-, utf8String, xml
+{ cabal, aeson, cereal, cryptoApi, httpConduit, httpTypes, network
+, pureMD5, text
 }:
 
 cabal.mkDerivation (self: {
   pname = "liblastfm";
-  version = "0.0.3.8";
-  sha256 = "0icx86x3w85z0pqdxcch583j6jk5id5aw9gf24266mgfg5k6iwdy";
+  version = "0.1.0.0";
+  sha256 = "1777p2zysha9z389dkzvc22wph5k2xa6f23xk1ckr8j1q5v9dg6x";
   buildDepends = [
-    aeson attoparsec curl mtl pureMD5 urlencoded utf8String xml
+    aeson cereal cryptoApi httpConduit httpTypes network pureMD5 text
   ];
   meta = {
-    description = "Wrapper to Lastfm API";
+    description = "Lastfm API interface";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
   };

@@ -1,0 +1,15 @@
+Don't invoke "dpkg --print-architecture" for every call to
+Dpkg::Arch::get_raw_build_arch().
+
+diff -ru -x '*~' dpkg-1.16.9/scripts/Dpkg/Arch.pm dpkg-1.16.9-new/scripts/Dpkg/Arch.pm
+--- dpkg-1.16.9/scripts/Dpkg/Arch.pm	2012-10-20 06:34:17.000000000 +0200
++++ dpkg-1.16.9-new/scripts/Dpkg/Arch.pm	2012-12-04 19:42:20.451002537 +0100
+@@ -59,7 +59,7 @@
+ 	# dpkg-architecture itself, by avoiding computing the DEB_BUILD_
+ 	# variables when they are not requested.
+ 
+-	my $build_arch = `dpkg --print-architecture`;
++	$build_arch = `dpkg --print-architecture`;
+ 	syserr("dpkg --print-architecture failed") if $? >> 8;
+ 
+ 	chomp $build_arch;

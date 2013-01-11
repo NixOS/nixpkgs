@@ -17,8 +17,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ python makeWrapper docutils unzip ];
 
-  PYTHONPATH = "${python}/lib/python2.6/site-packages:${python}/lib/python2.7/site-packages:${docutils}/lib/python2.5/site-packages:${docutils}/lib/python2.6/site-packages:${docutils}/lib/python2.7/site-packages";
-
   makeFlags = "PREFIX=$(out)";
 
   postInstall = (stdenv.lib.optionalString guiSupport
@@ -46,8 +44,6 @@ stdenv.mkDerivation {
       cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin
       chmod u+x $out/share/cgi-bin/hgweb.cgi
     '';
-
-  doCheck = false;  # The test suite fails, unfortunately. Not sure why.
 
   meta = {
     description = "A fast, lightweight SCM system for very large distributed projects";
