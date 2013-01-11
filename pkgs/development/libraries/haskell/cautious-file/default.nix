@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cautious-file";
-  version = "1.0.1";
-  sha256 = "0mlgchvdhw9lhml4pqmxxvx1zcqmkcyl3yx6w3zp0df200njzsws";
+  version = "1.0.2";
+  sha256 = "1sw5ngwrarq1lsd4c6v2wdmgbhkkq6kpybb62r8ccm11ddgn3yiq";
   buildDepends = [ filepath ];
   meta = {
     description = "Ways to write a file cautiously, to reduce the chances of problems such as data loss due to crashes or power failures";

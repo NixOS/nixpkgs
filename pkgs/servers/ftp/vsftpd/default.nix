@@ -1,11 +1,11 @@
 { stdenv, fetchurl, openssl, sslEnable ? false, libcap, pam }:
 
 stdenv.mkDerivation (rec {
-  name = "vsftpd-2.3.4";
+  name = "vsftpd-3.0.2";
   
   src = fetchurl {
-    url = "ftp://vsftpd.beasts.org/users/cevans/${name}.tar.gz";
-    sha256 = "0nhsqwnb8qkbxx5wjahara1ln85hp151v656psra5brpckwysrml";
+    url = "https://security.appspot.com/downloads/${name}.tar.gz";
+    sha256 = "0mjy345wszskz1vnk83360c1y37arwgap3gwz8hy13sjqpig0imy";
   };
 
   # The gcc-wrappers use -idirafter for glibc, and vsftpd also, and
@@ -14,9 +14,13 @@ stdenv.mkDerivation (rec {
     sed -i -e 's/-idirafter.*//' Makefile
   '';
   
-  preBuild =''
-    makeFlagsArray=( "LIBS=${if sslEnable then "-lcrypt -lssl -lcrypto " else ""}-lpam -lcap" )
-  '';
+  preBuild = let
+      sslLibs = if sslEnable then "-lcrypt -lssl -lcrypto " else "";
+    in ''
+      makeFlagsArray=( "LIBS=${sslLibs}-lpam -lcap -fstack-protector" )
+    '';
+
+  # It won't link without this flag, used in CFLAGS
 
   buildInputs = [ openssl libcap pam ];
 

@@ -14,6 +14,11 @@ stdenv.mkDerivation  rec {
     xlibs.xproto
   ];
 
+  preInstall = ''
+    sed -e "s@\`which bristol\`@$out/bin/bristol@g" -i bin/startBristol
+    sed -e "s@\`which brighton\`@$out/bin/brighton@g" -i bin/startBristol
+  '';
+
   meta = with stdenv.lib; {
     description = "A range of synthesiser, electric piano and organ emulations";
     homepage = http://bristol.sourceforge.net;

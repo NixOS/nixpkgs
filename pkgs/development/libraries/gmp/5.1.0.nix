@@ -1,11 +1,12 @@
 { stdenv, fetchurl, m4, cxx ? true }:
 
 stdenv.mkDerivation rec {
-  name = "gmp-5.0.5";
+  name = "gmp-5.1.0";
 
   src = fetchurl {
-    url = "mirror://gnu/gmp/${name}.tar.bz2";
-    sha256 = "1jfymbr90mpn0zw5sg001llqnvf2462y77vgjknrmfs1rjn8ln0z";
+    urls = [ "mirror://gnu/gmp/${name}.tar.bz2"
+      "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
+    sha256 = "15n7xxgasbxdch8ii8z9ic6fxc2ysk3q8iavf55abjp5iylspnfz";
   };
 
   patches = [ ./ignore-bad-cpuid.patch ];

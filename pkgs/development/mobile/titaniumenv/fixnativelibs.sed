@@ -1,0 +1,1 @@
+s|\t\t\t\t\t\t\t\tapk_zip.write(native_lib, path_in_zip)|\t\t\t\t\t\t\t\tinfo = zipfile.ZipInfo(path_in_zip)\n\t\t\t\t\t\t\t\tinfo.compress_type = zipfile.ZIP_DEFLATED\n\t\t\t\t\t\t\t\tinfo.create_system = 3\n\t\t\t\t\t\t\t\tf = open(native_lib)\n\t\t\t\t\t\t\t\tapk_zip.writestr(info, f.read())\n\t\t\t\t\t\t\t\tf.close()|

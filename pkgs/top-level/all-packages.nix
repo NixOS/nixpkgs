@@ -411,7 +411,14 @@ let
     client = true;
   });
 
-  androidenv = import ../development/androidenv {
+  androidenv = import ../development/mobile/androidenv {
+    inherit pkgs;
+    pkgs_i686 = pkgsi686Linux;
+  };
+  
+  xcodeenv = callPackage ../development/mobile/xcodeenv { };
+  
+  titaniumenv = import ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
@@ -513,6 +520,7 @@ let
   bup = callPackage ../tools/backup/bup {
     inherit (pythonPackages) pyxattr pylibacl setuptools fuse;
     inherit (haskellPackages) pandoc;
+    par2Support = (config.bup.par2Support or false);
   };
 
   atool = callPackage ../tools/archivers/atool { };
@@ -570,10 +578,15 @@ let
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  coreutils = callPackage ../tools/misc/coreutils {
-    # TODO: Add ACL support for cross-Linux.
-    aclSupport = crossSystem == null && stdenv.isLinux;
-  };
+  coreutils = (if stdenv.isDarwin then
+      # 8.20 doesn't build on Darwin
+      callPackage ../tools/misc/coreutils/8.19
+    else
+      callPackage ../tools/misc/coreutils)
+    {
+      # TODO: Add ACL support for cross-Linux.
+      aclSupport = crossSystem == null && stdenv.isLinux;
+    };
 
   cpio = callPackage ../tools/archivers/cpio { };
 
@@ -915,6 +928,8 @@ let
 
   hping = callPackage ../tools/networking/hping { };
 
+  httpie = callPackage ../tools/networking/httpie { };
+
   httpfs2 = callPackage ../tools/filesystems/httpfs { };
 
   # FIXME: This Hydra snapshot is outdated and depends on the `nixPerl',
@@ -1050,6 +1065,8 @@ let
   xz = callPackage ../tools/compression/xz { };
 
   lzop = callPackage ../tools/compression/lzop { };
+
+  maildrop = callPackage ../tools/networking/maildrop { };
 
   mailutils = callPackage ../tools/networking/mailutils {
     guile = guile_1_8;
@@ -2959,6 +2976,8 @@ let
 
   automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix { };
 
+  automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
+
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
@@ -3749,7 +3768,7 @@ let
   # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { };
 
-  gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
+  gmp5 = callPackage ../development/libraries/gmp/5.1.0.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
@@ -4935,6 +4954,10 @@ let
   telepathy_farstream = callPackage ../development/libraries/telepathy/farstream {};
 
   telepathy_qt = callPackage ../development/libraries/telepathy/qt { };
+
+  tinyxml = tinyxml2;
+
+  tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
   tk = callPackage ../development/libraries/tk { };
 
@@ -6448,7 +6471,7 @@ let
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
   libertine = builderDefsPackage (import ../data/fonts/libertine) {
-    inherit fontforge;
+    inherit fetchurl fontforge lib;
   };
 
   lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
@@ -6694,7 +6717,7 @@ let
 
   cuneiform = builderDefsPackage (import ../tools/graphics/cuneiform) {
     inherit cmake patchelf;
-    imagemagick=imagemagick;
+    imagemagick = imagemagick;
   };
 
   cvs = callPackage ../applications/version-management/cvs { };
@@ -6710,6 +6733,8 @@ let
   darktable = callPackage ../applications/graphics/darktable {
     inherit (gnome) GConf libglade;
   };
+
+  "dd-agent" = callPackage ../tools/networking/dd-agent { };
 
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
@@ -6979,6 +7004,8 @@ let
 
   feh = callPackage ../applications/graphics/feh { };
 
+  filezilla = callPackage ../applications/networking/ftp/filezilla { };
+
   firefox = pkgs.firefoxPkgs.firefox;
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
@@ -7004,6 +7031,13 @@ let
 
   firefox17Wrapper = lowPrio (wrapFirefox { browser = firefox17Pkgs.firefox; });
 
+  firefox18Pkgs = callPackage ../applications/networking/browsers/firefox/18.0.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
+  firefox18Wrapper = lowPrio (wrapFirefox { browser = firefox18Pkgs.firefox; });
+
   flac = callPackage ../applications/audio/flac { };
 
   flashplayer = callPackage ../applications/networking/browsers/mozilla-plugins/flashplayer-11 {
@@ -7027,6 +7061,10 @@ let
   freerdp = callPackage ../applications/networking/remote/freerdp { };
 
   freerdpUnstable = callPackage ../applications/networking/remote/freerdp/unstable.nix { };
+
+  freicoin = callPackage ../applications/misc/freicoin {
+    db4 = db48;
+  };
 
   fspot = callPackage ../applications/graphics/f-spot {
     inherit (gnome) libgnome libgnomeui;
@@ -7250,6 +7288,8 @@ let
   ion3 = callPackage ../applications/window-managers/ion-3 {
     lua = lua5;
   };
+
+  ipe = callPackage ../applications/graphics/ipe { };
 
   iptraf = callPackage ../applications/networking/iptraf { };
 
@@ -7995,6 +8035,8 @@ let
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
 
+  xbmc = callPackage ../applications/video/xbmc { };
+
   xcalib = callPackage ../tools/X11/xcalib { };
 
   xchat = callPackage ../applications/networking/irc/xchat { };
@@ -8098,6 +8140,8 @@ let
   alienarena = callPackage ../games/alienarena { };
 
   andyetitmoves = if stdenv.isLinux then callPackage ../games/andyetitmoves {} else null;
+
+  anki = callPackage ../games/anki { };
 
   asc = callPackage ../games/asc {
     lua = lua5;
@@ -8284,12 +8328,7 @@ let
 
   superTux = callPackage ../games/super-tux { };
 
-  superTuxKart = callPackage ../games/super-tux-kart {
-    /* With GNU Make 3.82, the build process is stuck in the `data'
-       directory, after displaying "Making all in tracks", and `pstree'
-       indicates that `make' doesn't launch any new process.  */
-    stdenv = overrideInStdenv stdenv [ gnumake381 ];
-  };
+  superTuxKart = callPackage ../games/super-tux-kart { };
 
   tbe = callPackage ../games/the-butterfly-effect {};
 

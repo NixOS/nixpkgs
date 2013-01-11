@@ -711,6 +711,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dimensional = callPackage ../development/libraries/haskell/dimensional {};
 
+  dimensionalTf = callPackage ../development/libraries/haskell/dimensional-tf {};
+
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
@@ -911,7 +913,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
 
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
-  hashable_1_3_0_2 = callPackage ../development/libraries/haskell/hashable/1.2.0.2.nix {};
+  hashable_1_2_0_3 = callPackage ../development/libraries/haskell/hashable/1.2.0.3.nix {};
   hashable = self.hashable_1_1_2_5;
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
@@ -1242,6 +1244,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
+  nat = callPackage ../development/libraries/haskell/nat {};
+
+  nats = callPackage ../development/libraries/haskell/nats {};
+
+  naturals = callPackage ../development/libraries/haskell/naturals {};
+
   netlist = callPackage ../development/libraries/haskell/netlist {};
 
   netlistToVhdl = callPackage ../development/libraries/haskell/netlist-to-vhdl {};
@@ -1278,6 +1286,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   numbers = callPackage ../development/libraries/haskell/numbers {};
 
   numtype = callPackage ../development/libraries/haskell/numtype {};
+
+  numtypeTf = callPackage ../development/libraries/haskell/numtype-tf {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
@@ -1678,9 +1688,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   transformersBase = callPackage ../development/libraries/haskell/transformers-base {};
 
+  transformersCompat = callPackage ../development/libraries/haskell/transformers-compat {};
+
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
   typeEquality = callPackage ../development/libraries/haskell/type-equality {};
+
+  typeLlevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
 
   unbound = callPackage ../development/libraries/haskell/unbound {};
 
@@ -1784,9 +1798,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   wxdirect = callPackage ../development/libraries/haskell/wxHaskell/wxdirect.nix {};
 
-  X11_1_5_0_1 = callPackage ../development/libraries/haskell/X11/1.5.0.1.nix {};
-  X11_1_6_0_2 = callPackage ../development/libraries/haskell/X11/1.6.0.2.nix {};
-  X11 = self.X11_1_6_0_2;
+  X11 = callPackage ../development/libraries/haskell/X11 {};
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {};
 
@@ -1960,18 +1972,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     stm = self.stm_2_3;
   };
 
-  xmonad = callPackage ../applications/window-managers/xmonad {
-    X11 = self.X11_1_5_0_1;
-  };
+  xmonad = callPackage ../applications/window-managers/xmonad {};
 
-  xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {
-    X11 = self.X11_1_5_0_1;
-    X11Xft = self.X11Xft.override { X11 = self.X11_1_5_0_1; };
-  };
+  xmonadContrib = callPackage ../applications/window-managers/xmonad/xmonad-contrib.nix {};
 
-  xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {
-    X11 = self.X11_1_5_0_1;
-  };
+  xmonadExtras = callPackage ../applications/window-managers/xmonad/xmonad-extras.nix {};
 
   # Tools.
 
@@ -1982,7 +1987,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     transformers = self.transformers_0_2_2_0;
     tar          = self.tar_0_3_2_0;
   };
-
 
   cabalGhci = callPackage ../development/tools/haskell/cabal-ghci {};
 

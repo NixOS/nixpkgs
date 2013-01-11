@@ -1,13 +1,13 @@
-{ cabal, hashable, ReadArgs, systemFilepath, text, transformers
-, unorderedContainers, vector
+{ cabal, hashable, liftedBase, ReadArgs, systemFilepath, text
+, transformers, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "basic-prelude";
-  version = "0.3.1.0";
-  sha256 = "15k89z78zjhga36wrvfn8b17hsmlwr1na6xq0gmimivfrdlnz5j0";
+  version = "0.3.2.0";
+  sha256 = "1sdwkh9xrsx8v96d06jll7cqc0p6ykv2y9gnjzpbfx0k3ns69kcj";
   buildDepends = [
-    hashable ReadArgs systemFilepath text transformers
+    hashable liftedBase ReadArgs systemFilepath text transformers
     unorderedContainers vector
   ];
   meta = {

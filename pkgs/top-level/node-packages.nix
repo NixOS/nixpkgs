@@ -742,6 +742,19 @@ let self = {
     ];
   };
 
+  "optparse" = self."optparse-1.0.3";
+  
+  "optparse-1.0.3" = self.buildNodePackage rec {
+    name = "optparse-1.0.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/optparse/-/${name}.tgz";
+      sha256 = "1cg99i4rq8azxikzqz0ykw4q971azbj49d3m7slj041yscb6m883";
+    };
+    deps = [
+    
+    ];
+  };
+
   "osenv" = self."osenv-0";
 
   "osenv-0" = self.buildNodePackage rec {

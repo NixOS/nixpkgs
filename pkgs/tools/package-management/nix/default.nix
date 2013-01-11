@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.2";
+  name = "nix-1.3";
 
   src = fetchurl {
     url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-    sha256 = "2f7c2d27e240b6a43ebfba330127072e3fb1473c17dbfc5e9662ea589dfd16e5";
+    sha256 = "32cba96df0e02d6627f5625a441fdd4ea0db718dd5bfd50044cdfd3c606d4852";
   };
 
   nativeBuildInputs = [ perl pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     ''
-      --with-store-dir=${storeDir} --localstatedir=${stateDir}
+      --with-store-dir=${storeDir} --localstatedir=${stateDir} --sysconfdir=/etc
       --with-dbi=${perlPackages.DBI}/${perl.libPrefix}
       --with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}
       --with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}
@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
       --enable-gc
       CFLAGS=-O3 CXXFLAGS=-O3
     '';
+
+  makeFlags = "profiledir=$(out)/etc/profile.d";
+
+  installFlags = "sysconfdir=$(out)/etc";
 
   doInstallCheck = true;
 
