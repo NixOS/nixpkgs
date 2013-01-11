@@ -3768,7 +3768,9 @@ let
   # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { };
 
-  gmp5 = callPackage ../development/libraries/gmp/5.1.0.nix { };
+  gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
+
+  gmp51 = callPackage ../development/libraries/gmp/5.1.0.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
