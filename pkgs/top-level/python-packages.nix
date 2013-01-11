@@ -3,21 +3,27 @@
 let pythonPackages = python.modules // rec {
 
   inherit python;
-
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
 
+  # helpers
 
   buildPythonPackage = import ../development/python-modules/generic {
     inherit (pkgs) lib;
     inherit python wrapPython setuptools recursivePthLoader offlineDistutils;
   };
 
+  wrapPython = pkgs.makeSetupHook
+    { deps = pkgs.makeWrapper;
+      substitutions.libPrefix = python.libPrefix;
+    }
+    ../development/python-modules/generic/wrap.sh;
+
+  # specials
 
   recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
     inherit (pkgs) stdenv;
     inherit python;
   };
-
 
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
@@ -34,6 +40,8 @@ let pythonPackages = python.modules // rec {
     inherit python;
   };
 
+  # packages defined elsewhere
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl;
     inherit buildPythonPackage pythonPackages;
@@ -49,12 +57,8 @@ let pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
-  wrapPython = pkgs.makeSetupHook
-    { deps = pkgs.makeWrapper;
-      substitutions.libPrefix = python.libPrefix;
-    }
-    ../development/python-modules/generic/wrap.sh;
 
+  # packages defined here
 
   afew = buildPythonPackage rec {
     rev = "6bb3915636aaf86f046a017ffffd9a4ef395e199";
