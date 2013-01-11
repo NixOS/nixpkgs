@@ -5295,13 +5295,13 @@ let
 
   numeric = callPackage ../development/python-modules/numeric { };
 
-  pil = python27Packages.pil;
+  pil = pythonPackages.pil;
 
   psyco = callPackage ../development/python-modules/psyco { };
 
   pycairo = callPackage ../development/python-modules/pycairo { };
 
-  pycrypto = python27Packages.pycrypto;
+  pycrypto = pythonPackages.pycrypto;
 
   pycups = callPackage ../development/python-modules/pycups { };
 
