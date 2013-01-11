@@ -55,25 +55,25 @@ let
   drv-name = drv:
     discard (substring 33 (stringLength (builtins.baseNameOf drv)) (builtins.baseNameOf drv));
 
-  replace-strings = drv: rewritten-drvs: runCommand (drv-name drv) { nixStore = "${nix}/bin/nix-store"; } ''
+  rewrite-hashes = drv: hashes: runCommand (drv-name drv) { nixStore = "${nix}/bin/nix-store"; } ''
     $nixStore --dump ${drv} | sed 's|${baseNameOf drv}|'$(basename $out)'|g' | sed -e ${
       concatStringsSep " -e " (mapAttrsToList (name: value:
         "'s|${baseNameOf name}|${baseNameOf value}|g'"
-      ) rewritten-drvs)
+      ) hashes)
     } | $nixStore --restore $out
   '';
 
   rewritten-deps = listToAttrs [ {name = discard (toString old-dependency); value = new-dependency;} ];
 
-  fn = drv:
+  rewritten-derivations = drv:
     if depends-on-old drv
       then listToAttrs [ {
         name = discard (toString drv);
 
-        value = replace-strings drv (rewritten-deps // (fold (drv: acc:
-          (fn drv) // acc
+        value = rewrite-hashes drv (rewritten-deps // (fold (drv: acc:
+          (rewritten-derivations drv) // acc
         ) {} (references-of drv)));
       } ]
       else {};
 in assert (stringLength (drv-name (toString old-dependency)) == stringLength (drv-name (toString new-dependency)));
-getAttr (discard (toString drv)) (fn drv)
+getAttr (discard (toString drv)) (rewritten-derivations drv)
