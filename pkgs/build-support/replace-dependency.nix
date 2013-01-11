@@ -63,18 +63,17 @@ let
     } | $nixStore --restore $out
   '';
 
-  fn = { drv, rewritten-drvs }: rewritten-drvs // (
+  rewritten-deps = listToAttrs [ {name = discard old-dependency.outPath; value = new-dependency;} ];
+
+  fn = drv:
     if depends-on-old drv
       then listToAttrs [ {
         name = discard (toString drv);
 
-        value = replace-strings drv (rewritten-drvs // (fold (drv: acc:
-          (fn { inherit drv rewritten-drvs; }) // acc
+        value = replace-strings drv (rewritten-deps // (fold (drv: acc:
+          (fn drv) // acc
         ) {} (references-of drv)));
       } ]
-      else {}
-  );
-in assert (stringLength old-dependency.name == stringLength new-dependency.name); getAttr (discard drv.outPath) (fn {
-  inherit drv;
-  rewritten-drvs = listToAttrs [ {name = discard old-dependency.outPath; value = new-dependency;} ];
-})
+      else {};
+in assert (stringLength old-dependency.name == stringLength new-dependency.name);
+getAttr (discard drv.outPath) (fn drv)
