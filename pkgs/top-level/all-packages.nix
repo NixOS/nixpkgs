@@ -344,6 +344,10 @@ let
     inherit stdenv;
   };
 
+  "replace-dependency" = import ../build-support/replace-dependency.nix {
+    inherit runCommand nix lib;
+  };
+
   nukeReferences = callPackage ../build-support/nuke-references/default.nix { };
 
   vmTools = import ../build-support/vm/default.nix {
