@@ -52,6 +52,11 @@ let pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pycairo = import ../development/python-modules/pycairo {
+    inherit (pkgs) stdenv fetchurl pkgconfig cairo x11;
+    inherit python;
+  };
+
   pycrypto = import ../development/python-modules/pycrypto {
     inherit (pkgs) fetchurl stdenv gmp;
     inherit python buildPythonPackage;

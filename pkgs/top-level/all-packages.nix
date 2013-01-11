@@ -5299,7 +5299,7 @@ let
 
   psyco = callPackage ../development/python-modules/psyco { };
 
-  pycairo = callPackage ../development/python-modules/pycairo { };
+  pycairo = pythonPackages.pycairo;
 
   pycrypto = pythonPackages.pycrypto;
 
