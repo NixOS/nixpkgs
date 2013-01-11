@@ -45,7 +45,7 @@ let
 
   discard = builtins.unsafeDiscardStringContext;
 
-  old-storepath = builtins.storePath (discard old-dependency.outPath);
+  old-storepath = builtins.storePath (discard (toString old-dependency));
 
   references-of = drv: getAttr (discard (toString drv)) references;
 
@@ -63,7 +63,7 @@ let
     } | $nixStore --restore $out
   '';
 
-  rewritten-deps = listToAttrs [ {name = discard old-dependency.outPath; value = new-dependency;} ];
+  rewritten-deps = listToAttrs [ {name = discard (toString old-dependency); value = new-dependency;} ];
 
   fn = drv:
     if depends-on-old drv
@@ -75,5 +75,5 @@ let
         ) {} (references-of drv)));
       } ]
       else {};
-in assert (stringLength old-dependency.name == stringLength new-dependency.name);
-getAttr (discard drv.outPath) (fn drv)
+in assert (stringLength (drv-name (toString old-dependency)) == stringLength (drv-name (toString new-dependency)));
+getAttr (discard (toString drv)) (fn drv)
