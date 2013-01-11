@@ -4,12 +4,9 @@ stdenv.mkDerivation rec {
   name = "gmp-5.1.0";
 
   src = fetchurl {
-    urls = [ "mirror://gnu/gmp/${name}.tar.bz2"
-      "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
+    urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
     sha256 = "15n7xxgasbxdch8ii8z9ic6fxc2ysk3q8iavf55abjp5iylspnfz";
   };
-
-  patches = [ ./ignore-bad-cpuid.patch ];
 
   nativeBuildInputs = [ m4 ];
 
