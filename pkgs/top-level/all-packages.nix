@@ -7693,6 +7693,8 @@ let
 
   pqiv = callPackage ../applications/graphics/pqiv { };
 
+  qiv = callPackage ../applications/graphics/qiv { };
+
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
   procmail = callPackage ../applications/misc/procmail { };
