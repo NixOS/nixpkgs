@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, libX11, xproto, libXext
-, libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel
+, libXcursor, libXmu, qt4, libIDL, SDL, libcap, zlib, libpng, glib, kernel, lvm2
 , which, alsaLib, curl, gawk
 , xorriso, makeself, perl, pkgconfig
 , javaBindings ? false, jdk ? null
@@ -11,8 +11,8 @@ with stdenv.lib;
 
 let
 
-  version = "4.2.4";
-  extpackRevision = "81684";
+  version = "4.2.6";
+  extpackRevision = "82870";
 
   forEachModule = action: ''
     for mod in \
@@ -35,7 +35,7 @@ let
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}"
          + ".vbox-extpack";
     # Has to be base16 because it's used as an input to VBoxExtPackHelperApp!
-    sha256 = "62078e057a4ab56aec5ac086746522b3d94787333d0444169471fa5152c609ed";
+    sha256 = "f0113688a76efa0426c27c5541c78506b18637025c35aa682ecc6eeed5d56582";
     url = "https://www.virtualbox.org/wiki/Downloads";
   };
 
@@ -44,19 +44,17 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "a7c607523c1c10b7b978ab39a92bb646517316548aa4a1a74b6e434ac2bf0adc";
+    sha256 = "54526091bc2aa66b88ca878dd9ecc4466f96d607db2f6678a9d673ecf6646ae3";
   };
 
   buildInputs =
     [ iasl dev86 libxslt libxml2 xproto libX11 libXext libXcursor qt4 libIDL SDL
-      libcap glib kernel python alsaLib curl pam xorriso makeself perl
+      libcap glib kernel lvm2 python alsaLib curl pam xorriso makeself perl
       pkgconfig which libXmu ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python;
 
-  patches = [ ./remove_fa_ir.patch ];
-
-  postPatch = ''
+  prePatch = ''
     set -x
     MODULES_BUILD_DIR=`echo ${kernel}/lib/modules/*/build`
     sed -e 's@/lib/modules/`uname -r`/build@'$MODULES_BUILD_DIR@ \
