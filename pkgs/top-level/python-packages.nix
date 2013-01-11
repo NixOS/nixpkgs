@@ -67,6 +67,20 @@ let pythonPackages = python.modules // rec {
     inherit python;
   };
 
+  pygtk = import ../development/python-modules/pygtk {
+    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  # XXX: how can we get an override here?
+  #pyGtkGlade = pygtk.override {
+  #  inherit (pkgs.gnome) libglade;
+  #};
+  pyGtkGlade = import ../development/python-modules/pygtk {
+    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit (pkgs.gnome) libglade;
+    inherit python buildPythonPackage pygobject pycairo;
+  };
 
   # packages defined here
 

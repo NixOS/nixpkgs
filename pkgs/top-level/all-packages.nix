@@ -5311,11 +5311,9 @@ let
 
   pygobject = pythonPackages.pygobject;
 
-  pygtk = callPackage ../development/python-modules/pygtk { };
+  pygtk = pythonPackages.pygtk;
 
-  pyGtkGlade = callPackage ../development/python-modules/pygtk {
-    inherit (gnome) libglade;
-  };
+  pyGtkGlade = pythonPackages.pyGtkGlade;
 
   pyopenssl = builderDefsPackage (import ../development/python-modules/pyopenssl) {
     inherit python openssl;
