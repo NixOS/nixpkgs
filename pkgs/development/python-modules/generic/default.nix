@@ -53,6 +53,8 @@ python.stdenv.mkDerivation (attrs // {
 
   buildInputs = [ python wrapPython setuptools ] ++ buildInputs ++ pythonPath;
 
+  propagatedBuildInputs = propagatedBuildInputs ++ [ recursivePthLoader ];
+
   pythonPath = [ setuptools ] ++ pythonPath;
 
   preConfigure = ''
