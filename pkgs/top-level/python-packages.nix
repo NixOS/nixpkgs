@@ -62,6 +62,11 @@ let pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pygobject = import ../development/python-modules/pygobject {
+    inherit (pkgs) stdenv fetchurl pkgconfig glib;
+    inherit python;
+  };
+
 
   # packages defined here
 

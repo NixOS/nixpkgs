@@ -5309,7 +5309,7 @@ let
 
   pygame = callPackage ../development/python-modules/pygame { };
 
-  pygobject = callPackage ../development/python-modules/pygobject { };
+  pygobject = pythonPackages.pygobject;
 
   pygtk = callPackage ../development/python-modules/pygtk { };
 
