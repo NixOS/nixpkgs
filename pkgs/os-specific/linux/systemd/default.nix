@@ -1,22 +1,25 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
-, glib, kbd, libxslt, coreutils, libgcrypt
+, glib, kbd, libxslt, coreutils, libgcrypt, sysvtools
 }:
 
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-196";
+  name = "systemd-197";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "1gz4an5havzwzp7xsinn01prwvf51hgipb8pbciri0fxlmcadm3b";
+    sha256 = "1dbljyyc3w4a1af99f15f3sqnfx7mfmc5x5hwxb70kg23ai7x1g6";
   };
 
   patches =
-    [ ./reexec.patch
-      ./ignore-duplicates.patch
-      ./crypt-devices-are-ready.patch
+    [ ./0001-Make-systemctl-daemon-reexec-do-the-right-thing-on-N.patch
+      ./0002-Ignore-duplicate-paths-in-systemctl-start.patch
+      ./0003-Start-device-units-for-uninitialised-encrypted-devic.patch
+      ./0004-Set-switch-to-configuration-hints-for-some-units.patch
+      ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
+      ./0006-Don-t-call-plymouth-quit.patch
     ];
 
   buildInputs =
@@ -27,7 +30,6 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--localstatedir=/var"
       "--sysconfdir=/etc"
-      "--with-distro=other"
       "--with-rootprefix=$(out)"
       "--with-rootprefix=$(out)"
       "--with-dbusinterfacedir=$(out)/share/dbus-1/interfaces"
@@ -41,19 +43,24 @@ stdenv.mkDerivation rec {
   preConfigure =
     ''
       # FIXME: patch this in systemd properly (and send upstream).
-      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c; do
+      # FIXME: use sulogin from util-linux once updated.
+      for i in src/remount-fs/remount-fs.c src/core/mount.c src/core/swap.c src/fsck/fsck.c units/emergency.service.in units/rescue.service.m4.in; do
         test -e $i
         substituteInPlace $i \
           --replace /bin/mount ${utillinux}/bin/mount \
           --replace /bin/umount ${utillinux}/bin/umount \
           --replace /sbin/swapon ${utillinux}/sbin/swapon \
           --replace /sbin/swapoff ${utillinux}/sbin/swapoff \
-          --replace /sbin/fsck ${utillinux}/sbin/fsck
+          --replace /sbin/fsck ${utillinux}/sbin/fsck \
+          --replace /bin/echo ${coreutils}/bin/echo \
+          --replace /sbin/sulogin ${sysvtools}/sbin/sulogin
       done
 
       substituteInPlace src/journal/catalog.c \
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
     '';
+
+  PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 
   NIX_CFLAGS_COMPILE =
     [ "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\""
