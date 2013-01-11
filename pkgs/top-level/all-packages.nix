@@ -2847,6 +2847,7 @@ let
   python27Full = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = lib.attrValues python27.modules;
     python = python27;
+    inherit (python27Packages) recursivePthLoader;
   };
 
   pythonhomeWrapper = callPackage ../development/interpreters/python/pythonhome-wrapper.nix { };
