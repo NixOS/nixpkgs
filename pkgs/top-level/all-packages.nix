@@ -344,9 +344,9 @@ let
     inherit stdenv;
   };
 
-  "replace-dependency" = import ../build-support/replace-dependency.nix {
+  "replace-dependency" = if builtins ? langVersion then import ../build-support/replace-dependency.nix {
     inherit runCommand nix lib;
-  };
+  } else args: throw "You must be using at least nix-1.2 to use replace-dependency";
 
   nukeReferences = callPackage ../build-support/nuke-references/default.nix { };
 
