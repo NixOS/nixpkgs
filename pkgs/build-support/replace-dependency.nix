@@ -8,16 +8,16 @@
 # should be used. The old dependency and new dependency MUST have the same-length
 # name, and ideally should have close-to-identical directory layout.
 #
-# Example: safe-firefox = replace-dependency {
+# Example: safeFirefox = replaceDependency {
 #   drv = firefox;
-#   old-dependency = glibc;
-#   new-dependency = overrideDerivation glibc (attrs: {
+#   oldDependency = glibc;
+#   newDependency = overrideDerivation glibc (attrs: {
 #     patches  = attrs.patches ++ [ ./fix-glibc-hole.patch ];
 #   });
 # };
 # This will rebuild glibc with your security patch, then copy over firefox
 # (and all of its dependencies) without rebuilding further.
-{ drv, old-dependency, new-dependency }:
+{ drv, oldDependency, newDependency }:
 
 with lib;
 
@@ -45,17 +45,17 @@ let
 
   discard = builtins.unsafeDiscardStringContext;
 
-  old-storepath = builtins.storePath (discard (toString old-dependency));
+  oldStorepath = builtins.storePath (discard (toString oldDependency));
 
-  references-of = drv: getAttr (discard (toString drv)) references;
+  referencesOf = drv: getAttr (discard (toString drv)) references;
 
-  depends-on-old = drv: elem old-storepath (references-of drv) ||
-    any depends-on-old (references-of drv);
+  dependsOnOld = drv: elem oldStorepath (referencesOf drv) ||
+    any dependsOnOld (referencesOf drv);
 
-  drv-name = drv:
+  drvName = drv:
     discard (substring 33 (stringLength (builtins.baseNameOf drv)) (builtins.baseNameOf drv));
 
-  rewrite-hashes = drv: hashes: runCommand (drv-name drv) { nixStore = "${nix}/bin/nix-store"; } ''
+  rewriteHashes = drv: hashes: runCommand (drvName drv) { nixStore = "${nix}/bin/nix-store"; } ''
     $nixStore --dump ${drv} | sed 's|${baseNameOf drv}|'$(basename $out)'|g' | sed -e ${
       concatStringsSep " -e " (mapAttrsToList (name: value:
         "'s|${baseNameOf name}|${baseNameOf value}|g'"
@@ -63,17 +63,17 @@ let
     } | $nixStore --restore $out
   '';
 
-  rewritten-deps = listToAttrs [ {name = discard (toString old-dependency); value = new-dependency;} ];
+  rewrittenDeps = listToAttrs [ {name = discard (toString oldDependency); value = newDependency;} ];
 
-  rewritten-derivations = drv:
-    if depends-on-old drv
+  rewrittenDerivations = drv:
+    if dependsOnOld drv
       then listToAttrs [ {
         name = discard (toString drv);
 
-        value = rewrite-hashes drv (rewritten-deps // (fold (drv: acc:
-          (rewritten-derivations drv) // acc
-        ) {} (references-of drv)));
+        value = rewriteHashes drv (rewrittenDeps // (fold (drv: acc:
+          (rewrittenDerivations drv) // acc
+        ) {} (referencesOf drv)));
       } ]
       else {};
-in assert (stringLength (drv-name (toString old-dependency)) == stringLength (drv-name (toString new-dependency)));
-getAttr (discard (toString drv)) (rewritten-derivations drv)
+in assert (stringLength (drvName (toString oldDependency)) == stringLength (drvName (toString newDependency)));
+getAttr (discard (toString drv)) (rewrittenDerivations drv)
