@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jfymbr90mpn0zw5sg001llqnvf2462y77vgjknrmfs1rjn8ln0z";
   };
 
+  patches = [ ./ignore-bad-cpuid.patch ];
+
   nativeBuildInputs = [ m4 ];
 
   configureFlags =
