@@ -49,6 +49,18 @@ in
       description = "Obsolete.";
     };
 
+    boot.initrd.luks.mitigateDMAAttacks = mkOption {
+      default = true;
+      description = ''
+	Unless enabled, encryption keys can be easily recovered by an attacker with physical
+	access to any machine with PCMCIA, ExpressCard, ThunderBolt or FireWire port.
+	More information: http://en.wikipedia.org/wiki/DMA_attack
+
+	This option blacklists FireWire drivers, but doesn't remove them. You can manually
+	load the drivers if you need to use a FireWire device, but don't forget to unload them!
+      '';
+    };
+
     boot.initrd.luks.devices = mkOption {
       default = [ ];
       example = [ { name = "luksroot"; device = "/dev/sda3"; preLVM = true; } ];
@@ -122,6 +134,10 @@ in
   };
 
   config = mkIf (luks.devices != []) {
+
+    # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
+    boot.blacklistedKernelModules = optionals luks.mitigateDMAAttacks
+      ["firewire_ohci" "firewire_core" "firewire_sbp2"];
 
     # Some modules that may be needed for mounting anything ciphered
     boot.initrd.kernelModules = [ "aes_generic" "aes_x86_64" "dm_mod" "dm_crypt"
