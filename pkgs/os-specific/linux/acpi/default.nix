@@ -1,11 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "acpi-1.5";
-  
+  name = "acpi-${version}";
+  version = "1.6";
+
   src = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/a/acpi/acpi_1.5.orig.tar.gz";
-    sha256 = "1pb020j627ldjm1askqfzp6cjxrs79ail8svihanv7pgbg5r3zsp";
+    url = "mirror://sf/acpiclient/${version}/${name}.tar.gz";
+    sha256 = "0cawznhkzb51yxa599d1xkw05nklmjrrmd79vmjkkzf4002d4qgd";
   };
 
   meta = {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
       the "old" `apm' command on ACPI systems.  It includes
       battery and thermal information.
     '';
-    homepage = http://grahame.angrygoats.net/acpi.shtml;
+    homepage = http://sourceforge.net/projects/acpiclient/;
     license = "GPLv2+";
   };
 }
