@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   name = "hardlink-2012.9.${rev}";
 
   src = fetchurl {
-    url = "pkgs.fedoraproject.org/cgit/hardlink.git/snapshot/hardlink-${rev}.zip";
+    url = "http://pkgs.fedoraproject.org/cgit/hardlink.git/snapshot/hardlink-${rev}.zip";
     sha256 = "fea1803170b538d5fecf6a8d312ded1d25d516e9386a3797441a247487551647";
     name = "hardlink-${rev}.zip";
   };
