@@ -9,11 +9,11 @@ assert bdbSupport -> db4 != null;
 assert ldapSupport -> openldap != null;
 
 stdenv.mkDerivation rec {
-  name = "apr-util-1.4.1";
+  name = "apr-util-1.5.1";
 
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    md5 = "52b31b33fb1aa16e65ddaefc76e41151";
+    md5 = "9c1db8606e520f201c451ec9a0b095f6";
   };
 
   configureFlags = ''
@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
   '';
 
   propagatedBuildInputs = stdenv.lib.optional ldapSupport openldap;
+
+  enableParallelBuilding = true;
 
   passthru = {
     inherit sslSupport bdbSupport ldapSupport;
