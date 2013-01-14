@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.6";
 
   src = fetchurl {
-    url = "mirror://sf/acpiclient/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/acpiclient/${version}/${name}.tar.gz";
     sha256 = "0cawznhkzb51yxa599d1xkw05nklmjrrmd79vmjkkzf4002d4qgd";
   };
 
