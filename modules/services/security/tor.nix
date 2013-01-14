@@ -53,6 +53,14 @@ in
           '';
         };
 
+	socksListenAddressFaster = mkOption {
+          default = "127.0.0.1:9063";
+	  description = ''
+            Same as socksListenAddress but uses weaker circuit isolation to provide
+            performance suitable for a web browser.
+          '';
+        };
+
         socksPolicy = mkOption {
           default = "";
           example = "accept 192.168.0.0/16, reject *";
@@ -259,7 +267,8 @@ in
         User ${torUser}
       ''
       + optionalString cfg.client.enable  ''
-        SOCKSPort ${cfg.client.socksListenAddress}
+        SOCKSPort ${cfg.client.socksListenAddress} IsolateDestAddr
+	SOCKSPort ${cfg.client.socksListenAddressFaster}
         ${opt "SocksPolicy" cfg.client.socksPolicy}
       ''
       + optionalString cfg.relay.enable ''
@@ -276,7 +285,7 @@ in
         # Generally, this file goes in /etc/privoxy/config
         #
         # Tor listens as a SOCKS4a proxy here:
-        forward-socks4a / ${cfg.client.socksListenAddress} .
+        forward-socks4a / ${cfg.client.socksListenAddressFaster} .
         confdir ${privoxy}/etc
         logdir ${privoxyDir}
         # actionsfile standard  # Internal purpose, recommended
