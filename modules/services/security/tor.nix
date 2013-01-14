@@ -259,7 +259,7 @@ in
         User ${torUser}
       ''
       + optionalString cfg.client.enable  ''
-        SocksListenAddress ${cfg.client.socksListenAddress}
+        SOCKSPort ${cfg.client.socksListenAddress}
         ${opt "SocksPolicy" cfg.client.socksPolicy}
       ''
       + optionalString cfg.relay.enable ''
