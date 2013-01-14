@@ -87,7 +87,7 @@ in
       };
 
     boot.kernelModules =
-      [ "acpi_cpufreq" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand"
+      [ "acpi_cpufreq" "powernow-k8" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand"
         "cpufreq_conservative"
       ];
 
