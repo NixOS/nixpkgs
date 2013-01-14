@@ -62,7 +62,10 @@ in
     };
 
     boot.initrd.luks.cryptoModules = mkOption {
-      default = [ "aes" "blowfish" "twofish" "serpent" "cbc" "xts" "lrw" "sha256" "sha1" "sha2" ];
+      default = [ "aes" "aes_generic" "aes_x86_64" "aes_i586" "blowfish" "twofish" "serpent" "cbc" "xts" "lrw" "sha256" 
+"sha1" 
+"sha2" 
+];
       description = ''
 	A list of cryptographic kernel modules needed to decrypt the root device(s).
 	The default includes all common modules.
