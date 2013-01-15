@@ -76,6 +76,7 @@ let
         rm -rf "$out/lib/python${majorVersion}/test"
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
         ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
+        ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
       '';
 
     passthru = {
