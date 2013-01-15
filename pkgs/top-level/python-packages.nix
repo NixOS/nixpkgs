@@ -3,21 +3,27 @@
 let pythonPackages = python.modules // rec {
 
   inherit python;
-
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
 
+  # helpers
 
   buildPythonPackage = import ../development/python-modules/generic {
     inherit (pkgs) lib;
-    inherit python wrapPython setuptools setuptoolsSite offlineDistutils;
+    inherit python wrapPython setuptools recursivePthLoader offlineDistutils;
   };
 
+  wrapPython = pkgs.makeSetupHook
+    { deps = pkgs.makeWrapper;
+      substitutions.libPrefix = python.libPrefix;
+    }
+    ../development/python-modules/generic/wrap.sh;
+
+  # specials
 
   recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
     inherit (pkgs) stdenv;
     inherit python;
   };
-
 
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
@@ -34,6 +40,8 @@ let pythonPackages = python.modules // rec {
     inherit python;
   };
 
+  # packages defined elsewhere
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl;
     inherit buildPythonPackage pythonPackages;
@@ -44,17 +52,37 @@ let pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pycairo = import ../development/python-modules/pycairo {
+    inherit (pkgs) stdenv fetchurl pkgconfig cairo x11;
+    inherit python;
+  };
+
   pycrypto = import ../development/python-modules/pycrypto {
     inherit (pkgs) fetchurl stdenv gmp;
     inherit python buildPythonPackage;
   };
 
-  wrapPython = pkgs.makeSetupHook
-    { deps = pkgs.makeWrapper;
-      substitutions.libPrefix = python.libPrefix;
-    }
-    ../development/python-modules/generic/wrap.sh;
+  pygobject = import ../development/python-modules/pygobject {
+    inherit (pkgs) stdenv fetchurl pkgconfig glib;
+    inherit python;
+  };
 
+  pygtk = import ../development/python-modules/pygtk {
+    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  # XXX: how can we get an override here?
+  #pyGtkGlade = pygtk.override {
+  #  inherit (pkgs.gnome) libglade;
+  #};
+  pyGtkGlade = import ../development/python-modules/pygtk {
+    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit (pkgs.gnome) libglade;
+    inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  # packages defined here
 
   afew = buildPythonPackage rec {
     rev = "6bb3915636aaf86f046a017ffffd9a4ef395e199";

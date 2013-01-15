@@ -1,7 +1,7 @@
 { stdenv, fetchurl, python, wrapPython }:
 
 stdenv.mkDerivation rec {
-  name = "setuptools-" + version;
+  name = "python-setuptools-" + version;
 
   version = "0.6c11";
 
