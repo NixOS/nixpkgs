@@ -18,7 +18,7 @@ for url in $urls; do
     if ! echo "$base" | grep -q -E "[a-zA-Z]"; then echo "skipping $url (no letter in name)"; continue; fi
     if ! echo "$base" | grep -q -E "[0-9]"; then echo "skipping $url (no digit in name)"; continue; fi
     if ! echo "$base" | grep -q -E "[-_\.]"; then echo "skipping $url (no dot/underscore in name)"; continue; fi
-    if echo "$base" | grep -q -E "[&?=]"; then echo "skipping $url (bad character in name)"; continue; fi
+    if echo "$base" | grep -q -E "[&?=%]"; then echo "skipping $url (bad character in name)"; continue; fi
     if [ "${base:0:1}" = "." ]; then echo "skipping $url (starts with a dot)"; continue; fi
 
     $(dirname $0)/copy-tarball.sh "$url"
