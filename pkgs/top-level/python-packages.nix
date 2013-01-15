@@ -458,6 +458,16 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  cssselect = buildPythonPackage rec {
+    name = "cssselect-0.7.1";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/cssselect/cssselect-0.7.1.tar.gz";
+      md5 = "c6c5e9a2e7ca226ce03f6f67a771379c";
+    };
+    # AttributeError: 'module' object has no attribute 'tests'
+    doCheck = false;
+  };
+
   cssutils = buildPythonPackage (rec {
     name = "cssutils-0.9.9";
 
@@ -2169,6 +2179,16 @@ let pythonPackages = python.modules // rec {
           license = "BSD-style";
         };
       };
+
+
+  pyquery = buildPythonPackage rec {
+    name = "pyquery-1.2.4";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyquery/pyquery-1.2.4.tar.gz";
+      md5 = "268f08258738d21bc1920d7522f2a63b";
+    };
+    buildInputs = [ cssselect lxml ];
+  };
 
 
   pyreport = buildPythonPackage (rec {
