@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "jedit-4.4.2";
 
   src = fetchurl {
-    url = mirror://sf/jedit/jedit4.4.2source.tar.bz2;
+    url = mirror://sourceforge/jedit/jedit4.4.2source.tar.bz2;
     sha256 = "5e9ad9c32871b77ef0b9fe46dcfcea57ec52558d36113b7280194a33430b8ceb";
   };
 

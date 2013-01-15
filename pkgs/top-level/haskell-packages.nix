@@ -711,6 +711,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dimensional = callPackage ../development/libraries/haskell/dimensional {};
 
+  dimensionalTf = callPackage ../development/libraries/haskell/dimensional-tf {};
+
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
@@ -1242,7 +1244,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
+  nat = callPackage ../development/libraries/haskell/nat {};
+
   nats = callPackage ../development/libraries/haskell/nats {};
+
+  naturals = callPackage ../development/libraries/haskell/naturals {};
 
   netlist = callPackage ../development/libraries/haskell/netlist {};
 
@@ -1280,6 +1286,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   numbers = callPackage ../development/libraries/haskell/numbers {};
 
   numtype = callPackage ../development/libraries/haskell/numtype {};
+
+  numtypeTf = callPackage ../development/libraries/haskell/numtype-tf {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
@@ -1685,6 +1693,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
   typeEquality = callPackage ../development/libraries/haskell/type-equality {};
+
+  typeLlevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
 
   unbound = callPackage ../development/libraries/haskell/unbound {};
 

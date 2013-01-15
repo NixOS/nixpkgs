@@ -15,7 +15,7 @@ let
     version="20101017";
     name="${baseName}-${version}";
     filename="${baseName}_src_${version}";
-    url="${baseName}.googlecode.com/files/${filename}.tgz";
+    url="http://${baseName}.googlecode.com/files/${filename}.tgz";
     hash="0xrky7ixjaby5x026v7hn72xh7d401w9jhccxjn0khhn1x87p2w1";
   };
 in

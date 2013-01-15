@@ -344,6 +344,10 @@ let
     inherit stdenv;
   };
 
+  replaceDependency = import ../build-support/replace-dependency.nix {
+    inherit runCommand nix lib;
+  };
+
   nukeReferences = callPackage ../build-support/nuke-references/default.nix { };
 
   vmTools = import ../build-support/vm/default.nix {
@@ -541,7 +545,7 @@ let
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
     inherit libpng bison flex;
-    ffmpeg = ffmpeg_1_0;
+    ffmpeg = ffmpeg_1_1;
   };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
@@ -1748,6 +1752,8 @@ let
   wv = callPackage ../tools/misc/wv { };
 
   wv2 = callPackage ../tools/misc/wv2 { };
+
+  x86info = callPackage ../os-specific/linux/x86info { };
 
   x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
 
@@ -3604,6 +3610,10 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
+  ffmpeg_1_1 = callPackage ../development/libraries/ffmpeg/1.1.nix {
+    vpxSupport = !stdenv.isMips;
+  };
+
   fftw = callPackage ../development/libraries/fftw {
     singlePrecision = false;
   };
@@ -5020,6 +5030,8 @@ let
   tremor = callPackage ../development/libraries/tremor { };
 
   unicap = callPackage ../development/libraries/unicap {};
+
+  tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
@@ -6516,7 +6528,7 @@ let
   liberation_ttf = callPackage ../data/fonts/redhat-liberation-fonts { };
 
   libertine = builderDefsPackage (import ../data/fonts/libertine) {
-    inherit fontforge;
+    inherit fetchurl fontforge lib;
   };
 
   lmmath = callPackage ../data/fonts/lmodern/lmmath.nix {};
@@ -6778,6 +6790,8 @@ let
   darktable = callPackage ../applications/graphics/darktable {
     inherit (gnome) GConf libglade;
   };
+
+  "dd-agent" = callPackage ../tools/networking/dd-agent { };
 
   dia = callPackage ../applications/graphics/dia {
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
@@ -7073,6 +7087,13 @@ let
   };
 
   firefox17Wrapper = lowPrio (wrapFirefox { browser = firefox17Pkgs.firefox; });
+
+  firefox18Pkgs = callPackage ../applications/networking/browsers/firefox/18.0.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
+  firefox18Wrapper = lowPrio (wrapFirefox { browser = firefox18Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7521,7 +7542,7 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
-  MPlayer = callPackage ../applications/video/MPlayer {
+  mplayer = callPackage ../applications/video/mplayer {
     pulseSupport = config.pulseaudio or false;
   };
 
@@ -7674,6 +7695,8 @@ let
   };
 
   pqiv = callPackage ../applications/graphics/pqiv { };
+
+  qiv = callPackage ../applications/graphics/qiv { };
 
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
@@ -7982,7 +8005,7 @@ let
   };
 
   vlc = callPackage ../applications/video/vlc {
-    ffmpeg = ffmpeg_1_0;
+    ffmpeg = ffmpeg_1_1;
   };
 
   vnstat = callPackage ../applications/networking/vnstat { };
@@ -8362,12 +8385,7 @@ let
 
   superTux = callPackage ../games/super-tux { };
 
-  superTuxKart = callPackage ../games/super-tux-kart {
-    /* With GNU Make 3.82, the build process is stuck in the `data'
-       directory, after displaying "Making all in tracks", and `pstree'
-       indicates that `make' doesn't launch any new process.  */
-    stdenv = overrideInStdenv stdenv [ gnumake381 ];
-  };
+  superTuxKart = callPackage ../games/super-tux-kart { };
 
   tbe = callPackage ../games/the-butterfly-effect {};
 
@@ -9133,8 +9151,6 @@ let
 
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
   wine = callPackage_i686 ../misc/emulators/wine { };
-
-  wineWarcraft = callPackage_i686 ../misc/emulators/wine/wine-warcraft.nix { };
 
   x2x = callPackage ../tools/X11/x2x { };
 
