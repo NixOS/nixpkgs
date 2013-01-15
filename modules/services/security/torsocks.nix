@@ -4,16 +4,30 @@ let
 
   cfg = config.services.tor;
 
-  torsocks = pkgs.writeTextFile {
-    name = "torsocks";
+  makeConfig = server: ''
+      server = ${toString(head (splitString ":" server))}
+      server_port = ${toString(tail (splitString ":" server))}
+
+      local = 127.0.0.0/255.128.0.0
+      local = 127.128.0.0/255.192.0.0
+      local = 169.254.0.0/255.255.0.0
+      local = 172.16.0.0/255.240.0.0
+      local = 192.168.0.0/255.255.0.0
+
+      ${cfg.torsocks.config}
+    '';
+  makeTorsocks = name: server: pkgs.writeTextFile {
+    name = name;
     text = ''
         #!${pkgs.stdenv.shell}
-        TORSOCKS_CONF_FILE=${pkgs.writeText "torsocks.conf" cfg.torsocks.config} LD_PRELOAD="${pkgs.torsocks}/lib/torsocks/libtorsocks.so $LD_PRELOAD" $@
+        TORSOCKS_CONF_FILE=${pkgs.writeText "torsocks.conf" (makeConfig server)} LD_PRELOAD="${pkgs.torsocks}/lib/torsocks/libtorsocks.so $LD_PRELOAD" $@
     '';
     executable = true;
-    destination = "/bin/torsocks";
+    destination = "/bin/${name}";
   };
 
+  torsocks = makeTorsocks "torsocks" cfg.torsocks.server;
+  torsocksFaster = makeTorsocks "torsocks-faster" cfg.torsocks.serverFaster;
 in
 
 {
@@ -33,9 +47,18 @@ in
 
       server = mkOption {
         default = cfg.client.socksListenAddress;
-        example = "192.168.0.20";
+        example = "192.168.0.20:9050";
         description = ''
           IP address of TOR client to use.
+        '';
+      };
+
+      serverFaster = mkOption {
+        default = cfg.client.socksListenAddressFaster;
+        example = "192.168.0.20:9063";
+        description = ''
+          IP address of TOR client to use for applications like web browsers which
+	  need less circuit isolation to achive satisfactory performance.
         '';
       };
 
@@ -55,18 +78,8 @@ in
 
   config = mkIf cfg.torsocks.enable {
 
-    environment.systemPackages = [ torsocks ];  # expose it to the users
+    environment.systemPackages = [ torsocks torsocksFaster ];  # expose it to the users
 
-    services.tor.torsocks.config = ''
-      server = ${toString(head (splitString ":" cfg.torsocks.server))}
-      server_port = ${toString(tail (splitString ":" cfg.torsocks.server))}
-
-      local = 127.0.0.0/255.128.0.0
-      local = 127.128.0.0/255.192.0.0
-      local = 169.254.0.0/255.255.0.0
-      local = 172.16.0.0/255.240.0.0
-      local = 192.168.0.0/255.255.0.0
-    '';
   };
 
 }
