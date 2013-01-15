@@ -5291,6 +5291,10 @@ let
 
   pythonPackages = python27Packages;
 
+  # `nix-env -i python-nose` installs for 2.7, the default python.
+  # Therefore we do not recurse into attributes here, in contrast to
+  # python27Packages. `nix-env -iA python26Packages.nose` works
+  # regardless.
   python26Packages = import ./python-packages.nix {
     inherit pkgs;
     python = python26;
