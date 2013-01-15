@@ -9157,8 +9157,6 @@ let
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
   wine = callPackage_i686 ../misc/emulators/wine { };
 
-  wineWarcraft = callPackage_i686 ../misc/emulators/wine/wine-warcraft.nix { };
-
   x2x = callPackage ../tools/X11/x2x { };
 
   xosd = callPackage ../misc/xosd { };
