@@ -36,6 +36,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/tkabber \
+      --prefix PATH : "${tk}/bin" \
       --set TCLLIBPATH '"${tclLibPaths}"' \
       --set TKABBER_SITE_PLUGINS '$HOME/.nix-profile/share/tkabber-plugins'
   '';

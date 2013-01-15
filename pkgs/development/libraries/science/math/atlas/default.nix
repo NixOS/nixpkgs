@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   name = "atlas-3.9.67";
 
   src = fetchurl {
-    url = mirror://sf/math-atlas/atlas3.9.67.tar.bz2;
+    url = mirror://sourceforge/math-atlas/atlas3.9.67.tar.bz2;
     sha256 = "06xxlv440z8a3qmfrh17p28girv71c6awvpw5vhpspr0pcsgk1pa";
   };
 

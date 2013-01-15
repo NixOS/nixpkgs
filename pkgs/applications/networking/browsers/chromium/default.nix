@@ -78,8 +78,9 @@ let
 
   post23 = !versionOlder sourceInfo.version "24.0.0.0";
   post24 = !versionOlder sourceInfo.version "25.0.0.0";
+  only24 = post23 && !post24;
 
-  maybeFixPulseAudioBuild = optional (post23 && pulseSupport)
+  maybeFixPulseAudioBuild = optional (only24 && pulseSupport)
     ./pulse_audio_fix.patch;
 
 in stdenv.mkDerivation rec {
@@ -120,6 +121,8 @@ in stdenv.mkDerivation rec {
 
   postPatch = optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
+  '' + optionalString post24 ''
+    sed -i -r -e "s/-f(stack-protector)(-all)?/-fno-\1/" build/common.gypi
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {

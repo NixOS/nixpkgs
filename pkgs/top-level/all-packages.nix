@@ -344,6 +344,10 @@ let
     inherit stdenv;
   };
 
+  replaceDependency = import ../build-support/replace-dependency.nix {
+    inherit runCommand nix lib;
+  };
+
   nukeReferences = callPackage ../build-support/nuke-references/default.nix { };
 
   vmTools = import ../build-support/vm/default.nix {
@@ -541,7 +545,7 @@ let
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
     inherit libpng bison flex;
-    ffmpeg = ffmpeg_1_0;
+    ffmpeg = ffmpeg_1_1;
   };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
@@ -1748,6 +1752,8 @@ let
   wv = callPackage ../tools/misc/wv { };
 
   wv2 = callPackage ../tools/misc/wv2 { };
+
+  x86info = callPackage ../os-specific/linux/x86info { };
 
   x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
 
@@ -3604,6 +3610,10 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
+  ffmpeg_1_1 = callPackage ../development/libraries/ffmpeg/1.1.nix {
+    vpxSupport = !stdenv.isMips;
+  };
+
   fftw = callPackage ../development/libraries/fftw {
     singlePrecision = false;
   };
@@ -5020,6 +5030,8 @@ let
   tremor = callPackage ../development/libraries/tremor { };
 
   unicap = callPackage ../development/libraries/unicap {};
+
+  tsocks = callPackage ../development/libraries/tsocks { };
 
   unixODBC = callPackage ../development/libraries/unixODBC { };
 
@@ -7529,7 +7541,7 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
-  MPlayer = callPackage ../applications/video/MPlayer {
+  mplayer = callPackage ../applications/video/mplayer {
     pulseSupport = config.pulseaudio or false;
   };
 
@@ -7682,6 +7694,8 @@ let
   };
 
   pqiv = callPackage ../applications/graphics/pqiv { };
+
+  qiv = callPackage ../applications/graphics/qiv { };
 
   # perhaps there are better apps for this task? It's how I had configured my preivous system.
   # And I don't want to rewrite all rules
@@ -7990,7 +8004,7 @@ let
   };
 
   vlc = callPackage ../applications/video/vlc {
-    ffmpeg = ffmpeg_1_0;
+    ffmpeg = ffmpeg_1_1;
   };
 
   vnstat = callPackage ../applications/networking/vnstat { };
@@ -9138,8 +9152,6 @@ let
 
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
   wine = callPackage_i686 ../misc/emulators/wine { };
-
-  wineWarcraft = callPackage_i686 ../misc/emulators/wine/wine-warcraft.nix { };
 
   x2x = callPackage ../tools/X11/x2x { };
 

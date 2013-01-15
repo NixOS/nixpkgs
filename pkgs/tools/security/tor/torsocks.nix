@@ -2,11 +2,11 @@
 stdenv.mkDerivation rec {
   pname = "torsocks";
   name = "${pname}-${version}";
-  version = "1.0-epsilon";
+  version = "1.2";
   
   src = fetchurl {
     url = "http://${pname}.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0508i4q9gm0rrav018z1jn4as5if3qrfdng6dmmzgs324hvdgap5";
+    sha256 = "1m0is5q24sf7jjlkl0icfkdc0m53nbkg0q72s57p48yp4hv7v9dy";
   };
 
   preConfigure = ''

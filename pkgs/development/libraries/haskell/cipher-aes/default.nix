@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cipher-aes";
-  version = "0.1.5";
-  sha256 = "0n0qbq2hwyksdbr6fn7yj5vwicmdrn58mfz0dprl8fj456r4j3kn";
+  version = "0.1.7";
+  sha256 = "1iai9c4rvxframylvc0xwx2nk6s0rsj4dc42wi334xyinilvfyng";
   meta = {
     homepage = "http://github.com/vincenthz/hs-cipher-aes";
     description = "Fast AES cipher implementation with advanced mode of operations";
