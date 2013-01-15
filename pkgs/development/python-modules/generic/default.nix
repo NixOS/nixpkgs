@@ -90,8 +90,6 @@ python.stdenv.mkDerivation (attrs // {
     ''
       wrapPythonPrograms
 
-      # these should already be in $name.pth
-      #createBuildInputsPth build-inputs "$buildInputStrings"
       for inputsfile in propagated-build-inputs propagated-build-native-inputs; do
         if test -e $out/nix-support/$inputsfile; then
             createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
