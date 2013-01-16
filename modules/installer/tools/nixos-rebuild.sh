@@ -96,10 +96,6 @@ done
 
 if [ -z "$action" ]; then showSyntax; fi
 
-if [ "$action" = dry-run ]; then
-    extraBuildFlags+=(--dry-run)
-fi
-
 if [ -n "$rollback" ]; then
     buildNix=
 fi
@@ -129,7 +125,7 @@ fi
 # First build Nix, since NixOS may require a newer version than the
 # current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
 # more conservative.
-if [ -n "$buildNix" ]; then
+if [ "$action" != dry-run -a -n "$buildNix" ]; then
     echo "building Nix..." >&2
     if ! nix-build '<nixos>' -A config.environment.nix -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
         if ! nix-build '<nixos>' -A nixFallback -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
@@ -147,6 +143,11 @@ if nixos=$(nix-instantiate --find-file nixos "${extraBuildFlags[@]}"); then
     if [ -n "$suffix" ]; then
         echo -n "$suffix" > "$nixos/.version-suffix"
     fi
+fi
+
+
+if [ "$action" = dry-run ]; then
+    extraBuildFlags+=(--dry-run)
 fi
 
 
