@@ -1781,6 +1781,9 @@ rec {
       sha256 = "0pxfphg671wh56h59pf0zrj7m1cr0yga95hf3w54563pzcw2vqv3";
     };
     propagatedBuildInputs = [ ClassAccessor ParseRecDescent ];
+    patches = [
+      ../development/perl-modules/Google-ProtocolBuffers-multiline-comments.patch
+    ];
   };
 
   Graph = buildPerlPackage rec {
