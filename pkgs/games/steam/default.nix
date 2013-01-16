@@ -9,14 +9,14 @@
 
 assert stdenv.system == "i686-linux";
 
-let version = "1.0.0.18"; in
+let version = "1.0.0.21"; in
 
 stdenv.mkDerivation rec {
   name = "steam-${version}";
 
   src = fetchurl {
     url = "http://media.steampowered.com/client/installer/steam.deb";
-    sha256 = "1gzfyh3wfdb4h7cxibx61c31l8pjz5zcp5d9d5w9jyja463lv49c";
+    sha256 = "03p3mvrdkkq9x7ssi9wl5zzyi4xvw5zvap7w72rpjsz8145l3vsj";
   };
 
   buildInputs = [ dpkg makeWrapper ];
@@ -30,8 +30,6 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
     substituteInPlace "$out/bin/steam" --replace "/bin/bash" "/bin/sh"
     substituteInPlace "$out/bin/steam" --replace "/usr/" "$out/"
-    substituteInPlace "$out/bin/steam" --replace "\`basename \$0\`" "steam"
-    sed -i '/jockey-common/d' $out/bin/steam
 
     mv $out/bin/steam $out/bin/.steam-wrapped
     cat > $out/bin/steam << EOF
@@ -52,7 +50,7 @@ stdenv.mkDerivation rec {
       export LD_LIBRARY_PATH="\$STEAMBINDIR:\$LD_LIBRARY_PATH:${mesa}/lib"
       export SDL_VIDEO_X11_DGAMOUSE=0
       cd "\$STEAMROOT"
-      LDSO="\$STEAMBINDIR\ld.so"
+      LDSO="\$STEAMBINDIR/ld.so"
       cp ${glibc215}/lib/ld-linux.so.2 "\$LDSO"
       chmod u+w "\$LDSO"
       echo \$\$ > "\$PIDFILE" # pid of the shell will become pid of steam
