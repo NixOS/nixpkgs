@@ -6,7 +6,7 @@ with import ./systemd-unit-options.nix { inherit config pkgs; };
 
 let
 
-  cfg = config.boot.systemd;
+  cfg = config.systemd;
 
   systemd = pkgs.systemd;
 
@@ -340,7 +340,7 @@ in
 
   options = {
 
-    boot.systemd.units = mkOption {
+    systemd.units = mkOption {
       description = "Definition of systemd units.";
       default = {};
       type = types.attrsOf types.optionSet;
@@ -367,34 +367,34 @@ in
       };
     };
 
-    boot.systemd.packages = mkOption {
+    systemd.packages = mkOption {
       default = [];
       type = types.listOf types.package;
       description = "Packages providing systemd units.";
     };
 
-    boot.systemd.targets = mkOption {
+    systemd.targets = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
       options = [ unitOptions unitConfig ];
       description = "Definition of systemd target units.";
     };
 
-    boot.systemd.services = mkOption {
+    systemd.services = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
       options = [ serviceOptions unitConfig serviceConfig ];
       description = "Definition of systemd service units.";
     };
 
-    boot.systemd.sockets = mkOption {
+    systemd.sockets = mkOption {
       default = {};
       type = types.attrsOf types.optionSet;
       options = [ socketOptions unitConfig ];
       description = "Definition of systemd socket units.";
     };
 
-    boot.systemd.mounts = mkOption {
+    systemd.mounts = mkOption {
       default = [];
       type = types.listOf types.optionSet;
       options = [ mountOptions unitConfig mountConfig ];
@@ -405,13 +405,13 @@ in
       '';
     };
 
-    boot.systemd.defaultUnit = mkOption {
+    systemd.defaultUnit = mkOption {
       default = "multi-user.target";
       type = types.uniq types.string;
       description = "Default unit started when the system boots.";
     };
 
-    boot.systemd.globalEnvironment = mkOption {
+    systemd.globalEnvironment = mkOption {
       type = types.attrs;
       default = {};
       example = { TZ = "CET"; };
@@ -500,11 +500,11 @@ in
       '';
 
     # Target for ‘charon send-keys’ to hook into.
-    boot.systemd.targets.keys =
+    systemd.targets.keys =
       { description = "Security Keys";
       };
 
-    boot.systemd.units =
+    systemd.units =
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets

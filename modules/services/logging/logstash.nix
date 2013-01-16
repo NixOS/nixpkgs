@@ -136,7 +136,7 @@ in
       mkNameValuePairs = mergeConfigs;
     };
   } ( mkIf cfg.enable {
-    boot.systemd.services.logstash = with pkgs; {
+    systemd.services.logstash = with pkgs; {
       description = "Logstash daemon";
 
       wantedBy = [ "multi-user.target" ];

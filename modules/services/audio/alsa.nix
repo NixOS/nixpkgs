@@ -50,7 +50,7 @@ in
 
     boot.kernelModules = optional config.sound.enableOSSEmulation "snd_pcm_oss";
 
-    boot.systemd.services."alsa-store" =
+    systemd.services."alsa-store" =
       { description = "Store Sound Card State";
         wantedBy = [ "shutdown.target" ];
         before = [ "shutdown.target" ];

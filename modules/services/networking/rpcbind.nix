@@ -65,7 +65,7 @@ in
 
     environment.etc = [ netconfigFile ];
 
-    boot.systemd.services.rpcbind =
+    systemd.services.rpcbind =
       { description = "ONC RPC Directory Service";
 
         wantedBy = [ "multi-user.target" ];

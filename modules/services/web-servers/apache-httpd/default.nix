@@ -601,7 +601,7 @@ in
         date.timezone = "${config.time.timeZone}"
       '';
 
-    boot.systemd.services.httpd =
+    systemd.services.httpd =
       { description = "Apache HTTPD";
 
         wantedBy = [ "multi-user.target" ];

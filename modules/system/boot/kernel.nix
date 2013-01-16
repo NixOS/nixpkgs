@@ -213,7 +213,7 @@ in
     # just so we can set a restart trigger.  Also make
     # multi-user.target pull it in so that it gets started if it
     # failed earlier.
-    boot.systemd.services."systemd-modules-load" =
+    systemd.services."systemd-modules-load" =
       { description = "Load Kernel Modules";
         wantedBy = [ "sysinit.target" "multi-user.target" ];
         before = [ "sysinit.target" "shutdown.target" ];

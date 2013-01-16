@@ -71,6 +71,11 @@ in zipModules ([]
 ++ rename obsolete "networking.enableWLAN" "networking.wireless.enable"
 ++ rename obsolete "networking.enableRT73Firmware" "networking.enableRalinkFirmware"
 
+# FIXME: Remove these eventually.
+++ rename obsolete "boot.systemd.sockets" "systemd.sockets"
+++ rename obsolete "boot.systemd.targets" "systemd.targets"
+++ rename obsolete "boot.systemd.services" "systemd.services"
+
 # Old Grub-related options.
 ++ rename obsolete "boot.copyKernels" "boot.loader.grub.copyKernels"
 ++ rename obsolete "boot.extraGrubEntries" "boot.loader.grub.extraEntries"

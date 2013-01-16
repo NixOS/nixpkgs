@@ -84,7 +84,7 @@ in
 
     boot.extraTTYs = mkIf cfg.showManual ["tty${cfg.ttyNumber}"];
 
-    boot.systemd.services = optionalAttrs cfg.showManual
+    systemd.services = optionalAttrs cfg.showManual
       { "nixos-manual" =
         { description = "NixOS Manual";
           wantedBy = [ "multi-user.target" ];

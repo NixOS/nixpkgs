@@ -212,7 +212,7 @@ would get 1/1001 of the cgroup’s CPU time.)  You can limit a service’s
 CPU share in <filename>configuration.nix</filename>:
 
 <programlisting>
-boot.systemd.services.httpd.serviceConfig.CPUShares = 512;
+systemd.services.httpd.serviceConfig.CPUShares = 512;
 </programlisting>
 
 By default, every cgroup has 1024 CPU shares, so this will halve the
@@ -227,8 +227,8 @@ available memory.  Per-cgroup memory limits can be specified in
 and 640 MiB of RAM (including swap):
 
 <programlisting>
-boot.systemd.services.httpd.serviceConfig.MemoryLimit = "512M";
-boot.systemd.services.httpd.serviceConfig.ControlGroupAttribute = [ "memory.memsw.limit_in_bytes 640M" ];
+systemd.services.httpd.serviceConfig.MemoryLimit = "512M";
+systemd.services.httpd.serviceConfig.ControlGroupAttribute = [ "memory.memsw.limit_in_bytes 640M" ];
 </programlisting>
 
 </para>

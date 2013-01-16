@@ -80,7 +80,7 @@ in
 
     boot.kernelModules = [ "nfsd" ];
 
-    boot.systemd.services.nfsd =
+    systemd.services.nfsd =
       { description = "NFS Server";
 
         wantedBy = [ "multi-user.target" ];
@@ -108,7 +108,7 @@ in
         serviceConfig.RemainAfterExit = true;
       };
 
-    boot.systemd.services.mountd =
+    systemd.services.mountd =
       { description = "NFSv3 Mount Daemon";
 
         requires = [ "rpcbind.service" ];

@@ -92,7 +92,7 @@ in
 
   config = mkIf config.networking.useDHCP {
 
-    boot.systemd.services.dhcpcd =
+    systemd.services.dhcpcd =
       { description = "DHCP Client";
 
         wantedBy = [ "network.target" ];

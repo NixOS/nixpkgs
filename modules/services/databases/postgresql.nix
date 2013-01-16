@@ -155,7 +155,7 @@ in
 
     environment.systemPackages = [postgresql];
 
-    boot.systemd.services.postgresql =
+    systemd.services.postgresql =
       { description = "PostgreSQL Server";
 
         wantedBy = [ "multi-user.target" ];

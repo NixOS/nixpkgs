@@ -270,14 +270,14 @@ in
           target = "nix.machines";
         };
 
-    boot.systemd.sockets."nix-daemon" =
+    systemd.sockets."nix-daemon" =
       { description = "Nix Daemon Socket";
         wantedBy = [ "sockets.target" ];
         before = [ "multi-user.target" ];
         socketConfig.ListenStream = "/nix/var/nix/daemon-socket/socket";
       };
 
-    boot.systemd.services."nix-daemon" =
+    systemd.services."nix-daemon" =
       { description = "Nix Daemon";
 
         path = [ nix pkgs.openssl pkgs.utillinux ]

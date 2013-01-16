@@ -40,7 +40,7 @@ in
 
     boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
 
-    boot.systemd.services.statd =
+    systemd.services.statd =
       { description = "NFSv3 Network Status Monitor";
 
         path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
@@ -64,7 +64,7 @@ in
         serviceConfig.Restart = "always";
       };
 
-    boot.systemd.services.idmapd =
+    systemd.services.idmapd =
       { description = "NFSv4 ID Mapping Daemon";
 
         path = [ pkgs.sysvtools pkgs.utillinux ];

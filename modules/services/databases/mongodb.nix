@@ -102,7 +102,7 @@ in
 
     environment.systemPackages = [ mongodb ];
 
-    boot.systemd.services.mongodb =
+    systemd.services.mongodb =
       { description = "MongoDB server";
 
         wantedBy = [ "multi-user.target" ];

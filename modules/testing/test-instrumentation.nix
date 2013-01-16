@@ -11,7 +11,7 @@ let kernel = config.boot.kernelPackages.kernel; in
 
   config = {
 
-    boot.systemd.services.backdoor =
+    systemd.services.backdoor =
       { wantedBy = [ "multi-user.target" ];
         requires = [ "dev-hvc0.device" "dev-ttyS0.device" ];
         after = [ "dev-hvc0.device" "dev-ttyS0.device" ];
@@ -34,8 +34,8 @@ let kernel = config.boot.kernelPackages.kernel; in
     # Prevent agetty from being instantiated on ttyS0, since it
     # interferes with the backdoor (writes to ttyS0 will randomly fail
     # with EIO).  Likewise for hvc0.
-    boot.systemd.services."serial-getty@ttyS0".enable = false;
-    boot.systemd.services."serial-getty@hvc0".enable = false;
+    systemd.services."serial-getty@ttyS0".enable = false;
+    systemd.services."serial-getty@hvc0".enable = false;
 
     boot.initrd.postDeviceCommands =
       ''
@@ -77,7 +77,7 @@ let kernel = config.boot.kernelPackages.kernel; in
     networking.defaultGateway = mkOverride 150 "";
     networking.nameservers = mkOverride 150 [ ];
 
-    boot.systemd.globalEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
+    systemd.globalEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SERIAL_8250_CONSOLE")

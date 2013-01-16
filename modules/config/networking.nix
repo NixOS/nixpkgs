@@ -87,7 +87,7 @@ in
       }
     ];
 
-  boot.systemd.units."ip-up.target".text =
+  systemd.units."ip-up.target".text =
     ''
       [Unit]
       Description=Services Requiring IP Connectivity

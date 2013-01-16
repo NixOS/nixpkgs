@@ -51,7 +51,7 @@ in
     services.cron.systemCronJobs = mkIf cfg.automatic (singleton
       "${cfg.dates} root ${config.system.build.systemd}/bin/systemctl start nix-gc.service");
 
-    boot.systemd.services."nix-gc" =
+    systemd.services."nix-gc" =
       { description = "Nix Garbage Collector";
         path  = [ config.environment.nix ];
         script = "exec nix-collect-garbage ${cfg.options}";

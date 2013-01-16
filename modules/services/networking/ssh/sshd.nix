@@ -262,7 +262,7 @@ in
       }
     ];
 
-    boot.systemd.services.sshd =
+    systemd.services.sshd =
       { description = "SSH Daemon";
 
         wantedBy = [ "multi-user.target" ];

@@ -58,7 +58,7 @@ in
 
     networking.enableIPv6 = true;
 
-    boot.systemd.services.gogoclient = {
+    systemd.services.gogoclient = {
       description = "ipv6 tunnel";
 
       after = [ "network.target" ];

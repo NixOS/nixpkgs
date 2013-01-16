@@ -40,7 +40,7 @@ in
 
     boot.extraTTYs = [ cfg.tty ];
 
-    boot.systemd.services.rogue =
+    systemd.services.rogue =
       { description = "Rogue dungeon crawling game";
         wantedBy = [ "multi-user.target" ];
         serviceConfig =

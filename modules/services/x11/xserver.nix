@@ -386,9 +386,9 @@ in
     environment.pathsToLink =
       [ "/etc/xdg" "/share/xdg" "/share/applications" "/share/icons" "/share/pixmaps" ];
 
-    boot.systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
+    systemd.defaultUnit = mkIf cfg.autorun "graphical.target";
 
-    boot.systemd.services."display-manager" =
+    systemd.services."display-manager" =
       { description = "X11 Server";
 
         after = [ "systemd-udev-settle.service" "local-fs.target" ];

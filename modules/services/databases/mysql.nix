@@ -141,7 +141,7 @@ in
 
     environment.systemPackages = [mysql];
 
-    boot.systemd.services.mysql =
+    systemd.services.mysql =
       { description = "MySQL Server";
 
         wantedBy = [ "multi-user.target" ];

@@ -81,7 +81,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.systemd.services.smartd = {
+    systemd.services.smartd = {
       description = "S.M.A.R.T. Daemon";
 
       environment.TZ = config.time.timeZone;

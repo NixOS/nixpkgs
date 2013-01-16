@@ -43,7 +43,7 @@ in {
   config = mkIf cfg.enable {
     environment.etc = [ { source = datadog-conf; target = "dd-agent/datadog.conf"; } ];
 
-    boot.systemd.services.dd-agent = {
+    systemd.services.dd-agent = {
       description = "Datadog agent monitor";
 
       path = [ pkgs.sysstat pkgs.procps ];

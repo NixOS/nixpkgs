@@ -82,7 +82,7 @@ with utils;
 
     # Create missing swapfiles.
     # FIXME: support changing the size of existing swapfiles.
-    boot.systemd.services =
+    systemd.services =
       let
 
         createSwapDevice = sw:

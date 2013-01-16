@@ -38,7 +38,7 @@ in
         description = "Name service cache daemon user";
       };
 
-    boot.systemd.services.nscd =
+    systemd.services.nscd =
       { description = "Name Service Cache Daemon";
 
         wantedBy = [ "nss-lookup.target" "nss-user-lookup.target" ];

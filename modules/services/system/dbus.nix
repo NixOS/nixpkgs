@@ -118,7 +118,7 @@ in
 
     # FIXME: these are copied verbatim from the dbus source tree.  We
     # should install and use the originals.
-    boot.systemd.units."dbus.socket".text =
+    systemd.units."dbus.socket".text =
       ''
         [Unit]
         Description=D-Bus System Message Bus Socket
@@ -127,7 +127,7 @@ in
         ListenStream=/var/run/dbus/system_bus_socket
       '';
       
-    boot.systemd.units."dbus.service".text =
+    systemd.units."dbus.service".text =
       ''
         [Unit]
         Description=D-Bus System Message Bus

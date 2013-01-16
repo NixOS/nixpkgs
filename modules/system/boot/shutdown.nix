@@ -6,7 +6,7 @@ with pkgs.lib;
 
   # This unit saves the value of the system clock to the hardware
   # clock on shutdown.
-  boot.systemd.units."save-hwclock.service" =
+  systemd.units."save-hwclock.service" =
     { wantedBy = [ "shutdown.target" ];
 
       text =

@@ -35,7 +35,7 @@ with pkgs.lib;
 
     services.udev.packages = [ pkgs.upower ];
 
-    boot.systemd.services.upower =
+    systemd.services.upower =
       { description = "Power Management Daemon";
         path = [ pkgs.glib ]; # needed for gdbus
         serviceConfig =

@@ -22,7 +22,7 @@ with pkgs.lib;
       KERNEL=="tmp0", TAG+="systemd", ENV{SYSTEMD_WANTS}+="rngd.service"
     '';
 
-    boot.systemd.services.rngd = {
+    systemd.services.rngd = {
       bindsTo = [ "dev-random.device" ];
 
       after = [ "dev-random.device" ];

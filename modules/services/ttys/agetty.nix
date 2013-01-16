@@ -39,7 +39,7 @@ with pkgs.lib;
     # which some small modifications, which is annoying.
 
     # Generate a separate job for each tty.
-    boot.systemd.units."getty@.service".text =
+    systemd.units."getty@.service".text =
       ''
         [Unit]
         Description=Getty on %I
@@ -76,7 +76,7 @@ with pkgs.lib;
         X-RestartIfChanged=false
       '';
     
-    boot.systemd.units."serial-getty@.service".text =
+    systemd.units."serial-getty@.service".text =
       ''
         [Unit]
         Description=Serial Getty on %I

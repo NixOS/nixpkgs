@@ -177,13 +177,13 @@ in
       };
 
     # Provide a target that pulls in all filesystems.
-    boot.systemd.targets.fs =
+    systemd.targets.fs =
       { description = "All File Systems";
         wants = [ "local-fs.target" "remote-fs.target" ];
       };
 
     # Emit systemd services to format requested filesystems.
-    boot.systemd.services =
+    systemd.services =
       let
 
         formatDevice = fs:

@@ -11,7 +11,7 @@ let
   makeOpenVPNJob = cfg: name:
     let
 
-      path = (getAttr "openvpn-${name}" config.boot.systemd.services).path;
+      path = (getAttr "openvpn-${name}" config.systemd.services).path;
 
       upScript = ''
         #! /bin/sh

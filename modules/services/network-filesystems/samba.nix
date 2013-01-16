@@ -200,7 +200,7 @@ in
           };
 
 
-        boot.systemd = {
+        systemd = {
           targets.samba = {
             description = "Samba server";
             requires = [ "samba-setup.service" ];

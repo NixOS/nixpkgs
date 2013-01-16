@@ -19,7 +19,7 @@ in
 {
   require = [options];
 
-  boot.systemd.services."fetch-ec2-data" =
+  systemd.services."fetch-ec2-data" =
     { description = "Fetch EC2 Data";
 
       wantedBy = [ "multi-user.target" ];
@@ -78,7 +78,7 @@ in
       serviceConfig.RemainAfterExit = true;
     };
 
-  boot.systemd.services."print-host-key" =
+  systemd.services."print-host-key" =
     { description = "Print SSH Host Key";
       wantedBy = [ "multi-user.target" ];
       after = [ "sshd.service" ];

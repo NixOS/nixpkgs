@@ -49,7 +49,7 @@ in
 
     boot.kernelModules = [ "tun" ];
 
-    boot.systemd.services.libvirtd =
+    systemd.services.libvirtd =
       { description = "Libvirt Virtual Machine Management Daemon";
 
         wantedBy = [ "multi-user.target" ];

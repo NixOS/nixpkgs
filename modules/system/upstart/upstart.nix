@@ -277,7 +277,7 @@ in
 
   config = {
 
-    boot.systemd.services =
+    systemd.services =
       flip mapAttrs' config.jobs (name: job:
         nameValuePair job.name job.unit);
 

@@ -73,7 +73,7 @@ in
         description = "Zabbix daemon user";
       };
 
-    boot.systemd.services."zabbix-server" =
+    systemd.services."zabbix-server" =
       { description = "Zabbix Server";
 
         wantedBy = [ "multi-user.target" ];

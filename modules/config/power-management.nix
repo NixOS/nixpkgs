@@ -73,7 +73,7 @@ in
     powerManagement.scsiLinkPolicy = mkDefault "min_power";
 
     # Service executed before suspending/hibernating.
-    boot.systemd.services."pre-sleep" =
+    systemd.services."pre-sleep" =
       { description = "Pre-Sleep Actions";
         wantedBy = [ "sleep.target" ];
         before = [ "sleep.target" ];
@@ -87,7 +87,7 @@ in
     # Service executed before suspending/hibernating.  There doesn't
     # seem to be a good way to hook in a service to be executed after
     # both suspend *and* hibernate, so have a separate one for each.
-    boot.systemd.services."post-suspend" =
+    systemd.services."post-suspend" =
       { description = "Post-Suspend Actions";
         wantedBy = [ "suspend.target" ];
         after = [ "systemd-suspend.service" ];
@@ -99,7 +99,7 @@ in
         serviceConfig.Type = "oneshot";
       };
 
-    boot.systemd.services."post-hibernate" =
+    systemd.services."post-hibernate" =
       { description = "Post-Hibernate Actions";
         wantedBy = [ "hibernate.target" ];
         after = [ "systemd-hibernate.service" ];

@@ -74,7 +74,7 @@ in
     # shipped with systemd, except that it uses /dev/tty1 instead of
     # /dev/tty0 to prevent putting the X server in non-raw mode, and
     # it has a restart trigger.
-    boot.systemd.services."systemd-vconsole-setup" =
+    systemd.services."systemd-vconsole-setup" =
       { description = "Setup Virtual Console";
         before = [ "sysinit.target" "shutdown.target" ];
         unitConfig =
