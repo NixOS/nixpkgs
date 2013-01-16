@@ -20,7 +20,7 @@ let
     let
 
       versionModule =
-        { system.nixosVersion = version + (lib.optionalString (!officialRelease) versionSuffix);
+        { system.nixosVersionSuffix = lib.optionalString (!officialRelease) versionSuffix;
           isoImage.isoBaseName = "nixos-${type}";
         };
 
@@ -55,7 +55,7 @@ let
 
     with import <nixpkgs> {inherit system;};
     let
-      versionModule = { system.nixosVersion = version + (lib.optionalString (!officialRelease) versionSuffix); };
+      versionModule = { system.nixosVersionSuffix = lib.optionalString (!officialRelease) versionSuffix; };
 
       config = (import lib/eval-config.nix {
         inherit system;

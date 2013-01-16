@@ -140,6 +140,16 @@ if [ -n "$buildNix" ]; then
 fi
 
 
+# Update the version suffix if we're building from Git (so that
+# nixos-version shows something useful).
+if nixos=$(nix-instantiate --find-file nixos "${extraBuildFlags[@]}"); then
+    suffix=$($SHELL $nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}")
+    if [ -n "$suffix" ]; then
+        echo -n "$suffix" > "$nixos/.version-suffix"
+    fi
+fi
+
+
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").

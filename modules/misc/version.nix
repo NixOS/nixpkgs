@@ -5,17 +5,24 @@ with pkgs.lib;
 {
 
   options = {
-  
+
     system.nixosVersion = mkOption {
-      default =
-        builtins.readFile ../../.version
-        + (if builtins.pathExists ../../.version-suffix then builtins.readFile ../../.version-suffix else "pre-git");
       description = "NixOS version.";
+    };
+
+    system.nixosVersionSuffix = mkOption {
+      description = "NixOS version suffix.";
     };
 
   };
 
   config = {
+
+    system.nixosVersion =
+      builtins.readFile ../../.version + config.system.nixosVersionSuffix;
+
+    system.nixosVersionSuffix =
+      if builtins.pathExists ../../.version-suffix then builtins.readFile ../../.version-suffix else "pre-git";
 
     # Generate /etc/os-release.  See
     # http://0pointer.de/public/systemd-man/os-release.html for the
@@ -32,7 +39,7 @@ with pkgs.lib;
           '';
         target = "os-release";
       };
-  
+
   };
 
 }
