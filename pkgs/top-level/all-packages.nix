@@ -1318,6 +1318,8 @@ let
 
   pdfjam = callPackage ../tools/typesetting/pdfjam { };
 
+  jbig2enc = callPackage ../tools/graphics/jbig2enc { };
+
   pdfread = callPackage ../tools/graphics/pdfread { };
 
   briss = callPackage ../tools/graphics/briss { };
