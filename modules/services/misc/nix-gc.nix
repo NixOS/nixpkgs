@@ -49,7 +49,7 @@ in
   config = {
 
     services.cron.systemCronJobs = mkIf cfg.automatic (singleton
-      "${cfg.dates} root ${config.system.build.systemd}/bin/systemctl start nix-gc.service");
+      "${cfg.dates} root ${config.systemd.package}/bin/systemctl start nix-gc.service");
 
     systemd.services."nix-gc" =
       { description = "Nix Garbage Collector";

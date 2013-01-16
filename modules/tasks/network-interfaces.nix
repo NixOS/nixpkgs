@@ -350,11 +350,11 @@ in
                     ip -4 addr add "${i.ipAddress}/${mask}" dev "${i.name}"
                     # Ensure that the default gateway remains set.
                     # (Flushing this interface may have removed it.)
-                    ${config.system.build.systemd}/bin/systemctl try-restart --no-block network-setup.service
+                    ${config.systemd.package}/bin/systemctl try-restart --no-block network-setup.service
                   else
                     echo "skipping configuring interface"
                   fi
-                  ${config.system.build.systemd}/bin/systemctl start ip-up.target
+                  ${config.systemd.package}/bin/systemctl start ip-up.target
                 ''
               + optionalString i.proxyARP
                 ''

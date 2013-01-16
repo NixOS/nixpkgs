@@ -120,7 +120,7 @@ let
 
       echo -n "$kernelParams" > $out/kernel-params
       echo -n "$configurationName" > $out/configuration-name
-      echo -n "systemd ${toString config.system.build.systemd.interfaceVersion}" > $out/init-interface-version
+      echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosVersion" > $out/nixos-version
 
       mkdir $out/fine-tune
@@ -149,7 +149,7 @@ let
     buildCommand = systemBuilder;
 
     inherit (pkgs) utillinux;
-    inherit (config.system.build) systemd;
+    systemd = config.systemd.package;
 
     inherit children;
     kernelParams =

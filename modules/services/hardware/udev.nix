@@ -6,7 +6,7 @@ let
 
   inherit (pkgs) stdenv writeText procps;
 
-  udev = config.system.build.systemd;
+  udev = config.systemd.package;
 
   cfg = config.services.udev;
 

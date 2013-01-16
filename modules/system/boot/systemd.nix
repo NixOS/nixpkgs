@@ -8,7 +8,7 @@ let
 
   cfg = config.systemd;
 
-  systemd = pkgs.systemd;
+  systemd = cfg.package;
 
   makeUnit = name: unit:
     pkgs.runCommand "unit" { inherit (unit) text; }
@@ -340,6 +340,12 @@ in
 
   options = {
 
+    systemd.package = mkOption {
+      default = pkgs.systemd;
+      type = types.package;
+      description = "The systemd package.";
+    };
+
     systemd.units = mkOption {
       description = "Definition of systemd units.";
       default = {};
@@ -456,8 +462,6 @@ in
   ###### implementation
 
   config = {
-
-    system.build.systemd = systemd;
 
     system.build.units = units;
 

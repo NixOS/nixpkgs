@@ -14,8 +14,8 @@ let
       xserver_arguments ${dmcfg.xserverArgs}
       sessions ${pkgs.lib.concatStringsSep "," (dmcfg.session.names ++ ["custom"])}
       login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
-      halt_cmd ${config.system.build.systemd}/sbin/shutdown -h now
-      reboot_cmd ${config.system.build.systemd}/sbin/shutdown -r now
+      halt_cmd ${config.systemd.package}/sbin/shutdown -h now
+      reboot_cmd ${config.systemd.package}/sbin/shutdown -r now
       ${optionalString (cfg.defaultUser != "") ("default_user " + cfg.defaultUser)}
       ${optionalString cfg.autoLogin "auto_login yes"}
     '';

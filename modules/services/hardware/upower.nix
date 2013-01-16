@@ -56,7 +56,7 @@ with pkgs.lib;
     # the daemon.
     powerManagement.resumeCommands =
       ''
-        ${config.system.build.systemd}/bin/systemctl try-restart upower
+        ${config.systemd.package}/bin/systemctl try-restart upower
       '';
 
   };

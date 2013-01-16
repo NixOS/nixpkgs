@@ -9,7 +9,7 @@ with pkgs.lib;
 
 let
 
-  udev = config.system.build.systemd;
+  udev = config.systemd.package;
 
   options = {
 

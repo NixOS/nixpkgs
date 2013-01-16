@@ -85,7 +85,7 @@ in
         serviceConfig =
           { Type = "oneshot";
             RemainAfterExit = true;
-            ExecStart = "${config.system.build.systemd}/lib/systemd/systemd-vconsole-setup /dev/tty1";
+            ExecStart = "${config.systemd.package}/lib/systemd/systemd-vconsole-setup /dev/tty1";
           };
         restartTriggers = [ vconsoleConf ];
       };

@@ -57,13 +57,13 @@ let
           # server hostnames in its config file, then it will never do
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation.
-          ${config.system.build.systemd}/bin/systemctl try-restart ntpd.service
+          ${config.systemd.package}/bin/systemctl try-restart ntpd.service
 
-          ${config.system.build.systemd}/bin/systemctl start ip-up.target
+          ${config.systemd.package}/bin/systemctl start ip-up.target
       fi
 
       #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
-      #    ${config.system.build.systemd}/bin/systemctl start ip-down.target
+      #    ${config.systemd.package}/bin/systemctl start ip-down.target
       #fi
     '';
 
@@ -126,7 +126,7 @@ in
     powerManagement.resumeCommands =
       ''
         # Tell dhcpcd to rebind its interfaces if it's running.
-        ${config.system.build.systemd}/bin/systemctl reload dhcpcd.service
+        ${config.systemd.package}/bin/systemctl reload dhcpcd.service
       '';
 
   };

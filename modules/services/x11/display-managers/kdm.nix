@@ -12,8 +12,8 @@ let
   defaultConfig =
     ''
       [Shutdown]
-      HaltCmd=${config.system.build.systemd}/sbin/shutdown -h now
-      RebootCmd=${config.system.build.systemd}/sbin/shutdown -r now
+      HaltCmd=${config.systemd.package}/sbin/shutdown -h now
+      RebootCmd=${config.systemd.package}/sbin/shutdown -r now
       ${optionalString (config.system.boot.loader.id == "grub") ''
         BootManager=${if config.boot.loader.grub.version == 2 then "Grub2" else "Grub"}
       ''}

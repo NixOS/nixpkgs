@@ -124,7 +124,7 @@ in
 
     powerManagement.resumeCommands =
       ''
-        ${config.system.build.systemd}/bin/systemctl try-restart wpa_supplicant
+        ${config.systemd.package}/bin/systemctl try-restart wpa_supplicant
       '';
 
     assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != [];
