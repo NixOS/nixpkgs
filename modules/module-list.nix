@@ -164,6 +164,7 @@
   ./services/security/fprot.nix
   ./services/security/frandom.nix
   ./services/security/tor.nix
+  ./services/security/torify.nix
   ./services/security/torsocks.nix
   ./services/system/cgroups.nix
   ./services/system/dbus.nix

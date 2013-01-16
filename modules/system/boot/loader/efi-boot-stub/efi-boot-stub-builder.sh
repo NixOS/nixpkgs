@@ -122,3 +122,10 @@ for fn in "@efiSysMountPoint@/efi/nixos/"*; do
         rm -vf -- "$fn"
     fi
 done
+
+# Run any extra commands users may need
+if test -n "@runEfibootmgr@"; then
+  set +e
+  @postEfiBootMgrCommands@
+  set -e
+fi

@@ -27,7 +27,7 @@ with pkgs.lib;
     environment.shellInit =
       ''
         export TZ=${config.time.timeZone}
-        export TZDIR=${pkgs.glibc}/share/zoneinfo
+        export TZDIR=${pkgs.tzdata}/share/zoneinfo
       '';
 
     environment.etc = singleton

@@ -43,6 +43,36 @@ let
       pkgs.xorg.fontadobe75dpi
     ];
 
+  # Just enumerate all heads without discarding XRandR output information.
+  xrandrHeads = let
+    mkHead = num: output: {
+      name = "multihead${toString num}";
+      inherit output;
+    };
+  in imap mkHead cfg.xrandrHeads;
+
+  xrandrDeviceSection = flip concatMapStrings xrandrHeads (h: ''
+    Option "monitor-${h.output}" "${h.name}"
+  '');
+
+  # Here we chain every monitor from the left to right, so we have:
+  # m4 right of m3 right of m2 right of m1   .----.----.----.----.
+  # Which will end up in reverse ----------> | m1 | m2 | m3 | m4 |
+  #                                          `----^----^----^----'
+  xrandrMonitorSections = let
+    mkMonitor = previous: current: previous ++ singleton {
+      inherit (current) name;
+      value = ''
+        Section "Monitor"
+          Identifier "${current.name}"
+          ${optionalString (previous != []) ''
+          Option "RightOf" "${(head previous).name}"
+          ''}
+        EndSection
+      '';
+    };
+    monitors = foldl mkMonitor [] xrandrHeads;
+  in concatMapStrings (getAttr "value") monitors;
 
   configFile = pkgs.stdenv.mkDerivation {
     name = "xserver.conf";
@@ -254,6 +284,21 @@ in
         default = "";
         example = "HorizSync 28-49";
         description = "Contents of the first Monitor section of the X server configuration file.";
+      };
+
+      xrandrHeads = mkOption {
+        default = [];
+        example = [ "HDMI-0" "DVI-0" ];
+        type = with types; listOf string;
+        description = ''
+          Simple multiple monitor configuration, just specify a list of XRandR
+          outputs which will be mapped from left to right in the order of the
+          list.
+
+          Be careful using this option with multiple graphic adapters or with
+          drivers that have poor support for XRandR, unexpected things might
+          happen with those.
+        '';
       };
 
       moduleSection = mkOption {
@@ -515,6 +560,7 @@ in
             Identifier "Device-${driver.name}[0]"
             Driver "${driver.driverName}"
             ${cfg.deviceSection}
+            ${xrandrDeviceSection}
           EndSection
 
           Section "Screen"
@@ -556,6 +602,8 @@ in
 
           EndSection
         '')}
+
+        ${xrandrMonitorSections}
       '';
 
   });

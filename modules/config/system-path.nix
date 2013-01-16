@@ -55,7 +55,7 @@ let
       pkgs.time
       pkgs.udev
       pkgs.usbutils
-      pkgs.utillinux
+      pkgs.utillinuxCurses
       extraManpages      
     ];
 
