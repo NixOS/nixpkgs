@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "mime-types";
-  version = "0.1.0.1";
-  sha256 = "1a34ckmv8qcyk38jydxwph59zcrhnwaah1h6pzn112kysjqjgcsl";
+  version = "0.1.0.2";
+  sha256 = "1pkhr8k23386qwa1wmlrcilz75di2l8n5kc4n8pnia05p49akfcs";
   buildDepends = [ text ];
   meta = {
     homepage = "https://github.com/yesodweb/wai";
