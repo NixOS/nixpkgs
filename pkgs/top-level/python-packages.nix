@@ -352,6 +352,22 @@ let pythonPackages = python.modules // rec {
   # });
 
 
+  buildout = buildPythonPackage rec {
+    name = "buildout-${version}";
+    version = "1.7.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
+      md5 = "4e3b521600e475c56a0a66459a5fc7bb";
+    };
+
+   meta = {
+      homepage = http://www.buildout.org/;
+      description = "A software build and configuration system";
+    };
+  };
+
+
   carrot = buildPythonPackage rec {
     name = "carrot-0.10.7";
 
