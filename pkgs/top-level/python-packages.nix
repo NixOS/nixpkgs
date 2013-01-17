@@ -1368,6 +1368,26 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  mrbob = buildPythonPackage rec {
+    name = "mrbob-${version}";
+    version = "0.1a6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/m/mr.bob/mr.bob-${version}.zip";
+      md5 = "361c8ac7a31953ab94a95cf34d9a0b2b";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    propagatedBuildInputs = [ argparse jinja2 ];
+
+    meta = {
+      homepage = https://github.com/iElectric/mr.bob.git;
+      description = "A tool to generate code skeletons from templates";
+    };
+  };
+
+
   mutagen = buildPythonPackage (rec {
     name = "mutagen-1.20";
 
