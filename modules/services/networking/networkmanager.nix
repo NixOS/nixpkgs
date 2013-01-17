@@ -98,7 +98,7 @@ in {
     # Create an initialisation service that both starts
     # NetworkManager when network.target is reached,
     # and sets up necessary directories for NM.
-    systemd.services."NetworkManager-init" = {
+    systemd.services."networkmanager-init" = {
       description = "NetworkManager initialisation";
       wantedBy = [ "network.target" ];
       partOf = [ "NetworkManager.service" ];
