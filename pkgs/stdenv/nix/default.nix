@@ -1,6 +1,8 @@
-{ stdenv, pkgs }:
+{ stdenv, pkgs, config }:
 
 import ../generic rec {
+  inherit config;
+
   preHook =
     ''
       export NIX_ENFORCE_PURITY=1
