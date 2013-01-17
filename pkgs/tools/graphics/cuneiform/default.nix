@@ -9,7 +9,7 @@ let
 in
 rec {
   src = fetchurl {
-    url = "http://launchpad.net/cuneiform-linux/${version}/${version}/+download/cuneiform-linux-${version}.tar.bz2";
+    url = "https://launchpad.net/cuneiform-linux/1.1/1.1/+download/cuneiform-linux-1.1.0.tar.bz2";
     sha256 = "1bdvppyfx2184zmzcylskd87cxv56d8f32jf7g1qc8779l2hszjp";
   };
 
