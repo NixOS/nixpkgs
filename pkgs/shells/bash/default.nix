@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (texinfo != null) texinfo
     ++ stdenv.lib.optional interactive readline;
 
+  enableParallelBuilding = true;
+
   postInstall = ''
     # Add an `sh' -> `bash' symlink.
     ln -s bash "$out/bin/sh"
