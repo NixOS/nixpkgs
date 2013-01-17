@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./configure --replace /usr /no-such-path
   '';
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   meta = {
     homepage = http://w3m.sourceforge.net/;
