@@ -1838,6 +1838,21 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  psutil = buildPythonPackage rec {
+    name = "psutil-0.6.1";
+
+    src = fetchurl {
+      url = "http://psutil.googlecode.com/files/${name}.tar.gz";
+      sha256 = "0vqarv63jqzghr4fi1fqdbvg847fq2gqdj8dzc3x59f9b36a8rfn";
+    };
+
+    meta = {
+      description = "Process and system utilization information interface for python";
+      homepage = http://code.google.com/p/psutil/;
+    };
+  };
+
+
   psycopg2 = buildPythonPackage rec {
     name = "psycopg2-2.0.13";
 
