@@ -107,6 +107,10 @@ let
               if [ -x $out/bin/gtk-update-icon-cache -a -f $out/share/icons/hicolor/index.theme ]; then
                   $out/bin/gtk-update-icon-cache $out/share/icons/hicolor
               fi
+
+              if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
+                  $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
+              fi
             '';
         };
 
