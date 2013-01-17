@@ -3,21 +3,27 @@
 let pythonPackages = python.modules // rec {
 
   inherit python;
-
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
 
+  # helpers
 
   buildPythonPackage = import ../development/python-modules/generic {
     inherit (pkgs) lib;
-    inherit python wrapPython setuptools setuptoolsSite offlineDistutils;
+    inherit python wrapPython setuptools recursivePthLoader offlineDistutils;
   };
 
+  wrapPython = pkgs.makeSetupHook
+    { deps = pkgs.makeWrapper;
+      substitutions.libPrefix = python.libPrefix;
+    }
+    ../development/python-modules/generic/wrap.sh;
+
+  # specials
 
   recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
     inherit (pkgs) stdenv;
     inherit python;
   };
-
 
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
@@ -34,6 +40,8 @@ let pythonPackages = python.modules // rec {
     inherit python;
   };
 
+  # packages defined elsewhere
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl;
     inherit buildPythonPackage pythonPackages;
@@ -44,17 +52,37 @@ let pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pycairo = import ../development/python-modules/pycairo {
+    inherit (pkgs) stdenv fetchurl pkgconfig cairo x11;
+    inherit python;
+  };
+
   pycrypto = import ../development/python-modules/pycrypto {
     inherit (pkgs) fetchurl stdenv gmp;
     inherit python buildPythonPackage;
   };
 
-  wrapPython = pkgs.makeSetupHook
-    { deps = pkgs.makeWrapper;
-      substitutions.libPrefix = python.libPrefix;
-    }
-    ../development/python-modules/generic/wrap.sh;
+  pygobject = import ../development/python-modules/pygobject {
+    inherit (pkgs) stdenv fetchurl pkgconfig glib;
+    inherit python;
+  };
 
+  pygtk = import ../development/python-modules/pygtk {
+    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  # XXX: how can we get an override here?
+  #pyGtkGlade = pygtk.override {
+  #  inherit (pkgs.gnome) libglade;
+  #};
+  pyGtkGlade = import ../development/python-modules/pygtk {
+    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit (pkgs.gnome) libglade;
+    inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  # packages defined here
 
   afew = buildPythonPackage rec {
     rev = "6bb3915636aaf86f046a017ffffd9a4ef395e199";
@@ -456,6 +484,16 @@ let pythonPackages = python.modules // rec {
       maintainers = [ stdenv.lib.maintainers.shlevy ];
       platforms = python.meta.platforms;
     };
+  };
+
+  cssselect = buildPythonPackage rec {
+    name = "cssselect-0.7.1";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/cssselect/cssselect-0.7.1.tar.gz";
+      md5 = "c6c5e9a2e7ca226ce03f6f67a771379c";
+    };
+    # AttributeError: 'module' object has no attribute 'tests'
+    doCheck = false;
   };
 
   cssutils = buildPythonPackage (rec {
@@ -2171,6 +2209,16 @@ let pythonPackages = python.modules // rec {
       };
 
 
+  pyquery = buildPythonPackage rec {
+    name = "pyquery-1.2.4";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyquery/pyquery-1.2.4.tar.gz";
+      md5 = "268f08258738d21bc1920d7522f2a63b";
+    };
+    buildInputs = [ cssselect lxml ];
+  };
+
+
   pyreport = buildPythonPackage (rec {
     name = "pyreport-0.3.4c";
 
@@ -3028,10 +3076,10 @@ let pythonPackages = python.modules // rec {
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.6.4";
+    name = "virtualenv-1.8.4";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "1072b66d53c24e019a8f1304ac9d9fc5";
+      md5 = "1c7e56a7f895b2e71558f96e365ee7a7";
     };
 
     patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];

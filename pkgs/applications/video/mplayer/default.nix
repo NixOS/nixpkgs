@@ -18,6 +18,7 @@
 , pulseSupport ? false, pulseaudio ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
+, useUnfreeCodecs ? false
 }:
 
 assert x11Support -> (libX11 != null && libXext != null && mesa != null);
@@ -66,9 +67,7 @@ let
       cp -prv * $out
     '';
 
-    meta = {
-      license = "unfree";
-    };
+    meta.license = "unfree";
   } else null;
 
 in
@@ -140,8 +139,7 @@ stdenv.mkDerivation rec {
       ${if x264Support then "--enable-x264 --disable-x264-lavc" else "--disable-x264 --enable-x264-lavc"}
       ${if jackaudioSupport then "--enable-jack" else "--disable-jack"}
       ${if pulseSupport then "--enable-pulse" else "--disable-pulse"}
-
-      ${optionalString (codecs != null) "--codecsdir=${codecs}"}
+      ${optionalString (useUnfreeCodecs && codecs != null) "--codecsdir=${codecs}"}
       ${optionalString (stdenv.isi686 || stdenv.isx86_64) "--enable-runtime-cpudetection"}
       --enable-freetype
       --disable-xanim
@@ -153,6 +151,8 @@ stdenv.mkDerivation rec {
     '';
 
   NIX_LDFLAGS = stdenv.lib.optionalString x11Support "-lX11 -lXext";
+
+  enableParallelBuilding = true;
 
   # Provide a reasonable standard font.  Maybe we should symlink here.
   postInstall =

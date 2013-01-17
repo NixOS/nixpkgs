@@ -20,8 +20,6 @@ rec {
     http://kent.dl.sourceforge.net/sourceforge/
   ];
 
-  sf = sourceforge;
-
   # GNU (http://www.gnu.org/prep/ftp.html).
   gnu = [
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
