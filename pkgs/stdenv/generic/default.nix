@@ -10,7 +10,7 @@ let
 
   lib = import ../../lib;
 
-  disallowUnfree = builtins.getEnv "HYDRA_DISALLOW_UNFREE" == "1";
+  allowUnfree = config.allowUnfree or true && builtins.getEnv "HYDRA_DISALLOW_UNFREE" != "1";
 
   stdenvGenerator = setupScript: rec {
 
@@ -41,7 +41,7 @@ let
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.
         mkDerivation = attrs:
-          if disallowUnfree && attrs.meta.license or "" == "unfree" then
+          if !allowUnfree && attrs.meta.license or "" == "unfree" then
             throw "package ‘${attrs.name}’ has an unfree license, refusing to evaluate"
           else
           (derivation (
