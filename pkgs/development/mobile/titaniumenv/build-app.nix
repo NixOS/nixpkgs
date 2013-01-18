@@ -16,7 +16,8 @@ let
   deleteKeychain = "security delete-keychain $keychainName";
 in
 stdenv.mkDerivation {
-  inherit name src;
+  name = stdenv.lib.replaceChars [" "] [""] name;
+  inherit src;
   
   buildInputs = [] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
 
@@ -27,9 +28,9 @@ stdenv.mkDerivation {
     
     ${if target == "android" then
         if release then
-          "${titaniumsdk}/mobilesdk/*/*/android/builder.py distribute ${name} ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId} ${androidKeyStore} ${androidKeyStorePassword} ${androidKeyAlias} $out"
+          ''${titaniumsdk}/mobilesdk/*/*/android/builder.py distribute "${name}" ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId} ${androidKeyStore} ${androidKeyStorePassword} ${androidKeyAlias} $out''
         else
-          "${titaniumsdk}/mobilesdk/*/*/android/builder.py build ${name} ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId}"
+          ''${titaniumsdk}/mobilesdk/*/*/android/builder.py build "${name}" ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId}''
 
       else if target == "iphone" then
         if iosDistribute then ''
@@ -52,7 +53,7 @@ stdenv.mkDerivation {
                 cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
             fi
             
-            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py distribute 6.0 $(pwd) ${appId} ${name} "$provisioningId" "${iosCertificateName}" $out universal "$HOME/Library/Keychains/$keychainName"
+            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py distribute 6.0 $(pwd) ${appId} "${name}" "$provisioningId" "${iosCertificateName}" $out universal "$HOME/Library/Keychains/$keychainName"
             
             # Remove our generated keychain
             
@@ -80,7 +81,7 @@ stdenv.mkDerivation {
                     cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
                 fi
             
-                ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py adhoc 6.0 $(pwd) ${appId} ${name} "$provisioningId" "${iosCertificateName}" universal "$HOME/Library/Keychains/$keychainName"
+                ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py adhoc 6.0 $(pwd) ${appId} "${name}" "$provisioningId" "${iosCertificateName}" universal "$HOME/Library/Keychains/$keychainName"
             
                 # Remove our generated keychain
             
@@ -95,7 +96,7 @@ stdenv.mkDerivation {
             
             cp -av * $out
             cd $out
-            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py build 6.0 $(pwd) ${appId} ${name}
+            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py build 6.0 $(pwd) ${appId} "${name}"
           ''
 
       else throw "Target: ${target} is not supported!"}
