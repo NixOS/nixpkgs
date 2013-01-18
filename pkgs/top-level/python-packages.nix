@@ -1271,6 +1271,23 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  manuel = buildPythonPackage rec {
+    name = "manuel-${version}";
+    version = "1.6.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/m/manuel/${name}.tar.gz";
+      md5 = "53d6a6905301a20f6095e41d11968fff";
+    };
+
+    propagatedBuildInputs = [ six zope_testing ];
+
+    meta = {
+      description = "A documentation builder";
+      homepage = http://pypi.python.org/pypi/manuel;
+      license = "ZPL";
+    };
+  };
 
   markdown = buildPythonPackage rec {
     version = "2.0.3";
@@ -2910,6 +2927,24 @@ let pythonPackages = python.modules // rec {
   });
 
 
+  subunit = buildPythonPackage rec {
+    name = "subunit-${version}";
+    version = "0.0.9";
+
+    src = fetchurl {
+      url = "https://launchpad.net/subunit/trunk/0.0.9/+download/python-${name}.tar.gz";
+      sha256 = "0g3bk8lfd52zjzg43h47h2kckchm3xyv1gcr85nca2i50rcrpj56";
+    };
+
+    propagatedBuildInputs = [ testtools ];
+
+    meta = {
+      description = "A streaming protocol for test results";
+      homepage = https://launchpad.net/subunit;
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
+
   # XXX: ValueError: ZIP does not support timestamps before 1980
   # svneverever =  buildPythonPackage rec {
   #   name = "svneverever-778489a8";
@@ -2971,6 +3006,23 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  testtools = buildPythonPackage rec {
+    name = "testtools-${version}";
+    version = "0.9.24";
+
+    src = fetchurl {
+      url = "https://launchpad.net/testtools/0.9/0.9.24/+download/${name}.tar.gz";
+      sha256 = "0mgkvd7c1aw34nlnz2nmll5k01aqhixxiikbs2nfyk3xfa4221x7";
+    };
+
+    meta = {
+      description = "A set of extensions to the Python standard library's unit testing framework";
+      homepage = http://pypi.python.org/pypi/testtools;
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   trac = buildPythonPackage {
     name = "trac-0.12.2";
 
@@ -2992,6 +3044,26 @@ let pythonPackages = python.modules // rec {
       license = "BSD";
     };
   };
+
+
+  transaction = buildPythonPackage rec {
+    name = "transaction-${version}";
+    version = "1.4.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/t/transaction/${name}.tar.gz";
+      md5 = "b7c2ff135939f605a8c54e1c13cd5d66";
+    };
+
+    propagatedBuildInputs = [ zopeInterface ];
+
+    meta = {
+      description = "Transaction management";
+      homepage = http://pypi.python.org/pypi/transaction;
+      license = "ZPL";
+    };
+  };
+
 
   turses = buildPythonPackage (rec {
     name = "turses-0.2.9";
@@ -3311,6 +3383,62 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+
+  zconfig = buildPythonPackage rec {
+    name = "zconfig-${version}";
+    version = "2.9.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/Z/ZConfig/ZConfig-${version}.tar.gz";
+      md5 = "2c5f73c216140a705be3d9c44b988722";
+    };
+
+    propagatedBuildInputs = [ zope_testrunner ];
+
+    meta = {
+      description = "Structured Configuration Library";
+      homepage = http://pypi.python.org/pypi/ZConfig;
+      license = "ZPL";
+    };
+  };
+
+
+  zc_lockfile = buildPythonPackage rec {
+    name = "zc_lockfile-${version}";
+    version = "1.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zc.lockfile/zc.lockfile-${version}.tar.gz";
+      md5 = "f099d4cf2583a0c7bea0146a44dc4d59";
+    };
+
+    meta = {
+      description = "Inter-process locks";
+      homepage =  http://www.python.org/pypi/zc.lockfile;
+      license = "ZPL";
+    };
+  };
+
+
+  zdaemon = buildPythonPackage rec {
+    name = "zdaemon-${version}";
+    version = "3.0.5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zdaemon/${name}.tar.gz";
+      md5 = "975f770544bb4352c5cf32fec22e63c9";
+    };
+
+    propagatedBuildInputs  = [ zconfig ];
+
+    meta = {
+      description = "A daemon process control library and tools for Unix-based systems";
+      homepage = http://pypi.python.org/pypi/zdaemon;
+      license = "ZPL";
+    };
+  };
+
+
   zfec = buildPythonPackage (rec {
     name = "zfec-1.4.7";
 
@@ -3339,6 +3467,102 @@ let pythonPackages = python.modules // rec {
       license = "GPLv2+";
     };
   });
+
+
+  zodb3 = buildPythonPackage rec {
+    name = "zodb3-${version}";
+    version = "3.10.5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/Z/ZODB3/ZODB3-${version}.tar.gz";
+      md5 = "6f180c6897a1820948fee2a6290503cd";
+    };
+
+    propagatedBuildInputs = [ manuel transaction zc_lockfile zconfig zdaemon zopeInterface zope_event ];
+
+    meta = {
+      description = "An object-oriented database for Python";
+      homepage = http://pypi.python.org/pypi/ZODB3;
+      license = "ZPL";
+    };
+  };
+
+
+  zope_event = buildPythonPackage rec {
+    name = "zope_event-${version}";
+    version = "4.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.event/zope.event-${version}.tar.gz";
+      md5 = "e08dd299d428d77a1cfcbfe841b81872";
+    };
+
+    meta = {
+      description = "An event publishing system";
+      homepage = http://pypi.python.org/pypi/zope.event;
+      license = "ZPL";
+    };
+  };
+
+
+  zope_exceptions = buildPythonPackage rec {
+     name = "zopeexceptions-${version}";
+     version = "4.0.5";
+
+     src = fetchurl {
+       url = "http://pypi.python.org/packages/source/z/zope.exceptions/zope.exceptions-${version}.tar.gz";
+       md5 = "c95569fcb444ae541777de7ae5297492";
+     };
+
+     propagatedBuildInputs = [ zopeInterface ];
+
+     meta = {
+       description = "Exception interfaces and implementations";
+       homepage = http://pypi.python.org/pypi/zope.exceptions;
+       license = "ZPL";
+     };
+   };
+
+
+  zope_testing = buildPythonPackage rec {
+    name = "zope_testing-${version}";
+    version = "4.1.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.testing/zope.testing-${version}.tar.gz";
+      md5 = "2e3829841090d6adff718b8b73c87b6b";
+    };
+
+    propagatedBuildInputs = [ zopeInterface zope_exceptions ];
+
+    meta = {
+      description = "Zope testing helpers";
+      homepage =  http://pypi.python.org/pypi/zope.testing;
+      license = "ZPL";
+    };
+  };
+
+
+  zope_testrunner = buildPythonPackage rec {
+    name = "zope_testrunner-${version}";
+    version = "4.0.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.testrunner/zope.testrunner-${version}.zip";
+      md5 = "cd648fc865a79aa0950e73342836dd4c";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    propagatedBuildInputs = [ subunit zopeInterface zope_exceptions zope_testing ];
+
+    meta = {
+      description = "A flexible test runner with layer support";
+      homepage = http://pypi.python.org/pypi/zope.testrunner;
+      license = "ZPL";
+    };
+  };
+
 
   zopeInterface = buildPythonPackage {
     name = "zope-interface-3.6.1";
