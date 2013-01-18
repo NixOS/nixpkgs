@@ -237,7 +237,7 @@ let
 
   ### BUILD SUPPORT
 
-  attrSetToDir = arg : import ../build-support/upstream-updater/attrset-to-dir.nix {
+  attrSetToDir = arg: import ../build-support/upstream-updater/attrset-to-dir.nix {
     inherit writeTextFile stdenv lib;
     theAttrSet = arg;
   };
