@@ -33,6 +33,7 @@ stdenv.mkDerivation {
     '';
 
   passthru = { inherit patch; };
+
   meta = {
     description = "Another Unionfs implementation for Linux (third generation)";
     homepage = http://aufs.sourceforge.net/;

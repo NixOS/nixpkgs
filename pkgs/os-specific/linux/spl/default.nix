@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "spl-0.6.0-rc13-${kernel.version}";
   src = fetchurl {
-    url = http://zfsonlinux.org/downloads/0.6.0-rc13/spl-0.6.0-rc13.tar.gz;
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.0-rc13.tar.gz;
     sha256 = "1frbifj1yd7pznlhsqsiksip5amx4ljvasg8h80haaxk0yvvkr9b";
   };
 

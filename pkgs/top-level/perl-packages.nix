@@ -2039,6 +2039,21 @@ rec {
     };
   };
 
+  GoogleProtocolBuffers = buildPerlPackage rec {
+    name = "Google-ProtocolBuffers-0.08";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/G/GA/GARIEV/${name}.tar.gz";
+      sha256 = "0pxfphg671wh56h59pf0zrj7m1cr0yga95hf3w54563pzcw2vqv3";
+    };
+    propagatedBuildInputs = [ ClassAccessor ParseRecDescent ];
+    patches =
+      [ ../development/perl-modules/Google-ProtocolBuffers-multiline-comments.patch ];
+    meta = {
+      description = "Simple interface to Google Protocol Buffers";
+      license = "perl";
+    };
+  };
+
   Graph = buildPerlPackage rec {
     name = "Graph-0.94";
     src = fetchurl {

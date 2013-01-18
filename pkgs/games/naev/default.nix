@@ -36,6 +36,6 @@ stdenv.mkDerivation {
     homepage = http://www.naev.org;
     license = "GPLv3+";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    #platforms = stdenv.lib.platforms.linux;
   };
 }

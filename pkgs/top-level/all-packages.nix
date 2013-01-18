@@ -196,7 +196,7 @@ let
 
 
   allStdenvs = import ../stdenv {
-    inherit system stdenvType platform;
+    inherit system stdenvType platform config;
     allPackages = args: import ./all-packages.nix ({ inherit config system; } // args);
   };
 
@@ -419,9 +419,9 @@ let
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
-  
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
-  
+
   titaniumenv = import ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
@@ -1317,6 +1317,8 @@ let
   pdf2djvu = callPackage ../tools/typesetting/pdf2djvu { };
 
   pdfjam = callPackage ../tools/typesetting/pdfjam { };
+
+  jbig2enc = callPackage ../tools/graphics/jbig2enc { };
 
   pdfread = callPackage ../tools/graphics/pdfread { };
 
@@ -2834,25 +2836,23 @@ let
 
   pure = callPackage ../development/interpreters/pure {};
 
-  python = python27;
   python3 = python32;
-
-  python26 = callPackage ../development/interpreters/python/2.6 { };
-
-  python27 = callPackage ../development/interpreters/python/2.7 { };
-
   python32 = callPackage ../development/interpreters/python/3.2 { };
 
-  pythonFull = python27Full;
+  python = python27;
+  python26 = callPackage ../development/interpreters/python/2.6 { };
+  python27 = callPackage ../development/interpreters/python/2.7 { };
 
+  pythonFull = python27Full;
   python26Full = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = lib.attrValues python26.modules;
     python = python26;
+    inherit (python26Packages) recursivePthLoader;
   };
-
   python27Full = callPackage ../development/interpreters/python/wrapper.nix {
     extraLibs = lib.attrValues python27.modules;
     python = python27;
+    inherit (python27Packages) recursivePthLoader;
   };
 
   pythonhomeWrapper = callPackage ../development/interpreters/python/pythonhome-wrapper.nix { };
@@ -5291,6 +5291,10 @@ let
 
   pythonPackages = python27Packages;
 
+  # `nix-env -i python-nose` installs for 2.7, the default python.
+  # Therefore we do not recurse into attributes here, in contrast to
+  # python27Packages. `nix-env -iA python26Packages.nose` works
+  # regardless.
   python26Packages = import ./python-packages.nix {
     inherit pkgs;
     python = python26;
@@ -5307,13 +5311,13 @@ let
 
   numeric = callPackage ../development/python-modules/numeric { };
 
-  pil = python27Packages.pil;
+  pil = pythonPackages.pil;
 
   psyco = callPackage ../development/python-modules/psyco { };
 
-  pycairo = callPackage ../development/python-modules/pycairo { };
+  pycairo = pythonPackages.pycairo;
 
-  pycrypto = python27Packages.pycrypto;
+  pycrypto = pythonPackages.pycrypto;
 
   pycups = callPackage ../development/python-modules/pycups { };
 
@@ -5321,13 +5325,11 @@ let
 
   pygame = callPackage ../development/python-modules/pygame { };
 
-  pygobject = callPackage ../development/python-modules/pygobject { };
+  pygobject = pythonPackages.pygobject;
 
-  pygtk = callPackage ../development/python-modules/pygtk { };
+  pygtk = pythonPackages.pygtk;
 
-  pyGtkGlade = callPackage ../development/python-modules/pygtk {
-    inherit (gnome) libglade;
-  };
+  pyGtkGlade = pythonPackages.pyGtkGlade;
 
   pyopenssl = builderDefsPackage (import ../development/python-modules/pyopenssl) {
     inherit python openssl;

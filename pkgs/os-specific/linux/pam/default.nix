@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "linux-pam-1.1.1";
 
   src = fetchurl {
-    url = mirror://kernel/linux/libs/pam/library/Linux-PAM-1.1.1.tar.bz2;
+    url = http://www.linux-pam.org/library/Linux-PAM-1.1.1.tar.bz2;
     sha256 = "015r3xdkjpqwcv4lvxavq0nybdpxhfjycqpzbx8agqd5sywkx3b0";
   };
 
