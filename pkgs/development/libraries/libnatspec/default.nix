@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, popt }:
+{ stdenv, fetchurl, popt, libiconvOrEmpty }:
 
 stdenv.mkDerivation rec {
   name = "libnatspec-0.2.6";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zvm9afh1skxgdv62ylrpwyykpjhhskxj0zv7yrdf7jhfdriz0y3";
   };
 
-  buildInputs = [ popt ];
+  buildInputs = [ popt ] ++ libiconvOrEmpty;
 
   meta = {
     homepage = http://natspec.sourceforge.net/ ;
