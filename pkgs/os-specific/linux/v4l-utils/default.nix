@@ -13,11 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libjpeg which ] ++ stdenv.lib.optional withQt4 qt4;
 
-  # The keytable wants to touch /etc files and udev scripts in /lib.
-  # I skip it.
-  patchPhase = ''
-    sed -i s/keytable// utils/Makefile
-  '';
+  configureFlags = [
+    "--with-udevdir=$(out)/lib/udev"
+  ];
 
   installPhase = ''
     make PREFIX=$out install
