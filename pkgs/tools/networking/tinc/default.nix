@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
       authentication, compression and ethernet bridging.
     '';
     homepage="http://www.tinc-vpn.org/";
-    license = stdenv.lib.licenses.gpl2;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 }
