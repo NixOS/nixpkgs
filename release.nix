@@ -86,7 +86,8 @@ let
 
         src = nixosSrc;
 
-        inherit officialRelease version versionSuffix;
+        inherit officialRelease version;
+        versionSuffix = lib.optionalString (!officialRelease) versionSuffix;
 
         distPhase = ''
           echo -n $VERSION_SUFFIX > .version-suffix
@@ -111,7 +112,8 @@ let
 
         src = nixosSrc;
 
-        inherit officialRelease version versionSuffix;
+        inherit officialRelease version;
+        versionSuffix = lib.optionalString (!officialRelease) versionSuffix;
 
         buildInputs = [ nixUnstable ];
 
