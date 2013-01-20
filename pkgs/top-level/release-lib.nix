@@ -1,7 +1,11 @@
 rec {
-  allPackages = import ./all-packages.nix;
 
-  pkgs = allPackages {};
+  # Ensure that we don't build packages marked as unfree.
+  allPackages = args: import ./all-packages.nix (args // {
+    config.allowUnfree = false;
+  });
+
+  pkgs = allPackages { };
 
   /* !!! Hack: poor man's memoisation function.  Necessary for prevent
      Nixpkgs from being evaluated again and again for every

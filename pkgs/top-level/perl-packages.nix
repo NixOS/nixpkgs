@@ -3953,13 +3953,13 @@ rec {
   };
 
   TestWarn = buildPerlPackage rec {
-    name = "Test-Warn-0.23";
+    name = "Test-Warn-0.24";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
-      sha256 = "1733s39s4pm0hsshvvjsv1vbri09l4g0g7yyg64y65yqcyanfdf0";
+      sha256 = "12r1mcwrm6cgc3ppgawwv265vmrighj4bl6xc5c41f4c2l6bdxml";
     };
-    propagatedBuildInputs = [TestSimple TestException ArrayCompare TreeDAGNode];
-    buildInputs = [TestPod];
+    propagatedBuildInputs = [ TestSimple TestException ArrayCompare TreeDAGNode ];
+    buildInputs = [ TestPod ];
   };
 
   TestWWWMechanize = buildPerlPackage rec {

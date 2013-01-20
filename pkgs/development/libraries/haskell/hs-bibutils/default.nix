@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hs-bibutils";
-  version = "4.15";
-  sha256 = "1h2vqi6ymhx9wpfv5qzvq4fhc4iand93shsncp8nszk64acmz9z9";
+  version = "4.16";
+  sha256 = "0501fqv0xlwdmpg65s3rr0fns6gqq15x2zq2a8915n3dvipfkixb";
   buildDepends = [ syb ];
   meta = {
     homepage = "http://gorgias.mine.nu/repos/hs-bibutils/";

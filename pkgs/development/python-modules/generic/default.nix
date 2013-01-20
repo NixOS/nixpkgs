@@ -40,6 +40,8 @@
 , preInstall ? ""
 , postInstall ? ""
 
+, meta ? {}
+
 , ... } @ attrs:
 
 # Keep extra attributes from ATTR, e.g., `patchPhase', etc.
@@ -47,6 +49,12 @@ python.stdenv.mkDerivation (attrs // {
   inherit doCheck buildPhase checkPhase;
 
   name = namePrefix + name;
+
+  # default values for maintainers and platforms
+  meta = {
+    maintainers = python.meta.maintainers;
+    platforms = python.meta.platforms;
+  } // meta;
 
   # checkPhase after installPhase to run tests on installed packages
   phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase";
