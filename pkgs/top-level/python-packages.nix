@@ -502,6 +502,18 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  covCore = buildPythonPackage rec {
+    name = "cov-core-1.7";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/cov-core/cov-core-1.7.tar.gz";
+      md5 = "59c1e22e636633e10120beacbf45b28c";
+    };
+    meta = {
+      description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
+    };
+    propagatedBuildInputs = [ coverage ];
+  };
+
   cssselect = buildPythonPackage rec {
     name = "cssselect-0.7.1";
     src = fetchurl {
@@ -1590,6 +1602,32 @@ let pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ coverage ];
+  };
+
+  nose2 = buildPythonPackage rec {
+    name = "nose2-0.4.5";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose2/${name}.tar.gz";
+      md5 = "d7e51c848227488e3cc0424faf5511cd";
+    };
+    meta = {
+      description = "nose2 is the next generation of nicer testing for Python";
+    };
+    propagatedBuildInputs = [ six ];
+    # AttributeError: 'module' object has no attribute 'collector'
+    doCheck = false;
+  };
+
+  nose2Cov = buildPythonPackage rec {
+    name = "nose2-cov-1.0a4";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose2-cov/nose2-cov-1.0a4.tar.gz";
+      md5 = "6442f03e2ea732b0e38eb5b00fbe0b31";
+    };
+    meta = {
+      description = "nose2 plugin for coverage reporting, including subprocesses and multiprocessing";
+    };
+    buildInputs = [ covCore nose2 ];
   };
 
   notify = pkgs.stdenv.mkDerivation (rec {
