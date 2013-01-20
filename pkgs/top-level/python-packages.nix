@@ -629,6 +629,10 @@ let pythonPackages = python.modules // rec {
       md5 = "52bc9dffb394970c27e02853ae3a3241";
     };
 
+    patchPhase = ''
+      sed -e "s#html.entities#htmlentitydefs#g" -i distutils2/pypi/simple.py
+    '';
+
     doCheck = false;
 
     meta = {
