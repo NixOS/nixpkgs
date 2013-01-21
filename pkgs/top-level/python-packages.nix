@@ -1445,7 +1445,7 @@ let pythonPackages = python.modules // rec {
       md5 = "361c8ac7a31953ab94a95cf34d9a0b2b";
     };
 
-    buildInputs = [ pkgs.unzip ];
+    buildInputs = [ pkgs.unzip six ];
 
     propagatedBuildInputs = [ argparse jinja2 ];
 
