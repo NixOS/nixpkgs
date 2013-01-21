@@ -1149,6 +1149,15 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  ipdb = buildPythonPackage {
+    name = "ipdb-0.7";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
+      md5 = "d879f9b2b0f26e0e999809585dcaec61";
+    };
+    propagatedBuildInputs = [ ipython ];
+  };
+
   jedi = buildPythonPackage (rec {
     name = "jedi-0.5b5";
 
