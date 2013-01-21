@@ -604,32 +604,43 @@ pythonPackages = python.modules // rec {
     };
   };
 
-  distribute = buildPythonPackage (rec {
-    name = "distribute-0.6.26";
+  distribute = stdenv.mkDerivation rec {
+    name = "distribute-0.6.34";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/d/distribute/distribute-0.6.26.tar.gz";
-      md5 = "841f4262a70107f85260362f5def8206"; #"ecd75ea629fee6d59d26f88c39b2d291";
-
+      url = "http://pypi.python.org/packages/source/d/distribute/distribute-0.6.34.tar.gz";
+      md5 = "4576ab843a6db5100fb22a72deadf56d";
     };
 
-    buildInputs = [ pkgs.unzip ];
+    buildInputs = [ python wrapPython offlineDistutils ];
 
-    installCommand =
-      ''
-        # ehm, YES, the --verbose flags needs to be there, otherwise it tries to patch setuptools!
-        easy_install --verbose --prefix=$out .
-      '';
+    pythonPath = [ recursivePthLoader ];
 
-    # test for 27 fails
-    doCheck = false;
+    installPhase=''
+      dst="$out/lib/${python.libPrefix}/site-packages"
+      mkdir -p $dst
+      PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+      export PYTHONPATH="$dst:$PYTHONPATH"
+
+      python setup.py install --prefix="$out"
+
+      eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
+      if [ -e "$eapth" ]; then
+          # move colliding easy_install.pth to specifically named one
+          mv "$eapth" $(dirname "$eapth")/${name}.pth
+      fi
+
+      rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
+
+      wrapPythonPrograms
+    '';
 
     meta = {
       description = "Easily download, build, install, upgrade, and uninstall Python packages";
       homepage = http://packages.python.org/distribute;
       license = "PSF or ZPL";
     };
-  });
+  };
 
 
   distutils2  = buildPythonPackage rec {
