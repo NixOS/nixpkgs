@@ -5364,7 +5364,7 @@ let
 
   twisted = pythonPackages.twisted;
 
-  ZopeInterface = pythonPackages.zopeInterface;
+  ZopeInterface = pythonPackages.zope_interface;
 
 
   ### SERVERS
