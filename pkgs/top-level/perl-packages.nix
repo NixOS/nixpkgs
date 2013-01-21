@@ -1479,10 +1479,10 @@ rec {
   };
 
   EncodeLocale = buildPerlPackage rec {
-    name = "Encode-Locale-1.02";
+    name = "Encode-Locale-1.03";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Encode/${name}.tar.gz";
-      sha256 = "0h2kim6mg236s749wlg35lhv1zdkrkr0bm65spkg005cn0mbmi90";
+      sha256 = "0m9d1vdphlyzybgmdanipwd9ndfvyjgk3hzw250r299jjgh3fqzp";
     };
   };
 
@@ -1623,10 +1623,10 @@ rec {
   };
 
   FileListing = buildPerlPackage rec {
-    name = "File-Listing-6.03";
+    name = "File-Listing-6.04";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
-      sha256 = "154hp49pcngsqrwi1pbw3fx82v7vql4dc9wh7qfj37vmy8sn1s93";
+      sha256 = "1xcwjlnxaiwwpn41a5yi6nz95ywh3szq5chdxiwj36kqsvy5000y";
     };
     propagatedBuildInputs = [ HTTPDate ];
   };
@@ -1878,10 +1878,10 @@ rec {
   };
 
   HTMLParser = buildPerlPackage rec {
-    name = "HTML-Parser-3.68";
+    name = "HTML-Parser-3.69";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/HTML/${name}.tar.gz";
-      sha256 = "1hhniqqpvi01vxsyvmcj677yg7a12zy0a3ynwxwg3ig6shn8a3j3";
+      sha256 = "01i4lj37dgwbj9mna756dzzz5lvx7adcnjk9s0hskqq0cn81r2vl";
     };
     propagatedBuildInputs = [HTMLTagset];
   };
@@ -1962,19 +1962,19 @@ rec {
   };
 
   HTTPCookies = buildPerlPackage rec {
-    name = "HTTP-Cookies-6.00";
+    name = "HTTP-Cookies-6.01";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/HTTP/${name}.tar.gz";
-      sha256 = "0758c3rj22z1bj7pbypmh1jadgd6w68nn8inhds96r39jhc79d9h";
+      sha256 = "087bqmg22dg3vj7gssh3pcsh9y1scimkbl5h1kc8jqyfhgisvlzm";
     };
     propagatedBuildInputs = [ HTTPDate HTTPMessage ];
   };
 
   HTTPDate = buildPerlPackage rec {
-    name = "HTTP-Date-6.00";
+    name = "HTTP-Date-6.02";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/HTTP/${name}.tar.gz";
-      sha256 = "15nrnfir4xqdd3lm0s0jgh9zwxx5ylmvl63xqmj5wipzl4l76vs6";
+      sha256 = "0cz357kafhhzw7w59iyi0wvhw7rlh5g1lh38230ckw7rl0fr9fg8";
     };
   };
 
@@ -1995,12 +1995,12 @@ rec {
   };
 
   HTTPMessage = buildPerlPackage rec {
-    name = "HTTP-Message-6.02";
+    name = "HTTP-Message-6.06";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/HTTP/${name}.tar.gz";
-      sha256 = "10ai2vabbx6yqsyz6rbi7hp4vljmlq9kyn74jvjp95la5v4b6c93";
+      sha256 = "0qxdrcak97azjvqyx1anpb2ky6vp6vc37x0wcfjdqfajkh09fzh8";
     };
-    propagatedBuildInputs = [ EncodeLocale HTMLParser HTTPDate IOCompress LWPMediaTypes URI ];
+    propagatedBuildInputs = [ EncodeLocale HTMLParser HTTPDate IOCompress LWPMediaTypes URI IOHTML ];
   };
 
   HTTPParserXS = buildPerlPackage rec {
@@ -2066,14 +2066,15 @@ rec {
   };
 
   IOCompress = buildPerlPackage rec {
-    name = "IO-Compress-2.037";
+    name = "IO-Compress-2.060";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
-      sha256 = "07hs3afzg9ry6ir2f9rf3fg8b129cihs989mr0nh9wdvxgxqmr1q";
+      sha256 = "03zaq9xzg0z9wcgj1hws8zhzdgdlwiz48nh6sy663bn7rzxm5k28";
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     # Work around a self-referencing Makefile variable.
     makeFlags = "INSTALLARCHLIB=$(INSTALLSITEARCH)";
+    doCheck = !stdenv.isDarwin;
   };
 
   IODigest = buildPerlPackage {
@@ -2083,6 +2084,14 @@ rec {
       sha256 = "1g6ilxqv2a7spf273v7k0721c6am7pwpjrin3h5zaqxfmd312nav";
     };
     propagatedBuildInputs = [PerlIOviadynamic];
+  };
+
+  IOHTML = buildPerlPackage rec {
+    name = "IO-HTML-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
+      sha256 = "0c4hc76c1gypdwfasnibr2qlf9x3bnhyw357lhqlrczbm6vn8hw5";
+    };
   };
 
   IOLockedFile = buildPerlPackage rec {
@@ -2424,10 +2433,10 @@ rec {
   };
 
   LWP = buildPerlPackage rec {
-    name = "libwww-perl-6.03";
+    name = "libwww-perl-6.04";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/LWP/${name}.tar.gz";
-      sha256 = "1zlnz4ylk1y0rw56vlf9knawwjx72b1gm09yp06ccpgmmndif4dg";
+      sha256 = "0z92fpwk6lh2gghv050r0qb216jmjl2m0c6zby935q8lv0q5wwgr";
     };
     propagatedBuildInputs =
       [ EncodeLocale FileListing HTMLParser HTTPCookies HTTPMessage LWPMediaTypes URI NetHTTP ];
@@ -2435,10 +2444,10 @@ rec {
   };
 
   LWPMediaTypes = buildPerlPackage rec {
-    name = "LWP-MediaTypes-6.01";
+    name = "LWP-MediaTypes-6.02";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/LWP/${name}.tar.gz";
-      sha256 = "1fhxql3xnhrlyzkjyss4swvhyh0r58cv2kwjcpj3mdbbg54ah9fz";
+      sha256 = "0xmnblp962qy02akah30sji8bxrqcyqlff2w95l199ghql60ny8q";
     };
   };
 
@@ -2882,10 +2891,10 @@ rec {
   };
 
   NetHTTP = buildPerlPackage rec {
-    name = "Net-HTTP-6.01";
+    name = "Net-HTTP-6.05";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Net/${name}.tar.gz";
-      sha256 = "0ipad5y605fr968snxmp1sxrkvag9r5y0g8qvj9n7ca9nbwq7n3n";
+      sha256 = "1r2bv3cw4m054qfsm6i7rpvhrql1d78izpc36prv3xvahfsqxawc";
     };
   };
 
