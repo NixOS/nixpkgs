@@ -2012,15 +2012,6 @@ rec {
     buildInputs = [ TestMore ];
   };
 
-  HTTPRequest = buildPerlPackage rec {
-    name = "HTTP-Message-6.03";
-    src = fetchurl {
-      url = "mirror://cpan/modules/by-module/HTTP/${name}.tar.gz";
-      sha256 = "c736e083bdf0eea1bb73e2dc3b66db0a8283942c0f69063afadb9a7cfa80011b";
-    };
-    propagatedBuildInputs = [ HTTPDate URI HTMLParser LWP ];
-  };
-
   HTTPRequestAsCGI = buildPerlPackage rec {
     name = "HTTP-Request-AsCGI-1.2";
     src = fetchurl {
@@ -3013,7 +3004,7 @@ rec {
       url = "mirror://cpan/authors/id/W/WR/WROG/${name}.tar.gz";
       sha256 = "24ac83539b188d85bd2c7bd67e355aab0ede3f98170b23cb50bd30b11b4387ff";
     };
-    propagatedBuildInputs = [ CryptDHGMP URI HTMLParser HTTPRequest XMLSimple ];
+    propagatedBuildInputs = [ CryptDHGMP URI HTMLParser HTTPMessage XMLSimple ];
   };
 
   NetOpenIDConsumer = buildPerlPackage rec {
