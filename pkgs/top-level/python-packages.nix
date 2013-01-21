@@ -1,6 +1,12 @@
 { pkgs, python }:
 
-let pythonPackages = python.modules // rec {
+let
+isPy26 = python.majorVersion == "2.6";
+isPy27 = python.majorVersion == "2.7";
+optional = pkgs.lib.optional;
+optionals = pkgs.lib.optionals;
+
+pythonPackages = python.modules // rec {
 
   inherit python;
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
@@ -108,7 +114,6 @@ let pythonPackages = python.modules // rec {
       homepage = https://github.com/teythoon/afew;
       description = "afew is an initial tagging script for notmuch mail.";
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -137,7 +142,6 @@ let pythonPackages = python.modules // rec {
       homepage = https://github.com/pazz/alot;
       description = "Terminal MUA using notmuch mail";
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -461,7 +465,6 @@ let pythonPackages = python.modules // rec {
       description = "Simple, lightweight, and easily extensible STOMP message broker";
       homepage = http://code.google.com/p/coilmq/;
       license = pkgs.lib.licenses.asl20;
-      platforms = python.meta.platforms;
     };
   });
 
@@ -481,16 +484,15 @@ let pythonPackages = python.modules // rec {
       homepage = http://pypi.python.org/pypi/configobj;
       license = pkgs.lib.licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
   coverage = buildPythonPackage rec {
-    name = "coverage-3.5.3";
+    name = "coverage-3.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/c/coverage/${name}.tar.gz";
-      md5 = "5f1f523940c473faa8a9f6ca29f78efc";
+      md5 = "67d4e393f4c6a5ffc18605409d2aa1ac";
     };
 
     meta = {
@@ -498,8 +500,19 @@ let pythonPackages = python.modules // rec {
       homepage = http://nedbatchelder.com/code/coverage/;
       license = pkgs.lib.licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.shlevy ];
-      platforms = python.meta.platforms;
     };
+  };
+
+  covCore = buildPythonPackage rec {
+    name = "cov-core-1.7";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/cov-core/cov-core-1.7.tar.gz";
+      md5 = "59c1e22e636633e10120beacbf45b28c";
+    };
+    meta = {
+      description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
+    };
+    propagatedBuildInputs = [ coverage ];
   };
 
   cssselect = buildPythonPackage rec {
@@ -615,9 +628,31 @@ let pythonPackages = python.modules // rec {
       description = "Easily download, build, install, upgrade, and uninstall Python packages";
       homepage = http://packages.python.org/distribute;
       license = "PSF or ZPL";
-      platforms = python.meta.platforms;
     };
   });
+
+
+  distutils2  = buildPythonPackage rec {
+    name = "distutils2-${version}";
+    version = "1.0a4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/D/Distutils2/Distutils2-${version}.tar.gz";
+      md5 = "52bc9dffb394970c27e02853ae3a3241";
+    };
+
+    patchPhase = ''
+      sed -e "s#html.entities#htmlentitydefs#g" -i distutils2/pypi/simple.py
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "A Python Packaging Library";
+      homepage = http://pypi.python.org/pypi/Distutils2;
+      license = "PSF";
+    };
+  };
 
 
   distutils_extra = buildPythonPackage rec {
@@ -840,7 +875,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://pypi.python.org/pypi/flake8;
       license = pkgs.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -904,7 +938,6 @@ let pythonPackages = python.modules // rec {
       license = "MIT";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -961,14 +994,12 @@ let pythonPackages = python.modules // rec {
       sha256 = "0bhiyx41kilvy04cgjbvjy2r4b6l7zz31fbrg3l6lvnqm26nihb0";
     };
 
-    buildInputs = [ pkgs.setuptools ] ++
-                  (if python.majorVersion == "2.6" then [ argparse ] else []);
+    buildInputs = [ pkgs.setuptools ] ++ (optional isPy26 argparse);
 
     meta = {
       description = "automatically generated zsh completion function for Python's option parser modules";
       license = "BSD";
       maintainers = [ stdenv.lib.maintainers.simons ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1062,10 +1093,17 @@ let pythonPackages = python.modules // rec {
       description = "A comprehensive HTTP client library";
       license = pkgs.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
+  importlib = if isPy26 then (buildPythonPackage {
+    name = "importlib-1.0.2";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/importlib/importlib-1.0.2.tar.gz";
+      md5 = "4aa23397da8bd7c7426864e88e4db7e1";
+    };
+    doCheck = false;
+  }) else null;
 
   iptools = buildPythonPackage rec {
     version = "0.4.0";
@@ -1101,6 +1139,15 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  ipdb = buildPythonPackage {
+    name = "ipdb-0.7";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
+      md5 = "d879f9b2b0f26e0e999809585dcaec61";
+    };
+    propagatedBuildInputs = [ ipython ];
+  };
+
   jedi = buildPythonPackage (rec {
     name = "jedi-0.5b5";
 
@@ -1114,7 +1161,6 @@ let pythonPackages = python.modules // rec {
       description = "An autocompletion tool for Python that can be used for text editors.";
       license = pkgs.lib.licenses.lgpl3Plus;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -1410,7 +1456,7 @@ let pythonPackages = python.modules // rec {
       md5 = "361c8ac7a31953ab94a95cf34d9a0b2b";
     };
 
-    buildInputs = [ pkgs.unzip ];
+    buildInputs = [ pkgs.unzip six ] ++ (optionals isPy26 [ importlib ordereddict ]);
 
     propagatedBuildInputs = [ argparse jinja2 ];
 
@@ -1569,6 +1615,32 @@ let pythonPackages = python.modules // rec {
     buildInputs = [ coverage ];
   };
 
+  nose2 = if isPy26 then null else (buildPythonPackage rec {
+    name = "nose2-0.4.5";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose2/${name}.tar.gz";
+      md5 = "d7e51c848227488e3cc0424faf5511cd";
+    };
+    meta = {
+      description = "nose2 is the next generation of nicer testing for Python";
+    };
+    propagatedBuildInputs = [ six ];
+    # AttributeError: 'module' object has no attribute 'collector'
+    doCheck = false;
+  });
+
+  nose2Cov = if isPy26 then null else (buildPythonPackage rec {
+    name = "nose2-cov-1.0a4";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose2-cov/nose2-cov-1.0a4.tar.gz";
+      md5 = "6442f03e2ea732b0e38eb5b00fbe0b31";
+    };
+    meta = {
+      description = "nose2 plugin for coverage reporting, including subprocesses and multiprocessing";
+    };
+    propagatedBuildInputs = [ covCore nose2 ];
+  });
+
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
 
@@ -1577,7 +1649,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "1kh4spwgqxm534qlzzf2ijchckvs0pwjxl1irhicjmlg7mybnfvx";
     };
 
-    buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pkgs.pygobject pkgs.pygtk pkgs.glib pkgs.gtk pkgs.dbus_glib ];
+    buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pygobject pygtk pkgs.glib pkgs.gtk pkgs.dbus_glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
@@ -1605,7 +1677,6 @@ let pythonPackages = python.modules // rec {
       description = "A Python wrapper around notmuch";
       homepage = http://notmuchmail.org/;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1682,6 +1753,15 @@ let pythonPackages = python.modules // rec {
   #   };
   # });
 
+  ordereddict = if isPy26 then (buildPythonPackage {
+    name = "ordereddict-1.1";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/o/ordereddict/ordereddict-1.1.tar.gz";
+      md5 = "a0ed854ee442051b249bfad0f638bbec";
+    };
+    doCheck = false;
+  }) else null;
+
   ply = buildPythonPackage (rec {
     name = "ply-3.2";
 
@@ -1712,7 +1792,6 @@ let pythonPackages = python.modules // rec {
       license = "revised-BSD";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -1743,8 +1822,6 @@ let pythonPackages = python.modules // rec {
         tunnel -- this is how sftp works, for example.  it is written
         entirely in python (no C or platform-dependent code) and is released
         under the GNU LGPL (lesser GPL).  '';
-
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1838,7 +1915,6 @@ let pythonPackages = python.modules // rec {
       '';
 
       maintainers = [ stdenv.lib.maintainers.simons ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -2123,7 +2199,6 @@ let pythonPackages = python.modules // rec {
       description = "A Python wrapper for the GPGME library.";
       license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -2356,7 +2431,6 @@ let pythonPackages = python.modules // rec {
       license = "revised BSD";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -2827,7 +2901,7 @@ let pythonPackages = python.modules // rec {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = [ pkgs.xlibs.libX11 pkgs.pythonDBus pkgs.pygobject ];
+    propagatedBuildInputs = [ pkgs.xlibs.libX11 pkgs.pythonDBus pygobject ];
 
     meta = {
       description = "High-level, platform independent Skype API wrapper for Python";
@@ -2922,7 +2996,6 @@ let pythonPackages = python.modules // rec {
       description = "Lightweight and extensible STOMP messaging client";
       homepage = http://bitbucket.org/hozn/stompclient;
       license = pkgs.lib.licenses.asl20;
-      platforms = python.meta.platforms;
     };
   });
 
@@ -3065,6 +3138,24 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  eggdeps  = buildPythonPackage rec {
+     name = "eggdeps-${version}";
+     version = "0.4";
+
+     src = fetchurl {
+       url = "http://pypi.python.org/packages/source/t/tl.eggdeps/tl.${name}.tar.gz";
+       md5 = "2472204a2abd0d8cd4d11ff0fbf36ae7";
+     };
+
+     propagatedBuildInputs = [ zopeInterface zope_testing ];
+     meta = {
+       description = "A tool which computes a dependency graph between active Python eggs";
+       homepage = http://thomas-lotze.de/en/software/eggdeps/;
+       license = "ZPL";
+     };
+   };
+
+
   turses = buildPythonPackage (rec {
     name = "turses-0.2.9";
 
@@ -3073,9 +3164,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "c0f32fa31e2c5fa42f5cc19f3dba4e73f0438bf36bf756ba137f2423c0ac4637";
     };
 
-    propagatedBuildInputs = [ oauth2 urwid tweepy ] ++
-                            (if python.majorVersion == "2.6" then [ argparse ]
-                                                             else []);
+    propagatedBuildInputs = [ oauth2 urwid tweepy ] ++ optional isPy26 argparse;
 
     #buildInputs = [ tox ];
     # needs tox
@@ -3136,7 +3225,6 @@ let pythonPackages = python.modules // rec {
       license = "MIT";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3194,7 +3282,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://excess.org/urwid;
       license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -3614,7 +3701,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://liw.fi/cliapp/;
       description = "Python framework for Unix command line programs.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3635,7 +3721,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://liw.fi/tracing/;
       description = "Python debug logging helper.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3656,7 +3741,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://liw.fi/ttystatus/;
       description = "Progress and status updates on terminals for Python.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3679,7 +3763,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://liw.fi/larch/;
       description = "Python B-tree library.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3699,7 +3782,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Fixed size round-robin style database";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3722,7 +3804,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Backend data caching and persistence daemon for Graphite";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3741,7 +3822,6 @@ let pythonPackages = python.modules // rec {
       homepage = https://launchpad.net/txamqp;
       description = "Library for communicating with AMQP peers and brokers using Twisted";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3763,7 +3843,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Enterprise scalable realtime graphing";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 

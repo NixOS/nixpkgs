@@ -1587,6 +1587,8 @@ let
     guile = guile_1_8;
   };
 
+  tinc = callPackage ../tools/networking/tinc { };
+
   tmux = callPackage ../tools/misc/tmux { };
 
   tor = callPackage ../tools/security/tor { };

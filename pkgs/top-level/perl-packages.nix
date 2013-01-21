@@ -1737,10 +1737,10 @@ rec {
   };
 
   EncodeLocale = buildPerlPackage rec {
-    name = "Encode-Locale-1.02";
+    name = "Encode-Locale-1.03";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Encode/${name}.tar.gz";
-      sha256 = "0h2kim6mg236s749wlg35lhv1zdkrkr0bm65spkg005cn0mbmi90";
+      sha256 = "0m9d1vdphlyzybgmdanipwd9ndfvyjgk3hzw250r299jjgh3fqzp";
     };
   };
 
@@ -1878,10 +1878,10 @@ rec {
   };
 
   FileListing = buildPerlPackage rec {
-    name = "File-Listing-6.03";
+    name = "File-Listing-6.04";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/File/${name}.tar.gz";
-      sha256 = "154hp49pcngsqrwi1pbw3fx82v7vql4dc9wh7qfj37vmy8sn1s93";
+      sha256 = "1xcwjlnxaiwwpn41a5yi6nz95ywh3szq5chdxiwj36kqsvy5000y";
     };
     propagatedBuildInputs = [ HTTPDate ];
   };
@@ -2404,6 +2404,7 @@ rec {
       description = "IO Interface to compressed data files/buffers";
       license = "perl5";
     };
+    doCheck = !stdenv.isDarwin;
   };
 
   IODigest = buildPerlPackage {
@@ -3591,7 +3592,7 @@ rec {
       url = "mirror://cpan/authors/id/W/WR/WROG/${name}.tar.gz";
       sha256 = "4ab927b6756366fa4cef2b54088645849f32fc7e0cd8de0a50001bbf62946fd8";
     };
-    propagatedBuildInputs = [ NetOpenIDCommon JSON ];
+    propagatedBuildInputs = [ NetOpenIDCommon JSON LWP ];
   };
 
   PackageDeprecationManager = buildPerlPackage {

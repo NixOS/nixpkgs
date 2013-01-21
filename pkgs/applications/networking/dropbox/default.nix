@@ -42,7 +42,7 @@ let
     exec = "dropbox";
     comment = "Online directories";
     desktopName = "Dropbox";
-    genericName = "Online storage";    
+    genericName = "Online storage";
     categories = "Application;Internet;";
   };
 
@@ -65,7 +65,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     ensureDir "$out/${appdir}"
-    cp -r .dropbox-dist/* "$out/${appdir}/"
+    cp -r ".dropbox-dist/"* "$out/${appdir}/"
     ensureDir "$out/bin"
     ln -s "$out/${appdir}/dropbox" "$out/bin/dropbox"
 
@@ -78,13 +78,13 @@ in stdenv.mkDerivation {
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
 
     ensureDir "$out/share/applications"
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp "${desktopItem}/share/applications/"* $out/share/applications
   '';
 
   buildInputs = [ patchelf ];
 
   meta = {
+    homepage = "http://www.dropbox.com";
     description = "Online stored folders (daemon version)";
-    homepage = http://www.dropbox.com;
   };
 }
