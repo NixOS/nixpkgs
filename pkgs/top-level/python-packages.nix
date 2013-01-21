@@ -114,7 +114,6 @@ pythonPackages = python.modules // rec {
       homepage = https://github.com/teythoon/afew;
       description = "afew is an initial tagging script for notmuch mail.";
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -143,7 +142,6 @@ pythonPackages = python.modules // rec {
       homepage = https://github.com/pazz/alot;
       description = "Terminal MUA using notmuch mail";
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -467,7 +465,6 @@ pythonPackages = python.modules // rec {
       description = "Simple, lightweight, and easily extensible STOMP message broker";
       homepage = http://code.google.com/p/coilmq/;
       license = pkgs.lib.licenses.asl20;
-      platforms = python.meta.platforms;
     };
   });
 
@@ -487,7 +484,6 @@ pythonPackages = python.modules // rec {
       homepage = http://pypi.python.org/pypi/configobj;
       license = pkgs.lib.licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -504,7 +500,6 @@ pythonPackages = python.modules // rec {
       homepage = http://nedbatchelder.com/code/coverage/;
       license = pkgs.lib.licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.shlevy ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -633,7 +628,6 @@ pythonPackages = python.modules // rec {
       description = "Easily download, build, install, upgrade, and uninstall Python packages";
       homepage = http://packages.python.org/distribute;
       license = "PSF or ZPL";
-      platforms = python.meta.platforms;
     };
   });
 
@@ -881,7 +875,6 @@ pythonPackages = python.modules // rec {
       homepage = http://pypi.python.org/pypi/flake8;
       license = pkgs.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -945,7 +938,6 @@ pythonPackages = python.modules // rec {
       license = "MIT";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -1008,7 +1000,6 @@ pythonPackages = python.modules // rec {
       description = "automatically generated zsh completion function for Python's option parser modules";
       license = "BSD";
       maintainers = [ stdenv.lib.maintainers.simons ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1102,7 +1093,6 @@ pythonPackages = python.modules // rec {
       description = "A comprehensive HTTP client library";
       license = pkgs.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1171,7 +1161,6 @@ pythonPackages = python.modules // rec {
       description = "An autocompletion tool for Python that can be used for text editors.";
       license = pkgs.lib.licenses.lgpl3Plus;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -1688,7 +1677,6 @@ pythonPackages = python.modules // rec {
       description = "A Python wrapper around notmuch";
       homepage = http://notmuchmail.org/;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1804,7 +1792,6 @@ pythonPackages = python.modules // rec {
       license = "revised-BSD";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -1835,8 +1822,6 @@ pythonPackages = python.modules // rec {
         tunnel -- this is how sftp works, for example.  it is written
         entirely in python (no C or platform-dependent code) and is released
         under the GNU LGPL (lesser GPL).  '';
-
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1930,7 +1915,6 @@ pythonPackages = python.modules // rec {
       '';
 
       maintainers = [ stdenv.lib.maintainers.simons ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -2215,7 +2199,6 @@ pythonPackages = python.modules // rec {
       description = "A Python wrapper for the GPGME library.";
       license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -2448,7 +2431,6 @@ pythonPackages = python.modules // rec {
       license = "revised BSD";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -3014,7 +2996,6 @@ pythonPackages = python.modules // rec {
       description = "Lightweight and extensible STOMP messaging client";
       homepage = http://bitbucket.org/hozn/stompclient;
       license = pkgs.lib.licenses.asl20;
-      platforms = python.meta.platforms;
     };
   });
 
@@ -3244,7 +3225,6 @@ pythonPackages = python.modules // rec {
       license = "MIT";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3302,7 +3282,6 @@ pythonPackages = python.modules // rec {
       homepage = http://excess.org/urwid;
       license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -3722,7 +3701,6 @@ pythonPackages = python.modules // rec {
       homepage = http://liw.fi/cliapp/;
       description = "Python framework for Unix command line programs.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3743,7 +3721,6 @@ pythonPackages = python.modules // rec {
       homepage = http://liw.fi/tracing/;
       description = "Python debug logging helper.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3764,7 +3741,6 @@ pythonPackages = python.modules // rec {
       homepage = http://liw.fi/ttystatus/;
       description = "Progress and status updates on terminals for Python.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3787,7 +3763,6 @@ pythonPackages = python.modules // rec {
       homepage = http://liw.fi/larch/;
       description = "Python B-tree library.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3807,7 +3782,6 @@ pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Fixed size round-robin style database";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3830,7 +3804,6 @@ pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Backend data caching and persistence daemon for Graphite";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3849,7 +3822,6 @@ pythonPackages = python.modules // rec {
       homepage = https://launchpad.net/txamqp;
       description = "Library for communicating with AMQP peers and brokers using Twisted";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3871,7 +3843,6 @@ pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Enterprise scalable realtime graphing";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
