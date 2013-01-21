@@ -1929,6 +1929,16 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  pip = buildPythonPackage {
+    name = "pip-1.2.1";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pip/pip-1.2.1.tar.gz";
+      md5 = "db8a6d8a4564d3dc7f337ebed67b1a85";
+    };
+    buildInputs = [ mock scripttest virtualenv nose ];
+    # ValueError: Working directory tests not found, or not a directory
+    doCheck = false;
+  };
 
   polib = buildPythonPackage rec {
     name = "polib-${version}";
