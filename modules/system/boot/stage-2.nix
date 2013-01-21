@@ -13,7 +13,7 @@ let
         example = "rm -f /var/log/messages";
         type = types.string;
         description = ''
-          Shell commands to be executed just before Upstart is started.
+          Shell commands to be executed just before systemd is started.
         '';
       };
 
