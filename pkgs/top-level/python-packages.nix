@@ -1649,7 +1649,7 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "nose2 plugin for coverage reporting, including subprocesses and multiprocessing";
     };
-    buildInputs = [ covCore nose2 ];
+    propagatedBuildInputs = [ covCore nose2 ];
   });
 
   notify = pkgs.stdenv.mkDerivation (rec {
