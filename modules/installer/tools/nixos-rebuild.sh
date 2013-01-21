@@ -44,13 +44,13 @@ EOF
 
 
 # Parse the command line.
-extraBuildFlags=
+extraBuildFlags=()
 action=
 buildNix=1
 rollback=
 upgrade=
 
-while test "$#" -gt 0; do
+while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
     case "$i" in
       --help)
@@ -72,20 +72,20 @@ while test "$#" -gt 0; do
         upgrade=1
         ;;
       --show-trace|--no-build-hook|--keep-failed|-K|--keep-going|-k|--verbose|-v|--fallback)
-        extraBuildFlags="$extraBuildFlags $i"
+        extraBuildFlags+=("$i")
         ;;
       --max-jobs|-j|--cores|-I)
         j="$1"; shift 1
-        extraBuildFlags="$extraBuildFlags $i $j"
+        extraBuildFlags+=("$i" "$j")
         ;;
       --option)
         j="$1"; shift 1
         k="$1"; shift 1
-        extraBuildFlags="$extraBuildFlags $i $j $k"
+        extraBuildFlags+=("$i" "$j" "$k")
         ;;
       --fast)
         buildNix=
-        extraBuildFlags="$extraBuildFlags --show-trace"
+        extraBuildFlags+=(--show-trace)
         ;;
       *)
         echo "$0: unknown option \`$i'"
@@ -94,13 +94,9 @@ while test "$#" -gt 0; do
     esac
 done
 
-if test -z "$action"; then showSyntax; fi
+if [ -z "$action" ]; then showSyntax; fi
 
-if test "$action" = dry-run; then
-    extraBuildFlags="$extraBuildFlags --dry-run"
-fi
-
-if test -n "$rollback"; then
+if [ -n "$rollback" ]; then
     buildNix=
 fi
 
@@ -115,7 +111,7 @@ trap 'rm -rf "$tmpDir"' EXIT
 # This matters if the new Nix in Nixpkgs has a schema change.  It
 # would upgrade the schema, which should only happen once we actually
 # switch to the new configuration.
-if initctl status nix-daemon 2>&1 | grep -q 'running'; then
+if systemctl show nix-daemon.socket nix-daemon.service | grep -q ActiveState=active; then
     export NIX_REMOTE=${NIX_REMOTE:-daemon}
 fi
 
@@ -129,42 +125,57 @@ fi
 # First build Nix, since NixOS may require a newer version than the
 # current one.  Of course, the same goes for Nixpkgs, but Nixpkgs is
 # more conservative.
-if [ -n "$buildNix" ]; then
+if [ "$action" != dry-run -a -n "$buildNix" ]; then
     echo "building Nix..." >&2
-    if ! nix-build '<nixos>' -A config.environment.nix -o $tmpDir/nix $extraBuildFlags > /dev/null; then
-        if ! nix-build '<nixos>' -A nixFallback -o $tmpDir/nix $extraBuildFlags > /dev/null; then
-            nix-build '<nixpkgs>' -A nixUnstable -o $tmpDir/nix $extraBuildFlags > /dev/null
+    if ! nix-build '<nixos>' -A config.environment.nix -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
+        if ! nix-build '<nixos>' -A nixFallback -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null; then
+            nix-build '<nixpkgs>' -A nixUnstable -o $tmpDir/nix "${extraBuildFlags[@]}" > /dev/null
         fi
     fi
     PATH=$tmpDir/nix/bin:$PATH
 fi
 
 
+# Update the version suffix if we're building from Git (so that
+# nixos-version shows something useful).
+if nixos=$(nix-instantiate --find-file nixos "${extraBuildFlags[@]}"); then
+    suffix=$($SHELL $nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}")
+    if [ -n "$suffix" ]; then
+        echo -n "$suffix" > "$nixos/.version-suffix"
+    fi
+fi
+
+
+if [ "$action" = dry-run ]; then
+    extraBuildFlags+=(--dry-run)
+fi
+
+
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the
 # current directory (for "build" and "test").
-if test -z "$rollback"; then
+if [ -z "$rollback" ]; then
     echo "building the system configuration..." >&2
-    if test "$action" = switch -o "$action" = boot; then
-        nix-env $extraBuildFlags -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
+    if [ "$action" = switch -o "$action" = boot ]; then
+        nix-env "${extraBuildFlags[@]}" -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system
         pathToConfig=/nix/var/nix/profiles/system
-    elif test "$action" = test -o "$action" = build -o "$action" = dry-run; then
-        nix-build '<nixos>' -A system -K -k $extraBuildFlags > /dev/null
+    elif [ "$action" = test -o "$action" = build -o "$action" = dry-run ]; then
+        nix-build '<nixos>' -A system -K -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm ]; then
-        nix-build '<nixos>' -A vm -K -k $extraBuildFlags > /dev/null
+        nix-build '<nixos>' -A vm -K -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     elif [ "$action" = build-vm-with-bootloader ]; then
-        nix-build '<nixos>' -A vmWithBootLoader -K -k $extraBuildFlags > /dev/null
+        nix-build '<nixos>' -A vmWithBootLoader -K -k "${extraBuildFlags[@]}" > /dev/null
         pathToConfig=./result
     else
         showSyntax
     fi
-else # test -n "$rollback"
-    if test "$action" = switch -o "$action" = boot; then
+else # [ -n "$rollback" ]
+    if [ "$action" = switch -o "$action" = boot ]; then
         nix-env --rollback -p /nix/var/nix/profiles/system
         pathToConfig=/nix/var/nix/profiles/system
-    elif test "$action" = test -o "$action" = build; then
+    elif [ "$action" = test -o "$action" = build ]; then
         systemNumber=$(
             nix-env -p /nix/var/nix/profiles/system --list-generations |
             sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
@@ -179,7 +190,7 @@ fi
 
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
-if test "$action" = switch -o "$action" = boot -o "$action" = test; then
+if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
     # Just in case the new configuration hangs the system, do a sync now.
     sync
 
@@ -187,7 +198,7 @@ if test "$action" = switch -o "$action" = boot -o "$action" = test; then
 fi
 
 
-if test "$action" = build-vm; then
+if [ "$action" = build-vm ]; then
     cat >&2 <<EOF
 
 Done.  The virtual machine can be started by running $(echo $pathToConfig/bin/run-*-vm).

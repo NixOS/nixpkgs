@@ -16,6 +16,17 @@ let
     inherit pkgs options;
   };
 
+  entry = "${manual.manual}/share/doc/nixos/manual.html";
+
+  help = pkgs.writeScriptBin "nixos-help"
+    ''
+      #! ${pkgs.stdenv.shell} -e
+      if ! ''${BROWSER:-w3m} ${entry}; then
+        echo "$0: unable to start a web browser; please set \$BROWSER or install ‘w3m’"
+        exit 1
+      fi
+    '';
+
 in
 
 {
@@ -69,23 +80,23 @@ in
 
     system.build.manual = manual;
 
-    environment.systemPackages = [ manual.manpages ];
+    environment.systemPackages = [ manual.manpages help ];
 
     boot.extraTTYs = mkIf cfg.showManual ["tty${cfg.ttyNumber}"];
 
-    jobs = mkIf cfg.showManual
-      { nixosManual =
-        { name = "nixos-manual";
-
-          description = "NixOS manual";
-
-          startOn = "started udev";
-
-          exec =
-            ''
-              ${cfg.browser} ${manual.manual}/share/doc/nixos/manual.html \
-                < /dev/tty${toString cfg.ttyNumber} > /dev/tty${toString cfg.ttyNumber} 2>&1
-            '';
+    systemd.services = optionalAttrs cfg.showManual
+      { "nixos-manual" =
+        { description = "NixOS Manual";
+          wantedBy = [ "multi-user.target" ];
+          serviceConfig =
+            { ExecStart = "${cfg.browser} ${entry}";
+              StandardInput = "tty";
+              StandardOutput = "tty";
+              TTYPath = "/dev/tty${cfg.ttyNumber}";
+              TTYReset = true;
+              TTYVTDisallocate = true;
+              Restart = "always";
+            };
         };
       };
 

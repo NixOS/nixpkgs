@@ -6,14 +6,23 @@
 
   testScript =
     ''
+      $machine->waitForUnit("default.target");
+      $machine->screenshot("postboot");
+
       subtest "create user", sub {
           $machine->succeed("useradd -m alice");
           $machine->succeed("(echo foobar; echo foobar) | passwd alice");
       };
 
+      # Check whether switching VTs works.
+      subtest "virtual console switching", sub {
+          $machine->sendKeys("alt-f2");
+          $machine->waitUntilSucceeds("[ \$(fgconsole) = 2 ]");
+          $machine->waitForUnit('getty@tty2.service');
+      };
+
       # Log in as alice on a virtual console.
       subtest "virtual console login", sub {
-          $machine->waitForJob("tty1");
           $machine->sleep(2); # urgh: wait for username prompt
           $machine->sendChars("alice\n");
           $machine->waitUntilSucceeds("pgrep login");
@@ -24,28 +33,19 @@
           $machine->waitForFile("/home/alice/done");
       };
 
-      # Check whether switching VTs works.
-      subtest "virtual console switching", sub {
-          $machine->sendKeys("alt-f10");
-          $machine->waitUntilSucceeds("[ \$(fgconsole) = 10 ]");
-          $machine->sleep(2); # allow fbcondecor to catch up (not important)
-          $machine->screenshot("syslog");
-      };
-
-      # Check whether ConsoleKit/udev gives and removes device
-      # ownership as needed.
+      # Check whether systemd gives and removes device ownership as
+      # needed.
       subtest "device permissions", sub {
+          $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+          $machine->sendKeys("alt-f1");
+          $machine->waitUntilSucceeds("[ \$(fgconsole) = 1 ]");
           $machine->fail("getfacl /dev/snd/timer | grep -q alice");
-          $machine->succeed("chvt 1");
-          $machine->waitUntilSucceeds("getfacl /dev/snd/timer | grep -q alice");
           $machine->succeed("chvt 2");
-          $machine->sleep(2); # urgh
-          $machine->fail("getfacl /dev/snd/timer | grep -q alice");
+          $machine->waitUntilSucceeds("getfacl /dev/snd/timer | grep -q alice");
       };
 
       # Log out.
       subtest "virtual console logout", sub {
-          $machine->succeed("chvt 1");
           $machine->sendChars("exit\n");
           $machine->waitUntilFails("pgrep -u alice bash");
           $machine->screenshot("mingetty");

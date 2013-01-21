@@ -95,15 +95,18 @@ in
   config = mkIf config.services.acpid.enable {
 
     jobs.acpid =
-      { description = "ACPI daemon";
+      { description = "ACPI Daemon";
 
-        startOn = "stopped udevtrigger and started syslogd";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "systemd-udev-settle.service" ];
 
         path = [ pkgs.acpid ];
 
         daemonType = "fork";
 
         exec = "acpid --confdir ${acpiConfDir}";
+
+        unitConfig.ConditionPathExists = [ "/proc/acpi" ];
       };
 
   };

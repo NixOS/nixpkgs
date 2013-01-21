@@ -39,6 +39,7 @@ let
   );
 
   userOptions = {
+
     openssh.authorizedKeys = {
       keys = mkOption {
         type = types.listOf types.string;
@@ -63,6 +64,7 @@ let
         '';
       };
     };
+
   };
 
   authKeysFiles = let
@@ -114,14 +116,13 @@ in
       };
 
       permitRootLogin = mkOption {
-        default = "yes";
+        default = "without-password";
         check = permitRootLoginCheck;
         description = ''
           Whether the root user can login using ssh. Valid values are
           <literal>yes</literal>, <literal>without-password</literal>,
           <literal>forced-commands-only</literal> or
           <literal>no</literal>.
-          If without-password doesn't work try <literal>yes</literal>.
         '';
       };
 
@@ -261,19 +262,17 @@ in
       }
     ];
 
-    jobs.sshd = {
+    systemd.services.sshd =
+      { description = "SSH Daemon";
 
-        description = "OpenSSH server";
+        wantedBy = [ "multi-user.target" ];
 
-        startOn = "started network-interfaces";
-
-        environment = {
-          LD_LIBRARY_PATH = nssModulesPath;
-          # Duplicated from bashrc. OpenSSH needs a patch for this.
-          LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
-        };
+        stopIfChanged = false;
 
         path = [ pkgs.openssh ];
+
+        environment.LD_LIBRARY_PATH = nssModulesPath;
+        environment.LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
 
         preStart =
           ''
@@ -284,22 +283,28 @@ in
             fi
           '';
 
-        daemonType = "fork";
-
-        exec =
-          ''
-            ${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} \
-              -f ${pkgs.writeText "sshd_config" cfg.extraConfig}
-          '';
+        serviceConfig =
+          { ExecStart =
+              "${pkgs.openssh}/sbin/sshd -h ${cfg.hostKeyPath} " +
+              "-f ${pkgs.writeText "sshd_config" cfg.extraConfig}";
+            Restart = "always";
+            Type = "forking";
+            KillMode = "process";
+            PIDFile = "/run/sshd.pid";
+          };
       };
 
     networking.firewall.allowedTCPPorts = cfg.ports;
+
+    security.pam.services = optional cfg.usePAM { name = "sshd"; startSession = true; showMotd = true; };
 
     services.openssh.authorizedKeysFiles =
       [ ".ssh/authorized_keys" ".ssh/authorized_keys2" "/etc/ssh/authorized_keys.d/%u" ];
 
     services.openssh.extraConfig =
       ''
+        PidFile /run/sshd.pid
+
         Protocol 2
 
         UsePAM ${if cfg.usePAM then "yes" else "no"}
@@ -328,11 +333,14 @@ in
         PasswordAuthentication ${if cfg.passwordAuthentication then "yes" else "no"}
         ChallengeResponseAuthentication ${if cfg.challengeResponseAuthentication then "yes" else "no"}
 
+        PrintMotd no # handled by pam_motd
+
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
                     message = "cannot enable X11 forwarding without setting xauth location";}];
+
   };
 
 }

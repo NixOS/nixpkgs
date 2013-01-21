@@ -3,7 +3,9 @@
 {config, pkgs, ...}:
 
 with pkgs.lib;
+
 let
+
   cfg = config.networking;
 
   options = {
@@ -55,7 +57,9 @@ in
         source = pkgs.writeText "hosts"
           ''
             127.0.0.1 localhost
-            ::1 localhost
+            ${optionalString cfg.enableIPv6 ''
+              ::1 localhost
+            ''}
             ${cfg.extraHosts}
           '';
         target = "hosts";
@@ -71,7 +75,7 @@ in
           '' + optionalString config.services.nscd.enable ''
             # Invalidate the nscd cache whenever resolv.conf is
             # regenerated.
-            libc_restart='${pkgs.upstart}/sbin/start invalidate-nscd'
+            libc_restart='${pkgs.systemd}/bin/systemctl reload --no-block nscd.service'
           '' + optionalString cfg.dnsSingleRequest ''
             # only send one DNS request at a time
             resolv_conf_options='single-request'
@@ -82,4 +86,10 @@ in
         target = "resolvconf.conf";
       }
     ];
+
+  systemd.units."ip-up.target".text =
+    ''
+      [Unit]
+      Description=Services Requiring IP Connectivity
+    '';
 }

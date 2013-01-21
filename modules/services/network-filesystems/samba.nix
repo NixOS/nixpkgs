@@ -26,18 +26,14 @@ let
         mkdir -p /var/samba/locks /var/samba/cores/nmbd  /var/samba/cores/smbd /var/samba/cores/winbindd
       fi
 
-      passwdFile="$(sed -n 's/^.*smb[ ]\+passwd[ ]\+file[ ]\+=[ ]\+\(.*\)/\1/p' ${configFile})"
+      passwdFile="$(${pkgs.gnused}/bin/sed -n 's/^.*smb[ ]\+passwd[ ]\+file[ ]\+=[ ]\+\(.*\)/\1/p' ${configFile})"
       if [ -n "$passwdFile" ]; then
-        echo 'INFO: creating directory containing passwd file'
+        echo 'INFO: [samba] creating directory containing passwd file'
         mkdir -p "$(dirname "$passwdFile")"
       fi
 
       mkdir -p ${logDir}
       mkdir -p ${privateDir}
-
-      # The following line is to trigger a restart of the daemons when
-      # the configuration changes:
-      # ${configFile}
     '';
 
   configFile = pkgs.writeText "smb.conf"
@@ -60,12 +56,11 @@ let
   # This may include nss_ldap, needed for samba if it has to use ldap.
   nssModulesPath = config.system.nssModules.path;
 
-  daemonJob = appName: args:
-    { name = "samba-${appName}";
-      description = "Samba Service daemon ${appName}";
+  daemonService = appName: args:
+    { description = "Samba Service daemon ${appName}";
 
-      startOn = "started samba";
-      stopOn = "stopping samba";
+      wantedBy = [ "samba.target" ];
+      partOf = [ "samba.target" ];
 
       environment = {
         LD_LIBRARY_PATH = nssModulesPath;
@@ -73,9 +68,12 @@ let
         LOCALE_ARCHIVE = "/run/current-system/sw/lib/locale/locale-archive";
       };
 
-      daemonType = "fork";
+      serviceConfig = {
+        ExecStart = "${samba}/sbin/${appName} ${args}";
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      };
 
-      exec = "${samba}/sbin/${appName} ${args}";
+      restartTriggers = [ configFile ];
     };
 
 in
@@ -202,22 +200,26 @@ in
           };
 
 
-        # Dummy job to start the real Samba daemons (nmbd, smbd, winbindd).
-        jobs.sambaControl =
-          { name = "samba";
+        systemd = {
+          targets.samba = {
             description = "Samba server";
-
-            startOn = "started network-interfaces";
-            stopOn = "stopping network-interfaces";
-
-            preStart = setupScript;
+            requires = [ "samba-setup.service" ];
+            after = [ "samba-setup.service" "network.target" ];
+            wantedBy = [ "multi-user.target" ];
           };
 
-        jobs.nmbd = daemonJob "nmbd" "-D";
+          services = {
+            "samba-nmbd" = daemonService "nmbd" "-F";
+            "samba-smbd" = daemonService "smbd" "-F";
+            "samba-winbindd" = daemonService "winbindd" "-F";
+            "samba-setup" = {
+              description = "Samba setup task";
+              script = setupScript;
+              unitConfig.RequiresMountsFor = "/home/smbd /var/samba /var/log/samba";
+            };
+          };
+        };
 
-        jobs.smbd = daemonJob "smbd" "-D";
-
-        jobs.winbindd = daemonJob "winbindd" "-D";
       })
     ];
 

@@ -95,7 +95,7 @@ let
         description =
           ''
             If enabled, the Nix store in the VM is made writable by
-            layering an AUFS/tmpfs filesystem on top of the host's Nix
+            layering a unionfs-fuse/tmpfs filesystem on top of the host's Nix
             store.
           '';
       };
@@ -252,11 +252,9 @@ in
   # CIFS.  Also use paravirtualised network and block devices for
   # performance.
   boot.initrd.availableKernelModules =
-    [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" ]
-    ++ optional cfg.writableStore [ "aufs" ];
+    [ "cifs" "nls_utf8" "hmac" "md4" "ecb" "des_generic" ];
 
-  boot.extraModulePackages =
-    optional cfg.writableStore config.boot.kernelPackages.aufs;
+  boot.initrd.supportedFilesystems = optional cfg.writableStore "unionfs-fuse";
 
   boot.initrd.extraUtilsCommands =
     ''
@@ -290,9 +288,12 @@ in
       mkdir -p $targetRoot/boot
       mount -o remount,ro $targetRoot/nix/store
       ${optionalString cfg.writableStore ''
-        mkdir /mnt-store-tmpfs
-        mount -t tmpfs -o "mode=755" none /mnt-store-tmpfs
-        mount -t aufs -o dirs=/mnt-store-tmpfs=rw:$targetRoot/nix/store=rr none $targetRoot/nix/store
+        mkdir -p /unionfs-chroot/ro-store
+        mount --rbind $targetRoot/nix/store /unionfs-chroot/ro-store
+
+        mkdir /unionfs-chroot/rw-store
+        mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
+        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-store=RW:/ro-store=RO $targetRoot/nix/store
       ''}
     '';
 
@@ -322,35 +323,33 @@ in
   # where the regular value for the `fileSystems' attribute should be
   # disregarded for the purpose of building a VM test image (since
   # those filesystems don't exist in the VM).
-  fileSystems = mkOverride 50 (
-    [ { mountPoint = "/";
-        device = "/dev/vda";
-      }
-      { mountPoint = "/nix/store";
-        device = "//10.0.2.4/store";
-        fsType = "cifs";
-        options = "guest,sec=none,noperm,noacl";
-        neededForBoot = true;
-      }
-      { mountPoint = "/tmp/xchg";
-        device = "//10.0.2.4/xchg";
-        fsType = "cifs";
-        options = "guest,sec=none,noperm,noacl";
-        neededForBoot = true;
-      }
-      { mountPoint = "/tmp/shared";
-        device = "//10.0.2.4/shared";
-        fsType = "cifs";
-        options = "guest,sec=none,noperm,noacl";
-        neededForBoot = true;
-      }
-    ] ++ optional cfg.useBootLoader
-      { mountPoint = "/boot";
-        device = "/dev/disk/by-label/boot";
-        fsType = "ext4";
-        options = "ro";
-        noCheck = true; # fsck fails on a r/o filesystem
-      });
+  fileSystems =
+    { "/".device = "/dev/vda";
+      "/nix/store" =
+        { device = "//10.0.2.4/store";
+          fsType = "cifs";
+          options = "guest,sec=none,noperm,noacl";
+        };
+      "/tmp/xchg" =
+        { device = "//10.0.2.4/xchg";
+          fsType = "cifs";
+          options = "guest,sec=none,noperm,noacl";
+          neededForBoot = true;
+        };
+      "/tmp/shared" =
+        { device = "//10.0.2.4/shared";
+          fsType = "cifs";
+          options = "guest,sec=none,noperm,noacl";
+          neededForBoot = true;
+        };
+    } // optionalAttrs cfg.useBootLoader
+    { "/boot" =
+        { device = "/dev/disk/by-label/boot";
+          fsType = "ext4";
+          options = "ro";
+          noCheck = true; # fsck fails on a r/o filesystem
+        };
+    };
 
   swapDevices = mkOverride 50 [ ];
 
@@ -365,6 +364,7 @@ in
   networking.interfaces = singleton
     { name = "eth0";
       ipAddress = "10.0.2.15";
+      prefixLength = 24;
     };
 
   # Don't run ntpd in the guest.  It should get the correct time from KVM.
@@ -396,8 +396,6 @@ in
       HorizSync 30-140
       VertRefresh 50-160
     '';
-
-  services.mingetty.ttys = ttys ++ optional (!cfg.graphics) "ttyS0";
 
   # Wireless won't work in the VM.
   networking.wireless.enable = mkOverride 50 false;

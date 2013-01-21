@@ -4,7 +4,9 @@ with pkgs.lib;
 
 let
 
-  inherit (pkgs) stdenv writeText udev procps;
+  inherit (pkgs) stdenv writeText procps;
+
+  udev = config.systemd.package;
 
   cfg = config.services.udev;
 
@@ -24,20 +26,16 @@ let
   udevRules = stdenv.mkDerivation {
     name = "udev-rules";
     buildCommand = ''
-      ensureDir $out
+      mkdir -p $out
       shopt -s nullglob
 
       # Set a reasonable $PATH for programs called by udev rules.
       echo 'ENV{PATH}="${udevPath}/bin:${udevPath}/sbin"' > $out/00-path.rules
 
-      # Set the firmware search path so that the firmware.sh helper
-      # called by 50-firmware.rules works properly.
-      echo 'ENV{FIRMWARE_DIRS}="/root/test-firmware ${toString config.hardware.firmware}"' >> $out/00-path.rules
-
       # Add the udev rules from other packages.
       for i in ${toString cfg.packages}; do
         echo "Adding rules for package $i"
-        for j in $i/*/udev/rules.d/*; do
+        for j in $i/{etc,lib}/udev/rules.d/*; do
           echo "Copying $j to $out/$(basename $j)"
           echo "# Copied from $j" > $out/$(basename $j)
           cat $j >> $out/$(basename $j)
@@ -53,12 +51,7 @@ let
           --replace \"/bin/mount \"${pkgs.utillinux}/bin/mount
       done
 
-      # If auto-configuration is disabled, then remove
-      # udev's 80-drivers.rules file, which contains rules for
-      # automatically calling modprobe.
-      ${if !config.boot.hardwareScan then "rm $out/80-drivers.rules" else ""}
-
-      echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev ... "
+      echo -n "Checking that all programs called by relative paths in udev rules exist in ${udev}/lib/udev... "
       import_progs=$(grep 'IMPORT{program}="[^/$]' $out/* |
         sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
       run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="[^/$]' |
@@ -72,7 +65,7 @@ let
       done
       echo "OK"
 
-      echo -n "Checking that all programs call by absolute paths in udev rules exist ... "
+      echo -n "Checking that all programs called by absolute paths in udev rules exist... "
       import_progs=$(grep 'IMPORT{program}="\/' $out/* |
         sed -e 's/.*IMPORT{program}="\([^ "]*\)[ "].*/\1/' | uniq)
       run_progs=$(grep -v '^[[:space:]]*#' $out/* | grep 'RUN+="/' |
@@ -90,23 +83,8 @@ let
       for i in ${toString cfg.packages}; do
         grep -l '\(RUN+\|IMPORT{program}\)="\(/usr\)\?/s\?bin' $i/*/udev/rules.d/* || true
       done
-
-      # Use the persistent device rules (naming for CD/DVD and
-      # network devices) stored in
-      # /var/lib/udev/rules.d/70-persistent-{cd,net}.rules.  These are
-      # modified by the write_{cd,net}_rules helpers called from
-      # 75-cd-aliases-generator.rules and
-      # 75-persistent-net-generator.rules.
-      ln -sv /var/lib/udev/rules.d/70-persistent-cd.rules $out/
-      ln -sv /var/lib/udev/rules.d/70-persistent-net.rules $out/
     ''; # */
   };
-
-  # The udev configuration file.
-  conf = writeText "udev.conf" ''
-    udev_rules="${udevRules}"
-    #udev_log="debug"
-  '';
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
@@ -207,61 +185,15 @@ in
 
     services.udev.extraRules = nixosRules;
 
-    services.udev.packages = [ pkgs.udev extraUdevRules ];
+    services.udev.packages = [ extraUdevRules ];
 
-    services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux pkgs.udev ];
+    services.udev.path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.utillinux udev ];
 
-    jobs.udev =
-      { startOn = "startup";
-
-        environment = { UDEV_CONFIG_FILE = conf; };
-
-        path = [ udev ];
-
-        preStart =
-          ''
-            echo "" > /proc/sys/kernel/hotplug || true
-
-            mkdir -p /var/lib/udev/rules.d
-            touch /var/lib/udev/rules.d/70-persistent-cd.rules /var/lib/udev/rules.d/70-persistent-net.rules
-
-            mkdir -p /dev/.udev # !!! bug in udev?
-          '';
-
-        daemonType = "fork";
-
-        exec = "udevd --daemon";
-
-        postStart =
-          ''
-            # Do the loading of additional stage 2 kernel modules.
-            # This needs to be done while udevd is running, because
-            # the modules may call upon udev's firmware loading rule.
-            for i in ${toString config.boot.kernelModules}; do
-                echo "loading kernel module ‘$i’..."
-                ${config.system.sbin.modprobe}/sbin/modprobe $i || true
-            done
-          '';
-      };
-
-    jobs.udevtrigger =
-      { startOn = "started udev";
-
-        task = true;
-
-        path = [ udev ];
-
-        script =
-          ''
-            # Let udev create device nodes for all modules that have already
-            # been loaded into the kernel (or for which support is built into
-            # the kernel).
-            udevadm trigger --action=add
-            udevadm settle || true # wait for udev to finish
-
-            initctl emit -n new-devices
-          '';
-      };
+    environment.etc =
+      [ { source = udevRules;
+          target = "udev/rules.d";
+        }
+      ];
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "UNIX")

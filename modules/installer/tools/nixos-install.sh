@@ -16,7 +16,7 @@ if test -z "$mountPoint"; then
 fi
 
 if test -z "$NIXOS_CONFIG"; then
-    NIXOS_CONFIG=/mnt/etc/nixos/configuration.nix
+    NIXOS_CONFIG=/etc/nixos/configuration.nix
 fi
 
 if ! test -e "$mountPoint"; then
@@ -28,32 +28,41 @@ if ! grep -F -q " $mountPoint " /proc/mounts; then
     echo "$mountPoint doesn't appear to be a mount point"
     exit 1
 fi
-    
-if ! test -e "$NIXOS_CONFIG"; then
+
+if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
     echo "configuration file $NIXOS_CONFIG doesn't exist"
     exit 1
 fi
-    
+
 
 
 # Mount some stuff in the target root directory.  We bind-mount /etc
 # into the chroot because we need networking and the nixbld user
 # accounts in /etc/passwd.  But we do need the target's /etc/nixos.
-mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt $mountPoint/etc
-mount --rbind /dev $mountPoint/dev
-mount --rbind /proc $mountPoint/proc
-mount --rbind /sys $mountPoint/sys
-mount --rbind / $mountPoint/mnt
+mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt $mountPoint/mnt2 $mountPoint/etc /etc/nixos
+mount --make-private / # systemd makes / shared, which is annoying
+mount --bind / $mountPoint/mnt
+mount --bind /nix/store $mountPoint/mnt/nix/store
+mount --bind /dev $mountPoint/dev
+mount --bind /dev/shm $mountPoint/dev/shm
+mount --bind /proc $mountPoint/proc
+mount --bind /sys $mountPoint/sys
+mount --bind $mountPoint/etc/nixos $mountPoint/mnt2
 mount --bind /etc $mountPoint/etc
-mount --bind $mountPoint/mnt/$mountPoint/etc/nixos $mountPoint/etc/nixos
+mount --bind $mountPoint/mnt2 $mountPoint/etc/nixos
 
 cleanup() {
     set +e
-    umount -l $mountPoint/mnt
-    umount -l $mountPoint/dev
-    umount -l $mountPoint/proc
-    umount -l $mountPoint/sys
-    mountpoint -q $mountPoint/etc && umount -l $mountPoint/etc
+    mountpoint -q $mountPoint/etc/nixos && umount $mountPoint/etc/nixos
+    mountpoint -q $mountPoint/etc && umount $mountPoint/etc
+    umount $mountPoint/mnt2
+    umount $mountPoint/sys
+    umount $mountPoint/proc
+    umount $mountPoint/dev/shm
+    umount $mountPoint/dev
+    umount $mountPoint/mnt/nix/store
+    umount $mountPoint/mnt
+    rmdir $mountPoint/mnt $mountPoint/mnt2
 }
 
 trap "cleanup" EXIT
@@ -144,7 +153,7 @@ srcs=$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-nam
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
 echo "building the system configuration..."
-NIX_PATH="/mnt$srcs/nixos:nixos-config=/mnt$NIXOS_CONFIG" NIXOS_CONFIG= \
+NIX_PATH="/mnt$srcs/nixos:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
 

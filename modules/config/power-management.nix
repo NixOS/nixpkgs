@@ -6,21 +6,6 @@ let
 
   cfg = config.powerManagement;
 
-  sleepHook = pkgs.writeScript "sleep-hook.sh"
-    ''
-      #! ${pkgs.stdenv.shell}
-      action="$1"
-      case "$action" in
-          hibernate|suspend)
-              ${cfg.powerDownCommands}
-              ;;
-          thaw|resume)
-              ${cfg.resumeCommands}
-              ${cfg.powerUpCommands}
-              ;;
-      esac
-    '';
-
 in
 
 {
@@ -32,7 +17,7 @@ in
     powerManagement = {
 
       enable = mkOption {
-        default = false;
+        default = true;
         description =
           ''
             Whether to enable power management.  This includes support
@@ -79,13 +64,6 @@ in
     # Enable the ACPI daemon.  Not sure whether this is essential.
     services.acpid.enable = true;
 
-    environment.systemPackages = [ pkgs.pmutils ];
-
-    environment.etc = singleton
-      { source = sleepHook;
-        target = "pm/sleep.d/00sleep-hook";
-      };
-
     boot.kernelModules =
       [ "acpi_cpufreq" "powernow-k8" "cpufreq_performance" "cpufreq_powersave" "cpufreq_ondemand"
         "cpufreq_conservative"
@@ -93,7 +71,46 @@ in
 
     powerManagement.cpuFreqGovernor = mkDefault "ondemand";
     powerManagement.scsiLinkPolicy = mkDefault "min_power";
-    
+
+    # Service executed before suspending/hibernating.
+    systemd.services."pre-sleep" =
+      { description = "Pre-Sleep Actions";
+        wantedBy = [ "sleep.target" ];
+        before = [ "sleep.target" ];
+        script =
+          ''
+            ${cfg.powerDownCommands}
+          '';
+        serviceConfig.Type = "oneshot";
+      };
+
+    # Service executed before suspending/hibernating.  There doesn't
+    # seem to be a good way to hook in a service to be executed after
+    # both suspend *and* hibernate, so have a separate one for each.
+    systemd.services."post-suspend" =
+      { description = "Post-Suspend Actions";
+        wantedBy = [ "suspend.target" ];
+        after = [ "systemd-suspend.service" ];
+        script =
+          ''
+            ${cfg.resumeCommands}
+            ${cfg.powerUpCommands}
+          '';
+        serviceConfig.Type = "oneshot";
+      };
+
+    systemd.services."post-hibernate" =
+      { description = "Post-Hibernate Actions";
+        wantedBy = [ "hibernate.target" ];
+        after = [ "systemd-hibernate.service" ];
+        script =
+          ''
+            ${cfg.resumeCommands}
+            ${cfg.powerUpCommands}
+          '';
+        serviceConfig.Type = "oneshot";
+      };
+
   };
 
 }

@@ -4,60 +4,81 @@
 <title>Troubleshooting</title>
 
 
-<section>
-  
-<title>Debugging the boot process</title>
+<section><title>Boot problems</title>
 
-<para>To get a Stage 1 shell (i.e., a shell in the initial ramdisk),
-add <literal>debug1</literal> to the kernel command line.  The shell
-gets started before anything useful has been done.  That is, no
-modules have been loaded and no file systems have been mounted, except
-for <filename>/proc</filename> and <filename>/sys</filename>.</para>
+<para>If NixOS fails to boot, there are a number of kernel command
+line parameters that may help you to identify or fix the issue.  You
+can add these parameters in the GRUB boot menu by pressing “e” to
+modify the selected boot entry and editing the line starting with
+<literal>linux</literal>.  The following are some useful kernel command
+line parameters that are recognised by the NixOS boot scripts or by
+systemd:
 
-<para>To get a Stage 2 shell (i.e., a shell in the actual root file
-system), add <literal>debug2</literal> to the kernel command
-line.  This shell is started right after stage 1 calls the stage 2
-<literal>init</literal> script, so the root file system is there but
-no services have been started.</para>
+<variablelist>
+
+  <varlistentry><term><literal>boot.shell_on_fail</literal></term>
+    <listitem><para>Start a root shell if something goes wrong in
+    stage 1 of the boot process (the initial ramdisk).  This is
+    disabled by default because there is no authentication for the
+    root shell.</para></listitem>
+  </varlistentry>
+
+  <varlistentry><term><literal>boot.debug1</literal></term>
+    <listitem><para>Start an interactive shell in stage 1 before
+    anything useful has been done.  That is, no modules have been
+    loaded and no file systems have been mounted, except for
+    <filename>/proc</filename> and
+    <filename>/sys</filename>.</para></listitem>
+  </varlistentry>
+
+  <varlistentry><term><literal>boot.trace</literal></term>
+    <listitem><para>Print every shell command executed by the stage 1
+    and 2 boot scripts.</para></listitem>
+  </varlistentry>
+
+  <varlistentry><term><literal>single</literal></term>
+    <listitem><para>Boot into rescue mode (a.k.a. single user mode).
+    This will cause systemd to start nothing but the unit
+    <literal>rescue.target</literal>, which runs
+    <command>sulogin</command> to prompt for the root password and
+    start a root login shell.  Exiting the shell causes the system to
+    continue with the normal boot process.</para></listitem>
+  </varlistentry>
+
+  <varlistentry><term><literal>systemd.log_level=debug systemd.log_target=console</literal></term>
+    <listitem><para>Make systemd very verbose and send log messages to
+    the console instead of the journal.</para></listitem>
+  </varlistentry>
+
+</variablelist>
+
+For more parameters recognised by systemd, see
+<citerefentry><refentrytitle>systemd</refentrytitle><manvolnum>1</manvolnum></citerefentry>.</para>
+
+<para>If no login prompts or X11 login screens appear (e.g. due to
+hanging dependencies), you can press Alt+ArrowUp.  If you’re lucky,
+this will start rescue mode (described above).  (Also note that since
+most units have a 90-second timeout before systemd gives up on them,
+the <command>agetty</command> login prompts should appear eventually
+unless something is very wrong.)</para>
 
 </section>
 
 
-
 <section>
-  
-<title>Safe mode</title>
 
-<para>If the hardware autodetection (in
-<filename>upstart-jobs/hardware-scan</filename>) causes problems, add
-<literal>safemode</literal> to the kernel command line.  This will
-disable auto-loading of modules for your PCI devices.  However, you
-will probably need to explicitly add modules to
-<option>boot.kernelModules</option> to get network support etc.</para>
-
-</section>
-
-
-<section>
-  
 <title>Maintenance mode</title>
 
-<para>You can go to maintenance mode by doing
+<para>You can enter rescue mode by running:
 
 <screen>
-$ shutdown now</screen>
+$ systemctl rescue</screen>
 
-This will eventually give you a single-user root shell.
-
-To get out of maintenance mode, do
-
-<screen>
-$ initctl emit startup</screen>
-
-</para>
+This will eventually give you a single-user root shell.  Systemd will
+stop (almost) all system services.  To get out of maintenance mode,
+just exit from the rescue shell.</para>
 
 </section>
-
 
 
 </chapter>

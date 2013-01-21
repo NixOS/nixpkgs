@@ -11,7 +11,7 @@ let
 
 in
 
-if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
+optionalAttrs (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) # ugly...
 {
 
   ###### interface
@@ -41,9 +41,11 @@ if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
     users.extraGroups = singleton { name = "vboxsf"; };
 
     jobs.virtualbox =
-      { description = "VirtualBox service";
+      { description = "VirtualBox Guest Services";
 
-        startOn = "started udev";
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "dev-vboxguest.device" ];
+        after = [ "dev-vboxguest.device" ];
 
         exec = "${kernel.virtualboxGuestAdditions}/sbin/VBoxService --foreground";
       };
@@ -62,7 +64,7 @@ if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
       ''
         InputDevice "VBoxMouse"
       '';
-    
+
     services.xserver.displayManager.sessionCommands =
       ''
         PATH=${makeSearchPath "bin" [ pkgs.gnugrep pkgs.which pkgs.xorg.xorgserver ]}:$PATH \
@@ -74,12 +76,14 @@ if (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) then
         # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
         # should restrict this to logged-in users.
         KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
+
+        # Allow systemd dependencies on vboxguest.
+        KERNEL=="vboxguest", TAG+="systemd"
       '';
 
-    # Make the ACPI Shutdown command to do the right thing.    
+    # Make the ACPI Shutdown command to do the right thing.
     services.acpid.enable = true;
     services.acpid.powerEventCommands = "poweroff";
   };
 
 }
-else {}

@@ -31,20 +31,48 @@ let
 
   options = {
 
+    environment.promptInit =  mkOption {
+      default = ''
+        # Provide a nice prompt.
+        PROMPT_COLOR="1;31m"
+        let $UID && PROMPT_COLOR="1;32m"
+        PS1="\n\[\033[$PROMPT_COLOR\][\u@\h:\w]\\$\[\033[0m\] "
+        if test "$TERM" = "xterm"; then
+          PS1="\[\033]2;\h:\u:\w\007\]$PS1"
+        fi
+      '';
+      description = "
+        Script used to initialized shell prompt.
+      ";
+      type = with pkgs.lib.types; string;
+    };
+
     environment.shellInit = mkOption {
-        default = "";
-        example = ''export PATH=/godi/bin/:$PATH'';
-        description = "
-          Script used to initialized user shell environments.
-        ";
-        type = with pkgs.lib.types; string;
-      };
+      default = "";
+      example = ''export PATH=/godi/bin/:$PATH'';
+      description = "
+        Script used to initialized user shell environments.
+      ";
+      type = with pkgs.lib.types; string;
+    };
 
     environment.enableBashCompletion = mkOption {
-        default = false;
-        description = "Enable bash-completion for all interactive shells.";
-        type = with pkgs.lib.types; bool;
-      };
+      default = false;
+      description = "Enable bash-completion for all interactive shells.";
+      type = with pkgs.lib.types; bool;
+    };
+
+    environment.binsh = mkOption {
+      default = "${config.system.build.binsh}/bin/sh";
+      example = "\${pkgs.dash}/bin/dash";
+      type = with pkgs.lib.types; path;
+      description = ''
+        Select the shell executable that is linked system-wide to
+        <literal>/bin/sh</literal>. Please note that NixOS assumes all
+        over the place that shell to be Bash, so override the default
+        setting only if you know exactly what you're doing.
+      '';
+    };
 
   };
 
@@ -68,6 +96,7 @@ in
         # configured properly.
         source = pkgs.substituteAll {
           src = ./bashrc.sh;
+          inherit (config.environment) promptInit;
           inherit initBashCompletion shellAliases;
         };
         target = "bashrc";
@@ -79,12 +108,12 @@ in
       }
     ];
 
-  environment.shellAliases = {
-    ls = "ls --color=tty";
-    ll = "ls -l";
-    l = "ls -alh";
-    which = "type -P";
-  };
+  environment.shellAliases =
+    { ls = "ls --color=tty";
+      ll = "ls -l";
+      l = "ls -alh";
+      which = "type -P";
+    };
 
   system.build.binsh = pkgs.bashInteractive;
 
@@ -93,7 +122,7 @@ in
       # Create the required /bin/sh symlink; otherwise lots of things
       # (notably the system() function) won't work.
       mkdir -m 0755 -p /bin
-      ln -sfn ${config.system.build.binsh}/bin/sh /bin/.sh.tmp
+      ln -sfn "${config.environment.binsh}" /bin/.sh.tmp
       mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
     '';
 

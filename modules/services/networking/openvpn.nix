@@ -11,8 +11,8 @@ let
   makeOpenVPNJob = cfg: name:
     let
 
-      path = (getAttr "openvpn-${name}" config.jobs).path;
-    
+      path = (getAttr "openvpn-${name}" config.systemd.services).path;
+
       upScript = ''
         #! /bin/sh
         exec > /var/log/openvpn-${name}-up 2>&1
@@ -28,17 +28,17 @@ let
             fi
           fi
         done
-        
+
         ${cfg.up}
       '';
-      
+
       downScript = ''
         #! /bin/sh
         exec > /var/log/openvpn-${name}-down 2>&1
         export PATH=${path}
         ${cfg.down}
       '';
-      
+
       configFile = pkgs.writeText "openvpn-config-${name}"
         ''
           ${optionalString (cfg.up != "" || cfg.down != "") "script-security 2"}
@@ -46,7 +46,7 @@ let
           ${optionalString (cfg.up != "") "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
           ${optionalString (cfg.down != "") "down ${pkgs.writeScript "openvpn-${name}-down" downScript}"}
         '';
-        
+
     in {
       description = "OpenVPN instance ‘${name}’";
 
@@ -76,7 +76,7 @@ in
       default = {};
 
       example = {
-      
+
         server = {
           config = ''
             # Simplest server configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
@@ -88,7 +88,7 @@ in
           up = "ip route add ...";
           down = "ip route del ...";
         };
-        
+
         client = {
           config = ''
             client
@@ -103,7 +103,7 @@ in
           up = "echo nameserver $nameserver | ${pkgs.openresolv}/sbin/resolvconf -m 0 -a $dev";
           down = "${pkgs.openresolv}/sbin/resolvconf -d $dev";
         };
-        
+
       };
 
       description = ''
@@ -116,7 +116,7 @@ in
       '';
 
       type = types.attrsOf types.optionSet;
-      
+
       options =  {
 
         config = mkOption {
@@ -158,9 +158,9 @@ in
     jobs = listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers);
 
     environment.systemPackages = [ openvpn ];
-    
+
     boot.kernelModules = [ "tun" ];
-    
+
   };
 
 }

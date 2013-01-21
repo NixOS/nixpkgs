@@ -59,22 +59,22 @@ rec {
     ''
       startAll;
 
-      $share->waitForJob("checkable");
-      $fsCheck->waitForJob("checkable");
+      $share->waitForUnit("checkable");
+      $fsCheck->waitForUnit("checkable");
 
       # check repos1
-      $fsCheck->mustSucceed("test -d /repos1");
-      $share->mustSucceed("touch /repos1/test1");
-      $fsCheck->mustSucceed("test -e /repos1/test1");
+      $fsCheck->succeed("test -d /repos1");
+      $share->succeed("touch /repos1/test1");
+      $fsCheck->succeed("test -e /repos1/test1");
 
       # check repos2 (check after remount)
-      $fsCheck->mustSucceed("test -d /repos2");
-      $share->mustSucceed("touch /repos2/test2");
-      $fsCheck->mustSucceed("test -e /repos2/test2");
+      $fsCheck->succeed("test -d /repos2");
+      $share->succeed("touch /repos2/test2");
+      $fsCheck->succeed("test -e /repos2/test2");
 
       # check without network
       $share->block();
-      $fsCheck->mustFail("test -e /repos1/test1");
-      $fsCheck->mustFail("test -e /repos2/test2");
+      $fsCheck->fail("test -e /repos1/test1");
+      $fsCheck->fail("test -e /repos2/test2");
     '';
 }

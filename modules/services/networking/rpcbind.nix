@@ -29,6 +29,8 @@ let
     '';
   };
 
+  check = mkAssert (!(config.services.rpcbind.enable && config.services.portmap.enable))
+    "Portmap and rpcbind cannot both be enabled.";
 
 in
 
@@ -57,24 +59,26 @@ in
 
   ###### implementation
 
-  config = mkIf config.services.rpcbind.enable {
+  config = mkIf config.services.rpcbind.enable (check {
 
-    environment.etc = [netconfigFile];
+    environment.systemPackages = [ pkgs.rpcbind ];
 
-    jobs.rpcbind =
-      { description = "ONC RPC rpcbind";
+    environment.etc = [ netconfigFile ];
 
-        startOn = "started network-interfaces";
-        stopOn = "";
+    systemd.services.rpcbind =
+      { description = "ONC RPC Directory Service";
 
-        daemonType = "fork";
+        wantedBy = [ "multi-user.target" ];
 
-        exec =
-          ''
-            ${pkgs.rpcbind}/bin/rpcbind
-          '';
+        requires = [ "basic.target" ];
+        after = [ "basic.target" ];
+
+        unitConfig.DefaultDependencies = false; # don't stop during shutdown
+
+        serviceConfig.Type = "forking";
+        serviceConfig.ExecStart = "@${pkgs.rpcbind}/bin/rpcbind rpcbind";
       };
 
-  };
+  });
 
 }

@@ -20,7 +20,7 @@ let
     let
 
       versionModule =
-        { system.nixosVersion = version + (lib.optionalString (!officialRelease) versionSuffix);
+        { system.nixosVersionSuffix = lib.optionalString (!officialRelease) versionSuffix;
           isoImage.isoBaseName = "nixos-${type}";
         };
 
@@ -55,7 +55,7 @@ let
 
     with import <nixpkgs> {inherit system;};
     let
-      versionModule = { system.nixosVersion = version + (lib.optionalString (!officialRelease) versionSuffix); };
+      versionModule = { system.nixosVersionSuffix = lib.optionalString (!officialRelease) versionSuffix; };
 
       config = (import lib/eval-config.nix {
         inherit system;
@@ -195,10 +195,9 @@ let
     */
 
 
-    tests =
+    tests = { system ? "x86_64-linux" }:
       let
-        t = import ./tests { system = "i686-linux"; };
-        t_64 = import ./tests { system = "x86_64-linux"; };
+        t = import ./tests { inherit system; };
       in {
         avahi = t.avahi.test;
         bittorrent = t.bittorrent.test;
@@ -209,7 +208,6 @@ let
         installer.rebuildCD = t.installer.rebuildCD.test;
         installer.separateBoot = t.installer.separateBoot.test;
         installer.simple = t.installer.simple.test;
-        installer.simple_64 = t_64.installer.simple.test;
         installer.swraid = t.installer.swraid.test;
         ipv6 = t.ipv6.test;
         kde4 = t.kde4.test;

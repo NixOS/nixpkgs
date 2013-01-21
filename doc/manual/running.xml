@@ -1,0 +1,288 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="ch-running">
+
+<title>Running NixOS</title>
+
+<para>This chapter describes various aspects of managing a running
+NixOS system, such as how to use the <command>systemd</command>
+service manager.</para>
+
+
+<!--===============================================================-->
+
+<section><title>Service management</title>
+
+<para>In NixOS, all system services are started and monitored using
+the systemd program.  Systemd is the “init” process of the system
+(i.e. PID 1), the parent of all other processes.  It manages a set of
+so-called “units”, which can be things like system services
+(programs), but also mount points, swap files, devices, targets
+(groups of units) and more.  Units can have complex dependencies; for
+instance, one unit can require that another unit must be succesfully
+started before the first unit can be started.  When the system boots,
+it starts a unit named <literal>default.target</literal>; the
+dependencies of this unit cause all system services to be started,
+filesystems to be mounted, swap files to be activated, and so
+on.</para>
+
+<para>The command <command>systemctl</command> is the main way to
+interact with <command>systemd</command>.  Without any arguments, it
+shows the status of active units:
+
+<screen>
+$ systemctl
+-.mount          loaded active mounted   /
+swapfile.swap    loaded active active    /swapfile
+sshd.service     loaded active running   SSH Daemon
+graphical.target loaded active active    Graphical Interface
+<replaceable>...</replaceable>
+</screen>
+
+</para>
+
+<para>You can ask for detailed status information about a unit, for
+instance, the PostgreSQL database service:
+
+<screen>
+$ systemctl status postgresql.service
+postgresql.service - PostgreSQL Server
+          Loaded: loaded (/nix/store/pn3q73mvh75gsrl8w7fdlfk3fq5qm5mw-unit/postgresql.service)
+          Active: active (running) since Mon, 2013-01-07 15:55:57 CET; 9h ago
+        Main PID: 2390 (postgres)
+          CGroup: name=systemd:/system/postgresql.service
+                  ├─2390 postgres
+                  ├─2418 postgres: writer process
+                  ├─2419 postgres: wal writer process
+                  ├─2420 postgres: autovacuum launcher process
+                  ├─2421 postgres: stats collector process
+                  └─2498 postgres: zabbix zabbix [local] idle
+
+Jan 07 15:55:55 hagbard postgres[2394]: [1-1] LOG:  database system was shut down at 2013-01-07 15:55:05 CET
+Jan 07 15:55:57 hagbard postgres[2390]: [1-1] LOG:  database system is ready to accept connections
+Jan 07 15:55:57 hagbard postgres[2420]: [1-1] LOG:  autovacuum launcher started
+Jan 07 15:55:57 hagbard systemd[1]: Started PostgreSQL Server.
+</screen>
+
+Note that this shows the status of the unit (active and running), all
+the processes belonging to the service, as well as the most recent log
+messages from the service.
+
+</para>
+
+<para>Units can be stopped, started or restarted:
+
+<screen>
+$ systemctl stop postgresql.service
+$ systemctl start postgresql.service
+$ systemctl restart postgresql.service
+</screen>
+
+These operations are synchronous: they wait until the service has
+finished starting or stopping (or has failed).  Starting a unit will
+cause the dependencies of that unit to be started as well (if
+necessary).</para>
+
+<!-- - cgroups: each service and user session is a cgroup
+
+- cgroup resource management -->
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Rebooting and shutting down</title>
+
+<para>The system can be shut down (and automatically powered off) by
+doing:
+
+<screen>
+$ shutdown
+</screen>
+
+This is equivalent to running <command>systemctl poweroff</command>.
+Likewise, <command>reboot</command> (a.k.a. <command>systemctl
+reboot</command>) will reboot the system.</para>
+
+<para>The machine can be suspended to RAM (if supported) using
+<command>systemctl suspend</command>, and suspended to disk using
+<command>systemctl hibernate</command>.</para>
+
+<para>These commands can be run by any user who is logged in locally,
+i.e. on a virtual console or in X11; otherwise, the user is asked for
+authentication.</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>User sessions</title>
+
+<para>Systemd keeps track of all users who are logged into the system
+(e.g. on a virtual console or remotely via SSH).  The command
+<command>loginctl</command> allows quering and manipulating user
+sessions.  For instance, to list all user sessions:
+
+<screen>
+$ loginctl
+   SESSION        UID USER             SEAT
+        c1        500 eelco            seat0
+        c3          0 root             seat0
+        c4        500 alice
+</screen>
+
+This shows that two users are logged in locally, while another is
+logged in remotely.  (“Seats” are essentially the combinations of
+displays and input devices attached to the system; usually, there is
+only one seat.)  To get information about a session:
+
+<screen>
+$ loginctl session-status c3
+c3 - root (0)
+           Since: Tue, 2013-01-08 01:17:56 CET; 4min 42s ago
+          Leader: 2536 (login)
+            Seat: seat0; vc3
+             TTY: /dev/tty3
+         Service: login; type tty; class user
+           State: online
+          CGroup: name=systemd:/user/root/c3
+                  ├─ 2536 /nix/store/10mn4xip9n7y9bxqwnsx7xwx2v2g34xn-shadow-4.1.5.1/bin/login --
+                  ├─10339 -bash
+                  └─10355 w3m nixos.org
+</screen>
+
+This shows that the user is logged in on virtual console 3.  It also
+lists the processes belonging to this session.  Since systemd keeps
+track of this, you can terminate a session in a way that ensures that
+all the session’s processes are gone:
+
+<screen>
+$ loginctl terminate-session c3
+</screen>
+
+</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Control groups</title>
+
+<para>To keep track of the processes in a running system, systemd uses
+<emphasis>control groups</emphasis> (cgroups).  A control group is a
+set of processes used to allocate resources such as CPU, memory or I/O
+bandwidth.  There can be multiple control group hierarchies, allowing
+each kind of resource to be managed independently.</para>
+
+<para>The command <command>systemd-cgls</command> lists all control
+groups in the <literal>systemd</literal> hierarchy, which is what
+systemd uses to keep track of the processes belonging to each service
+or user session:
+
+<screen>
+$ systemd-cgls
+├─user
+│ └─eelco
+│   └─c1
+│     ├─ 2567 -:0
+│     ├─ 2682 kdeinit4: kdeinit4 Running...
+│     ├─ <replaceable>...</replaceable>
+│     └─10851 sh -c less -R
+└─system
+  ├─httpd.service
+  │ ├─2444 httpd -f /nix/store/3pyacby5cpr55a03qwbnndizpciwq161-httpd.conf -DNO_DETACH
+  │ └─<replaceable>...</replaceable>
+  ├─dhcpcd.service
+  │ └─2376 dhcpcd --config /nix/store/f8dif8dsi2yaa70n03xir8r653776ka6-dhcpcd.conf
+  └─ <replaceable>...</replaceable>
+</screen>
+
+Similarly, <command>systemd-cgls cpu</command> shows the cgroups in
+the CPU hierarchy, which allows per-cgroup CPU scheduling priorities.
+By default, every systemd service gets its own CPU cgroup, while all
+user sessions are in the top-level CPU cgroup.  This ensures, for
+instance, that a thousand run-away processes in the
+<literal>httpd.service</literal> cgroup cannot starve the CPU for one
+process in the <literal>postgresql.service</literal> cgroup.  (By
+contrast, it they were in the same cgroup, then the PostgreSQL process
+would get 1/1001 of the cgroup’s CPU time.)  You can limit a service’s
+CPU share in <filename>configuration.nix</filename>:
+
+<programlisting>
+systemd.services.httpd.serviceConfig.CPUShares = 512;
+</programlisting>
+
+By default, every cgroup has 1024 CPU shares, so this will halve the
+CPU allocation of the <literal>httpd.service</literal> cgroup.</para>
+
+<para>There also is a <literal>memory</literal> hierarchy that
+controls memory allocation limits; by default, all processes are in
+the top-level cgroup, so any service or session can exhaust all
+available memory.  Per-cgroup memory limits can be specified in
+<filename>configuration.nix</filename>; for instance, to limit
+<literal>httpd.service</literal> to 512 MiB of RAM (excluding swap)
+and 640 MiB of RAM (including swap):
+
+<programlisting>
+systemd.services.httpd.serviceConfig.MemoryLimit = "512M";
+systemd.services.httpd.serviceConfig.ControlGroupAttribute = [ "memory.memsw.limit_in_bytes 640M" ];
+</programlisting>
+
+</para>
+
+<para>The command <command>systemd-cgtop</command> shows a
+continuously updated list of all cgroups with their CPU and memory
+usage.</para>
+
+</section>
+
+
+<!--===============================================================-->
+
+<section><title>Logging</title>
+
+<para>System-wide logging is provided by systemd’s
+<emphasis>journal</emphasis>, which subsumes traditional logging
+daemons such as syslogd and klogd.  Log entries are kept in binary
+files in <filename>/var/log/journal/</filename>.  The command
+<literal>journalctl</literal> allows you to see the contents of the
+journal.  For example,
+
+<screen>
+$ journalctl -b
+</screen>
+
+shows all journal entries since the last reboot.  (The output of
+<command>journalctl</command> is piped into <command>less</command> by
+default.)  You can use various options and match operators to restrict
+output to messages of interest.  For instance, to get all messages
+from PostgreSQL:
+
+<screen>
+$ journalctl _SYSTEMD_UNIT=postgresql.service
+-- Logs begin at Mon, 2013-01-07 13:28:01 CET, end at Tue, 2013-01-08 01:09:57 CET. --
+...
+Jan 07 15:44:14 hagbard postgres[2681]: [2-1] LOG:  database system is shut down
+-- Reboot --
+Jan 07 15:45:10 hagbard postgres[2532]: [1-1] LOG:  database system was shut down at 2013-01-07 15:44:14 CET
+Jan 07 15:45:13 hagbard postgres[2500]: [1-1] LOG:  database system is ready to accept connections
+</screen>
+
+Or to get all messages since the last reboot that have at least a
+“critical” severity level:
+
+<screen>
+$ journalctl -b -p crit
+Dec 17 21:08:06 mandark sudo[3673]: pam_unix(sudo:auth): auth could not identify password for [alice]
+Dec 29 01:30:22 mandark kernel[6131]: [1053513.909444] CPU6: Core temperature above threshold, cpu clock throttled (total events = 1)
+</screen>
+
+</para>
+
+</section>
+
+
+</chapter>

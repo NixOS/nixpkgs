@@ -2,7 +2,16 @@
 
 with pkgs.lib;
 
-let kernel = config.boot.kernelPackages.kernel; in
+let
+
+  kernel = config.boot.kernelPackages.kernel;
+
+  kernelModulesConf = pkgs.writeText "nixos.conf"
+    ''
+      ${concatStringsSep "\n" config.boot.kernelModules}
+    '';
+
+in
 
 {
 
@@ -41,7 +50,7 @@ let kernel = config.boot.kernelPackages.kernel; in
 
     boot.extraKernelParams = mkOption {
       default = [ ];
-      example = [ "debugtrace" ];
+      example = [ "boot.trace" ];
       description = "Additional user-defined kernel parameters.";
     };
 
@@ -55,7 +64,7 @@ let kernel = config.boot.kernelPackages.kernel; in
 
     boot.extraModulePackages = mkOption {
       default = [];
-      # !!! example = [pkgs.aufs pkgs.nvidia_x11];
+      # !!! example = [pkgs.nvidia_x11];
       description = "A list of additional packages supplying kernel modules.";
     };
 
@@ -191,6 +200,40 @@ let kernel = config.boot.kernelPackages.kernel; in
     # The Linux kernel >= 2.6.27 provides firmware.
     hardware.firmware = [ "${kernel}/lib/firmware" ];
 
+    # Create /etc/modules-load.d/nixos.conf, which is read by
+    # systemd-modules-load.service to load required kernel modules.
+    # FIXME: ensure that systemd-modules-load.service is restarted if
+    # this file changes.
+    environment.etc = singleton
+      { target = "modules-load.d/nixos.conf";
+        source = kernelModulesConf;
+      };
+
+    # Sigh.  This overrides systemd's systemd-modules-load.service
+    # just so we can set a restart trigger.  Also make
+    # multi-user.target pull it in so that it gets started if it
+    # failed earlier.
+    systemd.services."systemd-modules-load" =
+      { description = "Load Kernel Modules";
+        wantedBy = [ "sysinit.target" "multi-user.target" ];
+        before = [ "sysinit.target" "shutdown.target" ];
+        unitConfig =
+          { DefaultDependencies = "no";
+            Conflicts = "shutdown.target";
+          };
+        serviceConfig =
+          { Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${config.systemd.package}/lib/systemd/systemd-modules-load";
+            # Ignore failed module loads.  Typically some of the
+            # modules in ‘boot.kernelModules’ are "nice to have but
+            # not required" (e.g. acpi-cpufreq), so we don't want to
+            # barf on those.
+            SuccessExitStatus = "0 1";
+          };
+        restartTriggers = [ kernelModulesConf ];
+      };
+
     lib.kernelConfig = {
       isYes = option: {
         assertion = config: config.isYes option;
@@ -240,4 +283,5 @@ let kernel = config.boot.kernelPackages.kernel; in
       ) config.system.requiredKernelConfig;
 
   };
+
 }

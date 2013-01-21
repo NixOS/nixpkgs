@@ -28,9 +28,8 @@ rec {
     { server =
         { config, pkgs, ... }:
 
-        { jobs.quake3Server =
-            { name = "quake3-server";
-              startOn = "startup";
+        { jobs."quake3-server" =
+            { startOn = "startup";
               exec =
                 "${pkgs.quake3demo}/bin/quake3-server '+set g_gametype 0' " +
                 "'+map q3dm7' '+addbot grunt' '+addbot daemia' 2> /tmp/log";
@@ -46,7 +45,7 @@ rec {
     ''
       startAll;
 
-      $server->waitForJob("quake3-server");
+      $server->waitForUnit("quake3-server");
       $client1->waitForX;
       $client2->waitForX;
 
@@ -74,7 +73,7 @@ rec {
 
       $client1->shutdown();
       $client2->shutdown();
-      $server->succeed("stop quake3-server");
+      $server->stopJob("quake3-server");
     '';
 
 }

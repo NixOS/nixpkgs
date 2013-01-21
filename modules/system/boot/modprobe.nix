@@ -9,7 +9,6 @@ with pkgs.lib;
   options = {
 
     system.sbin.modprobe = mkOption {
-      # should be moved in module-init-tools
       internal = true;
       default = pkgs.writeTextFile {
         name = "modprobe";
@@ -18,7 +17,7 @@ with pkgs.lib;
         text =
           ''
             #! ${pkgs.stdenv.shell}
-            export MODULE_DIR=${config.system.modulesTree}/lib/modules/
+            export MODULE_DIR=/run/current-system/kernel-modules/lib/modules
 
             # Fall back to the kernel modules used at boot time if the
             # modules in the current configuration don't match the
@@ -27,7 +26,7 @@ with pkgs.lib;
                 MODULE_DIR=/run/booted-system/kernel-modules/lib/modules/
             fi
 
-            exec ${pkgs.module_init_tools}/sbin/modprobe "$@"
+            exec ${pkgs.kmod}/sbin/modprobe "$@"
           '';
       };
       description = ''
@@ -78,6 +77,8 @@ with pkgs.lib;
         target = "modprobe.d/nixos.conf";
       };
 
+    environment.systemPackages = [ config.system.sbin.modprobe pkgs.kmod ];
+
     boot.blacklistedKernelModules =
       [ # This module is for debugging and generates gigantic amounts
         # of log output, so it should never be loaded automatically.
@@ -104,8 +105,8 @@ with pkgs.lib;
 
     environment.shellInit =
       ''
-        export MODULE_DIR=${config.system.modulesTree}/lib/modules/
-      '';    
+        export MODULE_DIR=/run/current-system/kernel-modules/lib/modules
+      '';
 
   };
 

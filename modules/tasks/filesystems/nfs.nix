@@ -33,50 +33,49 @@ in
   config = mkIf (any (fs: fs == "nfs" || fs == "nfs4") config.boot.supportedFilesystems) {
 
     services.rpcbind.enable = true;
-    
+
     system.fsPackages = [ pkgs.nfsUtils ];
 
     boot.kernelModules = [ "sunrpc" ];
 
     boot.initrd.kernelModules = mkIf inInitrd [ "nfs" ];
 
-    # Ensure that statd and idmapd are started before mountall.
-    jobs.mountall.preStart =
-      ''
-        ensure statd || true
-        ensure idmapd || true
-      '';
-
-    jobs.statd =
-      { description = "Kernel NFS server - Network Status Monitor";
+    systemd.services.statd =
+      { description = "NFSv3 Network Status Monitor";
 
         path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
 
-        stopOn = ""; # needed during shutdown
+        wantedBy = [ "remote-fs-pre.target" "multi-user.target" ];
+        before = [ "remote-fs-pre.target" ];
+        requires = [ "basic.target" "rpcbind.service" ];
+        after = [ "basic.target" "rpcbind.service" "network.target" ];
+
+        unitConfig.DefaultDependencies = false; # don't stop during shutdown
 
         preStart =
           ''
-            ensure rpcbind
             mkdir -p ${nfsStateDir}/sm
             mkdir -p ${nfsStateDir}/sm.bak
             sm-notify -d
           '';
 
-        daemonType = "fork";
-
-        exec = "rpc.statd --no-notify";
+        serviceConfig.Type = "forking";
+        serviceConfig.ExecStart = "@${pkgs.nfsUtils}/sbin/rpc.statd rpc.statd --no-notify";
+        serviceConfig.Restart = "always";
       };
 
-    jobs.idmapd =
-      { description = "NFS ID mapping daemon";
+    systemd.services.idmapd =
+      { description = "NFSv4 ID Mapping Daemon";
 
-        path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
+        path = [ pkgs.sysvtools pkgs.utillinux ];
 
-        startOn = "started udev";
+        wantedBy = [ "remote-fs-pre.target" "multi-user.target" ];
+        before = [ "remote-fs-pre.target" ];
+        requires = [ "rpcbind.service" ];
+        after = [ "rpcbind.service" ];
 
         preStart =
           ''
-            ensure rpcbind
             mkdir -p ${rpcMountpoint}
             mount -t rpc_pipefs rpc_pipefs ${rpcMountpoint}
           '';
@@ -86,9 +85,9 @@ in
             umount ${rpcMountpoint}
           '';
 
-        daemonType = "fork";
-
-        exec = "rpc.idmapd -v -c ${idmapdConfFile}";
+        serviceConfig.Type = "forking";
+        serviceConfig.ExecStart = "@${pkgs.nfsUtils}/sbin/rpc.idmapd rpc.idmapd -c ${idmapdConfFile}";
+        serviceConfig.Restart = "always";
       };
 
   };

@@ -116,9 +116,8 @@ in
         # jobs.  Used to determine which jobs need to be restarted
         # when switching to a new configuration.
         mkdir -m 0700 -p /var/run/upstart-jobs
-        
+
         mkdir -m 0755 -p /var/log
-        mkdir -m 0755 -p /var/log/upstart
 
         touch /var/log/wtmp # must exist
         chmod 644 /var/log/wtmp
@@ -146,9 +145,9 @@ in
 
     system.activationScripts.tmpfs =
       ''
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devSize}" /dev
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devShmSize}" /dev/shm
-        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.runSize}" /run
+        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devSize}" none /dev
+        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.devShmSize}" none /dev/shm
+        ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.runSize}" none /run
       '';
 
   };

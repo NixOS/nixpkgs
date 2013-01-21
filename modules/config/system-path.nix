@@ -16,9 +16,7 @@ let
     '';
 
   requiredPackages =
-    [ config.system.sbin.modprobe # must take precedence over module_init_tools
-      config.system.build.upstart
-      config.environment.nix
+    [ config.environment.nix
       pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
@@ -39,7 +37,6 @@ let
       pkgs.less
       pkgs.libcap
       pkgs.man
-      pkgs.module_init_tools
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
@@ -50,12 +47,10 @@ let
       pkgs.procps
       pkgs.rsync
       pkgs.strace
-      pkgs.sysklogd
       pkgs.sysvtools
       pkgs.time
-      pkgs.udev
       pkgs.usbutils
-      pkgs.utillinuxCurses
+      pkgs.utillinux
       extraManpages      
     ];
 

@@ -41,16 +41,11 @@ in
 
   config = mkIf cfg.enable {
 
-    services.xserver.displayManager.slim.enable = false;
-
-    services.xserver.displayManager.job =
-      { execCmd =
-          ''
-            exec ${pkgs.xorg.xinit}/bin/xinit \
-              ${pkgs.su}/bin/su -c ${dmcfg.session.script} ${cfg.user} \
-              -- ${dmcfg.xserverBin} ${dmcfg.xserverArgs}
-          '';
-      };
+    services.xserver.displayManager.slim = {
+      enable = true;
+      autoLogin = true;
+      defaultUser = cfg.user;
+    };
 
   };
 

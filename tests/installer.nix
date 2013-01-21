@@ -49,7 +49,7 @@ let
         boot.loader.grub.extraConfig = "serial; terminal_output.serial";
         boot.initrd.kernelModules = [ "ext3" "ext4" "xfs" "virtio_console" ];
 
-        fileSystems = [ ${fileSystems} ];
+        ${fileSystems}
         swapDevices = [ { label = "swap"; } ];
 
         environment.systemPackages = [ ${optionalString testChannel "pkgs.rlwrap"} ];
@@ -58,16 +58,12 @@ let
 
   rootFS =
     ''
-      { mountPoint = "/";
-        device = "/dev/disk/by-label/nixos";
-      }
+      fileSystems."/".device = "/dev/disk/by-label/nixos";
     '';
 
   bootFS =
     ''
-      { mountPoint = "/boot";
-        device = "/dev/disk/by-label/boot";
-      }
+      fileSystems."/boot".device = "/dev/disk/by-label/boot";
     '';
 
 
@@ -110,31 +106,31 @@ let
         # Create a channel on the web server containing a few packages
         # to simulate the Nixpkgs channel.
         $webserver->start;
-        $webserver->waitForJob("httpd");
+        $webserver->waitForUnit("httpd");
         $webserver->succeed(
             "nix-push --bzip2 --dest /tmp/channel --manifest --url-prefix http://nixos.org/channels/nixos-unstable " .
             "${toString channelContents} >&2");
       ''}
 
       # Make sure that we get a login prompt etc.
-      $machine->mustSucceed("echo hello");
-      $machine->waitForJob("tty1");
-      $machine->waitForJob("rogue");
-      $machine->waitForJob("nixos-manual");
-      $machine->waitForJob("dhcpcd");
+      $machine->succeed("echo hello");
+      #$machine->waitForUnit('getty@tty2');
+      $machine->waitForUnit("rogue");
+      $machine->waitForUnit("nixos-manual");
+      $machine->waitForUnit("dhcpcd");
 
       ${optionalString testChannel ''
         # Allow the machine to talk to the fake nixos.org.
-        $machine->mustSucceed(
+        $machine->succeed(
             "rm /etc/hosts",
             "echo 192.168.1.1 nixos.org > /etc/hosts",
             "ifconfig eth1 up 192.168.1.2",
         );
 
         # Test nix-env.
-        $machine->mustFail("hello");
-        $machine->mustSucceed("nix-env -i hello");
-        $machine->mustSucceed("hello") =~ /Hello, world/
+        $machine->fail("hello");
+        $machine->succeed("nix-env -i hello");
+        $machine->succeed("hello") =~ /Hello, world/
             or die "bad `hello' output";
       ''}
 
@@ -142,12 +138,12 @@ let
       ${createPartitions}
 
       # Create the NixOS configuration.
-      $machine->mustSucceed(
+      $machine->succeed(
           "mkdir -p /mnt/etc/nixos",
           "nixos-hardware-scan > /mnt/etc/nixos/hardware.nix",
       );
 
-      my $cfg = $machine->mustSucceed("cat /mnt/etc/nixos/hardware.nix");
+      my $cfg = $machine->succeed("cat /mnt/etc/nixos/hardware.nix");
       print STDERR "Result of the hardware scan:\n$cfg\n";
 
       $machine->copyFileFromHost(
@@ -155,10 +151,10 @@ let
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
-      $machine->mustSucceed("nixos-install >&2");
+      $machine->succeed("nixos-install >&2");
 
       # Do it again to make sure it's idempotent.
-      $machine->mustSucceed("nixos-install >&2");
+      $machine->succeed("nixos-install >&2");
 
       $machine->shutdown;
 
@@ -166,26 +162,25 @@ let
       my $machine = createMachine({ hda => "harddisk", hdaInterface => "${iface}" });
 
       # Did /boot get mounted, if appropriate?
-      # !!! There is currently no good way to wait for the
-      # `filesystems' task to finish.
-      $machine->waitForFile("/boot/grub");
+      $machine->waitForUnit("local-fs.target");
+      $machine->succeed("test -e /boot/grub");
 
       # Did the swap device get activated?
-      # !!! Idem.
-      $machine->waitUntilSucceeds("cat /proc/swaps | grep -q /dev");
+      $machine->waitForUnit("swap.target");
+      $machine->succeed("cat /proc/swaps | grep -q /dev");
 
-      $machine->mustSucceed("nix-env -i coreutils >&2");
-      $machine->mustSucceed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
+      $machine->succeed("nix-env -i coreutils >&2");
+      $machine->succeed("type -tP ls | tee /dev/stderr") =~ /.nix-profile/
           or die "nix-env failed";
 
-      $machine->mustSucceed("nixos-rebuild switch >&2");
+      $machine->succeed("nixos-rebuild switch >&2");
 
       $machine->shutdown;
 
       # And just to be sure, check that the machine still boots after
       # "nixos-rebuild switch".
       my $machine = createMachine({ hda => "harddisk", hdaInterface => "${iface}" });
-      $machine->waitForJob("network-interfaces");
+      $machine->waitForUnit("network.target");
       $machine->shutdown;
     '';
 
@@ -209,7 +204,7 @@ in {
   simple = makeTest
     { createPartitions =
         ''
-          $machine->mustSucceed(
+          $machine->succeed(
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
               "parted /dev/vda -- mkpart primary ext2 1024M -1s",
@@ -228,7 +223,7 @@ in {
   separateBoot = makeTest
     { createPartitions =
         ''
-          $machine->mustSucceed(
+          $machine->succeed(
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
               "parted /dev/vda -- mkpart primary linux-swap 50MB 1024M",
@@ -251,7 +246,7 @@ in {
   lvm = makeTest
     { createPartitions =
         ''
-          $machine->mustSucceed(
+          $machine->succeed(
               "parted /dev/vda mklabel msdos",
               "parted /dev/vda -- mkpart primary 1M 2048M", # first PV
               "parted /dev/vda -- set 1 lvm on",
@@ -274,7 +269,7 @@ in {
   swraid = makeTest
     { createPartitions =
         ''
-          $machine->mustSucceed(
+          $machine->succeed(
               "parted /dev/vda --"
               . " mklabel msdos"
               . " mkpart primary ext2 1M 30MB" # /boot
@@ -308,7 +303,7 @@ in {
   grub1 = makeTest
     { createPartitions =
         ''
-          $machine->mustSucceed(
+          $machine->succeed(
               "parted /dev/sda mklabel msdos",
               "parted /dev/sda -- mkpart primary linux-swap 1M 1024M",
               "parted /dev/sda -- mkpart primary ext2 1024M -1s",
@@ -335,19 +330,19 @@ in {
           $machine->start;
 
           # Enable sshd service.
-          $machine->mustSucceed(
+          $machine->succeed(
             "sed -i 's,^}\$,jobs.sshd.startOn = pkgs.lib.mkOverride 0 \"startup\"; },' /etc/nixos/configuration.nix"
           );
 
-          my $cfg = $machine->mustSucceed("cat /etc/nixos/configuration.nix");
+          my $cfg = $machine->succeed("cat /etc/nixos/configuration.nix");
           print STDERR "New CD config:\n$cfg\n";
 
           # Apply the new CD configuration.
-          $machine->mustSucceed("nixos-rebuild test");
+          $machine->succeed("nixos-rebuild test");
 
           # Connect to it-self.
-          #$machine->waitForJob("sshd");
-          #$machine->mustSucceed("ssh root@127.0.0.1 echo hello");
+          #$machine->waitForUnit("sshd");
+          #$machine->succeed("ssh root@127.0.0.1 echo hello");
 
           $machine->shutdown;
         '';

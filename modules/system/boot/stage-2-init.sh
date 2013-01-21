@@ -25,9 +25,8 @@ setPath "@path@"
 
 
 # Normally, stage 1 mounts the root filesystem read/writable.
-# However, in some environments (such as Amazon EC2), stage 2 is
-# executed directly, and the root is read-only.  So make it writable
-# here.
+# However, in some environments, stage 2 is executed directly, and the
+# root is read-only.  So make it writable here.
 mount -n -o remount,rw /
 
 
@@ -36,20 +35,22 @@ mount -n -o remount,rw /
 if [ ! -e /proc/1 ]; then
     mkdir -m 0755 -p /proc
     mount -n -t proc none /proc
-    mkdir -m 0755 -p /sys
-    mount -t sysfs none /sys
     mkdir -m 0755 -p /dev
-    mount -t tmpfs -o "mode=0755" none /dev
+    mount -t devtmpfs none /dev
+fi
 
-    # Create the minimal device nodes needed for the activation scripts
-    # and Upstart.
-    mknod -m 0666 /dev/null c 1 3
-    mknod -m 0644 /dev/urandom c 1 9 # needed for passwd
-    mknod -m 0644 /dev/console c 5 1
-    mknod -m 0644 /dev/ptmx c 5 2 # required by upstart
-    mknod -m 0644 /dev/tty1 c 4 1
-    mknod -m 0644 /dev/ttyS0 c 4 64
-    mknod -m 0644 /dev/ttyS1 c 4 65
+
+# Make /nix/store a read-only bind mount to enforce immutability of
+# the Nix store.  Note that we can't use "chown root:nixbld" here
+# because users/groups might not exist yet.
+chown 0:30000 /nix/store
+chmod 1775 /nix/store
+if [ -n "@readOnlyStore@" ]; then
+    if ! mountpoint -q /nix/store; then
+        mkdir -p /nix/rw-store
+        mount --bind /nix/store /nix/store
+        mount -o remount,ro,bind /nix/store
+    fi
 fi
 
 
@@ -57,23 +58,15 @@ fi
 mkdir -m 0755 -p /etc
 test -e /etc/fstab || touch /etc/fstab # to shut up mount
 rm -f /etc/mtab* # not that we care about stale locks
-cat /proc/mounts > /etc/mtab
+ln -s /proc/mounts /etc/mtab
 
 
 # Process the kernel command line.
-debug2=
 for o in $(cat /proc/cmdline); do
     case $o in
-        debugtrace)
+        boot.debugtrace)
             # Show each command.
             set -x
-            ;;
-        debug2)
-            debug2=1
-            ;;
-        S|s|single)
-            # !!! argh, can't pass a startup event to Upstart yet.
-            exec @shell@
             ;;
         resume=*)
             set -- $(IFS==; echo $o)
@@ -87,19 +80,19 @@ done
 mkdir -m 0755 /dev/shm
 mount -t tmpfs -o "rw,nosuid,nodev,size=@devShmSize@" tmpfs /dev/shm
 mkdir -m 0755 -p /dev/pts
-mount -t devpts -o mode=0600,gid=@ttyGid@ none /dev/pts
 [ -e /proc/bus/usb ] && mount -t usbfs none /proc/bus/usb # UML doesn't have USB by default
 mkdir -m 01777 -p /tmp
-mkdir -m 0755 -p /var
+mkdir -m 0755 -p /var /var/log
 mkdir -m 0755 -p /nix/var
 mkdir -m 0700 -p /root
 mkdir -m 0755 -p /bin # for the /bin/sh symlink
 mkdir -m 0755 -p /home
 mkdir -m 0755 -p /etc/nixos
+mkdir -m 0700 -p /var/log/journal
 
 
 # Miscellaneous boot time cleanup.
-rm -rf /var/run /var/lock /var/log/upstart
+rm -rf /var/run /var/lock
 rm -f /etc/resolv.conf
 
 if test -n "@cleanTmpDir@"; then
@@ -167,26 +160,9 @@ ln -sfn /run/booted-system /nix/var/nix/gcroots/booted-system
 @shell@ @postBootCommands@
 
 
-# For debugging Upstart.
-if [ -n "$debug2" ]; then
-    # Get the console from the kernel cmdline
-    console=tty1
-    for o in $(cat /proc/cmdline); do
-      case $o in
-        console=*)
-          set -- $(IFS==; echo $o)
-          params=$2
-          set -- $(IFS=,; echo $params)
-          console=$1
-          ;;
-      esac
-    done
-
-    echo "Debug shell called from @out@"
-    setsid @shellDebug@ < /dev/$console >/dev/$console 2>/dev/$console
-fi
-
-
-# Start Upstart's init.
-echo "starting Upstart..."
-PATH=/run/current-system/upstart/sbin exec init --no-sessions ${debug2:+--verbose}
+# Start systemd.
+echo "starting systemd..."
+PATH=/run/current-system/systemd/lib/systemd \
+    MODULE_DIR=/run/booted-system/kernel-modules/lib/modules \
+    LOCALE_ARCHIVE=/run/current-system/sw/lib/locale/locale-archive \
+    exec systemd --log-target=journal # --log-level=debug --log-target=console --crash-shell

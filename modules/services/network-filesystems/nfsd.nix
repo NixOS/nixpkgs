@@ -80,44 +80,44 @@ in
 
     boot.kernelModules = [ "nfsd" ];
 
-    jobs.nfsd =
-      { description = "Kernel NFS server";
+    systemd.services.nfsd =
+      { description = "NFS Server";
 
-        startOn = "started networking";
+        wantedBy = [ "multi-user.target" ];
+
+        requires = [ "rpcbind.service" "mountd.service" ];
+        after = [ "rpcbind.service" "mountd.service" "statd.service" ];
 
         path = [ pkgs.nfsUtils ];
 
-        preStart =
+        script =
           ''
-            ensure rpcbind
-            ensure mountd
-
             # Create a state directory required by NFSv4.
             mkdir -p /var/lib/nfs/v4recovery
 
             rpc.nfsd \
               ${if cfg.hostName != null then "-H ${cfg.hostName}" else ""} \
               ${builtins.toString cfg.nproc}
+
+            sm-notify -d
           '';
 
         postStop = "rpc.nfsd 0";
 
-        postStart =
-          ''
-            ensure statd
-            ensure idmapd
-          '';
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
       };
 
-    jobs.mountd =
-      { description = "Kernel NFS server - mount daemon";
+    systemd.services.mountd =
+      { description = "NFSv3 Mount Daemon";
+
+        requires = [ "rpcbind.service" ];
+        after = [ "rpcbind.service" ];
 
         path = [ pkgs.nfsUtils pkgs.sysvtools pkgs.utillinux ];
 
         preStart =
           ''
-            ensure rpcbind
-
             mkdir -p /var/lib/nfs
             touch /var/lib/nfs/rmtab
 
@@ -133,14 +133,14 @@ in
               ''
             }
 
-            # exports file is ${exports}
-            # keep this comment so that this job is restarted whenever exports changes!
             exportfs -ra
           '';
 
-        daemonType = "fork";
+        restartTriggers = [ exports ];
 
-        exec = "rpc.mountd -f /etc/exports";
+        serviceConfig.Type = "forking";
+        serviceConfig.ExecStart = "@${pkgs.nfsUtils}/sbin/rpc.mountd rpc.mountd -f /etc/exports";
+        serviceConfig.Restart = "always";
       };
 
   };

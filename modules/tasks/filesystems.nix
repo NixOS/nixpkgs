@@ -1,21 +1,24 @@
-{ config, pkgs, ... }:
+{ config, pkgs, utils, ... }:
 
 with pkgs.lib;
+with utils;
 
 let
+
+  fileSystems = attrValues config.fileSystems;
 
   fstab = pkgs.writeText "fstab"
     ''
       # This is a generated file.  Do not edit!
 
       # Filesystems.
-      ${flip concatMapStrings config.fileSystems (fs:
+      ${flip concatMapStrings fileSystems (fs:
           (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
           + " " + fs.mountPoint
           + " " + fs.fsType
           + " " + fs.options
           + " 0"
-          + " " + (if fs.fsType == "none" || fs.fsType == "btrfs" || fs.noCheck then "0" else
+          + " " + (if fs.fsType == "none" || fs.device == "none" || fs.fsType == "btrfs" || fs.fsType == "tmpfs" || fs.noCheck then "0" else
                    if fs.mountPoint == "/" then "1" else "2")
           + "\n"
       )}
@@ -26,8 +29,72 @@ let
       )}
     '';
 
+  fileSystemOpts = { name, ... }: {
+
+    options = {
+
+      mountPoint = mkOption {
+        example = "/mnt/usb";
+        type = types.uniq types.string;
+        description = "Location of the mounted the file system.";
+      };
+
+      device = mkOption {
+        default = null;
+        example = "/dev/sda";
+        type = types.uniq (types.nullOr types.string);
+        description = "Location of the device.";
+      };
+
+      label = mkOption {
+        default = null;
+        example = "root-partition";
+        type = types.uniq (types.nullOr types.string);
+        description = "Label of the device (if any).";
+      };
+
+      fsType = mkOption {
+        default = "auto";
+        example = "ext3";
+        type = types.uniq types.string;
+        description = "Type of the file system.";
+      };
+
+      options = mkOption {
+        default = "defaults,relatime";
+        example = "data=journal";
+        type = types.string;
+        merge = pkgs.lib.concatStringsSep ",";
+        description = "Options used to mount the file system.";
+      };
+
+      autoFormat = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          If the device does not currently contain a filesystem (as
+          determined by <command>blkid</command>, then automatically
+          format it with the filesystem type specified in
+          <option>fsType</option>.  Use with caution.
+        '';
+      };
+
+      noCheck = mkOption {
+        default = false;
+        type = types.bool;
+        description = "Disable running fsck on this filesystem.";
+      };
+
+    };
+
+    config = {
+      mountPoint = mkDefault name;
+    };
+
+  };
+
 in
-    
+
 {
 
   ###### interface
@@ -35,20 +102,17 @@ in
   options = {
 
     fileSystems = mkOption {
-      example = [
-        { mountPoint = "/";
-          device = "/dev/hda1";
-        }
-        { mountPoint = "/data";
+      example = {
+        "/".device = "/dev/hda1";
+        "/data" = {
           device = "/dev/hda2";
           fsType = "ext3";
           options = "data=journal";
-        }
-        { mountPoint = "/bigdisk";
-          label = "bigdisk";
-        }
-      ];
-
+        };
+        "/bigdisk".label = "bigdisk";
+      };
+      type = types.loaOf types.optionSet;
+      options = [ fileSystemOpts ];
       description = ''
         The file systems to be mounted.  It must include an entry for
         the root directory (<literal>mountPoint = \"/\"</literal>).  Each
@@ -64,76 +128,7 @@ in
         specify a volume label (<literal>label</literal>) for file
         systems that support it, such as ext2/ext3 (see <command>mke2fs
         -L</command>).
-
-        <literal>autocreate</literal> forces <literal>mountPoint</literal> to be created with
-        <command>mkdir -p</command> .
       '';
-
-      type = types.list types.optionSet;
-
-      options = {
-
-        mountPoint = mkOption {
-          example = "/mnt/usb";
-          type = types.uniq types.string;
-          description = "Location of the mounted the file system.";
-        };
-
-        device = mkOption {
-          default = null;
-          example = "/dev/sda";
-          type = types.uniq (types.nullOr types.string);
-          description = "Location of the device.";
-        };
-
-        label = mkOption {
-          default = null;
-          example = "root-partition";
-          type = types.uniq (types.nullOr types.string);
-          description = "Label of the device (if any).";
-        };
-
-        fsType = mkOption {
-          default = "auto";
-          example = "ext3";
-          type = types.uniq types.string;
-          description = "Type of the file system.";
-        };
-
-        options = mkOption {
-          default = "defaults,relatime";
-          example = "data=journal";
-          type = types.string;
-          merge = pkgs.lib.concatStringsSep ",";
-          description = "Options used to mount the file system.";
-        };
-
-        autocreate = mkOption {
-          default = false;
-          type = types.bool;
-          description = ''
-            Automatically create the mount point defined in
-            <option>fileSystems.*.mountPoint</option>.
-          '';
-        };
-
-        autoFormat = mkOption {
-          default = false;
-          type = types.bool;
-          description = ''
-            If the device does not currently contain a filesystem (as
-            determined by <command>blkid</command>, then automatically
-            format it with the filesystem type specified in
-            <option>fsType</option>.  Use with caution.
-          '';
-        };
-
-        noCheck = mkOption {
-          default = false;
-          type = types.bool;
-          description = "Disable running fsck on this filesystem.";
-        };
-      };
     };
 
     system.fsPackages = mkOption {
@@ -156,16 +151,6 @@ in
       description = "Names of supported filesystem types in the initial ramdisk.";
     };
 
-    boot.ttyEmergency = mkOption {
-      default =
-        if pkgs.stdenv.isArm
-          then "ttyS0" # presumably an embedded platform such as a plug
-        else "tty1";
-      description = ''
-        The tty that will be stopped in case an emergency shell is spawned
-        at boot.
-        '';
-    };
   };
 
 
@@ -173,18 +158,17 @@ in
 
   config = {
 
-    boot.supportedFilesystems =
-      map (fs: fs.fsType) config.fileSystems;
+    boot.supportedFilesystems = map (fs: fs.fsType) fileSystems;
 
     boot.initrd.supportedFilesystems =
       map (fs: fs.fsType)
-        (filter (fs: fs.mountPoint == "/" || fs.neededForBoot) config.fileSystems);
+        (filter (fs: fs.mountPoint == "/" || fs.neededForBoot) fileSystems);
 
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
-    
+
     environment.systemPackages =
-      [ pkgs.ntfs3g pkgs.cifs_utils pkgs.mountall ]
+      [ pkgs.ntfs3g pkgs.cifs_utils ]
       ++ config.system.fsPackages;
 
     environment.etc = singleton
@@ -192,133 +176,43 @@ in
         target = "fstab";
       };
 
-    jobs.mountall =
-      { startOn = "started udev or config-changed";
+    # Provide a target that pulls in all filesystems.
+    systemd.targets.fs =
+      { description = "All File Systems";
+        wants = [ "local-fs.target" "remote-fs.target" ];
+      };
 
-        task = true;
+    # Emit systemd services to format requested filesystems.
+    systemd.services =
+      let
 
-        path = [ pkgs.utillinux pkgs.mountall ] ++ config.system.fsPackages;
-
-        console = "output";
-
-        preStart =
-          ''
-            # Ensure that this job is restarted when fstab changed:
-            # ${fstab}
-            echo "mounting filesystems..."
-
-            # Format devices.
-            ${flip concatMapStrings config.fileSystems (fs: optionalString fs.autoFormat ''
-              if [ -e "${fs.device}" ]; then
+        formatDevice = fs:
+          let
+            mountPoint' = escapeSystemdPath fs.mountPoint;
+            device' = escapeSystemdPath fs.device;
+          in nameValuePair "mkfs-${device'}"
+          { description = "Initialisation of Filesystem ${fs.device}";
+            wantedBy = [ "${mountPoint'}.mount" ];
+            before = [ "${mountPoint'}.mount" "systemd-fsck@${device'}.service" ];
+            require = [ "${device'}.device" ];
+            after = [ "${device'}.device" ];
+            path = [ pkgs.utillinux ] ++ config.system.fsPackages;
+            script =
+              ''
+                if ! [ -e "${fs.device}" ]; then exit 1; fi
+                # FIXME: this is scary.  The test could be more robust.
                 type=$(blkid -p -s TYPE -o value "${fs.device}" || true)
                 if [ -z "$type" ]; then
                   echo "creating ${fs.fsType} filesystem on ${fs.device}..."
                   mkfs.${fs.fsType} "${fs.device}"
                 fi
-              fi
-            '')}
+              '';
+            unitConfig.RequiresMountsFor = [ "${dirOf fs.device}" ];
+            unitConfig.DefaultDependencies = false; # needed to prevent a cycle
+            serviceConfig.Type = "oneshot";
+          };
 
-            # Create missing mount points.  Note that this won't work
-            # if the mount point is under another mount point.
-            ${flip concatMapStrings config.fileSystems (fs: optionalString fs.autocreate ''
-              mkdir -p -m 0755 '${fs.mountPoint}'
-            '')}
-
-            # Create missing swapfiles.
-            # FIXME: support changing the size of existing swapfiles.
-            ${flip concatMapStrings config.swapDevices (sw: optionalString (sw.size != null) ''
-              if [ ! -e "${sw.device}" -a -e "$(dirname "${sw.device}")" ]; then
-                # FIXME: use ‘fallocate’ on filesystems that support it.
-                dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
-                mkswap ${sw.device}
-              fi
-            '')}
-            
-          '';
-
-        daemonType = "daemon";
-          
-        exec = "mountall --daemon";
-      };
-
-    # The `mount-failed' event is emitted synchronously, but we don't
-    # want `mountall' to wait for the emergency shell.  So use this
-    # intermediate job to make the event asynchronous.
-    jobs."mount-failed" =
-      { task = true;
-        startOn = "mount-failed";
-        restartIfChanged = false;
-        script =
-          ''
-            # Don't start the emergency shell if the X server is
-            # running.  The user won't see it, and the "console owner"
-            # stanza breaks VT switching and causes the X server to go
-            # to 100% CPU time.
-            status="$(status xserver || true)"
-            [[ "$status" =~ start/ ]] && exit 0
-
-            stop ${config.boot.ttyEmergency} || true
-            
-            start --no-wait emergency-shell \
-              DEVICE="$DEVICE" MOUNTPOINT="$MOUNTPOINT"
-          '';
-      };
-
-    # On an `ip-up' event, notify mountall so that it retries mounting
-    # remote filesystems.
-    jobs."mountall-ip-up" =
-      {
-        task = true;
-        startOn = "ip-up";
-        restartIfChanged = false;
-        script =
-          ''
-            # Send USR1 to the mountall process.  Can't use "pkill
-            # mountall" here because that has a race condition: we may
-            # accidentally send USR1 to children of mountall (such as
-            # fsck) just before they do execve().
-            status="$(status mountall)"
-            if [[ "$status" =~ "start/running, process "([0-9]+) ]]; then
-                pid=''${BASH_REMATCH[1]}
-                echo "sending USR1 to $pid..."
-                kill -USR1 "$pid"
-            fi
-          '';
-      };
-
-    jobs."emergency-shell" =
-      { task = true;
-
-        restartIfChanged = false;
-
-        console = "owner";
-
-        script =
-          ''
-            cat <<EOF
-
-            [1;31m<<< Emergency shell >>>[0m
-
-            The filesystem \`$DEVICE' could not be mounted on \`$MOUNTPOINT'.
-
-            Please do one of the following:
-
-            - Repair the filesystem (\`fsck $DEVICE') and exit the emergency
-              shell to resume booting.
-
-            - Ignore any failed filesystems and continue booting by running
-              \`initctl emit filesystem'.
-
-            - Remove the failed filesystem from the system configuration in
-              /etc/nixos/configuration.nix and run \`nixos-rebuild switch'.
-
-            EOF
-
-            ${pkgs.shadow}/bin/login root || false
-
-            initctl start --no-wait mountall
-          '';
-      };
+      in listToAttrs (map formatDevice (filter (fs: fs.autoFormat) fileSystems));
 
   };
 

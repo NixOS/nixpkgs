@@ -20,16 +20,16 @@
 
     my $key=`${pkgs.openssh}/bin/ssh-keygen -t dsa -f key -N ""`;
 
-    $server->waitForJob("sshd");
+    $server->waitForUnit("sshd");
 
-    $server->mustSucceed("mkdir -m 700 /root/.ssh");
+    $server->succeed("mkdir -m 700 /root/.ssh");
     $server->copyFileFromHost("key.pub", "/root/.ssh/authorized_keys");
 
-    $client->mustSucceed("mkdir -m 700 /root/.ssh");
+    $client->succeed("mkdir -m 700 /root/.ssh");
     $client->copyFileFromHost("key", "/root/.ssh/id_dsa");
-    $client->mustSucceed("chmod 600 /root/.ssh/id_dsa");
+    $client->succeed("chmod 600 /root/.ssh/id_dsa");
 
-    $client->waitForJob("network-interfaces");
-    $client->mustSucceed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world'");
+    $client->waitForUnit("network.target");
+    $client->succeed("ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no server 'echo hello world' >&2");
   '';
 }

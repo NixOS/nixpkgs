@@ -40,14 +40,18 @@ in
 
     boot.extraTTYs = [ cfg.tty ];
 
-    jobs.rogue =
+    systemd.services.rogue =
       { description = "Rogue dungeon crawling game";
-
-        startOn = "started udev";
-
-        extraConfig = "chdir /root";
-
-        exec = "${pkgs.rogue}/bin/rogue < /dev/${cfg.tty} > /dev/${cfg.tty} 2>&1";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig =
+          { ExecStart = "${pkgs.rogue}/bin/rogue";
+            StandardInput = "tty";
+            StandardOutput = "tty";
+            TTYPath = "/dev/${cfg.tty}";
+            TTYReset = true;
+            TTYVTDisallocate = true;
+            Restart = "always";
+          };
       };
 
     services.ttyBackgrounds.specificThemes = singleton

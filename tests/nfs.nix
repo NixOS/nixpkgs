@@ -8,7 +8,7 @@ let
         [ { mountPoint = "/data";
             device = "server:/data";
             fsType = "nfs";
-            options = "bootwait,vers=3";
+            options = "vers=3";
           }
         ];
     };
@@ -34,20 +34,21 @@ in
 
   testScript =
     ''
-      $server->waitForJob("nfsd");
+      $server->waitForUnit("nfsd");
+      $server->waitForUnit("network.target");
 
       startAll;
 
-      $client1->waitForJob("tty1"); # depends on filesystems
+      $client1->waitForUnit("data.mount");
       $client1->succeed("echo bla > /data/foo");
       $server->succeed("test -e /data/foo");
 
-      $client2->waitForJob("tty1"); # depends on filesystems
+      $client2->waitForUnit("data.mount");
       $client2->succeed("echo bla > /data/bar");
       $server->succeed("test -e /data/bar");
 
       # Test whether restarting ‘nfsd’ works correctly.
-      $server->succeed("stop nfsd; start nfsd");
+      $server->succeed("systemctl restart nfsd");
       $client2->succeed("echo bla >> /data/bar"); # will take 90 seconds due to the NFS grace period
 
       # Test whether we can get a lock.
@@ -66,7 +67,7 @@ in
       $client2->waitForFile("locked");
 
       # Test whether locks survive a reboot of the server.
-      $client1->waitForJob("tty1"); # depends on filesystems
+      $client1->waitForUnit("data.mount");
       $server->shutdown;
       $server->start;
       $client1->succeed("touch /data/xyzzy");

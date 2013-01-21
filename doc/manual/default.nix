@@ -59,7 +59,7 @@ in rec {
 
       mkdir -p $dst/images/callouts
       cp ${pkgs.docbook5_xsl}/xml/xsl/docbook/images/callouts/*.gif $dst/images/callouts/
-      
+
       cp ${./style.css} $dst/style.css
 
       ensureDir $out/nix-support

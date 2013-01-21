@@ -46,11 +46,10 @@
   ./rename.nix
   ./security/apparmor.nix
   ./security/ca.nix
-  ./security/consolekit.nix
   ./security/pam.nix
   ./security/pam_usb.nix
-  ./security/policykit.nix
   ./security/polkit.nix
+  ./security/rngd.nix
   ./security/rtkit.nix
   ./security/setuid-wrappers.nix
   ./security/sudo.nix
@@ -73,7 +72,6 @@
   ./services/games/ghost-one.nix
   ./services/hardware/acpid.nix
   ./services/hardware/bluetooth.nix
-  ./services/hardware/hal.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
   ./services/hardware/pommed.nix
@@ -102,6 +100,7 @@
   ./services/misc/rogue.nix
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
+  ./services/monitoring/dd-agent.nix
   ./services/monitoring/monit.nix
   ./services/monitoring/nagios/default.nix
   ./services/monitoring/smartd.nix
@@ -166,13 +165,12 @@
   ./services/security/tor.nix
   ./services/security/torify.nix
   ./services/security/torsocks.nix
-  ./services/system/cgroups.nix
   ./services/system/dbus.nix
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
   ./services/ttys/gpm.nix
-  ./services/ttys/mingetty.nix
+  ./services/ttys/agetty.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/jboss/default.nix
   ./services/web-servers/tomcat.nix
@@ -206,12 +204,11 @@
   ./system/boot/loader/init-script/init-script.nix
   ./system/boot/luksroot.nix
   ./system/boot/modprobe.nix
+  ./system/boot/shutdown.nix
   ./system/boot/stage-1.nix
   ./system/boot/stage-2.nix
+  ./system/boot/systemd.nix
   ./system/etc/etc.nix
-  ./system/upstart-events/control-alt-delete.nix
-  ./system/upstart-events/runlevel.nix
-  ./system/upstart-events/shutdown.nix
   ./system/upstart/upstart.nix
   ./tasks/cpu-freq.nix
   ./tasks/filesystems.nix
@@ -219,6 +216,7 @@
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/nfs.nix
   ./tasks/filesystems/reiserfs.nix
+  ./tasks/filesystems/unionfs-fuse.nix
   ./tasks/filesystems/vfat.nix
   ./tasks/filesystems/xfs.nix
   ./tasks/kbd.nix

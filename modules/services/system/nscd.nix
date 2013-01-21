@@ -20,14 +20,13 @@ in
 
       enable = mkOption {
         default = true;
-        description = "
-          Whether to enable the Name Service Cache Daemon.
-        ";
+        description = "Whether to enable the Name Service Cache Daemon.";
       };
 
     };
 
   };
+
 
   ###### implementation
 
@@ -39,37 +38,31 @@ in
         description = "Name service cache daemon user";
       };
 
-    jobs.nscd =
+    systemd.services.nscd =
       { description = "Name Service Cache Daemon";
 
-        startOn = "startup";
+        wantedBy = [ "nss-lookup.target" "nss-user-lookup.target" ];
 
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
         preStart =
           ''
-            mkdir -m 0755 -p /var/run/nscd
+            mkdir -m 0755 -p /run/nscd
+            rm -f /run/nscd/nscd.pid
             mkdir -m 0755 -p /var/db/nscd
           '';
 
-        path = [ pkgs.glibc ];
-
-        exec = "nscd -f ${./nscd.conf} -d 2> /dev/null";
-      };
-
-    # Flush nscd's ‘hosts’ database when the network comes up or the
-    # system configuration changes to get rid of any negative entries.
-    jobs.invalidate_nscd =
-      { name = "invalidate-nscd";
-        description = "Invalidate NSCD cache";
-        startOn = "ip-up or config-changed";
-        task = true;
-        path = [ pkgs.glibc ];
-        script = ''
-          nscd --invalidate=passwd
-          nscd --invalidate=group
-          nscd --invalidate=hosts
-        '';
+        serviceConfig =
+          { ExecStart = "@${pkgs.glibc}/sbin/nscd nscd -f ${./nscd.conf}";
+            Type = "forking";
+            PIDFile = "/run/nscd/nscd.pid";
+            Restart = "always";
+            ExecReload =
+              [ "${pkgs.glibc}/sbin/nscd --invalidate passwd"
+                "${pkgs.glibc}/sbin/nscd --invalidate group"
+                "${pkgs.glibc}/sbin/nscd --invalidate hosts"
+              ];
+          };
       };
 
   };

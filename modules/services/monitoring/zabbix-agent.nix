@@ -73,15 +73,12 @@ in
         description = "Zabbix daemon user";
       };
 
-    jobs.zabbix_agent =
-      { name = "zabbix-agent";
+    systemd.services."zabbix-agent" =
+      { description = "Zabbix Agent";
 
-        description = "Zabbix agent daemon";
+        wantedBy = [ "multi-user.target" ];
 
-        startOn = "ip-up";
-        stopOn = "stopping network-interfaces";
-
-        path = [ pkgs.zabbix.agent ];
+        path = [ pkgs.nettools ];
 
         preStart =
           ''
@@ -89,30 +86,11 @@ in
             chown zabbix ${stateDir} ${logDir}
           '';
 
-        # Zabbix doesn't have an option not to daemonize, and doesn't
-        # daemonize in a way that allows Upstart to track it.  So to
-        # make sure that we notice when it goes down, we start Zabbix
-        # with an open connection to a fifo, with a `cat' on the other
-        # side.  If Zabbix dies, then `cat' will exit as well, so we
-        # just monitor `cat'.
-        script =
-          ''
-            export PATH=${pkgs.nettools}/bin:$PATH
-            rm -f ${stateDir}/dummy2
-            mkfifo ${stateDir}/dummy2
-            cat ${stateDir}/dummy2 &
-            pid=$!
-            zabbix_agentd --config ${configFile} 100>${stateDir}/dummy2
-            wait "$pid"
-          '';
-
-        postStop =
-          ''
-            pid=$(cat ${pidFile} 2> /dev/null || true)
-            (test -n "$pid" && kill "$pid") || true
-            # Wait until they're really gone.
-            while ${pkgs.procps}/bin/pgrep -u zabbix zabbix_agentd > /dev/null; do sleep 1; done
-          '';
+        serviceConfig.ExecStart = "@${pkgs.zabbix.agent}/sbin/zabbix_agentd zabbix_agentd --config ${configFile}";
+        serviceConfig.Type = "forking";
+        serviceConfig.RemainAfterExit = true;
+        serviceConfig.Restart = "always";
+        serviceConfig.RestartSec = 2;
       };
 
     environment.systemPackages = [ pkgs.zabbix.agent ];

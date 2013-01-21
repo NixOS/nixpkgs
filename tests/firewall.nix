@@ -25,9 +25,9 @@
     ''
       startAll;
 
-      $walled->waitForJob("firewall");
-      $walled->waitForJob("httpd");
-      $attacker->waitForJob("network-interfaces");
+      $walled->waitForUnit("firewall");
+      $walled->waitForUnit("httpd");
+      $attacker->waitForUnit("network.target");
 
       # Local connections should still work.
       $walled->succeed("curl -v http://localhost/ >&2");
@@ -41,7 +41,7 @@
       $walled->succeed("ping -c 1 attacker >&2");
 
       # If we stop the firewall, then connections should succeed.
-      $walled->succeed("stop firewall");
+      $walled->stopJob("firewall");
       $attacker->succeed("curl -v http://walled/ >&2");
     '';
 

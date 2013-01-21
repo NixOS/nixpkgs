@@ -6,7 +6,7 @@ with pkgs.lib;
   ###### interface
 
   options = {
-  
+
     powerManagement.cpuFreqGovernor = mkOption {
       default = "";
       example = "ondemand";
@@ -17,7 +17,7 @@ with pkgs.lib;
         "userspace".
       '';
     };
-    
+
   };
 
 
@@ -30,17 +30,22 @@ with pkgs.lib;
     jobs.cpufreq =
       { description = "Initialize CPU frequency governor";
 
-        startOn = "started udev";
+        after = [ "systemd-modules-load.service" ];
+        wantedBy = [ "multi-user.target" ];
 
-        task = true;
+        path = [ pkgs.cpufrequtils ];
 
-        script = ''
+        preStart = ''
           for i in $(seq 0 $(($(nproc) - 1))); do
-            ${pkgs.cpufrequtils}/bin/cpufreq-set -g ${config.powerManagement.cpuFreqGovernor} -c $i
+            for gov in $(cpufreq-info -c $i -g); do
+              if [ "$gov" = ${config.powerManagement.cpuFreqGovernor} ]; then
+                echo "<6>setting governor on CPU $i to ‘$gov’"
+                cpufreq-set -c $i -g $gov
+              fi
+            done
           done
         '';
       };
-      
   };
 
 }

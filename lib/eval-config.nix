@@ -31,7 +31,7 @@ rec {
     inherit pkgs modules baseModules;
     modulesPath = ../modules;
     pkgs_i686 = import <nixpkgs> { system = "i686-linux"; };
-    utils = {}; # forward compatibility
+    utils = import ./utils.nix pkgs;
   };
 
   # Import Nixpkgs, allowing the NixOS option nixpkgs.config to

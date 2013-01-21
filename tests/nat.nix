@@ -13,7 +13,7 @@
         { config, pkgs, nodes, ... }:
         { virtualisation.vlans = [ 1 ];
           networking.defaultGateway =
-            nodes.router.config.networking.ifaces.eth2.ipAddress;
+            nodes.router.config.networking.interfaces.eth2.ipAddress;
         };
 
       router =
@@ -40,18 +40,19 @@
       startAll;
 
       # The router should have access to the server.
-      $server->waitForJob("httpd");
-      $router->waitForJob("network-interfaces");
+      $server->waitForUnit("network.target");
+      $server->waitForUnit("httpd");
+      $router->waitForUnit("network.target");
       $router->succeed("curl --fail http://server/ >&2");
 
       # The client should be also able to connect via the NAT router.
-      $router->waitForJob("nat");
-      $client->waitForJob("network-interfaces");
+      $router->waitForUnit("nat");
+      $client->waitForUnit("network.target");
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
 
       # Test whether passive FTP works.
-      $server->waitForJob("vsftpd");
+      $server->waitForUnit("vsftpd");
       $server->succeed("echo Hello World > /home/ftp/foo.txt");
       $client->succeed("curl -v ftp://server/foo.txt >&2");
 
@@ -63,12 +64,12 @@
       $router->succeed("ping -c 1 client >&2");
 
       # If we turn off NAT, the client shouldn't be able to reach the server.
-      $router->succeed("stop nat");
+      $router->stopJob("nat");
       $client->fail("curl --fail --connect-timeout 5 http://server/ >&2");
       $client->fail("ping -c 1 server >&2");
 
       # And make sure that restarting the NAT job works.
-      $router->succeed("start nat");
+      $router->succeed("systemctl start nat");
       $client->succeed("curl --fail http://server/ >&2");
       $client->succeed("ping -c 1 server >&2");
     '';

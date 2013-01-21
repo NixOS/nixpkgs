@@ -56,22 +56,31 @@ in
   config = mkIf cfg.enable {
     boot.kernelModules = [ "tun" ];
 
-    # environment.systemPackages = [pkgs.gogoclient];
-
     networking.enableIPv6 = true;
 
-    jobs.gogoclient = {
-      name = "gogoclient";
+    systemd.services.gogoclient = {
       description = "ipv6 tunnel";
-      startOn = optionalString cfg.autorun "starting networking";
-      stopOn = "stopping network-interfaces";
-      preStart = ''
-        mkdir -p /var/lib/gogoc
-        chmod 700 /var/lib/gogoc
-        cat ${pkgs.gogoclient}/share/${pkgs.gogoclient.name}/gogoc.conf.sample | ${pkgs.gnused}/bin/sed -e "s|^userid=|&${cfg.username}|;s|^passwd=|&${if cfg.password == "" then "" else "$(cat ${cfg.password})"}|;s|^server=.*|server=${cfg.server}|;s|^auth_method=.*|auth_method=${if cfg.password == "" then "anonymous" else "any"}|;s|^#log_file=|log_file=1|" > /var/lib/gogoc/gogoc.conf
+
+      after = [ "network.target" ];
+      requires = [ "network.target" ];
+
+      unitConfig.RequiresMountsFor = "/var/lib/gogoc";
+
+      script = let authMethod = if cfg.password == "" then "anonymous" else "any"; in ''
+        mkdir -p -m 700 /var/lib/gogoc
+        cat ${pkgs.gogoclient}/share/${pkgs.gogoclient.name}/gogoc.conf.sample | \
+          ${pkgs.gnused}/bin/sed \
+            -e "s|^userid=|&${cfg.username}|" \
+            -e "s|^passwd=|&${optionalString (cfg.password != "") "$(cat ${cfg.password})"}|" \
+            -e "s|^server=.*|server=${cfg.server}|" \
+            -e "s|^auth_method=.*|auth_method=${authMethod}|" \
+            -e "s|^#log_file=|log_file=1|" > /var/lib/gogoc/gogoc.conf
+        cd /var/lib/gogoc
+        exec ${pkgs.gogoclient}/bin/gogoc -y -f /var/lib/gogoc/gogoc.conf
       '';
-      script = "cd /var/lib/gogoc; exec gogoc -y -f ./gogoc.conf";
-      path = [pkgs.gogoclient];
+    } // optionalAttrs cfg.autorun {
+      wantedBy = [ "ip-up.target" ];
+      partOf = [ "ip-up.target" ];
     };
 
   };

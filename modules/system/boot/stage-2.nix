@@ -1,53 +1,60 @@
 { config, pkgs, ... }:
 
+with pkgs.lib;
+
 let
 
   options = {
 
     boot = {
-      postBootCommands = pkgs.lib.mkOption {
+
+      postBootCommands = mkOption {
         default = "";
         example = "rm -f /var/log/messages";
-        type = with pkgs.lib.types; string;
+        type = types.string;
         description = ''
           Shell commands to be executed just before Upstart is started.
         '';
       };
 
-      devSize = pkgs.lib.mkOption {
+      devSize = mkOption {
         default = "5%";
         example = "32m";
+        type = types.uniq types.string;
         description = ''
           Size limit for the /dev tmpfs. Look at mount(8), tmpfs size option,
           for the accepted syntax.
         '';
       };
 
-      devShmSize = pkgs.lib.mkOption {
+      devShmSize = mkOption {
         default = "50%";
         example = "256m";
+        type = types.uniq types.string;
         description = ''
           Size limit for the /dev/shm tmpfs. Look at mount(8), tmpfs size option,
           for the accepted syntax.
         '';
       };
 
-      runSize = pkgs.lib.mkOption {
+      runSize = mkOption {
         default = "25%";
         example = "256m";
+        type = types.uniq types.string;
         description = ''
           Size limit for the /run tmpfs. Look at mount(8), tmpfs size option,
           for the accepted syntax.
         '';
       };
 
-      cleanTmpDir = pkgs.lib.mkOption {
+      cleanTmpDir = mkOption {
         default = false;
         example = true;
         description = ''
           Delete all files in /tmp/ during boot.
         '';
       };
+
     };
 
   };
@@ -60,14 +67,13 @@ let
     shellDebug = "${pkgs.bashInteractive}/bin/bash";
     isExecutable = true;
     inherit (config.boot) devShmSize runSize cleanTmpDir;
+    inherit (config.nix) readOnlyStore;
     ttyGid = config.ids.gids.tty;
-    upstart = config.system.build.upstart;
     path =
       [ pkgs.coreutils
         pkgs.utillinux
-        pkgs.udev
         pkgs.sysvtools
-      ] ++ pkgs.lib.optional config.boot.cleanTmpDir pkgs.findutils;
+      ] ++ optional config.boot.cleanTmpDir pkgs.findutils;
     postBootCommands = pkgs.writeText "local-cmds"
       ''
         ${config.boot.postBootCommands}

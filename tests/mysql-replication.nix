@@ -48,10 +48,10 @@ in
   testScript = ''
     startAll;
 
-    $master->waitForJob("mysql");
-    $master->waitForJob("mysql");
-    $slave2->waitForJob("mysql");
+    $master->waitForUnit("mysql");
+    $master->waitForUnit("mysql");
+    $slave2->waitForUnit("mysql");
     $slave2->sleep(100); # Hopefully this is long enough!!
-    $slave2->mustSucceed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
+    $slave2->succeed("echo 'use testdb; select * from tests' | mysql -u root -N | grep 4");
   '';
 }

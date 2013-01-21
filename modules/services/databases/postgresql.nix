@@ -22,8 +22,6 @@ let
 
   postgresql = postgresqlAndPlugins cfg.package;
 
-  run = "su -s ${pkgs.stdenv.shell} postgres";
-
   flags = optional cfg.enableTCPIP "-i";
 
   # The main PostgreSQL configuration file.
@@ -36,7 +34,7 @@ let
     '';
 
   pre84 = versionOlder (builtins.parseDrvName postgresql.name).version "8.4";
-  
+
 in
 
 {
@@ -146,7 +144,7 @@ in
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '';
-        
+
     users.extraUsers = singleton
       { name = "postgres";
         description = "PostgreSQL server user";
@@ -157,10 +155,11 @@ in
 
     environment.systemPackages = [postgresql];
 
-    jobs.postgresql =
-      { description = "PostgreSQL server";
+    systemd.services.postgresql =
+      { description = "PostgreSQL Server";
 
-        startOn = "started network-interfaces and filesystem";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
         environment =
           { TZ = config.time.timeZone;
@@ -175,34 +174,38 @@ in
             if ! test -e ${cfg.dataDir}; then
                 mkdir -m 0700 -p ${cfg.dataDir}
                 chown -R postgres ${cfg.dataDir}
-                ${run} -c 'initdb -U root'
+                su -s ${pkgs.stdenv.shell} postgres -c 'initdb -U root'
                 rm -f ${cfg.dataDir}/*.conf
             fi
 
             ln -sfn ${configFile} ${cfg.dataDir}/postgresql.conf
           ''; # */
 
-        exec = "${run} -c 'postgres ${toString flags}'";
+        serviceConfig =
+          { ExecStart = "@${postgresql}/bin/postgres postgres ${toString flags}";
+            User = "postgres";
+            Group = "postgres";
+            PermissionsStartOnly = true;
+
+            # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
+            # http://www.postgresql.org/docs/current/static/server-shutdown.html
+            KillSignal = "SIGINT";
+
+            # Give Postgres a decent amount of time to clean up after
+            # receiving systemd's SIGINT.
+            TimeoutSec = 60;
+          };
 
         # Wait for PostgreSQL to be ready to accept connections.
         postStart =
           ''
-            while ! psql postgres -c ""; do
-                stop_check
-                sleep 1
+            while ! psql postgres -c "" 2> /dev/null; do
+                if ! kill -0 "$MAINPID"; then exit 1; fi
+                sleep 0.1
             done
           '';
 
-        extraConfig =
-          ''
-            # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See 
-            # http://www.postgresql.org/docs/current/static/server-shutdown.html
-            kill signal INT
-
-            # Give Postgres a decent amount of time to clean up after
-            # receiving Upstart's SIGINT.
-            kill timeout 60
-          '';
+        unitConfig.RequiresMountsFor = "${cfg.dataDir}";
       };
 
   };

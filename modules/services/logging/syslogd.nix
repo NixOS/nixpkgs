@@ -36,6 +36,15 @@ in
 
     services.syslogd = {
 
+      enable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to enable syslogd.  Note that systemd also logs
+          syslog messages, so you normally don't need to run syslogd.
+        '';
+      };
+
       tty = mkOption {
         type = types.uniq types.string;
         default = "tty10";
@@ -89,22 +98,27 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf cfg.enable {
+
+    environment.systemPackages = [ pkgs.sysklogd ];
 
     services.syslogd.extraParams = optional cfg.enableNetworkInput "-r";
 
-    jobs.syslogd =
-      { description = "Syslog daemon";
+    # FIXME: restarting syslog seems to break journal logging.
+    systemd.services.syslog =
+      { description = "Syslog Daemon";
 
-        startOn = "started udev";
+        requires = [ "syslog.socket" ];
 
-        environment = { TZ = config.time.timeZone; };
+        wantedBy = [ "multi-user.target" "syslog.target" ];
 
-        daemonType = "fork";
+        environment.TZ = config.time.timeZone;
 
-        path = [ pkgs.sysklogd ];
-
-        exec = "syslogd ${toString cfg.extraParams} -f ${syslogConf}";
+        serviceConfig =
+          { ExecStart = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
+            # Prevent syslogd output looping back through journald.
+            StandardOutput = "null";
+          };
       };
 
   };

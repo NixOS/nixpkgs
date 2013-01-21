@@ -49,11 +49,11 @@ in
 
     boot.kernelModules = [ "tun" ];
 
-    jobs.libvirtd =
-      { description = "Libvirtd virtual machine management daemon";
+    systemd.services.libvirtd =
+      { description = "Libvirt Virtual Machine Management Daemon";
 
-        startOn = "stopped udevtrigger";
-        stopOn = "";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "systemd-udev-settle.service" ];
 
         path =
           [ pkgs.bridge_utils pkgs.dmidecode pkgs.dnsmasq
@@ -83,7 +83,9 @@ in
             done
           ''; # */
 
-        exec = "${pkgs.libvirt}/sbin/libvirtd --daemon --verbose";
+        serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/libvirtd libvirtd --daemon --verbose";
+        serviceConfig.Type = "forking";
+        serviceConfig.KillMode = "process"; # when stopping, leave the VMs alone
 
         # Wait until libvirtd is ready to accept requests.
         postStart =
@@ -94,18 +96,17 @@ in
             done
             exit 1 # !!! seems to be ignored
           '';
-
-        daemonType = "daemon";
       };
 
-    # !!! Split this into save and restore tasks.
     jobs."libvirt-guests" =
-      { description = "Job to save/restore libvirtd VMs";
+      { description = "Libvirt Virtual Machines";
 
-        startOn = "started libvirtd";
+        wantedBy = [ "multi-user.target" ];
+        wants = [ "libvirtd.service" ];
+        after = [ "libvirtd.service" ];
 
         # We want to suspend VMs only on shutdown, but Upstart is broken.
-        stopOn = "";
+        #stopOn = "";
 
         restartIfChanged = false;
 
@@ -119,19 +120,8 @@ in
 
         postStop = "${pkgs.libvirt}/etc/rc.d/init.d/libvirt-guests stop";
 
-        respawn = false;
-      };
-
-    jobs."stop-libvirt" =
-      { description = "Helper task to stop libvirtd and libvirt-guests on shutdown";
-        task = true;
-        restartIfChanged = false;
-        startOn = "starting shutdown";
-        script =
-          ''
-            stop libvirt-guests || true
-            stop libvirtd || true
-          '';
+        serviceConfig.Type = "oneshot";
+        serviceConfig.RemainAfterExit = true;
       };
 
   };

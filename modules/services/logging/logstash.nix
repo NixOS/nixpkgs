@@ -136,12 +136,11 @@ in
       mkNameValuePairs = mergeConfigs;
     };
   } ( mkIf cfg.enable {
-    # Always log to stdout
-    services.logstash.outputConfig = { stdout = {}; };
-
-    jobs.logstash = with pkgs; {
+    systemd.services.logstash = with pkgs; {
       description = "Logstash daemon";
-      startOn = "started networking and filesystem";
+
+      wantedBy = [ "multi-user.target" ];
+      environment.TZ = config.time.timeZone;
 
       path = [ jre ];
 
@@ -157,7 +156,7 @@ in
         output {
           ${exprToConfig cfg.outputConfig}
         }
-      ''}";
+      ''} &> /var/log/logstash.log";
     };
   })];
 }

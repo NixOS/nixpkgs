@@ -364,21 +364,12 @@ in
       # accurate way is unlikely to be better.
       { description = "Postfix mail server";
 
-        startOn = "started networking and filesystem";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-        daemonType = "none";
-
-        respawn = true;
+        daemonType = "fork";
 
         environment.TZ = config.time.timeZone;
-
-        script = ''
-          while ${pkgs.procps}/bin/ps `${pkgs.coreutils}/bin/cat /var/postfix/queue/pid/master.pid` |
-            grep -q postfix
-          do
-            ${pkgs.coreutils}/bin/sleep 1m
-          done
-        '';
 
         preStart =
           ''
@@ -402,11 +393,11 @@ in
             ${pkgs.postfix}/sbin/postalias -c /var/postfix/conf /var/postfix/conf/aliases
             ${pkgs.postfix}/sbin/postmap -c /var/postfix/conf /var/postfix/conf/virtual
 
-            exec ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
+            ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf start
           '';
 
         preStop = ''
-            exec ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf stop
+            ${pkgs.postfix}/sbin/postfix -c /var/postfix/conf stop
         '';
 
       };

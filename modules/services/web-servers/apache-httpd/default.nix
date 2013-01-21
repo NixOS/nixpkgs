@@ -601,26 +601,12 @@ in
         date.timezone = "${config.time.timeZone}"
       '';
 
-    jobs.httpd =
-      { # Statically verify the syntactic correctness of the generated
-        # httpd.conf.  !!! this is impure!  It doesn't just check for
-        # syntax, but also whether the Apache user/group exist,
-        # whether SSL keys exist, etc.
-        buildHook =
-          ''
-            echo
-            echo '=== Checking the generated Apache configuration file ==='
-            ${httpd}/bin/httpd -f ${httpdConf} -t || true
-          '';
+    systemd.services.httpd =
+      { description = "Apache HTTPD";
 
-        description = "Apache HTTPD";
-
-        startOn = "started networking and filesystem"
-          # Hacky.  Some subservices depend on Postgres
-          # (e.g. Mediawiki), but they don't have a way to declare
-          # that dependency.  So just start httpd after postgresql if
-          # the latter is enabled.
-          + optionalString config.services.postgresql.enable " and started postgresql";
+        wantedBy = [ "multi-user.target" ];
+        requires = [ "keys.target" ];
+        after = [ "network.target" "fs.target" "postgresql.service" "keys.target" ];
 
         path =
           [ httpd pkgs.coreutils pkgs.gnugrep ]
@@ -632,9 +618,7 @@ in
 
         environment =
           { PHPRC = if enablePHP then phpIni else "";
-
             TZ = config.time.timeZone;
-
           } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
         preStart =
@@ -668,12 +652,9 @@ in
             done
           '';
 
-        exec = "httpd -f ${httpdConf} -DNO_DETACH";
-
-        preStop =
-          ''
-            ${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop
-          '';
+        serviceConfig.ExecStart = "@${httpd}/bin/httpd httpd -f ${httpdConf} -DNO_DETACH";
+        serviceConfig.ExecStop = "${httpd}/bin/httpd -f ${httpdConf} -k graceful-stop";
+        serviceConfig.Restart = "always";
       };
 
   };

@@ -31,12 +31,12 @@
   testScript =
     ''
       # Start the router first so that it respond to router solicitations.
-      $router->waitForJob("radvd");
+      $router->waitForUnit("radvd");
 
       startAll;
 
-      $client->waitForJob("network-interfaces");
-      $server->waitForJob("network-interfaces");
+      $client->waitForUnit("network.target");
+      $server->waitForUnit("network.target");
 
       # Wait until the given interface has a non-tentative address of
       # the desired scope (i.e. has completed Duplicate Address

@@ -115,12 +115,12 @@ let
 
       ln -s ${config.system.build.etc}/etc $out/etc
       ln -s ${config.system.path} $out/sw
-      ln -s ${config.system.build.upstart} $out/upstart
+      ln -s "$systemd" $out/systemd
       ln -s ${config.hardware.firmware} $out/firmware
 
       echo -n "$kernelParams" > $out/kernel-params
       echo -n "$configurationName" > $out/configuration-name
-      echo -n "${toString config.system.build.upstart.interfaceVersion}" > $out/upstart-interface-version
+      echo -n "systemd ${toString config.systemd.package.interfaceVersion}" > $out/init-interface-version
       echo -n "$nixosVersion" > $out/nixos-version
 
       mkdir $out/fine-tune
@@ -131,7 +131,7 @@ let
       done
 
       mkdir $out/bin
-      substituteAll ${./switch-to-configuration.sh} $out/bin/switch-to-configuration
+      substituteAll ${./switch-to-configuration.pl} $out/bin/switch-to-configuration
       chmod +x $out/bin/switch-to-configuration
 
       ${config.system.extraSystemBuilderCmds}
@@ -147,6 +147,10 @@ let
     name = "nixos-${config.system.nixosVersion}";
     preferLocalBuild = true;
     buildCommand = systemBuilder;
+
+    inherit (pkgs) utillinux;
+    systemd = config.systemd.package;
+
     inherit children;
     kernelParams =
       config.boot.kernelParams ++ config.boot.extraKernelParams;
@@ -165,17 +169,10 @@ let
     # to the activation script.
     noRestartIfChanged = attrValues (mapAttrs (n: v: if v.restartIfChanged then [] else ["[${v.name}]=1"]) config.jobs);
 
-    # Most of these are needed by grub-install.
-    path =
-      [ pkgs.coreutils
-        pkgs.gnused
-        pkgs.gnugrep
-        pkgs.findutils
-        pkgs.diffutils
-        config.system.build.upstart # for initctl
-      ];
-
     configurationName = config.boot.loader.grub.configurationName;
+
+    # Needed by switch-to-configuration.
+    perl = "${pkgs.perl}/bin/perl -I${pkgs.perlPackages.FileSlurp}/lib/perl5/site_perl";
   };
 
 

@@ -1,6 +1,7 @@
-{ config, pkgs, ... }:
+{ config, pkgs, utils, ... }:
 
 with pkgs.lib;
+with utils;
 
 {
 
@@ -74,9 +75,39 @@ with pkgs.lib;
   };
 
   config = mkIf ((length config.swapDevices) != 0) {
+
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SWAP")
     ];
+
+    # Create missing swapfiles.
+    # FIXME: support changing the size of existing swapfiles.
+    systemd.services =
+      let
+
+        createSwapDevice = sw:
+          assert sw.device != "";
+          let device' = escapeSystemdPath sw.device; in
+          nameValuePair "mkswap-${escapeSystemdPath sw.device}"
+          { description = "Initialisation of Swapfile ${sw.device}";
+            wantedBy = [ "${device'}.swap" ];
+            before = [ "${device'}.swap" ];
+            path = [ pkgs.utillinux ];
+            script =
+              ''
+                if [ ! -e "${sw.device}" ]; then
+                  fallocate -l ${toString sw.size}M "${sw.device}" ||
+                    dd if=/dev/zero of="${sw.device}" bs=1M count=${toString sw.size}
+                  mkswap ${sw.device}
+                fi
+              '';
+            unitConfig.RequiresMountsFor = [ "${dirOf sw.device}" ];
+            unitConfig.DefaultDependencies = false; # needed to prevent a cycle
+            serviceConfig.Type = "oneshot";
+          };
+
+      in listToAttrs (map createSwapDevice (filter (sw: sw.size != null) config.swapDevices));
+
   };
 
 }

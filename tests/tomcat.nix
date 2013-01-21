@@ -23,9 +23,9 @@
   testScript = ''
     startAll;
 
-    $server->waitForJob("tomcat");
+    $server->waitForUnit("tomcat");
     $server->sleep(30); # Dirty, but it takes a while before Tomcat handles to requests properly
-    $client->waitForJob("network-interfaces");
+    $client->waitForUnit("network.target");
     $client->succeed("curl --fail http://server/examples/servlets/servlet/HelloWorldExample");
     $client->succeed("curl --fail http://server/examples/jsp/jsp2/simpletag/hello.jsp");
   '';

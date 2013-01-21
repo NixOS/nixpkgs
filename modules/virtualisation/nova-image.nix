@@ -68,17 +68,9 @@ with pkgs.lib;
         ''
     );
 
-  fileSystems =
-    [ { mountPoint = "/";
-        device = "/dev/disk/by-label/nixos";
-      }
-    ];
+  fileSystems."/".device = "/dev/disk/by-label/nixos";
 
   boot.kernelParams = [ "console=ttyS0" ];
-
-  boot.initrd.kernelModules = [ "aufs" ];
-
-  boot.extraModulePackages = [ config.boot.kernelPackages.aufs ];
 
   boot.loader.grub.version = 2;
   boot.loader.grub.device = "/dev/vda";
@@ -87,8 +79,8 @@ with pkgs.lib;
   # Put /tmp and /var on /ephemeral0, which has a lot more space.
   # Unfortunately we can't do this with the `fileSystems' option
   # because it has no support for creating the source of a bind
-  # mount.  Also, "move" /nix to /ephemeral0 by layering an AUFS
-  # on top of it so we have a lot more space for Nix operations.
+  # mount.  Also, "move" /nix to /ephemeral0 by layering a unionfs-fuse
+  # mount on top of it so we have a lot more space for Nix operations.
   /*
   boot.initrd.postMountCommands =
     ''
@@ -100,9 +92,16 @@ with pkgs.lib;
       mkdir -m 755 -p $targetRoot/var
       mount --bind $targetRoot/ephemeral0/var $targetRoot/var
 
+      mkdir -p /unionfs-chroot/ro-nix
+      mount --rbind $targetRoot/nix /unionfs-chroot/ro-nix
+
+      mkdir -p /unionfs-chroot/rw-nix
       mkdir -m 755 -p $targetRoot/ephemeral0/nix
-      mount -t aufs -o dirs=$targetRoot/ephemeral0/nix=rw:$targetRoot/nix=rr none $targetRoot/nix
+      mount --rbind $targetRoot/ephemeral0/nix /unionfs-chroot/rw-nix
+      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-nix=RW:/ro-nix=RO $targetRoot/nix
     '';
+
+    boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];
     */
 
   # Since Nova allows VNC access to instances, it's nice to start to

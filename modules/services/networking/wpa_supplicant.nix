@@ -45,15 +45,15 @@ in
         description = ''
           The interfaces <command>wpa_supplicant</command> will use.  If empty, it will
           automatically use all wireless interfaces. (Note that auto-detection is currently
-	  broken on Linux 3.4.x kernels. See http://github.com/NixOS/nixos/issues/10 for
-	  further details.)
+          broken on Linux 3.4.x kernels. See http://github.com/NixOS/nixos/issues/10 for
+          further details.)
         '';
       };
 
       driver = mkOption {
         default = "";
         example = "nl80211";
-        description = "force a specific wpa_supplicant driver";
+        description = "Force a specific wpa_supplicant driver.";
       };
 
       userControlled = {
@@ -66,7 +66,7 @@ in
             When you want to use this, make sure ${configFile} doesn't exist.
             It will be created for you.
 
-            Currently it is also necesarry to explicitly specify networking.wireless.interfaces
+            Currently it is also necessary to explicitly specify networking.wireless.interfaces.
           '';
         };
 
@@ -74,7 +74,7 @@ in
           default = "wheel";
           example = "network";
           type = types.string;
-          description = "members of this group can control wpa_supplicant";
+          description = "Members of this group can control wpa_supplicant.";
         };
       };
     };
@@ -90,8 +90,10 @@ in
     services.dbus.packages = [ pkgs.wpa_supplicant ];
 
     jobs.wpa_supplicant =
-      { startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
+      { description = "WPA Supplicant";
+
+        wantedBy = [ "network.target" ];
+        after = [ "systemd-udev-settle.service" ];
 
         path = [ pkgs.wpa_supplicant ];
 
@@ -122,7 +124,7 @@ in
 
     powerManagement.resumeCommands =
       ''
-        ${config.system.build.upstart}/sbin/restart wpa_supplicant
+        ${config.systemd.package}/bin/systemctl try-restart wpa_supplicant
       '';
 
     assertions = [{ assertion = !cfg.userControlled.enable || cfg.interfaces != [];

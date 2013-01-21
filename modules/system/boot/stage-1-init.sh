@@ -1,6 +1,7 @@
 #! @shell@
 
 targetRoot=/mnt-root
+console=tty1
 
 export LD_LIBRARY_PATH=@extraUtils@/lib
 export PATH=@extraUtils@/bin:@extraUtils@/sbin
@@ -17,37 +18,31 @@ An error occured in stage 1 of the boot process, which must mount the
 root filesystem on \`$targetRoot' and then start stage 2.  Press one
 of the following keys:
 
-  i) to launch an interactive shell;
+EOF
+    if [ -n "$allowShell" ]; then cat <<EOF
+  i) to launch an interactive shell
   f) to start an interactive shell having pid 1 (needed if you want to
-     start stage 2's init manually); or
-  *) to ignore the error and continue.
+     start stage 2's init manually)
+EOF
+    fi
+    cat <<EOF
+  r) to reboot immediately
+  *) to ignore the error and continue
 EOF
 
     read reply
 
-    # Get the console from the kernel cmdline
-    console=tty1
-    for o in $(cat /proc/cmdline); do
-      case $o in
-        console=*)
-          set -- $(IFS==; echo $o)
-          params=$2
-          set -- $(IFS=,; echo $params)
-          console=$1
-          ;;
-      esac
-    done
-
-    case $reply in
-        f)
-            exec setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" ;;
-        i)
-            echo "Starting interactive shell..."
-            setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
-            ;;
-        *)
-            echo "Continuing...";;
-    esac
+    if [ -n "$allowShell" -a "$reply" = f ]; then
+        exec setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console"
+    elif [ -n "$allowShell" -a "$reply" = i ]; then
+        echo "Starting interactive shell..."
+        setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
+    elif [ "$reply" = r ]; then
+        echo "Rebooting..."
+        reboot -f
+    else
+        echo "Continuing..."
+    fi
 }
 
 trap 'fail' 0
@@ -67,40 +62,45 @@ mkdir -p /proc
 mount -t proc none /proc
 mkdir -p /sys
 mount -t sysfs none /sys
-mount -t tmpfs -o "mode=0755,size=@devSize@" none /dev
+mount -t devtmpfs -o "size=@devSize@" none /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
 mount -t securityfs none /sys/kernel/security
-
-# Some console devices, for the interactivity
-mknod /dev/console c 5 1
-mknod /dev/tty c 5 0
-mknod /dev/tty1 c 4 1
-mknod /dev/ttyS0 c 4 64
-mknod /dev/ttyS1 c 4 65
 
 # Process the kernel command line.
 export stage2Init=/init
 for o in $(cat /proc/cmdline); do
     case $o in
+        console=*)
+            set -- $(IFS==; echo $o)
+            params=$2
+            set -- $(IFS=,; echo $params)
+            console=$1
+            ;;
         init=*)
             set -- $(IFS==; echo $o)
             stage2Init=$2
             ;;
-        debugtrace)
+        boot.trace|debugtrace)
             # Show each command.
             set -x
             ;;
-        debug1) # stop right away
+        boot.shell_on_fail)
+            allowShell=1
+            ;;
+        boot.debug1|debug1) # stop right away
+            allowShell=1
             fail
             ;;
-        debug1devices) # stop after loading modules and creating device nodes
+        boot.debug1devices) # stop after loading modules and creating device nodes
+            allowShell=1
             debug1devices=1
             ;;
-        debug1mounts) # stop after mounting file systems
+        boot.debug1mounts) # stop after mounting file systems
+            allowShell=1
             debug1mounts=1
             ;;
-        stage1panic=1)
+        boot.panic_on_fail|stage1panic=1)
             panicOnFail=1
             ;;
         root=*)
@@ -131,16 +131,12 @@ for i in @kernelModules@; do
 done
 
 
-# Create /dev/null.
-mknod /dev/null c 1 3
-
-
 # Create device nodes in /dev.
 echo "running udev..."
-export UDEV_CONFIG_FILE=@udevConf@
-mkdir -p /dev/.udev # !!! bug in udev?
+mkdir -p /etc/udev
+ln -sfn @udevRules@ /etc/udev/rules.d
 mkdir -p /dev/.mdadm
-udevd --daemon
+systemd-udevd --daemon
 udevadm trigger --action=add
 udevadm settle || true
 modprobe scsi_wait_scan || true
@@ -191,7 +187,7 @@ onACPower() {
 checkFS() {
     local device="$1"
     local fsType="$2"
-    
+
     # Only check block devices.
     if [ ! -b "$device" ]; then return 0; fi
 
@@ -230,7 +226,7 @@ checkFS() {
     if test $(($fsckResult | 2)) = $fsckResult; then
         echo "fsck finished, rebooting..."
         sleep 3
-        reboot
+        reboot -f
     fi
 
     if test $(($fsckResult | 4)) = $fsckResult; then
@@ -343,8 +339,8 @@ exec 3>&-
 udevadm control --exit || true
 
 # Kill any remaining processes, just to be sure we're not taking any
-# with us into stage 2.
-pkill -9 -v 1
+# with us into stage 2. unionfs-fuse mounts require the unionfs process.
+pkill -9 -v '(1|unionfs)'
 
 
 if test -n "$debug1mounts"; then fail; fi

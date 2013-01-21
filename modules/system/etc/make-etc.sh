@@ -26,9 +26,9 @@ for ((i = 0; i < ${#targets_[@]}; i++)); do
         if ! [ -e $out/etc/$target ]; then
             ln -s $source $out/etc/$target
         else
-            echo "Duplicate entry $target -> $source"
+            echo "duplicate entry $target -> $source"
             if test "$(readlink $out/etc/$target)" != "$source"; then
-                echo "Mismatched duplicate entry $(readlink $out/etc/$target) <-> $source"
+                echo "mismatched duplicate entry $(readlink $out/etc/$target) <-> $source"
                 exit 1
             fi
         fi

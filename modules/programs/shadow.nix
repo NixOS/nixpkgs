@@ -1,6 +1,6 @@
 # Configuration for the pwdutils suite of tools: passwd, useradd, etc.
 
-{config, pkgs, ...}:
+{ config, pkgs, ... }:
 
 let
 
@@ -27,6 +27,7 @@ let
       # Uncomment this to allow non-root users to change their account
       #information.  This should be made configurable.
       #CHFN_RESTRICT frwh
+
     '';
 
 in
@@ -90,7 +91,7 @@ in
         { name = "groupmod"; rootOK = true; }
         { name = "groupmems"; rootOK = true; }
         { name = "groupdel"; rootOK = true; }
-        { name = "login"; ownDevices = true; allowNullPassword = true; }
+        { name = "login"; startSession = true; allowNullPassword = true; showMotd = true; }
       ];
 
     security.setuidPrograms = [ "passwd" "chfn" "su" "newgrp" ];

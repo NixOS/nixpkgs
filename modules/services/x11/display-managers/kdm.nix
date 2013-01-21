@@ -12,8 +12,8 @@ let
   defaultConfig =
     ''
       [Shutdown]
-      HaltCmd=${config.system.build.upstart}/sbin/halt
-      RebootCmd=${config.system.build.upstart}/sbin/reboot
+      HaltCmd=${config.systemd.package}/sbin/shutdown -h now
+      RebootCmd=${config.systemd.package}/sbin/shutdown -r now
       ${optionalString (config.system.boot.loader.id == "grub") ''
         BootManager=${if config.boot.loader.grub.version == 2 then "Grub2" else "Grub"}
       ''}
@@ -111,7 +111,7 @@ in
         logsXsession = true;
       };
 
-    security.pam.services = [ { name = "kde"; allowNullPassword = true; } ];
+    security.pam.services = [ { name = "kde"; allowNullPassword = true; startSession = true; } ];
 
     users.extraUsers = singleton
       { name = "kdm";

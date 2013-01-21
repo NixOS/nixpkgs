@@ -239,17 +239,14 @@ if $generate; then
   # Add filesystem entries for each partition that you want to see
   # mounted at boot time.  This should include at least the root
   # filesystem.
-  fileSystems =
-    [ # { mountPoint = "/";
-      #   device = "/dev/disk/by-label/nixos";
-      # }
 
-      # { mountPoint = "/data"; # where you want to mount the device
-      #   device = "/dev/sdb";  # the device
-      #   fsType = "ext3";      # the type of the partition
-      #   options = "data=journal";
-      # }
-    ];
+  # fileSystems."/".device = "/dev/disk/by-label/nixos";
+
+  # fileSystems."/data" =     # where you want to mount the device
+  #   { device = "/dev/sdb";  # the device
+  #     fsType = "ext3";      # the type of the partition
+  #     options = "data=journal";
+  #   };
 
   # List swap partitions activated at boot time.
   swapDevices =

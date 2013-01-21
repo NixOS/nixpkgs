@@ -3,7 +3,6 @@
 with pkgs.lib;
 
 let
-  nix = config.environment.nix;
   cfg = config.nix.gc;
 in
 
@@ -16,7 +15,7 @@ in
 
       automatic = mkOption {
         default = false;
-        example = true;
+        type = types.bool;
         description = "
           Automatically run the garbage collector at specified dates.
         ";
@@ -24,6 +23,7 @@ in
 
       dates = mkOption {
         default = "15 03 * * *";
+        type = types.string;
         description = "
           Run the garbage collector at specified dates to avoid full
           hard-drives.
@@ -33,6 +33,7 @@ in
       options = mkOption {
         default = "";
         example = "--max-freed $((64 * 1024**3))";
+        type = types.string;
         description = "
           Options given to <filename>nix-collect-garbage</filename> when the
           garbage collector is run automatically.
@@ -45,10 +46,17 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.automatic {
-    services.cron.systemCronJobs = [
-      "${cfg.dates} root ${nix}/bin/nix-collect-garbage ${cfg.options} > /var/log/gc.log 2>&1"
-    ];
+  config = {
+
+    services.cron.systemCronJobs = mkIf cfg.automatic (singleton
+      "${cfg.dates} root ${config.systemd.package}/bin/systemctl start nix-gc.service");
+
+    systemd.services."nix-gc" =
+      { description = "Nix Garbage Collector";
+        path  = [ config.environment.nix ];
+        script = "exec nix-collect-garbage ${cfg.options}";
+      };
+
   };
 
 }

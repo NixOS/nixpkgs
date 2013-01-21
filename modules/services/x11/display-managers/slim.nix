@@ -14,10 +14,9 @@ let
       xserver_arguments ${dmcfg.xserverArgs}
       sessions ${pkgs.lib.concatStringsSep "," (dmcfg.session.names ++ ["custom"])}
       login_cmd exec ${pkgs.stdenv.shell} ${dmcfg.session.script} "%session"
-      halt_cmd ${config.system.build.upstart}/sbin/shutdown -h now
-      reboot_cmd ${config.system.build.upstart}/sbin/shutdown -r now
+      halt_cmd ${config.systemd.package}/sbin/shutdown -h now
+      reboot_cmd ${config.systemd.package}/sbin/shutdown -r now
       ${optionalString (cfg.defaultUser != "") ("default_user " + cfg.defaultUser)}
-      ${optionalString cfg.hideCursor "hidecursor true"}
       ${optionalString cfg.autoLogin "auto_login yes"}
     '';
 
@@ -76,14 +75,6 @@ in
         '';
       };
 
-      hideCursor = mkOption {
-        default = false;
-        example = true;
-        description = ''
-          Hide the mouse cursor on the login screen.
-        '';
-      };
-
       autoLogin = mkOption {
         default = false;
         example = true;
@@ -115,7 +106,7 @@ in
 
     # Allow null passwords so that the user can login as root on the
     # installation CD.
-    security.pam.services = [ { name = "slim"; allowNullPassword = true; } ];
+    security.pam.services = [ { name = "slim"; allowNullPassword = true; startSession = true; } ];
 
   };
 

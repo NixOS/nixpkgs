@@ -24,16 +24,16 @@
       <year>2007-2012</year>
       <holder>Eelco Dolstra</holder>
     </copyright>
-    
+
   </info>
 
-  
+
   <preface>
     <title>Preface</title>
 
     <para>This manual describes NixOS, a Linux distribution based on
     the purely functional package management system Nix.</para>
-    
+
     <para>NixOS is rather bleeding edge, and this manual is
     correspondingly sketchy and quite possibly out of date.  It gives
     basic information on how to get NixOS up and running, but since
@@ -45,11 +45,13 @@
     mailing list or on <link
     xlink:href="irc://irc.freenode.net/#nixos">the
     <literal>#nixos</literal> channel on Freenode.</link>.</para>
-    
+
   </preface>
-  
+
 
   <xi:include href="installation.xml" />
+  <xi:include href="configuration.xml" />
+  <xi:include href="running.xml" />
   <!-- <xi:include href="userconfiguration.xml" /> -->
   <xi:include href="troubleshooting.xml" />
   <xi:include href="development.xml" />

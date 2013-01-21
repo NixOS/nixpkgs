@@ -8,74 +8,74 @@ let
   users = config.users;
 
   userOpts = { name, config, ... }: {
-  
+
     options = {
-    
+
       name = mkOption {
         type = with types; uniq string;
         description = "The name of the user account. If undefined, the name of the attribute set will be used.";
       };
-      
+
       description = mkOption {
         type = with types; uniq string;
         default = "";
         description = "A short description of the user account.";
       };
-      
+
       uid = mkOption {
         type = with types; uniq (nullOr int);
         default = null;
         description = "The account UID. If undefined, NixOS will select a free UID.";
       };
-      
+
       group = mkOption {
         type = with types; uniq string;
         default = "nogroup";
         description = "The user's primary group.";
       };
-      
+
       extraGroups = mkOption {
         type = types.listOf types.string;
         default = [];
         description = "The user's auxiliary groups.";
       };
-      
+
       home = mkOption {
         type = with types; uniq string;
         default = "/var/empty";
         description = "The user's home directory.";
       };
-      
+
       shell = mkOption {
         type = with types; uniq string;
         default = "/run/current-system/sw/sbin/nologin";
         description = "The path to the user's shell.";
       };
-      
+
       createHome = mkOption {
         type = types.bool;
         default = false;
         description = "If true, the home directory will be created automatically.";
       };
-      
+
       useDefaultShell = mkOption {
         type = types.bool;
         default = false;
         description = "If true, the user's shell will be set to <literal>users.defaultUserShell</literal>.";
       };
-      
+
       password = mkOption {
         type = with types; uniq (nullOr string);
         default = null;
         description = "The user's password. If undefined, no password is set for the user.  Warning: do not set confidential information here because this data would be readable by all.  This option should only be used for public account such as guest.";
       };
-      
+
       isSystemUser = mkOption {
         type = types.bool;
         default = true;
         description = "Indicates if the user is a system user or not.";
       };
-      
+
       createUser = mkOption {
         type = types.bool;
         default = true;
@@ -85,7 +85,13 @@ let
           then not modify any of the basic properties for the user account.
         ";
       };
-      
+
+      isAlias = mkOption {
+        type = types.bool;
+        default = false;
+        description = "If true, the UID of this user is not required to be unique and can thus alias another user.";
+      };
+
     };
 
     config = {
@@ -93,41 +99,41 @@ let
       uid = mkDefault (attrByPath [name] null ids.uids);
       shell = mkIf config.useDefaultShell (mkDefault users.defaultUserShell);
     };
-    
+
   };
 
   groupOpts = { name, config, ... }: {
-  
+
     options = {
-    
+
       name = mkOption {
         type = with types; uniq string;
         description = "The name of the group. If undefined, the name of the attribute set will be used.";
       };
-      
+
       gid = mkOption {
         type = with types; uniq (nullOr int);
         default = null;
         description = "The GID of the group. If undefined, NixOS will select a free GID.";
       };
-      
+
     };
 
     config = {
       name = mkDefault name;
       gid = mkDefault (attrByPath [name] null ids.gids);
     };
-    
+
   };
 
   # Note: the 'X' in front of the password is to distinguish between
   # having an empty password, and not having a password.
-  serializedUser = userName: let u = getAttr userName config.users.extraUsers; in "${u.name}\n${u.description}\n${if u.uid != null then toString u.uid else ""}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n${toString u.isSystemUser}\n${if u.createUser then "yes" else "no"}\n";
+  serializedUser = u: "${u.name}\n${u.description}\n${if u.uid != null then toString u.uid else ""}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n${toString u.isSystemUser}\n${toString u.createUser}\n${toString u.isAlias}\n";
 
-  # keep this extra file so that cat can be used to pass special chars such as "`" which is used in the avahi daemon
   usersFile = pkgs.writeText "users" (
-    concatMapStrings serializedUser (attrNames config.users.extraUsers)
-  );
+    let
+      p = partition (u: u.isAlias) (attrValues config.users.extraUsers);
+    in concatStrings (map serializedUser p.wrong ++ map serializedUser p.right));
 
 in
 
@@ -208,6 +214,7 @@ in
       users = { };
       nixbld = { };
       utmp = { };
+      adm = { }; # expected by journald
     };
 
     system.activationScripts.rootPasswd = stringAfter [ "etc" ]
@@ -242,8 +249,9 @@ in
             read password
             read isSystemUser
             read createUser
+            read isAlias
 
-            if ! test "$createUser" = "yes"; then
+            if [ -z "$createUser" ]; then
                 continue
             fi
 
@@ -256,6 +264,7 @@ in
                     --home "$home" \
                     --shell "$shell" \
                     ''${createHome:+--create-home} \
+                    ''${isAlias:+--non-unique} \
                     "$name"
                 if test "''${password:0:1}" = 'X'; then
                     (echo "''${password:1}"; echo "''${password:1}") | ${pkgs.shadow}/bin/passwd "$name"

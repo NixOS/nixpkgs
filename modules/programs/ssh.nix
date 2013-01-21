@@ -38,7 +38,7 @@ in
     };
   };
 
-  assertions = [{ assertion = if cfg.forwardX11 then cfg.setXAuthLocation else true; 
+  assertions = [{ assertion = if cfg.forwardX11 then cfg.setXAuthLocation else true;
                   message = "cannot enable X11 forwarding without setting xauth location";}];
 
   config = {
@@ -46,14 +46,11 @@ in
       [ { # SSH configuration.  Slight duplication of the sshd_config
           # generation in the sshd service.
           source = pkgs.writeText "ssh_config" ''
+            AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
             ${optionalString cfg.setXAuthLocation ''
               XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
             ''}
-            ${if cfg.forwardX11 then ''
-              ForwardX11 yes
-            '' else ''
-              ForwardX11 no
-            ''}
+            ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
           '';
           target = "ssh/ssh_config";
         }

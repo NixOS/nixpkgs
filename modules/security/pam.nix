@@ -31,6 +31,8 @@ let
                  concatStringsSep " " [ domain type item value ])
                 limits));
 
+  motd = pkgs.writeText "motd" config.users.motd;
+
   makePAMService =
     { name
     , # If set, root doesn't need to authenticate (e.g. for the "chsh"
@@ -43,9 +45,10 @@ let
       # against the keys in the calling user's ~/.ssh/authorized_keys.
       # This is useful for "sudo" on password-less remote systems.
       sshAgentAuth ? false
-    , # If set, use ConsoleKit's PAM connector module to claim
-      # ownership of audio devices etc.
-      ownDevices ? false
+    , # If set, the service will register a new session with systemd's
+      # login manager.  If the service is running locally, this will
+      # give the user ownership of audio devices etc.
+      startSession ? false
     , # Whether to forward XAuth keys between users.  Mostly useful
       # for "su".
       forwardXAuth ? false
@@ -59,6 +62,8 @@ let
       allowNullPassword ? false
     , # The limits, as per limits.conf(5).
       limits ? config.security.pam.loginLimits
+    , # Whether to show the message of the day.
+      showMotd ? false
     }:
 
     { source = pkgs.writeText "${name}.pam"
@@ -77,7 +82,7 @@ let
           ${optionalString rootOK
               "auth sufficient pam_rootok.so"}
           ${optionalString (config.security.pam.enableSSHAgentAuth && sshAgentAuth)
-              "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys"}
+              "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           auth sufficient pam_unix.so ${optionalString allowNullPassword "nullok"} likeauth
@@ -105,12 +110,14 @@ let
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
-          ${optionalString ownDevices
-              "session optional ${pkgs.consolekit}/lib/security/pam_ck_connector.so"}
+          ${optionalString startSession
+              "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
           ${optionalString forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
           ${optionalString (limits != [])
               "session required ${pkgs.pam}/lib/security/pam_limits.so conf=${makeLimitsConf limits}"}
+          ${optionalString (showMotd && config.users.motd != null)
+              "session optional ${pkgs.pam}/lib/security/pam_motd.so motd=${motd}"}
         '';
       target = "pam.d/${name}";
     };
@@ -152,7 +159,7 @@ in
       default = [];
       example = [
         { name = "chsh"; rootOK = true; }
-        { name = "login"; ownDevices = true; allowNullPassword = true;
+        { name = "login"; startSession = true; allowNullPassword = true;
           limits = [
             { domain = "ftp";
               type   = "hard";
@@ -173,13 +180,13 @@ in
           the name of the service.  The attribute
           <varname>rootOK</varname> specifies whether the root user is
           allowed to use this service without authentication.  The
-          attribute <varname>ownDevices</varname> specifies whether
-          ConsoleKit's PAM connector module should be used to give the
-          user ownership of devices such as audio and CD-ROM drives.
-          The attribute <varname>forwardXAuth</varname> specifies
-          whether X authentication keys should be passed from the
-          calling user to the target user (e.g. for
-          <command>su</command>).
+          attribute <varname>startSession</varname> specifies whether
+          systemd's PAM connector module should be used to start a new
+          session; for local sessions, this will give the user
+          ownership of devices such as audio and CD-ROM drives.  The
+          attribute <varname>forwardXAuth</varname> specifies whether
+          X authentication keys should be passed from the calling user
+          to the target user (e.g. for <command>su</command>).
 
           The attribute <varname>limits</varname> defines resource limits
           that should apply to users or groups for the service.  Each item in
@@ -200,6 +207,13 @@ in
           This allows machines to exclusively use SSH keys instead of
           passwords.
         '';
+    };
+
+    users.motd = mkOption {
+      default = null;
+      example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
+      type = types.nullOr types.string;
+      description = "Message of the day shown to users when they log in.";
     };
 
   };
@@ -238,7 +252,6 @@ in
         { name = "lshd"; }
         { name = "samba"; }
         { name = "screen"; }
-        { name = "sshd"; }
         { name = "vlock"; }
         { name = "xlock"; }
         { name = "xscreensaver"; }

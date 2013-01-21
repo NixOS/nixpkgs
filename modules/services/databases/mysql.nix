@@ -91,6 +91,7 @@ in
         description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
       };
 
+      # FIXME: remove this option; it's a really bad idea.
       rootPassword = mkOption {
         default = null;
         description = "Path to a file containing the root password, modified on the first startup. Not specifying a root password will leave the root password empty.";
@@ -140,10 +141,12 @@ in
 
     environment.systemPackages = [mysql];
 
-    jobs.mysql =
-      { description = "MySQL server";
+    systemd.services.mysql =
+      { description = "MySQL Server";
 
-        startOn = "filesystem";
+        wantedBy = [ "multi-user.target" ];
+
+        unitConfig.RequiresMountsFor = "${cfg.dataDir}";
 
         preStart =
           ''
@@ -156,9 +159,12 @@ in
 
             mkdir -m 0700 -p ${cfg.pidDir}
             chown -R ${cfg.user} ${cfg.pidDir}
-            
-            ${mysql}/libexec/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions} &
+          '';
 
+        serviceConfig.ExecStart = "${mysql}/libexec/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+
+        postStart =
+          ''
             # Wait until the MySQL server is available for use
             count=0
             while [ ! -e /tmp/mysql.sock ]
@@ -183,7 +189,7 @@ in
                         echo "Creating initial database: ${database.name}"
                         ( echo "create database ${database.name};"
                           echo "use ${database.name};"
-                          
+
                           if [ -f "${database.schema}" ]
                           then
                               cat ${database.schema}
@@ -204,7 +210,7 @@ in
                 ${optionalString (cfg.rootPassword != null)
                   ''
                     # Change root password
-                    
+
                     ( echo "use mysql;"
                       echo "update user set Password=password('$(cat ${cfg.rootPassword})') where User='root';"
                       echo "flush privileges;"
@@ -213,14 +219,10 @@ in
 
               rm /tmp/mysql_init
             fi
-          '';
+          ''; # */
 
-        postStop = "${mysql}/bin/mysqladmin ${optionalString (cfg.rootPassword != null) "--user=root --password=\"$(cat ${cfg.rootPassword})\""} shutdown";
-        
-        # !!! Need a postStart script to wait until mysqld is ready to
-        # accept connections.
-
-        extraConfig = "kill timeout 60";
+        serviceConfig.ExecStop =
+          "${mysql}/bin/mysqladmin ${optionalString (cfg.rootPassword != null) "--user=root --password=\"$(cat ${cfg.rootPassword})\""} shutdown";
       };
 
   };

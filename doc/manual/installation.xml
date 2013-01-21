@@ -1,7 +1,7 @@
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink">
 
-<title>Installation</title>
+<title>Installing NixOS</title>
 
 
 <!--===============================================================-->
@@ -58,7 +58,7 @@ Wiki</link>.</para>
 
     <listitem><para>For partitioning:
     <command>fdisk</command>.</para></listitem>
-    
+
     <listitem><para>For initialising Ext4 partitions:
     <command>mkfs.ext4</command>.  It is recommended that you assign a
     unique symbolic label to the file system using the option
@@ -70,13 +70,13 @@ Wiki</link>.</para>
     <command>mkswap</command>.  Again it’s recommended to assign a
     label to the swap partition: <option>-L
     <replaceable>label</replaceable></option>.</para></listitem>
-    
+
     <listitem><para>For creating LVM volumes, the LVM commands, e.g.,
 
 <screen>
 $ pvcreate /dev/sda1 /dev/sdb1
 $ vgcreate MyVolGroup /dev/sda1 /dev/sdb1
-$ lvcreate --size 2G --name bigdisk MyVolGroup 
+$ lvcreate --size 2G --name bigdisk MyVolGroup
 $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
 
     </para></listitem>
@@ -87,7 +87,7 @@ $ lvcreate --size 1G --name smalldisk MyVolGroup</screen>
   </itemizedlist>
 
   </para></listitem>
-    
+
   <listitem><para>Mount the target file system on which NixOS should
   be installed on <filename>/mnt</filename>.</para></listitem>
 
@@ -138,7 +138,7 @@ $ nixos-option --install</screen>
     xlink:href="https://nixos.org/repos/nix/configurations/trunk/"/>.</para>
 
   </listitem>
-  
+
   <listitem><para>If your machine has a limited amount of memory, you
   may want to activate swap devices now (<command>swapon
   <replaceable>device</replaceable></command>).  The installer (or
@@ -230,15 +230,11 @@ $ reboot</screen>
 {
   boot.loader.grub.device = "/dev/sda";
 
-  fileSystems =
-    [ { mountPoint = "/";
-        device = "/dev/disk/by-label/nixos";
-      }
-    ];
+  fileSystems."/".device = "/dev/disk/by-label/nixos";
 
   swapDevices =
     [ { device = "/dev/disk/by-label/swap"; } ];
-  
+
   services.sshd.enable = true;
 }</screen>
 </example>
@@ -264,7 +260,7 @@ to build the new configuration, make it the default configuration for
 booting, and try to realise the configuration in the running system
 (e.g., by restarting system services).</para>
 
-<para>You can also do 
+<para>You can also do
 
 <screen>
 $ nixos-rebuild test</screen>
@@ -274,7 +270,7 @@ without making it the boot default.  So if (say) the configuration
 locks up your machine, you can just reboot to get back to a working
 configuration.</para>
 
-<para>There is also 
+<para>There is also
 
 <screen>
 $ nixos-rebuild boot</screen>
@@ -283,7 +279,7 @@ to build the configuration and make it the boot default, but not
 switch to it now (so it will only take effect after the next
 reboot).</para>
 
-<para>Finally, you can do 
+<para>Finally, you can do
 
 <screen>
 $ nixos-rebuild build</screen>
@@ -333,7 +329,7 @@ You can then upgrade NixOS to the latest version in the channel by
 running
 
 <screen>
-$ nix-channel --update
+$ nix-channel --update nixos
 </screen>
 
 and running the <command>nixos-rebuild</command> command as described

@@ -9,7 +9,7 @@ let
   # Don't start dhclient on explicitly configured interfaces or on
   # interfaces that are part of a bridge.
   ignoredInterfaces =
-    map (i: i.name) (filter (i: i ? ipAddress && i.ipAddress != "" ) config.networking.interfaces)
+    map (i: i.name) (filter (i: i.ipAddress != null) (attrValues config.networking.interfaces))
     ++ concatLists (attrValues (mapAttrs (n: v: v.interfaces) config.networking.bridges))
     ++ config.networking.dhcpcd.denyInterfaces;
 
@@ -52,20 +52,19 @@ let
       ''}
 
       if [ "$reason" = BOUND -o "$reason" = REBOOT ]; then
-          # Restart ntpd.  (The "ip-up" event below will trigger the
-          # restart.)  We need to restart it to make sure that it will
-          # actually do something: if ntpd cannot resolve the server
-          # hostnames in its config file, then it will never do
+          # Restart ntpd.  We need to restart it to make sure that it
+          # will actually do something: if ntpd cannot resolve the
+          # server hostnames in its config file, then it will never do
           # anything ever again ("couldn't resolve ..., giving up on
           # it"), so we silently lose time synchronisation.
-          ${config.system.build.upstart}/sbin/initctl stop ntpd
+          ${config.systemd.package}/bin/systemctl try-restart ntpd.service
 
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-up $params
+          ${config.systemd.package}/bin/systemctl start ip-up.target
       fi
 
-      if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
-          ${config.system.build.upstart}/sbin/initctl emit -n ip-down $params
-      fi
+      #if [ "$reason" = EXPIRE -o "$reason" = RELEASE -o "$reason" = NOCARRIER ] ; then
+      #    ${config.systemd.package}/bin/systemctl start ip-down.target
+      #fi
     '';
 
 in
@@ -93,12 +92,27 @@ in
 
   config = mkIf config.networking.useDHCP {
 
-    jobs.dhcpcd =
-      { startOn = "started network-interfaces";
+    systemd.services.dhcpcd =
+      { description = "DHCP Client";
+
+        wantedBy = [ "network.target" ];
+        after = [ "systemd-udev-settle.service" ];
+
+        # Stopping dhcpcd during a reconfiguration is undesirable
+        # because it brings down the network interfaces configured by
+        # dhcpcd.  So do a "systemctl restart" instead.
+        stopIfChanged = false;
 
         path = [ dhcpcd pkgs.nettools pkgs.openresolv ];
 
-        exec = "dhcpcd --config ${dhcpcdConf} --nobackground";
+        serviceConfig =
+          { Type = "forking";
+            PIDFile = "/run/dhcpcd.pid";
+            ExecStart = "@${dhcpcd}/sbin/dhcpcd dhcpcd --config ${dhcpcdConf}";
+            ExecReload = "${dhcpcd}/sbin/dhcpcd --rebind";
+            StandardError = "null";
+            Restart = "always";
+          };
       };
 
     environment.systemPackages = [ dhcpcd ];
@@ -112,8 +126,7 @@ in
     powerManagement.resumeCommands =
       ''
         # Tell dhcpcd to rebind its interfaces if it's running.
-        status="$(${config.system.build.upstart}/sbin/status dhcpcd)"
-        [[ "$status" =~ start/running ]] && ${dhcpcd}/sbin/dhcpcd --rebind
+        ${config.systemd.package}/bin/systemctl reload dhcpcd.service
       '';
 
   };

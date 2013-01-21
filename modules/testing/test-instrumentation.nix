@@ -5,25 +5,16 @@
 
 with pkgs.lib;
 
-let
-  kernel = config.boot.kernelPackages.kernel;
-
-  hasCIFSTimeout = if kernel ? features then kernel.features ? cifsTimeout
-    else (filter (p: p.name == "cifs-timeout") kernel.kernelPatches) != [];
-in
+let kernel = config.boot.kernelPackages.kernel; in
 
 {
 
-  config =
-  # Require a patch to the kernel to increase the 15s CIFS timeout.
-  mkAssert hasCIFSTimeout "
-    VM tests require that the kernel has the CIFS timeout patch.
-  " {
+  config = {
 
-    jobs.backdoor =
-      { startOn = "started udev";
-        stopOn = "";
-
+    systemd.services.backdoor =
+      { wantedBy = [ "multi-user.target" ];
+        requires = [ "dev-hvc0.device" "dev-ttyS0.device" ];
+        after = [ "dev-hvc0.device" "dev-ttyS0.device" ];
         script =
           ''
             export USER=root
@@ -35,11 +26,16 @@ in
             echo "connecting to host..." >&2
             stty -F /dev/hvc0 raw -echo # prevent nl -> cr/nl conversion
             echo
-            PS1= /bin/sh
+            PS1= exec /bin/sh
           '';
-
-        respawn = false;
+        serviceConfig.KillSignal = "SIGHUP";
       };
+
+    # Prevent agetty from being instantiated on ttyS0, since it
+    # interferes with the backdoor (writes to ttyS0 will randomly fail
+    # with EIO).  Likewise for hvc0.
+    systemd.services."serial-getty@ttyS0".enable = false;
+    systemd.services."serial-getty@hvc0".enable = false;
 
     boot.initrd.postDeviceCommands =
       ''
@@ -60,10 +56,6 @@ in
 
         # Coverage data is written into /tmp/coverage-data.
         mkdir -p /tmp/xchg/coverage-data
-
-        # Mount debugfs to gain access to the kernel coverage data (if
-        # available).
-        mount -t debugfs none /sys/kernel/debug || true
       '';
 
     # If the kernel has been built with coverage instrumentation, make
@@ -73,32 +65,26 @@ in
     # Panic if an error occurs in stage 1 (rather than waiting for
     # user intervention).
     boot.kernelParams =
-      [ "console=tty1" "console=ttyS0" "panic=1" "stage1panic=1" ];
+      [ "console=tty1" "console=ttyS0" "panic=1" "boot.panic_on_fail" ];
 
     # `xwininfo' is used by the test driver to query open windows.
     environment.systemPackages = [ pkgs.xorg.xwininfo ];
 
-    # Send all of /var/log/messages to the serial port.
-    services.syslogd.extraConfig = "*.* /dev/ttyS0";
-
-    # Disable "-- MARK --" messages.  These prevent hanging tests from
-    # being killed after 1 hour of silence.
-    services.syslogd.extraParams = [ "-m 0" ];
-
-    # Don't run klogd.  Kernel messages appear on the serial console anyway.
-    jobs.klogd.startOn = mkOverride 50 "";
+    # Log everything to the serial console.
+    services.journald.console = "/dev/console";
 
     # Prevent tests from accessing the Internet.
     networking.defaultGateway = mkOverride 150 "";
     networking.nameservers = mkOverride 150 [ ];
 
-    system.upstartEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
+    systemd.globalEnvironment.GCOV_PREFIX = "/tmp/xchg/coverage-data";
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isYes "SERIAL_8250_CONSOLE")
       (isYes "SERIAL_8250")
       (isEnabled "VIRTIO_CONSOLE")
     ];
+
   };
 
 }

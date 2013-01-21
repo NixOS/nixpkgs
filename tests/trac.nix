@@ -33,8 +33,7 @@
         fileSystems = pkgs.lib.mkOverride 50
           [ { mountPoint = "/repos";
               device = "storage:/repos";
-	      fsType = "nfs";
-	      options = "bootwait";
+              fsType = "nfs";
             }
           ];
 
@@ -56,15 +55,15 @@
     ''
       startAll;
 
-      $postgresql->waitForJob("postgresql");
-      $postgresql->mustSucceed("createdb trac");
+      $postgresql->waitForUnit("postgresql");
+      $postgresql->succeed("createdb trac");
 
-      $webserver->mustSucceed("mkdir -p /repos/trac");
-      $webserver->mustSucceed("svnadmin create /repos/trac");
+      $webserver->succeed("mkdir -p /repos/trac");
+      $webserver->succeed("svnadmin create /repos/trac");
 
       $webserver->waitForFile("/var/trac");
-      $webserver->mustSucceed("mkdir -p /var/trac/projects/test");
-      $webserver->mustSucceed("PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/${pkgs.python.libPrefix}/site-packages trac-admin /var/trac/projects/test initenv Test postgres://root\@postgresql/trac svn /repos/trac");
+      $webserver->succeed("mkdir -p /var/trac/projects/test");
+      $webserver->succeed("PYTHONPATH=${pkgs.pythonPackages.psycopg2}/lib/${pkgs.python.libPrefix}/site-packages trac-admin /var/trac/projects/test initenv Test postgres://root\@postgresql/trac svn /repos/trac");
 
       $client->waitForX;
       $client->execute("konqueror http://webserver/projects/test &");

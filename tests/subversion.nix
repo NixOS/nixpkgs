@@ -41,7 +41,7 @@ in
           services.httpd.enable = true;
           services.httpd.adminAddr = "e.dolstra@tudelft.nl";
           services.httpd.extraSubservices =
-            [ { serviceType = "subversion";
+            [ { function = import <services/subversion>;
                 urlPrefix = "";
                 dataDir = "/data/subversion";
                 userCreationDomain = "192.168.0.0/16";
@@ -66,33 +66,33 @@ in
 
       $webserver->waitForOpenPort(80);
 
-      print STDERR $client->mustSucceed("svn --version");
+      print STDERR $client->succeed("svn --version");
 
-      print STDERR $client->mustSucceed("curl --fail http://webserver/");
+      print STDERR $client->succeed("curl --fail http://webserver/");
 
       # Create a new user through the web interface.
-      $client->mustSucceed("curl --fail -F username=alice -F fullname='Alice Lastname' -F address=alice\@example.org -F password=foobar -F password_again=foobar http://webserver/repoman/adduser");
+      $client->succeed("curl --fail -F username=alice -F fullname='Alice Lastname' -F address=alice\@example.org -F password=foobar -F password_again=foobar http://webserver/repoman/adduser");
 
       # Let Alice create a new repository.
-      $client->mustSucceed("curl --fail -u alice:foobar --form repo=xyzzy --form description=Xyzzy http://webserver/repoman/create");
+      $client->succeed("curl --fail -u alice:foobar --form repo=xyzzy --form description=Xyzzy http://webserver/repoman/create");
 
-      $client->mustSucceed("curl --fail http://webserver/") =~ /alice/ or die;
+      $client->succeed("curl --fail http://webserver/") =~ /alice/ or die;
 
       # Let Alice do a checkout.
       my $svnFlags = "--non-interactive --username alice --password foobar";
-      $client->mustSucceed("svn co $svnFlags http://webserver/repos/xyzzy wc");
-      $client->mustSucceed("echo hello > wc/world");
-      $client->mustSucceed("svn add wc/world");
-      $client->mustSucceed("svn ci $svnFlags -m 'Added world.' wc/world");
+      $client->succeed("svn co $svnFlags http://webserver/repos/xyzzy wc");
+      $client->succeed("echo hello > wc/world");
+      $client->succeed("svn add wc/world");
+      $client->succeed("svn ci $svnFlags -m 'Added world.' wc/world");
 
       # Create a new user on the server through the create-user.pl script.
       $webserver->execute("svn-server-create-user.pl bob bob\@example.org Bob");
-      $webserver->mustSucceed("svn-server-resetpw.pl bob fnord");
-      $client->mustSucceed("curl --fail http://webserver/") =~ /bob/ or die;
+      $webserver->succeed("svn-server-resetpw.pl bob fnord");
+      $client->succeed("curl --fail http://webserver/") =~ /bob/ or die;
 
       # Bob should not have access to the repo.
       my $svnFlagsBob = "--non-interactive --username bob --password fnord";
-      $client->mustFail("svn co $svnFlagsBob http://webserver/repos/xyzzy wc2");
+      $client->fail("svn co $svnFlagsBob http://webserver/repos/xyzzy wc2");
 
       # Bob should not be able change the ACLs of the repo.
       # !!! Repoman should really return a 403 here.
@@ -100,15 +100,15 @@ in
           =~ /not authorised/ or die;
 
       # Give Bob access.
-      $client->mustSucceed("curl --fail -u alice:foobar -F description=Xyzzy -F readers=alice,bob -F writers=alice -F watchers= -F tardirs= http://webserver/repoman/update/xyzzy");
+      $client->succeed("curl --fail -u alice:foobar -F description=Xyzzy -F readers=alice,bob -F writers=alice -F watchers= -F tardirs= http://webserver/repoman/update/xyzzy");
 
       # So now his checkout should succeed.
-      $client->mustSucceed("svn co $svnFlagsBob http://webserver/repos/xyzzy wc2");
+      $client->succeed("svn co $svnFlagsBob http://webserver/repos/xyzzy wc2");
 
       # Test ViewVC and WebSVN
-      $client->mustSucceed("curl --fail -u alice:foobar http://webserver/viewvc/xyzzy");
-      $client->mustSucceed("curl --fail -u alice:foobar http://webserver/websvn/xyzzy");
-      $client->mustSucceed("curl --fail -u alice:foobar http://webserver/repos-xml/xyzzy");
+      $client->succeed("curl --fail -u alice:foobar http://webserver/viewvc/xyzzy");
+      $client->succeed("curl --fail -u alice:foobar http://webserver/websvn/xyzzy");
+      $client->succeed("curl --fail -u alice:foobar http://webserver/repos-xml/xyzzy");
 
       # Stop Apache to gather all the coverage data.
       $webserver->stopJob("httpd");

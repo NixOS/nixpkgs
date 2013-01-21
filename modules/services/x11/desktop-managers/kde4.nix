@@ -158,7 +158,7 @@ in
     services.udisks.enable = true;
     services.upower = mkIf config.powerManagement.enable { enable = true; };
 
-    security.pam.services = [ { name = "kde"; allowNullPassword = true; } ];
+    security.pam.services = [ { name = "kde"; allowNullPassword = true; startSession = true; } ];
 
   };
 
