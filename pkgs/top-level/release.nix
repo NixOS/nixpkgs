@@ -49,7 +49,6 @@ with (import ./release-lib.nix);
   chatzilla = linux;
   cksfv = all;
   classpath = linux;
-  consolekit = linux;
   coreutils = all;
   cpio = all;
   cron = linux;

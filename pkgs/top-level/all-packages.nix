@@ -237,7 +237,7 @@ let
 
   ### BUILD SUPPORT
 
-  attrSetToDir = arg : import ../build-support/upstream-updater/attrset-to-dir.nix {
+  attrSetToDir = arg: import ../build-support/upstream-updater/attrset-to-dir.nix {
     inherit writeTextFile stdenv lib;
     theAttrSet = arg;
   };
@@ -3506,8 +3506,6 @@ let
 
   confuse = callPackage ../development/libraries/confuse { };
 
-  consolekit = callPackage ../development/libraries/consolekit { };
-
   coredumper = callPackage ../development/libraries/coredumper { };
 
   ctl = callPackage ../development/libraries/ctl { };
@@ -5196,7 +5194,6 @@ let
 
   ### DEVELOPMENT / LIBRARIES / JAVA
 
-
   atermjava = callPackage ../development/libraries/java/aterm {
     stdenv = overrideInStdenv stdenv [gnumake380];
   };
@@ -5266,6 +5263,7 @@ let
   ### DEVELOPMENT / LIBRARIES / JAVASCRIPT
 
   jquery_ui = callPackage ../development/libraries/javascript/jquery-ui { };
+
 
   ### DEVELOPMENT / PERL MODULES
 
@@ -6348,8 +6346,7 @@ let
   });
 
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
-  udev173 = callPackage ../os-specific/linux/udev/173.nix { };
-  udev = pkgs.udev173;
+  udev = pkgs.systemd;
 
   udisks = callPackage ../os-specific/linux/udisks { };
 
@@ -8983,18 +8980,12 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
-  nixUnstable = nixStable;
-
-  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
-  */
 
   nut = callPackage ../applications/misc/nut { };
-
-  nut_2_6_3 = callPackage ../applications/misc/nut/2.6.3.nix { };
 
   disnix = callPackage ../tools/package-management/disnix { };
 
