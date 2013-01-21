@@ -878,7 +878,7 @@ rec {
     propagatedBuildInputs = [ DataOptList ModuleImplementation ModuleRuntime PackageStash TryTiny ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
-      description = "A working (require "Class::Name") and more";
+      description = "A working (require \"Class::Name\") and more";
       license = "perl5";
     };
   };
