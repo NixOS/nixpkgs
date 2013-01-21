@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "redis";
-  version = "2.4.7";
+  version = "2.6.9";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://redis.googlecode.com/files/redis-2.4.7.tar.gz";
-    sha256 = "f91956377b7ff23cc23e0c8758e0b873032f36545c61d88436ebb741bf4dd5e1";
+    url = "http://redis.googlecode.com/files/redis-2.6.9.tar.gz";
+    sha256 = "4d967eff2038aebea33875d17e85ed67179df6505df68529a622f7836d1c7489";
   };
 
   makeFlags = "PREFIX=$(out)";
