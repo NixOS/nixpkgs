@@ -3507,6 +3507,7 @@ pythonPackages = python.modules // rec {
       description = "Structured Configuration Library";
       homepage = http://pypi.python.org/pypi/ZConfig;
       license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
 
@@ -3524,6 +3525,7 @@ pythonPackages = python.modules // rec {
       description = "Inter-process locks";
       homepage =  http://www.python.org/pypi/zc.lockfile;
       license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
 
@@ -3543,6 +3545,7 @@ pythonPackages = python.modules // rec {
       description = "A daemon process control library and tools for Unix-based systems";
       homepage = http://pypi.python.org/pypi/zdaemon;
       license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
 
@@ -3592,6 +3595,7 @@ pythonPackages = python.modules // rec {
       description = "An object-oriented database for Python";
       homepage = http://pypi.python.org/pypi/ZODB3;
       license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
 
@@ -3609,6 +3613,7 @@ pythonPackages = python.modules // rec {
       description = "An event publishing system";
       homepage = http://pypi.python.org/pypi/zope.event;
       license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
 
@@ -3628,6 +3633,7 @@ pythonPackages = python.modules // rec {
        description = "Exception interfaces and implementations";
        homepage = http://pypi.python.org/pypi/zope.exceptions;
        license = "ZPL";
+       maintainers = [ stdenv.lib.maintainers.goibhniu ];
      };
    };
 
@@ -3647,6 +3653,7 @@ pythonPackages = python.modules // rec {
       description = "Zope testing helpers";
       homepage =  http://pypi.python.org/pypi/zope.testing;
       license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
 
@@ -3668,6 +3675,7 @@ pythonPackages = python.modules // rec {
       description = "A flexible test runner with layer support";
       homepage = http://pypi.python.org/pypi/zope.testrunner;
       license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
 
