@@ -77,7 +77,8 @@ stdenv.mkDerivation rec {
           --prefix PATH ":" "${python}/bin" \
           --prefix PATH ":" "${glxinfo}/bin" \
           --prefix PATH ":" "${xdpyinfo}/bin" \
-          --prefix LD_LIBRARY_PATH ":" "${curl}/lib"
+          --prefix LD_LIBRARY_PATH ":" "${curl}/lib" \
+          --prefix LD_LIBRARY_PATH ":" "${libvdpau}/lib"
       done
     '';
 
