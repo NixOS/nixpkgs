@@ -3013,7 +3013,7 @@ rec {
       url = "mirror://cpan/authors/id/W/WR/WROG/${name}.tar.gz";
       sha256 = "4ab927b6756366fa4cef2b54088645849f32fc7e0cd8de0a50001bbf62946fd8";
     };
-    propagatedBuildInputs = [ NetOpenIDCommon JSON ];
+    propagatedBuildInputs = [ NetOpenIDCommon JSON LWP ];
   };
 
   PackageDeprecationManager = buildPerlPackage rec {
