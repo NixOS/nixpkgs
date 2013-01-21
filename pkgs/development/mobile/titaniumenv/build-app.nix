@@ -47,7 +47,7 @@ stdenv.mkDerivation {
    
             # Ensure that the requested provisioning profile can be found
             
-            if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles" ]
+            if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision" ]
             then
                 mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
                 cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
@@ -75,7 +75,7 @@ stdenv.mkDerivation {
    
                 # Ensure that the requested provisioning profile can be found
             
-                if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles" ]
+                if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision" ]
                 then
                     mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
                     cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
