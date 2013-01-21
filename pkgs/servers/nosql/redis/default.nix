@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, which, tcl }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "redis-2.6.9";
