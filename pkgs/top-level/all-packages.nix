@@ -2859,6 +2859,8 @@ let
 
   pythonhomeWrapper = callPackage ../development/interpreters/python/pythonhome-wrapper.nix { };
 
+  pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
