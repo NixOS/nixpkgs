@@ -1,8 +1,12 @@
-{ fetchurl, stdenv, gnum4, texinfo, texLive, automake }:
+{ fetchurl, stdenv, makeWrapper, gnum4, texinfo, texLive, automake }:
 
 let
   version = "9.1.1";
   bootstrapFromC = ! (stdenv.isi686 || stdenv.isx86_64);
+
+  arch = if      stdenv.isi686   then "-i386"
+         else if stdenv.isx86_64 then "-x86-64"
+         else                         "";
 in
 stdenv.mkDerivation {
   name = "mit-scheme-${version}";
@@ -25,6 +29,11 @@ stdenv.mkDerivation {
       sha256 = "0pclakzwxbqgy6wqwvs6ml62wgby8ba8xzmwzdwhx1v8wv05yw1j";
     };
 
+  configurePhase =
+    '' (cd src && ./configure)
+       (cd doc && ./configure)
+    '';
+
   buildPhase =
     '' cd src
        ${if bootstrapFromC
@@ -42,11 +51,16 @@ stdenv.mkDerivation {
     '';
 
   installPhase =
-    '' make install -C src
-       make install -C doc
+    '' make prefix=$out install -C src
+       make prefix=$out install -C doc
     '';
 
-  buildNativeInputs = [ gnum4 texinfo texLive automake ];
+  fixupPhase =
+    '' wrapProgram $out/bin/mit-scheme${arch} --set MITSCHEME_LIBRARY_PATH \
+         $out/lib/mit-scheme${arch}
+    '';
+
+  buildNativeInputs = [ makeWrapper gnum4 texinfo texLive automake ];
 
   # XXX: The `check' target doesn't exist.
   doCheck = false;
