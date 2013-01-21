@@ -1,6 +1,12 @@
 { pkgs, python }:
 
-let pythonPackages = python.modules // rec {
+let
+isPy26 = python.majorVersion == "2.6";
+isPy27 = python.majorVersion == "2.7";
+optional = pkgs.lib.optional;
+optionals = pkgs.lib.optionals;
+
+pythonPackages = python.modules // rec {
 
   inherit python;
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
@@ -996,8 +1002,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "0bhiyx41kilvy04cgjbvjy2r4b6l7zz31fbrg3l6lvnqm26nihb0";
     };
 
-    buildInputs = [ pkgs.setuptools ] ++
-                  (if python.majorVersion == "2.6" then [ argparse ] else []);
+    buildInputs = [ pkgs.setuptools ] ++ (optional isPy26 argparse);
 
     meta = {
       description = "automatically generated zsh completion function for Python's option parser modules";
@@ -1101,6 +1106,14 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  importlib = if isPy26 then (buildPythonPackage {
+    name = "importlib-1.0.2";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/importlib/importlib-1.0.2.tar.gz";
+      md5 = "4aa23397da8bd7c7426864e88e4db7e1";
+    };
+    doCheck = false;
+  }) else null;
 
   iptools = buildPythonPackage rec {
     version = "0.4.0";
@@ -1445,7 +1458,7 @@ let pythonPackages = python.modules // rec {
       md5 = "361c8ac7a31953ab94a95cf34d9a0b2b";
     };
 
-    buildInputs = [ pkgs.unzip six ];
+    buildInputs = [ pkgs.unzip six ] ++ (optionals isPy26 [ importlib ordereddict ]);
 
     propagatedBuildInputs = [ argparse jinja2 ];
 
@@ -1604,7 +1617,7 @@ let pythonPackages = python.modules // rec {
     buildInputs = [ coverage ];
   };
 
-  nose2 = buildPythonPackage rec {
+  nose2 = if isPy26 then null else (buildPythonPackage rec {
     name = "nose2-0.4.5";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose2/${name}.tar.gz";
@@ -1616,9 +1629,9 @@ let pythonPackages = python.modules // rec {
     propagatedBuildInputs = [ six ];
     # AttributeError: 'module' object has no attribute 'collector'
     doCheck = false;
-  };
+  });
 
-  nose2Cov = buildPythonPackage rec {
+  nose2Cov = if isPy26 then null else (buildPythonPackage rec {
     name = "nose2-cov-1.0a4";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/n/nose2-cov/nose2-cov-1.0a4.tar.gz";
@@ -1628,7 +1641,7 @@ let pythonPackages = python.modules // rec {
       description = "nose2 plugin for coverage reporting, including subprocesses and multiprocessing";
     };
     buildInputs = [ covCore nose2 ];
-  };
+  });
 
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
@@ -1742,6 +1755,15 @@ let pythonPackages = python.modules // rec {
   #     homepage = "http://simonwillison.net/2009/May/28/optfunc/";
   #   };
   # });
+
+  ordereddict = if isPy26 then (buildPythonPackage {
+    name = "ordereddict-1.1";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/o/ordereddict/ordereddict-1.1.tar.gz";
+      md5 = "a0ed854ee442051b249bfad0f638bbec";
+    };
+    doCheck = false;
+  }) else null;
 
   ply = buildPythonPackage (rec {
     name = "ply-3.2";
@@ -3152,9 +3174,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "c0f32fa31e2c5fa42f5cc19f3dba4e73f0438bf36bf756ba137f2423c0ac4637";
     };
 
-    propagatedBuildInputs = [ oauth2 urwid tweepy ] ++
-                            (if python.majorVersion == "2.6" then [ argparse ]
-                                                             else []);
+    propagatedBuildInputs = [ oauth2 urwid tweepy ] ++ optional isPy26 argparse;
 
     #buildInputs = [ tox ];
     # needs tox
