@@ -129,7 +129,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     HTTP         = self.HTTP_4000_2_6;          # 7.6 ok
     HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
-    network      = self.network_2_4_0_1;        # 7.6 ok
+    network      = self.network_2_4_1_0;        # 7.6 ok
     OpenGL       = self.OpenGL_2_6_0_1;         # 7.6 ok
     parallel     = self.parallel_3_2_0_3;       # 7.6 ok
     parsec       = self.parsec_3_1_3;           # 7.6 ok
@@ -582,6 +582,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cipherAes = callPackage ../development/libraries/haskell/cipher-aes {};
 
+  cipherRc4 = callPackage ../development/libraries/haskell/cipher-rc4 {};
+
   classyPrelude = callPackage ../development/libraries/haskell/classy-prelude {};
 
   classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
@@ -634,7 +636,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
+  cryptoNumbers = callPackage ../development/libraries/haskell/crypto-numbers {};
+
   cryptoPubkeyTypes = callPackage ../development/libraries/haskell/crypto-pubkey-types {};
+
+  cryptoPubkey = callPackage ../development/libraries/haskell/crypto-pubkey {};
 
   cryptoRandomApi = callPackage ../development/libraries/haskell/crypto-random-api {};
 
@@ -913,7 +919,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
 
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
-  hashable_1_2_0_3 = callPackage ../development/libraries/haskell/hashable/1.2.0.3.nix {};
+  hashable_1_2_0_5 = callPackage ../development/libraries/haskell/hashable/1.2.0.5.nix {};
   hashable = self.hashable_1_1_2_5;
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
@@ -1260,8 +1266,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
   network_2_3_0_13 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
   network_2_3_1_0 = callPackage ../development/libraries/haskell/network/2.3.1.0.nix {};
-  network_2_4_0_1 = callPackage ../development/libraries/haskell/network/2.4.0.1.nix {};
-  network = self.network_2_4_0_1;
+  network_2_4_1_0 = callPackage ../development/libraries/haskell/network/2.4.1.0.nix {};
+  network = self.network_2_4_1_0;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 

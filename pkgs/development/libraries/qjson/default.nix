@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "qjson-0.7.1";
 
   src = fetchurl {
-    url = "mirror://sf/qjson/${name}.tar.bz2";
+    url = "mirror://sourceforge/qjson/${name}.tar.bz2";
     sha256 = "155r7nypgnsvjc6w3q51zmjchpqxi4c3azad9cf1fip8bws993iv";
   };
 

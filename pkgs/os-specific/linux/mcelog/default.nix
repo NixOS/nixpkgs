@@ -25,6 +25,10 @@ in stdenv.mkDerivation {
 
   makeFlags = "prefix=$(out) etcprefix=$(out) DOCDIR=$(out)/share/doc";
 
+  preInstall = ''
+    ensureDir $out/share/doc
+  '';
+
   meta = {
     description = "Tool to display logged machine check exceptions";
     homepage = http://mcelog.org/;

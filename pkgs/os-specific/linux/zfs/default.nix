@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "zfs-0.6.0-rc13-${kernel.version}";
 
   src = fetchurl {
-    url = http://zfsonlinux.org/downloads/0.6.0-rc13/zfs-0.6.0-rc13.tar.gz;
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.0-rc13.tar.gz;
     sha256 = "1kpx7sa49ir93kmlrjwjzd6v4kzmda4j9cf6bv2p4s3yrmiz3cjv";
   };
 

@@ -1,12 +1,12 @@
 # Create a python that knows about additional python packages via
 # PYTHONPATH
 
-{stdenv, python, makeWrapper, extraLibs ? []}:
+{ stdenv, python, makeWrapper, recursivePthLoader, extraLibs ? [] }:
 
 stdenv.mkDerivation {
   name = "python-${python.version}-wrapper";
 
-  propagatedBuildInputs = [python makeWrapper] ++ extraLibs;
+  propagatedBuildInputs = extraLibs ++ [ python makeWrapper recursivePthLoader ];
 
   unpackPhase = "true";
   installPhase = ''

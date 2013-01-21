@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "iwlwifi-1000-ucode-128.50.3.1";
   
   src = fetchurl {
-    url = "http://intellinuxwireless.org/iwlwifi/downloads/${name}.tgz";
+    url = "http://wireless.kernel.org/en/users/Drivers/iwlwifi?action=AttachFile&do=get&target=${name}.tgz";
+    name = "${name}.tgz";
     sha256 = "7e81ddad18acec19364c9df22496e8afae99a2e1490b2b178e420b52d443728d";
   };
   
@@ -26,6 +27,6 @@ stdenv.mkDerivation rec {
       driver found in recent kernels.
     '';
 
-    homepage = http://intellinuxwireless.org/;
+    homepage = http://wireless.kernel.org/en/users/Drivers/iwlwifi;
   };
 }

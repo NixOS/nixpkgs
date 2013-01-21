@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "iwlwifi-6000g2a-ucode-18.168.6.1";
 
   src = fetchurl {
-    url = "http://intellinuxwireless.org/iwlwifi/downloads/${name}.tgz";
+    url = "http://wireless.kernel.org/en/users/Drivers/iwlwifi?action=AttachFile&do=get&target=${name}.tgz";
+    name = "${name}.tgz";
     sha256 = "a7f2615756addafbf3e6912cb0265f9650b2807d1ccdf54b620735772725bbe9";
   };
 
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://intellinuxwireless.org/";
+    homepage = http://wireless.kernel.org/en/users/Drivers/iwlwifi;
     description = "Firmware for the Intel 6000 Series Gen2 wireless card";
 
     longDescription = ''

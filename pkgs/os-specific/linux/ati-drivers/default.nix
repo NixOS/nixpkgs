@@ -45,9 +45,9 @@ stdenv.mkDerivation rec {
       patchelf
       unzip
     ];
-    
+
   inherit kernel glibc /* glibc only used for setting interpreter */;
-  
+
   LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
     [ "${xorg.libXrandr}/lib"
       "${xorg.libXrender}/lib"
@@ -58,11 +58,11 @@ stdenv.mkDerivation rec {
   inherit mesa; # only required to build examples
 
   meta = {
-    description = "ati drivers";
+    description = "ATI drivers";
     homepage = http://support.amd.com/us/gpudownload/Pages/index.aspx;
     license = "unfree";
     maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = [ "x86_64-linux" ];
+    #platforms = [ "x86_64-linux" ];
   };
 
   # moved assertions here because the name is evaluated when the NixOS manual is generated

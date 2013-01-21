@@ -13,7 +13,7 @@ let versionNumber = "304.64"; in
 stdenv.mkDerivation {
   name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernel.version}"}";
 
-  builder = ./builder.sh;
+  builder = ./builder-legacy304.sh;
 
   src =
     if stdenv.system == "i686-linux" then

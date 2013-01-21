@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "libmpd";
-  version = "0.8.0.1";
-  sha256 = "16j2c0dnwllsb979gqf1cl4ylvpldcj8k32ddpp4wf62lbb1mqxm";
+  version = "0.8.0.2";
+  sha256 = "1phlbb5lsapw2hb0db7906ddlmvnpyk1xbgxvl9zp9zfd0sn40aj";
   buildDepends = [ filepath mtl network text time utf8String ];
   meta = {
     homepage = "http://github.com/joachifm/libmpd-haskell";
