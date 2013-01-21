@@ -492,11 +492,11 @@ pythonPackages = python.modules // rec {
   });
 
   coverage = buildPythonPackage rec {
-    name = "coverage-3.5.3";
+    name = "coverage-3.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/c/coverage/${name}.tar.gz";
-      md5 = "5f1f523940c473faa8a9f6ca29f78efc";
+      md5 = "67d4e393f4c6a5ffc18605409d2aa1ac";
     };
 
     meta = {
