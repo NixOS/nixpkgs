@@ -1224,7 +1224,7 @@ pythonPackages = python.modules // rec {
       sha256 = "11qilrs4sd4c1mkd64ikrjsc2vwrshhc54n5mh4xrark9c7ayp0y";
     };
 
-    buildInputs = [ zopeInterface mock ];
+    buildInputs = [ zope_interface mock ];
 
     preConfigure = "cp test/secrets.py-dist test/secrets.py";
 
@@ -3149,7 +3149,7 @@ pythonPackages = python.modules // rec {
       md5 = "b7c2ff135939f605a8c54e1c13cd5d66";
     };
 
-    propagatedBuildInputs = [ zopeInterface ];
+    propagatedBuildInputs = [ zope_interface ];
 
     meta = {
       description = "Transaction management";
@@ -3168,7 +3168,7 @@ pythonPackages = python.modules // rec {
        md5 = "2472204a2abd0d8cd4d11ff0fbf36ae7";
      };
 
-     propagatedBuildInputs = [ zopeInterface zope_testing ];
+     propagatedBuildInputs = [ zope_interface zope_testing ];
      meta = {
        description = "A tool which computes a dependency graph between active Python eggs";
        homepage = http://thomas-lotze.de/en/software/eggdeps/;
@@ -3225,7 +3225,7 @@ pythonPackages = python.modules // rec {
       sha256 = "110c30z622jn14yany1sxfaqj5qx20n9rc9zqacxlwma30fdcbjn";
     };
 
-    propagatedBuildInputs = [ zopeInterface ];
+    propagatedBuildInputs = [ zope_interface ];
 
     # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
     # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
@@ -3586,7 +3586,7 @@ pythonPackages = python.modules // rec {
       md5 = "6f180c6897a1820948fee2a6290503cd";
     };
 
-    propagatedBuildInputs = [ manuel transaction zc_lockfile zconfig zdaemon zopeInterface zope_event ];
+    propagatedBuildInputs = [ manuel transaction zc_lockfile zconfig zdaemon zope_interface zope_event ];
 
     meta = {
       description = "An object-oriented database for Python";
@@ -3622,7 +3622,7 @@ pythonPackages = python.modules // rec {
        md5 = "c95569fcb444ae541777de7ae5297492";
      };
 
-     propagatedBuildInputs = [ zopeInterface ];
+     propagatedBuildInputs = [ zope_interface ];
 
      meta = {
        description = "Exception interfaces and implementations";
@@ -3641,7 +3641,7 @@ pythonPackages = python.modules // rec {
       md5 = "2e3829841090d6adff718b8b73c87b6b";
     };
 
-    propagatedBuildInputs = [ zopeInterface zope_exceptions ];
+    propagatedBuildInputs = [ zope_interface zope_exceptions ];
 
     meta = {
       description = "Zope testing helpers";
@@ -3662,7 +3662,7 @@ pythonPackages = python.modules // rec {
 
     buildInputs = [ pkgs.unzip ];
 
-    propagatedBuildInputs = [ subunit zopeInterface zope_exceptions zope_testing ];
+    propagatedBuildInputs = [ subunit zope_interface zope_exceptions zope_testing ];
 
     meta = {
       description = "A flexible test runner with layer support";
@@ -3672,7 +3672,7 @@ pythonPackages = python.modules // rec {
   };
 
 
-  zopeInterface = buildPythonPackage {
+  zope_interface = buildPythonPackage {
     name = "zope-interface-3.6.1";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.interface/zope.interface-3.6.1.tar.gz";
@@ -3815,7 +3815,7 @@ pythonPackages = python.modules // rec {
       sha256 = "0wjhd87pvpcpvaj3wql2d92g8lpp33iwmxdkp7npic5mjl2y0dsg";
     };
 
-    buildInputs = [ txamqp zopeInterface twisted ];
+    buildInputs = [ txamqp zope_interface twisted ];
     propagatedBuildInputs = [ whisper ];
 
     # error: invalid command 'test'
