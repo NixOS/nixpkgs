@@ -3512,11 +3512,11 @@ pythonPackages = python.modules // rec {
 
 
   zc_lockfile = buildPythonPackage rec {
-    name = "zc_lockfile-${version}";
+    name = "zc.lockfile-${version}";
     version = "1.0.2";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zc.lockfile/zc.lockfile-${version}.tar.gz";
+      url = "http://pypi.python.org/packages/source/z/zc.lockfile/${name}.tar.gz";
       md5 = "f099d4cf2583a0c7bea0146a44dc4d59";
     };
 
@@ -3597,11 +3597,11 @@ pythonPackages = python.modules // rec {
 
 
   zope_event = buildPythonPackage rec {
-    name = "zope_event-${version}";
+    name = "zope.event-${version}";
     version = "4.0.2";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.event/zope.event-${version}.tar.gz";
+      url = "http://pypi.python.org/packages/source/z/zope.event/${name}.tar.gz";
       md5 = "e08dd299d428d77a1cfcbfe841b81872";
     };
 
@@ -3614,11 +3614,11 @@ pythonPackages = python.modules // rec {
 
 
   zope_exceptions = buildPythonPackage rec {
-     name = "zopeexceptions-${version}";
+     name = "zope.exceptions-${version}";
      version = "4.0.5";
 
      src = fetchurl {
-       url = "http://pypi.python.org/packages/source/z/zope.exceptions/zope.exceptions-${version}.tar.gz";
+       url = "http://pypi.python.org/packages/source/z/zope.exceptions/${name}.tar.gz";
        md5 = "c95569fcb444ae541777de7ae5297492";
      };
 
@@ -3633,11 +3633,11 @@ pythonPackages = python.modules // rec {
 
 
   zope_testing = buildPythonPackage rec {
-    name = "zope_testing-${version}";
+    name = "zope.testing-${version}";
     version = "4.1.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.testing/zope.testing-${version}.tar.gz";
+      url = "http://pypi.python.org/packages/source/z/zope.testing/${name}.tar.gz";
       md5 = "2e3829841090d6adff718b8b73c87b6b";
     };
 
@@ -3652,11 +3652,11 @@ pythonPackages = python.modules // rec {
 
 
   zope_testrunner = buildPythonPackage rec {
-    name = "zope_testrunner-${version}";
+    name = "zope.testrunner-${version}";
     version = "4.0.4";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.testrunner/zope.testrunner-${version}.zip";
+      url = "http://pypi.python.org/packages/source/z/zope.testrunner/${name}.zip";
       md5 = "cd648fc865a79aa0950e73342836dd4c";
     };
 
@@ -3672,10 +3672,12 @@ pythonPackages = python.modules // rec {
   };
 
 
-  zope_interface = buildPythonPackage {
-    name = "zope-interface-3.6.1";
+  zope_interface = buildPythonPackage rec {
+    name = "zope.interface-${version}";
+    version = "3.6.1";
+
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.interface/zope.interface-3.6.1.tar.gz";
+      url = "http://pypi.python.org/packages/source/z/zope.interface/${name}.tar.gz";
       sha256 = "294c3c0529e84169177bce78d616c768fa1c028a2fbc1854f615d32ed88dbc6c";
     };
 
