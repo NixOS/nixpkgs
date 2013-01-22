@@ -912,6 +912,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     polyparse = self.polyparse_1_7;
   };
 
+  groupoids = callPackage ../development/libraries/haskell/groupoids {};
+
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
