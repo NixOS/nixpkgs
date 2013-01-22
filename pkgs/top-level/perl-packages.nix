@@ -2519,35 +2519,35 @@ rec {
   };
 
   ImageExifTool = buildPerlPackage rec {
-      name = "Image-ExifTool-8.41";
+    name = "Image-ExifTool-8.41";
 
-      src = fetchurl {
-        url = "http://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
-        sha256 = "1fdjic0bhbai8zzl3287i9wcs88khiv8qx5slx9n3gzvbnxacvqg";
-      };
-
-      meta = {
-        description = "ExifTool, a tool to read, write and edit EXIF meta information";
-        homepage = http://www.sno.phy.queensu.ca/~phil/exiftool/;
-
-        longDescription = ''
-          ExifTool is a platform-independent Perl library plus a command-line
-          application for reading, writing and editing meta information in
-          image, audio and video files.  ExifTool supports many different types
-          of metadata including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC
-          Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well as the maker
-          notes of many digital cameras by Canon, Casio, FujiFilm, HP,
-          JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Nikon,
-          Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Ricoh, Sanyo,
-          Sigma/Foveon and Sony.
-        '';
-
-        licenses = [ "GPLv1+" /* or */ "Artistic" ];
-
-        maintainers = [ stdenv.lib.maintainers.ludo ];
-        platforms = stdenv.lib.platforms.unix;
-      };
+    src = fetchurl {
+      url = "http://www.sno.phy.queensu.ca/~phil/exiftool/${name}.tar.gz";
+      sha256 = "1fdjic0bhbai8zzl3287i9wcs88khiv8qx5slx9n3gzvbnxacvqg";
     };
+
+    meta = {
+      description = "ExifTool, a tool to read, write and edit EXIF meta information";
+      homepage = http://www.sno.phy.queensu.ca/~phil/exiftool/;
+
+      longDescription = ''
+        ExifTool is a platform-independent Perl library plus a command-line
+        application for reading, writing and editing meta information in
+        image, audio and video files.  ExifTool supports many different types
+        of metadata including EXIF, GPS, IPTC, XMP, JFIF, GeoTIFF, ICC
+        Profile, Photoshop IRB, FlashPix, AFCP and ID3, as well as the maker
+        notes of many digital cameras by Canon, Casio, FujiFilm, HP,
+        JVC/Victor, Kodak, Leaf, Minolta/Konica-Minolta, Nikon,
+        Olympus/Epson, Panasonic/Leica, Pentax/Asahi, Ricoh, Sanyo,
+        Sigma/Foveon and Sony.
+      '';
+
+      licenses = [ "GPLv1+" /* or */ "Artistic" ];
+
+      maintainers = [ stdenv.lib.maintainers.ludo ];
+      platforms = stdenv.lib.platforms.unix;
+    };
+  };
 
   Inline = buildPerlPackage rec {
     name = "Inline-0.45";
