@@ -2489,7 +2489,11 @@ let
     fpc = fpc;
   };
 
-  llvm = callPackage ../development/compilers/llvm { };
+  llvm = callPackage ../development/compilers/llvm {
+    stdenv = if stdenv.isDarwin
+      then stdenvAdapters.overrideGCC stdenv gccApple
+      else stdenv;
+  };
 
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
