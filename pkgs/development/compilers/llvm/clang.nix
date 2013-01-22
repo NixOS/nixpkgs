@@ -1,14 +1,13 @@
-{ stdenv, fetchurl, perl, groff, llvm, cmake }:
+{ stdenv, fetchurl, perl, groff, llvm, cmake, libxml2 }:
 
-let version = "3.1"; in
+let version = "3.2"; in
 
 stdenv.mkDerivation {
   name = "clang-${version}";
 
-  buildInputs = [ perl llvm groff cmake ];
+  buildInputs = [ perl llvm groff cmake libxml2 ];
 
-  patches = stdenv.lib.optionals (stdenv.gcc.libc != null) 
-    [ ./clang-include-paths.patch ./clang-ld-flags.patch ];
+  patches = stdenv.lib.optional (stdenv.gcc.libc != null) ./clang-purity.patch;
 
   cmakeFlags = [
     "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}"
@@ -22,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
       url = "http://llvm.org/releases/${version}/clang-${version}.src.tar.gz";
-      sha256 = "11m7sm9f8qcrayckfg3z91zb3fimilpm0f7azn7q7qnkvhay4qzz";
+      sha256 = "0n2nzw3pw2v7fk67f2k2qyzd9wibvi3i5j7cjzz1csqgghzz1aia";
   };
 
   passthru = { gcc = stdenv.gcc.gcc; };
@@ -35,4 +34,3 @@ stdenv.mkDerivation {
     platforms = with stdenv.lib.platforms; all;
   };
 }
-

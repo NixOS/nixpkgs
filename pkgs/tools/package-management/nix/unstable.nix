@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.2pre2980_9de6bc5";
+  name = "nix-1.4pre3044_536c85e";
 
   src = fetchurl {
-    url = "http://hydra.nixos.org/build/3338447/download/4/${name}.tar.bz2";
-    sha256 = "b767c2b75a0036edfc6be209dcaab23643887b192e3788640380ac27298b08d0";
+    url = "http://hydra.nixos.org/build/3794557/download/5/${name}.tar.xz";
+    sha256 = "d0f952ff3b4c0cf7f9682b45844ffb3686ff333d02be83341380186a97834f95";
   };
 
   nativeBuildInputs = [ perl pkgconfig ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     ''
-      --with-store-dir=${storeDir} --localstatedir=${stateDir}
+      --with-store-dir=${storeDir} --localstatedir=${stateDir} --sysconfdir=/etc
       --with-dbi=${perlPackages.DBI}/${perl.libPrefix}
       --with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}
       --with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}
@@ -34,6 +34,10 @@ stdenv.mkDerivation rec {
       --enable-gc
       CFLAGS=-O3 CXXFLAGS=-O3
     '';
+
+  makeFlags = "profiledir=$(out)/etc/profile.d";
+
+  installFlags = "sysconfdir=$(out)/etc";
 
   doInstallCheck = true;
 

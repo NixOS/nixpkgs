@@ -491,6 +491,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
+  bifunctors = callPackage ../development/libraries/haskell/bifunctors {};
+
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
   binary_hackage = callPackage ../development/libraries/haskell/binary {};
@@ -733,6 +735,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dns = callPackage ../development/libraries/haskell/dns {};
 
+  doctest = callPackage ../development/libraries/haskell/doctest {};
+
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
   doubleConversion = callPackage ../development/libraries/haskell/double-conversion {};
@@ -907,6 +911,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     fgl = self.fgl_5_4_2_4;
     polyparse = self.polyparse_1_7;
   };
+
+  groupoids = callPackage ../development/libraries/haskell/groupoids {};
 
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
@@ -1387,6 +1393,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
   primitive = self.primitive_0_5_0_1;
 
+  profunctors = callPackage ../development/libraries/haskell/profunctors {};
+
+  profunctorExtras = callPackage ../development/libraries/haskell/profunctor-extras {};
+
   projectTemplate = callPackage ../development/libraries/haskell/project-template {};
 
   processExtras = callPackage ../development/libraries/haskell/process-extras {};
@@ -1503,6 +1513,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
 
   semigroupoids = callPackage ../development/libraries/haskell/semigroupoids {};
+
+  semigroupoidExtras = callPackage ../development/libraries/haskell/semigroupoid-extras {};
 
   setenv = callPackage ../development/libraries/haskell/setenv {};
 

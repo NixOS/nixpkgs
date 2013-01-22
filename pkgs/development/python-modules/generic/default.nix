@@ -50,11 +50,13 @@ python.stdenv.mkDerivation (attrs // {
 
   name = namePrefix + name;
 
-  # default values for maintainers and platforms
+  # default to python's platforms and add maintainer(s) to every
+  # package
   meta = {
-    maintainers = python.meta.maintainers;
     platforms = python.meta.platforms;
-  } // meta;
+  } // meta // {
+    maintainers = (meta.maintainers or []) ++ [ lib.maintainers.chaoflow ];
+  };
 
   # checkPhase after installPhase to run tests on installed packages
   phases = "unpackPhase patchPhase configurePhase buildPhase installPhase checkPhase fixupPhase distPhase";

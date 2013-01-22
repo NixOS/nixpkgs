@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, x11, libjpeg, libpng12, libXmu
-, fontconfig, freetype, pam, consolekit, dbus_libs }:
+, fontconfig, freetype, pam, dbus_libs }:
 
 stdenv.mkDerivation rec {
   name = "slim-1.3.4";
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cmake pkgconfig x11 libjpeg libpng12 libXmu fontconfig freetype
       pam dbus_libs
-    ] ++ stdenv.lib.optional (consolekit != null) consolekit;
+    ];
 
   preConfigure = "substituteInPlace CMakeLists.txt --replace /etc $out/etc";
 
-  cmakeFlags = [ "-DUSE_PAM=1" ] ++ stdenv.lib.optional (consolekit != null) "-DUSE_CONSOLEKIT=1";
+  cmakeFlags = [ "-DUSE_PAM=1" ];
 
   NIX_CFLAGS_LINK = "-lXmu";
 
