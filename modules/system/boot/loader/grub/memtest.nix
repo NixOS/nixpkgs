@@ -13,7 +13,8 @@ in
       default = false;
       type = types.bool;
       description = ''
-        Add a menu entry in grub for memtest86
+        Make Memtest86+, a memory testing program, available from the
+        GRUB menu.
       '';
     };
   };
