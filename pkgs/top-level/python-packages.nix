@@ -3600,6 +3600,127 @@ pythonPackages = python.modules // rec {
   };
 
 
+  zope_broken = buildPythonPackage rec {
+    name = "zope.broken-3.6.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.broken/${name}.zip";
+      md5 = "eff24d7918099a3e899ee63a9c31bee6";
+    };
+
+    buildInputs = [ pkgs.unzip zope_interface ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_browser = buildPythonPackage rec {
+    name = "zope.browser-1.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.browser/${name}.zip";
+      md5 = "4ff0ddbf64c45bfcc3189e35f4214ded";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    propagatedBuildInputs = [ zope_interface ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_component = buildPythonPackage rec {
+    name = "zope.component-4.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.component/zope.component-4.0.2.tar.gz";
+      md5 = "8c2fd4414ca23cbbe014dcaf911acebc";
+    };
+
+    propagatedBuildInputs = [
+      zope_configuration zope_event zope_i18nmessageid zope_interface
+      zope_testing
+    ];
+
+    # ignore tests because of a circular dependency on zope_security
+    doCheck = false;
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_configuration = buildPythonPackage rec {
+    name = "zope.configuration-4.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.configuration/zope.configuration-4.0.2.tar.gz";
+      md5 = "40b3c7ad0b748ede532d8cfe2544e44e";
+    };
+
+    propagatedBuildInputs = [ zope_i18nmessageid zope_schema ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_container = buildPythonPackage rec {
+    name = "zope.container-3.11.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.container/${name}.tar.gz";
+      md5 = "fc66d85a17b8ffb701091c9328983dcc";
+    };
+
+    propagatedBuildInputs = [
+      zodb3 zope_broken zope_dottedname zope_publisher
+      zope_filerepresentation zope_lifecycleevent zope_size
+      zope_traversing
+    ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_contenttype = buildPythonPackage rec {
+    name = "zope.contenttype-3.5.5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.contenttype/${name}.zip";
+      md5 = "c6ac80e6887de4108a383f349fbdf332";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_dottedname = buildPythonPackage rec {
+    name = "zope.dottedname-3.4.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.dottedname/${name}.tar.gz";
+      md5 = "62d639f75b31d2d864fe5982cb23959c";
+    };
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
   zope_event = buildPythonPackage rec {
     name = "zope.event-${version}";
     version = "4.0.2";
@@ -3638,6 +3759,181 @@ pythonPackages = python.modules // rec {
    };
 
 
+  zope_filerepresentation = buildPythonPackage rec {
+    name = "zope.filerepresentation-3.6.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.filerepresentation/${name}.tar.gz";
+      md5 = "4a7a434094f4bfa99a7f22e75966c359";
+    };
+
+    propagatedBuildInputs = [ zope_schema ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_i18n = buildPythonPackage rec {
+    name = "zope.i18n-3.7.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.i18n/${name}.tar.gz";
+      md5 = "a6fe9d9ad53dd7e94e87cd58fb67d3b7";
+    };
+
+    propagatedBuildInputs = [ pytz zope_component ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_i18nmessageid = buildPythonPackage rec {
+    name = "zope.i18nmessageid-4.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.i18nmessageid/zope.i18nmessageid-4.0.2.tar.gz";
+      md5 = "c4550f7a0b4a736186e6e0fa3b2471f7";
+    };
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_lifecycleevent = buildPythonPackage rec {
+    name = "zope.lifecycleevent-3.6.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.lifecycleevent/${name}.tar.gz";
+      md5 = "3ba978f3ba7c0805c81c2c79ea3edb33";
+    };
+
+    propagatedBuildInputs = [ zope_event zope_component ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_location = buildPythonPackage rec {
+    name = "zope.location-4.0.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.location/zope.location-4.0.0.tar.gz";
+      md5 = "cd0e10d5923c95e352bcde505cc11324";
+    };
+
+    propagatedBuildInputs = [ zope_proxy ];
+
+    # ignore circular dependency on zope_schema
+    installCommand = ''
+      easy_install --always-unzip --no-deps --prefix="$out" .
+    '';
+
+    doCheck = false;
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_proxy = buildPythonPackage rec {
+    name = "zope.proxy-4.1.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.proxy/zope.proxy-4.1.1.tar.gz";
+      md5 = "c36691f0abee7573f4ddcc378603cefd";
+    };
+
+    propagatedBuildInputs = [ zope_interface ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_publisher = buildPythonPackage rec {
+    name = "zope.publisher-3.12.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.publisher/${name}.tar.gz";
+      md5 = "495131970cc7cb14de8e517fb3857ade";
+    };
+
+    propagatedBuildInputs = [
+      zope_browser zope_contenttype zope_i18n zope_security
+    ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_schema = buildPythonPackage rec {
+    name = "zope.schema-4.2.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.schema/zope.schema-4.2.2.tar.gz";
+      md5 = "e7e581af8193551831560a736a53cf58";
+    };
+    
+    propagatedBuildInputs = [ zope_event zope_interface zope_testing ];
+
+    # ignore circular dependency on zope_location
+    installCommand = ''
+      easy_install  --no-deps --prefix="$out" .
+    '';
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_security = buildPythonPackage rec {
+    name = "zope.security-3.7.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.security/zope.security-3.7.4.tar.gz";
+      md5 = "072ab8d11adc083eace11262da08630c";
+    };
+
+    propagatedBuildInputs = [
+      zope_component zope_configuration zope_i18nmessageid zope_schema
+      zope_proxy
+    ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_size = buildPythonPackage rec {
+    name = "zope.size-3.4.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.size/${name}.tar.gz";
+      md5 = "55d9084dfd9dcbdb5ad2191ceb5ed03d";
+    };
+
+    propagatedBuildInputs = [ zope_i18nmessageid zope_interface ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
   zope_testing = buildPythonPackage rec {
     name = "zope.testing-${version}";
     version = "4.1.1";
@@ -3647,7 +3943,7 @@ pythonPackages = python.modules // rec {
       md5 = "2e3829841090d6adff718b8b73c87b6b";
     };
 
-    propagatedBuildInputs = [ zope_interface zope_exceptions ];
+    propagatedBuildInputs = [ zope_interface zope_exceptions zope_location ];
 
     meta = {
       description = "Zope testing helpers";
@@ -3680,21 +3976,42 @@ pythonPackages = python.modules // rec {
   };
 
 
+  zope_traversing = buildPythonPackage rec {
+    name = "zope.traversing-3.13.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.traversing/${name}.zip";
+      md5 = "eaad8fc7bbef126f9f8616b074ec00aa";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    propagatedBuildInputs = [ zope_location zope_security zope_publisher ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
   zope_interface = buildPythonPackage rec {
-    name = "zope.interface-${version}";
-    version = "3.6.1";
+    name = "zope.interface-4.0.3";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zope.interface/${name}.tar.gz";
-      sha256 = "294c3c0529e84169177bce78d616c768fa1c028a2fbc1854f615d32ed88dbc6c";
+      md5 = "1ddd308f2c83703accd1696158c300eb";
     };
+
+    propagatedBuildInputs = [ zope_event ];
 
     meta = {
       description = "Zope.Interface";
       homepage = http://zope.org/Products/ZopeInterface;
       license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
+
 
   # XXX: link broken
   # hgsvn = buildPythonPackage rec {
