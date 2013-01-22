@@ -98,7 +98,7 @@ with pkgs.lib;
       mkdir -p /unionfs-chroot/rw-nix
       mkdir -m 755 -p $targetRoot/ephemeral0/nix
       mount --rbind $targetRoot/ephemeral0/nix /unionfs-chroot/rw-nix
-      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-nix=RW:/ro-nix=RO $targetRoot/nix
+      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768 /rw-nix=RW:/ro-nix=RO $targetRoot/nix
     '';
 
     boot.initrd.supportedFilesystems = [ "unionfs-fuse" ];

@@ -132,7 +132,7 @@ with pkgs.lib;
               mkdir -p /unionfs-chroot/rw-nix
               mount --rbind $targetRoot/$diskForUnionfs/root/nix /unionfs-chroot/rw-nix
 
-              unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-nix=RW:/ro-nix=RO $targetRoot/nix
+              unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768 /rw-nix=RW:/ro-nix=RO $targetRoot/nix
           fi
       fi
     '';

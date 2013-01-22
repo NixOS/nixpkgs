@@ -281,7 +281,7 @@ in
       # Mark this as a NixOS machinex.
       mkdir -p $targetRoot/etc
       echo -n > $targetRoot/etc/NIXOS
-    
+
       # Fix the permissions on /tmp.
       chmod 1777 $targetRoot/tmp
 
@@ -293,7 +293,7 @@ in
 
         mkdir /unionfs-chroot/rw-store
         mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
-        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-store=RW:/ro-store=RO $targetRoot/nix/store
+        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768 /rw-store=RW:/ro-store=RO $targetRoot/nix/store
       ''}
     '';
 

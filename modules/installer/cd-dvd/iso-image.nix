@@ -208,14 +208,14 @@ in
       mkdir /unionfs-chroot/rw-root
       mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-root
       mkdir /mnt-root-union
-      unionfs -o allow_other,cow,chroot=/unionfs-chroot /rw-root=RW:/ro-root=RO /mnt-root-union
+      unionfs -o allow_other,cow,chroot=/unionfs-chroot,max_files=32768 /rw-root=RW:/ro-root=RO /mnt-root-union
       oldTargetRoot=$targetRoot
       targetRoot=/mnt-root-union
 
       mkdir /unionfs-chroot/rw-store
       mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
       mkdir -p $oldTargetRoot/nix/store
-      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot /rw-store=RW:/ro-root/nix/store=RO /mnt-root-union/nix/store
+      unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768 /rw-store=RW:/ro-root/nix/store=RO /mnt-root-union/nix/store
     '';
 
   # Closures to be copied to the Nix store on the CD, namely the init
