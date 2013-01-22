@@ -51,8 +51,7 @@ in
       };
 
       driver = mkOption {
-        default = "";
-        example = "nl80211";
+        default = "nl80211,wext";
         description = "Force a specific wpa_supplicant driver.";
       };
 
@@ -118,7 +117,7 @@ in
             '' else ''
               ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
             ''}
-            exec wpa_supplicant -s -u ${optionalString (cfg.driver != "") "-D${cfg.driver}"} -c ${configFile} $ifaces
+            exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces -dd
           '';
       };
 
