@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       ./0004-Set-switch-to-configuration-hints-for-some-units.patch
       ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
       ./0006-Don-t-call-plymouth-quit.patch
-    ];
+    ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
