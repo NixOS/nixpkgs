@@ -152,8 +152,7 @@ let
       doublePatchelf = (pkgs.stdenv.system == "armv5tel-linux");
     }
     ''
-      ensureDir $out/bin
-      ensureDir $out/lib
+      mkdir -p $out/bin $out/lib
 
       # Copy what we need from Glibc.
       cp -pv ${pkgs.glibc}/lib/ld*.so.? $out/lib
@@ -228,8 +227,8 @@ let
       export LD_LIBRARY_PATH=$out/lib
       $out/bin/mount --help 2>&1 | grep "BusyBox"
       $out/bin/udevadm --version
-      $out/bin/dmsetup --version 2>&1 | tee -a $out/log | grep "version:"
-      LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a $out/log | grep "LVM"
+      $out/bin/dmsetup --version 2>&1 | tee -a log | grep "version:"
+      LVM_SYSTEM_DIR=$out $out/bin/lvm version 2>&1 | tee -a log | grep "LVM"
       $out/bin/mdadm --version
 
       ${config.boot.initrd.extraUtilsCommandsTest}
