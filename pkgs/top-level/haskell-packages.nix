@@ -1393,6 +1393,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
   primitive = self.primitive_0_5_0_1;
 
+  profunctors = callPackage ../development/libraries/haskell/profunctors {};
+
+  profunctorExtras = callPackage ../development/libraries/haskell/profunctor-extras {};
+
   projectTemplate = callPackage ../development/libraries/haskell/project-template {};
 
   processExtras = callPackage ../development/libraries/haskell/process-extras {};
