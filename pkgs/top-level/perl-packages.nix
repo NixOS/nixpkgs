@@ -395,6 +395,7 @@ rec {
       homepage = http://dev.catalyst.perl.org/;
       description = "Catalyst Development Tools";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -416,13 +417,16 @@ rec {
     ];
   };
 
-  CatalystManual = buildPerlPackage rec {
-    name = "Catalyst-Manual-5.8000";
+  CatalystManual = buildPerlPackage {
+    name = "Catalyst-Manual-5.9006";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/H/HK/HKCLARK/${name}.tar.gz";
-      sha256 = "0ay4gcprwqw4h5vsk8g0n9ir51sq7n5i2rdahgqdlb8caj4fshz5";
+      url = mirror://cpan/authors/id/H/HK/HKCLARK/Catalyst-Manual-5.9006.tar.gz;
+      sha256 = "0cl9nqg5jrqcf2h3pgk6q8408czf5s0k0xh3ra884c9cnx84mr95";
     };
-    buildInputs = [TestPod TestPodCoverage];
+    meta = {
+      description = "The Catalyst developer's manual";
+      license = "perl";
+    };
   };
 
   CatalystModelDBICSchema = buildPerlPackage {
