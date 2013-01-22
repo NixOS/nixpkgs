@@ -2857,8 +2857,6 @@ let
     inherit (python27Packages) recursivePthLoader;
   };
 
-  pythonhomeWrapper = callPackage ../development/interpreters/python/pythonhome-wrapper.nix { };
-
   pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };
 
   pyrex = pyrex095;
