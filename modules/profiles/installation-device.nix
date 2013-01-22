@@ -117,10 +117,8 @@ in
       ''
 
         Log in as "root" with an empty password.  ${
-          if config.services.xserver.enable then
-            "Type `start xserver' to start\nthe graphical user interface."
-          else ""
-        }
+          optionalString config.services.xserver.enable
+            "Type `start display-manager' to\nstart the graphical user interface."}
       '';
 
     # Allow sshd to be started manually through "start sshd".  It should
