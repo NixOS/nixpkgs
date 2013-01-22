@@ -8411,10 +8411,7 @@ let
 
   trigger = callPackage ../games/trigger { };
 
-  ufoai = callPackage ../games/ufoai {
-    inherit (gnome) gtksourceview gtkglext;
-    libpng = libpng12;
-  };
+  ufoai = callPackage ../games/ufoai { };
 
   ultimatestunts = callPackage ../games/ultimatestunts { };
 
