@@ -1448,7 +1448,7 @@ rec {
 
   DBDPg = import ../development/perl-modules/DBD-Pg {
     inherit stdenv fetchurl buildPerlPackage DBI;
-    postgresql = pkgs.postgresql91;
+    postgresql = pkgs.postgresql92;
   };
 
   DBFile = import ../development/perl-modules/DB_File {
@@ -1457,10 +1457,10 @@ rec {
   };
 
   DBI = buildPerlPackage {
-    name = "DBI-1.623";
+    name = "DBI-1.616";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.623.tar.gz;
-      sha256 = "18g3bl4bg0ww0n3aqc0gg3ckiql7cyf7v2aqma9ga086xgwp6bci";
+      url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.616.tar.gz;
+      sha256 = "0m6hk66xprjl314d5c665hnd1vch9a0b9y6ywvmf04kdqj33kkk0";
     };
     meta = {
       homepage = http://dbi.perl.org/;
