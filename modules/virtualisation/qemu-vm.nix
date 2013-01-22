@@ -293,7 +293,7 @@ in
 
         mkdir /unionfs-chroot/rw-store
         mount -t tmpfs -o "mode=755" none /unionfs-chroot/rw-store
-        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768 /rw-store=RW:/ro-store=RO $targetRoot/nix/store
+        unionfs -o allow_other,cow,nonempty,chroot=/unionfs-chroot,max_files=32768,hide_meta_files /rw-store=RW:/ro-store=RO $targetRoot/nix/store
       ''}
     '';
 
@@ -313,7 +313,13 @@ in
       )
     '';
 
-  virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
+  virtualisation.pathsInNixDB =
+    [ config.system.build.toplevel
+      # This path from the initrd must be registered as valid because
+      # unionfs uses it from the target Nix store (?).  FIXME: get
+      # unionfs to use the path from the Nix store instead.
+      config.system.build.extraUtils
+    ];
 
   virtualisation.qemu.options = [ "-vga std" "-usbdevice tablet" ];
 
