@@ -869,11 +869,11 @@ pythonPackages = python.modules // rec {
 
 
   flake8 = buildPythonPackage (rec {
-    name = "flake8-1.6.2";
+    name = "flake8-1.7.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      md5 = "abfdbb25d37c28e9da05f1b5c3596d1a";
+      md5 = "a7830d1a6c23e889bc1fcaa4a87f53bd";
     };
 
     buildInputs = [ nose ];
