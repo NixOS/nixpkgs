@@ -491,6 +491,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
+  bifunctors = callPackage ../development/libraries/haskell/bifunctors {};
+
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
   binary_hackage = callPackage ../development/libraries/haskell/binary {};
