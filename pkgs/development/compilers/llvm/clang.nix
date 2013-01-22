@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, perl, groff, llvm, cmake }:
+{ stdenv, fetchurl, perl, groff, llvm, cmake, libxml2 }:
 
 let version = "3.2"; in
 
 stdenv.mkDerivation {
   name = "clang-${version}";
 
-  buildInputs = [ perl llvm groff cmake ];
+  buildInputs = [ perl llvm groff cmake libxml2 ];
 
   patches = stdenv.lib.optional (stdenv.gcc.libc != null) ./clang-purity.patch;
 
