@@ -89,9 +89,10 @@ with pkgs.lib;
         # on modern machines.
         "snd_pcsp"
 
-        # !!! Hm, Ubuntu blacklists all framebuffer devices because
-        # they're "buggy" and cause suspend problems.  Maybe we should
-        # too?
+        # The cirrusfb module prevents X11 from starting.  FIXME:
+        # Ubuntu blacklists all framebuffer devices because they're
+        # "buggy" and cause suspend problems.  Maybe we should too?
+        "cirrusfb"
       ];
 
     system.activationScripts.modprobe =
