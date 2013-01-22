@@ -44,6 +44,11 @@ stdenv.mkDerivation ({
 
       /* Without this patch many KDE binaries crash. */
       ./glibc-elf-localscope.patch
+
+      /* Add blowfish password hashing support.  This is needed for
+         compatibility with old NixOS installations (since NixOS used
+         to default to blowfish). */
+      ./glibc-crypt-blowfish.patch
     ];
 
   postPatch = ''
