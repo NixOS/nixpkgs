@@ -117,7 +117,7 @@ in
             '' else ''
               ifaces="${concatStringsSep " -N " (map (i: "-i${i}") ifaces)}"
             ''}
-            exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces -dd
+            exec wpa_supplicant -s -u -D${cfg.driver} -c ${configFile} $ifaces
           '';
       };
 
