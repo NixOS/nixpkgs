@@ -3055,11 +3055,11 @@ pythonPackages = python.modules // rec {
   # };
 
   taskcoach = buildPythonPackage rec {
-    name = "TaskCoach-1.3.8";
+    name = "TaskCoach-1.3.22";
 
     src = fetchurl {
       url = "mirror://sourceforge/taskcoach/${name}.tar.gz";
-      sha256 = "0gc277cgnw6f167lrbxlf7rmgyjxwzgkmi77qz9xwvnwcj2l94xn";
+      sha256 = "1ddx56bqmh347synhgjq625ijv5hqflr0apxg0nl4jqdsqk1zmxh";
     };
 
     propagatedBuildInputs = [ wxPython ];
