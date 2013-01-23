@@ -224,6 +224,7 @@ let
 
           [Service]
           Environment=PATH=${def.path}
+          Environment=LD_LIBRARY_PATH=
           ${let env = cfg.globalEnvironment // def.environment;
             in concatMapStrings (n: "Environment=${n}=${getAttr n env}\n") (attrNames env)}
           ${optionalString (!def.restartIfChanged) "X-RestartIfChanged=false"}
