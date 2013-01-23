@@ -6262,6 +6262,8 @@ let
 
   procps = callPackage ../os-specific/linux/procps { };
 
+  "procps-ng" = callPackage ../os-specific/linux/procps-ng { };
+
   pwdutils = callPackage ../os-specific/linux/pwdutils { };
 
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
