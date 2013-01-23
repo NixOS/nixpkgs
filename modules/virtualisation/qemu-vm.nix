@@ -311,13 +311,7 @@ in
       fi
     '';
 
-  virtualisation.pathsInNixDB =
-    [ config.system.build.toplevel
-      # This path from the initrd must be registered as valid because
-      # unionfs uses it from the target Nix store (?).  FIXME: get
-      # unionfs to use the path from the Nix store instead.
-      config.system.build.extraUtils
-    ];
+  virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
   virtualisation.qemu.options = [ "-vga std" "-usbdevice tablet" ];
 
