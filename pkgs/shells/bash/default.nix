@@ -48,7 +48,9 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (texinfo != null) texinfo
     ++ stdenv.lib.optional interactive readline;
 
-  enableParallelBuilding = true;
+  # Bash randomly fails to build because of a recursive invocation to
+  # build `version.h'.
+  enableParallelBuilding = false;
 
   postInstall = ''
     # Add an `sh' -> `bash' symlink.
