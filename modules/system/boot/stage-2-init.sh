@@ -2,6 +2,8 @@
 
 systemConfig=@systemConfig@
 
+export HOME=/root
+
 
 # Print a greeting.
 echo
