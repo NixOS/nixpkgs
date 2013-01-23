@@ -306,11 +306,9 @@ in
   # dependency.)
   boot.postBootCommands =
     ''
-      ( source /proc/cmdline
-        if [ -n "$regInfo" ]; then
-            ${config.environment.nix}/bin/nix-store --load-db < $regInfo
-        fi
-      )
+      if [[ "$(cat /proc/cmdline)" =~ regInfo=([^ ]*) ]]; then
+        ${config.environment.nix}/bin/nix-store --load-db < ''${BASH_REMATCH[1]}
+      fi
     '';
 
   virtualisation.pathsInNixDB =
