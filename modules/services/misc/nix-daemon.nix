@@ -185,7 +185,7 @@ in
       };
 
       readOnlyStore = mkOption {
-        default = false;
+        default = true;
         description = ''
           If set, NixOS will enforce the immutability of the Nix store
           by making <filename>/nix/store</filename> a read-only bind
