@@ -149,14 +149,15 @@ else:
 
 print >> sys.stderr, "registered AMI {0}".format(ami_id)
 
-time.sleep(5)
+print >> sys.stderr, "sleeping a bit..."
+time.sleep(30)
+
+print >> sys.stderr, "setting image name..."
+m._conn.create_tags([ami_id], {'Name': ami_name})
+
 print >> sys.stderr, "making image public..."
 image = m._conn.get_all_images(image_ids=[ami_id])[0]
 image.set_launch_permissions(user_ids=[], group_names=["all"])
-
-m._conn.create_tags([ami_id], {'Name': ami_name})
-
-time.sleep(5)
 
 
 # Do a test deployment to make sure that the AMI works.
