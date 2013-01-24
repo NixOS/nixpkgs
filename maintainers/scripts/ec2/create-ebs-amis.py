@@ -1,11 +1,12 @@
 #! /usr/bin/env python
 
+import os
 import sys
-from charon import deployment
-from boto.ec2.blockdevicemapping import BlockDeviceMapping, BlockDeviceType
-import charon.util
 import time
 import argparse
+import charon.util
+from charon import deployment
+from boto.ec2.blockdevicemapping import BlockDeviceMapping, BlockDeviceType
 
 parser = argparse.ArgumentParser(description='Create an EBS-backed NixOS AMI')
 parser.add_argument('--region', dest='region', required=True, help='EC2 region')
@@ -18,13 +19,14 @@ instance_type = "cc1.4xlarge" if args.hvm else "m1.small"
 key_name = args.key_name
 ebs_size = 8 if args.hvm else 20
 
+
 # Start a NixOS machine in the given region.
 f = open("ebs-creator-config.nix", "w")
-f.write('''{{ 
-  machine = 
+f.write('''{{
+  machine =
     {{ pkgs, ... }}:
     {{
-      deployment.ec2.region = "{0}"; 
+      deployment.ec2.region = "{0}";
       deployment.ec2.keyPair = pkgs.lib.mkOverride 10 "{1}";
       deployment.ec2.blockDeviceMapping."/dev/xvdg".size = pkgs.lib.mkOverride 10 {2};
     }};
@@ -32,18 +34,19 @@ f.write('''{{
 '''.format(args.region, key_name, ebs_size))
 f.close()
 
-db = deployment.open_database("./ebs-creator.charon")
+db = deployment.open_database(deployment.get_default_state_file())
 try:
     depl = deployment.open_deployment(db, "ebs-creator")
 except Exception:
     depl = deployment.create_deployment(db)
     depl.name = "ebs-creator"
 depl.auto_response = "y"
-depl.nix_exprs = ["./ebs-creator.nix", "./ebs-creator-config.nix"]
+depl.nix_exprs = [os.path.abspath("./ebs-creator.nix"), os.path.abspath("./ebs-creator-config.nix")]
 if not args.keep: depl.destroy_resources()
 depl.deploy(allow_reboot=True)
 
 m = depl.machines['machine']
+
 
 # Do the installation.
 device="/dev/xvdg"
@@ -58,16 +61,8 @@ m.run_command("mkdir -p /mnt")
 m.run_command("mount {0} /mnt".format(device))
 m.run_command("touch /mnt/.ebs")
 m.run_command("mkdir -p /mnt/etc/nixos")
-# Kind of hacky until the nixos channel is updated to systemd
-#m.run_command("nix-channel --add http://nixos.org/channels/nixos-unstable")
-#m.run_command("nix-channel --update")
-m.run_command("mkdir unpack")
-m.run_command("cd unpack; (curl -L http://hydra.nixos.org/job/nixos/systemd/channel/latest/download | bzcat | tar xv)")
-m.run_command("mkdir nixos")
-m.run_command("mv unpack/*/* nixos")
-m.run_command("mv nixos unpack/*")
-m.run_command("nix-env -p /nix/var/nix/profiles/per-user/root/channels -i $(nix-store --add unpack/*)")
-m.run_command("rm -fR unpack")
+m.run_command("nix-channel --add http://nixos.org/channels/nixos-unstable")
+m.run_command("nix-channel --update")
 m.run_command("nixos-rebuild switch")
 version = m.run_command("nixos-version", capture_stdout=True).replace('"', '').rstrip()
 print >> sys.stderr, "NixOS version is {0}".format(version)
@@ -89,7 +84,7 @@ if args.hvm:
 else:
     ami_name = "nixos-{0}-x86_64-ebs".format(version)
     description = "NixOS {0} (x86_64; EBS root)".format(version)
-    
+
 
 # Wait for the snapshot to finish.
 def check():
@@ -161,6 +156,9 @@ image.set_launch_permissions(user_ids=[], group_names=["all"])
 
 m._conn.create_tags([ami_id], {'Name': ami_name})
 
+time.sleep(5)
+
+
 # Do a test deployment to make sure that the AMI works.
 f = open("ebs-test.nix", "w")
 f.write(
@@ -180,7 +178,7 @@ f.close()
 test_depl = deployment.create_deployment(db)
 test_depl.auto_response = "y"
 test_depl.name = "ebs-creator-test"
-test_depl.nix_exprs = [ "./ebs-test.nix" ]
+test_depl.nix_exprs = [os.path.abspath("./ebs-test.nix")]
 test_depl.deploy(create_only=True)
 test_depl.machines['machine'].run_command("nixos-version")
 if not args.keep:
