@@ -68,6 +68,7 @@ with pkgs.lib;
           ln -s ${config.system.build.binsh}/bin/sh /mnt/bin/sh
 
           # Generate the GRUB menu.
+          ln -s vda /dev/sda
           chroot /mnt ${config.system.build.toplevel}/bin/switch-to-configuration boot
 
           umount /mnt/proc /mnt/dev /mnt/sys
