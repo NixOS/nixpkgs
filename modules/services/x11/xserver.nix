@@ -43,6 +43,7 @@ let
       pkgs.xorg.fontadobe75dpi
     ];
 
+
   # Just enumerate all heads without discarding XRandR output information.
   xrandrHeads = let
     mkHead = num: output: {
@@ -73,6 +74,7 @@ let
     };
     monitors = foldl mkMonitor [] xrandrHeads;
   in concatMapStrings (getAttr "value") monitors;
+
 
   configFile = pkgs.stdenv.mkDerivation {
     name = "xserver.conf";
@@ -106,6 +108,17 @@ let
         echo "$config" >> $out
       ''; # */
   };
+
+
+  checkAgent = mkAssert (!(cfg.startOpenSSHAgent && cfg.startGnuPGAgent))
+    ''
+      The OpenSSH agent and GnuPG agent cannot be started both.
+      Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
+    '';
+
+  checkPolkit = mkAssert config.security.polkit.enable
+    "X11 requires Polkit to be enabled (‘security.polkit.enable = true’).";
+
 
 in
 
@@ -374,13 +387,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable
-    (mkAssert (!(cfg.startOpenSSHAgent && cfg.startGnuPGAgent))
-      ''
-        The OpenSSH agent and GnuPG agent cannot be started both.
-        Choose between `startOpenSSHAgent' and `startGnuPGAgent'.
-      ''
-  {
+  config = mkIf cfg.enable (checkAgent (checkPolkit {
 
     boot.extraModulePackages =
       optional (elem "nvidia" driverNames) kernelPackages.nvidia_x11 ++
@@ -601,6 +608,6 @@ in
         ${xrandrMonitorSections}
       '';
 
-  });
+  }));
 
 }
