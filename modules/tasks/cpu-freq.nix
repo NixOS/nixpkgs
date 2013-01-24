@@ -13,8 +13,8 @@ with pkgs.lib;
       type = types.uniq types.string;
       description = ''
         Configure the governor used to regulate the frequence of the
-        available CPUs. By default, the kernel configures the governor
-        "userspace".
+        available CPUs. By default, the kernel configures the
+        on-demand governor.
       '';
     };
 
