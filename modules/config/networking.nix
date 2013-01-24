@@ -87,9 +87,8 @@ in
       }
     ];
 
-  systemd.units."ip-up.target".text =
-    ''
-      [Unit]
-      Description=Services Requiring IP Connectivity
-    '';
+  # The ‘ip-up’ target is started when we have IP connectivity.  So
+  # services that depend on IP connectivity (like ntpd) should be
+  # pulled in by this target.
+  systemd.targets.ip-up.description = "Services Requiring IP Connectivity";
 }
