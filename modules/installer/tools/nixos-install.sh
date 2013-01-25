@@ -42,6 +42,7 @@ fi
 mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt $mountPoint/mnt2 $mountPoint/etc /etc/nixos
 mount --make-private / # systemd makes / shared, which is annoying
 mount --bind / $mountPoint/mnt
+mount --bind /nix $mountPoint/mnt/nix
 mount --bind /nix/store $mountPoint/mnt/nix/store
 mount --bind /dev $mountPoint/dev
 mount --bind /dev/shm $mountPoint/dev/shm
@@ -61,6 +62,7 @@ cleanup() {
     umount $mountPoint/dev/shm
     umount $mountPoint/dev
     umount $mountPoint/mnt/nix/store
+    umount $mountPoint/mnt/nix
     umount $mountPoint/mnt
     rmdir $mountPoint/mnt $mountPoint/mnt2
 }
