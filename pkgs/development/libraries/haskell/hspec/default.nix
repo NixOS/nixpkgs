@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     ansiTerminal filepath hspecExpectations HUnit QuickCheck setenv
     silently time transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://hspec.github.com/";
     description = "Behavior-Driven Development for Haskell";
