@@ -10,28 +10,29 @@ from boto.ec2.blockdevicemapping import BlockDeviceMapping, BlockDeviceType
 
 parser = argparse.ArgumentParser(description='Create an EBS-backed NixOS AMI')
 parser.add_argument('--region', dest='region', required=True, help='EC2 region')
-parser.add_argument('--key', dest='key_name', default="eelco", help='EC2 keypair')
 parser.add_argument('--keep', dest='keep', action='store_true', help='Keep Charon machine after use')
 parser.add_argument('--hvm', dest='hvm', action='store_true', help='Create HVM image')
 args = parser.parse_args()
 
 instance_type = "cc1.4xlarge" if args.hvm else "m1.small"
-key_name = args.key_name
 ebs_size = 8 if args.hvm else 20
 
 
 # Start a NixOS machine in the given region.
 f = open("ebs-creator-config.nix", "w")
 f.write('''{{
+  resources.ec2KeyPairs.keypair.accessKeyId = "logicblox-dev";
+  resources.ec2KeyPairs.keypair.region = "{0}";
+
   machine =
     {{ pkgs, ... }}:
     {{
+      deployment.ec2.accessKeyId = "logicblox-dev";
       deployment.ec2.region = "{0}";
-      deployment.ec2.keyPair = pkgs.lib.mkOverride 10 "{1}";
-      deployment.ec2.blockDeviceMapping."/dev/xvdg".size = pkgs.lib.mkOverride 10 {2};
+      deployment.ec2.blockDeviceMapping."/dev/xvdg".size = pkgs.lib.mkOverride 10 {1};
     }};
 }}
-'''.format(args.region, key_name, ebs_size))
+'''.format(args.region, ebs_size))
 f.close()
 
 db = deployment.open_database(deployment.get_default_state_file())
@@ -67,7 +68,7 @@ m.run_command("nixos-rebuild switch")
 version = m.run_command("nixos-version", capture_stdout=True).replace('"', '').rstrip()
 print >> sys.stderr, "NixOS version is {0}".format(version)
 m.run_command("cp -f $(nix-instantiate --find-file nixos/modules/virtualisation/amazon-config.nix) /mnt/etc/nixos/configuration.nix")
-m.run_command("nixos-install")
+m.run_command("./nixos-install")
 if args.hvm:
     m.run_command('cp /mnt/nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
     m.run_command('sed -i "s|hd0|hd0,0|" /mnt/boot/grub/menu.lst')
@@ -164,16 +165,23 @@ image.set_launch_permissions(user_ids=[], group_names=["all"])
 f = open("ebs-test.nix", "w")
 f.write(
     '''
-    {{ network.description = "NixOS EBS test";
-       machine.deployment.targetEnv = "ec2";
-       machine.deployment.ec2.region = "{0}";
-       machine.deployment.ec2.instanceType = "{2}";
-       machine.deployment.ec2.keyPair = "{3}";
-       machine.deployment.ec2.securityGroups = [ "eelco-test" ];
-       machine.deployment.ec2.ami = "{1}";
-       machine.fileSystems = [];
+    {{
+      network.description = "NixOS EBS test";
+
+      resources.ec2KeyPairs.keypair.accessKeyId = "logicblox-dev";
+      resources.ec2KeyPairs.keypair.region = "{0}";
+
+      machine = {{ config, pkgs, resources, ... }}: {{
+        deployment.targetEnv = "ec2";
+        deployment.ec2.accessKeyId = "logicblox-dev";
+        deployment.ec2.region = "{0}";
+        deployment.ec2.instanceType = "{2}";
+        deployment.ec2.keyPair = resources.ec2KeyPairs.keypair.name;
+        deployment.ec2.securityGroups = [ "admin" ];
+        deployment.ec2.ami = "{1}";
+      }};
     }}
-    '''.format(args.region, ami_id, instance_type, key_name))
+    '''.format(args.region, ami_id, instance_type))
 f.close()
 
 test_depl = deployment.create_deployment(db)
