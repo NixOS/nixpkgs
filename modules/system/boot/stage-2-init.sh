@@ -49,7 +49,6 @@ chown 0:30000 /nix/store
 chmod 1775 /nix/store
 if [ -n "@readOnlyStore@" ]; then
     if ! mountpoint -q /nix/store; then
-        mkdir -p /nix/rw-store
         mount --bind /nix/store /nix/store
         mount -o remount,ro,bind /nix/store
     fi
