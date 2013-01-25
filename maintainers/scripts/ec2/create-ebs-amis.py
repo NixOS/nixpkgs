@@ -68,7 +68,7 @@ m.run_command("nixos-rebuild switch")
 version = m.run_command("nixos-version", capture_stdout=True).replace('"', '').rstrip()
 print >> sys.stderr, "NixOS version is {0}".format(version)
 m.run_command("cp -f $(nix-instantiate --find-file nixos/modules/virtualisation/amazon-config.nix) /mnt/etc/nixos/configuration.nix")
-m.run_command("./nixos-install")
+m.run_command("nixos-install")
 if args.hvm:
     m.run_command('cp /mnt/nix/store/*-grub-0.97*/lib/grub/i386-pc/* /mnt/boot/grub')
     m.run_command('sed -i "s|hd0|hd0,0|" /mnt/boot/grub/menu.lst')
