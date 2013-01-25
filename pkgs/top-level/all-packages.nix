@@ -7824,6 +7824,10 @@ let
 
   spotify = callPackage ../applications/audio/spotify { };
 
+  libspotify = callPackage ../development/libraries/libspotify {
+    apiKey = config.libspotify.apiKey or null;
+  };
+
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
   stumpwm = builderDefsPackage (import ../applications/window-managers/stumpwm) {
