@@ -68,7 +68,7 @@ sub parseFstab {
     my ($fss, $swaps);
     foreach my $line (read_file($filename, err_mode => 'quiet')) {
         chomp $line;
-        $line =~ s/#.*//;
+        $line =~ s/^\s*#.*//;
         next if $line =~ /^\s*$/;
         my @xs = split / /, $line;
         if ($xs[2] eq "swap") {
