@@ -1,6 +1,7 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
-, openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype }:
+, openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype
+, libmcrypt, icu }:
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
@@ -110,6 +111,20 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         buildInputs = [gettext];
       };
 
+      mcrypt = {
+        configureFlags = ["--with-mcrypt=${libmcrypt}"];
+        buildInputs = [libmcrypt];
+      };
+
+      intl = {
+        configureFlags = ["--enable-intl"];
+        buildInputs = [icu];
+      };
+
+      exif = {
+        configureFlags = ["--enable-exif"];
+      };
+
       /*
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
@@ -141,12 +156,15 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     opensslSupport = config.php.openssl or true;
     mbstringSupport = config.php.mbstring or true;
     gdSupport = config.php.gd or true;
+    mcryptSupport = config.php.mcrypt or true;
+    intlSupport = config.php.intl or true;
+    exifSupport = config.php.exif or true;
   };
 
   configurePhase = ''
     iniFile=$out/etc/php-recommended.ini
     [[ -z "$libxml2" ]] || export PATH=$PATH:$libxml2/bin
-    ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out  $configureFlags
+    ./configure --with-config-file-scan-dir=/etc --with-config-file-path=$out/etc --prefix=$out $configureFlags
     echo configurePhase end
   '';
 
