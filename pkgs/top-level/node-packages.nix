@@ -128,7 +128,7 @@ let self = {
     name = "bson-0.1.5";
     src = fetchurl {
       url = "http://registry.npmjs.org/bson/-/${name}.tgz";
-      sha256 = "3fad2209466740ea81d0bc285b92d940efe5104a6314946ea40180c431a19692";
+      sha256 = "58af4a1697b015190b40c2a7e5743f9d4494887ef98dfe2f58f24c70f2d31150";
     };
     deps = [
 
@@ -739,6 +739,19 @@ let self = {
     };
     deps = [
 
+    ];
+  };
+
+  "optparse" = self."optparse-1.0.3";
+  
+  "optparse-1.0.3" = self.buildNodePackage rec {
+    name = "optparse-1.0.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/optparse/-/${name}.tgz";
+      sha256 = "1cg99i4rq8azxikzqz0ykw4q971azbj49d3m7slj041yscb6m883";
+    };
+    deps = [
+    
     ];
   };
 

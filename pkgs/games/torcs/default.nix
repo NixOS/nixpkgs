@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     homepage = http://torcs.sourceforge.net/;
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    #platforms = with stdenv.lib.platforms; linux;
   };
 }

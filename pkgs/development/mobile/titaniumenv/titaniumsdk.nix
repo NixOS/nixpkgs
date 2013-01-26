@@ -53,5 +53,8 @@ stdenv.mkDerivation {
       --prefix PYTHONPATH : ${python.modules.sqlite3}/lib/python*/site-packages \
       --prefix PATH : ${jdk}/bin \
       --prefix JAVA_HOME : ${jdk}
+  '' + stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") ''
+    # 'ditto' utility is needed to copy stuff to the Xcode organizer. Dirty, but this allows it to work.
+    sed -i -e "s|ditto|/usr/bin/ditto|g" $out/mobilesdk/osx/*/iphone/builder.py
   '';
 }

@@ -1,23 +1,35 @@
 { pkgs, python }:
 
-let pythonPackages = python.modules // rec {
+let
+isPy26 = python.majorVersion == "2.6";
+isPy27 = python.majorVersion == "2.7";
+optional = pkgs.lib.optional;
+optionals = pkgs.lib.optionals;
+
+pythonPackages = python.modules // rec {
 
   inherit python;
-
   inherit (pkgs) fetchurl fetchsvn fetchgit stdenv;
 
+  # helpers
 
   buildPythonPackage = import ../development/python-modules/generic {
     inherit (pkgs) lib;
-    inherit python wrapPython setuptools setuptoolsSite offlineDistutils;
+    inherit python wrapPython setuptools recursivePthLoader offlineDistutils;
   };
 
+  wrapPython = pkgs.makeSetupHook
+    { deps = pkgs.makeWrapper;
+      substitutions.libPrefix = python.libPrefix;
+    }
+    ../development/python-modules/generic/wrap.sh;
+
+  # specials
 
   recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
     inherit (pkgs) stdenv;
     inherit python;
   };
-
 
   setuptools = import ../development/python-modules/setuptools {
     inherit (pkgs) stdenv fetchurl;
@@ -34,6 +46,8 @@ let pythonPackages = python.modules // rec {
     inherit python;
   };
 
+  # packages defined elsewhere
+
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl;
     inherit buildPythonPackage pythonPackages;
@@ -44,17 +58,37 @@ let pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pycairo = import ../development/python-modules/pycairo {
+    inherit (pkgs) stdenv fetchurl pkgconfig cairo x11;
+    inherit python;
+  };
+
   pycrypto = import ../development/python-modules/pycrypto {
     inherit (pkgs) fetchurl stdenv gmp;
     inherit python buildPythonPackage;
   };
 
-  wrapPython = pkgs.makeSetupHook
-    { deps = pkgs.makeWrapper;
-      substitutions.libPrefix = python.libPrefix;
-    }
-    ../development/python-modules/generic/wrap.sh;
+  pygobject = import ../development/python-modules/pygobject {
+    inherit (pkgs) stdenv fetchurl pkgconfig glib;
+    inherit python;
+  };
 
+  pygtk = import ../development/python-modules/pygtk {
+    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  # XXX: how can we get an override here?
+  #pyGtkGlade = pygtk.override {
+  #  inherit (pkgs.gnome) libglade;
+  #};
+  pyGtkGlade = import ../development/python-modules/pygtk {
+    inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
+    inherit (pkgs.gnome) libglade;
+    inherit python buildPythonPackage pygobject pycairo;
+  };
+
+  # packages defined here
 
   afew = buildPythonPackage rec {
     rev = "6bb3915636aaf86f046a017ffffd9a4ef395e199";
@@ -80,19 +114,18 @@ let pythonPackages = python.modules // rec {
       homepage = https://github.com/teythoon/afew;
       description = "afew is an initial tagging script for notmuch mail.";
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
 
   alot = buildPythonPackage rec {
-    rev = "5b5dbecb5a03840b751219db90bcf4dcffda315e";
+    rev = "6b5f1a8bf68eecf4364f97c71ec177cf715c081e";
     name = "alot-0.3.3_${rev}";
 
     src = fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "156q7x4wilhcgmaap7rjci3cgwm5ia85ddgx6xm6lfp5hkf5300v";
+      sha256 = "1l6b5gy0z549p54p2va1q7pxyiwb6ghqfy6gdm3kg1np9hw59rl4";
     };
 
     # error: invalid command 'test'
@@ -109,7 +142,6 @@ let pythonPackages = python.modules // rec {
       homepage = https://github.com/pazz/alot;
       description = "Terminal MUA using notmuch mail";
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -324,6 +356,22 @@ let pythonPackages = python.modules // rec {
   # });
 
 
+  buildout = buildPythonPackage rec {
+    name = "buildout-${version}";
+    version = "1.7.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
+      md5 = "4e3b521600e475c56a0a66459a5fc7bb";
+    };
+
+   meta = {
+      homepage = http://www.buildout.org/;
+      description = "A software build and configuration system";
+    };
+  };
+
+
   carrot = buildPythonPackage rec {
     name = "carrot-0.10.7";
 
@@ -417,7 +465,6 @@ let pythonPackages = python.modules // rec {
       description = "Simple, lightweight, and easily extensible STOMP message broker";
       homepage = http://code.google.com/p/coilmq/;
       license = pkgs.lib.licenses.asl20;
-      platforms = python.meta.platforms;
     };
   });
 
@@ -437,16 +484,15 @@ let pythonPackages = python.modules // rec {
       homepage = http://pypi.python.org/pypi/configobj;
       license = pkgs.lib.licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
   coverage = buildPythonPackage rec {
-    name = "coverage-3.5.3";
+    name = "coverage-3.6";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/c/coverage/${name}.tar.gz";
-      md5 = "5f1f523940c473faa8a9f6ca29f78efc";
+      md5 = "67d4e393f4c6a5ffc18605409d2aa1ac";
     };
 
     meta = {
@@ -454,8 +500,29 @@ let pythonPackages = python.modules // rec {
       homepage = http://nedbatchelder.com/code/coverage/;
       license = pkgs.lib.licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.shlevy ];
-      platforms = python.meta.platforms;
     };
+  };
+
+  covCore = buildPythonPackage rec {
+    name = "cov-core-1.7";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/cov-core/cov-core-1.7.tar.gz";
+      md5 = "59c1e22e636633e10120beacbf45b28c";
+    };
+    meta = {
+      description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
+    };
+    propagatedBuildInputs = [ coverage ];
+  };
+
+  cssselect = buildPythonPackage rec {
+    name = "cssselect-0.7.1";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/cssselect/cssselect-0.7.1.tar.gz";
+      md5 = "c6c5e9a2e7ca226ce03f6f67a771379c";
+    };
+    # AttributeError: 'module' object has no attribute 'tests'
+    doCheck = false;
   };
 
   cssutils = buildPythonPackage (rec {
@@ -537,33 +604,66 @@ let pythonPackages = python.modules // rec {
     };
   };
 
-  distribute = buildPythonPackage (rec {
-    name = "distribute-0.6.26";
+  distribute = stdenv.mkDerivation rec {
+    name = "distribute-0.6.34";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/d/distribute/distribute-0.6.26.tar.gz";
-      md5 = "841f4262a70107f85260362f5def8206"; #"ecd75ea629fee6d59d26f88c39b2d291";
-
+      url = "http://pypi.python.org/packages/source/d/distribute/distribute-0.6.34.tar.gz";
+      md5 = "4576ab843a6db5100fb22a72deadf56d";
     };
 
-    buildInputs = [ pkgs.unzip ];
+    buildInputs = [ python wrapPython offlineDistutils ];
 
-    installCommand =
-      ''
-        # ehm, YES, the --verbose flags needs to be there, otherwise it tries to patch setuptools!
-        easy_install --verbose --prefix=$out .
-      '';
+    pythonPath = [ recursivePthLoader ];
 
-    # test for 27 fails
-    doCheck = false;
+    installPhase=''
+      dst="$out/lib/${python.libPrefix}/site-packages"
+      mkdir -p $dst
+      PYTHONPATH="${offlineDistutils}/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+      export PYTHONPATH="$dst:$PYTHONPATH"
+
+      python setup.py install --prefix="$out"
+
+      eapth="$out/lib/${python.libPrefix}"/site-packages/easy-install.pth
+      if [ -e "$eapth" ]; then
+          # move colliding easy_install.pth to specifically named one
+          mv "$eapth" $(dirname "$eapth")/${name}.pth
+      fi
+
+      rm -f "$out/lib/${python.libPrefix}"/site-packages/site.py*
+
+      wrapPythonPrograms
+    '';
 
     meta = {
       description = "Easily download, build, install, upgrade, and uninstall Python packages";
       homepage = http://packages.python.org/distribute;
       license = "PSF or ZPL";
-      platforms = python.meta.platforms;
     };
-  });
+  };
+
+
+  distutils2  = buildPythonPackage rec {
+    name = "distutils2-${version}";
+    version = "1.0a4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/D/Distutils2/Distutils2-${version}.tar.gz";
+      md5 = "52bc9dffb394970c27e02853ae3a3241";
+    };
+
+    patchPhase = ''
+      sed -e "s#html.entities#htmlentitydefs#g" -i distutils2/pypi/simple.py
+    '';
+
+    doCheck = false;
+
+    meta = {
+      description = "A Python Packaging Library";
+      homepage = http://pypi.python.org/pypi/Distutils2;
+      license = "PSF";
+    };
+  };
 
 
   distutils_extra = buildPythonPackage rec {
@@ -769,11 +869,11 @@ let pythonPackages = python.modules // rec {
 
 
   flake8 = buildPythonPackage (rec {
-    name = "flake8-1.6.2";
+    name = "flake8-1.7.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      md5 = "abfdbb25d37c28e9da05f1b5c3596d1a";
+      md5 = "a7830d1a6c23e889bc1fcaa4a87f53bd";
     };
 
     buildInputs = [ nose ];
@@ -786,7 +886,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://pypi.python.org/pypi/flake8;
       license = pkgs.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -850,7 +949,6 @@ let pythonPackages = python.modules // rec {
       license = "MIT";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -907,14 +1005,12 @@ let pythonPackages = python.modules // rec {
       sha256 = "0bhiyx41kilvy04cgjbvjy2r4b6l7zz31fbrg3l6lvnqm26nihb0";
     };
 
-    buildInputs = [ pkgs.setuptools ] ++
-                  (if python.majorVersion == "2.6" then [ argparse ] else []);
+    buildInputs = [ pkgs.setuptools ] ++ (optional isPy26 argparse);
 
     meta = {
       description = "automatically generated zsh completion function for Python's option parser modules";
       license = "BSD";
       maintainers = [ stdenv.lib.maintainers.simons ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1008,10 +1104,17 @@ let pythonPackages = python.modules // rec {
       description = "A comprehensive HTTP client library";
       license = pkgs.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
+  importlib = if isPy26 then (buildPythonPackage {
+    name = "importlib-1.0.2";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/importlib/importlib-1.0.2.tar.gz";
+      md5 = "4aa23397da8bd7c7426864e88e4db7e1";
+    };
+    doCheck = false;
+  }) else null;
 
   iptools = buildPythonPackage rec {
     version = "0.4.0";
@@ -1047,6 +1150,15 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  ipdb = buildPythonPackage {
+    name = "ipdb-0.7";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
+      md5 = "d879f9b2b0f26e0e999809585dcaec61";
+    };
+    propagatedBuildInputs = [ ipython ];
+  };
+
   jedi = buildPythonPackage (rec {
     name = "jedi-0.5b5";
 
@@ -1060,7 +1172,6 @@ let pythonPackages = python.modules // rec {
       description = "An autocompletion tool for Python that can be used for text editors.";
       license = pkgs.lib.licenses.lgpl3Plus;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -1113,7 +1224,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "11qilrs4sd4c1mkd64ikrjsc2vwrshhc54n5mh4xrark9c7ayp0y";
     };
 
-    buildInputs = [ zopeInterface mock ];
+    buildInputs = [ zope_interface mock ];
 
     preConfigure = "cp test/secrets.py-dist test/secrets.py";
 
@@ -1217,6 +1328,23 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+  manuel = buildPythonPackage rec {
+    name = "manuel-${version}";
+    version = "1.6.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/m/manuel/${name}.tar.gz";
+      md5 = "53d6a6905301a20f6095e41d11968fff";
+    };
+
+    propagatedBuildInputs = [ six zope_testing ];
+
+    meta = {
+      description = "A documentation builder";
+      homepage = http://pypi.python.org/pypi/manuel;
+      license = "ZPL";
+    };
+  };
 
   markdown = buildPythonPackage rec {
     version = "2.0.3";
@@ -1326,6 +1454,26 @@ let pythonPackages = python.modules // rec {
     meta = {
       homepage = http://code.google.com/p/pymox/;
       description = "A mock object framework for Python.";
+    };
+  };
+
+
+  mrbob = buildPythonPackage rec {
+    name = "mrbob-${version}";
+    version = "0.1a6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/m/mr.bob/mr.bob-${version}.zip";
+      md5 = "361c8ac7a31953ab94a95cf34d9a0b2b";
+    };
+
+    buildInputs = [ pkgs.unzip six ] ++ (optionals isPy26 [ importlib ordereddict ]);
+
+    propagatedBuildInputs = [ argparse jinja2 ];
+
+    meta = {
+      homepage = https://github.com/iElectric/mr.bob.git;
+      description = "A tool to generate code skeletons from templates";
     };
   };
 
@@ -1478,6 +1626,32 @@ let pythonPackages = python.modules // rec {
     buildInputs = [ coverage ];
   };
 
+  nose2 = if isPy26 then null else (buildPythonPackage rec {
+    name = "nose2-0.4.5";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose2/${name}.tar.gz";
+      md5 = "d7e51c848227488e3cc0424faf5511cd";
+    };
+    meta = {
+      description = "nose2 is the next generation of nicer testing for Python";
+    };
+    propagatedBuildInputs = [ six ];
+    # AttributeError: 'module' object has no attribute 'collector'
+    doCheck = false;
+  });
+
+  nose2Cov = if isPy26 then null else (buildPythonPackage rec {
+    name = "nose2-cov-1.0a4";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/n/nose2-cov/nose2-cov-1.0a4.tar.gz";
+      md5 = "6442f03e2ea732b0e38eb5b00fbe0b31";
+    };
+    meta = {
+      description = "nose2 plugin for coverage reporting, including subprocesses and multiprocessing";
+    };
+    propagatedBuildInputs = [ covCore nose2 ];
+  });
+
   notify = pkgs.stdenv.mkDerivation (rec {
     name = "python-notify-0.1.1";
 
@@ -1486,7 +1660,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "1kh4spwgqxm534qlzzf2ijchckvs0pwjxl1irhicjmlg7mybnfvx";
     };
 
-    buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pkgs.pygobject pkgs.pygtk pkgs.glib pkgs.gtk pkgs.dbus_glib ];
+    buildInputs = [ python pkgs.pkgconfig pkgs.libnotify pygobject pygtk pkgs.glib pkgs.gtk pkgs.dbus_glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
@@ -1514,7 +1688,6 @@ let pythonPackages = python.modules // rec {
       description = "A Python wrapper around notmuch";
       homepage = http://notmuchmail.org/;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1591,6 +1764,15 @@ let pythonPackages = python.modules // rec {
   #   };
   # });
 
+  ordereddict = if isPy26 then (buildPythonPackage {
+    name = "ordereddict-1.1";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/o/ordereddict/ordereddict-1.1.tar.gz";
+      md5 = "a0ed854ee442051b249bfad0f638bbec";
+    };
+    doCheck = false;
+  }) else null;
+
   ply = buildPythonPackage (rec {
     name = "ply-3.2";
 
@@ -1621,7 +1803,6 @@ let pythonPackages = python.modules // rec {
       license = "revised-BSD";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -1652,8 +1833,6 @@ let pythonPackages = python.modules // rec {
         tunnel -- this is how sftp works, for example.  it is written
         entirely in python (no C or platform-dependent code) and is released
         under the GNU LGPL (lesser GPL).  '';
-
-      platforms = python.meta.platforms;
     };
   };
 
@@ -1747,10 +1926,19 @@ let pythonPackages = python.modules // rec {
       '';
 
       maintainers = [ stdenv.lib.maintainers.simons ];
-      platforms = python.meta.platforms;
     };
   };
 
+  pip = buildPythonPackage {
+    name = "pip-1.2.1";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pip/pip-1.2.1.tar.gz";
+      md5 = "db8a6d8a4564d3dc7f337ebed67b1a85";
+    };
+    buildInputs = [ mock scripttest virtualenv nose ];
+    # ValueError: Working directory tests not found, or not a directory
+    doCheck = false;
+  };
 
   polib = buildPythonPackage rec {
     name = "polib-${version}";
@@ -1796,6 +1984,21 @@ let pythonPackages = python.modules // rec {
     meta = {
       description = "Protocol Buffers are Google's data interchange format.";
       homepage = http://code.google.com/p/protobuf/;
+    };
+  };
+
+
+  psutil = buildPythonPackage rec {
+    name = "psutil-0.6.1";
+
+    src = fetchurl {
+      url = "http://psutil.googlecode.com/files/${name}.tar.gz";
+      sha256 = "0vqarv63jqzghr4fi1fqdbvg847fq2gqdj8dzc3x59f9b36a8rfn";
+    };
+
+    meta = {
+      description = "Process and system utilization information interface for python";
+      homepage = http://code.google.com/p/psutil/;
     };
   };
 
@@ -2017,7 +2220,6 @@ let pythonPackages = python.modules // rec {
       description = "A Python wrapper for the GPGME library.";
       license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -2171,6 +2373,16 @@ let pythonPackages = python.modules // rec {
       };
 
 
+  pyquery = buildPythonPackage rec {
+    name = "pyquery-1.2.4";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyquery/pyquery-1.2.4.tar.gz";
+      md5 = "268f08258738d21bc1920d7522f2a63b";
+    };
+    buildInputs = [ cssselect lxml ];
+  };
+
+
   pyreport = buildPythonPackage (rec {
     name = "pyreport-0.3.4c";
 
@@ -2240,7 +2452,6 @@ let pythonPackages = python.modules // rec {
       license = "revised BSD";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   });
 
@@ -2599,7 +2810,6 @@ let pythonPackages = python.modules // rec {
           sha256 = "1wif9r6307qhlcp2zbg6n05yvxxn9ppkxh8gpsplcbyh22zi7bcd";
         };
 
-      preInstallPhases = "preInstall";
       preInstall = ''
         cp ${x_ignore_nofocus}/* .
         sed -i 's|dlopen(library,|dlopen("libX11.so.6",|' x_ignore_nofocus.c
@@ -2712,7 +2922,7 @@ let pythonPackages = python.modules // rec {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = [ pkgs.xlibs.libX11 pkgs.pythonDBus pkgs.pygobject ];
+    propagatedBuildInputs = [ pkgs.xlibs.libX11 pkgs.pythonDBus pygobject ];
 
     meta = {
       description = "High-level, platform independent Skype API wrapper for Python";
@@ -2807,10 +3017,27 @@ let pythonPackages = python.modules // rec {
       description = "Lightweight and extensible STOMP messaging client";
       homepage = http://bitbucket.org/hozn/stompclient;
       license = pkgs.lib.licenses.asl20;
-      platforms = python.meta.platforms;
     };
   });
 
+
+  subunit = buildPythonPackage rec {
+    name = "subunit-${version}";
+    version = "0.0.9";
+
+    src = fetchurl {
+      url = "https://launchpad.net/subunit/trunk/0.0.9/+download/python-${name}.tar.gz";
+      sha256 = "0g3bk8lfd52zjzg43h47h2kckchm3xyv1gcr85nca2i50rcrpj56";
+    };
+
+    propagatedBuildInputs = [ testtools ];
+
+    meta = {
+      description = "A streaming protocol for test results";
+      homepage = https://launchpad.net/subunit;
+      license = pkgs.lib.licenses.asl20;
+    };
+  };
 
   # XXX: ValueError: ZIP does not support timestamps before 1980
   # svneverever =  buildPythonPackage rec {
@@ -2828,11 +3055,11 @@ let pythonPackages = python.modules // rec {
   # };
 
   taskcoach = buildPythonPackage rec {
-    name = "TaskCoach-1.3.8";
+    name = "TaskCoach-1.3.22";
 
     src = fetchurl {
       url = "mirror://sourceforge/taskcoach/${name}.tar.gz";
-      sha256 = "0gc277cgnw6f167lrbxlf7rmgyjxwzgkmi77qz9xwvnwcj2l94xn";
+      sha256 = "1ddx56bqmh347synhgjq625ijv5hqflr0apxg0nl4jqdsqk1zmxh";
     };
 
     propagatedBuildInputs = [ wxPython ];
@@ -2873,6 +3100,23 @@ let pythonPackages = python.modules // rec {
   };
 
 
+  testtools = buildPythonPackage rec {
+    name = "testtools-${version}";
+    version = "0.9.24";
+
+    src = fetchurl {
+      url = "https://launchpad.net/testtools/0.9/0.9.24/+download/${name}.tar.gz";
+      sha256 = "0mgkvd7c1aw34nlnz2nmll5k01aqhixxiikbs2nfyk3xfa4221x7";
+    };
+
+    meta = {
+      description = "A set of extensions to the Python standard library's unit testing framework";
+      homepage = http://pypi.python.org/pypi/testtools;
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
   trac = buildPythonPackage {
     name = "trac-0.12.2";
 
@@ -2895,17 +3139,53 @@ let pythonPackages = python.modules // rec {
     };
   };
 
+
+  transaction = buildPythonPackage rec {
+    name = "transaction-${version}";
+    version = "1.4.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/t/transaction/${name}.tar.gz";
+      md5 = "b7c2ff135939f605a8c54e1c13cd5d66";
+    };
+
+    propagatedBuildInputs = [ zope_interface ];
+
+    meta = {
+      description = "Transaction management";
+      homepage = http://pypi.python.org/pypi/transaction;
+      license = "ZPL";
+    };
+  };
+
+
+  eggdeps  = buildPythonPackage rec {
+     name = "eggdeps-${version}";
+     version = "0.4";
+
+     src = fetchurl {
+       url = "http://pypi.python.org/packages/source/t/tl.eggdeps/tl.${name}.tar.gz";
+       md5 = "2472204a2abd0d8cd4d11ff0fbf36ae7";
+     };
+
+     propagatedBuildInputs = [ zope_interface zope_testing ];
+     meta = {
+       description = "A tool which computes a dependency graph between active Python eggs";
+       homepage = http://thomas-lotze.de/en/software/eggdeps/;
+       license = "ZPL";
+     };
+   };
+
+
   turses = buildPythonPackage (rec {
-    name = "turses-0.2.9";
+    name = "turses-0.2.11";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
-      sha256 = "c0f32fa31e2c5fa42f5cc19f3dba4e73f0438bf36bf756ba137f2423c0ac4637";
+      sha256 = "0zd0fjb5rr5if8wp6kmi29wrkj7ypp4vz00xxb0if1kjrakczlvm";
     };
 
-    propagatedBuildInputs = [ oauth2 urwid tweepy ] ++
-                            (if python.majorVersion == "2.6" then [ argparse ]
-                                                             else []);
+    propagatedBuildInputs = [ oauth2 urwid tweepy ] ++ optional isPy26 argparse;
 
     #buildInputs = [ tox ];
     # needs tox
@@ -2921,11 +3201,11 @@ let pythonPackages = python.modules // rec {
   });
 
   tweepy = buildPythonPackage (rec {
-    name = "tweepy-1.12";
+    name = "tweepy-1.13";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
-      sha256 = "66d728527ab3d5f5e4d6725654783f99169172678105f609d14353f6626c1315";
+      sha256 = "1gaki8qvzi72jaj5xls51lc6fgs1xnm9c6jgpirwklpdn7y8wyy5";
     };
 
     meta = {
@@ -2945,7 +3225,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "110c30z622jn14yany1sxfaqj5qx20n9rc9zqacxlwma30fdcbjn";
     };
 
-    propagatedBuildInputs = [ zopeInterface ];
+    propagatedBuildInputs = [ zope_interface ];
 
     # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
     # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
@@ -2966,7 +3246,6 @@ let pythonPackages = python.modules // rec {
       license = "MIT";
 
       maintainers = [ stdenv.lib.maintainers.ludo ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3024,15 +3303,14 @@ let pythonPackages = python.modules // rec {
       homepage = http://excess.org/urwid;
       license = pkgs.lib.licenses.lgpl21;
       maintainers = [ stdenv.lib.maintainers.garbas ];
-      platforms = python.meta.platforms;
     };
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.6.4";
+    name = "virtualenv-1.8.4";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "1072b66d53c24e019a8f1304ac9d9fc5";
+      md5 = "1c7e56a7f895b2e71558f96e365ee7a7";
     };
 
     patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];
@@ -3213,6 +3491,65 @@ let pythonPackages = python.modules // rec {
     };
   });
 
+
+  zconfig = buildPythonPackage rec {
+    name = "zconfig-${version}";
+    version = "2.9.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/Z/ZConfig/ZConfig-${version}.tar.gz";
+      md5 = "2c5f73c216140a705be3d9c44b988722";
+    };
+
+    propagatedBuildInputs = [ zope_testrunner ];
+
+    meta = {
+      description = "Structured Configuration Library";
+      homepage = http://pypi.python.org/pypi/ZConfig;
+      license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zc_lockfile = buildPythonPackage rec {
+    name = "zc.lockfile-${version}";
+    version = "1.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zc.lockfile/${name}.tar.gz";
+      md5 = "f099d4cf2583a0c7bea0146a44dc4d59";
+    };
+
+    meta = {
+      description = "Inter-process locks";
+      homepage =  http://www.python.org/pypi/zc.lockfile;
+      license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zdaemon = buildPythonPackage rec {
+    name = "zdaemon-${version}";
+    version = "3.0.5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zdaemon/${name}.tar.gz";
+      md5 = "975f770544bb4352c5cf32fec22e63c9";
+    };
+
+    propagatedBuildInputs  = [ zconfig ];
+
+    meta = {
+      description = "A daemon process control library and tools for Unix-based systems";
+      homepage = http://pypi.python.org/pypi/zdaemon;
+      license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
   zfec = buildPythonPackage (rec {
     name = "zfec-1.4.7";
 
@@ -3242,19 +3579,439 @@ let pythonPackages = python.modules // rec {
     };
   });
 
-  zopeInterface = buildPythonPackage {
-    name = "zope-interface-3.6.1";
+
+  zodb3 = buildPythonPackage rec {
+    name = "zodb3-${version}";
+    version = "3.10.5";
+
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zope.interface/zope.interface-3.6.1.tar.gz";
-      sha256 = "294c3c0529e84169177bce78d616c768fa1c028a2fbc1854f615d32ed88dbc6c";
+      url = "http://pypi.python.org/packages/source/Z/ZODB3/ZODB3-${version}.tar.gz";
+      md5 = "6f180c6897a1820948fee2a6290503cd";
     };
+
+    propagatedBuildInputs = [ manuel transaction zc_lockfile zconfig zdaemon zope_interface zope_event ];
+
+    meta = {
+      description = "An object-oriented database for Python";
+      homepage = http://pypi.python.org/pypi/ZODB3;
+      license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_broken = buildPythonPackage rec {
+    name = "zope.broken-3.6.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.broken/${name}.zip";
+      md5 = "eff24d7918099a3e899ee63a9c31bee6";
+    };
+
+    buildInputs = [ pkgs.unzip zope_interface ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_browser = buildPythonPackage rec {
+    name = "zope.browser-1.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.browser/${name}.zip";
+      md5 = "4ff0ddbf64c45bfcc3189e35f4214ded";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    propagatedBuildInputs = [ zope_interface ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_component = buildPythonPackage rec {
+    name = "zope.component-4.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.component/zope.component-4.0.2.tar.gz";
+      md5 = "8c2fd4414ca23cbbe014dcaf911acebc";
+    };
+
+    propagatedBuildInputs = [
+      zope_configuration zope_event zope_i18nmessageid zope_interface
+      zope_testing
+    ];
+
+    # ignore tests because of a circular dependency on zope_security
+    doCheck = false;
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_configuration = buildPythonPackage rec {
+    name = "zope.configuration-4.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.configuration/zope.configuration-4.0.2.tar.gz";
+      md5 = "40b3c7ad0b748ede532d8cfe2544e44e";
+    };
+
+    propagatedBuildInputs = [ zope_i18nmessageid zope_schema ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_container = buildPythonPackage rec {
+    name = "zope.container-3.11.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.container/${name}.tar.gz";
+      md5 = "fc66d85a17b8ffb701091c9328983dcc";
+    };
+
+    propagatedBuildInputs = [
+      zodb3 zope_broken zope_dottedname zope_publisher
+      zope_filerepresentation zope_lifecycleevent zope_size
+      zope_traversing
+    ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_contenttype = buildPythonPackage rec {
+    name = "zope.contenttype-3.5.5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.contenttype/${name}.zip";
+      md5 = "c6ac80e6887de4108a383f349fbdf332";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_dottedname = buildPythonPackage rec {
+    name = "zope.dottedname-3.4.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.dottedname/${name}.tar.gz";
+      md5 = "62d639f75b31d2d864fe5982cb23959c";
+    };
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_event = buildPythonPackage rec {
+    name = "zope.event-${version}";
+    version = "4.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.event/${name}.tar.gz";
+      md5 = "e08dd299d428d77a1cfcbfe841b81872";
+    };
+
+    meta = {
+      description = "An event publishing system";
+      homepage = http://pypi.python.org/pypi/zope.event;
+      license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_exceptions = buildPythonPackage rec {
+     name = "zope.exceptions-${version}";
+     version = "4.0.5";
+
+     src = fetchurl {
+       url = "http://pypi.python.org/packages/source/z/zope.exceptions/${name}.tar.gz";
+       md5 = "c95569fcb444ae541777de7ae5297492";
+     };
+
+     propagatedBuildInputs = [ zope_interface ];
+
+     meta = {
+       description = "Exception interfaces and implementations";
+       homepage = http://pypi.python.org/pypi/zope.exceptions;
+       license = "ZPL";
+       maintainers = [ stdenv.lib.maintainers.goibhniu ];
+     };
+   };
+
+
+  zope_filerepresentation = buildPythonPackage rec {
+    name = "zope.filerepresentation-3.6.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.filerepresentation/${name}.tar.gz";
+      md5 = "4a7a434094f4bfa99a7f22e75966c359";
+    };
+
+    propagatedBuildInputs = [ zope_schema ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_i18n = buildPythonPackage rec {
+    name = "zope.i18n-3.7.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.i18n/${name}.tar.gz";
+      md5 = "a6fe9d9ad53dd7e94e87cd58fb67d3b7";
+    };
+
+    propagatedBuildInputs = [ pytz zope_component ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_i18nmessageid = buildPythonPackage rec {
+    name = "zope.i18nmessageid-4.0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.i18nmessageid/zope.i18nmessageid-4.0.2.tar.gz";
+      md5 = "c4550f7a0b4a736186e6e0fa3b2471f7";
+    };
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_lifecycleevent = buildPythonPackage rec {
+    name = "zope.lifecycleevent-3.6.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.lifecycleevent/${name}.tar.gz";
+      md5 = "3ba978f3ba7c0805c81c2c79ea3edb33";
+    };
+
+    propagatedBuildInputs = [ zope_event zope_component ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_location = buildPythonPackage rec {
+    name = "zope.location-4.0.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.location/zope.location-4.0.0.tar.gz";
+      md5 = "cd0e10d5923c95e352bcde505cc11324";
+    };
+
+    propagatedBuildInputs = [ zope_proxy ];
+
+    # ignore circular dependency on zope_schema
+    installCommand = ''
+      easy_install --always-unzip --no-deps --prefix="$out" .
+    '';
+
+    doCheck = false;
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_proxy = buildPythonPackage rec {
+    name = "zope.proxy-4.1.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.proxy/zope.proxy-4.1.1.tar.gz";
+      md5 = "c36691f0abee7573f4ddcc378603cefd";
+    };
+
+    propagatedBuildInputs = [ zope_interface ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_publisher = buildPythonPackage rec {
+    name = "zope.publisher-3.12.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.publisher/${name}.tar.gz";
+      md5 = "495131970cc7cb14de8e517fb3857ade";
+    };
+
+    propagatedBuildInputs = [
+      zope_browser zope_contenttype zope_i18n zope_security
+    ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_schema = buildPythonPackage rec {
+    name = "zope.schema-4.2.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.schema/zope.schema-4.2.2.tar.gz";
+      md5 = "e7e581af8193551831560a736a53cf58";
+    };
+    
+    propagatedBuildInputs = [ zope_event zope_interface zope_testing ];
+
+    # ignore circular dependency on zope_location
+    installCommand = ''
+      easy_install  --no-deps --prefix="$out" .
+    '';
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_security = buildPythonPackage rec {
+    name = "zope.security-3.7.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.security/zope.security-3.7.4.tar.gz";
+      md5 = "072ab8d11adc083eace11262da08630c";
+    };
+
+    propagatedBuildInputs = [
+      zope_component zope_configuration zope_i18nmessageid zope_schema
+      zope_proxy
+    ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_size = buildPythonPackage rec {
+    name = "zope.size-3.4.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.size/${name}.tar.gz";
+      md5 = "55d9084dfd9dcbdb5ad2191ceb5ed03d";
+    };
+
+    propagatedBuildInputs = [ zope_i18nmessageid zope_interface ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_testing = buildPythonPackage rec {
+    name = "zope.testing-${version}";
+    version = "4.1.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.testing/${name}.tar.gz";
+      md5 = "2e3829841090d6adff718b8b73c87b6b";
+    };
+
+    propagatedBuildInputs = [ zope_interface zope_exceptions zope_location ];
+
+    meta = {
+      description = "Zope testing helpers";
+      homepage =  http://pypi.python.org/pypi/zope.testing;
+      license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_testrunner = buildPythonPackage rec {
+    name = "zope.testrunner-${version}";
+    version = "4.0.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.testrunner/${name}.zip";
+      md5 = "cd648fc865a79aa0950e73342836dd4c";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    propagatedBuildInputs = [ subunit zope_interface zope_exceptions zope_testing ];
+
+    meta = {
+      description = "A flexible test runner with layer support";
+      homepage = http://pypi.python.org/pypi/zope.testrunner;
+      license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_traversing = buildPythonPackage rec {
+    name = "zope.traversing-3.13.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.traversing/${name}.zip";
+      md5 = "eaad8fc7bbef126f9f8616b074ec00aa";
+    };
+
+    buildInputs = [ pkgs.unzip ];
+
+    propagatedBuildInputs = [ zope_location zope_security zope_publisher ];
+
+    meta = {
+        maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
+  zope_interface = buildPythonPackage rec {
+    name = "zope.interface-4.0.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zope.interface/${name}.tar.gz";
+      md5 = "1ddd308f2c83703accd1696158c300eb";
+    };
+
+    propagatedBuildInputs = [ zope_event ];
 
     meta = {
       description = "Zope.Interface";
       homepage = http://zope.org/Products/ZopeInterface;
       license = "ZPL";
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
     };
   };
+
 
   # XXX: link broken
   # hgsvn = buildPythonPackage rec {
@@ -3292,7 +4049,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://liw.fi/cliapp/;
       description = "Python framework for Unix command line programs.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3313,7 +4069,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://liw.fi/tracing/;
       description = "Python debug logging helper.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3334,7 +4089,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://liw.fi/ttystatus/;
       description = "Progress and status updates on terminals for Python.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3357,7 +4111,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://liw.fi/larch/;
       description = "Python B-tree library.";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3377,7 +4130,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Fixed size round-robin style database";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3390,7 +4142,7 @@ let pythonPackages = python.modules // rec {
       sha256 = "0wjhd87pvpcpvaj3wql2d92g8lpp33iwmxdkp7npic5mjl2y0dsg";
     };
 
-    buildInputs = [ txamqp zopeInterface twisted ];
+    buildInputs = [ txamqp zope_interface twisted ];
     propagatedBuildInputs = [ whisper ];
 
     # error: invalid command 'test'
@@ -3400,7 +4152,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Backend data caching and persistence daemon for Graphite";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3419,7 +4170,6 @@ let pythonPackages = python.modules // rec {
       homepage = https://launchpad.net/txamqp;
       description = "Library for communicating with AMQP peers and brokers using Twisted";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 
@@ -3441,7 +4191,6 @@ let pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Enterprise scalable realtime graphing";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
-      platforms = python.meta.platforms;
     };
   };
 

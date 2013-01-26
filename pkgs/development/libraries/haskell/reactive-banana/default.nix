@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "reactive-banana";
-  version = "0.7.1.0";
-  sha256 = "0diklfkc4fq05g5fhgcdkx8y0vmq26zfnmfkj95yvmwks8p9k22r";
+  version = "0.7.1.1";
+  sha256 = "0d4dqpzglzkygy2hhn1j1c7vk2782mk66f8aqaadkyhijn7kc6i5";
   buildDepends = [ hashable transformers unorderedContainers vault ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/Reactive-banana";

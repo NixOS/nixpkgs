@@ -1,10 +1,11 @@
 {stdenv, fetchurl, klibc, kernel, withKlibc ? true}:
 
 stdenv.mkDerivation rec {
-  name = "v86d-0.1.10-${kernel.version}";
+  name = "v86d-${version}-${kernel.version}";
+  version = "0.1.10";
 
   src = fetchurl {
-    url = "http://dev.gentoo.org/~spock/projects/uvesafb/archive/${name}.tar.bz2";
+    url = "mirror://gentoo/distfiles//v86d-${version}.tar.bz2";
     sha256 = "0p3kwqjis941pns9948dxfnjnl5lwd8f2b6x794whs7g32p68jb3";
   };
 

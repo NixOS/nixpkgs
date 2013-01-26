@@ -129,7 +129,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     HTTP         = self.HTTP_4000_2_6;          # 7.6 ok
     HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
-    network      = self.network_2_4_0_1;        # 7.6 ok
+    network      = self.network_2_4_1_0;        # 7.6 ok
     OpenGL       = self.OpenGL_2_6_0_1;         # 7.6 ok
     parallel     = self.parallel_3_2_0_3;       # 7.6 ok
     parsec       = self.parsec_3_1_3;           # 7.6 ok
@@ -491,6 +491,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
+  bifunctors = callPackage ../development/libraries/haskell/bifunctors {};
+
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
   binary_hackage = callPackage ../development/libraries/haskell/binary {};
@@ -582,6 +584,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cipherAes = callPackage ../development/libraries/haskell/cipher-aes {};
 
+  cipherRc4 = callPackage ../development/libraries/haskell/cipher-rc4 {};
+
   classyPrelude = callPackage ../development/libraries/haskell/classy-prelude {};
 
   classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
@@ -634,7 +638,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
+  cryptoNumbers = callPackage ../development/libraries/haskell/crypto-numbers {};
+
   cryptoPubkeyTypes = callPackage ../development/libraries/haskell/crypto-pubkey-types {};
+
+  cryptoPubkey = callPackage ../development/libraries/haskell/crypto-pubkey {};
 
   cryptoRandomApi = callPackage ../development/libraries/haskell/crypto-random-api {};
 
@@ -711,6 +719,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dimensional = callPackage ../development/libraries/haskell/dimensional {};
 
+  dimensionalTf = callPackage ../development/libraries/haskell/dimensional-tf {};
+
   directoryTree = callPackage ../development/libraries/haskell/directory-tree {};
 
   distributedProcess = callPackage ../development/libraries/haskell/distributed-process {};
@@ -724,6 +734,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dlist = callPackage ../development/libraries/haskell/dlist {};
 
   dns = callPackage ../development/libraries/haskell/dns {};
+
+  doctest = callPackage ../development/libraries/haskell/doctest {};
 
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
@@ -900,6 +912,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     polyparse = self.polyparse_1_7;
   };
 
+  groupoids = callPackage ../development/libraries/haskell/groupoids {};
+
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
@@ -911,7 +925,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
 
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
-  hashable_1_2_0_3 = callPackage ../development/libraries/haskell/hashable/1.2.0.3.nix {};
+  hashable_1_2_0_5 = callPackage ../development/libraries/haskell/hashable/1.2.0.5.nix {};
   hashable = self.hashable_1_1_2_5;
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
@@ -1242,7 +1256,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
+  nat = callPackage ../development/libraries/haskell/nat {};
+
   nats = callPackage ../development/libraries/haskell/nats {};
+
+  naturals = callPackage ../development/libraries/haskell/naturals {};
 
   netlist = callPackage ../development/libraries/haskell/netlist {};
 
@@ -1254,8 +1272,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
   network_2_3_0_13 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
   network_2_3_1_0 = callPackage ../development/libraries/haskell/network/2.3.1.0.nix {};
-  network_2_4_0_1 = callPackage ../development/libraries/haskell/network/2.4.0.1.nix {};
-  network = self.network_2_4_0_1;
+  network_2_4_1_0 = callPackage ../development/libraries/haskell/network/2.4.1.0.nix {};
+  network = self.network_2_4_1_0;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
@@ -1280,6 +1298,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   numbers = callPackage ../development/libraries/haskell/numbers {};
 
   numtype = callPackage ../development/libraries/haskell/numtype {};
+
+  numtypeTf = callPackage ../development/libraries/haskell/numtype-tf {};
 
   OneTuple = callPackage ../development/libraries/haskell/OneTuple {};
 
@@ -1373,6 +1393,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
   primitive = self.primitive_0_5_0_1;
 
+  profunctors = callPackage ../development/libraries/haskell/profunctors {};
+
+  profunctorExtras = callPackage ../development/libraries/haskell/profunctor-extras {};
+
   projectTemplate = callPackage ../development/libraries/haskell/project-template {};
 
   processExtras = callPackage ../development/libraries/haskell/process-extras {};
@@ -1433,6 +1457,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   recaptcha = callPackage ../development/libraries/haskell/recaptcha {};
 
+  reflection = callPackage ../development/libraries/haskell/reflection {};
+
   regexBase_0_72_0_2 = callPackage ../development/libraries/haskell/regex-base/0.72.0.2.nix {};
   regexBase_0_93_1   = callPackage ../development/libraries/haskell/regex-base/0.93.1.nix   {};
   regexBase_0_93_2   = callPackage ../development/libraries/haskell/regex-base/0.93.2.nix   {};
@@ -1489,6 +1515,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
 
   semigroupoids = callPackage ../development/libraries/haskell/semigroupoids {};
+
+  semigroupoidExtras = callPackage ../development/libraries/haskell/semigroupoid-extras {};
 
   setenv = callPackage ../development/libraries/haskell/setenv {};
 
@@ -1685,6 +1713,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   tuple = callPackage ../development/libraries/haskell/tuple {};
 
   typeEquality = callPackage ../development/libraries/haskell/type-equality {};
+
+  typeLlevelNaturalNumber = callPackage ../development/libraries/haskell/type-level-natural-number {};
 
   unbound = callPackage ../development/libraries/haskell/unbound {};
 

@@ -49,6 +49,6 @@ rec {
     maintainers = [
       a.lib.maintainers.raskin
     ];
-    platforms = a.lib.platforms.linux ;
+    #platforms = a.lib.platforms.linux ;
   };
 }

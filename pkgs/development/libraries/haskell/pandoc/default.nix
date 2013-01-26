@@ -1,20 +1,20 @@
 { cabal, base64Bytestring, blazeHtml, blazeMarkup, citeprocHs
-, extensibleExceptions, filepath, highlightingKate, HTTP, json, mtl
-, network, pandocTypes, parsec, random, syb, tagsoup, temporary
-, texmath, time, utf8String, xml, zipArchive, zlib
+, dataDefault, extensibleExceptions, filepath, highlightingKate
+, HTTP, json, mtl, network, pandocTypes, parsec, random, syb
+, tagsoup, temporary, texmath, text, time, xml, zipArchive, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.9.4.5";
-  sha256 = "05k8i537756m07xlb6kgshpfxa4sp2jxidb1c8m72ilpai13r6fb";
+  version = "1.10.0.5";
+  sha256 = "05mjgvxk3wxfssf4aviigdm6jb73a6bp8lwz86aabdgkgh2i6n54";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    base64Bytestring blazeHtml blazeMarkup citeprocHs
+    base64Bytestring blazeHtml blazeMarkup citeprocHs dataDefault
     extensibleExceptions filepath highlightingKate HTTP json mtl
     network pandocTypes parsec random syb tagsoup temporary texmath
-    time utf8String xml zipArchive zlib
+    text time xml zipArchive zlib
   ];
   configureFlags = "-fblaze_html_0_5";
   meta = {

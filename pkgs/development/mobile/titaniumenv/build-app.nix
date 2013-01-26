@@ -1,7 +1,7 @@
 {stdenv, androidsdk, titaniumsdk, xcodewrapper}:
 { appId, name, src, target, androidPlatformVersions ? [ "8" ]
 , release ? false, androidKeyStore ? null, androidKeyAlias ? null, androidKeyStorePassword ? null
-, iosKeyFile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null
+, iosKeyFile ? null, iosCertificateName ? null, iosCertificate ? null, iosCertificatePassword ? null, iosDistribute ? false
 }:
 
 assert (release && target == "android") -> androidKeyStore != null && androidKeyAlias != null && androidKeyStorePassword != null;
@@ -12,9 +12,12 @@ let
     platformVersions = androidPlatformVersions;
     useGoogleAPIs = true;
   };
+  
+  deleteKeychain = "security delete-keychain $keychainName";
 in
 stdenv.mkDerivation {
-  inherit name src;
+  name = stdenv.lib.replaceChars [" "] [""] name;
+  inherit src;
   
   buildInputs = [] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") xcodewrapper;
 
@@ -25,13 +28,12 @@ stdenv.mkDerivation {
     
     ${if target == "android" then
         if release then
-          "${titaniumsdk}/mobilesdk/*/*/android/builder.py distribute ${name} ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId} ${androidKeyStore} ${androidKeyStorePassword} ${androidKeyAlias} $out"
+          ''${titaniumsdk}/mobilesdk/*/*/android/builder.py distribute "${name}" ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId} ${androidKeyStore} ${androidKeyStorePassword} ${androidKeyAlias} $out''
         else
-          "${titaniumsdk}/mobilesdk/*/*/android/builder.py build ${name} ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId}"
+          ''${titaniumsdk}/mobilesdk/*/*/android/builder.py build "${name}" ${androidsdkComposition}/libexec/android-sdk-* $(pwd) ${appId}''
 
       else if target == "iphone" then
-        if release then
-          ''
+        if iosDistribute then ''
             export HOME=/Users/$(whoami)
             export keychainName=$(basename $out)
             
@@ -45,17 +47,45 @@ stdenv.mkDerivation {
    
             # Ensure that the requested provisioning profile can be found
             
-            if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles" ]
+            if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision" ]
             then
                 mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
                 cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
             fi
             
-            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py adhoc 6.0 $(pwd) ${appId} ${name} "$provisioningId" "${iosCertificateName}" universal "$HOME/Library/Keychains/$keychainName"
+            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py distribute 6.0 $(pwd) ${appId} "${name}" "$provisioningId" "${iosCertificateName}" $out universal "$HOME/Library/Keychains/$keychainName"
             
             # Remove our generated keychain
             
-            security delete-keychain $keychainName
+            ${deleteKeychain}
+          ''
+        else
+            if release then
+              ''
+                export HOME=/Users/$(whoami)
+                export keychainName=$(basename $out)
+            
+                # Create a keychain with the component hash name (should always be unique)
+                security create-keychain -p "" $keychainName
+                security default-keychain -s $keychainName
+                security unlock-keychain -p "" $keychainName
+                security import ${iosCertificate} -k $keychainName -P "${iosCertificatePassword}" -A
+
+                provisioningId=$(grep UUID -A1 -a ${iosKeyFile} | grep -o "[-A-Z0-9]\{36\}")
+   
+                # Ensure that the requested provisioning profile can be found
+            
+                if [ ! -f "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision" ]
+                then
+                    mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
+                    cp ${iosKeyFile} "$HOME/Library/MobileDevice/Provisioning Profiles/$provisioningId.mobileprovision"
+                fi
+            
+                ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py adhoc 6.0 $(pwd) ${appId} "${name}" "$provisioningId" "${iosCertificateName}" universal "$HOME/Library/Keychains/$keychainName"
+            
+                # Remove our generated keychain
+            
+                ${deleteKeychain}
           ''
         else
           ''
@@ -66,7 +96,7 @@ stdenv.mkDerivation {
             
             cp -av * $out
             cd $out
-            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py build 6.0 $(pwd) ${appId} ${name}
+            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py build 6.0 $(pwd) ${appId} "${name}"
           ''
 
       else throw "Target: ${target} is not supported!"}
@@ -84,4 +114,6 @@ stdenv.mkDerivation {
         else if target == "iphone" then ""
         else throw "Target: ${target} is not supported!"}
   '';
+  
+  failureHook = stdenv.lib.optionalString (release && target == "iphone") deleteKeychain;
 }

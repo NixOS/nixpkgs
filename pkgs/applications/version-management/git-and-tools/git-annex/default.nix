@@ -12,14 +12,14 @@
 }:
 
 let
-  version = "3.20130102";
+  version = "3.20130107";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=${version}";
-    sha256 = "0aga3i7rzq21vyj2wq87n4yl5aljzxc69vbzw43nxx9sr2f3xyh5";
+    sha256 = "15x4rmpxv3mgp8r4gb6jana5262nvyl6rm5p8slc5z5ijl0qwbzq";
     name = "git-annex-${version}.tar.gz";
   };
 
