@@ -3648,10 +3648,6 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
-  ffmpeg_1_0 = callPackage ../development/libraries/ffmpeg/1.0.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
   ffmpeg_1_1 = callPackage ../development/libraries/ffmpeg/1.1.nix {
     vpxSupport = !stdenv.isMips;
   };
