@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, autoreconfHook, libtool
-, flex, bison, pkgconfig, libdrm2_4_39, file, expat, makedepend, llvm
+, flex, bison, pkgconfig, libdrm2_4_40, file, expat, makedepend, llvm
 , libXxf86vm, libXfixes, libXdamage, glproto, dri2proto, libX11, libxcb, libXext
 , libXt, udev, enableTextureFloats ? false
 , python, libxml2Python, wayland }:
@@ -8,14 +8,14 @@ if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "9.0.1"; in
+let version = "9.0.2"; in
 
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    md5 = "97d6554c05ea7449398afe3a0ede7018";
+    md5 = "dc45d1192203e418163e0017640e1cfc";
   };
 
   patches =
@@ -31,14 +31,14 @@ stdenv.mkDerivation {
     + stdenv.lib.optionalString enableTextureFloats " --enable-texture-float";
 
   buildInputs = [ autoconf automake autoreconfHook libtool
-    expat libdrm2_4_39 libXxf86vm libXfixes libXdamage glproto dri2proto llvm
+    expat libdrm2_4_40 libXxf86vm libXfixes libXdamage glproto dri2proto llvm
     libxml2Python libX11 libXext libxcb libXt udev wayland ];
 
   buildNativeInputs = [ pkgconfig python makedepend file flex bison ];
 
   enableParallelBuilding = true;
 
-  passthru = { inherit libdrm2_4_39; };
+  passthru = { inherit libdrm2_4_40; };
 
   meta = {
     description = "An open source implementation of OpenGL";

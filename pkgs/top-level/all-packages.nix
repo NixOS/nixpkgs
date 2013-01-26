@@ -4178,7 +4178,7 @@ let
     inherit (xorg) libpthreadstubs;
   };
 
-  libdrm2_4_39 = callPackage ../development/libraries/libdrm/2.4.39.nix {
+  libdrm2_4_40 = callPackage ../development/libraries/libdrm/2.4.40.nix {
     inherit fetchurl stdenv pkgconfig;
     inherit (xorg) libpthreadstubs;
   };
