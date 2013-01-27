@@ -6216,6 +6216,8 @@ let
 
   procps = callPackage ../os-specific/linux/procps { };
 
+  "procps-ng" = callPackage ../os-specific/linux/procps-ng { };
+
   pwdutils = callPackage ../os-specific/linux/pwdutils { };
 
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
@@ -7775,6 +7777,10 @@ let
   sox = callPackage ../applications/misc/audio/sox { };
 
   spotify = callPackage ../applications/audio/spotify { };
+
+  libspotify = callPackage ../development/libraries/libspotify {
+    apiKey = config.libspotify.apiKey or null;
+  };
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 

@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cg9n75rg5l9vr1925n2g771kga33imikyl0mf70lww2sfgvs18r";
   };
 
+  propagatedBuildInputs = [ pythonPackages.pycurl ];
+
   buildInputs =
     [ intltool pkgconfig glib udev libusb1 cups xmlto
       libxml2 docbook_xml_dtd_412 docbook_xsl desktop_file_utils
@@ -20,7 +22,7 @@ stdenv.mkDerivation rec {
     ];
 
   pythonPath =
-    [ pythonDBus pycups pygobject ]
+    [ pythonDBus pycups pygobject pythonPackages.pycurl ]
     ++ stdenv.lib.optionals withGUI [ pygtk pythonPackages.notify ];
 
   configureFlags =

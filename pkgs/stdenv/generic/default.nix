@@ -41,7 +41,7 @@ let
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.
         mkDerivation = attrs:
-          if !allowUnfree && attrs.meta.license or "" == "unfree" then
+          if !allowUnfree && (let l = attrs.meta.license or ""; in l == "unfree" || l == "unfree-redistributable") then
             throw "package ‘${attrs.name}’ has an unfree license, refusing to evaluate"
           else
           (derivation (

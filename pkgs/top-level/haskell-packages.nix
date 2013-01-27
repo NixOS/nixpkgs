@@ -1457,6 +1457,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   recaptcha = callPackage ../development/libraries/haskell/recaptcha {};
 
+  reflection = callPackage ../development/libraries/haskell/reflection {};
+
   regexBase_0_72_0_2 = callPackage ../development/libraries/haskell/regex-base/0.72.0.2.nix {};
   regexBase_0_93_1   = callPackage ../development/libraries/haskell/regex-base/0.93.1.nix   {};
   regexBase_0_93_2   = callPackage ../development/libraries/haskell/regex-base/0.93.2.nix   {};
