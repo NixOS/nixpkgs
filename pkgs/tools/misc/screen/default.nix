@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    configureFlags="--enable-telnet --enable-pam --infodir=$out/share/info --mandir=$out/share/man"
+    configureFlags="--enable-telnet --enable-pam --infodir=$out/share/info --mandir=$out/share/man --with-sys-screenrc=/etc/screenrc"
     sed -i -e "s|/usr/local|/non-existent|g" -e "s|/usr|/non-existent|g" configure Makefile.in */Makefile.in
   '';
 
