@@ -1,0 +1,57 @@
+diff --git a/include/configs/sheevaplug.h b/include/configs/sheevaplug.h
+index 7c8497c..b0da1e5 100644
+--- a/include/configs/sheevaplug.h
++++ b/include/configs/sheevaplug.h
+@@ -50,7 +50,6 @@
+ #define CONFIG_CMD_MII
+ #define CONFIG_CMD_MMC
+ #define CONFIG_CMD_NAND
+-#define CONFIG_JFFS2_NAND
+ #define CONFIG_CMD_PING
+ #define CONFIG_CMD_USB
+ /*
+@@ -73,25 +72,36 @@
+  * it has to be rounded to sector size
+  */
+ #define CONFIG_ENV_SIZE			0x20000	/* 128k */
+-#define CONFIG_ENV_ADDR			0xa0000
+-#define CONFIG_ENV_OFFSET		0xa0000	/* env starts here */
++#define CONFIG_ENV_ADDR			0x60000
++#define CONFIG_ENV_OFFSET		0x60000	/* env starts here */
+ 
+ /*
+  * Default environment variables
+  */
+-#define CONFIG_BOOTCOMMAND		"${x_bootcmd_kernel}; "	\
++#define CONFIG_BOOTCOMMAND		"${x_bootcmd_ubi0}; "	\
++	"${x_bootcmd_ubi1}; " \
++	"${x_bootcmd_ubi2}; " \
++	"${x_bootcmd_ubi3}; " \
+ 	"setenv bootargs ${x_bootargs} ${x_bootargs_root}; "	\
+-	"${x_bootcmd_usb}; bootm 0x6400000;"
++	"${x_bootcmd_usb}; bootm 0x200000 0x1100000;"
+ 
+ #define CONFIG_MTDPARTS		"orion_nand:512k(uboot),"	\
+-	"0x1ff00000@512k(rootfs) rw\0"
++	"0x1ff00000@512k(rootfs)\0"
++#define CONFIG_MTDPARTSK		"orion_nand:512k(uboot),"	\
++	"0x1ff00000@512k(rootfs)rw\0"
+ 
+ #define CONFIG_EXTRA_ENV_SETTINGS	"x_bootargs=console"	\
+-	"=ttyS0,115200 mtdparts="CONFIG_MTDPARTS	\
++	"=ttyS0,115200 mtdparts="CONFIG_MTDPARTSK	\
++	"mtdparts=mtdparts="CONFIG_MTDPARTS	\
+ 	"mtdids=nand0=orion_nand\0"	\
+-	"x_bootcmd_kernel=nand read 0x6400000 0x100000 0x300000\0" \
++	"ipaddr=192.168.1.4\0"	\
++	"x_bootcmd_ubi0=ubi part nand0,1\0" \
++	"x_bootcmd_ubi1=ubifsmount rootfs\0" \
++	"x_bootcmd_ubi2=ubifsload 0x200000 /nixos-kernel\0" \
++	"x_bootcmd_ubi3=ubifsload 0x1100000 /nixos-initrd\0" \
+ 	"x_bootcmd_usb=usb start\0" \
+-	"x_bootargs_root=root=/dev/mtdblock3 rw rootfstype=jffs2\0"
++	"x_bootargs_root=ubi.mtd=rootfs root=ubi0:rootfs rw rootfstype=ubifs " \
++	"init=/boot/nixos-init systemConfig=/boot/default/system\0"
+ 
+ /*
+  * Ethernet Driver configuration

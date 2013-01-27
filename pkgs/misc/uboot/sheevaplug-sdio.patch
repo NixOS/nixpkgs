@@ -1,0 +1,1091 @@
+diff --git a/arch/arm/include/asm/arch-kirkwood/config.h b/arch/arm/include/asm/arch-kirkwood/config.h
+index a9499b7..1294d7f 100644
+--- a/arch/arm/include/asm/arch-kirkwood/config.h
++++ b/arch/arm/include/asm/arch-kirkwood/config.h
+@@ -66,6 +66,7 @@
+ #define MV_SATA_BASE		KW_SATA_BASE
+ #define MV_SATA_PORT0_OFFSET	KW_SATA_PORT0_OFFSET
+ #define MV_SATA_PORT1_OFFSET	KW_SATA_PORT1_OFFSET
++#define MV_SDIO_BASE		KW_SDIO_BASE
+ 
+ /*
+  * NAND configuration
+@@ -107,6 +108,14 @@
+ #endif /* CONFIG_CMD_NET */
+ 
+ /*
++ * SDIO/MMC Card Configuration
++ */
++#ifdef CONFIG_CMD_MMC
++#define CONFIG_MMC
++#define CONFIG_MV_SDIO
++#endif /* CONFIG_CMD_MMC */
++
++/*
+  * USB/EHCI
+  */
+ #ifdef CONFIG_CMD_USB
+diff --git a/arch/arm/include/asm/arch-kirkwood/kirkwood.h b/arch/arm/include/asm/arch-kirkwood/kirkwood.h
+index 47771d5..343214b 100644
+--- a/arch/arm/include/asm/arch-kirkwood/kirkwood.h
++++ b/arch/arm/include/asm/arch-kirkwood/kirkwood.h
+@@ -55,6 +55,7 @@
+ #define KW_EGIGA0_BASE			(KW_REGISTER(0x72000))
+ #define KW_EGIGA1_BASE			(KW_REGISTER(0x76000))
+ #define KW_SATA_BASE			(KW_REGISTER(0x80000))
++#define KW_SDIO_BASE			(KW_REGISTER(0x90000))
+ 
+ /* Kirkwood Sata controller has two ports */
+ #define KW_SATA_PORT0_OFFSET		0x2000
+diff --git a/drivers/mmc/Makefile b/drivers/mmc/Makefile
+index c567737..081d5f4 100644
+--- a/drivers/mmc/Makefile
++++ b/drivers/mmc/Makefile
+@@ -34,6 +34,7 @@ COBJS-$(CONFIG_GENERIC_ATMEL_MCI) += gen_atmel_mci.o
+ COBJS-$(CONFIG_MMC_SPI) += mmc_spi.o
+ COBJS-$(CONFIG_ARM_PL180_MMCI) += arm_pl180_mmci.o
+ COBJS-$(CONFIG_MV_SDHCI) += mv_sdhci.o
++COBJS-$(CONFIG_MV_SDIO) += mv_sdio.o
+ COBJS-$(CONFIG_MXC_MMC) += mxcmmc.o
+ COBJS-$(CONFIG_MXS_MMC) += mxsmmc.o
+ COBJS-$(CONFIG_OMAP_HSMMC) += omap_hsmmc.o
+diff --git a/drivers/mmc/mv_sdio.c b/drivers/mmc/mv_sdio.c
+new file mode 100644
+index 0000000..35969d3
+--- /dev/null
++++ b/drivers/mmc/mv_sdio.c
+@@ -0,0 +1,675 @@
++/*
++ * (C) Copyright 2009
++ * Marvell Semiconductor <www.marvell.com>
++ * Written-by: Gérald Kerma <geraker@gmail.com>
++ *
++ * (C) Copyright 2003
++ * Kyle Harris, Nexus Technologies, Inc. kharris@nexus-tech.net
++ *
++ * See file CREDITS for list of people who contributed to this
++ * project.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License as
++ * published by the Free Software Foundation; either version 2 of
++ * the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
++ * MA 02110-1301 USA
++ */
++
++#include <config.h>
++#include <common.h>
++#include <malloc.h>
++#include <mmc.h>
++#include <asm/errno.h>
++#include <part.h>
++#include <asm/io.h>
++#ifdef CONFIG_KIRKWOOD
++#include <asm/arch/kirkwood.h>
++#endif
++#include "mv_sdio.h"
++
++#ifdef CONFIG_MMC
++
++#define DRIVER_NAME "mv-sdio"
++
++#ifdef DEBUG
++#define pr_debug(fmt, args...) printf(fmt, ##args)
++#else
++#define pr_debug(...) do { } while(0)
++#endif
++
++//static mv_sdio_t *mvsd = (mv_sdio_t *)mmc->priv;
++static mv_sdio_t *mvsd = (mv_sdio_t *)MV_SDIO_BASE;
++	
++static int is_sdhc;
++extern int fat_register_device(block_dev_desc_t *dev_desc, int part_no);
++static block_dev_desc_t mmc_dev;
++block_dev_desc_t * mmc_get_dev(int dev)
++{
++	return ((block_dev_desc_t *)&mmc_dev);
++}
++
++/*
++ * FIXME needs to read cid and csd info to determine block size
++ * and other parameters
++ */
++static uchar mmc_buf[MMC_BLOCK_SIZE];
++static mv_mmc_csd_t mv_mmc_csd;
++static int mmc_ready = 0;
++
++/* MMC_DEFAULT_RCA should probably be just 1, but this may break other code
++   that expects it to be shifted. */
++static u_int16_t rca = 0;
++
++/* used for debug */
++static u_int32_t mv_mmc_size(const struct mv_mmc_csd *csd)
++{
++	u_int32_t block_len, mult, blocknr;
++
++	block_len = csd->read_bl_len << 12;
++	mult = csd->c_size_mult1 << 8;
++	blocknr = (csd->c_size+1) * mult;
++
++	return blocknr * block_len;
++}
++
++static int isprint (unsigned char ch)
++{
++	if (ch >= 32 && ch < 127)
++		return (1);
++
++	return (0);
++}
++
++static int toprint(char *dst, char c)
++{
++	if (isprint(c)) {
++		*dst = c;
++		return 1;
++	}
++
++	return sprintf(dst,"\\x%02x", c);
++
++}
++
++static void print_mmc_cid(mv_mmc_cid_t *cid)
++{
++	printf("MMC found. Card desciption is:\n");
++	printf("Manufacturer ID = %02x%02x%02x\n",
++		cid->id[0], cid->id[1], cid->id[2]);
++	printf("HW/FW Revision = %x %x\n",cid->hwrev, cid->fwrev);
++	cid->hwrev = cid->fwrev = 0;	/* null terminate string */
++	printf("Product Name = %s\n",cid->name);
++	printf("Serial Number = %02x%02x%02x\n",
++		cid->sn[0], cid->sn[1], cid->sn[2]);
++	printf("Month = %d\n",cid->month);
++	printf("Year = %d\n",1997 + cid->year);
++}
++
++static void print_sd_cid(mv_sd_cid_t *cid)
++{
++	int len;
++	char tbuf[64];
++
++	printf("SD%s found. Card desciption is:\n", is_sdhc?"HC":"");
++
++	len = 0;
++	len += toprint(&tbuf[len], cid->oid_0);
++	len += toprint(&tbuf[len], cid->oid_1);
++	tbuf[len] = 0;
++
++	printf("Manufacturer:       0x%02x, OEM \"%s\"\n",
++	    cid->mid, tbuf);
++
++	len = 0;
++	len += toprint(&tbuf[len], cid->pnm_0);
++	len += toprint(&tbuf[len], cid->pnm_1);
++	len += toprint(&tbuf[len], cid->pnm_2);
++	len += toprint(&tbuf[len], cid->pnm_3);
++	len += toprint(&tbuf[len], cid->pnm_4);
++	tbuf[len] = 0;
++
++	printf("Product name:       \"%s\", revision %d.%d\n",
++		tbuf,
++	    cid->prv >> 4, cid->prv & 15);
++
++	printf("Serial number:      %u\n",
++	    cid->psn_0 << 24 | cid->psn_1 << 16 | cid->psn_2 << 8 |
++	    cid->psn_3);
++	printf("Manufacturing date: %d/%d\n",
++	    cid->mdt_1 & 15,
++	    2000+((cid->mdt_0 & 15) << 4)+((cid->mdt_1 & 0xf0) >> 4));
++
++	printf("CRC:                0x%02x, b0 = %d\n",
++	    cid->crc >> 1, cid->crc & 1);
++}
++
++static void mvsdio_set_clock(unsigned int clock)
++{
++	unsigned int m;
++
++	m = MVSDMMC_BASE_FAST_CLOCK/(2*clock) - 1;
++
++	pr_debug("mvsdio_set_clock: dividor = 0x%x clock=%d\n",
++		      m, clock);
++
++
++	writew(m & 0x7ff, &mvsd->CLK_DIV);
++
++	if (isprint(1))
++	udelay(10*1000);
++}
++
++/****************************************************/
++static ulong * mv_mmc_cmd(ulong cmd, ulong arg, ushort xfermode, ushort resptype, ushort waittype)
++/****************************************************/
++{
++	static ulong resp[4];
++	ushort done ;
++	int err = 0 ;
++	ulong curr, start, diff, hz;
++	ushort response[8];
++
++	pr_debug("mv_mmc_cmd %x, arg: %x,xfer: %x,resp: %x, wait : %x\n"
++	, (unsigned int)cmd, (unsigned int)arg, xfermode, resptype, waittype);
++
++
++	/* clear status */
++	writew(0xffff, &mvsd->NOR_INTR_STATUS);
++	writew(0xffff, &mvsd->ERR_INTR_STATUS);
++
++	start = get_timer(0);
++	hz = CONFIG_SYS_HZ;
++
++	while((readw(&mvsd->PRESENT_STATE0) & CARD_BUSY)) {
++		curr = get_timer(0);
++		diff = (long) curr - (long) start;
++		if (diff > (3*hz))
++		{
++			/* 3 seconds timeout, card busy, can't sent cmd */
++			printf("card too busy \n");
++			return 0;
++		}
++	}
++
++	writew((ushort)(arg&0xffff), &mvsd->ARG_LOW);
++	writew((ushort)(arg>>16), &mvsd->ARG_HI);
++	writew(xfermode, &mvsd->XFER_MODE);
++	if( (cmd == MMC_CMD_READ_BLOCK) || (cmd == 25) )
++	{
++		writew(((cmd << 8) | resptype | 0x3c ) , &mvsd->CMD);
++	pr_debug("cmd reg : %x\n", readw(&mvsd->CMD)) ;
++
++	}
++	else
++	{
++		writew(((cmd << 8) | resptype ), &mvsd->CMD);
++	}
++
++	done = readw(&mvsd->NOR_INTR_STATUS) & waittype;
++	start = get_timer(0);
++
++	while( done!=waittype)
++	{
++		done = readw(&mvsd->NOR_INTR_STATUS) & waittype;
++
++		if( readw(&mvsd->NOR_INTR_STATUS) & 0x8000 )
++		{		
++			pr_debug("Error! cmd : %d, err : %04x\n", (unsigned int)cmd, readw(&mvsd->ERR_INTR_STATUS)) ;
++
++			return 0 ;	/* error happen */
++		}
++
++		curr = get_timer(0);
++		diff = (long) curr - (long) start;
++		if (diff > (3*hz))
++		{
++			pr_debug("cmd timeout, status : %04x\n", readw(&mvsd->NOR_INTR_STATUS));
++			pr_debug("xfer mode : %04x\n", readw(&mvsd->XFER_MODE));
++
++			err = 1 ;
++			break;
++		}
++	}
++
++	response[0] = readw(&mvsd->RSP0);
++	response[1] = readw(&mvsd->RSP1);
++	response[2] = readw(&mvsd->RSP2);
++	response[3] = readw(&mvsd->RSP3);
++	response[4] = readw(&mvsd->RSP4);
++	response[5] = readw(&mvsd->RSP5);
++	response[6] = readw(&mvsd->RSP6);
++	response[7] = readw(&mvsd->RSP7);
++
++	memset(resp, 0, sizeof(resp));
++
++	switch (resptype & 0x3) {
++		case SDIO_CMD_RSP_48:
++		case SDIO_CMD_RSP_48BUSY:
++			resp[0] = ((response[2] & 0x3f) << (8 - 8)) |
++				((response[1] & 0xffff) << (14 - 8)) |
++				((response[0] & 0x3ff) << (30 - 8));
++			resp[1] = ((response[0] & 0xfc00) >> 10);
++			break;
++
++		case SDIO_CMD_RSP_136:
++			resp[3] = ((response[7] & 0x3fff) << 8)	|
++				((response[6] & 0x3ff) << 22);
++			resp[2] = ((response[6] & 0xfc00) >> 10)	|
++				((response[5] & 0xffff) << 6)	|
++				((response[4] & 0x3ff) << 22);
++			resp[1] = ((response[4] & 0xfc00) >> 10)	|
++				((response[3] & 0xffff) << 6)	|
++				((response[2] & 0x3ff) << 22);
++			resp[0] = ((response[2] & 0xfc00) >> 10)	|
++				((response[1] & 0xffff) << 6)	|
++				((response[0] & 0x3ff) << 22);
++			break;
++		default:
++			return 0;
++	}
++	int i;
++	pr_debug("MMC resp :");
++	for (i=0; i<4; ++i ) {
++		pr_debug(" %08x", (unsigned int)resp[i]);
++	}
++	pr_debug("\n");
++	if( err )
++		return NULL ;
++	else
++		return resp;
++}
++
++/****************************************************/
++static int mv_mmc_block_read(uchar *dst, ulong src, ulong len)
++/****************************************************/
++{
++	ulong *resp;
++
++	if (len == 0) {
++		return 0;
++	}
++
++	if (is_sdhc) {
++		/* SDHC: use block address */
++		src >>= 9;
++	}
++
++	pr_debug("mmc_block_rd dst %lx src %lx len %d\n", (ulong)dst, src, (int)len);
++
++	/* prepare for dma transfer */
++	writew(((ulong)(dst))&0xffff,&mvsd->SYS_ADDR_LOW);
++	writew(((ulong)(dst)>>16)&0xffff,&mvsd->SYS_ADDR_HI);
++	writew(len,&mvsd->BLK_SIZE);
++	writew(1,&mvsd->BLK_COUNT);
++	
++	/* send read command */
++	resp = mv_mmc_cmd(MMC_CMD_READ_BLOCK, src, 0x10 ,
++			SDIO_CMD_RSP_48, SDIO_NOR_XFER_DONE);
++	if (!resp) {
++		pr_debug("mv_mmc_block_read: mmc read block cmd fails\n");
++		return -EIO;
++	}
++
++	return 0;
++}
++
++/****************************************************/
++int mv_mmc_read(ulong src, uchar *dst, int size)
++/****************************************************/
++{
++	ulong end, part_start, part_end, part_len, aligned_start, aligned_end;
++	ulong mmc_block_size, mmc_block_address;
++
++	if (size == 0) {
++		return 0;
++	}
++
++	if (!mmc_ready) {
++		printf("Please initial the MMC first\n");
++		return -1;
++	}
++
++	mmc_block_size = MMC_BLOCK_SIZE;
++	mmc_block_address = ~(mmc_block_size - 1);
++
++	end = src + size;
++	part_start = ~mmc_block_address & src;
++	part_end = ~mmc_block_address & end;
++	aligned_start = mmc_block_address & src;
++	aligned_end = mmc_block_address & end;
++
++	/* all block aligned accesses */
++	pr_debug("src %lx dst %lx end %lx pstart %lx pend %lx astart %lx aend %lx\n",
++	(long unsigned int)src,(ulong)dst, end, part_start, part_end, aligned_start, aligned_end);
++
++	if (part_start) {
++		part_len = mmc_block_size - part_start;
++		pr_debug("ps src %lx dst %lx end %lx pstart %lx pend %lx astart %lx aend %lx\n",
++		(long unsigned int)src,(ulong)dst, end, part_start, part_end, aligned_start, aligned_end);
++
++		if ((mv_mmc_block_read(mmc_buf, aligned_start, mmc_block_size)) < 0) {
++			return -1;
++		}
++		memcpy(dst, mmc_buf+part_start, part_len);
++		dst += part_len;
++		src += part_len;
++	}
++	pr_debug("src %lx dst %lx end %lx pstart %lx pend %lx astart %lx aend %lx\n",
++	(long unsigned int)src,(ulong)dst, end, part_start, part_end, aligned_start, aligned_end);
++
++	for (; src < aligned_end; aligned_start +=mmc_block_size, src += mmc_block_size, dst += mmc_block_size) {
++		pr_debug("al src %lx dst %lx end %lx pstart %lx pend %lx astart %lx aend %lx\n",
++		(long unsigned int)src,(ulong)dst, end, part_start, part_end, aligned_start, aligned_end);
++
++		if ((mv_mmc_block_read(mmc_buf, aligned_start, mmc_block_size)) < 0) {
++		 	printf("mmc block read error\n");
++			return -1;
++		}
++		memcpy(dst, mmc_buf, mmc_block_size);
++	}
++	pr_debug("src %lx dst %lx end %lx pstart %lx pend %lx astart %lx aend %lx\n",
++	(long unsigned int)src,(ulong)dst, end, part_start, part_end, aligned_start, aligned_end);
++
++	if (part_end && src < end) {
++		pr_debug("pe src %lx dst %lx end %lx pstart %lx pend %lx astart %lx aend %lx\n",
++		(long unsigned int)src,(ulong)dst, end, part_start, part_end, aligned_start, aligned_end);
++
++		if ((mv_mmc_block_read(mmc_buf, aligned_end, mmc_block_size)) < 0) {
++			return -1;
++		}
++		memcpy(dst, mmc_buf, part_end);
++	}
++	return 0;
++}
++
++/****************************************************/
++static ulong mv_mmc_bread(int dev_num, ulong blknr, ulong blkcnt, ulong *dst)
++/****************************************************/
++{
++	int mmc_block_size = MMC_BLOCK_SIZE;
++	ulong src = blknr * mmc_block_size;
++
++	mv_mmc_read(src, (uchar *)dst, blkcnt*mmc_block_size);
++	return blkcnt;
++}
++
++/****************************************************/
++int mmc_legacy_init(int verbose)
++/****************************************************/
++{
++	int retries, rc = -ENODEV;
++	ulong *resp;
++	int sd_ver20;
++	int is_sd;
++	ushort reg;
++	uchar cidbuf[64];
++
++	sd_ver20 = 0;
++	is_sdhc = 0;
++	is_sd = 0;
++
++	/* Initial Host Ctrl : Timeout : max , Normal Speed mode, 4-bit data mode */
++	/* Big Endian, SD memory Card, Push_pull CMD Line */
++	writew( SDIO_HOST_CTRL_TMOUT(0xf) |
++		SDIO_HOST_CTRL_DATA_WIDTH_4_BITS |
++		SDIO_HOST_CTRL_BIG_ENDIAN |
++		SDIO_HOST_CTRL_PUSH_PULL_EN |
++		SDIO_HOST_CTRL_CARD_TYPE_MEM_ONLY ,
++		&mvsd->HOST_CTRL);
++
++	writew( 0, &mvsd->CLK_CTRL);
++
++	/* enable status */
++	writew( 0xffff, &mvsd->NOR_STATUS_EN);
++	writew( 0xffff, &mvsd->ERR_STATUS_EN);
++
++	/* disable interrupts */
++	writew( 0, &mvsd->NOR_INTR_EN);
++	writew( 0, &mvsd->ERR_INTR_EN);
++
++	writew( 0x100, &mvsd->SW_RESET);
++	udelay(10000);
++
++	mv_mmc_csd.c_size = 0;
++
++	/* reset */
++	retries = 10;
++	resp = mv_mmc_cmd(0, 0, 0, SDIO_CMD_RSP_NONE, SDIO_NOR_CMD_DONE );
++	pr_debug("cmd 0 resp : %08x %08x %08x %08x\n",
++	(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3] );
++
++
++	pr_debug ("trying to detect SD card version\n");
++
++	resp = mv_mmc_cmd(8, 0x000001aa, 0,  SDIO_CMD_RSP_48, SDIO_NOR_CMD_DONE );
++	pr_debug("cmd 8 resp : %08x %08x %08x %08x\n",
++	(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3] );
++
++	if (resp && (resp[0] & 0x1ff)==0x1aa) {
++		pr_debug ("SD version 2.0 card detected\n");
++
++		sd_ver20 = 1;
++	}
++
++	if (sd_ver20)
++		retries = 50;
++	else
++		retries = 10;
++
++	while (retries--) {
++		resp = mv_mmc_cmd(55, 0, 0,  SDIO_CMD_RSP_48, SDIO_NOR_CMD_DONE );
++		pr_debug("cmd 55 resp : %08x %08x %08x %08x\n",
++		(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3] );
++
++
++		if (sd_ver20)
++			resp = mv_mmc_cmd(41, 0x40300000, 0,  SDIO_CMD_RSP_48, SDIO_NOR_CMD_DONE );
++		else
++			resp = mv_mmc_cmd(41, 0x00300000, 0,  SDIO_CMD_RSP_48, SDIO_NOR_CMD_DONE );
++
++		pr_debug("cmd 41 resp : %08x %08x %08x %08x\n",
++		(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3] );
++
++
++		if (resp && (resp[0] & 0x80000000)) {
++			pr_debug ("detected SD card\n");
++
++			is_sd = 1;
++			break;
++		}
++
++		udelay(100*1000);
++	}
++
++	if (retries <= 0 && !is_sd) {
++		pr_debug ("failed to detect SD card, trying MMC\n");
++
++		retries = 10;
++		while (retries--) {
++			resp = mv_mmc_cmd(1, 0, 0,  SDIO_CMD_RSP_48, SDIO_NOR_CMD_DONE );
++			pr_debug("cmd 01 resp : %08x %08x %08x %08x\n",
++			(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3] );
++
++
++			if (resp && (resp[0] & 0x80000000)) {
++				printf ("detected MMC card\n");
++				reg = readw(&mvsd->HOST_CTRL);
++				reg &= ~(0x3<<1);
++				reg |= SDIO_HOST_CTRL_CARD_TYPE_IO_MMC;
++				writew( reg, &mvsd->HOST_CTRL);
++				break;
++			}
++
++			udelay(100*1000);
++		}
++	}
++		
++	if (retries <= 0) {
++		pr_debug ("detect fails\n");
++
++		return -ENODEV;
++	}
++
++	/* try to get card id */
++	resp = mv_mmc_cmd(2, 0, 0, SDIO_CMD_RSP_136, SDIO_NOR_CMD_DONE );
++	pr_debug("cmd 2 resp : %08x %08x %08x %08x\n",
++	(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3] );
++
++
++	if (resp == NULL) {
++		pr_debug ("read cid fails\n");
++
++		return -ENODEV;
++	}
++
++	if (is_sd) {
++		mv_sd_cid_t *cid = (mv_sd_cid_t *) resp;
++
++		memcpy(cidbuf, resp, sizeof(mv_sd_cid_t));
++
++		sprintf((char *) mmc_dev.vendor,
++			"Man %02x OEM %c%c \"%c%c%c%c%c\"",
++			cid->mid, cid->oid_0, cid->oid_1,
++			cid->pnm_0, cid->pnm_1, cid->pnm_2, cid->pnm_3, cid->pnm_4);
++
++		sprintf((char *) mmc_dev.product, "%d",
++			(cid->psn_0 << 24) | (cid->psn_1 <<16) | (cid->psn_2 << 8) | (cid->psn_3 << 8));
++		
++		sprintf((char *) mmc_dev.revision, "%d.%d", cid->prv>>4, cid->prv & 0xff);
++		
++	} else {
++		/* TODO configure mmc driver depending on card attributes */
++		mv_mmc_cid_t *cid = (mv_mmc_cid_t *) resp;
++
++		memcpy(cidbuf, resp, sizeof(mv_sd_cid_t));
++
++
++		sprintf((char *) mmc_dev.vendor,
++			"Man %02x%02x%02x Snr %02x%02x%02x",
++			cid->id[0], cid->id[1], cid->id[2],
++			cid->sn[0], cid->sn[1], cid->sn[2]);
++		sprintf((char *) mmc_dev.product, "%s", cid->name);
++		sprintf((char *) mmc_dev.revision, "%x %x", cid->hwrev, cid->fwrev);
++	}
++	
++	/* fill in device description */
++	mmc_dev.if_type = IF_TYPE_MMC;
++	mmc_dev.part_type = PART_TYPE_DOS;
++	mmc_dev.dev = 0;
++	mmc_dev.lun = 0;
++	mmc_dev.type = 0;
++
++	/* FIXME fill in the correct size (is set to 128MByte) */
++	mmc_dev.blksz = MMC_BLOCK_SIZE;
++	mmc_dev.lba = 0x10000;
++
++	mmc_dev.removable = 0;
++	mmc_dev.block_read = (unsigned long) mv_mmc_bread;
++
++	/* MMC exists, get CSD too */
++	resp = mv_mmc_cmd(MMC_CMD_SET_RCA, 0, 0, SDIO_CMD_RSP_48, SDIO_NOR_CMD_DONE );
++	if (resp == NULL) {
++		pr_debug ("set rca fails\n");
++
++		return -ENODEV;
++	}
++	pr_debug("cmd3 resp : 0x%08x 0x%08x 0x%08x 0x%08x\n",
++	(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3]);
++
++
++	if (is_sd)
++		rca = resp[0] >> 16;
++	else
++		rca = 0;
++
++	resp = mv_mmc_cmd(MMC_CMD_SEND_CSD, rca<<16, 0, SDIO_CMD_RSP_136,SDIO_NOR_CMD_DONE );
++	pr_debug("cmd 9 resp : %08x %08x %08x %08x\n",
++	(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3] );
++
++	if (resp == NULL) {
++		pr_debug ("read csd fails\n");
++
++		return -ENODEV;
++	}
++
++	memcpy(&mv_mmc_csd, (mv_mmc_csd_t *) resp, sizeof(mv_mmc_csd_t));
++	rc = 0;
++	mmc_ready = 1;
++
++	/* FIXME add verbose printout for csd */
++	pr_debug ("size = %u\n", mv_mmc_size(&mv_mmc_csd));
++
++
++	resp = mv_mmc_cmd(7, rca<<16, 0, SDIO_CMD_RSP_48BUSY, SDIO_NOR_CMD_DONE);
++	if (resp == NULL) {
++		pr_debug ("select card fails\n");
++
++		return -ENODEV;
++	}
++	pr_debug("cmd 7 resp : %08x %08x %08x %08x\n",
++	(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3] );
++
++
++	if (is_sd) {
++		resp = mv_mmc_cmd(55, rca<<16, 0,  SDIO_CMD_RSP_48, SDIO_NOR_CMD_DONE );
++		if (resp == NULL) {
++			pr_debug ("cmd55 fails\n");
++
++			return -ENODEV;
++		}
++		pr_debug("cmd55 resp : 0x%08x 0x%08x 0x%08x 0x%08x\n",
++		(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3]);
++
++
++		resp = mv_mmc_cmd(6, (rca<<16) | 0x2 , 0, SDIO_CMD_RSP_48, SDIO_NOR_CMD_DONE );
++		if (resp == NULL) {
++			pr_debug ("cmd55 fails\n");
++
++			return -ENODEV;
++		}
++	pr_debug("cmd6 resp : 0x%08x 0x%08x 0x%08x 0x%08x\n",
++	(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3]);
++
++	}
++
++	resp = (ulong *) &mv_mmc_csd;
++	pr_debug("csd: 0x%08x 0x%08x 0x%08x 0x%08x\n",
++	(unsigned int)resp[0], (unsigned int)resp[1], (unsigned int)resp[2], (unsigned int)resp[3]);
++
++
++	/* check SDHC */
++	if ((resp[0]&0xf0000000)==0x40000000)
++		is_sdhc = 1;
++
++	/* set block len */
++	resp = mv_mmc_cmd(MMC_CMD_SET_BLOCKLEN, MMC_BLOCK_SIZE, 0, SDIO_CMD_RSP_48, SDIO_NOR_CMD_DONE );
++	if (!resp) {
++		pr_debug("mv_mmc_block_read: set blk len fails\n");
++	 	return -ENODEV;
++	}
++
++	if (verbose) {
++		if (is_sd)
++			print_sd_cid((mv_sd_cid_t *) cidbuf);
++		else
++			print_mmc_cid((mv_mmc_cid_t *) cidbuf);
++	}
++
++	mvsdio_set_clock(CONFIG_SYS_MMC_CLK_PP);
++
++	fat_register_device(&mmc_dev,1); /* partitions start counting with 1 */
++
++	return 0;
++}
++
++#endif	/* CONFIG_MMC */
+diff --git a/drivers/mmc/mv_sdio.h b/drivers/mmc/mv_sdio.h
+new file mode 100644
+index 0000000..9707000
+--- /dev/null
++++ b/drivers/mmc/mv_sdio.h
+@@ -0,0 +1,310 @@
++/*
++ * (C) Copyright 2009
++ * Marvell Semiconductor <www.marvell.com>
++ * Written-by: Gérald Kerma <geraker@gmail.com>
++ *
++ * See file CREDITS for list of people who contributed to this
++ * project.
++ *
++ * This program is free software; you can redistribute it and/or
++ * modify it under the terms of the GNU General Public License as
++ * published by the Free Software Foundation; either version 2 of
++ * the License, or (at your option) any later version.
++ *
++ * This program is distributed in the hope that it will be useful,
++ * but WITHOUT ANY WARRANTY; without even the implied warranty of
++ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
++ * GNU General Public License for more details.
++ *
++ * You should have received a copy of the GNU General Public License
++ * along with this program; if not, write to the Free Software
++ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
++ * MA 02110-1301 USA
++ */
++
++#ifndef _MVSDIO_INCLUDE
++#define _MVSDIO_INCLUDE
++
++//#define SDIO_REG(x) (MV_SDIO_BASE + (x))
++
++#define MVSDMMC_DMA_SIZE			65536
++#define MVSDMMC_CMD_TIMEOUT			2 /* 100 usec*/
++
++/*
++ * Clock rates
++ */
++
++#define MVSD_CLOCKRATE_MAX			50000000
++#define MVSD_BASE_DIV_MAX			0x7ff
++
++#define CONFIG_SYS_MMC_CLK_PP			25000000
++
++/*
++ * The base MMC clock rate
++ */
++
++#define MVSDMMC_CLOCKRATE_MIN			100000
++#define MVSDMMC_CLOCKRATE_MAX			MVSD_CLOCKRATE_MAX
++#define MVSDMMC_BASE_FAST_CLOCK			CONFIG_SYS_TCLK
++
++
++/*
++ * SDIO register
++ */
++#ifndef __ASSEMBLY__
++
++/*
++ * Structure for struct SoC access.
++ * Names starting with '_' are fillers.
++ */
++typedef struct mv_sdio {
++	/*	reg			Offset */
++	u32	SYS_ADDR_LOW;		/* 0x00 */
++	u32	SYS_ADDR_HI;		/* 0x04 */
++	u32	BLK_SIZE;		/* 0x08 */
++	u32	BLK_COUNT;		/* 0x0c */
++	u32	ARG_LOW;		/* 0x10 */
++	u32	ARG_HI;			/* 0x14 */
++	u32	XFER_MODE;		/* 0x18 */
++	u32	CMD;			/* 0x1c */
++	u32	RSP0;			/* 0x20 */
++	u32	RSP1;			/* 0x24 */
++	u32	RSP2;			/* 0x28 */
++	u32	RSP3;			/* 0x2c */
++	u32	RSP4;			/* 0x30 */
++	u32	RSP5;			/* 0x34 */
++	u32	RSP6;			/* 0x38 */
++	u32	RSP7;			/* 0x3c */
++	u32	BUF_DATA_PORT;		/* 0x40 */
++	u32	RSVED;			/* 0x44 */
++	u32	PRESENT_STATE0;		/* 0x48 */
++	u32	PRESENT_STATE1;		/* 0x4c */
++	u32	HOST_CTRL;		/* 0x50 */
++	u32	BLK_GAP_CTRL;		/* 0x54 */
++	u32	CLK_CTRL;		/* 0x58 */
++	u32	SW_RESET;		/* 0x5c */
++	u32	NOR_INTR_STATUS;	/* 0x60 */
++	u32	ERR_INTR_STATUS;	/* 0x64 */
++	u32	NOR_STATUS_EN;		/* 0x68 */
++	u32	ERR_STATUS_EN;		/* 0x6c */
++	u32	NOR_INTR_EN;		/* 0x70 */
++	u32	ERR_INTR_EN;		/* 0x74 */
++	u32	AUTOCMD12_ERR_STATUS;	/* 0x78 */
++	u32	CURR_BYTE_LEFT;		/* 0x7c */
++	u32	CURR_BLK_LEFT;		/* 0x80 */
++	u32	AUTOCMD12_ARG_LOW;	/* 0x84 */
++	u32	AUTOCMD12_ARG_HI;	/* 0x88 */
++	u32	AUTOCMD12_INDEX;	/* 0x8c */
++	u32	AUTO_RSP0;		/* 0x90 */
++	u32	AUTO_RSP1;		/* 0x94 */
++	u32	AUTO_RSP2;		/* 0x98 */
++	u32	_9c;			/* 0x9c */
++	u32	_a0[0x78];		/* 0xa0 */
++	u32	CLK_DIV;		/* 0x128 */
++
++} mv_sdio_t;
++
++#endif /* __ASSEMBLY__ */
++
++/*
++ * SDIO_PRESENT_STATE
++ */
++
++#define CARD_BUSY				(1 << 1)
++#define CMD_INHIBIT				(1 << 0)
++#define CMD_TXACTIVE				(1 << 8)
++#define CMD_RXACTIVE				(1 << 9)
++#define CMD_AUTOCMD12ACTIVE			(1 << 14)
++
++#define CMD_BUS_BUSY				(CMD_AUTOCMD12ACTIVE|	\
++						CMD_RXACTIVE|	\
++						CMD_TXACTIVE|	\
++						CMD_INHIBIT|	\
++						CARD_BUSY)
++
++/*
++ * SDIO_CMD
++ */
++
++#define SDIO_CMD_RSP_NONE			(0 << 0)
++#define SDIO_CMD_RSP_136			(1 << 0)
++#define SDIO_CMD_RSP_48				(2 << 0)
++#define SDIO_CMD_RSP_48BUSY			(3 << 0)
++
++#define SDIO_CMD_CHECK_DATACRC16		(1 << 2)
++#define SDIO_CMD_CHECK_CMDCRC			(1 << 3)
++#define SDIO_CMD_INDX_CHECK			(1 << 4)
++#define SDIO_CMD_DATA_PRESENT			(1 << 5)
++#define SDIO_UNEXPECTED_RESP			(1 << 7)
++
++
++/*
++ * SDIO_XFER_MODE
++ */
++
++#define SDIO_XFER_MODE_STOP_CLK			(1 << 5)
++#define SDIO_XFER_MODE_HW_WR_DATA_EN		(1 << 1)
++#define SDIO_XFER_MODE_AUTO_CMD12		(1 << 2)
++#define SDIO_XFER_MODE_INT_CHK_EN		(1 << 3)
++#define SDIO_XFER_MODE_TO_HOST			(1 << 4)
++
++
++/*
++ * SDIO_HOST_CTRL
++ */
++
++#define SDIO_HOST_CTRL_PUSH_PULL_EN 		(1 << 0)
++
++#define SDIO_HOST_CTRL_CARD_TYPE_MEM_ONLY 	(0 << 1)
++#define SDIO_HOST_CTRL_CARD_TYPE_IO_ONLY 	(1 << 1)
++#define SDIO_HOST_CTRL_CARD_TYPE_IO_MEM_COMBO 	(2 << 1)
++#define SDIO_HOST_CTRL_CARD_TYPE_IO_MMC 	(3 << 1)
++#define SDIO_HOST_CTRL_CARD_TYPE_MASK	 	(3 << 1)
++
++#define SDIO_HOST_CTRL_BIG_ENDIAN 		(1 << 3)
++#define SDIO_HOST_CTRL_LSB_FIRST 		(1 << 4)
++#define SDIO_HOST_CTRL_ID_MODE_LOW_FREQ 	(1 << 5)
++#define SDIO_HOST_CTRL_HALF_SPEED 		(1 << 6)
++#define SDIO_HOST_CTRL_DATA_WIDTH_4_BITS 	(1 << 9)
++#define SDIO_HOST_CTRL_HI_SPEED_EN 		(1 << 10)
++
++
++#define SDIO_HOST_CTRL_TMOUT_MASK 		(0xf << 11)
++#define SDIO_HOST_CTRL_TMOUT_MAX 		(0xf << 11)
++#define SDIO_HOST_CTRL_TMOUT(x) 		((x) << 11)
++#define SDIO_HOST_CTRL_TMOUT_EN 		(1 << 15)
++
++#define SDIO_HOST_CTRL_DFAULT_OPEN_DRAIN 	\
++		(SDIO_HOST_CTRL_TMOUT(x)(0xf))
++#define SDIO_HOST_CTRL_DFAULT_PUSH_PULL 	\
++		(SDIO_HOST_CTRL_TMOUT(x)(0xf) | SDIO_HOST_CTRL_PUSH_PULL_EN)
++
++
++/*
++ * NOR status bits
++ */
++
++#define SDIO_NOR_ERROR				(1 << 15)
++#define SDIO_NOR_UNEXP_RSP			(1 << 14)
++#define SDIO_NOR_AUTOCMD12_DONE			(1 << 13)
++#define SDIO_NOR_SUSPEND_ON			(1 << 12)
++#define SDIO_NOR_LMB_FF_8W_AVAIL		(1 << 11)
++#define SDIO_NOR_LMB_FF_8W_FILLED		(1 << 10)
++#define SDIO_NOR_READ_WAIT_ON			(1 << 9)
++#define SDIO_NOR_CARD_INT			(1 << 8)
++#define SDIO_NOR_READ_READY			(1 << 5)
++#define SDIO_NOR_WRITE_READY			(1 << 4)
++#define SDIO_NOR_DMA_INI			(1 << 3)
++#define SDIO_NOR_BLK_GAP_EVT			(1 << 2)
++#define SDIO_NOR_XFER_DONE			(1 << 1)
++#define SDIO_NOR_CMD_DONE			(1 << 0)
++
++
++/*
++ * ERR status bits
++ */
++
++#define SDIO_ERR_CRC_STATUS			(1 << 14)
++#define SDIO_ERR_CRC_STARTBIT			(1 << 13)
++#define SDIO_ERR_CRC_ENDBIT			(1 << 12)
++#define SDIO_ERR_RESP_TBIT			(1 << 11)
++#define SDIO_ERR_SIZE				(1 << 10)
++#define SDIO_ERR_CMD_STARTBIT			(1 << 9)
++#define SDIO_ERR_AUTOCMD12			(1 << 8)
++#define SDIO_ERR_DATA_ENDBIT			(1 << 6)
++#define SDIO_ERR_DATA_CRC			(1 << 5)
++#define SDIO_ERR_DATA_TIMEOUT			(1 << 4)
++#define SDIO_ERR_CMD_INDEX			(1 << 3)
++#define SDIO_ERR_CMD_ENDBIT			(1 << 2)
++#define SDIO_ERR_CMD_CRC			(1 << 1)
++#define SDIO_ERR_CMD_TIMEOUT			(1 << 0)
++
++#define SDIO_ERR_INTR_MASK			0xFFFF
++
++
++#define MMC_BLOCK_SIZE                  512
++#define MMC_CMD_RESET                   0
++#define MMC_CMD_SEND_OP_COND            1
++#define MMC_CMD_ALL_SEND_CID            2
++#define MMC_CMD_SET_RCA                 3
++#define MMC_CMD_SELECT_CARD		7
++#define MMC_CMD_SEND_CSD                9
++#define MMC_CMD_SEND_CID                10
++#define MMC_CMD_SEND_STATUS             13
++#define MMC_CMD_SET_BLOCKLEN            16
++#define MMC_CMD_READ_BLOCK              17
++#define MMC_CMD_RD_BLK_MULTI            18
++#define MMC_CMD_WRITE_BLOCK             24
++#define MMC_MAX_BLOCK_SIZE              512
++
++typedef struct mv_mmc_cid
++{
++	/* FIXME: BYTE_ORDER */
++	uchar year:4,
++	month:4;
++	uchar sn[3];
++	uchar fwrev:4,
++	hwrev:4;
++	uchar name[6];
++	uchar id[3];
++} mv_mmc_cid_t;
++
++typedef struct mv_mmc_csd
++{
++	uchar   ecc:2,
++		file_format:2,
++		tmp_write_protect:1,
++		perm_write_protect:1,
++		copy:1,
++		file_format_grp:1;
++	uint64_t content_prot_app:1,
++		rsvd3:4,
++		write_bl_partial:1,
++		write_bl_len:4,
++		r2w_factor:3,
++		default_ecc:2,
++		wp_grp_enable:1,
++		wp_grp_size:5,
++		erase_grp_mult:5,
++		erase_grp_size:5,
++		c_size_mult1:3,
++		vdd_w_curr_max:3,
++		vdd_w_curr_min:3,
++		vdd_r_curr_max:3,
++		vdd_r_curr_min:3,
++		c_size:12,
++		rsvd2:2,
++		dsr_imp:1,
++		read_blk_misalign:1,
++		write_blk_misalign:1,
++		read_bl_partial:1;
++	ushort  read_bl_len:4,
++		ccc:12;
++	uchar   tran_speed;
++	uchar   nsac;
++	uchar   taac;
++	uchar   rsvd1:2,
++		spec_vers:4,
++		csd_structure:2;
++} mv_mmc_csd_t;
++
++typedef struct {
++	char		pnm_0;	/* product name */
++	char		oid_1;	/* OEM/application ID */
++	char		oid_0;
++	uint8_t		mid;	/* manufacturer ID */
++	char		pnm_4;
++	char		pnm_3;
++	char		pnm_2;
++	char		pnm_1;
++	uint8_t		psn_2;	/* product serial number */
++	uint8_t		psn_1;
++	uint8_t		psn_0;	/* MSB */
++	uint8_t		prv;	/* product revision */
++	uint8_t		crc;	/* CRC7 checksum, b0 is unused and set to 1 */
++	uint8_t		mdt_1;	/* manufacturing date, LSB, RRRRyyyy yyyymmmm */
++	uint8_t		mdt_0;	/* MSB */
++	uint8_t		psn_3;	/* LSB */
++} mv_sd_cid_t;
++
++#endif /* _MVSDIO_INCLUDE */
+diff --git a/include/configs/sheevaplug.h b/include/configs/sheevaplug.h
+index 83dd8ff..7c8497c 100644
+--- a/include/configs/sheevaplug.h
++++ b/include/configs/sheevaplug.h
+@@ -1,3 +1,4 @@
++
+ /*
+  * (C) Copyright 2009
+  * Marvell Semiconductor <www.marvell.com>
+@@ -47,7 +48,9 @@
+ #define CONFIG_CMD_DHCP
+ #define CONFIG_CMD_ENV
+ #define CONFIG_CMD_MII
++#define CONFIG_CMD_MMC
+ #define CONFIG_CMD_NAND
++#define CONFIG_JFFS2_NAND
+ #define CONFIG_CMD_PING
+ #define CONFIG_CMD_USB
+ /*
+@@ -70,8 +73,8 @@
+  * it has to be rounded to sector size
+  */
+ #define CONFIG_ENV_SIZE			0x20000	/* 128k */
+-#define CONFIG_ENV_ADDR			0x60000
+-#define CONFIG_ENV_OFFSET		0x60000	/* env starts here */
++#define CONFIG_ENV_ADDR			0xa0000
++#define CONFIG_ENV_OFFSET		0xa0000	/* env starts here */
+ 
+ /*
+  * Default environment variables
+@@ -81,10 +84,11 @@
+ 	"${x_bootcmd_usb}; bootm 0x6400000;"
+ 
+ #define CONFIG_MTDPARTS		"orion_nand:512k(uboot),"	\
+-	"3m@1m(kernel),1m@4m(psm),13m@5m(rootfs) rw\0"
++	"0x1ff00000@512k(rootfs) rw\0"
+ 
+ #define CONFIG_EXTRA_ENV_SETTINGS	"x_bootargs=console"	\
+ 	"=ttyS0,115200 mtdparts="CONFIG_MTDPARTS	\
++	"mtdids=nand0=orion_nand\0"	\
+ 	"x_bootcmd_kernel=nand read 0x6400000 0x100000 0x300000\0" \
+ 	"x_bootcmd_usb=usb start\0" \
+ 	"x_bootargs_root=root=/dev/mtdblock3 rw rootfstype=jffs2\0"
