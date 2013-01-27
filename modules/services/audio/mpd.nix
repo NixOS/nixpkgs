@@ -6,93 +6,85 @@ let
 
   uid = config.ids.uids.mpd;
   gid = config.ids.gids.mpd;
+  cfg = config.services.mpd;
 
-in
+  mpdConf = pkgs.writeText "mpd.conf" ''
+    music_directory     "${cfg.musicDirectory}"
+    playlist_directory  "${cfg.dataDir}/playlists"
+    db_file             "${cfg.dataDir}/tag_cache"
+    state_file          "${cfg.dataDir}/state"
+    sticker_file        "${cfg.dataDir}/sticker.sql"
+    log_file            "syslog"
+    user                "mpd"
+    ${cfg.extraConfig}
+  ''; 
 
-{
+in {
 
   ###### interface
 
-  options = {
+  options = { 
 
-    services.mpd = {
+    services.mpd = { 
 
       enable = mkOption {
         default = false;
         description = ''
-          Whether to enable the MPD music player daemon (server).
-        '';
-      };
+          Whether to enable MPD, the music player daemon.
+        ''; 
+      };  
 
-      conffile = mkOption {
-        default = ''
-          music_directory     "${config.services.mpd.dataDir}/music"
-          playlist_directory  "${config.services.mpd.dataDir}/playlists"
-          db_file             "${config.services.mpd.dataDir}/tag_cache"
-          state_file          "${config.services.mpd.dataDir}/state"
-          sticker_file        "${config.services.mpd.dataDir}/sticker.sql"
-          log_file            "/var/log/mpd.log"
-          pid_file            "/var/run/mpd/mpd.pid"
-          bind_to_address     "localhost"
-          user                "mpd"
-        '';
-        description = ''The contents of the MPD configuration file mpd.conf'';
-      };
+      musicDirectory = mkOption {
+        default = "${cfg.dataDir}/music";
+        description = ''
+          Extra configuration added to the end of MPD's
+          configuration file, mpd.conf.
+        ''; 
+      };  
+
+      extraConfig = mkOption {
+        default = ""; 
+        description = ''
+          Extra directives added to to the end of MPD's configuration file,
+          mpd.conf. Basic configuration like file location and uid/gid
+          is added automatically to the beginning of the file.
+        ''; 
+      };  
 
       dataDir = mkOption {
         default = "/var/lib/mpd/";
-        example = "debug";
         description = ''
-          The root directory of the MPD data tree. Contains a tag cache,
-	  playlists and a music/ subdirectory that should contain (or
-          symlink to) your music collection.
-        '';
-      };
+          The directory where MPD stores its state, tag cache,
+          playlists etc.
+        ''; 
+      };  
 
-    };
+    };  
 
-  };
+  };  
 
 
   ###### implementation
 
-  config = mkIf config.services.mpd.enable {
+  config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.mpd ];
+    systemd.services.mpd = {
+      after = [ "network.target" "sound.target" ];
+      description = "Music Player Daemon";
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.mpd ];
+      script = "mpd --no-daemon ${mpdConf}";
+    };
 
-    users.extraUsers = singleton
-      { name = "mpd";
-        group = "mpd";
-        extraGroups = [ "audio" ];
-        description = "MPD system-wide daemon";
-        home = "${config.services.mpd.dataDir}";
-      };
+    users.extraUsers.mpd = {
+      inherit uid;
+      group = "mpd";
+      extraGroups = [ "audio" ];
+      description = "Music Player Daemon user";
+      home = "${cfg.dataDir}";
+    };
 
-    users.extraGroups = singleton
-      { name = "mpd";
-        inherit gid;
-      };
-
-    jobs.mpd =
-      { description = "MPD system-wide server";
-
-        startOn = "startup";
-
-        preStart =
-          ''
-            mkdir -p /var/run/mpd && chown mpd /var/run/mpd
-            test -d ${config.services.mpd.dataDir} || \
-            ( mkdir -p --mode 755 ${config.services.mpd.dataDir}/music \
-                                  ${config.services.mpd.dataDir}/playlists && \
-              chown -R mpd:mpd ${config.services.mpd.dataDir} )
-          '';
-
-        daemonType = "fork";
-        exec =
-          ''
-            ${pkgs.mpd}/bin/mpd ${pkgs.writeText "mpd.conf" config.services.mpd.conffile}
-          '';
-      };
+    users.extraGroups.mpd.gid = gid;
 
   };
 
