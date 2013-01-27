@@ -6230,6 +6230,8 @@ let
   radeonR600 = callPackage ../os-specific/linux/firmware/radeon-r600 { };
   radeonJuniper = callPackage ../os-specific/linux/firmware/radeon-juniper { };
 
+  raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
+
   regionset = callPackage ../os-specific/linux/regionset { };
 
   rfkill = callPackage ../os-specific/linux/rfkill { };
