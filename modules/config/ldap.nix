@@ -220,18 +220,15 @@ mkIf cfg.enable {
     };
   };
 
-  jobs = mkIf cfg.daemon.enable {
+  systemd.services = mkIf cfg.daemon.enable {
     nslcd = {
-      startOn = "filesystem";
-  
-      stopOn = "stopping network-interfaces";
-  
-      daemonType = "fork";
-  
+      wantedBy = [ "nss-user-lookup.target" ];
+
       path = [ nss_pam_ldapd ];
   
       preStart = ''
         mkdir -p /run/nslcd
+        rm -f /run/nslcd/nslcd.pid;
         chown nslcd.nslcd /run/nslcd
         ${optionalString (cfg.bind.distinguishedName != "") ''
           if test -s "${cfg.bind.password}" ; then
@@ -239,10 +236,14 @@ mkIf cfg.enable {
           fi
         ''}
       '';
-  
-      postStop = "rm -f /run/nslcd/nslcd.pid";
-  
-      exec = "nslcd";
+
+      script = "nslcd";
+
+      serviceConfig = {
+        Type = "forking";
+        PIDFile = "/run/nslcd/nslcd.pid";
+        Restart = "always";
+      };
     };
   };
 }
