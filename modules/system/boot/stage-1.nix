@@ -149,7 +149,7 @@ let
   extraUtils = pkgs.runCommand "extra-utils"
     { buildInputs = [pkgs.nukeReferences];
       allowedReferences = [ "out" ]; # prevent accidents like glibc being included in the initrd
-      doublePatchelf = (pkgs.stdenv.system == "armv5tel-linux");
+      doublePatchelf = pkgs.stdenv.isArm;
     }
     ''
       mkdir -p $out/bin $out/lib
