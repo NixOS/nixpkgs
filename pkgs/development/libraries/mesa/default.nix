@@ -1,6 +1,6 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, libdrm, file, expat, makedepend
 , libXxf86vm, libXfixes, libXdamage, glproto, dri2proto, libX11, libxcb, libXext
-, libXt, udev, enableTextureFloats ? false
+, libXt, udev, enableTextureFloats ? false, enableR600LlvmCompiler ? false
 , python, libxml2Python, autoconf, automake, libtool, llvm, writeText }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   configureFlags =
     ""
     + " --enable-gles1 --enable-gles2 --enable-gallium-egl"
-#    + " --enable-r600-llvm-compiler"
     + " --with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast"
+    + stdenv.lib.optionalString enableR600LlvmCompiler " --enable-r600-llvm-compiler"
     # Texture floats are patented, see docs/patents.txt
     + stdenv.lib.optionalString enableTextureFloats " --enable-texture-float";
 
