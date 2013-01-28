@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, wayland, mesa90x, libxkbcommon, pixman
-, cairo, libxcb, libXcursor, x11, udev, libdrm2_4_39, mtdev
+, cairo, libxcb, libXcursor, x11, udev, libdrm2_4_40, mtdev
 , libjpeg, pam, autoconf, automake, libtool }:
 
-let version = "1.0.3"; in
+let version = "1.0.4"; in
 
 stdenv.mkDerivation rec {
   name = "weston-${version}";
 
   src = fetchurl {
     url = "http://wayland.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "0ls8w1l8k9fx0hjlw7qzjb98l911agigf5s2dna3xsjlyv9afdii";
+    sha256 = "1841sd6i8nq9gs1xkx8lwcg4lzy6yfcs95nnsfaf0y1ppd6c9sj2";
   };
 
   patches = [
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ pkgconfig wayland mesa90x libxkbcommon pixman
-    cairo libxcb libXcursor x11 udev libdrm2_4_39 mtdev
+    cairo libxcb libXcursor x11 udev libdrm2_4_40 mtdev
     libjpeg pam autoconf automake libtool ];
 
   preConfigure = "autoreconf -vfi";
