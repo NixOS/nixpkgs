@@ -1930,13 +1930,6 @@ let
   # expects a single digit after the dot.  As a workaround, we feed
   # GCC with Texinfo 4.9.  Stupid bug, hackish workaround.
 
-  gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.1) {
-    inherit fetchurl noSysDirs gmp mpfr;
-    stdenv = overrideGCC stdenv gcc42;
-    texinfo = texinfo49;
-    profiledCompiler = false;
-  });
-
   gcc42 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.2) {
     inherit fetchurl stdenv noSysDirs;
     profiledCompiler = false;
@@ -2159,20 +2152,14 @@ let
       stdenv = allStdenvs.stdenvNative;
     });
 
+  /*
   gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
     inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
     texinfo = texinfo49;
   });
+  */
 
   gfortran = gfortran46;
-
-  gfortran41 = wrapGCC (gcc41.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    inherit gmp mpfr;
-  });
 
   gfortran42 = wrapGCC (gcc42.gcc.override {
     name = "gfortran";
@@ -8859,9 +8846,7 @@ let
 
   foomatic_filters = callPackage ../misc/drivers/foomatic-filters {};
 
-  freestyle = callPackage ../misc/freestyle {
-    #stdenv = overrideGCC stdenv gcc41;
-  };
+  freestyle = callPackage ../misc/freestyle { };
 
   gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
     inherit perl intltool pyGtkGlade gettext pkgconfig makeWrapper pygobject
