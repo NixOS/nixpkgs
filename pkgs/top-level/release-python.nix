@@ -1525,7 +1525,6 @@ in
   rdesktop = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rdf4store = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rdiff_backup = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  RealPlayer = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   recutils = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   redshift = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   relfs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

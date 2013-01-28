@@ -7753,10 +7753,6 @@ let
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
-  RealPlayer = callPackage_i686 ../applications/video/RealPlayer {
-    libstdcpp5 = gcc33.gcc;
-  };
-
   recode = callPackage ../tools/text/recode { };
 
   retroshare = callPackage ../applications/networking/p2p/retroshare {
@@ -8080,8 +8076,6 @@ let
          ([ ]
           ++ lib.optional enableGnash gnash
           ++ lib.optional enableAdobeFlash flashplayer
-          # RealPlayer is disabled by default for legal reasons.
-          ++ lib.optional (system != "i686-linux" && cfg.enableRealPlayer or false) RealPlayer
           ++ lib.optional (cfg.enableDjvu or false) (djview4)
           ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
           ++ lib.optional (cfg.enableGeckoMediaPlayer or false) gecko_mediaplayer
