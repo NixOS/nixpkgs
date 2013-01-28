@@ -2152,13 +2152,6 @@ let
       stdenv = allStdenvs.stdenvNative;
     });
 
-  /*
-  gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
-    inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
-    texinfo = texinfo49;
-  });
-  */
-
   gfortran = gfortran46;
 
   gfortran42 = wrapGCC (gcc42.gcc.override {
@@ -2702,16 +2695,6 @@ let
       noLibc = (libc == null);
       inherit stdenv gcc binutils libc shell name cross;
     });
-
-  # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
-  # want to merge `gcc-upc-wrapper' and `gcc-wrapper'.
-  wrapGCCUPC = baseGCC: import ../build-support/gcc-upc-wrapper {
-    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
-    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
-    gcc = baseGCC;
-    libc = glibc;
-    inherit stdenv binutils;
-  };
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
