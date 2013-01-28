@@ -3807,7 +3807,7 @@ let
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
 
-  google_perftools = callPackage ../development/libraries/google-perftools { };
+  gperftools = callPackage ../development/libraries/gperftools { };
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
