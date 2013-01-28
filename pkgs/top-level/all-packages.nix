@@ -1917,10 +1917,6 @@ let
 
   gcc = gcc46;
 
-  gcc295 = wrapGCC (import ../development/compilers/gcc/2.95 {
-    inherit fetchurl stdenv noSysDirs;
-  });
-
   gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
     inherit fetchurl stdenv noSysDirs;
   });
