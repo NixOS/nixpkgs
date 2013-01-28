@@ -8,6 +8,8 @@ stdenv.mkDerivation (rec {
     sha256 = "1nsqk70ry3221sd62s4f0njcrncppszs4xxjcak13lxyfq2y0fs7";
   };
 
+  patches = [ ./glibc-2.17.patch ];
+
   # Perl is needed for `cg_annotate'.
   # GDB is needed to provide a sane default for `--db-command'.
   nativeBuildInputs = [ perl ];
