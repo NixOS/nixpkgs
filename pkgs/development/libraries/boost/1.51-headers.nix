@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation {
-  name = "boost-1.51.0-headers";
+  name = "boost-headers-1.51.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/boost/boost_1_51_0.tar.bz2";
