@@ -5643,7 +5643,7 @@ let
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
 
-  eject = callPackage ../os-specific/linux/eject { };
+  eject = utillinux;
 
   ffado = callPackage ../os-specific/linux/ffado { };
 
