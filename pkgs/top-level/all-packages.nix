@@ -724,6 +724,8 @@ let
 
   fakeroot = callPackage ../tools/system/fakeroot { };
 
+  fcitx = callPackage ../tools/inputmethods/fcitx { };
+
   fcron = callPackage ../tools/system/fcron { };
 
   fdisk = callPackage ../tools/system/fdisk { };
