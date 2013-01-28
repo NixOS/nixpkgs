@@ -7,6 +7,7 @@
 , x264Support ? true, x264 ? null
 , xvidSupport ? true, xvidcore ? null
 , vdpauSupport ? true, libvdpau ? null
+, vaapiSupport ? true, libva ? null
 , faacSupport ? false, faac ? null
 , dc1394Support ? false, libdc1394 ? null
 , x11grabSupport ? false, libXext ? null, libXfixes ? null
@@ -19,6 +20,7 @@ assert vpxSupport -> libvpx != null;
 assert x264Support -> x264 != null;
 assert xvidSupport -> xvidcore != null;
 assert vdpauSupport -> libvdpau != null;
+assert vaapiSupport -> libva != null;
 assert faacSupport -> faac != null;
 assert x11grabSupport -> libXext != null && libXfixes != null;
 
@@ -62,6 +64,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional x264Support x264
     ++ stdenv.lib.optional xvidSupport xvidcore
     ++ stdenv.lib.optional vdpauSupport libvdpau
+    ++ stdenv.lib.optional vaapiSupport libva
     ++ stdenv.lib.optional faacSupport faac
     ++ stdenv.lib.optional dc1394Support libdc1394
     ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ];

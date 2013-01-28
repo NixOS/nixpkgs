@@ -5057,6 +5057,8 @@ let
 
   ucommon = callPackage ../development/libraries/ucommon { };
 
+  vdpauDriver = callPackage ../development/libraries/vaapi-vdpau { };
+
   vamp = callPackage ../development/libraries/audio/vamp { };
 
   vcdimager = callPackage ../development/libraries/vcdimager { };

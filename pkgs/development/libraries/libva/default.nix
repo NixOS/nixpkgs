@@ -1,17 +1,18 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, libX11, pkgconfig, libXext, mesa, libdrm, libXfixes, intelgen4asm }:
+{ stdenv, fetchurl, autoconf, automake, libtool, libX11, pkgconfig, libXext, mesa
+, libdrm, libXfixes, intelgen4asm, which }:
 
 stdenv.mkDerivation rec {
-  name = "libva-1.0.12";
+  name = "libva-1.1.0";
   
   src = fetchurl {
     url = "http://cgit.freedesktop.org/libva/snapshot/${name}.tar.bz2";
-    sha256 = "1xg8zvmh75w63sc8ykagzrbzswph6g9jardy8v83glkqzilaw2p8";
+    sha256 = "0lqkharln67p60jlyz9y662gjgqk2iy2nrj84j1jr1nzgw7j01a5";
   };
 
   buildInputs = [ autoconf automake libtool libX11 libXext pkgconfig mesa libdrm
-    libXfixes intelgen4asm ];
+    libXfixes intelgen4asm which ];
 
-  configureFlags = [ "--enable-i965-driver" "--enable-glx" ];
+  configureFlags = [ "--enable-glx" ];
 
   preConfigure = "sh autogen.sh";
 
