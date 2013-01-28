@@ -229,7 +229,6 @@ with (import ./release-lib.nix);
   postfix = linux;
   ppl = all;
   procps = linux;
-  pwdutils = linux;
   pthreadmanpages = linux;
   pygtk = linux;
   pyqt4 = linux;

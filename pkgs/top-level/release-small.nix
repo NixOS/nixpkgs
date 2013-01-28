@@ -146,7 +146,6 @@ with (import ./release-lib.nix);
   policykit = linux;
   portmap = linux;
   procps = linux;
-  pwdutils = linux;
   python = allBut "i686-cygwin";
   pythonFull = linux;
   readline = all;
