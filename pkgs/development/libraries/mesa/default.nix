@@ -7,9 +7,10 @@ if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
 else
 
-let version = "9.0.2"; in
-
-stdenv.mkDerivation rec {
+let
+  version = "9.0.2";
+in
+stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
