@@ -1,14 +1,12 @@
-{ stdenv, fetchurl, zlib, ncurses ? null, perl ? null }:
+{ stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.21.2";
+  name = "util-linux-2.22.2";
 
   src = fetchurl {
-    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.21/${name}.tar.bz2";
-    sha256 = "0c1xp9pzwizxfk09anvjaz5cv8gvxracvvb6s84xiaxza679svq6";
+    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.22/${name}.tar.bz2";
+    sha256 = "0vf3ifb45gr4cd27pmmxk8y5b3r0920mv16fv0vfwz5705xa2qvl";
   };
-
-  patches = [ ./linux-specific-header.patch ];
 
   crossAttrs = {
     # Work around use of `AC_RUN_IFELSE'.
@@ -22,13 +20,24 @@ stdenv.mkDerivation rec {
   # --enable-libmount-mount  fixes the behaviour being /etc/mtab a symlink to /proc/monunts
   #     http://pl.digipedia.org/usenet/thread/19513/1924/
   configureFlags = ''
-    --disable-use-tty-group
     --enable-write
+    --enable-last
+    --enable-mesg
+    --enable-ddate
+    --disable-use-tty-group
     --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/sbin:/sbin
-    --enable-libmount-mount
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 
-  buildInputs = [ zlib ] ++ stdenv.lib.optional (ncurses != null) ncurses
-             ++ stdenv.lib.optional (perl != null) perl;
+  buildInputs =
+    [ zlib pam ]
+    ++ stdenv.lib.optional (ncurses != null) ncurses
+    ++ stdenv.lib.optional (perl != null) perl;
+
+  enableParallelBuilding = true;
+
+  meta = {
+    homepage = http://www.kernel.org/pub/linux/utils/util-linux/;
+    description = "A set of system utilities for Linux";
+  };
 }
