@@ -161,8 +161,7 @@ let
 
   ### Symbolic names.
 
-
-  x11 = xlibsWrapper;
+  x11 = if stdenv.isDarwin then darwinX11AndOpenGL else xlibsWrapper;
 
   # `xlibs' is the set of X library components.  This used to be the
   # old modular X llibraries project (called `xlibs') but now it's just
