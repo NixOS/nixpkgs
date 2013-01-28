@@ -4588,7 +4588,8 @@ let
 
   darwinX11AndOpenGL = callPackage ../build-support/native-darwin-x11-and-opengl { };
 
-  mesa = callPackage ../development/libraries/mesa { };
+  mesa = if stdenv.isDarwin then darwinX11AndOpenGL else
+    callPackage ../development/libraries/mesa { };
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
