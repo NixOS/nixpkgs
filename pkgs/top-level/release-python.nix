@@ -584,7 +584,6 @@ in
   gv = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gwenhywfar = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gwrap = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  gwt = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gxneur = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   hadoop = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   harfbuzz = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
