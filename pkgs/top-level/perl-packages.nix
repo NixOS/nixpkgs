@@ -2466,6 +2466,10 @@ rec {
       sha256 = "1vg7jpn7vz3a2j3fxjjkaxiiqg7azqmy7afrpghiqkjcr8b6zs9y";
     };
     propagatedBuildInputs = [ URI NetSSLeay ];
+    meta = {
+      description = "Nearly transparent SSL encapsulation for IO::Socket::INET";
+      license = "perl";
+    };
   };
 
   IOString = buildPerlPackage rec {
@@ -3532,6 +3536,10 @@ rec {
     buildInputs = [ pkgs.openssl ];
     OPENSSL_PREFIX = pkgs.openssl;
     doCheck = false; # Test performs network access.
+    meta = {
+      description = "Perl extension for using OpenSSL";
+      license = "SSLeay";
+    };
   };
 
   NetTwitterLite = buildPerlPackage {
