@@ -223,10 +223,7 @@ rec {
         UBIFS_FS_ZLIB y
         UBIFS_FS_DEBUG n
       '';
-    kernelTarget = "uImage";
-    uboot = "sheevaplug";
-    # Only for uboot = uboot :
-    ubootConfig = "sheevaplug_config";
+    kernelTarget = "zImage";
     gcc = {
       arch = "armv6";
       fpu = "vfp";
