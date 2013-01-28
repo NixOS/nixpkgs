@@ -4587,6 +4587,8 @@ let
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
+  darwinX11AndOpenGL = callPackage ../build-support/native-darwin-x11-and-opengl { };
+
   mesa = callPackage ../development/libraries/mesa { };
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
