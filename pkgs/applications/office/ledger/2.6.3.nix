@@ -1,24 +1,22 @@
-{ stdenv, fetchurl, emacs, gmp, pcre, expat, autoconf, automake, libtool, texinfo }:
+{ stdenv, fetchurl, emacs, gmp, pcre, expat }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "ledger-2.6.3";
 
   src = fetchurl {
-    url = "https://github.com/jwiegley/ledger/archive/v2.6.3.tar.gz";
-    sha256 = "0fmawai1fakhvdmjrydxp2pl67vk1c1ff54z28xl2k057ws49hnm";
+    url = "https://github.com/downloads/ledger/ledger/${name}.tar.gz";
+    sha256 = "05zpnypcwgck7lwk00pbdlcwa347xsqifxh4zsbbn01m98bx1v5k";
   };
 
-  buildInputs = [ emacs gmp pcre expat autoconf automake libtool texinfo ];
-
-  preConfigure = "autoreconf -vi";
+  buildInputs = [ emacs gmp pcre expat ];
 
   configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";
 
   doCheck = true;
 
-  # Patchelf breaks the hard-coded rpath to ledger's libamounts.so and
-  # libledger-2.6.3. Fortunately, libtool chooses proper rpaths to begin
-  # with, so we can just disable patchelf to avoid the issue.
+  # Patchelf breaks the hard-coded rpath to ledger's libamounts.0.so and
+  # libledger-2.6.3.so. Fortunately, libtool chooses proper rpaths to
+  # begin with, so we can just disable patchelf to avoid the issue.
   dontPatchELF = true;
 
   meta = {
