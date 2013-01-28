@@ -1934,12 +1934,6 @@ let
   # expects a single digit after the dot.  As a workaround, we feed
   # GCC with Texinfo 4.9.  Stupid bug, hackish workaround.
 
-  gcc40 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.0) {
-    inherit fetchurl stdenv noSysDirs;
-    texinfo = texinfo49;
-    profiledCompiler = true;
-  });
-
   gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.1) {
     inherit fetchurl noSysDirs gmp mpfr;
     stdenv = overrideGCC stdenv gcc42;
@@ -2175,12 +2169,6 @@ let
   });
 
   gfortran = gfortran46;
-
-  gfortran40 = wrapGCC (gcc40.gcc.override {
-    langFortran = true;
-    langCC = false;
-    inherit gmp mpfr;
-  });
 
   gfortran41 = wrapGCC (gcc41.gcc.override {
     name = "gfortran";
