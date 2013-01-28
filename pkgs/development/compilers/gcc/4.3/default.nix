@@ -76,7 +76,7 @@ stdenv.mkDerivation ({
     });
     
   patches =
-    [./pass-cxxcpp.patch ./libmudflap-cpp.patch]
+    [ ./pass-cxxcpp.patch ./libmudflap-cpp.patch ./siginfo_t_fix.patch ]
     ++ optional noSysDirs ./no-sys-dirs.patch
     ++ optional (noSysDirs && langFortran) ./no-sys-dirs-fortran.patch
     ++ optional langJava ./java-jvgenmain-link.patch
