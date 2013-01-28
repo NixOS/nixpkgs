@@ -3408,15 +3408,12 @@ let
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   boost144 = callPackage ../development/libraries/boost/1.44.nix { };
-  boost146 = callPackage ../development/libraries/boost/1.46.nix { };
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
-  boost151 = callPackage ../development/libraries/boost/1.51.nix { };
   boost152 = callPackage ../development/libraries/boost/1.52.nix { };
   boost = boost152;
 
   boostHeaders149 = callPackage ../development/libraries/boost/1.49-headers.nix { };
-  boostHeaders151 = callPackage ../development/libraries/boost/1.51-headers.nix { };
   boostHeaders152 = callPackage ../development/libraries/boost/1.52-headers.nix { };
   boostHeaders = boostHeaders152;
 
