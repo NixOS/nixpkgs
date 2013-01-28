@@ -1479,7 +1479,7 @@ rec {
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ClassMethodModifiers ConfigAny ContextPreserve DataCompare DataDumperConcise DataPage DBI DevelGlobalDestruction HashMerge ModuleFind Moo MROCompat namespaceclean PathClass ScopeGuard SQLAbstract strictures SubName TryTiny ];
     meta = {
       homepage = http://www.dbix-class.org/;
-      description = "Extensible and flexible object <-> relational mapper.";
+      description = "Extensible and flexible object <-> relational mapper";
       license = "perl";
     };
   };
@@ -2643,7 +2643,7 @@ rec {
     };
     buildInputs = [ JSON ];
     meta = {
-      description = "Wrapper Class for the various JSON classes.";
+      description = "Wrapper Class for the various JSON classes";
       license = "perl";
     };
   };
@@ -2655,7 +2655,7 @@ rec {
       sha256 = "1lv9riws9f72gya2fsp5jvbd1fbzyi8423x38a491ryy9cai2ph3";
     };
     meta = {
-      description = "JSON::XS compatible pure-Perl module.";
+      description = "JSON::XS compatible pure-Perl module";
       license = "perl";
     };
   };
@@ -2720,7 +2720,7 @@ rec {
     };
     propagatedBuildInputs = [ HTMLParser HTMLTagset LinguaStem /* MemoizeExpireLRU */ ];
     meta = {
-      description = "Part-of-speech tagger for English natural language processing.";
+      description = "Part-of-speech tagger for English natural language processing";
       license = "gpl_3";
     };
   };
