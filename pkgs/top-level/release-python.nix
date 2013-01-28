@@ -1106,7 +1106,6 @@ in
     nvidia_x11_legacy96 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     openafsClient = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     openiscsi = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    ov511 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     perf = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     spl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     sysprof = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
