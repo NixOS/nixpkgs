@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha1 = "291e8bd9d615cf3d27e4000117c81a3602484a50";
   };
 
-  patches = [ ./types.h ];
+  patches = [ ./types.patch ];
 
   buildInputs = [ libuuid ];
 
