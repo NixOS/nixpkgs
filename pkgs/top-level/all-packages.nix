@@ -5901,7 +5901,7 @@ let
   };
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
-    inherit fetchgit stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
   };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
