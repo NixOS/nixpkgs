@@ -224,6 +224,7 @@ rec {
         UBIFS_FS_DEBUG n
       '';
     kernelTarget = "zImage";
+    uboot = null;
     gcc = {
       arch = "armv6";
       fpu = "vfp";
