@@ -7798,7 +7798,7 @@ let
   siproxd = callPackage ../applications/networking/siproxd { };
 
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
-    usePulseAudio = config.pulseaudio or false; # disabled by default (the 100% cpu bug)
+    usePulseAudio = config.pulseaudio or true;
   };
 
   st = callPackage ../applications/misc/st { };
