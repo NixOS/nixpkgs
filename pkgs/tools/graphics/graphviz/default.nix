@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libpng, libjpeg, expat, libXaw
-, yacc, libtool, fontconfig, pango, gd, xlibs, gts
+, yacc, libtool, fontconfig, pango, gd, xlibs, gts, gettext
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig libpng libjpeg expat libXaw yacc libtool fontconfig
       pango gd gts
-    ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender ];
+    ] ++ stdenv.lib.optionals (xlibs != null) [ xlibs.xlibs xlibs.libXrender ]
+    ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 
   patches = [ ./fix-broken-memcp-signature.patch ];
 

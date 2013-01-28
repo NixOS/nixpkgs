@@ -89,9 +89,11 @@ let version = "4.7.2";
     gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null cross;
     gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null cross;
     gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null cross;
+    gccMode = stdenv.lib.attrByPath [ "gcc" "mode" ] null cross;
     withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
     withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
     withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
+    withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
     crossMingw = (cross != null && cross.libc == "msvcrt");
 
     crossConfigureFlags =
@@ -99,6 +101,7 @@ let version = "4.7.2";
       withArch +
       withCpu +
       withAbi +
+      withMode +
       (if (crossMingw && crossStageStatic) then
         " --with-headers=${libcCross}/include" +
         " --with-gcc" +
@@ -181,7 +184,6 @@ stdenv.mkDerivation ({
       let
         libc = if libcCross != null then libcCross else stdenv.glibc;
         gnu_h = "gcc/config/gnu.h";
-        i386_gnu_h = "gcc/config/i386/gnu.h";
         extraCPPDeps =
              libc.propagatedBuildInputs
           ++ stdenv.lib.optional (libpthreadCross != null) libpthreadCross
@@ -194,8 +196,8 @@ stdenv.mkDerivation ({
           then "-L${libpthreadCross}/lib ${libpthreadCross.TARGET_LDFLAGS}"
           else "-L${libpthread}/lib";
       in
-        '' echo "augmenting \`CPP_SPEC' in \`${i386_gnu_h}' with \`${extraCPPSpec}'..."
-           sed -i "${i386_gnu_h}" \
+        '' echo "augmenting \`CPP_SPEC' in \`${gnu_h}' with \`${extraCPPSpec}'..."
+           sed -i "${gnu_h}" \
                -es'|CPP_SPEC *"\(.*\)$|CPP_SPEC "${extraCPPSpec} \1|g'
 
            echo "augmenting \`LIB_SPEC' in \`${gnu_h}' with \`${extraLibSpec}'..."
@@ -289,7 +291,9 @@ stdenv.mkDerivation ({
         )
       )
     }
-    ${if (stdenv ? glibc) then " --with-native-system-header-dir=${stdenv.glibc}/include" else ""}
+    ${if (stdenv ? glibc && cross == null)
+      then " --with-native-system-header-dir=${stdenv.glibc}/include"
+      else ""}
     ${ # Trick that should be taken out once we have a mips64el-linux not loongson2f
       if cross == null && stdenv.system == "mips64el-linux" then "--with-arch=loongson2f" else ""}
     ${if langAda then " --enable-libada" else ""}

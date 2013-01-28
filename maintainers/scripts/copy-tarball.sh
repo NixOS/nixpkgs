@@ -10,25 +10,25 @@ base="$(basename "$url")"
 if [ -z "$base" ]; then echo "bad URL"; exit 1; fi
 dstPath="$distDir/$base"
 
-if [ -e "$dstPath" ]; then echo "$dstPath already exists"; exit 0; fi
+if [ -e "$dstPath" ]; then if [ -n "$VERBOSE" ]; then echo "$dstPath already exists"; fi; exit 0; fi
 
 if [ -z "$file" ]; then
 
     echo "downloading $url to $dstPath"
 
-    if [ -n "$dryRun" ]; then exit 0; fi
+    if [ -n "$DRY_RUN" ]; then exit 0; fi
 
     declare -a res
     if ! res=($(PRINT_PATH=1 nix-prefetch-url "$url")); then
-        continue
+        exit
     fi
-    
+
     storePath=${res[1]}
 
 else
     storePath="$file"
 fi
-    
+
 cp $storePath "$dstPath.tmp.$$"
 mv -f "$dstPath.tmp.$$" "$dstPath"
 

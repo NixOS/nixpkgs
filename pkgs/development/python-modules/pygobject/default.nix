@@ -12,16 +12,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python pkgconfig glib ];
 
+  # in a "normal" setup, pygobject and pygtk are installed into the
+  # same site-packages: we need a pth file for both. pygtk.py would be
+  # used to select a specific version, in our setup it should have no
+  # effect, but we leave it in case somebody expects and calls it.
   postInstall = ''
-    # All python code is installed into a "gtk-2.0" sub-directory. That
-    # sub-directory may be useful on systems which share several library
-    # versions in the same prefix, i.e. /usr/local, but on Nix that directory
-    # is useless. Furthermore, its existence makes it very hard to guess a
-    # proper $PYTHONPATH that allows "import gtk" to succeed.
-    cd $(toPythonPath $out)/gtk-2.0
-    for n in *; do
-      ln -s "gtk-2.0/$n" "../$n"
-    done
+    mv $out/lib/${python.libPrefix}/site-packages/{pygtk.pth,${name}.pth}
   '';
 
   meta = {

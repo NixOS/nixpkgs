@@ -5,7 +5,7 @@
 with import ../../pkgs/lib;
 
 let
-  trace = if (builtins.getEnv "VERBOSE") == "1" then builtins.trace else (x: y: y);
+  trace = if builtins.getEnv "VERBOSE" == "1" then builtins.trace else (x: y: y);
 
   rel = removeAttrs (import ../../pkgs/top-level/release.nix) [ "tarball" "xbursttools" ];
 
@@ -13,7 +13,7 @@ let
   
   strictAttrs = as: seqList (attrValues as) as;
 
-  maybe = as: let y = builtins.tryEval (strictAttrs as); in if y.success then y.value else builtins.trace "FAIL" null;
+  maybe = as: let y = builtins.tryEval (strictAttrs as); in if y.success then y.value else builtins.trace "FAIL" {};
 
   call = attrs: flip mapAttrs attrs
     (n: v: trace n (

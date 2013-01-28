@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-loader-dynamic";
-  version = "0.9.0.1";
-  sha256 = "1pzn8lfqngn8cqm1dpxn5wsx70xcd7r90rd2948n4p5309qgh9mq";
+  version = "0.10";
+  sha256 = "0wnrsbnf3crfxhhraz4my08m6yhmqj632rv6cdy9ili3wxjkqd57";
   buildDepends = [ directoryTree hint mtl snapCore time ];
   meta = {
     homepage = "http://snapframework.com/";

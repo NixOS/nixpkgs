@@ -1,0 +1,34 @@
+--- a/btrfs-list.c	2012-12-30 12:20:01.394137593 +0100
++++ b/btrfs-list.c	2012-12-30 12:22:47.242452906 +0100
+@@ -1004,6 +1004,23 @@
+ 	return 0;
+ }
+ 
++static void __drop_deleting_roots(struct root_lookup *root_lookup)
++{
++	struct rb_node *n;
++
++again:
++	n = rb_first(&root_lookup->root);
++	while (n) {
++		struct root_info *entry = rb_entry(n, struct root_info, rb_node);
++		if (!entry->ref_tree) {
++			rb_erase(n, &root_lookup->root);
++			free(entry);
++			goto again;
++		}
++		n = rb_next(n);
++	}
++}
++
+ static int __list_subvol_search(int fd, struct root_lookup *root_lookup)
+ {
+ 	int ret;
+@@ -1123,6 +1140,8 @@
+ 			break;
+ 	}
+ 
++	__drop_deleting_roots(root_lookup);
++
+ 	return 0;
+ }

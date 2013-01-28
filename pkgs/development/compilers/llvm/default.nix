@@ -1,13 +1,13 @@
 { stdenv, fetchurl, perl, groff, cmake, python }:
 
-let version = "3.1"; in
+let version = "3.2"; in
 
 stdenv.mkDerivation {
   name = "llvm-${version}";
 
   src = fetchurl {
     url    = "http://llvm.org/releases/${version}/llvm-${version}.src.tar.gz";
-    sha256 = "1ea05135197b5400c1f88d00ff280d775ce778f8f9ea042e25a1e1e734a4b9ab";
+    sha256 = "0hv30v5l4fkgyijs56sr1pbrlzgd674pg143x7az2h37sb290l0j";
   };
 
   buildInputs = [ perl groff cmake python ];
@@ -24,4 +24,3 @@ stdenv.mkDerivation {
     platforms = with stdenv.lib.platforms; all;
   };
 }
-

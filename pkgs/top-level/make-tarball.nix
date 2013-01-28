@@ -47,16 +47,16 @@ releaseTools.sourceTarball {
     export NIX_DB_DIR=$TMPDIR
     export NIX_STATE_DIR=$TMPDIR
     nix-store --init
-  
+
     # Run the regression tests in `lib'.
     res="$(nix-instantiate --eval-only --strict pkgs/lib/tests.nix)"
     if test "$res" != "[ ]"; then
         echo "regression tests for lib failed, got: $res"
         exit 1
     fi
-  
+
     # Check that all-packages.nix evaluates on a number of platforms.
-    for platform in i686-linux x86_64-linux powerpc-linux i686-freebsd powerpc-darwin i686-darwin; do
+    for platform in i686-linux x86_64-linux powerpc-linux i686-freebsd; do
         header "checking pkgs/top-level/all-packages.nix on $platform"
         nix-env --readonly-mode -f pkgs/top-level/all-packages.nix \
             --show-trace --argstr system "$platform" \
@@ -72,7 +72,7 @@ releaseTools.sourceTarball {
 
   distPhase = ''
     find . -name "\.svn" -exec rm -rvf {} \; -prune
-  
+
     mkdir -p $out/tarballs
     mkdir ../$releaseName
     cp -prd . ../$releaseName

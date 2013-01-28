@@ -1,5 +1,5 @@
 { system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
-, extraAttrs ? {}, overrides ? (pkgs: {})
+, extraAttrs ? {}, overrides ? (pkgs: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -10,7 +10,7 @@ let
 
   lib = import ../../lib;
 
-  disallowUnfree = builtins.getEnv "HYDRA_DISALLOW_UNFREE" == "1";
+  allowUnfree = config.allowUnfree or true && builtins.getEnv "HYDRA_DISALLOW_UNFREE" != "1";
 
   stdenvGenerator = setupScript: rec {
 
@@ -41,7 +41,7 @@ let
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.
         mkDerivation = attrs:
-          if disallowUnfree && attrs.meta.license or "" == "unfree" then
+          if !allowUnfree && (let l = attrs.meta.license or ""; in l == "unfree" || l == "unfree-redistributable" || l == lib.licenses.proprietary) then
             throw "package ‘${attrs.name}’ has an unfree license, refusing to evaluate"
           else
           (derivation (
@@ -82,9 +82,7 @@ let
           // (attrs.passthru or {});
 
         # Utility flags to test the type of platform.
-        isDarwin = result.system == "i686-darwin"
-               || result.system == "powerpc-darwin"
-               || result.system == "x86_64-darwin";
+        isDarwin = result.system == "x86_64-darwin";
         isLinux = result.system == "i686-linux"
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
@@ -108,7 +106,6 @@ let
                || result.system == "x86_64-openbsd";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-gnu"
-               || result.system == "i686-darwin"
                || result.system == "i686-freebsd"
                || result.system == "i686-openbsd"
                || result.system == "i386-sunos";

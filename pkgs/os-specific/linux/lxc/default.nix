@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, libcap, perl, docbook2x, docbook_xml_dtd_45 }:
+{ stdenv, fetchurl, libcap, apparmor, perl, docbook2x, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
-  name = "lxc-0.8.0-rc2";
+  name = "lxc-0.8.0";
 
   src = fetchurl {
     url = "http://lxc.sf.net/download/lxc/${name}.tar.gz";
-    sha256 = "1f0ee0464507d26e494784e841b68c765ecd3abc5976012e226f69d1aa361bef";
+    sha256 = "0b3912mal1n56i1v5f3aplm7shqnlz24p0znpva27r4l1drk7j7a";
   };
 
-  buildInputs = [ libcap perl docbook2x ];
+  buildInputs = [ libcap apparmor perl docbook2x ];
 
   patches = [
    ./dont-run-ldconfig.patch

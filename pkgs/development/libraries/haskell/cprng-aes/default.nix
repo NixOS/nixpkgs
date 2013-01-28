@@ -1,13 +1,11 @@
-{ cabal, cereal, cipherAes, cryptoApi, cryptocipher, entropy
-, random
-}:
+{ cabal, cipherAes, cryptoApi, cryptoRandomApi, entropy, random }:
 
 cabal.mkDerivation (self: {
   pname = "cprng-aes";
-  version = "0.2.4";
-  sha256 = "0rk14yj76p5a1h6jlz4q2fgijjid430lwcr57zkkda8mdibqqs5j";
+  version = "0.3.4";
+  sha256 = "0k1zh4nw30qgdrkgn6x6zfbpp129f9cparzyqsdqfbf44j0mf2rw";
   buildDepends = [
-    cereal cipherAes cryptoApi cryptocipher entropy random
+    cipherAes cryptoApi cryptoRandomApi entropy random
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cprng-aes";

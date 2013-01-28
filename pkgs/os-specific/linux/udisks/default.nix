@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xgqifddwaavmjc8c30i0mdffyirsld7c6qhfyjw7f9khwv8jjw5";
   };
 
-  patches = [ ./purity.patch ];
+  patches = [ ./purity.patch ./no-pci-db.patch ];
 
   postPatch =
     ''
@@ -29,11 +29,6 @@ stdenv.mkDerivation rec {
   buildNativeInputs = [ pkgconfig ];
 
   configureFlags = "--localstatedir=/var --enable-lvm2";
-
-  preConfigure =
-    ''
-      # Ensure that udisks can find the necessary programs.
-    '';
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/udisks;

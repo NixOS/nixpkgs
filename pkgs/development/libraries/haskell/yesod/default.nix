@@ -1,30 +1,31 @@
-{ cabal, attoparsec, base64Bytestring, blazeBuilder, blazeHtml
-, blazeMarkup, Cabal, conduit, fileEmbed, filepath, fsnotify
-, ghcPaths, hamlet, httpConduit, httpReverseProxy, httpTypes
-, liftedBase, monadControl, network, optparseApplicative, parsec
-, projectTemplate, resourcet, shakespeare, shakespeareCss
-, shakespeareJs, shakespeareText, split, systemFileio
-, systemFilepath, tar, text, time, transformers, unixCompat
-, unorderedContainers, wai, waiExtra, warp, yaml, yesodAuth
-, yesodCore, yesodDefault, yesodForm, yesodJson, yesodPersistent
-, zlib
+{ cabal, aeson, attoparsec, base64Bytestring, blazeBuilder
+, blazeHtml, blazeMarkup, Cabal, conduit, fileEmbed, filepath
+, fsnotify, ghcPaths, hamlet, httpConduit, httpReverseProxy
+, httpTypes, liftedBase, monadControl, network, networkConduit
+, optparseApplicative, parsec, projectTemplate, resourcet
+, shakespeare, shakespeareCss, shakespeareJs, shakespeareText
+, split, systemFileio, systemFilepath, tar, text, time
+, transformers, unixCompat, unorderedContainers, wai, waiExtra
+, warp, yaml, yesodAuth, yesodCore, yesodDefault, yesodForm
+, yesodJson, yesodPersistent, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "1.1.4";
-  sha256 = "1na50j7cd89mxk7ss67xlj703spvkpzcwgp7qs1pn2x3xsm7vrm2";
+  version = "1.1.7.2";
+  sha256 = "0mxxzcmp63sdn7g30ilp40dsj2iccajc9gpxycnqxqabdzhqkbm0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    attoparsec base64Bytestring blazeBuilder blazeHtml blazeMarkup
-    Cabal conduit fileEmbed filepath fsnotify ghcPaths hamlet
-    httpConduit httpReverseProxy httpTypes liftedBase monadControl
-    network optparseApplicative parsec projectTemplate resourcet
-    shakespeare shakespeareCss shakespeareJs shakespeareText split
-    systemFileio systemFilepath tar text time transformers unixCompat
-    unorderedContainers wai waiExtra warp yaml yesodAuth yesodCore
-    yesodDefault yesodForm yesodJson yesodPersistent zlib
+    aeson attoparsec base64Bytestring blazeBuilder blazeHtml
+    blazeMarkup Cabal conduit fileEmbed filepath fsnotify ghcPaths
+    hamlet httpConduit httpReverseProxy httpTypes liftedBase
+    monadControl network networkConduit optparseApplicative parsec
+    projectTemplate resourcet shakespeare shakespeareCss shakespeareJs
+    shakespeareText split systemFileio systemFilepath tar text time
+    transformers unixCompat unorderedContainers wai waiExtra warp yaml
+    yesodAuth yesodCore yesodDefault yesodForm yesodJson
+    yesodPersistent zlib
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

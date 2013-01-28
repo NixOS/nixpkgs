@@ -26,7 +26,10 @@ stdenv.mkDerivation (rec {
         else ""}
   '';
 
-  enableParallelBuilding = true;
+  # Build of the Guile bindings is not parallel-safe.  See
+  # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
+  # for the actual fix.
+  enableParallelBuilding = false;
 
   buildInputs = [ zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;
@@ -37,7 +40,7 @@ stdenv.mkDerivation (rec {
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = (!stdenv.isFreeBSD);
+  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
   meta = {
     description = "The GNU Transport Layer Security Library";

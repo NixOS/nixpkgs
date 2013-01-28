@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtk, zathura_core, girara, libspectre, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "zathura-ps-0.1.0";
+  name = "zathura-ps-0.2.0";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/zathura/plugins/download/${name}.tar.gz";
-    sha256 = "1669fd11e436636cdedb2cde206b562f4f9c666cea9773f6f2014e765fd62789";
+    sha256 = "717eda01213b162421b6b52f29d6b981edc302fddf351ccb2c093b6842751414";
   };
 
   buildInputs = [ pkgconfig libspectre gettext zathura_core gtk girara ];

@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "pmtools-20071116";
 
   src = fetchurl {
-    url = "www.lesswatts.org/patches/linux_acpi/${name}.tar.gz";
+    url = "http://www.lesswatts.org/patches/linux_acpi/${name}.tar.gz";
     sha256 = "91751774976e39f6237efd0326eb35196a9346220b92ad35894a33283e872748";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.lesswatts.org/projects/acpi/utilities.php";
+    homepage = http://www.lesswatts.org/projects/acpi/utilities.php;
     description = "Linux ACPI utilities";
     license = "GPLv2";
 

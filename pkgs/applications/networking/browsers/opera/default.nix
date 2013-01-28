@@ -13,18 +13,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "opera-12.11-1661";
+  name = "opera-12.12-1707";
 
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "${mirror}/linux/1211/${name}.i386.linux.tar.xz";
-        sha256 = "0ax2kcnl0hb7fz56c9gcjia3dnwabxl2mq2hvszmbky4i399jlkk";
+        url = "${mirror}/linux/1212/${name}.i386.linux.tar.xz";
+        sha256 = "1jkrhxjxa5kz4bhyma0zlnsszdn84sq4pks3x8bfcayn12m6yxkz";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "${mirror}/linux/1211/${name}.x86_64.linux.tar.xz";
-        sha256 = "1pnad4kdasrmm27kg6frldipyzcfy1y610rasbqic9frzb9q8dbp";
+        url = "${mirror}/linux/1212/${name}.x86_64.linux.tar.xz";
+        sha256 = "0acizxgyqblcvl91dwmvi937fi1kw6whz5qgxyl1fkygbayji90v";
       }
     else throw "Opera is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 
@@ -73,6 +73,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     oldRPATH=`patchelf --print-rpath $out/lib/opera/opera`
     patchelf --set-rpath $oldRPATH:${cups}/lib $out/lib/opera/opera
+
+    # This file should normally require a gtk-update-icon-cache -q /usr/share/icons/hicolor command
+    # It have no reasons to exist in a redistribuable package
+    rm $out/share/icons/hicolor/icon-theme.cache
     '';
 
   meta = {

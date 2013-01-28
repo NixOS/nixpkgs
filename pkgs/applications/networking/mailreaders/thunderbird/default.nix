@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     sha1 = "ccc5f2e155364948945abf6fd27bebeb4d797aa8";
   };
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   buildInputs =
     [ pkgconfig perl python zip unzip bzip2 gtk dbus_glib alsaLib libIDL nspr

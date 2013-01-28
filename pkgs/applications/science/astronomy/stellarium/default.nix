@@ -1,14 +1,14 @@
 {stdenv, fetchurl, cmake, freetype, libpng, mesa, gettext, openssl, qt4, perl, libiconv}:
 
 let
-  name = "stellarium-0.11.4";
+  name = "stellarium-0.11.4a";
 in
 stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
     url = "mirror://sourceforge/stellarium/${name}.tar.gz";
-    sha256 = "8ad5e9878eb36c2c27f4754dcfc69279123e0eae02cc388074e3cf9b23746535";
+    sha256 = "0gs3lf2061chgcyx22xbnn6b284nsnj8xal7jyjzj57s8yk4n619";
   };
 
   buildInputs = [ cmake freetype libpng mesa gettext openssl qt4 perl libiconv ];
