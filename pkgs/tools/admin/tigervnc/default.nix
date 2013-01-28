@@ -4,7 +4,7 @@
 , fixesproto, damageproto, xcmiscproto, bigreqsproto, randrproto, renderproto
 , fontsproto, videoproto, compositeproto, scrnsaverproto, resourceproto
 , libxkbfile, libXfont, libpciaccess, cmake, libjpeg_turbo, libXft, fltk, libXinerama
-, xineramaproto, libXcursor, fetchsvn, libxcrypt
+, xineramaproto, libXcursor, fetchsvn
 }:
 
 with stdenv.lib;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   revision = 5005;
   version = "r${toString revision}";
   name = "tigervnc-${version}";
-  
+
   src = fetchsvn {
     # Release url = "mirror://sourceforge/tigervnc/${version}/${name}.tar.gz";
     url = "https://tigervnc.svn.sourceforge.net/svnroot/tigervnc/trunk";
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i -e 's,$(includedir)/pixman-1,${if stdenv ? cross then pixman.crossDrv else pixman}/include/pixman-1,' unix/xserver/hw/vnc/Makefile.am
-    sed -i -e '/^$pidFile/a$ENV{XKB_BINDIR}="${if stdenv ? cross then xkbcomp.crossDrv else xkbcomp}/bin";' unix/vncserver 
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${if stdenv ? cross then xkeyboard_config.crossDrv else xkeyboard_config}/etc/X11/xkb";' unix/vncserver 
+    sed -i -e '/^$pidFile/a$ENV{XKB_BINDIR}="${if stdenv ? cross then xkbcomp.crossDrv else xkbcomp}/bin";' unix/vncserver
+    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${if stdenv ? cross then xkeyboard_config.crossDrv else xkeyboard_config}/etc/X11/xkb";' unix/vncserver
 
     fontPath=
     for i in $fontDirectories; do
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
         addToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
       done
     done
-    
-    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver 
+
+    sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver
   '';
 
   # I don't know why I can't use in the script
@@ -79,13 +79,13 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libX11 libXext gettext libICE libXtst libXi libSM libXft
       nasm libgcrypt gnutls pam pixman libjpeg_turbo fltk xineramaproto
-      libXinerama libXcursor libxcrypt
+      libXinerama libXcursor
     ];
-  
-  nativeBuildInputs = 
-    [ autoconf automake cvs utilmacros fontutil libtool flex bison 
+
+  nativeBuildInputs =
+    [ autoconf automake cvs utilmacros fontutil libtool flex bison
       cmake
-    ] 
+    ]
       ++ xorgserver.nativeBuildInputs;
 
   propagatedNativeBuildInputs = xorgserver.propagatedNativeBuildInputs;
@@ -97,5 +97,4 @@ stdenv.mkDerivation rec {
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
   };
-
 }
