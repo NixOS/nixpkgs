@@ -4474,8 +4474,6 @@ let
 
   libx86 = builderDefsPackage ../development/libraries/libx86 {};
 
-  libxcrypt = callPackage ../development/libraries/libxcrypt { };
-
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
   libxklavier = callPackage ../development/libraries/libxklavier { };
@@ -6166,9 +6164,7 @@ let
 
   nss_ldap = callPackage ../os-specific/linux/nss_ldap { };
 
-  pam = callPackage ../os-specific/linux/pam {
-    libxcrypt = null;
-  };
+  pam = callPackage ../os-specific/linux/pam { };
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 

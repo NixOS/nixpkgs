@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, cracklib, libxcrypt }:
+{ stdenv, fetchurl, flex, cracklib }:
 
 stdenv.mkDerivation rec {
   name = "linux-pam-1.1.6";
@@ -10,13 +10,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex ];
 
-  buildInputs = [ cracklib ]
-    ++ stdenv.lib.optional
-      (!stdenv.isArm && stdenv.system != "mips64el-linux")
-      libxcrypt;
+  buildInputs = [ cracklib ];
 
   crossAttrs = {
-    # Skip libxcrypt cross-building, as it fails for mips and arm
     propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
     preConfigure = preConfigure + ''
       ar x ${flex.crossDrv}/lib/libfl.a
