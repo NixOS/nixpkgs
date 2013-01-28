@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   };
 
   # See <http://svn.boost.org/trac/boost/ticket/4688>.
-  patches = [ ./boost_filesystem_post_1_49_0.patch ];
+  patches = [ ./boost_filesystem_post_1_49_0.patch ./time_utc.patch ];
 
   enableParallelBuilding = true;
 
