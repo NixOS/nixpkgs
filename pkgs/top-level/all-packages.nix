@@ -6200,10 +6200,6 @@ let
       inherit stdenv module_init_tools modules buildEnv;
     };
 
-  modutils = callPackage ../os-specific/linux/modutils {
-    stdenv = overrideGCC stdenv gcc34;
-  };
-
   multipath_tools = callPackage ../os-specific/linux/multipath-tools { };
 
   nettools = callPackage ../os-specific/linux/net-tools { };
