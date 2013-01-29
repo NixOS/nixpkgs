@@ -1,15 +1,21 @@
-{stdenv, fetchurl, pkgconfig, libxml2, libgsf, bzip2, glib, gtk, libcroco}:
+{ stdenv, fetchurl, pkgconfig, libxml2, libgsf, bzip2, glib, gtk, libcroco
+, gdk_pixbuf, gobjectIntrospection?null, enableIntrospection?false }:
 
-stdenv.mkDerivation {
-  name = "librsvg-2.34.2";
+# no introspection by default, it's too big
+
+stdenv.mkDerivation rec {
+  name = "librsvg-2.36.4";
 
   src = fetchurl {
-    url = mirror://gnome/sources/librsvg/2.34/librsvg-2.34.2.tar.xz;
-    sha256 = "0r24xr10chmz4l3ka2zy9c2245s7svzljbw9nrda3h44bcr03rsx";
+    url = "mirror://gnome/sources/librsvg/2.36/${name}.tar.xz";
+    sha256 = "1hp6325gdkzx8yqn2d2r915ak3k6hfshjjh0sc54z3vr0i99688h";
   };
-  buildInputs = [ libxml2 libgsf bzip2 libcroco ];
+  buildInputs = [ libxml2 libgsf bzip2 libcroco gdk_pixbuf ]
+    ++ stdenv.lib.optional enableIntrospection [gobjectIntrospection];
   propagatedBuildInputs = [ glib gtk ];
   buildNativeInputs = [ pkgconfig ];
+
+  configureFlags = ["--enable-introspection=auto"];
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the
