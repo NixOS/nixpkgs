@@ -15,6 +15,8 @@ rec {
 
   at_spi2_core = callPackage ./core/at-spi2-core { };
 
+  evince = callPackage ./core/evince { }; # ToDo: dbus would prevent compilation, enable tests
+
   gconf = callPackage ./core/gconf { };
 
   gcr = callPackage ./core/gcr { }; # ToDo: tests fail

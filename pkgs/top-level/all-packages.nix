@@ -6896,14 +6896,7 @@ let
 
   keepassx = callPackage ../applications/misc/keepassx { };
 
-  # FIXME: Evince and other GNOME/GTK+ apps (e.g., Viking) provide
-  # `share/icons/hicolor/icon-theme.cache'.  Arbitrarily give this one a
-  # higher priority.
-  evince = hiPrio (callPackage ../applications/misc/evince {
-    inherit (gnome) gnomedocutils gnomeicontheme libgnome
-      libgnomeui libglade scrollkeeper;
-    poppler = poppler_0_18;
-  });
+  inherit (gnome3) evince;
 
   evolution_data_server = newScope (gnome) ../servers/evolution-data-server { };
 
