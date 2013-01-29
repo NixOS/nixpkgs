@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, freetype, expat }:
 
 stdenv.mkDerivation rec {
-  name = "fontconfig-2.10.1";
+  name = "fontconfig-2.10.2";
 
   src = fetchurl {
-    url = "http://fontconfig.org/release/${name}.tar.gz";
-    sha256 = "08h252crb3aqciwdk81jypmz2i7618dzqn3zlr87w1f017wjp4f3";
+    url = "http://fontconfig.org/release/${name}.tar.bz2";
+    sha256 = "0llraqw86jmw4vzv7inskp3xxm2gc64my08iwq5mzncgfdbfza4f";
   };
 
   buildInputs = [ pkgconfig freetype ];
