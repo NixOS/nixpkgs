@@ -77,9 +77,17 @@ let
         else configExpr;
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
-  platform = if platform_ != null then platform_
-    else config.platform or (import ./platforms.nix).pc;
 
+  platformAuto = let
+      platforms = (import ./platforms.nix);
+    in
+      if system == "armv6l-linux" then platforms.raspberrypi
+      else if system == "armv5tel-linux" then platforms.sheevaplug
+      else if system == "mips64el-linux" then platforms.fuloong2f_n32
+      else platforms.pc;
+
+  platform = if platform_ != null then platform_
+    else config.platform or platformAuto;
 
   # Helper functions that are exported through `pkgs'.
   helperFunctions =
