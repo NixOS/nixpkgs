@@ -1,29 +1,27 @@
 { stdenv, fetchurl, zlib }:
 
-assert zlib != null;
-
 stdenv.mkDerivation rec {
-  version = "1.4.4";
+  version = "1.5.14";
   name = "libpng-apng-${version}";
-  
+
   patch_src = fetchurl {
-    url = "mirror://sourceforge/project/libpng-apng/libpng-master/${version}/libpng-${version}-apng.patch.gz";
-    sha256 = "d729a2feacfd80547e06c30343d598302f4417cf2e6f649e4ee617690987bd24";
+    url = "mirror://sourceforge/libpng-apng/libpng15/${version}/libpng-${version}-apng.patch.gz";
+    sha256 = "1vcqbkdssy4srm8jqyzaipdc70xzanilqssypmwqyngp8ph0m45p";
   };
 
   src = fetchurl {
-    url = "mirror://sourceforge/libpng/libpng-${version}.tar.gz";
-    sha256 = "d07616ba1e9c161017384feb3b576d70c160b970abfd9549ad39a622284b574a";
+    url = "mirror://sourceforge/libpng/libpng-${version}.tar.xz";
+    sha256 = "0m3vz3gig7s63zanq5b1dgb5ph12qm0cylw4g4fbxlsq3f74hn8l";
   };
 
   preConfigure = ''
     gunzip < ${patch_src} | patch -Np1
   '';
-  
+
   propagatedBuildInputs = [ zlib ];
 
   passthru = { inherit zlib; };
-  
+
   meta = {
     description = "The official reference implementation for the PNG file format with animation patch";
     homepage = http://www.libpng.org/pub/png/libpng.html;
