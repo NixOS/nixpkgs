@@ -104,16 +104,19 @@ stdenv.mkDerivation ({
   };
 
   patches =
-    [./pass-cxxcpp.patch
+    [ ./pass-cxxcpp.patch
 
-     # libmudflap and libstdc++ receive the build CPP,
-     # and not the target.
-     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42279
-     ./target-cpp.patch
+      # libmudflap and libstdc++ receive the build CPP,
+      # and not the target.
+      # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=42279
+      ./target-cpp.patch
 
-     # Bad mixture of build/target flags
-     ./libstdc++-target.patch
-     ]
+      # Bad mixture of build/target flags
+      ./libstdc++-target.patch
+
+      # Compatibility with newer Glibc.
+      ./siginfo_t_fix.patch
+    ]
     ++ optional noSysDirs ./no-sys-dirs.patch
     # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
     # target libraries and tools.
