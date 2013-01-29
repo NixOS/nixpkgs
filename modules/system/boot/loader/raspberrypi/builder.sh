@@ -77,7 +77,7 @@ addEntry() {
       copyForced $kernel /boot/kernel.img
       # copyForced $initrd /boot/initrd
       cp "$(readlink -f "$path/init")" /boot/nixos-init
-      cp $path/kernel-params /boot/cmdline.txt
+      echo "`cat $path/kernel-params` init=$path/init" >/boot/cmdline.txt
 
       echo "$2" > /boot/defaultgeneration
     fi
