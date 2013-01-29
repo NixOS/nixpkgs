@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, mesa, libva, libdrm, libX11, pkgconfig }:
+{ stdenv, fetchurl, autoconf, automake, libtool, mesa, libva, libdrm, libX11, pkgconfig
+, intelgen4asm }:
 
 stdenv.mkDerivation rec {
-  name = "intel-driver-1.0.19";
+  name = "libva-intel-driver-1.0.19";
   
   src = fetchurl {
-    url = "http://cgit.freedesktop.org/intel-driver/snapshot/${name}.tar.bz2";
-    sha256 = "1ns6y1hdqvqd92mc0d6axyh17rgyzp73xnbf97mnnzi9fc47x6p1";
+    url = "http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver/${name}.tar.bz2";
+    sha256 = "14m7krah3ajkwj190q431lqqa84hdljcdmrcrqkbgaffyjlqvdid";
   };
 
-  buildInputs = [ autoconf automake libtool mesa libva pkgconfig libdrm libX11 ];
+  buildInputs = [ autoconf automake libtool mesa libva pkgconfig libdrm libX11 intelgen4asm ];
 
   preConfigure = ''
     sh autogen.sh
