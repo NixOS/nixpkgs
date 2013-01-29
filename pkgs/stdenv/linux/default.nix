@@ -241,7 +241,7 @@ rec {
     extraPath = [ stdenvLinuxBoot3Pkgs.xz ];
     overrides = pkgs: {
       inherit (stdenvLinuxBoot1Pkgs) perl;
-      inherit (stdenvLinuxBoot3Pkgs) gettext gnum4 xz gmp;
+      inherit (stdenvLinuxBoot3Pkgs) gettext gnum4 gmp;
     };
     inherit fetchurl;
   };
