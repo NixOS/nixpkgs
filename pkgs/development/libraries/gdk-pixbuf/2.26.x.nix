@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, xz, jasper }:
 
 stdenv.mkDerivation rec {
-  name = "gdk-pixbuf-2.26.1";
+  name = "gdk-pixbuf-2.26.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/2.26/${name}.tar.xz";
-    sha256 = "a60af12b58d9cc15ba4c680c6730ce5d38e8d664af1d575a379385b94b4ec7ba";
+    sha256 = "112w3xl16vam72d5mj1gvs1dgr0aipbxp0qq189mmadwcg8nysbp";
   };
 
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
