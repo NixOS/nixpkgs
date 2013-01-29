@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray=(CUPSSERVERBIN=$out/lib/cups CUPSSERVERROOT=$out/etc/cups CUPSDATA=$out/share/cups)
   '' + stdenv.lib.optionalString (variant ? preConfigure) variant.preConfigure;
 
-  configureFlags =
+  configureFlags = [ "--with-system-libtiff" ] ++
     (if x11Support then [ "--with-x" ] else [ "--without-x" ]) ++
     (if cupsSupport then [ "--enable-cups" "--with-install-cups" ] else [ "--disable-cups" ]);
 
