@@ -17,6 +17,8 @@ rec {
 
   gconf = callPackage ./core/gconf { };
 
+  gcr = callPackage ./core/gcr { }; # ToDo: tests fail
+
   gnome_terminal = callPackage ./core/gnome-terminal { };
 
   gsettings_desktop_schemas = lib.lowPrio (callPackage ./core/gsettings-desktop-schemas { });
