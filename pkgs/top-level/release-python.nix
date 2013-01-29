@@ -1362,7 +1362,6 @@ in
   openfire = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   openlierox = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   openobex = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  openoffice = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   opensc = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   openscad = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   opensc_dnie_wrapper = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
