@@ -1359,6 +1359,8 @@ let
     libpng = libpng12;
   };
 
+  podiff = callPackage ../tools/text/podiff { };
+
   polipo = callPackage ../servers/polipo { };
 
   polkit_gnome = callPackage ../tools/security/polkit-gnome { };
