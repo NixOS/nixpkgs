@@ -1,22 +1,22 @@
 { cabal, aeson, attoparsec, cereal, clientsession, comonad
-, configurator, directoryTree, dlist, errors, filepath, hashable
-, heist, lens, logict, MonadCatchIOTransformers, mtl, mwcRandom
-, pwstoreFast, regexPosix, snapCore, snapServer, stm, syb, text
-, time, transformers, unorderedContainers, vector, vectorAlgorithms
-, xmlhtml
+, configurator, directoryTree, dlist, either, errors, filepath
+, hashable, heist, lens, logict, MonadCatchIOTransformers, mtl
+, mwcRandom, pwstoreFast, regexPosix, snapCore, snapServer, stm
+, syb, text, time, transformers, unorderedContainers, vector
+, vectorAlgorithms, xmlhtml
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap";
-  version = "0.10.0.1";
-  sha256 = "14j9lgcdyxh7n4yidfvn1r94nziljiqz6nsqgq114v34bnn6l2yn";
+  version = "0.11.0";
+  sha256 = "0mw1fxjijd3z9bz1znrc5vfxa4mc1by481gxfmk2hdlcsib9sp7n";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson attoparsec cereal clientsession comonad configurator
-    directoryTree dlist errors filepath hashable heist lens logict
-    MonadCatchIOTransformers mtl mwcRandom pwstoreFast regexPosix
-    snapCore snapServer stm syb text time transformers
+    directoryTree dlist either errors filepath hashable heist lens
+    logict MonadCatchIOTransformers mtl mwcRandom pwstoreFast
+    regexPosix snapCore snapServer stm syb text time transformers
     unorderedContainers vector vectorAlgorithms xmlhtml
   ];
   jailbreak = true;
