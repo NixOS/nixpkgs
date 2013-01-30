@@ -2389,25 +2389,25 @@ let
   # Current Haskell Platform: 2012.4.0.0
   haskellPlatform = haskellPackages.haskellPlatform;
 
-  haskellPackages_ghc6104             = recurseIntoAttrs (haskell.packages_ghc6104);
+  haskellPackages_ghc6104             =                   haskell.packages_ghc6104;
   haskellPackages_ghc6121             =                   haskell.packages_ghc6121;
   haskellPackages_ghc6122             =                   haskell.packages_ghc6122;
-  haskellPackages_ghc6123             = recurseIntoAttrs (haskell.packages_ghc6123);
+  haskellPackages_ghc6123             =                   haskell.packages_ghc6123;
   haskellPackages_ghc701              =                   haskell.packages_ghc701;
   haskellPackages_ghc702              =                   haskell.packages_ghc702;
   haskellPackages_ghc703              =                   haskell.packages_ghc703;
-  haskellPackages_ghc704              = recurseIntoAttrs (haskell.packages_ghc704);
+  haskellPackages_ghc704              =                   haskell.packages_ghc704;
   haskellPackages_ghc721              =                   haskell.packages_ghc721;
   haskellPackages_ghc722              =                   haskell.packages_ghc722;
   # For the default version, we build profiling versions of the libraries, too.
   # The following three lines achieve that: the first two make Hydra build explicit
   # profiling and non-profiling versions; the final respects the user-configured
   # default setting.
-  haskellPackages_ghc741              = recurseIntoAttrs (haskell.packages_ghc741);
+  haskellPackages_ghc741              =                   haskell.packages_ghc741;
   haskellPackages_ghc742_no_profiling = recurseIntoAttrs (haskell.packages_ghc741.noProfiling);
   haskellPackages_ghc742_profiling    = recurseIntoAttrs (haskell.packages_ghc741.profiling);
   haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742.highPrio);
-  haskellPackages_ghc761              = recurseIntoAttrs (haskell.packages_ghc761);
+  haskellPackages_ghc761              =                   haskell.packages_ghc761;
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
 
