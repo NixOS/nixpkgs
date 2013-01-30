@@ -53,6 +53,7 @@
       ../hardware/network/intel-6000.nix
       ../hardware/network/intel-6000g2a.nix
       ../hardware/network/intel-6000g2b.nix
+      ../hardware/network/intel-2030.nix
       ../hardware/network/broadcom-43xx.nix
       ../hardware/network/zydas-zd1211.nix
       ../hardware/video/radeon.nix
