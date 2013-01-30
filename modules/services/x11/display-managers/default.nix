@@ -23,7 +23,7 @@ let
 
     # To admit zero-length 'paths'
     postBuild = "
-      ensureDir $out/lib/dri
+      mkdir -p $out/lib/dri
     ";
   };
 
