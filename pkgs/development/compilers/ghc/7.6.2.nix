@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '';
 
-  configureFlags=[
+  configureFlags = [
     "--with-gcc=${stdenv.gcc}/bin/gcc"
   ];
 
