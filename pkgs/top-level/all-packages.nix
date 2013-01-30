@@ -4590,7 +4590,7 @@ let
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
-  darwinX11AndOpenGL = callPackage ../build-support/native-darwin-x11-and-opengl { };
+  darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
 
   mesa = if stdenv.isDarwin then darwinX11AndOpenGL else
     callPackage ../development/libraries/mesa { };
