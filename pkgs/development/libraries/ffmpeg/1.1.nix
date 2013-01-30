@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     "--enable-swscale"
     "--disable-ffplay"
     "--enable-shared"
+    "--enable-avresample"
     "--enable-runtime-cpudetect"
   ]
     ++ stdenv.lib.optional mp3Support "--enable-libmp3lame"
