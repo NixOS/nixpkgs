@@ -7541,6 +7541,10 @@ let
     pulseSupport = config.pulseaudio or false;
   };
 
+  mplayer2 = callPackage ../applications/video/mplayer2 {
+    ffmpeg = ffmpeg_1_1;
+  };
+
   MPlayerPlugin = browser:
     import ../applications/networking/browsers/mozilla-plugins/mplayerplug-in {
       inherit browser;
