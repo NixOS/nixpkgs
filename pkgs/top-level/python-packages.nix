@@ -253,6 +253,7 @@ pythonPackages = python.modules // rec {
 
   awscli = buildPythonPackage rec {
     name = "awscli-0.5.0";
+    namePrefix = "";
 
     src = fetchurl {
       url = https://github.com/aws/aws-cli/archive/0.5.0.tar.gz;
