@@ -130,7 +130,7 @@ let
           NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
           cd ..
           chmod -R u+w $releaseName
-          tar cfj $out/tarballs/$releaseName.tar.bz2 $releaseName
+          tar cfJ $out/tarballs/$releaseName.tar.xz $releaseName
         ''; # */
       };
 
