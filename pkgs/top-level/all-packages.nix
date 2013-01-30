@@ -4427,6 +4427,8 @@ let
   libpng_apng = callPackage ../development/libraries/libpng/libpng-apng.nix { };
   libpng12 = callPackage ../development/libraries/libpng/12.nix { };
 
+  libpaper = callPackage ../development/libraries/libpaper { };
+
   libproxy = callPackage ../development/libraries/libproxy { };
 
   libpseudo = callPackage ../development/libraries/libpseudo { };
