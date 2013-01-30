@@ -1,7 +1,8 @@
 { stdenv, fetchurl, lib, openssl, dbus_libs, pkgconfig, libnl
 , readlineSupport ? true, readline
 }:
-assert readlineSupport -> readline!=null;
+
+assert readlineSupport -> readline != null;
 
 stdenv.mkDerivation rec {
   version = "1.1";
@@ -12,21 +13,23 @@ stdenv.mkDerivation rec {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
     sha256 = "00lyifj8cz7qyal6dy1dxbpk3g3bywvdarik8gbj9ds7zmfbwkd5";
   };
-  extraConfig = lib.concatStringsSep "\n" (
-    [ "CONFIG_DEBUG_SYSLOG=y"
-      "CONFIG_CTRL_IFACE_DBUS=y"
-      "CONFIG_CTRL_IFACE_DBUS_NEW=y"
-      "CONFIG_CTRL_IFACE_DBUS_INTRO=y"
-      "CONFIG_DRIVER_NL80211=y"
-      "CONFIG_LIBNL32=y"
-    ] ++ lib.optional readlineSupport "CONFIG_READLINE=y"
-  );
+
+  extraConfig =
+    ''
+      CONFIG_DEBUG_SYSLOG=y
+      CONFIG_CTRL_IFACE_DBUS=y
+      CONFIG_CTRL_IFACE_DBUS_NEW=y
+      CONFIG_CTRL_IFACE_DBUS_INTRO=y
+      CONFIG_DRIVER_NL80211=y
+      CONFIG_LIBNL32=y
+      ${stdenv.lib.optionalString readlineSupport "CONFIG_READLINE=y"}
+    '';
 
   preBuild = ''
     cd wpa_supplicant
     cp -v defconfig .config
-    echo ${extraConfig} | tee -a .config
-    echo CONFIG_LIBNL32=y | tee -a .config
+    echo "$extraConfig" >> .config
+    cat .config
     substituteInPlace Makefile --replace /usr/local $out
   '';
 
