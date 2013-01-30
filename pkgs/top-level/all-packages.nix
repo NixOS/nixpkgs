@@ -2650,7 +2650,7 @@ let
 
   stalin = callPackage ../development/compilers/stalin { };
 
-  strategoPackages = strategoPackages018;
+  strategoPackages = recurseIntoAttrs strategoPackages018;
 
   strategoPackages016 = callPackage ../development/compilers/strategoxt/0.16.nix {
     stdenv = overrideInStdenv stdenv [gnumake380];
