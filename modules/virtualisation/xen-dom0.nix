@@ -68,7 +68,7 @@ in
     environment.systemPackages = [ xen ];
 
     # Domain 0 requires a pvops-enabled kernel.
-    boot.kernelPackages = pkgs.linuxPackages_2_6_32_xen;
+    boot.kernelPackages = pkgs.linuxPackages_3_2_xen;
 
     boot.kernelModules =
       [ "xen_evtchn" "xen_gntdev" "xen_blkback" "xen_netback" "xen_pciback"
