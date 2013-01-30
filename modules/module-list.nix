@@ -36,6 +36,7 @@
   ./misc/passthru.nix
   ./misc/version.nix
   ./programs/bash/bash.nix
+  ./programs/bash/command-not-found.nix
   ./programs/blcr.nix
   ./programs/info.nix
   ./programs/shadow.nix

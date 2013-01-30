@@ -33,7 +33,7 @@ let
 
   options = {
 
-    environment.promptInit =  mkOption {
+    environment.promptInit = mkOption {
       default = ''
         # Provide a nice prompt.
         PROMPT_COLOR="1;31m"
