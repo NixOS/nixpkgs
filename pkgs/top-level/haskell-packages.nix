@@ -1558,6 +1558,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
 
+  stringQq = callPackage ../development/libraries/haskell/string-qq {};
+
   stringsearch = callPackage ../development/libraries/haskell/stringsearch {};
 
   strptime = callPackage ../development/libraries/haskell/strptime {};
