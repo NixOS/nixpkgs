@@ -30,7 +30,6 @@ let
     (name: { inherit name; driverName = name; } //
       attrByPath [name] (if (hasAttr ("xf86video" + name) xorg) then { modules = [(getAttr ("xf86video" + name) xorg) ]; } else throw "unknown video driver `${name}'") knownVideoDrivers);
 
-
   fontsForXServer =
     config.fonts.fonts ++
     # We don't want these fonts in fonts.conf, because then modern,
@@ -201,6 +200,15 @@ in
           The names of the video drivers that the X server should
           support.  The X server will try all of the drivers listed
           here until it finds one that supports your video card.
+        '';
+      };
+
+      vaapiDrivers = mkOption {
+        default = [ pkgs.vaapiIntel pkgs.vaapiVdpau ];
+        defaultText = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
+        example = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
+        description = ''
+          Names of the packages providing libva acceleration drivers.
         '';
       };
 

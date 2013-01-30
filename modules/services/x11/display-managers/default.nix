@@ -16,6 +16,17 @@ let
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
 
+  vaapiDrivers = pkgs.buildEnv {
+    name = "vaapi-drivers";
+    paths = cfg.vaapiDrivers;
+    pathsToLink = "/lib/dri";
+
+    # To admit zero-length 'paths'
+    postBuild = "
+      ensureDir $out/lib/dri
+    ";
+  };
+
   # file provided by services.xserver.displayManager.session.script
   xsession = wm: dm: pkgs.writeScript "xsession"
     ''
@@ -79,6 +90,8 @@ let
       if test -e ~/.Xdefaults; then
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
       fi
+
+      export LIBVA_DRIVERS_PATH=${vaapiDrivers}/lib/dri;
 
       source /etc/profile
 
