@@ -34,6 +34,7 @@ let
       pkgs.gnused
       pkgs.gnutar
       pkgs.gzip
+      pkgs.xz
       pkgs.less
       pkgs.libcap
       pkgs.man
@@ -51,7 +52,7 @@ let
       pkgs.time
       pkgs.usbutils
       pkgs.utillinux
-      extraManpages      
+      extraManpages
     ];
 
 

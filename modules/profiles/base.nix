@@ -40,7 +40,6 @@
     pkgs.unrar
     pkgs.unzip
     pkgs.zip
-    pkgs.xz
     pkgs.dar # disk archiver
     pkgs.cabextract
 
