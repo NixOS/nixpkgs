@@ -727,8 +727,6 @@ let
 
   fcron = callPackage ../tools/system/fcron { };
 
-  fdisk = callPackage ../tools/system/fdisk { };
-
   fdm = callPackage ../tools/networking/fdm {};
 
   figlet = callPackage ../tools/misc/figlet { };
@@ -811,6 +809,10 @@ let
     inherit intltool perl gettext libusb pkgconfig bluez readline pcsclite
       libical gtk glib;
     inherit (xorg) libXpm;
+  };
+
+  gnufdisk = callPackage ../tools/system/fdisk {
+    guile = guile_1_8;
   };
 
   gnugrep =
