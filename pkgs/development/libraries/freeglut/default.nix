@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libXi, libXrandr, libXxf86vm, mesa, x11 }:
+{ stdenv, fetchurl, libXi, libXrandr, libXxf86vm, mesa, mesa_glu, x11 }:
 
 stdenv.mkDerivation {
   name = "freeglut-2.8.0";
@@ -10,6 +10,6 @@ stdenv.mkDerivation {
 
   configureFlags = "--" + (if stdenv.isDarwin then "disable" else "enable") + "-warnings";
 
-  buildInputs = [ libXi libXrandr libXxf86vm mesa x11 ];
+  buildInputs = [ libXi libXrandr libXxf86vm mesa mesa_glu x11 ];
   patches = [ ./0001-remove-typedefs-now-living-in-mesa.patch ];
 }
