@@ -4043,8 +4043,7 @@ let
 
   inteltbb = callPackage ../development/libraries/intel-tbb { };
 
-  intltool = gnome.intltool;
-  intltool_standalone = callPackage ../development/tools/misc/intltool {};
+  intltool = callPackage ../development/tools/misc/intltool { };
 
   irrlicht3843 = callPackage ../development/libraries/irrlicht { };
 
@@ -6772,7 +6771,6 @@ let
 
   compiz = callPackage ../applications/window-managers/compiz {
     inherit (gnome) GConf ORBit2;
-    intltool = intltool_standalone;
   };
 
   coriander = callPackage ../applications/video/coriander {
