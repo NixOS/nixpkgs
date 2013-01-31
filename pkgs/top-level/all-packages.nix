@@ -3944,7 +3944,10 @@ let
 
   atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
 
-  cairo = callPackage ../development/libraries/cairo { };
+  cairo = callPackage ../development/libraries/cairo {
+    pixman = pixman_cairo; # it's recommended to be in sync
+  };
+  pixman_cairo = callPackage ../development/libraries/pixman { };
 
   pango = callPackage ../development/libraries/pango/1.30.x.nix { };
 
