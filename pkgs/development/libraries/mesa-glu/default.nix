@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, mesa }:
+{ stdenv, fetchurl, pkgconfig, mesa_noglu }:
 
 stdenv.mkDerivation rec {
   name = "glu-9.0.0";
@@ -8,7 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "04nzlil3a6fifcmb95iix3yl8mbxdl66b99s62yzq8m7g79x0yhz";
   };
 
-  buildInputs = [ pkgconfig mesa ];
+  buildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ mesa_noglu ];
+
+  passthru = { inherit (mesa_noglu) libdrm; };
 
   meta = {
     description = "OpenGL utility library";

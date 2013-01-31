@@ -4598,9 +4598,8 @@ let
 
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
-  mesa = callPackage ../development/libraries/mesa { };
-
-  mesa_glu = callPackage ../development/libraries/mesa-glu { };
+  mesa_noglu = callPackage ../development/libraries/mesa { };
+  mesa = callPackage ../development/libraries/mesa-glu { }; # mesa *with* GL/glu.h
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };

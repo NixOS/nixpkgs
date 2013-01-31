@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, audiofile
-, openglSupport ? false, mesa ? null, mesa_glu ? null
+, openglSupport ? false, mesa ? null
 , alsaSupport ? true, alsaLib ? null
 , x11Support ? true, x11 ? null, libXrandr ? null
 , pulseaudioSupport ? true, pulseaudio ? null
@@ -9,7 +9,7 @@
 # PulseAudio.
 assert alsaSupport || pulseaudioSupport;
 
-assert openglSupport -> (mesa != null && mesa_glu != null && x11Support);
+assert openglSupport -> (mesa != null && x11Support);
 assert x11Support -> (x11 != null && libXrandr != null);
 assert alsaSupport -> alsaLib != null;
 assert pulseaudioSupport -> pulseaudio != null;
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional pulseaudioSupport pulseaudio;
 
   buildInputs = [ pkgconfig audiofile ] ++
-    stdenv.lib.optional openglSupport [ mesa mesa_glu ] ++
+    stdenv.lib.optional openglSupport [ mesa ] ++
     stdenv.lib.optional alsaSupport alsaLib;
 
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
