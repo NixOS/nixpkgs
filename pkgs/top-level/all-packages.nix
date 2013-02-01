@@ -891,6 +891,8 @@ let
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
 
+  gummiboot = callPackage ../tools/misc/gummiboot { };
+
   gupnp = callPackage ../development/libraries/gupnp {
     inherit (gnome) libsoup;
   };
