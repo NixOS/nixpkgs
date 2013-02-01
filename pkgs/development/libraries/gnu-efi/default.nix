@@ -2,12 +2,13 @@
 , fetchurl
 }:
 
-stdenv.mkDerivation {
-  name = "gnu-efi-3.0r";
+let version = "3.0s"; in stdenv.mkDerivation {
+
+  name = "gnu-efi-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnu-efi/gnu-efi_3.0r.orig.tar.gz";
-    sha256 = "1zi298wsg8v29xj4azcawqfjbxqi2w7l60agf7x2ph2lnqlga2v5";
+    url = "mirror://sourceforge/gnu-efi/gnu-efi_${version}.orig.tar.gz";
+    sha256 = "18bpswzkj81dadq1b7n2s9g0cz60l34ggzxlq21mb8va10j9zmhh";
   };
 
   meta = {
