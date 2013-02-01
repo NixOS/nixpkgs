@@ -4150,8 +4150,6 @@ let
 
   libgtop = callPackage ../development/libraries/libgtop {};
 
-  libgweather = callPackage ../development/libraries/libgweather {};
-
   liblo = callPackage ../development/libraries/liblo { };
 
   liblrdf = librdf;

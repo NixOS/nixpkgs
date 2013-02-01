@@ -1033,7 +1033,6 @@ in
   libgpod = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   libgsf = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   libgtop = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  libgweather = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   libimobiledevice = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   libinfinity = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   liblapack = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
