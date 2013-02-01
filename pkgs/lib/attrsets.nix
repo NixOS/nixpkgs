@@ -5,7 +5,7 @@ with {
   inherit (import ./trivial.nix) or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
-  inherit (import ./lists.nix) concatMap concatLists all;
+  inherit (import ./lists.nix) concatMap concatLists all deepSeqList;
   inherit (import ./misc.nix) maybeAttr;
 };
 
@@ -314,4 +314,5 @@ rec {
   overrideExisting = old: new:
     old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] (getAttr attr old) new)) (attrNames old));
 
+  deepSeqAttrs = x: y: deepSeqList (attrValues x) y;
 }

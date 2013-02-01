@@ -1,3 +1,8 @@
+with {
+  inherit (import ./lists.nix) deepSeqList;
+  inherit (import ./attrsets.nix) deepSeqAttrs;
+};
+
 rec {
 
   # Identity function.
@@ -22,4 +27,10 @@ rec {
   # evaluation of its first argument.
   seq = x: y: if x == null then y else y;
   
+  deepSeq = x: y:
+    if builtins.isList x
+      then deepSeqList x y
+    else if builtins.isAttrs x
+      then deepSeqAttrs x y
+      else seq x y;
 }
