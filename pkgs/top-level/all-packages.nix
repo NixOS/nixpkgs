@@ -3934,13 +3934,13 @@ let
       gtkmm;
   };
 
-  glib = callPackage ../development/libraries/glib/2.34.x.nix { };
+  glib = callPackage ../development/libraries/glib { };
 
   glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
-  atk = callPackage ../development/libraries/atk/2.6.x.nix { };
+  atk = callPackage ../development/libraries/atk { };
 
   atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
 
@@ -3949,13 +3949,13 @@ let
   };
   pixman_cairo = callPackage ../development/libraries/pixman { };
 
-  pango = callPackage ../development/libraries/pango/1.30.x.nix { };
+  pango = callPackage ../development/libraries/pango { };
 
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
 
-  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.26.x.nix { };
+  gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
-  gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
+  gtk2 = callPackage ../development/libraries/gtk+/2.x.nix { };
 
   gtk = pkgs.gtk2;
 

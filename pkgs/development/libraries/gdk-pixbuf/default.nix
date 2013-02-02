@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, xz, jasper }:
+{ stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, xz
+, jasper }:
 
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-2.26.5";
