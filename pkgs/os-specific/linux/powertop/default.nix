@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gettext, libnl, ncurses, pciutils, pkgconfig, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "powertop-2.1";
+  name = "powertop-2.2";
 
   src = fetchurl {
     url = "https://01.org/powertop/sites/default/files/downloads/${name}.tar.gz";
-    sha256 = "16161nlah4i4hq8vyx7ds1vq7icdzwm7gmyjg0xhcrs1r9n83m1x";
+    sha256 = "0a5haxawcjrlwwxx4j5kd4ad05gjmcr13v8gswfwfxcn7fyf2f8k";
   };
 
   buildInputs = [ gettext libnl ncurses pciutils pkgconfig zlib ];
