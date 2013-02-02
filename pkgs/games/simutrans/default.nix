@@ -35,6 +35,7 @@ let
     unpackPhase = "true";
     buildInputs = [ makeWrapper ];
     installPhase = ''makeWrapper "${binaries}/bin/simutrans" "$out/bin/simutrans" --add-flags -objects --add-flags "${pak}"'';
+    inherit (binaries) meta;
   };
 
   binaries = stdenv.mkDerivation rec {
