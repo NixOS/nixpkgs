@@ -148,8 +148,10 @@ let
       NFSD_V3 y
       NFSD_V3_ACL y
       NFSD_V4 y
+      NFS_FSCACHE y
       CIFS_XATTR y
       CIFS_POSIX y
+      CIFS_FSCACHE y
 
       # Security related features.
       STRICT_DEVMEM y # Filter access to /dev/mem
@@ -239,7 +241,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.4.26";
+    version = "3.4.28";
     testing = false;
 
     preConfigure = ''
@@ -248,7 +250,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "1zmv1g90fgqrabc0qb5ip551mh12ps1zin3hbygysc89j684rbk1";
+      sha256 = "11b8nip1szm2c4wnpz2plv9icny33i377wd8jk9qbib08wwcf87i";
     };
 
     config = configWithPlatform stdenv.platform;

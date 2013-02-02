@@ -40,7 +40,7 @@ stdenv.mkDerivation (rec {
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = (!stdenv.isFreeBSD);
+  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
   meta = {
     description = "The GNU Transport Layer Security Library";

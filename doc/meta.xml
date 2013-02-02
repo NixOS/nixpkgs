@@ -177,6 +177,12 @@ following:
   </varlistentry>
 
   <varlistentry>
+    <term><varname>perl5</varname></term>
+    <listitem><para>The Perl 5 license (Artistic License, version 1
+    and GPL, version 1 or later).</para></listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term><varname>free</varname></term>
     <listitem><para>Catch-all for free software licenses not listed
     above.</para></listitem>

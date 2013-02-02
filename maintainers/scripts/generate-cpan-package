@@ -1,0 +1,122 @@
+#! /bin/sh -e
+
+export PERL5LIB=/nix/var/nix/profiles/per-user/eelco/cpan-generator/lib/perl5/site_perl
+
+name="$1"
+[ -n "$name" ] || { echo "no name"; exit 1; }
+
+cpan -D "$name" > cpan-info
+
+url="$(echo $(cat cpan-info | sed '6!d'))"
+[ -n "$url" ] || { echo "no URL"; exit 1; }
+url="mirror://cpan/authors/id/$url"
+echo "URL = $url" >&2
+
+version=$(cat cpan-info | grep 'CPAN: ' | awk '{ print $2 }')
+echo "VERSION = $version"
+
+declare -a xs=($(PRINT_PATH=1 nix-prefetch-url "$url"))
+hash=${xs[0]}
+path=${xs[1]}
+echo "HASH = $hash" >&2
+
+namedash="$(echo $name | sed s/::/-/g)-$version"
+
+attr=$(echo $name | sed s/:://g)
+
+rm -rf cpan_tmp
+mkdir cpan_tmp
+tar xf "$path" -C cpan_tmp
+
+shopt -s nullglob
+meta=$(echo cpan_tmp/*/META.json)
+if [ -z "$meta" ]; then
+    yaml=$(echo cpan_tmp/*/META.yml)
+    [ -n "$yaml" ] || { echo "no meta file"; exit 1; }
+    meta=$(echo $yaml | sed s/\.yml$/.json/)
+    perl -e '
+      use YAML;
+      use JSON;
+      local $/;
+      $x = YAML::Load(<>);
+      print encode_json $x;
+    ' < $yaml > $meta
+fi
+
+description="$(json abstract < $meta | perl -e '$x = <>; print uc(substr($x, 0, 1)), substr($x, 1);')"
+homepage="$(json resources.homepage < $meta)"
+if [ -z "$homepage" ]; then
+    #homepage="$(json meta-spec.url < $meta)"
+    true
+fi
+
+license="$(json license < $meta | json -a 2> /dev/null || true)"
+if [ -z "$license" ]; then
+    license="$(json -a license < $meta)"
+fi
+license="$(echo $license | sed s/perl_5/perl5/)"
+
+f() {
+    local type="$1"
+    perl -e '
+      use JSON;
+      local $/;
+      $x = decode_json <>;
+      if (defined $x->{prereqs}) {
+        $x2 = $x->{prereqs}->{'$type'}->{requires};
+      } elsif ("'$type'" eq "runtime") {
+        $x2 = $x->{requires};
+      } elsif ("'$type'" eq "configure") {
+        $x2 = $x->{configure_requires};
+      } elsif ("'$type'" eq "build") {
+        $x2 = $x->{build_requires};
+      }
+      foreach my $y (keys %{$x2}) {
+        next if $y eq "perl";
+        eval "use $y;";
+        if (!$@) {
+          print STDERR "skipping Perl-builtin module $y\n";
+          next;
+        }
+        print $y, "\n";
+      };
+    ' < $meta | sed s/:://g
+}
+
+confdeps=$(f configure)
+builddeps=$(f build)
+testdeps=$(f test)
+runtimedeps=$(f runtime)
+
+buildInputs=$(echo $(for i in $confdeps $builddeps $testdeps; do echo $i; done | sort | uniq))
+propagatedBuildInputs=$(echo $(for i in $runtimedeps; do echo $i; done | sort | uniq))
+
+echo "===" >&2
+
+cat <<EOF
+  $attr = buildPerlPackage {
+    name = "$namedash";
+    src = fetchurl {
+      url = $url;
+      sha256 = "$hash";
+    };
+EOF
+if [ -n "$buildInputs" ]; then
+    cat <<EOF
+    buildInputs = [ $buildInputs ];
+EOF
+fi
+if [ -n "$propagatedBuildInputs" ]; then
+    cat <<EOF
+    propagatedBuildInputs = [ $propagatedBuildInputs ];
+EOF
+fi
+cat <<EOF
+    meta = {
+      homepage = $homepage;
+      description = "$description";
+      license = "$license";
+    };
+  };
+EOF
+

@@ -49,7 +49,6 @@ with (import ./release-lib.nix);
   chatzilla = linux;
   cksfv = all;
   classpath = linux;
-  consolekit = linux;
   coreutils = all;
   cpio = all;
   cron = linux;
@@ -211,7 +210,6 @@ with (import ./release-lib.nix);
   ntp = linux;
   ocaml = linux;
   octave = linux;
-  openoffice = linux;
   openssh = linux;
   openssl = all;
   pam_console = linux;
@@ -351,7 +349,6 @@ with (import ./release-lib.nix);
   };
 
   firefox36Pkgs.firefox = linux;
-  firefox17Pkgs.firefox = linux;
   firefox18Pkgs.firefox = linux;
 
   gnome = {

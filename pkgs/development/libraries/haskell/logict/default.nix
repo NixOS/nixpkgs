@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "logict";
-  version = "0.5.0.2";
-  sha256 = "0m0a55l061vbxdqw9h1780g893amdxs7glza4jd5jncjsv823s1z";
+  version = "0.6";
+  sha256 = "1np4wizvwlx458kq6mmdrh8qcp1794y1bs4mnnz951h6hay5z49f";
   buildDepends = [ mtl ];
   meta = {
     homepage = "http://code.haskell.org/~dolio/logict";

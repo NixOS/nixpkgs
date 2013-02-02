@@ -1,15 +1,15 @@
 { cabal, binary, Cabal, filepath, happy, haskeline, mtl, parsec
-, transformers
+, split, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "idris";
-  version = "0.9.5.1";
-  sha256 = "0cy27b2kq696lw354y55mpx1gv66jdax1xjph989kxp0rd1v1sw9";
+  version = "0.9.6";
+  sha256 = "1yml1k4bis210hgi898hgs4wj5p34ainlj7vwy5lh7bjkvrksgq1";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
-    binary Cabal filepath haskeline mtl parsec transformers
+    binary Cabal filepath haskeline mtl parsec split transformers
   ];
   buildTools = [ happy ];
   meta = {

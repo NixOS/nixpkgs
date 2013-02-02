@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "wai-test";
-  version = "1.3.0";
-  sha256 = "15y0aw5c4sh1mns4ss39l0wsxrd1b6yq6m5r638x23zl6y7d9j40";
+  version = "1.3.0.1";
+  sha256 = "0yy0bvkrny4kj77wvn0cflwha6yijfxvnj530ps7xnzv1qm8qn1l";
   buildDepends = [
     blazeBuilder blazeBuilderConduit caseInsensitive conduit cookie
     httpTypes HUnit text transformers wai

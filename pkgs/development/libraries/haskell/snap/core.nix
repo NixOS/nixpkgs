@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     MonadCatchIOTransformers mtl random regexPosix text time unixCompat
     unorderedContainers vector zlibEnum
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "Snap: A Haskell Web Framework (core interfaces and types)";

@@ -126,7 +126,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     GLUT         = self.GLUT_2_3_1_0;           # 7.6 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
     html         = self.html_1_0_1_2;           # 7.6 ok
-    HTTP         = self.HTTP_4000_2_6;          # 7.6 ok
+    HTTP         = self.HTTP_4000_2_7;          # 7.6 ok
     HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
     network      = self.network_2_4_1_0;        # 7.6 ok
@@ -138,7 +138,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexBase    = self.regexBase_0_93_2;       # 7.6 ok
     regexCompat  = self.regexCompat_0_95_1;     # 7.6 ok
     regexPosix   = self.regexPosix_0_95_2;      # 7.6 ok
-    split        = self.split_0_2_1_1;          # 7.6 ok
+    split        = self.split_0_2_1_2;          # 7.6 ok
     stm          = self.stm_2_4_2;              # 7.6 ok
     syb          = self.syb_0_3_7;              # 7.6 ok
     text         = self.text_0_11_2_3;          # 7.6 ok
@@ -491,6 +491,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   benchpress = callPackage ../development/libraries/haskell/benchpress {};
 
+  bifunctors = callPackage ../development/libraries/haskell/bifunctors {};
+
   bimap = callPackage ../development/libraries/haskell/bimap {};
 
   binary_hackage = callPackage ../development/libraries/haskell/binary {};
@@ -733,6 +735,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dns = callPackage ../development/libraries/haskell/dns {};
 
+  doctest = callPackage ../development/libraries/haskell/doctest {};
+
   dotgen = callPackage ../development/libraries/haskell/dotgen {};
 
   doubleConversion = callPackage ../development/libraries/haskell/double-conversion {};
@@ -908,6 +912,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     polyparse = self.polyparse_1_7;
   };
 
+  groupoids = callPackage ../development/libraries/haskell/groupoids {};
+
   hakyll = callPackage ../development/libraries/haskell/hakyll {};
 
   hamlet = callPackage ../development/libraries/haskell/hamlet {};
@@ -961,8 +967,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
   HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
   HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
-  HTTP_4000_2_6 = callPackage ../development/libraries/haskell/HTTP/4000.2.6.nix {};
-  HTTP = self.HTTP_4000_2_6;
+  HTTP_4000_2_7 = callPackage ../development/libraries/haskell/HTTP/4000.2.7.nix {};
+  HTTP = self.HTTP_4000_2_7;
 
   httpReverseProxy = callPackage ../development/libraries/haskell/http-reverse-proxy {};
 
@@ -1387,6 +1393,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
   primitive = self.primitive_0_5_0_1;
 
+  profunctors = callPackage ../development/libraries/haskell/profunctors {};
+
+  profunctorExtras = callPackage ../development/libraries/haskell/profunctor-extras {};
+
   projectTemplate = callPackage ../development/libraries/haskell/project-template {};
 
   processExtras = callPackage ../development/libraries/haskell/process-extras {};
@@ -1447,6 +1457,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   recaptcha = callPackage ../development/libraries/haskell/recaptcha {};
 
+  reflection = callPackage ../development/libraries/haskell/reflection {};
+
   regexBase_0_72_0_2 = callPackage ../development/libraries/haskell/regex-base/0.72.0.2.nix {};
   regexBase_0_93_1   = callPackage ../development/libraries/haskell/regex-base/0.93.1.nix   {};
   regexBase_0_93_2   = callPackage ../development/libraries/haskell/regex-base/0.93.2.nix   {};
@@ -1504,6 +1516,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   semigroupoids = callPackage ../development/libraries/haskell/semigroupoids {};
 
+  semigroupoidExtras = callPackage ../development/libraries/haskell/semigroupoid-extras {};
+
   setenv = callPackage ../development/libraries/haskell/setenv {};
 
   shelly = callPackage ../development/libraries/haskell/shelly {};
@@ -1543,6 +1557,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   strict = callPackage ../development/libraries/haskell/strict {};
 
   stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
+
+  stringQq = callPackage ../development/libraries/haskell/string-qq {};
 
   stringsearch = callPackage ../development/libraries/haskell/stringsearch {};
 
@@ -1592,7 +1608,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   split_0_2_1_1 = callPackage ../development/libraries/haskell/split/0.2.1.1.nix {};
-  split = self.split_0_2_1_1;
+  split_0_2_1_2 = callPackage ../development/libraries/haskell/split/0.2.1.2.nix {};
+  split = self.split_0_2_1_2;
 
   stbImage = callPackage ../development/libraries/haskell/stb-image {};
 

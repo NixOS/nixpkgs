@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, dbus_tools, polkit
 , intltool, libxslt, docbook_xsl, udev, libusb1, pmutils
-, useSystemd ? false, systemd ? null
+, useSystemd ? true, systemd
 }:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "upower-0.9.18";
+  name = "upower-0.9.19";
 
   src = fetchurl {
     url = "http://upower.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "13q6cw2d45qp077g3bjng4yhrvm6g1y9347dkf53kscm5xfm18d1";
+    sha256 = "053yahks5c7nwdxwx8q6nqp3mxbqldmc844mzyvc3ws9635zmisl";
   };
 
   buildInputs =

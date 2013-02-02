@@ -10,7 +10,10 @@ stdenv.mkDerivation (rec {
 
   buildInputs = [ pkgconfig gtk imlib2 file ];
 
-  preBuild=''substituteInPlace Makefile --replace /usr/local "$out"'';
+  preBuild=''
+    substituteInPlace Makefile --replace /usr/local "$out"
+    substituteInPlace Makefile --replace /man/ /share/man/
+  '';
 
   meta = {
     description = "qiv (quick image viewer)";

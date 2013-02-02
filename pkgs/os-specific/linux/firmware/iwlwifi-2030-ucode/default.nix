@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "iwlwifi-2030-ucode-18.168.6.1";
 
   src = fetchurl {
-    url = "http://intellinuxwireless.org/iwlwifi/downloads/${name}.tgz";
+    url = "http://wireless.kernel.org/en/users/Drivers/iwlwifi?action=AttachFile&do=get&target=${name}.tgz";
+    name = "${name}.tgz";
     sha256 = "0b69jpb46fk63ybyyb8lbh99j1d29ayp8fl98l18iqy3q7mx4ry8";
   };
 

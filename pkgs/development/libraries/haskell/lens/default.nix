@@ -1,20 +1,22 @@
-{ cabal, comonad, comonadsFd, comonadTransformers, filepath
-, hashable, mtl, nats, parallel, semigroups, split, text
-, transformers, transformersCompat, unorderedContainers, vector
+{ cabal, bifunctors, comonad, comonadsFd, comonadTransformers
+, contravariant, distributive, filepath, genericDeriving, hashable
+, MonadCatchIOTransformers, mtl, parallel, profunctorExtras
+, profunctors, reflection, semigroupoids, semigroups, split, tagged
+, text, transformers, transformersCompat, unorderedContainers
+, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "3.7.3";
-  sha256 = "0mvwczviszfv52ylymvrz3zk6s05ngmqc2g1k4r6pym8s9cmgmzz";
+  version = "3.8.5";
+  sha256 = "09z2izh7mqj75yh9f0pb8ky9vnzs9zx2z2mz1ik7l8wid43gm6vn";
   buildDepends = [
-    comonad comonadsFd comonadTransformers filepath hashable mtl nats
-    parallel semigroups split text transformers transformersCompat
-    unorderedContainers vector
+    bifunctors comonad comonadsFd comonadTransformers contravariant
+    distributive filepath genericDeriving hashable
+    MonadCatchIOTransformers mtl parallel profunctorExtras profunctors
+    reflection semigroupoids semigroups split tagged text transformers
+    transformersCompat unorderedContainers vector
   ];
-  patchPhase = ''
-    sed -i -e 's|semigroups.*,|semigroups,|' lens.cabal
-  '';
   meta = {
     homepage = "http://github.com/ekmett/lens/";
     description = "Lenses, Folds and Traversals";
