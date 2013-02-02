@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   buildFlags = [
     "GNU_EFI=${gnu_efi}"
-  ];
+  ] ++ stdenv.lib.optional (stdenv.system == "i686-linux") "ARCH=ia32";
 
   installPhase = "mkdir -p $out/bin; mv gummiboot.efi $out/bin";
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.lgpl21Plus;
 
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
 
     maintainers = [ stdenv.lib.maintainers.shlevy ];
   };
