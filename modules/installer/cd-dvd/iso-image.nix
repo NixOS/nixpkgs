@@ -119,17 +119,6 @@ let
     '';
 
 
-  efiShell = if pkgs.stdenv.isi686 then
-    pkgs.fetchurl {
-      url = "https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/EdkShellBinPkg/FullShell/Ia32/Shell_Full.efi";
-      sha256 = "1gv6kyaspczdp7x8qnx5x76ilriaygkfs99ay7ihhdi6riclkhfl";
-    }
-  else
-    pkgs.fetchurl {
-      url = "https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2/EdkShellBinPkg/FullShell/X64/Shell_Full.efi";
-      sha256 = "1g18z84rlavxr5gsrh2g942rfr6znv9fs3fqww5m7dhmnysgyv8p";
-    };
-
   # The efi boot image
   efiImg = pkgs.runCommand "efi-image_eltorito" {}
     ''
@@ -139,14 +128,22 @@ let
       ${pkgs.mtools}/bin/mmd -i "$out" efi
       ${pkgs.mtools}/bin/mmd -i "$out" efi/boot
       ${pkgs.mtools}/bin/mmd -i "$out" efi/nixos
+      ${pkgs.mtools}/bin/mmd -i "$out" loader
+      ${pkgs.mtools}/bin/mmd -i "$out" loader/entries
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${efiShell} ::efi/boot/boot${targetArch}.efi
+        ${pkgs.gummiboot}/bin/gummiboot.efi ::efi/boot/boot${targetArch}.efi
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${config.boot.kernelPackages.kernel + "/bzImage"} ::bzImage.efi
+        ${config.boot.kernelPackages.kernel + "/bzImage"} ::bzImage
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
         ${config.system.build.initialRamdisk + "/initrd"} ::efi/nixos/initrd
-      echo "bzImage.efi initrd=\\efi\\nixos\\initrd init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" > boot-params
-      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::startup.nsh
+      echo "title NixOS LiveCD" > boot-params
+      echo "linux /bzImage" >> boot-params
+      echo "initrd /efi/nixos/initrd" >> boot-params
+      echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> boot-params
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::loader/entries/nixos-livecd.conf
+      echo "default nixos-livecd" > boot-params
+      echo "timeout 5" >> boot-params
+      ${pkgs.mtools}/bin/mcopy -v -i "$out" boot-params ::loader/loader.conf
     '';
 
   targetArch = if pkgs.stdenv.isi686 then
