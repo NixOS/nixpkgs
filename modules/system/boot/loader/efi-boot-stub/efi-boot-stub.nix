@@ -8,7 +8,13 @@ let
     isExecutable = true;
     inherit (pkgs) bash;
     path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.glibc] ++ (pkgs.stdenv.lib.optionals config.boot.loader.efiBootStub.runEfibootmgr [pkgs.efibootmgr pkgs.module_init_tools]);
-    inherit (config.boot.loader.efiBootStub) efiSysMountPoint runEfibootmgr installStartupNsh efiDisk efiPartition postEfiBootMgrCommands;
+    inherit (config.boot.loader.efiBootStub) installStartupNsh;
+
+    inherit (config.boot.loader.efi) efiSysMountPoint;
+
+    inherit (config.boot.loader.efi.efibootmgr) efiDisk efiPartition postEfiBootMgrCommands;
+
+    runEfibootmgr = config.boot.loader.efi.efibootmgr.enable;
 
     efiShell = if config.boot.loader.efiBootStub.installShell then
       if pkgs.stdenv.isi686 then
@@ -51,38 +57,6 @@ in
             '';
           };
 
-          efiDisk = mkOption {
-            default = "/dev/sda";
-            description = ''
-              The disk that contains the EFI system partition. Only used by
-              efibootmgr
-            '';
-          };
-
-          efiPartition = mkOption {
-            default = "1";
-            description = ''
-              The partition number of the EFI system partition. Only used by
-              efibootmgr
-            '';
-          };
-
-          efiSysMountPoint = mkOption {
-            default = "/boot";
-            description = ''
-              Where the EFI System Partition is mounted.
-            '';
-          };
-
-          runEfibootmgr = mkOption {
-            default = false;
-            description = ''
-              Whether to run efibootmgr to add the configuration to the boot options list.
-              WARNING! efibootmgr has been rumored to brick Apple firmware on
-              old kernels! Don't use it on kernels older than 2.6.39!
-            '';
-          };
-
           installStartupNsh = mkOption {
             default = false;
             description = ''
@@ -100,17 +74,6 @@ in
               (CDs, usb sticks, etc.), but it may be an option for broken
               systems where efibootmgr doesn't work. Particularly useful in
               conjunction with installStartupNsh
-            '';
-          };
-
-          postEfiBootMgrCommands = mkOption {
-            default = "";
-            type = types.string;
-            description = ''
-              Shell commands to be executed immediately after efibootmgr has setup the system EFI.
-              Some systems do not follow the EFI specifications properly and insert extra entries.
-              Others will brick (fix by removing battery) on boot when it finds more than X entries.
-              This hook allows for running a few extra efibootmgr commands to combat these issues.
             '';
           };
 
