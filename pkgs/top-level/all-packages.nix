@@ -3953,6 +3953,8 @@ let
 
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
 
+  pangox_compat = callPackage ../development/libraries/pangox-compat { };
+
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix { };
