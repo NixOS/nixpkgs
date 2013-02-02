@@ -4606,9 +4606,6 @@ let
     else callPackage ../development/libraries/mesa-glu { }; # mesa *with* GL/glu.h
   darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
 
-  mesa = if stdenv.isDarwin then darwinX11AndOpenGL else
-    callPackage ../development/libraries/mesa { };
-
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
     toolbuslib    = callPackage ../development/libraries/toolbuslib { aterm = aterm28; inherit (windows) w32api; };
