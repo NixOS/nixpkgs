@@ -1,10 +1,10 @@
-{ cabal, semigroupoids, semigroups }:
+{ cabal, semigroupoids, semigroups, tagged }:
 
 cabal.mkDerivation (self: {
   pname = "bifunctors";
-  version = "3.0.3";
-  sha256 = "1nmrwc9n9qkj9w9c38ja0had32isr6v35j1v19fhqdwk5ddbpxp4";
-  buildDepends = [ semigroupoids semigroups ];
+  version = "3.2";
+  sha256 = "03bszf1127iw5kimjbag5gmgzz7h2qzcd9f7jb53jpiadfhjfx0a";
+  buildDepends = [ semigroupoids semigroups tagged ];
   meta = {
     homepage = "http://github.com/ekmett/bifunctors/";
     description = "Haskell 98 bifunctors";

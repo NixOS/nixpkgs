@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     caseInsensitive enumerator MonadCatchIOTransformers mtl network
     snapCore text time unixCompat
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "A fast, iteratee-based, epoll-enabled web server for the Snap Framework";

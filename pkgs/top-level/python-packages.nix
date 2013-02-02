@@ -251,6 +251,18 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  awscli = buildPythonPackage rec {
+    name = "awscli-0.5.0";
+    namePrefix = "";
+
+    src = fetchurl {
+      url = https://github.com/aws/aws-cli/archive/0.5.0.tar.gz;
+      sha256 = "0smgcisl2p7p2y2i299x7g271kdmgs0hnzngw5030phvh0lq202i";
+    };
+
+    propagatedBuildInputs = [ argparse botocore ];
+
+  };
 
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
@@ -333,6 +345,27 @@ pythonPackages = python.modules // rec {
         future infrastructural services offered by Amazon Web
         Services.  This includes S3, SQS, EC2, among others.
       '';
+    };
+  };
+
+
+  botocore = buildPythonPackage rec {
+    name = "botocore-0.5.2";
+
+    src = fetchurl {
+      url = https://github.com/boto/botocore/archive/0.5.2.tar.gz;
+      sha256 = "18073mydin0mwk1d7vdlmsiz3rvhjzxkaaqrmxw440acbipnngq2";
+    };
+
+    propagatedBuildInputs = [ dateutil requests014 ];
+
+    meta = {
+      homepage = https://github.com/boto/botocore;
+
+      license = "bsd";
+
+      description = "A low-level interface to a growing number of Amazon Web Services";
+
     };
   };
 
@@ -576,12 +609,14 @@ pythonPackages = python.modules // rec {
 
 
   dateutil = buildPythonPackage (rec {
-    name = "dateutil-1.5";
+    name = "dateutil-2.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "02dhw57jf5kjcp7ng1if7vdrbnlpb9yjmz7wygwwvf3gni4766bg";
+      sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
     };
+
+    propagatedBuildInputs = [ six ];
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
@@ -2635,6 +2670,35 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "The ReportLab Toolkit. An Open Source Python library for generating PDFs and graphics.";
       homepage = http://www.reportlab.com/;
+    };
+  };
+
+
+  requests = buildPythonPackage rec {
+    name = "requests-1.1.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
+      md5 = "a0158815af244c32041a3147ee09abf3";
+    };
+
+    meta = {
+      description = "Requests is an Apache2 Licensed HTTP library, written in Python, for human beings..";
+      homepage = http://docs.python-requests.org/en/latest/;
+    };
+  };
+
+  requests014 = buildPythonPackage rec {
+    name = "requests-0.14.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
+      md5 = "3de30600072cbc7214ae342d1d08aa46";
+    };
+
+    meta = {
+      description = "Requests is an Apache2 Licensed HTTP library, written in Python, for human beings..";
+      homepage = http://docs.python-requests.org/en/latest/;
     };
   };
 

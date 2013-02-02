@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "3.8.2";
-  sha256 = "1spz4nyv1f7kf4bnw8qgqaks5kc4m0slzw0czj1wh1232w2sz15m";
+  version = "3.8.5";
+  sha256 = "09z2izh7mqj75yh9f0pb8ky9vnzs9zx2z2mz1ik7l8wid43gm6vn";
   buildDepends = [
     bifunctors comonad comonadsFd comonadTransformers contravariant
     distributive filepath genericDeriving hashable

@@ -43,6 +43,6 @@ stdenv.mkDerivation {
     description = "A standards-based printing system for UNIX";
     license = stdenv.lib.licenses.gpl2; # actually LGPL for the library and GPL for the rest
     maintainers = [ stdenv.lib.maintainers.urkud stdenv.lib.maintainers.simons ];
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
