@@ -835,6 +835,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ghcEvents = callPackage ../development/libraries/haskell/ghc-events {};
 
+  ghcHeapView = callPackage ../development/libraries/haskell/ghc-heap-view {
+    cabal = self.cabal.override { enableLibraryProfiling = false; }; # pkg cannot be built with profiling enabled
+  };
+
   ghcMod = callPackage ../development/libraries/haskell/ghc-mod {
     inherit (pkgs) emacs;
   };
@@ -846,6 +850,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ghcSyb = callPackage ../development/libraries/haskell/ghc-syb {};
 
   ghcSybUtils = callPackage ../development/libraries/haskell/ghc-syb-utils {};
+
+  ghcVis = callPackage ../development/libraries/haskell/ghc-vis {
+    cabal = self.cabal.override { enableLibraryProfiling = false; }; # pkg cannot be built with profiling enabled
+  };
 
   gio = callPackage ../development/libraries/haskell/gio {};
 
@@ -1824,6 +1832,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   X11 = callPackage ../development/libraries/haskell/X11 {};
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {};
+
+  xdot = callPackage ../development/libraries/haskell/xdot {
+    polyparse = self.polyparse_1_7;
+  };
 
   xhtml_3000_2_0_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.1.nix {};
   xhtml_3000_2_0_4 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.4.nix {};
