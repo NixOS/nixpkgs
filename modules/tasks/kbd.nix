@@ -65,10 +65,7 @@ in
     # Let systemd-vconsole-setup.service do the work of setting up the
     # virtual consoles.  FIXME: trigger a restart of
     # systemd-vconsole-setup.service if /etc/vconsole.conf changes.
-    environment.etc = singleton
-      { target = "vconsole.conf";
-        source = vconsoleConf;
-      };
+    environment.etc."vconsole.conf".source = vconsoleConf;
 
     # This is identical to the systemd-vconsole-setup.service unit
     # shipped with systemd, except that it uses /dev/tty1 instead of
