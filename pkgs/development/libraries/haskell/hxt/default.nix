@@ -4,12 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "hxt";
-  version = "9.2.2";
-  sha256 = "0ichjpshq10b11dyfv1q7rs2m190x3gplx6k54amlxv45nwd1s6r";
+  version = "9.3.1.1";
+  sha256 = "1x0z85vx49s2b9bgjm14c2152cwr0vzf02rlxrla5dj5g565985y";
   buildDepends = [
     binary deepseq filepath HUnit hxtCharproperties hxtRegexXmlschema
     hxtUnicode mtl network parsec
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.fh-wedel.de/~si/HXmlToolbox/index.html";
     description = "A collection of tools for processing XML with Haskell";

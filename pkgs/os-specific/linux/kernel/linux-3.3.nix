@@ -1,4 +1,4 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
@@ -146,8 +146,10 @@ let
       NFSD_V3 y
       NFSD_V3_ACL y
       NFSD_V4 y
+      NFS_FSCACHE y
       CIFS_XATTR y
       CIFS_POSIX y
+      CIFS_FSCACHE y
 
       # Security related features.
       STRICT_DEVMEM y # Filter access to /dev/mem
@@ -236,7 +238,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.3.6";
+    version = "3.3.8";
     testing = false;
 
     preConfigure = ''
@@ -245,7 +247,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "04hplilmy9ks6nxi4292mcqwil6b5vinx90w23m41bll1x32gbq8";
+      sha256 = "0bgppngf711mlxp0jcsnv5xc0xxc8vs5rzc1czkv2igrfb1kvrnz";
     };
 
     config = configWithPlatform stdenv.platform;
@@ -253,6 +255,7 @@ import ./generic.nix (
 
     features.iwlwifi = true;
     features.efiBootStub = true;
+    features.netfilterRPFilter = true;
   }
 
   // removeAttrs args ["extraConfig"]

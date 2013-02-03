@@ -4,15 +4,15 @@
 
 cabal.mkDerivation (self: {
   pname = "yaml";
-  version = "0.8.0.1";
-  sha256 = "0frps30spsxkr479h4hpzsc9gkaazgmdjp5p4pmzy9mf174qacs8";
+  version = "0.8.2";
+  sha256 = "1c83vxgry1425z4wk2mnijy183pnlhamcra7fvh55rvhq4bql1m8";
   buildDepends = [
     aeson attoparsec conduit resourcet text transformers
     unorderedContainers vector
   ];
   meta = {
     homepage = "http://github.com/snoyberg/yaml/";
-    description = "Low-level binding to the libyaml C library";
+    description = "Support for parsing and rendering YAML documents";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

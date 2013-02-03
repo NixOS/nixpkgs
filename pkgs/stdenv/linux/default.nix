@@ -7,7 +7,7 @@
 # The function defaults are for easy testing.
 { system ? builtins.currentSystem
 , allPackages ? import ../../top-level/all-packages.nix
-, platform ? null }:
+, platform ? null, config }:
 
 rec {
 
@@ -81,7 +81,7 @@ rec {
     {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? [], fetchurl}:
 
     import ../generic {
-      inherit system;
+      inherit system config;
       name = "stdenv-linux-boot";
       preHook =
         ''
@@ -261,7 +261,7 @@ rec {
   #     dependency (`nix-store -qR') on bootstrapTools or the
   #     first binutils built.
   stdenvLinux = import ../generic rec {
-    inherit system;
+    inherit system config;
     
     preHook = commonPreHook;
     

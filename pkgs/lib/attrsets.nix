@@ -5,7 +5,8 @@ with {
   inherit (import ./trivial.nix) or;
   inherit (import ./default.nix) fold;
   inherit (import ./strings.nix) concatStringsSep;
-  inherit (import ./lists.nix) concatMap concatLists;
+  inherit (import ./lists.nix) concatMap concatLists all deepSeqList;
+  inherit (import ./misc.nix) maybeAttr;
 };
 
 rec {
@@ -23,7 +24,7 @@ rec {
       then attrByPath (tail attrPath) default (getAttr attr e)
       else default;
 
-      
+
   /* Return nested attribute set in which an attribute is set.  For instance
      ["x" "y"] applied with some value v returns `x.y = v;' */
   setAttrByPath = attrPath: value:
@@ -36,7 +37,7 @@ rec {
   getAttrFromPath = attrPath: set:
     let errorMsg = "cannot find attribute `" + concatStringsSep "." attrPath + "'";
     in attrByPath attrPath (abort errorMsg) set;
-      
+
 
   /* Return the specified attributes from a set.
 
@@ -79,6 +80,18 @@ rec {
     listToAttrs (fold (n: ys: let v = getAttr n set; in if pred n v then [(nameValuePair n v)] ++ ys else ys) [] (attrNames set));
 
 
+  /* foldAttrs: apply fold functions to values grouped by key. Eg accumulate values as list:
+     foldAttrs (n: a: [n] ++ a) [] [{ a = 2; } { a = 3; }]
+     => { a = [ 2 3 ]; }
+  */
+  foldAttrs = op: nul: list_of_attrs:
+    fold (n: a:
+        fold (name: o:
+          o // (listToAttrs [{inherit name; value = op (getAttr name n) (maybeAttr name nul a); }])
+        ) a (attrNames n)
+    ) {} list_of_attrs;
+
+
   /* Recursively collect sets that verify a given predicate named `pred'
      from the set `attrs'.  The recursion is stopped when the predicate is
      verified.
@@ -108,7 +121,7 @@ rec {
      builtins.listToAttrs. */
   nameValuePair = name: value: { inherit name value; };
 
-  
+
   /* Apply a function to each element in an attribute set.  The
      function takes two arguments --- the attribute name and its value
      --- and returns the new value for the attribute.  The result is a
@@ -126,7 +139,7 @@ rec {
   /* Like `mapAttrs', but allows the name of each attribute to be
      changed in addition to the value.  The applied function should
      return both the new name and value as a `nameValuePair'.
-     
+
      Example:
        mapAttrs' (name: value: nameValuePair ("foo_" + name) ("bar-" + value))
           { x = "a"; y = "b"; }
@@ -134,11 +147,11 @@ rec {
   */
   mapAttrs' = f: set:
     listToAttrs (map (attr: f attr (getAttr attr set)) (attrNames set));
-        
+
 
   /* Call a function for each attribute in the given set and return
      the result in a list.
-  
+
      Example:
        mapAttrsToList (name: value: name + value)
           { x = "a"; y = "b"; }
@@ -146,7 +159,7 @@ rec {
   */
   mapAttrsToList = f: attrs:
     map (name: f name (getAttr name attrs)) (attrNames attrs);
-    
+
 
   /* Like `mapAttrs', except that it recursively applies itself to
      attribute sets.  Also, the first argument of the argument
@@ -163,7 +176,7 @@ rec {
   */
   mapAttrsRecursive = mapAttrsRecursiveCond (as: true);
 
-  
+
   /* Like `mapAttrsRecursive', but it takes an additional predicate
      function that tells it whether to recursive into an attribute
      set.  If it returns false, `mapAttrsRecursiveCond' does not
@@ -247,7 +260,7 @@ rec {
 
        returns: {
          foo.bar = 1; # 'foo.*' from the second set
-         foo.quz = 2; # 
+         foo.quz = 2; #
          bar = 3;     # 'bar' from the first set
          baz = 4;     # 'baz' from the second set
        }
@@ -264,9 +277,9 @@ rec {
       );
     in f [] [rhs lhs];
 
-  /* Does the same as the update operator '//' and keep siblings attribute.
-     This recusion stop when one of the attribute value is not an attribute
-     set, in which case the right hand side value takes precedence over the
+  /* A recursive variant of the update operator ‘//’.  The recusion
+     stops when one of the attribute values is not an attribute set,
+     in which case the right hand side value takes precedence over the
      left hand side value.
 
      Example:
@@ -301,4 +314,5 @@ rec {
   overrideExisting = old: new:
     old // listToAttrs (map (attr: nameValuePair attr (attrByPath [attr] (getAttr attr old) new)) (attrNames old));
 
+  deepSeqAttrs = x: y: deepSeqList (attrValues x) y;
 }

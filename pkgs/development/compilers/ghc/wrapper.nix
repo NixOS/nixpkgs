@@ -1,6 +1,10 @@
-{stdenv, ghc, makeWrapper, coreutils}:
+{ stdenv, ghc, makeWrapper, coreutils }:
 
-stdenv.mkDerivation {
+let
+  ghc761OrLater = !stdenv.lib.versionOlder ghc.version "7.6.1";
+  packageDBFlag = if ghc761OrLater then "-package-db" else "-package-conf";
+in
+stdenv.mkDerivation ({
   name = "ghc-${ghc.version}-wrapper";
 
   buildInputs = [makeWrapper];
@@ -15,10 +19,10 @@ stdenv.mkDerivation {
       makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\")"
     done
     for prg in runghc runhaskell; do
-      makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\" \" -package-conf --ghc-arg=\")"
+      makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\" \" ${packageDBFlag} --ghc-arg=\")"
     done
     for prg in ghc-pkg ghc-pkg-${ghc.version}; do
-      makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\" --package-conf=)"
+      makeWrapper $ghc/bin/$prg $out/bin/$prg --add-flags "\$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\" -${packageDBFlag}=)"
     done
     for prg in hp2ps hpc hasktags hsc2hs; do
       test -x $ghc/bin/$prg && ln -s $ghc/bin/$prg $out/bin/$prg
@@ -29,7 +33,7 @@ stdenv.mkDerivation {
 
     for arg in \$($out/bin/ghc-get-packages.sh ${ghc.version} \"\$(dirname \$0)\"); do
       case "\$arg" in
-        -package-conf) ;;
+        ${packageDBFlag}) ;;
         *)
           CANONICALIZED="\$(${stdenv.lib.optionalString stdenv.isDarwin "${coreutils}/bin/"}readlink -f "\$arg")"
           GHC_PACKAGES_HASH["\$CANONICALIZED"]= ;;
@@ -50,4 +54,4 @@ stdenv.mkDerivation {
   inherit ghc;
   inherit (ghc) meta;
   ghcVersion = ghc.version;
-}
+} // (stdenv.lib.optionalAttrs ghc761OrLater { preFixup = "sed -i -e 's|-package-conf|${packageDBFlag}|' $out/bin/ghc-get-packages.sh"; }))

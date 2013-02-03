@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation {
 
-  name = "libgadu-1.11.0";
+  name = "libgadu-1.11.2";
 
   src = fetchurl {
-    url = http://toxygen.net/libgadu/files/libgadu-1.11.0.tar.gz;
-    sha256 = "045a0bd395k3ramdvlzyfx3878p42fv4r04rgasmdsm2n33wgm38";
+    url = http://toxygen.net/libgadu/files/libgadu-1.11.2.tar.gz;
+    sha256 = "0kifi9blhbimihqw4kaf6wyqhlx8fpp8nq4s6y280ar9p0il2n3z";
   };
 
   propagatedBuildInputs = [ zlib ];

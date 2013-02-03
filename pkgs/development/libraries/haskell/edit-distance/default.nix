@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "edit-distance";
-  version = "0.2.1";
-  sha256 = "1zhiyzgqmxi4mn7zn5q6rg03hgff9y5f9xizbs00069v7ncygi38";
+  version = "0.2.1.2";
+  sha256 = "08dxsp1ar8mr4xrjy37lzl0s1rjnqsdq30p09nclip5pyhcw7g44";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ random ];

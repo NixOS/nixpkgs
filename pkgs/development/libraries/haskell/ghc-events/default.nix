@@ -2,15 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-events";
-  version = "0.4.0.0";
-  sha256 = "0q1r5jxk8ma8rg65n4iixl5zyk4nxpzi4ywf0jz8y1nbbhbas7g2";
+  version = "0.4.2.0";
+  sha256 = "0209r9g5w4ifsaw3dkfra6kma1vyk50dc306an72mcwnp4l7dv4l";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary mtl ];
-  patchPhase = ''
-    sed -i -e 's|mtl *>=.*$|mtl,|' ghc-events.cabal
-  '';
-  noHaddock = true;
   meta = {
     description = "Library and tool for parsing .eventlog files from GHC";
     license = self.stdenv.lib.licenses.bsd3;

@@ -1,6 +1,6 @@
 # generic builder for Cabal packages
 
-{stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, enableLibraryProfiling ? false} :
+{ stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal, enableLibraryProfiling ? false }:
 {
   mkDerivation =
     args : # arguments for the individual package, can modify the defaults
@@ -44,7 +44,9 @@
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
             src = fetchurl {
-              url = "http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz";
+              # cannot use mirrors system because of subtly different directory structures
+              urls = ["http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz"
+                      "http://hdiff.luite.com/packages/archive/${self.pname}/${self.fname}.tar.gz"];
               inherit (self) sha256;
             };
 
@@ -86,7 +88,8 @@
             configurePhase = ''
               eval "$preConfigure"
 
-              for i in Setup.hs Setup.lhs; do
+              ${lib.optionalString (lib.attrByPath ["jailbreak"] false self) "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal && "
+              }for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
 

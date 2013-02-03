@@ -4,7 +4,7 @@
 stdenv.mkDerivation {
   name = "hg-archive" + (if (name != null) then "-${name}" else "");
   builder = ./builder.sh;
-  buildInputs = [mercurial nix];
+  buildInputs = [mercurial];
 
   # Nix <= 0.7 compatibility.
   id = md5;

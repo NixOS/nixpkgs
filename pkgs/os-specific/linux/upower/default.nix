@@ -1,27 +1,39 @@
-{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, polkit
-, intltool, libxslt, docbook_xsl, udev, libusb1, pmutils }:
+{ stdenv, fetchurl, pkgconfig, glib, dbus, dbus_glib, dbus_tools, polkit
+, intltool, libxslt, docbook_xsl, udev, libusb1, pmutils
+, useSystemd ? true, systemd
+}:
 
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "upower-0.9.17";
+  name = "upower-0.9.19";
 
   src = fetchurl {
     url = "http://upower.freedesktop.org/releases/${name}.tar.xz";
-    sha256 = "0a1j2pg44r6ljj9jgzlw8i5fzabpm2b2jk058kxsr77ciz96i7yg";
+    sha256 = "053yahks5c7nwdxwx8q6nqp3mxbqldmc844mzyvc3ws9635zmisl";
   };
 
-  buildInputs = [ dbus_glib polkit intltool libxslt docbook_xsl udev libusb1 ];
+  buildInputs =
+    [ dbus_glib polkit intltool libxslt docbook_xsl udev libusb1 ]
+    ++ stdenv.lib.optional useSystemd systemd;
 
   buildNativeInputs = [ pkgconfig ];
 
-  configureFlags = "--with-backend=linux --localstatedir=/var";
+  configureFlags =
+    [ "--with-backend=linux" "--localstatedir=/var" ]
+    ++ stdenv.lib.optional useSystemd
+    [ "--enable-systemd"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+      "--with-systemdutildir=$(out)/lib/systemd/system-sleep"
+    ];
 
   preConfigure =
     ''
       substituteInPlace src/linux/up-backend.c \
         --replace /usr/bin/pm- ${pmutils}/bin/pm- \
         --replace /usr/sbin/pm- ${pmutils}/sbin/pm-
+      substituteInPlace src/notify-upower.sh \
+        --replace /usr/bin/dbus-send ${dbus_tools}/bin/dbus-send
     '';
 
   installFlags = "historydir=$(TMPDIR)/foo";

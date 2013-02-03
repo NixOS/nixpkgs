@@ -1,7 +1,16 @@
-{ stdenv, nodejs }:
+{ stdenv, runCommand, nodejs, neededNatives}:
 
-args @ { src, deps, ... }:
+args @ { src, deps ? [], flags ? [], ... }:
 
+with stdenv.lib;
+
+let npmFlags = concatStringsSep " " (map (v: "--${v}") flags);
+    sources = runCommand "node-sources" {} ''
+      tar xf ${nodejs.src}
+      mv *node* $out
+    '';
+
+in
 stdenv.mkDerivation ({
   unpackPhase = "true";
 
@@ -17,9 +26,11 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ${nodejs}/bin/npm --registry http://www.example.com install ${src}    
+    ${nodejs}/bin/npm --registry http://www.example.com --nodedir=${sources} install ${src} ${npmFlags}
     runHook postBuild
   '';
+
+  buildNativeInputs = neededNatives;
 
   installPhase = ''
     runHook preInstall
@@ -31,5 +42,9 @@ stdenv.mkDerivation ({
         xargs -0 sed --follow-symlinks -i 's@#!/usr/bin/env node@#!${nodejs}/bin/node@'
     fi
     runHook postInstall
+  '';
+
+  preFixup = ''
+    find $out -type f -print0 | xargs -0 sed -i 's|${src}|${src.name}|g'
   '';
 } // args)

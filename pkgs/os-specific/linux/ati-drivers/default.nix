@@ -2,6 +2,7 @@
 , mesa # for fgl_glxgears
 , libXxf86vm, xf86vidmodeproto # for fglrx_gamma
 , xorg, makeWrapper, glibc, patchelf
+, unzip
 }:
 
 # If you want to use a different Xorg version probably
@@ -16,6 +17,9 @@
 
 # http://wiki.cchtml.com/index.php/Main_Page
 
+# There is one issue left:
+# /usr/lib/dri/fglrx_dri.so must point to /run/opengl-driver/lib/fglrx_dri.so
+
 assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
@@ -27,18 +31,23 @@ stdenv.mkDerivation rec {
   inherit libXxf86vm xf86vidmodeproto;
 
   src = fetchurl {
-    url = https://www2.ati.com/drivers/linux/ati-driver-installer-10-11-x86.x86_64.run;
-    sha256 = "1z33w831ayx1j5lm9d1xv6whkmzsz9v8li3s8c96hwnwki6zpimr";
+    url = http://www2.ati.com/drivers/linux/amd-driver-installer-12-8-x86.x86_64.zip;
+    sha256 = "0hdv89vdap6v0dnwhddizfmlkwyh0j910sp4wyj2lq5pn9rm2lk2";
+
+    # beta
+    # url = "http://www2.ati.com/drivers/beta/amd-driver-installer-12-9-beta-x86.x86_64.zip";
+    # sha256 = "02dmflzfrgr07fa1hv34m7ad8pra21xv7qbk500gqm6v8s9vbplk";
   };
 
   buildInputs =
     [ xlibs.libXext xlibs.libX11
       xlibs.libXrandr which imake makeWrapper
       patchelf
+      unzip
     ];
-    
+
   inherit kernel glibc /* glibc only used for setting interpreter */;
-  
+
   LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
     [ "${xorg.libXrandr}/lib"
       "${xorg.libXrender}/lib"
@@ -49,11 +58,11 @@ stdenv.mkDerivation rec {
   inherit mesa; # only required to build examples
 
   meta = {
-    description = "ati drivers";
+    description = "ATI drivers";
     homepage = http://support.amd.com/us/gpudownload/Pages/index.aspx;
     license = "unfree";
     maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = [ "x86_64-linux" ];
+    #platforms = [ "x86_64-linux" ];
   };
 
   # moved assertions here because the name is evaluated when the NixOS manual is generated

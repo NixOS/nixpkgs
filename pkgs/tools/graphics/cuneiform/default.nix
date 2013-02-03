@@ -2,15 +2,15 @@ a :
 let 
   fetchurl = a.fetchurl;
 
-  version = a.lib.attrByPath ["version"] "1.0" a; 
+  version = "1.1.0";
   buildInputs = with a; [
     cmake imagemagick patchelf
   ];
 in
 rec {
   src = fetchurl {
-    url = "http://launchpad.net/cuneiform-linux/${version}/${version}/+download/cuneiform-linux-${version}.0.tar.bz2";
-    sha256 = "bfa7acc6aade966ab62bc0f19e0ac1a843b659a70202229570c087ca8b15f39e";
+    url = "https://launchpad.net/cuneiform-linux/1.1/1.1/+download/cuneiform-linux-1.1.0.tar.bz2";
+    sha256 = "1bdvppyfx2184zmzcylskd87cxv56d8f32jf7g1qc8779l2hszjp";
   };
 
   inherit buildInputs;

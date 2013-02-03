@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "darcs";
-  version = "2.8.1";
-  sha256 = "1fz9k9zihb0fz0w2y55iqa1fd604nxzz48r62sx3ixxn8qqsvrd1";
+  version = "2.8.3";
+  sha256 = "0nbg45i5sgbsc488siqirgysy3z912xghqbwm5hcsl37j910hxch";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -15,6 +15,10 @@ cabal.mkDerivation (self: {
     zlib
   ];
   extraLibraries = [ curl ];
+  postInstall = ''
+    mkdir -p $out/etc/bash_completion.d
+    mv contrib/darcs_completion $out/etc/bash_completion.d/darcs
+  '';
   meta = {
     homepage = "http://darcs.net/";
     description = "a distributed, interactive, smart revision control system";

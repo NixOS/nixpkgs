@@ -1,0 +1,20 @@
+diff -Naur gummiboot-16-orig/Makefile gummiboot-16/Makefile
+--- gummiboot-16-orig/Makefile	2013-01-24 04:20:58.000000000 -0500
++++ gummiboot-16/Makefile	2013-02-01 17:27:42.922371399 -0500
+@@ -1,13 +1,13 @@
+ VERSION=16
+ 
+ ARCH=$(shell $(CC) -dumpmachine | sed "s/\(-\).*$$//")
+-LIBDIR=$(shell echo $$(cd /usr/lib/$$(gcc -print-multi-os-directory); pwd))
++LIBDIR=$(GNU_EFI)/lib
+ LIBEFIDIR=$(or $(wildcard $(LIBDIR)/gnuefi), $(LIBDIR))
+ 
+ CPPFLAGS = \
+ 	-I. \
+-	-I/usr/include/efi \
+-	-I/usr/include/efi/$(ARCH)
++	-I$(GNU_EFI)/include/efi \
++	-I$(GNU_EFI)/include/efi/$(ARCH)
+ 
+ CFLAGS = \
+ 	-DVERSION=$(VERSION) \

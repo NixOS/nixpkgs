@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "SourceGraph";
-  version = "0.7.0.2";
-  sha256 = "0cdspzsz15r83fjry9467z67h6vvnjh31fip6gf64k74gdjkfisl";
+  version = "0.7.0.4";
+  sha256 = "1rxbanvw1dpdnpmrf5gpl12gn9796yq89dnmdxy56mb9qzsm7nm6";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [

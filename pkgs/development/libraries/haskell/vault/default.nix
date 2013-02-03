@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "vault";
-  version = "0.2.0.0";
-  sha256 = "1hv87kvi2bwf9ff8mhjzdf8rvqhk1xpschzs1x3swadj1kc9f1sv";
+  version = "0.2.0.4";
+  sha256 = "1a63rarksp4waj64b9kv8q77wbhdnsnxahkixl1klp25hkp8aan3";
   buildDepends = [ hashable unorderedContainers ];
   meta = {
     homepage = "https://github.com/HeinrichApfelmus/vault";

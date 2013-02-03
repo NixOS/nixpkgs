@@ -1,4 +1,4 @@
-{ enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? true
+{ enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? false
 , stdenv, fetchurl, x11 ? null, motif ? null, freetype ? null, t1lib ? null
 , base14Fonts ? null
 }:
@@ -6,6 +6,8 @@
 assert enableGUI -> x11 != null && motif != null && freetype != null;
 assert enablePDFtoPPM -> freetype != null;
 assert useT1Lib -> t1lib != null;
+
+assert !useT1Lib; # t1lib has multiple unpatched security vulnerabilities
 
 stdenv.mkDerivation {
   name = "xpdf-3.03";

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, libX11, ncurses}:
+{ stdenv, fetchurl, libX11, ncurses, libXext, libXft }:
 
 stdenv.mkDerivation rec {
-  name = "st-0.2.1";
+  name = "st-0.3";
   
   src = fetchurl {
-    url = http://hg.suckless.org/st/archive/0.2.1.tar.gz;
-    sha256 = "15yqyys69ifjc4vrzvamrg7x0pwa60mnjpi0kap4y9ykhds83xab";
+    url = "http://dl.suckless.org/st/${name}.tar.gz";
+    sha256 = "0d0fjixiis4ixbz4l18rqhnssa7cy2bap3jkjyphqlqhl7lahv3d";
   };
   
-  buildInputs = [ libX11 ncurses ];
+  buildInputs = [ libX11 ncurses libXext libXft ];
 
   installPhase = ''
     TERMINFO=$out/share/terminfo make install PREFIX=$out

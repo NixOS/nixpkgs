@@ -2,10 +2,10 @@
 ftgl, freetype}:
 
 stdenv.mkDerivation rec {
-  name = "opencascade-6.5.2";
+  name = "opencascade-6.5.4";
   src = fetchurl {
-    url = http://files.opencascade.com/OCCT/OCC_6.5.2_release/OpenCASCADE652.tar.gz;
-    sha256 = "0nsfjhd6rv1fmq8jbyzcs0f13h4xfld487vqs9bwd4lbwcfqxwcy";
+    url = http://files.opencascade.com/OCCT/OCC_6.5.4_release/OpenCASCADE654.tar.gz;
+    sha256 = "1di08mc0wly4cdi3rh9kj52bk0bfpyk6dy03c9yfnv04i7z03kmy";
   };
 
   buildInputs = [ mesa tcl tk file libXmu automake autoconf libtool qt4 ftgl freetype ];
@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   # -fpermissive helps building opencascade, although gcc detects a flaw in the code
   # and reports an error otherwise. Further versions may fix that.
-  NIX_CFLAGS_COMPILE = "-I${ftgl}/include/FTGL -I${freetype}/include/freetype2 -fpermissive";
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
-  configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" ];
+  configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" "--with-qt=${qt4}" "--with-ftgl=${ftgl}" "--with-freetype=${freetype}" ];
 
   postInstall = ''
     mv $out/inc $out/include

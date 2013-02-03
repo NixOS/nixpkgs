@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, libnl1, openssl }:
+{ stdenv, fetchurl, libnl, openssl, pkgconfig }:
 stdenv.mkDerivation rec {
 
   name = "hostapd-${version}";
-  version = "0.7.3";
+  version = "1.0";
 
   src = fetchurl {
-    url = http://w1.fi/releases/hostapd-0.7.3.tar.gz;
-    sha256 = "0rqmjs4k50qjp2d0k71lg5vsh34w07w985cxjqklq6kyyf0jgsri";
+    url = "http://w1.fi/releases/${name}.tar.gz";
+    sha256 = "1k6z2g0g324593a7ybd76bywvj0gnf9cybqaj2sq5ks6gv5rsbh0";
   };
 
-  buildInputs = [ libnl1 openssl ];
+  buildInputs = [ libnl openssl pkgconfig ];
 
   configurePhase = ''
     cd hostapd
-    substituteInPlace defconfig --replace "#CONFIG_DRIVER_NL80211" "CONFIG_DRIVER_NL80211"
-    substituteInPlace Makefile --replace "/usr/local/bin/" "$out/bin/"
+    substituteInPlace Makefile --replace "/usr/local/bin" "$out/bin"
     mv defconfig .config
+    echo CONFIG_LIBNL32=y | tee -a .config
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libnl-3.0)"
   '';
   preInstall = "mkdir -p $out/bin";
 

@@ -1,19 +1,19 @@
-{ fetchurl, stdenv, parted, libuuid, gettext }:
+{ fetchurl, stdenv, parted, libuuid, gettext, guile }:
 
 stdenv.mkDerivation rec {
-  name = "fdisk-1.3.0a";
+  name = "gnufdisk-2.0.0a"; # .0a1 seems broken, see http://lists.gnu.org/archive/html/bug-fdisk/2012-09/msg00000.html
 
   src = fetchurl {
-    url = "mirror://gnu/fdisk/${name}.tar.bz2";
-    sha256 = "1g2zvl560f7p1hd4q50d1msy6qp7949mdkagfy8ki8cayp8fp267";
+    url = "mirror://gnu/fdisk/${name}.tar.gz";
+    sha256 = "04nd7civ561x2lwcmxhsqbprml3178jfc58fy1v7hzqg5k4nbhy3";
   };
 
-  buildInputs = [ parted libuuid gettext ];
+  buildInputs = [ parted libuuid gettext guile ];
 
   doCheck = true;
 
   meta = {
-    description = "GNU fdisk, a command-line disk partitioning tool";
+    description = "A command-line disk partitioning tool";
 
     longDescription = ''
       GNU fdisk provides alternatives to util-linux fdisk and util-linux
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/fdisk/;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.linux;
+    #platforms = stdenv.lib.platforms.linux; # was failing for long without anyone complaining
   };
 }

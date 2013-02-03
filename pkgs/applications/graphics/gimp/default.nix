@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk, freetype
-, fontconfig, libart_lgpl, libtiff, libjpeg, libpng, libexif, zlib, perl
-, perlXMLParser, python, pygtk, gettext, xlibs, intltool, babl, gegl
+, fontconfig, libart_lgpl, libtiff, libjpeg, libpng12, libexif, zlib, perl
+, perlXMLParser, python, pygtk, gettext, xlibs, intltool, babl_0_0_22, gegl_0_0_22
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   
   buildInputs = [
     pkgconfig gtk freetype fontconfig
-    libart_lgpl libtiff libjpeg libpng libexif zlib perl
-    perlXMLParser python pygtk gettext intltool babl gegl
+    libart_lgpl libtiff libjpeg libpng12 libexif zlib perl
+    perlXMLParser python pygtk gettext intltool babl_0_0_22 gegl_0_0_22
   ];
 
   passthru = { inherit gtk; }; # probably its a good idea to use the same gtk in plugins ?

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "repr";
-  version = "0.4.1.2";
-  sha256 = "09rv23p1hvvfw5wnhiawgrpqgqa4i0d00skyj9z1jj6bfxk5avjs";
+  version = "0.4.1.3";
+  sha256 = "1y1zl81yjc9jrci83bm6bn8hrfqf6x25vxzkhrkydhhwcwqfqaj5";
   buildDepends = [
     baseUnicodeSymbols dstring random stringCombinators
   ];

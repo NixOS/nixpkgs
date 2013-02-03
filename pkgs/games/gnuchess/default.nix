@@ -1,36 +1,29 @@
-{builderDefsPackage, flex} @ x:
-builderDefsPackage 
-(a :  
-let 
-  fetchurl = a.fetchurl;
-
-  version = a.lib.attrByPath ["version"] "5.07" a; 
-  buildInputs = with a; [
+{stdenv, fetchurl, flex}:
+let
+  s = # Generated upstream information
+  rec {
+    baseName="gnuchess";
+    version="6.0.2";
+    name="${baseName}-${version}";
+    hash="1xd3g28glz2xyjnca0zfw3k0jl5vhgd7wvy4n9km5wnn9z7287l2";
+    url="http://ftp.gnu.org/gnu/chess/gnuchess-6.0.2.tar.gz";
+    sha256="1xd3g28glz2xyjnca0zfw3k0jl5vhgd7wvy4n9km5wnn9z7287l2";
+  };
+  buildInputs = [
     flex
   ];
 in
-rec {
+stdenv.mkDerivation rec {
+  inherit (s) name version;
   src = fetchurl {
-    url = "mirror://gnu/chess/gnuchess-${version}.tar.gz";
-    sha256 = "0zh15m35fzbsrk1aann9pwlkv54dwb00snx99pk3xbg5bwkf125k";
+    inherit (s) url sha256;
   };
-
   inherit buildInputs;
-  configureFlags = [];
-
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "preBuild" "doMakeInstall"];
-
-  preBuild = a.fullDepEntry (''
-    sed -i src/input.c -e 's/static pthread_t/pthread_t/'
-    sed -i "s@gnuchess@$out/bin/gnuchess@" -i src/gnuchessx
-
-
-    sed -e s/getline/gnuchess_local_getline/g -i $(grep getline -rl .)
-  '') ["minInit" "doUnpack"];
-      
-  name = "gnuchess-" + version;
   meta = {
-    description = "GNU Chess playing program";
+    inherit (s) version;
+    description = "GNU Chess engine";
+    maintainers = [stdenv.lib.maintainers.raskin];
+    platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.gpl3Plus;
   };
-}) x
+}

@@ -1,0 +1,70 @@
+*** git-export/module/Makefile.in.orig	Wed Dec 31 16:00:01 1969
+--- git-export/module/Makefile.in	Tue Mar  6 00:23:07 2012
+***************
+*** 11,19 ****
+  	@# installed devel headers, or they may be in the module
+  	@# subdirectory when building against the spl source tree.
+  	@if [ -f @SPL_OBJ@/@SPL_SYMBOLS@ ]; then \
+! 		/bin/cp @SPL_OBJ@/@SPL_SYMBOLS@ .; \
+  	elif [ -f @SPL_OBJ@/module/@SPL_SYMBOLS@ ]; then \
+! 		/bin/cp @SPL_OBJ@/module/@SPL_SYMBOLS@ .; \
+  	else \
+  		echo -e "\n" \
+  		"*** Missing spl symbols ensure you have built the spl:\n" \
+--- 11,21 ----
+  	@# installed devel headers, or they may be in the module
+  	@# subdirectory when building against the spl source tree.
+  	@if [ -f @SPL_OBJ@/@SPL_SYMBOLS@ ]; then \
+! 		/bin/cp -f @SPL_OBJ@/@SPL_SYMBOLS@ .; \
+! 		chmod +w @SPL_SYMBOLS@ .; \
+  	elif [ -f @SPL_OBJ@/module/@SPL_SYMBOLS@ ]; then \
+! 		/bin/cp -f @SPL_OBJ@/module/@SPL_SYMBOLS@ .; \
+! 		chmod +w @SPL_SYMBOLS@ .; \
+  	else \
+  		echo -e "\n" \
+  		"*** Missing spl symbols ensure you have built the spl:\n" \
+***************
+*** 35,55 ****
+  modules_install:
+  	@# Install the kernel modules
+  	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` \
+! 		INSTALL_MOD_PATH=$(DESTDIR) \
+  		INSTALL_MOD_DIR=addon/zfs $@
+  	@# Remove extraneous build products when packaging
+! 	if [ -n "$(DESTDIR)" ]; then \
+! 		find $(DESTDIR)/lib/modules/@LINUX_VERSION@ \
+  			-name 'modules.*' | xargs $(RM); \
+  	fi
+! 	sysmap=$(DESTDIR)/boot/System.map-@LINUX_VERSION@; \
+  	if [ -f $$sysmap ]; then \
+  		depmod -ae -F $$sysmap @LINUX_VERSION@; \
+  	fi
+  
+  modules_uninstall:
+  	@# Uninstall the kernel modules
+! 	$(RM) -R $(DESTDIR)/lib/modules/@LINUX_VERSION@/addon/zfs
+  
+  distdir:
+  
+--- 37,57 ----
+  modules_install:
+  	@# Install the kernel modules
+  	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` \
+! 		INSTALL_MOD_PATH=@prefix@ \
+  		INSTALL_MOD_DIR=addon/zfs $@
+  	@# Remove extraneous build products when packaging
+! 	if [ -n "@prefix@" ]; then \
+! 		find @prefix@/lib/modules/@LINUX_VERSION@ \
+  			-name 'modules.*' | xargs $(RM); \
+  	fi
+! 	sysmap=@prefix@/boot/System.map-@LINUX_VERSION@; \
+  	if [ -f $$sysmap ]; then \
+  		depmod -ae -F $$sysmap @LINUX_VERSION@; \
+  	fi
+  
+  modules_uninstall:
+  	@# Uninstall the kernel modules
+! 	$(RM) -R @prefix@/lib/modules/@LINUX_VERSION@/addon/zfs
+  
+  distdir:
+  

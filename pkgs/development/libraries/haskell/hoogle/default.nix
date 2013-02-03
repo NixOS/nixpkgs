@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hoogle";
-  version = "4.2.12";
-  sha256 = "1j726bm8sx4qamaib6l14s4a4jz4z6szhj1vk8n5b6f3g38s7hwy";
+  version = "4.2.15";
+  sha256 = "0mhxdbbzq7hl5zxz3dhxyrs5q08y8hxwsm19ba0gx47qvg3znzki";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -17,7 +17,7 @@ cabal.mkDerivation (self: {
   meta = {
     homepage = "http://www.haskell.org/hoogle/";
     description = "Haskell API Search";
-    license = "GPL";
+    license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];
   };

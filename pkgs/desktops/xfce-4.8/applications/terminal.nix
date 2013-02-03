@@ -7,9 +7,9 @@
 
 stdenv.mkDerivation {
   name = "xfce-terminal-0.4.8";
-  
+
   src = fetchurl {
-    url = http://archive.xfce.org/src/apps/terminal/0.4/Terminal-0.4.8.tar.bz2;
+    url = http://archive.xfce.org/src/apps/xfce4-terminal/0.4/Terminal-0.4.8.tar.bz2;
     sha1 = "2f12c3a0fffad18976d47e531d404ee308cb2f05";
   };
 

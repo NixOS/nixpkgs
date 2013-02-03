@@ -3,7 +3,7 @@
 , autoconf
 , automake
 , libtool
-, xorgserver, xproto, fontsproto, xf86driproto, renderproto, videoproto
+, xorgserver, xproto, fontsproto, xf86driproto, renderproto, videoproto, pixman
 , utilmacros
 , libdrm
 , pkgconfig }:
@@ -21,11 +21,13 @@ stdenv.mkDerivation {
     autoconf
     automake
     libtool
-    xorgserver xproto fontsproto xf86driproto renderproto videoproto
+    xorgserver xproto fontsproto xf86driproto renderproto videoproto pixman
     utilmacros
     libdrm
     pkgconfig
   ];
+
+  NIX_CFLAGS_COMPILE = "-I${pixman}/include/pixman-1";
 
   preConfigure = "autoreconf -vfi";
 

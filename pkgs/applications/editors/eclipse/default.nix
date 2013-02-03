@@ -49,6 +49,8 @@ let
         # Create desktop item.
         mkdir -p $out/share/applications
         cp ${desktopItem}/share/applications/* $out/share/applications
+        mkdir -p $out/share/pixmaps
+        ln -s $out/eclipse/icon.xpm $out/share/pixmaps/eclipse.xpm
       ''; # */
 
       meta = {
@@ -164,14 +166,13 @@ in {
     src =
       if stdenv.system == "x86_64-linux" then
         fetchurl {
-          url = http://eclipse.ialto.com/eclipse/downloads/drops4/R-4.2-201206081400/eclipse-SDK-4.2-linux-gtk-x86_64.tar.gz;
-          sha256 = "1vcr49qm6rsbgzi9d43ggmby68pdigqcy55l5vy1gmixqks3g6s0";
+          url = http://eclipse.ialto.com/eclipse/downloads/drops4/R-4.2.1-201209141800/eclipse-SDK-4.2.1-linux-gtk-x86_64.tar.gz;
+          sha256 = "1mlyy90lk08lb2971ynglgi3nqvqfq1k70md2kb39jk160wd1xrk";
         }
       else
         fetchurl {
-          url = http://eclipse.ialto.com/eclipse/downloads/drops4/R-4.2-201206081400/eclipse-SDK-4.2-linux-gtk.tar.gz;
-          sha256 = "1zlv80idkkdda05ks4biknbkczp24b2xki81ik5nygrjg29jqgnz";
+          url = http://eclipse.ialto.com/eclipse/downloads/drops4/R-4.2.1-201209141800/eclipse-SDK-4.2.1-linux-gtk.tar.gz;
+          sha256 = "1av6qm9wkbyk123qqf38f0jq4jv2bj9wp6fmpnl55zg6qr463c1w";
         };
     };
 }
-

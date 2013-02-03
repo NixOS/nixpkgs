@@ -1,29 +1,34 @@
 { stdenv, fetchurl, udev, intltool, pkgconfig, glib, xmlto
 , makeWrapper, pygobject, pygtk, docbook_xml_dtd_412, docbook_xsl
-, pythonDBus, libxml2, desktop_file_utils, libusb, cups, pycups
+, pythonDBus, libxml2, desktop_file_utils, libusb1, cups, pycups
 , pythonPackages
 , withGUI ? true
 }:
 
 stdenv.mkDerivation rec {
-  name = "${meta.name}-${meta.version}";
+  name = "system-config-printer-1.3.12";
 
   src = fetchurl {
-    url = "http://cyberelk.net/tim/data/${meta.name}/1.3/${name}.tar.xz";
-    sha256 = "1d50rqgpyrzyrxwq3qhafzq9075qm2wxdrh1f1q7whlr0chxi3mw";
+    url = "http://cyberelk.net/tim/data/system-config-printer/1.3/${name}.tar.xz";
+    sha256 = "1cg9n75rg5l9vr1925n2g771kga33imikyl0mf70lww2sfgvs18r";
   };
 
+  propagatedBuildInputs = [ pythonPackages.pycurl ];
+
   buildInputs =
-    [ intltool pkgconfig glib udev libusb cups xmlto
+    [ intltool pkgconfig glib udev libusb1 cups xmlto
       libxml2 docbook_xml_dtd_412 docbook_xsl desktop_file_utils
       pythonPackages.python pythonPackages.wrapPython
     ];
 
   pythonPath =
-    [ pythonDBus pycups pygobject ]
+    [ pythonDBus pycups pygobject pythonPackages.pycurl ]
     ++ stdenv.lib.optionals withGUI [ pygtk pythonPackages.notify ];
-    
-  configureFlags = "--with-udev-rules";
+
+  configureFlags =
+    [ "--with-udev-rules"
+      "--with-systemdsystemunitdir=$(out)/etc/systemd/systemd"
+    ];
 
   postInstall =
     ''
@@ -34,7 +39,6 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    name = "system-config-printer";
-    version = "1.3.4";
+    homepage = http://cyberelk.net/tim/software/system-config-printer/;
   };
 }

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [m4 ncurses ocaml];
 
-  patches = [ ./ldconf.patch ];
+  patches = [ ./ldconf.patch ./install_topfind.patch ];
 
   dontAddPrefix=true;
 
@@ -24,7 +24,6 @@ stdenv.mkDerivation {
       -mandir $out/share/man
       -sitelib $out/lib/ocaml/${ocaml_version}/site-lib
       -config $out/etc/findlib.conf
-      -no-topfind
     )
   '';
 

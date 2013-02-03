@@ -2,11 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "hs-bibutils";
-  version = "4.12";
-  sha256 = "0akxi69as7k5c0955yla9wcl1xvcvgzpzy3p1jj781w1lf89p537";
+  version = "4.16";
+  sha256 = "0501fqv0xlwdmpg65s3rr0fns6gqq15x2zq2a8915n3dvipfkixb";
   buildDepends = [ syb ];
   meta = {
-    homepage = "http://code.haskell.org/hs-bibutils";
+    homepage = "http://gorgias.mine.nu/repos/hs-bibutils/";
     description = "Haskell bindings to bibutils, the bibliography conversion utilities";
     license = "GPL";
     platforms = self.ghc.meta.platforms;

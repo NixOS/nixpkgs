@@ -9,11 +9,13 @@ with stdenv.lib;
 let
 
   majorVersion = "2.6";
-  version = "${majorVersion}.7";
+  version = "${majorVersion}.8";
 
+  # http://www.python.org/download/releases/2.6.8/
+  # md5 taken from webpage, python 2.6 will receive security fixes until Oct 2013
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "0p0fd8i533zsdm6gc0jmhmdifccx4v064mh0i1hl2s6fcjhc20j5";
+    md5 = "c6e0420a21d8b23dee8b0195c9b9a125";
   };
   
   patches =
@@ -51,6 +53,10 @@ let
         for i in /usr /sw /opt /pkg; do
           substituteInPlace ./setup.py --replace $i /no-such-path
         done
+      '' + optionalString (stdenv ? gcc && stdenv.gcc.libc != null) ''
+        for i in Lib/plat-*/regen; do
+          substituteInPlace $i --replace /usr/include/ ${stdenv.gcc.libc}/include/
+        done
       '';
 
     NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin "-msse2";
@@ -60,6 +66,10 @@ let
     postInstall =
       ''
         rm -rf "$out/lib/python${majorVersion}/test"
+        ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb
+        ln -s $out/lib/python${majorVersion}/pdb.py $out/bin/pdb${majorVersion}
+        mv $out/share/man/man1/{python.1,python2.6.1}
+        ln -s $out/share/man/man1/{python2.6.1,python.1}
       '';
 
     passthru = {

@@ -1,0 +1,291 @@
+diff --git a/doc/lxc-attach.sgml.in b/doc/lxc-attach.sgml.in
+index 7092f16..021da41 100644
+--- a/doc/lxc-attach.sgml.in
++++ b/doc/lxc-attach.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-cgroup.sgml.in b/doc/lxc-cgroup.sgml.in
+index 5acd313..856a544 100644
+--- a/doc/lxc-cgroup.sgml.in
++++ b/doc/lxc-cgroup.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-checkpoint.sgml.in b/doc/lxc-checkpoint.sgml.in
+index bf0efd9..eeb0039 100644
+--- a/doc/lxc-checkpoint.sgml.in
++++ b/doc/lxc-checkpoint.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-console.sgml.in b/doc/lxc-console.sgml.in
+index 606c868..62f9e07 100644
+--- a/doc/lxc-console.sgml.in
++++ b/doc/lxc-console.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-create.sgml.in b/doc/lxc-create.sgml.in
+index a3cca83..d59106d 100644
+--- a/doc/lxc-create.sgml.in
++++ b/doc/lxc-create.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+@@ -141,6 +141,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 	    filesystem) of size SIZE rather than the default, which is 1G.
+ 	  </para>
+ 	</listitem>
++      </varlistentry>
+ 
+       <varlistentry>
+ 	<term>
+diff --git a/doc/lxc-destroy.sgml.in b/doc/lxc-destroy.sgml.in
+index e75de57..05f53d6 100644
+--- a/doc/lxc-destroy.sgml.in
++++ b/doc/lxc-destroy.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-execute.sgml.in b/doc/lxc-execute.sgml.in
+index 77d132a..1e58bef 100644
+--- a/doc/lxc-execute.sgml.in
++++ b/doc/lxc-execute.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-freeze.sgml.in b/doc/lxc-freeze.sgml.in
+index 798ccf4..f0d0485 100644
+--- a/doc/lxc-freeze.sgml.in
++++ b/doc/lxc-freeze.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-kill.sgml.in b/doc/lxc-kill.sgml.in
+index 5bec922..1f48820 100644
+--- a/doc/lxc-kill.sgml.in
++++ b/doc/lxc-kill.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-ls.sgml.in b/doc/lxc-ls.sgml.in
+index 3ffd4f8..b11d211 100644
+--- a/doc/lxc-ls.sgml.in
++++ b/doc/lxc-ls.sgml.in
+@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+ ]>
+diff --git a/doc/lxc-monitor.sgml.in b/doc/lxc-monitor.sgml.in
+index 9d8711c..b492968 100644
+--- a/doc/lxc-monitor.sgml.in
++++ b/doc/lxc-monitor.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-ps.sgml.in b/doc/lxc-ps.sgml.in
+index bb7b5a6..05ed59f 100644
+--- a/doc/lxc-ps.sgml.in
++++ b/doc/lxc-ps.sgml.in
+@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+ ]>
+diff --git a/doc/lxc-restart.sgml.in b/doc/lxc-restart.sgml.in
+index eb556d9..d158cc7 100644
+--- a/doc/lxc-restart.sgml.in
++++ b/doc/lxc-restart.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-start.sgml.in b/doc/lxc-start.sgml.in
+index 4504d58..f268185 100644
+--- a/doc/lxc-start.sgml.in
++++ b/doc/lxc-start.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-stop.sgml.in b/doc/lxc-stop.sgml.in
+index d15e649..51179c4 100644
+--- a/doc/lxc-stop.sgml.in
++++ b/doc/lxc-stop.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-unfreeze.sgml.in b/doc/lxc-unfreeze.sgml.in
+index bb00d85..3f8f59b 100644
+--- a/doc/lxc-unfreeze.sgml.in
++++ b/doc/lxc-unfreeze.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc-wait.sgml.in b/doc/lxc-wait.sgml.in
+index 97a4c39..0c7c589 100644
+--- a/doc/lxc-wait.sgml.in
++++ b/doc/lxc-wait.sgml.in
+@@ -24,7 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY commonoptions SYSTEM "@builddir@/common_options.sgml">
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+diff --git a/doc/lxc.conf.sgml.in b/doc/lxc.conf.sgml.in
+index 9edabf8..daa2ff8 100644
+--- a/doc/lxc.conf.sgml.in
++++ b/doc/lxc.conf.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+ ]>
+diff --git a/doc/lxc.sgml.in b/doc/lxc.sgml.in
+index 1b30fed..d98ca21 100644
+--- a/doc/lxc.sgml.in
++++ b/doc/lxc.sgml.in
+@@ -23,7 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
+ 
+ -->
+ 
+-<!DOCTYPE refentry PUBLIC "-//Davenport//DTD DocBook V3.0//EN" [
++<!DOCTYPE refentry PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+ 
+ <!ENTITY seealso SYSTEM "@builddir@/see_also.sgml">
+ ]>
+@@ -280,7 +280,7 @@ rootfs
+       </para>
+ 
+       <programlisting>
+-
++<![CDATA[
+    ---------
+   | STOPPED |<---------------
+    ---------                 |
+@@ -305,7 +305,7 @@ rootfs
+    ----------                |
+        |                     |
+         ---------------------
+-
++]]>
+       </programlisting>
+     </refsect2>
+ 
+@@ -570,7 +570,7 @@ rootfs
+ 	to the background.
+ 
+ 	<programlisting>
+-
++<![CDATA[
+ 	  # launch lxc-wait in background
+ 	  lxc-wait -n foo -s STOPPED &
+ 	  LXC_WAIT_PID=$!
+@@ -583,7 +583,7 @@ rootfs
+ 	  # is STOPPED
+ 	  wait $LXC_WAIT_PID
+ 	  echo "'foo' is finished"
+-
++]]>
+ 	</programlisting>
+       </para>
+     </refsect2>

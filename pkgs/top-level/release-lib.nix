@@ -1,7 +1,11 @@
 rec {
-  allPackages = import ./all-packages.nix;
 
-  pkgs = allPackages {};
+  # Ensure that we don't build packages marked as unfree.
+  allPackages = args: import ./all-packages.nix (args // {
+    config.allowUnfree = false;
+  });
+
+  pkgs = allPackages { };
 
   /* !!! Hack: poor man's memoisation function.  Necessary for prevent
      Nixpkgs from being evaluated again and again for every
@@ -10,7 +14,6 @@ rec {
     if system == "x86_64-linux" then pkgs_x86_64_linux
     else if system == "i686-linux" then pkgs_i686_linux
     else if system == "x86_64-darwin" then pkgs_x86_64_darwin
-    else if system == "i686-darwin" then pkgs_i686_darwin
     else if system == "x86_64-freebsd" then pkgs_x86_64_freebsd
     else if system == "i686-freebsd" then pkgs_i686_freebsd
     else if system == "i686-cygwin" then pkgs_i686_cygwin
@@ -19,7 +22,6 @@ rec {
   pkgs_x86_64_linux = allPackages { system = "x86_64-linux"; };
   pkgs_i686_linux = allPackages { system = "i686-linux"; };
   pkgs_x86_64_darwin = allPackages { system = "x86_64-darwin"; };
-  pkgs_i686_darwin = allPackages { system = "i686-darwin"; };
   pkgs_x86_64_freebsd = allPackages { system = "x86_64-freebsd"; };
   pkgs_i686_freebsd = allPackages { system = "i686-freebsd"; };
   pkgs_i686_cygwin = allPackages { system = "i686-cygwin"; };
@@ -75,37 +77,37 @@ rec {
         job = toJob value;
         getPkg = pkgs: (pkgs.lib.addMetaAttrs {
             schedulingPriority = toString job.schedulingPriority;
-            maintainers = crossMaintainers; 
+            maintainers = crossMaintainers;
           }
           (pkgs.lib.getAttrFromPath path pkgs));
       in testOnCross crossSystem job.systems getPkg);
 
   /* Find all packages that have a meta.platforms field listing the
      supported platforms. */
-  packagesWithMetaPlatform = attrSet: 
-    if builtins ? tryEval then 
-      let pairs = pkgs.lib.concatMap 
+  packagesWithMetaPlatform = attrSet:
+    if builtins ? tryEval then
+      let pairs = pkgs.lib.concatMap
         (x:
-	  let pair = builtins.tryEval
-	        (let 
-		   attrVal = (builtins.getAttr x attrSet);
-		 in
-		   {val=(processPackage attrVal); 
-		    attrVal = attrVal;
-		    attrValIsAttrs = builtins.isAttrs attrVal;
-		    });
-	      success = (builtins.tryEval pair.value.attrVal).success;
-	  in
-          if success && pair.value.attrValIsAttrs && 
-	      pair.value.val != [] then 
-	    [{name= x; value=pair.value.val;}] else [])
+          let pair = builtins.tryEval
+                (let
+                   attrVal = (builtins.getAttr x attrSet);
+                 in
+                   {val=(processPackage attrVal);
+                    attrVal = attrVal;
+                    attrValIsAttrs = builtins.isAttrs attrVal;
+                    });
+              success = (builtins.tryEval pair.value.attrVal).success;
+          in
+          if success && pair.value.attrValIsAttrs &&
+              pair.value.val != [] then
+            [{name= x; value=pair.value.val;}] else [])
         (builtins.attrNames attrSet);
       in
         builtins.listToAttrs pairs
     else {};
-    
+
   # May fail as much as it wishes, we will catch the error.
-  processPackage = attrSet: 
+  processPackage = attrSet:
     if attrSet ? recurseForDerivations && attrSet.recurseForDerivations then
       packagesWithMetaPlatform attrSet
     else if attrSet ? recurseForRelease && attrSet.recurseForRelease then
@@ -121,6 +123,6 @@ rec {
   /* Platform groups for specific kinds of applications. */
   x11Supported = linux;
   gtkSupported = linux;
-  ghcSupported = linux ++ ["i686-darwin"] ;
+  ghcSupported = linux;
 
 }

@@ -18,16 +18,15 @@
 assert useKerberos -> kerberos != null;
 
 stdenv.mkDerivation rec {
-  name = "samba-3.6.5";
+  name = "samba-3.6.8";
 
   src = fetchurl {
     url = "http://us3.samba.org/samba/ftp/stable/${name}.tar.gz";
-    sha256 = "1i40mf5rvz055zp7fy5rqp1lwlsm65g8k6n8jxw5w5f1p3rmzxla";
+    sha256 = "1phl6mmrc72jyvbyrw6cv6b92cxq3v2pbn1fh97nnb4hild1fnjg";
   };
 
   patches =
-    [
-      # Allow cross-builds for GNU/Hurd.
+    [ # Allow cross-builds for GNU/Hurd.
       ./libnss-wins-pthread.patch
     ];
 
@@ -39,7 +38,7 @@ stdenv.mkDerivation rec {
   postPatch =
     # XXX: Awful hack to allow cross-compilation.
     '' sed -i source3/configure \
-           -e 's/^as_fn_error \("cannot run test program while cross compiling\)/$as_echo \1/g'
+           -e 's/^as_fn_error .. \("cannot run test program while cross compiling\)/$as_echo \1/g'
     ''; # "
 
   preConfigure =
@@ -69,11 +68,17 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out
       mv $TMPDIR/inst/$out/* $out/
-  
+
       mkdir -pv $out/lib/cups/backend
       ln -sv ../../../bin/smbspool $out/lib/cups/backend/smb
       mkdir -pv $out/etc/openldap/schema
       cp ../examples/LDAP/samba.schema $out/etc/openldap/schema
     '' # */
     + stdenv.lib.optionalString (configDir == "") "touch $out/lib/smb.conf";
+
+  meta = {
+    homepage = http://www.samba.org/;
+    description = "The standard Windows interoperability suite of programs for Linux and Unix";
+    platforms = stdenv.lib.platforms.linux;
+  };
 }
