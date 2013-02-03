@@ -6,7 +6,7 @@ with pkgs.lib;
 
 let
 
-  etc' = attrValues config.environment.etc;
+  etc' = filter (f: f.enable) (attrValues config.environment.etc);
 
   etc = pkgs.stdenv.mkDerivation {
     name = "etc";
@@ -45,6 +45,15 @@ in
 
       options = singleton ({ name, config, ... }:
         { options = {
+
+            enable = mkOption {
+              type = types.bool;
+              default = true;
+              description = ''
+                Whether this /etc file should be generated.  This
+                option allows specific /etc files to be disabled.
+              '';
+            };
 
             target = mkOption {
               description = ''
