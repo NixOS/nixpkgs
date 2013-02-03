@@ -120,6 +120,22 @@ def update_efibootmgr(path):
         "-p",
         "@efiPartition@",
         ])
+    efibootmgr_entries = subprocess.check_output(["@efibootmgr@/sbin/efibootmgr"]).split("\n")
+    for entry in efibootmgr_entries:
+        columns = entry.split()
+        if len(columns) > 1 and columns[0] == "BootOrder:":
+            boot_order = columns[1].split(',')
+        if len(columns) > 2:
+            if ' '.join(columns[1:3]) == "NixOS gummiboot":
+                bootnum = columns[0][4:8]
+                if not bootnum in boot_order:
+                    boot_order.insert(0, bootnum)
+                    with open("/dev/null", 'w') as dev_null:
+                        subprocess.call([
+                            "@efibootmgr@/sbin/efibootmgr",
+                            "-o",
+                            ','.join(boot_order)
+                            ], stdout=dev_null)
     subprocess.call(post_efibootmgr, shell=True)
 
 parser = argparse.ArgumentParser(description='Update NixOS-related gummiboot files')
