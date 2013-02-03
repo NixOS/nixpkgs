@@ -9142,6 +9142,12 @@ let
   # Wine cannot be built in 64-bit; use a 32-bit build instead.
   wine = callPackage_i686 ../misc/emulators/wine { };
 
+  # winetricks is a shell script with no binary components. Safe to just use the current platforms
+  # build instead of the i686 specific build.
+  winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
+    inherit (gnome2) zenity;
+  };
+
   x2x = callPackage ../tools/X11/x2x { };
 
   xosd = callPackage ../misc/xosd { };
