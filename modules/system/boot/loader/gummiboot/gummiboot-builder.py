@@ -23,8 +23,6 @@ def write_entry(generation, kernel, initrd):
     kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
     with open("%s/kernel-params" % (generation_dir)) as params_file:
         kernel_params = kernel_params + params_file.read()
-    with open("/etc/machine-id") as machine_file:
-        machine_id = machine_file.readlines()[0]
     with open(tmp_path, 'w') as f:
         print >> f, "title NixOS"
         print >> f, "version Generation %d" % (generation)
@@ -145,6 +143,8 @@ args = parser.parse_args()
 known_paths = []
 mkdir_p("@efiSysMountPoint@/efi/nixos")
 mkdir_p("@efiSysMountPoint@/loader/entries")
+with open("/etc/machine-id") as machine_file:
+    machine_id = machine_file.readlines()[0]
 gens = get_generations("system")
 for gen in gens:
     add_entry(gen)
