@@ -7055,6 +7055,10 @@ let
     inherit (gnome) libgnome libgnomeui vte;
   };
 
+  guitarix = callPackage ../applications/audio/guitarix {
+    fftw = fftwSinglePrec;
+  };
+
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
   wireshark = callPackage ../applications/networking/sniffers/wireshark { };
