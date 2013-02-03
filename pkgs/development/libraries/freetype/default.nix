@@ -18,6 +18,16 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString useEncumberedCode
     "-DFT_CONFIG_OPTION_SUBPIXEL_RENDERING=1";
 
+  infinality_patch =
+    let infinality_base_URL = "http://www.infinality.net/fedora/linux/zips";
+        patch_file_name = "freetype-infinality-2.4.10-20120616_01-x86_64.tar.bz2";
+    in fetchurl {
+      url = "${infinality_base_URL}/${patch_file_name}";
+      sha256 = "0n2z8iklb10in4hg4wdgyhir4nl94ry8zd94wvdyq8dbzm4v33nw";
+    };
+
+  patches = [ infinality_patch ];
+
   # The asm for armel is written with the 'asm' keyword.
   CFLAGS = stdenv.lib.optionalString stdenv.isArm "-std=gnu99";
 
