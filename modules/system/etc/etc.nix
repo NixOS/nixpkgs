@@ -1,12 +1,32 @@
-# Produce a script to generate /etc.
+# Management of static files in /etc.
+
 { config, pkgs, ... }:
 
 with pkgs.lib;
 
-###### interface
 let
 
-  option = {
+  etc = pkgs.stdenv.mkDerivation {
+    name = "etc";
+
+    builder = ./make-etc.sh;
+
+    preferLocalBuild = true;
+
+    /* !!! Use toXML. */
+    sources = map (x: x.source) config.environment.etc;
+    targets = map (x: x.target) config.environment.etc;
+    modes = map (x: x.mode) config.environment.etc;
+  };
+
+in
+
+{
+
+  ###### interface
+
+  options = {
+
     environment.etc = mkOption {
       default = [];
       example = [
@@ -37,37 +57,23 @@ let
         };
       };
     };
-  };
-in
 
-###### implementation
-let
-
-  etc = pkgs.stdenv.mkDerivation {
-    name = "etc";
-
-    builder = ./make-etc.sh;
-
-    preferLocalBuild = true;
-
-    /* !!! Use toXML. */
-    sources = map (x: x.source) config.environment.etc;
-    targets = map (x: x.target) config.environment.etc;
-    modes = map (x: x.mode) config.environment.etc;
   };
 
-in
 
-{
-  require = [option];
+  ###### implementation
 
-  system.build.etc = etc;
+  config = {
 
-  system.activationScripts.etc = stringAfter [ "stdio" ]
-    ''
-      # Set up the statically computed bits of /etc.
-      echo "setting up /etc..."
-      ${pkgs.perl}/bin/perl ${./setup-etc.pl} ${etc}/etc
-    '';
+    system.build.etc = etc;
+
+    system.activationScripts.etc = stringAfter [ "stdio" ]
+      ''
+        # Set up the statically computed bits of /etc.
+        echo "setting up /etc..."
+        ${pkgs.perl}/bin/perl ${./setup-etc.pl} ${etc}/etc
+      '';
+
+  };
 
 }
