@@ -45,9 +45,6 @@ in
 
       options = singleton ({ name, config, ... }:
         { options = {
-            source = mkOption {
-              description = "Path of the source file.";
-            };
 
             target = mkOption {
               description = ''
@@ -55,6 +52,17 @@ in
                 <filename>/etc</filename>).  Defaults to the attribute
                 name.
               '';
+            };
+
+            text = mkOption {
+              default = null;
+              type = types.nullOr types.string;
+              description = "Text of the file.";
+            };
+
+            source = mkOption {
+              types = types.path;
+              description = "Path of the source file.";
             };
 
             mode = mkOption {
@@ -71,6 +79,8 @@ in
 
           config = {
             target = mkDefault name;
+            source = mkIf (config.text != null)
+              (mkDefault (pkgs.writeText "etc-file" config.text));
           };
 
         });

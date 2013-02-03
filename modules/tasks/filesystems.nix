@@ -7,28 +7,6 @@ let
 
   fileSystems = attrValues config.fileSystems;
 
-  fstab = pkgs.writeText "fstab"
-    ''
-      # This is a generated file.  Do not edit!
-
-      # Filesystems.
-      ${flip concatMapStrings fileSystems (fs:
-          (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
-          + " " + fs.mountPoint
-          + " " + fs.fsType
-          + " " + fs.options
-          + " 0"
-          + " " + (if fs.fsType == "none" || fs.device == "none" || fs.fsType == "btrfs" || fs.fsType == "tmpfs" || fs.noCheck then "0" else
-                   if fs.mountPoint == "/" then "1" else "2")
-          + "\n"
-      )}
-
-      # Swap devices.
-      ${flip concatMapStrings config.swapDevices (sw:
-          "${sw.device} none swap\n"
-      )}
-    '';
-
   fileSystemOpts = { name, ... }: {
 
     options = {
@@ -171,10 +149,27 @@ in
       [ pkgs.ntfs3g pkgs.cifs_utils ]
       ++ config.system.fsPackages;
 
-    environment.etc = singleton
-      { source = fstab;
-        target = "fstab";
-      };
+    environment.etc.fstab.text =
+      ''
+        # This is a generated file.  Do not edit!
+
+        # Filesystems.
+        ${flip concatMapStrings fileSystems (fs:
+            (if fs.device != null then fs.device else "/dev/disk/by-label/${fs.label}")
+            + " " + fs.mountPoint
+            + " " + fs.fsType
+            + " " + fs.options
+            + " 0"
+            + " " + (if fs.fsType == "none" || fs.device == "none" || fs.fsType == "btrfs" || fs.fsType == "tmpfs" || fs.noCheck then "0" else
+                     if fs.mountPoint == "/" then "1" else "2")
+            + "\n"
+        )}
+
+        # Swap devices.
+        ${flip concatMapStrings config.swapDevices (sw:
+            "${sw.device} none swap\n"
+        )}
+      '';
 
     # Provide a target that pulls in all filesystems.
     systemd.targets.fs =

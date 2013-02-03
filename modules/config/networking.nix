@@ -48,7 +48,7 @@ in
       "rpc".source = pkgs.glibc + "/etc/rpc";
 
       # /etc/hosts: Hostname-to-IP mappings.
-      "hosts".source = pkgs.writeText "hosts"
+      "hosts".text =
         ''
           127.0.0.1 localhost
           ${optionalString cfg.enableIPv6 ''
@@ -58,7 +58,7 @@ in
         '';
 
       # /etc/resolvconf.conf: Configuration for openresolv.
-      "resolvconf.conf".source = pkgs.writeText "resolvconf.conf" (
+      "resolvconf.conf".text =
           ''
             # This is the default, but we must set it here to prevent
             # a collision with an apparently unrelated environment
@@ -74,7 +74,7 @@ in
           '' + optionalString config.services.bind.enable ''
             # This hosts runs a full-blown DNS resolver.
             name_servers='127.0.0.1'
-          '' );
+          '';
     };
 
   # The ‘ip-up’ target is started when we have IP connectivity.  So
