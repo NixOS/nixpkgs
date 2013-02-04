@@ -21,6 +21,7 @@ g: # Get dependencies from patched gems
     erubis = g.erubis_2_7_0;
     fakes3 = g.fakes3_0_1_5;
     ffi = g.ffi_1_3_1;
+    foreman = g.foreman_0_61_0;
     highline = g.highline_1_6_2;
     hike = g.hike_1_2_1;
     hoe = g.hoe_3_1_0;
@@ -30,7 +31,7 @@ g: # Get dependencies from patched gems
     json = g.json_1_7_6;
     json_pure = g.json_pure_1_7_6;
     mail = g.mail_2_4_4;
-    mime_types = g.mime_types_1_19;
+    mime_types = g.mime_types_1_20_1;
     minitar = g.minitar_0_5_3;
     multi_json = g.multi_json_1_5_0;
     net_sftp = g.net_sftp_2_0_5;
@@ -63,7 +64,7 @@ g: # Get dependencies from patched gems
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''fakes3'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
+  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
   gems = {
     ZenTest_4_8_4 = {
       basename = ''ZenTest'';
@@ -369,6 +370,17 @@ is the MIT license.'';
       requiredGems = [  ];
       sha256 = ''0hbrfwgaw3ilmb47lvg9gzdnnfs0q0dzp6dki7rphcvsgirhp0sb'';
     };
+    foreman_0_61_0 = {
+      basename = ''foreman'';
+      meta = {
+        description = ''Process manager for applications with multiple components'';
+        homepage = ''http://github.com/ddollar/foreman'';
+        longDescription = ''Process manager for applications with multiple components'';
+      };
+      name = ''foreman-0.61.0'';
+      requiredGems = [  ];
+      sha256 = ''1h9dmzq1cwz87qyzx2ibpjghsxjnnqbh485l3sdxyfh5k3v79k7z'';
+    };
     highline_1_6_2 = {
       basename = ''highline'';
       meta = {
@@ -489,28 +501,40 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
         longDescription = ''A really Ruby Mail handler.'';
       };
       name = ''mail-2.4.4'';
-      requiredGems = [ g.mime_types_1_19 g.treetop_1_4_12 ];
+      requiredGems = [ g.mime_types_1_20_1 g.treetop_1_4_12 ];
       sha256 = ''0idylz5pnlz34mrxm7gs9jbll2c0k0y9dq2qarhxk30gwyvjaxi3'';
     };
-    mime_types_1_19 = {
+    mime_types_1_20_1 = {
       basename = ''mime_types'';
       meta = {
         description = ''This library allows for the identification of a file's likely MIME content type'';
         homepage = ''http://mime-types.rubyforge.org/'';
         longDescription = ''This library allows for the identification of a file's likely MIME content
-type. This is release 1.19 with new MIME types. The identification of MIME
+type. This is release 1.20.1 with new MIME types. The identification of MIME
 content type is based on a file's filename extensions.
+
+MIME types are used in MIME-compliant communications, as in e-mail or
+HTTP traffic, to indicate the type of content which is transmitted.
+MIME::Types provides the ability for detailed information about MIME
+entities (provided as a set of MIME::Type objects) to be determined and
+used programmatically. There are many types defined by RFCs and vendors,
+so the list is long but not complete; don't hesitate to ask to add
+additional information. This library follows the IANA collection of MIME
+types (see below for reference).
 
 MIME::Types for Ruby was originally based on and synchronized with MIME::Types
 for Perl by Mark Overmeer, copyright 2001 - 2009. As of version 1.15, the data
 format for the MIME::Type list has changed and the synchronization will no
 longer happen.
 
-:include: Licence.rdoc'';
+MIME::Types is built to conform to the MIME types of RFCs 2045 and 2231. It
+follows the official {IANA registry}[http://www.iana.org/assignments/media-types/]
+({ftp}[ftp://ftp.iana.org/assignments/media-types]) with some unofficial types
+added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp].'';
       };
-      name = ''mime-types-1.19'';
+      name = ''mime-types-1.20.1'';
       requiredGems = [  ];
-      sha256 = ''1b44lrzk9v6i0jyajkx106qjyg8ns7siw1k42hmmwqj574ffsn26'';
+      sha256 = ''13l7avr24nwzk0xpyqh04iqpf58vqsb3bbqjmjr04bsryq8azlb0'';
     };
     minitar_0_5_3 = {
       basename = ''minitar'';
