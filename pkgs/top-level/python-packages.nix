@@ -1659,6 +1659,8 @@ pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ coverage ];
+
+    doCheck = ! stdenv.isDarwin;
   };
 
   nose2 = if isPy26 then null else (buildPythonPackage rec {
