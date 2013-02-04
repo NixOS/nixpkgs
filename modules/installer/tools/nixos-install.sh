@@ -110,7 +110,7 @@ export LC_TIME=
 # Create a temporary Nix config file that causes the nixbld users to
 # be used.
 echo "build-users-group = nixbld" > $mountPoint/tmp/nix.conf
-grep binary-caches /etc/nix/nix.conf >> $mountPoint/tmp/nix.conf
+grep binary-caches "$NIX_CONF_DIR/nix.conf" >> $mountPoint/tmp/nix.conf || true
 export NIX_CONF_DIR=/tmp
 
 
