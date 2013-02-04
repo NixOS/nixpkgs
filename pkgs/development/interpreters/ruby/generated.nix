@@ -13,6 +13,7 @@ g: # Get dependencies from patched gems
     arel = g.arel_3_0_2;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_4;
     autotest_rails = g.autotest_rails_4_1_2;
+    aws_sdk = g.aws_sdk_1_8_1_2;
     builder = g.builder_3_1_4;
     buildr = g.buildr_1_4_9;
     bundler = g.bundler_1_2_3;
@@ -38,6 +39,7 @@ g: # Get dependencies from patched gems
     net_sftp = g.net_sftp_2_0_5;
     net_ssh = g.net_ssh_2_6_3;
     nix = g.nix_0_1_1;
+    nokogiri = g.nokogiri_1_5_6;
     polyglot = g.polyglot_0_3_3;
     rack = g.rack_1_5_1;
     rack_cache = g.rack_cache_1_2;
@@ -66,10 +68,11 @@ g: # Get dependencies from patched gems
     treetop = g.treetop_1_4_12;
     tzinfo = g.tzinfo_0_3_35;
     uuid = g.uuid_2_3_6;
+    uuidtools = g.uuidtools_2_1_3;
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''uuid'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''uuid'' ];
   gems = {
     ZenTest_4_8_4 = {
       basename = ''ZenTest'';
@@ -219,6 +222,17 @@ rails support and extra plugins for migrations and fixtures.'';
       name = ''autotest-rails-4.1.2'';
       requiredGems = [ g.ZenTest_4_8_4 ];
       sha256 = ''1wkb5jayb39yx0i8ly7sibygf9f9c3w24jg2z1qgm135zlb070v4'';
+    };
+    aws_sdk_1_8_1_2 = {
+      basename = ''aws_sdk'';
+      meta = {
+        description = ''AWS SDK for Ruby'';
+        homepage = ''http://aws.amazon.com/sdkforruby'';
+        longDescription = ''AWS SDK for Ruby'';
+      };
+      name = ''aws-sdk-1.8.1.2'';
+      requiredGems = [ g.uuidtools_2_1_3 g.nokogiri_1_5_6 g.json_1_7_6 ];
+      sha256 = ''0z3ins8rd8v3r40sn70kg21f5di58lqjfxppl19hi3pdjxgdrr7x'';
     };
     builder_3_0_4 = {
       basename = ''builder'';
@@ -618,6 +632,21 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
       requiredGems = [  ];
       sha256 = ''0kwrbkkg0gxibhsz9dpd5zabcf2wqsicg28yiazyb3dc9dslk26k'';
     };
+    nokogiri_1_5_6 = {
+      basename = ''nokogiri'';
+      meta = {
+        description = ''Nokogiri (é‹¸) is an HTML, XML, SAX, and Reader parser'';
+        homepage = ''http://nokogiri.org'';
+        longDescription = ''Nokogiri (é‹¸) is an HTML, XML, SAX, and Reader parser.  Among Nokogiri's
+many features is the ability to search documents via XPath or CSS3 selectors.
+
+XML is like violence - if it doesnâ€™t solve your problems, you are not using
+enough of it.'';
+      };
+      name = ''nokogiri-1.5.6'';
+      requiredGems = [  ];
+      sha256 = ''1235h8k242f6yi5qgb8rfcx6gp7g99djwqgrz0vb6w12pbp9kar8'';
+    };
     polyglot_0_3_3 = {
       basename = ''polyglot'';
       meta = {
@@ -794,7 +823,7 @@ documentation.
 See RDoc for a description of RDoc's markup and basic use.'';
       };
       name = ''rdoc-3.12'';
-      requiredGems = [ g.json_1_7_6 ];
+      requiredGems = [  ];
       sha256 = ''0cd4hrkba7zr675m62yb87l7hpf0sp2qw8ccc2s0y2fa2fxdxdkp'';
     };
     rjb_1_4_2 = {
@@ -1007,6 +1036,18 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''uuid-2.3.6'';
       requiredGems = [ g.macaddr_1_6_1 ];
       sha256 = ''194xznnxncfgr0nx84l11gnafvkfzr1nj1swnwas75q0ld0ri2l8'';
+    };
+    uuidtools_2_1_3 = {
+      basename = ''uuidtools'';
+      meta = {
+        description = ''UUID generator'';
+        homepage = ''http://uuidtools.rubyforge.org/'';
+        longDescription = ''A simple universally unique ID generation library.
+'';
+      };
+      name = ''uuidtools-2.1.3'';
+      requiredGems = [  ];
+      sha256 = ''0v8scs7760334kkwca7n8kah6nk4hyw7izgk014zg1l1yv7kzpi9'';
     };
     websocket_1_0_7 = {
       basename = ''websocket'';
