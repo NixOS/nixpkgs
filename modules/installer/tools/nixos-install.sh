@@ -85,7 +85,12 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/log/nix/drvs
 
 mkdir -m 1775 -p $mountPoint/nix/store
-chown root:nixbld $mountPoint/nix/store
+build_users_group=$((grep build-users-group "$NIX_CONF_DIR/nix.conf" 2>/dev/null | awk '{ print $3 }') || echo -n "")
+if test -n "$build_users_group"; then
+    chown root:"$build_users_group" $mountPoint/nix/store
+else
+    chown root $mountPoint/nix/store
+fi
 
 
 # Get the store paths to copy from the references graph.
@@ -109,7 +114,9 @@ export LC_TIME=
 
 # Create a temporary Nix config file that causes the nixbld users to
 # be used.
-echo "build-users-group = nixbld" > $mountPoint/tmp/nix.conf
+if test -n "$build_users_group"; then
+    echo "build-users-group = $build_users_group" > $mountPoint/tmp/nix.conf
+fi
 grep binary-caches "$NIX_CONF_DIR/nix.conf" >> $mountPoint/tmp/nix.conf || true
 export NIX_CONF_DIR=/tmp
 
