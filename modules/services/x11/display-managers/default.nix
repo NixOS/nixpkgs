@@ -22,9 +22,7 @@ let
     pathsToLink = "/lib/dri";
 
     # To admit zero-length 'paths'
-    postBuild = "
-      mkdir -p $out/lib/dri
-    ";
+    postBuild = "mkdir -p $out/lib/dri";
   };
 
   # file provided by services.xserver.displayManager.session.script
@@ -91,7 +89,7 @@ let
           ${xorg.xrdb}/bin/xrdb -merge ~/.Xdefaults
       fi
 
-      export LIBVA_DRIVERS_PATH=${vaapiDrivers}/lib/dri;
+      export LIBVA_DRIVERS_PATH=${vaapiDrivers}/lib/dri
 
       source /etc/profile
 
@@ -139,7 +137,7 @@ let
 
   mkDesktops = names: pkgs.runCommand "desktops" {}
     ''
-      ensureDir $out
+      mkdir -p $out
       ${concatMapStrings (n: ''
         cat - > "$out/${n}.desktop" << EODESKTOP
         [Desktop Entry]

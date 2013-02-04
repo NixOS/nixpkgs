@@ -56,5 +56,5 @@ in
   # Use nss-myhostname to ensure that our hostname always resolves to
   # a valid IP address.  It returns all locally configured IP
   # addresses, or ::1 and 127.0.0.2 as fallbacks.
-  system.nssModules = [ pkgs.nss_myhostname ];
+  system.nssModules = [ pkgs.systemd ];
 }

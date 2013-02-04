@@ -204,11 +204,11 @@ in
       };
 
       vaapiDrivers = mkOption {
-        default = [ pkgs.vaapiIntel pkgs.vaapiVdpau ];
+        default = [ ];
         defaultText = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
         example = "[ pkgs.vaapiIntel pkgs.vaapiVdpau ]";
         description = ''
-          Names of the packages providing libva acceleration drivers.
+          Packages providing libva acceleration drivers.
         '';
       };
 
