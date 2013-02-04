@@ -1,13 +1,13 @@
 { cabal, blazeBuilder, filepath, ieee754, mtl, syb, text
-, utf8String
+, transformers, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "hastache";
-  version = "0.4.2";
-  sha256 = "1ad691qxnnx0a6ik0cjdzd8aw7z88p06zckbb3cb1r8pk6m0g7vi";
+  version = "0.5.0";
+  sha256 = "1c1pphw7qx5l5fdfqchihvp2yrwwb0ln8dfshkvd1giv8cjmbyn8";
   buildDepends = [
-    blazeBuilder filepath ieee754 mtl syb text utf8String
+    blazeBuilder filepath ieee754 mtl syb text transformers utf8String
   ];
   meta = {
     homepage = "http://github.com/lymar/hastache";
