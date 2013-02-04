@@ -759,6 +759,8 @@ let
   fox = callPackage ../development/libraries/fox/default.nix { };
   fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
 
+  fping = callPackage ../tools/networking/fping {};
+
   fprot = callPackage ../tools/security/fprot { };
 
   freeipmi = callPackage ../tools/system/freeipmi {};
