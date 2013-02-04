@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       ./0004-Set-switch-to-configuration-hints-for-some-units.patch
       ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
       ./0006-Don-t-call-plymouth-quit.patch
+      ./0007-Ignore-IPv6-link-local-addresses.patch
+      ./0008-Fix-a-segfault-in-nscd-when-using-nss-myhostname.patch
     ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
