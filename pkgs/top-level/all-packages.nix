@@ -1210,8 +1210,6 @@ let
     inherit (pythonPackages) pysqlite;
   };
 
-  nss_myhostname = callPackage ../tools/networking/nss-myhostname {};
-
   nss_pam_ldapd = callPackage ../tools/networking/nss-pam-ldapd {};
 
   ntfs3g = callPackage ../tools/filesystems/ntfs-3g { };
