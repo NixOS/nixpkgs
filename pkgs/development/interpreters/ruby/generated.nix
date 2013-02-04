@@ -40,6 +40,7 @@ g: # Get dependencies from patched gems
     polyglot = g.polyglot_0_3_3;
     rack = g.rack_1_5_1;
     rack_cache = g.rack_cache_1_2;
+    rack_protection = g.rack_protection_1_3_2;
     rack_ssl = g.rack_ssl_1_3_3;
     rack_test = g.rack_test_0_6_2;
     rails = g.rails_3_2_11;
@@ -56,6 +57,7 @@ g: # Get dependencies from patched gems
     rubyzip = g.rubyzip_0_9_9;
     sass = g.sass_3_2_5;
     selenium_webdriver = g.selenium_webdriver_2_29_0;
+    sinatra = g.sinatra_1_3_2;
     sprockets = g.sprockets_2_2_2;
     thor = g.thor_0_17_0;
     tilt = g.tilt_1_3_3;
@@ -64,7 +66,7 @@ g: # Get dependencies from patched gems
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ];
+  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ];
   gems = {
     ZenTest_4_8_4 = {
       basename = ''ZenTest'';
@@ -663,6 +665,17 @@ Also see http://rack.github.com/.
       requiredGems = [ g.rack_1_5_1 ];
       sha256 = ''073ffpsqmy4nqxz178qisb3a4v3305c49ypj0jw6s9mkz02yvgq2'';
     };
+    rack_protection_1_3_2 = {
+      basename = ''rack_protection'';
+      meta = {
+        description = ''You should use protection!'';
+        homepage = ''http://github.com/rkh/rack-protection'';
+        longDescription = ''You should use protection!'';
+      };
+      name = ''rack-protection-1.3.2'';
+      requiredGems = [  ];
+      sha256 = ''0f69d491xciq1hb3mm26nxnsb3pvlf3gdkggj4ryiphimsy05n0k'';
+    };
     rack_ssl_1_3_3 = {
       basename = ''rack_ssl'';
       meta = {
@@ -891,6 +904,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''selenium-webdriver-2.29.0'';
       requiredGems = [ g.childprocess_0_3_7 g.websocket_1_0_7 ];
       sha256 = ''0c5fybp19mawq07h59b16h736pz8sz017m1pwalb6mcyliqmlwcj'';
+    };
+    sinatra_1_3_2 = {
+      basename = ''sinatra'';
+      meta = {
+        description = ''Classy web-development dressed in a DSL'';
+        homepage = ''http://www.sinatrarb.com/'';
+        longDescription = ''Sinatra is a DSL for quickly creating web applications in Ruby with minimal effort.'';
+      };
+      name = ''sinatra-1.3.2'';
+      requiredGems = [ g.rack_protection_1_3_2 ];
+      sha256 = ''05blf915zpiwyz7agcn9rwdmddwxz0z4l3gd4qlqmrgd2vkw4sxc'';
     };
     sprockets_2_2_2 = {
       basename = ''sprockets'';
