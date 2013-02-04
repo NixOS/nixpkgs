@@ -85,7 +85,7 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/log/nix/drvs
 
 mkdir -m 1775 -p $mountPoint/nix/store
-build_users_group=$((grep build-users-group "$NIX_CONF_DIR/nix.conf" 2>/dev/null | awk '{ print $3 }') || echo -n "")
+build_users_group=$((grep build-users-group "${NIX_CONF_DIR:-/etc/nix}/nix.conf" 2>/dev/null | awk '{ print $3 }') || echo -n "")
 if test -n "$build_users_group"; then
     chown root:"$build_users_group" $mountPoint/nix/store
 else
@@ -117,7 +117,7 @@ export LC_TIME=
 if test -n "$build_users_group"; then
     echo "build-users-group = $build_users_group" > $mountPoint/tmp/nix.conf
 fi
-grep binary-caches "$NIX_CONF_DIR/nix.conf" >> $mountPoint/tmp/nix.conf || true
+grep binary-caches "${NIX_CONF_DIR:-/etc/nix}/nix.conf" >> $mountPoint/tmp/nix.conf || true
 export NIX_CONF_DIR=/tmp
 
 
