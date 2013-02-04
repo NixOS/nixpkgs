@@ -18,8 +18,10 @@ g: # Get dependencies from patched gems
     buildr = g.buildr_1_4_9;
     bundler = g.bundler_1_2_3;
     childprocess = g.childprocess_0_3_7;
+    daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_1_3;
     erubis = g.erubis_2_7_0;
+    eventmachine = g.eventmachine_1_0_0;
     fakes3 = g.fakes3_0_1_5;
     ffi = g.ffi_1_3_1;
     foreman = g.foreman_0_61_0;
@@ -63,6 +65,7 @@ g: # Get dependencies from patched gems
     sinatra = g.sinatra_1_3_2;
     sprockets = g.sprockets_2_2_2;
     systemu = g.systemu_2_5_2;
+    thin = g.thin_1_5_0;
     thor = g.thor_0_17_0;
     tilt = g.tilt_1_3_3;
     treetop = g.treetop_1_4_12;
@@ -72,7 +75,7 @@ g: # Get dependencies from patched gems
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''uuid'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
   gems = {
     ZenTest_4_8_4 = {
       basename = ''ZenTest'';
@@ -320,6 +323,17 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [ g.ffi_1_3_1 ];
       sha256 = ''1dq7zyjm9fdivxm83nbhn8y5w9cc5wa458qlmkkcy52yvv0vsc84'';
     };
+    daemons_1_1_9 = {
+      basename = ''daemons'';
+      meta = {
+        description = ''A toolkit to create and control daemons in different ways'';
+        homepage = ''http://daemons.rubyforge.org'';
+        longDescription = ''Daemons provides an easy way to wrap existing ruby scripts (for example a self-written server)  to be run as a daemon and to be controlled by simple start/stop/restart commands.  You can also call blocks as daemons and control them from the parent or just daemonize the current process.  Besides this basic functionality, daemons offers many advanced features like exception  backtracing and logging (in case your ruby script crashes) and monitoring and automatic restarting of your processes if they crash.'';
+      };
+      name = ''daemons-1.1.9'';
+      requiredGems = [  ];
+      sha256 = ''1j1m64pirsldhic6x6sg4lcrmp1bs1ihpd49xm8m1b2rc1c3irzy'';
+    };
     diff_lcs_1_1_3 = {
       basename = ''diff_lcs'';
       meta = {
@@ -367,6 +381,26 @@ is the MIT license.'';
       name = ''erubis-2.7.0'';
       requiredGems = [  ];
       sha256 = ''1fj827xqjs91yqsydf0zmfyw9p4l2jz5yikg3mppz6d7fi8kyrb3'';
+    };
+    eventmachine_1_0_0 = {
+      basename = ''eventmachine'';
+      meta = {
+        description = ''Ruby/EventMachine library'';
+        homepage = ''http://rubyeventmachine.com'';
+        longDescription = ''EventMachine implements a fast, single-threaded engine for arbitrary network
+communications. It's extremely easy to use in Ruby. EventMachine wraps all
+interactions with IP sockets, allowing programs to concentrate on the
+implementation of network protocols. It can be used to create both network
+servers and clients. To create a server or client, a Ruby program only needs
+to specify the IP address and port, and provide a Module that implements the
+communications protocol. Implementations of several standard network protocols
+are provided with the package, primarily to serve as examples. The real goal
+of EventMachine is to enable programs to easily interface with other programs
+using TCP/IP, especially if custom protocols are required.'';
+      };
+      name = ''eventmachine-1.0.0'';
+      requiredGems = [  ];
+      sha256 = ''1qshsikskkfbbhai9s0qhmnpa326m83k9yzivwvkl2dc1ffpk2pz'';
     };
     fakes3_0_1_5 = {
       basename = ''fakes3'';
@@ -980,6 +1014,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''systemu-2.5.2'';
       requiredGems = [  ];
       sha256 = ''0h834ajdg9w4xrijp31fn98pjfj08gi08xjvp5xh3i6hz9a25fhr'';
+    };
+    thin_1_5_0 = {
+      basename = ''thin'';
+      meta = {
+        description = ''A thin and fast web server'';
+        homepage = ''http://code.macournoyer.com/thin/'';
+        longDescription = ''A thin and fast web server'';
+      };
+      name = ''thin-1.5.0'';
+      requiredGems = [ g.eventmachine_1_0_0 g.daemons_1_1_9 ];
+      sha256 = ''14sd2qbbk6y108z6v723mh3f1mk8s4fwxmmn9f8dk4xkhk4rwvq1'';
     };
     thor_0_17_0 = {
       basename = ''thor'';
