@@ -30,6 +30,7 @@ g: # Get dependencies from patched gems
     jruby_pageant = g.jruby_pageant_1_1_1;
     json = g.json_1_7_6;
     json_pure = g.json_pure_1_7_6;
+    macaddr = g.macaddr_1_6_1;
     mail = g.mail_2_4_4;
     mime_types = g.mime_types_1_20_1;
     minitar = g.minitar_0_5_3;
@@ -59,14 +60,16 @@ g: # Get dependencies from patched gems
     selenium_webdriver = g.selenium_webdriver_2_29_0;
     sinatra = g.sinatra_1_3_2;
     sprockets = g.sprockets_2_2_2;
+    systemu = g.systemu_2_5_2;
     thor = g.thor_0_17_0;
     tilt = g.tilt_1_3_3;
     treetop = g.treetop_1_4_12;
     tzinfo = g.tzinfo_0_3_35;
+    uuid = g.uuid_2_3_6;
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ];
+  gem_nix_args = [ ''autotest-rails'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''uuid'' ];
   gems = {
     ZenTest_4_8_4 = {
       basename = ''ZenTest'';
@@ -494,6 +497,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       name = ''json_pure-1.7.6'';
       requiredGems = [  ];
       sha256 = ''1cjwg6f9gj7w2n9916w12i1g97ngqqar44sc2r1x9ib5jicspb00'';
+    };
+    macaddr_1_6_1 = {
+      basename = ''macaddr'';
+      meta = {
+        description = ''macaddr'';
+        homepage = ''https://github.com/ahoward/macaddr'';
+        longDescription = ''description: macaddr kicks the ass'';
+      };
+      name = ''macaddr-1.6.1'';
+      requiredGems = [ g.systemu_2_5_2 ];
+      sha256 = ''1vd9l1d0lc0sq3rn1ya816wrzgxxqdzq6pgq0y0435qm6ikwy7ch'';
     };
     mail_2_4_4 = {
       basename = ''mail'';
@@ -927,6 +941,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [ g.hike_1_2_1 g.tilt_1_3_3 ];
       sha256 = ''15ngw3bjbyr31ygzmmdxxa30ylah6pdn8akgdy9w30vfx2vr7s7s'';
     };
+    systemu_2_5_2 = {
+      basename = ''systemu'';
+      meta = {
+        description = ''systemu'';
+        homepage = ''https://github.com/ahoward/systemu'';
+        longDescription = ''description: systemu kicks the ass'';
+      };
+      name = ''systemu-2.5.2'';
+      requiredGems = [  ];
+      sha256 = ''0h834ajdg9w4xrijp31fn98pjfj08gi08xjvp5xh3i6hz9a25fhr'';
+    };
     thor_0_17_0 = {
       basename = ''thor'';
       meta = {
@@ -969,6 +994,19 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''tzinfo-0.3.35'';
       requiredGems = [  ];
       sha256 = ''1c52ndjqcxpgxhlclbxf98clcpni216xk5zgrkcd4px84riyjbmp'';
+    };
+    uuid_2_3_6 = {
+      basename = ''uuid'';
+      meta = {
+        description = ''UUID generator'';
+        homepage = ''http://github.com/assaf/uuid'';
+        longDescription = ''UUID generator for producing universally unique identifiers based on RFC 4122
+(http://www.ietf.org/rfc/rfc4122.txt).
+'';
+      };
+      name = ''uuid-2.3.6'';
+      requiredGems = [ g.macaddr_1_6_1 ];
+      sha256 = ''194xznnxncfgr0nx84l11gnafvkfzr1nj1swnwas75q0ld0ri2l8'';
     };
     websocket_1_0_7 = {
       basename = ''websocket'';
