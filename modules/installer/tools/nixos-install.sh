@@ -149,25 +149,29 @@ done
 
 
 # Get the absolute path to the NixOS/Nixpkgs sources.
-srcs=$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path)
+nixpkgs_src=$(nix-instantiate --find-file nixpkgs)
+nixos_src=$(nix-instantiate --find-file nixos)
 
 
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
 echo "building the system configuration..."
-NIX_PATH="/mnt$srcs/nixos:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
+NIX_PATH="nixpkgs=/mnt$nixpkgs_src:nixos=/mnt$nixos_src:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
 
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
 # of the NixOS channel.
-echo "copying NixOS/Nixpkgs sources..."
 mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles
 mkdir -m 1777 -p $mountPoint/nix/var/nix/profiles/per-user
 mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles/per-user/root
-chroot $mountPoint @nix@/bin/nix-env \
-    -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
+srcs=$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")
+if test -n "$srcs"; then
+    echo "copying NixOS/Nixpkgs sources..."
+    chroot $mountPoint @nix@/bin/nix-env \
+        -p /nix/var/nix/profiles/per-user/root/channels -i "$srcs" --quiet
+fi
 mkdir -m 0700 -p $mountPoint/root/.nix-defexpr
 ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
 
