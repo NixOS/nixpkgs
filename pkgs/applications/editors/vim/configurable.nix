@@ -70,7 +70,7 @@ composableDerivation {} {
 
   postInstall = "
     rpath=`patchelf --print-rpath \$out/bin/vim`;
-    for i in $\nativeBuildInputs; do
+    for i in \$nativeBuildInputs; do
       echo adding \$i/lib
       rpath=\$rpath:\$i/lib
     done
