@@ -6342,7 +6342,6 @@ let
 
   wesnoth = callPackage ../games/wesnoth {
     lua = lua5;
-    boost = boost147;
   };
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
