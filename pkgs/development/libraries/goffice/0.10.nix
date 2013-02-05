@@ -3,11 +3,11 @@
 , cairo, gconf, libgnomeui }:
 
 stdenv.mkDerivation rec {
-  name = "goffice-0.9.3";
+  name = "goffice-0.10.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goffice/0.9/${name}.tar.xz";
-    sha256 = "0l9achvmbmhn2p5qd0nl7vxn5c3nf1ndzlyknczzyiaa6d5zj91h";
+    url = "mirror://gnome/sources/goffice/0.10/${name}.tar.xz";
+    sha256 = "7e7577f69203b03c4966906bcaabc6e87a629efb1684630c2bee7907bed08439";
   };
 
   buildInputs = [
