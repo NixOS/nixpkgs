@@ -1005,6 +1005,20 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  gcovr = buildPythonPackage rec {
+    name = "gcovr-2.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gcovr/${name}.tar.gz";
+      md5 = "672db629469882b93c40016aebff50ac";
+    };
+
+    meta = {
+      description = "A Python script for summarizing gcov data";
+      license = "BSD";
+    };
+  };
+
   genshi = buildPythonPackage {
     name = "genshi-0.6";
 
