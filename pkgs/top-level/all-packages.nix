@@ -3324,6 +3324,8 @@ let
 
   swigWithJava = swig;
 
+  swfmill = callPackage ../tools/video/swfmill { };
+
   swftools = callPackage ../tools/video/swftools { };
 
   texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
