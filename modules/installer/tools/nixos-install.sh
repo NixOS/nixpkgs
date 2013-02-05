@@ -159,9 +159,8 @@ done
 
 
 # Get the absolute path to the NixOS/Nixpkgs sources.
-export NIX_PATH=${NIX_PATH+$NIX_PATH:}/nix/var/nix/profiles/per-user/root/channels/nixos
-nixpkgs_src=$(nix-instantiate --find-file nixpkgs)
-nixos_src=$(nix-instantiate --find-file nixos)
+nixpkgs_src=$(readlink -f $(nix-instantiate --find-file nixpkgs))
+nixos_src=$(readlink -f $(nix-instantiate --find-file nixos))
 
 
 # Build the specified Nix expression in the target store and install
