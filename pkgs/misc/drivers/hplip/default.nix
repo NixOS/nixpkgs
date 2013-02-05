@@ -1,5 +1,5 @@
-{stdenv, fetchurl, cups, zlib, libjpeg, libusb, python, saneBackends, dbus
-, pkgconfig, polkit, qtSupport ? true, qt4
+{stdenv, fetchurl, cups, zlib, libjpeg, libusb, pythonPackages, saneBackends, dbus
+, pkgconfig, polkit, qtSupport ? true, qt4, pythonDBus, pyqt4
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i s,/etc/sane.d,$out/etc/sane.d/, Makefile.in
+    sed -i s,/etc/hp/,$out/etc/hp/, base/g.py
   '';
 
   # --disable-network-build Until we have snmp
@@ -41,8 +42,27 @@ stdenv.mkDerivation rec {
     ";
   '';
 
-  buildInputs = [libjpeg cups libusb python saneBackends dbus pkgconfig] ++
+  postInstall = ''
+    wrapPythonPrograms
+    '';
+
+  buildInputs = [
+      libjpeg
+      cups
+      libusb
+      pythonPackages.python
+      pythonPackages.wrapPython
+      pythonPackages.recursivePthLoader # does not seem to work?
+      saneBackends
+      dbus
+      pkgconfig] ++
     stdenv.lib.optional qtSupport qt4;
+
+  pythonPath = with pythonPackages; [
+      pythonDBus
+      pyqt4
+      pygobject
+    ];
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
