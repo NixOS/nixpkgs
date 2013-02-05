@@ -1,14 +1,14 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
- , tcl, tk, xproto, libX11
+ , tcl, tk, xproto, libX11, git
  } :
 let
   realGcc = stdenv.gcc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20121209";
+  date = "20130205";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   clp_ver = "1.14.5";
   lighttpd_ver = "1.4.29";
   patchelf_ver = "0.6";
+  pcre_ver = "8.31";
 
   grisu_src = fetchurl {
     url = "http://double-conversion.googlecode.com/files/double-conversion-${grisu_ver}.tar.gz";
@@ -57,16 +58,20 @@ stdenv.mkDerivation rec {
     url = "http://hydra.nixos.org/build/1524660/download/2/patchelf-${patchelf_ver}.tar.bz2";
     sha256 = "00bw29vdsscsili65wcb5ay0gvg1w0ljd00sb5xc6br8bylpyzpw";
   };
+  pcre_src = fetchurl {
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${pcre_ver}.tar.bz2";
+    sha256 = "0g4c0z4h30v8g8qg02zcbv7n67j5kz0ri9cfhgkpwg276ljs0y2p";
+  };
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "27b950f62aeb3664ab76e5d827b30b4885a9efb9";
-    sha256 = "0khx8ln2zq3vpj0g66hnsdhw04hxl79fq43rc06ggsmc1j4xrifb";
+    rev = "efc696bf74eec7605b4da19f6f1605ba99959ed3";
+    sha256 = "19if7aj3mrp84dg9g2d3zbhasrq0nz28djl9a01m0y4y9bfymp7s";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
-    openblas liblapack tcl tk xproto libX11 
+    openblas liblapack tcl tk xproto libX11 git
     ];
 
   configurePhase = ''
@@ -79,7 +84,7 @@ stdenv.mkDerivation rec {
       cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"
     }
 
-    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${clp_src}" "${patchelf_src}" ; do
+    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${clp_src}" "${patchelf_src}" "${pcre_src}" ; do
       copy_kill_hash "$i" deps
     done
     copy_kill_hash "${dsfmt_src}" deps/random
@@ -105,18 +110,9 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     mkdir -p usr/lib
-    ln -s libuv.a usr/lib/uv.a
   '';
 
   preInstall = ''
-    make -C deps install-tk-wrapper
-  '';
-
-  postInstall = ''
-   (
-   cd $out/share/julia/test/ 
-   $out/bin/julia runtests.jl all
-   ) || true
   '';
 
   meta = {

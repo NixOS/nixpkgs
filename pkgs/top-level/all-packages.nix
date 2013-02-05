@@ -2483,7 +2483,7 @@ let
   jikes = callPackage ../development/compilers/jikes { };
 
   julia = callPackage ../development/compilers/julia {
-    pcre = pcre_8_30;
+    pcre = pcre_8_31;
     liblapack = liblapack.override {shared = true;};
     fftw = fftw.override {pthreads = true;};
     fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
@@ -4772,6 +4772,10 @@ let
   };
 
   pcre_8_30 = callPackage ../development/libraries/pcre/8.30.nix {
+    unicodeSupport = config.pcre.unicode or true;
+  };
+
+  pcre_8_31 = callPackage ../development/libraries/pcre/8.31.nix {
     unicodeSupport = config.pcre.unicode or true;
   };
 
