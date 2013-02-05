@@ -1322,11 +1322,11 @@ pythonPackages = python.modules // rec {
   };
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-2.2.2";
+    name = "lxml-3.0.2";
 
     src = fetchurl {
-      url = http://pypi.python.org/packages/source/l/lxml/lxml-2.2.2.tar.gz;
-      sha256 = "0zjpsy67wcs69qhb06ficl3a5z229hmczpr8h84rkk05vaagj8qv";
+      url = "http://pypi.python.org/packages/source/l/lxml/${name}.tar.gz";
+      md5 = "38b15b0dd5e9292cf98be800e84a3ce4";
     };
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
