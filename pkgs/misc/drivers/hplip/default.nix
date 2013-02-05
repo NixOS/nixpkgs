@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
       libusb
       pythonPackages.python
       pythonPackages.wrapPython
-      pythonPackages.recursivePthLoader # does not seem to work?
       saneBackends
       dbus
       pkgconfig] ++
@@ -62,6 +61,7 @@ stdenv.mkDerivation rec {
       pythonDBus
       pyqt4
       pygobject
+      recursivePthLoader
     ];
 
   meta = with stdenv.lib; {
