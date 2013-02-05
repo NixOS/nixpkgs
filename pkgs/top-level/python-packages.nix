@@ -398,6 +398,12 @@ pythonPackages = python.modules // rec {
       md5 = "4e3b521600e475c56a0a66459a5fc7bb";
     };
 
+   # TODO: consider if this patch should be an option
+   # It makes buildout useful in a nix profile, but this alters the default functionality
+   patchPhase = ''
+     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
+   ''; 
+
    meta = {
       homepage = http://www.buildout.org/;
       description = "A software build and configuration system";
