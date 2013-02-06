@@ -3852,7 +3852,7 @@ let
     libart = gnome.libart_lgpl;
   };
 
-  goffice_0_9 = callPackage ../development/libraries/goffice/0.9.nix {
+  goffice_0_10 = callPackage ../development/libraries/goffice/0.10.nix {
     inherit (gnome) libglade libgnomeui;
     gconf = gnome.GConf;
     libart = gnome.libart_lgpl;
@@ -7202,7 +7202,7 @@ let
   };
 
   gnumeric = callPackage ../applications/office/gnumeric {
-    goffice = goffice_0_9;
+    goffice = goffice_0_10;
     inherit (gnome) libglade scrollkeeper;
   };
 
