@@ -1067,6 +1067,8 @@ let
 
   lxc = callPackage ../os-specific/linux/lxc { };
 
+  lzip = callPackage ../tools/compression/lzip { };
+
   lzma = xz;
 
   xz = callPackage ../tools/compression/xz { };
