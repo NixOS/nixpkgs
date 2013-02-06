@@ -1782,6 +1782,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vty = callPackage ../development/libraries/haskell/vty {};
 
+  vtyUi = callPackage ../development/libraries/haskell/vty-ui {};
+
   wai = callPackage ../development/libraries/haskell/wai {};
 
   waiAppStatic = callPackage ../development/libraries/haskell/wai-app-static {};
