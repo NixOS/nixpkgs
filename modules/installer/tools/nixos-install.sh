@@ -112,6 +112,10 @@ export LC_ALL=
 export LC_TIME=
 
 
+# There is no daemon in the chroot
+unset NIX_REMOTE
+
+
 # Create a temporary Nix config file that causes the nixbld users to
 # be used.
 if test -n "$build_users_group"; then
