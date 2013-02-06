@@ -17,6 +17,7 @@
   bjornfor = "Bjørn Forsman <bjorn.forsman@gmail.com>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
   bodil = "Bodil Stokke <nix@bodil.org>";
+  blue = "Danny Wilson <danny@prime.vc>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   coconnor = "Corey O'Connor <coreyoconnor@gmail.com>";
   eelco = "Eelco Dolstra <eelco.dolstra@logicblox.com>";
