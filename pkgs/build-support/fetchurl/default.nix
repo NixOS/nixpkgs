@@ -32,6 +32,10 @@ let
     # This variable allows the user to override hashedMirrors from the
     # command-line.
     "NIX_HASHED_MIRRORS"
+
+    # This variable allows overriding the timeout for connecting to
+    # the hashed mirrors.
+    "NIX_CONNECT_TIMEOUT"
   ] ++ (map (site: "NIX_MIRRORS_${site}") sites);
 
 in
