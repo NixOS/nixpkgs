@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "either";
-  version = "3.1";
-  sha256 = "1paglfhd2xjr32sh5npl3kvamv4nps9fpy0wk9ya0l26w4c3bdsm";
+  version = "3.4";
+  sha256 = "05nbp8gp50wq592k6dsrpzp6wmqjn9pz6mkizqfb65z1wvd1xiz2";
   buildDepends = [
     MonadRandom mtl semigroupoids semigroups transformers
   ];
