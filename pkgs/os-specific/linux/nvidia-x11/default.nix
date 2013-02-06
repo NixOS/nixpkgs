@@ -15,6 +15,8 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
+  patches = [ ./version-test.patch ];
+
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
