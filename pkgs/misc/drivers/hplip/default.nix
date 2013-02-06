@@ -1,5 +1,5 @@
 {stdenv, fetchurl, cups, zlib, libjpeg, libusb, pythonPackages, saneBackends, dbus
-, pkgconfig, polkit, qtSupport ? true, qt4, pythonDBus, pyqt4
+, pkgconfig, polkit, qtSupport ? true, qt4, pythonDBus, pyqt4, net_snmp
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       --with-systraydir=$out/xdg/autostart
       --with-mimedir=$out/etc/cups
       --enable-policykit
-      --disable-network-build"
+    "
 
     export makeFlags="
       halpredir=$out/share/hal/fdi/preprobe/10osvendor
@@ -54,8 +54,9 @@ stdenv.mkDerivation rec {
       pythonPackages.wrapPython
       saneBackends
       dbus
-      pkgconfig] ++
-    stdenv.lib.optional qtSupport qt4;
+      pkgconfig
+      net_snmp
+    ] ++ stdenv.lib.optional qtSupport qt4;
 
   pythonPath = with pythonPackages; [
       pythonDBus
