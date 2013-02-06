@@ -29,20 +29,6 @@ tryDownload() {
 
 
 finish() {
-    # On old versions of Nix, verify the hash of the output.  On newer
-    # versions, Nix verifies the hash itself.
-    if test "$NIX_OUTPUT_CHECKED" != "1"; then
-        if test "$outputHashAlgo" != "md5"; then
-            echo "hashes other than md5 are unsupported in Nix <= 0.7, upgrade to Nix 0.8"
-            exit 1
-        fi
-        actual=$(md5sum -b "$out" | cut -c1-32)
-        if test "$actual" != "$id"; then
-            echo "hash is $actual, expected $id"
-            exit 1
-        fi
-    fi
-
     stopNest
     exit 0
 }
