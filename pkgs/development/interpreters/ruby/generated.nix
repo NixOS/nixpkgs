@@ -116,7 +116,7 @@ installed versions.'';
         longDescription = ''Email on Rails. Compose, deliver, receive, and test emails using the familiar controller/view pattern. First-class support for multipart email and attachments.'';
       };
       name = ''actionmailer-3.2.11'';
-      requiredGems = [ g.mail_2_4_4 ];
+      requiredGems = [ g.actionpack_3_2_11 g.mail_2_4_4 ];
       sha256 = ''12j8k1kfz5lqqlrxna88455hx62mbs638414dhnwsw358yf52qnn'';
     };
     actionpack_3_2_11 = {
@@ -127,7 +127,7 @@ installed versions.'';
         longDescription = ''Web apps on Rails. Simple, battle-tested conventions for building and testing MVC web applications. Works with any Rack-compatible server.'';
       };
       name = ''actionpack-3.2.11'';
-      requiredGems = [ g.activemodel_3_2_11 g.rack_cache_1_2 g.rack_1_4_4 g.rack_test_0_6_2 g.journey_1_0_4 g.sprockets_2_2_2 g.erubis_2_7_0 ];
+      requiredGems = [ g.activesupport_3_2_11 g.activemodel_3_2_11 g.rack_cache_1_2 g.builder_3_0_4 g.rack_1_4_4 g.rack_test_0_6_2 g.journey_1_0_4 g.sprockets_2_2_2 g.erubis_2_7_0 ];
       sha256 = ''0ins0by3il1fkg5aslr7rb97ykkrrns7dsp6qr8wwvr1dvrzrnbq'';
     };
     activemodel_3_2_11 = {
@@ -138,7 +138,7 @@ installed versions.'';
         longDescription = ''A toolkit for building modeling frameworks like Active Record and Active Resource. Rich support for attributes, callbacks, validations, observers, serialization, internationalization, and testing.'';
       };
       name = ''activemodel-3.2.11'';
-      requiredGems = [ g.builder_3_0_4 ];
+      requiredGems = [ g.activesupport_3_2_11 g.builder_3_0_4 ];
       sha256 = ''0q5f70wv76aprdawqgwa0ldsg3v45mqi36yicir336941lcs28nf'';
     };
     activerecord_3_2_11 = {
@@ -149,7 +149,7 @@ installed versions.'';
         longDescription = ''Databases on Rails. Build a persistent domain model by mapping database tables to Ruby classes. Strong conventions for associations, validations, aggregations, migrations, and testing come baked-in.'';
       };
       name = ''activerecord-3.2.11'';
-      requiredGems = [ g.arel_3_0_2 g.tzinfo_0_3_35 ];
+      requiredGems = [ g.activesupport_3_2_11 g.activemodel_3_2_11 g.arel_3_0_2 g.tzinfo_0_3_35 ];
       sha256 = ''049h164hwd6j7p8rvb46h776rshmkk4dpvh9cynihaajvzmcj3lw'';
     };
     activeresource_3_2_11 = {
@@ -160,7 +160,7 @@ installed versions.'';
         longDescription = ''REST on Rails. Wrap your RESTful web app with Ruby classes and work with them like Active Record models.'';
       };
       name = ''activeresource-3.2.11'';
-      requiredGems = [  ];
+      requiredGems = [ g.activesupport_3_2_11 g.activemodel_3_2_11 ];
       sha256 = ''0pjxfl589an08pm29cqid8dsbn3f7dlr56kpr6bs3gbzg9k3b44h'';
     };
     activesupport_3_2_11 = {
@@ -431,7 +431,7 @@ using TCP/IP, especially if custom protocols are required.'';
         longDescription = ''Process manager for applications with multiple components'';
       };
       name = ''foreman-0.61.0'';
-      requiredGems = [  ];
+      requiredGems = [ g.thor_0_17_0 ];
       sha256 = ''1h9dmzq1cwz87qyzx2ibpjghsxjnnqbh485l3sdxyfh5k3v79k7z'';
     };
     highline_1_6_2 = {
@@ -565,7 +565,7 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
         longDescription = ''A really Ruby Mail handler.'';
       };
       name = ''mail-2.4.4'';
-      requiredGems = [ g.mime_types_1_20_1 g.treetop_1_4_12 ];
+      requiredGems = [ g.mime_types_1_20_1 g.treetop_1_4_12 g.i18n_0_6_1 ];
       sha256 = ''0idylz5pnlz34mrxm7gs9jbll2c0k0y9dq2qarhxk30gwyvjaxi3'';
     };
     mime_types_1_20_1 = {
@@ -750,7 +750,7 @@ Also see http://rack.github.com/.
         longDescription = ''You should use protection!'';
       };
       name = ''rack-protection-1.3.2'';
-      requiredGems = [  ];
+      requiredGems = [ g.rack_1_5_1 ];
       sha256 = ''0f69d491xciq1hb3mm26nxnsb3pvlf3gdkggj4ryiphimsy05n0k'';
     };
     rack_ssl_1_3_3 = {
@@ -762,7 +762,7 @@ Also see http://rack.github.com/.
 '';
       };
       name = ''rack-ssl-1.3.3'';
-      requiredGems = [  ];
+      requiredGems = [ g.rack_1_5_1 ];
       sha256 = ''0rkmj71s87prswa8sqal42kdllgpfd35ir5m9ahhnlmrrpqd0hr5'';
     };
     rack_test_0_6_2 = {
@@ -776,7 +776,7 @@ to build on. Most of its initial functionality is an extraction of Merb 1.0's
 request helpers feature.'';
       };
       name = ''rack-test-0.6.2'';
-      requiredGems = [  ];
+      requiredGems = [ g.rack_1_5_1 ];
       sha256 = ''01mk715ab5qnqf6va8k3hjsvsmplrfqpz6g58qw4m3l8mim0p4ky'';
     };
     rails_3_2_11 = {
@@ -798,7 +798,7 @@ request helpers feature.'';
         longDescription = ''Rails internals: application bootup, plugins, generators, and rake tasks.'';
       };
       name = ''railties-3.2.11'';
-      requiredGems = [ g.rake_10_0_3 g.rack_ssl_1_3_3 g.rdoc_3_12 ];
+      requiredGems = [ g.rake_10_0_3 g.rack_ssl_1_3_3 g.thor_0_17_0 g.rdoc_3_12 g.activesupport_3_2_11 g.actionpack_3_2_11 ];
       sha256 = ''0gjna6jskckh35xp03sjlb7xq2cgabmjl7nvczh6kq8xb1vh09dw'';
     };
     rake_0_9_2_2 = {
@@ -857,7 +857,7 @@ documentation.
 See RDoc for a description of RDoc's markup and basic use.'';
       };
       name = ''rdoc-3.12'';
-      requiredGems = [  ];
+      requiredGems = [ g.json_1_7_6 ];
       sha256 = ''0cd4hrkba7zr675m62yb87l7hpf0sp2qw8ccc2s0y2fa2fxdxdkp'';
     };
     rjb_1_4_2 = {
@@ -892,7 +892,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''BDD for Ruby'';
       };
       name = ''rspec-2.11.0'';
-      requiredGems = [  ];
+      requiredGems = [ g.rspec_core_2_11_1 g.rspec_expectations_2_11_3 g.rspec_mocks_2_11_3 ];
       sha256 = ''0k55akvs2xhs57kz81g37s4v56vybq46sjs7f8wpybrwxryg1vxs'';
     };
     rspec_core_2_11_1 = {
@@ -914,7 +914,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''rspec expectations (should[_not] and matchers)'';
       };
       name = ''rspec-expectations-2.11.3'';
-      requiredGems = [  ];
+      requiredGems = [ g.diff_lcs_1_1_3 ];
       sha256 = ''0vqqw4hkaff6v6i6kinki4jxp9xv8b2nbmz91qa1yhjd3wr14ai5'';
     };
     rspec_mocks_2_11_3 = {
@@ -979,7 +979,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.'';
       };
       name = ''selenium-webdriver-2.29.0'';
-      requiredGems = [ g.childprocess_0_3_7 g.websocket_1_0_7 ];
+      requiredGems = [ g.multi_json_1_5_0 g.rubyzip_0_9_9 g.childprocess_0_3_7 g.websocket_1_0_7 ];
       sha256 = ''0c5fybp19mawq07h59b16h736pz8sz017m1pwalb6mcyliqmlwcj'';
     };
     sinatra_1_3_2 = {
@@ -990,7 +990,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''Sinatra is a DSL for quickly creating web applications in Ruby with minimal effort.'';
       };
       name = ''sinatra-1.3.2'';
-      requiredGems = [ g.rack_protection_1_3_2 ];
+      requiredGems = [ g.rack_1_5_1 g.rack_protection_1_3_2 g.tilt_1_3_3 ];
       sha256 = ''05blf915zpiwyz7agcn9rwdmddwxz0z4l3gd4qlqmrgd2vkw4sxc'';
     };
     sprockets_2_2_2 = {
@@ -1001,7 +1001,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''Sprockets is a Rack-based asset packaging system that concatenates and serves JavaScript, CoffeeScript, CSS, LESS, Sass, and SCSS.'';
       };
       name = ''sprockets-2.2.2'';
-      requiredGems = [ g.hike_1_2_1 g.tilt_1_3_3 ];
+      requiredGems = [ g.hike_1_2_1 g.multi_json_1_5_0 g.rack_1_5_1 g.tilt_1_3_3 ];
       sha256 = ''15ngw3bjbyr31ygzmmdxxa30ylah6pdn8akgdy9w30vfx2vr7s7s'';
     };
     systemu_2_5_2 = {
@@ -1023,7 +1023,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''A thin and fast web server'';
       };
       name = ''thin-1.5.0'';
-      requiredGems = [ g.eventmachine_1_0_0 g.daemons_1_1_9 ];
+      requiredGems = [ g.rack_1_5_1 g.eventmachine_1_0_0 g.daemons_1_1_9 ];
       sha256 = ''14sd2qbbk6y108z6v723mh3f1mk8s4fwxmmn9f8dk4xkhk4rwvq1'';
     };
     thor_0_17_0 = {
@@ -1055,7 +1055,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         homepage = ''https://github.com/cjheath/treetop'';
       };
       name = ''treetop-1.4.12'';
-      requiredGems = [ g.polyglot_0_3_3 ];
+      requiredGems = [ g.polyglot_0_3_3 g.polyglot_0_3_3 ];
       sha256 = ''1jlfjq67n933sm0px0s2j965v1kl1rj8fbx6xk8y4yppkv6ygxc8'';
     };
     tzinfo_0_3_35 = {
