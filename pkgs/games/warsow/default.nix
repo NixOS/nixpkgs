@@ -3,14 +3,14 @@
 }:
 stdenv.mkDerivation rec {
   name = "warsow-${version}";
-  version = "1.02";
+  version = "1.03";
   mversion = "1.02";  # sometimes only engine is updated
   src1 = fetchurl {
-    url = "http://www.warsow.net:1337/~warsow/1.02/warsow_1.02_sdk.tar.gz";
-    sha256 = "0b5vra4qihkkcw4jn54r8l2lyl2mp67b4y1m76nyz7f34vng1hdy";
+    url = "http://www.warsow.net:1337/~warsow/${version}/warsow_${version}_sdk.tar.gz";
+    sha256 = "0z6r5v30p8fxbszmkxssv5fnnjw7w5wfn7wfgbwvmy87ayi7mkcq";
   };
   src2 = fetchurl {
-    url = "http://www.warsow.net:1337/~warsow/1.02/warsow_1.02.tar.gz";
+    url = "http://www.warsow.net:1337/~warsow/${mversion}/warsow_${mversion}.tar.gz";
     sha256 = "0ai5v1h5g9nq21ixz23v0qsj9dr7dbiz7l8r34mq4c3z6ili8zpy";
   };
   unpackPhase = ''
