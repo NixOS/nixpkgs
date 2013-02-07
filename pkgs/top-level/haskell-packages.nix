@@ -751,6 +751,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dualTree = callPackage ../development/libraries/haskell/dual-tree {};
 
+  dyre = callPackage ../development/libraries/haskell/dyre {};
+
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
 
   editline = callPackage ../development/libraries/haskell/editline {};
@@ -1832,6 +1834,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   X11 = callPackage ../development/libraries/haskell/X11 {};
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {};
+
+  xdgBasedir = callPackage ../development/libraries/haskell/xdg-basedir {};
 
   xdot = callPackage ../development/libraries/haskell/xdot {
     polyparse = self.polyparse_1_7;
