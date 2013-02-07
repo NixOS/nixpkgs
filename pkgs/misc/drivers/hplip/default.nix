@@ -60,10 +60,9 @@ stdenv.mkDerivation rec {
 
   pythonPath = with pythonPackages; [
       pythonDBus
-      pyqt4
       pygobject
       recursivePthLoader
-    ];
+    ] ++ stdenv.lib.optional qtSupport pyqt4;
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
