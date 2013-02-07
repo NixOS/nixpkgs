@@ -6170,6 +6170,8 @@ let
 
   thttpd = callPackage ../servers/http/thttpd { };
 
+  storm = callPackage ../servers/computing/storm { };
+
   tomcat5 = callPackage ../servers/http/tomcat/5.0.nix { };
 
   tomcat6 = callPackage ../servers/http/tomcat/6.0.nix { };
