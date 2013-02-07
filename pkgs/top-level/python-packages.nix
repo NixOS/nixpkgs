@@ -1997,6 +1997,45 @@ pythonPackages = python.modules // rec {
     doCheck = false;
   };
 
+
+  pillow = buildPythonPackage rec {
+    name = "Pillow-1.7.8";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
+      md5 = "41d8688d4db72673069a6dc63b5289d6";
+    };
+
+    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib ];
+
+    configurePhase = ''
+      sed -i "setup.py" \
+          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
+              s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
+              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;'
+    '';
+
+    doCheck = true;
+
+    meta = {
+      homepage = http://python-imaging.github.com/Pillow;
+
+      description = "Fork of The Python Imaging Library (PIL)";
+
+      longDescription = ''
+        The Python Imaging Library (PIL) adds image processing
+        capabilities to your Python interpreter.  This library
+        supports many file formats, and provides powerful image
+        processing and graphics capabilities.
+      '';
+
+      license = "http://www.pythonware.com/products/pil/license.htm";
+
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
+
   polib = buildPythonPackage rec {
     name = "polib-${version}";
     version = "1.0.1";
