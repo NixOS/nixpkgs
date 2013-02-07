@@ -230,9 +230,6 @@ let
       # Devtmpfs support.
       DEVTMPFS y
 
-      # Easier debug of NFS issues
-      SUNRPC_DEBUG y
-
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
