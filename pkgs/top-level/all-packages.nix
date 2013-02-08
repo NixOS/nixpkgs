@@ -2135,6 +2135,12 @@ let
     binutilsCross = null;
   }));
 
+  gcc46_multi = lowPrio (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc46.gcc.override {
+    stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
+    profiledCompiler = false;
+    enableMultilib = true;
+  }));
+
   gcc47_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.7 {
     inherit noSysDirs;
     # I'm not sure if profiling with enableParallelBuilding helps a lot.
