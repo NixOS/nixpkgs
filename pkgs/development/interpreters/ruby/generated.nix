@@ -3,7 +3,7 @@
 g: # Get dependencies from patched gems
 {
   aliases = {
-    ZenTest = g.ZenTest_4_8_4;
+    ZenTest = g.ZenTest_4_9_0;
     actionmailer = g.actionmailer_3_2_11;
     actionpack = g.actionpack_3_2_11;
     activemodel = g.activemodel_3_2_11;
@@ -39,11 +39,11 @@ g: # Get dependencies from patched gems
     minitar = g.minitar_0_5_3;
     multi_json = g.multi_json_1_5_0;
     net_sftp = g.net_sftp_2_0_5;
-    net_ssh = g.net_ssh_2_6_3;
+    net_ssh = g.net_ssh_2_6_5;
     nix = g.nix_0_1_1;
     nokogiri = g.nokogiri_1_5_6;
     polyglot = g.polyglot_0_3_3;
-    rack = g.rack_1_5_1;
+    rack = g.rack_1_5_2;
     rack_cache = g.rack_cache_1_2;
     rack_protection = g.rack_protection_1_3_2;
     rack_ssl = g.rack_ssl_1_3_3;
@@ -52,7 +52,7 @@ g: # Get dependencies from patched gems
     railties = g.railties_3_2_11;
     rake = g.rake_10_0_3;
     rb_fsevent = g.rb_fsevent_0_9_3;
-    rdoc = g.rdoc_3_12;
+    rdoc = g.rdoc_3_12_1;
     rjb = g.rjb_1_4_6;
     rspec = g.rspec_2_11_0;
     rspec_core = g.rspec_core_2_11_1;
@@ -77,7 +77,7 @@ g: # Get dependencies from patched gems
   };
   gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
   gems = {
-    ZenTest_4_8_4 = {
+    ZenTest_4_9_0 = {
       basename = ''ZenTest'';
       meta = {
         description = ''ZenTest provides 4 different tools: zentest, unit_diff, autotest, and multiruby'';
@@ -104,9 +104,9 @@ multiruby runs anything you want on multiple versions of ruby. Great
 for compatibility checking! Use multiruby_setup to manage your
 installed versions.'';
       };
-      name = ''ZenTest-4.8.4'';
+      name = ''ZenTest-4.9.0'';
       requiredGems = [  ];
-      sha256 = ''074k8smn2qfyyh32r0pja0wpcxbvlb6bhsc7rqrcjrisdjkngkrr'';
+      sha256 = ''16bp7rwl463m0d213rmwp4rjfwiw1bm529c518v91l18h7hcnb96'';
     };
     actionmailer_3_2_11 = {
       basename = ''actionmailer'';
@@ -127,7 +127,7 @@ installed versions.'';
         longDescription = ''Web apps on Rails. Simple, battle-tested conventions for building and testing MVC web applications. Works with any Rack-compatible server.'';
       };
       name = ''actionpack-3.2.11'';
-      requiredGems = [ g.activesupport_3_2_11 g.activemodel_3_2_11 g.rack_cache_1_2 g.builder_3_0_4 g.rack_1_4_4 g.rack_test_0_6_2 g.journey_1_0_4 g.sprockets_2_2_2 g.erubis_2_7_0 ];
+      requiredGems = [ g.activesupport_3_2_11 g.activemodel_3_2_11 g.rack_cache_1_2 g.builder_3_0_4 g.rack_1_4_5 g.rack_test_0_6_2 g.journey_1_0_4 g.sprockets_2_2_2 g.erubis_2_7_0 ];
       sha256 = ''0ins0by3il1fkg5aslr7rb97ykkrrns7dsp6qr8wwvr1dvrzrnbq'';
     };
     activemodel_3_2_11 = {
@@ -223,7 +223,7 @@ database compatibility and query generation.'';
 rails support and extra plugins for migrations and fixtures.'';
       };
       name = ''autotest-rails-4.1.2'';
-      requiredGems = [ g.ZenTest_4_8_4 ];
+      requiredGems = [ g.ZenTest_4_9_0 ];
       sha256 = ''1wkb5jayb39yx0i8ly7sibygf9f9c3w24jg2z1qgm135zlb070v4'';
     };
     aws_sdk_1_8_1_2 = {
@@ -630,7 +630,7 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
         longDescription = ''A pure Ruby implementation of the SFTP client protocol'';
       };
       name = ''net-sftp-2.0.5'';
-      requiredGems = [ g.net_ssh_2_6_3 ];
+      requiredGems = [ g.net_ssh_2_6_5 ];
       sha256 = ''0lqk735wspm8rbiyxpbil8ikrqcyg00ss1df7fny0761c3as6m0v'';
     };
     net_ssh_2_6_0 = {
@@ -644,16 +644,16 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
       requiredGems = [ g.jruby_pageant_1_1_1 ];
       sha256 = ''18fsgps4a9dfrjszkl3py8j7vw0xwi70bcp59ccj2rlr6i1jv5gw'';
     };
-    net_ssh_2_6_3 = {
+    net_ssh_2_6_5 = {
       basename = ''net_ssh'';
       meta = {
         description = ''Net::SSH: a pure-Ruby implementation of the SSH2 client protocol.'';
-        homepage = ''http://github.com/net-ssh/net-ssh'';
+        homepage = ''https://github.com/net-ssh/net-ssh'';
         longDescription = ''Net::SSH: a pure-Ruby implementation of the SSH2 client protocol. It allows you to write programs that invoke and interact with processes on remote servers, via SSH2.'';
       };
-      name = ''net-ssh-2.6.3'';
+      name = ''net-ssh-2.6.5'';
       requiredGems = [  ];
-      sha256 = ''1gmrchx9cn7s7ca97kwhrdxvlw5vs3cxpprrvqmhmi3knmnqcp9m'';
+      sha256 = ''1f21r78b0rm9gyzdc96fzih27nrags3pk00zlhfviqlfbmb1c48x'';
     };
     nix_0_1_1 = {
       basename = ''nix'';
@@ -695,7 +695,7 @@ augments 'require' to find and load matching files.'';
       requiredGems = [  ];
       sha256 = ''082zmail2h3cxd9z1wnibhk6aj4sb1f3zzwra6kg9bp51kx2c00v'';
     };
-    rack_1_4_4 = {
+    rack_1_4_5 = {
       basename = ''rack'';
       meta = {
         description = ''a modular Ruby webserver interface'';
@@ -709,11 +709,11 @@ middleware) into a single method call.
 Also see http://rack.github.com/.
 '';
       };
-      name = ''rack-1.4.4'';
+      name = ''rack-1.4.5'';
       requiredGems = [  ];
-      sha256 = ''1h0x50ng1s2jy6h5adw4a430vz8x28nskq099x3pjlpns6q632vz'';
+      sha256 = ''027k0nbb8d7cl24x2cywdc6lgrr4lwvdwwjk8wkgz8h9ism3zgzp'';
     };
-    rack_1_5_1 = {
+    rack_1_5_2 = {
       basename = ''rack'';
       meta = {
         description = ''a modular Ruby webserver interface'';
@@ -727,9 +727,9 @@ middleware) into a single method call.
 Also see http://rack.github.com/.
 '';
       };
-      name = ''rack-1.5.1'';
+      name = ''rack-1.5.2'';
       requiredGems = [  ];
-      sha256 = ''113gzaha2qx74y0wl940zlzrn9357yww6zrbyva05d09l749d21r'';
+      sha256 = ''19szfw76cscrzjldvw30jp3461zl00w4xvw1x9lsmyp86h1g0jp6'';
     };
     rack_cache_1_2 = {
       basename = ''rack_cache'';
@@ -739,7 +739,7 @@ Also see http://rack.github.com/.
         longDescription = ''Rack::Cache is suitable as a quick drop-in component to enable HTTP caching for Rack-based applications that produce freshness (Expires, Cache-Control) and/or validation (Last-Modified, ETag) information.'';
       };
       name = ''rack-cache-1.2'';
-      requiredGems = [ g.rack_1_5_1 ];
+      requiredGems = [ g.rack_1_5_2 ];
       sha256 = ''073ffpsqmy4nqxz178qisb3a4v3305c49ypj0jw6s9mkz02yvgq2'';
     };
     rack_protection_1_3_2 = {
@@ -750,7 +750,7 @@ Also see http://rack.github.com/.
         longDescription = ''You should use protection!'';
       };
       name = ''rack-protection-1.3.2'';
-      requiredGems = [ g.rack_1_5_1 ];
+      requiredGems = [ g.rack_1_5_2 ];
       sha256 = ''0f69d491xciq1hb3mm26nxnsb3pvlf3gdkggj4ryiphimsy05n0k'';
     };
     rack_ssl_1_3_3 = {
@@ -762,7 +762,7 @@ Also see http://rack.github.com/.
 '';
       };
       name = ''rack-ssl-1.3.3'';
-      requiredGems = [ g.rack_1_5_1 ];
+      requiredGems = [ g.rack_1_5_2 ];
       sha256 = ''0rkmj71s87prswa8sqal42kdllgpfd35ir5m9ahhnlmrrpqd0hr5'';
     };
     rack_test_0_6_2 = {
@@ -776,7 +776,7 @@ to build on. Most of its initial functionality is an extraction of Merb 1.0's
 request helpers feature.'';
       };
       name = ''rack-test-0.6.2'';
-      requiredGems = [ g.rack_1_5_1 ];
+      requiredGems = [ g.rack_1_5_2 ];
       sha256 = ''01mk715ab5qnqf6va8k3hjsvsmplrfqpz6g58qw4m3l8mim0p4ky'';
     };
     rails_3_2_11 = {
@@ -798,7 +798,7 @@ request helpers feature.'';
         longDescription = ''Rails internals: application bootup, plugins, generators, and rake tasks.'';
       };
       name = ''railties-3.2.11'';
-      requiredGems = [ g.rake_10_0_3 g.rack_ssl_1_3_3 g.thor_0_17_0 g.rdoc_3_12 g.activesupport_3_2_11 g.actionpack_3_2_11 ];
+      requiredGems = [ g.rake_10_0_3 g.rack_ssl_1_3_3 g.thor_0_17_0 g.rdoc_3_12_1 g.activesupport_3_2_11 g.actionpack_3_2_11 ];
       sha256 = ''0gjna6jskckh35xp03sjlb7xq2cgabmjl7nvczh6kq8xb1vh09dw'';
     };
     rake_0_9_2_2 = {
@@ -845,7 +845,7 @@ request helpers feature.'';
       requiredGems = [  ];
       sha256 = ''0bdnxwdxj4r1kdxfi5nszbsb126njrr81p912g64xxs2bgxd1bp1'';
     };
-    rdoc_3_12 = {
+    rdoc_3_12_1 = {
       basename = ''rdoc'';
       meta = {
         description = ''RDoc produces HTML and command-line documentation for Ruby projects'';
@@ -856,9 +856,9 @@ documentation.
 
 See RDoc for a description of RDoc's markup and basic use.'';
       };
-      name = ''rdoc-3.12'';
+      name = ''rdoc-3.12.1'';
       requiredGems = [ g.json_1_7_6 ];
-      sha256 = ''0cd4hrkba7zr675m62yb87l7hpf0sp2qw8ccc2s0y2fa2fxdxdkp'';
+      sha256 = ''1hflgw2v0lyx38kdwj71jyibc14j6ghb6zmp2l3g47v7d2m47z4g'';
     };
     rjb_1_4_2 = {
       basename = ''rjb'';
@@ -990,7 +990,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''Sinatra is a DSL for quickly creating web applications in Ruby with minimal effort.'';
       };
       name = ''sinatra-1.3.2'';
-      requiredGems = [ g.rack_1_5_1 g.rack_protection_1_3_2 g.tilt_1_3_3 ];
+      requiredGems = [ g.rack_1_5_2 g.rack_protection_1_3_2 g.tilt_1_3_3 ];
       sha256 = ''05blf915zpiwyz7agcn9rwdmddwxz0z4l3gd4qlqmrgd2vkw4sxc'';
     };
     sprockets_2_2_2 = {
@@ -1001,7 +1001,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''Sprockets is a Rack-based asset packaging system that concatenates and serves JavaScript, CoffeeScript, CSS, LESS, Sass, and SCSS.'';
       };
       name = ''sprockets-2.2.2'';
-      requiredGems = [ g.hike_1_2_1 g.multi_json_1_5_0 g.rack_1_5_1 g.tilt_1_3_3 ];
+      requiredGems = [ g.hike_1_2_1 g.multi_json_1_5_0 g.rack_1_5_2 g.tilt_1_3_3 ];
       sha256 = ''15ngw3bjbyr31ygzmmdxxa30ylah6pdn8akgdy9w30vfx2vr7s7s'';
     };
     systemu_2_5_2 = {
@@ -1023,7 +1023,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''A thin and fast web server'';
       };
       name = ''thin-1.5.0'';
-      requiredGems = [ g.rack_1_5_1 g.eventmachine_1_0_0 g.daemons_1_1_9 ];
+      requiredGems = [ g.rack_1_5_2 g.eventmachine_1_0_0 g.daemons_1_1_9 ];
       sha256 = ''14sd2qbbk6y108z6v723mh3f1mk8s4fwxmmn9f8dk4xkhk4rwvq1'';
     };
     thor_0_17_0 = {
