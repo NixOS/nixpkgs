@@ -11,9 +11,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ automake autoconf libtool pkgconfig zeromq2 jdk ];
 
   preConfigurePhases = ["./autogen.sh"];
-  preConfigure = if stdenv.system == "x86_64-darwin" then ''
-    sed -i -e 's~/Headers~/include~' -e 's~_JNI_INC_SUBDIRS=\".*\"~_JNI_INC_SUBDIRS=\"darwin\"~' configure
-  '' else "";
+  preConfigure = ''
+    sed -i -e 's|(JAVAC)|(JAVAC) -encoding utf8|' src/Makefile.in
+    ${if stdenv.system == "x86_64-darwin" then
+      '' sed -i -e 's~/Headers~/include~' -e 's~_JNI_INC_SUBDIRS=\".*\"~_JNI_INC_SUBDIRS=\"darwin\"~' configure
+      '' else ""}
+  '';
 
 
   maintainers = [ stdenv.lib.maintainers.blue ];

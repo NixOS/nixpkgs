@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, jzmq, jdk, lib, python}:
+{ stdenv, fetchurl, unzip, jzmq, jdk, lib, python, logsDir, confDir }:
 
 stdenv.mkDerivation {
   name = "storm-0.8.2";
@@ -12,16 +12,18 @@ stdenv.mkDerivation {
   installPhase = ''
     # Remove junk
     rm -f lib/jzmq*
-    mkdir -p /var/log/storm
+    mkdir -p $out/bin
     mv bin/storm $out/bin/
-    rm -R bin
+    rm -R bin conf logs
 
     # Fix shebang header for python scripts
-    sed -i -e "s|#!/usr/bin/.*python|#!${python}/bin/python|" bin/storm;
+    sed -i -e "s|#!/usr/bin/.*python|#!${python}/bin/python|" $out/bin/storm;
 
     mkdir -p $out
     cp -av * $out
-    ln -s /var/log/storm $out/logs
+    cd $out;
+    ${if logsDir != "" then ''ln -s ${logsDir} logs'' else ""}
+    ${if confDir != "" then ''ln -s ${confDir} conf'' else ""}
   '';
 
   dontStrip = true;
