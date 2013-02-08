@@ -229,7 +229,7 @@ let
   # just the plain stdenv.
   stdenv_32bit = lowPrio (
     if system == "x86_64-linux" then
-      overrideGCC stdenv gcc43_multi
+      overrideGCC stdenv gcc46_multi
     else
       stdenv);
 
