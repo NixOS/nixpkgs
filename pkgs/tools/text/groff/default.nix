@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ghostscript, perl, groff }:
 
 stdenv.mkDerivation rec {
-  name = "groff-1.20.1";
+  name = "groff-1.22.2";
 
   src = fetchurl {
     url = "mirror://gnu/groff/${name}.tar.gz";
-    sha256 = "01fq5i68p4s4fc6m8i90y5d28wk1x6zh2mkw85n0qqnb6n0qfidn";
+    sha256 = "0xi07nhj5vdgax37rj25mwxzdmsz1ifx50hjgc6hqbkpqkd6821q";
   };
 
   buildInputs = [ ghostscript ];
@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    homepage = "http://www.gnu.org/software/groff/";
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
+    license = "GPLv3+";
 
     longDescription = ''
       groff is the GNU implementation of troff, a document formatting
@@ -35,9 +37,5 @@ stdenv.mkDerivation rec {
       version gxditview of the X11 xditview previewer, and an
       implementation of the -mm macros.
     '';
-
-    homepage = http://www.gnu.org/software/groff/;
-
-    license = "GPLv3+";
   };
 }
