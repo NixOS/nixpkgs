@@ -4,9 +4,8 @@ stdenv.mkDerivation rec {
   name = "tex4ht-1.0.2009_06_11_1038";
 
   src = fetchurl {
-    url = "http://www.tug.org/applications/tex4ht/tex4ht.zip";
-    # http://www.cse.ohio-state.edu/~gurari/TeX4ht/fix/${name}.tar.gz";
-    sha1 = "2970cec5f4afc9039b82d6a4210f21d70ded2f5a";
+    url = "http://tug.org/applications/tex4ht/tex4ht.zip";
+    sha256 = "15gj18ihds6530af42clpa4zskak5kah9wzs2hd19a9ymwjsccd6";
   };
 
   buildInputs = [ tetex unzip ];
@@ -22,17 +21,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    for f in src/tex4ht src/t4ht src/htcmd bin/unix/*; do # */
-      mv $f $out/bin/.
+    for f in src/tex4ht src/t4ht src/htcmd "bin/unix/"*; do
+      mv $f $out/bin/
     done
-
-    mkdir -p $out/share
-    cp -r texmf $out/share/.
+    mv texmf $out/
   '';
 
   meta = {
-    homepage = http://www.cse.ohio-state.edu/~gurari/TeX4ht/mn.html;
-    # LaTeX Project Public License
-    license = "LPPL";
+    homepage = "http://tug.org/tex4ht/";
+    description = "a system to convert (La)TeX documents to HTML and various other formats";
+    license = "LPPL";		# LaTeX Project Public License
   };
 }
