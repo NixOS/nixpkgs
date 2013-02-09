@@ -5504,6 +5504,8 @@ let
 
   nginx = callPackage ../servers/http/nginx { };
 
+  petidomo = callPackage ../servers/mail/petidomo { };
+
   popa3d = callPackage ../servers/mail/popa3d { };
 
   postfix = callPackage ../servers/mail/postfix { };
