@@ -4204,6 +4204,8 @@ let
 
   libdwarf = callPackage ../development/libraries/libdwarf { };
 
+  libeatmydata = callPackage ../development/libraries/libeatmydata { };
+
   libebml = callPackage ../development/libraries/libebml { };
 
   libedit = callPackage ../development/libraries/libedit { };
