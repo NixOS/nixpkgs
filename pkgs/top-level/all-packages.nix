@@ -4488,6 +4488,8 @@ let
 
   libungif = callPackage ../development/libraries/giflib/libungif.nix { };
 
+  libunique = callPackage ../development/libraries/libunique/default.nix { };
+
   libusb = callPackage ../development/libraries/libusb { };
 
   libusb1 = callPackage ../development/libraries/libusb1 { };
@@ -8622,12 +8624,9 @@ let
 
   oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };
 
-  xfce = xfce48;
-
-  xfce48 = recurseIntoAttrs
-    (let callPackage = newScope pkgs.xfce48; in
-     import ../desktops/xfce-4.8 { inherit callPackage pkgs; });
-
+  xfce = xfce4_10;
+  xfce4_08 = recurseIntoAttrs (import ../desktops/xfce/4_08.nix { inherit pkgs newScope; });
+  xfce4_10 = recurseIntoAttrs (import ../desktops/xfce/4_10.nix { inherit pkgs newScope; });
 
   ### SCIENCE
 
