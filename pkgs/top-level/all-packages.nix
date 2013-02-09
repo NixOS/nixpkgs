@@ -3441,11 +3441,9 @@ let
   boost144 = callPackage ../development/libraries/boost/1.44.nix { };
   boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
-  boost152 = callPackage ../development/libraries/boost/1.52.nix { };
   boost153 = callPackage ../development/libraries/boost/1.53.nix { };
   boost = boost153;
 
-  boostHeaders152 = callPackage ../development/libraries/boost/1.52-headers.nix { };
   boostHeaders153 = callPackage ../development/libraries/boost/1.53-headers.nix { };
   boostHeaders = boostHeaders153;
 
