@@ -8,9 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0llraqw86jmw4vzv7inskp3xxm2gc64my08iwq5mzncgfdbfza4f";
   };
 
-  buildInputs = [ pkgconfig freetype ];
 
-  propagatedBuildInputs = [ expat ]; # !!! shouldn't be necessary, but otherwise pango breaks
+  buildInputs = [ pkgconfig freetype expat ];
+
+  #propagatedBuildInputs = [ expat ]; # !!! shouldn't be necessary, but otherwise pango breaks
 
   configureFlags = "--with-confdir=/etc/fonts --with-cache-dir=/var/cache/fontconfig --disable-docs --with-default-fonts=";
 

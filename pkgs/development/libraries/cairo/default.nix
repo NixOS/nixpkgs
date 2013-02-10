@@ -4,6 +4,7 @@
 , xcbSupport ? true # no longer experimental since 1.12
 , gobjectSupport ? true, glib
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype, xlibs
+, expat
 , zlib, libpng, pixman
 , gettext, libiconvOrEmpty
 }:
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xlibs;
-    [ pkgconfig x11 fontconfig libXrender ]
+    [ pkgconfig x11 fontconfig libXrender expat ]
     ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
 
     # On non-GNU systems we need GNU Gettext for libintl.
