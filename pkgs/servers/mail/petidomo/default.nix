@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://petidomo.sourceforge.net/";
     description = "a simple and easy to administer mailing list server";
-    license = stdenv.lib.licenses.gpl3plus;
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.simons ];
