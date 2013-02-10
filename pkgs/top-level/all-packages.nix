@@ -7538,6 +7538,7 @@ let
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;
+    boost = boost149;
   };
 
   monotoneViz = builderDefsPackage (import ../applications/version-management/monotone-viz/mtn-head.nix) {
