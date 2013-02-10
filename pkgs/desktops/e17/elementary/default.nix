@@ -1,11 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, pkgconfig, eina, eet, evas, ecore, edje }:
 stdenv.mkDerivation rec {
-  name = "eina-${version}";
+  name = "elementary-${version}";
   version = "1.7.5";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
-    sha256 = "0kd4116njrbag9h459cmfpg07c4ag04z3yrsg513lpi27amch27w";
+    sha256 = "08cb4x9639xyrb8d4vzvhl6v385qjfswl717sicm7iimh5zlm2l9";
   };
+  buildInputs = [ pkgconfig eina eet evas ecore edje ];
   meta = {
     description = "Enlightenment's core data structure library";
     longDescription = ''
