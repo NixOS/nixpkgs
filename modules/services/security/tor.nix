@@ -252,8 +252,8 @@ in
     // optionalAttrs (cfg.client.privoxy.enable && cfg.client.enable) {
       torPrivoxy = { name = "tor-privoxy";
 
-                     startOn = "starting tor";
-                     stopOn = "stopping tor";
+                     startOn = "started network-interfaces";
+                     stopOn = "stopping network-interfaces";
 
                      preStart = ''
                        mkdir -m 0755 -p ${privoxyDir}
