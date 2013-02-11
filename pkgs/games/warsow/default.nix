@@ -1,5 +1,6 @@
 { stdenv, fetchurl, unzip, pkgconfig, zlib, curl, libjpeg, libpng, libvorbis
-, libtheora, libXxf86dga, libXxf86vm, libXinerama, SDL, mesa, openal
+, libtheora, libXxf86dga, libXxf86vm, libXinerama, SDL, mesa, openal, freetype
+, makeWrapper
 }:
 stdenv.mkDerivation rec {
   name = "warsow-${version}";
@@ -25,18 +26,20 @@ stdenv.mkDerivation rec {
     substituteInPlace snd_openal/snd_main.c --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
   '';
   buildInputs = [ unzip pkgconfig zlib curl libjpeg libpng libvorbis libtheora
-                  libXxf86dga libXxf86vm libXinerama SDL mesa openal ];
+                  libXxf86dga libXxf86vm libXinerama SDL mesa openal makeWrapper
+                ];
   installPhase = ''
     dest=$out/opt/warsow
     cd release
-    for f in warsow wsw_server wswtv_server; do
-        substituteInPlace $f --replace BINARY_DIR= BINARY_DIR=$dest
-    done
     mkdir -p $dest
     mkdir -p $out/bin
-    cp -v {warsow,wsw_server,wswtv_server}.* $dest
+    cp -v {warsow,wsw_server,wswtv_server}* $dest
     cp -rv basewsw libs $dest
-    cp -v warsow wsw_server wswtv_server $out/bin
+    # Since 1.03 some modules are _always_ downloaded from server, thus
+    makeWrapper $dest/warsow $out/bin/warsow \
+      --suffix-each LD_LIBRARY_PATH ':' "${freetype}/lib"
+    makeWrapper $dest/wsw_server $out/bin/wsw_server
+    makeWrapper $dest/wswtv_server $out/bin/wswtv_server
   '';
   postFixup = ''
     p=$out/opt/warsow/warsow.*
