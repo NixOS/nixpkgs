@@ -37,8 +37,7 @@ let
         echo "Adding rules for package $i"
         for j in $i/{etc,lib}/udev/rules.d/*; do
           echo "Copying $j to $out/$(basename $j)"
-          echo "# Copied from $j" > $out/$(basename $j)
-          cat $j >> $out/$(basename $j)
+          cat $j > $out/$(basename $j)
         done
       done
 
@@ -83,6 +82,10 @@ let
       for i in ${toString cfg.packages}; do
         grep -l '\(RUN+\|IMPORT{program}\)="\(/usr\)\?/s\?bin' $i/*/udev/rules.d/* || true
       done
+
+      ${optionalString (!config.networking.usePredictableInterfaceNames) ''
+        ln -s /dev/null $out/80-net-name-slot.rules
+      ''}
     ''; # */
   };
 
@@ -141,7 +144,7 @@ in
         example = ''
           KERNEL=="eth*", ATTR{address}=="00:1D:60:B9:6D:4F", NAME="my_fast_network_card"
         '';
-        type = with pkgs.lib.types; string;
+        type = types.lines;
         description = ''
           Additional <command>udev</command> rules. They'll be written
           into file <filename>10-local.rules</filename>. Thus they are
@@ -174,6 +177,23 @@ in
         pathsToLink = [ "/" ];
         ignoreCollisions = true;
       };
+    };
+
+    networking.usePredictableInterfaceNames = mkOption {
+      default = true;
+      type = types.bool;
+      description = ''
+        Whether to assign <link
+        xlink:href='http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames'>predictable
+        names to network interfaces</link>.  If enabled, interfaces
+        are assigned names that contain topology information
+        (e.g. <literal>wlp3s0</literal>) and thus should be stable
+        across reboots.  If disabled, names depend on the order in
+        which interfaces are discovered by the kernel, which may
+        change randomly across reboots; for instance, you may find
+        <literal>eth0</literal> and <literal>eth1</literal> flipping
+        unpredictably.
+      '';
     };
 
   };
