@@ -126,7 +126,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     GLUT         = self.GLUT_2_3_1_0;           # 7.6 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
     html         = self.html_1_0_1_2;           # 7.6 ok
-    HTTP         = self.HTTP_4000_2_7;          # 7.6 ok
+    HTTP         = self.HTTP_4000_2_8;          # 7.6 ok
     HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
     network      = self.network_2_4_1_0;        # 7.6 ok
@@ -977,8 +977,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
   HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
   HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
-  HTTP_4000_2_7 = callPackage ../development/libraries/haskell/HTTP/4000.2.7.nix {};
-  HTTP = self.HTTP_4000_2_7;
+  HTTP_4000_2_8 = callPackage ../development/libraries/haskell/HTTP/4000.2.8.nix {};
+  HTTP = self.HTTP_4000_2_8;
 
   httpReverseProxy = callPackage ../development/libraries/haskell/http-reverse-proxy {};
 

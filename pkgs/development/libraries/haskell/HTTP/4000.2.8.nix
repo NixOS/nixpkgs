@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HTTP";
-  version = "4000.2.7";
-  sha256 = "0a5zjhrbdp8hwmkc709i2qwnxx4lafrp6wssdms6g5l97a52bdc2";
+  version = "4000.2.8";
+  sha256 = "0p0cwzjw2102bsyfaga6m8b53s6qnhd6byg2j2qla653f6kjlsh8";
   buildDepends = [ mtl network parsec ];
   meta = {
     homepage = "https://github.com/haskell/HTTP";
