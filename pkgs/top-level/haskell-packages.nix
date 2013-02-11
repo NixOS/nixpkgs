@@ -2000,10 +2000,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Applications.
 
-  darcs = callPackage ../applications/version-management/darcs {
-    tar = self.tar_0_3_2_0;
-    haskeline = self.haskeline_0_6_4_7;
-  };
+  darcs = callPackage ../applications/version-management/darcs {};
 
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;
