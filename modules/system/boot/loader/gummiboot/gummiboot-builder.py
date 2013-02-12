@@ -6,6 +6,7 @@ import errno
 import subprocess
 import glob
 import tempfile
+import errno
 
 def copy_if_not_exists(source, dest):
     known_paths.append(dest)
@@ -26,7 +27,7 @@ def write_entry(generation, kernel, initrd):
     with open(tmp_path, 'w') as f:
         print >> f, "title NixOS"
         print >> f, "version Generation %d" % (generation)
-        print >> f, "machine-id %s" % (machine_id)
+        if machine_id is not None: print >> f, "machine-id %s" % (machine_id)
         print >> f, "linux %s" % (kernel)
         print >> f, "initrd %s" % (initrd)
         print >> f, "options %s" % (kernel_params)
@@ -143,8 +144,14 @@ args = parser.parse_args()
 known_paths = []
 mkdir_p("@efiSysMountPoint@/efi/nixos")
 mkdir_p("@efiSysMountPoint@/loader/entries")
-with open("/etc/machine-id") as machine_file:
-    machine_id = machine_file.readlines()[0]
+try:
+    with open("/etc/machine-id") as machine_file:
+        machine_id = machine_file.readlines()[0]
+except IOError as e:
+    if e.errno != errno.ENOENT:
+        raise
+    machine_id = None
+
 gens = get_generations("system")
 for gen in gens:
     add_entry(gen)
