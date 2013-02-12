@@ -1,16 +1,12 @@
-{ stdenv, fetchurl, cmake, libpng, libtiff, lcms2 }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "openjpeg-2.0.0";
+  name = "openjpeg-1.5.1";
 
   src = fetchurl {
     url = "http://openjpeg.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1n05yrmscpgksrh2kfh12h18l0lw9j03mgmvwcg3hm8m0lwgak9k";
+    sha256 = "13dbyf3jwr4h2dn1k11zph3jgx17z7d66xmi640mbsf8l6bk1yvc";
   };
-
-  configurePhase = "cmake";
-
-  buildInputs = [ cmake libpng libtiff lcms2 ];
 
   meta = {
     homepage = http://www.openjpeg.org/;
