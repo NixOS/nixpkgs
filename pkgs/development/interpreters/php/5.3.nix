@@ -1,7 +1,11 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
 , openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype
-, libxslt }:
+, libxslt, libmcrypt }:
+
+let
+  libmcryptOverride = libmcrypt.override { disablePosixThreads = true; };
+in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
@@ -116,6 +120,11 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         buildInputs = [libxslt];
       };
 
+      mcrypt = {
+        configureFlags = ["--with-mcrypt=${libmcrypt}"];
+        buildInputs = [libmcryptOverride];
+      };
+
       /*
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
@@ -148,6 +157,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     mbstringSupport = config.php.mbstring or true;
     gdSupport = config.php.gd or true;
     xslSupport = config.php.xsl or false;
+    mcryptSupport = config.php.mcrypt or false;
   };
 
   configurePhase = ''
