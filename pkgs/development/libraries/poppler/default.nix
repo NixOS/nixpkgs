@@ -1,23 +1,25 @@
 { fetchurl, stdenv, cairo, freetype, fontconfig, zlib
-, libjpeg, pixman, curl, libpthreadstubs, libXau, libXdmcp, openjpeg
-, libxml2, pkgconfig, cmake, lcms
-, gtkSupport ? false, glib ? null, gtk ? null
+, libjpeg, curl, libpthreadstubs, xorg, openjpeg
+, libxml2, pkgconfig, cmake, lcms2
+, gtkSupport ? false, glib ? null, gtk3 ? null # gtk2 no longer accepted
 , qt4Support ? false, qt4 ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "poppler-0.18.4";
+  name = "poppler-0.22.1";
 
   src = fetchurl {
     url = "${meta.homepage}${name}.tar.gz";
-    sha256 = "0bnl05al7mjndp2h0355946j59nfw76f5v0x57d47q68rm412hik";
+    sha256 = "1h4p241k7ysm7mb8wgwi7ilp69z297d7ql5padb0dnmzq39sddhj";
   };
 
-  propagatedBuildInputs =
-    [ zlib cairo freetype fontconfig libjpeg lcms pixman curl
-      libpthreadstubs libXau libXdmcp openjpeg libxml2 stdenv.gcc.libc
+  propagatedBuildInputs = with xorg;
+    [ zlib cairo freetype fontconfig libjpeg lcms2 curl
+      libpthreadstubs libxml2 stdenv.gcc.libc
+      libXau libXdmcp libxcb libXrender libXext
+      #openjpeg # not detected
     ]
-    ++ stdenv.lib.optionals gtkSupport [ glib gtk ]
+    ++ stdenv.lib.optionals gtkSupport [ glib /*gtk3*/ ]
     ++ stdenv.lib.optional qt4Support qt4;
 
   buildNativeInputs = [ pkgconfig cmake ];
