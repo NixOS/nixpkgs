@@ -4855,8 +4855,6 @@ let
 
   qt4 = pkgs.kde4.qt4;
 
-  qt47 = callPackage ../development/libraries/qt-4.x/4.7 { };
-
   qt48 = callPackage ../development/libraries/qt-4.x/4.8 {
     # GNOME dependencies are not used unless gtkStyle == true
     inherit (pkgs.gnome) libgnomeui GConf gnome_vfs;
