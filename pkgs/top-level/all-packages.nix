@@ -4810,16 +4810,12 @@ let
     gtkSupport = true;
     qt4Support = false;
   };
-  poppler_0_20 = callPackage ../development/libraries/poppler/0.20.nix {
+  poppler_0_18 = callPackage ../development/libraries/poppler/0.18.nix {
     gtkSupport = true;
     qt4Support = false;
   };
 
   popplerQt4 = poppler.override {
-    gtkSupport = false;
-    qt4Support = true;
-  };
-  popplerQt4_0_20 = poppler_0_20.override {
     gtkSupport = false;
     qt4Support = true;
   };
@@ -6724,9 +6720,7 @@ let
       inherit (gnome) libglade;
   };
 
-  calibre = callPackage ../applications/misc/calibre {
-    popplerQt4 = popplerQt4_0_20;
-  };
+  calibre = callPackage ../applications/misc/calibre { };
 
   carrier = builderDefsPackage (import ../applications/networking/instant-messengers/carrier/2.5.0.nix) {
     inherit fetchurl stdenv pkgconfig perl perlXMLParser libxml2 openssl nss
@@ -7034,7 +7028,7 @@ let
   evince = hiPrio (callPackage ../applications/misc/evince {
     inherit (gnome) gnomedocutils gnomeicontheme libgnome
       libgnomeui libglade scrollkeeper;
-    poppler = poppler_0_20;
+    poppler = poppler_0_18;
   });
 
   evolution_data_server = newScope (gnome) ../servers/evolution-data-server { };
@@ -7440,7 +7434,7 @@ let
         freefont_ttf xorg.fontmiscmisc xorg.fontbhttf
       ];
     };
-    poppler = poppler_0_20;
+    poppler = poppler_0_18;
   };
 
   lingot = callPackage ../applications/audio/lingot {
