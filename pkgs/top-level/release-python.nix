@@ -1501,7 +1501,6 @@ in
   qshowdiff = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qsynth = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qt3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  qt47 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qt_gstreamer = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qtpfsgui = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qtractor = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
