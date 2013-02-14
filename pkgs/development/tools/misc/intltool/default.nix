@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, perlXMLParser}:
+{ stdenv, fetchurl, perl, perlXMLParser, gettext }:
 let
   s = # Generated upstream information
   rec {
@@ -12,12 +12,15 @@ let
   propagatedBuildInputs = [perl perlXMLParser];
   buildInputs = [];
   in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (s) name version;
   src = fetchurl {
     inherit (s) url sha256;
   };
-  inherit propagatedBuildInputs buildInputs;
+  inherit buildInputs;
+
+  # not needed by intltool itself but (probably) needed for its usage
+  propagatedBuildInputs = propagatedBuildInputs ++ [ gettext ];
 
   meta = {
     description = "Translation helper tool";
