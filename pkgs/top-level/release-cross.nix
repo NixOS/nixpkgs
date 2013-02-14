@@ -16,7 +16,6 @@ let
       #xorgserver.hostDrv = nativePlatforms;
     };
     nixUnstable.hostDrv = nativePlatforms;
-    linuxPackages_3_3.kernel.hostDrv = linux;
     linuxPackages_3_4.kernel.hostDrv = linux;
     linuxPackages_3_6.kernel.hostDrv = linux;
   };

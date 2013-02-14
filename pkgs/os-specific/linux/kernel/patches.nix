@@ -133,20 +133,6 @@ rec {
     features.aufs3 = true;
   };
 
-  aufs3_3 = rec {
-    name = "aufs3.3";
-    version = "3.3.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "65ab607cfb2c411d86da8fcee25c0f6dada1c4d5";
-      sha256 = "55c887932f1c12aed4ee20d9e749a80e9e0412951bd0a40fa3949ba972764a0a";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
   aufs3_4 = rec {
     name = "aufs3.4";
     version = "3.4.20121210";
