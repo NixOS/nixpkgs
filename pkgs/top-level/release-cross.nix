@@ -17,7 +17,6 @@ let
     };
     nixUnstable.hostDrv = nativePlatforms;
     linuxPackages_3_4.kernel.hostDrv = linux;
-    linuxPackages_3_6.kernel.hostDrv = linux;
   };
 
   /* Basic list of packages to be natively built,

@@ -147,20 +147,6 @@ rec {
     features.aufs3 = true;
   };
 
-  aufs3_6 = rec {
-    name = "aufs3.6";
-    version = "3.6.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "f541ebfd88df0f4e6f9daf55053282e4f52cc4d9";
-      sha256 = "4d615a5f3c14a6a7c49bc6d65e78a2cdb89321cbd8a53f87cc8fe9edda382c3a";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
   # not officially released yet, but 3.x seems to work fine
   aufs3_7 = rec {
     name = "aufs3.7";
