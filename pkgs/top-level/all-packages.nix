@@ -4630,7 +4630,9 @@ let
 
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
-  mlt = callPackage ../development/libraries/mlt { };
+  mlt = callPackage ../development/libraries/mlt {
+    ffmpeg = ffmpeg_1_1;
+  };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
 
