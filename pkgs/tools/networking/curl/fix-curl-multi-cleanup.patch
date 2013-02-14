@@ -1,0 +1,32 @@
+commit 249c981407b8c52edf2b0833a78cd3d3d8bd2823
+Author: Shea Levy <shea@shealevy.com>
+Date:   Sun Feb 10 13:27:10 2013 -0500
+
+    curl_multi_cleanup: Don't try to cleanup the closure_handle if it is NULL.
+    
+    Without this, curl_multi_cleanup(curl_multi_init()) segfaults.
+    
+    Signed-off-by: Shea Levy <shea@shealevy.com>
+
+diff --git a/lib/multi.c b/lib/multi.c
+index fa0afb9..5b9d0bb 100644
+--- a/lib/multi.c
++++ b/lib/multi.c
+@@ -1773,11 +1773,13 @@ CURLMcode curl_multi_cleanup(CURLM *multi_handle)
+     /* Close all the connections in the connection cache */
+     close_all_connections(multi);
+ 
+-    multi->closure_handle->dns.hostcache = multi->hostcache;
+-    Curl_hostcache_clean(multi->closure_handle);
++    if (multi->closure_handle) {
++        multi->closure_handle->dns.hostcache = multi->hostcache;
++        Curl_hostcache_clean(multi->closure_handle);
+ 
+-    Curl_close(multi->closure_handle);
+-    multi->closure_handle = NULL;
++        Curl_close(multi->closure_handle);
++        multi->closure_handle = NULL;
++    }
+ 
+     Curl_hash_destroy(multi->sockhash);
+     multi->sockhash = NULL;

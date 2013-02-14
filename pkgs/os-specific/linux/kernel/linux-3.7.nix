@@ -239,6 +239,9 @@ let
       MEDIA_RC_SUPPORT? y
       MEDIA_USB_SUPPORT y
 
+      # Easier debug of NFS issues
+      SUNRPC_DEBUG y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -247,7 +250,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.7.5";
+    version = "3.7.7";
     testing = false;
 
     preConfigure = ''
@@ -256,7 +259,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "1x8wpc33h3xib3c98icpw8b652lqdqcw0sal0fky4wrb7v22kshd";
+      sha256 = "176jhdpsyma1h4vz94jba3qxjnzlxakki1rqh8xf25zmdd25iygz";
     };
 
     config = configWithPlatform stdenv.platform;

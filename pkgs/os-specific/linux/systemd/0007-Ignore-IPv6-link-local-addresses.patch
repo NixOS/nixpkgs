@@ -1,0 +1,37 @@
+From ab889004b8972258a87798133451f99dfce21823 Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+Date: Mon, 4 Feb 2013 12:41:14 +0100
+Subject: [PATCH 7/8] Ignore IPv6 link-local addresses
+
+Returning IPv6 link-local addresses is a bad idea, because they only
+work if an application connects specifically over the corresponding
+interface.  So you get errors like:
+
+  $ curl -6 http://my-machine/
+  curl: (7) Failed to connect to fe80::d6be:d9ff:fe1b:8477: Invalid argument
+
+To prevent this, this patch filters out link-local addresses.  So if
+you don't have a routable IPv6 address, nss-myhostname will fall back
+to returning ::1.
+---
+ src/nss-myhostname/netlink.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/nss-myhostname/netlink.c b/src/nss-myhostname/netlink.c
+index 53c3b50..621ca1d 100644
+--- a/src/nss-myhostname/netlink.c
++++ b/src/nss-myhostname/netlink.c
+@@ -155,6 +155,10 @@ int ifconf_acquire_addresses(struct address **_list, unsigned *_n_list) {
+                             ifaddrmsg->ifa_scope == RT_SCOPE_NOWHERE)
+                                 continue;
+ 
++                        if (ifaddrmsg->ifa_family == AF_INET6 &&
++                            ifaddrmsg->ifa_scope == RT_SCOPE_LINK)
++                                continue;
++
+                         if (ifaddrmsg->ifa_flags & IFA_F_DEPRECATED)
+                                 continue;
+ 
+-- 
+1.8.1
+

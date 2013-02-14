@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-heap-view";
-  version = "0.4.1.0";
-  sha256 = "1icq5620j37n85d08yfpln75f9944flbqyqhjqsf0qr72zsm3w11";
+  version = "0.4.2.0";
+  sha256 = "0c9yz47j0ddy0l04dabglc99hl7n9wwnz4xj9r8ljafag6l221gp";
   buildDepends = [ transformers ];
   meta = {
     description = "Extract the heap representation of Haskell values and thunks";

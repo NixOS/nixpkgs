@@ -68,6 +68,14 @@ rec {
       merge = lib.concatStrings;
     };
 
+    # Like ‘string’, but add newlines between every value.  Useful for
+    # configuration file contents.
+    lines = mkOptionType {
+      name = "string";
+      check = lib.traceValIfNot builtins.isString;
+      merge = lib.concatStringsSep "\n";
+    };
+
     envVar = mkOptionType {
       name = "environment variable";
       inherit (string) check;

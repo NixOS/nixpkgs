@@ -398,6 +398,12 @@ pythonPackages = python.modules // rec {
       md5 = "4e3b521600e475c56a0a66459a5fc7bb";
     };
 
+   # TODO: consider if this patch should be an option
+   # It makes buildout useful in a nix profile, but this alters the default functionality
+   patchPhase = ''
+     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
+   ''; 
+
    meta = {
       homepage = http://www.buildout.org/;
       description = "A software build and configuration system";
@@ -1005,6 +1011,20 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  gcovr = buildPythonPackage rec {
+    name = "gcovr-2.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gcovr/${name}.tar.gz";
+      md5 = "672db629469882b93c40016aebff50ac";
+    };
+
+    meta = {
+      description = "A Python script for summarizing gcov data";
+      license = "BSD";
+    };
+  };
+
   genshi = buildPythonPackage {
     name = "genshi-0.6";
 
@@ -1302,11 +1322,11 @@ pythonPackages = python.modules // rec {
   };
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-2.2.2";
+    name = "lxml-3.0.2";
 
     src = fetchurl {
-      url = http://pypi.python.org/packages/source/l/lxml/lxml-2.2.2.tar.gz;
-      sha256 = "0zjpsy67wcs69qhb06ficl3a5z229hmczpr8h84rkk05vaagj8qv";
+      url = "http://pypi.python.org/packages/source/l/lxml/${name}.tar.gz";
+      md5 = "38b15b0dd5e9292cf98be800e84a3ce4";
     };
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
@@ -1659,6 +1679,8 @@ pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ coverage ];
+
+    doCheck = ! stdenv.isDarwin;
   };
 
   nose2 = if isPy26 then null else (buildPythonPackage rec {
@@ -1974,6 +1996,45 @@ pythonPackages = python.modules // rec {
     # ValueError: Working directory tests not found, or not a directory
     doCheck = false;
   };
+
+
+  pillow = buildPythonPackage rec {
+    name = "Pillow-1.7.8";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
+      md5 = "41d8688d4db72673069a6dc63b5289d6";
+    };
+
+    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib ];
+
+    configurePhase = ''
+      sed -i "setup.py" \
+          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
+              s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
+              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;'
+    '';
+
+    doCheck = true;
+
+    meta = {
+      homepage = http://python-imaging.github.com/Pillow;
+
+      description = "Fork of The Python Imaging Library (PIL)";
+
+      longDescription = ''
+        The Python Imaging Library (PIL) adds image processing
+        capabilities to your Python interpreter.  This library
+        supports many file formats, and provides powerful image
+        processing and graphics capabilities.
+      '';
+
+      license = "http://www.pythonware.com/products/pil/license.htm";
+
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
 
   polib = buildPythonPackage rec {
     name = "polib-${version}";

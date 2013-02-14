@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     xhtml zlib
   ];
   buildTools = [ alex happy ];
+  jailbreak = true;
   meta = {
     homepage = "http://wiki.portal.chalmers.se/agda/";
     description = "A dependently typed functional programming language and proof assistant";

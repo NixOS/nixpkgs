@@ -48,6 +48,7 @@ installPhase() {
     patchelf --set-rpath $out/lib:$glPath $out/lib/libGL.so.*.*
     patchelf --set-rpath $out/lib:$glPath $out/lib/libvdpau_nvidia.so.*.*
     patchelf --set-rpath $cudaPath $out/lib/libcuda.so.*.*
+    patchelf --set-rpath $openclPath $out/lib/libnvidia-opencl.so.*.*
 
     if test -z "$libsOnly"; then
 

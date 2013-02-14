@@ -238,6 +238,9 @@ let
       MEDIA_CAMERA_SUPPORT? y
       MEDIA_RC_SUPPORT? y
 
+      # Easier debug of NFS issues
+      SUNRPC_DEBUG y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
