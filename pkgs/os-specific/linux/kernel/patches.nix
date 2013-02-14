@@ -147,20 +147,6 @@ rec {
     features.aufs3 = true;
   };
 
-  aufs3_5 = rec {
-    name = "aufs3.5";
-    version = "3.5.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "1658e9080c0e49f38feee5027cf0d32940a661ca";
-      sha256 = "4577fe1dd34299520155767a7c42697d41aabc0055ae8b1e448449b8c24a1044";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
   aufs3_6 = rec {
     name = "aufs3.6";
     version = "3.6.20121210";
@@ -216,12 +202,6 @@ rec {
       features.cifsTimeout = true;
     };
 
-  cifs_timeout_3_5_7 =
-    { name = "cifs-timeout";
-      patch = ./cifs-timeout-3.5.7.patch;
-      features.cifsTimeout = true;
-    };
-
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
@@ -231,12 +211,6 @@ rec {
   dell_rfkill =
     { name = "dell-rfkill";
       patch = ./dell-rfkill.patch;
-    };
-
-  # seems no longer necessary on 3.6
-  perf3_5 =
-    { name = "perf-3.5";
-      patch = ./perf-3.5.patch;
     };
 
   sheevaplug_modules_2_6_35 =
