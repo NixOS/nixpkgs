@@ -32,10 +32,20 @@ let
       ServerTimeout=60
       # Needed to prevent the X server from dying on logout and not coming back:
       TerminateServer=true
+      ${optionalString (cfg.setupScript != "")
+      ''
+        Setup=${cfg.setupScript}
+      ''} 
 
       [X-*-Greeter]
       HiddenUsers=root,nixbld1,nixbld2,nixbld3,nixbld4,nixbld5,nixbld6,nixbld7,nixbld8,nixbld9,nixbld10
       PluginsLogin=${kdebase_workspace}/lib/kde4/kgreet_classic.so
+      ${optionalString (cfg.themeDirectory != "")
+      ''
+        UseTheme=true
+        Theme=${cfg.themeDirectory}
+      ''
+      }
 
       ${optionalString (cfg.enableXDMCP)
       ''
@@ -78,6 +88,23 @@ in
         default = false;
         description = ''
           Whether to enable XDMCP, which allows remote logins.
+        '';
+      };
+
+      themeDirectory = mkOption {
+        default = "";
+        description = ''
+          The path to a KDM theme directory. This theme
+          will be used by the KDM greeter.
+        '';
+      };
+
+      setupScript = mkOption {
+        default = "";
+        description = ''
+          The path to a KDM setup script. This script is run as root just
+          before KDM starts. Can be used for setting up
+          monitors with xrandr, for example.
         '';
       };
 
