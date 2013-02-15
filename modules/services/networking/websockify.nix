@@ -21,6 +21,7 @@ let cfg = config.services.networking.websockify; in {
       sslKey = mkOption {
         description = "Path to the SSL key";
         default = cfg.sslCert;
+        defaultText = "config.services.networking.websockify.sslCert";
         type = types.path;
       };
 
