@@ -3503,7 +3503,7 @@ pythonPackages = python.modules // rec {
       md5 = "29b6549d3421907de4bbd881ecc2e1b1";
     };
 
-    buildInputs = [ numpy ];
+    propagatedBuildInputs = [ numpy ];
 
     meta = {
       description = "WebSockets support for any application/server";
