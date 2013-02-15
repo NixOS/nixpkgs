@@ -6892,6 +6892,8 @@ let
 
     jabber = callPackage ../applications/editors/emacs-modes/jabber { };
 
+    emacsClangCompleteAsync = callPackage ../applications/editors/emacs-modes/emacs-clang-complete-async { };
+
     emacsSessionManagement = callPackage ../applications/editors/emacs-modes/session-management-for-emacs { };
 
     emacsw3m = callPackage ../applications/editors/emacs-modes/emacs-w3m { };
