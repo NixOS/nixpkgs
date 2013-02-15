@@ -3494,6 +3494,24 @@ pythonPackages = python.modules // rec {
   };
 
 
+  websockify = buildPythonPackage rec {
+    version = "0.3.0";
+    name = "websockify-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/w/websockify/websockify-${version}.tar.gz";
+      md5 = "29b6549d3421907de4bbd881ecc2e1b1";
+    };
+
+    buildInputs = [ numpy ];
+
+    meta = {
+      description = "WebSockets support for any application/server";
+      homepage = https://github.com/kanaka/websockify;
+    };
+  };
+
+
   webtest = buildPythonPackage rec {
     version = "1.2.3";
     name = "webtest-${version}";
