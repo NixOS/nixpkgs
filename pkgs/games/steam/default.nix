@@ -2,6 +2,7 @@
 , libselinux, libXrandr, pango, freetype, fontconfig, glib, gtk
 , gdk_pixbuf, cairo, libXi, alsaLib, libXrender, nss, nspr, zlib
 , dbus, libpng12, libXfixes, cups, libgcrypt, openal, pulseaudio
+, libxcb, libXau
 , SDL # World of Goo
 , libvorbis # Osmos
 , curl, mesa # Superbrothers: S&S EP
@@ -9,14 +10,14 @@
 
 assert stdenv.system == "i686-linux";
 
-let version = "1.0.0.21"; in
+let version = "1.0.0.27"; in
 
 stdenv.mkDerivation rec {
   name = "steam-${version}";
 
   src = fetchurl {
     url = "http://media.steampowered.com/client/installer/steam.deb";
-    sha256 = "03p3mvrdkkq9x7ssi9wl5zzyi4xvw5zvap7w72rpjsz8145l3vsj";
+    sha256 = "1hlmqxd0yv92aag3wbykwvri54lbmq9s6krrxfnrp1rbpli9r2jx";
   };
 
   buildInputs = [ dpkg makeWrapper ];
@@ -30,12 +31,14 @@ stdenv.mkDerivation rec {
     rmdir $out/usr
     substituteInPlace "$out/bin/steam" --replace "/bin/bash" "/bin/sh"
     substituteInPlace "$out/bin/steam" --replace "/usr/" "$out/"
+    sed -i 's,STEAMPACKAGE=.*,STEAMPACKAGE=steam,' $out/bin/steam
+    sed -i '/STEAMSCRIPT/d' $out/bin/steam
 
     mv $out/bin/steam $out/bin/.steam-wrapped
     cat > $out/bin/steam << EOF
     #!${stdenv.shell}
 
-    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib:${libselinux}/lib:${libXrandr}/lib:${pango}/lib:${freetype}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${gdk_pixbuf}/lib:${cairo}/lib:${libXi}/lib:${alsaLib}/lib:${libXrender}/lib:${nss}/lib:${nspr}/lib:${zlib}/lib:${dbus}/lib:${libpng12}/lib:${libXfixes}/lib:${cups}/lib:${libgcrypt}/lib:${openal}/lib:${pulseaudio}/lib:${SDL}/lib:${libvorbis}/lib:${curl}/lib
+    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib:${libselinux}/lib:${libXrandr}/lib:${pango}/lib:${freetype}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${gdk_pixbuf}/lib:${cairo}/lib:${libXi}/lib:${alsaLib}/lib:${libXrender}/lib:${nss}/lib:${nspr}/lib:${zlib}/lib:${dbus}/lib:${libpng12}/lib:${libXfixes}/lib:${cups}/lib:${libgcrypt}/lib:${openal}/lib:${pulseaudio}/lib:${libxcb}/lib:${libXau}/lib:${SDL}/lib:${libvorbis}/lib:${curl}/lib
     STEAMBOOTSTRAP=\$HOME/.steam/steam/steam.sh
     if [ -f \$STEAMBOOTSTRAP ]; then
       STEAMCONFIG=~/.steam
