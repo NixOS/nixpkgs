@@ -147,6 +147,12 @@ rec {
       description = "Shell commands executed as the service's main process.";
     };
 
+    scriptArgs = mkOption {
+      type = types.uniq types.string;
+      default = "";
+      description = "Arguments passed to the main process script.";
+    };
+
     preStart = mkOption {
       type = types.string;
       default = "";

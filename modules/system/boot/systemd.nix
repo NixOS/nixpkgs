@@ -241,7 +241,7 @@ let
             ExecStart=${makeJobScript "${name}-start" ''
               #! ${pkgs.stdenv.shell} -e
               ${def.script}
-            ''}
+            ''} ${def.scriptArgs}
           ''}
 
           ${optionalString (def.postStart != "") ''
