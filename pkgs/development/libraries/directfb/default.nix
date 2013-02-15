@@ -1,5 +1,5 @@
-{stdenv, fetchurl, perl, zlib, libjpeg, freetype, libpng, giflib
-, enableX11 ? true, libX11, xproto, xextproto, libXext, renderproto, libXrender
+{ stdenv, fetchurl, pkgconfig, perl, zlib, libjpeg, freetype, libpng, giflib
+, enableX11 ? true, xlibs
 , enableSDL ? true, SDL }:
 
 let s = import ./src-for-default.nix; in
@@ -10,16 +10,14 @@ stdenv.mkDerivation {
     sha256 = s.hash;
   };
 
-  patches = [ ./ftbfs.patch ];
-
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ zlib libjpeg freetype giflib libpng ]
+  buildInputs = [ pkgconfig zlib libjpeg freetype giflib libpng ]
     ++ stdenv.lib.optional enableSDL SDL
-    ++ stdenv.lib.optionals enableX11 [
-      xproto libX11 libXext xextproto
-      renderproto libXrender
-    ];
+    ++ stdenv.lib.optionals enableX11 (with xlibs; [
+      xproto libX11 libXext #xextproto
+      #renderproto libXrender
+    ]);
 
   NIX_LDFLAGS="-lgcc_s";
 
@@ -31,7 +29,7 @@ stdenv.mkDerivation {
     "--enable-fbdev"
     "--enable-mmx"
     "--enable-sse"
-    "--enable-sysfs"
+    #"--enable-sysfs" # not recognized
     "--with-software"
     "--with-smooth-scaling"
     ] ++ stdenv.lib.optionals enableX11 [

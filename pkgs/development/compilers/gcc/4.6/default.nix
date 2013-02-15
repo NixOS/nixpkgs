@@ -278,7 +278,7 @@ stdenv.mkDerivation ({
         [ "--with-host-libstdcxx=-lstdc++ -lgcc_s" ];
 
   configureFlags = "
-    ${if enableMultilib then "" else "--disable-multilib"}
+    ${if enableMultilib then "--disable-libquadmath" else "--disable-multilib"}
     ${if enableShared then "" else "--disable-shared"}
     ${if enablePlugin then "--enable-plugin" else ""}
     ${if ppl != null then "--with-ppl=${ppl}" else ""}

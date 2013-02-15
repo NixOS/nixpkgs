@@ -207,7 +207,6 @@ with (import ./release-lib.nix);
   ntp = linux;
   ocaml = linux;
   octave = linux;
-  openoffice = linux;
   openssh = linux;
   openssl = all;
   pam_console = linux;

@@ -1,19 +1,18 @@
 { stdenv, fetchurl, alsaLib, dbus, expat, libsamplerate
 , libsndfile, makeWrapper, pkgconfig, python, pythonDBus
-, firewireSupport ? false, ffado ? null }:
+, firewireSupport ? false, ffado ? null, bash }:
 
 assert firewireSupport -> ffado != null;
 
 stdenv.mkDerivation rec {
   name = "jackdbus-${version}";
-  version = "1.9.8";
+  version = "1.9.9.5";
 
   src = fetchurl {
     urls = [
-      "http://pkgs.fedoraproject.org/lookaside/pkgs/jack-audio-connection-kit/jack-1.9.8.tgz/1dd2ff054cab79dfc11d134756f27165/jack-1.9.8.tgz"
-      "http://www.grame.fr/~letz/jack-1.9.8.tgz"
+      https://dl.dropbox.com/u/28869550/jack-1.9.9.5.tar.bz2
     ];
-    sha256 = "0788092zxrivcfnfg15brpjkf14x8ma8cwjz4k0b9xdxajn2wwac";
+    sha256 = "1ggba69jsfg7dmjzlyqz58y2wa92lm3vwdy4r15bs7mvxb65mvv5";
   };
 
   buildInputs =
@@ -21,10 +20,11 @@ stdenv.mkDerivation rec {
       pkgconfig python pythonDBus
     ] ++ (stdenv.lib.optional firewireSupport ffado);
 
-  patches = ./ffado_setbuffsize-jack2.patch;
+  patchPhase = ''
+    substituteInPlace svnversion_regenerate.sh --replace /bin/bash ${bash}/bin/bash
+  '';
 
   configurePhase = ''
-    cd jack-1.9.8
     python waf configure --prefix=$out --dbus --alsa ${if firewireSupport then "--firewire" else ""}
   '';
 

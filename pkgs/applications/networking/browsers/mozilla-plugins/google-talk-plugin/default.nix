@@ -45,6 +45,8 @@ in
 
 stdenv.mkDerivation rec {
   name = "google-talk-plugin-${version}";
+  # Use the following to determine the current upstream version:
+  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages | sed -nr 's/^Version: *([^ ]+)-1$/\1/p'
   version = "3.10.2.0";
 
   src =

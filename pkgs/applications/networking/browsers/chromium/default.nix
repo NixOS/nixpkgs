@@ -50,7 +50,7 @@ let
     use_system_libexpat = true;
     use_system_libexif = true;
     use_system_libjpeg = true;
-    use_system_libpng = true;
+    use_system_libpng = !post24;
     use_system_libusb = true;
     use_system_libxml = true;
     use_system_speex = true;

@@ -1,5 +1,5 @@
 {stdenv, fetchurl, jre, libX11, libXext, libXcursor, libXrandr, libXxf86vm
-, mesa, openal}:
+, mesa, openal, alsaOss }:
 
 stdenv.mkDerivation {
   name = "minecraft-1.4.7";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
     # wrapper for minecraft
     export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${jre}/lib/${jre.architecture}/:${libX11}/lib/:${libXext}/lib/:${libXcursor}/lib/:${libXrandr}/lib/:${libXxf86vm}/lib/:${mesa}/lib/:${openal}/lib/
-    ${jre}/bin/java -jar $out/minecraft.jar
+    ${alsaOss}/bin/aoss ${jre}/bin/java -jar $out/minecraft.jar
     EOF
 
     chmod +x $out/bin/minecraft

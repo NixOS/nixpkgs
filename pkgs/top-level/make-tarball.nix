@@ -77,8 +77,7 @@ releaseTools.sourceTarball {
     mkdir ../$releaseName
     cp -prd . ../$releaseName
     echo nixpkgs > ../$releaseName/channel-name
-    (cd .. && tar cfa $out/tarballs/$releaseName.tar.bz2 $releaseName) || false
-    (cd .. && tar cfa $out/tarballs/$releaseName.tar.lzma $releaseName) || false
+    (cd .. && tar cfa $out/tarballs/$releaseName.tar.xz $releaseName) || false
 
     mkdir -p $out/release-notes
     cp doc/NEWS.html $out/release-notes/index.html

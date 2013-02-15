@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "distributed-process-simplelocalnet";
-  version = "0.2.0.8";
-  sha256 = "01kzqfbrkl9zzknw0gbdh1c1lss911lphagn2sw6nzl9xpnhjqk0";
+  version = "0.2.0.9";
+  sha256 = "0bkb26bfpmyhh26hgznnw073kvk78ws6lqi86pxrgnnm9sx5mi21";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

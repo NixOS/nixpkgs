@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "profunctors";
-  version = "3.2";
-  sha256 = "0c7242pk5hfz67cwjy0l7skqyz20akw9j2w7cb8iggcbbb27bgyc";
+  version = "3.3";
+  sha256 = "0cvar0qr2yf0lmqwhiy2ibajiq9cmqy2ikwn8l5mdxxh5q5rwgjj";
   buildDepends = [ comonad tagged ];
   meta = {
     homepage = "http://github.com/ekmett/profunctors/";

@@ -4,8 +4,8 @@ stdenv.mkDerivation rec {
   name = "wget-1.14";
 
   src = fetchurl {
-    url = "mirror://gnu/wget/${name}.tar.gz";
-    sha256 = "0sf26vlklxx20fjnj30fx6rijpcyvdl6cjmh6m2bjnvn7a78k9pk";
+    url = "mirror://gnu/wget/${name}.tar.xz";
+    sha256 = "0yqllj3nv9p3vqbdm6j4nvpjcwf1y19rq8sd966nrbd2qvvxfq8p";
   };
 
   preConfigure = stdenv.lib.optionalString doCheck

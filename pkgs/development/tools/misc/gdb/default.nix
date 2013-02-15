@@ -8,7 +8,7 @@
 
 let
 
-  basename = "gdb-7.5";
+  basename = "gdb-7.5.1";
 
   # Whether (cross-)building for GNU/Hurd.  This is an approximation since
   # having `stdenv ? cross' doesn't tell us if we're building `crossDrv' and
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.bz2";
-    md5 = "24a6779a9fe0260667710de1b082ef61";
+    sha256 = "084xs90545an51biyy4qd53hsw6p1k6arviq2wlz1a4z526q02q7";
   };
 
   # I think python is not a native input, but I leave it

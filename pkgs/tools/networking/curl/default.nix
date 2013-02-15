@@ -55,6 +55,8 @@ stdenv.mkDerivation rec {
     inherit sslSupport openssl;
   };
 
+  patches = [ ./fix-curl-multi-cleanup.patch ];
+
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
   '';

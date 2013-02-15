@@ -10,16 +10,13 @@ let
     coreutils.crossDrv = nativePlatforms;
     dropbear.crossDrv = nativePlatforms;
     tigervnc.crossDrv = nativePlatforms;
-    #openoffice.crossDrv = nativePlatforms;
     wxGTK.crossDrv = nativePlatforms;
     #firefox = nativePlatforms;
     xorg = {
       #xorgserver.crossDrv = nativePlatforms;
     };
     nixUnstable.crossDrv = nativePlatforms;
-    linuxPackages_3_3.kernel.crossDrv = linux;
     linuxPackages_3_4.kernel.crossDrv = linux;
-    linuxPackages_3_6.kernel.crossDrv = linux;
   };
 
   /* Basic list of packages to be natively built,
@@ -36,7 +33,7 @@ in
 /* Test some cross builds to the Sheevaplug */
 let
   crossSystem = {
-    config = "armv5tel-unknown-linux-gnueabi";  
+    config = "armv5tel-unknown-linux-gnueabi";
     bigEndian = false;
     arch = "arm";
     float = "soft";
@@ -57,7 +54,7 @@ in {
 /* Test some cross builds to the Sheevaplug - uclibc*/
 let
   crossSystem = {
-    config = "armv5tel-unknown-linux-gnueabi";  
+    config = "armv5tel-unknown-linux-gnueabi";
     bigEndian = false;
     arch = "arm";
     float = "soft";
@@ -86,7 +83,7 @@ in {
 /* Test some cross builds to the mipsel */
 let
   crossSystem = {
-    config = "mipsel-unknown-linux";  
+    config = "mipsel-unknown-linux";
     bigEndian = false;
     arch = "mips";
     float = "soft";
@@ -120,7 +117,7 @@ in {
 /* Test some cross builds to the ultrasparc */
 let
   crossSystem = {
-    config = "sparc64-unknown-linux";  
+    config = "sparc64-unknown-linux";
     bigEndian = true;
     arch = "sparc64";
     float = "hard";
@@ -236,7 +233,7 @@ in {
 /* Linux on the fuloong */
 let
   crossSystem = {
-    config = "mips64el-unknown-linux";  
+    config = "mips64el-unknown-linux";
     bigEndian = false;
     arch = "mips";
     float = "hard";
@@ -274,7 +271,7 @@ in {
 /* Linux on the Ben Nanonote */
 let
   crossSystem = {
-    config = "mipsel-unknown-linux";  
+    config = "mipsel-unknown-linux";
     bigEndian = false;
     arch = "mips";
     float = "soft";

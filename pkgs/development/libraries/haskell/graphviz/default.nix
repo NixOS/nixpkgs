@@ -1,13 +1,14 @@
-{ cabal, colour, dlist, fgl, filepath, polyparse, text
+{ cabal, colour, dlist, fgl, filepath, polyparse, temporary, text
 , transformers, wlPprintText
 }:
 
 cabal.mkDerivation (self: {
   pname = "graphviz";
-  version = "2999.15.0.1";
-  sha256 = "137d8n20fbpdz7az79gqharsfl293pl3xn444338i6blfi47ssdy";
+  version = "2999.16.0.0";
+  sha256 = "1g4q4wyj5amz9xvgnqn143p5nq6m4a0lggxz7jn9l2hwp41bx1g8";
   buildDepends = [
-    colour dlist fgl filepath polyparse text transformers wlPprintText
+    colour dlist fgl filepath polyparse temporary text transformers
+    wlPprintText
   ];
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";

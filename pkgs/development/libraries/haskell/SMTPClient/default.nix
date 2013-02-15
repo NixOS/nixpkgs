@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "SMTPClient";
-  version = "1.0.4";
-  sha256 = "12m0qv8bf0s52yz07sipxlvas8k3xvi1d4lw6960q0nxr40ijyy2";
+  version = "1.1.0";
+  sha256 = "07njj24c43iz33c641d5ish62h13lhpvn2mx5pv5i6s3fm3bxsfk";
   buildDepends = [ extensibleExceptions hsemail network ];
   meta = {
     description = "A simple SMTP client library";
