@@ -2,7 +2,7 @@
 , libselinux, libXrandr, pango, freetype, fontconfig, glib, gtk
 , gdk_pixbuf, cairo, libXi, alsaLib, libXrender, nss, nspr, zlib
 , dbus, libpng12, libXfixes, cups, libgcrypt, openal, pulseaudio
-, libxcb, libXau
+, libxcb, libXau, libXdmcp
 , SDL # World of Goo
 , libvorbis # Osmos
 , curl, mesa # Superbrothers: S&S EP
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     cat > $out/bin/steam << EOF
     #!${stdenv.shell}
 
-    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib:${libselinux}/lib:${libXrandr}/lib:${pango}/lib:${freetype}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${gdk_pixbuf}/lib:${cairo}/lib:${libXi}/lib:${alsaLib}/lib:${libXrender}/lib:${nss}/lib:${nspr}/lib:${zlib}/lib:${dbus}/lib:${libpng12}/lib:${libXfixes}/lib:${cups}/lib:${libgcrypt}/lib:${openal}/lib:${pulseaudio}/lib:${libxcb}/lib:${libXau}/lib:${SDL}/lib:${libvorbis}/lib:${curl}/lib
+    export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib:${libselinux}/lib:${libXrandr}/lib:${pango}/lib:${freetype}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${gdk_pixbuf}/lib:${cairo}/lib:${libXi}/lib:${alsaLib}/lib:${libXrender}/lib:${nss}/lib:${nspr}/lib:${zlib}/lib:${dbus}/lib:${libpng12}/lib:${libXfixes}/lib:${cups}/lib:${libgcrypt}/lib:${openal}/lib:${pulseaudio}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${SDL}/lib:${libvorbis}/lib:${curl}/lib
     STEAMBOOTSTRAP=\$HOME/.steam/steam/steam.sh
     if [ -f \$STEAMBOOTSTRAP ]; then
       STEAMCONFIG=~/.steam
