@@ -14,7 +14,7 @@ PROG=$(basename "$0")
 SITES=
 
 pypath() {
-  BIN=$(realpath -s "$(dirname "$BIN")")
+  BIN=$(realpath -s "$(dirname "$1")")
   ENV=$(dirname "$BIN")
   SITE="$ENV/lib/python2.7/site-packages"
   SITES="$SITES${SITES:+:}$SITE"
