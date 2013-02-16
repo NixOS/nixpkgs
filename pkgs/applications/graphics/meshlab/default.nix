@@ -1,4 +1,4 @@
-{stdenv, fetchurl, qt, bzip2, lib3ds, levmar, muparser, unzip}:
+{stdenv, fetchurl, qt4, bzip2, lib3ds, levmar, muparser, unzip}:
 
 stdenv.mkDerivation rec {
   name = "meshlab-1.3.2";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
 
-  buildInputs = [ qt unzip ];
+  buildInputs = [ qt4 unzip ];
 
   meta = {
     description = "System for the processing and editing of unstructured 3D triangular meshes";
