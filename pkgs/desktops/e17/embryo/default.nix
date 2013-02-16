@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
       untouched.
     '';
     homepage = http://enlightenment.org/;
-    license = with stdenv.lib.licenses; [ bsd2 bsd3 ];  # not sure
+    license = with stdenv.lib.licenses; [ bsd2.shortName bsd3.shortName ];  # not sure
   };
 }
