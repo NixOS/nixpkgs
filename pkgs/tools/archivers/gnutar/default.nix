@@ -35,7 +35,7 @@ stdenv.mkDerivation (rec {
 }
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
-// stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux") {
+// stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
   FORCE_UNSAFE_CONFIGURE = 1;
 }
 

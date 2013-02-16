@@ -3048,7 +3048,7 @@ let
     cross = assert crossSystem != null; crossSystem;
   }));
 
-  bison = bison25;
+  bison = bison27;
 
   bison1875 = callPackage ../development/tools/parsing/bison/bison-1.875.nix { };
 
@@ -3059,6 +3059,8 @@ let
   bison25 = callPackage ../development/tools/parsing/bison/bison-2.5.nix { };
 
   bison26 = callPackage ../development/tools/parsing/bison/bison-2.6.nix { };
+
+  bison27 = callPackage ../development/tools/parsing/bison/bison-2.7.nix { };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted;

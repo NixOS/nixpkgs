@@ -9,7 +9,7 @@ rec {
   path =
     (if system == "i686-solaris" then [ "/usr/gnu" ] else []) ++
     (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
-    ["/" "/usr" "/usr/local"];
+    ["/opt/local/gnu" "/opt/local/bin" "/" "/usr" "/usr/local"];
 
   prehookBase = ''
     # Disable purity tests; it's allowed (even needed) to link to
@@ -112,7 +112,7 @@ rec {
     name = "gcc-native";
     nativeTools = true;
     nativeLibc = true;
-    nativePrefix = if system == "i686-solaris" then "/usr/gnu" else "/usr";
+    nativePrefix = if system == "i686-solaris" then "/usr/gnu" else "/opt/local/gcc47";
     stdenv = stdenvBoot0;
   };
 
