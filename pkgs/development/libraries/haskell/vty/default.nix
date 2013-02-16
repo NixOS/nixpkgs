@@ -1,13 +1,15 @@
-{ cabal, deepseq, mtl, parallel, parsec, terminfo, utf8String
-, vector
+{ cabal, deepseq, mtl, parallel, parsec, stringQq, terminfo
+, utf8String, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "vty";
-  version = "4.7.0.20";
-  sha256 = "15slw4zpvfkx9qwj2g5ndcxwbw0kkhyq8frvh9kharqd0zqzgqzb";
+  version = "4.7.3";
+  sha256 = "0x059mzw6v2xf92fdhy0ilyqbics2as6dqrdr6njpp0m6qykkybb";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
-    deepseq mtl parallel parsec terminfo utf8String vector
+    deepseq mtl parallel parsec stringQq terminfo utf8String vector
   ];
   meta = {
     homepage = "https://github.com/coreyoconnor/vty";

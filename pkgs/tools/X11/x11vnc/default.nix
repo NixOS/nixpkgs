@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
         --replace '"/bin/true"' '"${coreutils}/bin/true"'
         
     substituteInPlace x11vnc/ssltools.h \
+        --replace /bin/su /var/setuid-wrappers/su \
         --replace xdpyinfo ${xorg.xdpyinfo}/bin/xdpyinfo
   '';
 
