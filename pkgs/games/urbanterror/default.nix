@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   '';
   installPhase = ''
     destDir="$out/opt/urbanterror"
-    ensureDir "$destDir" "$out/bin"
+    mkdir -p "$destDir"
+    mkdir -p "$out/bin"
     cp -v build/release-linux-*/Quake3-UrT.* \
           "$destDir/Quake3-UrT"
     cp -v build/release-linux-*/Quake3-UrT-Ded.* \
