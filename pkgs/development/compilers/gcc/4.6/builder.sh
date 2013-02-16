@@ -198,7 +198,7 @@ postConfigure() {
 
 preInstall() {
     # Make ‘lib64’ a symlink to ‘lib’.
-    if [ -n "$is64bit" ]; then
+    if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
         mkdir -p $out/lib
         ln -s lib $out/lib64
     fi

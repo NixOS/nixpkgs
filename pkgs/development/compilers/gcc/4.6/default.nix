@@ -192,7 +192,7 @@ stdenv.mkDerivation ({
     inherit langC langCC langFortran langJava langAda langGo;
   };
 
-  inherit patches;
+  inherit patches enableMultilib;
 
   postPatch =
     if (stdenv.isGNU
@@ -431,7 +431,7 @@ stdenv.mkDerivation ({
     else null;
 
   passthru = { inherit langC langCC langAda langFortran langVhdl
-      langGo enableMultilib version; };
+      langGo version; };
 
   enableParallelBuilding = true;
 
