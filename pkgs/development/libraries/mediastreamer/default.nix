@@ -2,11 +2,11 @@
   libv4l, libtheora, intltool, libvpx, gsm }:
 
 stdenv.mkDerivation rec {
-  name = "mediastreamer-2.8.0";
+  name = "mediastreamer-2.8.2";
 
   src = fetchurl {
     url = "mirror://savannah/linphone/mediastreamer/${name}.tar.gz";
-    sha256 = "0h1qda2mjc76xirldlvpmzf57vcbgr113a9b0kw1xm5i58s0w34f";
+    sha256 = "0csg9a4mwfw5j475q9d5klhy82jnpcqfrlbvw81nxnqki40bnbm6";
   };
 
 # TODO: make it load plugins from *_PLUGIN_PATH
