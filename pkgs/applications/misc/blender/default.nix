@@ -1,26 +1,32 @@
 { stdenv, fetchurl, SDL, cmake, gettext, ilmbase, libXi, libjpeg,
 libpng, libsamplerate, libtiff, mesa, openal, openexr, openjpeg,
-python, zlib, boost }:
+python, zlib, boost, glew, xlibs }:
 
 stdenv.mkDerivation rec {
-  name = "blender-2.63a";
+  name = "blender-2.65a";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "c479b1abfe5fd8a1a5d04b8d21fdbc0fc960d7855b24785b888c09792bca4c1a";
+    sha256 = "1p7nszbqsn48s6jrj0bqav7q52gj82rpv1w5lhh64v092m3v9jpq";
   };
 
   buildInputs = [ cmake mesa gettext python libjpeg libpng zlib openal
-    SDL openexr libsamplerate libXi libtiff ilmbase openjpeg boost ];
+    SDL openexr libsamplerate libXi libtiff ilmbase openjpeg boost glew xlibs.libXxf86vm ];
+
+  patches = [ ./fix-include.patch ];
 
   cmakeFlags = [
     "-DOPENEXR_INC=${openexr}/include/OpenEXR"
     "-DWITH_OPENCOLLADA=OFF"
     "-DWITH_INSTALL_PORTABLE=OFF"
-    "-DPYTHON_LIBPATH=${python}/lib"
-  ];
+    "-DPYTHON_LIBRARY=${python}/lib"
+    "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
+    "-DOPENJPEG_INCLUDE_DIR=${openjpeg}/include"
+    "-DWITH_CYCLES=0" # would need openimageio
+  ]; # ToDo?: more options available
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+  NIX_CFLAGS_COMPILE = "-I${openjpeg}/include/${openjpeg.incDir} -I${ilmbase}/include/OpenEXR";
+  NIX_CFLAGS_LINK = "-lpython3";
 
   enableParallelBuilding = true;
 

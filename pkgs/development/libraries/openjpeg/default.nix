@@ -2,6 +2,9 @@
 
 stdenv.mkDerivation rec {
   name = "openjpeg-1.5.1";
+  passthru = {
+    incDir = "openjpeg-1.5";
+  };
 
   src = fetchurl {
     url = "http://openjpeg.googlecode.com/files/${name}.tar.gz";

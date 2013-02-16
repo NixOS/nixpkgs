@@ -6711,7 +6711,7 @@ let
   };
 
   blender = callPackage  ../applications/misc/blender {
-    python = python32;
+    python = python33; # 2.65a doesn't accept lower
   };
 
   bristol = callPackage ../applications/audio/bristol { };
