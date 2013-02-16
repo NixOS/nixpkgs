@@ -15,6 +15,7 @@ in
     ./wmii.nix
     ./xmonad.nix
     ./i3.nix
+    ./xbmc.nix
   ];
 
   options = {
