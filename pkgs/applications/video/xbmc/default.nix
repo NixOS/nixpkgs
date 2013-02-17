@@ -13,7 +13,7 @@
 , ffmpeg, libmpeg2, libsamplerate, libmad
 , libogg, libvorbis, flac
 , lzo, libcdio, libmodplug, libass
-, sqlite, mysql
+, sqlite, mysql, nasm
 , curl, bzip2, zip, unzip, glxinfo, xdpyinfo
 , dbus_libs ? null, dbusSupport ? true
 , udev, udevSupport ? true
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       ffmpeg libmpeg2 libsamplerate libmad
       libogg libvorbis flac
       lzo libcdio libmodplug libass
-      sqlite mysql
+      sqlite mysql nasm
       curl bzip2 zip unzip glxinfo xdpyinfo
     ]
     ++ lib.optional dbusSupport dbus_libs
