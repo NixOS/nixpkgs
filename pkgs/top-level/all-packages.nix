@@ -5104,6 +5104,8 @@ let
     libpng = libpng12;
   };
 
+  wayland = callPackage ../development/libraries/wayland { };
+
   webkit =
     builderDefsPackage ../development/libraries/webkit {
       inherit (gnome) gtkdoc libsoup;
