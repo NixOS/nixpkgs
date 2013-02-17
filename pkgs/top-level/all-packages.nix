@@ -4426,8 +4426,6 @@ let
 
   libosip = callPackage ../development/libraries/osip {};
 
-  libotf = callPackage ../development/libraries/libotf { };
-
   libotr = callPackage ../development/libraries/libotr { };
 
   libp11 = callPackage ../development/libraries/libp11 { };
@@ -4470,8 +4468,6 @@ let
   libstartup_notification = callPackage ../development/libraries/startup-notification { };
 
   libtasn1 = callPackage ../development/libraries/libtasn1 { };
-
-  libtau = callPackage ../development/libraries/libtau { };
 
   libtheora = callPackage ../development/libraries/libtheora { };
 
@@ -4776,8 +4772,6 @@ let
       onlyHeaders = true;
     };
   };
-
-  opentrace_format = callPackage ../development/libraries/opentrace-format { };
 
   ortp = callPackage ../development/libraries/ortp { };
 

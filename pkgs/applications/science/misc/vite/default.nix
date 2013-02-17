@@ -1,28 +1,31 @@
-{ stdenv, fetchurl, fetchsvn, cmake, qt4, mesa, opentrace_format, libtau }:
+{ fetchsvn, stdenv, cmake, qt4, mesa }:
 
 # ViTE 1.1 has several bugs, so use the SVN version.
 let
-  rev = "1157";
+  rev = "1143";
   externals = fetchsvn {
     url = "svn://scm.gforge.inria.fr/svn/vite/externals";
-    sha256 = "1yqx72q3dd53k8z6jz93nbm9yyysq4npdjh1qv3f1qcrpz75k1zj";
+    sha256 = "0wg3yh5q8gx7189rvkd8achld7bzp0i7qqn6c77pg767b4b8dh1a";
     inherit rev;
   };
 in
 stdenv.mkDerivation {
-  name = "vite-1.2";
+  name = "vite-1.2pre${rev}";
 
-  src = fetchurl {
-    url = "http://gforge.inria.fr/frs/download.php/27457/vite_${rev}.tar.gz";
-    sha256 = "0j894wpqgcy0dzsxrp0z2fzymcl1m406cy4xv1kdzada25zjaq7m";
+  src = fetchsvn {
+    url = "svn://scm.gforge.inria.fr/svn/vite/trunk";
+    sha256 = "0cy9b6isiwqwnv9gk0cg97x370fpwyccljadds4a118k5gh58zw4";
+    inherit rev;
   };
 
+  preConfigure =
+    '' rm -v externals
+       ln -sv "${externals}" externals
+    '';
+
   patches = [ ./larger-line-buffer.patch ];
-  preConfigure = "sed -i '50i\#include <GL/glu.h>' src/render/Geometry.hpp";
 
-  cmakeFlags = "-DTAU_LIBRARY=${libtau}/lib/libTAU.so -DTAU_INCLUDE_DIR=${libtau}/include"; # -DTAU_DIR:PATH=${libtau}";
-
-  buildInputs = [ cmake qt4 mesa opentrace_format libtau ];
+  buildInputs = [ cmake qt4 mesa ];
 
   NIX_LDFLAGS = "-lGLU";
 
