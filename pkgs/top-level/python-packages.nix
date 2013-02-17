@@ -721,6 +721,60 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  deluge = buildPythonPackage rec {
+    name = "deluge-1.3.5";
+
+    src = fetchurl {
+      url = "http://download.deluge-torrent.org/source/${name}.tar.gz";
+      md5 = "fbf52593a85bfa7c8520834fa9177fba";
+    };
+
+    # TODO: gui, procsettitle
+    buildInputs = [ pkgs.libtorrentRasterbar twisted Mako chardet pyxdg pkgs.pyopenssl ];
+    propagatedBuildInputs = [ pkgs.libtorrentRasterbar twisted Mako chardet pyxdg pkgs.pyopenssl ];
+
+    meta = {
+      homepage = http://deluge-torrent.org;
+      description = "Torrent client";
+      license = "GPLv3";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+  pyxdg = buildPythonPackage rec {
+    name = "pyxdg-0.25";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyxdg/${name}.tar.gz";
+      md5 = "bedcdb3a0ed85986d40044c87f23477c";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      homepage = http://freedesktop.org/wiki/Software/pyxdg;
+      description = "Contains implementations of freedesktop.org standards";
+      license = "LGPLv2";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+  chardet = buildPythonPackage rec {
+    name = "chardet-2.1.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/chardet/${name}.tar.gz";
+      md5 = "295367fd210d20f3febda615a88e1ef0";
+    };
+
+    meta = {
+      homepage = https://github.com/erikrose/chardet;
+      description = "Universal encoding detector";
+      license = "LGPLv2";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
 
   django = buildPythonPackage rec {
     name = "Django-${version}";
@@ -1380,6 +1434,43 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "A Python crypto and SSL toolkit";
       homepage = http://chandlerproject.org/Projects/MeTooCrypto;
+    };
+  };
+
+
+  Mako = buildPythonPackage rec {
+    name = "Mako-0.7.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/M/Mako/${name}.tar.gz";
+      md5 = "daf7cc50f997533b573f9b40193139a2";
+    };
+
+    buildInputs = [ MarkupSafe nose ];
+    propagatedBuildInputs = [ MarkupSafe ];
+
+    meta = {
+      description = "Super-fast templating language.";
+      homepage = http://www.makotemplates.org;
+      license = "MIT";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+
+  MarkupSafe = buildPythonPackage rec {
+    name = "MarkupSafe-0.15";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/M/MarkupSafe/${name}.tar.gz";
+      md5 = "4e7c4d965fe5e033fa2d7bb7746bb186";
+    };
+
+    meta = {
+      description = "Implements a XML/HTML/XHTML Markup safe string";
+      homepage = http://dev.pocoo.org;
+      license = "BSD";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
 
