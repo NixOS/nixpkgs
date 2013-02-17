@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1hywvbn4a8f96fjn3cvd6nxzh5jvh05s1r263d9vqlgn25dxrzay";
   };
   
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
   
   meta = with stdenv.lib; {
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";

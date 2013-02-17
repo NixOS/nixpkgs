@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     ++ optional libpngSupport libpng
     ;
 
-  buildNativeInputs = [ yasm python3 ];
+  nativeBuildInputs = [ yasm python3 ];
 
   postConfigure = ''
     patchShebangs TOOLS

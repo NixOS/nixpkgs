@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "09aj30m49ivycl3irram8c3givc0crivjm3ymw0nhfaxrwhlb186";
   };
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
   buildInputs = [ attr ];
 
   # Upstream use C++-style comments in C code. Remove them.

@@ -41,7 +41,7 @@ stdenv.mkDerivation {
 
       # Then build the plugins.
       (
-        buildNativeInputs="$out $buildNativeInputs" # to find audacious
+        nativeBuildInputs="$out $nativeBuildInputs" # to find audacious
         source $stdenv/setup
         rm -rfv audacious-*
         src=$pluginsSrc

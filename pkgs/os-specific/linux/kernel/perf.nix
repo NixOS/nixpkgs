@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   # perf refers both to newt and slang
-  buildNativeInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt flex bison ];
+  nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt flex bison ];
   buildInputs = [ elfutils python perl newt slang pkgconfig] ++
     stdenv.lib.optional withGtk gtk;
 
@@ -27,9 +27,9 @@ stdenv.mkDerivation {
   crossAttrs = {
     /* I don't want cross-python or cross-perl -
        I don't know if cross-python even works */
-    propagatedBuildInputs = [ elfutils.hostDrv newt.hostDrv ];
+    propagatedBuildInputs = [ elfutils.crossDrv newt.crossDrv ];
     makeFlags = "CROSS_COMPILE=${stdenv.cross.config}-";
-    elfutils = elfutils.hostDrv;
+    elfutils = elfutils.crossDrv;
   };
 
   meta = {

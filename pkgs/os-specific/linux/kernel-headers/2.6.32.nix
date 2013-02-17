@@ -4,7 +4,7 @@ assert cross == null -> stdenv.isLinux;
 
 let
   version = "2.6.32.16";
-  kernelHeadersBaseConfig = if (cross == null) then
+  kernelHeadersBaseConfig = if cross == null then
       stdenv.platform.kernelHeadersBaseConfig
     else
       cross.platform.kernelHeadersBaseConfig;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "1ndvqvfaxachsklzzr5db1bzvfhnzz8diddrm1zlv7171fzmn13j";
   };
 
-  targetConfig = if (cross != null) then cross.config else null;
+  targetConfig = if cross != null then cross.config else null;
 
   platform =
     if cross != null then cross.platform.kernelArch else

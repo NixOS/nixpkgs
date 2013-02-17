@@ -88,12 +88,12 @@
             configurePhase = ''
               eval "$preConfigure"
 
-              ${lib.optionalString (lib.attrByPath ["jailbreak"] false self) "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal && "
-              }for i in Setup.hs Setup.lhs; do
+              ${lib.optionalString (lib.attrByPath ["jailbreak"] false self) "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
+              for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
 
-              for p in $extraBuildInputs $propagatedBuildNativeInputs; do
+              for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/include" ]; then
                   extraLibDirs="$extraLibDirs --extra-include-dir=$p/include"
                 fi
@@ -145,8 +145,8 @@
             '';
 
             postFixup = ''
-              if test -f $out/nix-support/propagated-build-native-inputs; then
-                ln -s $out/nix-support/propagated-build-native-inputs $out/nix-support/propagated-user-env-packages
+              if test -f $out/nix-support/propagated-native-build-inputs; then
+                ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
               fi
             '';
 

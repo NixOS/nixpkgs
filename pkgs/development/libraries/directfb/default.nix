@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = s.hash;
   };
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [ pkgconfig zlib libjpeg freetype giflib libpng ]
     ++ stdenv.lib.optional enableSDL SDL

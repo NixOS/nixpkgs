@@ -21,7 +21,7 @@ stdenv.mkDerivation ({
     inherit rev;
   };
 
-  buildNativeInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ machHeaders hurdHeaders ]
    ++ stdenv.lib.optional (!headersOnly) hurd
    ++ stdenv.lib.optional (gccCross != null) gccCross;

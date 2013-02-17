@@ -21,7 +21,7 @@ stdenv.mkDerivation {
           sha256 = "1993vskpycyr43rwdp8f688fc5zvllrqq935r7rhsgbqbipkk73h";
         };
 
-        buildNativeInputs = [ patchutils ];
+        nativeBuildInputs = [ patchutils ];
 
         buildCommand = "filterdiff -x '*/CHANGES' $src > $out";
       })

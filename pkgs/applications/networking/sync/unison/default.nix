@@ -27,7 +27,7 @@ stdenv.mkDerivation (rec {
     done
   '' else "";
 
-  dontStrip = if ! ocaml.nativeCompilers then true else false;
+  dontStrip = !ocaml.nativeCompilers;
 
   meta = {
     homepage = http://www.cis.upenn.edu/~bcpierce/unison/;

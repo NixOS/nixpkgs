@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib python pygobject ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://www.gupnp.org/;

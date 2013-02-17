@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     [ mesa openal freealut wxGTK freetype fftwSinglePrec SDL_net zlib libpng libjpeg
     libogg libvorbis ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   patches = [ ./file-existence.patch ];
 

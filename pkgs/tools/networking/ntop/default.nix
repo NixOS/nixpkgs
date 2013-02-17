@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     cp ${libtool}/share/aclocal/libtool.m4 libtool.m4.in
   '';
 
-  buildNativeInputs = [ autoconf automake libtool wget libpcap gdbm zlib openssl rrdtool
+  nativeBuildInputs = [ autoconf automake libtool wget libpcap gdbm zlib openssl rrdtool
     python geoip ];
 
   meta = {

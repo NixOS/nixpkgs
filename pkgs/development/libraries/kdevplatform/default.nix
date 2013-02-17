@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ kdelibs qt4 phonon ];
   buildInputs = [ apr aprutil subversion boost qjson ];
 
-  buildNativeInputs = [ cmake automoc4 gettext pkgconfig ];
+  nativeBuildInputs = [ cmake automoc4 gettext pkgconfig ];
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.urkud ];

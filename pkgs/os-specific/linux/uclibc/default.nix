@@ -33,8 +33,8 @@ let
     }
   '';
 
-  archMakeFlag = if (cross != null) then "ARCH=${cross.arch}" else "";
-  crossMakeFlag = if (cross != null) then "CROSS=${cross.config}-" else "";
+  archMakeFlag = if cross != null then "ARCH=${cross.arch}" else "";
+  crossMakeFlag = if cross != null then "CROSS=${cross.config}-" else "";
 
   # UCLIBC_SUSV4_LEGACY defines 'tmpnam', needed for gcc libstdc++ builds.
   nixConfig = ''
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
   '';
 
   # Cross stripping hurts.
-  dontStrip = if (cross != null) then true else false;
+  dontStrip = cross != null;
 
   makeFlags = [ crossMakeFlag "VERBOSE=1" ];
 

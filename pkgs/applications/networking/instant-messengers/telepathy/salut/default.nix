@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib libxml2 telepathy_glib avahi libsoup libuuid gnutls
     sqlite ];
 
-  buildNativeInputs = [ libxslt pkgconfigUpstream ];
+  nativeBuildInputs = [ libxslt pkgconfigUpstream ];
 
   configureFlags = "--disable-avahi-tests";
 

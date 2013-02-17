@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   configureFlags = if sslSupport then "--with-ssl" else "";
   
   buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl;
-  buildNativeInputs = [ ncurses ];
+  nativeBuildInputs = [ ncurses ];
 
   crossAttrs = {
     configureFlags = "--enable-widec" +

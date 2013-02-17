@@ -1,0 +1,211 @@
+Partly taken from:
+http://gcc.gnu.org/git/?p=gcc.git;a=patch;h=5617a3db5d04630d0bfb71a3578894b4442f266d
+
+Adapted to gcc 4.6.3. Original commit text follows.
+
+From 5617a3db5d04630d0bfb71a3578894b4442f266d Mon Sep 17 00:00:00 2001
+From: tschwinge <tschwinge@138bc75d-0d04-0410-961f-82ee72b054a4>
+Date: Fri, 20 Apr 2012 07:44:50 +0000
+Subject: [PATCH] 	struct siginfo vs. siginfo_t
+
+gcc/
+	* config/alpha/linux-unwind.h (alpha_fallback_frame_state): Use
+	siginfo_t instead of struct siginfo.
+	* config/bfin/linux-unwind.h (bfin_fallback_frame_state): Likewise.
+	* config/i386/linux-unwind.h (x86_fallback_frame_state): Likewise.
+	* config/ia64/linux-unwind.h (ia64_fallback_frame_state)
+	(ia64_handle_unwabi): Likewise.
+	* config/mips/linux-unwind.h (mips_fallback_frame_state): Likewise.
+	* config/pa/linux-unwind.h (pa32_fallback_frame_state): Likewise.
+	* config/sh/linux-unwind.h (shmedia_fallback_frame_state)
+	(sh_fallback_frame_state): Likewise.
+	* config/xtensa/linux-unwind.h (xtensa_fallback_frame_state): Likewise.
+
+git-svn-id: svn+ssh://gcc.gnu.org/svn/gcc/trunk@186610 138bc75d-0d04-0410-961f-82ee72b054a4
+
+diff --git a/gcc/config/alpha/linux-unwind.h b/gcc/config/alpha/linux-unwind.h
+index 4c811dc..8c04b3b 100644
+--- a/gcc/config/alpha/linux-unwind.h
++++ b/gcc/config/alpha/linux-unwind.h
+@@ -1,5 +1,5 @@
+ /* DWARF2 EH unwinding support for Alpha Linux.
+-   Copyright (C) 2004, 2005, 2009, 2011 Free Software Foundation, Inc.
++   Copyright (C) 2004, 2005, 2009, 2011, 2012 Free Software Foundation, Inc.
+ 
+ This file is part of GCC.
+ 
+@@ -49,7 +49,7 @@ alpha_fallback_frame_state (struct _Unwind_Context *context,
+   else if (pc[1] == 0x201f015f)		/* lda $0,NR_rt_sigreturn */
+     {
+       struct rt_sigframe {
+-	struct siginfo info;
++	siginfo_t info;
+ 	struct ucontext uc;
+       } *rt_ = context->cfa;
+       sc = &rt_->uc.uc_mcontext;
+diff --git a/gcc/config/bfin/linux-unwind.h b/gcc/config/bfin/linux-unwind.h
+index 88c8285..15bb2f1 100644
+--- a/gcc/config/bfin/linux-unwind.h
++++ b/gcc/config/bfin/linux-unwind.h
+@@ -1,5 +1,5 @@
+ /* DWARF2 EH unwinding support for Blackfin.
+-   Copyright (C) 2007, 2009 Free Software Foundation, Inc.
++   Copyright (C) 2007, 2009, 2012 Free Software Foundation, Inc.
+ 
+ This file is part of GCC.
+ 
+@@ -48,10 +48,10 @@ bfin_fallback_frame_state (struct _Unwind_Context *context,
+     {
+       struct rt_sigframe {
+ 	int sig;
+-	struct siginfo *pinfo;
++	siginfo_t *pinfo;
+ 	void *puc;
+ 	char retcode[8];
+-	struct siginfo info;
++	siginfo_t info;
+ 	struct ucontext uc;
+       } *rt_ = context->cfa;
+ 
+diff --git a/gcc/config/i386/linux-unwind.h b/gcc/config/i386/linux-unwind.h
+index ad0ccfa..02b1897 100644
+--- a/gcc/config/i386/linux-unwind.h
++++ b/gcc/config/i386/linux-unwind.h
+@@ -136,9 +136,9 @@ x86_fallback_frame_state (struct _Unwind_Context *context,
+     {
+       struct rt_sigframe {
+ 	int sig;
+-	struct siginfo *pinfo;
++	siginfo_t *pinfo;
+ 	void *puc;
+-	struct siginfo info;
++	siginfo_t info;
+ 	struct ucontext uc;
+       } *rt_ = context->cfa;
+       /* The void * cast is necessary to avoid an aliasing warning.
+diff --git a/gcc/config/ia64/linux-unwind.h b/gcc/config/ia64/linux-unwind.h
+index 93f762d..da31259 100644
+--- a/gcc/config/ia64/linux-unwind.h
++++ b/gcc/config/ia64/linux-unwind.h
+@@ -1,5 +1,5 @@
+ /* DWARF2 EH unwinding support for IA64 Linux.
+-   Copyright (C) 2004, 2005, 2009 Free Software Foundation, Inc.
++   Copyright (C) 2004, 2005, 2009, 2012 Free Software Foundation, Inc.
+ 
+    This file is part of GCC.
+ 
+@@ -47,7 +47,7 @@ ia64_fallback_frame_state (struct _Unwind_Context *context,
+       struct sigframe {
+ 	char scratch[16];
+ 	unsigned long sig_number;
+-	struct siginfo *info;
++	siginfo_t *info;
+ 	struct sigcontext *sc;
+       } *frame_ = (struct sigframe *)context->psp;
+       struct sigcontext *sc = frame_->sc;
+@@ -137,7 +137,7 @@ ia64_handle_unwabi (struct _Unwind_Context *context, _Unwind_FrameState *fs)
+       struct sigframe {
+ 	char scratch[16];
+ 	unsigned long sig_number;
+-	struct siginfo *info;
++	siginfo_t *info;
+ 	struct sigcontext *sc;
+       } *frame = (struct sigframe *)context->psp;
+       struct sigcontext *sc = frame->sc;
+diff --git a/gcc/config/mips/linux-unwind.h b/gcc/config/mips/linux-unwind.h
+index 02f7cd5..094ff58 100644
+--- a/gcc/config/mips/linux-unwind.h
++++ b/gcc/config/mips/linux-unwind.h
+@@ -1,5 +1,6 @@
+ /* DWARF2 EH unwinding support for MIPS Linux.
+-   Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Free Software Foundation, Inc.
++   Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2012 Free Software
++   Foundation, Inc.
+ 
+ This file is part of GCC.
+ 
+@@ -75,7 +76,7 @@ mips_fallback_frame_state (struct _Unwind_Context *context,
+       struct rt_sigframe {
+ 	u_int32_t ass[4];  /* Argument save space for o32.  */
+ 	u_int32_t trampoline[2];
+-	struct siginfo info;
++	siginfo_t info;
+ 	_sig_ucontext_t uc;
+       } *rt_ = context->cfa;
+       sc = &rt_->uc.uc_mcontext;
+diff --git a/gcc/config/pa/linux-unwind.h b/gcc/config/pa/linux-unwind.h
+index a0560e9..38b4eda 100644
+--- a/gcc/config/pa/linux-unwind.h
++++ b/gcc/config/pa/linux-unwind.h
+@@ -1,5 +1,5 @@
+ /* DWARF2 EH unwinding support for PA Linux.
+-   Copyright (C) 2004, 2005, 2009 Free Software Foundation, Inc.
++   Copyright (C) 2004, 2005, 2009, 2012 Free Software Foundation, Inc.
+ 
+ This file is part of GCC.
+ 
+@@ -63,7 +63,7 @@ pa32_fallback_frame_state (struct _Unwind_Context *context,
+   int i;
+   struct sigcontext *sc;
+   struct rt_sigframe {
+-    struct siginfo info;
++    siginfo_t info;
+     struct ucontext uc;
+   } *frame;
+ 
+diff --git a/gcc/config/sh/linux-unwind.h b/gcc/config/sh/linux-unwind.h
+index 94ed95d..5a78e31 100644
+--- a/gcc/config/sh/linux-unwind.h
++++ b/gcc/config/sh/linux-unwind.h
+@@ -1,5 +1,6 @@
+ /* DWARF2 EH unwinding support for SH Linux.
+-   Copyright (C) 2004, 2005, 2006, 2007, 2009 Free Software Foundation, Inc.
++   Copyright (C) 2004, 2005, 2006, 2007, 2009, 2012 Free Software Foundation,
++   Inc.
+ 
+ This file is part of GCC.
+ 
+@@ -80,9 +81,9 @@ shmedia_fallback_frame_state (struct _Unwind_Context *context,
+ 	   && (*(unsigned long *) (pc+11)  == 0x6ff0fff0))
+     {
+       struct rt_sigframe {
+-	struct siginfo *pinfo;
++	siginfo_t *pinfo;
+ 	void *puc;
+-	struct siginfo info;
++	siginfo_t info;
+ 	struct ucontext uc;
+       } *rt_ = context->cfa;
+       /* The void * cast is necessary to avoid an aliasing warning.
+@@ -179,7 +180,7 @@ sh_fallback_frame_state (struct _Unwind_Context *context,
+ 		&& (*(unsigned short *) (pc+14)  == 0x00ad))))
+     {
+       struct rt_sigframe {
+-	struct siginfo info;
++	siginfo_t info;
+ 	struct ucontext uc;
+       } *rt_ = context->cfa;
+       /* The void * cast is necessary to avoid an aliasing warning.
+diff --git a/gcc/config/xtensa/linux-unwind.h b/gcc/config/xtensa/linux-unwind.h
+index 32e9349..2456497 100644
+--- a/gcc/config/xtensa/linux-unwind.h
++++ b/gcc/config/xtensa/linux-unwind.h
+@@ -1,5 +1,5 @@
+ /* DWARF2 EH unwinding support for Xtensa.
+-   Copyright (C) 2008, 2009 Free Software Foundation, Inc.
++   Copyright (C) 2008, 2009, 2012 Free Software Foundation, Inc.
+ 
+ This file is part of GCC.
+ 
+@@ -62,7 +62,7 @@ xtensa_fallback_frame_state (struct _Unwind_Context *context,
+   struct sigcontext *sc;
+ 
+   struct rt_sigframe {
+-    struct siginfo info;
++    siginfo_t info;
+     struct ucontext uc;
+   } *rt_;
+ 
+-- 
+1.7.3.4
+

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib telepathy_glib dbus_glib pidgin ];
 
-  buildNativeInputs = [ pkgconfig libxslt ];
+  nativeBuildInputs = [ pkgconfig libxslt ];
 
   meta = {
     description = "A Telepathy connection manager based on libpurple";

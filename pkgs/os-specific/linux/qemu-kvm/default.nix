@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "018vb5nmk2fsm143bs2bl2wirhasd4b10d7jchl32zik4inbk2p9";
   };
 
+  patches = [ ./fix-librt-check.patch ];
+
   postPatch =
     '' for i in $(find . -type f)
        do

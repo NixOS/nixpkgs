@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 eigen zlib openbabel mesa libX11 ];
 
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   NIX_CFLAGS_COMPILE = "-include ${mesa}/include/GL/glu.h";
 

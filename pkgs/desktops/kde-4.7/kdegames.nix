@@ -7,7 +7,7 @@ kde rec {
 
   pythonPath = [ pythonPackages.twisted pykde4 ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   # TODO: ggz
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bjhyjg561kwp6zc2wg58njdvpnsj5yaa2slz8g3ga1176jl68w3";
   };
 
-  buildNativeInputs = [ makeWrapper pkgconfig docbook_xml_dtd_412 docbook_xsl
+  nativeBuildInputs = [ makeWrapper pkgconfig docbook_xml_dtd_412 docbook_xsl
     xmlto bc pythonPackages.wrapPython ];
 
   pythonPath = [ pythonPackages.curses ];

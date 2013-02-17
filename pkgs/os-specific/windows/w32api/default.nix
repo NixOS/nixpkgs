@@ -12,7 +12,7 @@ stdenv.mkDerivation ({
     sha256 = "09rhnl6zikmdyb960im55jck0rdy5z9nlg3akx68ixn7khf3j8wb";
   };
 
-  buildNativeInputs = [ xz ];
+  nativeBuildInputs = [ xz ];
 
 } //
 (if onlyHeaders then {

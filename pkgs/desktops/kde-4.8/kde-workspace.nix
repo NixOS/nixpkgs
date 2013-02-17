@@ -16,7 +16,7 @@ kde {
       kactivities
     ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   preConfigure =
    ''

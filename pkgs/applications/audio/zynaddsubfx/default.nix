@@ -10,7 +10,7 @@ stdenv.mkDerivation  rec {
   };
 
   buildInputs = [ alsaLib fftw fltk13 minixml zlib ];
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   patches = [
     (fetchurl {

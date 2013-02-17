@@ -1,7 +1,7 @@
 { kde, cmake }:
 
 kde {
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   patches = [ ./files/kde-wallpapers-buildsystem.patch ];
 

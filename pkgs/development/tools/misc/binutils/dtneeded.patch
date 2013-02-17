@@ -1,0 +1,12 @@
+diff --git a/ld/ldmain.c b/ld/ldmain.c
+index 15f8ebf..f71241e 100644
+--- a/ld/ldmain.c
++++ b/ld/ldmain.c
+@@ -298,6 +298,7 @@ main (int argc, char **argv)
+   lang_init ();
+   ldemul_before_parse ();
+   lang_has_input_file = FALSE;
++  input_flags.add_DT_NEEDED_for_dynamic = TRUE;
+   parse_args (argc, argv);
+ 
+   if (config.hash_table_size != 0)

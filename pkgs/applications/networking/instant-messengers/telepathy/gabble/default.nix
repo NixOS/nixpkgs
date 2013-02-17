@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fk65f7q75z3wm5h4wad7g5sm2j6r8v2845b74ycl29br78ki2hf";
   };
 
-  buildNativeInputs = [pkgconfig libxslt];
+  nativeBuildInputs = [pkgconfig libxslt];
   buildInputs = [ libxml2 dbus_glib sqlite libsoup libnice telepathy_glib gnutls ];
 
   configureFlags = "--with-ca-certificates=/etc/ca-bundle.crt";

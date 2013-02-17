@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "libdiscid-0.2.2";
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake ];
 
   src = fetchurl {

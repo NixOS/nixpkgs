@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0iin2j3ad7ldj32dwc04g28k54iv3lrc5121rgyphm7l9hvigbvk";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ imagemagick ];
 

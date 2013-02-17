@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n64hpmsccvicagvr0c6v0kgp2yw0kgnd3jvsyd26cnwgs7c6kkq";
   };
 
-  buildNativeInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ stdenv.lib.optional doCheck qemu;
 
@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
        # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
+
+       # Fix for building on Glibc 2.16.  Won't be needed once the
+       # gnulib in grub is updated.
+       sed -i '/gets is a security hole/d' grub-core/gnulib/stdio.in.h
     '';
 
   prePatch =

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1slgi61n4dlsfli47ql354fd1ppj7n40jd94wvnsdqx0mna9syrd";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpthreadstubs libpciaccess udev ];
 
   patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;

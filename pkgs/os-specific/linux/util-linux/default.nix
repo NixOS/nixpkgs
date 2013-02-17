@@ -1,16 +1,12 @@
-{ stdenv, fetchurl, zlib, ncurses ? null, perl ? null }:
+{ stdenv, fetchurl, zlib, ncurses ? null, perl ? null, pam }:
 
 stdenv.mkDerivation rec {
-  name = "util-linux-2.20.1";
+  name = "util-linux-2.22.2";
 
   src = fetchurl {
-    # This used to be mirror://kernel/linux/utils/util-linux, but it
-    # disappeared in the kernel.org meltdown.
-    url = "mirror://gentoo/distfiles/${name}.tar.bz2";
-    sha256 = "1q5vjcvw4f067c63vj2n3xggvk5prm11571x6vnqiav47vdbqvni";
+    url = "http://www.kernel.org/pub/linux/utils/util-linux/v2.22/${name}.tar.bz2";
+    sha256 = "0vf3ifb45gr4cd27pmmxk8y5b3r0920mv16fv0vfwz5705xa2qvl";
   };
-
-  patches = [ ./linux-specific-header.patch ];
 
   crossAttrs = {
     # Work around use of `AC_RUN_IFELSE'.
@@ -24,13 +20,24 @@ stdenv.mkDerivation rec {
   # --enable-libmount-mount  fixes the behaviour being /etc/mtab a symlink to /proc/monunts
   #     http://pl.digipedia.org/usenet/thread/19513/1924/
   configureFlags = ''
-    --disable-use-tty-group
     --enable-write
+    --enable-last
+    --enable-mesg
+    --enable-ddate
+    --disable-use-tty-group
     --enable-fs-paths-default=/var/setuid-wrappers:/var/run/current-system/sw/sbin:/sbin
-    --enable-libmount-mount
     ${if ncurses == null then "--without-ncurses" else ""}
   '';
 
-  buildInputs = [ zlib ] ++ stdenv.lib.optional (ncurses != null) ncurses
-             ++ stdenv.lib.optional (perl != null) perl;
+  buildInputs =
+    [ zlib pam ]
+    ++ stdenv.lib.optional (ncurses != null) ncurses
+    ++ stdenv.lib.optional (perl != null) perl;
+
+  enableParallelBuilding = true;
+
+  meta = {
+    homepage = http://www.kernel.org/pub/linux/utils/util-linux/;
+    description = "A set of system utilities for Linux";
+  };
 }

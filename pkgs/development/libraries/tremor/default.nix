@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "161411cbefa1527da7a8fc087e78d8e21d19143d3a6eb42fb281e5026aad7568";
   };
 
-  buildNativeInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
   propagatedBuildInputs = [ libogg ];
 
   preConfigure = ''

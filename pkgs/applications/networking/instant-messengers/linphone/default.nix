@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk libglade libosip libexosip readline mediastreamer speex libsoup ];
 
-  buildNativeInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig ];
 
   preConfigure = "rm -r mediastreamer2 oRTP";
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ cln ];
   buildInputs = [ readline ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = "--disable-rpath";
 

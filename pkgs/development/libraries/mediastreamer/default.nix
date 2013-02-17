@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
 # TODO: make it load plugins from *_PLUGIN_PATH
-  buildNativeInputs = [pkgconfig intltool];
+  nativeBuildInputs = [pkgconfig intltool];
 
   propagatedBuildInputs = [alsaLib ffmpeg speex ortp pulseaudio xorg.libX11
     xorg.libXv xorg.libXext libv4l libtheora libvpx gsm ];
