@@ -1,7 +1,7 @@
 {stdenv, fetchurl, zlib, cmake}:
 
 stdenv.mkDerivation rec {
-  name = "taglib-1.7.1";
+  name = "taglib-1.8";
   
   src = fetchurl {
     url = "https://github.com/downloads/taglib/taglib/${name}.tar.gz";
