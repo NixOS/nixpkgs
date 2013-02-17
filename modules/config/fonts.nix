@@ -171,7 +171,6 @@ in
   environment.shellInit =
     ''
       export FONTCONFIG_FILE=/etc/fonts/fonts.conf
-      export GDFONTPATH=${concatStringsSep ":" config.fonts.fonts}
     '';
 
   environment.systemPackages =
