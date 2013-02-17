@@ -1,17 +1,21 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, libosip, libexosip
-, speex, readline, mediastreamer }:
-        
+, speex, readline, mediastreamer, libsoup }:
+
 stdenv.mkDerivation rec {
-  name = "linphone-3.5.0";
+  name = "linphone-3.5.2";
 
   src = fetchurl {
     url = "mirror://savannah/linphone/3.5.x/sources/${name}.tar.gz";
-    sha256 = "1jrgsyx2mn6y50hjfx79fzqhp42r78cjr63w3bfjdl258zy2f6ix";
+    sha256 = "0830iam7kgqphgk3q6qx93kp5wrf0gnm5air82jamy7377jxadys";
   };
 
-  buildInputs = [ gtk libglade libosip libexosip readline mediastreamer speex ];
+  patches = [ ./fix-deprecated.patch ];
+
+  buildInputs = [ gtk libglade libosip libexosip readline mediastreamer speex libsoup ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
+
+  preConfigure = "rm -r mediastreamer2 oRTP";
 
   configureFlags = "--enable-external-ortp --enable-external-mediastreamer";
 

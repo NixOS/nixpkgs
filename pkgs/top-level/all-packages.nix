@@ -5009,6 +5009,8 @@ let
     libpng = libpng12;
   };
 
+  wayland = callPackage ../development/libraries/wayland { };
+
   webkit =
     builderDefsPackage ../development/libraries/webkit {
       inherit (gnome) gtkdoc libsoup;
@@ -8322,10 +8324,10 @@ let
 
   enlightenment = callPackage ../desktops/enlightenment { };
 
-  # e17 = recurseIntoAttrs (
-  #   let callPackage = newScope pkgs.e17; in
-  #   import ../desktops/e17 { inherit callPackage pkgs; }
-  # );
+  e17 = recurseIntoAttrs (
+    let callPackage = newScope pkgs.e17; in
+    import ../desktops/e17 { inherit callPackage pkgs; }
+  );
 
   gnome2 = callPackage ../desktops/gnome-2 {
     callPackage = pkgs.newScope pkgs.gnome2;
