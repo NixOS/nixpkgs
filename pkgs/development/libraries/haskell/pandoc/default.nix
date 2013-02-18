@@ -17,6 +17,9 @@ cabal.mkDerivation (self: {
     text time xml zipArchive zlib
   ];
   configureFlags = "-fblaze_html_0_5";
+  patchPhase = ''
+    sed -r -i -e 's|blaze-html >= 0.5 && < 0.6,|blaze-html >= 0.5,|' pandoc.cabal
+  '';
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Conversion between markup formats";
