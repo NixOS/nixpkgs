@@ -874,6 +874,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     libc = pkgs.stdenv.gcc.libc;
   };
 
+  Glob = callPackage ../development/libraries/haskell/Glob {};
+
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
   gloss = callPackage ../development/libraries/haskell/gloss {
@@ -1181,6 +1183,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   logict = callPackage ../development/libraries/haskell/logict {};
 
+  maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
+
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
   mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
@@ -1218,8 +1222,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
 
   monadPar_0_1_0_3 = callPackage ../development/libraries/haskell/monad-par/0.1.0.3.nix {};
-  monadPar_0_3 = callPackage ../development/libraries/haskell/monad-par/0.3.nix {};
-  monadPar = self.monadPar_0_3;
+  monadPar_0_3_4 = callPackage ../development/libraries/haskell/monad-par/0.3.4.nix {};
+  monadPar = self.monadPar_0_3_4;
 
   monadParExtras = callPackage ../development/libraries/haskell/monad-par-extras {};
 
@@ -1754,6 +1758,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   utilityHt = callPackage ../development/libraries/haskell/utility-ht {};
 
   uulib = callPackage ../development/libraries/haskell/uulib {};
+
+  uuid = callPackage ../development/libraries/haskell/uuid {};
 
   uuParsinglib = callPackage ../development/libraries/haskell/uu-parsinglib {};
 

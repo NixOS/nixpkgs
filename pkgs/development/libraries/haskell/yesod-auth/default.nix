@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     transformers unorderedContainers wai yesodCore yesodForm yesodJson
     yesodPersistent
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Authentication for Yesod";

@@ -12,8 +12,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "1.1.8";
-  sha256 = "0ygcsrq8nf1jvksig72r3i13qz1d3hgh5476fy6l4wl33idk6jb1";
+  version = "1.1.8.1";
+  sha256 = "01s9b0pqqj7q760vm62ni95k5fqwccw8l6531kqav2vnfvi08ric";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -27,6 +27,7 @@ cabal.mkDerivation (self: {
     yesodAuth yesodCore yesodDefault yesodForm yesodJson
     yesodPersistent zlib
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";

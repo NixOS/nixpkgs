@@ -19,6 +19,9 @@ cabal.mkDerivation (self: {
     shakespeareJs shakespeareText text time transformers wai waiExtra
     warp yaml yesod yesodCore yesodDefault yesodForm yesodStatic
   ];
+  patchPhase = ''
+    sed -r -i -e 's|blaze-html * >= 0.5 *&& < 0.6|blaze-html >= 0.5|' hledger-web.cabal
+  '';
   jailbreak = true;
   meta = {
     homepage = "http://hledger.org";

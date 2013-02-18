@@ -427,6 +427,8 @@ let
     pkgs_i686 = pkgsi686Linux;
   };
 
+  apg = callPackage ../tools/security/apg { };
+
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
 
   titaniumenv = import ../development/mobile/titaniumenv {
