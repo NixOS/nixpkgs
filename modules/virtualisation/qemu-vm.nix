@@ -321,7 +321,7 @@ in
   # where the regular value for the `fileSystems' attribute should be
   # disregarded for the purpose of building a VM test image (since
   # those filesystems don't exist in the VM).
-  fileSystems =
+  fileSystems = mkOverride 10
     { "/".device = "/dev/vda";
       "/nix/store" =
         { device = "//10.0.2.4/store";
