@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, eina }:
 stdenv.mkDerivation rec {
   name = "embryo-${version}";
-  version = "1.2.0-alpha";
+  version = "1.7.5";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
-    sha256 = "0hcjlf0rljz4zs1y5l4h0gn2gyqb1h4msfsaps8flaym4mxrvvd9";
+    sha256 = "104fsa179w2dfg00sfnap7c3b4ixcps4crxa6yav755awssdcim9";
   };
   buildInputs = [ pkgconfig eina ];
   meta = {
@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
       untouched.
     '';
     homepage = http://enlightenment.org/;
-    license = with stdenv.lib.licenses; [ bsd2 bsd3 ];  # not sure
+    license = with stdenv.lib.licenses; [ bsd2.shortName bsd3.shortName ];  # not sure
   };
 }

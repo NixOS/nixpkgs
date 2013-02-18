@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.1.2.1";
-  sha256 = "1d9bbqy1dix60w72zc3g4y7454avngfyl2i8gj99bdqin2wwcgp8";
+  version = "4.1.4.0";
+  sha256 = "0nhr7ai03hx2qjxlqml0js43iwxhcbpdqkwdvw8pqs396yrjwxdj";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     filepath httpConduit httpTypes lrucache mtl pandoc parsec random
     regexBase regexTdfa snapCore snapServer tagsoup text time
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";

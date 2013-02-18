@@ -1,0 +1,22 @@
+Enables gxvalid and otvalid modules for use with ftvalid.
+
+--- freetype-2.2.1/modules.cfg.orig	2006-07-07 21:01:09.000000000 -0400
++++ freetype-2.2.1/modules.cfg	2006-07-07 21:01:54.000000000 -0400
+@@ -110,7 +110,7 @@
+ AUX_MODULES += cache
+ 
+ # TrueType GX/AAT table validation.  Needs ftgxval.c below.
+-# AUX_MODULES += gxvalid
++AUX_MODULES += gxvalid
+ 
+ # Support for streams compressed with gzip (files with suffix .gz).
+ #
+@@ -124,7 +124,7 @@
+ 
+ # OpenType table validation.  Needs ftotval.c below.
+ #
+-# AUX_MODULES += otvalid
++AUX_MODULES += otvalid
+ 
+ # Auxiliary PostScript driver component to share common code.
+ #

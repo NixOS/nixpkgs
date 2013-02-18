@@ -584,7 +584,6 @@ in
   gv = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gwenhywfar = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gwrap = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  gwt = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gxneur = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   hadoop = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   harfbuzz = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1107,7 +1106,6 @@ in
     nvidia_x11_legacy96 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     openafsClient = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     openiscsi = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    ov511 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     perf = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     spl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     sysprof = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1364,7 +1362,6 @@ in
   openfire = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   openlierox = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   openobex = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  openoffice = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   opensc = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   openscad = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   opensc_dnie_wrapper = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1504,7 +1501,6 @@ in
   qshowdiff = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qsynth = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qt3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  qt47 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qt_gstreamer = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qtpfsgui = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   qtractor = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1525,7 +1521,6 @@ in
   rdesktop = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rdf4store = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   rdiff_backup = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  RealPlayer = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   recutils = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   redshift = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   relfs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

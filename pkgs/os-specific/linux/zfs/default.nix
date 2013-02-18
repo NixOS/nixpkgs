@@ -1,11 +1,11 @@
 { stdenv, fetchurl, kernel, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
-  name = "zfs-0.6.0-rc13-${kernel.version}";
+  name = "zfs-0.6.0-rc14-${kernel.version}";
 
   src = fetchurl {
-    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.0-rc13.tar.gz;
-    sha256 = "1kpx7sa49ir93kmlrjwjzd6v4kzmda4j9cf6bv2p4s3yrmiz3cjv";
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.0-rc14.tar.gz;
+    sha256 = "0ny2lbhyfsfwfcasa1iv2hz12hzcskx9mv641955d844dh32z9fg";
   };
 
   patches = [ ./module_perm_prefix.patch ./mount_zfs_prefix.patch ./kerneldir_path.patch ./no_absolute_paths_to_coreutils.patch ];

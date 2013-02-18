@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
       ./0004-Set-switch-to-configuration-hints-for-some-units.patch
       ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
       ./0006-Don-t-call-plymouth-quit.patch
+      ./0007-Ignore-IPv6-link-local-addresses.patch
+      ./0008-Fix-a-segfault-in-nscd-when-using-nss-myhostname.patch
     ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
@@ -31,6 +33,8 @@ stdenv.mkDerivation rec {
     [ "--localstatedir=/var"
       "--sysconfdir=/etc"
       "--with-rootprefix=$(out)"
+      "--with-kbd-loadkeys=${kbd}/bin/loadkeys"
+      "--with-kbd-setfont=${kbd}/bin/setfont"
       "--with-rootprefix=$(out)"
       "--with-dbusinterfacedir=$(out)/share/dbus-1/interfaces"
       "--with-dbuspolicydir=$(out)/etc/dbus-1/system.d"
@@ -63,9 +67,7 @@ stdenv.mkDerivation rec {
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
 
   NIX_CFLAGS_COMPILE =
-    [ "-DKBD_LOADKEYS=\"${kbd}/bin/loadkeys\""
-      "-DKBD_SETFONT=\"${kbd}/bin/setfont\""
-      # Can't say ${polkit}/bin/pkttyagent here because that would
+    [ # Can't say ${polkit}/bin/pkttyagent here because that would
       # lead to a cyclic dependency.
       "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
       "-fno-stack-protector"

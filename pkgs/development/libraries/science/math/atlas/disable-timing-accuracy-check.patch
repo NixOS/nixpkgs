@@ -1,0 +1,22 @@
+diff -ubr ATLAS-orig/CONFIG/src/config.c ATLAS/CONFIG/src/config.c
+--- ATLAS-orig/CONFIG/src/config.c	2013-02-06 11:23:47.078036878 +0100
++++ ATLAS/CONFIG/src/config.c	2013-02-06 11:24:16.481120888 +0100
+@@ -711,17 +711,7 @@
+ 
+ int ProbeCPUThrottle(int verb, char *targarg, enum OSTYPE OS, enum ASMDIA asmb)
+ {
+-   int i, iret;
+-   char *ln;
+-   i = strlen(targarg) + 22 + 12;
+-   ln = malloc(i*sizeof(char));
+-   assert(ln);
+-   sprintf(ln, "%s -O %d -s %d -t", targarg, OS, asmb);
+-   iret = GetIntProbe(verb, ln, "arch", "CPU THROTTLE", 0);
+-   free(ln);
+-   if (iret) printf("CPU Throttling apparently enabled!\n");
+-   else printf("Cannot detect CPU throttling.\n");
+-   return(iret);
++   return 0;
+ }
+ 
+ char *NewAppendedString_SFLAG(char *old, char *flag, char *str)

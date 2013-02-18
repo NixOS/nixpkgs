@@ -121,7 +121,7 @@ in stdenv.mkDerivation {
         --base-dir "$libexec/ExtensionPacks" \
         --cert-dir "$libexec/ExtPackCertificates" \
         --name "Oracle VM VirtualBox Extension Pack" \
-        --tarball "${extensionPack}"
+        --tarball "${extensionPack}" \
         --sha-256 "${extensionPack.outputHash}"
     ''}
 

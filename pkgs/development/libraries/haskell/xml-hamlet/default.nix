@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "xml-hamlet";
-  version = "0.4.0.3";
-  sha256 = "1923c2jg162jab01mcbpy52xs1pzxkrgny6sq8v0p758n8hjazwc";
+  version = "0.4.0.4";
+  sha256 = "1s4s5z1xir9zmcbfz8mrznf2byclmg0qjjhwmpal2r9ly9g3na98";
   buildDepends = [ parsec shakespeare text xmlConduit ];
   meta = {
     homepage = "http://www.yesodweb.com/";

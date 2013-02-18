@@ -119,20 +119,6 @@ rec {
     features.aufs3 = true;
   };
 
-  aufs3_1 = rec {
-    name = "aufs3.1";
-    version = "3.1.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "82c9fe43d197072a82cab6f02a5fd5cc4f50306a";
-      sha256 = "f03d00964c9fc9975144d315fb79a1cd56d99f8c11853ed81d34afca35cd560a";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
   aufs3_2 = rec {
     name = "aufs3.2";
     version = "3.2.20121210";
@@ -147,20 +133,6 @@ rec {
     features.aufs3 = true;
   };
 
-  aufs3_3 = rec {
-    name = "aufs3.3";
-    version = "3.3.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "65ab607cfb2c411d86da8fcee25c0f6dada1c4d5";
-      sha256 = "55c887932f1c12aed4ee20d9e749a80e9e0412951bd0a40fa3949ba972764a0a";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
   aufs3_4 = rec {
     name = "aufs3.4";
     version = "3.4.20121210";
@@ -170,34 +142,6 @@ rec {
       inherit version;
       rev = "2faacd9baffb37df3b9062cc554353eebe68df1e";
       sha256 = "3ecf97468f5e85970d9fd2bfc61e38c7f5ae2c6dde0045d5a17de085c411d452";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
-  aufs3_5 = rec {
-    name = "aufs3.5";
-    version = "3.5.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "1658e9080c0e49f38feee5027cf0d32940a661ca";
-      sha256 = "4577fe1dd34299520155767a7c42697d41aabc0055ae8b1e448449b8c24a1044";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
-  aufs3_6 = rec {
-    name = "aufs3.6";
-    version = "3.6.20121210";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "f541ebfd88df0f4e6f9daf55053282e4f52cc4d9";
-      sha256 = "4d615a5f3c14a6a7c49bc6d65e78a2cdb89321cbd8a53f87cc8fe9edda382c3a";
     };
     features.aufsBase = true;
     features.aufs3 = true;
@@ -244,12 +188,6 @@ rec {
       features.cifsTimeout = true;
     };
 
-  cifs_timeout_3_5_7 =
-    { name = "cifs-timeout";
-      patch = ./cifs-timeout-3.5.7.patch;
-      features.cifsTimeout = true;
-    };
-
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
@@ -259,12 +197,6 @@ rec {
   dell_rfkill =
     { name = "dell-rfkill";
       patch = ./dell-rfkill.patch;
-    };
-
-  # seems no longer necessary on 3.6
-  perf3_5 =
-    { name = "perf-3.5";
-      patch = ./perf-3.5.patch;
     };
 
   sheevaplug_modules_2_6_35 =

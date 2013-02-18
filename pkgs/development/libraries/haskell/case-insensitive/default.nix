@@ -1,10 +1,10 @@
-{ cabal, hashable, text }:
+{ cabal, deepseq, hashable, text }:
 
 cabal.mkDerivation (self: {
   pname = "case-insensitive";
-  version = "0.4.0.4";
-  sha256 = "1xzpri688vbd6fvvxczqx8bv53009ygzws7vbjmj2q97wcm8nmwd";
-  buildDepends = [ hashable text ];
+  version = "1.0";
+  sha256 = "1x437b5yyh930a5dr642lvfdgpx12w4ms70whiw1ffjjhssb88zk";
+  buildDepends = [ deepseq hashable text ];
   meta = {
     homepage = "https://github.com/basvandijk/case-insensitive";
     description = "Case insensitive string comparison";

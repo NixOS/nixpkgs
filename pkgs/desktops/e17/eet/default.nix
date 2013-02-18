@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, eina, zlib, libjpeg }:
 stdenv.mkDerivation rec {
   name = "eet-${version}";
-  version = "1.6.0-alpha";
+  version = "1.7.5";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
-    sha256 = "1cq6i9g020mi5mr069jykx1fvihd18k1y4x49skmhzfh7dv10dfp";
+    sha256 = "0ys2579v45f9x2n47shq0k63g0sdbj1ndhh72dvfajihsgjwd767";
   };
   buildInputs = [ pkgconfig eina zlib libjpeg ];
   meta = {

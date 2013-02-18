@@ -1,15 +1,14 @@
-{ cabal, base64Bytestring, base64Conduit, classyPreludeConduit
-, conduit, mtl, resourcet, systemFileio, systemFilepath, text
-, transformers
+{ cabal, base64Bytestring, base64Conduit, classyPrelude, conduit
+, mtl, resourcet, systemFileio, systemFilepath, text, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "project-template";
-  version = "0.1.1";
-  sha256 = "186hqfhhl77yq9gqiw59jbnkk7xmpljqfwwilzjkjknf3ifhs5na";
+  version = "0.1.3";
+  sha256 = "1nsc4i3s9a7d0nysswhylvnr79z0ax9biiwr7b6jn7jzx0f2bdmm";
   buildDepends = [
-    base64Bytestring base64Conduit classyPreludeConduit conduit mtl
-    resourcet systemFileio systemFilepath text transformers
+    base64Bytestring base64Conduit classyPrelude conduit mtl resourcet
+    systemFileio systemFilepath text transformers
   ];
   meta = {
     homepage = "https://github.com/fpco/haskell-ide";

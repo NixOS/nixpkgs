@@ -7,16 +7,17 @@ assert stdenv.isLinux;
 assert stdenv.gcc.gcc != null;
 
 stdenv.mkDerivation rec {
-  name = "wine-${meta.version}";
+  version = "1.5.23";
+  name = "wine-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wine/${name}.tar.bz2";
-    sha256 = "0l5kr3iq1lkv3gcw8ljzfjcfnsh9b5crdd4i0dzwdk1i3bfw2xxc";
+    sha256 = "1wgs2bdl3sn3j0za7fk9zfjlii1x6qkvmyw4jxzz1mfw6nizswzr";
   };
 
   gecko = fetchurl {
-    url = "mirror://sourceforge/wine/wine_gecko-1.5-x86.msi";
-    sha256 = "2e372a1b87ff2a22ad5127400ece4b09e55591d9f84e00bb562d294898a49b5c";
+    url = "mirror://sourceforge/wine/wine_gecko-1.9-x86.msi";
+    sha256 = "10p7djsf85xjk8rzg3hgw5fskrn8402y2aijy701xwm4hy9ga79g";
   };
 
   buildInputs = [
@@ -46,7 +47,6 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    version = "1.5.21";
     homepage = "http://www.winehq.org/";
     license = "LGPL";
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";

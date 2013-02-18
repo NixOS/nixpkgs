@@ -21,8 +21,8 @@ rec {
 
   
   src = fetchurl {
-    url = "http://releases.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
-    sha1 = "3752f13f26a51dd2e42d2805a707a842e6f8d1b1";
+    url = "http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2";
+    sha256 = "1qwvs3rdmrnkjnjvhi3vh4mjdpxr43zcm7llc6z5qws9n9yx15n1";
   };
   
   commonConfigureFlags =

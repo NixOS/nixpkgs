@@ -96,7 +96,7 @@ stdenv.mkDerivation {
             
             cp -av * $out
             cd $out
-            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py build 6.0 $(pwd) ${appId} "${name}"
+            ${titaniumsdk}/mobilesdk/*/*/iphone/builder.py build 6.0 $(pwd) ${appId} "${name}" universal
           ''
 
       else throw "Target: ${target} is not supported!"}
