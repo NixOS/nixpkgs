@@ -80,15 +80,25 @@
             isLibrary = ! self.isExecutable;
             isExecutable = false;
 
+            # ignore version restrictions on the build inputs that the cabal file might specify
+            jailbreak = false;
+
+            # pass the '--enable-split-objs' flag to cabal in the configure stage
+            enableSplitObjs = true;
+
+            # configure flag to pass to enable/disable library profiling
             libraryProfiling =
               if enableLibraryProfiling then ["--enable-library-profiling"]
                                         else ["--disable-library-profiling"];
+
+            # configure flag to pass to enable/disable object splitting
+            splitObjects = if self.enableSplitObjs then "--enable-split-objs" else "--disable-split-objs";
 
             # compiles Setup and configures
             configurePhase = ''
               eval "$preConfigure"
 
-              ${lib.optionalString (lib.attrByPath ["jailbreak"] false self) "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
+              ${lib.optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
@@ -104,7 +114,7 @@
                 done
               done
 
-              ./Setup configure --verbose --prefix="$out" $libraryProfiling $extraLibDirs $configureFlags
+              ./Setup configure --verbose --prefix="$out" $libraryProfiling $splitObjects $extraLibDirs $configureFlags
 
               eval "$postConfigure"
             '';
