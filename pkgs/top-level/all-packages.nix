@@ -4964,6 +4964,8 @@ let
         # optional
   };
 
+  snappy = callPackage ../development/libraries/snappy { };
+
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
   soprano = callPackage ../development/libraries/soprano { };
