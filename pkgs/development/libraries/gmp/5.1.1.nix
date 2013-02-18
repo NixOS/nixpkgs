@@ -1,11 +1,11 @@
 { stdenv, fetchurl, m4, cxx ? true }:
 
 stdenv.mkDerivation rec {
-  name = "gmp-5.1.0";
+  name = "gmp-5.1.1";
 
   src = fetchurl {
     urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
-    sha256 = "15n7xxgasbxdch8ii8z9ic6fxc2ysk3q8iavf55abjp5iylspnfz";
+    sha256 = "1bdgf04k2i12pfivxgjq68iarz3ngix9hpzbmkgijrdk92gpgm50";
   };
 
   nativeBuildInputs = [ m4 ];
@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    homepage = "http://gmplib.org/";
     description = "GMP, the GNU multiple precision arithmetic library";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     longDescription =
       '' GMP is a free library for arbitrary precision arithmetic, operating
@@ -46,10 +48,7 @@ stdenv.mkDerivation rec {
          asymptotically faster algorithms.
       '';
 
-    homepage = http://gmplib.org/;
-    license = "LGPLv3+";
-
-    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
     platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
   };
 }
