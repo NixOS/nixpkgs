@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, wayland, mesa90x, libxkbcommon, pixman
+{ stdenv, fetchurl, pkgconfig, wayland, mesa, libxkbcommon, pixman
 , cairo, libxcb, libXcursor, x11, udev, libdrm, mtdev
 , libjpeg, pam, autoconf, automake, libtool }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0g2k82pnlxl8b70ykazj7kn8xffjfsmgcgx427qdrm4083z2hgm0";
   };
 
-  buildInputs = [ pkgconfig wayland mesa90x libxkbcommon pixman
+  buildInputs = [ pkgconfig wayland mesa libxkbcommon pixman
     cairo libxcb libXcursor x11 udev libdrm mtdev
     libjpeg pam autoconf automake libtool ];
 
