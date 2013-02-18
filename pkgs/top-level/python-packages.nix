@@ -299,11 +299,11 @@ pythonPackages = python.modules // rec {
 
 
   beautifulsoup = buildPythonPackage (rec {
-    name = "beautifulsoup-3.0.8";
+    name = "beautifulsoup-3.2.1";
 
     src = fetchurl {
-      url = "http://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.0.8.tar.gz";
-      sha256 = "1gasiy5lwbhsxw27g36d88n36xbj52434klisvqhljgckd4xqcy7";
+      url = "http://www.crummy.com/software/BeautifulSoup/download/3.x/BeautifulSoup-3.2.1.tar.gz";
+      sha256 = "1nshbcpdn0jpcj51x0spzjp519pkmqz0n0748j7dgpz70zlqbfpm";
     };
 
     # error: invalid command 'test'
@@ -311,10 +311,27 @@ pythonPackages = python.modules // rec {
 
     meta = {
       homepage = http://www.crummy.com/software/BeautifulSoup/;
-
       license = "bsd";
-
       description = "Undemanding HTML/XML parser";
+    };
+  });
+
+  beautifulsoup4 = buildPythonPackage (rec { 
+    name = "beautifulsoup4-4.1.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/b/beautifulsoup4/${name}.tar.gz";
+      md5 = "c012adc06217b8532c446d181cc56586";
+    };
+
+    # invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      homepage = http://crummy.com/software/BeautifulSoup/bs4/;
+      description = "HTML and XML parser";
+      license = stdenv.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   });
 
@@ -986,6 +1003,23 @@ pythonPackages = python.modules // rec {
   };
 
 
+  feedparser = buildPythonPackage (rec { 
+    name = "feedparser-5.1.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/f/feedparser/${name}.tar.gz";
+      md5 = "f2253de78085a1d5738f626fcc1d8f71";
+    };
+
+    meta = {
+      homepage = http://code.google.com/p/feedparser/;
+      description = "Universal feed parser";
+      license = stdenv.lib.licenses.bsd2;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
+
+
   flake8 = buildPythonPackage (rec {
     name = "flake8-1.7.0";
 
@@ -1024,6 +1058,26 @@ pythonPackages = python.modules // rec {
       license = "BSD";
     };
   };
+
+
+  flexget = buildPythonPackage (rec { 
+    name = "FlexGet-1.0.3353";
+
+    src = fetchurl {
+      url = "http://download.flexget.com/archive/${name}.tar.gz";
+      md5 = "cffc4e51b5c5efddb339d265524e46b8";
+    };
+
+    buildInputs = [ nose ];
+    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar ];
+
+    meta = {
+      homepage = http://flexget.com/;
+      description = "Multipurpose automation tool for content like torrents, ...";
+      license = stdenv.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
 
 
   flup = buildPythonPackage (rec {
@@ -1222,6 +1276,21 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  html5lib = buildPythonPackage (rec { 
+    name = "html5lib-0.95";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/h/html5lib/${name}.tar.gz";
+      md5 = "fe607f9917d81763e842f818f23464ee";
+    };
+
+    meta = {
+      homepage = http://code.google.com/p/html5lib/;
+      description = "HTML parser based on WHAT-WG HTML5 specification";
+      license = stdenv.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
 
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.7.7";
@@ -2512,6 +2581,56 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  pyrss2gen = buildPythonPackage (rec { 
+    name = "PyRSS2Gen-1.0.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/PyRSS2Gen/${name}.tar.gz";
+      md5 = "eae2bc6412c5679c287ecc1a59588f75";
+    };
+
+    meta = {
+      homepage = http://www.dalkescientific.om/Python/PyRSS2Gen.html;
+      description = "Library for generating RSS 2.0 feeds";
+      license = stdenv.lib.licenses.bsd2;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
+
+  pynzb = buildPythonPackage (rec { 
+    name = "pynzb-0.1.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pynzb/${name}.tar.gz";
+      md5 = "63c74a36348ac28aa99732dcb8be8c59";
+    };
+
+    meta = {
+      homepage = http://github.com/ericflo/pynzb;
+      description = "Unified API for parsing NZB files";
+      license = stdenv.lib.licenses.bsd;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
+
+  progressbar = buildPythonPackage (rec { 
+    name = "progressbar-2.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/progressbar/${name}.tar.gz";
+      md5 = "8ea4e2c17a8ec9e7d153767c5f2a7b28";
+    };
+
+    # invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/python-progressbar/;
+      description = "Text progressbar library for python";
+      license = stdenv.lib.licenses.lgpl;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
 
   ldap = buildPythonPackage rec {
     name = "python-ldap-2.4.3";
@@ -3233,11 +3352,11 @@ pythonPackages = python.modules // rec {
 
 
   sqlalchemy = buildPythonPackage {
-    name = "sqlalchemy-0.6.6";
+    name = "sqlalchemy-0.7.9";
 
     src = fetchurl {
-      url = mirror://sourceforge/sqlalchemy/0.6.6/SQLAlchemy-0.6.6.tar.gz;
-      sha256 = "0inj9b66pi447cw500mqn7d09dij20ic3k5bnyhj6rpdl2l83a0l";
+      url = mirror://sourceforge/sqlalchemy/0.7.9/SQLAlchemy-0.7.9.tar.gz;
+      md5 = "c4852d586d95a59fbc9358f4467875d5";
     };
 
     buildInputs = [ nose ];
