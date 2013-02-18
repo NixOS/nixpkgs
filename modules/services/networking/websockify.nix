@@ -35,6 +35,7 @@ let cfg = config.services.networking.websockify; in {
 
   config = mkIf cfg.enable {
     systemd.services."websockify@" = {
+      description = "Service to forward websocket connections to TCP connections (from port:to port %I)";
       script = ''
         IFS=':' read -a array <<< "$1"
         ${pkgs.pythonPackages.websockify}/bin/websockify --ssl-only \
@@ -44,6 +45,7 @@ let cfg = config.services.networking.websockify; in {
     };
 
     systemd.targets."default-websockify" = {
+      description = "Target to start all default websockify@ services";
       wants = mapAttrsToList (name: value: "websockify@${name}:${toString value}.service") cfg.portMap;
       wantedBy = [ "multi-user.target" ];
     };
