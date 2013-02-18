@@ -10,14 +10,14 @@
 
 assert stdenv.system == "i686-linux";
 
-let version = "1.0.0.27"; in
+let version = "1.0.0.28"; in
 
 stdenv.mkDerivation rec {
   name = "steam-${version}";
 
   src = fetchurl {
     url = "http://media.steampowered.com/client/installer/steam.deb";
-    sha256 = "1hlmqxd0yv92aag3wbykwvri54lbmq9s6krrxfnrp1rbpli9r2jx";
+    sha256 = "0c0n1v9rnn6jj2wrvbmi77j9v93f3ndw039z9db6092yqls1amqk";
   };
 
   buildInputs = [ dpkg makeWrapper ];
