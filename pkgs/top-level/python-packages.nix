@@ -2608,7 +2608,7 @@ pythonPackages = python.modules // rec {
     meta = {
       homepage = http://github.com/ericflo/pynzb;
       description = "Unified API for parsing NZB files";
-      license = stdenv.lib.licenses.bsd;
+      license = stdenv.lib.licenses.bsd3;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   });
