@@ -1759,6 +1759,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   uulib = callPackage ../development/libraries/haskell/uulib {};
 
+  uuid = callPackage ../development/libraries/haskell/uuid {};
+
   uuParsinglib = callPackage ../development/libraries/haskell/uu-parsinglib {};
 
   vacuum = callPackage ../development/libraries/haskell/vacuum {};
