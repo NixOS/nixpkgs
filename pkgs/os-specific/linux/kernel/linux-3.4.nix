@@ -233,6 +233,9 @@ let
       # Devtmpfs support.
       DEVTMPFS y
 
+      # Easier debug of NFS issues
+      SUNRPC_DEBUG y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -241,7 +244,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.4.28";
+    version = "3.4.31";
     testing = false;
 
     preConfigure = ''
@@ -250,7 +253,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "11b8nip1szm2c4wnpz2plv9icny33i377wd8jk9qbib08wwcf87i";
+      sha256 = "1148f77iab0p5j61v42a4jka4ndwnjpd6lkqhwiqs61lmv3m7j2r";
     };
 
     config = configWithPlatform stdenv.platform;

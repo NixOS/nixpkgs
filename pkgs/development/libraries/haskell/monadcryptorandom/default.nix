@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "monadcryptorandom";
-  version = "0.5";
-  sha256 = "19sb9mgfvmmmx1sn0aiq6dn5nl0201xwgs6xqakn7pz5vsqcww2b";
+  version = "0.5.1";
+  sha256 = "10waxc0i7hcqlgb9iwcdz0xqkym4ihavgwq466xlaqzzhcpp38d6";
   buildDepends = [ cryptoApi mtl tagged transformers ];
   meta = {
     homepage = "https://github.com/TomMD/monadcryptorandom";

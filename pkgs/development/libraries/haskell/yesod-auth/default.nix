@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-auth";
-  version = "1.1.4";
-  sha256 = "060548zbjsvf6zvixiyic729fd9862z3qwz349ric60jfa20cdpx";
+  version = "1.1.4.1";
+  sha256 = "18x2m1clk3nqaap51c6ayxbh5q6v0i4srcphgyf26lrxq514pvad";
   buildDepends = [
     aeson authenticate blazeHtml blazeMarkup hamlet httpConduit
     httpTypes liftedBase mimeMail network persistent persistentTemplate
@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     transformers unorderedContainers wai yesodCore yesodForm yesodJson
     yesodPersistent
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Authentication for Yesod";

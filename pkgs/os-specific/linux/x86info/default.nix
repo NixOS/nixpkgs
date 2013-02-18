@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0a4lzka46nabpsrg3n7akwr46q38f96zfszd73xcback1s2hjc7y";
   };
 
+  preConfigure = "patchShebangs .";
+
   buildInputs = [ pciutils python ];
 
   installPhase = ''
@@ -18,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An identification utility for the x86 series of processors.";
-    longDescription = 
+    longDescription =
     ''
       x86info will identify all Intel/AMD/Centaur/Cyrix/VIA CPUs. It leverages
       the cpuid kernel module where possible.  it supports parsing model specific

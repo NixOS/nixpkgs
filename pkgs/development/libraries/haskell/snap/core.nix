@@ -7,15 +7,14 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-core";
-  version = "0.9.2.2";
-  sha256 = "0svahih2piaj87xfysgjvqqh11gmwz9icrh2g819h68kzh10imlf";
+  version = "0.9.3.1";
+  sha256 = "1q2lk70l0hk4l6ksjnal1bfkby0i08gdzvj9cscvxs4njxmgdapq";
   buildDepends = [
     attoparsec attoparsecEnumerator blazeBuilder blazeBuilderEnumerator
     bytestringMmap caseInsensitive deepseq enumerator filepath HUnit
     MonadCatchIOTransformers mtl random regexPosix text time unixCompat
     unorderedContainers vector zlibEnum
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "Snap: A Haskell Web Framework (core interfaces and types)";

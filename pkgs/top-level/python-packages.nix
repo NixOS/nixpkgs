@@ -398,6 +398,12 @@ pythonPackages = python.modules // rec {
       md5 = "4e3b521600e475c56a0a66459a5fc7bb";
     };
 
+   # TODO: consider if this patch should be an option
+   # It makes buildout useful in a nix profile, but this alters the default functionality
+   patchPhase = ''
+     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
+   ''; 
+
    meta = {
       homepage = http://www.buildout.org/;
       description = "A software build and configuration system";
@@ -715,6 +721,60 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  deluge = buildPythonPackage rec {
+    name = "deluge-1.3.5";
+
+    src = fetchurl {
+      url = "http://download.deluge-torrent.org/source/${name}.tar.gz";
+      md5 = "fbf52593a85bfa7c8520834fa9177fba";
+    };
+
+    # TODO: gui, procsettitle
+    buildInputs = [ pkgs.libtorrentRasterbar twisted Mako chardet pyxdg pkgs.pyopenssl ];
+    propagatedBuildInputs = [ pkgs.libtorrentRasterbar twisted Mako chardet pyxdg pkgs.pyopenssl ];
+
+    meta = {
+      homepage = http://deluge-torrent.org;
+      description = "Torrent client";
+      license = "GPLv3";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+  pyxdg = buildPythonPackage rec {
+    name = "pyxdg-0.25";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyxdg/${name}.tar.gz";
+      md5 = "bedcdb3a0ed85986d40044c87f23477c";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      homepage = http://freedesktop.org/wiki/Software/pyxdg;
+      description = "Contains implementations of freedesktop.org standards";
+      license = "LGPLv2";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+  chardet = buildPythonPackage rec {
+    name = "chardet-2.1.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/c/chardet/${name}.tar.gz";
+      md5 = "295367fd210d20f3febda615a88e1ef0";
+    };
+
+    meta = {
+      homepage = https://github.com/erikrose/chardet;
+      description = "Universal encoding detector";
+      license = "LGPLv2";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
 
   django = buildPythonPackage rec {
     name = "Django-${version}";
@@ -1004,6 +1064,20 @@ pythonPackages = python.modules // rec {
       license = stdenv.lib.licenses.lgpl21;
     };
   });
+
+  gcovr = buildPythonPackage rec {
+    name = "gcovr-2.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gcovr/${name}.tar.gz";
+      md5 = "672db629469882b93c40016aebff50ac";
+    };
+
+    meta = {
+      description = "A Python script for summarizing gcov data";
+      license = "BSD";
+    };
+  };
 
   genshi = buildPythonPackage {
     name = "genshi-0.6";
@@ -1302,11 +1376,11 @@ pythonPackages = python.modules // rec {
   };
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-2.2.2";
+    name = "lxml-3.0.2";
 
     src = fetchurl {
-      url = http://pypi.python.org/packages/source/l/lxml/lxml-2.2.2.tar.gz;
-      sha256 = "0zjpsy67wcs69qhb06ficl3a5z229hmczpr8h84rkk05vaagj8qv";
+      url = "http://pypi.python.org/packages/source/l/lxml/${name}.tar.gz";
+      md5 = "38b15b0dd5e9292cf98be800e84a3ce4";
     };
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
@@ -1360,6 +1434,43 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "A Python crypto and SSL toolkit";
       homepage = http://chandlerproject.org/Projects/MeTooCrypto;
+    };
+  };
+
+
+  Mako = buildPythonPackage rec {
+    name = "Mako-0.7.3";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/M/Mako/${name}.tar.gz";
+      md5 = "daf7cc50f997533b573f9b40193139a2";
+    };
+
+    buildInputs = [ MarkupSafe nose ];
+    propagatedBuildInputs = [ MarkupSafe ];
+
+    meta = {
+      description = "Super-fast templating language.";
+      homepage = http://www.makotemplates.org;
+      license = "MIT";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+
+  MarkupSafe = buildPythonPackage rec {
+    name = "MarkupSafe-0.15";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/M/MarkupSafe/${name}.tar.gz";
+      md5 = "4e7c4d965fe5e033fa2d7bb7746bb186";
+    };
+
+    meta = {
+      description = "Implements a XML/HTML/XHTML Markup safe string";
+      homepage = http://dev.pocoo.org;
+      license = "BSD";
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
 
@@ -1659,6 +1770,8 @@ pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ coverage ];
+
+    doCheck = ! stdenv.isDarwin;
   };
 
   nose2 = if isPy26 then null else (buildPythonPackage rec {
@@ -1974,6 +2087,45 @@ pythonPackages = python.modules // rec {
     # ValueError: Working directory tests not found, or not a directory
     doCheck = false;
   };
+
+
+  pillow = buildPythonPackage rec {
+    name = "Pillow-1.7.8";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
+      md5 = "41d8688d4db72673069a6dc63b5289d6";
+    };
+
+    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib ];
+
+    configurePhase = ''
+      sed -i "setup.py" \
+          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
+              s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
+              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;'
+    '';
+
+    doCheck = true;
+
+    meta = {
+      homepage = http://python-imaging.github.com/Pillow;
+
+      description = "Fork of The Python Imaging Library (PIL)";
+
+      longDescription = ''
+        The Python Imaging Library (PIL) adds image processing
+        capabilities to your Python interpreter.  This library
+        supports many file formats, and provides powerful image
+        processing and graphics capabilities.
+      '';
+
+      license = "http://www.pythonware.com/products/pil/license.htm";
+
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
 
   polib = buildPythonPackage rec {
     name = "polib-${version}";
@@ -3429,6 +3581,24 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "WSGI request and response object";
       homepage = http://pythonpaste.org/webob/;
+    };
+  };
+
+
+  websockify = buildPythonPackage rec {
+    version = "0.3.0";
+    name = "websockify-${version}";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/w/websockify/websockify-${version}.tar.gz";
+      md5 = "29b6549d3421907de4bbd881ecc2e1b1";
+    };
+
+    propagatedBuildInputs = [ numpy ];
+
+    meta = {
+      description = "WebSockets support for any application/server";
+      homepage = https://github.com/kanaka/websockify;
     };
   };
 

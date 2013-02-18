@@ -126,7 +126,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     GLUT         = self.GLUT_2_3_1_0;           # 7.6 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
     html         = self.html_1_0_1_2;           # 7.6 ok
-    HTTP         = self.HTTP_4000_2_7;          # 7.6 ok
+    HTTP         = self.HTTP_4000_2_8;          # 7.6 ok
     HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
     network      = self.network_2_4_1_0;        # 7.6 ok
@@ -525,7 +525,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   bloomfilter = callPackage ../development/libraries/haskell/bloomfilter {};
 
   bmp_1_2_2_1 = callPackage ../development/libraries/haskell/bmp/1.2.2.1.nix {};
-  bmp_1_2_3_4 = callPackage ../development/libraries/haskell/bmp/1.2.3.4.nix {};
+  bmp_1_2_4_1 = callPackage ../development/libraries/haskell/bmp/1.2.4.1.nix {};
   bmp = self.bmp_1_2_2_1;       # later versions work only with ghc 7.6 and beyond
 
   Boolean = callPackage ../development/libraries/haskell/Boolean {};
@@ -751,6 +751,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dualTree = callPackage ../development/libraries/haskell/dual-tree {};
 
+  dyre = callPackage ../development/libraries/haskell/dyre {};
+
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
 
   editline = callPackage ../development/libraries/haskell/editline {};
@@ -872,6 +874,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     libc = pkgs.stdenv.gcc.libc;
   };
 
+  Glob = callPackage ../development/libraries/haskell/Glob {};
+
   GlomeVec = callPackage ../development/libraries/haskell/GlomeVec {};
 
   gloss = callPackage ../development/libraries/haskell/gloss {
@@ -975,8 +979,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HTTP_4000_2_2 = callPackage ../development/libraries/haskell/HTTP/4000.2.2.nix {};
   HTTP_4000_2_3 = callPackage ../development/libraries/haskell/HTTP/4000.2.3.nix {};
   HTTP_4000_2_5 = callPackage ../development/libraries/haskell/HTTP/4000.2.5.nix {};
-  HTTP_4000_2_7 = callPackage ../development/libraries/haskell/HTTP/4000.2.7.nix {};
-  HTTP = self.HTTP_4000_2_7;
+  HTTP_4000_2_8 = callPackage ../development/libraries/haskell/HTTP/4000.2.8.nix {};
+  HTTP = self.HTTP_4000_2_8;
 
   httpReverseProxy = callPackage ../development/libraries/haskell/http-reverse-proxy {};
 
@@ -1179,6 +1183,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   logict = callPackage ../development/libraries/haskell/logict {};
 
+  maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
+
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
   mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
@@ -1216,8 +1222,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   monadLogger = callPackage ../development/libraries/haskell/monad-logger {};
 
   monadPar_0_1_0_3 = callPackage ../development/libraries/haskell/monad-par/0.1.0.3.nix {};
-  monadPar_0_3 = callPackage ../development/libraries/haskell/monad-par/0.3.nix {};
-  monadPar = self.monadPar_0_3;
+  monadPar_0_3_4 = callPackage ../development/libraries/haskell/monad-par/0.3.4.nix {};
+  monadPar = self.monadPar_0_3_4;
 
   monadParExtras = callPackage ../development/libraries/haskell/monad-par-extras {};
 
@@ -1753,6 +1759,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   uulib = callPackage ../development/libraries/haskell/uulib {};
 
+  uuid = callPackage ../development/libraries/haskell/uuid {};
+
   uuParsinglib = callPackage ../development/libraries/haskell/uu-parsinglib {};
 
   vacuum = callPackage ../development/libraries/haskell/vacuum {};
@@ -1781,6 +1789,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   void = callPackage ../development/libraries/haskell/void {};
 
   vty = callPackage ../development/libraries/haskell/vty {};
+
+  vtyUi = callPackage ../development/libraries/haskell/vty-ui {};
 
   wai = callPackage ../development/libraries/haskell/wai {};
 
@@ -1832,6 +1842,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   X11 = callPackage ../development/libraries/haskell/X11 {};
 
   X11Xft = callPackage ../development/libraries/haskell/X11-xft {};
+
+  xdgBasedir = callPackage ../development/libraries/haskell/xdg-basedir {};
 
   xdot = callPackage ../development/libraries/haskell/xdot {
     polyparse = self.polyparse_1_7;
@@ -1994,10 +2006,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Applications.
 
-  darcs = callPackage ../applications/version-management/darcs {
-    tar = self.tar_0_3_2_0;
-    haskeline = self.haskeline_0_6_4_7;
-  };
+  darcs = callPackage ../applications/version-management/darcs {};
 
   leksah = callPackage ../applications/editors/leksah {
     QuickCheck = self.QuickCheck2;

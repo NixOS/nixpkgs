@@ -14,13 +14,12 @@ PROG=$(basename "$0")
 SITES=
 
 pypath() {
-  BIN=$(dirname "$1")
-  BIN=$(realpath -s "$BIN")
+  BIN=$(realpath -s "$(dirname "$1")")
   ENV=$(dirname "$BIN")
   SITE="$ENV/lib/python2.7/site-packages"
   SITES="$SITES${SITES:+:}$SITE"
 
-  PRG=$BIN/$(readlink "$1")
+  PRG="$BIN"/$(readlink "$1")
 
   if test -L "$PRG"; then
     pypath "$PRG"
@@ -31,4 +30,4 @@ pypath $(realpath -s "$0")
 
 export PYTHONPATH="$PYTHONPATH${PYTHONPATH:+:}$SITES"
 
-exec $BIN/$PROG "$@"
+exec "$BIN/$PROG" "$@"

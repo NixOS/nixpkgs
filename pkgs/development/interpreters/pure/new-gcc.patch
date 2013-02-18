@@ -1,0 +1,62 @@
+diff --git a/runtime.cc b/runtime.cc
+index 04cbc40..54a0b43 100644
+--- a/runtime.cc
++++ b/runtime.cc
+@@ -13121,39 +13121,6 @@ unsigned int sleep(unsigned int secs)
+ }
+ #endif
+ 
+-/* Horrible kludge to get round, trunc and the inverse hyperbolic functions
+-   from libmingwex.a (these are in C99, but not in the Windows system
+-   libraries, and LLVM doesn't know how to get them either). */
+-
+-extern "C"
+-double __round(double x)
+-{
+-  return round(x);
+-}
+-
+-extern "C"
+-double __trunc(double x)
+-{
+-  return trunc(x);
+-}
+-
+-extern "C"
+-double __asinh(double x)
+-{
+-  return asinh(x);
+-}
+-
+-extern "C"
+-double __acosh(double x)
+-{
+-  return acosh(x);
+-}
+-
+-extern "C"
+-double __atanh(double x)
+-{
+-  return atanh(x);
+-}
+ 
+ /* File type bits. */
+ 
+diff --git a/util.hh b/util.hh
+index ae95b79..eab3330 100644
+--- a/util.hh
++++ b/util.hh
+@@ -58,13 +58,6 @@ char *default_encoding();
+ double my_strtod(const char  *nptr, char **endptr);
+ char *my_formatd(char *buffer, const char  *format, double d);
+ 
+-/* Windows doesn't have strptime, so we provide a suitable replacement from
+-   GNU libc (see strptime.c). */
+-
+-#ifndef HAVE_STRPTIME
+-extern "C"
+-char *strptime(const char *s, const char *format, struct tm *tm);
+-#endif
+ 
+ /* Windows doesn't have mkstemp, so we provide a suitable replacement. */
+ 

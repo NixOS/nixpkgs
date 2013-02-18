@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     blazeBuilder blazeHtml blazeMarkup parsec text unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     description = "XML parser and renderer with HTML 5 quirks mode";
     license = self.stdenv.lib.licenses.bsd3;

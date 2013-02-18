@@ -1,5 +1,5 @@
 x@{builderDefsPackage
-  , llvm, gmp, mpfr, readline
+  , llvm, gmp, mpfr, readline, bison, flex
   , ...}:
 builderDefsPackage
 (a :  
@@ -12,11 +12,11 @@ let
   sourceInfo = rec {
     baseName="pure";
     project="pure-lang";
-    version="0.49";
+    version="0.56";
     name="${baseName}-${version}";
     extension="tar.gz";
     url="http://${project}.googlecode.com/files/${name}.${extension}";
-    hash="0kkrcmmqks82g3qlkvs3cd23v6b5948rw3xsdadd1jidh74jg33x";
+    hash="1ll29j31lp7ymp1kq57328q8md7pkp8jmwsadp67j4cdlzc3zdhj";
   };
 in
 rec {
@@ -29,8 +29,10 @@ rec {
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doConfigure" "doMakeInstall"];
-      
+  phaseNames = ["doPatch" "doConfigure" "doMakeInstall"];
+
+  patches = [ ./new-gcc.patch ];
+
   meta = {
     description = "A purely functional programming language based on term rewriting";
     maintainers = with a.lib.maintainers;

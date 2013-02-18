@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ python openssl v8 zlib ] ++ stdenv.lib.optional stdenv.isLinux utillinux;
+  
+  setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
     description = "Event-driven I/O framework for the V8 JavaScript engine";
