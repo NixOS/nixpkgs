@@ -316,7 +316,7 @@ pythonPackages = python.modules // rec {
     };
   });
 
-  beautifulsoup4 = buildPythonPackage (rec { 
+  beautifulsoup4 = buildPythonPackage (rec {
     name = "beautifulsoup4-4.1.3";
 
     src = fetchurl {
@@ -442,7 +442,7 @@ pythonPackages = python.modules // rec {
    # It makes buildout useful in a nix profile, but this alters the default functionality
    patchPhase = ''
      sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
-   ''; 
+   '';
 
    meta = {
       homepage = http://www.buildout.org/;
@@ -1003,7 +1003,7 @@ pythonPackages = python.modules // rec {
   };
 
 
-  feedparser = buildPythonPackage (rec { 
+  feedparser = buildPythonPackage (rec {
     name = "feedparser-5.1.3";
 
     src = fetchurl {
@@ -1060,7 +1060,7 @@ pythonPackages = python.modules // rec {
   };
 
 
-  flexget = buildPythonPackage (rec { 
+  flexget = buildPythonPackage (rec {
     name = "FlexGet-1.0.3353";
 
     src = fetchurl {
@@ -1276,7 +1276,7 @@ pythonPackages = python.modules // rec {
     };
   };
 
-  html5lib = buildPythonPackage (rec { 
+  html5lib = buildPythonPackage (rec {
     name = "html5lib-0.95";
 
     src = fetchurl {
@@ -2581,7 +2581,7 @@ pythonPackages = python.modules // rec {
     };
   };
 
-  pyrss2gen = buildPythonPackage (rec { 
+  pyrss2gen = buildPythonPackage (rec {
     name = "PyRSS2Gen-1.0.0";
 
     src = fetchurl {
@@ -2597,7 +2597,7 @@ pythonPackages = python.modules // rec {
     };
   });
 
-  pynzb = buildPythonPackage (rec { 
+  pynzb = buildPythonPackage (rec {
     name = "pynzb-0.1.0";
 
     src = fetchurl {
@@ -2613,7 +2613,7 @@ pythonPackages = python.modules // rec {
     };
   });
 
-  progressbar = buildPythonPackage (rec { 
+  progressbar = buildPythonPackage (rec {
     name = "progressbar-2.2";
 
     src = fetchurl {
@@ -2627,7 +2627,7 @@ pythonPackages = python.modules // rec {
     meta = {
       homepage = http://code.google.com/p/python-progressbar/;
       description = "Text progressbar library for python";
-      license = stdenv.lib.licenses.lgpl;
+      license = stdenv.lib.licenses.lgpl3Plus;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   });
@@ -4298,7 +4298,7 @@ pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/z/zope.schema/zope.schema-4.2.2.tar.gz";
       md5 = "e7e581af8193551831560a736a53cf58";
     };
-    
+
     propagatedBuildInputs = [ zope_event zope_interface zope_testing ];
 
     # ignore circular dependency on zope_location
