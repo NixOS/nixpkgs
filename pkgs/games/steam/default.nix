@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     #!${stdenv.shell}
 
     export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:${libX11}/lib:${gcc.gcc}/lib:${glibc215}/lib:${libselinux}/lib:${libXrandr}/lib:${pango}/lib:${freetype}/lib:${fontconfig}/lib:${glib}/lib:${gtk}/lib:${gdk_pixbuf}/lib:${cairo}/lib:${libXi}/lib:${alsaLib}/lib:${libXrender}/lib:${nss}/lib:${nspr}/lib:${zlib}/lib:${dbus}/lib:${libpng12}/lib:${libXfixes}/lib:${cups}/lib:${libgcrypt}/lib:${openal}/lib:${pulseaudio}/lib:${libxcb}/lib:${libXau}/lib:${libXdmcp}/lib:${SDL}/lib:${libvorbis}/lib:${curl}/lib
-    STEAMBOOTSTRAP=\$HOME/.steam/steam/steam.sh
+    STEAMBOOTSTRAP=~/.steam/steam/steam.sh
     if [ -f \$STEAMBOOTSTRAP ]; then
       PLATFORM32=ubuntu12_32
       STEAMCONFIG=~/.steam
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
       if [ ! -e "\$STEAMCONFIG" ]; then
           mkdir "\$STEAMCONFIG"
       fi
-      #if [ "\$STEAMROOT" != "\$STEAMROOTLINK" -a "\$STEAMROOT" != "\$STEAMDATALINK" ]; then
+      if [ "\$STEAMROOT" != "\$STEAMROOTLINK" -a "\$STEAMROOT" != "\$STEAMDATALINK" ]; then
           rm -f "\$STEAMBIN32LINK" && ln -s "\$STEAMROOT/\$PLATFORM32" "\$STEAMBIN32LINK"
           rm -f "\$STEAMBIN64LINK" && ln -s "\$STEAMROOT/\$PLATFORM64" "\$STEAMBIN64LINK"
           rm -f "\$STEAMSDK32LINK" && ln -s "\$STEAMROOT/linux32" "\$STEAMSDK32LINK"
@@ -66,7 +66,11 @@ stdenv.mkDerivation rec {
           if [ "\$STEAMDATALINK" ]; then
               rm -f "\$STEAMDATALINK" && ln -s "\$STEAMDATA" "\$STEAMDATALINK"
           fi
-      #fi
+      fi
+      # Temporary bandaid until everyone has the new libsteam_api.so
+      rm -f ~/.steampath && ln -s "\$STEAMCONFIG/bin32/steam" ~/.steampath
+      rm -f ~/.steampid && ln -s "\$PIDFILE" ~/.steampid
+      rm -f ~/.steam/bin && ln -s "\$STEAMBIN32LINK" ~/.steam/bin
       export LD_LIBRARY_PATH="\$STEAMBIN32LINK:\$LD_LIBRARY_PATH:${mesa}/lib"
       export SDL_VIDEO_X11_DGAMOUSE=0
       cd "\$STEAMROOT"
