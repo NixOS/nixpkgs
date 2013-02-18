@@ -1183,6 +1183,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   logict = callPackage ../development/libraries/haskell/logict {};
 
+  maccatcher = callPackage ../development/libraries/haskell/maccatcher {};
+
   mathFunctions = callPackage ../development/libraries/haskell/math-functions {};
 
   mainlandPretty = callPackage ../development/libraries/haskell/mainland-pretty {};
