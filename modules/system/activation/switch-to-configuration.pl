@@ -4,7 +4,10 @@ use strict;
 use warnings;
 use File::Basename;
 use File::Slurp;
+use Sys::Syslog qw(:standard :macros);
 use Cwd 'abs_path';
+
+my $out = "@out@";
 
 my $startListFile = "/run/systemd/start-list";
 my $restartListFile = "/run/systemd/restart-list";
@@ -25,15 +28,17 @@ EOF
 
 die "This is not a NixOS installation (/etc/NIXOS is missing)!\n" unless -f "/etc/NIXOS";
 
+openlog("nixos", "", LOG_USER);
+
 # Install or update the bootloader.
 if ($action eq "switch" || $action eq "boot") {
-    system("@installBootLoader@ @out@") == 0 or exit 1;
+    system("@installBootLoader@ $out") == 0 or exit 1;
     exit 0 if $action eq "boot";
 }
 
 # Check if we can activate the new configuration.
 my $oldVersion = read_file("/run/current-system/init-interface-version", err_mode => 'quiet') // "";
-my $newVersion = read_file("@out@/init-interface-version");
+my $newVersion = read_file("$out/init-interface-version");
 
 if ($newVersion ne $oldVersion) {
     print STDERR <<EOF;
@@ -43,6 +48,8 @@ won\'t take effect until you reboot the system.
 EOF
     exit 100;
 }
+
+syslog(LOG_NOTICE, "switching to system configuration $out");
 
 # Ignore SIGHUP so that we're not killed if we're running on (say)
 # virtual console 1 and we restart the "tty1" unit.
@@ -106,7 +113,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
     # Recognise template instances.
     $baseUnit = "$1\@.$2" if $unit =~ /^(.*)@[^\.]*\.(.*)$/;
     my $prevUnitFile = "/etc/systemd/system/$baseUnit";
-    my $newUnitFile = "@out@/etc/systemd/system/$baseUnit";
+    my $newUnitFile = "$out/etc/systemd/system/$baseUnit";
 
     my $baseName = $baseUnit;
     $baseName =~ s/\.[a-z]*$//;
@@ -230,7 +237,7 @@ sub unique {
 # we generated units for all mounts; then we could unify this with the
 # unit checking code above.
 my ($prevFss, $prevSwaps) = parseFstab "/etc/fstab";
-my ($newFss, $newSwaps) = parseFstab "@out@/etc/fstab";
+my ($newFss, $newSwaps) = parseFstab "$out/etc/fstab";
 foreach my $mountPoint (keys %$prevFss) {
     my $prev = $prevFss->{$mountPoint};
     my $new = $newFss->{$mountPoint};
@@ -276,7 +283,7 @@ print STDERR "NOT restarting the following units: ", join(", ", sort(@unitsToSki
 # and so on).
 my $res = 0;
 print STDERR "activating the configuration...\n";
-system("@out@/activate", "@out@") == 0 or $res = 2;
+system("$out/activate", "$out") == 0 or $res = 2;
 
 # Restart systemd if necessary.
 if (abs_path("/proc/1/exe") ne abs_path("@systemd@/lib/systemd/systemd")) {
@@ -340,6 +347,12 @@ if (scalar @failed > 0) {
         system("COLUMNS=1000 @systemd@/bin/systemctl status --no-pager '$unit' >&2");
     }
     $res = 4;
+}
+
+if ($res == 0) {
+    syslog(LOG_NOTICE, "finished switching to system configuration $out");
+} else {
+    syslog(LOG_ERR, "switching to system configuration $out failed (status $res)");
 }
 
 exit $res;

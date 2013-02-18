@@ -42,6 +42,9 @@ if [ ! -e /proc/1 ]; then
 fi
 
 
+echo "booting system configuration $systemConfig" > /dev/kmsg
+
+
 # Make /nix/store a read-only bind mount to enforce immutability of
 # the Nix store.  Note that we can't use "chown root:nixbld" here
 # because users/groups might not exist yet.
