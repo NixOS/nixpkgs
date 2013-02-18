@@ -370,6 +370,8 @@ let
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
+  aespipe = callPackage ../tools/security/aespipe { };
+
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
   analog = callPackage ../tools/admin/analog {};
