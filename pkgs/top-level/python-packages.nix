@@ -275,6 +275,29 @@ pythonPackages = python.modules // rec {
     propagatedBuildInputs = [ logilab_common ];
   };
 
+
+  beets = buildPythonPackage rec {
+    name = "beets-1.0.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
+      md5 = "88ad09a93aa0d69ce813205cf23b2a6c";
+    };
+
+    # tests depend on $HOME setting
+    configurePhase = "export HOME=$TMPDIR";
+
+    propagatedBuildInputs = [ pyyaml unidecode mutagen munkres musicbrainzngs python.modules.sqlite3 python.modules.readline ];
+
+    meta = {
+      homepage = http://beets.radbox.org;
+      description = "Music tagger and library organizer";
+      license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.0.8";
 
@@ -1620,6 +1643,43 @@ pythonPackages = python.modules // rec {
     meta = {
       homepage = https://github.com/iElectric/mr.bob.git;
       description = "A tool to generate code skeletons from templates";
+    };
+  };
+
+
+  munkres = buildPythonPackage rec {
+    name = "munkres-1.0.5.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/m/munkres/${name}.tar.gz";
+      md5 = "cb9d114fb523428bab4742e88bc83696";
+    };
+
+    # error: invalid command 'test'
+    doCheck = false;
+
+    meta = {
+      homepage = http://bmc.github.com/munkres/;
+      description = "Munkres algorithm for the Assignment Problem";
+      license = pkgs.lib.licenses.bsd3;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
+
+  musicbrainzngs = buildPythonPackage rec {
+    name = "musicbrainzngs-0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/m/musicbrainzngs/${name}.tar.gz";
+      md5 = "bc32aa1cf121f29c3ca1c06e9668865f";
+    };
+
+    meta = {
+      homepage = http://alastair/python-musicbrainz-ngs;
+      description = "Python bindings for musicbrainz NGS webservice";
+      license = pkgs.lib.licenses.bsd2;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
 
@@ -4386,6 +4446,23 @@ pythonPackages = python.modules // rec {
       homepage = http://graphite.wikidot.com/;
       description = "Backend data caching and persistence daemon for Graphite";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
+    };
+  };
+
+
+  unidecode = buildPythonPackage rec {
+    name = "Unidecode-0.04.12";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/U/Unidecode/${name}.tar.gz";
+      md5 = "351dc98f4512bdd2e93f7a6c498730eb";
+    };
+
+    meta = {
+      homepage = http://pypi.python.org/pypi/Unidecode/;
+      description = "ASCII transliterations of Unicode text";
+      license = pkgs.lib.licenses.gplv2;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
 
