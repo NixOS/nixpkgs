@@ -4198,11 +4198,6 @@ let
     inherit (xorg) libpthreadstubs;
   };
 
-  libdrm2_4_40 = callPackage ../development/libraries/libdrm/2.4.40.nix {
-    inherit fetchurl stdenv pkgconfig;
-    inherit (xorg) libpthreadstubs;
-  };
-
   libdv = callPackage ../development/libraries/libdv { };
 
   libdvbpsi = callPackage ../development/libraries/libdvbpsi { };
@@ -4628,8 +4623,6 @@ let
   mesa = if stdenv.isDarwin then darwinX11AndOpenGL
     else callPackage ../development/libraries/mesa-glu { }; # mesa *with* GL/glu.h
   darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
-
-  mesa90x = callPackage ../development/libraries/mesa/9.0.x.nix { };
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {
     sdfLibrary    = callPackage ../development/libraries/sdf-library { aterm = aterm28; };
@@ -8025,7 +8018,6 @@ let
 
   weston = callPackage ../applications/window-managers/weston {
     cairo = cairo.override {
-      xcbSupport = true;
       glSupport = true;
     };
   };

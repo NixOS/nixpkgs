@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, wayland, mesa90x, libxkbcommon, pixman
-, cairo, libxcb, libXcursor, x11, udev, libdrm2_4_40, mtdev
+, cairo, libxcb, libXcursor, x11, udev, libdrm, mtdev
 , libjpeg, pam, autoconf, automake, libtool }:
 
 let version = "1.0.5"; in
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig wayland mesa90x libxkbcommon pixman
-    cairo libxcb libXcursor x11 udev libdrm2_4_40 mtdev
+    cairo libxcb libXcursor x11 udev libdrm mtdev
     libjpeg pam autoconf automake libtool ];
 
   preConfigure = "autoreconf -vfi";

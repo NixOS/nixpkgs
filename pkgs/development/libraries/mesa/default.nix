@@ -1,7 +1,8 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, libdrm, file, expat, makedepend
 , libXxf86vm, libXfixes, libXdamage, glproto, dri2proto, libX11, libxcb, libXext
 , libXt, udev, enableTextureFloats ? false, enableR600LlvmCompiler ? false
-, python, libxml2Python, autoconf, automake, libtool, llvm, writeText }:
+, python, libxml2Python, autoconf, automake, libtool, llvm, writeText
+, wayland }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
@@ -24,14 +25,15 @@ stdenv.mkDerivation {
 
   configureFlags =
     ""
-    + " --enable-gles1 --enable-gles2 --enable-gallium-egl"
-    + " --with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast"
+    + " --enable-gles1 --enable-gles2 --disable-gallium-egl"
+    + " --with-egl-platforms=x11,wayland,drm --enable-gbm --enable-shared-glapi"
+    + " --with-gallium-drivers=nouveau,r300,r600,svga,swrast"
     + stdenv.lib.optionalString enableR600LlvmCompiler " --enable-r600-llvm-compiler"
     # Texture floats are patented, see docs/patents.txt
     + stdenv.lib.optionalString enableTextureFloats " --enable-texture-float";
 
   buildInputs = [ expat libdrm libXxf86vm libXfixes libXdamage glproto dri2proto
-    libxml2Python libX11 libXext libxcb libXt udev llvm ];
+    libxml2Python libX11 libXext libxcb libXt udev llvm wayland ];
 
   buildNativeInputs = [ pkgconfig python makedepend file flex bison automake autoconf libtool ];
 
