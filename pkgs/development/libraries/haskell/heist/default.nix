@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     filepath hashable MonadCatchIOTransformers mtl random text time
     unorderedContainers vector xmlhtml
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "An Haskell template system supporting both HTML5 and XML";

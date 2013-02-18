@@ -27,6 +27,7 @@ cabal.mkDerivation (self: {
     yesodAuth yesodCore yesodDefault yesodForm yesodJson
     yesodPersistent zlib
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";

@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     text time transformers transformersBase vector wai waiExtra
     yesodRoutes
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";

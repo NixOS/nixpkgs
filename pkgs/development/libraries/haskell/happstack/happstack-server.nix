@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     text threads time timeCompat transformers transformersBase
     utf8String xhtml zlib
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://happstack.com";
     description = "Web related tools and services";
