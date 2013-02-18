@@ -6,7 +6,7 @@ let cfg = config.services.networking.websockify; in {
   options = {
     services.networking.websockify = {
       enable = mkOption {  
-        description = "Whether to enable websockify to forward websocket connections to TCP connections";
+        description = "Whether to enable websockify to forward websocket connections to TCP connections.";
 
         default = false;   
 
@@ -14,19 +14,19 @@ let cfg = config.services.networking.websockify; in {
       };
 
       sslCert = mkOption {
-        description = "Path to the SSL certificate";
+        description = "Path to the SSL certificate.";
         type = types.path;
       };
 
       sslKey = mkOption {
-        description = "Path to the SSL key";
+        description = "Path to the SSL key.";
         default = cfg.sslCert;
         defaultText = "config.services.networking.websockify.sslCert";
         type = types.path;
       };
 
       portMap = mkOption {
-        description = "Ports to map by default";
+        description = "Ports to map by default.";
         default = {};
         type = types.attrsOf types.int;
       };
