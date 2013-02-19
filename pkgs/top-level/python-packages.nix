@@ -119,13 +119,13 @@ pythonPackages = python.modules // rec {
 
 
   alot = buildPythonPackage rec {
-    rev = "6b5f1a8bf68eecf4364f97c71ec177cf715c081e";
+    rev = "c765ebd6041a845a800cc9fd30705102ae2d040f";
     name = "alot-0.3.3_${rev}";
 
     src = fetchurl {
       url = "https://github.com/pazz/alot/tarball/${rev}";
       name = "${name}.tar.bz";
-      sha256 = "1l6b5gy0z549p54p2va1q7pxyiwb6ghqfy6gdm3kg1np9hw59rl4";
+      sha256 = "0yyp3nz5n1zfwf0l4rkkphq5l6prd988b57ighnmi2samzqa9yv4";
     };
 
     # error: invalid command 'test'
