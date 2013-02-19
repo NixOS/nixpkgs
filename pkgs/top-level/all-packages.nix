@@ -378,6 +378,8 @@ let
 
   aefs = callPackage ../tools/filesystems/aefs { };
 
+  aespipe = callPackage ../tools/security/aespipe { };
+
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
   analog = callPackage ../tools/admin/analog {};
@@ -3286,9 +3288,10 @@ let
 
   swftools = callPackage ../tools/video/swftools { };
 
+  texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
-
-  texinfo = callPackage ../development/tools/misc/texinfo { };
+  texinfo5 = callPackage ../development/tools/misc/texinfo/5.0.nix { };
+  texinfo = texinfo413;
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
@@ -4868,6 +4871,8 @@ let
   snack = callPackage ../development/libraries/snack {
         # optional
   };
+
+  snappy = callPackage ../development/libraries/snappy { };
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
@@ -6778,6 +6783,8 @@ let
     ecb = callPackage ../applications/editors/emacs-modes/ecb { };
 
     jabber = callPackage ../applications/editors/emacs-modes/jabber { };
+
+    emacsClangCompleteAsync = callPackage ../applications/editors/emacs-modes/emacs-clang-complete-async { };
 
     emacsSessionManagement = callPackage ../applications/editors/emacs-modes/session-management-for-emacs { };
 

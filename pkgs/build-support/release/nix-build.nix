@@ -77,7 +77,8 @@ stdenv.mkDerivation (
       if [ -z "${toString doCoverageAnalysis}" ]; then
           for i in $outputs; do
               if [ "$i" = out ]; then j=none; else j="$i"; fi
-              echo "nix-build $j ''${!i}" >> $out/nix-support/hydra-build-products
+              mkdir -p ''${!i}/nix-support
+              echo "nix-build $j ''${!i}" >> ''${!i}/nix-support/hydra-build-products
           done
       fi
     '';
