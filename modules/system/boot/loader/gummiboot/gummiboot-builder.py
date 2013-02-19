@@ -17,8 +17,6 @@ system_dir = lambda generation: "/nix/var/nix/profiles/system-%d-link" % (genera
 
 def write_entry(generation, kernel, initrd):
     entry_file = "@efiSysMountPoint@/loader/entries/nixos-generation-%d.conf" % (generation)
-    if os.path.exists(entry_file):
-        return
     generation_dir = os.readlink(system_dir(generation))
     tmp_path = "%s.tmp" % (entry_file)
     kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
