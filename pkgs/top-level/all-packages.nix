@@ -7003,6 +7003,7 @@ let
 
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
     inherit (gnome) libart_lgpl;
+    webkit = null;
   };
 
   gimp = gimp_2_6;
