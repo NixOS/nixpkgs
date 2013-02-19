@@ -1,0 +1,86 @@
+http://pkgs.fedoraproject.org/gitweb/?p=psimedia.git;a=blob_plain;f=psimedia-remove-v4l.patch;hb=HEAD
+
+--- a/gstprovider/deviceenum/deviceenum_unix.cpp
++++ b/gstprovider/deviceenum/deviceenum_unix.cpp
+@@ -35,7 +35,7 @@
+ # include <sys/stat.h>
+ # include <dirent.h>
+ # include <sys/ioctl.h>
+-# include <linux/videodev.h>
++# include <linux/videodev2.h>
+ #endif
+ 
+ namespace DeviceEnum {
+@@ -478,72 +478,7 @@
+ // v4l detection scheme adapted from PWLib (used by Ekiga/Gnomemeeting)
+ static QList<Item> get_v4l_items()
+ {
+-#ifdef Q_OS_LINUX
+-	QList<Item> out;
+-
+-	QList<V4LName> list = get_v4l_names("/sys/class/video4linux", true);
+-	if(list.isEmpty())
+-		list = get_v4l_names("/proc/video/dev", false);
+-
+-	// if we can't find anything, then do a raw scan for possibilities
+-	if(list.isEmpty())
+-	{
+-		QStringList possible = scan_for_videodevs("/dev");
+-		foreach(QString str, possible)
+-		{
+-			V4LName v;
+-			v.dev = str;
+-			list += v;
+-		}
+-	}
+-
+-	for(int n = 0; n < list.count(); ++n)
+-	{
+-		V4LName &v = list[n];
+-
+-		// if we already have a friendly name then we'll skip the confirm
+-		//   in order to save resources.  the only real drawback here that
+-		//   I can think of is if the device isn't a capture type.  but
+-		//   what does it mean to have a V4L device that isn't capture??
+-		if(v.friendlyName.isEmpty())
+-		{
+-			int fd = open(QFile::encodeName(v.dev).data(), O_RDONLY | O_NONBLOCK);
+-			if(fd == -1)
+-				continue;
+-
+-			// get video capabilities and close
+-			struct video_capability caps;
+-			memset(&caps, 0, sizeof(caps));
+-			int ret = ioctl(fd, VIDIOCGCAP, &caps);
+-			close(fd);
+-			if(ret == -1)
+-				continue;
+-
+-			if(!(caps.type & VID_TYPE_CAPTURE))
+-				continue;
+-
+-			v.friendlyName = caps.name;
+-		}
+-
+-		Item i;
+-		i.type = Item::Video;
+-		i.dir = Item::Input;
+-		i.name = v.friendlyName;
+-		i.driver = "v4l";
+-		i.id = v.dev;
+-
+-		// HACK
+-		if(v.friendlyName == "Labtec Webcam Notebook")
+-			i.explicitCaptureSize = QSize(640, 480);
+-
+-		out += i;
+-	}
+-
+-	return out;
+-#else
+-	// return empty list if non-linux
+ 	return QList<Item>();
+-#endif
+ }
+ 
+ static QList<Item> get_v4l2_items()
