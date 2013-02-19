@@ -95,6 +95,16 @@ let
       '';
     };
 
+    boot.initrd.compressor = mkOption {
+      default = "gzip -9";
+
+      type = types.string;
+
+      description = "The compressor to use on the initrd";
+
+      example = "xz";
+    };
+
     fileSystems = mkOption {
       options.neededForBoot = mkOption {
         default = false;
@@ -317,6 +327,8 @@ let
   # The closure of the init script of boot stage 1 is what we put in
   # the initial RAM disk.
   initialRamdisk = pkgs.makeInitrd {
+    inherit (config.boot.initrd) compressor;
+
     contents =
       [ { object = bootStage1;
           symlink = "/init";
