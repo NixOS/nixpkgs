@@ -1,30 +1,13 @@
-{ stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig, pam, curl
+{ stdenv, fetchurl, zlib, openssl, perl, libedit, pkgconfig, pam
 , etcDir ? null
 , hpnSupport ? false
 }:
 
 let
 
-  # Ugly download
-  hpnSrc = stdenv.mkDerivation {
-    name = "openssh-6.1p1-hpn13v14.diff.gz";
-
-    buildInputs = [ curl ];
-
-    url = "http://www.psc.edu/index.php/component/remository/HPN-SSH/OpenSSH-6.1-Patches/HPN-SSH-Kitchen-Sink-Patch-for-OpenSSH-6.1/";
-
-    phases = [ "installPhase" ];
-
-    installPhase = ''
-      URL2=$(curl -c cookies.jar "$url" | grep "window.location" |
-        sed 's,.*\(http:/.*\)'"'"'},\1,')
-      URL3=$(curl -b cookies.jar -c cookies.jar "$URL2" | grep "window.location" |
-        sed 's,.*\(http:/.*\)'"'"'},\1,')
-      curl -b cookies.jar "$URL3" > $out
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHash = "14das6lim6fxxnx887ssw76ywsbvx3s4q3n43afgh5rgvs4xmnnq";
+  hpnSrc = fetchurl {
+    url = http://nixos.org/tarballs/openssh-6.1p1-hpn13v14.diff.gz;
+    sha256 = "14das6lim6fxxnx887ssw76ywsbvx3s4q3n43afgh5rgvs4xmnnq";
   };
 
 in
@@ -42,7 +25,7 @@ stdenv.mkDerivation rec {
       gunzip -c ${hpnSrc} | patch -p1
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
-    
+
   patches = [ ./locale_archive.patch ];
 
   buildNativeInptus = [ perl ];
