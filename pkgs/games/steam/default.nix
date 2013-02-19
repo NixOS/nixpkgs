@@ -8,17 +8,25 @@
 , curl, mesa # Superbrothers: S&S EP
 , patchelf }:
 
-assert stdenv.system == "i686-linux";
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 let version = "1.0.0.28"; in
 
 stdenv.mkDerivation rec {
   name = "steam-${version}";
 
-  src = fetchurl {
-    url = "http://media.steampowered.com/client/installer/steam.deb";
-    sha256 = "0c0n1v9rnn6jj2wrvbmi77j9v93f3ndw039z9db6092yqls1amqk";
-  };
+  src =
+    if stdenv.system == "i686-linux" then 
+      fetchurl {
+        url = "http://repo.steampowered.com/steam/archive/precise/steam_${version}_i386.deb";
+        sha256 = "0c0n1v9rnn6jj2wrvbmi77j9v93f3ndw039z9db6092yqls1amqk";
+      }
+    else if stdenv.system == "x86_64-linux" then 
+      fetchurl {
+        url = "http://repo.steampowered.com/steam/archive/precise/steam64_${version}_amd64.deb";
+        sha256 = "1dr2b9s036w8r46az1f9cjddrjaf8a9k564g65j288y6w9pcdb2w";
+      }
+    else throw "Steam not supported on this platform.";
 
   buildInputs = [ dpkg makeWrapper ];
 

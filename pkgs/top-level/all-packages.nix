@@ -9034,7 +9034,7 @@ let
 
   stardust = callPackage ../games/stardust {};
 
-  steam = callPackage_i686 ../games/steam {};
+  steam = callPackage ../games/steam {};
 
   stuntrally = callPackage ../games/stuntrally { };
 
