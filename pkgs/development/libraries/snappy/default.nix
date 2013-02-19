@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = http://code.google.com/p/snappy/
-    license = "BSD"
+    homepage = http://code.google.com/p/snappy/;
+    license = "BSD";
     description = "Compression/decompression library for very high speeds";
   };
 }

@@ -4580,7 +4580,7 @@ pythonPackages = python.modules // rec {
     meta = {
       homepage = http://pypi.python.org/pypi/Unidecode/;
       description = "ASCII transliterations of Unicode text";
-      license = pkgs.lib.licenses.gplv2;
+      license = pkgs.lib.licenses.gpl2;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   };
