@@ -8377,9 +8377,7 @@ let
 
       calligra = callPackage ../applications/office/calligra { };
 
-      digikam = callPackage ../applications/graphics/digikam {
-        boost = boost147;
-      };
+      digikam = callPackage ../applications/graphics/digikam { };
 
       k3b = callPackage ../applications/misc/k3b { };
 
