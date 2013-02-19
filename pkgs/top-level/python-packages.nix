@@ -3573,11 +3573,11 @@ pythonPackages = python.modules // rec {
 
 
   turses = buildPythonPackage (rec {
-    name = "turses-0.2.11";
+    name = "turses-0.2.12";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/turses/${name}.tar.gz";
-      sha256 = "0zd0fjb5rr5if8wp6kmi29wrkj7ypp4vz00xxb0if1kjrakczlvm";
+      sha256 = "016fw2ch1gy3rrlfjsdpd6y11mkrbjw4h84h7954k2vhc84l1gm0";
     };
 
     propagatedBuildInputs = [ oauth2 urwid tweepy ] ++ optional isPy26 argparse;
@@ -3596,11 +3596,11 @@ pythonPackages = python.modules // rec {
   });
 
   tweepy = buildPythonPackage (rec {
-    name = "tweepy-1.13";
+    name = "tweepy-2.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/t/tweepy/${name}.tar.gz";
-      sha256 = "1gaki8qvzi72jaj5xls51lc6fgs1xnm9c6jgpirwklpdn7y8wyy5";
+      sha256 = "1b95xcw11b5871gd4br78hxbvcq8y9f0i0sqga85dgg9hnmvdcx0";
     };
 
     meta = {
