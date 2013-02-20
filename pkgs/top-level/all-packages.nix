@@ -1930,7 +1930,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc46;
+  gcc = gcc47;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc/2.95 {
     inherit fetchurl stdenv noSysDirs;
@@ -3866,7 +3866,7 @@ let
   # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { };
 
-  gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
+  gmp5 = callPackage ../development/libraries/gmp/5.1.1.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 

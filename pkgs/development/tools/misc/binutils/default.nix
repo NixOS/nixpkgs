@@ -1,12 +1,12 @@
 { stdenv, fetchurl, noSysDirs, zlib, cross ? null, gold ? false, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null }:
 
-let basename = "binutils-2.21.1a"; in
+let basename = "binutils-2.23.1"; in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "0m7nmd7gc9d9md43wbrv65hz6lbi2crqwryzpigv19ray1lzmv6d";
+    sha256 = "2ab2e5b03e086d12c6295f831adad46b3e1410a3a234933a2e8fac66cb2e7a19";
   };
 
   patches = [

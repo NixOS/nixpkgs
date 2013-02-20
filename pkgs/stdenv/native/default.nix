@@ -9,7 +9,8 @@ rec {
   path =
     (if system == "i686-solaris" then [ "/usr/gnu" ] else []) ++
     (if system == "i686-netbsd" then [ "/usr/pkg" ] else []) ++
-    ["/opt/local/gnu" "/opt/local/bin" "/" "/usr" "/usr/local"];
+    (if system == "x86_64-solaris" then [ "/opt/local/gnu" ] else []) ++
+    ["/" "/usr" "/usr/local"];
 
   prehookBase = ''
     # Disable purity tests; it's allowed (even needed) to link to

@@ -8,6 +8,7 @@ stdenv.mkDerivation (rec {
     sha256 = "516a6370b3b3f46e2fc5a5e222ff5ecd76f3089bc956a7587a6e4f89de17714c";
   };
 
+  LDFLAGS = if stdenv.isSunOS then "-lsec -lavl" else "";
   configureFlags = [ "--disable-csharp" ]
      ++ (stdenv.lib.optionals stdenv.isCygwin
           [ # We have a static libiconv, so we can only build the static lib.
