@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "base64-conduit";
-  version = "0.5.1";
-  sha256 = "1zmp6iv55rac7x7w59az7zaarq79fr7zvgg2wcb5b627axlw909l";
+  version = "1.0.0";
+  sha256 = "10wjgdixk5da48jpm2i91vy3ckdqpbpgba6hzn7ak6d3qac22m9q";
   buildDepends = [ base64Bytestring conduit ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
