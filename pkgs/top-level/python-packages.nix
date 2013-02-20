@@ -2502,6 +2502,28 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  pyglet = buildPythonPackage rec {
+    name = "pyglet-1.1.4";
+
+    src = fetchurl {
+      url = "http://pyglet.googlecode.com/files/${name}.tar.gz";
+      sha256 = "048n20d606i3njnzhajadnznnfm8pwchs43hxs50da9p79g2m6qx";
+    };
+
+    patchPhase = let
+      libs = [ pkgs.mesa pkgs.xlibs.libX11 pkgs.freetype pkgs.fontconfig ];
+      paths = pkgs.lib.concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
+    in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://www.pyglet.org/";
+      description = "A cross-platform windowing and multimedia library";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   pygments = buildPythonPackage rec {
     name = "Pygments-1.5";
 
