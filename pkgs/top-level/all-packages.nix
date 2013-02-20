@@ -718,6 +718,8 @@ let
 
   euca2ools = callPackage ../tools/virtualization/euca2ools { pythonPackages = python26Packages; };
 
+  evtest = callPackage ../applications/misc/evtest { };
+
   exif = callPackage ../tools/graphics/exif { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
