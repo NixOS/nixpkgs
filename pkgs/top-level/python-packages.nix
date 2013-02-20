@@ -2768,6 +2768,24 @@ pythonPackages = python.modules // rec {
   });
 
 
+  pyserial = buildPythonPackage rec {
+    name = "pyserial-2.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyserial/${name}.tar.gz";
+      md5 = "cde799970b7c1ce1f7d6e9ceebe64c98";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://pyserial.sourceforge.net/";
+      license = stdenv.lib.licenses.psfl;
+      description = "Python serial port extension";
+    };
+  };
+
+
   pysqlite = buildPythonPackage (rec {
     name = "pysqlite-2.5.5";
 
