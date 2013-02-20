@@ -4,12 +4,11 @@
 
 cabal.mkDerivation (self: {
   pname = "hamlet";
-  version = "1.1.6.2";
-  sha256 = "00asrmyb4k9xpsbwwafm3rj1lisssrc3hj3dsr827w9x86xxargy";
+  version = "1.1.6.3";
+  sha256 = "1kpj8j47licmdf364n0fn5908hsl6ib1wkiqhcx3m0nimb7pjnss";
   buildDepends = [
     blazeBuilder blazeHtml blazeMarkup failure parsec shakespeare text
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "Haml-like template files that are compile-time checked";
