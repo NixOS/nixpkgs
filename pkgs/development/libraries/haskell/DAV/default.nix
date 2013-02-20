@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
     caseInsensitive cmdargs httpConduit httpTypes lens liftedBase mtl
     network resourcet transformers xmlConduit xmlHamlet
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://floss.scru.org/hDAV";
     description = "RFC 4918 WebDAV support";
