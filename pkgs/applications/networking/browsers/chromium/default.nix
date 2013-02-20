@@ -14,6 +14,9 @@
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, mesa
 
+# dependencies for >= v26
+, protobuf, speechd, libXdamage
+
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 
@@ -59,6 +62,7 @@ let
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = false; # http://crbug.com/143623
+    use_system_protobuf = post25;
 
     use_system_harfbuzz = false;
     use_system_icu = false;
@@ -78,6 +82,7 @@ let
 
   post23 = !versionOlder sourceInfo.version "24.0.0.0";
   post24 = !versionOlder sourceInfo.version "25.0.0.0";
+  post25 = !versionOlder sourceInfo.version "26.0.0.0";
   only24 = post23 && !post24;
 
   maybeFixPulseAudioBuild = optional (only24 && pulseSupport)
@@ -109,7 +114,8 @@ in stdenv.mkDerivation rec {
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio
-    ++ optional post24 pciutils;
+    ++ optional post24 pciutils
+    ++ optionals post25 [ protobuf speechd libXdamage ];
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
@@ -117,12 +123,16 @@ in stdenv.mkDerivation rec {
 
   patches = optional cupsSupport ./cups_allow_deprecated.patch
          ++ optional pulseSupport ./pulseaudio_array_bounds.patch
-         ++ maybeFixPulseAudioBuild;
+         ++ maybeFixPulseAudioBuild
+         ++ optional post25 ./clone_detached.patch;
 
   postPatch = optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
   '' + optionalString post24 ''
     sed -i -r -e "s/-f(stack-protector)(-all)?/-fno-\1/" build/common.gypi
+  '' + optionalString post25 ''
+    sed -i -e 's|/usr/bin/gcc|gcc|' \
+      third_party/WebKit/Source/WebCore/WebCore.gyp/WebCore.gyp
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {

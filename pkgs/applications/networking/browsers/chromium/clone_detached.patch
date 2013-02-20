@@ -1,0 +1,19 @@
+From 222f1e980ab84ffd3a21001feaf06dd537570a1a Mon Sep 17 00:00:00 2001
+From: Ian Farmer <ian@ianfarmer.net>
+Date: Sat, 16 Feb 2013 09:38:10 -0800
+Subject: [PATCH] Update Chromium dev channel version to 26.0.1410.5.
+
+This version requires a patch for compatibility with versions
+of glibc that support older kernel versions.
+
+--- a/content/common/sandbox_seccomp_bpf_linux.cc	2013-02-15 23:26:06.000000000 -0800
++++ b/content/common/sandbox_seccomp_bpf_linux.cc	2013-02-15 23:26:24.000000000 -0800
+@@ -1313,7 +1313,7 @@
+     return Sandbox::Cond(0, ErrorCode::TP_32BIT, ErrorCode::OP_EQUAL,
+         CLONE_VM | CLONE_FS | CLONE_FILES | CLONE_SIGHAND |
+         CLONE_THREAD | CLONE_SYSVSEM | CLONE_SETTLS |
+-        CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID,
++        CLONE_PARENT_SETTID | CLONE_CHILD_CLEARTID | CLONE_DETACHED,
+         ErrorCode(ErrorCode::ERR_ALLOWED),
+         Sandbox::Trap(ReportCloneFailure, NULL));
+   } else {
