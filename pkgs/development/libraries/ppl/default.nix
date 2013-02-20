@@ -1,19 +1,21 @@
 { fetchurl, stdenv, gmpxx, perl, gnum4 }:
 
-let version = "0.11.2"; in
+let version = "1.0"; in
 
 stdenv.mkDerivation rec {
   name = "ppl-${version}";
 
   src = fetchurl {
     url = "http://bugseng.com/products/ppl/download/ftp/releases/${version}/ppl-${version}.tar.bz2";
-    sha256 = "1sxviip4yk6gp453pid5scy1ba66dzdpr02i1416yk7lkv0x3yz3";
+    sha256 = "c169e962b8a0f7b7bcde5c5e0e2235248f1d78b155dfad684591d1a57e330b54";
   };
 
   nativeBuildInputs = [ perl gnum4 ];
   propagatedBuildInputs = [ gmpxx ];
 
   configureFlags = "--disable-watchdog";
+
+  patches = [ ./upstream-based.patch ];
 
   # Beware!  It took ~6 hours to compile PPL and run its tests on a 1.2 GHz
   # x86_64 box.  Nevertheless, being a dependency of GCC, it probably ought
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
       version of the simplex algorithm.
     '';
 
-    homepage = http://www.cs.unipr.it/ppl/;
+    homepage = http://bugseng.com/products/ppl/;
 
     license = "GPLv3+";
 

@@ -279,19 +279,25 @@ stdenv.mkDerivation ({
 
   configureFlagsArray = stdenv.lib.optionals
     (ppl != null && ppl ? dontDisableStatic && ppl.dontDisableStatic)
-        [ "--with-host-libstdcxx=-lstdc++ -lgcc_s" ];
+        [ "--with-host-libstdcxx=-lstdc++ -lgcc_s" ]; 
 
   # 'iant' at #go-nuts@freenode, gccgo maintainer, said that
   # they have a bug in 4.7.1 if adding "--disable-static"
   dontDisableStatic = langGo;
 
   configureFlags = "
+    ${if stdenv.isSunOS then
+      " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
+      # On Illumos/Solaris GNU as is preferred
+      " --with-gnu-as --with-gnu-ld "
+      else ""}
+    --enable-lto
     ${if enableMultilib then "" else "--disable-multilib"}
     ${if enableShared then "" else "--disable-shared"}
-    ${if enablePlugin then "--enable-plugin" else ""}
-    ${if ppl != null then "--with-ppl=${ppl}" else ""}
+    ${if enablePlugin then "--enable-plugin" else "--disable-plugin"}
+    ${if ppl != null then "--with-ppl=${ppl} --disable-ppl-version-check" else ""}
     ${if cloog != null then
-      "--with-cloog=${cloog} --enable-cloog-backend=isl"
+      "--with-cloog=${cloog} --disable-cloog-version-check --enable-cloog-backend=isl"
       else ""}
     ${if langJava then
       "--with-ecj-jar=${javaEcj} " +
@@ -406,7 +412,9 @@ stdenv.mkDerivation ({
   # Needed for the cross compilation to work
   AR = "ar";
   LD = "ld";
-  CC = "gcc";
+  # http://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
+  CC = if stdenv.system == "x86_64-solaris" then "gcc -m64"
+       else "gcc";
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find
   # the library headers and binaries, regarless of the language being
@@ -495,6 +503,7 @@ stdenv.mkDerivation ({
   makeFlags = [ "all-gcc" "all-target-libgcc" ];
   installTargets = "install-gcc install-target-libgcc";
 }
+
 
 # Strip kills static libs of other archs (hence cross != null)
 // optionalAttrs (!stripped || cross != null) { dontStrip = true; NIX_STRIP_DEBUG = 0; }

@@ -10,6 +10,8 @@ stdenv.mkDerivation (rec {
 
   patches = [ ./no-gets.patch ];
 
+  LDFLAGS = if stdenv.isSunOS then "-lsec -lavl" else "";
+
   configureFlags = [ "--disable-csharp" ]
      ++ (stdenv.lib.optionals stdenv.isCygwin
           [ # We have a static libiconv, so we can only build the static lib.

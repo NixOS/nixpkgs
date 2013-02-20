@@ -49,6 +49,7 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
+  LDFLAGS = stdenv.lib.optionalString stdenv.isSunOS "-lmp -lmd -lnsl -lsocket -lresolv";
   NIX_LDFLAGS = stdenv.lib.optionalString selinuxSupport "-lsepol";
 
   meta = {

@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "cpio-2.9";
   
   src = fetchurl {
-    url = mirror://gnu/cpio/cpio-2.9.tar.bz2;
-    sha256 = "01s7f9hg8kgpis96j99hgkiqgdy53pm7qi7bhm3fzx58jfk5z6mv";
+    url = mirror://gnu/cpio/cpio-2.11.tar.bz2;
+    sha256 = "bb820bfd96e74fc6ce43104f06fe733178517e7f5d1cdee553773e8eff7d5bbd";
   };
 
   patches = [
