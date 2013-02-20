@@ -2,7 +2,7 @@
 , libselinux, libXrandr, pango, freetype, fontconfig, glib, gtk
 , gdk_pixbuf, cairo, libXi, alsaLib, libXrender, nss, nspr, zlib
 , dbus, libpng12, libXfixes, cups, libgcrypt, openal, pulseaudio
-, libxcb, libXau, libXdmcp
+, libxcb, libXau, libXdmcp, flashplayer
 , SDL # World of Goo
 , libvorbis # Osmos
 , curl, mesa # Superbrothers: S&S EP
@@ -82,6 +82,8 @@ stdenv.mkDerivation rec {
       export LD_LIBRARY_PATH="\$STEAMBIN32LINK:\$LD_LIBRARY_PATH:${mesa}/lib"
       export SDL_VIDEO_X11_DGAMOUSE=0
       cd "\$STEAMROOT"
+      FLASHLINK="\$STEAMCONFIG/bin32/plugins"
+      rm -f "\$FLASHLINK" && ln -s "${flashplayer}/lib/mozilla/plugins" "\$FLASHLINK"
       LDSO="\$STEAMBIN32LINK/ld.so"
       cp ${glibc215}/lib/ld-linux.so.2 "\$LDSO"
       chmod u+w "\$LDSO"
