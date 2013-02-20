@@ -2,7 +2,7 @@
 , withCryptodev ? false, cryptodevHeaders }:
 
 let
-  name = "openssl-1.0.0i";
+  name = "openssl-1.0.1e";
 
   opensslCrossSystem = stdenv.lib.attrByPath [ "openssl" "system" ]
     (throw "openssl needs its platform name cross building" null)
@@ -41,7 +41,7 @@ stdenv.mkDerivation {
       "http://www.openssl.org/source/${name}.tar.gz"
       "http://openssl.linux-mirror.org/source/${name}.tar.gz"
     ];
-    sha1 = "b7aa11cbd7d264c2b1f44e3d55b334fb33f7b674";
+    sha1 = "3f1b1223c9e8189bfe4e186d86449775bd903460";
   };
 
   patches = patchesCross false;
@@ -53,7 +53,9 @@ stdenv.mkDerivation {
   # On x86_64-darwin, "./config" misdetects the system as
   # "darwin-i386-cc".  So specify the system type explicitly.
   configureScript =
-    if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc" else "./config";
+    if stdenv.system == "x86_64-darwin" then "./Configure darwin64-x86_64-cc"
+    else if stdenv.system == "x86_64-solaris" then "./Configure solaris64-x86_64-gcc"
+    else "./config";
 
   configureFlags = "shared --libdir=lib" +
     stdenv.lib.optionalString withCryptodev " -DHAVE_CRYPTODEV -DUSE_CRYPTODEV_DIGESTS";
