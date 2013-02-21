@@ -21,6 +21,8 @@ rec {
 
   gsettings_desktop_schemas = lib.lowPrio (callPackage ./core/gsettings-desktop-schemas { });
 
+  gvfs = callPackage ./core/gvfs { };
+
   vte = callPackage ./core/vte { };
 
   zenity = callPackage ./core/zenity { };
