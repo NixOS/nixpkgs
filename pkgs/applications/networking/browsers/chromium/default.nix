@@ -14,6 +14,9 @@
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, mesa
 
+# dependencies for v25
+, libvpx
+
 # dependencies for >= v26
 , protobuf, speechd, libXdamage
 
@@ -70,6 +73,8 @@ let
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
     use_system_v8 = false;
+  } // optionalAttrs (post24 && !post25) {
+    use_system_libvpx = true;
   };
 
   defaultDependencies = [
@@ -115,6 +120,7 @@ in stdenv.mkDerivation rec {
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio
     ++ optional post24 pciutils
+    ++ optional (post24 && !post25) libvpx
     ++ optionals post25 [ protobuf speechd libXdamage ];
 
   opensslPatches = optional useOpenSSL openssl.patches;
