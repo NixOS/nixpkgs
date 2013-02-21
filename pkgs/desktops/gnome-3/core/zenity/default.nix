@@ -16,5 +16,5 @@ stdenv.mkDerivation rec {
   configureFlags = "--disable-scrollkeeper";
   buildInputs = [ gnome3.gtk libxml2 libxslt libX11 ];
 
-  buildNativeInputs = [ pkgconfig intltool gnome_doc_utils which ];
+  nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which ];
 }

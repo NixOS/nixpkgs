@@ -11,5 +11,5 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gnome3.gtk ];
-  buildNativeInputs = [ pkgconfig intltool gnome_doc_utils which libxml2 libxslt gnome3.scrollkeeper ];
+  nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libxml2 libxslt gnome3.scrollkeeper ];
 }
