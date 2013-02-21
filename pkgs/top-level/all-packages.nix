@@ -3470,8 +3470,6 @@ let
 
   caelum = callPackage ../development/libraries/caelum { };
 
-  cairomm = callPackage ../development/libraries/cairomm { };
-
   scmccid = callPackage ../development/libraries/scmccid { };
 
   ccrtp = callPackage ../development/libraries/ccrtp { };
@@ -3955,31 +3953,27 @@ let
   };
 
   glib = callPackage ../development/libraries/glib/2.34.x.nix { };
-
-  glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
+  glibmm = callPackage ../development/libraries/glibmm { };
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
   atk = callPackage ../development/libraries/atk/2.6.x.nix { };
-
-  atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
+  atkmm = callPackage ../development/libraries/atkmm { };
 
   cairo = callPackage ../development/libraries/cairo { };
+  cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango/1.30.x.nix { };
-
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
 
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf/2.26.x.nix { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.24.x.nix { };
-
+  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
   gtk = pkgs.gtk2;
 
-  gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
-  gtkmm3 = callPackage ../development/libraries/gtkmm/3.2.x.nix { };
-
-  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
+  gtkmm = callPackage ../development/libraries/gtkmm/2.x.nix { };
+  gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     gtksharp = gtksharp2;
