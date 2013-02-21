@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, cairo, libxml2, libxslt, gnome3, pango
-, gnome_doc_utils, intltool, libX11, which, GConf3 }:
+, gnome_doc_utils, intltool, libX11, which, gconf }:
 
 stdenv.mkDerivation rec {
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = "--disable-scrollkeeper";
-  buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte GConf3 ];
+  buildInputs = [ gnome3.gtk gnome3.gsettings_desktop_schemas gnome3.vte gconf ];
 
   buildNativeInputs = [ pkgconfig intltool gnome_doc_utils which ];
 }

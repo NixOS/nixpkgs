@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, dbus_glib, gnome3, libxml2
-, intltool, dbus_libs, polkit }:
+{ stdenv, fetchurl, pkgconfig, dbus_glib, gtk, glib, libxml2
+, intltool, polkit, orbit }:
 
 stdenv.mkDerivation rec {
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   moduleName   = "GConf";
 
   origName = "${moduleName}-${versionMajor}.${versionMinor}";
-  
+
   name = "gconf-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
@@ -16,7 +16,14 @@ stdenv.mkDerivation rec {
     sha256 = "1ijqks0jxc4dyfxg4vnbqds4aj6miyahlsmlqlkf2bi1798akpjd";
   };
 
-  buildInputs = [ dbus_libs dbus_glib libxml2 polkit gnome3.gtk ];
-  propagatedBuildInputs = [ gnome3.glib ];
-  buildNativeInputs = [ pkgconfig intltool ];
+  buildInputs = [ libxml2 polkit gtk orbit ];
+  propagatedBuildInputs = [ glib dbus_glib  ];
+  nativeBuildInputs = [ pkgconfig intltool ];
+
+  # ToDo: ldap reported as not found but afterwards reported as supported
+
+  meta = {
+    homepage = http://projects.gnome.org/gconf/;
+    description = "A system for storing application preferences";
+  };
 }
