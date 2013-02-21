@@ -361,6 +361,5 @@ in {
   system.requiredKernelConfig = with config.lib.kernelConfig; [
     (isYes "TMPFS")
     (isYes "BLK_DEV_INITRD")
-    (isYes "SECURITYFS")
   ];
 }

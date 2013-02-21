@@ -65,7 +65,6 @@ mount -t sysfs none /sys
 mount -t devtmpfs -o "size=@devSize@" none /dev
 mkdir -p /run
 mount -t tmpfs -o "mode=0755,size=@runSize@" none /run
-mount -t securityfs none /sys/kernel/security
 
 # Process the kernel command line.
 export stage2Init=/init
