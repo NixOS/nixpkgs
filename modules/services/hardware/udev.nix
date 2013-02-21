@@ -86,6 +86,13 @@ let
       ${optionalString (!config.networking.usePredictableInterfaceNames) ''
         ln -s /dev/null $out/80-net-name-slot.rules
       ''}
+
+      # If auto-configuration is disabled, then remove
+      # udev's 80-drivers.rules file, which contains rules for
+      # automatically calling modprobe.
+      ${optionalString (!config.boot.hardwareScan) ''
+        ln -s /dev/null $out/80-drivers.rules
+      ''}
     ''; # */
   };
 
