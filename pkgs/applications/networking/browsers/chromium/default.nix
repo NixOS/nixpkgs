@@ -17,8 +17,11 @@
 # dependencies for v25
 , libvpx
 
+# dependencies for >= v25
+, protobuf
+
 # dependencies for >= v26
-, protobuf, speechd, libXdamage
+, speechd, libXdamage
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -75,6 +78,7 @@ let
     use_system_v8 = false;
   } // optionalAttrs (post24 && !post25) {
     use_system_libvpx = true;
+    use_system_protobuf = true;
   };
 
   defaultDependencies = [
@@ -89,6 +93,7 @@ let
   post24 = !versionOlder sourceInfo.version "25.0.0.0";
   post25 = !versionOlder sourceInfo.version "26.0.0.0";
   only24 = post23 && !post24;
+  only25 = post24 && !post25;
 
   maybeFixPulseAudioBuild = optional (only24 && pulseSupport)
     ./pulse_audio_fix.patch;
@@ -119,9 +124,9 @@ in stdenv.mkDerivation rec {
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio
-    ++ optional post24 pciutils
-    ++ optional (post24 && !post25) libvpx
-    ++ optionals post25 [ protobuf speechd libXdamage ];
+    ++ optionals post24 [ pciutils protobuf ]
+    ++ optional only25 libvpx
+    ++ optionals post25 [ speechd libXdamage ];
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
