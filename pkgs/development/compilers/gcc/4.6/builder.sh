@@ -196,6 +196,15 @@ postConfigure() {
 }
 
 
+preInstall() {
+    # Make ‘lib64’ a symlink to ‘lib’.
+    if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
+        mkdir -p $out/lib
+        ln -s lib $out/lib64
+    fi
+}
+
+
 postInstall() {
     # Remove precompiled headers for now.  They are very big and
     # probably not very useful yet.
@@ -233,14 +242,5 @@ postInstall() {
 
     eval "$postInstallGhdl"
 }
-
-
-if test -z "$targetConfig" && test -z "$crossConfig"; then
-    if test -z "$profiledCompiler"; then
-        buildFlags="bootstrap $buildFlags"
-    else    
-        buildFlags="profiledbootstrap $buildFlags"
-    fi
-fi
 
 genericBuild

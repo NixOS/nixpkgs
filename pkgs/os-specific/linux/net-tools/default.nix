@@ -1,15 +1,13 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "net-tools-1.60";
-  
+stdenv.mkDerivation rec {
+  name = "net-tools-1.60_p20120127084908";
+
   src = fetchurl {
-    url = http://www.tazenda.demon.co.uk/phil/net-tools/net-tools-1.60.tar.bz2;
-    md5 = "888774accab40217dde927e21979c165";
+    url = "mirror://gentoo/distfiles/${name}.tar.xz";
+    sha256 = "408a51964aa142a4f45c4cffede2478abbd5630a7c7346ba0d3611059a2a3c94";
   };
 
-  patches = [ ./net-tools-labels.patch ];
-  
   preBuild =
     ''
       cp ${./config.h} config.h

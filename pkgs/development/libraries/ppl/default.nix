@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sxviip4yk6gp453pid5scy1ba66dzdpr02i1416yk7lkv0x3yz3";
   };
 
-  buildNativeInputs = [ perl gnum4 ];
+  nativeBuildInputs = [ perl gnum4 ];
   propagatedBuildInputs = [ gmpxx ];
 
   configureFlags = "--disable-watchdog";

@@ -29,7 +29,7 @@ let
     (enableShared && enableStatic)) then
     "tagged" else "system";
 
-  cflags = if (enablePIC) then "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC" else "";
+  cflags = if enablePIC then "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC" else "";
 
 in
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
   ];
 
   crossAttrs = rec {
-    buildInputs = [ expat.hostDrv zlib.hostDrv bzip2.hostDrv ];
+    buildInputs = [ expat.crossDrv zlib.crossDrv bzip2.crossDrv ];
     # all buildInputs set previously fell into propagatedBuildInputs, as usual, so we have to
     # override them.
     propagatedBuildInputs = buildInputs;
@@ -85,7 +85,7 @@ stdenv.mkDerivation {
       cat << EOF > user-config.jam
       using gcc : cross : $crossConfig-g++ ;
       EOF
-      ./bjam -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat.hostDrv}/include -sEXPAT_LIBPATH=${expat.hostDrv}/lib --layout=${finalLayout} --user-config=user-config.jam toolset=gcc-cross variant=${variant} threading=${threading} link=${link} ${cflags} --without-python install
+      ./bjam -j$NIX_BUILD_CORES -sEXPAT_INCLUDE=${expat.crossDrv}/include -sEXPAT_LIBPATH=${expat.crossDrv}/lib --layout=${finalLayout} --user-config=user-config.jam toolset=gcc-cross variant=${variant} threading=${threading} link=${link} ${cflags} --without-python install
     '';
   };
 }

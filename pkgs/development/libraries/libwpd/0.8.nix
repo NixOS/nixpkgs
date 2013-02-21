@@ -12,5 +12,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib libgsf libxml2 ];
 
-  buildNativeInputs = [ pkgconfig bzip2 ];
+  nativeBuildInputs = [ pkgconfig bzip2 ];
 }

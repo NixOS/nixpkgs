@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ neon libusb openssl udev avahi freeipmi ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags =
     [ "--with-all"

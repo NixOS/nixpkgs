@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "09i2s0dwmrk147ind2dx7nq845g12fp6fsjqrphhrr0dbi0zzgh3";
   };
 
-  buildNativeInputs = [ yacc flex pkgconfig xz ];
+  nativeBuildInputs = [ yacc flex pkgconfig xz ];
 
   buildInputs = [ glib ];
 

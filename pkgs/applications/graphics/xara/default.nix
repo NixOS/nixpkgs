@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "05xbzq1i1vw2mdsv7zjqfpxfv3g1j0g5kks0gq6sh373xd6y8lyh";
   };
     
-  buildNativeInputs = [ automake pkgconfig gettext perl zip ];
+  nativeBuildInputs = [ automake pkgconfig gettext perl zip ];
   buildInputs = [ wxGTK gtk libxml2 freetype pango ];
 
   configureFlags = "--disable-svnversion";

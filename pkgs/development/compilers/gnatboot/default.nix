@@ -3,12 +3,12 @@
 stdenv.mkDerivation {
   name = "gentoo-gnatboot-4.1";
 
-  src = if (stdenv.system == "i686-linux") then
+  src = if stdenv.system == "i686-linux" then
     fetchurl {
       url = "mirror://gentoo/distfiles/gnatboot-4.1-i386.tar.bz2";
       sha256 = "0665zk71598204bf521vw68i5y6ccqarq9fcxsqp7ccgycb4lysr";
     }
-    else if (stdenv.system == "x86_64-linux") then
+    else if stdenv.system == "x86_64-linux" then
     fetchurl {
       url = "mirror://gentoo/distfiles/gnatboot-4.1-amd64.tar.bz2";
       sha256 = "1li4d52lmbnfs6llcshlbqyik2q2q4bvpir0f7n38nagp0h6j0d4";

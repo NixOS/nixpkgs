@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   utils = ./utils.sh;
   addFlags = ./add-flags;
   inherit nativeTools nativeLibc nativePrefix gcc libc binutils;
-  crossConfig = if (cross != null) then cross.config else null;
+  crossConfig = if cross != null then cross.config else null;
   gccLibs = if gcc != null then gccLibs else null;
   name = chosenName;
   langC = if nativeTools then true else gcc.langC;

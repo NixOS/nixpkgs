@@ -122,7 +122,7 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  buildNativeInputs = [ perl nettools ];
+  nativeBuildInputs = [ perl nettools ];
 
   makeFlags = commonMakeFlags ++ [
    "INSTALLKERNEL=${installkernel stdenv.platform.kernelTarget}"

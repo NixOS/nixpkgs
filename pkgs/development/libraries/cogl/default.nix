@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ix87hz3qxqysqwx58wbc46lzchlmfs08fjzbf3l6mmsqj8gs9pc";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs =
     [ mesa glib gdk_pixbuf libXfixes libXcomposite libXdamage ];

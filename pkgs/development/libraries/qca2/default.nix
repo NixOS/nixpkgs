@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ qt4 ];
   
-  buildNativeInputs = [ which ];
+  nativeBuildInputs = [ which ];
 
   preBuild =
     ''

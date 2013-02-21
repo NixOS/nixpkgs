@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "076zkyqkn56q0a8n3h65n1a68fknk4hrrp6mbhajq5s1wp5248j8";
   };
 
-  buildNativeInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison ];
 
   configureFlags = [ "--disable-shared" ];
 

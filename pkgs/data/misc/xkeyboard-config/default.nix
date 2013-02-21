@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext ];
 
-  buildNativeInputs = [ perl perlXMLParser intltool xkbcomp ];
+  nativeBuildInputs = [ perl perlXMLParser intltool xkbcomp ];
 
   patches = [ ./eo.patch ];
 

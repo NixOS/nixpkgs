@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       lvm2 libatasmart intltool libuuid libxslt docbook_xsl
     ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = "--localstatedir=/var --enable-lvm2";
 

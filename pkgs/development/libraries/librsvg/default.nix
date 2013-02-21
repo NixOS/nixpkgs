@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxml2 libgsf bzip2 libcroco gdk_pixbuf ]
     ++ stdenv.lib.optional enableIntrospection [gobjectIntrospection];
   propagatedBuildInputs = [ glib gtk ];
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = ["--enable-introspection=auto"];
 

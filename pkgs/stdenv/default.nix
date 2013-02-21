@@ -56,6 +56,7 @@ rec {
     if stdenvType == "i686-linux" then stdenvLinux else
     if stdenvType == "x86_64-linux" then stdenvLinux else
     if stdenvType == "armv5tel-linux" then stdenvLinux else
+    if stdenvType == "armv6l-linux" then stdenvLinux else
     if stdenvType == "armv7l-linux" then stdenvLinux else
     if stdenvType == "mips64el-linux" then stdenvLinux else
     if stdenvType == "powerpc-linux" then /* stdenvLinux */ stdenvNative else

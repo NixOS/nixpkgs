@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libnice python pygobject gupnp_igd ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ gstreamer gst_plugins_base gst_python 
     gst_plugins_good gst_plugins_bad gst_ffmpeg

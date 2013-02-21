@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rwyxjk6646r43mvsg01q7rfsah0ni05fa8gxzlx1zhj76db95yh";
   };
 
-  buildNativeInputs = [ cmake pkgconfig python libxslt ];
+  nativeBuildInputs = [ cmake pkgconfig python libxslt ];
   propagatedBuildInputs = [ qt4 dbus_glib telepathy_farstream telepathy_glib ];
   preBuild = ''
     NIX_CFLAGS_COMPILE+=" `pkg-config --cflags dbus-glib-1`"

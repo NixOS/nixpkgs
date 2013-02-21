@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ kdepimlibs perl boost gpgme gmpxx libalkimia libofx libical ];
-  buildNativeInputs = [ cmake automoc4 gettext shared_mime_info pkgconfig ];
+  nativeBuildInputs = [ cmake automoc4 gettext shared_mime_info pkgconfig ];
 
   KDEDIRS = libalkimia;
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # TODO: enable xmodmap support, needs xmodmap DB
   propagatedBuildInputs = [ libX11 libXi xkeyboard_config libxml2 libICE glib libxkbfile isocodes ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = ''
     --with-xkb-base=${xkeyboard_config}/etc/X11/xkb

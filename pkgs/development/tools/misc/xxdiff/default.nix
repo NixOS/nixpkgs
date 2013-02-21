@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "7ae7d81becc25b1adabc9383bb5b9005dddb31510cdc404ce8a0d6ff6c3dc47e";
   };
 
-  buildNativeInputs = [ flex bison qt4 ];
+  nativeBuildInputs = [ flex bison qt4 ];
 
   buildInputs = [ qt4 ];
 

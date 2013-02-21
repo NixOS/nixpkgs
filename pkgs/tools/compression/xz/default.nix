@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "xz-5.0.3";
+  name = "xz-5.0.4";
 
   src = fetchurl {
     url = "http://tukaani.org/xz/${name}.tar.bz2";
-    sha256 = "1sgaq4gdh8llz3gnlgvd65x610fwc8h4m32skhqn5npwgghvj4as";
+    sha256 = "14nf55b47335aakswqk0kqv1qsh4269rnb757dmkkbd1sdhb1naw";
   };
 
   doCheck = true;

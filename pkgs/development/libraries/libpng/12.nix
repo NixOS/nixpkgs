@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib ];
 
-  buildNativeInputs = [ xz ];
+  nativeBuildInputs = [ xz ];
 
   passthru = { inherit zlib; };
 

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional qt4Support qt4)
     ++ libiconvOrEmpty;
 
-  buildNativeInputs = [ pkgconfig gettext intltool ];
+  nativeBuildInputs = [ pkgconfig gettext intltool ];
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"

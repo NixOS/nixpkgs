@@ -69,7 +69,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ pkgconfig fuse devicemapper wxGTK nasm ]; 
-  makeFlags = if (wxGUI) then "" else "NOGUI=1";
+  makeFlags = if wxGUI then "" else "NOGUI=1";
 
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";

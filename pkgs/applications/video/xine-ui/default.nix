@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i3byriqav06b55kwzs4dkzrjw7mmmcv0rc7jzb52hn8qp8xz34x";
   };
   
-  buildNativeInputs = [ pkgconfig shared_mime_info ];
+  nativeBuildInputs = [ pkgconfig shared_mime_info ];
 
   buildInputs =
     [ xineLib libpng readline ncurses curl lirc libjpeg

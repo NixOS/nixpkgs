@@ -34,7 +34,7 @@ stdenv.mkDerivation (rec {
   buildInputs = [ zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 

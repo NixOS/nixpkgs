@@ -10,5 +10,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ alsaLib ];
 
-  configureFlags = "--with-driver=none --enable-sandboxed";
+  configureFlags = [
+    "--with-driver=devinput"
+    "--sysconfdir=$(out)/etc"
+    "--enable-sandboxed"
+  ];
 }

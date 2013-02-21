@@ -25,7 +25,7 @@ let
   langGo = if nativeTools then false else gcc ? langGo && gcc.langGo;
 in
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   name =
     (if name != "" then name else gccName + "-wrapper") +
     (if gcc != null && gccVersion != "" then "-" + gccVersion else "");
@@ -50,17 +50,17 @@ stdenv.mkDerivation ({
   langFortran = if nativeTools then false else gcc ? langFortran;
   langAda = if nativeTools then false else gcc ? langAda && gcc.langAda;
   langVhdl = if nativeTools then false else gcc ? langVhdl && gcc.langVhdl;
-  zlib = if (gcc != null && gcc ? langVhdl) then zlib else null;
+  zlib = if gcc != null && gcc ? langVhdl then zlib else null;
   shell = if shell == "" then stdenv.shell else
     if builtins.isAttrs shell then (shell + shell.shellPath)
     else shell;
 
   crossAttrs = {
-    shell = shell.hostDrv + shell.hostDrv.shellPath;
-    libc = libc.hostDrv;
-    coreutils = coreutils.hostDrv;
-    binutils = binutils.hostDrv;
-    gcc = gcc.hostDrv;
+    shell = shell.crossDrv + shell.crossDrv.shellPath;
+    libc = libc.crossDrv;
+    coreutils = coreutils.crossDrv;
+    binutils = binutils.crossDrv;
+    gcc = gcc.crossDrv;
     #
     # This is not the best way to do this. I think the reference should be
     # the style in the gcc-cross-wrapper, but to keep a stable stdenv now I
@@ -85,15 +85,10 @@ stdenv.mkDerivation ({
     if !nativeLibc then
       (if stdenv.system == "i686-linux" then "ld-linux.so.2" else
        if stdenv.system == "x86_64-linux" then "ld-linux-x86-64.so.2" else
-       if stdenv.isArm then "ld-linux.so.3" else
+       # ARM with a wildcard, which can be "" or "-armhf".
+       if stdenv.isArm then "ld-linux*.so.3" else
        if stdenv.system == "powerpc-linux" then "ld.so.1" else
        if stdenv.system == "mips64el-linux" then "ld.so.1" else
        abort "don't know the name of the dynamic linker for this platform")
     else "";
 }
-#  This go wrapper should be reworked in stdenv-updates.
-// (if langGo then
-{
-  inherit langGo;
-  builder = ./buildergo.sh;
-} else {}))

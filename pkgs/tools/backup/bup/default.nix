@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     rev = "458e92da32ddd3c18fc1c3e52a76e9f0b48b832f";
   };
 
-  buildNativeInputs = [ pandoc perl makeWrapper ];
+  nativeBuildInputs = [ pandoc perl makeWrapper ];
 
   buildInputs = [ python git ];
 

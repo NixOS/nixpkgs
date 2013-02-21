@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./install.patch ];
 
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   NIX_LDFLAGS = "-llcms -ljpeg";
 

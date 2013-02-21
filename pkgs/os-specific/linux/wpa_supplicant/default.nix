@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl dbus_libs libnl ]
     ++ lib.optional readlineSupport readline;
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   patches =
     [ (fetchurl {

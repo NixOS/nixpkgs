@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://libmms.sourceforge.net;

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, cmake, boost, libunwind, mysql, libmemcached, pcre
 , libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php, re2c
-, expat, libcap, oniguruma, libdwarf, libmcrypt, inteltbb, google_perftools
+, expat, libcap, oniguruma, libdwarf, libmcrypt, inteltbb, gperftools
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam
 }:
 assert stdenv.system == "x86_64-linux";
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
   buildInputs = [ 
     cmake boost libunwind mysql libmemcached pcre libeventFB gd curlFB
     libxml2_280 icu flex bison openssl zlib php expat libcap oniguruma
-    libdwarf libmcrypt inteltbb google_perftools bzip2 openldap readline
+    libdwarf libmcrypt inteltbb gperftools bzip2 openldap readline
     libelf uwimap binutils cyrus_sasl pam
   ];
   installPhase = ''

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1i460q9gslb7l75hjwc6w2kp2wk7fgp8lr7phamg33c6j013y30k";
   };
 
-  buildNativeInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ openssl libxslt curl pcre libxml2 ]
     ++ stdenv.lib.optional withMysql mysql

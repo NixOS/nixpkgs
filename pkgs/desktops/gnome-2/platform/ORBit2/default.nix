@@ -9,6 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "0l3mhpyym9m5iz09fz0rgiqxl2ym6kpkwpsp1xrr4aa80nlh1jam";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ glib libIDL ];
 }

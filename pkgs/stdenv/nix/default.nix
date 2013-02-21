@@ -12,7 +12,7 @@ import ../generic rec {
         export NIX_DONT_SET_RPATH=1
         export NIX_NO_SELF_RPATH=1
         dontFixLibtool=1
-        stripAllFlags=" " # the Darwin "strip" command doesn't know "-s" 
+        stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
         xargsFlags=" "
       fi
     '';
@@ -25,7 +25,7 @@ import ../generic rec {
     nativeTools = false;
     nativeLibc = true;
     inherit stdenv;
-    binutils = 
+    binutils =
       if stdenv.isDarwin then
         import ../../build-support/native-darwin-cctools-wrapper {inherit stdenv;}
       else
@@ -42,7 +42,7 @@ import ../generic rec {
   overrides = pkgs_: {
     inherit gcc;
     inherit (gcc) binutils;
-    inherit (pkgs) 
+    inherit (pkgs)
       gzip bzip2 xz bash coreutils diffutils findutils gawk
       gnumake gnused gnutar gnugrep gnupatch perl;
   };

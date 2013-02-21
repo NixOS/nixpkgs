@@ -4,17 +4,17 @@
 }:
 
 assert aclSupport -> acl != null;
-assert selinuxSupport -> ( (libselinux != null) && (libsepol != null) );
+assert selinuxSupport -> libselinux != null && libsepol != null;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.15";
+  name = "coreutils-8.20";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "176lgw810xw84c6fz5xwhydxggkndmzggl0pxqzldbjf85vv6zl3";
+    sha256 = "1cly97xdy3v4nbbx631k43smqw0nnpn651kkprs0yyl2cj3pkjyv";
   };
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
   buildInputs = [ gmp ]
     ++ stdenv.lib.optional aclSupport acl
     ++ stdenv.lib.optional selinuxSupport libselinux
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   crossAttrs = ({
     buildInputs = [ gmp ]
-      ++ stdenv.lib.optional aclSupport acl.hostDrv
-      ++ stdenv.lib.optional selinuxSupport libselinux.hostDrv
-      ++ stdenv.lib.optional selinuxSupport libsepol.hostDrv
+      ++ stdenv.lib.optional aclSupport acl.crossDrv
+      ++ stdenv.lib.optional selinuxSupport libselinux.crossDrv
+      ++ stdenv.lib.optional selinuxSupport libsepol.crossDrv
       ++ stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
-        stdenv.gccCross.libc.libiconv.hostDrv;
+        stdenv.gccCross.libc.libiconv.crossDrv;
 
     # Needed for fstatfs()
     # I don't know why it is not properly detected cross building with glibc.
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
   # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
-  doCheck = (stdenv ? glibc);
+  doCheck = stdenv ? glibc;
 
   enableParallelBuilding = true;
 

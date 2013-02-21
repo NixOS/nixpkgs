@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     sha256 = "0jd4g3bwkgk2s4flbmgisyihm7cam964gzb3pawjlkhas01zghz8";
   };
 
-  buildNativeInputs = [ which ];
+  nativeBuildInputs = [ which ];
   propagatedBuildInputs = [x11 libXft libXrender zlib libjpeg libpng];
 
   configureFlags = "

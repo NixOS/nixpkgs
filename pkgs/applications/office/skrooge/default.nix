@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs grantlee qca2 libofx ];
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   meta = {
     inherit (kdelibs.meta) platforms;

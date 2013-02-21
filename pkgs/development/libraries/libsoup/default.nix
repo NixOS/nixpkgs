@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "82c92f1f6f4cbfd501df783ed87e7de9410b4a12a3bb0b19c64722e185d2bbc9";
   };
 
-  buildNativeInputs = [ pkgconfig intltool python ];
+  nativeBuildInputs = [ pkgconfig intltool python ];
 
   propagatedBuildInputs = [ glib libxml2 ]
     ++ stdenv.lib.optionals gnomeSupport [ libgnome_keyring sqlite ];

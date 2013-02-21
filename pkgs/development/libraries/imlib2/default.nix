@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = [ x11 libjpeg libtiff libungif libpng bzip2 ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     platforms = stdenv.lib.platforms.gnu; # random choice

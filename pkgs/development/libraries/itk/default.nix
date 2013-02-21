@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildNativeInputs = [ cmake xz ];
+  nativeBuildInputs = [ cmake xz ];
   buildInputs = [ libX11 libuuid ];
 
   meta = {

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ mesa freeglut libX11 plib openal freealut libXrandr xproto
     libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis ];
 
-  buildNativeInputs = [ bash ];
+  nativeBuildInputs = [ bash ];
 
   installTargets = "install datainstall";
 

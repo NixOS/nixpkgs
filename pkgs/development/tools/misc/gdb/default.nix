@@ -11,8 +11,8 @@ let
   basename = "gdb-7.5.1";
 
   # Whether (cross-)building for GNU/Hurd.  This is an approximation since
-  # having `stdenv ? cross' doesn't tell us if we're building `hostDrv' and
-  # `buildDrv'.
+  # having `stdenv ? cross' doesn't tell us if we're building `crossDrv' and
+  # `nativeDrv'.
   isGNU =
       stdenv.system == "i686-gnu"
       || (stdenv ? cross && stdenv.cross.config == "i586-pc-gnu");
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   # I think python is not a native input, but I leave it
   # here while I will not need it cross building
-  buildNativeInputs = [ texinfo python ]
+  nativeBuildInputs = [ texinfo python ]
     ++ stdenv.lib.optional isGNU mig;
 
   buildInputs = [ ncurses readline gmp mpfr expat ]
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     # Do not add --with-python here to avoid cross building it.
     configureFlags =
-      '' --with-gmp=${gmp.hostDrv} --with-mpfr=${mpfr.hostDrv} --with-system-readline
-         --with-expat --with-libexpat-prefix=${expat.hostDrv} --without-python
+      '' --with-gmp=${gmp.crossDrv} --with-mpfr=${mpfr.crossDrv} --with-system-readline
+         --with-expat --with-libexpat-prefix=${expat.crossDrv} --without-python
       '' + stdenv.lib.optionalString (target != null)
          " --target=${target.config}";
   };

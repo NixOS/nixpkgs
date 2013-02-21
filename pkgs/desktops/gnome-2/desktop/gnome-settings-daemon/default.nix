@@ -14,5 +14,5 @@ stdenv.mkDerivation {
       pulseaudio
     ];
 
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 }

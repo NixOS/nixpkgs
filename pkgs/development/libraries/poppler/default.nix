@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals gtkSupport [ glib /*gtk3*/ ]
     ++ stdenv.lib.optional qt4Support qt4;
 
-  buildNativeInputs = [ pkgconfig cmake ];
+  nativeBuildInputs = [ pkgconfig cmake ];
 
   cmakeFlags = "-DENABLE_XPDF_HEADERS=ON -DENABLE_LIBCURL=ON -DENABLE_ZLIB=ON";
 

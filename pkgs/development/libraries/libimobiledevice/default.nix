@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
   name = "libimobiledevice-1.0.6";
 
-  buildNativeInputs = [ python libplist.swig pkgconfig ];
+  nativeBuildInputs = [ python libplist.swig pkgconfig ];
   buildInputs = [ readline ];
   propagatedBuildInputs = [ usbmuxd glib gnutls libgcrypt libtasn1 libplist ];
 
