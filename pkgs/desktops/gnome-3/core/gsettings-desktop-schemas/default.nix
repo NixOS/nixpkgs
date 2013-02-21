@@ -1,21 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, cairo, libxml2, libxslt, gnome3, pango
-, gnome_doc_utils, intltool, libX11, which }:
+{ stdenv, fetchurl, pkgconfig, intltool, glib }:
 
 stdenv.mkDerivation rec {
 
-  versionMajor = "3.5";
-  versionMinor = "3";
+  versionMajor = "3.6";
+  versionMinor = "1";
   moduleName   = "gsettings-desktop-schemas";
 
   name = "${moduleName}-${versionMajor}.${versionMinor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${moduleName}/${versionMajor}/${name}.tar.xz";
-    sha256 = "0vxbpwqvm55a4ssaddfsw2jy0q8bvsv8wbjps4yyyi9iykfylwli";
+    sha256 = "1rk71q2rky9nzy0zb5jsvxa62vhg7dk65kdgdifq8s761797ga6r";
   };
 
-  configureFlags = "--disable-scrollkeeper";
-  buildInputs = [ gnome3.glib libxml2 libxslt libX11 ];
+  buildInputs = [ glib ];
 
-  nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 }

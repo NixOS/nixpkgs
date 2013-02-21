@@ -6425,7 +6425,7 @@ let
 
   gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
 
-  gsettings_desktop_schemas = callPackage ../data/misc/gsettings-desktop-schemas {};
+  inherit (gnome3) gsettings_desktop_schemas;
 
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
 
