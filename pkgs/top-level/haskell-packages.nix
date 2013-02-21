@@ -1544,9 +1544,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   skein = callPackage ../development/libraries/haskell/skein {};
 
-  smallcheck_0_6_2 = callPackage ../development/libraries/haskell/smallcheck/0.6.2.nix {};
-  smallcheck_1_0_1 = callPackage ../development/libraries/haskell/smallcheck/1.0.1.nix {};
-  smallcheck = self.smallcheck_1_0_1;
+  smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
 
   snap = callPackage ../development/libraries/haskell/snap/snap.nix {};
 
