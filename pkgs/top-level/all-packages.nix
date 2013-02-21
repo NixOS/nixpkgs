@@ -7075,7 +7075,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox18Pkgs;
+  firefoxPkgs = pkgs.firefox19Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
@@ -7089,12 +7089,12 @@ let
 
   firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
-  firefox18Pkgs = callPackage ../applications/networking/browsers/firefox/18.0.nix {
+  firefox19Pkgs = callPackage ../applications/networking/browsers/firefox/19.0.nix {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
 
-  firefox18Wrapper = lowPrio (wrapFirefox { browser = firefox18Pkgs.firefox; });
+  firefox19Wrapper = lowPrio (wrapFirefox { browser = firefox19Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
