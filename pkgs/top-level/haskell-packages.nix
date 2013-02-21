@@ -1617,9 +1617,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Shellac = callPackage ../development/libraries/haskell/Shellac/Shellac.nix {};
 
-  show = callPackage ../development/libraries/haskell/show {
-    smallcheck = self.smallcheck_0_6_2;
-  };
+  show = callPackage ../development/libraries/haskell/show {};
 
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
