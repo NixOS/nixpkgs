@@ -616,9 +616,7 @@ let
 
   dar = callPackage ../tools/archivers/dar { };
 
-  davfs2 = callPackage ../tools/filesystems/davfs2 {
-    neon = neon029;
-  };
+  davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
@@ -7830,7 +7828,6 @@ let
   sublime = callPackage ../applications/editors/sublime { };
 
   subversion = callPackage ../applications/version-management/subversion/default.nix {
-    neon = pkgs.neon029;
     bdbSupport = true;
     httpServer = false;
     httpSupport = true;
