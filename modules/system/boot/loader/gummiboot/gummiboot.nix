@@ -12,17 +12,13 @@ let
 
     isExecutable = true;
 
-    inherit (pkgs) python gummiboot kmod efibootmgr;
+    inherit (pkgs) python gummiboot;
 
     inherit (config.environment) nix;
 
     inherit (cfg) timeout;
 
-    inherit (efi) efiSysMountPoint;
-
-    inherit (efi.efibootmgr) postEfiBootMgrCommands efiDisk efiPartition;
-
-    runEfibootmgr = efi.efibootmgr.enable;
+    inherit (efi) efiSysMountPoint canTouchEfiVariables;
   };
 in {
   options.boot.loader.gummiboot = {

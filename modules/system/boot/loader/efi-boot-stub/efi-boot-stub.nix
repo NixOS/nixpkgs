@@ -14,7 +14,7 @@ let
 
     inherit (config.boot.loader.efi.efibootmgr) efiDisk efiPartition postEfiBootMgrCommands;
 
-    runEfibootmgr = config.boot.loader.efi.efibootmgr.enable;
+    runEfibootmgr = config.boot.loader.efi.canTouchEfiVariables;
 
     efiShell = if config.boot.loader.efiBootStub.installShell then
       if pkgs.stdenv.isi686 then

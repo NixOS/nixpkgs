@@ -80,64 +80,16 @@ def remove_old_entries(gens):
         if not path in known_paths:
             os.unlink(path)
 
-def update_gummiboot():
-    mkdir_p("@efiSysMountPoint@/efi/gummiboot")
-    store_file_path = "@gummiboot@/bin/gummiboot.efi"
-    store_dir = os.path.basename("@gummiboot@")
-    efi_file_path = "/efi/gummiboot/%s-gummiboot.efi" % (store_dir)
-    copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
-    return efi_file_path
-
-def update_efibootmgr(path):
-    subprocess.call(["@kmod@/sbin/modprobe", "efivars"])
-    post_efibootmgr = """
-@postEfiBootMgrCommands@
-    """
-    efibootmgr_entries = subprocess.check_output(["@efibootmgr@/sbin/efibootmgr"]).split("\n")
-    for entry in efibootmgr_entries:
-        columns = entry.split()
-        if len(columns) > 2:
-            if ' '.join(columns[1:3]) == "NixOS gummiboot":
-                subprocess.call([
-                    "@efibootmgr@/sbin/efibootmgr",
-                    "-B",
-                    "-b",
-                    columns[0][4:8]
-                    ])
-    subprocess.call([
-        "@efibootmgr@/sbin/efibootmgr",
-        "-c",
-        "-d",
-        "@efiDisk@",
-        "-g",
-        "-l",
-        path.replace("/", "\\"),
-        "-L",
-        "NixOS gummiboot",
-        "-p",
-        "@efiPartition@",
-        ])
-    efibootmgr_entries = subprocess.check_output(["@efibootmgr@/sbin/efibootmgr"]).split("\n")
-    for entry in efibootmgr_entries:
-        columns = entry.split()
-        if len(columns) > 1 and columns[0] == "BootOrder:":
-            boot_order = columns[1].split(',')
-        if len(columns) > 2:
-            if ' '.join(columns[1:3]) == "NixOS gummiboot":
-                bootnum = columns[0][4:8]
-                if not bootnum in boot_order:
-                    boot_order.insert(0, bootnum)
-                    with open("/dev/null", 'w') as dev_null:
-                        subprocess.call([
-                            "@efibootmgr@/sbin/efibootmgr",
-                            "-o",
-                            ','.join(boot_order)
-                            ], stdout=dev_null)
-    subprocess.call(post_efibootmgr, shell=True)
-
 parser = argparse.ArgumentParser(description='Update NixOS-related gummiboot files')
 parser.add_argument('default_config', metavar='DEFAULT-CONFIG', help='The default NixOS config to boot')
 args = parser.parse_args()
+
+# We deserve our own env var!
+if os.getenv("NIXOS_INSTALL_GRUB") == "1":
+    if "@canTouchEfiVariables@" == "1":
+        subprocess.check_call(["@gummiboot@/bin/gummiboot", "--path=@efiSysMountPoint@", "install"])
+    else:
+        subprocess.check_call(["@gummiboot@/bin/gummiboot", "--path=@efiSysMountPoint@", "--no-variables", "install"])
 
 known_paths = []
 mkdir_p("@efiSysMountPoint@/efi/nixos")
@@ -157,9 +109,3 @@ for gen in gens:
         write_loader_conf(gen)
 
 remove_old_entries(gens)
-
-# We deserve our own env var!
-if os.getenv("NIXOS_INSTALL_GRUB") == "1":
-    gummiboot_path = update_gummiboot()
-    if "@runEfibootmgr@" == "1":
-        update_efibootmgr(gummiboot_path)

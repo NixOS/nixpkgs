@@ -4,6 +4,14 @@ with pkgs.lib;
 
 {
   options.boot.loader.efi = {
+    canTouchEfiVariables = mkOption {
+      default = false;
+
+      type = types.bool;
+
+      description = "Whether or not the installation process should modify efi boot variables.";
+    };
+
     efibootmgr = {
       efiDisk = mkOption {
         default = "/dev/sda";
@@ -11,18 +19,6 @@ with pkgs.lib;
         type = types.string;
 
         description = "The disk that contains the EFI system partition.";
-      };
-
-      enable = mkOption {
-        default = false;
-
-        type = types.bool;
-
-        description = ''
-          Whether to run efibootmgr to add the efi bootloaders configuration to the boot options list.
-          WARNING! efibootmgr has been rumored to brick Apple firmware on
-          old kernels! Don't use it on kernels older than 2.6.39!
-        '';
       };
 
       efiPartition = mkOption {

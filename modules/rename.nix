@@ -104,6 +104,7 @@ in zipModules ([]
 ++ rename obsolete "boot.loader.efiBootStub.efiDisk" "boot.loader.efi.efibootmgr.efiDisk"
 ++ rename obsolete "boot.loader.efiBootStub.efiPartition" "boot.loader.efi.efibootmgr.efiPartition"
 ++ rename obsolete "boot.loader.efiBootStub.postEfiBootMgrCommands" "boot.loader.efi.efibootmgr.postEfiBootMgrCommands"
-++ rename obsolete "boot.loader.efiBootStub.runEfibootmgr" "boot.loader.efi.efibootmgr.enable"
+++ rename obsolete "boot.loader.efiBootStub.runEfibootmgr" "boot.loader.efi.canTouchEfiVariables"
+++ rename obsolete "boot.loader.efi.efibootmgr.enable" "boot.loader.efi.canTouchEfiVariables"
 
 ) # do not add renaming after this.
