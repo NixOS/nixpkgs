@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm }:
 
-stdenv.mkDerivation {
-  name = "gtkmm-3.2.0";
+stdenv.mkDerivation rec {
+  name = "gtkmm-3.6.0";
 
   src = fetchurl {
-    url = mirror://gnome/sources/gtkmm/3.2/gtkmm-3.2.0.tar.xz;
-    sha256 = "1wkljr2vjvjg5mggi4rvk9k4j2kzh8lc106k2yp8gqjlhk2xm5b1";
+    url = "mirror://gnome/sources/gtkmm/3.6/${name}.tar.xz";
+    sha256 = "0n93z8is5afgpqq0czr5wynr78vpv5lap3ayl4x0iv5cr3am90c8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
