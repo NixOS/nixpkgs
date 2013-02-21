@@ -4146,7 +4146,7 @@ let
   libgig = callPackage ../development/libraries/libgig { };
 
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
-  libgnome_keyring3 = callPackage ../development/libraries/libgnome-keyring/3.x.nix { };
+  libgnome_keyring3 = gnome3.libgnome_keyring;
 
   libgtop = callPackage ../development/libraries/libgtop {};
 
