@@ -1427,6 +1427,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   PSQueue = callPackage ../development/libraries/haskell/PSQueue {};
 
+  publicsuffixlist = callPackage ../development/libraries/haskell/publicsuffixlist {};
+
   pureMD5 = callPackage ../development/libraries/haskell/pureMD5 {};
 
   pwstoreFast = callPackage ../development/libraries/haskell/pwstore-fast {};
