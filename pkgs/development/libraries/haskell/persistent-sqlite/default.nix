@@ -1,13 +1,13 @@
-{ cabal, aeson, conduit, monadControl, persistent, text
-, transformers
+{ cabal, aeson, conduit, monadControl, monadLogger, persistent
+, text, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "persistent-sqlite";
-  version = "1.1.3.1";
-  sha256 = "0kbsi6njk4c10khlh81pmqai20jcq5v9cgy1xyskkp26d3y0llya";
+  version = "1.1.4";
+  sha256 = "1xllj5bq7rw9v32ddm515705nviarw0hp4yxj0z8jf5q5jdz2vz0";
   buildDepends = [
-    aeson conduit monadControl persistent text transformers
+    aeson conduit monadControl monadLogger persistent text transformers
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
