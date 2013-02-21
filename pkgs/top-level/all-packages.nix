@@ -4678,19 +4678,7 @@ let
       else stdenv;
   };
 
-  neon = neon029;
-
-  neon026 = callPackage ../development/libraries/neon/0.26.nix {
-    compressionSupport = true;
-    sslSupport = true;
-  };
-
-  neon028 = callPackage ../development/libraries/neon/0.28.nix {
-    compressionSupport = true;
-    sslSupport = true;
-  };
-
-  neon029 = callPackage ../development/libraries/neon/0.29.nix {
+  neon = callPackage ../development/libraries/neon {
     compressionSupport = true;
     sslSupport = true;
   };
