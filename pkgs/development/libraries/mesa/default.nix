@@ -30,8 +30,10 @@ stdenv.mkDerivation {
     # Texture floats are patented, see docs/patents.txt
     + stdenv.lib.optionalString enableTextureFloats " --enable-texture-float";
 
-  buildInputs = [ expat libdrm libXxf86vm libXfixes libXdamage glproto dri2proto
-    libxml2Python libX11 libXext libxcb libXt udev llvm ];
+  buildInputs = [
+    autoconf automake libtool expat libxml2Python udev llvm
+    libdrm libXxf86vm libXfixes libXdamage glproto dri2proto libX11 libXext libxcb libXt
+  ];
 
   nativeBuildInputs = [ pkgconfig python makedepend file flex bison ];
 
