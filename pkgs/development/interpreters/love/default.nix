@@ -27,7 +27,6 @@ stdenv.mkDerivation rec {
     license = "zlib";
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.matainters.raskin ];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
   };
 }
-
