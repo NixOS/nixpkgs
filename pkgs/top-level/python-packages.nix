@@ -2502,6 +2502,28 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  pyglet = buildPythonPackage rec {
+    name = "pyglet-1.1.4";
+
+    src = fetchurl {
+      url = "http://pyglet.googlecode.com/files/${name}.tar.gz";
+      sha256 = "048n20d606i3njnzhajadnznnfm8pwchs43hxs50da9p79g2m6qx";
+    };
+
+    patchPhase = let
+      libs = [ pkgs.mesa pkgs.xlibs.libX11 pkgs.freetype pkgs.fontconfig ];
+      paths = pkgs.lib.concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
+    in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://www.pyglet.org/";
+      description = "A cross-platform windowing and multimedia library";
+      license = stdenv.lib.licenses.bsd3;
+    };
+  };
+
   pygments = buildPythonPackage rec {
     name = "Pygments-1.5";
 
@@ -2766,6 +2788,24 @@ pythonPackages = python.modules // rec {
       description = "Pyreport makes notes out of a python script.";
     };
   });
+
+
+  pyserial = buildPythonPackage rec {
+    name = "pyserial-2.6";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyserial/${name}.tar.gz";
+      md5 = "cde799970b7c1ce1f7d6e9ceebe64c98";
+    };
+
+    doCheck = false;
+
+    meta = {
+      homepage = "http://pyserial.sourceforge.net/";
+      license = stdenv.lib.licenses.psfl;
+      description = "Python serial port extension";
+    };
+  };
 
 
   pysqlite = buildPythonPackage (rec {

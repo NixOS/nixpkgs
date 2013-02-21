@@ -14,6 +14,15 @@
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, mesa
 
+# dependencies for v25
+, libvpx
+
+# dependencies for >= v25
+, protobuf
+
+# dependencies for >= v26
+, speechd, libXdamage
+
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 
@@ -59,6 +68,7 @@ let
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = false; # http://crbug.com/143623
+    use_system_protobuf = post25;
 
     use_system_harfbuzz = false;
     use_system_icu = false;
@@ -66,6 +76,9 @@ let
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
     use_system_v8 = false;
+  } // optionalAttrs (post24 && !post25) {
+    use_system_libvpx = true;
+    use_system_protobuf = true;
   };
 
   defaultDependencies = [
@@ -78,7 +91,9 @@ let
 
   post23 = !versionOlder sourceInfo.version "24.0.0.0";
   post24 = !versionOlder sourceInfo.version "25.0.0.0";
+  post25 = !versionOlder sourceInfo.version "26.0.0.0";
   only24 = post23 && !post24;
+  only25 = post24 && !post25;
 
   maybeFixPulseAudioBuild = optional (only24 && pulseSupport)
     ./pulse_audio_fix.patch;
@@ -109,7 +124,9 @@ in stdenv.mkDerivation rec {
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio
-    ++ optional post24 pciutils;
+    ++ optionals post24 [ pciutils protobuf ]
+    ++ optional only25 libvpx
+    ++ optionals post25 [ speechd libXdamage ];
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
@@ -118,12 +135,16 @@ in stdenv.mkDerivation rec {
   patches = optional cupsSupport ./cups_allow_deprecated.patch
          ++ optional pulseSupport ./pulseaudio_array_bounds.patch
          ++ maybeFixPulseAudioBuild
+         ++ optional post25 ./clone_detached.patch
          ++ [ ./glibc-2.16-use-siginfo_t.patch ];
 
   postPatch = optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
   '' + optionalString post24 ''
     sed -i -r -e "s/-f(stack-protector)(-all)?/-fno-\1/" build/common.gypi
+  '' + optionalString post25 ''
+    sed -i -e 's|/usr/bin/gcc|gcc|' \
+      third_party/WebKit/Source/WebCore/WebCore.gyp/WebCore.gyp
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
@@ -203,4 +224,6 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
   };
+} // optionalAttrs only25 {
+  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 }

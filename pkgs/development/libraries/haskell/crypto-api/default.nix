@@ -1,10 +1,10 @@
-{ cabal, cereal, entropy, largeword, tagged }:
+{ cabal, cereal, entropy, tagged, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "crypto-api";
-  version = "0.10.2";
-  sha256 = "06dbvdwyw2hf5cafpjfhasgyzzbigvvg74c47lafvqvgxvn9v4ms";
-  buildDepends = [ cereal entropy largeword tagged ];
+  version = "0.11";
+  sha256 = "1v42dmm4cx8brb5mpz34wa20c3s27r0v7qiqlb54svzsl0jkfmiy";
+  buildDepends = [ cereal entropy tagged transformers ];
   meta = {
     homepage = "http://trac.haskell.org/crypto-api/wiki";
     description = "A generic interface for cryptographic operations";

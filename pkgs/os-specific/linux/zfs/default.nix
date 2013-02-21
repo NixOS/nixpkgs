@@ -29,9 +29,9 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = ''
-    --with-linux=${kernel}/lib/modules/${kernel.version}/build 
-    --with-linux-obj=${kernel}/lib/modules/${kernel.version}/build 
-    --with-spl=${spl}/libexec/spl/${kernel.version}
+    --with-linux=${kernel}/lib/modules/${kernel.modDirVersion}/build 
+    --with-linux-obj=${kernel}/lib/modules/${kernel.modDirVersion}/build 
+    --with-spl=${spl}/libexec/spl/${kernel.modDirVersion}
     ${if stdenv.system == "i686-linux"  then "--enable-atomic-spinlocks" else ""}
   '';
 

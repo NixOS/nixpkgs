@@ -331,9 +331,10 @@ let
     inherit lib;
   };
 
-  makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
-    inherit stdenv perl cpio contents ubootChooser;
-  };
+  makeInitrd = {contents, compressor ? "gzip -9"}:
+    import ../build-support/kernel/make-initrd.nix {
+      inherit stdenv perl cpio contents ubootChooser compressor;
+    };
 
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
@@ -628,9 +629,7 @@ let
 
   dar = callPackage ../tools/archivers/dar { };
 
-  davfs2 = callPackage ../tools/filesystems/davfs2 {
-    neon = neon029;
-  };
+  davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
@@ -729,6 +728,8 @@ let
   ethtool = callPackage ../tools/misc/ethtool { };
 
   euca2ools = callPackage ../tools/virtualization/euca2ools { pythonPackages = python26Packages; };
+
+  evtest = callPackage ../applications/misc/evtest { };
 
   exif = callPackage ../tools/graphics/exif { };
 
@@ -1541,6 +1542,11 @@ let
   };
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
+
+  snx = callPackage_i686 ../tools/networking/snx {
+    inherit (pkgsi686Linux) pam gcc33;
+    inherit (pkgsi686Linux.xlibs) libX11;
+  };
 
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
     inherit (gnome) libgnomeui scrollkeeper;
@@ -4590,19 +4596,7 @@ let
       else stdenv;
   };
 
-  neon = neon029;
-
-  neon026 = callPackage ../development/libraries/neon/0.26.nix {
-    compressionSupport = true;
-    sslSupport = true;
-  };
-
-  neon028 = callPackage ../development/libraries/neon/0.28.nix {
-    compressionSupport = true;
-    sslSupport = true;
-  };
-
-  neon029 = callPackage ../development/libraries/neon/0.29.nix {
+  neon = callPackage ../development/libraries/neon {
     compressionSupport = true;
     sslSupport = true;
   };
@@ -5575,6 +5569,8 @@ let
 
   xorgVideoUnichrome = callPackage ../servers/x11/xorg/unichrome/default.nix { };
 
+  yaws = callPackage ../servers/http/yaws { };
+
   zabbix = recurseIntoAttrs (import ../servers/monitoring/zabbix {
     inherit fetchurl stdenv pkgconfig postgresql curl openssl zlib;
   });
@@ -5896,6 +5892,18 @@ let
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
   };
 
+  linux_3_8 = makeOverridable (import ../os-specific/linux/kernel/linux-3.8.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [
+        kernelPatches.sec_perm_2_6_24
+      ] ++ lib.optionals (platform.kernelArch == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
@@ -6016,6 +6024,7 @@ let
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 pkgs.linuxPackages_3_4);
   linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi pkgs.linuxPackages_3_6_rpi);
   linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7 pkgs.linuxPackages_3_7);
+  linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8 pkgs.linuxPackages_3_8);
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -7695,7 +7704,6 @@ let
   sublime = callPackage ../applications/editors/sublime { };
 
   subversion = callPackage ../applications/version-management/subversion/default.nix {
-    neon = pkgs.neon029;
     bdbSupport = true;
     httpServer = false;
     httpSupport = true;
@@ -8081,7 +8089,9 @@ let
 
   blackshadeselite = callPackage ../games/blackshadeselite { };
 
-  blobby = callPackage ../games/blobby {};
+  blobby = callPackage ../games/blobby {
+    boost = boost149;
+  };
 
   bsdgames = callPackage ../games/bsdgames { };
 
