@@ -1,18 +1,27 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "7.6.0.20120810";
+  version = "7.6.1";
 
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "http://haskell.org/ghc/dist/7.6.1-rc1/${name}-src.tar.bz2";
-    sha256 = "04m8ms3a58590s4p8x6qma25rdanz0iai8rcla78ka798612pvjd";
+    url = "http://haskell.org/ghc/dist/7.6.1/${name}-src.tar.bz2";
+    sha256 = "1q5rqp8z90mq6ysf7h28zkbhfaxlrpva2qy0wnkr43d7214dzp7i";
   };
 
   buildInputs = [ ghc perl gmp ncurses ];
 
-  enableParallelBuilding = true;
+  # My attempts to compile GHC with parallel build support enabled, failed
+  # 4 consecutive times with the following error:
+  #
+  #    building rts/dist/build/AutoApply.debug_o
+  #    building rts/dist/build/AutoApply.thr_o
+  #      rts_dist_HC rts/dist/build/AutoApply.debug_o
+  #    /nix/store/1iigiim5855m8j7pmwf5xrnpf705s4dh-binutils-2.21.1a/bin/ld: cannot find libraries/integer-gmp/dist-install/build/cbits/gmp-wrappers_o_split/gmp-wrappers__1.o
+  #    collect2: ld returned 1 exit status
+  #    make[1]: *** [libraries/integer-gmp/dist-install/build/cbits/gmp-wrappers.p_o] Error 1
+  enableParallelBuilding = false;
 
   buildMK = ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"

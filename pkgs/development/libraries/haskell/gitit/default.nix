@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "gitit";
-  version = "0.10.0.1";
-  sha256 = "0dx4jq7j0s6h5lfl8qrr4qnyb3j0cnnc1c786yf8kcmhk04n028f";
+  version = "0.10.2";
+  sha256 = "07zdc1qx429rmisb39gdamwn9b1jblvjg7py4fcxx3qj01b6mvxx";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -18,9 +18,6 @@ cabal.mkDerivation (self: {
     safe SHA syb tagsoup text time url utf8String xhtml xml xssSanitize
     zlib
   ];
-  patchPhase = ''
-    sed -i -e 's|hslogger.*,|hslogger,|' gitit.cabal
-  '';
   meta = {
     homepage = "http://gitit.net";
     description = "Wiki using happstack, git or darcs, and pandoc";

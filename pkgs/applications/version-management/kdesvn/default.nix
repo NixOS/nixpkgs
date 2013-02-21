@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext, apr, aprutil, subversion, db4, kdelibs }:
+{ stdenv, fetchurl, gettext, apr, aprutil, subversion, db4, kdelibs, expat }:
 
 stdenv.mkDerivation rec {
   name = "kdesvn-1.5.5";
@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   patches = [ ./docbook.patch ./virtual_inheritance.patch ];
   
 
-  buildInputs = [ apr aprutil subversion db4 kdelibs ];
+  buildInputs = [ apr aprutil subversion db4 kdelibs expat ];
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   meta = {
     description = "KDE SVN front-end";

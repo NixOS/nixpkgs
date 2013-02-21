@@ -61,6 +61,7 @@ rec {
 
   setVars = fullDepEntry (''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lXt"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fpermissive"
   '') ["minInit"];
 
   doReplaceUsrBin = fullDepEntry (''

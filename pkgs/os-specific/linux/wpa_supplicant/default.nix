@@ -1,43 +1,48 @@
-{ stdenv, fetchurl, openssl, dbus_libs, pkgconfig, libnl1 }:
+{ stdenv, fetchurl, lib, openssl, dbus_libs, pkgconfig, libnl
+, readlineSupport ? true, readline
+}:
+
+assert readlineSupport -> readline != null;
 
 stdenv.mkDerivation rec {
-  version = "0.7.3";
-  
+  version = "1.1";
+
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
-    url = "http://hostap.epitest.fi/releases/wpa_supplicant-${version}.tar.gz";
-    sha256 = "0hwlsn512q2ps8wxxjmkjfdg3vjqqb9mxnnwfv1wqijkm3551kfh";
+    url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
+    sha256 = "00lyifj8cz7qyal6dy1dxbpk3g3bywvdarik8gbj9ds7zmfbwkd5";
   };
-  
+
+  extraConfig =
+    ''
+      CONFIG_DEBUG_SYSLOG=y
+      CONFIG_CTRL_IFACE_DBUS=y
+      CONFIG_CTRL_IFACE_DBUS_NEW=y
+      CONFIG_CTRL_IFACE_DBUS_INTRO=y
+      CONFIG_DRIVER_NL80211=y
+      CONFIG_LIBNL32=y
+      ${stdenv.lib.optionalString readlineSupport "CONFIG_READLINE=y"}
+    '';
+
   preBuild = ''
     cd wpa_supplicant
     cp -v defconfig .config
-    echo CONFIG_DEBUG_SYSLOG=y | tee -a .config
-    echo CONFIG_CTRL_IFACE_DBUS=y | tee -a .config
-    echo CONFIG_CTRL_IFACE_DBUS_NEW=y | tee -a .config
-    echo CONFIG_CTRL_IFACE_DBUS_INTRO=y | tee -a .config
-    echo CONFIG_DRIVER_NL80211=y | tee -a .config
+    echo "$extraConfig" >> .config
+    cat .config
     substituteInPlace Makefile --replace /usr/local $out
   '';
 
-  buildInputs = [ openssl dbus_libs libnl1 ];
+  buildInputs = [ openssl dbus_libs libnl ]
+    ++ lib.optional readlineSupport readline;
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   patches =
-    [ # Upstream patch required for NetworkManager-0.9
-      (fetchurl {
-        url = "http://w1.fi/gitweb/gitweb.cgi?p=hostap-07.git;a=commitdiff_plain;h=b80b5639935d37b95d00f86b57f2844a9c775f57";
-        name = "wpa_supplicant-nm-0.9.patch";
-        sha256 = "1pqba0l4rfhba5qafvvbywi9x1qmphs944p704bh1flnx7cz6ya8";
-      })
-      # wpa_supplicant crashes when controlled through dbus (wicd/nm)
-      # see: https://bugzilla.redhat.com/show_bug.cgi?id=678625
-      (fetchurl {
-        url = "https://bugzilla.redhat.com/attachment.cgi?id=491018";
-        name = "dbus-assertion-fix.patch";
-        sha256 = "6206d79bcd800d56cae73e2a01a27ac2bee961512f77e5d62a59256a9919077a";
+    [ (fetchurl {
+        url = "https://projects.archlinux.org/svntogit/packages.git/plain/trunk/hostap_allow-linking-with-libnl-3.2.patch?h=packages/wpa_supplicant";
+        name = "hostap_allow-linking-with-libnl-3.2.patch";
+        sha256 = "0iwvjq0apc6mv1r03k5pnyjgda3q47yx36c4lqvv8i8q1vn7kbf2";
       })
     ];
 
@@ -45,10 +50,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man5 $out/share/man/man8
     cp -v doc/docbook/*.5 $out/share/man/man5/
     cp -v doc/docbook/*.8 $out/share/man/man8/
-    mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services
+    mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
     cp -v dbus/*service $out/share/dbus-1/system-services
     sed -e "s@/sbin/wpa_supplicant@$out&@" -i $out/share/dbus-1/system-services/*
     cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
+    cp -v systemd/*.service $out/etc/systemd/system
   ''; # */
 
   meta = {

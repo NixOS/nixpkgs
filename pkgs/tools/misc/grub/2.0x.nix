@@ -4,14 +4,14 @@
 let
 
   prefix = "grub${if EFIsupport then "-efi" else ""}";
-  
+
   version = "2.00";
-  
+
   unifont_bdf = fetchurl {
     url = "http://unifoundry.com/unifont-5.1.20080820.bdf.gz";
     sha256 = "0s0qfff6n6282q28nwwblp5x295zd6n71kl43xj40vgvdqxv0fxx";
   };
-  
+
 in
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "0n64hpmsccvicagvr0c6v0kgp2yw0kgnd3jvsyd26cnwgs7c6kkq";
   };
 
-  buildNativeInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ stdenv.lib.optional doCheck qemu;
 
@@ -43,6 +43,10 @@ stdenv.mkDerivation rec {
        # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
+
+       # Fix for building on Glibc 2.16.  Won't be needed once the
+       # gnulib in grub is updated.
+       sed -i '/gets is a security hole/d' grub-core/gnulib/stdio.in.h
     '';
 
   prePatch =
@@ -50,6 +54,8 @@ stdenv.mkDerivation rec {
        sed -i "configure" \
            -e "s|/usr/src/unifont.bdf|$PWD/unifont.bdf|g"
     '';
+
+  patches = [ ./fix-bash-completion.patch ];
 
   configureFlags =
     let arch = if stdenv.system == "i686-linux" then "i386"

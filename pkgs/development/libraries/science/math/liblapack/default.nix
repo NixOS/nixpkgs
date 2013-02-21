@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ atlasMaybeShared ];
   buildInputs = [ gfortran cmake ];
-  buildNativeInputs = [ python ];
+  nativeBuildInputs = [ python ];
 
   cmakeFlags = [
     "-DUSE_OPTIMIZED_BLAS=ON"

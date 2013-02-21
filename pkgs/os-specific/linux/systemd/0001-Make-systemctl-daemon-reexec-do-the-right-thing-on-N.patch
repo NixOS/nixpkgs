@@ -1,0 +1,26 @@
+From 0085f49cd0ba889e3db9102f328f6044ae3a2c18 Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+Date: Tue, 8 Jan 2013 15:44:33 +0100
+Subject: [PATCH 1/6] Make "systemctl daemon-reexec" do the right thing on
+ NixOS
+
+---
+ src/core/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/core/main.c b/src/core/main.c
+index 1ee3c9c..1686f60 100644
+--- a/src/core/main.c
++++ b/src/core/main.c
+@@ -1858,7 +1858,7 @@ finish:
+                         char_array_0(sfd);
+ 
+                         i = 0;
+-                        args[i++] = SYSTEMD_BINARY_PATH;
++                        args[i++] = "/run/current-system/systemd/lib/systemd/systemd";
+                         if (switch_root_dir)
+                                 args[i++] = "--switched-root";
+                         args[i++] = arg_running_as == SYSTEMD_SYSTEM ? "--system" : "--user";
+-- 
+1.8.0.1
+

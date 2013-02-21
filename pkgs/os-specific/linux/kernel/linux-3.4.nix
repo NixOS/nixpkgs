@@ -1,4 +1,4 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
@@ -148,8 +148,10 @@ let
       NFSD_V3 y
       NFSD_V3_ACL y
       NFSD_V4 y
+      NFS_FSCACHE y
       CIFS_XATTR y
       CIFS_POSIX y
+      CIFS_FSCACHE y
 
       # Security related features.
       STRICT_DEVMEM y # Filter access to /dev/mem
@@ -231,6 +233,9 @@ let
       # Devtmpfs support.
       DEVTMPFS y
 
+      # Easier debug of NFS issues
+      SUNRPC_DEBUG y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -239,7 +244,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.4.9";
+    version = "3.4.32";
     testing = false;
 
     preConfigure = ''
@@ -248,7 +253,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "02rnzpnfs7hfsglrgwr1450ssj47da1w079rmvzh1k0apy7qdpzm";
+      sha256 = "0z218ibz36lpdyjjch94jx12fcghj376x3fkmgxmwdjaz7zngn4i";
     };
 
     config = configWithPlatform stdenv.platform;
@@ -256,6 +261,8 @@ import ./generic.nix (
 
     features.iwlwifi = true;
     features.efiBootStub = true;
+    features.needsCifsUtils = true;
+    features.netfilterRPFilter = true;
   }
 
   // removeAttrs args ["extraConfig"]

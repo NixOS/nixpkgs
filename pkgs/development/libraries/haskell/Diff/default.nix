@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Diff";
-  version = "0.1.3";
-  sha256 = "02dhy4rp3mkzm5x3h1rkdin2h8qcb7h7nhn14gl2gvl6wdykfh5w";
+  version = "0.3.0";
+  sha256 = "0k7fj4icnh25x21cmrnbqq0sjgxrr2ffhn8bz89qmy5h9dznvy98";
   meta = {
     description = "O(ND) diff algorithm in haskell";
     license = self.stdenv.lib.licenses.bsd3;

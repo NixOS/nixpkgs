@@ -1,4 +1,4 @@
-{ kde, gcc, cmake, perl
+{ kde, gcc, cmake, perl, aspell
 , qt4, bzip2, pcre, fam, libxml2, libxslt, shared_mime_info, giflib, jasper
 , openexr, avahi, kerberos, acl, attr, shared_desktop_ontologies, libXScrnSaver
 , automoc4, strigi, soprano, qca2, attica, enchant, libdbusmenu_qt
@@ -10,12 +10,12 @@ kde {
   buildInputs =
     [ acl attr attica avahi bzip2 enchant fam getopt giflib herqq jasper
       libdbusmenu_qt libXScrnSaver libxslt pcre polkit_qt_1 qca2
-      shared_desktop_ontologies xz udev libxml2 libjpeg kerberos
+      shared_desktop_ontologies xz udev libxml2 libjpeg kerberos aspell
     ];
 
   propagatedBuildInputs = [ qt4 soprano strigi phonon ];
 
-  propagatedBuildNativeInputs = [ automoc4 cmake perl shared_mime_info ];
+  propagatedNativeBuildInputs = [ automoc4 cmake perl shared_mime_info ];
 
   # TODO: make sonnet plugins (dictionaries) really work.
   # There are a few hardcoded paths.

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs ];
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   meta = with stdenv.lib; {
     description = "KDE Wacom graphic tablet configuration tool";

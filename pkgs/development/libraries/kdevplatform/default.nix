@@ -2,17 +2,17 @@
   gettext, pkgconfig, apr, aprutil, boost, qjson }:
 
 stdenv.mkDerivation rec {
-  name = "kdevplatform-1.3.0";
+  name = "kdevplatform-1.3.1";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kdevelop/4.3.0/src/${name}.tar.bz2";
-    sha256 = "0afka8999csyj8hbgmcsbn8h2by04v7n8k4mrwkl0b79crdvwbcd";
+    url = "mirror://kde/stable/kdevelop/4.3.1/src/${name}.tar.bz2";
+    sha256 = "1fiqwabw5ilhw1jwvvr743dym12y3kxrs3zlqahz57yncdsglcl6";
   };
 
   propagatedBuildInputs = [ kdelibs qt4 phonon ];
   buildInputs = [ apr aprutil subversion boost qjson ];
 
-  buildNativeInputs = [ cmake automoc4 gettext pkgconfig ];
+  nativeBuildInputs = [ cmake automoc4 gettext pkgconfig ];
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.urkud ];

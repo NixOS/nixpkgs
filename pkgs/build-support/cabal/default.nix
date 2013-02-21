@@ -1,6 +1,6 @@
 # generic builder for Cabal packages
 
-{stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, enableLibraryProfiling ? false} :
+{ stdenv, fetchurl, lib, pkgconfig, ghc, Cabal, jailbreakCabal, enableLibraryProfiling ? false }:
 {
   mkDerivation =
     args : # arguments for the individual package, can modify the defaults
@@ -44,7 +44,9 @@
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
             src = fetchurl {
-              url = "http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz";
+              # cannot use mirrors system because of subtly different directory structures
+              urls = ["http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz"
+                      "http://hdiff.luite.com/packages/archive/${self.pname}/${self.fname}.tar.gz"];
               inherit (self) sha256;
             };
 
@@ -78,19 +80,30 @@
             isLibrary = ! self.isExecutable;
             isExecutable = false;
 
+            # ignore version restrictions on the build inputs that the cabal file might specify
+            jailbreak = false;
+
+            # pass the '--enable-split-objs' flag to cabal in the configure stage
+            enableSplitObjs = true;
+
+            # configure flag to pass to enable/disable library profiling
             libraryProfiling =
               if enableLibraryProfiling then ["--enable-library-profiling"]
                                         else ["--disable-library-profiling"];
+
+            # configure flag to pass to enable/disable object splitting
+            splitObjects = if self.enableSplitObjs then "--enable-split-objs" else "--disable-split-objs";
 
             # compiles Setup and configures
             configurePhase = ''
               eval "$preConfigure"
 
+              ${lib.optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
 
-              for p in $extraBuildInputs $propagatedBuildNativeInputs; do
+              for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/include" ]; then
                   extraLibDirs="$extraLibDirs --extra-include-dir=$p/include"
                 fi
@@ -101,7 +114,7 @@
                 done
               done
 
-              ./Setup configure --verbose --prefix="$out" $libraryProfiling $extraLibDirs $configureFlags
+              ./Setup configure --verbose --prefix="$out" $libraryProfiling $splitObjects $extraLibDirs $configureFlags
 
               eval "$postConfigure"
             '';
@@ -142,8 +155,8 @@
             '';
 
             postFixup = ''
-              if test -f $out/nix-support/propagated-build-native-inputs; then
-                ln -s $out/nix-support/propagated-build-native-inputs $out/nix-support/propagated-user-env-packages
+              if test -f $out/nix-support/propagated-native-build-inputs; then
+                ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
               fi
             '';
 

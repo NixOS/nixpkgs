@@ -1,5 +1,5 @@
 { system, name ? "stdenv", preHook ? "", initialPath, gcc, shell
-, extraAttrs ? {}, overrides ? (pkgs: {})
+, extraAttrs ? {}, overrides ? (pkgs: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
   # (see all-packages.nix).
@@ -10,7 +10,7 @@ let
 
   lib = import ../../lib;
 
-  disallowUnfree = builtins.getEnv "HYDRA_DISALLOW_UNFREE" == "1";
+  allowUnfree = config.allowUnfree or true && builtins.getEnv "HYDRA_DISALLOW_UNFREE" != "1";
 
   stdenvGenerator = setupScript: rec {
 
@@ -41,16 +41,16 @@ let
         # Add a utility function to produce derivations that use this
         # stdenv and its shell.
         mkDerivation = attrs:
-          if disallowUnfree && attrs.meta.license or "" == "unfree" then
+          if !allowUnfree && (let l = attrs.meta.license or ""; in l == "unfree" || l == "unfree-redistributable" || l == lib.licenses.proprietary) then
             throw "package ‘${attrs.name}’ has an unfree license, refusing to evaluate"
           else
           (derivation (
             (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
             // (let
               buildInputs = attrs.buildInputs or [];
-              buildNativeInputs = attrs.buildNativeInputs or [];
+              nativeBuildInputs = attrs.nativeBuildInputs or [];
               propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-              propagatedBuildNativeInputs = attrs.propagatedBuildNativeInputs or [];
+              propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
               crossConfig = attrs.crossConfig or null;
             in
             {
@@ -58,15 +58,16 @@ let
               args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
               stdenv = result;
               system = result.system;
+              userHook = config.stdenv.userHook or null;
 
               # Inputs built by the cross compiler.
               buildInputs = lib.optionals (crossConfig != null) buildInputs;
               propagatedBuildInputs = lib.optionals (crossConfig != null)
                   propagatedBuildInputs;
               # Inputs built by the usual native compiler.
-              buildNativeInputs = buildNativeInputs ++ lib.optionals
+              nativeBuildInputs = nativeBuildInputs ++ lib.optionals
                 (crossConfig == null) buildInputs;
-              propagatedBuildNativeInputs = propagatedBuildNativeInputs ++
+              propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
                 lib.optionals (crossConfig == null) propagatedBuildInputs;
             }))
           )
@@ -82,13 +83,12 @@ let
           // (attrs.passthru or {});
 
         # Utility flags to test the type of platform.
-        isDarwin = result.system == "i686-darwin"
-               || result.system == "powerpc-darwin"
-               || result.system == "x86_64-darwin";
+        isDarwin = result.system == "x86_64-darwin";
         isLinux = result.system == "i686-linux"
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
                || result.system == "armv5tel-linux"
+               || result.system == "armv6l-linux"
                || result.system == "armv7l-linux"
                || result.system == "mips64el-linux";
         isGNU = result.system == "i686-gnu";      # GNU/Hurd
@@ -108,7 +108,6 @@ let
                || result.system == "x86_64-openbsd";
         isi686 = result.system == "i686-linux"
                || result.system == "i686-gnu"
-               || result.system == "i686-darwin"
                || result.system == "i686-freebsd"
                || result.system == "i686-openbsd"
                || result.system == "i386-sunos";
@@ -117,10 +116,13 @@ let
                || result.system == "x86_64-freebsd"
                || result.system == "x86_64-openbsd";
         is64bit = result.system == "x86_64-linux"
-                || result.system == "x86_64-darwin";
+                || result.system == "x86_64-darwin"
+                || result.system == "x86_64-freebsd"
+                || result.system == "x86_64-openbsd";
         isMips = result.system == "mips-linux"
                 || result.system == "mips64el-linux";
         isArm = result.system == "armv5tel-linux"
+             || result.system == "armv6l-linux"
              || result.system == "armv7l-linux";
 
         # Utility function: allow stdenv to be easily regenerated with

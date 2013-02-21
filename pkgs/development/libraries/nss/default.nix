@@ -11,20 +11,22 @@ let
   };
 
   secLoadPatch = fetchurl {
-    url = "http://patch-tracker.debian.org/patch/series/dl/nss/2:3.13.5-1/85_security_load.patch";
+    name = "security_load.patch";
+    urls = [
+      # "http://patch-tracker.debian.org/patch/series/dl/nss/2:3.13.6-1/85_security_load.patch"
+      # "http://anonscm.debian.org/gitweb/?p=pkg-mozilla/nss.git;a=blob_plain;f=debian/patches/85_security_load.patch;hb=HEAD"
+      "http://www.parsix.org/export/7797/pkg/security/raul/main/nss/trunk/debian/patches/85_security_load.patch"
+    ];
     sha256 = "8a8d0ae4ebbd7c389973fa5d26d8bc5f473046c6cb1d8283cb9a3c1f4c565c47";
   };
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.13.6";
+  version = "3.14";
 
-  src = let
-    uscoreVersion = stdenv.lib.replaceChars ["."] ["_"] version;
-    releasePath = "releases/NSS_${uscoreVersion}_RTM/src/nss-${version}.tar.gz";
-  in fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/${releasePath}";
-    sha256 = "f7e90727e0ecc1c29de10da39a79bc9c53b814ccfbf40720e053b29c683d43a0";
+  src = fetchurl {
+    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_14_RTM/src/${name}.tar.gz";
+    sha1 = "ace3642fb2ca67854ea7075d053ca01a6d81e616";
   };
 
   buildInputs = [ nspr perl zlib sqlite ];

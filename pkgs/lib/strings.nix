@@ -109,6 +109,13 @@ rec {
       stringAsChars subst s;
 
 
+  # Case conversion utilities
+  lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
+  upperChars = stringToCharacters "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  toLower = replaceChars upperChars lowerChars;
+  toUpper = replaceChars lowerChars upperChars;
+
+
   # Compares strings not requiring context equality
   # Obviously, a workaround but works on all Nix versions
   eqStrings = a: b: (a+(substring 0 0 b)) == ((substring 0 0 a)+b);
@@ -154,5 +161,21 @@ rec {
 
   # Return true iff string v1 denotes a version older than v2.
   versionOlder = v1: v2: builtins.compareVersions v2 v1 == 1;
+
+
+  # Get the version of the specified derivation, as specified in its
+  # ‘name’ attribute.
+  getVersion = drv: (builtins.parseDrvName drv.name).version;
+
+
+  # Extract name with version from URL. Ask for separator which is 
+  # supposed to start extension
+  nameFromURL = url: sep: let
+    components = splitString "/" url;
+    filename = lib.last components;
+    name = builtins.head (splitString sep filename);
+  in
+  assert ! eqStrings name filename;
+  name;
 
 }

@@ -1,11 +1,5 @@
 {stdenv, fetchurl, perl, ncurses, gmp}:
 
-let
-  supportedPlatforms = ["x86_64-linux" "i686-linux"];
-in
-
-assert stdenv.lib.elem stdenv.system supportedPlatforms;
-
 stdenv.mkDerivation rec {
   version = "6.12.1";
 
@@ -105,5 +99,5 @@ stdenv.mkDerivation rec {
         [ $(./main) == "yes" ]
       '';
 
-  meta.platforms = supportedPlatforms;
+  meta.platforms = ["x86_64-linux" "i686-linux"];
 }

@@ -20,8 +20,6 @@ rec {
     http://kent.dl.sourceforge.net/sourceforge/
   ];
 
-  sf = sourceforge;
-
   # GNU (http://www.gnu.org/prep/ftp.html).
   gnu = [
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
@@ -120,7 +118,6 @@ rec {
   ];
 
   savannah = [
-    ftp://ftp.twaren.net/Unix/NonGNU/
     ftp://mirror.csclub.uwaterloo.ca/nongnu/
     ftp://mirror.publicns.net/pub/nongnu/
     ftp://savannah.c3sl.ufpr.br/
@@ -226,6 +223,20 @@ rec {
     ftp://ftp.nara.wide.ad.jp/pub/X11/GNOME/
   ];
 
+  xfce = [
+    http://archive.xfce.org/
+    http://mirror.netcologne.de/xfce/
+    http://archive.se.xfce.org/xfce/
+    http://archive.be.xfce.org/xfce/
+    http://mirror.perldude.de/archive.xfce.org/
+    http://archive.be2.xfce.org/
+    http://ftp.udc.es/xfce/
+    http://archive.al-us.xfce.org/
+    http://mirror.yongbok.net/X11/xfce-mirror/
+    http://mirrors.tummy.com/pub/archive.xfce.org/
+    http://xfce.mirror.uber.com.au/
+  ];
+
   # X.org.
   xorg = [
     http://xorg.freedesktop.org/releases/
@@ -248,8 +259,6 @@ rec {
   ];
 
   postgresql = [
-    http://ftp2.nl.postgresql.org/
-    ftp://ftp.nl.postgresql.org/pub/mirror/postgresql/
     ftp://ftp.postgresql.org/pub/
     ftp://ftp-archives.postgresql.org/pub/
   ];

@@ -1,4 +1,7 @@
 # General list operations.
+with {
+  inherit (import ./trivial.nix) deepSeq;
+};
 
 rec {
   inherit (builtins) head tail length isList add sub lessThan;
@@ -190,7 +193,7 @@ rec {
         else let
           part = partition (strictLess (head l)) (tail l);
         in
-          qs part.wrong ([(head l)] ++ qs part.right []);
+          qs part.wrong ([(head l)] ++ qs part.right concat);
     in
       qs list [];
 
@@ -220,4 +223,5 @@ rec {
       ++ zipTwoLists (tail xs) (tail ys)
     else [];
 
+  deepSeqList = xs: y: if any (x: deepSeq x false) xs then y else y;
 }

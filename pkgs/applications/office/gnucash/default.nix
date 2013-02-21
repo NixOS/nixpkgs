@@ -1,6 +1,7 @@
 { fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk, libgnomeui, libofx
 , libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
-, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper
+, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper, libglade
+, libgsf, libart_lgpl
 }:
 
 /* If you experience GConf errors when running GnuCash on NixOS, see
@@ -9,18 +10,21 @@
  */
 
 stdenv.mkDerivation rec {
-  name = "gnucash-2.4.10";
+  name = "gnucash-2.4.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "1k76b6hnsmljggxsq5l9w94krfmhx58ij8jcxf72p0ddnlimdrjj";
+    sha256 = "0qbpgd6spclkmwryi66cih0igi5a6pmsnk41mmnscpfpz1mddhwk";
   };
 
   buildInputs = [
     pkgconfig libxml2 gconf glib gtk libgnomeui libgtkhtml gtkhtml
     libgnomeprint goffice enchant gettext intltool perl guile slibGuile
-    swig isocodes bzip2 makeWrapper libofx
+    swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
   ];
+
+  # fix a problem with new intltool versions, taken from Gentoo
+  patchPhase = "patch -p3 < ${./potfiles-skip.patch}";
 
   configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx";
 

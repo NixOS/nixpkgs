@@ -1,43 +1,45 @@
-{ stdenv, fetchurl, unzip, pkgconfig, zlib, curl, libjpeg, libvorbis
-, libXxf86dga, libXxf86vm, libXinerama, SDL, mesa, openal
+{ stdenv, fetchurl, unzip, pkgconfig, zlib, curl, libjpeg, libpng, libvorbis
+, libtheora, libXxf86dga, libXxf86vm, libXinerama, SDL, mesa, openal, freetype
+, makeWrapper
 }:
 stdenv.mkDerivation rec {
   name = "warsow-${version}";
-  version = "0.62";
-  mversion = "0.61";  # sometimes only engine is updated
+  version = "1.03";
+  mversion = "1.02";  # sometimes only engine is updated
   src1 = fetchurl {
-    url = "http://www.zcdn.org/dl/warsow_${version}_sdk.zip";
-    sha256 = "0nb1z55lzmwarnn71dcyg9b3k7r7wxagqxks8a7rnlq7acsnra71";
+    url = "http://www.warsow.net:1337/~warsow/${version}/warsow_${version}_sdk.tar.gz";
+    sha256 = "0z6r5v30p8fxbszmkxssv5fnnjw7w5wfn7wfgbwvmy87ayi7mkcq";
   };
   src2 = fetchurl {
-    url = "http://www.zcdn.org/dl/warsow_${mversion}_unified.zip";
-    sha256 = "1b5bv4dsly7i7c4fqlkckv4da1knxl9m3kg8nlgkgr8waczgvazv";
+    url = "http://www.warsow.net:1337/~warsow/${mversion}/warsow_${mversion}.tar.gz";
+    sha256 = "0ai5v1h5g9nq21ixz23v0qsj9dr7dbiz7l8r34mq4c3z6ili8zpy";
   };
   unpackPhase = ''
-    mkdir warsow_${version}_sdk
+    tar xf "$src1"
     cd warsow_${version}_sdk
-    unzip $src1
-    unzip $src2
+    tar xf "$src2"
     mkdir -p source/release/
-    mv warsow_${mversion}_unified/basewsw source/release/
+    mv warsow_${mversion}/basewsw source/release/
     cd source
   '';
   patchPhase = ''
     substituteInPlace snd_openal/snd_main.c --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
   '';
-  buildInputs = [ unzip pkgconfig zlib curl libjpeg libvorbis libXxf86dga
-                  libXxf86vm libXinerama SDL mesa openal ];
+  buildInputs = [ unzip pkgconfig zlib curl libjpeg libpng libvorbis libtheora
+                  libXxf86dga libXxf86vm libXinerama SDL mesa openal makeWrapper
+                ];
   installPhase = ''
     dest=$out/opt/warsow
     cd release
-    for f in warsow wsw_server wswtv_server; do
-        substituteInPlace $f --replace BINARY_DIR= BINARY_DIR=$dest
-    done
     mkdir -p $dest
     mkdir -p $out/bin
-    cp -v {warsow,wsw_server,wswtv_server}.* $dest
+    cp -v {warsow,wsw_server,wswtv_server}* $dest
     cp -rv basewsw libs $dest
-    cp -v warsow wsw_server wswtv_server $out/bin
+    # Since 1.03 some modules are _always_ downloaded from server, thus
+    makeWrapper $dest/warsow $out/bin/warsow \
+      --suffix-each LD_LIBRARY_PATH ':' "${freetype}/lib"
+    makeWrapper $dest/wsw_server $out/bin/wsw_server
+    makeWrapper $dest/wswtv_server $out/bin/wswtv_server
   '';
   postFixup = ''
     p=$out/opt/warsow/warsow.*

@@ -1,17 +1,12 @@
-{ stdenv, fetchgit, autoconf, automake, libtool }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "npth-git20120407";
+  name = "npth-0.91";
 
-  src = fetchgit {
-    url = "git://git.gnupg.org/npth.git";
-    rev = "cbb52bd5ada02bbd914869f4540221831358d077";
-    sha256 = "1789b15bc49171d47bbd5a3bccbadc7dde1ae095bb2c205c7ec5d7a36573876d";
+  src = fetchurl {
+    url = "ftp://ftp.gnupg.org/gcrypt/npth/${name}.tar.bz2";
+    sha256 = "1qgs1n70x83dyyysabg50dh8s3464jwsa63qi5if2cd3sk78dvya";
   };
-
-  buildInputs = [ autoconf automake libtool ];
-
-  preConfigure = "autoreconf -vfi";
 
   meta = {
     description = "The New GNU Portable Threads Library";

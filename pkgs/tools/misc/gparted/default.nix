@@ -1,22 +1,21 @@
 { stdenv, fetchurl, parted, gtk, glib, intltool, gettext, libuuid
-, pkgconfig, gtkmm, gnomedocutils, libxml2 }:
+, pkgconfig, gtkmm, libxml2 }:
 
-stdenv.mkDerivation {
-  name = "gparted-0.8.1";
+stdenv.mkDerivation rec {
+  name = "gparted-0.14.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/gparted/gparted-0.5.1/gparted-0.8.1.tar.bz2;
-    sha256 = "128pnrcqp3d4a4jnjxm0mqglbyrs2q841pmg5g8ilyc827b6j163";
+    url = "mirror://sourceforge/gparted/${name}.tar.bz2";
+    sha256 = "0697sq2dbs9cn689bk68gs9pj3k08bfp9wfg6j291zrprdd3rddi";
   };
 
   configureFlags = "--disable-doc";
 
-  buildInputs =
-    [ parted gtk glib intltool gettext libuuid pkgconfig gtkmm
-      gnomedocutils libxml2
-    ];
+  buildInputs = [
+    parted gtk glib intltool gettext libuuid pkgconfig gtkmm libxml2
+  ];
 
-  meta = { 
+  meta = {
     description = "Graphical disk partitioning tool";
     homepage = http://gparted.sourceforge.net;
     license = "GPLv2";

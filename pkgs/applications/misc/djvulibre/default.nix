@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, libjpeg, libtiff, libpng, ghostscript, libungif, zlib }:
+{ stdenv, fetchurl, libjpeg, libtiff, librsvg }:
 
 stdenv.mkDerivation rec {
-  name = "djvulibre-3.5.24";
+  name = "djvulibre-3.5.25.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/djvu/${name}.tar.gz";
-    sha256 = "0d1592cmc7scg2jzah47mnvbqldhxb1x9vxm7y64a3iasa0lqwy0";
+    sha256 = "1q5i5ha4zmj2ahjfhi8cv1rah80vm43m9ads46ji38rgvpb7x3c9";
   };
 
-  buildInputs = [ libjpeg libtiff libpng ghostscript zlib libungif ];
-
-  patches = [ ./gcc-4.6.patch ];
+  buildInputs = [ libjpeg libtiff librsvg ];
 
   meta = {
     description = "A library and viewer for the DJVU file format for scanned images";

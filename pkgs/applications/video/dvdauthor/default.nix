@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, imagemagick, libdvdread, libxml2, freetype, fribidi, libpng, zlib }:
+{ stdenv, fetchurl, imagemagick, libdvdread, libxml2, freetype, fribidi, libpng, zlib, pkgconfig }:
 
-stdenv.mkDerivation {
-  name = "dvdauthor-0.7.0";
+stdenv.mkDerivation rec{
+  name = "dvdauthor-0.7.1";
 
   src = fetchurl {
-    url = mirror://sourceforge/dvdauthor/dvdauthor-0.7.0.tar.gz;
-    sha256 = "1l1l5zya7lirwa1783pa7h22wrfcq8hibbf5kpx8z8zbk5xsz9mf";
+    url = "mirror://sourceforge/dvdauthor/${name}.tar.gz";
+    sha256 = "1s8zqlim0s3hk5sbdsilip3qqh0yv05l1jwx49d9rsy614dv27sh";
   };
 
-  buildInputs = [ imagemagick libdvdread libxml2 freetype fribidi libpng zlib ];
+  buildInputs = [ libpng freetype libdvdread libxml2 zlib fribidi imagemagick ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  # Does not build against recent versions of libpng without patch.
-  patches = [ ./build-against-libpng15.patch ];
-
-  meta = { 
+  meta = {
     description = "Tools for generating DVD files to be played on standalone DVD players";
     homepage = http://dvdauthor.sourceforge.net/;
     license = ["GPLv2"];

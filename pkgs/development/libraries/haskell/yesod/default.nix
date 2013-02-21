@@ -1,24 +1,33 @@
-{ cabal, attoparsec, blazeBuilder, blazeHtml, blazeMarkup, Cabal
-, filepath, hamlet, httpTypes, monadControl, parsec, shakespeareCss
-, shakespeareJs, shakespeareText, systemFileio, systemFilepath, tar
-, text, time, transformers, unixCompat, unorderedContainers, wai
-, waiExtra, warp, yaml, yesodAuth, yesodCore, yesodForm, yesodJson
-, yesodPersistent, zlib
+{ cabal, aeson, attoparsec, base64Bytestring, blazeBuilder
+, blazeHtml, blazeMarkup, Cabal, conduit, fileEmbed, filepath
+, fsnotify, ghcPaths, hamlet, httpConduit, httpReverseProxy
+, httpTypes, liftedBase, monadControl, network, networkConduit
+, optparseApplicative, parsec, projectTemplate, resourcet
+, shakespeare, shakespeareCss, shakespeareJs, shakespeareText
+, split, systemFileio, systemFilepath, tar, text, time
+, transformers, unixCompat, unorderedContainers, wai, waiExtra
+, warp, yaml, yesodAuth, yesodCore, yesodDefault, yesodForm
+, yesodJson, yesodPersistent, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "yesod";
-  version = "1.1.0.2";
-  sha256 = "0r89sg0nnv3x46l9z39gn109a38jzr46lgx33v18268maqlc7brb";
+  version = "1.1.8.1";
+  sha256 = "01s9b0pqqj7q760vm62ni95k5fqwccw8l6531kqav2vnfvi08ric";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    attoparsec blazeBuilder blazeHtml blazeMarkup Cabal filepath hamlet
-    httpTypes monadControl parsec shakespeareCss shakespeareJs
-    shakespeareText systemFileio systemFilepath tar text time
+    aeson attoparsec base64Bytestring blazeBuilder blazeHtml
+    blazeMarkup Cabal conduit fileEmbed filepath fsnotify ghcPaths
+    hamlet httpConduit httpReverseProxy httpTypes liftedBase
+    monadControl network networkConduit optparseApplicative parsec
+    projectTemplate resourcet shakespeare shakespeareCss shakespeareJs
+    shakespeareText split systemFileio systemFilepath tar text time
     transformers unixCompat unorderedContainers wai waiExtra warp yaml
-    yesodAuth yesodCore yesodForm yesodJson yesodPersistent zlib
+    yesodAuth yesodCore yesodDefault yesodForm yesodJson
+    yesodPersistent zlib
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";

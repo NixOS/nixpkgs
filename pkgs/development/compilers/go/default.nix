@@ -7,11 +7,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.0.2";
+  name = "go-1.0.3";
 
   src = fetchurl {
-    url = http://go.googlecode.com/files/go1.0.2.src.tar.gz;
-    sha256 = "1a4mpkb3bd9dwp0r3fgrfcyk5lgw0f0cfrbskg2lrhc7a12zpz3h";
+    url = http://go.googlecode.com/files/go1.0.3.src.tar.gz;
+    sha256 = "1pz31az3icwqfqfy3avms05jnqr0qrbrx9yqsclkdwbjs4rkbfkz";
   };
 
   buildInputs = [ bison glibc bash makeWrapper ];
@@ -54,9 +54,9 @@ stdenv.mkDerivation {
   patches = [ ./cacert.patch ];
 
   GOOS = "linux";
-  GOARCH = if (stdenv.system == "i686-linux") then "386"
-          else if (stdenv.system == "x86_64-linux") then "amd64"
-          else if (stdenv.system == "armv5tel-linux") then "arm"
+  GOARCH = if stdenv.system == "i686-linux" then "386"
+          else if stdenv.system == "x86_64-linux" then "amd64"
+          else if stdenv.system == "armv5tel-linux" then "arm"
           else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     for a in go gofmt godoc; do
 	    wrapProgram "$out/bin/$a" \
 	      --set "GOROOT" $out/share/go \
-        ${if (stdenv.system == "armv5tel-linux") then "--set GOARM $GOARM" else ""}
+        ${if stdenv.system == "armv5tel-linux" then "--set GOARM $GOARM" else ""}
     done
 
     # Copy the emacs configuration for Go files.

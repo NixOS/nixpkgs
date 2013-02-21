@@ -1,15 +1,15 @@
-{stdenv, fetchurl, libxml2 }:
+{ stdenv, fetchurl, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "libxslt-1.1.26";
-  
+  name = "libxslt-1.1.27";
+
   src = fetchurl {
     url = "ftp://xmlsoft.org/libxml2/${name}.tar.gz";
-    sha256 = "1c9xdv39jvq1hp16gsbi56hbz032dmqyy0fpi4ls1y3152s55pam";
+    sha256 = "09ky3vhlaahvsb0q9gp6h3as53pfj70gincirachjqzj46jdka5n";
   };
-  
-  buildInputs = [libxml2];
-  
+
+  buildInputs = [ libxml2 ];
+
   postInstall = ''
     mkdir -p $out/nix-support
     ln -s ${libxml2}/nix-support/setup-hook $out/nix-support/
@@ -19,5 +19,7 @@ stdenv.mkDerivation rec {
     homepage = http://xmlsoft.org/XSLT/;
     description = "A C library and tools to do XSL transformations";
     license = "bsd";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.eelco ];
   };
 }

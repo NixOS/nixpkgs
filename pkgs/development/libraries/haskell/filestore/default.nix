@@ -4,17 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "filestore";
-  version = "0.5";
-  sha256 = "0cppm8iksz4dnh4kafyfy0cqbidw83rdpgc1mksiwh9c9gaxrlq7";
+  version = "0.6";
+  sha256 = "1bmsqxrkiqw791h0xwasry3jm56rjsyvl9l5r78209bhiv5v6xk0";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     Diff filepath HUnit mtl parsec split time utf8String xml
   ];
-  patchPhase = ''
-    sed -i -e 's|split.*,|split,|' filestore.cabal
-  '';
-  noHaddock = true;
+  jailbreak = true;
   meta = {
     description = "Interface for versioning file stores";
     license = self.stdenv.lib.licenses.bsd3;

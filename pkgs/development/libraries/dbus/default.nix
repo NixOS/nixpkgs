@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, expat, libX11, libICE, libSM, useX11 ? true }:
 
 let
-  version = "1.4.16";
+  version = "1.6.4";
 
   src = fetchurl {
     url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1ii93d0lzj5xm564dcq6ca4s0nvm5i9fx3jp0s7i9hlc5wkfd3hx";
+    sha256 = "1wacqyfkcpayg7f8rvx9awqg275n5pksxq5q7y21lxjx85x6pfjz";
   };
 
   patches = [ ./ignore-missing-includedirs.patch ];
@@ -17,9 +17,13 @@ in rec {
   libs = stdenv.mkDerivation {
     name = "dbus-library-" + version;
 
-    buildNativeInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
 
     buildInputs = [ expat ];
+
+    # FIXME: dbus has optional systemd integration when checking
+    # at_console policies.  How to enable this without introducing a
+    # circular dependency between dbus and systemd?
 
     inherit src patches configureFlags;
 
@@ -44,7 +48,7 @@ in rec {
 
     configureFlags = "${configureFlags} --with-dbus-daemondir=${daemon}/bin";
 
-    buildNativeInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
 
     buildInputs = [ expat libs ]
       ++ stdenv.lib.optionals useX11 [ libX11 libICE libSM ];
@@ -58,6 +62,8 @@ in rec {
       '';
 
     postConfigure = "cd tools";
+
+    installFlags = "localstatedir=$TMPDIR/var";
   };
 
   # I'm too lazy to separate daemon and libs now.

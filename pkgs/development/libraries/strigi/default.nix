@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ zlib bzip2 stdenv.gcc.libc libxml2 qt4 exiv2 clucene_core fam dbus_tools ];
 
-  buildNativeInputs = [ cmake pkgconfig perl ];
+  nativeBuildInputs = [ cmake pkgconfig perl ];
 
   enableParallelBuilding = true;
 

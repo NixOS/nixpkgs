@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gfy00zv6blplw3405q46khmjhdnp6ylblvygjjjk5skgvpscdd1";
   };
   
-  buildNativeInputs = [ flex bison ];
+  nativeBuildInputs = [ flex bison ];
   
   configureFlags = "--with-pcap=linux";
 

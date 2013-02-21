@@ -7,13 +7,14 @@
 , perl, coreutils, libXi
 , buildMultimedia ? true, alsaLib, gstreamer, gst_plugins_base
 , buildWebkit ? true
-, flashplayerFix ? true, gdk_pixbuf
+, flashplayerFix ? false, gdk_pixbuf
 , gtkStyle ? false, libgnomeui, gtk, GConf, gnome_vfs
+, developerBuild ? false
 }:
 
-let
-  v = "4.8.2";
-in
+with stdenv.lib;
+
+let v = "4.8.4"; in
 
 # TODO:
 #  * move some plugins (e.g., SQL plugins) to dedicated derivations to avoid
@@ -24,27 +25,26 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "0y93vkkn44md37gyg4y8sc9ylk27xkniaimfcpdcwd090qnjl6wj";
+    sha256 = "0w1j16q6glniv4hppdgcvw52w72gb2jab35ylkw0qjn5lj5y7c1k";
   };
 
-  patches = [ ( substituteAll {
+  patches =
+    [ ./glib-2.32.patch
+      (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         inherit cups icu libXfixes;
         glibc = stdenv.gcc.libc;
       })
-    ] ++ stdenv.lib.optional gtkStyle (
-      substituteAll {
+    ] ++ stdenv.lib.optional gtkStyle (substituteAll {
         src = ./dlopen-gtkstyle.diff;
         # substituteAll ignores env vars starting with capital letter
-        gconf = GConf; 
+        gconf = GConf;
         inherit gnome_vfs libgnomeui gtk;
-      }
-    ) ++ stdenv.lib.optional flashplayerFix (
-      substituteAll {
+      })
+    ++ stdenv.lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
         inherit gtk gdk_pixbuf;
-      }
-    );
+      });
 
   preConfigure =
     ''
@@ -75,26 +75,25 @@ stdenv.mkDerivation rec {
       -nomake demos -nomake examples -nomake docs
 
       -no-phonon ${if buildWebkit then "" else "-no"}-webkit ${if buildMultimedia then "" else "-no"}-multimedia -audio-backend
+      ${if developerBuild then "-developer-build" else ""}
     '';
 
   propagatedBuildInputs =
     [ libXrender libXrandr libXinerama libXcursor libXext libXfixes
       libXv libXi libSM
     ]
-    ++ (stdenv.lib.optional (stdenv.lib.lists.elem stdenv.system
-                              stdenv.lib.platforms.mesaPlatforms)
-         mesa)
-    ++ (stdenv.lib.optional (buildWebkit || buildMultimedia) alsaLib)
+    ++ optional (stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms) mesa
+    ++ optional (buildWebkit || buildMultimedia) alsaLib
     ++ [ zlib libpng openssl dbus.libs freetype fontconfig glib ]
-    ++ (stdenv.lib.optionals (buildWebkit || buildMultimedia)
-        [ gstreamer gst_plugins_base ]);
+    ++ optionals (buildWebkit || buildMultimedia) [ gstreamer gst_plugins_base ];
 
   # The following libraries are only used in plugins
-  buildInputs = [ cups # Qt dlopen's libcups instead of linking to it
-    mysql postgresql sqlite libjpeg libmng libtiff icu ]
-    ++ stdenv.lib.optionals gtkStyle [ gtk gdk_pixbuf ];
+  buildInputs =
+    [ cups # Qt dlopen's libcups instead of linking to it
+      mysql postgresql sqlite libjpeg libmng libtiff icu ]
+    ++ optionals gtkStyle [ gtk gdk_pixbuf ];
 
-  buildNativeInputs = [ perl pkgconfig which ];
+  nativeBuildInputs = [ perl pkgconfig which ];
 
   prefixKey = "-prefix ";
 
@@ -119,7 +118,7 @@ stdenv.mkDerivation rec {
       -no-svg
       -make qmake -make libs -nomake tools
       -nomake demos -nomake examples -nomake docs
-    '' + stdenv.lib.optionalString isMingw " -xplatform win32-g++-4.6";
+    '' + optionalString isMingw " -xplatform win32-g++-4.6";
     patches = [];
     preConfigure = ''
       sed -i -e 's/ g++/ ${stdenv.cross.config}-g++/' \
@@ -136,13 +135,12 @@ stdenv.mkDerivation rec {
     '';
     dontSetConfigureCross = true;
     dontStrip = true;
-  } // (if isMingw then
-  {
+  } // optionalAttrs isMingw {
     propagatedBuildInputs = [ ];
-  } else {});
+  };
 
-  meta = with stdenv.lib; {
-    homepage = http://qt.nokia.com/products;
+  meta = {
+    homepage = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license = "GPL/LGPL";
     maintainers = with maintainers; [ urkud sander ];

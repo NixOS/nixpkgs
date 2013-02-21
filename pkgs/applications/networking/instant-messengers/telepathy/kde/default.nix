@@ -20,7 +20,7 @@ let
     text_ui = [ ktp.telepathy_logger_qt qt_gstreamer telepathy_logger ];
   };
 
-  extraBuildNativeInputs = {
+  extraNativeBuildInputs = {
     telepathy_logger_qt = [ flex bison ];
   };
 
@@ -37,7 +37,7 @@ let
           inherit sha256;
         };
 
-        buildNativeInputs = [ gettext pkgconfig ] ++ (stdenv.lib.attrByPath [ key ] [] extraBuildNativeInputs);
+        nativeBuildInputs = [ gettext pkgconfig ] ++ (stdenv.lib.attrByPath [ key ] [] extraNativeBuildInputs);
         buildInputs = [ kdelibs telepathy_qt ]
           ++ stdenv.lib.optional (name != "ktp-common-internals") ktp.common_internals
           ++ (stdenv.lib.attrByPath [ key ] [] extraBuildInputs);

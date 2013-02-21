@@ -1,6 +1,6 @@
 #!/bin/sh
 
-channels_url="http://omahaproxy.appspot.com/";
+channels_url="http://omahaproxy.appspot.com/all?csv=1";
 bucket_url="http://commondatastorage.googleapis.com/chromium-browser-official/";
 output_file="$(cd "$(dirname "$0")" && pwd)/sources.nix";
 
@@ -78,7 +78,12 @@ get_channel_exprs()
     do
         channel="${chline%%,*}";
         version="${chline##*,}";
-        url="${bucket_url%/}/chromium-$version.tar.bz2";
+
+        # XXX: Remove case after version 26 is stable:
+        case "${version%%.*}" in
+            26) url="${bucket_url%/}/chromium-$version-lite.tar.xz";;
+            *)  url="${bucket_url%/}/chromium-$version.tar.bz2";;
+        esac;
 
         echo -n "Checking if sha256 of version $version is cached..." >&2;
         if sha256="$(sha_lookup "$version")";

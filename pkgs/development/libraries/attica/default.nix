@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
   
   buildInputs = [ qt4 ];
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
   
   meta = with stdenv.lib; {
     description = "A library to access Open Collaboration Service providers";

@@ -1,37 +1,46 @@
 { fetchurl, stdenv, zlib, lzo, libtasn1, nettle
-, guileBindings, guile, perl }:
+, guileBindings, guile, perl, gmp }:
 
 assert guileBindings -> guile != null;
 
 stdenv.mkDerivation (rec {
 
-  name = "gnutls-3.0.22";
+  name = "gnutls-3.1.3";
 
   src = fetchurl {
     url = "mirror://gnu/gnutls/${name}.tar.xz";
-    sha256 = "1pp90fm27qi5cd0pq18xcmnl79xcbfwxc54bg1xi1wv0vryqdpcr";
+    sha256 = "0fff9frz0ycbnppfn0w4a2s9x27k21l4hh9zbax3v7a8cg33dcpw";
   };
 
+  # Note: GMP is a dependency of Nettle, whose public headers include
+  # GMP headers, hence the hack.
   configurePhase = ''
     ./configure --prefix="$out"                                 \
       --disable-dependency-tracking --enable-fast-install       \
       --without-p11-kit                                         \
-      --with-lzo --with-libtasn1-prefix="${libtasn1}"		\
+      --with-lzo --with-libtasn1-prefix="${libtasn1}"           \
+      --with-libnettle-prefix="${nettle}"                       \
+      CPPFLAGS="-I${gmp}/include"                               \
       ${if guileBindings
         then "--enable-guile --with-guile-site-dir=\"$out/share/guile/site\""
         else ""}
   '';
 
+  # Build of the Guile bindings is not parallel-safe.  See
+  # <http://git.savannah.gnu.org/cgit/gnutls.git/commit/?id=330995a920037b6030ec0282b51dde3f8b493cad>
+  # for the actual fix.
+  enableParallelBuilding = false;
+
   buildInputs = [ zlib lzo ]
     ++ stdenv.lib.optional guileBindings guile;
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   propagatedBuildInputs = [ nettle libtasn1 ];
 
   # XXX: Gnulib's `test-select' fails on FreeBSD:
   # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
-  doCheck = (!stdenv.isFreeBSD);
+  doCheck = (!stdenv.isFreeBSD && !stdenv.isDarwin);
 
   meta = {
     description = "The GNU Transport Layer Security Library";

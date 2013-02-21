@@ -5,11 +5,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl_gnome {
     project = "ModemManager";
-    major = "0"; minor = "5"; extension = "xz";
-    sha256 = "0zvwrni4l21d856nq28khigrhwgrq5cc7nh45zidwjj8q7bsxiz7";
+    major = "0"; minor = "5"; patchlevel = "4.0"; extension = "xz";
+    sha256 = "1fdf5d5cc494825afe9f551248e00a2d91e220e88435b47f109ca2a707a40f1f";
   };
 
-  buildNativeInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig ];
 
   buildInputs = [ udev polkit dbus_glib ppp ];
 

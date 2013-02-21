@@ -59,6 +59,18 @@ stdenv.mkDerivation rec {
           ln -s $f $out/bin
           echo -n .
         done
+        for f in "$currentPath/etc/bash_completion.d/"*; do
+	  mkdir -p $out/etc/bash_completion.d
+          ln -s $f $out/etc/bash_completion.d/
+          echo -n .
+        done
+	for s in 1 2 3 4 5 6 7 8 9; do
+	  for f in "$currentPath/share/man/man$s/"*; do
+	    mkdir -p $out/share/man/man$s
+            ln -sv $f $out/share/man/man$s/
+            echo -n .
+	  done
+       done
         for f in "$currentPkgDir/"*.conf; do
           ln -s $f $linkedPkgDir
           echo -n .
@@ -74,7 +86,12 @@ stdenv.mkDerivation rec {
     echo -n "Generating wrappers "
 
     for prg in ghc ghci ghc-${ghc.version} ghci-${ghc.version}; do
-      makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "-B$linkedTopDir"
+      # The NIX env-vars are picked up by our patched version of ghc-paths.
+      makeWrapper ${ghc}/bin/$prg $out/bin/$prg \
+        --add-flags "-B$linkedTopDir" \
+        --set "NIX_GHC"        "$out/bin/ghc"     \
+        --set "NIX_GHCPKG"     "$out/bin/ghc-pkg" \
+        --set "NIX_GHC_LIBDIR" "$linkedTopDir"
       echo -n .
     done
 

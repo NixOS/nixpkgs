@@ -6,7 +6,7 @@
 
 
 let baseName = "aacskeys";
-    version  = "0.4.0c";
+    version  = "0.4.0e";
 in
 
 stdenv.mkDerivation {
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   '';
 
   src = fetchurl {
-    url = "http://debian-multimedia.org/pool/main/a/${baseName}/${baseName}_${version}.orig.tar.gz";
-    sha256 = "54ea78898917f4acaf78101dda254de56bc7696bad12cbf22ee6f09d4ee88a43";
+    url = "http://deb-multimedia.org/pool/main/a/${baseName}/${baseName}_${version}.orig.tar.gz";
+    sha256 = "0d3zvwixpkixfkkc16wj37h2xbcq5hsqqhqngzqr6pslmqr67vnr";
   };
 
   buildInputs = [openssl jdk premake];

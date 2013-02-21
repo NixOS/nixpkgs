@@ -1,12 +1,14 @@
-{ cabal, blazeHtml, filepath, mtl, parsec, regexPcreBuiltin }:
+{ cabal, blazeHtml, filepath, mtl, parsec, regexPcre }:
 
 cabal.mkDerivation (self: {
   pname = "highlighting-kate";
-  version = "0.5.2";
-  sha256 = "1a3aifknbxm3v0lvqisdc6zqgki9x9z12jdrmijxmxq1riwwalr2";
+  version = "0.5.3.6";
+  sha256 = "0ypgw56gaa2hvh05ks079lfcaaynki3da471g39f23m3scgkawlr";
   isLibrary = true;
   isExecutable = true;
-  buildDepends = [ blazeHtml filepath mtl parsec regexPcreBuiltin ];
+  buildDepends = [ blazeHtml filepath mtl parsec regexPcre ];
+  prePatch = "sed -i -e 's|regex-pcre-builtin|regex-pcre|' highlighting-kate.cabal";
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/jgm/highlighting-kate";
     description = "Syntax highlighting";

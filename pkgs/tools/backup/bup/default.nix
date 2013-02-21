@@ -1,17 +1,20 @@
-{ stdenv, fetchgit, python, pyxattr, pylibacl, setuptools, fuse, git, perl, pandoc, makeWrapper }:
+{ stdenv, fetchgit, python, pyxattr, pylibacl, setuptools, fuse, git, perl, pandoc, makeWrapper
+, par2cmdline, par2Support ? false }:
+
+assert par2Support -> par2cmdline != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "bup-0.25git20120722";
+  name = "bup-0.25git20121224";
 
   src = fetchgit {
-    url = "https://github.com/apenwarr/bup.git";
-    sha256 = "3ad232d7f23071ed34f920bd4c3137583f1adffbe23c022896289bc0a03fe7aa";
-    rev = "02bd2b566ea5eec2fd656e0ae572b4c7b6b9550a";
+    url = "https://github.com/bup/bup.git";
+    sha256 = "f0e0c835ab83f00b28920d493e4150d2247113aad3a74385865c2a8c6f1ba7b8";
+    rev = "458e92da32ddd3c18fc1c3e52a76e9f0b48b832f";
   };
 
-  buildNativeInputs = [ pandoc perl makeWrapper ];
+  nativeBuildInputs = [ pandoc perl makeWrapper ];
 
   buildInputs = [ python git ];
 
@@ -26,8 +29,8 @@ stdenv.mkDerivation {
       substituteInPlace $f --replace "/usr/bin/env python" "${python}/bin/python"
     done
     substituteInPlace Makefile --replace "./format-subst.pl" "perl ./format-subst.pl"
-    substituteInPlace lib/bup/csetup.py \
-      --replace "'bupsplit.c'])" "'bupsplit.c'], library_dirs=['${python}/lib'])"
+  '' + optionalString par2Support ''
+    substituteInPlace cmd/fsck-cmd.py --replace "['par2'" "['${par2cmdline}/bin/par2'"
   '';
 
   makeFlags = [
@@ -42,6 +45,6 @@ stdenv.mkDerivation {
       Highly efficient file backup system based on the git packfile format.
       Capable of doing *fast* incremental backups of virtual machine images.
     '';
-    homepage = "https://github.com/apenwarr/bup";
+    homepage = "https://github.com/bup/bup";
   };
 }

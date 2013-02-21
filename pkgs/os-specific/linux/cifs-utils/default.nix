@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
-   
+
 stdenv.mkDerivation rec {
-  name = "cifs-utils-5.3";
-   
+  name = "cifs-utils-5.6";
+
   src = fetchurl {
     url = "ftp://ftp.samba.org/pub/linux-cifs/cifs-utils/${name}.tar.bz2";
-    sha256 = "68e969c4107a872e2848992732dc11eafc7bdf084bec894c0ba677572de49b32";
+    sha256 = "0f619nw1163bcmfc83mmqj31qdkl68wfm81vynx3d8q0m0k1ll7i";
   };
 
   makeFlags = "root_sbindir=$(out)/sbin";
@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://www.samba.org/linux-cifs/cifs-utils/;
     description = "Tools for managing Linux CIFS client filesystems";
-    platforms = stdenv.lib.platforms.linux;    
+    platforms = stdenv.lib.platforms.linux;
   };
 }

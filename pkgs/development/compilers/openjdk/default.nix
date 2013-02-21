@@ -17,8 +17,13 @@
 , libXrender
 , libXtst
 , libXi
+, libXinerama
+, libXcursor
+, fontconfig
 , cpio
+, cacert
 , jreOnly ? false
+, perl
 }:
 
 let
@@ -34,35 +39,18 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
+  update = "6";
+
+  build = "24";
+
 in
 
 stdenv.mkDerivation rec {
-  name = "openj${if jreOnly then "re" else "dk"}-7b127";
+  name = "openj${if jreOnly then "re" else "dk"}-7u${update}b${build}";
 
   src = fetchurl {
-    url = http://www.java.net/download/openjdk/jdk7/promoted/b147/openjdk-7-fcs-src-b147-27_jun_2011.zip;
-    sha256 = "1qhwlz9y5qmwmja4qnxg6sn3pgsg1i11fb9j41w8l26acyhk34rs";
-  };
-
-  jaxws_src_name = "jdk7-jaxws2_2_4-b03-2011_05_27.zip";
-
-  jaxws_src = fetchurl {
-    url = "http://download.java.net/glassfish/components/jax-ws/openjdk/jdk7/${jaxws_src_name}";
-    sha256 = "1mpzgr9lnbf2p3x45npcniy47kbzi3hyqqbd4w3j63sxnxcp5bh5";
-  };
-
-  jaxp_src_name = "jaxp145_01.zip";
-
-  jaxp_src = fetchurl {
-    url = "http://download.java.net/jaxp/1.4.5/${jaxp_src_name}";
-    sha256 = "1js8m1a6lcn95byplmjjs1lja1maisyl6lgfjy1jx3lqi1hlr4n5";
-  };
-
-  jaf_src_name = "jdk7-jaf-2010_08_19.zip";
-
-  jaf_src = fetchurl {
-    url = "http://java.net/downloads/jax-ws/JDK7/${jaf_src_name}";
-    sha256 = "17n0i5cgvfsd6ric70h3n7hr8aqnzd216gaq3603wrxlvggzxbp6";
+    url = "http://www.java.net/download/openjdk/jdk7u6/promoted/b24/openjdk-7u6-fcs-src-b24-28_aug_2012.zip";
+    sha256 = "1x1iq8ga0hqqh0bpcmydzzy19757hknn2yvgzib85p7b7dx0vfx9";
   };
 
 #  outputs = [ "out" ] ++ stdenv.lib.optionals (! jreOnly) [ "jre" ];
@@ -82,15 +70,15 @@ stdenv.mkDerivation rec {
     libXrender
     libXtst
     libXi
+    libXinerama
+    libXcursor
+    fontconfig
+    perl
   ];
 
-  postUnpack = ''
-    mkdir -p drops
-    cp ${jaxp_src} drops/${jaxp_src_name}
-    cp ${jaxws_src} drops/${jaxws_src_name}
-    cp ${jaf_src} drops/${jaf_src_name}
-    export DROPS_PATH=$(pwd)/drops
+  NIX_LDFLAGS = "-lfontconfig -lXcursor -lXinerama";
 
+  postUnpack = ''
     sed -i -e "s@/usr/bin/test@${coreutils}/bin/test@" \
       -e "s@/bin/ls@${coreutils}/bin/ls@" \
       openjdk/hotspot/make/linux/makefiles/sa.make
@@ -104,8 +92,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./cppflags-include-fix.patch
-    ./printf-fix.patch
-    ./linux-version-check-fix.patch
+    ./no-crypto-restrictions.patch
   ];
 
   makeFlags = [
@@ -114,15 +101,13 @@ stdenv.mkDerivation rec {
     "FREETYPE_HEADERS_PATH=${freetype}/include"
     "FREETYPE_LIB_PATH=${freetype}/lib"
     "MILESTONE=release"
-    "BUILD_NUMBER=b127"
+    "BUILD_NUMBER=b${build}"
     "CUPS_HEADERS_PATH=${cups}/include"
     "USRBIN_PATH="
     "COMPILER_PATH="
     "DEVTOOLS_PATH="
     "UNIXCOMMAND_PATH="
     "BOOTDIR=${jdk}"
-    "DROPS_DIR=$(DROPS_PATH)"
-    "SKIP_BOOT_CYCLE=false"
   ];
 
   configurePhase = ''
@@ -132,6 +117,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out
     cp -av build/*/j2${if jreOnly then "re" else "sdk"}-image/* $out
+    pushd $out/${if ! jreOnly then "jre/" else ""}lib/security
+    rm cacerts
+    perl ${./generate-cacerts.pl} $out/bin/keytool ${cacert}/etc/ca-bundle.crt
+    popd
   '';
 #  '' + (if jreOnly then "" else ''
 #    if [ -z $jre ]; then
@@ -155,4 +144,3 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit architecture; };
 }
-

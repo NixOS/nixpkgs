@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0icpxh1l1dpviq2zwy764dhg8y03zwyf4pgw4s7kb165nvh9v5kv";
   };
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng ];
-  buildInputs = [ cmake lua5 stdenv.gcc.libc ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ lua5 stdenv.gcc.libc ];
   cmakeFlags = "-DPODOFO_BUILD_SHARED=ON -DPODOFO_BUILD_STATIC=OFF";
 
   meta = {

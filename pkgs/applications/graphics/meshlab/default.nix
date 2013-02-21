@@ -1,11 +1,11 @@
-{stdenv, fetchurl, qt, bzip2, lib3ds, levmar, muparser, unzip}:
+{stdenv, fetchurl, qt4, bzip2, lib3ds, levmar, muparser, unzip}:
 
 stdenv.mkDerivation rec {
-  name = "meshlab-1.2.3a";
+  name = "meshlab-1.3.2";
 
   src = fetchurl {
-    url = mirror://sourceforge/meshlab/MeshLabSrc_AllInc_v123a.tgz;
-    sha256 = "09w42q0x1yjr7l9ng952lic7vkb1arsvqg1fld5s297zwzfmsl9v";
+    url = "mirror://sourceforge/meshlab/meshlab/MeshLab%20v1.3.2/MeshLabSrc_AllInc_v132.tgz";
+    sha256 = "d57f0a99a55421aac54a66e2475d48f00f7b1752f9587cd69cf9b5b9c1a519b1";
   };
 
   # I don't know why I need this; without this, the rpath set at the beginning of the
@@ -13,13 +13,16 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   buildPhase = ''
+    mkdir -p "$out/include"
+    cp -r vcglib "$out/include"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$out/include/vcglib"
     export NIX_LDFLAGS="-rpath $out/opt/meshlab $NIX_LDFLAGS"
     cd meshlab/src
     pushd external
     qmake -recursive external.pro
     make
     popd
-    qmake -recursive meshlabv12.pro
+    qmake -recursive meshlab_full.pro
     make
   '';
 
@@ -31,7 +34,9 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/meshlab/meshlab $out/bin/meshlab
   '';
 
-  buildInputs = [ qt unzip ];
+  sourceRoot = ".";
+
+  buildInputs = [ qt4 unzip ];
 
   meta = {
     description = "System for the processing and editing of unstructured 3D triangular meshes";

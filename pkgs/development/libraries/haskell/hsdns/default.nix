@@ -2,16 +2,19 @@
 
 cabal.mkDerivation (self: {
   pname = "hsdns";
-  version = "1.5";
-  sha256 = "2788d1ad5ef07ae5f356a460fb92316118f3a4d9c779ec27fb8243602bcf6399";
+  version = "1.6";
+  sha256 = "1vf3crkhs7z572bqdf7p2hfcqkjxvnyg0w0cf8b7kyfxzn8bj3fa";
   buildDepends = [ network ];
   extraLibraries = [ adns ];
   noHaddock = true;
   meta = {
-    homepage = "http://gitorious.org/hsdns";
+    homepage = "http://github.com/peti/hsdns";
     description = "Asynchronous DNS Resolver";
-    license = "LGPL";
+    license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

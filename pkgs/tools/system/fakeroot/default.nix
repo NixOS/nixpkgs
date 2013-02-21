@@ -1,12 +1,20 @@
-{stdenv, fetchurl}:
+{stdenv, fetchurl, utillinux}:
 
-stdenv.mkDerivation {
-  name = "fakeroot-1.18.1";
+stdenv.mkDerivation rec {
+  name = "fakeroot-1.18.4";
 
   src = fetchurl {
-    url = http://ftp.de.debian.org/debian/pool/main/f/fakeroot/fakeroot_1.18.1.orig.tar.bz2;
-    sha256 = "0h5jsw715a9hv32cb1m1bajy26l7xxrbgrk6qk1b6m91lxh6rnw9";
+    url = https://launchpad.net/ubuntu/+archive/primary/+files/fakeroot_1.18.4.orig.tar.bz2;
+    sha256 = "18mydrz49n7ic7147pikkpdb96x00s9wisdk6hrc75ll7vx9wd8a";
   };
+
+  buildInputs = [ utillinux /* provides getopt */ ];
+
+  postUnpack = ''
+    for prog in getopt; do
+      sed -i "s@getopt@$(type -p getopt)@g" ${name}/scripts/fakeroot.in
+    done
+  '';
 
   meta = {
     homepage = http://fakeroot.alioth.debian.org/;

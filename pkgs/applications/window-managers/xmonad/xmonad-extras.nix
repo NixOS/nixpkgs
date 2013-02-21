@@ -4,13 +4,14 @@
 
 cabal.mkDerivation (self: {
   pname = "xmonad-extras";
-  version = "0.10.1.1";
-  sha256 = "1pkp9z58w2x8yhxhvm5nifxb1qcajv52ji53n77rjhpysvrgq5m7";
+  version = "0.11";
+  sha256 = "09r64z09mfdz86k7v5c6zds9ng0fjcp44kd8f5qg1sz40yblrny5";
   buildDepends = [
     hint libmpd mtl network parsec random regexPosix split X11 xmonad
     xmonadContrib
   ];
-  configureFlags = "-f-with_hlist";
+  configureFlags = "-f-with_hlist -fwith_split -fwith_parsec";
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/xmonad-extras";
     description = "Third party extensions for xmonad with wacky dependencies";

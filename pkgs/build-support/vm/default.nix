@@ -3,7 +3,7 @@
 , img ? "bzImage"
 , rootModules ?
     [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3"
-      "unix" "hmac" "md4" "ecb" "des_generic"
+      "ext4" "unix" "hmac" "md4" "ecb" "des_generic"
     ]
 }:
 
@@ -38,35 +38,19 @@ rec {
       # Copy what we need from Glibc.
       cp -p ${pkgs.stdenv.glibc}/lib/ld-linux*.so.? $out/lib
       cp -p ${pkgs.stdenv.glibc}/lib/libc.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/librt.so.* $out/lib
-      cp -p ${pkgs.stdenv.glibc}/lib/libdl.so.* $out/lib
+      cp -p ${pkgs.stdenv.glibc}/lib/libm.so.* $out/lib
 
-      # Copy some utillinux stuff.
-      cp ${utillinux}/bin/mount ${utillinux}/bin/umount $out/bin
-      cp -pd ${utillinux}/lib/libblkid*.so.* $out/lib
-      cp -pd ${utillinux}/lib/libuuid*.so.* $out/lib
-
-      # Copy some coreutils.
-      cp ${coreutils}/bin/basename $out/bin
-      cp ${coreutils}/bin/mkdir $out/bin
-      cp ${coreutils}/bin/mknod $out/bin
-      cp ${coreutils}/bin/cat $out/bin
-      cp ${coreutils}/bin/chroot $out/bin
-      cp ${coreutils}/bin/sleep $out/bin
-      cp ${coreutils}/bin/ln $out/bin
-
-      # Copy some other tools.
-      cp ${bash}/bin/bash $out/bin
-      cp ${module_init_tools}/sbin/insmod $out/bin/insmod
-      cp ${nettools}/sbin/ifconfig $out/bin
-      cp ${sysvinit}/sbin/halt $out/bin
+      # Copy BusyBox.
+      cp -pd ${pkgs.busybox}/bin/* ${pkgs.busybox}/sbin/* $out/bin
 
       # Run patchelf to make the programs refer to the copied libraries.
       for i in $out/bin/* $out/lib/*; do if ! test -L $i; then nuke-refs $i; fi; done
 
       for i in $out/bin/*; do
-          echo "patching $i..."
-          patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+          if [ -f "$i" -a ! -L "$i" ]; then
+              echo "patching $i..."
+              patchelf --set-interpreter $out/lib/ld-linux*.so.? --set-rpath $out/lib $i || true
+          fi
       done
     ''; # */
 
@@ -84,8 +68,7 @@ rec {
 
 
   stage1Init = writeScript "vm-run-stage1" ''
-    #! ${initrdUtils}/bin/bash -e
-    echo START
+    #! ${initrdUtils}/bin/ash -e
 
     export PATH=${initrdUtils}/bin
 
@@ -167,8 +150,7 @@ rec {
 
     mount -o remount,ro dummy /fs
 
-    echo DONE
-    halt -d -p -f
+    poweroff -f
   '';
 
 
@@ -761,7 +743,7 @@ rec {
   debClosureGenerator =
     {name, packagesLists, urlPrefix, packages}:
 
-    runCommand "${name}.nix" {} ''
+    runCommand "${name}.nix" { buildInputs = [ perl dpkg ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         bunzip2 < $i >> ./Packages
@@ -770,7 +752,7 @@ rec {
       # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
       sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
 
-      ${perl}/bin/perl -I${dpkg} -w ${deb/deb-closure.pl} \
+      perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
     '';
 
@@ -1173,10 +1155,16 @@ rec {
     ubuntu1004i386 = {
       name = "ubuntu-10.04-lucid-i386";
       fullName = "Ubuntu 10.04 Lucid (i386)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/lucid/main/binary-i386/Packages.bz2;
-        sha256 = "0e46596202a68caa754dfe0883f46047525309880c492cdd5e2d0970fcf626aa";
-      };
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/lucid/main/binary-i386/Packages.bz2;
+            sha256 = "0e46596202a68caa754dfe0883f46047525309880c492cdd5e2d0970fcf626aa";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/lucid/universe/binary-i386/Packages.bz2;
+            sha256 = "13nvsb7na9igps2fdbbfpq4y8ihccmcs6x35pfyfp6rkhjgpzigy";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
     };
@@ -1184,32 +1172,50 @@ rec {
     ubuntu1004x86_64 = {
       name = "ubuntu-10.04-lucid-amd64";
       fullName = "Ubuntu 10.04 Lucid (amd64)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/lucid/main/binary-amd64/Packages.bz2;
-        sha256 = "74a8f3192b0eda397d65316e0fa6cd34d5358dced41639e07d9f1047971bfef0";
-      };
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/lucid/main/binary-amd64/Packages.bz2;
+            sha256 = "74a8f3192b0eda397d65316e0fa6cd34d5358dced41639e07d9f1047971bfef0";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/lucid/universe/binary-amd64/Packages.bz2;
+            sha256 = "112lbnf8rcsbbh89aci4m6gwac0jy16838aij0av8n076zwkvlj9";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" "mktemp" ];
     };
 
     ubuntu1010i386 = {
-      name = "ubuntu-10.04-maverick-i386";
-      fullName = "Ubuntu 10.04 Maverick (i386)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/maverick/main/binary-i386/Packages.bz2;
-        sha256 = "1qjs4042y03bxbxwjs3pgrs99ba6vqvjaaz6zhaxxaqj1r12dwa0";
-      };
+      name = "ubuntu-10.10-maverick-i386";
+      fullName = "Ubuntu 10.10 Maverick (i386)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/maverick/main/binary-i386/Packages.bz2;
+            sha256 = "1qjs4042y03bxbxwjs3pgrs99ba6vqvjaaz6zhaxxaqj1r12dwa0";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/maverick/universe/binary-i386/Packages.bz2;
+            sha256 = "1g5pnhx730wj32221ic8p2q6zcka23knpyg190mvq9x7kflcbfzy";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
     ubuntu1010x86_64 = {
-      name = "ubuntu-10.04-maverick-amd64";
-      fullName = "Ubuntu 10.04 Maverick (amd64)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/maverick/main/binary-amd64/Packages.bz2;
-        sha256 = "1p0i4gp1bxd3zvckgnh1hx4vfc23rfgzd19dk5rmi61lzbzzqbgc";
-      };
+      name = "ubuntu-10.10-maverick-amd64";
+      fullName = "Ubuntu 10.10 Maverick (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/maverick/main/binary-amd64/Packages.bz2;
+            sha256 = "1p0i4gp1bxd3zvckgnh1hx4vfc23rfgzd19dk5rmi61lzbzzqbgc";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/maverick/universe/binary-amd64/Packages.bz2;
+            sha256 = "0m26viwah29gh47p8m3jpnx6l84dhpwnms29m9bvqn1vwcrgjh0s";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
@@ -1217,10 +1223,16 @@ rec {
     ubuntu1110i386 = {
       name = "ubuntu-11.10-oneiric-i386";
       fullName = "Ubuntu 11.10 Oneiric (i386)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/oneiric/main/binary-i386/Packages.bz2;
-        sha256 = "11r1s76ppi7rwz08i20d7n4ndaj9lb9wsl9k8ww4s1c6agzpwv8a";
-      };
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/oneiric/main/binary-i386/Packages.bz2;
+            sha256 = "11r1s76ppi7rwz08i20d7n4ndaj9lb9wsl9k8ww4s1c6agzpwv8a";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/oneiric/universe/binary-i386/Packages.bz2;
+            sha256 = "1dr59j8pjdhk07fpc0x73afcd9630kkdsbabx3bj92q71104yigz";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
@@ -1228,10 +1240,16 @@ rec {
     ubuntu1110x86_64 = {
       name = "ubuntu-11.10-oneiric-amd64";
       fullName = "Ubuntu 11.10 Oneiric (amd64)";
-      packagesList = fetchurl {
-        url = mirror://ubuntu/dists/oneiric/main/binary-amd64/Packages.bz2;
-        sha256 = "07k784gxwaqmyggmzczy9hjkgfp6p6dcs8rhkxw5hfzn0jaf8l2s";
-      };
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/oneiric/main/binary-amd64/Packages.bz2;
+            sha256 = "07k784gxwaqmyggmzczy9hjkgfp6p6dcs8rhkxw5hfzn0jaf8l2s";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/oneiric/universe/binary-amd64/Packages.bz2;
+            sha256 = "1v3ldxn5jnnfgs863ryd6wl3fsb3glainr1ma2zn2l5vpzhpi2h1";
+          })
+        ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" ];
     };
@@ -1264,6 +1282,40 @@ rec {
           (fetchurl {
             url = mirror://ubuntu/dists/precise/universe/binary-amd64/Packages.bz2;
             sha256 = "0x4hz5aplximgb7gnpvrhkw8m7a40s80rkm5b8hil0afblwlg4vr";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+
+    ubuntu1210i386 = {
+      name = "ubuntu-12.10-quantal-i386";
+      fullName = "Ubuntu 12.10 Quantal (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/quantal/main/binary-i386/Packages.bz2;
+            sha256 = "bee3200ac8f037700ccd2311fb8b0de665bd02d46bdb2ae946cf50c5885001c3";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/quantal/universe/binary-i386/Packages.bz2;
+            sha256 = "323036e81c8bf409f71d3bc5cf37cfba72fe1d0fc82e9b5418d4d0cb516646e1";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" ];
+    };
+
+    ubuntu1210x86_64 = {
+      name = "ubuntu-12.10-quantal-amd64";
+      fullName = "Ubuntu 12.10 Quantal (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/quantal/main/binary-amd64/Packages.bz2;
+            sha256 = "ef14073f335ef118ebe1c7d45f5a0c17ef28f72abb57c10b9082ab5e04b5d003";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/quantal/universe/binary-amd64/Packages.bz2;
+            sha256 = "c762bd4ed063326577a62ff783cf9720e772b03d4a2aa38048918ee6287b96ce";
           })
         ];
       urlPrefix = mirror://ubuntu;
@@ -1315,22 +1367,22 @@ rec {
     };
 
     debian60i386 = {
-      name = "debian-6.0.4-squeeze-i386";
-      fullName = "Debian 6.0.4 Squeeze (i386)";
+      name = "debian-6.0.6-squeeze-i386";
+      fullName = "Debian 6.0.6 Squeeze (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-i386/Packages.bz2;
-        sha256 = "1aih4n1iz4gzzm5cy1j14mpx8i25jj1237994j33k7dm0gnqgr2w";
+        sha256 = "18c0473jacd877nkky1x21dkmp4992d8qra6wj07sq0yz5gdc9c4";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian60x86_64 = {
-      name = "debian-6.0.4-squeeze-amd64";
-      fullName = "Debian 6.0.4 Squeeze (amd64)";
+      name = "debian-6.0.6-squeeze-amd64";
+      fullName = "Debian 6.0.6 Squeeze (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
-        sha256 = "1gb3im7kl8dwd7z82xj4wb5g58r86fjj8cirvq0ssrvcm9bqaiz7";
+        sha256 = "1n1h3pz6axcaraxq8gfzq0jywlpdrqand1dnd4q79dy6cl788bi2";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

@@ -1,0 +1,33 @@
+*** git-export/module/Makefile.in	Wed Dec 31 16:00:01 1969
+--- git-export/module/Makefile.in.new	Sat Jan 28 21:42:06 2012
+***************
+*** 17,30 ****
+  modules_install:
+  	@# Install the kernel modules
+  	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` \
+! 		INSTALL_MOD_PATH=$(DESTDIR) \
+  		INSTALL_MOD_DIR=addon/spl $@
+  	@# Remove extraneous build products when packaging
+! 	if [ -n "$(DESTDIR)" ]; then \
+! 		find $(DESTDIR)/lib/modules/@LINUX_VERSION@ \
+  			-name 'modules.*' | xargs $(RM); \
+  	fi
+! 	sysmap=$(DESTDIR)/boot/System.map-@LINUX_VERSION@; \
+  	if [ -f $$sysmap ]; then \
+  		depmod -ae -F $$sysmap @LINUX_VERSION@; \
+  	fi
+--- 17,30 ----
+  modules_install:
+  	@# Install the kernel modules
+  	$(MAKE) -C @LINUX_OBJ@ SUBDIRS=`pwd` \
+! 		INSTALL_MOD_PATH=@prefix@ \
+  		INSTALL_MOD_DIR=addon/spl $@
+  	@# Remove extraneous build products when packaging
+! 	if [ -n "@prefix@" ]; then \
+! 		find @prefix@/lib/modules/@LINUX_VERSION@ \
+  			-name 'modules.*' | xargs $(RM); \
+  	fi
+! 	sysmap=@prefix@/boot/System.map-@LINUX_VERSION@; \
+  	if [ -f $$sysmap ]; then \
+  		depmod -ae -F $$sysmap @LINUX_VERSION@; \
+  	fi

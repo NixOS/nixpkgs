@@ -11,5 +11,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ telepathy_glib ];
 
-  buildNativeInputs = [ pkgconfig libxslt ];
+  nativeBuildInputs = [ pkgconfig libxslt ];
 }

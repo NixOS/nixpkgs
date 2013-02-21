@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       libksane libxslt gettext opencv libgpod gdk_pixbuf qjson
     ];
 
-  buildNativeInputs = [ pkgconfig cmake automoc4 ];
+  nativeBuildInputs = [ pkgconfig cmake automoc4 ];
 
   meta = {
     description = "Photo Management Program";

@@ -10,11 +10,11 @@ assert sslSupport -> openssl != null;
 assert scpSupport -> libssh2 != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.26.0";
+  name = "curl-7.29.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "0snj41knvy4xbfirr88l9gq5zjzz0mwlmq0mxbfgqszb2qpjdvgw";
+    sha256 = "0bw3sclhjqb2zwgcp6njjpaca62rwlj2mrw2r9wic47sqsxfhy4x";
   };
 
   # Zlib and OpenSSL must be propagated because `libcurl.la' contains
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ${if linkStatic then "--enable-static --disable-shared" else ""}
   '';
 
-  dontDisableStatic = if linkStatic then true else false;
+  dontDisableStatic = linkStatic;
 
   CFLAGS = if stdenv ? isDietLibC then "-DHAVE_INET_NTOA_R_2_ARGS=1" else "";
   LDFLAGS = if linkStatic then "-static" else "";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # We should refer to the cross built openssl
     # For the 'urandom', maybe it should be a cross-system option
     configureFlags = ''
-      ${if sslSupport then "--with-ssl=${openssl.hostDrv}" else "--without-ssl"}
+      ${if sslSupport then "--with-ssl=${openssl.crossDrv}" else "--without-ssl"}
       ${if linkStatic then "--enable-static --disable-shared" else ""}
       --with-random /dev/urandom
     '';
@@ -55,12 +55,14 @@ stdenv.mkDerivation rec {
     inherit sslSupport openssl;
   };
 
+  patches = [ ./fix-curl-multi-cleanup.patch ];
+
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
   '';
 
   meta = {
+    homepage = "http://curl.haxx.se/";
     description = "A command line tool for transferring files with URL syntax";
-    homepage = http://curl.haxx.se/;
   };
 }

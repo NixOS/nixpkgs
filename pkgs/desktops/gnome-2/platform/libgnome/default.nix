@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "197pnq8y0knqjhm2fg4j6hbqqm3qfzfnd0irhwxpk1b4hqb3kimj";
   };
   
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ popt zlib intltool GConf gnome_vfs libcanberra libtool ];
   propagatedBuildInputs = [ glib libbonobo ];
 }

@@ -2,9 +2,7 @@
 # nettools needed for hostname
 
 let
-  pname = "Isabelle";
-  version = "2011";
-  name = "${pname}${version}";
+  name = "Isabelle2012";
   theories = ["HOL" "FOL" "ZF"];
 in
 
@@ -12,8 +10,8 @@ stdenv.mkDerivation {
   inherit name theories;
 
   src = fetchurl {
-    url = http://isabelle.in.tum.de/website-Isabelle2011/dist/Isabelle2011.tar.gz;
-    sha256 = "ea85eb2a859891be387f020b2e45f8c9a0bd1d8bbc3902f28a429e9c61cb0b6a";
+    url = http://www.cl.cam.ac.uk/research/hvg/isabelle/dist/Isabelle2012.tar.gz;
+    sha256 = "1w2k5cg0d9hyigax0hwp6d84jnylb13ysk4x5kwl2412xryravxq";
   };
 
   buildInputs = [ perl polyml nettools ];

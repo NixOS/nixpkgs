@@ -21,10 +21,10 @@
 } :
 
 stdenv.mkDerivation rec {
-  name = "pidgin-2.10.2";
+  name = "pidgin-2.10.6";
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${name}.tar.bz2";
-    sha256 = "1f1j9pr7zwpxwbv94510brh69pmwn4v3np12h75pfrnkas8d5kg5";
+    sha256 = "3e25a633b97cbfa8326999a30282e7a662a9b9bbf2853be84af0b8fb60392c96";
   };
 
   inherit nss ncurses;

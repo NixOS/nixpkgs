@@ -3,12 +3,20 @@ a @ {
   boehmgc,mesa,ncurses,readline,gsl,libsigsegv,
   python,zlib, perl, texLive, texinfo, lzma,
 
-  noDepEntry, fullDepEntry, fetchUrlFromSrcInfo, 
+  noDepEntry, fullDepEntry, fetchUrlFromSrcInfo,
   lib,
 
   ...}:
-let 
-  s = import ./src-for-default.nix;
+let
+  s = # Generated upstream information
+  rec {
+    baseName="asymptote";
+    version="2.21";
+    name="asymptote-2.21";
+    hash="07lkj0xnxpanfscmbm30lw6j9484rlmmqpnl0mhs7nx9h2lczrjz";
+    url="mirror://sourceforge/project/asymptote/2.21/asymptote-2.21.src.tgz";
+    sha256="07lkj0xnxpanfscmbm30lw6j9484rlmmqpnl0mhs7nx9h2lczrjz";
+  };
   buildInputs = with a; [
     freeglut ghostscriptX imagemagick fftw boehmgc
     mesa ncurses readline gsl libsigsegv python zlib
@@ -51,11 +59,13 @@ rec {
   '' ["minInit" "addInputs" "doUnpack"];
 
   meta = {
+    inherit (s) version;
     description = "A tool for programming graphics intended to replace Metapost";
     maintainers = [
       a.lib.maintainers.raskin
+      a.lib.maintainers.simons
     ];
-    platforms = with a.lib.platforms; 
+    platforms = with a.lib.platforms;
       linux;
   };
 }

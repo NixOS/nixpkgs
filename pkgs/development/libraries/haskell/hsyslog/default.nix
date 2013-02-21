@@ -2,10 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "hsyslog";
-  version = "1.4";
-  sha256 = "f3bf4bf47565cb0245afb0e8ffa3f79635b02f0032081845a5999964d828f4db";
+  version = "1.5";
+  sha256 = "1dpcawnl3a5lw2w8gc9920sjrw43qmq1k2zws8rx2q0r6ps7nhgp";
   meta = {
-    homepage = "http://gitorious.org/hsyslog";
+    homepage = "http://github.com/peti/hsyslog";
     description = "FFI interface to syslog(3) from POSIX.1-2001.";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

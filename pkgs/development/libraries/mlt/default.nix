@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "mlt-${version}";
-  version = "0.8.0";
+  version = "0.8.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/mlt/${name}.tar.gz";
-    sha256 = "1pf61imb5xzgzf65g54kybjr67235rxi20691023mcv34qwppl3v";
+    sha256 = "0m4nzxli1pl8w59m4iwwhpmr1xdz7xfknmbl3a0mkkd1jzdiq3nc";
   };
 
   buildInputs = 

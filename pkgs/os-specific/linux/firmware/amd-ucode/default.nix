@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
 
-  name = "amd-ucode-2012-01-17";
+  name = "amd-ucode-2012-09-10";
 
   src = fetchurl {
     url = "http://www.amd64.org/pub/microcode/${name}.tar";
-    sha256 = "0mqnbs87khv6p874cbyf9nb8i4gc592ws67lyzhc4chmwvc9ln47";
+    sha256 = "065phvhx5hx5ssdd1x2p5m1yv26ak7l5aaw6yk6h95x9mxn5r111";
   };
 
   installPhase = ''

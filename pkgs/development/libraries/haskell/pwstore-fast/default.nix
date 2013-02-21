@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pwstore-fast";
-  version = "2.2";
-  sha256 = "03b9vr5j6cadvi6w3lr8b9km4jq6jh0vzcmkxzq9qvvly89lx96a";
+  version = "2.3";
+  sha256 = "014l4n00lpg5037fkdwnxnv7xjfc3vlz1dphr7hfbqnjwf1z9ibw";
   buildDepends = [ base64Bytestring cryptohash random ];
   meta = {
     homepage = "https://github.com/PeterScott/pwstore";

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl db4 zlib uwimap htmlTidy pam ];
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   NIX_LDFLAGS = "-lpam";
 

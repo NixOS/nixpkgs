@@ -1,16 +1,16 @@
 { stdenv, fetchurl, kdelibs, grantlee, qca2, libofx, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "skrooge-1.3.0";
+  name = "skrooge-1.3.2";
 
   src = fetchurl {
     url = "http://skrooge.org/files/${name}.tar.bz2";
-    sha256 = "1sfzzn9xz01c0095w4scckiiwv2gfbaxx05h7ds5n02a113w53kz";
+    sha256 = "18j36yamxzfwpnnnjiach22q9088c2nlcilzh2p24gjhgnnd0v6r";
   };
 
   buildInputs = [ kdelibs grantlee qca2 libofx ];
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   meta = {
     inherit (kdelibs.meta) platforms;

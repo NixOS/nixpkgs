@@ -1,30 +1,27 @@
-{ cabal, aeson, attoparsec, cereal, clientsession, configurator
-, dataLens, dataLensTemplate, directoryTree, filepath, hashable
-, heist, logict, MonadCatchIOTransformers, mtl, mwcRandom
-, pwstoreFast, snapCore, snapServer, stm, syb, text, time
-, transformers, unorderedContainers, utf8String, vector
-, vectorAlgorithms, xmlhtml
+{ cabal, aeson, attoparsec, cereal, clientsession, comonad
+, configurator, directoryTree, dlist, errors, filepath, hashable
+, heist, lens, logict, MonadCatchIOTransformers, mtl, mwcRandom
+, pwstoreFast, regexPosix, snapCore, snapServer, stm, syb, text
+, time, transformers, unorderedContainers, vector, vectorAlgorithms
+, xmlhtml
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap";
-  version = "0.9.1.1";
-  sha256 = "1g8jvnwrhna5g064dmv4v4khrpwwn0vcqw8l7rcpkp75l46fq29z";
+  version = "0.11.1";
+  sha256 = "0dd66496fjfp80i6whl356sqk7n03rx4ycsah7x11fc9rvplmr3q";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aeson attoparsec cereal clientsession configurator dataLens
-    dataLensTemplate directoryTree filepath hashable heist logict
-    MonadCatchIOTransformers mtl mwcRandom pwstoreFast snapCore
-    snapServer stm syb text time transformers unorderedContainers
-    utf8String vector vectorAlgorithms xmlhtml
+    aeson attoparsec cereal clientsession comonad configurator
+    directoryTree dlist errors filepath hashable heist lens logict
+    MonadCatchIOTransformers mtl mwcRandom pwstoreFast regexPosix
+    snapCore snapServer stm syb text time transformers
+    unorderedContainers vector vectorAlgorithms xmlhtml
   ];
-  patchPhase = ''
-    sed -i snap.cabal -e 's|clientsession.*,|clientsession,|'
-  '';
   meta = {
     homepage = "http://snapframework.com/";
-    description = "Snap: A Haskell Web Framework: project starter executable and glue code library";
+    description = "Top-level package for the Snap Web Framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
   };

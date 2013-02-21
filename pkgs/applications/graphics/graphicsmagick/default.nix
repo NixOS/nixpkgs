@@ -19,7 +19,7 @@ stdenv.mkDerivation {
       zlib libtool
     ];
 
-  buildNativeInputs = [ xz ];
+  nativeBuildInputs = [ xz ];
 
   postInstall = ''
     sed -i 's/-ltiff.*'\'/\'/ $out/bin/*

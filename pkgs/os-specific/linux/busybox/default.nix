@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
     sha256 = "10k8kgrprll9hxfm9gc3jl7kkq79g6l2pygn5snqwqg5v80zy4zb";
   };
 
+  # Remove this patch after the next busybox update.
+  patches = [ ./include-missing-sys-resource-header.patch ];
+
   configurePhase = ''
     make defconfig
     ${configParser}
@@ -60,7 +63,7 @@ stdenv.mkDerivation rec {
     extraCrossConfig = ''
       CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cross.config}-"
     '' +
-      (if (stdenv.cross.platform.kernelMajor == "2.4") then ''
+      (if stdenv.cross.platform.kernelMajor == "2.4" then ''
         CONFIG_IONICE n
       '' else "");
   };

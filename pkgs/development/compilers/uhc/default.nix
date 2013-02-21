@@ -44,7 +44,6 @@ in stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.linux;
     maintainers = [
       stdenv.lib.maintainers.andres
-      stdenv.lib.maintainers.simons
     ];
   };
 }

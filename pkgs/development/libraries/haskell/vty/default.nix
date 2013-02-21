@@ -1,17 +1,19 @@
-{ cabal, deepseq, mtl, parallel, parsec, terminfo, utf8String
-, vector
+{ cabal, deepseq, mtl, parallel, parsec, stringQq, terminfo
+, utf8String, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "vty";
-  version = "4.7.0.14";
-  sha256 = "0wgn2jbr7lih9znkpa09nvb4qjd0801c0r4mwwrw4pd9n9mkjqn9";
+  version = "4.7.3";
+  sha256 = "0x059mzw6v2xf92fdhy0ilyqbics2as6dqrdr6njpp0m6qykkybb";
+  isLibrary = true;
+  isExecutable = true;
   buildDepends = [
-    deepseq mtl parallel parsec terminfo utf8String vector
+    deepseq mtl parallel parsec stringQq terminfo utf8String vector
   ];
   meta = {
     homepage = "https://github.com/coreyoconnor/vty";
-    description = "A simple terminal access library";
+    description = "A simple terminal UI library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
     maintainers = [ self.stdenv.lib.maintainers.andres ];

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cabal-file-th";
-  version = "0.2.2";
-  sha256 = "1ql2gmg3mdfkmnk1m3966npr6l1in15fzlkbn7dr1cp4s90igqhy";
+  version = "0.2.3";
+  sha256 = "0kawvb5n56rkq4453l6pia3wrr6jvvdwkghi6i176n1gm2zf2ri8";
   buildDepends = [ Cabal ];
   meta = {
     homepage = "http://github.com/nkpart/cabal-file-th";

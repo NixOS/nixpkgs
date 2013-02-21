@@ -1,9 +1,10 @@
-{ cabal }:
+{ cabal, filepath }:
 
 cabal.mkDerivation (self: {
   pname = "file-embed";
-  version = "0.0.4.4";
-  sha256 = "1czwa5vpafhvif4gv7bwa7hrxkrbrvvybgyjckd0hdpl6bpd4nhp";
+  version = "0.0.4.7";
+  sha256 = "1hn08499kay0y6ik5z1s58s8r9h1nzf116avgi6ia4b565wpzkvi";
+  buildDepends = [ filepath ];
   meta = {
     homepage = "https://github.com/snoyberg/file-embed";
     description = "Use Template Haskell to embed file contents directly";

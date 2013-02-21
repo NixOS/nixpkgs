@@ -1,31 +1,33 @@
-{stdenv, fetchgit, python}:
+{ stdenv, fetchurl, python, pandoc, zip }:
 
-let pkgname = "youtube-dl";
-    pkgver  = "2011.12.08";
-    
+let
+  version = "2012.12.11";
 in
 stdenv.mkDerivation {
-  name = "${pkgname}-${pkgver}";
+  name = "youtube-dl-${version}";
 
-  src = fetchgit {
-    url = "git://github.com/rg3/${pkgname}";
-    rev = "661a807c65a154eccdddb875b45e4782ca86132c";
-    sha256 = "32fd193b867b122400e9d5d32f6dfaf15704f837a9dc2ff809e1ce06712857ba";
+  src = fetchurl {
+    url = "https://github.com/downloads/rg3/youtube-dl/youtube-dl.${version}.tar.gz";
+    sha256 = "03zv3z8p0fi122nqj7ff8hkgqscir4s7psm03rq7dfpg1z35klmn";
   };
 
-  buildInputs = [python];
-  buildPhase = "sed -i 's|#!/usr/bin/env python|#!#{python}/bin/python|' youtube-dl";
+  buildInputs = [ python ];
+  nativeBuildInputs = [ pandoc zip ];
 
-  installPhase = ''
-    ensureDir $out/bin
-    cp youtube-dl $out/bin
+  patchPhase = ''
+    rm youtube-dl
+    substituteInPlace Makefile --replace "#!/usr/bin/env python" "#!${python}/bin/python"
+  '';
+
+  configurePhase = ''
+    makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc )
   '';
 
   meta = {
-    description = "A small command-line program to download videos from YouTube.com and a few more sites";
-    homepage = http://rg3.github.com/youtube-dl/;
-    maintainers = [
-      stdenv.lib.maintainers.bluescreen303
-    ];
+    homepage = "http://rg3.github.com/youtube-dl/";
+    description = "Command-line tool to download videos from YouTube.com and other sites";
+
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    maintainers = with stdenv.lib.maintainers; [ bluescreen303 simons ];
   };
 }

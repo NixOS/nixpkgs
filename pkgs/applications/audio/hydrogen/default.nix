@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -e 's#/usr/lib/ladspa#${ladspaPlugins}/lib/ladspa#' -i libs/hydrogen/src/preferences.cpp
     sed '/\/usr/d' -i libs/hydrogen/src/preferences.cpp
-    '';
+    sed "s#pkg_ver.rstrip().split('.')#pkg_ver.rstrip().split('.')[:3]#" -i Sconstruct
+  '';
 
   # why doesn't scons find librdf?
   buildPhase = ''

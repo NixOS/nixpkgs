@@ -8,16 +8,16 @@ assert xineramaSupport -> xlibs.libXinerama != null;
 assert cupsSupport -> cups != null;
 
 stdenv.mkDerivation rec {
-  name = "gtk+-3.2.3";
+  name = "gtk+-3.2.4";
 
   src = fetchurl {
-    url = mirror://gnome/sources/gtk+/3.2/gtk+-3.2.3.tar.xz;
-    sha256 = "0g8x2kcqq17bccm4yszim837saj73zfk66ia2azcgfqfa7r21kz2";
+    url = "mirror://gnome/sources/gtk+/3.2/${name}.tar.xz";
+    sha256 = "f981bf514858c00d7084bd6f6c34b3c60b8aebdb959e7aca6faa59ed67c136bd";
   };
 
   enableParallelBuilding = true;
 
-  buildNativeInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   propagatedBuildInputs =
     [ xlibs.xlibs glib atk pango gdk_pixbuf cairo

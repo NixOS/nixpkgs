@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "2.0.3";
+  version = "2.0.5";
 
   src = fetchurl {
     url = "http://download.videolan.org/pub/videolan/vlc/${version}/${name}.tar.xz";
-    sha256 = "1lnjfpizgp8slj6i4fgk5wld6nfw08wfhkb1i1dvzbhmfigq1agv";
+    sha256 = "0vkbv477a7z0v55sigz6c3abxljz7jyysp7z8s29zk8vhq0fpyfz";
   };
 
   buildInputs =
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       libdc1394 libraw1394
     ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags =
     [ "--enable-alsa"

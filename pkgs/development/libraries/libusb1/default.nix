@@ -1,12 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "libusb-1.0.8";
+  name = "libusb-1.0.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/libusb/${name}.tar.bz2";
-    sha256 = "1afvpaqnl5plqg95nkvsl4sj9d6ckrmjq44mql8l4zqgf6jx7l11";
+    sha256 = "16sz34ix6hw2wwl3kqx6rf26fg210iryr68wc439dc065pffw879";
   };
+
+  buildInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://www.libusb.org;

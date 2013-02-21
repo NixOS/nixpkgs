@@ -1,0 +1,54 @@
+http://sources2.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/net-im/psimedia/files/psimedia-1.0.3-glib2.32.patch?view=log
+
+Index: psimedia-1.0.3/gstprovider/gstcustomelements/gstcustomelements.h
+===================================================================
+--- psimedia-1.0.3.orig/gstprovider/gstcustomelements/gstcustomelements.h
++++ psimedia-1.0.3/gstprovider/gstcustomelements/gstcustomelements.h
+@@ -21,7 +21,7 @@
+ #ifndef GSTCUSTOMELEMENTS_H
+ #define GSTCUSTOMELEMENTS_H
+ 
+-#include <glib/gthread.h>
++#include <glib.h>
+ #include <gst/gst.h>
+ #include <gst/base/gstpushsrc.h>
+ #include <gst/video/video.h>
+Index: psimedia-1.0.3/gstprovider/gstelements/static/gstelements.h
+===================================================================
+--- psimedia-1.0.3.orig/gstprovider/gstelements/static/gstelements.h
++++ psimedia-1.0.3/gstprovider/gstelements/static/gstelements.h
+@@ -21,7 +21,7 @@
+ #ifndef PSI_GSTELEMENTS_H
+ #define PSI_GSTELEMENTS_H
+ 
+-#include <glib/gmacros.h>
++#include <glib.h>
+ 
+ G_BEGIN_DECLS
+ 
+Index: psimedia-1.0.3/gstprovider/gstthread.h
+===================================================================
+--- psimedia-1.0.3.orig/gstprovider/gstthread.h
++++ psimedia-1.0.3/gstprovider/gstthread.h
+@@ -22,7 +22,7 @@
+ #define PSI_GSTTHREAD_H
+ 
+ #include <QThread>
+-#include <glib/gmain.h>
++#include <glib.h>
+ 
+ namespace PsiMedia {
+ 
+Index: psimedia-1.0.3/gstprovider/rwcontrol.h
+===================================================================
+--- psimedia-1.0.3.orig/gstprovider/rwcontrol.h
++++ psimedia-1.0.3/gstprovider/rwcontrol.h
+@@ -28,7 +28,7 @@
+ #include <QMutex>
+ #include <QWaitCondition>
+ #include <QTimer>
+-#include <glib/gmain.h>
++#include <glib.h>
+ #include "psimediaprovider.h"
+ #include "rtpworker.h"
+ 

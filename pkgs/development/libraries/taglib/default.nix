@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = "-DWITH_ASF=ON -DWITH_MP4=ON";
 
   buildInputs = [zlib];
-  buildNativeInputs = [cmake];
+  nativeBuildInputs = [cmake];
 
   meta = {
     homepage = http://developer.kde.org/~wheeler/taglib.html;

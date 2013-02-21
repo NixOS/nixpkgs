@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unix-time";
-  version = "0.1.2";
-  sha256 = "146m4b93bla0pbf76bmff6f3aq9zx60cwy58mkqa0a4dyndd3pid";
+  version = "0.1.5";
+  sha256 = "13xks5kshr51mbs112j8vvhirzhbi3fq6zjw7l4z2iwn8chh4hwg";
   meta = {
     description = "Unix time parser/formatter and utilities";
     license = self.stdenv.lib.licenses.bsd3;

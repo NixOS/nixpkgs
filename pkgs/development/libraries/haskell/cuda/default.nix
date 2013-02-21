@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cuda";
-  version = "0.4.1.0";
-  sha256 = "1drr95d4v3khidxr6na5vyq28bv5rqk2n676q0bydc4rqwhb1z6w";
+  version = "0.4.1.1";
+  sha256 = "05hhlnfyr30r1frsc15px38ijd1qvs125yjxvsi6q1kmmkq1w6y9";
   buildDepends = [ extensibleExceptions ];
   buildTools = [ c2hs ];
   extraLibraries = [ cudatoolkit nvidia_x11 self.stdenv.gcc ];
@@ -21,7 +21,7 @@ cabal.mkDerivation (self: {
       test -f $i && ghc --make $i
     done
   
-    for p in $extraBuildInputs $propagatedBuildNativeInputs; do
+    for p in $extraBuildInputs $propagatedNativeBuildInputs; do
       if [ -d "$p/include" ]; then
         extraLibDirs="$extraLibDirs --extra-include-dir=$p/include"
       fi

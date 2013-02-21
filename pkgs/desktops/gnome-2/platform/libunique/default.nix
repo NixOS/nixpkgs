@@ -9,6 +9,6 @@ stdenv.mkDerivation rec {
     sha256 = "1fsgvmncd9caw552lyfg8swmsd6bh4ijjsph69bwacwfxwf09j75";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk ];
 }

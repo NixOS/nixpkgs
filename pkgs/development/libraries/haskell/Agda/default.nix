@@ -1,21 +1,21 @@
-{ cabal, alex, binary, filepath, happy, hashable, hashtables
-, haskeline, haskellSrcExts, mtl, QuickCheck, syb, xhtml, zlib
+{ cabal, alex, binary, deepseq, filepath, geniplate, happy
+, hashable, hashtables, haskeline, haskellSrcExts, mtl, parallel
+, QuickCheck, text, unorderedContainers, xhtml, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "Agda";
-  version = "2.3.0.1";
-  sha256 = "0f2kc3by2z01g8bqc446hyzx9sidx6qi0p7h5bcpjf8iryk1dh2w";
+  version = "2.3.2";
+  sha256 = "1xp0qvag6wx6zjwhmb7nm13hp63vlh8h4a2rkc85rsh610m0nynl";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    binary filepath hashable hashtables haskeline haskellSrcExts mtl
-    QuickCheck syb xhtml zlib
+    binary deepseq filepath geniplate hashable hashtables haskeline
+    haskellSrcExts mtl parallel QuickCheck text unorderedContainers
+    xhtml zlib
   ];
   buildTools = [ alex happy ];
-  patchPhase = ''
-    sed -i -e 's|mtl == 2.0.\*|mtl|' Agda.cabal
-  '';
+  jailbreak = true;
   meta = {
     homepage = "http://wiki.portal.chalmers.se/agda/";
     description = "A dependently typed functional programming language and proof assistant";

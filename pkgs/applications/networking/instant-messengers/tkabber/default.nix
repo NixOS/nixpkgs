@@ -1,6 +1,15 @@
-{ stdenv, fetchurl, tcl, tk, tcllib, tcltls, bwidget, cacert, makeWrapper, x11 }:
+{ stdenv, fetchurl, tcl, tk, tcllib, tcltls, tclgpg
+, bwidget, makeWrapper, x11 }:
 
-stdenv.mkDerivation rec {
+let
+  tclLibraries = [ bwidget tcllib tcltls tclgpg ];
+
+  getTclLibPath = p: "${p}/lib/${p.libPrefix}";
+
+  tclLibPaths = stdenv.lib.concatStringsSep " "
+    (map getTclLibPath tclLibraries);
+
+in stdenv.mkDerivation rec {
   name = "tkabber-0.11.1";
 
   src = fetchurl {
@@ -13,7 +22,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace login.tcl --replace \
       "custom::defvar loginconf(sslcacertstore) \"\"" \
-      "custom::defvar loginconf(sslcacertstore) \"${cacert}/etc/ca-bundle.crt\""
+      "custom::defvar loginconf(sslcacertstore) \$env(OPENSSL_X509_CERT_FILE)"
 
     sed -i '/^if.*load_default_xrdb/,/^}$/ {
         s@option readfile \(\[fullpath [^]]*\]\)@option readfile "'"$out/share/doc/tkabber/examples/xrdb/${defaultTheme}.xrdb"'"@
@@ -26,13 +35,17 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/tkabber --set TCLLIBPATH "${bwidget}/tcltk\ ${tcllib}/lib/tcllib${tcllib.version}\ ${tcltls}/lib/tls${tcltls.version}"
+    wrapProgram $out/bin/tkabber \
+      --prefix PATH : "${tk}/bin" \
+      --set TCLLIBPATH '"${tclLibPaths}"' \
+      --set TKABBER_SITE_PLUGINS '$HOME/.nix-profile/share/tkabber-plugins'
   '';
 
-  buildInputs = [tcl tk tcllib tcltls bwidget x11 makeWrapper];
+  buildInputs = [ tcl tk x11 makeWrapper ] ++ tclLibraries;
 
   meta = {
     homepage = "http://tkabber.jabber.ru/";
     description = "A GUI client for the XMPP (Jabber) instant messaging protocol";
+    license = stdenv.lib.licenses.gpl2;
   };
 }

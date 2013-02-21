@@ -1,49 +1,56 @@
 { postscriptSupport ? true
 , pdfSupport ? true
 , pngSupport ? true
-, xcbSupport ? false
+, xcbSupport ? true # no longer experimental since 1.12
 , gobjectSupport ? true, glib
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype, xlibs
-, zlib, libpng, pixman, libxcb ? null, xcbutil ? null
-, gettext
+, expat
+, zlib, libpng, pixman
+, gettext, libiconvOrEmpty
 }:
 
 assert postscriptSupport -> zlib != null;
 assert pngSupport -> libpng != null;
-assert xcbSupport -> libxcb != null && xcbutil != null;
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.10.2";
-  
+  name = "cairo-1.12.14";
+
   src = fetchurl {
-    url = "http://cairographics.org/releases/${name}.tar.gz";
-    sha1 = "ccce5ae03f99c505db97c286a0c9a90a926d3c6e";
+    url = "http://cairographics.org/releases/${name}.tar.xz";
+    sha256 = "04xcykglff58ygs0dkrmmnqljmpjwp2qgwcz8sijqkdpz7ix3l4n";
   };
 
-  buildInputs =
-    [ pkgconfig x11 fontconfig xlibs.libXrender ]
+  buildInputs = with xlibs;
+    [ pkgconfig x11 fontconfig libXrender expat ]
     ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
 
     # On non-GNU systems we need GNU Gettext for libintl.
-    ++ stdenv.lib.optional (!stdenv.isLinux) gettext;
+    ++ stdenv.lib.optional (!stdenv.isLinux) gettext
+
+    ++ libiconvOrEmpty;
 
   propagatedBuildInputs =
     [ freetype pixman ] ++
     stdenv.lib.optional gobjectSupport glib ++
     stdenv.lib.optional postscriptSupport zlib ++
     stdenv.lib.optional pngSupport libpng;
-    
+
   configureFlags =
     [ "--enable-tee" ]
     ++ stdenv.lib.optional xcbSupport "--enable-xcb"
     ++ stdenv.lib.optional pdfSupport "--enable-pdf";
 
-  preConfigure = ''
-    # Work around broken `Requires.private' that prevents Freetype
-    # `-I' flags to be propagated.
-    sed -i "src/cairo.pc.in" \
-        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
-  '';
+  preConfigure =
+  # On FreeBSD, `-ldl' doesn't exist.
+    (stdenv.lib.optionalString stdenv.isFreeBSD
+       '' for i in "util/"*"/Makefile.in" boilerplate/Makefile.in
+          do
+            cat "$i" | sed -es/-ldl//g > t
+            mv t "$i"
+          done
+       '');
+
+  enableParallelBuilding = true;
 
   # The default `--disable-gtk-doc' is ignored.
   postInstall = "rm -rf $out/share/gtk-doc";

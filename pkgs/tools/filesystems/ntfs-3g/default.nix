@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   buildInputs = [libuuid] ++ stdenv.lib.optionals crypto [gnutls libgcrypt];
-  buildNativeInputs = stdenv.lib.optional crypto pkgconfig;
+  nativeBuildInputs = stdenv.lib.optional crypto pkgconfig;
 
   src = fetchurl {
     url = "http://tuxera.com/opensource/${name}.tgz";

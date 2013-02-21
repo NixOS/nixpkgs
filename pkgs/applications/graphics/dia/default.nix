@@ -16,9 +16,15 @@ stdenv.mkDerivation rec {
       libxslt docbook_xsl libart_lgpl
     ] ++ stdenv.lib.optional withGNOME libgnomeui;
 
-  buildNativeInputs = [ pkgconfig intltool perl ];
+  nativeBuildInputs = [ pkgconfig intltool perl ];
 
   configureFlags = stdenv.lib.optionalString withGNOME "--enable-gnome";
+
+  patches = [ ./glib-top-level-header.patch ];
+
+  # This file should normally require a gtk-update-icon-cache -q /usr/share/icons/hicolor command
+  # It have no reasons to exist in a redistribuable package
+  postInstall = "rm $out/share/icons/hicolor/icon-theme.cache";
 
   meta = {
     description = "Gnome Diagram drawing software";

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1n3ak0y9hj9kha0r3cdbi8zb47vrgal1jsbblamqgwwwgzy8cri3";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ zlib bzip2 ]
     ++ optionals sdlClient [ SDL SDL_mixer SDL_image SDL_ttf SDL_gfx freetype ]

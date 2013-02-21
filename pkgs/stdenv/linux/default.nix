@@ -7,7 +7,7 @@
 # The function defaults are for easy testing.
 { system ? builtins.currentSystem
 , allPackages ? import ../../top-level/all-packages.nix
-, platform ? null }:
+, platform ? null, config }:
 
 rec {
 
@@ -16,6 +16,7 @@ rec {
     else if system == "x86_64-linux" then import ./bootstrap/x86_64
     else if system == "powerpc-linux" then import ./bootstrap/powerpc
     else if system == "armv5tel-linux" then import ./bootstrap/armv5tel
+    else if system == "armv6l-linux" then import ./bootstrap/armv6l
     else if system == "armv7l-linux" then import ./bootstrap/armv5tel
     else if system == "mips64el-linux" then import ./bootstrap/loongson2f
     else abort "unsupported platform for the pure Linux stdenv";
@@ -32,11 +33,11 @@ rec {
 
   # The bootstrap process proceeds in several steps.
 
-  
+
   # 1) Create a standard environment by downloading pre-built binaries
   # of coreutils, GCC, etc.
 
-  
+
   # This function downloads a file.
   download = {url, sha256}: derivation {
     name = baseNameOf (toString url);
@@ -49,31 +50,31 @@ rec {
     impureEnvVars = [ "http_proxy" "https_proxy" "ftp_proxy" "all_proxy" "no_proxy" ];
   };
 
-  
+
   # Download and unpack the bootstrap tools (coreutils, GCC, Glibc, ...).
   bootstrapTools = derivation {
     name = "bootstrap-tools";
-    
+
     builder = bootstrapFiles.sh;
-    
+
     args =
-      if system == "armv5tel-linux"
+      if (system == "armv5tel-linux" || system == "armv6l-linux")
       then [ ./scripts/unpack-bootstrap-tools-arm.sh ]
       else [ ./scripts/unpack-bootstrap-tools.sh ];
-    
+
     inherit (bootstrapFiles) bzip2 mkdir curl cpio;
-    
+
     tarball = download {
       inherit (bootstrapFiles.bootstrapTools) url sha256;
     };
-    
+
     inherit system;
-    
+
     # Needed by the GCC wrapper.
     langC = true;
     langCC = true;
   };
-  
+
 
   # This function builds the various standard environments used during
   # the bootstrap.
@@ -81,7 +82,7 @@ rec {
     {gcc, extraAttrs ? {}, overrides ? (pkgs: {}), extraPath ? [], fetchurl}:
 
     import ../generic {
-      inherit system;
+      inherit system config;
       name = "stdenv-linux-boot";
       preHook =
         ''
@@ -109,7 +110,7 @@ rec {
     fetchurl = null;
   };
 
-  
+
   fetchurl = import ../../build-support/fetchurl {
     stdenv = stdenvLinuxBoot0;
     curl = bootstrapTools;
@@ -133,7 +134,7 @@ rec {
   # A helper function to call gcc-wrapper.
   wrapGCC =
     {gcc ? bootstrapTools, libc, binutils, coreutils, shell ? "", name ? "bootstrap-gcc-wrapper"}:
-    
+
     import ../../build-support/gcc-wrapper {
       nativeTools = false;
       nativeLibc = false;
@@ -153,7 +154,7 @@ rec {
     };
     inherit fetchurl;
   };
-  
+
 
   # 2) These are the packages that we can build with the first
   #    stdenv.  We only need binutils, because recent Glibcs
@@ -164,7 +165,7 @@ rec {
     bootStdenv = stdenvLinuxBoot1;
   };
 
-  
+
   # 3) 2nd stdenv that we will use to build only the glibc.
   stdenvLinuxBoot2 = stdenvBootFun {
     gcc = wrapGCC {
@@ -186,12 +187,12 @@ rec {
     bootStdenv = stdenvLinuxBoot2;
   };
 
-  
+
   # 5) Build Glibc with the bootstrap tools.  The result is the full,
   #    dynamically linked, final Glibc.
   stdenvLinuxGlibc = stdenvLinuxBoot2Pkgs.glibc;
 
-  
+
   # 6) Construct a third stdenv identical to the 2nd, except that
   #    this one uses the Glibc built in step 3.  It still uses
   #    the recent binutils and rest of the bootstrap tools, including GCC.
@@ -217,14 +218,14 @@ rec {
     inherit fetchurl;
   };
 
-  
+
   # 7) The packages that can be built using the third stdenv.
   stdenvLinuxBoot3Pkgs = allPackages {
     inherit system platform;
     bootStdenv = stdenvLinuxBoot3;
   };
 
-  
+
   # 8) Construct a fourth stdenv identical to the second, except that
   #    this one uses the dynamically linked GCC and Binutils from step
   #    5.  The other tools (e.g. coreutils) are still from the
@@ -240,19 +241,19 @@ rec {
     extraPath = [ stdenvLinuxBoot3Pkgs.xz ];
     overrides = pkgs: {
       inherit (stdenvLinuxBoot1Pkgs) perl;
-      inherit (stdenvLinuxBoot3Pkgs) gettext gnum4 xz gmp;
+      inherit (stdenvLinuxBoot3Pkgs) gettext gnum4 gmp;
     };
     inherit fetchurl;
   };
 
-  
+
   # 9) The packages that can be built using the fourth stdenv.
   stdenvLinuxBoot4Pkgs = allPackages {
     inherit system platform;
     bootStdenv = stdenvLinuxBoot4;
   };
 
-  
+
   # 10) Construct the final stdenv.  It uses the Glibc, GCC and
   #     Binutils built above, and adds in dynamically linked versions
   #     of all other tools.
@@ -261,11 +262,11 @@ rec {
   #     dependency (`nix-store -qR') on bootstrapTools or the
   #     first binutils built.
   stdenvLinux = import ../generic rec {
-    inherit system;
-    
+    inherit system config;
+
     preHook = commonPreHook;
-    
-    initialPath = 
+
+    initialPath =
       ((import ../common-path.nix) {pkgs = stdenvLinuxBoot4Pkgs;})
       ++ [stdenvLinuxBoot4Pkgs.patchelf];
 
@@ -273,18 +274,19 @@ rec {
       inherit (stdenvLinuxBoot3Pkgs) binutils;
       inherit (stdenvLinuxBoot4Pkgs) coreutils;
       libc = stdenvLinuxGlibc;
-      gcc = stdenvLinuxBoot3Pkgs.gcc.gcc;
+      gcc = stdenvLinuxBoot4.gcc.gcc;
       shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
       name = "";
     };
 
     shell = stdenvLinuxBoot4Pkgs.bash + "/bin/bash";
-    
+
     fetchurlBoot = fetchurl;
-    
+
     extraAttrs = {
       inherit (stdenvLinuxBoot3Pkgs) glibc;
-      inherit platform;
+      inherit platform bootstrapTools;
+      shellPackage = stdenvLinuxBoot4Pkgs.bash; 
     };
 
     overrides = pkgs: {

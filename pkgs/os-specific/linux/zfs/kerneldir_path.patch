@@ -1,0 +1,85 @@
+diff --git a/Makefile.am b/Makefile.am
+index 9ffd6be..8e51412 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -34,7 +34,7 @@ distclean-local::
+ if CONFIG_KERNEL
+ install-data-local:
+ 	release=$(ZFS_META_VERSION)-$(ZFS_META_RELEASE); \
+-	instdest=$(DESTDIR)/usr/src/zfs-$$release/$(LINUX_VERSION); \
++	instdest=$(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION); \
+ 	for instfile in $(noinst_HEADERS) module/$(LINUX_SYMBOLS); do \
+ 		$(INSTALL) -D $$instfile $$instdest/$$instfile; \
+ 	done
+diff --git a/include/Makefile.am b/include/Makefile.am
+index 8f9c8d7..5fc44d5 100644
+--- a/include/Makefile.am
++++ b/include/Makefile.am
+@@ -27,6 +27,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/linux/Makefile.am b/include/linux/Makefile.am
+index 6e481a1..1107809 100644
+--- a/include/linux/Makefile.am
++++ b/include/linux/Makefile.am
+@@ -16,6 +16,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/linux
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/sys/Makefile.am b/include/sys/Makefile.am
+index 651e68b..b80bb55 100644
+--- a/include/sys/Makefile.am
++++ b/include/sys/Makefile.am
+@@ -89,6 +89,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/sys/fm/Makefile.am b/include/sys/fm/Makefile.am
+index 900ed93..8d9bed2 100644
+--- a/include/sys/fm/Makefile.am
++++ b/include/sys/fm/Makefile.am
+@@ -16,6 +16,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys/fm
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/sys/fm/fs/Makefile.am b/include/sys/fm/fs/Makefile.am
+index d82d076..b4ae3ee 100644
+--- a/include/sys/fm/fs/Makefile.am
++++ b/include/sys/fm/fs/Makefile.am
+@@ -13,6 +13,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys/fm/fs
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif
+diff --git a/include/sys/fs/Makefile.am b/include/sys/fs/Makefile.am
+index b702679..3c747f4 100644
+--- a/include/sys/fs/Makefile.am
++++ b/include/sys/fs/Makefile.am
+@@ -13,6 +13,6 @@ libzfs_HEADERS = $(COMMON_H) $(USER_H)
+ endif
+ 
+ if CONFIG_KERNEL
+-kerneldir = /usr/src/zfs-$(ZFS_META_VERSION)-$(ZFS_META_RELEASE)/$(LINUX_VERSION)/sys/fs
++kerneldir = $(DESTDIR)/$(libexecdir)/zfs/$(LINUX_VERSION)
+ kernel_HEADERS = $(COMMON_H) $(KERNEL_H)
+ endif

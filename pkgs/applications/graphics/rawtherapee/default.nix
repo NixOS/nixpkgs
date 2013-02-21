@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gtk, cmake, pixman, libpthreadstubs, gtkmm, libXau
-, libXdmcp, lcms2, libiptcdata
+, libXdmcp, lcms2, libiptcdata, expat
 , mercurial  # Not really needed for anything, but it fails if it does not find 'hg'
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
   
   buildInputs = [ pkgconfig gtk cmake pixman libpthreadstubs gtkmm libXau libXdmcp
-    lcms2 libiptcdata mercurial ];
+    lcms2 libiptcdata expat mercurial ];
 
   # Disable the use of the RAWZOR propietary libraries
   cmakeFlags = [ "-DWITH_RAWZOR=OFF" ];

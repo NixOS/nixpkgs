@@ -4,11 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "xmlhtml";
-  version = "0.2.0.2";
-  sha256 = "0dqlqx3cnrqap3ficdkmwm8661j8i7qknb8xhjqvfmnb9pwqdks2";
+  version = "0.2.0.3";
+  sha256 = "03bwsm3dazc01cwndlm92nr35a4fllsxx17rp72d2vnf1571a1vb";
   buildDepends = [
     blazeBuilder blazeHtml blazeMarkup parsec text unorderedContainers
   ];
+  jailbreak = true;
   meta = {
     description = "XML parser and renderer with HTML 5 quirks mode";
     license = self.stdenv.lib.licenses.bsd3;

@@ -14,17 +14,17 @@ assert sslSupport -> aprutil.sslSupport && openssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.2";
+  version = "2.4.3";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha1 = "8d391db515edfb6623c0c7c6ce5c1b2e1f7c64c2";
+    sha256 = "17i4zdcjfvxks0p1fbqvab37kr8d6zscqaqan8pqkw8iq6wh48fq";
   };
 
   buildInputs = [perl] ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
-    optional libxml2Support libxml2;    # there is --with-libxml2, but it doesn't work
+    optional libxml2Support libxml2;
 
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = "-lgcc_s";
@@ -38,9 +38,13 @@ stdenv.mkDerivation rec {
     --disable-debugger-mode
     --enable-mods-shared=all
     --enable-mpms-shared=all
+    --enable-cern-meta
+    --enable-imagemap
+    --enable-cgi
     ${optionalString proxySupport "--enable-proxy"}
     ${optionalString sslSupport "--enable-ssl --with-ssl=${openssl}"}
     ${optionalString luaSupport "--enable-lua --with-lua=${lua5}"}
+    ${optionalString libxml2Support "--with-libxml2=${libxml2}/include/libxml2"}
   '';
 
   postInstall = ''

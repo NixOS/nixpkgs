@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches = [ ./001-mips_removal_h_constraint.patch ./pkgconfig.patch ];
 
-  buildNativeInputs = [ autoconf ];
+  nativeBuildInputs = [ autoconf ];
 
   # The -fforce-mem flag has been removed in GCC 4.3.
   preConfigure = ''

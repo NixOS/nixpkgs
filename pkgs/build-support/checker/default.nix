@@ -8,14 +8,14 @@ with lib;
 
 let 
   findInList = p: list: default:
-       if (list == []) then default else
+       if list == [] then default else
        if (p (head list)) then (head list) else
        findInList p (tail list) default;
   
 
   checkAttrInclusion = s: a: b:
 	(
-	if (! isAttrs b) then s else
+	if ! isAttrs b then s else
 	if (lib.attrByPath ["_type"] "" b) == "option" then "" else
 	findInList (x : x != "") 
 		( map (x: if (x == "servicesProposal") # this attr will be checked at another place ( -> upstart-jobs/default.nix )

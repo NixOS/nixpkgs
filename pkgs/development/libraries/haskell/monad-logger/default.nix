@@ -1,10 +1,15 @@
-{ cabal, fastLogger, resourcet, text, transformers }:
+{ cabal, conduit, fastLogger, monadControl, mtl, resourcet, text
+, transformers, transformersBase
+}:
 
 cabal.mkDerivation (self: {
   pname = "monad-logger";
-  version = "0.2.0";
-  sha256 = "0rsp24lx9gcvayj5d6afq26qrggm9qrjqjpdm7088xbl5k0c71fz";
-  buildDepends = [ fastLogger resourcet text transformers ];
+  version = "0.2.3.2";
+  sha256 = "0b5jfmzmsb7pdawcm5i74sy934q2d78pjs39invas502kx5bxzk5";
+  buildDepends = [
+    conduit fastLogger monadControl mtl resourcet text transformers
+    transformersBase
+  ];
   meta = {
     homepage = "https://github.com/kazu-yamamoto/logger";
     description = "A class of monads which can log messages";

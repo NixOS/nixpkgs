@@ -1,12 +1,14 @@
 { stdenv, fetchurl, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "jfsutils-1.1.12";
+  name = "jfsutils-1.1.15";
 
   src = fetchurl {
     url = "http://jfs.sourceforge.net/project/pub/${name}.tar.gz";
-    sha256 = "04vqdlg90j0mk5jkxpfg9fp6ss4gs1g5pappgns6183q3i6j02hd";
+    sha1 = "291e8bd9d615cf3d27e4000117c81a3602484a50";
   };
+
+  patches = [ ./types.patch ];
 
   buildInputs = [ libuuid ];
 

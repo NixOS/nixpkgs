@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, kdelibs, gettext, pkgconfig }:
+{ stdenv, fetchurl, kdelibs, gettext, pkgconfig, shared_desktop_ontologies, qca2, qoauth }:
 
 stdenv.mkDerivation rec {
-  name = "rekonq-0.9.0-1";
+  name = "rekonq-1.1";
 
   src = fetchurl {
-    url = "mirror://sf/rekonq/${name}.tar.bz2";
-    sha256 = "0vri6wdxxi7qkcjpgvscwa7m3ysy62jns924d07arvy8bmg5whc5";
+    url = "mirror://sourceforge/rekonq/${name}.tar.bz2";
+    sha256 = "1bs733mwyfb7bxnial8n49b82ip04sark2mxwlq7ixxsbgq7972l";
   };
 
-  buildInputs = [ kdelibs ];
+  buildInputs = [ kdelibs qca2 qoauth ];
 
-  buildNativeInputs = [ gettext pkgconfig ];
+  nativeBuildInputs = [ gettext pkgconfig shared_desktop_ontologies ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

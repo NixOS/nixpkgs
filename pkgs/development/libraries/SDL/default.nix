@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, pkgconfig, audiofile
 , openglSupport ? false, mesa ? null
 , alsaSupport ? true, alsaLib ? null
 , x11Support ? true, x11 ? null, libXrandr ? null
@@ -16,25 +16,26 @@ assert pulseaudioSupport -> pulseaudio != null;
 
 let
   configureFlagsFun = attrs: ''
-        --disable-oss
+        --disable-oss --disable-video-x11-xme
         --disable-x11-shared --disable-alsa-shared --enable-rpath --disable-pulseaudio-shared
+        --disable-osmesa-shared
         ${if alsaSupport then "--with-alsa-prefix=${attrs.alsaLib}/lib" else ""}
       '';
 in
 stdenv.mkDerivation rec {
-  name = "SDL-1.2.14";
+  name = "SDL-1.2.15";
 
   src = fetchurl {
     url = "http://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "1dnrxr18cyar0xd13dca7h8wp1fin4n3iyncxfq6pjrlf0l7x4jx";
+    sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedBuildInputs = stdenv.lib.optionals x11Support [ x11 libXrandr ] ++
     stdenv.lib.optional pulseaudioSupport pulseaudio;
 
-  buildInputs = [ pkgconfig ] ++
-    stdenv.lib.optional openglSupport mesa ++
+  buildInputs = [ pkgconfig audiofile ] ++
+    stdenv.lib.optional openglSupport [ mesa ] ++
     stdenv.lib.optional alsaSupport alsaLib;
 
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
   configureFlags = configureFlagsFun { inherit alsaLib; };
 
   crossAttrs = {
-      configureFlags = configureFlagsFun { alsaLib = alsaLib.hostDrv; };
+      configureFlags = configureFlagsFun { alsaLib = alsaLib.crossDrv; };
   };
 
   passthru = {inherit openglSupport;};

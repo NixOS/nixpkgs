@@ -2,10 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "repa-algorithms";
-  version = "3.2.1.1";
-  sha256 = "19gc2vbkqxysnm0argksn8c3cv7vf30hkdycgv8fdfn0yc95xz0v";
+  version = "3.2.3.1";
+  sha256 = "12w76npa52g7zxa0j9w8q9njacm2dn0hcd8a8386p9r6iy6lpjwc";
   buildDepends = [ repa vector ];
   extraLibraries = [ llvm ];
+  jailbreak = true;
   meta = {
     homepage = "http://repa.ouroborus.net";
     description = "Algorithms using the Repa array library";

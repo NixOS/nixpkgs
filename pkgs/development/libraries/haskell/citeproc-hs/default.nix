@@ -1,14 +1,14 @@
-{ cabal, filepath, hsBibutils, HTTP, json, mtl, network
-, pandocTypes, parsec, syb, time, utf8String, xml
+{ cabal, filepath, hexpat, hsBibutils, HTTP, json, mtl, network
+, pandocTypes, parsec, syb, time, utf8String
 }:
 
 cabal.mkDerivation (self: {
   pname = "citeproc-hs";
-  version = "0.3.4";
-  sha256 = "17w6fpmlhbfd8jxxz4s6ybz3dswf0i96fjjbs05ykh4i97rs62nv";
+  version = "0.3.7";
+  sha256 = "0ix9y7z8m8x4l10h96fgv820grywvwcp3019wxjja4y4w6irid3b";
   buildDepends = [
-    filepath hsBibutils HTTP json mtl network pandocTypes parsec syb
-    time utf8String xml
+    filepath hexpat hsBibutils HTTP json mtl network pandocTypes parsec
+    syb time utf8String
   ];
   meta = {
     homepage = "http://gorgias.mine.nu/repos/citeproc-hs/";

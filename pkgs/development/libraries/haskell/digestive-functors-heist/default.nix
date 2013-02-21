@@ -1,10 +1,11 @@
-{ cabal, digestiveFunctors, heist, text, xmlhtml }:
+{ cabal, digestiveFunctors, heist, mtl, text, xmlhtml }:
 
 cabal.mkDerivation (self: {
   pname = "digestive-functors-heist";
-  version = "0.5.0.0";
-  sha256 = "1cqzpnr53mailnmjgkbqk4f4hrjd84h6682mr8x7qg5v27zvcdbn";
-  buildDepends = [ digestiveFunctors heist text xmlhtml ];
+  version = "0.6.0.0";
+  sha256 = "17qndqsk09fvnvyhhw3xbbjjhfyyp4sivc898vqllyyky0wqmrdk";
+  buildDepends = [ digestiveFunctors heist mtl text xmlhtml ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/jaspervdj/digestive-functors";
     description = "Heist frontend for the digestive-functors library";

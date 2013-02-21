@@ -2,7 +2,7 @@
 
 kde {
   buildInputs = [ qt4 ];
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   patches = [ ./smokegen-nix.patch ];
 

@@ -1,4 +1,4 @@
-args @ { stdenv, fetchurl, userModeLinux ? false, extraConfig ? ""
+args @ { stdenv, fetchurl, extraConfig ? ""
 , perl, mktemp, module_init_tools
 , ... }:
 
@@ -230,15 +230,15 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.0.31";
-  
+    version = "3.0.65";
+
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
     '';
 
     src = fetchurl {
-      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.bz2";
-      sha256 = "1b5ix1fc55m6vsr28dh5xi89fphl3m3kmvaniq9div5rj8f6kv0f";
+      url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
+      sha256 = "1vmk0bmg0djwbh9scrhpyljan01ygkwn4q0j1ydn8snag7sn4x8y";
     };
 
     config = configWithPlatform stdenv.platform;
