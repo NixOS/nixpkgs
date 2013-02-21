@@ -1536,6 +1536,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   shelly = callPackage ../development/libraries/haskell/shelly {};
 
+  simpleReflect = callPackage ../development/libraries/haskell/simple-reflect {};
+
   simpleSendfile = callPackage ../development/libraries/haskell/simple-sendfile {};
 
   silently = callPackage ../development/libraries/haskell/silently {};
