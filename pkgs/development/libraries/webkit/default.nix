@@ -9,7 +9,7 @@ rec {
     sha256 = s.hash;
   };
 
-  buildInputs = [gtk glib atk cairo curl fontconfig freetype
+  buildInputs = [gtk gtk2 glib atk cairo curl fontconfig freetype
     gettext libjpeg libpng libtiff libxml2 libxslt pango
     sqlite icu gperf bison flex autoconf automake libtool 
     perl intltool pkgconfig libsoup gtkdoc libXt libproxy
@@ -91,6 +91,6 @@ rec {
     maintainers = [stdenv.lib.maintainers.raskin];
   };
   passthru = {
-    inherit gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg;
+    inherit gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg libsoup;
   };
 }
