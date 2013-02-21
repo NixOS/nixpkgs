@@ -74,6 +74,7 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.mpd ];
       script = "mpd --no-daemon ${mpdConf}";
+      preStart = "mkdir -p ${cfg.dataDir} && chown -R mpd:mpd  ${cfg.dataDir}";
     };
 
     users.extraUsers.mpd = {
