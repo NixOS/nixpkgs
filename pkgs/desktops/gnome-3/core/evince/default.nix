@@ -43,13 +43,7 @@ stdenv.mkDerivation rec {
     # by `g_file_info_get_content_type ()'.
     wrapProgram "$out/bin/evince" \
       --prefix XDG_DATA_DIRS : "${shared_mime_info}/share:$out/share"
-
-    for pkg in "${gsettings_desktop_schemas}" "${gtk3}"; do
-      cp -s $pkg/share/glib-2.0/schemas/*.gschema.xml $out/share/glib-2.0/schemas/
-    done
-    ${glib}/bin/glib-compile-schemas $out/share/glib-2.0/schemas/
-  '';
-
+  '' + gsettings_desktop_schemas.doCompileSchemas;
   doCheck = false; # would need pythonPackages.dogTail, which is missing
 
   meta = {
