@@ -1295,7 +1295,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   networkMulticast = callPackage ../development/libraries/haskell/network-multicast {};
 
-  networkPprotocolXmpp = callPackage ../development/libraries/haskell/network-protocol-xmpp {};
+  networkProtocolXmpp = callPackage ../development/libraries/haskell/network-protocol-xmpp {};
 
   networkTransport = callPackage ../development/libraries/haskell/network-transport {};
 
