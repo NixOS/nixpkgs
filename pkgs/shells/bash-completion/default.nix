@@ -1,15 +1,17 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchgit, autoconf, automake }:
 
-let
-  version = "2.0";
-in
 stdenv.mkDerivation {
-  name = "bash-completion-${version}";
+  name = "bash-completion-2.0-95-gd08b9f2";
 
-  src = fetchurl {
-    url = "http://bash-completion.alioth.debian.org/files/bash-completion-${version}.tar.bz2";
-    sha256 = "e5a490a4301dfb228361bdca2ffca597958e47dd6056005ef9393a5852af5804";
+  src = fetchgit {
+    url = "http://anonscm.debian.org/git/bash-completion/bash-completion.git";
+    rev = "d08b9f233559b3dced20050ba312b08fe0de53b4";
+    sha256 = "0jybaib2bmpk5qd80y1l6wmfcd0b95cmf1l3hcb0ckpj0pjff0bn";
   };
+
+  buildInputs = [ autoconf automake ];
+
+  preConfigure = "autoreconf -i";
 
   doCheck = true;
 
@@ -18,6 +20,7 @@ stdenv.mkDerivation {
     description = "Programmable completion for the bash shell";
     license = "GPL";
 
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }

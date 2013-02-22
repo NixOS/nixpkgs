@@ -1,7 +1,11 @@
 { stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , apacheHttpd, mysql, libxml2, readline, zlib, curl, gd, postgresql, gettext
 , openssl, pkgconfig, sqlite, config, libiconv, libjpeg, libpng, freetype
-, icu }:
+, libxslt, libmcrypt, bzip2, icu }:
+
+let
+  libmcryptOverride = libmcrypt.override { disablePosixThreads = true; };
+in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
@@ -120,6 +124,25 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
         configureFlags = ["--enable-exif"];
       };
 
+      xsl = {
+        configureFlags = ["--with-xsl=${libxslt}"];
+        buildInputs = [libxslt];
+      };
+
+      mcrypt = {
+        configureFlags = ["--with-mcrypt=${libmcrypt}"];
+        buildInputs = [libmcryptOverride];
+      };
+
+      bz2 = {
+        configureFlags = ["--with-bz2=${bzip2}"];
+        buildInputs = [bzip2];
+      };
+
+      zip = {
+        configureFlags = ["--enable-zip"];
+      };
+
       /*
          php is build within this derivation in order to add the xdebug lines to the php.ini.
          So both Apache and command line php both use xdebug without having to configure anything.
@@ -153,6 +176,10 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
     gdSupport = config.php.gd or true;
     intlSupport = config.php.intl or true;
     exifSupport = config.php.exif or true;
+    xslSupport = config.php.xsl or false;
+    mcryptSupport = config.php.mcrypt or false;
+    bz2Support = config.php.bz2 or false;
+    zipSupport = config.php.zip or true;
   };
 
   configurePhase = ''

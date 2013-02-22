@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "errors";
-  version = "1.3.1";
-  sha256 = "0vfpnpkiz362bvjyaf35spfk3h6vw7xi1x3f8agzs7kmxrdvrfik";
+  version = "1.4.1";
+  sha256 = "18npfwr6byh0aib9qxpynr2gf0v92c0xbxky4a733jbdrwli5c40";
   buildDepends = [ either safe transformers ];
   meta = {
     description = "Simplified error-handling";

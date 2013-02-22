@@ -6,7 +6,7 @@ source $mirrorsFile
 # Curl flags to handle redirects, not use EPSV, handle cookies for
 # servers to need them during redirects, and work on SSL without a
 # certificate (this isn't a security problem because we check the
-# cryptographic hash of the output anyway). 
+# cryptographic hash of the output anyway).
 curl="curl \
  --location --max-redirs 20 \
  --retry 3
@@ -29,20 +29,6 @@ tryDownload() {
 
 
 finish() {
-    # On old versions of Nix, verify the hash of the output.  On newer
-    # versions, Nix verifies the hash itself.
-    if test "$NIX_OUTPUT_CHECKED" != "1"; then
-        if test "$outputHashAlgo" != "md5"; then
-            echo "hashes other than md5 are unsupported in Nix <= 0.7, upgrade to Nix 0.8"
-            exit 1
-        fi
-        actual=$(md5sum -b "$out" | cut -c1-32)
-        if test "$actual" != "$id"; then
-            echo "hash is $actual, expected $id"
-            exit 1
-        fi
-    fi
-
     stopNest
     exit 0
 }
@@ -52,10 +38,11 @@ tryHashedMirrors() {
     if test -n "$NIX_HASHED_MIRRORS"; then
         hashedMirrors="$NIX_HASHED_MIRRORS"
     fi
-    
+
     for mirror in $hashedMirrors; do
         url="$mirror/$outputHashAlgo/$outputHash"
-        if $curl --fail --silent --show-error --head "$url" \
+        if $curl --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
+            --fail --silent --show-error --head "$url" \
             --write-out "%{http_code}" --output /dev/null > code 2> log; then
             tryDownload "$url"
             if test -n "$success"; then finish; fi

@@ -148,8 +148,10 @@ let
       NFSD_V3 y
       NFSD_V3_ACL y
       NFSD_V4 y
+      NFS_FSCACHE y
       CIFS_XATTR y
       CIFS_POSIX y
+      CIFS_FSCACHE y
 
       # Security related features.
       STRICT_DEVMEM y # Filter access to /dev/mem
@@ -237,6 +239,9 @@ let
       MEDIA_RC_SUPPORT? y
       MEDIA_USB_SUPPORT y
 
+      # Easier debug of NFS issues
+      SUNRPC_DEBUG y
+
       ${if kernelPlatform ? kernelExtraConfig then kernelPlatform.kernelExtraConfig else ""}
       ${extraConfig}
     '';
@@ -245,7 +250,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.7.3";
+    version = "3.7.6";
     testing = false;
 
     preConfigure = ''
@@ -254,7 +259,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "05421g78kx01ia0pq3d3y3gkrzqb5grfhhy7vy1ixlq8a23kc6b7";
+      sha256 = "0r5njypz4ypcq1g7wpfzscc267k0zm0xh916rk3ypi0vj55k6pdv";
     };
 
     config = configWithPlatform stdenv.platform;

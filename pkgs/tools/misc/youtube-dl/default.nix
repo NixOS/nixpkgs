@@ -26,6 +26,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://rg3.github.com/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
+
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = with stdenv.lib.maintainers; [ bluescreen303 simons ];
   };
 }

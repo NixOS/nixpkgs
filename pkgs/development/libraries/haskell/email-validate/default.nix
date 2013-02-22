@@ -1,10 +1,10 @@
-{ cabal, parsec, ranges }:
+{ cabal, attoparsec }:
 
 cabal.mkDerivation (self: {
   pname = "email-validate";
-  version = "0.3.2";
-  sha256 = "0cshrl0if1ivn7c0ggm21r58pzsyp7l5wk3dgl86n6zla9dwdmhq";
-  buildDepends = [ parsec ranges ];
+  version = "1.0.0";
+  sha256 = "0sj1cvn9ap0m8d4cg4cqavvmkd74vp86lyyra9g6f17815sxdbsg";
+  buildDepends = [ attoparsec ];
   meta = {
     homepage = "http://porg.es/blog/email-address-validation-simpler-faster-more-correct";
     description = "Validating an email address string against RFC 5322";

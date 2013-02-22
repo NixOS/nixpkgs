@@ -1479,7 +1479,7 @@ rec {
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ClassMethodModifiers ConfigAny ContextPreserve DataCompare DataDumperConcise DataPage DBI DevelGlobalDestruction HashMerge ModuleFind Moo MROCompat namespaceclean PathClass ScopeGuard SQLAbstract strictures SubName TryTiny ];
     meta = {
       homepage = http://www.dbix-class.org/;
-      description = "Extensible and flexible object <-> relational mapper.";
+      description = "Extensible and flexible object <-> relational mapper";
       license = "perl";
     };
   };
@@ -2460,12 +2460,16 @@ rec {
   };
 
   IOSocketSSL = buildPerlPackage rec {
-    name = "IO-Socket-SSL-1.77";
+    name = "IO-Socket-SSL-1.81";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/IO/${name}.tar.gz";
-      sha256 = "2a090167a0d13cdefdac7fb25ca49decd5fd925f37d032bca98c73c4856570a9";
+      sha256 = "1vg7jpn7vz3a2j3fxjjkaxiiqg7azqmy7afrpghiqkjcr8b6zs9y";
     };
     propagatedBuildInputs = [ URI NetSSLeay ];
+    meta = {
+      description = "Nearly transparent SSL encapsulation for IO::Socket::INET";
+      license = "perl";
+    };
   };
 
   IOString = buildPerlPackage rec {
@@ -2637,9 +2641,9 @@ rec {
       url = mirror://cpan/authors/id/P/PE/PERIGRIN/JSON-Any-1.29.tar.gz;
       sha256 = "15v2j9dh58r7r4s7rnnmgnzzbyz61bhyxwpx1z7r811ixs9bkks2";
     };
-    buildInputs = [ JSON ];
+    propagatedBuildInputs = [ JSON ];
     meta = {
-      description = "Wrapper Class for the various JSON classes.";
+      description = "Wrapper Class for the various JSON classes";
       license = "perl";
     };
   };
@@ -2651,7 +2655,7 @@ rec {
       sha256 = "1lv9riws9f72gya2fsp5jvbd1fbzyi8423x38a491ryy9cai2ph3";
     };
     meta = {
-      description = "JSON::XS compatible pure-Perl module.";
+      description = "JSON::XS compatible pure-Perl module";
       license = "perl";
     };
   };
@@ -2716,7 +2720,7 @@ rec {
     };
     propagatedBuildInputs = [ HTMLParser HTMLTagset LinguaStem /* MemoizeExpireLRU */ ];
     meta = {
-      description = "Part-of-speech tagger for English natural language processing.";
+      description = "Part-of-speech tagger for English natural language processing";
       license = "gpl_3";
     };
   };
@@ -3524,14 +3528,18 @@ rec {
   };
 
   NetSSLeay = buildPerlPackage rec {
-    name = "Net-SSLeay-1.42";
+    name = "Net-SSLeay-1.52";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Net/${name}.tar.gz";
-      sha256 = "17gxf0d1l0qlxn0d6gqz1dlzl6cdqv0jg47k0h1fcs45rlcpgjmn";
+      sha256 = "1fkpdlpg99rdq2vlm6bgmqc8iazhcrfzvbpwxnn20k0viwpy7v28";
     };
     buildInputs = [ pkgs.openssl ];
     OPENSSL_PREFIX = pkgs.openssl;
     doCheck = false; # Test performs network access.
+    meta = {
+      description = "Perl extension for using OpenSSL";
+      license = "SSLeay";
+    };
   };
 
   NetTwitterLite = buildPerlPackage {

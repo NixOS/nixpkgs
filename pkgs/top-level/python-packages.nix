@@ -251,6 +251,18 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  awscli = buildPythonPackage rec {
+    name = "awscli-0.5.0";
+    namePrefix = "";
+
+    src = fetchurl {
+      url = https://github.com/aws/aws-cli/archive/0.5.0.tar.gz;
+      sha256 = "0smgcisl2p7p2y2i299x7g271kdmgs0hnzngw5030phvh0lq202i";
+    };
+
+    propagatedBuildInputs = [ argparse botocore ];
+
+  };
 
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
@@ -337,6 +349,27 @@ pythonPackages = python.modules // rec {
   };
 
 
+  botocore = buildPythonPackage rec {
+    name = "botocore-0.5.2";
+
+    src = fetchurl {
+      url = https://github.com/boto/botocore/archive/0.5.2.tar.gz;
+      sha256 = "18073mydin0mwk1d7vdlmsiz3rvhjzxkaaqrmxw440acbipnngq2";
+    };
+
+    propagatedBuildInputs = [ dateutil requests014 ];
+
+    meta = {
+      homepage = https://github.com/boto/botocore;
+
+      license = "bsd";
+
+      description = "A low-level interface to a growing number of Amazon Web Services";
+
+    };
+  };
+
+
   # bugz = buildPythonPackage (rec {
   #   name = "bugz-0.9.3";
   #
@@ -364,6 +397,12 @@ pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
       md5 = "4e3b521600e475c56a0a66459a5fc7bb";
     };
+
+   # TODO: consider if this patch should be an option
+   # It makes buildout useful in a nix profile, but this alters the default functionality
+   patchPhase = ''
+     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
+   ''; 
 
    meta = {
       homepage = http://www.buildout.org/;
@@ -576,12 +615,14 @@ pythonPackages = python.modules // rec {
 
 
   dateutil = buildPythonPackage (rec {
-    name = "dateutil-1.5";
+    name = "dateutil-2.1";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
-      sha256 = "02dhw57jf5kjcp7ng1if7vdrbnlpb9yjmz7wygwwvf3gni4766bg";
+      sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
     };
+
+    propagatedBuildInputs = [ six ];
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
@@ -970,6 +1011,20 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  gcovr = buildPythonPackage rec {
+    name = "gcovr-2.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/g/gcovr/${name}.tar.gz";
+      md5 = "672db629469882b93c40016aebff50ac";
+    };
+
+    meta = {
+      description = "A Python script for summarizing gcov data";
+      license = "BSD";
+    };
+  };
+
   genshi = buildPythonPackage {
     name = "genshi-0.6";
 
@@ -1267,11 +1322,11 @@ pythonPackages = python.modules // rec {
   };
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-2.2.2";
+    name = "lxml-3.0.2";
 
     src = fetchurl {
-      url = http://pypi.python.org/packages/source/l/lxml/lxml-2.2.2.tar.gz;
-      sha256 = "0zjpsy67wcs69qhb06ficl3a5z229hmczpr8h84rkk05vaagj8qv";
+      url = "http://pypi.python.org/packages/source/l/lxml/${name}.tar.gz";
+      md5 = "38b15b0dd5e9292cf98be800e84a3ce4";
     };
 
     buildInputs = [ pkgs.libxml2 pkgs.libxslt ];
@@ -1624,6 +1679,8 @@ pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ coverage ];
+
+    doCheck = ! stdenv.isDarwin;
   };
 
   nose2 = if isPy26 then null else (buildPythonPackage rec {
@@ -1939,6 +1996,45 @@ pythonPackages = python.modules // rec {
     # ValueError: Working directory tests not found, or not a directory
     doCheck = false;
   };
+
+
+  pillow = buildPythonPackage rec {
+    name = "Pillow-1.7.8";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/P/Pillow/${name}.zip";
+      md5 = "41d8688d4db72673069a6dc63b5289d6";
+    };
+
+    buildInputs = [ pkgs.freetype pkgs.libjpeg pkgs.unzip pkgs.zlib ];
+
+    configurePhase = ''
+      sed -i "setup.py" \
+          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = _lib_include("${pkgs.freetype}")|g ;
+              s|^JPEG_ROOT =.*$|JPEG_ROOT = _lib_include("${pkgs.libjpeg}")|g ;
+              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = _lib_include("${pkgs.zlib}")|g ;'
+    '';
+
+    doCheck = true;
+
+    meta = {
+      homepage = http://python-imaging.github.com/Pillow;
+
+      description = "Fork of The Python Imaging Library (PIL)";
+
+      longDescription = ''
+        The Python Imaging Library (PIL) adds image processing
+        capabilities to your Python interpreter.  This library
+        supports many file formats, and provides powerful image
+        processing and graphics capabilities.
+      '';
+
+      license = "http://www.pythonware.com/products/pil/license.htm";
+
+      maintainers = [ stdenv.lib.maintainers.goibhniu ];
+    };
+  };
+
 
   polib = buildPythonPackage rec {
     name = "polib-${version}";
@@ -2635,6 +2731,35 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "The ReportLab Toolkit. An Open Source Python library for generating PDFs and graphics.";
       homepage = http://www.reportlab.com/;
+    };
+  };
+
+
+  requests = buildPythonPackage rec {
+    name = "requests-1.1.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
+      md5 = "a0158815af244c32041a3147ee09abf3";
+    };
+
+    meta = {
+      description = "Requests is an Apache2 Licensed HTTP library, written in Python, for human beings..";
+      homepage = http://docs.python-requests.org/en/latest/;
+    };
+  };
+
+  requests014 = buildPythonPackage rec {
+    name = "requests-0.14.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
+      md5 = "3de30600072cbc7214ae342d1d08aa46";
+    };
+
+    meta = {
+      description = "Requests is an Apache2 Licensed HTTP library, written in Python, for human beings..";
+      homepage = http://docs.python-requests.org/en/latest/;
     };
   };
 
