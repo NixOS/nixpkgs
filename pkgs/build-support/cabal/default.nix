@@ -89,7 +89,8 @@
               eval "$preConfigure"
 
               ${lib.optionalString (lib.attrByPath ["jailbreak"] false self) "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal && "
-              }for i in Setup.hs Setup.lhs; do
+              }${lib.optionalString (lib.attrByPath ["doCheck"] false self)  "configureFlags+=\" --enable-test\" && "
+	      }for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
 
@@ -115,7 +116,8 @@
 
               ./Setup build
 
-              export GHC_PACKAGE_PATH=$(ghc-packages)
+              ${lib.optionalString (lib.attrByPath ["doCheck"] false self)  "./Setup test && "
+	      }export GHC_PACKAGE_PATH=$(ghc-packages)
               [ -n "$noHaddock" ] || ./Setup haddock
 
               eval "$postBuild"
