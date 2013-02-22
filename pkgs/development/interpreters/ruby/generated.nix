@@ -31,8 +31,10 @@ g: # Get dependencies from patched gems
     i18n = g.i18n_0_6_1;
     journey = g.journey_1_0_4;
     jruby_pageant = g.jruby_pageant_1_1_1;
+    jsduck = g.jsduck_4_6_1;
     json = g.json_1_7_7;
     json_pure = g.json_pure_1_7_7;
+    libv8 = g.libv8_3_3_10_4_x86_64_linux;
     macaddr = g.macaddr_1_6_1;
     mail = g.mail_2_4_4;
     mime_types = g.mime_types_1_21;
@@ -42,6 +44,7 @@ g: # Get dependencies from patched gems
     net_ssh = g.net_ssh_2_6_5;
     nix = g.nix_0_1_1;
     nokogiri = g.nokogiri_1_5_6;
+    parallel = g.parallel_0_6_2;
     polyglot = g.polyglot_0_3_3;
     rack = g.rack_1_5_2;
     rack_cache = g.rack_cache_1_2;
@@ -52,6 +55,7 @@ g: # Get dependencies from patched gems
     railties = g.railties_3_2_12;
     rake = g.rake_10_0_3;
     rb_fsevent = g.rb_fsevent_0_9_3;
+    rdiscount = g.rdiscount_2_0_7;
     rdoc = g.rdoc_3_12_1;
     rjb = g.rjb_1_4_6;
     rspec = g.rspec_2_11_0;
@@ -65,6 +69,7 @@ g: # Get dependencies from patched gems
     sinatra = g.sinatra_1_3_2;
     sprockets = g.sprockets_2_2_2;
     systemu = g.systemu_2_5_2;
+    therubyracer = g.therubyracer_0_10_2;
     thin = g.thin_1_5_0;
     thor = g.thor_0_17_0;
     tilt = g.tilt_1_3_3;
@@ -75,7 +80,7 @@ g: # Get dependencies from patched gems
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''buildr'' ''fakes3'' ''foreman'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
   gems = {
     ZenTest_4_9_0 = {
       basename = ''ZenTest'';
@@ -513,6 +518,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [  ];
       sha256 = ''1kgqsn0bagr41gf5kbqaxbs38a7s5bm85m0pdx4qz7d70v9nc9cl'';
     };
+    jsduck_4_6_1 = {
+      basename = ''jsduck'';
+      meta = {
+        description = ''Simple JavaScript Duckumentation generator'';
+        homepage = ''https://github.com/senchalabs/jsduck'';
+        longDescription = ''Documentation generator for Sencha JS frameworks'';
+      };
+      name = ''jsduck-4.6.1'';
+      requiredGems = [ g.rdiscount_2_0_7 g.json_1_7_7 g.parallel_0_6_2 g.therubyracer_0_10_2 ];
+      sha256 = ''01bws3jfsym531znwsd6qjaymf1mrsss1bj8csvj3vhnv728qbyh'';
+    };
     json_1_7_7 = {
       basename = ''json'';
       meta = {
@@ -545,6 +561,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       name = ''json_pure-1.7.7'';
       requiredGems = [  ];
       sha256 = ''0jxp0amx9xhka0ixnhvfgwc5ydr82hkxp81pvw32z31arx7jrwl6'';
+    };
+    libv8_3_3_10_4_x86_64_linux = {
+      basename = ''libv8'';
+      meta = {
+        description = ''Distribution of the V8 JavaScript engine'';
+        homepage = ''http://github.com/fractaloop/libv8'';
+        longDescription = ''Distributes the V8 JavaScript engine in binary and source forms in order to support fast builds of The Ruby Racer'';
+      };
+      name = ''libv8-3.3.10.4-x86_64-linux'';
+      requiredGems = [  ];
+      sha256 = ''13lnmkm9z3xqyi8rlsycfd7wybv044pxcisrkyq0cx7ig91a0dmc'';
     };
     macaddr_1_6_1 = {
       basename = ''macaddr'';
@@ -680,6 +707,16 @@ enough of it.'';
       name = ''nokogiri-1.5.6'';
       requiredGems = [  ];
       sha256 = ''1235h8k242f6yi5qgb8rfcx6gp7g99djwqgrz0vb6w12pbp9kar8'';
+    };
+    parallel_0_6_2 = {
+      basename = ''parallel'';
+      meta = {
+        description = ''Run any kind of code in parallel processes'';
+        homepage = ''http://github.com/grosser/parallel'';
+      };
+      name = ''parallel-0.6.2'';
+      requiredGems = [  ];
+      sha256 = ''05rdbb1jqv0179wjfj74a1739rsqv7ijf4jp1i5s6lzh878c6l6p'';
     };
     polyglot_0_3_3 = {
       basename = ''polyglot'';
@@ -844,6 +881,16 @@ request helpers feature.'';
       name = ''rb-fsevent-0.9.3'';
       requiredGems = [  ];
       sha256 = ''0bdnxwdxj4r1kdxfi5nszbsb126njrr81p912g64xxs2bgxd1bp1'';
+    };
+    rdiscount_2_0_7 = {
+      basename = ''rdiscount'';
+      meta = {
+        description = ''Fast Implementation of Gruber's Markdown in C'';
+        homepage = ''http://github.com/rtomayko/rdiscount'';
+      };
+      name = ''rdiscount-2.0.7'';
+      requiredGems = [  ];
+      sha256 = ''1cj9dn59xqjaglvzvd1ninid62xmih74az0glqqb90n2p42s2zs1'';
     };
     rdoc_3_12_1 = {
       basename = ''rdoc'';
@@ -1014,6 +1061,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''systemu-2.5.2'';
       requiredGems = [  ];
       sha256 = ''0h834ajdg9w4xrijp31fn98pjfj08gi08xjvp5xh3i6hz9a25fhr'';
+    };
+    therubyracer_0_10_2 = {
+      basename = ''therubyracer'';
+      meta = {
+        description = ''Embed the V8 Javascript interpreter into Ruby'';
+        homepage = ''http://github.com/cowboyd/therubyracer'';
+        longDescription = ''Call javascript code and manipulate javascript objects from ruby. Call ruby code and manipulate ruby objects from javascript.'';
+      };
+      name = ''therubyracer-0.10.2'';
+      requiredGems = [ g.libv8_3_3_10_4_x86_64_linux ];
+      sha256 = ''111hm2l613v06sy7pzjzmnyi4x11rg3c2syhnpv8fn0wnn9rdiyb'';
     };
     thin_1_5_0 = {
       basename = ''thin'';
