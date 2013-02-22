@@ -13,17 +13,17 @@ g: # Get dependencies from patched gems
     arel = g.arel_3_0_2;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_4;
     autotest_rails = g.autotest_rails_4_1_2;
-    aws_sdk = g.aws_sdk_1_8_1_2;
+    aws_sdk = g.aws_sdk_1_8_3;
     builder = g.builder_3_1_4;
-    buildr = g.buildr_1_4_9;
-    bundler = g.bundler_1_2_3;
+    buildr = g.buildr_1_4_10;
+    bundler = g.bundler_1_2_4;
     childprocess = g.childprocess_0_3_8;
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_1_3;
     erubis = g.erubis_2_7_0;
     eventmachine = g.eventmachine_1_0_0;
     fakes3 = g.fakes3_0_1_5;
-    ffi = g.ffi_1_3_1;
+    ffi = g.ffi_1_4_0;
     foreman = g.foreman_0_61_0;
     highline = g.highline_1_6_2;
     hike = g.hike_1_2_1;
@@ -37,7 +37,7 @@ g: # Get dependencies from patched gems
     mail = g.mail_2_4_4;
     mime_types = g.mime_types_1_21;
     minitar = g.minitar_0_5_3;
-    multi_json = g.multi_json_1_5_1;
+    multi_json = g.multi_json_1_6_1;
     net_sftp = g.net_sftp_2_0_5;
     net_ssh = g.net_ssh_2_6_5;
     nix = g.nix_0_1_1;
@@ -61,7 +61,7 @@ g: # Get dependencies from patched gems
     rubyforge = g.rubyforge_2_0_4;
     rubyzip = g.rubyzip_0_9_9;
     sass = g.sass_3_2_5;
-    selenium_webdriver = g.selenium_webdriver_2_29_0;
+    selenium_webdriver = g.selenium_webdriver_2_30_0;
     sinatra = g.sinatra_1_3_2;
     sprockets = g.sprockets_2_2_2;
     systemu = g.systemu_2_5_2;
@@ -70,7 +70,7 @@ g: # Get dependencies from patched gems
     tilt = g.tilt_1_3_3;
     treetop = g.treetop_1_4_12;
     tzinfo = g.tzinfo_0_3_35;
-    uuid = g.uuid_2_3_6;
+    uuid = g.uuid_2_3_7;
     uuidtools = g.uuidtools_2_1_3;
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
@@ -171,7 +171,7 @@ installed versions.'';
         longDescription = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.'';
       };
       name = ''activesupport-3.2.12'';
-      requiredGems = [ g.i18n_0_6_1 g.multi_json_1_5_1 ];
+      requiredGems = [ g.i18n_0_6_1 g.multi_json_1_6_1 ];
       sha256 = ''1giqkprxjf5gyfyhn5nz9q8a5gi3v8irxhkpqr00zc5fw1azllsg'';
     };
     arel_3_0_2 = {
@@ -226,16 +226,16 @@ rails support and extra plugins for migrations and fixtures.'';
       requiredGems = [ g.ZenTest_4_9_0 ];
       sha256 = ''1wkb5jayb39yx0i8ly7sibygf9f9c3w24jg2z1qgm135zlb070v4'';
     };
-    aws_sdk_1_8_1_2 = {
+    aws_sdk_1_8_3 = {
       basename = ''aws_sdk'';
       meta = {
         description = ''AWS SDK for Ruby'';
         homepage = ''http://aws.amazon.com/sdkforruby'';
         longDescription = ''AWS SDK for Ruby'';
       };
-      name = ''aws-sdk-1.8.1.2'';
+      name = ''aws-sdk-1.8.3'';
       requiredGems = [ g.uuidtools_2_1_3 g.nokogiri_1_5_6 g.json_1_7_7 ];
-      sha256 = ''0z3ins8rd8v3r40sn70kg21f5di58lqjfxppl19hi3pdjxgdrr7x'';
+      sha256 = ''0ggvwiya4swyjyswfgwhzw09hap2slz7djp0svq22y7j0xci1axy'';
     };
     builder_3_0_4 = {
       basename = ''builder'';
@@ -285,7 +285,7 @@ simple to do.  Currently the following builder objects are supported:
       requiredGems = [  ];
       sha256 = ''1p0bjy1vb0zbswd6bsh5qda0f0br53p8vak8cm7hls62094r405p'';
     };
-    buildr_1_4_9 = {
+    buildr_1_4_10 = {
       basename = ''buildr'';
       meta = {
         description = ''Build like you code'';
@@ -297,20 +297,20 @@ to do, and it takes care of the rest.  But also something we can easily extend
 for those one-off tasks, with a language that's a joy to use.
 '';
       };
-      name = ''buildr-1.4.9'';
-      requiredGems = [ g.rake_0_9_2_2 g.builder_3_1_3 g.net_ssh_2_6_0 g.net_sftp_2_0_5 g.rubyzip_0_9_9 g.highline_1_6_2 g.json_pure_1_7_5 g.rubyforge_2_0_4 g.hoe_3_1_0 g.rjb_1_4_2 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_1_3 g.rspec_expectations_2_11_3 g.rspec_mocks_2_11_3 g.rspec_core_2_11_1 g.rspec_2_11_0 g.xml_simple_1_1_1 g.minitar_0_5_3 ];
-      sha256 = ''1ws8cdc7ylfq0aqbcmgwj3d8jxh8lp8zgxx0w0a7ippvvjjxb7az'';
+      name = ''buildr-1.4.10'';
+      requiredGems = [ g.rake_0_9_2_2 g.builder_3_1_3 g.net_ssh_2_6_0 g.net_sftp_2_0_5 g.rubyzip_0_9_9 g.highline_1_6_2 g.json_pure_1_7_5 g.rubyforge_2_0_4 g.hoe_3_1_0 g.rjb_1_4_2 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_1_3 g.rspec_expectations_2_11_3 g.rspec_mocks_2_11_3 g.rspec_core_2_11_1 g.rspec_2_11_0 g.xml_simple_1_1_1 g.minitar_0_5_3 g.bundler_1_2_4 ];
+      sha256 = ''1x192r8ab5zr9rlp1i9b3pi3y74f9pj2w491wkgshgwj22akh6vn'';
     };
-    bundler_1_2_3 = {
+    bundler_1_2_4 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://gembundler.com'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.2.3'';
+      name = ''bundler-1.2.4'';
       requiredGems = [  ];
-      sha256 = ''0bf6ync0901d9q4cg5ws4ra0qh9ssw2xgsip8dka34sbm59kav4w'';
+      sha256 = ''0p90abn29wvg6ic1230f4dj7zs55r9r772b0xq02fwqd0ry3pdgl'';
     };
     childprocess_0_3_8 = {
       basename = ''childprocess'';
@@ -320,7 +320,7 @@ for those one-off tasks, with a language that's a joy to use.
         longDescription = ''This gem aims at being a simple and reliable solution for controlling external programs running in the background on any Ruby / OS combination.'';
       };
       name = ''childprocess-0.3.8'';
-      requiredGems = [ g.ffi_1_3_1 ];
+      requiredGems = [ g.ffi_1_4_0 ];
       sha256 = ''08rp4krw0g60567ih4w51ndlq2pg92al0dycy0bs0m3msq68nlq4'';
     };
     daemons_1_1_9 = {
@@ -412,16 +412,16 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [ g.thor_0_17_0 g.builder_3_1_4 ];
       sha256 = ''1na5wrbarla6s414svqmr5spbpv6vmcgpswal444x4clcpmadhib'';
     };
-    ffi_1_3_1 = {
+    ffi_1_4_0 = {
       basename = ''ffi'';
       meta = {
         description = ''Ruby FFI'';
         homepage = ''http://wiki.github.com/ffi/ffi'';
         longDescription = ''Ruby FFI library'';
       };
-      name = ''ffi-1.3.1'';
+      name = ''ffi-1.4.0'';
       requiredGems = [  ];
-      sha256 = ''0hbrfwgaw3ilmb47lvg9gzdnnfs0q0dzp6dki7rphcvsgirhp0sb'';
+      sha256 = ''06a29qvg487yk9pyi7wzyj5700mf7s3mjdqc6dsrh0467mjj9768'';
     };
     foreman_0_61_0 = {
       basename = ''foreman'';
@@ -611,16 +611,16 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
       requiredGems = [  ];
       sha256 = ''035vs1knnnjsb8arfp8vx75warvwcdpiljjwv38lqljai9v8fq53'';
     };
-    multi_json_1_5_1 = {
+    multi_json_1_6_1 = {
       basename = ''multi_json'';
       meta = {
         description = ''A gem to provide swappable JSON backends.'';
         homepage = ''http://github.com/intridea/multi_json'';
         longDescription = ''A gem to provide easy switching between different JSON backends, including Oj, Yajl, the JSON gem (with C-extensions), the pure-Ruby JSON gem, and OkJson.'';
       };
-      name = ''multi_json-1.5.1'';
+      name = ''multi_json-1.6.1'';
       requiredGems = [  ];
-      sha256 = ''0c2jxjg6lx811515s35vnyjl9m9rsb2adw6yj2fxgqkc7yx1fjsz'';
+      sha256 = ''0p33swcl9i97wvv0cq9jkdl8q7xbc3j07apy35vsgldnhw99krcg'';
     };
     net_sftp_2_0_5 = {
       basename = ''net_sftp'';
@@ -787,7 +787,7 @@ request helpers feature.'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
       name = ''rails-3.2.12'';
-      requiredGems = [ g.activesupport_3_2_12 g.actionpack_3_2_12 g.activerecord_3_2_12 g.activeresource_3_2_12 g.actionmailer_3_2_12 g.railties_3_2_12 g.bundler_1_2_3 ];
+      requiredGems = [ g.activesupport_3_2_12 g.actionpack_3_2_12 g.activerecord_3_2_12 g.activeresource_3_2_12 g.actionmailer_3_2_12 g.railties_3_2_12 g.bundler_1_2_4 ];
       sha256 = ''1jjnm74nzl5v3461c0mrbpa471yd6s8hnkmnxb64c2rm95c61wxz'';
     };
     railties_3_2_12 = {
@@ -971,16 +971,16 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [  ];
       sha256 = ''1ys7pfadw61dm09yyk28zrssi8zsyj99fyq6bdf2xmi8yp1avs6k'';
     };
-    selenium_webdriver_2_29_0 = {
+    selenium_webdriver_2_30_0 = {
       basename = ''selenium_webdriver'';
       meta = {
         description = ''The next generation developer focused tool for automated testing of webapps'';
         homepage = ''http://selenium.googlecode.com'';
         longDescription = ''WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.'';
       };
-      name = ''selenium-webdriver-2.29.0'';
-      requiredGems = [ g.multi_json_1_5_1 g.rubyzip_0_9_9 g.childprocess_0_3_8 g.websocket_1_0_7 ];
-      sha256 = ''0c5fybp19mawq07h59b16h736pz8sz017m1pwalb6mcyliqmlwcj'';
+      name = ''selenium-webdriver-2.30.0'';
+      requiredGems = [ g.multi_json_1_6_1 g.rubyzip_0_9_9 g.childprocess_0_3_8 g.websocket_1_0_7 ];
+      sha256 = ''1ybx8v9m5y8ykbdbldd1mglz0xhg30iv0708ig0vzjl2522sg6v1'';
     };
     sinatra_1_3_2 = {
       basename = ''sinatra'';
@@ -1001,7 +1001,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''Sprockets is a Rack-based asset packaging system that concatenates and serves JavaScript, CoffeeScript, CSS, LESS, Sass, and SCSS.'';
       };
       name = ''sprockets-2.2.2'';
-      requiredGems = [ g.hike_1_2_1 g.multi_json_1_5_1 g.rack_1_5_2 g.tilt_1_3_3 ];
+      requiredGems = [ g.hike_1_2_1 g.multi_json_1_6_1 g.rack_1_5_2 g.tilt_1_3_3 ];
       sha256 = ''15ngw3bjbyr31ygzmmdxxa30ylah6pdn8akgdy9w30vfx2vr7s7s'';
     };
     systemu_2_5_2 = {
@@ -1069,7 +1069,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [  ];
       sha256 = ''1c52ndjqcxpgxhlclbxf98clcpni216xk5zgrkcd4px84riyjbmp'';
     };
-    uuid_2_3_6 = {
+    uuid_2_3_7 = {
       basename = ''uuid'';
       meta = {
         description = ''UUID generator'';
@@ -1078,9 +1078,9 @@ See RDoc for a description of RDoc's markup and basic use.'';
 (http://www.ietf.org/rfc/rfc4122.txt).
 '';
       };
-      name = ''uuid-2.3.6'';
+      name = ''uuid-2.3.7'';
       requiredGems = [ g.macaddr_1_6_1 ];
-      sha256 = ''194xznnxncfgr0nx84l11gnafvkfzr1nj1swnwas75q0ld0ri2l8'';
+      sha256 = ''04q10an3v40zwjihvdwm23fw6vl39fbkhdiwfw78a51ym9airnlp'';
     };
     uuidtools_2_1_3 = {
       basename = ''uuidtools'';
