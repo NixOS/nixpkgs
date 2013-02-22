@@ -3636,8 +3636,6 @@ let
 
   gav = callPackage ../games/gav { };
 
-  GConf3 = callPackage ../development/libraries/GConf/3.x.nix { };
-
   gdome2 = callPackage ../development/libraries/gdome2 {
     inherit (gnome) gtkdoc;
   };
@@ -3866,13 +3864,13 @@ let
 
   glib = callPackage ../development/libraries/glib { };
 
-  glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
+  glibmm = callPackage ../development/libraries/glibmm { };
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
   atk = callPackage ../development/libraries/atk { };
 
-  atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
+  atkmm = callPackage ../development/libraries/atkmm { };
 
   cairo = callPackage ../development/libraries/cairo {
     pixman = pixman_cairo; # it's recommended to be in sync
@@ -3888,13 +3886,13 @@ let
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix { };
-
+  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3-default.nix {
+    inherit (gnome3) at_spi2_atk;
+  });
   gtk = pkgs.gtk2;
 
-  gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
-  gtkmm3 = callPackage ../development/libraries/gtkmm/3.2.x.nix { };
-
-  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
+  gtkmm = callPackage ../development/libraries/gtkmm/2.x.nix { };
+  gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     gtksharp = gtksharp2;
@@ -4076,7 +4074,7 @@ let
 
   libcm = callPackage ../development/libraries/libcm { };
 
-  libcroco = callPackage ../development/libraries/libcroco {};
+  inherit (gnome3) libcroco;
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
@@ -4146,11 +4144,9 @@ let
   libgig = callPackage ../development/libraries/libgig { };
 
   libgnome_keyring = callPackage ../development/libraries/libgnome-keyring { };
-  libgnome_keyring3 = callPackage ../development/libraries/libgnome-keyring/3.x.nix { };
+  libgnome_keyring3 = gnome3.libgnome_keyring;
 
   libgtop = callPackage ../development/libraries/libgtop {};
-
-  libgweather = callPackage ../development/libraries/libgweather {};
 
   liblo = callPackage ../development/libraries/liblo { };
 
@@ -4242,9 +4238,7 @@ let
 
   libspectre = callPackage ../development/libraries/libspectre { };
 
-  libgsf = callPackage ../development/libraries/libgsf {
-    inherit (gnome) gnome_vfs libbonobo;
-  };
+  libgsf = callPackage ../development/libraries/libgsf { };
 
   libiconv = callPackage ../development/libraries/libiconv { };
 
@@ -4372,7 +4366,9 @@ let
 
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
-  librsvg = callPackage ../development/libraries/librsvg { };
+  librsvg = callPackage ../development/libraries/librsvg {
+    gtk2 = null; gtk3 = null; # neither gtk version by default
+  };
 
   librsync = callPackage ../development/libraries/librsync { };
 
@@ -6425,7 +6421,7 @@ let
 
   gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
 
-  gsettings_desktop_schemas = callPackage ../data/misc/gsettings-desktop-schemas {};
+  inherit (gnome3) gsettings_desktop_schemas;
 
   hicolor_icon_theme = callPackage ../data/misc/hicolor-icon-theme { };
 
@@ -6896,14 +6892,7 @@ let
 
   keepassx = callPackage ../applications/misc/keepassx { };
 
-  # FIXME: Evince and other GNOME/GTK+ apps (e.g., Viking) provide
-  # `share/icons/hicolor/icon-theme.cache'.  Arbitrarily give this one a
-  # higher priority.
-  evince = hiPrio (callPackage ../applications/misc/evince {
-    inherit (gnome) gnomedocutils gnomeicontheme libgnome
-      libgnomeui libglade scrollkeeper;
-    poppler = poppler_0_18;
-  });
+  inherit (gnome3) evince;
 
   evolution_data_server = newScope (gnome) ../servers/evolution-data-server { };
 
@@ -8363,6 +8352,11 @@ let
   }  // pkgs.gtkLibs // {
     # Backwards compatibility;
     inherit (pkgs) libsoup libwnck gtk_doc gnome_doc_utils;
+  };
+
+  gnome3 = callPackage ../desktops/gnome-3 {
+    callPackage = pkgs.newScope pkgs.gnome3;
+    self = pkgs.gnome3;
   };
 
   gnome = recurseIntoAttrs gnome2;
