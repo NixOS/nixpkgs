@@ -1,10 +1,10 @@
 {stdenv, fetchurl, sqlite, zlib, acl, ncurses, openssl, readline}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "bacula-5.2.13";
 
   src = fetchurl {
-    url = mirror://sourceforge/bacula/bacula-5.2.13.tar.gz;
+    url = "mirror://sourceforge/bacula/${name}.tar.gz";
     sha256 = "1n3sc0kd7r0afpyi708y3md0a24rbldnfcdz0syqj600pxcd9gm4";
   };
 
