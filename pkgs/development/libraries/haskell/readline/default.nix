@@ -1,9 +1,9 @@
-{ cabal, readline, ncurses } :
+{ cabal, readline, ncurses }:
 
-cabal.mkDerivation (self : {
+cabal.mkDerivation (self: {
   pname = "readline";
-  version = "1.0.1.0";
-  sha256 = "07f2f039f32bf18838a4875d0f3caa3ed9436dd52b962b2061f0bb8a3316fa1d";
+  version = "1.0.3.0";
+  sha256 = "1sszlx34qa88fad3wlhd4rkb1my1nrpzvyd8vq7dn806j5sf3ff0";
   propagatedBuildInputs = [ readline ncurses ];
   # experimentally link with ncursesw because ghci can't interpret ld scripts,
   # and ncurses sometimes seems to be a script pointing to ncursesw
@@ -14,8 +14,6 @@ cabal.mkDerivation (self : {
     description = "An interface to the GNU readline library";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

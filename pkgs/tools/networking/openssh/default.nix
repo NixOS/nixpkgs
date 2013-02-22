@@ -6,8 +6,8 @@
 let
 
   hpnSrc = fetchurl {
-    url = http://www.psc.edu/networking/projects/hpn-ssh/openssh-5.9p1-hpn13v12.diff.gz;
-    sha256 = "0h1h45vic4zks5bc5mvkc50rlgy2c219vn3rmpmalgm5hws9qjbl";
+    url = http://nixos.org/tarballs/openssh-6.1p1-hpn13v14.diff.gz;
+    sha256 = "14das6lim6fxxnx887ssw76ywsbvx3s4q3n43afgh5rgvs4xmnnq";
   };
 
 in
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       gunzip -c ${hpnSrc} | patch -p1
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
-    
+
   patches = [ ./locale_archive.patch ];
 
   buildNativeInptus = [ perl ];

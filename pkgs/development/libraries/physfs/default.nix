@@ -1,11 +1,11 @@
 {stdenv, fetchurl, cmake}:
 
 stdenv.mkDerivation rec {
-  name = "physfs-2.0.2";
+  name = "physfs-2.0.3";
 
   src = fetchurl {
-    url = "${meta.homepage}/downloads/${name}.tar.gz";
-    sha256 = "02dwy0vsn2dp31f15vxd3yxxr1rgy25ab7ncavyh73i290qnsadf";
+    url = "${meta.homepage}/downloads/${name}.tar.bz2";
+    sha256 = "0sbbyqzqhyf0g68fcvvv20n3928j0x6ik1njmhn1yigvq2bj11na";
   };
 
   buildNativeInputs = [ cmake ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://icculus.org/physfs/;
+    homepage = "http://icculus.org/physfs/";
     description = "Library to provide abstract access to various archives";
     license = "free";
   };

@@ -20,6 +20,7 @@
   garbas = "Rok Garbas <rok@garbas.si>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
   guibert = "David Guibert <david.guibert@gmail.com>";
+  iElectric = "Domen Kozar <domen@dev.si>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   ludo = "Ludovic Courtès <ludo@gnu.org>";

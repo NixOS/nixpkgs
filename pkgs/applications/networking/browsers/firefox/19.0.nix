@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gtk, pango, perl, python, zip, libIDL
 , libjpeg, libpng, zlib, cairo, dbus, dbus_glib, bzip2, xlibs
-, freetype, fontconfig, file, alsaLib, nspr, nss, libnotify
+, freetype, fontconfig, file, alsaLib, nspr, libnotify
 , yasm, mesa, sqlite, unzip, makeWrapper, pysqlite
 
 , # If you want the resulting program to call itself "Firefox" instead
@@ -15,9 +15,9 @@ assert stdenv.gcc ? libc && stdenv.gcc.libc != null;
 
 rec {
 
-  firefoxVersion = "18.0.2";
+  firefoxVersion = "19.0";
 
-  xulVersion = "18.0.2"; # this attribute is used by other packages
+  xulVersion = "19.0"; # this attribute is used by other packages
 
 
   src = fetchurl {
@@ -27,7 +27,7 @@ rec {
         # Fall back to this url for versions not available at releases.mozilla.org.
         "ftp://ftp.mozilla.org/pub/mozilla.org/firefox/releases/${firefoxVersion}/source/firefox-${firefoxVersion}.source.tar.bz2"
     ];
-    sha1 = "fe5810d61edf6f4dc8bc477a08f9483b955f747b";
+    sha1 = "816d64e8c9432349cd208fd181d210c54f985351";
   };
 
   commonConfigureFlags =
@@ -60,7 +60,7 @@ rec {
       [ pkgconfig gtk perl zip libIDL libjpeg libpng zlib cairo bzip2
         python dbus dbus_glib pango freetype fontconfig xlibs.libXi
         xlibs.libX11 xlibs.libXrender xlibs.libXft xlibs.libXt file
-        alsaLib nspr nss libnotify xlibs.pixman yasm mesa
+        alsaLib nspr libnotify xlibs.pixman yasm mesa
         xlibs.libXScrnSaver xlibs.scrnsaverproto pysqlite
         xlibs.libXext xlibs.xextproto sqlite unzip makeWrapper
       ];
@@ -125,7 +125,7 @@ rec {
 
     buildInputs =
       [ pkgconfig gtk perl zip libIDL libjpeg zlib cairo bzip2 python
-        dbus dbus_glib pango freetype fontconfig alsaLib nspr nss libnotify
+        dbus dbus_glib pango freetype fontconfig alsaLib nspr libnotify
         xlibs.pixman yasm mesa sqlite file unzip pysqlite
       ];
 

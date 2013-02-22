@@ -1,13 +1,14 @@
-{ cabal, attoparsec, blazeBuilder, blazeBuilderConduit, conduit
-, text
+{ cabal, attoparsec, attoparsecConduit, blazeBuilder
+, blazeBuilderConduit, caseInsensitive, conduit, text, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "tagstream-conduit";
-  version = "0.5.3";
-  sha256 = "08g34dbb59mrpj0lym5a0zlygvj7in57nkhbk84kxvggrhl0jndl";
+  version = "0.5.4";
+  sha256 = "1djf66kn3m4sdwmis82f9w2nkmjyrq12zda7ic9pcsvra579868i";
   buildDepends = [
-    attoparsec blazeBuilder blazeBuilderConduit conduit text
+    attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
+    caseInsensitive conduit text transformers
   ];
   meta = {
     homepage = "http://github.com/yihuang/tagstream-conduit";

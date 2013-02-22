@@ -1,10 +1,10 @@
-{ cabal, QuickCheck, random, smallcheck, syb }:
+{ cabal, QuickCheck, random, simpleReflect, smallcheck, syb }:
 
 cabal.mkDerivation (self: {
   pname = "show";
-  version = "0.4.1.2";
-  sha256 = "1qaphxjaxng7d0kcn3vvxbvqljzzs1hvmsrdsm3pbi19qlsavd5w";
-  buildDepends = [ QuickCheck random smallcheck syb ];
+  version = "0.5";
+  sha256 = "1s9nwhbc1935359r76glirg858c1sg8nfvv0bzzrncrgf0gxcl4f";
+  buildDepends = [ QuickCheck random simpleReflect smallcheck syb ];
   meta = {
     description = "'Show' instances for Lambdabot";
     license = "GPL";

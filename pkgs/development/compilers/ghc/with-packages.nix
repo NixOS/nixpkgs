@@ -64,6 +64,13 @@ stdenv.mkDerivation rec {
           ln -s $f $out/etc/bash_completion.d/
           echo -n .
         done
+	for s in 1 2 3 4 5 6 7 8 9; do
+	  for f in "$currentPath/share/man/man$s/"*; do
+	    mkdir -p $out/share/man/man$s
+            ln -sv $f $out/share/man/man$s/
+            echo -n .
+	  done
+       done
         for f in "$currentPkgDir/"*.conf; do
           ln -s $f $linkedPkgDir
           echo -n .

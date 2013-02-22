@@ -71,11 +71,13 @@ let
 
       # Wireless networking.
       IPW2100_MONITOR y # support promiscuous mode
-      IPW2200_MONITOR y # support promiscuous mode
+      IPW2200_MONITOR? y # support promiscuous mode
       HOSTAP_FIRMWARE y # Support downloading firmware images with Host AP driver
       HOSTAP_FIRMWARE_NVRAM y
       ATH9K_PCI y # Detect Atheros AR9xxx cards on PCI(e) bus
       ATH9K_AHB y # Ditto, AHB bus
+      B43_PHY_HT y
+      BCMA_HOST_PCI y
 
       # Some settings to make sure that fbcondecor works - in particular,
       # disable tileblitting and the drivers that need it.
@@ -140,7 +142,7 @@ let
       XFS_RT y # XFS Realtime subvolume support
       OCFS2_DEBUG_MASKLOG n
       BTRFS_FS_POSIX_ACL y
-      UBIFS_FS_XATTR y
+      UBIFS_FS_XATTR? y
       UBIFS_FS_ADVANCED_COMPR y
       NFSD_V2_ACL y
       NFSD_V3 y
@@ -173,7 +175,7 @@ let
       BT_RFCOMM_TTY y # RFCOMM TTY support
       CRASH_DUMP n
       DMAR? n # experimental
-      DVB_DYNAMIC_MINORS y # we use udev
+      DVB_DYNAMIC_MINORS? y # we use udev
       EFI_STUB y # EFI bootloader in the bzImage itself
       FUSION y # Fusion MPT device support
       IDE_GD_ATAPI y # ATAPI floppy support
@@ -186,7 +188,7 @@ let
       LEDS_TRIGGER_IDE_DISK y # LED IDE Disk Trigger
       LOGIRUMBLEPAD2_FF y # Logitech Rumblepad 2 force feedback
       LOGO n # not needed
-      MEDIA_ATTACH y
+      MEDIA_ATTACH? y
       MEGARAID_NEWGEN y
       MICROCODE_AMD y
       MODVERSIONS y
@@ -202,8 +204,10 @@ let
       THERMAL_HWMON y # Hardware monitoring support
       USB_DEBUG n
       USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
+      USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
       X86_CHECK_BIOS_CORRUPTION y
       X86_MCE y
+      XEN_DOM0 y
 
       # Linux Containers
       RT_GROUP_SCHED? y
@@ -230,6 +234,11 @@ let
       # Devtmpfs support.
       DEVTMPFS y
 
+      # Media support
+      MEDIA_CAMERA_SUPPORT? y
+      MEDIA_RC_SUPPORT? y
+      MEDIA_USB_SUPPORT y
+
       # Easier debug of NFS issues
       SUNRPC_DEBUG y
 
@@ -241,7 +250,8 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.3.8";
+    version = "3.8";
+    modDirVersion = "3.8.0";
     testing = false;
 
     preConfigure = ''
@@ -250,7 +260,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "0bgppngf711mlxp0jcsnv5xc0xxc8vs5rzc1czkv2igrfb1kvrnz";
+      sha256 = "0jqqhfskd88480hkwnkc8rlwkwb56p322irp9xm6gmfyzfyx2w70";
     };
 
     config = configWithPlatform stdenv.platform;
@@ -258,6 +268,8 @@ import ./generic.nix (
 
     features.iwlwifi = true;
     features.efiBootStub = true;
+    features.needsCifsUtils = true;
+    features.canDisableNetfilterConntrackHelpers = true;
     features.netfilterRPFilter = true;
   }
 
