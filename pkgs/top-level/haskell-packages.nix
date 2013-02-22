@@ -2017,9 +2017,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     QuickCheck = self.QuickCheck2;
   };
 
-  xmobar = callPackage ../applications/misc/xmobar {
-    stm = self.stm_2_3;
-  };
+  xmobar = callPackage ../applications/misc/xmobar {};
 
   xmonad = callPackage ../applications/window-managers/xmonad {};
 
