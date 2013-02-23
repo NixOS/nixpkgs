@@ -26,6 +26,21 @@ stdenv.mkDerivation {
       ./impure-dirs.patch
     ];
 
+  # a bunch of patches from Gentoo, mostly should be from upstream (unreleased)
+  preConfigure = ''
+      patch -i     ${./archives-many-objs.patch}
+      patch -i     ${./MAKEFLAGS-reexec.patch}
+      patch -i     ${./memory-corruption.patch}
+      patch -i     ${./glob-speedup.patch}
+      patch -i     ${./copy-on-expand.patch}
+      patch -i     ${./oneshell.patch}
+      patch -i     ${./parallel-remake.patch}
+      patch -p1 -i ${./intermediate-parallel.patch}
+      patch -i     ${./construct-command-line.patch}
+      patch -i     ${./long-command-line.patch}
+      patch -i     ${./darwin-library_search-dylib.patch}
+  '';
+
   meta = {
     description = "GNU Make, a program controlling the generation of non-source files from sources";
 
