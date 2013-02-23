@@ -10,7 +10,7 @@ stdenv.mkDerivation (rec {
 
   patches = [ ./no-gets.patch ];
 
-  LDFLAGS = if stdenv.isSunOS then "-lsec -lavl" else "";
+  LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
   configureFlags = [ "--disable-csharp" ]
      ++ (stdenv.lib.optionals stdenv.isCygwin

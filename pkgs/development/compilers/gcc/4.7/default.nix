@@ -277,19 +277,34 @@ stdenv.mkDerivation ({
     ++ (optional stdenv.isDarwin gnused)
     ;
 
-  configureFlagsArray = stdenv.lib.optionals
-    (ppl != null && ppl ? dontDisableStatic && ppl.dontDisableStatic)
-        [ "--with-host-libstdcxx=-lstdc++ -lgcc_s" ]; 
+  NIX_LDFLAGS = stdenv.lib.optionalString  stdenv.isSunOS "-lm -ldl";
+
+  preConfigure = ''
+    configureFlagsArray=(
+      ${stdenv.lib.optionalString (ppl != null && ppl ? dontDisableStatic && ppl.dontDisableStatic)
+        "'--with-host-libstdcxx=-lstdc++ -lgcc_s'"}
+      ${stdenv.lib.optionalString (ppl != null && stdenv.isSunOS)
+        "\"--with-host-libstdcxx=-Wl,-rpath,\$prefix/lib/amd64 -lstdc++\"
+         \"--with-boot-ldflags=-L../prev-x86_64-pc-solaris2.11/libstdc++-v3/src/.libs\""}
+    );
+    ${stdenv.lib.optionalString (stdenv.isSunOS && stdenv.is64bit)
+      ''
+        export NIX_LDFLAGS=`echo $NIX_LDFLAGS | sed -e s~$prefix/lib~$prefix/lib/amd64~g`
+        export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
+        export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
+        export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
+      ''}
+    '';
 
   # 'iant' at #go-nuts@freenode, gccgo maintainer, said that
   # they have a bug in 4.7.1 if adding "--disable-static"
-  dontDisableStatic = langGo;
+  dontDisableStatic = langGo || staticCompiler;
 
   configureFlags = "
     ${if stdenv.isSunOS then
       " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
       # On Illumos/Solaris GNU as is preferred
-      " --with-gnu-as --with-gnu-ld "
+      " --with-gnu-as --without-gnu-ld "
       else ""}
     --enable-lto
     ${if enableMultilib then "" else "--disable-multilib"}

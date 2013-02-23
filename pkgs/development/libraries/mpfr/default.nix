@@ -1,6 +1,6 @@
 {stdenv, fetchurl, gmp}:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   name = "mpfr-3.1.1";
 
   src = fetchurl {
@@ -35,16 +35,14 @@ stdenv.mkDerivation (rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = stdenv.lib.platforms.all;
   };
+
+  configureFlags =
+    /* Work around a FreeBSD bug that otherwise leads to segfaults in
+        the test suite:
+          http://hydra.bordeaux.inria.fr/build/34862
+          http://websympa.loria.fr/wwsympa/arc/mpfr/2011-10/msg00015.html
+          http://www.freebsd.org/cgi/query-pr.cgi?pr=161344
+      */
+    stdenv.lib.optional (stdenv.isSunOS or stdenv.isFreeBSD) "--disable-thread-safe" ++
+    stdenv.lib.optional stdenv.is64bit "--with-pic";
 }
-
-//
-
-(stdenv.lib.optionalAttrs (stdenv.isSunOS or stdenv.isFreeBSD) {
-   /* Work around a FreeBSD bug that otherwise leads to segfaults in
-      the test suite:
-        http://hydra.bordeaux.inria.fr/build/34862
-        http://websympa.loria.fr/wwsympa/arc/mpfr/2011-10/msg00015.html
-        http://www.freebsd.org/cgi/query-pr.cgi?pr=161344
-    */
-   configureFlags = [ "--disable-thread-safe" ];
- }))

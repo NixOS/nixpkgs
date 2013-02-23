@@ -155,7 +155,7 @@ if test -n "$targetConfig"; then
     dontStrip=1
 fi
 
-
+providedPreConfigure="$preConfigure";
 preConfigure() {
     if test -n "$newlibSrc"; then
         tar xvf "$newlibSrc" -C ..
@@ -188,6 +188,9 @@ preConfigure() {
         configureFlags="$configureFlags --with-build-sysroot=`pwd`/.."
     fi
 
+    # Eval the preConfigure script from nix expression.
+    eval $providedPreConfigure;
+    env;
     # Perform the build in a different directory.
     mkdir ../build
     cd ../build
