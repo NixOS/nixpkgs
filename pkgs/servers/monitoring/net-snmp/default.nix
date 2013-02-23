@@ -1,11 +1,11 @@
 { stdenv, fetchurl, file, openssl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "net-snmp-5.7.1";
+  name = "net-snmp-5.7.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/net-snmp/${name}.tar.gz";
-    sha256 = "07qqdgs3flraqccwry4a4x23jcg6vfi0rqj7clsibdv51ijwjwbw";
+    sha256 = "05mqrv22c65405d6v91cqf4hvczkkvvyy5lsxw8h8g0zrjs33v89";
   };
 
   preConfigure =
@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
       perlversion=$(perl -e 'use Config; print $Config{version};')
       perlarchname=$(perl -e 'use Config; print $Config{archname};')
       installFlags="INSTALLSITEARCH=$out/lib/perl5/site_perl/$perlversion/$perlarchname INSTALLSITEMAN3DIR=$out/share/man/man3"
+
+      # http://comments.gmane.org/gmane.network.net-snmp.user/32434
+      substituteInPlace "man/Makefile.in" --replace 'grep -vE' '@EGREP@ -v'
     '';
 
   configureFlags =
