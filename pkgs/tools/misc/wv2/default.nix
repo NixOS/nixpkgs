@@ -1,10 +1,19 @@
-{stdenv, fetchurl, pkgconfig, libgsf, glib, libxml2}:
+{ stdenv, fetchurl, pkgconfig, cmake, libgsf, glib, libxml2 }:
 
-stdenv.mkDerivation {
-  name = "wv2-0.3.1";
+stdenv.mkDerivation rec {
+  name = "wv2-0.4.2";
   src = fetchurl {
-    url = mirror://sourceforge/wvware/wv2-0.3.1.tar.bz2;
-    sha256 = "896ff8ec59e280e8cb1ef9a953b364845dd65de1cdf8e4ed8a7e045a3f81c546";
+    url = "mirror://sourceforge/wvware/${name}.tar.bz2";
+    sha256 = "1p1qxr8z5bsiq8pvlina3c8c1vjcb5d96bs3zz4jj3nb20wnsawz";
   };
-  buildInputs = [ pkgconfig libgsf glib libxml2 ];
+
+  patches = [ ./fix-include.patch ];
+
+  buildInputs = [ pkgconfig cmake libgsf glib libxml2 ];
+
+  meta = {
+    description = "Excellent MS Word filter lib, used in most Office suites";
+    license = "LGPLv2";
+    homepage = http://wvware.sourceforge.net;
+  };
 }
