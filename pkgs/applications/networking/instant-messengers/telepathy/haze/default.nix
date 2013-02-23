@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "telepathy-haze";
-  name = "${pname}-0.6.0";
+  name = "${pname}-0.7.0";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/${pname}/${name}.tar.gz";
-    sha256 = "1qrgmcr8ga6nvaz9hhn0mv0p7v799wsawrg3k5l791cgxx5carz2";
+    sha256 = "1gaj8518ilm3gnzqf3lmiqgnwkay8wfbsqngcz15whzji8sl608b";
   };
 
   buildInputs = [ glib telepathy_glib dbus_glib pidgin ];
