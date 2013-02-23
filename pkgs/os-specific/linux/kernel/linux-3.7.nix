@@ -78,6 +78,7 @@ let
       ATH9K_AHB y # Ditto, AHB bus
       B43_PHY_HT y
       BCMA_HOST_PCI y
+      CFG08211_WEXT y # Without it, ipw2200 drivers don't build
 
       # Some settings to make sure that fbcondecor works - in particular,
       # disable tileblitting and the drivers that need it.
