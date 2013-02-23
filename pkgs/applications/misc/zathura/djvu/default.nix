@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
 	  The zathura-djvu plugin adds DjVu support to zathura by using the
 	  djvulibre library.
     '';
-    license = "free";
+    license = stdenv.lib.licenses.zlib;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.garbas ];
   };
 }
 
