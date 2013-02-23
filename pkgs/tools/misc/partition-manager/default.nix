@@ -1,16 +1,21 @@
-{ stdenv, fetchurl, cmake, gettext, parted, libuuid, qt4, kdelibs, kde_baseapps,
-  automoc4, phonon, perl }:
+{ stdenv, fetchurl, pkgconfig, cmake, gettext, automoc4, perl
+, parted, libuuid, qt4, kdelibs, kde_baseapps, phonon, libatasmart
+}:
 
-stdenv.mkDerivation {
-  name = "partitionmanager-1.0.0";
+stdenv.mkDerivation rec {
+  name = "partitionmanager-1.0.3_p20120804";
 
   src = fetchurl {
-    url = http://www.kde-apps.org/CONTENT/content-files/89595-partitionmanager-1.0.0.tar.bz2;
-    sha256 = "03ibn4vns7pa0ygkp2jh6zcdy106as5cc7p6rv1f5c15wxx0zsk1";
+    #url = "mirror://sourceforge/partitionman/${name}.tar.bz2";
+    # the upstream version is old and doesn't build
+    url = "http://dev.gentoo.org/~kensington/distfiles/${name}.tar.bz2";
+    sha256 = "1j6zpgj8xs98alzxvcibwch9yj8jsx0s7y864gbdx280jmj8c1np";
   };
 
-  buildInputs =
-    [ cmake gettext parted libuuid qt4 kdelibs kde_baseapps automoc4 perl phonon ];
+  buildInputs = [
+    pkgconfig cmake gettext automoc4 perl
+    parted libuuid qt4 kdelibs kde_baseapps phonon libatasmart
+  ];
 
   preConfigure = ''
     export VERBOSE=1
@@ -19,13 +24,13 @@ stdenv.mkDerivation {
 
   postInstall = ''
     set -x
-    rpath=`patchelf --print-rpath $out/bin/partitionmanager-bin`:${qt4}/lib 
+    rpath=`patchelf --print-rpath $out/bin/partitionmanager-bin`:${qt4}/lib
     for p in $out/bin/partitionmanager-bin; do
       patchelf --set-rpath $rpath $p
     done
   '';
 
-  meta = { 
+  meta = {
     description = "Utility program to help you manage the disk devices";
     homepage = http://www.kde-apps.org/content/show.php/KDE+Partition+Manager?content=89595; # ?
     license = "GPL";
