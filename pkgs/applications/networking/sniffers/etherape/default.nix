@@ -1,5 +1,5 @@
-{stdenv, fetchurl, pkgconfig, gtk, libpcap, libglade, libgnome, libgnomeui,
-gnomedocutils, scrollkeeper, libxslt}:
+{ stdenv, fetchurl, pkgconfig, libtool, gtk, libpcap, libglade, libgnome, libgnomeui
+, gnomedocutils, scrollkeeper, libxslt }:
 
 stdenv.mkDerivation rec {
   name = "etherape-0.9.12";
@@ -9,8 +9,10 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "--disable-scrollkeeper" ];
-  buildInputs = [ gtk libpcap pkgconfig libglade libgnome libgnomeui gnomedocutils
-    scrollkeeper libxslt ];
+  buildInputs = [
+    pkgconfig libtool gtk libpcap libglade libgnome libgnomeui gnomedocutils
+    scrollkeeper libxslt
+  ];
 
   meta = {
     homepage = http://etherape.sourceforge.net/;
