@@ -6644,7 +6644,8 @@ let
   cmus = callPackage ../applications/audio/cmus { };
 
   compiz = callPackage ../applications/window-managers/compiz {
-    inherit (gnome) GConf ORBit2;
+    inherit (gnome) GConf ORBit2 metacity;
+    boost = boost149; # https://bugs.launchpad.net/compiz/+bug/1131864
     intltool = intltool_standalone;
   };
 
