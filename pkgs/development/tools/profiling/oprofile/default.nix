@@ -6,11 +6,11 @@
 assert withGUI -> qt4 != null;
 
 stdenv.mkDerivation rec {
-  name = "oprofile-0.9.7";
+  name = "oprofile-0.9.8";
 
   src = fetchurl {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
-    sha256 = "09ymfgcvp6372xnxdbq664ba8f4nzz4cxlya7wi8s1gabmym0nyb";
+    sha256 = "1g31lwgpacql6w5z1z2f31pgwzn14rgsbh7kmmdmsgm2l47r0idb";
   };
 
   patchPhase = ''
@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ binutils zlib popt makeWrapper gawk which gnugrep pkgconfig ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
 
-  configureFlags =
-    [ "--with-kernel-support"
+  configureFlags = [
       "--disable-shared"   # needed because only the static libbfd is available
     ]
     ++ stdenv.lib.optional withGUI "--with-qt-dir=${qt4} --enable-gui=qt4";
