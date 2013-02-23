@@ -1,46 +1,33 @@
 x@{builderDefsPackage
-  , fetchgit, ...}:
+  , fetchurl, yacc, bison, ...}:
 builderDefsPackage
-(a :  
-let 
-  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++ 
-    ["fetchgit"];
+(a :
+let
+  helperArgNames = ["stdenv" "fetchurl" "builderDefsPackage"] ++
+    [];
 
   buildInputs = map (n: builtins.getAttr n x)
     (builtins.attrNames (builtins.removeAttrs x helperArgNames));
   sourceInfo = rec {
-    version="git-head-${rev}";
+    version="0.10.2";
     baseName="netboot";
-    rev="19a955cd87b399a5b56";
-    name="${baseName}-git-head";
-    url="git://github.com/ITikhonov/netboot.git";
-    hash="7610c734dc46183439c161d327e7ef6a3d5bc07b5173850b92f71ec047b109d6";
+    name="${baseName}-${version}";
+    url="mirror://sourceforge/netboot/${name}.tar.gz";
+    hash="09w09bvwgb0xzn8hjz5rhi3aibysdadbg693ahn8rylnqfq4hwg0";
   };
 in
 rec {
-  srcDrv = a.fetchgit {
+  src = a.fetchurl {
     url = sourceInfo.url;
     sha256 = sourceInfo.hash;
-    rev = sourceInfo.rev;
   };
-
-  src=srcDrv + "/";
 
   inherit (sourceInfo) name version;
   inherit buildInputs;
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["doBuild" "doDeploy"];
+  phaseNames = ["doUnpack" "doConfigure" "doMakeInstall"];
 
-  doBuild = a.fullDepEntry ''
-    gcc netboot.c -o netboot
-  '' ["doUnpack" "addInputs"];
-
-  doDeploy = a.fullDepEntry ''
-    mkdir -p "$out/bin"
-    cp netboot "$out/bin"
-  '' ["defEnsureDir" "minInit"];
-      
   meta = {
     description = "Mini PXE server";
     maintainers = with a.lib.maintainers;
