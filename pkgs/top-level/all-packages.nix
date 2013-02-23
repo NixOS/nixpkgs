@@ -449,9 +449,7 @@ let
 
   atftp = callPackage ../tools/networking/atftp {};
 
-  autogen = callPackage ../development/tools/misc/autogen {
-    guile = guile_1_8;
-  };
+  autogen = callPackage ../development/tools/misc/autogen { };
 
   autojump = callPackage ../tools/misc/autojump { };
 
