@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, bison, pkgconfig, libdrm, file, expat, makedepend
+{ stdenv, fetchurl, flex, bison, pkgconfig, intltool, libdrm, file, expat, makedepend
 , libXxf86vm, libXfixes, libXdamage, glproto, dri2proto, libX11, libxcb, libXext
 , libXt, udev, enableTextureFloats ? false, enableR600LlvmCompiler ? false
 , python, libxml2Python, autoconf, automake, libtool, llvm, writeText }:
@@ -8,14 +8,14 @@ if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
 else
 
 let
-  version = "9.0.3";
+  version = "9.1";
 in
 stdenv.mkDerivation {
   name = "mesa-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256="1986av3pl8v9hhxxqqdm2wn3qlwwnrznvfmm4wszhyf3n82h157a";
+    sha256="0yvhl0vdg32h0xr4xi348gkp0hlcc16j1cfxn4pyc9pywyzlqj5g";
   };
 
   prePatch = "patchShebangs .";
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     + stdenv.lib.optionalString enableTextureFloats " --enable-texture-float";
 
   buildInputs = [
-    autoconf automake libtool expat libxml2Python udev llvm
+    autoconf automake libtool intltool expat libxml2Python udev llvm
     libdrm libXxf86vm libXfixes libXdamage glproto dri2proto libX11 libXext libxcb libXt
   ];
 
