@@ -1,4 +1,4 @@
-{ fetchurl, buildPythonPackage }:
+{ pkgs, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
   version = "6.5.5-rc2";
@@ -15,6 +15,7 @@ buildPythonPackage rec {
   meta = {
     description = "OfflineImap synchronizes emails between two repositories, so that you can read the same mailbox from multiple computers.";
     homepage = "http://offlineimap.org";
-    license = "GPLv2+";
+    license = pkgs.lib.licenses.gpl2Plus;
+    maintainers = [ pkgs.lib.maintainers.garbas ];
   };
 }
