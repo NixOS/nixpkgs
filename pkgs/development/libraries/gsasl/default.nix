@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gss, libidn }:
 
 stdenv.mkDerivation rec {
-  name = "gsasl-1.6.1";
+  name = "gsasl-1.8.0";
 
   src = fetchurl {
     url = "mirror://gnu/gsasl/${name}.tar.gz";
-    sha256 = "02dmras3kqik08p14mpq0lj678w7wmmaxpcvdrx116wkcgspv2z6";
+    sha256 = "1rci64cxvcfr8xcjpqc4inpfq7aw4snnsbf5xz7d30nhvv8n40ii";
   };
 
   buildInputs = [ gss libidn ];
