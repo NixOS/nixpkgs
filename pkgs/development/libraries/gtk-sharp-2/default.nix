@@ -26,6 +26,13 @@ stdenv.mkDerivation {
 
   # patches = [ ./dllmap-glue.patch ];
 
+  # patch bad usage of glib, which wasn't tolerated anymore
+  prePatch = ''
+    for f in glib/glue/{thread,list,slist}.c; do
+      sed -i 's,#include <glib/.*\.h>,#include <glib.h>,g' "$f"
+    done
+  '';
+
   buildInputs = [
     pkgconfig mono glib pango gtk GConf libglade libgnomecanvas
     libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
