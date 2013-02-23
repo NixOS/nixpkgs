@@ -21,9 +21,9 @@
 
 */
 
-stdenv.mkDerivation {
-
-  name = "firebird-2.3.1";
+stdenv.mkDerivation rec {
+  version = "2.5.2";
+  name = "firebird-${version}";
 
   configureFlags =
     [ "--with-serivec-port=${builtins.toString port}"
@@ -34,8 +34,8 @@ stdenv.mkDerivation {
     ++ (stdenv.lib.optional superServer "--enable-superserver=true");
 
   src = fetchurl {
-    url = mirror://sourceforge/firebird/files/2.1.3-Release/Firebird-2.1.3.18185-0.tar.bz2;
-    sha256 = "0a7xy016r0j1f97cf2lww8fkz1vlvvghrgv9ffz2i6f7ppacniw0";
+    url = "mirror://sourceforge/firebird/Firebird-${version}.26539-0.tar.bz2";
+    sha256 = "1j5bcfl35hr6i4lcd08zls19bal2js3ar16gnwkzbhwxkxbyb43b";
   };
 
   buildInputs = [libedit icu];
