@@ -1,5 +1,5 @@
 { stdenv, fetchurl, boost, zlib, botan, libidn
-, lua, pcre, sqlite, perl, pkgconfig }:
+, lua, pcre, sqlite, perl, pkgconfig, expect }:
 
 let
   version = "1.0";
@@ -16,7 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "5c530bc4652b2c08b5291659f0c130618a14780f075f981e947952dcaefc31dc";
   };
 
-  buildInputs = [boost zlib botan libidn lua pcre sqlite pkgconfig];
+  patches = [ ./glibc-file-handle.patch ];
+
+  buildInputs = [ boost zlib botan libidn lua pcre sqlite pkgconfig expect ];
 
   postInstall = ''
     mkdir -p $out/share/${name}
@@ -24,6 +26,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/perl5/site_perl/${perlVersion}
     cp -v contrib/Monotone.pm $out/lib/perl5/site_perl/${perlVersion}
   '';
+
+  #doCheck = true; # some tests fail (and they take VERY long)
 
   meta = {
     description = "A free distributed version control system";
