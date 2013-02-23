@@ -1,13 +1,13 @@
 { stdenv, fetchsvn, alsaLib, aubio, boost, cairomm, curl, fftw
-, fftwSinglePrec, flac, glib, glibmm, gtk, gtkmm, jackaudio
+, fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jackaudio
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
 , libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper, pango
 , perl, pkgconfig, python, serd, sord, sratom, suil }:
 
 let
-  # Ardour 3 Beta 5
-  rev = "13072";
+  # Ardour 3 RC2
+  rev = "14092";
 in
 
 stdenv.mkDerivation {
@@ -16,12 +16,12 @@ stdenv.mkDerivation {
   src = fetchsvn {
     url = http://subversion.ardour.org/svn/ardour2/branches/3.0;
     inherit rev;
-    sha256 = "17k990kdb5q17z6jcz5b60imvvfbjw9zfxzy9fk0vg8gd6yq7736";
+    sha256 = "1zyy74z3xcsdhrzw4g6y1qm1ai2fl3bgabscl0wn7m1kkscr9nzg";
   };
 
   buildInputs = 
     [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec
-      flac glib glibmm gtk gtkmm jackaudio libgnomecanvas
+      flac glibc glibmm gtk gtkmm jackaudio libgnomecanvas
       libgnomecanvasmm liblo libmad libogg librdf librdf_raptor
       librdf_rasqal libsamplerate libsigcxx libsndfile libusb libuuid
       libxml2 libxslt lilv lv2 pango perl pkgconfig python serd sord
@@ -32,6 +32,7 @@ stdenv.mkDerivation {
     printf '#include "ardour/svn_revision.h"\nnamespace ARDOUR { const char* svn_revision = \"${rev}\"; }\n' > libs/ardour/svn_revision.cc
     sed -e 's|^#!/usr/bin/perl.*$|#!${perl}/bin/perl|g' -i tools/fmt-bindings
     sed -e 's|^#!/usr/bin/env.*$|#!${perl}/bin/perl|g' -i tools/*.pl
+    sed 's|/usr/include/libintl.h|${glibc}/include/libintl.h|' -i wscript
   '';
 
   configurePhase = "python waf configure --prefix=$out";
