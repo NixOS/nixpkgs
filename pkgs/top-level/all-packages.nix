@@ -4848,7 +4848,7 @@ let
 
   silgraphite = callPackage ../development/libraries/silgraphite {};
 
-  simgear = callPackage ../development/libraries/simgear {};
+  simgear = callPackage ../development/libraries/simgear { };
 
   sfml_git = callPackage ../development/libraries/sfml { };
 
