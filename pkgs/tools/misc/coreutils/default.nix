@@ -49,8 +49,8 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  LDFLAGS = stdenv.lib.optionalString stdenv.isSunOS "-lmp -lmd -lnsl -lsocket -lresolv";
-  NIX_LDFLAGS = stdenv.lib.optionalString selinuxSupport "-lsepol";
+  NIX_LDFLAGS = stdenv.lib.optionalString selinuxSupport "-lsepol" +
+                stdenv.lib.optionalString stdenv.isSunOS "-lmp -lmd -lnsl -lsocket -lresolv -luutil -lnvpair -lidmap -lavl -lsec";
 
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
