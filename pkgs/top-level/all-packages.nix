@@ -8122,7 +8122,7 @@ let
     libpng = libpng12;
   };
 
-  flightgear = callPackage ../games/flightgear {};
+  flightgear = callPackage ../games/flightgear { };
 
   freeciv = callPackage ../games/freeciv { };
 
