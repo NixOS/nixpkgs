@@ -769,6 +769,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   emailValidate = callPackage ../development/libraries/haskell/email-validate {};
 
+  encoding = callPackage ../development/libraries/haskell/encoding {};
+
   enumerator = callPackage ../development/libraries/haskell/enumerator {};
 
   entropy = callPackage ../development/libraries/haskell/entropy {};
