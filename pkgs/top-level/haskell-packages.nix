@@ -1079,6 +1079,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
+  hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {};
+
   hsyslog = callPackage ../development/libraries/haskell/hsyslog {};
 
   html_1_0_1_2 = callPackage ../development/libraries/haskell/html/1.0.1.2.nix {};
