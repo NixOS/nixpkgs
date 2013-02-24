@@ -1,10 +1,10 @@
 { cabal, aeson, blazeBuilder, blazeHtml, blazeMarkup
 , caseInsensitive, cereal, clientsession, conduit, cookie, failure
-, fastLogger, hamlet, httpTypes, liftedBase, monadControl
-, monadLogger, parsec, pathPieces, random, resourcet, shakespeare
-, shakespeareCss, shakespeareI18n, shakespeareJs, text, time
-, transformers, transformersBase, vector, wai, waiExtra
-, yesodRoutes
+, fastLogger, hamlet, hspec, httpTypes, HUnit, liftedBase
+, monadControl, monadLogger, parsec, pathPieces, QuickCheck, random
+, resourcet, shakespeare, shakespeareCss, shakespeareI18n
+, shakespeareJs, text, time, transformers, transformersBase, vector
+, wai, waiExtra, waiTest, yesodRoutes
 }:
 
 cabal.mkDerivation (self: {
@@ -18,6 +18,10 @@ cabal.mkDerivation (self: {
     resourcet shakespeare shakespeareCss shakespeareI18n shakespeareJs
     text time transformers transformersBase vector wai waiExtra
     yesodRoutes
+  ];
+  testDepends = [
+    blazeBuilder conduit hamlet hspec httpTypes HUnit QuickCheck random
+    shakespeareCss shakespeareJs text transformers wai waiTest
   ];
   meta = {
     homepage = "http://www.yesodweb.com/";

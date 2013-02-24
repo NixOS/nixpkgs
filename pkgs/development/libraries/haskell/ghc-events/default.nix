@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ binary mtl ];
+  testDepends = [ binary mtl ];
   meta = {
     description = "Library and tool for parsing .eventlog files from GHC";
     license = self.stdenv.lib.licenses.bsd3;

@@ -1,5 +1,5 @@
-{ cabal, colour, dlist, fgl, filepath, polyparse, temporary, text
-, transformers, wlPprintText
+{ cabal, colour, dlist, fgl, filepath, polyparse, QuickCheck
+, temporary, text, transformers, wlPprintText
 }:
 
 cabal.mkDerivation (self: {
@@ -9,6 +9,10 @@ cabal.mkDerivation (self: {
   buildDepends = [
     colour dlist fgl filepath polyparse temporary text transformers
     wlPprintText
+  ];
+  testDepends = [
+    colour dlist fgl filepath polyparse QuickCheck temporary text
+    transformers wlPprintText
   ];
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";

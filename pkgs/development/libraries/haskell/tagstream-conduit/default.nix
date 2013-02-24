@@ -1,5 +1,6 @@
 { cabal, attoparsec, attoparsecConduit, blazeBuilder
-, blazeBuilderConduit, caseInsensitive, conduit, text, transformers
+, blazeBuilderConduit, caseInsensitive, conduit, hspec, HUnit
+, QuickCheck, text, transformers
 }:
 
 cabal.mkDerivation (self: {
@@ -10,6 +11,7 @@ cabal.mkDerivation (self: {
     attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
     caseInsensitive conduit text transformers
   ];
+  testDepends = [ conduit hspec HUnit QuickCheck text ];
   meta = {
     homepage = "http://github.com/yihuang/tagstream-conduit";
     description = "streamlined html tag parser";

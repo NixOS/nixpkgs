@@ -1,10 +1,11 @@
-{ cabal, pathPieces, text, vector }:
+{ cabal, hspec, HUnit, pathPieces, text, vector }:
 
 cabal.mkDerivation (self: {
   pname = "yesod-routes";
   version = "1.1.2";
   sha256 = "17yv2z7k1s958xyn552wpk0cwpivsnkvia8477yhgbp4n2d1i5jv";
   buildDepends = [ pathPieces text vector ];
+  testDepends = [ hspec HUnit pathPieces text ];
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Efficient routing for Yesod";

@@ -1,10 +1,10 @@
 { cabal, asn1Data, attoparsec, attoparsecConduit, base64Bytestring
 , blazeBuilder, blazeBuilderConduit, caseInsensitive, certificate
 , conduit, cookie, cprngAes, dataDefault, deepseq, failure
-, filepath, httpTypes, liftedBase, mimeTypes, monadControl, mtl
-, network, random, regexCompat, resourcet, socks, text, time, tls
-, tlsExtra, transformers, transformersBase, utf8String, void
-, zlibConduit
+, filepath, hspec, httpTypes, HUnit, liftedBase, mimeTypes
+, monadControl, mtl, network, networkConduit, random, regexCompat
+, resourcet, socks, text, time, tls, tlsExtra, transformers
+, transformersBase, utf8String, void, wai, warp, zlibConduit
 }:
 
 cabal.mkDerivation (self: {
@@ -18,6 +18,14 @@ cabal.mkDerivation (self: {
     mimeTypes monadControl mtl network random regexCompat resourcet
     socks text time tls tlsExtra transformers transformersBase
     utf8String void zlibConduit
+  ];
+  testDepends = [
+    asn1Data attoparsec attoparsecConduit base64Bytestring blazeBuilder
+    blazeBuilderConduit caseInsensitive certificate conduit cookie
+    cprngAes dataDefault deepseq failure filepath hspec httpTypes HUnit
+    liftedBase mimeTypes monadControl mtl network networkConduit random
+    regexCompat resourcet socks text time tls tlsExtra transformers
+    transformersBase utf8String void wai warp zlibConduit
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/http-conduit";

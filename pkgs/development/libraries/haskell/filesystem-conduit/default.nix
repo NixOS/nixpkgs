@@ -1,4 +1,5 @@
-{ cabal, conduit, systemFileio, systemFilepath, text, transformers
+{ cabal, blazeBuilder, conduit, hspec, QuickCheck, systemFileio
+, systemFilepath, text, transformers
 }:
 
 cabal.mkDerivation (self: {
@@ -7,6 +8,9 @@ cabal.mkDerivation (self: {
   sha256 = "1fz3iihcqpg6m3svjqdg8lvkpza955qn8cbs9b3w333vxkglhi6v";
   buildDepends = [
     conduit systemFileio systemFilepath text transformers
+  ];
+  testDepends = [
+    blazeBuilder conduit hspec QuickCheck text transformers
   ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";

@@ -1,7 +1,7 @@
 { cabal, attoparsec, attoparsecConduit, blazeBuilder
 , blazeBuilderConduit, blazeHtml, blazeMarkup, conduit, dataDefault
-, failure, monadControl, resourcet, systemFilepath, text
-, transformers, xmlTypes
+, failure, hspec, HUnit, monadControl, resourcet, systemFilepath
+, text, transformers, xmlTypes
 }:
 
 cabal.mkDerivation (self: {
@@ -12,6 +12,9 @@ cabal.mkDerivation (self: {
     attoparsec attoparsecConduit blazeBuilder blazeBuilderConduit
     blazeHtml blazeMarkup conduit dataDefault failure monadControl
     resourcet systemFilepath text transformers xmlTypes
+  ];
+  testDepends = [
+    blazeMarkup conduit hspec HUnit text transformers xmlTypes
   ];
   meta = {
     homepage = "http://github.com/snoyberg/xml";

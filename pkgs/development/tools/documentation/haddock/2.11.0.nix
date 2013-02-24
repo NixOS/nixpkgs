@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ Cabal filepath ghcPaths xhtml ];
+  testDepends = [ Cabal filepath ];
   buildTools = [ alex happy ];
   meta = {
     homepage = "http://www.haskell.org/haddock/";

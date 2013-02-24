@@ -1,4 +1,5 @@
-{ cabal, liftedBase, monadControl, transformers, transformersBase
+{ cabal, hspec, liftedBase, monadControl, transformers
+, transformersBase
 }:
 
 cabal.mkDerivation (self: {
@@ -8,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     liftedBase monadControl transformers transformersBase
   ];
+  testDepends = [ hspec liftedBase monadControl transformers ];
   meta = {
     description = "Choice for IO and lifted IO";
     license = self.stdenv.lib.licenses.bsd3;

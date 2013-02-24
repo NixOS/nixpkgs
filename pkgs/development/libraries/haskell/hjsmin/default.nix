@@ -1,10 +1,16 @@
-{ cabal, blazeBuilder, languageJavascript, text }:
+{ cabal, blazeBuilder, Cabal, HUnit, languageJavascript, QuickCheck
+, testFramework, testFrameworkHunit, text
+}:
 
 cabal.mkDerivation (self: {
   pname = "hjsmin";
   version = "0.1.4.1";
   sha256 = "0r73hd6kn37mdbm2i3g6v3qqm696kyflqs6ajq68qr5sr62sjb1a";
   buildDepends = [ blazeBuilder languageJavascript text ];
+  testDepends = [
+    blazeBuilder Cabal HUnit languageJavascript QuickCheck
+    testFramework testFrameworkHunit text
+  ];
   meta = {
     homepage = "http://github.com/alanz/hjsmin";
     description = "Haskell implementation of a javascript minifier";

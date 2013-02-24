@@ -1,5 +1,6 @@
-{ cabal, conduit, filesystemConduit, resourcet, systemFilepath
-, tagstreamConduit, text, transformers, xmlConduit, xmlTypes
+{ cabal, conduit, filesystemConduit, hspec, HUnit, resourcet
+, systemFilepath, tagstreamConduit, text, transformers, xmlConduit
+, xmlTypes
 }:
 
 cabal.mkDerivation (self: {
@@ -10,6 +11,7 @@ cabal.mkDerivation (self: {
     conduit filesystemConduit resourcet systemFilepath tagstreamConduit
     text transformers xmlConduit xmlTypes
   ];
+  testDepends = [ hspec HUnit xmlConduit ];
   meta = {
     homepage = "https://github.com/snoyberg/xml";
     description = "Parse HTML documents using xml-conduit datatypes";
