@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     QuickCheck testFramework testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/DanBurton/numbers";
     description = "Various number types";
