@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "1ppcbfmcgrd1lwswa293fxwny6khhg4blygfbcsawrvgc5ji0q74";
   buildDepends = [ HUnit ];
   testDepends = [ hspec HUnit markdownUnlit silently ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/sol/hspec-expectations#readme";
     description = "Catchy combinators for HUnit";

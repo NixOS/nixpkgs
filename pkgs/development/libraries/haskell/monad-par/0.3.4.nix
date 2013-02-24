@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     mwcRandom QuickCheck testFramework testFrameworkHunit
     testFrameworkQuickcheck2 testFrameworkTh time
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/simonmar/monad-par";
     description = "A library for parallel programming based on a monad";
