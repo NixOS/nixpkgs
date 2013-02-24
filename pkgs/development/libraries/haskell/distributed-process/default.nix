@@ -20,6 +20,7 @@ cabal.mkDerivation (self: {
     testFrameworkHunit
   ];
   noHaddock = true;
+  doCheck = false;
   meta = {
     homepage = "http://github.com/haskell-distributed/distributed-process";
     description = "Cloud Haskell: Erlang-style concurrency in Haskell";
