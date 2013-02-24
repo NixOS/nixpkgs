@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [ Cabal deepseq filepath ghcPaths xhtml ];
   testDepends = [ Cabal filepath ];
   buildTools = [ alex happy ];
+  doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/haddock/";
     description = "A documentation-generation tool for Haskell libraries";
