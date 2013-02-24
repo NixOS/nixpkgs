@@ -1195,6 +1195,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ltk = callPackage ../development/libraries/haskell/ltk {};
 
+  lockfreeQueue = callPackage ../development/libraries/haskell/lockfree-queue {};
+
   logfloat = callPackage ../development/libraries/haskell/logfloat {};
 
   logict = callPackage ../development/libraries/haskell/logict {};
