@@ -6174,6 +6174,8 @@ let
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
 
+  sepolgen = callPackage ../os-specific/linux/sepolgen { };
+
   shadow = callPackage ../os-specific/linux/shadow { };
 
   splashutils = callPackage ../os-specific/linux/splashutils/default.nix { };
