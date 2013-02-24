@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     erf HUnit ieee754 mathFunctions primitive QuickCheck testFramework
     testFrameworkHunit testFrameworkQuickcheck2 vector vectorAlgorithms
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/bos/statistics";
     description = "A library of statistical types, data, and functions";
