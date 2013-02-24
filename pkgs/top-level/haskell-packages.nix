@@ -2029,6 +2029,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cabalDev = callPackage ../development/tools/haskell/cabal-dev {};
 
+  cabal2Ghci = callPackage ../development/tools/haskell/cabal2ghci {};
+
   cabalGhci = callPackage ../development/tools/haskell/cabal-ghci {};
 
   cabalInstall_0_6_2  = callPackage ../tools/package-management/cabal-install/0.6.2.nix  {};
