@@ -1112,6 +1112,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hxtUnicode = callPackage ../development/libraries/haskell/hxt-unicode {};
 
+  idna = callPackage ../development/libraries/haskell/idna {};
+
   IfElse = callPackage ../development/libraries/haskell/IfElse {};
 
   ieee754 = callPackage ../development/libraries/haskell/ieee754 {};
