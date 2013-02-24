@@ -90,6 +90,10 @@
             # pass the '--enable-split-objs' flag to cabal in the configure stage
             enableSplitObjs = true;
 
+            # pass the '--enable-tests' flag to cabal in the configure stage
+            # and run any regression test suites the package might have
+            doCheck = true;
+
             extraConfigureFlags = [
               (stdenv.lib.enableFeature enableLibraryProfiling "library-profiling")
               (stdenv.lib.enableFeature self.enableSplitObjs "split-objs")
