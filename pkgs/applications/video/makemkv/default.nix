@@ -23,7 +23,16 @@ stdenv.mkDerivation rec {
           + ":" + stdenv.gcc.gcc + "/lib64";
 
   meta = {
-    description = "software to convert blu-ray and dvd to mkv";
+    description = "convert blu-ray and dvd to mkv";
+    longDescription = ''
+      makemkv is a one-click QT application that transcodes an encrypted
+      blu-ray or DVD disc into a more portable set of mkv files, preserving
+      subtitles, chapter marks, all video and audio tracks.
+
+      Program is time-limited -- it will stop functioning after 60 days. You
+      can always download the latest version from makemkv.com that will reset the
+      expiration date.
+    ''
     license = "unfree";
     homepage = http://makemkv.com;
   };
