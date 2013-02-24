@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     transformers vector
   ];
   testDepends = [ base16Bytestring cryptohash HUnit text time ];
+  doCheck = false;
   meta = {
     description = "Mid-Level PostgreSQL client library";
     license = self.stdenv.lib.licenses.bsd3;
