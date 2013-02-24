@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "racket";
-  version = "5.2.1";
+  version = "5.3.3";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://download.racket-lang.org/installers/${version}/${pname}/${name}-src-unix.tgz";
-    sha256 = "1v5kvp7vfi4a4bn08jlaga441amlfxpjw9dm6vc1fazwzd72m539";
+    sha256 = "1qp0fmsh4dkxvlj35xnwdcf4m97jcf927cwhnckjicqx1lfa0wj7";
   };
 
   # Various racket executables do run-time searches for these.
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Racket (formerly called PLT Scheme) is a programming language derived from Scheme.";
+    description = "A programming language derived from Scheme (formerly called PLT Scheme).";
     longDescription = ''
       Racket (formerly called PLT Scheme) is a programming language derived
       from Scheme. The Racket project has four primary components: the
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
 
     homepage = http://racket-lang.org/;
-    license = stdenv.lib.licenses.lgpl2Plus;
+    license = stdenv.lib.licenses.lgpl2Plus; # and licenses of contained libraries
     maintainers = [ stdenv.lib.maintainers.kkallio ];
     platforms = stdenv.lib.platforms.linux;
   };
