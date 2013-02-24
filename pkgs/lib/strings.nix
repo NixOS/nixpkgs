@@ -171,4 +171,9 @@ rec {
   assert ! eqStrings name filename;
   name;
 
+
+  # Create an --{enable,disable}-<feat> string that can be passed to
+  # standard GNU Autoconf scripts.
+  enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
+
 }
