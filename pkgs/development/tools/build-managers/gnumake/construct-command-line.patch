@@ -13,10 +13,10 @@ Subject: [PATCH]  job.c (construct_command_argv_internal): Don't assume
  job.c     | 23 ++++++++++++++++-------
  2 files changed, 23 insertions(+), 7 deletions(-)
 
-diff --git a/job.c b/job.c
+diff --git job.c job.c
 index 67b402d..c2ce84d 100644
---- a/job.c
-+++ b/job.c
+--- job.c
++++ job.c
 @@ -2844,12 +2844,12 @@ construct_command_argv_internal (char *line, char **restp, char *shell,
  
      unsigned int shell_len = strlen (shell);

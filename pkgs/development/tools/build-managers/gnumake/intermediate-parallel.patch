@@ -1,7 +1,7 @@
-diff --git a/remake.c b/remake.c
+diff --git remake.c remake.c
 index c0bf709..b1ddd23 100644
---- a/remake.c
-+++ b/remake.c
+--- remake.c
++++ remake.c
 @@ -612,6 +612,10 @@ update_file_1 (struct file *file, unsigned int depth)
                  d->file->dontcare = file->dontcare;
                }
@@ -13,10 +13,10 @@ index c0bf709..b1ddd23 100644
  
  	    dep_status |= update_file (d->file, depth);
  
-diff --git a/tests/scripts/features/parallelism b/tests/scripts/features/parallelism
+diff --git tests/scripts/features/parallelism tests/scripts/features/parallelism
 index d4250f0..76d24a7 100644
---- a/tests/scripts/features/parallelism
-+++ b/tests/scripts/features/parallelism
+--- tests/scripts/features/parallelism
++++ tests/scripts/features/parallelism
 @@ -214,6 +214,23 @@ rm main.x");
      rmfiles(qw(foo.y foo.y.in main.bar));
  }
