@@ -485,6 +485,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   base64Conduit = callPackage ../development/libraries/haskell/base64-conduit {};
 
+  baseCompat = callPackage ../development/libraries/haskell/base-compat {};
+
   baseUnicodeSymbols = callPackage ../development/libraries/haskell/base-unicode-symbols {};
 
   basicPrelude = callPackage ../development/libraries/haskell/basic-prelude {};
