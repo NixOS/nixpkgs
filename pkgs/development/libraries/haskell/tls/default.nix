@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     cereal certificate cprngAes cryptoPubkey cryptoRandomApi mtl
     QuickCheck testFramework testFrameworkQuickcheck2 time
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/vincenthz/hs-tls";
     description = "TLS/SSL protocol native implementation (Server and Client)";
