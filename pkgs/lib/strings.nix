@@ -161,7 +161,7 @@ rec {
   getVersion = drv: (builtins.parseDrvName drv.name).version;
 
 
-  # Extract name with version from URL. Ask for separator which is 
+  # Extract name with version from URL. Ask for separator which is
   # supposed to start extension
   nameFromURL = url: sep: let
     components = splitString "/" url;
