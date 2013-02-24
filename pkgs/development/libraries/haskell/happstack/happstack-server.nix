@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     utf8String xhtml zlib
   ];
   testDepends = [ HUnit parsec zlib ];
+  doCheck = false;
   meta = {
     homepage = "http://happstack.com";
     description = "Web related tools and services";
