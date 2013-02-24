@@ -462,6 +462,16 @@ in
       '';
     };
 
+    services.logind.extraConfig = mkOption {
+      default = "";
+      type = types.uniq types.string;
+      example = "HandleLidSwitch=ignore";
+      description = ''
+        Extra config options for systemd-logind. See man logind.conf for
+        available options.
+      '';
+    };
+
     systemd.enableEmergencyMode = mkOption {
       default = true;
       type = types.bool;
@@ -507,6 +517,13 @@ in
               ''}
             '';
           target = "systemd/journald.conf";
+        }
+        { source = pkgs.writeText "logind.conf"
+            ''
+              [Logind]
+              ${config.services.logind.extraConfig}
+            '';
+          target = "systemd/logind.conf";
         }
       ];
 
