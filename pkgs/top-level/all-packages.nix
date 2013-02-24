@@ -8398,6 +8398,8 @@ let
     lua = lua5;
   };
 
+  unvanquished = callPackage ../games/unvanquished { };
+
   uqm = callPackage ../games/uqm { };
 
   urbanterror = callPackage ../games/urbanterror { };
