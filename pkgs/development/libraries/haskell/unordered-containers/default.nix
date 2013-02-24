@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     ChasingBottoms hashable HUnit QuickCheck testFramework
     testFrameworkHunit testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/tibbe/unordered-containers";
     description = "Efficient hashing-based container types";
