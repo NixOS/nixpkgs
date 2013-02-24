@@ -146,10 +146,17 @@ in
 
     environment.systemPackages =  [ pkgs.hostapd ];
 
-    jobs.hostapd =
-      { startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-        exec = "${pkgs.hostapd}/bin/hostapd ${configFile}";
+    systemd.services.hostapd =
+      { description = "hostapd wireless AP";
+
+        path = [ pkgs.hostapd ]; 
+
+        after = [ "${cfg.interface}-cfg.service" "nat.service" "bind.service" "dhcpd.service"];
+
+        serviceConfig = 
+          { ExecStart = "${pkgs.hostapd}/bin/hostapd ${configFile}";
+            Restart = "always";
+          };
       };
   };
 }
