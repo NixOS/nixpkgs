@@ -9,7 +9,7 @@
         internalAttrs = [
           "internalAttrs" "buildDepends" "buildTools" "extraLibraries" "pkgconfigDepends"
           "isLibrary" "isExecutable" "testDepends"
-        ];
+        ] ++ stdenv.lib.optional (!args.doCheck or false) "doCheck";
 
         # Stuff happening after the user preferences have been processed. We remove
         # internal attributes and strip null elements from the dependency lists, all
