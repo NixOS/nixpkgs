@@ -1426,6 +1426,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
 
+  punycode = callPackage ../development/libraries/haskell/punycode {};
+
   primitive_0_4_1 = callPackage ../development/libraries/haskell/primitive/0.4.1.nix {};
   primitive_0_5   = callPackage ../development/libraries/haskell/primitive/0.5.nix   {};
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
