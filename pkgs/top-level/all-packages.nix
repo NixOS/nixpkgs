@@ -6060,6 +6060,8 @@ let
 
   libcap_manpages = callPackage ../os-specific/linux/libcap/man.nix { };
 
+  libcap_ng = callPackage ../os-specific/linux/libcap-ng { };
+
   libnscd = callPackage ../os-specific/linux/libnscd { };
 
   libnotify = callPackage ../development/libraries/libnotify { };
