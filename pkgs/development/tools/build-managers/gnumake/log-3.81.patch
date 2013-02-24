@@ -1,6 +1,6 @@
-diff -rc make-3.81-orig/job.c make-3.81/job.c
-*** make-3.81-orig/job.c	2006-03-20 04:03:04.000000000 +0100
---- make-3.81/job.c	2009-01-19 19:37:28.000000000 +0100
+diff -rc job.c job.c
+*** job.c	2006-03-20 04:03:04.000000000 +0100
+--- job.c	2009-01-19 19:37:28.000000000 +0100
 ***************
 *** 1083,1089 ****
        appear.  */
@@ -18,9 +18,9 @@ diff -rc make-3.81-orig/job.c make-3.81/job.c
   
     /* Tell update_goal_chain that a command has been started on behalf of
        this target.  It is important that this happens here and not in
-diff -rc make-3.81-orig/main.c make-3.81/main.c
-*** make-3.81-orig/main.c	2006-03-20 03:36:37.000000000 +0100
---- make-3.81/main.c	2009-01-19 19:41:41.000000000 +0100
+diff -rc main.c main.c
+*** main.c	2006-03-20 03:36:37.000000000 +0100
+--- main.c	2009-01-19 19:41:41.000000000 +0100
 ***************
 *** 886,891 ****
 --- 886,900 ----
@@ -87,9 +87,9 @@ diff -rc make-3.81-orig/main.c make-3.81/main.c
 + int enable_nested_output = 0;
 + int stdout_nesting_level = 0;
 + int stderr_nesting_level = 0;
-diff -rc make-3.81-orig/make.h make-3.81/make.h
-*** make-3.81-orig/make.h	2006-02-16 00:54:43.000000000 +0100
---- make-3.81/make.h	2009-01-19 19:32:03.000000000 +0100
+diff -rc make.h
+*** make.h	2006-02-16 00:54:43.000000000 +0100
+--- make.h	2009-01-19 19:32:03.000000000 +0100
 ***************
 *** 609,611 ****
 --- 609,614 ----
@@ -99,9 +99,9 @@ diff -rc make-3.81-orig/make.h make-3.81/make.h
 + extern int enable_nested_output;
 + extern int stdout_nesting_level;
 + extern int stderr_nesting_level;
-diff -rc make-3.81-orig/remake.c make-3.81/remake.c
-*** make-3.81-orig/remake.c	2006-03-20 03:36:37.000000000 +0100
---- make-3.81/remake.c	2009-01-19 19:39:40.000000000 +0100
+diff -rc reremake.c
+*** remake.c	2006-03-20 03:36:37.000000000 +0100
+--- remake.c	2009-01-19 19:39:40.000000000 +0100
 ***************
 *** 1120,1126 ****
 --- 1120,1137 ----
