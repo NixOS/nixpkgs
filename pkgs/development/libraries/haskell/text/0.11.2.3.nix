@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     deepseq HUnit QuickCheck random testFramework testFrameworkHunit
     testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/bos/text";
     description = "An efficient packed Unicode text type";
