@@ -1604,9 +1604,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   stringCombinators = callPackage ../development/libraries/haskell/string-combinators {};
 
-  stringQq = callPackage ../development/libraries/haskell/string-qq {};
-
   stringprep = callPackage ../development/libraries/haskell/stringprep {};
+
+  stringQq = callPackage ../development/libraries/haskell/string-qq {};
 
   stringsearch = callPackage ../development/libraries/haskell/stringsearch {};
 
@@ -1677,11 +1677,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   strictConcurrency = callPackage ../development/libraries/haskell/strictConcurrency {};
 
+  stringbuilder = callPackage ../development/libraries/haskell/stringbuilder {};
+
   svgcairo = callPackage ../development/libraries/haskell/svgcairo {
     libc = pkgs.stdenv.gcc.libc;
   };
-
-  stringbuilder = callPackage ../development/libraries/haskell/stringbuilder {};
 
   symbol = callPackage ../development/libraries/haskell/symbol {};
 
