@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     cereal conduit cryptoApi cryptocipher cryptohash hspec skein
     transformers
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/meteficha/crypto-conduit";
     description = "Conduit interface for cryptographic operations (from crypto-api)";
