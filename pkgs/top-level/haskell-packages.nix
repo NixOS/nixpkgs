@@ -2029,11 +2029,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
 
-  cabalDev = callPackage ../development/tools/haskell/cabal-dev {
-    mtl          = self.mtl_2_0_1_0.override { transformers = self.transformers_0_2_2_0; };
-    transformers = self.transformers_0_2_2_0;
-    tar          = self.tar_0_3_2_0;
-  };
+  cabalDev = callPackage ../development/tools/haskell/cabal-dev {};
 
   cabalGhci = callPackage ../development/tools/haskell/cabal-ghci {};
 
