@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     httpdShed HUnit network split testFramework testFrameworkHunit
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/haskell/HTTP";
     description = "A library for client-side HTTP";
