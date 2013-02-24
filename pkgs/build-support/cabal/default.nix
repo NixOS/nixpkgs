@@ -139,14 +139,12 @@
               eval "$postBuild"
             '';
 
-            checkPhase = ''
-              if [ -n "$doCheck" ]; then
-                eval "$preCheck"
+            checkPhase = stdenv.lib.optional self.doCheck ''
+              eval "$preCheck"
 
-                ./Setup test
+              ./Setup test
 
-                eval "$postCheck"
-              fi
+              eval "$postCheck"
             '';
 
             # installs via Cabal; creates a registration file for nix-support
