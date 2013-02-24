@@ -1290,6 +1290,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   NanoProlog = callPackage ../development/libraries/haskell/NanoProlog {};
 
+  nanospec = callPackage ../development/libraries/haskell/nanospec {};
+
   nat = callPackage ../development/libraries/haskell/nat {};
 
   nats = callPackage ../development/libraries/haskell/nats {};
