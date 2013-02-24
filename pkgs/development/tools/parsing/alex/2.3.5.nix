@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   isLibrary = false;
   isExecutable = true;
   buildTools = [ perl ];
+  doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/alex/";
     description = "Alex is a tool for generating lexical analysers in Haskell";
