@@ -5,6 +5,7 @@ cabal.mkDerivation (self: {
   version = "0.1.0.3";
   sha256 = "1c0yclil152hv06c2sbgam9amd63nnzh7a4xsnxb05wgy93qs2mg";
   buildDepends = [ deepseq HUnit ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/simonmar/monad-par";
     description = "A library for parallel programming based on a monad";

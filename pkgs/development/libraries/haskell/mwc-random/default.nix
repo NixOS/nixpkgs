@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     HUnit QuickCheck statistics testFramework testFrameworkHunit
     testFrameworkQuickcheck2 vector
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/bos/mwc-random";
     description = "Fast, high quality pseudo random number generation";

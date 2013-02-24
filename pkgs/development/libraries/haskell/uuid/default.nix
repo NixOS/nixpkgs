@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     criterion deepseq HUnit mersenneRandomPure64 QuickCheck random
   ];
+  doCheck = false;
   meta = {
     homepage = "http://projects.haskell.org/uuid/";
     description = "For creating, comparing, parsing and printing Universally Unique Identifiers";
