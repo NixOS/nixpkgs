@@ -1,4 +1,4 @@
-{stdenv, fetchurl, autoconf, automake, libtool, gettext, perl}:
+{ stdenv, fetchurl, autoconf, automake, libtool, gettext, perl, flex }:
 
 let
   asIfPatch = ./recode-3.6-as-if.patch;
@@ -6,8 +6,8 @@ let
   gettextPatch = ./recode-3.6-gettextfix.diff;
 
   debianPatch = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/r/recode/recode_3.6-15.diff.gz";
-    sha256 = "114qxm29wk95w5760bswgd46d5p00g5kbfai5wchjvcbi722p5qf";
+    url = "http://ftp.de.debian.org/debian/pool/main/r/recode/recode_3.6-17.diff.gz";
+    sha256 = "1iwrggw64faf6lghgm9nzh64vh8m8jd79h6pxqgrmfmplzrzpzjp";
   };
 in
 stdenv.mkDerivation {
@@ -18,15 +18,21 @@ stdenv.mkDerivation {
     sha256 = "1krgjqfhsxcls4qvxhagc45sm1sd0w69jm81nwm0bip5z3rs9rp3";
   };
 
-  buildInputs = [ autoconf automake libtool gettext perl ];
+  buildInputs = [ autoconf automake libtool gettext perl flex ];
 
   patchPhase = ''
-    patch -Np1 -i ${asIfPatch}
     patch -Np1 -i ${gettextPatch}
+    patch -Np1 -i ${asIfPatch}
     gunzip <${debianPatch} | patch -Np1 -i -
     sed -i '1i#include <stdlib.h>' src/argmatch.c
-    rm -f acinclude.m4
-    autoreconf -fi
+
+    # fix build with new automake, https://bugs.gentoo.org/show_bug.cgi?id=419455
+    rm acinclude.m4
+    substituteInPlace Makefile.am --replace "ACLOCAL = ./aclocal.sh @ACLOCAL@" ""
+    sed -i '/^AM_C_PROTOTYPES/d' configure.in
+    substituteInPlace src/Makefile.am --replace "ansi2knr" ""
+
+    autoreconf -i
     libtoolize
   '';
 
