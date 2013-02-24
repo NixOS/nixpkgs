@@ -19,6 +19,7 @@ cabal.mkDerivation (self: {
     mkdir -p $out/etc/bash_completion.d
     mv contrib/darcs_completion $out/etc/bash_completion.d/darcs
   '';
+  doCheck = false;
   meta = {
     homepage = "http://darcs.net/";
     description = "a distributed, interactive, smart revision control system";
