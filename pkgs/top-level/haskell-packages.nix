@@ -1323,6 +1323,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   networkTransportTcp = callPackage ../development/libraries/haskell/network-transport-tcp {};
 
+  networkTransportTests = callPackage ../development/libraries/haskell/network-transport-tests {};
+
   newtype = callPackage ../development/libraries/haskell/newtype {};
 
   nonNegative = callPackage ../development/libraries/haskell/non-negative {};
