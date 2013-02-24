@@ -1,5 +1,5 @@
-{ cabal, liftedBase, monadControl, resourcet, text, transformers
-, transformersBase, void
+{ cabal, doctest, hspec, liftedBase, monadControl, QuickCheck
+, resourcet, text, transformers, transformersBase, void
 }:
 
 cabal.mkDerivation (self: {
@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     liftedBase monadControl resourcet text transformers
     transformersBase void
+  ];
+  testDepends = [
+    doctest hspec QuickCheck resourcet text transformers void
   ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";

@@ -1,5 +1,5 @@
-{ cabal, classyPrelude, conduit, monadControl, resourcet
-, transformers, void, xmlConduit
+{ cabal, classyPrelude, conduit, hspec, monadControl, QuickCheck
+, resourcet, transformers, void, xmlConduit
 }:
 
 cabal.mkDerivation (self: {
@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     classyPrelude conduit monadControl resourcet transformers void
     xmlConduit
   ];
+  testDepends = [ conduit hspec QuickCheck transformers ];
   meta = {
     homepage = "https://github.com/snoyberg/classy-prelude";
     description = "conduit instances for classy-prelude";

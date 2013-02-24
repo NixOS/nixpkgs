@@ -1,7 +1,7 @@
 { cabal, base64Bytestring, blazeBuilder, blazeHtml, blazeMarkup
-, cereal, cryptoConduit, cryptohash, fileEmbed, httpDate, httpTypes
-, mimeTypes, systemFileio, systemFilepath, text, time, transformers
-, unixCompat, wai
+, cereal, cryptoConduit, cryptohash, fileEmbed, hspec, httpDate
+, httpTypes, mimeTypes, network, systemFileio, systemFilepath, text
+, time, transformers, unixCompat, wai, waiTest
 }:
 
 cabal.mkDerivation (self: {
@@ -12,6 +12,10 @@ cabal.mkDerivation (self: {
     base64Bytestring blazeBuilder blazeHtml blazeMarkup cereal
     cryptoConduit cryptohash fileEmbed httpDate httpTypes mimeTypes
     systemFileio systemFilepath text time transformers unixCompat wai
+  ];
+  testDepends = [
+    hspec httpDate httpTypes mimeTypes network text time transformers
+    unixCompat wai waiTest
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/web-application-interface";

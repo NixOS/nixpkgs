@@ -14,6 +14,7 @@ cabal.mkDerivation (self: {
     persistent poolConduit text time transformers wai waiTest
     xmlConduit xmlTypes
   ];
+  testDepends = [ hspec htmlConduit HUnit xmlConduit ];
   meta = {
     homepage = "http://www.yesodweb.com";
     description = "integration testing for WAI/Yesod Applications";

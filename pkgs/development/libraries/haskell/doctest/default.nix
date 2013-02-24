@@ -1,4 +1,6 @@
-{ cabal, deepseq, filepath, ghcPaths, syb, transformers }:
+{ cabal, baseCompat, deepseq, filepath, ghcPaths, hspec, HUnit
+, QuickCheck, setenv, silently, stringbuilder, syb, transformers
+}:
 
 cabal.mkDerivation (self: {
   pname = "doctest";
@@ -7,6 +9,10 @@ cabal.mkDerivation (self: {
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ deepseq filepath ghcPaths syb transformers ];
+  testDepends = [
+    baseCompat deepseq filepath ghcPaths hspec HUnit QuickCheck setenv
+    silently stringbuilder syb transformers
+  ];
   meta = {
     homepage = "https://github.com/sol/doctest-haskell#readme";
     description = "Test interactive Haskell examples";

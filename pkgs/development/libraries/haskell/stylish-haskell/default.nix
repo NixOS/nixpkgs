@@ -1,5 +1,5 @@
-{ cabal, aeson, cmdargs, filepath, haskellSrcExts, mtl, strict, syb
-, yaml
+{ cabal, aeson, cmdargs, filepath, haskellSrcExts, HUnit, mtl
+, strict, syb, testFramework, testFrameworkHunit, yaml
 }:
 
 cabal.mkDerivation (self: {
@@ -10,6 +10,10 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [
     aeson cmdargs filepath haskellSrcExts mtl strict syb yaml
+  ];
+  testDepends = [
+    aeson cmdargs filepath haskellSrcExts HUnit mtl syb testFramework
+    testFrameworkHunit yaml
   ];
   meta = {
     homepage = "https://github.com/jaspervdj/stylish-haskell";

@@ -21,7 +21,7 @@ cabal.mkDerivation (self: {
       test -f $i && ghc --make $i
     done
   
-    for p in $extraBuildInputs $propagatedNativeBuildInputs; do
+    for p in $extraBuildInputs $propagatedBuildNativeInputs; do
       if [ -d "$p/include" ]; then
         extraLibDirs="$extraLibDirs --extra-include-dir=$p/include"
       fi

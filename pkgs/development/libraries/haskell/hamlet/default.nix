@@ -1,5 +1,5 @@
-{ cabal, blazeBuilder, blazeHtml, blazeMarkup, failure, parsec
-, shakespeare, text
+{ cabal, blazeBuilder, blazeHtml, blazeMarkup, failure, hspec
+, HUnit, parsec, shakespeare, text
 }:
 
 cabal.mkDerivation (self: {
@@ -9,6 +9,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     blazeBuilder blazeHtml blazeMarkup failure parsec shakespeare text
   ];
+  testDepends = [ blazeHtml blazeMarkup hspec HUnit parsec text ];
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "Haml-like template files that are compile-time checked";

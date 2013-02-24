@@ -1,7 +1,8 @@
 { cabal, aeson, attoparsec, base64Bytestring, blazeHtml
-, blazeMarkup, conduit, liftedBase, monadControl, monadLogger
-, pathPieces, poolConduit, resourcet, silently, sqlite, text, time
-, transformers, transformersBase, unorderedContainers, vector
+, blazeMarkup, conduit, hspec, liftedBase, monadControl
+, monadLogger, pathPieces, poolConduit, resourcet, silently, sqlite
+, text, time, transformers, transformersBase, unorderedContainers
+, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -14,6 +15,7 @@ cabal.mkDerivation (self: {
     resourcet silently text time transformers transformersBase
     unorderedContainers vector
   ];
+  testDepends = [ hspec text ];
   extraLibraries = [ sqlite ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";

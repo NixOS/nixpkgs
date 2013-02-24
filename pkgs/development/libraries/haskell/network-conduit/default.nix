@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     conduit liftedBase monadControl network transformers
   ];
+  testDepends = [ conduit ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Stream socket data using conduits";

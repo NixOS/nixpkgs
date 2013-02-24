@@ -1,9 +1,14 @@
-{ cabal }:
+{ cabal, QuickCheck, random, testFramework
+, testFrameworkQuickcheck2
+}:
 
 cabal.mkDerivation (self: {
   pname = "binary";
   version = "0.6.4.0";
   sha256 = "0vq80fzhwil5bx4a2vbd3jvfh1awhg1pwxgvq3lvbi37yzl0ydgh";
+  testDepends = [
+    QuickCheck random testFramework testFrameworkQuickcheck2
+  ];
   meta = {
     homepage = "https://github.com/kolmodin/binary";
     description = "Binary serialisation for Haskell values using lazy ByteStrings";

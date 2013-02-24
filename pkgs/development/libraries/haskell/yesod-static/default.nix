@@ -1,5 +1,5 @@
 { cabal, base64Bytestring, cereal, conduit, cryptoConduit
-, cryptohash, fileEmbed, httpTypes, systemFilepath, text
+, cryptohash, fileEmbed, hspec, httpTypes, systemFilepath, text
 , transformers, unixCompat, wai, waiAppStatic, yesodCore
 }:
 
@@ -10,6 +10,11 @@ cabal.mkDerivation (self: {
   buildDepends = [
     base64Bytestring cereal conduit cryptoConduit cryptohash fileEmbed
     httpTypes systemFilepath text transformers unixCompat wai
+    waiAppStatic yesodCore
+  ];
+  testDepends = [
+    base64Bytestring cereal conduit cryptoConduit cryptohash fileEmbed
+    hspec httpTypes systemFilepath text transformers unixCompat wai
     waiAppStatic yesodCore
   ];
   meta = {

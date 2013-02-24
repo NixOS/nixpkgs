@@ -1,6 +1,7 @@
-{ cabal, binary, dataAccessor, distributedStatic, mtl
-, networkTransport, random, rank1dynamic, stm, syb, time
-, transformers
+{ cabal, ansiTerminal, binary, dataAccessor, distributedStatic
+, HUnit, mtl, network, networkTransport, networkTransportTcp
+, random, rank1dynamic, stm, syb, testFramework, testFrameworkHunit
+, time, transformers
 }:
 
 cabal.mkDerivation (self: {
@@ -12,6 +13,11 @@ cabal.mkDerivation (self: {
   buildDepends = [
     binary dataAccessor distributedStatic mtl networkTransport random
     rank1dynamic stm syb time transformers
+  ];
+  testDepends = [
+    ansiTerminal binary distributedStatic HUnit network
+    networkTransport networkTransportTcp random stm testFramework
+    testFrameworkHunit
   ];
   noHaddock = true;
   meta = {

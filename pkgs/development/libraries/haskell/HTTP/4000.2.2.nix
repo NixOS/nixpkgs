@@ -1,10 +1,15 @@
-{ cabal, mtl, network, parsec }:
+{ cabal, httpdShed, HUnit, mtl, network, parsec, split
+, testFramework, testFrameworkHunit
+}:
 
 cabal.mkDerivation (self: {
   pname = "HTTP";
   version = "4000.2.2";
   sha256 = "0qrr9wdj25sdfxifppmw0w14g8skpgf42ic4iqcqylxxzfa8v7vh";
   buildDepends = [ mtl network parsec ];
+  testDepends = [
+    httpdShed HUnit network split testFramework testFrameworkHunit
+  ];
   meta = {
     homepage = "https://github.com/haskell/HTTP";
     description = "A library for client-side HTTP";

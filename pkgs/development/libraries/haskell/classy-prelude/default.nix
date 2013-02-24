@@ -1,5 +1,5 @@
-{ cabal, basicPrelude, hashable, liftedBase, systemFilepath, text
-, transformers, unorderedContainers, vector
+{ cabal, basicPrelude, hashable, hspec, liftedBase, QuickCheck
+, systemFilepath, text, transformers, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     basicPrelude hashable liftedBase systemFilepath text transformers
     unorderedContainers vector
   ];
+  testDepends = [ hspec QuickCheck transformers ];
   meta = {
     homepage = "https://github.com/snoyberg/classy-prelude";
     description = "A typeclass-based Prelude";

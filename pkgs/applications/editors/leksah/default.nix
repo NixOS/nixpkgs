@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     QuickCheck regexBase regexTdfa strict text time transformers
     utf8String
   ];
+  testDepends = [ Cabal QuickCheck ];
   noHaddock = true;
   meta = {
     homepage = "http://www.leksah.org";
