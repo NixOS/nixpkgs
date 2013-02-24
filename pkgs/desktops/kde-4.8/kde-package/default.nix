@@ -51,7 +51,7 @@ rec {
           "-DBUILD_${subdir}=TRUE"
         ] ++ cmakeFlags;
       meta = defMeta // meta;
-      enableParallelBuilding = true;
+      enableParallelBuilding = module.enableParallelBuilding or true;
     } // (removeAttrs a [ "meta" "name" "cmakeFlags" ]));
 
   # A KDE monolithic module
