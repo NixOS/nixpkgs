@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ binary digest filepath mtl time utf8String zlib ];
   testDepends = [ HUnit time ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/jgm/zip-archive";
     description = "Library for creating and modifying zip archives";
