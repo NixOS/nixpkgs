@@ -20,12 +20,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = 
-    [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec
-      flac glibc glibmm gtk gtkmm jackaudio libgnomecanvas
-      libgnomecanvasmm liblo libmad libogg librdf librdf_raptor
-      librdf_rasqal libsamplerate libsigcxx libsndfile libusb libuuid
-      libxml2 libxslt lilv lv2 pango perl pkgconfig python serd sord
-      sratom suil
+    [ alsaLib aubio boost cairomm curl fftw fftwSinglePrec flac glibc
+      glibmm gtk gtkmm jackaudio libgnomecanvas libgnomecanvasmm liblo
+      libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
+      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
+      makeWrapper pango perl pkgconfig python serd sord sratom suil
     ];
 
   patchPhase = ''
@@ -39,13 +38,14 @@ stdenv.mkDerivation {
 
   buildPhase = "python waf";
 
-  installPhase = "python waf install";
-
-  postInstall = ''
-    mkdir -pv $out/gtk-2.0/2.10.0/engines
-    mv lib/ardour3/libclearlooks.so $out/gtk-2.0/2.10.0/engines/
-    wrapProgram $out/bin/ardour3 --prefix GTK_PATH : $out/gtk-2.0
-    '';
+  # For the custom ardour clearlooks gtk-engine to work, it must be
+  # moved to a directory called "engines" and added to GTK_PATH
+  installPhase = ''
+    python waf install
+    mkdir -pv $out/gtk2/engines
+    mv $out/lib/ardour3/libclearlooks.so $out/gtk2/engines/
+    wrapProgram $out/bin/ardour3 --prefix GTK_PATH : $out/gtk2
+  '';
 
   meta = with stdenv.lib; {
     description = "Multi-track hard disk recording software";
