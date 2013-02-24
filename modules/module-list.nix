@@ -172,6 +172,7 @@
   ./services/system/kerberos.nix
   ./services/system/nscd.nix
   ./services/system/uptimed.nix
+  ./services/torrent/deluge.nix
   ./services/ttys/gpm.nix
   ./services/ttys/agetty.nix
   ./services/web-servers/apache-httpd/default.nix
