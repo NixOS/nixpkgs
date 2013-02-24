@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     QuickCheck testFramework testFrameworkQuickcheck2
   ];
   extraLibraries = [ zeromq ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/twittner/zeromq-haskell/";
     description = "Bindings to ZeroMQ 3.x";
