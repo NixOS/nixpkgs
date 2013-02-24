@@ -624,6 +624,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   contravariant = callPackage ../development/libraries/haskell/contravariant {};
 
+  concurrentExtra = callPackage ../development/libraries/haskell/concurrent-extra {};
+
   converge = callPackage ../development/libraries/haskell/converge {};
 
   cookie = callPackage ../development/libraries/haskell/cookie {};
