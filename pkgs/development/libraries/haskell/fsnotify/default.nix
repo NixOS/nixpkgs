@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     Cabal Glob hinotify hspec QuickCheck random systemFileio
     systemFilepath text time uniqueid
   ];
+  doCheck = false;
   meta = {
     description = "Cross platform library for file creation, modification, and deletion notification";
     license = self.stdenv.lib.licenses.bsd3;
