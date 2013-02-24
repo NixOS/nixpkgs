@@ -86,13 +86,11 @@
             # pass the '--enable-split-objs' flag to cabal in the configure stage
             enableSplitObjs = true;
 
-            # configure flag to pass to enable/disable library profiling
-            libraryProfiling =
-              if enableLibraryProfiling then ["--enable-library-profiling"]
-                                        else ["--disable-library-profiling"];
-
-            # configure flag to pass to enable/disable object splitting
-            splitObjects = if self.enableSplitObjs then "--enable-split-objs" else "--disable-split-objs";
+            extraConfigureFlags = [
+              (stdenv.lib.enableFeature enableLibraryProfiling "library-profiling")
+              (stdenv.lib.enableFeature self.enableSplitObjs "split-objs")
+              (stdenv.lib.enableFeature self.doCheck "tests")
+            ];
 
             # compiles Setup and configures
             configurePhase = ''
@@ -106,19 +104,17 @@
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
                 if [ -d "$p/include" ]; then
-                  extraLibDirs="$extraLibDirs --extra-include-dir=$p/include"
+                  extraConfigureFlags+=" --extra-include-dir=$p/include"
                 fi
                 for d in lib{,64}; do
                   if [ -d "$p/$d" ]; then
-                    extraLibDirs="$extraLibDirs --extra-lib-dir=$p/$d"
+                    extraConfigureFlags+=" --extra-lib-dir=$p/$d"
                   fi
                 done
               done
 
-              test -z "$doCheck" || configureFlags+=" --enable-tests"
-
-              echo "configure flags: $libraryProfiling $splitObjects $extraLibDirs $configureFlags"
-              ./Setup configure --verbose --prefix="$out" $libraryProfiling $splitObjects $extraLibDirs $configureFlags
+              echo "configure flags: $extraConfigureFlags $configureFlags"
+              ./Setup configure --verbose --prefix="$out" $extraConfigureFlags $configureFlags
 
               eval "$postConfigure"
             '';
