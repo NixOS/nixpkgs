@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     Diff filepath HUnit mtl parsec split time utf8String xml
   ];
+  doCheck = false;
   jailbreak = true;
   meta = {
     description = "Interface for versioning file stores";
