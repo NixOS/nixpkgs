@@ -23,6 +23,7 @@ stdenv.mkDerivation {
       # /usr/include and friends.
       ./impure-dirs.patch
     ];
+  patchFlags = "-p0";
 
   meta = {
     description = "GNU Make, a program controlling the generation of non-source files from sources";
