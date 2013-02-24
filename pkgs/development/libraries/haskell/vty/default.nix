@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     Cabal deepseq mtl parallel parsec QuickCheck random terminfo
     utf8String vector
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/coreyoconnor/vty";
     description = "A simple terminal UI library";
