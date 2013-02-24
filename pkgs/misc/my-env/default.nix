@@ -12,7 +12,7 @@
   }
 
   # Then you can install it by:  
-  #  $ nix-env -i sdl-env
+  #  $ nix-env -i env-sdl
   # And you can load it simply calling:  
   #  $ load-env-sdl
   # and this will update your env vars to have 'make' and 'gcc' finding the SDL
