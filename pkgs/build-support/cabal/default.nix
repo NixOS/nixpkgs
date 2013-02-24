@@ -99,6 +99,7 @@
               eval "$preConfigure"
 
               ${lib.optionalString self.jailbreak "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal"}
+
               for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
@@ -114,6 +115,9 @@
                 done
               done
 
+              test -z "$doCheck" || configureFlags+=" --enable-tests"
+
+              echo "configure flags: $libraryProfiling $splitObjects $extraLibDirs $configureFlags"
               ./Setup configure --verbose --prefix="$out" $libraryProfiling $splitObjects $extraLibDirs $configureFlags
 
               eval "$postConfigure"
@@ -129,6 +133,16 @@
               [ -n "$noHaddock" ] || ./Setup haddock
 
               eval "$postBuild"
+            '';
+
+            checkPhase = ''
+              if [ -n "$doCheck" ]; then
+                eval "$preCheck"
+
+                ./Setup test
+
+                eval "$postCheck"
+              fi
             '';
 
             # installs via Cabal; creates a registration file for nix-support

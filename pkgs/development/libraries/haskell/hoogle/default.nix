@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hoogle";
-  version = "4.2.15";
-  sha256 = "0mhxdbbzq7hl5zxz3dhxyrs5q08y8hxwsm19ba0gx47qvg3znzki";
+  version = "4.2.16";
+  sha256 = "1hamwqhndrkajm4xvxxfhr2rnlmf3z2ysyfxx3y6d24jawjyqf8a";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -14,7 +14,6 @@ cabal.mkDerivation (self: {
     haskellSrcExts httpTypes parsec random safe tagsoup time
     transformers uniplate wai warp
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://www.haskell.org/hoogle/";
     description = "Haskell API Search";

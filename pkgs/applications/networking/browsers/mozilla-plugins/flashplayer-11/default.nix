@@ -3,7 +3,6 @@
 , zlib
 , alsaLib
 , curl
-, nss
 , nspr
 , fontconfig
 , freetype
@@ -77,7 +76,7 @@ stdenv.mkDerivation {
   };
 
   rpath = stdenv.lib.makeLibraryPath
-    [ zlib alsaLib curl nss nspr fontconfig freetype expat libX11
+    [ zlib alsaLib curl nspr fontconfig freetype expat libX11
       libXext libXrender libXcursor libXt gtk glib pango atk cairo gdk_pixbuf
       libvdpau
     ];

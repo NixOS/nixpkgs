@@ -49,7 +49,7 @@ rec {
       network pcreLight SHA stm utf8String networkInfo dbus clientsession cryptoApi dataDefault
       extensibleExceptions filepath hamlet httpTypes networkMulticast text time transformers
       transformersBase wai waiLogger warp yesod yesodDefault yesodStatic testpack QuickCheck
-      SafeSemaphore networkPprotocolXmpp async dns DAV uuid Glob;
+      SafeSemaphore networkProtocolXmpp async dns DAV uuid Glob;
   };
 
   qgit = import ./qgit {

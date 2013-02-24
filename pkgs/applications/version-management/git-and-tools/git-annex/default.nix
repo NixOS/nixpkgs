@@ -8,7 +8,7 @@
 , networkMulticast, pcreLight, QuickCheck, SHA, stm, text, time
 , transformers, transformersBase, utf8String, wai, waiLogger, warp
 , yesod, yesodDefault, yesodStatic, testpack, SafeSemaphore
-, networkPprotocolXmpp, async, dns, DAV, uuid, Glob
+, networkProtocolXmpp, async, dns, DAV, uuid, Glob
 }:
 
 let
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     httpTypes IfElse json liftedBase MissingH monadControl mtl network
     networkInfo networkMulticast pcreLight QuickCheck SHA stm text time
     transformers transformersBase utf8String wai waiLogger warp yesod
-    yesodDefault yesodStatic testpack SafeSemaphore networkPprotocolXmpp
+    yesodDefault yesodStatic testpack SafeSemaphore networkProtocolXmpp
     async dns DAV uuid Glob ];
 
   checkTarget = "test";

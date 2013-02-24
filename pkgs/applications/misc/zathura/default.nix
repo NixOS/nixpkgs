@@ -34,7 +34,9 @@ rec {
         is an application that provides a minimalistic and space saving interface
         as well as an easy usage that mainly focuses on keyboard interaction.
       '';
-      license = "free";
+      license = stdenv.lib.licenses.zlib;
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
 }

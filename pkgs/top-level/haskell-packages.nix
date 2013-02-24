@@ -129,7 +129,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     HTTP         = self.HTTP_4000_2_8;          # 7.6 ok
     HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
-    network      = self.network_2_4_1_0;        # 7.6 ok
+    network      = self.network_2_4_1_2;        # 7.6 ok
     OpenGL       = self.OpenGL_2_6_0_1;         # 7.6 ok
     parallel     = self.parallel_3_2_0_3;       # 7.6 ok
     parsec       = self.parsec_3_1_3;           # 7.6 ok
@@ -1286,8 +1286,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network_2_3_0_5 = callPackage ../development/libraries/haskell/network/2.3.0.5.nix {};
   network_2_3_0_13 = callPackage ../development/libraries/haskell/network/2.3.0.13.nix {};
   network_2_3_1_0 = callPackage ../development/libraries/haskell/network/2.3.1.0.nix {};
-  network_2_4_1_0 = callPackage ../development/libraries/haskell/network/2.4.1.0.nix {};
-  network = self.network_2_4_1_0;
+  network_2_4_1_2 = callPackage ../development/libraries/haskell/network/2.4.1.2.nix {};
+  network = self.network_2_4_1_2;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
 
@@ -1295,7 +1295,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   networkMulticast = callPackage ../development/libraries/haskell/network-multicast {};
 
-  networkPprotocolXmpp = callPackage ../development/libraries/haskell/network-protocol-xmpp {};
+  networkProtocolXmpp = callPackage ../development/libraries/haskell/network-protocol-xmpp {};
 
   networkTransport = callPackage ../development/libraries/haskell/network-transport {};
 
@@ -1999,9 +1999,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrcExts = self.haskellSrcExts_1_11_1;
   };
 
-  tar_0_3_2_0 = callPackage ../development/tools/haskell/tar/0.3.2.0.nix {};
-  tar_0_4_0_1 = callPackage ../development/tools/haskell/tar/0.4.0.1.nix {};
-  tar = self.tar_0_4_0_1;
+  tar = callPackage ../development/libraries/haskell/tar {};
 
   threadscope = callPackage ../development/tools/haskell/threadscope {};
 
@@ -2017,9 +2015,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     QuickCheck = self.QuickCheck2;
   };
 
-  xmobar = callPackage ../applications/misc/xmobar {
-    stm = self.stm_2_3;
-  };
+  xmobar = callPackage ../applications/misc/xmobar {};
 
   xmonad = callPackage ../applications/window-managers/xmonad {};
 
@@ -2031,11 +2027,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cabal2nix = callPackage ../development/tools/haskell/cabal2nix {};
 
-  cabalDev = callPackage ../development/tools/haskell/cabal-dev {
-    mtl          = self.mtl_2_0_1_0.override { transformers = self.transformers_0_2_2_0; };
-    transformers = self.transformers_0_2_2_0;
-    tar          = self.tar_0_3_2_0;
-  };
+  cabalDev = callPackage ../development/tools/haskell/cabal-dev {};
+
+  cabal2Ghci = callPackage ../development/tools/haskell/cabal2ghci {};
 
   cabalGhci = callPackage ../development/tools/haskell/cabal-ghci {};
 

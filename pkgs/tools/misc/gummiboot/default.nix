@@ -1,21 +1,19 @@
-{ stdenv, fetchurl, gnu_efi, unzip }:
+{ stdenv, fetchurl, gnu_efi, unzip, pkgconfig, utillinux, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
 
 stdenv.mkDerivation rec {
-  name = "gummiboot-16";
+  name = "gummiboot-23";
 
-  buildInputs = [ unzip ];
+  buildInputs = [ unzip pkgconfig utillinux libxslt docbook_xsl docbook_xml_dtd_42 ];
 
   patches = [ ./no-usr.patch ];
 
-  buildFlags = [
-    "GNU_EFI=${gnu_efi}"
-  ] ++ stdenv.lib.optional (stdenv.system == "i686-linux") "ARCH=ia32";
+  buildFlags = [ "GNU_EFI=${gnu_efi}" ];
 
-  installPhase = "mkdir -p $out/bin; mv gummiboot.efi $out/bin";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   src = fetchurl {
     url = "http://cgit.freedesktop.org/gummiboot/snapshot/${name}.zip";
-    sha256 = "0as5svmvsbz08qgbvns77qfb36xi9lx2138ikiinqv6finzm8fi1";
+    sha256 = "1lmfk4k52ha00ppna5g7h51vhd27i9fipf5k7mc2d9jkm2480z4j";
   };
 
   meta = {
