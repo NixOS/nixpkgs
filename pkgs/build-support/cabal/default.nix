@@ -8,7 +8,7 @@
         # environment overly, but also to keep hash-backwards-compatible with the old cabal.nix.
         internalAttrs = [
           "internalAttrs" "buildDepends" "buildTools" "extraLibraries" "pkgconfigDepends"
-          "isLibrary" "isExecutable"
+          "isLibrary" "isExecutable" "testDepends"
         ];
 
         # Stuff happening after the user preferences have been processed. We remove
