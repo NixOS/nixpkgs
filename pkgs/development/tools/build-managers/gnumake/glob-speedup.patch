@@ -17,8 +17,8 @@ Changes since 1.198: +35 -25 lines
 Avoid invoking glob() unless the filename has potential globbing
 characters in it, for performance improvements.
 
---- a/read.c	2011/04/29 15:27:39	1.198
-+++ b/read.c	2011/05/07 14:36:12	1.200
+--- read.c	2011/04/29 15:27:39	1.198
++++ read.c	2011/05/07 14:36:12	1.200
 @@ -2901,6 +2901,7 @@
        const char *name;
        const char **nlist = 0;
