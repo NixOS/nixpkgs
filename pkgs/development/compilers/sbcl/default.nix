@@ -4,11 +4,11 @@ let
   s= # Generated upstream information
   rec {
     baseName="sbcl";
-    version="1.1.3";
+    version="1.1.4";
     name="${baseName}-${version}";
-    hash="1qy64fy0nvjdgzlmasswgvzg1b2h2rygnnjvlf9vj7wg16i5383i";
-    url="mirror://sourceforge/project/sbcl/sbcl/1.1.3/sbcl-1.1.3-source.tar.bz2";
-    sha256="1qy64fy0nvjdgzlmasswgvzg1b2h2rygnnjvlf9vj7wg16i5383i";
+    hash="1k7p986hsd3yygzrsc0w68maflvhbg4gcmi3rbylyn0mi8pxb2s6";
+    url="mirror://sourceforge/project/sbcl/sbcl/${version}/sbcl-${version}-source.tar.bz2";
+    sha256="1k7p986hsd3yygzrsc0w68maflvhbg4gcmi3rbylyn0mi8pxb2s6";
   };
   buildInputs = with a; [
     clisp makeWrapper
@@ -21,7 +21,10 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doBuild" "doInstall" "doWrap"];
+  phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doPatch" "doBuild" "doInstall" "doWrap"];
+
+  patches = [ ./newglibc.patch ]; # https://bugs.launchpad.net/sbcl/+bug/1095036
+  patchFlags = "-p2";
 
   setVars = a.fullDepEntry (''
     export INSTALL_ROOT=$out
