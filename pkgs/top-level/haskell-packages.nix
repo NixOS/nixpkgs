@@ -1677,6 +1677,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     libc = pkgs.stdenv.gcc.libc;
   };
 
+  stringbuilder = callPackage ../development/libraries/haskell/stringbuilder {};
+
   symbol = callPackage ../development/libraries/haskell/symbol {};
 
   systemFilepath = callPackage ../development/libraries/haskell/system-filepath {};
