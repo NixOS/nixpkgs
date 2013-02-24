@@ -7,7 +7,7 @@ let
     src = ./efi-boot-stub-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.glibc] ++ (pkgs.stdenv.lib.optionals config.boot.loader.efiBootStub.runEfibootmgr [pkgs.efibootmgr pkgs.module_init_tools]);
+    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep pkgs.glibc] ++ (pkgs.stdenv.lib.optionals config.boot.loader.efi.canTouchEfiVariables [pkgs.efibootmgr pkgs.module_init_tools]);
     inherit (config.boot.loader.efiBootStub) installStartupNsh;
 
     inherit (config.boot.loader.efi) efiSysMountPoint;
