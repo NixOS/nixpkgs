@@ -582,6 +582,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
 
+  ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
+
   citeprocHs = callPackage ../development/libraries/haskell/citeproc-hs {};
 
   cipherAes = callPackage ../development/libraries/haskell/cipher-aes {};
