@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     baseUnicodeSymbols concurrentExtra HUnit stm testFramework
     testFrameworkHunit
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/basvandijk/threads";
     description = "Fork threads and wait for their result";
