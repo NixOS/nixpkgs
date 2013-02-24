@@ -1773,6 +1773,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   unbound = callPackage ../development/libraries/haskell/unbound {};
 
+  unboundedDelays = callPackage ../development/libraries/haskell/unbounded-delays {};
+
   uniplate = callPackage ../development/libraries/haskell/uniplate {};
 
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
