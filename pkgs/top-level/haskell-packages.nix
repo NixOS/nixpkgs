@@ -1604,6 +1604,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   stringQq = callPackage ../development/libraries/haskell/string-qq {};
 
+  stringprep = callPackage ../development/libraries/haskell/stringprep {};
+
   stringsearch = callPackage ../development/libraries/haskell/stringsearch {};
 
   strptime = callPackage ../development/libraries/haskell/strptime {};
