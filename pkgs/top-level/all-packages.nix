@@ -2823,13 +2823,7 @@ let
 
   picolisp = callPackage ../development/interpreters/picolisp {};
 
-  pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
-    inherit cairo fontconfig freetype libjpeg libpng openssl
-      perl mesa zlib which;
-    inherit (xorg) libX11 libXaw libXft libXrender libICE xproto
-      renderproto pixman libSM libxcb libXext xextproto libXmu
-      libXt;
-  };
+  pltScheme = racket; # just to be sure
 
   polyml = callPackage ../development/compilers/polyml { };
 
