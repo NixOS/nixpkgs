@@ -25,6 +25,7 @@ cabal.mkDerivation (self: {
     sed -r -i -e 's|blaze-html * >= 0.5 *&& < 0.6|blaze-html >= 0.5|' hledger-web.cabal
   '';
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://hledger.org";
     description = "A web interface for the hledger accounting tool";
