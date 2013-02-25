@@ -656,6 +656,7 @@ rec {
     meta = {
       description = "Replace the development server with Starman";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -4813,18 +4814,18 @@ rec {
     };
   };
 
-  TestWWWMechanizeCatalyst = buildPerlPackage rec {
-    name = "Test-WWW-Mechanize-Catalyst-0.55";
+  TestWWWMechanizeCatalyst = buildPerlPackage {
+    name = "Test-WWW-Mechanize-Catalyst-0.58";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
-      sha256 = "0zdg4sxx231dj3qgbr58i63927gl4qzh0krignqxp8q6ck3hr63f";
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Test-WWW-Mechanize-Catalyst-0.58.tar.gz;
+      sha256 = "1pa2m064skxfwsm93hffxcyky4kcn2q418vnw2fn79ich6wrcijd";
     };
-    propagatedBuildInputs =
-      [ CatalystRuntime TestWWWMechanize WWWMechanize
-        CatalystPluginSessionStateCookie HTMLForm
-      ];
-    buildInputs = [ TestPod ];
     doCheck = false; # listens on an external port
+    propagatedBuildInputs = [ CatalystRuntime LWP Moose namespaceclean TestWWWMechanize WWWMechanize ];
+    meta = {
+      description = "Test::WWW::Mechanize for Catalyst";
+      license = "perl";
+    };
   };
 
   TestWWWMechanizePSGI = buildPerlPackage {
