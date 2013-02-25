@@ -14,6 +14,7 @@ g: # Get dependencies from patched gems
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_4;
     autotest_rails = g.autotest_rails_4_1_2;
     aws_sdk = g.aws_sdk_1_8_3_1;
+    bitbucket_backup = g.bitbucket_backup_0_2_2;
     builder = g.builder_3_2_0;
     buildr = g.buildr_1_4_10;
     bundler = g.bundler_1_3_0;
@@ -26,7 +27,7 @@ g: # Get dependencies from patched gems
     fakes3 = g.fakes3_0_1_5;
     ffi = g.ffi_1_4_0;
     foreman = g.foreman_0_61_0;
-    highline = g.highline_1_6_2;
+    highline = g.highline_1_6_15;
     hike = g.hike_1_2_1;
     hoe = g.hoe_3_1_0;
     i18n = g.i18n_0_6_1;
@@ -81,7 +82,7 @@ g: # Get dependencies from patched gems
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
   gems = {
     ZenTest_4_9_0 = {
       basename = ''ZenTest'';
@@ -242,6 +243,17 @@ rails support and extra plugins for migrations and fixtures.'';
       name = ''aws-sdk-1.8.3.1'';
       requiredGems = [ g.uuidtools_2_1_3 g.nokogiri_1_5_6 g.json_1_7_7 ];
       sha256 = ''1yiv2skrrwqw8ihznnqqznh4yax75hbv497xqllp7b5qqmnrpvy4'';
+    };
+    bitbucket_backup_0_2_2 = {
+      basename = ''bitbucket_backup'';
+      meta = {
+        description = ''A tool to backup Bitbucket repos.'';
+        homepage = ''https://bitbucket.org/seth/bitbucket-backup'';
+        longDescription = ''A tool to backup Bitbucket repos.'';
+      };
+      name = ''bitbucket-backup-0.2.2'';
+      requiredGems = [ g.highline_1_6_15 g.json_1_7_7 ];
+      sha256 = ''1kzg6pkzw04n96i6mhb74gpg4c899wly5fc2m1y6m2xvn71qksys'';
     };
     builder_3_0_4 = {
       basename = ''builder'';
@@ -450,6 +462,21 @@ using TCP/IP, especially if custom protocols are required.'';
       name = ''foreman-0.61.0'';
       requiredGems = [ g.thor_0_17_0 ];
       sha256 = ''1h9dmzq1cwz87qyzx2ibpjghsxjnnqbh485l3sdxyfh5k3v79k7z'';
+    };
+    highline_1_6_15 = {
+      basename = ''highline'';
+      meta = {
+        description = ''HighLine is a high-level command-line IO library.'';
+        homepage = ''http://highline.rubyforge.org'';
+        longDescription = ''A high-level IO library that provides validation, type conversion, and more for
+command-line interfaces. HighLine also includes a complete menu system that can
+crank out anything from simple list selection to complete shells with just
+minutes of work.
+'';
+      };
+      name = ''highline-1.6.15'';
+      requiredGems = [  ];
+      sha256 = ''1ilwlgylv92md9dnw6hqhrw8hiwk3f4k8qz6airqjp1rq9r594m1'';
     };
     highline_1_6_2 = {
       basename = ''highline'';
