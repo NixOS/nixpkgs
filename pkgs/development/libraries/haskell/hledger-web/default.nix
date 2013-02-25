@@ -4,6 +4,7 @@
 , parsec, regexpr, safe, shakespeareCss, shakespeareJs
 , shakespeareText, text, time, transformers, wai, waiExtra, warp
 , yaml, yesod, yesodCore, yesodDefault, yesodForm, yesodStatic
+, yesodTest
 }:
 
 cabal.mkDerivation (self: {
@@ -19,6 +20,7 @@ cabal.mkDerivation (self: {
     shakespeareJs shakespeareText text time transformers wai waiExtra
     warp yaml yesod yesodCore yesodDefault yesodForm yesodStatic
   ];
+  testDepends = [ yesodCore yesodDefault yesodTest ];
   patchPhase = ''
     sed -r -i -e 's|blaze-html * >= 0.5 *&& < 0.6|blaze-html >= 0.5|' hledger-web.cabal
   '';
@@ -28,6 +30,5 @@ cabal.mkDerivation (self: {
     description = "A web interface for the hledger accounting tool";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })
