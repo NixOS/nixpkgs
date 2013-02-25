@@ -12,7 +12,7 @@ in {
     services.deluge = {
       enable = mkOption {
         default = false;
-        example = "true";
+        example = true;
         description = ''
           Start Deluge daemon.
         ''; 
@@ -22,7 +22,7 @@ in {
     services.deluge.web = {
       enable = mkOption {
         default = false;
-        example = "true";
+        example = true;
         description = ''
           Start Deluge Web daemon.
         ''; 
