@@ -54,6 +54,7 @@
   ./security/rtkit.nix
   ./security/setuid-wrappers.nix
   ./security/sudo.nix
+  ./services/amqp/activemq/default.nix
   ./services/amqp/rabbitmq.nix
   ./services/audio/alsa.nix
   ./services/audio/fuppes.nix
