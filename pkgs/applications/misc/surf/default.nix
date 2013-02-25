@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "surf-${version}";
-  version="0.5";
+  version="0.6";
 
   src = fetchurl {
     url = "http://dl.suckless.org/surf/surf-${version}.tar.gz";
-    sha256 = "19qfkwdk6p5hcwnnplscp1kmypz74mga7x6iqy6w3g18s221f2mx";
+    sha256 = "01b8hq8z2wd7ssym5bypx2b15mrs1lhgkrcgxf700kswxvxcrhgx";
   };
 
   buildInputs = [ gtk webkit pkgconfig glib libsoup ];
