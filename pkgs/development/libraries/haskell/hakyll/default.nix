@@ -23,6 +23,7 @@ cabal.mkDerivation (self: {
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
   jailbreak = true;
+  doCheck = false;
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
