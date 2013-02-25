@@ -1,0 +1,29 @@
+Send an ETag header, and honour the If-None-Match request header
+
+diff -ru -x '*~' Catalyst-Plugin-Static-Simple-0.30-orig/lib/Catalyst/Plugin/Static/Simple.pm Catalyst-Plugin-Static-Simple-0.30/lib/Catalyst/Plugin/Static/Simple.pm
+--- Catalyst-Plugin-Static-Simple-0.30-orig/lib/Catalyst/Plugin/Static/Simple.pm	2012-05-04 18:49:30.000000000 +0200
++++ Catalyst-Plugin-Static-Simple-0.30/lib/Catalyst/Plugin/Static/Simple.pm	2013-02-25 18:05:08.466813337 +0100
+@@ -187,11 +187,21 @@
+     my $type      = $c->_ext_to_type( $full_path );
+     my $stat      = stat $full_path;
+ 
++    # Tell Firefox & friends its OK to cache, even over SSL:
++    #$c->res->headers->header('Cache-control' => 'public');
++
++    if ($config->{send_etag}) {
++        my $etag = '"' . $stat->mtime . '-' . $stat->ino . '-'. $stat->size . '"';
++        $c->res->headers->header('ETag' => $etag);
++        if (($c->req->header('If-None-Match') // "") eq $etag) {
++            $c->res->status(304);
++            return 1;
++        }
++    }
++
+     $c->res->headers->content_type( $type );
+     $c->res->headers->content_length( $stat->size );
+     $c->res->headers->last_modified( $stat->mtime );
+-    # Tell Firefox & friends its OK to cache, even over SSL:
+-    $c->res->headers->header('Cache-control' => 'public');
+     # Optionally, set a fixed expiry time:
+     if ($config->{expires}) {
+         $c->res->headers->expires(time() + $config->{expires});
