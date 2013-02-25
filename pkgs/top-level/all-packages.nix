@@ -3090,6 +3090,8 @@ let
 
   cgdb = callPackage ../development/tools/misc/cgdb { };
 
+  chromedriver = callPackage ../development/tools/selenium/chromedriver { };
+
   complexity = callPackage ../development/tools/misc/complexity { };
 
   ctags = callPackage ../development/tools/misc/ctags { };
