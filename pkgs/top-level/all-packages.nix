@@ -3395,6 +3395,8 @@ let
 
   acl = callPackage ../development/libraries/acl { };
 
+  activemq = callPackage ../development/libraries/apache-activemq { };
+
   adns = callPackage ../development/libraries/adns { };
 
   afflib = callPackage ../development/libraries/afflib {};
