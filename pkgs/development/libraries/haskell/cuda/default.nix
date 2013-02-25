@@ -34,6 +34,9 @@ cabal.mkDerivation (self: {
   
     ./Setup configure --verbose --prefix="$out" $libraryProfiling $extraLibDirs $configureFlags
   '';
+
+  doCheck = false;
+
   meta = {
     description = "FFI binding to the CUDA interface for programming NVIDIA GPUs";
     license = self.stdenv.lib.licenses.bsd3;
