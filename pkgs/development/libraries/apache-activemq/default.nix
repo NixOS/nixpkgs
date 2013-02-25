@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ensureDir $out
-    mv LICENSE lib $out/
+    mv * $out/
     for j in `find $out/lib -name "*.jar"`; do
       cp="''${cp:+"$cp:"}$j";
     done
@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
     homepage = http://activemq.apache.org/;
     description = ''
       Messaging and Integration Patterns server written in Java.
-      This nixpkg supplies the jar-files packaged in activemq's
-      binary distribution.
     '';
     license = stdenv.lib.licenses.asl20;
   };
