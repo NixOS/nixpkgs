@@ -13,9 +13,9 @@ cabal.mkDerivation (self: {
   # library. GHC's linker fails if the wrong version is found first.
   # We solve this by eliminating lib64 from the path on 32-bit
   # platforms and putting lib64 first on 64-bit platforms.
-  
+
   libPaths = if self.stdenv.is64bit then "lib64 lib" else "lib";
-  
+
   configurePhase = ''
     for i in Setup.hs Setup.lhs; do
       test -f $i && ghc --make $i
@@ -31,7 +31,7 @@ cabal.mkDerivation (self: {
         fi
       done
     done
-  
+
     ./Setup configure --verbose --prefix="$out" $libraryProfiling $extraLibDirs $configureFlags
   '';
 
