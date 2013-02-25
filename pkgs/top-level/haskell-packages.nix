@@ -871,6 +871,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   gio = callPackage ../development/libraries/haskell/gio {};
 
+  github = callPackage ../development/libraries/haskell/github {};
+
   gitit = callPackage ../development/libraries/haskell/gitit {};
 
   glade = callPackage ../development/libraries/haskell/glade {
