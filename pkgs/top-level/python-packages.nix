@@ -4664,4 +4664,58 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  pyspotify = buildPythonPackage rec {
+    name = "pyspotify-${version}";
+  
+    version = "1.10";
+  
+    src = fetchgit {
+      url = "https://github.com/mopidy/pyspotify.git";
+      rev = "refs/tags/v${version}";
+      sha256 = "1rvgrviwn6f037m8vq395chz6a1119dbsdhfwdbv5ambi0bak6ll";
+    };
+  
+    buildInputs = [ pkgs.libspotify ];
+  
+    # python zip complains about old timestamps
+    preConfigure = ''
+      find -print0 | xargs -0 touch
+    '';
+  
+    # There are no tests
+    doCheck = false;
+  
+    meta = {
+      homepage = http://pyspotify.mopidy.com;
+      description = "A Python interface to Spotify’s online music streaming service";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+    };
+  };
+
+  pykka = buildPythonPackage rec {
+    name = "pykka-${version}";
+  
+    version = "1.1.0";
+  
+    src = fetchgit {
+      url = "https://github.com/jodal/pykka.git";
+      rev = "refs/tags/v${version}";
+      sha256 = "0w6bcaqkzwmd9habszlgjkp3kkhkna08s9aivnmna5hddsghfqmz";
+    };
+  
+    # python zip complains about old timestamps
+    preConfigure = ''
+      find -print0 | xargs -0 touch
+    '';
+  
+    # There are no tests
+    doCheck = false;
+  
+    meta = {
+      homepage = http://www.pykka.org;
+      description = "A Python implementation of the actor model";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+    };
+  };
+
 }; in pythonPackages
