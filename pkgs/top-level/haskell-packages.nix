@@ -1865,6 +1865,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   CouchDB = callPackage ../development/libraries/haskell/CouchDB {};
 
+  wlPprint = callPackage ../development/libraries/haskell/wl-pprint {};
+
+  wlPprintExtras = callPackage ../development/libraries/haskell/wl-pprint-extras {};
+
+  wlPprintTerminfo = callPackage ../development/libraries/haskell/wl-pprint-terminfo {};
+
   wlPprintText = callPackage ../development/libraries/haskell/wl-pprint-text {};
 
   word8 = callPackage ../development/libraries/haskell/word8 {};
