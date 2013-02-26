@@ -34,19 +34,23 @@ in {
 
     systemd.services.deluged = {
       after = [ "network.target" ];
-      description = "Deluge Daemon";
+      description = "Deluge BitTorrent Daemon";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.pythonPackages.deluge ];
       script = "deluged -d";
+      serviceConfig.User = "deluge";
+      serviceConfig.Group = "deluge";
     };
 
     systemd.services.delugeweb = mkIf cfg_web.enable {
       after = [ "network.target" "deluged.service" ];
-      description = "Deluge Web";
+      description = "Deluge BitTorrent WebUI";
       wantedBy = [ "multi-user.target" ];
       wants = [ "deluged.service" ];
       path = [ pkgs.pythonPackages.deluge ];
       script = "deluge --ui web";
+      serviceConfig.User = "deluge";
+      serviceConfig.Group = "deluge";
     };
 
     environment.systemPackages = [ pkgs.pythonPackages.deluge ];
@@ -54,6 +58,8 @@ in {
     users.extraUsers.deluge = {
       inherit uid;
       group = "deluge";
+      home = "/var/lib/deluge/";
+      createHome = true;
       description = "Deluge Daemon user";
     };
 
