@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0wx1nqk709kx75cwp2axachnbxryp4gyl06qxn5nl95184w0mhls";
   };
 
+  doCheck = true;
+
+  patches = [ ./skip-some-tests.patch ];
+
   meta = {
     homepage = http://www.gnu.org/software/gzip/;
     description = "Gzip, the GNU zip compression program";
