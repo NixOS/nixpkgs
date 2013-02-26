@@ -40,6 +40,21 @@ let self = {
     ];
   };
 
+  amdefine = "amdefine-0.0.4";
+
+  "amdefine->=0.0.4" = self."amdefine-0.0.4";
+  
+  "amdefine-0.0.4" = self.buildNodePackage rec {
+    name = "amdefine-0.0.4";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/amdefine/-/${name}.tgz";
+      sha256 = "10sdb85mb6fvkglqwg7icdh58sng9pm8655npmsbv18gsbcnmbg4";
+    };
+    deps = [
+
+    ];
+  };
+
   "ansi" = self."ansi-~0.1.2";
 
   "ansi-~0.1.2" = self.buildNodePackage rec {
@@ -854,11 +869,14 @@ let self = {
 
   "optimist" = self."optimist-*";
 
-  "optimist-*" = self.buildNodePackage rec {
-    name = "optimist-0.3.4";
+  "optimist-*" = self."optimist-0.3.5";
+  "optimist-~0.3.5" = self."optimist-0.3.5";
+
+  "optimist-0.3.5" = self.buildNodePackage rec {
+    name = "optimist-0.3.5";
     src = fetchurl {
       url = "http://registry.npmjs.org/optimist/-/${name}.tgz";
-      sha256 = "add88b473a660ad8a9ff88a3eec49a74d9c64f592acbcd219ff4c0d7249f4d60";
+      sha256 = "17d06n3y9difknq9j340qksj2zllal6sg0pj4clj9ja5jxf721x4";
     };
     deps = [
       self."wordwrap-~0.0.2"
@@ -1218,7 +1236,20 @@ let self = {
     ];
   };
 
-  "source-map" = self."source-map-0.1.2";
+  "source-map" = self."source-map-0.1.7";
+
+  "source-map-~0.1.7" = self."source-map-0.1.7";
+
+  "source-map-0.1.7" = self.buildNodePackage rec {
+    name = "source-map-0.1.7";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/source-map/-/${name}.tgz";
+      sha256 = "041skhq60kwpx319iy0m33zcgc7q2ddlfl3vvmwl5ssl9p46g8x2";
+    };
+    deps = [
+      self."amdefine->=0.0.4"
+    ];
+  };
 
   "source-map-0.1.2" = self.buildNodePackage rec {
     name = "source-map-0.1.2";
@@ -1298,7 +1329,19 @@ let self = {
     ];
   };
 
-  "uglify-js" = self."uglify-js-1.2.6";
+  "uglify-js" = self."uglify-js-2.2.5";
+
+  "uglify-js-2.2.5" = self.buildNodePackage rec {
+    name = "uglify-js-2.2.5";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/uglify-js/-/${name}.tgz";
+      sha256 = "18ic581gjyvfl4gvlcdmzw4vrcbvn698i2rznnba70f8lk6ndlgr";
+    };
+    deps = [
+      self."source-map-~0.1.7"
+      self."optimist-~0.3.5"
+    ];
+  };
 
   "uglify-js-1.2.5" = self.buildNodePackage rec {
     name = "uglify-js-1.2.5";
