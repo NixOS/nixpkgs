@@ -10,7 +10,7 @@ stdenv.mkDerivation (rec {
 
   doCheck = true;
 
-  patches = [ ./skip-perl-requiring-tests.patch ];
+  patches = [ ./skip-some-tests.patch ];
 
   meta = {
     homepage = http://www.gnu.org/software/gzip/;
