@@ -510,6 +510,18 @@ rec {
     };
   };
 
+  CatalystPluginCaptcha = buildPerlPackage {
+    name = "Catalyst-Plugin-Captcha-0.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DI/DIEGOK/Catalyst-Plugin-Captcha-0.04.tar.gz;
+      sha256 = "0llyj3v5nx9cx46jdbbvxf1lc9s9cxq5ml22xmx3wkb201r5qgaa";
+    };
+    propagatedBuildInputs = [ CatalystRuntime CatalystPluginSession GDSecurityImage HTTPDate ];
+    meta = {
+      description = "Create and validate Captcha for Catalyst";
+    };
+  };
+
   CatalystPluginConfigLoader = buildPerlPackage rec {
     name = "Catalyst-Plugin-ConfigLoader-0.30";
     src = fetchurl {
@@ -2011,6 +2023,19 @@ rec {
     postPatch = "sed -ie 's/if (GD::Image->can(.newFromJpeg.)) {/if ( 0 ) {/' t/GD.t";
 
     makeMakerFlags = "--lib_png_path=${pkgs.libpng} --lib_jpeg_path=${pkgs.libjpeg} --lib_zlib_path=${pkgs.zlib} --lib_ft_path=${pkgs.freetype} --lib_fontconfig_path=${pkgs.fontconfig} --lib_xpm_path=${pkgs.xlibs.libXpm}";
+  };
+
+  GDSecurityImage = buildPerlPackage {
+    name = "GD-SecurityImage-1.72";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BU/BURAK/GD-SecurityImage-1.72.tar.gz;
+      sha256 = "07a025krdaml5ls7gyssfdcsif6cnsnksrxkqk48n9dmv7rz7q1r";
+    };
+    propagatedBuildInputs = [ GD ];
+    meta = {
+      description = "Security image (captcha) generator";
+      license = "perl5";
+    };
   };
 
   GeoIP = buildPerlPackage rec {
