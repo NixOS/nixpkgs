@@ -35,7 +35,7 @@ in {
       description = "Deluge BitTorrent Daemon";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.pythonPackages.deluge ];
-      script = "${pkgs.pythonPackages.deluge}/bin/deluged -d";
+      serviceConfig.ExecStart = "${pkgs.pythonPackages.deluge}/bin/deluged -d";
       serviceConfig.User = "deluge";
       serviceConfig.Group = "deluge";
     };
@@ -45,7 +45,7 @@ in {
       description = "Deluge BitTorrent WebUI";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.pythonPackages.deluge ];
-      script = "${pkgs.pythonPackages.deluge}/bin/deluge --ui web";
+      serviceConfig.ExecStart = "${pkgs.pythonPackages.deluge}/bin/deluge --ui web";
       serviceConfig.User = "deluge";
       serviceConfig.Group = "deluge";
     };
