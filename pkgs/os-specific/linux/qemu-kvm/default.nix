@@ -19,17 +19,8 @@ stdenv.mkDerivation rec {
       ncurses python glib libaio mesa texinfo perl
     ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
 
-  patchPhase =
-    '' for i in $(find . -type f)
-       do
-         sed -i "$i" \
-             -e 's|/bin/bash|/bin/sh|g ;
-                 s|/usr/bin/python|${python}/bin/python|g ;
-                 s|/bin/rm|rm|g'
-       done
-    '' + stdenv.lib.optionalString spiceSupport ''
-       for i in configure spice-qemu-char.c ui/spice-input.c ui/spice-core.c ui/qemu-spice.h
-       do
+  patchPhase = "patchShebangs ." + stdenv.lib.optionalString spiceSupport ''
+       for i in configure spice-qemu-char.c ui/spice-input.c ui/spice-core.c ui/qemu-spice.h; do
          substituteInPlace $i --replace '#include <spice.h>' '#include <spice/spice.h>'
        done
     '';
