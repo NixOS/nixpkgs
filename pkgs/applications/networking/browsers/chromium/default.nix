@@ -135,7 +135,9 @@ in stdenv.mkDerivation rec {
   patches = optional cupsSupport ./cups_allow_deprecated.patch
          ++ optional pulseSupport ./pulseaudio_array_bounds.patch
          ++ maybeFixPulseAudioBuild
-         ++ optional post25 ./clone_detached.patch;
+         ++ optional post25 ./clone_detached.patch
+         # XXX: Remove after stdenv-updates merge!
+         ++ singleton "/dev/null";
 
   postPatch = optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
