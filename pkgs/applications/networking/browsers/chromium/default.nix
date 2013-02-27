@@ -223,6 +223,4 @@ in stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.linux;
   };
-} // optionalAttrs only25 {
-  NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 }
