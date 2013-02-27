@@ -8173,7 +8173,7 @@ let
 
   zathuraCollection = recurseIntoAttrs
     (let callPackage = newScope pkgs.zathuraCollection; in
-      import ../applications/misc/zathura { inherit callPackage pkgs; });
+      import ../applications/misc/zathura { inherit callPackage pkgs fetchurl; });
 
   zathura = zathuraCollection.zathuraWrapper;
 
