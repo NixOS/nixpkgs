@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "github-backup";
-  version = "1.20120627";
-  sha256 = "1nq5zj821idvcqybyxkpkma544ci30k2sr8jhp7f2bpa97yidn3k";
+  version = "1.20120314";
+  sha256 = "07ilb6cg1kbz4id53l4m46wjxzs7yxcmpz6280ym6k885dras5v2";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "backs up everything github knows about a repository, to the repository";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
