@@ -1,5 +1,5 @@
 { stdenv, fetchurl, attr, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
-, libjpeg, libpng, ncurses, python, glib, libaio, mesa
+, libjpeg, libpng, ncurses, python, glib, libaio, mesa, perl, texinfo
 , spice, spice_protocol, spiceSupport ? false }:
 
 assert stdenv.isLinux;
@@ -14,7 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "018vb5nmk2fsm143bs2bl2wirhasd4b10d7jchl32zik4inbk2p9";
   };
 
-  postPatch =
+  buildInputs =
+    [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
+      ncurses python glib libaio mesa texinfo perl
+    ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
+
+  patchPhase =
     '' for i in $(find . -type f)
        do
          sed -i "$i" \
@@ -32,14 +37,8 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--audio-drv-list=alsa"
       "--smbd=smbd"                               # use `smbd' from $PATH
+      "--enable-docs"
     ] ++ stdenv.lib.optional spiceSupport "--enable-spice";
-
-  enableParallelBuilding = true;
-
-  buildInputs =
-    [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
-      ncurses python glib libaio mesa
-    ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
 
   postInstall =
     ''
@@ -48,6 +47,8 @@ stdenv.mkDerivation rec {
       # cause architecture selection to misbehave.
       ln -sv $(cd $out/bin && echo qemu-system-*) $out/bin/qemu-kvm
     '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.linux-kvm.org/;
