@@ -40,6 +40,8 @@ stdenv.mkDerivation rec {
       ln -sv $(cd $out/bin && echo qemu-system-*) $out/bin/qemu-kvm
     '';
 
+  doCheck = true;
+
   enableParallelBuilding = true;
 
   meta = {
