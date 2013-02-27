@@ -36,7 +36,7 @@ rec {
       '';
       license = stdenv.lib.licenses.zlib;
       platforms = stdenv.lib.platforms.linux;
-      maintainers = [ stdenv.lib.maintainers.garbas ];
+      maintainers = [ stdenv.lib.maintainers.garbas stdenv.lib.maintainers.smironov ];
     };
   };
 }
