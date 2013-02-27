@@ -1122,6 +1122,8 @@ let
 
   mkcue = callPackage ../tools/cd-dvd/mkcue { };
 
+  mkpasswd = callPackage ../tools/security/mkpasswd { };
+
   mktemp = callPackage ../tools/security/mktemp { };
 
   modemmanager = callPackage ../tools/networking/modemmanager {};
