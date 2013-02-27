@@ -75,7 +75,6 @@ in
     wwwrun = 54;
     spamd = 56;
     nslcd = 58;
-    deluge = 60;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 
@@ -133,7 +132,6 @@ in
     networkmanager = 57;
     nslcd = 58;
     scanner = 59;
-    deluge = 60;
 
     # When adding a gid, make sure it doesn't match an existing uid.
 

@@ -3,8 +3,6 @@
 with pkgs.lib;
 
 let
-  uid = config.ids.uids.deluge;
-  gid = config.ids.gids.deluge;
   cfg = config.services.deluge;
   cfg_web = config.services.deluge.web;
 in {
@@ -43,10 +41,9 @@ in {
     };
 
     systemd.services.delugeweb = mkIf cfg_web.enable {
-      after = [ "network.target" "deluged.service" ];
+      after = [ "network.target" ];
       description = "Deluge BitTorrent WebUI";
       wantedBy = [ "multi-user.target" ];
-      wants = [ "deluged.service" ];
       path = [ pkgs.pythonPackages.deluge ];
       script = "${pkgs.pythonPackages.deluge}/bin/deluge --ui web";
       serviceConfig.User = "deluge";
@@ -56,13 +53,12 @@ in {
     environment.systemPackages = [ pkgs.pythonPackages.deluge ];
 
     users.extraUsers.deluge = {
-      inherit uid;
       group = "deluge";
       home = "/var/lib/deluge/";
       createHome = true;
       description = "Deluge Daemon user";
     };
 
-    users.extraGroups.deluge.gid = gid;
+    users.extraGroups.deluge = {};
   };
 }
