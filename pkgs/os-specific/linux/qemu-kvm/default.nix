@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     [ "--audio-drv-list=alsa"
       "--smbd=smbd"                               # use `smbd' from $PATH
       "--enable-docs"
+      "--python=${python}/bin/python"
     ] ++ stdenv.lib.optional spiceSupport "--enable-spice";
 
   postInstall =
