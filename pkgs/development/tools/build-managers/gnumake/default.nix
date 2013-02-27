@@ -24,6 +24,10 @@ stdenv.mkDerivation {
       # Likewise, when searching for included Makefiles, don't look in
       # /usr/include and friends.
       ./impure-dirs.patch
+
+
+      # Patch from https://github.com/joyent/pkgsrc/blob/trunk/devel/gmake/patches/patch-ah
+      ./patch-ah
     ];
 
   meta = {

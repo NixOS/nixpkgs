@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gmp, isl }:
 
 stdenv.mkDerivation rec {
-  name = "cloog-0.16.3";
+  name = "cloog-0.18.0";
 
   src = fetchurl {
     url = "http://www.bastoul.net/cloog/pages/download/count.php3?url=./${name}.tar.gz";
-    sha256 = "0lzbsszfzsr0jfwkccfbsvx913d2yc45dqwa472plmxkhbwykmc9";
+    sha256 = "1c4aa8dde7886be9cbe0f9069c334843b21028f61d344a2d685f88cb1dcf2228";
   };
 
   buildInputs = [ gmp ];

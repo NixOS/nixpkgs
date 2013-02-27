@@ -1,17 +1,19 @@
 { stdenv, fetchurl, pcre, libiconv ? null }:
 
-let version = "2.10"; in
+let version = "2.14"; in
 
 stdenv.mkDerivation ({
   name = "gnugrep-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    sha256 = "1cvsqyfzk1p38fcaav22dn76fkd02g7bjnqna6vrpk9vy9rnfybc";
+    sha256 = "e70e801d4fbb16e761654a58ae48bf5020621c95c8e35bd864742577685872e1";
   };
 
   buildInputs = [ pcre ]
     ++ (stdenv.lib.optional (libiconv != null) libiconv);
+
+  patches = [ ./test-localeconv.patch ];
 
   doCheck = if stdenv.isDarwin then false else true;
 

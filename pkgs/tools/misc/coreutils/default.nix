@@ -6,12 +6,12 @@
 assert aclSupport -> acl != null;
 assert selinuxSupport -> ( (libselinux != null) && (libsepol != null) );
 
-stdenv.mkDerivation rec {
-  name = "coreutils-8.15";
+stdenv.mkDerivation (rec {
+  name = "coreutils-8.21";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "176lgw810xw84c6fz5xwhydxggkndmzggl0pxqzldbjf85vv6zl3";
+    sha256 = "064f512185iysqqcvhnhaf3bfmzrvcgs7n405qsyp99zmfyl9amd";
   };
 
   buildNativeInputs = [ perl ];
@@ -49,7 +49,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = stdenv.lib.optionalString selinuxSupport "-lsepol";
+  NIX_LDFLAGS = stdenv.lib.optionalString selinuxSupport "-lsepol" +
+                stdenv.lib.optionalString stdenv.isSunOS "-lmp -lmd -lnsl -lsocket -lresolv -luutil -lnvpair -lidmap -lavl -lsec";
 
   meta = {
     homepage = http://www.gnu.org/software/coreutils/;
@@ -67,4 +68,8 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
-
+  # May have some issues with root compilation because the bootstrap tool
+  # cannot be used as a login shell for now.
+// stdenv.lib.optionalAttrs (stdenv.system == "armv7l-linux" || stdenv.isSunOS) {
+  FORCE_UNSAFE_CONFIGURE = 1;
+})

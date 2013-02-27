@@ -1,0 +1,40 @@
+$NetBSD: patch-ac,v 1.18 2011/11/01 14:47:46 hans Exp $
+
+--- ncurses-5.9/configure.orig	2011-02-21 01:40:36.000000000 +0000
++++ ncurses-5.9/configure
+@@ -7096,6 +7096,13 @@ sco*) #(vi
+ 	# setting _XOPEN_SOURCE breaks Lynx on SCO Unix / OpenServer
+ 	;;
+ solaris2.1[0-9]) #(vi
++	case "$GCC_VERSION" in 
++		4.[67].*)
++			cf_XOPEN_SOURCE=600
++			cf_add_cflags=-std=c99
++			CPPFLAGS="$CPPFLAGS -std=c99"
++			;;
++	esac
+ 	cf_xopen_source="-D__EXTENSIONS__ -D_XOPEN_SOURCE=$cf_XOPEN_SOURCE"
+ 	;;
+ solaris2.[1-9]) #(vi
+@@ -9640,12 +9647,7 @@ case ".$MANPAGE_RENAMES" in #(vi
+ .no) #(vi
+   ;;
+ .|.yes)
+-  # Debian 'man' program?
+-  if test -f /etc/debian_version ; then
+-    MANPAGE_RENAMES=`cd $srcdir && pwd`/man/man_db.renames
+-  else
+     MANPAGE_RENAMES=no
+-  fi
+   ;;
+ esac
+ 
+@@ -18449,7 +18444,7 @@ echo "${ECHO_T}$LIB_SUBSETS" >&6
+ 
+ ### Construct the list of include-directories to be generated
+ 
+-CPPFLAGS="$CPPFLAGS -I. -I../include"
++CPPFLAGS="-I. -I../include $CPPFLAGS"
+ if test "$srcdir" != "."; then
+ 	CPPFLAGS="$CPPFLAGS -I\${srcdir}/../include"
+ fi

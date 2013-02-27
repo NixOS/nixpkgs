@@ -1930,7 +1930,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc46;
+  gcc = gcc47;
 
   gcc295 = wrapGCC (import ../development/compilers/gcc/2.95 {
     inherit fetchurl stdenv noSysDirs;
@@ -3048,7 +3048,7 @@ let
     cross = assert crossSystem != null; crossSystem;
   }));
 
-  bison = bison25;
+  bison = bison27;
 
   bison1875 = callPackage ../development/tools/parsing/bison/bison-1.875.nix { };
 
@@ -3059,6 +3059,8 @@ let
   bison25 = callPackage ../development/tools/parsing/bison/bison-2.5.nix { };
 
   bison26 = callPackage ../development/tools/parsing/bison/bison-2.6.nix { };
+
+  bison27 = callPackage ../development/tools/parsing/bison/bison-2.7.nix { };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted;
@@ -3864,7 +3866,7 @@ let
   # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { };
 
-  gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
+  gmp5 = callPackage ../development/libraries/gmp/5.1.1.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 

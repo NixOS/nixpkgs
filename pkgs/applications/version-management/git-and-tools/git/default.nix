@@ -32,7 +32,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
   makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
-      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1");
+      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
+      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "");
 
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
