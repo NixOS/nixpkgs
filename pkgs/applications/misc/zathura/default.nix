@@ -35,6 +35,7 @@ rec {
         as well as an easy usage that mainly focuses on keyboard interaction.
       '';
       license = "free";
+      maintainers = [stdenv.lib.maintainers.smironov];
     };
   };
 }
