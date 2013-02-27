@@ -530,8 +530,6 @@ unpackPhase() {
 patchPhase() {
     runHook prePatch
 
-    if [ -z "$patchPhase" -a -z "$patches" ]; then return; fi
-
     for i in $patches; do
         header "applying patch $i" 3
         local uncompress=cat
