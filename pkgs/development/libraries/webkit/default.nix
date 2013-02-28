@@ -1,6 +1,6 @@
 args : with args; 
 let 
-  s = import ./src-for-default.nix;
+  s = import ./src-for-default.nix; # 1.10 needs newer gtk3, wait for x-updates
   version = lib.attrByPath ["version"] s.version args;
 in
 rec {
@@ -54,12 +54,15 @@ rec {
     ];
 
   /* doConfigure should be specified separately */
-  phaseNames = ["setVars" "fixConfigure" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
+  phaseNames = ["setVars" "doPatch" "fixConfigure" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
     "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
 
   setVars = fullDepEntry (''
     export NIX_LDFLAGS="$NIX_LDFLAGS -lXt"
   '') ["minInit"];
+
+  patches = [ ./bison26.patch ]; # http://trac.webkit.org/changeset/124099
+  patchFlags = "-p2";
 
   doReplaceUsrBin = fullDepEntry (''
     for i in $(find . -name '*.pl') $(find . -name '*.pm'); do 

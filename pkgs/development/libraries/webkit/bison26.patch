@@ -1,0 +1,515 @@
+Index: /trunk/Source/WebCore/ChangeLog
+===================================================================
+--- /trunk/Source/WebCore/ChangeLog	(revision 124098)
++++ /trunk/Source/WebCore/ChangeLog	(revision 124099)
+@@ -1,2 +1,27 @@
++2012-07-30  Alexis Menard  <alexis.menard@openbossa.org>
++
++        Build fix with newer bison 2.6.
++        https://bugs.webkit.org/show_bug.cgi?id=92264
++
++        Reviewed by Adam Barth.
++
++        As stated in http://www.gnu.org/software/bison/manual/html_node/Table-of-Symbols.html
++        YYLEX_PARAM and YYPARSE_PARAM are depecreated since version 1.875. So far all Mac OS
++        version I had access to as well as recent Linux runs at least version 2.3 so it's safe
++        to use the replacement of these deprecated macros in favor of %lex-param and %parse-param.
++        As announced http://lists.gnu.org/archive/html/info-gnu/2012-07/msg00011.html with the release
++        of version 2.6 YYLEX_PARAM and YYPARSE_PARAM are not supported anymore.
++
++        No new tests : build fix and the patch should not trigger any regressions
++
++        * css/CSSGrammar.y:
++        * css/CSSParser.cpp:
++        * xml/XPathGrammar.y: Refactored a bit to not use an intermediate PARSER define.
++        * xml/XPathParser.cpp: bison 2.6 declare xpathyyparse in the .h file now, i.e. XPathGrammar.h
++        therefore including this file within the namespace {} declarations leads to xpathyyparse being
++        defined part of WebCore::XPath namespaces but the actual implementation of xpathyyparse is in XPathGrammar.cpp
++        (generated) and not implemented within the WebCore::XPath so it lead to linking issues. Last, XPathGrammar.h needs 
++        to be included after the other includes as it uses some XPath types. It breaks the style but CSSParser.cpp is doing the same.
++
+ 2012-07-30  Sadrul Habib Chowdhury  <sadrul@chromium.org>
+ 
+Index: /trunk/Source/WebCore/css/CSSParser.cpp
+===================================================================
+--- /trunk/Source/WebCore/css/CSSParser.cpp	(revision 124098)
++++ /trunk/Source/WebCore/css/CSSParser.cpp	(revision 124099)
+@@ -115,5 +115,5 @@
+ #endif
+ 
+-extern int cssyyparse(void* parser);
++extern int cssyyparse(WebCore::CSSParser*);
+ 
+ using namespace std;
+Index: /trunk/Source/WebCore/css/CSSGrammar.y
+===================================================================
+--- /trunk/Source/WebCore/css/CSSGrammar.y	(revision 124098)
++++ /trunk/Source/WebCore/css/CSSGrammar.y	(revision 124099)
+@@ -54,11 +54,10 @@
+ #define YYDEBUG 0
+ 
+-// FIXME: Replace with %parse-param { CSSParser* parser } once we can depend on bison 2.x
+-#define YYPARSE_PARAM parser
+-#define YYLEX_PARAM parser
+-
+ %}
+ 
+ %pure_parser
++
++%parse-param { CSSParser* parser }
++%lex-param { CSSParser* parser }
+ 
+ %union {
+@@ -90,5 +89,5 @@
+ %{
+ 
+-static inline int cssyyerror(const char*)
++static inline int cssyyerror(void*, const char*)
+ {
+     return 1;
+Index: /trunk/Source/WebCore/xml/XPathParser.cpp
+===================================================================
+--- /trunk/Source/WebCore/xml/XPathParser.cpp	(revision 124098)
++++ /trunk/Source/WebCore/xml/XPathParser.cpp	(revision 124099)
+@@ -33,22 +33,19 @@
+ #include "XPathException.h"
+ #include "XPathNSResolver.h"
++#include "XPathPath.h"
+ #include "XPathStep.h"
+ #include <wtf/StdLibExtras.h>
+ #include <wtf/text/StringHash.h>
+ 
+-int xpathyyparse(void*);
+-
++using namespace WebCore;
+ using namespace WTF;
+ using namespace Unicode;
+-
+-namespace WebCore {
+-namespace XPath {
+-
+-class LocationPath;
+-
+-#include "XPathGrammar.h"    
++using namespace XPath;
++
++extern int xpathyyparse(WebCore::XPath::Parser*);
++#include "XPathGrammar.h"
+ 
+ Parser* Parser::currentParser = 0;
+-    
++
+ enum XMLCat { NameStart, NameCont, NotPartOfName };
+ 
+@@ -631,4 +628,2 @@
+ }
+ 
+-}
+-}
+Index: /trunk/Source/WebCore/xml/XPathGrammar.y
+===================================================================
+--- /trunk/Source/WebCore/xml/XPathGrammar.y	(revision 124098)
++++ /trunk/Source/WebCore/xml/XPathGrammar.y	(revision 124099)
+@@ -35,4 +35,5 @@
+ #include "XPathPath.h"
+ #include "XPathPredicate.h"
++#include "XPathStep.h"
+ #include "XPathVariableReference.h"
+ #include <wtf/FastMalloc.h>
+@@ -45,6 +46,4 @@
+ #define YYDEBUG 0
+ #define YYMAXDEPTH 10000
+-#define YYPARSE_PARAM parserParameter
+-#define PARSER static_cast<Parser*>(parserParameter)
+ 
+ using namespace WebCore;
+@@ -54,4 +53,5 @@
+ 
+ %pure_parser
++%parse-param { WebCore::XPath::Parser* parser }
+ 
+ %union
+@@ -72,5 +72,5 @@
+ 
+ static int xpathyylex(YYSTYPE* yylval) { return Parser::current()->lex(yylval); }
+-static void xpathyyerror(const char*) { }
++static void xpathyyerror(void*, const char*) { }
+     
+ %}
+@@ -119,5 +119,5 @@
+     OrExpr
+     {
+-        PARSER->m_topExpr = $1;
++        parser->m_topExpr = $1;
+     }
+     ;
+@@ -139,5 +139,5 @@
+     {
+         $$ = new LocationPath;
+-        PARSER->registerParseNode($$);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -151,5 +151,5 @@
+         $$ = $2;
+         $$->insertFirstStep($1);
+-        PARSER->unregisterParseNode($1);
++        parser->unregisterParseNode($1);
+     }
+     ;
+@@ -160,6 +160,6 @@
+         $$ = new LocationPath;
+         $$->appendStep($1);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -167,5 +167,5 @@
+     {
+         $$->appendStep($3);
+-        PARSER->unregisterParseNode($3);
++        parser->unregisterParseNode($3);
+     }
+     |
+@@ -174,6 +174,6 @@
+         $$->appendStep($2);
+         $$->appendStep($3);
+-        PARSER->unregisterParseNode($2);
+-        PARSER->unregisterParseNode($3);
++        parser->unregisterParseNode($2);
++        parser->unregisterParseNode($3);
+     }
+     ;
+@@ -184,9 +184,9 @@
+         if ($2) {
+             $$ = new Step(Step::ChildAxis, *$1, *$2);
+-            PARSER->deletePredicateVector($2);
++            parser->deletePredicateVector($2);
+         } else
+             $$ = new Step(Step::ChildAxis, *$1);
+-        PARSER->deleteNodeTest($1);
+-        PARSER->registerParseNode($$);
++        parser->deleteNodeTest($1);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -195,6 +195,6 @@
+         String localName;
+         String namespaceURI;
+-        if (!PARSER->expandQName(*$1, localName, namespaceURI)) {
+-            PARSER->m_gotNamespaceError = true;
++        if (!parser->expandQName(*$1, localName, namespaceURI)) {
++            parser->m_gotNamespaceError = true;
+             YYABORT;
+         }
+@@ -202,9 +202,9 @@
+         if ($2) {
+             $$ = new Step(Step::ChildAxis, Step::NodeTest(Step::NodeTest::NameTest, localName, namespaceURI), *$2);
+-            PARSER->deletePredicateVector($2);
++            parser->deletePredicateVector($2);
+         } else
+             $$ = new Step(Step::ChildAxis, Step::NodeTest(Step::NodeTest::NameTest, localName, namespaceURI));
+-        PARSER->deleteString($1);
+-        PARSER->registerParseNode($$);
++        parser->deleteString($1);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -213,9 +213,9 @@
+         if ($3) {
+             $$ = new Step($1, *$2, *$3);
+-            PARSER->deletePredicateVector($3);
++            parser->deletePredicateVector($3);
+         } else
+             $$ = new Step($1, *$2);
+-        PARSER->deleteNodeTest($2);
+-        PARSER->registerParseNode($$);
++        parser->deleteNodeTest($2);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -224,6 +224,6 @@
+         String localName;
+         String namespaceURI;
+-        if (!PARSER->expandQName(*$2, localName, namespaceURI)) {
+-            PARSER->m_gotNamespaceError = true;
++        if (!parser->expandQName(*$2, localName, namespaceURI)) {
++            parser->m_gotNamespaceError = true;
+             YYABORT;
+         }
+@@ -231,9 +231,9 @@
+         if ($3) {
+             $$ = new Step($1, Step::NodeTest(Step::NodeTest::NameTest, localName, namespaceURI), *$3);
+-            PARSER->deletePredicateVector($3);
++            parser->deletePredicateVector($3);
+         } else
+             $$ = new Step($1, Step::NodeTest(Step::NodeTest::NameTest, localName, namespaceURI));
+-        PARSER->deleteString($2);
+-        PARSER->registerParseNode($$);
++        parser->deleteString($2);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -260,6 +260,6 @@
+             $$ = new Step::NodeTest(Step::NodeTest::CommentNodeTest);
+ 
+-        PARSER->deleteString($1);
+-        PARSER->registerNodeTest($$);
++        parser->deleteString($1);
++        parser->registerNodeTest($$);
+     }
+     |
+@@ -267,6 +267,6 @@
+     {
+         $$ = new Step::NodeTest(Step::NodeTest::ProcessingInstructionNodeTest);
+-        PARSER->deleteString($1);        
+-        PARSER->registerNodeTest($$);
++        parser->deleteString($1);
++        parser->registerNodeTest($$);
+     }
+     |
+@@ -274,7 +274,7 @@
+     {
+         $$ = new Step::NodeTest(Step::NodeTest::ProcessingInstructionNodeTest, $3->stripWhiteSpace());
+-        PARSER->deleteString($1);        
+-        PARSER->deleteString($3);
+-        PARSER->registerNodeTest($$);
++        parser->deleteString($1);
++        parser->deleteString($3);
++        parser->registerNodeTest($$);
+     }
+     ;
+@@ -294,6 +294,6 @@
+         $$ = new Vector<Predicate*>;
+         $$->append(new Predicate($1));
+-        PARSER->unregisterParseNode($1);
+-        PARSER->registerPredicateVector($$);
++        parser->unregisterParseNode($1);
++        parser->registerPredicateVector($$);
+     }
+     |
+@@ -301,5 +301,5 @@
+     {
+         $$->append(new Predicate($2));
+-        PARSER->unregisterParseNode($2);
++        parser->unregisterParseNode($2);
+     }
+     ;
+@@ -316,5 +316,5 @@
+     {
+         $$ = new Step(Step::DescendantOrSelfAxis, Step::NodeTest(Step::NodeTest::AnyNodeTest));
+-        PARSER->registerParseNode($$);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -324,5 +324,5 @@
+     {
+         $$ = new Step(Step::SelfAxis, Step::NodeTest(Step::NodeTest::AnyNodeTest));
+-        PARSER->registerParseNode($$);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -330,5 +330,5 @@
+     {
+         $$ = new Step(Step::ParentAxis, Step::NodeTest(Step::NodeTest::AnyNodeTest));
+-        PARSER->registerParseNode($$);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -338,6 +338,6 @@
+     {
+         $$ = new VariableReference(*$1);
+-        PARSER->deleteString($1);
+-        PARSER->registerParseNode($$);
++        parser->deleteString($1);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -350,6 +350,6 @@
+     {
+         $$ = new StringExpression(*$1);
+-        PARSER->deleteString($1);
+-        PARSER->registerParseNode($$);
++        parser->deleteString($1);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -357,6 +357,6 @@
+     {
+         $$ = new Number($1->toDouble());
+-        PARSER->deleteString($1);
+-        PARSER->registerParseNode($$);
++        parser->deleteString($1);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -370,6 +370,6 @@
+         if (!$$)
+             YYABORT;
+-        PARSER->deleteString($1);
+-        PARSER->registerParseNode($$);
++        parser->deleteString($1);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -379,7 +379,7 @@
+         if (!$$)
+             YYABORT;
+-        PARSER->deleteString($1);
+-        PARSER->deleteExpressionVector($3);
+-        PARSER->registerParseNode($$);
++        parser->deleteString($1);
++        parser->deleteExpressionVector($3);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -390,6 +390,6 @@
+         $$ = new Vector<Expression*>;
+         $$->append($1);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->registerExpressionVector($$);
++        parser->unregisterParseNode($1);
++        parser->registerExpressionVector($$);
+     }
+     |
+@@ -397,5 +397,5 @@
+     {
+         $$->append($3);
+-        PARSER->unregisterParseNode($3);
++        parser->unregisterParseNode($3);
+     }
+     ;
+@@ -413,7 +413,7 @@
+         $$->addSubExpression($1);
+         $$->addSubExpression($3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -431,7 +431,7 @@
+         $3->setAbsolute(true);
+         $$ = new Path(static_cast<Filter*>($1), $3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -441,8 +441,8 @@
+         $3->setAbsolute(true);
+         $$ = new Path(static_cast<Filter*>($1), $3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($2);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($2);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -454,7 +454,7 @@
+     {
+         $$ = new Filter($1, *$2);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->deletePredicateVector($2);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->deletePredicateVector($2);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -466,7 +466,7 @@
+     {
+         $$ = new LogicalOp(LogicalOp::OP_Or, $1, $3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -478,7 +478,7 @@
+     {
+         $$ = new LogicalOp(LogicalOp::OP_And, $1, $3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -490,7 +490,7 @@
+     {
+         $$ = new EqTestOp($2, $1, $3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -502,7 +502,7 @@
+     {
+         $$ = new EqTestOp($2, $1, $3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -514,7 +514,7 @@
+     {
+         $$ = new NumericOp(NumericOp::OP_Add, $1, $3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     |
+@@ -522,7 +522,7 @@
+     {
+         $$ = new NumericOp(NumericOp::OP_Sub, $1, $3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -534,7 +534,7 @@
+     {
+         $$ = new NumericOp($2, $1, $3);
+-        PARSER->unregisterParseNode($1);
+-        PARSER->unregisterParseNode($3);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($1);
++        parser->unregisterParseNode($3);
++        parser->registerParseNode($$);
+     }
+     ;
+@@ -547,6 +547,6 @@
+         $$ = new Negative;
+         $$->addSubExpression($2);
+-        PARSER->unregisterParseNode($2);
+-        PARSER->registerParseNode($$);
++        parser->unregisterParseNode($2);
++        parser->registerParseNode($$);
+     }
+     ;
