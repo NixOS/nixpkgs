@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.8.1";
+  version = "1.8.1.3";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha1 = "wfj2pbqf9l56014dm330wb13qgcwx3dc";
+    sha256 = "1waz35cwgcwhgmgzmc4s00yd2vivhy77p49crgqsl0nqpxyj8lrp";
   };
 
   patches = [ ./docbook2texi.patch ];
@@ -32,7 +32,8 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals guiSupport [tcl tk];
 
   makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
-      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1");
+      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
+      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "");
 
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
