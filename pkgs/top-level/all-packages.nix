@@ -7082,7 +7082,9 @@ let
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
 
-  graphicsmagick137 = callPackage ../applications/graphics/graphicsmagick/1.3.7.nix { };
+  graphicsmagick137 = callPackage ../applications/graphics/graphicsmagick/1.3.7.nix {
+    libpng = libpng12;
+  };
 
   gtkpod = callPackage ../applications/audio/gtkpod {
     inherit (gnome) libglade;
