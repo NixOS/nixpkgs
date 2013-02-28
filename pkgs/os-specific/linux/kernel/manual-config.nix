@@ -1,4 +1,4 @@
-{ stdenv, runCommand, nettools, perl, kmod, writeTextFile }:
+{ stdenv, runCommand, nettools, bc, perl, kmod, writeTextFile }:
 
 with stdenv.lib;
 
@@ -122,7 +122,7 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  buildNativeInputs = [ perl nettools ];
+  buildNativeInputs = [ perl bc nettools ];
 
   makeFlags = commonMakeFlags ++ [
    "INSTALLKERNEL=${installkernel stdenv.platform.kernelTarget}"
