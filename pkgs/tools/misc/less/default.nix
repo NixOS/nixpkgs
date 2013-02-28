@@ -1,11 +1,11 @@
 {stdenv, fetchurl, ncurses}:
  
 stdenv.mkDerivation {
-  name = "less-436";
+  name = "less-451";
  
   src = fetchurl {
-    url = http://www.greenwoodsoftware.com/less/less-436.tar.gz;
-    sha256 = "1lilcx6qrfr2dqahv7r10j9h2v86w5sb7m8wrx2sza9ifkq6z8ap";
+    url = http://www.greenwoodsoftware.com/less/less-451.tar.gz;
+    sha256 = "9fe8287c647afeafb4149c5dedaeacfd20971ed7c26c7553794bb750536b5f57";
   };
  
   buildInputs = [ncurses];
