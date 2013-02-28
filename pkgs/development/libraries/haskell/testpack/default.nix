@@ -2,10 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "testpack";
-  version = "2.1.2";
-  sha256 = "12dhl8svy0wmdwlvkp0p0j6wr6vgv4hrjcpdv48kc5rcwjvh8xif";
+  version = "2.1.2.1";
+  sha256 = "1fm4dy9vs2whc48cr00ncqqzz6r5yp7bvgil86idbbgi8igld5j0";
   buildDepends = [ HUnit mtl QuickCheck random ];
   patches = [ ./support-recent-quickcheck.patch ];
+  jailbreak = true;
   meta = {
     homepage = "http://hackage.haskell.org/cgi-bin/hackage-scripts/package/testpack";
     description = "Test Utililty Pack for HUnit and QuickCheck";
