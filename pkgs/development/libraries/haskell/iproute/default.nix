@@ -1,5 +1,5 @@
 { cabal, appar, byteorder, doctest, hspec, network, QuickCheck
-, Safe
+, safe
 }:
 
 cabal.mkDerivation (self: {
@@ -8,8 +8,11 @@ cabal.mkDerivation (self: {
   sha256 = "1ni91llvq1mfdsjmw1laqhk964y4vlpyk5s25j8klsfn27mq6c68";
   buildDepends = [ appar byteorder network ];
   testDepends = [
-    appar byteorder doctest hspec network QuickCheck Safe
+    appar byteorder doctest hspec network QuickCheck safe
   ];
+  patchPhase = ''
+    sed -i -e 's|Safe|safe|' iproute.cabal
+  '';
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/iproute/";
     description = "IP Routing Table";
