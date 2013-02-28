@@ -8,9 +8,9 @@ let
     sha256 = "fc1370ef38abeeb13f55c905ec002e60705fb0bfde3b8d21c8d6eb8056c11bac";
   };
 
-  patches = [ ./ignore-missing-includedirs.patch ];
+  patches = [ ./ignore-missing-includedirs.patch ./implement-getgrouplist.patch ];
 
-  configureFlags = "--localstatedir=/var --sysconfdir=/etc --with-session-socket-dir=/tmp";
+  configureFlags = "--enable-embedded-tests --localstatedir=/var --sysconfdir=/etc --with-session-socket-dir=/tmp";
 
 in rec {
 
