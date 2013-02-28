@@ -1,0 +1,67 @@
+http://lists.gnu.org/archive/html/bug-patch/2012-11/msg00001.html
+Tested on Illumos, where ksh is /bin/sh.
+
+--- patch-2.7.1/tests/test-lib.sh
++++ patch-2.7.1/tests/test-lib.sh
+@@ -118,7 +118,7 @@
+ }
+ 
+ if test -z "`echo -n`"; then
+-    if eval 'test -n "${BASH_LINENO[0]}" 2>/dev/null'; then
++    if (eval 'test -n "${BASH_LINENO[0]}"') 2>/dev/null; then
+ 	eval '
+ 	    _start_test() {
+ 		echo -n "[${BASH_LINENO[2]}] $* -- "
+
+--- patch-2.7.1/tests/crlf-handling
++++ patch-2.7.1/tests/crlf-handling
+@@ -14,7 +14,7 @@
+ use_tmpdir
+ 
+ lf2crlf() {
+-    while read l; do echo -e "$l\r"; done
++    while read l; do printf "%s\r\n" "$l"; done
+ }
+ 
+ echo 1 > a
+
+--- patch-2.7.1/tests/merge
++++ patch-2.7.1/tests/merge
+@@ -32,18 +32,20 @@
+     shift
+     done > a.sed
+     echo "$body" | sed -f a.sed > b
+-    shift
+-    while test $# -gt 0 ; do
+-	echo "$1"
++    if test $# -gt 0 ; then
+ 	shift
+-    done > b.sed
++    while test $# -gt 0 ; do
++	echo "$1"
++	shift
++    done
++    fi > b.sed
+     echo "$body" | sed -f b.sed > c
+     rm -f a.sed b.sed
+     output=`diff -u a b | patch $ARGS -f c`
+     status=$?
+     echo "$output" | sed -e '/^$/d' -e '/^patching file c$/d'
+     cat c
+-    test $status == 0 || echo "Status: $status"
++    test $status = 0 || echo "Status: $status"
+ }
+ 
+ x() {
+
+--- patch-2.7.1/tests/read-only-files
++++ patch-2.7.1/tests/read-only-files
+@@ -16,7 +16,7 @@
+
+ : > read-only
+ chmod a-w read-only
+-if : 2> /dev/null > read-only; then
++if (: > read-only) 2> /dev/null; then
+     echo "Files with read-only permissions are writable" \
+         "(probably running as superuser)" >&2
+     exit 77
