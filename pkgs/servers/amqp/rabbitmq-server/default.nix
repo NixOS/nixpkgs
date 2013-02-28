@@ -1,16 +1,17 @@
 { stdenv, fetchurl, erlang, python, libxml2, libxslt, xmlto
-, docbook_xml_dtd_45, docbook_xsl }:
+, docbook_xml_dtd_45, docbook_xsl, zip, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "rabbitmq-server-2.4.0";
+  version = "3.0.2";
+  name = "rabbitmq-server-${version}";
 
   src = fetchurl {
-    url = "http://www.rabbitmq.com/releases/rabbitmq-server/v2.4.0/${name}.tar.gz";
-    sha256 = "0zvyyqw9kpzi791hvv8qj1aw0fpx5m5cgqfvffxfrdz8daxx3nma";
+    url = "http://www.rabbitmq.com/releases/rabbitmq-server/v${version}/${name}.tar.gz";
+    sha256 = "1xcqv8jmpj768rl3219ksmpsm64imys7h9f3phvmpjfqdw6lnr9x";
   };
 
   buildInputs =
-    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl ];
+    [ erlang python libxml2 libxslt xmlto docbook_xml_dtd_45 docbook_xsl zip unzip ];
 
   preBuild =
     ''
