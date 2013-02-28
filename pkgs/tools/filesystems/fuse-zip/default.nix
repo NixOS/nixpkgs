@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   name = "fuse-zip-0.2.13";
-  
+
   src = fetchurl {
     url = "http://fuse-zip.googlecode.com/files/${name}.tar.gz";
     sha1 = "9cfa00e38a59d4e06fd47bfaca75ad5e299ecc6b";
   };
 
+  patches = [ ./libzip.patch ]; # problems with new libzip; from Gentoo
+
   buildInputs = [ pkgconfig fuse libzip zlib ];
 
   makeFlags = "INSTALLPREFIX=$(out)";
-  
+
   meta = {
     homepage = http://code.google.com/p/fuse-zip/;
     description = "A FUSE-based filesystem that allows read and write access to ZIP files";
