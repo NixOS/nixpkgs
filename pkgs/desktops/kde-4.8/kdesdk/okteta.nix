@@ -5,6 +5,8 @@ kde {
 
 # TODO: Look what does -DBUILD_mobile add
 
+  enableParallelBuilding = false;
+
   meta = {
     description = "KDE byte editor";
   };
