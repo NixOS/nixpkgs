@@ -13,6 +13,8 @@ stdenv.mkDerivation {
   buildInputs = [ pcre ]
     ++ stdenv.lib.optional (libiconv != null) libiconv;
 
+  patches = [ ./test-localeconv.patch ];
+
   NIX_LDFLAGS = stdenv.lib.optionalString (libiconv != null) "-L${libiconv}/lib -liconv";
 
   doCheck = !stdenv.isDarwin;
