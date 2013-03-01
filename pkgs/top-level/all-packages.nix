@@ -7360,6 +7360,8 @@ let
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
+  jalv = callPackage ../applications/audio/jalv { };
+
   jedit = callPackage ../applications/editors/jedit { };
 
   jigdo = callPackage ../applications/misc/jigdo { };
