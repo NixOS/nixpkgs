@@ -9,7 +9,7 @@ let
     libXt xproto libXext xextproto libX11 gtkspell aspell
     scrnsaverproto pycrypto pythonDBus pythonSexy 
     docutils pyasn1 farstream gst_plugins_bad gstreamer
-    gst_libav gst_python
+    gst_libav
   ];
 in
 rec {

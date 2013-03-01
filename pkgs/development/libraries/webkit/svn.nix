@@ -86,6 +86,6 @@ rec {
     maintainers = [stdenv.lib.maintainers.raskin];
   };
   passthru = {
-    inherit gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg;
+    inherit gstreamer gst_plugins_base gst_plugins_good gst_libav;
   };
 }

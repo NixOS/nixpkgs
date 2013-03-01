@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     make install-plugins
 
     # Wrap programs so the find the GStreamer plug-ins they need
-    # (e.g., gst-ffmpeg is needed to watch movies such as YouTube's).
+    # (e.g., gst-libav is needed to watch movies such as YouTube's).
     for prog in "$out/bin/"*
     do
       wrapProgram "$prog" --prefix                                            \
