@@ -6,10 +6,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://dl.suckless.org/surf/surf-${version}.tar.gz";
-    sha256 = "fdc1ccfaee5c4f008eeb8fe5f9200d3ad71296e8d7af52bdd6a771f111866805";
+    sha256 = "01b8hq8z2wd7ssym5bypx2b15mrs1lhgkrcgxf700kswxvxcrhgx";
   };
 
-  buildInputs = [ gtk makeWrapper webkit pkgconfig glib libsoup glib_networking ];
+  buildInputs = [ gtk makeWrapper webkit pkgconfig glib libsoup ];
 
   # Allow users set their own list of patches
   inherit patches;
