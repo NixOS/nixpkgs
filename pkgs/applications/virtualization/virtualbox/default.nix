@@ -54,7 +54,10 @@ in stdenv.mkDerivation {
     ++ optional javaBindings jdk
     ++ optional pythonBindings python;
 
-  patches = singleton ./missing_files_4.2.8.patch;
+  patches = [
+    ./missing_files_4.2.8.patch
+    ./strict_types.patch
+  ];
 
   prePatch = ''
     set -x
