@@ -17,7 +17,7 @@ rec {
     ];
 
   propagatedBuildInputs = [
-    gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good
+    gstreamer gst_plugins_base gst_libav gst_plugins_good
     ];
 
   configureCommand = "./autogen.sh ";

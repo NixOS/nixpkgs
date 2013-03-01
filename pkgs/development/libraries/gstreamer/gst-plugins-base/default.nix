@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-base-0.10.36";
+  name = "gst-plugins-base-1.0.5";
 
   src = fetchurl {
     urls = [
       "${meta.homepage}/src/gst-plugins-base/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "0jp6hjlra98cnkal4n6bdmr577q8mcyp3c08s3a02c4hjhw5rr0z";
+    sha256 = "0wvigpblsarbxfv1ms34qza4yasqj18fwqf8268qgwwyp44nxkip";
   };
 
   patchPhase = ''

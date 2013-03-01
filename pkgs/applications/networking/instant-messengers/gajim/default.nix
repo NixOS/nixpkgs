@@ -9,7 +9,7 @@ let
     libXt xproto libXext xextproto libX11 gtkspell aspell
     scrnsaverproto pycrypto pythonDBus pythonSexy 
     docutils pyasn1 farstream gst_plugins_bad gstreamer
-    gst_ffmpeg gst_python
+    gst_libav gst_python
   ];
 in
 rec {
@@ -38,7 +38,7 @@ rec {
       sed -e 's^'"$i"'^'"$out/bin-wrapped/$name"'^' -i "$out/bin/$name"
       sed -e "2aexport LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}${a.gtkspell}/lib:${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
       sed -e "2aexport NIX_LDFLAGS=\"\$NIX_LDFLAGS -L${a.gtkspell}/lib -L${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
-      sed -e "2aexport GST_PLUGIN_PATH=\"\$GST_PLUGIN_PATH''${GST_PLUGIN_PATH:+:}$(echo ${a.gst_plugins_bad}/lib/gstreamer-*):$(echo ${a.gst_ffmpeg}/lib/gstreamer-*):$(echo ${a.farstream}/lib/gstreamer-*)\"" -i "$out/bin/gajim"
+      sed -e "2aexport GST_PLUGIN_PATH=\"\$GST_PLUGIN_PATH''${GST_PLUGIN_PATH:+:}$(echo ${a.gst_plugins_bad}/lib/gstreamer-*):$(echo ${a.gst_libav}/lib/gstreamer-*):$(echo ${a.farstream}/lib/gstreamer-*)\"" -i "$out/bin/gajim"
     done
   '') ["wrapBinContentsPython"];
 

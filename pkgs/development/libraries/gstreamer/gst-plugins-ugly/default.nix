@@ -2,14 +2,14 @@
 , libmad, libdvdread, libmpeg2, libcdio, a52dec }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-ugly-0.10.18";
+  name = "gst-plugins-ugly-1.0.5";
 
   src = fetchurl {
     urls = [
-      "${meta.homepage}/src/gst-plugins-ugly/${name}.tar.bz2"
-      "mirror://gentoo/distfiles/${name}.tar.bz2"
+      "${meta.homepage}/src/gst-plugins-ugly/${name}.tar.xz"
+      "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "054fdkb2riy5knda39cp6w3xp9lzax52bn12cklglscjrm46ghgr";
+    sha256 = "0c8kg59fg3v6hjf7wlwypcp9vnql359nvd4knj1jg6vdm4p1ham6";
   };
 
   buildInputs =

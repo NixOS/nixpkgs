@@ -32,7 +32,7 @@ rec {
       --prefix GST_PLUGIN_PATH : ${a.webkit.gstreamer}/lib/gstreamer-* \
       --prefix GST_PLUGIN_PATH : ${a.webkit.gst_plugins_base}/lib/gstreamer-* \
       --prefix GST_PLUGIN_PATH : ${a.webkit.gst_plugins_good}/lib/gstreamer-* \
-      --prefix GST_PLUGIN_PATH : ${a.webkit.gst_ffmpeg}/lib/gstreamer-* \
+      --prefix GST_PLUGIN_PATH : ${a.webkit.gst_libav}/lib/gstreamer-* \
       --prefix GIO_EXTRA_MODULES : ${a.glib_networking}/lib/gio/modules
     '';
 
