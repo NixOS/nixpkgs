@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "bc9185e0c300d61e2a6c8ac48b4bea6a0a456c9ba11d1fbadf2d1e6ca063f2b4";
+    sha256 = "f336af12244db74e6564dc22e438bbcba70f994aaf0d117fdf70caca9fab1b78";
   };
 
   buildInputs =
@@ -55,7 +55,6 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python;
 
   patches = [
-    ./missing_files_4.2.8.patch
     ./strict_types.patch
     ./build_fix_3.9.0.patch
   ];
