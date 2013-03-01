@@ -2,14 +2,14 @@
 , libdvdnav, libdvdread }:
 
 stdenv.mkDerivation rec {
-  name = "gst-plugins-bad-0.10.22";
+  name = "gst-plugins-bad-1.0.5";
 
   src = fetchurl {
     urls = [
-      "${meta.homepage}/src/gst-plugins-bad/${name}.tar.bz2"
-      "mirror://gentoo/distfiles/${name}.tar.bz2"
+      "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz"
+      "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "030728gf0zjg62yng4qy9yapaffbvkziawa28rk0gspz8cpi1xyq";
+    sha256 = "0si79dsdx06w6p48v1c5ifbjhq26p4jn8swi18ni8x6j5yd5p3rf";
   };
 
   buildInputs =

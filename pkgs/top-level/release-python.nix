@@ -549,7 +549,7 @@ in
   gsettings_desktop_schemas = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gsmartcontrol = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gssdp = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  gst_ffmpeg = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
+  gst_libav = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gst_plugins_bad = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gst_plugins_base = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gst_plugins_good = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

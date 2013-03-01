@@ -2,14 +2,14 @@
 , useInternalFfmpeg ? false, ffmpeg ? null }:
 
 stdenv.mkDerivation rec {
-  name = "gst-ffmpeg-0.10.12";
+  name = "gst-libav-1.0.5";
 
   src = fetchurl {
     urls = [
-      "http://gstreamer.freedesktop.org/src/gst-ffmpeg/${name}.tar.bz2"
+      "http://gstreamer.freedesktop.org/src/gst-libav/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
-    sha256 = "0fyppl8q18g71jd2r0mbiqk8hhrdxq43dglma06mxyjb5c80fxxi";
+    sha256 = "1m9jzga9ahml3dnfm7syz6mglmysqpbkkyr48kka9cwna1kbxy5f";
   };
 
   # Upstream strongly recommends against using --with-system-ffmpeg,
