@@ -57,6 +57,7 @@ in stdenv.mkDerivation {
   patches = [
     ./missing_files_4.2.8.patch
     ./strict_types.patch
+    ./build_fix_3.9.0.patch
   ];
 
   prePatch = ''
