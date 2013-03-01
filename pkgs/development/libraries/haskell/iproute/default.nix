@@ -4,15 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "iproute";
-  version = "1.2.10";
-  sha256 = "1ni91llvq1mfdsjmw1laqhk964y4vlpyk5s25j8klsfn27mq6c68";
+  version = "1.2.11";
+  sha256 = "14f96sb41f5m14186900rz84vwv7idjiylp8m5nsm6gganvh4sh4";
   buildDepends = [ appar byteorder network ];
   testDepends = [
     appar byteorder doctest hspec network QuickCheck safe
   ];
-  patchPhase = ''
-    sed -i -e 's|Safe|safe|' iproute.cabal
-  '';
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/iproute/";
     description = "IP Routing Table";
