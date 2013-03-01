@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Program is time-limited -- it will stop functioning after 60 days. You
       can always download the latest version from makemkv.com that will reset the
       expiration date.
-    ''
+    '';
     license = "unfree";
     homepage = http://makemkv.com;
   };
