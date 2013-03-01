@@ -7032,6 +7032,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  fvwm = callPackage ../applications/window-managers/fvwm { };
+
   geany = callPackage ../applications/editors/geany { };
 
   goldendict = callPackage ../applications/misc/goldendict { };
