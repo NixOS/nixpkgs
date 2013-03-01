@@ -5,11 +5,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nix-1.5";
+  name = "nix-1.5.1";
 
   src = fetchurl {
     url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-    sha256 = "ff63673afbcfd916acef881717dd9843d143efa70529ea89dd6b92995d54c076";
+    sha256 = "c53ec8a5518445bea658e1edb4e3be8c315b583aefc55d6969f2bf6f6c805239";
   };
 
   buildNativeInputs = [ perl pkgconfig ];
