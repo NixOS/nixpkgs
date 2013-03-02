@@ -2891,6 +2891,10 @@ let
     inherit (python27Packages) recursivePthLoader;
   };
 
+  pythonDocs = recurseIntoAttrs (import ../development/interpreters/python/docs {
+    inherit stdenv fetchurl;
+  });
+
   pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };
 
   pyrex = pyrex095;
