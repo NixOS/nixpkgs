@@ -278,6 +278,18 @@ let
         '';
     };
 
+  timerToUnit = name: def:
+    { inherit (def) wantedBy enable;
+      text =
+        ''
+          [Unit]
+          ${attrsToSection def.unitConfig}
+
+          [Timer]
+          ${attrsToSection def.timerConfig}
+        '';
+    };
+
   mountToUnit = name: def:
     { inherit (def) wantedBy enable;
       text =
@@ -408,6 +420,13 @@ in
       type = types.attrsOf types.optionSet;
       options = [ socketOptions unitConfig ];
       description = "Definition of systemd socket units.";
+    };
+
+    systemd.timers = mkOption {
+      default = {};
+      type = types.attrsOf types.optionSet;
+      options = [ timerOptions unitConfig ];
+      description = "Definition of systemd timer units.";
     };
 
     systemd.mounts = mkOption {
@@ -552,6 +571,7 @@ in
       mapAttrs' (n: v: nameValuePair "${n}.target" (targetToUnit n v)) cfg.targets
       // mapAttrs' (n: v: nameValuePair "${n}.service" (serviceToUnit n v)) cfg.services
       // mapAttrs' (n: v: nameValuePair "${n}.socket" (socketToUnit n v)) cfg.sockets
+      // mapAttrs' (n: v: nameValuePair "${n}.timer" (timerToUnit n v)) cfg.timers
       // listToAttrs (map
                    (v: let n = escapeSystemdPath v.where;
                        in nameValuePair "${n}.mount" (mountToUnit n v)) cfg.mounts);

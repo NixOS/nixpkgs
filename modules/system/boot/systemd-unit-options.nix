@@ -223,6 +223,26 @@ rec {
 
   };
 
+
+  timerOptions = unitOptions // {
+
+    timerConfig = mkOption {
+      default = {};
+      example = { OnCalendar = "Sun 14:00:00"; Unit = "foo.service"; };
+      type = types.attrs;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Timer]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.timer</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> and
+        <citerefentry><refentrytitle>systemd.time</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+  };
+
+
   mountOptions = unitOptions // {
 
     what = mkOption {
