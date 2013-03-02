@@ -1,18 +1,30 @@
-{ stdenv, fetchurl, pkgconfig, librdf_raptor, ladspaH, openssl, zlib }:
+{ stdenv, fetchurl, pkgconfig, libtool, automake, autoconf
+, librdf_raptor, librdf_raptor2, ladspaH, openssl, zlib #, swh_lv2
+}:
 
-stdenv.mkDerivation {
-  name = "liblrdf-0.4.0";
+stdenv.mkDerivation rec {
+  version = "0.5.0";
+  name = "liblrdf-${version}";
 
   src = fetchurl {
-    url = mirror://sourceforge/lrdf/liblrdf/0.4.0/liblrdf-0.4.0.tar.gz;
-    sha256 = "015jv7pp0a0qxgljgdvf7d01nj4fx0zgzg0wayjp7v86pa38xscm";
+    url = "http://github.com/swh/LRDF/archive/${version}.tar.gz";
+    sha256 = "18p2flb2sv2hq6w2qkd29z9c7knnwqr3f12i2srshlzx6vwkm05s";
   };
 
-  buildInputs = [ pkgconfig ladspaH openssl zlib ];
+  postPatch = "sed -i -e 's:usr/local:usr:' examples/{instances,remove}_test.c";
 
-  propagatedBuildInputs = [ librdf_raptor ];
+  preConfigure = "rm m4/* && autoreconf -if";
 
-  meta = { 
+  buildInputs = [
+    pkgconfig libtool automake autoconf ladspaH openssl zlib /*swh_lv2*/
+    #librdf_raptor 
+  ];
+
+  propagatedBuildInputs = [ librdf_raptor2 ];
+
+  #doCheck = true; # would need swh_lv2 and some path patching
+
+  meta = {
     description = "A lightweight RDF library with special support for LADSPA plugins.";
     homepage = http://sourceforge.net/projects/lrdf/;
     license = "GPLv2";

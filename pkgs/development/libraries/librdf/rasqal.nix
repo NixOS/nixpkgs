@@ -1,11 +1,11 @@
 { stdenv, fetchurl, librdf_raptor2, gmp, pkgconfig, pcre, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "rasqal-0.9.26";
+  name = "rasqal-0.9.30";
 
   src = fetchurl {
     url = "http://download.librdf.org/source/${name}.tar.gz";
-    sha256 = "1drjcy1k9g72iis0ghllzn7n0w03bahhrd2p5hs39anbm6mr0yk9";
+    sha256 = "1z8wifq79kivcwpwzmjnjdrbr65zam190gpxhgrvsyfch0yykw5b";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ librdf_raptor2 ];
 
   postInstall = "rm -rvf $out/share/gtk-doc";
-  
-  meta = { 
+
+  meta = {
     description = "Library that handles Resource Description Framework (RDF)";
     homepage = "http://librdf.org/rasqal";
     license = "LGPL-2.1 Apache-2.0";
