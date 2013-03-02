@@ -42,25 +42,23 @@ in
 
   isoImage.volumeID = "NIXOS_${config.system.nixosVersion}";
 
-  boot.postBootCommands =
+  # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
+  # for nixos-install.
+  boot.postBootCommands = optionalString includeSources
     ''
-      # Provide the NixOS/Nixpkgs sources in /etc/nixos.  This is required
-      # for nixos-install.
-      ${optionalString includeSources ''
-        echo "unpacking the NixOS/Nixpkgs sources..."
-        mkdir -p /nix/var/nix/profiles/per-user/root
-        ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/per-user/root/channels -i ${channelSources} --quiet
-        mkdir -m 0700 -p /root/.nix-defexpr
-        ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
-     ''}
-
-     # Make the installer more likely to succeed in low memory
-     # environments.  The kernel's overcommit heustistics bite us
-     # fairly often, preventing processes such as nix-worker or
-     # download-using-manifests.pl from forking even if there is
-     # plenty of free memory.
-     echo 1 > /proc/sys/vm/overcommit_memory
+      echo "unpacking the NixOS/Nixpkgs sources..."
+      mkdir -p /nix/var/nix/profiles/per-user/root
+      ${config.environment.nix}/bin/nix-env -p /nix/var/nix/profiles/per-user/root/channels -i ${channelSources} --quiet
+      mkdir -m 0700 -p /root/.nix-defexpr
+      ln -s /nix/var/nix/profiles/per-user/root/channels /root/.nix-defexpr/channels
     '';
+
+  # Make the installer more likely to succeed in low memory
+  # environments.  The kernel's overcommit heustistics bite us
+  # fairly often, preventing processes such as nix-worker or
+  # download-using-manifests.pl from forking even if there is
+  # plenty of free memory.
+  boot.kernel.sysctl."vm.overcommit_memory" = "1";
 
   # To speed up installation a little bit, include the complete stdenv
   # in the Nix store on the CD.
