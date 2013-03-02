@@ -10,6 +10,7 @@
   ./config/pulseaudio.nix
   ./config/shells.nix
   ./config/swap.nix
+  ./config/sysctl.nix
   ./config/system-path.nix
   ./config/timezone.nix
   ./config/unix-odbc-drivers.nix

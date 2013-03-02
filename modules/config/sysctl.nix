@@ -1,0 +1,58 @@
+{ config, pkgs, ... }:
+
+with pkgs.lib;
+
+let
+
+  sysctlOption = mkOptionType {
+    name = "sysctl option value";
+    check = x: builtins.isBool x || builtins.isString x || builtins.isInt x;
+    merge = xs: last xs; # FIXME: hacky way to allow overriding in configuration.nix.
+  };
+
+in
+
+{
+
+  options = {
+
+    boot.kernel.sysctl = mkOption {
+      default = {};
+      example = {
+        "net.ipv4.tcp_syncookies" = false;
+        "vm.swappiness" = 60;
+      };
+      type = types.attrsOf sysctlOption;
+      description = ''
+        Runtime parameters of the Linux kernel, as set by
+        <citerefentry><refentrytitle>sysctl</refentrytitle>
+        <manvolnum>8</manvolnum></citerefentry>.  Note that sysctl
+        parameters names must be enclosed in quotes
+        (e.g. <literal>"vm.swappiness"</literal> instead of
+        <literal>vm.swappiness</literal>).  The value of each parameter
+        may be a string, integer or Boolean.
+      '';
+    };
+
+  };
+
+  config = {
+
+    environment.etc."sysctl.d/nixos.conf".text =
+      concatStrings (mapAttrsToList (n: v: "${n}=${if v == false then "0" else toString v}\n") config.boot.kernel.sysctl);
+
+    systemd.services.systemd-sysctl =
+      { description = "Apply Kernel Variables";
+        before = [ "sysinit.target" "shutdown.target" ];
+        wantedBy = [ "sysinit.target" "multi-user.target" ];
+        restartTriggers = [ config.environment.etc."sysctl.d/nixos.conf".source ];
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+          ExecStart = "${config.systemd.package}/lib/systemd/systemd-sysctl";
+        };
+      };
+
+  };
+
+}
