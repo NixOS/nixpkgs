@@ -5794,7 +5794,7 @@ let
         kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs2_2_6_32
         kernelPatches.cifs_timeout_2_6_29
-        kernelPatches.no_xsave
+        # kernelPatches.no_xsave # doesn't apply anymore
         kernelPatches.dell_rfkill
       ];
   };
