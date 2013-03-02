@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fpdyxww41ba52d98blvnf543xvirq1v9xz1i3x1gm9lzlzpmc2g";
   };
 
+  patches = [ ./gets-undeclared.patch ];
+
   buildNativeInputs = [ pkgconfig gperf ];
   buildInputs =
     [ zlib bzip2 lzo
