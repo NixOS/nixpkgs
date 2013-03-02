@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     license = "GPL";
     homepage = http://www.koffice.org;
     maintainers = with stdenv.lib.maintainers; [ sander urkud ];
-    inherit (kdelibs.meta) platforms;
+    # doesn't build, seems dead and superseded by calligra
+    #inherit (kdelibs.meta) platforms;
   };
 }
