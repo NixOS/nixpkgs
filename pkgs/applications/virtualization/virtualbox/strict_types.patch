@@ -1,0 +1,68 @@
+diff --git a/src/VBox/HostDrivers/Support/linux/SUPDrv-linux.c b/src/VBox/HostDrivers/Support/linux/SUPDrv-linux.c
+index 9cc124c..d86da0c 100644
+--- a/src/VBox/HostDrivers/Support/linux/SUPDrv-linux.c
++++ b/src/VBox/HostDrivers/Support/linux/SUPDrv-linux.c
+@@ -253,7 +253,11 @@ static struct platform_device gPlatformDevice =
+ DECLINLINE(RTUID) vboxdrvLinuxUid(void)
+ {
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29)
++# ifdef CONFIG_UIDGID_STRICT_TYPE_CHECKS
++    return from_kuid(current_user_ns(), current_uid());
++# else
+     return current->cred->uid;
++# endif
+ #else
+     return current->uid;
+ #endif
+@@ -262,7 +266,11 @@ DECLINLINE(RTUID) vboxdrvLinuxUid(void)
+ DECLINLINE(RTGID) vboxdrvLinuxGid(void)
+ {
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29)
++# ifdef CONFIG_UIDGID_STRICT_TYPE_CHECKS
++    return from_kgid(current_user_ns(), current_gid());
++# else
+     return current->cred->gid;
++# endif
+ #else
+     return current->gid;
+ #endif
+@@ -271,7 +279,11 @@ DECLINLINE(RTGID) vboxdrvLinuxGid(void)
+ DECLINLINE(RTUID) vboxdrvLinuxEuid(void)
+ {
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 29)
++# ifdef CONFIG_UIDGID_STRICT_TYPE_CHECKS
++    return from_kuid(current_user_ns(), current_euid());
++# else
+     return current->cred->euid;
++# endif
+ #else
+     return current->euid;
+ #endif
+diff --git a/src/VBox/HostDrivers/VBoxPci/linux/VBoxPci-linux.c b/src/VBox/HostDrivers/VBoxPci/linux/VBoxPci-linux.c
+index 575f739..8909e79 100644
+--- a/src/VBox/HostDrivers/VBoxPci/linux/VBoxPci-linux.c
++++ b/src/VBox/HostDrivers/VBoxPci/linux/VBoxPci-linux.c
+@@ -429,7 +429,11 @@ int vboxPciOsDevDetachHostDriver(PVBOXRAWPCIINS pIns)
+         if (!pNewCreds)
+                 goto done;
+ 
++# ifdef CONFIG_UIDGID_STRICT_TYPE_CHECKS
++        pNewCreds->fsuid = GLOBAL_ROOT_UID;;
++# else
+         pNewCreds->fsuid = 0;
++# endif
+         pOldCreds = override_creds(pNewCreds);
+ #endif
+ 
+@@ -539,7 +543,11 @@ int vboxPciOsDevReattachHostDriver(PVBOXRAWPCIINS pIns)
+         if (!pNewCreds)
+             goto done;
+ 
++# ifdef CONFIG_UIDGID_STRICT_TYPE_CHECKS
++        pNewCreds->fsuid = GLOBAL_ROOT_UID;;
++# else
+         pNewCreds->fsuid = 0;
++# endif
+         pOldCreds = override_creds(pNewCreds);
+ #endif
+         RTStrPrintf(szFileBuf, cMaxBuf,

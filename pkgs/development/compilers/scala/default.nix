@@ -28,5 +28,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.scala-lang.org/;
     license = "BSD";
+    platforms = stdenv.lib.platforms.all;
   };
 }

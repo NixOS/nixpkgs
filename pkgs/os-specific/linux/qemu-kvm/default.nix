@@ -1,5 +1,5 @@
 { stdenv, fetchurl, attr, zlib, SDL, alsaLib, pkgconfig, pciutils, libuuid, vde2
-, libjpeg, libpng, ncurses, python, glib, libaio, mesa
+, libjpeg, libpng, ncurses, python, glib, libaio, mesa, perl, texinfo
 , spice, spice_protocol, spiceSupport ? false }:
 
 assert stdenv.isLinux;
@@ -15,18 +15,14 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./fix-librt-check.patch ];
+  
+  buildInputs =
+    [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
+      ncurses python glib libaio mesa texinfo perl
+    ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
 
-  postPatch =
-    '' for i in $(find . -type f)
-       do
-         sed -i "$i" \
-             -e 's|/bin/bash|/bin/sh|g ;
-                 s|/usr/bin/python|${python}/bin/python|g ;
-                 s|/bin/rm|rm|g'
-       done
-    '' + stdenv.lib.optionalString spiceSupport ''
-       for i in configure spice-qemu-char.c ui/spice-input.c ui/spice-core.c ui/qemu-spice.h
-       do
+  patchPhase = "patchShebangs ." + stdenv.lib.optionalString spiceSupport ''
+       for i in configure spice-qemu-char.c ui/spice-input.c ui/spice-core.c ui/qemu-spice.h; do
          substituteInPlace $i --replace '#include <spice.h>' '#include <spice/spice.h>'
        done
     '';
@@ -34,14 +30,9 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--audio-drv-list=alsa"
       "--smbd=smbd"                               # use `smbd' from $PATH
+      "--enable-docs"
+      "--python=${python}/bin/python"
     ] ++ stdenv.lib.optional spiceSupport "--enable-spice";
-
-  enableParallelBuilding = true;
-
-  buildInputs =
-    [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
-      ncurses python glib libaio mesa
-    ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
 
   postInstall =
     ''
@@ -50,6 +41,10 @@ stdenv.mkDerivation rec {
       # cause architecture selection to misbehave.
       ln -sv $(cd $out/bin && echo qemu-system-*) $out/bin/qemu-kvm
     '';
+
+  doCheck = true;
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.linux-kvm.org/;

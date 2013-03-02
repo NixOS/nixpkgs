@@ -1132,6 +1132,8 @@ let
 
   mkcue = callPackage ../tools/cd-dvd/mkcue { };
 
+  mkpasswd = callPackage ../tools/security/mkpasswd { };
+
   mktemp = callPackage ../tools/security/mktemp { };
 
   modemmanager = callPackage ../tools/networking/modemmanager {};
@@ -2848,6 +2850,10 @@ let
     inherit (python27Packages) recursivePthLoader;
   };
 
+  pythonDocs = recurseIntoAttrs (import ../development/interpreters/python/docs {
+    inherit stdenv fetchurl;
+  });
+
   pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };
 
   pyrex = pyrex095;
@@ -2864,6 +2870,7 @@ let
 
   ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
   ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
+  ruby2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.0.nix { });
 
   ruby = ruby19;
 
@@ -3026,6 +3033,8 @@ let
   ccacheStdenv = lowPrio (overrideGCC stdenv ccacheWrapper);
 
   cgdb = callPackage ../development/tools/misc/cgdb { };
+
+  chromedriver = callPackage ../development/tools/selenium/chromedriver { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
@@ -3332,6 +3341,8 @@ let
   aalib = callPackage ../development/libraries/aalib { };
 
   acl = callPackage ../development/libraries/acl { };
+
+  activemq = callPackage ../development/libraries/apache-activemq { };
 
   adns = callPackage ../development/libraries/adns { };
 
@@ -6015,7 +6026,7 @@ let
 
   # A function to build a manually-configured kernel
   linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
-    inherit (pkgs) stdenv runCommand nettools perl kmod writeTextFile;
+    inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile;
   };
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
@@ -6897,6 +6908,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  fvwm = callPackage ../applications/window-managers/fvwm { };
+
   geany = callPackage ../applications/editors/geany { };
 
   goldendict = callPackage ../applications/misc/goldendict { };
@@ -7228,6 +7241,8 @@ let
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
+  jalv = callPackage ../applications/audio/jalv { };
+
   jedit = callPackage ../applications/editors/jedit { };
 
   jigdo = callPackage ../applications/misc/jigdo { };
@@ -7391,6 +7406,9 @@ let
     inherit (ocamlPackages) lablgtk;
     inherit (gnome) libgnomecanvas;
   };
+
+  mopidy = callPackage ../applications/audio/mopidy { };
+  mopidy_git = callPackage ../applications/audio/mopidy/git.nix { };
 
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
@@ -8814,10 +8832,14 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
+  nixUnstable = nixStable;
+
+  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
+  */
 
   nut = callPackage ../applications/misc/nut { };
 

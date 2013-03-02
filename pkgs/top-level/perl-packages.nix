@@ -510,6 +510,18 @@ rec {
     };
   };
 
+  CatalystPluginCaptcha = buildPerlPackage {
+    name = "Catalyst-Plugin-Captcha-0.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DI/DIEGOK/Catalyst-Plugin-Captcha-0.04.tar.gz;
+      sha256 = "0llyj3v5nx9cx46jdbbvxf1lc9s9cxq5ml22xmx3wkb201r5qgaa";
+    };
+    propagatedBuildInputs = [ CatalystRuntime CatalystPluginSession GDSecurityImage HTTPDate ];
+    meta = {
+      description = "Create and validate Captcha for Catalyst";
+    };
+  };
+
   CatalystPluginConfigLoader = buildPerlPackage rec {
     name = "Catalyst-Plugin-ConfigLoader-0.30";
     src = fetchurl {
@@ -590,6 +602,7 @@ rec {
       url = mirror://cpan/authors/id/A/AB/ABRAXXA/Catalyst-Plugin-Static-Simple-0.30.tar.gz;
       sha256 = "18zar1n4imgnv7b4dr5sxyikry4668ngqgc6f0dr210bqafvwv7w";
     };
+    patches = [ ../development/perl-modules/catalyst-plugin-static-simple-etag.patch ];
     propagatedBuildInputs = [ CatalystRuntime MIMETypes Moose MooseXTypes namespaceautoclean ];
     meta = {
       description = "Make serving static pages painless";
@@ -655,6 +668,7 @@ rec {
     meta = {
       description = "Replace the development server with Starman";
       license = "perl";
+      platforms = stdenv.lib.platforms.linux;
     };
   };
 
@@ -2009,6 +2023,19 @@ rec {
     postPatch = "sed -ie 's/if (GD::Image->can(.newFromJpeg.)) {/if ( 0 ) {/' t/GD.t";
 
     makeMakerFlags = "--lib_png_path=${pkgs.libpng} --lib_jpeg_path=${pkgs.libjpeg} --lib_zlib_path=${pkgs.zlib} --lib_ft_path=${pkgs.freetype} --lib_fontconfig_path=${pkgs.fontconfig} --lib_xpm_path=${pkgs.xlibs.libXpm}";
+  };
+
+  GDSecurityImage = buildPerlPackage {
+    name = "GD-SecurityImage-1.72";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BU/BURAK/GD-SecurityImage-1.72.tar.gz;
+      sha256 = "07a025krdaml5ls7gyssfdcsif6cnsnksrxkqk48n9dmv7rz7q1r";
+    };
+    propagatedBuildInputs = [ GD ];
+    meta = {
+      description = "Security image (captcha) generator";
+      license = "perl5";
+    };
   };
 
   GeoIP = buildPerlPackage rec {
@@ -4812,18 +4839,18 @@ rec {
     };
   };
 
-  TestWWWMechanizeCatalyst = buildPerlPackage rec {
-    name = "Test-WWW-Mechanize-Catalyst-0.55";
+  TestWWWMechanizeCatalyst = buildPerlPackage {
+    name = "Test-WWW-Mechanize-Catalyst-0.58";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
-      sha256 = "0zdg4sxx231dj3qgbr58i63927gl4qzh0krignqxp8q6ck3hr63f";
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Test-WWW-Mechanize-Catalyst-0.58.tar.gz;
+      sha256 = "1pa2m064skxfwsm93hffxcyky4kcn2q418vnw2fn79ich6wrcijd";
     };
-    propagatedBuildInputs =
-      [ CatalystRuntime TestWWWMechanize WWWMechanize
-        CatalystPluginSessionStateCookie HTMLForm
-      ];
-    buildInputs = [ TestPod ];
     doCheck = false; # listens on an external port
+    propagatedBuildInputs = [ CatalystRuntime LWP Moose namespaceclean TestWWWMechanize WWWMechanize ];
+    meta = {
+      description = "Test::WWW::Mechanize for Catalyst";
+      license = "perl";
+    };
   };
 
   TestWWWMechanizePSGI = buildPerlPackage {

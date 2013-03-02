@@ -145,7 +145,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     transformers = self.transformers_0_3_0_0;   # 7.6 ok
     vector       = self.vector_0_10_0_1;        # 7.6 ok
     xhtml        = self.xhtml_3000_2_1;         # 7.6 ok
-    zlib         = self.zlib_0_5_4_0;           # 7.6 ok
+    zlib         = self.zlib_0_5_4_1;           # 7.6 ok
     cabalInstall = self.cabalInstall_1_16_0_2;  # 7.6 ok
     alex         = self.alex_3_0_4;             # 7.6 ok
     haddock      = self.haddock_2_13_1;         # 7.6 ok
@@ -871,6 +871,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   gio = callPackage ../development/libraries/haskell/gio {};
 
+  github = callPackage ../development/libraries/haskell/github {};
+
   gitit = callPackage ../development/libraries/haskell/gitit {};
 
   glade = callPackage ../development/libraries/haskell/glade {
@@ -1550,8 +1552,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   safe = callPackage ../development/libraries/haskell/safe {};
 
-  Safe = callPackage ../development/libraries/haskell/Safe {};
-
   SafeSemaphore = callPackage ../development/libraries/haskell/SafeSemaphore {};
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
@@ -1863,6 +1863,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   CouchDB = callPackage ../development/libraries/haskell/CouchDB {};
 
+  wlPprint = callPackage ../development/libraries/haskell/wl-pprint {};
+
+  wlPprintExtras = callPackage ../development/libraries/haskell/wl-pprint-extras {};
+
+  wlPprintTerminfo = callPackage ../development/libraries/haskell/wl-pprint-terminfo {};
+
   wlPprintText = callPackage ../development/libraries/haskell/wl-pprint-text {};
 
   word8 = callPackage ../development/libraries/haskell/word8 {};
@@ -1956,7 +1962,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   zlib_0_5_4_0 = callPackage ../development/libraries/haskell/zlib/0.5.4.0.nix {
     inherit (pkgs) zlib;
   };
-  zlib = self.zlib_0_5_4_0;
+  zlib_0_5_4_1 = callPackage ../development/libraries/haskell/zlib/0.5.4.1.nix {
+    inherit (pkgs) zlib;
+  };
+  zlib = self.zlib_0_5_4_1;
 
   zlibBindings = callPackage ../development/libraries/haskell/zlib-bindings {};
 
@@ -2077,11 +2086,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cabalInstall_1_16_0_2 = callPackage ../tools/package-management/cabal-install/1.16.0.2.nix {};
   cabalInstall = self.cabalInstall_1_16_0_2;
 
+  githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
+
   jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {};
 
   lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 
   myhasktags = callPackage ../tools/misc/myhasktags {};
+
+  packunused = callPackage ../development/tools/haskell/packunused {};
 
   splot = callPackage ../development/tools/haskell/splot {};
 

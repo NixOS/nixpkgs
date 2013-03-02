@@ -1,7 +1,7 @@
-diff -urN nss-3.12.5-orig/mozilla/security/nss/config/Makefile nss-3.12.5/mozilla/security/nss/config/Makefile
---- nss-3.12.5-orig/mozilla/security/nss/config/Makefile	1969-12-31 18:00:00.000000000 -0600
-+++ nss-3.12.5/mozilla/security/nss/config/Makefile	2009-09-14 21:45:45.619639265 -0500
-@@ -0,0 +1,42 @@
+diff -urN a/mozilla/security/nss/config/Makefile b/mozilla/security/nss/config/Makefile
+--- a/mozilla/security/nss/config/Makefile	1969-12-31 18:00:00.000000000 -0600
++++ b/mozilla/security/nss/config/Makefile	2012-12-15 07:27:20.650148987 -0600
+@@ -0,0 +1,40 @@
 +CORE_DEPTH = ../..
 +DEPTH      = ../..
 +
@@ -16,15 +16,17 @@ diff -urN nss-3.12.5-orig/mozilla/security/nss/config/Makefile nss-3.12.5/mozill
 +
 +export:
 +	# Create the nss.pc file
++	mkdir -p $(DIST)/lib/pkgconfig
 +	sed -e "s,@prefix@,$(PREFIX)," \
 +	    -e "s,@exec_prefix@,\$${prefix}," \
-+	    -e "s,@libdir@,\$${prefix}/lib," \
++	    -e "s,@libdir@,\$${prefix}/gentoo/nss," \
 +	    -e "s,@includedir@,\$${prefix}/include/nss," \
 +	    -e "s,@NSS_MAJOR_VERSION@,$(NSS_MAJOR_VERSION),g" \
 +	    -e "s,@NSS_MINOR_VERSION@,$(NSS_MINOR_VERSION)," \
 +	    -e "s,@NSS_PATCH_VERSION@,$(NSS_PATCH_VERSION)," \
 +	    nss.pc.in > nss.pc
 +	chmod 0644 nss.pc
++	ln -sf ../../../../../security/nss/config/nss.pc $(DIST)/lib/pkgconfig
 +
 +	# Create the nss-config script
 +	mkdir -p $(DIST)/bin
@@ -34,19 +36,15 @@ diff -urN nss-3.12.5-orig/mozilla/security/nss/config/Makefile nss-3.12.5/mozill
 +	    -e "s,@NSS_PATCH_VERSION@,$(NSS_PATCH_VERSION)," \
 +	    nss-config.in > nss-config
 +	chmod 0755 nss-config
-+	# ln -sf ../../../../security/nss/config/nss-config $(DIST)/bin
++	ln -sf ../../../../security/nss/config/nss-config $(DIST)/bin
 +
 +libs:
 +
 +dummy: all export libs
 +
-+install:
-+	mkdir -p $(DIST)/lib/pkgconfig
-+	cp nss.pc $(DIST)/lib/pkgconfig
-+
-diff -urN nss-3.12.5-orig/mozilla/security/nss/config/nss-config.in nss-3.12.5/mozilla/security/nss/config/nss-config.in
---- nss-3.12.5-orig/mozilla/security/nss/config/nss-config.in	1969-12-31 18:00:00.000000000 -0600
-+++ nss-3.12.5/mozilla/security/nss/config/nss-config.in	2009-09-14 21:47:45.190638078 -0500
+diff -urN a/mozilla/security/nss/config/nss-config.in b/mozilla/security/nss/config/nss-config.in
+--- a/mozilla/security/nss/config/nss-config.in	1969-12-31 18:00:00.000000000 -0600
++++ b/mozilla/security/nss/config/nss-config.in	2012-12-15 07:27:20.651148959 -0600
 @@ -0,0 +1,145 @@
 +#!/bin/sh
 +
@@ -177,7 +175,7 @@ diff -urN nss-3.12.5-orig/mozilla/security/nss/config/nss-config.in nss-3.12.5/m
 +fi
 +
 +if test "$echo_libs" = "yes"; then
-+      libdirs="-Wl,-R$libdir -L$libdir"
++      libdirs=""
 +      if test -n "$lib_ssl"; then
 +	libdirs="$libdirs -lssl${major_version}"
 +      fi
@@ -193,9 +191,9 @@ diff -urN nss-3.12.5-orig/mozilla/security/nss/config/nss-config.in nss-3.12.5/m
 +      echo $libdirs
 +fi      
 +
-diff -urN nss-3.12.5-orig/mozilla/security/nss/config/nss.pc.in nss-3.12.5/mozilla/security/nss/config/nss.pc.in
---- nss-3.12.5-orig/mozilla/security/nss/config/nss.pc.in	1969-12-31 18:00:00.000000000 -0600
-+++ nss-3.12.5/mozilla/security/nss/config/nss.pc.in	2009-09-14 21:45:45.653637310 -0500
+diff -urN a/mozilla/security/nss/config/nss.pc.in b/mozilla/security/nss/config/nss.pc.in
+--- a/mozilla/security/nss/config/nss.pc.in	1969-12-31 18:00:00.000000000 -0600
++++ b/mozilla/security/nss/config/nss.pc.in	2012-12-15 07:27:20.651148959 -0600
 @@ -0,0 +1,12 @@
 +prefix=@prefix@
 +exec_prefix=@exec_prefix@
@@ -206,13 +204,13 @@ diff -urN nss-3.12.5-orig/mozilla/security/nss/config/nss.pc.in nss-3.12.5/mozil
 +Description: Network Security Services
 +Version: @NSS_MAJOR_VERSION@.@NSS_MINOR_VERSION@.@NSS_PATCH_VERSION@
 +Requires: nspr >= 4.8
-+Libs: -L${libdir} -lssl3 -lsmime3 -lnssutil3 -lnss3 -Wl,-R${libdir}
++Libs: -lssl3 -lsmime3 -lnss3 -lnssutil3
 +Cflags: -I${includedir}
 +
-diff -urN nss-3.12.5-orig/mozilla/security/nss/Makefile nss-3.12.5/mozilla/security/nss/Makefile
---- nss-3.12.5-orig/mozilla/security/nss/Makefile	2008-12-02 17:24:39.000000000 -0600
-+++ nss-3.12.5/mozilla/security/nss/Makefile	2009-09-14 21:45:45.678657145 -0500
-@@ -78,7 +78,7 @@
+diff -urN a/mozilla/security/nss/Makefile b/mozilla/security/nss/Makefile
+--- a/mozilla/security/nss/Makefile	2012-11-13 19:14:07.000000000 -0600
++++ b/mozilla/security/nss/Makefile	2012-12-15 07:27:57.235162137 -0600
+@@ -44,7 +44,7 @@
  # (7) Execute "local" rules. (OPTIONAL).                              #
  #######################################################################
  
@@ -221,27 +219,25 @@ diff -urN nss-3.12.5-orig/mozilla/security/nss/Makefile nss-3.12.5/mozilla/secur
  
  nss_clean_all: clobber_coreconf clobber_nspr clobber_dbm clobber
  
-@@ -140,12 +140,6 @@
+@@ -106,12 +106,6 @@
  	--with-dist-prefix='$(NSPR_PREFIX)' \
  	--with-dist-includedir='$(NSPR_PREFIX)/include'
  
 -build_nspr: $(NSPR_CONFIG_STATUS)
--	cd $(CORE_DEPTH)/../nsprpub/$(OBJDIR_NAME) ; $(MAKE)
+-	$(MAKE) -C $(CORE_DEPTH)/../nsprpub/$(OBJDIR_NAME)
 -
 -clobber_nspr: $(NSPR_CONFIG_STATUS)
--	cd $(CORE_DEPTH)/../nsprpub/$(OBJDIR_NAME) ; $(MAKE) clobber
+-	$(MAKE) -C $(CORE_DEPTH)/../nsprpub/$(OBJDIR_NAME) clobber
 -
  build_dbm:
- ifndef NSS_DISABLE_DBM
- 	cd $(CORE_DEPTH)/dbm ; $(MAKE) export libs
-diff -urN nss-3.12.5-orig/mozilla/security/nss/manifest.mn nss-3.12.5/mozilla/security/nss/manifest.mn
---- nss-3.12.5-orig/mozilla/security/nss/manifest.mn	2008-04-04 15:36:59.000000000 -0500
-+++ nss-3.12.5/mozilla/security/nss/manifest.mn	2009-09-14 21:45:45.703656167 -0500
-@@ -42,6 +42,6 @@
+ ifdef NSS_DISABLE_DBM
+ 	@echo "skipping the build of DBM"
+diff -urN a/mozilla/security/nss/manifest.mn b/mozilla/security/nss/manifest.mn
+--- a/mozilla/security/nss/manifest.mn	2012-03-20 09:46:49.000000000 -0500
++++ b/mozilla/security/nss/manifest.mn	2012-12-15 07:27:20.652148933 -0600
+@@ -10,6 +10,6 @@
  
  RELEASE = nss
  
 -DIRS = lib cmd
 +DIRS = lib cmd config
- 
- 

@@ -17,10 +17,10 @@ let self = {
   "abbrev" = self."abbrev-1";
 
   "abbrev-1" = self.buildNodePackage rec {
-    name = "abbrev-1.0.3";
+    name = "abbrev-1.0.4";
     src = fetchurl {
       url = "http://registry.npmjs.org/abbrev/-/${name}.tgz";
-      sha256 = "d444c07f411418828a5e81ac85569afe638e6441a562086faa0209ec7bdf55f2";
+      sha256 = "8dc0f480571a4a19e74f1abd4f31f6a70f94953d1ccafa16ed1a544a19a6f3a8";
     };
     deps = [
 
@@ -40,6 +40,21 @@ let self = {
     ];
   };
 
+  amdefine = "amdefine-0.0.4";
+
+  "amdefine->=0.0.4" = self."amdefine-0.0.4";
+  
+  "amdefine-0.0.4" = self.buildNodePackage rec {
+    name = "amdefine-0.0.4";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/amdefine/-/${name}.tgz";
+      sha256 = "10sdb85mb6fvkglqwg7icdh58sng9pm8655npmsbv18gsbcnmbg4";
+    };
+    deps = [
+
+    ];
+  };
+
   "ansi" = self."ansi-~0.1.2";
 
   "ansi-~0.1.2" = self.buildNodePackage rec {
@@ -47,6 +62,19 @@ let self = {
     src = fetchurl {
       url = "http://registry.npmjs.org/ansi/-/${name}.tgz";
       sha256 = "6f2288b1db642eb822578f4ee70bf26bf97173cc7d3f10f496070fb96250006b";
+    };
+    deps = [
+
+    ];
+  };
+
+  "asn1" = self."asn1-0.1.11";
+
+  "asn1-0.1.11" = self.buildNodePackage rec {
+    name = "asn1-0.1.11";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/asn1/-/${name}.tgz";
+      sha256 = "7206eadc8a9344e484bcce979e22a12c9fa64c1395aa0544b8b767808b268f43";
     };
     deps = [
 
@@ -142,6 +170,32 @@ let self = {
     src = fetchurl {
       url = "http://registry.npmjs.org/buffertools/-/${name}.tgz";
       sha256 = "a0520dbf39eedbd8c685ac4989bf822ac57cc161924abf82ba567234620380a5";
+    };
+    deps = [
+
+    ];
+  };
+
+  "bunyan" = self."bunyan-0.8.0";
+
+  "bunyan-0.8.0" = self.buildNodePackage rec {
+    name = "bunyan-0.8.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/bunyan/-/${name}.tgz";
+      sha256 = "059b8948dd34d371d39aa87227d26d62180c365afeb6625c07187c8f0ad29f27";
+    };
+    deps = [
+
+    ];
+  };
+
+  "byline" = self."byline-2.0.2";
+
+  "byline-2.0.2" = self.buildNodePackage rec {
+    name = "byline-2.0.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/byline/-/${name}.tgz";
+      sha256 = "a916ffde5ee385f7d682c13028907a96fe33cdeed6d72cea903d09fb154dae50";
     };
     deps = [
 
@@ -299,6 +353,30 @@ let self = {
     ];
   };
 
+  "ctype" = self."ctype->=0.0.2";
+
+  "ctype->=0.0.2" = self.buildNodePackage rec {
+    name = "ctype-0.5.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/ctype/-/${name}.tgz";
+      sha256 = "4a7224a74f19dc6a1206fa1c04ae1a4ab795cd4ba842466e2f511fa714f82c60";
+    };
+    deps = [
+
+    ];
+  };
+
+  "ctype-0.5.0" = self.buildNodePackage rec {
+    name = "ctype-0.5.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/ctype/-/${name}.tgz";
+      sha256 = "50157e6c5e44d1c833bfc239a7a337ee08fd6f3c5a15f7ef5cee5571a86b0378";
+    };
+    deps = [
+
+    ];
+  };
+
   "datetime" = self."datetime-0.0.3";
 
   "datetime-0.0.3" = self.buildNodePackage rec {
@@ -332,6 +410,19 @@ let self = {
     src = fetchurl {
       url = "http://registry.npmjs.org/diff/-/${name}.tgz";
       sha256 = "88e1bb04e3707c5601ec0841e170f8892a3b929bf8c4030f826cd32c1fa21472";
+    };
+    deps = [
+
+    ];
+  };
+
+  "dtrace-provider" = self."dtrace-provider-0.0.6";
+
+  "dtrace-provider-0.0.6" = self.buildNodePackage rec {
+    name = "dtrace-provider-0.0.6";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/dtrace-provider/-/${name}.tgz";
+      sha256 = "ce48363aefa9e8afb3c8e8e5ce8d321a5d5a7eecbb28eaa997c48c5e9d502508";
     };
     deps = [
 
@@ -478,6 +569,20 @@ let self = {
     ];
   };
 
+  "http-signature" = self."http-signature-0.9.9";
+
+  "http-signature-0.9.9" = self.buildNodePackage rec {
+    name = "http-signature-0.9.9";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/http-signature/-/${name}.tgz";
+      sha256 = "c1e193f1195028f2cc8a8f402c7755fc215552a81f6bebbdf6f21de9390a438e";
+    };
+    deps = [
+      self."asn1-0.1.11"
+      self."ctype-0.5.0"
+    ];
+  };
+
   "inherits" = self."inherits-1.0.0";
   "inherits-1" = self."inherits-1.0.0";
   "inherits-1.x" = self."inherits-1.0.0";
@@ -535,6 +640,17 @@ let self = {
 
   "lru-cache" = self."lru-cache-~2.0.0";
 
+  "lru-cache-1.1.0" = self.buildNodePackage rec {
+    name = "lru-cache-1.1.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/lru-cache/-/${name}.tgz";
+      sha256 = "735898f87ba800d6f2f3517ab92b631f03976c9d3fbaedb6ce357cfe3813ee8b";
+    };
+    deps = [
+
+    ];
+  };
+
   "lru-cache-~2.0.0" = self.buildNodePackage rec {
     name = "lru-cache-2.0.1";
     src = fetchurl {
@@ -549,6 +665,17 @@ let self = {
   "mime" = self."mime-*";
 
   "mime->= 0.0.1" = self."mime-*";
+
+  "mime-1.2.5" = self.buildNodePackage rec {
+    name = "mime-1.2.5";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/mime/-/${name}.tgz";
+      sha256 = "ccf05a6c47146e8acb9d0671eee09d2eb077cf9ddd1f7e8eccf49dbf969d6c72";
+    };
+    deps = [
+
+    ];
+  };
 
   "mime-1.2.6" = self.buildNodePackage rec {
     name = "mime-1.2.6";
@@ -624,6 +751,19 @@ let self = {
     ];
   };
 
+  "nijs" = self."nijs-0.0.3";
+
+  "nijs-0.0.3" = self.buildNodePackage rec {
+    name = "nijs-0.0.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/nijs/-/${name}.tgz";
+      sha256 = "0rcqycb4nigfasxfjw1ngh556r5ik1qr58938nx6qbxzkrm0k1ip";
+    };
+    deps = [
+      self."optparse"
+    ];
+  };
+
   "node-expat" = self."node-expat-*";
 
   "node-expat-*" = self.buildNodePackage rec {
@@ -678,6 +818,17 @@ let self = {
 
   "nopt" = self."nopt-2";
 
+  "nopt-1.0.10" = self.buildNodePackage rec {
+    name = "nopt-1.0.10";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/nopt/-/${name}.tgz";
+      sha256 = "426562943bfbbfc059eac83575ade5b78c6c01e5c1000a90a7defecfe2334927";
+    };
+    deps = [
+      self."abbrev-1"
+    ];
+  };
+
   "nopt-2" = self.buildNodePackage rec {
     name = "nopt-2.0.0";
     src = fetchurl {
@@ -718,11 +869,14 @@ let self = {
 
   "optimist" = self."optimist-*";
 
-  "optimist-*" = self.buildNodePackage rec {
-    name = "optimist-0.3.4";
+  "optimist-*" = self."optimist-0.3.5";
+  "optimist-~0.3.5" = self."optimist-0.3.5";
+
+  "optimist-0.3.5" = self.buildNodePackage rec {
+    name = "optimist-0.3.5";
     src = fetchurl {
       url = "http://registry.npmjs.org/optimist/-/${name}.tgz";
-      sha256 = "add88b473a660ad8a9ff88a3eec49a74d9c64f592acbcd219ff4c0d7249f4d60";
+      sha256 = "17d06n3y9difknq9j340qksj2zllal6sg0pj4clj9ja5jxf721x4";
     };
     deps = [
       self."wordwrap-~0.0.2"
@@ -911,6 +1065,43 @@ let self = {
     ];
   };
 
+  "restify" = self."restify-1.4.3";
+
+  "restify-1.4.3" = self.buildNodePackage rec {
+    name = "restify-1.4.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/restify/-/${name}.tgz";
+      sha256 = "7c95b1e58d6effab3b947409892a20260b6d1142aefec9c3eb1e46165363d64e";
+    };
+    deps = [
+      self."async-0.1.22"
+      self."bunyan-0.8.0"
+      self."byline-2.0.2"
+      self."formidable-1.0.11"
+      self."dtrace-provider-0.0.6"
+      self."http-signature-0.9.9"
+      self."lru-cache-1.1.0"
+      self."mime-1.2.5"
+      self."node-uuid-1.3.3"
+      self."qs-0.5.0"
+      self."retry-0.6.0"
+      self."semver-1.0.14"
+    ];
+  };
+
+  "retry" = self."retry-0.6.0";
+
+  "retry-0.6.0" = self.buildNodePackage rec {
+    name = "retry-0.6.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/retry/-/${name}.tgz";
+      sha256 = "983e676af24ff4dcbac396420fca3c195ce3b1de5f731f697888b4fe6b7bbd2a";
+    };
+    deps = [
+
+    ];
+  };
+
   "rimraf" = self."rimraf-2";
 
   "rimraf-2" = self.buildNodePackage rec {
@@ -926,7 +1117,9 @@ let self = {
 
   "semver" = self."semver-1";
 
-  "semver-1" = self.buildNodePackage rec {
+  "semver-1" = self."semver-1.0.14";
+
+  "semver-1.0.14" = self.buildNodePackage rec {
     name = "semver-1.0.14";
     src = fetchurl {
       url = "http://registry.npmjs.org/semver/-/${name}.tgz";
@@ -963,6 +1156,37 @@ let self = {
     };
     deps = [
 
+    ];
+  };
+
+  "smartdc" = self."smartdc-*";
+
+  "smartdc-*" = self.buildNodePackage rec {
+    name = "smartdc-6.5.6";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/smartdc/-/${name}.tgz";
+      sha256 = "a5d7ba965a863a411b52f0321a9fa1be350cb6af807175beb16529e4282dff4d";
+    };
+    deps = [
+      self."http-signature-0.9.9"
+      self."lru-cache-1.1.0"
+      self."nopt-1.0.10"
+      self."restify-1.4.3"
+      self."bunyan-0.8.0"
+      self."ssh-agent-0.1.0"
+    ];
+  };
+
+  "ssh-agent" = self."ssh-agent-0.1.0";
+
+  "ssh-agent-0.1.0" = self.buildNodePackage rec {
+    name = "ssh-agent-0.1.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/ssh-agent/-/${name}.tgz";
+      sha256 = "62860d09a84d0bf1250d8c90aae3d0a922a7812591a9f4243330178774eb87b5";
+    };
+    deps = [
+      self."ctype->=0.0.2"
     ];
   };
 
@@ -1012,7 +1236,20 @@ let self = {
     ];
   };
 
-  "source-map" = self."source-map-0.1.2";
+  "source-map" = self."source-map-0.1.7";
+
+  "source-map-~0.1.7" = self."source-map-0.1.7";
+
+  "source-map-0.1.7" = self.buildNodePackage rec {
+    name = "source-map-0.1.7";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/source-map/-/${name}.tgz";
+      sha256 = "041skhq60kwpx319iy0m33zcgc7q2ddlfl3vvmwl5ssl9p46g8x2";
+    };
+    deps = [
+      self."amdefine->=0.0.4"
+    ];
+  };
 
   "source-map-0.1.2" = self.buildNodePackage rec {
     name = "source-map-0.1.2";
@@ -1092,7 +1329,19 @@ let self = {
     ];
   };
 
-  "uglify-js" = self."uglify-js-1.2.6";
+  "uglify-js" = self."uglify-js-2.2.5";
+
+  "uglify-js-2.2.5" = self.buildNodePackage rec {
+    name = "uglify-js-2.2.5";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/uglify-js/-/${name}.tgz";
+      sha256 = "18ic581gjyvfl4gvlcdmzw4vrcbvn698i2rznnba70f8lk6ndlgr";
+    };
+    deps = [
+      self."source-map-~0.1.7"
+      self."optimist-~0.3.5"
+    ];
+  };
 
   "uglify-js-1.2.5" = self.buildNodePackage rec {
     name = "uglify-js-1.2.5";
