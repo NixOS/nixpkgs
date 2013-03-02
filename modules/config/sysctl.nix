@@ -53,6 +53,12 @@ in
         };
       };
 
+    # Enable hardlink and symlink restrictions.  See
+    # https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/commit/?id=800179c9b8a1e796e441674776d11cd4c05d61d7
+    # for details.
+    boot.kernel.sysctl."fs.protected_hardlinks" = true;
+    boot.kernel.sysctl."fs.protected_symlinks" = true;
+
   };
 
 }
