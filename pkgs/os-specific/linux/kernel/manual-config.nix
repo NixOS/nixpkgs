@@ -112,12 +112,12 @@ stdenv.mkDerivation {
   unpackPhase = ''
     mkdir build
     export buildRoot="$(pwd)/build"
-    ln -sv ${configfile} $buildRoot/.config
     cd $sourceRoot
   '';
 
   configurePhase = ''
     runHook preConfigure
+    ln -sv ${configfile} $buildRoot/.config
     make $makeFlags "''${makeFlagsArray[@]}" oldconfig
     runHook postConfigure
   '';
