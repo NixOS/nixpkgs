@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "pythonMAJORMINOR-docs-TYPE-VERSION";
   src = fetchurl {
     url = URL;
@@ -10,6 +10,6 @@ stdenv.mkDerivation {
   };
   installPhase = ''
     mkdir -p $out/share/docs
-    cp -R ./ $out/share/docs/
+    cp -R ./ $out/share/docs/${name}
   '';
 }

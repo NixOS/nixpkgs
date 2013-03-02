@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "python26-docs-text-2.6.8";
   src = fetchurl {
     url = http://docs.python.org/ftp/python/doc/2.6.8/python-2.6.8-docs-text.tar.bz2;
@@ -10,6 +10,6 @@ stdenv.mkDerivation {
   };
   installPhase = ''
     mkdir -p $out/share/docs
-    cp -R ./ $out/share/docs/
+    cp -R ./ $out/share/docs/${name}
   '';
 }

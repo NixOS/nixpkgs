@@ -2,7 +2,7 @@
 
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "python30-docs-pdf-a4-3.0.1";
   src = fetchurl {
     url = http://docs.python.org/ftp/python/doc/3.0.1/python-3.0.1-docs-pdf-a4.tar.bz2;
@@ -10,6 +10,6 @@ stdenv.mkDerivation {
   };
   installPhase = ''
     mkdir -p $out/share/docs
-    cp -R ./ $out/share/docs/
+    cp -R ./ $out/share/docs/${name}
   '';
 }
