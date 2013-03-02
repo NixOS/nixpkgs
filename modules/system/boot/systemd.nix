@@ -520,7 +520,7 @@ in
         }
         { source = pkgs.writeText "logind.conf"
             ''
-              [Logind]
+              [Login]
               ${config.services.logind.extraConfig}
             '';
           target = "systemd/logind.conf";
