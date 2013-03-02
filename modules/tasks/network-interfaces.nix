@@ -402,6 +402,9 @@ in
                   brctl addif "${n}" "${i}"
                   ip link set "${i}" up
                   ip addr flush dev "${i}"
+
+                  echo "bringing up network device ${n}..."
+                  ip link set "${n}" up
                 '')}
 
                 # !!! Should delete (brctl delif) any interfaces that
