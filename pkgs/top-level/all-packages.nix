@@ -6525,7 +6525,7 @@ let
   antiword = callPackage ../applications/office/antiword {};
 
   ardour = callPackage ../applications/audio/ardour {
-    inherit (gnome) libgnomecanvas;
+    inherit (gnome) libgnomecanvas libgnomecanvasmm;
   };
 
   ardour3 =  lowPrio (callPackage ../applications/audio/ardour/ardour3.nix {
