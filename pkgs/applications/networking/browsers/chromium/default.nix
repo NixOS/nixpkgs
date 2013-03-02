@@ -127,7 +127,6 @@ in stdenv.mkDerivation rec {
   patches = optional cupsSupport ./cups_allow_deprecated.patch
          ++ optional pulseSupport ./pulseaudio_array_bounds.patch
          ++ optional post25 ./clone_detached.patch
-         ++ optional post25 ./clone_detached.patch
          ++ [ ./glibc-2.16-use-siginfo_t.patch ];
 
   postPatch = ''

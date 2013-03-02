@@ -14,14 +14,13 @@ stdenv.mkDerivation rec {
     sha256 = "018vb5nmk2fsm143bs2bl2wirhasd4b10d7jchl32zik4inbk2p9";
   };
 
-  patches = [ ./fix-librt-check.patch ];
-  
   buildInputs =
     [ attr zlib SDL alsaLib pkgconfig pciutils libuuid vde2 libjpeg libpng
       ncurses python glib libaio mesa texinfo perl
     ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
 
-  patchPhase = "patchShebangs ." + stdenv.lib.optionalString spiceSupport ''
+  patches = [ ./fix-librt-check.patch ];
+  postPatch = "patchShebangs ." + stdenv.lib.optionalString spiceSupport ''
        for i in configure spice-qemu-char.c ui/spice-input.c ui/spice-core.c ui/qemu-spice.h; do
          substituteInPlace $i --replace '#include <spice.h>' '#include <spice/spice.h>'
        done
