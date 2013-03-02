@@ -75,16 +75,6 @@ let
     "INSTALL_PATH=$(out)"
   ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
   ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
-in
-
-stdenv.mkDerivation {
-  name = "linux-${version}";
-
-  enableParallelBuilding = true;
-
-  passthru = {
-    inherit version modDirVersion config kernelPatches src;
-  };
 
   sourceRoot = stdenv.mkDerivation {
     name = "linux-${version}-source";
@@ -108,11 +98,25 @@ stdenv.mkDerivation {
       mv $sourceRoot $out
     '';
   };
+in
+
+stdenv.mkDerivation {
+  name = "linux-${version}";
+
+  enableParallelBuilding = true;
+
+  outputs = if isModular then [ "out" "dev" ] else null;
+
+  passthru = {
+    inherit version modDirVersion config kernelPatches src;
+  };
+
+  inherit sourceRoot;
 
   unpackPhase = ''
     mkdir build
     export buildRoot="$(pwd)/build"
-    cd $sourceRoot
+    cd ${sourceRoot}
   '';
 
   configurePhase = ''
@@ -140,7 +144,9 @@ stdenv.mkDerivation {
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
     rm -f $out/lib/modules/${modDirVersion}/build
-    mv $buildRoot $out/lib/modules/${modDirVersion}/build
+    mkdir -p $dev/lib/modules/${modDirVersion}
+    mv $out/lib/modules/${modDirVersion}/source $dev/lib/modules/${modDirVersion}/source
+    mv $buildRoot $dev/lib/modules/${modDirVersion}/build
   '' else optionalString installsFirmware ''
     make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
@@ -149,6 +155,10 @@ stdenv.mkDerivation {
   postFixup = if isModular then ''
     if [ -z "$dontStrip" ]; then
         find $out -name "*.ko" -print0 | xargs -0 -r strip -S
+        # Remove all references to the source directory to avoid unneeded
+        # runtime dependencies
+        find $out -name "*.ko" -print0 | xargs -0 -r sed -i \
+          "s|${sourceRoot}|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${sourceRoot.name}|g"
     fi
   '' else null;
 

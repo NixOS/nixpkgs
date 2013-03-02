@@ -6013,7 +6013,7 @@ let
       callPackage = newScope self; 
 
       self = {
-        inherit kernel;
+        kernel = kernel.dev or kernel;
 
         acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
@@ -6115,7 +6115,7 @@ let
 
         zfs = callPackage ../os-specific/linux/zfs/default.nix { };
       };
-    in self;
+    in (self // { kernel = self.kernel.out; });
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32);
