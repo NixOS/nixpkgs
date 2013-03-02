@@ -146,11 +146,13 @@ stdenv.mkDerivation {
       $installFlags "''${installFlagsArray[@]}"
   '');
 
-  postFixup = optionalString isModular ''
+  postFixup = if isModular then ''
     if [ -z "$dontStrip" ]; then
         find $out -name "*.ko" -print0 | xargs -0 -r strip -S
     fi
-  '';
+  '' else null;
+
+  __ignoreNulls = true;
 
   meta = {
     description = "The Linux kernel";
