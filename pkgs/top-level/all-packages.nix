@@ -8053,6 +8053,7 @@ let
     cairo = cairo.override {
       glSupport = true;
     };
+    pixman = pixman_cairo;
   };
 
   wings = callPackage ../applications/graphics/wings { };
