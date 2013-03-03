@@ -7368,6 +7368,8 @@ let
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
 
+  jack_oscrolloscope = callPackage ../applications/audio/jack-oscrolloscope { };
+
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
   jalv = callPackage ../applications/audio/jalv { };
