@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, pkgconfig, glib, bison, flex }:
+{ stdenv, fetchurl_gnome, pkgconfig, glib, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "gob2-2.0.18";
+  name = src.pkgname;
 
-  src = fetchurl {
-    url = "http://ftp.5z.com/pub/gob/${name}.tar.gz";
+  src = fetchurl_gnome {
+    project = "gob2";
+    major = "2"; minor = "0"; patchlevel = "18"; extension = "gz";
     sha256 = "1r242s3rsxyqiw2ic2gdpvvrx903jgjd1aa4mkl26in5k9zk76fa";
   };
 
