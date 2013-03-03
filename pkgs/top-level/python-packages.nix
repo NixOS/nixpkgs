@@ -2655,12 +2655,12 @@ pythonPackages = python.modules // rec {
   });
 
   ldap = buildPythonPackage rec {
-    name = "python-ldap-2.4.3";
+    name = "python-ldap-2.4.10";
     namePrefix = "";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
-      sha256 = "17aysa9b4zjw00ikjirf4m37xbp2ifj1g0zjs14xzqqib3nh1yw8";
+      sha256 = "0m6fm2alcb5v9xdcjv2nw2lhz9nnd3mnr5lrmf397hi4pw0pik37";
     };
 
     NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
