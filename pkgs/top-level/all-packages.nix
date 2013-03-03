@@ -8251,7 +8251,9 @@ let
 
   dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { };
 
-  eduke32 = callPackage ../games/eduke32 { };
+  eduke32 = callPackage ../games/eduke32 {
+    stdenv = overrideGCC stdenv gcc47;
+  };
 
   egoboo = callPackage ../games/egoboo { };
 

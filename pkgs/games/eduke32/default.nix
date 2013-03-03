@@ -1,14 +1,14 @@
-{stdenv, fetchurl, SDL, SDL_mixer, libvorbis, mesa, gtk, pkgconfig, nasm, makeDesktopItem}:
+{stdenv, fetchurl, SDL, SDL_mixer, libvorbis, mesa, gtk, pkgconfig, nasm, libvpx, flac, makeDesktopItem}:
 
 stdenv.mkDerivation rec {
-  name = "eduke32-1944";
+  name = "eduke32-3542";
   
   src = fetchurl {
-    url = http://dukeworld.duke4.net/eduke32/synthesis/20110724-1944/eduke32_src_20110724-1944.tar.bz2;
-    sha256 = "0y2y9agydfkdq4krp4lz22br3p23as6hrqhq7l9djw0pm2y76fqh";
+    url = http://dukeworld.duke4.net/eduke32/synthesis/20130303-3542/eduke32_src_20130303-3542.tar.bz2;
+    sha256 = "0v1q2bkmpnac5l9x97nnlhrrb95518vmhxx48zv3ncvmpafl1mqc";
   };
   
-  buildInputs = [ SDL SDL_mixer libvorbis mesa gtk pkgconfig ]
+  buildInputs = [ SDL SDL_mixer libvorbis mesa gtk pkgconfig libvpx flac ]
     ++ stdenv.lib.optional (stdenv.system == "i686-linux") nasm;
   
   NIX_CFLAGS_COMPILE = "-I${SDL}/include/SDL";
