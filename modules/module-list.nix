@@ -179,6 +179,7 @@
   ./services/ttys/agetty.nix
   ./services/web-servers/apache-httpd/default.nix
   ./services/web-servers/jboss/default.nix
+  ./services/web-servers/lighttpd.nix
   ./services/web-servers/nginx/default.nix
   ./services/web-servers/tomcat.nix
   ./services/x11/desktop-managers/default.nix
