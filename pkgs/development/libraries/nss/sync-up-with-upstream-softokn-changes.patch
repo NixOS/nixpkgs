@@ -1,0 +1,406 @@
+From d6dbecfea317a468be12423595e584f43d84d8ec Mon Sep 17 00:00:00 2001
+From: Elio Maldonado <emaldona@redhat.com>
+Date: Sat, 9 Feb 2013 17:11:00 -0500
+Subject: [PATCH] Sync up with upstream softokn changes
+
+- Disable RSA OEP case in FormatBlock, RSA_OAEP support is experimental and in a state of flux
+- Numerous change upstream due to the work for TLS/DTLS 'Lucky 13' vulnerability CVE-2013-0169
+- It now compiles with the NSS_3_14_3_BETA1 source
+---
+ mozilla/security/nss/lib/ckfw/pem/rsawrapr.c |  338 +++++++-------------------
+ 1 files changed, 82 insertions(+), 256 deletions(-)
+
+diff --git a/mozilla/security/nss/lib/ckfw/pem/rsawrapr.c b/mozilla/security/nss/lib/ckfw/pem/rsawrapr.c
+index 5ac4f39..3780d30 100644
+--- a/mozilla/security/nss/lib/ckfw/pem/rsawrapr.c
++++ b/mozilla/security/nss/lib/ckfw/pem/rsawrapr.c
+@@ -46,6 +46,7 @@
+ #include "sechash.h"
+ #include "base.h"
+ 
++#include "lowkeyi.h"
+ #include "secerr.h"
+ 
+ #define RSA_BLOCK_MIN_PAD_LEN		8
+@@ -54,9 +55,8 @@
+ #define RSA_BLOCK_PRIVATE_PAD_OCTET	0xff
+ #define RSA_BLOCK_AFTER_PAD_OCTET	0x00
+ 
+-#define OAEP_SALT_LEN		8
+-#define OAEP_PAD_LEN		8
+-#define OAEP_PAD_OCTET		0x00
++/* Needed for RSA-PSS functions */
++static const unsigned char eightZeros[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+ 
+ #define FLAT_BUFSIZE 512        /* bytes to hold flattened SHA1Context. */
+ 
+@@ -78,127 +78,39 @@ pem_PublicModulusLen(NSSLOWKEYPublicKey *pubk)
+     return 0;
+ }
+ 
+-static SHA1Context *SHA1_CloneContext(SHA1Context * original)
+-{
+-    SHA1Context *clone = NULL;
+-    unsigned char *pBuf;
+-    int sha1ContextSize = SHA1_FlattenSize(original);
+-    SECStatus frv;
+-    unsigned char buf[FLAT_BUFSIZE];
+-
+-    PORT_Assert(sizeof buf >= sha1ContextSize);
+-    if (sizeof buf >= sha1ContextSize) {
+-        pBuf = buf;
+-    } else {
+-        pBuf = nss_ZAlloc(NULL, sha1ContextSize);
+-        if (!pBuf)
+-            goto done;
+-    }
+-
+-    frv = SHA1_Flatten(original, pBuf);
+-    if (frv == SECSuccess) {
+-        clone = SHA1_Resurrect(pBuf, NULL);
+-        memset(pBuf, 0, sha1ContextSize);
+-    }
+-  done:
+-    if (pBuf != buf)
+-        nss_ZFreeIf(pBuf);
+-    return clone;
++/* Constant time comparison of a single byte.
++ * Returns 1 iff a == b, otherwise returns 0.
++ * Note: For ranges of bytes, use constantTimeCompare.
++ */
++static unsigned char constantTimeEQ8(unsigned char a, unsigned char b) {
++    unsigned char c = ~(a - b | b - a);
++    c >>= 7;
++    return c;
+ }
+ 
+-/*
+- * Modify data by XORing it with a special hash of salt.
++/* Constant time comparison of a range of bytes.
++ * Returns 1 iff len bytes of a are identical to len bytes of b, otherwise
++ * returns 0.
+  */
+-static SECStatus
+-oaep_xor_with_h1(unsigned char *data, unsigned int datalen,
+-                 unsigned char *salt, unsigned int saltlen)
+-{
+-    SHA1Context *sha1cx;
+-    unsigned char *dp, *dataend;
+-    unsigned char end_octet;
+-
+-    sha1cx = SHA1_NewContext();
+-    if (sha1cx == NULL) {
+-        return SECFailure;
+-    }
+-
+-    /*
+-     * Get a hash of salt started; we will use it several times,
+-     * adding in a different end octet (x00, x01, x02, ...).
+-     */
+-    SHA1_Begin(sha1cx);
+-    SHA1_Update(sha1cx, salt, saltlen);
+-    end_octet = 0;
+-
+-    dp = data;
+-    dataend = data + datalen;
+-
+-    while (dp < dataend) {
+-        SHA1Context *sha1cx_h1;
+-        unsigned int sha1len, sha1off;
+-        unsigned char sha1[SHA1_LENGTH];
+-
+-        /*
+-         * Create hash of (salt || end_octet)
+-         */
+-        sha1cx_h1 = SHA1_CloneContext(sha1cx);
+-        SHA1_Update(sha1cx_h1, &end_octet, 1);
+-        SHA1_End(sha1cx_h1, sha1, &sha1len, sizeof(sha1));
+-        SHA1_DestroyContext(sha1cx_h1, PR_TRUE);
+-        PORT_Assert(sha1len == SHA1_LENGTH);
+-
+-        /*
+-         * XOR that hash with the data.
+-         * When we have fewer than SHA1_LENGTH octets of data
+-         * left to xor, use just the low-order ones of the hash.
+-         */
+-        sha1off = 0;
+-        if ((dataend - dp) < SHA1_LENGTH)
+-            sha1off = SHA1_LENGTH - (dataend - dp);
+-        while (sha1off < SHA1_LENGTH)
+-            *dp++ ^= sha1[sha1off++];
+-
+-        /*
+-         * Bump for next hash chunk.
+-         */
+-        end_octet++;
+-    }
+-
+-    SHA1_DestroyContext(sha1cx, PR_TRUE);
+-    return SECSuccess;
++static unsigned char constantTimeCompare(const unsigned char *a,
++                                         const unsigned char *b,
++                                         unsigned int len) {
++    unsigned char tmp = 0;
++    unsigned int i;
++    for (i = 0; i < len; ++i, ++a, ++b)
++        tmp |= *a ^ *b;
++    return constantTimeEQ8(0x00, tmp);
+ }
+ 
+-/*
+- * Modify salt by XORing it with a special hash of data.
++/* Constant time conditional.
++ * Returns a if c is 1, or b if c is 0. The result is undefined if c is
++ * not 0 or 1.
+  */
+-static SECStatus
+-oaep_xor_with_h2(unsigned char *salt, unsigned int saltlen,
+-                 unsigned char *data, unsigned int datalen)
++static unsigned int constantTimeCondition(unsigned int c,
++                                          unsigned int a,
++                                          unsigned int b)
+ {
+-    unsigned char sha1[SHA1_LENGTH];
+-    unsigned char *psalt, *psha1, *saltend;
+-    SECStatus rv;
+-
+-    /*
+-     * Create a hash of data.
+-     */
+-    rv = SHA1_HashBuf(sha1, data, datalen);
+-    if (rv != SECSuccess) {
+-        return rv;
+-    }
+-
+-    /*
+-     * XOR the low-order octets of that hash with salt.
+-     */
+-    PORT_Assert(saltlen <= SHA1_LENGTH);
+-    saltend = salt + saltlen;
+-    psalt = salt;
+-    psha1 = sha1 + SHA1_LENGTH - saltlen;
+-    while (psalt < saltend) {
+-        *psalt++ ^= *psha1++;
+-    }
+-
+-    return SECSuccess;
++    return (~(c - 1) & a) | ((c - 1) & b);
+ }
+ 
+ /*
+@@ -212,7 +124,7 @@ static unsigned char *rsa_FormatOneBlock(unsigned modulusLen,
+     unsigned char *block;
+     unsigned char *bp;
+     int padLen;
+-    int i;
++    int i, j;
+     SECStatus rv;
+ 
+     block = (unsigned char *) nss_ZAlloc(NULL, modulusLen);
+@@ -260,124 +172,58 @@ static unsigned char *rsa_FormatOneBlock(unsigned modulusLen,
+          */
+     case RSA_BlockPublic:
+ 
+-        /*
+-         * 0x00 || BT || Pad || 0x00 || ActualData
+-         *   1      1   padLen    1      data->len
+-         * Pad is all non-zero random bytes.
+-         */
+-        padLen = modulusLen - data->len - 3;
+-        PORT_Assert(padLen >= RSA_BLOCK_MIN_PAD_LEN);
+-        if (padLen < RSA_BLOCK_MIN_PAD_LEN) {
+-            nss_ZFreeIf(block);
+-            return NULL;
+-        }
+-        for (i = 0; i < padLen; i++) {
+-            /* Pad with non-zero random data. */
+-            do {
+-                rv = RNG_GenerateGlobalRandomBytes(bp + i, 1);
+-            } while (rv == SECSuccess
+-                     && bp[i] == RSA_BLOCK_AFTER_PAD_OCTET);
+-            if (rv != SECSuccess) {
+-                nss_ZFreeIf(block);
+-                return NULL;
+-            }
+-        }
+-        bp += padLen;
+-        *bp++ = RSA_BLOCK_AFTER_PAD_OCTET;
+-        nsslibc_memcpy(bp, data->data, data->len);
+-
+-        break;
+-
+-        /*
+-         * Blocks intended for public-key operation, using
+-         * Optimal Asymmetric Encryption Padding (OAEP).
+-         */
+-    case RSA_BlockOAEP:
+-        /*
+-         * 0x00 || BT || Modified2(Salt) || Modified1(PaddedData)
+-         *   1      1     OAEP_SALT_LEN     OAEP_PAD_LEN + data->len [+ N]
+-         *
+-         * where:
+-         *   PaddedData is "Pad1 || ActualData [|| Pad2]"
+-         *   Salt is random data.
+-         *   Pad1 is all zeros.
+-         *   Pad2, if present, is random data.
+-         *   (The "modified" fields are all the same length as the original
+-         * unmodified values; they are just xor'd with other values.)
+-         *
+-         *   Modified1 is an XOR of PaddedData with a special octet
+-         * string constructed of iterated hashing of Salt (see below).
+-         *   Modified2 is an XOR of Salt with the low-order octets of
+-         * the hash of Modified1 (see farther below ;-).
+-         *
+-         * Whew!
+-         */
+-
+-
+-        /*
+-         * Salt
+-         */
+-        rv = RNG_GenerateGlobalRandomBytes(bp, OAEP_SALT_LEN);
+-        if (rv != SECSuccess) {
+-            nss_ZFreeIf(block);
+-            return NULL;
+-        }
+-        bp += OAEP_SALT_LEN;
+-
+-        /*
+-         * Pad1
+-         */
+-        nsslibc_memset(bp, OAEP_PAD_OCTET, OAEP_PAD_LEN);
+-        bp += OAEP_PAD_LEN;
+-
+-        /*
+-         * Data
+-         */
+-        nsslibc_memcpy(bp, data->data, data->len);
+-        bp += data->len;
+-
+-        /*
+-         * Pad2
+-         */
+-        if (bp < (block + modulusLen)) {
+-            rv = RNG_GenerateGlobalRandomBytes(bp,
+-                                               block - bp + modulusLen);
+-            if (rv != SECSuccess) {
+-                nss_ZFreeIf(block);
+-                return NULL;
+-            }
+-        }
+-
+-        /*
+-         * Now we have the following:
+-         * 0x00 || BT || Salt || PaddedData
+-         * (From this point on, "Pad1 || Data [|| Pad2]" is treated
+-         * as the one entity PaddedData.)
+-         *
+-         * We need to turn PaddedData into Modified1.
+-         */
+-        if (oaep_xor_with_h1(block + 2 + OAEP_SALT_LEN,
+-                             modulusLen - 2 - OAEP_SALT_LEN,
+-                             block + 2, OAEP_SALT_LEN) != SECSuccess) {
+-            nss_ZFreeIf(block);
+-            return NULL;
+-        }
+-
+-        /*
+-         * Now we have:
+-         * 0x00 || BT || Salt || Modified1(PaddedData)
+-         *
+-         * The remaining task is to turn Salt into Modified2.
+-         */
+-        if (oaep_xor_with_h2(block + 2, OAEP_SALT_LEN,
+-                             block + 2 + OAEP_SALT_LEN,
+-                             modulusLen - 2 - OAEP_SALT_LEN) !=
+-            SECSuccess) {
+-            nss_ZFreeIf(block);
+-            return NULL;
+-        }
+-
+-        break;
++	/*
++	 * 0x00 || BT || Pad || 0x00 || ActualData
++	 *   1      1   padLen    1      data->len
++	 * Pad is all non-zero random bytes.
++	 *
++	 * Build the block left to right.
++	 * Fill the entire block from Pad to the end with random bytes.
++	 * Use the bytes after Pad as a supply of extra random bytes from 
++	 * which to find replacements for the zero bytes in Pad.
++	 * If we need more than that, refill the bytes after Pad with 
++	 * new random bytes as necessary.
++	 */
++	padLen = modulusLen - (data->len + 3);
++	PORT_Assert (padLen >= RSA_BLOCK_MIN_PAD_LEN);
++	if (padLen < RSA_BLOCK_MIN_PAD_LEN) {
++	    nss_ZFreeIf (block);
++	    return NULL;
++	}
++	j = modulusLen - 2;
++	rv = RNG_GenerateGlobalRandomBytes(bp, j);
++	if (rv == SECSuccess) {
++	    for (i = 0; i < padLen; ) {
++		unsigned char repl;
++		/* Pad with non-zero random data. */
++		if (bp[i] != RSA_BLOCK_AFTER_PAD_OCTET) {
++		    ++i;
++		    continue;
++		}
++		if (j <= padLen) {
++		    rv = RNG_GenerateGlobalRandomBytes(bp + padLen,
++					  modulusLen - (2 + padLen));
++		    if (rv != SECSuccess)
++		    	break;
++		    j = modulusLen - 2;
++		}
++		do {
++		    repl = bp[--j];
++		} while (repl == RSA_BLOCK_AFTER_PAD_OCTET && j > padLen);
++		if (repl != RSA_BLOCK_AFTER_PAD_OCTET) {
++		    bp[i++] = repl;
++		}
++	    }
++	}
++	if (rv != SECSuccess) {
++	    /*sftk_fatalError = PR_TRUE;*/
++	    nss_ZFreeIf (block);
++	    return NULL;
++	}
++	bp += padLen;
++	*bp++ = RSA_BLOCK_AFTER_PAD_OCTET;
++	nsslibc_memcpy(bp, data->data, data->len);
++	break;
+ 
+     default:
+         PORT_Assert(0);
+@@ -427,26 +273,6 @@ rsa_FormatBlock(SECItem * result, unsigned modulusLen,
+ 
+         break;
+ 
+-    case RSA_BlockOAEP:
+-        /*
+-         * 0x00 || BT || M1(Salt) || M2(Pad1||ActualData[||Pad2])
+-         *
+-         * The "2" below is the first octet + the second octet.
+-         * (The other fields do not contain the clear values, but are
+-         * the same length as the clear values.)
+-         */
+-        PORT_Assert(data->len <= (modulusLen - (2 + OAEP_SALT_LEN
+-                                                + OAEP_PAD_LEN)));
+-
+-        result->data = rsa_FormatOneBlock(modulusLen, blockType, data);
+-        if (result->data == NULL) {
+-            result->len = 0;
+-            return SECFailure;
+-        }
+-        result->len = modulusLen;
+-
+-        break;
+-
+     case RSA_BlockRaw:
+         /*
+          * Pad || ActualData
+-- 
+1.7.1
+

@@ -1,10 +1,10 @@
-{ cabal, dlist }:
+{ cabal, logict, mtl }:
 
 cabal.mkDerivation (self: {
   pname = "smallcheck";
-  version = "0.6.2";
-  sha256 = "0yz7an3k71ia7sgs8xpkh37xz9ipsnbf13680185cij8llq8zbyr";
-  buildDepends = [ dlist ];
+  version = "1.0.1";
+  sha256 = "1b8g7vgvwyz2smx16gbn73k749mazj2zmr2hjhqj4rk0433i6lpk";
+  buildDepends = [ logict mtl ];
   meta = {
     homepage = "https://github.com/feuerbach/smallcheck";
     description = "A property-based testing library";

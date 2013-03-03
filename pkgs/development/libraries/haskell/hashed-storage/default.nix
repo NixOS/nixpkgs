@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     binary dataenc extensibleExceptions filepath mmap mtl zlib
   ];
+  doCheck = false;
   meta = {
     description = "Hashed file storage support code";
     license = self.stdenv.lib.licenses.bsd3;

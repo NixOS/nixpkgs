@@ -323,9 +323,10 @@ let
     inherit lib;
   };
 
-  makeInitrd = {contents}: import ../build-support/kernel/make-initrd.nix {
-    inherit stdenv perl cpio contents ubootChooser;
-  };
+  makeInitrd = {contents, compressor ? "gzip -9"}:
+    import ../build-support/kernel/make-initrd.nix {
+      inherit stdenv perl cpio contents ubootChooser compressor;
+    };
 
   makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
 
@@ -369,6 +370,8 @@ let
   acct = callPackage ../tools/system/acct { };
 
   aefs = callPackage ../tools/filesystems/aefs { };
+
+  aespipe = callPackage ../tools/security/aespipe { };
 
   aircrackng = callPackage ../tools/networking/aircrack-ng { };
 
@@ -613,9 +616,7 @@ let
 
   dar = callPackage ../tools/archivers/dar { };
 
-  davfs2 = callPackage ../tools/filesystems/davfs2 {
-    neon = neon029;
-  };
+  davfs2 = callPackage ../tools/filesystems/davfs2 { };
 
   dbench = callPackage ../development/tools/misc/dbench { };
 
@@ -714,6 +715,8 @@ let
   ethtool = callPackage ../tools/misc/ethtool { };
 
   euca2ools = callPackage ../tools/virtualization/euca2ools { pythonPackages = python26Packages; };
+
+  evtest = callPackage ../applications/misc/evtest { };
 
   exif = callPackage ../tools/graphics/exif { };
 
@@ -1118,6 +1121,8 @@ let
   mjpegtools = callPackage ../tools/video/mjpegtools { };
 
   mkcue = callPackage ../tools/cd-dvd/mkcue { };
+
+  mkpasswd = callPackage ../tools/security/mkpasswd { };
 
   mktemp = callPackage ../tools/security/mktemp { };
 
@@ -1527,6 +1532,11 @@ let
   };
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
+
+  snx = callPackage_i686 ../tools/networking/snx {
+    inherit (pkgsi686Linux) pam gcc33;
+    inherit (pkgsi686Linux.xlibs) libX11;
+  };
 
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
     inherit (gnome) libgnomeui scrollkeeper;
@@ -2882,6 +2892,10 @@ let
     inherit (python27Packages) recursivePthLoader;
   };
 
+  pythonDocs = recurseIntoAttrs (import ../development/interpreters/python/docs {
+    inherit stdenv fetchurl;
+  });
+
   pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };
 
   pyrex = pyrex095;
@@ -2898,6 +2912,7 @@ let
 
   ruby18 = callPackage ../development/interpreters/ruby/ruby-18.nix { };
   ruby19 = callPackage ../development/interpreters/ruby/ruby-19.nix { };
+  ruby2 = lowPrio (callPackage ../development/interpreters/ruby/ruby-2.0.nix { });
 
   ruby = ruby19;
 
@@ -3081,6 +3096,8 @@ let
   ccacheStdenv = lowPrio (overrideGCC stdenv ccacheWrapper);
 
   cgdb = callPackage ../development/tools/misc/cgdb { };
+
+  chromedriver = callPackage ../development/tools/selenium/chromedriver { };
 
   complexity = callPackage ../development/tools/misc/complexity { };
 
@@ -3341,9 +3358,10 @@ let
 
   swftools = callPackage ../tools/video/swftools { };
 
+  texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
-
-  texinfo = callPackage ../development/tools/misc/texinfo { };
+  texinfo5 = callPackage ../development/tools/misc/texinfo/5.0.nix { };
+  texinfo = texinfo413;
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
@@ -3386,6 +3404,8 @@ let
   aalib = callPackage ../development/libraries/aalib { };
 
   acl = callPackage ../development/libraries/acl { };
+
+  activemq = callPackage ../development/libraries/apache-activemq { };
 
   adns = callPackage ../development/libraries/adns { };
 
@@ -3461,8 +3481,6 @@ let
   bwidget = callPackage ../development/libraries/bwidget { };
 
   caelum = callPackage ../development/libraries/caelum { };
-
-  cairomm = callPackage ../development/libraries/cairomm { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
 
@@ -3947,22 +3965,20 @@ let
   };
 
   glib = callPackage ../development/libraries/glib { };
-
-  glibmm = callPackage ../development/libraries/glibmm/2.30.x.nix { };
+  glibmm = callPackage ../development/libraries/glibmm { };
 
   glib_networking = callPackage ../development/libraries/glib-networking {};
 
   atk = callPackage ../development/libraries/atk { };
-
-  atkmm = callPackage ../development/libraries/atkmm/2.22.x.nix { };
+  atkmm = callPackage ../development/libraries/atkmm { };
 
   cairo = callPackage ../development/libraries/cairo {
     pixman = pixman_cairo; # it's recommended to be in sync
   };
   pixman_cairo = callPackage ../development/libraries/pixman { };
+  cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
-
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
 
   pangox_compat = callPackage ../development/libraries/pangox-compat { };
@@ -3970,13 +3986,11 @@ let
   gdk_pixbuf = callPackage ../development/libraries/gdk-pixbuf { };
 
   gtk2 = callPackage ../development/libraries/gtk+/2.x.nix { };
-
+  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
   gtk = pkgs.gtk2;
 
-  gtkmm = callPackage ../development/libraries/gtkmm/2.24.x.nix { };
-  gtkmm3 = callPackage ../development/libraries/gtkmm/3.2.x.nix { };
-
-  gtk3 = lowPrio (callPackage ../development/libraries/gtk+/3.2.x.nix { });
+  gtkmm = callPackage ../development/libraries/gtkmm/2.x.nix { };
+  gtkmm3 = callPackage ../development/libraries/gtkmm/3.x.nix { };
 
   gtkmozembedsharp = callPackage ../development/libraries/gtkmozembed-sharp {
     gtksharp = gtksharp2;
@@ -4687,19 +4701,7 @@ let
       else stdenv;
   };
 
-  neon = neon029;
-
-  neon026 = callPackage ../development/libraries/neon/0.26.nix {
-    compressionSupport = true;
-    sslSupport = true;
-  };
-
-  neon028 = callPackage ../development/libraries/neon/0.28.nix {
-    compressionSupport = true;
-    sslSupport = true;
-  };
-
-  neon029 = callPackage ../development/libraries/neon/0.29.nix {
+  neon = callPackage ../development/libraries/neon {
     compressionSupport = true;
     sslSupport = true;
   };
@@ -4980,6 +4982,8 @@ let
   snack = callPackage ../development/libraries/snack {
         # optional
   };
+
+  snappy = callPackage ../development/libraries/snappy { };
 
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
@@ -5682,6 +5686,8 @@ let
 
   xorgVideoUnichrome = callPackage ../servers/x11/xorg/unichrome/default.nix { };
 
+  yaws = callPackage ../servers/http/yaws { };
+
   zabbix = recurseIntoAttrs (import ../servers/monitoring/zabbix {
     inherit fetchurl stdenv pkgconfig postgresql curl openssl zlib;
   });
@@ -5924,7 +5930,7 @@ let
         kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs2_2_6_32
         kernelPatches.cifs_timeout_2_6_29
-        kernelPatches.no_xsave
+        # kernelPatches.no_xsave # doesn't apply anymore
         kernelPatches.dell_rfkill
       ];
   };
@@ -6001,125 +6007,142 @@ let
       ];
   };
 
+  linux_3_8 = makeOverridable (import ../os-specific/linux/kernel/linux-3.8.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    kernelPatches =
+      [
+        kernelPatches.sec_perm_2_6_24
+      ] ++ lib.optionals (platform.kernelArch == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
      for a specific kernel.  This function can then be called for
      whatever kernel you're using. */
 
-  linuxPackagesFor = kernel: self: let callPackage = newScope self; in rec {
+  linuxPackagesFor = kernel:
+    let
+      callPackage = newScope self; 
 
-    inherit kernel;
+      self = {
+        kernel = kernel.dev or kernel;
 
-    acpi_call = callPackage ../os-specific/linux/acpi-call {};
+        acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
-    bbswitch = callPackage ../os-specific/linux/bbswitch {};
+        bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
-    ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
+        ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    aufs =
-      if kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs/2.nix { }
-      else if kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs/3.nix { }
-      else null;
+        aufs =
+          if self.kernel.features ? aufs2 then
+            callPackage ../os-specific/linux/aufs/2.nix { }
+          else if self.kernel.features ? aufs3 then
+            callPackage ../os-specific/linux/aufs/3.nix { }
+          else null;
 
-    aufs_util =
-      if kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs-util/2.nix { }
-      else if kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs-util/3.nix { }
-      else null;
+        aufs_util =
+          if self.kernel.features ? aufs2 then
+            callPackage ../os-specific/linux/aufs-util/2.nix { }
+          else if self.kernel.features ? aufs3 then
+            callPackage ../os-specific/linux/aufs-util/3.nix { }
+          else null;
 
-    blcr = callPackage ../os-specific/linux/blcr { };
+        blcr = callPackage ../os-specific/linux/blcr { };
 
-    cryptodev = callPackage ../os-specific/linux/cryptodev { };
+        cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
-    e1000e = callPackage ../os-specific/linux/e1000e {};
+        e1000e = callPackage ../os-specific/linux/e1000e {};
 
-    exmap = callPackage ../os-specific/linux/exmap { };
+        exmap = callPackage ../os-specific/linux/exmap { };
 
-    frandom = callPackage ../os-specific/linux/frandom { };
+        frandom = callPackage ../os-specific/linux/frandom { };
 
-    iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
+        iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
 
-    iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
+        iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
-    iwlwifi4965ucode =
-      (if (builtins.compareVersions kernel.version "2.6.27" == 0)
-          || (builtins.compareVersions kernel.version "2.6.27" == 1)
-       then iwlwifi4965ucodeV2
-       else iwlwifi4965ucodeV1);
+        iwlwifi4965ucode =
+          (if (builtins.compareVersions self.kernel.version "2.6.27" == 0)
+              || (builtins.compareVersions self.kernel.version "2.6.27" == 1)
+           then iwlwifi4965ucodeV2
+           else iwlwifi4965ucodeV1);
 
-    atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
+        atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
-    broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
+        broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
-    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
+        kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
-    nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
+        nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
-    nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
-    nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
-    nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
+        nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
+        nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
+        nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
 
-    openafsClient = callPackage ../servers/openafs-client { };
+        openafsClient = callPackage ../servers/openafs-client { };
 
-    openiscsi = callPackage ../os-specific/linux/open-iscsi { };
+        openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
-    wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
+        wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
-    kqemu = callPackage ../os-specific/linux/kqemu { };
+        kqemu = callPackage ../os-specific/linux/kqemu { };
 
-    klibc = callPackage ../os-specific/linux/klibc {
-      linuxHeaders = glibc.kernelHeaders;
-    };
+        klibc = callPackage ../os-specific/linux/klibc {
+          linuxHeaders = glibc.kernelHeaders;
+        };
 
-    splashutils = let hasFbConDecor = if kernel ? features
-      then kernel.features ? fbConDecor
-      else kernel.config.isEnabled "FB_CON_DECOR";
-    in if hasFbConDecor then pkgs.splashutils else null;
+        splashutils = let hasFbConDecor = if self.kernel ? features
+          then self.kernel.features ? fbConDecor
+          else self.kernel.config.isEnabled "FB_CON_DECOR";
+        in if hasFbConDecor then pkgs.splashutils else null;
 
-    /* compiles but has to be integrated into the kernel somehow
-      Let's have it uncommented and finish it..
-    */
-    ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
+        /* compiles but has to be integrated into the kernel somehow
+           Let's have it uncommented and finish it..
+        */
+        ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
 
-    perf = callPackage ../os-specific/linux/kernel/perf.nix { };
+        perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
-    spl = callPackage ../os-specific/linux/spl/default.nix { };
+        spl = callPackage ../os-specific/linux/spl/default.nix { };
 
-    sysprof = callPackage ../development/tools/profiling/sysprof {
-      inherit (gnome) libglade;
-    };
+        sysprof = callPackage ../development/tools/profiling/sysprof {
+          inherit (gnome) libglade;
+        };
 
-    systemtap = callPackage ../development/tools/profiling/systemtap {
-      linux = kernel;
-      inherit (gnome) libglademm;
-    };
+        systemtap = callPackage ../development/tools/profiling/systemtap {
+          linux = self.kernel;
+          inherit (gnome) libglademm;
+        };
 
-    tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
+        tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
-    v86d = callPackage ../os-specific/linux/v86d { };
+        v86d = callPackage ../os-specific/linux/v86d { };
 
-    virtualbox = callPackage ../applications/virtualization/virtualbox {
-      stdenv = stdenv_32bit;
-      inherit (gnome) libIDL;
-    };
+        virtualbox = callPackage ../applications/virtualization/virtualbox {
+          stdenv = stdenv_32bit;
+          inherit (gnome) libIDL;
+        };
 
-    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
+        virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
-    zfs = callPackage ../os-specific/linux/zfs/default.nix { };
-  };
+        zfs = callPackage ../os-specific/linux/zfs/default.nix { };
+      };
+    in (self // { kernel = self.kernel.out; });
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32 pkgs.linuxPackages_2_6_32);
-  linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);
-  linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
-  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 pkgs.linuxPackages_3_2);
-  linuxPackages_3_2_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_xen pkgs.linuxPackages_3_2_xen);
-  linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 pkgs.linuxPackages_3_4);
-  linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7 pkgs.linuxPackages_3_7);
+  linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32);
+  linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35);
+  linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0);
+  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2);
+  linuxPackages_3_2_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_xen);
+  linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4);
+  linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7);
+  linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8);
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -6127,7 +6150,7 @@ let
 
   # A function to build a manually-configured kernel
   linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
-    inherit (pkgs) stdenv runCommand nettools perl kmod writeTextFile;
+    inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile;
   };
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
@@ -6914,6 +6937,8 @@ let
 
     jabber = callPackage ../applications/editors/emacs-modes/jabber { };
 
+    emacsClangCompleteAsync = callPackage ../applications/editors/emacs-modes/emacs-clang-complete-async { };
+
     emacsSessionManagement = callPackage ../applications/editors/emacs-modes/session-management-for-emacs { };
 
     emacsw3m = callPackage ../applications/editors/emacs-modes/emacs-w3m { };
@@ -7034,6 +7059,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  fvwm = callPackage ../applications/window-managers/fvwm { };
+
   geany = callPackage ../applications/editors/geany { };
 
   goldendict = callPackage ../applications/misc/goldendict { };
@@ -7078,7 +7105,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox18Pkgs;
+  firefoxPkgs = pkgs.firefox19Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
@@ -7092,12 +7119,12 @@ let
 
   firefox13Wrapper = lowPrio (wrapFirefox { browser = firefox13Pkgs.firefox; });
 
-  firefox18Pkgs = callPackage ../applications/networking/browsers/firefox/18.0.nix {
+  firefox19Pkgs = callPackage ../applications/networking/browsers/firefox/19.0.nix {
     inherit (gnome) libIDL;
     inherit (pythonPackages) pysqlite;
   };
 
-  firefox18Wrapper = lowPrio (wrapFirefox { browser = firefox18Pkgs.firefox; });
+  firefox19Wrapper = lowPrio (wrapFirefox { browser = firefox19Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7362,6 +7389,8 @@ let
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
+  jalv = callPackage ../applications/audio/jalv { };
+
   jedit = callPackage ../applications/editors/jedit { };
 
   jigdo = callPackage ../applications/misc/jigdo { };
@@ -7459,6 +7488,8 @@ let
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
+  mda_lv2 = callPackage ../applications/audio/mda-lv2 { };
+
   meld = callPackage ../applications/version-management/meld {
     inherit (gnome) scrollkeeper;
     pygtk = pyGtkGlade;
@@ -7524,6 +7555,9 @@ let
     inherit (ocamlPackages) lablgtk;
     inherit (gnome) libgnomecanvas;
   };
+
+  mopidy = callPackage ../applications/audio/mopidy { };
+  mopidy_git = callPackage ../applications/audio/mopidy/git.nix { };
 
   mozilla = callPackage ../applications/networking/browsers/mozilla {
     inherit (gnome) libIDL;
@@ -7825,7 +7859,6 @@ let
   sublime = callPackage ../applications/editors/sublime { };
 
   subversion = callPackage ../applications/version-management/subversion/default.nix {
-    neon = pkgs.neon029;
     bdbSupport = true;
     httpServer = false;
     httpSupport = true;
@@ -8215,7 +8248,9 @@ let
 
   blackshadeselite = callPackage ../games/blackshadeselite { };
 
-  blobby = callPackage ../games/blobby {};
+  blobby = callPackage ../games/blobby {
+    boost = boost149;
+  };
 
   bsdgames = callPackage ../games/bsdgames { };
 
@@ -8410,6 +8445,8 @@ let
   ultrastardx = callPackage ../games/ultrastardx {
     lua = lua5;
   };
+
+  unvanquished = callPackage ../games/unvanquished { };
 
   uqm = callPackage ../games/uqm { };
 
@@ -8949,10 +8986,14 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
+  nixUnstable = nixStable;
+
+  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
+  */
 
   nut = callPackage ../applications/misc/nut { };
 

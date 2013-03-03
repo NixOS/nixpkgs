@@ -20,6 +20,7 @@ cabal.mkDerivation (self: {
   patchPhase = ''
     sed -r -i -e 's|blaze-html >= 0.5 && < 0.6,|blaze-html >= 0.5,|' pandoc.cabal
   '';
+  doCheck = false;
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";
     description = "Conversion between markup formats";

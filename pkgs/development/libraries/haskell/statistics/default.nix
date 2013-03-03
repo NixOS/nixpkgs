@@ -1,5 +1,7 @@
-{ cabal, deepseq, erf, mathFunctions, monadPar, mwcRandom
-, primitive, vector, vectorAlgorithms
+{ cabal, deepseq, erf, HUnit, ieee754, mathFunctions, monadPar
+, mwcRandom, primitive, QuickCheck, testFramework
+, testFrameworkHunit, testFrameworkQuickcheck2, vector
+, vectorAlgorithms
 }:
 
 cabal.mkDerivation (self: {
@@ -10,6 +12,11 @@ cabal.mkDerivation (self: {
     deepseq erf mathFunctions monadPar mwcRandom primitive vector
     vectorAlgorithms
   ];
+  testDepends = [
+    erf HUnit ieee754 mathFunctions primitive QuickCheck testFramework
+    testFrameworkHunit testFrameworkQuickcheck2 vector vectorAlgorithms
+  ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/bos/statistics";
     description = "A library of statistical types, data, and functions";

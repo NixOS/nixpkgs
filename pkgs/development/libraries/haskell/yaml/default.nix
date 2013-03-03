@@ -1,5 +1,5 @@
-{ cabal, aeson, attoparsec, conduit, resourcet, text, transformers
-, unorderedContainers, vector
+{ cabal, aeson, attoparsec, conduit, hspec, HUnit, resourcet, text
+, transformers, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     aeson attoparsec conduit resourcet text transformers
     unorderedContainers vector
+  ];
+  testDepends = [
+    conduit hspec HUnit text transformers unorderedContainers
   ];
   meta = {
     homepage = "http://github.com/snoyberg/yaml/";

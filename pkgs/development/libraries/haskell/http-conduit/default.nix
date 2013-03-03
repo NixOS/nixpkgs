@@ -1,23 +1,31 @@
-{ cabal, asn1Data, attoparsec, attoparsecConduit, base64Bytestring
-, blazeBuilder, blazeBuilderConduit, caseInsensitive, certificate
-, conduit, cookie, cprngAes, dataDefault, deepseq, failure
-, filepath, httpTypes, liftedBase, mimeTypes, monadControl, mtl
-, network, random, regexCompat, resourcet, socks, text, time, tls
-, tlsExtra, transformers, transformersBase, utf8String, void
-, zlibConduit
+{ cabal, asn1Data, base64Bytestring, blazeBuilder
+, blazeBuilderConduit, caseInsensitive, certificate, conduit
+, cookie, cprngAes, dataDefault, deepseq, failure, filepath, hspec
+, httpTypes, HUnit, liftedBase, mimeTypes, monadControl, mtl
+, network, networkConduit, publicsuffixlist, random, regexCompat
+, resourcet, socks, text, time, tls, tlsExtra, transformers
+, transformersBase, utf8String, void, wai, warp, zlibConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "1.8.7.1";
-  sha256 = "1m0f9snc2zxj8hvxw3ngw0h78ckvdlxxfjvrryk93blfwbamssi5";
+  version = "1.9.0";
+  sha256 = "1b6f2sg96fddk5ywbfvbvj9z81695d35qymf31idpkyshcp9argk";
   buildDepends = [
-    asn1Data attoparsec attoparsecConduit base64Bytestring blazeBuilder
-    blazeBuilderConduit caseInsensitive certificate conduit cookie
-    cprngAes dataDefault deepseq failure filepath httpTypes liftedBase
-    mimeTypes monadControl mtl network random regexCompat resourcet
-    socks text time tls tlsExtra transformers transformersBase
-    utf8String void zlibConduit
+    asn1Data base64Bytestring blazeBuilder blazeBuilderConduit
+    caseInsensitive certificate conduit cookie cprngAes dataDefault
+    deepseq failure filepath httpTypes liftedBase mimeTypes
+    monadControl mtl network publicsuffixlist random regexCompat
+    resourcet socks text time tls tlsExtra transformers
+    transformersBase utf8String void zlibConduit
+  ];
+  testDepends = [
+    asn1Data base64Bytestring blazeBuilder blazeBuilderConduit
+    caseInsensitive certificate conduit cookie cprngAes dataDefault
+    deepseq failure filepath hspec httpTypes HUnit liftedBase mimeTypes
+    monadControl mtl network networkConduit publicsuffixlist random
+    regexCompat resourcet socks text time tls tlsExtra transformers
+    transformersBase utf8String void wai warp zlibConduit
   ];
   meta = {
     homepage = "http://www.yesodweb.com/book/http-conduit";

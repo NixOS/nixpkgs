@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "lilv-${version}";
-  version = "0.14.2";
+  version = "0.16.0";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "0g9sg5f8xkkvsad0c6rh4j1k2b2hwsh83yg66f4qznxh43np7zlx";
+    sha256 = "1ddrcikypi7gfmj5cqn975axzrgv7mhzif4h0ni9w5b4v64rvcyg";
   };
 
   buildInputs = [ lv2 pkgconfig python serd sord sratom ];

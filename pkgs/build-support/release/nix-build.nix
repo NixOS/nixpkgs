@@ -77,7 +77,8 @@ stdenv.mkDerivation (
       if [ -z "${toString doCoverageAnalysis}" ]; then
           for i in $outputs; do
               if [ "$i" = out ]; then j=none; else j="$i"; fi
-              echo "nix-build $j ''${!i}" >> $out/nix-support/hydra-build-products
+              mkdir -p ''${!i}/nix-support
+              echo "nix-build $j ''${!i}" >> ''${!i}/nix-support/hydra-build-products
           done
       fi
     '';
@@ -110,7 +111,7 @@ stdenv.mkDerivation (
       (stdenv.lib.optional doCoverageAnalysis "coverageReportPhase") ++ ["finalPhase"];
 
     meta = (if args ? meta then args.meta else {}) // {
-      description = if doCoverageAnalysis then "Coverage analysis" else "Native Nix build on ${stdenv.system}";
+      description = if doCoverageAnalysis then "Coverage analysis" else "Nix package for ${stdenv.system}";
     };
 
   }

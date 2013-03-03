@@ -1,5 +1,5 @@
-{ cabal, deepseq, mtl, parallel, parsec, stringQq, terminfo
-, utf8String, vector
+{ cabal, Cabal, deepseq, mtl, parallel, parsec, QuickCheck, random
+, stringQq, terminfo, utf8String, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -11,6 +11,11 @@ cabal.mkDerivation (self: {
   buildDepends = [
     deepseq mtl parallel parsec stringQq terminfo utf8String vector
   ];
+  testDepends = [
+    Cabal deepseq mtl parallel parsec QuickCheck random terminfo
+    utf8String vector
+  ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/coreyoconnor/vty";
     description = "A simple terminal UI library";

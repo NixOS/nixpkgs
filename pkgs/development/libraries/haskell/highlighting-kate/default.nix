@@ -2,13 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "highlighting-kate";
-  version = "0.5.3.6";
-  sha256 = "0ypgw56gaa2hvh05ks079lfcaaynki3da471g39f23m3scgkawlr";
+  version = "0.5.3.7";
+  sha256 = "04wa1al83v5ak6gvrwqy2b63mda0qfi2ircxfs9ddk1gkdscrlrl";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ blazeHtml filepath mtl parsec regexPcre ];
   prePatch = "sed -i -e 's|regex-pcre-builtin|regex-pcre|' highlighting-kate.cabal";
-  jailbreak = true;
   meta = {
     homepage = "http://github.com/jgm/highlighting-kate";
     description = "Syntax highlighting";

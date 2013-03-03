@@ -12,6 +12,7 @@ cabal.mkDerivation (self: {
     Diff filepath HUnit mtl parsec split time utf8String xml
   ];
   jailbreak = true;
+  doCheck = false;
   meta = {
     description = "Interface for versioning file stores";
     license = self.stdenv.lib.licenses.bsd3;
