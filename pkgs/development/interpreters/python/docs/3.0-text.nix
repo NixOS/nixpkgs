@@ -12,4 +12,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/docs
     cp -R ./ $out/share/docs/${name}
   '';
+  meta = {
+    maintainers = [ lib.maintainers.chaoflow ];
+  };
 }
