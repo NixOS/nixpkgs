@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext }:
+{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext, docutils }:
 
 stdenv.mkDerivation rec {
 
@@ -13,7 +13,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk girara gettext ];
 
-  makeFlags = "PREFIX=$(out)";
+  # Bug in zathura build system: we should remove empty manfiles in order them
+  # to be compiled properly
+  preBuild = ''
+    rm zathura.1
+    rm zathurarc.5
+  '';
+
+  makeFlags = [ "PREFIX=$(out)" "RSTTOMAN=${docutils}/bin/rst2man.py" "VERBOSE=1" ];
 
   meta = {
     homepage = http://pwmt.org/projects/zathura/;
