@@ -46,11 +46,11 @@ in
         before = [ "sysinit.target" "shutdown.target" ];
         wantedBy = [ "sysinit.target" "multi-user.target" ];
         restartTriggers = [ config.environment.etc."sysctl.d/nixos.conf".source ];
+        unitConfig.DefaultDependencies = false; # needed to prevent a cycle
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = true;
           ExecStart = "${config.systemd.package}/lib/systemd/systemd-sysctl";
-          unitConfig.DefaultDependencies = false; # needed to prevent a cycle
         };
       };
 
