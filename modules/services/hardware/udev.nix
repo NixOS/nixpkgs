@@ -227,6 +227,12 @@ in
       (isYes "INOTIFY_USER")
       (isYes "NET")
     ];
-  };
 
+    boot.extraKernelParams = [ "firmware_class.path=${config.hardware.firmware}" ];
+
+    boot.extraModprobeConfig = "options firmware_class path=${config.hardware.firmware}";
+
+    system.activationScripts."set-firmware-path" =
+      "echo -n ${config.hardware.firmware} > /sys/module/firmware_class/parameters/path";
+  };
 }
