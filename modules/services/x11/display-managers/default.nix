@@ -19,10 +19,8 @@ let
   vaapiDrivers = pkgs.buildEnv {
     name = "vaapi-drivers";
     paths = cfg.vaapiDrivers;
-    pathsToLink = "/lib/dri";
-
-    # To admit zero-length 'paths'
-    postBuild = "mkdir -p $out/lib/dri";
+    # We only want /lib/dri, but with a single input path, we need "/" for it to work
+    pathsToLink = [ "/" ];
   };
 
   # file provided by services.xserver.displayManager.session.script
