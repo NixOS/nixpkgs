@@ -50,6 +50,7 @@ in
           Type = "oneshot";
           RemainAfterExit = true;
           ExecStart = "${config.systemd.package}/lib/systemd/systemd-sysctl";
+          unitConfig.DefaultDependencies = false; # needed to prevent a cycle
         };
       };
 
