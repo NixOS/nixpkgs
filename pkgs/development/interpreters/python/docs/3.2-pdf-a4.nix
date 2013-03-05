@@ -1,6 +1,6 @@
 # This file was generated and will be overwritten by ./generate.sh
 
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation rec {
   name = "python32-docs-pdf-a4-3.2.3";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lw1sbk3nx70k2zxgjc36ryvyzlxndzsvhrxyzdy9sjfhasyd807";
   };
   installPhase = ''
-    mkdir -p $out/share/docs
-    cp -R ./ $out/share/docs/${name}
+    mkdir -p $out/share/doc
+    cp -R ./ $out/share/doc/${name}
   '';
   meta = {
     maintainers = [ lib.maintainers.chaoflow ];

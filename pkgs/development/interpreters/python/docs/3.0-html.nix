@@ -1,6 +1,6 @@
 # This file was generated and will be overwritten by ./generate.sh
 
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation rec {
   name = "python30-docs-html-3.0.1";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ybjnhg8qfr9kc4axm5xlghkz9dmsg6b1caj6m4gz28q89vggv3c";
   };
   installPhase = ''
-    mkdir -p $out/share/docs
-    cp -R ./ $out/share/docs/${name}
+    mkdir -p $out/share/doc
+    cp -R ./ $out/share/doc/${name}
   '';
   meta = {
     maintainers = [ lib.maintainers.chaoflow ];
