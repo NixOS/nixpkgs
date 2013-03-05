@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pythonPackages, pygobject, gst_python
+{ stdenv, fetchgit, pythonPackages, pygobject
 , gst_plugins_good, gst_plugins_base
 }:
 

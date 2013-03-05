@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, python, pkgconfig, glib, gobjectIntrospection
-, cairo, pycairo, expat }:
+{ stdenv, fetchurl, python, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
   name = "pygobject-3.0.4";

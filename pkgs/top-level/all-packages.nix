@@ -3898,16 +3898,35 @@ let
   };
 
   gstreamer = callPackage ../development/libraries/gstreamer/gstreamer {};
+  gstreamer_0_10 = callPackage ../development/libraries/gstreamer/gstreamer/0.10.nix {};
 
   gst_plugins_base = callPackage ../development/libraries/gstreamer/gst-plugins-base {};
+  gst_plugins_base_0_10 = callPackage ../development/libraries/gstreamer/gst-plugins-base/0.10.nix {
+    gstreamer = gstreamer_0_10;
+  };
 
   gst_plugins_good = callPackage ../development/libraries/gstreamer/gst-plugins-good {};
+  gst_plugins_good_0_10 = callPackage ../development/libraries/gstreamer/gst-plugins-good/0.10.nix {
+    gstreamer = gstreamer_0_10;
+    gst_plugins_base = gst_plugins_base_0_10;
+  };
 
   gst_plugins_bad = callPackage ../development/libraries/gstreamer/gst-plugins-bad {};
+  gst_plugins_bad_0_10 = callPackage ../development/libraries/gstreamer/gst-plugins-bad/0.10.nix {
+    gstreamer = gstreamer_0_10;
+    gst_plugins_base = gst_plugins_base_0_10;
+  };
 
   gst_plugins_ugly = callPackage ../development/libraries/gstreamer/gst-plugins-ugly {};
+  gst_plugins_ugly_0_10 = callPackage ../development/libraries/gstreamer/gst-plugins-ugly/0.10.nix {
+    gstreamer = gstreamer_0_10;
+    gst_plugins_base = gst_plugins_base_0_10;
+  };
 
   gst_libav = callPackage ../development/libraries/gstreamer/gst-libav {};
+  gst_ffmpeg_0_10 = callPackage ../development/libraries/gstreamer/gst-ffmpeg/0.10.nix {  # gst_ffmpeg was renamed to gst_libav with gstreamer 1.0
+    gst_plugins_base = gst_plugins_base_0_10;
+  };
 
   gnonlin = callPackage ../development/libraries/gstreamer/gnonlin {};
 
@@ -4793,7 +4812,10 @@ let
 
   phonon = callPackage ../development/libraries/phonon { };
 
-  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
+  phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { 
+    gstreamer = gstreamer_0_10;
+    gst_plugins_base = gst_plugins_base_0_10;
+  };
 
   phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { };
 
