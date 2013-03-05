@@ -39,6 +39,6 @@ stdenv.mkDerivation {
     mv bin/*-${if release then "release" else "debug"}.apk $out
     
     mkdir -p $out/nix-support
-    echo "apk apk $(ls $out/*.apk)" > $out/nix-support/hydra-build-products
+    echo "file binary-dist $(ls $out/*.apk)" > $out/nix-support/hydra-build-products
   '';
 }
