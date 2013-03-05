@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "SHA";
   };
   installPhase = ''
-    mkdir -p $out/share/doc
-    cp -R ./ $out/share/doc/${name}
+    mkdir -p $out/share/doc/pythonMAJORMINOR
+    cp -R ./ $out/share/doc/pythonMAJORMINOR/TYPE
   '';
   meta = {
     maintainers = [ lib.maintainers.chaoflow ];

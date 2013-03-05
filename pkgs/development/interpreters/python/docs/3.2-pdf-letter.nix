@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "199ibzslw3zrwjd49582vc5q6ghp5ig8zalvslawz0xkz1226wg2";
   };
   installPhase = ''
-    mkdir -p $out/share/doc
-    cp -R ./ $out/share/doc/${name}
+    mkdir -p $out/share/doc/python32
+    cp -R ./ $out/share/doc/python32/pdf-letter
   '';
   meta = {
     maintainers = [ lib.maintainers.chaoflow ];

@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hg92n0mzl9w6j33b2h0bf2vy6fsxnpxfdc3qw760vcm0y00155j";
   };
   installPhase = ''
-    mkdir -p $out/share/doc
-    cp -R ./ $out/share/doc/${name}
+    mkdir -p $out/share/doc/python27
+    cp -R ./ $out/share/doc/python27/html
   '';
   meta = {
     maintainers = [ lib.maintainers.chaoflow ];
