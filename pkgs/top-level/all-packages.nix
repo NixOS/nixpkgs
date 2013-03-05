@@ -2892,7 +2892,7 @@ let
   };
 
   pythonDocs = recurseIntoAttrs (import ../development/interpreters/python/docs {
-    inherit stdenv fetchurl;
+    inherit stdenv fetchurl lib;
   });
 
   pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };

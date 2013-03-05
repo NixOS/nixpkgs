@@ -9,7 +9,7 @@ ${VERSIONS}
 
 
 cat >default.nix <<EOF
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib }:
 
 let
 pythonDocs = {
@@ -42,7 +42,7 @@ for type in $TYPES; do
         attrname=python${major}${minor}
         cat >>default.nix <<EOF
     ${attrname} = import ./${major}.${minor}-${type}.nix {
-      inherit stdenv fetchurl;
+      inherit stdenv fetchurl lib;
     };
 EOF
 
