@@ -1,7 +1,8 @@
 addGstreamerLibPath () {
-    if test -d "$1/lib/gstreamer-1.0"
+    # 
+    if test -d "$1/lib/gstreamer-*"
     then
-        export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}${GST_PLUGIN_PATH:+:}$1/lib/gstreamer-1.0"
+        export GST_PLUGIN_PATH="${GST_PLUGIN_PATH}${GST_PLUGIN_PATH:+:}$1/lib/gstreamer-*"
     fi
 }
 

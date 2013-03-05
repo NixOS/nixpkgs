@@ -28,8 +28,8 @@ pythonPackages.buildPythonPackage rec {
   postInstall = ''
     for p in $out/bin/mopidy $out/bin/mopidy-scan; do
       wrapProgram $p \
-        --prefix GST_PLUGIN_PATH : ${gst_plugins_good}/lib/gstreamer-1.0 \
-        --prefix GST_PLUGIN_PATH : ${gst_plugins_base}/lib/gstreamer-1.0
+        --prefix GST_PLUGIN_PATH : ${gst_plugins_good}/lib/gstreamer-* \
+        --prefix GST_PLUGIN_PATH : ${gst_plugins_base}/lib/gstreamer-*
     done
   '';
 
