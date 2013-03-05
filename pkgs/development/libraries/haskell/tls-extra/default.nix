@@ -1,16 +1,17 @@
-{ cabal, certificate, cipherAes, cryptoApi, cryptocipher
-, cryptohash, mtl, network, pem, text, time, tls, vector
+{ cabal, certificate, cipherAes, cipherRc4, cryptohash
+, cryptoPubkey, cryptoRandomApi, mtl, network, pem, text, time, tls
+, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "tls-extra";
-  version = "0.5.0";
-  sha256 = "1r645qljn3ql7jcphsqf4cm259cl8fsva64q4p2x37mafi01bkr8";
+  version = "0.6.1";
+  sha256 = "0gc3dz3s188jk6q2lai56y4ckxh62s9gm04d7jznr6jzpx2i4fan";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    certificate cipherAes cryptoApi cryptocipher cryptohash mtl network
-    pem text time tls vector
+    certificate cipherAes cipherRc4 cryptohash cryptoPubkey
+    cryptoRandomApi mtl network pem text time tls vector
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-tls";

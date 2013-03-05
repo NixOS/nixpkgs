@@ -1,19 +1,21 @@
 { cabal, aeson, attoparsec, base64Bytestring, blazeHtml
-, blazeMarkup, conduit, liftedBase, monadControl, monadLogger
-, pathPieces, poolConduit, resourcet, sqlite, text, time
-, transformers, transformersBase, unorderedContainers, vector
+, blazeMarkup, conduit, hspec, liftedBase, monadControl
+, monadLogger, pathPieces, poolConduit, resourcet, silently, sqlite
+, text, time, transformers, transformersBase, unorderedContainers
+, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "persistent";
-  version = "1.0.2.2";
-  sha256 = "0sas9jv00c01sx593applajcfjdjz24yrncx001kj6mfm7pmm86n";
+  version = "1.1.5.1";
+  sha256 = "1ds0q3mzgg60makx7impyxsvpzd3issa89igcy176yb54ypjwfnz";
   buildDepends = [
     aeson attoparsec base64Bytestring blazeHtml blazeMarkup conduit
     liftedBase monadControl monadLogger pathPieces poolConduit
-    resourcet text time transformers transformersBase
+    resourcet silently text time transformers transformersBase
     unorderedContainers vector
   ];
+  testDepends = [ hspec text ];
   extraLibraries = [ sqlite ];
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";

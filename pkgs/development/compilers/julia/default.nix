@@ -1,14 +1,14 @@
 { stdenv, fetchgit, gfortran, perl, m4, llvm, gmp, pcre, zlib
  , readline, fftwSinglePrec, fftw, libunwind, suitesparse, glpk, fetchurl
  , ncurses, libunistring, lighttpd, patchelf, openblas, liblapack
- , tcl, tk
+ , tcl, tk, xproto, libX11, git
  } :
 let
   realGcc = stdenv.gcc.gcc;
 in
 stdenv.mkDerivation rec {
   pname = "julia";
-  date = "20121122";
+  date = "20130205";
   name = "${pname}-git-${date}";
 
   grisu_ver = "1.1.1";
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
   clp_ver = "1.14.5";
   lighttpd_ver = "1.4.29";
   patchelf_ver = "0.6";
+  pcre_ver = "8.31";
 
   grisu_src = fetchurl {
     url = "http://double-conversion.googlecode.com/files/double-conversion-${grisu_ver}.tar.gz";
@@ -57,30 +58,33 @@ stdenv.mkDerivation rec {
     url = "http://hydra.nixos.org/build/1524660/download/2/patchelf-${patchelf_ver}.tar.bz2";
     sha256 = "00bw29vdsscsili65wcb5ay0gvg1w0ljd00sb5xc6br8bylpyzpw";
   };
+  pcre_src = fetchurl {
+    url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${pcre_ver}.tar.bz2";
+    sha256 = "0g4c0z4h30v8g8qg02zcbv7n67j5kz0ri9cfhgkpwg276ljs0y2p";
+  };
 
   src = fetchgit {
     url = "git://github.com/JuliaLang/julia.git";
-    rev = "53598b026b6fd9f79eba02cbc4e2d6c38ca32bd7";
-    sha256 = "159yasgfbbj6px16kgwf7bg478giv8zbm5hg90ipncp1ls2lv3jy";
+    rev = "efc696bf74eec7605b4da19f6f1605ba99959ed3";
+    sha256 = "19if7aj3mrp84dg9g2d3zbhasrq0nz28djl9a01m0y4y9bfymp7s";
   };
 
   buildInputs = [ gfortran perl m4 gmp pcre llvm readline zlib
     fftw fftwSinglePrec libunwind suitesparse glpk ncurses libunistring patchelf
-    openblas liblapack
+    openblas liblapack tcl tk xproto libX11 git
     ];
 
   configurePhase = ''
     for i in GMP LLVM PCRE LAPACK OPENBLAS BLAS READLINE FFTW LIBUNWIND SUITESPARSE GLPK LIGHTTPD ZLIB; 
     do 
-      sed -e "s@USE_SYSTEM_$i=0@USE_SYSTEM_$i=1@" -i Make.inc; 
+      makeFlags="$makeFlags USE_SYSTEM_$i=1 "
     done
-    sed -e 's@-lcurses@@g' -i Make.inc
 
     copy_kill_hash(){
       cp "$1" "$2/$(basename "$1" | sed -e 's/^[a-z0-9]*-//')"
     }
 
-    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${clp_src}" "${patchelf_src}" ; do
+    for i in "${grisu_src}" "${dsfmt_src}" "${arpack_src}" "${clp_src}" "${patchelf_src}" "${pcre_src}" ; do
       copy_kill_hash "$i" deps
     done
     copy_kill_hash "${dsfmt_src}" deps/random
@@ -88,8 +92,6 @@ stdenv.mkDerivation rec {
     ${if realGcc ==null then "" else 
     ''export NIX_LDFLAGS="$NIX_LDFLAGS -L${realGcc}/lib -L${realGcc}/lib64 -lpcre -llapack -lm -lfftw3f -lfftw3 -lglpk -lunistring -lz "''}
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fPIC "
-
-    sed -e 's@ cpp @ gcc -E @g' -i base/Makefile
 
     export LDFLAGS="-L${suitesparse}/lib -L$out/lib/julia -Wl,-rpath,$out/lib/julia"
 
@@ -107,20 +109,10 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    make -C test/unicode all SHELL="${stdenv.shell}"
-    make -C extras glpk_h.jl GLPK_PREFIX="$GLPK_PREFIX" SHELL="${stdenv.shell}"
-
     mkdir -p usr/lib
-    ln -s libuv.a usr/lib/uv.a
   '';
 
-  postInstall = ''
-   ld -E --whole-archive --shared ${suitesparse}/lib/lib*[a-z].a -o "$out"/lib/libsuitesparse-shared.so
-   for i in umfpack cholmod amd camd colamd btf cxsparse ldl rbio spqr suitesparseconfig; do
-     ln -s "libsuitesparse-shared.so" "$out/lib/lib$i.so"
-   done
-   ln -s "${lighttpd}/sbin/lighttpd" "$out/sbin/"
-   ln -s "${lighttpd}/lib/"* "$out/lib/"
+  preInstall = ''
   '';
 
   meta = {

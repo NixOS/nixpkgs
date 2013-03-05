@@ -20,11 +20,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "uboot-2009.11";
+  name = "uboot-2012.07";
    
   src = fetchurl {
-    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-2009.11.tar.bz2";
-    sha256 = "1rld7q3ww89si84g80hqskd1z995lni5r5xc4d4322n99wqiarh6";
+    url = "ftp://ftp.denx.de/pub/u-boot/u-boot-2012.07.tar.bz2";
+    sha256 = "15nli6h9a127ldizsck3g4ysy5j4m910wawspgpadz4vjyk213p0";
   };
 
   buildNativeInputs = [ unzip ];
@@ -39,6 +39,15 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp tools/{envcrc,mkimage} $out/bin
   '';
+
+  # They have 'errno.h' included by a "-idirafter". As the gcc
+  # wrappers add the glibc include as "-idirafter", the only way
+  # we can make the glibc take priority is to -include errno.h.
+  postPatch = if stdenv ? glibc && stdenv.glibc != null then ''
+    sed -i 's,$(HOSTCPPFLAGS),-include ${stdenv.glibc}/include/errno.h $(HOSTCPPFLAGS),' config.mk
+  '' else "";
+
+  patches = [ ./sheevaplug-sdio.patch ./sheevaplug-config.patch ];
 
   configurePhase =
     assert platform ? uboot && platform.uboot != null;

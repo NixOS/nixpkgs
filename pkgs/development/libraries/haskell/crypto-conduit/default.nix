@@ -1,10 +1,17 @@
-{ cabal, cereal, conduit, cryptoApi, transformers }:
+{ cabal, cereal, conduit, cryptoApi, cryptocipher, cryptohash
+, hspec, skein, transformers
+}:
 
 cabal.mkDerivation (self: {
   pname = "crypto-conduit";
-  version = "0.4.1";
-  sha256 = "1gdznwcq3fb9ls68lgpwna6k1k612j241c8441z7r2kx3a64dqwv";
+  version = "0.5.0";
+  sha256 = "0mlf2l784w0wyfjqsxzfdwmn1wb0z1s6mb8kdhw8x1z4a8gy9a92";
   buildDepends = [ cereal conduit cryptoApi transformers ];
+  testDepends = [
+    cereal conduit cryptoApi cryptocipher cryptohash hspec skein
+    transformers
+  ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/meteficha/crypto-conduit";
     description = "Conduit interface for cryptographic operations (from crypto-api)";

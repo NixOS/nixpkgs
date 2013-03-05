@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "Boolean";
-  version = "0.1.1";
-  sha256 = "1id075slxgz67gv382vpr7cr19i59bjajvb60iv2xrhh73gp08yv";
+  version = "0.1.2";
+  sha256 = "07mhg9zf98hlm7qq9gdbrq68a8rpvdby1jwmgrvf3nv2k47dimx6";
   meta = {
     description = "Generalized booleans";
     license = self.stdenv.lib.licenses.bsd3;

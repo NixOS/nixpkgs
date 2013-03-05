@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, glib, pkgconfig }:
+{ fetchurl, stdenv, glib, pkgconfig, gettext }:
 
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "07mqx09jxh8cv9753y2d2jsv7wp8vjmrd7zcfpbrddz3wc9kx705";
   };
 
-  buildInputs = [ glib pkgconfig ];
+  buildInputs = [ glib pkgconfig ] ++ stdenv.lib.optional (stdenv.system == "x86_64-darwin") gettext;
 
   meta = {
     homepage = http://gts.sourceforge.net/;

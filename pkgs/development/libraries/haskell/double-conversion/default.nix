@@ -1,10 +1,11 @@
-{ cabal, text }:
+{ cabal, testFramework, testFrameworkQuickcheck2, text }:
 
 cabal.mkDerivation (self: {
   pname = "double-conversion";
-  version = "0.2.0.5";
-  sha256 = "1z23a8sfnq5lady8n2kcina9a7df8lmsliscf85x84dxkd3a1ahf";
+  version = "0.2.0.6";
+  sha256 = "1c6hy0ghdqf44fvhdpdxjbcr0ahimw283x5fnvjxja36i71qshjp";
   buildDepends = [ text ];
+  testDepends = [ testFramework testFrameworkQuickcheck2 text ];
   meta = {
     homepage = "https://github.com/bos/double-conversion";
     description = "Fast conversion between double precision floating point and text";

@@ -1,19 +1,27 @@
 { stdenv, fetchurl, ncurses, openssl, perl, python, aspell, gnutls
-, zlib, curl , pkgconfig, libgcrypt, ruby, lua5, tcl, guile }:
+, zlib, curl , pkgconfig, libgcrypt, ruby, lua5, tcl, guile
+, pythonPackages, cacert, cmake, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.9";
+  version = "0.4.0";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/${name}.tar.gz";
-    sha256 = "8666c788cbb212036197365df3ba3cf964a23e4f644d76ea51d66dbe3be593bb";
+    sha256 = "17jxknam1bbakmdfqy1b2cfc8l9ag90l3z1gcxdvwg358wasv9dc";
   };
 
   buildInputs = 
     [ ncurses perl python openssl aspell gnutls zlib curl pkgconfig
-      libgcrypt ruby lua5 tcl guile
+      libgcrypt ruby lua5 tcl guile pythonPackages.pycrypto makeWrapper
+      cacert cmake
     ];
+
+  postInstall = ''
+       wrapProgram "$out/bin/weechat-curses" \
+         --prefix PYTHONPATH : "$PYTHONPATH" \
+         --prefix PYTHONPATH : "$out/lib/${python.libPrefix}/site-packages"
+  '';
 
   meta = {
     homepage = http://http://www.weechat.org/;

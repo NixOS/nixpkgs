@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "highlighting-kate";
-  version = "0.5.3.3";
-  sha256 = "08jxl2ba0kb4vj1qbdf4sas8bwbxzayzwsxnjvq358x57i5l302n";
+  version = "0.5.3.7";
+  sha256 = "04wa1al83v5ak6gvrwqy2b63mda0qfi2ircxfs9ddk1gkdscrlrl";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ blazeHtml filepath mtl parsec regexPcre ];

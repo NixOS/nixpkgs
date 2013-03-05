@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
 
   buildNativeInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ gstreamer gst_plugins_base
-    gst_plugins_good gst_plugins_bad gst_libav
-    ];
+  propagatedBuildInputs = [ gstreamer gst_plugins_base gst_plugins_good gst_plugins_bad gst_libav ];
 
   meta = {
     homepage = http://www.freedesktop.org/wiki/Software/Farstream;

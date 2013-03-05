@@ -1,10 +1,16 @@
-{ cabal, classyPrelude, conduit, xmlConduit }:
+{ cabal, classyPrelude, conduit, hspec, monadControl, QuickCheck
+, resourcet, transformers, void, xmlConduit
+}:
 
 cabal.mkDerivation (self: {
   pname = "classy-prelude-conduit";
-  version = "0.4.1";
-  sha256 = "0llir0xnnyhgxifay019x64jw7mnn9p1sqs1xwm14gjcqr2nqqg8";
-  buildDepends = [ classyPrelude conduit xmlConduit ];
+  version = "0.5.3";
+  sha256 = "1rmx439kdjipyz2s3v2s1xv1mb55kb4njl9k6f8mfhykgac39rhz";
+  buildDepends = [
+    classyPrelude conduit monadControl resourcet transformers void
+    xmlConduit
+  ];
+  testDepends = [ conduit hspec QuickCheck transformers ];
   meta = {
     homepage = "https://github.com/snoyberg/classy-prelude";
     description = "conduit instances for classy-prelude";

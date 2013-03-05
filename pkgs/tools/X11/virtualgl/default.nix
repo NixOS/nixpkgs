@@ -2,19 +2,19 @@
 , libjpeg_turbo, cmake }:
 
 let
-  libDir = if stdenv.is64bit then "lib64" else "lib";
+  version = "2.3.2";
 in
 stdenv.mkDerivation {
-  name = "virtualgl-2.1.4";
+  name = "virtualgl-${version}";
   src = fetchurl {
-    url = mirror://sourceforge/virtualgl/VirtualGL-2.3.tar.gz;
-    sha256 = "2f00c4eb20b0ae88e957a23fb66882e4ade2faa208abd30aa8c4f61570ecd4b9";
+    url = "mirror://sourceforge/virtualgl/VirtualGL-${version}.tar.gz";
+    sha256 = "062lrhd8yr13ch4wpgzxdabqs92j4q7fcl3a0c3sdlav4arspqmy";
   };
 
   patches = [ ./xshm.patch ./fixturbopath.patch ];
 
   prePatch = ''
-    sed -i s,LD_PRELOAD=lib,LD_PRELOAD=$out/${libDir}/lib, rr/vglrun
+    sed -i s,LD_PRELOAD=lib,LD_PRELOAD=$out/lib/lib, server/vglrun
   '';
 
   cmakeFlags = [ "-DTJPEG_LIBRARY=${libjpeg_turbo}/lib/libturbojpeg.so" ];

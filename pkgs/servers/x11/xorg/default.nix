@@ -1724,8 +1724,9 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xf86-video-vmware-12.0.2.tar.bz2;
       sha256 = "0isiwx516gww8hfk3vy7js83yziyjym9mq2zjadyq1a8v5gqf9y8";
     };
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ];
-  })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ;};
+    CFLAGS = "-I${pixman}/include/pixman-1";
+    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto pixman ];
+  })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto pixman ;};
     
   xf86videovoodoo = (stdenv.mkDerivation ((if overrides ? xf86videovoodoo then overrides.xf86videovoodoo else x: x) {
     name = "xf86-video-voodoo-1.2.4";

@@ -2,10 +2,10 @@
 , dbus_libs }:
 stdenv.mkDerivation rec {
   name = "e_dbus-${version}";
-  version = "1.2.0-alpha";
+  version = "1.7.5";
   src = fetchurl {
     url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
-    sha256 = "1kky76v7yydsjihgi1hbwpyqhdmbxmxj2dw4p7kiqbl67dmsjhxg";
+    sha256 = "16ckrpzzw5x1cs0fwqkk8431al55xil5magihkp9l3s77g0qd26q";
   };
   buildInputs = [ pkgconfig zlib libjpeg expat ecore eina evas ];
   propagatedBuildInputs = [ dbus_libs ];
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
     --disable-edbus-test-client
     --disable-edbus-notify-send
     --disable-edbus-notify-test
+    --disable-edbus-async-test
   '';
   meta = {
     description = "Enlightenment's D-Bus wrapping and glue layer library";

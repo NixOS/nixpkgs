@@ -107,27 +107,13 @@ rec {
 
   aufs3_0 = rec {
     name = "aufs3.0";
-    version = "3.0.20120827";
+    version = "3.0.20121210";
     utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
     utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
     patch = makeAufs3StandalonePatch {
       inherit version;
-      rev = "4bd8efe495832ec43c26cb31ddcab3bae56485da";
-      sha256 = "496113f0eae1a24ae0c1998d1c73fc7c13961579c8e694b3651a8080eae7b74e";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
-  aufs3_1 = rec {
-    name = "aufs3.1";
-    version = "3.1.20120827";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "9be47f1ff7c86976b0baa7847f22d75983e53922";
-      sha256 = "0cd239b9aad396750a26a5cd7b0d54146f21db63fb13d3fa03c4f73b7ebce77e";
+      rev = "0627c706d69778f5c74be982f28c746153b8cdf7";
+      sha256 = "7008ff64f5adc2b3a30fcbb090bcbfaac61b778af38493b6144fc7d768a6514d";
     };
     features.aufsBase = true;
     features.aufs3 = true;
@@ -135,27 +121,13 @@ rec {
 
   aufs3_2 = rec {
     name = "aufs3.2";
-    version = "3.2.20120827";
+    version = "3.2.20121210";
     utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
     utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
     patch = makeAufs3StandalonePatch {
       inherit version;
-      rev = "267cb1138b4724ee028ec64ace556abdf993c9f4";
-      sha256 = "61f69264806cf06a05548166e2bc8fd121de9a3e524385f725d76abab22b8a0d";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
-  aufs3_3 = rec {
-    name = "aufs3.3";
-    version = "3.3.20120827";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "ef302b8a8a2862b622cf4826d08b1e076ee6acb7";
-      sha256 = "7f78783685cc3e4eb825cd5dd8dabc82bb16c275493a850e8b7955ac69048d98";
+      rev = "0bf50c3b82f98e2ddc4c9ba0657f28ebfa8d15cb";
+      sha256 = "bc4b65cb77c62744db251da98488fdf4962f14a144c045cea6cbbbd42718ff89";
     };
     features.aufsBase = true;
     features.aufs3 = true;
@@ -163,42 +135,28 @@ rec {
 
   aufs3_4 = rec {
     name = "aufs3.4";
-    version = "3.4.20120827";
+    version = "3.4.20121210";
     utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
     utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
     patch = makeAufs3StandalonePatch {
       inherit version;
-      rev = "79d8207b22c38420757adf7eec86ee2dcec7443c";
-      sha256 = "bc148aa251c6e63edca70c516c0548dc9b3e48653039df4cf693aa2bcc1b9bb0";
-    };
-    features.aufsBase = true;
-    features.aufs3 = true;
-  };
-
-  aufs3_5 = rec {
-    name = "aufs3.5";
-    version = "3.5.20120827";
-    utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
-    utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
-    patch = makeAufs3StandalonePatch {
-      inherit version;
-      rev = "18e455787597579fe144cdb2f18aa6a0a32c46a4";
-      sha256 = "9649a4cb00e41e2b2e3aa57c3869c33faf90ecbd845a3ac0119922655e80a030";
+      rev = "2faacd9baffb37df3b9062cc554353eebe68df1e";
+      sha256 = "3ecf97468f5e85970d9fd2bfc61e38c7f5ae2c6dde0045d5a17de085c411d452";
     };
     features.aufsBase = true;
     features.aufs3 = true;
   };
 
   # not officially released yet, but 3.x seems to work fine
-  aufs3_6 = rec {
-    name = "aufs3.6";
-    version = "3.x.20120827";
+  aufs3_7 = rec {
+    name = "aufs3.7";
+    version = "3.x.20121210";
     utilRev = "91af15f977d12e02165759620005f6ce1a4d7602";
     utilHash = "dda4df89828dcf0e4012d88b4aa3eda8c30af69d6530ff5fedc2411de872c996";
     patch = makeAufs3StandalonePatch {
       inherit version;
-      rev = "46660ad144289fa1f0aca59bd00d592b560d0dbb";
-      sha256 = "823b7b4c011c103d63711900b3213008de3c9e408b909e0cc2b8697c1e82b67d";
+      rev = "8d24d728c7eb54dd624bccd8e87afa826670142c";
+      sha256 = "02dcb46e02b2a6b90c1601b5747614276074488c9308625c3a52ab74cad997a5";
     };
     features.aufsBase = true;
     features.aufs3 = true;
@@ -230,12 +188,6 @@ rec {
       features.cifsTimeout = true;
     };
 
-  cifs_timeout_3_5_7 =
-    { name = "cifs-timeout";
-      patch = ./cifs-timeout-3.5.7.patch;
-      features.cifsTimeout = true;
-    };
-
   no_xsave =
     { name = "no-xsave";
       patch = ./no-xsave.patch;
@@ -245,12 +197,6 @@ rec {
   dell_rfkill =
     { name = "dell-rfkill";
       patch = ./dell-rfkill.patch;
-    };
-
-  # seems no longer necessary on 3.6
-  perf3_5 =
-    { name = "perf-3.5";
-      patch = ./perf-3.5.patch;
     };
 
   sheevaplug_modules_2_6_35 =

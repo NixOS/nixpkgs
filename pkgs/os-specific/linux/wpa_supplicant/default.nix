@@ -1,28 +1,40 @@
-{ stdenv, fetchurl, openssl, dbus_libs, pkgconfig, libnl }:
+{ stdenv, fetchurl, lib, openssl, dbus_libs, pkgconfig, libnl
+, readlineSupport ? true, readline
+}:
+
+assert readlineSupport -> readline != null;
 
 stdenv.mkDerivation rec {
-  version = "1.0";
+  version = "1.1";
 
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
     url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
-    sha256 = "171b9027rbzy64zaal4832ix9i3mm6ypwmynbpia5bss793ivm4i";
+    sha256 = "00lyifj8cz7qyal6dy1dxbpk3g3bywvdarik8gbj9ds7zmfbwkd5";
   };
+
+  extraConfig =
+    ''
+      CONFIG_DEBUG_SYSLOG=y
+      CONFIG_CTRL_IFACE_DBUS=y
+      CONFIG_CTRL_IFACE_DBUS_NEW=y
+      CONFIG_CTRL_IFACE_DBUS_INTRO=y
+      CONFIG_DRIVER_NL80211=y
+      CONFIG_LIBNL32=y
+      ${stdenv.lib.optionalString readlineSupport "CONFIG_READLINE=y"}
+    '';
 
   preBuild = ''
     cd wpa_supplicant
     cp -v defconfig .config
-    echo CONFIG_DEBUG_SYSLOG=y | tee -a .config
-    echo CONFIG_CTRL_IFACE_DBUS=y | tee -a .config
-    echo CONFIG_CTRL_IFACE_DBUS_NEW=y | tee -a .config
-    echo CONFIG_CTRL_IFACE_DBUS_INTRO=y | tee -a .config
-    echo CONFIG_DRIVER_NL80211=y | tee -a .config
-    echo CONFIG_LIBNL32=y | tee -a .config
+    echo "$extraConfig" >> .config
+    cat .config
     substituteInPlace Makefile --replace /usr/local $out
   '';
 
-  buildInputs = [ openssl dbus_libs libnl ];
+  buildInputs = [ openssl dbus_libs libnl ]
+    ++ lib.optional readlineSupport readline;
 
   buildNativeInputs = [ pkgconfig ];
 
@@ -38,10 +50,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/man/man5 $out/share/man/man8
     cp -v doc/docbook/*.5 $out/share/man/man5/
     cp -v doc/docbook/*.8 $out/share/man/man8/
-    mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services
+    mkdir -p $out/etc/dbus-1/system.d $out/share/dbus-1/system-services $out/etc/systemd/system
     cp -v dbus/*service $out/share/dbus-1/system-services
     sed -e "s@/sbin/wpa_supplicant@$out&@" -i $out/share/dbus-1/system-services/*
     cp -v dbus/dbus-wpa_supplicant.conf $out/etc/dbus-1/system.d
+    cp -v systemd/*.service $out/etc/systemd/system
   ''; # */
 
   meta = {

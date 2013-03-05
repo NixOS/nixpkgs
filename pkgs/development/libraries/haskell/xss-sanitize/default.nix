@@ -1,11 +1,16 @@
-{ cabal, attoparsec, cssText, network, tagsoup, text, utf8String }:
+{ cabal, attoparsec, cssText, hspec, HUnit, network, tagsoup, text
+, utf8String
+}:
 
 cabal.mkDerivation (self: {
   pname = "xss-sanitize";
-  version = "0.3.2";
-  sha256 = "0m7gl232i06i090kbrlz67cs4q3pqf8169m9kjdj41kj6jay1dcx";
+  version = "0.3.3";
+  sha256 = "0xnyp8nwglh4waawijk1q5z8higf8mggh6hp0pp6ys4bm7gsp74a";
   buildDepends = [
     attoparsec cssText network tagsoup text utf8String
+  ];
+  testDepends = [
+    attoparsec cssText hspec HUnit network tagsoup text utf8String
   ];
   meta = {
     homepage = "http://github.com/yesodweb/haskell-xss-sanitize";

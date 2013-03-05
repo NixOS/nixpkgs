@@ -83,7 +83,7 @@ vmTools.runInLinuxImage (stdenv.mkDerivation (
     ''; # */
 
     meta = (if args ? meta then args.meta else {}) // {
-      description = "Build of a Deb package on ${diskImage.fullName} (${diskImage.name})";
+      description = "Deb package for ${diskImage.fullName}";
     };
   }
 

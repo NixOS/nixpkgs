@@ -3,11 +3,12 @@
 
 cabal.mkDerivation (self: {
   pname = "network-conduit";
-  version = "0.6.1.1";
-  sha256 = "00x5ks1qcq5smmd2g4bm23lb3ngdxmdlz822qkkj9l9c27lkn67n";
+  version = "1.0.0";
+  sha256 = "16kgg6wkpl10kcwfijm9iqi7r5gababaymxyhmjab6axfzknppk3";
   buildDepends = [
     conduit liftedBase monadControl network transformers
   ];
+  testDepends = [ conduit ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Stream socket data using conduits";

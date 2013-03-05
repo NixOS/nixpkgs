@@ -1,24 +1,25 @@
-{ cabal, aeson, attoparsec, cereal, clientsession, configurator
-, dataLens, dataLensTemplate, directoryTree, filepath, hashable
-, heist, logict, MonadCatchIOTransformers, mtl, mwcRandom
-, pwstoreFast, snapCore, snapServer, stm, syb, text, time
-, transformers, unorderedContainers, vector, vectorAlgorithms
+{ cabal, aeson, attoparsec, cereal, clientsession, comonad
+, configurator, directoryTree, dlist, errors, filepath, hashable
+, heist, lens, logict, MonadCatchIOTransformers, mtl, mwcRandom
+, pwstoreFast, regexPosix, snapCore, snapServer, stm, syb, text
+, time, transformers, unorderedContainers, vector, vectorAlgorithms
 , xmlhtml
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap";
-  version = "0.9.2.2";
-  sha256 = "1ql9c8b9arcd8zwlwsiipl4diah87sp339ljc5bc7yls1g4d9zsw";
+  version = "0.11.2";
+  sha256 = "1z9n15dhbxg0j17c1ik0vhdhxy2mz70915xd4jffg9jrdvlky51a";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    aeson attoparsec cereal clientsession configurator dataLens
-    dataLensTemplate directoryTree filepath hashable heist logict
-    MonadCatchIOTransformers mtl mwcRandom pwstoreFast snapCore
-    snapServer stm syb text time transformers unorderedContainers
-    vector vectorAlgorithms xmlhtml
+    aeson attoparsec cereal clientsession comonad configurator
+    directoryTree dlist errors filepath hashable heist lens logict
+    MonadCatchIOTransformers mtl mwcRandom pwstoreFast regexPosix
+    snapCore snapServer stm syb text time transformers
+    unorderedContainers vector vectorAlgorithms xmlhtml
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://snapframework.com/";
     description = "Top-level package for the Snap Web Framework";

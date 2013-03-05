@@ -8,8 +8,8 @@
         # environment overly, but also to keep hash-backwards-compatible with the old cabal.nix.
         internalAttrs = [
           "internalAttrs" "buildDepends" "buildTools" "extraLibraries" "pkgconfigDepends"
-          "isLibrary" "isExecutable"
-        ];
+          "isLibrary" "isExecutable" "testDepends"
+        ] ++ stdenv.lib.optional (!args.doCheck or false) "doCheck";
 
         # Stuff happening after the user preferences have been processed. We remove
         # internal attributes and strip null elements from the dependency lists, all
@@ -44,7 +44,9 @@
             # the default download location for Cabal packages is Hackage,
             # you still have to specify the checksum
             src = fetchurl {
-              url = "http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz";
+              # cannot use mirrors system because of subtly different directory structures
+              urls = ["http://hackage.haskell.org/packages/archive/${self.pname}/${self.version}/${self.fname}.tar.gz"
+                      "http://hdiff.luite.com/packages/archive/${self.pname}/${self.fname}.tar.gz"];
               inherit (self) sha256;
             };
 
@@ -53,6 +55,7 @@
             # but often propagatedBuildInputs is preferable anyway
             buildInputs = [ghc Cabal] ++ self.extraBuildInputs;
             extraBuildInputs = self.buildTools ++
+                               (stdenv.lib.optionals (self.doCheck or false) self.testDepends) ++
                                (if self.pkgconfigDepends == [] then [] else [pkgconfig]) ++
                                (if self.isLibrary then [] else self.buildDepends ++ self.extraLibraries ++ self.pkgconfigDepends);
 
@@ -87,7 +90,8 @@
               eval "$preConfigure"
 
               ${lib.optionalString (lib.attrByPath ["jailbreak"] false self) "${jailbreakCabal}/bin/jailbreak-cabal ${self.pname}.cabal && "
-              }for i in Setup.hs Setup.lhs; do
+              }${lib.optionalString (lib.attrByPath ["doCheck"] false self)  "configureFlags+=\" --enable-test\" && "
+	      }for i in Setup.hs Setup.lhs; do
                 test -f $i && ghc --make $i
               done
 
@@ -113,7 +117,8 @@
 
               ./Setup build
 
-              export GHC_PACKAGE_PATH=$(ghc-packages)
+              ${lib.optionalString (lib.attrByPath ["doCheck"] false self)  "./Setup test && "
+	      }export GHC_PACKAGE_PATH=$(ghc-packages)
               [ -n "$noHaddock" ] || ./Setup haddock
 
               eval "$postBuild"

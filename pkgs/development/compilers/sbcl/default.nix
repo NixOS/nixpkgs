@@ -4,10 +4,11 @@ let
   s= # Generated upstream information
   rec {
     baseName="sbcl";
-    version="1.1.1";
+    version="1.1.3";
     name="${baseName}-${version}";
-    hash="1gkwz0248zl2nhx79ck5wiyxj8407c10gcrpgg1c67102pgyiikv";
-    url="mirror://sourceforge/project/sbcl/sbcl/1.1.1/sbcl-1.1.1-source.tar.bz2";
+    hash="1qy64fy0nvjdgzlmasswgvzg1b2h2rygnnjvlf9vj7wg16i5383i";
+    url="mirror://sourceforge/project/sbcl/sbcl/1.1.3/sbcl-1.1.3-source.tar.bz2";
+    sha256="1qy64fy0nvjdgzlmasswgvzg1b2h2rygnnjvlf9vj7wg16i5383i";
   };
   buildInputs = with a; [
     clisp makeWrapper
@@ -90,5 +91,3 @@ rec {
     inherit(s) version;
   };
 }
-
-

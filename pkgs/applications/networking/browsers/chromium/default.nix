@@ -1,4 +1,4 @@
-{ stdenv, config, fetchurl, makeWrapper, which
+{ stdenv, fetchurl, makeWrapper, which
 
 # default dependencies
 , bzip2, flac, speex
@@ -13,34 +13,33 @@
 , gcc, bison, gperf
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, mesa
+, protobuf
+
+# dependencies for v25 only
+, libvpx
+
+# dependencies for >= v26
+, speechd, libXdamage
 
 # optional dependencies
-, libgnome_keyring # config.gnomeKeyring
-, gconf # config.gnome
-, libgcrypt # config.gnome || config.cups
-, nss, openssl # config.openssl
-, pulseaudio # config.pulseaudio
-, libselinux # config.selinux
+, libgcrypt ? null # gnomeSupport || cupsSupport
+
+# package customization
+, channel ? "stable"
+, enableSELinux ? false, libselinux ? null
+, enableNaCl ? false
+, useOpenSSL ? false, nss ? null, openssl ? null
+, gnomeSupport ? false, gconf ? null
+, gnomeKeyringSupport ? false, libgnome_keyring ? null
+, proprietaryCodecs ? true
+, cupsSupport ? false
+, pulseSupport ? false, pulseaudio ? null
 }:
 
 with stdenv.lib;
 
 let
-  mkConfigurable = mapAttrs (flag: default: attrByPath ["chromium" flag] default config);
-
-  cfg = mkConfigurable {
-    channel = "stable";
-    selinux = false;
-    nacl = false;
-    openssl = false;
-    gnome = false;
-    gnomeKeyring = false;
-    proprietaryCodecs = true;
-    cups = false;
-    pulseaudio = config.pulseaudio or true;
-  };
-
-  sourceInfo = builtins.getAttr cfg.channel (import ./sources.nix);
+  sourceInfo = builtins.getAttr channel (import ./sources.nix);
 
   mkGypFlags =
     let
@@ -58,15 +57,16 @@ let
     use_system_libexpat = true;
     use_system_libexif = true;
     use_system_libjpeg = true;
-    use_system_libpng = true;
+    use_system_libpng = false; # PNG dlopen() version conflict
     use_system_libusb = true;
     use_system_libxml = true;
     use_system_speex = true;
-    use_system_ssl = cfg.openssl;
+    use_system_ssl = useOpenSSL;
     use_system_stlport = true;
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = false; # http://crbug.com/143623
+    use_system_protobuf = post25;
 
     use_system_harfbuzz = false;
     use_system_icu = false;
@@ -74,6 +74,9 @@ let
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
     use_system_v8 = false;
+  } // optionalAttrs pre26 {
+    use_system_libvpx = true;
+    use_system_protobuf = true;
   };
 
   defaultDependencies = [
@@ -84,13 +87,8 @@ let
     libusb1 libexif
   ];
 
-  post23 = !versionOlder sourceInfo.version "24.0.0.0";
-  post24 = !versionOlder sourceInfo.version "25.0.0.0";
-
-  maybeFixPulseAudioBuild = optional (post23 && cfg.pulseaudio) (fetchurl {
-    url = http://archrepo.jeago.com/sources/chromium-dev/pulse_audio_fix.patch;
-    sha256 = "1w91mirrkqigdhsj892mqxlc0nlv1dsp5shc46w9xf8nl96jxgfb";
-  });
+  pre26 = versionOlder sourceInfo.version "26.0.0.0";
+  post25 = !pre26;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -107,44 +105,53 @@ in stdenv.mkDerivation rec {
     which makeWrapper
     python perl pkgconfig
     nspr udev
-    (if cfg.openssl then openssl else nss)
+    (if useOpenSSL then openssl else nss)
     utillinux alsaLib
     gcc bison gperf
     krb5
     glib gtk dbus_glib
     libXScrnSaver libXcursor mesa
-  ] ++ optional cfg.gnomeKeyring libgnome_keyring
-    ++ optionals cfg.gnome [ gconf libgcrypt ]
-    ++ optional cfg.selinux libselinux
-    ++ optional cfg.cups libgcrypt
-    ++ optional cfg.pulseaudio pulseaudio
-    ++ optional post24 pciutils;
+    pciutils protobuf
+  ] ++ optional gnomeKeyringSupport libgnome_keyring
+    ++ optionals gnomeSupport [ gconf libgcrypt ]
+    ++ optional enableSELinux libselinux
+    ++ optional cupsSupport libgcrypt
+    ++ optional pulseSupport pulseaudio
+    ++ optional pre26 libvpx
+    ++ optionals post25 [ speechd libXdamage ];
 
-  opensslPatches = optional cfg.openssl openssl.patches;
+  opensslPatches = optional useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
-  patches = optional cfg.cups ./cups_allow_deprecated.patch
-         ++ optional cfg.pulseaudio ./pulseaudio_array_bounds.patch
-         ++ maybeFixPulseAudioBuild;
+  patches = optional cupsSupport ./cups_allow_deprecated.patch
+         ++ optional pulseSupport ./pulseaudio_array_bounds.patch
+         ++ optional post25 ./clone_detached.patch
+         # XXX: Remove after stdenv-updates merge!
+         ++ singleton "/dev/null";
 
-  postPatch = optionalString cfg.openssl ''
+  postPatch = ''
+    sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
+  '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
+  '' + optionalString post25 ''
+    sed -i -e 's|/usr/bin/gcc|gcc|' \
+      third_party/WebKit/Source/WebCore/WebCore.gyp/WebCore.gyp
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {
     linux_use_gold_binary = false;
     linux_use_gold_flags = false;
     proprietary_codecs = false;
-    use_gnome_keyring = cfg.gnomeKeyring;
-    use_gconf = cfg.gnome;
-    use_gio = cfg.gnome;
-    use_pulseaudio = cfg.pulseaudio;
-    disable_nacl = !cfg.nacl;
-    use_openssl = cfg.openssl;
-    selinux = cfg.selinux;
-    use_cups = cfg.cups;
-  } // optionalAttrs cfg.proprietaryCodecs {
+    use_gnome_keyring = gnomeKeyringSupport;
+    use_gconf = gnomeSupport;
+    use_gio = gnomeSupport;
+    use_pulseaudio = pulseSupport;
+    disable_nacl = !enableNaCl;
+    use_openssl = useOpenSSL;
+    selinux = enableSELinux;
+    use_cups = cupsSupport;
+  } // optionalAttrs proprietaryCodecs {
     # enable support for the H.264 codec
     proprietary_codecs = true;
     ffmpeg_branding = "Chrome";
@@ -205,7 +212,7 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "Chromium, an open source web browser";
     homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ goibhniu chaoflow ];
+    maintainers = with maintainers; [ goibhniu chaoflow aszlig ];
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

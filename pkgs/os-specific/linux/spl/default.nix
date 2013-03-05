@@ -1,10 +1,10 @@
 { stdenv, fetchurl, kernel, perl, autoconf, automake, libtool, coreutils, gawk }:
 
 stdenv.mkDerivation {
-  name = "spl-0.6.0-rc12-${kernel.version}";
+  name = "spl-0.6.0-rc14-${kernel.version}";
   src = fetchurl {
-    url = http://github.com/downloads/zfsonlinux/spl/spl-0.6.0-rc12.tar.gz;
-    sha256 = "166853pqa294f78mn4j4x9pri79lyv3j2h8m9fzhfy7d7gxfqljk";
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.0-rc14.tar.gz;
+    sha256 = "00wyamf13z8ins4s14xf0b3hfjfz4w084mr17hs3k5xifb5jxa8g";
   };
 
   patches = [ ./install_prefix.patch ./install_prefix_2.patch ./module_prefix.patch ];
@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = ''
-     --with-linux=${kernel}/lib/modules/${kernel.version}/build
-     --with-linux-obj=${kernel}/lib/modules/${kernel.version}/build
+     --with-linux=${kernel}/lib/modules/${kernel.modDirVersion}/build
+     --with-linux-obj=${kernel}/lib/modules/${kernel.modDirVersion}/build
   '';
 
   meta = {

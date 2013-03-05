@@ -1,10 +1,11 @@
-{ cabal, blazeBuilder, caseInsensitive, text }:
+{ cabal, blazeBuilder, caseInsensitive, hspec, QuickCheck, text }:
 
 cabal.mkDerivation (self: {
   pname = "http-types";
-  version = "0.7.3.0.1";
-  sha256 = "1s2dh75jpf2yllw503hjw0x2anhc4c71vz5yylri8nxzx1zs18rq";
+  version = "0.8.0";
+  sha256 = "14d1gzgwhinkwx3lmc6hvqj6ivjrvy4m6fm2walnyk1zv24zli75";
   buildDepends = [ blazeBuilder caseInsensitive text ];
+  testDepends = [ blazeBuilder hspec QuickCheck text ];
   meta = {
     homepage = "https://github.com/aristidb/http-types";
     description = "Generic HTTP types for Haskell (for both client and server code)";

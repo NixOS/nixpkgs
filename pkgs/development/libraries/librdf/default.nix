@@ -8,7 +8,9 @@ stdenv.mkDerivation {
     sha256 = "015jv7pp0a0qxgljgdvf7d01nj4fx0zgzg0wayjp7v86pa38xscm";
   };
 
-  buildInputs = [ pkgconfig librdf_raptor ladspaH openssl zlib ];
+  buildInputs = [ pkgconfig ladspaH openssl zlib ];
+
+  propagatedBuildInputs = [ librdf_raptor ];
 
   meta = { 
     description = "A lightweight RDF library with special support for LADSPA plugins.";

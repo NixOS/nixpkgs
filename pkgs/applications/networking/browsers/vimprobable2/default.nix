@@ -2,12 +2,19 @@
   pkgconfig, webkit }:
 
 stdenv.mkDerivation {
-  name = "vimprobable2-1.0.2";
+  name = "vimprobable2-1.2.0";
   src = fetchurl {
-    url = "mirror://sourceforge/vimprobable/vimprobable2_1.0.2.tar.bz2";
-    sha256 = "19gwlfv0lczbns73xg3637q7ixly62y3ijccnv0m1bqaqxjl4v8x";
+    url = "mirror://sourceforge/vimprobable/vimprobable2_1.2.0.tar.bz2";
+    sha256 = "0fjakrmz1syjwgx01j2icpdv69jgvfl2nlxbj8zxfr8mw0h2wg1f";
   };
+
+  # Nixos default ca bundle
+  patchPhase = ''
+    sed -i s,/etc/ssl/certs/ca-certificates.crt,/etc/ca-bundle.crt, config.h
+  '';
+
   buildInputs = [ makeWrapper gtk libsoup libX11 perl pkgconfig webkit ];
+
   installPhase = ''
     make PREFIX=/ DESTDIR=$out install
     wrapProgram "$out/bin/vimprobable2" --prefix GIO_EXTRA_MODULES : \

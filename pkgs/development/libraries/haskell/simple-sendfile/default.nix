@@ -1,10 +1,12 @@
-{ cabal, network }:
+{ cabal, conduit, hspec, HUnit, network, networkConduit }:
 
 cabal.mkDerivation (self: {
   pname = "simple-sendfile";
-  version = "0.2.8";
-  sha256 = "11lw8m21cy40hd9nzp80d9jawgv9hd3sfvizjcfbvdc2lpq6m17j";
+  version = "0.2.11";
+  sha256 = "1q9m9lxv9jfkn6a1lf07jcl4li3n5996df1qrfkfjq2n0bvn4qfj";
   buildDepends = [ network ];
+  testDepends = [ conduit hspec HUnit network networkConduit ];
+  doCheck = false;
   meta = {
     description = "Cross platform library for the sendfile system call";
     license = self.stdenv.lib.licenses.bsd3;

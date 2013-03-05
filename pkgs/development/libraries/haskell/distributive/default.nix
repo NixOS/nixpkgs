@@ -1,10 +1,11 @@
-{ cabal, transformers }:
+{ cabal, doctest, filepath, transformers, transformersCompat }:
 
 cabal.mkDerivation (self: {
   pname = "distributive";
-  version = "0.2.2";
-  sha256 = "13wvr2wb3h2nr1qd3dwjqx0b6g4igjqm3q2cyi4mc41gwihkbhr2";
-  buildDepends = [ transformers ];
+  version = "0.3";
+  sha256 = "0z6vwak2n91vpx9ps9j1pbiw0zlh9jmds84yx1yqssbqx8npi32f";
+  buildDepends = [ transformers transformersCompat ];
+  testDepends = [ doctest filepath ];
   meta = {
     homepage = "http://github.com/ekmett/distributive/";
     description = "Haskell 98 Distributive functors -- Dual to Traversable";

@@ -20,6 +20,13 @@ in
   rails = { gemFlags = "--no-ri --no-rdoc"; };
   
   ncurses = { propagatedBuildInputs = [ ncurses ]; };
+
+  nix = {
+    postInstall = ''
+      cd $out/${ruby.gemPath}/gems/nix*
+      patch -Np1 -i ${./fix-gem-nix-versions.patch}
+    '';
+  };
   
   ncursesw = { propagatedBuildInputs = [ ncurses ]; };
   

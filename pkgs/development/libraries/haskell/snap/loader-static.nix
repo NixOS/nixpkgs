@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-loader-static";
-  version = "0.9.0";
-  sha256 = "1blchmg0qfng7bw235z1gqkwyi764j78bc29vd5p6xxhmq111ys7";
+  version = "0.9.0.1";
+  sha256 = "0xlb8611r9l9ld97rs27nji7k1qvjg5i62b4al38xj6i0f2skyyi";
   meta = {
     homepage = "http://snapframework.com/";
     description = "Snap: A Haskell Web Framework: static loader";

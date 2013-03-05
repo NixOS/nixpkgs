@@ -1,53 +1,63 @@
 { stdenv
 , fetchgit
+, cmake
 , openssl
 , printerSupport ? true, cups
 , pkgconfig
 , zlib
 , libX11
 , libXcursor
-, alsaLib
-, cmake
-, libxkbfile
-, libXinerama
+, libXdamage
 , libXext
-, directfb
-, cunit
+, alsaLib
+, ffmpeg
+, libxkbfile
+#, xmlto, docbook_xml_dtd_412, docbook_xml_xslt
+, libXinerama
+#, directfb
+#, cunit
+, libXv
+, pulseaudioSupport ? true, pulseaudio
 }:
 
 assert printerSupport -> cups != null;
 
-let rev = "498b88a1da748a4a2b4dbd12c795ca87fee24bab"; in
+let rev = "ec6effcb1e7759551cf31f5b18d768afc67db97d"; in
 
 stdenv.mkDerivation rec {
-  name = "freerdp-1.0pre${rev}";
+  name = "freerdp-1.1pre${rev}";
 
   src = fetchgit {
     url = git://github.com/FreeRDP/FreeRDP.git;
     inherit rev;
-    sha256 = "91ef562e96db483ada28236e524326a75b6942becce4fd2a65ace386186eccf7";
+    sha256 = "4e5af9a6769c4b34c6b75dffe83a385d1d86068c523ea9f62fabc651a2958455";
   };
 
   buildInputs = [
+    cmake
     openssl
     pkgconfig
     zlib
     libX11
     libXcursor
-    libxkbfile
-    libXinerama
+    libXdamage
     libXext
-    directfb
+#    directfb
+#    cunit
     alsaLib
-    cmake
-    cunit
+    ffmpeg
+    libxkbfile
+#    xmlto docbook_xml_dtd_412 docbook_xml_xslt
+    libXinerama
+    libXv
   ] ++ stdenv.lib.optional printerSupport cups;
 
   doCheck = false;
 
   checkPhase = ''LD_LIBRARY_PATH="libfreerdp-cache:libfreerdp-chanman:libfreerdp-common:libfreerdp-core:libfreerdp-gdi:libfreerdp-kbd:libfreerdp-rail:libfreerdp-rfx:libfreerdp-utils" cunit/test_freerdp'';
 
-  cmakeFlags = [ "-DWITH_DIRECTFB=ON" "-DWITH_CUNIT=ON" ];
+  cmakeFlags = [ "-DWITH_DIRECTFB=OFF" "-DWITH_CUNIT=OFF" "-DWITH_MANPAGES=OFF" 
+  ] ++ stdenv.lib.optional pulseaudioSupport "-DWITH_PULSEAUDIO=ON";
 
   meta = {
     description = "A Remote Desktop Protocol Client";

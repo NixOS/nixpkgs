@@ -3,7 +3,7 @@ stdenv.mkDerivation {
   name = "semnotes-0.4.0-1";
 
   src = fetchurl {
-    url = "mirror://sf/semn/0.4.0/semnotes-0.4.0-1-src.tar.bz2";
+    url = "mirror://sourceforge/semn/0.4.0/semnotes-0.4.0-1-src.tar.bz2";
     sha256 = "1zh5jfh7pyhyz5fbzcgzyckdg0ny7sf8s16yy6rjw9n021zz5i7m";
   };
 

@@ -65,9 +65,9 @@ stdenv.mkDerivation rec {
          --enable-gui=gtk"
 
        # In `libmedia', Gnash compiles with "-I$gst_plugins_base/include",
-       # whereas it really needs "-I$gst_plugins_base/include/gstreamer-0.10".
+       # whereas it really needs "-I$gst_plugins_base/include/gstreamer-*".
        # Work around this using GCC's $CPATH variable.
-       export CPATH="${gst_plugins_base}/include/gstreamer-0.10:${gst_plugins_good}/include/gstreamer-0.10"
+       export CPATH="${gst_plugins_base}/include/gstreamer-*:${gst_plugins_good}/include/gstreamer-*"
        echo "\$CPATH set to \`$CPATH'"
 
        echo "\$GST_PLUGIN_PATH set to \`$GST_PLUGIN_PATH'"
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     do
       wrapProgram "$prog" --prefix                                            \
         GST_PLUGIN_PATH ":"                                                     \
-        "${gst_plugins_base}/lib/gstreamer-0.10:${gst_plugins_good}/lib/gstreamer-0.10:${gst_libav}/lib/gstreamer-0.10"
+        "${gst_plugins_base}/lib/gstreamer-*:${gst_plugins_good}/lib/gstreamer-*:${gst_libav}/lib/gstreamer-*"
     done
   '';
 

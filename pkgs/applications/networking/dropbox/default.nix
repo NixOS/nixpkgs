@@ -21,8 +21,8 @@ assert stdenv.system == "x86_64-linux";
 
 let
 
-  version = "1.4.0";
-  sha256 = "93933d95cce5956ed99342fa342d01ce2bde8d2e4339afb97f23e0c0ec98875e";
+  version = "1.4.21";
+  sha256 = "94073842f4a81feee80bca590e1df73fc3cab47ba879407ceba2de48f30d84e2";
 
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
@@ -42,7 +42,7 @@ let
     exec = "dropbox";
     comment = "Online directories";
     desktopName = "Dropbox";
-    genericName = "Online storage";    
+    genericName = "Online storage";
     categories = "Application;Internet;";
   };
 
@@ -65,7 +65,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     ensureDir "$out/${appdir}"
-    cp -r .dropbox-dist/* "$out/${appdir}/"
+    cp -r ".dropbox-dist/"* "$out/${appdir}/"
     ensureDir "$out/bin"
     ln -s "$out/${appdir}/dropbox" "$out/bin/dropbox"
 
@@ -78,13 +78,13 @@ in stdenv.mkDerivation {
       -print -exec patchelf --force-rpath --set-rpath "$RPATH" {} \;
 
     ensureDir "$out/share/applications"
-    cp ${desktopItem}/share/applications/* $out/share/applications
+    cp "${desktopItem}/share/applications/"* $out/share/applications
   '';
 
   buildInputs = [ patchelf ];
 
   meta = {
+    homepage = "http://www.dropbox.com";
     description = "Online stored folders (daemon version)";
-    homepage = http://www.dropbox.com;
   };
 }

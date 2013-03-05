@@ -9,7 +9,7 @@
 , versionSuffix ? 
     if officialRelease
     then ""
-    else if src ? rev then "pre${toString src.rev}" else ""
+    else "pre${toString (src.rev or src.revCount or "")}"
 , src, stdenv, autoconf, automake, libtool
 , ... } @ args:
 
@@ -126,7 +126,7 @@ stdenv.mkDerivation (
     };
 
     meta = (if args ? meta then args.meta else {}) // {
-      description = "Build of a source distribution from a checkout";
+      description = "Source distribution";
 
       # Tarball builds are generally important, so give them a high
       # default priority.

@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hoogle";
-  version = "4.2.14";
-  sha256 = "1ymmf8zxp2nbygnavhr3ay0fidhd3vhrdqb7mg0qgk8y9kx25brj";
+  version = "4.2.16";
+  sha256 = "1hamwqhndrkajm4xvxxfhr2rnlmf3z2ysyfxx3y6d24jawjyqf8a";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

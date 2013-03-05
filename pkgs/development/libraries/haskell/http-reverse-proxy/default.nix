@@ -1,16 +1,21 @@
-{ cabal, blazeBuilder, caseInsensitive, classyPreludeConduit
-, conduit, httpConduit, httpTypes, liftedBase, monadControl
-, network, networkConduit, text, wai, warp, word8
+{ cabal, blazeBuilder, caseInsensitive, classyPrelude, conduit
+, dataDefault, hspec, httpConduit, httpTypes, liftedBase
+, monadControl, network, networkConduit, text, transformers, wai
+, warp, word8
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-reverse-proxy";
-  version = "0.1.0.6";
-  sha256 = "0ybhzyim8b2k1kv5bz0qbignj5lwf8pbpqmrp1vrvyz8a2iy71c8";
+  version = "0.1.1.3";
+  sha256 = "0z2h2xbvg034snfh3hzc0v2zp5j57lcak2h4vz10lwaqr3jxqnpn";
   buildDepends = [
-    blazeBuilder caseInsensitive classyPreludeConduit conduit
+    blazeBuilder caseInsensitive classyPrelude conduit dataDefault
     httpConduit httpTypes liftedBase monadControl network
     networkConduit text wai warp word8
+  ];
+  testDepends = [
+    blazeBuilder conduit hspec httpConduit httpTypes liftedBase network
+    networkConduit transformers wai warp
   ];
   meta = {
     homepage = "https://github.com/fpco/http-reverse-proxy";

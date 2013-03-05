@@ -1,5 +1,6 @@
-{ cabal, attoparsec, blazeBuilder, blazeTextual, postgresqlLibpq
-, text, time, transformers, vector
+{ cabal, attoparsec, base16Bytestring, blazeBuilder, blazeTextual
+, cryptohash, HUnit, postgresqlLibpq, text, time, transformers
+, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -10,6 +11,8 @@ cabal.mkDerivation (self: {
     attoparsec blazeBuilder blazeTextual postgresqlLibpq text time
     transformers vector
   ];
+  testDepends = [ base16Bytestring cryptohash HUnit text time ];
+  doCheck = false;
   meta = {
     description = "Mid-Level PostgreSQL client library";
     license = self.stdenv.lib.licenses.bsd3;

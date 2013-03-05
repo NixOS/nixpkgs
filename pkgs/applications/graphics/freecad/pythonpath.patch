@@ -1,11 +1,15 @@
-http://sourceforge.net/apps/phpbb/free-cad/viewtopic.php?f=4&t=847&p=6364
-
-Index: src/Main/MainGui.cpp
-===================================================================
---- a/src/Main/MainGui.cpp	(revision 4193)
-+++ a/src/Main/MainGui.cpp	(working copy)
-@@ -149,10 +149,10 @@
+diff --git a/src/Main/MainGui.cpp b/src/Main/MainGui.cpp
+index 03407c5..b029384 100644
+--- a/src/Main/MainGui.cpp
++++ b/src/Main/MainGui.cpp
+@@ -190,15 +190,15 @@ int main( int argc, char ** argv )
      // http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=559846
+     putenv("LANG=C");
+     putenv("LC_ALL=C");
+-    putenv("PYTHONPATH=");
++    //putenv("PYTHONPATH=");
+ #elif defined(FC_OS_MACOSX)
+     (void)QLocale::system();
      putenv("LANG=C");
      putenv("LC_ALL=C");
 -    putenv("PYTHONPATH=");

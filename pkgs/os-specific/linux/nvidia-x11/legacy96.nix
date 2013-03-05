@@ -2,7 +2,7 @@
 
 let 
 
-  versionNumber = "96.43.20";
+  versionNumber = "96.43.23";
 
 in
 
@@ -15,26 +15,16 @@ stdenv.mkDerivation {
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86/${versionNumber}/NVIDIA-Linux-x86-${versionNumber}-pkg0.run";
-        sha256 = "05vm36jnydp4cfdkfvrvxczd64i3f0pp0yp7dn8y8pklrxi80xxw";
+        sha256 = "0hi10h26l51mknr57zsdg0zaxcqdz1lp3hsz0hi1c1vkpbsavrji";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://us.download.nvidia.com/XFree86/Linux-x86_64/${versionNumber}/NVIDIA-Linux-x86_64-${versionNumber}-pkg0.run";
-        sha256 = "0a8ninp4wyql3xh6z93dzhbacvz7g0h8gs4pg5279a0i6h05wb1w";
+        sha256 = "09vynha40rsxpklj1m0qjfg853ckdpi9g87h06irikh405x57kzp";
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
   inherit versionNumber kernel;
-
-  # Only for kernels 3.4 and over
-  # Patches taken from arch linux AUR 
-  # https://aur.archlinux.org/packages.php?ID=57698
-  kpatches = stdenv.lib.optionals (stdenv.lib.strings.versionOlder "3.4" kernel.version)
-    [ ./acpixf.patch
-      ./generated.patch
-      ./patchlevel.patch
-      ./switch_to.patch
-    ];
 
   dontStrip = true;
 

@@ -46,17 +46,17 @@ stdenv.mkDerivation (
               header "Copying build directory to $KEEPBUILDDIR"
               mkdir -p $KEEPBUILDDIR
               cp -R $TMPDIR/* $KEEPBUILDDIR
-              stopNest 
+              stopNest
           fi
       fi
     '';
   }
 
-  // args // 
+  // args //
 
   {
     name = name + (if src ? version then "-" + src.version else "");
-  
+
     postHook = ''
       . ${./functions.sh}
       origSrc=$src
@@ -75,7 +75,11 @@ stdenv.mkDerivation (
       echo "$system" > $out/nix-support/system
 
       if [ -z "${toString doCoverageAnalysis}" ]; then
-          echo "nix-build none $out" >> $out/nix-support/hydra-build-products
+          for i in $outputs; do
+              if [ "$i" = out ]; then j=none; else j="$i"; fi
+              mkdir -p ''${!i}/nix-support
+              echo "nix-build $j ''${!i}" >> ''${!i}/nix-support/hydra-build-products
+          done
       fi
     '';
 
@@ -107,7 +111,7 @@ stdenv.mkDerivation (
       (stdenv.lib.optional doCoverageAnalysis "coverageReportPhase") ++ ["finalPhase"];
 
     meta = (if args ? meta then args.meta else {}) // {
-      description = if doCoverageAnalysis then "Coverage analysis" else "Native Nix build on ${stdenv.system}";
+      description = if doCoverageAnalysis then "Coverage analysis" else "Nix package for ${stdenv.system}";
     };
 
   }

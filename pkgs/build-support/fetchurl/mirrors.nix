@@ -20,8 +20,6 @@ rec {
     http://kent.dl.sourceforge.net/sourceforge/
   ];
 
-  sf = sourceforge;
-
   # GNU (http://www.gnu.org/prep/ftp.html).
   gnu = [
     # This one redirects to a (supposedly) nearby and (supposedly) up-to-date
@@ -248,8 +246,6 @@ rec {
   ];
 
   postgresql = [
-    http://ftp2.nl.postgresql.org/
-    ftp://ftp.nl.postgresql.org/pub/mirror/postgresql/
     ftp://ftp.postgresql.org/pub/
     ftp://ftp-archives.postgresql.org/pub/
   ];

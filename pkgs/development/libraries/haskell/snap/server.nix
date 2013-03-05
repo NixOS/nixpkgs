@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "snap-server";
-  version = "0.9.2.4";
-  sha256 = "1kwmrlk9dr033h6q05afnr916wnw5wlxrr87z1myv0a6nzqmdhzl";
+  version = "0.9.3.3";
+  sha256 = "1n50xyhg4rva7ifv70825177606q87ip7f9p5kf94i9kci0kmlig";
   buildDepends = [
     attoparsec attoparsecEnumerator blazeBuilder blazeBuilderEnumerator
     caseInsensitive enumerator MonadCatchIOTransformers mtl network

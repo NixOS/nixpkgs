@@ -1,14 +1,19 @@
 { cabal, attoparsec, blazeBuilder, deepseq, dlist, hashable, mtl
-, syb, text, time, unorderedContainers, vector
+, QuickCheck, syb, testFramework, testFrameworkQuickcheck2, text
+, time, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "aeson";
-  version = "0.6.0.2";
-  sha256 = "04vyjpp3zi2g65rrkq4x4bddw0nfclniq5hhfq7l3jhybd8jxy51";
+  version = "0.6.1.0";
+  sha256 = "16hjwcybmgmk1sg8x02r9bxisx4gl61rlq8w2zsxfgkxwjpfhkbx";
   buildDepends = [
     attoparsec blazeBuilder deepseq dlist hashable mtl syb text time
     unorderedContainers vector
+  ];
+  testDepends = [
+    attoparsec QuickCheck testFramework testFrameworkQuickcheck2 text
+    time
   ];
   meta = {
     homepage = "https://github.com/bos/aeson";
