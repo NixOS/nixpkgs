@@ -1,6 +1,8 @@
+{ nixpkgs ? <nixpkgs> }:
+
 let
-  pkgs = import <nixpkgs> {};
-  pkgs_i686 = import <nixpkgs> { system = "i686-linux"; };
+  pkgs = import nixpkgs {};
+  pkgs_i686 = import nixpkgs { system = "i686-linux"; };
 in
 rec {
   titaniumenv = import ./.. {
