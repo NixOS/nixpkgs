@@ -2891,6 +2891,10 @@ let
     inherit (python27Packages) recursivePthLoader;
   };
 
+  pythonDocs = recurseIntoAttrs (import ../development/interpreters/python/docs {
+    inherit stdenv fetchurl;
+  });
+
   pythonLinkmeWrapper = callPackage ../development/interpreters/python/python-linkme-wrapper.nix { };
 
   pyrex = pyrex095;
@@ -3641,10 +3645,6 @@ let
   };
 
   ffmpeg_0_6_90 = callPackage ../development/libraries/ffmpeg/0.6.90.nix {
-    vpxSupport = !stdenv.isMips;
-  };
-
-  ffmpeg_1_0 = callPackage ../development/libraries/ffmpeg/1.0.nix {
     vpxSupport = !stdenv.isMips;
   };
 
@@ -5907,7 +5907,7 @@ let
         kernelPatches.sec_perm_2_6_24
         # kernelPatches.aufs2_2_6_32
         kernelPatches.cifs_timeout_2_6_29
-        kernelPatches.no_xsave
+        # kernelPatches.no_xsave # doesn't apply anymore
         kernelPatches.dell_rfkill
       ];
   };
@@ -6002,120 +6002,124 @@ let
      for a specific kernel.  This function can then be called for
      whatever kernel you're using. */
 
-  linuxPackagesFor = kernel: self: let callPackage = newScope self; in rec {
+  linuxPackagesFor = kernel:
+    let
+      callPackage = newScope self; 
 
-    inherit kernel;
+      self = {
+        kernel = kernel.dev or kernel;
 
-    acpi_call = callPackage ../os-specific/linux/acpi-call {};
+        acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
-    bbswitch = callPackage ../os-specific/linux/bbswitch {};
+        bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
-    ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
+        ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
 
-    aufs =
-      if kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs/2.nix { }
-      else if kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs/3.nix { }
-      else null;
+        aufs =
+          if self.kernel.features ? aufs2 then
+            callPackage ../os-specific/linux/aufs/2.nix { }
+          else if self.kernel.features ? aufs3 then
+            callPackage ../os-specific/linux/aufs/3.nix { }
+          else null;
 
-    aufs_util =
-      if kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs-util/2.nix { }
-      else if kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs-util/3.nix { }
-      else null;
+        aufs_util =
+          if self.kernel.features ? aufs2 then
+            callPackage ../os-specific/linux/aufs-util/2.nix { }
+          else if self.kernel.features ? aufs3 then
+            callPackage ../os-specific/linux/aufs-util/3.nix { }
+          else null;
 
-    blcr = callPackage ../os-specific/linux/blcr { };
+        blcr = callPackage ../os-specific/linux/blcr { };
 
-    cryptodev = callPackage ../os-specific/linux/cryptodev { };
+        cryptodev = callPackage ../os-specific/linux/cryptodev { };
 
-    e1000e = callPackage ../os-specific/linux/e1000e {};
+        e1000e = callPackage ../os-specific/linux/e1000e {};
 
-    exmap = callPackage ../os-specific/linux/exmap { };
+        exmap = callPackage ../os-specific/linux/exmap { };
 
-    frandom = callPackage ../os-specific/linux/frandom { };
+        frandom = callPackage ../os-specific/linux/frandom { };
 
-    iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
+        iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
 
-    iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
+        iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
-    iwlwifi4965ucode =
-      (if (builtins.compareVersions kernel.version "2.6.27" == 0)
-          || (builtins.compareVersions kernel.version "2.6.27" == 1)
-       then iwlwifi4965ucodeV2
-       else iwlwifi4965ucodeV1);
+        iwlwifi4965ucode =
+          (if (builtins.compareVersions self.kernel.version "2.6.27" == 0)
+              || (builtins.compareVersions self.kernel.version "2.6.27" == 1)
+           then iwlwifi4965ucodeV2
+           else iwlwifi4965ucodeV1);
 
-    atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
+        atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
-    broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
+        broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
 
-    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
+        kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
-    nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
+        nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
-    nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
-    nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
-    nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
+        nvidia_x11_legacy96 = callPackage ../os-specific/linux/nvidia-x11/legacy96.nix { };
+        nvidia_x11_legacy173 = callPackage ../os-specific/linux/nvidia-x11/legacy173.nix { };
+        nvidia_x11_legacy304 = callPackage ../os-specific/linux/nvidia-x11/legacy304.nix { };
 
-    openafsClient = callPackage ../servers/openafs-client { };
+        openafsClient = callPackage ../servers/openafs-client { };
 
-    openiscsi = callPackage ../os-specific/linux/open-iscsi { };
+        openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
-    wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
+        wis_go7007 = callPackage ../os-specific/linux/wis-go7007 { };
 
-    kqemu = callPackage ../os-specific/linux/kqemu { };
+        kqemu = callPackage ../os-specific/linux/kqemu { };
 
-    klibc = callPackage ../os-specific/linux/klibc {
-      linuxHeaders = glibc.kernelHeaders;
-    };
+        klibc = callPackage ../os-specific/linux/klibc {
+          linuxHeaders = glibc.kernelHeaders;
+        };
 
-    splashutils = let hasFbConDecor = if kernel ? features
-      then kernel.features ? fbConDecor
-      else kernel.config.isEnabled "FB_CON_DECOR";
-    in if hasFbConDecor then pkgs.splashutils else null;
+        splashutils = let hasFbConDecor = if self.kernel ? features
+          then self.kernel.features ? fbConDecor
+          else self.kernel.config.isEnabled "FB_CON_DECOR";
+        in if hasFbConDecor then pkgs.splashutils else null;
 
-    /* compiles but has to be integrated into the kernel somehow
-      Let's have it uncommented and finish it..
-    */
-    ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
+        /* compiles but has to be integrated into the kernel somehow
+           Let's have it uncommented and finish it..
+        */
+        ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
 
-    perf = callPackage ../os-specific/linux/kernel/perf.nix { };
+        perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
-    spl = callPackage ../os-specific/linux/spl/default.nix { };
+        spl = callPackage ../os-specific/linux/spl/default.nix { };
 
-    sysprof = callPackage ../development/tools/profiling/sysprof {
-      inherit (gnome) libglade;
-    };
+        sysprof = callPackage ../development/tools/profiling/sysprof {
+          inherit (gnome) libglade;
+        };
 
-    systemtap = callPackage ../development/tools/profiling/systemtap {
-      linux = kernel;
-      inherit (gnome) libglademm;
-    };
+        systemtap = callPackage ../development/tools/profiling/systemtap {
+          linux = self.kernel;
+          inherit (gnome) libglademm;
+        };
 
-    tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
+        tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
-    v86d = callPackage ../os-specific/linux/v86d { };
+        v86d = callPackage ../os-specific/linux/v86d { };
 
-    virtualbox = callPackage ../applications/virtualization/virtualbox {
-      stdenv = stdenv_32bit;
-      inherit (gnome) libIDL;
-    };
+        virtualbox = callPackage ../applications/virtualization/virtualbox {
+          stdenv = stdenv_32bit;
+          inherit (gnome) libIDL;
+        };
 
-    virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
+        virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
 
-    zfs = callPackage ../os-specific/linux/zfs/default.nix { };
-  };
+        zfs = callPackage ../os-specific/linux/zfs/default.nix { };
+      };
+    in (self // { kernel = self.kernel.out; });
 
   # Build the kernel modules for the some of the kernels.
-  linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32 pkgs.linuxPackages_2_6_32);
-  linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35 pkgs.linuxPackages_2_6_35);
-  linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 pkgs.linuxPackages_3_0);
-  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 pkgs.linuxPackages_3_2);
-  linuxPackages_3_2_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_xen pkgs.linuxPackages_3_2_xen);
-  linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 pkgs.linuxPackages_3_4);
-  linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7 pkgs.linuxPackages_3_7);
-  linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8 pkgs.linuxPackages_3_8);
+  linuxPackages_2_6_32 = recurseIntoAttrs (linuxPackagesFor linux_2_6_32);
+  linuxPackages_2_6_35 = recurseIntoAttrs (linuxPackagesFor linux_2_6_35);
+  linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0);
+  linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2);
+  linuxPackages_3_2_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_xen);
+  linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4);
+  linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7);
+  linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8);
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -7030,6 +7034,8 @@ let
 
   fossil = callPackage ../applications/version-management/fossil { };
 
+  fvwm = callPackage ../applications/window-managers/fvwm { };
+
   geany = callPackage ../applications/editors/geany { };
 
   goldendict = callPackage ../applications/misc/goldendict { };
@@ -7355,6 +7361,8 @@ let
   bip = callPackage ../applications/networking/irc/bip { };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
+
+  jack_oscrolloscope = callPackage ../applications/audio/jack-oscrolloscope { };
 
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
@@ -8175,7 +8183,7 @@ let
 
   zathuraCollection = recurseIntoAttrs
     (let callPackage = newScope pkgs.zathuraCollection; in
-      import ../applications/misc/zathura { inherit callPackage pkgs; });
+      import ../applications/misc/zathura { inherit callPackage pkgs fetchurl; });
 
   zathura = zathuraCollection.zathuraWrapper;
 
@@ -8239,7 +8247,9 @@ let
 
   dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { };
 
-  eduke32 = callPackage ../games/eduke32 { };
+  eduke32 = callPackage ../games/eduke32 {
+    stdenv = overrideGCC stdenv gcc47;
+  };
 
   egoboo = callPackage ../games/egoboo { };
 

@@ -22,11 +22,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nss-${version}";
-  version = "3.14";
+  version = "3.14.3";
 
   src = fetchurl {
-    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_14_RTM/src/${name}.tar.gz";
-    sha1 = "ace3642fb2ca67854ea7075d053ca01a6d81e616";
+    url = "http://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_14_3_RTM/src/${name}.tar.gz";
+    sha1 = "94d8781d1fa29cfbd37453dda3e9488709b82c4c";
   };
 
   buildInputs = [ nspr perl zlib sqlite ];
@@ -38,14 +38,28 @@ in stdenv.mkDerivation rec {
   '';
 
   patches = [
-    ./nss-3.12.5-gentoo-fixups.diff
+    ./nss-3.14.1-gentoo-fixups-r1.patch
     secLoadPatch
     ./nix_secload_fixup.patch
+    ./sync-up-with-upstream-softokn-changes.patch
   ];
 
   postPatch = ''
     sed -i -e 's/^DIRS.*$/& pem/' mozilla/security/nss/lib/ckfw/manifest.mn
-    sed -i -e "/^PREFIX =/s:= /usr:= $out:" mozilla/security/nss/config/Makefile
+
+    # Fix up the patch from Gentoo
+    sed -i \
+      -e "/^PREFIX =/s|= /usr|= $out|" \
+      -e '/@libdir@/s|gentoo/nss|lib|' \
+      -e '/ln -sf/d' \
+      mozilla/security/nss/config/Makefile
+
+    # Note for spacing/tab nazis: The TAB characters are intentional!
+    cat >> mozilla/security/nss/config/Makefile <<INSTALL_TARGET
+    install:
+    	mkdir -p \$(DIST)/lib/pkgconfig
+    	cp nss.pc \$(DIST)/lib/pkgconfig
+    INSTALL_TARGET
   '';
 
   preConfigure = "cd mozilla/security/nss";

@@ -126,7 +126,7 @@ stdenv.mkDerivation (
     };
 
     meta = (if args ? meta then args.meta else {}) // {
-      description = "Build of a source distribution from a checkout";
+      description = "Source distribution";
 
       # Tarball builds are generally important, so give them a high
       # default priority.
