@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hp2any-graph";
-  version = "0.5.3";
-  sha256 = "1al20pxfgkgwynrx7vr0i57342s91lcm3cnd9qjx8b6vkqmzykkq";
+  version = "0.5.4";
+  sha256 = "1lhp9saw51w09fhk94hz31rjawnnxavd7x3lxjc8xn1778wp3v9h";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
