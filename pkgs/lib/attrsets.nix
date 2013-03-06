@@ -194,7 +194,7 @@ rec {
          (as: !(as ? "type" && as.type == "derivation"))
          (x: ... do something ...)
          attrs
-     */
+  */
   mapAttrsRecursiveCond = cond: f: set:
     let
       recurse = path: set:
@@ -206,6 +206,17 @@ rec {
               else f (path ++ [name]) value;
         in mapAttrs g set;
     in recurse [] set;
+
+
+  /* Generate an attribute set by mapping a function over a list of
+     attribute names.
+
+     Example:
+       genAttrs [ "foo" "bar" ] (name: "x_" + name)
+       => { foo = "x_foo"; bar = "x_bar"; }
+  */
+  genAttrs = names: f:
+    listToAttrs (map (n: nameValuePair n (f n)) names);
 
 
   /* Check whether the argument is a derivation. */
