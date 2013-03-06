@@ -1,6 +1,6 @@
 args : with args; 
 let 
-  s = import ./src-for-default.nix; # 1.10 needs newer gtk3, wait for x-updates
+  s = import ./src-for-default.nix; # 1.8.3 needs newer gtk3, wait for x-updates
   version = lib.attrByPath ["version"] s.version args;
 in
 rec {
@@ -9,12 +9,13 @@ rec {
     sha256 = s.hash;
   };
 
-  buildInputs = [gtk gtk2 glib atk cairo curl fontconfig freetype
-    gettext libjpeg libpng libtiff libxml2 libxslt pango
-    sqlite icu gperf bison flex autoconf automake libtool 
-    perl intltool pkgconfig libsoup gtkdoc libXt libproxy
-    enchant python ruby which renderproto libXrender geoclue
-    kbproto mesa
+  buildInputs = with xlibs; [
+    pkgconfig libtool intltool autoconf automake gperf bison flex
+    gtk3 gtk2 glib atk cairo pango fontconfig freetype libsoup gtkdoc
+    libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
+    which libproxy geoclue enchant python ruby perl
+    mesa libXt libXrender renderproto libXcomposite compositeproto
+    libXdamage damageproto kbproto
     ];
 
   propagatedBuildInputs = [
@@ -22,19 +23,22 @@ rec {
     ];
 
   configureFlags = [
-    "--enable-3D-transforms"
+    # "--enable-3D-transforms" # no longer recognized
     "--enable-web-sockets"
     "--enable-web-timing"
-    
+
+    # https://bugs.webkit.org/show_bug.cgi?id=55294
+    "--enable-image-resizer"
+
     "--enable-geolocation"
 
     # Not implemented?
-    #"--enable-web-audio"
+    # "--enable-web-audio"
 
     "--enable-mathml"
 
     #"--enable-wml"
-    
+
     # https://bugs.webkit.org/show_bug.cgi?id=45110
     #"--enable-indexed-database"
 
@@ -43,26 +47,29 @@ rec {
 
     # "--enable-input-speech"
 
-    "--enable-file-writer"
+    #"--enable-file-writer" # no longer recognized
     "--enable-blob"
 
     # https://bugs.webkit.org/show_bug.cgi?id=59430
-    #"--enable-directory-upload"
+    # "--enable-directory-upload"
 
     # https://bugs.webkit.org/show_bug.cgi?id=58443
-    #"--enable-file-system"
+    # "--enable-file-system"
+
+    "--enable-dependency-tracking" # to fix parallel building
     ];
 
-  /* doConfigure should be specified separately */
-  phaseNames = ["setVars" "doPatch" "fixConfigure" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
-    "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
+  # instead of enableParallelBuilding = true;
+  makeFlags = "-j$NIX_BUILD_CORES";
 
-  setVars = fullDepEntry (''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lXt"
-  '') ["minInit"];
+  /* doConfigure should be specified separately */
+  phaseNames = ["doPatch" "fixConfigure" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
+    "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
 
   patches = [ ./bison26.patch ]; # http://trac.webkit.org/changeset/124099
   patchFlags = "-p2";
+
+  #doCheck = true; # tests still have problems
 
   doReplaceUsrBin = fullDepEntry (''
     for i in $(find . -name '*.pl') $(find . -name '*.pm'); do 

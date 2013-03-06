@@ -5010,33 +5010,25 @@ let
 
   webkit =
     builderDefsPackage ../development/libraries/webkit {
+      inherit gtk2; # for plugins etc. even with gtk3, see Gentoo ebuild
+      inherit gtk3 glib atk cairo pango fontconfig freetype;
       inherit (gnome) gtkdoc libsoup;
-      inherit atk pango glib gtk2 /*for plugins etc. even with gtk3, see Gentoo ebuild*/;
-      gtk = gtk3;
-      inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libxml2 libxslt sqlite
-        icu cairo intltool automake libtool
-        pkgconfig autoconf bison libproxy enchant
-        python ruby which flex geoclue mesa;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
-        gst_plugins_good;
-      inherit (xlibs) libXt renderproto libXrender kbproto;
-      inherit libpng perl;
+      inherit pkgconfig libtool intltool autoconf automake gperf bison flex
+        libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
+        which libproxy geoclue enchant python ruby perl
+        mesa xlibs;
+      inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
     };
 
   webkit_gtk2 =
     builderDefsPackage ../development/libraries/webkit/gtk2.nix {
+      inherit gtk2 glib atk cairo pango fontconfig freetype;
       inherit (gnome) gtkdoc libsoup;
-      inherit gtk atk pango glib;
-      inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libxml2 libxslt sqlite
-        icu cairo intltool automake libtool
-        pkgconfig autoconf bison libproxy enchant
-        python ruby which flex geoclue;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
-        gst_plugins_good;
-      inherit (xlibs) libXt renderproto libXrender;
-      inherit libpng perl;
+      inherit pkgconfig libtool intltool autoconf automake gperf bison flex
+        libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
+        which libproxy geoclue enchant python ruby perl
+        mesa xlibs;
+      inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
     };
 
   webkitSVN =
