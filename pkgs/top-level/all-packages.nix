@@ -6003,6 +6003,19 @@ let
       ];
   };
 
+  # low-priority because it is RC
+  linux_3_9 = lowPrio (makeOverridable (import ../os-specific/linux/kernel/linux-3.9.nix) {
+    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
+    kernelPatches =
+      [
+        kernelPatches.sec_perm_2_6_24
+      ] ++ lib.optionals (platform.kernelArch == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  });
+
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
      specific kernel, we have a function that builds those packages
