@@ -7611,6 +7611,8 @@ let
 
   mupdf = callPackage ../applications/misc/mupdf { };
 
+  mypaint = callPackage ../applications/graphics/mypaint { };
+
   mythtv = callPackage ../applications/video/mythtv { };
 
   tvtime = callPackage ../applications/video/tvtime {
