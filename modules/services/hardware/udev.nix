@@ -233,6 +233,6 @@ in
     boot.extraModprobeConfig = "options firmware_class path=${config.hardware.firmware}";
 
     system.activationScripts."set-firmware-path" =
-      "echo -n ${config.hardware.firmware} > /sys/module/firmware_class/parameters/path";
+      "echo -n ${config.hardware.firmware} 2>/dev/null > /sys/module/firmware_class/parameters/path";
   };
 }
