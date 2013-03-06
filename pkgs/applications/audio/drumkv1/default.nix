@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ jackaudio libsndfile lv2 qt4 ];
 
   meta = with stdenv.lib; {
-    description = "";
+    description = "An old-school drum-kit sampler synthesizer with stereo fx";
     homepage = http://drumkv1.sourceforge.net/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
