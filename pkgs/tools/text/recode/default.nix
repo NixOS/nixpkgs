@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   preCheck = ''
-    checkFlagsArray=(LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
+    checkFlagsArray=(CPPFLAGS="-I../lib" LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
   '';
 
   meta = {
