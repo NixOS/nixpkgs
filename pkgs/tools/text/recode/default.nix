@@ -1,46 +1,29 @@
-{stdenv, fetchurl, autoconf, automake, libtool, gettext, perl}:
+# XXX: this may need -liconv on non-glibc systems.. 
 
-let
-  asIfPatch = ./recode-3.6-as-if.patch;
+{stdenv, fetchgit, python, perl}:
 
-  gettextPatch = ./recode-3.6-gettextfix.diff;
+stdenv.mkDerivation rec {
+  name = "recode-3.7-pff85fdbd";
 
-  debianPatch = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/r/recode/recode_3.6-15.diff.gz";
-    sha256 = "114qxm29wk95w5760bswgd46d5p00g5kbfai5wchjvcbi722p5qf";
-  };
-in
-stdenv.mkDerivation {
-  name = "recode-3.6";
-
-  src = fetchurl {
-    url = "ftp://ftp.halifax.rwth-aachen.de/gnu/recode/recode-3.6.tar.gz";
-    sha256 = "1krgjqfhsxcls4qvxhagc45sm1sd0w69jm81nwm0bip5z3rs9rp3";
+  src = fetchgit {
+    url = https://github.com/pinard/Recode.git;
+    rev = "2fd8385658e5a08700e3b916053f6680ff85fdbd";
+    sha256 = "1xhlfmqld6af16l444jli9crj9brym2jihg1n6lkxh2gar68f5l7";
   };
 
-  buildInputs = [ autoconf automake libtool gettext perl ];
-
-  patchPhase = ''
-    patch -Np1 -i ${asIfPatch}
-    patch -Np1 -i ${gettextPatch}
-    gunzip <${debianPatch} | patch -Np1 -i -
-    sed -i '1i#include <stdlib.h>' src/argmatch.c
-    rm -f acinclude.m4
-    autoreconf -fi
-    libtoolize
-  '';
-
-  configureFlags = "--without-included-gettext";
+  buildInputs = [ python perl ];
 
   doCheck = true;
+
+  preCheck = ''
+    checkFlagsArray=(LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
+  '';
 
   meta = {
     homepage = "http://www.gnu.org/software/recode/";
     description = "Converts files between various character sets and usages";
-
-    license = "GPLv2+";
-
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [];
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }
