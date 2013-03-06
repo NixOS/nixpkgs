@@ -8250,6 +8250,8 @@ let
 
   crrcsim = callPackage ../games/crrcsim {};
 
+  drumkv1 = callPackage ../applications/audio/drumkv1 { };
+
   dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { };
 
   eduke32 = callPackage ../games/eduke32 {
@@ -8358,6 +8360,8 @@ let
 
   rogue = callPackage ../games/rogue { };
 
+  samplv1 = callPackage ../applications/audio/samplv1 { };
+
   sauerbraten = callPackage ../games/sauerbraten {};
 
   scid = callPackage ../games/scid { };
@@ -8389,6 +8393,8 @@ let
   superTux = callPackage ../games/super-tux { };
 
   superTuxKart = callPackage ../games/super-tux-kart { };
+
+  synthv1 = callPackage ../applications/audio/synthv1 { };
 
   tbe = callPackage ../games/the-butterfly-effect {};
 
