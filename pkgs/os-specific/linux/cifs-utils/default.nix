@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0f619nw1163bcmfc83mmqj31qdkl68wfm81vynx3d8q0m0k1ll7i";
   };
 
+  patches = [ ./find-systemd-ask-password-via-path.patch ];
+
   makeFlags = "root_sbindir=$(out)/sbin";
 
   meta = {

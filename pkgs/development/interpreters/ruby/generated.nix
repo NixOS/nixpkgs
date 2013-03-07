@@ -17,47 +17,47 @@ g: # Get dependencies from patched gems
     bitbucket_backup = g.bitbucket_backup_0_2_2;
     builder = g.builder_3_2_0;
     buildr = g.buildr_1_4_10;
-    bundler = g.bundler_1_3_0;
-    childprocess = g.childprocess_0_3_8;
+    bundler = g.bundler_1_3_1;
+    childprocess = g.childprocess_0_3_9;
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_1_3;
     dimensions = g.dimensions_1_2_0;
     erubis = g.erubis_2_7_0;
-    eventmachine = g.eventmachine_1_0_0;
+    eventmachine = g.eventmachine_1_0_1;
     fakes3 = g.fakes3_0_1_5;
     ffi = g.ffi_1_4_0;
     foreman = g.foreman_0_61_0;
     highline = g.highline_1_6_15;
     hike = g.hike_1_2_1;
     hoe = g.hoe_3_1_0;
-    i18n = g.i18n_0_6_1;
+    i18n = g.i18n_0_6_4;
     journey = g.journey_1_0_4;
     jruby_pageant = g.jruby_pageant_1_1_1;
     jsduck = g.jsduck_4_6_2;
     json = g.json_1_7_7;
     json_pure = g.json_pure_1_7_7;
-    libv8 = g.libv8_3_3_10_4_x86_64_linux;
+    libv8 = g.libv8_3_3_10_4;
     macaddr = g.macaddr_1_6_1;
     mail = g.mail_2_4_4;
     mime_types = g.mime_types_1_21;
     minitar = g.minitar_0_5_3;
     multi_json = g.multi_json_1_6_1;
     net_sftp = g.net_sftp_2_0_5;
-    net_ssh = g.net_ssh_2_6_5;
+    net_ssh = g.net_ssh_2_6_6;
     nix = g.nix_0_1_1;
     nokogiri = g.nokogiri_1_5_6;
     parallel = g.parallel_0_6_2;
     polyglot = g.polyglot_0_3_3;
     rack = g.rack_1_5_2;
     rack_cache = g.rack_cache_1_2;
-    rack_protection = g.rack_protection_1_3_2;
+    rack_protection = g.rack_protection_1_4_0;
     rack_ssl = g.rack_ssl_1_3_3;
     rack_test = g.rack_test_0_6_2;
     rails = g.rails_3_2_12;
     railties = g.railties_3_2_12;
     rake = g.rake_10_0_3;
     rb_fsevent = g.rb_fsevent_0_9_3;
-    rdiscount = g.rdiscount_2_0_7;
+    rdiscount = g.rdiscount_2_0_7_1;
     rdoc = g.rdoc_3_12_2;
     rjb = g.rjb_1_4_6;
     rspec = g.rspec_2_11_0;
@@ -67,16 +67,16 @@ g: # Get dependencies from patched gems
     rubyforge = g.rubyforge_2_0_4;
     rubyzip = g.rubyzip_0_9_9;
     sass = g.sass_3_2_6;
-    selenium_webdriver = g.selenium_webdriver_2_30_0;
+    selenium_webdriver = g.selenium_webdriver_2_31_0;
     sinatra = g.sinatra_1_3_2;
     sprockets = g.sprockets_2_2_2;
     systemu = g.systemu_2_5_2;
     therubyracer = g.therubyracer_0_10_2;
     thin = g.thin_1_5_0;
     thor = g.thor_0_17_0;
-    tilt = g.tilt_1_3_3;
+    tilt = g.tilt_1_3_4;
     treetop = g.treetop_1_4_12;
-    tzinfo = g.tzinfo_0_3_35;
+    tzinfo = g.tzinfo_0_3_36;
     uuid = g.uuid_2_3_7;
     uuidtools = g.uuidtools_2_1_3;
     websocket = g.websocket_1_0_7;
@@ -156,7 +156,7 @@ installed versions.'';
         longDescription = ''Databases on Rails. Build a persistent domain model by mapping database tables to Ruby classes. Strong conventions for associations, validations, aggregations, migrations, and testing come baked-in.'';
       };
       name = ''activerecord-3.2.12'';
-      requiredGems = [ g.activesupport_3_2_12 g.activemodel_3_2_12 g.arel_3_0_2 g.tzinfo_0_3_35 ];
+      requiredGems = [ g.activesupport_3_2_12 g.activemodel_3_2_12 g.arel_3_0_2 g.tzinfo_0_3_36 ];
       sha256 = ''0fl8iyv3gcy72y79iv4ccyck8ik02rrl3pdy7yxfhlnqgryp8syi'';
     };
     activeresource_3_2_12 = {
@@ -178,7 +178,7 @@ installed versions.'';
         longDescription = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.'';
       };
       name = ''activesupport-3.2.12'';
-      requiredGems = [ g.i18n_0_6_1 g.multi_json_1_6_1 ];
+      requiredGems = [ g.i18n_0_6_4 g.multi_json_1_6_1 ];
       sha256 = ''1giqkprxjf5gyfyhn5nz9q8a5gi3v8irxhkpqr00zc5fw1azllsg'';
     };
     arel_3_0_2 = {
@@ -316,30 +316,30 @@ for those one-off tasks, with a language that's a joy to use.
 '';
       };
       name = ''buildr-1.4.10'';
-      requiredGems = [ g.rake_0_9_2_2 g.builder_3_1_3 g.net_ssh_2_6_0 g.net_sftp_2_0_5 g.rubyzip_0_9_9 g.highline_1_6_2 g.json_pure_1_7_5 g.rubyforge_2_0_4 g.hoe_3_1_0 g.rjb_1_4_2 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_1_3 g.rspec_expectations_2_11_3 g.rspec_mocks_2_11_3 g.rspec_core_2_11_1 g.rspec_2_11_0 g.xml_simple_1_1_1 g.minitar_0_5_3 g.bundler_1_3_0 ];
+      requiredGems = [ g.rake_0_9_2_2 g.builder_3_1_3 g.net_ssh_2_6_0 g.net_sftp_2_0_5 g.rubyzip_0_9_9 g.highline_1_6_2 g.json_pure_1_7_5 g.rubyforge_2_0_4 g.hoe_3_1_0 g.rjb_1_4_2 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_1_3 g.rspec_expectations_2_11_3 g.rspec_mocks_2_11_3 g.rspec_core_2_11_1 g.rspec_2_11_0 g.xml_simple_1_1_1 g.minitar_0_5_3 g.bundler_1_3_1 ];
       sha256 = ''1x192r8ab5zr9rlp1i9b3pi3y74f9pj2w491wkgshgwj22akh6vn'';
     };
-    bundler_1_3_0 = {
+    bundler_1_3_1 = {
       basename = ''bundler'';
       meta = {
         description = ''The best way to manage your application's dependencies'';
         homepage = ''http://gembundler.com'';
         longDescription = ''Bundler manages an application's dependencies through its entire life, across many machines, systematically and repeatably'';
       };
-      name = ''bundler-1.3.0'';
+      name = ''bundler-1.3.1'';
       requiredGems = [  ];
-      sha256 = ''16ss4fh97wbg5n5l00wkinxdsj7bjgqzv9h6yhygv45wi8rbf8zp'';
+      sha256 = ''1nmvfsk9148nkl0bdcs167kiihp89zwkyvjs0khvi4df6s9km725'';
     };
-    childprocess_0_3_8 = {
+    childprocess_0_3_9 = {
       basename = ''childprocess'';
       meta = {
         description = ''This gem aims at being a simple and reliable solution for controlling external programs running in the background on any Ruby / OS combination.'';
         homepage = ''http://github.com/jarib/childprocess'';
         longDescription = ''This gem aims at being a simple and reliable solution for controlling external programs running in the background on any Ruby / OS combination.'';
       };
-      name = ''childprocess-0.3.8'';
+      name = ''childprocess-0.3.9'';
       requiredGems = [ g.ffi_1_4_0 ];
-      sha256 = ''08rp4krw0g60567ih4w51ndlq2pg92al0dycy0bs0m3msq68nlq4'';
+      sha256 = ''0jbz2ix7ff9ry8717lhcq9w8j8yd45akw48giwgdqccay5mlph7d'';
     };
     daemons_1_1_9 = {
       basename = ''daemons'';
@@ -411,7 +411,7 @@ is the MIT license.'';
       requiredGems = [  ];
       sha256 = ''1fj827xqjs91yqsydf0zmfyw9p4l2jz5yikg3mppz6d7fi8kyrb3'';
     };
-    eventmachine_1_0_0 = {
+    eventmachine_1_0_1 = {
       basename = ''eventmachine'';
       meta = {
         description = ''Ruby/EventMachine library'';
@@ -427,9 +427,9 @@ are provided with the package, primarily to serve as examples. The real goal
 of EventMachine is to enable programs to easily interface with other programs
 using TCP/IP, especially if custom protocols are required.'';
       };
-      name = ''eventmachine-1.0.0'';
+      name = ''eventmachine-1.0.1'';
       requiredGems = [  ];
-      sha256 = ''1qshsikskkfbbhai9s0qhmnpa326m83k9yzivwvkl2dc1ffpk2pz'';
+      sha256 = ''1v7im8v9y5jb863794irgnlqzdg669w6v1g89sln0l511gjnjv52'';
     };
     fakes3_0_1_5 = {
       basename = ''fakes3'';
@@ -524,16 +524,16 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [ g.rake_0_9_6 ];
       sha256 = ''0i961x0hrd6fs1nsfham87dhn64gqpnai27l14jag7qbnp3a79yp'';
     };
-    i18n_0_6_1 = {
+    i18n_0_6_4 = {
       basename = ''i18n'';
       meta = {
         description = ''New wave Internationalization support for Ruby'';
         homepage = ''http://github.com/svenfuchs/i18n'';
         longDescription = ''New wave Internationalization support for Ruby.'';
       };
-      name = ''i18n-0.6.1'';
+      name = ''i18n-0.6.4'';
       requiredGems = [  ];
-      sha256 = ''0x3lhp1vl1k4dfqx6k93hhxcpjkz57y8cf007ws7p845ywk6ibfl'';
+      sha256 = ''0wz1rnrs4n21j1rw9a120j2pfdkbikp1yvxaqi3mk30iw6mx4p0f'';
     };
     journey_1_0_4 = {
       basename = ''journey'';
@@ -565,7 +565,7 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
         longDescription = ''Documentation generator for Sencha JS frameworks'';
       };
       name = ''jsduck-4.6.2'';
-      requiredGems = [ g.rdiscount_2_0_7 g.json_1_7_7 g.parallel_0_6_2 g.therubyracer_0_10_2 g.dimensions_1_2_0 ];
+      requiredGems = [ g.rdiscount_2_0_7_1 g.json_1_7_7 g.parallel_0_6_2 g.therubyracer_0_10_2 g.dimensions_1_2_0 ];
       sha256 = ''035w4igfa6yy6234ff4zbiqfjn0bhwqs6k8kji52l7gzgskwmzln'';
     };
     json_1_7_7 = {
@@ -601,16 +601,16 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [  ];
       sha256 = ''0jxp0amx9xhka0ixnhvfgwc5ydr82hkxp81pvw32z31arx7jrwl6'';
     };
-    libv8_3_3_10_4_x86_64_linux = {
+    libv8_3_3_10_4 = {
       basename = ''libv8'';
       meta = {
         description = ''Distribution of the V8 JavaScript engine'';
         homepage = ''http://github.com/fractaloop/libv8'';
         longDescription = ''Distributes the V8 JavaScript engine in binary and source forms in order to support fast builds of The Ruby Racer'';
       };
-      name = ''libv8-3.3.10.4-x86_64-linux'';
+      name = ''libv8-3.3.10.4'';
       requiredGems = [  ];
-      sha256 = ''13lnmkm9z3xqyi8rlsycfd7wybv044pxcisrkyq0cx7ig91a0dmc'';
+      sha256 = ''0zy585rs1ihm8nsw525wgmbkcq7aqy1k9dbkk8s6953adl0bpz42'';
     };
     macaddr_1_6_1 = {
       basename = ''macaddr'';
@@ -631,7 +631,7 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
         longDescription = ''A really Ruby Mail handler.'';
       };
       name = ''mail-2.4.4'';
-      requiredGems = [ g.mime_types_1_21 g.treetop_1_4_12 g.i18n_0_6_1 ];
+      requiredGems = [ g.mime_types_1_21 g.treetop_1_4_12 g.i18n_0_6_4 ];
       sha256 = ''0idylz5pnlz34mrxm7gs9jbll2c0k0y9dq2qarhxk30gwyvjaxi3'';
     };
     mime_types_1_21 = {
@@ -696,7 +696,7 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
         longDescription = ''A pure Ruby implementation of the SFTP client protocol'';
       };
       name = ''net-sftp-2.0.5'';
-      requiredGems = [ g.net_ssh_2_6_5 ];
+      requiredGems = [ g.net_ssh_2_6_6 ];
       sha256 = ''0lqk735wspm8rbiyxpbil8ikrqcyg00ss1df7fny0761c3as6m0v'';
     };
     net_ssh_2_6_0 = {
@@ -710,16 +710,16 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
       requiredGems = [ g.jruby_pageant_1_1_1 ];
       sha256 = ''18fsgps4a9dfrjszkl3py8j7vw0xwi70bcp59ccj2rlr6i1jv5gw'';
     };
-    net_ssh_2_6_5 = {
+    net_ssh_2_6_6 = {
       basename = ''net_ssh'';
       meta = {
         description = ''Net::SSH: a pure-Ruby implementation of the SSH2 client protocol.'';
         homepage = ''https://github.com/net-ssh/net-ssh'';
         longDescription = ''Net::SSH: a pure-Ruby implementation of the SSH2 client protocol. It allows you to write programs that invoke and interact with processes on remote servers, via SSH2.'';
       };
-      name = ''net-ssh-2.6.5'';
+      name = ''net-ssh-2.6.6'';
       requiredGems = [  ];
-      sha256 = ''1f21r78b0rm9gyzdc96fzih27nrags3pk00zlhfviqlfbmb1c48x'';
+      sha256 = ''00fdnwv3jf311jjcc51lq8w26r62vzma91i79h5hj8i1ylrilx51'';
     };
     nix_0_1_1 = {
       basename = ''nix'';
@@ -818,16 +818,16 @@ Also see http://rack.github.com/.
       requiredGems = [ g.rack_1_5_2 ];
       sha256 = ''073ffpsqmy4nqxz178qisb3a4v3305c49ypj0jw6s9mkz02yvgq2'';
     };
-    rack_protection_1_3_2 = {
+    rack_protection_1_4_0 = {
       basename = ''rack_protection'';
       meta = {
         description = ''You should use protection!'';
         homepage = ''http://github.com/rkh/rack-protection'';
         longDescription = ''You should use protection!'';
       };
-      name = ''rack-protection-1.3.2'';
+      name = ''rack-protection-1.4.0'';
       requiredGems = [ g.rack_1_5_2 ];
-      sha256 = ''0f69d491xciq1hb3mm26nxnsb3pvlf3gdkggj4ryiphimsy05n0k'';
+      sha256 = ''0dfydg04fzj9rz34npy6cpp0827lij440s7fls0db41lz4vb94k0'';
     };
     rack_ssl_1_3_3 = {
       basename = ''rack_ssl'';
@@ -863,7 +863,7 @@ request helpers feature.'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
       name = ''rails-3.2.12'';
-      requiredGems = [ g.activesupport_3_2_12 g.actionpack_3_2_12 g.activerecord_3_2_12 g.activeresource_3_2_12 g.actionmailer_3_2_12 g.railties_3_2_12 g.bundler_1_3_0 ];
+      requiredGems = [ g.activesupport_3_2_12 g.actionpack_3_2_12 g.activerecord_3_2_12 g.activeresource_3_2_12 g.actionmailer_3_2_12 g.railties_3_2_12 g.bundler_1_3_1 ];
       sha256 = ''1jjnm74nzl5v3461c0mrbpa471yd6s8hnkmnxb64c2rm95c61wxz'';
     };
     railties_3_2_12 = {
@@ -921,15 +921,15 @@ request helpers feature.'';
       requiredGems = [  ];
       sha256 = ''0bdnxwdxj4r1kdxfi5nszbsb126njrr81p912g64xxs2bgxd1bp1'';
     };
-    rdiscount_2_0_7 = {
+    rdiscount_2_0_7_1 = {
       basename = ''rdiscount'';
       meta = {
         description = ''Fast Implementation of Gruber's Markdown in C'';
         homepage = ''http://github.com/rtomayko/rdiscount'';
       };
-      name = ''rdiscount-2.0.7'';
+      name = ''rdiscount-2.0.7.1'';
       requiredGems = [  ];
-      sha256 = ''1cj9dn59xqjaglvzvd1ninid62xmih74az0glqqb90n2p42s2zs1'';
+      sha256 = ''1xjwi99wfyjhn72h8k709kbq2npqmw2zvikszxfg6in83yb8vmxn'';
     };
     rdoc_3_12_2 = {
       basename = ''rdoc'';
@@ -1057,16 +1057,16 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [  ];
       sha256 = ''10xy6k663399r881cj30fapbdsrq8jwzvnp97y8n3mhxmrvzpq28'';
     };
-    selenium_webdriver_2_30_0 = {
+    selenium_webdriver_2_31_0 = {
       basename = ''selenium_webdriver'';
       meta = {
         description = ''The next generation developer focused tool for automated testing of webapps'';
         homepage = ''http://selenium.googlecode.com'';
         longDescription = ''WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.'';
       };
-      name = ''selenium-webdriver-2.30.0'';
-      requiredGems = [ g.multi_json_1_6_1 g.rubyzip_0_9_9 g.childprocess_0_3_8 g.websocket_1_0_7 ];
-      sha256 = ''1ybx8v9m5y8ykbdbldd1mglz0xhg30iv0708ig0vzjl2522sg6v1'';
+      name = ''selenium-webdriver-2.31.0'';
+      requiredGems = [ g.multi_json_1_6_1 g.rubyzip_0_9_9 g.childprocess_0_3_9 g.websocket_1_0_7 ];
+      sha256 = ''1nv3ff31g183kdb97jjz0y7ny3vdnccd09pgblpj87bzhrrdfv3r'';
     };
     sinatra_1_3_2 = {
       basename = ''sinatra'';
@@ -1076,7 +1076,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''Sinatra is a DSL for quickly creating web applications in Ruby with minimal effort.'';
       };
       name = ''sinatra-1.3.2'';
-      requiredGems = [ g.rack_1_5_2 g.rack_protection_1_3_2 g.tilt_1_3_3 ];
+      requiredGems = [ g.rack_1_5_2 g.rack_protection_1_4_0 g.tilt_1_3_4 ];
       sha256 = ''05blf915zpiwyz7agcn9rwdmddwxz0z4l3gd4qlqmrgd2vkw4sxc'';
     };
     sprockets_2_2_2 = {
@@ -1087,7 +1087,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''Sprockets is a Rack-based asset packaging system that concatenates and serves JavaScript, CoffeeScript, CSS, LESS, Sass, and SCSS.'';
       };
       name = ''sprockets-2.2.2'';
-      requiredGems = [ g.hike_1_2_1 g.multi_json_1_6_1 g.rack_1_5_2 g.tilt_1_3_3 ];
+      requiredGems = [ g.hike_1_2_1 g.multi_json_1_6_1 g.rack_1_5_2 g.tilt_1_3_4 ];
       sha256 = ''15ngw3bjbyr31ygzmmdxxa30ylah6pdn8akgdy9w30vfx2vr7s7s'';
     };
     systemu_2_5_2 = {
@@ -1109,7 +1109,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''Call javascript code and manipulate javascript objects from ruby. Call ruby code and manipulate ruby objects from javascript.'';
       };
       name = ''therubyracer-0.10.2'';
-      requiredGems = [ g.libv8_3_3_10_4_x86_64_linux ];
+      requiredGems = [ g.libv8_3_3_10_4 ];
       sha256 = ''111hm2l613v06sy7pzjzmnyi4x11rg3c2syhnpv8fn0wnn9rdiyb'';
     };
     thin_1_5_0 = {
@@ -1120,7 +1120,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''A thin and fast web server'';
       };
       name = ''thin-1.5.0'';
-      requiredGems = [ g.rack_1_5_2 g.eventmachine_1_0_0 g.daemons_1_1_9 ];
+      requiredGems = [ g.rack_1_5_2 g.eventmachine_1_0_1 g.daemons_1_1_9 ];
       sha256 = ''14sd2qbbk6y108z6v723mh3f1mk8s4fwxmmn9f8dk4xkhk4rwvq1'';
     };
     thor_0_17_0 = {
@@ -1134,16 +1134,16 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [  ];
       sha256 = ''0gf46qafcfgmi20a2mnb3wkd9y6spgy2hq22h70377daj4zjxla2'';
     };
-    tilt_1_3_3 = {
+    tilt_1_3_4 = {
       basename = ''tilt'';
       meta = {
         description = ''Generic interface to multiple Ruby template engines'';
         homepage = ''http://github.com/rtomayko/tilt/'';
         longDescription = ''Generic interface to multiple Ruby template engines'';
       };
-      name = ''tilt-1.3.3'';
+      name = ''tilt-1.3.4'';
       requiredGems = [  ];
-      sha256 = ''18qdl8nllbgwipa2ab9df3wlfgvsc8ml78hbypwc17b9qwv9bbs8'';
+      sha256 = ''0hw59shnf3vgpx1jv24mj0d48m72h5cm1d4bianhhkjj82mc406a'';
     };
     treetop_1_4_12 = {
       basename = ''treetop'';
@@ -1155,16 +1155,16 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [ g.polyglot_0_3_3 g.polyglot_0_3_3 ];
       sha256 = ''1jlfjq67n933sm0px0s2j965v1kl1rj8fbx6xk8y4yppkv6ygxc8'';
     };
-    tzinfo_0_3_35 = {
+    tzinfo_0_3_36 = {
       basename = ''tzinfo'';
       meta = {
         description = ''Daylight-savings aware timezone library'';
         homepage = ''http://tzinfo.rubyforge.org/'';
         longDescription = ''TZInfo is a Ruby library that uses the standard tz (Olson) database to provide daylight savings aware transformations between times in different time zones.'';
       };
-      name = ''tzinfo-0.3.35'';
+      name = ''tzinfo-0.3.36'';
       requiredGems = [  ];
-      sha256 = ''1c52ndjqcxpgxhlclbxf98clcpni216xk5zgrkcd4px84riyjbmp'';
+      sha256 = ''1dk7jnhrr5lbhckgq7bh6yxgy8j7vd13qb4kr4vlk76j5ngs2whv'';
     };
     uuid_2_3_7 = {
       basename = ''uuid'';

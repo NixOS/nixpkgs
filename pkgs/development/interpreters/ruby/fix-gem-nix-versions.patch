@@ -1,0 +1,35 @@
+diff --git a/lib/nix/gem-nix-command.rb b/lib/nix/gem-nix-command.rb
+index 8d3733e..ba942ff 100644
+--- a/lib/nix/gem-nix-command.rb
++++ b/lib/nix/gem-nix-command.rb
+@@ -108,11 +108,12 @@ class Gem::Commands::NixCommand < Gem::Command
+ 
+       # args to dep informations
+       args.each { |arg|
+-        if arg =~ /(.+)-?(.*)?/ then
++        if arg =~ /(.+)-([0-9][^-]+)/ then
+           gem_name = $1
+-          version =  $2.empty? ?  Gem::Requirement.default : Gem::Version.new($2)
++          version =  Gem::Version.new($2)
+         else
+-          raise Gem::CommandLineError, "couldn't parse arg. expected: name or name-version"
++          gem_name = arg
++          version =  Gem::Requirement.default
+         end
+ 
+         adddep(Gem::Dependency.new gem_name, version)
+@@ -162,7 +163,13 @@ class Gem::Commands::NixCommand < Gem::Command
+     spec, source_uri = find_gem_with_source(dep)
+     full_name = spec.full_name
+ 
+-    return if @gems_with_deps.key?(full_name)
++    if @gems_with_deps.key?(full_name)
++      unless @gems_with_deps[full_name].nil?
++        return @gems_with_deps[full_name][0]
++      else
++        return nil
++      end
++    end
+     @gems_with_deps[full_name] = nil # there maybe circular dependencies. thus mark this gem seen as early as possible
+ 
+     # development deps can't be found. Some are old. Thus only add rutime dependencies

@@ -113,6 +113,11 @@ stdenv.mkDerivation {
            "cp -av build/iphone/build/* $out"
         else if target == "iphone" then ""
         else throw "Target: ${target} is not supported!"}
+    
+    ${if target == "android" then ''
+        mkdir -p $out/nix-support
+        echo "file binary-dist $(ls $out/*.apk)" > $out/nix-support/hydra-build-products
+    '' else ""}
   '';
   
   failureHook = stdenv.lib.optionalString (release && target == "iphone") deleteKeychain;

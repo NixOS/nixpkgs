@@ -2,12 +2,11 @@
 , docbook_xml_dtd_45, docbook_xsl, zip, unzip }:
 
 stdenv.mkDerivation rec {
-  version = "3.0.2";
-  name = "rabbitmq-server-${version}";
+  name = "rabbitmq-server-3.0.3";
 
   src = fetchurl {
-    url = "http://www.rabbitmq.com/releases/rabbitmq-server/v${version}/${name}.tar.gz";
-    sha256 = "1xcqv8jmpj768rl3219ksmpsm64imys7h9f3phvmpjfqdw6lnr9x";
+    url = "http://www.rabbitmq.com/releases/rabbitmq-server/v3.0.3/${name}.tar.gz";
+    sha256 = "07mp57xvszdrlgw8rgn9r9dpa6vdqdjk7f1dyh6a9sdg8s9fby38";
   };
 
   buildInputs =

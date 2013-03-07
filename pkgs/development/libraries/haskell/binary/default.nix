@@ -1,13 +1,14 @@
-{ cabal, QuickCheck, random, testFramework
+{ cabal, Cabal, filepath, HUnit, QuickCheck, random, testFramework
 , testFrameworkQuickcheck2
 }:
 
 cabal.mkDerivation (self: {
   pname = "binary";
-  version = "0.6.4.0";
-  sha256 = "0vq80fzhwil5bx4a2vbd3jvfh1awhg1pwxgvq3lvbi37yzl0ydgh";
+  version = "0.7.0.1";
+  sha256 = "16srrp0qx9hsr7820b2q3sp9wp8y8sxxi8rvsh63n48w4l3canxq";
   testDepends = [
-    QuickCheck random testFramework testFrameworkQuickcheck2
+    Cabal filepath HUnit QuickCheck random testFramework
+    testFrameworkQuickcheck2
   ];
   meta = {
     homepage = "https://github.com/kolmodin/binary";

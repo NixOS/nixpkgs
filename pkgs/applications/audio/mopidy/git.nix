@@ -14,7 +14,7 @@ pythonPackages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with pythonPackages; [
-   gst_python pygobject pykka pyspotify pylast
+   gst_python pygobject pykka pyspotify pylast cherrypy ws4py
   ];
 
   # python zip complains about old timestamps

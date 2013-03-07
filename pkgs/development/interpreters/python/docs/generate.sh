@@ -9,14 +9,15 @@ ${VERSIONS}
 
 
 cat >default.nix <<EOF
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib }:
 
 let
 pythonDocs = {
 EOF
 
-for version in $VERSIONS; do
-    for type in $TYPES; do
+for type in $TYPES; do
+    echo "  ${type/-/_} = {" >> default.nix
+    for version in $VERSIONS; do
         major=$(echo -n ${version}| cut -d. -f1)
         minor=$(echo -n ${version}| cut -d. -f2)
         outfile=${major}.${minor}-${type}.nix
@@ -38,16 +39,17 @@ for version in $VERSIONS; do
             -e "s,URL,${url}," \
             -e "s,SHA,${sha}," < template.nix > ${outfile}
 
-        attrname=python${major}${minor}_$(echo -n ${type} |sed -e "s,-,_,g")
+        attrname=python${major}${minor}
         cat >>default.nix <<EOF
-  ${attrname} = import ./${major}.${minor}-${type}.nix {
-    inherit stdenv fetchurl;
-  };
+    ${attrname} = import ./${major}.${minor}-${type}.nix {
+      inherit stdenv fetchurl lib;
+    };
 EOF
 
         echo "done."
         echo
     done
+    echo "  };" >> default.nix
 done
 
 echo "}; in pythonDocs" >> default.nix

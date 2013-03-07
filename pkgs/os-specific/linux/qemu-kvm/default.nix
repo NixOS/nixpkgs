@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
     ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
 
   patches = [ ./fix-librt-check.patch ];
-  postPatch = "patchShebangs ." + stdenv.lib.optionalString spiceSupport ''
+
+  postPatch = "patchShebangs .;"
+    + stdenv.lib.optionalString spiceSupport ''
        for i in configure spice-qemu-char.c ui/spice-input.c ui/spice-core.c ui/qemu-spice.h; do
          substituteInPlace $i --replace '#include <spice.h>' '#include <spice/spice.h>'
        done

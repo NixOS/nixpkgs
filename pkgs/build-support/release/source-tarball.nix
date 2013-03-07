@@ -6,22 +6,14 @@
 , buildInputs ? []
 , name ? "source-tarball"
 , version ? "0"
-, versionSuffix ? 
+, versionSuffix ?
     if officialRelease
     then ""
     else "pre${toString (src.rev or src.revCount or "")}"
 , src, stdenv, autoconf, automake, libtool
+, # By default, provide all the GNU Build System as input.
+  bootstrapBuildInputs ? [ autoconf automake libtool ]
 , ... } @ args:
-
-let
-
-  # By default, provide all the GNU Build System as input.
-  bootstrapBuildInputs =
-    if (args ? bootstrapBuildInputs)
-    then args.bootstrapBuildInputs
-    else [ autoconf automake libtool ];
-
-in
 
 stdenv.mkDerivation (
 
@@ -82,17 +74,17 @@ stdenv.mkDerivation (
   }
 
   # Then, the caller-supplied attributes.
-  // args // 
+  // args //
 
   # And finally, our own stuff.
   {
     name = name + "-" + version + versionSuffix;
 
     buildInputs = buildInputs ++ bootstrapBuildInputs;
-    
+
     preUnpack = ''
       mkdir -p $out/nix-support
-    '';  
+    '';
 
     postUnpack = ''
       # Set all source files to the current date.  This is because Nix

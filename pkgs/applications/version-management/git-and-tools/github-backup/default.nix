@@ -1,11 +1,15 @@
-{ cabal, extensibleExceptions, filepath, github, hslogger, IfElse
+{ cabal, fetchurl, extensibleExceptions, filepath, github, hslogger, IfElse
 , MissingH, mtl, network, prettyShow
 }:
 
 cabal.mkDerivation (self: {
   pname = "github-backup";
   version = "1.20120314";
-  sha256 = "07ilb6cg1kbz4id53l4m46wjxzs7yxcmpz6280ym6k885dras5v2";
+  src = fetchurl {
+    url = "https://github.com/joeyh/github-backup/archive/1.20120314.tar.gz";
+    sha256 = "0rmgkylsnxbry02g5bxq5af03azgydfz6dzyvqzbhnkwavhqdlqy";
+    name = "github-backup-${self.pname}.tar.gz";
+  };
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
