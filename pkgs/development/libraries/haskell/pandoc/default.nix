@@ -18,7 +18,7 @@ cabal.mkDerivation (self: {
   ];
   configureFlags = "-fblaze_html_0_5";
   patchPhase = ''
-    sed -r -i -e 's|blaze-html >= 0.5 && < 0.6,|blaze-html >= 0.5,|' pandoc.cabal
+    sed -r -i -e 's|blaze-html >= 0.5 && < 0.6,|blaze-html >= 0.5,|' -e 's|syb >= 0.1 && < 0.4,| syb,|' pandoc.cabal
   '';
   doCheck = false;
   meta = {
