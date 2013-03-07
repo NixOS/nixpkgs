@@ -252,6 +252,7 @@ import ./generic.nix (
 
   rec {
     version = "3.9-rc1";
+    modDirVersion = "3.9.0-rc1";
     testing = true;
 
     preConfigure = ''
