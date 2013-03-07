@@ -17,6 +17,6 @@ stdenv.mkDerivation {
     description = "Tool to get/set the infamous idle3 timer in WD HDDs";
     license = "GPLv3";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; all;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
