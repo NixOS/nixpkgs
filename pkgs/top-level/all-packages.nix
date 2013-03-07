@@ -704,6 +704,8 @@ let
 
   efibootmgr = callPackage ../tools/system/efibootmgr { };
 
+  elasticsearch = callPackage ../servers/search/elasticsearch { };
+
   enblendenfuse = callPackage ../tools/graphics/enblend-enfuse {
     boost = boost149;
   };
