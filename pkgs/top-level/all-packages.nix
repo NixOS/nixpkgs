@@ -4969,6 +4969,8 @@ let
 
   snappy = callPackage ../development/libraries/snappy { };
 
+  sodium = callPackage ../development/libraries/sodium {};
+
   sofia_sip = callPackage ../development/libraries/sofia-sip { };
 
   soprano = callPackage ../development/libraries/soprano { };
