@@ -961,6 +961,8 @@ let
 
   idutils = callPackage ../tools/misc/idutils { };
 
+  idle3tools = callPackage ../tools/system/idle3tools { };
+
   iftop = callPackage ../tools/networking/iftop { };
 
   imapproxy = callPackage ../tools/networking/imapproxy { };
