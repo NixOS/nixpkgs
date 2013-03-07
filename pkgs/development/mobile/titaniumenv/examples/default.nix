@@ -2,6 +2,7 @@
 
 let
   pkgs = import nixpkgs {};
+  pkgs_darwin_x86_64 = import nixpkgs { system = "x86_64-darwin"; };
 in
 rec {
   kitchensink_android = import ./kitchensink {
@@ -10,7 +11,7 @@ rec {
   };
   
   kitchensink_iphone = import ./kitchensink {
-    inherit (pkgs) fetchgit titaniumenv;
+    inherit (pkgs_darwin_x86_64) fetchgit titaniumenv;
     target = "iphone";
   };
   
@@ -20,13 +21,13 @@ rec {
   };
   
   simulate_kitchensink_iphone = import ./simulate-kitchensink {
-    inherit (pkgs.titaniumenv) xcodeenv;
+    inherit (pkgs_darwin_x86_64.titaniumenv) xcodeenv;
     kitchensink = kitchensink_iphone;
     device = "iPhone";
   };
   
   simulate_kitchensink_ipad = import ./simulate-kitchensink {
-    inherit (pkgs.titaniumenv) xcodeenv;
+    inherit (pkgs_darwin_x86_64.titaniumenv) xcodeenv;
     kitchensink = kitchensink_iphone;
     device = "iPad";
   };
