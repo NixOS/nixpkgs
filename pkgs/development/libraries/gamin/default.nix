@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ python glib ];
 

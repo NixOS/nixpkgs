@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt ];
 
-  buildNativeInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig ];
 
   patches =
     [ ( substituteAll {

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     [ dbus_glib polkit intltool libxslt docbook_xsl udev libusb1 ]
     ++ stdenv.lib.optional useSystemd systemd;
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags =
     [ "--with-backend=linux" "--localstatedir=/var" ]

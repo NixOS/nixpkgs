@@ -23,7 +23,7 @@
     ''
       easy_install --always-unzip --prefix="$out" .
     ''
-    
+
 , preConfigure ? "true"
 
 , buildPhase ? "true"
@@ -100,7 +100,16 @@ python.stdenv.mkDerivation (attrs // {
     ''
       wrapPythonPrograms
 
-      for inputsfile in propagated-build-inputs propagated-build-native-inputs; do
+      # If a user installs a Python package, she probably also wants its
+      # dependencies in the user environment (since Python modules don't
+      # have something like an RPATH, so the only way to find the
+      # dependencies is to have them in the PYTHONPATH variable).
+      if test -e $out/nix-support/propagated-build-inputs; then
+          ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
+      fi
+
+      createBuildInputsPth build-inputs "$buildInputStrings"
+      for inputsfile in propagated-build-inputs propagated-native-build-inputs; do
         if test -e $out/nix-support/$inputsfile; then
             createBuildInputsPth $inputsfile "$(cat $out/nix-support/$inputsfile)"
         fi

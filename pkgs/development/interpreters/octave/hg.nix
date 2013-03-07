@@ -12,7 +12,7 @@ stdenv.mkDerivation ({
       license = "GPL-3";
     };
 } // (
-  if (config.octave.devVersion or false) then {
+  if config.octave.devVersion or false then {
     name = "octave-hg"; # developement version mercurial repo
     # REGION AUTO UPDATE:   { name="octave"; type = "hg"; url = "http://www.octave.org/hg/octave"; }
     src = sourceFromHead "octave-03b414516dd8.tar.gz"

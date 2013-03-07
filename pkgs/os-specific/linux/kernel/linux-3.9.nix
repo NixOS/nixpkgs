@@ -273,7 +273,7 @@ import ./generic.nix (
     features.canDisableNetfilterConntrackHelpers = true;
     features.netfilterRPFilter = true;
 
-    extraBuildNativeInputs = [bc];
+    extraNativeBuildInputs = [bc];
   }
 
   // removeAttrs args ["extraConfig"]

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     + " MANDIR=$(out)/share/man";
 
   buildInputs = [ db4 iptables ];
-  buildNativeInputs = [ bison flex pkgconfig ];
+  nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;
 

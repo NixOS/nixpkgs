@@ -3,7 +3,7 @@
 kde {
   buildInputs = [ kdelibs xscreensaver kde_workspace eigen libkexiv2 libXt ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   preConfigure = "cp -v ${./FindXscreensaver.cmake} cmake/modules/FindXscreensaver.cmake";
 

@@ -116,9 +116,7 @@ in
   boost = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   boost144 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   boost146 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  boost147 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   boost149 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  boost151 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   botan = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   box2d = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   box2d_2_0_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

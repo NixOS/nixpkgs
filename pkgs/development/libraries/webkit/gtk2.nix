@@ -10,11 +10,13 @@ rec {
     sha256 = s.hash;
   };
 
-  buildInputs = [gtk glib atk cairo curl fontconfig freetype
-    gettext libjpeg libpng libtiff libxml2 libxslt pango
-    sqlite icu gperf bison flex autoconf automake libtool 
-    intltool pkgconfig libsoup gtkdoc libXt libproxy
-    enchant python ruby which renderproto libXrender geoclue perl
+  buildInputs = with xlibs; [
+    pkgconfig libtool intltool autoconf automake gperf bison flex
+    gtk2 glib atk cairo pango fontconfig freetype libsoup gtkdoc
+    libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
+    which libproxy geoclue enchant python ruby perl
+    mesa libXt libXrender renderproto libXcomposite compositeproto
+    libXdamage damageproto kbproto
     ];
 
   propagatedBuildInputs = [
@@ -22,12 +24,14 @@ rec {
     ];
 
   configureFlags = [
-    "--enable-3D-transforms"
+    "--with-gtk=2.0"
+
+    # "--enable-3D-transforms" # no longer recognized
     "--enable-web-sockets"
     "--enable-web-timing"
-    
+
     # https://bugs.webkit.org/show_bug.cgi?id=55294
-    # "--enable-image-resizer"
+    "--enable-image-resizer"
 
     "--enable-geolocation"
 
@@ -37,15 +41,16 @@ rec {
     "--enable-mathml"
 
     #"--enable-wml"
-    
-    # https://bugs.webkit.org/show_bug.cgi?id=45110
-    # "--enable-indexed-database"
 
-    "--enable-xhtmlmp"
+    # https://bugs.webkit.org/show_bug.cgi?id=45110
+    #"--enable-indexed-database"
+
+    # Doesn't work in release...
+    #"--enable-xhtmlmp"
 
     # "--enable-input-speech"
 
-    "--enable-file-writer"
+    #"--enable-file-writer" # no longer recognized
     "--enable-blob"
 
     # https://bugs.webkit.org/show_bug.cgi?id=59430
@@ -53,16 +58,21 @@ rec {
 
     # https://bugs.webkit.org/show_bug.cgi?id=58443
     # "--enable-file-system"
+
+    "--enable-dependency-tracking" # to fix parallel building
     ];
 
+  # instead of enableParallelBuilding = true;
+  makeFlags = "-j$NIX_BUILD_CORES";
+
   /* doConfigure should be specified separately */
-  phaseNames = ["setVars" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
+  phaseNames = ["doPatch" "fixConfigure" /* "paranoidFixComments" */ "doConfigure" (doPatchShebangs ".") 
     "doReplaceUsrBin" "doMakeInstall" "doAddPrograms"];
 
-  setVars = fullDepEntry (''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lXt"
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -fpermissive"
-  '') ["minInit"];
+  patches = [ ./bison26.patch ]; # http://trac.webkit.org/changeset/124099
+  patchFlags = "-p2";
+
+  #doCheck = true; # tests still have problems
 
   doReplaceUsrBin = fullDepEntry (''
     for i in $(find . -name '*.pl') $(find . -name '*.pm'); do 
@@ -81,12 +91,19 @@ rec {
     sed -re 's@( |^)//.*@/* & */@' -i $(find . -name '*.c' -o -name '*.h')
   '') ["minInit" "doUnpack"];
 
+  # See http://archive.linuxfromscratch.org/mail-archives/blfs-dev/2012-April/022893.html
+  fixConfigure = fullDepEntry (''
+    sed   -i -e 's/=GSTREAMER_0_10_REQUIRED_VERSION/=\$GSTREAMER_0_10_REQUIRED_VERSION/' \
+      -e 's/=GSTREAMER_0_10_PLUGINS_BASE_REQUIRED_VERSION/=\$GSTREAMER_0_10_PLUGINS_BASE_REQUIRED_VERSION/' \
+      configure{,.ac}
+  '') ["minInit" "doUnpack"];
+
   name = s.name;
   meta = {
     description = "WebKit - a fast and correct HTML renderer";
     maintainers = [stdenv.lib.maintainers.raskin];
   };
   passthru = {
-    inherit gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg;
+    inherit gstreamer gst_plugins_base gst_plugins_good gst_ffmpeg libsoup;
   };
 }

@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "0bzsvnharawfg525lpavrp55mq4aih5nb01dwwqwnccg8hk9z2fw";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
     [ libX11 mesa libXext libXfixes libXdamage libXcomposite libXi cogl pango
       atk json_glib

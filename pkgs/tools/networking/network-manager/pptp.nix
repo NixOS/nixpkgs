@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ networkmanager pptp ppp ]
     ++ stdenv.lib.optionals withGnome [ gtk libgnome_keyring ];
 
-  buildNativeInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig ];
 
   configureFlags =
     if withGnome then "--with-gnome --with-gtkver=2" else "--without-gnome";

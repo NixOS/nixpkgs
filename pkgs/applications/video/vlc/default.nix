@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       libdc1394 libraw1394
     ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags =
     [ "--enable-alsa"

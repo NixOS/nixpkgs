@@ -126,7 +126,7 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  buildNativeInputs = [ perl bc nettools ];
+  nativeBuildInputs = [ perl bc nettools ];
 
   makeFlags = commonMakeFlags ++ [
    "INSTALLKERNEL=${installkernel stdenv.platform.kernelTarget}"
@@ -161,8 +161,6 @@ stdenv.mkDerivation {
           "s|${sourceRoot}|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${sourceRoot.name}|g"
     fi
   '' else null;
-
-  __ignoreNulls = true;
 
   meta = {
     description = "The Linux kernel";

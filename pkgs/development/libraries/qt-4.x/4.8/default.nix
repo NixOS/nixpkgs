@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
       mysql postgresql sqlite libjpeg libmng libtiff icu ]
     ++ optionals gtkStyle [ gtk gdk_pixbuf ];
 
-  buildNativeInputs = [ perl pkgconfig which ];
+  nativeBuildInputs = [ perl pkgconfig which ];
 
   prefixKey = "-prefix ";
 

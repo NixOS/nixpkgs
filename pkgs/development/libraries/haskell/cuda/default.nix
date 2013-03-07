@@ -13,15 +13,15 @@ cabal.mkDerivation (self: {
   # library. GHC's linker fails if the wrong version is found first.
   # We solve this by eliminating lib64 from the path on 32-bit
   # platforms and putting lib64 first on 64-bit platforms.
-  
+
   libPaths = if self.stdenv.is64bit then "lib64 lib" else "lib";
-  
+
   configurePhase = ''
     for i in Setup.hs Setup.lhs; do
       test -f $i && ghc --make $i
     done
-  
-    for p in $extraBuildInputs $propagatedBuildNativeInputs; do
+
+    for p in $extraBuildInputs $propagatedNativeBuildInputs; do
       if [ -d "$p/include" ]; then
         extraLibDirs="$extraLibDirs --extra-include-dir=$p/include"
       fi
@@ -31,9 +31,12 @@ cabal.mkDerivation (self: {
         fi
       done
     done
-  
+
     ./Setup configure --verbose --prefix="$out" $libraryProfiling $extraLibDirs $configureFlags
   '';
+
+  doCheck = false;
+
   meta = {
     description = "FFI binding to the CUDA interface for programming NVIDIA GPUs";
     license = self.stdenv.lib.licenses.bsd3;

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ kdelibs ];
-  buildNativeInputs = [ cmake gettext ];
+  nativeBuildInputs = [ cmake gettext ];
 
   meta = {
     homepage = http://kdiff3.sourceforge.net/;

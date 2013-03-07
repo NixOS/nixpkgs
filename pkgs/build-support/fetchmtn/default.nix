@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   builder = ./builder.sh;
-  buildNativeInputs = [monotone];
+  nativeBuildInputs = [monotone];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   propagatedBuildInputs = [ libxml2 libsoup gssdp ];
   buildInputs = [ glib libuuid ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://www.gupnp.org/;

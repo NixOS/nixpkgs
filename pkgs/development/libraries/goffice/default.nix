@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "165070beb67b84580afe80a8a100b674a81d553ab791acd72ac0c655f4fadb15";
   };
 
+  # fix linking error: undefined reference to pcre_info
+  patches = [ ./pcre_info.patch ]; # inspired by https://bugs.php.net/bug.php?id=60986
+
   buildInputs = [
     pkgconfig libglade bzip2 libart intltool gettext
     gconf libgnomeui pcre

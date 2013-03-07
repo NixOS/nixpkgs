@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1riia87v5nsx858xnlvc7sspr1p36adjqrdch1255ikr5xbv6h6x";
   };
 
-  buildNativeInputs = [ pkgconfig which ];
+  nativeBuildInputs = [ pkgconfig which ];
   buildInputs =
     [ libexif libjpeg libpng libungif freetype fontconfig libtiff libwebp
       imagemagick curl saneBackends

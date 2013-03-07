@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
   # For most other functionality, this should probably be extended
-  buildNativeInputs = [ pkgconfig zlib ];
+  nativeBuildInputs = [ pkgconfig zlib ];
 
   meta = {
     description = "Open Source multimedia framework for research and academic purposes";

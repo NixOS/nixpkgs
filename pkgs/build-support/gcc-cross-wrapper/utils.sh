@@ -17,6 +17,7 @@ badPath() {
     # Otherwise, the path should refer to the store or some temporary
     # directory (including the build directory).
     test \
+        "$p" != "/dev/null" -a \
         "${p:0:${#NIX_STORE}}" != "$NIX_STORE" -a \
         "${p:0:4}" != "/tmp" -a \
         "${p:0:${#NIX_BUILD_TOP}}" != "$NIX_BUILD_TOP"

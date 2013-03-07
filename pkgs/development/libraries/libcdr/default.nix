@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libwpg libwpd lcms2 ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   CXXFLAGS="--std=gnu++0x"; # For c++11 constants in lcms2.h
 

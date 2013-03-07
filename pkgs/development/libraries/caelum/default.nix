@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ois ogre boost ];
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   enableParallelBuilding = true;
 

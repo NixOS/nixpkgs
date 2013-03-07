@@ -161,7 +161,7 @@ rec {
   getVersion = drv: (builtins.parseDrvName drv.name).version;
 
 
-  # Extract name with version from URL. Ask for separator which is 
+  # Extract name with version from URL. Ask for separator which is
   # supposed to start extension
   nameFromURL = url: sep: let
     components = splitString "/" url;
@@ -170,5 +170,10 @@ rec {
   in
   assert ! eqStrings name filename;
   name;
+
+
+  # Create an --{enable,disable}-<feat> string that can be passed to
+  # standard GNU Autoconf scripts.
+  enableFeature = enable: feat: "--${if enable then "enable" else "disable"}-${feat}";
 
 }

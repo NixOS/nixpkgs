@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uulib";
-  version = "0.9.15";
-  sha256 = "0433shh493c04qmi0sd9mfzpy198zi11gxdmcs6nz2gcnxm812zm";
+  version = "0.9.14";
+  sha256 = "0bi62l9fp1ghqq4dagdy4nsxmm08gpsrnfgy6d6k8f4239s3yr0z";
   meta = {
     homepage = "http://www.cs.uu.nl/wiki/HUT/WebHome";
     description = "Haskell Utrecht Tools Library";

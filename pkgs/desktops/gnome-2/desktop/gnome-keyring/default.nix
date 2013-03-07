@@ -13,5 +13,5 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [ glib libtasn1 ];
 
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 }

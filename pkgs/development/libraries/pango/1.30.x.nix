@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin gettext;
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ x11 glib cairo libpng ];
 

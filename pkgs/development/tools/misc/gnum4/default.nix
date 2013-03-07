@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     && !stdenv.isSunOS;                    # XXX: `test-setlocale2.sh' fails
 
   # Upstream is aware of it; it may be in the next release.
-  patches = [ ./s_isdir.patch ./readlink-EINVAL.patch ];
+  patches = [ ./s_isdir.patch ./readlink-EINVAL.patch ./no-gets.patch ];
 
   meta = {
     homepage = http://www.gnu.org/software/m4/;

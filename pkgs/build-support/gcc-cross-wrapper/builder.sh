@@ -28,7 +28,7 @@ if test -z "$nativeLibc"; then
 
     echo "$cflagsCompile -B$libc/lib/ -idirafter $libc/include -idirafter $gcc/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
 
-    echo "-L$libc/lib" > $out/nix-support/libc-ldflags
+    echo "-L$libc/lib -rpath $libc/lib -rpath-link $libc/lib" > $out/nix-support/libc-ldflags
 
     # The dynamic linker is passed in `ldflagsBefore' to allow
     # explicit overrides of the dynamic linker by callers to gcc/ld

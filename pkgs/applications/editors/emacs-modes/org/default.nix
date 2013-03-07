@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ emacs ];
-  buildNativeInputs = [ texinfo texLive ];
+  nativeBuildInputs = [ texinfo texLive ];
 
   configurePhase =
     '' sed -i mk/default.mk \

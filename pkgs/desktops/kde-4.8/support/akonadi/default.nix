@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 soprano libxslt boost ];
 
-  buildNativeInputs = [ cmake automoc4 shared_mime_info ];
+  nativeBuildInputs = [ cmake automoc4 shared_mime_info ];
 
   enableParallelBuilding = true;
   

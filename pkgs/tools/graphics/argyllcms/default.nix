@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       -ljpeg -ltiff ;
   '';
 
-  buildNativeInputs = [ jam unzip ];
+  nativeBuildInputs = [ jam unzip ];
 
   preConfigure = ''
     cp ${jamTop} Jamtop

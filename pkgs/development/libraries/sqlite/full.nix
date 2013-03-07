@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ readline ncurses ];
-  buildNativeInputs = [ tcl ];
+  nativeBuildInputs = [ tcl ];
 
   doCheck = true;
   checkTarget = "test";

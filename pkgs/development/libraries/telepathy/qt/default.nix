@@ -1,16 +1,16 @@
 { stdenv, fetchurl, cmake, qt4, pkgconfig, python, libxslt, dbus_glib
-, telepathy_farstream, telepathy_glib }:
+, telepathy_farstream, telepathy_glib, pythonDBus }:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-qt-0.9.1";
+  name = "telepathy-qt-0.9.3";
 
   src = fetchurl {
     url = "http://telepathy.freedesktop.org/releases/telepathy-qt/${name}.tar.gz";
-    sha256 = "0rwyxjk6646r43mvsg01q7rfsah0ni05fa8gxzlx1zhj76db95yh";
+    sha256 = "1yabyhsikw828ns7cf6hvzbxdxh53na1ck0q7qsav1lvlyz5gzy0";
   };
 
-  buildNativeInputs = [ cmake pkgconfig python libxslt ];
-  propagatedBuildInputs = [ qt4 dbus_glib telepathy_farstream telepathy_glib ];
+  nativeBuildInputs = [ cmake pkgconfig python libxslt ];
+  propagatedBuildInputs = [ qt4 dbus_glib telepathy_farstream telepathy_glib pythonDBus ];
   preBuild = ''
     NIX_CFLAGS_COMPILE+=" `pkg-config --cflags dbus-glib-1`"
   '';

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ phonon qt4 gstreamer gst_plugins_base ];
 
-  buildNativeInputs = [ cmake automoc4 pkgconfig ];
+  nativeBuildInputs = [ cmake automoc4 pkgconfig ];
 
   meta = {
     homepage = http://phonon.kde.org/;

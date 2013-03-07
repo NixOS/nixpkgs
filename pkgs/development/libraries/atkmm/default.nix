@@ -10,5 +10,5 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ atk glibmm ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 }

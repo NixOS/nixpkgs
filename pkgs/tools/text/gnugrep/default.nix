@@ -1,19 +1,21 @@
 { stdenv, fetchurl, pcre, libiconv ? null }:
 
-let version = "2.10"; in
+let version = "2.14"; in
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   name = "gnugrep-${version}";
 
   src = fetchurl {
     url = "mirror://gnu/grep/grep-${version}.tar.xz";
-    sha256 = "1cvsqyfzk1p38fcaav22dn76fkd02g7bjnqna6vrpk9vy9rnfybc";
+    sha256 = "1qbjb1l7f9blckc5pqy8jlf6482hpx4awn2acmhyf5mv9wfq03p7";
   };
 
   buildInputs = [ pcre ]
-    ++ (stdenv.lib.optional (libiconv != null) libiconv);
+    ++ stdenv.lib.optional (libiconv != null) libiconv;
 
-  doCheck = if stdenv.isDarwin then false else true;
+  NIX_LDFLAGS = stdenv.lib.optionalString (libiconv != null) "-L${libiconv}/lib -liconv";
+
+  doCheck = !stdenv.isDarwin;
 
   # On Mac OS X, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.
@@ -38,4 +40,4 @@ stdenv.mkDerivation ({
   };
 
   passthru = {inherit pcre;};
-} // (if libiconv != null then { NIX_LDFLAGS="-L${libiconv}/lib -liconv"; } else {}) )
+}

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gets-undeclared.patch ];
 
-  buildNativeInputs = [ pkgconfig gperf ];
+  nativeBuildInputs = [ pkgconfig gperf ];
+  
   buildInputs =
     [ zlib bzip2 lzo
       libgcrypt

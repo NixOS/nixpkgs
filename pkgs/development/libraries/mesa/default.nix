@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   buildInputs = [ expat libdrm libXxf86vm libXfixes libXdamage glproto dri2proto
     libxml2Python libX11 libXext libxcb libXt udev ];
 
-  buildNativeInputs = [ pkgconfig python makedepend file flex bison ];
+  nativeBuildInputs = [ pkgconfig python makedepend file flex bison ];
 
   enableParallelBuilding = true;
 

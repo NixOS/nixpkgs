@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk glib libjpeg libpng libtiff jasper ffmpeg xineLib gstreamer ];
 
-  buildNativeInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   enableParallelBuilding = true;
 

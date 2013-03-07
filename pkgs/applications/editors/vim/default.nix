@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
  
   buildInputs = [ ncurses pkgconfig ];
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   configureFlags = [
     "--enable-multibyte"

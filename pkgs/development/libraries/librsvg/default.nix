@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
   buildInputs = [ libxml2 libgsf bzip2 libcroco ];
   propagatedBuildInputs = [ glib gtk ];
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the

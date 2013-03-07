@@ -3,7 +3,7 @@
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba_light
 , gccCrossStageStatic, gccCrossStageFinal
-, forceBuildDrv, forceSystem, newScope, platform, config, crossSystem
+, forceNativeDrv, forceSystem, newScope, platform, config, crossSystem
 , overrides ? {} }:
 
 with args;
@@ -12,18 +12,18 @@ let
   callPackage = newScope gnu;
 
   gnu = {
-    hurdCross = forceBuildDrv(callPackage ./hurd {
+    hurdCross = forceNativeDrv (callPackage ./hurd {
       inherit fetchgit stdenv autoconf libtool texinfo
         glibcCross hurdPartedCross;
       inherit (gnu) machHeaders mig;
-      libuuid = libuuid.hostDrv;
+      libuuid = libuuid.crossDrv;
       automake = automake111x;
       headersOnly = false;
       cross = assert crossSystem != null; crossSystem;
       gccCross = gccCrossStageFinal;
     });
 
-    hurdCrossIntermediate = forceBuildDrv(callPackage ./hurd {
+    hurdCrossIntermediate = forceNativeDrv (callPackage ./hurd {
       inherit fetchgit stdenv autoconf libtool texinfo glibcCross;
       inherit (gnu) machHeaders mig;
       hurdPartedCross = null;
@@ -58,7 +58,7 @@ let
       hurd = null;
     };
 
-    libpthreadCross = forceBuildDrv(callPackage ./libpthread {
+    libpthreadCross = forceNativeDrv (callPackage ./libpthread {
       inherit fetchgit stdenv autoconf automake libtool glibcCross;
       inherit (gnu) machHeaders hurdHeaders;
       hurd = gnu.hurdCrossIntermediate;
@@ -85,7 +85,7 @@ let
       stdenv = (forceSystem "i686-linux").stdenv;
     };
 
-    # XXX: Use this one for its `.hostDrv'.  Using the one above from
+    # XXX: Use this one for its `.crossDrv'.  Using the one above from
     # `x86_64-linux' leads to building a different cross-toolchain because of
     # the `forceSystem'.
     mig_raw = callPackage ./mig {};

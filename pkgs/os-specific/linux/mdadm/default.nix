@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   # Enable incremental activation of swraid arrays from udev.
   patches = [ ./udev.patch ];
 
-  buildNativeInputs = [ groff ];
+  nativeBuildInputs = [ groff ];
 
   preConfigure = "sed -e 's@/lib/udev@\${out}/lib/udev@' -e 's@ -Werror @ @' -i Makefile";
 

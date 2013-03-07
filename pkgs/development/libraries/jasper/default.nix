@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "154l7zk7yh3v8l2l6zm5s2alvd2fzkp6c9i18iajfbna5af5m43b";
   };
 
-  buildNativeInputs = [unzip];
+  nativeBuildInputs = [unzip];
   propagatedBuildInputs = [ libjpeg ];
 
   configureFlags = "--enable-shared";

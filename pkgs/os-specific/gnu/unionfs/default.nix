@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=i586-pc-gnu-gcc" ];
   buildInputs = [ hurd machHeaders ];
-  buildNativeInputs = [ mig ];
+  nativeBuildInputs = [ mig ];
 
   installPhase =
     '' mkdir -p "$out/hurd"

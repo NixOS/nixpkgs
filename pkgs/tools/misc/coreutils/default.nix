@@ -4,48 +4,41 @@
 }:
 
 assert aclSupport -> acl != null;
-assert selinuxSupport -> ( (libselinux != null) && (libsepol != null) );
+assert selinuxSupport -> libselinux != null && libsepol != null;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.15";
+  name = "coreutils-8.21";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "176lgw810xw84c6fz5xwhydxggkndmzggl0pxqzldbjf85vv6zl3";
+    sha256 = "064f512185iysqqcvhnhaf3bfmzrvcgs7n405qsyp99zmfyl9amd";
   };
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
   buildInputs = [ gmp ]
     ++ stdenv.lib.optional aclSupport acl
     ++ stdenv.lib.optional selinuxSupport libselinux
     ++ stdenv.lib.optional selinuxSupport libsepol;
 
-  crossAttrs = ({
+  crossAttrs = {
     buildInputs = [ gmp ]
-      ++ stdenv.lib.optional aclSupport acl.hostDrv
-      ++ stdenv.lib.optional selinuxSupport libselinux.hostDrv
-      ++ stdenv.lib.optional selinuxSupport libsepol.hostDrv
+      ++ stdenv.lib.optional aclSupport acl.crossDrv
+      ++ stdenv.lib.optional selinuxSupport libselinux.crossDrv
+      ++ stdenv.lib.optional selinuxSupport libsepol.crossDrv
       ++ stdenv.lib.optional (stdenv.gccCross.libc ? libiconv)
-        stdenv.gccCross.libc.libiconv.hostDrv;
+        stdenv.gccCross.libc.libiconv.crossDrv;
 
     # Needed for fstatfs()
     # I don't know why it is not properly detected cross building with glibc.
     configureFlags = [ "fu_cv_sys_stat_statfs2_bsize=yes" ];
     doCheck = false;
-  }
-
-  //
-
-  # XXX: Temporary workaround to allow GNU/Hurd builds with newer libcs.
-  (stdenv.lib.optionalAttrs (stdenv.cross.config == "i586-pc-gnu") {
-    patches = [ ./gets-undeclared.patch ];
-  }));
+  };
 
   # The tests are known broken on Cygwin
   # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
   # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
-  doCheck = (stdenv ? glibc);
+  doCheck = stdenv ? glibc;
 
   enableParallelBuilding = true;
 
@@ -67,4 +60,3 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };
 }
-

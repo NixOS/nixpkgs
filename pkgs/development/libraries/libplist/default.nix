@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "libplist-1.3";
 
-  buildNativeInputs = [ cmake swig2 ];
+  nativeBuildInputs = [ cmake swig2 ];
 
   patches = [ ./swig.patch ];
 

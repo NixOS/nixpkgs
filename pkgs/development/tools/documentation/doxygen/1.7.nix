@@ -47,6 +47,6 @@ stdenv.mkDerivation {
     '';
 
     maintainers = [stdenv.lib.maintainers.simons];
-    platforms = if (qt4 != null) then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
+    platforms = if qt4 != null then stdenv.lib.platforms.linux else stdenv.lib.platforms.unix;
   };
 }

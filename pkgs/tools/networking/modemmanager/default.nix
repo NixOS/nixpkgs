@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fdf5d5cc494825afe9f551248e00a2d91e220e88435b47f109ca2a707a40f1f";
   };
 
-  buildNativeInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool pkgconfig ];
 
   buildInputs = [ udev polkit dbus_glib ppp ];
 

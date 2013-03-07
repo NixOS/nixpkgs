@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     ++ (if useGtk then ["--enable-pinentry-gtk2"] else ["--disable-pinentry-gtk"])
     ++ (if useQt4 then ["--enable-pinentry-qt4"] else ["--disable-pinentry-qt4"]);
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = "http://gnupg.org/aegypten2/";

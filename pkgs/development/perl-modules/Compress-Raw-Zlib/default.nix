@@ -21,7 +21,6 @@ buildPerlPackage rec {
   doCheck = !stdenv.isDarwin;
 
   meta = {
-    homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
     license = "perl5";
   };
 }

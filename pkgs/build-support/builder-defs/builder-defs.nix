@@ -20,21 +20,21 @@ let inherit (builtins) head tail trace; in
                 else if (hasSuffixHack ".tar.gz" s) || (hasSuffixHack ".tgz" s) then "tgz" 
                 else if (hasSuffixHack ".tar.bz2" s) || (hasSuffixHack ".tbz2" s) || 
 			(hasSuffixHack ".tbz" s) then "tbz2"
-                else if (hasSuffixHack ".tar.Z" s) then "tZ" 
-                else if (hasSuffixHack ".tar.lzma" s) then "tar.lzma"
-                else if (hasSuffixHack ".tar.xz" s) then "tar.xz"
+                else if hasSuffixHack ".tar.Z" s then "tZ" 
+                else if hasSuffixHack ".tar.lzma" s then "tar.lzma"
+                else if hasSuffixHack ".tar.xz" s then "tar.xz"
                 else if (hasSuffixHack ".zip" s) || (hasSuffixHack ".ZIP" s) then "zip"
-                else if (hasSuffixHack "-cvs-export" s) then "cvs-dir"
-                else if (hasSuffixHack "-git-export" s) then "git-dir"
-                else if (hasSuffixHack ".nar.bz2" s) then "narbz2"
-                else if (hasSuffixHack ".rpm" s) then "rpm"
+                else if hasSuffixHack "-cvs-export" s then "cvs-dir"
+                else if hasSuffixHack "-git-export" s then "git-dir"
+                else if hasSuffixHack ".nar.bz2" s then "narbz2"
+                else if hasSuffixHack ".rpm" s then "rpm"
 
                 # Mostly for manually specified directories..
-                else if (hasSuffixHack "/" s) then "dir"
+                else if hasSuffixHack "/" s then "dir"
 
                 # Last block - for single files!! It should be always after .tar.*
-                else if (hasSuffixHack ".bz2" s) then "plain-bz2"
-                else if (hasSuffixHack ".gz" s) then "plain-gz"
+                else if hasSuffixHack ".bz2" s then "plain-bz2"
+                else if hasSuffixHack ".gz" s then "plain-gz"
 
 		# For bootstrap calls
 		else if (s ==("" + (substring 0 0 s))) then "empty"
@@ -391,7 +391,7 @@ let inherit (builtins) head tail trace; in
 
         cmakeFlags = attrByPath ["cmakeFlags"] [] args;
 
-        cmakeRPathFlag = if (attrByPath ["cmakeSkipRpath "] true args) then " -DCMAKE_SKIP_BUILD_RPATH=ON " else "";
+        cmakeRPathFlag = if attrByPath ["cmakeSkipRpath "] true args then " -DCMAKE_SKIP_BUILD_RPATH=ON " else "";
 
         cmakeBuildDir = attrByPath ["cmakeBuildDir"] "build" args;
 
@@ -508,7 +508,7 @@ let inherit (builtins) head tail trace; in
         );
 
 	builderDefsPackage = bd: func:
-	  if (builtins.isFunction func) then 
+	  if builtins.isFunction func then 
 	    (foldArgs 
 	      (x: y: ((func (bd // x // y)) // y))
               (innerBuilderDefsPackage bd)
@@ -588,7 +588,7 @@ let inherit (builtins) head tail trace; in
      url = srcInfo.url;
      sha256 = srcInfo.hash;
    } // 
-   (if (srcInfo ? downloadName) then {name = srcInfo.downloadName;} else {}));
+   (if srcInfo ? downloadName then {name = srcInfo.downloadName;} else {}));
 
    fetchGitFromSrcInfo = srcInfo: fetchgit {
      url = srcInfo.url;

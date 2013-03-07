@@ -26,7 +26,7 @@ postInstall() {
             for p in $nativePkgs; do
                 if test -e $p/lib/pkgconfig/$r.pc; then
                     echo "  found requisite $r in $p"
-                    propagatedBuildNativeInputs="$propagatedBuildNativeInputs $p"
+                    propagatedNativeBuildInputs="$propagatedNativeBuildInputs $p"
                 fi
             done
         fi
@@ -34,7 +34,7 @@ postInstall() {
 
     mkdir -p "$out/nix-support"
     echo "$propagatedBuildInputs" > "$out/nix-support/propagated-build-inputs"
-    echo "$propagatedBuildNativeInputs" > "$out/nix-support/propagated-build-native-inputs"
+    echo "$propagatedNativeBuildInputs" > "$out/nix-support/propagated-native-build-inputs"
 }
 
 

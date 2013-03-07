@@ -6,6 +6,12 @@
   fetchurlBoot
 }:
 
+if ! builtins ? langVersion then
+
+  abort "This version of Nixpkgs requires Nix >= 1.2, please upgrade!"
+
+else
+
 let
 
   lib = import ../../lib;
@@ -30,6 +36,8 @@ let
 
         propagatedUserEnvPkgs = [gcc] ++
           lib.filter lib.isDerivation initialPath;
+
+        __ignoreNulls = true;
       }
 
       // rec {
@@ -49,9 +57,9 @@ let
                 (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
                 // (let
                   buildInputs = attrs.buildInputs or [];
-                  buildNativeInputs = attrs.buildNativeInputs or [];
+                  nativeBuildInputs = attrs.nativeBuildInputs or [];
                   propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-                  propagatedBuildNativeInputs = attrs.propagatedBuildNativeInputs or [];
+                  propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
                   crossConfig = attrs.crossConfig or null;
                 in
                 {
@@ -59,15 +67,16 @@ let
                   args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
                   stdenv = result;
                   system = result.system;
+                  userHook = config.stdenv.userHook or null;
 
                   # Inputs built by the cross compiler.
                   buildInputs = lib.optionals (crossConfig != null) buildInputs;
                   propagatedBuildInputs = lib.optionals (crossConfig != null)
                       propagatedBuildInputs;
                   # Inputs built by the usual native compiler.
-                  buildNativeInputs = buildNativeInputs ++ lib.optionals
+                  nativeBuildInputs = nativeBuildInputs ++ lib.optionals
                     (crossConfig == null) buildInputs;
-                  propagatedBuildNativeInputs = propagatedBuildNativeInputs ++
+                  propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
                     lib.optionals (crossConfig == null) propagatedBuildInputs;
               }));
 
@@ -103,6 +112,7 @@ let
                || result.system == "x86_64-linux"
                || result.system == "powerpc-linux"
                || result.system == "armv5tel-linux"
+               || result.system == "armv6l-linux"
                || result.system == "armv7l-linux"
                || result.system == "mips64el-linux";
         isGNU = result.system == "i686-gnu";      # GNU/Hurd
@@ -130,10 +140,13 @@ let
                || result.system == "x86_64-freebsd"
                || result.system == "x86_64-openbsd";
         is64bit = result.system == "x86_64-linux"
-                || result.system == "x86_64-darwin";
+                || result.system == "x86_64-darwin"
+                || result.system == "x86_64-freebsd"
+                || result.system == "x86_64-openbsd";
         isMips = result.system == "mips-linux"
                 || result.system == "mips64el-linux";
         isArm = result.system == "armv5tel-linux"
+             || result.system == "armv6l-linux"
              || result.system == "armv7l-linux";
 
         # Utility function: allow stdenv to be easily regenerated with

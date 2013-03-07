@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ hunspell ];
-  buildNativeInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig perl ];
 
   meta = {
     homepage = http://hunspell.sourceforge.net/;

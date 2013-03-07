@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./ignore-bad-cpuid.patch ];
 
-  buildNativeInputs = [ m4 ];
+  nativeBuildInputs = [ m4 ];
 
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures

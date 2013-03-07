@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0zf4mvi3jzx6zjrfl2rbhl2m68pzbzpf1vbdmn7dqbfpcb67jpdy";
   };
 
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   unpackPhase = ''
     mkdir -v ${name}

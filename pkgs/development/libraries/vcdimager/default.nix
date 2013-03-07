@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1526jxynslg07i50v3c3afhc8swbd4si8y6s8m3h1wrz6mkplp87";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ libxml2 popt ];
 

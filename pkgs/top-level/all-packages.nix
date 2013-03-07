@@ -77,9 +77,17 @@ let
         else configExpr;
 
   # Allow setting the platform in the config file. Otherwise, let's use a reasonable default (pc)
-  platform = if platform_ != null then platform_
-    else config.platform or (import ./platforms.nix).pc;
 
+  platformAuto = let
+      platforms = (import ./platforms.nix);
+    in
+      if system == "armv6l-linux" then platforms.raspberrypi
+      else if system == "armv5tel-linux" then platforms.sheevaplug
+      else if system == "mips64el-linux" then platforms.fuloong2f_n32
+      else platforms.pc;
+
+  platform = if platform_ != null then platform_
+    else config.platform or platformAuto;
 
   # Helper functions that are exported through `pkgs'.
   helperFunctions =
@@ -221,8 +229,8 @@ let
       else
         defaultStdenv;
 
-  forceBuildDrv = drv : if (crossSystem == null) then drv else
-    (drv // { hostDrv = drv.buildDrv; });
+  forceNativeDrv = drv : if crossSystem == null then drv else
+    (drv // { crossDrv = drv.nativeDrv; });
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
@@ -441,9 +449,7 @@ let
 
   atftp = callPackage ../tools/networking/atftp {};
 
-  autogen = callPackage ../development/tools/misc/autogen {
-    guile = guile_1_8;
-  };
+  autogen = callPackage ../development/tools/misc/autogen { };
 
   autojump = callPackage ../tools/misc/autojump { };
 
@@ -586,10 +592,15 @@ let
 
   convmv = callPackage ../tools/misc/convmv { };
 
-  coreutils = callPackage ../tools/misc/coreutils {
-    # TODO: Add ACL support for cross-Linux.
-    aclSupport = crossSystem == null && stdenv.isLinux;
-  };
+  coreutils = (if stdenv.isDarwin then
+      # 8.20 doesn't build on Darwin
+      callPackage ../tools/misc/coreutils/8.19.nix
+    else
+      callPackage ../tools/misc/coreutils)
+    {
+      # TODO: Add ACL support for cross-Linux.
+      aclSupport = crossSystem == null && stdenv.isLinux;
+    };
 
   cpio = callPackage ../tools/archivers/cpio { };
 
@@ -739,7 +750,6 @@ let
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
-  file511 = callPackage ../tools/misc/file/511.nix { };
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
@@ -1316,7 +1326,7 @@ let
                 gettext = null;
                 readline = null;
                 devicemapper = null;
-              }).hostDrv)
+              }).crossDrv)
            { hurd = gnu.hurdCrossIntermediate; })
     else null;
 
@@ -1936,10 +1946,6 @@ let
 
   gcc = gcc46;
 
-  gcc295 = wrapGCC (import ../development/compilers/gcc/2.95 {
-    inherit fetchurl stdenv noSysDirs;
-  });
-
   gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
     inherit fetchurl stdenv noSysDirs;
   });
@@ -1952,19 +1958,6 @@ let
   # using Texinfo >= 4.10, just because it uses a stupid regexp that
   # expects a single digit after the dot.  As a workaround, we feed
   # GCC with Texinfo 4.9.  Stupid bug, hackish workaround.
-
-  gcc40 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.0) {
-    inherit fetchurl stdenv noSysDirs;
-    texinfo = texinfo49;
-    profiledCompiler = true;
-  });
-
-  gcc41 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.1) {
-    inherit fetchurl noSysDirs gmp mpfr;
-    stdenv = overrideGCC stdenv gcc42;
-    texinfo = texinfo49;
-    profiledCompiler = false;
-  });
 
   gcc42 = wrapGCC (makeOverridable (import ../development/compilers/gcc/4.2) {
     inherit fetchurl stdenv noSysDirs;
@@ -2049,7 +2042,7 @@ let
                    if isMingw then windows.mingw_headers1 else null;
     in
       wrapGCCCross {
-      gcc = forceBuildDrv (lib.addMetaAttrs { platforms = []; } (
+      gcc = forceNativeDrv (lib.addMetaAttrs { platforms = []; } (
         gcc_realCross.override {
           crossStageStatic = true;
           langCC = false;
@@ -2070,7 +2063,7 @@ let
   };
 
   gccCrossStageFinal = wrapGCCCross {
-    gcc = forceBuildDrv (gcc_realCross.override {
+    gcc = forceNativeDrv (gcc_realCross.override {
       libpthreadCross =
         # FIXME: Don't explicitly refer to `i586-pc-gnu'.
         if crossSystem != null && crossSystem.config == "i586-pc-gnu"
@@ -2105,9 +2098,9 @@ let
       gettext which noSysDirs;
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = if stdenv.isArm then false else true;
+    profiledCompiler = !stdenv.isArm;
 
-    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
@@ -2126,7 +2119,7 @@ let
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = if stdenv.system == "armv5tel-linux" then false else true;
+    profiledCompiler = !stdenv.system == "armv5tel-linux";
   }));
 
   gcc46_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.6 {
@@ -2134,9 +2127,9 @@ let
 
     # bootstrapping a profiled compiler does not work in the sheevaplug:
     # http://gcc.gnu.org/bugzilla/show_bug.cgi?id=43944
-    profiledCompiler = if stdenv.isArm then false else true;
+    profiledCompiler = !stdenv.isArm;
 
-    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
@@ -2159,7 +2152,7 @@ let
 
   gcc46_multi = if system == "x86_64-linux" then lowPrio (
       wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi (gcc46.gcc.override {
-      stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc);
+      stdenv = overrideGCC stdenv (wrapGCCWith (import ../build-support/gcc-wrapper) glibc_multi gcc.gcc);
       profiledCompiler = false;
       enableMultilib = true;
     })) else throw "Multilib gcc not supported on this system";
@@ -2170,7 +2163,7 @@ let
     # We can enable it back some day. This makes the *gcc* builds faster now.
     profiledCompiler = false;
 
-    # When building `gcc.hostDrv' (a "Canadian cross", with host == target
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
     # be passed.
     cross = null;
@@ -2200,26 +2193,7 @@ let
       stdenv = allStdenvs.stdenvNative;
     });
 
-  gccupc40 = wrapGCCUPC (import ../development/compilers/gcc-upc-4.0 {
-    inherit fetchurl stdenv bison autoconf gnum4 noSysDirs;
-    texinfo = texinfo49;
-  });
-
   gfortran = gfortran46;
-
-  gfortran40 = wrapGCC (gcc40.gcc.override {
-    langFortran = true;
-    langCC = false;
-    inherit gmp mpfr;
-  });
-
-  gfortran41 = wrapGCC (gcc41.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    inherit gmp mpfr;
-  });
 
   gfortran42 = wrapGCC (gcc42.gcc.override {
     name = "gfortran";
@@ -2489,10 +2463,10 @@ let
     jreOnly = true;
   };
 
-  jdk = if (stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+  jdk = if stdenv.isDarwin || stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjdk
     else pkgs.oraclejdk;
-  jre = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
+  jre = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
     then pkgs.openjre
     else pkgs.oraclejre;
 
@@ -2514,7 +2488,6 @@ let
   jikes = callPackage ../development/compilers/jikes { };
 
   julia = callPackage ../development/compilers/julia {
-    pcre = pcre_8_31;
     liblapack = liblapack.override {shared = true;};
     fftw = fftw.override {pthreads = true;};
     fftwSinglePrec = fftwSinglePrec.override {pthreads = true;};
@@ -2755,22 +2728,12 @@ let
   wrapGCCCross =
     {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
 
-    forceBuildDrv (import ../build-support/gcc-cross-wrapper {
+    forceNativeDrv (import ../build-support/gcc-cross-wrapper {
       nativeTools = false;
       nativeLibc = false;
       noLibc = (libc == null);
       inherit stdenv gcc binutils libc shell name cross;
     });
-
-  # FIXME: This is a specific hack for GCC-UPC.  Eventually, we may
-  # want to merge `gcc-upc-wrapper' and `gcc-wrapper'.
-  wrapGCCUPC = baseGCC: import ../build-support/gcc-upc-wrapper {
-    nativeTools = stdenv ? gcc && stdenv.gcc.nativeTools;
-    nativeLibc = stdenv ? gcc && stdenv.gcc.nativeLibc;
-    gcc = baseGCC;
-    libc = glibc;
-    inherit stdenv binutils;
-  };
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
@@ -2853,11 +2816,13 @@ let
 
   perl510 = callPackage ../development/interpreters/perl/5.10 { };
 
-  perl514 = callPackage ../development/interpreters/perl/5.14 {
+  perl514 = callPackage ../development/interpreters/perl/5.14 { };
+
+  perl516 = callPackage ../development/interpreters/perl/5.16 {
     fetchurl = fetchurlBoot;
   };
 
-  perl = if system != "i686-cygwin" then perl514 else sysPerl;
+  perl = if system != "i686-cygwin" then perl516 else sysPerl;
 
   php = callPackage ../development/interpreters/php/5.3.nix { };
 
@@ -2869,13 +2834,7 @@ let
 
   picolisp = callPackage ../development/interpreters/picolisp {};
 
-  pltScheme = builderDefsPackage (import ../development/interpreters/plt-scheme) {
-    inherit cairo fontconfig freetype libjpeg libpng openssl
-      perl mesa zlib which;
-    inherit (xorg) libX11 libXaw libXft libXrender libICE xproto
-      renderproto pixman libSM libxcb libXext xextproto libXmu
-      libXt;
-  };
+  pltScheme = racket; # just to be sure
 
   polyml = callPackage ../development/compilers/polyml { };
 
@@ -3023,20 +2982,9 @@ let
 
   automake110x = callPackage ../development/tools/misc/automake/automake-1.10.x.nix { };
 
-  automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix {
-    doCheck = !stdenv.isArm && !stdenv.isCygwin && !stdenv.isMips
-      # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
-      && stdenv.system != "i686-solaris"
+  automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
-      # One test fails to terminate on FreeBSD: <http://bugs.gnu.org/8788>.
-      && !stdenv.isFreeBSD;
-  };
-
-  automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix {
-    doCheck = !stdenv.isArm && !stdenv.isCygwin && !stdenv.isMips
-      # Some of the parallel tests seem to hang on `i386-pc-solaris2.11'.
-      && stdenv.system != "i686-solaris";
-  };
+  automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix { };
 
   automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
 
@@ -3055,23 +3003,13 @@ let
     gold = true;
   });
 
-  binutilsCross = lowPrio (forceBuildDrv (import ../development/tools/misc/binutils {
+  binutilsCross = lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {
     inherit stdenv fetchurl zlib;
     noSysDirs = true;
     cross = assert crossSystem != null; crossSystem;
   }));
 
-  bison = bison25;
-
-  bison1875 = callPackage ../development/tools/parsing/bison/bison-1.875.nix { };
-
-  bison23 = callPackage ../development/tools/parsing/bison/bison-2.3.nix { };
-
-  bison24 = callPackage ../development/tools/parsing/bison/bison-2.4.nix { };
-
-  bison25 = callPackage ../development/tools/parsing/bison/bison-2.5.nix { };
-
-  bison26 = callPackage ../development/tools/parsing/bison/bison-2.6.nix { };
+  bison = callPackage ../development/tools/parsing/bison { };
 
   buildbot = callPackage ../development/tools/build-managers/buildbot {
     inherit (pythonPackages) twisted;
@@ -3304,13 +3242,13 @@ let
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
-  /* Make pkgconfig always return a buildDrv, never a proper hostDrv,
+  /* Make pkgconfig always return a nativeDrv, never a proper crossDrv,
      because most usage of pkgconfig as buildInput (inheritance of
-     pre-cross nixpkgs) means using it using as buildNativeInput
+     pre-cross nixpkgs) means using it using as nativeBuildInput
      cross_renaming: we should make all programs use pkgconfig as
-     buildNativeInput after the renaming.
+     nativeBuildInput after the renaming.
      */
-  pkgconfig = forceBuildDrv (callPackage ../development/tools/misc/pkgconfig { });
+  pkgconfig = forceNativeDrv (callPackage ../development/tools/misc/pkgconfig { });
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
 
   premake = callPackage ../development/tools/misc/premake { };
@@ -3471,7 +3409,6 @@ let
   boolstuff = callPackage ../development/libraries/boolstuff { };
 
   boost144 = callPackage ../development/libraries/boost/1.44.nix { };
-  boost147 = callPackage ../development/libraries/boost/1.47.nix { };
   boost149 = callPackage ../development/libraries/boost/1.49.nix { };
   boost153 = callPackage ../development/libraries/boost/1.53.nix { };
   boost = boost153;
@@ -3724,6 +3661,7 @@ let
   gegl_0_0_22 = callPackage ../development/libraries/gegl/0_0_22.nix {
     #  avocodec avformat librsvg
   };
+
   geoclue = callPackage ../development/libraries/geoclue {};
 
   geoip = builderDefsPackage ../development/libraries/geoip {
@@ -3751,31 +3689,9 @@ let
 
   glfw = callPackage ../development/libraries/glfw { };
 
-  glibc = glibc213;
+  glibc = glibc217;
 
-  glibcCross = glibc213Cross;
-
-  glibc25 = callPackage ../development/libraries/glibc/2.5 {
-    kernelHeaders = linuxHeaders_2_6_28;
-    installLocales = false;
-  };
-
-  glibc27 = callPackage ../development/libraries/glibc/2.7 {
-    kernelHeaders = linuxHeaders;
-    #installLocales = false;
-  };
-
-  glibc29 = callPackage ../development/libraries/glibc/2.9 {
-    kernelHeaders = linuxHeaders;
-    installLocales = config.glibc.locales or false;
-  };
-
-  glibc29Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.9) {
-    inherit stdenv fetchurl;
-    gccCross = gccCrossStageStatic;
-    kernelHeaders = linuxHeadersCross;
-    installLocales = config.glibc.locales or false;
-  });
+  glibcCross = glibc217Cross;
 
   glibc213 = (callPackage ../development/libraries/glibc/2.13 {
     kernelHeaders = linuxHeaders;
@@ -3783,9 +3699,17 @@ let
     machHeaders = null;
     hurdHeaders = null;
     gccCross = null;
-  }) // (if crossSystem != null then { hostDrv = glibc213Cross; } else {});
+  }) // (if crossSystem != null then { crossDrv = glibc213Cross; } else {});
 
-  glibc213Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.13)
+  glibc217 = callPackage ../development/libraries/glibc/2.17 {
+    kernelHeaders = linuxHeaders;
+    installLocales = config.glibc.locales or false;
+    machHeaders = null;
+    hurdHeaders = null;
+    gccCross = null;
+  };
+
+  glibc217Cross = forceNativeDrv (makeOverridable (import ../development/libraries/glibc/2.17)
     (let crossGNU = crossSystem != null && crossSystem.config == "i586-pc-gnu";
      in {
        inherit stdenv fetchurl;
@@ -3798,33 +3722,13 @@ let
         inherit fetchgit;
       }));
 
-  glibc214 = (callPackage ../development/libraries/glibc/2.14 {
-    kernelHeaders = linuxHeaders;
-    installLocales = config.glibc.locales or false;
-    machHeaders = null;
-    hurdHeaders = null;
-    gccCross = null;
-  }) // (lib.optionalAttrs (crossSystem != null) { hostDrv = glibc214Cross; });
-
-  glibc214Cross = forceBuildDrv (makeOverridable (import ../development/libraries/glibc/2.14)
-    (let crossGNU = (crossSystem != null && crossSystem.config == "i586-pc-gnu");
-     in {
-       inherit stdenv fetchurl;
-       gccCross = gccCrossStageStatic;
-       kernelHeaders = if crossGNU then gnu.hurdHeaders else linuxHeadersCross;
-       installLocales = config.glibc.locales or false;
-     }
-     // lib.optionalAttrs crossGNU {
-        inherit (gnu) machHeaders hurdHeaders libpthreadHeaders mig;
-        inherit fetchgit;
-      }));
 
   # We can choose:
-  libcCrossChooser = name : if (name == "glibc") then glibcCross
-    else if (name == "uclibc") then uclibcCross
-    else if (name == "msvcrt" && stdenv.cross.config == "x86_64-w64-mingw32") then
+  libcCrossChooser = name : if name == "glibc" then glibcCross
+    else if name == "uclibc" then uclibcCross
+    else if name == "msvcrt" && stdenv.cross.config == "x86_64-w64-mingw32" then
       windows.mingw_w64
-    else if (name == "msvcrt") then windows.mingw_headers3
+    else if name == "msvcrt" then windows.mingw_headers3
     else throw "Unknown libc";
 
   libcCross = assert crossSystem != null; libcCrossChooser crossSystem.libc;
@@ -3875,6 +3779,8 @@ let
 
   gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
 
+  gmp51 = callPackage ../development/libraries/gmp/5.1.1.nix { };
+
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection { };
 
   goffice = callPackage ../development/libraries/goffice {
@@ -3892,7 +3798,7 @@ let
 
   goocanvas = callPackage ../development/libraries/goocanvas { };
 
-  google_perftools = callPackage ../development/libraries/google-perftools { };
+  gperftools = callPackage ../development/libraries/gperftools { };
 
   #GMP ex-satellite, so better keep it near gmp
   mpfr = callPackage ../development/libraries/mpfr { };
@@ -4344,14 +4250,14 @@ let
 
   libiconv = callPackage ../development/libraries/libiconv { };
 
-  libiconvOrEmpty = if (libiconvOrNull == null) then [] else [libiconv];
+  libiconvOrEmpty = if libiconvOrNull == null then [] else [libiconv];
 
   libiconvOrNull =
-    if ((gcc ? libc && (gcc.libc != null)) || stdenv.isGlibc)
+    if gcc.libc or null != null || stdenv.isGlibc
     then null
     else libiconv;
 
-  libiconvOrLibc = if (libiconvOrNull == null) then gcc.libc else libiconv;
+  libiconvOrLibc = if libiconvOrNull == null then gcc.libc else libiconv;
 
   libid3tag = callPackage ../development/libraries/libid3tag { };
 
@@ -4559,8 +4465,6 @@ let
   libwpg = callPackage ../development/libraries/libwpg { };
 
   libx86 = builderDefsPackage ../development/libraries/libx86 {};
-
-  libxcrypt = callPackage ../development/libraries/libxcrypt { };
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
@@ -4792,14 +4696,6 @@ let
     unicodeSupport = config.pcre.unicode or true;
   };
 
-  pcre_8_30 = callPackage ../development/libraries/pcre/8.30.nix {
-    unicodeSupport = config.pcre.unicode or true;
-  };
-
-  pcre_8_31 = callPackage ../development/libraries/pcre/8.31.nix {
-    unicodeSupport = config.pcre.unicode or true;
-  };
-
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
   phonon = callPackage ../development/libraries/phonon { };
@@ -4955,7 +4851,7 @@ let
 
   silgraphite = callPackage ../development/libraries/silgraphite {};
 
-  simgear = callPackage ../development/libraries/simgear {};
+  simgear = callPackage ../development/libraries/simgear { };
 
   sfml_git = callPackage ../development/libraries/sfml { };
 
@@ -5121,35 +5017,25 @@ let
 
   webkit =
     builderDefsPackage ../development/libraries/webkit {
+      inherit gtk2; # for plugins etc. even with gtk3, see Gentoo ebuild
+      inherit gtk3 glib atk cairo pango fontconfig freetype;
       inherit (gnome) gtkdoc libsoup;
-      inherit atk pango glib;
-      gtk = gtk3;
-      inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libxml2 libxslt sqlite
-        icu cairo intltool automake libtool
-        pkgconfig autoconf bison libproxy enchant
-        python ruby which flex geoclue mesa;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
-        gst_plugins_good;
-      inherit (xlibs) libXt renderproto libXrender kbproto;
-      libpng = libpng12;
-      perl = perl510;
+      inherit pkgconfig libtool intltool autoconf automake gperf bison flex
+        libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
+        which libproxy geoclue enchant python ruby perl
+        mesa xlibs;
+      inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
     };
 
   webkit_gtk2 =
     builderDefsPackage ../development/libraries/webkit/gtk2.nix {
+      inherit gtk2 glib atk cairo pango fontconfig freetype;
       inherit (gnome) gtkdoc libsoup;
-      inherit gtk atk pango glib;
-      inherit freetype fontconfig gettext gperf curl
-        libjpeg libtiff libxml2 libxslt sqlite
-        icu cairo intltool automake libtool
-        pkgconfig autoconf bison libproxy enchant
-        python ruby which flex geoclue;
-      inherit gstreamer gst_plugins_base gst_ffmpeg
-        gst_plugins_good;
-      inherit (xlibs) libXt renderproto libXrender;
-      libpng = libpng12;
-      perl = perl510;
+      inherit pkgconfig libtool intltool autoconf automake gperf bison flex
+        libjpeg libpng libtiff libxml2 libxslt sqlite icu curl
+        which libproxy geoclue enchant python ruby perl
+        mesa xlibs;
+      inherit gstreamer gst_plugins_base gst_ffmpeg gst_plugins_good;
     };
 
   webkitSVN =
@@ -5164,7 +5050,7 @@ let
       inherit gstreamer gst_plugins_base gst_ffmpeg
         gst_plugins_good;
       inherit (xlibs) libXt renderproto libXrender;
-      libpng = libpng12;
+      inherit libpng;
     };
 
   wvstreams = callPackage ../development/libraries/wvstreams { };
@@ -5778,7 +5664,7 @@ let
   libuuid =
     if crossSystem != null && crossSystem.config == "i586-pc-gnu"
     then (utillinux // {
-      hostDrv = lib.overrideDerivation utillinux.hostDrv (args: {
+      crossDrv = lib.overrideDerivation utillinux.crossDrv (args: {
         # `libblkid' fails to build on GNU/Hurd.
         configureFlags = args.configureFlags
           + " --disable-libblkid --disable-mount --disable-libmount"
@@ -5798,7 +5684,7 @@ let
 
   ebtables = callPackage ../os-specific/linux/ebtables { };
 
-  eject = callPackage ../os-specific/linux/eject { };
+  eject = utillinux;
 
   ffado = callPackage ../os-specific/linux/ffado { };
 
@@ -5863,9 +5749,7 @@ let
 
   iwlwifi6000g2bucode = callPackage ../os-specific/linux/firmware/iwlwifi-6000g2b-ucode { };
 
-  jujuutils = callPackage ../os-specific/linux/jujuutils {
-    linuxHeaders = linuxHeaders33;
-  };
+  jujuutils = callPackage ../os-specific/linux/jujuutils { };
 
   kbd = callPackage ../os-specific/linux/kbd { };
 
@@ -5879,25 +5763,25 @@ let
 
   libnl = callPackage ../os-specific/linux/libnl { };
 
+  linuxHeaders = linuxHeaders37;
+
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
-  linuxHeaders = callPackage ../os-specific/linux/kernel-headers { };
+  linuxHeaders37 = callPackage ../os-specific/linux/kernel-headers/3.7.nix { };
 
-  linuxHeaders33 = callPackage ../os-specific/linux/kernel-headers/3.3.5.nix { };
-
-  linuxHeaders26Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
+  linuxHeaders26Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.6.32.nix {
     inherit stdenv fetchurl perl;
     cross = assert crossSystem != null; crossSystem;
   });
 
-  linuxHeaders24Cross = forceBuildDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
+  linuxHeaders24Cross = forceNativeDrv (import ../os-specific/linux/kernel-headers/2.4.nix {
     inherit stdenv fetchurl perl;
     cross = assert crossSystem != null; crossSystem;
   });
 
   # We can choose:
-  linuxHeadersCrossChooser = ver : if (ver == "2.4") then linuxHeaders24Cross
-    else if (ver == "2.6") then linuxHeaders26Cross
+  linuxHeadersCrossChooser = ver : if ver == "2.4" then linuxHeaders24Cross
+    else if ver == "2.6" then linuxHeaders26Cross
     else throw "Unknown linux kernel version";
 
   linuxHeadersCross = assert crossSystem != null;
@@ -5999,6 +5883,10 @@ let
       ];
   };
 
+  linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
+    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+  };
+
   linux_3_8 = makeOverridable (import ../os-specific/linux/kernel/linux-3.8.nix) {
     inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
     kernelPatches =
@@ -6072,16 +5960,14 @@ let
         iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
         iwlwifi4965ucode =
-          (if (builtins.compareVersions self.kernel.version "2.6.27" == 0)
-              || (builtins.compareVersions self.kernel.version "2.6.27" == 1)
-           then iwlwifi4965ucodeV2
-           else iwlwifi4965ucodeV1);
+          if builtins.compareVersions self.kernel.version "2.6.27" == 0
+             || builtins.compareVersions self.kernel.version "2.6.27" == 1
+          then iwlwifi4965ucodeV2
+          else iwlwifi4965ucodeV1;
 
         atheros = callPackage ../os-specific/linux/atheros/0.9.4.nix { };
 
         broadcom_sta = callPackage ../os-specific/linux/broadcom-sta/default.nix { };
-
-        kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
 
         nvidia_x11 = callPackage ../os-specific/linux/nvidia-x11 { };
 
@@ -6146,6 +6032,7 @@ let
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2);
   linuxPackages_3_2_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_xen);
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4);
+  linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi);
   linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7);
   linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8);
 
@@ -6251,8 +6138,6 @@ let
 
   pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };
 
-  pam_unix2 = callPackage ../os-specific/linux/pam_unix2 { };
-
   pam_usb = callPackage ../os-specific/linux/pam_usb { };
 
   pcmciaUtils = callPackage ../os-specific/linux/pcmciautils {
@@ -6276,8 +6161,6 @@ let
 
   "procps-ng" = callPackage ../os-specific/linux/procps-ng { };
 
-  pwdutils = callPackage ../os-specific/linux/pwdutils { };
-
   qemu_kvm = callPackage ../os-specific/linux/qemu-kvm { };
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
@@ -6287,6 +6170,8 @@ let
   radeonR700 = callPackage ../os-specific/linux/firmware/radeon-r700 { };
   radeonR600 = callPackage ../os-specific/linux/firmware/radeon-r600 { };
   radeonJuniper = callPackage ../os-specific/linux/firmware/radeon-juniper { };
+
+  raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
 
   regionset = callPackage ../os-specific/linux/regionset { };
 
@@ -6344,10 +6229,10 @@ let
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
 
-  ubootChooser = name : if (name == "upstream") then ubootUpstream
-    else if (name == "sheevaplug") then ubootSheevaplug
-    else if (name == "guruplug") then ubootGuruplug
-    else if (name == "nanonote") then ubootNanonote
+  ubootChooser = name : if name == "upstream" then ubootUpstream
+    else if name == "sheevaplug" then ubootSheevaplug
+    else if name == "guruplug" then ubootGuruplug
+    else if name == "nanonote" then ubootNanonote
     else throw "Unknown uboot";
 
   ubootUpstream = callPackage ../misc/uboot { };
@@ -6447,7 +6332,6 @@ let
 
   wesnoth = callPackage ../games/wesnoth {
     lua = lua5;
-    boost = boost147;
   };
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
@@ -6657,7 +6541,7 @@ let
   antiword = callPackage ../applications/office/antiword {};
 
   ardour = callPackage ../applications/audio/ardour {
-    inherit (gnome) libgnomecanvas;
+    inherit (gnome) libgnomecanvas libgnomecanvasmm;
   };
 
   ardour3 =  lowPrio (callPackage ../applications/audio/ardour/ardour3.nix {
@@ -6774,7 +6658,8 @@ let
   cmus = callPackage ../applications/audio/cmus { };
 
   compiz = callPackage ../applications/window-managers/compiz {
-    inherit (gnome) GConf ORBit2;
+    inherit (gnome) GConf ORBit2 metacity;
+    boost = boost149; # https://bugs.launchpad.net/compiz/+bug/1131864
     intltool = intltool_standalone;
   };
 
@@ -6869,28 +6754,6 @@ let
   elvis = callPackage ../applications/editors/elvis { };
 
   emacs = emacs24;
-
-  emacs22 = callPackage ../applications/editors/emacs-22 {
-    stdenv =
-      if stdenv.isDarwin
-
-      /* On Darwin, use Apple-GCC, otherwise:
-           configure: error: C preprocessor "cc -E -no-cpp-precomp" fails sanity check */
-      then overrideGCC stdenv gccApple
-
-      /* Using cpp 4.5, we get:
-
-           make[1]: Entering directory `/tmp/nix-build-dhbj8qqmqxwp3iw6sjcgafsrwlwrix1f-emacs-22.3.drv-0/emacs-22.3/lib-src'
-           Makefile:148: *** recipe commences before first target.  Stop.
-
-         Apparently, this is because `lib-src/Makefile' is generated by
-         processing `lib-src/Makefile.in' with cpp, and the escaping rules for
-         literal backslashes have changed.  */
-      else overrideGCC stdenv gcc44;
-
-    xaw3dSupport = config.emacs.xaw3dSupport or false;
-    gtkGUI = config.emacs.gtkSupport or true;
-  };
 
   emacs23 = callPackage ../applications/editors/emacs-23 {
     stdenv =
@@ -7018,7 +6881,6 @@ let
     xmlRpc = callPackage ../applications/editors/emacs-modes/xml-rpc { };
   };
 
-  emacs22Packages = emacsPackages emacs22 pkgs.emacs22Packages;
   emacs23Packages = emacsPackages emacs23 pkgs.emacs23Packages;
   emacs24Packages = recurseIntoAttrs (emacsPackages emacs24 pkgs.emacs24Packages);
 
@@ -7170,6 +7032,7 @@ let
 
   gimp_2_8 = callPackage ../applications/graphics/gimp/2.8.nix {
     inherit (gnome) libart_lgpl;
+    webkit = null;
   };
 
   gimp = gimp_2_6;
@@ -7248,7 +7111,9 @@ let
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
 
-  graphicsmagick137 = callPackage ../applications/graphics/graphicsmagick/1.3.7.nix { };
+  graphicsmagick137 = callPackage ../applications/graphics/graphicsmagick/1.3.7.nix {
+    libpng = libpng12;
+  };
 
   gtkpod = callPackage ../applications/audio/gtkpod {
     inherit (gnome) libglade;
@@ -7702,9 +7567,9 @@ let
   picocom = callPackage ../tools/misc/picocom { };
 
   pidgin = callPackage ../applications/networking/instant-messengers/pidgin {
-    openssl = if (config.pidgin.openssl or true) then openssl else null;
-    gnutls = if (config.pidgin.gnutls or false) then gnutls else null;
-    libgcrypt = if (config.pidgin.gnutls or false) then libgcrypt else null;
+    openssl = if config.pidgin.openssl or true then openssl else null;
+    gnutls = if config.pidgin.gnutls or false then gnutls else null;
+    libgcrypt = if config.pidgin.gnutls or false then libgcrypt else null;
     inherit (gnome) startupnotification;
   };
 
@@ -8125,6 +7990,8 @@ let
 
   xbindkeys = callPackage ../tools/X11/xbindkeys { };
 
+  xbmc = callPackage ../applications/video/xbmc { };
+
   xcalib = callPackage ../tools/X11/xcalib { };
 
   xchat = callPackage ../applications/networking/irc/xchat { };
@@ -8288,7 +8155,7 @@ let
     libpng = libpng12;
   };
 
-  flightgear = callPackage ../games/flightgear {};
+  flightgear = callPackage ../games/flightgear { };
 
   freeciv = callPackage ../games/freeciv { };
 
@@ -8434,14 +8301,14 @@ let
   speed_dreams = callPackage ../games/speed-dreams {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
-    plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
+    plib = plib.override { enablePIC = !stdenv.isi686; };
     libpng = libpng12;
   };
 
   torcs = callPackage ../games/torcs {
     # Torcs wants to make shared libraries linked with plib libraries (it provides static).
     # i686 is the only platform I know than can do that linking without plib built with -fPIC
-    plib = plib.override { enablePIC = if stdenv.isi686 then false else true; };
+    plib = plib.override { enablePIC = !stdenv.isi686; };
   };
 
   trigger = callPackage ../games/trigger { };
@@ -8564,9 +8431,7 @@ let
 
       calligra = callPackage ../applications/office/calligra { };
 
-      digikam = callPackage ../applications/graphics/digikam {
-        boost = boost147;
-      };
+      digikam = callPackage ../applications/graphics/digikam { };
 
       k3b = callPackage ../applications/misc/k3b { };
 
@@ -8597,7 +8462,7 @@ let
       kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
 
       koffice = callPackage ../applications/office/koffice {
-        boost = boost147;
+        boost = boost149;
       };
 
       konq_plugins = callPackage ../applications/networking/browsers/konq-plugins { };
@@ -8936,9 +8801,7 @@ let
 
   foomatic_filters = callPackage ../misc/drivers/foomatic-filters {};
 
-  freestyle = callPackage ../misc/freestyle {
-    #stdenv = overrideGCC stdenv gcc41;
-  };
+  freestyle = callPackage ../misc/freestyle { };
 
   gajim = builderDefsPackage (import ../applications/networking/instant-messengers/gajim) {
     inherit perl intltool pyGtkGlade gettext pkgconfig makeWrapper pygobject

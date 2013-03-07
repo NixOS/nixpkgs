@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libtiff libpng lcms libxmi boost mesa freeglut glew ];
 
-  buildNativeInputs = [ perl pkgconfig ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
   patches =
     let

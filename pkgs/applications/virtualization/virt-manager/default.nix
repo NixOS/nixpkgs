@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = "make";
   
-  buildNativeInputs = [ makeWrapper pythonPackages.wrapPython ];
+  nativeBuildInputs = [ makeWrapper pythonPackages.wrapPython ];
 
   # patch the runner script in order to make wrapPythonPrograms work and run the program using a syscall
   # example code: /etc/nixos/nixpkgs/pkgs/development/interpreters/spidermonkey/1.8.0-rc1.nix

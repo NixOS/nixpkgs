@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 gtk ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   QTDIR = qt4;
 }

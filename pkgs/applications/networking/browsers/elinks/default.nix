@@ -21,12 +21,12 @@ stdenv.mkDerivation rec {
     '';
 
   crossAttrs = {
-    propagatedBuildInputs = [ ncurses.hostDrv zlib.hostDrv openssl.hostDrv ];
+    propagatedBuildInputs = [ ncurses.crossDrv zlib.crossDrv openssl.crossDrv ];
     configureFlags = ''
       --enable-finger --enable-html-highlight
       --enable-gopher --enable-cgi --enable-bittorrent --enable-nntp
-      --with-openssl=${openssl.hostDrv}
-      --with-bzip2=${bzip2.hostDrv}
+      --with-openssl=${openssl.crossDrv}
+      --with-bzip2=${bzip2.crossDrv}
     '';
   };
 

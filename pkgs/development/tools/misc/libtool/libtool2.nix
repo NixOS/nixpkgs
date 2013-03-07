@@ -8,7 +8,7 @@ stdenv.mkDerivation (rec {
     sha256 = "0649qfpzkswgcj9vqkkr9rn4nlcx80faxpyqscy2k1x9c94f93dk";
   };
 
-  buildNativeInputs = [ lzma m4 perl ];
+  nativeBuildInputs = [ lzma m4 perl ];
 
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!

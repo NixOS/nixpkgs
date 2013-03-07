@@ -21,7 +21,10 @@ rec {
   configureFlags = [];
 
   /* doConfigure should be removed if not needed */
-  phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doBuild" "doInstall" "doWrap"];
+  phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doPatch" "doBuild" "doInstall" "doWrap"];
+
+  patches = [ ./newglibc.patch ]; # https://bugs.launchpad.net/sbcl/+bug/1095036
+  patchFlags = "-p2";
 
   setVars = a.fullDepEntry (''
     export INSTALL_ROOT=$out

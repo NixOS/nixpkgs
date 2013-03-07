@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib libgcrypt ];
 
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = "-DWITH_GCRYPT=ON";
 

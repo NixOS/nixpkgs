@@ -70,5 +70,5 @@ stdenv.mkDerivation {
     cp usr/dash/sh $dir/
   '';
   
-  buildNativeInputs = [ perl bison mktemp ];
+  nativeBuildInputs = [ perl bison mktemp ];
 }

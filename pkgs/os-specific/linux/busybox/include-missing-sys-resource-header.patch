@@ -1,0 +1,12 @@
+diff --git a/include/libbb.h b/include/libbb.h
+index f12800f..e7806c2 100644
+--- a/include/libbb.h
++++ b/include/libbb.h
+@@ -40,6 +40,7 @@
+ #include <sys/poll.h>
+ #include <sys/ioctl.h>
+ #include <sys/mman.h>
++#include <sys/resource.h>
+ #include <sys/socket.h>
+ #include <sys/stat.h>
+ #include <sys/time.h>

@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ clutter gtk3 ];
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   postBuild = "rm -rf $out/share/gtk-doc";
 

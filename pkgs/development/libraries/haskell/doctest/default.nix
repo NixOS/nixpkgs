@@ -13,7 +13,6 @@ cabal.mkDerivation (self: {
     baseCompat deepseq filepath ghcPaths hspec HUnit QuickCheck setenv
     silently stringbuilder syb transformers
   ];
-  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "https://github.com/sol/doctest-haskell#readme";

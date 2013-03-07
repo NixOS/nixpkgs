@@ -10,6 +10,6 @@ stdenv.mkDerivation rec {
   };
   
   buildInputs = [ libglade ];
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
   propagatedBuildInputs = [ libart_lgpl gtk ];
 }

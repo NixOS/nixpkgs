@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "0diy72sgiyvfl6bdy7k3qwv3ijx2z1y477smkk6jsbbd9fsp2lfg";
   };
 
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "GTD (getting things done) implementation";

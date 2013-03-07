@@ -10,5 +10,5 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs imlib ];
 
-  buildNativeInputs = [ cmake gettext pkgconfig ];
+  nativeBuildInputs = [ cmake gettext pkgconfig ];
 }
