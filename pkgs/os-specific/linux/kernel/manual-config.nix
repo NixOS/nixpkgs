@@ -162,8 +162,6 @@ stdenv.mkDerivation {
     fi
   '' else null;
 
-  __ignoreNulls = true;
-
   meta = {
     description = "The Linux kernel";
     license = "GPLv2";

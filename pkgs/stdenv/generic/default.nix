@@ -6,6 +6,12 @@
   fetchurlBoot
 }:
 
+if ! builtins ? langVersion then
+
+  abort "This version of Nixpkgs requires Nix >= 1.2, please upgrade!"
+
+else
+
 let
 
   lib = import ../../lib;
@@ -30,6 +36,8 @@ let
 
         propagatedUserEnvPkgs = [gcc] ++
           lib.filter lib.isDerivation initialPath;
+
+        __ignoreNulls = true;
       }
 
       // rec {
