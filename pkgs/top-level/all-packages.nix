@@ -5574,6 +5574,8 @@ let
 
   openfire = callPackage ../servers/xmpp/openfire { };
 
+  oracleXE = callPackage ../servers/sql/oracle-xe { };
+
   OVMF = callPackage ../applications/virtualization/OVMF { };
 
   postgresql = postgresql83;
