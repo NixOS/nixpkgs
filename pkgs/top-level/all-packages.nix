@@ -7994,6 +7994,8 @@ let
 
   xcalib = callPackage ../tools/X11/xcalib { };
 
+  xchainkeys = callPackage ../tools/X11/xchainkeys { };
+
   xchat = callPackage ../applications/networking/irc/xchat { };
 
   xchm = callPackage ../applications/misc/xchm { };
