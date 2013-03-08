@@ -1,11 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "iwlwifi-4965-ucode-228.57.2.21";
+  name = "iwlwifi-4965-ucode-228.61.2.24";
   
   src = fetchurl {
-    url = "http://intellinuxwireless.org/iwlwifi/downloads/" + name + ".tgz";
-    sha256 = "1ss8r9l8j28n4zplpcwf81n74yy7p4q9dldnblmh4g0h9nyr8nf0";
+    url = "http://wireless.kernel.org/en/users/Drivers/iwlegacy?action=AttachFile&do=get&target=iwlwifi-4965-ucode-228.61.2.24.tgz";
+    name = "iwlwifi-4965-ucode-228.61.2.24.tgz";
+    sha256 = "1n5af3cci0v40w4gr0hplqr1lfvhghlbzdbf60d6185vpcny2l5m";
   };
   
   buildPhase = "true";
