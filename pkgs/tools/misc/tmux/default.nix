@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ywy1x2g905hmhkdz418ik42lcvnhnwr8fv63rcqczfg27d6nd38";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   # There's a bug in tmux's configure script, --disable-static actually enables it
   # Fixed upstream in revision ThomasAdam/tmux@e964ff70e696f30f0301d11deb45c8ada54e0c55
