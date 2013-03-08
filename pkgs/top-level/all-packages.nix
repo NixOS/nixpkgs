@@ -6087,6 +6087,8 @@ let
 
   libcap_manpages = callPackage ../os-specific/linux/libcap/man.nix { };
 
+  libcap_ng = callPackage ../os-specific/linux/libcap-ng { };
+
   libnscd = callPackage ../os-specific/linux/libnscd { };
 
   libnotify = callPackage ../development/libraries/libnotify { };
@@ -6198,6 +6200,8 @@ let
   rtl8168e2fw = callPackage ../os-specific/linux/firmware/rtl8168e-2 { };
 
   sdparm = callPackage ../os-specific/linux/sdparm { };
+
+  sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
