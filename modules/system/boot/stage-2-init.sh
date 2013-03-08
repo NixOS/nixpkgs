@@ -51,8 +51,10 @@ echo "booting system configuration $systemConfig" > /dev/kmsg
 chown 0:30000 /nix/store
 chmod 1775 /nix/store
 if [ -n "@readOnlyStore@" ]; then
-    mount --bind /nix/store /nix/store
-    mount -o remount,ro,bind /nix/store
+    if ! readonly-mountpoint /nix/store; then
+        mount --bind /nix/store /nix/store
+        mount -o remount,ro,bind /nix/store
+    fi
 fi
 
 
