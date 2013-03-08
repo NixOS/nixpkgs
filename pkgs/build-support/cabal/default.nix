@@ -88,7 +88,7 @@
             jailbreak = false;
 
             # pass the '--enable-split-objs' flag to cabal in the configure stage
-            enableSplitObjs = true;
+            enableSplitObjs = !stdenv.isDarwin;         # http://hackage.haskell.org/trac/ghc/ticket/4013
 
             # pass the '--enable-tests' flag to cabal in the configure stage
             # and run any regression test suites the package might have
