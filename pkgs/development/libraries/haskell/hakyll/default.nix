@@ -22,6 +22,7 @@ cabal.mkDerivation (self: {
     QuickCheck random regexBase regexTdfa tagsoup testFramework
     testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
+  doCheck = false;
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";
