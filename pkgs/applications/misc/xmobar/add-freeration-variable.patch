@@ -1,0 +1,58 @@
+diff --git a/readme.md b/readme.md
+index f4f07e8..de679c7 100644
+--- a/readme.md
++++ b/readme.md
+@@ -645,7 +645,7 @@ something like:
+ - Args: default monitor arguments
+ - Variables that can be used with the `-t`/`--template` argument:
+              `total`, `free`, `buffer`, `cache`, `rest`, `used`,
+-             `usedratio`, `usedbar`, `freebar`
++             `usedratio`, `usedbar`, `freeratio`, `freebar`
+ - Default template: `Mem: <usedratio>% (<cache>M)`
+ 
+ ### `Swap Args RefreshRate`
+diff --git a/src/Plugins/Monitors/Mem.hs b/src/Plugins/Monitors/Mem.hs
+index 5c55ee2..3cf46c7 100644
+--- a/src/Plugins/Monitors/Mem.hs
++++ b/src/Plugins/Monitors/Mem.hs
+@@ -19,8 +19,8 @@ import Plugins.Monitors.Common
+ memConfig :: IO MConfig
+ memConfig = mkMConfig
+        "Mem: <usedratio>% (<cache>M)" -- template
+-       ["usedbar", "freebar", "usedratio", "total",
+-        "free", "buffer", "cache", "rest", "used"]  -- available replacements
++       ["usedbar", "freebar", "usedratio", "freeratio", "total",
++        "free", "buffer", "cache", "rest", "used"] -- available replacements
+ 
+ fileMEM :: IO String
+ fileMEM = readFile "/proc/meminfo"
+@@ -33,7 +33,8 @@ parseMEM =
+            rest = free + buffer + cache
+            used = total - rest
+            usedratio = used / total
+-       return [usedratio, total, free, buffer, cache, rest, used]
++           freeratio = free / total
++       return [usedratio, freeratio, total, free, buffer, cache, rest, used, freeratio]
+ 
+ totalMem :: IO Float
+ totalMem = fmap ((*1024) . (!!1)) parseMEM
+@@ -42,15 +43,16 @@ usedMem :: IO Float
+ usedMem = fmap ((*1024) . (!!6)) parseMEM
+ 
+ formatMem :: [Float] -> Monitor [String]
+-formatMem (r:xs) =
++formatMem (r:fr:xs) =
+     do let f = showDigits 0
+            rr = 100 * r
+        ub <- showPercentBar rr r
+        fb <- showPercentBar (100 - rr) (1 - r)
+        rs <- showPercentWithColors r
++       fs <- showPercentWithColors fr
+        s <- mapM (showWithColors f) xs
+-       return (ub:fb:rs:s)
+-formatMem _ = return $ replicate 9 "N/A"
++       return (ub:fb:rs:fs:s)
++formatMem _ = return $ replicate 10 "N/A"
+ 
+ runMem :: [String] -> Monitor String
+ runMem _ =
