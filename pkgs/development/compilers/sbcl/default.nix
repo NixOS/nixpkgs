@@ -23,9 +23,6 @@ rec {
   /* doConfigure should be removed if not needed */
   phaseNames = ["setVars" "doFixNewer" "doFixTests" "setVersion" "doPatch" "doBuild" "doInstall" "doWrap"];
 
-  patches = [ ./newglibc.patch ]; # https://bugs.launchpad.net/sbcl/+bug/1095036
-  patchFlags = "-p2";
-
   setVars = a.fullDepEntry (''
     export INSTALL_ROOT=$out
     mkdir test-home
