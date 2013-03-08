@@ -4,7 +4,6 @@
 
 int main(int argc, char ** argv) {
 	struct statvfs stat;
-	int res;
 	if (argc != 2) {
 		fprintf(stderr, "Usage: %s PATH", argv[0]);
 		exit(2);
