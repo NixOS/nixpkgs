@@ -1102,6 +1102,8 @@ let
 
   mairix = callPackage ../tools/text/mairix { };
 
+  makemkv = callPackage ../applications/video/makemkv { };
+
   man = callPackage ../tools/misc/man { };
 
   man_db = callPackage ../tools/misc/man-db { };
