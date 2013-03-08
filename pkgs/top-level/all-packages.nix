@@ -2624,6 +2624,8 @@ let
     ocaml_extlib = callPackage ../development/ocaml-modules/extlib { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
+
+    opam = callPackage ../development/tools/ocaml/opam { };
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_3_12_1;
