@@ -2625,7 +2625,7 @@ let
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
 
-    opam = callPackage ../development/tools/ocaml/opam/0.9.4.nix { };
+    opam = callPackage ../development/tools/ocaml/opam { };
   };
 
   ocamlPackages = recurseIntoAttrs ocamlPackages_3_12_1;
