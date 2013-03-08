@@ -260,7 +260,6 @@ in
   electricsheep = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   elinks = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   emacs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  emacs22 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   emacs23 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   emacs24Packages = {
     autoComplete = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

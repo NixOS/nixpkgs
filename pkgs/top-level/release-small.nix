@@ -135,7 +135,6 @@ with (import ./release-lib.nix);
   openssl = all;
   pam_console = linux;
   pam_login = linux;
-  pam_unix2 = linux;
   pan = gtkSupported;
   par2cmdline = all;
   pciutils = linux;
