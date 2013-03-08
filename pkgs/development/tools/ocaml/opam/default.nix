@@ -40,12 +40,12 @@ stdenv.mkDerivation rec {
   src = srcs.opam;
 
   postUnpack = ''
-  ln -sv ${srcs.cudf} $sourceRoot/src_ext/${srcs.cudf.name}
-  ln -sv ${srcs.extlib} $sourceRoot/src_ext/${srcs.extlib.name}
-  ln -sv ${srcs.ocaml_re} $sourceRoot/src_ext/${srcs.ocaml_re.name}
-  ln -sv ${srcs.ocamlgraph} $sourceRoot/src_ext/${srcs.ocamlgraph.name}
-  ln -sv ${srcs.dose3} $sourceRoot/src_ext/${srcs.dose3.name}
-  ln -sv ${srcs.cmdliner} $sourceRoot/src_ext/${srcs.cmdliner.name}
+    ln -sv ${srcs.cudf} $sourceRoot/src_ext/${srcs.cudf.name}
+    ln -sv ${srcs.extlib} $sourceRoot/src_ext/${srcs.extlib.name}
+    ln -sv ${srcs.ocaml_re} $sourceRoot/src_ext/${srcs.ocaml_re.name}
+    ln -sv ${srcs.ocamlgraph} $sourceRoot/src_ext/${srcs.ocamlgraph.name}
+    ln -sv ${srcs.dose3} $sourceRoot/src_ext/${srcs.dose3.name}
+    ln -sv ${srcs.cmdliner} $sourceRoot/src_ext/${srcs.cmdliner.name}
   '';
 
   makeFlags = ["HOME=$(TMPDIR)"];
