@@ -1,22 +1,21 @@
-{stdenv, fetchurl, ncurses, libevent}:
+{stdenv, fetchurl, ncurses, libevent, pkgconfig}:
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "1.5";
+  version = "1.7";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "eb8215b57c05b765d2446d9acb2bc5edcdb3eb4ea31af89ee127a27e90056306";
+    sha256 = "0ywy1x2g905hmhkdz418ik42lcvnhnwr8fv63rcqczfg27d6nd38";
   };
 
-  makeFlags = "PREFIX=\${out}";
+  buildNativeInputs = [ pkgconfig ];
 
-  crossAttrs = {
-    preBuild = ''
-      makeFlags=" $makeFlags CC=${stdenv.cross.config}-gcc "
-    '';
-  };
+  # There's a bug in tmux's configure script, --disable-static actually enables it
+  # Fixed upstream in revision ThomasAdam/tmux@e964ff70e696f30f0301d11deb45c8ada54e0c55
+  # Remove on next update
+  dontDisableStatic = true;
 
   buildInputs = [ ncurses libevent ];
 
@@ -41,6 +40,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
 
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [ stdenv.lib.maintainers.thammers ];
+    maintainers = with stdenv.lib.maintainers; [ shlevy thammers ];
   };
 }
