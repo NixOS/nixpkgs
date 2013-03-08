@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
+    maintainers = stdenv.lib.maintainers.orbitz;
     description = "A package manager for ocaml";
-    platforms = stdenv.lib.platforms.all;
+    platforms   = stdenv.lib.platforms.all;
   };
 }
