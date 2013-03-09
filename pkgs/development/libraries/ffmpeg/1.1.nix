@@ -25,7 +25,7 @@ assert faacSupport -> faac != null;
 assert x11grabSupport -> libXext != null && libXfixes != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-1.1";
+  name = "ffmpeg-1.1.3";
   
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
