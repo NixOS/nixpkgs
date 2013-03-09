@@ -1871,6 +1871,8 @@ let
 
   zip = callPackage ../tools/archivers/zip { };
 
+  zpaq = callPackage ../tools/archivers/zpaq { };
+
   zsync = callPackage ../tools/compression/zsync { };
 
 
