@@ -1653,6 +1653,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   SHA = callPackage ../development/libraries/haskell/SHA {};
 
+  shake = callPackage ../development/libraries/haskell/shake {};
+
   shakespeare = callPackage ../development/libraries/haskell/shakespeare {};
 
   shakespeareCss = callPackage ../development/libraries/haskell/shakespeare-css {};
