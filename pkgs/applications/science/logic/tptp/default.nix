@@ -14,7 +14,7 @@ let
     version="5.4.0";
     name="${baseName}-${version}";
     url="http://www.cs.miami.edu/~tptp/TPTP/Distribution/TPTP-v${version}.tgz";
-    hash="0nyq2kkiphwgj3hczc7zglzqjj6hxxsh6zcygpy4yhxh9a9rpkg1";
+    hash="0rvrmh3vw4bk7mj29bx1pi76g2bsqyc13gsnpa1cbjs5pzyhm780";
   };
 in
 rec {

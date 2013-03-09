@@ -24,7 +24,21 @@ stdenv.mkDerivation {
       # Likewise, when searching for included Makefiles, don't look in
       # /usr/include and friends.
       ./impure-dirs.patch
+
+      # a bunch of patches from Gentoo, mostly should be from upstream (unreleased)
+      ./archives-many-objs.patch
+      ./MAKEFLAGS-reexec.patch
+      ./memory-corruption.patch
+      ./glob-speedup.patch
+      ./copy-on-expand.patch
+      ./oneshell.patch
+      ./parallel-remake.patch
+      ./intermediate-parallel.patch
+      ./construct-command-line.patch
+      ./long-command-line.patch
+      ./darwin-library_search-dylib.patch
     ];
+  patchFlags = "-p0";
 
   meta = {
     description = "GNU Make, a program controlling the generation of non-source files from sources";

@@ -152,6 +152,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString x11Support "-lX11 -lXext";
 
+  installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";
+
   enableParallelBuilding = true;
 
   # Provide a reasonable standard font.  Maybe we should symlink here.
@@ -159,6 +161,9 @@ stdenv.mkDerivation rec {
     ''
       mkdir -p $out/share/mplayer
       cp ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mplayer/subfont.ttf
+      if test -f $out/share/applications/mplayer.desktop ; then
+        echo "NoDisplay=True" >> $out/share/applications/mplayer.desktop
+      fi
     '';
 
   crossAttrs = {

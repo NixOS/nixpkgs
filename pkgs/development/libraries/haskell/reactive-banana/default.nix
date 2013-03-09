@@ -1,10 +1,16 @@
-{ cabal, hashable, transformers, unorderedContainers, vault }:
+{ cabal, hashable, HUnit, testFramework, testFrameworkHunit
+, transformers, unorderedContainers, vault
+}:
 
 cabal.mkDerivation (self: {
   pname = "reactive-banana";
   version = "0.7.1.1";
   sha256 = "0d4dqpzglzkygy2hhn1j1c7vk2782mk66f8aqaadkyhijn7kc6i5";
   buildDepends = [ hashable transformers unorderedContainers vault ];
+  testDepends = [
+    hashable HUnit testFramework testFrameworkHunit transformers
+    unorderedContainers vault
+  ];
   meta = {
     homepage = "http://haskell.org/haskellwiki/Reactive-banana";
     description = "Practical library for functional reactive programming (FRP)";

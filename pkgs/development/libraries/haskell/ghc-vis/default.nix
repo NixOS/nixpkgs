@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-vis";
-  version = "0.6";
-  sha256 = "0gvfs0f6fjg4bzq9q6rrhin6gk1pbyw9qbigi90cz1fg10nq7nzi";
+  version = "0.6.1";
+  sha256 = "0q0v1l44vagcg0nl4iv8m872g4qblj9syjlcgbf6fpgx1fqnyp24";
   buildDepends = [
     cairo deepseq fgl ghcHeapView graphviz gtk mtl svgcairo text
     transformers xdot

@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
     sha256 = "1nbkbvq959f70zhr03fwdibhs0sbf1k7zmbz9w99vda7gdcl0nps";
   };
 
-  buildInputs = [ libnice python pygobject gupnp_igd ];
+  buildInputs = [ libnice python pygobject gupnp_igd libnice ];
 
   nativeBuildInputs = [ pkgconfig ];
 
-  propagatedBuildInputs = [ gstreamer gst_plugins_base gst_python 
+  propagatedBuildInputs = [ gstreamer gst_plugins_base gst_python
     gst_plugins_good gst_plugins_bad gst_ffmpeg
     ];
 

@@ -1,0 +1,18 @@
+--- OpenSceneGraph-3.0.1.orig/src/osgPlugins/xine/video_out_rgb.c
++++ OpenSceneGraph-3.0.1/src/osgPlugins/xine/video_out_rgb.c
+@@ -2769,8 +2769,14 @@ init_class(xine_t* xine, void* vo_visual
+ 	clear(rgb_class, sizeof(rgbout_class_t));
+ 
+ 	rgb_class->driver_class.open_plugin     = open_plugin;
++#if XINE_MAJOR_VERSION < 1 || (XINE_MAJOR_VERSION == 1 && XINE_MINOR_VERSION < 2)
+ 	rgb_class->driver_class.get_identifier  = get_identifier;
+ 	rgb_class->driver_class.get_description = get_description;
++#else
++	rgb_class->driver_class.identifier      = get_identifier(NULL);
++	rgb_class->driver_class.description     = get_description(NULL);
++#endif
++
+ 	rgb_class->driver_class.dispose         = dispose_class;
+ 
+ 	return(rgb_class);
+

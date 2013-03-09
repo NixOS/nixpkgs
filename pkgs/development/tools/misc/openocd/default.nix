@@ -1,38 +1,21 @@
 {stdenv, fetchurl, libftdi}:
 
-let
-  # The "GuruPlug installer" from Marvell.  See
-  # <http://www.plugcomputer.org/index.php/us/resources/downloads?func=select&id=16>,
-  # linked from <http://www.globalscaletechnologies.com/t-downloads.aspx>.
-  guruplug_installer = fetchurl {
-    url = "http://www.plugcomputer.org/index.php/us/resources/downloads?func=download&id=65&chk=d6878f4bf86070f7b4f7bc93317fcb0f&no_html=1";
-    sha256 = "1nps9li9k1kxb31f9x6d114hh0a3bx886abvgh8vg004ni996hlv";
-    name = "guruplug-installer.tar.gz";
-  };
-in
-stdenv.mkDerivation {
-  name = "openocd-0.4.0";
+stdenv.mkDerivation rec {
+  name = "openocd-${version}";
+  version = "0.6.1";
 
   src = fetchurl {
-    url = "http://download.berlios.de/openocd/openocd-0.4.0.tar.bz2";
-    sha256 = "1c9j8s3mqgw5spv6nd4lqfkd1l9jmjipi0ya054vnjfsy2617kzv";
+    url = "http://downloads.sourceforge.net/project/openocd/openocd/${version}/openocd-${version}.tar.bz2";
+    sha256 = "0argjhff9x4ilgycics61kfgkvb6kkkhhhmj3fxcyydd8mscri7l";
   };
 
-  configureFlags = [ "--enable-ft2232_libftdi" "--disable-werror" ];
+  configureFlags = [ "--enable-ft2232_libftdi"
+                     "--enable-jlink"
+                     "--enable-rlink"
+                     "--enable-ulink"
+                     "--enable-stlink" ];
 
   buildInputs = [ libftdi ];
-
-  # Copy the GuruPlug stuff.
-  # XXX: Unfortunately, these files were written for OpenOCD 0.2.0 and don't
-  # work with 0.4.0.
-  # postInstall =
-  #   '' tar xf "${guruplug_installer}"
-  #      for dir in interface target board
-  #      do
-  #        cp -v "guruplug-installer/openocd/$dir/"* \
-  #              "$out/share/openocd/scripts/$dir/"
-  #      done
-  #   '';
 
   meta = {
     homepage = http://openocd.berlios.de;

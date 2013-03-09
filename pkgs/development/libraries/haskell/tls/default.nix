@@ -1,5 +1,6 @@
-{ cabal, cereal, certificate, cryptohash, cryptoPubkey
-, cryptoRandomApi, mtl, network
+{ cabal, cereal, certificate, cprngAes, cryptohash, cryptoPubkey
+, cryptoRandomApi, mtl, network, QuickCheck, testFramework
+, testFrameworkQuickcheck2, time
 }:
 
 cabal.mkDerivation (self: {
@@ -10,6 +11,11 @@ cabal.mkDerivation (self: {
     cereal certificate cryptohash cryptoPubkey cryptoRandomApi mtl
     network
   ];
+  testDepends = [
+    cereal certificate cprngAes cryptoPubkey cryptoRandomApi mtl
+    QuickCheck testFramework testFrameworkQuickcheck2 time
+  ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/vincenthz/hs-tls";
     description = "TLS/SSL protocol native implementation (Server and Client)";

@@ -6,6 +6,12 @@
   fetchurlBoot
 }:
 
+if ! builtins ? langVersion then
+
+  abort "This version of Nixpkgs requires Nix >= 1.2, please upgrade!"
+
+else
+
 let
 
   lib = import ../../lib;
@@ -30,6 +36,8 @@ let
 
         propagatedUserEnvPkgs = [gcc] ++
           lib.filter lib.isDerivation initialPath;
+
+        __ignoreNulls = true;
       }
 
       // rec {
@@ -44,43 +52,59 @@ let
           if !allowUnfree && (let l = attrs.meta.license or ""; in l == "unfree" || l == "unfree-redistributable" || l == lib.licenses.proprietary) then
             throw "package ‘${attrs.name}’ has an unfree license, refusing to evaluate"
           else
-          (derivation (
-            (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
-            // (let
-              buildInputs = attrs.buildInputs or [];
-              nativeBuildInputs = attrs.nativeBuildInputs or [];
-              propagatedBuildInputs = attrs.propagatedBuildInputs or [];
-              propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
-              crossConfig = attrs.crossConfig or null;
-            in
-            {
-              builder = attrs.realBuilder or shell;
-              args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
-              stdenv = result;
-              system = result.system;
-              userHook = config.stdenv.userHook or null;
+            let
+              drv = derivation (
+                (removeAttrs attrs ["meta" "passthru" "crossAttrs"])
+                // (let
+                  buildInputs = attrs.buildInputs or [];
+                  nativeBuildInputs = attrs.nativeBuildInputs or [];
+                  propagatedBuildInputs = attrs.propagatedBuildInputs or [];
+                  propagatedNativeBuildInputs = attrs.propagatedNativeBuildInputs or [];
+                  crossConfig = attrs.crossConfig or null;
+                in
+                {
+                  builder = attrs.realBuilder or shell;
+                  args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
+                  stdenv = result;
+                  system = result.system;
+                  userHook = config.stdenv.userHook or null;
 
-              # Inputs built by the cross compiler.
-              buildInputs = lib.optionals (crossConfig != null) buildInputs;
-              propagatedBuildInputs = lib.optionals (crossConfig != null)
-                  propagatedBuildInputs;
-              # Inputs built by the usual native compiler.
-              nativeBuildInputs = nativeBuildInputs ++ lib.optionals
-                (crossConfig == null) buildInputs;
-              propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
-                lib.optionals (crossConfig == null) propagatedBuildInputs;
-            }))
-          )
-          # The meta attribute is passed in the resulting attribute set,
-          # but it's not part of the actual derivation, i.e., it's not
-          # passed to the builder and is not a dependency.  But since we
-          # include it in the result, it *is* available to nix-env for
-          # queries.
-          // { meta = attrs.meta or {}; }
-          # Pass through extra attributes that are not inputs, but
-          # should be made available to Nix expressions using the
-          # derivation (e.g., in assertions).
-          // (attrs.passthru or {});
+                  # Inputs built by the cross compiler.
+                  buildInputs = lib.optionals (crossConfig != null) buildInputs;
+                  propagatedBuildInputs = lib.optionals (crossConfig != null)
+                      propagatedBuildInputs;
+                  # Inputs built by the usual native compiler.
+                  nativeBuildInputs = nativeBuildInputs ++ lib.optionals
+                    (crossConfig == null) buildInputs;
+                  propagatedNativeBuildInputs = propagatedNativeBuildInputs ++
+                    lib.optionals (crossConfig == null) propagatedBuildInputs;
+              }));
+
+              outputs = drv.outputs or [ "out" ];
+
+              commonAttrs = drv // (builtins.listToAttrs outputsList) //
+                ({ all = map (x: x.value) outputsList;
+                  # The meta attribute is passed in the resulting attribute set,
+                  # but it's not part of the actual derivation, i.e., it's not
+                  # passed to the builder and is not a dependency.  But since we
+                  # include it in the result, it *is* available to nix-env for
+                  # queries.
+                  meta = attrs.meta or {};
+                }) //
+                # Pass through extra attributes that are not inputs, but
+                # should be made available to Nix expressions using the
+                # derivation (e.g., in assertions).
+                (attrs.passthru or {});
+
+              outputToAttrListElement = outputName:
+                { name = outputName;
+                  value = commonAttrs // {
+                    inherit (builtins.getAttr outputName drv) outPath drvPath type outputName;
+                  };
+                };
+
+              outputsList = map outputToAttrListElement outputs;
+            in (builtins.head outputsList).value;
 
         # Utility flags to test the type of platform.
         isDarwin = result.system == "x86_64-darwin";

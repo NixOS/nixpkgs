@@ -1,21 +1,24 @@
-{ stdenv, fetchurl, udev, pkgconfig, dbus_libs }:
+{ stdenv, fetchurl, pkgconfig, udev, dbus_libs, perl }:
 
 stdenv.mkDerivation rec {
-  name = "pcsclite-1.7.4";
+  name = "pcsclite-1.8.8";
 
   src = fetchurl {
-    url = "http://alioth.debian.org/frs/download.php/3598/${name}.tar.bz2";
-    sha256 = "1lc3amxisv2ya51v0gysygldj25kv7zj81famv69s205mvmagr6q";
+    url = "http://alioth.debian.org/frs/download.php/3862/${name}.tar.bz2";
+    sha256 = "1rw5530vr2jf02ziyf32jbd98n5q8zjcfwp5nkw3x3bkgr53arpy";
   };
 
   # The OS should care on preparing the drivers into this location
-  configureFlags = [ "--enable-usbdropdir=/var/lib/pcsc/drivers" ];
+  configureFlags = [
+    "--enable-usbdropdir=/var/lib/pcsc/drivers"
+    "--with-systemdsystemunitdir=$out/lib/systemd/system" # probably
+  ];
 
   preConfigure = ''
     configureFlags="$configureFlags --enable-confdir=$out/etc"
   '';
 
-  buildInputs = [ udev dbus_libs ];
+  buildInputs = [ udev dbus_libs perl ];
 
   nativeBuildInputs = [ pkgconfig ];
 

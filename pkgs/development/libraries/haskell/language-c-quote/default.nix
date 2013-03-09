@@ -1,5 +1,6 @@
 { cabal, alex, exceptionMtl, exceptionTransformers, filepath, happy
-, haskellSrcMeta, mainlandPretty, mtl, srcloc, syb, symbol
+, haskellSrcMeta, HUnit, mainlandPretty, mtl, srcloc, syb, symbol
+, testFramework, testFrameworkHunit
 }:
 
 cabal.mkDerivation (self: {
@@ -9,6 +10,9 @@ cabal.mkDerivation (self: {
   buildDepends = [
     exceptionMtl exceptionTransformers filepath haskellSrcMeta
     mainlandPretty mtl srcloc syb symbol
+  ];
+  testDepends = [
+    HUnit srcloc symbol testFramework testFrameworkHunit
   ];
   buildTools = [ alex happy ];
   jailbreak = true;

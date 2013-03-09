@@ -7,6 +7,7 @@ cabal.mkDerivation (self : {
   sha256 = "189vvp173pqc69zgzqqx6vyhvsc13p1s86ql60rs1j5qlhh8ajg8";
   extraBuildInputs = [alex happy makeWrapper];
   propagatedBuildInputs = [ghcPaths xhtml];
+  doCheck = false;
 
   postInstall = ''
    wrapProgram $out/bin/haddock --add-flags "\$(${self.ghc.GHCGetPackages} ${self.ghc.ghcVersion} \"\$(dirname \$0)\" \"--optghc=-package-conf --optghc=\")"

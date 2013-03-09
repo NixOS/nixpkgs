@@ -1,25 +1,33 @@
-{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext }:
+{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext, docutils }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.2.1";
+  version = "0.2.2";
 
   name = "zathura-core-${version}";
 
   src = fetchurl {
     url = "http://pwmt.org/projects/zathura/download/zathura-${version}.tar.gz";
-    sha256 = "075b9def201c77ca738dc9e15b252bc23c085b7c4671a1810d1d962e8d0bd790";
+    sha256 = "1ja2j9ygymr259fxf02j1vkvalypac48gpadq8fn3qbclxxj61k5";
   };
 
   buildInputs = [ pkgconfig gtk girara gettext ];
 
-  makeFlags = "PREFIX=$(out)";
+  # Bug in zathura build system: we should remove empty manfiles in order them
+  # to be compiled properly
+  preBuild = ''
+    rm zathura.1
+    rm zathurarc.5
+  '';
+
+  makeFlags = [ "PREFIX=$(out)" "RSTTOMAN=${docutils}/bin/rst2man.py" "VERBOSE=1" ];
 
   meta = {
     homepage = http://pwmt.org/projects/zathura/;
     description = "A core component for zathura PDF viewer";
-    license = "free";
+    license = stdenv.lib.licenses.zlib;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.garbas ];
 
     # Set lower priority in order to provide user with a wrapper script called
     # 'zathura' instead of real zathura executable. The wrapper will build

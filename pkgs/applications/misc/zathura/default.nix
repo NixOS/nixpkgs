@@ -1,4 +1,4 @@
-{ callPackage, pkgs }:
+{ callPackage, pkgs, fetchurl }:
 
 rec {
   inherit (pkgs) stdenv;
@@ -11,7 +11,9 @@ rec {
 
   zathura_ps = callPackage ./ps { };
 
-  zathuraWrapper = stdenv.mkDerivation rec {
+  zathuraWrapper = stdenv.mkDerivation {
+
+    inherit zathura_core;
 
     name = "zathura-${zathura_core.version}";
 
@@ -21,7 +23,7 @@ rec {
       zathura_ps
     ];
 
-    zathura = "${zathura_core}/bin/zathura";
+    icon = ./icon.xpm;
 
     builder = ./builder.sh;
 
@@ -34,7 +36,9 @@ rec {
         is an application that provides a minimalistic and space saving interface
         as well as an easy usage that mainly focuses on keyboard interaction.
       '';
-      license = "free";
+      license = stdenv.lib.licenses.zlib;
+      platforms = stdenv.lib.platforms.linux;
+      maintainers = [ stdenv.lib.maintainers.garbas stdenv.lib.maintainers.smironov ];
     };
   };
 }

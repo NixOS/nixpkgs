@@ -1,10 +1,15 @@
-{ cabal, blazeBuilder, conduit, text, transformers }:
+{ cabal, blazeBuilder, conduit, hspec, QuickCheck, text
+, transformers
+}:
 
 cabal.mkDerivation (self: {
   pname = "blaze-builder-conduit";
-  version = "0.5.0.3";
-  sha256 = "0dbymh29zg0bvhlmai5s6qiqypx46hmlg375jpcq1597vzaanwnw";
+  version = "1.0.0";
+  sha256 = "15q0b0k5dxrp9cw2b4qf9mmjwz1mmxrn3890df5rc9z6yajajrc6";
   buildDepends = [ blazeBuilder conduit text transformers ];
+  testDepends = [
+    blazeBuilder conduit hspec QuickCheck transformers
+  ];
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Convert streams of builders to streams of bytestrings";

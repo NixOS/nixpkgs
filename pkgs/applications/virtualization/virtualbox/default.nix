@@ -11,8 +11,8 @@ with stdenv.lib;
 
 let
 
-  version = "4.2.6";
-  extpackRevision = "82870";
+  version = "4.2.8";
+  extpackRevision = "83876";
 
   forEachModule = action: ''
     for mod in \
@@ -35,7 +35,7 @@ let
     name = "Oracle_VM_VirtualBox_Extension_Pack-${version}-${extpackRevision}"
          + ".vbox-extpack";
     # Has to be base16 because it's used as an input to VBoxExtPackHelperApp!
-    sha256 = "f0113688a76efa0426c27c5541c78506b18637025c35aa682ecc6eeed5d56582";
+    sha256 = "fa579416f382b58c4e93d3740d076ceba728e28d987e51aced5865a46cb9111c";
     url = "https://www.virtualbox.org/wiki/Downloads";
   };
 
@@ -44,7 +44,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = "54526091bc2aa66b88ca878dd9ecc4466f96d607db2f6678a9d673ecf6646ae3";
+    sha256 = "f336af12244db74e6564dc22e438bbcba70f994aaf0d117fdf70caca9fab1b78";
   };
 
   buildInputs =
@@ -53,6 +53,11 @@ in stdenv.mkDerivation {
       pkgconfig which libXmu ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python;
+
+  patches = [
+    ./strict_types.patch
+    ./build_fix_3.9.0.patch
+  ];
 
   prePatch = ''
     set -x

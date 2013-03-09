@@ -1,30 +1,35 @@
-{ stdenv, fetchurl, makeWrapper, boost, file, gettext
+{ stdenv, fetchurl, makeWrapper, autoconf, automake, boost, file, gettext
 , glib, glibc, libgnome_keyring, gnome_keyring, gtk, gtkmm, intltool
 , libctemplate, libglade
+, libiodbc
 , libgnome, libsigcxx, libtool, libuuid, libxml2, libzip, lua, mesa, mysql
 , pango, paramiko, pcre, pexpect, pkgconfig, pycrypto, python, sqlite
 }:
 
 stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "5.2.39";
+  version = "5.2.47";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://mirror.services.wisc.edu/mysql/Downloads/MySQLGUITools/mysql-workbench-gpl-${version}-src.tar.gz";
-    sha256 = "0e4e14f1b39dca2b65f924381d82b406dc25a530fbd25631b4cd05bddc4ab5bd";
+    url = "http://mirror.cogentco.com/pub/mysql/MySQLGUITools/mysql-workbench-gpl-${version}-src.tar.gz";
+    sha256 = "1343fn3msdxqfpxw0kgm0mdx5r7g9ra1cpc8p2xhl7kz2pmqp4p6";
   };
 
-  buildInputs = [ boost file gettext glib glibc libgnome_keyring gtk gtkmm intltool
-    libctemplate libglade libgnome libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
+  buildInputs = [ autoconf automake boost file gettext glib glibc libgnome_keyring gtk gtkmm intltool
+    libctemplate libglade libgnome libiodbc libsigcxx libtool libuuid libxml2 libzip lua makeWrapper mesa
     mysql paramiko pcre pexpect pkgconfig pycrypto python sqlite ];
 
   preConfigure = ''
     substituteInPlace $(pwd)/frontend/linux/workbench/mysql-workbench.in --replace "catchsegv" "${glibc}/bin/catchsegv"
   '';
 
+  postConfigure = ''
+    autoreconf -fi
+  '';
+
   postInstall = ''
-    wrapProgram "$out/bin/mysql-workbench-bin" \
+    wrapProgram "$out/bin/mysql-workbench" \
       --prefix LD_LIBRARY_PATH : "${python}/lib" \
       --prefix LD_LIBRARY_PATH : "$(cat ${stdenv.gcc}/nix-support/orig-gcc)/lib64" \
       --prefix PATH : "${gnome_keyring}/bin" \

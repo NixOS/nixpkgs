@@ -3,7 +3,7 @@
 
 let
   pkgconfig = pkgconfigUpstream;
-  version = "0.4.0";
+  version = "0.5.3";
   manifest = import (./. + "/${version}.nix");
 
   overrides = {

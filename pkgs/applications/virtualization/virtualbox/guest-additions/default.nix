@@ -2,14 +2,14 @@
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor
 , dbus }:
 
-let version = "4.2.6"; in
+let version = "4.2.8"; in
 
 stdenv.mkDerivation {
   name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "1lry4hjjk8p69km1bi3mpmyarlnxz9izs2c0s8pq5rjzv1bd7bxr";
+    sha256 = "04a5402d8dcdefc83ffb2785351ddc57758781a3759137974469189392ae4ad5";
   };
 
   KERN_DIR = "${kernel}/lib/modules/*/build";

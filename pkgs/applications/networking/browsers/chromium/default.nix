@@ -13,6 +13,13 @@
 , gcc, bison, gperf
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, mesa
+, protobuf
+
+# dependencies for v25 only
+, libvpx
+
+# dependencies for >= v26
+, speechd, libXdamage
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -50,7 +57,7 @@ let
     use_system_libexpat = true;
     use_system_libexif = true;
     use_system_libjpeg = true;
-    use_system_libpng = !post24;
+    use_system_libpng = false; # PNG dlopen() version conflict
     use_system_libusb = true;
     use_system_libxml = true;
     use_system_speex = true;
@@ -59,6 +66,7 @@ let
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = false; # http://crbug.com/143623
+    use_system_protobuf = post25;
 
     use_system_harfbuzz = false;
     use_system_icu = false;
@@ -66,6 +74,9 @@ let
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
     use_system_v8 = false;
+  } // optionalAttrs pre26 {
+    use_system_libvpx = true;
+    use_system_protobuf = true;
   };
 
   defaultDependencies = [
@@ -76,12 +87,8 @@ let
     libusb1 libexif
   ];
 
-  post23 = !versionOlder sourceInfo.version "24.0.0.0";
-  post24 = !versionOlder sourceInfo.version "25.0.0.0";
-  only24 = post23 && !post24;
-
-  maybeFixPulseAudioBuild = optional (only24 && pulseSupport)
-    ./pulse_audio_fix.patch;
+  pre26 = versionOlder sourceInfo.version "26.0.0.0";
+  post25 = !pre26;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -104,12 +111,14 @@ in stdenv.mkDerivation rec {
     krb5
     glib gtk dbus_glib
     libXScrnSaver libXcursor mesa
+    pciutils protobuf
   ] ++ optional gnomeKeyringSupport libgnome_keyring
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio
-    ++ optional post24 pciutils;
+    ++ optional pre26 libvpx
+    ++ optionals post25 [ speechd libXdamage ];
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
@@ -117,13 +126,16 @@ in stdenv.mkDerivation rec {
 
   patches = optional cupsSupport ./cups_allow_deprecated.patch
          ++ optional pulseSupport ./pulseaudio_array_bounds.patch
-         ++ maybeFixPulseAudioBuild
+         ++ optional post25 ./clone_detached.patch
          ++ [ ./glibc-2.16-use-siginfo_t.patch ];
 
-  postPatch = optionalString useOpenSSL ''
+  postPatch = ''
+    sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
+  '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
-  '' + optionalString post24 ''
-    sed -i -r -e "s/-f(stack-protector)(-all)?/-fno-\1/" build/common.gypi
+  '' + optionalString post25 ''
+    sed -i -e 's|/usr/bin/gcc|gcc|' \
+      third_party/WebKit/Source/WebCore/WebCore.gyp/WebCore.gyp
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {

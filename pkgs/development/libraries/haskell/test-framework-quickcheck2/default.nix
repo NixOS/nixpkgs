@@ -7,6 +7,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     extensibleExceptions QuickCheck random testFramework
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://batterseapower.github.com/test-framework/";
     description = "QuickCheck2 support for the test-framework package";

@@ -1,0 +1,24 @@
+diff -ru fuse-zip-0.2.13/lib/bigBuffer.cpp fuse-zip-0.2.13.new//lib/bigBuffer.cpp
+--- fuse-zip-0.2.13/lib/bigBuffer.cpp	2010-12-06 12:34:32.000000000 -0500
++++ fuse-zip-0.2.13.new//lib/bigBuffer.cpp	2011-09-28 21:40:01.294946957 -0400
+@@ -236,7 +236,7 @@
+     len = offset;
+ }
+ 
+-ssize_t BigBuffer::zipUserFunctionCallback(void *state, void *data, size_t len, enum zip_source_cmd cmd) {
++zip_int64_t BigBuffer::zipUserFunctionCallback(void *state, void *data, zip_uint64_t len, enum zip_source_cmd cmd) {
+     CallBackStruct *b = (CallBackStruct*)state;
+     switch (cmd) {
+         case ZIP_SOURCE_OPEN: {
+diff -ru fuse-zip-0.2.13/lib/bigBuffer.h fuse-zip-0.2.13.new//lib/bigBuffer.h
+--- fuse-zip-0.2.13/lib/bigBuffer.h	2010-12-06 12:34:32.000000000 -0500
++++ fuse-zip-0.2.13.new//lib/bigBuffer.h	2011-09-28 21:40:23.203719133 -0400
+@@ -52,7 +52,7 @@
+      * never called because read() always successfull.
+      * See zip_source_function(3) for details.
+      */
+-    static ssize_t zipUserFunctionCallback(void *state, void *data, size_t len, enum zip_source_cmd cmd);
++    static zip_int64_t zipUserFunctionCallback(void *state, void *data, zip_uint64_t len, enum zip_source_cmd cmd);
+ 
+     /**
+      * Return number of chunks needed to keep 'offset' bytes.

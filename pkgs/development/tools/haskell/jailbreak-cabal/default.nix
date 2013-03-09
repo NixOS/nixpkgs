@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "jailbreak-cabal";
-  version = "1.0";
-  sha256 = "10vq592fx1i3fdqiij7daf3dmqq5c8c29ihr2y1rn2pjhkyiy4kk";
+  version = "1.1";
+  sha256 = "0x0dkzfjsgqpjmldgami46ki9k7pgy7ll4slms0kdc89qryzp7dg";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ Cabal ];

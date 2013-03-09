@@ -1,5 +1,6 @@
-{ cabal, ansiTerminal, filepath, hspecExpectations, HUnit
-, QuickCheck, setenv, silently, time, transformers
+{ cabal, ansiTerminal, doctest, filepath, ghcPaths
+, hspecExpectations, hspecMeta, HUnit, QuickCheck, setenv, silently
+, time, transformers
 }:
 
 cabal.mkDerivation (self: {
@@ -11,6 +12,10 @@ cabal.mkDerivation (self: {
   buildDepends = [
     ansiTerminal filepath hspecExpectations HUnit QuickCheck setenv
     silently time transformers
+  ];
+  testDepends = [
+    ansiTerminal doctest filepath ghcPaths hspecExpectations hspecMeta
+    HUnit QuickCheck setenv silently time transformers
   ];
   meta = {
     homepage = "http://hspec.github.com/";

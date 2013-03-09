@@ -25,8 +25,8 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = ''
-     --with-linux=${kernel}/lib/modules/${kernel.version}/build
-     --with-linux-obj=${kernel}/lib/modules/${kernel.version}/build
+     --with-linux=${kernel}/lib/modules/${kernel.modDirVersion}/build
+     --with-linux-obj=${kernel}/lib/modules/${kernel.modDirVersion}/build
   '';
 
   meta = {

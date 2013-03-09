@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "03bzhfp7l9f5hh61qdrr83331nbfgj3jfsfylwmnmcknpisdqnkw";
   buildDepends = [ cpphs ];
   buildTools = [ happy ];
+  doCheck = false;
   meta = {
     homepage = "http://code.haskell.org/haskell-src-exts";
     description = "Manipulating Haskell source: abstract syntax, lexer, parser, and pretty-printer";

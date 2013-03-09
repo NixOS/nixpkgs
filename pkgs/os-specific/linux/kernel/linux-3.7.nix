@@ -78,6 +78,7 @@ let
       ATH9K_AHB y # Ditto, AHB bus
       B43_PHY_HT y
       BCMA_HOST_PCI y
+      CFG80211_WEXT y # Without it, ipw2200 drivers don't build
 
       # Some settings to make sure that fbcondecor works - in particular,
       # disable tileblitting and the drivers that need it.
@@ -250,7 +251,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.7.9";
+    version = "3.7.10";
     testing = false;
 
     preConfigure = ''
@@ -259,7 +260,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "1d9834flw0jyfn0lq1l0ahp8v12p227qn6z39v1pk53dap1zl0v1";
+      sha256 = "1l8b40z95ahc2v9babmhrbi8jn2bhwkapq0libq0z21iipqsya4v";
     };
 
     config = configWithPlatform stdenv.platform;

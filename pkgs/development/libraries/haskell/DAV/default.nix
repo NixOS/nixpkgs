@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "DAV";
-  version = "0.3";
-  sha256 = "16qbq59g79a0a1n6vblndj1fknj9fvd0anhrsz9czwl3k3lk5cx8";
+  version = "0.3.1";
+  sha256 = "0ql6sf61gq55iyn189papnid91n4ab5s2i24zvkqrgixjz7998rd";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

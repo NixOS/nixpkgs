@@ -1,5 +1,6 @@
-{ cabal, colour, dataDefault, diagramsLib, forceLayout, lens, mtl
-, vectorSpace
+{ cabal, colour, dataDefault, diagramsLib, forceLayout, HUnit, lens
+, mtl, QuickCheck, testFramework, testFrameworkHunit
+, testFrameworkQuickcheck2, vectorSpace
 }:
 
 cabal.mkDerivation (self: {
@@ -8,6 +9,10 @@ cabal.mkDerivation (self: {
   sha256 = "0j0wmf2nksqh3rqmzyw468bp25zikc5icif5f3rfi1v06ghsk0i5";
   buildDepends = [
     colour dataDefault diagramsLib forceLayout lens mtl vectorSpace
+  ];
+  testDepends = [
+    diagramsLib HUnit QuickCheck testFramework testFrameworkHunit
+    testFrameworkQuickcheck2
   ];
   meta = {
     homepage = "http://projects.haskell.org/diagrams/";

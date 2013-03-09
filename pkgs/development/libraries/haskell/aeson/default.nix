@@ -1,5 +1,6 @@
 { cabal, attoparsec, blazeBuilder, deepseq, dlist, hashable, mtl
-, syb, text, time, unorderedContainers, vector
+, QuickCheck, syb, testFramework, testFrameworkQuickcheck2, text
+, time, unorderedContainers, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -9,6 +10,10 @@ cabal.mkDerivation (self: {
   buildDepends = [
     attoparsec blazeBuilder deepseq dlist hashable mtl syb text time
     unorderedContainers vector
+  ];
+  testDepends = [
+    attoparsec QuickCheck testFramework testFrameworkQuickcheck2 text
+    time
   ];
   meta = {
     homepage = "https://github.com/bos/aeson";

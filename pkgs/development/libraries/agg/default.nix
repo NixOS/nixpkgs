@@ -8,7 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
   buildInputs = [ autoconf automake libtool pkgconfig freetype SDL libX11 ];
-  preConfigure = "sh autogen.sh";
+
+  # fix build with new automake, from Gentoo ebuild
+  preConfigure = ''
+    sed -i '/^AM_C_PROTOTYPES/d' configure.in
+    sh autogen.sh
+  '';
 
   configureFlags = "--x-includes=${libX11}/include --x-libraries=${libX11}/lib";
 

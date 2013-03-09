@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "sendfile";
-  version = "0.7.8";
-  sha256 = "0xy9ciikr444gblh3r8z3w4h4rcrfjfciw3dvxgzbygqs5dy6yxl";
+  version = "0.7.9";
+  sha256 = "0hnw1ym81cff49dwww19kgbs4s0kpandbvn6h5cml3y0p1nxybqh";
   buildDepends = [ network ];
   meta = {
     homepage = "http://hub.darcs.net/stepcut/sendfile";

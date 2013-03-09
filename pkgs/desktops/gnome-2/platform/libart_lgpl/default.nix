@@ -1,9 +1,9 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "libart_lgpl-2.3.20";
+stdenv.mkDerivation rec {
+  name = "libart_lgpl-2.3.21";
   src = fetchurl {
-    url = mirror://gnome/sources/libart_lgpl/2.3/libart_lgpl-2.3.20.tar.bz2;
-    sha256 = "0iyqsc517lj8xnidchnk0fxa6aqvss4hv8p9fk6bba86lbiillym";
+    url = "mirror://gnome/sources/libart_lgpl/2.3/${name}.tar.bz2";
+    sha256 = "1yknfkyzgz9s616is0l9gp5aray0f2ry4dw533jgzj8gq5s1xhgx";
   };
 }

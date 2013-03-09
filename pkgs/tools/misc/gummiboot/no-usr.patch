@@ -1,14 +1,24 @@
-diff -Naur gummiboot-16-orig/Makefile gummiboot-16/Makefile
---- gummiboot-16-orig/Makefile	2013-01-24 04:20:58.000000000 -0500
-+++ gummiboot-16/Makefile	2013-02-01 17:27:42.922371399 -0500
-@@ -1,13 +1,13 @@
- VERSION=16
+diff -Naur gummiboot-23-orig/Makefile gummiboot-23/Makefile
+--- gummiboot-23-orig/Makefile	2013-02-20 00:55:44.000000000 -0500
++++ gummiboot-23/Makefile	2013-02-21 12:00:35.783637645 -0500
+@@ -10,7 +10,8 @@
+ export E Q
  
  ARCH=$(shell $(CC) -dumpmachine | sed "s/\(-\).*$$//")
 -LIBDIR=$(shell echo $$(cd /usr/lib/$$(gcc -print-multi-os-directory); pwd))
++PREFIX=/usr
 +LIBDIR=$(GNU_EFI)/lib
  LIBEFIDIR=$(or $(wildcard $(LIBDIR)/gnuefi), $(LIBDIR))
  
+ ifeq ($(ARCH),i686)
+@@ -25,13 +26,13 @@
+ 		-mno-red-zone
+ endif
+ 
+-all: gummiboot$(MACHINE_TYPE_NAME).efi gummiboot
++all: gummiboot$(MACHINE_TYPE_NAME).efi gummiboot man
+ 
+ # ------------------------------------------------------------------------------
  CPPFLAGS = \
  	-I. \
 -	-I/usr/include/efi \
@@ -18,3 +28,52 @@ diff -Naur gummiboot-16-orig/Makefile gummiboot-16/Makefile
  
  CFLAGS = \
  	-DVERSION=$(VERSION) \
+@@ -82,6 +83,7 @@
+ 	  `pkg-config --cflags --libs blkid` \
+ 	  src/setup/setup.c \
+ 	  src/setup/efivars.c \
++	  -DPREFIX=\"$(PREFIX)\" \
+ 	  -o $@
+ 
+ # ------------------------------------------------------------------------------
+@@ -101,11 +103,11 @@
+ 	rm -f src/efi/gummiboot.o src/efi/gummiboot.so gummiboot gummiboot$(MACHINE_TYPE_NAME).efi
+ 
+ install: all
+-	mkdir -p $(DESTDIR)/usr/bin/
+-	cp gummiboot $(DESTDIR)/usr/bin
+-	mkdir -p $(DESTDIR)/usr/lib/gummiboot/
+-	cp gummiboot$(MACHINE_TYPE_NAME).efi $(DESTDIR)/usr/lib/gummiboot/
+-	[ -e gummiboot.1 ] && mkdir -p $(DESTDIR)/usr/share/man/man1/ && cp gummiboot.1 $(DESTDIR)/usr/share/man/man1/ || :
++	mkdir -p $(DESTDIR)$(PREFIX)/bin/
++	cp gummiboot $(DESTDIR)$(PREFIX)/bin
++	mkdir -p $(DESTDIR)$(PREFIX)/lib/gummiboot/
++	cp gummiboot$(MACHINE_TYPE_NAME).efi $(DESTDIR)$(PREFIX)/lib/gummiboot/
++	[ -e gummiboot.1 ] && mkdir -p $(DESTDIR)$(PREFIX)/share/man/man1/ && cp gummiboot.1 $(DESTDIR)$(PREFIX)/share/man/man1/ || :
+ 
+ tar:
+ 	git archive --format=tar --prefix=gummiboot-$(VERSION)/ $(VERSION) | xz > gummiboot-$(VERSION).tar.xz
+diff -Naur gummiboot-23-orig/src/setup/setup.c gummiboot-23/src/setup/setup.c
+--- gummiboot-23-orig/src/setup/setup.c	2013-02-20 00:55:44.000000000 -0500
++++ gummiboot-23/src/setup/setup.c	2013-02-21 11:57:43.295324700 -0500
+@@ -736,7 +736,7 @@
+         char *p = NULL, *q = NULL, *v = NULL;
+         int r;
+ 
+-        if (asprintf(&p, "/usr/lib/gummiboot/%s", name) < 0) {
++        if (asprintf(&p, PREFIX "/lib/gummiboot/%s", name) < 0) {
+                 fprintf(stderr, "Out of memory.\n");
+                 r = -ENOMEM;
+                 goto finish;
+@@ -791,9 +791,9 @@
+                         return r;
+         }
+ 
+-        d = opendir("/usr/lib/gummiboot");
++        d = opendir(PREFIX "/lib/gummiboot");
+         if (!d) {
+-                fprintf(stderr, "Failed to open /usr/lib/gummiboot: %m\n");
++                fprintf(stderr, "Failed to open " PREFIX "/lib/gummiboot: %m\n");
+                 return -errno;
+         }
+ 

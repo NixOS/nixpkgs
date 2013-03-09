@@ -1,0 +1,3 @@
+url http://mattmahoney.net/dc/zpaq.html
+version_link "/zpaq[0-9]+[.]zip"
+version "[^0-9]*([0-9]+)[^0-9]*" '\1'

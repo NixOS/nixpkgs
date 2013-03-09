@@ -1,8 +1,15 @@
-{ stdenv, fetchXfce, pkgconfig, intltool, gtk }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk }:
 
 stdenv.mkDerivation rec {
-  name = "gtk-xfce-engine-3.0.1";
-  src = fetchXfce.core name "0vd0ly81540f9133abza56mlqqx1swp0j70ll8kf948sva0wy0zb";
+  p_name  = "gtk-xfce-engine";
+  ver_maj = "3.0";
+  ver_min = "1";
+
+  src = fetchurl {
+    url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
+    sha256 = "0vd0ly81540f9133abza56mlqqx1swp0j70ll8kf948sva0wy0zb";
+  };
+  name = "${p_name}-${ver_maj}.${ver_min}";
 
   #TODO: gtk3
   buildInputs = [ pkgconfig intltool gtk ];

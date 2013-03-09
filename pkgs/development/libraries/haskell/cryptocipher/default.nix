@@ -1,5 +1,6 @@
-{ cabal, cereal, cipherAes, cipherRc4, cpu, cryptoApi
-, cryptoPubkeyTypes, primitive, tagged, vector
+{ cabal, cereal, cipherAes, cipherRc4, cpu, cryptoApi, cryptohash
+, cryptoPubkeyTypes, entropy, primitive, QuickCheck, tagged
+, testFramework, testFrameworkQuickcheck2, vector
 }:
 
 cabal.mkDerivation (self: {
@@ -11,6 +12,10 @@ cabal.mkDerivation (self: {
   buildDepends = [
     cereal cipherAes cipherRc4 cpu cryptoApi cryptoPubkeyTypes
     primitive tagged vector
+  ];
+  testDepends = [
+    cryptoApi cryptohash entropy QuickCheck testFramework
+    testFrameworkQuickcheck2 vector
   ];
   meta = {
     homepage = "http://github.com/vincenthz/hs-cryptocipher";
