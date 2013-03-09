@@ -85,7 +85,7 @@
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_14_0; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
     };
 
   ghc6121Prefs =
@@ -97,7 +97,7 @@
       monadPar = self.monadPar_0_1_0_3;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_14_0; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
     };
 
   ghc6104Prefs =
@@ -111,7 +111,7 @@
       monadPar = self.monadPar_0_1_0_3;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_14_0; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
     };
 
   # Abstraction for Haskell packages collections
