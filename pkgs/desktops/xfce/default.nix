@@ -17,6 +17,11 @@ deps = rec { # xfce-global dependency overrides should be here
 
 xfce_self = rec { # the lines are very long but it seems better than the even-odd line approach
 
+  #### NixOS support
+
+  inherit (deps) gvfs;
+  xinitrc = "${xfce4session}/etc/xdg/xfce4/xinitrc";
+
   #### CORE                 from "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2"
 
   exo             = callPackage ./core/exo.nix { };
@@ -61,10 +66,6 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
 
   xfce4_systemload_plugin = callPackage ./panel-plugins/xfce4-systemload-plugin.nix { };
   xfce4_cpufreq_plugin    = callPackage ./panel-plugins/xfce4-cpufreq-plugin.nix { };
-
-  #### SUPPORT
-
-  gvfs = deps.gvfs;
 
 }; # xfce_self
 
