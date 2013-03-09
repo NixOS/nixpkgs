@@ -7269,6 +7269,8 @@ let
 
   jack_oscrolloscope = callPackage ../applications/audio/jack-oscrolloscope { };
 
+  jack_rack = callPackage ../applications/audio/jack-rack { };
+
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
   jalv = callPackage ../applications/audio/jalv { };
