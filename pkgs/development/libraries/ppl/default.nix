@@ -1,13 +1,13 @@
 { fetchurl, stdenv, gmpxx, perl, gnum4 }:
 
-let version = "0.11.2"; in
+let version = "0.12.1"; in
 
 stdenv.mkDerivation rec {
   name = "ppl-${version}";
 
   src = fetchurl {
     url = "http://bugseng.com/products/ppl/download/ftp/releases/${version}/ppl-${version}.tar.bz2";
-    sha256 = "1sxviip4yk6gp453pid5scy1ba66dzdpr02i1416yk7lkv0x3yz3";
+    sha256 = "165iy8bmkgszs0v8lkb1mzwp53x4vkcc7m1xdpv8w77qf93ya8j0";
   };
 
   nativeBuildInputs = [ perl gnum4 ];
@@ -23,7 +23,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
+    homepage = "http://www.cs.unipr.it/ppl/";
     description = "PPL: The Parma Polyhedra Library";
+    license = "GPLv3+";
 
     longDescription = ''
       The Parma Polyhedra Library (PPL) provides numerical abstractions
@@ -39,10 +41,6 @@ stdenv.mkDerivation rec {
       integer linear programming problem solver using an exact-arithmetic
       version of the simplex algorithm.
     '';
-
-    homepage = http://www.cs.unipr.it/ppl/;
-
-    license = "GPLv3+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
   };

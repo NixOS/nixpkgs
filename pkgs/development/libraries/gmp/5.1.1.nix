@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "gmp-5.1.1";
 
   src = fetchurl {
-    urls = [ "mirror://gnu/gmp/${name}.tar.bz2" "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
+    urls = [ "mirror://gnu/gmp/${name}.tar.bz2" 
+      "ftp://ftp.gmplib.org/pub/${name}/${name}.tar.bz2" ];
     sha256 = "1bdgf04k2i12pfivxgjq68iarz3ngix9hpzbmkgijrdk92gpgm50";
   };
 
