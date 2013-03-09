@@ -5244,10 +5244,10 @@ rec {
   };
 
   XMLLibXML = buildPerlPackage rec {
-    name = "XML-LibXML-2.0001";
+    name = "XML-LibXML-2.0014";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/XML/${name}.tar.gz";
-      sha256 = "1zx4fqi531yzaf1c5cw1qwb9vy37fksz35a7pp6pic9v8jvz09x6";
+      sha256 = "0r2mw6pnygj2bpng9f4q5jfn4iawhkj47ys3sbnvqymyp1afihf6";
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ pkgs.libxml2 ];
