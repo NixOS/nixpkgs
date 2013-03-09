@@ -456,6 +456,28 @@ pythonPackages = python.modules // rec {
   };
 
 
+  buildout152 = buildPythonPackage rec {
+    name = "buildout-${version}";
+    version = "1.5.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
+      md5 = "87f7b3f8d13926c806242fd5f6fe36f7";
+    };
+
+   # TODO: consider if this patch should be an option
+   # It makes buildout useful in a nix profile, but this alters the default functionality
+   patchPhase = ''
+     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
+   '';
+
+   meta = {
+      homepage = http://www.buildout.org/;
+      description = "A software build and configuration system";
+    };
+  };
+
+
   carrot = buildPythonPackage rec {
     name = "carrot-0.10.7";
 
