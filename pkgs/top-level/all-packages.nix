@@ -7313,6 +7313,8 @@ let
     fftw = fftwSinglePrec;
   };
 
+  caps = callPackage ../applications/audio/caps { };
+
   lastwatch = callPackage ../applications/audio/lastwatch { };
 
   lci = callPackage ../applications/science/logic/lci {};
