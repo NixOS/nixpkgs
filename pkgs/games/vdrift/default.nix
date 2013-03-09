@@ -2,12 +2,20 @@
   asio, boost, SDL_gfx, pkgconfig, bullet, curl, libarchive }:
 
 stdenv.mkDerivation rec {
-  name = "vdrift-2011-10-22";
+  version = "2012-07-22";
+  name = "vdrift-${version}";
+  patch = "c"; # see https://github.com/VDrift/vdrift/issues/110
 
   src = fetchurl {
     url = "mirror://sourceforge/vdrift/${name}.tar.bz2";
-    sha256 = "0vg1v1590jbln6k236kxn2sfgclvc6g34kykhh4nq9q3l1xgy38s";
+    sha256 = "1yqkc7y4s4g5ylw501bf0c03la7kfddjdk4yyi1xkcwy3pmgw2al";
   };
+
+  patches = fetchurl {
+    url = "mirror://sourceforge/vdrift/${name}${patch}_patch.diff";
+    sha256 = "08mfg4xxkzyp6602cgqyjzc3rn0zsaa3ddjkpd44b83drv19lriy";
+  };
+  patchFlags = "-p0";
 
   buildInputs = [ scons mesa SDL freeglut SDL_image glew libvorbis asio boost
     SDL_gfx pkgconfig bullet curl libarchive ];
