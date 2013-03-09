@@ -95,9 +95,9 @@
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
+      # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_14_0; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
-      # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
   ghc6104Prefs =
@@ -109,9 +109,9 @@
       text = self.text_0_11_0_6;
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
+      # deviating from Haskell platform here, to make some packages (notably statistics) compile
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
       cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_14_0; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
-      # deviating from Haskell platform here, to make some packages (notably statistics) compile
     };
 
   # Abstraction for Haskell packages collections
