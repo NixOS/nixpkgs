@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libevent openssl zlib ];
 
-  NIX_CFLAGS_LINK = "-lgcc_s";
+  CFLAGS = "-lgcc_s";
 
   doCheck = true;
 
