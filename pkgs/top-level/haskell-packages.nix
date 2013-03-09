@@ -106,6 +106,18 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     enableLibraryProfiling = enableLibraryProfiling;
   };
 
+  # A variant of the cabal build driver that disables unit testing.
+  # Useful for breaking cycles, where the unit test of a package A
+  # depends on package B, which has A as a regular build input.
+  cabalNoTest = {
+    mkDerivation = x: rec {
+      final = self.cabal.mkDerivation (self: (x final) // { doCheck = false; });
+    }.final;
+  };
+
+  # Convenience helper function.
+  disableTest = x: x.override { cabal = self.cabalNoTest; };
+
   # Haskell Platform
   #
   # We try to support several platform versions. For these, we set all
