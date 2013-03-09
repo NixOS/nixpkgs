@@ -62,6 +62,10 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfce4_systemload_plugin = callPackage ./panel-plugins/xfce4-systemload-plugin.nix { };
   xfce4_cpufreq_plugin    = callPackage ./panel-plugins/xfce4-cpufreq-plugin.nix { };
 
+  #### SUPPORT
+
+  gvfs = deps.gvfs;
+
 }; # xfce_self
 
 in xfce_self
