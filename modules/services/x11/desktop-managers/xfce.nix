@@ -38,7 +38,7 @@ in
             # Ugly.
             export GST_PLUGIN_PATH=${config.system.path}/lib
 
-            exec ${pkgs.stdenv.shell} ${pkgs.xfce.xfceutils}/etc/xdg/xfce4/xinitrc
+            exec ${pkgs.stdenv.shell} ${pkgs.xfce.xinitrc}
           '';
       };
 
