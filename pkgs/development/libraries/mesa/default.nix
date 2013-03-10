@@ -25,9 +25,9 @@ stdenv.mkDerivation {
 
   configureFlags =
     ""
-    + " --enable-gles1 --enable-gles2 --disable-gallium-egl"
+    + " --enable-gles1 --enable-gles2 --enable-gallium-egl"
+    + " --with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast"
     + " --with-egl-platforms=x11,wayland,drm --enable-gbm --enable-shared-glapi"
-    + " --with-gallium-drivers=nouveau,r300,r600,svga,swrast"
     + stdenv.lib.optionalString enableR600LlvmCompiler " --enable-r600-llvm-compiler"
     # Texture floats are patented, see docs/patents.txt
     + stdenv.lib.optionalString enableTextureFloats " --enable-texture-float";
