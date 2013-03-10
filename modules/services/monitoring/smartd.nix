@@ -6,6 +6,27 @@ let
 
   cfg = config.services.smartd;
 
+  smartdOpts = { name, ... }: {
+
+    options = {
+
+      device = mkOption {
+        example = "/dev/sda";
+        type = types.string;
+        description = "Location of the device.";
+      };
+
+      options = mkOption {
+        default = "";
+        example = "-d sat";
+        type = types.string;
+        merge = pkgs.lib.concatStringsSep " ";
+        description = "Options that determine how smartd monitors the device";
+      };
+    };
+
+  };
+
   smartdMail = pkgs.writeScript "smartdmail.sh" ''
     #! ${pkgs.stdenv.shell}
     TMPNAM=/tmp/smartd-message.$$.tmp
@@ -24,7 +45,7 @@ let
 
   smartdConf = pkgs.writeText "smartd.conf" (concatMapStrings (device:
     ''
-      ${device} -a -m root -M exec ${smartdMail} ${cfg.deviceOpts}
+      ${device.device} -a -m root -M exec ${smartdMail} ${device.options} ${cfg.deviceOpts}
     ''
     ) cfg.devices);
 
@@ -63,7 +84,9 @@ in
 
       devices = mkOption {
         default = [];
-        example = ["/dev/sda" "/dev/sdb"];
+        example = [ { device = "/dev/sda"; } { device = "/dev/sdb"; options = "-d sat"; } ];
+        type = types.list types.optionSet;
+        options = [ smartdOpts ];
         description = ''
           List of devices to monitor. By default -- if this list is empty --,
           smartd will monitor all devices connected to the machine at the time
