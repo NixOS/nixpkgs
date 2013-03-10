@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ polkit gtk3 ];
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 
   configureFlags = "--disable-introspection";
 

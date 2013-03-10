@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
           MANDIR=$out/share/man/man8 PPPDIR=$out/etc/ppp )
     '';
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   meta = {
     description = "PPTP client for Linux";

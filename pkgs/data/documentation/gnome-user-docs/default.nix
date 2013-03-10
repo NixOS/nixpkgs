@@ -8,5 +8,5 @@ stdenv.mkDerivation {
     sha256 = "1ka0nw2kc85p10y8x31v0wv06a88k7qrgafp4ys04y9fzz0rkcjj";
   };
 
-  buildNativeInputs = [ itstool libxml2 gettext ];
+  nativeBuildInputs = [ itstool libxml2 gettext ];
 }

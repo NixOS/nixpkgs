@@ -6,7 +6,7 @@
 assert release -> keyStore != null && keyAlias != null && keyStorePassword != null && keyAliasPassword != null;
 
 let
-  platformName = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then "linux"
+  platformName = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" then "linux"
     else if stdenv.system == "x86_64-darwin" then "macosx"
     else throw "Platform: ${stdenv.system} is not supported!";
 
@@ -37,5 +37,8 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     mv bin/*-${if release then "release" else "debug"}.apk $out
+    
+    mkdir -p $out/nix-support
+    echo "file binary-dist $(ls $out/*.apk)" > $out/nix-support/hydra-build-products
   '';
 }

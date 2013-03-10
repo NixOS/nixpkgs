@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ kdelibs ];
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   meta = {
     homepage = http://yakuake.kde.org;

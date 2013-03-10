@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib libxml2 sqlite zlib sg3_utils
     gdk_pixbuf taglib libimobiledevice python pygobject mutagen ];
 
-  buildNativeInputs = [ gettext perlXMLParser intltool pkgconfig perl
+  nativeBuildInputs = [ gettext perlXMLParser intltool pkgconfig perl
     libimobiledevice.swig ];
 
   meta = {

@@ -9,7 +9,7 @@ kde {
       samba (libcanberra.override { gtk = null; }) ntrack libjpeg qca2 pulseaudio
     ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   passthru.propagatedUserEnvPackages = [ virtuoso ];
 

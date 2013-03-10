@@ -14,5 +14,5 @@ stdenv.mkDerivation {
   pythonPath = [ libxml2Python ];
   postInstall = "wrapPythonPrograms";
 
-  buildNativeInputs = [ pkgconfig intltool pythonPackages.wrapPython ];
+  nativeBuildInputs = [ pkgconfig intltool pythonPackages.wrapPython ];
 }

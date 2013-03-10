@@ -68,6 +68,11 @@ pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pycrypto25 = import ../development/python-modules/pycrypto/2.5.nix {
+    inherit (pkgs) fetchurl stdenv gmp;
+    inherit python buildPythonPackage;
+  };
+
   pygobject = import ../development/python-modules/pygobject {
     inherit (pkgs) stdenv fetchurl pkgconfig glib;
     inherit python;
@@ -135,7 +140,7 @@ pythonPackages = python.modules // rec {
 
     postInstall = ''
       wrapProgram $out/bin/alot \
-        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file511}/lib:${pkgs.gpgme}/lib
+        --prefix LD_LIBRARY_PATH : ${pkgs.notmuch}/lib:${pkgs.file}/lib:${pkgs.gpgme}/lib
     '';
 
     meta = {
@@ -436,6 +441,28 @@ pythonPackages = python.modules // rec {
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
       md5 = "4e3b521600e475c56a0a66459a5fc7bb";
+    };
+
+   # TODO: consider if this patch should be an option
+   # It makes buildout useful in a nix profile, but this alters the default functionality
+   patchPhase = ''
+     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
+   '';
+
+   meta = {
+      homepage = http://www.buildout.org/;
+      description = "A software build and configuration system";
+    };
+  };
+
+
+  buildout152 = buildPythonPackage rec {
+    name = "buildout-${version}";
+    version = "1.5.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
+      md5 = "87f7b3f8d13926c806242fd5f6fe36f7";
     };
 
    # TODO: consider if this patch should be an option
@@ -1486,12 +1513,12 @@ pythonPackages = python.modules // rec {
 
 
   magic = pkgs.stdenv.mkDerivation rec {
-    name = "python-${pkgs.file511.name}";
+    name = "python-${pkgs.file.name}";
 
-    src = pkgs.file511.src;
+    src = pkgs.file.src;
 
     patches = [ ../tools/misc/file/python.patch ];
-    buildInputs = [ python pkgs.file511 ];
+    buildInputs = [ python pkgs.file ];
 
     configurePhase = "cd python";
 
@@ -2655,12 +2682,12 @@ pythonPackages = python.modules // rec {
   });
 
   ldap = buildPythonPackage rec {
-    name = "python-ldap-2.4.3";
+    name = "python-ldap-2.4.10";
     namePrefix = "";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/python-ldap/${name}.tar.gz";
-      sha256 = "17aysa9b4zjw00ikjirf4m37xbp2ifj1g0zjs14xzqqib3nh1yw8";
+      sha256 = "0m6fm2alcb5v9xdcjv2nw2lhz9nnd3mnr5lrmf397hi4pw0pik37";
     };
 
     NIX_CFLAGS_COMPILE = "-I${pkgs.cyrus_sasl}/include/sasl";
@@ -4714,6 +4741,32 @@ pythonPackages = python.modules // rec {
     meta = {
       homepage = http://www.pykka.org;
       description = "A Python implementation of the actor model";
+      maintainers = [ stdenv.lib.maintainers.rickynils ];
+    };
+  };
+
+  ws4py = buildPythonPackage rec {
+    name = "ws4py-${version}";
+  
+    version = "git-20130303";
+  
+    src = fetchgit {
+      url = "https://github.com/Lawouach/WebSocket-for-Python.git";
+      rev = "ace276500ca7e4c357595e3773be151d37bcd6e2";
+      sha256 = "04m4m3ncn7g4rb81xg5n28imns7rsq8d2w98gjpaib6vlmyly3g1";
+    };
+  
+    # python zip complains about old timestamps
+    preConfigure = ''
+      find -print0 | xargs -0 touch
+    '';
+  
+    # Tests depend on other packages
+    doCheck = false;
+  
+    meta = {
+      homepage = https://ws4py.readthedocs.org;
+      description = "A WebSocket package for Python";
       maintainers = [ stdenv.lib.maintainers.rickynils ];
     };
   };

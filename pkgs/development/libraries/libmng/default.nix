@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "unmaintained/autogen.sh";
 
-  buildNativeInputs = [ automake110x autoconf libtool ];
+  nativeBuildInputs = [ automake110x autoconf libtool ];
 
   propagatedBuildInputs = [ zlib libpng libjpeg lcms ];
 

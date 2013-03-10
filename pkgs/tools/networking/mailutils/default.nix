@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0szbqa12zqzldqyw97lxqax3ja2adis83i7brdfsxmrfw68iaf65";
   };
 
-  patches = [ ./path-to-cat.patch ];
+  patches = [ ./path-to-cat.patch ./no-gets.patch ];
 
   buildInputs =
    [ gettext gdbm libtool pam readline ncurses

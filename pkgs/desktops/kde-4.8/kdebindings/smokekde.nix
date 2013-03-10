@@ -3,7 +3,7 @@
 kde {
   # attica, akonadi and kdepimlibs are disabled due to smokegen crash
   buildInputs = [ smokeqt kdelibs shared_desktop_ontologies ];
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = "-DQTDEFINES_FILE=${smokeqt}/share/smokegen/qtdefines";
   meta = {

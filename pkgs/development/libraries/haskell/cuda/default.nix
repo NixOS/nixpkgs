@@ -7,21 +7,19 @@ cabal.mkDerivation (self: {
   buildDepends = [ extensibleExceptions ];
   buildTools = [ c2hs ];
   extraLibraries = [ cudatoolkit nvidia_x11 self.stdenv.gcc ];
+  doCheck = false;
   # Perhaps this should be the default in cabal.nix ...
   #
   # The cudatoolkit provides both 64 and 32-bit versions of the
   # library. GHC's linker fails if the wrong version is found first.
   # We solve this by eliminating lib64 from the path on 32-bit
   # platforms and putting lib64 first on 64-bit platforms.
-  
   libPaths = if self.stdenv.is64bit then "lib64 lib" else "lib";
-  
   configurePhase = ''
     for i in Setup.hs Setup.lhs; do
       test -f $i && ghc --make $i
     done
-  
-    for p in $extraBuildInputs $propagatedBuildNativeInputs; do
+    for p in $extraBuildInputs $propagatedNativeBuildInputs; do
       if [ -d "$p/include" ]; then
         extraLibDirs="$extraLibDirs --extra-include-dir=$p/include"
       fi
@@ -31,7 +29,6 @@ cabal.mkDerivation (self: {
         fi
       done
     done
-  
     ./Setup configure --verbose --prefix="$out" $libraryProfiling $extraLibDirs $configureFlags
   '';
   meta = {

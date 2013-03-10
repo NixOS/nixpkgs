@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst_plugins_base GConf ]
     ++ optional withMesa mesa;
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = [
     "--enable-gtk2"

@@ -1,6 +1,6 @@
 # This file was generated and will be overwritten by ./generate.sh
 
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation rec {
   name = "python26-docs-pdf-letter-2.6.8";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "01r87m8hb7f9ql4j9zcjcrr9150nsk23sj8cy02vygr83sc1ldmq";
   };
   installPhase = ''
-    mkdir -p $out/share/docs
-    cp -R ./ $out/share/docs/${name}
+    mkdir -p $out/share/doc/python26
+    cp -R ./ $out/share/doc/python26/pdf-letter
   '';
   meta = {
     maintainers = [ lib.maintainers.chaoflow ];

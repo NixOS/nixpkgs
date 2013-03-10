@@ -16,7 +16,7 @@ kde {
       kactivities
     ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   preConfigure =
    ''
@@ -27,6 +27,8 @@ kde {
      substituteInPlace kcontrol/keyboard/xkb_rules.cpp \
        --replace /usr/share/X11 ${xkeyboard_config}/etc/X11
    '';
+
+  enableParallelBuilding = false; # frequent problems on Hydra
 
   meta = {
     description = "KDE workspace components such as Plasma, Kwin and System Settings";

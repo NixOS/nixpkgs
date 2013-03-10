@@ -1,12 +1,12 @@
 { stdenv, fetchurl, noSysDirs, zlib, cross ? null, gold ? false, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null }:
 
-let basename = "binutils-2.21.1a"; in
+let basename = "binutils-2.23.1"; in
 stdenv.mkDerivation rec {
   name = basename + stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "0m7nmd7gc9d9md43wbrv65hz6lbi2crqwryzpigv19ray1lzmv6d";
+    sha256 = "06bs5v5ndb4g5qx96d52lc818gkbskd1m0sz57314v887sqfbcia";
   };
 
   patches = [
@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     # RUNPATH instead of RPATH on binaries.  This is important because
     # RUNPATH can be overriden using LD_LIBRARY_PATH at runtime.
     ./new-dtags.patch
+
+    # Since binutils 2.22, DT_NEEDED flags aren't copied for dynamic outputs.
+    # That requires upstream changes for things to work. So we can patch it to
+    # get the old behaviour by now.
+    ./dtneeded.patch
   ];
 
   buildInputs =

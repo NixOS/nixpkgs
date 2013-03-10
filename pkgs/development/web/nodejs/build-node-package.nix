@@ -30,7 +30,7 @@ stdenv.mkDerivation ({
     runHook postBuild
   '';
 
-  buildNativeInputs = neededNatives;
+  nativeBuildInputs = neededNatives;
 
   installPhase = ''
     runHook preInstall

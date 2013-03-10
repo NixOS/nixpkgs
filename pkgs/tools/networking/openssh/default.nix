@@ -28,7 +28,6 @@ stdenv.mkDerivation rec {
 
   patches = [ ./locale_archive.patch ];
 
-  buildNativeInptus = [ perl ];
   buildInputs = [ zlib openssl libedit pkgconfig pam ];
 
   # I set --disable-strip because later we strip anyway. And it fails to strip

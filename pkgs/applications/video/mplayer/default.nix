@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     ++ optional libpngSupport libpng
     ;
 
-  buildNativeInputs = [ yasm ];
+  nativeBuildInputs = [ yasm ];
 
   postConfigure = ''
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak

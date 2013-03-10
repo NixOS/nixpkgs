@@ -1,6 +1,6 @@
 # This file was generated and will be overwritten by ./generate.sh
 
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, lib }:
 
 stdenv.mkDerivation rec {
   name = "python31-docs-pdf-letter-3.1.5";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0s202vrjfa8dnp3vpfjb21bmqym9wyj8jn2glgwjzk63z6fwb60i";
   };
   installPhase = ''
-    mkdir -p $out/share/docs
-    cp -R ./ $out/share/docs/${name}
+    mkdir -p $out/share/doc/python31
+    cp -R ./ $out/share/doc/python31/pdf-letter
   '';
   meta = {
     maintainers = [ lib.maintainers.chaoflow ];

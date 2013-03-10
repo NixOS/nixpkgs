@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libtiff openexr imagemagick libjpeg qt4 mesa freeglut
     bzip2 libX11 libpng expat ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://pfstools.sourceforge.net/;

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
                   libXrandr libXfixes libXrender libXext libXinerama
                   python pyparsing ];
 
-  buildNativeInputs = [ pkgconfig spice_protocol ];
+  nativeBuildInputs = [ pkgconfig spice_protocol ];
 
   NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 

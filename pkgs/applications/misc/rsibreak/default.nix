@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yrf73r8mixskh8b531wb8dfs9z7rrw010xsrflhjhjmqh94h8mw";
   };
 
-  buildNativeInputs = [ gettext ];
+  nativeBuildInputs = [ gettext ];
 
   buildInputs = [ kdelibs kdebase_workspace ];
 

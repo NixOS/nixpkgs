@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1mjk686h1qzqj51h4xs4xvagfgnnhm8czbzzjvr5w034pr8n8rg1";
   };
 
-  buildNativeInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig perl ];
 
   buildInputs = [
     xorg.libX11 xorg.libXv xorg.libXinerama xorg.libxcb xorg.libXext

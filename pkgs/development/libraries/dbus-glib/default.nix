@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "04fiwld5yaxyggxlvdmbaqkngh4fn8gfkkqckcp3274bpgb82z19";
   };
 
-  buildNativeInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkgconfig gettext ];
 
   buildInputs = [ expat ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
 

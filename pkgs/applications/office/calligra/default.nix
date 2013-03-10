@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q6ydi7hzrzwqzb38gikdh1l2zf8qp4i3nkgyb01148bjwrhvf21";
   };
 
-  buildNativeInputs = [ cmake perl pkgconfig ];
+  nativeBuildInputs = [ cmake perl pkgconfig ];
 
   buildInputs = [ kdelibs attica zlib libpng boost mesa kdepimlibs
     createresources eigen qca2 exiv2 soprano marble lcms2 fontconfig freetype

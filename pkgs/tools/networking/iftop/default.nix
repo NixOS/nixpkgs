@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1b0fis53280qx85gldhmqfcpgyiwplzg43gxyngia1w3f1y58cnh";
   };
 
+  # Explicitly link against libgcc_s, to work around the infamous
+  # "libgcc_s.so.1 must be installed for pthread_cancel to work".
+  LDFLAGS = "-lgcc_s";
+
   preConfigure = ''
     cp ${automake}/share/automake*/config.{sub,guess} config
   '';

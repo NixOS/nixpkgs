@@ -1,9 +1,15 @@
-{ h, v, stdenv, fetchXfce, python, gettext, intltool, pkgconfig, gtk, gvfs }:
+{ stdenv, fetchurl, python, gettext, intltool, pkgconfig, gtk, gvfs }:
 
 stdenv.mkDerivation rec {
-  name = "gigolo-${v}";
+  p_name  = "gigolo";
+  ver_maj = "0.4";
+  ver_min = "1";
 
-  src = fetchXfce.app name h;
+  src = fetchurl {
+    url = "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2";
+    sha256 = "1y8p9bbv1a4qgbxl4vn6zbag3gb7gl8qj75cmhgrrw9zrvqbbww2";
+  };
+  name = "${p_name}-${ver_maj}.${ver_min}";
 
   buildInputs = [ python gettext intltool gtk pkgconfig gvfs];
 
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://goodies.xfce.org/projects/applications/gigolo;
+    homepage = "http://goodies.xfce.org/projects/applications/${p_name}";
     description = "A frontend to easily manage connections to remote filesystems";
     platforms = stdenv.lib.platforms.linux;
   };

@@ -23,8 +23,8 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = git://anongit.freedesktop.org/xorg/driver/xf86-video-nested;
-    description = "Driver to run Xorg on top of Xorg or something else";
+    homepage = http://cgit.freedesktop.org/xorg/driver/xf86-video-nested;
+    description = "A driver to run Xorg on top of Xorg or something else";
     maintainers = [ stdenv.lib.maintainers.goibhniu ];
     platforms = stdenv.lib.platforms.linux;
   };

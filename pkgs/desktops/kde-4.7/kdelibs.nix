@@ -15,7 +15,7 @@ kde {
 
   propagatedBuildInputs = [ qt4 soprano strigi phonon ];
 
-  propagatedBuildNativeInputs = [ automoc4 cmake perl shared_mime_info ];
+  propagatedNativeBuildInputs = [ automoc4 cmake perl shared_mime_info ];
 
   # TODO: make sonnet plugins (dictionaries) really work.
   # There are a few hardcoded paths.

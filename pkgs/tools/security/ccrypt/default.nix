@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1bzbfq19jnnlp221kilzxpy0l6w3hk9b1iqjz4haypzlyxswnf35";
   };
 
-  buildNativeInputs = [ perl ];
+  nativeBuildInputs = [ perl ];
 
   meta = {
     homepage = http://ccrypt.sourceforge.net/;

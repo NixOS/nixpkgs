@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ qt4 ];
-  buildNativeInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = "-DWITH_DOC=OFF";
   

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib dbus.libs openobex bluez libical ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://www.bluez.org/;

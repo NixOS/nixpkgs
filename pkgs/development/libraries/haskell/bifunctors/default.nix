@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "bifunctors";
-  version = "3.2";
-  sha256 = "03bszf1127iw5kimjbag5gmgzz7h2qzcd9f7jb53jpiadfhjfx0a";
+  version = "3.2.0.1";
+  sha256 = "1biicx0zi48wzzi7vkhzvrdyk59hmmm1bqbsga6x5nbrbf3qrkm6";
   buildDepends = [ semigroupoids semigroups tagged ];
   meta = {
     homepage = "http://github.com/ekmett/bifunctors/";

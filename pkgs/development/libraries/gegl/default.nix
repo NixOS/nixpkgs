@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ babl libpng cairo libjpeg librsvg pango gtk bzip2 intltool ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = { 
     description = "Graph-based image processing framework";

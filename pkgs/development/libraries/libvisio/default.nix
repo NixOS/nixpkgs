@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1iqkz280mi066bdccyxagkqm41i270nx01cacvgjq2pflgd3njd1";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ boost libwpd libwpg ];
 
   configureFlags = "--disable-werror";

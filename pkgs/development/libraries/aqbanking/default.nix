@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gwenhywfar gmp zlib ];
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = "--with-gwen-dir=${gwenhywfar}";
 

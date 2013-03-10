@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "wesnoth";
-  version = "1.10.2";
+  version = "1.10.5";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "0hawzq85sq0kdddj0s7y6kpx043g1hsl7cvyw1xcxqh45hkgw2ix";
+    sha256 = "1rvlr8c3vzhgd33vzc1hfhiil6d7hc3px8r8p79vmp3kwi3d49zn";
   };
 
   buildInputs = [ SDL SDL_image SDL_mixer SDL_net SDL_ttf pango gettext zlib boost fribidi

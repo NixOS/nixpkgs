@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ glib ];
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = http://live.gnome.org/JsonGlib;

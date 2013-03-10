@@ -52,7 +52,7 @@
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; };
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
       monadPar = self.monadPar_0_1_0_3;
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
     };
 
   ghc703Prefs =
@@ -61,7 +61,7 @@
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
     };
 
   ghc702Prefs = ghc701Prefs;
@@ -72,7 +72,7 @@
       cabalInstall_0_14_0 = self.cabalInstall_0_14_0.override { Cabal = self.Cabal_1_14_0; zlib = self.zlib_0_5_3_3; };
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
     };
 
   ghc6123Prefs = ghc6122Prefs;
@@ -84,8 +84,8 @@
       monadPar = self.monadPar_0_1_0_3;
       deepseq = self.deepseq_1_1_0_2;
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_14_0; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
     };
 
   ghc6121Prefs =
@@ -95,9 +95,9 @@
       extensibleExceptions = self.extensibleExceptions_0_1_1_0;
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_14_0; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
     };
 
   ghc6104Prefs =
@@ -109,9 +109,9 @@
       text = self.text_0_11_0_6;
       deepseq = self.deepseq_1_1_0_2;
       monadPar = self.monadPar_0_1_0_3;
-      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.Cabal_1_14_0; };
-      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_14_0; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
       # deviating from Haskell platform here, to make some packages (notably statistics) compile
+      jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      cabal2nix = self.cabal2nix.override { Cabal = self.Cabal_1_16_0_3; hackageDb = self.hackageDb.override { Cabal = self.Cabal_1_16_0_3; }; };
     };
 
   # Abstraction for Haskell packages collections

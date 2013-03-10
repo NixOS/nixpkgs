@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = "export USER=`whoami`";
-  buildNativeInputs = [ flex bison pkgconfig intltool procps ];
+  nativeBuildInputs = [ flex bison pkgconfig intltool procps ];
   buildInputs = [ libxml2 ];
   propagatedBuildInputs = [ popt glib ORBit2 ];
 }

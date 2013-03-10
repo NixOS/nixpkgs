@@ -2,12 +2,15 @@
 , xfconf, udev, libnotify }:
 
 stdenv.mkDerivation rec {
-  name = "thunar-volman-0.6.0";
+  p_name  = "thunar-volman";
+  ver_maj = "0.8";
+  ver_min = "0";
 
   src = fetchurl {
-    url = "http://archive.xfce.org/src/xfce/thunar-volman/0.6/${name}.tar.bz2";
-    sha1 = "dcda936948623b342b290a78c294f71c038e832e";
+    url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
+    sha256 = "1sxw09fwyn5sr6ipxk7r8gqjyf41c2v7vkgl0l6mhy5mcb48f27z";
   };
+  name = "${p_name}-${ver_maj}.${ver_min}";
 
   buildInputs =
     [ pkgconfig intltool exo gtk udev libxfce4ui libxfce4util
@@ -18,7 +21,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://thunar.xfce.org/;
+    homepage = http://goodies.xfce.org/projects/thunar-plugins/thunar-volman;
     description = "Thunar extension for automatic management of removable drives and media";
     license = "GPLv2+";
     platforms = stdenv.lib.platforms.linux;

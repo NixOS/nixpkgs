@@ -1,9 +1,16 @@
-{ v, h, stdenv, fetchXfce, pkgconfig, intltool
+{ stdenv, fetchurl, pkgconfig, intltool
 , gtk , libxfce4util, libxfce4ui, xfconf }:
 
 stdenv.mkDerivation rec {
-  name = "xfce4-notifyd-${v}";
-  src = fetchXfce.app name h;
+  p_name  = "xfce4-notifyd";
+  ver_maj = "0.2";
+  ver_min = "2";
+
+  src = fetchurl {
+    url = "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2";
+    sha256 = "0s4ilc36sl5k5mg5727rmqims1l3dy5pwg6dk93wyjqnqbgnhvmn";
+  };
+  name = "${p_name}-${ver_maj}.${ver_min}";
 
   buildInputs = [ pkgconfig intltool gtk libxfce4util libxfce4ui xfconf ];
 
@@ -14,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://goodies.xfce.org/projects/applications/xfce4-notifyd;
+    homepage = "http://goodies.xfce.org/projects/applications/${p_name}";
     description = "Notification daemon for Xfce";
     license = "GPLv2+";
   };

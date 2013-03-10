@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "1233szd05ahaxyk1sjis374n90m40svfks2aq9jx3g3lxygzwmi2";
   };
 
-  buildNativeInputs = [ cmake automoc4 xz ];
+  nativeBuildInputs = [ cmake automoc4 xz ];
 
   buildInputs = [ qt4 vlc_ phonon ];
 

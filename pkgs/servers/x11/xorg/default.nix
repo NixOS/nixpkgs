@@ -1518,11 +1518,11 @@ let
   })) // {inherit fontsproto libpciaccess randrproto renderproto videoproto xextproto xorgserver xproto ;};
     
   xf86videointel = (stdenv.mkDerivation ((if overrides ? xf86videointel then overrides.xf86videointel else x: x) {
-    name = "xf86-video-intel-2.20.10";
+    name = "xf86-video-intel-2.20.19";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-intel-2.20.10.tar.bz2;
-      sha256 = "1kfd6qiqxyqhjp8g1xcipkldsf7xa47q8zfdhxg3qzw77n6a4hfz";
+      url = mirror://xorg/individual/driver/xf86-video-intel-2.20.19.tar.bz2;
+      sha256 = "0k67vcf0aqhv9zmy1arxyjdl7fsrg90cjm0ryyhamghq67z0xcmr";
     };
     buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess pixman randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ];
   })) // {inherit dri2proto fontsproto libdrm udev libpciaccess pixman randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ;};
@@ -1724,9 +1724,8 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xf86-video-vmware-12.0.2.tar.bz2;
       sha256 = "0isiwx516gww8hfk3vy7js83yziyjym9mq2zjadyq1a8v5gqf9y8";
     };
-    CFLAGS = "-I${pixman}/include/pixman-1";
-    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto pixman ];
-  })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto pixman ;};
+    buildInputs = [pkgconfig fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ];
+  })) // {inherit fontsproto libdrm libpciaccess randrproto renderproto videoproto libX11 libXext xextproto xineramaproto xorgserver xproto ;};
     
   xf86videovoodoo = (stdenv.mkDerivation ((if overrides ? xf86videovoodoo then overrides.xf86videovoodoo else x: x) {
     name = "xf86-video-voodoo-1.2.4";

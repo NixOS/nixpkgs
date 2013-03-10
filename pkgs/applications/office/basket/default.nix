@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ kdelibs qimageblitz kdepimlibs gpgme ];
 
-  buildNativeInputs = [ cmake gettext ];
+  nativeBuildInputs = [ cmake gettext ];
   
   meta = {
     description = "A multi-purpose note-taking application";

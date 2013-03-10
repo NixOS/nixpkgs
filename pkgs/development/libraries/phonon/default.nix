@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 pulseaudio ];
 
-  buildNativeInputs = [ cmake automoc4 ];
+  nativeBuildInputs = [ cmake automoc4 ];
 
   meta = {
     homepage = http://phonon.kde.org/;

@@ -17,7 +17,7 @@ stdenv.mkDerivation ( rec {
   };
 
   buildInputs = [aterm toolbuslib errorSupport];
-  buildNativeInputs = [pkgconfig];
+  nativeBuildInputs = [pkgconfig];
   
   dontStrip = isMingw;
 } // ( if isMingw then { NIX_CFLAGS_COMPILE = "-O2 -Wl,--stack=0x2300000"; } else {} ) )

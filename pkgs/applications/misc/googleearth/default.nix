@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sha256 = "0bcpmnlk03382x577qbnbw3i6y08hr3qmg85pqj35scnl6van74c";
   };
 
-  buildNativeInputs = [
+  nativeBuildInputs = [
     glibc
     glib
     stdenv.gcc.gcc
@@ -55,7 +55,7 @@ stdenv.mkDerivation {
     chmod +x $out/bin/googleearth
 
     fullPath=
-    for i in $buildNativeInputs; do
+    for i in $nativeBuildInputs; do
       fullPath=$fullPath:$i/lib
     done
           

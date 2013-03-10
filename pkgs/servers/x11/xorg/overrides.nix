@@ -37,18 +37,18 @@ in
     # I should use: builtins.unsafeDiscardStringContext
     buildInputs = [args.pkgconfig args.libxslt xorg.libpthreadstubs /*xorg.python*/
         xorg.libXau xorg.xcbproto xorg.libXdmcp ] ++ [ xorg.xproto ];
-    buildNativeInputs = [ args.python ];
+    nativeBuildInputs = [ args.python ];
   };
 
   xcbproto = attrs : attrs // {
     # I only remove python from the original.
     buildInputs = [args.pkgconfig  /*xorg.python*/ ];
-    buildNativeInputs = [ args.python ];
+    nativeBuildInputs = [ args.python ];
   };
 
   pixman = attrs : attrs // {
     buildInputs = [ args.pkgconfig ];
-    buildNativeInputs = [ args.perl ];
+    nativeBuildInputs = [ args.perl ];
   };
 
   libpciaccess = attrs : attrs // {
@@ -192,6 +192,11 @@ in
     buildInputs = attrs.buildInputs ++ [xorg.pixman];
   };
 
+  xf86videovmware = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
+    buildInputs = attrs.buildInputs ++ [xorg.pixman xorg.glproto args.mesa];
+  };
+
   xdriinfo = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
   };
@@ -261,7 +266,7 @@ in
   };
 
   twm = attrs: attrs // {
-    buildNativeInputs = [args.bison args.flex];
+    nativeBuildInputs = [args.bison args.flex];
   };
 
   xbacklight = attrs: attrs // {

@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   patches = [ ./noyywrap.patch ];
 
-  buildNativeInputs = [ autoconf automake flex bison machHeaders ];
+  nativeBuildInputs = [ autoconf automake flex bison machHeaders ];
 
   preConfigure = "autoreconf -vfi";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     postInstall =
       # Fix the shebang to point to the cross-built shell.
       '' sed -i "$out/bin/mig" \
-             -e 's|^#!/.*|#!${bash.hostDrv}/bin/sh|g'
+             -e 's|^#!/.*|#!${bash.crossDrv}/bin/sh|g'
       '';
   };
 

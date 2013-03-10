@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
       libgnome_keyring libsoup avahi libtool libxslt docbook_xsl
     ];
 
-  buildNativeInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 
   enableParallelBuilding = true;
 }

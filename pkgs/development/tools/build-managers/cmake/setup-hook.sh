@@ -47,7 +47,7 @@ cmakeConfigurePhase() {
     eval "$postConfigure"
 }
 
-if [ -z "$dontUseCmakeConfigure" ]; then
+if [ -z "$dontUseCmakeConfigure" -a ! -v configurePhase ]; then
     configurePhase=cmakeConfigurePhase
 fi
 

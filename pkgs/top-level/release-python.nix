@@ -116,9 +116,7 @@ in
   boost = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   boost144 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   boost146 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  boost147 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   boost149 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  boost151 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   botan = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   box2d = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   box2d_2_0_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -262,7 +260,6 @@ in
   electricsheep = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   elinks = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   emacs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  emacs22 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   emacs23 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   emacs24Packages = {
     autoComplete = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -335,7 +332,7 @@ in
   ffado = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ffmpeg = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ffmpeg_0_6_90 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  ffmpeg_1_0 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
+  ffmpeg_1_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   fileschanged = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   fio = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   firefox = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -376,7 +373,6 @@ in
   gcj44 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gcj46 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gcl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  GConf3 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gdb = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gdbCross = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   gdk_pixbuf = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1036,7 +1032,6 @@ in
   libgpod = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   libgsf = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   libgtop = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  libgweather = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   libimobiledevice = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   libinfinity = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   liblapack = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

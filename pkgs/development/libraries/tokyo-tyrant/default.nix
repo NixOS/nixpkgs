@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "13xqcinhydqmh7231qlir6pymacjwcf98drybkhd9597kzxp1bs2";
   };
 
-  buildNativeInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ tokyocabinet ];
 
   doCheck = false;                                # FIXME

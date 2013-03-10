@@ -60,7 +60,7 @@ stdenv.mkDerivation {
          $out/lib/mit-scheme${arch}
     '';
 
-  buildNativeInputs = [ makeWrapper gnum4 texinfo texLive automake ];
+  nativeBuildInputs = [ makeWrapper gnum4 texinfo texLive automake ];
 
   # XXX: The `check' target doesn't exist.
   doCheck = false;

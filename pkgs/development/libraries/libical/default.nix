@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     rev = "1130";
     sha256 = "56caf19abdf44807fda75a67ef0886319551e53c4e4ece4da4fc862e34c64e1a";
   };
-  buildNativeInputs = [ perl cmake ];
+  nativeBuildInputs = [ perl cmake ];
 
   patches = [ ./respect-env-tzdir.patch ];
 }

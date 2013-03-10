@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./id3v2-0.1.11-track-bad-free.patch ];
 
-  buildNativeInputs = [ groff ];
+  nativeBuildInputs = [ groff ];
   buildInputs = [ id3lib ];
 
   configurePhase = ''

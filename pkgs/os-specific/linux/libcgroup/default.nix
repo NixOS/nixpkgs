@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pam ];
 
-  buildNativeInputs = [ yacc flex ];
+  nativeBuildInputs = [ yacc flex ];
 
   meta = {
     description = "Library and tools to manage Linux's cgroup resource management system";

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gdk.patch ];
 
-  buildNativeInputs = [pkgconfig];
+  nativeBuildInputs = [pkgconfig];
 
   propagatedBuildInputs = [ gtkglext gtkmm gtk mesa gdk_pixbuf ];
 

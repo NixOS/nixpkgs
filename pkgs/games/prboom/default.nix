@@ -9,7 +9,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ SDL SDL_mixer SDL_net mesa ];
   crossAttrs = {
-    propagatedBuildInputs = [ SDL.hostDrv SDL_mixer.hostDrv SDL_net.hostDrv ];
+    propagatedBuildInputs = [ SDL.crossDrv SDL_mixer.crossDrv SDL_net.crossDrv ];
     configureFlags = "--disable-gl --disable-cpu-opt --without-x --disable-sdltest
       ac_cv_type_uid_t=yes ac_cv_type_gid_t=yes";
 

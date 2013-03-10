@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib curl ];
 
-  buildNativeInputs = [ automake libtool autoconf unzip ];
+  nativeBuildInputs = [ automake libtool autoconf unzip ];
 
   meta = {
     description = "SyncML client sdk by Funambol project";

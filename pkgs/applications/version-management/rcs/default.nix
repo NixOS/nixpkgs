@@ -1,11 +1,11 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "rcs-5.8";
+  name = "rcs-5.8.1";
 
   src = fetchurl {
     url = "mirror://gnu/rcs/${name}.tar.gz";
-    sha256 = "0q12nlghv4khxw5lk0y4949caghzg4jg0ripddi2h3q75vmfh6vh";
+    sha256 = "1b1y6s4gy3miv2bvx0z01kvnv58h35sw766lccdkxkalk43cml04";
   };
 
   doCheck = true;

@@ -1,0 +1,27 @@
+--- a/third_party/tcmalloc/chromium/src/base/linux_syscall_support.h.orig		2012-12-22 16:01:44.000000000 +0200
++++ b/third_party/tcmalloc/chromium/src/base/linux_syscall_support.h		2012-12-23 21:53:26.746069153 +0200
+@@ -250,7 +250,7 @@
+ struct kernel_old_sigaction {
+   union {
+     void             (*sa_handler_)(int);
+-    void             (*sa_sigaction_)(int, struct siginfo *, void *);
++    void             (*sa_sigaction_)(int, siginfo_t *, void *);
+   };
+   unsigned long      sa_mask;
+   unsigned long      sa_flags;
+@@ -287,13 +287,13 @@
+   unsigned long      sa_flags;
+   union {
+     void             (*sa_handler_)(int);
+-    void             (*sa_sigaction_)(int, struct siginfo *, void *);
++    void             (*sa_sigaction_)(int, siginfo_t *, void *);
+   };
+   struct kernel_sigset_t sa_mask;
+ #else
+   union {
+     void             (*sa_handler_)(int);
+-    void             (*sa_sigaction_)(int, struct siginfo *, void *);
++    void             (*sa_sigaction_)(int, siginfo_t *, void *);
+   };
+   unsigned long      sa_flags;
+   void               (*sa_restorer)(void);
