@@ -43,7 +43,9 @@ in
     boot = { 
       kernelModules = [ "spl" "zfs" ] ;
       extraModulePackages = [ kernel.zfs kernel.spl ];
-      extraModprobeConfig = mkIf (cfgSpl.hostid != "") "options spl spl_hostid=${cfgSpl.hostid}";
+      extraModprobeConfig = mkIf (cfgSpl.hostid != "") ''
+        options spl spl_hostid=${cfgSpl.hostid}
+      '';
     };
 
     boot.initrd = mkIf inInitrd { 
