@@ -1763,10 +1763,10 @@ rec {
   };
 
   Error = buildPerlPackage rec {
-    name = "Error-0.17016";
+    name = "Error-0.17019";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "1akr35g7nbhch8fgkrqixjy08gx19brp981wyxplscizwcya64zh";
+      sha256 = "0m09jwjs2x8j50bh3cg3m2mbxa7qh9i2krgq7z8h1pgl5dscyg2i";
     };
   };
 
