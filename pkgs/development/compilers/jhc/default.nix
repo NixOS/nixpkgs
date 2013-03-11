@@ -1,4 +1,4 @@
-{ 
+{
   stdenv, fetchurl, perl, ghc, binary, zlib, utf8String, readline, fgl,
   regexCompat, HsSyck, random
 }:
@@ -19,11 +19,12 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = ''
-      A Haskell compiler which aims to produce the most efficient programs
-    '';
+    homepage = "http://repetae.net/computer/jhc/";
+    description = "A Haskell compiler which aims to produce the most efficient programs";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [ stdenv.lib.maintainers.aforemny ];
+
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ stdenv.lib.maintainers.aforemny stdenv.lib.maintainers.simons ];
   };
 
 }
