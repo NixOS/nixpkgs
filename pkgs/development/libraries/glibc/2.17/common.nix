@@ -16,6 +16,7 @@ let
 
 in
 
+assert stdenv.gcc != null;
 assert cross != null -> gccCross != null;
 assert mig != null -> machHeaders != null;
 assert machHeaders != null -> hurdHeaders != null;
