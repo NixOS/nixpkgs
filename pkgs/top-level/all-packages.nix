@@ -5928,7 +5928,7 @@ let
 
   linuxPackagesFor = kernel:
     let
-      callPackage = newScope self; 
+      callPackage = newScope self;
 
       self = {
         kernel = kernel.dev or kernel;
