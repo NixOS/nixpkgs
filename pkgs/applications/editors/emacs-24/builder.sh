@@ -29,6 +29,4 @@ preConfigure() {
     done
 }
 
-preBuild="make bootstrap"
-
 genericBuild
