@@ -2664,6 +2664,10 @@ let
 
   scala = callPackage ../development/compilers/scala { };
 
+  sdcc = callPackage ../development/compilers/sdcc {
+    boost = boost149; # sdcc 3.2.0 fails to build with boost 1.53
+  };
+
   stalin = callPackage ../development/compilers/stalin { };
 
   strategoPackages = recurseIntoAttrs strategoPackages018;
