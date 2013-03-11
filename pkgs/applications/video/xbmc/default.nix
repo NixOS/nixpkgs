@@ -86,5 +86,7 @@ stdenv.mkDerivation rec {
       homepage = http://xbmc.org/;
       description = "XBMC Media Center";
       license = "GPLv2";
+      platforms = stdenv.lib.platforms.linux; 
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
 }
