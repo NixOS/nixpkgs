@@ -1,4 +1,4 @@
-{ cabal, perl, QuickCheck }:
+{ cabal, fetchurl, perl, QuickCheck }:
 
 cabal.mkDerivation (self: {
   pname = "alex";
@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
   isExecutable = true;
   buildDepends = [ QuickCheck ];
   buildTools = [ perl ];
+  patches = [ (fetchurl { url="https://github.com/simonmar/alex/pull/21.patch"; sha256="0apv3rk00gwkf5rqw3467bg6pnamr07zdksbp9khhzzi73k9aq4f"; }) ];
   meta = {
     homepage = "http://www.haskell.org/alex/";
     description = "Alex is a tool for generating lexical analysers in Haskell";
