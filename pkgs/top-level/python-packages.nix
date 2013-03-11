@@ -789,11 +789,11 @@ pythonPackages = python.modules // rec {
   };
 
   deluge = buildPythonPackage rec {
-    name = "deluge-1.3.5";
+    name = "deluge-1.3.6";
 
     src = fetchurl {
       url = "http://download.deluge-torrent.org/source/${name}.tar.gz";
-      md5 = "fbf52593a85bfa7c8520834fa9177fba";
+      md5 = "33557678bf2f320de670ddaefaea009d";
     };
 
     # TODO: gui, procsettitle
@@ -824,6 +824,7 @@ pythonPackages = python.modules // rec {
       description = "Contains implementations of freedesktop.org standards";
       license = "LGPLv2";
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
