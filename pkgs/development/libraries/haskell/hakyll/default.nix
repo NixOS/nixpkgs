@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.2.1.1";
-  sha256 = "072fl5k8fwmrx1rwb964cz0kn1hcyda13l597mqdmdi2ky5s5hf0";
+  version = "4.2.1.2";
+  sha256 = "0b2jmi9hi5l72lkyjn2w3gwn52zvnvv7c10x5329hp000gzmwbvi";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -22,7 +22,6 @@ cabal.mkDerivation (self: {
     QuickCheck random regexBase regexTdfa snapCore snapServer tagsoup
     testFramework testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
-  patchPhase = "sed -i -e 's|pandoc.*,|pandoc,|' hakyll.cabal";
   doCheck = false;
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
