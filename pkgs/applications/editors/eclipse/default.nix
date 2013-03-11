@@ -1,11 +1,22 @@
 { stdenv, fetchurl, patchelf, makeDesktopItem, makeWrapper
 , freetype, fontconfig, libX11, libXext, libXrender, zlib
 , glib, gtk, libXtst, jre
+, pkgs, applyGlobalOverrides
 }:
 
 assert stdenv ? glibc;
 
 let
+
+  olderCairoSource = rec {
+    name = "cairo-1.12.2";
+    src = fetchurl {
+      url = "http://cairographics.org/releases/${name}.tar.xz";
+      sha1 = "bc2ee50690575f16dab33af42a2e6cdc6451e3f9";
+    };
+  };
+  p = applyGlobalOverrides (pkgs: { cairo = pkgs.lib.overrideDerivation pkgs.cairo (x: olderCairoSource); } );
+  inherit (p) glib gtk; # only these seem to depend on cairo
 
   buildEclipse =
     { name, src, description }:
