@@ -3894,6 +3894,7 @@ let
 
   cairo = callPackage ../development/libraries/cairo { };
   cairomm = callPackage ../development/libraries/cairomm { };
+  cairo_1_12_2 = callPackage ../development/libraries/cairo/1.12.2.nix { };
 
   pango = callPackage ../development/libraries/pango/1.30.x.nix { };
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
