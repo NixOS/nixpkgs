@@ -223,8 +223,6 @@ mkIf cfg.enable {
   systemd.services = mkIf cfg.daemon.enable {
     nslcd = {
       wantedBy = [ "nss-user-lookup.target" ];
-      wants = [ "network.target" ];
-      after = [ "network.target" ];
 
       path = [ nss_pam_ldapd ];
   
