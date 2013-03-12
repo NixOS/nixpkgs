@@ -1142,6 +1142,8 @@ let
 
   mktemp = callPackage ../tools/security/mktemp { };
 
+  mktorrent = callPackage ../tools/misc/mktorrent { };
+
   modemmanager = callPackage ../tools/networking/modemmanager {};
 
   monit = builderDefsPackage ../tools/system/monit {
