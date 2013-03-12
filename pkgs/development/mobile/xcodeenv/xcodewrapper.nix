@@ -1,8 +1,5 @@
-{stdenv}:
+{stdenv, version ? "4.6"}:
 
-let
-  version = "4.5.2";
-in
 stdenv.mkDerivation {
   name = "xcode-wrapper-"+version;
   buildCommand = ''
