@@ -3,7 +3,7 @@
 assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 let 
-  version = "0.8.4.103"; 
+  version = "0.8.8.323"; 
   qt4webkit = 
     if stdenv.system == "i686-linux" then
       fetchurl {
@@ -25,13 +25,13 @@ stdenv.mkDerivation {
   src =
     if stdenv.system == "i686-linux" then
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.g9cb177b.260-1_i386.deb";
-        sha256 = "1iri6pgavgb06nx0l3myqryx7zd7cf22my8vh2v6w4kbvaajjl31";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gd143501.250-1_i386.deb";
+        sha256 = "13q803qlvq16yrr7f95izp9mqqdb8kpcsyrb5gc5i2pya68ra906";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
-        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.g9cb177b.260-1_amd64.deb";
-        sha256 = "0y5kyfa1gk16d9z67hgssam8hgzw6g5f7xsxk0lz3ak487xdwl6k";
+        url = "http://repository.spotify.com/pool/non-free/s/spotify/spotify-client_${version}.gd143501.250-1_amd64.deb";
+        sha256 = "0ny3z499wks1dhrd3qq4d6cp0zd33198z9vak8ffgm5x24sdpghf";
       }
     else throw "Spotify not supported on this platform.";
 
@@ -43,8 +43,8 @@ stdenv.mkDerivation {
     ''
       mkdir -p $out
       dpkg-deb -x $src $out
-      mv $out/usr/* $out/
-      rmdir $out/usr
+      mv $out/opt/spotify/* $out/
+      rm -rf $out/usr $out/opt
 
       # Work around Spotify referring to a specific minor version of
       # OpenSSL.
@@ -57,14 +57,13 @@ stdenv.mkDerivation {
       ln -s ${nspr}/lib/libnspr4.so $out/lib/libnspr4.so.0d
       ln -s ${nspr}/lib/libplc4.so $out/lib/libplc4.so.0d
 
-      for f in ${chromium}/libexec/chromium/*; do
-        ln -s $f $out/bin/$(basename $f)
-      done
+      mkdir -p $out/bin
 
+      ln -s $out/spotify-client/spotify $out/bin/spotify
       patchelf \
         --interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" \
-        --set-rpath $out/lib:$out/share/spotify:${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc freetype glib pango cairo atk gdk_pixbuf gtk GConf cups sqlite]}:${stdenv.gcc.gcc}/lib64 \
-        $out/bin/spotify
+        --set-rpath $out/lib:$out/spotify-client:${stdenv.lib.makeLibraryPath [ xlibs.libXScrnSaver xlibs.libX11 qt4 alsaLib stdenv.gcc.gcc freetype glib pango cairo atk gdk_pixbuf gtk GConf cups sqlite]}:${stdenv.gcc.gcc}/lib64 \
+        $out/spotify-client/spotify
 
       dpkg-deb -x ${qt4webkit} ./
       mkdir -p $out/lib/
