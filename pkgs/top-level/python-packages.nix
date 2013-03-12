@@ -805,6 +805,7 @@ pythonPackages = python.modules // rec {
       description = "Torrent client";
       license = "GPLv3";
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
