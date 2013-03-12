@@ -31,7 +31,7 @@ with pkgs.lib;
       '';
 
     environment.etc = singleton
-      { source = "${pkgs.glibc}/share/zoneinfo/${config.time.timeZone}";
+      { source = "${pkgs.tzdata}/share/zoneinfo/${config.time.timeZone}";
         target = "localtime";
       };
       
