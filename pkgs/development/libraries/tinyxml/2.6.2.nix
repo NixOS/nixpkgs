@@ -20,8 +20,12 @@ in stdenv.mkDerivation {
   
   buildInputs = [ unzip ];
   buildPhase = ''
+    # use STL (xbmc requires it)
+    sed '1i#define TIXML_USE_STL 1' -i tinyxml.h
+    sed '1i#define TIXML_USE_STL 1' -i xmltest.cpp
+
     # build xmltest
-    make
+    make 
     
     # build the lib as a shared library
     g++ -Wall -O2 -shared -fpic tinyxml.cpp \
