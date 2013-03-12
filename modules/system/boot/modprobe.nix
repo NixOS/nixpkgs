@@ -57,6 +57,7 @@ with pkgs.lib;
         <citerefentry><refentrytitle>modprobe.conf</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
+      type = types.lines;
     };
 
   };
