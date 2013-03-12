@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     sed '1i#define TIXML_USE_STL 1' -i xmltest.cpp
 
     # build xmltest
-    make 
+    make
     
     # build the lib as a shared library
     g++ -Wall -O2 -shared -fpic tinyxml.cpp \
