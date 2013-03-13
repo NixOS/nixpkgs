@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "lzip-1.14-rc3";
+  name = "lzip-1.14";
 
   src = fetchurl {
     url = "http://download.savannah.gnu.org/releases/lzip/${name}.tar.gz";
-    sha256 = "040mmfadvhry68bv10baqi1bs8g5wwbf5rx0widyz69llpn64mw9";
+    sha256 = "1rybhk2pxpfh2789ck9mrkdv3bpx7b7miwndlshb5vb02m9crxbz";
   };
 
   doCheck = true;
