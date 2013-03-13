@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rybhk2pxpfh2789ck9mrkdv3bpx7b7miwndlshb5vb02m9crxbz";
   };
 
+  configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";
+
   doCheck = true;
 
   meta = {
