@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, perl }:
 
 stdenv.mkDerivation rec {
-  name = "texinfo-5.0";
+  name = "texinfo-5.1";
 
   src = fetchurl {
     url = "mirror://gnu/texinfo/${name}.tar.xz";
-    sha256 = "1p34f68h9ggfj6ckgj0p62qlj7pmz3ha3vc91kh4hr44pnwm1pla";
+    sha256 = "0864v5i488x3mb3v5p6nhy2kw0mqkzpa3b0453iibj81zlpq078q";
   };
 
   buildInputs = [ ncurses perl ];
