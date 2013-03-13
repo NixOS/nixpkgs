@@ -8,12 +8,6 @@ kde {
     ];
 
   propagatedBuildInputs = [ kdelibs ];
-  
-  preConfigure = ''
-    echo '#include <sys/types.h>' > tmp.h
-    cat tmp.h kioslave/smtp/command.h > tmp2.h
-    mv tmp2.h kioslave/smtp/command.h
-  '';
 
   meta = {
     description = "KDE PIM libraries";

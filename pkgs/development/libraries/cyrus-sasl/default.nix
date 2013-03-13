@@ -10,13 +10,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl db4 gettext ] ++ stdenv.lib.optional stdenv.isLinux pam;
 
+  patches = [ ./missing-size_t.patch ]; # https://bugzilla.redhat.com/show_bug.cgi?id=906519
+  patchFlags = "-p0";
+
   # Set this variable at build-time to make sure $out can be evaluated.
   preConfigure = ''
     configureFlagsArray=( --with-plugindir=$out/lib/sasl2
                           --with-configdir=$out/lib/sasl2
-			  --with-saslauthd=/run/saslauthd
-			  --enable-login
-			)
+                          --with-saslauthd=/run/saslauthd
+                          --enable-login
+                        )
   '';
 
   meta = {
