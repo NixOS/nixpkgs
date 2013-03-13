@@ -64,18 +64,18 @@ rec {
               if all opt.check list then
                 opt.merge list
               else
-                throw "One of the definitions has a bad type.";
+                throw "${name} has one value not passing the check function.";
           }
         else opt;
 
-      ensureDefaultType = opt:
+      checkDefault = opt:
         if opt ? check && opt ? default then
           opt // {
             default =
               if opt.check opt.default then
                 opt.default
               else
-                throw "The default value has a bad type.";
+                throw "The default value of ${name} doesn't pass the check function.";
           }
         else opt;
 
@@ -125,7 +125,7 @@ rec {
 
         # override settings
         ensureMergeInputType
-        ensureDefaultType
+        checkDefault
         handleOptionSets
       ];
 
