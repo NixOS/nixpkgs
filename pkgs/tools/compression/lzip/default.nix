@@ -1,7 +1,9 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "lzip-1.14";
+
+  buildInputs = [ texinfo ];
 
   src = fetchurl {
     url = "http://download.savannah.gnu.org/releases/lzip/${name}.tar.gz";
