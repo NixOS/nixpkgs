@@ -15,14 +15,14 @@ in
 
 rec {
 
-  isSignificantByte = x: typeOf x == "significant-byte";
+  isSignificantByte = isType "significant-byte";
   significantBytes = setTypes "significant-byte" {
     bigEndian = {};
     littleEndian = {};
   };
 
 
-  isCpuType = x: typeOf x == "cpu-type"
+  isCpuType = isType "cpu-type"
     && elem x.bits [8 16 32 64 128]
     && (builtins.lessThan 8 x.bits -> isSignificantByte x.significantByte);
 
@@ -37,7 +37,7 @@ rec {
     };
 
 
-  isExecFormat = x: typeOf x == "exec-format";
+  isExecFormat = isType "exec-format";
   execFormats = setTypes "exec-format" {
     aout = {}; # a.out
     elf = {};
@@ -47,7 +47,7 @@ rec {
   };
 
 
-  isKernel = x: typeOf x == "kernel";
+  isKernel = isType "kernel";
   kernels = with execFormats;
     setTypes "kernel" {
       cygwin =  { execFormat = pe; };
@@ -61,7 +61,7 @@ rec {
     };
 
 
-  isArchitecture = x: typeOf x == "architecture";
+  isArchitecture = isType "architecture";
   architectures = setTypes "architecture" {
     apple = {};
     pc = {};
@@ -69,7 +69,7 @@ rec {
   };
 
 
-  isSystem = x: typeOf x == "system"
+  isSystem = isType "system"
     && isCpuType x.cpu
     && isArchitecture x.arch
     && isKernel x.kernel;
