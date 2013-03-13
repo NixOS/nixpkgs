@@ -54,10 +54,10 @@ in
       { description = "Store Sound Card State";
         wantedBy = [ "shutdown.target" ];
         before = [ "shutdown.target" ];
-        preStart = "mkdir -p /var/lib/alsa";
         unitConfig.DefaultDependencies = "no";
         serviceConfig.Type = "oneshot";
         serviceConfig.ExecStart = "${alsaUtils}/sbin/alsactl store --ignore";
+        serviceConfig.ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/lib/alsa";
       };
 
   };
