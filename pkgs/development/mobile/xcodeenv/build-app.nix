@@ -1,6 +1,7 @@
 {stdenv, xcodewrapper}:
 { name
 , src
+, sdkVersion ? "6.1"
 , target ? null
 , configuration ? null
 , scheme ? null
@@ -36,7 +37,7 @@ let
 
   _sdk = if sdk == null
     then
-      if release then "iphoneos6.0" else "iphonesimulator6.0"
+      if release then "iphoneos" + sdkVersion else "iphonesimulator" + sdkVersion
     else sdk;
 
   # The following is to prevent repetition
