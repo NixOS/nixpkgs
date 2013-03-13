@@ -6,6 +6,7 @@ cabal.mkDerivation (self: {
   sha256 = "192jgfixnpxdj6jiiz92kx5bi6ij3c389b76q9f4vyfmvcajj1sr";
   buildDepends = [ cereal mtl text ];
   testDepends = [ cereal encoding HUnit mtl QuickCheck text ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/litherum/punycode";
     description = "Encode unicode strings to ascii forms according to RFC 3492";
