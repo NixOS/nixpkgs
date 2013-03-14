@@ -1,4 +1,4 @@
-{stdenv, fetchurl, eventlog, pkgconfig, libestr, libee, json_c, libuuid, zlib}:
+{stdenv, fetchurl, eventlog, pkgconfig, libestr, libee, json_c, libuuid, zlib, gnutls}:
 
 stdenv.mkDerivation {
   name = "rsyslog-7.2.6";
@@ -8,7 +8,9 @@ stdenv.mkDerivation {
     sha256 = "19a5c60816ebce6c86468eb8c5fe1c4cc1febf23c9167ce59d2327fe5e047ed9";
   };
 
-  buildInputs = [pkgconfig libestr libee json_c libuuid zlib];
+  buildInputs = [pkgconfig libestr libee json_c libuuid zlib gnutls];
+
+  configureFlags = "--enable-gnutls";
 
   meta = {
     homepage = "http://www.rsyslog.com/";
