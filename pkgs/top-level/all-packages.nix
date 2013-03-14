@@ -496,6 +496,7 @@ let
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
 
   syslogng = callPackage ../tools/system/syslog-ng { };
+  rsyslog = callPackage ../tools/system/rsyslog { };
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
@@ -1059,6 +1060,10 @@ let
   lftp = callPackage ../tools/networking/lftp { };
 
   libconfig = callPackage ../development/libraries/libconfig { };
+
+  libee = callPackage ../development/libraries/libee { };
+
+  libestr = callPackage ../development/libraries/libestr { };
 
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
