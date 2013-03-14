@@ -384,7 +384,7 @@ in
 
     environment.x11Packages = mkOption {
       default = [];
-      type = types.list types.package;
+      type = types.listOf types.package;
       description = ''
         List of packages added to the system when the X server is
         activated (<option>services.xserver.enable</option>).

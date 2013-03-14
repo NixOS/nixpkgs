@@ -55,7 +55,7 @@ in
       };
 
       phononBackends = mkOption {
-        type = types.list types.string;
+        type = types.listOf types.string;
         default = ["gstreamer"];
         example = ["gstreamer" "vlc"];
         description = "Which phonon multimedia backend kde should use";
@@ -65,7 +65,7 @@ in
     environment.kdePackages = mkOption {
       default = [];
       example = "[ pkgs.kde4.kdesdk ]";
-      type = types.list types.package;
+      type = types.listOf types.package;
       description = "This option is obsolete.  Please use <option>environment.systemPackages</option> instead.";
     };
 

@@ -26,7 +26,7 @@ with utils;
         recommended.
       '';
 
-      type = types.list types.optionSet;
+      type = types.listOf types.optionSet;
 
       options = {config, options, ...}: {
 

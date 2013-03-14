@@ -67,7 +67,7 @@ in
         A list of services provided by xinetd.
       '';
 
-      type = types.list types.optionSet;
+      type = types.listOf types.optionSet;
 
       options = {
 

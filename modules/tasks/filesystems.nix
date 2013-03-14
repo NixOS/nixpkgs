@@ -118,14 +118,14 @@ in
     boot.supportedFilesystems = mkOption {
       default = [ ];
       example = [ "btrfs" ];
-      type = types.list types.string;
+      type = types.listOf types.string;
       description = "Names of supported filesystem types.";
     };
 
     boot.initrd.supportedFilesystems = mkOption {
       default = [ ];
       example = [ "btrfs" ];
-      type = types.list types.string;
+      type = types.listOf types.string;
       description = "Names of supported filesystem types in the initial ramdisk.";
     };
 
