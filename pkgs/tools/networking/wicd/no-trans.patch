@@ -1,0 +1,15 @@
+--- wicd-1.7.2.4/setup.py     2013-03-14 21:28:21.360580941 +0100
++++ wicd-1.7.2.4/setup.py  2013-03-14 21:22:50.125721943 +0100
+@@ -599,12 +599,6 @@
+     if not wpath.no_install_pmutils:
+         data.append((wpath.pmutils, ['other/55wicd']))
+     print 'Using pid path', os.path.basename(wpath.pidfile)
+-    print 'Language support for',
+-    for pofile in glob('po/*.po'):
+-        language = pofile.replace('po/', '').replace('.po', '')
+-        print language,
+-        data.append((wpath.translations + language + '/LC_MESSAGES/',
+-                    ['translations/' + language + '/LC_MESSAGES/wicd.mo']))
+     print
+ except Exception, e:
+     print str(e)

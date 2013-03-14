@@ -6,16 +6,17 @@
 # on urwid which has not been packaged at this time (2009-12-27).
 
 stdenv.mkDerivation rec {
-  name = "wicd-1.7.1-beta2";
+  name = "wicd-${version}";
+  version = "1.7.2.4";
   
   src = fetchurl {
-    url = "mirror://sourceforge/wicd/wicd-1.7.1b2.tar.bz2";
-    sha256 = "13ga6a2ip8dy8h49wvv02jxxfvpk5q5sm2wz76dy62y1xsrm23c1";
+    url = "https://launchpad.net/wicd/1.7/${version}/+download/${name}.tar.gz";
+    sha256 = "15ywgh60xzmp5z8l1kzics7yi95isrjg1paz42dvp7dlpdfzpzfw";
   };
 
   buildInputs = [ python ];
 
-  patches = [ ./no-var-install.patch ./mkdir-networks.patch ./pygtk.patch ./no-optimization.patch ];
+  patches = [ ./no-var-install.patch ./no-trans.patch ./mkdir-networks.patch ./pygtk.patch ./no-optimization.patch ];
 
   # Should I be using pygtk's propogated build inputs?
   # !!! Should use makeWrapper.
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     substituteInPlace wicd/wicd-daemon.py --replace 'misc.find_path("python2")' "'${python}/bin/python'"
     
     substituteInPlace in/scripts=wicd.in --subst-var-by TEMPLATE-DEFAULT $out/share/other/dhclient.conf.template.default
-    
+
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin:${wpa_supplicant}/sbin:${dhcpcd}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${openresolv}/sbin:${iproute}/sbin" in/scripts=wicd.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pygobject}):$(toPythonPath ${pythonDBus})" in/scripts=wicd.in
     sed -i "4iexport LC_ALL=\\\"${locale}\\\"" in/scripts=wicd.in
@@ -57,11 +58,14 @@ stdenv.mkDerivation rec {
     --suspend=$out/etc/acpi/suspend.d/ \
     --pmutils=$out/lib/pm-utils/sleep.d/ \
     --dbus=$out/etc/dbus-1/system.d/ \
+    --dbus-service=$out/etc/dbus-1/system-services/ \
+    --systemd=$out/lib/systemd/ \
+    --logrotate=$out/etc/logrotate.d/ \
     --desktop=$out/share/applications/ \
     --icons=$out/share/icons/hicolour/ \
     --translations=$out/share/locale/ \
     --autostart=$out/etc/xdg/autostart/ \
-    --varlib=/var/lib/wicd/ \
+    --varlib=$out/var/lib/ \
     --docdir=$out/share/doc/ \
     --mandir=$out/share/man/ \
     --kdedir=$out/share/autostart/ \
@@ -76,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    python setup.py install --prefix=$out
+    python setup.py install --prefix=$out --install-lib=$out/lib/${python.libPrefix}/site-packages
     mkdir -p $out/share/other
     cp other/dhclient.conf.template.default $out/share/other/dhclient.conf.template.default
 
@@ -87,17 +91,17 @@ stdenv.mkDerivation rec {
     echo "wpa2-ttls" >> "$out/etc/encryption/templates/active"
 
     # have wicd generate upstart events
-    echo '#!/bin/sh
-initctl emit -n wicd-preconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/preconnect/upstart-emit
-    echo '#!/bin/sh
-initctl emit -n wicd-postconnect ITYPE="$1" ESSID="$2" BSSID="$3"
-initctl emit -n ip-up' > $out/etc/scripts/postconnect/upstart-emit
-    echo '#!/bin/sh
-initctl emit -n wicd-predisconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/predisconnect/upstart-emit
-    echo '#!/bin/sh
-initctl emit -n wicd-postdisconnect ITYPE="$1" ESSID="$2" BSSID="$3"
-initctl emit -n ip-down' > $out/etc/scripts/postdisconnect/upstart-emit
-    chmod a+x $out/etc/scripts/*/upstart-emit
+#     echo '#!/bin/sh
+# initctl emit -n wicd-preconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/preconnect/upstart-emit
+#     echo '#!/bin/sh
+# initctl emit -n wicd-postconnect ITYPE="$1" ESSID="$2" BSSID="$3"
+# initctl emit -n ip-up' > $out/etc/scripts/postconnect/upstart-emit
+#     echo '#!/bin/sh
+# initctl emit -n wicd-predisconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/predisconnect/upstart-emit
+#     echo '#!/bin/sh
+# initctl emit -n wicd-postdisconnect ITYPE="$1" ESSID="$2" BSSID="$3"
+# initctl emit -n ip-down' > $out/etc/scripts/postdisconnect/upstart-emit
+#     chmod a+x $out/etc/scripts/*/upstart-emit
   '';
 
   meta = {
