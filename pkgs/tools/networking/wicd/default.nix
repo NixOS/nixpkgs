@@ -1,5 +1,5 @@
 {stdenv, fetchurl, python, pygobject, pycairo, pyGtkGlade, pythonDBus, 
- wpa_supplicant, dhcp, dhcpcd, wirelesstools, nettools, openresolv, iproute,
+ wpa_supplicant, dhcp, dhcpcd, wirelesstools, nettools, openresolv, iproute, iputils,
  locale ? "C" }:
 
 # Wicd has a ncurses interface that we do not build because it depends
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     
     substituteInPlace in/scripts=wicd.in --subst-var-by TEMPLATE-DEFAULT $out/share/other/dhclient.conf.template.default
 
-    sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin:${wpa_supplicant}/sbin:${dhcpcd}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${openresolv}/sbin:${iproute}/sbin" in/scripts=wicd.in
+    sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin:${wpa_supplicant}/sbin:${dhcpcd}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${nettools}/bin:${iputils}/sbin:${openresolv}/sbin:${iproute}/sbin" in/scripts=wicd.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pygobject}):$(toPythonPath ${pythonDBus})" in/scripts=wicd.in
     sed -i "4iexport LC_ALL=\\\"${locale}\\\"" in/scripts=wicd.in
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin" in/scripts=wicd-client.in
@@ -89,19 +89,6 @@ stdenv.mkDerivation rec {
     # <http://wicd.net/punbb/viewtopic.php?id=87>.
     cp -v "${./wpa2-ttls}" "$out/etc/encryption/templates/wpa2-ttls"
     echo "wpa2-ttls" >> "$out/etc/encryption/templates/active"
-
-    # have wicd generate upstart events
-#     echo '#!/bin/sh
-# initctl emit -n wicd-preconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/preconnect/upstart-emit
-#     echo '#!/bin/sh
-# initctl emit -n wicd-postconnect ITYPE="$1" ESSID="$2" BSSID="$3"
-# initctl emit -n ip-up' > $out/etc/scripts/postconnect/upstart-emit
-#     echo '#!/bin/sh
-# initctl emit -n wicd-predisconnect ITYPE="$1" ESSID="$2" BSSID="$3"' > $out/etc/scripts/predisconnect/upstart-emit
-#     echo '#!/bin/sh
-# initctl emit -n wicd-postdisconnect ITYPE="$1" ESSID="$2" BSSID="$3"
-# initctl emit -n ip-down' > $out/etc/scripts/postdisconnect/upstart-emit
-#     chmod a+x $out/etc/scripts/*/upstart-emit
   '';
 
   meta = {
