@@ -48,12 +48,7 @@ rec {
       };
 
       functionsFromType = opt:
-        if decl ? type && decl.type ? merge then
-          opt
-          // optionalAttrs (decl.type ? merge) { inherit (decl.type) merge; }
-          // optionalAttrs (decl.type ? check) { inherit (decl.type) check; }
-        else
-          opt;
+        opt // (builtins.intersectAttrs { merge = 1; check = 1; } (decl.type or {}));
 
       addDeclaration = opt: opt // decl;
 
