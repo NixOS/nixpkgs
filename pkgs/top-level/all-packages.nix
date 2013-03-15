@@ -1565,6 +1565,8 @@ let
     inherit (gnome) libgnomeui scrollkeeper;
   };
 
+  storebrowse = callPackage ../tools/system/storebrowse { };
+
   fusesmb = callPackage ../tools/filesystems/fusesmb { };
 
   socat = callPackage ../tools/networking/socat { };
