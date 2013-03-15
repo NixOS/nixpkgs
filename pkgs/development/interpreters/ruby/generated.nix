@@ -10,6 +10,7 @@ g: # Get dependencies from patched gems
     activerecord = g.activerecord_3_2_12;
     activeresource = g.activeresource_3_2_12;
     activesupport = g.activesupport_3_2_12;
+    addressable = g.addressable_2_3_3;
     arel = g.arel_3_0_2;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_4;
     autotest_rails = g.autotest_rails_4_1_2;
@@ -19,6 +20,7 @@ g: # Get dependencies from patched gems
     buildr = g.buildr_1_4_10;
     bundler = g.bundler_1_3_4;
     childprocess = g.childprocess_0_3_9;
+    chronic = g.chronic_0_9_1;
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_1_3;
     dimensions = g.dimensions_1_2_0;
@@ -27,6 +29,8 @@ g: # Get dependencies from patched gems
     eventmachine = g.eventmachine_1_0_3;
     eventmachine_tail = g.eventmachine_tail_0_6_4;
     fakes3 = g.fakes3_0_1_5;
+    faraday = g.faraday_0_8_6;
+    faraday_middleware = g.faraday_middleware_0_8_8;
     ffi = g.ffi_1_4_0;
     file_tail = g.file_tail_1_0_12;
     foreman = g.foreman_0_62_0;
@@ -45,10 +49,13 @@ g: # Get dependencies from patched gems
     mime_types = g.mime_types_1_21;
     minitar = g.minitar_0_5_3;
     multi_json = g.multi_json_1_6_1;
+    multipart_post = g.multipart_post_1_2_0;
     net_sftp = g.net_sftp_2_0_5;
     net_ssh = g.net_ssh_2_6_6;
     nix = g.nix_0_1_1;
     nokogiri = g.nokogiri_1_5_6;
+    papertrail = g.papertrail_0_9_7;
+    papertrail_cli = g.papertrail_cli_0_9_3;
     parallel = g.parallel_0_6_2;
     polyglot = g.polyglot_0_3_3;
     rack = g.rack_1_5_2;
@@ -88,8 +95,9 @@ g: # Get dependencies from patched gems
     uuidtools = g.uuidtools_2_1_3;
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
+    yajl_ruby = g.yajl_ruby_1_1_0;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
   gems = {
     ZenTest_4_9_0 = {
       basename = ''ZenTest'';
@@ -187,6 +195,20 @@ installed versions.'';
       name = ''activesupport-3.2.12'';
       requiredGems = [ g.i18n_0_6_4 g.multi_json_1_6_1 ];
       sha256 = ''1giqkprxjf5gyfyhn5nz9q8a5gi3v8irxhkpqr00zc5fw1azllsg'';
+    };
+    addressable_2_3_3 = {
+      basename = ''addressable'';
+      meta = {
+        description = ''URI Implementation'';
+        homepage = ''http://addressable.rubyforge.org/'';
+        longDescription = ''Addressable is a replacement for the URI implementation that is part of
+Ruby's standard library. It more closely conforms to the relevant RFCs and
+adds support for IRIs and URI templates.
+'';
+      };
+      name = ''addressable-2.3.3'';
+      requiredGems = [  ];
+      sha256 = ''0nn583ba8kq4hhpr4lr2zzpm4r0mga0zfalxxpa6a4v27q71v5hh'';
     };
     arel_3_0_2 = {
       basename = ''arel'';
@@ -348,6 +370,17 @@ for those one-off tasks, with a language that's a joy to use.
       requiredGems = [ g.ffi_1_4_0 ];
       sha256 = ''0jbz2ix7ff9ry8717lhcq9w8j8yd45akw48giwgdqccay5mlph7d'';
     };
+    chronic_0_9_1 = {
+      basename = ''chronic'';
+      meta = {
+        description = ''Natural language date/time parsing.'';
+        homepage = ''http://github.com/mojombo/chronic'';
+        longDescription = ''Chronic is a natural language date/time parser written in pure Ruby.'';
+      };
+      name = ''chronic-0.9.1'';
+      requiredGems = [  ];
+      sha256 = ''0kspaxpfy7yvyk1lvpx31w852qfj8wb9z04mcj5bzi70ljb9awqk'';
+    };
     daemons_1_1_9 = {
       basename = ''daemons'';
       meta = {
@@ -468,6 +501,27 @@ using TCP/IP, especially if custom protocols are required.'';
       name = ''fakes3-0.1.5'';
       requiredGems = [ g.thor_0_17_0 g.builder_3_2_0 ];
       sha256 = ''1na5wrbarla6s414svqmr5spbpv6vmcgpswal444x4clcpmadhib'';
+    };
+    faraday_0_8_6 = {
+      basename = ''faraday'';
+      meta = {
+        description = ''HTTP/REST API client library.'';
+        homepage = ''https://github.com/lostisland/faraday'';
+      };
+      name = ''faraday-0.8.6'';
+      requiredGems = [ g.multipart_post_1_2_0 ];
+      sha256 = ''16jd0gnqfrh5v4v88nlasyjjm8cmf2w2p6gphxq64mvdxlcdy5jy'';
+    };
+    faraday_middleware_0_8_8 = {
+      basename = ''faraday_middleware'';
+      meta = {
+        description = ''Various middleware for Faraday'';
+        homepage = ''https://github.com/pengwynn/faraday_middleware'';
+        longDescription = ''Various middleware for Faraday'';
+      };
+      name = ''faraday_middleware-0.8.8'';
+      requiredGems = [ g.faraday_0_8_6 ];
+      sha256 = ''1n0g8pm7ynx6ffyqhscc1cqw97zhvd8isr31yfyj15335j1jsncz'';
     };
     ffi_1_4_0 = {
       basename = ''ffi'';
@@ -727,6 +781,17 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
       requiredGems = [  ];
       sha256 = ''0p33swcl9i97wvv0cq9jkdl8q7xbc3j07apy35vsgldnhw99krcg'';
     };
+    multipart_post_1_2_0 = {
+      basename = ''multipart_post'';
+      meta = {
+        description = ''A multipart form post accessory for Net::HTTP.'';
+        homepage = ''https://github.com/nicksieger/multipart-post'';
+        longDescription = ''Use with Net::HTTP to do multipart form posts.  IO values that have #content_type, #original_filename, and #local_path will be posted as a binary file.'';
+      };
+      name = ''multipart-post-1.2.0'';
+      requiredGems = [  ];
+      sha256 = ''12p7lnmc52di1r4h73h6xrpppplzyyhani9p7wm8l4kgf1hnmwnc'';
+    };
     net_sftp_2_0_5 = {
       basename = ''net_sftp'';
       meta = {
@@ -785,6 +850,28 @@ enough of it.'';
       name = ''nokogiri-1.5.6'';
       requiredGems = [  ];
       sha256 = ''1235h8k242f6yi5qgb8rfcx6gp7g99djwqgrz0vb6w12pbp9kar8'';
+    };
+    papertrail_0_9_7 = {
+      basename = ''papertrail'';
+      meta = {
+        description = ''Command-line client for Papertrail hosted log management service.'';
+        homepage = ''http://github.com/papertrail/papertrail-cli'';
+        longDescription = ''Command-line client for Papertrail hosted log management service. Tails and searches app server logs and system syslog. Supports Boolean search and works with grep and pipe output (Unix).'';
+      };
+      name = ''papertrail-0.9.7'';
+      requiredGems = [ g.addressable_2_3_3 g.yajl_ruby_1_1_0 g.chronic_0_9_1 g.faraday_0_8_6 g.faraday_middleware_0_8_8 ];
+      sha256 = ''0v0m1v0qabbr9pmyl77znz39qy1m7p0xwvf3lf9hyq6n524f2dwr'';
+    };
+    papertrail_cli_0_9_3 = {
+      basename = ''papertrail_cli'';
+      meta = {
+        description = ''Placeholder gem to point to new papertrail gem'';
+        homepage = ''http://github.com/papertrail/papertrail-cli-gem'';
+        longDescription = ''Placeholder gem to point to new papertrail gem.'';
+      };
+      name = ''papertrail-cli-0.9.3'';
+      requiredGems = [ g.papertrail_0_9_7 ];
+      sha256 = ''1914dcfqsmw5rl4xd1zwjrfbgwglyncxm8km06bgxaqn4wnaq5iv'';
     };
     parallel_0_6_2 = {
       basename = ''parallel'';
@@ -1297,6 +1384,16 @@ interpreters.'';
       name = ''xml-simple-1.1.1'';
       requiredGems = [  ];
       sha256 = ''0zlwz8kvpm45m227aazg369fapbqyhvd5v9aga8cvxyhqnq0b87i'';
+    };
+    yajl_ruby_1_1_0 = {
+      basename = ''yajl_ruby'';
+      meta = {
+        description = ''Ruby C bindings to the excellent Yajl JSON stream-based parser library.'';
+        homepage = ''http://github.com/brianmario/yajl-ruby'';
+      };
+      name = ''yajl-ruby-1.1.0'';
+      requiredGems = [  ];
+      sha256 = ''0sj46j47icb12hdhcfh76rnvddyiic5ifqzkh3kla1vcr505kf4m'';
     };
   };
 }
