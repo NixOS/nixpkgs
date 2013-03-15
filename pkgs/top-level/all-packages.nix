@@ -496,6 +496,7 @@ let
   mcrl2 = callPackage ../tools/misc/mcrl2 { };
 
   syslogng = callPackage ../tools/system/syslog-ng { };
+  rsyslog = callPackage ../tools/system/rsyslog { };
 
   mcelog = callPackage ../os-specific/linux/mcelog { };
 
@@ -1060,6 +1061,10 @@ let
 
   libconfig = callPackage ../development/libraries/libconfig { };
 
+  libee = callPackage ../development/libraries/libee { };
+
+  libestr = callPackage ../development/libraries/libestr { };
+
   libtirpc = callPackage ../development/libraries/ti-rpc { };
 
   libshout = callPackage ../development/libraries/libshout { };
@@ -1141,6 +1146,8 @@ let
   mkpasswd = callPackage ../tools/security/mkpasswd { };
 
   mktemp = callPackage ../tools/security/mktemp { };
+
+  mktorrent = callPackage ../tools/misc/mktorrent { };
 
   modemmanager = callPackage ../tools/networking/modemmanager {};
 
@@ -1870,6 +1877,8 @@ let
   zile = callPackage ../applications/editors/zile { };
 
   zip = callPackage ../tools/archivers/zip { };
+
+  zpaq = callPackage ../tools/archivers/zpaq { };
 
   zsync = callPackage ../tools/compression/zsync { };
 
@@ -2662,6 +2671,10 @@ let
 
   scala = callPackage ../development/compilers/scala { };
 
+  sdcc = callPackage ../development/compilers/sdcc {
+    boost = boost149; # sdcc 3.2.0 fails to build with boost 1.53
+  };
+
   stalin = callPackage ../development/compilers/stalin { };
 
   strategoPackages = recurseIntoAttrs strategoPackages018;
@@ -3310,7 +3323,7 @@ let
 
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
-  texinfo5 = callPackage ../development/tools/misc/texinfo/5.0.nix { };
+  texinfo5 = callPackage ../development/tools/misc/texinfo/5.1.nix { };
   texinfo = texinfo413;
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
@@ -3742,9 +3755,9 @@ let
     installLocales = config.glibc.locales or false;
   };
 
-  glibcLocales = callPackage ../development/libraries/glibc/2.13/locales.nix { };
+  glibcLocales = callPackage ../development/libraries/glibc/2.17/locales.nix { };
 
-  glibcInfo = callPackage ../development/libraries/glibc/2.13/info.nix { };
+  glibcInfo = callPackage ../development/libraries/glibc/2.17/info.nix { };
 
   glibc_multi =
     runCommand "${glibc.name}-multi"
@@ -3888,6 +3901,7 @@ let
 
   cairo = callPackage ../development/libraries/cairo { };
   cairomm = callPackage ../development/libraries/cairomm { };
+  cairo_1_12_2 = callPackage ../development/libraries/cairo/1.12.2.nix { };
 
   pango = callPackage ../development/libraries/pango/1.30.x.nix { };
   pangomm = callPackage ../development/libraries/pangomm/2.28.x.nix { };
@@ -4645,6 +4659,8 @@ let
     automake = automake111x;
     ftgl = ftgl212;
   };
+
+  opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
 
   opencsg = callPackage ../development/libraries/opencsg { };
 
@@ -5926,7 +5942,7 @@ let
 
   linuxPackagesFor = kernel:
     let
-      callPackage = newScope self; 
+      callPackage = newScope self;
 
       self = {
         kernel = kernel.dev or kernel;
@@ -6755,7 +6771,11 @@ let
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
-  eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse { });
+  eclipses = recurseIntoAttrs (
+    (callPackage ../applications/editors/eclipse { }).deepOverride {
+      cairo = cairo_1_12_2;
+    }
+  );
 
   ed = callPackage ../applications/editors/ed { };
 
@@ -7267,6 +7287,8 @@ let
 
   jack_oscrolloscope = callPackage ../applications/audio/jack-oscrolloscope { };
 
+  jack_rack = callPackage ../applications/audio/jack-rack { };
+
   jackmeter = callPackage ../applications/audio/jackmeter { };
 
   jalv = callPackage ../applications/audio/jalv { };
@@ -7310,6 +7332,8 @@ let
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
     fftw = fftwSinglePrec;
   };
+
+  caps = callPackage ../applications/audio/caps { };
 
   lastwatch = callPackage ../applications/audio/lastwatch { };
 
@@ -7724,7 +7748,9 @@ let
 
   sox = callPackage ../applications/misc/audio/sox { };
 
-  spotify = callPackage ../applications/audio/spotify { };
+  spotify = callPackage ../applications/audio/spotify {
+    inherit (gnome) GConf;
+  };
 
   libspotify = callPackage ../development/libraries/libspotify {
     apiKey = config.libspotify.apiKey or null;
@@ -8003,6 +8029,8 @@ let
   xbmc = callPackage ../applications/video/xbmc { };
 
   xcalib = callPackage ../tools/X11/xcalib { };
+
+  xchainkeys = callPackage ../tools/X11/xchainkeys { };
 
   xchat = callPackage ../applications/networking/irc/xchat { };
 

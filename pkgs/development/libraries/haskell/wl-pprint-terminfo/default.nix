@@ -1,12 +1,13 @@
-{ cabal, nats, semigroups, terminfo, transformers, wlPprintExtras
+{ cabal, nats, semigroups, terminfo, text, transformers
+, wlPprintExtras
 }:
 
 cabal.mkDerivation (self: {
   pname = "wl-pprint-terminfo";
-  version = "3.4";
-  sha256 = "1wnlm74fwcn171a533bv15bvlhabrzh192wabala0wyvwgl8hwzk";
+  version = "3.6";
+  sha256 = "14dq0inv6i8pwjzrpys420iwi6002mard1n73z96k89zq5xhwlbg";
   buildDepends = [
-    nats semigroups terminfo transformers wlPprintExtras
+    nats semigroups terminfo text transformers wlPprintExtras
   ];
   meta = {
     homepage = "http://github.com/ekmett/wl-pprint-terminfo/";

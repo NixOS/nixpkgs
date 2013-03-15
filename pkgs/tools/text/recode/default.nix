@@ -1,6 +1,6 @@
 # XXX: this may need -liconv on non-glibc systems.. 
 
-{stdenv, fetchgit, python, perl}:
+{ stdenv, fetchgit, python, perl, autoconf, automake, libtool, intltool, flex }:
 
 stdenv.mkDerivation rec {
   name = "recode-3.7-pff85fdbd";
@@ -11,12 +11,22 @@ stdenv.mkDerivation rec {
     sha256 = "1xhlfmqld6af16l444jli9crj9brym2jihg1n6lkxh2gar68f5l7";
   };
 
-  buildInputs = [ python perl ];
+  buildInputs = [ python perl autoconf automake libtool intltool flex ];
 
-  doCheck = true;
+  preConfigure = ''
+    # fix build with new automake, https://bugs.gentoo.org/show_bug.cgi?id=419455
+    #rm acinclude.m4
+    substituteInPlace Makefile.am --replace "ACLOCAL = ./aclocal.sh @ACLOCAL@" ""
+    sed -i '/^AM_C_PROTOTYPES/d' configure.ac
+    substituteInPlace src/Makefile.am --replace "ansi2knr" ""
+
+    autoreconf -fi
+  '';
+
+  #doCheck = true; # doesn't work yet
 
   preCheck = ''
-    checkFlagsArray=(LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
+    checkFlagsArray=(CPPFLAGS="-I../lib" LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
   '';
 
   meta = {

@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "NumInstances";
-  version = "1.0";
-  sha256 = "1fmg3slwma5f88a2qxj54ny40s67qbdyvsyh506bkp11v54958fy";
+  version = "1.2";
+  sha256 = "0s26j3h0xg16lcz95qs21iyfnzx8q8w2k2lnq55gakkr1wl4ap59";
   meta = {
     description = "Instances of numeric classes for functions and tuples";
     license = self.stdenv.lib.licenses.bsd3;

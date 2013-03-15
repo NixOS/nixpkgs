@@ -1,11 +1,12 @@
-{ stdenv, fetchurl, makeWrapper, glib_networking, gtk, libsoup, libX11, perl,
-  pkgconfig, webkit }:
+{ stdenv, fetchurl, makeWrapper, glib, glib_networking, gtk, libsoup, libX11, perl,
+  pkgconfig, webkit, gsettings_desktop_schemas }:
 
-stdenv.mkDerivation {
-  name = "vimprobable2-1.2.0";
+stdenv.mkDerivation rec {
+  version = "1.2.1";
+  name = "vimprobable2-${version}";
   src = fetchurl {
-    url = "mirror://sourceforge/vimprobable/vimprobable2_1.2.0.tar.bz2";
-    sha256 = "0fjakrmz1syjwgx01j2icpdv69jgvfl2nlxbj8zxfr8mw0h2wg1f";
+    url = "mirror://sourceforge/vimprobable/vimprobable2_${version}.tar.bz2";
+    sha256 = "19zx1k3s2gnhzzd2wpyqsk151w9p52ifl64xaz9a6qkgvrxlli8p";
   };
 
   # Nixos default ca bundle
@@ -17,8 +18,9 @@ stdenv.mkDerivation {
 
   installPhase = ''
     make PREFIX=/ DESTDIR=$out install
-    wrapProgram "$out/bin/vimprobable2" --prefix GIO_EXTRA_MODULES : \
-      ${glib_networking}/lib/gio/modules
+    wrapProgram "$out/bin/vimprobable2" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share"
   '';
 
   meta = {

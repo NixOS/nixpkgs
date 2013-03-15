@@ -3,6 +3,7 @@
 let
 pythonDocs = {
   html = {
+    recurseForDerivations = true;
     python33 = import ./3.3-html.nix {
       inherit stdenv fetchurl lib;
     };
@@ -23,6 +24,7 @@ pythonDocs = {
     };
   };
   pdf_a4 = {
+    recurseForDerivations = true;
     python33 = import ./3.3-pdf-a4.nix {
       inherit stdenv fetchurl lib;
     };
@@ -43,6 +45,7 @@ pythonDocs = {
     };
   };
   pdf_letter = {
+    recurseForDerivations = true;
     python33 = import ./3.3-pdf-letter.nix {
       inherit stdenv fetchurl lib;
     };
@@ -63,6 +66,7 @@ pythonDocs = {
     };
   };
   text = {
+    recurseForDerivations = true;
     python33 = import ./3.3-text.nix {
       inherit stdenv fetchurl lib;
     };

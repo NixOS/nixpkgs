@@ -68,6 +68,11 @@ pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pycrypto25 = import ../development/python-modules/pycrypto/2.5.nix {
+    inherit (pkgs) fetchurl stdenv gmp;
+    inherit python buildPythonPackage;
+  };
+
   pygobject = import ../development/python-modules/pygobject {
     inherit (pkgs) stdenv fetchurl pkgconfig glib;
     inherit python;
@@ -451,6 +456,28 @@ pythonPackages = python.modules // rec {
   };
 
 
+  buildout152 = buildPythonPackage rec {
+    name = "buildout-${version}";
+    version = "1.5.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
+      md5 = "87f7b3f8d13926c806242fd5f6fe36f7";
+    };
+
+   # TODO: consider if this patch should be an option
+   # It makes buildout useful in a nix profile, but this alters the default functionality
+   patchPhase = ''
+     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
+   '';
+
+   meta = {
+      homepage = http://www.buildout.org/;
+      description = "A software build and configuration system";
+    };
+  };
+
+
   carrot = buildPythonPackage rec {
     name = "carrot-0.10.7";
 
@@ -762,11 +789,11 @@ pythonPackages = python.modules // rec {
   };
 
   deluge = buildPythonPackage rec {
-    name = "deluge-1.3.5";
+    name = "deluge-1.3.6";
 
     src = fetchurl {
       url = "http://download.deluge-torrent.org/source/${name}.tar.gz";
-      md5 = "fbf52593a85bfa7c8520834fa9177fba";
+      md5 = "33557678bf2f320de670ddaefaea009d";
     };
 
     # TODO: gui, procsettitle
@@ -778,6 +805,7 @@ pythonPackages = python.modules // rec {
       description = "Torrent client";
       license = "GPLv3";
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+      platforms = stdenv.lib.platforms.all;
     };
   };
 

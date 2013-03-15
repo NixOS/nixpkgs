@@ -42,7 +42,7 @@ cmakeConfigurePhase() {
 
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
-    cmake ${cmakeDir:-.} $cmakeFlags ${cmakeFlagsArray[@]}
+    cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
 
     eval "$postConfigure"
 }

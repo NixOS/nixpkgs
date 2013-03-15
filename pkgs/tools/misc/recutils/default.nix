@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1v2xzwwwhc5j5kmvg4sv6baxjpsfqh8ln7ilv4mgb1408rs7xmky";
   };
 
+  patches = [ ./glibc.patch ];
+
   doCheck = true;
 
   buildInputs = [ curl emacs ] ++ (stdenv.lib.optionals doCheck [ check bc ]);
