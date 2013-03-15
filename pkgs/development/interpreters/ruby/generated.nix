@@ -22,10 +22,13 @@ g: # Get dependencies from patched gems
     daemons = g.daemons_1_1_9;
     diff_lcs = g.diff_lcs_1_1_3;
     dimensions = g.dimensions_1_2_0;
+    em_resolv_replace = g.em_resolv_replace_1_1_3;
     erubis = g.erubis_2_7_0;
     eventmachine = g.eventmachine_1_0_3;
+    eventmachine_tail = g.eventmachine_tail_0_6_4;
     fakes3 = g.fakes3_0_1_5;
     ffi = g.ffi_1_4_0;
+    file_tail = g.file_tail_1_0_12;
     foreman = g.foreman_0_62_0;
     highline = g.highline_1_6_15;
     hike = g.hike_1_2_1;
@@ -59,6 +62,7 @@ g: # Get dependencies from patched gems
     rb_fsevent = g.rb_fsevent_0_9_3;
     rdiscount = g.rdiscount_2_0_7_1;
     rdoc = g.rdoc_3_12_2;
+    remote_syslog = g.remote_syslog_1_6_13;
     rjb = g.rjb_1_4_6;
     rspec = g.rspec_2_11_0;
     rspec_core = g.rspec_core_2_11_1;
@@ -68,13 +72,16 @@ g: # Get dependencies from patched gems
     rubyzip = g.rubyzip_0_9_9;
     sass = g.sass_3_2_7;
     selenium_webdriver = g.selenium_webdriver_2_31_0;
+    servolux = g.servolux_0_10_0;
     sinatra = g.sinatra_1_3_2;
     sprockets = g.sprockets_2_2_2;
+    syslog_protocol = g.syslog_protocol_0_9_2;
     systemu = g.systemu_2_5_2;
     therubyracer = g.therubyracer_0_10_2;
     thin = g.thin_1_5_0;
     thor = g.thor_0_17_0;
     tilt = g.tilt_1_3_5;
+    tins = g.tins_0_7_2;
     treetop = g.treetop_1_4_12;
     tzinfo = g.tzinfo_0_3_37;
     uuid = g.uuid_2_3_7;
@@ -82,7 +89,7 @@ g: # Get dependencies from patched gems
     websocket = g.websocket_1_0_7;
     xml_simple = g.xml_simple_1_1_1;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
   gems = {
     ZenTest_4_9_0 = {
       basename = ''ZenTest'';
@@ -388,6 +395,16 @@ is the MIT license.'';
       requiredGems = [  ];
       sha256 = ''1pqb7yzjcpbgbyi196ifqbd1wy570cn12bkzcvpcha4xilhajja0'';
     };
+    em_resolv_replace_1_1_3 = {
+      basename = ''em_resolv_replace'';
+      meta = {
+        description = ''EventMachine-aware DNS lookup for Ruby'';
+        homepage = ''http://github.com/mperham/em-resolv-replace'';
+      };
+      name = ''em-resolv-replace-1.1.3'';
+      requiredGems = [  ];
+      sha256 = ''1w5y4rzmp51ni56v05qwgay5wrs2i6i3q92pvlcrghmhxhgsbqg7'';
+    };
     erubis_2_7_0 = {
       basename = ''erubis'';
       meta = {
@@ -431,6 +448,17 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [  ];
       sha256 = ''09sqlsb6x9ddlgfw5gsw7z0yjg5m2qfjiqkz2fx70zsizj3lqhil'';
     };
+    eventmachine_tail_0_6_4 = {
+      basename = ''eventmachine_tail'';
+      meta = {
+        description = ''eventmachine tail - a file tail implementation with glob support'';
+        homepage = ''http://code.google.com/p/semicomplete/wiki/EventMachineTail'';
+        longDescription = ''Add file 'tail' implemented with EventMachine. Also includes a 'glob watch' class for watching a directory pattern for new matches, like /var/log/*.log'';
+      };
+      name = ''eventmachine-tail-0.6.4'';
+      requiredGems = [ g.eventmachine_1_0_3 ];
+      sha256 = ''1pvlb34vdzd81kf9f3xyibb4f55xjqm7lqqy28dgyci5cyv50y61'';
+    };
     fakes3_0_1_5 = {
       basename = ''fakes3'';
       meta = {
@@ -451,6 +479,17 @@ using TCP/IP, especially if custom protocols are required.'';
       name = ''ffi-1.4.0'';
       requiredGems = [  ];
       sha256 = ''06a29qvg487yk9pyi7wzyj5700mf7s3mjdqc6dsrh0467mjj9768'';
+    };
+    file_tail_1_0_12 = {
+      basename = ''file_tail'';
+      meta = {
+        description = ''File::Tail for Ruby'';
+        homepage = ''http://github.com/flori/file-tail'';
+        longDescription = ''Library to tail files in Ruby'';
+      };
+      name = ''file-tail-1.0.12'';
+      requiredGems = [ g.tins_0_7_2 ];
+      sha256 = ''0mzxxnwj7k5pwxs0rdbmb3b41zgvzw7x40sf3qlkch4zdfx91i1j'';
     };
     foreman_0_62_0 = {
       basename = ''foreman'';
@@ -946,6 +985,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [ g.json_1_7_7 ];
       sha256 = ''1v9k4sp5yzj2bshngckdvivj6bszciskk1nd2r3wri2ygs7vgqm8'';
     };
+    remote_syslog_1_6_13 = {
+      basename = ''remote_syslog'';
+      meta = {
+        description = ''Monitor plain text log file(s) for new entries and send to remote syslog collector'';
+        homepage = ''http://github.com/papertrail/remote_syslog'';
+        longDescription = ''Lightweight daemon to tail one or more log files and transmit UDP syslog messages to a remote syslog host (centralized log aggregation). Generates UDP packets itself instead of depending on a system syslog daemon, so it doesn't affect system-wide logging configuration.'';
+      };
+      name = ''remote_syslog-1.6.13'';
+      requiredGems = [ g.servolux_0_10_0 g.file_tail_1_0_12 g.eventmachine_1_0_3 g.eventmachine_tail_0_6_4 g.syslog_protocol_0_9_2 g.em_resolv_replace_1_1_3 ];
+      sha256 = ''0q35j02k2l3fw3fdzq0i3rd6chsqr982gj13f3m3lsxm7kms03nw'';
+    };
     rjb_1_4_2 = {
       basename = ''rjb'';
       meta = {
@@ -1068,6 +1118,20 @@ See RDoc for a description of RDoc's markup and basic use.'';
       requiredGems = [ g.multi_json_1_6_1 g.rubyzip_0_9_9 g.childprocess_0_3_9 g.websocket_1_0_7 ];
       sha256 = ''1nv3ff31g183kdb97jjz0y7ny3vdnccd09pgblpj87bzhrrdfv3r'';
     };
+    servolux_0_10_0 = {
+      basename = ''servolux'';
+      meta = {
+        description = ''* {Homepage}[http://rubygems.'';
+        homepage = ''http://gemcutter.org/gems/servolux'';
+        longDescription = ''Serv-O-Lux is a collection of Ruby classes that are useful for daemon and
+process management, and for writing your own Ruby services. The code is well
+documented and tested. It works with Ruby and JRuby supporting both 1.8 and 1.9
+interpreters.'';
+      };
+      name = ''servolux-0.10.0'';
+      requiredGems = [  ];
+      sha256 = ''08jdrk35f61ab8b48ffm85p9lgfpbnzq3n4is00gqhpcrrq72dhs'';
+    };
     sinatra_1_3_2 = {
       basename = ''sinatra'';
       meta = {
@@ -1089,6 +1153,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''sprockets-2.2.2'';
       requiredGems = [ g.hike_1_2_1 g.multi_json_1_6_1 g.rack_1_5_2 g.tilt_1_3_5 ];
       sha256 = ''15ngw3bjbyr31ygzmmdxxa30ylah6pdn8akgdy9w30vfx2vr7s7s'';
+    };
+    syslog_protocol_0_9_2 = {
+      basename = ''syslog_protocol'';
+      meta = {
+        description = ''Syslog protocol parser and generator'';
+        homepage = ''https://github.com/eric/syslog_protocol'';
+        longDescription = ''Syslog protocol parser and generator'';
+      };
+      name = ''syslog_protocol-0.9.2'';
+      requiredGems = [  ];
+      sha256 = ''1yb2cmbyj0zmb2yhkgnmghcngrkhcxs4g1svcmgfj90l2hs23nmc'';
     };
     systemu_2_5_2 = {
       basename = ''systemu'';
@@ -1144,6 +1219,17 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''tilt-1.3.5'';
       requiredGems = [  ];
       sha256 = ''081saxdxnal4ky38a904jw3n2837m80g211w0zm5rx6m712mb6qd'';
+    };
+    tins_0_7_2 = {
+      basename = ''tins'';
+      meta = {
+        description = ''Useful stuff.'';
+        homepage = ''http://flori.github.com/tins'';
+        longDescription = ''All the stuff that isn't good/big enough for a real library.'';
+      };
+      name = ''tins-0.7.2'';
+      requiredGems = [  ];
+      sha256 = ''142mvgn8218wikwdvd5gq4g6k3p24f273wlqvczzfhz02livrz90'';
     };
     treetop_1_4_12 = {
       basename = ''treetop'';
