@@ -80,6 +80,10 @@ stdenv.mkDerivation {
       ${stdenv.lib.optionalString generateIPA ''
         # Produce an IPA file
         xcrun -sdk iphoneos PackageApplication -v $out/*.app -o $out/${name}.ipa
+        
+        # Add IPA to Hydra build products
+        mkdir -p $out/nix-support
+        echo "file binary-dist $(echo $out/*.ipa)" > $out/nix-support/hydra-build-products
       ''}
       
       # Delete our temp keychain
