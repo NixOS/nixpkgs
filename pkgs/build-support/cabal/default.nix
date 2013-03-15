@@ -121,7 +121,7 @@
               done
 
               echo "configure flags: $extraConfigureFlags $configureFlags"
-              ./Setup configure --verbose --prefix="$out" $extraConfigureFlags $configureFlags
+              ./Setup configure --verbose --prefix="$out" --libdir='$prefix/lib/$compiler' --libsubdir='$pkgid' $extraConfigureFlags $configureFlags
 
               eval "$postConfigure"
             '';
@@ -156,7 +156,7 @@
 
               ensureDir $out/bin # necessary to get it added to PATH
 
-              local confDir=$out/lib/ghc-pkgs/ghc-${ghc.ghc.version}
+              local confDir=$out/lib/ghc-${ghc.ghc.version}/package.conf.d
               local installedPkgConf=$confDir/${self.fname}.installedconf
               local pkgConf=$confDir/${self.fname}.conf
               ensureDir $confDir

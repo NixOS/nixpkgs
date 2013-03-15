@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     echo "Linking selected packages and dependencies:"
 
     for currentPath in ${stdenv.lib.concatStringsSep " " allPackages}; do
-      currentPkgDir="$currentPath/lib/ghc-pkgs/ghc-${ghc.version}"
+      currentPkgDir="$currentPath/lib/ghc-${ghc.version}/package.conf.d/"
       # Check if current path is a Cabal package for the current GHC
       if test -d $currentPkgDir; then
         echo -n "Linking $currentPath "
