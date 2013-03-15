@@ -12,6 +12,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python pkgconfig glib ];
 
+  # in a "normal" setup, pygobject and pygtk are installed into the
+  # same site-packages: we need a pth file for both. pygtk.py would be
+  # used to select a specific version, in our setup it should have no
+  # effect, but we leave it in case somebody expects and calls it.
+  postInstall = ''
+    mv $out/lib/${python.libPrefix}/site-packages/{pygtk.pth,${name}.pth}
+  '';
+
   meta = {
     homepage = http://live.gnome.org/PyGObject;
     description = "Python bindings for Glib";
