@@ -4660,6 +4660,8 @@ let
     ftgl = ftgl212;
   };
 
+  opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
+
   opencsg = callPackage ../development/libraries/opencsg { };
 
   openct = callPackage ../development/libraries/openct { };
