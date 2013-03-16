@@ -9058,6 +9058,8 @@ let
 
   vice = callPackage ../misc/emulators/vice { };
 
+  viewnior = callPackage ../applications/graphics/viewnior { };
+
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     inherit (gnome) libsoup;
     webkit = webkit_gtk2;
