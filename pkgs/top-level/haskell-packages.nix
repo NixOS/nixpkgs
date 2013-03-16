@@ -1318,6 +1318,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   netlistToVhdl = callPackage ../development/libraries/haskell/netlist-to-vhdl {};
 
+  netwire = callPackage ../development/libraries/haskell/netwire {};
+
   network_2_2_1_4 = callPackage ../development/libraries/haskell/network/2.2.1.4.nix {};
   network_2_2_1_7 = callPackage ../development/libraries/haskell/network/2.2.1.7.nix {};
   network_2_3_0_2 = callPackage ../development/libraries/haskell/network/2.3.0.2.nix {};
