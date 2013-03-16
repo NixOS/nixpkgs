@@ -3,7 +3,7 @@
 assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64);
 
 stdenv.mkDerivation rec {
-  name = "storebrowser-20130316003957";
+  name = "storebrowse-20130316003957";
 
   src = fetchurl {
     url = "http://viric.name/cgi-bin/storebrowse/tarball/storebrowse-16700f4ad9e88.tar.gz?uuid=16700f4ad9e88";
