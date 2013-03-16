@@ -3,12 +3,12 @@
 assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64);
 
 stdenv.mkDerivation rec {
-  name = "storebrowse-20130316003957";
+  name = "storebrowse-20130316140138";
 
   src = fetchurl {
-    url = "http://viric.name/cgi-bin/storebrowse/tarball/storebrowse-16700f4ad9e88.tar.gz?uuid=16700f4ad9e88";
+    url = "http://viric.name/cgi-bin/storebrowse/tarball/storebrowse-881990147c.tar.gz?uuid=881990147c";
     name = "${name}.tar.gz";
-    sha256 = "1wwzdraszja8sapa666akm8fkg53aj8ka5yn2hkq6dmbim5wjnaq";
+    sha256 = "183b6gz7xv88c94i9mgmjslsdn75v5vsbchl19kjv7mbrxfx5mvl";
   };
 
   srcGoSqlite = fetchhg {
