@@ -4482,6 +4482,8 @@ let
 
   libxdg_basedir = callPackage ../development/libraries/libxdg-basedir { };
 
+  libxkbcommon = callPackage ../development/libraries/libxkbcommon { };
+
   libxklavier = callPackage ../development/libraries/libxklavier { };
 
   libxmi = callPackage ../development/libraries/libxmi { };
@@ -7940,6 +7942,12 @@ let
   };
 
   weechat = callPackage ../applications/networking/irc/weechat { };
+
+  weston = callPackage ../applications/window-managers/weston {
+    cairo = cairo.override {
+      glSupport = true;
+    };
+  };
 
   wings = callPackage ../applications/graphics/wings { };
 
