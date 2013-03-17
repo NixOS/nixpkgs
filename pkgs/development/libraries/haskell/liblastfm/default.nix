@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "liblastfm";
-  version = "0.1.0.0";
-  sha256 = "1777p2zysha9z389dkzvc22wph5k2xa6f23xk1ckr8j1q5v9dg6x";
+  version = "0.1.1.0";
+  sha256 = "1yrgyb0m1gdhsrkv3b8a5a0qii67v9gx1kbv79ixlac60bsm4q95";
   buildDepends = [
     aeson cereal cryptoApi httpConduit httpTypes network pureMD5 text
   ];

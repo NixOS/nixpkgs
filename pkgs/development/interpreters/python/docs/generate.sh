@@ -16,7 +16,11 @@ pythonDocs = {
 EOF
 
 for type in $TYPES; do
-    echo "  ${type/-/_} = {" >> default.nix
+    cat >>default.nix <<EOF
+  ${type/-/_} = {
+    recurseForDerivations = true;
+EOF
+
     for version in $VERSIONS; do
         major=$(echo -n ${version}| cut -d. -f1)
         minor=$(echo -n ${version}| cut -d. -f2)

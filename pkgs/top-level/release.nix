@@ -347,43 +347,25 @@ with (import ./release-lib.nix);
     gnome_vfs = linux;
   };
 
-  /*
   haskellPackages_ghc6104 = {
     ghc = ghcSupported;
-    haskellPlatform_2009_2_0_2 = ghcSupported;
-  };
-
-  haskellPackages_ghc6121 = {
-    ghc = ghcSupported;
-    haskellPlatform_2010_1_0_0 = ghcSupported;
   };
 
   haskellPackages_ghc6123 = {
     ghc = ghcSupported;
-    gitit = linux;
-    gtk = linux;
-    haskellPlatform = ghcSupported;
-  };
-
-  haskellPackages_ghc701 = {
-    ghc = ghcSupported;
-  };
-
-  haskellPackages_ghc702 = {
-    ghc = ghcSupported;
-    haskellPlatform = ghcSupported;
   };
 
   haskellPackages_ghc704 = {
-    darcs = ghcSupported;
     ghc = ghcSupported;
-    gitit = linux;
-    gtk = linux;
-    haskellPlatform = ghcSupported;
-    lhs2tex = ghcSupported;
-    xmonad = linux;
   };
-  */
+
+  haskellPackages_ghc742 = {
+    ghc = ghcSupported;
+  };
+
+  haskellPackages_ghc762 = {
+    ghc = ghcSupported;
+  };
 
   strategoPackages = {
     sdf = linux;

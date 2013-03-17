@@ -7,8 +7,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hakyll";
-  version = "4.2.1.0";
-  sha256 = "05w5j8wc47j8g4x2lsm0zs3aspb4rjvgnrxbjlxps0mfz3csqfhh";
+  version = "4.2.1.2";
+  sha256 = "0b2jmi9hi5l72lkyjn2w3gwn52zvnvv7c10x5329hp000gzmwbvi";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -19,8 +19,8 @@ cabal.mkDerivation (self: {
   testDepends = [
     binary blazeHtml blazeMarkup citeprocHs cmdargs cryptohash deepseq
     filepath httpConduit httpTypes HUnit lrucache mtl pandoc parsec
-    QuickCheck random regexBase regexTdfa tagsoup testFramework
-    testFrameworkHunit testFrameworkQuickcheck2 text time
+    QuickCheck random regexBase regexTdfa snapCore snapServer tagsoup
+    testFramework testFrameworkHunit testFrameworkQuickcheck2 text time
   ];
   doCheck = false;
   meta = {

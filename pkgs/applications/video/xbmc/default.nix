@@ -2,7 +2,7 @@
 , pkgconfig, cmake, gnumake, yasm, python
 , boost
 , gettext, pcre, yajl, fribidi
-, openssl, gperf
+, openssl, gperf, tinyxml2, taglib, libssh, swig, jre
 , libX11, xproto, inputproto
 , libXt, libXmu, libXext, xextproto
 , libXinerama, libXrandr, randrproto
@@ -30,11 +30,11 @@ assert sambaSupport -> samba != null;
 assert vdpauSupport -> libvdpau != null && ffmpeg.vdpauSupport;
 
 stdenv.mkDerivation rec {
-    name = "xbmc-11.0";
+    name = "xbmc-12.0";
 
     src = fetchurl {
       url = "http://mirrors.xbmc.org/releases/source/${name}.tar.gz";
-      sha256 = "1fe5d310c16138f26e2b13bc545604e95f48ace6c8636f23e77da402cd7b0b19";
+      sha256 = "0vy1a38gfbp9vhbjvwqm11sd76gl3s9q0h7gwpsks85m2k88q0ak";
     };
 
     buildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       pkgconfig cmake gnumake yasm python
       boost
       gettext pcre yajl fribidi
-      openssl gperf
+      openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto
       libXt libXmu libXext xextproto
       libXinerama libXrandr randrproto
@@ -86,5 +86,7 @@ stdenv.mkDerivation rec {
       homepage = http://xbmc.org/;
       description = "XBMC Media Center";
       license = "GPLv2";
+      platforms = stdenv.lib.platforms.linux; 
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
 }

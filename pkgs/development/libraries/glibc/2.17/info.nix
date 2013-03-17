@@ -19,7 +19,7 @@ build null {
   # libc.info hasn't a Top node.
   installPhase = ''
     mkdir -p "$out/share/info"
-    cp -v "../$sourceRoot/manual/"*.info* "$out/share/info"
+    cp -v "manual/"*.info* "$out/share/info"
   '';
 
   meta.description = "GNU Info manual of the GNU C Library";

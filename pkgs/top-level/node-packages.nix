@@ -751,13 +751,13 @@ let self = {
     ];
   };
 
-  "nijs" = self."nijs-0.0.3";
+  "nijs" = self."nijs-0.0.4";
 
-  "nijs-0.0.3" = self.buildNodePackage rec {
-    name = "nijs-0.0.3";
+  "nijs-0.0.4" = self.buildNodePackage rec {
+    name = "nijs-0.0.4";
     src = fetchurl {
       url = "http://registry.npmjs.org/nijs/-/${name}.tgz";
-      sha256 = "0rcqycb4nigfasxfjw1ngh556r5ik1qr58938nx6qbxzkrm0k1ip";
+      sha256 = "0hr7chc4wrynq5mlakchx3p715i50ycakbqj4jcngx62wk9l42qd";
     };
     deps = [
       self."optparse"

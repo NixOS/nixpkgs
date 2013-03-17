@@ -1,5 +1,5 @@
 { fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
-, zlib, libuuid, gems, jdk }:
+, zlib, libuuid, gems, jdk, python }:
 
 let
 
@@ -14,6 +14,8 @@ in
 
 {
   sup = { buildInputs = [ gems.ncursesw ]; };
+
+  libv8 = { buildInputs = [ python ]; };
   
   sqlite3 = { propagatedBuildInputs = [ sqlite ]; };
   

@@ -1,7 +1,9 @@
-{ nixpkgs ? <nixpkgs> }:
+{ nixpkgs ? <nixpkgs>
+, system ? builtins.currentSystem
+}:
 
 let
-  pkgs = import nixpkgs {};
+  pkgs = import nixpkgs { inherit system; };
   pkgs_darwin_x86_64 = import nixpkgs { system = "x86_64-darwin"; };
 in
 rec {

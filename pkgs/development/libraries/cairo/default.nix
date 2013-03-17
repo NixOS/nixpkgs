@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xlibs;
-    [ pkgconfig x11 fontconfig libXrender expat ]
+    [ pkgconfig x11 fontconfig expat ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) libXrender
     ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
     ++ stdenv.lib.optionals glSupport [ mesa ]
 

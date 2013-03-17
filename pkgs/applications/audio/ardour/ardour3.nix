@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, alsaLib, aubio, boost, cairomm, curl, fftw
+{ stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, fftw
 , fftwSinglePrec, flac, glibc, glibmm, gtk, gtkmm, jackaudio
 , libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
@@ -6,17 +6,17 @@
 , perl, pkgconfig, python, serd, sord, sratom, suil }:
 
 let
-  # Ardour 3 RC2
-  rev = "14092";
+  # Ardour 3.0 tag
+  rev = "79db9422";
 in
 
 stdenv.mkDerivation {
-  name = "ardour3-svn-${rev}";
+  name = "ardour3";
 
-  src = fetchsvn {
-    url = http://subversion.ardour.org/svn/ardour2/branches/3.0;
+  src = fetchgit {
+    url = git://git.ardour.org/ardour/ardour.git;
     inherit rev;
-    sha256 = "1zyy74z3xcsdhrzw4g6y1qm1ai2fl3bgabscl0wn7m1kkscr9nzg";
+    sha256 = "cdbe4ca6d4b639fcd66a3d1cf9c2816b4755655c9d81bdd2417263f413aa7096";
   };
 
   buildInputs = 

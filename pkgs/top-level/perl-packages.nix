@@ -335,6 +335,19 @@ rec {
       [ CatalystRuntime HTTPRequestAsCGI DataVisitor MROCompat ];
   };
 
+  CatalystActionREST = buildPerlPackage {
+    name = "Catalyst-Action-REST-1.06";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Action-REST-1.06.tar.gz;
+      sha256 = "0z72cf8zgmwmcqlhkawz9fikc0g44972sidfs16x7rwdhzavd01k";
+    };
+    propagatedBuildInputs = [ CatalystRuntime ClassInspector ConfigGeneral DataSerializer DataTaxi FreezeThaw HTMLParser JSONXS LWPUserAgent Moose MROCompat namespaceautoclean ParamsValidate PHPSerialization URIFind XMLSimple YAMLSyck ];
+    meta = {
+      description = "Automated REST Method Dispatching";
+      license = "perl";
+    };
+  };
+
   CatalystAuthenticationStoreHtpasswd = buildPerlPackage rec {
     name = "Catalyst-Authentication-Store-Htpasswd-1.003";
     src = fetchurl {
@@ -837,6 +850,14 @@ rec {
     };
   };
 
+  ClassISA = buildPerlPackage {
+    name = "Class-ISA-0.36";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/S/SM/SMUELLER/Class-ISA-0.36.tar.gz;
+      sha256 = "0r5r574i6wgxm8zsq4bc34d0dzprrh6h6mpp1nhlks1qk97g65l8";
+    };
+  };
+
   ClassMakeMethods = buildPerlPackage rec {
     name = "Class-MakeMethods-1.009";
     src = fetchurl {
@@ -1323,6 +1344,27 @@ rec {
     propagatedBuildInputs = [TestException ClassAccessorChained];
   };
 
+  DataSerializer = buildPerlPackage {
+    name = "Data-Serializer-0.59";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/N/NE/NEELY/Data-Serializer-0.59.tar.gz;
+      sha256 = "1mydpbacrkirafcjxcg1c0gnls1kxiv0qvdd4q2yd6vsyay0ayqr";
+    };
+    meta = {
+      description = "Modules that serialize data structures";
+      license = "perl";
+    };
+  };
+
+  DataTaxi = buildPerlPackage {
+    name = "Data-Taxi-0.96";
+    propagatedBuildInputs = [DebugShowStuff];
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIKO/Data-Taxi-0.96.tar.gz;
+      sha256 = "0y4wls4jlwd6prvd77szymddhq9sfj06kaqnk4frlvd0zh83djxb";
+    };
+  };
+
   DataUUID = buildPerlPackage rec {
     name = "Data-UUID-1.217";
     src = fetchurl {
@@ -1426,6 +1468,19 @@ rec {
     };
     buildInputs = [ TestOutput ];
     propagatedBuildInputs = [ ClassLoad ClassSingleton ParamsValidate TryTiny ];
+  };
+
+  DebugShowStuff = buildPerlPackage {
+    name = "Debug-ShowStuff-1.14";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIKO/Debug-ShowStuff-1.14.tar.gz;
+      sha256 = "023c6f7y93k9qxxfa2fsvc5jkbv3rh6i3nw6zvxa5cg57xfypd7h";
+    };
+    propagatedBuildInputs = [ ClassISA DevelStackTrace StringUtil TermReadKey TextTabularDisplay TieIxHash ];
+    meta = {
+      description = "Debug::ShowStuff - A collection of handy debugging routines for displaying the values of variables with a minimum of coding.";
+      license = "perl";
+    };
   };
 
   DevelCaller = buildPerlPackage {
@@ -1763,10 +1818,10 @@ rec {
   };
 
   Error = buildPerlPackage rec {
-    name = "Error-0.17016";
+    name = "Error-0.17019";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "1akr35g7nbhch8fgkrqixjy08gx19brp981wyxplscizwcya64zh";
+      sha256 = "0m09jwjs2x8j50bh3cg3m2mbxa7qh9i2krgq7z8h1pgl5dscyg2i";
     };
   };
 
@@ -1998,6 +2053,7 @@ rec {
       url = mirror://cpan/authors/id/I/IL/ILYAZ/modules/FreezeThaw-0.43.tar.gz;
       sha256 = "1qamc5aggp35xk590a4hy660f2rhc2l7j65hbyxdya9yvg7z437l";
     };
+    doCheck = false;
   };
 
   GD = buildPerlPackage rec {
@@ -2975,10 +3031,14 @@ rec {
   };
 
   ModuleFind = buildPerlPackage {
-    name = "Module-Find-0.06";
+    name = "Module-Find-0.11";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.06.tar.gz;
-      sha256 = "1394jk0rn2zmchpl11kim69xh5h5yzg96jdlf76fqrk3dcn0y2ip";
+      url = mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.11.tar.gz;
+      sha256 = "15ykcwplbqh5hc0fw4cx6g0f22zr0hrfkdkv1s34n9yg574dq3b5";
+    };
+    meta = {
+      description = "Find and use installed modules in a (sub)category";
+      license = "perl";
     };
   };
 
@@ -3837,6 +3897,18 @@ rec {
     };
   };
 
+  PHPSerialization = buildPerlPackage {
+    name = "PHP-Serialization-0.34";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/PHP-Serialization-0.34.tar.gz;
+      sha256 = "0yphqsgg7zrar2ywk2j2fnjxmi9rq32yf0p5ln8m9fmfx4kd84mr";
+    };
+    meta = {
+      description = "Simple flexible means of converting the output of PHP's serialize() into the equivalent Perl memory structure, and vice versa.";
+      license = "unknown";
+    };
+  };
+
   Plack = buildPerlPackage {
     name = "Plack-1.0015";
     src = fetchurl {
@@ -4303,6 +4375,18 @@ rec {
     };
     propagatedBuildInputs =
       [ LinguaENInflectPhrase TextUnidecode namespaceclean ];
+  };
+
+  StringUtil = buildPerlPackage {
+    name = "String-Util-1.21";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MI/MIKO/String-Util-1.21.tar.gz;
+      sha256 = "1ndvm9pbngf1j0fm02ghl4nfcqi5404sxdlm42g3ismf1ms1fnxa";
+    };
+    meta = {
+      description = "String::Util -- String processing utilities";
+      license = "perl";
+    };
   };
 
   SubExporter = buildPerlPackage {
@@ -5132,6 +5216,20 @@ rec {
     };
   };
 
+  URIFind = buildPerlModule {
+    name = "URI-Find-20111103";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MS/MSCHWERN/URI-Find-20111103.tar.gz;
+      sha256 = "1igbbj14j5fssdqrbr60mg3w95wldfxdikplqdmqgf2zn5j65ibr";
+    };
+    propagatedBuildInputs = [ URI URIURL ];
+    meta = {
+      homepage = http://search.cpan.org/dist/URI-Find;
+      description = "Find URIs in arbitrary text";
+      license = "perl5";
+    };
+  };
+
   UriGoogleChart = buildPerlPackage rec {
     name = "URI-GoogleChart-1.02";
     src = fetchurl {
@@ -5139,6 +5237,18 @@ rec {
       sha256 = "00hq5cpsk7sa04n0wg52qhpqf9i2849yyvw2zk83ayh1qqpc50js";
     };
     buildInputs = [URI TestMore];
+  };
+
+  URIURL = buildPerlPackage {
+    name = "URI-URL-5.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GA/GAAS/URI-1.60.tar.gz;
+      sha256 = "0xr31mf7lfrwhyvlx4pzp6p7alls5gi4bj8pk5g89f5cckfd74hz";
+    };
+    meta = {
+      description = "Uniform Resource Identifiers (absolute and relative)";
+      license = "perl";
+    };
   };
 
   VariableMagic = buildPerlPackage rec {
