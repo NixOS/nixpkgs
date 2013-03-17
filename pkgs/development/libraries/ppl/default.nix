@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://bugseng.com/products/ppl/download/ftp/releases/${version}/ppl-${version}.tar.bz2";
-    sha256 = "c169e962b8a0f7b7bcde5c5e0e2235248f1d78b155dfad684591d1a57e330b54";
+    sha256 = "0m0b6dzablci8mlavpsmn5w1v3r46li0wpjwvsybgxx0p1ifjsf1";
   };
 
   nativeBuildInputs = [ perl gnum4 ];

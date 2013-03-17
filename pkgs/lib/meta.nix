@@ -43,6 +43,6 @@ rec {
   /* Increase the nix-env priority of the package, i.e., this
      version/variant of the package will be preferred.
   */
-  hiPrio = drv: addMetaAttrs { priority = "110"; } drv;
+  hiPrio = drv: addMetaAttrs { priority = "-10"; } drv;
   
 }

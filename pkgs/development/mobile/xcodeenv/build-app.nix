@@ -1,6 +1,7 @@
 {stdenv, xcodewrapper}:
 { name
 , src
+, sdkVersion ? "6.1"
 , target ? null
 , configuration ? null
 , scheme ? null
@@ -36,7 +37,7 @@ let
 
   _sdk = if sdk == null
     then
-      if release then "iphoneos6.0" else "iphonesimulator6.0"
+      if release then "iphoneos" + sdkVersion else "iphonesimulator" + sdkVersion
     else sdk;
 
   # The following is to prevent repetition
@@ -79,6 +80,10 @@ stdenv.mkDerivation {
       ${stdenv.lib.optionalString generateIPA ''
         # Produce an IPA file
         xcrun -sdk iphoneos PackageApplication -v $out/*.app -o $out/${name}.ipa
+        
+        # Add IPA to Hydra build products
+        mkdir -p $out/nix-support
+        echo "file binary-dist $(echo $out/*.ipa)" > $out/nix-support/hydra-build-products
       ''}
       
       # Delete our temp keychain

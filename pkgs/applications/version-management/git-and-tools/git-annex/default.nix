@@ -1,48 +1,49 @@
-{ stdenv, ghc, fetchurl, perl, coreutils, git, libuuid, rsync
-, findutils, curl, ikiwiki, which, openssh
-, blazeBuilder, blazeHtml, bloomfilter, caseInsensitive
-, clientsession, cryptoApi, dataDefault, dataenc, dbus
-, editDistance, extensibleExceptions, filepath, hamlet, hinotify
-, hS3, hslogger, HTTP, httpTypes, IfElse, json, liftedBase
-, MissingH, monadControl, mtl, network, networkInfo
-, networkMulticast, pcreLight, QuickCheck, SHA, stm, text, time
-, transformers, transformersBase, utf8String, wai, waiLogger, warp
-, yesod, yesodDefault, yesodStatic, testpack, SafeSemaphore
-, networkProtocolXmpp, async, dns, DAV, uuid, Glob
+{ stdenv, fetchurl, perl, which, ikiwiki, ghc, aeson, async, blazeBuilder
+, bloomfilter, bup, caseInsensitive, clientsession, cryptoApi, curl, dataDefault
+, dataenc, DAV, dbus, dns, editDistance, extensibleExceptions, filepath, git
+, gnupg1, gnutls, hamlet, hinotify, hS3, hslogger, httpConduit, httpTypes, HUnit
+, IfElse, json, liftedBase, lsof, MissingH, monadControl, mtl, network
+, networkInfo, networkMulticast, networkProtocolXmpp, openssh, QuickCheck
+, random, regexCompat, rsync, SafeSemaphore, SHA, stm, text, time, transformers
+, transformersBase, utf8String, uuid, wai, waiLogger, warp, xmlConduit, xmlTypes
+, yesod, yesodDefault, yesodForm, yesodStatic, testpack
+, cabalInstall		# TODO: remove this build input at the next update
 }:
 
 let
-  version = "3.20130216";
+  version = "4.20130227";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=${version}";
-    sha256 = "1zbxkv9kkfyr8haml0wih1fi2xi6qazwzcxjyv8q65fa80ksskbr";
+    sha256 = "1zw5kzb08zz43ahbhrazjpq9zn73l3kwnqilp464frf7fg7rwan6";
     name = "git-annex-${version}.tar.gz";
   };
 
-  buildInputs = [ ghc git libuuid rsync findutils curl ikiwiki which
-    openssh blazeBuilder blazeHtml bloomfilter caseInsensitive
-    clientsession cryptoApi dataDefault dataenc dbus editDistance
-    extensibleExceptions filepath hamlet hinotify hS3 hslogger HTTP
-    httpTypes IfElse json liftedBase MissingH monadControl mtl network
-    networkInfo networkMulticast pcreLight QuickCheck SHA stm text time
-    transformers transformersBase utf8String wai waiLogger warp yesod
-    yesodDefault yesodStatic testpack SafeSemaphore networkProtocolXmpp
-    async dns DAV uuid Glob ];
+  buildInputs = [ ghc aeson async blazeBuilder bloomfilter bup ikiwiki
+    caseInsensitive clientsession cryptoApi curl dataDefault dataenc DAV dbus
+    dns editDistance extensibleExceptions filepath git gnupg1 gnutls hamlet
+    hinotify hS3 hslogger httpConduit httpTypes HUnit IfElse json liftedBase
+    lsof MissingH monadControl mtl network networkInfo networkMulticast
+    networkProtocolXmpp openssh QuickCheck random regexCompat rsync
+    SafeSemaphore SHA stm text time transformers transformersBase utf8String
+    uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodDefault yesodForm
+    yesodStatic which perl testpack cabalInstall ];
 
-  checkTarget = "test";
-  doCheck = true;
-
-  preConfigure = ''
+  configurePhase = ''
     makeFlagsArray=( PREFIX=$out )
-    sed -i -e 's|#!/usr/bin/perl|#!${perl}/bin/perl|' Build/mdwn2man
-    sed -i -e 's|"cp |"${coreutils}/bin/cp |' -e 's|"rm -f |"${coreutils}/bin/rm -f |' test.hs
-    # Remove this patch after the next update!
-    sed -i -e '9i #define WITH_OLD_URI' Utility/Url.hs
+    patchShebangs .
+
+    # cabal-install wants to store stuff in $HOME
+    mkdir ../tmp
+    export HOME=$PWD/../tmp
+
+    cabal configure -f-fast -ftestsuite -f-android -fproduction -fdns -fxmpp -fpairing -fwebapp -fassistant -fdbus -finotify -fwebdav -fs3
   '';
+
+  checkPhase = "./git-annex test";
 
   meta = {
     homepage = "http://git-annex.branchable.com/";

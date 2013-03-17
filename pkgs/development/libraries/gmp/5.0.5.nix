@@ -23,6 +23,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  crossAttrs = {
+    # Disable stripping to avoid "libgmp.a: Archive has no index"
+    # (see <http://hydra.nixos.org/build/4268666>.)
+    dontStrip = true;
+    dontCrossStrip = true;
+  };
+
   meta = {
     description = "GMP, the GNU multiple precision arithmetic library";
 

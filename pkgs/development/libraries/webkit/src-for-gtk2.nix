@@ -1,9 +1,10 @@
 rec {
-   version="1.4.0";
-   name="webkit-1.4.0";
-   hash="123zllzlnkjgw4d2ag73dvrjmkikbapxlz5730ps6y4qm43gxc1y";
-   url="http://webkitgtk.org/webkit-1.4.0.tar.gz";
-   advertisedUrl="http://webkitgtk.org/webkit-1.4.0.tar.gz";
+   version="1.8.1";
+   name="webkit-1.8.1";
+   hash="0a1v3v8dp2cl332qr51j4fpl0rwpgxbf29hn3zdim9hcniv6l4ls";
+   url="http://webkitgtk.org/releases/webkit-1.8.1.tar.xz";
+   advertisedUrl="http://webkitgtk.org/releases/webkit-1.8.1.tar.xz";
   
   
 }
+

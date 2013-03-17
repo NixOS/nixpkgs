@@ -33,21 +33,21 @@ vmTools.buildRPM (
       rpm -Up ''${rpms[*]} --excludepath /nix/store
 
       eval "$postRPMInstall"
-      
+
       echo "uninstalling ''${rpmNames[*]}..."
       rpm -e ''${rpmNames[*]} --nodeps
 
       for i in $out/rpms/*/*.src.rpm; do
         echo "file srpm $i" >> $out/nix-support/hydra-build-products
       done
-      
+
       for rpmdir in $extraRPMs ; do
         echo "file rpm-extra $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)" >> $out/nix-support/hydra-build-products
       done
     ''; # */
 
     meta = (if args ? meta then args.meta else {}) // {
-      description = "Build of an RPM package on ${diskImage.fullName} (${diskImage.name})";
+      description = "RPM package for ${diskImage.fullName}";
     };
   }
 

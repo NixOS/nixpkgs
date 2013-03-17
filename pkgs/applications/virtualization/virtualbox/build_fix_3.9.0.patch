@@ -1,0 +1,22 @@
+commit d725168153e3dc5a383b12e0bf9af9b6244ad3eb
+Author: vboxsync <vboxsync@cfe28804-0f27-0410-a406-dd0f0b0b656f>
+Date:   Thu Feb 28 13:46:12 2013 +0000
+
+    Linux 3.9.0 rc0 compile fix
+
+    git-svn-id: http://www.virtualbox.org/svn/vbox/trunk@44867 cfe28804-0f27-0410-a406-dd0f0b0b656f
+
+diff --git a/src/VBox/Runtime/r0drv/linux/the-linux-kernel.h b/src/VBox/Runtime/r0drv/linux/the-linux-kernel.h
+index ec9b502..7a208d1 100644
+--- a/src/VBox/Runtime/r0drv/linux/the-linux-kernel.h
++++ b/src/VBox/Runtime/r0drv/linux/the-linux-kernel.h
+@@ -90,6 +90,9 @@
+ #include <linux/slab.h>
+ #include <linux/time.h>
+ #include <linux/sched.h>
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(3, 9, 0)
++# include <linux/sched/rt.h>
++#endif
+ #if LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 7)
+ # include <linux/jiffies.h>
+ #endif

@@ -260,7 +260,6 @@ in
   electricsheep = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   elinks = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   emacs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  emacs22 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   emacs23 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   emacs24Packages = {
     autoComplete = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -333,7 +332,7 @@ in
   ffado = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ffmpeg = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ffmpeg_0_6_90 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  ffmpeg_1_0 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
+  ffmpeg_1_1 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   fileschanged = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   fio = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   firefox = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

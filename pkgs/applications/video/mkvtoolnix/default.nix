@@ -16,11 +16,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mkvtoolnix-5.9.0";
+  name = "mkvtoolnix-6.1.0";
 
   src = fetchurl {
-    url = "http://www.bunkus.org/videotools/mkvtoolnix/sources/${name}.tar.bz2";
-    sha256 = "1qdxzi72w5p77brlpp7y7llsgzlvl4p8fk1kzg934cqw6cqza4yr";
+    url = "http://www.bunkus.org/videotools/mkvtoolnix/sources/${name}.tar.xz";
+    sha256 = "01k5al3886cyi97kynx5hf98z5p7mb8vd2m057gbp1k10zblcb9x";
   };
 
   buildInputs = [ libmatroska flac libvorbis file boost lzo xdg_utils expat wxGTK zlib ruby gettext pkgconfig curl ];
@@ -39,4 +39,3 @@ stdenv.mkDerivation rec {
     homepage = http://www.bunkus.org/videotools/mkvtoolnix/;
   };
 }
-

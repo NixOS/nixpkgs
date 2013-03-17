@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "/usr/local/bin" "$out/bin"
     mv defconfig .config
     echo CONFIG_LIBNL32=y | tee -a .config
+    echo CONFIG_IEEE80211N=y | tee -a .config
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libnl-3.0)"
   '';
   preInstall = "mkdir -p $out/bin";

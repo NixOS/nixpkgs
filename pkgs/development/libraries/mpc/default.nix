@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.multiprecision.org/mpc/download/${name}.tar.gz";
-    sha256 = "ed5a815cfea525dc778df0cb37468b9c1b554aaf30d9328b1431ca705b7400ff";
+    sha1 = "vxg0rkyn4cs40wr2cp6bbcyr1nnijzlc";
   };
 
   buildInputs = [ gmp mpfr ];

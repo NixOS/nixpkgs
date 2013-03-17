@@ -1,29 +1,29 @@
-{ cabal, asn1Data, attoparsec, attoparsecConduit, base64Bytestring
-, blazeBuilder, blazeBuilderConduit, caseInsensitive, certificate
-, conduit, cookie, cprngAes, dataDefault, deepseq, failure
-, filepath, hspec, httpTypes, HUnit, liftedBase, mimeTypes
-, monadControl, mtl, network, networkConduit, random, regexCompat
+{ cabal, asn1Data, base64Bytestring, blazeBuilder
+, blazeBuilderConduit, caseInsensitive, certificate, conduit
+, cookie, cprngAes, dataDefault, deepseq, failure, filepath, hspec
+, httpTypes, HUnit, liftedBase, mimeTypes, monadControl, mtl
+, network, networkConduit, publicsuffixlist, random, regexCompat
 , resourcet, socks, text, time, tls, tlsExtra, transformers
 , transformersBase, utf8String, void, wai, warp, zlibConduit
 }:
 
 cabal.mkDerivation (self: {
   pname = "http-conduit";
-  version = "1.8.9";
-  sha256 = "0v99nc29h4qm1dbs7bwk4nwhxwk22vzl4ghrq9r3vishi6gwr7hb";
+  version = "1.9.2.1";
+  sha256 = "1zzw9gdljn7pmp0d6k051gp1wiw9412c3gdbpwbpng6m5jhk079i";
   buildDepends = [
-    asn1Data attoparsec attoparsecConduit base64Bytestring blazeBuilder
-    blazeBuilderConduit caseInsensitive certificate conduit cookie
-    cprngAes dataDefault deepseq failure filepath httpTypes liftedBase
-    mimeTypes monadControl mtl network random regexCompat resourcet
-    socks text time tls tlsExtra transformers transformersBase
-    utf8String void zlibConduit
+    asn1Data base64Bytestring blazeBuilder blazeBuilderConduit
+    caseInsensitive certificate conduit cookie cprngAes dataDefault
+    deepseq failure filepath httpTypes liftedBase mimeTypes
+    monadControl mtl network publicsuffixlist random regexCompat
+    resourcet socks text time tls tlsExtra transformers
+    transformersBase utf8String void zlibConduit
   ];
   testDepends = [
-    asn1Data attoparsec attoparsecConduit base64Bytestring blazeBuilder
-    blazeBuilderConduit caseInsensitive certificate conduit cookie
-    cprngAes dataDefault deepseq failure filepath hspec httpTypes HUnit
-    liftedBase mimeTypes monadControl mtl network networkConduit random
+    asn1Data base64Bytestring blazeBuilder blazeBuilderConduit
+    caseInsensitive certificate conduit cookie cprngAes dataDefault
+    deepseq failure filepath hspec httpTypes HUnit liftedBase mimeTypes
+    monadControl mtl network networkConduit publicsuffixlist random
     regexCompat resourcet socks text time tls tlsExtra transformers
     transformersBase utf8String void wai warp zlibConduit
   ];

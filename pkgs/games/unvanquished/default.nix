@@ -3,10 +3,10 @@
 , makeWrapper }:
 stdenv.mkDerivation rec {
   name = "unvanquished-${version}";
-  version = "0.12.0";
+  version = "0.13.1";
   src = fetchurl {
     url = "https://github.com/Unvanquished/Unvanquished/archive/v${version}.tar.gz";
-    sha256 = "0spwin0vms1zzkbgzkm423k804nqr5d54xppjbwhdnrd5fdv0gyl";
+    sha256 = "1k7mlpwalimn6xb2s760f124xncpg455qvls6z3x0ii5x0wc1mp2";
   };
   buildInputs = [ cmake mesa SDL libjpeg libpng glew libwebp ncurses gmp curl
                   nettle openal speex libogg libvorbis libtheora xvidcore 

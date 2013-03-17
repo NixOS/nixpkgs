@@ -1,52 +1,39 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, gettext, perl, flex }:
+# XXX: this may need -liconv on non-glibc systems.. 
 
-let
-  asIfPatch = ./recode-3.6-as-if.patch;
+{ stdenv, fetchgit, python, perl, autoconf, automake, libtool, intltool, flex }:
 
-  gettextPatch = ./recode-3.6-gettextfix.diff;
+stdenv.mkDerivation rec {
+  name = "recode-3.7-pff85fdbd";
 
-  debianPatch = fetchurl {
-    url = "http://ftp.de.debian.org/debian/pool/main/r/recode/recode_3.6-17.diff.gz";
-    sha256 = "1iwrggw64faf6lghgm9nzh64vh8m8jd79h6pxqgrmfmplzrzpzjp";
-  };
-in
-stdenv.mkDerivation {
-  name = "recode-3.6";
-
-  src = fetchurl {
-    url = "ftp://ftp.halifax.rwth-aachen.de/gnu/recode/recode-3.6.tar.gz";
-    sha256 = "1krgjqfhsxcls4qvxhagc45sm1sd0w69jm81nwm0bip5z3rs9rp3";
+  src = fetchgit {
+    url = https://github.com/pinard/Recode.git;
+    rev = "2fd8385658e5a08700e3b916053f6680ff85fdbd";
+    sha256 = "1xhlfmqld6af16l444jli9crj9brym2jihg1n6lkxh2gar68f5l7";
   };
 
-  buildInputs = [ autoconf automake libtool gettext perl flex ];
+  buildInputs = [ python perl autoconf automake libtool intltool flex ];
 
-  patchPhase = ''
-    patch -Np1 -i ${gettextPatch}
-    patch -Np1 -i ${asIfPatch}
-    gunzip <${debianPatch} | patch -Np1 -i -
-    sed -i '1i#include <stdlib.h>' src/argmatch.c
-
+  preConfigure = ''
     # fix build with new automake, https://bugs.gentoo.org/show_bug.cgi?id=419455
-    rm acinclude.m4
+    #rm acinclude.m4
     substituteInPlace Makefile.am --replace "ACLOCAL = ./aclocal.sh @ACLOCAL@" ""
-    sed -i '/^AM_C_PROTOTYPES/d' configure.in
+    sed -i '/^AM_C_PROTOTYPES/d' configure.ac
     substituteInPlace src/Makefile.am --replace "ansi2knr" ""
 
-    autoreconf -i
-    libtoolize
+    autoreconf -fi
   '';
 
-  configureFlags = "--without-included-gettext";
+  #doCheck = true; # doesn't work yet
 
-  doCheck = true;
+  preCheck = ''
+    checkFlagsArray=(CPPFLAGS="-I../lib" LDFLAGS="-L../src/.libs -Wl,-rpath=../src/.libs")
+  '';
 
   meta = {
     homepage = "http://www.gnu.org/software/recode/";
     description = "Converts files between various character sets and usages";
-
-    license = "GPLv2+";
-
     platforms = stdenv.lib.platforms.unix;
-    maintainers = [];
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }

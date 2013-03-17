@@ -1,0 +1,55 @@
+2009-04-26  Aurelien Jarno  <aurelien@aurel32.net>
+
+	* sysdeps/posix/getaddrinfo.c (rfc3484_sort): don't assign native
+	result if the result has no associated interface.
+
+---
+ sysdeps/posix/getaddrinfo.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+--- a/sysdeps/posix/getaddrinfo.c
++++ b/sysdeps/posix/getaddrinfo.c
+@@ -1456,13 +1456,13 @@
+ 
+ 	      /* Fill in the results in all the records.  */
+ 	      for (int i = 0; i < src->nresults; ++i)
+-		if (src->results[i].index == a1_index)
++		if (a1_index != -1 && src->results[i].index == a1_index)
+ 		  {
+ 		    assert (src->results[i].native == -1
+ 			    || src->results[i].native == a1_native);
+ 		    src->results[i].native = a1_native;
+ 		  }
+-		else if (src->results[i].index == a2_index)
++		else if (a2_index != -1 && src->results[i].index == a2_index)
+ 		  {
+ 		    assert (src->results[i].native == -1
+ 			    || src->results[i].native == a2_native);
+
+2009-03-15  Aurelien Jarno  <aurelien@aurel32.net>
+
+	* sysdeps/posix/getaddrinfo.c (getaddrinfo): correctly detect 
+	interface for all 127.X.Y.Z addresses.
+
+---
+ sysdeps/posix/getaddrinfo.c |    9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+--- a/sysdeps/posix/getaddrinfo.c
++++ b/sysdeps/posix/getaddrinfo.c
+@@ -2265,7 +2265,14 @@
+ 			  tmp.addr[0] = 0;
+ 			  tmp.addr[1] = 0;
+ 			  tmp.addr[2] = htonl (0xffff);
+-			  tmp.addr[3] = sinp->sin_addr.s_addr;
++			  /* Special case for lo interface, the source address
++			     being possibly different than the interface 
++			     address. */
++			  if ((ntohl(sinp->sin_addr.s_addr) & 0xff000000)
++			      == 0x7f000000)
++			    tmp.addr[3] = htonl(0x7f000001);
++			  else
++			    tmp.addr[3] = sinp->sin_addr.s_addr;
+ 			}
+ 		      else
+ 			{

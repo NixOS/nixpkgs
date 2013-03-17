@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "time-compat";
-  version = "0.1.0.2";
-  sha256 = "0687bxkvqs22p7skqb8n289k9nv7cafg8jyx32sswn2h11m7dihb";
+  version = "0.1.0.3";
+  sha256 = "0zqgzr8yjn36rn6gflwh5s0c92vl44xzxiw0jz8d5h0h8lhi21sr";
   buildDepends = [ time ];
   meta = {
     homepage = "http://hub.darcs.net/dag/time-compat";

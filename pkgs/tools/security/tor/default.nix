@@ -8,12 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "bb2d6f1136f33e11d37e6e34184143bf191e59501613daf33ae3d6f78f3176a0";
   };
 
-#  patchPhase =
-    # DNS lookups fail in chroots.
-#    '' sed -i "src/or/test.c" -es/localhost/127.0.0.1/g
-#    '';
-
   buildInputs = [ libevent openssl zlib ];
+
+  CFLAGS = "-lgcc_s";
 
   doCheck = true;
 
@@ -35,7 +32,7 @@ stdenv.mkDerivation rec {
 
     maintainers =
       [ # Russell O’Connor <roconnor@theorem.ca> ?
-	stdenv.lib.maintainers.ludo
+        stdenv.lib.maintainers.ludo
       ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };

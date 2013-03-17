@@ -49,6 +49,11 @@ stdenv.mkDerivation ({
          compatibility with old NixOS installations (since NixOS used
          to default to blowfish). */
       ./glibc-crypt-blowfish.patch
+
+      /* Fix for random "./sysdeps/posix/getaddrinfo.c:1467:
+         rfc3484_sort: Assertion `src->results[i].native == -1 ||
+         src->results[i].native == a2_native' failed." crashes. */
+      ./glibc-rh739743.patch
     ];
 
   postPatch = ''
@@ -138,7 +143,9 @@ stdenv.mkDerivation ({
 
     configureScript="`pwd`/../$sourceRoot/configure"
 
-    makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.gcc.libc}/lib"
+    ${stdenv.lib.optionalString (stdenv.gcc.libc != null)
+      ''makeFlags="$makeFlags BUILD_LDFLAGS=-Wl,-rpath,${stdenv.gcc.libc}/lib"''
+    }
 
     ${preConfigure}
   '';

@@ -28,7 +28,7 @@ let
   layout = if taggedLayout then "tagged" else "system";
 
   cflags = if enablePIC && enableExceptions then
-             "cflags=-fPIC -fexceptions cxxflags=-fPIC linkflags=-fPIC"
+             "cflags=\"-fPIC -fexceptions\" cxxflags=-fPIC linkflags=-fPIC"
            else if enablePIC then
              "cflags=-fPIC cxxflags=-fPIC linkflags=-fPIC"
            else if enableExceptions then

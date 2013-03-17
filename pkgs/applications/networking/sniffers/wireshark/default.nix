@@ -3,20 +3,20 @@
 , heimdal, python, lynx, lua5
 }:
 
-let
-  version = "1.8.3";
-in
+let version = "1.8.5"; in
+
 stdenv.mkDerivation {
   name = "wireshark-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wireshark/wireshark-${version}.tar.bz2";
-    sha256 = "1crg59kkxb7lw1wpfg52hd4l00hq56pyg7f40c7sgqmm0vsmza43";
+    sha256 = "0wp33qa5yvi60b08iiz55wflhr1vwd7680sbwx2kqjlp2s17kr6l";
   };
 
-  buildInputs = [perl pkgconfig gtk libpcap flex bison gnutls libgcrypt
-    glib zlib libxml2 libxslt adns geoip heimdal python lynx lua5
-  ];
+  buildInputs =
+    [ perl pkgconfig gtk libpcap flex bison gnutls libgcrypt
+      glib zlib libxml2 libxslt adns geoip heimdal python lynx lua5
+    ];
 
   configureFlags = "--disable-usr-local --with-ssl --enable-threads --enable-packet-editor";
 

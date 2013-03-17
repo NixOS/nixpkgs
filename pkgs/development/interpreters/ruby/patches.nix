@@ -1,5 +1,5 @@
 { fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
-, zlib, libuuid, gems, jdk }:
+, zlib, libuuid, gems, jdk, python }:
 
 let
 
@@ -14,12 +14,21 @@ in
 
 {
   sup = { buildInputs = [ gems.ncursesw ]; };
+
+  libv8 = { buildInputs = [ python ]; };
   
   sqlite3 = { propagatedBuildInputs = [ sqlite ]; };
   
   rails = { gemFlags = "--no-ri --no-rdoc"; };
   
   ncurses = { propagatedBuildInputs = [ ncurses ]; };
+
+  nix = {
+    postInstall = ''
+      cd $out/${ruby.gemPath}/gems/nix*
+      patch -Np1 -i ${./fix-gem-nix-versions.patch}
+    '';
+  };
   
   ncursesw = { propagatedBuildInputs = [ ncurses ]; };
   

@@ -33,7 +33,6 @@ with (import ./release-lib.nix);
   bc = all;
   binutils = linux;
   bind = linux;
-  bison26 = all;
   bitlbee = linux;
   bittorrent = linux;
   blender = linux;
@@ -73,7 +72,6 @@ with (import ./release-lib.nix);
   e2fsprogs = linux;
   ejabberd = linux;
   elinks = linux;
-  emacs22 = gtkSupported;
   emacs23 = gtkSupported;
   enscript = all;
   eprover = linux;
@@ -211,7 +209,6 @@ with (import ./release-lib.nix);
   openssl = all;
   pam_console = linux;
   pam_login = linux;
-  pam_unix2 = linux;
   pan = gtkSupported;
   par2cmdline = all;
   pavucontrol = linux;
@@ -332,15 +329,12 @@ with (import ./release-lib.nix);
   zsh = linux;
   zsnes = ["i686-linux"];
 
-  emacs22Packages = {
+  emacs23Packages = {
     bbdb = linux;
     cedet = linux;
     ecb = linux;
     emacsw3m = linux;
     emms = linux;
-  };
-
-  emacs23Packages = emacs22Packages // {
     jdee = linux;
   };
 
@@ -353,43 +347,25 @@ with (import ./release-lib.nix);
     gnome_vfs = linux;
   };
 
-  /*
   haskellPackages_ghc6104 = {
     ghc = ghcSupported;
-    haskellPlatform_2009_2_0_2 = ghcSupported;
-  };
-
-  haskellPackages_ghc6121 = {
-    ghc = ghcSupported;
-    haskellPlatform_2010_1_0_0 = ghcSupported;
   };
 
   haskellPackages_ghc6123 = {
     ghc = ghcSupported;
-    gitit = linux;
-    gtk = linux;
-    haskellPlatform = ghcSupported;
-  };
-
-  haskellPackages_ghc701 = {
-    ghc = ghcSupported;
-  };
-
-  haskellPackages_ghc702 = {
-    ghc = ghcSupported;
-    haskellPlatform = ghcSupported;
   };
 
   haskellPackages_ghc704 = {
-    darcs = ghcSupported;
     ghc = ghcSupported;
-    gitit = linux;
-    gtk = linux;
-    haskellPlatform = ghcSupported;
-    lhs2tex = ghcSupported;
-    xmonad = linux;
   };
-  */
+
+  haskellPackages_ghc742 = {
+    ghc = ghcSupported;
+  };
+
+  haskellPackages_ghc762 = {
+    ghc = ghcSupported;
+  };
 
   strategoPackages = {
     sdf = linux;
@@ -453,7 +429,6 @@ with (import ./release-lib.nix);
     xfce4panel = linux;
     xfce4session = linux;
     xfce4settings = linux;
-    xfceutils = linux;
     xfdesktop = linux;
     xfwm4 = linux;
   };

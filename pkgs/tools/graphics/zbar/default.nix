@@ -30,6 +30,8 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
+
+  configureFlags = ["--disable-video"];
       
   meta = {
     description = "Bar code toolset";
