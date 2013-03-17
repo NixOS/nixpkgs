@@ -9,6 +9,7 @@ let
   syslogConf = pkgs.writeText "syslog.conf" ''
     $ModLoad imuxsock
     $SystemLogSocketName /run/systemd/journal/syslog
+    $WorkDirectory /var/spool/rsyslog
 
     ${cfg.defaultConfig}
     ${cfg.extraConfig}
@@ -95,6 +96,7 @@ in
 
         serviceConfig =
           { ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
+            ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/spool/rsyslog";
             # Prevent syslogd output looping back through journald.
             StandardOutput = "null";
           };
