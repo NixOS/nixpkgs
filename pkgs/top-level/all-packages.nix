@@ -579,6 +579,8 @@ let
 
   cowsay = callPackage ../tools/misc/cowsay { };
 
+  cuetools = callPackage ../tools/cd-dvd/cuetools { };
+
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
   "unionfs-fuse" = callPackage ../tools/filesystems/unionfs-fuse { };
