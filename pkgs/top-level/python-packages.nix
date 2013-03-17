@@ -1049,17 +1049,18 @@ pythonPackages = python.modules // rec {
 
 
   flake8 = buildPythonPackage (rec {
-    name = "flake8-1.7.0";
+    name = "flake8-2.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/f/flake8/${name}.tar.gz";
-      md5 = "a7830d1a6c23e889bc1fcaa4a87f53bd";
+      md5 = "176c6b3613777122721db181560aa1e3";
     };
 
     buildInputs = [ nose ];
+    propagatedBuildInputs = [ pyflakes pep8 mccabe ];
 
     # 3 failing tests
-    doCheck = false;
+    #doCheck = false;
 
     meta = {
       description = "code checking using pep8 and pyflakes.";
@@ -1651,6 +1652,25 @@ pythonPackages = python.modules // rec {
   });
 
 
+  mccabe = buildPythonPackage (rec {
+    name = "mccabe-0.2";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/m/mccabe/${name}.tar.gz";
+      md5 = "c1012c7c24081471f45aab864d4e3805";
+    };
+
+    buildInputs = [ ];
+
+    meta = {
+      description = "McCabe checker, plugin for flake8";
+      homepage = "https://github.com/flintwork/mccabe";
+      license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
+    };
+  });
+
+
   mechanize = buildPythonPackage (rec {
     name = "mechanize-0.1.11";
 
@@ -2183,17 +2203,32 @@ pythonPackages = python.modules // rec {
 
   pep8 = buildPythonPackage rec {
     name = "pep8-${version}";
-    version = "1.3.3";
+    version = "1.4.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/p/pep8/${name}.tar.gz";
-      md5 = "093a99ced0cc3b58c01549d7350f5a73";
+      md5 = "055dbd22ac5669232fdba752612e9686";
     };
 
+    #======================================================================
+    #FAIL: test_check_simple (testsuite.test_shell.ShellTestCase)
+    #----------------------------------------------------------------------
+    #Traceback (most recent call last):
+    #  File "/tmp/nix-build-python-pep8-1.4.5.drv-0/pep8-1.4.5/testsuite/test_shell.py", line 84, in test_check_simple
+    #    self.assertTrue(config_filename.endswith('tox.ini'))
+    #AssertionError: False is not true
+    #
+    #----------------------------------------------------------------------
+    #Ran 21 tests in 0.711s
+    #
+    #FAILED (failures=1)
+    doCheck = false;
+
     meta = {
-      homepage = http://pypi.python.org/pypi/pep8/;
+      homepage = "http://pep8.readthedocs.org/";
       description = "Python style guide checker";
       license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
 
@@ -2527,6 +2562,24 @@ pythonPackages = python.modules // rec {
     meta = {
       homepage = "http://home.blarg.net/~steveha/pyfeed.html";
       description = "Tools for syndication feeds";
+    };
+  };
+
+  pyflakes = buildPythonPackage rec {
+    name = "pyflakes-0.6.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyflakes/${name}.tar.gz";
+      md5 = "00debd2280b962e915dfee552a675915";
+    };
+
+    buildInputs = [ unittest2 ];
+
+    meta = {
+      homepage = "https://launchpad.net/pyflakes";
+      description = "A simple program which checks Python source files for errors.";
+      license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
 
