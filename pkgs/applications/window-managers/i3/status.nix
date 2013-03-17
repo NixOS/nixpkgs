@@ -2,11 +2,11 @@
   }:
 
 stdenv.mkDerivation rec {
-  name = "i3status-2.6";
+  name = "i3status-2.7";
 
   src = fetchurl {
     url = "http://i3wm.org/i3status/${name}.tar.bz2";
-    sha256 = "e7e710cc271887bcd22757269e1b00a5618fb53abdb3455140116b3d38797bce";
+    sha256 = "0cm6fhsc7hzsqni8pwhjl2l0rfd458paabn54cgzqnmwwdflwgq7";
   };
 
   buildInputs = [ confuse yajl alsaLib wirelesstools ];
