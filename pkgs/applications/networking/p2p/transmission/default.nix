@@ -13,13 +13,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ pkgconfig openssl curl intltool libevent
-                  file inotifyTools gtk ];
+                  file inotifyTools ]
+    ++ stdenv.lib.optional enableGtk gtk;
 
   preConfigure = ''
     sed -i -e 's|/usr/bin/file|${file}/bin/file|g' configure
   '';
 
-  configureFlags = stdenv.lib.optional enableGtk "--with-gtk";
+  configureFlags = stdenv.lib.optionalString enableGtk "--with-gtk";
 
   postInstall = ''
     rm -f $out/share/icons/hicolor/icon-theme.cache
