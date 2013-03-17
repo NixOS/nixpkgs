@@ -1,0 +1,21 @@
+Skip tests requiring Perl and less (more).
+Also zgrep-signal skipping fails with weird Bad file number error on illumos.
+--- gzip-1.5/tests/Makefile.in.orig	2013-02-23 15:15:08.017048868 +0000
++++ gzip-1.5/tests/Makefile.in	2013-02-23 15:15:32.756197039 +0000
+@@ -1421,7 +1421,6 @@
+   trailing-nul				\
+   zdiff					\
+   zgrep-f				\
+-  zgrep-signal				\
+   znew-k
+ 
+ EXTRA_DIST = \
+@@ -1441,8 +1440,6 @@
+   zfgrep	\
+   zforce	\
+   zgrep		\
+-  zless		\
+-  zmore		\
+   znew
+ 
+ TESTS_ENVIRONMENT = \

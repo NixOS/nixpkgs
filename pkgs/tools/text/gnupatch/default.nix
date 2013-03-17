@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
     configureFlags = [ "ac_cv_func_strnlen_working=yes" ];
   };
 
-  # Tests fail on FreeBSD due to a Bashism in the tests.
-  doCheck = !stdenv.isFreeBSD;
+  patches = [ ./bashishms.patch ];
+
+  doCheck = true;
 
   meta = {
     description = "GNU Patch, a program to apply differences to files";

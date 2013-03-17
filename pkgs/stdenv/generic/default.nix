@@ -138,11 +138,13 @@ let
         isx86_64 = result.system == "x86_64-linux"
                || result.system == "x86_64-darwin"
                || result.system == "x86_64-freebsd"
-               || result.system == "x86_64-openbsd";
+               || result.system == "x86_64-openbsd"
+               || result.system == "x86_64-solaris";
         is64bit = result.system == "x86_64-linux"
                 || result.system == "x86_64-darwin"
                 || result.system == "x86_64-freebsd"
-                || result.system == "x86_64-openbsd";
+                || result.system == "x86_64-openbsd"
+                || result.system == "x86_64-solaris";
         isMips = result.system == "mips-linux"
                 || result.system == "mips64el-linux";
         isArm = result.system == "armv5tel-linux"
