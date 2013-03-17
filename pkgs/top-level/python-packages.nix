@@ -1321,11 +1321,11 @@ pythonPackages = python.modules // rec {
   });
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.7.7";
+    name = "httplib2-0.8";
 
     src = fetchurl {
       url = "http://httplib2.googlecode.com/files/${name}.tar.gz";
-      sha256 = "2e2ce18092c32d1ec54f8a447e14e33585e30f240b883bfeeca65f12b3bcfaf6";
+      sha256 = "0gww8axb4j1vysbk9kfsk5vrws9a403gh30dxchmga8hrg1rns5g";
     };
 
     meta = {
