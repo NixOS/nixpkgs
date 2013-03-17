@@ -23,6 +23,7 @@ import ../generic rec {
 
   gcc = import ../../build-support/gcc-wrapper {
     nativeTools = false;
+    nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
     nativeLibc = true;
     inherit stdenv;
     binutils =

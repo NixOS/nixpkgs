@@ -8,7 +8,7 @@ let
      <http://mail.python.org/pipermail/python-bugs-list/2006-September/035362.html>,
      but this is left as an exercise to the reader.
      So disable them for now.  */
-  cxx = stdenv.system != "i686-solaris";
+  cxx = !stdenv.isSunOS;
 in
 stdenv.mkDerivation (rec {
   name = "ncurses-5.9";
@@ -22,6 +22,8 @@ stdenv.mkDerivation (rec {
     --with-shared --includedir=''${out}/include --without-debug
     ${if unicode then "--enable-widec" else ""}${if cxx then "" else "--without-cxx-binding"}
   '';
+
+  patches = [ ./patch-ac ];
 
   selfNativeBuildInput = true;
 

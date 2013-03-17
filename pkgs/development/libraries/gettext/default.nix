@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, libiconv }:
+{ stdenv, fetchurl, libiconv, xz }:
 
 stdenv.mkDerivation (rec {
-  name = "gettext-0.18.1.1";
+  name = "gettext-0.18.2";
   
   src = fetchurl {
     url = "mirror://gnu/gettext/${name}.tar.gz";
-    sha256 = "1sa3ch12qxa4h3ya6hkz119yclcccmincl9j20dhrdx5mykp3b4k";
+    sha256 = "516a6370b3b3f46e2fc5a5e222ff5ecd76f3089bc956a7587a6e4f89de17714c";
   };
 
-  patches = [ ./no-gets.patch ];
+  LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
-  configureFlags = [ "--disable-csharp" ]
+  configureFlags = [ "--disable-csharp" "--with-xz" ]
      ++ (stdenv.lib.optionals stdenv.isCygwin
           [ # We have a static libiconv, so we can only build the static lib.
             "--disable-shared" "--enable-static"
@@ -30,7 +30,7 @@ stdenv.mkDerivation (rec {
     fi
   '';
 
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  buildInputs = [ xz ] ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
   
   enableParallelBuilding = true;
       

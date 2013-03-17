@@ -1,14 +1,16 @@
 { stdenv, fetchurl, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "libxslt-1.1.27";
+  name = "libxslt-1.1.28";
 
   src = fetchurl {
     url = "ftp://xmlsoft.org/libxml2/${name}.tar.gz";
-    sha256 = "09ky3vhlaahvsb0q9gp6h3as53pfj70gincirachjqzj46jdka5n";
+    sha256 = "5fc7151a57b89c03d7b825df5a0fae0a8d5f05674c0e7cf2937ecec4d54a028c";
   };
 
   buildInputs = [ libxml2 ];
+
+  patches = stdenv.lib.optionals stdenv.isSunOS [ ./patch-ah.patch ];
 
   postInstall = ''
     mkdir -p $out/nix-support
