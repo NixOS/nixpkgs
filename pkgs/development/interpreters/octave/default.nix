@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull libX11
-    graphicsmagick pcre liblapack texLive pkgconfig mesa fltk zlib curl
+    graphicsmagick pcre liblapack pkgconfig mesa fltk zlib curl
     fftw fftwSinglePrec qrupdate ];
 
   doCheck = true;
