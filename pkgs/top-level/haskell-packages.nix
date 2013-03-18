@@ -1275,6 +1275,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mongoDB = callPackage ../development/libraries/haskell/mongoDB {};
 
+  mmorph = callPackage ../development/libraries/haskell/mmorph {};
+
   mpppc = callPackage ../development/libraries/haskell/mpppc {};
 
   mtl_1_1_0_2 = callPackage ../development/libraries/haskell/mtl/1.1.0.2.nix {};
