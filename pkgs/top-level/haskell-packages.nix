@@ -583,6 +583,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cereal = callPackage ../development/libraries/haskell/cereal {};
 
+  cerealConduit = callPackage ../development/libraries/haskell/cereal-conduit {};
+
   certificate = callPackage ../development/libraries/haskell/certificate {};
 
   cgi_3001_1_7_1 = callPackage ../development/libraries/haskell/cgi/3001.1.7.1.nix {};
