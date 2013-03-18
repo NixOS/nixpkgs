@@ -1693,6 +1693,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   stm_2_4_2 = callPackage ../development/libraries/haskell/stm/2.4.2.nix {};
   stm = self.stm_2_4_2;
 
+  stmChans = callPackage ../development/libraries/haskell/stm-chans {};
+
+  stmConduit = callPackage ../development/libraries/haskell/stm-conduit {};
+
   storableComplex = callPackage ../development/libraries/haskell/storable-complex {};
 
   storableRecord = callPackage ../development/libraries/haskell/storable-record {};
