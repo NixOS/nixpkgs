@@ -1,16 +1,17 @@
 { stdenv, fetchurl, fetchhg, go, sqlite}:
 
-assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64);
+assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isArm);
 
 stdenv.mkDerivation rec {
-  name = "storebrowse-20130316140138";
+  name = "storebrowse-20130318212204";
 
   src = fetchurl {
-    url = "http://viric.name/cgi-bin/storebrowse/tarball/storebrowse-881990147c.tar.gz?uuid=881990147c";
+    url = "http://viric.name/cgi-bin/storebrowse/tarball/storebrowse-775928f68e53.tar.gz?uuid=775928f68e53";
     name = "${name}.tar.gz";
-    sha256 = "183b6gz7xv88c94i9mgmjslsdn75v5vsbchl19kjv7mbrxfx5mvl";
+    sha256 = "1yb8qbw95d9561s10k12a6lwv3my8h52arsbfcpizx74dwfsv7in";
   };
 
+  # This source has license BSD
   srcGoSqlite = fetchhg {
     url = "https://code.google.com/p/gosqlite/";
     tag = "5baefb109e18";
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
     PATH=${go}/bin:$PATH
     mkdir $TMPDIR/go
     export GOPATH=$TMPDIR/go
+
+    ${stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "export GOARM=5"}
 
     GOSQLITE=$GOPATH/src/code.google.com/p/gosqlite
     mkdir -p $GOSQLITE
