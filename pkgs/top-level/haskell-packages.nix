@@ -489,6 +489,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   authenticate = callPackage ../development/libraries/haskell/authenticate {};
 
+  authenticateOauth = callPackage ../development/libraries/haskell/authenticate-oauth {};
+
   base16Bytestring = callPackage ../development/libraries/haskell/base16-bytestring {};
 
   base64String = callPackage ../development/libraries/haskell/base64-string {};
