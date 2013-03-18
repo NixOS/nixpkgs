@@ -135,7 +135,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     async        = self.async_2_0_1_4;          # 7.6 ok
     cgi          = self.cgi_3001_1_8_3;         # 7.6 ok
     fgl          = self.fgl_5_4_2_4;            # 7.6 ok
-    GLUT         = self.GLUT_2_3_1_0;           # 7.6 ok
+    GLUT         = self.GLUT_2_4_0_0;           # 7.6 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
     html         = self.html_1_0_1_2;           # 7.6 ok
     HTTP         = self.HTTP_4000_2_8;          # 7.6 ok
@@ -924,7 +924,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   GLUT_2_3_1_0 = callPackage ../development/libraries/haskell/GLUT/2.3.1.0.nix {
     OpenGL = self.OpenGL_2_6_0_1;
   };
-  GLUT = self.GLUT_2_3_1_0;
+  GLUT_2_4_0_0 = callPackage ../development/libraries/haskell/GLUT/2.4.0.0.nix {
+    OpenGL = self.OpenGL_2_8_0_0;
+  };
+  GLUT = self.GLUT_2_4_0_0;
 
   gnuidn = callPackage ../development/libraries/haskell/gnuidn {};
 
