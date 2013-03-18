@@ -4179,6 +4179,14 @@ rec {
     };
   };
 
+  SGMLSpm = buildPerlPackage {
+    name = "SGMLSpm-1.1";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RA/RAAB/SGMLSpm-1.1.tar.gz;
+      sha256 = "1gdjf3mcz2bxir0l9iljxiz6qqqg3a9gg23y5wjg538w552r432m";
+    };
+  };
+
   Socket6 = buildPerlPackage rec {
     name = "Socket6-0.23";
     src = fetchurl {
