@@ -1,24 +1,27 @@
-{ stdenv, fetchurl, libsysfs, openssl }:
+{ stdenv, fetchurl, libsysfs, gnutls, openssl, libcap }:
 
 assert stdenv ? glibc;
 
-stdenv.mkDerivation {
-  name = "iputils-20101006";
+let
+  time = "20121221";
+in
+stdenv.mkDerivation rec {
+  name = "iputils-${time}";
   
   src = fetchurl {
-    url = http://www.skbuff.net/iputils/iputils-s20101006.tar.bz2;
-    sha256 = "1rvfvdnmzlmgy9a6xv5v4n785zmn10v2l7yaq83rdfgbh1ng8fpx";
+    url = "http://www.skbuff.net/iputils/iputils-s${time}.tar.bz2";
+    sha256 = "17riqp8dh8dvx32zv3hyrghpxz6xnxa6vai9b4yc485nqngm83s5";
   };
 
-  buildInputs = [ libsysfs openssl ];
+  buildInputs = [ libsysfs gnutls openssl libcap ];
 
-  # Urgh, it uses Make's `-l' dependency "feature". 
-  makeFlags = "VPATH=${libsysfs}/lib:${stdenv.glibc}/lib:${openssl}/lib";
+  buildFlags = "all ninfod";
 
   installPhase =
     ''
-      mkdir -p $out/sbin
-      cp -p arping ping ping6 rdisc tracepath tracepath6 traceroute6 $out/sbin/
+      mkdir -p $out/sbin $out/bin
+      cp -p ping ping6 tracepath tracepath6 traceroute6 $out/bin/
+      cp -p clockdiff arping rdisc ninfod/ninfod $out/sbin/
     '';
     
   meta = {
