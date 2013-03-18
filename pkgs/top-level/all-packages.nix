@@ -1283,7 +1283,9 @@ let
 
   opendkim = callPackage ../development/libraries/opendkim { };
 
-  openjade = callPackage ../tools/text/sgml/openjade { };
+  openjade = callPackage ../tools/text/sgml/openjade {
+    perl = perl510;
+  };
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
