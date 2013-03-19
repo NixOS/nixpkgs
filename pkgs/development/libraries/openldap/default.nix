@@ -8,7 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "01h6zq6zki9b1k07pbyps5vxj9w39ybzjvkyz5h9xk09dd54raza";
   };
 
-  buildInputs = [openssl cyrus_sasl db4 groff];
+  buildInputs = [ openssl cyrus_sasl db4 groff ];
+
+  configureFlags =
+    [ "--enable-overlays"
+    ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
+      ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl";
 
   dontPatchELF = 1; # !!!
 
