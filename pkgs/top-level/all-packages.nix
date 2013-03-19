@@ -5636,7 +5636,7 @@ let
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
   bluez4 = callPackage ../os-specific/linux/bluez { };
-  bluez5 = callPackage ../os-specific/linux/bluez/bluez5.nix { };
+  bluez5 = lowPrio (callPackage ../os-specific/linux/bluez/bluez5.nix { });
 
   bluez = bluez4;
 
