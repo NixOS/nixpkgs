@@ -8,9 +8,12 @@ let
     sha256 = "fc1370ef38abeeb13f55c905ec002e60705fb0bfde3b8d21c8d6eb8056c11bac";
   };
 
-  patches = [ ./ignore-missing-includedirs.patch ./implement-getgrouplist.patch ];
+  patches = [
+    ./ignore-missing-includedirs.patch ./implement-getgrouplist.patch
+    ./ucred-dirty-hack.patch
+  ];
 
-  configureFlags = "--enable-embedded-tests --localstatedir=/var --sysconfdir=/etc --with-session-socket-dir=/tmp";
+  configureFlags = "--localstatedir=/var --sysconfdir=/etc --with-session-socket-dir=/tmp";
 
 in rec {
 
@@ -19,7 +22,7 @@ in rec {
 
     nativeBuildInputs = [ pkgconfig ];
 
-    buildInputs = [ expat ];
+    buildInputs = [ expat libX11 ];
 
     # FIXME: dbus has optional systemd integration when checking
     # at_console policies.  How to enable this without introducing a
