@@ -1389,6 +1389,16 @@ pythonPackages = python.modules // rec {
     propagatedBuildInputs = [ ipython ];
   };
 
+  ipdbplugin = buildPythonPackage {
+    name = "ipdbplugin-1.2";
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.2.tar.gz";
+      md5 = "39169b00a2186b99469249c5b0613753";
+    };
+    propagatedBuildInputs = [ nose ipython ];
+  };
+
+
   jedi = buildPythonPackage (rec {
     name = "jedi-0.5b5";
 
