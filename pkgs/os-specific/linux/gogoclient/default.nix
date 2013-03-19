@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
     rm $out/bin/gogoc.conf.sample
 
     substituteInPlace "$out/template/linux.sh" \
-      --replace "/sbin/ifconfig" "${nettools}/sbin/ifconfig" \
-      --replace "/sbin/route"    "${nettools}/sbin/route" \
+      --replace "/sbin/ifconfig" "${nettools}/bin/ifconfig" \
+      --replace "/sbin/route"    "${nettools}/bin/route" \
       --replace "/sbin/ip"       "${iproute}/sbin/ip" \
       --replace "/sbin/sysctl"   "${procps}/sbin/sysctl"
     sed -i -e 's/^.*Exec \$route -A.*$/& metric 128/' $out/template/linux.sh
