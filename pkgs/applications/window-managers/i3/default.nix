@@ -1,6 +1,6 @@
 { fetchurl, stdenv, which, pkgconfig, libxcb, xcbutilkeysyms, xcbutil,
   xcbutilwm, libstartup_notification, libX11, pcre, libev, yajl,
-  libXcursor, coreutils, perl }:
+  libXcursor, coreutils, perl, pango }:
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
@@ -12,10 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutil xcbutilwm
-    libstartup_notification libX11 pcre libev yajl libXcursor perl ];
+    libstartup_notification libX11 pcre libev yajl libXcursor perl pango ];
 
   patchPhase = ''
-    sed -i -e '/^# Pango/,/^$/d' common.mk
     patchShebangs .
   '';
 
