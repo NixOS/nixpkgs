@@ -1,11 +1,11 @@
 { stdenv, fetchurl, emacs, texinfo, texLive, perl, which, automake }:
 
 stdenv.mkDerivation (rec {
-  name = "ProofGeneral-4.1";
+  name = "ProofGeneral-4.2";
 
   src = fetchurl {
-    url = http://proofgeneral.inf.ed.ac.uk/releases/ProofGeneral-4.1.tgz;
-    sha256 = "1ivxx8c6j7cfdfj2pj0gzdqac7hpb679bjmwdqdcz1c1ni34s9ia";
+    url = http://proofgeneral.inf.ed.ac.uk/releases/ProofGeneral-4.2.tgz;
+    sha256 = "09qb0myq66fw17v4ziz401ilsb5xlxz1nl2wsp69d0vrfy0bcrrm";
   };
 
   sourceRoot = name;
@@ -24,7 +24,7 @@ stdenv.mkDerivation (rec {
        sed -i '101d' doc/ProofGeneral.texi
 
        # Emacs 24 compatibility.
-       sed -i 's|interactive-p|called-interactively-p '\'''any|' isar/isabelle-system.el generic/proof-{menu,script,splash}.el lib/scomint.el
+       #sed -i 's|interactive-p|called-interactively-p '\'''any|' isar/isabelle-system.el generic/proof-{menu,script,splash}.el lib/scomint.el
     '';
 
   preBuild = ''
