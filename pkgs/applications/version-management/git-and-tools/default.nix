@@ -72,7 +72,7 @@ rec {
   };
 
   topGit = lib.makeOverridable (import ./topgit) {
-    inherit stdenv fetchurl unzip;
+    inherit stdenv fetchurl;
   };
 
   tig = import ./tig {

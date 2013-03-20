@@ -1,33 +1,25 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl }:
 
-let
-  version = "0.8-45-gd279e29";
-  lib = stdenv.lib;
-in
-stdenv.mkDerivation {
-  name = "topgit-${version}";
+stdenv.mkDerivation rec {
+  name = "topgit-0.9";
 
   src = fetchurl {
-    url = "http://repo.or.cz/w/topgit.git/snapshot/topgit-${version}.zip";
-    sha256 = "0vzrng1w2k7m4z0x9h6zbrcf33dx08ly8fnbxzz3ms2k2dbsmpl6";
+    url = "https://github.com/greenrd/topgit/archive/${name}.tar.gz";
+    sha256 = "1z9x42a0cmn8n2n961qcfl522nd6j9a3dpx1jbqfp24ddrk5zd94";
   };
 
-  buildInputs = [unzip];
-  configurePhase = "export prefix=$out";
+  configurePhase = "makeFlags=prefix=$out";
 
   postInstall = ''
-    mkdir -p "$out/share/doc/topgit-${version}"
-    cp README "$out/share/doc/topgit-${version}/"
-    mkdir -p "$out/etc/bash_completion.d"
-    make prefix="$out" install
-    mv "contrib/tg-completion.bash" "$out/etc/bash_completion.d/"
+    install -D README "$out/share/doc/${name}/README"
+    install -D contrib/tg-completion.bash "$out/etc/bash_completion.d/tg-completion.bash"
   '';
 
   meta = {
-    description = "TopGit aims to make handling of large amount of interdependent topic branches easier";
-    maintainers = [ lib.maintainers.marcweber lib.maintainers.ludo lib.maintainers.simons ];
-    homepage = http://repo.or.cz/w/topgit.git;
+    homepage = "https://github.com/greenrd/topgit";
+    description = "TopGit manages large amount of interdependent topic branches";
     license = "GPLv2";
     platforms = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ marcweber ludo simons ];
   };
 }
