@@ -2,20 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
-  version = "2.0.0";
+  version = "2.1.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
-    sha256 = "0malymlswxwgh8amkw37qjb8n34ylw3chgbdxgxkq34rkvhv60hb";
+    sha256 = "1k1d1dr11jmm166r12wkw6j4wnlxk3p7wkvlk3cxhdrmyacqfrzk";
   };
 
   jarsrc = fetchurl {
-    url = "https://leiningen.s3.amazonaws.com/downloads/leiningen-2.0.0-standalone.jar";
-    sha256 = "10jvk19mr5dcl5a9kzna9zslh77v3ixi8awhrhxi30dn1yj3r7ck";
+    url = "https://leiningen.s3.amazonaws.com/downloads/leiningen-${version}-standalone.jar";
+    sha256 = "0y1llnbsgimxg3zpy070j98k1i6y1r0asn4h8aal0db8x3sj49j2";
   };
 
-  patches = ./lein_2.0.0.patch;
+  patches = ./lein_2.1.0.patch;
 
   inherit rlwrap clojure;
 
