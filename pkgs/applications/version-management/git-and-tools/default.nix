@@ -49,10 +49,9 @@ rec {
       editDistance extensibleExceptions filepath gnutls hamlet hinotify hS3
       hslogger httpConduit httpTypes HUnit IfElse json liftedBase MissingH
       monadControl mtl network networkInfo networkMulticast networkProtocolXmpp
-      QuickCheck random regexCompat SafeSemaphore SHA stm text time
+      QuickCheck random regexCompat SafeSemaphore SHA stm text time regexTdfa
       transformers transformersBase utf8String uuid wai waiLogger warp
-      xmlConduit xmlTypes yesod yesodDefault yesodForm yesodStatic testpack
-      cabalInstall;
+      xmlConduit xmlTypes yesod yesodDefault yesodForm yesodStatic testpack;
   };
 
   qgit = import ./qgit {
