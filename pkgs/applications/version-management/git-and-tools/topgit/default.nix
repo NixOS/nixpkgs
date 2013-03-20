@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
   configurePhase = "makeFlags=prefix=$out";
 
   postInstall = ''
-    install -D README "$out/share/doc/${name}/README"
-    install -D contrib/tg-completion.bash "$out/etc/bash_completion.d/tg-completion.bash"
+    mkdir -p "$out/share/doc/${name}" "$out/etc/bash_completion.d/"
+    mv README "$out/share/doc/${name}/"
+    mv contrib/tg-completion.bash "$out/etc/bash_completion.d/"
   '';
 
   meta = {
