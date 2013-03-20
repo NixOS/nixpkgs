@@ -398,7 +398,7 @@ sub waitForFile {
 
 sub startJob {
     my ($self, $jobName) = @_;
-    $self->execute("systemctl stop $jobName");
+    $self->execute("systemctl start $jobName");
     # FIXME: check result
 }
 
