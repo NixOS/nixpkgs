@@ -12,6 +12,7 @@
 , faacSupport ? false, faac ? null
 , dc1394Support ? false, libdc1394 ? null
 , x11grabSupport ? false, libXext ? null, libXfixes ? null
+, playSupport ? true, SDL ? null
 }:
 
 assert speexSupport -> speex != null;
@@ -25,6 +26,7 @@ assert vdpauSupport -> libvdpau != null;
 assert vaapiSupport -> libva != null;
 assert faacSupport -> faac != null;
 assert x11grabSupport -> libXext != null && libXfixes != null;
+assert playSupport -> SDL != null;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-1.1.3";
@@ -41,7 +43,6 @@ stdenv.mkDerivation rec {
     "--enable-gpl"
     "--enable-postproc"
     "--enable-swscale"
-    "--disable-ffplay"
     "--enable-shared"
     "--enable-avresample"
     "--enable-runtime-cpudetect"
@@ -57,7 +58,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional vdpauSupport "--enable-vdpau"
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree"
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
-    ++ stdenv.lib.optional x11grabSupport "--enable-x11grab";
+    ++ stdenv.lib.optional x11grabSupport "--enable-x11grab"
+    ++ stdenv.lib.optional playSupport "--enable-ffplay";
 
   buildInputs = [ pkgconfig lame yasm zlib bzip2 alsaLib ]
     ++ stdenv.lib.optional mp3Support lame
@@ -72,7 +74,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional vaapiSupport libva
     ++ stdenv.lib.optional faacSupport faac
     ++ stdenv.lib.optional dc1394Support libdc1394
-    ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ];
+    ++ stdenv.lib.optionals x11grabSupport [ libXext libXfixes ]
+    ++ stdenv.lib.optional playSupport SDL;
 
   enableParallelBuilding = true;
     
