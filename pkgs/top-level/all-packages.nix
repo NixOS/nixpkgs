@@ -6772,6 +6772,8 @@ let
     inherit (xlibs) libX11;
   };
 
+  dunst = callPackage ../applications/misc/dunst { };
+
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
 
   dvdauthor = callPackage ../applications/video/dvdauthor { };
