@@ -6,6 +6,7 @@
 , vpxSupport ? false, libvpx ? null
 , x264Support ? true, x264 ? null
 , xvidSupport ? true, xvidcore ? null
+, opusSupport ? true, libopus ? null
 , vdpauSupport ? true, libvdpau ? null
 , vaapiSupport ? true, libva ? null
 , faacSupport ? false, faac ? null
@@ -19,6 +20,7 @@ assert vorbisSupport -> libvorbis != null;
 assert vpxSupport -> libvpx != null;
 assert x264Support -> x264 != null;
 assert xvidSupport -> xvidcore != null;
+assert opusSupport -> libopus != null;
 assert vdpauSupport -> libvdpau != null;
 assert vaapiSupport -> libva != null;
 assert faacSupport -> faac != null;
@@ -51,6 +53,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional vpxSupport "--enable-libvpx"
     ++ stdenv.lib.optional x264Support "--enable-libx264"
     ++ stdenv.lib.optional xvidSupport "--enable-libxvid"
+    ++ stdenv.lib.optional opusSupport "--enable-libopus"
     ++ stdenv.lib.optional vdpauSupport "--enable-vdpau"
     ++ stdenv.lib.optional faacSupport "--enable-libfaac --enable-nonfree"
     ++ stdenv.lib.optional dc1394Support "--enable-libdc1394"
@@ -64,6 +67,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional vpxSupport libvpx
     ++ stdenv.lib.optional x264Support x264
     ++ stdenv.lib.optional xvidSupport xvidcore
+    ++ stdenv.lib.optional opusSupport libopus
     ++ stdenv.lib.optional vdpauSupport libvdpau
     ++ stdenv.lib.optional vaapiSupport libva
     ++ stdenv.lib.optional faacSupport faac
