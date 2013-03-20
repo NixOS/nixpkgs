@@ -1,10 +1,11 @@
-{ cabal, semigroups, transformers }:
+{ cabal, doctest, filepath, semigroups, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "comonad";
-  version = "3.0.1.1";
-  sha256 = "01zqxrqxy6x6nf6rynzmncbhlgbbpshhw10pkimnw5isg3b8qhc2";
+  version = "3.0.2";
+  sha256 = "0ryyifcxc5rmjrf9323zzj357709mah1hdsrnrbakd5ck7grjfay";
   buildDepends = [ semigroups transformers ];
+  testDepends = [ doctest filepath ];
   meta = {
     homepage = "http://github.com/ekmett/comonad/";
     description = "Haskell 98 compatible comonads";
