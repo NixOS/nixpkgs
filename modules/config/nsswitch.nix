@@ -22,7 +22,6 @@ let
         {
           inherit list;
           path = makeLibraryPath list;
-          dir = pkgs.symlinkJoin "nss-modules" (map (p: "${p}/lib") list);
         };
     };
 

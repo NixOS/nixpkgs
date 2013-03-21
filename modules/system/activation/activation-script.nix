@@ -150,11 +150,6 @@ in
         ${pkgs.utillinux}/bin/mount -o "remount,size=${config.boot.runSize}" none /run
       '';
 
-    system.activationScripts.nss =
-      ''
-        ln -sfn ${config.system.nssModules.dir} /run/nss
-      '';
-
   };
 
 }
