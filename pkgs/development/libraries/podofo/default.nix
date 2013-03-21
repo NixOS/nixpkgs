@@ -2,10 +2,10 @@
 openssl, libpng, lua5}:
 
 stdenv.mkDerivation rec {
-  name = "podofo-0.9.1";
+  name = "podofo-0.9.2";
   src = fetchurl {
     url = "mirror://sourceforge/podofo/${name}.tar.gz";
-    sha256 = "0icpxh1l1dpviq2zwy764dhg8y03zwyf4pgw4s7kb165nvh9v5kv";
+    sha256 = "1wx3s0718rmhdzdwyi8hgpf2s92sk3hijy8f4glrmnjpiihr2la6";
   };
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng ];
   nativeBuildInputs = [ cmake ];

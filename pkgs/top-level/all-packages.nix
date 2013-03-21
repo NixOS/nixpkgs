@@ -587,6 +587,10 @@ let
 
   clamav = callPackage ../tools/security/clamav { };
 
+  cloc = callPackage ../tools/misc/cloc {
+    inherit (perlPackages) perl AlgorithmDiff RegexpCommon;
+  };
+
   cloog = callPackage ../development/libraries/cloog { };
 
   cloogppl = callPackage ../development/libraries/cloog-ppl { };
@@ -1279,7 +1283,9 @@ let
 
   opendkim = callPackage ../development/libraries/opendkim { };
 
-  openjade = callPackage ../tools/text/sgml/openjade { };
+  openjade = callPackage ../tools/text/sgml/openjade {
+    perl = perl510;
+  };
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
@@ -1564,6 +1570,8 @@ let
   stardict = callPackage ../applications/misc/stardict/stardict.nix {
     inherit (gnome) libgnomeui scrollkeeper;
   };
+
+  storebrowse = callPackage ../tools/system/storebrowse { };
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { };
 
@@ -5741,7 +5749,10 @@ let
 
   iproute = callPackage ../os-specific/linux/iproute { };
 
-  iputils = callPackage ../os-specific/linux/iputils { };
+  iputils = callPackage ../os-specific/linux/iputils {
+    sp = spCompat;
+    inherit (perlPackages) SGMLSpm;
+  };
 
   iptables = callPackage ../os-specific/linux/iptables { };
 
@@ -6424,6 +6435,8 @@ let
   };
 
   docbook5 = callPackage ../data/sgml+xml/schemas/docbook-5.0 { };
+
+  docbook_sgml_dtd_31 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/3.1.nix { };
 
   docbook_sgml_dtd_41 = callPackage ../data/sgml+xml/schemas/sgml-dtd/docbook/4.1.nix { };
 
@@ -7858,6 +7871,9 @@ let
     wrapPython = pythonPackages.wrapPython;
   };
 
+  # This builds the gtk client
+  transmission_260 = callPackage ../applications/networking/p2p/transmission/2.60.nix { };
+
   transmission = callPackage ../applications/networking/p2p/transmission { };
 
   transmission_remote_gtk = callPackage ../applications/networking/p2p/transmission-remote-gtk {};
@@ -8892,14 +8908,10 @@ let
     stateDir = config.nix.stateDir or "/nix/var";
   };
 
-  nixUnstable = nixStable;
-
-  /*
   nixUnstable = callPackage ../tools/package-management/nix/unstable.nix {
     storeDir = config.nix.storeDir or "/nix/store";
     stateDir = config.nix.stateDir or "/nix/var";
   };
-  */
 
   nut = callPackage ../applications/misc/nut { };
 
@@ -9053,6 +9065,8 @@ let
   };
 
   vice = callPackage ../misc/emulators/vice { };
+
+  viewnior = callPackage ../applications/graphics/viewnior { };
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     inherit (gnome) libsoup;

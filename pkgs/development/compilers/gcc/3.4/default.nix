@@ -15,7 +15,12 @@ stdenv.mkDerivation {
     md5 = "4a21ac777d4b5617283ce488b808da7b";
   };
 
-  patches = if noSysDirs then [./no-sys-dirs.patch] else [];
+  patches = stdenv.lib.optional noSysDirs ./no-sys-dirs.patch;
+
+  # inspiration: https://aur.archlinux.org/packages/g77/
+  postPatch = ''
+    substituteInPlace gcc/config/i386/linux.h --replace 'struct siginfo' siginfo_t
+  '';
 
   inherit noSysDirs profiledCompiler;
 

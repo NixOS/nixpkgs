@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "pandoc";
-  version = "1.11";
-  sha256 = "1v32z6fmfkllwf5y64sjbk3ckss2kfcs71b64a7fjdhp82m4i4yh";
+  version = "1.11.1";
+  sha256 = "0b23vrgkm1csykx1zrldkg5ka816j6m7a5fhs4cxffalifq91c7b";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -24,7 +24,6 @@ cabal.mkDerivation (self: {
     testFrameworkQuickcheck2 text
   ];
   configureFlags = "-fblaze_html_0_5";
-  patchPhase = "sed -i -e 's|QuickCheck >= 2.4 && < 2.6,|QuickCheck,|' pandoc.cabal";
   doCheck = false;
   meta = {
     homepage = "http://johnmacfarlane.net/pandoc";

@@ -66,7 +66,7 @@ rec {
                 else if dep.type == "tex" then [".tex" ""]
                 else [""];
               fn = pkgs.lib.findFirst (fn: builtins.pathExists fn) null
-                (map (ext: "${dirOf key}/${dep.name}${ext}") exts);
+                (map (ext: dirOf key + ("/" + dep.name + ext)) exts);
             in if fn != null then [{key = fn;}] ++ xs
                else xs;
 
@@ -90,8 +90,8 @@ rec {
             { src = key; }
             "${pkgs.stdenv.bash}/bin/bash ${./find-lhs2tex-includes.sh}");
 
-        in pkgs.lib.concatMap (x : if builtins.pathExists x then [{key = x;}] else [])
-                              (map (x : "${dirOf key}/${x}") deps);
+        in pkgs.lib.concatMap (x: if builtins.pathExists x then [{key = x;}] else [])
+                              (map (x: dirOf key + ("/" + x)) deps);
     };
 
   dot2pdf =

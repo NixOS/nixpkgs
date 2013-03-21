@@ -15,7 +15,12 @@ stdenv.mkDerivation {
     url = http://ftp.gnu.org/gnu/gcc/gcc-3.3.6/gcc-3.3.6.tar.bz2;
     md5 = "6936616a967da5a0b46f1e7424a06414";
   };
-  
+
+  # inspiration: https://aur.archlinux.org/packages/g77/
+  postPatch = ''
+    substituteInPlace gcc/config/i386/linux.h --replace 'struct siginfo' siginfo_t
+  '';
+
   inherit noSysDirs langC langCC langFortran;
 
   meta = {

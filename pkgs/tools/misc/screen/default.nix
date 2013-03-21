@@ -8,6 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "0xvckv1ia5pjxk7fs4za6gz2njwmfd54sc464n8ab13096qxbw3q";
   };
 
+  patches = [ ./screen-4.0.3-caption-colors.patch
+              ./screen-4.0.3-long-term.patch ];
+
   preConfigure = ''
     configureFlags="--enable-telnet --enable-pam --infodir=$out/share/info --mandir=$out/share/man --with-sys-screenrc=/etc/screenrc"
     sed -i -e "s|/usr/local|/non-existent|g" -e "s|/usr|/non-existent|g" configure Makefile.in */Makefile.in
