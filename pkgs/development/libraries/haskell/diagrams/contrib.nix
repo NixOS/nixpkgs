@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-contrib";
-  version = "0.6.0.3";
-  sha256 = "0j0wmf2nksqh3rqmzyw468bp25zikc5icif5f3rfi1v06ghsk0i5";
+  version = "0.6.0.4";
+  sha256 = "190wn56bmrpbijsxf793xbjy1a4rci3vj40ri6i2dv3an6p0ka0q";
   buildDepends = [
     colour dataDefault diagramsLib forceLayout lens mtl vectorSpace
   ];
