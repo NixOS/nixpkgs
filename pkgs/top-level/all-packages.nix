@@ -8169,7 +8169,9 @@ let
 
   blackshadeselite = callPackage ../games/blackshadeselite { };
 
-  blobby = callPackage ../games/blobby { };
+  blobby = callPackage ../games/blobby {
+    boost = boost149;
+  };
 
   bsdgames = callPackage ../games/bsdgames { };
 
