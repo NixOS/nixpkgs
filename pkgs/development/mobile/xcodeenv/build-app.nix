@@ -44,7 +44,8 @@ let
   deleteKeychain = "security delete-keychain $keychainName";
 in
 stdenv.mkDerivation {
-  inherit name src;
+  name = stdenv.lib.replaceChars [" "] [""] name;
+  inherit src;
   buildInputs = [ xcodewrapper ];
   buildPhase = ''
     ${stdenv.lib.optionalString release ''
@@ -79,11 +80,11 @@ stdenv.mkDerivation {
     ${stdenv.lib.optionalString release ''
       ${stdenv.lib.optionalString generateIPA ''
         # Produce an IPA file
-        xcrun -sdk iphoneos PackageApplication -v $out/*.app -o $out/${name}.ipa
+        xcrun -sdk iphoneos PackageApplication -v $out/*.app -o "$out/${name}.ipa"
         
         # Add IPA to Hydra build products
         mkdir -p $out/nix-support
-        echo "file binary-dist $(echo $out/*.ipa)" > $out/nix-support/hydra-build-products
+        echo "file binary-dist \"$(echo $out/*.ipa)\"" > $out/nix-support/hydra-build-products
       ''}
       
       # Delete our temp keychain

@@ -13,7 +13,8 @@ let
   androidsdkComposition = androidsdk { inherit platformVersions useGoogleAPIs; };
 in
 stdenv.mkDerivation {
-  inherit name src;
+  name = stdenv.lib.replaceChars [" "] [""] name;
+  inherit src;
   
   ANDROID_HOME = "${androidsdkComposition}/libexec/android-sdk-${platformName}";
 
@@ -36,9 +37,9 @@ stdenv.mkDerivation {
   
   installPhase = ''
     mkdir -p $out
-    mv bin/*-${if release then "release" else "debug"}.apk $out
+    mv "bin/*-${if release then "release" else "debug"}.apk" $out
     
     mkdir -p $out/nix-support
-    echo "file binary-dist $(echo $out/*.apk)" > $out/nix-support/hydra-build-products
+    echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
   '';
 }

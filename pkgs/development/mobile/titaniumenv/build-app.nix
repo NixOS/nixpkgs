@@ -110,13 +110,17 @@ stdenv.mkDerivation {
         if target == "android" then
           ''cp $(ls build/android/bin/*.apk | grep -v '\-unsigned.apk') $out''
         else if target == "iphone" && release then
-           "cp -av build/iphone/build/* $out"
+           ''
+             cp -av build/iphone/build/* $out
+             mkdir -p $out/nix-support
+             echo "file binary-dist \"$(echo $out/Release-iphoneos/*.ipa)\"" > $out/nix-support/hydra-build-products
+           ''
         else if target == "iphone" then ""
         else throw "Target: ${target} is not supported!"}
     
     ${if target == "android" then ''
         mkdir -p $out/nix-support
-        echo "file binary-dist $(ls $out/*.apk)" > $out/nix-support/hydra-build-products
+        echo "file binary-dist \"$(ls $out/*.apk)\"" > $out/nix-support/hydra-build-products
     '' else ""}
   '';
   
