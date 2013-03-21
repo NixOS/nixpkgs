@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, kernelHeaders
+{ stdenv, fetchurl, fetchgit ? null, kernelHeaders
 , machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
 , mig ? null
 , installLocales ? true
