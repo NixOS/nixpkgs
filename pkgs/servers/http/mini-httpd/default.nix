@@ -1,11 +1,11 @@
 { stdenv, fetchurl, boostHeaders }:
 
 stdenv.mkDerivation rec {
-  name = "mini-httpd-1.2";
+  name = "mini-httpd-1.3";
 
   src = fetchurl {
     url = "mirror://savannah/mini-httpd/${name}.tar.gz";
-    sha256 = "1547312rg2phxwny9vm1bkyid251n7wy4p1mgs6f5yq6ypwrsr6p";
+    sha256 = "16n33hyp3fcjvd71yrny3ym3kqvxr1jy2hh9wgf6b7zjri3gfak3";
   };
 
   buildInputs = [ boostHeaders ];
