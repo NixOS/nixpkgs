@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "libxml-sax";
-  version = "0.7.3";
-  sha256 = "1514ix5n8y1dwjdm0kmr17fdigc0ic89gzwdvfgh542sjm11100r";
+  version = "0.7.4";
+  sha256 = "1vbxrmxxb6a58hd6dd81kz8fh198jkvwv4gxzbbfw44170946c0z";
   buildDepends = [ text xmlTypes ];
   extraLibraries = [ libxml2 ];
   pkgconfigDepends = [ libxml2 ];
