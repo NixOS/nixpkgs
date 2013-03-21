@@ -192,9 +192,8 @@ in
       };
 
       videoDrivers = mkOption {
-        # !!! We'd like "nv" here, but it segfaults the X server.  Idem for
-        # "vmware".
-        default = [ "ati" "cirrus" "intel" "vesa" ];
+        # !!! We'd like "nv" here, but it segfaults the X server.
+        default = [ "ati" "cirrus" "intel" "vesa" "vmware" ];
         example = [ "vesa" ];
         description = ''
           The names of the video drivers that the X server should
