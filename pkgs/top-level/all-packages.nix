@@ -2212,15 +2212,7 @@ let
       stdenv = allStdenvs.stdenvNative;
     });
 
-  gfortran = gfortran46;
-
-  gfortran42 = wrapGCC (gcc42.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    inherit gmp mpfr;
-  });
+  gfortran = gfortran47;
 
   gfortran43 = wrapGCC (gcc43.gcc.override {
     name = "gfortran";
@@ -2238,15 +2230,7 @@ let
     profiledCompiler = false;
   });
 
-  gfortran45 = wrapGCC (gcc45_real.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran46 = wrapGCC (gcc46_real.gcc.override {
+  gfortran47 = wrapGCC (gcc47.gcc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
