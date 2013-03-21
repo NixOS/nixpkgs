@@ -1872,7 +1872,11 @@ let
 
   youtubeDL = callPackage ../tools/misc/youtube-dl { inherit (haskellPackages) pandoc; };
 
-  zbar = callPackage ../tools/graphics/zbar {};
+  zbar = callPackage ../tools/graphics/zbar {
+    pygtk = lib.overrideDerivation pygtk (x: {
+      gtk = gtk2;
+    });
+  };
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
