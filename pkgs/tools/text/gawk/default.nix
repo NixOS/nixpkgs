@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "04vd0axif762mf781pj3days6ilv2333b9zi9c50y5mma66g5q91";
   };
 
-  patches = stdenv.lib.optional stdenv.isCygwin [ ./cygwin-identifiers.patch ];
+  patches = [];
 
   doCheck = !stdenv.isCygwin; # XXX: `test-dup2' segfaults on Cygwin 6.1
 
