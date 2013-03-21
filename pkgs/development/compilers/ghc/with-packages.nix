@@ -25,7 +25,11 @@ buildEnv {
 
     for prg in runghc runhaskell; do
       rm -f $out/bin/$prg
-      makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "-f $out/bin/ghc"
+      makeWrapper ${ghc}/bin/$prg $out/bin/$prg         \
+        --add-flags "-f $out/bin/ghc"                   \
+        --set "NIX_GHC"        "$out/bin/ghc"           \
+        --set "NIX_GHCPKG"     "$out/bin/ghc-pkg"       \
+        --set "NIX_GHC_LIBDIR" "${libDir}"
     done
 
     for prg in ghc-pkg ghc-pkg-${ghc.version}; do
