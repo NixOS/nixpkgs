@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   
   installPhase = ''
     mkdir -p $out
-    mv "bin/*-${if release then "release" else "debug"}.apk" $out
+    mv bin/*-${if release then "release" else "debug"}.apk $out
     
     mkdir -p $out/nix-support
     echo "file binary-dist \"$(echo $out/*.apk)\"" > $out/nix-support/hydra-build-products
