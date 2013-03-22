@@ -3,7 +3,7 @@
 
 assert stdenv.system == "i686-linux";
 let
-  topath = wine;
+  topath = "${wine}/bin";
 
   toldpath = stdenv.lib.concatStringsSep ":" (map (x: "${x}/lib") 
     [ stdenv.gcc.gcc libX11 libXtst libXext libXdamage libXfixes wine ]);
