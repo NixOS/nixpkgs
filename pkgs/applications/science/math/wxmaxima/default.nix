@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     description = "Cross platform GUI for the computer algebra system Maxima.";
     license = "GPL2";
     homepage = http://wxmaxima.sourceforge.net;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.simons ];
   };
 }
