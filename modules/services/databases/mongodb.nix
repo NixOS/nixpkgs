@@ -38,7 +38,7 @@ in
       };
 
       package = mkOption {
-        default = pkgs.mongodb.override { useV8 = cfg.useV8; };
+        default = pkgs.mongodb;
         description = "
           Which MongoDB derivation to use.
         ";
@@ -72,11 +72,6 @@ in
       logappend = mkOption {
         default = true;
         description = "Append logfile instead over overwriting";
-      };
-
-      useV8 = mkOption {
-        default = false;
-        description = "Use V8 instead of spidermonkey for js execution";
       };
 
       replSetName = mkOption {
