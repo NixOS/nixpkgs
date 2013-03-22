@@ -1629,10 +1629,10 @@ let
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
-  teamviewer = callPackage ../applications/networking/remote/teamviewer { };
+  teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer { };
 
   # Work In Progress: it doesn't start unless running a daemon as root
-  teamviewer8 = lowPrio (callPackage ../applications/networking/remote/teamviewer/8.nix { });
+  teamviewer8 = lowPrio (callPackage_i686 ../applications/networking/remote/teamviewer/8.nix { });
 
   telnet = callPackage ../tools/networking/telnet { };
 

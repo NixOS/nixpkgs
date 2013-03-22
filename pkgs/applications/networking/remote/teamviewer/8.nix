@@ -6,7 +6,7 @@
 # It doesn't want to start unless teamviewerd is running as root.
 # I haven't tried to make the daemon run.
 
-assert stdenv.system = "i686-linux";
+assert stdenv.system == "i686-linux";
 let
   topath = "${wine}/bin";
 
