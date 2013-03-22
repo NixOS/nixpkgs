@@ -5464,9 +5464,7 @@ let
 
   #monetdb = callPackage ../servers/sql/monetdb { };
 
-  mongodb = callPackage ../servers/nosql/mongodb {
-    useV8 = (config.mongodb.useV8 or false);
-  };
+  mongodb = callPackage ../servers/nosql/mongodb { };
 
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
