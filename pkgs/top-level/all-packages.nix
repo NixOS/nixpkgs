@@ -1629,6 +1629,8 @@ let
 
   tcpdump = callPackage ../tools/networking/tcpdump { };
 
+  teamviewer = callPackage_i686 ../applications/networking/remote/teamviewer { };
+
   telnet = callPackage ../tools/networking/telnet { };
 
   texmacs = callPackage ../applications/editors/texmacs {
