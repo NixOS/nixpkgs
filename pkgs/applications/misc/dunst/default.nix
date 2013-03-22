@@ -27,5 +27,7 @@ stdenv.mkDerivation rec {
     description = "lightweight and customizable notification daemon";
     homepage = http://www.knopwob.org/dunst/;
     license = stdenv.lib.licenses.bsd3;
+    # NOTE: 'unix' or even 'all' COULD work too, I'm not sure
+    platforms = stdenv.lib.platforms.linux;
   };
 }
