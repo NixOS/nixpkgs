@@ -15,9 +15,9 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = http://www.latex2html.org/;
-    license = "unfree-redistributable";
+    homepage = "http://www.latex2html.org/";
     description = "Convertor written in Perl that converts LaTeX documents to HTML";
   };
+    license = stdenv.lib.licenses.gpl2Plus;
 
 }
