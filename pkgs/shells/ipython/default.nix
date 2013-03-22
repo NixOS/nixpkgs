@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "1m4m0zf3llnicfgrbnl2h08p3662px7v2pzbhq4fq24vnyz6x5w2";
   };
 
-  propagatedBuildInputs = [ pythonPackages.readline pythonPackages.sqlite3 ];
+  propagatedBuildInputs = [ pythonPackages.readline pythonPackages.sqlite3 pythonPackages.tornado pythonPackages.pyzmq ];
 
   doCheck = false;
 
