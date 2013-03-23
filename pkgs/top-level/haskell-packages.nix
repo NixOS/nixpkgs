@@ -407,10 +407,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       (self.haskellPlatformArgs_2010_1_0_0 self);
 
   haskellPlatformArgs_2009_2_0_2 = self : {
-    inherit (self) cabal ghc editline;
+    inherit (self) cabal ghc;
     time         = self.time_1_1_2_4;
     haddock      = self.haddock_2_4_2;
     cgi          = self.cgi_3001_1_7_1;
+    editline     = self.editline_0_2_1_0;
     fgl          = self.fgl_5_4_2_2;
     GLUT         = self.GLUT_2_1_1_2;
     haskellSrc   = self.haskellSrc_1_0_1_3;
