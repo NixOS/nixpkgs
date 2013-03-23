@@ -1452,7 +1452,7 @@ let
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
-  pythonDBus = callPackage ../development/python-modules/dbus { };
+  pythonDBus = dbus_python;
 
   pythonIRClib = builderDefsPackage (import ../development/python-modules/irclib) {
     inherit python;
@@ -3582,23 +3582,13 @@ let
 
   db48 = callPackage ../development/libraries/db4/db4-4.8.nix { };
 
-  dbus = pkgs.dbus_all.libs // { inherit (pkgs.dbus_all) libs; };
-
-  dbus_daemon = pkgs.dbus_all.daemon;
-
-  dbus_tools = pkgs.dbus_all.tools;
-
-  dbus_libs = pkgs.dbus_all.libs;
-
-  dbus_all = callPackage ../development/libraries/dbus {
-    useX11 = true;
-  };
-
-  dbus_cplusplus = callPackage ../development/libraries/dbus-cplusplus { };
-
-  dbus_glib = callPackage ../development/libraries/dbus-glib { };
-
-  dbus_java = callPackage ../development/libraries/java/dbus-java { };
+  dbus = dbus_all;
+  dbus_all = callPackage ../development/libraries/dbus { };
+  inherit (dbus_all) dbus_libs dbus_daemon dbus_tools dbus_tests dbus_docs;
+  dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
+  dbus_glib       = callPackage ../development/libraries/dbus-glib { };
+  dbus_java       = callPackage ../development/libraries/java/dbus-java { };
+  dbus_python     = callPackage ../development/python-modules/dbus { };
 
   dclib = callPackage ../development/libraries/dclib { };
 
