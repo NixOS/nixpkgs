@@ -12,6 +12,8 @@ mapTestOn (rec {
 
   gitAndTools.gitAnnex = linux;
 
+  jhc = linux;
+
   haskellPackages_ghc742 = {
     abstractPar = linux;
     ACVector = linux;
@@ -449,6 +451,7 @@ mapTestOn (rec {
     html = linux;
     HTTP = linux;
     HUnit = linux;
+    jailbreakCabal = linux;
     monadPar = linux;
     mtl = linux;
     network = linux;
@@ -481,6 +484,125 @@ mapTestOn (rec {
     xmonadContrib = linux;
     xmonadExtras = linux;
     xmonad = linux;
+    zlib = linux;
+  };
+
+  haskellPackages_ghc704 = {
+    alex = linux;
+    cabal2nix = linux;
+    cabalInstall = linux;
+    cgi = linux;
+    fgl = linux;
+    funcmp = linux;
+    GLUT = linux;
+    haddock = linux;
+    happy = linux;
+    haskellPlatform = linux;
+    haskellSrc = linux;
+    hopenssl = linux;
+    hsdns = linux;
+    hsemail = linux;
+    hsyslog = linux;
+    html = linux;
+    HTTP = linux;
+    HUnit = linux;
+    # This attribute causes an infinite recursion in Hydra!
+    # jailbreakCabal = linux;
+    mtl = linux;
+    network = linux;
+    OpenGL = linux;
+    parallel = linux;
+    parsec = linux;
+    primitive = linux;
+    QuickCheck = linux;
+    regexBase = linux;
+    regexCompat = linux;
+    regexPosix = linux;
+    stm = linux;
+    streamproc = linux;
+    syb = linux;
+    text = linux;
+    transformers = linux;
+    vector = linux;
+    xhtml = linux;
+    zlib = linux;
+  };
+
+  haskellPackages_ghc6123 = {
+    alex = linux;
+    cabal2nix = linux;
+    cabalInstall = linux;
+    cgi = linux;
+    fgl = linux;
+    funcmp = linux;
+    GLUT = linux;
+    haddock = linux;
+    happy = linux;
+    haskellPlatform = linux;
+    haskellSrc = linux;
+    hopenssl = linux;
+    hsdns = linux;
+    hsemail = linux;
+    hsyslog = linux;
+    html = linux;
+    HTTP = linux;
+    HUnit = linux;
+    # This attribute causes an infinite recursion in Hydra!
+    # jailbreakCabal = linux;
+    mtl = linux;
+    network = linux;
+    OpenGL = linux;
+    parallel = linux;
+    parsec = linux;
+    primitive = linux;
+    QuickCheck = linux;
+    regexBase = linux;
+    regexCompat = linux;
+    regexPosix = linux;
+    stm = linux;
+    streamproc = linux;
+    text = linux;
+    transformers = linux;
+    vector = linux;
+    xhtml = linux;
+    zlib = linux;
+  };
+
+  haskellPackages_ghc6104 = {
+    alex = linux;
+    cabalInstall = linux;
+    cgi = linux;
+    fgl = linux;
+    funcmp = linux;
+    GLUT = linux;
+    haddock = linux;
+    happy = linux;
+    haskellPlatform = linux;
+    haskellSrc = linux;
+    hopenssl = linux;
+    hsdns = linux;
+    hsyslog = linux;
+    html = linux;
+    HTTP = linux;
+    HUnit = linux;
+    # This attribute causes an infinite recursion in Hydra!
+    # jailbreakCabal = linux;
+    mtl = linux;
+    network = linux;
+    OpenGL = linux;
+    parallel = linux;
+    parsec = linux;
+    primitive = linux;
+    QuickCheck = linux;
+    regexBase = linux;
+    regexCompat = linux;
+    regexPosix = linux;
+    stm = linux;
+    streamproc = linux;
+    text = linux;
+    transformers = linux;
+    vector = linux;
+    xhtml = linux;
     zlib = linux;
   };
 
