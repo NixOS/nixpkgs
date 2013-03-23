@@ -85,7 +85,7 @@ in
       devices = mkOption {
         default = [];
         example = [ { device = "/dev/sda"; } { device = "/dev/sdb"; options = "-d sat"; } ];
-        type = types.list types.optionSet;
+        type = types.listOf types.optionSet;
         options = [ smartdOpts ];
         description = ''
           List of devices to monitor. By default -- if this list is empty --,

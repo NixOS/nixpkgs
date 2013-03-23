@@ -84,7 +84,7 @@ in
         Make sure that initrd has the crypto modules needed for decryption.
       '';
 
-      type = types.list types.optionSet;
+      type = types.listOf types.optionSet;
 
       options = {
 

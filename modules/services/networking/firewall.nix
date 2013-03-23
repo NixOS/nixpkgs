@@ -108,7 +108,7 @@ in
     };
 
     networking.firewall.trustedInterfaces = mkOption {
-      type = types.list types.string;
+      type = types.listOf types.string;
       description =
         ''
           Traffic coming in from these interfaces will be accepted
@@ -119,7 +119,7 @@ in
     networking.firewall.allowedTCPPorts = mkOption {
       default = [];
       example = [ 22 80 ];
-      type = types.list types.int;
+      type = types.listOf types.int;
       description =
         ''
           List of TCP ports on which incoming connections are
@@ -130,7 +130,7 @@ in
     networking.firewall.allowedUDPPorts = mkOption {
       default = [];
       example = [ 53 ];
-      type = types.list types.int;
+      type = types.listOf types.int;
       description =
         ''
           List of open UDP ports.
@@ -168,7 +168,7 @@ in
     networking.firewall.connectionTrackingModules = mkOption {
       default = [ "ftp" ];
       example = [ "ftp" "irc" "sane" "sip" "tftp" "amanda" "h323" "netbios_sn" "pptp" "snmp" ];
-      type = types.list types.string;
+      type = types.listOf types.string;
       description =
         ''
           List of connection-tracking helpers that are auto-loaded.
