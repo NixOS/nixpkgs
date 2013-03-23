@@ -16,6 +16,7 @@ cabal.mkDerivation (self: {
     maintainers = [
       self.stdenv.lib.maintainers.andres
       self.stdenv.lib.maintainers.guibert
+      self.stdenv.lib.maintainers.simons
     ];
   };
 })

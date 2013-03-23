@@ -23,6 +23,9 @@ cabal.mkDerivation (self: {
     description = "Examples using the Accelerate library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.stdenv.lib.platforms.none;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

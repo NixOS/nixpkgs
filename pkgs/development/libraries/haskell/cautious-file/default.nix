@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     description = "Ways to write a file cautiously, to reduce the chances of problems such as data loss due to crashes or power failures";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

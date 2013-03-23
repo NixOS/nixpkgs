@@ -11,5 +11,6 @@ cabal.mkDerivation (self: {
     description = "Literate Haskell support for Markdown";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

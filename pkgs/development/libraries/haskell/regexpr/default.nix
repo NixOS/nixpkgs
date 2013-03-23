@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     description = "regular expression like Perl/Ruby in Haskell";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

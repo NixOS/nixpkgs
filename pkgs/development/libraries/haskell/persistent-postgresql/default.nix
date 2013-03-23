@@ -15,6 +15,9 @@ cabal.mkDerivation (self: {
     description = "Backend for the persistent library using postgresql";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

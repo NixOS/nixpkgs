@@ -14,5 +14,6 @@ cabal.mkDerivation (self: {
     description = "Flexible wire arrows for FRP";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

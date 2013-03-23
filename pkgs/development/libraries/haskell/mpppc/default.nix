@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     description = "Multi-dimensional parametric pretty-printer with color";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

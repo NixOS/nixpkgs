@@ -10,5 +10,6 @@ cabal.mkDerivation (self: {
     description = "A cross-platform library for setting environment variables";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

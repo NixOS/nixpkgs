@@ -8,5 +8,6 @@ cabal.mkDerivation (self: {
     description = "Date cacher";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
