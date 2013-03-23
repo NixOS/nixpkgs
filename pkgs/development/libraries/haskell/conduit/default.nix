@@ -13,6 +13,7 @@ cabal.mkDerivation (self: {
   testDepends = [
     doctest hspec QuickCheck resourcet text transformers void
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Streaming data processing library";
