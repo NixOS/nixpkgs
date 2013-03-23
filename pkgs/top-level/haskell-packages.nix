@@ -781,7 +781,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
 
-  editline = callPackage ../development/libraries/haskell/editline {};
+  editline_0_2_1_0 = callPackage ../development/libraries/haskell/editline/0.2.1.0.nix {};
+  editline_0_2_1_1 = callPackage ../development/libraries/haskell/editline/0.2.1.1.nix {};
+  editline = self.editline_0_2_1_1;
 
   elerea = callPackage ../development/libraries/haskell/elerea {};
 
