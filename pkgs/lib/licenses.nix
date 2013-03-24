@@ -187,7 +187,17 @@
     fullName = "Tcl/Tk license";
     url = http://www.tcl.tk/software/tcltk/license.html;
   };
-  
+
+  unfree = {
+    shortName = "unfree";
+    fullName = "unfree non-redistributable license";
+  };
+
+  unfreeRedistributable = {
+    shortName = "unfree-redistributable";
+    fullName = "unfree redistributable license";
+  };
+
   zlib = {
     shortName = "zlib";
     fullName = "zlib license";
