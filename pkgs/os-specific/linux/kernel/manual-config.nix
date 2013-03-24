@@ -1,8 +1,7 @@
-{ stdenv, runCommand, nettools, bc, perl, kmod, writeTextFile }:
-
-with stdenv.lib;
+{ stdenv, runCommand, nettools, bc, perl, kmod, writeTextFile, ubootChooser }:
 
 let
+  inherit (stdenv.lib) optional optionalString optionalAttrs getAttr hasAttr;
 
   # Function to parse the config file into a nix expression
   readConfig = configFile:
@@ -58,10 +57,10 @@ in
 }:
 
 let
-  installkernel = name: writeTextFile { name = "installkernel"; executable=true; text = ''
-    #!/bin/sh
-    mkdir $4
-    cp -av $2 $4/${name}
+  installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
+    #!${stdenv.shell} -e
+    mkdir -p $4
+    cp -av $2 $4
     cp -av $3 $4
   '';};
 
@@ -72,9 +71,10 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
-    "INSTALL_PATH=$(out)"
-  ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-  ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
+  ];
+
+  # Some image types need special install targets (e.g. uImage is installed with make uinstall)
+  installTarget = target: [ (if target == "uImage" then "uinstall" else "install") ];
 
   sourceRoot = stdenv.mkDerivation {
     name = "linux-${version}-source";
@@ -126,16 +126,34 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  nativeBuildInputs = [ perl bc nettools ];
+  nativeBuildInputs = [ perl bc nettools ] ++ optional (stdenv.platform.uboot != null)
+    (ubootChooser stdenv.platform.uboot);
 
   makeFlags = commonMakeFlags ++ [
-   "INSTALLKERNEL=${installkernel stdenv.platform.kernelTarget}"
+   "ARCH=${stdenv.platform.kernelArch}"
   ];
 
-  crossAttrs = {
+  buildFlags = [ stdenv.platform.kernelTarget ] ++ optional isModular "modules";
+
+  installFlags = [
+    "INSTALLKERNEL=${installkernel}"
+    "INSTALL_PATH=$(out)"
+  ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
+  ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
+
+  installTargets = installTarget stdenv.platform.kernelTarget;
+
+  crossAttrs = let cp = stdenv.cross.platform; in {
+    buildFlags = [ cp.kernelTarget ] ++ optional isModular "modules";
+
     makeFlags = commonMakeFlags ++ [
-     "INSTALLKERNEL=${installkernel stdenv.cross.platform.kernelTarget}"
+     "ARCH=${cp.kernelArch}"
+     "CROSS_COMPILE=$(crossConfig)-"
     ];
+
+    installTargets = installTarget cp.kernelTarget;
+
+    buildInputs = optional (cp.uboot != null) (ubootChooser cp.uboot).crossDrv;
   };
 
   postInstall = optionalString installsFirmware ''
@@ -143,7 +161,7 @@ stdenv.mkDerivation {
   '' + (if isModular then ''
     make modules_install $makeFlags "''${makeFlagsArray[@]}" \
       $installFlags "''${installFlagsArray[@]}"
-    rm -f $out/lib/modules/${modDirVersion}/build
+    unlink $out/lib/modules/${modDirVersion}/build
     mkdir -p $dev/lib/modules/${modDirVersion}
     mv $out/lib/modules/${modDirVersion}/source $dev/lib/modules/${modDirVersion}/source
     mv $buildRoot $dev/lib/modules/${modDirVersion}/build
@@ -154,7 +172,7 @@ stdenv.mkDerivation {
 
   postFixup = if isModular then ''
     if [ -z "$dontStrip" ]; then
-        find $out -name "*.ko" -print0 | xargs -0 -r strip -S
+        find $out -name "*.ko" -print0 | xargs -0 -r ''${crossConfig+$crossConfig-}strip -S
         # Remove all references to the source directory to avoid unneeded
         # runtime dependencies
         find $out -name "*.ko" -print0 | xargs -0 -r sed -i \
@@ -167,8 +185,8 @@ stdenv.mkDerivation {
     license = "GPLv2";
     homepage = http://www.kernel.org/;
     maintainers = [
-      maintainers.shlevy
+      stdenv.lib.maintainers.shlevy
     ];
-    platforms = lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
