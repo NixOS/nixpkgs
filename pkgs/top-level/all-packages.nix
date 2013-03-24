@@ -6750,6 +6750,8 @@ let
     inherit (gnome) GConf libglade;
   };
 
+  devilspie = callPackage ../tools/X11/devilspie {};
+
   "dd-agent" = callPackage ../tools/networking/dd-agent { };
 
   dia = callPackage ../applications/graphics/dia {
