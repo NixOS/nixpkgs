@@ -468,6 +468,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ansiWlPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
 
+  arithmoi = callPackage ../development/libraries/haskell/arithmoi {};
+
   arrows = callPackage ../development/libraries/haskell/arrows {};
 
   asn1Data = callPackage ../development/libraries/haskell/asn1-data {};
