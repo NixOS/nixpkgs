@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, kernel, module_init_tools}:
+{ stdenv, fetchurl, kernelDev, module_init_tools}:
 
 stdenv.mkDerivation rec {
-  name = "iscsitarget-1.4.20.2-${kernel.version}";
+  name = "iscsitarget-1.4.20.2-${kernelDev.version}";
   
   src = fetchurl {
     url = "mirror://sourceforge/iscsitarget/iscsitarget/1.4.20.2/${name}.tar.gz";
     sha256 = "126kp0yc7vmvdbaw2xfav89340b0h91dvvyib5qbvyrq40n8wg0g";
   };
   
-  KSRC = "${kernel}/lib/modules/*/build";
+  KSRC = "${kernelDev}/lib/modules/*/build";
   
   DESTDIR = "$(out)";
   

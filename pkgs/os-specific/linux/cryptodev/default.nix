@@ -1,8 +1,8 @@
-{ fetchurl, stdenv, kernel, onlyHeaders ? false }:
+{ fetchurl, stdenv, kernelDev, onlyHeaders ? false }:
 
 stdenv.mkDerivation rec {
   pname = "cryptodev-linux-1.5";
-  name = "${pname}-${kernel.version}";
+  name = "${pname}-${kernelDev.version}";
 
   src = fetchurl {
     url = "http://download.gna.org/cryptodev-linux/${pname}.tar.gz";
@@ -10,12 +10,12 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = if !onlyHeaders then ''
-    make -C ${kernel}/lib/modules/${kernel.modDirVersion}/build \
+    make -C ${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build \
       SUBDIRS=`pwd` INSTALL_PATH=$out
   '' else ":";
 
   installPhase = stdenv.lib.optionalString (!onlyHeaders) ''
-    make -C ${kernel}/lib/modules/${kernel.modDirVersion}/build \
+    make -C ${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build \
       INSTALL_MOD_PATH=$out SUBDIRS=`pwd` modules_install
   '' + ''
     mkdir -p $out/include/crypto

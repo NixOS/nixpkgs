@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, kernel }:
+{ stdenv, fetchurl, kernelDev }:
 
 let
   baseName = "bbswitch";
   version = "0.6";
-  name = "${baseName}-${version}-${kernel.version}";
+  name = "${baseName}-${version}-${kernelDev.version}";
 
 in
 
@@ -17,13 +17,13 @@ stdenv.mkDerivation {
 
   preBuild = ''
     substituteInPlace Makefile \
-      --replace "\$(shell uname -r)" "${kernel.modDirVersion}" \
-      --replace "/lib/modules" "${kernel}/lib/modules"
+      --replace "\$(shell uname -r)" "${kernelDev.modDirVersion}" \
+      --replace "/lib/modules" "${kernelDev}/lib/modules"
   '';
 
   installPhase = ''
-    ensureDir $out/lib/modules/${kernel.modDirVersion}/misc
-    cp bbswitch.ko $out/lib/modules/${kernel.modDirVersion}/misc
+    ensureDir $out/lib/modules/${kernelDev.modDirVersion}/misc
+    cp bbswitch.ko $out/lib/modules/${kernelDev.modDirVersion}/misc
 
     ensureDir $out/bin
     tee $out/bin/discrete_vga_poweroff << EOF

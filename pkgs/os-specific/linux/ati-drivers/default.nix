@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, xlibs, which, imake
+{ stdenv, fetchurl, kernelDev, xlibs, which, imake
 , mesa # for fgl_glxgears
 , libXxf86vm, xf86vidmodeproto # for fglrx_gamma
 , xorg, makeWrapper, glibc, patchelf
@@ -23,7 +23,7 @@
 assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
-  name = "ati-drivers-${version}-${kernel.version}";
+  name = "ati-drivers-${version}-${kernelDev.version}";
   version = "10-11-x86";
 
   builder = ./builder.sh;
@@ -46,7 +46,9 @@ stdenv.mkDerivation rec {
       unzip
     ];
 
-  inherit kernel glibc /* glibc only used for setting interpreter */;
+  kernel = kernelDev;
+
+  inherit glibc /* glibc only used for setting interpreter */;
 
   LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
     [ "${xorg.libXrandr}/lib"

@@ -1,23 +1,23 @@
-{stdenv, fetchurl, kernel}:
+{stdenv, fetchurl, kernelDev}:
 
 stdenv.mkDerivation {
-  name = "tp_smapi-0.41-${kernel.version}";
+  name = "tp_smapi-0.41-${kernelDev.version}";
 
   src = fetchurl {
     url = "https://github.com/downloads/evgeni/tp_smapi/tp_smapi-0.41.tar.gz";
     sha256 = "6aef02b92d10360ac9be0db29ae390636be55017990063a092a285c70b54e666";
   };
 
-  buildInputs = [ kernel ];
+  buildInputs = [ kernelDev ];
 
   makeFlags = [
-    "KBASE=${kernel}/lib/modules/${kernel.modDirVersion}"
+    "KBASE=${kernelDev}/lib/modules/${kernelDev.modDirVersion}"
     "SHELL=/bin/sh"
   ];
 
   installPhase = ''
-    install -v -D -m 644 thinkpad_ec.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/firmware/thinkpad_ec.ko"
-    install -v -D -m 644 tp_smapi.ko "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/firmware/tp_smapi.ko"
+    install -v -D -m 644 thinkpad_ec.ko "$out/lib/modules/${kernelDev.modDirVersion}/kernel/drivers/firmware/thinkpad_ec.ko"
+    install -v -D -m 644 tp_smapi.ko "$out/lib/modules/${kernelDev.modDirVersion}/kernel/drivers/firmware/tp_smapi.ko"
   '';
 
   dontStrip = true;

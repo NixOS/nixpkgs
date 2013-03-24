@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel ? null, xlibs, zlib, perl
+{ stdenv, fetchurl, kernelDev ? null, xlibs, zlib, perl
 , gtk, atk, pango, glib, gdk_pixbuf
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -11,7 +11,7 @@ with stdenv.lib;
 let versionNumber = "310.32"; in
 
 stdenv.mkDerivation {
-  name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernel.version}"}";
+  name = "nvidia-x11-${versionNumber}${optionalString (!libsOnly) "-${kernelDev.version}"}";
 
   builder = ./builder.sh;
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   inherit versionNumber libsOnly;
 
-  kernel = if libsOnly then null else kernel;
+  kernel = if libsOnly then null else kernelDev;
 
   dontStrip = true;
 
