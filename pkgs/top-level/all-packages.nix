@@ -847,6 +847,8 @@ let
         libiconv = if gnu then null else libiconv;
       };
 
+  gnulib = callPackage ../development/tools/gnulib { };
+
   gnupatch = callPackage ../tools/text/gnupatch { };
 
   gnupg1orig = callPackage ../tools/security/gnupg1 {
