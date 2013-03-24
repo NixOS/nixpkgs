@@ -4565,8 +4565,12 @@ let
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesa_noglu = callPackage ../development/libraries/mesa { };
+  mesa_glu = callPackage ../development/libraries/mesa-glu { };
   mesa = if stdenv.isDarwin then darwinX11AndOpenGL
-    else callPackage ../development/libraries/mesa-glu { }; # mesa *with* GL/glu.h
+    else buildEnv {
+      name = "mesa";
+      paths = [ mesa_glu mesa_noglu ];
+    };
   darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
 
   metaEnvironment = recurseIntoAttrs (let callPackage = newScope pkgs.metaEnvironment; in rec {

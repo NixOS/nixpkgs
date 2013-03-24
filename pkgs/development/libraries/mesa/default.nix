@@ -12,7 +12,7 @@ let
   version = "9.1.1";
 in
 stdenv.mkDerivation {
-  name = "mesa-${version}";
+  name = "mesa-noglu-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
