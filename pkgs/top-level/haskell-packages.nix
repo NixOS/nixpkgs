@@ -609,6 +609,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cipherRc4 = callPackage ../development/libraries/haskell/cipher-rc4 {};
 
+  circlePacking = callPackage ../development/libraries/haskell/circle-packing {};
+
   classyPrelude = callPackage ../development/libraries/haskell/classy-prelude {};
 
   classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
