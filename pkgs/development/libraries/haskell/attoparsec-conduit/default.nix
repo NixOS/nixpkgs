@@ -3,8 +3,8 @@
 
 cabal.mkDerivation (self: {
   pname = "attoparsec-conduit";
-  version = "1.0.0";
-  sha256 = "1aw071qcwhxwpd6azhgaiia97rhj50rms4pysbc19iihmdih3ib8";
+  version = "1.0.1";
+  sha256 = "14b6ym5sjvg1x82ijydhrjk5445kg0fvwqzqwqld59akbqb6fpg5";
   buildDepends = [ attoparsec conduit text transformers ];
   testDepends = [ attoparsec conduit hspec resourcet text ];
   meta = {
