@@ -13,11 +13,15 @@ cabal.mkDerivation (self: {
   testDepends = [
     doctest hspec QuickCheck resourcet text transformers void
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/snoyberg/conduit";
     description = "Streaming data processing library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

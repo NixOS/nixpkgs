@@ -11,5 +11,6 @@ cabal.mkDerivation (self: {
     description = "Haskell 98 Distributive functors -- Dual to Traversable";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

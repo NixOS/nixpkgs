@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "Catchy combinators for HUnit";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

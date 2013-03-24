@@ -10,5 +10,6 @@ cabal.mkDerivation (self: {
     description = "Unit tests for Network.Transport implementations";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

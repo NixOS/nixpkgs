@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     description = "Fast, online, error-correcting, monadic, applicative, merging, permuting, idiomatic parser combinators";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

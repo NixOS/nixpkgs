@@ -15,6 +15,9 @@ cabal.mkDerivation (self: {
     description = "Core data types, parsers and utilities for the hledger accounting tool";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

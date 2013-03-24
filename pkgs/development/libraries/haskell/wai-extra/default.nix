@@ -19,11 +19,15 @@ cabal.mkDerivation (self: {
     blazeBuilder conduit dataDefault fastLogger hspec httpTypes HUnit
     text transformers wai waiTest zlib zlibBindings
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/yesodweb/wai";
     description = "Provides some basic WAI handlers and middleware";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

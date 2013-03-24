@@ -13,11 +13,15 @@ cabal.mkDerivation (self: {
     binary cryptohash dataBinaryIeee754 mtl network QuickCheck
     testFramework testFrameworkQuickcheck2 text time
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/selectel/bson-haskell";
     description = "BSON documents are JSON-like objects with a standard binary encoding";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
