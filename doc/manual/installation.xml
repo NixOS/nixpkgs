@@ -48,7 +48,7 @@ Wiki</link>.</para>
   password.</para></listitem>
 
   <listitem><para>If you downloaded the graphical ISO image, you can
-  run <command>start xserver</command> to start KDE.</para></listitem>
+  run <command>start display-manager</command> to start KDE.</para></listitem>
 
   <listitem><para>The NixOS installer doesn’t do any partitioning or
   formatting yet, so you need to that yourself.  Use the following
