@@ -487,7 +487,7 @@ in
                 ''
                   ln -sf ${kernelPackages.nvidia_x11} /run/opengl-driver
                   ${optionalString (pkgs.stdenv.system == "x86_64-linux" && cfg.driSupport32Bit)
-                    "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernel = null; } } /run/opengl-driver-32"}
+                    "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernelDev = null; } } /run/opengl-driver-32"}
                 ''
               else if elem "nvidiaLegacy96" driverNames then
                 "ln -sf ${kernelPackages.nvidia_x11_legacy96} /run/opengl-driver"
