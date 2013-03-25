@@ -6043,11 +6043,6 @@ let
       inherit (gnome) libglade;
     };
 
-    systemtap = callPackage ../development/tools/profiling/systemtap {
-      linux = self.kernelDev;
-      inherit (gnome) libglademm;
-    };
-
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
     v86d = callPackage ../os-specific/linux/v86d { };
@@ -6253,6 +6248,10 @@ let
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd { };
+
+  systemtap = callPackage ../development/tools/profiling/systemtap {
+    inherit (gnome) libglademm;
+  };
 
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 
