@@ -7704,7 +7704,7 @@ let
   };
 
   rsync = callPackage ../applications/networking/sync/rsync {
-    enableACLs = !(stdenv.isDarwin || stdenv.isSunOS);
+    enableACLs = !(stdenv.isDarwin || stdenv.isSunOS || stdenv.isFreeBSD);
     enableCopyDevicesPatch = (config.rsync.enableCopyDevicesPatch or false);
   };
 
