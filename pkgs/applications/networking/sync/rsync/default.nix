@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://samba.anu.edu.au/rsync/;
     description = "A fast incremental file transfer utility";
+    license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.simons ];
