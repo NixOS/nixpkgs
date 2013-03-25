@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, buildPythonPackage, minicom, avrdude, arduino_core, avrgcclibc }:
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages, minicom
+, avrdude, arduino_core, avrgcclibc }:
 
 buildPythonPackage {
   name = "ino-0.3.4";
@@ -10,15 +11,20 @@ buildPythonPackage {
   };
 
   # TODO: add avrgcclibc, it must be rebuild with C++ support
-  propagatedBuildInputs = [ minicom avrdude arduino_core ];
+  propagatedBuildInputs =
+    [ arduino_core avrdude minicom pythonPackages.configobj
+      pythonPackages.jinja2 pythonPackages.pyserial ];
 
   patchPhase = ''
     echo "Patching Arduino distribution path"
-    sed -i 's@/usr/local/share/arduino@${arduino_core}/share/arduino@g' ino/environment.py
+    sed -i 's@/usr/local/share/arduino@${arduino_core}/share/arduino@g' \
+        ino/environment.py
+    sed -i -e 's@argparse@@' -e 's@ordereddict@@' \
+        requirements.txt
+    sed -i -e 's@from ordereddict@from collections@' \
+        ino/environment.py ino/utils.py
   '';
  
-  doCheck = false;
-
   meta = {
     description = "Command line toolkit for working with Arduino hardware";
     homepage = http://inotool.org/;
