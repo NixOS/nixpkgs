@@ -154,7 +154,7 @@ in
 
 {
 
-  imports = [ ./kdm.nix ./slim.nix ];
+  imports = [ ./kdm.nix ./slim.nix ./lightdm.nix ];
 
 
   options = {
