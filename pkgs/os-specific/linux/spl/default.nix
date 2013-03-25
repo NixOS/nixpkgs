@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, kernelDev, perl, autoconf, automake, libtool, coreutils, gawk }:
+{ stdenv, fetchurl, kernel, perl, autoconf, automake, libtool, coreutils, gawk }:
 
 stdenv.mkDerivation {
-  name = "spl-0.6.0-rc14-${kernelDev.version}";
+  name = "spl-0.6.0-rc14-${kernel.version}";
   src = fetchurl {
     url = http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.0-rc14.tar.gz;
     sha256 = "00wyamf13z8ins4s14xf0b3hfjfz4w084mr17hs3k5xifb5jxa8g";
@@ -9,9 +9,7 @@ stdenv.mkDerivation {
 
   patches = [ ./install_prefix.patch ./install_prefix_2.patch ./module_prefix.patch ];
 
-  buildInputs = [ perl kernelDev autoconf automake libtool ];
-
-  NIX_CFLAGS_COMPILE = "-I${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build/include/generated";
+  buildInputs = [ perl autoconf automake libtool ];
 
   preConfigure = ''
     ./autogen.sh
@@ -25,8 +23,8 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = ''
-     --with-linux=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build
-     --with-linux-obj=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build
+     --with-linux=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source
+     --with-linux-obj=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
   '';
 
   meta = {
