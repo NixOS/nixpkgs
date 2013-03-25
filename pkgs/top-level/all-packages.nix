@@ -5844,7 +5844,6 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs2_2_6_32
         kernelPatches.cifs_timeout_2_6_29
         # kernelPatches.no_xsave # doesn't apply anymore
         kernelPatches.dell_rfkill
@@ -5856,7 +5855,6 @@ let
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_35
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs2_2_6_35
         kernelPatches.cifs_timeout_2_6_35
       ] ++ lib.optional (platform.kernelArch == "arm")
         kernelPatches.sheevaplug_modules_2_6_35;
@@ -5878,7 +5876,6 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_0
       ];
   };
 
@@ -5887,7 +5884,6 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_2
         kernelPatches.cifs_timeout_2_6_38
       ];
   };
@@ -5903,7 +5899,6 @@ let
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_4
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -5915,7 +5910,6 @@ let
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_7
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -5968,20 +5962,6 @@ let
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
-
-    aufs =
-      if self.kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs/2.nix { }
-      else if self.kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs/3.nix { }
-      else null;
-
-    aufs_util =
-      if self.kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs-util/2.nix { }
-      else if self.kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs-util/3.nix { }
-      else null;
 
     blcr = callPackage ../os-specific/linux/blcr { };
 
