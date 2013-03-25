@@ -1577,6 +1577,8 @@ let
 
   fusesmb = callPackage ../tools/filesystems/fusesmb { };
 
+  sl = callPackage ../tools/misc/sl { };
+
   socat = callPackage ../tools/networking/socat { };
 
   sourceHighlight = callPackage ../tools/text/source-highlight { };
