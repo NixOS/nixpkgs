@@ -1,13 +1,15 @@
-{ stdenv, kernelDev, elfutils, python, perl, newt, slang, asciidoc, xmlto
+{ stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig
 , withGtk ? false, gtk ? null }:
 
 assert withGtk -> gtk != null;
 
 stdenv.mkDerivation {
-  name = "perf-linux-${kernelDev.version}";
+  name = "perf-linux-${kernel.version}";
 
-  inherit (kernelDev) src patches;
+  inherit (kernel) src;
+
+  patches = map (builtins.getAttr "patch") kernel.kernelPatches;
 
   preConfigure = ''
     cd tools/perf
