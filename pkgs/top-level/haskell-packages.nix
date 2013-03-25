@@ -407,10 +407,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
       (self.haskellPlatformArgs_2010_1_0_0 self);
 
   haskellPlatformArgs_2009_2_0_2 = self : {
-    inherit (self) cabal ghc editline;
+    inherit (self) cabal ghc;
     time         = self.time_1_1_2_4;
     haddock      = self.haddock_2_4_2;
     cgi          = self.cgi_3001_1_7_1;
+    editline     = self.editline_0_2_1_0;
     fgl          = self.fgl_5_4_2_2;
     GLUT         = self.GLUT_2_1_1_2;
     haskellSrc   = self.haskellSrc_1_0_1_3;
@@ -466,6 +467,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
 
   ansiWlPprint = callPackage ../development/libraries/haskell/ansi-wl-pprint {};
+
+  arithmoi = callPackage ../development/libraries/haskell/arithmoi {};
 
   arrows = callPackage ../development/libraries/haskell/arrows {};
 
@@ -606,6 +609,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cipherRc4 = callPackage ../development/libraries/haskell/cipher-rc4 {};
 
+  circlePacking = callPackage ../development/libraries/haskell/circle-packing {};
+
   classyPrelude = callPackage ../development/libraries/haskell/classy-prelude {};
 
   classyPreludeConduit = callPackage ../development/libraries/haskell/classy-prelude-conduit {};
@@ -670,9 +675,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptoRandomApi = callPackage ../development/libraries/haskell/crypto-random-api {};
 
-  cuda = callPackage ../development/libraries/haskell/cuda {
+  cuda_0_4_1_1 = callPackage ../development/libraries/haskell/cuda/0.4.1.1.nix {
     inherit (pkgs.linuxPackages) nvidia_x11;
   };
+  cuda_0_5_0_1 = callPackage ../development/libraries/haskell/cuda/0.5.0.1.nix {
+    inherit (pkgs.linuxPackages) nvidia_x11;
+  };
+  cuda = self.cuda_0_4_1_1;
 
   csv = callPackage ../development/libraries/haskell/csv {};
 
@@ -781,7 +790,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   editDistance = callPackage ../development/libraries/haskell/edit-distance {};
 
-  editline = callPackage ../development/libraries/haskell/editline {};
+  editline_0_2_1_0 = callPackage ../development/libraries/haskell/editline/0.2.1.0.nix {};
+  editline_0_2_1_1 = callPackage ../development/libraries/haskell/editline/0.2.1.1.nix {};
+  editline = self.editline_0_2_1_1;
 
   elerea = callPackage ../development/libraries/haskell/elerea {};
 

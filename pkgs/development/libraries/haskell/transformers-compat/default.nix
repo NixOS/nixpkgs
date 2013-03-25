@@ -11,5 +11,6 @@ cabal.mkDerivation (self: {
     description = "A small compatibility shim exposing the new types from transformers 0.3 to older Haskell platforms.";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

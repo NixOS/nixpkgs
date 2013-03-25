@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "Fast AES cipher implementation with advanced mode of operations";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

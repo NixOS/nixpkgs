@@ -1,5 +1,5 @@
 { cabal, filepath, hslogger, MissingH, mtl, regexBase, regexCompat
-, regexPosix
+, regexPosix, fetchurl
 }:
 
 cabal.mkDerivation (self: {
@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     filepath hslogger MissingH mtl regexBase regexCompat regexPosix
   ];
+  patches = [ (fetchurl { url = "https://github.com/jgoerzen/hsh/pull/10.patch"; sha256 = "0fw2ihl4hlncggwf3v4d7aydm3rzgzpcxplfbwq7janysix4q950"; }) ];
   meta = {
     homepage = "http://software.complete.org/hsh";
     description = "Library to mix shell scripting with Haskell programs";

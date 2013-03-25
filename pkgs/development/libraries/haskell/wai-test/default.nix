@@ -16,5 +16,6 @@ cabal.mkDerivation (self: {
     description = "Unit test framework (built on HUnit) for WAI applications";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

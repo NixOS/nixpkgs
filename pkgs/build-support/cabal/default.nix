@@ -92,7 +92,7 @@
 
             # pass the '--enable-tests' flag to cabal in the configure stage
             # and run any regression test suites the package might have
-            doCheck = stdenv.lib.versionOlder "7" ghc.ghcVersion;
+            doCheck = stdenv.lib.versionOlder "7.4" ghc.ghcVersion;
 
             extraConfigureFlags = [
               (stdenv.lib.enableFeature enableLibraryProfiling "library-profiling")

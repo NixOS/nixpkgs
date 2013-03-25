@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   /* On Darwin, there are 3 test failures that haven't been investigated
      yet.  */
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.isDarwin && !stdenv.isFreeBSD;
 
   patches =
     [

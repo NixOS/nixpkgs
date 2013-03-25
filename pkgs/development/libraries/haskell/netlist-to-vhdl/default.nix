@@ -9,5 +9,6 @@ cabal.mkDerivation (self: {
     description = "Convert a Netlist AST to VHDL";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

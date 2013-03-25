@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
     description = "Library for safe (pattern match free) functions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

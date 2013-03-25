@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   patches = [ (fetchurl {
     url = "http://projects.archlinux.org/svntogit/community.git/plain/trunk/ncurses.patch?h=packages/gtypist";
-    sha256 = "1chdr4xkm140cjwv1n3ydk04qdwgycd12d9adz2sjc58lybqp7sy";
+    sha256 = "14crgh21gghszwijxjvixpijqzsgn62wx6kz28zkjskdw0p5vij1";
   })];
 
   meta = {

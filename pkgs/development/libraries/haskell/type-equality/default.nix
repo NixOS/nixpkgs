@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
     description = "Type equality, coercion/cast and other operations";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

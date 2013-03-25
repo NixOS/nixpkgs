@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
     description = "'Show' instances for Lambdabot";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

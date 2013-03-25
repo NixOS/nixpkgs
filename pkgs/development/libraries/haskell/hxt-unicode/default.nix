@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     description = "Unicode en-/decoding functions for utf8, iso-latin-* and other encodings";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

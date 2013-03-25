@@ -12,6 +12,15 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals stdenv.isSunOS [ ./patch-ah.patch ];
 
+  configureFlags = [
+    "--with-libxml-prefix=${libxml2}"
+    "--without-python"
+    "--without-crypto"
+    "--without-debug"
+    "--without-mem-debug"
+    "--without-debugger"
+  ];
+
   postInstall = ''
     mkdir -p $out/nix-support
     ln -s ${libxml2}/nix-support/setup-hook $out/nix-support/

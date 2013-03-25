@@ -9,6 +9,9 @@ cabal.mkDerivation (self: {
     description = "Deriving Parsers and Quasi-Quoters from BNF Grammars";
     license = self.stdenv.lib.licenses.gpl2;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

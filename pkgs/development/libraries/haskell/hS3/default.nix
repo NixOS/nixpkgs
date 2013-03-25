@@ -17,6 +17,9 @@ cabal.mkDerivation (self: {
     description = "Interface to Amazon's Simple Storage Service (S3)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

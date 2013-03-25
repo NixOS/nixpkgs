@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     description = "Graph representation of the GHC heap";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

@@ -4596,6 +4596,28 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  tornado = buildPythonPackage rec {
+    name = "tornado-2.4";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/t/tornado/tornado-2.4.tar.gz";
+      md5 = "c738af97c31dd70f41f6726cf0968941";
+    };
+    doCheck = false;
+  };
+
+
+  pyzmq = buildPythonPackage rec {
+    name = "pyzmq-13.0.0";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pyzmq/pyzmq-13.0.0.zip";
+      md5 = "fa2199022e54a393052d380c6e1a0934";
+    };
+    buildInputs = [ pkgs.unzip pkgs.zeromq3 ];
+    propagatedBuildInputs = [  ];
+    doCheck = false;
+  };
+
+
   tracing = buildPythonPackage rec {
     name = "tracing-0.7";
 

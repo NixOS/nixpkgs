@@ -11,6 +11,9 @@ cabal.mkDerivation (self: {
     description = "Reify a recursive data structure into an explicit graph";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })
