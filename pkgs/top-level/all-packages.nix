@@ -5975,8 +5975,6 @@ let
 
     iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
 
-    iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
-
     iwlwifi4965ucode =
       if builtins.compareVersions self.kernel.version "2.6.27" == 0
          || builtins.compareVersions self.kernel.version "2.6.27" == 1

@@ -27,7 +27,6 @@ import ./generic.nix (
     config = configWithPlatform stdenv.platform;
     configCross = configWithPlatform stdenv.cross.platform;
 
-    features.iwlwifi = true;
     #features.efiBootStub = true;
     #features.needsCifsUtils = true;
     #features.canDisableNetfilterConntrackHelpers = true;

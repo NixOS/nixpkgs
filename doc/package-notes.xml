@@ -32,15 +32,8 @@ extra options to be concatenated to the kernel configuration file
 <varname>features</varname> specifying whether optional functionality
 is or isn’t enabled.  This is used in NixOS to implement
 kernel-specific behaviour.  For instance, if the kernel has the
-<varname>iwlwifi</varname> feature (i.e. has built-in support for
-Intel wireless chipsets), then NixOS doesn’t have to build the
-external <varname>iwlwifi</varname> package:
-
-<programlisting>
-modulesTree = [kernel]
-  ++ pkgs.lib.optional (!kernel.features ? iwlwifi) kernelPackages.iwlwifi
-  ++ ...;
-</programlisting>
+<varname>efiBootStub</varname> feature (i.e. the kernel is an EFI
+application), then NixOS be installed on efi machines.
 
 </para>
 

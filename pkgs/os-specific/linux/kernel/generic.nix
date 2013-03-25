@@ -16,7 +16,7 @@
   configCross ? {}
 
 , # An attribute set whose attributes express the availability of
-  # certain features in this kernel.  E.g. `{iwlwifi = true;}'
+  # certain features in this kernel.  E.g. `{efiBootStub = true;}'
   # indicates a kernel that provides Intel wireless support.  Used in
   # NixOS to implement kernel-specific behaviour.
   features ? {}
