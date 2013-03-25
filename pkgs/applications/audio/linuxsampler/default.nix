@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   patches = ./linuxsampler_lv2_sfz_fix.diff;
 
+  # It fails to compile without this option. I'm not sure what the bug
+  # is, but everything works OK for me (goibhniu).
+  configureFlags = [ "--disable-nptl-bug-check" ];
+
   preConfigure = ''
     sed -e 's/which/type -P/g' -i scripts/generate_parser.sh
     make -f Makefile.cvs
