@@ -42,7 +42,6 @@ in
   require =
     [
       ./system-tarball.nix
-      ../../hardware/network/rt73.nix
     ];
 
   # Disable some other stuff we don't need.
@@ -87,7 +86,6 @@ in
       pkgs.bvi # binary editor
       pkgs.joe
     ];
-*/
 
   boot.loader.grub.enable = false;
   boot.loader.generationsDir.enable = false;
@@ -134,8 +132,6 @@ in
   ];
 
   services.mingetty = {
-    ttys = [ "ttyS0" ];
-
     # Some more help text.
     helpLine = ''
       Log in as "root" with an empty password.  ${
@@ -176,6 +172,9 @@ in
   services.openssh.enable = true;
   services.ttyBackgrounds.enable = false;
   jobs.openssh.startOn = pkgs.lib.mkOverrideTemplate 50 {} "";
+
+  # cpufrequtils fails to build on non-pc
+  powerManagement.enable = false;
 
   nixpkgs.config = {
     platform = pkgs.platforms.sheevaplug;
