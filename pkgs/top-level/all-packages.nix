@@ -2876,7 +2876,7 @@ let
 
   pure = callPackage ../development/interpreters/pure {};
 
-  python3 = python32;
+  python3 = hiPrio python32;
   python32 = callPackage ../development/interpreters/python/3.2 { };
 
   python = python27;
