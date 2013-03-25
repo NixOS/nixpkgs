@@ -1476,6 +1476,8 @@ let
 
   remmina = callPackage ../applications/networking/remote/remmina {};
 
+  renameutils = callPackage ../tools/misc/renameutils { };
+
   replace = callPackage ../tools/text/replace { };
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
