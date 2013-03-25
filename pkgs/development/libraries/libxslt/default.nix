@@ -8,7 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "09ky3vhlaahvsb0q9gp6h3as53pfj70gincirachjqzj46jdka5n";
   };
 
-  buildInputs = [ libxml2 ];
+  configureFlags = [
+    "--with-libxml-prefix=${libxml2}"
+    "--without-python"
+    "--without-crypto"
+    "--without-debug"
+    "--without-mem-debug"
+    "--without-debugger"
+  ];
 
   postInstall = ''
     mkdir -p $out/nix-support
