@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, kernelDev, pkgconfig, gtkmm, boost, pcre }:
+{ fetchurl, stdenv, kernel, pkgconfig, gtkmm, boost, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "exmap-0.10-${kernelDev.version}";
+  name = "exmap-0.10-${kernel.version}";
 
   src = fetchurl {
     url = "http://www.berthels.co.uk/exmap/download/${name}.tgz";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace "kernel/Makefile" \
       --replace '/lib/modules/$(shell uname -r)/build' \
-                ${kernelDev}/lib/modules/*/build
+                ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build
 
     # The `proc_root' variable (the root of `/proc') is no longer exported
     # since 2.6.26.  Fortunately, one can pass `NULL' instead of `&proc_root'.
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     substituteInPlace "src/Makefile" --replace "-Werror" ""
   '';
 
-  buildInputs = [ kernelDev pkgconfig gtkmm boost pcre ];
+  buildInputs = [ pkgconfig gtkmm boost pcre ];
 
   buildPhase = "make build";
 
