@@ -5832,7 +5832,7 @@ let
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
   linux_2_6_15 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.15.nix) {
-    inherit fetchurl perl mktemp module_init_tools;
+    inherit fetchurl perl linuxManualConfig;
     stdenv = overrideInStdenv stdenv [ gcc34 gnumake381 ];
     kernelPatches =
       [ kernelPatches.cifs_timeout_2_6_15
@@ -5840,7 +5840,7 @@ let
   };
 
   linux_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
@@ -5852,7 +5852,7 @@ let
   };
 
   linux_2_6_35 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.35.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_35
         kernelPatches.sec_perm_2_6_24
@@ -5874,7 +5874,7 @@ let
   };
 
   linux_3_0 = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
@@ -5883,7 +5883,7 @@ let
   };
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
@@ -5899,7 +5899,7 @@ let
   };
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
@@ -5911,7 +5911,7 @@ let
   };
 
   linux_3_7 = makeOverridable (import ../os-specific/linux/kernel/linux-3.7.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
@@ -5924,11 +5924,11 @@ let
   };
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
   };
 
   linux_3_8 = makeOverridable (import ../os-specific/linux/kernel/linux-3.8.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
@@ -5941,7 +5941,7 @@ let
 
   # low-priority because it is RC
   linux_3_9 = lowPrio (makeOverridable (import ../os-specific/linux/kernel/linux-3.9.nix) {
-    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24

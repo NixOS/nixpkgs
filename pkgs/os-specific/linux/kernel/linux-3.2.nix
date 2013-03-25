@@ -1,6 +1,4 @@
-args @ { stdenv, fetchurl, extraConfig ? ""
-, perl, mktemp, module_init_tools
-, ... }:
+args @ { stdenv, fetchurl, extraConfig ? "", ... }:
 
 let
   configWithPlatform = kernelPlatform :
@@ -240,12 +238,6 @@ import ./generic.nix (
 
   rec {
     version = "3.2.41";
-
-    modDirVersion = version;
-
-    preConfigure = ''
-      substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
-    '';
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.0/linux-${version}.tar.xz";

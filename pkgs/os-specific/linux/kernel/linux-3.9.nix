@@ -1,6 +1,4 @@
-args @ { stdenv, fetchurl, extraConfig ? ""
-, perl, mktemp, module_init_tools, bc
-, ... }:
+args @ { stdenv, fetchurl, extraConfig ? "", ... }:
 
 let
   configWithPlatform = kernelPlatform :
@@ -255,10 +253,6 @@ import ./generic.nix (
     modDirVersion = "3.9.0-rc3";
     testing = true;
 
-    preConfigure = ''
-      substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
-    '';
-
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
       sha256 = "1fbg952zzn6nkch2fpd1fzkwc6xsf66fnmkxrmc77yz8d29qddi5";
@@ -272,8 +266,6 @@ import ./generic.nix (
     features.needsCifsUtils = true;
     features.canDisableNetfilterConntrackHelpers = true;
     features.netfilterRPFilter = true;
-
-    extraNativeBuildInputs = [bc];
   }
 
   // removeAttrs args ["extraConfig"]

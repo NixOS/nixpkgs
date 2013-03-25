@@ -33,11 +33,10 @@ in
 
 import ./generic.nix (rec {
   version = "2.6.15.7";
-  postBuild = "make $makeFlags $kernelTarget";
 
   src = fetchurl {
     url = "ftp://ftp.kernel.org/pub/linux/kernel/v2.6/linux-${version}.tar.bz2";
-      sha256 = "43e0c251924324749b06464512532c3002d6294520faabdba5b3aea4e840b48b";
+    sha256 = "43e0c251924324749b06464512532c3002d6294520faabdba5b3aea4e840b48b";
   };
 
   config = configWithPlatform stdenv.platform;

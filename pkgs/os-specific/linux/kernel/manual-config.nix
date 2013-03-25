@@ -158,6 +158,21 @@ let
               "s|${sourceRoot}|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${sourceRoot.name}|g"
         fi
       '' else null;
+
+      meta = {
+        description =
+          "The Linux kernel" +
+          (if kernelPatches == [] then "" else
+            " (with patches: "
+            + stdenv.lib.concatStrings (stdenv.lib.intersperse ", " (map (x: x.name) kernelPatches))
+            + ")");
+        license = "GPLv2";
+        homepage = http://www.kernel.org/;
+        maintainers = [
+          stdenv.lib.maintainers.shlevy
+        ];
+        platforms = stdenv.lib.platforms.linux;
+      };
     };
 in
 
@@ -186,14 +201,4 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
       # may be different from stdenv.platform.uboot)
       buildInputs = optional (cp.uboot != null) (ubootChooser cp.uboot).crossDrv;
     };
-
-  meta = {
-    description = "The Linux kernel";
-    license = "GPLv2";
-    homepage = http://www.kernel.org/;
-    maintainers = [
-      stdenv.lib.maintainers.shlevy
-    ];
-    platforms = stdenv.lib.platforms.linux;
-  };
 })

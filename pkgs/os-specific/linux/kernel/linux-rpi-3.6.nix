@@ -1,5 +1,5 @@
 args @ {
-  stdenv, fetchurl, extraConfig ? "" , perl, mktemp, module_init_tools, ...
+  stdenv, fetchurl, extraConfig ? "", ...
 }:
 
 let
@@ -17,10 +17,6 @@ import ./generic.nix (
   rec {
     version = "3.6.y-${rev}";
     testing = false;
-
-    preConfigure = ''
-      substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
-    '';
 
     src = fetchurl {
       url = "https://api.github.com/repos/raspberrypi/linux/tarball/${rev}";
