@@ -28,7 +28,7 @@ in
       # This function is called whenever a command is not found.
       command_not_found_handle() {
         local p=/run/current-system/sw/bin/command-not-found
-        if [ -x $p -a -f /var/lib/nixos/programs.sqlite ]; then
+        if [ -x $p -a -f /nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite ]; then
           # Run the helper program.
           $p "$1"
           # Retry the command if we just installed it.
