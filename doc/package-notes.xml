@@ -33,7 +33,7 @@ extra options to be concatenated to the kernel configuration file
 is or isn’t enabled.  This is used in NixOS to implement
 kernel-specific behaviour.  For instance, if the kernel has the
 <varname>efiBootStub</varname> feature (i.e. the kernel is an EFI
-application), then NixOS be installed on efi machines.
+application), then NixOS can be installed on efi machines.
 
 </para>
 
