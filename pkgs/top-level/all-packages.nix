@@ -7739,6 +7739,10 @@ let
 
   dropbox = callPackage ../applications/networking/dropbox { };
 
+  lightdm = callPackage ../applications/display-managers/lightdm { };
+
+  lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
+
   slim = callPackage ../applications/display-managers/slim { };
 
   sndBase = builderDefsPackage (import ../applications/audio/snd) {
