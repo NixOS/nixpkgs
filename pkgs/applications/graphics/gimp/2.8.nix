@@ -4,11 +4,11 @@
 , python, pygtk, libart_lgpl, libexif, gettext, xlibs }:
 
 stdenv.mkDerivation rec {
-  name = "gimp-2.8.2";
+  name = "gimp-2.8.4";
   
   src = fetchurl {
     url = "ftp://ftp.gimp.org/pub/gimp/v2.8/${name}.tar.bz2";
-    md5 = "b542138820ca3a41cbd63fc331907955";
+    md5 = "392592e8755d046317878d226145900f";
   };
   
   buildInputs = 
