@@ -5999,9 +5999,9 @@ let
 
     kqemu = callPackage ../os-specific/linux/kqemu { };
 
-    klibc = callPackage ../os-specific/linux/klibc {
-      linuxHeaders = glibc.kernelHeaders;
-    };
+    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
+
+    klibc = callPackage ../os-specific/linux/klibc { };
 
     splashutils = let hasFbConDecor = if self.kernel ? features
       then self.kernel.features ? fbConDecor
@@ -6073,9 +6073,7 @@ let
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
-  klibc = callPackage ../os-specific/linux/klibc {
-    linuxHeaders = glibc.kernelHeaders;
-  };
+  klibc = linuxPackages.klibc;
 
   klibcShrunk = callPackage ../os-specific/linux/klibc/shrunk.nix { };
 

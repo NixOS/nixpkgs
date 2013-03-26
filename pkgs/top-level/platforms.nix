@@ -2,6 +2,7 @@ rec {
   pcBase = {
     name = "pc";
     uboot = null;
+    kernelMajor = "2.6";
     kernelHeadersBaseConfig = "defconfig";
     kernelBaseConfig = "defconfig";
     # Build whatever possible as a module, if not stated in the extra config.

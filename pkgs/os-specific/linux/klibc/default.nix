@@ -1,67 +1,52 @@
-{ stdenv, fetchurl, perl, bison, mktemp, linuxHeaders, linuxHeadersCross, kernelDev ? null }:
-
-assert stdenv.isLinux;
+{ stdenv, fetchurl, kernelHeaders, kernel, perl }:
 
 let
-  version = "1.5.24";
-  baseMakeFlags = ["V=1" "prefix=$out" "SHLIBDIR=$out/lib"];
-in
+  version = "2.0.2";
 
-stdenv.mkDerivation {
-  name = "klibc-${version}${stdenv.lib.optionalString (kernelDev != null) "-${kernelDev.version}"}";
+  commonMakeFlags = [
+    "prefix=$(out)"
+    "SHLIBDIR=$(out)/lib"
+  ];
+in stdenv.mkDerivation {
+  name = "klibc-${version}-${kernel.version}";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";
-    sha256 = "18lm32dlj9k2ky9wwk274zmc3jndgrb41b6qm82g3lza6wlw3yki";
+    url = "mirror://kernel/linux/libs/klibc/2.0/klibc-${version}.tar.xz";
+    sha256 = "1e9d4ba6fe2aeea0bd27d14a9a674c29fb7cf766ff021e9c5f99256cb409474e";
   };
 
-  # Trick to make this build on nix. It expects to have the kernel sources
-  # instead of only the linux kernel headers.
-  # So it cannot run the 'make headers_install' it wants to run.
-  # We don't install the headers, so klibc will not be useful as libc, but
-  # usually in nixpkgs we only use the userspace tools comming with klibc.
-  prePatch = stdenv.lib.optionalString (kernelDev == null) ''
-    sed -i -e /headers_install/d scripts/Kbuild.install
-  '';
-  
-  makeFlags = baseMakeFlags;
+  nativeBuildInputs = [ perl ];
 
-  inherit linuxHeaders;
+  inherit kernelHeaders;
+
+  patches = [ ./readonly-kernel-source.patch ];
+
+  configurePhase = ''
+    ln -sv $kernelHeaders linux
+  '';
+
+  makeFlags = commonMakeFlags ++ [
+    "KLIBCARCH=${stdenv.platform.kernelArch}"
+  ];
+
+  installFlags = [
+    "KLIBCKERNELSRC=${kernel.sourceRoot}"
+  ];
 
   crossAttrs = {
-    makeFlags = baseMakeFlags ++ [ "CROSS_COMPILE=${stdenv.cross.config}-"
-        "KLIBCARCH=${stdenv.cross.arch}" ];
+    makeFlags = commonMakeFlags ++ [
+      "KLIBCARCH=${stdenv.cross.platform.kernelArch}"
+      "CROSS_COMPILE=${stdenv.cross.config}-"
+    ] ++ stdenv.lib.optional (stdenv.cross.arch == "arm") "CONFIG_AEABI=y";
 
-    patchPhase = ''
-      sed -i 's/-fno-pic -mno-abicalls/& -mabi=32/' usr/klibc/arch/mips/MCONFIG
-      sed -i /KLIBCKERNELSRC/d scripts/Kbuild.install
-      # Wrong check for __mips64 in klibc
-      sed -i s/__mips64__/__mips64/ usr/include/fcntl.h
-    '';
+    installFlags = [
+      "KLIBCARCH=${stdenv.cross.platform.kernelArch}"
+      "KLIBCKERNELSRC=${kernel.crossDrv.sourceRoot}"
+    ];
 
-    linuxHeaders = linuxHeadersCross;
+    kernelHeaders = kernelHeaders.crossDrv;
   };
-  
-  # The AEABI option concerns only arm systems, and does not affect the build for
-  # other systems.
-  preBuild = ''
-    sed -i /CONFIG_AEABI/d defconfig
-    echo "CONFIG_AEABI=y" >> defconfig
-    makeFlags=$(eval "echo $makeFlags")
 
-  '' + (if kernelDev == null then ''
-    mkdir linux
-    cp -prsd $linuxHeaders/include linux/
-    chmod -R u+w linux/include/
-  '' else ''
-    tar xvf ${kernelDev.src}
-    mv linux* linux
-    cd linux
-    ln -sv ${kernelDev}/config .config
-    make prepare
-    cd ..
-  '');
-  
   # Install static binaries as well.
   postInstall = ''
     dir=$out/lib/klibc/bin.static
@@ -69,6 +54,4 @@ stdenv.mkDerivation {
     cp $(find $(find . -name static) -type f ! -name "*.g" -a ! -name ".*") $dir/
     cp usr/dash/sh $dir/
   '';
-  
-  nativeBuildInputs = [ perl bison mktemp ];
 }
