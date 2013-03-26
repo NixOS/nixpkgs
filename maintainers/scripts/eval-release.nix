@@ -1,6 +1,5 @@
-# Evaluate `release.nix' like Hydra would (i.e. call each job
-# attribute with the expected `system' argument).  Too bad
-# nix-instantiate can't to do this.
+# Evaluate `release.nix' like Hydra would.  Too bad nix-instantiate
+# can't to do this.
 
 with import ../../pkgs/lib;
 
