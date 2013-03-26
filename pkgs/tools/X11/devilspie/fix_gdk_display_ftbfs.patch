@@ -1,0 +1,152 @@
+Index: devilspie-0.22/src/xutils.c
+===================================================================
+--- devilspie-0.22.orig/src/xutils.c	2011-09-12 01:02:01.000000000 +0200
++++ devilspie-0.22/src/xutils.c	2011-09-12 01:22:35.000000000 +0200
+@@ -40,7 +40,7 @@
+   retval = GPOINTER_TO_UINT (g_hash_table_lookup (atom_hash, atom_name));
+   if (!retval)
+     {
+-      retval = XInternAtom (gdk_display, atom_name, FALSE);
++      retval = XInternAtom (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), atom_name, FALSE);
+ 
+       if (retval != None)
+         {
+@@ -76,7 +76,7 @@
+   xev.xclient.type = ClientMessage;
+   xev.xclient.serial = 0;
+   xev.xclient.send_event = True;
+-  xev.xclient.display = gdk_display;
++  xev.xclient.display = GDK_DISPLAY_XDISPLAY(gdk_display_get_default());
+   xev.xclient.window = xwindow;
+   xev.xclient.message_type = my_wnck_atom_get ("_NET_WM_STATE");
+   xev.xclient.format = 32;
+@@ -84,7 +84,7 @@
+   xev.xclient.data.l[1] = state1;
+   xev.xclient.data.l[2] = state2;
+ 
+-  XSendEvent (gdk_display,
++  XSendEvent (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
+ 	      RootWindowOfScreen (screen),
+               False,
+ 	      SubstructureRedirectMask | SubstructureNotifyMask,
+@@ -100,7 +100,7 @@
+ int
+ my_wnck_error_trap_pop (void)
+ {
+-  XSync (gdk_display, False);
++  XSync (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), False);
+   return gdk_error_trap_pop ();
+ }
+ 
+@@ -122,7 +122,7 @@
+   
+   my_wnck_error_trap_push ();
+   property = NULL;
+-  result = XGetWindowProperty (gdk_display,
++  result = XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
+ 			       xwindow, atom,
+ 			       0, G_MAXLONG,
+ 			       False, AnyPropertyType, &type, &format, &nitems,
+@@ -144,7 +144,7 @@
+       pp = (long *)property;  // we can assume (long *) since format == 32
+       if (nitems == 1)
+         {
+-          prop_name = XGetAtomName (gdk_display, *pp);
++          prop_name = XGetAtomName (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), *pp);
+           if (prop_name)
+             {
+               retval = g_strdup (prop_name);
+@@ -157,7 +157,7 @@
+           prop_names[nitems] = NULL;
+           for (i=0; i < nitems; i++)
+             {
+-              prop_names[i] = XGetAtomName (gdk_display, *pp++);
++              prop_names[i] = XGetAtomName (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), *pp++);
+             }
+           retval = g_strjoinv (", ", prop_names);
+           for (i=0; i < nitems; i++)
+@@ -179,7 +179,7 @@
+    XWindowAttributes attrs;
+ 
+    xid = wnck_window_get_xid (window);
+-   XGetWindowAttributes(gdk_display, xid, &attrs);
++   XGetWindowAttributes(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), xid, &attrs);
+ 
+    return attrs.screen;
+ }
+@@ -202,7 +202,7 @@
+   
+   my_wnck_error_trap_push ();
+   type = None;
+-  result = XGetWindowProperty (gdk_display,
++  result = XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
+                               xwindow,
+                               atom,
+                               0, G_MAXLONG,
+@@ -242,7 +242,7 @@
+   
+   my_wnck_error_trap_push ();
+   type = None;
+-  result = XGetWindowProperty (gdk_display,
++  result = XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
+                               xwindow,
+                               atom,
+                               0, G_MAXLONG,
+@@ -325,7 +325,7 @@
+   }
+   my_wnck_error_trap_push ();
+ 
+-  XChangeProperty (GDK_DISPLAY(), wnck_window_get_xid(window),
++  XChangeProperty (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), wnck_window_get_xid(window),
+                    my_wnck_atom_get ("_NET_WM_WINDOW_TYPE"),
+                    XA_ATOM, 32, PropModeReplace, (guchar *)&atom, 1);
+ 
+Index: devilspie-0.22/src/actions.c
+===================================================================
+--- devilspie-0.22.orig/src/actions.c	2011-09-12 01:28:55.000000000 +0200
++++ devilspie-0.22/src/actions.c	2011-09-12 01:32:51.000000000 +0200
+@@ -205,7 +205,7 @@
+ 
+   /* try to set new position.. */
+   my_wnck_error_trap_push ();
+-  XMoveResizeWindow (gdk_display,
++  XMoveResizeWindow (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
+                      wnck_window_get_xid (c->window),
+                      new_xoffset, new_yoffset,
+                      new_width, new_height);
+@@ -253,7 +253,7 @@
+ 
+   /* Try to set new position.. */
+   my_wnck_error_trap_push ();
+-  XMoveWindow (gdk_display,
++  XMoveWindow (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
+                wnck_window_get_xid (c->window),
+                xoffset, yoffset);
+ 
+@@ -504,7 +504,7 @@
+   x = ((num - 1) * wnck_screen_get_width (screen)) - viewport_start + x;
+ 
+   my_wnck_error_trap_push ();
+-  XMoveResizeWindow (gdk_display,
++  XMoveResizeWindow (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()),
+                      wnck_window_get_xid (c->window),
+                      x, y, width, height);
+   if (my_wnck_error_trap_pop ()) {
+@@ -577,7 +577,7 @@
+   hints.decorations = decorate ? 1 : 0;
+ 
+   /* Set Motif hints, most window managers handle these */
+-  XChangeProperty(GDK_DISPLAY(), wnck_window_get_xid (c->window),
++  XChangeProperty(GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), wnck_window_get_xid (c->window),
+                   my_wnck_atom_get ("_MOTIF_WM_HINTS"), 
+                   my_wnck_atom_get ("_MOTIF_WM_HINTS"), 32, PropModeReplace, 
+                   (unsigned char *)&hints, PROP_MOTIF_WM_HINTS_ELEMENTS);
+@@ -687,7 +687,7 @@
+ 	}
+ 	my_wnck_error_trap_push ();
+ 	v=0xffffffff/100*opacity;
+-	XChangeProperty (GDK_DISPLAY(), wnck_window_get_xid(c->window),
++	XChangeProperty (GDK_DISPLAY_XDISPLAY(gdk_display_get_default()), wnck_window_get_xid(c->window),
+ 		my_wnck_atom_get ("_NET_WM_WINDOW_OPACITY"),
+ 		XA_CARDINAL, 32, PropModeReplace, (guchar *)&v, 1);
+ 

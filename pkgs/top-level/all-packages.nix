@@ -1940,6 +1940,8 @@ let
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
+  chicken = callPackage ../development/compilers/chicken { };
+
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
   clangUnwrapped = callPackage ../development/compilers/llvm/clang.nix {
@@ -6754,6 +6756,8 @@ let
   darktable = callPackage ../applications/graphics/darktable {
     inherit (gnome) GConf libglade;
   };
+
+  devilspie = callPackage ../tools/X11/devilspie {};
 
   "dd-agent" = callPackage ../tools/networking/dd-agent { };
 
