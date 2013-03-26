@@ -1,5 +1,5 @@
 {stdenv, subversion, sshSupport ? false, openssh ? null}: 
-{url, rev ? "HEAD", md5 ? "", sha256 ? ""}:
+{url, rev ? "HEAD", md5 ? "", sha256 ? "", ignoreExternals ? false}:
 
 let
   repoName = with stdenv.lib;
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
   outputHashMode = "recursive";
   outputHash = if sha256 == "" then md5 else sha256;
   
-  inherit url rev sshSupport openssh;
+  inherit url rev sshSupport openssh ignoreExternals;
 
   impureEnvVars = [
     # We borrow these environment variables from the caller to allow
