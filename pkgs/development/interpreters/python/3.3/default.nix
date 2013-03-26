@@ -16,8 +16,8 @@ assert readline != null -> ncurses != null;
 with stdenv.lib;
 
 let
-  majorVersion = "3.2";
-  version = "${majorVersion}.3";
+  majorVersion = "3.3";
+  version = "${majorVersion}.0";
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "5648ec81f93870fde2f0aa4ed45c8718692b15ce6fd9ed309bfb827ae12010aa";
+    sha256 = "1ybdf7wc8pfw51rf7xcywfw27n6l97qyzd1ibpq151q5dkyi7h8m";
   };
 
   preConfigure = ''

@@ -2876,8 +2876,7 @@ let
 
   pure = callPackage ../development/interpreters/pure {};
 
-  python3 = hiPrio python32;
-  python32 = callPackage ../development/interpreters/python/3.2 { };
+  python3 = hiPrio (callPackage ../development/interpreters/python/3.3 { });
 
   python = python27;
   python26 = callPackage ../development/interpreters/python/2.6 { };
@@ -6647,7 +6646,7 @@ let
   };
 
   blender = callPackage  ../applications/misc/blender {
-    python = python32;
+    python = python3;
   };
 
   bristol = callPackage ../applications/audio/bristol { };
