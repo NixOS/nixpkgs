@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   builder = ./builder.sh;
 
-  patches = [ ./version-test.patch ];
+  patches = [ ./conftest-find-kernel-config.sh ./version-test.patch ];
 
   src =
     if stdenv.system == "i686-linux" then
