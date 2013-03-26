@@ -131,7 +131,8 @@ let
       ${pkgs.mtools}/bin/mmd -i "$out" loader
       ${pkgs.mtools}/bin/mmd -i "$out" loader/entries
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
-        ${pkgs.gummiboot}/bin/gummiboot.efi ::efi/boot/boot${targetArch}.efi
+        ${pkgs.gummiboot}/lib/gummiboot/gummiboot${targetArch}.efi \
+        ::efi/boot/boot${targetArch}.efi
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
         ${config.boot.kernelPackages.kernel + "/bzImage"} ::bzImage
       ${pkgs.mtools}/bin/mcopy -v -i "$out" \
