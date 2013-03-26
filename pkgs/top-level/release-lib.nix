@@ -5,7 +5,7 @@ rec {
     config.allowUnfree = false;
   });
 
-  pkgs = allPackages { };
+  pkgs = allPackages { system = "x86_64-linux"; };
 
 
   # The platforms for which we build Nixpkgs.
