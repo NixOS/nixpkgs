@@ -8,6 +8,10 @@ rec {
   pkgs = allPackages { };
 
 
+  # The platforms for which we build Nixpkgs.
+  supportedSystems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "x86_64-freebsd" "i686-freebsd" ];
+
+
   /* !!! Hack: poor man's memoisation function.  Necessary to prevent
      Nixpkgs from being evaluated again and again for every
      job/platform pair. */
@@ -45,11 +49,14 @@ rec {
     { type = "job"; systems = x; schedulingPriority = 10; };
 
 
-  /* Perform a job on the given set of platforms.  The function `f' is
-     called by Hydra for each platform, and should return some job
-     to build on that platform.  `f' is passed the Nixpkgs collection
-     for the platform in question. */
-  testOn = systems: f: pkgs.lib.genAttrs systems (system: f (pkgsFor system));
+  /* Build a package on the given set of platforms.  The function `f'
+     is called for each supported platform with Nixpkgs for that
+     platform as an argument .  We return an attribute set containing
+     a derivation for each supported platform, i.e. ‘{ x86_64-linux =
+     f pkgs_x86_64_linux; i686-linux = f pkgs_i686_linux; ... }’. */
+  testOn = systems: f: pkgs.lib.genAttrs
+    (pkgs.lib.filter (x: pkgs.lib.elem x supportedSystems) systems)
+    (system: f (pkgsFor system));
 
 
   /* Similar to the testOn function, but with an additional
