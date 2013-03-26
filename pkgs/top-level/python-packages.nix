@@ -796,14 +796,14 @@ pythonPackages = python.modules // rec {
       md5 = "33557678bf2f320de670ddaefaea009d";
     };
 
-    # TODO: gui, procsettitle
-    buildInputs = [ pkgs.libtorrentRasterbar twisted Mako chardet pyxdg pkgs.pyopenssl ];
-    propagatedBuildInputs = [ pkgs.libtorrentRasterbar twisted Mako chardet pyxdg pkgs.pyopenssl ];
+    propagatedBuildInputs = with pkgs; [
+      pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl
+    ];
 
     meta = {
       homepage = http://deluge-torrent.org;
       description = "Torrent client";
-      license = "GPLv3";
+      license = stdenv.lib.licenses.gpl3Plus;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
       platforms = stdenv.lib.platforms.all;
     };
