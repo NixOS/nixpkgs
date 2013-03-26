@@ -1,13 +1,15 @@
-/*
-  This file will be evaluated by hydra with a call like this:
-  hydra_eval_jobs --gc-roots-dir \
-    /nix/var/nix/gcroots/per-user/hydra/hydra-roots --argstr \
-    system i686-linux --argstr system x86_64-linux --arg \
-    nixpkgs "{outPath = ./}" .... release.nix
+/* This file defines the builds that constitute the Nixpkgs.
+   Everything defined here ends up in the Nixpkgs channel.  Individual
+   jobs can be tested by running:
 
-  Hydra can be installed with "nix-env -i hydra".
+   $ nix-build pkgs/top-level/release.nix -A <jobname>.<system>
+
+   e.g.
+
+   $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
-with (import ./release-lib.nix);
+
+with import ./release-lib.nix;
 
 {
 
@@ -20,8 +22,6 @@ with (import ./release-lib.nix);
   apacheHttpd = linux;
   aspell = all;
   at = linux;
-  aterm25 = all;
-  aterm28 = all;
   audacious = linux;
   autoconf = all;
   automake110x = all;
