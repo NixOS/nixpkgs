@@ -3,7 +3,7 @@
 , officialRelease ? false
 }:
 
-let nixpkgs' = nixpkgs; in # urgh
+let nixpkgs' = nixpkgs; pkgs = import <nixpkgs> {}; in # urgh
 
 rec {
 
@@ -19,9 +19,12 @@ rec {
     supportedSystems = [ "x86_64-linux" "i686-linux" ];
   };
 
-  tested = (import <nixpkgs> { }).releaseTools.aggregate {
+  tested = pkgs.releaseTools.aggregate {
     name = "nixos-${nixos.tarball.version}";
-    meta.description = "Release-critical builds for the NixOS unstable channel";
+    meta = {
+      description = "Release-critical builds for the NixOS unstable channel";
+      maintainers = [ pkgs.lib.maintainers.shlevy ];
+    };
     members =
       [ nixos.channel
         nixos.manual

@@ -8,7 +8,7 @@ int main(int argc, char ** argv) {
 		fprintf(stderr, "Usage: %s PATH", argv[0]);
 		exit(2);
 	}
-	if(statvfs(argv[1], &stat) != 0) {
+	if (statvfs(argv[1], &stat) != 0) {
 		perror("statvfs");
 		exit(3);
 	}
