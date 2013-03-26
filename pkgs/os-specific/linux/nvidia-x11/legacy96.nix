@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernelDev, xlibs, zlib, gtk, atk, pango, glib}:
+{stdenv, fetchurl, kernel, xlibs, zlib, gtk, atk, pango, glib}:
 
 let 
 
@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nvidia-x11-${versionNumber}-${kernelDev.version}";
+  name = "nvidia-x11-${versionNumber}-${kernel.version}";
   
   builder = ./builder-legacy.sh;
   
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
       }
     else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
-  kernel = kernelDev;
+  kernel = kernel.dev;
 
   inherit versionNumber;
 
