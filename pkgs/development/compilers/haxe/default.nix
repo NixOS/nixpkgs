@@ -5,12 +5,22 @@ stdenv.mkDerivation {
 
   buildInputs = [ocaml zlib neko];
 
-  src = fetchsvn {
+  srcs = fetchsvn {
     url = "http://haxe.googlecode.com/svn/tags/v2-10";
-    sha256 = "dbd3c655e4136eb68a165ef83b96bfc1f0f2eb9ec8729603b19bcd717a61a679";
+    sha256 = "0vwdlj0vmmf97bg6cish7yah36aca2q599vwzbr1m0jpjbvindkh";
+    ignoreExternals = true;
+  };
+
+  ocamllibs = fetchsvn {
+    url = "http://ocamllibs.googlecode.com/svn/trunk";
+    sha256 = "143s320xn2xalm0lnw46h1fvy48qg7my3j8cf66f0wwzv2fisr1q";
+    rev = 256;
+    ignoreExternals = true;
   };
 
   prePatch = ''
+    cp -r "$ocamllibs" libs
+    chmod -R u+w libs
     sed -i -e 's|com.class_path <- \[|&"'"$out/lib/haxe/std/"'";|' main.ml
   '';
 
