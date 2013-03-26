@@ -9027,7 +9027,7 @@ let
 
   texLiveFull = lib.setName "texlive-full" (texLiveAggregationFun {
     paths = [ texLive texLiveExtra lmodern texLiveCMSuper texLiveLatexXColor
-              texLivePGF texLiveBeamer texLiveModerncv tipa tex4ht ];
+              texLivePGF texLiveBeamer texLiveModerncv tipa tex4ht texinfo5 ];
   });
 
   /* Look in configurations/misc/raskin.nix for usage example (around revisions
