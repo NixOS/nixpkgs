@@ -1,12 +1,12 @@
 { nixosSrc ? { outPath = ./.; revCount = 1234; shortRev = "abcdefg"; }
-, nixpkgsSrc ? { outPath = <nixpkgs>; revCount = 5678; shortRev = "gfedcba"; }
+, nixpkgs ? { outPath = <nixpkgs>; revCount = 5678; shortRev = "gfedcba"; }
 , officialRelease ? false
 }:
 
 let
 
   version = builtins.readFile ./.version;
-  versionSuffix = "pre${toString nixosSrc.revCount}_${nixosSrc.shortRev}-${nixpkgsSrc.shortRev}";
+  versionSuffix = "pre${toString nixosSrc.revCount}_${nixosSrc.shortRev}-${nixpkgs.shortRev}";
 
   systems = [ "x86_64-linux" "i686-linux" ];
 
@@ -115,7 +115,7 @@ in {
         ensureDir "$out/tarballs"
         mkdir ../$releaseName
         cp -prd . ../$releaseName/nixos
-        cp -prd ${nixpkgsSrc} ../$releaseName/nixpkgs
+        cp -prd ${nixpkgs} ../$releaseName/nixpkgs
         echo "$expr" > ../$releaseName/default.nix
         NIX_STATE_DIR=$TMPDIR nix-env -f ../$releaseName/default.nix -qaP --meta --xml \* > /dev/null
         cd ..

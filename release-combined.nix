@@ -1,17 +1,20 @@
 { nixosSrc ? { outPath = ./.; revCount = 1234; shortRev = "abcdefg"; }
-, nixpkgsSrc ? { outPath = <nixpkgs>; revCount = 5678; shortRev = "gfedcba"; }
+, nixpkgs ? { outPath = <nixpkgs>; revCount = 5678; shortRev = "gfedcba"; }
 , officialRelease ? false
 }:
+
+let nixpkgs' = nixpkgs; in # urgh
 
 rec {
 
   nixos = import ./release.nix {
-    inherit nixosSrc nixpkgsSrc officialRelease;
+    inherit nixosSrc officialRelease;
+    nixpkgs = nixpkgs';
   };
 
   nixpkgs = import <nixpkgs/pkgs/top-level/release.nix> {
     inherit officialRelease;
-    nixpkgs = nixpkgsSrc;
+    nixpkgs = nixpkgs';
     # Only do Linux builds.
     supportedSystems = [ "x86_64-linux" "i686-linux" ];
   };
