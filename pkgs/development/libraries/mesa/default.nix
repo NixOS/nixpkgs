@@ -42,7 +42,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  passthru = { inherit libdrm; };
+  passthru = { inherit libdrm; inherit version; };
 
   meta = {
     description = "An open source implementation of OpenGL";

@@ -4568,7 +4568,7 @@ let
   mesa_glu = callPackage ../development/libraries/mesa-glu { };
   mesa = if stdenv.isDarwin then darwinX11AndOpenGL
     else buildEnv {
-      name = "mesa";
+      name = "mesa-${mesa_noglu.version}";
       paths = [ mesa_glu mesa_noglu ];
     };
   darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
