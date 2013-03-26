@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "${libXinerama}/include ${libSM}/include ${libXxf86vm}/include";
   SEARCH_LIB =
     "${libXinerama}/lib ${libSM}/lib ${libXxf86vm}/lib "
-    + optionalString withMesa "${mesa.mesa_noglu}/lib ${mesa}/lib ";
+    + optionalString withMesa "${mesa}/lib ";
 
   # Work around a bug in configure.
   NIX_CFLAGS_COMPILE = "-DHAVE_X11_XLIB_H=1";

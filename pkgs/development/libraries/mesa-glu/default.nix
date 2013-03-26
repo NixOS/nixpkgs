@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ mesa_noglu ];
 
-  passthru = { inherit (mesa_noglu) libdrm; inherit mesa_noglu; };
-
   meta = {
     description = "OpenGL utility library";
     homepage = http://cgit.freedesktop.org/mesa/glu/;
