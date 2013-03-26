@@ -1,4 +1,4 @@
-with (import ./release-lib.nix);
+with import ./release-lib.nix { supportedSystems = []; };
 let
   nativePlatforms = linux;
 

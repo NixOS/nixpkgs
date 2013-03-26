@@ -1,3 +1,5 @@
+{ supportedSystems }:
+
 rec {
 
   # Ensure that we don't build packages marked as unfree.
@@ -6,10 +8,6 @@ rec {
   });
 
   pkgs = allPackages { system = "x86_64-linux"; };
-
-
-  # The platforms for which we build Nixpkgs.
-  supportedSystems = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "x86_64-freebsd" "i686-freebsd" ];
 
 
   /* !!! Hack: poor man's memoisation function.  Necessary to prevent
