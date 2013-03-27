@@ -1,12 +1,12 @@
 { stdenv, fetchurl, buildPythonPackage, pythonPackages }:
 
 buildPythonPackage rec {
-  name = "ipython-0.13";
+  name = "ipython-0.13.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://pypi.python.org/packages/source/i/ipython/${name}.tar.gz";
-    sha256 = "1m4m0zf3llnicfgrbnl2h08p3662px7v2pzbhq4fq24vnyz6x5w2";
+    sha256 = "1h7q2zlyfn7si2vf6gnq2d0krkm1f5jy5nbi105by7zxqjai1grv";
   };
 
   propagatedBuildInputs = [ pythonPackages.readline pythonPackages.sqlite3 pythonPackages.tornado pythonPackages.pyzmq ];
