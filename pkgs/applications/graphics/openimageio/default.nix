@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, cmake, unzip, boost, libjpeg, libtiff, libpng, openexr, ilmbase }:
+{ stdenv, fetchurl, boost, cmake, ilmbase, libjpeg, libpng, libtiff, openexr
+, unzip
+}:
 
 stdenv.mkDerivation rec {
   name = "oiio-${version}";
@@ -9,13 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "08a6qhplzs8kianqb1gjgrndg81h3il5531jn9g6i4940b1xispg";
   };
 
-  buildInputs = [ cmake unzip boost libjpeg libtiff libpng openexr ilmbase ];
+  buildInputs = [ boost cmake ilmbase libjpeg libpng libtiff openexr unzip ];
 
   configurePhase = "";
 
-  buildPhase = "make ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr} USE_PYTHON=0 INSTALLDIR=$out dist_dir=";
+  buildPhase = ''
+    make ILMBASE_HOME=${ilmbase} OPENEXR_HOME=${openexr} USE_PYTHON=0 \
+      INSTALLDIR=$out dist_dir=
+  '';
 
-  installPhase = "echo hallo";
+  installPhase = "";
 
   meta = with stdenv.lib; {
     homepage = http://www.openimageio.org;
