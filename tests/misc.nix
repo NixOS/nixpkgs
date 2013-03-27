@@ -33,6 +33,11 @@
           $machine->waitForUnit("root-swapfile.swap");
           $machine->succeed("ls -l /root/swapfile | grep 134217728");
       };
+
+      # Test whether kernel.poweroff_cmd is set.
+      subtest "poweroff_cmd", sub {
+          $machine->succeed("[ -x \"\$(cat /proc/sys/kernel/poweroff_cmd)\" ]")
+      };
     '';
 
 }
