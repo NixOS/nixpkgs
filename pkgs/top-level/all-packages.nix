@@ -4712,7 +4712,7 @@ let
     opensc = opensc_0_11_7;
   };
 
-  oiio = callPackage ../development/libraries/oiio { };
+  opencolorio = callPackage ../development/libraries/opencolorio { };
 
   ois = callPackage ../development/libraries/ois {};
 
@@ -7591,6 +7591,8 @@ let
   oneteam = callPackage ../applications/networking/instant-messengers/oneteam {};
 
   openbox = callPackage ../applications/window-managers/openbox { };
+
+  openimageio = callPackage ../applications/graphics/openimageio { };
 
   openjump = callPackage ../applications/misc/openjump { };
 
