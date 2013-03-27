@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     homepage = http://code.google.com/p/g500-control/;
     description = "Configure Logitech G500's internal profile under Linux";
     license = stdenv.lib.licenses.gpl2;
+    platforms = stdenv.lib.platforms.linux;
   };
 }
 
