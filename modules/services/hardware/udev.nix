@@ -228,7 +228,15 @@ in
       (isYes "NET")
     ];
 
-    system.activationScripts."set-firmware-path" =
-      "echo -n ${config.hardware.firmware} 2>/dev/null > /sys/module/firmware_class/parameters/path";
+    system.activationScripts.setFirmwarePath =
+      ''
+        echo -n ${config.hardware.firmware} 2>/dev/null > /sys/module/firmware_class/parameters/path
+      '';
+
+    system.activationScripts.clearHotplug =
+      ''
+        echo "" > /proc/sys/kernel/hotplug
+      '';
+
   };
 }
