@@ -7750,6 +7750,8 @@ let
 
   dropbox = callPackage ../applications/networking/dropbox { };
 
+  dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
+
   slim = callPackage ../applications/display-managers/slim { };
 
   sndBase = builderDefsPackage (import ../applications/audio/snd) {
