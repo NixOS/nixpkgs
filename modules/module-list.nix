@@ -60,6 +60,7 @@
   ./services/audio/alsa.nix
   ./services/audio/fuppes.nix
   ./services/audio/mpd.nix
+  ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
