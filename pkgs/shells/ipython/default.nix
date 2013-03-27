@@ -1,4 +1,16 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonPackages }:
+{ stdenv, fetchurl, buildPythonPackage, pythonPackages, pyqt4 ? null, sip ? null
+, notebookSupport ? true   # ipython notebook
+, qtconsoleSupport ? true  # ipython qtconsole
+, pylabSupport ? true      # ipython --pylab    (backend: agg - no gui, just file)
+, pylabQtSupport ? true    # ipython --pylab=qt (backend: Qt4Agg - plot to window)
+}:
+
+# ipython qtconsole works with both pyside and pyqt4. But ipython --pylab=qt
+# only works with pyqt4 (at least this is true for ipython 0.13.1). So just use
+# pyqt4 for both.
+
+assert qtconsoleSupport == true -> pyqt4 != null;
+assert pylabQtSupport == true -> pyqt4 != null && sip != null;
 
 buildPythonPackage rec {
   name = "ipython-0.13.1";
@@ -9,7 +21,24 @@ buildPythonPackage rec {
     sha256 = "1h7q2zlyfn7si2vf6gnq2d0krkm1f5jy5nbi105by7zxqjai1grv";
   };
 
-  propagatedBuildInputs = [ pythonPackages.readline pythonPackages.sqlite3 pythonPackages.tornado pythonPackages.pyzmq ];
+  propagatedBuildInputs = [
+    pythonPackages.readline
+    pythonPackages.sqlite3  # required for history support
+  ] ++ stdenv.lib.optionals notebookSupport [
+    pythonPackages.tornado
+    pythonPackages.pyzmq
+    pythonPackages.jinja2
+  ] ++ stdenv.lib.optionals qtconsoleSupport [
+    pythonPackages.pygments
+    pythonPackages.pyzmq
+    pyqt4
+  ] ++ stdenv.lib.optionals pylabSupport [
+    pythonPackages.matplotlib
+  ] ++ stdenv.lib.optionals pylabQtSupport [
+    pythonPackages.matplotlib
+    pyqt4
+    sip
+  ];
 
   doCheck = false;
 
