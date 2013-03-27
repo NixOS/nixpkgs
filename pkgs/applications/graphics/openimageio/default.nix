@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, boost, cmake, ilmbase, libjpeg, libpng, libtiff, openexr
-, unzip
+{ stdenv, fetchurl, boost, cmake, ilmbase, libjpeg, libpng, libtiff
+, opencolorio, openexr, unzip
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "08a6qhplzs8kianqb1gjgrndg81h3il5531jn9g6i4940b1xispg";
   };
 
-  buildInputs = [ boost cmake ilmbase libjpeg libpng libtiff openexr unzip ];
+  buildInputs = [ 
+    boost cmake ilmbase libjpeg libpng libtiff opencolorio openexr unzip
+  ];
 
   configurePhase = "";
 
@@ -20,11 +22,11 @@ stdenv.mkDerivation rec {
       INSTALLDIR=$out dist_dir=
   '';
 
-  installPhase = "";
+  installPhase = ":";
 
   meta = with stdenv.lib; {
     homepage = http://www.openimageio.org;
-    description = "A library for reading and writing images";
+    description = "A library and tools for reading and writing images";
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
