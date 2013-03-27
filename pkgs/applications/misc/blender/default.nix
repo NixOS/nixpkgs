@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, SDL, cmake, ffmpeg, gettext, glew, ilmbase, libXi, libjpeg,
-libpng, libsamplerate, libtiff, mesa, oiio, openal, openexr, openjpeg,
+{ stdenv, fetchurl, SDL, cmake, ffmpeg, jackaudio, gettext, glew, ilmbase, libXi, libjpeg,
+libpng, libsamplerate, libsndfile, libtiff, mesa, opencolorio, openimageio, openal, openexr, openjpeg,
 python, zlib, boost }:
 
 stdenv.mkDerivation rec {
@@ -10,13 +10,17 @@ stdenv.mkDerivation rec {
     sha256 = "0wj8x9xk5irvsjc3rm7wzml1j47xcdpdpy84kidafk02biskcqcb";
   };
 
-  buildInputs = [ cmake mesa ffmpeg gettext python glew libjpeg libpng zlib openal
-    SDL openexr libsamplerate libXi libtiff ilmbase oiio openjpeg boost ];
+  buildInputs = [ cmake mesa ffmpeg jackaudio gettext python glew libjpeg libpng zlib openal
+    SDL openexr libsamplerate libsndfile libXi libtiff ilmbase opencolorio openimageio openjpeg boost ];
 
 
   cmakeFlags = [
     "-DOPENEXR_INC=${openexr}/include/OpenEXR"
     "-DWITH_OPENCOLLADA=OFF"
+    "-DWITH_CODEC_FFMPEG=ON"
+    "-DWITH_CODEC_SNDFILE=ON"
+    "-DWITH_SYSTEM_OPENJPEG=ON"
+    "-DWITH_JACK=ON"
     "-DWITH_INSTALL_PORTABLE=OFF"
     "-DPYTHON_LIBRARY=python${python.majorVersion}m"    
     "-DPYTHON_LIBPATH=${python}/lib"
