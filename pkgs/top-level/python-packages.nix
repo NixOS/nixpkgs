@@ -49,7 +49,7 @@ pythonPackages = python.modules // rec {
   # packages defined elsewhere
 
   ipython = import ../shells/ipython {
-    inherit (pkgs) stdenv fetchurl;
+    inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
   };
 
