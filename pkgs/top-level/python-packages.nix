@@ -166,6 +166,7 @@ pythonPackages = python.modules // rec {
 
     postInstall = ''
       ln -s ${pyramid}/bin/pserve $out/bin
+      ln -s ${pkgs.bacula}/bin/bconsole $out/bin
       wrapProgram "$out/bin/pserve" \
         --suffix PYTHONPATH : "$out/lib/python2.7/site-packages"
     '';
