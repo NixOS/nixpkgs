@@ -2876,8 +2876,9 @@ let
 
   pure = callPackage ../development/interpreters/pure {};
 
-  python3 = python32;
+  python3 = python33;
   python32 = callPackage ../development/interpreters/python/3.2 { };
+  python33 = callPackage ../development/interpreters/python/3.3 { };
 
   python = python27;
   python26 = callPackage ../development/interpreters/python/2.6 { };
@@ -4710,6 +4711,8 @@ let
   libopensc_dnie = callPackage ../development/libraries/libopensc-dnie {
     opensc = opensc_0_11_7;
   };
+
+  oiio = callPackage ../development/libraries/oiio { };
 
   ois = callPackage ../development/libraries/ois {};
 
@@ -6647,7 +6650,7 @@ let
   };
 
   blender = callPackage  ../applications/misc/blender {
-    python = python32;
+    python = python3;
   };
 
   bristol = callPackage ../applications/audio/bristol { };

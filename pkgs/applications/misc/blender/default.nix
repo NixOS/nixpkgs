@@ -1,26 +1,29 @@
-{ stdenv, fetchurl, SDL, cmake, gettext, ilmbase, libXi, libjpeg,
-libpng, libsamplerate, libtiff, mesa, openal, openexr, openjpeg,
+{ stdenv, fetchurl, SDL, cmake, ffmpeg, gettext, glew, ilmbase, libXi, libjpeg,
+libpng, libsamplerate, libtiff, mesa, oiio, openal, openexr, openjpeg,
 python, zlib, boost }:
 
 stdenv.mkDerivation rec {
-  name = "blender-2.63a";
+  name = "blender-2.66a";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "c479b1abfe5fd8a1a5d04b8d21fdbc0fc960d7855b24785b888c09792bca4c1a";
+    sha256 = "0wj8x9xk5irvsjc3rm7wzml1j47xcdpdpy84kidafk02biskcqcb";
   };
 
-  buildInputs = [ cmake mesa gettext python libjpeg libpng zlib openal
-    SDL openexr libsamplerate libXi libtiff ilmbase openjpeg boost ];
+  buildInputs = [ cmake mesa ffmpeg gettext python glew libjpeg libpng zlib openal
+    SDL openexr libsamplerate libXi libtiff ilmbase oiio openjpeg boost ];
+
 
   cmakeFlags = [
     "-DOPENEXR_INC=${openexr}/include/OpenEXR"
     "-DWITH_OPENCOLLADA=OFF"
     "-DWITH_INSTALL_PORTABLE=OFF"
+    "-DPYTHON_LIBRARY=python${python.majorVersion}m"    
     "-DPYTHON_LIBPATH=${python}/lib"
+    "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
 
   enableParallelBuilding = true;
 
