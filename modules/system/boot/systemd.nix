@@ -31,10 +31,11 @@ let
       "network.target"
       "nss-lookup.target"
       "nss-user-lookup.target"
-      "syslog.target"
       "time-sync.target"
       #"cryptsetup.target"
       "sigpwr.target"
+      "timers.target"
+      "paths.target"
 
       # Rescue mode.
       "rescue.target"
@@ -108,8 +109,10 @@ let
       "hibernate.target"
       "suspend.target"
       "sleep.target"
+      "hybrid-sleep.target"
       "systemd-hibernate.service"
       "systemd-suspend.service"
+      "systemd-hybrid-sleep.service"
       "systemd-shutdownd.socket"
       "systemd-shutdownd.service"
 
@@ -139,12 +142,13 @@ let
     ];
 
   upstreamWants =
-    [ "basic.target.wants"
+    [ #"basic.target.wants"
       "sysinit.target.wants"
       "sockets.target.wants"
       "local-fs.target.wants"
       "multi-user.target.wants"
       "shutdown.target.wants"
+      "timers.target.wants"
     ];
 
   makeJobScript = name: text:

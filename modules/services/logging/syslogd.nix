@@ -110,7 +110,7 @@ in
 
         requires = [ "syslog.socket" ];
 
-        wantedBy = [ "multi-user.target" "syslog.target" ];
+        wantedBy = [ "multi-user.target" ];
 
         environment.TZ = config.time.timeZone;
 

@@ -132,7 +132,6 @@ in
         [Unit]
         Description=D-Bus System Message Bus
         Requires=dbus.socket
-        After=syslog.target
 
         [Service]
         ExecStartPre=${pkgs.dbus_tools}/bin/dbus-uuidgen --ensure
