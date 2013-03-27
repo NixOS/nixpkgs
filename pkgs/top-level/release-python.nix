@@ -1085,8 +1085,6 @@ in
     acpi_call = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     atheros = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     ati_drivers_x11 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    aufs = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    aufs_util = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     bbswitch = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     broadcom_sta = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     cryptodev = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1094,7 +1092,6 @@ in
     exmap = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     frandom = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     iscsitarget = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-    iwlwifi = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     klibc = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     kqemu = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
     ndiswrapper = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

@@ -1,5 +1,5 @@
 args @ {
-  stdenv, fetchurl, extraConfig ? "" , perl, mktemp, module_init_tools, ...
+  stdenv, fetchurl, extraConfig ? "", ...
 }:
 
 let
@@ -18,10 +18,6 @@ import ./generic.nix (
     version = "3.6.y-${rev}";
     testing = false;
 
-    preConfigure = ''
-      substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
-    '';
-
     src = fetchurl {
       url = "https://api.github.com/repos/raspberrypi/linux/tarball/${rev}";
       name = "linux-raspberrypi-${version}.tar.gz";
@@ -31,7 +27,6 @@ import ./generic.nix (
     config = configWithPlatform stdenv.platform;
     configCross = configWithPlatform stdenv.cross.platform;
 
-    features.iwlwifi = true;
     #features.efiBootStub = true;
     #features.needsCifsUtils = true;
     #features.canDisableNetfilterConntrackHelpers = true;

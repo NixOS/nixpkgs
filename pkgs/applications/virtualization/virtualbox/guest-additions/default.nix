@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, lib, patchelf, cdrkit, kernelDev, which, makeWrapper
+{ stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
 , libX11, libXt, libXext, libXmu, libXcomposite, libXfixes, libXrandr, libXcursor
 , dbus }:
 
 let version = "4.2.8"; in
 
 stdenv.mkDerivation {
-  name = "VirtualBox-GuestAdditions-${version}-${kernelDev.version}";
+  name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
     sha256 = "04a5402d8dcdefc83ffb2785351ddc57758781a3759137974469189392ae4ad5";
   };
 
-  KERN_DIR = "${kernelDev}/lib/modules/*/build";
+  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
   buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 
@@ -112,8 +112,7 @@ stdenv.mkDerivation {
     for i in *
     do
         cd $i
-        kernelVersion=$(cd ${kernelDev}/lib/modules; ls)
-        export MODULE_DIR=$out/lib/modules/$kernelVersion/misc
+        export MODULE_DIR=$out/lib/modules/${kernel.modDirVersion}/misc
         find . -type f | xargs sed -i -e "s|-o root||g" \
                                       -e "s|-g root||g"
         make install

@@ -1,0 +1,12 @@
+diff -Naur klibc-2.0.2-orig/scripts/Kbuild.install klibc-2.0.2/scripts/Kbuild.install
+--- klibc-2.0.2-orig/scripts/Kbuild.install	2012-10-03 12:41:43.000000000 -0400
++++ klibc-2.0.2/scripts/Kbuild.install	2013-03-25 19:56:44.287154530 -0400
+@@ -95,7 +95,7 @@
+ 	$(Q)mkdir -p $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)include
+ 	$(Q)mkdir -p $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)lib
+ 	$(Q)mkdir -p $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)bin
+-	$(Q)$(MAKE) -C $(KLIBCKERNELSRC) ARCH=$(KLIBCARCH) INSTALL_HDR_PATH=$(INSTALLROOT)$(INSTALLDIR)/$(KCROSS) headers_install
++	$(Q)$(MAKE) -C $(KLIBCKERNELSRC) ARCH=$(KLIBCARCH) INSTALL_HDR_PATH=$(INSTALLROOT)$(INSTALLDIR)/$(KCROSS) O=$(TMPDIR) headers_install
+ 	$(Q)cp -rf usr/include/. $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)include/.
+ 	$(Q)chmod -R a+rX $(INSTALLROOT)$(INSTALLDIR)/$(KCROSS)include
+ 	$(Q)$(install-data) $(srctree)/klcc/klcc.1 $(INSTALLROOT)$(mandir)/man1/$(KCROSS)klcc.1

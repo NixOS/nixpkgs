@@ -1,6 +1,4 @@
-args @ { stdenv, fetchurl, extraConfig ? ""
-, perl, mktemp, module_init_tools
-, ... }:
+args @ { stdenv, fetchurl, extraConfig ? "", ... }:
 
 let
   configWithPlatform = kernelPlatform :
@@ -254,10 +252,6 @@ import ./generic.nix (
     version = "3.7.10";
     testing = false;
 
-    preConfigure = ''
-      substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
-    '';
-
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
       sha256 = "1l8b40z95ahc2v9babmhrbi8jn2bhwkapq0libq0z21iipqsya4v";
@@ -266,7 +260,6 @@ import ./generic.nix (
     config = configWithPlatform stdenv.platform;
     configCross = configWithPlatform stdenv.cross.platform;
 
-    features.iwlwifi = true;
     features.efiBootStub = true;
     features.needsCifsUtils = true;
     features.canDisableNetfilterConntrackHelpers = true;

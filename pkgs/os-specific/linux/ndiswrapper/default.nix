@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, kernelDev, perl }:
+{ stdenv, fetchurl, kernel, perl }:
 
 stdenv.mkDerivation {
-  name = "ndiswrapper-1.56-${kernelDev.version}";
+  name = "ndiswrapper-1.56-${kernel.version}";
 
   # need at least .config and include 
-  kernel = kernelDev;
+  kernel = kernel.dev;
 
   buildPhase = "
     echo make KBUILD=$(echo \$kernel/lib/modules/*/build);
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     sha256 = "10yqg1a08v6z1qm1qr1v4rbhl35c90gzrazapr09vp372hky8f57";
   };
 
-  buildInputs = [ kernelDev perl ];
+  buildInputs = [ perl ];
 
   # this is a patch against svn head, not stable version
   patches = [./prefix.patch];

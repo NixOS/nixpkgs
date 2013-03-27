@@ -84,7 +84,9 @@ let
       if system == "armv6l-linux" then platforms.raspberrypi
       else if system == "armv5tel-linux" then platforms.sheevaplug
       else if system == "mips64el-linux" then platforms.fuloong2f_n32
-      else platforms.pc;
+      else if system == "x86_64-linux" then platforms.pc64
+      else if system == "i686-linux" then platforms.pc32
+      else platforms.pcBase;
 
   platform = if platform_ != null then platform_
     else config.platform or platformAuto;
@@ -5835,7 +5837,7 @@ let
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
   linux_2_6_15 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.15.nix) {
-    inherit fetchurl perl mktemp module_init_tools;
+    inherit fetchurl perl linuxManualConfig;
     stdenv = overrideInStdenv stdenv [ gcc34 gnumake381 ];
     kernelPatches =
       [ kernelPatches.cifs_timeout_2_6_15
@@ -5843,11 +5845,10 @@ let
   };
 
   linux_2_6_32 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.32.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_31
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs2_2_6_32
         kernelPatches.cifs_timeout_2_6_29
         # kernelPatches.no_xsave # doesn't apply anymore
         kernelPatches.dell_rfkill
@@ -5855,11 +5856,10 @@ let
   };
 
   linux_2_6_35 = makeOverridable (import ../os-specific/linux/kernel/linux-2.6.35.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ kernelPatches.fbcondecor_2_6_35
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs2_2_6_35
         kernelPatches.cifs_timeout_2_6_35
       ] ++ lib.optional (platform.kernelArch == "arm")
         kernelPatches.sheevaplug_modules_2_6_35;
@@ -5877,20 +5877,18 @@ let
   };
 
   linux_3_0 = makeOverridable (import ../os-specific/linux/kernel/linux-3.0.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_0
       ];
   };
 
   linux_3_2 = makeOverridable (import ../os-specific/linux/kernel/linux-3.2.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_2
         kernelPatches.cifs_timeout_2_6_38
       ];
   };
@@ -5902,11 +5900,10 @@ let
   };
 
   linux_3_4 = makeOverridable (import ../os-specific/linux/kernel/linux-3.4.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [ #kernelPatches.fbcondecor_2_6_38
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_4
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -5914,11 +5911,10 @@ let
   };
 
   linux_3_7 = makeOverridable (import ../os-specific/linux/kernel/linux-3.7.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
-        # kernelPatches.aufs3_7
       ] ++ lib.optionals (platform.kernelArch == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
@@ -5927,11 +5923,11 @@ let
   };
 
   linux_3_6_rpi = makeOverridable (import ../os-specific/linux/kernel/linux-rpi-3.6.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
   };
 
   linux_3_8 = makeOverridable (import ../os-specific/linux/kernel/linux-3.8.nix) {
-    inherit fetchurl stdenv perl mktemp module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
@@ -5944,7 +5940,7 @@ let
 
   # low-priority because it is RC
   linux_3_9 = lowPrio (makeOverridable (import ../os-specific/linux/kernel/linux-3.9.nix) {
-    inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
+    inherit fetchurl stdenv perl linuxManualConfig;
     kernelPatches =
       [
         kernelPatches.sec_perm_2_6_24
@@ -5964,27 +5960,11 @@ let
   linuxPackagesFor = kernel: self: let callPackage = newScope self; in {
     inherit kernel;
 
-    kernelDev = kernel.dev or kernel;
-
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
-
-    aufs =
-      if self.kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs/2.nix { }
-      else if self.kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs/3.nix { }
-      else null;
-
-    aufs_util =
-      if self.kernel.features ? aufs2 then
-        callPackage ../os-specific/linux/aufs-util/2.nix { }
-      else if self.kernel.features ? aufs3 then
-        callPackage ../os-specific/linux/aufs-util/3.nix { }
-      else null;
 
     blcr = callPackage ../os-specific/linux/blcr { };
 
@@ -5997,8 +5977,6 @@ let
     frandom = callPackage ../os-specific/linux/frandom { };
 
     iscsitarget = callPackage ../os-specific/linux/iscsitarget { };
-
-    iwlwifi = callPackage ../os-specific/linux/iwlwifi { };
 
     iwlwifi4965ucode =
       if builtins.compareVersions self.kernel.version "2.6.27" == 0
@@ -6024,9 +6002,9 @@ let
 
     kqemu = callPackage ../os-specific/linux/kqemu { };
 
-    klibc = callPackage ../os-specific/linux/klibc {
-      linuxHeaders = glibc.kernelHeaders;
-    };
+    kernelHeaders = callPackage ../os-specific/linux/kernel-headers { };
+
+    klibc = callPackage ../os-specific/linux/klibc { };
 
     splashutils = let hasFbConDecor = if self.kernel ? features
       then self.kernel.features ? fbConDecor
@@ -6044,11 +6022,6 @@ let
 
     sysprof = callPackage ../development/tools/profiling/sysprof {
       inherit (gnome) libglade;
-    };
-
-    systemtap = callPackage ../development/tools/profiling/systemtap {
-      linux = self.kernelDev;
-      inherit (gnome) libglademm;
     };
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
@@ -6082,7 +6055,7 @@ let
 
   # A function to build a manually-configured kernel
   linuxManualConfig = import ../os-specific/linux/kernel/manual-config.nix {
-    inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile;
+    inherit (pkgs) stdenv runCommand nettools bc perl kmod writeTextFile ubootChooser;
   };
 
   keyutils = callPackage ../os-specific/linux/keyutils { };
@@ -6103,9 +6076,7 @@ let
 
   lsiutil = callPackage ../os-specific/linux/lsiutil { };
 
-  klibc = callPackage ../os-specific/linux/klibc {
-    linuxHeaders = glibc.kernelHeaders;
-  };
+  klibc = linuxPackages.klibc;
 
   klibcShrunk = callPackage ../os-specific/linux/klibc/shrunk.nix { };
 
@@ -6256,6 +6227,10 @@ let
   sysstat = callPackage ../os-specific/linux/sysstat { };
 
   systemd = callPackage ../os-specific/linux/systemd { };
+
+  systemtap = callPackage ../development/tools/profiling/systemtap {
+    inherit (gnome) libglademm;
+  };
 
   sysvinit = callPackage ../os-specific/linux/sysvinit { };
 

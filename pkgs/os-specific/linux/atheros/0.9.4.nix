@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, builderDefs, kernelDev }:
+{ stdenv, fetchurl, builderDefs, kernel }:
 	let localDefs = builderDefs.passthru.function {
 		src = /* put a fetchurl here */
 		fetchurl {
@@ -8,7 +8,7 @@
 
 		buildInputs = [];
 		configureFlags = [];
-		makeFlags = [''KERNELPATH=${kernelDev}/lib/modules/*/build'' ''DESTDIR=$out''];
+		makeFlags = [''KERNELPATH=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build'' ''DESTDIR=$out''];
 	};
 	in with localDefs;
 let 
@@ -17,7 +17,7 @@ postInstall = fullDepEntry (''
 '') [minInit doMakeInstall];
 in
 stdenv.mkDerivation rec {
-	name = "atheros-0.9.4-${kernelDev.version}";
+	name = "atheros-0.9.4-${kernel.version}";
 	builder = writeScript (name + "-builder")
 		(textClosure localDefs [doMakeInstall 
 			postInstall doForceShare doPropagate]);
