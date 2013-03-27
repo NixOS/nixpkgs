@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       "--with-dbuspolicydir=$(out)/etc/dbus-1/system.d"
       "--with-dbussystemservicedir=$(out)/share/dbus-1/system-services"
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
-      "--with-firmware-path=/root/test-firmware:/var/run/current-system/firmware"
+      "--with-firmware-path=/root/test-firmware:/run/current-system/firmware"
       "--with-tty-gid=3" # tty in NixOS has gid 3
     ];
 
@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
       # Work around our kernel headers being too old.  FIXME: remove
       # this after the next stdenv update.
       "-DFS_NOCOW_FL=0x00800000"
+      # Enable udev's firmware builtin for now.
+      "-DENABLE_FIRMWARE=1"
     ];
 
   # Use /var/lib/udev rather than /etc/udev for the generated hardware
