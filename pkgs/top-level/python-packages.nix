@@ -58,6 +58,11 @@ pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pitz = import ../applications/misc/pitz {
+    inherit (pkgs) stdenv fetchurl;
+    inherit buildPythonPackage tempita jinja2 pyyaml clepy mock nose decorator docutils;
+  };
+
   pycairo = import ../development/python-modules/pycairo {
     inherit (pkgs) stdenv fetchurl pkgconfig cairo x11;
     inherit python;
@@ -533,6 +538,24 @@ pythonPackages = python.modules // rec {
       description = "A pythonic, object-oriented HTTP framework";
     };
   });
+
+
+  clepy = buildPythonPackage rec {
+    name = "clepy-0.3.20";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/clepy/${name}.tar.gz";
+      sha256 = "16vibfxms5z4ld8gbkra6dkhqm2cc3jnn0fwp7mw70nlwxnmm51c";
+    };
+
+    buildInputs = [ mock nose decorator ];
+
+    meta = {
+      homepage = http://code.google.com/p/clepy/;
+      description = "Utilities created by the Cleveland Python users group";
+    };
+  };
+
 
   clientform = buildPythonPackage (rec {
     name = "clientform-0.2.10";
