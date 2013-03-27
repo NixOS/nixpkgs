@@ -652,6 +652,8 @@ let
 
   ddrescue = callPackage ../tools/system/ddrescue { };
 
+  deluge = pythonPackages.deluge;
+
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
 
   despotify = callPackage ../development/libraries/despotify { };
