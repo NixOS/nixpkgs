@@ -7983,7 +7983,10 @@ let
 
   weechat = callPackage ../applications/networking/irc/weechat { };
 
-  wings = callPackage ../applications/graphics/wings { };
+  wings = callPackage ../applications/graphics/wings {
+    erlang = erlangR14B04;
+    esdl = esdl.override { erlang = erlangR14B04; }; 
+  };
 
   wmname = callPackage ../applications/misc/wmname { };
 
