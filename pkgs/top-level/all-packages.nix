@@ -6030,6 +6030,8 @@ let
   linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi);
   linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7 linuxPackages_3_7);
   linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8 linuxPackages_3_8);
+  # Update this when adding a new version!
+  linuxPackages_latest = pkgs.linuxPackages_3_8;
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
