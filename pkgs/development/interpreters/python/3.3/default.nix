@@ -17,7 +17,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.3";
-  version = "${majorVersion}.0";
+  version = "${majorVersion}.1rc1";
 
   buildInputs = filter (p: p != null) [
     zlib bzip2 gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
-    sha256 = "1ybdf7wc8pfw51rf7xcywfw27n6l97qyzd1ibpq151q5dkyi7h8m";
+    sha256 = "1pnsbdzbd3750jcy32sv1760lv7am4x3f33jn1kmdmd82za279gv";
   };
 
   preConfigure = ''
