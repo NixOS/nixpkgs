@@ -30,11 +30,11 @@ assert sambaSupport -> samba != null;
 assert vdpauSupport -> libvdpau != null && ffmpeg.vdpauSupport;
 
 stdenv.mkDerivation rec {
-    name = "xbmc-12.0";
+    name = "xbmc-12.1";
 
     src = fetchurl {
       url = "http://mirrors.xbmc.org/releases/source/${name}.tar.gz";
-      sha256 = "0vy1a38gfbp9vhbjvwqm11sd76gl3s9q0h7gwpsks85m2k88q0ak";
+      sha256 = "1hqyq1vl34sywcj8zgx7kdpf8ljzj969l5w6yy4314c431pg7qr9";
     };
 
     buildInputs = [
