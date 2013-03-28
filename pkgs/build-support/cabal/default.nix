@@ -110,14 +110,16 @@
               done
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
+                if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
+                  # Haskell packages don't need any extra configuration.
+                  continue;
+                fi
                 if [ -d "$p/include" ]; then
                   extraConfigureFlags+=" --extra-include-dir=$p/include"
                 fi
                 for d in lib{,64}; do
                   if [ -d "$p/$d" ]; then
-                    if [ ! -d "$p/$d/ghc-pkgs" ]; then
-                      extraConfigureFlags+=" --extra-lib-dir=$p/$d"
-                    fi
+                    extraConfigureFlags+=" --extra-lib-dir=$p/$d"
                   fi
                 done
               done
