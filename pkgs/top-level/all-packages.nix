@@ -8876,6 +8876,8 @@ let
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
+  wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
+
   nix = nixStable;
 
   nixStable = callPackage ../tools/package-management/nix {
