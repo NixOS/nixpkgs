@@ -8876,7 +8876,7 @@ let
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
-  wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
+  mupen64plus1_5 = callPackage ../misc/emulators/mupen64plus/1.5.nix { };
 
   nix = nixStable;
 
@@ -9064,6 +9064,8 @@ let
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
   };
+
+  wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
   x2x = callPackage ../tools/X11/x2x { };
 
