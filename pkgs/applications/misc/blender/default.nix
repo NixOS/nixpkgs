@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, SDL, cmake, ffmpeg, jackaudio, gettext, glew, ilmbase, libXi, libjpeg,
-libpng, libsamplerate, libsndfile, libtiff, mesa, opencolorio, openimageio, openal, openexr, openjpeg,
-python, zlib, boost }:
+{ stdenv, fetchurl, SDL, boost, cmake, ffmpeg, gettext, glew
+, ilmbase, jackaudio, libXi, libjpeg, libpng, libsamplerate, libsndfile
+, libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   name = "blender-2.66a";
@@ -10,8 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "0wj8x9xk5irvsjc3rm7wzml1j47xcdpdpy84kidafk02biskcqcb";
   };
 
-  buildInputs = [ cmake mesa ffmpeg jackaudio gettext python glew libjpeg libpng zlib openal
-    SDL openexr libsamplerate libsndfile libXi libtiff ilmbase opencolorio openimageio openjpeg boost ];
+  buildInputs = [
+    SDL boost cmake ffmpeg gettext glew ilmbase jackaudio libXi
+    libjpeg libpng libsamplerate libsndfile libtiff mesa openal
+    opencolorio openexr openimageio openjpeg python zlib
+  ];
 
 
   cmakeFlags = [
@@ -19,7 +24,6 @@ stdenv.mkDerivation rec {
     "-DWITH_OPENCOLLADA=OFF"
     "-DWITH_CODEC_FFMPEG=ON"
     "-DWITH_CODEC_SNDFILE=ON"
-    "-DWITH_SYSTEM_OPENJPEG=ON"
     "-DWITH_JACK=ON"
     "-DWITH_INSTALL_PORTABLE=OFF"
     "-DPYTHON_LIBRARY=python${python.majorVersion}m"    
