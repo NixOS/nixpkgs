@@ -3,14 +3,14 @@
 , libtasn1, ebtables, libgcrypt, yajl
 }:
 
-let version = "1.0.2"; in
+let version = "1.0.3"; in
 
 stdenv.mkDerivation {
   name = "libvirt-${version}";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/libvirt-${version}.tar.gz";
-    sha256 = "0yf104r1377pg0kmx6sshmh8v5z0bdvv6266y5gbcn46yx92g34v";
+    sha256 = "0mr727n0ygxk6y69srg3ahmjd7wligamw683x2snmz6wgk6llkzn";
   };
 
   buildInputs =
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   postInstall =
     ''
-      substituteInPlace $out/etc/rc.d/init.d/libvirt-guests \
+      substituteInPlace $out/libexec/libvirt-guests.sh \
         --replace "$out/bin" "${gettext}/bin"
     '';
 
