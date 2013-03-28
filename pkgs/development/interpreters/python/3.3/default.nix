@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   inherit majorVersion version;
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.bz2";
+    url = "http://www.python.org/ftp/python/3.3.1/Python-${version}.tar.bz2";
     sha256 = "1pnsbdzbd3750jcy32sv1760lv7am4x3f33jn1kmdmd82za279gv";
   };
 
