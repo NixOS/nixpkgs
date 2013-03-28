@@ -21,7 +21,7 @@ in
       };
 
       dates = mkOption {
-        default = "00:43";
+        default = "03:15";
         type = types.uniq types.string;
         description = ''
           Specification (in the format described by
@@ -48,18 +48,22 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkMerge [
 
-    #systemd.timers.nix-gc.enable = cfg.automatic;
-    systemd.timers.nix-gc.enable = true;
-    systemd.timers.nix-gc.timerConfig.OnCalendar = cfg.dates;
+    { systemd.services.nix-gc =
+        { description = "Nix Garbage Collector";
+          path  = [ config.environment.nix ];
+          script = "exec nix-collect-garbage ${cfg.options}";
+        };
+    }
 
-    systemd.services.nix-gc =
-      { description = "Nix Garbage Collector";
-        path  = [ config.environment.nix ];
-        script = "exec nix-collect-garbage ${cfg.options}";
-      };
+    (mkIf cfg.automatic {
+      systemd.timers.nix-gc =
+        { wantedBy = [ "timers.target" ];
+          timerConfig.OnCalendar = cfg.dates;
+        };
+    })
 
-  };
+  ];
 
 }
