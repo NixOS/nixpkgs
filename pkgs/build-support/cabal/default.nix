@@ -115,7 +115,9 @@
                 fi
                 for d in lib{,64}; do
                   if [ -d "$p/$d" ]; then
-                    extraConfigureFlags+=" --extra-lib-dir=$p/$d"
+                    if [ ! -d "$p/$d/ghc-pkgs" ]; then
+                      extraConfigureFlags+=" --extra-lib-dir=$p/$d"
+                    fi
                   fi
                 done
               done
