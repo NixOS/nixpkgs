@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
     "--with-postgresql=${postgresql}"
   ];
 
+  postInstall = ''
+    mkdir -p $out/bin
+    ln -s $out/sbin/* $out/bin
+  '';
+
   meta = {
     description = "Enterprise ready, Network Backup Tool";
     homepage = http://bacula.org/;

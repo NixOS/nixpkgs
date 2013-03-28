@@ -1,7 +1,7 @@
-From b40d8783f94666035baae567882c0d4be82cda01 Mon Sep 17 00:00:00 2001
+From 0bc7513439a8b77f62bc8ebcf220b77f83321b75 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:48:19 +0100
-Subject: [PATCH 4/6] Set switch-to-configuration hints for some units
+Subject: [PATCH 4/8] Set switch-to-configuration hints for some units
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -24,22 +24,22 @@ to prevent all user sessions from being killed when this unit changes.
  4 files changed, 12 insertions(+)
 
 diff --git a/units/local-fs.target b/units/local-fs.target
-index dd92b17..dfcbc7b 100644
+index ee02e4e..63ae843 100644
 --- a/units/local-fs.target
 +++ b/units/local-fs.target
-@@ -10,3 +10,5 @@ Description=Local File Systems
- Documentation=man:systemd.special(7)
+@@ -11,3 +11,5 @@ Documentation=man:systemd.special(7)
+ After=local-fs-pre.target
  OnFailure=emergency.target
  OnFailureIsolate=yes
 +
 +X-StopOnReconfiguration=yes
 diff --git a/units/remote-fs.target b/units/remote-fs.target
-index 9e68878..85a53d7 100644
+index e867b8d..02462b4 100644
 --- a/units/remote-fs.target
 +++ b/units/remote-fs.target
-@@ -9,5 +9,7 @@
- Description=Remote File Systems
+@@ -10,5 +10,7 @@ Description=Remote File Systems
  Documentation=man:systemd.special(7)
+ After=remote-fs-pre.target remote-fs-setup.target
  
 +X-StopOnReconfiguration=yes
 +
@@ -70,5 +70,5 @@ index 0869e73..b6ed958 100644
 +# Restart kills all active sessions.
 +X-RestartIfChanged=no
 -- 
-1.8.0.1
+1.8.1
 

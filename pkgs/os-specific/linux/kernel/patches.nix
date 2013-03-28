@@ -2,24 +2,6 @@
 
 let
 
-  fbcondecorConfig =
-    ''
-      FB_CON_DECOR y
-
-      # fbcondecor is picky about some other settings.
-      FB y
-      FB_TILEBLITTING n
-      FB_MATROX n
-      FB_S3 n
-      FB_VT8623 n
-      FB_ARK n
-      FB_CFB_FILLRECT y
-      FB_CFB_COPYAREA y
-      FB_CFB_IMAGEBLIT y
-      FB_VESA y
-      FRAMEBUFFER_CONSOLE y
-    '';
-
   makeTuxonicePatch = { version, kernelVersion, sha256,
     url ? "http://tuxonice.net/files/tuxonice-${version}-for-${kernelVersion}.patch.bz2" }:
     { name = "tuxonice-${kernelVersion}";
@@ -62,47 +44,6 @@ rec {
     { name = "sec_perm-2.6.24";
       patch = ./sec_perm-2.6.24.patch;
       features.secPermPatch = true;
-    };
-
-  fbcondecor_2_6_31 =
-    { name = "fbcondecor-0.9.6-2.6.31.2";
-      patch = fetchurl {
-        url = http://dev.gentoo.org/~spock/projects/fbcondecor/archive/fbcondecor-0.9.6-2.6.31.2.patch;
-        sha256 = "1avk0yn0y2qbpsxf31r6d14y4a1mand01r4k4i71yfxvpqcgxka9";
-      };
-      extraConfig = fbcondecorConfig;
-      features.fbConDecor = true;
-    };
-
-  fbcondecor_2_6_35 =
-    rec {
-      name = "fbcondecor-0.9.6-2.6.35-rc4";
-      patch = fetchurl {
-        url = "http://dev.gentoo.org/~spock/projects/fbcondecor/archive/${name}.patch";
-        sha256 = "0dlks1arr3b3hlmw9k1a1swji2x655why61sa0aahm62faibsg1r";
-      };
-      extraConfig = fbcondecorConfig;
-      features.fbConDecor = true;
-    };
-
-  aufs2_2_6_32 =
-    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2-32;hb=aufs2-32
-      # Note that this merely the patch needed to build AUFS2 as a
-      # standalone package.
-      name = "aufs2";
-      patch = ./aufs2.patch;
-      features.aufsBase = true;
-      features.aufs2 = true;
-    };
-
-  aufs2_2_6_35 =
-    { # From http://git.c3sl.ufpr.br/gitweb?p=aufs/aufs2-standalone.git;a=tree;h=refs/heads/aufs2-35;hb=aufs2-35
-      # Note that this merely the patch needed to build AUFS2 as a
-      # standalone package.
-      name = "aufs2";
-      patch = ./aufs2-35.patch;
-      features.aufsBase = true;
-      features.aufs2 = true;
     };
 
   aufs3_0 = rec {
@@ -164,24 +105,6 @@ rec {
 
   # Increase the timeout on CIFS requests from 15 to 120 seconds to
   # make CIFS more resilient to high load on the CIFS server.
-  cifs_timeout_2_6_15 =
-    { name = "cifs-timeout";
-      patch = ./cifs-timeout-2.6.15.patch;
-      features.cifsTimeout = true;
-    };
-
-  cifs_timeout_2_6_29 =
-    { name = "cifs-timeout";
-      patch = ./cifs-timeout-2.6.29.patch;
-      features.cifsTimeout = true;
-    };
-
-  cifs_timeout_2_6_35 =
-    { name = "cifs-timeout";
-      patch = ./cifs-timeout-2.6.35.patch;
-      features.cifsTimeout = true;
-    };
-
   cifs_timeout_2_6_38 =
     { name = "cifs-timeout";
       patch = ./cifs-timeout-2.6.38.patch;
@@ -192,16 +115,6 @@ rec {
     { name = "no-xsave";
       patch = ./no-xsave.patch;
       features.noXsave = true;
-    };
-
-  dell_rfkill =
-    { name = "dell-rfkill";
-      patch = ./dell-rfkill.patch;
-    };
-
-  sheevaplug_modules_2_6_35 =
-    { name = "sheevaplug_modules-2.6.35";
-      patch = ./sheevaplug_modules-2.6.35.patch;
     };
 
   mips_fpureg_emu =

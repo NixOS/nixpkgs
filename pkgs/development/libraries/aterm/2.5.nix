@@ -16,14 +16,15 @@ stdenv.mkDerivation {
     # SIZEOF_LONG, SIZEOF_INT and SIZEOF_VOID_P being set.
     ./sizeof.patch
   ];
-  
+
   doCheck = true;
 
-  dontDisableStatic = true; 
+  dontDisableStatic = true;
 
   meta = {
     homepage = http://www.cwi.nl/htbin/sen1/twiki/bin/view/SEN1/ATerm;
     license = "LGPL";
     description = "Library for manipulation of term data structures in C";
+    platforms = stdenv.lib.platforms.all;
   };
 }

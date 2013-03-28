@@ -173,6 +173,7 @@ let
       CRASH_DUMP n
       DMAR? n # experimental
       DVB_DYNAMIC_MINORS y # we use udev
+      FHANDLE y # used by systemd
       FUSION y # Fusion MPT device support
       IDE_GD_ATAPI y # ATAPI floppy support
       IRDA_ULTRA y # Ultra (connectionless) protocol

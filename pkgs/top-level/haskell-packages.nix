@@ -1054,8 +1054,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   HFuse = callPackage ../development/libraries/haskell/hfuse {};
 
-  HGL = callPackage ../development/libraries/haskell/HGL {};
-
   highlightingKate = callPackage ../development/libraries/haskell/highlighting-kate {};
 
   hinotify = callPackage ../development/libraries/haskell/hinotify {};

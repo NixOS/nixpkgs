@@ -92,10 +92,6 @@ rec {
   remove = e: filter (x: x != e);
 
   
-  # Given two lists, removes all elements of the first list from the second list
-  removeList = l: filter (x: elem x l);
-
-
   # Return true if `list' has an element `x'.
   elem =
     builtins.elem or

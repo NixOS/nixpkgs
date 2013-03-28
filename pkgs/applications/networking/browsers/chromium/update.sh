@@ -62,7 +62,7 @@ then
             sha256="$(nix_getattr "$output_file" "$channel.sha256")";
         fi;
 
-        sha_insert "$version" "$sha256"
+        sha_insert "$version" "$sha256";
         echo "$sha256";
     }
 else
@@ -80,10 +80,11 @@ get_channel_exprs()
         version="${chline##*,}";
 
         # XXX: Remove case after version 26 is stable:
-        case "${version%%.*}" in
-            26) url="${bucket_url%/}/chromium-$version-lite.tar.xz";;
-            *)  url="${bucket_url%/}/chromium-$version.tar.bz2";;
-        esac;
+        if [ "${version%%.*}" -ge 26 ]; then
+            url="${bucket_url%/}/chromium-$version.tar.xz";
+        else
+            url="${bucket_url%/}/chromium-$version.tar.bz2";
+        fi;
 
         echo -n "Checking if sha256 of version $version is cached..." >&2;
         if sha256="$(sha_lookup "$version")";

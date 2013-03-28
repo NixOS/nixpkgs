@@ -21,6 +21,9 @@
 # dependencies for >= v26
 , speechd, libXdamage
 
+# dependencies for >= v27
+, libXtst
+
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 
@@ -88,7 +91,9 @@ let
   ];
 
   pre26 = versionOlder sourceInfo.version "26.0.0.0";
+  pre27 = versionOlder sourceInfo.version "27.0.0.0";
   post25 = !pre26;
+  post26 = !pre27;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -118,16 +123,16 @@ in stdenv.mkDerivation rec {
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio
     ++ optional pre26 libvpx
-    ++ optionals post25 [ speechd libXdamage ];
+    ++ optionals post25 [ speechd libXdamage ]
+    ++ optional post26 libXtst;
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
   patches = optional cupsSupport ./cups_allow_deprecated.patch
-         ++ optional pulseSupport ./pulseaudio_array_bounds.patch
-         ++ optional post25 ./clone_detached.patch
-         ++ [ ./glibc-2.16-use-siginfo_t.patch ];
+         ++ optional (pulseSupport && pre27) ./pulseaudio_array_bounds.patch
+         ++ optional pre27 ./glibc-2.16-use-siginfo_t.patch;
 
   postPatch = ''
     sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
