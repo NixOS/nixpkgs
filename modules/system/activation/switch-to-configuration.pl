@@ -33,8 +33,12 @@ openlog("nixos", "", LOG_USER);
 # Install or update the bootloader.
 if ($action eq "switch" || $action eq "boot") {
     system("@installBootLoader@ $out") == 0 or exit 1;
-    exit 0 if $action eq "boot";
 }
+
+# Just in case the new configuration hangs the system, do a sync now.
+system("sync") unless ($ENV{"NIXOS_NO_SYNC"} // "") eq "1";
+
+exit 0 if $action eq "boot";
 
 # Check if we can activate the new configuration.
 my $oldVersion = read_file("/run/current-system/init-interface-version", err_mode => 'quiet') // "";

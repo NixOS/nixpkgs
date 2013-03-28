@@ -191,9 +191,6 @@ fi
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
 if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
-    # Just in case the new configuration hangs the system, do a sync now.
-    sync
-
     $pathToConfig/bin/switch-to-configuration "$action"
 fi
 
