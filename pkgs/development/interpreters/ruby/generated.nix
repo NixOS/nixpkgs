@@ -71,6 +71,8 @@ g: # Get dependencies from patched gems
     rdiscount = g.rdiscount_2_0_7_1;
     rdoc = g.rdoc_3_12_2;
     remote_syslog = g.remote_syslog_1_6_13;
+    right_aws = g.right_aws_3_0_5;
+    right_http_connection = g.right_http_connection_1_3_0;
     rjb = g.rjb_1_4_6;
     rspec = g.rspec_2_11_0;
     rspec_core = g.rspec_core_2_11_1;
@@ -98,7 +100,7 @@ g: # Get dependencies from patched gems
     xml_simple = g.xml_simple_1_1_1;
     yajl_ruby = g.yajl_ruby_1_1_0;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''right_aws'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
   gems = {
     ZenTest_4_9_0 = {
       basename = ''ZenTest'';
@@ -1105,6 +1107,73 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''remote_syslog-1.6.13'';
       requiredGems = [ g.servolux_0_10_0 g.file_tail_1_0_12 g.eventmachine_1_0_3 g.eventmachine_tail_0_6_4 g.syslog_protocol_0_9_2 g.em_resolv_replace_1_1_3 ];
       sha256 = ''0q35j02k2l3fw3fdzq0i3rd6chsqr982gj13f3m3lsxm7kms03nw'';
+    };
+    right_aws_3_0_5 = {
+      basename = ''right_aws'';
+      meta = {
+        description = ''The RightScale AWS gems have been designed to provide a robust, fast, and secure interface to Amazon EC2, EBS, S3, SQS, SDB, and CloudFront.'';
+        longDescription = ''== DESCRIPTION:
+
+The RightScale AWS gems have been designed to provide a robust, fast, and secure interface to Amazon EC2, EBS, S3, SQS, SDB, and CloudFront.
+These gems have been used in production by RightScale since late 2006 and are being maintained to track enhancements made by Amazon.
+The RightScale AWS gems comprise:
+
+- RightAws::Ec2 -- interface to Amazon EC2 (Elastic Compute Cloud) and the
+  associated EBS (Elastic Block Store)
+- RightAws::S3 and RightAws::S3Interface -- interface to Amazon S3 (Simple Storage Service)
+- RightAws::Sqs and RightAws::SqsInterface -- interface to first-generation Amazon SQS (Simple Queue Service) (API version 2007-05-01)
+- RightAws::SqsGen2 and RightAws::SqsGen2Interface -- interface to second-generation Amazon SQS (Simple Queue Service) (API version 2008-01-01)
+- RightAws::SdbInterface and RightAws::ActiveSdb -- interface to Amazon SDB (SimpleDB)
+- RightAws::AcfInterface -- interface to Amazon CloudFront, a content distribution service
+
+== FEATURES:
+
+- Full programmmatic access to EC2, EBS, S3, SQS, SDB, and CloudFront.
+- Complete error handling: all operations check for errors and report complete
+  error information by raising an AwsError.
+- Persistent HTTP connections with robust network-level retry layer using
+  RightHttpConnection).  This includes socket timeouts and retries.
+- Robust HTTP-level retry layer.  Certain (user-adjustable) HTTP errors returned
+  by Amazon's services are classified as temporary errors.
+  These errors are automaticallly retried using exponentially increasing intervals.
+  The number of retries is user-configurable.
+- Fast REXML-based parsing of responses (as fast as a pure Ruby solution allows).
+- Uses libxml (if available) for faster response parsing.
+- Support for large S3 list operations.  Buckets and key subfolders containing
+  many (&gt; 1000) keys are listed in entirety.  Operations based on list (like
+  bucket clear) work on arbitrary numbers of keys.
+- Support for streaming GETs from S3, and streaming PUTs to S3 if the data source is a file.
+- Support for single-threaded usage, multithreaded usage, as well as usage with multiple
+  AWS accounts.
+- Support for both first- and second-generation SQS (API versions 2007-05-01
+  and 2008-01-01).  These versions of SQS are not compatible.
+- Support for signature versions 0 and 1 on SQS, SDB, and EC2.
+- Interoperability with any cloud running Eucalyptus (http://eucalyptus.cs.ucsb.edu)
+- Test suite (requires AWS account to do "live" testing).
+'';
+      };
+      name = ''right_aws-3.0.5'';
+      requiredGems = [ g.right_http_connection_1_3_0 ];
+      sha256 = ''0pxdmxmqiidy3dpxsp4l0b1l6nq9b1sh4p1gkzalqm4l24646h4k'';
+    };
+    right_http_connection_1_3_0 = {
+      basename = ''right_http_connection'';
+      meta = {
+        description = ''RightScale's robust HTTP/S connection module'';
+        homepage = ''http://rightscale.rubyforge.org/'';
+        longDescription = ''Rightscale::HttpConnection is a robust HTTP/S library.  It implements a retry
+algorithm for low-level network errors.
+
+== FEATURES:
+
+- provides put/get streaming
+- does configurable retries on connect and read timeouts, DNS failures, etc.
+- HTTPS certificate checking
+'';
+      };
+      name = ''right_http_connection-1.3.0'';
+      requiredGems = [  ];
+      sha256 = ''0900zy2ya57vhxdkdm2gj7xmvzj4gwm5l7ad0lh68ka3vxhdi7ap'';
     };
     rjb_1_4_2 = {
       basename = ''rjb'';
