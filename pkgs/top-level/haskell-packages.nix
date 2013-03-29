@@ -444,7 +444,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
 
-  accelerateCuda = callPackage ../development/libraries/haskell/accelerate-cuda {};
+  accelerateCuda = callPackage ../development/libraries/haskell/accelerate-cuda {
+    languageCQuote = self.languageCQuote_0_4_4;
+  };
 
   accelerateExamples = callPackage ../development/libraries/haskell/accelerate-examples {};
 
