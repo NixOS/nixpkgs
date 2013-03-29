@@ -7547,6 +7547,10 @@ let
 
   ogmtools = callPackage ../applications/video/ogmtools { };
 
+  omxplayer = callPackage ../applications/video/omxplayer {
+    stdenv = overrideGCC stdenv gcc47;
+  };
+
   oneteam = callPackage ../applications/networking/instant-messengers/oneteam {};
 
   openbox = callPackage ../applications/window-managers/openbox { };
