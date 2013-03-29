@@ -1,7 +1,8 @@
-diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
---- perl-5.14.2-orig/Configure	2011-09-26 11:44:34.000000000 +0200
-+++ perl-5.14.2/Configure	2012-01-20 17:05:23.089223129 +0100
-@@ -106,15 +106,7 @@
+diff --git a/Configure b/Configure
+index fdbbf20..ba1fd07 100755
+--- a/Configure
++++ b/Configure
+@@ -106,15 +106,7 @@ if test -d c:/. || ( uname -a | grep -i 'os\(/\|\)2' ) 2>&1 >/dev/null ; then
  fi
  
  : Proper PATH setting
@@ -18,7 +19,7 @@ diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
  
  for p in $paths
  do
-@@ -1311,8 +1303,7 @@
+@@ -1323,8 +1315,7 @@ archobjs=''
  archname=''
  : Possible local include directories to search.
  : Set locincpth to "" in a hint file to defeat local include searches.
@@ -28,8 +29,8 @@ diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
  :
  : no include file wanted by default
  inclwanted=''
-@@ -1328,17 +1319,12 @@
- archobjs=''
+@@ -1335,17 +1326,12 @@ DEBUGGING=''
+ 
  libnames=''
  : change the next line if compiling for Xenix/286 on Xenix/386
 -xlibpth='/usr/lib/386 /lib/386'
@@ -49,7 +50,7 @@ diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
  
  : Private path used by Configure to find libraries.  Its value
  : is prepended to libpth. This variable takes care of special
-@@ -1371,8 +1357,6 @@
+@@ -1380,8 +1366,6 @@ libswanted="sfio socket bind inet nsl nm ndbm gdbm dbm db malloc dl dld ld sun"
  libswanted="$libswanted m crypt sec util c cposix posix ucb bsd BSD"
  : We probably want to search /usr/shlib before most other libraries.
  : This is only used by the lib/ExtUtils/MakeMaker.pm routine extliblist.
@@ -58,7 +59,7 @@ diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
  : Do not use vfork unless overridden by a hint file.
  usevfork=false
  
-@@ -2380,7 +2364,6 @@
+@@ -2389,7 +2373,6 @@ uname
  zip
  "
  pth=`echo $PATH | sed -e "s/$p_/ /g"`
@@ -66,7 +67,7 @@ diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
  for file in $loclist; do
  	eval xxx=\$$file
  	case "$xxx" in
-@@ -4785,7 +4768,7 @@
+@@ -4708,7 +4691,7 @@ $rm -f testcpp.c testcpp.out
  : Set private lib path
  case "$plibpth" in
  '') if ./mips; then
@@ -75,7 +76,7 @@ diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
  	fi;;
  esac
  case "$libpth" in
-@@ -8390,13 +8373,8 @@
+@@ -8354,13 +8337,8 @@ esac
  echo " "
  case "$sysman" in
  '') 
@@ -91,7 +92,7 @@ diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
  	;;
  esac
  if $test -d "$sysman"; then
-@@ -19721,9 +19699,10 @@
+@@ -19742,9 +19720,10 @@ $rm_try tryp
  case "$full_ar" in
  '') full_ar=$ar ;;
  esac
@@ -103,10 +104,11 @@ diff -ru -x '*~' perl-5.14.2-orig/Configure perl-5.14.2/Configure
  
  : see what type gids are declared as in the kernel
  echo " "
-diff -ru -x '*~' perl-5.14.2-orig/ext/Errno/Errno_pm.PL perl-5.14.2/ext/Errno/Errno_pm.PL
---- perl-5.14.2-orig/ext/Errno/Errno_pm.PL	2011-09-26 11:44:34.000000000 +0200
-+++ perl-5.14.2/ext/Errno/Errno_pm.PL	2012-01-20 17:02:07.938138311 +0100
-@@ -137,11 +137,7 @@
+diff --git a/ext/Errno/Errno_pm.PL b/ext/Errno/Errno_pm.PL
+index 439f254..2cdfdb0 100644
+--- a/ext/Errno/Errno_pm.PL
++++ b/ext/Errno/Errno_pm.PL
+@@ -137,11 +137,7 @@ sub get_files {
  	if ($dep =~ /(\S+errno\.h)/) {
  	     $file{$1} = 1;
  	}
@@ -119,10 +121,11 @@ diff -ru -x '*~' perl-5.14.2-orig/ext/Errno/Errno_pm.PL perl-5.14.2/ext/Errno/Er
  	# Some Linuxes have weird errno.hs which generate
  	# no #file or #line directives
  	my $linux_errno_h = -e '/usr/include/errno.h' ?
-diff -ru -x '*~' perl-5.14.2-orig/hints/freebsd.sh perl-5.14.2/hints/freebsd.sh
---- perl-5.14.2-orig/hints/freebsd.sh	2011-09-19 15:18:22.000000000 +0200
-+++ perl-5.14.2/hints/freebsd.sh	2012-01-20 17:10:37.267924044 +0100
-@@ -118,21 +118,21 @@
+diff --git a/hints/freebsd.sh b/hints/freebsd.sh
+index a67c0bb..0f07ca5 100644
+--- a/hints/freebsd.sh
++++ b/hints/freebsd.sh
+@@ -119,21 +119,21 @@ case "$osvers" in
          objformat=`/usr/bin/objformat`
          if [ x$objformat = xaout ]; then
              if [ -e /usr/lib/aout ]; then
@@ -150,3 +153,73 @@ diff -ru -x '*~' perl-5.14.2-orig/hints/freebsd.sh perl-5.14.2/hints/freebsd.sh
         ldflags="-Wl,-E "
          lddlflags="-shared "
          cccdlflags='-DPIC -fPIC'
+diff --git a/hints/linux.sh b/hints/linux.sh
+index 688c68d..c12f5f5 100644
+--- a/hints/linux.sh
++++ b/hints/linux.sh
+@@ -60,17 +60,6 @@ libswanted="$*"
+ # Debian 4.0 puts ndbm in the -lgdbm_compat library.
+ libswanted="$libswanted gdbm_compat"
+ 
+-# If you have glibc, then report the version for ./myconfig bug reporting.
+-# (Configure doesn't need to know the specific version since it just uses
+-# gcc to load the library for all tests.)
+-# We don't use __GLIBC__ and  __GLIBC_MINOR__ because they
+-# are insufficiently precise to distinguish things like
+-# libc-2.0.6 and libc-2.0.7.
+-if test -L /lib/libc.so.6; then
+-    libc=`ls -l /lib/libc.so.6 | awk '{print $NF}'`
+-    libc=/lib/$libc
+-fi
+-
+ # Configure may fail to find lstat() since it's a static/inline
+ # function in <sys/stat.h>.
+ d_lstat=define
+@@ -154,24 +143,6 @@ case "$optimize" in
+     ;;
+ esac
+ 
+-# Ubuntu 11.04 (and later, presumably) doesn't keep most libraries
+-# (such as -lm) in /lib or /usr/lib.  So we have to ask gcc to tell us
+-# where to look.  We don't want gcc's own libraries, however, so we
+-# filter those out.
+-# This could be conditional on Unbuntu, but other distributions may
+-# follow suit, and this scheme seems to work even on rather old gcc's.
+-# This unconditionally uses gcc because even if the user is using another
+-# compiler, we still need to find the math library and friends, and I don't
+-# know how other compilers will cope with that situation.
+-# Morever, if the user has their own gcc earlier in $PATH than the system gcc,
+-# we don't want its libraries. So we try to prefer the system gcc
+-# Still, as an escape hatch, allow Configure command line overrides to
+-# plibpth to bypass this check.
+-if [ -x /usr/bin/gcc ] ; then
+-    gcc=/usr/bin/gcc
+-else
+-    gcc=gcc
+-fi
+ 
+ case "$plibpth" in
+ '') plibpth=`LANG=C LC_ALL=C $gcc -print-search-dirs | grep libraries |
+@@ -345,22 +316,6 @@ sparc*)
+ 	;;
+ esac
+ 
+-# SuSE8.2 has /usr/lib/libndbm* which are ld scripts rather than
+-# true libraries. The scripts cause binding against static
+-# version of -lgdbm which is a bad idea. So if we have 'nm'
+-# make sure it can read the file
+-# NI-S 2003/08/07
+-if [ -r /usr/lib/libndbm.so  -a  -x /usr/bin/nm ] ; then
+-   if /usr/bin/nm /usr/lib/libndbm.so >/dev/null 2>&1 ; then
+-    echo 'Your shared -lndbm seems to be a real library.'
+-   else
+-    echo 'Your shared -lndbm is not a real library.'
+-    set `echo X "$libswanted "| sed -e 's/ ndbm / /'`
+-    shift
+-    libswanted="$*"
+-   fi
+-fi
+-
+ 
+ # This script UU/usethreads.cbu will get 'called-back' by Configure
+ # after it has prompted the user for whether to use threads.
