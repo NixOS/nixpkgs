@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "case-insensitive";
-  version = "1.0";
-  sha256 = "1x437b5yyh930a5dr642lvfdgpx12w4ms70whiw1ffjjhssb88zk";
+  version = "1.0.0.1";
+  sha256 = "1yp8895qvxcmai0hvxdq77qss9cia2f9fyn6rm0hln3rcx8n53xm";
   buildDepends = [ deepseq hashable text ];
   testDepends = [ HUnit testFramework testFrameworkHunit text ];
   meta = {
