@@ -1191,7 +1191,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   languageC_0_3_2_1 = callPackage ../development/libraries/haskell/language-c/0.3.2.1.nix {};
   languageC = self.languageC_0_4_2;
 
-  languageCQuote = callPackage ../development/libraries/haskell/language-c-quote/default.nix {};
+  languageCQuote_0_4_4 = callPackage ../development/libraries/haskell/language-c-quote/0.4.4.nix {};
+  languageCQuote_0_7_1 = callPackage ../development/libraries/haskell/language-c-quote/0.7.1.nix {};
+  languageCQuote = self.languageCQuote_0_7_1;
 
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
