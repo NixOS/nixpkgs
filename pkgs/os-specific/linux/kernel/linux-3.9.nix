@@ -252,7 +252,7 @@ import ./generic.nix (
 
   rec {
     version = "3.9-rc4";
-    modDirVersion = "3.9.0-rc3";
+    modDirVersion = "3.9.0-rc4";
     testing = true;
 
     preConfigure = ''
