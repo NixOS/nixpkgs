@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     homepage = http://i3wm.org;
     maintainers = [ stdenv.lib.maintainers.garbas ];
     license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.plaforms.all;
   };
 
 }
