@@ -47,13 +47,6 @@ in
 	'';
       };
 
-      user = mkOption {
-	default = "bitlbee";
-	description = ''
-	  The user that executes the BitlBee daemon.
-	'';	
-      };
-
       authMode = mkOption {
 	default = "Open";
 	check = authModeCheck;
@@ -62,13 +55,6 @@ in
 	  	Open -- Accept connections from anyone, use NickServ for user authentication.
 	  	Closed -- Require authorization (using the PASS command during login) before allowing the user to connect at all.
 	  	Registered -- Only allow registered users to use this server; this disables the register- and the account command until the user identifies himself.
-	'';	
-      };
-
-      configDir = mkOption {
-	default = "/var/lib/bitlbee";
-	description = ''
-	  Specifyies the directory that stores all the per-user configuration files.
 	'';	
       };
 
@@ -96,14 +82,14 @@ in
   config = mkIf config.services.bitlbee.enable {
 
     users.extraUsers = singleton
-      { name = "${cfg.user}";
+      { name = "bitlbee";
 	uid = bitlbeeUid;
 	description = "BitlBee user";
-	home = "/var/empty";
+	home = "/var/lib/bitlbee";
       };
 
     users.extraGroups = singleton
-      { name = "${cfg.user}";
+      { name = "bitlbee";
 	gid = config.ids.gids.bitlbee;
       };
 
@@ -111,15 +97,6 @@ in
       { description = "BitlBee IRC to other chat networks gateway";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-	preStart = 
-	  ''
-   	  if ! test -d ${cfg.configDir}
-   	  then
-		mkdir -p ${cfg.configDir}
-		chown ${cfg.user}:${cfg.user} ${cfg.configDir}
-		chmod 750 ${cfg.configDir}
-   	  fi
-          '';
 	serviceConfig.ExecStart = "${pkgs.bitlbee}/sbin/bitlbee -F -n -c /etc/bitlbee.conf";
       };
 
@@ -131,11 +108,11 @@ in
 		''
 		[settings]
 		RunMode = Daemon
-		User = ${cfg.user}	
+		User = bitlbee	
+		ConfigDir = /var/lib/bitlbee			
 		DaemonInterface = ${cfg.interface}
 		DaemonPort = ${toString cfg.portNumber} 
 		AuthMode = ${cfg.authMode}
-		ConfigDir = ${cfg.configDir}			
 		${cfg.extraSettings}
 		[defaults]
 		${cfg.extraDefaults}
