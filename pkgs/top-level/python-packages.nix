@@ -2776,11 +2776,11 @@ pythonPackages = python.modules // rec {
 
 
   prettytable = buildPythonPackage rec {
-    name = "prettytable-0.5";
+    name = "prettytable-0.7.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.gz";
-      md5 = "13a6930d775395f393afd86948afa4fa";
+      url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.bz2";
+      sha1 = "ad346a18d92c1d95f2295397c7a8a4f489e48851";
     };
 
     meta = {
