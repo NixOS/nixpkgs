@@ -4,9 +4,13 @@ with pkgs.lib;
 
 let
 
+  cfg = config.services.bitlbee;
   bitlbeeUid = config.ids.uids.bitlbee;
 
-  inherit (config.services.bitlbee) portNumber interface;
+  authModeCheck = v:
+    v == "Open" ||
+    v == "Closed" ||
+    v == "Registered";
 
 in
 
@@ -43,6 +47,45 @@ in
 	'';
       };
 
+      user = mkOption {
+	default = "bitlbee";
+	description = ''
+	  The user that executes the BitlBee daemon.
+	'';	
+      };
+
+      authMode = mkOption {
+	default = "Open";
+	check = authModeCheck;
+	description = ''
+	  The following authentication modes are available:
+	  	Open -- Accept connections from anyone, use NickServ for user authentication.
+	  	Closed -- Require authorization (using the PASS command during login) before allowing the user to connect at all.
+	  	Registered -- Only allow registered users to use this server; this disables the register- and the account command until the user identifies himself.
+	'';	
+      };
+
+      configDir = mkOption {
+	default = "/var/lib/bitlbee";
+	description = ''
+	  Specifyies the directory that stores all the per-user configuration files.
+	'';	
+      };
+
+      extraSettings = mkOption {
+	default = "";
+	description = ''
+	  Will be inserted in the Settings section of the config file.
+	'';	
+      };
+
+      extraDefaults = mkOption {
+	default = "";
+	description = ''
+	  Will be inserted in the Default section of the config file.
+	'';	
+      };
+
     };
 
   };
@@ -53,40 +96,53 @@ in
   config = mkIf config.services.bitlbee.enable {
 
     users.extraUsers = singleton
-      { name = "bitlbee";
+      { name = "${cfg.user}";
 	uid = bitlbeeUid;
 	description = "BitlBee user";
 	home = "/var/empty";
       };
 
     users.extraGroups = singleton
-      { name = "bitlbee";
+      { name = "${cfg.user}";
 	gid = config.ids.gids.bitlbee;
       };
 
-    jobs.bitlbee =
+    systemd.services.bitlbee = 
       { description = "BitlBee IRC to other chat networks gateway";
-	name = "bitlbee";
-
-	startOn = "ip-up";
-
-	preStart =
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+	preStart = 
 	  ''
-	    if ! test -d /var/lib/bitlbee
-	    then
-		mkdir -p /var/lib/bitlbee
-		chown bitlbee:bitlbee /var/lib/bitlbee
-	    fi
-	  '';
-
-	exec =
-	  ''
-	    ${pkgs.bitlbee}/sbin/bitlbee -F -p ${toString portNumber} \
-	      -i ${interface} -u bitlbee
-	  '';
+   	  if ! test -d ${cfg.configDir}
+   	  then
+		mkdir -p ${cfg.configDir}
+		chown ${cfg.user}:${cfg.user} ${cfg.configDir}
+		chmod 750 ${cfg.configDir}
+   	  fi
+          '';
+	serviceConfig.ExecStart = "${pkgs.bitlbee}/sbin/bitlbee -F -n -c /etc/bitlbee.conf";
       };
 
     environment.systemPackages = [ pkgs.bitlbee ];
+
+    environment.etc =
+      [
+	{ source = pkgs.writeText "bitlbee.conf"
+		''
+		[settings]
+		RunMode = Daemon
+		User = ${cfg.user}	
+		DaemonInterface = ${cfg.interface}
+		DaemonPort = ${toString cfg.portNumber} 
+		AuthMode = ${cfg.authMode}
+		ConfigDir = ${cfg.configDir}			
+		${cfg.extraSettings}
+		[defaults]
+		${cfg.extraDefaults}
+		'';
+          target = "bitlbee.conf";
+        }
+      ];
 
   };
 
