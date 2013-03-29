@@ -770,6 +770,8 @@ let
 
   libbsd = callPackage ../development/libraries/libbsd { };
 
+  lprof = callPackage ../tools/graphics/lprof { };
+
   flvtool2 = callPackage ../tools/video/flvtool2 { };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
