@@ -87,9 +87,9 @@ let
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
+          auth sufficient pam_unix.so ${optionalString allowNullPassword "nullok"} likeauth
           ${optionalString otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
-          auth sufficient pam_unix.so ${optionalString allowNullPassword "nullok"} likeauth
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
           ${optionalString config.krb5.enable ''

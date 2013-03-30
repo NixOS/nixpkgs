@@ -39,7 +39,7 @@ let
       }
       passdb {
         driver = pam
-        args = dovecot2
+        args = ${optionalString cfg.showPAMFailure "failure_show_msg=yes"} dovecot2
       }
 
       pop3_uidl_format = %08Xv%08Xu
@@ -111,6 +111,10 @@ in
         description = "Server key.";
       };
 
+      showPAMFailure = mkOption {
+        default = false;
+        description = "Show the PAM failure message on authentication error (useful for OTPW).";
+      };
     };
 
   };
