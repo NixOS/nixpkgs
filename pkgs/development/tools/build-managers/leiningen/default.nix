@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "Project automation for Clojure";
     license = "EPL";
     platforms = stdenv.lib.platforms.unix;
+    maintainer = with stdenv.lib.maintainers; [the-kenny];
   };
 }
