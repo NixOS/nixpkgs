@@ -1317,6 +1317,8 @@ let
 
   ossec = callPackage ../tools/security/ossec {};
 
+  otpw = callPackage ../os-specific/linux/otpw { };
+
   p7zip = callPackage ../tools/archivers/p7zip { };
 
   pal = callPackage ../tools/misc/pal { };
