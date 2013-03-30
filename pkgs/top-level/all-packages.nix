@@ -8078,9 +8078,7 @@ let
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
-  xpra = callPackage ../tools/X11/xpra {
-    inherit (pythonPackages) notify;
-  };
+  xpra = callPackage ../tools/X11/xpra { };
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome) libglade;
