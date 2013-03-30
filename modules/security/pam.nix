@@ -41,6 +41,8 @@ let
     , # If set, user listed in /etc/pamusb.conf are able to log in with
       # the associated usb key.
       usbAuth ? config.security.pam.usb.enable
+    , # If set, OTPW system will be used (if ~/.otpw exists)
+      otpwAuth ? config.security.pam.enableOTPW
     , # If set, the calling user's SSH agent is used to authenticate
       # against the keys in the calling user's ~/.ssh/authorized_keys.
       # This is useful for "sudo" on password-less remote systems.
@@ -85,6 +87,8 @@ let
               "auth sufficient ${pkgs.pam_ssh_agent_auth}/libexec/pam_ssh_agent_auth.so file=~/.ssh/authorized_keys:~/.ssh/authorized_keys2:/etc/ssh/authorized_keys.d/%u"}
           ${optionalString usbAuth
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
+          ${optionalString otpwAuth
+              "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
           auth sufficient pam_unix.so ${optionalString allowNullPassword "nullok"} likeauth
           ${optionalString config.users.ldap.enable
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
@@ -110,6 +114,8 @@ let
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.krb5.enable
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
+          ${optionalString otpwAuth
+              "session optional ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString startSession
               "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
           ${optionalString forwardXAuth
@@ -209,6 +215,13 @@ in
         '';
     };
 
+    security.pam.enableOTPW = mkOption {
+      default = false;
+      description = ''
+        Enable the OTPW (one-time password) PAM module
+      '';
+    };
+
     users.motd = mkOption {
       default = null;
       example = "Today is Sweetmorn, the 4th day of The Aftermath in the YOLD 3178.";
@@ -227,7 +240,8 @@ in
       # Include the PAM modules in the system path mostly for the manpages.
       [ pkgs.pam ]
       ++ optional config.users.ldap.enable pam_ldap
-      ++ optional config.krb5.enable [pam_krb5 pam_ccreds];
+      ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
+      ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ];
 
     environment.etc =
       map makePAMService config.security.pam.services
