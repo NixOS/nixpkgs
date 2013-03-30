@@ -5103,12 +5103,14 @@ let
   wxGTK = wxGTK28;
 
   wxGTK28 = callPackage ../development/libraries/wxGTK-2.8 {
-    inherit (gnome) GConf;
+    #inherit (gnome) GConf; # disable gstreamer until orbit gets fixed for new glib
+    GConf = null; gstreamer = null; gst_plugins_base = null;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
   wxGTK29 = callPackage ../development/libraries/wxGTK-2.9/default.nix {
-    inherit (gnome) GConf;
+    #inherit (gnome) GConf; # disable gstreamer until orbit gets fixed for new glib
+    GConf = null; gstreamer = null; gst_plugins_base = null;
     withMesa = lib.elem system lib.platforms.mesaPlatforms;
   };
 
