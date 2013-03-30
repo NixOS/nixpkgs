@@ -1271,6 +1271,8 @@ let
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
+  oathToolkit = callPackage ../tools/security/oath-toolkit { };
+
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
 
   obexd = callPackage ../tools/bluetooth/obexd { };
@@ -5241,6 +5243,8 @@ let
     javac  = gcj;
     jvm    = gcj;
     xerces = xercesJava;  };
+
+  xmlsec = callPackage ../development/libraries/xmlsec { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
