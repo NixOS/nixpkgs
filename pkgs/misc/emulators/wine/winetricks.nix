@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchsvn {
     url = "http://winetricks.googlecode.com/svn/trunk";
     inherit rev;
+    sha256 = "01v13qw4sxmfm09g9amqycnzy743gdrhvv23rjr9255dzlrj1s8f";
   };
 
   buildInputs = [ perl which ];
