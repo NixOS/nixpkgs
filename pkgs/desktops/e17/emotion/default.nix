@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, ecore, evas, eet, eina, edje }:
+{ stdenv, fetchurl, pkgconfig, ecore, evas, eet, eina, edje, vlc }:
 stdenv.mkDerivation rec {
   name = "emotion-${version}";
   version = "1.7.5";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
     sha256 = "1sfw8kpj2fcqymzd6q7p51xxib1n2arvjl1hnwhqkvwhlsq2b4sw";
   };
-  buildInputs = [ pkgconfig ecore evas eet eina edje ];
+  buildInputs = [ pkgconfig ecore evas eet eina edje vlc ];
   meta = {
     description = "A library to easily integrate media playback into EFL applications";
     longDescription = ''
