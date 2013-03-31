@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     ./no-optimization.patch
     ./dhclient.patch 
     ./no-ast-transl.patch
+    ./fix-app-icon.patch
     ];
 
   # Should I be using pygtk's propogated build inputs?
