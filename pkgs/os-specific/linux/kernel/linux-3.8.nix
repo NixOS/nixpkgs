@@ -261,7 +261,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "1f1b6e09cb6ba656b28a41eb9e16e11576879f14574c0cb861b24734f3c5899f";
+      sha256 = "17w9qprk8ixjc6w0qk2p2jgqfxhmw4b9xss1iar5d9kbrc4nw6qz";
     };
 
     config = configWithPlatform stdenv.platform;
