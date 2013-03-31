@@ -1708,6 +1708,23 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  http_signature = buildPythonPackage (rec {
+    name = "http_signature-0.1.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/h/http_signature/${name}.tar.gz";
+      md5 = "015061846254bd5d8c5dbc2913985153";
+    };
+
+    propagatedBuildInputs = [pycrypto];
+
+    meta = {
+      homepage = https://github.com/atl/py-http-signature;
+      description = "";
+      license = stdenv.lib.licenses.mit;
+    };
+  });
+
   httplib2 = buildPythonPackage rec {
     name = "httplib2-0.8";
 
@@ -3889,6 +3906,23 @@ pythonPackages = python.modules // rec {
       license = "BSD";
     };
   });
+
+  smartdc = buildPythonPackage rec {
+    name = "smartdc-0.1.12";
+
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/s/smartdc/smartdc-0.1.12.tar.gz;
+      md5 = "b960f61facafc879142b699050f6d8b4";
+    };
+
+    propagatedBuildInputs = [ requests http_signature ];
+
+    meta = {
+      description = "Joyent SmartDataCenter CloudAPI connector using http-signature authentication via Requests";
+      homepage = https://github.com/atl/py-smartdc;
+      license = pkgs.lib.licenses.mit;
+    };
+  };
 
   sphinx = buildPythonPackage (rec {
     name = "Sphinx-1.1.3";
