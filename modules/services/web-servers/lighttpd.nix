@@ -7,6 +7,9 @@ with pkgs.lib;
 let
 
   cfg = config.services.lighttpd;
+  configFile = pkgs.writeText "lighttpd.conf" ''
+    ${cfg.configText}
+  '';
 
 in
 
@@ -64,20 +67,10 @@ in
       description = "Lighttpd Web Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.lighttpd}/sbin/lighttpd -D -f /etc/lighttpd.conf";
+      serviceConfig.ExecStart = "${pkgs.lighttpd}/sbin/lighttpd -D -f ${configFile}";
       # SIGINT => graceful shutdown
       serviceConfig.KillSignal = "SIGINT";
     };
-
-    environment.etc =
-      [
-        { source = pkgs.writeText "lighttpd.conf"
-            ''
-            ${cfg.configText}
-            '';
-          target = "lighttpd.conf";
-        }
-      ];
 
     users.extraUsers.lighttpd = {
       group = "lighttpd";
