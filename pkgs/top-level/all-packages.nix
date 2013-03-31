@@ -1950,6 +1950,8 @@ let
 
   bigloo = callPackage ../development/compilers/bigloo { };
 
+  chicken = callPackage ../development/compilers/chicken { };
+
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
   clangUnwrapped = callPackage ../development/compilers/llvm/clang.nix {
