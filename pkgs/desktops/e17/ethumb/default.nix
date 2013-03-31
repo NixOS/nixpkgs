@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, eina, evas, ecore, edje, eet }:
+{ stdenv, fetchurl, pkgconfig, eina, evas, ecore, edje, eet, e_dbus }:
 stdenv.mkDerivation rec {
   name = "ethumb-${version}";
   version = "1.7.5";
@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
     sha256 = "0prka3knz8p2n46dfrzgwn55khhhrhjny4vvnzkjcwmhvz7kgc9l";
   };
   buildInputs = [ pkgconfig eina evas ecore edje eet ];
+  propagatedBuildInputs = [ e_dbus ];
   meta = {
     description = "A thumbnail generation library";
     longDescription = ''
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
       * create thumbnails with a predefined frame (possibly an edje frame);
       * have an option to create fdo-like thumbnails;
       * have a client/server utility;
-      * TODO: make thumbnails from edje backgrounds, icons and themes; 
+      * TODO: make thumbnails from edje backgrounds, icons and themes;
     '';
     homepage = http://enlightenment.org/;
     license = stdenv.lib.licenses.lgpl21;
