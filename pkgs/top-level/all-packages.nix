@@ -1791,6 +1791,8 @@ let
 
   uptimed = callPackage ../tools/system/uptimed { };
 
+  varnish = callPackage ../servers/varnish { };
+
   vlan = callPackage ../tools/networking/vlan { };
 
   wakelan = callPackage ../tools/networking/wakelan { };
