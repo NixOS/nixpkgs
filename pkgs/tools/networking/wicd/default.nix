@@ -16,7 +16,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
-  patches = [ ./no-var-install.patch ./no-trans.patch ./mkdir-networks.patch ./pygtk.patch ./no-optimization.patch ];
+  patches = [
+    ./no-var-install.patch
+    ./no-trans.patch 
+    #./mkdir-networks.patch
+    ./pygtk.patch
+    ./no-optimization.patch
+    ./dhclient.patch 
+    ];
 
   # Should I be using pygtk's propogated build inputs?
   # !!! Should use makeWrapper.
