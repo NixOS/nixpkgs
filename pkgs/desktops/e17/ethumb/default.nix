@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, eina, evas, ecore, edje, eet, e_dbus }:
+{ stdenv, fetchurl, pkgconfig, eina, evas, ecore, edje, eet, e_dbus, emotion, libexif }:
 stdenv.mkDerivation rec {
   name = "ethumb-${version}";
   version = "1.7.5";
@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
     url = "http://download.enlightenment.org/releases/${name}.tar.bz2";
     sha256 = "0prka3knz8p2n46dfrzgwn55khhhrhjny4vvnzkjcwmhvz7kgc9l";
   };
-  buildInputs = [ pkgconfig eina evas ecore edje eet ];
-  propagatedBuildInputs = [ e_dbus ];
+  buildInputs = [ pkgconfig eina evas ecore edje eet emotion libexif ];
+  propagatedBuildInputs = [ e_dbus libexif ];
   meta = {
     description = "A thumbnail generation library";
     longDescription = ''
