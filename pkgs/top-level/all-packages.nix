@@ -5300,9 +5300,10 @@ let
     python = python27;
   });
 
-  plone42Packages = recurseIntoAttrs (import ../development/web/plone {
-    inherit pkgs buildPythonPackage;
+  plone43Packages = recurseIntoAttrs (import ../development/web/plone {
+    inherit pkgs;
     python = python27;
+    pythonPackages = python27Packages;
   });
 
   foursuite = callPackage ../development/python-modules/4suite { };
