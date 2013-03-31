@@ -77,6 +77,11 @@ in {
 
   config = mkIf cfg.enable {
 
+    assertions = [{
+      assertion = config.networking.wireless.enable == false;
+      message = "You can not use networking.networkmanager with services.networking.wireless";
+    }];
+
     environment.etc = [
       { source = ipUpScript;
         target = "NetworkManager/dispatcher.d/01nixos-ip-up";
