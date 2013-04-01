@@ -7676,7 +7676,9 @@ let
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
-  rawtherapee = callPackage ../applications/graphics/rawtherapee { };
+  rawtherapee = callPackage ../applications/graphics/rawtherapee {
+    fftw = fftw.override {float = true;}; 
+  };
 
   rcs = callPackage ../applications/version-management/rcs { };
 
