@@ -12,6 +12,21 @@ let
     v == "Closed" ||
     v == "Registered";
 
+  bitlbeeConfig = pkgs.writeText "bitlbee.conf"
+    ''
+    [settings]
+    RunMode = Daemon
+    User = bitlbee  
+    ConfigDir = /var/lib/bitlbee      
+    DaemonInterface = ${cfg.interface}
+    DaemonPort = ${toString cfg.portNumber}
+    AuthMode = ${cfg.authMode}
+    ${cfg.extraSettings}
+
+    [defaults]
+    ${cfg.extraDefaults}
+    '';
+
 in
 
 {
@@ -85,6 +100,7 @@ in
         uid = bitlbeeUid;
         description = "BitlBee user";
         home = "/var/lib/bitlbee";
+        createHome = true;
       };
 
     users.extraGroups = singleton
@@ -96,29 +112,12 @@ in
       { description = "BitlBee IRC to other chat networks gateway";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        serviceConfig.ExecStart = "${pkgs.bitlbee}/sbin/bitlbee -F -n -c /etc/bitlbee.conf";
+        serviceConfig.User = "bitlbee";
+        serviceConfig.ExecStart = "${pkgs.bitlbee}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
       };
 
     environment.systemPackages = [ pkgs.bitlbee ];
 
-    environment.etc =
-      [
-        { source = pkgs.writeText "bitlbee.conf"
-            ''
-            [settings]
-            RunMode = Daemon
-            User = bitlbee  
-            ConfigDir = /var/lib/bitlbee      
-            DaemonInterface = ${cfg.interface}
-            DaemonPort = ${toString cfg.portNumber} 
-            AuthMode = ${cfg.authMode}
-            ${cfg.extraSettings}
-            [defaults]
-            ${cfg.extraDefaults}
-            '';
-          target = "bitlbee.conf";
-        }
-      ];
   };
 
 }
