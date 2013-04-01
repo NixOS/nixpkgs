@@ -1,4 +1,4 @@
-{fetchurl, stdenv, builderDefs, stringsWithDeps, singlePrecision ? false, pthreads ? false}:
+{fetchurl, stdenv, builderDefs, stringsWithDeps, singlePrecision ? false, pthreads ? false, float ? false}:
 let
   version = "3.3.2";
   localDefs = builderDefs.passthru.function { 
@@ -12,6 +12,7 @@ let
                         # some distros seem to be shipping both versions within the same package?
                         # why does --enable-float still result in ..3f.so instead of ..3.so?
                    ++ (if singlePrecision then [ "--enable-single" ] else [ ])
+                   ++ (if float then [ "--enable-float" ] else [ ])
 		   ++ (stdenv.lib.optional (!pthreads) "--enable-openmp")
 		   ++ (stdenv.lib.optional pthreads "--enable-threads")
                         # I think all i686 has sse
