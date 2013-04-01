@@ -39,12 +39,15 @@ let
         exec > ~/.xsession-errors 2>&1
       ''}
 
-      # Stop systemd from handling the power button and lid switch,
-      # since presumably the desktop environment will handle these.
-      if [ -z "$_INHIBITION_LOCK_TAKEN" ]; then
-        export _INHIBITION_LOCK_TAKEN=1
-        exec ${config.systemd.package}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key "$0" "$sessionType"
-      fi
+      ${optionalString cfg.displayManager.desktopManagerHandlesLidAndPower ''
+        # Stop systemd from handling the power button and lid switch,
+        # since presumably the desktop environment will handle these.
+        if [ -z "$_INHIBITION_LOCK_TAKEN" ]; then
+          export _INHIBITION_LOCK_TAKEN=1
+          exec ${config.systemd.package}/bin/systemd-inhibit --what=handle-lid-switch:handle-power-key "$0" "$sessionType"
+        fi
+
+      ''}
 
       ${optionalString cfg.startOpenSSHAgent ''
         if test -z "$SSH_AUTH_SOCK"; then
@@ -183,6 +186,16 @@ in
           '';
         type = types.string;
         description = "Shell commands executed just before the window or desktop manager is started.";
+      };
+
+      desktopManagerHandlesLidAndPower = mkOption {
+        default = true;
+        description = ''
+          Whether the display manager should prevent systemd from handling
+          lid and power events. This is normally handled by the desktop
+          environment's power manager. Turn this off when using a minimal
+          X11 setup without a full power manager.
+        '';
       };
 
       session = mkOption {
