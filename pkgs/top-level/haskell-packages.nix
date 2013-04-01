@@ -1966,6 +1966,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   yap = callPackage ../development/libraries/haskell/yap {};
 
+  yeganesh = callPackage ../applications/misc/yeganesh {};
+
   yesod = callPackage ../development/libraries/haskell/yesod {};
 
   yesodAuth = callPackage ../development/libraries/haskell/yesod-auth {};
