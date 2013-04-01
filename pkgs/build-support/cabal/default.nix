@@ -115,11 +115,11 @@
                   continue;
                 fi
                 if [ -d "$p/include" ]; then
-                  extraConfigureFlags+=" --extra-include-dir=$p/include"
+                  extraConfigureFlags+=" --extra-include-dirs=$p/include"
                 fi
                 for d in lib{,64}; do
                   if [ -d "$p/$d" ]; then
-                    extraConfigureFlags+=" --extra-lib-dir=$p/$d"
+                    extraConfigureFlags+=" --extra-lib-dirs=$p/$d"
                   fi
                 done
               done
