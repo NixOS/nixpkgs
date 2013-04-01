@@ -1054,6 +1054,8 @@ let
 
   most = callPackage ../tools/misc/most { };
 
+  multitail = callPackage ../tools/misc/multitail { };
+
   netperf = callPackage ../applications/networking/netperf { };
 
   ninka = callPackage ../development/tools/misc/ninka { };
