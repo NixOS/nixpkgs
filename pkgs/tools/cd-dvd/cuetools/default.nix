@@ -13,7 +13,10 @@ stdenv.mkDerivation {
   buildInputs = [ automake autoconf flex bison ]; 
 
   meta = {
-    description = "cue and toc file parsers and utilities";
+    description = "cd/dvd cue and toc file parsers and utilities";
     homepage = https://github.com/svend/cuetools;
+    platforms = stdenv.lib.platforms.all;
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = with stdenv.lib.maintainers; [ jcumming ];
   };
 }
