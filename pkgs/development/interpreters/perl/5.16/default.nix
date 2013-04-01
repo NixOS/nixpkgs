@@ -60,17 +60,21 @@ stdenv.mkDerivation rec {
 
   setupHook = ./setup-hook.sh;
 
+  doCheck = true;
   # some network-related tests don't work, mostly probably due to our sandboxing
+  testsToSkip = ''
+    lib/Net/hostent.t \
+    dist/IO/t/{io_multihomed.t,io_sock.t} \
+    t/porting/{maintainers.t,regen.t} \
+    cpan/Socket/t/getnameinfo.t
+  '';
   postPatch = ''
-    for test in lib/Net/hostent.t dist/IO/t/{io_multihomed.t,io_sock.t} \
-      t/porting/{maintainers.t,regen.t}
-    do
+    for test in ${testsToSkip}; do
       rm "$test"
       pat=`echo "$test" | sed 's,/,\\\\/,g'` # just escape slashes
       sed "/^$pat/d" -i MANIFEST
     done
   '';
-  doCheck = true;
 
   passthru.libPrefix = "lib/perl5/site_perl";
 }
