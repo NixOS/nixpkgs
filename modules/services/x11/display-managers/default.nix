@@ -89,8 +89,6 @@ let
 
       export LIBVA_DRIVERS_PATH=${vaapiDrivers}/lib/dri
 
-      source /etc/profile
-
       ${cfg.displayManager.sessionCommands}
 
       # Allow the user to setup a custom session type.
