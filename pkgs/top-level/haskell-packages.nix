@@ -1514,6 +1514,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   QuickCheck2 = self.QuickCheck_2_6;
   QuickCheck  = self.QuickCheck2;
 
+  quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
+
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
   random_1_0_1_1 = callPackage ../development/libraries/haskell/random/1.0.1.1.nix {};
