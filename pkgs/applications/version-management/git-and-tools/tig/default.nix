@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     make install
     make install-doc
+    mkdir -p $out/etc/bash_completion.d/
+    cp contrib/tig-completion.bash $out/etc/bash_completion.d/
   '';
   meta = {
     homepage = "http://jonas.nitro.dk/tig/";
