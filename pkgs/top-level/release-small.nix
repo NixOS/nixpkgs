@@ -177,7 +177,7 @@ with (import ./release-lib.nix);
   texLiveExtra = linux;
   texinfo = all;
   time = linux;
-  tinycc = ["i686-linux"];
+  tinycc = linux;
   udev = linux;
   unrar = linux;
   unzip = all;
