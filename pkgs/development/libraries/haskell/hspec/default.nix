@@ -1,21 +1,21 @@
 { cabal, ansiTerminal, doctest, filepath, ghcPaths
-, hspecExpectations, hspecMeta, HUnit, QuickCheck, setenv, silently
-, time, transformers
+, hspecExpectations, hspecMeta, HUnit, QuickCheck, quickcheckIo
+, setenv, silently, time, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "hspec";
-  version = "1.4.5";
-  sha256 = "1dfwc1gjsawafi6k19hsw4kd5ahp8a9hdkyrm7nhjp4kjzgd2ymf";
+  version = "1.5.1";
+  sha256 = "0iz34hgwir07g2qv3zdkg5k5wrv68qd0c77xkpfcs653fi28i91a";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    ansiTerminal filepath hspecExpectations HUnit QuickCheck setenv
-    silently time transformers
+    ansiTerminal filepath hspecExpectations HUnit QuickCheck
+    quickcheckIo setenv time transformers
   ];
   testDepends = [
     ansiTerminal doctest filepath ghcPaths hspecExpectations hspecMeta
-    HUnit QuickCheck setenv silently time transformers
+    HUnit QuickCheck quickcheckIo setenv silently time transformers
   ];
   meta = {
     homepage = "http://hspec.github.com/";

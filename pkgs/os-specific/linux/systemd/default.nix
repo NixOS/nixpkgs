@@ -6,11 +6,11 @@
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-199";
+  name = "systemd-200";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "1vazjqi95pri5zx21gs4chyd7c8kg5lf1rc26w47zkry9yh64i4c";
+    sha256 = "05y2r25441nznif5xi5gab4c6xdywiqzgcl3nsmg0j2wzalbl24s";
   };
 
   patches =
@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
       ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
       ./0006-Don-t-call-plymouth-quit.patch
       ./0007-Ignore-IPv6-link-local-addresses.patch
-      ./0008-systemd-sysctl-Handle-missing-etc-sysctl.conf-proper.patch
     ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
@@ -74,8 +73,6 @@ stdenv.mkDerivation rec {
       # Work around our kernel headers being too old.  FIXME: remove
       # this after the next stdenv update.
       "-DFS_NOCOW_FL=0x00800000"
-      # Enable udev's firmware builtin for now.
-      "-DENABLE_FIRMWARE=1"
     ];
 
   # Use /var/lib/udev rather than /etc/udev for the generated hardware

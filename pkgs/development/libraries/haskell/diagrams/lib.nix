@@ -4,13 +4,12 @@
 
 cabal.mkDerivation (self: {
   pname = "diagrams-lib";
-  version = "0.6.0.1";
-  sha256 = "00ysdppl2jv0kspj0pjy8qj8shc9gg6g10lkq62vlvr39wnxx6yj";
+  version = "0.6.0.2";
+  sha256 = "0jxpbggwgbjnl2yx7y0zcjs2fls7y1wm33wllq5j9snkiz1n81hb";
   buildDepends = [
     active colour dataDefault diagramsCore monoidExtras newtype
     NumInstances semigroups vectorSpace
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Embedded domain-specific language for declarative graphics";

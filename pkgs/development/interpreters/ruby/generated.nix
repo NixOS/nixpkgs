@@ -4,12 +4,12 @@ g: # Get dependencies from patched gems
 {
   aliases = {
     ZenTest = g.ZenTest_4_9_0;
-    actionmailer = g.actionmailer_3_2_12;
-    actionpack = g.actionpack_3_2_12;
-    activemodel = g.activemodel_3_2_12;
-    activerecord = g.activerecord_3_2_12;
-    activeresource = g.activeresource_3_2_12;
-    activesupport = g.activesupport_3_2_12;
+    actionmailer = g.actionmailer_3_2_13;
+    actionpack = g.actionpack_3_2_13;
+    activemodel = g.activemodel_3_2_13;
+    activerecord = g.activerecord_3_2_13;
+    activeresource = g.activeresource_3_2_13;
+    activesupport = g.activesupport_3_2_13;
     addressable = g.addressable_2_3_3;
     arel = g.arel_3_0_2;
     atoulme_Antwrap = g.atoulme_Antwrap_0_7_4;
@@ -17,7 +17,7 @@ g: # Get dependencies from patched gems
     aws_sdk = g.aws_sdk_1_8_5;
     bitbucket_backup = g.bitbucket_backup_0_2_2;
     builder = g.builder_3_2_0;
-    buildr = g.buildr_1_4_10;
+    buildr = g.buildr_1_4_11;
     bundler = g.bundler_1_3_4;
     childprocess = g.childprocess_0_3_9;
     chronic = g.chronic_0_9_1;
@@ -28,48 +28,51 @@ g: # Get dependencies from patched gems
     erubis = g.erubis_2_7_0;
     eventmachine = g.eventmachine_1_0_3;
     eventmachine_tail = g.eventmachine_tail_0_6_4;
+    execjs = g.execjs_1_4_0;
     fakes3 = g.fakes3_0_1_5;
-    faraday = g.faraday_0_8_6;
+    faraday = g.faraday_0_8_7;
     faraday_middleware = g.faraday_middleware_0_8_8;
-    ffi = g.ffi_1_4_0;
+    ffi = g.ffi_1_6_0;
     file_tail = g.file_tail_1_0_12;
     foreman = g.foreman_0_62_0;
-    highline = g.highline_1_6_15;
+    highline = g.highline_1_6_16;
     hike = g.hike_1_2_1;
     hoe = g.hoe_3_1_0;
     i18n = g.i18n_0_6_4;
     journey = g.journey_1_0_4;
     jruby_pageant = g.jruby_pageant_1_1_1;
-    jsduck = g.jsduck_4_6_2;
+    jsduck = g.jsduck_4_7_1;
     json = g.json_1_7_7;
     json_pure = g.json_pure_1_7_7;
     libv8 = g.libv8_3_3_10_4;
     macaddr = g.macaddr_1_6_1;
-    mail = g.mail_2_4_4;
+    mail = g.mail_2_5_3;
     mime_types = g.mime_types_1_21;
     minitar = g.minitar_0_5_3;
-    multi_json = g.multi_json_1_6_1;
+    multi_json = g.multi_json_1_7_2;
     multipart_post = g.multipart_post_1_2_0;
     net_sftp = g.net_sftp_2_0_5;
     net_ssh = g.net_ssh_2_6_6;
     nix = g.nix_0_1_1;
-    nokogiri = g.nokogiri_1_5_6;
+    nokogiri = g.nokogiri_1_5_9;
     papertrail = g.papertrail_0_9_7;
     papertrail_cli = g.papertrail_cli_0_9_3;
-    parallel = g.parallel_0_6_2;
+    parallel = g.parallel_0_6_3;
     polyglot = g.polyglot_0_3_3;
     rack = g.rack_1_5_2;
     rack_cache = g.rack_cache_1_2;
     rack_protection = g.rack_protection_1_5_0;
     rack_ssl = g.rack_ssl_1_3_3;
     rack_test = g.rack_test_0_6_2;
-    rails = g.rails_3_2_12;
-    railties = g.railties_3_2_12;
-    rake = g.rake_10_0_3;
+    rails = g.rails_3_2_13;
+    railties = g.railties_3_2_13;
+    rake = g.rake_10_0_4;
     rb_fsevent = g.rb_fsevent_0_9_3;
     rdiscount = g.rdiscount_2_0_7_1;
     rdoc = g.rdoc_3_12_2;
     remote_syslog = g.remote_syslog_1_6_13;
+    right_aws = g.right_aws_3_0_5;
+    right_http_connection = g.right_http_connection_1_3_0;
     rjb = g.rjb_1_4_6;
     rspec = g.rspec_2_11_0;
     rspec_core = g.rspec_core_2_11_1;
@@ -85,9 +88,9 @@ g: # Get dependencies from patched gems
     syslog_protocol = g.syslog_protocol_0_9_2;
     systemu = g.systemu_2_5_2;
     therubyracer = g.therubyracer_0_10_2;
-    thin = g.thin_1_5_0;
-    thor = g.thor_0_17_0;
-    tilt = g.tilt_1_3_5;
+    thin = g.thin_1_5_1;
+    thor = g.thor_0_18_0;
+    tilt = g.tilt_1_3_6;
     tins = g.tins_0_7_2;
     treetop = g.treetop_1_4_12;
     tzinfo = g.tzinfo_0_3_37;
@@ -97,7 +100,7 @@ g: # Get dependencies from patched gems
     xml_simple = g.xml_simple_1_1_1;
     yajl_ruby = g.yajl_ruby_1_1_0;
   };
-  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
+  gem_nix_args = [ ''autotest-rails'' ''aws-sdk'' ''bitbucket-backup'' ''buildr'' ''fakes3'' ''foreman'' ''jsduck'' ''nix'' ''papertrail-cli'' ''rails'' ''rake'' ''rb-fsevent'' ''remote_syslog'' ''right_aws'' ''sass'' ''selenium-webdriver'' ''sinatra-1.3.2'' ''thin'' ''uuid'' ];
   gems = {
     ZenTest_4_9_0 = {
       basename = ''ZenTest'';
@@ -130,71 +133,71 @@ installed versions.'';
       requiredGems = [  ];
       sha256 = ''16bp7rwl463m0d213rmwp4rjfwiw1bm529c518v91l18h7hcnb96'';
     };
-    actionmailer_3_2_12 = {
+    actionmailer_3_2_13 = {
       basename = ''actionmailer'';
       meta = {
         description = ''Email composition, delivery, and receiving framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Email on Rails. Compose, deliver, receive, and test emails using the familiar controller/view pattern. First-class support for multipart email and attachments.'';
       };
-      name = ''actionmailer-3.2.12'';
-      requiredGems = [ g.actionpack_3_2_12 g.mail_2_4_4 ];
-      sha256 = ''0rjcyz5p139iv7r9gb9nw6c490mksf6n3rnfxsg6bdaxpabinlc7'';
+      name = ''actionmailer-3.2.13'';
+      requiredGems = [ g.actionpack_3_2_13 g.mail_2_5_3 ];
+      sha256 = ''0ksw1b5rba8l6400qgc6zjdn14q68n6crjmm76ggg32r4wv3xn06'';
     };
-    actionpack_3_2_12 = {
+    actionpack_3_2_13 = {
       basename = ''actionpack'';
       meta = {
         description = ''Web-flow and rendering framework putting the VC in MVC (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Web apps on Rails. Simple, battle-tested conventions for building and testing MVC web applications. Works with any Rack-compatible server.'';
       };
-      name = ''actionpack-3.2.12'';
-      requiredGems = [ g.activesupport_3_2_12 g.activemodel_3_2_12 g.rack_cache_1_2 g.builder_3_0_4 g.rack_1_4_5 g.rack_test_0_6_2 g.journey_1_0_4 g.sprockets_2_2_2 g.erubis_2_7_0 ];
-      sha256 = ''19p8slf607ssvhd1xkqmk0ddhxqh99faqbgw9i0gyjh1hxyh4apk'';
+      name = ''actionpack-3.2.13'';
+      requiredGems = [ g.activesupport_3_2_13 g.activemodel_3_2_13 g.rack_cache_1_2 g.builder_3_0_4 g.rack_1_4_5 g.rack_test_0_6_2 g.journey_1_0_4 g.sprockets_2_2_2 g.erubis_2_7_0 ];
+      sha256 = ''1m3kd3rwa4z0yik68xi0l9q71lyzq4gdciqaw5w2w9pal1cj8y5w'';
     };
-    activemodel_3_2_12 = {
+    activemodel_3_2_13 = {
       basename = ''activemodel'';
       meta = {
         description = ''A toolkit for building modeling frameworks (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''A toolkit for building modeling frameworks like Active Record and Active Resource. Rich support for attributes, callbacks, validations, observers, serialization, internationalization, and testing.'';
       };
-      name = ''activemodel-3.2.12'';
-      requiredGems = [ g.activesupport_3_2_12 g.builder_3_0_4 ];
-      sha256 = ''1w43k2yhdybrrhph87zhb9shc1j8z1ryhpqy15y7cj9gc4a1bnqf'';
+      name = ''activemodel-3.2.13'';
+      requiredGems = [ g.activesupport_3_2_13 g.builder_3_0_4 ];
+      sha256 = ''0lpc9ylwm00g66hmgj06iq51m2l234ii7k6qsjiywf9x5fq6khn5'';
     };
-    activerecord_3_2_12 = {
+    activerecord_3_2_13 = {
       basename = ''activerecord'';
       meta = {
         description = ''Object-relational mapper framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Databases on Rails. Build a persistent domain model by mapping database tables to Ruby classes. Strong conventions for associations, validations, aggregations, migrations, and testing come baked-in.'';
       };
-      name = ''activerecord-3.2.12'';
-      requiredGems = [ g.activesupport_3_2_12 g.activemodel_3_2_12 g.arel_3_0_2 g.tzinfo_0_3_37 ];
-      sha256 = ''0fl8iyv3gcy72y79iv4ccyck8ik02rrl3pdy7yxfhlnqgryp8syi'';
+      name = ''activerecord-3.2.13'';
+      requiredGems = [ g.activesupport_3_2_13 g.activemodel_3_2_13 g.arel_3_0_2 g.tzinfo_0_3_37 ];
+      sha256 = ''1z5rrjy2v27xldr24sd4sxi6k6f5anyg20kwj3qyc0jjn8c0gv85'';
     };
-    activeresource_3_2_12 = {
+    activeresource_3_2_13 = {
       basename = ''activeresource'';
       meta = {
         description = ''REST modeling framework (part of Rails).'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''REST on Rails. Wrap your RESTful web app with Ruby classes and work with them like Active Record models.'';
       };
-      name = ''activeresource-3.2.12'';
-      requiredGems = [ g.activesupport_3_2_12 g.activemodel_3_2_12 ];
-      sha256 = ''0dmy7n93ndxfqkccs0mv82dzkr130414djg96qi8njyj07ad84fi'';
+      name = ''activeresource-3.2.13'';
+      requiredGems = [ g.activesupport_3_2_13 g.activemodel_3_2_13 ];
+      sha256 = ''1r4ph4cqd32d4lq9bfyv1dpfxc4qndcqhqx7h7xg4p0va7dz251l'';
     };
-    activesupport_3_2_12 = {
+    activesupport_3_2_13 = {
       basename = ''activesupport'';
       meta = {
         description = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''A toolkit of support libraries and Ruby core extensions extracted from the Rails framework. Rich support for multibyte strings, internationalization, time zones, and testing.'';
       };
-      name = ''activesupport-3.2.12'';
-      requiredGems = [ g.i18n_0_6_4 g.multi_json_1_6_1 ];
-      sha256 = ''1giqkprxjf5gyfyhn5nz9q8a5gi3v8irxhkpqr00zc5fw1azllsg'';
+      name = ''activesupport-3.2.13'';
+      requiredGems = [ g.i18n_0_6_1 g.multi_json_1_7_2 ];
+      sha256 = ''1vailj8ja9g3s029p5qbvqdpxcis5gcpkl2d6j7a6d36hxlwlf8y'';
     };
     addressable_2_3_3 = {
       basename = ''addressable'';
@@ -270,7 +273,7 @@ rails support and extra plugins for migrations and fixtures.'';
         longDescription = ''AWS SDK for Ruby'';
       };
       name = ''aws-sdk-1.8.5'';
-      requiredGems = [ g.uuidtools_2_1_3 g.nokogiri_1_5_6 g.json_1_7_7 ];
+      requiredGems = [ g.uuidtools_2_1_3 g.nokogiri_1_5_9 g.json_1_7_7 ];
       sha256 = ''0rhkkkfsw0qzckn99mnvpbnl7b1kysma3x8bbqwah2x438kwygpb'';
     };
     bitbucket_backup_0_2_2 = {
@@ -281,7 +284,7 @@ rails support and extra plugins for migrations and fixtures.'';
         longDescription = ''A tool to backup Bitbucket repos.'';
       };
       name = ''bitbucket-backup-0.2.2'';
-      requiredGems = [ g.highline_1_6_15 g.json_1_7_7 ];
+      requiredGems = [ g.highline_1_6_16 g.json_1_7_7 ];
       sha256 = ''1kzg6pkzw04n96i6mhb74gpg4c899wly5fc2m1y6m2xvn71qksys'';
     };
     builder_3_0_4 = {
@@ -332,7 +335,7 @@ simple to do.  Currently the following builder objects are supported:
       requiredGems = [  ];
       sha256 = ''0f2cpfx6lpazb1wrz3lf06qp6f0qf0gdq5z8xnhkplc3fz3kslb0'';
     };
-    buildr_1_4_10 = {
+    buildr_1_4_11 = {
       basename = ''buildr'';
       meta = {
         description = ''Build like you code'';
@@ -344,9 +347,9 @@ to do, and it takes care of the rest.  But also something we can easily extend
 for those one-off tasks, with a language that's a joy to use.
 '';
       };
-      name = ''buildr-1.4.10'';
+      name = ''buildr-1.4.11'';
       requiredGems = [ g.rake_0_9_2_2 g.builder_3_1_3 g.net_ssh_2_6_0 g.net_sftp_2_0_5 g.rubyzip_0_9_9 g.highline_1_6_2 g.json_pure_1_7_5 g.rubyforge_2_0_4 g.hoe_3_1_0 g.rjb_1_4_2 g.atoulme_Antwrap_0_7_4 g.diff_lcs_1_1_3 g.rspec_expectations_2_11_3 g.rspec_mocks_2_11_3 g.rspec_core_2_11_1 g.rspec_2_11_0 g.xml_simple_1_1_1 g.minitar_0_5_3 g.bundler_1_3_4 ];
-      sha256 = ''1x192r8ab5zr9rlp1i9b3pi3y74f9pj2w491wkgshgwj22akh6vn'';
+      sha256 = ''0bdrwl9jvxc5h2wqsyacr688hxvzcqan1bhqyryb5bg9a5gpscb4'';
     };
     bundler_1_3_4 = {
       basename = ''bundler'';
@@ -367,7 +370,7 @@ for those one-off tasks, with a language that's a joy to use.
         longDescription = ''This gem aims at being a simple and reliable solution for controlling external programs running in the background on any Ruby / OS combination.'';
       };
       name = ''childprocess-0.3.9'';
-      requiredGems = [ g.ffi_1_4_0 ];
+      requiredGems = [ g.ffi_1_6_0 ];
       sha256 = ''0jbz2ix7ff9ry8717lhcq9w8j8yd45akw48giwgdqccay5mlph7d'';
     };
     chronic_0_9_1 = {
@@ -492,6 +495,17 @@ using TCP/IP, especially if custom protocols are required.'';
       requiredGems = [ g.eventmachine_1_0_3 ];
       sha256 = ''1pvlb34vdzd81kf9f3xyibb4f55xjqm7lqqy28dgyci5cyv50y61'';
     };
+    execjs_1_4_0 = {
+      basename = ''execjs'';
+      meta = {
+        description = ''Run JavaScript code from Ruby'';
+        homepage = ''https://github.com/sstephenson/execjs'';
+        longDescription = ''ExecJS lets you run JavaScript code from Ruby.'';
+      };
+      name = ''execjs-1.4.0'';
+      requiredGems = [ g.multi_json_1_7_2 ];
+      sha256 = ''0b69ci2afbcdqsri3i89a7s7j7palxsxdb65x6h2wx79kzlc5xcs'';
+    };
     fakes3_0_1_5 = {
       basename = ''fakes3'';
       meta = {
@@ -499,18 +513,18 @@ using TCP/IP, especially if custom protocols are required.'';
         longDescription = ''Use FakeS3 to test basic S3 functionality without actually connecting to S3'';
       };
       name = ''fakes3-0.1.5'';
-      requiredGems = [ g.thor_0_17_0 g.builder_3_2_0 ];
+      requiredGems = [ g.thor_0_18_0 g.builder_3_2_0 ];
       sha256 = ''1na5wrbarla6s414svqmr5spbpv6vmcgpswal444x4clcpmadhib'';
     };
-    faraday_0_8_6 = {
+    faraday_0_8_7 = {
       basename = ''faraday'';
       meta = {
         description = ''HTTP/REST API client library.'';
         homepage = ''https://github.com/lostisland/faraday'';
       };
-      name = ''faraday-0.8.6'';
+      name = ''faraday-0.8.7'';
       requiredGems = [ g.multipart_post_1_2_0 ];
-      sha256 = ''16jd0gnqfrh5v4v88nlasyjjm8cmf2w2p6gphxq64mvdxlcdy5jy'';
+      sha256 = ''186a9md3ixanl2crdlw37kspw5wiyw16z9mj3aw8rd1yd5q56ddi'';
     };
     faraday_middleware_0_8_8 = {
       basename = ''faraday_middleware'';
@@ -520,19 +534,19 @@ using TCP/IP, especially if custom protocols are required.'';
         longDescription = ''Various middleware for Faraday'';
       };
       name = ''faraday_middleware-0.8.8'';
-      requiredGems = [ g.faraday_0_8_6 ];
+      requiredGems = [ g.faraday_0_8_7 ];
       sha256 = ''1n0g8pm7ynx6ffyqhscc1cqw97zhvd8isr31yfyj15335j1jsncz'';
     };
-    ffi_1_4_0 = {
+    ffi_1_6_0 = {
       basename = ''ffi'';
       meta = {
         description = ''Ruby FFI'';
         homepage = ''http://wiki.github.com/ffi/ffi'';
         longDescription = ''Ruby FFI library'';
       };
-      name = ''ffi-1.4.0'';
+      name = ''ffi-1.6.0'';
       requiredGems = [  ];
-      sha256 = ''06a29qvg487yk9pyi7wzyj5700mf7s3mjdqc6dsrh0467mjj9768'';
+      sha256 = ''0jhjzj8gb6cakv32a6czgrx8krb0hx8mmkwh5yv2lhdcv3ak013v'';
     };
     file_tail_1_0_12 = {
       basename = ''file_tail'';
@@ -553,10 +567,10 @@ using TCP/IP, especially if custom protocols are required.'';
         longDescription = ''Process manager for applications with multiple components'';
       };
       name = ''foreman-0.62.0'';
-      requiredGems = [ g.thor_0_17_0 ];
+      requiredGems = [ g.thor_0_18_0 ];
       sha256 = ''08i34rgs3bydk52zwpps4p0y2fvcnibp9lvfdhr75ppin7wv7lmr'';
     };
-    highline_1_6_15 = {
+    highline_1_6_16 = {
       basename = ''highline'';
       meta = {
         description = ''HighLine is a high-level command-line IO library.'';
@@ -567,9 +581,9 @@ crank out anything from simple list selection to complete shells with just
 minutes of work.
 '';
       };
-      name = ''highline-1.6.15'';
+      name = ''highline-1.6.16'';
       requiredGems = [  ];
-      sha256 = ''1ilwlgylv92md9dnw6hqhrw8hiwk3f4k8qz6airqjp1rq9r594m1'';
+      sha256 = ''1v9dps96hryg7c8hqw41vbm1q02d7wpq7fj1c3bkzsd5518idgzi'';
     };
     highline_1_6_2 = {
       basename = ''highline'';
@@ -617,6 +631,17 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [ g.rake_0_9_6 ];
       sha256 = ''0i961x0hrd6fs1nsfham87dhn64gqpnai27l14jag7qbnp3a79yp'';
     };
+    i18n_0_6_1 = {
+      basename = ''i18n'';
+      meta = {
+        description = ''New wave Internationalization support for Ruby'';
+        homepage = ''http://github.com/svenfuchs/i18n'';
+        longDescription = ''New wave Internationalization support for Ruby.'';
+      };
+      name = ''i18n-0.6.1'';
+      requiredGems = [  ];
+      sha256 = ''0x3lhp1vl1k4dfqx6k93hhxcpjkz57y8cf007ws7p845ywk6ibfl'';
+    };
     i18n_0_6_4 = {
       basename = ''i18n'';
       meta = {
@@ -650,16 +675,16 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [  ];
       sha256 = ''1kgqsn0bagr41gf5kbqaxbs38a7s5bm85m0pdx4qz7d70v9nc9cl'';
     };
-    jsduck_4_6_2 = {
+    jsduck_4_7_1 = {
       basename = ''jsduck'';
       meta = {
         description = ''Simple JavaScript Duckumentation generator'';
         homepage = ''https://github.com/senchalabs/jsduck'';
         longDescription = ''Documentation generator for Sencha JS frameworks'';
       };
-      name = ''jsduck-4.6.2'';
-      requiredGems = [ g.rdiscount_2_0_7_1 g.json_1_7_7 g.parallel_0_6_2 g.therubyracer_0_10_2 g.dimensions_1_2_0 ];
-      sha256 = ''035w4igfa6yy6234ff4zbiqfjn0bhwqs6k8kji52l7gzgskwmzln'';
+      name = ''jsduck-4.7.1'';
+      requiredGems = [ g.rdiscount_2_0_7_1 g.json_1_7_7 g.parallel_0_6_3 g.execjs_1_4_0 g.therubyracer_0_10_2 g.dimensions_1_2_0 ];
+      sha256 = ''0yn568ix4j4xpyrsk07cp5c3migsl7ymlg07fsyn5a65yrwyaiyv'';
     };
     json_1_7_7 = {
       basename = ''json'';
@@ -716,16 +741,16 @@ For extra goodness, see: http://seattlerb.rubyforge.org/hoe/Hoe.pdf'';
       requiredGems = [ g.systemu_2_5_2 ];
       sha256 = ''1vd9l1d0lc0sq3rn1ya816wrzgxxqdzq6pgq0y0435qm6ikwy7ch'';
     };
-    mail_2_4_4 = {
+    mail_2_5_3 = {
       basename = ''mail'';
       meta = {
         description = ''Mail provides a nice Ruby DSL for making, sending and reading emails.'';
         homepage = ''http://github.com/mikel/mail'';
         longDescription = ''A really Ruby Mail handler.'';
       };
-      name = ''mail-2.4.4'';
+      name = ''mail-2.5.3'';
       requiredGems = [ g.mime_types_1_21 g.treetop_1_4_12 g.i18n_0_6_4 ];
-      sha256 = ''0idylz5pnlz34mrxm7gs9jbll2c0k0y9dq2qarhxk30gwyvjaxi3'';
+      sha256 = ''1afr3acz7vsvr4gp6wnrkw1iwbjhf14mh8g8mlm40r86wcwzr39k'';
     };
     mime_types_1_21 = {
       basename = ''mime_types'';
@@ -770,16 +795,16 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
       requiredGems = [  ];
       sha256 = ''035vs1knnnjsb8arfp8vx75warvwcdpiljjwv38lqljai9v8fq53'';
     };
-    multi_json_1_6_1 = {
+    multi_json_1_7_2 = {
       basename = ''multi_json'';
       meta = {
         description = ''A gem to provide swappable JSON backends.'';
         homepage = ''http://github.com/intridea/multi_json'';
         longDescription = ''A gem to provide easy switching between different JSON backends, including Oj, Yajl, the JSON gem (with C-extensions), the pure-Ruby JSON gem, and OkJson.'';
       };
-      name = ''multi_json-1.6.1'';
+      name = ''multi_json-1.7.2'';
       requiredGems = [  ];
-      sha256 = ''0p33swcl9i97wvv0cq9jkdl8q7xbc3j07apy35vsgldnhw99krcg'';
+      sha256 = ''17mfs58bilkn2b9g3ggh6pz1w4c2a72mqsr6zf0qd8vahw5h158q'';
     };
     multipart_post_1_2_0 = {
       basename = ''multipart_post'';
@@ -836,7 +861,7 @@ added from the the {LTSW collection}[http://www.ltsw.se/knbase/internet/mime.htp
       requiredGems = [  ];
       sha256 = ''0kwrbkkg0gxibhsz9dpd5zabcf2wqsicg28yiazyb3dc9dslk26k'';
     };
-    nokogiri_1_5_6 = {
+    nokogiri_1_5_9 = {
       basename = ''nokogiri'';
       meta = {
         description = ''Nokogiri (é‹¸) is an HTML, XML, SAX, and Reader parser'';
@@ -847,9 +872,9 @@ many features is the ability to search documents via XPath or CSS3 selectors.
 XML is like violence - if it doesnâ€™t solve your problems, you are not using
 enough of it.'';
       };
-      name = ''nokogiri-1.5.6'';
+      name = ''nokogiri-1.5.9'';
       requiredGems = [  ];
-      sha256 = ''1235h8k242f6yi5qgb8rfcx6gp7g99djwqgrz0vb6w12pbp9kar8'';
+      sha256 = ''08qx4p3p6dd1yh58c4waz5rjmkzv3v315fr0l6n0dgkg71dczbi9'';
     };
     papertrail_0_9_7 = {
       basename = ''papertrail'';
@@ -859,7 +884,7 @@ enough of it.'';
         longDescription = ''Command-line client for Papertrail hosted log management service. Tails and searches app server logs and system syslog. Supports Boolean search and works with grep and pipe output (Unix).'';
       };
       name = ''papertrail-0.9.7'';
-      requiredGems = [ g.addressable_2_3_3 g.yajl_ruby_1_1_0 g.chronic_0_9_1 g.faraday_0_8_6 g.faraday_middleware_0_8_8 ];
+      requiredGems = [ g.addressable_2_3_3 g.yajl_ruby_1_1_0 g.chronic_0_9_1 g.faraday_0_8_7 g.faraday_middleware_0_8_8 ];
       sha256 = ''0v0m1v0qabbr9pmyl77znz39qy1m7p0xwvf3lf9hyq6n524f2dwr'';
     };
     papertrail_cli_0_9_3 = {
@@ -873,15 +898,15 @@ enough of it.'';
       requiredGems = [ g.papertrail_0_9_7 ];
       sha256 = ''1914dcfqsmw5rl4xd1zwjrfbgwglyncxm8km06bgxaqn4wnaq5iv'';
     };
-    parallel_0_6_2 = {
+    parallel_0_6_3 = {
       basename = ''parallel'';
       meta = {
         description = ''Run any kind of code in parallel processes'';
-        homepage = ''http://github.com/grosser/parallel'';
+        homepage = ''https://github.com/grosser/parallel'';
       };
-      name = ''parallel-0.6.2'';
+      name = ''parallel-0.6.3'';
       requiredGems = [  ];
-      sha256 = ''05rdbb1jqv0179wjfj74a1739rsqv7ijf4jp1i5s6lzh878c6l6p'';
+      sha256 = ''17mg4vfx1c4z7399azf982a3cn522m43kavdqfhfs6i89m7z0l9n'';
     };
     polyglot_0_3_3 = {
       basename = ''polyglot'';
@@ -981,27 +1006,27 @@ request helpers feature.'';
       requiredGems = [ g.rack_1_5_2 ];
       sha256 = ''01mk715ab5qnqf6va8k3hjsvsmplrfqpz6g58qw4m3l8mim0p4ky'';
     };
-    rails_3_2_12 = {
+    rails_3_2_13 = {
       basename = ''rails'';
       meta = {
         description = ''Full-stack web application framework.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Ruby on Rails is a full-stack web framework optimized for programmer happiness and sustainable productivity. It encourages beautiful code by favoring convention over configuration.'';
       };
-      name = ''rails-3.2.12'';
-      requiredGems = [ g.activesupport_3_2_12 g.actionpack_3_2_12 g.activerecord_3_2_12 g.activeresource_3_2_12 g.actionmailer_3_2_12 g.railties_3_2_12 g.bundler_1_3_4 ];
-      sha256 = ''1jjnm74nzl5v3461c0mrbpa471yd6s8hnkmnxb64c2rm95c61wxz'';
+      name = ''rails-3.2.13'';
+      requiredGems = [ g.activesupport_3_2_13 g.actionpack_3_2_13 g.activerecord_3_2_13 g.activeresource_3_2_13 g.actionmailer_3_2_13 g.railties_3_2_13 g.bundler_1_3_4 ];
+      sha256 = ''1f5w4ivy0jxpjf1gkav064i0gd5x9xqnznwrkbc3slc9savprifz'';
     };
-    railties_3_2_12 = {
+    railties_3_2_13 = {
       basename = ''railties'';
       meta = {
         description = ''Tools for creating, working with, and running Rails applications.'';
         homepage = ''http://www.rubyonrails.org'';
         longDescription = ''Rails internals: application bootup, plugins, generators, and rake tasks.'';
       };
-      name = ''railties-3.2.12'';
-      requiredGems = [ g.rake_10_0_3 g.rack_ssl_1_3_3 g.thor_0_17_0 g.rdoc_3_12_2 g.activesupport_3_2_12 g.actionpack_3_2_12 ];
-      sha256 = ''0d8wy1n591x12bigj3jh8c9djzi8k68vh14342mc22raxwp5rwdw'';
+      name = ''railties-3.2.13'';
+      requiredGems = [ g.rake_10_0_4 g.rack_ssl_1_3_3 g.thor_0_18_0 g.rdoc_3_12_2 g.activesupport_3_2_13 g.actionpack_3_2_13 ];
+      sha256 = ''01wbqfnlrs9nbs0b97dbxh7aap2bma7my530pcggxdf8ckms8kr9'';
     };
     rake_0_9_2_2 = {
       basename = ''rake'';
@@ -1025,16 +1050,16 @@ request helpers feature.'';
       requiredGems = [  ];
       sha256 = ''09kyh351gddn6gjz255hbaza1cw235xvfz9dc15rhyq9phvqdphc'';
     };
-    rake_10_0_3 = {
+    rake_10_0_4 = {
       basename = ''rake'';
       meta = {
         description = ''Ruby based make-like utility.'';
         homepage = ''http://rake.rubyforge.org'';
         longDescription = ''Rake is a Make-like program implemented in Ruby. Tasks and dependencies arespecified in standard Ruby syntax.'';
       };
-      name = ''rake-10.0.3'';
+      name = ''rake-10.0.4'';
       requiredGems = [  ];
-      sha256 = ''09vvf3ylhdkr10vz7ajl3c7ql6dsnzkh3qclpafar433bzadfbpf'';
+      sha256 = ''032z0csyi5bjfgzq3winvqvi9fpf3bfx518hzzapkfy90y702ds1'';
     };
     rb_fsevent_0_9_3 = {
       basename = ''rb_fsevent'';
@@ -1082,6 +1107,73 @@ See RDoc for a description of RDoc's markup and basic use.'';
       name = ''remote_syslog-1.6.13'';
       requiredGems = [ g.servolux_0_10_0 g.file_tail_1_0_12 g.eventmachine_1_0_3 g.eventmachine_tail_0_6_4 g.syslog_protocol_0_9_2 g.em_resolv_replace_1_1_3 ];
       sha256 = ''0q35j02k2l3fw3fdzq0i3rd6chsqr982gj13f3m3lsxm7kms03nw'';
+    };
+    right_aws_3_0_5 = {
+      basename = ''right_aws'';
+      meta = {
+        description = ''The RightScale AWS gems have been designed to provide a robust, fast, and secure interface to Amazon EC2, EBS, S3, SQS, SDB, and CloudFront.'';
+        longDescription = ''== DESCRIPTION:
+
+The RightScale AWS gems have been designed to provide a robust, fast, and secure interface to Amazon EC2, EBS, S3, SQS, SDB, and CloudFront.
+These gems have been used in production by RightScale since late 2006 and are being maintained to track enhancements made by Amazon.
+The RightScale AWS gems comprise:
+
+- RightAws::Ec2 -- interface to Amazon EC2 (Elastic Compute Cloud) and the
+  associated EBS (Elastic Block Store)
+- RightAws::S3 and RightAws::S3Interface -- interface to Amazon S3 (Simple Storage Service)
+- RightAws::Sqs and RightAws::SqsInterface -- interface to first-generation Amazon SQS (Simple Queue Service) (API version 2007-05-01)
+- RightAws::SqsGen2 and RightAws::SqsGen2Interface -- interface to second-generation Amazon SQS (Simple Queue Service) (API version 2008-01-01)
+- RightAws::SdbInterface and RightAws::ActiveSdb -- interface to Amazon SDB (SimpleDB)
+- RightAws::AcfInterface -- interface to Amazon CloudFront, a content distribution service
+
+== FEATURES:
+
+- Full programmmatic access to EC2, EBS, S3, SQS, SDB, and CloudFront.
+- Complete error handling: all operations check for errors and report complete
+  error information by raising an AwsError.
+- Persistent HTTP connections with robust network-level retry layer using
+  RightHttpConnection).  This includes socket timeouts and retries.
+- Robust HTTP-level retry layer.  Certain (user-adjustable) HTTP errors returned
+  by Amazon's services are classified as temporary errors.
+  These errors are automaticallly retried using exponentially increasing intervals.
+  The number of retries is user-configurable.
+- Fast REXML-based parsing of responses (as fast as a pure Ruby solution allows).
+- Uses libxml (if available) for faster response parsing.
+- Support for large S3 list operations.  Buckets and key subfolders containing
+  many (&gt; 1000) keys are listed in entirety.  Operations based on list (like
+  bucket clear) work on arbitrary numbers of keys.
+- Support for streaming GETs from S3, and streaming PUTs to S3 if the data source is a file.
+- Support for single-threaded usage, multithreaded usage, as well as usage with multiple
+  AWS accounts.
+- Support for both first- and second-generation SQS (API versions 2007-05-01
+  and 2008-01-01).  These versions of SQS are not compatible.
+- Support for signature versions 0 and 1 on SQS, SDB, and EC2.
+- Interoperability with any cloud running Eucalyptus (http://eucalyptus.cs.ucsb.edu)
+- Test suite (requires AWS account to do "live" testing).
+'';
+      };
+      name = ''right_aws-3.0.5'';
+      requiredGems = [ g.right_http_connection_1_3_0 ];
+      sha256 = ''0pxdmxmqiidy3dpxsp4l0b1l6nq9b1sh4p1gkzalqm4l24646h4k'';
+    };
+    right_http_connection_1_3_0 = {
+      basename = ''right_http_connection'';
+      meta = {
+        description = ''RightScale's robust HTTP/S connection module'';
+        homepage = ''http://rightscale.rubyforge.org/'';
+        longDescription = ''Rightscale::HttpConnection is a robust HTTP/S library.  It implements a retry
+algorithm for low-level network errors.
+
+== FEATURES:
+
+- provides put/get streaming
+- does configurable retries on connect and read timeouts, DNS failures, etc.
+- HTTPS certificate checking
+'';
+      };
+      name = ''right_http_connection-1.3.0'';
+      requiredGems = [  ];
+      sha256 = ''0900zy2ya57vhxdkdm2gj7xmvzj4gwm5l7ad0lh68ka3vxhdi7ap'';
     };
     rjb_1_4_2 = {
       basename = ''rjb'';
@@ -1202,7 +1294,7 @@ See RDoc for a description of RDoc's markup and basic use.'';
         longDescription = ''WebDriver is a tool for writing automated tests of websites. It aims to mimic the behaviour of a real user, and as such interacts with the HTML of the application.'';
       };
       name = ''selenium-webdriver-2.31.0'';
-      requiredGems = [ g.multi_json_1_6_1 g.rubyzip_0_9_9 g.childprocess_0_3_9 g.websocket_1_0_7 ];
+      requiredGems = [ g.multi_json_1_7_2 g.rubyzip_0_9_9 g.childprocess_0_3_9 g.websocket_1_0_7 ];
       sha256 = ''1nv3ff31g183kdb97jjz0y7ny3vdnccd09pgblpj87bzhrrdfv3r'';
     };
     servolux_0_10_0 = {
@@ -1227,7 +1319,7 @@ interpreters.'';
         longDescription = ''Sinatra is a DSL for quickly creating web applications in Ruby with minimal effort.'';
       };
       name = ''sinatra-1.3.2'';
-      requiredGems = [ g.rack_1_5_2 g.rack_protection_1_5_0 g.tilt_1_3_5 ];
+      requiredGems = [ g.rack_1_5_2 g.rack_protection_1_5_0 g.tilt_1_3_6 ];
       sha256 = ''05blf915zpiwyz7agcn9rwdmddwxz0z4l3gd4qlqmrgd2vkw4sxc'';
     };
     sprockets_2_2_2 = {
@@ -1238,7 +1330,7 @@ interpreters.'';
         longDescription = ''Sprockets is a Rack-based asset packaging system that concatenates and serves JavaScript, CoffeeScript, CSS, LESS, Sass, and SCSS.'';
       };
       name = ''sprockets-2.2.2'';
-      requiredGems = [ g.hike_1_2_1 g.multi_json_1_6_1 g.rack_1_5_2 g.tilt_1_3_5 ];
+      requiredGems = [ g.hike_1_2_1 g.multi_json_1_7_2 g.rack_1_5_2 g.tilt_1_3_6 ];
       sha256 = ''15ngw3bjbyr31ygzmmdxxa30ylah6pdn8akgdy9w30vfx2vr7s7s'';
     };
     syslog_protocol_0_9_2 = {
@@ -1274,38 +1366,38 @@ interpreters.'';
       requiredGems = [ g.libv8_3_3_10_4 ];
       sha256 = ''111hm2l613v06sy7pzjzmnyi4x11rg3c2syhnpv8fn0wnn9rdiyb'';
     };
-    thin_1_5_0 = {
+    thin_1_5_1 = {
       basename = ''thin'';
       meta = {
         description = ''A thin and fast web server'';
         homepage = ''http://code.macournoyer.com/thin/'';
         longDescription = ''A thin and fast web server'';
       };
-      name = ''thin-1.5.0'';
+      name = ''thin-1.5.1'';
       requiredGems = [ g.rack_1_5_2 g.eventmachine_1_0_3 g.daemons_1_1_9 ];
-      sha256 = ''14sd2qbbk6y108z6v723mh3f1mk8s4fwxmmn9f8dk4xkhk4rwvq1'';
+      sha256 = ''0hrq9m3hb6pm8yrqshhg0gafkphdpvwcqmr7k722kgdisp3w91ga'';
     };
-    thor_0_17_0 = {
+    thor_0_18_0 = {
       basename = ''thor'';
       meta = {
         description = ''A scripting framework that replaces rake, sake and rubigen'';
         homepage = ''http://whatisthor.com/'';
         longDescription = ''A scripting framework that replaces rake, sake and rubigen'';
       };
-      name = ''thor-0.17.0'';
+      name = ''thor-0.18.0'';
       requiredGems = [  ];
-      sha256 = ''0gf46qafcfgmi20a2mnb3wkd9y6spgy2hq22h70377daj4zjxla2'';
+      sha256 = ''0m7pl518j5q1ymgxmsi6xfjp6k40mwbmzk33s760v53azwxkfxan'';
     };
-    tilt_1_3_5 = {
+    tilt_1_3_6 = {
       basename = ''tilt'';
       meta = {
         description = ''Generic interface to multiple Ruby template engines'';
         homepage = ''http://github.com/rtomayko/tilt/'';
         longDescription = ''Generic interface to multiple Ruby template engines'';
       };
-      name = ''tilt-1.3.5'';
+      name = ''tilt-1.3.6'';
       requiredGems = [  ];
-      sha256 = ''081saxdxnal4ky38a904jw3n2837m80g211w0zm5rx6m712mb6qd'';
+      sha256 = ''1yz6zfnwq0qyjn71115vd63ly8zm1jss0b2v7fbcbzzj9lrnq9y6'';
     };
     tins_0_7_2 = {
       basename = ''tins'';

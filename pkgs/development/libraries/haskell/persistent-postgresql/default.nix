@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     aeson conduit monadControl persistent postgresqlLibpq
     postgresqlSimple text time transformers
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/persistent";
     description = "Backend for the persistent library using postgresql";

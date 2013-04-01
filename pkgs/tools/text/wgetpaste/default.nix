@@ -23,5 +23,6 @@
       homepage = http://wgetpaste.zlin.dk/;
       license = "publicDomain";
       maintainers = with stdenv.lib.maintainers; [qknight];
+      platforms = stdenv.lib.platforms.all;
     };
   }

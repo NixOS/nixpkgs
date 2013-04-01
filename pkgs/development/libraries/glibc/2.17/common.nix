@@ -32,14 +32,17 @@ stdenv.mkDerivation ({
   enableParallelBuilding = true;
 
   patches =
-    [ /* Have rpcgen(1) look for cpp(1) in $PATH.  */
-      ./rpcgen-path.patch
+    [ /* Have rpcgen(1) look for cpp(1) in $PATH.
+         On GNU/Hurd, use the old version of the patch since the new one
+         doesn't apply.  */
+      (if hurdHeaders != null
+       then ../2.13/rpcgen-path.patch
+       else ./rpcgen-path.patch)
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 
-      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  Currently
-         disabled on GNU/Hurd, which uses a more recent libc snapshot. */
+      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
       ./dont-use-system-ld-so-cache.patch
 
       /* Without this patch many KDE binaries crash. */

@@ -5,11 +5,13 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{pkgs}:
+{pkgs, __overrides}:
 
 rec {
 
   inherit (pkgs) buildPerlPackage fetchurl stdenv perl fetchsvn;
+
+  inherit __overrides;
 
   # Helper functions for packages that use Module::Build to build.
   buildPerlModule = { buildInputs ? [], ... } @ args:

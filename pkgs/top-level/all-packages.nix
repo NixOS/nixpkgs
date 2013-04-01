@@ -579,6 +579,8 @@ let
 
   cowsay = callPackage ../tools/misc/cowsay { };
 
+  cuetools = callPackage ../tools/cd-dvd/cuetools { };
+
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
   "unionfs-fuse" = callPackage ../tools/filesystems/unionfs-fuse { };
@@ -879,6 +881,8 @@ let
 
   gnuvd = callPackage ../tools/misc/gnuvd { };
 
+  googleAuthenticator = callPackage ../os-specific/linux/google-authenticator { };
+
   gource = callPackage ../applications/version-management/gource {};
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
@@ -1051,6 +1055,8 @@ let
   mmv = callPackage ../tools/misc/mmv { };
 
   most = callPackage ../tools/misc/most { };
+
+  multitail = callPackage ../tools/misc/multitail { };
 
   netperf = callPackage ../applications/networking/netperf { };
 
@@ -1269,6 +1275,8 @@ let
 
   nzbget = callPackage ../tools/networking/nzbget { };
 
+  oathToolkit = callPackage ../tools/security/oath-toolkit { };
+
   obex_data_server = callPackage ../tools/bluetooth/obex-data-server { };
 
   obexd = callPackage ../tools/bluetooth/obexd { };
@@ -1316,6 +1324,8 @@ let
   optipng = callPackage ../tools/graphics/optipng { };
 
   ossec = callPackage ../tools/security/ossec {};
+
+  otpw = callPackage ../os-specific/linux/otpw { };
 
   p7zip = callPackage ../tools/archivers/p7zip { };
 
@@ -1785,6 +1795,8 @@ let
 
   uptimed = callPackage ../tools/system/uptimed { };
 
+  varnish = callPackage ../servers/varnish { };
+
   vlan = callPackage ../tools/networking/vlan { };
 
   wakelan = callPackage ../tools/networking/wakelan { };
@@ -1805,6 +1817,8 @@ let
     inherit zlib libpng freetype gd which
       libxml2 geoip;
   };
+
+  weighttp = callPackage ../tools/networking/weighttp { };
 
   wget = callPackage ../tools/networking/wget {
     inherit (perlPackages) LWP;
@@ -1941,6 +1955,8 @@ let
   aspectj = callPackage ../development/compilers/aspectj { };
 
   bigloo = callPackage ../development/compilers/bigloo { };
+
+  chicken = callPackage ../development/compilers/chicken { };
 
   ccl = builderDefsPackage ../development/compilers/ccl {};
 
@@ -5220,6 +5236,8 @@ let
     jvm    = gcj;
     xerces = xercesJava;  };
 
+  xmlsec = callPackage ../development/libraries/xmlsec { };
+
   zziplib = callPackage ../development/libraries/zziplib { };
 
 
@@ -5234,6 +5252,7 @@ let
 
   perlPackages = recurseIntoAttrs (import ./perl-packages.nix {
     inherit pkgs;
+    __overrides = (config.perlPackageOverrides or (p: {})) pkgs;
   });
 
   perl510Packages = import ./perl-packages.nix {
@@ -5241,6 +5260,7 @@ let
       perl = perl510;
       buildPerlPackage = import ../development/perl-modules/generic perl510;
     };
+    __overrides = (config.perl510PackageOverrides or (p: {})) pkgs;
   };
 
   perlXMLParser = perlPackages.XMLParser;
@@ -5270,9 +5290,10 @@ let
     python = python27;
   });
 
-  plone42Packages = recurseIntoAttrs (import ../development/web/plone {
-    inherit pkgs buildPythonPackage;
+  plone43Packages = recurseIntoAttrs (import ../development/web/plone {
+    inherit pkgs;
     python = python27;
+    pythonPackages = python27Packages;
   });
 
   foursuite = callPackage ../development/python-modules/4suite { };
@@ -6014,6 +6035,8 @@ let
   linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi);
   linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7 linuxPackages_3_7);
   linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8 linuxPackages_3_8);
+  # Update this when adding a new version!
+  linuxPackages_latest = pkgs.linuxPackages_3_8;
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -6307,7 +6330,7 @@ let
     };
 
     pthreads = callPackage ../os-specific/windows/pthread-w32 {
-      mingw_headers = mingw_headers2;
+      mingw_headers = mingw_headers3;
     };
 
     wxMSW = callPackage ../os-specific/windows/wxMSW-2.8 { };
@@ -7525,6 +7548,10 @@ let
 
   ogmtools = callPackage ../applications/video/ogmtools { };
 
+  omxplayer = callPackage ../applications/video/omxplayer {
+    stdenv = overrideGCC stdenv gcc47;
+  };
+
   oneteam = callPackage ../applications/networking/instant-messengers/oneteam {};
 
   openbox = callPackage ../applications/window-managers/openbox { };
@@ -7637,7 +7664,9 @@ let
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
-  rawtherapee = callPackage ../applications/graphics/rawtherapee { };
+  rawtherapee = callPackage ../applications/graphics/rawtherapee {
+    fftw = fftw.override {float = true;}; 
+  };
 
   rcs = callPackage ../applications/version-management/rcs { };
 
@@ -7691,6 +7720,10 @@ let
 
   dropbox = callPackage ../applications/networking/dropbox { };
 
+  lightdm = callPackage ../applications/display-managers/lightdm { };
+
+  lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
+
   slim = callPackage ../applications/display-managers/slim { };
 
   sndBase = builderDefsPackage (import ../applications/audio/snd) {
@@ -7704,6 +7737,8 @@ let
     inherit mesa libtool jackaudio alsaLib;
     guile = guile_1_8;
   };
+
+  shntool = callPackage ../applications/audio/shntool { };
 
   sonic_visualiser = callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
@@ -8048,9 +8083,7 @@ let
 
   libxpdf = callPackage ../applications/misc/xpdf/libxpdf.nix { };
 
-  xpra = callPackage ../tools/X11/xpra {
-    inherit (pythonPackages) notify;
-  };
+  xpra = callPackage ../tools/X11/xpra { };
 
   xscreensaver = callPackage ../misc/screensavers/xscreensaver {
     inherit (gnome) libglade;
@@ -8281,7 +8314,7 @@ let
   # You still can override by passing more arguments.
   spaceOrbit = callPackage ../games/orbit { };
 
-  spring = callPackage ../games/spring { boost = boost149;};
+  spring = callPackage ../games/spring { };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };
 
@@ -8858,6 +8891,8 @@ let
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
+  mupen64plus1_5 = callPackage ../misc/emulators/mupen64plus/1.5.nix { };
+
   nix = nixStable;
 
   nixStable = callPackage ../tools/package-management/nix {
@@ -9044,6 +9079,8 @@ let
   winetricks = callPackage ../misc/emulators/wine/winetricks.nix {
     inherit (gnome2) zenity;
   };
+
+  wxmupen64plus = callPackage ../misc/emulators/wxmupen64plus { };
 
   x2x = callPackage ../tools/X11/x2x { };
 

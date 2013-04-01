@@ -153,6 +153,11 @@ in
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/include/xorg";
   };
 
+  xf86inputvoid = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
+    buildInputs = attrs.buildInputs ++ [xorg.pixman];
+  };
+
   xf86videointel = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
   };
@@ -168,6 +173,11 @@ in
   };
 
   xf86videocirrus = attrs: attrs // {
+    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
+    buildInputs = attrs.buildInputs ++ [xorg.pixman];
+  };
+
+  xf86videodummy = attrs: attrs // {
     NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
     buildInputs = attrs.buildInputs ++ [xorg.pixman];
   };
