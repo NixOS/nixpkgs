@@ -50,12 +50,7 @@ if test -z "$finalPath"; then
     trap "rm -rf $tmpPath" EXIT
 
     # Perform the checkout.
-    if test "$NIX_PREFETCH_BZR_LEAVE_DOT_BZR" != 1
-    then
-        bzr export $revarg "$tmpFile" "$url" >&2
-    else
-        bzr checkout --lightweight $revarg "$url" "$tmpFile" >&2
-    fi
+    bzr -Ossl.cert_reqs=none export $revarg --format=dir "$tmpFile" "$url"
 
     # Compute the hash.
     hash=$(nix-hash --type $hashType $hashFormat $tmpFile)
