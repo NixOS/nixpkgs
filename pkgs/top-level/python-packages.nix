@@ -1485,7 +1485,7 @@ pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ nose ];
-    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar ];
+    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar deluge ];
 
     meta = {
       homepage = http://flexget.com/;
