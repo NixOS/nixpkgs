@@ -16,7 +16,7 @@ let
   nepomukConfig = pkgs.writeTextFile
     { name = "nepomuk-config";
       destination = "/share/config/nepomukserverrc";
-      text = 
+      text =
         ''
           [Basic Settings]
           Start Nepomuk=false
@@ -156,7 +156,7 @@ in
 
     # Enable helpful DBus services.
     services.udisks.enable = true;
-    services.upower = mkIf config.powerManagement.enable { enable = true; };
+    services.upower.enable = config.powerManagement.enable;
 
     security.pam.services = [ { name = "kde"; allowNullPassword = true; startSession = true; } ];
 
