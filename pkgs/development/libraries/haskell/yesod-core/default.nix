@@ -23,6 +23,7 @@ cabal.mkDerivation (self: {
     blazeBuilder conduit hamlet hspec httpTypes HUnit QuickCheck random
     shakespeareCss shakespeareJs text transformers wai waiTest
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://www.yesodweb.com/";
     description = "Creation of type-safe, RESTful web applications";
