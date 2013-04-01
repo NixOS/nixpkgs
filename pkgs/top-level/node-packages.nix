@@ -1208,6 +1208,21 @@ let self = {
     ];
   };
 
+  "s3http" = self."s3http-*";
+
+  "s3http-*" = self.buildNodePackage rec {
+    name = "s3http-0.0.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/s3http/-/${name}.tgz";
+      sha256 = "7140a0ee6df9fb90fd74aa0b68b73f899c6d8e2eaa2de89fde3f634e9bf10dba";
+    };
+    deps = [
+      self."aws-sdk-git"
+      self."commander-0.5.1"
+      self."http-auth-*"
+    ];
+  };
+
   "sax" = self."sax->=0.4.2";
 
   "sax->=0.4.2" = self.buildNodePackage rec {
