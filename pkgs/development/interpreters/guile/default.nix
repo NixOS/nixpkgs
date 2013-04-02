@@ -29,7 +29,7 @@
 
   enableParallelBuilding = true;
 
-  patches = [ ./disable-gc-sensitive-tests.patch ] ++
+  patches = [ ./disable-gc-sensitive-tests.patch ./eai_system.patch ] ++
     (stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch);
 
   # Explicitly link against libgcc_s, to work around the infamous
