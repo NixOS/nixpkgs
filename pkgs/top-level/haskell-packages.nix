@@ -139,7 +139,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
     html         = self.html_1_0_1_2;           # 7.6 ok
     HTTP         = self.HTTP_4000_2_8;          # 7.6 ok
-    HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
+    HUnit        = self.HUnit_1_2_5_2;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
     network      = self.network_2_4_1_2;        # 7.6 ok
     OpenGL       = self.OpenGL_2_8_0_0;         # 7.6 ok
@@ -1136,7 +1136,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HUnit_1_2_4_2 = callPackage ../development/libraries/haskell/HUnit/1.2.4.2.nix {};
   HUnit_1_2_4_3 = callPackage ../development/libraries/haskell/HUnit/1.2.4.3.nix {};
   HUnit_1_2_5_1 = callPackage ../development/libraries/haskell/HUnit/1.2.5.1.nix {};
-  HUnit = self.HUnit_1_2_5_1;
+  HUnit_1_2_5_2 = callPackage ../development/libraries/haskell/HUnit/1.2.5.2.nix {};
+  HUnit = self.HUnit_1_2_5_2;
 
   hxt = callPackage ../development/libraries/haskell/hxt {};
 
