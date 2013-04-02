@@ -25,6 +25,7 @@ cabal.mkDerivation (self: {
       ensureDir "$out/share/emacs"
       mv $pname-$version emacs/site-lisp
     '';
+  doCheck = false;
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
     description = "Happy Haskell programming on Emacs/Vim";
