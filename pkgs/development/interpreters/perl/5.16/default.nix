@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
     t/porting/{maintainers.t,regen.t} \
     cpan/Socket/t/getnameinfo.t \
   '' + stdenv.lib.optionalString (stdenv.isFreeBSD) ''
-    cpan/CPANPLUS/t/04_CPANPLUS-Module.t
-    cpan/CPANPLUS/t/20_CPANPLUS-Dist-MM.t
+    cpan/CPANPLUS/t/04_CPANPLUS-Module.t \
+    cpan/CPANPLUS/t/20_CPANPLUS-Dist-MM.t \
   '' + " ";
   postPatch = ''
     for test in ${testsToSkip}; do
