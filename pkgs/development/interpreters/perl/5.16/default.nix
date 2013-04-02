@@ -66,10 +66,11 @@ stdenv.mkDerivation rec {
     lib/Net/hostent.t \
     dist/IO/t/{io_multihomed.t,io_sock.t} \
     t/porting/{maintainers.t,regen.t} \
-    cpan/Socket/t/getnameinfo.t
-  '';
+    cpan/Socket/t/getnameinfo.t \
+  '' + " ";
   postPatch = ''
     for test in ${testsToSkip}; do
+      echo "Removing test" $test
       rm "$test"
       pat=`echo "$test" | sed 's,/,\\\\/,g'` # just escape slashes
       sed "/^$pat/d" -i MANIFEST
