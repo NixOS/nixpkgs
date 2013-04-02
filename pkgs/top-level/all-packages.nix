@@ -6735,6 +6735,10 @@ let
     inherit (gnome) GConf libglade;
   };
 
+  darktable12 = callPackage ../applications/graphics/darktable/1.2rc1.nix {
+    inherit (gnome) GConf libglade;
+  };
+
   "dd-agent" = callPackage ../tools/networking/dd-agent { };
 
   dia = callPackage ../applications/graphics/dia {
