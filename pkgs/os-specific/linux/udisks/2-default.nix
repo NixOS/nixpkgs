@@ -11,10 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "1a0mipihilscv9jwy59xrqn2kkri9p12a09anpjdld83l7jhh0ii";
   };
 
+  patches = [ ./force-path.patch ];
+
+  # FIXME remove /var/run/current-system/sw/* references
+  # FIXME add references to parted, cryptsetup, etc (see the sources)
   postPatch =
     ''
       substituteInPlace src/main.c --replace \
-        "/sbin:/bin:/usr/sbin:/usr/bin" \
+        "@path@" \
         "${utillinux}/bin:${mdadm}/sbin:/var/run/current-system/sw/bin:/var/run/current-system/sw/sbin"
     '';
 
