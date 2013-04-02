@@ -18,6 +18,7 @@ cabal.mkDerivation (self: {
     hspecMeta HUnit QuickCheck quickcheckIo random setenv silently time
     transformers
   ];
+  doCheck = self.stdenv.system == "x86_64-linux";
   meta = {
     homepage = "http://hspec.github.com/";
     description = "Behavior-Driven Development for Haskell";
