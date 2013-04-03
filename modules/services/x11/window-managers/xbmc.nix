@@ -21,7 +21,7 @@ in
       session = [{
         name = "xbmc";
         start = "
-          ${pkgs.xbmc}/bin/xbmc-standalone &
+          ${pkgs.xbmc}/bin/xbmc --lircdev /var/run/lirc/lircd --standalone &
           waitPID=$!
         ";
       }];
