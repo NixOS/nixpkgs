@@ -83,6 +83,10 @@ let
         grep -l '\(RUN+\|IMPORT{program}\)="\(/usr\)\?/s\?bin' $i/*/udev/rules.d/* || true
       done
 
+      ${optionalString (!config.networking.usePredictableInterfaceNames) ''
+        ln -s /dev/null $out/80-net-name-slot.rules
+      ''}
+
       # If auto-configuration is disabled, then remove
       # udev's 80-drivers.rules file, which contains rules for
       # automatically calling modprobe.
@@ -217,8 +221,6 @@ in
           target = "udev/rules.d";
         }
       ];
-
-    boot.extraKernelParams = mkIf (! config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "UNIX")
