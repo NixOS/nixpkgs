@@ -12,7 +12,7 @@ let self = {
                     mkdir unpack
                     cd unpack
                     tar xf ${src}
-                    mv */ package
+                    mv */ package 2>/dev/null || true
                     sed -i -e "s/: \"latest\"/: \"*\"/" package/package.json
                     tar cf $out *
                   '';
