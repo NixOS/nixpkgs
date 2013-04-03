@@ -704,6 +704,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
 
   dataDefaultClass = callPackage ../development/libraries/haskell/data-default-class {};
+  dataDefaultInstancesBase = callPackage ../development/libraries/haskell/data-default-instances-containers {};
+  dataDefaultInstancesContainers = callPackage ../development/libraries/haskell/data-default-instances-base {};
+  dataDefaultInstancesDlist = callPackage ../development/libraries/haskell/data-default-instances-dlist {};
+  dataDefaultInstancesOldLocale = callPackage ../development/libraries/haskell/data-default-instances-old-locale {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
