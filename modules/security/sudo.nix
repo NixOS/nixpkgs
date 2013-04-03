@@ -31,7 +31,7 @@ in
         ''
           Whether users of the <code>wheel</code> group can execute
           commands as super user without entering a password.
-	'';
+        '';
       };
 
     security.sudo.configFile = mkOption {
@@ -70,7 +70,7 @@ in
         %wheel      ALL=(ALL) ${if cfg.wheelNeedsPassword then "" else "NOPASSWD: ALL, "}SETENV: ALL
       '';
 
-    security.setuidPrograms = [ "sudo" ];
+    security.setuidPrograms = [ "sudo" "sudoedit" ];
 
     environment.systemPackages = [ sudo ];
 
