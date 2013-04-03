@@ -9,9 +9,12 @@ let self = {
   patchLatest = srcAttrs:
                   let src = fetchurl srcAttrs; in
                   pkgs.runCommand src.name {} ''
+                    mkdir unpack
+                    cd unpack
                     tar xf ${src}
+                    mv */ package 2>/dev/null || true
                     sed -i -e "s/: \"latest\"/: \"*\"/" package/package.json
-                    tar cf $out package
+                    tar cf $out *
                   '';
 
   "abbrev" = self."abbrev-1";
@@ -95,6 +98,19 @@ let self = {
   };
 
   "aws-sdk" = self."aws-sdk-*";
+
+  "aws-sdk-git" = self.buildNodePackage rec {
+    name = "aws-sdk-0.9.8-pre7b687a0c262ac129fd6eaffeb02de09ee7e6a87c";
+    src = self.patchLatest {
+      url = "https://github.com/aws/aws-sdk-js/archive/7b687a0c262ac129fd6eaffeb02de09ee7e6a87c.tar.gz";
+      sha256 = "1pn43wxi3xz4kjyxf8j7zil5frhd1zpqja8szamgll2pxxnpnr3i";
+      name = "${name}.tgz";
+    };
+    deps = [
+      self."xml2js-0.2.4"
+      self."xmlbuilder"
+    ];
+  };
 
   "aws-sdk-*" = self.buildNodePackage rec {
     name = "aws-sdk-0.9.7-pre.8";
@@ -1189,6 +1205,21 @@ let self = {
     };
     deps = [
       self."graceful-fs-~1.1"
+    ];
+  };
+
+  "s3http" = self."s3http-*";
+
+  "s3http-*" = self.buildNodePackage rec {
+    name = "s3http-0.0.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/s3http/-/${name}.tgz";
+      sha256 = "7140a0ee6df9fb90fd74aa0b68b73f899c6d8e2eaa2de89fde3f634e9bf10dba";
+    };
+    deps = [
+      self."aws-sdk-git"
+      self."commander-0.5.1"
+      self."http-auth-*"
     ];
   };
 

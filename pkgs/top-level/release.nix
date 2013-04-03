@@ -304,7 +304,7 @@ let
       texinfo = all;
       tightvnc = linux;
       time = linux;
-      tinycc = ["i686-linux"];
+      tinycc = linux;
       uae = linux;
       udev = linux;
       unrar = linux;

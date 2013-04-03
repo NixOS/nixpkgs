@@ -772,6 +772,8 @@ let
 
   libbsd = callPackage ../development/libraries/libbsd { };
 
+  lprof = callPackage ../tools/graphics/lprof { };
+
   flvtool2 = callPackage ../tools/video/flvtool2 { };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
@@ -812,6 +814,8 @@ let
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
+
+  g500-control = callPackage ../tools/misc/g500-control { };
 
   gawk = callPackage ../tools/text/gawk { };
 
@@ -1473,6 +1477,8 @@ let
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
   recutils = callPackage ../tools/misc/recutils { };
+
+  recoll = callPackage ../applications/search/recoll { };
 
   refind = callPackage ../tools/misc/refind { };
 
@@ -6719,6 +6725,10 @@ let
     inherit (gnome) GConf libglade;
   };
 
+  darktable12 = callPackage ../applications/graphics/darktable/1.2rc1.nix {
+    inherit (gnome) GConf libglade;
+  };
+
   "dd-agent" = callPackage ../tools/networking/dd-agent { };
 
   dia = callPackage ../applications/graphics/dia {
@@ -7719,6 +7729,8 @@ let
   st = callPackage ../applications/misc/st { };
 
   dropbox = callPackage ../applications/networking/dropbox { };
+
+  dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
   lightdm = callPackage ../applications/display-managers/lightdm { };
 
@@ -8750,7 +8762,9 @@ let
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
-  kicad = callPackage ../applications/science/electronics/kicad { };
+  kicad = callPackage ../applications/science/electronics/kicad {
+    wxGTK = wxGTK29;
+  };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
