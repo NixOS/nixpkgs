@@ -8601,6 +8601,8 @@ let
 
   oxygen_gtk = callPackage ../misc/themes/gtk2/oxygen-gtk { };
 
+  gnome_themes_standard = callPackage ../misc/themes/gnome-themes-standard { };
+
   xfce = xfce4_10;
   xfce4_10 = recurseIntoAttrs (import ../desktops/xfce { inherit pkgs newScope; });
 
