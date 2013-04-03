@@ -31,13 +31,11 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
-  patches =
-    [ /* Have rpcgen(1) look for cpp(1) in $PATH.
-         On GNU/Hurd, use the old version of the patch since the new one
-         doesn't apply.  */
-      (if hurdHeaders != null
-       then ../2.13/rpcgen-path.patch
-       else ./rpcgen-path.patch)
+  /* Don't try to apply these patches to the Hurd's snapshot, which is
+     older.  */
+  patches = stdenv.lib.optionals (hurdHeaders == null)
+    [ /* Have rpcgen(1) look for cpp(1) in $PATH.  */
+      ./rpcgen-path.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
