@@ -1,7 +1,5 @@
 #! /bin/sh -e
 
-export PERL5LIB=/nix/var/nix/profiles/per-user/eelco/cpan-generator/lib/perl5/site_perl
-
 name="$1"
 [ -n "$name" ] || { echo "no name"; exit 1; }
 

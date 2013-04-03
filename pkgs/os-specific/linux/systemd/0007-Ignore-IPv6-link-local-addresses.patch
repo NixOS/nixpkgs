@@ -1,7 +1,7 @@
-From ab889004b8972258a87798133451f99dfce21823 Mon Sep 17 00:00:00 2001
+From 61fa587560634d5c71a62a4a2fc2a37eb043e9a4 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Mon, 4 Feb 2013 12:41:14 +0100
-Subject: [PATCH 7/8] Ignore IPv6 link-local addresses
+Subject: [PATCH 7/7] Ignore IPv6 link-local addresses
 
 Returning IPv6 link-local addresses is a bad idea, because they only
 work if an application connects specifically over the corresponding

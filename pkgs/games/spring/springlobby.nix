@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, cmake, wxGTK, openal, pkgconfig, curl, libtorrentRasterbar
+{ stdenv, fetchurl, cmake, wxGTK, openal, pkgconfig, curl, libtorrentRasterbar, libpng, libX11
 , gettext, bash, gawk, boost}:
 stdenv.mkDerivation rec {
 
   name = "springlobby-${version}";
-  version = "0.146";
+  version = "0.169";
 
   src = fetchurl {
     url = "http://www.springlobby.info/tarballs/springlobby-${version}.tar.bz2";
-    sha256 = "55899baf6732e48bfaa36d80974aa135c051d2cbb6fe92fbcffd80440639eedf";
+    sha256 = "1wr8q2ha3wh718rr5rg7l6v404nf1rgkg4wkja77rfqy7r18zn7g";
   };
 
-  buildInputs = [ cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost];
+  buildInputs = [ cmake wxGTK openal pkgconfig curl gettext libtorrentRasterbar boost libpng libX11 ];
 
   prePatch = ''
     substituteInPlace tools/regen_config_header.sh --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"

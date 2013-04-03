@@ -139,7 +139,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
     html         = self.html_1_0_1_2;           # 7.6 ok
     HTTP         = self.HTTP_4000_2_8;          # 7.6 ok
-    HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
+    HUnit        = self.HUnit_1_2_5_2;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
     network      = self.network_2_4_1_2;        # 7.6 ok
     OpenGL       = self.OpenGL_2_8_0_0;         # 7.6 ok
@@ -150,7 +150,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexBase    = self.regexBase_0_93_2;       # 7.6 ok
     regexCompat  = self.regexCompat_0_95_1;     # 7.6 ok
     regexPosix   = self.regexPosix_0_95_2;      # 7.6 ok
-    split        = self.split_0_2_1_2;          # 7.6 ok
+    split        = self.split_0_2_1_3;          # 7.6 ok
     stm          = self.stm_2_4_2;              # 7.6 ok
     syb          = self.syb_0_4_0;              # 7.6 ok
     text         = self.text_0_11_2_3;          # 7.6 ok
@@ -444,7 +444,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
 
-  accelerateCuda = callPackage ../development/libraries/haskell/accelerate-cuda {};
+  accelerateCuda = callPackage ../development/libraries/haskell/accelerate-cuda {
+    languageCQuote = self.languageCQuote_0_4_4;
+  };
 
   accelerateExamples = callPackage ../development/libraries/haskell/accelerate-examples {};
 
@@ -700,6 +702,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataBinaryIeee754 = callPackage ../development/libraries/haskell/data-binary-ieee754 {};
 
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
+
+  dataDefaultClass = callPackage ../development/libraries/haskell/data-default-class {};
+  dataDefaultInstancesBase = callPackage ../development/libraries/haskell/data-default-instances-containers {};
+  dataDefaultInstancesContainers = callPackage ../development/libraries/haskell/data-default-instances-base {};
+  dataDefaultInstancesDlist = callPackage ../development/libraries/haskell/data-default-instances-dlist {};
+  dataDefaultInstancesOldLocale = callPackage ../development/libraries/haskell/data-default-instances-old-locale {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
@@ -1134,7 +1142,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HUnit_1_2_4_2 = callPackage ../development/libraries/haskell/HUnit/1.2.4.2.nix {};
   HUnit_1_2_4_3 = callPackage ../development/libraries/haskell/HUnit/1.2.4.3.nix {};
   HUnit_1_2_5_1 = callPackage ../development/libraries/haskell/HUnit/1.2.5.1.nix {};
-  HUnit = self.HUnit_1_2_5_1;
+  HUnit_1_2_5_2 = callPackage ../development/libraries/haskell/HUnit/1.2.5.2.nix {};
+  HUnit = self.HUnit_1_2_5_2;
 
   hxt = callPackage ../development/libraries/haskell/hxt {};
 
@@ -1189,7 +1198,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   languageC_0_3_2_1 = callPackage ../development/libraries/haskell/language-c/0.3.2.1.nix {};
   languageC = self.languageC_0_4_2;
 
-  languageCQuote = callPackage ../development/libraries/haskell/language-c-quote/default.nix {};
+  languageCQuote_0_4_4 = callPackage ../development/libraries/haskell/language-c-quote/0.4.4.nix {};
+  languageCQuote_0_7_1 = callPackage ../development/libraries/haskell/language-c-quote/0.7.1.nix {};
+  languageCQuote = self.languageCQuote_0_7_1;
 
   languageJavascript = callPackage ../development/libraries/haskell/language-javascript {};
 
@@ -1508,6 +1519,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   QuickCheck2 = self.QuickCheck_2_6;
   QuickCheck  = self.QuickCheck2;
 
+  quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
+
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
   random_1_0_1_1 = callPackage ../development/libraries/haskell/random/1.0.1.1.nix {};
@@ -1695,8 +1708,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   split_0_2_1_1 = callPackage ../development/libraries/haskell/split/0.2.1.1.nix {};
-  split_0_2_1_2 = callPackage ../development/libraries/haskell/split/0.2.1.2.nix {};
-  split = self.split_0_2_1_2;
+  split_0_2_1_3 = callPackage ../development/libraries/haskell/split/0.2.1.3.nix {};
+  split = self.split_0_2_1_3;
 
   stbImage = callPackage ../development/libraries/haskell/stb-image {};
 
@@ -1959,6 +1972,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   yaml = callPackage ../development/libraries/haskell/yaml {};
 
   yap = callPackage ../development/libraries/haskell/yap {};
+
+  yeganesh = callPackage ../applications/misc/yeganesh {};
 
   yesod = callPackage ../development/libraries/haskell/yesod {};
 

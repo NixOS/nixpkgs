@@ -1,16 +1,16 @@
 { stdenv, fetchurl, pkgconfig, intltool, gperf, libcap, dbus, kmod
 , xz, pam, acl, cryptsetup, libuuid, m4, utillinux
-, glib, kbd, libxslt, coreutils, libgcrypt, sysvtools
+, glib, kbd, libxslt, coreutils, libgcrypt, sysvtools, docbook_xsl
 }:
 
 assert stdenv.gcc.libc or null != null;
 
 stdenv.mkDerivation rec {
-  name = "systemd-197";
+  name = "systemd-200";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "1dbljyyc3w4a1af99f15f3sqnfx7mfmc5x5hwxb70kg23ai7x1g6";
+    sha256 = "05y2r25441nznif5xi5gab4c6xdywiqzgcl3nsmg0j2wzalbl24s";
   };
 
   patches =
@@ -21,12 +21,11 @@ stdenv.mkDerivation rec {
       ./0005-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
       ./0006-Don-t-call-plymouth-quit.patch
       ./0007-Ignore-IPv6-link-local-addresses.patch
-      ./0008-Fix-a-segfault-in-nscd-when-using-nss-myhostname.patch
     ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
     [ pkgconfig intltool gperf libcap dbus kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt
+      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt docbook_xsl
     ];
 
   configureFlags =
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
       "--with-dbuspolicydir=$(out)/etc/dbus-1/system.d"
       "--with-dbussystemservicedir=$(out)/share/dbus-1/system-services"
       "--with-dbussessionservicedir=$(out)/share/dbus-1/services"
-      "--with-firmware-path=/root/test-firmware:/var/run/current-system/firmware"
+      "--with-firmware-path=/root/test-firmware:/run/current-system/firmware"
       "--with-tty-gid=3" # tty in NixOS has gid 3
     ];
 
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE =
     [ # Can't say ${polkit}/bin/pkttyagent here because that would
       # lead to a cyclic dependency.
-      "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+      "-UPOLKIT_AGENT_BINARY_PATH -DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
       "-fno-stack-protector"
       # Work around our kernel headers being too old.  FIXME: remove
       # this after the next stdenv update.
@@ -81,7 +80,7 @@ stdenv.mkDerivation rec {
   # 1e1954f53386cb773e2a152748dd31c4d36aa2d8) because using /var is
   # forbidden in early boot, but in NixOS the initrd guarantees that
   # /var is mounted.
-  makeFlags = "CPPFLAGS=-I${stdenv.gcc.libc}/include hwdb_bin=/var/lib/udev/hwdb.bin";
+  makeFlags = "hwdb_bin=/var/lib/udev/hwdb.bin";
 
   installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc sysvinitdir=$(TMPDIR)/etc/init.d";
 

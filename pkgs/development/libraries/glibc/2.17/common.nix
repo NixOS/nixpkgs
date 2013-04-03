@@ -31,15 +31,16 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
-  patches =
+  /* Don't try to apply these patches to the Hurd's snapshot, which is
+     older.  */
+  patches = stdenv.lib.optionals (hurdHeaders == null)
     [ /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 
-      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  Currently
-         disabled on GNU/Hurd, which uses a more recent libc snapshot. */
+      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
       ./dont-use-system-ld-so-cache.patch
 
       /* Without this patch many KDE binaries crash. */

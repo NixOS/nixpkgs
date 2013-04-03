@@ -58,6 +58,11 @@ pythonPackages = python.modules // rec {
     inherit python buildPythonPackage;
   };
 
+  pitz = import ../applications/misc/pitz {
+    inherit (pkgs) stdenv fetchurl;
+    inherit buildPythonPackage tempita jinja2 pyyaml clepy mock nose decorator docutils;
+  };
+
   pycairo = import ../development/python-modules/pycairo {
     inherit (pkgs) stdenv fetchurl pkgconfig cairo x11;
     inherit python;
@@ -588,6 +593,24 @@ pythonPackages = python.modules // rec {
       description = "A pythonic, object-oriented HTTP framework";
     };
   });
+
+
+  clepy = buildPythonPackage rec {
+    name = "clepy-0.3.20";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/clepy/${name}.tar.gz";
+      sha256 = "16vibfxms5z4ld8gbkra6dkhqm2cc3jnn0fwp7mw70nlwxnmm51c";
+    };
+
+    buildInputs = [ mock nose decorator ];
+
+    meta = {
+      homepage = http://code.google.com/p/clepy/;
+      description = "Utilities created by the Cleveland Python users group";
+    };
+  };
+
 
   clientform = buildPythonPackage (rec {
     name = "clientform-0.2.10";
@@ -1462,7 +1485,7 @@ pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ nose ];
-    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar ];
+    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar deluge ];
 
     meta = {
       homepage = http://flexget.com/;
@@ -1682,6 +1705,23 @@ pythonPackages = python.modules // rec {
       description = "HTML parser based on WHAT-WG HTML5 specification";
       license = stdenv.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
+
+  http_signature = buildPythonPackage (rec {
+    name = "http_signature-0.1.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/h/http_signature/${name}.tar.gz";
+      md5 = "015061846254bd5d8c5dbc2913985153";
+    };
+
+    propagatedBuildInputs = [pycrypto];
+
+    meta = {
+      homepage = https://github.com/atl/py-http-signature;
+      description = "";
+      license = stdenv.lib.licenses.mit;
     };
   });
 
@@ -2753,11 +2793,11 @@ pythonPackages = python.modules // rec {
 
 
   prettytable = buildPythonPackage rec {
-    name = "prettytable-0.5";
+    name = "prettytable-0.7.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.gz";
-      md5 = "13a6930d775395f393afd86948afa4fa";
+      url = "http://pypi.python.org/packages/source/P/PrettyTable/${name}.tar.bz2";
+      sha1 = "ad346a18d92c1d95f2295397c7a8a4f489e48851";
     };
 
     meta = {
@@ -3866,6 +3906,23 @@ pythonPackages = python.modules // rec {
       license = "BSD";
     };
   });
+
+  smartdc = buildPythonPackage rec {
+    name = "smartdc-0.1.12";
+
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/s/smartdc/smartdc-0.1.12.tar.gz;
+      md5 = "b960f61facafc879142b699050f6d8b4";
+    };
+
+    propagatedBuildInputs = [ requests http_signature ];
+
+    meta = {
+      description = "Joyent SmartDataCenter CloudAPI connector using http-signature authentication via Requests";
+      homepage = https://github.com/atl/py-smartdc;
+      license = pkgs.lib.licenses.mit;
+    };
+  };
 
   sphinx = buildPythonPackage (rec {
     name = "Sphinx-1.1.3";

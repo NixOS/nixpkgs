@@ -8,5 +8,6 @@ stdenv.mkDerivation {
   };
   meta = {
 	description = "Small, GPL'ed password generator which creates passwords which can be easily memorized by a human.";
+        platforms = stdenv.lib.platforms.all;
   };
 }

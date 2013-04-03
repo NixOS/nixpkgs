@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
   # will actually use.
   configureFlags = stdenv.lib.optional stdenv.isCygwin [ "--enable-static" ];
 
+  crossAttrs = {
+    # Disable stripping to avoid "libiconv.a: Archive has no index" (MinGW).
+    dontStrip = true;
+    dontCrossStrip = true;
+  };
+
   meta = {
     description = "GNU libiconv, an iconv(3) implementation";
 

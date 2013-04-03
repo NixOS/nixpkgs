@@ -1,10 +1,17 @@
-{ cabal, dlist }:
+{ cabal, dataDefaultClass, dataDefaultInstancesBase
+, dataDefaultInstancesContainers, dataDefaultInstancesDlist
+, dataDefaultInstancesOldLocale
+}:
 
 cabal.mkDerivation (self: {
   pname = "data-default";
-  version = "0.5.1";
-  sha256 = "05zp9bcxm4lcdqniwckq0zi014iqcnqbrk5wh54dyy83h97z6mpv";
-  buildDepends = [ dlist ];
+  version = "0.5.2";
+  sha256 = "1w9wqv3k579zp5w11v06fak0lr9zzads49b1c9rb1vkz1d8bvf82";
+  buildDepends = [
+    dataDefaultClass dataDefaultInstancesBase
+    dataDefaultInstancesContainers dataDefaultInstancesDlist
+    dataDefaultInstancesOldLocale
+  ];
   meta = {
     description = "A class for types with a default value";
     license = self.stdenv.lib.licenses.bsd3;

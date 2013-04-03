@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     homepage = http://unkart.ovh.org/ncmpcpp/;
     license = "GPLv2+";
     maintainers = [ stdenv.lib.maintainers.mornfall ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
 

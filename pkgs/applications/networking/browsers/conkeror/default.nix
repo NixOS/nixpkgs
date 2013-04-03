@@ -1,18 +1,18 @@
 { stdenv, fetchurl, unzip, xulrunner, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "conkeror-1.0pre-20120316";
+  name = "conkeror-1.0pre-20130401";
   
   src = fetchurl {
-    url = http://repo.or.cz/w/conkeror.git/snapshot/1264c0dbbefb6d671504a072d4ddb48d62ccead2.zip;
-    sha256 = "1vdxnhqjjvg9cry70byv6d3wib2p4rxhkmv7hs10pq39km1kpj7f";
+    url = http://repo.or.cz/w/conkeror.git/snapshot/0341e791c78653a2f5bbbff9a1dac04bf898dd65.zip;
+    sha256 = "11v7p40lcz6r5z0w54f8pk6hyn9mqjcw44fqszjyz25rkhx951ry";
   };
   
   buildInputs = [ unzip makeWrapper ];
   
-  buildCommand = ''
+  installPhase = ''
     mkdir -p $out/libexec/conkeror
-    unzip $src -d $out/libexec
+    cp -r * $out/libexec/conkeror
 
     makeWrapper ${xulrunner}/bin/xulrunner $out/bin/conkeror \
       --add-flags $out/libexec/conkeror/application.ini
