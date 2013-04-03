@@ -703,6 +703,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
 
+  dataDefaultClass = callPackage ../development/libraries/haskell/data-default-class {};
+
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
   dataInttrie = callPackage ../development/libraries/haskell/data-inttrie {};
