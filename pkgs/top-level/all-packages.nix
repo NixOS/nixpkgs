@@ -7746,6 +7746,8 @@ let
 
   dropbox = callPackage ../applications/networking/dropbox { };
 
+  dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
+
   lightdm = callPackage ../applications/display-managers/lightdm { };
 
   lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
