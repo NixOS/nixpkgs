@@ -84,7 +84,7 @@ in
       '';
 
     # Enable helpful DBus services.
-    services.udisks.enable = true;
+    services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
 
   };
