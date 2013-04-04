@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip cmake SDL mesa zlib libjpeg libogg libvorbis openalSoft
     curl ];
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = https://github.com/dhewm/dhewm3;
     description = "Doom 3 port to SDL";
