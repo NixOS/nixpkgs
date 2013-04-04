@@ -1,19 +1,21 @@
-{ cabal, blazeBuilder, conduit, dataDefault, filepath, hinotify
-, httpReverseProxy, httpTypes, network, networkConduit
-, networkConduitTls, random, systemFileio, systemFilepath, tar
-, text, time, transformers, unixCompat, unixProcessConduit, wai
-, waiAppStatic, yaml, zlib
+{ cabal, attoparsec, blazeBuilder, caseInsensitive, conduit
+, dataDefault, filepath, hinotify, httpConduit, httpReverseProxy
+, httpTypes, mtl, network, networkConduit, networkConduitTls
+, random, regexTdfa, systemFileio, systemFilepath, tar, text, time
+, transformers, unixCompat, unixProcessConduit, wai, waiAppStatic
+, yaml, zlib
 }:
 
 cabal.mkDerivation (self: {
   pname = "keter";
-  version = "0.3.5.4";
-  sha256 = "0dqlfb5cydqk33zp6wf18wr3idpn3bbb8im3rcrg4r9ny7sqfmp7";
+  version = "0.3.6.1";
+  sha256 = "0jww64q74kx5h69mnv9wgc4kx0nlb06r7lf651gjkai8mf9dkqf2";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    blazeBuilder conduit dataDefault filepath hinotify httpReverseProxy
-    httpTypes network networkConduit networkConduitTls random
+    attoparsec blazeBuilder caseInsensitive conduit dataDefault
+    filepath hinotify httpConduit httpReverseProxy httpTypes mtl
+    network networkConduit networkConduitTls random regexTdfa
     systemFileio systemFilepath tar text time transformers unixCompat
     unixProcessConduit wai waiAppStatic yaml zlib
   ];
