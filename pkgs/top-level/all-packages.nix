@@ -7707,7 +7707,7 @@ let
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
-    fftw = fftw.override {float = true;}; 
+    fftw = fftw.override {float = true;};
   };
 
   rcs = callPackage ../applications/version-management/rcs { };
@@ -8005,7 +8005,7 @@ let
 
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR14B04;
-    esdl = esdl.override { erlang = erlangR14B04; }; 
+    esdl = esdl.override { erlang = erlangR14B04; };
   };
 
   wmname = callPackage ../applications/misc/wmname { };
