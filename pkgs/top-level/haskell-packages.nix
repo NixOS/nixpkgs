@@ -1603,6 +1603,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   SafeSemaphore = callPackage ../development/libraries/haskell/SafeSemaphore {};
 
+  scotty = callPackage ../development/libraries/haskell/scotty {};
+
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
