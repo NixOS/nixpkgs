@@ -53,7 +53,7 @@ in
       };
 
       package = mkOption {
-        default = pkgs.postgresql;
+        example = literalExample "pkgs.postgresql92";
         description = ''
           PostgreSQL package to use.
         '';
