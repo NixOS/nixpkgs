@@ -82,6 +82,7 @@
   ./services/hardware/sane.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks.nix
+  ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
   ./services/logging/klogd.nix
   ./services/logging/logcheck.nix
