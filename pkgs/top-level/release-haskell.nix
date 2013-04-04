@@ -204,6 +204,7 @@ mapTestOn {
     jailbreakCabal = supportedSystems;
     json = supportedSystems;
     jsonTypes = supportedSystems;
+    keter = supportedSystems;
     lambdabot = supportedSystems;
     languageCQuote = supportedSystems;
     languageJavascript = supportedSystems;
