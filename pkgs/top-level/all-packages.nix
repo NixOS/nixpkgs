@@ -7495,6 +7495,8 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  normalize = callPackage ../applications/audio/normalize { };
+
   mplayer = callPackage ../applications/video/mplayer {
     pulseSupport = config.pulseaudio or false;
   };
