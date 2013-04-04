@@ -7183,6 +7183,8 @@ let
 
   gqview = callPackage ../applications/graphics/gqview { };
 
+  gmpc = callPackage ../applications/audio/gmpc { };
+
   gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
     inherit (gnome) GConf;
   };
