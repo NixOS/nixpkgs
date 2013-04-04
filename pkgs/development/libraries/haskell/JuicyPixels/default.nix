@@ -14,6 +14,9 @@ cabal.mkDerivation (self: {
     description = "Picture loading/serialization (in png, jpeg, bitmap, radiance and gif)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

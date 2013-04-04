@@ -11,5 +11,6 @@ cabal.mkDerivation (self: {
     description = "Much safer replacement for QSemN, QSem, and SampleVar";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

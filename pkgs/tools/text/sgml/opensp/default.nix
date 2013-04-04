@@ -13,6 +13,8 @@ stdenv.mkDerivation {
       docsrc/*.xml
   '';
 
+  setupHook = ./setup-hook.sh;
+
   buildInputs = [ xmlto docbook_xml_dtd_412 libxslt docbook_xsl ];
 
   meta = {

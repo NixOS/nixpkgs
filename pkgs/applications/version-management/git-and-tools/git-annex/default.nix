@@ -6,19 +6,18 @@
 , networkInfo, networkMulticast, networkProtocolXmpp, openssh, QuickCheck
 , random, regexCompat, rsync, SafeSemaphore, SHA, stm, text, time, transformers
 , transformersBase, utf8String, uuid, wai, waiLogger, warp, xmlConduit, xmlTypes
-, yesod, yesodDefault, yesodForm, yesodStatic, testpack
-, cabalInstall		# TODO: remove this build input at the next update
+, yesod, yesodDefault, yesodForm, yesodStatic, testpack, regexTdfa
 }:
 
 let
-  version = "4.20130227";
+  version = "4.20130314";
 in
 stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
     url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=${version}";
-    sha256 = "1zw5kzb08zz43ahbhrazjpq9zn73l3kwnqilp464frf7fg7rwan6";
+    sha256 = "0rwirg9qdbd75c7wl6413blv9045sbxmw20idvbm47qc4q14gzv9";
     name = "git-annex-${version}.tar.gz";
   };
 
@@ -30,20 +29,21 @@ stdenv.mkDerivation {
     networkProtocolXmpp openssh QuickCheck random regexCompat rsync
     SafeSemaphore SHA stm text time transformers transformersBase utf8String
     uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodDefault yesodForm
-    yesodStatic which perl testpack cabalInstall ];
+    yesodStatic which perl testpack regexTdfa ];
 
   configurePhase = ''
-    makeFlagsArray=( PREFIX=$out )
+    makeFlagsArray=( PREFIX=$out CABAL=./Setup )
     patchShebangs .
-
-    # cabal-install wants to store stuff in $HOME
-    mkdir ../tmp
-    export HOME=$PWD/../tmp
-
-    cabal configure -f-fast -ftestsuite -f-android -fproduction -fdns -fxmpp -fpairing -fwebapp -fassistant -fdbus -finotify -fwebdav -fs3
+    ghc -O2 --make Setup
+    ./Setup configure -ftestsuite -f-android -fproduction -fdns -fxmpp -fpairing -fwebapp -fassistant -fdbus -finotify -fwebdav -fs3
   '';
 
-  checkPhase = "./git-annex test";
+  doCheck = true;
+  checkPhase = ''
+    export HOME="$NIX_BUILD_TOP/tmp"
+    mkdir "$HOME"
+    ./git-annex test
+  '';
 
   meta = {
     homepage = "http://git-annex.branchable.com/";

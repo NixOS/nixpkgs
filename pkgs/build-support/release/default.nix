@@ -39,4 +39,14 @@ rec {
     { inherit stdenv vmTools checkinstall;
     } // args);
 
+  aggregate =
+    { name, members, meta ? { } }:
+    pkgs.runCommand name
+      { inherit members meta;
+        _hydraAggregate = true;
+      }
+      ''
+        echo $members > $out
+      '';
+
 }

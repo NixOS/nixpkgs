@@ -2,17 +2,17 @@
 
 let
   driverdb = fetchurl {
-    url = "http://smartmontools.svn.sourceforge.net/viewvc/smartmontools/trunk/smartmontools/drivedb.h?revision=3781";
-    sha256 = "0m39ji2kf80dsws5ksg2pmkpn8x00lrlvl5nlc6ldjfss7sjvc9x";
+    url = "http://smartmontools.svn.sourceforge.net/viewvc/smartmontools/trunk/smartmontools/drivedb.h?revision=3797";
+    sha256 = "01ycm3vffxpfvfga9vp1d38jy3lqpkpxnxf78pidc8q1nn8bpdyz";
     name = "smartmontools-drivedb.h";
   };
 in
 stdenv.mkDerivation rec {
-  name = "smartmontools-6.0";
+  name = "smartmontools-6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
-    sha256 = "9fe4ff2b7bcd00fde19db82bba168f5462ed6e857d3ef439495e304e3231d3a6";
+    sha256 = "01yfv6hqsqandg6x8mnwa4g42hhqvc7dfxnfb3v849n8rj5kn059";
   };
 
   patchPhase = ''

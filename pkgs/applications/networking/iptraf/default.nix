@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0qsi5f8d84mgdszvz22acyv6mjnbrpk55d54km9i5mkkapck7r4y";
   };
 
+  patchPhase = ''
+    sed -i -e 's,#include <linux/if_tr.h>,#include <netinet/if_tr.h>,' src/*
+  '';
+
   preConfigure = "cd src";
 
   installPhase = ''

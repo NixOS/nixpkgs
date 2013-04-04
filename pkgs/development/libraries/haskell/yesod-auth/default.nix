@@ -8,8 +8,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-auth";
-  version = "1.1.5.3";
-  sha256 = "07srz4zpkn8w382xwi8ri6mh9kgplf0m51819zw1hympphmd9z82";
+  version = "1.1.6";
+  sha256 = "0g6ik3qvjnpyfbr2fciz53l62q44zi7ipil8v7hy56808n5y6i4i";
   buildDepends = [
     aeson authenticate blazeHtml blazeMarkup fileEmbed hamlet
     httpConduit httpTypes liftedBase mimeMail network persistent
@@ -22,6 +22,9 @@ cabal.mkDerivation (self: {
     description = "Authentication for Yesod";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

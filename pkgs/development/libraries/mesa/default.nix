@@ -2,7 +2,7 @@
 , libXxf86vm, libXfixes, libXdamage, glproto, dri2proto, libX11, libxcb, libXext
 , libXt, udev, enableTextureFloats ? false, enableR600LlvmCompiler ? false
 , python, libxml2Python, autoconf, automake, libtool, llvm, writeText
-, wayland }:
+, libffi, wayland }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
   throw "unsupported platform for Mesa"
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
   buildInputs = [
     autoconf automake libtool intltool expat libxml2Python udev llvm
     libdrm libXxf86vm libXfixes libXdamage glproto dri2proto libX11 libXext libxcb libXt
-    wayland
+    libffi wayland
   ];
 
   nativeBuildInputs = [ pkgconfig python makedepend file flex bison ];

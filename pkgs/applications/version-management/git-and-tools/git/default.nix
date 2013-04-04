@@ -1,6 +1,6 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper
+, libxslt, tcl, tk, makeWrapper, hardlink
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , guiSupport
 , withManual ? true
@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.8.1.3";
+  version = "1.8.2";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "1waz35cwgcwhgmgzmc4s00yd2vivhy77p49crgqsl0nqpxyj8lrp";
+    sha256 = "1rhkya4kfs7iayasgj3bk8zg1pfk3h7wqhfy9d6aaqjgzb75pwy2";
   };
 
   patches = [ ./docbook2texi.patch ];
@@ -111,46 +111,26 @@ stdenv.mkDerivation {
          notSupported "$out/$prog" \
                       "reinstall with config git = { guiSupport = true; } set"
        done
-     '')
+     '');
 
-   # Don't know why hardlinks aren't created. git installs the same executable
-   # multiple times into $out so replace duplicates by symlinks because I
-   # haven't tested whether the nix distribution system can handle hardlinks.
-   # This reduces the size of $out from 115MB down to 13MB on x86_64-linux!
-   + ''
-      declare -A seen
-      shopt -s globstar
-      for f in "$out/"**; do
-        if [ -L "$f" ]; then continue; fi
-        test -f "$f" || continue
-        sum=$(md5sum "$f");
-        sum=''\${sum/ */}
-        if [ -z "''\${seen["$sum"]}" ]; then
-          seen["$sum"]="$f"
-        else
-          rm "$f"; ln -v -s "''\${seen["$sum"]}" "$f"
-        fi
-      done
-     '';
+  # Git installs many copies of the same binary using hardlinks, but unfortunately
+  # our patchELF phase re-writes those files and destroys the hardlinks in the
+  # process. This utility re-generates them afterwards.
+  postFixup = "${hardlink}/bin/hardlink $out";
 
   enableParallelBuilding = true;
 
   meta = {
-    license = "GPLv2";
-    homepage = http://git-scm.com/;
+    homepage = "http://git-scm.com/";
     description = "Git, a popular distributed version control system";
+    license = stdenv.lib.licenses.gpl2Plus;
 
     longDescription = ''
       Git, a popular distributed version control system designed to
       handle very large projects with speed and efficiency.
     '';
 
-    maintainers =
-      [ # Add your name here!
-        stdenv.lib.maintainers.ludo
-        stdenv.lib.maintainers.simons
-      ];
-
     platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.ludo stdenv.lib.maintainers.simons ];
   };
 }

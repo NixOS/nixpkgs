@@ -20,10 +20,14 @@ cabal.mkDerivation (self: {
     unorderedContainers vector vectorAlgorithms xmlhtml
   ];
   jailbreak = true;
+  patchPhase = ''
+    sed -i -e 's|lens .*>= 3.7.6.*$|lens|' snap.cabal
+  '';
   meta = {
     homepage = "http://snapframework.com/";
     description = "Top-level package for the Snap Web Framework";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

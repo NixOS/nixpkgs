@@ -2,9 +2,7 @@
    also builds the documentation and tests whether the Nix expressions
    evaluate correctly. */
 
-{ nixpkgs ? { outPath = (import ./all-packages.nix {}).lib.cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
-, officialRelease ? false
-}:
+{ nixpkgs, officialRelease }:
 
 with import nixpkgs.outPath {};
 

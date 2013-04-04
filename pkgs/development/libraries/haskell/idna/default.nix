@@ -9,5 +9,6 @@ cabal.mkDerivation (self: {
     description = "Implements IDNA (RFC 3490)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

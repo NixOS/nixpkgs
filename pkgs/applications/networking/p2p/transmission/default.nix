@@ -1,20 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, openssl, curl, intltool, libevent,
-  file, inotifyTools, gtk ? null }:
+{ stdenv, fetchurl, pkgconfig, openssl, curl, intltool, libevent
+, file, inotifyTools
+, enableGtk ? false, gtk ? null }:
+
+assert enableGtk -> gtk != null;
 
 stdenv.mkDerivation rec {
-  name = "transmission-2.60"; # transmission >= 2.61 requires gtk3
+  name = "transmission-2.77"; # transmission >= 2.61 requires gtk3
 
   src = fetchurl {
     url = "http://download.transmissionbt.com/files/${name}.tar.xz";
-    sha256 = "1ramdliyy8j7qqpkxg643lda11ynxwfhq6qcs31fr3h9x72l0rg4";
+    sha256 = "1phzhj4wds6r2ziclva1b5l6l9xjsx5ji7s3m4xia44aq4znbcam";
   };
 
   buildInputs = [ pkgconfig openssl curl intltool libevent
-                  file inotifyTools gtk ];
+                  file inotifyTools ]
+    ++ stdenv.lib.optional enableGtk gtk;
 
   preConfigure = ''
     sed -i -e 's|/usr/bin/file|${file}/bin/file|g' configure
   '';
+
+  configureFlags = stdenv.lib.optionalString enableGtk "--with-gtk";
 
   postInstall = ''
     rm -f $out/share/icons/hicolor/icon-theme.cache

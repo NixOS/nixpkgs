@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     description = "Like Data.Dynamic/Data.Typeable but with support for rank-1 polymorphic types";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

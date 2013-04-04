@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cryptohash";
-  version = "0.8.3";
-  sha256 = "1fcqbbclii2hmbhi7h64v0nnbc34zzs107m3lqq38iiyy5fvqqv2";
+  version = "0.8.4";
+  sha256 = "0h58apxcrvpkyj3s2c7l68g7biv80snkn53g6jya1s687xff8fmn";
   buildDepends = [ cereal cryptoApi tagged ];
   testDepends = [
     HUnit QuickCheck testFramework testFrameworkHunit
@@ -16,6 +16,9 @@ cabal.mkDerivation (self: {
     description = "collection of crypto hashes, fast, pure and practical";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

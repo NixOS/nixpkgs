@@ -10,5 +10,6 @@ cabal.mkDerivation (self: {
     description = "A low-dimensional linear algebra library, tailored to computer graphics";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

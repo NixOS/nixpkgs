@@ -11,10 +11,12 @@ cabal.mkDerivation (self: {
   buildDepends = [
     filepath mtl QuickCheck random regexBase stm text time vector vty
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://jtdaugherty.github.com/vty-ui/";
     description = "An interactive terminal user interface library for Vty";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

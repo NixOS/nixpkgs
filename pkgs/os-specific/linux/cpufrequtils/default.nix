@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libtool, gettext }:
 
-assert stdenv.isLinux && stdenv.system != "powerpc-linux";
+assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation {
   name = "cpufrequtils-008";

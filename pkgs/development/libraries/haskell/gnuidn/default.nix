@@ -13,5 +13,6 @@ cabal.mkDerivation (self: {
     description = "Bindings for GNU IDN";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

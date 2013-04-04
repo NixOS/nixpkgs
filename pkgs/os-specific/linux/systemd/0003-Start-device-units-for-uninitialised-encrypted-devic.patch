@@ -1,7 +1,7 @@
-From a013beb84f135cebf1c8c9363d5676c1c0a6be7a Mon Sep 17 00:00:00 2001
+From 7e7d0ebc8617dfdae4ece9f5b66dc63031bb3fbc Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:46:30 +0100
-Subject: [PATCH 3/6] Start device units for uninitialised encrypted devices
+Subject: [PATCH 3/7] Start device units for uninitialised encrypted devices
 
 This is necessary because the NixOS service that initialises the
 filesystem depends on the appearance of the device unit.  Also, this
@@ -28,5 +28,5 @@ index d17bdd9..040b10e 100644
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", TEST!="md/array_state", ENV{SYSTEMD_READY}="0"
  SUBSYSTEM=="block", ENV{DEVTYPE}=="disk", KERNEL=="md*", ATTR{md/array_state}=="|clear|inactive", ENV{SYSTEMD_READY}="0"
 -- 
-1.8.0.1
+1.8.1
 

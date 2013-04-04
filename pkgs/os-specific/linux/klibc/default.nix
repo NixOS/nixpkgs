@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, bison, mktemp, linuxHeaders, linuxHeadersCross, kernel ? null }:
+{ stdenv, fetchurl, perl, bison, mktemp, linuxHeaders, linuxHeadersCross, kernelDev ? null }:
 
 assert stdenv.isLinux;
 
@@ -8,7 +8,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "klibc-${version}${stdenv.lib.optionalString (kernel != null) "-${kernel.version}"}";
+  name = "klibc-${version}${stdenv.lib.optionalString (kernelDev != null) "-${kernelDev.version}"}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/klibc/1.5/klibc-${version}.tar.bz2";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   # So it cannot run the 'make headers_install' it wants to run.
   # We don't install the headers, so klibc will not be useful as libc, but
   # usually in nixpkgs we only use the userspace tools comming with klibc.
-  prePatch = stdenv.lib.optionalString (kernel == null) ''
+  prePatch = stdenv.lib.optionalString (kernelDev == null) ''
     sed -i -e /headers_install/d scripts/Kbuild.install
   '';
   
@@ -49,15 +49,15 @@ stdenv.mkDerivation {
     echo "CONFIG_AEABI=y" >> defconfig
     makeFlags=$(eval "echo $makeFlags")
 
-  '' + (if kernel == null then ''
+  '' + (if kernelDev == null then ''
     mkdir linux
     cp -prsd $linuxHeaders/include linux/
     chmod -R u+w linux/include/
   '' else ''
-    tar xvf ${kernel.src}
+    tar xvf ${kernelDev.src}
     mv linux* linux
     cd linux
-    ln -sv ${kernel}/config .config
+    ln -sv ${kernelDev}/config .config
     make prepare
     cd ..
   '');

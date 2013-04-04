@@ -1,32 +1,37 @@
-{ stdenv, fetchurl, SDL, cmake, gettext, ilmbase, libXi, libjpeg,
-libpng, libsamplerate, libtiff, mesa, openal, openexr, openjpeg,
-python, zlib, boost, glew, xlibs }:
+{ stdenv, fetchurl, SDL, boost, cmake, ffmpeg, gettext, glew
+, ilmbase, jackaudio, libXi, libjpeg, libpng, libsamplerate, libsndfile
+, libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg, python
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-  name = "blender-2.65a";
+  name = "blender-2.66a";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "1p7nszbqsn48s6jrj0bqav7q52gj82rpv1w5lhh64v092m3v9jpq";
+    sha256 = "0wj8x9xk5irvsjc3rm7wzml1j47xcdpdpy84kidafk02biskcqcb";
   };
 
-  buildInputs = [ cmake mesa gettext python libjpeg libpng zlib openal
-    SDL openexr libsamplerate libXi libtiff ilmbase openjpeg boost glew xlibs.libXxf86vm ];
+  buildInputs = [
+    SDL boost cmake ffmpeg gettext glew ilmbase jackaudio libXi
+    libjpeg libpng libsamplerate libsndfile libtiff mesa openal
+    opencolorio openexr openimageio openjpeg python zlib
+  ];
 
-  patches = [ ./fix-include.patch ];
 
   cmakeFlags = [
     "-DOPENEXR_INC=${openexr}/include/OpenEXR"
     "-DWITH_OPENCOLLADA=OFF"
+    "-DWITH_CODEC_FFMPEG=ON"
+    "-DWITH_CODEC_SNDFILE=ON"
+    "-DWITH_JACK=ON"
     "-DWITH_INSTALL_PORTABLE=OFF"
-    "-DPYTHON_LIBRARY=${python}/lib"
-    "-DPYTHON_INCLUDE_DIR=${python}/include/${python.libPrefix}"
-    "-DOPENJPEG_INCLUDE_DIR=${openjpeg}/include"
-    "-DWITH_CYCLES=0" # would need openimageio
-  ]; # ToDo?: more options available
+    "-DPYTHON_LIBRARY=python${python.majorVersion}m"    
+    "-DPYTHON_LIBPATH=${python}/lib"
+    "-DPYTHON_INCLUDE_DIR=${python}/include/python${python.majorVersion}m"
+  ];
 
-  NIX_CFLAGS_COMPILE = "-I${openjpeg}/include/${openjpeg.incDir} -I${ilmbase}/include/OpenEXR";
-  NIX_CFLAGS_LINK = "-lpython3";
+  NIX_CFLAGS_COMPILE = "-I${ilmbase}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl
 , bzip2
 , db4
 , gdbm
@@ -17,10 +17,9 @@ with stdenv.lib;
 
 let
   majorVersion = "3.3";
-  version = "${majorVersion}.0";
+  version = "${majorVersion}.1rc1";
 
   buildInputs = filter (p: p != null) [
-    pkgconfig # ToDo?: system expat, libffi libmpcdec
     zlib bzip2 gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto
   ];
 in
@@ -29,8 +28,8 @@ stdenv.mkDerivation {
   inherit majorVersion version;
 
   src = fetchurl {
-    url = "http://www.python.org/ftp/python/${version}/Python-${version}.tar.xz";
-    sha256 = "1mxvyl890br2wk4dn8giw3ihajjsh2ljg59qnas63vx8hll4v689";
+    url = "http://www.python.org/ftp/python/3.3.1/Python-${version}.tar.bz2";
+    sha256 = "1pnsbdzbd3750jcy32sv1760lv7am4x3f33jn1kmdmd82za279gv";
   };
 
   preConfigure = ''

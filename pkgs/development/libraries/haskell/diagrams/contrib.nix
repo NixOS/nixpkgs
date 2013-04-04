@@ -1,14 +1,16 @@
-{ cabal, colour, dataDefault, diagramsLib, forceLayout, HUnit, lens
-, mtl, QuickCheck, testFramework, testFrameworkHunit
+{ cabal, arithmoi, circlePacking, colour, dataDefault, diagramsCore
+, diagramsLib, forceLayout, HUnit, lens, MonadRandom, mtl
+, QuickCheck, split, testFramework, testFrameworkHunit
 , testFrameworkQuickcheck2, vectorSpace
 }:
 
 cabal.mkDerivation (self: {
   pname = "diagrams-contrib";
-  version = "0.6.0.3";
-  sha256 = "0j0wmf2nksqh3rqmzyw468bp25zikc5icif5f3rfi1v06ghsk0i5";
+  version = "0.6.1";
+  sha256 = "0z92sfgqpfk401lzkvnsg3ij05795qc61c4lx12glbmdpfhilcpi";
   buildDepends = [
-    colour dataDefault diagramsLib forceLayout lens mtl vectorSpace
+    arithmoi circlePacking colour dataDefault diagramsCore diagramsLib
+    forceLayout lens MonadRandom mtl split vectorSpace
   ];
   testDepends = [
     diagramsLib HUnit QuickCheck testFramework testFrameworkHunit
@@ -19,5 +21,6 @@ cabal.mkDerivation (self: {
     description = "Collection of user contributions to diagrams EDSL";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

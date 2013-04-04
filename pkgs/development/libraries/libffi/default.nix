@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation (rec {
-  name = "libffi-3.0.9";
+  name = "libffi-3.0.13";
 
   src = fetchurl {
     url = "ftp://sourceware.org/pub/libffi/${name}.tar.gz";
-    sha256 = "0ln4jbpb6clcsdpb9niqk0frgx4k0xki96wiv067ig0q4cajb7aq";
+    sha256 = "077ibkf84bvcd6rw1m6jb107br63i2pp301rkmsbgg6300adxp8x";
   };
 
   doCheck = true;

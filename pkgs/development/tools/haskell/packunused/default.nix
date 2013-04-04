@@ -12,5 +12,6 @@ cabal.mkDerivation (self: {
     description = "Tool for detecting redundant Cabal package dependencies";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

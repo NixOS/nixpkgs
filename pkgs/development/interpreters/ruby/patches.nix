@@ -1,5 +1,5 @@
 { fetchurl, writeScript, ruby, ncurses, sqlite, libxml2, libxslt, libffi
-, zlib, libuuid, gems, jdk, python }:
+, zlib, libuuid, gems, jdk, python, stdenv }:
 
 let
 
@@ -15,7 +15,32 @@ in
 {
   sup = { buildInputs = [ gems.ncursesw ]; };
 
-  libv8 = { buildInputs = [ python ]; };
+  libv8 = {
+    # This fix is needed to fool scons, which clears the environment by default.
+    # It's ugly, but it works.
+    #
+    # We create a gcc wrapper wrapper, which reexposes the environment variables
+    # that scons hides. Furthermore, they treat warnings as errors causing the
+    # build to fail, due to an unused variable.
+    #
+    # Finally, we must set CC and AR explicitly to allow scons to find the
+    # compiler and archiver
+    
+    preBuild = ''
+      cat > $TMPDIR/g++ <<EOF
+      #! ${stdenv.shell}
+      $(export)
+      
+      g++ \$(echo \$@ | sed 's/-Werror//g')
+      EOF
+      chmod +x $TMPDIR/g++
+      
+      
+      export CXX=$TMPDIR/g++
+      export AR=$(type -p ar)
+    '';
+    buildInputs = [ python ];
+  };
   
   sqlite3 = { propagatedBuildInputs = [ sqlite ]; };
   

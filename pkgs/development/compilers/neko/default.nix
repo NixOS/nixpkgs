@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "neko-${version}";
-  version = "1.8.2";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "http://nekovm.org/_media/neko-${version}.tar.gz";
-    sha256 = "099727w6dk689z3pcgbhsqjl74zzrh82a5vb2abxynamcqxcgz1w";
+    sha256 = "1lcm1ahbklfpd5lnqjwmvyj2vr85jbq57hszk5jgq0x6yx6p3927";
   };
 
   prePatch = with stdenv.lib; let

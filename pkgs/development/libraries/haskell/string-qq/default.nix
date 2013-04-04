@@ -8,5 +8,6 @@ cabal.mkDerivation (self: {
     description = "QuasiQuoter for non-interpolated strings, texts and bytestrings";
     license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

@@ -6,8 +6,8 @@
 
 cabal.mkDerivation (self: {
   pname = "warp";
-  version = "1.3.7.4";
-  sha256 = "0z043v1fjblbvkn44hzp7j8iawqzbwf67qxq7gsv7jfq1q58xbrx";
+  version = "1.3.8";
+  sha256 = "0lpyrdwgsaxzds6qrh0drp0r90x1va4d7z2n65xb0rhkslr3sk3l";
   buildDepends = [
     blazeBuilder blazeBuilderConduit caseInsensitive conduit hashable
     httpTypes liftedBase network networkConduit simpleSendfile
@@ -23,6 +23,9 @@ cabal.mkDerivation (self: {
     description = "A fast, light-weight web server for WAI applications";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

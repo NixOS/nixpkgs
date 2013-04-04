@@ -13,6 +13,9 @@ cabal.mkDerivation (self: {
     description = "Command-line program for type-checking and compiling Agda programs";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

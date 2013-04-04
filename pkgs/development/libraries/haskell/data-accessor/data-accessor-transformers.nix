@@ -10,5 +10,6 @@ cabal.mkDerivation (self: {
     description = "Use Accessor to access state in transformers State monad";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

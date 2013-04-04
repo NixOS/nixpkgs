@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     description = "Atomic bit operations on memory locations for low-level synchronization";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

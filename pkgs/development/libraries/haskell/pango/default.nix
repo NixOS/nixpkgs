@@ -14,6 +14,9 @@ cabal.mkDerivation (self: {
     description = "Binding to the Pango text rendering engine";
     license = self.stdenv.lib.licenses.lgpl21;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

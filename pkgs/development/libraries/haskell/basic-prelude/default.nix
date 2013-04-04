@@ -15,5 +15,6 @@ cabal.mkDerivation (self: {
     description = "An enhanced core prelude; a common foundation for alternate preludes";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

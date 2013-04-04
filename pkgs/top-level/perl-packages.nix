@@ -5,11 +5,13 @@
    for each package in a separate file: the call to the function would
    be almost as must code as the function itself. */
 
-{pkgs}:
+{pkgs, __overrides}:
 
 rec {
 
   inherit (pkgs) buildPerlPackage fetchurl stdenv perl fetchsvn;
+
+  inherit __overrides;
 
   # Helper functions for packages that use Module::Build to build.
   buildPerlModule = { buildInputs ? [], ... } @ args:
@@ -1553,6 +1555,19 @@ rec {
     };
   };
 
+  DBIxClassCandy = buildPerlPackage {
+    name = "DBIx-Class-Candy-0.002103";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Candy-0.002103.tar.gz;
+      sha256 = "1vcaigvzxq9jjkhw2bkayrnsa76sakr3wrv7009f1dxyfa0iyrsk";
+    };
+    propagatedBuildInputs = [ TestDeep TestFatal DBIxClass LinguaENInflect StringCamelCase ];
+    meta = {
+      description = "Sugar for your favorite ORM, DBIx::Class";
+      license = "perl5";
+    };
+  };
+
   DBIxClassCursorCached = buildPerlPackage {
     name = "DBIx-Class-Cursor-Cached-1.001002";
     src = fetchurl {
@@ -1574,6 +1589,19 @@ rec {
       sha256 = "05zhniyzl31nq410ywhxm0vmvac53h7ax42hjs9mmpvf45ipahj1";
     };
     propagatedBuildInputs = [DBIxClass HTMLWidget];
+  };
+
+  DBIxClassHelpers = buildPerlPackage {
+    name = "DBIx-Class-Helpers-2.016005";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Helpers-2.016005.tar.gz;
+      sha256 = "0nkskc0h284l2q3m33553i8g4pr1kcx7vmwz8bi1kmga16bs7nqk";
+    };
+    propagatedBuildInputs = [ DBIxClassCandy TestDeep CarpClan DBDSQLite ];
+    meta = {
+      description = "Simplify the common case stuff for DBIx::Class.";
+      license = "perl5";
+    };
   };
 
   DBIxClassIntrospectableM2M = buildPerlPackage {
@@ -2057,10 +2085,10 @@ rec {
   };
 
   GD = buildPerlPackage rec {
-    name = "GD-2.45";
+    name = "GD-2.49";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LD/LDS/${name}.tar.gz";
-      sha256 = "1p84585b4iyqa21hbqni0blj8fzd917ynd3y1hwh3mrmyfqj178x";
+      sha256 = "03wwvhvni22cs7arai7d3wkb2qfa9p20grrb32hdxv41nqxqpihh";
     };
 
     buildInputs = [ pkgs.gd pkgs.libjpeg pkgs.zlib pkgs.freetype
@@ -4176,6 +4204,14 @@ rec {
     src = fetchurl {
       url = mirror://cpan/authors/id/S/SA/SAMV/Set-Object-1.26.tar.gz;
       sha256 = "1hx3wrw8xkvaggacc8zyn86hfi3079ahmia1n8vsw7dglp1bbhmj";
+    };
+  };
+
+  SGMLSpm = buildPerlPackage {
+    name = "SGMLSpm-1.1";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RA/RAAB/SGMLSpm-1.1.tar.gz;
+      sha256 = "1gdjf3mcz2bxir0l9iljxiz6qqqg3a9gg23y5wjg538w552r432m";
     };
   };
 
