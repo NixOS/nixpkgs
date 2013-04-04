@@ -5537,7 +5537,7 @@ let
 
   OVMF = callPackage ../applications/virtualization/OVMF { };
 
-  postgresql = postgresql83;
+  postgresql = postgresql92;
 
   postgresql83 = callPackage ../servers/sql/postgresql/8.3.x.nix { };
 
