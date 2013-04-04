@@ -556,7 +556,7 @@ let
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
     inherit libpng bison flex;
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
@@ -3653,7 +3653,7 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
-  ffmpeg_1_1 = callPackage ../development/libraries/ffmpeg/1.1.nix {
+  ffmpeg_1 = callPackage ../development/libraries/ffmpeg/1.x.nix {
     vpxSupport = !stdenv.isMips;
   };
 
@@ -4618,7 +4618,7 @@ let
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
   mlt = callPackage ../development/libraries/mlt {
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
@@ -7504,7 +7504,7 @@ let
   };
 
   mplayer2 = callPackage ../applications/video/mplayer2 {
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   MPlayerPlugin = browser:
@@ -7974,7 +7974,7 @@ let
   };
 
   vlc = callPackage ../applications/video/vlc {
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   vnstat = callPackage ../applications/networking/vnstat { };

@@ -74,6 +74,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i /^_install_strip/d configure
+
+    sed -i '/stdlib/a#include <ctype.h>/' sub/sub*.c
   '';
 
   buildInputs = with stdenv.lib;

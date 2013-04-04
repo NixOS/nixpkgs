@@ -29,11 +29,11 @@ assert x11grabSupport -> libXext != null && libXfixes != null;
 assert playSupport -> SDL != null;
 
 stdenv.mkDerivation rec {
-  name = "ffmpeg-1.1.3";
+  name = "ffmpeg-1.2";
   
   src = fetchurl {
     url = "http://www.ffmpeg.org/releases/${name}.tar.bz2";
-    sha256 = "03s1zsprz5p6gjgwwqcf7b6cvzwwid6l8k7bamx9i0f1iwkgdm0j";
+    sha256 = "1bssxbn4p813xlgb8whg4b60j90yzfy92x70b4q8j35fgp0gnfcs";
   };
   
   # `--enable-gpl' (as well as the `postproc' and `swscale') mean that
