@@ -18,12 +18,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-var-install.patch
-    #./no-trans.patch 
-    #./mkdir-networks.patch
     ./pygtk.patch
     ./no-optimization.patch
     ./dhclient.patch 
-    ./no-ast-transl.patch
     ./fix-app-icon.patch
     ./fix-gtk-issues.patch
     ];
@@ -44,6 +41,7 @@ stdenv.mkDerivation rec {
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus})" in/scripts=wicd-gtk.in
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin" in/scripts=wicd-cli.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus})" in/scripts=wicd-cli.in
+    rm po/ast.po
   '';
 
   configurePhase = ''
