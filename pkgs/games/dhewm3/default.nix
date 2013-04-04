@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0c17k60xhimpqi1xi9s1l7jbc97pqjnk4lgwyjb0agc3dkr73zwd";
   };
 
+  # Add mesa linking
+  patchPhase = ''
+    sed -i 's/\<idlib\()\?\)$/idlib GL\1/' CMakeLists.txt
+  '';
+
   unpackPhase = ''
     unzip ${src}
     cd */neo
@@ -24,5 +29,5 @@ stdenv.mkDerivation rec {
     description = "Doom 3 port to SDL";
     license = "GPLv3";
   };
-}
 
+}
