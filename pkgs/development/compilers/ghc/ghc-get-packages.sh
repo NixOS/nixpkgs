@@ -12,7 +12,7 @@ fi
 PATH="$2:$PATH"
 IFS=":"
 for p in $PATH; do
-  PkgDir="$p/../lib/ghc-pkgs/ghc-$version"
+  PkgDir="$p/../lib/ghc-$version/package.conf.d"
   for i in $PkgDir/*.installedconf; do
     # output takes place here
     test -f $i && echo -n " $prefix$i"

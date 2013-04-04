@@ -12,11 +12,11 @@
 #       $out/bin/gtester-report' to postInstall if this is solved
 
 stdenv.mkDerivation (rec {
-  name = "glib-2.34.0";
+  name = "glib-2.34.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/2.34/${name}.tar.xz";
-    sha256 = "f69b112f8848be35139d9099b62bc81649241f78f6a775516f0d4c9b47f65144";
+    sha256 = "855fcbf87cb93065b488358e351774d8a39177281023bae58c286f41612658a7";
   };
 
   # configure script looks for d-bus but it is only needed for tests
@@ -26,7 +26,11 @@ stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ pcre zlib libffi ];
 
-  configureFlags = "--with-pcre=system --disable-fam";
+  configureFlags = "--with-pcre=system --disable-fam" +
+                   (stdenv.lib.optionalString (libiconvOrNull != null) " --with-libiconv=gnu") +
+                   (stdenv.lib.optionalString stdenv.isSunOS " --disable-modular-tests");
+
+  CPPFLAGS = stdenv.lib.optionalString stdenv.isSunOS "-DBSD_COMP";
 
   enableParallelBuilding = true;
 

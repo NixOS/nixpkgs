@@ -7,17 +7,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "perl-5.16.2";
+  name = "perl-5.16.3";
 
   src = fetchurl {
     url = "mirror://cpan/src/${name}.tar.gz";
-    sha256 = "03nh8bqnjsdd5izjv3n2yfcxw4ck0llwww36jpbjbjgixwpqpy4f";
+    sha256 = "1dpd9lhc4723wmsn4dsn4m320qlqgyw28bvcbhnfqp2nl3f0ikv9";
   };
 
   patches =
     [ # Do not look in /usr etc. for dependencies.
       ./no-sys-dirs.patch
     ]
+    ++ stdenv.lib.optional stdenv.isSunOS  ./ld-shared.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./no-libutil.patch;
 
   # Build a thread-safe Perl with a dynamic libperls.o.  We need the
@@ -58,6 +59,28 @@ stdenv.mkDerivation rec {
     '';
 
   setupHook = ./setup-hook.sh;
+
+  doCheck = true;
+
+  # some network-related tests don't work, mostly probably due to our sandboxing
+  testsToSkip = ''
+    lib/Net/hostent.t \
+    dist/IO/t/{io_multihomed.t,io_sock.t} \
+    t/porting/{maintainers.t,regen.t} \
+    cpan/Socket/t/getnameinfo.t \
+  '' + stdenv.lib.optionalString stdenv.isFreeBSD ''
+    cpan/CPANPLUS/t/04_CPANPLUS-Module.t \
+    cpan/CPANPLUS/t/20_CPANPLUS-Dist-MM.t \
+  '' + " ";
+
+  postPatch = ''
+    for test in ${testsToSkip}; do
+      echo "Removing test" $test
+      rm "$test"
+      pat=`echo "$test" | sed 's,/,\\\\/,g'` # just escape slashes
+      sed "/^$pat/d" -i MANIFEST
+    done
+  '';
 
   passthru.libPrefix = "lib/perl5/site_perl";
 }

@@ -1998,7 +1998,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc46;
+  gcc = gcc48;
 
   gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
     inherit fetchurl stdenv noSysDirs;
@@ -2050,6 +2050,8 @@ let
   gcc46 = gcc46_real;
 
   gcc47 = gcc47_real;
+
+  gcc48 = gcc48_real;
 
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.5) {
@@ -2237,6 +2239,32 @@ let
     binutilsCross = null;
   }));
 
+  gcc48_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
+    inherit noSysDirs;
+    # I'm not sure if profiling with enableParallelBuilding helps a lot.
+    # We can enable it back some day. This makes the *gcc* builds faster now.
+    profiledCompiler = false;
+
+    # When building `gcc.crossDrv' (a "Canadian cross", with host == target
+    # and host != build), `cross' must be null but the cross-libc must still
+    # be passed.
+    cross = null;
+    libcCross = if crossSystem != null then libcCross else null;
+    libpthreadCross =
+      if crossSystem != null && crossSystem.config == "i586-pc-gnu"
+      then gnu.libpthreadCross
+      else null;
+  }));
+
+  gcc48_debug = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
+    stripped = false;
+
+    inherit noSysDirs;
+    cross = null;
+    libcCross = null;
+    binutilsCross = null;
+  }));
+
   gccApple =
     assert stdenv.isDarwin;
     wrapGCC (makeOverridable (import ../development/compilers/gcc/4.2-apple64) {
@@ -2247,15 +2275,7 @@ let
       stdenv = allStdenvs.stdenvNative;
     });
 
-  gfortran = gfortran46;
-
-  gfortran42 = wrapGCC (gcc42.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    inherit gmp mpfr;
-  });
+  gfortran = gfortran47;
 
   gfortran43 = wrapGCC (gcc43.gcc.override {
     name = "gfortran";
@@ -2273,15 +2293,7 @@ let
     profiledCompiler = false;
   });
 
-  gfortran45 = wrapGCC (gcc45_real.gcc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran46 = wrapGCC (gcc46_real.gcc.override {
+  gfortran47 = wrapGCC (gcc47.gcc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -3836,7 +3848,7 @@ let
   # The GHC bootstrap binaries link against libgmp.so.3, which is in GMP 4.x.
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { };
 
-  gmp5 = callPackage ../development/libraries/gmp/5.0.5.nix { };
+  gmp5 = callPackage ../development/libraries/gmp/5.1.1.nix { };
 
   gmp51 = callPackage ../development/libraries/gmp/5.1.1.nix { };
 

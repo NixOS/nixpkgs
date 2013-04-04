@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "18qf6jzz1r3mzb5qynywv4xx3z9g61hgkbpkdrhbgqh2g7jhgfc5";
   };
 
+  # ToDo: there might be more impurities than FMA support check
+  patches = [ ./disable-fma.patch ]; # http://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html
+  patchFlags = "-p0";
+
   doCheck = true;
 
   meta = {

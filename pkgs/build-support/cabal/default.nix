@@ -110,18 +110,22 @@
               done
 
               for p in $extraBuildInputs $propagatedNativeBuildInputs; do
+                if [ -d "$p/lib/ghc-${ghc.ghc.version}/package.conf.d" ]; then
+                  # Haskell packages don't need any extra configuration.
+                  continue;
+                fi
                 if [ -d "$p/include" ]; then
-                  extraConfigureFlags+=" --extra-include-dir=$p/include"
+                  extraConfigureFlags+=" --extra-include-dirs=$p/include"
                 fi
                 for d in lib{,64}; do
                   if [ -d "$p/$d" ]; then
-                    extraConfigureFlags+=" --extra-lib-dir=$p/$d"
+                    extraConfigureFlags+=" --extra-lib-dirs=$p/$d"
                   fi
                 done
               done
 
               echo "configure flags: $extraConfigureFlags $configureFlags"
-              ./Setup configure --verbose --prefix="$out" $extraConfigureFlags $configureFlags
+              ./Setup configure --verbose --prefix="$out" --libdir='$prefix/lib/$compiler' --libsubdir='$pkgid' $extraConfigureFlags $configureFlags
 
               eval "$postConfigure"
             '';
@@ -156,7 +160,7 @@
 
               ensureDir $out/bin # necessary to get it added to PATH
 
-              local confDir=$out/lib/ghc-pkgs/ghc-${ghc.ghc.version}
+              local confDir=$out/lib/ghc-${ghc.ghc.version}/package.conf.d
               local installedPkgConf=$confDir/${self.fname}.installedconf
               local pkgConf=$confDir/${self.fname}.conf
               ensureDir $confDir
