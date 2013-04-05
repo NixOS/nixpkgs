@@ -2,7 +2,7 @@
 , glib, dbus, udev, udisks2, libgcrypt
 , libgphoto2, avahi, libarchive, fuse, libcdio
 , libxml2, libxslt, docbook_xsl
-, lightWeight ? true, gnome, samba }:
+, lightWeight ? true, gnome, samba, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "gvfs-1.14.2";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool libtool ];
 
   buildInputs =
-    [ glib dbus.libs udev udisks2 libgcrypt
+    [ makeWrapper glib dbus.libs udev udisks2 libgcrypt
       libgphoto2 avahi libarchive fuse libcdio
       libxml2 libxslt docbook_xsl
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     ]);
 
   enableParallelBuilding = true;
+
+  # ToDo: one probably should specify schemas for samba and others here
+  fixupPhase = ''
+    wrapProgram $out/libexec/gvfsd --set GSETTINGS_SCHEMA_DIR "$out/share/glib-2.0/schemas"
+  '';
 
   meta = {
     description = "Virtual Filesystem support library" + stdenv.lib.optionalString lightWeight " (light-weight)";
