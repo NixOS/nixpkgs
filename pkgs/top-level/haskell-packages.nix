@@ -1359,6 +1359,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network = self.network_2_4_1_2;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
+  networkConduitTls = callPackage ../development/libraries/haskell/network-conduit-tls {};
 
   networkInfo = callPackage ../development/libraries/haskell/network-info {};
 
@@ -1603,6 +1604,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   SafeSemaphore = callPackage ../development/libraries/haskell/SafeSemaphore {};
 
+  scotty = callPackage ../development/libraries/haskell/scotty {};
+
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
   semigroups = callPackage ../development/libraries/haskell/semigroups {};
@@ -1836,6 +1839,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   uniqueid = callPackage ../development/libraries/haskell/uniqueid {};
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
+
+  unixProcessConduit = callPackage ../development/libraries/haskell/unix-process-conduit {};
 
   unixTime = callPackage ../development/libraries/haskell/unix-time {};
 
@@ -2147,6 +2152,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
 
   jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {};
+
+  keter = callPackage ../development/tools/haskell/keter {};
 
   lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 

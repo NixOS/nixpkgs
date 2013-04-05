@@ -1,7 +1,10 @@
 {stdenv, fetchurl, libX11, libXinerama, patches ? []}:
 
-stdenv.mkDerivation rec {
+let
   name = "dwm-6.0";
+in
+stdenv.mkDerivation {
+  inherit name;
  
   src = fetchurl {
     url = "http://dl.suckless.org/dwm/${name}.tar.gz";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
   prePatch = ''sed -i "s@/usr/local@$out@" config.mk'';
 
   # Allow users set their own list of patches
-  inherit patches;
+  patches = [ ./confnotify-6.0.patch ] ++ patches;
 
   buildPhase = " make ";
  

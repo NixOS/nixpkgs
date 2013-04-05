@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
   };
   buildInputs = [ pkgconfig zlib libjpeg expat ecore eina evas ];
   propagatedBuildInputs = [ dbus_libs ];
+  setupHook = ./setup-hook.sh;
   configureFlags = ''
     --disable-edbus-test
     --disable-edbus-test-client

@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-default";
-  version = "0.5.2";
-  sha256 = "1w9wqv3k579zp5w11v06fak0lr9zzads49b1c9rb1vkz1d8bvf82";
+  version = "0.5.3";
+  sha256 = "0d1hm0l9kim3kszshr4msmgzizrzha48gz2kb7b61p7n3gs70m7c";
   buildDepends = [
     dataDefaultClass dataDefaultInstancesBase
     dataDefaultInstancesContainers dataDefaultInstancesDlist

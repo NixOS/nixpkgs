@@ -27,7 +27,8 @@ stdenv.mkDerivation {
     ''
       mkdir -p $out
       cp -prvd * $out/
-      wrapProgram $out/bin/ib2012ux --prefix PATH : ${xdg_utils}/bin
+      wrapProgram $out/bin/ib2012ux --prefix PATH : ${xdg_utils}/bin \
+                                    --prefix LD_PRELOAD : $(cat $NIX_GCC/nix-support/orig-gcc)/lib/libgcc_s.so.1
     '';
 
   meta = {
