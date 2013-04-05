@@ -41,7 +41,7 @@ with (import ./release-lib.nix);
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
-  emacs23 = gtkSupported;
+  emacs24 = gtkSupported;
   enscript = all;
   file = all;
   findutils = all;
