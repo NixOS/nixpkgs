@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     inherit readline;
-    psqlSchema = "9.1";
+    psqlSchema = "9.2";
   };
 
   meta = {
