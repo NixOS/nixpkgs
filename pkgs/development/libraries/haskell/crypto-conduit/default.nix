@@ -1,15 +1,15 @@
-{ cabal, cereal, conduit, cryptoApi, cryptocipher, cryptohash
-, hspec, skein, transformers
+{ cabal, cereal, conduit, cryptoApi, cryptocipher
+, cryptohashCryptoapi, hspec, skein, transformers
 }:
 
 cabal.mkDerivation (self: {
   pname = "crypto-conduit";
-  version = "0.5.0";
-  sha256 = "0mlf2l784w0wyfjqsxzfdwmn1wb0z1s6mb8kdhw8x1z4a8gy9a92";
+  version = "0.5.1";
+  sha256 = "04z8z7bipa40xnjr8civ1sj3df2iyvlv929ibkrdqv87gj0qv2dp";
   buildDepends = [ cereal conduit cryptoApi transformers ];
   testDepends = [
-    cereal conduit cryptoApi cryptocipher cryptohash hspec skein
-    transformers
+    cereal conduit cryptoApi cryptocipher cryptohashCryptoapi hspec
+    skein transformers
   ];
   doCheck = false;
   meta = {
