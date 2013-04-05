@@ -1466,7 +1466,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
   postgresqlLibpq = callPackage ../development/libraries/haskell/postgresql-libpq {
-    postgresql = pkgs.postgresql91;
+    inherit (pkgs) postgresql;
   };
 
   postgresqlSimple = callPackage ../development/libraries/haskell/postgresql-simple {};
