@@ -3,21 +3,28 @@
 , officialRelease ? false
 }:
 
-let nixpkgs' = nixpkgs; pkgs = import <nixpkgs> {}; in # urgh
+let
+  nixpkgs' = nixpkgs; # urgh
 
-rec {
+  pkgs = import <nixpkgs> {};
 
-  nixos = import ./release.nix {
+  removeMaintainers = set: if builtins.isAttrs set
+    then if (set.type or "") == "derivation"
+      then set // { meta = builtins.removeAttrs (set.meta or {}) [ "maintainers" ]; }
+      else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
+    else set;
+in rec {
+  nixos = removeMaintainers (import ./release.nix {
     inherit nixosSrc officialRelease;
     nixpkgs = nixpkgs';
-  };
+  });
 
-  nixpkgs = import <nixpkgs/pkgs/top-level/release.nix> {
+  nixpkgs = removeMaintainers (import <nixpkgs/pkgs/top-level/release.nix> {
     inherit officialRelease;
     nixpkgs = nixpkgs';
     # Only do Linux builds.
     supportedSystems = [ "x86_64-linux" "i686-linux" ];
-  };
+  });
 
   tested = pkgs.releaseTools.aggregate {
     name = "nixos-${nixos.tarball.version}";
