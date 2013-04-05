@@ -162,7 +162,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     alex         = self.alex_3_0_5;             # 7.6 ok
     haddock      = self.haddock_2_13_1;         # 7.6 ok
     happy        = self.happy_1_18_10;          # 7.6 ok
-    primitive    = self.primitive_0_5_0_1; # semi-official, but specified
+    primitive    = self.primitive_0_5_0_1;      # semi-official, but specified
   };
 
   haskellPlatformArgs_2012_4_0_0 = self : {
@@ -1477,8 +1477,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
-  primitive_0_4_1 = callPackage ../development/libraries/haskell/primitive/0.4.1.nix {};
-  primitive_0_5   = callPackage ../development/libraries/haskell/primitive/0.5.nix   {};
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
   primitive = self.primitive_0_5_0_1;
 
