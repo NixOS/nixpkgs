@@ -74,7 +74,7 @@ in
       };
 
       dataDir = mkOption {
-        default = "/var/db/postgresql-${cfg.package.psqlSchema}";
+        default = "/var/db/postgresql";
         description = ''
           Data directory for PostgreSQL.
         '';
