@@ -203,11 +203,4 @@ with (import ./release-lib.nix);
     tools = linux;
   };
 
-  emacs23Packages = {
-    bbdb = linux;
-    cedet = linux;
-    ecb = linux;
-    emacsw3m = linux;
-    emms = linux;
-  };
 } ))
