@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cryptohash";
-  version = "0.8.4";
-  sha256 = "0h58apxcrvpkyj3s2c7l68g7biv80snkn53g6jya1s687xff8fmn";
+  version = "0.9.0";
+  sha256 = "0ipzrp83pz33qc7gmn9bmhbmc1f0hfvagyfr5bnmhgrh6lgy9s7l";
   buildDepends = [ cereal cryptoApi tagged ];
   testDepends = [
     HUnit QuickCheck testFramework testFrameworkHunit
