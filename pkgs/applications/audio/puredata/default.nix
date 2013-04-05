@@ -1,24 +1,31 @@
-{ stdenv, fetchurl, alsaLib, autoconf, automake, fftw, gettext, glib,
-libX11, libtool, tcl, tk }:
+{ stdenv, fetchurl, alsaLib, autoconf, automake, fftw, gettext, glib
+, jackaudio, libX11, libtool, makeWrapper, pkgconfig, tcl, tk
+}:
 
 stdenv.mkDerivation  rec {
   name = "puredata-${version}";
-  version = "0.43-0";
+  version = "0.44-0";
 
   src = fetchurl {
     url = "mirror://sourceforge/pure-data/pd-${version}.src.tar.gz";
-    sha256 = "1qfq7x8vj12kr0cdrnbvmxfhc03flicc6vcc8bz6hwrrakwciyz2";
+    sha256 = "031bvqfnlpfx0y5n0l5rmslziqc6jgmk99x1prgh1rmhjhjdnijw";
   };
 
-  buildInputs = [ alsaLib autoconf automake fftw gettext glib libX11
-    libtool tcl tk ];
+  buildInputs = [
+    alsaLib autoconf automake fftw gettext glib jackaudio libX11
+    libtool makeWrapper pkgconfig tcl tk
+  ];
 
   preConfigure = ''
     ./autogen.sh
   '';
 
+  postInstall = ''
+    wrapProgram $out/bin/pd --prefix PATH : ${tk}/bin
+  '';
+
   meta = with stdenv.lib; {
-    description = ''Real-time graphical programming environment for
+    description = ''A real-time graphical programming environment for
                     audio, video, and graphical processing'';
     homepage = http://puredata.info;
     license = licenses.bsd3;
