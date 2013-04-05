@@ -1947,9 +1947,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xdgBasedir = callPackage ../development/libraries/haskell/xdg-basedir {};
 
-  xdot = callPackage ../development/libraries/haskell/xdot {
-    polyparse = self.polyparse_1_7;
-  };
+  xdot = callPackage ../development/libraries/haskell/xdot {};
 
   xhtml_3000_2_0_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.1.nix {};
   xhtml_3000_2_0_4 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.4.nix {};
