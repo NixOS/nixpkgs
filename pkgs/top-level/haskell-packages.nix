@@ -1456,9 +1456,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pgm = callPackage ../development/libraries/haskell/pgm {};
 
-  polyparse_1_7 = callPackage ../development/libraries/haskell/polyparse/1.7.nix {};
-  polyparse_1_8 = callPackage ../development/libraries/haskell/polyparse/1.8.nix {};
-  polyparse = self.polyparse_1_8;
+  polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
