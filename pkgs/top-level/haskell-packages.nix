@@ -669,6 +669,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
+  cryptohashCryptoapi = callPackage ../development/libraries/haskell/cryptohash-cryptoapi {};
+
   cryptoNumbers = callPackage ../development/libraries/haskell/crypto-numbers {};
 
   cryptoPubkeyTypes = callPackage ../development/libraries/haskell/crypto-pubkey-types {};
