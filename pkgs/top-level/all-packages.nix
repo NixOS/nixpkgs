@@ -9100,6 +9100,8 @@ let
     inherit texLive unzip;
   };
 
+  thinkfan = callPackage ../tools/system/thinkfan { };
+
   vice = callPackage ../misc/emulators/vice { };
 
   viewnior = callPackage ../applications/graphics/viewnior { };
