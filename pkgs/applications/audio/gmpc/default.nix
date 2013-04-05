@@ -46,5 +46,6 @@ stdenv.mkDerivation rec {
     description = "A GTK2 frontend for Music Player Daemon";
     license = licenses.gpl2;
     maintainers = [ maintainers.rickynils ];
+    platforms = platforms.linux;
   };
 }
