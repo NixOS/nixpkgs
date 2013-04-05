@@ -7748,6 +7748,8 @@ let
     usePulseAudio = config.pulseaudio or true;
   };
 
+  skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
+
   st = callPackage ../applications/misc/st { };
 
   dropbox = callPackage ../applications/networking/dropbox { };
