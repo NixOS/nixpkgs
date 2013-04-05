@@ -8226,6 +8226,8 @@ let
 
   d1x_rebirth = callPackage ../games/d1x-rebirth { };
 
+  d2x_rebirth = callPackage ../games/d2x-rebirth { };
+
   eduke32 = callPackage ../games/eduke32 {
     stdenv = overrideGCC stdenv gcc47;
   };
