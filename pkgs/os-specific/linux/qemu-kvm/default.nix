@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       ncurses python glib libaio mesa texinfo perl
     ] ++ stdenv.lib.optionals spiceSupport [ spice_protocol spice ];
 
-  patches = [ ./fix-librt-check.patch ];
+  patches = [ ./fix-librt-check.patch ./fix-usb-passthrough.patch ];
 
   postPatch = "patchShebangs .;"
     + stdenv.lib.optionalString spiceSupport ''
