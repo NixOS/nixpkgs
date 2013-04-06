@@ -21,10 +21,15 @@ pythonPackages = python.modules // rec {
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
-    }
-    ../development/python-modules/generic/wrap.sh;
+    } 
+   ../development/python-modules/generic/wrap.sh;
 
   # specials
+
+  offlineDistutils = import ../development/python-modules/offline-distutils {
+    inherit (pkgs) stdenv;
+    inherit python;
+  };
 
   recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
     inherit (pkgs) stdenv;
@@ -39,11 +44,6 @@ pythonPackages = python.modules // rec {
   setuptoolsSite = import ../development/python-modules/setuptools/site.nix {
     inherit (pkgs) stdenv;
     inherit python setuptools;
-  };
-
-  offlineDistutils = import ../development/python-modules/offline-distutils {
-    inherit (pkgs) stdenv;
-    inherit python;
   };
 
   # packages defined elsewhere
@@ -329,39 +329,6 @@ pythonPackages = python.modules // rec {
 
   };
 
-  logilab_astng = buildPythonPackage rec {
-    name = "logilab-astng-0.24.1";
-
-    src = fetchurl {
-      url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
-      sha256 = "00qxaxsax80sknwv25xl1r49lc4gbhkxs1kjywji4ad8y1npax0s";
-    };
-
-    propagatedBuildInputs = [ logilab_common ];
-  };
-
-
-  beets = buildPythonPackage rec {
-    name = "beets-1.0.0";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
-      md5 = "88ad09a93aa0d69ce813205cf23b2a6c";
-    };
-
-    # tests depend on $HOME setting
-    configurePhase = "export HOME=$TMPDIR";
-
-    propagatedBuildInputs = [ pyyaml unidecode mutagen munkres musicbrainzngs python.modules.sqlite3 python.modules.readline ];
-
-    meta = {
-      homepage = http://beets.radbox.org;
-      description = "Music tagger and library organizer";
-      license = pkgs.lib.licenses.mit;
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
-    };
-  };
-
 
   beautifulsoup = buildPythonPackage (rec {
     name = "beautifulsoup-3.2.1";
@@ -399,6 +366,52 @@ pythonPackages = python.modules // rec {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   });
+
+
+  beaker = buildPythonPackage rec {
+    name = "Beaker-1.6.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
+      md5 = "c2e102870ed4c53104dec48ceadf8e9d";
+    };
+
+    buildInputs = [ sqlalchemy pycryptopp nose mock webtest ];
+
+    # http://hydra.nixos.org/build/4511591/log/raw
+    doCheck = false;
+
+    meta = {
+      maintainers = [
+        stdenv.lib.maintainers.garbas
+        stdenv.lib.maintainers.iElectric
+      ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+
+  beets = buildPythonPackage rec {
+    name = "beets-1.0.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
+      md5 = "88ad09a93aa0d69ce813205cf23b2a6c";
+    };
+
+    # tests depend on $HOME setting
+    configurePhase = "export HOME=$TMPDIR";
+
+    propagatedBuildInputs = [ pyyaml unidecode mutagen munkres musicbrainzngs python.modules.sqlite3 python.modules.readline ];
+
+    meta = {
+      homepage = http://beets.radbox.org;
+      description = "Music tagger and library organizer";
+      license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
 
   # euca2ools (and maybe Nova) needs boto 1.9, 2.0 doesn't work.
   boto_1_9 = buildPythonPackage (rec {
@@ -848,6 +861,18 @@ pythonPackages = python.modules // rec {
   };
 
 
+  logilab_astng = buildPythonPackage rec {
+    name = "logilab-astng-0.24.1";
+
+    src = fetchurl {
+      url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
+      sha256 = "00qxaxsax80sknwv25xl1r49lc4gbhkxs1kjywji4ad8y1npax0s";
+    };
+
+    propagatedBuildInputs = [ logilab_common ];
+  };
+
+
   peppercorn = buildPythonPackage rec {
     name = "peppercorn-0.4";
 
@@ -905,24 +930,6 @@ pythonPackages = python.modules // rec {
   };
 
 
-  pyramid_jinja2 = buildPythonPackage rec {
-    name = "pyramid_jinja2-1.6";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyramid_jinja2/${name}.zip";
-      md5 = "b7df1ab97f90f39529d27ba6da1f6b1c";
-    };
-
-    buildInputs = [ pkgs.unzip webtest ];
-    propagatedBuildInputs = [ jinja2 pyramid ];
-
-    meta = {
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
-      platforms = stdenv.lib.platforms.all;
-    };
-  };
-
-
   pyramid_beaker = buildPythonPackage rec {
     name = "pyramid_beaker-0.7";
 
@@ -940,20 +947,19 @@ pythonPackages = python.modules // rec {
   };
 
 
-  pyramid_tm = buildPythonPackage rec {
-    name = "pyramid_tm-0.7";
+  pyramid_jinja2 = buildPythonPackage rec {
+    name = "pyramid_jinja2-1.6";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyramid_tm/${name}.tar.gz";
-      md5 = "6dc917d262c69366630c542bd21859a3";
+      url = "http://pypi.python.org/packages/source/p/pyramid_jinja2/${name}.zip";
+      md5 = "b7df1ab97f90f39529d27ba6da1f6b1c";
     };
 
-    propagatedBuildInputs = [ transaction pyramid ];
+    buildInputs = [ pkgs.unzip webtest ];
+    propagatedBuildInputs = [ jinja2 pyramid ];
+
     meta = {
-      maintainers = [
-        stdenv.lib.maintainers.garbas
-        stdenv.lib.maintainers.iElectric
-      ];
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
       platforms = stdenv.lib.platforms.all;
     };
   };
@@ -979,19 +985,15 @@ pythonPackages = python.modules // rec {
   };
 
 
-  beaker = buildPythonPackage rec {
-    name = "Beaker-1.6.4";
+  pyramid_tm = buildPythonPackage rec {
+    name = "pyramid_tm-0.7";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
-      md5 = "c2e102870ed4c53104dec48ceadf8e9d";
+      url = "http://pypi.python.org/packages/source/p/pyramid_tm/${name}.tar.gz";
+      md5 = "6dc917d262c69366630c542bd21859a3";
     };
 
-    buildInputs = [ sqlalchemy pycryptopp nose mock webtest ];
-
-    # http://hydra.nixos.org/build/4511591/log/raw
-    doCheck = false;
-
+    propagatedBuildInputs = [ transaction pyramid ];
     meta = {
       maintainers = [
         stdenv.lib.maintainers.garbas
@@ -1002,22 +1004,20 @@ pythonPackages = python.modules // rec {
   };
 
 
-  rtmidi = buildPythonPackage rec {
-    version = "0.3a";
-    name = "rtmidi-${version}";
+  repoze_lru = buildPythonPackage rec {
+    name = "repoze.lru-0.4";
 
     src = fetchurl {
-      url = "http://chrisarndt.de/projects/python-rtmidi/download/python-${name}.tar.bz2";
-      sha256 = "0d2if633m3kbiricd5hgn1csccd8xab6lnab1bq9prdr9ks9i8h6";
+      url = "http://pypi.python.org/packages/source/r/repoze.lru/${name}.tar.gz";
+      md5 = "9f6ab7a4ff871ba795cadf56c20fb0f0";
     };
 
-    buildInputs = [ pkgs.alsaLib pkgs.jackaudio ];
-
-    meta = with stdenv.lib; {
-      description = "A Python wrapper for the RtMidi C++ library written with Cython";
-      homepage = http://trac.chrisarndt.de/code/wiki/python-rtmidi;
-      license = licenses.mit;
-      maintainers = [ maintainers.goibhniu ];
+    meta = {
+      maintainers = [
+        stdenv.lib.maintainers.garbas
+        stdenv.lib.maintainers.iElectric
+      ];
+      platforms = stdenv.lib.platforms.all;
     };
   };
 
@@ -1040,20 +1040,22 @@ pythonPackages = python.modules // rec {
   };
 
 
-  repoze_lru = buildPythonPackage rec {
-    name = "repoze.lru-0.4";
+  rtmidi = buildPythonPackage rec {
+    version = "0.3a";
+    name = "rtmidi-${version}";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/r/repoze.lru/${name}.tar.gz";
-      md5 = "9f6ab7a4ff871ba795cadf56c20fb0f0";
+      url = "http://chrisarndt.de/projects/python-rtmidi/download/python-${name}.tar.bz2";
+      sha256 = "0d2if633m3kbiricd5hgn1csccd8xab6lnab1bq9prdr9ks9i8h6";
     };
 
-    meta = {
-      maintainers = [
-        stdenv.lib.maintainers.garbas
-        stdenv.lib.maintainers.iElectric
-      ];
-      platforms = stdenv.lib.platforms.all;
+    buildInputs = [ pkgs.alsaLib pkgs.jackaudio ];
+
+    meta = with stdenv.lib; {
+      description = "A Python wrapper for the RtMidi C++ library written with Cython";
+      homepage = http://trac.chrisarndt.de/code/wiki/python-rtmidi;
+      license = licenses.mit;
+      maintainers = [ maintainers.goibhniu ];
     };
   };
 
