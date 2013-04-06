@@ -11,8 +11,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl kernelDev autoconf automake libtool ];
 
-  NIX_CFLAGS_COMPILE = "-I${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build/include/generated";
-
   preConfigure = ''
     ./autogen.sh
 
