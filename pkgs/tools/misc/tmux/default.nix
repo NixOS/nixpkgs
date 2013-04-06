@@ -2,20 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "tmux";
-  version = "1.7";
+  version = "1.8";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${name}.tar.gz";
-    sha256 = "0ywy1x2g905hmhkdz418ik42lcvnhnwr8fv63rcqczfg27d6nd38";
+    sha256 = "f265401ca890f8223e09149fcea5abcd6dfe75d597ab106e172b01e9d0c9cd44";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-
-  # There's a bug in tmux's configure script, --disable-static actually enables it
-  # Fixed upstream in revision ThomasAdam/tmux@e964ff70e696f30f0301d11deb45c8ada54e0c55
-  # Remove on next update
-  dontDisableStatic = true;
 
   buildInputs = [ ncurses libevent ];
 

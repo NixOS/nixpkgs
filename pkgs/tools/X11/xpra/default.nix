@@ -1,7 +1,7 @@
 { stdenv, fetchurl, buildPythonPackage
 , python, cython, pkgconfig
 , xorg, gtk, glib, pango, cairo, gdk_pixbuf, pygtk, atk, pygobject, pycairo
-, ffmpeg_1_1, x264, libvpx, pil, libwebp }:
+, ffmpeg_1, x264, libvpx, pil, libwebp }:
 
 buildPythonPackage rec {
   name = "xpra-0.8.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
     pango cairo gdk_pixbuf atk gtk glib
 
-    ffmpeg_1_1 libvpx x264 libwebp
+    ffmpeg_1 libvpx x264 libwebp
   ];
 
   propagatedBuildInputs = [ 

@@ -1,30 +1,28 @@
 { stdenv, fetchurl, zlib, readline }:
 
-let version = "9.2.3"; in
+let version = "9.2.4"; in
 
 stdenv.mkDerivation rec {
   name = "postgresql-${version}";
 
   src = fetchurl {
     url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
-    sha256 = "0zszqgp64pn7z9ab36bi989apj6hi20yxvcrk26jvhy0j0radxf4";
+    sha256 = "14xfzw3hb2fn60c438v3j7wa65jjm2pnmx4qb4i4ji4am0cdjzfr";
   };
 
   buildInputs = [ zlib readline ];
 
   enableParallelBuilding = true;
 
-  LC_ALL = "C";
+  makeFlags = [ "world" ];
 
-  postInstall =
-    ''
-      mkdir -p $out/share/man
-      cp -rvd doc/src/sgml/man1 $out/share/man
-    '';
+  installTargets = [ "install-world" ];
+
+  LC_ALL = "C";
 
   passthru = {
     inherit readline;
-    psqlSchema = "9.1";
+    psqlSchema = "9.2";
   };
 
   meta = {

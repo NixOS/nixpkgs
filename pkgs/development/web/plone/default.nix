@@ -5603,10 +5603,10 @@ let plone43rc1Packages = python.modules // rec {
   };
 
   zc_buildout = buildPythonPackage rec {
-    name = "zc.buildout-1.7.0";
+    name = "zc.buildout-2.1.0";
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.buildout-1.7.0.tar.gz";
-      md5 = "4e3b521600e475c56a0a66459a5fc7bb";
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.buildout-2.1.0.tar.gz";
+      md5 = "1f0ec4b9dc663b444107edf9b7f811a4";
     };
     buildInputs = [  ];
     propagatedBuildInputs = [ setuptools ];

@@ -556,7 +556,7 @@ let
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
     inherit libpng bison flex;
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
@@ -578,6 +578,8 @@ let
   convertlit = callPackage ../tools/text/convertlit { };
 
   cowsay = callPackage ../tools/misc/cowsay { };
+
+  cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
@@ -770,6 +772,8 @@ let
 
   libbsd = callPackage ../development/libraries/libbsd { };
 
+  lprof = callPackage ../tools/graphics/lprof { };
+
   flvtool2 = callPackage ../tools/video/flvtool2 { };
 
   fontforge = lowPrio (callPackage ../tools/misc/fontforge { });
@@ -810,6 +814,8 @@ let
   dos2unix = callPackage ../tools/text/dos2unix { };
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
+
+  g500-control = callPackage ../tools/misc/g500-control { };
 
   gawk = callPackage ../tools/text/gawk { };
 
@@ -1053,6 +1059,8 @@ let
   mmv = callPackage ../tools/misc/mmv { };
 
   most = callPackage ../tools/misc/most { };
+
+  multitail = callPackage ../tools/misc/multitail { };
 
   netperf = callPackage ../applications/networking/netperf { };
 
@@ -1470,6 +1478,8 @@ let
 
   recutils = callPackage ../tools/misc/recutils { };
 
+  recoll = callPackage ../applications/search/recoll { };
+
   refind = callPackage ../tools/misc/refind { };
 
   reiser4progs = callPackage ../tools/filesystems/reiser4progs { };
@@ -1790,6 +1800,8 @@ let
   unzipNLS = lowPrio (unzip.override { enableNLS = true; });
 
   uptimed = callPackage ../tools/system/uptimed { };
+
+  varnish = callPackage ../servers/varnish { };
 
   vlan = callPackage ../tools/networking/vlan { };
 
@@ -3644,7 +3656,7 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
-  ffmpeg_1_1 = callPackage ../development/libraries/ffmpeg/1.1.nix {
+  ffmpeg_1 = callPackage ../development/libraries/ffmpeg/1.x.nix {
     vpxSupport = !stdenv.isMips;
   };
 
@@ -4609,7 +4621,7 @@ let
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
   mlt = callPackage ../development/libraries/mlt {
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
@@ -4715,11 +4727,7 @@ let
 
   openldap = callPackage ../development/libraries/openldap { };
 
-  openlierox = builderDefsPackage ../games/openlierox {
-    inherit (xlibs) libX11 xproto;
-    inherit gd SDL SDL_image SDL_mixer zlib libxml2
-      pkgconfig;
-  };
+  openlierox = callPackage ../games/openlierox { };
 
   libopensc_dnie = callPackage ../development/libraries/libopensc-dnie {
     opensc = opensc_0_11_7;
@@ -5528,7 +5536,7 @@ let
 
   OVMF = callPackage ../applications/virtualization/OVMF { };
 
-  postgresql = postgresql83;
+  postgresql = postgresql92;
 
   postgresql83 = callPackage ../servers/sql/postgresql/8.3.x.nix { };
 
@@ -5542,9 +5550,7 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
-  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc {
-    postgresql = postgresql91;
-  };
+  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
   pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
     inherit xmpppy pythonIRClib python makeWrapper;
@@ -6732,6 +6738,10 @@ let
     inherit (gnome) GConf libglade;
   };
 
+  darktable12 = callPackage ../applications/graphics/darktable/1.2rc1.nix {
+    inherit (gnome) GConf libglade;
+  };
+
   "dd-agent" = callPackage ../tools/networking/dd-agent { };
 
   dia = callPackage ../applications/graphics/dia {
@@ -7170,6 +7180,8 @@ let
 
   gqview = callPackage ../applications/graphics/gqview { };
 
+  gmpc = callPackage ../applications/audio/gmpc { };
+
   gmtk = callPackage ../applications/networking/browsers/mozilla-plugins/gmtk {
     inherit (gnome) GConf;
   };
@@ -7412,6 +7424,8 @@ let
 
   mhwaveedit = callPackage ../applications/audio/mhwaveedit {};
 
+  mid2key = callPackage ../applications/audio/mid2key { };
+
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify
@@ -7482,12 +7496,14 @@ let
 
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
+  normalize = callPackage ../applications/audio/normalize { };
+
   mplayer = callPackage ../applications/video/mplayer {
     pulseSupport = config.pulseaudio or false;
   };
 
   mplayer2 = callPackage ../applications/video/mplayer2 {
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   MPlayerPlugin = browser:
@@ -7677,7 +7693,9 @@ let
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
-  rawtherapee = callPackage ../applications/graphics/rawtherapee { };
+  rawtherapee = callPackage ../applications/graphics/rawtherapee {
+    fftw = fftw.override {float = true;};
+  };
 
   rcs = callPackage ../applications/version-management/rcs { };
 
@@ -7727,9 +7745,13 @@ let
     usePulseAudio = config.pulseaudio or true;
   };
 
+  skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
+
   st = callPackage ../applications/misc/st { };
 
   dropbox = callPackage ../applications/networking/dropbox { };
+
+  dropbox-cli = callPackage ../applications/networking/dropbox-cli { };
 
   lightdm = callPackage ../applications/display-managers/lightdm { };
 
@@ -7748,6 +7770,8 @@ let
     inherit mesa libtool jackaudio alsaLib;
     guile = guile_1_8;
   };
+
+  shntool = callPackage ../applications/audio/shntool { };
 
   sonic_visualiser = callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
@@ -7951,7 +7975,7 @@ let
   };
 
   vlc = callPackage ../applications/video/vlc {
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   vnstat = callPackage ../applications/networking/vnstat { };
@@ -7970,7 +7994,7 @@ let
 
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR14B04;
-    esdl = esdl.override { erlang = erlangR14B04; }; 
+    esdl = esdl.override { erlang = erlangR14B04; };
   };
 
   wmname = callPackage ../applications/misc/wmname { };
@@ -8191,9 +8215,15 @@ let
 
   crrcsim = callPackage ../games/crrcsim {};
 
+  dhewm3 = callPackage ../games/dhewm3 {};
+
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
   dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { };
+
+  d1x_rebirth = callPackage ../games/d1x-rebirth { };
+
+  d2x_rebirth = callPackage ../games/d2x-rebirth { };
 
   eduke32 = callPackage ../games/eduke32 {
     stdenv = overrideGCC stdenv gcc47;
@@ -8759,7 +8789,9 @@ let
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
-  kicad = callPackage ../applications/science/electronics/kicad { };
+  kicad = callPackage ../applications/science/electronics/kicad {
+    wxGTK = wxGTK29;
+  };
 
   ngspice = callPackage ../applications/science/electronics/ngspice { };
 
@@ -9064,6 +9096,8 @@ let
   texLiveModerncv = builderDefsPackage (import ../tools/typesetting/tex/texlive/moderncv.nix) {
     inherit texLive unzip;
   };
+
+  thinkfan = callPackage ../tools/system/thinkfan { };
 
   vice = callPackage ../misc/emulators/vice { };
 

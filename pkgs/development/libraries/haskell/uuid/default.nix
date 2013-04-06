@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uuid";
-  version = "1.2.9";
-  sha256 = "088wbhf21w91774icddbm3a8p8jikwjqgg8zdad0pdv8zbi7flsi";
+  version = "1.2.10";
+  sha256 = "17njmmh190pg9bpb8iaw2kniyn7z7j70mzdmxr9h29kydl1xmky6";
   buildDepends = [ binary cryptohash maccatcher random time ];
   testDepends = [
     criterion deepseq HUnit mersenneRandomPure64 QuickCheck random

@@ -139,7 +139,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
     html         = self.html_1_0_1_2;           # 7.6 ok
     HTTP         = self.HTTP_4000_2_8;          # 7.6 ok
-    HUnit        = self.HUnit_1_2_5_1;          # 7.6 ok
+    HUnit        = self.HUnit_1_2_5_2;          # 7.6 ok
     mtl          = self.mtl_2_1_2;              # 7.6 ok
     network      = self.network_2_4_1_2;        # 7.6 ok
     OpenGL       = self.OpenGL_2_8_0_0;         # 7.6 ok
@@ -162,7 +162,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     alex         = self.alex_3_0_5;             # 7.6 ok
     haddock      = self.haddock_2_13_1;         # 7.6 ok
     happy        = self.happy_1_18_10;          # 7.6 ok
-    primitive    = self.primitive_0_5_0_1; # semi-official, but specified
+    primitive    = self.primitive_0_5_0_1;      # semi-official, but specified
   };
 
   haskellPlatformArgs_2012_4_0_0 = self : {
@@ -669,6 +669,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
 
+  cryptohashCryptoapi = callPackage ../development/libraries/haskell/cryptohash-cryptoapi {};
+
   cryptoNumbers = callPackage ../development/libraries/haskell/crypto-numbers {};
 
   cryptoPubkeyTypes = callPackage ../development/libraries/haskell/crypto-pubkey-types {};
@@ -702,6 +704,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   dataBinaryIeee754 = callPackage ../development/libraries/haskell/data-binary-ieee754 {};
 
   dataDefault = callPackage ../development/libraries/haskell/data-default {};
+
+  dataDefaultClass = callPackage ../development/libraries/haskell/data-default-class {};
+  dataDefaultInstancesBase = callPackage ../development/libraries/haskell/data-default-instances-containers {};
+  dataDefaultInstancesContainers = callPackage ../development/libraries/haskell/data-default-instances-base {};
+  dataDefaultInstancesDlist = callPackage ../development/libraries/haskell/data-default-instances-dlist {};
+  dataDefaultInstancesOldLocale = callPackage ../development/libraries/haskell/data-default-instances-old-locale {};
 
   dataenc = callPackage ../development/libraries/haskell/dataenc {};
 
@@ -967,10 +975,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
 
-  graphviz = callPackage ../development/libraries/haskell/graphviz {
-    fgl = self.fgl_5_4_2_4;
-    polyparse = self.polyparse_1_7;
-  };
+  graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
   groupoids = callPackage ../development/libraries/haskell/groupoids {};
 
@@ -1111,9 +1116,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hspec = callPackage ../development/libraries/haskell/hspec {};
 
-  hspecExpectations_0_3_0_3 = callPackage ../development/libraries/haskell/hspec-expectations/0.3.0.3.nix {};
-  hspecExpectations_0_3_2 = callPackage ../development/libraries/haskell/hspec-expectations/0.3.2.nix {};
-  hspecExpectations = self.hspecExpectations_0_3_0_3;
+  hspecExpectations = callPackage ../development/libraries/haskell/hspec-expectations {};
 
   hspecMeta = callPackage ../development/libraries/haskell/hspec-meta {};
 
@@ -1138,7 +1141,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   HUnit_1_2_4_2 = callPackage ../development/libraries/haskell/HUnit/1.2.4.2.nix {};
   HUnit_1_2_4_3 = callPackage ../development/libraries/haskell/HUnit/1.2.4.3.nix {};
   HUnit_1_2_5_1 = callPackage ../development/libraries/haskell/HUnit/1.2.5.1.nix {};
-  HUnit = self.HUnit_1_2_5_1;
+  HUnit_1_2_5_2 = callPackage ../development/libraries/haskell/HUnit/1.2.5.2.nix {};
+  HUnit = self.HUnit_1_2_5_2;
 
   hxt = callPackage ../development/libraries/haskell/hxt {};
 
@@ -1354,6 +1358,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   network = self.network_2_4_1_2;
 
   networkConduit = callPackage ../development/libraries/haskell/network-conduit {};
+  networkConduitTls = callPackage ../development/libraries/haskell/network-conduit-tls {};
 
   networkInfo = callPackage ../development/libraries/haskell/network-info {};
 
@@ -1453,14 +1458,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pgm = callPackage ../development/libraries/haskell/pgm {};
 
-  polyparse_1_7 = callPackage ../development/libraries/haskell/polyparse/1.7.nix {};
-  polyparse_1_8 = callPackage ../development/libraries/haskell/polyparse/1.8.nix {};
-  polyparse = self.polyparse_1_8;
+  polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
   postgresqlLibpq = callPackage ../development/libraries/haskell/postgresql-libpq {
-    postgresql = pkgs.postgresql91;
+    inherit (pkgs) postgresql;
   };
 
   postgresqlSimple = callPackage ../development/libraries/haskell/postgresql-simple {};
@@ -1471,8 +1474,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
-  primitive_0_4_1 = callPackage ../development/libraries/haskell/primitive/0.4.1.nix {};
-  primitive_0_5   = callPackage ../development/libraries/haskell/primitive/0.5.nix   {};
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
   primitive = self.primitive_0_5_0_1;
 
@@ -1513,6 +1514,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   QuickCheck1 = self.QuickCheck_1_2_0_1;
   QuickCheck2 = self.QuickCheck_2_6;
   QuickCheck  = self.QuickCheck2;
+
+  quickcheckIo = callPackage ../development/libraries/haskell/quickcheck-io {};
 
   RangedSets = callPackage ../development/libraries/haskell/Ranged-sets {};
 
@@ -1595,6 +1598,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   safe = callPackage ../development/libraries/haskell/safe {};
 
   SafeSemaphore = callPackage ../development/libraries/haskell/SafeSemaphore {};
+
+  scotty = callPackage ../development/libraries/haskell/scotty {};
 
   sendfile = callPackage ../development/libraries/haskell/sendfile {};
 
@@ -1830,6 +1835,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   unixCompat = callPackage ../development/libraries/haskell/unix-compat {};
 
+  unixProcessConduit = callPackage ../development/libraries/haskell/unix-process-conduit {};
+
   unixTime = callPackage ../development/libraries/haskell/unix-time {};
 
   unlambda = callPackage ../development/libraries/haskell/unlambda {};
@@ -1940,9 +1947,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xdgBasedir = callPackage ../development/libraries/haskell/xdg-basedir {};
 
-  xdot = callPackage ../development/libraries/haskell/xdot {
-    polyparse = self.polyparse_1_7;
-  };
+  xdot = callPackage ../development/libraries/haskell/xdot {};
 
   xhtml_3000_2_0_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.1.nix {};
   xhtml_3000_2_0_4 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.4.nix {};
@@ -1965,6 +1970,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   yaml = callPackage ../development/libraries/haskell/yaml {};
 
   yap = callPackage ../development/libraries/haskell/yap {};
+
+  yeganesh = callPackage ../applications/misc/yeganesh {};
 
   yesod = callPackage ../development/libraries/haskell/yesod {};
 
@@ -2138,6 +2145,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   githubBackup = callPackage ../applications/version-management/git-and-tools/github-backup {};
 
   jailbreakCabal = callPackage ../development/tools/haskell/jailbreak-cabal {};
+
+  keter = callPackage ../development/tools/haskell/keter {};
 
   lhs2tex = callPackage ../tools/typesetting/lhs2tex {};
 

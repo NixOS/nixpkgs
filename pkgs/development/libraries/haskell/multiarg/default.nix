@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "multiarg";
-  version = "0.12.0.0";
-  sha256 = "1v2bfqbjk4wxn5dzd7asqcfidlr9bmwc5yy7awp86ch669kjnbzd";
+  version = "0.12.0.2";
+  sha256 = "0f90dsa5ya55lrc0x0ziz01fjvaq85q4f8zsfci1w1rgxa9m7naa";
   buildDepends = [ explicitException utf8String ];
   meta = {
     homepage = "https://github.com/massysett/multiarg";

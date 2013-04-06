@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  NIX_LDFLAGS = "-llcms -ljpeg";
+  NIX_LDFLAGS = "-llcms -ljpeg -lX11";
 
   # NIX_CFLAGS_COMPILE = "-I.";
 

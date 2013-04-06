@@ -1485,7 +1485,7 @@ pythonPackages = python.modules // rec {
     };
 
     buildInputs = [ nose ];
-    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar ];
+    propagatedBuildInputs = [ beautifulsoup4 pyrss2gen feedparser pynzb html5lib dateutil beautifulsoup flask jinja2 requests sqlalchemy pyyaml cherrypy progressbar deluge ];
 
     meta = {
       homepage = http://flexget.com/;
@@ -1705,6 +1705,23 @@ pythonPackages = python.modules // rec {
       description = "HTML parser based on WHAT-WG HTML5 specification";
       license = stdenv.lib.licenses.mit;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  });
+
+  http_signature = buildPythonPackage (rec {
+    name = "http_signature-0.1.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/h/http_signature/${name}.tar.gz";
+      md5 = "015061846254bd5d8c5dbc2913985153";
+    };
+
+    propagatedBuildInputs = [pycrypto];
+
+    meta = {
+      homepage = https://github.com/atl/py-http-signature;
+      description = "";
+      license = stdenv.lib.licenses.mit;
     };
   });
 
@@ -2714,6 +2731,18 @@ pythonPackages = python.modules // rec {
     buildInputs = [ mock scripttest virtualenv nose ];
     # ValueError: Working directory tests not found, or not a directory
     doCheck = false;
+  };
+
+
+  pika = buildPythonPackage {
+    name = "pika-0.9.12";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/p/pika/pika-0.9.12.tar.gz;
+      md5 = "7174fc7cc5570314fa3cfaa729106482";
+    };
+    buildInputs = [ nose mock pyyaml ];
+
+    propagatedBuildInputs = [ unittest2 ];
   };
 
 
@@ -3890,6 +3919,23 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  smartdc = buildPythonPackage rec {
+    name = "smartdc-0.1.12";
+
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/s/smartdc/smartdc-0.1.12.tar.gz;
+      md5 = "b960f61facafc879142b699050f6d8b4";
+    };
+
+    propagatedBuildInputs = [ requests http_signature ];
+
+    meta = {
+      description = "Joyent SmartDataCenter CloudAPI connector using http-signature authentication via Requests";
+      homepage = https://github.com/atl/py-smartdc;
+      license = pkgs.lib.licenses.mit;
+    };
+  };
+
   sphinx = buildPythonPackage (rec {
     name = "Sphinx-1.1.3";
 
@@ -4261,10 +4307,10 @@ pythonPackages = python.modules // rec {
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.8.4";
+    name = "virtualenv-1.9.1";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "1c7e56a7f895b2e71558f96e365ee7a7";
+      md5 = "07e09df0adfca0b2d487e39a4bf2270a";
     };
 
     patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];

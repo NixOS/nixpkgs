@@ -1519,7 +1519,7 @@ rec {
 
   DBDPg = import ../development/perl-modules/DBD-Pg {
     inherit stdenv fetchurl buildPerlPackage DBI;
-    postgresql = pkgs.postgresql92;
+    inherit (pkgs) postgresql;
   };
 
   DBFile = import ../development/perl-modules/DB_File {
