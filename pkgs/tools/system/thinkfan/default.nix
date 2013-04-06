@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "";
-    license = stdenv.lib.licences.gpl3;
+    license = stdenv.lib.licenses.gpl3;
     homePage = "http://thinkfan.sourceforge.net/";
     maintainers = with stdenv.lib.maintainers; [ iElectric ];
     platforms = stdenv.lib.platforms.linux;
