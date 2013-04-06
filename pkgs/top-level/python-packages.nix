@@ -1002,6 +1002,27 @@ pythonPackages = python.modules // rec {
   };
 
 
+  rtmidi = buildPythonPackage rec {
+    version = "0.3a";
+    name = "rtmidi-${version}";
+
+    src = fetchurl {
+      url = "http://chrisarndt.de/projects/python-rtmidi/download/python-${name}.tar.bz2";
+      sha256 = "0d2if633m3kbiricd5hgn1csccd8xab6lnab1bq9prdr9ks9i8h6";
+    };
+
+    buildInputs = [ pkgs.alsaLib pkgs.jackaudio ];
+
+    meta = with stdenv.lib; {
+      description = "A Python wrapper for the RtMidi C++ library written with Cython";
+      homepage = http://trac.chrisarndt.de/code/wiki/python-rtmidi;
+      license = licenses.mit;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
+
+
+
   repoze_sphinx_autointerface = buildPythonPackage rec {
     name = "repoze.sphinx.autointerface-0.7.1";
 
