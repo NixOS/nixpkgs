@@ -207,7 +207,7 @@
   amd = {
     shortName = "amd";
     fullName = "AMD License Agreement";
-    url = "http://developer.amd.com/amd-license-agreement/";
+    url = http://developer.amd.com/amd-license-agreement/;
   };
 
   amdadl = {
