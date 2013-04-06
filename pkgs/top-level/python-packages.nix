@@ -4307,10 +4307,10 @@ pythonPackages = python.modules // rec {
   });
 
   virtualenv = buildPythonPackage rec {
-    name = "virtualenv-1.8.4";
+    name = "virtualenv-1.9.1";
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/v/virtualenv/${name}.tar.gz";
-      md5 = "1c7e56a7f895b2e71558f96e365ee7a7";
+      md5 = "07e09df0adfca0b2d487e39a4bf2270a";
     };
 
     patches = [ ../development/python-modules/virtualenv-change-prefix.patch ];
