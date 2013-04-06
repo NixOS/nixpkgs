@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hspec";
-  version = "1.5.2";
-  sha256 = "1bndznbq7qyqr4j4mnsxf3dabmjyzah0bsiyynrc00ay1pf033l8";
+  version = "1.5.3";
+  sha256 = "138qjfw3kq87dvmb2ig1nsnrjpyqayvbqrjkmswn0sg8qh5cgbgb";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -18,7 +18,7 @@ cabal.mkDerivation (self: {
     hspecMeta HUnit QuickCheck quickcheckIo random setenv silently time
     transformers
   ];
-  doCheck = self.stdenv.system == "x86_64-linux";
+  doCheck = false;
   meta = {
     homepage = "http://hspec.github.com/";
     description = "Behavior-Driven Development for Haskell";
