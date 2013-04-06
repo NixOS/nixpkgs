@@ -2998,6 +2998,7 @@ let
     });
 
   amdappsdk = callPackage ../development/misc/amdapp-sdk { };
+  amdadlsdk = callPackage ../development/misc/amdadl-sdk { };
 
 
   ### DEVELOPMENT / TOOLS
