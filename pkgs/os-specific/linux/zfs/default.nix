@@ -1,20 +1,19 @@
 { stdenv, fetchurl, kernelDev, spl, perl, autoconf, automake, libtool, zlib, libuuid, coreutils, utillinux }:
 
 stdenv.mkDerivation {
-  name = "zfs-0.6.0-rc14-${kernelDev.version}";
+  name = "zfs-0.6.1-${kernelDev.version}";
 
   src = fetchurl {
-    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.0-rc14.tar.gz;
-    sha256 = "0ny2lbhyfsfwfcasa1iv2hz12hzcskx9mv641955d844dh32z9fg";
+    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/zfs/zfs-0.6.1.tar.gz;
+    sha256 = "1ykph9d4p70mam6lvcx0zld6d34gch15dsilds5ncbxh0m52knl0";
   };
 
-  patches = [ ./module_perm_prefix.patch ./mount_zfs_prefix.patch ./kerneldir_path.patch ./no_absolute_paths_to_coreutils.patch ];
+  patches = [ ./mount_zfs_prefix.patch ./kerneldir_path.patch ];
 
   buildInputs = [ kernelDev spl perl autoconf automake libtool zlib libuuid coreutils ];
 
   # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
   NIX_CFLAGS_LINK = "-lgcc_s";
-  NIX_CFLAGS_COMPILE = "-I${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build/include/generated";
 
   preConfigure = ''
     ./autogen.sh
@@ -31,8 +30,7 @@ stdenv.mkDerivation {
   configureFlags = ''
     --with-linux=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build 
     --with-linux-obj=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build 
-    --with-spl=${spl}/libexec/spl/${kernelDev.modDirVersion}
-    ${if stdenv.system == "i686-linux"  then "--enable-atomic-spinlocks" else ""}
+    --with-spl=${spl}/libexec/spl
   '';
 
   meta = {

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, kernelDev, perl, autoconf, automake, libtool, coreutils, gawk }:
 
 stdenv.mkDerivation {
-  name = "spl-0.6.0-rc14-${kernelDev.version}";
+  name = "spl-0.6.1-${kernelDev.version}";
   src = fetchurl {
-    url = http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.0-rc14.tar.gz;
-    sha256 = "00wyamf13z8ins4s14xf0b3hfjfz4w084mr17hs3k5xifb5jxa8g";
+    url = "http://archive.zfsonlinux.org/downloads/zfsonlinux/spl/spl-0.6.1.tar.gz";
+    sha256 = "1bnianc00bkpdbcmignzqfv9yr8h6vj56wfl7lkhi9a5m5b3xakb";
   };
 
-  patches = [ ./install_prefix.patch ./install_prefix_2.patch ./module_prefix.patch ];
+  patches = [ ./install_prefix.patch ];
 
   buildInputs = [ perl kernelDev autoconf automake libtool ];
 
@@ -16,12 +16,12 @@ stdenv.mkDerivation {
   preConfigure = ''
     ./autogen.sh
 
-    substituteInPlace ./module/spl/spl-generic.c --replace /usr/bin/hostid   hostid
-    substituteInPlace ./module/spl/spl-module.c  --replace /bin/mknod        mknod 
+    substituteInPlace ./module/spl/spl-generic.c --replace /usr/bin/hostid hostid
+    substituteInPlace ./module/spl/spl-module.c  --replace /bin/mknod mknod 
 
     substituteInPlace ./module/spl/spl-generic.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:${gawk}:/bin"
-    substituteInPlace ./module/spl/spl-module.c  --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:/bin"
     substituteInPlace ./module/splat/splat-vnode.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:/bin"
+    substituteInPlace ./module/splat/splat-linux.c --replace "PATH=/sbin:/usr/sbin:/bin:/usr/bin" "PATH=${coreutils}:/bin"
   '';
 
   configureFlags = ''
