@@ -2734,6 +2734,18 @@ pythonPackages = python.modules // rec {
   };
 
 
+  pika = buildPythonPackage {
+    name = "pika-0.9.12";
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/p/pika/pika-0.9.12.tar.gz;
+      md5 = "7174fc7cc5570314fa3cfaa729106482";
+    };
+    buildInputs = [ nose mock pyyaml ];
+
+    propagatedBuildInputs = [ unittest2 ];
+  };
+
+
   pillow = buildPythonPackage rec {
     name = "Pillow-1.7.8";
 
