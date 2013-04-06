@@ -3047,6 +3047,8 @@ let
       inherit fetchurl stdenv cabextract;
     });
 
+  amdappsdk = callPackage ../development/misc/amdapp-sdk { };
+
 
   ### DEVELOPMENT / TOOLS
 
