@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, makeWrapper, perl, mesa, xorg }:
+{ stdenv, fetchurl, makeWrapper, perl, mesa, xorg }:
 
 stdenv.mkDerivation rec {
   version = "2.8";
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "AMD Accelerated Parallel Processing (APP) SDK, with OpenCL 1.2 support";
     homepage = http://developer.amd.com/tools/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/;
-    license = "unfree";
+    license = stdenv.lib.licenses.amd;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

@@ -203,4 +203,10 @@
     fullName = "zlib license";
     url = http://www.gzip.org/zlib/zlib_license.html;
   };
+
+  amd = {
+    shortName = "amd";
+    fullName = "AMD License Agreement";
+    url = http://developer.amd.com/amd-license-agreement/;
+  };
 }
