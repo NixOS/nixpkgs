@@ -145,6 +145,12 @@ in {
     inherit system;
   });
 
+  iso_minimal_new_kernel = pkgs.lib.genAttrs systems (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
+    type = "minimal-new-kernel";
+    inherit system;
+  });
+
   iso_graphical = pkgs.lib.genAttrs systems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-graphical.nix;
     type = "graphical";
