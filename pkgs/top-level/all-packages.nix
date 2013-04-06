@@ -5547,9 +5547,7 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
-  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc {
-    postgresql = postgresql91;
-  };
+  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
   pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
     inherit xmpppy pythonIRClib python makeWrapper;
@@ -7693,7 +7691,7 @@ let
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
-    fftw = fftw.override {float = true;}; 
+    fftw = fftw.override {float = true;};
   };
 
   rcs = callPackage ../applications/version-management/rcs { };
@@ -7993,7 +7991,7 @@ let
 
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR14B04;
-    esdl = esdl.override { erlang = erlangR14B04; }; 
+    esdl = esdl.override { erlang = erlangR14B04; };
   };
 
   wmname = callPackage ../applications/misc/wmname { };
