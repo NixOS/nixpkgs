@@ -1,16 +1,23 @@
 { fetchurl, stdenv, makeWrapper, perl, mesa, xorg }:
 
-# TODO: Add support for x86
-assert stdenv.system == "x86_64-linux";
-
 stdenv.mkDerivation rec {
   version = "2.8";
   name = "amdapp-sdk-${version}";
 
-  src = fetchurl {
+  src = if stdenv.system == "x86_64-linux" then fetchurl {
     url = "http://developer.amd.com/wordpress/media/2012/11/AMD-APP-SDK-v${version}-lnx64.tgz";
     sha256 = "d9c120367225bb1cd21abbcf77cb0a69cfb4bb6932d0572990104c566aab9681";
-  };
+  } else if stdenv.system == "i686-linux" then fetchurl {
+    url = "http://developer.amd.com/wordpress/media/2012/11/AMD-APP-SDK-v${version}-lnx32.tgz";
+    sha256 = "99610737f21b2f035e0eac4c9e776446cc4378a614c7667de03a82904ab2d356";
+  } else
+    throw "System not supported";
+
+  bits = if stdenv.system == "x86_64-linux" then "64"
+         else "32";
+
+  arch = if stdenv.system == "x86_64-linux" then "x86_64"
+         else "i686";
 
   # TODO: Add optional aparapi support
   patches = [ ./01-remove-aparapi-samples.patch ];
@@ -22,8 +29,8 @@ stdenv.mkDerivation rec {
 
   unpackPhase = ''
     tar xvzf $src
-    tar xf AMD-APP-SDK-v${version}-RC-lnx64.tgz
-    cd AMD-APP-SDK-v${version}-RC-lnx64
+    tar xf AMD-APP-SDK-v${version}-RC-lnx${bits}.tgz
+    cd AMD-APP-SDK-v${version}-RC-lnx${bits}
   '';
 
   installPhase = ''
@@ -31,14 +38,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -r {docs,include} "$out/"
     mkdir -p "$out/"{bin,lib,samples/opencl/bin}
-    cp -r "./bin/x86_64/clinfo" "$out/bin/clinfo"
-    cp -r "./lib/x86_64/"* "$out/lib/"
+    cp -r "./bin/${arch}/clinfo" "$out/bin/clinfo"
+    cp -r "./lib/${arch}/"* "$out/lib/"
     find ./samples/opencl/ -mindepth 1 -maxdepth 1 -type d -not -name bin -exec cp -r {} "$out/samples/opencl" \;
-    cp -r "./samples/opencl/bin/x86_64/"* "$out/samples/opencl/bin"
+    cp -r "./samples/opencl/bin/${arch}/"* "$out/samples/opencl/bin"
 
     #Register ICD
     mkdir -p "$out/etc/OpenCL/vendors"
-    echo "$out/lib/libamdocl64.so" > "$out/etc/OpenCL/vendors/amd.icd"
+    echo "$out/lib/libamdocl${bits}.so" > "$out/etc/OpenCL/vendors/amd.icd"
     # The OpenCL ICD specifications: http://www.khronos.org/registry/cl/extensions/khr/cl_khr_icd.txt
 
     #Install includes
@@ -58,6 +65,6 @@ stdenv.mkDerivation rec {
     description = "AMD Accelerated Parallel Processing (APP) SDK, with OpenCL 1.2 support";
     homepage = http://developer.amd.com/tools/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/;
     license = "unfree";
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
