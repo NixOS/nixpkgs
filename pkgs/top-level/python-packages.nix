@@ -861,6 +861,30 @@ pythonPackages = python.modules // rec {
   };
 
 
+  evdev = buildPythonPackage rec {
+    version = "0.3.2";
+    name = "evdev-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/e/evdev/${name}.tar.gz";
+      sha256 = "07gmynz764sln2sq18aafx13yawkv5nkqrkk06rj71sq71fsr9h9";
+    };
+
+    buildInputs = [ pkgs.linuxHeaders ];
+
+    patchPhase = "sed -e 's#/usr/include/linux/input.h#${pkgs.linuxHeaders}/include/linux/input.h#' -i setup.py";
+
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Provides bindings to the generic input event interface in Linux";
+      homepage = http://pythonhosted.org/evdev;
+      license = licenses.bsd3;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
+
+
   logilab_astng = buildPythonPackage rec {
     name = "logilab-astng-0.24.1";
 
