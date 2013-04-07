@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     lib/Net/hostent.t \
     dist/IO/t/{io_multihomed.t,io_sock.t} \
     t/porting/{maintainers.t,regen.t} \
-    cpan/Socket/t/getnameinfo.t \
+    cpan/Socket/t/get{name,addr}info.t \
   '' + stdenv.lib.optionalString stdenv.isFreeBSD ''
     cpan/CPANPLUS/t/04_CPANPLUS-Module.t \
     cpan/CPANPLUS/t/20_CPANPLUS-Dist-MM.t \
