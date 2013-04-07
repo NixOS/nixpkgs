@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
          else "32";
 
   arch = if stdenv.system == "x86_64-linux" then "x86_64"
-         else "i686";
+         else "x86";
 
   # TODO: Add optional aparapi support
   patches = [ ./01-remove-aparapi-samples.patch ];
