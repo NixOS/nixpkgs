@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0kqy30wz2krbg4y7750hjq5218hgy2vj9pm5qzkn1bqskxs4b4ap";
   };
 
-  patches = [ ./vpnc.patch ];
+  patches = [ ./vpnc.patch ./no-werror.patch ];
 
   preConfigure =
     ''

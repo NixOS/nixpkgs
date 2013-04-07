@@ -2,12 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "hsemail";
-  version = "1.7.5";
-  sha256 = "0ls6y48bndwgb7ng29wxim4h36rs6b07dqi6ic4hqgbb7lg6fma4";
+  version = "1.7.6";
+  sha256 = "0v4c6ljrzc7680i85wyxq7fkfs2j00941ps3rn8r16x3x2r8di04";
   buildDepends = [ mtl parsec ];
   testDepends = [ doctest hspec parsec ];
   meta = {
-    homepage = "http://gitorious.org/hsemail";
+    homepage = "http://github.com/peti/hsemail";
     description = "Internet Message Parsers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;

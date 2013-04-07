@@ -40,7 +40,7 @@ with import ./release-lib.nix { inherit supportedSystems; };
   dhcp = linux;
   diffutils = all;
   e2fsprogs = linux;
-  emacs23 = gtkSupported;
+  emacs24 = gtkSupported;
   enscript = all;
   file = all;
   findutils = all;
@@ -202,11 +202,4 @@ with import ./release-lib.nix { inherit supportedSystems; };
     tools = linux;
   };
 
-  emacs23Packages = {
-    bbdb = linux;
-    cedet = linux;
-    ecb = linux;
-    emacsw3m = linux;
-    emms = linux;
-  };
 } ))

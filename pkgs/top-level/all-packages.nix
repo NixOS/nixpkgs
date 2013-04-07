@@ -4734,11 +4734,7 @@ let
 
   openldap = callPackage ../development/libraries/openldap { };
 
-  openlierox = builderDefsPackage ../games/openlierox {
-    inherit (xlibs) libX11 xproto;
-    inherit gd SDL SDL_image SDL_mixer zlib libxml2
-      pkgconfig;
-  };
+  openlierox = callPackage ../games/openlierox { };
 
   libopensc_dnie = callPackage ../development/libraries/libopensc-dnie {
     opensc = opensc_0_11_7;
@@ -5561,9 +5557,7 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
-  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc {
-    postgresql = postgresql91;
-  };
+  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
   pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
     inherit xmpppy pythonIRClib python makeWrapper;
