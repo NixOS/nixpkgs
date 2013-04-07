@@ -317,15 +317,15 @@ pythonPackages = python.modules // rec {
   });
 
   awscli = buildPythonPackage rec {
-    name = "awscli-0.5.0";
+    name = "awscli-0.8.3";
     namePrefix = "";
 
     src = fetchurl {
-      url = https://github.com/aws/aws-cli/archive/0.5.0.tar.gz;
-      sha256 = "0smgcisl2p7p2y2i299x7g271kdmgs0hnzngw5030phvh0lq202i";
+      url = https://github.com/aws/aws-cli/archive/0.8.3.tar.gz;
+      sha256 = "0v7igh00zja560v8qz315g3m7x9six1hprrrb10cpp9sy8n58xnn";
     };
 
-    propagatedBuildInputs = [ argparse botocore ];
+    propagatedBuildInputs = [ argparse botocore colorama ];
 
   };
 
@@ -468,14 +468,14 @@ pythonPackages = python.modules // rec {
 
 
   botocore = buildPythonPackage rec {
-    name = "botocore-0.5.2";
+    name = "botocore-0.8.3";
 
     src = fetchurl {
-      url = https://github.com/boto/botocore/archive/0.5.2.tar.gz;
-      sha256 = "18073mydin0mwk1d7vdlmsiz3rvhjzxkaaqrmxw440acbipnngq2";
+      url = https://github.com/boto/botocore/archive/0.8.3.tar.gz;
+      sha256 = "0dbm2clrh7zs4brqqj3xssz3nymdg24ff2lww27s3wliirwqdiv1";
     };
 
-    propagatedBuildInputs = [ dateutil requests014 ];
+    propagatedBuildInputs = [ dateutil requests jmespath ];
 
     meta = {
       homepage = https://github.com/boto/botocore;
@@ -641,6 +641,27 @@ pythonPackages = python.modules // rec {
       description = "Python module for handling HTML forms on the client side";
     };
   });
+
+
+  colorama = buildPythonPackage rec {
+    name = "clientform-0.2.10";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/colorama/colorama-0.2.5.tar.gz";
+      md5 = "308c6e38917bdbfc4d3b0783c614897d";
+    };
+
+    propagatedBuildInputs = [ clientform ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/colorama/;
+      license = "bsd";
+      description = "Cross-platform colored terminal text";
+    };
+  };
+
 
   coilmq = buildPythonPackage (rec {
     name = "coilmq-0.6.1";
@@ -1887,6 +1908,24 @@ pythonPackages = python.modules // rec {
   };
 
 
+  jmespath = buildPythonPackage rec {
+    name = "jmespath-0.0.1";
+
+    src = fetchurl {
+      url = "https://github.com/boto/jmespath/archive/0.0.1.tar.gz";
+      sha256 = "1a5d62qbgfjbaw8wgkfh78gairnpy6bbdsygwm1prqwap1kyq6ch";
+    };
+
+    propagatedBuildInputs = [ ply ];
+
+    meta = {
+      homepage = "https://github.com/boto/jmespath";
+      description = "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
+      license = "BSD";
+    };
+  };
+
+
   pylast = buildPythonPackage rec {
     name = "pylast-${version}";
     version = "0.5.11";
@@ -2578,11 +2617,11 @@ pythonPackages = python.modules // rec {
   }) else null;
 
   ply = buildPythonPackage (rec {
-    name = "ply-3.2";
+    name = "ply-3.4";
 
     src = fetchurl {
       url = "http://www.dabeaz.com/ply/${name}.tar.gz";
-      sha256 = "10z4xq8lc8c21v4g7z3zpnvpqbc0vidigrck1kqhwgkqi4gh0kfj";
+      sha256 = "0sslnbpws847r1j1f41fjpn76w0asywfqgxwzyjrvmmxnw8myhxg";
     };
 
     meta = {
@@ -3646,20 +3685,6 @@ pythonPackages = python.modules // rec {
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
       md5 = "a0158815af244c32041a3147ee09abf3";
-    };
-
-    meta = {
-      description = "Requests is an Apache2 Licensed HTTP library, written in Python, for human beings..";
-      homepage = http://docs.python-requests.org/en/latest/;
-    };
-  };
-
-  requests014 = buildPythonPackage rec {
-    name = "requests-0.14.1";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "3de30600072cbc7214ae342d1d08aa46";
     };
 
     meta = {
