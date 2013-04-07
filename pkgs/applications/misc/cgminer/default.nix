@@ -20,6 +20,15 @@ stdenv.mkDerivation rec {
     ln -s ${amdadlsdk}/include/* ADL_SDK/
   '';
 
+  postBuild = ''
+    gcc api-example.c -I compat/jansson -o cgminer-api
+  '';
+
+  postInstall = ''
+    cp cgminer-api $out/bin/
+    chmod 444 $out/bin/*.cl
+  '';
+
   meta = {
     description = "CPU/GPU miner in c for bitcoin";
     longDescription= ''
