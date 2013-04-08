@@ -3304,7 +3304,11 @@ let
   pkgconfig = forceNativeDrv (callPackage ../development/tools/misc/pkgconfig { });
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
 
-  premake = callPackage ../development/tools/misc/premake { };
+  premake3 = callPackage ../development/tools/misc/premake/3.nix { };
+
+  premake4 = callPackage ../development/tools/misc/premake { };
+
+  premake = premake4;
 
   pstack = callPackage ../development/tools/misc/gdb/pstack.nix { };
 
