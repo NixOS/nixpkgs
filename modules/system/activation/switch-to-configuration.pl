@@ -36,7 +36,7 @@ if ($action eq "switch" || $action eq "boot") {
 }
 
 # Just in case the new configuration hangs the system, do a sync now.
-system("sync") unless ($ENV{"NIXOS_NO_SYNC"} // "") eq "1";
+system("@coreutils@/bin/sync") unless ($ENV{"NIXOS_NO_SYNC"} // "") eq "1";
 
 exit 0 if $action eq "boot";
 

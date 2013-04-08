@@ -148,7 +148,7 @@ let
     preferLocalBuild = true;
     buildCommand = systemBuilder;
 
-    inherit (pkgs) utillinux;
+    inherit (pkgs) utillinux coreutils;
     systemd = config.systemd.package;
 
     inherit children;
