@@ -166,7 +166,7 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   # fail saying different kernel versions
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/modules/dri $out/lib
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/modules/dri/* $out/lib
-  cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/*.so.* $out/lib
+  cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/*.so* $out/lib
   cp -r $TMP/arch/$arch/usr/X11R6/$lib_arch/fglrx/fglrx-libGL.so.1.2 $out/lib/fglrx-libGL.so.1.2
 
   cp -r $TMP/arch/$arch/usr/$lib_arch/* $out/lib
