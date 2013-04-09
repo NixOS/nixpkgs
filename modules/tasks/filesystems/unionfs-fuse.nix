@@ -15,5 +15,7 @@
         ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
         ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}/bin
       '';
+  } // pkgs.lib.mkIf (pkgs.lib.any (fs: fs == "unionfs-fuse") config.boot.supportedFilesystems) {
+    system.fsPackages = [ pkgs.unionfs-fuse ];
   };
 }
