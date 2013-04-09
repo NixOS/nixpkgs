@@ -11,6 +11,7 @@ unzip $src
 run_file=$(echo amd-driver-installer-*)
 sh $run_file --extract .
 
+eval "$patchPhase"
 
 kernelVersion=$(cd ${kernel}/lib/modules && ls)
 kernelBuild=$(echo ${kernel}/lib/modules/$kernelVersion/build)

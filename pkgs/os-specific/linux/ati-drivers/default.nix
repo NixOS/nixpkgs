@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel, xlibs, which, imake
+{ stdenv, fetchurl, kernelDev, xlibs, which, imake
 , mesa # for fgl_glxgears
 , libXxf86vm, xf86vidmodeproto # for fglrx_gamma
 , xorg, makeWrapper, glibc, patchelf
@@ -24,29 +24,30 @@ assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
   name = "ati-drivers-${version}-${kernel.version}";
-  version = "10-11-x86";
+  version = "13.1";
 
   builder = ./builder.sh;
 
   inherit libXxf86vm xf86vidmodeproto;
 
   src = fetchurl {
-    url = http://www2.ati.com/drivers/linux/amd-driver-installer-12-8-x86.x86_64.zip;
-    sha256 = "0hdv89vdap6v0dnwhddizfmlkwyh0j910sp4wyj2lq5pn9rm2lk2";
-
-    # beta
-    # url = "http://www2.ati.com/drivers/beta/amd-driver-installer-12-9-beta-x86.x86_64.zip";
-    # sha256 = "02dmflzfrgr07fa1hv34m7ad8pra21xv7qbk500gqm6v8s9vbplk";
+    url = http://www2.ati.com/drivers/linux/amd-driver-installer-catalyst-13.1-linux-x86.x86_64.zip;
+    sha256 = "67898a922b6b58f25a276a144f16b19014f79c39e4d44d8d2883a467d31e34ad";
   };
+
+  patchPhase = "patch -p0 < ${./gentoo-patches.patch}";
 
   buildInputs =
     [ xlibs.libXext xlibs.libX11
       xlibs.libXrandr which imake makeWrapper
       patchelf
       unzip
+      mesa
     ];
 
-  inherit kernel glibc /* glibc only used for setting interpreter */;
+  kernel = kernelDev;
+
+  inherit glibc /* glibc only used for setting interpreter */;
 
   LD_LIBRARY_PATH = stdenv.lib.concatStringsSep ":"
     [ "${xorg.libXrandr}/lib"

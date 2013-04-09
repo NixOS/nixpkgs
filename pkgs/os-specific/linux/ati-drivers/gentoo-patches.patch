@@ -1,0 +1,30 @@
+# kernel 3.7
+--- common/lib/modules/fglrx/build_mod/firegl_public.c	2012-10-18 00:29:21.778369464 +0200
++++ common/lib/modules/fglrx/build_mod/firegl_public.c.new	2012-10-18 00:30:39.647416026 +0200
+@@ -222,6 +222,10 @@
+ #define preempt_enable()
+ #endif
+ 
++#ifndef VM_RESERVED
++#define  VM_RESERVED   (VM_DONTEXPAND | VM_DONTDUMP)
++#endif
++
+ // ============================================================
+ /* globals */
+
+# kernel 3.8
+--- common/lib/modules/fglrx/build_mod/kcl_acpi.c	2012-07-04 21:43:47.000000000 +0200
++++ common/lib/modules/fglrx/build_mod/kcl_acpi.c.new	2012-12-23 11:25:38.000000000 +0100
+@@ -775,11 +775,7 @@
+ unsigned int ATI_API_CALL KCL_ACPI_GetHandles(kcl_match_info_t *pInfo)
+ {
+ #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,12)
+-    #if LINUX_VERSION_CODE > KERNEL_VERSION(2,6,19)
+-        pInfo->video_handle = pInfo->pcidev->dev.archdata.acpi_handle;
+-    #else 
+-        pInfo->video_handle = pInfo->pcidev->dev.firmware_data;
+-    #endif    
++    pInfo->video_handle = DEVICE_ACPI_HANDLE(&pInfo->pcidev->dev);
+     if ( pInfo->video_handle &&
+         (KCL_ACPI_videoDevice(pInfo->video_handle) != KCL_ACPI_OK) )
+     {
