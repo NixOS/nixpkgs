@@ -43,19 +43,15 @@ in
 
     environment.systemPackages = [ openldap ];
 
-    jobs.openldap =
-      {
-        description = "LDAP server";
-
-        startOn = "filesystem";
-        daemonType = "fork";
-
-        preStart =
-          ''
-            mkdir -p /var/run/slapd
-          '';
-        exec = "${openldap}/libexec/slapd -f ${configFile}";
-      };
+    systemd.services.openldap = {
+      description = "LDAP server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      preStart = ''
+        mkdir -p /var/run/slapd
+      '';
+      serviceConfig.ExecStart = "${openldap}/libexec/slapd -d 0 -f ${configFile}";
+    };
 
   };
 
