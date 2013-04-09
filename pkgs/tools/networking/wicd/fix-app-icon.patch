@@ -10,9 +10,9 @@ diff -ruN wicd-1.7.2.4.orig/gtk/gui.py wicd-1.7.2.4/gtk/gui.py
 -        if os.path.exists(os.path.join(wpath.images, "wicd.png")):
 -            self.window.set_icon_from_file(os.path.join(wpath.images, "wicd.png"))
 +        if os.path.exists(os.path.join(wpath.images, "../../icons/hicolour/128x128/apps/wicd-gtk.png")):
-+            self.window.set_icon_from_file(os.path.join(wpath.images, "../../icons/hicolour/128x128/apps/wicd-gtk.png"))
++            self.window.set_icon_from_file(os.path.join(wpath.images, "../../icons/hicolor/128x128/apps/wicd-gtk.png"))
 +        else:
-+            print 'icon doesn\'t exist %s' % os.path.join(wpath.images, "../../icons/hicolour/128x128/apps/wicd-gtk.png")
++            print 'icon doesn\'t exist %s' % os.path.join(wpath.images, "../../icons/hicolor/128x128/apps/wicd-gtk.png")
          self.statusID = None
          self.first_dialog_load = True
          self.is_visible = True

@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     --systemd=$out/lib/systemd/ \
     --logrotate=$out/etc/logrotate.d/ \
     --desktop=$out/share/applications/ \
-    --icons=$out/share/icons/hicolour/ \
+    --icons=$out/share/icons/hicolor/ \
     --translations=$out/share/locale/ \
     --autostart=$out/etc/xdg/autostart/ \
     --varlib=$out/var/lib/ \
