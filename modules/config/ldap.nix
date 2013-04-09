@@ -223,9 +223,9 @@ mkIf cfg.enable {
   systemd.services = mkIf cfg.daemon.enable {
     nslcd = {
       wantedBy = [ "nss-user-lookup.target" ];
+      before = [ "nss-user-lookup.target" ];
+      after = [ "network.target" ];
 
-      path = [ nss_pam_ldapd ];
-  
       preStart = ''
         mkdir -p /run/nslcd
         rm -f /run/nslcd/nslcd.pid;
@@ -237,9 +237,8 @@ mkIf cfg.enable {
         ''}
       '';
 
-      script = "nslcd";
-
       serviceConfig = {
+        ExecStart = "${nss_pam_ldapd}/sbin/nslcd";
         Type = "forking";
         PIDFile = "/run/nslcd/nslcd.pid";
         Restart = "always";
