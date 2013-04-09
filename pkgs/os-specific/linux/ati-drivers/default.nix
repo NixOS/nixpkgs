@@ -23,27 +23,26 @@
 assert stdenv.system == "x86_64-linux";
 
 stdenv.mkDerivation rec {
-  name = "ati-drivers-${version}-${kernelDev.version}";
-  version = "10-11-x86";
+  name = "ati-drivers-${version}-${kernel.version}";
+  version = "13.1";
 
   builder = ./builder.sh;
 
   inherit libXxf86vm xf86vidmodeproto;
 
   src = fetchurl {
-    url = http://www2.ati.com/drivers/linux/amd-driver-installer-12-8-x86.x86_64.zip;
-    sha256 = "0hdv89vdap6v0dnwhddizfmlkwyh0j910sp4wyj2lq5pn9rm2lk2";
-
-    # beta
-    # url = "http://www2.ati.com/drivers/beta/amd-driver-installer-12-9-beta-x86.x86_64.zip";
-    # sha256 = "02dmflzfrgr07fa1hv34m7ad8pra21xv7qbk500gqm6v8s9vbplk";
+    url = http://www2.ati.com/drivers/linux/amd-driver-installer-catalyst-13.1-linux-x86.x86_64.zip;
+    sha256 = "1bdpzpwpfqykyphskgfghj5xngc83nkdx2rb986lxnijg8jxnvp6";
   };
+
+  patchPhase = "patch -p0 < ${./gentoo-patches.patch}";
 
   buildInputs =
     [ xlibs.libXext xlibs.libX11
       xlibs.libXrandr which imake makeWrapper
       patchelf
       unzip
+      mesa
     ];
 
   kernel = kernelDev;
