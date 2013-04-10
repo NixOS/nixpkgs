@@ -2241,9 +2241,9 @@ let
 
   gcc48_real = lowPrio (wrapGCC (callPackage ../development/compilers/gcc/4.8 {
     inherit noSysDirs;
-    # I'm not sure if profiling with enableParallelBuilding helps a lot.
-    # We can enable it back some day. This makes the *gcc* builds faster now.
-    profiledCompiler = false;
+
+    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+    profiledCompiler = with stdenv; (isi686 || isx86_64);
 
     # When building `gcc.crossDrv' (a "Canadian cross", with host == target
     # and host != build), `cross' must be null but the cross-libc must still
