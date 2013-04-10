@@ -58,6 +58,7 @@ cleanup() {
     mountpoint -q $mountPoint/etc/nixos && umount $mountPoint/etc/nixos
     mountpoint -q $mountPoint/etc && umount $mountPoint/etc
     umount $mountPoint/mnt2
+    umount $mountPoint/sys/firmware/efi/efivars &>/dev/null || true
     umount $mountPoint/sys
     umount $mountPoint/proc
     umount $mountPoint/dev/shm
