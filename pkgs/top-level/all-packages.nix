@@ -1998,7 +1998,7 @@ let
 
   gambit = callPackage ../development/compilers/gambit { };
 
-  gcc = gcc47;
+  gcc = gcc48;
 
   gcc33 = wrapGCC (import ../development/compilers/gcc/3.3 {
     inherit fetchurl stdenv noSysDirs;
@@ -2050,6 +2050,8 @@ let
   gcc46 = gcc46_real;
 
   gcc47 = gcc47_real;
+
+  gcc48 = gcc48_real;
 
   gcc45_realCross = lib.addMetaAttrs { platforms = []; }
     (makeOverridable (import ../development/compilers/gcc/4.5) {
