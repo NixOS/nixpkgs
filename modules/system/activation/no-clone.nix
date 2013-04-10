@@ -6,8 +6,6 @@ with pkgs.lib;
 
 {
   boot.loader.grub.device = mkOverrideTemplate 0 {} "nodev";
-  # undefined the obsolete name of the previous option.
-  boot.grubDevice = mkOverrideTemplate 0 {} pkgs.lib.mkNotdef;
   nesting.children = mkOverrideTemplate 0 {} [];
   nesting.clone = mkOverrideTemplate 0 {} [];
 }

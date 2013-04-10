@@ -118,7 +118,7 @@ $ nixos-option --install</screen>
 
     <para>You need to specify a root file system in
     <option>fileSystems</option> and the target device for the Grub boot
-    loader in <option>boot.grubDevice</option>.  See
+    loader in <option>boot.loader.grub.device</option>.  See
     <xref linkend="ch-options"/> for a list of the available configuration
     options.</para>
 

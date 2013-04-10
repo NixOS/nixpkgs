@@ -1,6 +1,6 @@
 {
   boot = {
-    grubDevice = "/dev/sda";
+    loader.grub.device = "/dev/sda";
     copyKernels = true;
     bootMount = "(hd0,0)";
   };
