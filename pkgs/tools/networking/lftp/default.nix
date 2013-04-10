@@ -1,11 +1,11 @@
 { stdenv, fetchurl, gnutls, pkgconfig, readline, zlib, xz }:
 
 stdenv.mkDerivation rec {
-  name = "lftp-4.4.0";
+  name = "lftp-4.4.5";
 
   src = fetchurl {
     url = "ftp://ftp.cs.tu-berlin.de/pub/net/ftp/lftp/${name}.tar.xz";
-    sha256 = "0cg4gabya2sygbwh2b0cdr8v719q9gv929hdb5g1mxgj8npjd4y7";
+    sha256 = "1p3nxsd2an9pdwc3vgwxy8p5nnjrc7mhilikjaddy62cyvxdbpxq";
   };
 
   patches = [ ./no-gets.patch ];
