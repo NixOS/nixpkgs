@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "fsnotify";
-  version = "0.0.7";
-  sha256 = "0yx69kdy67pjkwfrd5r00lhprbf98j9za31f7vaxxf2lbgqlmk9q";
+  version = "0.0.7.1";
+  sha256 = "1hrnhp22s8pcj525m2vi9b7k3pp5qrv44qhqh6c8n0bgilqwg4yd";
   buildDepends = [ hinotify systemFileio systemFilepath text time ];
   testDepends = [
     Cabal Glob hinotify hspec QuickCheck random systemFileio
