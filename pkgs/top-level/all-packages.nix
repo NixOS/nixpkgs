@@ -3657,6 +3657,8 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
+  ffms = callPackage ../development/libraries/ffms { };
+
   fftw = callPackage ../development/libraries/fftw {
     singlePrecision = false;
   };
@@ -4575,6 +4577,8 @@ let
       ;
    guile = guile_1_8;
   };
+
+  log4cpp = callPackage ../development/libraries/log4cpp { };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
 
@@ -6592,6 +6596,8 @@ let
   avogadro = callPackage ../applications/science/chemistry/avogadro {
     eigen = eigen2;
   };
+
+  avxsynth = callPackage ../applications/video/avxsynth { };
 
   awesome = callPackage ../applications/window-managers/awesome {
     lua = lua5;
