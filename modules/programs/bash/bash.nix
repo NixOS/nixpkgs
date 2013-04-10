@@ -18,7 +18,7 @@ let
       nullglobStatus=$(shopt -p nullglob)
       shopt -s nullglob
       for p in $NIX_PROFILES; do
-        for m in "$p/etc/bash_completion.d/"*; do
+        for m in "$p/etc/bash_completion.d/"* "$p/share/bash-completion/completions/"*; do
           . $m
         done
       done
@@ -146,5 +146,8 @@ in
       mv /bin/.sh.tmp /bin/sh # atomically replace /bin/sh
     '';
 
-  environment.pathsToLink = optional cfg.enableBashCompletion "/etc/bash_completion.d";
+  environment.pathsToLink = optionals cfg.enableBashCompletion [
+    "/etc/bash_completion.d"
+    "/share/bash-completion"
+  ];
 }
