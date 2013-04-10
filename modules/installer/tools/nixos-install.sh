@@ -48,6 +48,7 @@ mount --bind /dev $mountPoint/dev
 mount --bind /dev/shm $mountPoint/dev/shm
 mount --bind /proc $mountPoint/proc
 mount --bind /sys $mountPoint/sys
+mount --bind /sys/firmware/efi/efivars $mountPoint/sys/firmware/efi/efivars &>/dev/null || true
 mount --bind $mountPoint/etc/nixos $mountPoint/mnt2
 mount --bind /etc $mountPoint/etc
 mount --bind $mountPoint/mnt2 $mountPoint/etc/nixos
