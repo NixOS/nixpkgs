@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng ];
   nativeBuildInputs = [ cmake ];
   buildInputs = [ lua5 stdenv.gcc.libc ];
+
+  crossAttrs = {
+    propagatedBuildInputs = [ zlib.crossDrv freetype.crossDrv libjpeg.crossDrv
+      libtiff.crossDrv fontconfig.crossDrv openssl.crossDrv libpng.crossDrv
+      lua5.crossDrv stdenv.gccCross.libc ];
+  };
+
   cmakeFlags = "-DPODOFO_BUILD_SHARED=ON -DPODOFO_BUILD_STATIC=OFF";
 
   meta = {
