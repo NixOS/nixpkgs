@@ -39,7 +39,7 @@ fi
 # Mount some stuff in the target root directory.  We bind-mount /etc
 # into the chroot because we need networking and the nixbld user
 # accounts in /etc/passwd.  But we do need the target's /etc/nixos.
-mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt $mountPoint/mnt2 $mountPoint/etc /etc/nixos
+mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/mnt $mountPoint/mnt2 $mountPoint/mnt-nixos $mountPoint/mnt-nixpkgs $mountPoint/etc /etc/nixos
 mount --make-private / # systemd makes / shared, which is annoying
 mount --bind / $mountPoint/mnt
 mount --bind /nix $mountPoint/mnt/nix
@@ -58,6 +58,8 @@ cleanup() {
     mountpoint -q $mountPoint/etc/nixos && umount $mountPoint/etc/nixos
     mountpoint -q $mountPoint/etc && umount $mountPoint/etc
     umount $mountPoint/mnt2
+    umount $mountPoint/mnt-nixos
+    umount $mountPoint/mnt-nixpkgs
     umount $mountPoint/sys/firmware/efi/efivars &>/dev/null || true
     umount $mountPoint/sys
     umount $mountPoint/proc
@@ -66,7 +68,7 @@ cleanup() {
     umount $mountPoint/mnt/nix/store
     umount $mountPoint/mnt/nix
     umount $mountPoint/mnt
-    rmdir $mountPoint/mnt $mountPoint/mnt2
+    rmdir $mountPoint/mnt $mountPoint/mnt2 $mountPoint/mnt-nixos $mountPoint/mnt-nixpkgs
 }
 
 trap "cleanup" EXIT
@@ -165,14 +167,14 @@ done
 
 
 # Get the absolute path to the NixOS/Nixpkgs sources.
-nixpkgs_src=$(readlink -f $(nix-instantiate --find-file nixpkgs))
-nixos_src=$(readlink -f $(nix-instantiate --find-file nixos))
+mount --bind $(readlink -f $(nix-instantiate --find-file nixpkgs)) $mountPoint/mnt-nixpkgs
+mount --bind $(readlink -f $(nix-instantiate --find-file nixos)) $mountPoint/mnt-nixos
 
 
 # Build the specified Nix expression in the target store and install
 # it into the system configuration profile.
 echo "building the system configuration..."
-NIX_PATH="nixpkgs=/mnt$nixpkgs_src:nixos=/mnt$nixos_src:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
+NIX_PATH="nixpkgs=/mnt-nixpkgs:nixos=/mnt-nixos:nixos-config=$NIXOS_CONFIG" NIXOS_CONFIG= \
     chroot $mountPoint @nix@/bin/nix-env \
     -p /nix/var/nix/profiles/system -f '<nixos>' --set -A system --show-trace
 
