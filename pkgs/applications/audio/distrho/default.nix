@@ -2,23 +2,19 @@
 , libxslt, lv2, pkgconfig, premake, xlibs }:
 
 let
-  rev = "7815b3545978e";
+  rev = "99efbf0b";
 in
 stdenv.mkDerivation rec {
   name = "distrho-${rev}";
 
   src = fetchgit {
-    url = "git://distrho.git.sf.net/gitroot/distrho/distrho";
+    url = "https://github.com/falkTX/DISTRHO.git";
     inherit rev;
-    sha256 = "2e260f16ee67b1166c39e2d55c8dd5593902c8b3d8d86485545ef83139e1e844";
+    sha256 = "ed26a6edca19ebb8260b3dc042f69c32162e1d91179fb9d22da42ec7131936f9";
   };
 
   patchPhase = ''
-    sed -e "s#xsltproc#${libxslt}/bin/xsltproc#" -i Makefile
-    sed -e "s#PREFIX = /usr/local#PREFIX = $out#" -i Makefile
-    sed -e "s#/etc/HybridReverb2#$out/etc/Hybridreverb2#" \
-      -i ports/hybridreverb2/source/SystemConfig.cpp
-    sed -e "s#/usr#$out#" -i ports/hybridreverb2/data/HybridReverb2.conf
+    sed -e "s#@./scripts#sh scripts#" -i Makefile
   '';
 
   buildInputs = [
@@ -31,9 +27,6 @@ stdenv.mkDerivation rec {
     sh ./scripts/premake-update.sh linux
     make standalone
     make lv2
-
-    # generate lv2 ttl
-    sh scripts/generate-ttl.sh
   '';
 
   installPhase = ''
@@ -41,12 +34,6 @@ stdenv.mkDerivation rec {
     cp bin/standalone/* $out/bin/
     mkdir -p $out/lib/lv2
     cp -a bin/lv2/* $out/lib/lv2/
-
-    # HybridReverb2 data
-    mkdir -p $out/etc/HybridReverb2
-    cp ports/hybridreverb2/data/HybridReverb2.conf $out/etc/HybridReverb2/
-    mkdir -p $out/share
-    cp -a ports/hybridreverb2/data/HybridReverb2 $out/share/
   '';
 
   meta = with stdenv.lib; {
@@ -55,8 +42,8 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Includes:
       3BandEQ bitmangler drowaudio-distortion drowaudio-flanger
-      drowaudio-tremolo eqinox HybridReverb2 juce_pitcher sDelay
-      TAL-Filter TAL-NoiseMaker TAL-Reverb-2 TAL-Vocoder-2 ThePilgrim
+      drowaudio-tremolo eqinox juce_pitcher sDelay TAL-Filter
+      TAL-NoiseMaker TAL-Reverb-2 TAL-Vocoder-2 ThePilgrim
       Wolpertinger argotlunar capsaicin drowaudio-distortionshaper
       drowaudio-reverb drumsynth highlife JuceDemoPlugin PingPongPan
       TAL-Dub-3 TAL-Filter-2 TAL-Reverb TAL-Reverb-3 TheFunction vex

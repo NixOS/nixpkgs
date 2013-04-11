@@ -1,0 +1,25 @@
+# Source:
+# https://projects.archlinux.org/svntogit/packages.git/plain/screen/trunk/screen-4.0.3-caption-colors.patch
+# modified by hand for nixpkgs
+
+From e6a28cf8bfdac15faa6c267bf476ddcaddf48d67 Mon Sep 17 00:00:00 2001
+From: Sadrul Habib Chowdhury <sadrul@users.sourceforge.net>
+Date: Tue, 26 Jan 2010 20:17:26 +0000
+Subject: Accommodate more color changes in the caption.
+
+---
+diff --git a/src/screen.c b/src/screen.c
+index b1c3dfb..2cceae0 100644
+--- a/screen.c
++++ b/screen.c
+@@ -2204,7 +2204,7 @@ static const char months[] = "JanFebMarAprMayJunJulAugSepOctNovDec";
+ #endif
+ 
+ static char winmsg_buf[MAXSTR];
+-#define MAX_WINMSG_REND 16	/* rendition changes */
++#define MAX_WINMSG_REND 256	/* rendition changes */
+ static int winmsg_rend[MAX_WINMSG_REND];
+ static int winmsg_rendpos[MAX_WINMSG_REND];
+ static int winmsg_numrend;
+--
+cgit v0.8.3.4

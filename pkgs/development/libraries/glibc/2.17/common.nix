@@ -3,7 +3,7 @@
 
 cross:
 
-{ name, fetchurl, stdenv, installLocales ? false
+{ name, fetchurl, fetchgit ? null, stdenv, installLocales ? false
 , gccCross ? null, kernelHeaders ? null
 , machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
 , mig ? null
@@ -31,15 +31,16 @@ stdenv.mkDerivation ({
 
   enableParallelBuilding = true;
 
-  patches =
+  /* Don't try to apply these patches to the Hurd's snapshot, which is
+     older.  */
+  patches = stdenv.lib.optionals (hurdHeaders == null)
     [ /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
       ./nix-locale-archive.patch
 
-      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  Currently
-         disabled on GNU/Hurd, which uses a more recent libc snapshot. */
+      /* Don't use /etc/ld.so.cache, for non-NixOS systems.  */
       ./dont-use-system-ld-so-cache.patch
 
       /* Without this patch many KDE binaries crash. */
@@ -118,16 +119,26 @@ stdenv.mkDerivation ({
 
 # Remove the `gccCross' attribute so that the *native* glibc store path
 # doesn't depend on whether `gccCross' is null or not.
-// (removeAttrs args [ "gccCross" "fetchurl" ]) //
+// (removeAttrs args [ "gccCross" "fetchurl" "fetchgit" ]) //
 
 {
   name = name + "-${version}" +
     stdenv.lib.optionalString (cross != null) "-${cross.config}";
 
-  src = fetchurl {
-    url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
-    sha256 = "0ym3zk9ii64279wgw7pw9xkbxczy2ci7ka6mnfs05rhlainhicm3";
-  };
+  src =
+    if hurdHeaders != null
+    then fetchgit {
+      # Shamefully the "official" glibc won't build on GNU, so use the one
+      # maintained by the Hurd folks, `tschwinge/Roger_Whittaker' branch.
+      # See <http://www.gnu.org/software/hurd/source_repositories/glibc.html>.
+      url = "git://git.sv.gnu.org/hurd/glibc.git";
+      sha256 = "cecec9dd5a2bafc875c56b058b6d7628a22b250b53747513dec304f31ffdb82d";
+      rev = "d3cdecf18e6550b0984a42b43ed48c5fb26501e1";
+    }
+    else fetchurl {
+      url = "mirror://gnu/glibc/glibc-${version}.tar.gz";
+      sha256 = "0ym3zk9ii64279wgw7pw9xkbxczy2ci7ka6mnfs05rhlainhicm3";
+    };
 
   # Remove absolute paths from `configure' & co.; build out-of-tree.
   preConfigure = ''

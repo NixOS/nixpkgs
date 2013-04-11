@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare";
-  version = "1.0.3.1";
-  sha256 = "08w1g19k9v9dvdy45j32kdic8vjhc10ad4g20q5ya0id4cd13qfs";
+  version = "1.0.4";
+  sha256 = "0aqcgfx3y9sbp7wvjmx6rxwi4r13qrfxs9a40gc00np03bpk1hxb";
   buildDepends = [ parsec text ];
   testDepends = [ hspec parsec text ];
   meta = {
@@ -11,6 +11,9 @@ cabal.mkDerivation (self: {
     description = "A toolkit for making compile-time interpolated templates";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

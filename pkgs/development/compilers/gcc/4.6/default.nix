@@ -333,6 +333,7 @@ stdenv.mkDerivation ({
 
   crossAttrs = {
     patches = patches ++ [ ./hurd-sigrtmin.patch ];
+    postPatch = "";
     AR = "${stdenv.cross.config}-ar";
     LD = "${stdenv.cross.config}-ld";
     CC = "${stdenv.cross.config}-gcc";

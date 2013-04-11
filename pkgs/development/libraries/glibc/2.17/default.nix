@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernelHeaders
+{ stdenv, fetchurl, fetchgit ? null, kernelHeaders
 , machHeaders ? null, hurdHeaders ? null, libpthreadHeaders ? null
 , mig ? null
 , installLocales ? true
@@ -18,8 +18,8 @@ in
       + stdenv.lib.optionalString (hurdHeaders != null) "-hurd"
       + stdenv.lib.optionalString debugSymbols "-debug";
 
-    inherit fetchurl stdenv kernelHeaders installLocales profilingLibraries
-      gccCross;
+    inherit fetchurl fetchgit stdenv kernelHeaders installLocales
+      profilingLibraries gccCross;
 
     builder = ./builder.sh;
 
@@ -56,7 +56,7 @@ in
 
   (if hurdHeaders != null
    then rec {
-     inherit machHeaders hurdHeaders libpthreadHeaders mig;
+     inherit machHeaders hurdHeaders libpthreadHeaders mig fetchgit;
 
      propagatedBuildInputs = [ machHeaders hurdHeaders libpthreadHeaders ];
 

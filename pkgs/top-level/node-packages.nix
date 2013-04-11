@@ -9,9 +9,12 @@ let self = {
   patchLatest = srcAttrs:
                   let src = fetchurl srcAttrs; in
                   pkgs.runCommand src.name {} ''
+                    mkdir unpack
+                    cd unpack
                     tar xf ${src}
+                    mv */ package 2>/dev/null || true
                     sed -i -e "s/: \"latest\"/: \"*\"/" package/package.json
-                    tar cf $out package
+                    tar cf $out *
                   '';
 
   "abbrev" = self."abbrev-1";
@@ -43,7 +46,7 @@ let self = {
   amdefine = "amdefine-0.0.4";
 
   "amdefine->=0.0.4" = self."amdefine-0.0.4";
-  
+
   "amdefine-0.0.4" = self.buildNodePackage rec {
     name = "amdefine-0.0.4";
     src = fetchurl {
@@ -91,6 +94,33 @@ let self = {
     };
     deps = [
 
+    ];
+  };
+
+  "aws-sdk" = self."aws-sdk-*";
+
+  "aws-sdk-git" = self.buildNodePackage rec {
+    name = "aws-sdk-0.9.8-pre7b687a0c262ac129fd6eaffeb02de09ee7e6a87c";
+    src = self.patchLatest {
+      url = "https://github.com/aws/aws-sdk-js/archive/7b687a0c262ac129fd6eaffeb02de09ee7e6a87c.tar.gz";
+      sha256 = "1pn43wxi3xz4kjyxf8j7zil5frhd1zpqja8szamgll2pxxnpnr3i";
+      name = "${name}.tgz";
+    };
+    deps = [
+      self."xml2js-0.2.4"
+      self."xmlbuilder"
+    ];
+  };
+
+  "aws-sdk-*" = self.buildNodePackage rec {
+    name = "aws-sdk-0.9.7-pre.8";
+    src = self.patchLatest {
+      url = "http://registry.npmjs.org/aws-sdk/-/${name}.tgz";
+      sha256 = "d3854275981fff76153f79c62745d8d6c59018861729766908c920fff95ea422";
+    };
+    deps = [
+      self."xml2js-0.2.4"
+      self."xmlbuilder"
     ];
   };
 
@@ -269,6 +299,17 @@ let self = {
   };
 
   "commander" = self."commander-~0.6.1";
+
+  "commander-0.5.1" = self.buildNodePackage rec {
+    name = "commander-0.5.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/commander/-/${name}.tgz";
+      sha256 = "91042851d0731b28a5e7c342e5cbce7723a7243d31ae378fa86c45ca9493a924";
+    };
+    deps = [
+
+    ];
+  };
 
   "commander-~0.6.1" = self.buildNodePackage rec {
     name = "commander-0.6.1";
@@ -569,6 +610,47 @@ let self = {
     ];
   };
 
+  "htdigest" = self."htdigest-1.0.7";
+
+  "htdigest-1.0.7" = self.buildNodePackage rec {
+    name = "htdigest-1.0.7";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/htdigest/-/${name}.tgz";
+      sha256 = "10fb047addf1c4f1089a26389066d5ff8f5ffa1ccce272a701bb4c2a30d90c58";
+    };
+    deps = [
+      self."commander-0.5.1"
+    ];
+  };
+
+  "htpasswd" = self."htpasswd-1.1.0";
+
+  "htpasswd-1.1.0" = self.buildNodePackage rec {
+    name = "htpasswd-1.1.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/htpasswd/-/${name}.tgz";
+      sha256 = "cee9c0a525e717e3565ba6ffea8a64c480bc8a9e7800cb9bfc385d1a8e713ec9";
+    };
+    deps = [
+      self."commander-0.5.1"
+    ];
+  };
+
+  "http-auth" = self."http-auth-*";
+
+  "http-auth-*" = self.buildNodePackage rec {
+    name = "http-auth-1.2.7";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/http-auth/-/${name}.tgz";
+      sha256 = "874dbb5907d03602f31eae959a0927a3112da8e868231d9a2119bb50d2fe63d2";
+    };
+    deps = [
+      self."node-uuid-1.2.0"
+      self."htpasswd-1.1.0"
+      self."htdigest-1.0.7"
+    ];
+  };
+
   "http-signature" = self."http-signature-0.9.9";
 
   "http-signature-0.9.9" = self.buildNodePackage rec {
@@ -751,13 +833,13 @@ let self = {
     ];
   };
 
-  "nijs" = self."nijs-0.0.4";
+  "nijs" = self."nijs-0.0.5";
 
-  "nijs-0.0.4" = self.buildNodePackage rec {
-    name = "nijs-0.0.4";
+  "nijs-0.0.5" = self.buildNodePackage rec {
+    name = "nijs-0.0.5";
     src = fetchurl {
       url = "http://registry.npmjs.org/nijs/-/${name}.tgz";
-      sha256 = "0hr7chc4wrynq5mlakchx3p715i50ycakbqj4jcngx62wk9l42qd";
+      sha256 = "026lxgm75mqy5n1yjsk1n8xbgq5n9lw43lqa5nmy2mq74hzzksf5";
     };
     deps = [
       self."optparse"
@@ -804,6 +886,17 @@ let self = {
   };
 
   "node-uuid" = self."node-uuid-1.3.3";
+
+  "node-uuid-1.2.0" = self.buildNodePackage rec {
+    name = "node-uuid-1.2.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/node-uuid/-/${name}.tgz";
+      sha256 = "96d3ce178ea0825d27a855630de74243a577dc988512512eea572829b208a3d2";
+    };
+    deps = [
+
+    ];
+  };
 
   "node-uuid-1.3.3" = self.buildNodePackage rec {
     name = "node-uuid-1.3.3";
@@ -897,7 +990,7 @@ let self = {
   };
 
   "optparse" = self."optparse-1.0.3";
-  
+
   "optparse-1.0.3" = self.buildNodePackage rec {
     name = "optparse-1.0.3";
     src = fetchurl {
@@ -905,7 +998,7 @@ let self = {
       sha256 = "1cg99i4rq8azxikzqz0ykw4q971azbj49d3m7slj041yscb6m883";
     };
     deps = [
-    
+
     ];
   };
 
@@ -1115,6 +1208,34 @@ let self = {
     ];
   };
 
+  "s3http" = self."s3http-*";
+
+  "s3http-*" = self.buildNodePackage rec {
+    name = "s3http-0.0.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/s3http/-/${name}.tgz";
+      sha256 = "7140a0ee6df9fb90fd74aa0b68b73f899c6d8e2eaa2de89fde3f634e9bf10dba";
+    };
+    deps = [
+      self."aws-sdk-git"
+      self."commander-0.5.1"
+      self."http-auth-*"
+    ];
+  };
+
+  "sax" = self."sax->=0.4.2";
+
+  "sax->=0.4.2" = self.buildNodePackage rec {
+    name = "sax-0.5.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/sax/-/${name}.tgz";
+      sha256 = "6bb7cd44e9dfea598997d4ba9d3279dafe75bed7b45904561ca9eb4d85cfd953";
+    };
+    deps = [
+
+    ];
+  };
+
   "semver" = self."semver-1";
 
   "semver-1" = self."semver-1.0.14";
@@ -1261,9 +1382,9 @@ let self = {
       self."requirejs-==0.26.0"
     ];
   };
-  
+
   "swig" = self."swig-0.13.2";
-  
+
   "swig-0.13.2" = self.buildNodePackage rec {
     name = "swig-0.13.2";
     src = fetchurl {
@@ -1442,6 +1563,32 @@ let self = {
     src = fetchurl {
       url = "http://registry.npmjs.org/wu/-/${name}.tgz";
       sha256 = "2400d0ca7da862a9063a6a8d914bb4e585f81a5121b0fda8e40b1f6e782c72c6";
+    };
+    deps = [
+
+    ];
+  };
+
+  "xml2js" = self."xml2js-0.2.4";
+
+  "xml2js-0.2.4" = self.buildNodePackage rec {
+    name = "xml2js-0.2.4";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/xml2js/-/${name}.tgz";
+      sha256 = "8daebb075fc7c564d84221a0cef7825ac824db8e312f873daee59a6adf38da28";
+    };
+    deps = [
+      self."sax->=0.4.2"
+    ];
+  };
+
+  "xmlbuilder" = self."xmlbuilder-*";
+
+  "xmlbuilder-*" = self.buildNodePackage rec {
+    name = "xmlbuilder-0.4.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/xmlbuilder/-/${name}.tgz";
+      sha256 = "3137e5bf9db1f114767f8ba56be753f2a9f512e38a2df64d7677ae3c9318a0fe";
     };
     deps = [
 

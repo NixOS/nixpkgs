@@ -1,6 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, networkmanager, GConf
 , libnotify, libgnome_keyring, dbus_glib, polkit, isocodes
-, mobile_broadband_provider_info }:
+, mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
+, makeWrapper }:
 
 let
   pn = "network-manager-applet";
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk libglade networkmanager GConf libnotify libgnome_keyring dbus_glib
-    polkit isocodes 
+    polkit isocodes makeWrapper
   ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
@@ -26,6 +27,14 @@ stdenv.mkDerivation rec {
   makeFlags = [
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''
   ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/nm-applet" \
+      --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
+      --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/share" \
+      --set GCONF_CONFIG_SOURCE "xml::~/.gconf" \
+      --prefix PATH ":" "${GConf}/bin"
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://projects.gnome.org/NetworkManager/;

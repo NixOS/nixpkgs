@@ -105,7 +105,7 @@ rec {
 
         FUSE_FS m
 
-        # nixos mounts some cgroup
+        # systemd uses cgroups
         CGROUPS y
 
         # Latencytop 
@@ -307,6 +307,12 @@ rec {
     kernelAutoModules = false;
     kernelExtraConfig =
       ''
+        MIGRATION n
+        COMPACTION n
+
+        # nixos mounts some cgroup
+        CGROUPS y
+
         BLK_DEV_RAM y
         BLK_DEV_INITRD y
         BLK_DEV_CRYPTOLOOP m
@@ -360,6 +366,9 @@ rec {
         EXT3_FS y
         REISERFS_FS y
         MAGIC_SYSRQ y
+
+        # The kernel doesn't boot at all, with FTRACE
+        FTRACE n
       '';
     kernelTarget = "vmlinux";
     uboot = null;

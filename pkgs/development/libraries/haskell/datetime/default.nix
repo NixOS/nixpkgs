@@ -10,6 +10,9 @@ cabal.mkDerivation (self: {
     description = "Utilities to make Data.Time.* easier to use.";
     license = "GPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

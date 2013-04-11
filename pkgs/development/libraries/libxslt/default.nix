@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libxml2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "libxslt-1.1.27";
 
   src = fetchurl {
@@ -22,4 +22,15 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };
-}
+} // (if !stdenv.isFreeBSD then {} else {
+  buildInputs = [];
+
+  configureFlags = [
+    "--with-libxml-prefix=${libxml2}"
+    "--without-python"
+    "--without-crypto"
+    "--without-debug"
+    "--without-mem-debug"
+    "--without-debugger"
+  ];
+}))

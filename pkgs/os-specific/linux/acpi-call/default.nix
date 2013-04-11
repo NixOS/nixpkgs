@@ -1,7 +1,7 @@
-{ stdenv, fetchgit, kernel }:
+{ stdenv, fetchgit, kernelDev }:
 
 stdenv.mkDerivation {
-  name = "acpi-call-${kernel.version}";
+  name = "acpi-call-${kernelDev.version}";
 
   src = fetchgit {
     url = "git://github.com/mkottman/acpi_call.git";
@@ -12,12 +12,12 @@ stdenv.mkDerivation {
   preBuild = ''
     sed -e 's/break/true/' -i test_off.sh
     sed -e 's@/bin/bash@.bin/sh@' -i test_off.sh
-    sed -e "s@/lib/modules/\$(.*)@${kernel}/lib/modules/${kernel.modDirVersion}@" -i Makefile
+    sed -e "s@/lib/modules/\$(.*)@${kernelDev}/lib/modules/${kernelDev.modDirVersion}@" -i Makefile
   '';
  
   installPhase = ''
-    mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
-    cp acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc
+    mkdir -p $out/lib/modules/${kernelDev.modDirVersion}/misc
+    cp acpi_call.ko $out/lib/modules/${kernelDev.modDirVersion}/misc
     mkdir -p $out/bin
     cp test_off.sh $out/bin/test_discrete_video_off.sh
     chmod a+x $out/bin/test_discrete_video_off.sh

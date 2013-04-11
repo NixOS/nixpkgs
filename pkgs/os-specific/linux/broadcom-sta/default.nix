@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, kernel }:
+{ stdenv, fetchurl, kernelDev }:
 
 let version = "5_100_82_112";
     bits = if stdenv.system == "i686-linux" then "32" else
@@ -6,7 +6,7 @@ let version = "5_100_82_112";
 in
 
 stdenv.mkDerivation {
-  name = "broadcom-sta-${version}-${kernel.version}";
+  name = "broadcom-sta-${version}-${kernelDev.version}";
 
   src = fetchurl {
     url = "http://www.broadcom.com/docs/linux_sta/hybrid-portsrc_x86_${bits}-v${version}.tar.gz";
@@ -15,13 +15,13 @@ stdenv.mkDerivation {
       else "1qsarnry10f5m8a73wbr9cg2ifs00sqg6x0ay59l72vl9hb2zlww";
   };
 
-  buildInputs = [ kernel ];
+  buildInputs = [ kernelDev ];
   patches =
     [ ./makefile.patch ./linux-2.6.39.patch ./linux-3.2.patch
       ./linux-3.4.patch ./license.patch
     ];
 
-  makeFlags = "KDIR=${kernel}/lib/modules/${kernel.modDirVersion}/build";
+  makeFlags = "KDIR=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/build";
 
   unpackPhase =
     ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   installPhase =
     ''
-      binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+      binDir="$out/lib/modules/${kernelDev.modDirVersion}/kernel/net/wireless/"
       docDir="$out/share/doc/broadcom-sta/"
       mkdir -p "$binDir" "$docDir"
       cp wl.ko "$binDir"

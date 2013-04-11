@@ -1,9 +1,12 @@
-{ cabal, libX11, libXext, libXinerama, libXrandr, libXrender }:
+{ cabal, dataDefault, libX11, libXext, libXinerama, libXrandr
+, libXrender
+}:
 
 cabal.mkDerivation (self: {
   pname = "X11";
-  version = "1.6.0.2";
-  sha256 = "0z1g93k2zbkb9is2zy6pfwp13bv11cvs30b9cz253wjv2liphshw";
+  version = "1.6.1.1";
+  sha256 = "1bkfnxcmf8qia0l3x5n3j4f1zakjwnlq0mhdnbpp6v3q2g37brbw";
+  buildDepends = [ dataDefault ];
   extraLibraries = [
     libX11 libXext libXinerama libXrandr libXrender
   ];
@@ -12,6 +15,9 @@ cabal.mkDerivation (self: {
     description = "A binding to the X11 graphics library";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

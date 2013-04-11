@@ -1,4 +1,4 @@
-{stdenv, fetchurl, kernel, ncurses, fxload}:
+{stdenv, fetchurl, kernelDev, ncurses, fxload}:
 
 let
 
@@ -12,7 +12,7 @@ let
 in   
 
 stdenv.mkDerivation {
-  name = "wis-go7007-0.9.8-${kernel.version}";
+  name = "wis-go7007-0.9.8-${kernelDev.version}";
 
   src = fetchurl {
     url = http://gentoo.osuosl.org/distfiles/wis-go7007-linux-0.9.8.tar.bz2;
@@ -50,9 +50,9 @@ stdenv.mkDerivation {
     # Urgh, we need the complete kernel sources for some header
     # files.  So unpack the original kernel source tarball and copy
     # the configured include directory etc. on top of it.
-    kernelVersion=$(cd ${kernel}/lib/modules && ls)
-    kernelBuild=$(echo ${kernel}/lib/modules/$kernelVersion/source)
-    tar xvfj ${kernel.src}
+    kernelVersion=$(cd ${kernelDev}/lib/modules && ls)
+    kernelBuild=$(echo ${kernelDev}/lib/modules/$kernelVersion/source)
+    tar xvfj ${kernelDev.src}
     kernelSource=$(echo $(pwd)/linux-*)
     cp -prd $kernelBuild/* $kernelSource
 

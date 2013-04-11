@@ -1,9 +1,16 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation {
-  name = "libmspack-0.0.20040308alpha";
+  name = "libmspack-0.3alpha";
   src = fetchurl {
-    url = http://www.kyz.uklinux.net/downloads/libmspack-0.0.20040308alpha.tar.gz;
-    md5 = "4d8e967649df0f6ade83df7da4b7511c";
+    url = http://www.cabextract.org.uk/libmspack/libmspack-0.3alpha.tar.gz;
+    sha256 = "03rlzhvzd3qm7sb029gs14syq1z6xjmczvwb9kbz5sl20sjngidh";
   };
+
+  meta = {
+    description = "A de/compression library for various Microsoft formats";
+    homepage = http://www.cabextract.org.uk/libmspack;
+    license = "LGPL2";
+  };
+
 }

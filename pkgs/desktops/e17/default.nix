@@ -36,6 +36,7 @@ rec {
 
   #### APPLICATIONS
 
+  terminology = callPackage ./terminology { };
 
 
 

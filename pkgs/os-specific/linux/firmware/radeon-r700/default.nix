@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://people.freedesktop.org/~agd5f/radeon_ucode/R700_rlc.bin";
-    sha256 = "1lbgrlbhqijizg16z0g0qa6ggznpdy844cawnwdp1b0fkwhrbkga";
+    sha256 = "1sbpq39cvjnpfp1iamhq9k9266jkaaywnm8d2pw95ayw56a77976";
   };
 
   unpackPhase = "true";

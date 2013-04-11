@@ -1,10 +1,10 @@
 {stdenv, fetchurl, libogg, libao, pkgconfig, libopus}:
 
 stdenv.mkDerivation rec {
-  name = "opus-tools-0.1.5";
+  name = "opus-tools-0.1.6";
   src = fetchurl {
     url = "http://downloads.xiph.org/releases/opus/${name}.tar.gz";
-    sha256 = "0184zfamg3qcjknk4liz4smws3mbv77gjhq2pn9xgcx9nw78srvn";
+    sha256 = "1hd2ych34y3qy4rj4hd5cp29ixy891afizlsxphsfvfplk1dp1nc";
   };
 
   buildInputs = [ libogg libao pkgconfig libopus ];

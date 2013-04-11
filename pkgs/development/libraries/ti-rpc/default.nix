@@ -1,11 +1,11 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "libtirpc-0.2.2";
+  name = "libtirpc-0.2.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/libtirpc/${name}.tar.bz2";
-    sha256 = "f05eb17c85d62423858b8f74512cfe66a9ae1cedf93f03c2a0a32e04f0a33705";
+    sha256 = "0g4jd8da0kfxz5lv1x5v7f3mfxw53cck8g2zz4llrjmlj42flaag";
   };
 
   # http://www.sourcemage.org/projects/grimoire/repository/revisions/d6344b6a3a94b88ed67925a474de5930803acfbf

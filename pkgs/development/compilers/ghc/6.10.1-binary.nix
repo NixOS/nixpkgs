@@ -98,5 +98,6 @@ stdenv.mkDerivation rec {
         [ $(./main) == "yes" ]
       '';
 
+  meta.license = stdenv.lib.licenses.bsd3;
   meta.platforms = ["i686-darwin" "x86_64-linux" "i686-linux"];
 }

@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hS3";
-  version = "0.5.6";
-  sha256 = "1cd6dzvhfkfp0lzw8lwfcr0wn8wqi2hm8pgb5idp4vg4z00yf2zc";
+  version = "0.5.7";
+  sha256 = "1p5p6vwazqi5kpi3i0msbgcdf6flp25b2v1an6lvj7y8dx1pk6f2";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
@@ -17,6 +17,9 @@ cabal.mkDerivation (self: {
     description = "Interface to Amazon's Simple Storage Service (S3)";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

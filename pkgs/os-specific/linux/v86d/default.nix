@@ -1,7 +1,7 @@
-{stdenv, fetchurl, klibc, kernel, withKlibc ? true}:
+{stdenv, fetchurl, klibc, kernelDev, withKlibc ? true}:
 
 stdenv.mkDerivation rec {
-  name = "v86d-${version}-${kernel.version}";
+  name = "v86d-${version}-${kernelDev.version}";
   version = "0.1.10";
 
   src = fetchurl {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = if withKlibc then [ "--with-klibc" ] else [ "--default" ];
 
   makeFlags = [
-    "KDIR=${kernel}/lib/modules/${kernel.modDirVersion}/source"
+    "KDIR=${kernelDev}/lib/modules/${kernelDev.modDirVersion}/source"
     "DESTDIR=$(out)"
   ];
 

@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, kernel}:
+{ stdenv, fetchurl, kernelDev}:
 
 stdenv.mkDerivation rec {
-  name = "open-iscsi-2.0-871-${kernel.version}";
+  name = "open-iscsi-2.0-871-${kernelDev.version}";
   
   src = fetchurl {
     url = "http://www.open-iscsi.org/bits/${name}.tar.gz";
     sha256 = "1jvx1agybaj4czhz41bz37as076spicsmlh5pjksvwl2mr38gsmw";
   };
   
-  KSRC = "${kernel}/lib/modules/*/build";
+  KSRC = "${kernelDev}/lib/modules/*/build";
   DESTDIR = "$(out)";
   
   preConfigure = ''

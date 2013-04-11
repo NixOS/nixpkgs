@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "cmdargs";
-  version = "0.10.2";
-  sha256 = "0vn7c569akyabij2bh9myyvnx08w67dwdvx5g5q36b3ixzp0lrg4";
+  version = "0.10.3";
+  sha256 = "1cglfbkmgbsv3k32vdfg4xk6b5g5c2z8pm0xgbmdb4bbg765lrh6";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath transformers ];
@@ -12,6 +12,9 @@ cabal.mkDerivation (self: {
     description = "Command line argument processing";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

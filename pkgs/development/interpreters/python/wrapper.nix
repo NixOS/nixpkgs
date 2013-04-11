@@ -15,7 +15,7 @@ stdenv.mkDerivation {
       makeWrapper "$python/bin/$prg" "$out/bin/$prg" --suffix PYTHONPATH : "$PYTHONPATH"
     done
     ensureDir "$out/share"
-    ln "$python/share/man" "$out/share/man" -s
+    ln -s "$python/share/man" "$out/share/man"
   '';
 
   inherit python;

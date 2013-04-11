@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit, freetype, pkgconfig, yasm, freefont_ttf, ffmpeg, libass
 , python3, docutils, which
-, x11Support ? true, libX11 ? null, libXext ? null, mesa ? null
+, x11Support ? true, libX11 ? null, libXext ? null, mesa ? null, libXxf86vm ? null
 , xineramaSupport ? true, libXinerama ? null
 , xvSupport ? true, libXv ? null
 , alsaSupport ? true, alsaLib ? null
@@ -17,7 +17,7 @@
 , useUnfreeCodecs ? false
 }:
 
-assert x11Support -> (libX11 != null && libXext != null && mesa != null);
+assert x11Support -> (libX11 != null && libXext != null && mesa != null && libXxf86vm != null);
 assert xineramaSupport -> (libXinerama != null && x11Support);
 assert xvSupport -> (libXv != null && x11Support);
 assert alsaSupport -> alsaLib != null;
@@ -74,11 +74,13 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i /^_install_strip/d configure
+
+    sed -i '/stdlib/a#include <ctype.h>/' sub/sub*.c
   '';
 
   buildInputs = with stdenv.lib;
     [ freetype pkgconfig ffmpeg libass docutils which ]
-    ++ optionals x11Support [ libX11 libXext mesa ]
+    ++ optionals x11Support [ libX11 libXext mesa libXxf86vm ]
     ++ optional alsaSupport alsaLib
     ++ optional xvSupport libXv
     ++ optional theoraSupport libtheora

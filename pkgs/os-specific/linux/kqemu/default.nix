@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, kernel, perl }:
+{ stdenv, fetchurl, kernelDev, perl }:
 
 stdenv.mkDerivation rec {
-  name = "kqemu-1.4.0pre1-${kernel.version}";
+  name = "kqemu-1.4.0pre1-${kernelDev.version}";
   
   src = fetchurl {
     url = "http://www.nongnu.org/qemu/${name}.tar.gz";
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
   
-  configureFlags = [ ''--PREFIX=$out'' ''--kernel-path=$(ls -d ${kernel}/lib/modules/*/build)'' ];
+  configureFlags = [ ''--PREFIX=$out'' ''--kernel-path=$(ls -d ${kernelDev}/lib/modules/*/build)'' ];
   
   preConfigure = '' 
     sed -e '/#include/i#include <linux/sched.h>' -i kqemu-linux.c
 
     sed -e 's/memset/mymemset/g; s/memcpy/mymemcpy/g; s/void [*]my/static void *my/g' -i common/kernel.c
-    sed -e 's/`uname -r`/'"$(basename ${kernel}/lib/modules/*)"'/' -i install.sh
+    sed -e 's/`uname -r`/'"$(basename ${kernelDev}/lib/modules/*)"'/' -i install.sh
     sed -e '/kernel_path=/akernel_path=$out$kernel_path' -i install.sh
     sed -e '/depmod/d' -i install.sh
     cat install.sh

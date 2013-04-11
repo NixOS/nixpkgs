@@ -11,11 +11,15 @@ cabal.mkDerivation (self: {
     extensibleExceptions filepath HUnit QuickCheck testFramework
     testFrameworkHunit testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/cabal/";
     description = "A framework for packaging Haskell software";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
+    maintainers = [
+      self.stdenv.lib.maintainers.andres
+      self.stdenv.lib.maintainers.simons
+    ];
   };
 })

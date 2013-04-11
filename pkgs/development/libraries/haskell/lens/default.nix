@@ -10,8 +10,8 @@
 
 cabal.mkDerivation (self: {
   pname = "lens";
-  version = "3.8.7.3";
-  sha256 = "0z28vv3k6zg2zsd3pb1vlhv75q0zjlh4zf1md77cviyyljwc0j09";
+  version = "3.9.0.2";
+  sha256 = "0ch38z33zgdyzjmc7jqwabwq68iidicpzhbwzpd4fvcqdp27apl2";
   buildDepends = [
     bifunctors comonad comonadsFd comonadTransformers contravariant
     distributive filepath genericDeriving hashable
@@ -31,5 +31,6 @@ cabal.mkDerivation (self: {
     description = "Lenses, Folds and Traversals";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

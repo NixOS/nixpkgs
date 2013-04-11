@@ -5,11 +5,23 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://podgorny.cz/unionfs-fuse/releases/${name}.tar.xz";
-
     sha256 = "0qpnr4czgc62vsfnmv933w62nq3xwcbnvqch72qakfgca75rsp4d";
   };
 
   buildInputs = [ cmake fuse ];
+
+  # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it
+  # possible to do:
+  #   mount -t unionfs-fuse none /dest -o dirs=/source1=RW,/source2=RO
+  #
+  # This must be done in preConfigure because the build process removes
+  # helper from the source directory during the build.
+  preConfigure = ''
+    ensureDir $out/sbin
+    cp -a mount.unionfs $out/sbin/mount.unionfs-fuse
+    substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse}/sbin/mount.fuse
+    substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs
+  '';
 
   meta = {
     description = "FUSE UnionFS implementation";

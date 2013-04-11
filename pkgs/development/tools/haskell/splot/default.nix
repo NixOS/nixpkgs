@@ -17,5 +17,6 @@ cabal.mkDerivation (self: {
     description = "A tool for visualizing the lifecycle of many concurrent multi-staged processes";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
+    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

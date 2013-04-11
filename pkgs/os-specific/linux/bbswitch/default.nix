@@ -1,13 +1,9 @@
-{ stdenv, fetchurl, kernel }:
+{ stdenv, fetchurl, kernelDev }:
 
 let
-  baseName = "bbswitch-0.5";
-  name = "${baseName}-${kernel.version}";
-
-  linux38Compatibility = fetchurl {
-    url = "http://github.com/Bumblebee-Project/bbswitch/commit/5593d95.patch";
-    sha256 = "0m6y5sdagf4brhk1lsp86rx94xf628sixzf6j71bn7jnqs4jslr6";
-  };
+  baseName = "bbswitch";
+  version = "0.6";
+  name = "${baseName}-${version}-${kernelDev.version}";
 
 in
 
@@ -15,21 +11,19 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://github.com/downloads/Bumblebee-Project/bbswitch/${baseName}.tar.gz";
-    sha256 = "19775r3bsf5l3ssbayr30fij09gavj2qjrr438hdcmzswvlj2dpv";
+    url = "https://github.com/Bumblebee-Project/${baseName}/archive/v${version}.tar.gz";
+    sha256 = "1y1wggfrlpxybz5cvrbvvpqa2hh6ncazzdlg9c94sx40n6p5dcf4";
   };
-
-  patches = [ linux38Compatibility ];
 
   preBuild = ''
     substituteInPlace Makefile \
-      --replace "\$(shell uname -r)" "${kernel.modDirVersion}" \
-      --replace "/lib/modules" "${kernel}/lib/modules"
+      --replace "\$(shell uname -r)" "${kernelDev.modDirVersion}" \
+      --replace "/lib/modules" "${kernelDev}/lib/modules"
   '';
 
   installPhase = ''
-    ensureDir $out/lib/modules/${kernel.modDirVersion}/misc
-    cp bbswitch.ko $out/lib/modules/${kernel.modDirVersion}/misc
+    ensureDir $out/lib/modules/${kernelDev.modDirVersion}/misc
+    cp bbswitch.ko $out/lib/modules/${kernelDev.modDirVersion}/misc
 
     ensureDir $out/bin
     tee $out/bin/discrete_vga_poweroff << EOF

@@ -57,7 +57,7 @@ stdenv.mkDerivation {
 
   crossAttrs = {
     shell = shell.crossDrv + shell.crossDrv.shellPath;
-    libc = libc.crossDrv;
+    libc = stdenv.gccCross.libc;
     coreutils = coreutils.crossDrv;
     binutils = binutils.crossDrv;
     gcc = gcc.crossDrv;

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, SDL, SDL_image, mesa, cmake, physfs, boost, zip, zlib}:
 stdenv.mkDerivation rec {
-  version = "2.0-RC1";
+  version = "2.0-rc3";
   name = "blobby-volley-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/blobby/Blobby%20Volley%202%20%28Linux%29/1.0RC1/blobby2-linux-1.0rc1.tar.gz";
-    sha256 = "1cb56bd31vqkc12cmzp43q2aai99505isq2mii95jp0rzdqks4fy";
+    url = "mirror://sourceforge/project/blobby/Blobby%20Volley%202%20%28Linux%29/1.0RC3/blobby2-linux-1.0rc3.tar.gz";
+    sha256 = "10f50b2ygw8cb9mp33wpdwv9p6lc10qlwc1xd44bbcby1d9v5ga5";
   };
 
   buildInputs = [SDL SDL_image mesa cmake physfs boost zip zlib];
