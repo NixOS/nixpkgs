@@ -6165,6 +6165,8 @@ let
     config = config.pcmciaUtils.config or null;
   };
 
+  plymouth = callPackage ../os-specific/linux/plymouth { };
+
   pmount = callPackage ../os-specific/linux/pmount { };
 
   pmutils = callPackage ../os-specific/linux/pm-utils { };
