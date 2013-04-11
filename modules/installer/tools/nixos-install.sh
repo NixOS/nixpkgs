@@ -89,7 +89,7 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/log/nix/drvs
 
 mkdir -m 1775 -p $mountPoint/nix/store
-build_users_group=$(@perl@/bin/perl -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"build-users-group"};')
+build_users_group=$(@perl@/bin/perl -I @nix@/lib/perl5/site_perl/*/* -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"build-users-group"};')
 if test -n "$build_users_group"; then
     chown root:"$build_users_group" $mountPoint/nix/store
 else
@@ -125,7 +125,7 @@ unset NIX_REMOTE
 if test -n "$build_users_group"; then
     echo "build-users-group = $build_users_group" > $mountPoint/tmp/nix.conf
 fi
-binary_caches=$(@perl@/bin/perl -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"binary-caches"};')
+binary_caches=$(@perl@/bin/perl -I @nix@/lib/perl5/site_perl/*/* -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"binary-caches"};')
 if test -n "$binary_caches"; then
     echo "binary-caches = $binary_caches" >> $mountPoint/tmp/nix.conf
 fi
