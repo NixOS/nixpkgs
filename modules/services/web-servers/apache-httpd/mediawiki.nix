@@ -72,11 +72,11 @@ let
 
   # Unpack Mediawiki and put the config file in its root directory.
   mediawikiRoot = pkgs.stdenv.mkDerivation rec {
-    name= "mediawiki-1.15.5";
+    name= "mediawiki-1.20.3";
 
     src = pkgs.fetchurl {
-      url = "http://download.wikimedia.org/mediawiki/1.15/${name}.tar.gz";
-      sha256 = "1d8afbdh3lsg54b69mnh6a47psb3lg978xpp277qs08yz15cjf7q";
+      url = "http://download.wikimedia.org/mediawiki/1.20/${name}.tar.gz";
+      sha256 = "046jcq54xla490sx0pn0w169wj74lqj3n87r39s59in6494lwp4a";
     };
 
     skins = config.skins;
@@ -100,7 +100,7 @@ let
     { buildInputs = [ pkgs.makeWrapper ]; }
     ''
       ensureDir $out/bin
-      for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php; do
+      for i in changePassword.php createAndPromote.php userOptions.php edit.php nukePage.php update.php; do
         makeWrapper ${php}/bin/php $out/bin/mediawiki-${config.id}-$(basename $i .php) \
           --add-flags ${mediawikiRoot}/maintenance/$i
       done
