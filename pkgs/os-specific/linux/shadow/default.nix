@@ -24,7 +24,19 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
 
-  patches = [ ./keep-path.patch dots_in_usernames ];
+  patches = [ ./keep-path.patch dots_in_usernames 
+    /* nixos managed /etc[/skel] files are symlinks pointing to /etc/static[/skel]
+    * thus useradd will create symlinks ~/.bashrc. This patch fixes it: If a file
+    * should be copied to user's home directory and it points to /etc/static
+    * the target of the symbolic link is copied instead.
+    * This is only one way to fix it. The alternative would be making nixos
+    * create files in /etc/skel and keep some state around so that it knows
+    * which files it put there so that it can remove them itself. This more
+    * complicated approach would pay off if multiple apps woulb be using
+    * /etc/skel
+    */
+    ./etc-copy-etc-satic-target.patch
+    ];
 
   # Assume System V `setpgrp (void)', which is the default on GNU variants
   # (`AC_FUNC_SETPGRP' is not cross-compilation capable.)
