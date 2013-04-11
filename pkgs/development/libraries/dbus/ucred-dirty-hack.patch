@@ -1,0 +1,18 @@
+diff --git a/dbus/dbus-sysdeps-unix.c b/dbus/dbus-sysdeps-unix.c
+index b4ecc96..267984a 100644
+--- a/dbus/dbus-sysdeps-unix.c
++++ b/dbus/dbus-sysdeps-unix.c
+@@ -1635,6 +1635,13 @@ write_credentials_byte (int             server_fd,
+     }
+ }
+ 
++struct ucred
++{
++  pid_t pid;			/* PID of sending process.  */
++  uid_t uid;			/* UID of sending process.  */
++  gid_t gid;			/* GID of sending process.  */
++};
++
+ /**
+  * Reads a single byte which must be nul (an error occurs otherwise),
+  * and reads unix credentials if available. Clears the credentials
