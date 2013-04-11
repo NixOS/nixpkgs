@@ -3589,7 +3589,9 @@ let
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
   dbus_python     = callPackage ../development/python-modules/dbus { };
   # Should we deprecate these? Currently there are many references.
-  dbus_tools = dbus.tools; dbus_libs = dbus.libs;
+  dbus_tools = dbus.tools;
+  dbus_libs = dbus.libs;
+  dbus_daemon = dbus.daemon;
 
   dclib = callPackage ../development/libraries/dclib { };
 
