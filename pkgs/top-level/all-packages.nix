@@ -3582,13 +3582,14 @@ let
 
   db48 = callPackage ../development/libraries/db4/db4-4.8.nix { };
 
-  dbus = dbus_all;
-  dbus_all = callPackage ../development/libraries/dbus { };
-  inherit (dbus_all) dbus_libs dbus_daemon dbus_tools dbus_tests dbus_docs;
+  dbus = let dbus_all = callPackage ../development/libraries/dbus { };
+    in dbus_all.libs // dbus_all; # previously dbus.libs also contained the daemon
   dbus_cplusplus  = callPackage ../development/libraries/dbus-cplusplus { };
   dbus_glib       = callPackage ../development/libraries/dbus-glib { };
   dbus_java       = callPackage ../development/libraries/java/dbus-java { };
   dbus_python     = callPackage ../development/python-modules/dbus { };
+  # Should we deprecate these? Currently there are many references.
+  dbus_tools = dbus.tools; dbus_libs = dbus.libs;
 
   dclib = callPackage ../development/libraries/dclib { };
 

@@ -3,128 +3,102 @@
 , libX11, libICE, libSM, useX11 ? true }:
 
 let
-  version = "1.6.4";
+  version = "1.6.8"; # 1.7.* isn't recommended, even for gnome 3.8
+  sha256 = "1b0vq5b81synr0hqsfyypyq5yw305q0fq1f9alzv3vmb73pp04zw";
 
-  src = fetchurl {
-    url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
-    sha256 = "1wacqyfkcpayg7f8rvx9awqg275n5pksxq5q7y21lxjx85x6pfjz";
-  };
+  inherit (stdenv) lib;
 
-  patches = [
-    ./ignore-missing-includedirs.patch ./implement-getgrouplist.patch
-    ./ucred-dirty-hack.patch ./no-create-dirs.patch
-  ];
-
-  # build only the specified subdirs
-  postPatch = subdirs : "sed '/SUBDIRS/s/=.*/=" + subdirs + "/' -i Makefile.am\n"
-    # use already packaged libdbus instead of trying to build it again
-    + stdenv.lib.optionalString (subdirs != "dbus") ''
-        for mfile in */Makefile.am; do
-          sed 's,\$(top_builddir)/dbus/\(libdbus-[0-9]\),${libs}/lib/\1,g' -i "$mfile"
-        done
-      '';
-
-  nativeBuildInputs = [ pkgconfig ];
-
-  buildInputs = [ autoconf automake libtool expat ]; # ToDo: optional selinux?
-
-  buildInputsWithX = buildInputs ++ stdenv.lib.optionals useX11 [ libX11 libICE libSM ];
-
-  preConfigure = ''
-    patchShebangs .
-    substituteInPlace tools/Makefile.am --replace 'install-localstatelibDATA:' 'disabled:'
-    autoreconf -fi
-  '';
-
-  configureFlags = [
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "--with-session-socket-dir=/tmp"
-    "--with-systemdsystemunitdir=$(out)/lib/systemd"
-  ];
+  buildInputsX = lib.optionals useX11 [ libX11 libICE libSM ];
 
   # also other parts than "libs" need this statically linked lib
-  postConfigure = "(cd dbus && make libdbus-internal.la)";
-
-  doCheck = true;
-
-  installFlags = "sysconfdir=$(out)/etc";
+  makeInternalLib = "(cd dbus && make libdbus-internal.la)";
 
 
-  libs = stdenv.mkDerivation {
-    name = "dbus-library-" + version;
+  # A generic builder for individual parts (subdirs) of D-Bus
+  dbus_drv = name: subdirs: merge: stdenv.mkDerivation (lib.mergeAttrsByFuncDefaultsClean [{
 
-    inherit src nativeBuildInputs preConfigure configureFlags doCheck installFlags;
+    name = "dbus-${name}-${version}";
 
-    buildInputs = buildInputs ++ [ systemd.headers ];
+    src = fetchurl {
+      url = "http://dbus.freedesktop.org/releases/dbus/dbus-${version}.tar.gz";
+      inherit sha256;
+    };
 
-    patches = patches ++ [ ./systemd.patch ]; # bypass systemd detection
+    configureFlags = [
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
+      "--with-session-socket-dir=/tmp"
+      "--with-systemdsystemunitdir=$(out)/lib/systemd"
+    ];
 
-    postPatch = postPatch "dbus";
+    preConfigure = ''
+      patchShebangs .
+      substituteInPlace tools/Makefile.am --replace 'install-localstatelibDATA:' 'disabled:'
+      autoreconf -fi
+    '';
 
-    # Enable X11 autolaunch support in libdbus.  This doesn't actually
-    # depend on X11 (it just execs dbus-launch in dbus.tools),
-    # contrary to what the configure script demands.
+    installFlags = "sysconfdir=$(out)/etc";
+
+    doCheck = true;
+
+    patches = [
+      ./ignore-missing-includedirs.patch ./implement-getgrouplist.patch
+      ./ucred-dirty-hack.patch ./no-create-dirs.patch
+    ];
+
+    nativeBuildInputs = [ pkgconfig ];
+    propagatedBuildInputs = [ expat ];
+    buildInputs = [ autoconf automake libtool ]; # ToDo: optional selinux?
+
+    # build only the specified subdirs
+    postPatch = "sed '/SUBDIRS/s/=.*/=" + subdirs + "/' -i Makefile.am\n"
+      # use already packaged libdbus instead of trying to build it again
+      + lib.optionalString (name != "libs") ''
+          for mfile in */Makefile.am; do
+            sed 's,\$(top_builddir)/dbus/\(libdbus-[0-9]\),${libs}/lib/\1,g' -i "$mfile"
+          done
+        '';
+
+  } merge ]);
+
+  libs = dbus_drv "libs" "dbus" {
+    buildInputs = [ systemd.headers ];
+    patches = [ ./systemd.patch ]; # bypass systemd detection
+
+    # Enable X11 autolaunch support in libdbus. This doesn't actually depend on X11
+    # (it just execs dbus-launch in dbus.tools), contrary to what the configure script demands.
     NIX_CFLAGS_COMPILE = "-DDBUS_ENABLE_X11_AUTOLAUNCH=1";
   };
 
-  tools = stdenv.mkDerivation {
-    name = "dbus-tools-" + version;
+in rec {
 
-    inherit src patches nativeBuildInputs preConfigure doCheck installFlags;
+  # This package has been split because most applications only need dbus.lib
+  # which serves as an interface to a *system-wide* daemon,
+  # see e.g. http://en.wikipedia.org/wiki/D-Bus#Architecture .
+  # Also some circular dependencies get split by this (like with systemd).
 
-    configureFlags = configureFlags ++ [ "--with-dbus-daemondir=${daemon}/bin" ];
+  inherit libs;
 
-    buildInputs = buildInputsWithX ++ [ libs daemon systemd dbus_glib ];
-
-    NIX_CFLAGS_LINK = "-Wl,--as-needed -ldbus-1";
-
-    postPatch = postPatch "tools";
-  };
-
-  daemon = stdenv.mkDerivation {
-    name = "dbus-daemon-" + version;
-
-    inherit src patches nativeBuildInputs
-      preConfigure configureFlags postConfigure doCheck installFlags;
-
-    buildInputs = buildInputs ++ [ systemd ];
-
-    postPatch = postPatch "bus";
-  };
-
-  tests = stdenv.mkDerivation {
-    name = "dbus-tests-" + version;
-
-    inherit src patches nativeBuildInputs
-      preConfigure configureFlags postConfigure doCheck installFlags;
-
-    buildInputs = buildInputsWithX ++ [ systemd libs tools daemon dbus_glib python ];
-
-    postPatch = postPatch "test";
-
+  tools = dbus_drv "tools" "tools" {
+    configureFlags = [ "--with-dbus-daemondir=${daemon}/bin" ];
+    buildInputs = buildInputsX ++ [ libs daemon systemd dbus_glib ];
     NIX_CFLAGS_LINK = "-Wl,--as-needed -ldbus-1";
   };
 
-  docs = stdenv.mkDerivation {
-    name = "dbus-docs-" + version;
+  daemon = dbus_drv "daemon" "bus" {
+    preBuild = makeInternalLib;
+    buildInputs = [ systemd ];
+  };
 
-    inherit src patches nativeBuildInputs
-      preConfigure configureFlags doCheck installFlags;
+  # Some of the tests don't work yet; in fact, @vcunat tried several packages
+  # containing dbus testing, and all of them have some test failure.
+  tests = dbus_drv "tests" "test" {
+    preBuild = makeInternalLib;
+    buildInputs = buildInputsX ++ [ systemd libs tools daemon dbus_glib python ];
+    NIX_CFLAGS_LINK = "-Wl,--as-needed -ldbus-1";
+  };
 
-    buildInputs = buildInputs;
-
-    postPatch = postPatch "doc";
-
+  docs = dbus_drv "docs" "doc" {
     postInstall = ''rm -r "$out/lib"'';
   };
-
-in {
-  inherit libs daemon tools tests docs;
-
-  dbus_libs   = libs;
-  dbus_daemon = daemon;
-  dbus_tools  = tools;
-  dbus_tests  = tests;
-  dbus_docs   = docs;
 }
