@@ -162,7 +162,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     alex         = self.alex_3_0_5;             # 7.6 ok
     haddock      = self.haddock_2_13_1;         # 7.6 ok
     happy        = self.happy_1_18_10;          # 7.6 ok
-    primitive    = self.primitive_0_5_0_1; # semi-official, but specified
+    primitive    = self.primitive_0_5_0_1;      # semi-official, but specified
   };
 
   haskellPlatformArgs_2012_4_0_0 = self : {
@@ -476,6 +476,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   asn1Data = callPackage ../development/libraries/haskell/asn1-data {};
 
+  asn1Types = callPackage ../development/libraries/haskell/asn1-types {};
+
   AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
 
   async_2_0_1_3 = callPackage ../development/libraries/haskell/async/2.0.1.3.nix {};
@@ -668,6 +670,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cryptoConduit = callPackage ../development/libraries/haskell/crypto-conduit {};
 
   cryptohash = callPackage ../development/libraries/haskell/cryptohash {};
+
+  cryptohashCryptoapi = callPackage ../development/libraries/haskell/cryptohash-cryptoapi {};
 
   cryptoNumbers = callPackage ../development/libraries/haskell/crypto-numbers {};
 
@@ -973,10 +977,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Graphalyze = callPackage ../development/libraries/haskell/Graphalyze {};
 
-  graphviz = callPackage ../development/libraries/haskell/graphviz {
-    fgl = self.fgl_5_4_2_4;
-    polyparse = self.polyparse_1_7;
-  };
+  graphviz = callPackage ../development/libraries/haskell/graphviz {};
 
   groupoids = callPackage ../development/libraries/haskell/groupoids {};
 
@@ -1459,14 +1460,12 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   pgm = callPackage ../development/libraries/haskell/pgm {};
 
-  polyparse_1_7 = callPackage ../development/libraries/haskell/polyparse/1.7.nix {};
-  polyparse_1_8 = callPackage ../development/libraries/haskell/polyparse/1.8.nix {};
-  polyparse = self.polyparse_1_8;
+  polyparse = callPackage ../development/libraries/haskell/polyparse {};
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
   postgresqlLibpq = callPackage ../development/libraries/haskell/postgresql-libpq {
-    postgresql = pkgs.postgresql91;
+    inherit (pkgs) postgresql;
   };
 
   postgresqlSimple = callPackage ../development/libraries/haskell/postgresql-simple {};
@@ -1477,8 +1476,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
-  primitive_0_4_1 = callPackage ../development/libraries/haskell/primitive/0.4.1.nix {};
-  primitive_0_5   = callPackage ../development/libraries/haskell/primitive/0.5.nix   {};
   primitive_0_5_0_1 = callPackage ../development/libraries/haskell/primitive/0.5.0.1.nix   {};
   primitive = self.primitive_0_5_0_1;
 
@@ -1952,9 +1949,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   xdgBasedir = callPackage ../development/libraries/haskell/xdg-basedir {};
 
-  xdot = callPackage ../development/libraries/haskell/xdot {
-    polyparse = self.polyparse_1_7;
-  };
+  xdot = callPackage ../development/libraries/haskell/xdot {};
 
   xhtml_3000_2_0_1 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.1.nix {};
   xhtml_3000_2_0_4 = callPackage ../development/libraries/haskell/xhtml/3000.2.0.4.nix {};

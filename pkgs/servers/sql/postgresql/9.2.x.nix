@@ -14,17 +14,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  LC_ALL = "C";
+  makeFlags = [ "world" ];
 
-  postInstall =
-    ''
-      mkdir -p $out/share/man
-      cp -rvd doc/src/sgml/man1 $out/share/man
-    '';
+  installTargets = [ "install-world" ];
+
+  LC_ALL = "C";
 
   passthru = {
     inherit readline;
-    psqlSchema = "9.1";
+    psqlSchema = "9.2";
   };
 
   meta = {

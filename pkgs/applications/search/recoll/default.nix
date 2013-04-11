@@ -3,6 +3,8 @@
 , djvulibre, groff, libxslt, unzip, xpdf, antiword, catdoc, lyx
 , ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconvOrLibc }:
 
+assert stdenv.system != "powerpc-linux";
+
 stdenv.mkDerivation rec {
   ver = "1.18.1";
   name = "recoll-${ver}";

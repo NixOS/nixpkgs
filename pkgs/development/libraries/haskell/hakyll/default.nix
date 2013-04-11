@@ -26,6 +26,9 @@ cabal.mkDerivation (self: {
     testFrameworkQuickcheck2 text time
   ];
   doCheck = false;
+  patchPhase = ''
+    sed -i -e 's|cryptohash .*,|cryptohash,|' hakyll.cabal
+  '';
   meta = {
     homepage = "http://jaspervdj.be/hakyll";
     description = "A static website compiler library";

@@ -5,7 +5,7 @@
 , libcaca, pulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, udev, gnutls, avahi, libcddb, jackaudio, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
-, libass, libva, libdvbpsi, libdc1394, libraw1394
+, libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
       xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
-      libdc1394 libraw1394
+      libdc1394 libraw1394 libopus
     ];
 
   nativeBuildInputs = [ pkgconfig ];

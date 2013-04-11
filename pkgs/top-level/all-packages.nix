@@ -556,7 +556,7 @@ let
 
   cfdg = builderDefsPackage ../tools/graphics/cfdg {
     inherit libpng bison flex;
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   checkinstall = callPackage ../tools/package-management/checkinstall { };
@@ -3649,9 +3649,11 @@ let
     vpxSupport = !stdenv.isMips;
   };
 
-  ffmpeg_1_1 = callPackage ../development/libraries/ffmpeg/1.1.nix {
+  ffmpeg_1 = callPackage ../development/libraries/ffmpeg/1.x.nix {
     vpxSupport = !stdenv.isMips;
   };
+
+  ffms = callPackage ../development/libraries/ffms { };
 
   fftw = callPackage ../development/libraries/fftw {
     singlePrecision = false;
@@ -4580,6 +4582,8 @@ let
     libpng = libpng15; # 0.0.13 needs libpng 1.2--1.5
   };
 
+  log4cpp = callPackage ../development/libraries/log4cpp { };
+
   log4cxx = callPackage ../development/libraries/log4cxx { };
 
   log4cplus = callPackage ../development/libraries/log4cplus { };
@@ -4626,7 +4630,7 @@ let
   mkvtoolnix = callPackage ../applications/video/mkvtoolnix { };
 
   mlt = callPackage ../development/libraries/mlt {
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   libmpeg2 = callPackage ../development/libraries/libmpeg2 { };
@@ -4732,11 +4736,7 @@ let
 
   openldap = callPackage ../development/libraries/openldap { };
 
-  openlierox = builderDefsPackage ../games/openlierox {
-    inherit (xlibs) libX11 xproto;
-    inherit gd SDL SDL_image SDL_mixer zlib libxml2
-      pkgconfig;
-  };
+  openlierox = callPackage ../games/openlierox { };
 
   libopensc_dnie = callPackage ../development/libraries/libopensc-dnie {
     opensc = opensc_0_11_7;
@@ -5565,9 +5565,7 @@ let
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
-  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc {
-    postgresql = postgresql91;
-  };
+  psqlodbc = callPackage ../servers/sql/postgresql/psqlodbc { };
 
   pyIRCt = builderDefsPackage (import ../servers/xmpp/pyIRCt) {
     inherit xmpppy pythonIRClib python makeWrapper;
@@ -6615,6 +6613,8 @@ let
     eigen = eigen2;
   };
 
+  avxsynth = callPackage ../applications/video/avxsynth { };
+
   awesome = callPackage ../applications/window-managers/awesome {
     lua = lua5;
     cairo = cairo.override { xcbSupport = true; };
@@ -6753,10 +6753,6 @@ let
   };
 
   darktable = callPackage ../applications/graphics/darktable {
-    inherit (gnome) GConf libglade;
-  };
-
-  darktable12 = callPackage ../applications/graphics/darktable/1.2rc1.nix {
     inherit (gnome) GConf libglade;
   };
 
@@ -7021,7 +7017,7 @@ let
 
   firefoxWrapper = wrapFirefox { browser = pkgs.firefox; };
 
-  firefoxPkgs = pkgs.firefox19Pkgs;
+  firefoxPkgs = pkgs.firefox20Pkgs;
 
   firefox36Pkgs = callPackage ../applications/networking/browsers/firefox/3.6.nix {
     inherit (gnome) libIDL;
@@ -7041,6 +7037,13 @@ let
   };
 
   firefox19Wrapper = lowPrio (wrapFirefox { browser = firefox19Pkgs.firefox; });
+
+  firefox20Pkgs = callPackage ../applications/networking/browsers/firefox/20.0.nix {
+    inherit (gnome) libIDL;
+    inherit (pythonPackages) pysqlite;
+  };
+
+  firefox20Wrapper = lowPrio (wrapFirefox { browser = firefox20Pkgs.firefox; });
 
   flac = callPackage ../applications/audio/flac { };
 
@@ -7223,6 +7226,8 @@ let
   hello = callPackage ../applications/misc/hello/ex-2 { };
 
   hexedit = callPackage ../applications/editors/hexedit { };
+
+  hipchat = callPackage_i686 ../applications/networking/instant-messengers/hipchat { };
 
   homebank = callPackage ../applications/office/homebank { };
 
@@ -7437,6 +7442,8 @@ let
 
   mhwaveedit = callPackage ../applications/audio/mhwaveedit {};
 
+  mid2key = callPackage ../applications/audio/mid2key { };
+
   midori = builderDefsPackage (import ../applications/networking/browsers/midori) {
     inherit imagemagick intltool python pkgconfig webkit libxml2
       which gettext makeWrapper file libidn sqlite docutils libnotify
@@ -7514,7 +7521,7 @@ let
   };
 
   mplayer2 = callPackage ../applications/video/mplayer2 {
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   MPlayerPlugin = browser:
@@ -7705,7 +7712,7 @@ let
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
-    fftw = fftw.override {float = true;}; 
+    fftw = fftw.override {float = true;};
   };
 
   rcs = callPackage ../applications/version-management/rcs { };
@@ -7755,6 +7762,8 @@ let
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
     usePulseAudio = config.pulseaudio or true;
   };
+
+  skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
   st = callPackage ../applications/misc/st { };
 
@@ -7984,7 +7993,7 @@ let
   };
 
   vlc = callPackage ../applications/video/vlc {
-    ffmpeg = ffmpeg_1_1;
+    ffmpeg = ffmpeg_1;
   };
 
   vnstat = callPackage ../applications/networking/vnstat { };
@@ -8009,7 +8018,7 @@ let
     
   wings = callPackage ../applications/graphics/wings {
     erlang = erlangR14B04;
-    esdl = esdl.override { erlang = erlangR14B04; }; 
+    esdl = esdl.override { erlang = erlangR14B04; };
   };
 
   wmname = callPackage ../applications/misc/wmname { };
@@ -8230,9 +8239,15 @@ let
 
   crrcsim = callPackage ../games/crrcsim {};
 
+  dhewm3 = callPackage ../games/dhewm3 {};
+
   drumkv1 = callPackage ../applications/audio/drumkv1 { };
 
   dwarf_fortress = callPackage_i686 ../games/dwarf-fortress { };
+
+  d1x_rebirth = callPackage ../games/d1x-rebirth { };
+
+  d2x_rebirth = callPackage ../games/d2x-rebirth { };
 
   eduke32 = callPackage ../games/eduke32 {
     stdenv = overrideGCC stdenv gcc47;
@@ -9112,6 +9127,8 @@ let
   texLiveModerncv = builderDefsPackage (import ../tools/typesetting/tex/texlive/moderncv.nix) {
     inherit texLive unzip;
   };
+
+  thinkfan = callPackage ../tools/system/thinkfan { };
 
   vice = callPackage ../misc/emulators/vice { };
 

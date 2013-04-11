@@ -1,11 +1,11 @@
 { stdenv, fetchurl, python, zlib, pkgconfig, glib, SDL, ncurses, perl, pixman }:
 
 stdenv.mkDerivation rec {
-  name = "qemu-1.3.1";
+  name = "qemu-1.4.0";
 
   src = fetchurl {
     url = "http://wiki.qemu.org/download/${name}.tar.bz2";
-    sha256 = "1bqfrb5dlsxm8gxhkksz8qzi5fhj3xqhxyfwbqcphhcv1kpyfwip";
+    sha256 = "1a7d11vjs1p6i1ck2ff9annmkhpkbjl73hl9i1cbg3s0fznrfqh6";
   };
 
   buildInputs = [ python zlib pkgconfig glib SDL ncurses perl pixman ];

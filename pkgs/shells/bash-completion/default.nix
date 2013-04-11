@@ -1,17 +1,12 @@
-{ stdenv, fetchgit, autoconf, automake }:
+{ stdenv, fetchurl }:
 
-stdenv.mkDerivation {
-  name = "bash-completion-2.0-95-gd08b9f2";
+stdenv.mkDerivation rec {
+  name = "bash-completion-2.1";
 
-  src = fetchgit {
-    url = "http://anonscm.debian.org/git/bash-completion/bash-completion.git";
-    rev = "d08b9f233559b3dced20050ba312b08fe0de53b4";
-    sha256 = "0jybaib2bmpk5qd80y1l6wmfcd0b95cmf1l3hcb0ckpj0pjff0bn";
+  src = fetchurl {
+    url = "http://bash-completion.alioth.debian.org/files/${name}.tar.bz2";
+    sha256 = "0kxf8s5bw7y50x0ksb77d3kv0dwadixhybl818w27y6mlw26hq1b";
   };
-
-  buildInputs = [ autoconf automake ];
-
-  preConfigure = "autoreconf -i";
 
   doCheck = true;
 

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     EOF
 
     makeFlags="install_uid=$(id -u) install_gid=$(id -g)"
-    installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc"
+    installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc timedir=$TMPDIR/dummy"
   '';
 
   buildInputs = [ coreutils pam groff ];

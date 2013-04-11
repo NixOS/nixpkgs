@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     extensibleExceptions filepath HUnit QuickCheck testFramework
     testFrameworkHunit testFrameworkQuickcheck2
   ];
+  doCheck = false;
   meta = {
     homepage = "http://www.haskell.org/cabal/";
     description = "A framework for packaging Haskell software";
