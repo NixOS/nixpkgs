@@ -4445,7 +4445,7 @@ pythonPackages = python.modules // rec {
       md5 = "11825b7074ba7043e157805e4e6e0f55";
     };
 
-    propagatedBuildInputs = [ nose ];
+    propagatedBuildInputs = [ nose python.modules.ssl ];
 
     meta = {
       description = "WSGI request and response object";
