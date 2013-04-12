@@ -1,14 +1,15 @@
+
 { stdenv, fetchurl, makeWrapper, perl, mesa, xorg }:
 
 stdenv.mkDerivation rec {
-  version = "2.8";
+  version = "2.7";
   name = "amdapp-sdk-${version}";
 
   src = if stdenv.system == "x86_64-linux" then fetchurl {
-    url = "http://developer.amd.com/wordpress/media/2012/11/AMD-APP-SDK-v${version}-lnx64.tgz";
-    sha256 = "d9c120367225bb1cd21abbcf77cb0a69cfb4bb6932d0572990104c566aab9681";
+    url = "http://download2-developer.amd.com/amd/APPSDK/AMD-APP-SDK-v${version}-lnx64.tgz";
+    sha256 = "08bi43bgnsxb47vbirh09qy02w7zxymqlqr8iikk9aavfxjlmch1";
   } else if stdenv.system == "i686-linux" then fetchurl {
-    url = "http://developer.amd.com/wordpress/media/2012/11/AMD-APP-SDK-v${version}-lnx32.tgz";
+    url = "http://download2-developer.amd.com/amd/APPSDK/AMD-APP-SDK-v${version}-lnx32.tgz";
     sha256 = "99610737f21b2f035e0eac4c9e776446cc4378a614c7667de03a82904ab2d356";
   } else
     throw "System not supported";
@@ -20,10 +21,11 @@ stdenv.mkDerivation rec {
          else "x86";
 
   # TODO: Add optional aparapi support
-  patches = [ ./01-remove-aparapi-samples.patch ];
+  #patches = [ ./01-remove-aparapi-samples.patch ];
 
   patchFlags = "-p0";
   buildInputs = [ makeWrapper perl mesa xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi ];
+  propagatedBuildInputs = [ stdenv.gcc ];
   NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi";
   doCheck = false;
 
@@ -53,12 +55,18 @@ stdenv.mkDerivation rec {
     install -m644 './include/OpenVideo/'{OVDecode.h,OVDecodeTypes.h} "$out/usr/include/OpenVideo/"
 
     #Create wrappers
-    wrapProgram "$out/bin/clinfo" --prefix LD_LIBRARY_PATH ":" "$out/lib"
+    patchelf --set-interpreter "$(cat $NIX_GCC/nix-support/dynamic-linker)" $out/bin/clinfo
+    patchelf --set-rpath ${stdenv.gcc.gcc}/lib64:${stdenv.gcc.gcc}/lib $out/bin/clinfo
+    for f in $(find "$out/samples/opencl/bin/" -type f -not -name "*.*");
+    do
+      wrapProgram "$f" --prefix PATH ":" "${stdenv.gcc}/bin"
+    done
 
     #Fix modes
     find "$out/" -type f -exec chmod 644 {} \;
     chmod -R 755 "$out/bin/"
-    find "$out/samples/opencl/bin" -type f -not -name "*.*" -exec chmod 755 {} \;
+    find "$out/samples/opencl/bin/" -type f -name ".*" -exec chmod 755 {} \;
+    find "$out/samples/opencl/bin/" -type f -not -name "*.*" -exec chmod 755 {} \;
   '';
 
   meta = {
