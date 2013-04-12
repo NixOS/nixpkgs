@@ -1,11 +1,14 @@
 { stdenv, fetchurl, perl, pkgconfig, glib, ncurses
 , enablePlugin ? true }:
 
-stdenv.mkDerivation rec {
-  name = "silc-client-1.1.8" + stdenv.lib.optionalString enablePlugin "-irssi-plugin";
+let
+  basename = "silc-client-1.1.8";
+in
+stdenv.mkDerivation {
+  name = basename + stdenv.lib.optionalString enablePlugin "-irssi-plugin";
 
   src = fetchurl {
-    url = "http://silcnet.org/download/server/sources/${name}.tar.bz2";
+    url = "http://silcnet.org/download/server/sources/${basename}.tar.bz2";
     sha256 = "1qnk35g8sbnfps3bq2k9sy0ymlsijh5n8z59m2ccq4pkmqbfqgv2";
   };
 
