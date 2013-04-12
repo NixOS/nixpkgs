@@ -274,7 +274,6 @@ let
       slim = linux;
       sloccount = allBut "i686-cygwin";
       smartmontools = linux;
-      socat = linux;
       spidermonkey = linux;
       splashutils = linux;
       sqlite = allBut "i686-cygwin";
