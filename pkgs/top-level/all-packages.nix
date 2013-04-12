@@ -6221,6 +6221,8 @@ let
 
   shadow = callPackage ../os-specific/linux/shadow { };
 
+  silc_server = callPackage ../servers/silc-server { };
+
   splashutils = callPackage ../os-specific/linux/splashutils/default.nix { };
 
   statifier = builderDefsPackage (import ../os-specific/linux/statifier) { };
