@@ -225,3 +225,9 @@ GCC_MAJOR="`gcc --version | grep -o -e ") ." | head -1 | cut -d " " -f 2`"
   rm -fr $out/lib/modules/fglrx # don't think those .a files are needed. They cause failure of the mod
 
 }
+
+for p in $extraDRIlibs; do
+  for lib in $p/lib/*.so*; do
+    ln -s $lib $out/lib/
+  done
+done
