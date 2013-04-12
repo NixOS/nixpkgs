@@ -1,5 +1,8 @@
 { stdenv, fetchurl, perl, pkgconfig, glib, ncurses
-, enablePlugin ? true }:
+, enablePlugin ? false }:
+
+# Enabling the plugin and using it with a recent irssi, segafults on join:
+# http://marc.info/?l=silc-devel&m=125610477802211
 
 let
   basename = "silc-client-1.1.8";
@@ -15,6 +18,8 @@ stdenv.mkDerivation {
   dontDisableStatic = true;
 
   patches = [ ./server_setup.patch ];
+
+  configureFlags = "--with-ncurses=${ncurses}";
 
   preConfigure = stdenv.lib.optionalString enablePlugin ''
     configureFlags="$configureFlags --with-silc-plugin=$out/lib/irssi"
