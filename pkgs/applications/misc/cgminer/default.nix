@@ -1,5 +1,5 @@
 { fetchgit, stdenv, pkgconfig, libtool, autoconf, automake, 
-  curl, ncurses, amdappsdk, amdadlsdk }:
+  curl, ncurses, amdappsdk, amdadlsdk, xorg }:
 
 stdenv.mkDerivation rec {
   version = "2.11.4";
@@ -11,10 +11,10 @@ stdenv.mkDerivation rec {
     sha256  = "1vf9agy4vw50cap03qig2y65hdrsdy7cknkzyagv89w5xb230r9a";
   };
 
-  buildInputs = [ autoconf automake pkgconfig libtool curl ncurses amdappsdk amdadlsdk ];
+  buildInputs = [ autoconf automake pkgconfig libtool curl ncurses amdappsdk amdadlsdk xorg.libX11 xorg.libXext xorg.libXinerama ];
   configureScript = "./autogen.sh";
   configureFlags = "--enable-scrypt";
-  NIX_LDFLAGS = "-lgcc_s";
+  NIX_LDFLAGS = "-lgcc_s -lX11 -lXext -lXinerama";
 
   preConfigure = ''
     ln -s ${amdadlsdk}/include/* ADL_SDK/
