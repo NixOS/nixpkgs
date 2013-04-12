@@ -1568,6 +1568,10 @@ let
 
   siege = callPackage ../tools/networking/siege {};
 
+  silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
+
+  silc_server = callPackage ../servers/silc-server { };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   slimrat = callPackage ../tools/networking/slimrat {
@@ -6220,8 +6224,6 @@ let
   sepolgen = callPackage ../os-specific/linux/sepolgen { };
 
   shadow = callPackage ../os-specific/linux/shadow { };
-
-  silc_server = callPackage ../servers/silc-server { };
 
   splashutils = callPackage ../os-specific/linux/splashutils/default.nix { };
 
