@@ -57,7 +57,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "HipChat Desktop Client";
     homepage = http://www.hipchat.com;
-    license = stdenv.lib.licenses.proprietary;
+    license = stdenv.lib.licenses.unfree;
     platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
