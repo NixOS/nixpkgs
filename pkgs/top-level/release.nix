@@ -228,7 +228,6 @@ let
       ntp = linux;
       ocaml = linux;
       octave = linux;
-      openssh = linux;
       openssl = all;
       pam_console = linux;
       pam_login = linux;

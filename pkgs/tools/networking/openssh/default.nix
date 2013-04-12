@@ -13,11 +13,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "openssh-6.1p1";
+  name = "openssh-6.2p1";
 
   src = fetchurl {
     url = "ftp://ftp.nl.uu.net/pub/OpenBSD/OpenSSH/portable/${name}.tar.gz";
-    sha1 = "751c92c912310c3aa9cadc113e14458f843fc7b3";
+    sha1 = "8824708c617cc781b2bb29fa20bd905fd3d2a43d";
   };
 
   prePatch = stdenv.lib.optionalString hpnSupport
@@ -26,7 +26,11 @@ stdenv.mkDerivation rec {
       export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
     '';
 
-  patches = [ ./locale_archive.patch ];
+  patches =
+    [ ./locale_archive.patch
+      # Upstream fix for gratuitous "no such identity" warnings.
+      ./fix-identity-warnings.patch
+    ];
 
   buildInputs = [ zlib openssl libedit pkgconfig pam ];
 
@@ -64,5 +68,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.openssh.org/;
     description = "An implementation of the SSH protocol";
     license = "bsd";
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = stdenv.lib.maintainers.eelco;
   };
 }
