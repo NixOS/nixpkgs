@@ -177,11 +177,6 @@
     url = http://docs.python.org/license.html;
   };
 
-  proprietary = {
-    shortName = "Proprietary";
-    fullName = "Proprietary (non redistributable) license";
-  };
-
   tcltk = {
     shortName = "Tcl/Tk";
     fullName = "Tcl/Tk license";

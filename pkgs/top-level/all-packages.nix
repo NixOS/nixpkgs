@@ -1568,6 +1568,10 @@ let
 
   siege = callPackage ../tools/networking/siege {};
 
+  silc_client = callPackage ../applications/networking/instant-messengers/silc-client { };
+
+  silc_server = callPackage ../servers/silc-server { };
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   slimrat = callPackage ../tools/networking/slimrat {
@@ -5318,11 +5322,13 @@ let
   # regardless.
   python26Packages = import ./python-packages.nix {
     inherit pkgs;
+    inherit (lib) lowPrio;
     python = python26;
   };
 
   python27Packages = recurseIntoAttrs (import ./python-packages.nix {
     inherit pkgs;
+    inherit (lib) lowPrio;
     python = python27;
   });
 
@@ -7308,6 +7314,8 @@ let
   iptraf = callPackage ../applications/networking/iptraf { };
 
   irssi = callPackage ../applications/networking/irc/irssi { };
+
+  irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
 
   bip = callPackage ../applications/networking/irc/bip { };
 

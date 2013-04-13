@@ -1,7 +1,7 @@
-From 75bc507c854a8fe1f819a6b04ebe9e05cd9c425c Mon Sep 17 00:00:00 2001
+From d9c2065158b63db16c9bf0fed37b3f759ef85cbd Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:44:33 +0100
-Subject: [PATCH 1/7] Make "systemctl daemon-reexec" do the right thing on
+Subject: [PATCH 1/8] Make "systemctl daemon-reexec" do the right thing on
  NixOS
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 1/7] Make "systemctl daemon-reexec" do the right thing on
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/src/core/main.c b/src/core/main.c
-index 25f55fc..c2e42b7 100644
+index 7899761..f6f83f4 100644
 --- a/src/core/main.c
 +++ b/src/core/main.c
-@@ -1887,7 +1887,7 @@ finish:
+@@ -1884,7 +1884,7 @@ finish:
                          char_array_0(sfd);
  
                          i = 0;

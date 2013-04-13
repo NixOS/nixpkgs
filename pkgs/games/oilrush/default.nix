@@ -67,7 +67,7 @@ stdenv.mkDerivation {
       of Tower Defense. 
     '';
     homepage = http://oilrush-game.com/;
-    license = [ "proprietary" ];
+    license = "unfree";
     #maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     #platforms = with stdenv.lib.platforms; linux;
   };

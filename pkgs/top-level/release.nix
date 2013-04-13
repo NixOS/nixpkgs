@@ -228,7 +228,6 @@ let
       ntp = linux;
       ocaml = linux;
       octave = linux;
-      openssh = linux;
       openssl = all;
       pam_console = linux;
       pam_login = linux;
@@ -274,7 +273,6 @@ let
       slim = linux;
       sloccount = allBut "i686-cygwin";
       smartmontools = linux;
-      socat = linux;
       spidermonkey = linux;
       splashutils = linux;
       sqlite = allBut "i686-cygwin";
