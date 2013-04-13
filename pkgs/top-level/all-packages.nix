@@ -7310,6 +7310,8 @@ let
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
 
+  irssi_otr = callPackage ../applications/networking/irc/irssi/otr { };
+
   bip = callPackage ../applications/networking/irc/bip { };
 
   jack_capture = callPackage ../applications/audio/jack-capture { };
