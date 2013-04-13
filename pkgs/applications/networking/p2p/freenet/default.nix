@@ -35,11 +35,12 @@ stdenv.mkDerivation {
 
   installPhase = ''
     ensureDir $out/share/freenet $out/bin
+    cp lib/bcprov.jar $out/share/freenet
     cp lib/freenet/freenet-ext.jar $out/share/freenet
     cp dist/freenet.jar $out/share/freenet
 
     cat <<EOF > $out/bin/freenet
-    ${jre}/bin/java -cp $out/share/freenet/freenet-ext.jar:$out/share/freenet/freenet.jar \\
+    ${jre}/bin/java -cp $out/share/freenet/bcprov.jar:$out/share/freenet/freenet-ext.jar:$out/share/freenet/freenet.jar \\
       -Xmx1024M freenet.node.NodeStarter
     EOF
     chmod +x $out/bin/freenet
