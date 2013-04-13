@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "3f911994409898e74527730745ef35ed75c352c695a1822a677a34b2cf0293b4";
   };
 
+  # Crashes without it, still not accepted upstream.
+  # Discussed in https://github.com/cryptodotis/irssi-otr/issues/21
+  patches = [ ./0001-Fix-pass-opdata-when-sending-message-fragment.patch ];
+
   NIX_LDFLAGS = "-lssp";
 
   propagatedBuildInputs = [ libgcrypt ];
