@@ -1,33 +1,30 @@
-{ stdenv, fetchgit, cmake, pkgconfig, glib, python, libgcrypt, libotr
-, withIrssi ? true, irssi }:
+{ stdenv, fetchurl, libotr, automake, autoconf, libtool, glib, pkgconfig, irssi }:
 
 let
-  rev = "9ea5cc4e2e41";
+  rev = "59ddcbe66a";
 in
 with stdenv.lib;
-stdenv.mkDerivation {
-  name = "irssi-otr-20120915-${rev}";
+stdenv.mkDerivation rec {
+  name = "irssi-otr-20130315-${rev}";
   
-  src = fetchgit {
-    url = git://git.tuxfamily.org/gitroot/irssiotr/irssiotr.git;
-    inherit rev;
-    sha256 = "19zwxiy6h8n6zblqlcy6y9xyixp1yw2k8792rffsaaczjc5lpbvk";
+  src = fetchurl {
+    url = "https://github.com/cryptodotis/irssi-otr/tarball/${rev}";
+    name = "${name}.tar.gz";
+    sha256 = "095dak0d10j6cpkwlqmk967p1wypwzvqr4wdqvb30w14dbn8dy0d";
   };
 
   patchPhase = ''
-    cp LICENSE README irssi
+    sed -i 's,/usr/include/irssi,${irssi}/include/irssi,' src/Makefile.am
+    sed -i "s,/usr/lib/irssi,$out/lib/irssi," configure.ac
+    sed -i "s,/usr/share/irssi,$out/share/irssi," help/Makefile.am
   '';
 
-  cmakeFlags = "-DIRCOTR_VERSION=mydistro-git-${rev}" +
-    optionalString withIrssi " -DWANT_IRSSI=ON -DIRSSI_INCLUDE_DIR=${irssi}/include";
+  preConfigure = "sh ./bootstrap";
 
-  nativeBuildInputs = [ python ];
-
-  buildInputs = [ cmake pkgconfig glib libgcrypt libotr ];
+  buildInputs = [ libotr automake autoconf libtool glib pkgconfig irssi ];
   
   meta = {
-    homepage = http://irssi-otr.tuxfamily.org/;
+    homepage = https://github.com/cryptodotis/irssi-otr;
     license = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [viric];
   };
 }
