@@ -2970,6 +2970,16 @@ pythonPackages = python.modules // rec {
   };
 
 
+  py = buildPythonPackage rec {
+    name = "py-1.4.13";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/py/py-1.4.13.tar.gz";
+      md5 = "3857dc8309d5f284669b81184253c2bb";
+    };
+  };
+
+
   pyasn1 = buildPythonPackage ({
     name = "pyasn1-0.0.11a";
 
@@ -4187,6 +4197,21 @@ pythonPackages = python.modules // rec {
       license = pkgs.lib.licenses.mit;
     };
   };
+
+
+  # TODO
+  # py.error.EACCES: [Permission denied]: mkdir('/homeless-shelter',)
+  # builder for `/nix/store/0czwg0n3pfkmpjphqv1jxfjlgkbziwsx-python-tox-1.4.3.drv' failed with exit code 1
+  # tox = buildPythonPackage rec {
+  #   name = "tox-1.4.3";
+  #
+  #   buildInputs = [ py virtualenv ];
+  #
+  #   src = fetchurl {
+  #     url = "https://pypi.python.org/packages/source/t/tox/tox-1.4.3.tar.gz";
+  #     md5 = "3727d5b0600d92edf2229a7ce6a0f752";
+  #   };
+  # };
 
 
   trac = buildPythonPackage {
