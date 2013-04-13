@@ -150,6 +150,7 @@ in
       { description = "hostapd wireless AP";
 
         path = [ pkgs.hostapd ]; 
+        wantedBy = [ "network.target" ];
 
         after = [ "${cfg.interface}-cfg.service" "nat.service" "bind.service" "dhcpd.service"];
 
