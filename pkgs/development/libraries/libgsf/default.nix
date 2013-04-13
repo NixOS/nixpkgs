@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
-, python
+, python, libiconvOrEmpty
 }:
 
 with { inherit (stdenv.lib) optionals; };
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [ gettext bzip2 zlib python ];
 
-  propagatedBuildInputs = [ libxml2 glib ];
+  propagatedBuildInputs = [ libxml2 glib ] ++ libiconvOrEmpty;
 
   doCheck = true;
 
