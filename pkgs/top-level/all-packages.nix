@@ -7057,6 +7057,8 @@ let
     jre = jdk;
   };
 
+  freenet = callPackage ../applications/networking/p2p/freenet { };
+
   freepv = callPackage ../applications/graphics/freepv { };
 
   xfontsel = callPackage ../applications/misc/xfontsel { };
