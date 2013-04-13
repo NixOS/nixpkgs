@@ -1,4 +1,4 @@
-{ pkgs, python }:
+{ pkgs, python, lowPrio }:
 
 let
 isPy26 = python.majorVersion == "2.6";
@@ -52,6 +52,14 @@ pythonPackages = python.modules // rec {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
   };
+
+  ipythonLight = lowPrio (import ../shells/ipython {
+    inherit (pkgs) stdenv fetchurl;
+    inherit buildPythonPackage pythonPackages;
+    qtconsoleSupport = false;
+    pylabSupport = false;
+    pylabQtSupport = false;
+  });
 
   pil = import ../development/python-modules/pil {
     inherit (pkgs) fetchurl stdenv libjpeg zlib freetype;
