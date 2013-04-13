@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   CFLAGS = stdenv.lib.optionalString stdenv.isArm "-std=gnu99";
 
   # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
-  buildInputs = stdenv.lib.optional (stdenv.system == "i686-freebsd") gnumake;
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux) gnumake;
 
   enableParallelBuilding = true;
 
