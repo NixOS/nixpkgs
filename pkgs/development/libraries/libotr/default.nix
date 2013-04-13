@@ -1,11 +1,21 @@
 {stdenv, fetchurl, libgcrypt}:
 
-stdenv.mkDerivation {
-  name = "libotr-3.2.0";
+stdenv.mkDerivation rec {
+  name = "libotr-4.0.0";
   src = fetchurl {
-    url = http://www.cypherpunks.ca/otr/libotr-3.2.0.tar.gz;
-    sha256 = "14v6idnqpp2vhgir9bzp1ay2gmhqsb8iavrkwmallakfwch9sfyq";
+    urls = [
+      "http://www.cypherpunks.ca/otr/${name}.tar.gz"
+      # The site is down at the time of updating to 4.0.0, so I add this url
+      http://ftp.de.debian.org/debian/pool/main/libo/libotr/libotr_4.0.0.orig.tar.gz
+    ];
+    sha256 = "3f911994409898e74527730745ef35ed75c352c695a1822a677a34b2cf0293b4";
   };
 
-  propagatedBuildInputs = [libgcrypt];
+  propagatedBuildInputs = [ libgcrypt ];
+
+  meta = {
+    homepage = "http://www.cypherpunks.ca/otr/";
+    license = "LGPLv2.1";
+    description = "Library for Off-The-Record Messaging";
+  };
 }
