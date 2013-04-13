@@ -6740,6 +6740,10 @@ let
     amdappsdk = amdappsdk28;
   };
 
+  reaper = callPackage ../applications/misc/reaper {
+    amdappsdk = amdappsdk26;
+  };
+
   bitlbee = callPackage ../applications/networking/instant-messengers/bitlbee {
     # For some reason, TLS support is broken when using GnuTLS 3.0 (can't
     # connect to jabber.org, for instance.)
