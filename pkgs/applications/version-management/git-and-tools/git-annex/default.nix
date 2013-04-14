@@ -6,7 +6,7 @@
 , networkInfo, networkMulticast, networkProtocolXmpp, openssh, QuickCheck
 , random, regexCompat, rsync, SafeSemaphore, SHA, stm, text, time, transformers
 , transformersBase, utf8String, uuid, wai, waiLogger, warp, xmlConduit, xmlTypes
-, yesod, yesodDefault, yesodForm, yesodStatic, testpack, regexTdfa
+, yesod, yesodDefault, yesodForm, yesodStatic, regexTdfa
 }:
 
 let
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     networkProtocolXmpp openssh QuickCheck random regexCompat rsync
     SafeSemaphore SHA stm text time transformers transformersBase utf8String
     uuid wai waiLogger warp xmlConduit xmlTypes yesod yesodDefault yesodForm
-    yesodStatic which perl testpack regexTdfa ];
+    yesodStatic which perl regexTdfa ];
 
   configurePhase = ''
     makeFlagsArray=( PREFIX=$out CABAL=./Setup )
