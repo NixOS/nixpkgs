@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, yacc, flex, pkgconfig, glib, xz, libiconvOrEmpty }:
+{ stdenv, fetchurl, yacc, flex, pkgconfig, glib, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ yacc flex pkgconfig ];
 
-  buildInputs = [ glib ] ++ libiconvOrEmpty;
+  buildInputs = [ glib ] ++ libintlOrEmpty;
 
   meta = {
     description = "Compiler for the GObject type system";

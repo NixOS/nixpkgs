@@ -689,7 +689,6 @@ let
 
   docbook2x = callPackage ../tools/typesetting/docbook2x {
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
-    libiconv = if stdenv.isDarwin then libiconv else null;
   };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
@@ -847,13 +846,9 @@ let
     guile = guile_1_8;
   };
 
-  gnugrep =
-    # Use libiconv only on non-GNU platforms (we can't test with
-    # `stdenv ? glibc' at this point.)
-    let gnu = stdenv.isLinux; in
-      callPackage ../tools/text/gnugrep {
-        libiconv = if gnu then null else libiconv;
-      };
+  gnugrep = callPackage ../tools/text/gnugrep {
+    libiconv = libiconvOrNull;
+  };
 
   gnulib = callPackage ../development/tools/gnulib { };
 
@@ -4324,6 +4319,9 @@ let
     else libiconv;
 
   libiconvOrLibc = if libiconvOrNull == null then gcc.libc else libiconv;
+
+  # On non-GNU systems we need GNU Gettext for libintl.
+  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux) gettext;
 
   libid3tag = callPackage ../development/libraries/libid3tag { };
 
