@@ -43,7 +43,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       libxml2 = {
         configureFlags = [
           "--with-libxml-dir=${libxml2}"
-          "--with-iconv-dir=${libiconv}"
+          #"--with-iconv-dir=${libiconv}"
           ];
         buildInputs = [ libxml2 ];
       };
