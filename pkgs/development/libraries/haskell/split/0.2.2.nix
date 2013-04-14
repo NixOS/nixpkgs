@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "split";
-  version = "0.2.1.3";
-  sha256 = "1s3aga7asxz495bx7i72a6fkdlz1zv20rrrqg1avj7b1sjn3gy9w";
+  version = "0.2.2";
+  sha256 = "0xa3j0gwr6k5vizxybnzk5fgb3pppgspi6mysnp2gwjp2dbrxkzr";
   testDepends = [ QuickCheck ];
   meta = {
     description = "Combinator library for splitting lists";

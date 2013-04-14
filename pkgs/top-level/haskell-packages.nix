@@ -150,7 +150,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexBase    = self.regexBase_0_93_2;       # 7.6 ok
     regexCompat  = self.regexCompat_0_95_1;     # 7.6 ok
     regexPosix   = self.regexPosix_0_95_2;      # 7.6 ok
-    split        = self.split_0_2_1_3;          # 7.6 ok
+    split        = self.split_0_2_2;            # 7.6 ok
     stm          = self.stm_2_4_2;              # 7.6 ok
     syb          = self.syb_0_4_0;              # 7.6 ok
     text         = self.text_0_11_2_3;          # 7.6 ok
@@ -1708,8 +1708,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   split_0_2_1_1 = callPackage ../development/libraries/haskell/split/0.2.1.1.nix {};
-  split_0_2_1_3 = callPackage ../development/libraries/haskell/split/0.2.1.3.nix {};
-  split = self.split_0_2_1_3;
+  split_0_2_2 = callPackage ../development/libraries/haskell/split/0.2.2.nix {};
+  split = self.split_0_2_2;
 
   stbImage = callPackage ../development/libraries/haskell/stb-image {};
 
