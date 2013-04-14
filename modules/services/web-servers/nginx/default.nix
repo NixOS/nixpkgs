@@ -1,14 +1,16 @@
 { config, pkgs, ... }:
- 
+
 with pkgs.lib;
- 
+
 let
   cfg = config.services.nginx;
   configFile = pkgs.writeText "nginx.conf" ''
+    user nginx nginx;
+    daemon off;
     ${cfg.config}
   '';
 in
- 
+
 {
   options = {
     services.nginx = {
@@ -18,9 +20,9 @@ in
           Enable the nginx Web Server.
         ";
       };
- 
+
       config = mkOption {
-        default = "";
+        default = "events {}";
         description = "
           Verbatim nginx.conf configuration.
         ";
@@ -33,14 +35,14 @@ in
         ";
       };
     };
- 
+
   };
- 
+
   config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.nginx ];
 
     # TODO: test user supplied config file pases syntax test
- 
+
     systemd.services.nginx = {
       description = "Nginx Web Server";
       after = [ "network.target" ];
@@ -55,11 +57,11 @@ in
         ExecStart = "${pkgs.nginx}/bin/nginx -c ${configFile} -p ${cfg.stateDir}";
       };
     };
- 
+
     users.extraUsers.nginx = {
       group = "nginx";
     };
- 
+
     users.extraGroups.nginx = {};
   };
 }
