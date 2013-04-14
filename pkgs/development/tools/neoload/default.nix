@@ -80,12 +80,12 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "load testing software for Web applications to realistically simulate user activity and analyze server behavior.";
+    description = "load testing software for Web applications to realistically simulate user activity and analyze server behavior";
 
     homepage = https://www.neotys.com/product/overview-neoload.html;
 
     # https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
-    license = stdenv.lib.licenses.proprietary;
+    license = stdenv.lib.licenses.unfree;
 
     maintainers = [ stdenv.lib.maintainers.bluescreen303 ];
     platforms = [ "i686-linux" "x86_64-linux" ];

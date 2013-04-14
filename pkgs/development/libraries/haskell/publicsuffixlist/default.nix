@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "publicsuffixlist";
-  version = "0.0.4";
-  sha256 = "0qwx2739pmmjfy6w3iri1fgyin3295vzn6rvazh34qd89i5vi3pb";
+  version = "0.1";
+  sha256 = "0mbrmhgyjp8jms3fd3nq4knc4j97sw8ijrmnlfjs7qj8jw4vwzxk";
   buildDepends = [ cereal dataDefault text utf8String ];
   testDepends = [ cereal dataDefault HUnit idna text utf8String ];
   meta = {

@@ -9,6 +9,10 @@ stdenv.mkDerivation {
   '';
 
   crossAttrs = {
+    propagatedBuildInputs = [ curl.crossDrv libmrss.crossDrv ];
+    preConfigure = ''
+      sed 's/^PDF/#PDF/' -i Makefile
+    '';
     makeFlags = "CC=${stdenv.cross.config}-gcc";
   };
 

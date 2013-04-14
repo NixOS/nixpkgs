@@ -1,4 +1,4 @@
-{ pkgs, python }:
+{ pkgs, python, lowPrio }:
 
 let
 isPy26 = python.majorVersion == "2.6";
@@ -21,10 +21,15 @@ pythonPackages = python.modules // rec {
   wrapPython = pkgs.makeSetupHook
     { deps = pkgs.makeWrapper;
       substitutions.libPrefix = python.libPrefix;
-    }
-    ../development/python-modules/generic/wrap.sh;
+    } 
+   ../development/python-modules/generic/wrap.sh;
 
   # specials
+
+  offlineDistutils = import ../development/python-modules/offline-distutils {
+    inherit (pkgs) stdenv;
+    inherit python;
+  };
 
   recursivePthLoader = import ../development/python-modules/recursive-pth-loader {
     inherit (pkgs) stdenv;
@@ -41,17 +46,20 @@ pythonPackages = python.modules // rec {
     inherit python setuptools;
   };
 
-  offlineDistutils = import ../development/python-modules/offline-distutils {
-    inherit (pkgs) stdenv;
-    inherit python;
-  };
-
   # packages defined elsewhere
 
   ipython = import ../shells/ipython {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
   };
+
+  ipythonLight = lowPrio (import ../shells/ipython {
+    inherit (pkgs) stdenv fetchurl;
+    inherit buildPythonPackage pythonPackages;
+    qtconsoleSupport = false;
+    pylabSupport = false;
+    pylabQtSupport = false;
+  });
 
   pil = import ../development/python-modules/pil {
     inherit (pkgs) fetchurl stdenv libjpeg zlib freetype;
@@ -110,7 +118,7 @@ pythonPackages = python.modules // rec {
       sha256 = "74926d9ddfa69534cfbd08a82f0acccab2c649558062654d5d2ff2999d201384";
     };
 
-    propagatedBuildInputs = [ notmuch pkgs.dbacl ];
+    propagatedBuildInputs = [ pythonPackages.notmuch pkgs.dbacl ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -139,34 +147,34 @@ pythonPackages = python.modules // rec {
     buildInputs = [
       pkgs.which
       pkgs.unzip
-      coverage
-      mock
-      tissue
-      unittest2
-      webtest
+      pythonPackages.coverage
+      pythonPackages.mock
+      pythonPackages.tissue
+      pythonPackages.unittest2
+      pythonPackages.webtest
     ];
 
     propagatedBuildInputs = [ 
       pkgs.makeWrapper
       pkgs.bacula
-      colander
-      deform
-      deform_bootstrap
-      docutils
-      nose
-      mysql_connector_repackaged
-      pg8000
-      pyramid
-      pyramid_beaker
-      pyramid_exclog
-      pyramid_jinja2
-      pyramid_tm
-      pytz
-      sqlalchemy
-      transaction
-      waitress
-      webhelpers
-      zope_sqlalchemy
+      pythonPackages.colander
+      pythonPackages.deform
+      pythonPackages.deform_bootstrap
+      pythonPackages.docutils
+      pythonPackages.nose
+      pythonPackages.mysql_connector_repackaged
+      pythonPackages.pg8000
+      pythonPackages.pyramid
+      pythonPackages.pyramid_beaker
+      pythonPackages.pyramid_exclog
+      pythonPackages.pyramid_jinja2
+      pythonPackages.pyramid_tm
+      pythonPackages.pytz
+      pythonPackages.sqlalchemy
+      pythonPackages.transaction
+      pythonPackages.waitress
+      pythonPackages.webhelpers
+      pythonPackages.zope_sqlalchemy
     ];
 
     postInstall = ''
@@ -196,7 +204,14 @@ pythonPackages = python.modules // rec {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = [ notmuch urwid twisted magic configobj pygpgme ];
+    propagatedBuildInputs =
+      [ pythonPackages.notmuch
+        pythonPackages.urwid
+        pythonPackages.twisted
+        pythonPackages.magic
+        pythonPackages.configobj
+        pythonPackages.pygpgme
+      ];
 
     postInstall = ''
       wrapProgram $out/bin/alot \
@@ -219,7 +234,7 @@ pythonPackages = python.modules // rec {
       md5 = "2b53b5d53fc40af4da7268d3c3e35a50";
     };
 
-    buildInputs = [ nose ];
+    buildInputs = [ pythonPackages.nose ];
 
     meta = {
       homepage = http://pypi.python.org/pypi/anyjson/;
@@ -280,7 +295,7 @@ pythonPackages = python.modules // rec {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = [ boto ];
+    propagatedBuildInputs = [ pythonPackages.boto ];
 
   });
 
@@ -316,50 +331,21 @@ pythonPackages = python.modules // rec {
     };
   });
 
+
   awscli = buildPythonPackage rec {
-    name = "awscli-0.5.0";
+    name = "awscli-0.8.3";
     namePrefix = "";
 
     src = fetchurl {
-      url = https://github.com/aws/aws-cli/archive/0.5.0.tar.gz;
-      sha256 = "0smgcisl2p7p2y2i299x7g271kdmgs0hnzngw5030phvh0lq202i";
+      url = https://github.com/aws/aws-cli/archive/0.8.3.tar.gz;
+      sha256 = "0v7igh00zja560v8qz315g3m7x9six1hprrrb10cpp9sy8n58xnn";
     };
 
-    propagatedBuildInputs = [ argparse botocore ];
-
-  };
-
-  logilab_astng = buildPythonPackage rec {
-    name = "logilab-astng-0.24.1";
-
-    src = fetchurl {
-      url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
-      sha256 = "00qxaxsax80sknwv25xl1r49lc4gbhkxs1kjywji4ad8y1npax0s";
-    };
-
-    propagatedBuildInputs = [ logilab_common ];
-  };
-
-
-  beets = buildPythonPackage rec {
-    name = "beets-1.0.0";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
-      md5 = "88ad09a93aa0d69ce813205cf23b2a6c";
-    };
-
-    # tests depend on $HOME setting
-    configurePhase = "export HOME=$TMPDIR";
-
-    propagatedBuildInputs = [ pyyaml unidecode mutagen munkres musicbrainzngs python.modules.sqlite3 python.modules.readline ];
-
-    meta = {
-      homepage = http://beets.radbox.org;
-      description = "Music tagger and library organizer";
-      license = pkgs.lib.licenses.mit;
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
-    };
+    propagatedBuildInputs =
+      [ pythonPackages.argparse
+        pythonPackages.botocore
+        pythonPackages.colorama
+      ];
   };
 
 
@@ -399,6 +385,66 @@ pythonPackages = python.modules // rec {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   });
+
+
+  beaker = buildPythonPackage rec {
+    name = "Beaker-1.6.4";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
+      md5 = "c2e102870ed4c53104dec48ceadf8e9d";
+    };
+
+    buildInputs =
+      [ pythonPackages.sqlalchemy
+        pythonPackages.pycryptopp
+        pythonPackages.nose
+        pythonPackages.mock
+        pythonPackages.webtest
+      ];
+
+    # http://hydra.nixos.org/build/4511591/log/raw
+    doCheck = false;
+
+    meta = {
+      maintainers = [
+        stdenv.lib.maintainers.garbas
+        stdenv.lib.maintainers.iElectric
+      ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+
+  beets = buildPythonPackage rec {
+    name = "beets-1.0.0";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/b/beets/${name}.tar.gz";
+      md5 = "88ad09a93aa0d69ce813205cf23b2a6c";
+    };
+
+    # tests depend on $HOME setting
+    configurePhase = "export HOME=$TMPDIR";
+
+    propagatedBuildInputs =
+      [ pythonPackages.pyyaml
+        pythonPackages.unidecode
+        pythonPackages.mutagen
+        pythonPackages.munkres
+        pythonPackages.musicbrainzngs
+        python.modules.sqlite3
+        python.modules.readline
+      ];
+
+    meta = {
+      homepage = http://beets.radbox.org;
+      description = "Music tagger and library organizer";
+      license = pkgs.lib.licenses.mit;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+    };
+  };
+
 
   # euca2ools (and maybe Nova) needs boto 1.9, 2.0 doesn't work.
   boto_1_9 = buildPythonPackage (rec {
@@ -455,14 +501,18 @@ pythonPackages = python.modules // rec {
 
 
   botocore = buildPythonPackage rec {
-    name = "botocore-0.5.2";
+    name = "botocore-0.8.3";
 
     src = fetchurl {
-      url = https://github.com/boto/botocore/archive/0.5.2.tar.gz;
-      sha256 = "18073mydin0mwk1d7vdlmsiz3rvhjzxkaaqrmxw440acbipnngq2";
+      url = https://github.com/boto/botocore/archive/0.8.3.tar.gz;
+      sha256 = "0dbm2clrh7zs4brqqj3xssz3nymdg24ff2lww27s3wliirwqdiv1";
     };
 
-    propagatedBuildInputs = [ dateutil requests014 ];
+    propagatedBuildInputs =
+      [ pythonPackages.dateutil
+        pythonPackages.requests
+        pythonPackages.jmespath
+      ];
 
     meta = {
       homepage = https://github.com/boto/botocore;
@@ -483,7 +533,7 @@ pythonPackages = python.modules // rec {
   #     rev = "refs/tags/0.9.3";
   #   };
   #
-  #   propagatedBuildInputs = [ argparse python.modules.ssl ];
+  #   propagatedBuildInputs = [ pythonPackages.argparse python.modules.ssl ];
   #
   #   doCheck = false;
   #
@@ -546,9 +596,12 @@ pythonPackages = python.modules // rec {
       md5 = "530a0614de3a669314c3acd4995c54d5";
     };
 
-    buildInputs = [ nose ];
+    buildInputs = [ pythonPackages.nose ];
 
-    propagatedBuildInputs = [ amqplib anyjson ];
+    propagatedBuildInputs =
+      [ pythonPackages.amqplib
+        pythonPackages.anyjson
+      ];
 
     doCheck = false; # depends on the network
 
@@ -568,7 +621,7 @@ pythonPackages = python.modules // rec {
       md5 = "853917116e731afbc8c8a43c37e6ddba";
     };
 
-    propagatedBuildInputs = [ markdown ];
+    propagatedBuildInputs = [ pythonPackages.markdown ];
 
     meta = {
       homepage = http://www.cheetahtemplate.org/;
@@ -603,7 +656,7 @@ pythonPackages = python.modules // rec {
       sha256 = "16vibfxms5z4ld8gbkra6dkhqm2cc3jnn0fwp7mw70nlwxnmm51c";
     };
 
-    buildInputs = [ mock nose decorator ];
+    buildInputs = [ pythonPackages.mock pythonPackages.nose pythonPackages.decorator ];
 
     meta = {
       homepage = http://code.google.com/p/clepy/;
@@ -629,6 +682,27 @@ pythonPackages = python.modules // rec {
     };
   });
 
+
+  colorama = buildPythonPackage rec {
+    name = "clientform-0.2.10";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/c/colorama/colorama-0.2.5.tar.gz";
+      md5 = "308c6e38917bdbfc4d3b0783c614897d";
+    };
+
+    propagatedBuildInputs = [ pythonPackages.clientform ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://code.google.com/p/colorama/;
+      license = "bsd";
+      description = "Cross-platform colored terminal text";
+    };
+  };
+
+
   coilmq = buildPythonPackage (rec {
     name = "coilmq-0.6.1";
 
@@ -637,9 +711,9 @@ pythonPackages = python.modules // rec {
       md5 = "5f39727415b837abd02651eeb2721749";
     };
 
-    propagatedBuildInputs = [ stompclient distribute ];
+    propagatedBuildInputs = [ pythonPackages.stompclient pythonPackages.distribute ];
 
-    buildInputs = [ coverage sqlalchemy ];
+    buildInputs = [ pythonPackages.coverage pythonPackages.sqlalchemy ];
 
     # ValueError: Could not parse auth file:
     # /tmp/nix-build-.../CoilMQ-0.6.1/coilmq/tests/resources/auth.ini
@@ -661,7 +735,7 @@ pythonPackages = python.modules // rec {
       md5 = "2d9f65a64cb6b7f35d6a0d7b607ce4c6";
     };
 
-    propagatedBuildInputs = [ translationstring ];
+    propagatedBuildInputs = [ pythonPackages.translationstring ];
 
     meta = {
       maintainers = [
@@ -716,7 +790,7 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
     };
-    propagatedBuildInputs = [ coverage ];
+    propagatedBuildInputs = [ pythonPackages.coverage ];
   };
 
   cssselect = buildPythonPackage rec {
@@ -737,7 +811,7 @@ pythonPackages = python.modules // rec {
       sha256 = "139yfm9yz9k33kgqw4khsljs10rkhhxyywbq9i82bh2r31cil1pp";
     };
 
-    buildInputs = [ pkgs.unzip mock ];
+    buildInputs = [ pkgs.unzip pythonPackages.mock ];
 
     # couple of failing tests
     doCheck = false;
@@ -759,7 +833,7 @@ pythonPackages = python.modules // rec {
       md5 = "94ca7e8c9ea0f69c0f3fc6f9fc88f65a";
     };
 
-    buildInputs = [ mock ];
+    buildInputs = [ pythonPackages.mock ];
 
     # Note: We don't actually need to provide Darcs as a build input.
     # Darcsver will DTRT when Darcs isn't available.  See news.gmane.org
@@ -787,7 +861,7 @@ pythonPackages = python.modules // rec {
       sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
     };
 
-    propagatedBuildInputs = [ six ];
+    propagatedBuildInputs = [ pythonPackages.six ];
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
@@ -819,7 +893,13 @@ pythonPackages = python.modules // rec {
       md5 = "2ed7b69644a6d8f4e1404e1892329240";
     };
 
-    propagatedBuildInputs = [ beautifulsoup4 peppercorn colander translationstring chameleon ];
+    propagatedBuildInputs =
+      [ pythonPackages.beautifulsoup4
+        pythonPackages.peppercorn
+        pythonPackages.colander
+        pythonPackages.translationstring
+        pythonPackages.chameleon
+      ];
 
     meta = {
       maintainers = [
@@ -845,6 +925,42 @@ pythonPackages = python.modules // rec {
       maintainers = [ stdenv.lib.maintainers.iElectric ];
       platforms = stdenv.lib.platforms.all;
     };
+  };
+
+
+  evdev = buildPythonPackage rec {
+    version = "0.3.2";
+    name = "evdev-${version}";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/e/evdev/${name}.tar.gz";
+      sha256 = "07gmynz764sln2sq18aafx13yawkv5nkqrkk06rj71sq71fsr9h9";
+    };
+
+    buildInputs = [ pkgs.linuxHeaders ];
+
+    patchPhase = "sed -e 's#/usr/include/linux/input.h#${pkgs.linuxHeaders}/include/linux/input.h#' -i setup.py";
+
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "Provides bindings to the generic input event interface in Linux";
+      homepage = http://pythonhosted.org/evdev;
+      license = licenses.bsd3;
+      maintainers = [ maintainers.goibhniu ];
+    };
+  };
+
+
+  logilab_astng = buildPythonPackage rec {
+    name = "logilab-astng-0.24.1";
+
+    src = fetchurl {
+      url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
+      sha256 = "00qxaxsax80sknwv25xl1r49lc4gbhkxs1kjywji4ad8y1npax0s";
+    };
+
+    propagatedBuildInputs = [ logilab_common ];
   };
 
 
@@ -905,24 +1021,6 @@ pythonPackages = python.modules // rec {
   };
 
 
-  pyramid_jinja2 = buildPythonPackage rec {
-    name = "pyramid_jinja2-1.6";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyramid_jinja2/${name}.zip";
-      md5 = "b7df1ab97f90f39529d27ba6da1f6b1c";
-    };
-
-    buildInputs = [ pkgs.unzip webtest ];
-    propagatedBuildInputs = [ jinja2 pyramid ];
-
-    meta = {
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
-      platforms = stdenv.lib.platforms.all;
-    };
-  };
-
-
   pyramid_beaker = buildPythonPackage rec {
     name = "pyramid_beaker-0.7";
 
@@ -940,20 +1038,19 @@ pythonPackages = python.modules // rec {
   };
 
 
-  pyramid_tm = buildPythonPackage rec {
-    name = "pyramid_tm-0.7";
+  pyramid_jinja2 = buildPythonPackage rec {
+    name = "pyramid_jinja2-1.6";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/p/pyramid_tm/${name}.tar.gz";
-      md5 = "6dc917d262c69366630c542bd21859a3";
+      url = "http://pypi.python.org/packages/source/p/pyramid_jinja2/${name}.zip";
+      md5 = "b7df1ab97f90f39529d27ba6da1f6b1c";
     };
 
-    propagatedBuildInputs = [ transaction pyramid ];
+    buildInputs = [ pkgs.unzip webtest ];
+    propagatedBuildInputs = [ jinja2 pyramid ];
+
     meta = {
-      maintainers = [
-        stdenv.lib.maintainers.garbas
-        stdenv.lib.maintainers.iElectric
-      ];
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
       platforms = stdenv.lib.platforms.all;
     };
   };
@@ -979,41 +1076,20 @@ pythonPackages = python.modules // rec {
   };
 
 
-  beaker = buildPythonPackage rec {
-    name = "Beaker-1.6.4";
+  pyramid_tm = buildPythonPackage rec {
+    name = "pyramid_tm-0.7";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/B/Beaker/${name}.tar.gz";
-      md5 = "c2e102870ed4c53104dec48ceadf8e9d";
+      url = "http://pypi.python.org/packages/source/p/pyramid_tm/${name}.tar.gz";
+      md5 = "6dc917d262c69366630c542bd21859a3";
     };
 
-    buildInputs = [ sqlalchemy pycryptopp nose mock webtest ];
-
-    # http://hydra.nixos.org/build/4511591/log/raw
-    doCheck = false;
-
+    propagatedBuildInputs = [ transaction pyramid ];
     meta = {
       maintainers = [
         stdenv.lib.maintainers.garbas
         stdenv.lib.maintainers.iElectric
       ];
-      platforms = stdenv.lib.platforms.all;
-    };
-  };
-
-
-  repoze_sphinx_autointerface = buildPythonPackage rec {
-    name = "repoze.sphinx.autointerface-0.7.1";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/r/repoze.sphinx.autointerface/${name}.tar.gz";
-      md5 = "f2fee996ae28dc16eb48f1a3e8f64801";
-    };
-
-    propagatedBuildInputs = [ zope_interface sphinx ];
-
-    meta = {
-      maintainers = [ stdenv.lib.maintainers.iElectric ];
       platforms = stdenv.lib.platforms.all;
     };
   };
@@ -1033,6 +1109,44 @@ pythonPackages = python.modules // rec {
         stdenv.lib.maintainers.iElectric
       ];
       platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+
+
+  repoze_sphinx_autointerface = buildPythonPackage rec {
+    name = "repoze.sphinx.autointerface-0.7.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/r/repoze.sphinx.autointerface/${name}.tar.gz";
+      md5 = "f2fee996ae28dc16eb48f1a3e8f64801";
+    };
+
+    propagatedBuildInputs = [ zope_interface sphinx ];
+
+    meta = {
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
+      platforms = stdenv.lib.platforms.all;
+    };
+  };
+
+
+  rtmidi = buildPythonPackage rec {
+    version = "0.3a";
+    name = "rtmidi-${version}";
+
+    src = fetchurl {
+      url = "http://chrisarndt.de/projects/python-rtmidi/download/python-${name}.tar.bz2";
+      sha256 = "0d2if633m3kbiricd5hgn1csccd8xab6lnab1bq9prdr9ks9i8h6";
+    };
+
+    buildInputs = [ pkgs.alsaLib pkgs.jackaudio ];
+
+    meta = with stdenv.lib; {
+      description = "A Python wrapper for the RtMidi C++ library written with Cython";
+      homepage = http://trac.chrisarndt.de/code/wiki/python-rtmidi;
+      license = licenses.mit;
+      maintainers = [ maintainers.goibhniu ];
     };
   };
 
@@ -1790,7 +1904,7 @@ pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
       md5 = "d879f9b2b0f26e0e999809585dcaec61";
     };
-    propagatedBuildInputs = [ ipython ];
+    propagatedBuildInputs = [ pythonPackages.ipython ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -1799,7 +1913,7 @@ pythonPackages = python.modules // rec {
       url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.2.tar.gz";
       md5 = "39169b00a2186b99469249c5b0613753";
     };
-    propagatedBuildInputs = [ nose ipython ];
+    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipython ];
   };
 
 
@@ -1836,6 +1950,24 @@ pythonPackages = python.modules // rec {
         Django inspired non-XML syntax but supports inline expressions and
         an optional sandboxed environment.
       '';
+    };
+  };
+
+
+  jmespath = buildPythonPackage rec {
+    name = "jmespath-0.0.1";
+
+    src = fetchurl {
+      url = "https://github.com/boto/jmespath/archive/0.0.1.tar.gz";
+      sha256 = "1a5d62qbgfjbaw8wgkfh78gairnpy6bbdsygwm1prqwap1kyq6ch";
+    };
+
+    propagatedBuildInputs = [ ply ];
+
+    meta = {
+      homepage = "https://github.com/boto/jmespath";
+      description = "JMESPath allows you to declaratively specify how to extract elements from a JSON document";
+      license = "BSD";
     };
   };
 
@@ -2531,11 +2663,11 @@ pythonPackages = python.modules // rec {
   }) else null;
 
   ply = buildPythonPackage (rec {
-    name = "ply-3.2";
+    name = "ply-3.4";
 
     src = fetchurl {
       url = "http://www.dabeaz.com/ply/${name}.tar.gz";
-      sha256 = "10z4xq8lc8c21v4g7z3zpnvpqbc0vidigrck1kqhwgkqi4gh0kfj";
+      sha256 = "0sslnbpws847r1j1f41fjpn76w0asywfqgxwzyjrvmmxnw8myhxg";
     };
 
     meta = {
@@ -2880,6 +3012,16 @@ pythonPackages = python.modules // rec {
       description = "Allows to get the public suffix of a domain name";
       homepage = "http://pypi.python.org/pypi/publicsuffix/";
       license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
+  py = buildPythonPackage rec {
+    name = "py-1.4.13";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/py/py-1.4.13.tar.gz";
+      md5 = "3857dc8309d5f284669b81184253c2bb";
     };
   };
 
@@ -3607,20 +3749,6 @@ pythonPackages = python.modules // rec {
     };
   };
 
-  requests014 = buildPythonPackage rec {
-    name = "requests-0.14.1";
-
-    src = fetchurl {
-      url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "3de30600072cbc7214ae342d1d08aa46";
-    };
-
-    meta = {
-      description = "Requests is an Apache2 Licensed HTTP library, written in Python, for human beings..";
-      homepage = http://docs.python-requests.org/en/latest/;
-    };
-  };
-
 
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-1.6.13";
@@ -4117,6 +4245,21 @@ pythonPackages = python.modules // rec {
   };
 
 
+  # TODO
+  # py.error.EACCES: [Permission denied]: mkdir('/homeless-shelter',)
+  # builder for `/nix/store/0czwg0n3pfkmpjphqv1jxfjlgkbziwsx-python-tox-1.4.3.drv' failed with exit code 1
+  # tox = buildPythonPackage rec {
+  #   name = "tox-1.4.3";
+  #
+  #   buildInputs = [ py virtualenv ];
+  #
+  #   src = fetchurl {
+  #     url = "https://pypi.python.org/packages/source/t/tox/tox-1.4.3.tar.gz";
+  #     md5 = "3727d5b0600d92edf2229a7ce6a0f752";
+  #   };
+  # };
+
+
   trac = buildPythonPackage {
     name = "trac-0.12.2";
 
@@ -4373,7 +4516,7 @@ pythonPackages = python.modules // rec {
       md5 = "11825b7074ba7043e157805e4e6e0f55";
     };
 
-    propagatedBuildInputs = [ nose ];
+    propagatedBuildInputs = [ nose python.modules.ssl ];
 
     meta = {
       description = "WSGI request and response object";

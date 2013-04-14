@@ -1,13 +1,14 @@
 {stdenv, fetchurl, cmake}:
 
-stdenv.mkDerivation {
-  name = "taskwarrior-2.1.2";
+stdenv.mkDerivation rec {
+  name = "taskwarrior-${version}";
+  version = "2.2.0";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = http://www.taskwarrior.org/download/task-2.1.2.tar.gz;
-    sha256 = "0diy72sgiyvfl6bdy7k3qwv3ijx2z1y477smkk6jsbbd9fsp2lfg";
+    url = "http://www.taskwarrior.org/download/task-${version}.tar.gz";
+    sha256 = "057fh50qp9bd5s08rw51iybpamn55v5nhn3s6ds89g76hp95vqir";
   };
 
   nativeBuildInputs = [ cmake ];

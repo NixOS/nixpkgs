@@ -338,10 +338,10 @@ rec {
   };
 
   CatalystActionREST = buildPerlPackage {
-    name = "Catalyst-Action-REST-1.06";
+    name = "Catalyst-Action-REST-1.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Action-REST-1.06.tar.gz;
-      sha256 = "0z72cf8zgmwmcqlhkawz9fikc0g44972sidfs16x7rwdhzavd01k";
+      url = mirror://cpan/authors/id/B/BO/BOBTFISH/Catalyst-Action-REST-1.07.tar.gz;
+      sha256 = "0c893iia1bmqlrknylaqhc9ln1xqz7yw9z639rxmyjyidx5b4q0d";
     };
     propagatedBuildInputs = [ CatalystRuntime ClassInspector ConfigGeneral DataSerializer DataTaxi FreezeThaw HTMLParser JSONXS LWPUserAgent Moose MROCompat namespaceautoclean ParamsValidate PHPSerialization URIFind XMLSimple YAMLSyck ];
     meta = {

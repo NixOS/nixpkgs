@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "grub-0.97-patch-1.12";
-  
+
   src = fetchurl {
     url = ftp://alpha.gnu.org/gnu/grub/grub-0.97.tar.gz;
     md5 = "cd3f3eb54446be6003156158d51f4884";
@@ -27,10 +27,10 @@ stdenv.mkDerivation {
     # shell.  KDE uses this to allow rebooting into a non-default
     # entry.
     (fetchurl {
-      url = http://cvs.mandriva.com/cgi-bin/viewvc.cgi/SPECS/grub/grub-0.97-once.patch?revision=1.3;
+      url = "https://raw.github.com/andatche/centos-grub/master/SOURCES/grub-0.97-once.patch";
       sha256 = "1g5qfn8lvl32h4pggdf7dmjqjpi42jblknzakb5h909fi5i1qyw8";
     })
-    
+
   ] ++ (stdenv.lib.optional buggyBiosCDSupport ./buggybios.patch);
 
   # Autoconf/automake required for the splashimage patch.

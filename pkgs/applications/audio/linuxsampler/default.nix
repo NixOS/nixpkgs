@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       have questions on the subject, that are not yet covered by the
       FAQ, please contact us.
     ''; 
-    license = licenses.proprietary;
+    license = licenses.unfree;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
   };

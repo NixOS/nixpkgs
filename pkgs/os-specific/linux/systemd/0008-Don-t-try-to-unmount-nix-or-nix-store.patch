@@ -1,0 +1,28 @@
+From ceb0fc701960de1568fe2732f390a7b92b76f2e1 Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+Date: Fri, 12 Apr 2013 13:16:57 +0200
+Subject: [PATCH 8/8] Don't try to unmount /nix or /nix/store
+
+They'll still be remounted read-only.
+
+https://github.com/NixOS/nixos/issues/126
+---
+ src/core/umount.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/src/core/umount.c b/src/core/umount.c
+index 8c69e74..ff13a5d 100644
+--- a/src/core/umount.c
++++ b/src/core/umount.c
+@@ -435,6 +435,8 @@ static int mount_points_list_umount(MountPoint **head, bool *changed, bool log_e
+                  * anyway, since we are running from it. They have
+                  * already been remounted ro. */
+                 if (path_equal(m->path, "/")
++                    || path_equal(m->path, "/nix")
++                    || path_equal(m->path, "/nix/store")
+ #ifndef HAVE_SPLIT_USR
+                     || path_equal(m->path, "/usr")
+ #endif
+-- 
+1.8.1
+

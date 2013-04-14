@@ -78,6 +78,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Oracle Database Express Edition";
     homepage = "http://www.oracle.com/technetwork/products/express-edition/";
-    license = licenses.proprietary;
+    license = licenses.unfree;
   };
 }

@@ -68,6 +68,7 @@ stdenv.mkDerivation {
        url = https://svn.boost.org/trac/boost/raw-attachment/ticket/4688/boost_filesystem.patch ;
        sha256 = "15k91ihzs6190pnryh4cl0b3c2pjpl9d790mr14x16zq52y7px2d";
      })
+    ./time_utc_144.patch
   ];
 
   crossAttrs = rec {

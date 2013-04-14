@@ -24,9 +24,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [m4 bison flex gettext bzip2];
   buildInputs = [zlib bzip2];
 
+  configureFlags = "--disable-werror";
+
   crossAttrs = {
 
-    /* Having bzip2 will harm, because anything using elfutils 
+    /* Having bzip2 will harm, because anything using elfutils
        as buildInput cross-building, will not be able to run 'bzip2' */
     propagatedBuildInputs = [ zlib.crossDrv ];
 
@@ -64,7 +66,7 @@ stdenv.mkDerivation rec {
       cp version.h $out/include
     '';
   };
-  
+
   dontAddDisableDepTrack = true;
 
   meta = {
