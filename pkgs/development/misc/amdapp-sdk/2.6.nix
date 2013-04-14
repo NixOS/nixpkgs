@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   # patches = [ ./01-remove-aparapi-samples.patch ];
 
   patchFlags = "-p0";
-  buildInputs = [ makeWrapper perl mesa xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi ];
+  buildInputs = [ makeWrapper perl mesa xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
   propagatedBuildInputs = [ stdenv.gcc ];
-  NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi";
+  NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";
   doCheck = false;
 
   unpackPhase = ''
