@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = http://www2.ati.com/drivers/linux/amd-driver-installer-catalyst-13.1-linux-x86.x86_64.zip;
-    sha256 = "1bdpzpwpfqykyphskgfghj5xngc83nkdx2rb986lxnijg8jxnvp6";
+    sha256 = "e66edb257a32da4e0d4a2b8bdea61d883ddb8b84cfbda9e1f5d36377f9fdb7ad";
   };
 
   patchPhase = "patch -p0 < ${./gentoo-patches.patch}";
@@ -55,6 +55,11 @@ stdenv.mkDerivation rec {
       "${xorg.libXext}/lib"
       "${xorg.libX11}/lib"
     ];
+
+  # without this some applications like blender don't start, but they start
+  # with nvidia. This causes them to be symlinked to $out/lib so that they
+  # appear in /run/opengl-driver/lib which get's added to LD_LIBRARY_PATH
+ extraDRIlibs = [ xorg.libXext ];
 
   inherit mesa; # only required to build examples
 
