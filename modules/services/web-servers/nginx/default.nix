@@ -5,6 +5,8 @@ with pkgs.lib;
 let
   cfg = config.services.nginx;
   configFile = pkgs.writeText "nginx.conf" ''
+    user nginx nginx;
+    daemon off;
     ${cfg.config}
   '';
 in
@@ -20,7 +22,7 @@ in
       };
 
       config = mkOption {
-        default = "";
+        default = "events {}";
         description = "
           Verbatim nginx.conf configuration.
         ";
