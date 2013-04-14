@@ -6,15 +6,16 @@
 
 cabal.mkDerivation (self: {
   pname = "statistics";
-  version = "0.10.2.0";
-  sha256 = "1sv0fhbi52maq9c4ni109m0051a1nndi3ncz9v29mkxqzyckrp9x";
+  version = "0.10.3.0";
+  sha256 = "1ay03y9z84mc4ai6i4g81v129rhg4146kad4ggb2gimbj6851fw1";
   buildDepends = [
     deepseq erf mathFunctions monadPar mwcRandom primitive vector
     vectorAlgorithms
   ];
   testDepends = [
-    erf HUnit ieee754 mathFunctions primitive QuickCheck testFramework
-    testFrameworkHunit testFrameworkQuickcheck2 vector vectorAlgorithms
+    erf HUnit ieee754 mathFunctions mwcRandom primitive QuickCheck
+    testFramework testFrameworkHunit testFrameworkQuickcheck2 vector
+    vectorAlgorithms
   ];
   doCheck = false;
   meta = {
