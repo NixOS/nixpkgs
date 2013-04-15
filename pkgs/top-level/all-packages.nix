@@ -2612,6 +2612,10 @@ let
       else stdenv;
   };
 
+  mentorToolchains = recurseIntoAttrs (
+    callPackage_i686 ../development/compilers/mentor {}
+  );
+
   mitscheme = callPackage ../development/compilers/mit-scheme { };
 
   mlton = callPackage ../development/compilers/mlton { };
