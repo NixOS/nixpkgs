@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, which }:
+{ fetchurl, stdenv, guile, which, libffi }:
 
 let version = "5.17"; in
 
@@ -10,7 +10,7 @@ let version = "5.17"; in
       sha256 = "065mg9gfb605wxbsk3inf93528ygcjgg6j8ml51691f6ghj363ff";
     };
 
-    buildInputs = [ guile which ];
+    buildInputs = [ guile which libffi ];
 
     patchPhase =
       '' for i in $(find -name \*.in)
