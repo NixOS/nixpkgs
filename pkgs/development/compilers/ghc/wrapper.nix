@@ -12,6 +12,8 @@ stdenv.mkDerivation ({
 
   unpackPhase = "true";
   installPhase = ''
+    eval "$preInstall"
+
     mkdir -p $out/bin
     cp $GHCGetPackages $out/bin/ghc-get-packages.sh
     chmod 755 $out/bin/ghc-get-packages.sh
@@ -47,6 +49,20 @@ stdenv.mkDerivation ({
     chmod +x $out/bin/ghc-packages
     mkdir -p $out/nix-support
     ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
+
+    eval "$postInstall"
+  '';
+
+  #  copy ./share and ./lib from ghc to ghc-wrapper.  Without this the 
+  # documentation and lib folders will be missing.
+  postFixup= ''
+    # make sure doc file exists, only needed when this is the first package
+    # insstalled that needs a doc folder.
+    mkdir -p $out/share/doc
+    cp -r $ghc/lib $out/lib
+
+    # copy ./doc/ghc to ./doc/ghc-${ghc.version} to prevent name conflicts
+    cp -r $ghc/share/doc/ghc $out/share/doc/ghc-${ghc.version}
   '';
 
   GHCGetPackages = ./ghc-get-packages.sh;
