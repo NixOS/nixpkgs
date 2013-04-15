@@ -7661,9 +7661,7 @@ let
 
   pidginmsnpecan = callPackage ../applications/networking/instant-messengers/pidgin-plugins/msn-pecan { };
 
-  pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr {
-    libotr = libotr_3_2;
-  };
+  pidginotr = callPackage ../applications/networking/instant-messengers/pidgin-plugins/otr { };
 
   pidginsipe = callPackage ../applications/networking/instant-messengers/pidgin-plugins/sipe { };
 
