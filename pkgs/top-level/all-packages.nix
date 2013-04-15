@@ -4419,6 +4419,8 @@ let
 
   libotr = callPackage ../development/libraries/libotr { };
 
+  libotr_3_2 = callPackage ../development/libraries/libotr/3.2.nix { };
+
   libp11 = callPackage ../development/libraries/libp11 { };
 
   libpar2 = callPackage ../development/libraries/libpar2 { };
@@ -6633,6 +6635,7 @@ let
     # For some reason, TLS support is broken when using GnuTLS 3.0 (can't
     # connect to jabber.org, for instance.)
     gnutls = gnutls2;
+    libotr = libotr_3_2;
   };
 
   blender = callPackage  ../applications/misc/blender {
