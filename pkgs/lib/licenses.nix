@@ -192,4 +192,16 @@
     fullName = "zlib license";
     url = http://www.gzip.org/zlib/zlib_license.html;
   };
+
+  amd = {
+    shortName = "amd";
+    fullName = "AMD License Agreement";
+    url = http://developer.amd.com/amd-license-agreement/;
+  };
+
+  amdadl = {
+    shortName = "amd-adl";
+    fullName = "amd-adl license";
+    url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/licenses/AMD-ADL?revision=1.1";
+  };
 }
