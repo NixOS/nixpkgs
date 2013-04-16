@@ -433,11 +433,19 @@ let
   apg = callPackage ../tools/security/apg { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
-
-  titaniumenv = import ../development/mobile/titaniumenv {
+  
+  titaniumenv_2_1 = import ../development/mobile/titaniumenv {
+    inherit pkgs;
+    pkgs_i686 = pkgsi686Linux;
+    version = "2.1";
+  };
+  
+  titaniumenv_3_1 = import ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
+  
+  titaniumenv = titaniumenv_3_1;
 
   inherit (androidenv) androidsdk_4_1;
 
