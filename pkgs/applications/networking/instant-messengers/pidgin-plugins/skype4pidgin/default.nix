@@ -1,22 +1,19 @@
-{ stdenv, fetchsvn, pkgconfig, pidgin, libnotify, gdk_pixbuf, glib, dbus
+{ stdenv, fetchurl, pkgconfig, pidgin, libnotify, gdk_pixbuf, glib, dbus
 , dbus_glib }:
 
-let
-  rev = 657;
-in
 stdenv.mkDerivation rec {
-  name = "skype4pidgin-svn-657";
-  src = fetchsvn {
-    url = "http://skype4pidgin.googlecode.com/svn/trunk";
-    inherit rev;
-    sha256 = "0sg91rqkg6mjdkwxjbs7bmh65sm5sj6fzygkfiz8av3zjzmj127b";
+  name = "skype4pidgin-novas0x2a-20120411-6c53f7c48f";
+  src = fetchurl {
+    url = "https://github.com/novas0x2a/skype4pidgin/tarball/6c53f7c48f";
+    name = "${name}.tar.gz";
+    sha256 = "116jfh5ravaixivqx4a4bz0lbb9c49d5r83nwmripja56zdbpgr0";
   };
 
   NIX_CFLAGS_COMPILE = "-I${libnotify}/include/libnotify";
 
   patchPhase = ''
     sed -i -e 's/ [^ ]*-gcc/ gcc/' -e 's/-march[^ ]*//' \
-        -e 's/glib-2.0/glib-2.0 gdk-pixbuf-2.0 libnotify purple dbus-glib-1/' Makefile
+        -e 's/GLIB_CFLAGS =.*/GLIB_CFLAGS=`pkg-config --cflags glib-2.0 gdk-pixbuf-2.0 libnotify purple dbus-glib-1`/' Makefile
     pkg-config --cflags glib-2.0 gdk-pixbuf-2.0 libnotify
   '';
 
@@ -33,4 +30,10 @@ stdenv.mkDerivation rec {
   postInstall = "ln -s \$out/lib/pidgin \$out/share/pidgin-otr";
 
   buildInputs = [ pidgin pkgconfig libnotify gdk_pixbuf glib dbus dbus_glib ];
+
+  meta = {
+    homepage = https://github.com/novas0x2a/skype4pidgin;
+    license = "GPLv3+";
+    description = "Plugin to use a running skype account through pidgin";
+  };
 }
