@@ -7778,6 +7778,9 @@ let
     usePulseAudio = config.pulseaudio or true;
   };
 
+  skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
+
+
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
   st = callPackage ../applications/misc/st { };
