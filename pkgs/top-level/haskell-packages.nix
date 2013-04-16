@@ -89,6 +89,16 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     ghc = ghc; # refers to ghcPlain
   };
 
+  # The normal GHC wrapper doesn't create links to the documentation in
+  # ~/.nix-profile. Having this second wrapper allows us to remedy the
+  # situation without re-building all Haskell packages. At the next
+  # stdenv-updates merge, this second wrapper will go away.
+
+  ghcUserEnvWrapper = pkgs.appendToName "new" (callPackage ../development/compilers/ghc/wrapper.nix {
+    ghc = ghc; # refers to ghcPlain
+    forUserEnv = true;
+  });
+
   # An experimental wrapper around ghcPlain that does not automatically
   # pick up packages from the profile, but instead has a fixed set of packages
   # in its global database. The set of packages can be specified as an
