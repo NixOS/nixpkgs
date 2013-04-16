@@ -77,7 +77,7 @@ let
         default = "
           Password used for SMTP auth.
         ";
-      }
+      };
 
     };
 
