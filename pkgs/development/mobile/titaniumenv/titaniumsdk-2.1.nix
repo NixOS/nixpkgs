@@ -1,18 +1,16 @@
-{stdenv, src ? null, fetchurl, unzip, makeWrapper, python, jdk}:
+{stdenv, fetchurl, unzip, makeWrapper, python, jdk}:
 
 stdenv.mkDerivation {
   name = "titanium-mobilesdk-2.1.4.v20121109124659";
-  src = if src == null then
-    if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
-      url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/2_1_X/mobilesdk-2.1.4.v20121109124659-linux.zip;
-      sha1 = "381eb4b06b5a261ddf336c52d4714e5626142697";
-    }
-    else if stdenv.system == "x86_64-darwin" then fetchurl {
-      url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/2_1_X/mobilesdk-2.1.4.v20121109124659-osx.zip;
-      sha1 = "1cef5803f0c7b7bb35feb88d3f91bbb191e3953e";
-    }
-    else throw "Platform: ${stdenv.system} not supported!"
-  else src;
+  src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") then fetchurl {
+    url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/2_1_X/mobilesdk-2.1.4.v20121109124659-linux.zip;
+    sha1 = "381eb4b06b5a261ddf336c52d4714e5626142697";
+  }
+  else if stdenv.system == "x86_64-darwin" then fetchurl {
+    url = http://builds.appcelerator.com.s3.amazonaws.com/mobile/2_1_X/mobilesdk-2.1.4.v20121109124659-osx.zip;
+    sha1 = "1cef5803f0c7b7bb35feb88d3f91bbb191e3953e";
+  }
+  else throw "Platform: ${stdenv.system} not supported!";
   
   buildInputs = [ unzip makeWrapper ];
   
