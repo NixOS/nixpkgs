@@ -544,34 +544,30 @@ pythonPackages = python.modules // rec {
   # });
 
 
-  buildout = buildPythonPackage rec {
-    name = "buildout-${version}";
-    version = "1.7.0";
+  buildout = zc_buildout;
+  buildout152 = zc_buildout152;
+
+  zc_buildout = zc_buildout171;
+  zc_buildout171 = buildPythonPackage rec {
+    name = "zc.buildout-1.7.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
-      md5 = "4e3b521600e475c56a0a66459a5fc7bb";
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/${name}.tar.gz";
+      md5 = "8834a21586bf2be53dc412002241a996";
     };
-
-   # TODO: consider if this patch should be an option
-   # It makes buildout useful in a nix profile, but this alters the default functionality
-   patchPhase = ''
-     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
-   '';
 
    meta = {
-      homepage = http://www.buildout.org/;
+      homepage = "http://www.buildout.org";
       description = "A software build and configuration system";
+      license = pkgs.lib.licenses.zpt21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
-
-
-  buildout152 = buildPythonPackage rec {
-    name = "buildout-${version}";
-    version = "1.5.2";
+  zc_buildout152 = buildPythonPackage rec {
+    name = "zc.buildout-1.5.2";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/${name}.tar.gz";
       md5 = "87f7b3f8d13926c806242fd5f6fe36f7";
     };
 
@@ -582,8 +578,10 @@ pythonPackages = python.modules // rec {
    '';
 
    meta = {
-      homepage = http://www.buildout.org/;
+      homepage = "http://www.buildout.org";
       description = "A software build and configuration system";
+      license = pkgs.lib.licenses.zpt21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
 
