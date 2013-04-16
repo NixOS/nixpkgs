@@ -5332,7 +5332,6 @@ let
 
   plone43Packages = recurseIntoAttrs (import ../development/web/plone {
     inherit pkgs;
-    python = python27;
     pythonPackages = python27Packages;
   });
 
