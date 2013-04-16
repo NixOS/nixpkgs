@@ -1548,6 +1548,8 @@ rec {
     };
     buildInputs = [ DBDSQLite PackageStash TestException TestWarn ];
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ClassMethodModifiers ConfigAny ContextPreserve DataCompare DataDumperConcise DataPage DBI DevelGlobalDestruction HashMerge ModuleFind Moo MROCompat namespaceclean PathClass ScopeGuard SQLAbstract strictures SubName TryTiny ];
+    # !!! tests broken with latest sqlite, see http://lists.scsys.co.uk/pipermail/dbix-class/2013-April/011271.html
+    doCheck = false;
     meta = {
       homepage = http://www.dbix-class.org/;
       description = "Extensible and flexible object <-> relational mapper";
