@@ -433,11 +433,19 @@ let
   apg = callPackage ../tools/security/apg { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
-
-  titaniumenv = import ../development/mobile/titaniumenv {
+  
+  titaniumenv_2_1 = import ../development/mobile/titaniumenv {
+    inherit pkgs;
+    pkgs_i686 = pkgsi686Linux;
+    version = "2.1";
+  };
+  
+  titaniumenv_3_1 = import ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
+  
+  titaniumenv = titaniumenv_3_1;
 
   inherit (androidenv) androidsdk_4_1;
 
@@ -689,7 +697,6 @@ let
 
   docbook2x = callPackage ../tools/typesetting/docbook2x {
     inherit (perlPackages) XMLSAX XMLParser XMLNamespaceSupport;
-    libiconv = if stdenv.isDarwin then libiconv else null;
   };
 
   dosfstools = callPackage ../tools/filesystems/dosfstools { };
@@ -847,13 +854,9 @@ let
     guile = guile_1_8;
   };
 
-  gnugrep =
-    # Use libiconv only on non-GNU platforms (we can't test with
-    # `stdenv ? glibc' at this point.)
-    let gnu = stdenv.isLinux; in
-      callPackage ../tools/text/gnugrep {
-        libiconv = if gnu then null else libiconv;
-      };
+  gnugrep = callPackage ../tools/text/gnugrep {
+    libiconv = libiconvOrNull;
+  };
 
   gnulib = callPackage ../development/tools/gnulib { };
 
@@ -3319,7 +3322,11 @@ let
   pkgconfig = forceNativeDrv (callPackage ../development/tools/misc/pkgconfig { });
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
 
-  premake = callPackage ../development/tools/misc/premake { };
+  premake3 = callPackage ../development/tools/misc/premake/3.nix { };
+
+  premake4 = callPackage ../development/tools/misc/premake { };
+
+  premake = premake4;
 
   pstack = callPackage ../development/tools/misc/gdb/pstack.nix { };
 
@@ -4323,6 +4330,9 @@ let
 
   libiconvOrLibc = if libiconvOrNull == null then gcc.libc else libiconv;
 
+  # On non-GNU systems we need GNU Gettext for libintl.
+  libintlOrEmpty = stdenv.lib.optional (!stdenv.isLinux) gettext;
+
   libid3tag = callPackage ../development/libraries/libid3tag { };
 
   libidn = callPackage ../development/libraries/libidn { };
@@ -4418,6 +4428,8 @@ let
   libosip = callPackage ../development/libraries/osip {};
 
   libotr = callPackage ../development/libraries/libotr { };
+
+  libotr_3_2 = callPackage ../development/libraries/libotr/3.2.nix { };
 
   libp11 = callPackage ../development/libraries/libp11 { };
 
@@ -5332,9 +5344,18 @@ let
     python = python27;
   });
 
-  plone43Packages = recurseIntoAttrs (import ../development/web/plone {
+  plone41Packages = recurseIntoAttrs (import ../development/web/plone/4.1.6.nix {
     inherit pkgs;
-    python = python27;
+    pythonPackages = python27Packages;
+  });
+
+  plone42Packages = recurseIntoAttrs (import ../development/web/plone/4.2.5.nix {
+    inherit pkgs;
+    pythonPackages = python27Packages;
+  });
+
+  plone43Packages = recurseIntoAttrs (import ../development/web/plone/4.3.0.nix {
+    inherit pkgs;
     pythonPackages = python27Packages;
   });
 
@@ -6651,6 +6672,7 @@ let
     # For some reason, TLS support is broken when using GnuTLS 3.0 (can't
     # connect to jabber.org, for instance.)
     gnutls = gnutls2;
+    libotr = libotr_3_2;
   };
 
   blender = callPackage  ../applications/misc/blender {
@@ -7066,6 +7088,8 @@ let
     jre = jdk;
   };
 
+  freenet = callPackage ../applications/networking/p2p/freenet { };
+
   freepv = callPackage ../applications/graphics/freepv { };
 
   xfontsel = callPackage ../applications/misc/xfontsel { };
@@ -7316,6 +7340,8 @@ let
   irssi = callPackage ../applications/networking/irc/irssi { };
 
   irssi_fish = callPackage ../applications/networking/irc/irssi/fish { };
+
+  irssi_otr = callPackage ../applications/networking/irc/irssi/otr { };
 
   bip = callPackage ../applications/networking/irc/bip { };
 
@@ -7770,6 +7796,9 @@ let
   skype = callPackage_i686 ../applications/networking/instant-messengers/skype {
     usePulseAudio = config.pulseaudio or true;
   };
+
+  skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
+
 
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 

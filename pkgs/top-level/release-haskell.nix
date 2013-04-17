@@ -341,7 +341,6 @@ mapTestOn {
     Tensor = supportedSystems;
     terminfo = supportedSystems;
     testFramework = supportedSystems;
-    testpack = supportedSystems;
     texmath = supportedSystems;
     text = supportedSystems;
     thLift = supportedSystems;

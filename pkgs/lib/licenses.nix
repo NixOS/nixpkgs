@@ -183,19 +183,25 @@
     url = http://www.tcl.tk/software/tcltk/license.html;
   };
 
-  unfree = {
-    shortName = "unfree";
-    fullName = "unfree non-redistributable license";
-  };
+  unfree = "unfree";
 
-  unfreeRedistributable = {
-    shortName = "unfree-redistributable";
-    fullName = "unfree redistributable license";
-  };
+  unfreeRedistributable = "unfree-redistributable";
 
   zlib = {
     shortName = "zlib";
     fullName = "zlib license";
     url = http://www.gzip.org/zlib/zlib_license.html;
+  };
+
+  zpt20 = {
+    shortName = "ZPT2.0";
+    fullName = "Zope Public License 2.0";
+    url = "http://old.zope.org/Resources/License/ZPL-2.0";
+  };
+
+  zpt21 = {
+    shortName = "ZPT2.1";
+    fullName = "Zope Public License 2.1";
+    url = "http://old.zope.org/Resources/License/ZPL-2.1";
   };
 }

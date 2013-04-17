@@ -1,12 +1,12 @@
-{titaniumenv, fetchgit, target, androidPlatformVersions ? [ "8" ]}:
+{titaniumenv, fetchgit, target, androidPlatformVersions ? [ "11" ]}:
 
 titaniumenv.buildApp {
   name = "KitchenSink";
   appId = "com.appcelerator.kitchensink";
   src = fetchgit {
     url = https://github.com/appcelerator/KitchenSink.git;
-    rev = "0f2c0b818034cc4e6867f0aa2afc98bf77dbff02";
-    sha256 = "de31496cfb5625d7a193bbbc32a8021e4094ffab20ae13ef2e1583b0394d7c60";
+    rev = "b68757ef6639e3da564e21038dc9c1aee1f80907";
+    sha256 = "17yabdkl0p6pf2a2lcgw1kid2smwc8rnpx0i9fa4avj6930cbh5i";
   };
   
   inherit target androidPlatformVersions;

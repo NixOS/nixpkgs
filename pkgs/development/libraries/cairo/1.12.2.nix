@@ -5,7 +5,7 @@
 , gobjectSupport ? true, glib
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype, xlibs
 , zlib, libpng, pixman, libxcb ? null, xcbutil ? null
-, gettext, libiconvOrEmpty
+, libiconvOrEmpty, libintlOrEmpty
 }:
 
 assert postscriptSupport -> zlib != null;
@@ -23,10 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ pkgconfig x11 fontconfig xlibs.libXrender ]
     ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
-
-    # On non-GNU systems we need GNU Gettext for libintl.
-    ++ stdenv.lib.optional (!stdenv.isLinux) gettext
-
+    ++ libintlOrEmpty
     ++ libiconvOrEmpty;
 
   propagatedBuildInputs =

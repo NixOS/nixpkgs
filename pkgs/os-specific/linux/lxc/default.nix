@@ -1,34 +1,33 @@
 { stdenv, fetchurl, libcap, apparmor, perl, docbook2x, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
-  name = "lxc-0.8.0";
+  name = "lxc-0.9.0";
 
   src = fetchurl {
     url = "http://lxc.sf.net/download/lxc/${name}.tar.gz";
-    sha256 = "0b3912mal1n56i1v5f3aplm7shqnlz24p0znpva27r4l1drk7j7a";
+    sha256 = "0821clxymkgp71n720xj5ngs22s2v8jks68f5j4vypycwvm6f5qy";
   };
 
   buildInputs = [ libcap apparmor perl docbook2x ];
 
   patches = [
-   ./dont-run-ldconfig.patch
-   ./fix-documentation-build.patch
-   ./fix-sgml-documentation.patch
+    ./dont-run-ldconfig.patch
+    ./install-localstatedir-in-store.patch
+    ./support-db2x.patch
   ];
 
   preConfigure = "export XML_CATALOG_FILES=${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
-  configureFlags = "--localstatedir=/var";
-
-  postInstall = ''
-    cd "$out/lib"
-    lib=liblxc.so.?.*
-    ln -s $lib $(echo $lib | sed -re 's/(liblxc[.]so[.].)[.].*/\1/')
-  '';
+  configureFlags = [
+    "--localstatedir=/var"
+    "--enable-doc"
+    "--enable-tests"
+    "--enable-apparmor"
+  ];
 
   meta = {
     homepage = "http://lxc.sourceforge.net";
-    description = "lightweight virtual system mechanism";
+    description = "userspace tools for Linux Containers, a lightweight virtualization system";
     license = stdenv.lib.licenses.lgpl21Plus;
 
     longDescription = ''
