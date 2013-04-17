@@ -34,6 +34,7 @@ stdenv.mkDerivation {
     sed -i -f ${./fixtiverify.sed} builder.py
     sed -i -f ${./fixtiprofiler.sed} builder.py
     sed -i -f ${./fixso.sed} builder.py
+    sed -i -f ${./fixnativelibs.sed} builder.py
     
     # Patch some executables
     
