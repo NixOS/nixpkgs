@@ -9185,4 +9185,8 @@ let
 
   bullet = callPackage ../development/libraries/bullet {};
 
+  dart = import ../development/interpreters/dart {
+    inherit stdenv fetchurl;
+  };
+
 }; in pkgs
