@@ -8266,6 +8266,10 @@ let
 
   qtractor = callPackage ../applications/audio/qtractor { };
 
+  quodlibet = callPackage ../applications/audio/quodlibet {
+    inherit (pythonPackages) mutagen;
+  };
+
   rakarrack = callPackage ../applications/audio/rakarrack {
     inherit (xorg) libXpm libXft;
     fltk = fltk13;
