@@ -8526,11 +8526,13 @@ let
   kde47 = kdePackagesFor (pkgs.kde47 // {
       boost = boost149;
       eigen = eigen2;
+      libotr = libotr_3_2;
     }) ../desktops/kde-4.7;
 
   kde48 = kdePackagesFor (pkgs.kde48 // {
       boost = boost149;
       eigen = eigen2;
+      libotr = libotr_3_2;
     }) ../desktops/kde-4.8;
 
   kdePackagesFor = self: dir:
