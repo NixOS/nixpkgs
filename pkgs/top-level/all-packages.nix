@@ -5330,6 +5330,16 @@ let
     python = python27;
   });
 
+  plone41Packages = recurseIntoAttrs (import ../development/web/plone/4.1.6.nix {
+    inherit pkgs;
+    pythonPackages = python27Packages;
+  });
+
+  plone42Packages = recurseIntoAttrs (import ../development/web/plone/4.2.5.nix {
+    inherit pkgs;
+    pythonPackages = python27Packages;
+  });
+
   plone43Packages = recurseIntoAttrs (import ../development/web/plone/4.3.0.nix {
     inherit pkgs;
     pythonPackages = python27Packages;
