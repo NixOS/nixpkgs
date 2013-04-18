@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig ];
 
-  propagatedBuildInputs =
-    [ xlibs.xlibs glib atk pango gdk_pixbuf cairo
-      xlibs.libXrandr xlibs.libXrender xlibs.libXcomposite xlibs.libXi
+  propagatedBuildInputs = with xlibs;
+    [ glib cairo pango gdk_pixbuf atk
+      libXrandr libXrender libXcomposite libXi libXcursor
     ]
-    ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
+    ++ stdenv.lib.optional xineramaSupport libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
 
   configureFlags = "--with-xinput=yes";

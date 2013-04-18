@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = with xlibs; [
     expat glib cairo pango gdk_pixbuf atk at_spi2_atk
-    libXrandr libXrender libXcomposite libXi
-  ] ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
+    libXrandr libXrender libXcomposite libXi libXcursor
+  ] ++ stdenv.lib.optional xineramaSupport libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
 
   postInstall = "rm -rf $out/share/gtk-doc";
