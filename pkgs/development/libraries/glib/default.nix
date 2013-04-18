@@ -11,6 +11,19 @@
 #     Reminder: add 'sed -e 's@python2\.[0-9]@python@' -i
 #       $out/bin/gtester-report' to postInstall if this is solved
 
+let
+  # some packages don't get "Cflags" from pkgconfig correctly
+  # and then fail to build when directly including like <glib/...>
+  flattenInclude = ''
+    for dir in $out/include/*; do
+      cp -r $dir/* "$out/include/"
+      rm -r "$dir"
+      ln -s . "$dir"
+    done
+    ln -sr -t "$out/include/" $out/lib/*/include/* 2>/dev/null || true
+  '';
+in
+
 stdenv.mkDerivation (rec {
   name = "glib-2.36.0";
 
@@ -30,9 +43,12 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  passthru.gioModuleDir = "lib/gio/modules";
-
   postInstall = ''rm -rvf $out/share/gtk-doc'';
+
+  passthru = {
+     gioModuleDir = "lib/gio/modules";
+     inherit flattenInclude;
+  };
 
   meta = {
     description = "GLib, a C library of programming buildings blocks";
