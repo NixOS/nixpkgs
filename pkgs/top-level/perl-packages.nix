@@ -1048,6 +1048,19 @@ rec {
     };
   };
 
+  ConfigAutoConf = buildPerlPackage {
+    name = "Config-AutoConf-0.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AM/AMBS/Config/Config-AutoConf-0.22.tar.gz;
+      sha256 = "1zk2xfvxd3yn3299i13vn5wm1c7jxgr7z3h0yh603xs2h9cg79wc";
+    };
+    propagatedBuildInputs = [ CaptureTiny ];
+    meta = {
+      description = "A module to implement some of AutoConf macros in pure perl.";
+      license = "perl5";
+    };
+  };
+
   ConfigGeneral = buildPerlPackage {
     name = "Config-General-2.51";
     src = fetchurl {
@@ -1915,6 +1928,7 @@ rec {
     };
   };
 
+
   ExtUtilsCppGuess = buildPerlModule rec {
     name = "ExtUtils-CppGuess-0.07";
     src = fetchurl {
@@ -1922,6 +1936,18 @@ rec {
       sha256 = "1a77hxf2pa8ia9na72rijv1yhpn2bjrdsybwk2dj2l938pl3xn0w";
     };
     propagatedBuildInputs = [ CaptureTiny ];
+  };
+
+  ExtUtilsLibBuilder = buildPerlModule {
+    name = "ExtUtils-LibBuilder-0.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AM/AMBS/ExtUtils/ExtUtils-LibBuilder-0.04.tar.gz;
+      sha256 = "0j4rhx3w6nbvmxqjg6q09gm10nnpkcmqmh29cgxsfc9k14d8bb6w";
+    };
+    meta = {
+      description = "A tool to build C libraries.";
+      license = "perl";
+    };
   };
 
   ExtUtilsMakeMaker = buildPerlPackage rec{
@@ -5138,6 +5164,19 @@ rec {
     };
     meta = {
       description = "Align text in columns";
+    };
+  };
+
+  TextBibTeX = buildPerlModule {
+    name = "Text-BibTeX-0.66";
+    buildInputs = [ ConfigAutoConf ExtUtilsLibBuilder ];
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AM/AMBS/Text/Text-BibTeX-0.66.tar.gz;
+      sha256 = "0wymg190afqfhr5i9ws02jgnksk06h3w45770ynjjr1fs343b9j7";
+    };
+    meta = {
+      description = "Interface to read and parse BibTeX files";
+      license = "perl5";
     };
   };
 
