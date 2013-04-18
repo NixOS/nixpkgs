@@ -528,6 +528,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   alternativeIo = callPackage ../development/libraries/haskell/alternative-io {};
 
+  alsaCore = callPackage ../development/libraries/haskell/alsa-core {};
+
+  alsaPcm = callPackage ../development/libraries/haskell/alsa-pcm {};
+
   appar = callPackage ../development/libraries/haskell/appar {};
 
   ansiTerminal = callPackage ../development/libraries/haskell/ansi-terminal {};
@@ -655,6 +659,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     libc = pkgs.stdenv.gcc.libc;
   };
 
+  carray = callPackage ../development/libraries/haskell/carray {};
+  
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
   caseInsensitive_1_0_0_2 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.2.nix {};
   caseInsensitive = self.caseInsensitive_1_0_0_2;
@@ -1249,6 +1255,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ivor = callPackage ../development/libraries/haskell/ivor {};
 
+  ixShapable = callPackage ../development/libraries/haskell/ix-shapable {};
+
   JuicyPixels = callPackage ../development/libraries/haskell/JuicyPixels {};
 
   jpeg = callPackage ../development/libraries/haskell/jpeg {};
@@ -1668,6 +1676,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   resourcet = callPackage ../development/libraries/haskell/resourcet {};
 
   RSA = callPackage ../development/libraries/haskell/RSA {};
+
+  sampleFrame = callPackage ../development/libraries/haskell/sample-frame {};
 
   safe = callPackage ../development/libraries/haskell/safe {};
 
