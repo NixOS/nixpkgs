@@ -4811,17 +4811,20 @@ let
   policykit = callPackage ../development/libraries/policykit { };
 
   poppler = callPackage ../development/libraries/poppler {
-    gtkSupport = true;
-    qt4Support = false;
+    glibSupport = true;
+    gtk3Support = false;
+    qt4Support  = false;
   };
   poppler_0_18 = callPackage ../development/libraries/poppler/0.18.nix {
-    gtkSupport = true;
-    qt4Support = false;
+    glibSupport = true;
+    gtk3Support = false;
+    qt4Support  = false;
   };
 
   popplerQt4 = poppler.override {
-    gtkSupport = false;
-    qt4Support = true;
+    glibSupport = false;
+    gtk3Support = false;
+    qt4Support  = true;
   };
 
   popt = callPackage ../development/libraries/popt { };

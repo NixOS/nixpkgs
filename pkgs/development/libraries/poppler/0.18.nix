@@ -1,7 +1,7 @@
 { fetchurl, stdenv, cairo, freetype, fontconfig, zlib
 , libjpeg, curl, libpthreadstubs, xorg, openjpeg
 , libxml2, pkgconfig, cmake, lcms2
-, gtkSupport ? false, glib ? null, gtk3 ? null # gtk2 no longer accepted
+, glibSupport ? false, glib, gtk3Support ? false, gtk3 # gtk2 no longer accepted
 , qt4Support ? false, qt4 ? null
 }:
 
@@ -17,9 +17,10 @@ stdenv.mkDerivation rec {
     [ zlib cairo freetype fontconfig libjpeg lcms2 curl
       libpthreadstubs libxml2 stdenv.gcc.libc
       libXau libXdmcp libxcb libXrender libXext
-      #openjpeg # not detected
+      openjpeg
     ]
-    ++ stdenv.lib.optionals gtkSupport [ glib /*gtk3*/ ]
+    ++ stdenv.lib.optional glibSupport glib
+    ++ stdenv.lib.optional gtk3Support gtk3
     ++ stdenv.lib.optional qt4Support qt4;
 
   nativeBuildInputs = [ pkgconfig cmake ];
