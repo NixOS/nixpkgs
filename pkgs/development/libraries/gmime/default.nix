@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, glib, zlib }:
+{ stdenv, fetchurl, pkgconfig, glib, zlib, libgpgerror }:
 
 stdenv.mkDerivation rec {
-  name = "gmime-2.4.24";
-  
+  name = "gmime-2.6.15";
+
   src = fetchurl {
-    url = "mirror://gnome/sources/gmime/2.4/${name}.tar.gz";
-    sha256 = "2f538d68e215f075d16575a6da9acb87983db9e2df0d7d403858048881a0dd15";
+    url = "mirror://gnome/sources/gmime/2.6/${name}.tar.xz";
+    sha256 = "16n9gmlwn6rphi59hrwy6dpn785s3r13h2kmrn3k61l2kfws1hml";
   };
-  
-  buildInputs = [ pkgconfig glib zlib ];
+
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ glib zlib libgpgerror ];
 
   meta = {
     homepage = http://spruce.sourceforge.net/gmime/;
