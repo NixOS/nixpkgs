@@ -636,6 +636,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   bytestringTrie = callPackage ../development/libraries/haskell/bytestring-trie {};
 
+  bytestringProgress = callPackage ../development/libraries/haskell/bytestring-progress {};
+
   c2hs = callPackage ../development/libraries/haskell/c2hs {
     languageC = self.languageC_0_3_2_1;
   };
@@ -1831,6 +1833,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   Tensor = callPackage ../development/libraries/haskell/Tensor {};
 
+  terminalProgressBar = callPackage ../development/libraries/haskell/terminal-progress-bar {};
+
   terminfo = callPackage ../development/libraries/haskell/terminfo {};
 
   testFramework = callPackage ../development/libraries/haskell/test-framework {};
@@ -2190,6 +2194,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   uuagc = callPackage ../development/tools/haskell/uuagc {};
 
   # Applications.
+
+  arbtt = callPackage ../applications/misc/arbtt {};
 
   darcs = callPackage ../applications/version-management/darcs {};
 
