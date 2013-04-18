@@ -5262,11 +5262,11 @@ pythonPackages = python.modules // rec {
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20121216";
+    version = "1.20130313";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "1bzvc4aj3w8g85qycwz1jxa73jj8rl6zrgd4hi78kr4dgslcfns5";
+      sha256 = "0rk13a68668gsrv6yqgzqxskffqnlyjar4qav6k5iyrp77amn7qm";
     };
 
     buildInputs = [ sphinx ];
@@ -5363,11 +5363,12 @@ pythonPackages = python.modules // rec {
 
 
   ttystatus = buildPythonPackage rec {
-    name = "ttystatus-0.21";
+    name = "ttystatus-${version}";
+    version = "0.22";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.21.orig.tar.gz";
-      sha256 = "4a1f3a41c9bd3b5d2bd8e6f093890857301e590aa1d428fc9a6dca591227244c";
+      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_${version}.orig.tar.gz";
+      sha256 = "1hzv0sbrvgcmafflhvzh7plci0dg7wcjlk39i8kqdasg6rw0ag6f";
     };
 
     buildInputs = [ sphinx ];
@@ -5384,11 +5385,11 @@ pythonPackages = python.modules // rec {
 
   larch = buildPythonPackage rec {
     name = "larch-${version}";
-    version = "1.20121216";
+    version = "1.20130316";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_${version}.orig.tar.gz";
-      sha256 = "0w4hirs8wkp1hji6nxfmq4rahkd5rgw4cavvdhpdfr4mddycbis3";
+      sha256 = "1mkvmy0jdzd7dlvdx2a75wsbj5qw1clawcgndx9jwl816a9iy225";
     };
 
     buildInputs = [ sphinx ];
