@@ -3,14 +3,14 @@
    fontconfig }:
 
 let
-  version = "5.10.5";
+  version = "6.2.6";
 in
 stdenv.mkDerivation {
   name = "swi-prolog-${version}";
 
   src = fetchurl {
     url = "http://www.swi-prolog.org/download/stable/src/pl-${version}.tar.gz";
-    sha256 = "38d938d6a64e894685aa44bf9ea34b5505764cd084e07e6b4c21a9dd89b579d5";
+    sha256 = "0ii14ghmky91kkh017khahl00s4igkz03b5gy6y0vhv179sz04ll";
   };
 
   buildInputs = [gmp readline openssl libjpeg unixODBC libXinerama
