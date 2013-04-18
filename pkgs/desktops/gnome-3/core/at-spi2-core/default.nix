@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, python, pkgconfig, popt, libX11, xextproto, libSM, libICE, libXtst, libXi
-, intltool, dbus_glib }:
+{ stdenv, fetchurl, python, pkgconfig, popt, intltool, dbus_glib
+, libX11, xextproto, libSM, libICE, libXtst, libXi }:
 
 stdenv.mkDerivation rec {
 
@@ -13,5 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "0n64h6j10sn90ds9y70d9wlvvsbwnrym9fm0cyjxb0zmqw7s6q8q";
   };
 
-  buildInputs = [ python pkgconfig popt libX11 xextproto libSM libICE libXtst libXi intltool dbus_glib ];
+  buildInputs = [
+    python pkgconfig popt  intltool dbus_glib
+    libX11 xextproto libSM libICE libXtst libXi
+  ];
+
+  # ToDo: on non-NixOS we create a symlink from there?
+  configureFlags = "--with-dbus-daemondir=/run/current-system/sw/bin/";
 }
