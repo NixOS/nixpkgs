@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = with xlibs; [
     expat glib cairo pango gdk_pixbuf atk at_spi2_atk
-    libXrandr libXrender libXcomposite libXi
+    libXrandr libXrender libXcomposite libXi libXcursor
   ] ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
 

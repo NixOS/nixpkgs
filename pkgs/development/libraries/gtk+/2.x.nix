@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs =
     [ xlibs.xlibs glib atk pango gdk_pixbuf cairo
       xlibs.libXrandr xlibs.libXrender xlibs.libXcomposite xlibs.libXi
+      xlibs.libXcursor
     ]
     ++ stdenv.lib.optional xineramaSupport xlibs.libXinerama
     ++ stdenv.lib.optionals cupsSupport [ cups ];
