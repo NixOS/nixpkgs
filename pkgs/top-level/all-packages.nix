@@ -8521,7 +8521,7 @@ let
 
   gnome = recurseIntoAttrs gnome2;
 
-  kde4 = recurseIntoAttrs pkgs.kde47;
+  kde4 = recurseIntoAttrs pkgs.kde48;
 
   kde47 = kdePackagesFor (pkgs.kde47 // {
       boost = boost149;
