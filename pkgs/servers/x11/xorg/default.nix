@@ -7,6 +7,8 @@ let
 
   xorg = rec {
 
+  inherit pixman;
+
   applewmproto = (stdenv.mkDerivation ((if overrides ? applewmproto then overrides.applewmproto else x: x) {
     name = "applewmproto-1.4.2";
     builder = ./builder.sh;

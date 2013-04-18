@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, perl }:
+{ fetchurl, stdenv, pkgconfig, perl, withPNG ? true, libpng, glib /*just passthru*/ }:
 
 stdenv.mkDerivation rec {
   name = "pixman-0.28.2";
@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0mcvxd5gx3w1wzgph91l2vaiic91jmx7s01hi2igphyvd80ckyia";
   };
 
-  buildInputs = [ pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig perl ];
+
+  buildInputs = stdenv.lib.optional withPNG [ libpng ]; # NOT in closure anyway
+
+  postInstall = glib.flattenInclude;
 
   meta = {
     homepage = http://pixman.org;

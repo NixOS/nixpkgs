@@ -5669,6 +5669,7 @@ let
       xkeyboard_config dbus libuuid openssl gperf m4
       autoconf libtool xmlto asciidoc udev flex bison python mtdev;
     automake = automake110x;
+    pixman = pixman_cairo;
   });
 
   xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
