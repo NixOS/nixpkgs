@@ -16,4 +16,6 @@ stdenv.mkDerivation rec {
     ];
 
   propagatedBuildInputs = [ GConf glib ];
+
+  postPatch = "find . -name Makefile.in | xargs sed 's/-DG_DISABLE_DEPRECATED//g' -i ";
 }
