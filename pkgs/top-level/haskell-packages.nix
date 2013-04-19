@@ -104,16 +104,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cabal = callPackage ../build-support/cabal {
     enableLibraryProfiling = enableLibraryProfiling;
+    enableCheckPhase = pkgs.stdenv.lib.versionOlder "7.4" self.ghc.ghcVersion;
   };
 
   # A variant of the cabal build driver that disables unit testing.
   # Useful for breaking cycles, where the unit test of a package A
   # depends on package B, which has A as a regular build input.
-  cabalNoTest = {
-    mkDerivation = x: rec {
-      final = self.cabal.mkDerivation (self: (x final) // { doCheck = false; });
-    }.final;
-  };
+  cabalNoTest = self.cabal.override { enableCheckPhase = false; };
 
   # Convenience helper function.
   disableTest = x: x.override { cabal = self.cabalNoTest; };
