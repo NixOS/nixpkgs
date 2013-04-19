@@ -234,7 +234,7 @@ mapHaskellTestOn {
   IfElse = default;
   irc = default;
   iteratee = default;
-  jailbreakCabal = defaultOrLater;
+  jailbreakCabal = all;
   json = default;
   jsonTypes = default;
   keter = default;
