@@ -694,6 +694,26 @@ rec {
       [ CatalystRuntime MooseXTraitsPluggable namespaceautoclean ListMoreUtils ];
   };
 
+  CatalystXRoleApplicator = buildPerlPackage rec {
+    name = "CatalystX-RoleApplicator-0.005";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      sha256 = "0vwaapxn8g5hs2xp63c4dwv9jmapmji4272fakssvgc9frklg3p2";
+    };
+    buildInputs = [ ];
+    propagatedBuildInputs = [ MooseXRelatedClassRoles CatalystRuntime ];
+  };
+
+  CatalystTraitForRequestProxyBase = buildPerlPackage rec {
+    name = "Catalyst-TraitFor-Request-ProxyBase-0.000005";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      sha256 = "02kir63d5cs2ipj3fn1qlmmx3gqi1xqzrxfr4pv5vjhjgsm0zgx7";
+    };
+    buildInputs = [ CatalystRuntime ];
+    propagatedBuildInputs = [ Moose URI CatalystXRoleApplicator ];
+  };
+
   CatalystXScriptServerStarman = buildPerlPackage {
     name = "CatalystX-Script-Server-Starman-0.02";
     src = fetchurl {
@@ -3458,14 +3478,14 @@ rec {
     };
   };
 
-  MooseXSetOnce = buildPerlPackage rec {
-    name = "MooseX-SetOnce-0.200001";
+  MooseXRelatedClassRoles = buildPerlPackage rec {
+    name = "MooseX-RelatedClassRoles-0.004";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
-      sha256 = "0qa2i45g2zn4r0wg7hba9va68nin5l63gr9l8b5q3hr4cjn97ll6";
+      sha256 = "17vynkf6m5d039qkr4in1c9lflr8hnwp1fgzdwhj4q6jglipmnrh";
     };
-    buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ Moose ];
+    buildInputs = [ ];
+    propagatedBuildInputs = [ MooseXRoleParameterized ];
   };
 
   MooseXParamsValidate = buildPerlPackage {
@@ -3518,6 +3538,16 @@ rec {
       url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
       sha256 = "1724cxvgy1wh1kfawcj2sanlm90zarfh7k186pgyx1lk8fhnlj4m";
     };
+    propagatedBuildInputs = [ Moose ];
+  };
+
+  MooseXSetOnce = buildPerlPackage rec {
+    name = "MooseX-SetOnce-0.200001";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/MooseX/${name}.tar.gz";
+      sha256 = "0qa2i45g2zn4r0wg7hba9va68nin5l63gr9l8b5q3hr4cjn97ll6";
+    };
+    buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose ];
   };
 
