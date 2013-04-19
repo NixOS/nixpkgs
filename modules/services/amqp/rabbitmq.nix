@@ -73,6 +73,7 @@ in
 
         environment.HOME = "/var/lib/rabbitmq";
         environment.RABBITMQ_NODE_IP_ADDRESS = cfg.listenAddress;
+        environment.SYS_PREFIX = "";
 
         exec =
           ''
