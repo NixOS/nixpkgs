@@ -440,6 +440,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Haskell libraries.
 
+  acidState = callPackage ../development/libraries/haskell/acid-state {};
+
   Agda = callPackage ../development/libraries/haskell/Agda {};
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
