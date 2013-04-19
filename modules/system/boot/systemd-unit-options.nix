@@ -76,6 +76,12 @@ rec {
       '';
     };
 
+    requiredBy = mkOption {
+      default = [];
+      types = types.listOf types.string;
+      description = "Units that require (i.e. depend on and need to go down with) this unit.";
+    };
+
     wantedBy = mkOption {
       default = [];
       types = types.listOf types.string;

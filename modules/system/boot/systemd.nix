@@ -211,7 +211,7 @@ let
         as));
 
   targetToUnit = name: def:
-    { inherit (def) wantedBy enable;
+    { inherit (def) wantedBy requiredBy enable;
       text =
         ''
           [Unit]
@@ -220,7 +220,7 @@ let
     };
 
   serviceToUnit = name: def:
-    { inherit (def) wantedBy enable;
+    { inherit (def) wantedBy requiredBy enable;
       text =
         ''
           [Unit]
@@ -267,7 +267,7 @@ let
     };
 
   socketToUnit = name: def:
-    { inherit (def) wantedBy enable;
+    { inherit (def) wantedBy requiredBy enable;
       text =
         ''
           [Unit]
@@ -279,7 +279,7 @@ let
     };
 
   timerToUnit = name: def:
-    { inherit (def) wantedBy enable;
+    { inherit (def) wantedBy requiredBy enable;
       text =
         ''
           [Unit]
@@ -291,7 +291,7 @@ let
     };
 
   mountToUnit = name: def:
-    { inherit (def) wantedBy enable;
+    { inherit (def) wantedBy requiredBy enable;
       text =
         ''
           [Unit]
@@ -343,6 +343,12 @@ let
             ln -sfn ../${name} $out/${name2}.wants/
           '') unit.wantedBy) cfg.units)}
 
+      ${concatStrings (mapAttrsToList (name: unit:
+          concatMapStrings (name2: ''
+            mkdir -p $out/${name2}.requires
+            ln -sfn ../${name} $out/${name2}.requires/
+          '') unit.requiredBy) cfg.units)}
+
       ln -s ${cfg.defaultUnit} $out/default.target
 
       ln -s rescue.target $out/kbrequest.target
@@ -386,6 +392,11 @@ in
             template instances (e.g. <literal>serial-getty@ttyS0</literal>)
             from being started.
           '';
+        };
+        requiredBy = mkOption {
+          default = [];
+          types = types.listOf types.string;
+          description = "Units that require (i.e. depend on and need to go down with) this unit.";
         };
         wantedBy = mkOption {
           default = [];
