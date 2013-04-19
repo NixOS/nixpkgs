@@ -31,7 +31,7 @@ let
       map (system: mkSystemJob system ghc pkg) systems;
 
   mkSystemJob = system: ghc: pkg:
-    pkgs.lib.nameValuePair "${ghc}.${system}" (pkgs.lib.getAttrFromPath ["haskellPackages_${ghc}" "${pkg}"] (pkgsFor system));
+    pkgs.lib.nameValuePair "${ghc}" (pkgs.lib.setAttrByPath [system] ((pkgs.lib.getAttrFromPath ["haskellPackages_${ghc}" "${pkg}"] (pkgsFor system))));
 
 in
 
