@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
   buildDepends = [
     asn1Data cryptohash cryptoPubkeyTypes filepath mtl pem time
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://github.com/vincenthz/hs-certificate";
     description = "Certificates and Key Reader/Writer";

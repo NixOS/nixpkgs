@@ -2,10 +2,11 @@
 
 cabal.mkDerivation (self: {
   pname = "skein";
-  version = "1.0.0";
-  sha256 = "03r9kqbvv6z1d8ivdwrxvac5bnd29w116pbixyrcrbx0sg1wwpfa";
+  version = "1.0.1";
+  sha256 = "1mvyq6wp03fs6sjppgalaacargvi69yf5d59k473pgr1g89v4ni1";
   buildDepends = [ cereal cryptoApi tagged ];
   testDepends = [ cereal cryptoApi filepath hspec tagged ];
+  jailbreak = true;
   meta = {
     homepage = "https://github.com/meteficha/skein";
     description = "Skein, a family of cryptographic hash functions. Includes Skein-MAC as well.";

@@ -5,16 +5,16 @@
 , libcaca, pulseaudio, flac, schroedinger, libxml2, librsvg
 , mpeg2dec, udev, gnutls, avahi, libcddb, jackaudio, SDL, SDL_image
 , libmtp, unzip, taglib, libkate, libtiger, libv4l, samba, liboggz
-, libass, libva, libdvbpsi, libdc1394, libraw1394
+, libass, libva, libdvbpsi, libdc1394, libraw1394, libopus
 }:
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchurl {
     url = "http://download.videolan.org/pub/videolan/vlc/${version}/${name}.tar.xz";
-    sha256 = "0vkbv477a7z0v55sigz6c3abxljz7jyysp7z8s29zk8vhq0fpyfz";
+    sha256 = "0qqrpry41vawihhggcx00vibbn73hxdal1gim1qnrqrcbq1rik1i";
   };
 
   buildInputs =
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       udev gnutls avahi libcddb jackaudio SDL SDL_image libmtp unzip taglib
       libkate libtiger libv4l samba liboggz libass libdvbpsi libva
       xlibs.xlibs xlibs.libXv xlibs.libXvMC xlibs.libXpm xlibs.xcbutilkeysyms
-      libdc1394 libraw1394
+      libdc1394 libraw1394 libopus
     ];
 
   nativeBuildInputs = [ pkgconfig ];

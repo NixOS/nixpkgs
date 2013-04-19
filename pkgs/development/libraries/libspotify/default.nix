@@ -56,6 +56,6 @@ if stdenv.system != "x86_64-linux" then throw ''
 
     maintainers = [ stdenv.lib.maintainers.shlevy ];
 
-    license = stdenv.lib.licenses.proprietary;
+    license = stdenv.lib.licenses.unfree;
   };
 }

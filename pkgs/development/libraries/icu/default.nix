@@ -13,12 +13,14 @@ stdenv.mkDerivation {
     sha256 = "0sv6hgkm92pm27zgjxgk284lcxxbsl0syi40ckw2b7yj7d8sxrc7";
   };
 
-  postUnpack = "
-    sourceRoot=\${sourceRoot}/source
-    echo Source root reset to \${sourceRoot}
-  ";
+  postUnpack = ''
+    sourceRoot=''${sourceRoot}/source
+    echo Source root reset to ''${sourceRoot}
+  '';
 
   configureFlags = "--disable-debug";
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Unicode and globalization support library";

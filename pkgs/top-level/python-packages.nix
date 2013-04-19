@@ -1,4 +1,4 @@
-{ pkgs, python }:
+{ pkgs, python, lowPrio }:
 
 let
 isPy26 = python.majorVersion == "2.6";
@@ -52,6 +52,14 @@ pythonPackages = python.modules // rec {
     inherit (pkgs) stdenv fetchurl sip pyqt4;
     inherit buildPythonPackage pythonPackages;
   };
+
+  ipythonLight = lowPrio (import ../shells/ipython {
+    inherit (pkgs) stdenv fetchurl;
+    inherit buildPythonPackage pythonPackages;
+    qtconsoleSupport = false;
+    pylabSupport = false;
+    pylabQtSupport = false;
+  });
 
   pil = import ../development/python-modules/pil {
     inherit (pkgs) fetchurl stdenv libjpeg zlib freetype;
@@ -110,7 +118,7 @@ pythonPackages = python.modules // rec {
       sha256 = "74926d9ddfa69534cfbd08a82f0acccab2c649558062654d5d2ff2999d201384";
     };
 
-    propagatedBuildInputs = [ notmuch pkgs.dbacl ];
+    propagatedBuildInputs = [ pythonPackages.notmuch pkgs.dbacl ];
 
     # error: invalid command 'test'
     doCheck = false;
@@ -139,34 +147,34 @@ pythonPackages = python.modules // rec {
     buildInputs = [
       pkgs.which
       pkgs.unzip
-      coverage
-      mock
-      tissue
-      unittest2
-      webtest
+      pythonPackages.coverage
+      pythonPackages.mock
+      pythonPackages.tissue
+      pythonPackages.unittest2
+      pythonPackages.webtest
     ];
 
     propagatedBuildInputs = [ 
       pkgs.makeWrapper
       pkgs.bacula
-      colander
-      deform
-      deform_bootstrap
-      docutils
-      nose
-      mysql_connector_repackaged
-      pg8000
-      pyramid
-      pyramid_beaker
-      pyramid_exclog
-      pyramid_jinja2
-      pyramid_tm
-      pytz
-      sqlalchemy
-      transaction
-      waitress
-      webhelpers
-      zope_sqlalchemy
+      pythonPackages.colander
+      pythonPackages.deform
+      pythonPackages.deform_bootstrap
+      pythonPackages.docutils
+      pythonPackages.nose
+      pythonPackages.mysql_connector_repackaged
+      pythonPackages.pg8000
+      pythonPackages.pyramid
+      pythonPackages.pyramid_beaker
+      pythonPackages.pyramid_exclog
+      pythonPackages.pyramid_jinja2
+      pythonPackages.pyramid_tm
+      pythonPackages.pytz
+      pythonPackages.sqlalchemy
+      pythonPackages.transaction
+      pythonPackages.waitress
+      pythonPackages.webhelpers
+      pythonPackages.zope_sqlalchemy
     ];
 
     postInstall = ''
@@ -196,7 +204,14 @@ pythonPackages = python.modules // rec {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = [ notmuch urwid twisted magic configobj pygpgme ];
+    propagatedBuildInputs =
+      [ pythonPackages.notmuch
+        pythonPackages.urwid
+        pythonPackages.twisted
+        pythonPackages.magic
+        pythonPackages.configobj
+        pythonPackages.pygpgme
+      ];
 
     postInstall = ''
       wrapProgram $out/bin/alot \
@@ -219,7 +234,7 @@ pythonPackages = python.modules // rec {
       md5 = "2b53b5d53fc40af4da7268d3c3e35a50";
     };
 
-    buildInputs = [ nose ];
+    buildInputs = [ pythonPackages.nose ];
 
     meta = {
       homepage = http://pypi.python.org/pypi/anyjson/;
@@ -280,7 +295,7 @@ pythonPackages = python.modules // rec {
     # error: invalid command 'test'
     doCheck = false;
 
-    propagatedBuildInputs = [ boto ];
+    propagatedBuildInputs = [ pythonPackages.boto ];
 
   });
 
@@ -316,6 +331,7 @@ pythonPackages = python.modules // rec {
     };
   });
 
+
   awscli = buildPythonPackage rec {
     name = "awscli-0.8.3";
     namePrefix = "";
@@ -325,8 +341,11 @@ pythonPackages = python.modules // rec {
       sha256 = "0v7igh00zja560v8qz315g3m7x9six1hprrrb10cpp9sy8n58xnn";
     };
 
-    propagatedBuildInputs = [ argparse botocore colorama ];
-
+    propagatedBuildInputs =
+      [ pythonPackages.argparse
+        pythonPackages.botocore
+        pythonPackages.colorama
+      ];
   };
 
 
@@ -376,7 +395,13 @@ pythonPackages = python.modules // rec {
       md5 = "c2e102870ed4c53104dec48ceadf8e9d";
     };
 
-    buildInputs = [ sqlalchemy pycryptopp nose mock webtest ];
+    buildInputs =
+      [ pythonPackages.sqlalchemy
+        pythonPackages.pycryptopp
+        pythonPackages.nose
+        pythonPackages.mock
+        pythonPackages.webtest
+      ];
 
     # http://hydra.nixos.org/build/4511591/log/raw
     doCheck = false;
@@ -402,7 +427,15 @@ pythonPackages = python.modules // rec {
     # tests depend on $HOME setting
     configurePhase = "export HOME=$TMPDIR";
 
-    propagatedBuildInputs = [ pyyaml unidecode mutagen munkres musicbrainzngs python.modules.sqlite3 python.modules.readline ];
+    propagatedBuildInputs =
+      [ pythonPackages.pyyaml
+        pythonPackages.unidecode
+        pythonPackages.mutagen
+        pythonPackages.munkres
+        pythonPackages.musicbrainzngs
+        python.modules.sqlite3
+        python.modules.readline
+      ];
 
     meta = {
       homepage = http://beets.radbox.org;
@@ -475,7 +508,11 @@ pythonPackages = python.modules // rec {
       sha256 = "0dbm2clrh7zs4brqqj3xssz3nymdg24ff2lww27s3wliirwqdiv1";
     };
 
-    propagatedBuildInputs = [ dateutil requests jmespath ];
+    propagatedBuildInputs =
+      [ pythonPackages.dateutil
+        pythonPackages.requests
+        pythonPackages.jmespath
+      ];
 
     meta = {
       homepage = https://github.com/boto/botocore;
@@ -496,7 +533,7 @@ pythonPackages = python.modules // rec {
   #     rev = "refs/tags/0.9.3";
   #   };
   #
-  #   propagatedBuildInputs = [ argparse python.modules.ssl ];
+  #   propagatedBuildInputs = [ pythonPackages.argparse python.modules.ssl ];
   #
   #   doCheck = false;
   #
@@ -507,34 +544,30 @@ pythonPackages = python.modules // rec {
   # });
 
 
-  buildout = buildPythonPackage rec {
-    name = "buildout-${version}";
-    version = "1.7.0";
+  buildout = zc_buildout;
+  buildout152 = zc_buildout152;
+
+  zc_buildout = zc_buildout171;
+  zc_buildout171 = buildPythonPackage rec {
+    name = "zc.buildout-1.7.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
-      md5 = "4e3b521600e475c56a0a66459a5fc7bb";
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/${name}.tar.gz";
+      md5 = "8834a21586bf2be53dc412002241a996";
     };
-
-   # TODO: consider if this patch should be an option
-   # It makes buildout useful in a nix profile, but this alters the default functionality
-   patchPhase = ''
-     sed -i "s/return (stdlib, site_paths)/return (stdlib, sys.path)/g" src/zc/buildout/easy_install.py
-   '';
 
    meta = {
-      homepage = http://www.buildout.org/;
+      homepage = "http://www.buildout.org";
       description = "A software build and configuration system";
+      license = pkgs.lib.licenses.zpt21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
-
-
-  buildout152 = buildPythonPackage rec {
-    name = "buildout-${version}";
-    version = "1.5.2";
+  zc_buildout152 = buildPythonPackage rec {
+    name = "zc.buildout-1.5.2";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/z/zc.buildout/zc.${name}.tar.gz";
+      url = "http://pypi.python.org/packages/source/z/zc.buildout/${name}.tar.gz";
       md5 = "87f7b3f8d13926c806242fd5f6fe36f7";
     };
 
@@ -545,8 +578,10 @@ pythonPackages = python.modules // rec {
    '';
 
    meta = {
-      homepage = http://www.buildout.org/;
+      homepage = "http://www.buildout.org";
       description = "A software build and configuration system";
+      license = pkgs.lib.licenses.zpt21;
+      maintainers = [ stdenv.lib.maintainers.garbas ];
     };
   };
 
@@ -559,9 +594,12 @@ pythonPackages = python.modules // rec {
       md5 = "530a0614de3a669314c3acd4995c54d5";
     };
 
-    buildInputs = [ nose ];
+    buildInputs = [ pythonPackages.nose ];
 
-    propagatedBuildInputs = [ amqplib anyjson ];
+    propagatedBuildInputs =
+      [ pythonPackages.amqplib
+        pythonPackages.anyjson
+      ];
 
     doCheck = false; # depends on the network
 
@@ -581,7 +619,7 @@ pythonPackages = python.modules // rec {
       md5 = "853917116e731afbc8c8a43c37e6ddba";
     };
 
-    propagatedBuildInputs = [ markdown ];
+    propagatedBuildInputs = [ pythonPackages.markdown ];
 
     meta = {
       homepage = http://www.cheetahtemplate.org/;
@@ -616,7 +654,7 @@ pythonPackages = python.modules // rec {
       sha256 = "16vibfxms5z4ld8gbkra6dkhqm2cc3jnn0fwp7mw70nlwxnmm51c";
     };
 
-    buildInputs = [ mock nose decorator ];
+    buildInputs = [ pythonPackages.mock pythonPackages.nose pythonPackages.decorator ];
 
     meta = {
       homepage = http://code.google.com/p/clepy/;
@@ -651,7 +689,7 @@ pythonPackages = python.modules // rec {
       md5 = "308c6e38917bdbfc4d3b0783c614897d";
     };
 
-    propagatedBuildInputs = [ clientform ];
+    propagatedBuildInputs = [ pythonPackages.clientform ];
 
     doCheck = false;
 
@@ -671,9 +709,9 @@ pythonPackages = python.modules // rec {
       md5 = "5f39727415b837abd02651eeb2721749";
     };
 
-    propagatedBuildInputs = [ stompclient distribute ];
+    propagatedBuildInputs = [ pythonPackages.stompclient pythonPackages.distribute ];
 
-    buildInputs = [ coverage sqlalchemy ];
+    buildInputs = [ pythonPackages.coverage pythonPackages.sqlalchemy ];
 
     # ValueError: Could not parse auth file:
     # /tmp/nix-build-.../CoilMQ-0.6.1/coilmq/tests/resources/auth.ini
@@ -695,7 +733,7 @@ pythonPackages = python.modules // rec {
       md5 = "2d9f65a64cb6b7f35d6a0d7b607ce4c6";
     };
 
-    propagatedBuildInputs = [ translationstring ];
+    propagatedBuildInputs = [ pythonPackages.translationstring ];
 
     meta = {
       maintainers = [
@@ -750,7 +788,7 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "plugin core for use by pytest-cov, nose-cov and nose2-cov";
     };
-    propagatedBuildInputs = [ coverage ];
+    propagatedBuildInputs = [ pythonPackages.coverage ];
   };
 
   cssselect = buildPythonPackage rec {
@@ -771,7 +809,7 @@ pythonPackages = python.modules // rec {
       sha256 = "139yfm9yz9k33kgqw4khsljs10rkhhxyywbq9i82bh2r31cil1pp";
     };
 
-    buildInputs = [ pkgs.unzip mock ];
+    buildInputs = [ pkgs.unzip pythonPackages.mock ];
 
     # couple of failing tests
     doCheck = false;
@@ -793,7 +831,7 @@ pythonPackages = python.modules // rec {
       md5 = "94ca7e8c9ea0f69c0f3fc6f9fc88f65a";
     };
 
-    buildInputs = [ mock ];
+    buildInputs = [ pythonPackages.mock ];
 
     # Note: We don't actually need to provide Darcs as a build input.
     # Darcsver will DTRT when Darcs isn't available.  See news.gmane.org
@@ -821,7 +859,7 @@ pythonPackages = python.modules // rec {
       sha256 = "1vlx0lpsxjxz64pz87csx800cwfqznjyr2y7nk3vhmzhkwzyqi2c";
     };
 
-    propagatedBuildInputs = [ six ];
+    propagatedBuildInputs = [ pythonPackages.six ];
 
     meta = {
       description = "Powerful extensions to the standard datetime module";
@@ -853,7 +891,13 @@ pythonPackages = python.modules // rec {
       md5 = "2ed7b69644a6d8f4e1404e1892329240";
     };
 
-    propagatedBuildInputs = [ beautifulsoup4 peppercorn colander translationstring chameleon ];
+    propagatedBuildInputs =
+      [ pythonPackages.beautifulsoup4
+        pythonPackages.peppercorn
+        pythonPackages.colander
+        pythonPackages.translationstring
+        pythonPackages.chameleon
+      ];
 
     meta = {
       maintainers = [
@@ -1858,7 +1902,7 @@ pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/i/ipdb/ipdb-0.7.tar.gz";
       md5 = "d879f9b2b0f26e0e999809585dcaec61";
     };
-    propagatedBuildInputs = [ ipython ];
+    propagatedBuildInputs = [ pythonPackages.ipython ];
   };
 
   ipdbplugin = buildPythonPackage {
@@ -1867,7 +1911,7 @@ pythonPackages = python.modules // rec {
       url = "https://pypi.python.org/packages/source/i/ipdbplugin/ipdbplugin-1.2.tar.gz";
       md5 = "39169b00a2186b99469249c5b0613753";
     };
-    propagatedBuildInputs = [ nose ipython ];
+    propagatedBuildInputs = [ pythonPackages.nose pythonPackages.ipython ];
   };
 
 
@@ -2966,6 +3010,16 @@ pythonPackages = python.modules // rec {
       description = "Allows to get the public suffix of a domain name";
       homepage = "http://pypi.python.org/pypi/publicsuffix/";
       license = pkgs.lib.licenses.mit;
+    };
+  };
+
+
+  py = buildPythonPackage rec {
+    name = "py-1.4.13";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/py/py-1.4.13.tar.gz";
+      md5 = "3857dc8309d5f284669b81184253c2bb";
     };
   };
 
@@ -4189,6 +4243,21 @@ pythonPackages = python.modules // rec {
   };
 
 
+  # TODO
+  # py.error.EACCES: [Permission denied]: mkdir('/homeless-shelter',)
+  # builder for `/nix/store/0czwg0n3pfkmpjphqv1jxfjlgkbziwsx-python-tox-1.4.3.drv' failed with exit code 1
+  # tox = buildPythonPackage rec {
+  #   name = "tox-1.4.3";
+  #
+  #   buildInputs = [ py virtualenv ];
+  #
+  #   src = fetchurl {
+  #     url = "https://pypi.python.org/packages/source/t/tox/tox-1.4.3.tar.gz";
+  #     md5 = "3727d5b0600d92edf2229a7ce6a0f752";
+  #   };
+  # };
+
+
   trac = buildPythonPackage {
     name = "trac-0.12.2";
 
@@ -4445,7 +4514,7 @@ pythonPackages = python.modules // rec {
       md5 = "11825b7074ba7043e157805e4e6e0f55";
     };
 
-    propagatedBuildInputs = [ nose ];
+    propagatedBuildInputs = [ nose python.modules.ssl ];
 
     meta = {
       description = "WSGI request and response object";
@@ -5193,11 +5262,11 @@ pythonPackages = python.modules // rec {
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20121216";
+    version = "1.20130313";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "1bzvc4aj3w8g85qycwz1jxa73jj8rl6zrgd4hi78kr4dgslcfns5";
+      sha256 = "0rk13a68668gsrv6yqgzqxskffqnlyjar4qav6k5iyrp77amn7qm";
     };
 
     buildInputs = [ sphinx ];
@@ -5294,11 +5363,12 @@ pythonPackages = python.modules // rec {
 
 
   ttystatus = buildPythonPackage rec {
-    name = "ttystatus-0.21";
+    name = "ttystatus-${version}";
+    version = "0.22";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.21.orig.tar.gz";
-      sha256 = "4a1f3a41c9bd3b5d2bd8e6f093890857301e590aa1d428fc9a6dca591227244c";
+      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_${version}.orig.tar.gz";
+      sha256 = "1hzv0sbrvgcmafflhvzh7plci0dg7wcjlk39i8kqdasg6rw0ag6f";
     };
 
     buildInputs = [ sphinx ];
@@ -5315,11 +5385,11 @@ pythonPackages = python.modules // rec {
 
   larch = buildPythonPackage rec {
     name = "larch-${version}";
-    version = "1.20121216";
+    version = "1.20130316";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_${version}.orig.tar.gz";
-      sha256 = "0w4hirs8wkp1hji6nxfmq4rahkd5rgw4cavvdhpdfr4mddycbis3";
+      sha256 = "1mkvmy0jdzd7dlvdx2a75wsbj5qw1clawcgndx9jwl816a9iy225";
     };
 
     buildInputs = [ sphinx ];

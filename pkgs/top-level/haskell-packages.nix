@@ -104,16 +104,13 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cabal = callPackage ../build-support/cabal {
     enableLibraryProfiling = enableLibraryProfiling;
+    enableCheckPhase = pkgs.stdenv.lib.versionOlder "7.4" self.ghc.ghcVersion;
   };
 
   # A variant of the cabal build driver that disables unit testing.
   # Useful for breaking cycles, where the unit test of a package A
   # depends on package B, which has A as a regular build input.
-  cabalNoTest = {
-    mkDerivation = x: rec {
-      final = self.cabal.mkDerivation (self: (x final) // { doCheck = false; });
-    }.final;
-  };
+  cabalNoTest = self.cabal.override { enableCheckPhase = false; };
 
   # Convenience helper function.
   disableTest = x: x.override { cabal = self.cabalNoTest; };
@@ -150,7 +147,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     regexBase    = self.regexBase_0_93_2;       # 7.6 ok
     regexCompat  = self.regexCompat_0_95_1;     # 7.6 ok
     regexPosix   = self.regexPosix_0_95_2;      # 7.6 ok
-    split        = self.split_0_2_1_3;          # 7.6 ok
+    split        = self.split_0_2_2;            # 7.6 ok
     stm          = self.stm_2_4_2;              # 7.6 ok
     syb          = self.syb_0_4_0;              # 7.6 ok
     text         = self.text_0_11_2_3;          # 7.6 ok
@@ -440,6 +437,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Haskell libraries.
 
+  acidState = callPackage ../development/libraries/haskell/acid-state {};
+
   Agda = callPackage ../development/libraries/haskell/Agda {};
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
@@ -475,6 +474,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   arrows = callPackage ../development/libraries/haskell/arrows {};
 
   asn1Data = callPackage ../development/libraries/haskell/asn1-data {};
+
+  asn1Types = callPackage ../development/libraries/haskell/asn1-types {};
 
   AspectAG = callPackage ../development/libraries/haskell/AspectAG {};
 
@@ -682,7 +683,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cuda_0_4_1_1 = callPackage ../development/libraries/haskell/cuda/0.4.1.1.nix {
     inherit (pkgs.linuxPackages) nvidia_x11;
   };
-  cuda_0_5_0_1 = callPackage ../development/libraries/haskell/cuda/0.5.0.1.nix {
+  cuda_0_5_0_2 = callPackage ../development/libraries/haskell/cuda/0.5.0.2.nix {
     inherit (pkgs.linuxPackages) nvidia_x11;
   };
   cuda = self.cuda_0_4_1_1;
@@ -1597,6 +1598,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   safe = callPackage ../development/libraries/haskell/safe {};
 
+  safecopy = callPackage ../development/libraries/haskell/safecopy {};
+
   SafeSemaphore = callPackage ../development/libraries/haskell/SafeSemaphore {};
 
   scotty = callPackage ../development/libraries/haskell/scotty {};
@@ -1706,8 +1709,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   SMTPClient = callPackage ../development/libraries/haskell/SMTPClient {};
 
   split_0_2_1_1 = callPackage ../development/libraries/haskell/split/0.2.1.1.nix {};
-  split_0_2_1_3 = callPackage ../development/libraries/haskell/split/0.2.1.3.nix {};
-  split = self.split_0_2_1_3;
+  split_0_2_2 = callPackage ../development/libraries/haskell/split/0.2.2.nix {};
+  split = self.split_0_2_2;
 
   stbImage = callPackage ../development/libraries/haskell/stb-image {};
 
@@ -1772,8 +1775,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   testFrameworkTh = callPackage ../development/libraries/haskell/test-framework-th {};
 
   testFrameworkThPrime = callPackage ../development/libraries/haskell/test-framework-th-prime {};
-
-  testpack = callPackage ../development/libraries/haskell/testpack {};
 
   texmath = callPackage ../development/libraries/haskell/texmath {};
 

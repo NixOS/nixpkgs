@@ -51,7 +51,7 @@ rec {
       monadControl mtl network networkInfo networkMulticast networkProtocolXmpp
       QuickCheck random regexCompat SafeSemaphore SHA stm text time regexTdfa
       transformers transformersBase utf8String uuid wai waiLogger warp
-      xmlConduit xmlTypes yesod yesodDefault yesodForm yesodStatic testpack;
+      xmlConduit xmlTypes yesod yesodDefault yesodForm yesodStatic;
   };
 
   qgit = import ./qgit {

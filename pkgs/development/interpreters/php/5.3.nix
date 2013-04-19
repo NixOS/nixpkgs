@@ -9,7 +9,7 @@ in
 
 composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed) version; in {
 
-  version = "5.3.18";
+  version = "5.3.24";
 
   name = "php-${version}";
 
@@ -43,7 +43,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
       libxml2 = {
         configureFlags = [
           "--with-libxml-dir=${libxml2}"
-          "--with-iconv-dir=${libiconv}"
+          #"--with-iconv-dir=${libiconv}"
           ];
         buildInputs = [ libxml2 ];
       };
@@ -196,7 +196,7 @@ composableDerivation.composableDerivation {} ( fixed : let inherit (fixed.fixed)
 
   src = fetchurl {
     url = "http://nl.php.net/get/php-${version}.tar.bz2/from/this/mirror";
-    sha256 = "0bqsdwil13m1r449c4rhrc8cmx2a09k8h2g107qqxfwanzndwrgh";
+    sha256 = "00sphz1y6bjb2qshbcbadh5f2xvhfy82rfdc62qjfn6337gwlfzw";
     name = "php-${version}.tar.bz2";
   };
 
