@@ -286,6 +286,7 @@ mapHaskellTestOn {
   ObjectName = default;
   OneTuple = default;
   OpenAL = all;
+  optparseApplicative = all;
   packunused = default;
   pandoc = defaultOrLater;
   pandocTypes = default;
