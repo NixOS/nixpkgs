@@ -1897,6 +1897,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   waiExtra = callPackage ../development/libraries/haskell/wai-extra {};
 
+  waiHandlerLaunch = callPackage ../development/libraries/haskell/wai-handler-launch {};
+
   waiLogger = callPackage ../development/libraries/haskell/wai-logger {};
 
   waiTest = callPackage ../development/libraries/haskell/wai-test {};
