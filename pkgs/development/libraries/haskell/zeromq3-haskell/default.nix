@@ -1,13 +1,15 @@
-{ cabal, QuickCheck, testFramework, testFrameworkQuickcheck2
-, zeromq
+{ cabal, ansiTerminal, checkers, MonadCatchIOTransformers
+, QuickCheck, transformers, zeromq
 }:
 
 cabal.mkDerivation (self: {
   pname = "zeromq3-haskell";
-  version = "0.2";
-  sha256 = "12qljfkcd4l9h3l80jibxgw2an6v782w0sxwvzxqmma29jv6hvky";
+  version = "0.3.1";
+  sha256 = "0wr157wl2qpnbfsqy4nlsnd6nbkl063387f7ab4qa07yhj5av80f";
+  buildDepends = [ MonadCatchIOTransformers transformers ];
   testDepends = [
-    QuickCheck testFramework testFrameworkQuickcheck2
+    ansiTerminal checkers MonadCatchIOTransformers QuickCheck
+    transformers
   ];
   extraLibraries = [ zeromq ];
   doCheck = false;
