@@ -89,6 +89,16 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     ghc = ghc; # refers to ghcPlain
   };
 
+  # The normal GHC wrapper doesn't create links to the documentation in
+  # ~/.nix-profile. Having this second wrapper allows us to remedy the
+  # situation without re-building all Haskell packages. At the next
+  # stdenv-updates merge, this second wrapper will go away.
+
+  ghcUserEnvWrapper = pkgs.appendToName "new" (callPackage ../development/compilers/ghc/wrapper.nix {
+    ghc = ghc; # refers to ghcPlain
+    forUserEnv = true;
+  });
+
   # An experimental wrapper around ghcPlain that does not automatically
   # pick up packages from the profile, but instead has a fixed set of packages
   # in its global database. The set of packages can be specified as an
@@ -605,6 +615,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   Chart = callPackage ../development/libraries/haskell/Chart {};
 
   ChasingBottoms = callPackage ../development/libraries/haskell/ChasingBottoms {};
+
+  checkers = callPackage ../development/libraries/haskell/checkers {};
 
   citeprocHs = callPackage ../development/libraries/haskell/citeproc-hs {};
 
@@ -1471,7 +1483,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   ppm = callPackage ../development/libraries/haskell/ppm {};
 
-  prettyShow = callPackage ../development/libraries/haskell/pretty-show {};
+  prettyShow_1_2 = callPackage ../development/libraries/haskell/pretty-show/1.2.nix {};
+  prettyShow_1_5 = callPackage ../development/libraries/haskell/pretty-show/1.5.nix {};
+  prettyShow = self.prettyShow_1_5;
 
   punycode = callPackage ../development/libraries/haskell/punycode {};
 
@@ -1894,6 +1908,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   waiAppStatic = callPackage ../development/libraries/haskell/wai-app-static {};
 
   waiExtra = callPackage ../development/libraries/haskell/wai-extra {};
+
+  waiHandlerLaunch = callPackage ../development/libraries/haskell/wai-handler-launch {};
 
   waiLogger = callPackage ../development/libraries/haskell/wai-logger {};
 

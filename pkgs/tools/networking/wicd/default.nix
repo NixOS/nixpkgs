@@ -1,6 +1,6 @@
 {stdenv, fetchurl, python, pygobject, pycairo, pyGtkGlade, pythonDBus, 
  wpa_supplicant, dhcp, dhcpcd, wirelesstools, nettools, openresolv, iproute, iputils,
- locale ? "C" }:
+ pythonPackages, locale ? "C" }:
 
 # Wicd has a ncurses interface that we do not build because it depends
 # on urwid which has not been packaged at this time (2009-12-27).
@@ -14,9 +14,16 @@ stdenv.mkDerivation rec {
     sha256 = "15ywgh60xzmp5z8l1kzics7yi95isrjg1paz42dvp7dlpdfzpzfw";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python pythonPackages.Babel ];
 
-  patches = [ ./no-var-install.patch ./no-trans.patch ./mkdir-networks.patch ./pygtk.patch ./no-optimization.patch ];
+  patches = [
+    ./no-var-install.patch
+    ./pygtk.patch
+    ./no-optimization.patch
+    ./dhclient.patch 
+    ./fix-app-icon.patch
+    ./fix-gtk-issues.patch
+    ];
 
   # Should I be using pygtk's propogated build inputs?
   # !!! Should use makeWrapper.
@@ -28,13 +35,13 @@ stdenv.mkDerivation rec {
 
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin:${wpa_supplicant}/sbin:${dhcpcd}/sbin:${dhcp}/sbin:${wirelesstools}/sbin:${nettools}/sbin:${nettools}/bin:${iputils}/bin:${openresolv}/sbin:${iproute}/sbin" in/scripts=wicd.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pygobject}):$(toPythonPath ${pythonDBus})" in/scripts=wicd.in
-    sed -i "4iexport LC_ALL=\\\"${locale}\\\"" in/scripts=wicd.in
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin" in/scripts=wicd-client.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus})" in/scripts=wicd-client.in
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin" in/scripts=wicd-gtk.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pygobject})/gtk-2.0:$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus})" in/scripts=wicd-gtk.in
     sed -i "2iexport PATH=\$PATH\$\{PATH:+:\}${python}/bin" in/scripts=wicd-cli.in
     sed -i "3iexport PYTHONPATH=\$PYTHONPATH\$\{PYTHONPATH:+:\}$(toPythonPath $out):$(toPythonPath ${pyGtkGlade})/gtk-2.0:$(toPythonPath ${pygobject}):$(toPythonPath ${pycairo}):$(toPythonPath ${pythonDBus})" in/scripts=wicd-cli.in
+    rm po/ast.po
   '';
 
   configurePhase = ''
@@ -62,7 +69,7 @@ stdenv.mkDerivation rec {
     --systemd=$out/lib/systemd/ \
     --logrotate=$out/etc/logrotate.d/ \
     --desktop=$out/share/applications/ \
-    --icons=$out/share/icons/hicolour/ \
+    --icons=$out/share/icons/hicolor/ \
     --translations=$out/share/locale/ \
     --autostart=$out/etc/xdg/autostart/ \
     --varlib=$out/var/lib/ \

@@ -4007,6 +4007,8 @@ let
 
   gts = callPackage ../development/libraries/gts { };
 
+  gvfs = callPackage ../development/libraries/gvfs { };
+
   gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
   # TODO : Add MIT Kerberos and let admin choose.
@@ -6208,6 +6210,8 @@ let
     config = config.pcmciaUtils.config or null;
   };
 
+  plymouth = callPackage ../os-specific/linux/plymouth { };
+
   pmount = callPackage ../os-specific/linux/pmount { };
 
   pmutils = callPackage ../os-specific/linux/pm-utils { };
@@ -6320,7 +6324,9 @@ let
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
   udev = pkgs.systemd;
 
-  udisks = callPackage ../os-specific/linux/udisks { };
+  udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
+  udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
+  udisks = udisks1;
 
   untie = callPackage ../os-specific/linux/untie { };
 
@@ -7193,7 +7199,7 @@ let
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
   gphoto2fs = builderDefsPackage ../applications/misc/gphoto2/gphotofs.nix {
-    inherit libgphoto2 fuse pkgconfig glib;
+    inherit libgphoto2 fuse pkgconfig glib libtool;
   };
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
