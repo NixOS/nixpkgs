@@ -160,6 +160,22 @@ in {
         };
   };
 
+  eclipse_cpp_42 = buildEclipse {
+    name = "eclipse-cpp-4.2";
+    description = "Eclipse IDE for C/C++ Developers";
+    src =
+      if stdenv.system == "x86_64-linux" then
+        fetchurl {
+          url = http://eclipse.ialto.com/technology/epp/downloads/release/juno/SR2/eclipse-cpp-juno-SR2-linux-gtk-x86_64.tar.gz;
+          sha256 = "1qq04926pf7v9sf3s0z53zvlbl1j0rmmjmbmhqi49473fnjikh7y";
+        }
+      else
+        fetchurl {
+          url = http://eclipse.ialto.com/technology/epp/downloads/release/juno/SR2/eclipse-cpp-juno-SR2-linux-gtk.tar.gz;
+          sha256 = "1a4s9qlhfpfpdhvffyglnfdr3dq5r2ywcxqywhqi95yhq5nmsgyk";
+        };
+  };
+
   eclipse_sdk_42 = buildEclipse {
     name = "eclipse-sdk-4.2";
     description = "Eclipse Classic";
