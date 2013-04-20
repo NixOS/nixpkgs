@@ -7185,7 +7185,7 @@ let
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
   gphoto2fs = builderDefsPackage ../applications/misc/gphoto2/gphotofs.nix {
-    inherit libgphoto2 fuse pkgconfig glib;
+    inherit libgphoto2 fuse pkgconfig glib libtool;
   };
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };

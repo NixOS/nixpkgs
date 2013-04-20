@@ -1,11 +1,11 @@
-a :  
-let 
+a :
+let
   fetchurl = a.fetchurl;
   s = import ./src-info-for-gphotofs.nix;
 
-  version = a.lib.attrByPath ["version"] s.version a; 
+  version = a.lib.attrByPath ["version"] s.version a;
   buildInputs = with a; [
-    libgphoto2 fuse pkgconfig glib
+    libgphoto2 fuse pkgconfig glib libtool
   ];
 in
 rec {
@@ -19,7 +19,7 @@ rec {
 
   /* doConfigure should be removed if not needed */
   phaseNames = ["doConfigure" "doMakeInstall"];
-      
+
   name = "gphoto2fs-" + version;
   meta = {
     description = "Fuse FS to mount a digital camera";
