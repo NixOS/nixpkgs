@@ -144,7 +144,7 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
 
               ./Setup build
 
-              export GHC_PACKAGE_PATH=$(ghc-packages)
+              export GHC_PACKAGE_PATH=$(${ghc.GHCPackages})
               [ -n "$noHaddock" ] || ./Setup haddock
 
               eval "$postBuild"
