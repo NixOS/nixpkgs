@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep
+{ fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, hardlink
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
@@ -66,6 +66,11 @@ stdenv.mkDerivation {
       sed -i -e 's|	perl -ne|	${perl}/bin/perl -ne|g' \
              -e 's|	perl -e|	${perl}/bin/perl -e|g' \
              $out/libexec/git-core/{git-am,git-submodule}
+
+      # gzip (and optionally bzip2, xz, zip) are a runtime dependencies for
+      # gitweb.cgi, need to patch so that it's found
+      sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
+          $out/share/gitweb/gitweb.cgi
     ''
 
    + (if svnSupport then
