@@ -5,21 +5,13 @@ callPackage = newScope (deps // xfce_self);
 deps = rec { # xfce-global dependency overrides should be here
   inherit (pkgs.gnome) libglade libwnck vte gtksourceview;
   inherit (pkgs.perlPackages) URI;
-
-  # The useful bits from ‘gnome-disk-utility’.
-  libgdu = callPackage ./support/libgdu.nix { };
-
-  # Gvfs is required by Thunar for the trash feature and for volume
-  # mounting.  Should use the one from Gnome, but I don't want to mess
-  # with the Gnome packages (or pull in a zillion Gnome dependencies).
-  gvfs = callPackage ./support/gvfs.nix { };
 };
 
 xfce_self = rec { # the lines are very long but it seems better than the even-odd line approach
 
   #### NixOS support
 
-  inherit (deps) gvfs;
+  inherit (pkgs) gvfs;
   xinitrc = "${xfce4session}/etc/xdg/xfce4/xinitrc";
 
   #### CORE                 from "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2"
