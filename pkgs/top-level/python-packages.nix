@@ -301,11 +301,11 @@ pythonPackages = python.modules // rec {
 
 
   argparse = buildPythonPackage (rec {
-    name = "argparse-1.1";
+    name = "argparse-1.2.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/a/argparse/${name}.zip";
-      sha256 = "ee6da1aaad8b08a74a33eb82264b1a2bf12a7d5aefc7e9d7d40a8f8fa9912e62";
+      url = "http://argparse.googlecode.com/files/${name}.tar.gz";
+      sha256 = "192174mys40m0bwk6l5jlfnzps0xi81sxm34cqms6dc3c454pbyx";
     };
 
     buildInputs = [ pkgs.unzip ];
