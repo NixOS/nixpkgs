@@ -207,7 +207,7 @@ if $generate; then
 
   # Generate a template configuration file where the user has to
   # fill the gaps.
-  cat <<EOF > "$NIXOS_CONFIG" \
+  cat <<EOF > "$NIXOS_CONFIG"
 # Edit this configuration file to define what should be installed on
 # the system.  Help is available in the configuration.nix(5) man page
 # or the NixOS manual available on virtual console 8 (Alt+F8).

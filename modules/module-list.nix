@@ -82,6 +82,7 @@
   ./services/hardware/sane.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks.nix
+  ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix
   ./services/hardware/thinkfan.nix
   ./services/logging/klogd.nix
@@ -131,6 +132,7 @@
   ./services/networking/ejabberd.nix
   ./services/networking/firewall.nix
   ./services/networking/flashpolicyd.nix
+  ./services/networking/freenet.nix
   ./services/networking/git-daemon.nix
   ./services/networking/gnunet.nix
   ./services/networking/gogoclient.nix

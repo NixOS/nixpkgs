@@ -194,7 +194,7 @@ $conf .= "$extraEntries\n" unless $extraEntriesBeforeNixOS;
 $conf =~ s/\@bootRoot\@/$bootRoot/g;
 
 # Add entries for all previous generations of the system profile.
-$conf .= "submenu \"NixOS - Old configurations\" {\n" if $grubVersion == 2;
+$conf .= "submenu \"NixOS - All configurations\" {\n" if $grubVersion == 2;
 
 sub nrFromGen { my ($x) = @_; $x =~ /system-(.*)-link/; return $1; }
 

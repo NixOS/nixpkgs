@@ -101,7 +101,9 @@ in
     jobs.fcron =
       { description = "fcron daemon";
 
-        startOn = "startup and filesystem";
+        startOn = "startup";
+
+        after = [ "local-fs.target" ];
 
         environment =
           { PATH = "/run/current-system/sw/bin";
