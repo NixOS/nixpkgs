@@ -1,0 +1,18 @@
+diff --git a/kpythonpluginfactory/CMakeLists.txt b/kpythonpluginfactory/CMakeLists.txt
+index 41fa0fe..642d867 100644
+--- a/kpythonpluginfactory/CMakeLists.txt
++++ b/kpythonpluginfactory/CMakeLists.txt
+@@ -3,7 +3,12 @@
+ set(kpythonpluginfactory_SRCS
+     kpythonpluginfactory.cpp)
+ 
+-GET_FILENAME_COMPONENT(LIB_PYTHON ${PYTHON_LIBRARY} NAME)
++option(HARDCODE_LIB_PYTHON_PATH "Whether the path to libpython.so should be hardcoded" OFF)
++if(HARDCODE_LIB_PYTHON_PATH)
++	get_filename_component(LIB_PYTHON ${PYTHON_LIBRARY} REALPATH)
++else(HARDCODE_LIB_PYTHON_PATH)
++    get_filename_component(LIB_PYTHON ${PYTHON_LIBRARY} NAME)
++endif(HARDCODE_LIB_PYTHON_PATH)
+ ADD_DEFINITIONS(-DLIB_PYTHON=\\"${LIB_PYTHON}\\")
+ ADD_DEFINITIONS(-DKDE_DEFAULT_DEBUG_AREA=15000)
+ 

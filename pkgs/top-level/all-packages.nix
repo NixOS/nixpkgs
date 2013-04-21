@@ -8541,6 +8541,12 @@ let
       libotr = libotr_3_2;
     }) ../desktops/kde-4.8;
 
+  kde410 = kdePackagesFor (pkgs.kde410 // {
+      boost = boost149;
+      eigen = eigen2;
+      libotr = libotr_3_2;
+    }) ../desktops/kde-4.10;
+
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
     let
