@@ -106,10 +106,8 @@
 
 //
 
-(if stdenv.isFreeBSD
- then {
-   # XXX: Thread support is currently broken on FreeBSD and Solaris (namely
-   # the `SCM_I_IS_THREAD' assertion in `scm_spawn_thread' is hit.)
-   configureFlags = [ "--without-threads" ];
- }
- else {}))
+(stdenv.lib.optionalAttrs (!stdenv.isLinux) {
+  # Work around <http://bugs.gnu.org/14201>.
+  SHELL = "/bin/sh";
+  CONFIG_SHELL = "/bin/sh";
+}))
