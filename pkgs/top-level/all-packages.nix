@@ -4810,21 +4810,14 @@ let
 
   policykit = callPackage ../development/libraries/policykit { };
 
-  poppler = callPackage ../development/libraries/poppler {
-    glibSupport = true;
-    gtk3Support = false;
-    qt4Support  = false;
-  };
+  poppler = let popplers = callPackage ../development/libraries/poppler { };
+    in popplers // popplers.poppler_glib;
+  popplerQt4 = poppler.poppler_qt4;
+
   poppler_0_18 = callPackage ../development/libraries/poppler/0.18.nix {
     glibSupport = true;
     gtk3Support = false;
     qt4Support  = false;
-  };
-
-  popplerQt4 = poppler.override {
-    glibSupport = false;
-    gtk3Support = false;
-    qt4Support  = true;
   };
 
   popt = callPackage ../development/libraries/popt { };
