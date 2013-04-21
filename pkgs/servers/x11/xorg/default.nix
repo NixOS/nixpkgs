@@ -1181,7 +1181,7 @@ let
     name = "xcb-util-renderutil-0.3.8";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xcb/xcb-util-renderutil-0.3.8.tar.bz2;
+      url = http://xcb.freedesktop.org/dist/xcb-util-renderutil-0.3.8.tar.bz2;
       sha256 = "0lkl9ij9b447c0br2qc5qsynjn09c4fdz7sd6yp7pyi8az2sb2cp";
     };
     buildInputs = [pkgconfig gperf m4 libxcb xproto ];
