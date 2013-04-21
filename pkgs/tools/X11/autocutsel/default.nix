@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = "http://www.nongnu.org/autocutsel/";
     description = "Autocutsel tracks changes in the server's cutbuffer and CLIPBOARD selection.";
-    license = "GNU/GPL";
+    license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [];
     platforms = with stdenv.lib.platforms; all;
   };
