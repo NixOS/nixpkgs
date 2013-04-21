@@ -10,10 +10,10 @@ let
   ghc6123 = "ghc6123";
   ghc704  = "ghc704";
   ghc742  = "ghc742";
-  ghc762  = "ghc762";
+  ghc763  = "ghc763";
   default = [ ghc742 ];
-  defaultOrLater = default ++ [ ghc762 ];
-  all     = [ ghc6104 ghc6123 ghc704 ghc742 ghc762 ];
+  defaultOrLater = default ++ [ ghc763 ];
+  all     = [ ghc6104 ghc6123 ghc704 ghc742 ghc763 ];
 
   allBut = platform: pkgs.lib.filter (x: platform != x) all;
 
@@ -186,7 +186,7 @@ mapHaskellTestOn {
   hashedStorage = default;
   haskeline = default;
   haskellLexer = default;
-  haskellPlatform = allBut ghc762;
+  haskellPlatform = allBut ghc763;
   haskellSrcExts = default;
   haskellSrc = all;
   haskellSrcMeta = default;
@@ -363,7 +363,7 @@ mapHaskellTestOn {
   strict = default;
   strptime = default;
   svgcairo = default;
-  syb = [ ghc704 ghc742 ghc762 ];
+  syb = [ ghc704 ghc742 ghc763 ];
   sybWithClass = default;
   sybWithClassInstancesText = default;
   tabular = default;
