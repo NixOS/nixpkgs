@@ -1,18 +1,17 @@
-{ stdenv, fetchurl, emacs, texinfo, unzip }:
+{ stdenv, fetchurl, emacs, texinfo }:
 
 let
   version = "1.2.0";
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "magit-${version}";
 
   src = fetchurl {
-    url = "https://github.com/magit/magit/zipball/${version}";
-    sha256 = "1877s8ikvcb457mmljmw366h6pgg4zzx98qfazhqj8snl4yqsj4i";
-    name = "magit-${version}.zip";
+    url = "https://github.com/downloads/magit/magit/${name}.tar.gz";
+    sha256 = "1a8vvilhd5y5vmlpsh194qpl4qlg0a1brylfscxcacpfp0cmhlzg";
   };
 
-  buildInputs = [ emacs texinfo unzip ];
+  buildInputs = [ emacs texinfo ];
 
   configurePhase = "makeFlagsArray=( PREFIX=$out SYSCONFDIR=$out/etc )";
 
