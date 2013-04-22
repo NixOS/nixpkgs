@@ -3732,13 +3732,12 @@ pythonPackages = python.modules // rec {
     };
   };
 
-
   requests = buildPythonPackage rec {
-    name = "requests-1.1.0";
+    name = "requests-1.2.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "a0158815af244c32041a3147ee09abf3";
+      md5 = "22af2682233770e5468a986f451c51c0";
     };
 
     meta = {
