@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.8.2";
+  version = "1.8.2.1";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,10 +21,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "1rhkya4kfs7iayasgj3bk8zg1pfk3h7wqhfy9d6aaqjgzb75pwy2";
+    sha1 = "ad9f833e509ba31c83efe336fd3599e89a39394b";
   };
 
-  patches = [ ./docbook2texi.patch ];
+  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
@@ -40,6 +40,8 @@ stdenv.mkDerivation {
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
   #doCheck = true;
+
+  installFlags = "NO_INSTALL_HARDLINKS=1";
 
   postInstall =
     ''
@@ -116,27 +118,7 @@ stdenv.mkDerivation {
          notSupported "$out/$prog" \
                       "reinstall with config git = { guiSupport = true; } set"
        done
-     '')
-
-   # Don't know why hardlinks aren't created. git installs the same executable
-   # multiple times into $out so replace duplicates by symlinks because I
-   # haven't tested whether the nix distribution system can handle hardlinks.
-   # This reduces the size of $out from 115MB down to 13MB on x86_64-linux!
-   + ''
-      declare -A seen
-      shopt -s globstar
-      for f in "$out/"**; do
-        if [ -L "$f" ]; then continue; fi
-        test -f "$f" || continue
-        sum=$(md5sum "$f");
-        sum=''\${sum/ */}
-        if [ -z "''\${seen["$sum"]}" ]; then
-          seen["$sum"]="$f"
-        else
-          rm "$f"; ln -v -s "''\${seen["$sum"]}" "$f"
-        fi
-      done
-     '';
+     '');
 
   enableParallelBuilding = true;
 
