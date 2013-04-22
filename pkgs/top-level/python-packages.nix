@@ -994,7 +994,7 @@ pythonPackages = python.modules // rec {
       webtest 
       zope_component 
       zope_interface 
-    ];
+    ] ++ optional isPy26 unittest2;
 
     propagatedBuildInputs = [
       chameleon
@@ -1197,6 +1197,8 @@ pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/C/Chameleon/${name}.tar.gz";
       md5 = "df72458bf3dd26a744dcff5ad555c34b";
     };
+
+    buildInputs = [] ++ optionals isPy26 [ ordereddict unittest2 ];
 
     # TODO: https://github.com/malthe/chameleon/issues/139
     doCheck = false;
@@ -4550,7 +4552,11 @@ pythonPackages = python.modules // rec {
       md5 = "a1266d4db421963fd3deb172c6689e4b";
     };
 
-    buildInputs = [ pkgs.unzip ];
+    buildInputs = [ pkgs.unzip ] ++ optionals isPy26 [ pythonPackages.ordereddict
+                                                       pythonPackages.unittest2 ];
+
+    # XXX: skipping two tests fails in python2.6
+    doCheck = ! isPy26;
 
     propagatedBuildInputs = [
       nose
@@ -4558,7 +4564,6 @@ pythonPackages = python.modules // rec {
       six
       beautifulsoup4
       waitress
-      unittest2
       mock
       pyquery
       wsgiproxy2
@@ -5093,7 +5098,7 @@ pythonPackages = python.modules // rec {
       md5 = "e7e581af8193551831560a736a53cf58";
     };
 
-    propagatedBuildInputs = [ zope_event zope_interface zope_testing ];
+    propagatedBuildInputs = [ zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
 
     # ignore circular dependency on zope_location
     installCommand = ''
