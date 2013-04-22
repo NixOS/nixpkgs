@@ -449,7 +449,11 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   acidState = callPackage ../development/libraries/haskell/acid-state {};
 
-  Agda = callPackage ../development/libraries/haskell/Agda {};
+  Agda = callPackage ../development/libraries/haskell/Agda {
+    hashable = self.hashable_1_1_2_5;
+    hashtables = self.hashtables.override { hashable = self.hashable_1_1_2_5; };
+    unorderedContainers = self.unorderedContainers.override { hashable = self.hashable_1_1_2_5; };
+  };
 
   accelerate = callPackage ../development/libraries/haskell/accelerate {};
 
@@ -1004,7 +1008,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
   hashable_1_2_0_6 = callPackage ../development/libraries/haskell/hashable/1.2.0.6.nix {};
-  hashable = self.hashable_1_1_2_5;
+  hashable = self.hashable_1_2_0_6;
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
