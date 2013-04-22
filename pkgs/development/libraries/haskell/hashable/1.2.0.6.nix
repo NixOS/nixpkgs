@@ -11,6 +11,7 @@ cabal.mkDerivation (self: {
     HUnit QuickCheck random testFramework testFrameworkHunit
     testFrameworkQuickcheck2 text
   ];
+  doCheck = false;
   meta = {
     homepage = "http://github.com/tibbe/hashable";
     description = "A class for types that can be converted to a hash value";
