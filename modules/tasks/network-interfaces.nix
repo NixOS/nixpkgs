@@ -277,7 +277,7 @@ in
             script =
               ''
                 # Set the static DNS configuration, if given.
-                ${pkgs.openresolv}/sbin/resolvconf -a static <<EOF
+                ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
                 ${optionalString (cfg.nameservers != [] && cfg.domain != "") ''
                   domain ${cfg.domain}
                 ''}
