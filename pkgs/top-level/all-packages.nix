@@ -6798,6 +6798,8 @@ let
     inherit (xlibs) libX11;
   };
 
+  doodle = callPackage ../applications/search/doodle { };
+
   dunst = callPackage ../applications/misc/dunst { };
 
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
