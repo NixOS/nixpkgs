@@ -1,9 +1,9 @@
 { fetchurl, stdenv, libtool, gettext, zlib, bzip2, flac, libvorbis
 , exiv2, libgsf, rpm, pkgconfig
-, gtkSupport ? true, glib ? null, gtk ? null
+, gtkSupport ? true, glib ? null, gtk3 ? null
 , videoSupport ? true, ffmpeg ? null, libmpeg2 ? null}:
 
-assert gtkSupport -> glib != null && gtk != null;
+assert gtkSupport -> glib != null && gtk3 != null;
 assert videoSupport -> ffmpeg != null && libmpeg2 != null;
 
 stdenv.mkDerivation rec {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
    [ libtool gettext zlib bzip2 flac libvorbis exiv2
      libgsf rpm
      pkgconfig
-   ] ++ stdenv.lib.optionals gtkSupport [ glib gtk ]
+   ] ++ stdenv.lib.optionals gtkSupport [ glib gtk3 ]
      ++ stdenv.lib.optionals videoSupport [ ffmpeg libmpeg2 ];
 
   configureFlags = "--disable-ltdl-install "
