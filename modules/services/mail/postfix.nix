@@ -369,8 +369,6 @@ in
 
         daemonType = "fork";
 
-        environment.TZ = config.time.timeZone;
-
         preStart =
           ''
             if ! [ -d /var/spool/postfix ]; then

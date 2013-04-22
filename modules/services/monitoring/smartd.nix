@@ -107,8 +107,6 @@ in
     systemd.services.smartd = {
       description = "S.M.A.R.T. Daemon";
 
-      environment.TZ = config.time.timeZone;
-
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd --no-fork ${smartdFlags}";

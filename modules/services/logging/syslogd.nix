@@ -112,8 +112,6 @@ in
 
         wantedBy = [ "multi-user.target" ];
 
-        environment.TZ = config.time.timeZone;
-
         serviceConfig =
           { ExecStart = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
             # Prevent syslogd output looping back through journald.

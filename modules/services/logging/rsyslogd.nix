@@ -92,8 +92,6 @@ in
 
         wantedBy = [ "multi-user.target" ];
 
-        environment.TZ = config.time.timeZone;
-
         serviceConfig =
           { ExecStart = "${pkgs.rsyslog}/sbin/rsyslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
             ExecStartPre = "${pkgs.coreutils}/bin/mkdir -p /var/spool/rsyslog";

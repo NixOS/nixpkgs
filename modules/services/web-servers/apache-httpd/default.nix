@@ -618,7 +618,6 @@ in
 
         environment =
           { PHPRC = if enablePHP then phpIni else "";
-            TZ = config.time.timeZone;
           } // (listToAttrs (concatMap (svc: svc.globalEnvVars) allSubservices));
 
         preStart =

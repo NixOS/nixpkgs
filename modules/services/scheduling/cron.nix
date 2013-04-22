@@ -90,12 +90,6 @@ in
 
         startOn = "startup";
 
-        # Needed to interpret times in the local timezone.
-        environment = {
-          TZ = config.time.timeZone;
-          TZDIR = "${pkgs.tzdata}/share/zoneinfo";
-        };
-
         path = [ cronNixosPkg ];
 
         preStart =

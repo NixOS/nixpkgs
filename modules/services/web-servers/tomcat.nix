@@ -119,8 +119,6 @@ in
         startOn = "started network-interfaces";
         stopOn = "stopping network-interfaces";
 
-        environment = { TZ = config.time.timeZone; };
-
         preStart =
           ''
             # Create the base directory

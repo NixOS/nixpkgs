@@ -140,7 +140,6 @@ in
       description = "Logstash daemon";
 
       wantedBy = [ "multi-user.target" ];
-      environment.TZ = config.time.timeZone;
 
       path = [ jre ];
 

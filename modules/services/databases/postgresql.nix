@@ -161,10 +161,7 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
 
-        environment =
-          { TZ = config.time.timeZone;
-            PGDATA = cfg.dataDir;
-          };
+        environment.PGDATA = cfg.dataDir;
 
         path = [ pkgs.su postgresql ];
 

@@ -6,7 +6,7 @@ with pkgs.lib;
   options = {
 
     time = {
-    
+
       timeZone = mkOption {
         default = "CET";
         type = with types; uniq string;
@@ -18,7 +18,7 @@ with pkgs.lib;
         default = false;
         description = "If set, keep the hardware clock in local time instead of UTC.";
       };
-      
+
     };
   };
 
@@ -26,7 +26,6 @@ with pkgs.lib;
 
     environment.shellInit =
       ''
-        export TZ=${config.time.timeZone}
         export TZDIR=${pkgs.tzdata}/share/zoneinfo
       '';
 
@@ -34,7 +33,7 @@ with pkgs.lib;
       { source = "${pkgs.tzdata}/share/zoneinfo/${config.time.timeZone}";
         target = "localtime";
       };
-      
+
   };
-  
+
 }

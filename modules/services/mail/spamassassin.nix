@@ -56,7 +56,6 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
 
-      environment.TZ = config.time.timeZone;
       exec = "${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --nouser-config --virtual-config-dir=/var/lib/spamassassin/user-%u --allow-tell --pidfile=/var/run/spamd.pid";
     };
 
