@@ -1,6 +1,6 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper, hardlink
+, libxslt, tcl, tk, makeWrapper
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , guiSupport
 , withManual ? true
@@ -116,17 +116,32 @@ stdenv.mkDerivation {
          notSupported "$out/$prog" \
                       "reinstall with config git = { guiSupport = true; } set"
        done
-     '');
+     '')
 
-  # Git installs many copies of the same binary using hardlinks, but unfortunately
-  # our patchELF phase re-writes those files and destroys the hardlinks in the
-  # process. This utility re-generates them afterwards.
-  postFixup = "${hardlink}/bin/hardlink $out";
+   # Don't know why hardlinks aren't created. git installs the same executable
+   # multiple times into $out so replace duplicates by symlinks because I
+   # haven't tested whether the nix distribution system can handle hardlinks.
+   # This reduces the size of $out from 115MB down to 13MB on x86_64-linux!
+   + ''
+      declare -A seen
+      shopt -s globstar
+      for f in "$out/"**; do
+        if [ -L "$f" ]; then continue; fi
+        test -f "$f" || continue
+        sum=$(md5sum "$f");
+        sum=''\${sum/ */}
+        if [ -z "''\${seen["$sum"]}" ]; then
+          seen["$sum"]="$f"
+        else
+          rm "$f"; ln -v -s "''\${seen["$sum"]}" "$f"
+        fi
+      done
+     '';
 
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://git-scm.com/";
+    homepage = http://git-scm.com/;
     description = "Git, a popular distributed version control system";
     license = stdenv.lib.licenses.gpl2Plus;
 
