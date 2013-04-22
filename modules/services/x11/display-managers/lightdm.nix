@@ -37,31 +37,31 @@ let
 
       # We need this to ensure that it actually tries to find icons from gnome-icon-theme
       cat - > $out/gtk-3.0/settings.ini << EOF
-[Settings]
-gtk-icon-theme-name=gnome
-EOF
+      [Settings]
+      gtk-icon-theme-name=gnome
+      EOF
 
       cat - > $out/lightdm-gtk-greeter.desktop << EOF
-[Desktop Entry]
-Name=LightDM Greeter
-Comment=This runs the LightDM Greeter
-Exec=$out/greeter
-Type=Application
-EOF
-      '';
-    };
+      [Desktop Entry]
+      Name=LightDM Greeter
+      Comment=This runs the LightDM Greeter
+      Exec=$out/greeter
+      Type=Application
+      EOF
+    '';
+  };
 
   lightdmConf = writeText "lightdm.conf"
     ''
-    [LightDM]
-    greeter-user = ${config.users.extraUsers.lightdm.name}
-    xgreeters-directory = ${cfg.greeter.package}
-    xsessions-directory = ${dmcfg.session.desktops}
+      [LightDM]
+      greeter-user = ${config.users.extraUsers.lightdm.name}
+      xgreeters-directory = ${cfg.greeter.package}
+      xsessions-directory = ${dmcfg.session.desktops}
 
-    [SeatDefaults]
-    xserver-command = ${xserverWrapper}
-    session-wrapper = ${dmcfg.session.script}
-    greeter-session = ${cfg.greeter.name}
+      [SeatDefaults]
+      xserver-command = ${xserverWrapper}
+      session-wrapper = ${dmcfg.session.script}
+      greeter-session = ${cfg.greeter.name}
     '';
 
 in
