@@ -301,11 +301,11 @@ pythonPackages = python.modules // rec {
 
 
   argparse = buildPythonPackage (rec {
-    name = "argparse-1.1";
+    name = "argparse-1.2.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/a/argparse/${name}.zip";
-      sha256 = "ee6da1aaad8b08a74a33eb82264b1a2bf12a7d5aefc7e9d7d40a8f8fa9912e62";
+      url = "http://argparse.googlecode.com/files/${name}.tar.gz";
+      sha256 = "192174mys40m0bwk6l5jlfnzps0xi81sxm34cqms6dc3c454pbyx";
     };
 
     buildInputs = [ pkgs.unzip ];
@@ -1505,6 +1505,23 @@ pythonPackages = python.modules // rec {
     meta = {
       homepage = http://pypi.python.org/pypi/enum/;
       description = "Robust enumerated type support in Python.";
+    };
+  };
+
+
+  epc = buildPythonPackage rec {
+    name = "epc-0.0.3";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/e/epc/${name}.tar.gz";
+      md5 = "04a93c0cd32b496969ead09f414dac74";
+    };
+
+    propagatedBuildInputs = [ sexpdata ];
+    doCheck = false;
+
+    meta = {
+      description = "EPC (RPC stack for Emacs Lisp) implementation in Python";
+      homepage = "https://github.com/tkf/python-epc";
     };
   };
 
@@ -3995,6 +4012,22 @@ pythonPackages = python.modules // rec {
       license = "MIT";
     };
   });
+
+
+  sexpdata = buildPythonPackage rec {
+    name = "sexpdata-0.0.2";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/sexpdata/${name}.tar.gz";
+      md5 = "efc44265bc27cb3d6ffed4fbf5733fc1";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "S-expression parser for Python";
+      homepage = "https://github.com/tkf/sexpdata";
+    };
+  };
 
 
   six = buildPythonPackage rec {
