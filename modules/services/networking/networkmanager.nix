@@ -124,6 +124,10 @@ in {
       wireless.enable = false;
     };
 
+    powerManagement.resumeCommands = ''
+      systemctl restart NetworkManager
+    '';
+
     security.polkit.permissions = polkitConf;
 
     services.dbus.packages = cfg.packages;
