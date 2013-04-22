@@ -1,4 +1,4 @@
-# NixOS module for Transmission BitTorrent daemon
+# NixOS module for Freenet daemon
 
 { config, pkgs, ... }:
 
@@ -52,7 +52,7 @@ in
 
     users.extraUsers.freenet = {
       group = "freenet";
-      description = "Psyced daemon user";
+      description = "Freenet daemon user";
       home = varDir;
       createHome = true;
     };
