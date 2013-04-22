@@ -891,6 +891,8 @@ pythonPackages = python.modules // rec {
       md5 = "2ed7b69644a6d8f4e1404e1892329240";
     };
 
+    buildInputs = [] ++ optional isPy26 unittest2;
+
     propagatedBuildInputs =
       [ pythonPackages.beautifulsoup4
         pythonPackages.peppercorn
