@@ -26,13 +26,12 @@ with pkgs.lib;
 
     environment.shellInit =
       ''
-        export TZDIR=${pkgs.tzdata}/share/zoneinfo
+        export TZDIR=/etc/zoneinfo
       '';
 
-    environment.etc = singleton
-      { source = "${pkgs.tzdata}/share/zoneinfo/${config.time.timeZone}";
-        target = "localtime";
-      };
+    environment.etc.localtime.source = "${pkgs.tzdata}/share/zoneinfo/${config.time.timeZone}";
+
+    environment.etc.zoneinfo.source = "${pkgs.tzdata}/share/zoneinfo";
 
   };
 
