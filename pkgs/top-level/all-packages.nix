@@ -3050,6 +3050,8 @@ let
   autoconf = callPackage ../development/tools/misc/autoconf { };
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
+ 
+  autocutsel = callPackage ../tools/X11/autocutsel{ };
 
   automake = automake112x;
 
