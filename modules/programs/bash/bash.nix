@@ -46,7 +46,7 @@ let
       description = ''
         Shell script code used to initialise the shell prompt.
       '';
-      type = with pkgs.lib.types; string;
+      type = with pkgs.lib.types; lines;
     };
 
     environment.shellInit = mkOption {
@@ -55,7 +55,7 @@ let
       description = ''
         Shell script code called during login shell initialisation.
       '';
-      type = with pkgs.lib.types; string;
+      type = with pkgs.lib.types; lines;
     };
 
     environment.interactiveShellInit = mkOption {
@@ -64,7 +64,7 @@ let
       description = ''
         Shell script code called during interactive shell initialisation.
       '';
-      type = with pkgs.lib.types; string;
+      type = with pkgs.lib.types; lines;
     };
 
     environment.enableBashCompletion = mkOption {
