@@ -87,8 +87,8 @@ pythonPackages = python.modules // rec {
   };
 
   pygobject = import ../development/python-modules/pygobject {
-    inherit (pkgs) stdenv fetchurl pkgconfig glib;
-    inherit python;
+    inherit (pkgs) stdenv fetchurl pkgconfig glib gobjectIntrospection cairo;
+    inherit python pycairo;
   };
 
   pygtk = import ../development/python-modules/pygtk {
