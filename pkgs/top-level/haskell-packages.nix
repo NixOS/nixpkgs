@@ -2060,8 +2060,6 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   flapjax = callPackage ../development/compilers/flapjax {};
 
-  idris = callPackage ../development/compilers/idris {};
-
   pakcs = callPackage ../development/compilers/pakcs {};
 
   # Development tools.
