@@ -9217,4 +9217,6 @@ let
 
   bullet = callPackage ../development/libraries/bullet {};
 
+  dart = callPackage ../development/interpreters/dart { };
+
 }; in pkgs
