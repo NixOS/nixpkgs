@@ -1,0 +1,32 @@
+diff --git a/libmisc/copydir.c b/libmisc/copydir.c
+index fac585c..ddf3788 100644
+--- a/libmisc/copydir.c
++++ b/libmisc/copydir.c
+@@ -490,6 +490,27 @@ static int copy_symlink (const char *src, const char *dst,
+ 	if (NULL == oldlink) {
+ 		return -1;
+ 	}
++      
++        /* NixOS hack: if the link points to a file in /etc/static/ this
++         * means the file is managed by nix and probably its meant to be a
++         * file. So derefence once more until the original store path (real file)
++         * is found*/
++
++
++	if (strncmp (oldlink, "/etc/static/", strlen ("/etc/static/")) == 0) {
++          char *target = readlink_malloc (oldlink);
++          free (oldlink);
++          int r = copy_entry(target, dst, reset_selinux, old_uid, new_uid, old_gid, new_gid);
++
++          /* make writeable by user */
++          struct stat s;
++          stat(dst, &s);
++          s.st_mode |= S_IWUSR; // u+w
++          chmod(dst, s.st_mode); // not minding higher bits because chmod (coreutils) doesn't either
++
++          free (target);
++          return r;
++        }
+ 
+ 	/* If src was a link to an entry of the src_orig directory itself,
+ 	 * create a link to the corresponding entry in the dst_orig
