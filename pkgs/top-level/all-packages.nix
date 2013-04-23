@@ -8976,6 +8976,8 @@ let
 
   gxemul = callPackage ../misc/gxemul { };
 
+  hatari = callPackage ../misc/emulators/hatari { };
+
   hplip = callPackage ../misc/drivers/hplip { };
 
   # using the new configuration style proposal which is unstable
