@@ -12,7 +12,6 @@ cabal.mkDerivation (self: {
     skein transformers
   ];
   doCheck = false;
-  jailbreak = true;
   meta = {
     homepage = "https://github.com/meteficha/crypto-conduit";
     description = "Conduit interface for cryptographic operations (from crypto-api)";
