@@ -1645,11 +1645,11 @@ pythonPackages = python.modules // rec {
 
 
   foolscap = buildPythonPackage (rec {
-    name = "foolscap-0.6.1";
+    name = "foolscap-0.6.4";
 
     src = fetchurl {
       url = "http://foolscap.lothar.com/releases/${name}.tar.gz";
-      sha256 = "8b3e4fc678c5c41483b3130666583a1c3909713adcd325204daded7b67171ed5";
+      sha256 = "16cddyk5is0gjfn0ia5n2l4lhdzvbjzlx6sfpy7ddjd3d3fq7ckl";
     };
 
     propagatedBuildInputs = [ twisted pkgs.pyopenssl ];
