@@ -44,7 +44,6 @@ in
     postfix = 14;
     dovecot = 15;
     tomcat = 16;
-    gnunetd = 17;
     pulseaudio = 22; # must match `pulseaudio' GID
     gpsd = 23;
     polkituser = 28;

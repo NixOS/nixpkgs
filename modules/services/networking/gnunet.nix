@@ -6,37 +6,27 @@ let
 
   cfg = config.services.gnunet;
 
+  homeDir = "/var/lib/gnunet";
+
   configFile = with cfg; pkgs.writeText "gnunetd.conf"
     ''
       [PATHS]
-      GNUNETD_HOME = ${home}
+      SERVICEHOME = ${homeDir}
 
-      [GNUNETD]
-      HOSTLISTURL = ${concatStringsSep " " hostLists}
-      APPLICATIONS = ${concatStringsSep " " applications}
-      TRANSPORTS = ${concatStringsSep " " transports}
+      [ats]
+      WAN_QUOTA_IN = ${toString load.maxNetDownBandwidth} b
+      WAN_QUOTA_OUT = ${toString load.maxNetUpBandwidth} b
 
-      [LOAD]
-      MAXNETDOWNBPSTOTAL = ${toString load.maxNetDownBandwidth}
-      MAXNETUPBPSTOTAL = ${toString load.maxNetUpBandwidth}
-      HARDUPLIMIT = ${toString load.hardNetUpBandwidth}
-      MAXCPULOAD = ${toString load.maxCPULoad}
-      INTERFACES = ${concatStringsSep " " load.interfaces}
+      [datastore]
+      QUOTA = ${toString fileSharing.quota} MB
 
-      [FS]
-      QUOTA = ${toString fileSharing.quota}
-      ACTIVEMIGRATION = ${if fileSharing.activeMigration then "YES" else "NO"}
-
-      [UDP]
+      [transport-udp]
       PORT = ${toString udp.port}
+      ADVERTISED_PORT = ${toString udp.port}
 
-      [TCP]
+      [transport-tcp]
       PORT = ${toString tcp.port}
-
-      [MODULES]
-      sqstore = sqstore_sqlite
-      dstore = dstore_sqlite
-      topology = topology_default
+      ADVERTISED_PORT = ${toString tcp.port}
 
       ${extraOptions}
     '';
@@ -59,71 +49,11 @@ in
         '';
       };
 
-      home = mkOption {
-        default = "/var/lib/gnunet";
-        description = ''
-          Directory where the GNUnet daemon will store its data.
-        '';
-      };
-
-      debug = mkOption {
-        default = false;
-        description = ''
-          When true, run in debug mode; gnunetd will not daemonize and
-          error messages will be written to stderr instead of a
-          logfile.
-        '';
-      };
-
-      logLevel = mkOption {
-        default = "ERROR";
-        example = "INFO";
-        description = ''
-          Log level of the deamon (see `gnunetd(1)' for details).
-        '';
-      };
-
-      hostLists = mkOption {
-        default = [
-          "http://gnunet.org/hostlist.php"
-          "http://gnunet.mine.nu:8081/hostlist"
-          "http://vserver1236.vserver-on.de/hostlist-074"
-        ];
-        description = ''
-          URLs of host lists.
-        '';
-      };
-
-      applications = mkOption {
-        default = [ "advertising" "getoption" "fs" "stats" "traffic" ];
-        example = [ "chat" "fs" ];
-        description = ''
-          List of GNUnet applications supported by the daemon.  Note that
-          `fs', which means "file sharing", is probably the one you want.
-        '';
-      };
-
-      transports = mkOption {
-        default = [ "udp" "tcp" "http" "nat" ];
-        example = [ "smtp" "http" ];
-        description = ''
-          List of transport methods used by the server.
-        '';
-      };
-
       fileSharing = {
         quota = mkOption {
           default = 1024;
           description = ''
             Maximum file system usage (in MiB) for file sharing.
-          '';
-        };
-
-        activeMigration = mkOption {
-          default = false;
-          description = ''
-            Whether to allow active migration of content originating
-            from other nodes.
           '';
         };
       };
@@ -170,33 +100,13 @@ in
             data.
           '';
         };
-
-        maxCPULoad = mkOption {
-          default = 100;
-          description = ''
-            Maximum CPU load (percentage) authorized for the GNUnet
-            daemon.
-          '';
-        };
-
-        interfaces = mkOption {
-          default = [ "eth0" ];
-          example = [ "wlan0" "eth1" ];
-          description = ''
-            List of network interfaces to use.
-          '';
-        };
       };
 
       extraOptions = mkOption {
         default = "";
-        example = ''
-          [NETWORK]
-          INTERFACE = eth3
-        '';
         description = ''
-          Additional options that will be copied verbatim in `gnunetd.conf'.
-          See `gnunetd.conf(5)' for details.
+          Additional options that will be copied verbatim in `gnunet.conf'.
+          See `gnunet.conf(5)' for details.
         '';
       };
     };
@@ -209,44 +119,28 @@ in
   config = mkIf config.services.gnunet.enable {
 
     users.extraUsers = singleton
-      { name = "gnunetd";
-        uid = config.ids.uids.gnunetd;
-        description = "GNUnet Daemon User";
-        home = "/var/empty";
+      { name = "gnunet";
+        group = "gnunet";
+        description = "GNUnet User";
+        home = homeDir;
+        createHome = true; 
       };
 
     # The user tools that talk to `gnunetd' should come from the same source,
     # so install them globally.
     environment.systemPackages = [ pkgs.gnunet ];
 
-    environment.etc = [
-      # Tools such as `gnunet-transport-check' expect /etc/gnunetd.conf.
-      { source = configFile;
-        target = "gnunetd.conf";
-      }
-    ];
-
-    jobs.gnunetd =
-      { description = "The GNUnet Daemon";
-
-        startOn = "started network-interfaces";
-        stopOn = "stopping network-interfaces";
-
-        preStart =
-          ''
-            test -d "${cfg.home}" || \
-              ( mkdir -m 755 -p "${cfg.home}" && chown -R gnunetd:users "${cfg.home}")
-          '';
-
-        exec =
-          ''
-            ${pkgs.gnunet}/bin/gnunetd                  \
-              ${if cfg.debug then "--debug" else "" }   \
-              --user="gnunetd"                          \
-              --config="${configFile}"                  \
-              --log="${cfg.logLevel}"
-          '';
-      };
+    systemd.services.gnunet = {
+      description = "GNUnet";
+      after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      serviceConfig.ExecStart = "${pkgs.gnunet}/bin/gnunet-arm -L DEBUG -l logfile -s -c ${configFile}";
+      serviceConfig.Type = "simple";
+      serviceConfig.User = "gnunet";
+      serviceConfig.UMask = "0007";
+      serviceConfig.WorkingDirectory = homeDir;
+      path = [ pkgs.gnunet ];
+    };
 
   };
 
