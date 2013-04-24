@@ -12,6 +12,9 @@ cabal.mkDerivation (self: {
     skein transformers
   ];
   doCheck = false;
+  patchPhase = ''
+    sed -i -e 's|crypto-api >= 0.9 && < 0.12|crypto-api >= 0.9|' crypto-conduit.cabal
+  '';
   meta = {
     homepage = "https://github.com/meteficha/crypto-conduit";
     description = "Conduit interface for cryptographic operations (from crypto-api)";
