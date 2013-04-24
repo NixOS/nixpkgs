@@ -1,15 +1,15 @@
 { stdenv, fetchurl, python, libxml2Python }:
 
 stdenv.mkDerivation rec {
-  name = "itstool-1.1.1";
+  name = "itstool-1.2.0";
 
   src = fetchurl {
     url = "http://files.itstool.org/itstool/${name}.tar.bz2";
-    sha256 = "1jchgcgxvqwkhr61q0j08adl1k8hw86dzbl207gzmns9fa7vmzqg";
+    sha256 = "1akq75aflihm3y7js8biy7b5mw2g11vl8yq90gydnwlwp0zxdzj6";
   };
 
   buildInputs = [ python ];
-  
+
   patchPhase =
     ''
       sed -e '/import libxml2/i import sys\

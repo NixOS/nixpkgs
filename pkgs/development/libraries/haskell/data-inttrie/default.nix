@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "data-inttrie";
-  version = "0.0.8";
-  sha256 = "0lzp89lq4gb84rcxqi77yarggz94a206da456208rrr7rhlqxg2x";
+  version = "0.1.0";
+  sha256 = "00kzf3cw0y0848cprmx3i7g70rmr92hhfzn60a2x98vb8f7y3814";
   meta = {
     homepage = "http://github.com/luqui/data-inttrie";
     description = "A lazy, infinite trie of integers";

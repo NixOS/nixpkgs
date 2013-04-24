@@ -40,6 +40,7 @@ stdenv.mkDerivation {
     cp dist/freenet.jar $out/share/freenet
 
     cat <<EOF > $out/bin/freenet
+    #!${stdenv.shell}
     ${jre}/bin/java -cp $out/share/freenet/bcprov.jar:$out/share/freenet/freenet-ext.jar:$out/share/freenet/freenet.jar \\
       -Xmx1024M freenet.node.NodeStarter
     EOF

@@ -301,11 +301,11 @@ pythonPackages = python.modules // rec {
 
 
   argparse = buildPythonPackage (rec {
-    name = "argparse-1.1";
+    name = "argparse-1.2.1";
 
     src = fetchurl {
-      url = "http://pypi.python.org/packages/source/a/argparse/${name}.zip";
-      sha256 = "ee6da1aaad8b08a74a33eb82264b1a2bf12a7d5aefc7e9d7d40a8f8fa9912e62";
+      url = "http://argparse.googlecode.com/files/${name}.tar.gz";
+      sha256 = "192174mys40m0bwk6l5jlfnzps0xi81sxm34cqms6dc3c454pbyx";
     };
 
     buildInputs = [ pkgs.unzip ];
@@ -891,6 +891,8 @@ pythonPackages = python.modules // rec {
       md5 = "2ed7b69644a6d8f4e1404e1892329240";
     };
 
+    buildInputs = [] ++ optional isPy26 unittest2;
+
     propagatedBuildInputs =
       [ pythonPackages.beautifulsoup4
         pythonPackages.peppercorn
@@ -994,7 +996,7 @@ pythonPackages = python.modules // rec {
       webtest 
       zope_component 
       zope_interface 
-    ];
+    ] ++ optional isPy26 unittest2;
 
     propagatedBuildInputs = [
       chameleon
@@ -1197,6 +1199,8 @@ pythonPackages = python.modules // rec {
       url = "http://pypi.python.org/packages/source/C/Chameleon/${name}.tar.gz";
       md5 = "df72458bf3dd26a744dcff5ad555c34b";
     };
+
+    buildInputs = [] ++ optionals isPy26 [ ordereddict unittest2 ];
 
     # TODO: https://github.com/malthe/chameleon/issues/139
     doCheck = false;
@@ -1503,6 +1507,23 @@ pythonPackages = python.modules // rec {
     meta = {
       homepage = http://pypi.python.org/pypi/enum/;
       description = "Robust enumerated type support in Python.";
+    };
+  };
+
+
+  epc = buildPythonPackage rec {
+    name = "epc-0.0.3";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/e/epc/${name}.tar.gz";
+      md5 = "04a93c0cd32b496969ead09f414dac74";
+    };
+
+    propagatedBuildInputs = [ sexpdata ];
+    doCheck = false;
+
+    meta = {
+      description = "EPC (RPC stack for Emacs Lisp) implementation in Python";
+      homepage = "https://github.com/tkf/python-epc";
     };
   };
 
@@ -2008,6 +2029,28 @@ pythonPackages = python.modules // rec {
     meta = {
       description = "A unified interface to many cloud providers";
       homepage = http://incubator.apache.org/libcloud/;
+    };
+  });
+
+
+  limnoria = buildPythonPackage (rec {
+    name = "limnoria-20130327";
+
+    src = fetchurl {
+      url = https://pypi.python.org/packages/source/l/limnoria/limnoria-2013-03-27T16:32:26+0100.tar.gz;
+      name = "limnoria-2013-03-27.tar.gz";
+      sha256 = "0xfaa6h8css3yhsmx5vcffizrz6mvmgm46q7449z3hq7g3793184";
+    };
+
+    propagatedBuildInputs = [ python.modules.sqlite3 ];
+
+    doCheck = false;
+
+    meta = with stdenv.lib; {
+      description = "A modified version of Supybot, an IRC bot";
+      homepage = http://supybot.fr.cr;
+      license = licenses.bsd3;
+      maintainers = [ maintainers.goibhniu ];
     };
   });
 
@@ -3732,13 +3775,12 @@ pythonPackages = python.modules // rec {
     };
   };
 
-
   requests = buildPythonPackage rec {
-    name = "requests-1.1.0";
+    name = "requests-1.2.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/r/requests/${name}.tar.gz";
-      md5 = "a0158815af244c32041a3147ee09abf3";
+      md5 = "22af2682233770e5468a986f451c51c0";
     };
 
     meta = {
@@ -3994,6 +4036,22 @@ pythonPackages = python.modules // rec {
       license = "MIT";
     };
   });
+
+
+  sexpdata = buildPythonPackage rec {
+    name = "sexpdata-0.0.2";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/s/sexpdata/${name}.tar.gz";
+      md5 = "efc44265bc27cb3d6ffed4fbf5733fc1";
+    };
+
+    doCheck = false;
+
+    meta = {
+      description = "S-expression parser for Python";
+      homepage = "https://github.com/tkf/sexpdata";
+    };
+  };
 
 
   six = buildPythonPackage rec {
@@ -4551,7 +4609,11 @@ pythonPackages = python.modules // rec {
       md5 = "a1266d4db421963fd3deb172c6689e4b";
     };
 
-    buildInputs = [ pkgs.unzip ];
+    buildInputs = [ pkgs.unzip ] ++ optionals isPy26 [ pythonPackages.ordereddict
+                                                       pythonPackages.unittest2 ];
+
+    # XXX: skipping two tests fails in python2.6
+    doCheck = ! isPy26;
 
     propagatedBuildInputs = [
       nose
@@ -4559,7 +4621,6 @@ pythonPackages = python.modules // rec {
       six
       beautifulsoup4
       waitress
-      unittest2
       mock
       pyquery
       wsgiproxy2
@@ -5094,7 +5155,7 @@ pythonPackages = python.modules // rec {
       md5 = "e7e581af8193551831560a736a53cf58";
     };
 
-    propagatedBuildInputs = [ zope_event zope_interface zope_testing ];
+    propagatedBuildInputs = [ zope_event zope_interface zope_testing ] ++ optional isPy26 ordereddict;
 
     # ignore circular dependency on zope_location
     installCommand = ''
@@ -5262,11 +5323,11 @@ pythonPackages = python.modules // rec {
 
   cliapp = buildPythonPackage rec {
     name = "cliapp-${version}";
-    version = "1.20121216";
+    version = "1.20130313";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-cliapp/python-cliapp_${version}.orig.tar.gz";
-      sha256 = "1bzvc4aj3w8g85qycwz1jxa73jj8rl6zrgd4hi78kr4dgslcfns5";
+      sha256 = "0rk13a68668gsrv6yqgzqxskffqnlyjar4qav6k5iyrp77amn7qm";
     };
 
     buildInputs = [ sphinx ];
@@ -5363,11 +5424,12 @@ pythonPackages = python.modules // rec {
 
 
   ttystatus = buildPythonPackage rec {
-    name = "ttystatus-0.21";
+    name = "ttystatus-${version}";
+    version = "0.22";
 
     src = fetchurl rec {
-      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_0.21.orig.tar.gz";
-      sha256 = "4a1f3a41c9bd3b5d2bd8e6f093890857301e590aa1d428fc9a6dca591227244c";
+      url = "http://code.liw.fi/debian/pool/main/p/python-ttystatus/python-ttystatus_${version}.orig.tar.gz";
+      sha256 = "1hzv0sbrvgcmafflhvzh7plci0dg7wcjlk39i8kqdasg6rw0ag6f";
     };
 
     buildInputs = [ sphinx ];
@@ -5384,11 +5446,11 @@ pythonPackages = python.modules // rec {
 
   larch = buildPythonPackage rec {
     name = "larch-${version}";
-    version = "1.20121216";
+    version = "1.20130316";
 
     src = fetchurl rec {
       url = "http://code.liw.fi/debian/pool/main/p/python-larch/python-larch_${version}.orig.tar.gz";
-      sha256 = "0w4hirs8wkp1hji6nxfmq4rahkd5rgw4cavvdhpdfr4mddycbis3";
+      sha256 = "1mkvmy0jdzd7dlvdx2a75wsbj5qw1clawcgndx9jwl816a9iy225";
     };
 
     buildInputs = [ sphinx ];

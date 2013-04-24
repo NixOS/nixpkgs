@@ -433,18 +433,18 @@ let
   apg = callPackage ../tools/security/apg { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
-  
+
   titaniumenv_2_1 = import ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
     version = "2.1";
   };
-  
+
   titaniumenv_3_1 = import ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
-  
+
   titaniumenv = titaniumenv_3_1;
 
   inherit (androidenv) androidsdk_4_1;
@@ -1213,6 +1213,8 @@ let
     mtutils = callPackage ../tools/text/multitran/mtutils { };
   });
 
+  munge = callPackage ../tools/security/munge { };
+
   muscleframework = callPackage ../tools/security/muscleframework { };
 
   muscletool = callPackage ../tools/security/muscletool { };
@@ -1296,7 +1298,9 @@ let
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
-  offlineimap = callPackage ../tools/networking/offlineimap { };
+  offlineimap = callPackage ../tools/networking/offlineimap {
+    inherit (pythonPackages) sqlite3;
+  };
 
   opendbx = callPackage ../development/libraries/opendbx { };
 
@@ -2480,7 +2484,8 @@ let
   haskellPackages_ghc742_profiling    = recurseIntoAttrs (haskell.packages_ghc742.profiling);
   haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742.highPrio);
   haskellPackages_ghc761              =                   haskell.packages_ghc761;
-  haskellPackages_ghc762              = recurseIntoAttrs (haskell.packages_ghc762);
+  haskellPackages_ghc762              =                   haskell.packages_ghc762;
+  haskellPackages_ghc763              = recurseIntoAttrs  haskell.packages_ghc763;
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
 
@@ -2895,7 +2900,11 @@ let
 
   perl = if system != "i686-cygwin" then perl516 else sysPerl;
 
-  php = callPackage ../development/interpreters/php/5.3.nix { };
+  php = php54;
+
+  php53 = callPackage ../development/interpreters/php/5.3.nix { };
+
+  php54 = callPackage ../development/interpreters/php/5.4.nix { };
 
   php_apc = callPackage ../development/libraries/php-apc { };
 
@@ -3048,6 +3057,8 @@ let
   autoconf = callPackage ../development/tools/misc/autoconf { };
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
+ 
+  autocutsel = callPackage ../tools/X11/autocutsel{ };
 
   automake = automake112x;
 
@@ -3997,6 +4008,8 @@ let
   gtkspell = callPackage ../development/libraries/gtkspell { };
 
   gts = callPackage ../development/libraries/gts { };
+
+  gvfs = callPackage ../development/libraries/gvfs { };
 
   gwenhywfar = callPackage ../development/libraries/gwenhywfar { };
 
@@ -6209,6 +6222,8 @@ let
     config = config.pcmciaUtils.config or null;
   };
 
+  plymouth = callPackage ../os-specific/linux/plymouth { };
+
   pmount = callPackage ../os-specific/linux/pmount { };
 
   pmutils = callPackage ../os-specific/linux/pm-utils { };
@@ -6321,7 +6336,9 @@ let
   udev145 = callPackage ../os-specific/linux/udev/145.nix { };
   udev = pkgs.systemd;
 
-  udisks = callPackage ../os-specific/linux/udisks { };
+  udisks1 = callPackage ../os-specific/linux/udisks/1-default.nix { };
+  udisks2 = callPackage ../os-specific/linux/udisks/2-default.nix { };
+  udisks = udisks1;
 
   untie = callPackage ../os-specific/linux/untie { };
 
@@ -6805,6 +6822,8 @@ let
     inherit (xlibs) libX11;
   };
 
+  doodle = callPackage ../applications/search/doodle { };
+
   dunst = callPackage ../applications/misc/dunst { };
 
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
@@ -7187,7 +7206,7 @@ let
   gphoto2 = callPackage ../applications/misc/gphoto2 { };
 
   gphoto2fs = builderDefsPackage ../applications/misc/gphoto2/gphotofs.nix {
-    inherit libgphoto2 fuse pkgconfig glib;
+    inherit libgphoto2 fuse pkgconfig glib libtool;
   };
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
@@ -7427,9 +7446,7 @@ let
   links = callPackage ../applications/networking/browsers/links { };
 
   ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
-  ledger3 = callPackage ../applications/office/ledger/3.0.nix {
-    boost = boost149;
-  };
+  ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
@@ -8539,17 +8556,25 @@ let
 
   gnome = recurseIntoAttrs gnome2;
 
-  kde4 = recurseIntoAttrs pkgs.kde47;
+  kde4 = recurseIntoAttrs pkgs.kde48;
 
   kde47 = kdePackagesFor (pkgs.kde47 // {
       boost = boost149;
       eigen = eigen2;
+      libotr = libotr_3_2;
     }) ../desktops/kde-4.7;
 
   kde48 = kdePackagesFor (pkgs.kde48 // {
       boost = boost149;
       eigen = eigen2;
+      libotr = libotr_3_2;
     }) ../desktops/kde-4.8;
+
+  kde410 = kdePackagesFor (pkgs.kde410 // {
+      boost = boost149;
+      eigen = eigen2;
+      libotr = libotr_3_2;
+    }) ../desktops/kde-4.10;
 
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
@@ -8973,6 +8998,8 @@ let
 
   gxemul = callPackage ../misc/gxemul { };
 
+  hatari = callPackage ../misc/emulators/hatari { };
+
   hplip = callPackage ../misc/drivers/hplip { };
 
   # using the new configuration style proposal which is unstable
@@ -9213,5 +9240,7 @@ let
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 
   bullet = callPackage ../development/libraries/bullet {};
+
+  dart = callPackage ../development/interpreters/dart { };
 
 }; in pkgs

@@ -53,6 +53,7 @@
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; };
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      prettyShow = self.prettyShow_1_2;
     };
 
   ghc703Prefs =
@@ -62,6 +63,7 @@
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      prettyShow = self.prettyShow_1_2;
     };
 
   ghc702Prefs = ghc701Prefs;
@@ -73,6 +75,7 @@
       cabalInstall_1_16_0_2 = self.cabalInstall_1_16_0_2.override { Cabal = self.Cabal_1_16_0_3; zlib = self.zlib_0_5_3_3; };
       monadPar = self.monadPar_0_1_0_3;
       jailbreakCabal = self.jailbreakCabal.override { Cabal = self.disableTest self.Cabal_1_14_0; };
+      prettyShow = self.prettyShow_1_2;
     };
 
   ghc6123Prefs = ghc6122Prefs;
@@ -281,6 +284,12 @@
 
   packages_ghc762 =
     packages { ghcPath = ../development/compilers/ghc/7.6.2.nix;
+               ghcBinary = ghc704Binary;
+               prefFun = ghcHEADPrefs;
+             };
+
+  packages_ghc763 =
+    packages { ghcPath = ../development/compilers/ghc/7.6.3.nix;
                ghcBinary = ghc704Binary;
                prefFun = ghcHEADPrefs;
              };

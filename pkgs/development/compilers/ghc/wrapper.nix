@@ -1,4 +1,4 @@
-{ stdenv, ghc, makeWrapper, coreutils }:
+{ stdenv, ghc, makeWrapper, coreutils, forUserEnv ? false }:
 
 let
   ghc761OrLater = !stdenv.lib.versionOlder ghc.version "7.6.1";
@@ -54,4 +54,11 @@ stdenv.mkDerivation ({
   inherit ghc;
   inherit (ghc) meta;
   ghcVersion = ghc.version;
-} // (stdenv.lib.optionalAttrs ghc761OrLater { preFixup = "sed -i -e 's|-package-conf|${packageDBFlag}|' $out/bin/ghc-get-packages.sh"; }))
+} // (stdenv.lib.optionalAttrs ghc761OrLater { preFixup = "sed -i -e 's|-package-conf|${packageDBFlag}|' $out/bin/ghc-get-packages.sh"; })
+  // (stdenv.lib.optionalAttrs forUserEnv {
+       postFixup= ''
+         ln -s $ghc/lib $out/lib;
+         mkdir -p $out/share/doc
+         ln -s $ghc/share/doc/ghc $out/share/doc/ghc-${ghc.version}
+       '';
+     }))

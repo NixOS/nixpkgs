@@ -7,11 +7,11 @@
  else stdenv.mkDerivation)
 
 (rec {
-  name = "guile-2.0.7";
+  name = "guile-2.0.9";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "0f53pxkia4v17n0avwqlcjpy0n89hkazm2xsa6p84lv8k6k8y9vg";
+    sha256 = "0nw9y8vjyz4r61v06p9msks5lm58pd91irmzg4k487vmv743h2pp";
   };
 
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
@@ -106,10 +106,8 @@
 
 //
 
-(if stdenv.isFreeBSD
- then {
-   # XXX: Thread support is currently broken on FreeBSD and Solaris (namely
-   # the `SCM_I_IS_THREAD' assertion in `scm_spawn_thread' is hit.)
-   configureFlags = [ "--without-threads" ];
- }
- else {}))
+(stdenv.lib.optionalAttrs (!stdenv.isLinux) {
+  # Work around <http://bugs.gnu.org/14201>.
+  SHELL = "/bin/sh";
+  CONFIG_SHELL = "/bin/sh";
+}))

@@ -45,7 +45,7 @@ stdenv.mkDerivation (
               KEEPBUILDDIR="$out/`basename $TMPDIR`"
               header "Copying build directory to $KEEPBUILDDIR"
               mkdir -p $KEEPBUILDDIR
-              cp -R $TMPDIR/* $KEEPBUILDDIR
+              cp -R "$TMPDIR/"* $KEEPBUILDDIR
               stopNest
           fi
       fi
@@ -68,7 +68,7 @@ stdenv.mkDerivation (
           export CFLAGS="-O0"
           export CXXFLAGS="-O0"
       fi
-    ''; # */
+    '';
 
     initPhase = ''
       mkdir -p $out/nix-support
