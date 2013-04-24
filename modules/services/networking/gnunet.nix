@@ -134,12 +134,10 @@ in
       description = "GNUnet";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.gnunet}/bin/gnunet-arm -L DEBUG -l logfile -s -c ${configFile}";
-      serviceConfig.Type = "simple";
+      serviceConfig.ExecStart = "${pkgs.gnunet}/lib/gnunet/libexec/gnunet-service-arm -c ${configFile}";
       serviceConfig.User = "gnunet";
       serviceConfig.UMask = "0007";
       serviceConfig.WorkingDirectory = homeDir;
-      path = [ pkgs.gnunet ];
     };
 
   };
