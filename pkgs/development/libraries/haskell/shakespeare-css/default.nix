@@ -2,11 +2,10 @@
 
 cabal.mkDerivation (self: {
   pname = "shakespeare-css";
-  version = "1.0.4";
-  sha256 = "1vh1n1lhhga6y4p7rphyhxpdkg7igkskvh0jmwkg3m4x3jq8g9jg";
+  version = "1.0.5.1";
+  sha256 = "06x57cm9ni7cgdizdwzqzpqdmgzhchax7c4mbqvk3ymgf3lybrss";
   buildDepends = [ parsec shakespeare text transformers ];
   testDepends = [ hspec HUnit shakespeare text ];
-  noHaddock = true;
   meta = {
     homepage = "http://www.yesodweb.com/book/shakespearean-templates";
     description = "Stick your haskell variables into css at compile time";
