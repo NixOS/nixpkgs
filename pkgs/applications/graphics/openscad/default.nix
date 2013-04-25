@@ -1,19 +1,15 @@
-{stdenv, fetchgit, qt4, bison, flex, eigen, boost, mesa, glew, opencsg, cgal
+{stdenv, fetchurl, qt4, bison, flex, eigen, boost, mesa, glew, opencsg, cgal
   , mpfr, gmp
   }:
 
 stdenv.mkDerivation rec {
-  version = "git-20121213";
+  version = "2013.01";
   name = "openscad-${version}";
-  # src = fetchurl {
-  #   url = "https://github.com/downloads/openscad/openscad/${name}.src.tar.gz";
-  #   sha256 = "0gaqwzxbbzc21lhb4y26j8g0g28dhrwrgkndizp5ddab5axi4zjh";
-  # };
-  src = fetchgit {
-    url = "https://github.com/openscad/openscad.git";
-    rev = "c0612a9ed0899c96963e04c848a59b0164a689a2";
-    sha256  = "1zqiwk1cjbj7sng9sdarbrs0zxkn9fsa84dyv8n0zlyh40s7kvw2";
-  };        
+
+  src = fetchurl {
+    url = "https://openscad.googlecode.com/files/${name}.src.tar.gz";
+    sha256 = "01r013l8zyfkgmqn05axh3rlfsjwd6j403w5ffl7nby4i2spiw1f";
+  };
 
   buildInputs = [qt4 bison flex eigen boost mesa glew opencsg cgal gmp mpfr];
 
