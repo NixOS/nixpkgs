@@ -167,7 +167,11 @@ in
   };
 
   xorgserver = with xorg; attrs: attrs // {
-    configureFlags = "--enable-xcsecurity"; # enable SECURITY extension
+    configureFlags = [
+      "--enable-xcsecurity" # enable SECURITY extension
+      "--with-default-font-path= "  # there were only paths containing "${prefix}",
+                                    # and there are no fonts in this package anyway
+    ];
     patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch];
     buildInputs = attrs.buildInputs ++ [ xtrans ];
     propagatedBuildInputs =
