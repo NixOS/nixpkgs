@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = ''
     export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -I$(echo ${eigen}/include/eigen*) "
-    qmake PREFIX="$out"
+    qmake PREFIX="$out" VERSION=${version}
   '';
 
   doCheck = false;
