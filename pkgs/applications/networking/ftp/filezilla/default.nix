@@ -3,12 +3,12 @@
 let version = "3.6.0.2"; in
 stdenv.mkDerivation {
   name = "filezilla-${version}";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/project/filezilla/FileZilla_Client/${version}/FileZilla_${version}_src.tar.bz2";
     sha256 = "01n6k1q21i21451rdx3rgc4hhxghdn5b0ldzpjsp44ipgww5wsjk";
   };
-  
+
   configureFlags = [
     "--disable-manualupdatecheck"
   ];
