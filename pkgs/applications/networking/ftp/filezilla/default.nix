@@ -17,7 +17,14 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://filezilla-project.org/";
-    description = "FileZilla is a cross-platform graphical FTP, FTPS and SFTP client a lot of features, supporting Windows, Linux, Mac OS X and more.";
+    description = "Graphical FTP, FTPS and SFTP client";
     license = "GPLv2";
+
+    longDescription = ''
+      FileZilla Client is a free, open source FTP client. It supports
+      FTP, SFTP, and FTPS (FTP over SSL/TLS). The client is available
+      under many platforms, binaries for Windows, Linux and Mac OS X are
+      provided.
+    '';
   };
 }
