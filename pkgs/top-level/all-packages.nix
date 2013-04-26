@@ -1483,6 +1483,8 @@ let
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
 
+  reaverwps = callPackage ../tools/networking/reaver-wps {};
+
   recutils = callPackage ../tools/misc/recutils { };
 
   recoll = callPackage ../applications/search/recoll { };
