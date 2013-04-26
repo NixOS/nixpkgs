@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus, gnutls2, wxGTK28, libidn, tinyxml, gettext, pkgconfig, xdg_utils, gtk2, sqlite36 }:
+{ stdenv, fetchurl, dbus, gnutls2, wxGTK28, libidn, tinyxml, gettext, pkgconfig, xdg_utils, gtk2, sqlite }:
 
 let version = "3.6.0.2"; in
 stdenv.mkDerivation {
@@ -12,9 +12,9 @@ stdenv.mkDerivation {
   configureFlags = [
     "--disable-manualupdatecheck"
   ];
-  
-  buildInputs = [ dbus gnutls2 wxGTK28 libidn tinyxml gettext pkgconfig xdg_utils gtk2 sqlite36 ];
-  
+
+  buildInputs = [ dbus gnutls2 wxGTK28 libidn tinyxml gettext pkgconfig xdg_utils gtk2 sqlite ];
+
   meta = {
     homepage = "http://filezilla-project.org/";
     description = "FileZilla is a cross-platform graphical FTP, FTPS and SFTP client a lot of features, supporting Windows, Linux, Mac OS X and more.";
