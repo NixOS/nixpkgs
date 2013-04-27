@@ -30,7 +30,7 @@ if ! grep -F -q " $mountPoint " /proc/mounts; then
 fi
 
 if ! test -e "$mountPoint/$NIXOS_CONFIG"; then
-    echo "configuration file $NIXOS_CONFIG doesn't exist"
+    echo "configuration file $mountPoint/$NIXOS_CONFIG doesn't exist"
     exit 1
 fi
 
