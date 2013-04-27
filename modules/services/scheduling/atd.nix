@@ -45,7 +45,7 @@ in
       group = "atd";
       setuid = true;
       setgid = true;
-    }) [ "at" "atq" "atrm" ];
+    }) [ "at" "atq" "atrm" "batch" ];
 
     environment.systemPackages = [ at ];
 
