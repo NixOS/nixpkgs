@@ -154,9 +154,6 @@ in
 
 {
 
-  imports = [ ./kdm.nix ./slim.nix ./lightdm.nix ];
-
-
   options = {
 
     services.xserver.displayManager = {
