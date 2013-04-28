@@ -296,10 +296,10 @@ rec {
   };
 
   BoostGeometryUtils = buildPerlModule rec {
-    name = "Boost-Geometry-Utils-0.09";
+    name = "Boost-Geometry-Utils-0.12";
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AA/AAR/${name}.tar.gz";
-      sha256 = "0wgd36rxd5lj0vlkp7l9zgx8bgbv0nj4kia83ipb7p64xpyysghg";
+      sha256 = "1pywbxjf05qpcixshblhd2cham601zwa9w7c3k5waz4cdild6g1m";
     };
     propagatedBuildInputs = [ ModuleBuildWithXSpp ExtUtilsTypemapsDefault ];
   };
@@ -3934,10 +3934,10 @@ rec {
   };
 
   MathClipper = buildPerlModule rec {
-    name = "Math-Clipper-1.19";
+    name = "Math-Clipper-1.22";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
-      sha256 = "1hrdand4i937bgsr3f3yma5ckkdwkprdwmkyyl37v1vqcjdrjr7j";
+      sha256 = "0p5iblg979v3pb6a8kyhjdv33yadr5997nhz9asjksgvww328nfa";
     };
     propagatedBuildInputs = [ ModuleBuildWithXSpp ExtUtilsXSpp ExtUtilsTypemapsDefault TestDeep ];
   };
