@@ -822,7 +822,7 @@ let
 
   uni2ascii = callPackage ../tools/text/uni2ascii { };
 
-  g500control = callPackage ../tools/misc/g500-control { };
+  g500-control = callPackage ../tools/misc/g500-control { };
 
   gawk = callPackage ../tools/text/gawk { };
 
