@@ -80,6 +80,15 @@ rec {
     };
   };
 
+  AlienWxWidgets = buildPerlPackage rec {
+    name = "Alien-wxWidgets-0.64";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MD/MDOOTSON/${name}.tar.gz";
+      sha256 = "1frmvdppzw1vrbk2jvwxh5a5qafl7bigflpgwpkzdg4v9nswgbmx";
+    };
+    propagatedBuildInputs = [ pkgs.pkgconfig pkgs.gtk2 pkgs.wxGTK ];
+  };
+
   AnyMoose = buildPerlPackage rec {
     name = "Any-Moose-0.10";
     src = fetchurl {
@@ -243,6 +252,15 @@ rec {
       url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
       sha256 = "1xqhzy3m2r08my13alff9bzl8b6xgd68312834x0hf33yir3l1yn";
     };
+  };
+
+  BoostGeometryUtils = buildPerlModule rec {
+    name = "Boost-Geometry-Utils-0.09";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AA/AAR/${name}.tar.gz";
+      sha256 = "0wgd36rxd5lj0vlkp7l9zgx8bgbv0nj4kia83ipb7p64xpyysghg";
+    };
+    propagatedBuildInputs = [ ModuleBuildWithXSpp ExtUtilsTypemapsDefault ];
   };
 
   CacheCache = buildPerlPackage rec {
@@ -1065,6 +1083,14 @@ rec {
     };
   };
 
+  constant-defer = buildPerlPackage rec {
+    name = "constant-defer-5";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KR/KRYDE/${name}.tar.gz";
+      sha256 = "05fjw2n6liwlillrj3bkfm5fzxw1mcfbxrnk9m18vibx6yzf8pwq";
+    };
+  };
+
   ContextPreserve = buildPerlPackage rec {
     name = "Context-Preserve-0.01";
     src = fetchurl {
@@ -1372,10 +1398,10 @@ rec {
   };
 
   DataUUID = buildPerlPackage rec {
-    name = "Data-UUID-1.217";
+    name = "Data-UUID-1.218";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Data/${name}.tar.gz";
-      sha256 = "0vgykclw1mn06a53d8y3g7s7vanks8078dh2j4jb84djk0cw9h0q";
+      sha256 = "1cb4i0j48g5dk2dwzz32myl6wv4ngxqnrkdnixq80pzjcmz1qkpl";
     };
   };
 
@@ -1891,11 +1917,20 @@ rec {
     };
   };
 
-  ExtUtilsMakeMaker = buildPerlPackage rec{
-    name = "ExtUtils-MakeMaker-6.59";
+  ExtUtilsCppGuess = buildPerlModule rec {
+    name = "ExtUtils-CppGuess-0.07";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "0fwhb2cf5x7y87xwml66p624iynf0mzvhy1q4aq5yv7l3lhwhaby";
+      sha256 = "1a77hxf2pa8ia9na72rijv1yhpn2bjrdsybwk2dj2l938pl3xn0w";
+    };
+    propagatedBuildInputs = [ CaptureTiny ];
+  };
+
+  ExtUtilsMakeMaker = buildPerlPackage rec{
+    name = "ExtUtils-MakeMaker-6.66";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
+      sha256 = "1w9pbjajas60a9i29j8h10nz9jf86w7jb197llnfs9fqcf4yvfha";
     };
     propagatedBuildInputs =
       [ ParseCPANMeta version JSONPP CPANMetaYAML CPANMeta
@@ -1904,10 +1939,10 @@ rec {
   };
 
   ExtUtilsManifest = buildPerlPackage rec {
-    name = "ExtUtils-Manifest-1.59";
+    name = "ExtUtils-Manifest-1.61";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "0cb7mjmfsk2rlwdr5y91x2w5ffb0yjf9gblibk9wplivlpa48jhs";
+      sha256 = "18jj4lrip2g580b2fw5khxvdx6h3pavgihvb87snggrlgabpj20n";
     };
   };
 
@@ -1917,6 +1952,23 @@ rec {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
       sha256 = "06baf0nsmdkfk50p4x9kss4ncm8h49gkzy8hl5cxbxdsab65gmrb";
     };
+  };
+
+  ExtUtilsTypemapsDefault = buildPerlModule rec {
+    name = "ExtUtils-Typemaps-Default-1.01";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
+      sha256 = "0k03rr7bmhnn6j0505w9id5apss85yvqnx76hxf3javn3klj1m5z";
+    };
+  };
+
+  ExtUtilsXSpp = buildPerlModule rec {
+    name = "ExtUtils-XSpp-0.1700";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
+      sha256 = "1msp79bdjzi59vignfz1cxwk5a2cjiahblvi0ka60pi8nnn0alrm";
+    };
+    buildInputs = [ Spiffy TestBase TestDifferences ];
   };
 
   FileChangeNotify = buildPerlModule rec {
@@ -2201,6 +2253,15 @@ rec {
       license = [ "Artistic" ];
       maintainers = [ stdenv.lib.maintainers.ludo ];
     };
+  };
+
+  GrowlGNTP = buildPerlModule rec {
+    name = "Growl-GNTP-0.20";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Growl/${name}.tar.gz";
+      sha256 = "150x65lwf7pfsygcpmvj3679lhlfwx87xylwnrmwll67f9dpkjdi";
+    };
+    buildInputs = [ DataUUID CryptCBC ];
   };
 
   HashFlatten = buildPerlPackage rec {
@@ -3014,6 +3075,49 @@ rec {
     propagatedBuildInputs = [TimeDate TestPod];
   };
 
+  MathLibm = buildPerlPackage rec {
+    name = "Math-Libm-1.00";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      sha256 = "0xn2a950mzzs5q1c4q98ckysn9dz20x7r35g02zvk35chgr0klxz";
+    };
+  };
+
+  MathClipper = buildPerlModule rec {
+    name = "Math-Clipper-1.19";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      sha256 = "1hrdand4i937bgsr3f3yma5ckkdwkprdwmkyyl37v1vqcjdrjr7j";
+    };
+    propagatedBuildInputs = [ ModuleBuildWithXSpp ExtUtilsXSpp ExtUtilsTypemapsDefault TestDeep ];
+  };
+
+  MathConvexHullMonotoneChain = buildPerlPackage rec {
+    name = "Math-ConvexHull-MonotoneChain-0.01";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      sha256 = "1xcl7cz62ydddji9qzs4xsfxss484jqjlj4iixa4aci611cw92r8";
+    };
+  };
+
+  MathGeometryVoronoi = buildPerlPackage rec {
+    name = "Math-Geometry-Voronoi-1.3";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      sha256 = "0b206k2q5cznld45cjhgm0as0clc9hk135ds8qafbkl3k175w1vj";
+    };
+    propagatedBuildInputs = [ ClassAccessor ParamsValidate ];
+  };
+
+  MathPlanePath = buildPerlPackage rec {
+    name = "Math-PlanePath-101";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
+      sha256 = "0g24zhgyxs56zv966xb487vvmhqqxvvsbbz4mck8n4l31rabk8jj";
+    };
+    propagatedBuildInputs = [ MathLibm constant-defer ];
+  };
+
   MathRound = buildPerlPackage rec {
     name = "Math-Round-0.06";
     src = fetchurl {
@@ -3062,6 +3166,15 @@ rec {
       description = "Build and install Perl modules";
       license = "perl5";
     };
+  };
+
+  ModuleBuildWithXSpp = buildPerlModule rec {
+    name = "Module-Build-WithXSpp-0.13";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SM/SMUELLER/${name}.tar.gz";
+      sha256 = "05c5dssgl7ykj64nkzy4nwfrs0hd1lvfidhflrs3f1c7hc0z9g46";
+    };
+    propagatedBuildInputs = [ ExtUtilsXSpp ExtUtilsCppGuess ];
   };
 
   ModuleFind = buildPerlPackage {
@@ -3550,6 +3663,15 @@ rec {
     propagatedBuildInputs =
       [ DigestHMAC LWP LWPProtocolHttps URI XMLParser IOString ];
     buildInputs = [ DBI DBDSQLite ];
+  };
+
+  NetDBus = buildPerlPackage rec {
+    name = "Net-DBus-1.0.0";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANBERR/${name}.tar.gz";
+      sha256 = "03srw98nn7r4k6fmnr5bhwsxbhgrsmzdja98jl8b8a72iayg7l5z";
+    };
+    propagatedBuildInputs = [ pkgs.pkgconfig pkgs.dbus XMLTwig ];
   };
 
   NetDNS = buildPerlPackage {
@@ -4238,6 +4360,15 @@ rec {
     };
   };
 
+  Spiffy = buildPerlPackage rec {
+    name = "Spiffy-0.31";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
+      sha256 = "11pnsbyjzpp8y8ss7mrmz8nnbvv5vr7x71f13pwii9m8cam04blj";
+    };
+    buildInputs = [ ExtUtilsMakeMaker ];
+  };
+
   SpreadsheetParseExcel = buildPerlPackage rec {
     name = "Spreadsheet-ParseExcel-0.58";
     src = fetchurl {
@@ -4691,6 +4822,15 @@ rec {
       sha256 = "10026w4r3yv6k3vc6cby7d61mxddlqh0ls6z39c82f17awfy9p7w";
     };
     buildInputs = [ LogTrace ];
+  };
+
+  TestBase = buildPerlPackage rec {
+    name = "Test-Base-0.60";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Test/${name}.tar.gz";
+      sha256 = "0yf030nay85xzas1qxn1nw6lhfsrcbgh3nq7bxbb11nxhvdaj2bx";
+    };
+    buildInputs = [ Spiffy ];
   };
 
   TestCheckDeps = buildPerlPackage {
@@ -5302,18 +5442,18 @@ rec {
   };
 
   version = buildPerlPackage rec {
-    name = "version-0.93";
+    name = "version-0.9902";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/version/${name}.tar.gz";
-      sha256 = "1lfq27hshq1gvdqksicp22ag8n1aiijhjw68q3r254kp6zimrz69";
+      sha256 = "17fdj3hxks33plapj3hinjgmyblnh302z52rq4b9spnz22q5vhww";
     };
   };
 
   VersionRequirements = buildPerlPackage rec {
-    name = "Version-Requirements-0.101020";
+    name = "Version-Requirements-0.101022";
     src = fetchurl {
       url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "18bcfxwn21gcih0bc6p1sp42iis8lwnqh7fpprkniflj8q0ps0x4";
+      sha256 = "0gn4cfx28sfsinxbf9lrxg4lzma8bsj99zb66lsg9irplrkx1pgl";
     };
   };
 
@@ -5373,6 +5513,18 @@ rec {
       description = "Database of robots.txt-derived permissions";
       license = "perl";
     };
+  };
+
+  Wx = buildPerlPackage rec {
+    name = "Wx-0.9922";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MD/MDOOTSON/${name}.tar.gz";
+      sha256 = "11x3cvffcyi4b2c6pz9awks3zrg83bg1cwapm4psdiqnd568safw";
+    };
+    propagatedBuildInputs = [ ExtUtilsXSpp AlienWxWidgets ];
+    # Testing requires an X server:
+    #   Error: Unable to initialize GTK+, is DISPLAY set properly?"
+    doCheck = false;
   };
 
   X11GUITest = buildPerlPackage rec {
@@ -5475,6 +5627,7 @@ rec {
       sha256 = "07zdsfzw9dlrx6ril9clf1jfif09vpf27rz66laja7mvih9izd1v";
     };
     propagatedBuildInputs = [XMLParser];
+    doCheck = false;  # requires lots of extra packages
   };
 
   XMLWriter = buildPerlPackage rec {
