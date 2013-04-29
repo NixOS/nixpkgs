@@ -203,6 +203,7 @@
     shortName = "ZPT2.1";
     fullName = "Zope Public License 2.1";
     url = "http://old.zope.org/Resources/License/ZPL-2.1";
+  };
 
   amd = {
     shortName = "amd";
