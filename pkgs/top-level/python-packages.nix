@@ -1476,6 +1476,22 @@ pythonPackages = python.modules // rec {
     };
   };
 
+  doxypy = buildPythonPackage rec {
+    name = "doxypy-0.4.2";
+
+    src = fetchurl {
+      url = "http://code.foosel.org/files/${name}.tar.gz";
+      sha256 = "1afmb30zmy7942b53qa5vd3js883wwqqls35n8xfb3rnj0qnll8g";
+    };
+
+    meta = {
+      homepage = http://code.foosel.org/doxypy;
+      description = "An input filter for Doxygen";
+    };
+
+    doCheck = false;
+  };
+
 
   dtopt = buildPythonPackage rec {
     name = "dtopt-0.1";
