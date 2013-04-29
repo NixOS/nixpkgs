@@ -5008,7 +5008,7 @@ let
     ncurses = null;
   });
 
-  sqlite = sqlite_3_7_14;
+  sqlite = sqlite_3_7_16;
 
   sqliteInteractive = appendToName "interactive" (sqlite.override {
     inherit readline ncurses;
