@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui, xfce4panel
-, libwnck, dbus_glib, xfconf, libglade, xorg }:
+, libwnck, dbus_glib, xfconf, libglade, xorg
+, polkit, xfce4_dev_tools }:
 
 #TODO: gnome stuff: gconf (assistive?), keyring
 
@@ -14,12 +15,16 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
+  patches = [ ./xfce4-session-systemd.patch ];
+
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util libxfce4ui libwnck dbus_glib
       xfconf xfce4panel libglade xorg.iceauth
+      polkit xfce4_dev_tools
     ];
 
-  configureFlags = [ "--with-xsession-prefix=$$out" ];
+  preConfigure = "xdt-autogen";
+  configureFlags = [ "--with-xsession-prefix=$(out)" ];
 
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache";
 
