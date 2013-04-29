@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, perl, libiconvOrNull, zlib, libffi
+{ stdenv, fetchurl, pkgconfig, gettext, perl, libiconvOrEmpty, zlib, libffi
 , python, pcre, libelf }:
 
 # TODO:
@@ -25,21 +25,23 @@ let
 in
 
 stdenv.mkDerivation (rec {
-  name = "glib-2.36.0";
+  name = "glib-2.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/2.36/${name}.tar.xz";
-    sha256 = "09xjkg5kaz4j0m25jizvz7ra48bmdawibykzri5igicjhsz8lnj5";
+    sha256 = "090bw5par3dfy5m6dhq393pmy92zpw3d7rgbzqjc14jfg637bqvx";
   };
 
   # configure script looks for d-bus but it is only needed for tests
-  buildInputs = [ libiconvOrNull libelf ];
+  buildInputs = [ libelf ] ++ libiconvOrEmpty;
 
   nativeBuildInputs = [ perl pkgconfig gettext python ];
 
   propagatedBuildInputs = [ pcre zlib libffi ];
 
   configureFlags = "--with-pcre=system --disable-fam";
+
+  postConfigure = "sed '/SANE_MALLOC_PROTOS/s,^,//,' -i config.h"; # https://bugzilla.gnome.org/show_bug.cgi?id=698716 :-)
 
   enableParallelBuilding = true;
 
