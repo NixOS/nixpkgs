@@ -4998,17 +4998,17 @@ let
 
   srtp = callPackage ../development/libraries/srtp {};
 
-  sqlite_3_7_16_2 = lowPrio (callPackage ../development/libraries/sqlite/3.7.16.2.nix {
+  sqlite_3_7_16 = lowPrio (callPackage ../development/libraries/sqlite/3.7.16.nix {
     readline = null;
     ncurses = null;
   });
 
-  sqlite_3_7_14_1 = lowPrio (callPackage ../development/libraries/sqlite/3.7.14.1.nix {
+  sqlite_3_7_14 = lowPrio (callPackage ../development/libraries/sqlite/3.7.14.nix {
     readline = null;
     ncurses = null;
   });
 
-  sqlite = sqlite_3_7_14_1;
+  sqlite = sqlite_3_7_14;
 
   sqliteInteractive = appendToName "interactive" (sqlite.override {
     inherit readline ncurses;
