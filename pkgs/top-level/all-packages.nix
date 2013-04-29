@@ -4998,9 +4998,7 @@ let
 
   srtp = callPackage ../development/libraries/srtp {};
 
-  # This version breaks the DBIxClass library and the Hydra regression
-  # test suite. These issues need further investigation.
-  sqlite_3_7_16_1 = lowPrio (callPackage ../development/libraries/sqlite/3.7.16.1.nix {
+  sqlite_3_7_16_2 = lowPrio (callPackage ../development/libraries/sqlite/3.7.16.2.nix {
     readline = null;
     ncurses = null;
   });
