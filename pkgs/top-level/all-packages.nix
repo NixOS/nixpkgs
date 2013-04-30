@@ -2502,6 +2502,8 @@ let
 
   go = callPackage ../development/compilers/go { };
 
+  go_1_1 = lowPrio (callPackage ../development/compilers/go/1.1.nix { });
+
   gprolog = callPackage ../development/compilers/gprolog { };
 
   gwt240 = callPackage ../development/compilers/gwt/2.4.0.nix { };
