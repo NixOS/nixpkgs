@@ -72,10 +72,13 @@ def get_generations(profile):
 def remove_old_entries(gens):
     slice_start = len("@efiSysMountPoint@/loader/entries/nixos-generation-")
     slice_end = -1 * len(".conf")
-    for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos-generation-[1-9][0-9]*.conf"):
-        gen = int(path[slice_start:slice_end])
-        if not gen in gens:
-            os.unlink(path)
+    for path in glob.iglob("@efiSysMountPoint@/loader/entries/nixos-generation-[1-9]*.conf"):
+        try:
+            gen = int(path[slice_start:slice_end])
+            if not gen in gens:
+                os.unlink(path)
+        except ValueError:
+            pass
     for path in glob.iglob("@efiSysMountPoint@/efi/nixos/*"):
         if not path in known_paths:
             os.unlink(path)
