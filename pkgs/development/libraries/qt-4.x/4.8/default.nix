@@ -14,7 +14,7 @@
 
 with stdenv.lib;
 
-let v = "4.8.3"; in
+let v = "4.8.4"; in
 
 # TODO:
 #  * move some plugins (e.g., SQL plugins) to dedicated derivations to avoid
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://releases.qt-project.org/qt4/source/qt-everywhere-opensource-src-${v}.tar.gz";
-    sha256 = "0a67riy4i0xj6j7vmckd0nakras3rl3rzx0r83h1p1i4z5s2kxzi";
+    sha256 = "0w1j16q6glniv4hppdgcvw52w72gb2jab35ylkw0qjn5lj5y7c1k";
   };
 
   patches =
