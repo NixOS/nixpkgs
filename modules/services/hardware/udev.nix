@@ -228,10 +228,7 @@ in
       (isYes "NET")
     ];
 
-    system.activationScripts.setFirmwarePath =
-      ''
-        echo -n ${config.hardware.firmware} 2>/dev/null > /sys/module/firmware_class/parameters/path
-      '';
+    boot.extraModprobeConfig = "options firmware_class path=${config.hardware.firmware}";
 
     system.activationScripts.clearHotplug =
       ''
