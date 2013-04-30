@@ -5968,8 +5968,7 @@ let
       ];
   };
 
-  # low-priority because it is RC
-  linux_3_9 = lowPrio (makeOverridable (import ../os-specific/linux/kernel/linux-3.9.nix) {
+  linux_3_9 = makeOverridable (import ../os-specific/linux/kernel/linux-3.9.nix) {
     inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
     kernelPatches =
       [
@@ -5979,7 +5978,7 @@ let
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
       ];
-  });
+  };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -6100,8 +6099,9 @@ let
   linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi);
   linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7 linuxPackages_3_7);
   linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8 linuxPackages_3_8);
+  linuxPackages_3_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_9 linuxPackages_3_9);
   # Update this when adding a new version!
-  linuxPackages_latest = pkgs.linuxPackages_3_8;
+  linuxPackages_latest = pkgs.linuxPackages_3_9;
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
