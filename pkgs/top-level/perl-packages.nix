@@ -1545,15 +1545,13 @@ rec {
   };
 
   DBIxClass = buildPerlPackage {
-    name = "DBIx-Class-0.08210";
+    name = "DBIx-Class-0.08250";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.08210.tar.gz;
-      sha256 = "0sajw5j3zpgf44zaif5sp98xpkdfmzfn76c8anljfx48qh7r22y4";
+      url = mirror://cpan/authors/id/R/RI/RIBASUSHI/DBIx-Class-0.08250.tar.gz;
+      sha256 = "0nsqvj34klc9pf4l5kj3nqkq7agbsn11ys4115100awf7gxjbad6";
     };
-    buildInputs = [ DBDSQLite PackageStash TestException TestWarn ];
+    buildInputs = [ DBDSQLite PackageStash TestException TestWarn TestDeep ];
     propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ClassInspector ClassMethodModifiers ConfigAny ContextPreserve DataCompare DataDumperConcise DataPage DBI DevelGlobalDestruction HashMerge ModuleFind Moo MROCompat namespaceclean PathClass ScopeGuard SQLAbstract strictures SubName TryTiny ];
-    # !!! tests broken with latest sqlite, see http://lists.scsys.co.uk/pipermail/dbix-class/2013-April/011271.html
-    doCheck = false;
     meta = {
       homepage = http://www.dbix-class.org/;
       description = "Extensible and flexible object <-> relational mapper";
