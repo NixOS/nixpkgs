@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "jquery-ui-1.10.2";
 
   src = fetchurl {
-    url = "http://jqueryui.com/download/${name}.custom.zip";
+    url = "http://jqueryui.com/resources/download/${name}.custom.zip";
     sha256 = "0r1fmqpym7bjqhjay9br4h3izky781bsda7v7552yjwkgiv391hl";
   };
 
