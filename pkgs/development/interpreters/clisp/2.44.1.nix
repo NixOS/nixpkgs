@@ -14,16 +14,22 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ libsigsegv gettext ncurses readline libX11 libXau libXt pcre
       zlib libXpm xproto libXext xextproto libffi libffcall ];
- 
+
+  patches = [ ./bits_ipctypes_to_sys_ipc.patch ]; # from Gentoo
+      
   # First, replace port 9090 (rather low, can be used)
   # with 64237 (much higher, IANA private area, not
   # anything rememberable).
-  patchPhase = ''
+  # Also remove reference to a type that disappeared from recent glibc
+  # (seems the correct thing to do, found no reference to any solution)
+  postPatch = ''
     sed -e 's@9090@64237@g' -i tests/socket.tst
     sed -i 's@/bin/pwd@${coreutils}&@' src/clisp-link.in
     find . -type f | xargs sed -e 's/-lICE/-lXau &/' -i
-  '';
 
+    substituteInPlace modules/bindings/glibc/linux.lisp --replace "(def-c-type __swblk_t)" ""
+  '';
+  
   configureFlags =
     ''
       --with-readline builddir --with-dynamic-ffi
