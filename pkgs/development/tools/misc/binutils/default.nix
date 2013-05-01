@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       + stdenv.lib.optionalString (stdenv.system == "mips64el-linux")
         " --enable-fix-loongson2f-nop"
       + stdenv.lib.optionalString (cross != null) " --target=${cross.config}"
-      + stdenv.lib.optionalString gold " --enable-gold"
+      + stdenv.lib.optionalString gold " --enable-gold --enable-plugins"
       + stdenv.lib.optionalString deterministic " --enable-deterministic-archives";
 
   enableParallelBuilding = true;
