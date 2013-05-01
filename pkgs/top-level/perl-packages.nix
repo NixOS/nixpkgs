@@ -1532,10 +1532,10 @@ rec {
   };
 
   DBI = buildPerlPackage {
-    name = "DBI-1.616";
+    name = "DBI-1.625";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.616.tar.gz;
-      sha256 = "0m6hk66xprjl314d5c665hnd1vch9a0b9y6ywvmf04kdqj33kkk0";
+      url = mirror://cpan/authors/id/T/TI/TIMB/DBI-1.625.tar.gz;
+      sha256 = "1rl1bnirf1hshc0z04vk41qplx2ixzciabvwy50a1sld7vs46q4w";
     };
     meta = {
       homepage = http://dbi.perl.org/;

@@ -8,15 +8,15 @@
 # some loss of functionality because of it.
 
 let
-  name = "tahoe-lafs-1.8.3";
+  name = "tahoe-lafs-1.9.2";
 in
 buildPythonPackage {
   inherit name;
   namePrefix = "";
 
   src = fetchurl {
-    url = "http://tahoe-lafs.org/source/tahoe-lafs/snapshots/allmydata-tahoe-1.8.3.tar.bz2";
-    sha256 = "00pm7fvwci5ncg2jhsqsl9r79kn495yni8nmr7p5i98f3siwvjd8";
+    url = "http://tahoe-lafs.org/source/tahoe-lafs/snapshots/allmydata-tahoe-1.9.2.tar.bz2";
+    sha256 = "0111gmavyrnglx10kj8z7wm7y97fyg9isv71c0gx9kq4c03knxq4";
   };
 
   # The patch doesn't apply cleanly to the current version.
@@ -37,7 +37,7 @@ buildPythonPackage {
         -es"|cmd = find_exe.find_exe('twistd')|cmd = ['${twisted}/bin/twistd']|g"
 
     sed -i "src/allmydata/util/iputil.py" \
-        -es"|_linux_path = '/sbin/ifconfig'|_linux_path = '${nettools}/sbin/ifconfig'|g"
+        -es"|_linux_path = '/sbin/ifconfig'|_linux_path = '${nettools}/bin/ifconfig'|g"
 
     # Chroots don't have /etc/hosts and /etc/resolv.conf, so work around
     # that.

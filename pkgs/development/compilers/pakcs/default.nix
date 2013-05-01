@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = "http://www.informatik.uni-kiel.de/~pakcs/";
-    description = "an implementation of the multi-paradigm declarative language Curry";
+    description = "An implementation of the multi-paradigm declarative language Curry";
     license = stdenv.lib.licenses.bsd3;
 
     longDescription = ''
@@ -77,6 +77,6 @@ stdenv.mkDerivation {
     '';
 
     maintainers = [ stdenv.lib.maintainers.kkallio ];
-    platforms = stdenv.lib.platforms.linux;
+    #platforms = stdenv.lib.platforms.linux;
   };
 }

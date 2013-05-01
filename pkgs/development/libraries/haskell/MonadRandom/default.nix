@@ -1,10 +1,10 @@
-{ cabal, mtl, random }:
+{ cabal, mtl, random, transformers }:
 
 cabal.mkDerivation (self: {
   pname = "MonadRandom";
-  version = "0.1.8";
-  sha256 = "1zin7qyv86gza60q6a6r8az2dwxm80wh23idvmjapgbjn2kfvfim";
-  buildDepends = [ mtl random ];
+  version = "0.1.9";
+  sha256 = "1n947650xlz47rj6y6ik2mknyr9smwragjr5akccinmfm1krg6lz";
+  buildDepends = [ mtl random transformers ];
   meta = {
     description = "Random-number generation monad";
     license = "unknown";

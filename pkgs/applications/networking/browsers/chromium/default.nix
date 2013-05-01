@@ -13,13 +13,7 @@
 , gcc, bison, gperf
 , glib, gtk, dbus_glib
 , libXScrnSaver, libXcursor, mesa
-, protobuf
-
-# dependencies for v25 only
-, libvpx
-
-# dependencies for >= v26
-, speechd, libXdamage
+, protobuf, speechd, libXdamage
 
 # dependencies for >= v27
 , libXtst
@@ -69,7 +63,7 @@ let
     use_system_xdg_utils = true;
     use_system_yasm = true;
     use_system_zlib = false; # http://crbug.com/143623
-    use_system_protobuf = post25;
+    use_system_protobuf = true;
 
     use_system_harfbuzz = false;
     use_system_icu = false;
@@ -77,9 +71,6 @@ let
     use_system_skia = false;
     use_system_sqlite = false; # http://crbug.com/22208
     use_system_v8 = false;
-  } // optionalAttrs pre26 {
-    use_system_libvpx = true;
-    use_system_protobuf = true;
   };
 
   defaultDependencies = [
@@ -90,10 +81,10 @@ let
     libusb1 libexif
   ];
 
-  pre26 = versionOlder sourceInfo.version "26.0.0.0";
   pre27 = versionOlder sourceInfo.version "27.0.0.0";
-  post25 = !pre26;
+  pre28 = versionOlder sourceInfo.version "28.0.0.0";
   post26 = !pre27;
+  post27 = !pre28;
 
 in stdenv.mkDerivation rec {
   name = "${packageName}-${version}";
@@ -116,14 +107,12 @@ in stdenv.mkDerivation rec {
     krb5
     glib gtk dbus_glib
     libXScrnSaver libXcursor mesa
-    pciutils protobuf
+    pciutils protobuf speechd libXdamage
   ] ++ optional gnomeKeyringSupport libgnome_keyring
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
     ++ optional pulseSupport pulseaudio
-    ++ optional pre26 libvpx
-    ++ optionals post25 [ speechd libXdamage ]
     ++ optional post26 libXtst;
 
   opensslPatches = optional useOpenSSL openssl.patches;
@@ -138,9 +127,11 @@ in stdenv.mkDerivation rec {
     sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
   '' + optionalString useOpenSSL ''
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
-  '' + optionalString post25 ''
+  '' + ''
     sed -i -e 's|/usr/bin/gcc|gcc|' \
-      third_party/WebKit/Source/WebCore/WebCore.gyp/WebCore.gyp
+      third_party/WebKit/Source/${if post27
+                                  then "core/core.gyp/core.gyp"
+                                  else "WebCore/WebCore.gyp/WebCore.gyp"}
   '';
 
   gypFlags = mkGypFlags (gypFlagsUseSystemLibs // {

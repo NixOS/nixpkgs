@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "crypto-conduit";
-  version = "0.5.1";
-  sha256 = "04z8z7bipa40xnjr8civ1sj3df2iyvlv929ibkrdqv87gj0qv2dp";
+  version = "0.5.2";
+  sha256 = "0ncqwr2a9nxl6q7qys9gb5db62lx622g5db1xhpfni045x324kbz";
   buildDepends = [ cereal conduit cryptoApi transformers ];
   testDepends = [
     cereal conduit cryptoApi cryptocipher cryptohashCryptoapi hspec

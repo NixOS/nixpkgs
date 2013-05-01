@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "yesod-static";
-  version = "1.1.2.2";
-  sha256 = "1z1afpr9xbclpwswlbys7f7w8761vvr06hxhqhnqfzf4ky8g3671";
+  version = "1.1.2.3";
+  sha256 = "15wk7kpr5xdxia07wyx7msfdlyafqn2pkkrzzdfqvij972n17xmh";
   buildDepends = [
     base64Bytestring cereal conduit cryptoConduit cryptohash fileEmbed
     httpTypes systemFilepath text transformers unixCompat wai

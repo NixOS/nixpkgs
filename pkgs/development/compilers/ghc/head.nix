@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses }:
 
 stdenv.mkDerivation rec {
-  version = "7.7.20130223";
+  version = "7.7";
   name = "ghc-${version}";
 
   src = fetchurl {
     url = "http://haskell.org/ghc/dist/current/dist/${name}-src.tar.bz2";
-    sha256 = "1naw6x1mjij10h9k4biard2pkzi6zml26vv4h34asprv0h6ymdbg";
+    sha256 = "1f4grj1lw25vb5drn4sn8fc1as3hwhk8dl659spi5fnbrs5k4wgb";
   };
 
   buildInputs = [ ghc perl gmp ncurses ];
@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp}/lib"
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp}/include"
     DYNAMIC_BY_DEFAULT = NO
+  '';
+
+  # The tarball errorneously contains an executable that doesn't work in
+  # Nix. Deleting it will cause the program to be re-built locally.
+  postUnpack = ''
+    rm -v $sourceRoot/libraries/integer-gmp/cbits/mkGmpDerivedConstants
   '';
 
   preConfigure = ''

@@ -57,8 +57,8 @@ mapHaskellTestOn {
   AspectAG = default;
   async = default ++ latest;
   attempt = default;
-  attoparsecEnumerator = default;
   attoparsec = default;
+  attoparsecEnumerator = default;
   authenticate = default;
   base64Bytestring = default;
   baseUnicodeSymbols = default;
@@ -67,8 +67,8 @@ mapHaskellTestOn {
   binaryShared = default;
   bitmap = default;
   bktrees = default;
-  blazeBuilderEnumerator = default;
   blazeBuilder = default;
+  blazeBuilderEnumerator = default;
   blazeHtml = default;
   blazeTextual = default;
   bloomfilter = default;
@@ -153,11 +153,12 @@ mapHaskellTestOn {
   filestore = default;
   fingertree = default;
   flexibleDefaults = default;
+  fsnotify = [ ghc704 ghc742 ghc763 ];
   funcmp = all;
   gamma = default;
   gdiff = default;
-  ghcEvents = default;
   ghc = default;
+  ghcEvents = default;
   ghcMod = default ++ latest;
   ghcMtl = default;
   ghcPaths = default;
@@ -187,8 +188,8 @@ mapHaskellTestOn {
   haskeline = default;
   haskellLexer = default;
   haskellPlatform = allBut ghc763;
-  haskellSrcExts = default;
   haskellSrc = all;
+  haskellSrcExts = default;
   haskellSrcMeta = default;
   HaXml = default;
   haxr = default;
@@ -224,10 +225,10 @@ mapHaskellTestOn {
   HStringTemplate = default ++ latest;
   hsyslog = all;
   html = all;
+  HTTP = all;
   httpConduit = default;
   httpDate = default;
   httpdShed = default;
-  HTTP = all;
   httpTypes = default;
   HUnit = all;
   hxt = default;
@@ -313,8 +314,8 @@ mapHaskellTestOn {
   pwstoreFast = default;
   QuickCheck2 = default;
   QuickCheck = all;
-  randomFu = default;
   random = default ++ latest;
+  randomFu = default;
   randomShuffle = default;
   randomSource = default;
   RangedSets = default;
@@ -378,11 +379,11 @@ mapHaskellTestOn {
   text = all;
   thLift = default;
   timeplot = default;
-  tlsExtra = default;
   tls = default;
+  tlsExtra = default;
+  transformers = all;
   transformersBase = default;
   transformersCompat = default;
-  transformers = all;
   tuple = default;
   typeLlevelNaturalNumber = default;
   uniplate = default;
@@ -406,16 +407,16 @@ mapHaskellTestOn {
   vectorSpace = default;
   vty = default;
   waiAppStatic = default;
-  waiExtra = default;
   wai = default;
+  waiExtra = default;
   waiLogger = default;
   warp = default;
-  wlPprintExtras = default;
   wlPprint = default ++ latest;
+  wlPprintExtras = default;
   wlPprintTerminfo = default;
   wxcore = default;
-  wxdirect = default;
   wx = default;
+  wxdirect = default;
   X11 = default;
   xhtml = all;
   xmlConduit = default;
@@ -424,14 +425,14 @@ mapHaskellTestOn {
   xmlTypes = default;
   xmobar = default ++ latest;
   xmonadContrib = default ++ latest;
-  xmonadExtras = default ++ latest;
   xmonad = default ++ latest;
+  xmonadExtras = default ++ latest;
   xssSanitize = default;
   yesodAuth = default;
   yesodCore = default;
+  yesod = default;
   yesodDefault = default;
   yesodForm = default;
-  yesod = default;
   yesodJson = default;
   yesodPersistent = default;
   yesodStatic = default;
@@ -439,8 +440,8 @@ mapHaskellTestOn {
   zeromqHaskell = default;
   zipArchive = default;
   zipper = default;
+  zlib = all;
   zlibBindings = default;
   zlibEnum = default;
-  zlib = all;
 
 }
