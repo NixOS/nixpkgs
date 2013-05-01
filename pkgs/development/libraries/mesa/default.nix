@@ -9,14 +9,14 @@ if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
 else
 
 let
-  version = "9.1.1";
+  version = "9.1.2";
 in
 stdenv.mkDerivation {
   name = "mesa-noglu-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256="1sxdx599lxjmkq0bj40vmqy1mlqfkqxnc9s4gd2ycv5230cp9r9s";
+    sha256="1ns366armqmp2bxj1l7fff95v22b5z9mnkyykbdj81lhg9gi3586";
   };
 
   prePatch = "patchShebangs .";
