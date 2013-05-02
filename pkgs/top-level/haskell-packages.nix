@@ -1895,6 +1895,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   vectorAlgorithms = callPackage ../development/libraries/haskell/vector-algorithms {};
 
+  vectorBinaryInstances = callPackage ../development/libraries/haskell/vector-binary-instances {};
+
   vectorSpace = callPackage ../development/libraries/haskell/vector-space {};
 
   vectorSpacePoints = callPackage ../development/libraries/haskell/vector-space-points {};
