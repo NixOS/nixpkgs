@@ -96,8 +96,7 @@ rec {
 
     path = mkOptionType {
       name = "path";
-      # Hacky: there is no ‘isPath’ primop.
-      check = lib.traceValIfNot (x: builtins.unsafeDiscardStringContext (builtins.substring 0 1 (toString x)) == "/");
+      check = lib.traceValIfNot isPath;
     };
 
     listOf = types.list;

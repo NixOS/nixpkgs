@@ -35,4 +35,14 @@ rec {
     else if builtins.isAttrs x
       then deepSeqAttrs x y
       else seq x y;
+
+  isPath = val: with builtins; !(
+      isAttrs val
+   || isList val
+   || isInt val
+   || isString val
+   || isFunction val
+   || isBool val
+   || val == null
+  );
 }
