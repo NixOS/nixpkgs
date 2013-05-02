@@ -1960,7 +1960,6 @@ in
   xnee = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xneur = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xneur_0_8 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  xonotic = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xorg_sys_opengl = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xorgVideoUnichrome = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   xoscope = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
