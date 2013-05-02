@@ -1594,7 +1594,6 @@ in
   sourceHighlight = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   spaceOrbit = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   speechd = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  speed_dreams = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   spice = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   spidermonkey_185 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   spin = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
@@ -1692,7 +1691,6 @@ in
   udev = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   udev145 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   udisks = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  ufoai = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ufraw = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ultimatestunts = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   ultrastardx = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
