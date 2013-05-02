@@ -5022,6 +5022,8 @@ let
     inherit readline ncurses;
   });
 
+  stlink = callPackage ../development/tools/misc/stlink { };
+
   stlport = callPackage ../development/libraries/stlport { };
 
   strigi = callPackage ../development/libraries/strigi {};
