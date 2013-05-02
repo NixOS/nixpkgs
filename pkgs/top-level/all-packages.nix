@@ -767,6 +767,8 @@ let
 
   file = callPackage ../tools/misc/file { };
 
+  filegive = callPackage ../tools/networking/filegive { };
+
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
   findutils = callPackage ../tools/misc/findutils { };
