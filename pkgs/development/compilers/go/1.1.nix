@@ -7,11 +7,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.1beta2";
+  name = "go-1.1rc1";
 
   src = fetchurl {
-    url = http://go.googlecode.com/files/go1.1beta2.src.tar.gz;
-    sha1 = "70d7642a6ea065a23458b9ea28e370b19912e52d";
+    url = http://go.googlecode.com/files/go1.1rc1.src.tar.gz;
+    sha1 = "c999c36e7bb5c9ef05d309b0bb4275feb62c44e3";
   };
 
   buildInputs = [ bison glibc bash makeWrapper ];
@@ -50,7 +50,7 @@ stdenv.mkDerivation {
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/pkg/os/os_test.go
     # Disable a failing icmp test
-    sed -i '/ip[46]:icmp.*nil/d' src/pkg/net/ipraw_test.go
+    sed -i '/ip[46]:.*icmp.*nil/d' src/pkg/net/ipraw_test.go
   '';
 
   patches = [ ./cacert.patch ];
