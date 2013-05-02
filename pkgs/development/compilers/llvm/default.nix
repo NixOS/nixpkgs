@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, perl, groff, cmake, python, libffi }:
+{ stdenv, fetchurl, perl, groff, cmake, python, libffi, binutils_gold }:
 
 let version = "3.3"; in
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "llvm-${version}";
 
   src = fetchurl {
@@ -21,8 +21,11 @@ stdenv.mkDerivation {
   preBuild = let LD = if stdenv.isDarwin then "DYLD" else "LD";
     in "export ${LD}_LIBRARY_PATH='$$${LD}_LIBRARY_PATH:'`pwd`/lib";
 
-  cmakeFlags = with stdenv; [ "-DCMAKE_BUILD_TYPE=Release" "-DLLVM_ENABLE_FFI=ON" ]
-    ++ lib.optional (!isDarwin) [ "-DBUILD_SHARED_LIBS=ON" ];
+  cmakeFlags = with stdenv; [
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DLLVM_ENABLE_FFI=ON"
+    "-DLLVM_BINUTILS_INCDIR=${binutils_gold}/include"
+  ] ++ lib.optional (!isDarwin) [ "-DBUILD_SHARED_LIBS=ON" ];
 
   enableParallelBuilding = true;
 
