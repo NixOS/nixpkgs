@@ -7779,6 +7779,11 @@ let
 
   geany = callPackage ../applications/editors/geany { };
 
+  gnuradio = callPackage ../applications/misc/gnuradio {
+    inherit (pythonPackages) lxml numpy scipy matplotlib pyopengl;
+    fftw = fftwFloat;
+  };
+
   goldendict = callPackage ../applications/misc/goldendict { };
 
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
