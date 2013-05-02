@@ -4075,6 +4075,10 @@ let
     singlePrecision = false;
   };
 
+  fftwFloat = callPackage ../development/libraries/fftw {
+    float = true;
+  };
+
   fftwSinglePrec = callPackage ../development/libraries/fftw {
     singlePrecision = true;
   };
