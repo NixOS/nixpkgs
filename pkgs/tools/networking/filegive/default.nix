@@ -3,12 +3,12 @@
 assert stdenv.isLinux && (stdenv.isi686 || stdenv.isx86_64 || stdenv.isArm);
 
 stdenv.mkDerivation rec {
-  name = "filegive-0.3";
+  name = "filegive-0.3.1";
 
   src = fetchurl {
-    url = "http://viric.name/cgi-bin/filegive/tarball/filegive-0.3.tar.gz?uuid=v0.3";
+    url = "http://viric.name/cgi-bin/filegive/tarball/filegive-0.3.1.tar.gz?uuid=v0.3.1";
     name = "${name}.tar.gz";
-    sha256 = "1xiz47q6f579nb36p973bb3wjszn515v0sjh76pif1cihijdsb5y";
+    sha256 = "14hsy7bkmhq03f2yf619kz8p11v8ndd59sdibck556z8dld7b6ya";
   };
 
   buildInputs = [ go ];
