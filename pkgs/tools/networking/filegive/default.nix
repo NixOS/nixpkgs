@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://viric.name/cgi-bin/filegive;
+    description = "Easy p2p file sending program";
     license = "BSD";
   };
 }
