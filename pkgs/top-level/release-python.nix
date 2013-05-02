@@ -1711,7 +1711,6 @@ in
   valkyrie = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vde2 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vdpauinfo = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  vdrift = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vectoroids = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   veracity = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   vfdecrypt = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
