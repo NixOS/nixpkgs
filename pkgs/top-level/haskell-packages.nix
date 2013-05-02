@@ -1007,8 +1007,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   happstackHamlet = callPackage ../development/libraries/haskell/happstack/happstack-hamlet.nix {};
 
   hashable_1_1_2_5 = callPackage ../development/libraries/haskell/hashable/1.1.2.5.nix {};
-  hashable_1_2_0_6 = callPackage ../development/libraries/haskell/hashable/1.2.0.6.nix {};
-  hashable = self.hashable_1_2_0_6;
+  hashable_1_2_0_7 = callPackage ../development/libraries/haskell/hashable/1.2.0.7.nix {};
+  hashable = self.hashable_1_2_0_7;
 
   hashedStorage = callPackage ../development/libraries/haskell/hashed-storage {};
 
