@@ -11,6 +11,17 @@ with import ./options.nix;
 with import ./properties.nix;
 
 rec {
+
+  # Unfortunately this can also be a string.
+  isPath = x: !(
+     builtins.isFunction x
+  || builtins.isAttrs x
+  || builtins.isInt x
+  || builtins.isBool x
+  || builtins.isList x
+  );
+
+
   importIfPath = path:
     if isPath path then
       import path
