@@ -262,7 +262,7 @@ output to messages of interest.  For instance, to get all messages
 from PostgreSQL:
 
 <screen>
-$ journalctl _SYSTEMD_UNIT=postgresql.service
+$ journalctl -u postgresql.service
 -- Logs begin at Mon, 2013-01-07 13:28:01 CET, end at Tue, 2013-01-08 01:09:57 CET. --
 ...
 Jan 07 15:44:14 hagbard postgres[2681]: [2-1] LOG:  database system is shut down
