@@ -41,7 +41,6 @@ in
   acl2 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   adobeReader = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   agg = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  alienarena = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   allegro = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   allegro5 = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   alliance = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
