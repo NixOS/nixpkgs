@@ -3768,6 +3768,8 @@ let
 
   texi2html = callPackage ../development/tools/misc/texi2html { };
 
+  uhd = callPackage ../development/tools/misc/uhd { };
+
   uisp = callPackage ../development/tools/misc/uisp { };
 
   uncrustify = callPackage ../development/tools/misc/uncrustify { };
