@@ -33,13 +33,16 @@ rec {
      
   overrideDerivation = drv: f:
     let
-      newDrv = derivation (drv.drvAttrs // (f drv));
+      # Filter out special attributes.
+      drop = [ "meta" "passthru" "outPath" "drvPath" "crossDrv" "nativeDrv" "type" "override" "deepOverride" "origArgs" "drvAttrs" "outputName" "all" "out" ]
+              # also drop functions such as .merge .override etc
+             ++ lib.filter (n: isFunction (getAttr n drv)) (attrNames drv);
+      attrs = removeAttrs drv drop;
+      newDrv = derivation (attrs // (f drv));
     in newDrv //
-      { meta = drv.meta or {};
+      { meta = if drv ? meta then drv.meta else {};
         passthru = if drv ? passthru then drv.passthru else {};
       }
-      //
-      (drv.passthru or {})
       //
       (if (drv ? crossDrv && drv ? nativeDrv)
        then {
