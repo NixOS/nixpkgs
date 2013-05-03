@@ -15,7 +15,12 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  patches = [ ./xfce4-session-systemd.patch ];
+  patch_crash = fetchurl {
+    url = "http://git.xfce.org/xfce/xfce4-session/patch/?id=ab391138cacc62ab184a338e237c4430356b41f9";
+    sha256 = "1kydj52hm883rdanpcqzf5qphj0ws2v28g8fim8jv2pm72d33day";
+  };
+
+  patches = [ ./xfce4-session-systemd.patch patch_crash ];
 
   buildInputs =
     [ pkgconfig intltool gtk libxfce4util libxfce4ui libwnck dbus_glib
