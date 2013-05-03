@@ -140,7 +140,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   haskellPlatformArgs_future = self : {
     inherit (self) cabal ghc;
     async        = self.async_2_0_1_4;          # 7.6 ok
-    cgi          = self.cgi_3001_1_8_3;         # 7.6 ok
+    cgi          = self.cgi_3001_1_7_5;         # 7.6 ok
     fgl          = self.fgl_5_4_2_4;            # 7.6 ok
     GLUT         = self.GLUT_2_4_0_0;           # 7.6 ok
     haskellSrc   = self.haskellSrc_1_0_1_5;     # 7.6 ok
@@ -613,8 +613,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   cgi_3001_1_7_2 = callPackage ../development/libraries/haskell/cgi/3001.1.7.2.nix {};
   cgi_3001_1_7_3 = callPackage ../development/libraries/haskell/cgi/3001.1.7.3.nix {};
   cgi_3001_1_7_4 = callPackage ../development/libraries/haskell/cgi/3001.1.7.4.nix {};
-  cgi_3001_1_8_3 = callPackage ../development/libraries/haskell/cgi/3001.1.8.3.nix {};
-  cgi = self.cgi_3001_1_8_3;
+  cgi_3001_1_7_5 = callPackage ../development/libraries/haskell/cgi/3001.1.7.5.nix {};
+  cgi_3001_1_8_4 = callPackage ../development/libraries/haskell/cgi/3001.1.8.4.nix {};
+  cgi = self.cgi_3001_1_8_4;
 
   Chart = callPackage ../development/libraries/haskell/Chart {};
 
