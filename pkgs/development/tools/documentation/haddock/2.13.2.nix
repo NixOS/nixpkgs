@@ -2,12 +2,12 @@
 
 cabal.mkDerivation (self: {
   pname = "haddock";
-  version = "2.13.1";
-  sha256 = "0zsflbc3ayjsn542sa58zl62dd78ykr489f18sh467hrrnaj4pkf";
+  version = "2.13.2";
+  sha256 = "1qwj13ks3fzar14s587svv1pdiwk80m7x5pzn74v3jrqkn0xbrr5";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ Cabal deepseq filepath ghcPaths xhtml ];
-  testDepends = [ Cabal filepath ];
+  testDepends = [ Cabal deepseq filepath ];
   buildTools = [ alex happy ];
   doCheck = false;
   meta = {
