@@ -1322,6 +1322,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
+    ubuntu1304i386 = {
+      name = "ubuntu-13.04-raring-i386";
+      fullName = "Ubuntu 13.04 Raring (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/raring/main/binary-i386/Packages.bz2;
+            sha256 = "b7da6802c5302439d9abf05ebe1ab4c3b82d7be9356f51a12c5bf4994f009181";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/raring/universe/binary-i386/Packages.bz2;
+            sha256 = "1db19982fc3689b00a918e2cdbb936dfccebbac2ed82f81bb0164a3d51039012";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1304x86_64 = {
+      name = "ubuntu-13.04-raring-amd64";
+      fullName = "Ubuntu 13.04 Raring (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/raring/main/binary-amd64/Packages.bz2;
+            sha256 = "9ee6a67bedbda80b668a868bb81b5b3f30bbabac01f69d2a08961c37c8536356";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/raring/universe/binary-amd64/Packages.bz2;
+            sha256 = "0caf561bad359e8a82a987a076c0f1cb7a43412a5de053c105b160477c192978";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
