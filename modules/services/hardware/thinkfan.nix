@@ -41,7 +41,7 @@ let
     #  All numbers are integers.
     #
 
-    sensor /proc/acpi/ibm/thermal (0, 10, 15, 2, 10, 5, 0, 3, 0, 3)
+    sensor ${cfg.sensor} (0, 10, 15, 2, 10, 5, 0, 3, 0, 3)
     
     (0,     0,      55)
     (1,     48,     60)
@@ -62,6 +62,13 @@ in {
         default = false;
         description = ''
           Whether to enable thinkfan, fan controller for ibm/lenovo thinkpads.
+        '';
+      };
+
+      sensor = mkOption {
+        default = "/proc/acpi/ibm/thermal";
+        description =''
+          Sensor used by thinkfan
         '';
       };
 
