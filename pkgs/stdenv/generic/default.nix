@@ -85,6 +85,7 @@ let
               # include it in the result, it *is* available to nix-env for
               # queries.
               meta = attrs.meta or {};
+              passthru = attrs.passthru or {};
             } //
             # Pass through extra attributes that are not inputs, but
             # should be made available to Nix expressions using the
