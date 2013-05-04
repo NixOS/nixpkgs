@@ -180,6 +180,7 @@ in
         "uhci_hcd"
         "ehci_hcd"
         "ohci_hcd"
+        "xhci_hcd"
         "usbhid"
 
         # Unix domain sockets (needed by udev).
