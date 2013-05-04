@@ -148,7 +148,7 @@ let
     '';
 
   targetArch = if pkgs.stdenv.isi686 then
-    "IA32"
+    "ia32"
   else if pkgs.stdenv.isx86_64 then
     "x64"
   else
