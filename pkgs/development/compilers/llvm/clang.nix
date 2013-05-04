@@ -1,6 +1,9 @@
 { stdenv, fetchurl, perl, groff, llvm, cmake, libxml2 }:
 
-let version = "3.2"; in
+let
+  version = "3.2";
+  gccReal = if (stdenv.gcc.gcc or null) == null then stdenv.gcc else stdenv.gcc.gcc;
+in
 
 stdenv.mkDerivation {
   name = "clang-${version}";
@@ -13,7 +16,7 @@ stdenv.mkDerivation {
     "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_TARGETS_TO_BUILD=all"
-    "-DGCC_INSTALL_PREFIX=${stdenv.gcc.gcc}"
+    "-DGCC_INSTALL_PREFIX=${gccReal}"
   ] ++ stdenv.lib.optionals (stdenv.gcc.libc != null) [
     "-DC_INCLUDE_DIRS=${stdenv.gcc.libc}/include/"
   ];
