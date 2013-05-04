@@ -13,6 +13,7 @@ stdenv.mkDerivation {
     "-DCLANG_PATH_TO_LLVM_BUILD=${llvm}"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_TARGETS_TO_BUILD=all"
+    "-DGCC_INSTALL_PREFIX=${stdenv.gcc.gcc}"
   ] ++ stdenv.lib.optionals (stdenv.gcc.libc != null) [
     "-DC_INCLUDE_DIRS=${stdenv.gcc.libc}/include/"
   ];
