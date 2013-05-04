@@ -26,7 +26,7 @@ let
         routers will systemically drop the ipv4 queries. The symptom of this problem is
         that 'getent hosts example.com' only returns ipv6 (or perhaps only ipv4) addresses. The
         workaround for this is to specify the option 'single-request' in
-        /etc/resolve.conf. This option enables that.
+        /etc/resolv.conf. This option enables that.
       '';
     };
 
