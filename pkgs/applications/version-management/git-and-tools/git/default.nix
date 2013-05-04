@@ -1,6 +1,6 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio, gnugrep, gzip
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
-, libxslt, tcl, tk, makeWrapper, hardlink
+, libxslt, tcl, tk, makeWrapper
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs
 , guiSupport
 , withManual ? true
@@ -10,7 +10,7 @@
 
 let
 
-  version = "1.8.2";
+  version = "1.8.2.1";
 
   svn = subversionClient.override { perlBindings = true; };
 
@@ -21,10 +21,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://git-core.googlecode.com/files/git-${version}.tar.gz";
-    sha256 = "1rhkya4kfs7iayasgj3bk8zg1pfk3h7wqhfy9d6aaqjgzb75pwy2";
+    sha1 = "ad9f833e509ba31c83efe336fd3599e89a39394b";
   };
 
-  patches = [ ./docbook2texi.patch ];
+  patches = [ ./docbook2texi.patch ./symlinks-in-bin.patch ];
 
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
@@ -41,6 +41,8 @@ stdenv.mkDerivation {
   # FIXME: "make check" requires Sparse; the Makefile must be tweaked
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
   #doCheck = true;
+
+  installFlags = "NO_INSTALL_HARDLINKS=1";
 
   postInstall =
     ''
@@ -119,15 +121,10 @@ stdenv.mkDerivation {
        done
      '');
 
-  # Git installs many copies of the same binary using hardlinks, but unfortunately
-  # our patchELF phase re-writes those files and destroys the hardlinks in the
-  # process. This utility re-generates them afterwards.
-  postFixup = "${hardlink}/bin/hardlink $out";
-
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://git-scm.com/";
+    homepage = http://git-scm.com/;
     description = "Git, a popular distributed version control system";
     license = stdenv.lib.licenses.gpl2Plus;
 

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [ zlib ]
-    ++ stdenv.lib.optional gold [dejagnu flex2535 bison /* Some Gold tests require this: */ bc];
+    ++ stdenv.lib.optional gold bison;
 
   inherit noSysDirs;
 

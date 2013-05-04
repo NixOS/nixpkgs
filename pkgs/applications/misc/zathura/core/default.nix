@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext, docutils }:
+{ stdenv, fetchurl, pkgconfig, gtk, girara, gettext, docutils, file, makeWrapper }:
 
 stdenv.mkDerivation rec {
 
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ja2j9ygymr259fxf02j1vkvalypac48gpadq8fn3qbclxxj61k5";
   };
 
-  buildInputs = [ pkgconfig gtk girara gettext ];
+  buildInputs = [ pkgconfig gtk girara gettext makeWrapper ];
 
   # Bug in zathura build system: we should remove empty manfiles in order them
   # to be compiled properly
@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [ "PREFIX=$(out)" "RSTTOMAN=${docutils}/bin/rst2man.py" "VERBOSE=1" ];
+
+  postInstall = ''
+    wrapProgram "$out/bin/zathura" --prefix PATH ":" "${file}/bin"
+  '';
 
   meta = {
     homepage = http://pwmt.org/projects/zathura/;

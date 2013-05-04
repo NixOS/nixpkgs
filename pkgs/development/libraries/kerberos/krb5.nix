@@ -25,6 +25,8 @@ stdenv.mkDerivation (rec {
 
   #doCheck = true; # report: No suitable file for testing purposes
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "MIT Kerberos 5";
     homepage = webpage;

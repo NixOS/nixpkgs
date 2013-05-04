@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dhcpcd-5.6.7";
+  name = "dhcpcd-5.6.8";
 
   src = fetchurl {
     url = "http://roy.marples.name/downloads/dhcpcd/${name}.tar.bz2";
-    sha256 = "144cjcjnr85jiwbw5iv3hvn97sc0z25ya3r31cn0wv11jrsw6b0h";
+    sha256 = "1i7fv1l0n7q1mnia7g0789ch63x5zhwk5gsrwvs78dv2f2kmvcd3";
   };
 
   configureFlags = "--sysconfdir=/etc";

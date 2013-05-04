@@ -154,6 +154,7 @@ rec {
     ftp://ftp.nl.uu.net/pub/CPAN/
     http://ftp.funet.fi/pub/CPAN/
     http://cpan.perl.org/
+    http://backpan.perl.org/  # for old releases
   ];
 
   # Debian.

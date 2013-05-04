@@ -433,18 +433,18 @@ let
   apg = callPackage ../tools/security/apg { };
 
   xcodeenv = callPackage ../development/mobile/xcodeenv { };
-  
+
   titaniumenv_2_1 = import ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
     version = "2.1";
   };
-  
+
   titaniumenv_3_1 = import ../development/mobile/titaniumenv {
     inherit pkgs;
     pkgs_i686 = pkgsi686Linux;
   };
-  
+
   titaniumenv = titaniumenv_3_1;
 
   inherit (androidenv) androidsdk_4_1;
@@ -766,6 +766,8 @@ let
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
+
+  filegive = callPackage ../tools/networking/filegive { };
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
@@ -1213,6 +1215,8 @@ let
     mtutils = callPackage ../tools/text/multitran/mtutils { };
   });
 
+  munge = callPackage ../tools/security/munge { };
+
   muscleframework = callPackage ../tools/security/muscleframework { };
 
   muscletool = callPackage ../tools/security/muscletool { };
@@ -1296,7 +1300,9 @@ let
 
   odt2txt = callPackage ../tools/text/odt2txt { };
 
-  offlineimap = callPackage ../tools/networking/offlineimap { };
+  offlineimap = callPackage ../tools/networking/offlineimap {
+    inherit (pythonPackages) sqlite3;
+  };
 
   opendbx = callPackage ../development/libraries/opendbx { };
 
@@ -1478,6 +1484,8 @@ let
   privateer = callPackage ../games/privateer { };
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
+
+  reaverwps = callPackage ../tools/networking/reaver-wps {};
 
   recutils = callPackage ../tools/misc/recutils { };
 
@@ -2488,7 +2496,8 @@ let
   haskellPackages_ghc742_profiling    = recurseIntoAttrs (haskell.packages_ghc742.profiling);
   haskellPackages_ghc742              = recurseIntoAttrs (haskell.packages_ghc742.highPrio);
   haskellPackages_ghc761              =                   haskell.packages_ghc761;
-  haskellPackages_ghc762              = recurseIntoAttrs (haskell.packages_ghc762);
+  haskellPackages_ghc762              =                   haskell.packages_ghc762;
+  haskellPackages_ghc763              = recurseIntoAttrs  haskell.packages_ghc763;
   # Reasonably current HEAD snapshot.
   haskellPackages_ghcHEAD             =                   haskell.packages_ghcHEAD;
 
@@ -2506,6 +2515,8 @@ let
   fsharp = callPackage ../development/compilers/fsharp {};
 
   go = callPackage ../development/compilers/go { };
+
+  go_1_1 = lowPrio (callPackage ../development/compilers/go/1.1.nix { });
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
@@ -2903,7 +2914,11 @@ let
 
   perl = if system != "i686-cygwin" then perl516 else sysPerl;
 
-  php = callPackage ../development/interpreters/php/5.3.nix { };
+  php = php54;
+
+  php53 = callPackage ../development/interpreters/php/5.3.nix { };
+
+  php54 = callPackage ../development/interpreters/php/5.4.nix { };
 
   php_apc = callPackage ../development/libraries/php-apc { };
 
@@ -3055,6 +3070,8 @@ let
   autoconf = callPackage ../development/tools/misc/autoconf { };
 
   autoconf213 = callPackage ../development/tools/misc/autoconf/2.13.nix { };
+
+  autocutsel = callPackage ../tools/X11/autocutsel{ };
 
   automake = automake112x;
 
@@ -4997,23 +5014,27 @@ let
 
   srtp = callPackage ../development/libraries/srtp {};
 
-  sqlite = lowPrio (callPackage ../development/libraries/sqlite {
+  sqlite_3_7_16 = lowPrio (callPackage ../development/libraries/sqlite/3.7.16.nix {
     readline = null;
     ncurses = null;
   });
 
-  sqlite36 = callPackage ../development/libraries/sqlite/3.6.x.nix {
+  sqlite_3_7_14 = lowPrio (callPackage ../development/libraries/sqlite/3.7.14.nix {
     readline = null;
     ncurses = null;
-  };
+  });
+
+  sqlite = sqlite_3_7_16;
 
   sqliteInteractive = appendToName "interactive" (sqlite.override {
     inherit readline ncurses;
   });
 
-  sqliteFull = lowPrio (callPackage ../development/libraries/sqlite/full.nix {
+  sqliteFull = lowPrio (callPackage ../development/libraries/sqlite/3.7.9-full.nix {
     inherit readline ncurses;
   });
+
+  stlink = callPackage ../development/tools/misc/stlink { };
 
   stlport = callPackage ../development/libraries/stlport { };
 
@@ -5728,7 +5749,10 @@ let
 
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
-  bluez = callPackage ../os-specific/linux/bluez { };
+  bluez4 = callPackage ../os-specific/linux/bluez { };
+  bluez5 = lowPrio (callPackage ../os-specific/linux/bluez/bluez5.nix { });
+
+  bluez = bluez4;
 
   beret = callPackage ../games/beret { };
 
@@ -5965,8 +5989,7 @@ let
       ];
   };
 
-  # low-priority because it is RC
-  linux_3_9 = lowPrio (makeOverridable (import ../os-specific/linux/kernel/linux-3.9.nix) {
+  linux_3_9 = makeOverridable (import ../os-specific/linux/kernel/linux-3.9.nix) {
     inherit fetchurl stdenv perl mktemp bc module_init_tools ubootChooser;
     kernelPatches =
       [
@@ -5976,7 +5999,7 @@ let
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
       ];
-  });
+  };
 
   /* Linux kernel modules are inherently tied to a specific kernel.  So
      rather than provide specific instances of those packages for a
@@ -6081,6 +6104,7 @@ let
     virtualbox = callPackage ../applications/virtualization/virtualbox {
       stdenv = stdenv_32bit;
       inherit (gnome) libIDL;
+      enableExtensionPack = config.virtualbox.enableExtensionPack or false;
     };
 
     virtualboxGuestAdditions = callPackage ../applications/virtualization/virtualbox/guest-additions { };
@@ -6096,8 +6120,9 @@ let
   linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi);
   linuxPackages_3_7 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_7 linuxPackages_3_7);
   linuxPackages_3_8 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_8 linuxPackages_3_8);
+  linuxPackages_3_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_9 linuxPackages_3_9);
   # Update this when adding a new version!
-  linuxPackages_latest = pkgs.linuxPackages_3_8;
+  linuxPackages_latest = pkgs.linuxPackages_3_9;
 
   # The current default kernel / kernel modules.
   linux = linuxPackages.kernel;
@@ -6811,6 +6836,8 @@ let
     inherit (xlibs) libX11;
   };
 
+  doodle = callPackage ../applications/search/doodle { };
+
   dunst = callPackage ../applications/misc/dunst { };
 
   dvb_apps  = callPackage ../applications/video/dvb-apps { };
@@ -7438,9 +7465,7 @@ let
   links = callPackage ../applications/networking/browsers/links { };
 
   ledger = callPackage ../applications/office/ledger/2.6.3.nix { };
-  ledger3 = callPackage ../applications/office/ledger/3.0.nix {
-    boost = boost149;
-  };
+  ledger3 = callPackage ../applications/office/ledger/3.0.nix { };
 
   links2 = callPackage ../applications/networking/browsers/links2 { };
 
@@ -7811,6 +7836,8 @@ let
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
   st = callPackage ../applications/misc/st { };
+
+  bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
 
   dropbox = callPackage ../applications/networking/dropbox { };
 
@@ -8553,6 +8580,12 @@ let
       libotr = libotr_3_2;
     }) ../desktops/kde-4.8;
 
+  kde410 = kdePackagesFor (pkgs.kde410 // {
+      boost = boost149;
+      eigen = eigen2;
+      libotr = libotr_3_2;
+    }) ../desktops/kde-4.10;
+
   kdePackagesFor = self: dir:
     let callPackageOrig = callPackage; in
     let
@@ -8973,6 +9006,8 @@ let
 
   gxemul = callPackage ../misc/gxemul { };
 
+  hatari = callPackage ../misc/emulators/hatari { };
+
   hplip = callPackage ../misc/drivers/hplip { };
 
   # using the new configuration style proposal which is unstable
@@ -9213,5 +9248,7 @@ let
   misc = import ../misc/misc.nix { inherit pkgs stdenv; };
 
   bullet = callPackage ../development/libraries/bullet {};
+
+  dart = callPackage ../development/interpreters/dart { };
 
 }; in pkgs

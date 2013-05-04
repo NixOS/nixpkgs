@@ -96,7 +96,9 @@ assert enableCheckPhase -> stdenv.lib.versionOlder "7" ghc.ghcVersion;
             jailbreak = false;
 
             # pass the '--enable-split-objs' flag to cabal in the configure stage
-            enableSplitObjs = !stdenv.isDarwin;         # http://hackage.haskell.org/trac/ghc/ticket/4013
+            enableSplitObjs = !(  stdenv.isDarwin         # http://hackage.haskell.org/trac/ghc/ticket/4013
+                               || stdenv.lib.versionOlder "7.6.99" ghc.ghcVersion  # -fsplit-ojbs is broken in 7.7 snapshot
+                               );
 
             # pass the '--enable-tests' flag to cabal in the configure stage
             # and run any regression test suites the package might have

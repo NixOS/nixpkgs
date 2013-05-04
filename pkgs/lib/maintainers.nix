@@ -30,7 +30,7 @@
   neznalek = "Vladimír Čunát <vcunat@gmail.com>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
-  phreedom = "Evgeny Egorochkin <phreedom.stdin@gmail.com>";
+  phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
   pierron = "Nicolas B. Pierron <nixos@nbp.name>";
   piotr = "Piotr Pietraszkiewicz <ppietrasa@gmail.com>";
   qknight = "Joachim Schiele <js@lastlog.de>";

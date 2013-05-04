@@ -288,6 +288,12 @@
                prefFun = ghcHEADPrefs;
              };
 
+  packages_ghc763 =
+    packages { ghcPath = ../development/compilers/ghc/7.6.3.nix;
+               ghcBinary = ghc704Binary;
+               prefFun = ghcHEADPrefs;
+             };
+
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.
   packages_ghcHEAD =
     packages { ghcPath = ../development/compilers/ghc/head.nix;

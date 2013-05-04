@@ -1,4 +1,4 @@
-{ pkgs, fetchurl, buildPythonPackage }:
+{ pkgs, fetchurl, buildPythonPackage, sqlite3 }:
 
 buildPythonPackage rec {
   version = "6.5.5-rc2";
@@ -11,6 +11,10 @@ buildPythonPackage rec {
   };
 
   doCheck = false;
+
+  propagatedBuildInputs = [
+    sqlite3
+  ];
 
   meta = {
     description = "OfflineImap synchronizes emails between two repositories, so that you can read the same mailbox from multiple computers.";

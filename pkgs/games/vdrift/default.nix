@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage = http://vdrift.net/;
     license = "GPLv2+";
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    #platforms = with stdenv.lib.platforms; linux;
   };
 }

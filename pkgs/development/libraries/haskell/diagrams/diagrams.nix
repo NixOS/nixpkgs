@@ -8,6 +8,7 @@ cabal.mkDerivation (self: {
     diagramsContrib diagramsCore diagramsLib diagramsSvg
   ];
   noHaddock = true;
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Embedded domain-specific language for declarative vector graphics";
