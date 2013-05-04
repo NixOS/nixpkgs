@@ -2472,11 +2472,12 @@ rec {
   };
 
   ExtUtilsCBuilder = buildPerlPackage rec {
-    name = "ExtUtils-CBuilder-0.280202";
+    name = "ExtUtils-CBuilder-0.280205";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "13qjdz1kmrp5mp404by94cdsyydjadg974ykinqga450djjaqpbq";
+      sha256 = "0nfrr3zd71gnsbp5xacdb70n17slrzj421s4nyr11zg5cqsj3ngs";
     };
+    buildInputs = [ PerlOSType ];
   };
 
   ExtUtilsConfig = buildPerlPackage {
@@ -4064,6 +4065,7 @@ rec {
       url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4005.tar.gz;
       sha256 = "eb2522507251550f459c11223ea6d86b34f1dee9b3e3928d0d6a0497505cb7ef";
     };
+    buildInputs = [ CPANMeta ExtUtilsCBuilder ];
     meta = {
       description = "Build and install Perl modules";
       license = "perl";
