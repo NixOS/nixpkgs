@@ -3093,9 +3093,9 @@ let
     inherit noSysDirs;
   };
 
-  binutils_gold = lowPrio (callPackage ../development/tools/misc/binutils {
+  binutils_nogold = lowPrio (callPackage ../development/tools/misc/binutils {
     inherit noSysDirs;
-    gold = true;
+    gold = false;
   });
 
   binutilsCross = lowPrio (forceNativeDrv (import ../development/tools/misc/binutils {

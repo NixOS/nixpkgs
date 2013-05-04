@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, noSysDirs, zlib, cross ? null, gold ? false, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null }:
+{ stdenv, fetchurl, noSysDirs, zlib, cross ? null, gold ? true, bison ? null, flex2535 ? null, bc ? null, dejagnu ? null }:
 
 let basename = "binutils-2.23.1"; in
 stdenv.mkDerivation rec {
