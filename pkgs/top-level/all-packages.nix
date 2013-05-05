@@ -1262,6 +1262,8 @@ let
 
   networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
 
+  pa_applet = callPackage ../tools/audio/pa-applet { };
+
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
 
   nlopt = callPackage ../development/libraries/nlopt {};
