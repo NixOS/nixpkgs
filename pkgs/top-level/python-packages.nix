@@ -868,6 +868,24 @@ pythonPackages = python.modules // rec {
     };
   });
 
+  # Buildbot 0.8.7p1 needs dateutil==1.5
+  dateutil_1_5 = buildPythonPackage (rec {
+    name = "dateutil-1.5";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/python-dateutil/python-${name}.tar.gz";
+      sha256 = "02dhw57jf5kjcp7ng1if7vdrbnlpb9yjmz7wygwwvf3gni4766bg";
+    };
+
+    propagatedBuildInputs = [ pythonPackages.six ];
+
+    meta = {
+      description = "Powerful extensions to the standard datetime module";
+      homepage = http://pypi.python.org/pypi/python-dateutil;
+      license = "BSD-style";
+    };
+  });
+
 
   decorator = buildPythonPackage rec {
     name = "decorator-3.3.1";
