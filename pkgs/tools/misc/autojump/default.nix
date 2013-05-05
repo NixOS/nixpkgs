@@ -12,7 +12,7 @@ in
       sha256 = "07jf5pa9xwmbswsc0h6law9f5qwczsj25w7h034s379imid5h62f";
     };
 
-    buildInputs = [ python ];
+    buildInputs = [ python bash ];
     dontBuild = true;
 
     installPhase = ''
