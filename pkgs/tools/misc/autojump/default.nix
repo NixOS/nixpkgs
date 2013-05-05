@@ -49,7 +49,7 @@ in
         Autojump supports tab-completion.
       '';
       homepage = http://wiki.github.com/joelthelion/autojump;
-      license = stdenv.lib.license.gpl3;
+      license = stdenv.lib.licenses.gpl3;
       platforms = stdenv.lib.platforms.all;
       maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
