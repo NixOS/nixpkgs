@@ -1809,6 +1809,8 @@ let
 
   unrar = callPackage ../tools/archivers/unrar { };
 
+  xarchive = callPackage ../tools/archivers/xarchive { };
+
   unarj = callPackage ../tools/archivers/unarj { };
 
   unshield = callPackage ../tools/archivers/unshield { };
