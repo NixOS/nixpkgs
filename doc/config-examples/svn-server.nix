@@ -1,6 +1,6 @@
 {
   boot = {
-    grubDevice = "/dev/sda";
+    loader.grub.device = "/dev/sda";
   };
 
   fileSystems = [
