@@ -321,12 +321,12 @@ rec {
   #
   # This function is best explained by an example:
   #
-  #     {version ? "2.0"} :
+  #     {version ? "2.x"} :
   #
   #     mkDerivation (mergeAttrsByVersion "package-name" version 
   #       { # version specific settings
   #         "git" = { src = ..; preConfigre = "autogen.sh"; buildInputs = [automake autoconf libtool];  };
-  #         "2.0" = { src = ..; };
+  #         "2.x" = { src = ..; };
   #       }
   #       {  // shared settings
   #          buildInputs = [ common build inputs ];
@@ -347,7 +347,12 @@ rec {
   # Very often it just happens that the "shared" code is the bigger part.
   # Then using this function might be appropriate.
   #
-  # Be aware that its easy to cause recompilations in all versions when using this function
+  # Be aware that its easy to cause recompilations in all versions when using
+  # this function - also if derivations get too complex splitting into multiple
+  # files is the way to go.
+  #
+  # See misc.nix -> versionedDerivation
+  # discussion: nixpkgs: pull/310
   mergeAttrsByVersion = name: version: attrsByVersion: base:
     mergeAttrsByFuncDefaultsClean [ { name = "${name}-${version}"; } base (maybeAttr version (throw "bad version ${version} for ${name}") attrsByVersion)];
 
