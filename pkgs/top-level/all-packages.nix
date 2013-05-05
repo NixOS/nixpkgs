@@ -8716,6 +8716,10 @@ let
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
+  spyder = callPackage ../applications/science/spyder {
+    inherit (pythonPackages) sphinx;
+  };
+
   stellarium = callPackage ../applications/science/astronomy/stellarium { };
 
   ### SCIENCE/GEOMETRY
