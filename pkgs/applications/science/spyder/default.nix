@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, buildPythonPackage
+{ stdenv, fetchurl, unzip, buildPythonPackage, makeDesktopItem
 # mandatory
 , pyside
 # recommended
@@ -22,6 +22,25 @@ buildPythonPackage rec {
 
   # There is no test for spyder
   doCheck = false;
+
+  desktopItem = makeDesktopItem {
+    name = "Spyder";
+    exec = "spyder";
+    icon = "spyder";
+    comment = "Scientific Python Development Environment";
+    desktopName = "Spyder";
+    genericName = "Python IDE";
+    categories = "Application;Development;Editor;IDE;";
+  };
+
+  # Create desktop item
+  postInstall = ''
+    mkdir -p $out/share/applications
+    cp $desktopItem/share/applications/* $out/share/applications/
+
+    mkdir -p $out/share/icons
+    cp spyderlib/images/spyder.svg $out/share/icons/
+  '';
 
   meta = {
     description = "Scientific PYthon Development EnviRonment (SPYDER)";
