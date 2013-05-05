@@ -8721,7 +8721,8 @@ let
   gravit = callPackage ../applications/science/astronomy/gravit { };
 
   spyder = callPackage ../applications/science/spyder {
-    inherit (pythonPackages) sphinx;
+    inherit (pythonPackages) pyflakes rope sphinx numpy scipy matplotlib; # recommended
+    inherit (pythonPackages) ipython pylint pep8; # optional
   };
 
   stellarium = callPackage ../applications/science/astronomy/stellarium { };
