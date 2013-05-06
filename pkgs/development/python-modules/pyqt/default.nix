@@ -1,14 +1,14 @@
 { stdenv, fetchurl, python, sip, qt4, pythonDBus, pkgconfig, lndir, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "PyQt-x11-gpl-4.9.1";
+  name = "PyQt-x11-gpl-4.10.1";
   
   src = fetchurl {
     urls = [
       "http://www.riverbankcomputing.co.uk/static/Downloads/PyQt4/${name}.tar.gz"
-      "http://pkgs.fedoraproject.org/lookaside/pkgs/PyQt4/PyQt-x11-gpl-4.9.1.tar.gz/7f495dc49f71e3bfb64bf942e0d8bb3c/PyQt-x11-gpl-4.9.1.tar.gz"
+      "http://pkgs.fedoraproject.org/lookaside/pkgs/PyQt4/PyQt-x11-gpl-4.10.1.tar.gz/e5973c4ec0b0469f329bc00209d2ad9c/PyQt-x11-gpl-4.10.1.tar.gz"
     ];
-    sha256 = "1ccvc80z8a0k0drvba9ngivsnv2k2nn5317yf86w1zwh45zmb0zj";
+    sha256 = "05psk23x6bc83hrkw7h88a14jxhvfbxms0c8yrdar8xqvkv8cdb2";
   };
   
   configurePhase = ''
