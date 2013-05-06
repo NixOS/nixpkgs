@@ -25,8 +25,8 @@ let
     kdesdk = [
       { name="cervisia"; }
       { name="lokalize"; }
-      { name = "kioslave-svn"; sane = "kioslave_svn"; subdir = "kioslave"; }
-      { name = "kioslave-perldoc"; sane = "kioslave_perldoc"; subdir = "kioslave"; }
+      { name = "kioslave-svn"; sane = "kioslave_svn"; subdir = "kdesdk-kioslaves"; }
+      { name = "kioslave-perldoc"; sane = "kioslave_perldoc"; subdir = "kdesdk-kioslaves"; }
       { name="dolphin-plugins-svn"; sane="dolphin_plugins_svn";subdir="dolphin-plugins/svn"; }
       { name="dolphin-plugins-git"; sane="dolphin_plugins_git";subdir="dolphin-plugins/git"; }
       { name="dolphin-plugins-hg"; sane="dolphin_plugins_hg";subdir="dolphin-plugins/hg"; }
