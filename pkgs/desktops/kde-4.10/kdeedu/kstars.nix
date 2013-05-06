@@ -1,7 +1,7 @@
 { kde, kdelibs, eigen, xplanet, indilib }:
 
 kde {
-#todo:wcslib, doesn't build
+#todo:wcslib
   buildInputs = [ kdelibs eigen xplanet indilib ];
 
   meta = {
