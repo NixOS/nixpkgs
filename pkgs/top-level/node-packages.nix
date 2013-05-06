@@ -576,6 +576,19 @@ let self = {
     ];
   };
 
+  "extend" = self."extend-*";
+
+  "extend-*" = self.buildNodePackage rec {
+    name = "extend-1.1.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/extend/-/${name}.tgz";
+      sha256 = "0b27709829110f2e84926ebe3494b82df6e79ad49a618ad3444e4edf62b57a57";
+    };
+    deps = [
+
+    ];
+  };
+
   "eyes" = self."eyes->=0.1.6";
 
   "eyes->=0.1.6" = self.buildNodePackage rec {
