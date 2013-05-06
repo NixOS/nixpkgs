@@ -74,10 +74,14 @@ in
       };
     };
 
-    users.extraUsers.nginx = {
+    users.extraUsers = optionalAttrs (cfg.user == "nginx") singleton
+    { name = "nginx";
       group = "nginx";
+      uid = config.ids.uids.nginx;
     };
 
-    users.extraGroups.nginx = {};
-  };
+    users.extraGroups = optionalAttrs (cfg.group == "nginx") singleton
+    { name = "nginx";
+      gid = config.ids.gids.nginx;
+    };
 }
