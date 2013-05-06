@@ -1,19 +1,21 @@
 { kde, kdelibs, python, sip, pyqt4, kdepimlibs, shared_desktop_ontologies,
-  boost, lndir }:
+  nepomuk_core, polkit_qt_1, boost, lndir, pkgconfig }:
 
 let pydir = "lib/python${python.majorVersion}"; in
 
 kde {
-#todo: doesn't build
-  buildInputs = [ python kdepimlibs
-# shared_desktop_ontologies boost 
-];
+
+  # todo: polkit isn't found by the build system
+
+  buildInputs = [
+    python kdepimlibs shared_desktop_ontologies
+    boost nepomuk_core polkit_qt_1 pkgconfig
+  ];
 
   propagatedBuildInputs = [ pyqt4 sip ];
 
 #  patches = [ ./pykde4-hardcode-lib-python.patch ];
-
-  cmakeFlags = "-DHARDCODE_LIB_PYTHON_PATH=ON ";
+#  cmakeFlags = "-DHARDCODE_LIB_PYTHON_PATH=ON ";
 
   preConfigure =
     ''
