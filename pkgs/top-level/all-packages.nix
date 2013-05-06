@@ -494,6 +494,8 @@ let
 
   btrfsProgs = callPackage ../tools/filesystems/btrfsprogs { };
 
+  byobu = callPackage ../tools/misc/byobu { };
+
   catdoc = callPackage ../tools/text/catdoc { };
 
   dlx = callPackage ../misc/emulators/dlx { };
