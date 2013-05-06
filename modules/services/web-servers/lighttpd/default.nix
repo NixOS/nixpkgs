@@ -36,6 +36,11 @@ let
       static-file.exclude-extensions = ( ".fcgi", ".php", ".rb", "~", ".inc" )
       index-file.names = ( "index.html" )
 
+      ${if cfg.mod_userdir then ''
+        server.modules += ("mod_userdir")
+        userdir.path = "public_html"
+      '' else ""}
+
       ${cfg.extraConfig}
     '';
 
@@ -68,6 +73,15 @@ in
         type = types.uniq types.string;
         description = ''
           Document-root of the web server. Must be readable by the "lighttpd" user.
+        '';
+      };
+
+      mod_userdir = mkOption {
+        default = false;
+        type = types.uniq types.bool;
+        description = ''
+          If true, requests in the form /~user/page.html are rewritten to take
+          the file public_html/page.html from the home directory of the user.
         '';
       };
 
