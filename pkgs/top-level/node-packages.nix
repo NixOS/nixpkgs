@@ -1641,14 +1641,14 @@ let self = {
     ];
   };
 
-  "underscore" = self."underscore-1.4.2";
-  "underscore->=1.3.1" = self."underscore-1.4.2";
+  "underscore" = self."underscore-*";
+  "underscore->=1.3.1" = self."underscore-*";
 
-  "underscore-1.4.2" = self.buildNodePackage rec {
-    name = "underscore-1.4.2";
+  "underscore-*" = self.buildNodePackage rec {
+    name = "underscore-1.4.4";
     src = fetchurl {
       url = "http://registry.npmjs.org/underscore/-/${name}.tgz";
-      sha256 = "329ab22ba9b37be4a0c694ca21b9ed85b99256a45c2e0cf3624c4719443366d6";
+      sha256 = "a848a28193850d58d7b98249d70844bc7f35a7d8b6b5ed75e08e829aa6e763d3";
     };
     deps = [
 
