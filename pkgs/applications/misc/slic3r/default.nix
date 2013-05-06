@@ -17,11 +17,11 @@ let
   ];
 in
 stdenv.mkDerivation {
-  name = "slic3r-0.9.9";
+  name = "slic3r-0.9.10-dev";
 
   src = fetchgit {
     url = "git://github.com/alexrj/Slic3r";
-    rev = "0.9.9";
+    rev = "855ba9033262416de2ae9e27f55a21738ef5d70f";
     sha256 = "ebef71283189df82ca0acc69a42ec7b3d54703e900f25366196b81df2d2fe718";
   };
 
