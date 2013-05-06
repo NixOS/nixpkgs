@@ -3,6 +3,7 @@
 let
   perlInputs = with perlPackages; [
     BoostGeometryUtils
+    ClassXSAccessor
     EncodeLocale
     IOStringy
     MathClipper
@@ -11,6 +12,8 @@ let
     MathGeometryVoronoi
     MathPlanePath
     Moo
+    Wx
+    XMLSAX
   ];
 in
 stdenv.mkDerivation {
