@@ -237,6 +237,9 @@ let
       DEVTMPFS y
 
       # Media support
+      MEDIA_SUPPORT y
+      MEDIA_DIGITAL_TV_SUPPORT y
+
       MEDIA_CAMERA_SUPPORT? y
       MEDIA_RC_SUPPORT? y
       MEDIA_USB_SUPPORT y
