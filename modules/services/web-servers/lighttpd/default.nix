@@ -41,6 +41,13 @@ let
         userdir.path = "public_html"
       '' else ""}
 
+      ${if cfg.mod_status then ''
+        server.modules += ("mod_status")
+        status.status-url = "/server-status"
+        status.statistics-url = "/server-statistics"
+        status.config-url = "/server-config"
+      '' else ""}
+
       ${cfg.extraConfig}
     '';
 
@@ -82,6 +89,15 @@ in
         description = ''
           If true, requests in the form /~user/page.html are rewritten to take
           the file public_html/page.html from the home directory of the user.
+        '';
+      };
+
+      mod_status = mkOption {
+        default = false;
+        type = types.uniq types.bool;
+        description = ''
+          Show server status overview at /server-status, statistics at
+          /server-statistics and list of loaded modules at /server-config.
         '';
       };
 
