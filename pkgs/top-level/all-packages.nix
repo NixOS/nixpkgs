@@ -8637,10 +8637,6 @@ let
 
       kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
 
-      koffice = callPackage ../applications/office/koffice {
-        boost = boost149;
-      };
-
       konq_plugins = callPackage ../applications/networking/browsers/konq-plugins { };
 
       konversation = callPackage ../applications/networking/irc/konversation { };
