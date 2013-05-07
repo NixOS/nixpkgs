@@ -1508,6 +1508,24 @@ pythonPackages = python.modules // rec {
   };
 
 
+  elpy = buildPythonPackage rec {
+    name = "elpy-1.0.1";
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/e/elpy/elpy-1.0.1.tar.gz";
+      md5 = "5453f085f7871ed8fc11d51f0b68c785";
+    };
+    buildInputs = [  ];
+    propagatedBuildInputs = [ flake8 ];
+
+    doCheck = false; # there are no tests
+
+    meta = {
+      description = "Backend for the elpy Emacs mode";
+      homepage = "https://github.com/jorgenschaefer/elpy";
+    };
+  };
+
+
   enum = buildPythonPackage rec {
     name = "enum-0.4.4";
 
