@@ -8615,8 +8615,6 @@ let
 
       kbibtex = callPackage ../applications/office/kbibtex { };
 
-      kbluetooth = callPackage ../tools/bluetooth/kbluetooth { };
-
       kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
       kdenlive = callPackage ../applications/video/kdenlive { };
