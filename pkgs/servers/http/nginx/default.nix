@@ -9,11 +9,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "nginx-1.2.4";
+  name = "nginx-1.2.8";
 
   src = fetchurl {
     url = "http://nginx.org/download/${name}.tar.gz";
-    sha256 = "0hvcv4lgfcrsl40azkd3rxhf73l05jzzgflclpkdvjd95xgw51y5";
+    sha256 = "0dvi8n3ljh3zz80r5zkb5q7f94mg62kkakn0wsqi3lxyqnc7r56j";
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt ] ++ stdenv.lib.optional fullWebDAV expat;
