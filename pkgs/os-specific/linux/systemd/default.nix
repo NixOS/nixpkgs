@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
       ./0006-Don-t-call-plymouth-quit.patch
       ./0007-Ignore-IPv6-link-local-addresses.patch
       ./0008-Don-t-try-to-unmount-nix-or-nix-store.patch
+      ./0009-Start-ctrl-alt-del.target-irreversibly.patch
     ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs =
