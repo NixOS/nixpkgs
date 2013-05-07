@@ -8635,8 +8635,6 @@ let
 
       kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
 
-      konq_plugins = callPackage ../applications/networking/browsers/konq-plugins { };
-
       konversation = callPackage ../applications/networking/irc/konversation { };
 
       krename = callPackage ../applications/misc/krename { };
