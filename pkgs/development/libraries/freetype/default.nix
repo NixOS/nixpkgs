@@ -9,7 +9,9 @@
 assert !(useEncumberedCode && useInfinality); # probably wouldn't make sense
 
 let
+
   version = "2.4.11";
+
   infinality = rec {
     inherit useInfinality;
     vers = "20130104";
@@ -21,6 +23,7 @@ let
   };
 
 in
+
 stdenv.mkDerivation rec {
   name = "freetype-${version}";
 
@@ -38,8 +41,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = with stdenv.lib;
     " -fno-strict-aliasing" # from Gentoo, see https://bugzilla.redhat.com/show_bug.cgi?id=506840
     + optionalString useEncumberedCode " -DFT_CONFIG_OPTION_SUBPIXEL_RENDERING=1"
-    + optionalString useInfinality " -DTT_CONFIG_OPTION_SUBPIXEL_HINTING=1"
-    ;
+    + optionalString useInfinality " -DTT_CONFIG_OPTION_SUBPIXEL_HINTING=1";
 
   patches = [ ./enable-validation.patch ] # from Gentoo
     ++ stdenv.lib.optional useInfinality [ infinality_patch ];
@@ -51,6 +53,7 @@ stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional (!stdenv.isLinux) gnumake;
 
   enableParallelBuilding = true;
+
   doCheck = true;
 
   postInstall =

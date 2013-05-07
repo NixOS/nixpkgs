@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   #propagatedBuildInputs = [ expat ]; # !!! shouldn't be necessary, but otherwise pango breaks
 
-  configureFlags = "--with-confdir=/etc/fonts --with-cache-dir=/var/cache/fontconfig --disable-docs --with-default-fonts=";
+  configureFlags = "--sysconfdir=/etc --with-cache-dir=/var/cache/fontconfig --disable-docs --with-default-fonts=";
 
   # We should find a better way to access the arch reliably.
   crossArch = stdenv.cross.arch or null;
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Don't try to write to /etc/fonts or /var/cache/fontconfig at install time.
-  installFlags = "CONFDIR=$(out)/etc/fonts RUN_FC_CACHE_TEST=false fc_cachedir=$(TMPDIR)/dummy";
+  installFlags = "sysconfdir=$(out)/etc RUN_FC_CACHE_TEST=false fc_cachedir=$(TMPDIR)/dummy";
 
   postInstall = if !freetype.infinality.useInfinality then "" else ''
     cd "$out/etc/fonts" && tar xvf ${infinality_patch}
