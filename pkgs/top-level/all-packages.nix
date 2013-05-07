@@ -3106,6 +3106,10 @@ let
     dateutil = pythonPackages.dateutil_1_5;
   };
 
+  buildbotSlave = callPackage ../development/tools/build-managers/buildbot-slave {
+    inherit (pythonPackages) twisted;
+  };
+
   byacc = callPackage ../development/tools/parsing/byacc { };
 
   casperjs = callPackage ../development/tools/casperjs { };
