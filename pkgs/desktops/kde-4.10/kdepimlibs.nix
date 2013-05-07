@@ -4,11 +4,11 @@
 
 kde {
   buildInputs =
-    [ boost gpgme libical libxslt nepomuk_core qjson
+    [ boost gpgme libical libxslt qjson
       openldap cyrus_sasl akonadi shared_desktop_ontologies
     ];
 
-  propagatedBuildInputs = [ kdelibs ];
+  propagatedBuildInputs = [ kdelibs nepomuk_core ];
 
   meta = {
     description = "KDE PIM libraries";
