@@ -1,4 +1,4 @@
-From fbb62c4d5973f7556ce6c3bc9242180b7e087de8 Mon Sep 17 00:00:00 2001
+From 4731a9074538e9e24d2b81fc737917b064e194e6 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 18:36:28 +0100
 Subject: [PATCH 6/8] Don't call "plymouth quit"
@@ -34,5 +34,5 @@ index 269797a..2c640f4 100644
  ExecStart=-/sbin/sulogin
  ExecStopPost=-@SYSTEMCTL@ --fail --no-block default
 -- 
-1.8.1
+1.8.2.1
 

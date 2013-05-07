@@ -1,4 +1,4 @@
-From 22d416e766e11dbc381620beff89284a0e23827b Mon Sep 17 00:00:00 2001
+From 7a498e661f3d111fa09700a6cfa62cfd6733b1cc Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Tue, 8 Jan 2013 15:48:19 +0100
 Subject: [PATCH 4/8] Set switch-to-configuration hints for some units
@@ -34,12 +34,12 @@ index 18c3d74..a09054c 100644
 +
 +X-StopOnReconfiguration=yes
 diff --git a/units/remote-fs.target b/units/remote-fs.target
-index e867b8d..02462b4 100644
+index 09213e8..47b4cf5 100644
 --- a/units/remote-fs.target
 +++ b/units/remote-fs.target
 @@ -10,5 +10,7 @@ Description=Remote File Systems
  Documentation=man:systemd.special(7)
- After=remote-fs-pre.target remote-fs-setup.target
+ After=remote-fs-pre.target
  
 +X-StopOnReconfiguration=yes
 +
@@ -70,5 +70,5 @@ index 0869e73..b6ed958 100644
 +# Restart kills all active sessions.
 +X-RestartIfChanged=no
 -- 
-1.8.1
+1.8.2.1
 
