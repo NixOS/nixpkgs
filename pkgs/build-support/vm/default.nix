@@ -1422,6 +1422,28 @@ rec {
       packages = commonDebianPackages;
     };
 
+    debian70i386 = {
+      name = "debian-7.0.0-wheezy-i386";
+      fullName = "Debian 7.0.0 Wheezy (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
+        sha256 = "712939639e2cc82615c85bdf81edf31edef0fda003ac2b32998e438aee403ab8";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+
+    debian70x86_64 = {
+      name = "debian-7.0.0-wheezy-amd64";
+      fullName = "Debian 7.0.0 Wheezy (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
+        sha256 = "e79132f7db6655013be1f75feb9812b071386525246d8639679b322487d2732a";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+
   };
 
 
@@ -1485,6 +1507,7 @@ rec {
     "bzip2"
     "tar"
     "grep"
+    "sed"
     "findutils"
     "g++"
     "make"
