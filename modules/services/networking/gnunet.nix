@@ -134,6 +134,7 @@ in
       description = "GNUnet";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.gnunet pkgs.miniupnpc ];
       serviceConfig.ExecStart = "${pkgs.gnunet}/lib/gnunet/libexec/gnunet-service-arm -c ${configFile}";
       serviceConfig.User = "gnunet";
       serviceConfig.UMask = "0007";
