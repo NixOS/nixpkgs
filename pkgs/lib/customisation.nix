@@ -34,7 +34,7 @@ rec {
   overrideDerivation = drv: f:
     let
       newDrv = derivation (drv.drvAttrs // (f drv));
-    in addPassthru newDrv (
+    in newDrv //
       { meta = drv.meta or {};
         passthru = if drv ? passthru then drv.passthru else {};
       }
@@ -46,7 +46,7 @@ rec {
          crossDrv = overrideDerivation drv.crossDrv f;
          nativeDrv = overrideDerivation drv.nativeDrv f;
        }
-       else { }));
+       else { });
 
 
   # usage: (you can use override multiple times)
