@@ -11,4 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake kdelibs libbluedevil shared_mime_info automoc4 ];
 
+  meta = with stdenv.lib; {
+    description = "Bluetooth manager for KDE";
+    license = "GPLv2";
+    inherit (kdelibs.meta) platforms;
+    maintainers = [ maintainers.phreedom ];
+  };
+
 }
