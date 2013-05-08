@@ -4,7 +4,7 @@
 , libkdcraw, libxslt, fftw, glew, gsl, shared_desktop_ontologies, okular }:
 
 stdenv.mkDerivation rec {
-  name = "calligra-2.5.0";
+  name = "calligra-2.5.5";
 
   src = fetchurl {
     url = "mirror://kde/stable/${name}/${name}.tar.bz2";
