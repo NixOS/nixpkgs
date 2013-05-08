@@ -1,37 +1,19 @@
-{ stdenv, buildPythonPackage, fetchurl, twisted, dateutil, jinja2
-, sqlalchemy , sqlalchemy_migrate
-, enableDebugClient ? false, pygobject ? null, pyGtkGlade ? null
-}:
-
-# enableDebugClient enables "buildbot debugclient", a Gtk-based debug control
-# panel. Its mostly for developers.
-
-assert enableDebugClient -> pygobject != null && pyGtkGlade != null;
+{ stdenv, buildPythonPackage, fetchurl, coreutils, twisted }:
 
 buildPythonPackage (rec {
-  name = "buildbot-0.8.7p1";
+  name = "buildbot-slave-0.8.7p1";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://buildbot.googlecode.com/files/${name}.tar.gz";
-    sha256 = "0xjpk8510fhryl1g4mczz319h62il8hw9rh1rzvsfmffgf43zvld";
+    sha256 = "1p7a0srab6ifljh9vi25awvxfrxljj9s0hi1jipiiykyhjihgnxv";
   };
 
-  patchPhase =
-    # The code insists on /usr/bin/tail, /usr/bin/make, etc.
-    '' echo "patching erroneous absolute path references..."
-       for i in $(find -name \*.py)
-       do
-         sed -i "$i" \
-             -e "s|/usr/bin/python|$(type -P python)|g ; s|/usr/bin/||g"
-       done
-    '';
+  patchPhase = ''
+    substituteInPlace buildslave/scripts/logwatcher.py --replace /usr/bin/tail ${coreutils}/bin/tail
+  '';
 
-  buildInputs = [ ];
-
-  propagatedBuildInputs =
-    [ twisted dateutil jinja2 sqlalchemy sqlalchemy_migrate
-    ] ++ stdenv.lib.optional enableDebugClient [ pygobject pyGtkGlade ];
+  propagatedBuildInputs = [ twisted ];
 
   # What's up with this?! 'trial' should be 'test', no?
   #
@@ -46,7 +28,7 @@ buildPythonPackage (rec {
 
   postInstall = ''
     mkdir -p "$out/share/man/man1"
-    cp docs/buildbot.1 "$out/share/man/man1"
+    cp docs/buildslave.1 "$out/share/man/man1"
   '';
 
   meta = {
@@ -54,7 +36,6 @@ buildPythonPackage (rec {
 
     license = "GPLv2+";
 
-    # Of course, we don't really need that on NixOS.  :-)
     description = "Continuous integration system that automates the build/test cycle";
 
     longDescription =
@@ -79,8 +60,5 @@ buildPythonPackage (rec {
          encouraging them to be more careful about testing before checking
          in code.
       '';
-
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.all;
   };
 })
