@@ -1707,6 +1707,8 @@ let
 
   udftools = callPackage ../tools/filesystems/udftools {};
 
+  udptunnel = callPackage ../tools/networking/udptunnel { };
+
   ufraw = callPackage ../applications/graphics/ufraw { };
 
   unetbootin = callPackage ../tools/cd-dvd/unetbootin { };

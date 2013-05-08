@@ -20,5 +20,5 @@ stdenv.mkDerivation {
     license = "GPLv3+";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
-  }
+  };
 }
