@@ -4,14 +4,13 @@
 
 cabal.mkDerivation (self: {
   pname = "certificate";
-  version = "1.3.6";
-  sha256 = "1w7xndslapy4ycgf2xshgx90i3v04nsck9l2mzc74nrnwm817b2m";
+  version = "1.3.7";
+  sha256 = "06sfka5p381gayx2q7vvyr7dl8q8d4jfqdrys3k0z8fjxdbqrqya";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     asn1Data cryptohash cryptoPubkeyTypes filepath mtl pem time
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://github.com/vincenthz/hs-certificate";
     description = "Certificates and Key Reader/Writer";

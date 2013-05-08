@@ -1,21 +1,19 @@
 { stdenv, fetchurl, unzip, jdk, lib }:
 
 stdenv.mkDerivation {
-  name = "jboss-5.1.0.GA";
+  name = "jboss-as-7.1.1.Final";
   src = fetchurl {
-    url = mirror://sourceforge/jboss/jboss-5.1.0.GA-jdk6.zip;
-    sha256 = "0wy5666h554x1qq4w0rzg3krp4rqrijq0ql7dkx6qgl3vpj9xr5y";
+    url = http://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.tar.gz;
+    sha256 = "1bdjw0ib9qr498vpfbg8klqw6rl11vbz7vwn6gp1r5gpqkd3zzc8";
   };
 
   buildInputs = [ unzip ];
-      
-  buildPhase = ''
-    sed -i -e "/GREP/aJAVA_HOME=${jdk}" bin/run.sh
-  '';
+
+  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
   
   installPhase = ''
-    mkdir -p $out
-    cp -av * $out
+    mv $PWD $out
+    find $out/bin -name \*.sh -print0 | xargs -0 sed -i -e '/#!\/bin\/sh/aJAVA_HOME=${jdk}'
   '';
   
   meta = {

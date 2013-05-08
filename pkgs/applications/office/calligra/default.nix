@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake perl pkgconfig ];
 
+  patches = [ ./fix-kde4.10-build.patch ];
+
   buildInputs = [ kdelibs attica zlib libpng boost mesa kdepimlibs
     createresources eigen qca2 exiv2 soprano marble lcms2 fontconfig freetype
     sqlite icu libwpd libwpg popplerQt4 libkdcraw libxslt fftw glew gsl
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A Qt/KDE office suite, formely known as koffice";
     homepage = http://calligra.org;
-    maintainers = [ stdenv.lib.maintainers.urkud ];
+    maintainers = with stdenv.lib.maintainers; [ urkud phreedom ];
     inherit (kdelibs.meta) platforms;
   };
 }

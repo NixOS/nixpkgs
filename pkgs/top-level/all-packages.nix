@@ -139,6 +139,9 @@ let
   # eventually.
   inherit __overrides pkgs;
 
+  # Make some arguments passed to all-packages.nix available
+  inherit system stdenvType platform;
+
 
   # We use `callPackage' to be able to omit function arguments that
   # can be obtained from `pkgs' or `pkgs.xorg' (i.e. `defaultScope').
@@ -491,6 +494,8 @@ let
 
   btrfsProgs = callPackage ../tools/filesystems/btrfsprogs { };
 
+  byobu = callPackage ../tools/misc/byobu { };
+
   catdoc = callPackage ../tools/text/catdoc { };
 
   dlx = callPackage ../misc/emulators/dlx { };
@@ -766,6 +771,8 @@ let
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
+
+  filegive = callPackage ../tools/networking/filegive { };
 
   fileschanged = callPackage ../tools/misc/fileschanged { };
 
@@ -1256,6 +1263,8 @@ let
   networkmanager_pptp_gnome = networkmanager_pptp.override { withGnome = true; };
 
   networkmanagerapplet = newScope gnome ../tools/networking/network-manager-applet { };
+
+  pa_applet = callPackage ../tools/audio/pa-applet { };
 
   nilfs_utils = callPackage ../tools/filesystems/nilfs-utils {};
 
@@ -1803,6 +1812,8 @@ let
   units = callPackage ../tools/misc/units { };
 
   unrar = callPackage ../tools/archivers/unrar { };
+
+  xarchive = callPackage ../tools/archivers/xarchive { };
 
   unarj = callPackage ../tools/archivers/unarj { };
 
@@ -5030,6 +5041,8 @@ let
     inherit readline ncurses;
   });
 
+  stlink = callPackage ../development/tools/misc/stlink { };
+
   stlport = callPackage ../development/libraries/stlport { };
 
   strigi = callPackage ../development/libraries/strigi {};
@@ -5744,7 +5757,10 @@ let
 
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
-  bluez = callPackage ../os-specific/linux/bluez { };
+  bluez4 = callPackage ../os-specific/linux/bluez { };
+  bluez5 = lowPrio (callPackage ../os-specific/linux/bluez/bluez5.nix { });
+
+  bluez = bluez4;
 
   beret = callPackage ../games/beret { };
 
@@ -8617,8 +8633,6 @@ let
 
       kbibtex = callPackage ../applications/office/kbibtex { };
 
-      kbluetooth = callPackage ../tools/bluetooth/kbluetooth { };
-
       kde_wacomtablet = callPackage ../applications/misc/kde-wacomtablet { };
 
       kdenlive = callPackage ../applications/video/kdenlive { };
@@ -8638,12 +8652,6 @@ let
       kmymoney = callPackage ../applications/office/kmymoney { };
 
       kipi_plugins = callPackage ../applications/graphics/kipi-plugins { };
-
-      koffice = callPackage ../applications/office/koffice {
-        boost = boost149;
-      };
-
-      konq_plugins = callPackage ../applications/networking/browsers/konq-plugins { };
 
       konversation = callPackage ../applications/networking/irc/konversation { };
 
@@ -8725,6 +8733,11 @@ let
   xplanet = callPackage ../applications/science/astronomy/xplanet { };
 
   gravit = callPackage ../applications/science/astronomy/gravit { };
+
+  spyder = callPackage ../applications/science/spyder {
+    inherit (pythonPackages) pyflakes rope sphinx numpy scipy matplotlib; # recommended
+    inherit (pythonPackages) ipython pylint pep8; # optional
+  };
 
   stellarium = callPackage ../applications/science/astronomy/stellarium { };
 

@@ -1,22 +1,22 @@
 { cabal, aeson, attoparsec, cereal, clientsession, comonad
 , configurator, directoryTree, dlist, errors, filepath, hashable
 , heist, lens, logict, MonadCatchIOTransformers, mtl, mwcRandom
-, pwstoreFast, regexPosix, snapCore, snapServer, stm, syb, tagged
-, text, time, transformers, unorderedContainers, vector
-, vectorAlgorithms, xmlhtml
+, pwstoreFast, regexPosix, snapCore, snapServer, stm, syb, text
+, time, transformers, unorderedContainers, vector, vectorAlgorithms
+, xmlhtml
 }:
 
 cabal.mkDerivation (self: {
   pname = "snap";
-  version = "0.11.2.2";
-  sha256 = "1fwm60rx2ginlphi00kn3ghs9rxdx4br8p4f3prpfmhvjikwgv8n";
+  version = "0.11.3.1";
+  sha256 = "0hlwpzrckq89wpa8603j7p3aghlqshrp3kzsdrryf44k24q3vgrj";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     aeson attoparsec cereal clientsession comonad configurator
     directoryTree dlist errors filepath hashable heist lens logict
     MonadCatchIOTransformers mtl mwcRandom pwstoreFast regexPosix
-    snapCore snapServer stm syb tagged text time transformers
+    snapCore snapServer stm syb text time transformers
     unorderedContainers vector vectorAlgorithms xmlhtml
   ];
   jailbreak = true;

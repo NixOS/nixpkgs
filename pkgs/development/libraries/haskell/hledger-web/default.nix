@@ -1,30 +1,26 @@
 { cabal, blazeHtml, blazeMarkup, clientsession, cmdargs
 , dataDefault, filepath, hamlet, hjsmin, hledger, hledgerLib
-, httpConduit, HUnit, ioStorage, monadControl, networkConduit
-, parsec, regexpr, safe, shakespeareCss, shakespeareJs
-, shakespeareText, text, time, transformers, wai, waiExtra, warp
-, yaml, yesod, yesodCore, yesodDefault, yesodForm, yesodStatic
-, yesodTest
+, httpConduit, HUnit, monadControl, networkConduit, parsec, regexpr
+, safe, shakespeareCss, shakespeareJs, shakespeareText, text, time
+, transformers, wai, waiExtra, waiHandlerLaunch, warp, yaml, yesod
+, yesodCore, yesodDefault, yesodForm, yesodStatic, yesodTest
 }:
 
 cabal.mkDerivation (self: {
   pname = "hledger-web";
-  version = "0.19.3";
-  sha256 = "1kx5mn6drm90clz132vrd2lkssm73hlwvxb9cxg6z82i5qa9jqn9";
+  version = "0.20.0.1";
+  sha256 = "0fq3wfsy2ykyplr66ac91yd2vwzfw3ji8mq9q4jn58nnh6bgxfa1";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
     blazeHtml blazeMarkup clientsession cmdargs dataDefault filepath
-    hamlet hjsmin hledger hledgerLib httpConduit HUnit ioStorage
-    monadControl networkConduit parsec regexpr safe shakespeareCss
-    shakespeareJs shakespeareText text time transformers wai waiExtra
-    warp yaml yesod yesodCore yesodDefault yesodForm yesodStatic
+    hamlet hjsmin hledger hledgerLib httpConduit HUnit monadControl
+    networkConduit parsec regexpr safe shakespeareCss shakespeareJs
+    shakespeareText text time transformers wai waiExtra
+    waiHandlerLaunch warp yaml yesod yesodCore yesodDefault yesodForm
+    yesodStatic
   ];
   testDepends = [ yesodCore yesodDefault yesodTest ];
-  patchPhase = ''
-    sed -r -i -e 's|blaze-html * >= 0.5 *&& < 0.6|blaze-html >= 0.5|' hledger-web.cabal
-  '';
-  jailbreak = true;
   doCheck = false;
   meta = {
     homepage = "http://hledger.org";

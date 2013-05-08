@@ -1,10 +1,10 @@
 { kde, fetchurl, cmake, kdelibs, libxslt, boost, kdepimlibs, akonadi
-, shared_desktop_ontologies, nepomuk_core }:
+, shared_desktop_ontologies }:
 
 kde {
   buildInputs = [
     kdepimlibs akonadi boost shared_desktop_ontologies
-    libxslt nepomuk_core
+    libxslt
   ];
 #todo: libkgapi, libkolab, libkolabxml
   meta = {

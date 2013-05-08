@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "201";
+  version = "203";
   name = "systemd-${version}";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/systemd/${name}.tar.xz";
-    sha256 = "046cr1q7xv7bslzc16g8zz8nddf64lw8v01isw1204n21cd9yafn";
+    sha256 = "07gvn3rpski8sh1nz16npjf2bvj0spsjdwc5px9685g2pi6kxcb1";
   };
 
   patches =
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
       ./0006-Don-t-call-plymouth-quit.patch
       ./0007-Ignore-IPv6-link-local-addresses.patch
       ./0008-Don-t-try-to-unmount-nix-or-nix-store.patch
+      ./0009-Start-ctrl-alt-del.target-irreversibly.patch
     ] ++ stdenv.lib.optional stdenv.isArm ./libc-bug-accept4-arm.patch;
 
   buildInputs = assert stdenv.gcc.libc or null != null; # assertion here, so it doesn't trigger on passthru.headers

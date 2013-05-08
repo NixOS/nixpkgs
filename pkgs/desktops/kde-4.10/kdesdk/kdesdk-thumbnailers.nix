@@ -1,8 +1,10 @@
 { kde, kdelibs, gettext }:
 
 kde {
-#todo: doesn't build
+
   buildInputs = [ kdelibs gettext ];
+
+  patches = [ ./thumbnailers-add-subdirectory.patch ];
 
   meta = {
     description = "PO file format thumbnailer";

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "kdenlive-${version}";
-  version = "0.9.4";
+  version = "0.9.6";
 
   src = fetchurl {
     url = "mirror://kde/stable/kdenlive/${version}/src/${name}.tar.bz2";
-    sha256 = "1l3axf3y83gdfr6yc1lmy296h09gypkpqsc01w7pprg0y19rrfif";
+    sha256 = "1rw2cbzy5mabwijvryyzbhpgldn2zy5jy4j87hl4m1i8ah9lgi7x";
   };
 
   buildInputs = 

@@ -1322,6 +1322,40 @@ rec {
       packages = commonDebPackages ++ [ "diffutils" ];
     };
 
+    ubuntu1304i386 = {
+      name = "ubuntu-13.04-raring-i386";
+      fullName = "Ubuntu 13.04 Raring (i386)";
+      packagesLists =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/raring/main/binary-i386/Packages.bz2;
+            sha256 = "b7da6802c5302439d9abf05ebe1ab4c3b82d7be9356f51a12c5bf4994f009181";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/raring/universe/binary-i386/Packages.bz2;
+            sha256 = "1db19982fc3689b00a918e2cdbb936dfccebbac2ed82f81bb0164a3d51039012";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
+    ubuntu1304x86_64 = {
+      name = "ubuntu-13.04-raring-amd64";
+      fullName = "Ubuntu 13.04 Raring (amd64)";
+      packagesList =
+        [ (fetchurl {
+            url = mirror://ubuntu/dists/raring/main/binary-amd64/Packages.bz2;
+            sha256 = "9ee6a67bedbda80b668a868bb81b5b3f30bbabac01f69d2a08961c37c8536356";
+          })
+          (fetchurl {
+            url = mirror://ubuntu/dists/raring/universe/binary-amd64/Packages.bz2;
+            sha256 = "0caf561bad359e8a82a987a076c0f1cb7a43412a5de053c105b160477c192978";
+          })
+        ];
+      urlPrefix = mirror://ubuntu;
+      packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
+    };
+
     debian40i386 = {
       name = "debian-4.0r9-etch-i386";
       fullName = "Debian 4.0r9 Etch (i386)";
@@ -1383,6 +1417,28 @@ rec {
       packagesList = fetchurl {
         url = mirror://debian/dists/squeeze/main/binary-amd64/Packages.bz2;
         sha256 = "b2bb561bde59ac67e07c70aa7c86a33f237436e6891796a93c6ed6ffb032080e";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+
+    debian70i386 = {
+      name = "debian-7.0.0-wheezy-i386";
+      fullName = "Debian 7.0.0 Wheezy (i386)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/wheezy/main/binary-i386/Packages.bz2;
+        sha256 = "712939639e2cc82615c85bdf81edf31edef0fda003ac2b32998e438aee403ab8";
+      };
+      urlPrefix = mirror://debian;
+      packages = commonDebianPackages;
+    };
+
+    debian70x86_64 = {
+      name = "debian-7.0.0-wheezy-amd64";
+      fullName = "Debian 7.0.0 Wheezy (amd64)";
+      packagesList = fetchurl {
+        url = mirror://debian/dists/wheezy/main/binary-amd64/Packages.bz2;
+        sha256 = "e79132f7db6655013be1f75feb9812b071386525246d8639679b322487d2732a";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
@@ -1451,6 +1507,7 @@ rec {
     "bzip2"
     "tar"
     "grep"
+    "sed"
     "findutils"
     "g++"
     "make"

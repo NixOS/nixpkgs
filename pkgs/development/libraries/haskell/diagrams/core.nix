@@ -10,6 +10,7 @@ cabal.mkDerivation (self: {
     dualTree MemoTrie monoidExtras newtype semigroups vectorSpace
     vectorSpacePoints
   ];
+  jailbreak = true;
   meta = {
     homepage = "http://projects.haskell.org/diagrams";
     description = "Core libraries for diagrams EDSL";

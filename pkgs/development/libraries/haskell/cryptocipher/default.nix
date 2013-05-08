@@ -1,17 +1,16 @@
 { cabal, cereal, cipherAes, cipherRc4, cpu, cryptoApi, cryptohash
-, cryptoPubkeyTypes, entropy, primitive, QuickCheck, tagged
-, testFramework, testFrameworkQuickcheck2, vector
+, entropy, primitive, QuickCheck, testFramework
+, testFrameworkQuickcheck2, vector
 }:
 
 cabal.mkDerivation (self: {
   pname = "cryptocipher";
-  version = "0.4.0";
-  sha256 = "1qbnhzbzypin7h62sn2sibij7clsgmaiq24q3xhgbjrirb6bhqf0";
+  version = "0.5.0";
+  sha256 = "16gqsy23y3g9089ng94124g5pvc4d0vnh2r47ii789f8j96062nd";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [
-    cereal cipherAes cipherRc4 cpu cryptoApi cryptoPubkeyTypes
-    primitive tagged vector
+    cereal cipherAes cipherRc4 cpu cryptoApi primitive vector
   ];
   testDepends = [
     cryptoApi cryptohash entropy QuickCheck testFramework

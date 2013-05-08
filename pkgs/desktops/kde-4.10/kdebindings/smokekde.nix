@@ -1,5 +1,5 @@
 { kde, cmake, smokeqt, kdelibs, akonadi, kdepimlibs, okular
-, shared_desktop_ontologies, attica, nepomuk_core }:
+, shared_desktop_ontologies, attica }:
 
 kde {
   # attica, akonadi and kdepimlibs are disabled due to smokegen crash

@@ -17,6 +17,13 @@ stdenv.mkDerivation (rec {
            -e "s|^\(\(DEST_\)\?PREFIX\)=.*$|\1=$out|g ; \
                s|/sbin/install-info|install-info|g"
 
+
+       # Workaround for bug #458 
+       # ProofGeneral 4.2 byte-compilation fails with Emacs 24.2.90
+       # http://proofgeneral.inf.ed.ac.uk/trac/ticket/458
+       sed -i "Makefile" \
+       	   -e "s|(setq byte-compile-error-on-warn t)||g"
+
        sed -i "bin/proofgeneral" -e's/which/type -p/g'
 
        # @image{ProofGeneral} fails, so remove it.

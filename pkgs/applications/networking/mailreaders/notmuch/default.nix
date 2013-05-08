@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, bash, emacs, gdb, glib, gmime, gnupg1,
+{ fetchurl, stdenv, bash, emacs, gdb, glib, gmime, gnupg,
   pkgconfig, talloc, xapian
 }:
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "03cwylm0y9xld0hn753v0hn62f96nagdmzxv8jlz8vdbh9iszs56";
   };
 
-  buildInputs = [ bash emacs gdb glib gmime gnupg1 pkgconfig talloc xapian ];
+  buildInputs = [ bash emacs gdb glib gmime gnupg pkgconfig talloc xapian ];
 
   patchPhase = ''
     (cd test && for prg in \
@@ -55,6 +55,14 @@ stdenv.mkDerivation rec {
       substituteInPlace "$prg" \
         --replace "#!/usr/bin/env bash" "#!${bash}/bin/bash"
     done)
+
+    for src in \
+      crypto.c \
+      emacs/notmuch-crypto.el
+    do
+      substituteInPlace "$src" \
+        --replace \"gpg\" \"${gnupg}/bin/gpg2\"
+    done
   '';
 
   # XXX: emacs tests broken
