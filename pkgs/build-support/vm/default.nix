@@ -302,7 +302,7 @@ rec {
     fi
     touch /mnt/.debug
 
-    mkdir /mnt/proc /mnt/dev /mnt/sys /mnt/bin
+    mkdir /mnt/proc /mnt/dev /mnt/sys
     ${createDeviceNodes "/mnt/dev"}
   '';
 
@@ -479,6 +479,7 @@ rec {
   fillDiskWithRPMs =
     { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
     , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , unifiedSystemDir ? false
     }:
 
     runInLinuxVM (stdenv.mkDerivation {
@@ -491,10 +492,26 @@ rec {
 
         chroot=$(type -tP chroot)
 
+        ${utillinux}/bin/mount -t proc none /mnt/proc
+
+        # Make the Nix store available in /mnt, because that's where the RPMs live.
+        mkdir -p /mnt/nix/store
+        ${utillinux}/bin/mount -o bind /nix/store /mnt/nix/store
+
+        # Newer distributions like Fedora 18 require /lib etc. to be
+        # symlinked to /usr.
+        ${lib.optionalString unifiedSystemDir ''
+          mkdir -p /mnt/usr/bin /mnt/usr/sbin /mnt/usr/lib /mnt/usr/lib64
+          ln -s /usr/bin /mnt/bin
+          ln -s /usr/sbin /mnt/sbin
+          ln -s /usr/lib /mnt/lib
+          ln -s /usr/lib64 /mnt/lib64
+        ''}
+
         echo "unpacking RPMs..."
         for i in $rpms; do
             echo "$i..."
-            ${rpm}/bin/rpm2cpio "$i" | (cd /mnt && ${cpio}/bin/cpio -i --make-directories)
+            ${rpm}/bin/rpm2cpio "$i" | (chroot /mnt ${cpio}/bin/cpio -i --make-directories)
         done
 
         eval "$preInstall"
@@ -505,9 +522,6 @@ rec {
         PATH=/usr/bin:/bin:/usr/sbin:/sbin $chroot /mnt \
           rpm --initdb
 
-        # Make the Nix store available in /mnt, because that's where the RPMs live.
-        mkdir -p /mnt/nix/store
-        ${utillinux}/bin/mount -o bind /nix/store /mnt/nix/store
         ${utillinux}/bin/mount -o bind /tmp /mnt/tmp
 
         echo "installing RPMs..."
@@ -519,8 +533,7 @@ rec {
 
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt/nix/store
-        ${utillinux}/bin/umount /mnt/tmp
+        ${utillinux}/bin/umount /mnt/nix/store /mnt/tmp /mnt/proc
         ${utillinux}/bin/umount /mnt
       '';
 
@@ -726,10 +739,11 @@ rec {
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? []
     , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"]
-    , runScripts ? true, createRootFS ? defaultCreateRootFS }:
+    , runScripts ? true, createRootFS ? defaultCreateRootFS
+    , unifiedSystemDir ? false }:
 
     fillDiskWithRPMs {
-      inherit name fullName size preInstall postInstall runScripts createRootFS;
+      inherit name fullName size preInstall postInstall runScripts createRootFS unifiedSystemDir;
       rpms = import (rpmClosureGenerator {
         inherit name packagesLists urlPrefixes archs;
         packages = packages ++ extraPackages;
@@ -980,6 +994,32 @@ rec {
       urlPrefix = mirror://fedora/linux/releases/16/Everything/x86_64/os;
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+    };
+
+    fedora18i386 = {
+      name = "fedora-18-i386";
+      fullName = "Fedora 18 (i386)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/18/Everything/i386/os/repodata/935f57e61365047b6aee346792bc68bfd24de30874ce5d26bf730a992d36678d-primary.xml.gz;
+        sha256 = "935f57e61365047b6aee346792bc68bfd24de30874ce5d26bf730a992d36678d";
+      };
+      urlPrefix = mirror://fedora/linux/releases/18/Everything/i386/os;
+      archs = ["noarch" "i386" "i586" "i686"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
+    };
+
+    fedora18x86_64 = {
+      name = "fedora-18-x86_64";
+      fullName = "Fedora 18 (x86_64)";
+      packagesList = fetchurl {
+        url = mirror://fedora/linux/releases/18/Everything/x86_64/os/repodata/463ac49f2218e404607b2eeb3c04be1a648d90293f4239bbb6a63c2fed672bea-primary.xml.gz;
+        sha256 = "463ac49f2218e404607b2eeb3c04be1a648d90293f4239bbb6a63c2fed672bea";
+      };
+      urlPrefix = mirror://fedora/linux/releases/18/Everything/x86_64/os;
+      archs = ["noarch" "x86_64"];
+      packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
+      unifiedSystemDir = true;
     };
 
     opensuse103i386 = {
@@ -1559,14 +1599,14 @@ rec {
         name = "redhat-9-i386";
         fullName = "Red Hat Linux 9 (i386)";
         size = 1024;
-        rpms = import ./rpm/redhat-9-i386.nix {inherit fetchurl;};
+        rpms = import ./rpm/redhat-9-i386.nix { inherit fetchurl; };
       };
 
       suse90i386 = fillDiskWithRPMs {
         name = "suse-9.0-i386";
         fullName = "SUSE Linux 9.0 (i386)";
         size = 1024;
-        rpms = import ./rpm/suse-9-i386.nix {inherit fetchurl;};
+        rpms = import ./rpm/suse-9-i386.nix { inherit fetchurl; };
         # Urgh.  The /etc/group entries are installed by aaa_base (or
         # something) but due to dependency ordering, that package isn't
         # installed yet by the time some other packages refer to these
