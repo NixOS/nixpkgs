@@ -1465,6 +1465,8 @@ let
 
   pwgen = callPackage ../tools/security/pwgen { };
 
+  pwnat = callPackage ../tools/networking/pwnat { };
+
   pydb = callPackage ../development/tools/pydb { };
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
