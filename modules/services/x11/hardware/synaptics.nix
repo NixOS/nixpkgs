@@ -89,6 +89,8 @@ let cfg = config.services.xserver.synaptics; in
 
     services.xserver.modules = [ pkgs.xorg.xf86inputsynaptics ];
 
+    environment.systemPackages = [ pkgs.xorg.xf86inputsynaptics ];
+
     services.xserver.config =
       ''
         # Automatically enable the synaptics driver for all touchpads.
