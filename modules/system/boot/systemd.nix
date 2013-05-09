@@ -530,36 +530,29 @@ in
 
     environment.systemPackages = [ systemd ];
 
-    environment.etc =
-      [ { source = units;
-          target = "systemd/system";
-        }
-        { source = pkgs.writeText "systemd.conf"
-            ''
-              [Manager]
-            '';
-          target = "systemd/system.conf";
-        }
-        { source = pkgs.writeText "journald.conf"
-            ''
-              [Journal]
-              RateLimitInterval=${config.services.journald.rateLimitInterval}
-              RateLimitBurst=${toString config.services.journald.rateLimitBurst}
-              ${optionalString (config.services.journald.console != "") ''
-                ForwardToConsole=yes
-                TTYPath=${config.services.journald.console}
-              ''}
-            '';
-          target = "systemd/journald.conf";
-        }
-        { source = pkgs.writeText "logind.conf"
-            ''
-              [Login]
-              ${config.services.logind.extraConfig}
-            '';
-          target = "systemd/logind.conf";
-        }
-      ];
+    environment.etc."systemd/system".source = units;
+
+    environment.etc."systemd/system.conf".text =
+      ''
+        [Manager]
+      '';
+
+    environment.etc."systemd/journald.conf".text =
+      ''
+        [Journal]
+        RateLimitInterval=${config.services.journald.rateLimitInterval}
+        RateLimitBurst=${toString config.services.journald.rateLimitBurst}
+        ${optionalString (config.services.journald.console != "") ''
+          ForwardToConsole=yes
+          TTYPath=${config.services.journald.console}
+        ''}
+      '';
+
+    environment.etc."systemd/logind.conf".text =
+      ''
+        [Login]
+        ${config.services.logind.extraConfig}
+      '';
 
     system.activationScripts.systemd =
       ''
