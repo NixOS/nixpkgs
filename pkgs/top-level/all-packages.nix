@@ -8609,6 +8609,8 @@ let
     in kde4 // {
       inherit kde4;
 
+      wrapper = callPackage ../build-support/kdewrapper {};
+
       recurseForRelease = true;
 
       akunambol = callPackage ../applications/networking/sync/akunambol { };
