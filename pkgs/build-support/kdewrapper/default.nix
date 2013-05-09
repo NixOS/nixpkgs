@@ -11,7 +11,8 @@
 program:
 
 let
-  libs = with kde4; [ kdelibs kde_runtime oxygen_icons shared_mime_info ] + extra;
+  libs = with kde4; [ kdelibs kde_runtime oxygen_icons shared_mime_info ]
+    ++ extraLibs;
 in
 stdenv.mkDerivation {
   name = program.name + "-wrapped";
@@ -25,13 +26,13 @@ stdenv.mkDerivation {
     QT_PLUGIN_PATH=
     for a in $libs; do
       KDEDIRS=$a''${KDEDIRS:+:}$KDEDIRS
-      QT_PLUGIN_PATH=$a''${KDEDIRS:+:}$KDEDIRS
+      QT_PLUGIN_PATH=$a/lib/qt4/plugins:$a/lib/kde4/plugins''${QT_PLUGIN_PATH:+:}$QT_PLUGIN_PATH
     done
     for a in ${program}/bin/*; do 
       PROG=$out/bin/`basename $a` 
     cat > $PROG << END
-      export KDEDIRS=$KDEDIRS
-      export QT_PLUGIN_PATH=$KDEDIRS
+      export KDEDIRS=$KDEDIRS\''${KDEDIRS:+:}\$KDEDIRS
+      export QT_PLUGIN_PATH=$QT_PLUGIN_PATH\''${QT_PLUGIN_PATH:+:}\$QT_PLUGIN_PATH
       exec $a "\$@"
     END
     chmod +x $PROG
