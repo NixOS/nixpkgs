@@ -4173,6 +4173,8 @@ let
 
   libcanberra = callPackage ../development/libraries/libcanberra { };
 
+  libcello = callPackage ../development/libraries/libcello {};
+
   libcdaudio = callPackage ../development/libraries/libcdaudio { };
 
   libcddb = callPackage ../development/libraries/libcddb { };
