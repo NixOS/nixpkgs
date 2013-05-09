@@ -4824,6 +4824,10 @@ let
 
   pangoxsl = callPackage ../development/libraries/pangoxsl { };
 
+  pcl = callPackage ../development/libraries/pcl {
+    vtk = vtkWithQt4;
+  };
+
   pcre = callPackage ../development/libraries/pcre {
     unicodeSupport = config.pcre.unicode or true;
   };
