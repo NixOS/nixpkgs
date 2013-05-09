@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "pwnat-0.3-beta";
 
   src = fetchurl {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-    ensureDir $out/bin $out/share/pwnat
+    mkdir -p $out/bin $out/share/pwnat
     cp pwnat $out/bin
     cp README* COPYING* $out/share/pwnat
   '';
