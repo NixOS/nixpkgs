@@ -8838,6 +8838,8 @@ let
 
   cvc3 = callPackage ../applications/science/logic/cvc3 {};
 
+  ekrhyper = callPackage ../applications/science/logic/ekrhyper {};
+
   eprover = callPackage ../applications/science/logic/eprover {
     texLive = texLiveAggregationFun {
       paths = [
