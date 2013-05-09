@@ -5415,6 +5415,8 @@ let
 
   pygobject = pythonPackages.pygobject;
 
+  pygobject3 = pythonPackages.pygobject3;
+
   pygtk = pythonPackages.pygtk;
 
   pyGtkGlade = pythonPackages.pyGtkGlade;
@@ -5762,7 +5764,10 @@ let
 
   bcm43xx = callPackage ../os-specific/linux/firmware/bcm43xx { };
 
-  bluez4 = callPackage ../os-specific/linux/bluez { };
+  bluez4 = callPackage ../os-specific/linux/bluez {
+    pygobject = pygobject3;
+  };
+
   bluez5 = lowPrio (callPackage ../os-specific/linux/bluez/bluez5.nix { });
 
   bluez = bluez4;
