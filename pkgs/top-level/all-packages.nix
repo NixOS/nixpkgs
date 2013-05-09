@@ -3797,14 +3797,6 @@ let
 
   glibcCross = glibc217Cross;
 
-  glibc213 = (callPackage ../development/libraries/glibc/2.13 {
-    kernelHeaders = linuxHeaders;
-    installLocales = config.glibc.locales or false;
-    machHeaders = null;
-    hurdHeaders = null;
-    gccCross = null;
-  }) // (if crossSystem != null then { crossDrv = glibc213Cross; } else {});
-
   glibc217 = callPackage ../development/libraries/glibc/2.17 {
     kernelHeaders = linuxHeaders;
     installLocales = config.glibc.locales or false;
