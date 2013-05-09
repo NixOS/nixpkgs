@@ -554,6 +554,11 @@ in
         ${config.services.logind.extraConfig}
       '';
 
+    environment.etc."systemd/sleep.conf".text =
+      ''
+        [Sleep]
+      '';
+
     system.activationScripts.systemd =
       ''
         mkdir -p /var/lib/udev -m 0755
