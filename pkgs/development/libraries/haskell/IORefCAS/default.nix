@@ -1,12 +1,13 @@
-{ cabal, bitsAtomic, HUnit, QuickCheck }:
+{ cabal, bitsAtomic, HUnit, QuickCheck, time }:
 
 cabal.mkDerivation (self: {
   pname = "IORefCAS";
-  version = "0.2";
-  sha256 = "18hyy3jqr9yky5r873816fqnywrwba90sq6zx61i2vkqlfbll1k9";
+  version = "0.2.0.1";
+  sha256 = "06vfck59x30mqa9h2ljd4r2cx1ks91b9gwcr928brp7filsq9fdb";
   buildDepends = [ bitsAtomic ];
-  testDepends = [ bitsAtomic HUnit QuickCheck ];
+  testDepends = [ bitsAtomic HUnit QuickCheck time ];
   meta = {
+    homepage = "https://github.com/rrnewton/haskell-lockfree-queue/wiki";
     description = "Atomic compare and swap for IORefs and STRefs";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
