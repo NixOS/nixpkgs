@@ -1,15 +1,17 @@
 { stdenv, fetchurl, python, pyqt4, sip, popplerQt4, pkgconfig, libpng
 , imagemagick, libjpeg, fontconfig, podofo, qt4, icu, sqlite
-, pil, makeWrapper, unrar, chmlib, pythonPackages, xz, udisks, libusb1, libmtp
+, pil, makeWrapper, unrar, chmlib, pythonPackages, xz
 }:
 
 stdenv.mkDerivation rec {
-  name = "calibre-0.8.70";
-  # 0.9.* versions won't build: https://bugs.launchpad.net/calibre/+bug/1094719
+  name = "calibre-0.8.51";
 
   src = fetchurl {
-    url = "mirror://sourceforge/calibre/${name}.tar.xz";
-    sha256 = "12avwp8r6cnrw6c32gmd2hksa9rszdb76zs6fcmr3n8r1wkwa71g";
+    urls = [ 
+      "http://calibre-ebook.googlecode.com/files/${name}.tar.xz"
+      "mirror://sourceforge/calibre/${name}.tar.xz"
+    ];
+    sha256 = "1grcc0k9qpfpwp863x52rl9wj4wz61hcz67l8h2jmli0wxiq44z1";
   };
 
   inherit python;
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
       fontconfig podofo qt4 pil chmlib icu
       pythonPackages.mechanize pythonPackages.lxml pythonPackages.dateutil
       pythonPackages.cssutils pythonPackages.beautifulsoup
-      pythonPackages.sqlite3 sqlite udisks libusb1 libmtp
+      pythonPackages.sqlite3 sqlite
     ];
 
   installPhase = ''

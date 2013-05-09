@@ -35,7 +35,7 @@ rec {
       #"--enable-profiling"
       "--disable-debug"
       "--enable-strip"
-      "--with-system-jpeg" # now we use recent libjpeg-turbo
+      # "--with-system-jpeg" # Too old in nixpkgs
       "--with-system-zlib"
       "--with-system-bz2"
       "--with-system-nspr"
