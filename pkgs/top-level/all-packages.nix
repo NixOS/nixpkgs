@@ -8882,6 +8882,8 @@ let
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
 
+  otter = callPackage ../applications/science/logic/otter {};
+
   picosat = callPackage ../applications/science/logic/picosat {};
 
   prover9 = callPackage ../applications/science/logic/prover9 { };
