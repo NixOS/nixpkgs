@@ -75,6 +75,8 @@ stdenv.mkDerivation rec {
   '' + optionalString stdenv.isFreeBSD ''
     cpan/CPANPLUS/t/04_CPANPLUS-Module.t \
     cpan/CPANPLUS/t/20_CPANPLUS-Dist-MM.t \
+  '' + stdenv.lib.optionalString stdenv.isSunOS ''
+    lib/locale.t \
   '' + " ";
 
   postPatch = optionalString (!stdenv.isDarwin) /* this failed on Darwin, no idea why */ ''
