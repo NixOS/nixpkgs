@@ -1326,6 +1326,12 @@ pythonPackages = python.modules // rec {
     propagatedBuildInputs = with pkgs; [
       pyGtkGlade libtorrentRasterbar twisted Mako chardet pyxdg pyopenssl
     ];
+ 
+    postInstall = ''
+       cp -R deluge/data/share $out/share
+       cp -R deluge/data/pixmaps $out/share/
+       cp -R deluge/data/icons $out/share/
+    '';
 
     meta = {
       homepage = http://deluge-torrent.org;
