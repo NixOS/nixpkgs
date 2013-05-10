@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/${name}/${name}.tar.bz2";
-    sha256 = "0q6ydi7hzrzwqzb38gikdh1l2zf8qp4i3nkgyb01148bjwrhvf21";
+    sha256 = "0h9idadrcyjvd0mkwri4lg310mzpna6s0pvc7b7r3267wzjbn9kw";
   };
 
   nativeBuildInputs = [ cmake perl pkgconfig ];
