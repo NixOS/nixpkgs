@@ -35,6 +35,11 @@ AppArmor.
 
   config = mkIf (cfg.enable) {
 
+    assertions = [ { assertion = config.boot.kernelPackages.kernel.features ? apparmor
+                               && config.boot.kernelPackages.kernel.features.apparmor;
+                     message = "AppArmor is enabled, but the kernel doesn't have AppArmor support"; }
+                 ];
+
     jobs.apparmor =
       { startOn = "startup";
 
