@@ -14,7 +14,8 @@ with pkgs.lib;
       enable = mkOption {
         default = false;
         description = ''
-          Enable AppArmor application security system
+          Enable AppArmor application security system. Enable only if you want to further improve 
+AppArmor.
         '';
       };
 
