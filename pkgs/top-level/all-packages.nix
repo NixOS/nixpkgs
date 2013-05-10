@@ -8155,6 +8155,7 @@ let
         if cfg.enableQuakeLive or false
         then with xlibs; [ stdenv.gcc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ]
         else [ ];
+      gtk_modules = [ libcanberra ];
     };
 
   x11vnc = callPackage ../tools/X11/x11vnc { };
