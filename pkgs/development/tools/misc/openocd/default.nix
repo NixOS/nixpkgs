@@ -1,12 +1,12 @@
-{stdenv, fetchurl, libftdi}:
+{stdenv, fetchurl, libftdi, libusb1 }:
 
 stdenv.mkDerivation rec {
   name = "openocd-${version}";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "http://downloads.sourceforge.net/project/openocd/openocd/${version}/openocd-${version}.tar.bz2";
-    sha256 = "0argjhff9x4ilgycics61kfgkvb6kkkhhhmj3fxcyydd8mscri7l";
+    sha256 = "0qwfyd821sy5p0agz0ybgn5nd7vplipw4mhm485ldj1hcmw7n8sj";
   };
 
   configureFlags = [ "--enable-ft2232_libftdi"
@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
                      "--enable-ulink"
                      "--enable-stlink" ];
 
-  buildInputs = [ libftdi ];
+  buildInputs = [ libftdi libusb1 ];
 
   meta = {
-    homepage = http://openocd.berlios.de;
+    homepage = http://openocd.sourceforge.net/;
     description = "OpenOCD, an on-chip debugger";
 
     longDescription =
