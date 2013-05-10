@@ -4655,6 +4655,10 @@ let
 
   darwinX11AndOpenGL = callPackage ../os-specific/darwin/native-x11-and-opengl { };
 
+  wxMac = callPackage ../os-specific/darwin/wxMac {
+    stdenv = overrideGCC stdenv gccApple;
+  };
+
   mesa = if stdenv.isDarwin then darwinX11AndOpenGL else
     callPackage ../development/libraries/mesa { };
 
