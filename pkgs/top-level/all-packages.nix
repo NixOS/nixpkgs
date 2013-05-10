@@ -8700,6 +8700,8 @@ let
 
       rekonq = callPackage ../applications/networking/browsers/rekonq { };
 
+      kwebkitpart = callPackage ../applications/networking/browsers/kwebkitpart { };
+
       rsibreak = callPackage ../applications/misc/rsibreak { };
 
       semnotes = callPackage ../applications/misc/semnotes { };
