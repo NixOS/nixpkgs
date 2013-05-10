@@ -1,17 +1,20 @@
 { stdenv, fetchurl
 , autoconf, automake, libtool, makeWrapper
-, perl, bison, flex, glibc, gettext, which, rpm, tetex, LocaleGettext, bash, pam, TermReadKey, RpcXML, swig}:
+, perl, bison, flex, glibc, gettext, which, rpm, tetex, LocaleGettext
+, bash, pam, TermReadKey, RpcXML, swig, python }:
 stdenv.mkDerivation rec {
 
   name = "apparmor-${version}";
-  version = "2.6.1";
+  version = "2.8.1";
 
   src = fetchurl {
-    url = "http://launchpad.net/apparmor/2.6/2.6.1/+download/${name}.tar.gz";
-    sha256 = "1x7225xgzyc5agbn41xsip236anr1kmaw70xc94pag82q7c1bc4w";
+    url = "http://launchpad.net/apparmor/2.8/${version}/+download/${name}.tar.gz";
+    sha256 = "1r0a5k14jbiik28m5gql0f3dbxl252jya7i120rrsbzqqnvw6nw7";
   };
 
-  buildInputs = [ autoconf automake libtool perl bison flex gettext which rpm tetex LocaleGettext pam TermReadKey RpcXML swig makeWrapper ];
+  buildInputs = [
+    autoconf automake libtool perl bison flex gettext which rpm tetex
+    LocaleGettext pam TermReadKey RpcXML swig makeWrapper python ];
 
   prePatch = ''
     substituteInPlace libraries/libapparmor/src/Makefile.in --replace "/usr/include" "${glibc}/include"
@@ -24,10 +27,15 @@ stdenv.mkDerivation rec {
     substituteInPlace parser/Makefile --replace "/usr/include/bits/socket.h" "${glibc}/include/bits/socket.h"
     substituteInPlace parser/Makefile --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
 
+    # for some reason pdf documentation doesn't build
+    substituteInPlace parser/Makefile --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"
+
     substituteInPlace parser/tst/gen-xtrans.pl --replace "/usr/bin/perl" "${perl}/bin/perl"
     substituteInPlace parser/tst/Makefile --replace "/usr/bin/prove" "${perl}/bin/prove"
     substituteInPlace parser/tst/Makefile --replace "./caching.sh" "${bash}/bin/bash ./caching.sh"
   '';
+
+  patches = ./capability.patch;
 
   buildPhase =''
     PERL5LIB=$PERL5LIB:$out/lib/perl5/site_perl:$out/lib
@@ -78,6 +86,14 @@ LD_LIBRARY_PATH=$out/lib    make
 	"${src}/kernel-patches/2.6.37/0001-AppArmor-compatibility-patch-for-v5-network-controll.patch"
 	"${src}/kernel-patches/2.6.37/0002-AppArmor-compatibility-patch-for-v5-interface.patch"
 	"${src}/kernel-patches/2.6.37/0003-AppArmor-Allow-dfa-backward-compatibility-with-broke.patch"
+      ];
+    };
+    linux_3_2_patch = {
+      features.apparmor = true;
+      patch = [
+	"${src}/kernel-patches/3.2/0001-AppArmor-compatibility-patch-for-v5-network-controll.patch"
+	"${src}/kernel-patches/3.2/0002-AppArmor-compatibility-patch-for-v5-interface.patch"
+	"${src}/kernel-patches/3.2/0003-AppArmor-Allow-dfa-backward-compatibility-with-broke.patch"
       ];
     };
   };
