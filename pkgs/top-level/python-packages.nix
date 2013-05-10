@@ -91,6 +91,13 @@ pythonPackages = python.modules // rec {
     inherit python;
   };
 
+  # also contaisn a pygtk wrapper (trunk version)
+  pygobject3 = import ../development/python-modules/pygobject/3.x.nix {
+    inherit (pkgs) stdenv fetchurl pkgconfig glib gobjectIntrospection cairo;
+    inherit python pycairo;
+  };
+
+  # py-gitk is only for gtk2. If you want to use gtk3 use pygobject3
   pygtk = import ../development/python-modules/pygtk {
     inherit (pkgs) fetchurl stdenv pkgconfig glib gtk;
     inherit python buildPythonPackage pygobject pycairo;

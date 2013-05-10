@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng, harfbuzz, fontconfig }:
+{ stdenv, fetchurl, pkgconfig, gettext, x11, glib, cairo, libpng, harfbuzz, fontconfig, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "pango-1.32.5"; #.6 needs a not-yet-stable fontconfig
@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "08aqis6j8nd1lb4f2h4h9d9kjvp54iwf8zvqzss0qn4v7nfcjyvx";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ gettext fontconfig ];
+  buildInputs = [ gobjectIntrospection ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ gettext fontconfig ];
 
   nativeBuildInputs = [ pkgconfig ];
 

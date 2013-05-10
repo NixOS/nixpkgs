@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, glib, libtiff, libjpeg, libpng, libX11, xz
-, jasper }:
+, jasper, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-2.28.1";
@@ -12,11 +12,13 @@ stdenv.mkDerivation rec {
   # !!! We might want to factor out the gdk-pixbuf-xlib subpackage.
   buildInputs = [ libX11 ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
 
   propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
 
-  configureFlags = "--with-libjasper --with-x11";
+  configureFlags = "--with-libjasper --with-x11"
+    + stdenv.lib.optionalString (gobjectIntrospection != null) " --enable-introspection=yes"
+    ;
 
   postInstall = "rm -rf $out/share/gtk-doc";
 

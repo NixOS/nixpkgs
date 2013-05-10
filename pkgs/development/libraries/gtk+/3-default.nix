@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs
+, expat, glib, cairo, pango, gdk_pixbuf, atk, at_spi2_atk, xlibs, gobjectIntrospection
 , xineramaSupport ? true
 , cupsSupport ? true, cups ? null
 }:
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
   propagatedBuildInputs = with xlibs; [
     expat glib cairo pango gdk_pixbuf atk at_spi2_atk
     libXrandr libXrender libXcomposite libXi libXcursor
