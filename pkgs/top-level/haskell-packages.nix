@@ -497,6 +497,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   async_2_0_1_4 = callPackage ../development/libraries/haskell/async/2.0.1.4.nix {};
   async = self.async_2_0_1_4;
 
+  atomicPrimops = callPackage ../development/libraries/haskell/atomic-primops {};
+
   attempt = callPackage ../development/libraries/haskell/attempt {};
 
   attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
