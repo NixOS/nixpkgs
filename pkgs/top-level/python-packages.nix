@@ -4667,8 +4667,7 @@ pythonPackages = python.modules // rec {
       md5 = "a1266d4db421963fd3deb172c6689e4b";
     };
 
-    buildInputs = [ pkgs.unzip ] ++ optionals isPy26 [ pythonPackages.ordereddict
-                                                       pythonPackages.unittest2 ];
+    buildInputs = [ pkgs.unzip ] ++ optionals isPy26 [ pythonPackages.ordereddict ];
 
     # XXX: skipping two tests fails in python2.6
     doCheck = ! isPy26;
@@ -4679,6 +4678,7 @@ pythonPackages = python.modules // rec {
       six
       beautifulsoup4
       waitress
+      unittest2
       mock
       pyquery
       wsgiproxy2
