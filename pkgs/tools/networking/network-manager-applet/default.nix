@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, gtk, libglade, networkmanager, GConf
 , libnotify, libgnome_keyring, dbus_glib, polkit, isocodes
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper }:
+, makeWrapper, networkmanager_openvpn }:
 
 let
   pn = "network-manager-applet";
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
+    ln -s ${networkmanager_openvpn}/etc/NetworkManager $out/etc/NetworkManager
+    ln -s ${networkmanager_openvpn}/lib/* $out/lib
     wrapProgram "$out/bin/nm-applet" \
       --prefix GIO_EXTRA_MODULES : "${glib_networking}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "${gsettings_desktop_schemas}/share:$out/share" \
