@@ -5,14 +5,13 @@
 
 cabal.mkDerivation (self: {
   pname = "authenticate-oauth";
-  version = "1.4.0.5";
-  sha256 = "0yic95glkc0j35sdq04z5n2607ch0k64vyi3y0kfji31qzd3d44x";
+  version = "1.4.0.6";
+  sha256 = "1ylfvc744wqyn5xbv6fivfys5kk9k9r2b9xf63zfzj5l5yqmv91a";
   buildDepends = [
     base64Bytestring blazeBuilder blazeBuilderConduit conduit
     cryptoPubkeyTypes dataDefault httpConduit httpTypes monadControl
     random resourcet RSA SHA time transformers
   ];
-  jailbreak = true;
   meta = {
     homepage = "http://github.com/yesodweb/authenticate";
     description = "Library to authenticate with OAuth for Haskell web applications";
