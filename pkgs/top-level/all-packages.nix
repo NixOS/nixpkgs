@@ -7853,7 +7853,9 @@ let
 
   skype_call_recorder = callPackage ../applications/networking/instant-messengers/skype-call-recorder { };
 
-  st = callPackage ../applications/misc/st { };
+  st = callPackage ../applications/misc/st {
+    conf = config.st.conf or null;
+  };
 
   bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
 
