@@ -19,7 +19,6 @@ cabal.mkDerivation (self: {
     maintainers = [
       self.stdenv.lib.maintainers.andres
       self.stdenv.lib.maintainers.bluescreen303
-      self.stdenv.lib.maintainers.simons
     ];
   };
 })

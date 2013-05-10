@@ -10,6 +10,5 @@ cabal.mkDerivation (self: {
     description = "Reifies arbitrary terms into types that can be reflected back into terms";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

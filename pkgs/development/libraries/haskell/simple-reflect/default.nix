@@ -9,6 +9,5 @@ cabal.mkDerivation (self: {
     description = "Simple reflection of expressions containing variables";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

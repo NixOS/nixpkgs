@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "An Haskell template system supporting both HTML5 and XML";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

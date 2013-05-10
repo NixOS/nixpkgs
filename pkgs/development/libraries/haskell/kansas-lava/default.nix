@@ -18,6 +18,5 @@ cabal.mkDerivation (self: {
     description = "Kansas Lava is a hardware simulator and VHDL generator";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

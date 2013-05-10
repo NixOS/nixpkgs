@@ -15,9 +15,6 @@ cabal.mkDerivation (self: {
     description = "Driver (client) for MongoDB, a free, scalable, fast, document DBMS";
     license = "unknown";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

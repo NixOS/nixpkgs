@@ -14,6 +14,5 @@ cabal.mkDerivation (self: {
     description = "Comonad transformers using functional dependencies";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

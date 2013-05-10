@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "3D rendering engine written entirely in Haskell";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

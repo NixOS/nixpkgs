@@ -8,6 +8,5 @@ cabal.mkDerivation (self: {
     description = "A class for types with a default value";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

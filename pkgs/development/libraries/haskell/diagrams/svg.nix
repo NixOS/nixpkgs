@@ -15,6 +15,5 @@ cabal.mkDerivation (self: {
     description = "SVG backend for diagrams drawing EDSL";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })
