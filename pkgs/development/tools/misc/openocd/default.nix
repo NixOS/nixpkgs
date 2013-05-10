@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libftdi libusb1 ];
 
   meta = {
-    homepage = http://openocd.berlios.de;
+    homepage = http://openocd.sourceforge.net/;
     description = "OpenOCD, an on-chip debugger";
 
     longDescription =
