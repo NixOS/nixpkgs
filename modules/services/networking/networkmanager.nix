@@ -130,7 +130,8 @@ in {
 
     security.polkit.permissions = polkitConf;
 
-    services.dbus.packages = cfg.packages;
+    # openvpn plugin has only dbus interface
+    services.dbus.packages = cfg.packages ++ [ networkmanager_openvpn ];
 
     services.udev.packages = cfg.packages;
   };
