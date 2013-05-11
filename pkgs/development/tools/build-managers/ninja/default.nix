@@ -1,10 +1,11 @@
 { stdenv, fetchurl, unzip, python, asciidoc, re2c }:
 
 stdenv.mkDerivation rec {
-  name = "ninja-1.2.0";
+  name = "ninja-${version}";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "https://github.com/martine/ninja/archive/v1.2.0.zip";
+    url = "https://github.com/martine/ninja/archive/v${version}.zip";
     sha256 = "15ynh806ah37bqb57hcs3mj2g82900sncp6n3bssfggb4azgjlh3";
   };
 
