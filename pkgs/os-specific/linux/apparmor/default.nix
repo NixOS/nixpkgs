@@ -1,7 +1,7 @@
 { stdenv, fetchurl
 , autoconf, automake, libtool, makeWrapper
 , perl, bison, flex, glibc, gettext, which, rpm, tetex, LocaleGettext
-, bash, pam, TermReadKey, RpcXML, swig, python }:
+, bash, pam, TermReadKey, RpcXML, swig, python, linuxHeaders }:
 stdenv.mkDerivation rec {
 
   name = "apparmor-${version}";
@@ -14,18 +14,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     autoconf automake libtool perl bison flex gettext which rpm tetex
-    LocaleGettext pam TermReadKey RpcXML swig makeWrapper python ];
+    LocaleGettext pam TermReadKey RpcXML swig makeWrapper python linuxHeaders ];
 
   prePatch = ''
     substituteInPlace libraries/libapparmor/src/Makefile.in --replace "/usr/include" "${glibc}/include"
     substituteInPlace libraries/libapparmor/src/Makefile.am --replace "/usr/include" "${glibc}/include"
     substituteInPlace common/Make.rules --replace "/usr/bin/pod2man" "${perl}/bin/pod2man"
     substituteInPlace common/Make.rules --replace "/usr/bin/pod2html" "${perl}/bin/pod2html"
+    substituteInPlace common/Make.rules --replace "cpp -dM" "cpp -dM -I${glibc}/include"
 
     substituteInPlace parser/Makefile --replace "/usr/bin/bison" "${bison}/bin/bison"
     substituteInPlace parser/Makefile --replace "/usr/bin/flex" "${flex}/bin/flex"
     substituteInPlace parser/Makefile --replace "/usr/include/bits/socket.h" "${glibc}/include/bits/socket.h"
     substituteInPlace parser/Makefile --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
+    #substituteInPlace parser/utils/vim/Makefile --replace "/usr/include/linux/capability.h" "${glibc}/include/linux/capability.h"
 
     # for some reason pdf documentation doesn't build
     substituteInPlace parser/Makefile --replace "manpages htmlmanpages pdf" "manpages htmlmanpages"
@@ -72,31 +74,14 @@ LD_LIBRARY_PATH=$out/lib    make
 #LD_LIBRARY_PATH=$out/lib    make check	# depends on the parser having been built first
     make install DESTDIR=$out
 
+    cd ..
+    cp -r  kernel-patches $out
   '';
   installPhase = ''
     for i in $out/bin/*;  do
       wrapProgram $i --prefix PERL5LIB : "$PERL5LIB:$out/lib/perl5/5.10.1/i686-linux-thread-multi/"
     done
   '';
-  passthru = {
-    linux_2_6_37_patch = {
-      name= "apparmor";
-      features.apparmor = true;
-      patch = [
-	"${src}/kernel-patches/2.6.37/0001-AppArmor-compatibility-patch-for-v5-network-controll.patch"
-	"${src}/kernel-patches/2.6.37/0002-AppArmor-compatibility-patch-for-v5-interface.patch"
-	"${src}/kernel-patches/2.6.37/0003-AppArmor-Allow-dfa-backward-compatibility-with-broke.patch"
-      ];
-    };
-    linux_3_2_patch = {
-      features.apparmor = true;
-      patch = [
-	"${src}/kernel-patches/3.2/0001-AppArmor-compatibility-patch-for-v5-network-controll.patch"
-	"${src}/kernel-patches/3.2/0002-AppArmor-compatibility-patch-for-v5-interface.patch"
-	"${src}/kernel-patches/3.2/0003-AppArmor-Allow-dfa-backward-compatibility-with-broke.patch"
-      ];
-    };
-  };
 
   meta = with stdenv.lib; {
     homepage = http://apparmor.net/;
