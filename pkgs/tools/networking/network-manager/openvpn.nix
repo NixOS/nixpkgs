@@ -1,14 +1,14 @@
 { stdenv, fetchurl, openvpn, intltool, pkgconfig, networkmanager
-, withGnome ? true, gtk2, libgnome_keyring }:
+, withGnome ? true, gtk2, libgnome_keyring, procps, module_init_tools }:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname = "NetworkManager-openvpn";
-  version = "0.9.4.0";
+  version = "0.9.6.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/0.9/${pname}-${version}.tar.xz";
-    sha256 = "1q436v2vlyxjj2b89jr3zny640xdjpslbrjb39ks1lrc1jqp0j6h";
+    sha256 = "18w7mlgnm7y5kg3s2jfm8biymh33ggw97bz27m5mg69kg42qgf4g";
   };
 
   buildInputs = [ openvpn networkmanager ]
@@ -18,17 +18,26 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "${if withGnome then "--with-gnome --with-gtkver=2" else "--without-gnome"}"
+    "--disable-static"
   ];
 
-  preBuild = ''
-     sed -i 's/-Wstrict-prototypes//' auth-dialog/Makefile
-     sed -i 's/-Werror//' auth-dialog/Makefile
-     sed -i 's/-Wstrict-prototypes//' properties/Makefile
-     sed -i 's/-Werror//' properties/Makefile
+  preConfigure = ''
+     substituteInPlace "configure" \
+       --replace "/sbin/sysctl" "${procps}/sbin/sysctl"
+     substituteInPlace "src/nm-openvpn-service.c" \
+       --replace "/sbin/openvpn" "${openvpn}/sbin/openvpn" \
+       --replace "/sbin/modprobe" "${module_init_tools}/sbin/modprobe"
+     substituteInPlace "properties/auth-helpers.c" \
+       --replace "/sbin/openvpn" "${openvpn}/sbin/openvpn"
   '';
 
-  postInstall = ''
-   # ln -s $out/NetworkManager/VPN /etc/NetworkManager/VPN
+  postConfigure = ''
+     substituteInPlace "./auth-dialog/Makefile" \
+       --replace "-Wstrict-prototypes" "" \
+       --replace "-Werror" ""
+     substituteInPlace "properties/Makefile" \
+       --replace "-Wstrict-prototypes" "" \
+       --replace "-Werror" ""
   '';
 
   meta = {
