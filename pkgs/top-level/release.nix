@@ -92,7 +92,6 @@ let
       doxygen = linux;
       dpkg = linux;
       drgeo = linux;
-      e2fsprogs = linux;
       ejabberd = linux;
       elinks = linux;
       emacs23 = gtkSupported;
