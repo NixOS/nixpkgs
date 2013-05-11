@@ -3328,6 +3328,8 @@ let
     licenseAccepted = (config.neoload.accept_license or false);
   };
 
+  ninja = callPackage ../development/tools/build-managers/ninja { };
+
   noweb = callPackage ../development/tools/literate-programming/noweb { };
 
   omake = callPackage ../development/tools/ocaml/omake { };
