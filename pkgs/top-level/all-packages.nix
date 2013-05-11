@@ -4137,6 +4137,8 @@ let
 
   lesstif93 = callPackage ../development/libraries/lesstif-0.93 { };
 
+  leveldb = callPackage ../development/libraries/leveldb { };
+
   levmar = callPackage ../development/libraries/levmar { };
 
   leptonica = callPackage ../development/libraries/leptonica { };
