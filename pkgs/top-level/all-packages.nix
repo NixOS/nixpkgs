@@ -5963,6 +5963,14 @@ let
       ];
   };
 
+  linux_3_2_apparmor = linux_3_2.override {
+    kernelPatches = [ kernelPatches.apparmor_3_2 ];
+    extraConfig = ''
+      SECURITY_APPARMOR y
+      DEFAULT_SECURITY_APPARMOR y
+    '';
+  };
+
   linux_3_2_xen = linux_3_2.override {
     extraConfig = ''
       XEN_DOM0 y
@@ -6135,6 +6143,7 @@ let
   # Build the kernel modules for the some of the kernels.
   linuxPackages_3_0 = recurseIntoAttrs (linuxPackagesFor linux_3_0 linuxPackages_3_0);
   linuxPackages_3_2 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2 linuxPackages_3_2);
+  linuxPackages_3_2_apparmor = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_apparmor linuxPackages_3_2_apparmor);
   linuxPackages_3_2_xen = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_2_xen linuxPackages_3_2_xen);
   linuxPackages_3_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_4 linuxPackages_3_4);
   linuxPackages_3_6_rpi = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_6_rpi linuxPackages_3_6_rpi);

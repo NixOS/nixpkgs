@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit }:
+{ stdenv, fetchurl, fetchgit, apparmor }:
 
 let
 
@@ -36,9 +36,22 @@ let
       '';
     };
 
+  makeAppArmorPatch = {apparmor, version}:
+    stdenv.mkDerivation {
+      name = "apparmor-${version}.patch";
+      phases = ["installPhase"];
+      installPhase = ''
+        cat ${apparmor}/kernel-patches/${version}/* > $out
+      '';
+    };
 in
 
 rec {
+
+  apparmor_3_2 = {
+    features.apparmor = true;
+    patch = makeAppArmorPatch { version = "3.2"; inherit apparmor; };
+  };
 
   sec_perm_2_6_24 =
     { name = "sec_perm-2.6.24";
