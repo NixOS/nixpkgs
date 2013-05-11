@@ -111,7 +111,7 @@ in
           ${pkgs.stdenv.shell} -c "chmod 770 ${homeDir}"
         '';
       serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.rpc_port}";
-      serviceConfig.ExecReload = "kill -HUP $MAINPID";
+      serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       serviceConfig.User = "transmission";
       # NOTE: transmission has an internal umask that also must be set (in settings.json)
       serviceConfig.UMask = "0002";
