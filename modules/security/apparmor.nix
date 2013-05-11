@@ -40,18 +40,25 @@ AppArmor.
                      message = "AppArmor is enabled, but the kernel doesn't have AppArmor support"; }
                  ];
 
-    jobs.apparmor =
-      { startOn = "startup";
+    environment.systemPackages = [ pkgs.apparmor ];
 
-	path = [ pkgs.apparmor ];
+    systemd.services.apparmor = {
+      #wantedBy = [ "basic.target" ];
+      wantedBy = [ "local-fs.target" ];
+      path = [ pkgs.apparmor ];
 
-        preStart = concatMapStrings (profile: ''
-          apparmor_parser -Kv -I ${pkgs.apparmor}/etc/apparmor.d/ "${profile}"
+      serviceConfig = {
+	Type = "oneshot";
+	RemainAfterExit = "yes";
+        ExecStart = concatMapStrings (profile: ''
+          ${pkgs.apparmor}/sbin/apparmor_parser -rKv -I ${pkgs.apparmor}/etc/apparmor.d/ "${profile}"
         '') cfg.profiles;
-
-	postStop = ''
-	'';
+        ExecStop = concatMapStrings (profile: ''
+          ${pkgs.apparmor}/sbin/apparmor_parser -Rv "${profile}"
+        '') cfg.profiles;
       };
+
+    };
 
   };
 
