@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   configureFlags = "--disable-usr-local --with-ssl --enable-threads --enable-packet-editor";
 
   meta = {
-    homepage = "http://sourceforge.net/projects/wireshark/";
+    homepage = http://www.wireshark.org/;
     description = "a powerful network protocol analyzer";
     license = stdenv.lib.licenses.gpl2;
 
