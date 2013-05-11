@@ -57,6 +57,8 @@ kde {
     "-DHUPNP_ENABLED=ON"
   ];
 
+  passthru.wantsUdisks2 = true;
+
   meta = {
     description = "KDE libraries";
     license = "LGPL";
