@@ -4111,6 +4111,8 @@ let
 
   jama = callPackage ../development/libraries/jama { };
 
+  jansson = callPackage ../development/libraries/jansson { };
+
   jbig2dec = callPackage ../development/libraries/jbig2dec { };
 
   jetty_gwt = callPackage ../development/libraries/java/jetty-gwt { };
