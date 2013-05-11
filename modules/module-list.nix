@@ -47,6 +47,7 @@
   ./programs/wvdial.nix
   ./rename.nix
   ./security/apparmor.nix
+  ./security/apparmor-suid.nix
   ./security/ca.nix
   ./security/pam.nix
   ./security/pam_usb.nix
