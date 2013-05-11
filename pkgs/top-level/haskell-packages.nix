@@ -705,6 +705,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   cssText = callPackage ../development/libraries/haskell/css-text {};
 
+  cufft = callPackage ../development/libraries/haskell/cufft {};
+
   curl = callPackage ../development/libraries/haskell/curl { curl = pkgs.curl; };
 
   cpu = callPackage ../development/libraries/haskell/cpu {};
