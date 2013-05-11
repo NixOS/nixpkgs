@@ -461,6 +461,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   accelerateExamples = callPackage ../development/libraries/haskell/accelerate-examples {};
 
+  accelerateFft = callPackage ../development/libraries/haskell/accelerate-fft {};
+
   accelerateIo = callPackage ../development/libraries/haskell/accelerate-io {};
 
   active = callPackage ../development/libraries/haskell/active {};
