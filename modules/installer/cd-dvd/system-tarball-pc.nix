@@ -23,13 +23,13 @@ let
     label nixos
       MENU LABEL ^NixOS using nfsroot
       KERNEL bzImage
-      append ip=dhcp nfsroot=/home/pcroot systemConfig=${config.system.build.toplevel} init=${config.system.build.toplevel}/init
+      append ip=dhcp nfsroot=/home/pcroot systemConfig=${config.system.build.toplevel} init=${config.system.build.toplevel}/init rw
 
     # I don't know how to make this boot with nfsroot (using the initrd)
     label nixos_initrd
       MENU LABEL NixOS booting the poor ^initrd.
       KERNEL bzImage
-      append initrd=initrd ip=dhcp nfsroot=/home/pcroot systemConfig=${config.system.build.toplevel} init=${config.system.build.toplevel}/init
+      append initrd=initrd ip=dhcp nfsroot=/home/pcroot systemConfig=${config.system.build.toplevel} init=${config.system.build.toplevel}/init rw
 
     label memtest
       MENU LABEL ^${pkgs.memtest86.name}
@@ -130,7 +130,7 @@ in
 
   nixpkgs.config = {
     packageOverrides = p: rec {
-      linux_3_2 = p.linux_3_2.override {
+      linux_3_4 = p.linux_3_4.override {
         extraConfig = ''
           # Enable drivers in kernel for most NICs.
           E1000 y
@@ -143,11 +143,15 @@ in
           ATL1C y
           VORTEX y
           VIA_RHINE y
+          R8169 y
 
           # Enable nfs root boot
+          UNIX y # http://www.linux-mips.org/archives/linux-mips/2006-11/msg00113.html
           IP_PNP y
           IP_PNP_DHCP y
+          FSCACHE y
           NFS_FS y
+          NFS_FSCACHE y
           ROOT_NFS y
 
           # Enable devtmpfs
