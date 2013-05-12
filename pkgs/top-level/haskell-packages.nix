@@ -1416,7 +1416,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   OpenGL_2_8_0_0 = callPackage ../development/libraries/haskell/OpenGL/2.8.0.0.nix {};
   OpenGL = self.OpenGL_2_8_0_0;
 
-  OpenGLRaw = callPackage ../development/libraries/haskell/OpenGLRaw {};
+  OpenGLRaw_1_3_0_0 = callPackage ../development/libraries/haskell/OpenGLRaw/1.3.0.0.nix {};
+  OpenGLRaw = self.OpenGLRaw_1_3_0_0;
 
   optparseApplicative = callPackage ../development/libraries/haskell/optparse-applicative {};
 
