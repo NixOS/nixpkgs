@@ -507,7 +507,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   attoparsecConduit = callPackage ../development/libraries/haskell/attoparsec-conduit {};
 
-  attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec/enumerator.nix {};
+  attoparsecEnumerator = callPackage ../development/libraries/haskell/attoparsec-enumerator {};
 
   authenticate = callPackage ../development/libraries/haskell/authenticate {};
 
