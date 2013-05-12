@@ -3,12 +3,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.0.5.1";
+  version = "2.0.6";
   name = "lyx-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.lyx.org/pub/lyx/stable/2.0.x/${name}.tar.xz";
-    sha256 = "18k9qbz40v6lqmkfcg98wvcv4wi4p36ach1jz3z2b15gbmv2gr9n";
+    sha256 = "1llah9d9ymvdk8asmqslcwnicycxrwb27k8si184n5bfxvnjpjx5";
   };
 
   configureFlags = [
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     texLive qt4 python makeWrapper pkgconfig
     enchant # mythes boost
   ];
+
+  doCheck = true;
 
   meta = {
     description = "WYSIWYM frontend for LaTeX, DocBook, etc.";
