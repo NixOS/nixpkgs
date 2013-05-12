@@ -22,8 +22,8 @@ stdenv.mkDerivation {
   buildCommand = ''
     ensureDir $out/bin
 
-    KDEDIRS=
-    QT_PLUGIN_PATH=
+    KDEDIRS=${program}
+    QT_PLUGIN_PATH=${program}/lib/qt4/plugins:${program}/lib/kde4/plugins
     for a in $libs; do
       KDEDIRS=$a''${KDEDIRS:+:}$KDEDIRS
       QT_PLUGIN_PATH=$a/lib/qt4/plugins:$a/lib/kde4/plugins''${QT_PLUGIN_PATH:+:}$QT_PLUGIN_PATH
@@ -31,9 +31,10 @@ stdenv.mkDerivation {
     for a in ${program}/bin/*; do 
       PROG=$out/bin/`basename $a` 
     cat > $PROG << END
-      export KDEDIRS=$KDEDIRS\''${KDEDIRS:+:}\$KDEDIRS
-      export QT_PLUGIN_PATH=$QT_PLUGIN_PATH\''${QT_PLUGIN_PATH:+:}\$QT_PLUGIN_PATH
-      exec $a "\$@"
+    #!/bin/sh
+    export KDEDIRS=$KDEDIRS\''${KDEDIRS:+:}\$KDEDIRS
+    export QT_PLUGIN_PATH=$QT_PLUGIN_PATH\''${QT_PLUGIN_PATH:+:}\$QT_PLUGIN_PATH
+    exec $a "\$@"
     END
     chmod +x $PROG
     done
