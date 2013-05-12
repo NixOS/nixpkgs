@@ -48,9 +48,11 @@ in
 
 rec {
 
-  apparmor_3_2 = {
+  apparmor_3_2 = rec {
+    version = "3.2";
+    name = "apparmor-${version}";
+    patch = makeAppArmorPatch { inherit apparmor version; };
     features.apparmor = true;
-    patch = makeAppArmorPatch { version = "3.2"; inherit apparmor; };
   };
 
   sec_perm_2_6_24 =
