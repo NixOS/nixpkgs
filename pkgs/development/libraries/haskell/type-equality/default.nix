@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "type-equality";
-  version = "0.1.1";
-  sha256 = "0sgb7aki0ns3547y3abv1xh9rlmwhjm1c370pf3jjssysayh2wzv";
+  version = "0.1.2";
+  sha256 = "06acqpkvyvalv5knjzzbgm40hzas6cdfsypvjxsbb0mhq4d80xwr";
   meta = {
     homepage = "http://github.com/hesselink/type-equality/";
     description = "Type equality, coercion/cast and other operations";
