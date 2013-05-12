@@ -3414,6 +3414,8 @@ let
 
   swftools = callPackage ../tools/video/swftools { };
 
+  tcptrack = callPackage ../development/tools/misc/tcptrack { };
+
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo49 = callPackage ../development/tools/misc/texinfo/4.9.nix { };
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.1.nix { };
