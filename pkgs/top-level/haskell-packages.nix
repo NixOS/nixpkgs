@@ -501,7 +501,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   attempt = callPackage ../development/libraries/haskell/attempt {};
 
-  attoparsec = callPackage ../development/libraries/haskell/attoparsec {};
+  attoparsec_0_10_4_0 = callPackage ../development/libraries/haskell/attoparsec/0.10.4.0.nix {};
+  attoparsec = self.attoparsec_0_10_4_0;
 
   attoparsecBinary = callPackage ../development/libraries/haskell/attoparsec-binary {};
 
