@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "unordered-containers";
-  version = "0.2.3.1";
-  sha256 = "10wz5y42r9b2ym7vl5sqrcawyjixmhy370h0kzpvczs8mlzvrlx8";
+  version = "0.2.3.0";
+  sha256 = "1vzgjr9jxdkmgq970ng9zi2j60awvx8iv1v6kzjlrkwzxx1a9dpd";
   buildDepends = [ deepseq hashable ];
   testDepends = [
     ChasingBottoms hashable HUnit QuickCheck testFramework
@@ -17,6 +17,5 @@ cabal.mkDerivation (self: {
     description = "Efficient hashing-based container types";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

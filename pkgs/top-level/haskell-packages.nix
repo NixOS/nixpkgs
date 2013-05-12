@@ -1858,7 +1858,9 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   unlambda = callPackage ../development/libraries/haskell/unlambda {};
 
-  unorderedContainers = callPackage ../development/libraries/haskell/unordered-containers {};
+  unorderedContainers_0_2_3_0 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.0.nix {};
+  unorderedContainers_0_2_3_1 = callPackage ../development/libraries/haskell/unordered-containers/0.2.3.1.nix {};
+  unorderedContainers = self.unorderedContainers_0_2_3_1;
 
   url = callPackage ../development/libraries/haskell/url {};
 
