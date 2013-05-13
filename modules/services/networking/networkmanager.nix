@@ -89,6 +89,9 @@ in {
       { source = configFile;
         target = "NetworkManager/NetworkManager.conf";
       }
+      { source = "${networkmanager_openvpn}/etc/NetworkManager/VPN/nm-openvpn-service.name";
+        target = "NetworkManager/VPN/nm-openvpn-service.name";
+      }
     ];
 
     environment.systemPackages = cfg.packages;
