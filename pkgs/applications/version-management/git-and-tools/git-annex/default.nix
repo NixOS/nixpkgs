@@ -16,8 +16,8 @@ stdenv.mkDerivation {
   name = "git-annex-${version}";
 
   src = fetchurl {
-    url = "http://git.kitenet.net/?p=git-annex.git;a=snapshot;sf=tgz;h=${version}";
-    sha256 = "0g89lmkrs02qdb1k1bfq9gz3j4yv35320vb8ddmj99f4nnhqc6vv";
+    url = "https://github.com/joeyh/git-annex/tarball/${version}";
+    sha256 = "1280sdj3d3s3k5a1znzl7xzzyncv9kz522bprhwb9if03v6xh2kl";
     name = "git-annex-${version}.tar.gz";
   };
 
