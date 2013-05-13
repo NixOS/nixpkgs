@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "accelerate";
-  version = "0.13.0.0";
-  sha256 = "07ph5brvxwi8k5calqmgiyafll2w88679rnpcv6bk5z57bsb5jli";
+  version = "0.13.0.1";
+  sha256 = "01vkvvvzlj023cwxz90clrcgz4xyz0nb8idm1zad21gzrij14915";
   buildDepends = [ fclabels hashable hashtables ];
   noHaddock = true;
   meta = {
