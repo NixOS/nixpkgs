@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haskdogs";
-  version = "0.3.1";
-  sha256 = "08x7pi1xpdf0pq395mfff5g676ws59li8xx94xnvxxjcsid6i709";
+  version = "0.3.2";
+  sha256 = "0vl3c66ki9j9ncs2rapdn80kbfk0l3y97qwfraqlnjycdl10sm6r";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [ Cabal filepath HSH ];
