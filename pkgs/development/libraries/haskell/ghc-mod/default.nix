@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "ghc-mod";
-  version = "1.12.4";
-  sha256 = "1f4pdwimzc2i7bb7ccpbl8pn18ygnqd65xw1z5cmhlswasbdab14";
+  version = "1.12.5";
+  sha256 = "1pl4ivbfp0mzglkpspvs6gnbqsqwdwjzmdx8vfijrv8n9jkw7xyj";
   isLibrary = false;
   isExecutable = true;
   buildDepends = [
@@ -17,6 +17,7 @@ cabal.mkDerivation (self: {
     ioChoice syb time transformers
   ];
   buildTools = [ emacs ];
+  doCheck = false;
   postInstall = ''
       cd $out/share/$pname-$version
       make
@@ -25,7 +26,6 @@ cabal.mkDerivation (self: {
       ensureDir "$out/share/emacs"
       mv $pname-$version emacs/site-lisp
     '';
-  doCheck = false;
   meta = {
     homepage = "http://www.mew.org/~kazu/proj/ghc-mod/";
     description = "Happy Haskell programming on Emacs/Vim";
