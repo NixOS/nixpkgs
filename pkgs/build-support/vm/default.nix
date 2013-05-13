@@ -98,6 +98,7 @@ rec {
       args=
       case $i in
         */cifs.ko)
+          args="CIFSMaxBufSize=4194304"
           ;;
       esac
       echo "loading module $(basename $i .ko)"
