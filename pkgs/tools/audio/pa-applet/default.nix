@@ -4,8 +4,9 @@ stdenv.mkDerivation rec {
   name = "pa-applet";
 
   src = fetchgit {
-    url = "https://github.com/fernandotcl/pa-applet.git";
+    url = "git://github.com/fernandotcl/pa-applet.git";
     rev = "005f192df9ba6d2e6491f9aac650be42906b135a";
+    sha256 = "1rqnp6nzgb3z7c6pvd5qzsxprwrzif8cfx6i7xp3f0x5s7n2dqkb";
   };
 
   buildInputs = [
