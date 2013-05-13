@@ -51,6 +51,10 @@ let
       # login manager.  If the service is running locally, this will
       # give the user ownership of audio devices etc.
       startSession ? false
+    , # Set the login uid of the process (/proc/self/loginuid) for
+      # auditing purposes.  The login uid is only set by "entry
+      # points" like login and sshd, not by commands like sudo.
+      setLoginUid ? startSession
     , # Whether to forward XAuth keys between users.  Mostly useful
       # for "su".
       forwardXAuth ? false
@@ -118,6 +122,8 @@ let
               "session optional ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString startSession
               "session optional ${pkgs.systemd}/lib/security/pam_systemd.so"}
+          ${optionalString setLoginUid
+              "session required pam_loginuid.so"}
           ${optionalString forwardXAuth
               "session optional pam_xauth.so xauthpath=${pkgs.xorg.xauth}/bin/xauth systemuser=99"}
           ${optionalString (limits != [])
