@@ -19,6 +19,9 @@ in
       ''
         cp -v ${pkgs.btrfsProgs}/bin/btrfsck $out/bin
         cp -v ${pkgs.btrfsProgs}/bin/btrfs $out/bin
+        # !!! Increases uncompressed initrd by 240k
+        cp -v ${pkgs.zlib}/lib/libz.so.1{,.2.7} $out/lib
+        cp -v ${pkgs.lzo}/lib/liblzo2.so.2{,.0.0} $out/lib
         ln -sv btrfsck $out/bin/fsck.btrfs
       '';
 
