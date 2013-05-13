@@ -7,6 +7,8 @@ let
 
   fileSystems = attrValues config.fileSystems;
 
+  prioOption = prio: optionalString (prio !=null) " pri=${toString prio}";
+
   fileSystemOpts = { name, ... }: {
 
     options = {
@@ -167,7 +169,7 @@ in
 
         # Swap devices.
         ${flip concatMapStrings config.swapDevices (sw:
-            "${sw.device} none swap\n"
+            "${sw.device} none swap${prioOption sw.priority}\n"
         )}
       '';
 
