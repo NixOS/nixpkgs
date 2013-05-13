@@ -215,7 +215,7 @@ corresponding configuration Nix expression.</para>
 <example xml:id='ex-install-sequence'><title>Commands for installing NixOS on <filename>/dev/sda</filename></title>
 <screen>
 $ fdisk /dev/sda <lineannotation>(or whatever device you want to install on)</lineannotation>
-$ mke2fs -j -L nixos /dev/sda1 <lineannotation>(idem)</lineannotation>
+$ mkfs.ext4 -L nixos /dev/sda1 <lineannotation>(idem)</lineannotation>
 $ mkswap -L swap /dev/sda2 <lineannotation>(idem)</lineannotation>
 $ mount LABEL=nixos /mnt
 $ nixos-option --install
