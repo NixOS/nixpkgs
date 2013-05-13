@@ -22,6 +22,11 @@ in
         ln -sv btrfsck $out/bin/fsck.btrfs
       '';
 
+    boot.initrd.extraUtilsCommandsTest = mkIf inInitrd
+      ''
+        $out/bin/btrfs --version
+      '';
+
     boot.initrd.postDeviceCommands = mkIf inInitrd
       ''
         btrfs device scan
