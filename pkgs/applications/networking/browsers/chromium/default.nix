@@ -130,7 +130,7 @@ in stdenv.mkDerivation rec {
   '' + ''
     sed -i -e 's|/usr/bin/gcc|gcc|' \
       third_party/WebKit/Source/${if post27
-                                  then "core/core.gyp/core.gyp"
+                                  then "core/core.gypi"
                                   else "WebCore/WebCore.gyp/WebCore.gyp"}
   '';
 
