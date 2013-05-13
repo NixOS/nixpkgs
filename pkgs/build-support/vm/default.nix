@@ -492,8 +492,6 @@ rec {
 
         chroot=$(type -tP chroot)
 
-        ${utillinux}/bin/mount -t proc none /mnt/proc
-
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt/nix/store
         ${utillinux}/bin/mount -o bind /nix/store /mnt/nix/store
@@ -506,6 +504,7 @@ rec {
           ln -s /usr/sbin /mnt/sbin
           ln -s /usr/lib /mnt/lib
           ln -s /usr/lib64 /mnt/lib64
+          ${utillinux}/bin/mount -t proc none /mnt/proc
         ''}
 
         echo "unpacking RPMs..."
@@ -533,7 +532,7 @@ rec {
 
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt/nix/store /mnt/tmp /mnt/proc
+        ${utillinux}/bin/umount /mnt/nix/store /mnt/tmp ${lib.optionalString unifiedSystemDir /mnt/proc}
         ${utillinux}/bin/umount /mnt
       '';
 
