@@ -1,9 +1,9 @@
 { pkgs
-, linuxKernel ? pkgs.linux
+, linuxKernel ? pkgs.linux_3_9
 , img ? "bzImage"
 , rootModules ?
     [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3"
-      "ext4" "unix" "hmac" "md4" "ecb" "des_generic"
+      "ext4" "unix" "hmac" "md4" "ecb" "des_generic" "sha256"
     ]
 }:
 
@@ -98,7 +98,6 @@ rec {
       args=
       case $i in
         */cifs.ko)
-          args="CIFSMaxBufSize=4194304"
           ;;
       esac
       echo "loading module $(basename $i .ko)"
@@ -123,14 +122,14 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
-    mount -t cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none
+    mount -t cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none,sec=ntlm
 
     mkdir -p /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/tmp
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t cifs //10.0.2.4/xchg /fs/tmp/xchg -o guest,sec=none
+    mount -t cifs //10.0.2.4/xchg /fs/tmp/xchg -o guest,sec=none,sec=ntlm
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
