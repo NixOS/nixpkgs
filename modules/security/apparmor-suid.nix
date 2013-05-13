@@ -20,21 +20,21 @@ with pkgs.lib;
     security.apparmor.profiles = [ (pkgs.writeText "ping" ''
       #include <tunables/global>
       /var/setuid-wrappers/ping {
-	#include <abstractions/base>
-	#include <abstractions/consoles>
-	#include <abstractions/nameservice>
+        #include <abstractions/base>
+        #include <abstractions/consoles>
+        #include <abstractions/nameservice>
 
-	capability net_raw,
-	capability setuid,
-	network inet raw,
+        capability net_raw,
+        capability setuid,
+        network inet raw,
 
-	${pkgs.glibc}/lib/*.so mr,
-	/var/setuid-wrappers/ping.real mixr,
-	${pkgs.iputils}/sbin/ping mixr,
-	#/etc/modules.conf r,
+        ${pkgs.glibc}/lib/*.so mr,
+        /var/setuid-wrappers/ping.real mixr,
+        ${pkgs.iputils}/sbin/ping mixr,
+        #/etc/modules.conf r,
 
-	## Site-specific additions and overrides. See local/README for details.
-	##include <local/bin.ping>
+        ## Site-specific additions and overrides. See local/README for details.
+        ##include <local/bin.ping>
       }
     '') ];
   };

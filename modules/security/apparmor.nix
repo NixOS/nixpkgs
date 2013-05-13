@@ -1,8 +1,11 @@
 {pkgs, config, ...}:
+
 let
   cfg = config.security.apparmor;
 in
+
 with pkgs.lib;
+
 {
 
   ###### interface
@@ -14,17 +17,17 @@ with pkgs.lib;
       enable = mkOption {
         default = false;
         description = ''
-          Enable AppArmor application security system. Enable only if you want to further improve 
-AppArmor.
+          Enable AppArmor application security system. Enable only if
+          you want to further improve AppArmor.
         '';
       };
 
       profiles = mkOption {
         default = [];
-	merge = mergeListOption;
+        merge = mergeListOption;
         description = ''
-	  List of file names of AppArmor profiles.
-	'';
+          List of file names of AppArmor profiles.
+        '';
       };
 
     };
@@ -48,8 +51,8 @@ AppArmor.
       path = [ pkgs.apparmor ];
 
       serviceConfig = {
-	Type = "oneshot";
-	RemainAfterExit = "yes";
+        Type = "oneshot";
+        RemainAfterExit = "yes";
         ExecStart = concatMapStrings (profile: ''
           ${pkgs.apparmor}/sbin/apparmor_parser -rKv -I ${pkgs.apparmor}/etc/apparmor.d/ "${profile}"
         '') cfg.profiles;
