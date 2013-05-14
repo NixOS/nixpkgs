@@ -189,7 +189,7 @@ in
         "unix"
 
         # Misc. stuff.
-        "pcips2" "serio" "atkbd" "xtkbd"
+        "pcips2" "xtkbd"
 
         # To wait for SCSI devices to appear.
         "scsi_wait_scan"
