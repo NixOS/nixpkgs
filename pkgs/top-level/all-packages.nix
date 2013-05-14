@@ -2520,7 +2520,7 @@ let
 
   go = callPackage ../development/compilers/go { };
 
-  go_1_1 = lowPrio (callPackage ../development/compilers/go/1.1.nix { });
+  go_1_1 = callPackage ../development/compilers/go/1.1.nix { };
 
   gprolog = callPackage ../development/compilers/gprolog { };
 
