@@ -16,6 +16,10 @@
           $machine->succeed("[ `nixos-version | wc -w` = 1 ]");
       };
 
+      subtest "nixos-rebuild", sub {
+          $machine->succeed("nixos-rebuild --help | grep 'Usage:'");
+      };
+
       # Sanity check for uid/gid assignment.
       subtest "users-groups", sub {
           $machine->succeed("[ `id -u messagebus` = 4 ]");
