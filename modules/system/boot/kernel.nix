@@ -179,9 +179,11 @@ in
         # a USB keyboard.
         "uhci_hcd"
         "ehci_hcd"
+        "ehci_pci"
         "ohci_hcd"
         "xhci_hcd"
         "usbhid"
+        "hid_generic"
 
         # Unix domain sockets (needed by udev).
         "unix"
