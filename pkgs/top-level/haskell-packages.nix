@@ -1241,9 +1241,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   iproute = callPackage ../development/libraries/haskell/iproute {};
 
-  irc = callPackage ../development/libraries/haskell/irc {
-    parsec = self.parsec2;
-  };
+  irc = callPackage ../development/libraries/haskell/irc {};
 
   iteratee = callPackage ../development/libraries/haskell/iteratee {};
 
