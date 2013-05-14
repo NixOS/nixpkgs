@@ -798,6 +798,16 @@ let self = {
     ];
   };
 
+  "jayschema" = self."jayschema-*";
+  
+  "jayschema-*" = self.buildNodePackage rec {
+    name = "jayschema-0.1.5";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/jayschema/-/${name}.tgz";
+      sha256 = "03f8ymrfc03qhs48nm9zibgi8axbjkqa4bfl44iqhkdjy217vqb6";
+    };
+  };
+
   "jsontool" = self."jsontool-*";
 
   "jsontool-*" = self.buildNodePackage rec {
