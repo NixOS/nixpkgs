@@ -181,24 +181,28 @@ in stdenv.mkDerivation rec {
     "chrome"
   ];
 
-  installPhase = ''
-    mkdir -vp "$out/libexec/${packageName}"
-    cp -v "out/${buildType}/"*.pak "$out/libexec/${packageName}/"
-    cp -vR "out/${buildType}/locales" "out/${buildType}/resources" "$out/libexec/${packageName}/"
-    cp -v out/${buildType}/libffmpegsumo.so "$out/libexec/${packageName}/"
+  installPhase = let
+    buildPath = "out/${buildType}";
+    libExecPath = "$out/libexec/${packageName}";
+  in ''
+    mkdir -vp "${libExecPath}"
+    cp -v "${buildPath}/"*.pak "${libExecPath}/"
+    cp -vR "${buildPath}/locales" "${buildPath}/resources" "${libExecPath}/"
+    cp -v ${buildPath}/libffmpegsumo.so "${libExecPath}/"
 
-    cp -v "out/${buildType}/chrome" "$out/libexec/${packageName}/${packageName}"
+    cp -v "${buildPath}/chrome" "${libExecPath}/${packageName}"
 
     mkdir -vp "$out/bin"
-    makeWrapper "$out/libexec/${packageName}/${packageName}" "$out/bin/${packageName}"
+    makeWrapper "${libExecPath}/${packageName}" "$out/bin/${packageName}"
 
     mkdir -vp "$out/share/man/man1"
-    cp -v "out/${buildType}/chrome.1" "$out/share/man/man1/${packageName}.1"
+    cp -v "${buildPath}/chrome.1" "$out/share/man/man1/${packageName}.1"
 
     for icon_file in chrome/app/theme/chromium/product_logo_*[0-9].png; do
       num_and_suffix="''${icon_file##*logo_}"
       icon_size="''${num_and_suffix%.*}"
-      logo_output_path="$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps"
+      logo_output_prefix="$out/share/icons/hicolor"
+      logo_output_path="$logo_output_prefix/''${icon_size}x''${icon_size}/apps"
       mkdir -vp "$logo_output_path"
       cp -v "$icon_file" "$logo_output_path/${packageName}.png"
     done
