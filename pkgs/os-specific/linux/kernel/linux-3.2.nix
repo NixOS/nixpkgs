@@ -250,7 +250,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.0/linux-${version}.tar.xz";
-      sha256 = "13qli7s5i3zq76xsww05s89gm6mkvpf1fjxbka0fddzvmwzw9jav";
+      sha256 = "0mhq64rvzf5bll7xxffajjl7p38szbc13jsr6zh34x3qfzf3abhr";
     };
 
     config = configWithPlatform stdenv.platform;
