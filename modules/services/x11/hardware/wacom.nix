@@ -60,6 +60,8 @@ in
 
   config = mkIf cfg.enable {
 
+    environment.systemPackages = [ pkgs.xf86_input_wacom ]; # provides xsetwacom
+
     services.xserver.modules = [ pkgs.xf86_input_wacom ];
 
     services.udev.packages = [ pkgs.xf86_input_wacom ];
