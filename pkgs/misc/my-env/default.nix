@@ -135,6 +135,7 @@ mkDerivation {
       ${extraCmds}
 
       nix_cleanup() {
+        :
         ${cleanupCmds}
       }
 
