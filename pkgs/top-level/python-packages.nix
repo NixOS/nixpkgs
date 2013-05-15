@@ -3041,6 +3041,46 @@ pythonPackages = python.modules // rec {
   };
 
 
+  powerline = buildPythonPackage rec {
+    rev = "72ea6730ead85fc19b983bd70173d15e6caa4965";
+    name = "powerline-beta_${rev}";
+
+    src = fetchurl {
+      url = "https://github.com/Lokaltog/powerline/tarball/${rev}";
+      name = "${name}.tar.bz";
+      sha256 = "08sr8ymhphh7rsn2gcmpdz3kzd04b7w3k4pc35h8w60jvg9i449s";
+    };
+
+    propagatedBuildInputs = [ pkgs.git pkgs.mercurial pkgs.bazaar pythonPackages.psutil pythonPackages.pygit2 ];
+
+    # error: This is still beta and some tests still fail
+    doCheck = false;
+
+    postInstall = ''
+      install -dm755 "$out/share/fonts/OTF/"
+      install -dm755 "$out/etc/fonts/conf.d"
+      install -m644 "font/PowerlineSymbols.otf" "$out/share/fonts/OTF/PowerlineSymbols.otf"
+      install -m644 "font/10-powerline-symbols.conf" "$out/etc/fonts/conf.d/10-powerline-symbols.conf"
+
+      install -dm755 "$out/share/vim/vimfiles/plugin"
+      install -m644 "powerline/bindings/vim/plugin/powerline.vim" "$out/share/vim/vimfiles/plugin/powerline.vim"
+
+      install -dm755 "$out/share/zsh/site-contrib"
+      install -m644 "powerline/bindings/zsh/powerline.zsh" "$out/share/zsh/site-contrib/powerline.zsh"
+
+      install -dm755 "$out/share/tmux"
+      install -m644 "powerline/bindings/tmux/powerline.conf" "$out/share/tmux/powerline.conf"
+    '';
+
+    meta = {
+      homepage = https://github.com/Lokaltog/powerline;
+      description = "The ultimate statusline/prompt utility.";
+      license = with stdenv.lib.licenses; mit;
+      platforms = with stdenv.lib.platforms; all; 
+    };
+  };
+
+
   prettytable = buildPythonPackage rec {
     name = "prettytable-0.7.1";
 
@@ -3170,6 +3210,25 @@ pythonPackages = python.modules // rec {
       description = "Python bindings for PortAudio";
       homepage = "http://people.csail.mit.edu/hubert/pyaudio/";
       license = stdenv.lib.licenses.mit;
+    };
+  };
+
+
+  pygit2 = buildPythonPackage rec {
+    name = "pygit2-0.18.1";
+
+    src = fetchurl {
+      url = "https://pypi.python.org/packages/source/p/pygit2/${name}.tar.gz";
+      md5 = "8d27f84509a96d6791a6c393ae67d7c8";
+    };
+
+    propagatedBuildInputs = [ pkgs.libgit2 ];
+
+    meta = {
+      homepage = https://pypi.python.org/pypi/pygit2;
+      description = "Pygit2 is a set of Python bindings to the libgit2 shared library.";
+      license = with stdenv.lib.licenses; gpl2;
+      platforms = with stdenv.lib.platforms; all;
     };
   };
 
