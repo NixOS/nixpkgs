@@ -445,7 +445,7 @@ rec {
      etc. from the specified filesystem image, which typically is a
      filesystem containing a non-NixOS Linux distribution. */
 
-  runInLinuxImage = attrs: runInLinuxVM (attrs // {
+  runInLinuxImage = drv: runInLinuxVM (lib.overrideDerivation drv (attrs: {
     mountDisk = true;
 
     /* Mount `image' as the root FS, but use a temporary copy-on-write
@@ -470,7 +470,7 @@ rec {
 
     /* Don't run Nix-specific build steps like patchelf. */
     fixupPhase = "true";
-  });
+  }));
 
 
   /* Create a filesystem image of the specified size and fill it with
