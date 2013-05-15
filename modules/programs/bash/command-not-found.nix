@@ -34,9 +34,12 @@ in
           # Retry the command if we just installed it.
           if [ $? = 126 ]; then
             "$@"
+          else
+            return 127
           fi
         else
           echo "$1: command not found" >&2
+          return 127
         fi
       }
     '';
