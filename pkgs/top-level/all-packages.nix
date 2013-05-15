@@ -3799,6 +3799,8 @@ let
 
   giblib = callPackage ../development/libraries/giblib { };
 
+  libgit2 = callPackage ../development/libraries/git2 { };
+
   glew = callPackage ../development/libraries/glew { };
 
   glfw = callPackage ../development/libraries/glfw { };
