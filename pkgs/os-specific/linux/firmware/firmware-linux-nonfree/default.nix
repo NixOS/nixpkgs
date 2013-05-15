@@ -60,7 +60,7 @@ in stdenv.mkDerivation {
   meta = {
     description = "Binary firmware collection packaged by Debian";
     homepage = "http://packages.debian.org/sid/firmware-linux-nonfree";
-    license = "unfree-redistributable-firmware";
+    license = stdenv.lib.licenses.unfreeRedistributable;
     priority = 10; # low priority so that other packages can override this big package
   };
 }
