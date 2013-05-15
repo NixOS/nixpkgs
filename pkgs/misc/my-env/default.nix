@@ -136,6 +136,7 @@ mkDerivation {
 
       nix_cleanup() {
         ${cleanupCmds}
+        true
       }
 
       export PATH
