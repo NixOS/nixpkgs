@@ -14,6 +14,9 @@ cabal.mkDerivation (self: {
     colour dlist fgl filepath polyparse QuickCheck temporary text
     transformers wlPprintText
   ];
+  patchPhase = ''
+    sed -i -e 's|polyparse.*,|polyparse,|' graphviz.cabal
+  '';
   doCheck = false;
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";
