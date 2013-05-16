@@ -515,6 +515,17 @@ let self = {
 
   "diff" = self."diff-~1.0.3";
 
+  "diff-~1.0.2" = self.buildNodePackage rec {
+    name = "diff-1.0.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/diff/-/${name}.tgz";
+      sha256 = "0i9hpssk0sx3a7610qr58cm9bx1fr95dvjk4wsklgi5zyb1xiqax";
+    };
+    deps = [
+
+    ];
+  };
+
   "diff-~1.0.3" = self.buildNodePackage rec {
     name = "diff-1.0.3";
     src = fetchurl {
@@ -700,6 +711,16 @@ let self = {
 
     ];
   };
+  
+  "growl" = self."growl-1.7.0";
+  
+  "growl-1.7.0" = self.buildNodePackage rec {
+    name = "growl-1.7.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/growl/-/${name}.tgz";
+      sha256 = "1kzzygdxr9h6jl74iqg8n1z6kvhpi8wjmic7vdnsdm9gmvnyk9jj";
+    };
+  };
 
   "hat" = self."hat-0.0.3";
 
@@ -795,6 +816,20 @@ let self = {
     };
     deps = [
 
+    ];
+  };
+
+  "jade" = self."jade-0.26.3";
+  
+  "jade-0.26.3" = self.buildNodePackage rec {
+    name = "jade-0.26.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/jade/-/${name}.tgz";
+      sha256 = "02sdl7dkpnbag40gl9gii1igyd9cpw8717dvyy3njaqrxf3l4cga";
+    };
+    deps = [
+      self."commander-~0.6.1"
+      self."mkdirp-0.3.0"
     ];
   };
 
@@ -936,6 +971,28 @@ let self = {
 
   "mkdirp" = self."mkdirp-0.3.4";
 
+  "mkdirp-0.3.0" = self.buildNodePackage rec {
+    name = "mkdirp-0.3.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/mkdirp/-/${name}.tgz";
+      sha256 = "0zf2yxajyv94nydky2g8229pn544yz2z4ml087l6m5wwm3ind0vh";
+    };
+    deps = [
+
+    ];
+  };
+
+  "mkdirp-0.3.3" = self.buildNodePackage rec {
+    name = "mkdirp-0.3.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/mkdirp/-/${name}.tgz";
+      sha256 = "1ybxjmcj45s90izizl2v7i19vbzayjanpqv7nz7w68kmbf2i4ymn";
+    };
+    deps = [
+
+    ];
+  };
+
   "mkdirp-0.3.4" = self.buildNodePackage rec {
     name = "mkdirp-0.3.4";
     src = fetchurl {
@@ -944,6 +1001,25 @@ let self = {
     };
     deps = [
 
+    ];
+  };
+
+  "mocha" = self."mocha-1.9.0";
+  
+  "mocha-1.9.0" = self.buildNodePackage rec {
+    name = "mocha-1.9.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/mocha/-/${name}.tgz";
+      sha256 = "1l175lzff4h4skf98xq259jr0dv3gb3pygbpdbkb2n9jd1pd6xih";
+    };
+    deps = [
+      self."commander-~0.6.1"
+      self."growl-1.7.0"
+      self."diff-~1.0.2"
+      self."debug"
+      self."mkdirp-0.3.3"
+      self."ms-0.3.0"
+      self."jade-0.26.3"
     ];
   };
 
@@ -971,6 +1047,16 @@ let self = {
     deps = [
 
     ];
+  };
+
+  "ms" = self."ms-0.3.0";
+  
+  "ms-0.3.0" = self.buildNodePackage rec {
+    name = "ms-0.3.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/ms/-/${name}.tgz";
+      sha256 = "1wh7pqm55vf7l2b10rzn4zj1j4f0wba873qilyzbpnm6hq0snbpp";
+    };
   };
 
   "nijs" = self."nijs-0.0.5";
