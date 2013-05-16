@@ -1006,6 +1006,24 @@ pythonPackages = python.modules // rec {
   };
 
 
+  pudb = buildPythonPackage rec {
+    name = "pudb-2013.1";
+
+    src = fetchurl {
+      url = "http://pypi.python.org/packages/source/p/pudb/${name}.tar.gz";
+      md5 = "f94922aba7f862f13886457dc3fadc6a";
+    };
+
+    propagatedBuildInputs = [ pythonPackages.pygments pythonPackages.urwid ];
+
+    meta = with stdenv.lib; {
+      description = "A full-screen, console-based Python debugger";
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
+  };
+
+
   pyramid = buildPythonPackage rec {
     name = "pyramid-1.3.4";
 
