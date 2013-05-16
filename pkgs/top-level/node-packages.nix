@@ -97,13 +97,24 @@ let self = {
     ];
   };
 
-  "async" = self."async-0.1.22";
+  "async" = self."async-0.2.8";
 
   "async-0.1.22" = self.buildNodePackage rec {
     name = "async-0.1.22";
     src = fetchurl {
       url = "http://registry.npmjs.org/async/-/${name}.tgz";
       sha256 = "6fd2750cd519a754b0e32ef3423e64768055129e00a95d9297005bda29fdef18";
+    };
+    deps = [
+
+    ];
+  };
+  
+  "async-0.2.8" = self.buildNodePackage rec {
+    name = "async-0.2.8";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/async/-/${name}.tgz";
+      sha256 = "0ii3pqb70wb6nws35p1ahc40dhmj7yp85f35j8xiip473gpwbms5";
     };
     deps = [
 
