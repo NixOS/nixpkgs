@@ -2942,7 +2942,7 @@ pythonPackages = python.modules // rec {
     name = "pg8000-1.09";
 
     src = fetchurl {
-      url = "http://pg8000.googlecode.com/files/pg8000/${name}.zip";
+      url = "http://pg8000.googlecode.com/files/${name}.zip";
       sha256 = "0kdc4rg47k1qkq22inghd50xlxjdkfcilym8mxff8wy4h091xykw";
     };
 
