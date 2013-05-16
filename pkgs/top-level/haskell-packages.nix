@@ -1930,6 +1930,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   uuid = callPackage ../development/libraries/haskell/uuid {};
 
+  uuOptions = callPackage ../development/libraries/haskell/uu-options {};
+
   uuInterleaved = callPackage ../development/libraries/haskell/uu-interleaved {};
 
   uuParsinglib = callPackage ../development/libraries/haskell/uu-parsinglib {};

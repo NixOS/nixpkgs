@@ -1,0 +1,20 @@
+Index: uu-options.cabal
+===================================================================
+--- uu-options.cabal	(revision 127)
++++ uu-options.cabal	(working copy)
+@@ -27,14 +27,8 @@
+      type: svn
+      location: https://svn.science.uu.nl/repos/project.STEC.uu-parsinglib/uu-options
+ 
+-executable           demo-options
+-  Main-is:           Options/UU/OptionsDemo.hs
++library
+   hs-source-dirs:    src
+   Build-Depends:     base >= 4.2 && <5, uu-parsinglib >=2.8 && < 2.9, uu-interleaved >=0.1.0 && < 0.2, lenses >= 0.1.6 && < 0.1.7, transformers >= 0.3.0.0, mtl
+-
+-Library
+-  hs-source-dirs:    src
+-  Build-Depends:     base >= 4.2 && <5, uu-parsinglib >=2.8 && < 2.9, uu-interleaved >=0.1.0 && < 0.2, lenses >= 0.1.6 && < 0.1.7, transformers >= 0.3.0.0, mtl
+   Exposed-modules:   Options.UU.Interleaved
+                      Options.UU.OptionsDemo
+-                     

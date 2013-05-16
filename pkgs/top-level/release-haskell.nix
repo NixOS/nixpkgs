@@ -398,6 +398,7 @@ mapHaskellTestOn {
   uuid = default;
   uulib = default ++ latest;
   uuParsinglib = default;
+  uuOptions = default;
   vacuumCairo = default;
   vacuum = default;
   vcsRevision = default;
