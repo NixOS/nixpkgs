@@ -4198,6 +4198,8 @@ let
 
   libbluray = callPackage ../development/libraries/libbluray { };
 
+  libbs2b = callPackage ../development/libraries/audio/libbs2b { };
+
   libcaca = callPackage ../development/libraries/libcaca { };
 
   libcanberra = callPackage ../development/libraries/libcanberra { };

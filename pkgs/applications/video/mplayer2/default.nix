@@ -12,6 +12,7 @@
 , theoraSupport ? true, libtheora ? null
 , jackaudioSupport ? false, jackaudio ? null
 , pulseSupport ? true, pulseaudio ? null
+, bs2bSupport ? false, libbs2b ? null
 # For screenshots
 , libpngSupport ? true, libpng ? null
 , useUnfreeCodecs ? false
@@ -29,6 +30,7 @@ assert speexSupport -> speex != null;
 assert theoraSupport -> libtheora != null;
 assert jackaudioSupport -> jackaudio != null;
 assert pulseSupport -> pulseaudio != null;
+assert bs2bSupport -> libbs2b != null;
 assert libpngSupport -> libpng != null;
 
 let
@@ -92,6 +94,7 @@ stdenv.mkDerivation rec {
     ++ optional screenSaverSupport libXScrnSaver
     ++ optional vdpauSupport libvdpau
     ++ optional speexSupport speex
+    ++ optional bs2bSupport libbs2b
     ++ optional libpngSupport libpng
     ;
 
