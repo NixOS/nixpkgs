@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, x11 }:
+{ stdenv, fetchurl, x11, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor, libXrandr, mesa, libXft }:
 
 let
   version = "1.6.9";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     md5 = "8ab8274237431865f57b2f5596374a65";
   };
 
-  buildInputs = [ x11 ];
+  buildInputs = [ x11 libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr libXft ];
 
   doCheck = true;
 

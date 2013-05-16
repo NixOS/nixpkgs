@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fox_1_6, pkgconfig, gettext, x11, gcc, intltool, file, libpng }:
+{ stdenv, fetchurl, fox, pkgconfig, gettext, x11, gcc, intltool, file, libpng }:
 
 let
   version = "1.33";
@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
     md5 = "fb089ba73add411b08a6560eeb51742d";
   };
 
-  buildInputs = [ fox_1_6 pkgconfig gettext x11 gcc intltool file libpng ];
+  buildInputs = [ fox pkgconfig gettext x11 gcc intltool file libpng ];
 
-  doCheck = false;
+  preConfigure = ''
+    sed -i s,/usr/share/xfe,$out/share/xfe, src/xfedefs.h
+  '';
 
   enableParallelBuilding = true;
 

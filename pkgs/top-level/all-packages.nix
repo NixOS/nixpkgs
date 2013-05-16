@@ -799,8 +799,13 @@ let
 
   fortune = callPackage ../tools/misc/fortune { };
 
-  fox = callPackage ../development/libraries/fox/default.nix { };
-  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
+  fox = callPackage ../development/libraries/fox/default.nix {
+    libpng = libpng12;
+  };
+
+  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix {
+    libpng = libpng12;
+  };
 
   fping = callPackage ../tools/networking/fping {};
 
@@ -8217,7 +8222,9 @@ let
 
   xen = callPackage ../applications/virtualization/xen { };
 
-  xfe = callPackage ../applications/misc/xfe { };
+  xfe = callPackage ../applications/misc/xfe {
+    fox = fox_1_6;
+  };
 
   xfig = callPackage ../applications/graphics/xfig { };
 
