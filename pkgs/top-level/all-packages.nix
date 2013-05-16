@@ -956,6 +956,10 @@ let
 
   gzip = callPackage ../tools/compression/gzip { };
 
+  partclone = callPackage ../tools/backup/partclone { };
+
+  partimage = callPackage ../tools/backup/partimage { };
+
   pigz = callPackage ../tools/compression/pigz { };
 
   haproxy = callPackage ../tools/networking/haproxy { };
