@@ -1064,6 +1064,7 @@ rec {
       archs = ["noarch" "x86_64"];
       packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
       mergeUsr = true;
+    };
 
     fedora18i386 = {
       name = "fedora-18-i386";
