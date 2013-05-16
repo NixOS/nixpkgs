@@ -2939,11 +2939,11 @@ pythonPackages = python.modules // rec {
 
 
   pg8000 = buildPythonPackage rec {
-    name = "pg8000-1.08";
+    name = "pg8000-1.09";
 
     src = fetchurl {
-      url = "http://pybrary.net/pg8000/dist/${name}.tar.gz";
-      md5 = "2e8317a22d0e09a6f12e98ddf3bb75fd";
+      url = "http://pg8000.googlecode.com/files/pg8000/${name}.zip";
+      sha256 = "0kdc4rg47k1qkq22inghd50xlxjdkfcilym8mxff8wy4h091xykw";
     };
 
     buildInputs = [ pkgs.unzip ];
