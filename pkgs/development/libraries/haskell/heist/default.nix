@@ -1,16 +1,17 @@
 { cabal, aeson, attoparsec, blazeBuilder, blazeHtml, directoryTree
 , dlist, errors, filepath, hashable, MonadCatchIOTransformers, mtl
-, random, text, time, unorderedContainers, vector, xmlhtml
+, random, text, time, transformers, unorderedContainers, vector
+, xmlhtml
 }:
 
 cabal.mkDerivation (self: {
   pname = "heist";
-  version = "0.11.1";
-  sha256 = "17d6jycgxx5fz8sd3wnln53im29vz8l9847qsqbpyx8adrcg7rjh";
+  version = "0.12.0";
+  sha256 = "0fdqvippsxljylchfcr32lw367i17cpv4yavjvmhfd923vgmmfj9";
   buildDepends = [
     aeson attoparsec blazeBuilder blazeHtml directoryTree dlist errors
     filepath hashable MonadCatchIOTransformers mtl random text time
-    unorderedContainers vector xmlhtml
+    transformers unorderedContainers vector xmlhtml
   ];
   meta = {
     homepage = "http://snapframework.com/";
