@@ -84,6 +84,19 @@ let self = {
     ];
   };
 
+  "assert" = self."assert-0.4.9";
+  
+  "assert-0.4.9" = self.buildNodePackage rec {
+    name = "assert-0.4.9";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/assert/-/${name}.tgz";
+      sha256 = "1sxyba88p08956havkxc5m9x5v5ybcswgasgfcix31kjbww14slp";
+    };
+    deps = [
+      self."util"
+    ];
+  };
+
   "async" = self."async-0.1.22";
 
   "async-0.1.22" = self.buildNodePackage rec {
@@ -561,6 +574,16 @@ let self = {
     deps = [
 
     ];
+  };
+
+  "events.node" = self."events.node-0.4.9";
+  
+  "events.node-0.4.9" = self.buildNodePackage rec {
+    name = "events.node-0.4.9";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/events.node/-/${name}.tgz";
+      sha256 = "1dphp42qir4f3j68lx3403870rc3iacfsm0ppzi1cgx3lzxgknmf";
+    };
   };
 
   "express" = self."express-*";
@@ -1748,6 +1771,19 @@ let self = {
     };
     deps = [
 
+    ];
+  };
+
+  "util" = self."util-0.4.9";
+  
+  "util-0.4.9" = self.buildNodePackage rec {
+    name = "util-0.4.9";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/util/-/${name}.tgz";
+      sha256 = "1rchmv7d29j5wc5m2jqk170xgn50y71hpwhy5ib515klkrnc5v1h";
+    };
+    deps = [
+      self."events.node"
     ];
   };
 
