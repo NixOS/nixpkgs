@@ -4646,6 +4646,7 @@ let
   mesaSupported = lib.elem system lib.platforms.mesaPlatforms;
 
   mesa_noglu = callPackage ../development/libraries/mesa { };
+  mesa_drivers = mesa_noglu.drivers;
   mesa_glu = callPackage ../development/libraries/mesa-glu { };
   mesa = if stdenv.isDarwin then darwinX11AndOpenGL
     else buildEnv {
