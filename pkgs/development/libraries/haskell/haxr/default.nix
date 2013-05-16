@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "haxr";
-  version = "3000.9.1";
-  sha256 = "0m716ncb81y245vviz04089nlrvkca9cvjvj2qphkdhhmxsqw8fc";
+  version = "3000.9.2.1";
+  sha256 = "065kkqa8wjh5qncjx7x83nxvmk338g8xzl4rjbczga6l3dpy0f24";
   buildDepends = [
     base64Bytestring blazeBuilder HaXml HTTP mtl network time
     utf8String
