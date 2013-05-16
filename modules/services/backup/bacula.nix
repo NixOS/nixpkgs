@@ -7,6 +7,7 @@ with pkgs.lib;
 
 let
   libDir = "/var/lib/bacula";
+
   fd_cfg = config.services.bacula-fd;
   fd_conf = pkgs.writeText "bacula-fd.conf"
     ''
@@ -94,6 +95,17 @@ let
     }
 
     ${dir_cfg.extraConfig}
+    '';
+
+  # TODO: by default use this config
+  bconsole_conf = pkgs.writeText "bconsole.conf"
+    ''
+    Director {
+      Name = ${dir_cfg.name};
+      Address = "localhost";
+      DirPort = ${toString dir_cfg.port};
+      Password = "${dir_cfg.password}";
+    }
     '';
 
   directorOptions = {name, config, ...}:
