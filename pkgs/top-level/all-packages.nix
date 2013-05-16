@@ -5743,6 +5743,8 @@ let
 
   stlink = callPackage ../development/tools/misc/stlink { };
 
+  stepmania = callPackage ../games/stepmania {};
+
   stlport = callPackage ../development/libraries/stlport { };
 
   strigi = callPackage ../development/libraries/strigi { clucene_core = clucene_core_2; };
