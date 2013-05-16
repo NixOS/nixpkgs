@@ -142,11 +142,11 @@ pythonPackages = python.modules // rec {
 
 
   almir = buildPythonPackage rec {
-    name = "almir-0.1.7";
+    name = "almir-0.1.8";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/a/almir/${name}.zip";
-      md5 = "daea15c898487a2bded1ae6ef78633e5";
+      md5 = "9a1f3c72a039622ca72b74be7a1cd37e";
     };
 
     buildInputs = [
