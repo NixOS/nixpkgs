@@ -39,6 +39,7 @@ stdenv.mkDerivation {
   patches = [
     ./static-gallium.patch
     ./dricore-gallium.patch
+    ./fix-rounding.patch
   ];
 
   # Change the search path for EGL drivers from $drivers/* to driverLink
