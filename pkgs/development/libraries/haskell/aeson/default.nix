@@ -15,6 +15,7 @@ cabal.mkDerivation (self: {
     attoparsec QuickCheck testFramework testFrameworkQuickcheck2 text
     time
   ];
+  doCheck = false;
   meta = {
     homepage = "https://github.com/bos/aeson";
     description = "Fast JSON parsing and encoding";
