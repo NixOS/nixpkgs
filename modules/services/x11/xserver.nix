@@ -393,6 +393,7 @@ in
   };
 
 
+
   ###### implementation
 
   config = mkIf cfg.enable (checkAgent (checkPolkit {
@@ -461,9 +462,7 @@ in
         environment =
           { FONTCONFIG_FILE = "/etc/fonts/fonts.conf"; # !!! cleanup
             XKB_BINDIR = "${xorg.xkbcomp}/bin"; # Needed for the Xkb extension.
-          } # !!! Depends on the driver selected at runtime.
-            // optionalAttrs (!elem "nvidia" driverNames) {
-            XORG_DRI_DRIVER_PATH = "${pkgs.mesa}/lib/dri";
+            XORG_DRI_DRIVER_PATH = "/run/opengl-driver/lib/dri"; # !!! Depends on the driver selected at runtime.
           } // optionalAttrs (elem "nvidia" driverNames) {
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11}/lib";
           } // optionalAttrs (elem "nvidiaLegacy96" driverNames) {
@@ -474,18 +473,18 @@ in
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.nvidia_x11_legacy304}/lib";
           } // optionalAttrs (elem "ati_unfree" driverNames) {
             LD_LIBRARY_PATH = "${xorg.libX11}/lib:${xorg.libXext}/lib:${kernelPackages.ati_drivers_x11}/lib:${kernelPackages.ati_drivers_x11}/X11R6/lib64/modules/linux";
-            XORG_DRI_DRIVER_PATH = "${kernelPackages.ati_drivers_x11}/lib/dri"; # is ignored because ati drivers ship their own unpatched libglx.so !
+            #XORG_DRI_DRIVER_PATH = "${kernelPackages.ati_drivers_x11}/lib/dri"; # is ignored because ati drivers ship their own unpatched libglx.so !
           } // cfg.displayManager.job.environment;
 
         preStart =
           ''
             rm -f /run/opengl-driver
-            rm -f /run/opengl-driver-32
+            ln -sf opengl-driver /run/opengl-driver-32
             ${# !!! The OpenGL driver depends on what's detected at runtime.
               if elem "nvidia" driverNames then
                 ''
                   ln -sf ${kernelPackages.nvidia_x11} /run/opengl-driver
-                  ${optionalString (pkgs.stdenv.system == "x86_64-linux" && cfg.driSupport32Bit)
+                  ${optionalString cfg.driSupport32Bit
                     "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11.override { libsOnly = true; kernelDev = null; } } /run/opengl-driver-32"}
                 ''
               else if elem "nvidiaLegacy96" driverNames then
@@ -495,16 +494,16 @@ in
               else if elem "nvidiaLegacy304" driverNames then
                 ''
                   ln -sf ${kernelPackages.nvidia_x11_legacy304} /run/opengl-driver
-                  ${optionalString (pkgs.stdenv.system == "x86_64-linux" && cfg.driSupport32Bit)
+                  ${optionalString cfg.driSupport32Bit
                     "ln -sf ${pkgs_i686.linuxPackages.nvidia_x11_legacy304.override { libsOnly = true; kernelDev = null; } } /run/opengl-driver-32"}
                 ''
               else if elem "ati_unfree" driverNames then
                 "ln -sf ${kernelPackages.ati_drivers_x11} /run/opengl-driver"
               else
                 ''
-                  ${optionalString cfg.driSupport "ln -sf ${pkgs.mesa} /run/opengl-driver"}
-                  ${optionalString (pkgs.stdenv.system == "x86_64-linux" && cfg.driSupport32Bit)
-                    "ln -sf ${pkgs_i686.mesa} /run/opengl-driver-32"}
+                  ${optionalString cfg.driSupport "ln -sf ${pkgs.mesa_drivers} /run/opengl-driver"}
+                  ${optionalString cfg.driSupport32Bit
+                    "ln -sf ${pkgs_i686.mesa_drivers} /run/opengl-driver-32"}
                 ''
             }
 
@@ -625,3 +624,4 @@ in
   }));
 
 }
+
