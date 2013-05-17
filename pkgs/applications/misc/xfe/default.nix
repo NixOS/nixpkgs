@@ -1,15 +1,11 @@
 { stdenv, fetchurl, fox, pkgconfig, gettext, x11, gcc, intltool, file, libpng }:
 
-let
-  version = "1.33";
-in
-
 stdenv.mkDerivation rec {
-  name = "xfe-${version}";
+  name = "xfe-1.34";
 
   src = fetchurl {
-    url = "http://downloads.sourceforge.net/project/xfe/xfe/${version}/${name}.tar.gz";
-    md5 = "fb089ba73add411b08a6560eeb51742d";
+    url = "mirror://sourceforge/xfe/${name}.tar.gz";
+    sha256 = "0y6gi8vdvw1prz7dv7wadf7v8gl6g75jrlrl5jnsb71l1431ncay";
   };
 
   buildInputs = [ fox pkgconfig gettext x11 gcc intltool file libpng ];
