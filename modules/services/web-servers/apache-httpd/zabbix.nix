@@ -27,7 +27,6 @@ in
     ''
       post_max_size = 32M
       max_execution_time = 300
-      mbstring.func_overload = 2
     '';
 
   extraConfig = ''
