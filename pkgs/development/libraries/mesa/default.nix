@@ -49,6 +49,7 @@ stdenv.mkDerivation {
   '';
 
   outputs = ["out" "drivers"];
+  preferLocalBuild = true; # see https://github.com/NixOS/nix/issues/118
 
   preConfigure = "./autogen.sh";
 
@@ -93,7 +94,6 @@ stdenv.mkDerivation {
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
   # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
   postInstall = ''
-      # salt to restart hydra
     mv -t "$drivers/lib/" \
       $out/lib/libdricore* \
       $out/lib/libgallium.* \
