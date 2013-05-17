@@ -5,7 +5,7 @@ with pkgs.lib;
 let
 
   ids = config.ids;
-  users = config.users;
+  cfg = config.users;
 
   userOpts = { name, config, ... }: {
 
@@ -28,9 +28,8 @@ let
       };
 
       uid = mkOption {
-        type = with types; uniq (nullOr int);
-        default = null;
-        description = "The account UID. If undefined, NixOS will select a free UID.";
+        type = with types; uniq int;
+        description = "The account UID.";
       };
 
       group = mkOption {
@@ -60,13 +59,21 @@ let
       createHome = mkOption {
         type = types.bool;
         default = false;
-        description = "If true, the home directory will be created automatically.";
+        description = ''
+          If true, the home directory will be created automatically. If this
+          option is true and the home directory already exists but is not
+          owned by the user, directory owner and group will be changed to
+          match the user.
+        '';
       };
 
       useDefaultShell = mkOption {
         type = types.bool;
         default = false;
-        description = "If true, the user's shell will be set to <literal>users.defaultUserShell</literal>.";
+        description = ''
+          If true, the user's shell will be set to
+          <literal>cfg.defaultUserShell</literal>.
+        '';
       };
 
       password = mkOption {
@@ -78,13 +85,29 @@ let
           because it is world-readable in the Nix store.  This option
           should only be used for public accounts such as
           <literal>guest</literal>.
+          The option <literal>password</literal> overrides
+          <literal>passwordFile</literal>, if both are specified.
+          If none of the options <literal>password</literal> or
+          <literal>passwordFile</literal> are specified, the user account will
+          be locked for password logins. This is the default behavior except
+          for the root account, which has an empty password by default. If you
+          want to lock the root account for password logins, set
+          <literal>users.extraUsers.root.password</literal> to
+          <literal>null</literal>.
         '';
       };
 
-      isSystemUser = mkOption {
-        type = types.bool;
-        default = true;
-        description = "Indicates if the user is a system user or not.";
+      passwordFile = mkOption {
+        type = with types; uniq (nullOr string);
+        default = null;
+        description = ''
+          The path to a file that contains the user's password. The password
+          file is read on each system activation. The file should contain
+          exactly one line, which should be the password in an encrypted form
+          that is suitable for the <literal>chpasswd -e</literal> command.
+          See the <literal>password</literal> for more details on how passwords
+          are assigned.
+        '';
       };
 
       createUser = mkOption {
@@ -96,19 +119,11 @@ let
           then not modify any of the basic properties for the user account.
         '';
       };
-
-      isAlias = mkOption {
-        type = types.bool;
-        default = false;
-        description = "If true, the UID of this user is not required to be unique and can thus alias another user.";
-      };
-
     };
 
     config = {
       name = mkDefault name;
-      uid = mkDefault (attrByPath [name] null ids.uids);
-      shell = mkIf config.useDefaultShell (mkDefault users.defaultUserShell);
+      shell = mkIf config.useDefaultShell (mkDefault cfg.defaultUserShell);
     };
 
   };
@@ -123,28 +138,100 @@ let
       };
 
       gid = mkOption {
-        type = with types; uniq (nullOr int);
-        default = null;
-        description = "The GID of the group. If undefined, NixOS will select a free GID.";
+        type = with types; uniq int;
+        description = "The GID of the group.";
+      };
+
+      members = mkOption {
+        type = with types; listOf string;
+        default = [];
+        description = ''
+        '';
       };
 
     };
 
     config = {
       name = mkDefault name;
-      gid = mkDefault (attrByPath [name] null ids.gids);
     };
 
   };
 
-  # Note: the 'X' in front of the password is to distinguish between
-  # having an empty password, and not having a password.
-  serializedUser = u: "${u.name}\n${u.description}\n${if u.uid != null then toString u.uid else ""}\n${u.group}\n${toString (concatStringsSep "," u.extraGroups)}\n${u.home}\n${u.shell}\n${toString u.createHome}\n${if u.password != null then "X" + u.password else ""}\n${toString u.isSystemUser}\n${toString u.createUser}\n${toString u.isAlias}\n";
-
-  usersFile = pkgs.writeText "users" (
+  getGroup = gname:
     let
-      p = partition (u: u.isAlias) (attrValues config.users.extraUsers);
-    in concatStrings (map serializedUser p.wrong ++ map serializedUser p.right));
+      groups = mapAttrsToList (n: g: g) (
+        filterAttrs (n: g: g.name == gname) cfg.extraGroups
+      );
+    in
+      if length groups == 1 then head groups
+      else if groups == [] then throw "Group ${gname} not defined"
+      else throw "Group ${gname} has multiple definitions";
+
+  getUser = uname:
+    let
+      users = mapAttrsToList (n: u: u) (
+        filterAttrs (n: u: u.name == uname) cfg.extraUsers
+      );
+    in
+      if length users == 1 then head users
+      else if users == [] then throw "User ${uname} not defined"
+      else throw "User ${uname} has multiple definitions";
+
+  mkGroupEntry = gname:
+    let
+      g = getGroup gname;
+      users = mapAttrsToList (n: u: u.name) (
+        filterAttrs (n: u: elem g.name u.extraGroups) cfg.extraUsers
+      );
+    in concatStringsSep ":" [
+      g.name "x" (toString g.gid)
+      (concatStringsSep "," (users ++ (filter (u: !(elem u users)) g.members)))
+    ];
+
+  mkPasswdEntry = uname: let u = getUser uname; in
+    concatStringsSep ":" [
+      u.name "x" (toString u.uid)
+      (toString (getGroup u.group).gid)
+      u.description u.home u.shell
+    ];
+
+  sortOn = a: sort (as1: as2: lessThan (getAttr a as1) (getAttr a as2));
+
+  groupFile = pkgs.writeText "group" (
+    concatStringsSep "\n" (map (g: mkGroupEntry g.name) (
+      sortOn "gid" (attrValues cfg.extraGroups)
+    ))
+  );
+
+  passwdFile = pkgs.writeText "passwd" (
+    concatStringsSep "\n" (map (u: mkPasswdEntry u.name) (
+      sortOn "uid" (filter (u: u.createUser) (attrValues cfg.extraUsers))
+    ))
+  );
+
+  # If mutableUsers is true, this script adds all users/groups defined in
+  # users.extra{Users,Groups} to /etc/{passwd,group} iff there isn't any
+  # existing user/group with the same name in those files.
+  # If mutableUsers is false, the /etc/{passwd,group} files will simply be
+  # replaced with the users/groups defined in the NixOS configuration.
+  # The merging procedure could certainly be improved, and instead of just
+  # keeping the lines as-is from /etc/{passwd,group} they could be combined
+  # in some way with the generated content from the NixOS configuration.
+  merger = src: pkgs.writeScript "merger" ''
+    #!${pkgs.bash}/bin/bash
+
+    PATH=${pkgs.gawk}/bin:${pkgs.gnugrep}/bin:$PATH
+
+    ${if !cfg.mutableUsers
+      then ''cp ${src} $1.tmp''
+      else ''awk -F: '{ print "^"$1":.*" }' $1 | egrep -vf - ${src} | cat $1 - > $1.tmp''
+    }
+
+    # set mtime to +1, otherwise change might go unnoticed (vipw/vigr only looks at mtime)
+    touch -m -t $(date -d @$(($(stat -c %Y $1)+1)) +%Y%m%d%H%M.%S) $1.tmp
+
+    mv -f $1.tmp $1
+  '';
 
 in
 
@@ -153,6 +240,28 @@ in
   ###### interface
 
   options = {
+
+    users.mutableUsers = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        If true, you are free to add new users and groups to the system
+        with the ordinary <literal>useradd</literal> and
+        <literal>groupadd</literal> commands. On system activation, the
+        existing contents of the <literal>/etc/passwd</literal> and
+        <literal>/etc/group</literal> files will be merged with the
+        contents generated from the <literal>users.extraUsers</literal> and
+        <literal>users.extraGroups</literal> options. If
+        <literal>mutableUsers</literal> is false, the contents of the user and
+        group files will simply be replaced on system activation. This also
+        holds for the user passwords; if this option is false, all changed
+        passwords will be reset according to the
+        <literal>users.extraUsers</literal> configuration on activation. If
+        this option is true, the initial password for a user will be set
+        according to <literal>users.extraUsers</literal>, but existing passwords
+        will not be changed.
+      '';
+    };
 
     users.extraUsers = mkOption {
       default = {};
@@ -188,20 +297,6 @@ in
       options = [ groupOpts ];
     };
 
-    security.initialRootPassword = mkOption {
-      type = types.str;
-      default = "";
-      example = "!";
-      description = ''
-        The (hashed) password for the root account set on initial
-        installation.  The empty string denotes that root can login
-        locally without a password (but not via remote services such
-        as SSH, or indirectly via <command>su</command> or
-        <command>sudo</command>).  The string <literal>!</literal>
-        prevents root from logging in using a password.
-      '';
-    };
-
   };
 
 
@@ -211,144 +306,88 @@ in
 
     users.extraUsers = {
       root = {
+        uid = ids.uids.root;
         description = "System administrator";
         home = "/root";
-        shell = config.users.defaultUserShell;
+        shell = cfg.defaultUserShell;
         group = "root";
+        password = mkDefault "";
       };
       nobody = {
+        uid = ids.uids.nobody;
         description = "Unprivileged account (don't use!)";
+        group = "nogroup";
       };
     };
 
     users.extraGroups = {
-      root = { };
-      wheel = { };
-      disk = { };
-      kmem = { };
-      tty = { };
-      floppy = { };
-      uucp = { };
-      lp = { };
-      cdrom = { };
-      tape = { };
-      audio = { };
-      video = { };
-      dialout = { };
-      nogroup = { };
-      users = { };
-      nixbld = { };
-      utmp = { };
-      adm = { }; # expected by journald
+      root.gid = ids.gids.root;
+      wheel.gid = ids.gids.wheel;
+      disk.gid = ids.gids.disk;
+      kmem.gid = ids.gids.kmem;
+      tty.gid = ids.gids.tty;
+      floppy.gid = ids.gids.floppy;
+      uucp.gid = ids.gids.uucp;
+      lp.gid = ids.gids.lp;
+      cdrom.gid = ids.gids.cdrom;
+      tape.gid = ids.gids.tape;
+      audio.gid = ids.gids.audio;
+      video.gid = ids.gids.video;
+      dialout.gid = ids.gids.dialout;
+      nogroup.gid = ids.gids.nogroup;
+      users.gid = ids.gids.users;
+      nixbld.gid = ids.gids.nixbld;
+      utmp.gid = ids.gids.utmp;
+      adm.gid = ids.gids.adm;
     };
 
-    system.activationScripts.rootPasswd = stringAfter [ "etc" ]
-      ''
-        # If there is no password file yet, create a root account with an
-        # empty password.
-        if ! test -e /etc/passwd; then
-            rootHome=/root
-            touch /etc/passwd; chmod 0644 /etc/passwd
-            touch /etc/group; chmod 0644 /etc/group
-            touch /etc/shadow; chmod 0600 /etc/shadow
-            # Can't use useradd, since it complains that it doesn't know us
-            # (bootstrap problem!).
-            echo "root:x:0:0:System administrator:$rootHome:${config.users.defaultUserShell}" >> /etc/passwd
-            echo "root:${config.security.initialRootPassword}:::::::" >> /etc/shadow
-        fi
+    system.activationScripts.users =
+      let
+        mkhomeUsers = filterAttrs (n: u: u.createHome) cfg.extraUsers;
+        setpwUsers = filterAttrs (n: u: u.createUser) cfg.extraUsers;
+        setpw = n: u: ''
+          setpw=yes
+          ${optionalString cfg.mutableUsers ''
+            test "$(getent shadow '${u.name}' | cut -d: -f2)" != "x" && setpw=no
+          ''}
+          if [ "$setpw" == "yes" ]; then
+            ${if u.password == ""
+              then "passwd -d '${u.name}' &>/dev/null"
+              else if (isNull u.password && isNull u.passwordFile)
+              then "passwd -l '${u.name}' &>/dev/null"
+              else if !(isNull u.password)
+              then ''
+                echo "${u.name}:${u.password}" | ${pkgs.shadow}/sbin/chpasswd''
+              else ''
+                echo -n "${u.name}:" | cat - "${u.passwordFile}" | \
+                  ${pkgs.shadow}/sbin/chpasswd -e
+              ''
+            }
+          fi
+        '';
+        mkhome = n: u:
+         let
+            uid = toString u.uid;
+            gid = toString ((getGroup u.group).gid);
+            h = u.home;
+          in ''
+            test -a "${h}" || mkdir -p "${h}" || true
+            test "$(stat -c %u "${h}")" = ${uid} || chown ${uid} "${h}" || true
+            test "$(stat -c %g "${h}")" = ${gid} || chgrp ${gid} "${h}" || true
+          '';
+      in stringAfter [ "etc" ] ''
+        touch /etc/group
+        touch /etc/passwd
+        VISUAL=${merger groupFile} ${pkgs.shadow}/sbin/vigr &>/dev/null
+        VISUAL=${merger passwdFile} ${pkgs.shadow}/sbin/vipw &>/dev/null
+        ${pkgs.shadow}/sbin/grpconv
+        ${pkgs.shadow}/sbin/pwconv
+        ${concatStrings (mapAttrsToList mkhome mkhomeUsers)}
+        ${concatStrings (mapAttrsToList setpw setpwUsers)}
       '';
 
-    # Print a reminder for users to set a root password.
-    environment.interactiveShellInit =
-      ''
-        if [ "$UID" = 0 ]; then
-            read _l < /etc/shadow
-            if [ "''${_l:0:6}" = root:: ]; then
-                cat >&2 <<EOF
-        [1;31mWarning:[0m Your root account has a null password, allowing local users
-        to login as root.  Please set a non-null password using \`passwd', or
-        disable password-based root logins using \`passwd -l'.
-        EOF
-            fi
-            unset _l
-        fi
-      '';
-
-    system.activationScripts.users = stringAfter [ "groups" ]
-      ''
-        echo "updating users..."
-
-        cat ${usersFile} | while true; do
-            read name || break
-            read description
-            read uid
-            read group
-            read extraGroups
-            read home
-            read shell
-            read createHome
-            read password
-            read isSystemUser
-            read createUser
-            read isAlias
-
-            if [ -z "$createUser" ]; then
-                continue
-            fi
-
-            if ! curEnt=$(getent passwd "$name"); then
-                useradd ''${isSystemUser:+--system} \
-                    --comment "$description" \
-                    ''${uid:+--uid $uid} \
-                    --gid "$group" \
-                    --groups "$extraGroups" \
-                    --home "$home" \
-                    --shell "$shell" \
-                    ''${createHome:+--create-home} \
-                    ''${isAlias:+--non-unique} \
-                    "$name"
-                if test "''${password:0:1}" = 'X'; then
-                    (echo "''${password:1}"; echo "''${password:1}") | ${pkgs.shadow}/bin/passwd "$name"
-                fi
-            else
-                #echo "updating user $name..."
-                oldIFS="$IFS"; IFS=:; set -- $curEnt; IFS="$oldIFS"
-                prevUid=$3
-                prevHome=$6
-                # Don't change the home directory if it's the same to prevent
-                # unnecessary warnings about logged in users.
-                if test "$prevHome" = "$home"; then unset home; fi
-                usermod \
-                    --comment "$description" \
-                    --gid "$group" \
-                    --groups "$extraGroups" \
-                    ''${home:+--home "$home"} \
-                    --shell "$shell" \
-                    "$name"
-            fi
-
-        done
-      '';
-
-    system.activationScripts.groups = stringAfter [ "rootPasswd" "binsh" "etc" "var" ]
-      ''
-        echo "updating groups..."
-
-        createGroup() {
-            name="$1"
-            gid="$2"
-
-            if ! curEnt=$(getent group "$name"); then
-                groupadd --system \
-                    ''${gid:+--gid $gid} \
-                    "$name"
-            fi
-        }
-
-        ${flip concatMapStrings (attrValues config.users.extraGroups) (g: ''
-          createGroup '${g.name}' '${toString g.gid}'
-        '')}
-      '';
+    # for backwards compatibility
+    system.activationScripts.groups = stringAfter [ "users" ] "";
 
   };
 
