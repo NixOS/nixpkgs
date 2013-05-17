@@ -94,6 +94,8 @@ in
         groupmems = { rootOK = true; };
         groupdel = { rootOK = true; };
         login = { startSession = true; allowNullPassword = true; showMotd = true; updateWtmp = true; };
+        chpasswd = { rootOK = true; };
+        chgpasswd = { rootOK = true; };
       };
 
     security.setuidPrograms = [ "passwd" "chfn" "su" "newgrp" ];
