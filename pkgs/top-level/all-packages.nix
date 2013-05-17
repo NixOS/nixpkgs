@@ -803,9 +803,7 @@ let
     libpng = libpng12;
   };
 
-  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix {
-    libpng = libpng12;
-  };
+  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
 
   fping = callPackage ../tools/networking/fping {};
 
