@@ -1,11 +1,11 @@
 { fetchurl, stdenv, gmp, gnum4 }:
 
 stdenv.mkDerivation (rec {
-  name = "nettle-2.5";
+  name = "nettle-2.7";
 
   src = fetchurl {
     url = "mirror://gnu/nettle/${name}.tar.gz";
-    sha256 = "0wicr7amx01l03rm0pzgr1qvw3f9blaw17vjsy1301dh13ll58aa";
+    sha256 = "1mnl5i1136p47lrklm0mhnnv3gjakza385zvxz12qf057h9ym562";
   };
 
   buildInputs = [ gnum4 ];
@@ -14,6 +14,8 @@ stdenv.mkDerivation (rec {
   doCheck = (stdenv.system != "i686-cygwin" && !stdenv.isDarwin);
 
   enableParallelBuilding = true;
+
+  dontDisableStatic = true;
 
   patches = stdenv.lib.optional (stdenv.system == "i686-cygwin")
               ./cygwin.patch;

@@ -5,11 +5,11 @@ assert guileBindings -> guile != null;
 
 stdenv.mkDerivation (rec {
 
-  name = "gnutls-3.1.10";
+  name = "gnutls-3.2.0";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnutls/v3.1/${name}.tar.xz";
-    sha256 = "0in6wxlvpv48maawmbg3jysq2rhjqxypgi6kkr173hc8kksp6lsk";
+    url = "ftp://ftp.gnutls.org/gcrypt/gnutls/v3.2/${name}.tar.xz";
+    sha256 = "034j843q774ryb7ydr3l1a9x6fblxp18dzqlnihjphzg2cdjyld0";
   };
 
   # Note: GMP is a dependency of Nettle, whose public headers include
@@ -59,7 +59,7 @@ stdenv.mkDerivation (rec {
        tampering, or message forgery."
     '';
 
-    homepage = http://www.gnu.org/software/gnutls/;
+    homepage = http://www.gnutls.org/;
     license = "LGPLv2.1+";
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
