@@ -93,6 +93,7 @@ stdenv.mkDerivation {
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
   # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
   postInstall = ''
+      # salt to restart hydra
     mv -t "$drivers/lib/" \
       $out/lib/libdricore* \
       $out/lib/libgallium.* \
