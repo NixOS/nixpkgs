@@ -1,4 +1,4 @@
-{ cabal, alsaLib, alsaCore, extensibleExceptions, sampleFrame
+{ cabal, alsaCore, alsaLib, extensibleExceptions, sampleFrame
 , storableRecord
 }:
 

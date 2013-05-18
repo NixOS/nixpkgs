@@ -1,6 +1,6 @@
-{ cabal, binary, bytestringProgress, deepseq, filepath, parsec
-, pcreLight, strict, terminalProgressBar, time, transformers
-, utf8String, X11, libXScrnSaver
+{ cabal, binary, bytestringProgress, deepseq, filepath
+, libXScrnSaver, parsec, pcreLight, strict, terminalProgressBar
+, time, transformers, utf8String, X11
 }:
 
 cabal.mkDerivation (self: {
