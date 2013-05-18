@@ -5204,6 +5204,8 @@ let
       inherit libpng;
     };
 
+  wildmidi = callPackage ../development/libraries/wildmidi { };
+
   wvstreams = callPackage ../development/libraries/wvstreams { };
 
   wxGTK = wxGTK28;
