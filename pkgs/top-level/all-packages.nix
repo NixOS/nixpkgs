@@ -6573,6 +6573,8 @@ let
 
   freefont_ttf = callPackage ../data/fonts/freefont-ttf { };
 
+  freepats = callPackage ../data/misc/freepats { };
+
   gentium = callPackage ../data/fonts/gentium {};
 
   gnome_user_docs = callPackage ../data/documentation/gnome-user-docs { };
