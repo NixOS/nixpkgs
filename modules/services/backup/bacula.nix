@@ -354,7 +354,7 @@ in {
       description = "Bacula File Daemon";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.bacula ];
-      serviceConfig.ExecStart = "${pkgs.bacula}/sbin/bacula-fd -f -u bacula -g bacula -c ${fd_conf}";
+      serviceConfig.ExecStart = "${pkgs.bacula}/sbin/bacula-fd -f -u root -g bacula -c ${fd_conf}";
     };
 
     systemd.services.bacula-sd = mkIf sd_cfg.enable {
