@@ -1367,6 +1367,8 @@ let
 
   parallel = callPackage ../tools/misc/parallel { };
 
+  parcellite = callPackage ../tools/misc/parcellite { };
+
   patchutils = callPackage ../tools/text/patchutils { };
 
   parted = callPackage ../tools/misc/parted { hurd = null; };
