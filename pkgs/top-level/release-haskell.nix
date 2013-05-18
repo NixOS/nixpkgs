@@ -50,6 +50,8 @@ mapHaskellTestOn {
   AgdaExecutable = default;
   alex = all;
   alexMeta = default;
+  alsaCore = default;
+  alsaPcm = default;
   alternativeIo = default;
   ansiTerminal = default;
   ansiWlPprint = default;
@@ -397,8 +399,8 @@ mapHaskellTestOn {
   uuagc = default;
   uuid = default;
   uulib = default ++ latest;
-  uuParsinglib = default;
   uuOptions = default;
+  uuParsinglib = default;
   vacuumCairo = default;
   vacuum = default;
   vcsRevision = default;
