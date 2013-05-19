@@ -5,6 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.2.0";
 
   src = fetchurl {
+    name = "${name}.zip";
     url = "https://github.com/martine/ninja/archive/v${version}.zip";
     sha256 = "15ynh806ah37bqb57hcs3mj2g82900sncp6n3bssfggb4azgjlh3";
   };
