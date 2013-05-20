@@ -1155,6 +1155,8 @@ let
 
   memtest86plus = callPackage ../tools/misc/memtest86/plus.nix { };
 
+  meo = callPackage ../tools/security/meo { };
+
   mc = callPackage ../tools/misc/mc { };
 
   mcabber = callPackage ../applications/networking/instant-messengers/mcabber { };
@@ -4854,6 +4856,8 @@ let
   phonon_backend_vlc = callPackage ../development/libraries/phonon-backend-vlc { };
 
   physfs = callPackage ../development/libraries/physfs { };
+
+  pkcs11helper = callPackage ../development/libraries/pkcs11helper { };
 
   plib = callPackage ../development/libraries/plib { };
 
