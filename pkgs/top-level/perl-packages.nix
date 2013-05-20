@@ -1995,6 +1995,15 @@ rec {
     buildInputs = [ Spiffy TestBase TestDifferences ];
   };
 
+  FCGI = buildPerlPackage rec {
+    name = "FCGI-0.74";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/FCGI/${name}.tar.gz";
+      sha256 = "0m089q07kpsk8y8g2wmi3d8i1jzn5m5m00shs7vnf2lnvvv4d7pm";
+    };
+    buildInputs = [ ];
+  };
+
   FileChangeNotify = buildPerlModule rec {
     name = "File-ChangeNotify-0.20";
     src = fetchurl {
@@ -3802,6 +3811,14 @@ rec {
     propagatedBuildInputs = [IOSocketSSL DigestHMAC];
   };
 
+  NetSNMP = buildPerlPackage rec {
+    name = "Net-SNMP-v6.0.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DT/DTOWN/${name}.tar.gz";
+      sha256 = "0hdpn1cw52x8cw24m9ayzpf4rwarm0khygn1sv3wvwxkrg0pphql";
+    };
+  };
+
   NetSSLeay = buildPerlPackage rec {
     name = "Net-SSLeay-1.52";
     src = fetchurl {
@@ -5347,10 +5364,10 @@ rec {
   };
 
   TimeHiRes = buildPerlPackage rec {
-    name = "Time-HiRes-1.9724";
+    name = "Time-HiRes-1.9725";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Time/${name}.tar.gz";
-      sha256 = "0lrwfixr3qg8j4vkfax1z4gqiccq0v0jyvc7db40qpvi88655gjs";
+      sha256 = "0fr7zkc55kazcjxdkrcjgimic8xpk6imxkckdpjlggjpkggv76f0";
     };
   };
 
