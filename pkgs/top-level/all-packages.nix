@@ -1054,6 +1054,8 @@ let
 
   jnettop = callPackage ../tools/networking/jnettop { };
 
+  jq = callPackage ../development/tools/jq {};
+
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
   jwhois = callPackage ../tools/networking/jwhois { };
