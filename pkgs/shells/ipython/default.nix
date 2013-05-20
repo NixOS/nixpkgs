@@ -46,12 +46,12 @@ buildPythonPackage rec {
     homepage = http://ipython.scipy.org/;
     description = "An interactive computing environment for Python";
     license = "BSD";
-
     longDescription = ''
       The goal of IPython is to create a comprehensive environment
       for interactive and exploratory computing. It consists of an
       enhanced interactive Python shell and an architecture for
       interactive parallel computing.
     '';
+    maintainers = stdenv.lib.maintainers.bjornfor;
   };
 }

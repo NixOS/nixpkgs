@@ -23,9 +23,11 @@ buildPythonPackage rec {
   # runtime. If we use buildInputs it would just build, not run.
   propagatedBuildInputs = [ tempita jinja2 pyyaml clepy mock nose decorator docutils ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Distributed bugtracker";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
     homepage = http://pitz.tplus1.com/;
+    platforms = platforms.linux;
+    maintainers = maintainers.bjornfor;
   };
 }

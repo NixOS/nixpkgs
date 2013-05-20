@@ -49,9 +49,11 @@ stdenv.mkDerivation rec {
       libsamplerate
     ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Qt-based audio player that looks like Winamp";
     homepage = http://qmmp.ylsoftware.com/;
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = maintainers.bjornfor;
   };
 }

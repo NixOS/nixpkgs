@@ -42,7 +42,7 @@ buildPythonPackage rec {
     cp spyderlib/images/spyder.svg $out/share/icons/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Scientific PYthon Development EnviRonment (SPYDER)";
     longDescription = ''
       Spyder (previously known as Pydee) is a powerful interactive development
@@ -50,6 +50,8 @@ buildPythonPackage rec {
       testing, debugging and introspection features.
     '';
     homepage = https://code.google.com/p/spyderlib/;
-    license = stdenv.lib.licenses.mit;
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = maintainers.bjornfor;
   };
 }

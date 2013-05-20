@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       '';
 
     license = "GPLv2+";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric bjornfor ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

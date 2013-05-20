@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://munin-monitoring.org/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.iElectric ];
+    maintainers = [ maintainers.iElectric maintainers.bjornfor ];
     platforms = platforms.linux;
   };
 }

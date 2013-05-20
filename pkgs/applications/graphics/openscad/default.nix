@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     platforms = with stdenv.lib.platforms;
       linux;
     maintainers = with stdenv.lib.maintainers; 
-      [raskin];
+      [raskin bjornfor];
   };
 }

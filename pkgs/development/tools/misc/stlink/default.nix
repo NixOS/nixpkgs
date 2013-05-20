@@ -18,8 +18,10 @@ stdenv.mkDerivation {
   buildInputs = [ autoconf automake libtool pkgconfig libusb1 ];
   preConfigure = "./autogen.sh";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "In-circuit debug and programming for ST-Link devices";
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = maintainers.bjornfor;
   };
 }

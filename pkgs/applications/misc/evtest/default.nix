@@ -12,8 +12,10 @@ stdenv.mkDerivation rec {
     rev = "1a50f2479c4775e047f234a24d95dda82441bfbd";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Simple tool for input event debugging";
     license = "GPLv2";
+    platforms = platforms.linux;
+    maintainers = maintainers.bjornfor;
   };
 }
