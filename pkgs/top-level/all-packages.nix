@@ -5631,6 +5631,8 @@ let
     gdSupport = true;
   };
 
+  munin = callPackage ../servers/monitoring/munin { };
+
   nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official { };
 
   net_snmp = callPackage ../servers/monitoring/net-snmp { };

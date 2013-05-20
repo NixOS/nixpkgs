@@ -3007,6 +3007,14 @@ rec {
     };
   };
 
+  Log4Perl = buildPerlPackage rec {
+    name = "Log-Log4perl-1.41";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Log/${name}.tar.gz";
+      sha256 = "0dajkgvlwsb4zdw6x3fil2n5phypq829dmqf8l9s88g9smms2a2i";
+    };
+  };
+
   LWP = buildPerlPackage {
     name = "libwww-perl-6.04";
     src = fetchurl {
