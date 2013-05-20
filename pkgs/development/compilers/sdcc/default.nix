@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ${if gputils == null then "--disable-pic14-port --disable-pic16-port" else ""}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Small Device C Compiler";
     longDescription = ''
       SDCC is a retargettable, optimizing ANSI - C compiler suite that targets
@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
       PIC18 targets. It can be retargeted for other microprocessors.
     '';
     homepage = http://sdcc.sourceforge.net/;
-    license = stdenv.lib.licenses.gpl2;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+    maintainers = maintainers.bjornfor;
   };
 }
