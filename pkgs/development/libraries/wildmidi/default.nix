@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     echo "source ${freepats}/freepats.cfg" >> "$out"/etc/wildmidi.cfg
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Software MIDI player and library";
     longDescription = ''
       WildMIDI is a simple software midi player which has a core softsynth
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://wildmidi.sourceforge.net/;
     # The library is LGPLv3, the wildmidi executable is GPLv3
-    license = stdenv.lib.licenses.lgpl3;
+    license = licenses.lgpl3;
+    platforms = platforms.linux;
+    maintainers = maintainers.bjornfor;
   };
 }

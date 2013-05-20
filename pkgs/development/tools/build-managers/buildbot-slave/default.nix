@@ -31,7 +31,7 @@ buildPythonPackage (rec {
     cp docs/buildslave.1 "$out/share/man/man1"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://buildbot.net/;
 
     license = "GPLv2+";
@@ -60,5 +60,7 @@ buildPythonPackage (rec {
          encouraging them to be more careful about testing before checking
          in code.
       '';
+    maintainers = with maintainers; [ bjornfor ];
+    platforms = platforms.all;
   };
 })

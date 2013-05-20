@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     cp doc/manual.html $out/share/doc/ninja/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Small build system with a focus on speed";
     longDescription = ''
       Ninja is a small build system with a focus on speed. It differs from
@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
       to run builds as fast as possible.
     '';
     homepage = http://martine.github.io/ninja/;
-    license = stdenv.lib.licenses.asl20;
+    license = licenses.asl20;
+    platforms = platforms.linux;
+    maintainers = maintainers.bjornfor;
   };
 }

@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses libpcap ];
 
-  meta = { 
+  meta = with stdenv.lib; {
     description = "libpcap based program for live TCP connection monitoring";
     homepage = http://www.rhythm.cx/~steve/devel/tcptrack/; # dead link
-    license = stdenv.lib.licenses.lgpl21;
+    license = licenses.lgpl21;
+    platforms = platforms.linux;
+    maintainers = maintainers.bjornfor;
   };
 }
