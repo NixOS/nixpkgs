@@ -29,9 +29,10 @@ let
       ./nix-store-mtime.patch
     ];
 
+  nativeBuildInputs = [ bzip2 ];
+
   buildInputs =
-    optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [ bzip2 ]
+    optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc
     ++ optional zlibSupport zlib;
 
     
