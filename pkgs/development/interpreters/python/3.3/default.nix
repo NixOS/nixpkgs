@@ -20,7 +20,7 @@ let
   version = "${majorVersion}.1";
 
   buildInputs = filter (p: p != null) [
-    zlib gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto
+    zlib bzip2 gdbm sqlite db4 readline ncurses openssl tcl tk libX11 xproto
   ];
 in
 stdenv.mkDerivation {
@@ -45,14 +45,11 @@ stdenv.mkDerivation {
                         )
   '';
 
-  nativeBuildInputs = [ bzip2 ];
-
   setupHook = ./setup-hook.sh;
 
   postInstall = ''
     rm -rf "$out/lib/python${majorVersion}/test"
   '';
-
 
   passthru = {
     zlibSupport = zlib != null;

@@ -33,11 +33,9 @@ let
                                 ${stdenv.gcc.libc}/include/netinet/in.h
   '';
 
-  nativeBuildInputs = [ bzip2 ];
-
   buildInputs =
     optional (stdenv ? gcc && stdenv.gcc.libc != null) stdenv.gcc.libc ++
-    [ openssl ]
+    [ bzip2 openssl ]
     ++ optional zlibSupport zlib;
 
   ensurePurity =
