@@ -6139,6 +6139,8 @@ let
     */
     ndiswrapper = callPackage ../os-specific/linux/ndiswrapper { };
 
+    netatop = callPackage ../os-specific/linux/netatop { };
+
     perf = callPackage ../os-specific/linux/kernel/perf.nix { };
 
     spl = callPackage ../os-specific/linux/spl/default.nix { };
