@@ -2019,11 +2019,11 @@ pythonPackages = python.modules // rec {
 
 
   jedi = buildPythonPackage (rec {
-    name = "jedi-0.5b5";
+    name = "jedi-0.6.0";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/j/jedi/${name}.tar.gz";
-      sha256 = "10xqdhda9kdbc22h4dphxqjncpdb80s1crxsirr5h016rw9czsa4";
+      sha256 = "0k27nai69ypi9whipg45s1myqr477wj7jaryqv37bqqij4jc85hg";
     };
 
     meta = {
