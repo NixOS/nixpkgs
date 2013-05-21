@@ -1397,6 +1397,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mtlparse = callPackage ../development/libraries/haskell/mtlparse {};
 
+  mueval = callPackage ../development/libraries/haskell/mueval {};
+
   multiarg = callPackage ../development/libraries/haskell/multiarg {};
 
   multiplate = callPackage ../development/libraries/haskell/multiplate {};
