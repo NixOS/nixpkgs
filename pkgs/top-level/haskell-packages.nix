@@ -1346,6 +1346,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   mimeTypes = callPackage ../development/libraries/haskell/mime-types {};
 
+  misfortune = callPackage ../development/libraries/haskell/misfortune {};
+
   MissingH = callPackage ../development/libraries/haskell/MissingH {};
 
   mmap = callPackage ../development/libraries/haskell/mmap {};
