@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     description = "Simple tool for input event debugging";
     license = "GPLv2";
     platforms = platforms.linux;
-    maintainers = maintainers.bjornfor;
+    maintainers = [maintainers.bjornfor];
   };
 }

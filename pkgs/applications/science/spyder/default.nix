@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = https://code.google.com/p/spyderlib/;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = maintainers.bjornfor;
+    maintainers = [maintainers.bjornfor];
   };
 }

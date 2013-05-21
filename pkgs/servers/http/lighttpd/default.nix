@@ -21,6 +21,6 @@ stdenv.mkDerivation {
     homepage = http://www.lighttpd.net/;
     license = "BSD";
     platforms = platforms.linux;
-    maintainers = maintainers.bjornfor;
+    maintainers = [maintainers.bjornfor];
   };
 }

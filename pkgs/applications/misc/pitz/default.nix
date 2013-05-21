@@ -28,6 +28,6 @@ buildPythonPackage rec {
     license = licenses.bsd3;
     homepage = http://pitz.tplus1.com/;
     platforms = platforms.linux;
-    maintainers = maintainers.bjornfor;
+    maintainers = [maintainers.bjornfor];
   };
 }
