@@ -660,7 +660,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   };
 
   carray = callPackage ../development/libraries/haskell/carray {};
-  
+
   caseInsensitive_1_0_0_1 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.1.nix {};
   caseInsensitive_1_0_0_2 = callPackage ../development/libraries/haskell/case-insensitive/1.0.0.2.nix {};
   caseInsensitive = self.caseInsensitive_1_0_0_2;
