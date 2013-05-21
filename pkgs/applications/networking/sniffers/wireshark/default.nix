@@ -4,14 +4,14 @@
 , makeDesktopItem
 }:
 
-let version = "1.8.6"; in
+let version = "1.8.7"; in
 
 stdenv.mkDerivation {
   name = "wireshark-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/wireshark/wireshark-${version}.tar.bz2";
-    sha256 = "1siifci4z7nxp6a1ghk2azw9v0hxi2vq26n3ms7n89kcj8zfs8i7";
+    sha256 = "0hm8zisy5dg7sfhh7rvgnpffq2qcw0syd8k5kns8j0j13sf44zjw";
   };
 
   buildInputs =
