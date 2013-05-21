@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "reflection";
-  version = "1.3.1";
-  sha256 = "0d81zvyg846jp0xkdkj4220w6hbrnzf46zcxs5qb5frm41rwcsj8";
+  version = "1.3.2";
+  sha256 = "0jmdygvmvhw20aqjk7k0jah93ggfgf2bgq5zpwnz9bwgi9gs17x6";
   buildDepends = [ tagged ];
   meta = {
     homepage = "http://github.com/ekmett/reflection";
