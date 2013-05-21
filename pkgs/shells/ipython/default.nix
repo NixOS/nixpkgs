@@ -52,6 +52,6 @@ buildPythonPackage rec {
       enhanced interactive Python shell and an architecture for
       interactive parallel computing.
     '';
-    maintainers = stdenv.lib.maintainers.bjornfor;
+    maintainers = [ stdenv.lib.maintainers.bjornfor ];
   };
 }
