@@ -1272,6 +1272,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   kansasLava = callPackage ../development/libraries/haskell/kansas-lava {};
 
+  knob = callPackage ../development/libraries/haskell/knob {};
+
   languageC_0_4_2   = callPackage ../development/libraries/haskell/language-c/0.4.2.nix {};
   languageC_0_3_2_1 = callPackage ../development/libraries/haskell/language-c/0.3.2.1.nix {};
   languageC = self.languageC_0_4_2;
