@@ -581,6 +581,8 @@ let
 
   chkrootkit = callPackage ../tools/security/chkrootkit { };
 
+  chrony = callPackage ../tools/networking/chrony { };
+
   cksfv = callPackage ../tools/networking/cksfv { };
 
   ciopfs = callPackage ../tools/filesystems/ciopfs { };
