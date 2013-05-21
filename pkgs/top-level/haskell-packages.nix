@@ -821,7 +821,15 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   derive = callPackage ../development/libraries/haskell/derive {};
 
+  dependentMap = callPackage ../development/libraries/haskell/dependent-map {};
+
+  dependentSum = callPackage ../development/libraries/haskell/dependent-sum {};
+
+  dependentSumTemplate = callPackage ../development/libraries/haskell/dependent-sum-template {};
+
   derp = callPackage ../development/libraries/haskell/derp {};
+
+  dice = callPackage ../development/libraries/haskell/dice {};
 
   diagrams = callPackage ../development/libraries/haskell/diagrams/diagrams.nix {};
   diagramsCairo = callPackage ../development/libraries/haskell/diagrams/cairo.nix {};
