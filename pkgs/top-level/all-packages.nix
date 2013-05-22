@@ -5693,11 +5693,12 @@ let
 
   xorg = recurseIntoAttrs (import ../servers/x11/xorg/default.nix {
     inherit fetchurl fetchsvn stdenv pkgconfig intltool freetype fontconfig
-      libxslt expat libdrm libpng zlib perl mesa
+      libxslt expat libdrm libpng zlib perl mesa_drivers
       xkeyboard_config dbus libuuid openssl gperf m4
       autoconf libtool xmlto asciidoc udev flex bison python mtdev;
     automake = automake110x;
     pixman = pixman_cairo;
+    mesa = mesa_noglu;
   });
 
   xorgReplacements = callPackage ../servers/x11/xorg/replacements.nix { };
