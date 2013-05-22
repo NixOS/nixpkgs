@@ -1,6 +1,6 @@
 {stdenv, fetchurl, bzip2, freetype, graphviz, ghostscript
 , libjpeg, libpng, libtiff, libxml2, zlib, libtool, xz
-, libX11}:
+, libX11, quantumdepth ? 8}:
 
 let version = "1.3.13"; in
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "08lgjvhvhw3by5h4kfpl7072dbvkcpsajy5f6izq69cv61vadqs5";
   };
 
-  configureFlags = "--enable-shared";
+  configureFlags = "--enable-shared --with-quantum-depth=" + toString quantumdepth;
 
   buildInputs =
     [ bzip2 freetype ghostscript graphviz libjpeg libpng libtiff libX11 libxml2
