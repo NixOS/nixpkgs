@@ -137,7 +137,8 @@ rec {
     mount -t cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none,sec=ntlm
 
     mkdir -p /fs/tmp
-    mount -t tmpfs -o "mode=755" none /fs/tmp
+    # tmpfs may be faster, but there's a tendency to run out of RAM on 32b systems
+    # mount -t tmpfs -o "mode=755" none /fs/tmp
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
