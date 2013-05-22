@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, glib
 , useGtk ? true, gtk
 , useNcurses ? true, ncurses
-, useQt4 ? false, qt4 }:
+, useQt4 ? true, qt4 }:
 
 assert useGtk || useNcurses || useQt4;
 
