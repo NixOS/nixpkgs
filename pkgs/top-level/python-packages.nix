@@ -1415,11 +1415,11 @@ pythonPackages = python.modules // rec {
 
 
   django_1_3 = buildPythonPackage rec {
-    name = "Django-1.3.3";
+    name = "Django-1.3.7";
 
     src = fetchurl {
       url = "http://www.djangoproject.com/m/releases/1.3/${name}.tar.gz";
-      sha256 = "0snlrcvk92qj1v0n9dpycn6sw56w4zns4mpc30837q6yi7ylrx4f";
+      sha256 = "12pv8y2x3fhrcrjayfm6z40r57iwchfi5r19ajs8q8z78i3z8l7f";
     };
 
     # error: invalid command 'test'
@@ -1433,11 +1433,11 @@ pythonPackages = python.modules // rec {
 
 
   django_evolution = buildPythonPackage rec {
-    name = "django_evolution-0.6.7";
+    name = "django_evolution-0.6.9";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/d/django_evolution/${name}.tar.gz";
-      md5 = "24b8373916f53f74d701b99a6cf41409";
+      md5 = "c0d7d10bc41898c88b14d434c48766ff";
     };
 
     propagatedBuildInputs = [ django_1_3 ];
@@ -1450,14 +1450,14 @@ pythonPackages = python.modules // rec {
 
 
   djblets = buildPythonPackage rec {
-    name = "Djblets-0.6.23";
+    name = "Djblets-0.6.28";
 
     src = fetchurl {
       url = "http://downloads.reviewboard.org/releases/Djblets/0.6/${name}.tar.gz";
-      sha256 = "1d8vg5a9q2ldnbxqap1893lqb66jwcsli2brbjx7mcnqrzcz449x";
+      sha256 = "11fsi911cqkjgv9j7646ljc2fgxsdfyq44kzmv01xhysm50fn6xx";
     };
 
-    propagatedBuildInputs = [ pil django_1_3 ];
+    propagatedBuildInputs = [ pil django_1_3 feedparser ];
 
     meta = {
       description = "A collection of useful extensions for Django";
@@ -3932,15 +3932,15 @@ pythonPackages = python.modules // rec {
 
 
   reviewboard = buildPythonPackage rec {
-    name = "ReviewBoard-1.6.13";
+    name = "ReviewBoard-1.6.16";
 
     src = fetchurl {
       url = "http://downloads.reviewboard.org/releases/ReviewBoard/1.6/${name}.tar.gz";
-      sha256 = "06q9vgvmmwiyqj6spw6sbhrcxwds02pvqir50psbpps74nxn2mph";
+      sha256 = "0vg3ypm57m43bscv8vswjdllv3d2j8lxqwwvpd65cl7jd1in0yr1";
     };
 
     propagatedBuildInputs =
-      [ recaptcha_client pytz memcached dateutil paramiko flup pygments
+      [ recaptcha_client pytz memcached dateutil_1_5 paramiko flup pygments
         djblets django_1_3 django_evolution pycrypto python.modules.sqlite3
         pysvn pil psycopg2
       ];
