@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Strip version restrictions from build dependencies in Cabal files";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

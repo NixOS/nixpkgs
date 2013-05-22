@@ -1,11 +1,11 @@
 { kde, boost, gpgme, libassuan, libxslt, kdepimlibs, kdepim_runtime
 , akonadi, shared_desktop_ontologies, cyrus_sasl, grantlee, prison
-, nepomuk_core, nepomuk_widgets, dblatex }:
+, nepomuk_widgets, dblatex }:
 
 kde {
 #todo: update grantlee to 0.3
   buildInputs =
-    [ kdepimlibs boost akonadi shared_desktop_ontologies nepomuk_core nepomuk_widgets
+    [ kdepimlibs boost akonadi shared_desktop_ontologies nepomuk_widgets
       libxslt cyrus_sasl gpgme libassuan grantlee prison dblatex
     ];
 

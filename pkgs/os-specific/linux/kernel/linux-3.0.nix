@@ -231,7 +231,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.0.75";
+    version = "3.0.78";
 
     preConfigure = ''
       substituteInPlace scripts/depmod.sh --replace '-b "$INSTALL_MOD_PATH"' ""
@@ -239,7 +239,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/linux-${version}.tar.xz";
-      sha256 = "08b4ibyxihsy36n0grg08iywxi23f29s15l3h0sa1dssxxhr1kf9";
+      sha256 = "0jgarhjllxygxsj2kph61pf9jvlab4pnp7n4kb9l0lfj3y0crx04";
     };
 
     config = configWithPlatform stdenv.platform;

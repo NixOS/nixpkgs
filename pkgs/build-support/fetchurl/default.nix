@@ -47,6 +47,9 @@ in
   # locations.  They are tried in order.
   urls ? []
 
+, # Additional curl options needed for the download to succeed.
+  curlOpts ? ""
+
 , # Name of the file.  If empty, use the basename of `url' (or of the
   # first element of `urls').
   name ? ""
@@ -97,7 +100,7 @@ stdenv.mkDerivation {
   outputHash = if outputHash != "" then outputHash else
       if sha256 != "" then sha256 else if sha1 != "" then sha1 else md5;
 
-  inherit showURLs mirrorsFile impureEnvVars;
+  inherit curlOpts showURLs mirrorsFile impureEnvVars;
 
   # Doing the download on a remote machine just duplicates network
   # traffic, so don't do that.

@@ -8,7 +8,7 @@ kde {
 
   propagatedBuildInputs = [ pyqt4 sip ];
 
-  patches = [ ./pykde4-hardcode-lib-python.patch ];
+  patches = [ ./pykde4-hardcode-lib-python.patch ./pykde4-new-sip.patch ];
 
   cmakeFlags = "-DHARDCODE_LIB_PYTHON_PATH=ON ";
 

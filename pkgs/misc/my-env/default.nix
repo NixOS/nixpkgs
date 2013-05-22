@@ -59,7 +59,7 @@
 { mkDerivation, substituteAll, pkgs }:
     { stdenv ? pkgs.stdenv, name, buildInputs ? []
     , propagatedBuildInputs ? [], gcc ? stdenv.gcc, cTags ? [], extraCmds ? ""
-    , shell ? "${pkgs.bashInteractive}/bin/bash"}:
+    , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash"}:
 
 mkDerivation {
   # The setup.sh script from stdenv will expect the native build inputs in
@@ -133,8 +133,16 @@ mkDerivation {
       fi
       rm -fr "\$tmp"
       ${extraCmds}
+
+      nix_cleanup() {
+        :
+        ${cleanupCmds}
+      }
+
       export PATH
       echo $name loaded
+
+      trap nix_cleanup EXIT
     EOF
 
     mkdir -p $out/bin

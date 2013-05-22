@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, x11 }:
+{ stdenv, fetchurl, x11, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor
+, libXrandr, mesa, libXft, libXfixes, xinput }:
 
 let
-  version = "1.6.9";
+  version = "1.6.48";
 in
 
 stdenv.mkDerivation rec {
@@ -9,10 +10,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.fox-toolkit.org/pub/${name}.tar.gz";
-    md5 = "8ab8274237431865f57b2f5596374a65";
+    sha256 = "1i0q0357lrd41jjr2nkf2a7ls5ls2nwrkxbfc7202vy22942lb9k";
   };
 
-  buildInputs = [ x11 ];
+  buildInputs = [ x11 libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
+      libXft mesa libXfixes xinput ];
 
   doCheck = true;
 
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
         Current aims are to make FOX completely platform independent, and thus programs written against the FOX library will be only a compile away from running on a variety of platforms.
       '';
     homepage = "http://fox-toolkit.org";
-    license = "LGPL";
+    license = "LGPLv3";
     maintainers = [ stdenv.lib.maintainers.bbenoist ];
     platforms = stdenv.lib.platforms.all;
   };

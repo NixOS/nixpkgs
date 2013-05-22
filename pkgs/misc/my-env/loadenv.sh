@@ -10,4 +10,5 @@ export buildInputs
 export NIX_STRIP_DEBUG=0
 export TZ="$OLDTZ"
 
-exec @shell@ --norc
+@shell@ --norc
+

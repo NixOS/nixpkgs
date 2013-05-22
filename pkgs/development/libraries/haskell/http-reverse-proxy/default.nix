@@ -22,6 +22,5 @@ cabal.mkDerivation (self: {
     description = "Reverse proxy HTTP requests, either over raw sockets or with WAI";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

@@ -1,11 +1,11 @@
 {stdenv, fetchurl, unzip, cmake, python}:
 
 stdenv.mkDerivation {
-  name = "flann-1.6.8";
+  name = "flann-1.8.4";
   
   src = fetchurl {
-    url = http://people.cs.ubc.ca/~mariusm/uploads/FLANN/flann-1.6.8-src.zip;
-    sha256 = "0ag9k821jy0983gjrfsjnqkl5axklcih0qkpfy72h3643nin0f50";
+    url = http://people.cs.ubc.ca/~mariusm/uploads/FLANN/flann-1.8.4-src.zip;
+    sha256 = "022w8hph7bli5zbpnk3z1qh1c2sl5hm8fw2ccim651ynn0hr7fyz";
   };
 
   buildInputs = [ unzip cmake python ];
@@ -14,5 +14,7 @@ stdenv.mkDerivation {
     homepage = http://people.cs.ubc.ca/~mariusm/flann/;
     license = "BSD";
     description = "Fast approximate nearest neighbor searches in high dimensional spaces";
+    maintainers = with stdenv.lib.maintainers; [viric];
+    platforms = with stdenv.lib.platforms; linux;
   };
 }

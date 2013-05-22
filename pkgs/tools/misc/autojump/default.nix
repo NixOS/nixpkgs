@@ -1,41 +1,33 @@
-{ fetchurl, stdenv, python }:
+{ fetchurl, stdenv, python, bash }:
 
-let version = "4"; in
+let 
+  version = "21.5.8";
+in
   stdenv.mkDerivation rec {
     name = "autojump-${version}";
 
     src = fetchurl {
-      url = "http://github.com/joelthelion/autojump/tarball/release-v4";
+      url = "http://github.com/joelthelion/autojump/archive/release-v${version}.tar.gz";
       name = "autojump-${version}.tar.gz";
-      sha256 = "06hjkdmfhawi6xksangymf9z85ql8d7q0vlcmgsw45vxq7iq1fnp";
+      sha256 = "07jf5pa9xwmbswsc0h6law9f5qwczsj25w7h034s379imid5h62f";
     };
 
-    # FIXME: Appears to be broken with Bash 4.0:
-    # http://wiki.github.com/joelthelion/autojump/doesnt-seem-to-be-working-with-bash-40 .
-
-    patchPhase = ''
-      sed -i "install.sh" \
-          -e "s,/usr/,$out/,g ; s,/etc/,/nowhere/,g ; s,sudo,,g"
-    '';
-
-    buildInputs = [ python ];
+    buildInputs = [ python bash ];
+    dontBuild = true;
 
     installPhase = ''
-      mkdir -p "$out/bin" "$out/share/man/man1"
-      yes no | sh ./install.sh
+      bash ./install.sh -d $out
 
       mkdir -p "$out/etc/bash_completion.d"
-      cp -v autojump.bash "$out/etc/bash_completion.d"
-
-      echo "Bash users: Make sure to source \`$out/etc/bash_completion.d/autojump.bash'"
-      echo "to get the \`j' and \`jumpstat' commands."
+      cp -v $out/etc/profile.d/autojump.bash "$out/etc/bash_completion.d"
+      mkdir -p $out/bin
+      ln -s $out/usr/local/bin/autojump $out/bin/j
 
       # FIXME: What's the right place for `autojump.zsh'?
     '';
 
     meta = {
       description = "Autojump, a `cd' command that learns";
-
       longDescription = ''
         One of the most used shell commands is “cd”.  A quick survey
         among my friends revealed that between 10 and 20% of all
@@ -56,9 +48,9 @@ let version = "4"; in
 
         Autojump supports tab-completion.
       '';
-
       homepage = http://wiki.github.com/joelthelion/autojump;
-
-      license = "GPLv3+";
+      license = stdenv.lib.licenses.gpl3;
+      platforms = stdenv.lib.platforms.all;
+      maintainers = [ stdenv.lib.maintainers.iElectric ];
     };
   }

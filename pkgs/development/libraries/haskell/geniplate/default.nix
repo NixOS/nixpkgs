@@ -9,6 +9,5 @@ cabal.mkDerivation (self: {
     description = "Use template Haskell to generate Uniplate-like functions";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

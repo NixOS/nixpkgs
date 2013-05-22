@@ -1048,6 +1048,19 @@ rec {
     };
   };
 
+  ConfigAutoConf = buildPerlPackage {
+    name = "Config-AutoConf-0.22";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AM/AMBS/Config/Config-AutoConf-0.22.tar.gz;
+      sha256 = "1zk2xfvxd3yn3299i13vn5wm1c7jxgr7z3h0yh603xs2h9cg79wc";
+    };
+    propagatedBuildInputs = [ CaptureTiny ];
+    meta = {
+      description = "A module to implement some of AutoConf macros in pure perl.";
+      license = "perl5";
+    };
+  };
+
   ConfigGeneral = buildPerlPackage {
     name = "Config-General-2.51";
     src = fetchurl {
@@ -1915,6 +1928,7 @@ rec {
     };
   };
 
+
   ExtUtilsCppGuess = buildPerlModule rec {
     name = "ExtUtils-CppGuess-0.07";
     src = fetchurl {
@@ -1922,6 +1936,18 @@ rec {
       sha256 = "1a77hxf2pa8ia9na72rijv1yhpn2bjrdsybwk2dj2l938pl3xn0w";
     };
     propagatedBuildInputs = [ CaptureTiny ];
+  };
+
+  ExtUtilsLibBuilder = buildPerlModule {
+    name = "ExtUtils-LibBuilder-0.04";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AM/AMBS/ExtUtils/ExtUtils-LibBuilder-0.04.tar.gz;
+      sha256 = "0j4rhx3w6nbvmxqjg6q09gm10nnpkcmqmh29cgxsfc9k14d8bb6w";
+    };
+    meta = {
+      description = "A tool to build C libraries.";
+      license = "perl";
+    };
   };
 
   ExtUtilsMakeMaker = buildPerlPackage rec{
@@ -1967,6 +1993,15 @@ rec {
       sha256 = "1msp79bdjzi59vignfz1cxwk5a2cjiahblvi0ka60pi8nnn0alrm";
     };
     buildInputs = [ Spiffy TestBase TestDifferences ];
+  };
+
+  FCGI = buildPerlPackage rec {
+    name = "FCGI-0.74";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/FCGI/${name}.tar.gz";
+      sha256 = "0m089q07kpsk8y8g2wmi3d8i1jzn5m5m00shs7vnf2lnvvv4d7pm";
+    };
+    buildInputs = [ ];
   };
 
   FileChangeNotify = buildPerlModule rec {
@@ -2981,6 +3016,14 @@ rec {
     };
   };
 
+  Log4Perl = buildPerlPackage rec {
+    name = "Log-Log4perl-1.41";
+    src = fetchurl {
+      url = "mirror://cpan/modules/by-module/Log/${name}.tar.gz";
+      sha256 = "0dajkgvlwsb4zdw6x3fil2n5phypq829dmqf8l9s88g9smms2a2i";
+    };
+  };
+
   LWP = buildPerlPackage {
     name = "libwww-perl-6.04";
     src = fetchurl {
@@ -3766,6 +3809,14 @@ rec {
       sha256 = "19g48kabj22v66jbf69q78xplhi7r1y2kdbddfwh4xy3g9k75rzg";
     };
     propagatedBuildInputs = [IOSocketSSL DigestHMAC];
+  };
+
+  NetSNMP = buildPerlPackage rec {
+    name = "Net-SNMP-v6.0.1";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DT/DTOWN/${name}.tar.gz";
+      sha256 = "0hdpn1cw52x8cw24m9ayzpf4rwarm0khygn1sv3wvwxkrg0pphql";
+    };
   };
 
   NetSSLeay = buildPerlPackage rec {
@@ -5141,6 +5192,19 @@ rec {
     };
   };
 
+  TextBibTeX = buildPerlModule {
+    name = "Text-BibTeX-0.66";
+    buildInputs = [ ConfigAutoConf ExtUtilsLibBuilder ];
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AM/AMBS/Text/Text-BibTeX-0.66.tar.gz;
+      sha256 = "0wymg190afqfhr5i9ws02jgnksk06h3w45770ynjjr1fs343b9j7";
+    };
+    meta = {
+      description = "Interface to read and parse BibTeX files";
+      license = "perl5";
+    };
+  };
+
   TextCSV = buildPerlPackage rec {
     name = "Text-CSV-1.10";
     src = fetchurl {
@@ -5300,10 +5364,10 @@ rec {
   };
 
   TimeHiRes = buildPerlPackage rec {
-    name = "Time-HiRes-1.9724";
+    name = "Time-HiRes-1.9725";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/Time/${name}.tar.gz";
-      sha256 = "0lrwfixr3qg8j4vkfax1z4gqiccq0v0jyvc7db40qpvi88655gjs";
+      sha256 = "0fr7zkc55kazcjxdkrcjgimic8xpk6imxkckdpjlggjpkggv76f0";
     };
   };
 

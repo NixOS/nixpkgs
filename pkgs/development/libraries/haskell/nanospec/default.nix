@@ -10,6 +10,5 @@ cabal.mkDerivation (self: {
     description = "A lightweight implementation of a subset of Hspec's API";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

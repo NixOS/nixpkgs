@@ -5,8 +5,8 @@
 
 cabal.mkDerivation (self: {
   pname = "hledger";
-  version = "0.20";
-  sha256 = "1jdh01y8jys1ha3qrmx509ka4wb1bgv28xz3rwz8aklz2nfzn4zb";
+  version = "0.20.0.1";
+  sha256 = "0sdsxdydpmnarxz94py8rlbcffpan7l299ff7j9gn4f42z3sarw7";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [

@@ -1141,8 +1141,6 @@ in
   mediastreamer = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   mediatomb = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   meld = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  mercurial = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
-  mercurialFull = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   merkaartor = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   mesa = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };
   meshlab = { type = "job"; systems = ["x86_64-linux"]; schedulingPriority = 4; };

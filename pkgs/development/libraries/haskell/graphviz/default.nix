@@ -14,15 +14,15 @@ cabal.mkDerivation (self: {
     colour dlist fgl filepath polyparse QuickCheck temporary text
     transformers wlPprintText
   ];
+  patchPhase = ''
+    sed -i -e 's|polyparse.*,|polyparse,|' graphviz.cabal
+  '';
   doCheck = false;
   meta = {
     homepage = "http://projects.haskell.org/graphviz/";
     description = "Bindings to Graphviz for graph visualisation";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

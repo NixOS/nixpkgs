@@ -2,8 +2,8 @@
 
 cabal.mkDerivation (self: {
   pname = "HaXml";
-  version = "1.23.3";
-  sha256 = "1gp3vjv8g0i9bd0sryfjarzp7n8ddfbrib68jzhqgjkqbyj2bs8g";
+  version = "1.24";
+  sha256 = "18kvavqa84k2121ppxngn39fjz4w63chngb3255w1fhdz13v3ydn";
   isLibrary = true;
   isExecutable = true;
   buildDepends = [ filepath polyparse random ];
@@ -12,9 +12,6 @@ cabal.mkDerivation (self: {
     description = "Utilities for manipulating XML documents";
     license = "LGPL";
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

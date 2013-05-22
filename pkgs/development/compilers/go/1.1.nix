@@ -7,11 +7,11 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "go-1.1rc1";
+  name = "go-1.1";
 
   src = fetchurl {
-    url = http://go.googlecode.com/files/go1.1rc1.src.tar.gz;
-    sha1 = "c999c36e7bb5c9ef05d309b0bb4275feb62c44e3";
+    url = http://go.googlecode.com/files/go1.1.src.tar.gz;
+    sha1 = "a464704ebbbdd552a39b5f9429b059c117d165b3";
   };
 
   buildInputs = [ bison glibc bash makeWrapper ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     sed -i 's,/bin/pwd,'"`type -P pwd`", src/pkg/os/os_test.go
     # Disable the hostname test
     sed -i '/TestHostname/areturn' src/pkg/os/os_test.go
-    # Disable a failing icmp test
+    # Disable a failing icmp test (maybe because not being root?)
     sed -i '/ip[46]:.*icmp.*nil/d' src/pkg/net/ipraw_test.go
   '';
 

@@ -84,13 +84,37 @@ let self = {
     ];
   };
 
-  "async" = self."async-0.1.22";
+  "assert" = self."assert-0.4.9";
+  
+  "assert-0.4.9" = self.buildNodePackage rec {
+    name = "assert-0.4.9";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/assert/-/${name}.tgz";
+      sha256 = "1sxyba88p08956havkxc5m9x5v5ybcswgasgfcix31kjbww14slp";
+    };
+    deps = [
+      self."util"
+    ];
+  };
+
+  "async" = self."async-0.2.8";
 
   "async-0.1.22" = self.buildNodePackage rec {
     name = "async-0.1.22";
     src = fetchurl {
       url = "http://registry.npmjs.org/async/-/${name}.tgz";
       sha256 = "6fd2750cd519a754b0e32ef3423e64768055129e00a95d9297005bda29fdef18";
+    };
+    deps = [
+
+    ];
+  };
+  
+  "async-0.2.8" = self.buildNodePackage rec {
+    name = "async-0.2.8";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/async/-/${name}.tgz";
+      sha256 = "0ii3pqb70wb6nws35p1ahc40dhmj7yp85f35j8xiip473gpwbms5";
     };
     deps = [
 
@@ -193,6 +217,19 @@ let self = {
     ];
   };
 
+  "buffer-crc32" = self."buffer-crc32-0.2.1";
+
+  "buffer-crc32-0.2.1" = self.buildNodePackage rec {
+    name = "buffer-crc32-0.2.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/buffer-crc32/-/${name}.tgz";
+      sha256 = "b6ea96d57411e37c15e18fb8ca600656399912ce16355f9af3c662f765507f01";
+    };
+    deps = [
+
+    ];
+  };
+
   "buffertools" = self."buffertools-~1";
 
   "buffertools-~1" = self.buildNodePackage rec {
@@ -232,7 +269,18 @@ let self = {
     ];
   };
 
-  "bytes" = self."bytes-0.1.0";
+  "bytes" = self."bytes-0.2.0";
+
+  "bytes-0.2.0" = self.buildNodePackage rec {
+    name = "bytes-0.2.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/bytes/-/${name}.tgz";
+      sha256 = "e70bd4dccc886a5cf1c925092b4acd7a262a9da3e1b51ccde10a3fcd0a328465";
+    };
+    deps = [
+
+    ];
+  };
 
   "bytes-0.1.0" = self.buildNodePackage rec {
     name = "bytes-0.1.0";
@@ -322,7 +370,27 @@ let self = {
     ];
   };
 
-  "connect" = self."connect-2.4.4";
+  "connect" = self."connect-2.7.7";
+
+  "connect-2.7.7" = self.buildNodePackage rec {
+    name = "connect-2.7.7";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/connect/-/${name}.tgz";
+      sha256 = "e4cf5b03c051d9b4b0e27a76ec76da0b8ca38d0e4ce1d8ba8c4c3b3caac7b032";
+    };
+    deps = [
+      self."qs-0.6.1"
+      self."formidable-1.0.13"
+      self."cookie-signature-1.0.1"
+      self."buffer-crc32-0.2.1"
+      self."cookie-0.0.5"
+      self."send-0.1.0"
+      self."bytes-0.2.0"
+      self."fresh-0.1.0"
+      self."pause-0.0.1"
+      self."debug"
+    ];
+  };
 
   "connect-~1.7" = self.buildNodePackage rec {
     name = "connect-1.7.3";
@@ -355,13 +423,37 @@ let self = {
     ];
   };
 
-  "cookie" = self."cookie-0.0.4";
+  "cookie" = self."cookie-0.0.5";
+
+  "cookie-0.0.5" = self.buildNodePackage rec {
+    name = "cookie-0.0.5";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/cookie/-/${name}.tgz";
+      sha256 = "17938b21dcd85f09994b85484abb5aeddc4e92c61d1b599b764bbaaa7ad6adee";
+    };
+    deps = [
+
+    ];
+  };
 
   "cookie-0.0.4" = self.buildNodePackage rec {
     name = "cookie-0.0.4";
     src = fetchurl {
       url = "http://registry.npmjs.org/cookie/-/${name}.tgz";
       sha256 = "a917477c448a6a91ef73d550d8d8a6d4864e8fbd247b6f73baaca66c9bfc3b0b";
+    };
+    deps = [
+
+    ];
+  };
+
+  "cookie-signature" = self."cookie-signature-1.0.1";
+
+  "cookie-signature-1.0.1" = self.buildNodePackage rec {
+    name = "cookie-signature-1.0.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/cookie-signature/-/${name}.tgz";
+      sha256 = "e2ea4f290fdcfe82d8fb76991fee4106d4ae1f5d5a2f8b8d91442e047c538c8e";
     };
     deps = [
 
@@ -434,17 +526,29 @@ let self = {
   "debug" = self."debug-*";
 
   "debug-*" = self.buildNodePackage rec {
-    name = "debug-0.7.0";
+    name = "debug-0.7.2";
     src = fetchurl {
       url = "http://registry.npmjs.org/debug/-/${name}.tgz";
-      sha256 = "113c041fb01fd8db2a1b83320529849ccbb23794a4c3799a0154312de2a5d618";
+      sha256 = "f9142856b1c2652a11e50f2aca068edbad7598f50d9e6d003b8ee85b2a333d63";
     };
     deps = [
 
     ];
   };
 
+
   "diff" = self."diff-~1.0.3";
+
+  "diff-~1.0.2" = self.buildNodePackage rec {
+    name = "diff-1.0.2";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/diff/-/${name}.tgz";
+      sha256 = "0i9hpssk0sx3a7610qr58cm9bx1fr95dvjk4wsklgi5zyb1xiqax";
+    };
+    deps = [
+
+    ];
+  };
 
   "diff-~1.0.3" = self.buildNodePackage rec {
     name = "diff-1.0.3";
@@ -483,6 +587,53 @@ let self = {
     ];
   };
 
+  "events.node" = self."events.node-0.4.9";
+  
+  "events.node-0.4.9" = self.buildNodePackage rec {
+    name = "events.node-0.4.9";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/events.node/-/${name}.tgz";
+      sha256 = "1dphp42qir4f3j68lx3403870rc3iacfsm0ppzi1cgx3lzxgknmf";
+    };
+  };
+
+  "express" = self."express-*";
+
+  "express-*" = self.buildNodePackage rec {
+    name = "express-3.2.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/express/-/${name}.tgz";
+      sha256 = "4ca52cccef971707a368f98c09baced9e06f4013b81c0cbcbf2c57c48982c428";
+    };
+    deps = [
+      self."connect-2.7.7"
+      self."commander-~0.6.1"
+      self."range-parser-0.0.4"
+      self."mkdirp-0.3.4"
+      self."cookie-0.0.5"
+      self."buffer-crc32-0.2.1"
+      self."fresh-0.1.0"
+      self."methods-0.0.1"
+      self."send-0.1.0"
+      self."cookie-signature-1.0.1"
+      self."debug"
+      self."qs-0.6.1"
+    ];
+  };
+
+  "extend" = self."extend-*";
+
+  "extend-*" = self.buildNodePackage rec {
+    name = "extend-1.1.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/extend/-/${name}.tgz";
+      sha256 = "0b27709829110f2e84926ebe3494b82df6e79ad49a618ad3444e4edf62b57a57";
+    };
+    deps = [
+
+    ];
+  };
+
   "eyes" = self."eyes->=0.1.6";
 
   "eyes->=0.1.6" = self.buildNodePackage rec {
@@ -509,7 +660,18 @@ let self = {
     ];
   };
 
-  "formidable" = self."formidable-1.0.11";
+  "formidable" = self."formidable-1.0.13";
+
+  "formidable-1.0.13" = self.buildNodePackage rec {
+    name = "formidable-1.0.13";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/formidable/-/${name}.tgz";
+      sha256 = "c3c7c6ecdd4b1ad9ec9b1c273d8dd1db2bc12f9a699c233d3885fcded58ceec6";
+    };
+    deps = [
+
+    ];
+  };
 
   "formidable-1.0.11" = self.buildNodePackage rec {
     name = "formidable-1.0.11";
@@ -547,7 +709,7 @@ let self = {
     };
     deps = [
       self."rimraf-2"
-      self."mkdirp-0.3"
+      self."mkdirp-0.3.4"
       self."graceful-fs-~1.1.2"
       self."inherits-~1.0.0"
     ];
@@ -582,6 +744,16 @@ let self = {
     deps = [
 
     ];
+  };
+  
+  "growl" = self."growl-1.7.0";
+  
+  "growl-1.7.0" = self.buildNodePackage rec {
+    name = "growl-1.7.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/growl/-/${name}.tgz";
+      sha256 = "1kzzygdxr9h6jl74iqg8n1z6kvhpi8wjmic7vdnsdm9gmvnyk9jj";
+    };
   };
 
   "hat" = self."hat-0.0.3";
@@ -681,6 +853,30 @@ let self = {
     ];
   };
 
+  "jade" = self."jade-0.26.3";
+  
+  "jade-0.26.3" = self.buildNodePackage rec {
+    name = "jade-0.26.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/jade/-/${name}.tgz";
+      sha256 = "02sdl7dkpnbag40gl9gii1igyd9cpw8717dvyy3njaqrxf3l4cga";
+    };
+    deps = [
+      self."commander-~0.6.1"
+      self."mkdirp-0.3.0"
+    ];
+  };
+
+  "jayschema" = self."jayschema-*";
+  
+  "jayschema-*" = self.buildNodePackage rec {
+    name = "jayschema-0.1.5";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/jayschema/-/${name}.tgz";
+      sha256 = "03f8ymrfc03qhs48nm9zibgi8axbjkqa4bfl44iqhkdjy217vqb6";
+    };
+  };
+
   "jsontool" = self."jsontool-*";
 
   "jsontool-*" = self.buildNodePackage rec {
@@ -744,6 +940,19 @@ let self = {
     ];
   };
 
+  "methods" = self."methods-0.0.1";
+
+  "methods-0.0.1" = self.buildNodePackage rec {
+    name = "methods-0.0.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/methods/-/${name}.tgz";
+      sha256 = "2f7e32954dff5991dd8220e8f5dcdd32aeec5ec56ce9f7235872444af51b3adb";
+    };
+    deps = [
+
+    ];
+  };
+
   "mime" = self."mime-*";
 
   "mime->= 0.0.1" = self."mime-*";
@@ -794,9 +1003,31 @@ let self = {
     ];
   };
 
-  "mkdirp" = self."mkdirp-0.3";
+  "mkdirp" = self."mkdirp-0.3.4";
 
-  "mkdirp-0.3" = self.buildNodePackage rec {
+  "mkdirp-0.3.0" = self.buildNodePackage rec {
+    name = "mkdirp-0.3.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/mkdirp/-/${name}.tgz";
+      sha256 = "0zf2yxajyv94nydky2g8229pn544yz2z4ml087l6m5wwm3ind0vh";
+    };
+    deps = [
+
+    ];
+  };
+
+  "mkdirp-0.3.3" = self.buildNodePackage rec {
+    name = "mkdirp-0.3.3";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/mkdirp/-/${name}.tgz";
+      sha256 = "1ybxjmcj45s90izizl2v7i19vbzayjanpqv7nz7w68kmbf2i4ymn";
+    };
+    deps = [
+
+    ];
+  };
+
+  "mkdirp-0.3.4" = self.buildNodePackage rec {
     name = "mkdirp-0.3.4";
     src = fetchurl {
       url = "http://registry.npmjs.org/mkdirp/-/${name}.tgz";
@@ -804,6 +1035,25 @@ let self = {
     };
     deps = [
 
+    ];
+  };
+
+  "mocha" = self."mocha-1.9.0";
+  
+  "mocha-1.9.0" = self.buildNodePackage rec {
+    name = "mocha-1.9.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/mocha/-/${name}.tgz";
+      sha256 = "1l175lzff4h4skf98xq259jr0dv3gb3pygbpdbkb2n9jd1pd6xih";
+    };
+    deps = [
+      self."commander-~0.6.1"
+      self."growl-1.7.0"
+      self."diff-~1.0.2"
+      self."debug"
+      self."mkdirp-0.3.3"
+      self."ms-0.3.0"
+      self."jade-0.26.3"
     ];
   };
 
@@ -831,6 +1081,16 @@ let self = {
     deps = [
 
     ];
+  };
+
+  "ms" = self."ms-0.3.0";
+  
+  "ms-0.3.0" = self.buildNodePackage rec {
+    name = "ms-0.3.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/ms/-/${name}.tgz";
+      sha256 = "1wh7pqm55vf7l2b10rzn4zj1j4f0wba873qilyzbpnm6hq0snbpp";
+    };
   };
 
   "nijs" = self."nijs-0.0.5";
@@ -873,7 +1133,7 @@ let self = {
       self."graceful-fs-1"
       self."fstream-~0.1.13"
       self."minimatch-0.2"
-      self."mkdirp-0.3"
+      self."mkdirp-0.3.4"
       self."nopt-2"
       self."npmlog-0"
       self."osenv-0"
@@ -1041,8 +1301,8 @@ let self = {
     ];
   };
 
-  "qs" = self."qs-0.5.0";
-  "qs->= 0.3.1" = self."qs-0.5.0";
+  "qs" = self."qs-0.6.1";
+  "qs->= 0.3.1" = self."qs-0.6.1";
 
   "qs-0.4.2" = self.buildNodePackage rec {
     name = "qs-0.4.2";
@@ -1060,6 +1320,17 @@ let self = {
     src = fetchurl {
       url = "http://registry.npmjs.org/qs/-/${name}.tgz";
       sha256 = "229a99fc833d50307833a13d898f3de137f2823593220273295e7e1dc81ab993";
+    };
+    deps = [
+
+    ];
+  };
+
+  "qs-0.6.1" = self.buildNodePackage rec {
+    name = "qs-0.6.1";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/qs/-/${name}.tgz";
+      sha256 = "afb476cec9b40a7801fe21f4056bfffb2270e126d7136f955c810fa7181f972a";
     };
     deps = [
 
@@ -1251,7 +1522,21 @@ let self = {
     ];
   };
 
-  "send" = self."send-0.0.4";
+  "send" = self."send-0.1.0";
+
+  "send-0.1.0" = self.buildNodePackage rec {
+    name = "send-0.1.0";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/send/-/${name}.tgz";
+      sha256 = "28b5a6ec41b5072521eb792cc901b92cdbb6b743c578d7008727dbbd3eb717de";
+    };
+    deps = [
+      self."debug"
+      self."mime-1.2.6"
+      self."fresh-0.1.0"
+      self."range-parser-0.0.4"
+    ];
+  };
 
   "send-0.0.4" = self.buildNodePackage rec {
     name = "send-0.0.4";
@@ -1486,17 +1771,30 @@ let self = {
     ];
   };
 
-  "underscore" = self."underscore-1.4.2";
-  "underscore->=1.3.1" = self."underscore-1.4.2";
+  "underscore" = self."underscore-*";
+  "underscore->=1.3.1" = self."underscore-*";
 
-  "underscore-1.4.2" = self.buildNodePackage rec {
-    name = "underscore-1.4.2";
+  "underscore-*" = self.buildNodePackage rec {
+    name = "underscore-1.4.4";
     src = fetchurl {
       url = "http://registry.npmjs.org/underscore/-/${name}.tgz";
-      sha256 = "329ab22ba9b37be4a0c694ca21b9ed85b99256a45c2e0cf3624c4719443366d6";
+      sha256 = "a848a28193850d58d7b98249d70844bc7f35a7d8b6b5ed75e08e829aa6e763d3";
     };
     deps = [
 
+    ];
+  };
+
+  "util" = self."util-0.4.9";
+  
+  "util-0.4.9" = self.buildNodePackage rec {
+    name = "util-0.4.9";
+    src = fetchurl {
+      url = "http://registry.npmjs.org/util/-/${name}.tgz";
+      sha256 = "1rchmv7d29j5wc5m2jqk170xgn50y71hpwhy5ib515klkrnc5v1h";
+    };
+    deps = [
+      self."events.node"
     ];
   };
 

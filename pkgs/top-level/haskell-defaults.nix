@@ -22,6 +22,13 @@
       extensibleExceptions = self.extensibleExceptions_0_1_1_4;
     };
 
+  ghc763Prefs =
+    self : self.haskellPlatformArgs_2013_2_0_0 self // {
+      haskellPlatform = self.haskellPlatform_2013_2_0_0;
+      binary = null; # now a core package
+      extensibleExceptions = self.extensibleExceptions_0_1_1_4;
+    };
+
   ghc742Prefs =
     self : self.haskellPlatformArgs_2012_4_0_0 self // {
       haskellPlatform = self.haskellPlatform_2012_4_0_0;
@@ -279,19 +286,19 @@
   packages_ghc761 =
     packages { ghcPath = ../development/compilers/ghc/7.6.1.nix;
                ghcBinary = ghc704Binary;
-               prefFun = ghcHEADPrefs;
+               prefFun = ghc763Prefs;
              };
 
   packages_ghc762 =
     packages { ghcPath = ../development/compilers/ghc/7.6.2.nix;
                ghcBinary = ghc704Binary;
-               prefFun = ghcHEADPrefs;
+               prefFun = ghc763Prefs;
              };
 
   packages_ghc763 =
     packages { ghcPath = ../development/compilers/ghc/7.6.3.nix;
                ghcBinary = ghc704Binary;
-               prefFun = ghcHEADPrefs;
+               prefFun = ghc763Prefs;
              };
 
   # Reasonably current HEAD snapshot. Should *always* be lowPrio.

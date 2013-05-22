@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
     mkdir -p $out/etc/bash_completion.d/
     cp contrib/tig-completion.bash $out/etc/bash_completion.d/
   '';
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "http://jonas.nitro.dk/tig/";
     description = "Tig is a git repository browser that additionally can act as a pager for output from various git commands";
-    maintainers = [ stdenv.lib.maintainers.garbas ];
-    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ maintainers.garbas maintainers.bjornfor ];
+    license = licenses.gpl2;
   };
 }

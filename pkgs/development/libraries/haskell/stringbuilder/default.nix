@@ -9,6 +9,5 @@ cabal.mkDerivation (self: {
     description = "A writer monad for multi-line string literals";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

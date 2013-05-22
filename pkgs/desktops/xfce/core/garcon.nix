@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   p_name  = "garcon";
   ver_maj = "0.2";
-  ver_min = "0";
+  ver_min = "1";
 
   src = fetchurl {
     url = "mirror://xfce/src/xfce/${p_name}/${ver_maj}/${name}.tar.bz2";
-    sha256 = "0v7pkvxcayi86z4f173z5l7w270f3g369sa88z59w0y0p7ns7ph2";
+    sha256 = "1xq14wayk07cil04yhrdkjhacz9dbldcl9i59sbrgrgznaw49dj8";
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
