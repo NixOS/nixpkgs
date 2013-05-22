@@ -3,7 +3,8 @@
 , libdrm, xorg, wayland, udev, llvm, libffi
 , libvdpau
 , enableTextureFloats ? false # Texture floats are patented, see docs/patents.txt
-, enableR600LlvmCompiler ? false
+, enableR600LlvmCompiler ? false # we would need currently unreleased LLVM or patches
+, enableExtraFeatures ? false # add ~15 MB to mesa_drivers
 }:
 
 if ! stdenv.lib.lists.elem stdenv.system stdenv.lib.platforms.mesaPlatforms then
@@ -12,18 +13,17 @@ else
 
 /** Packaging design:
   - The basic mesa ($out) contains headers and libraries (GLU is in mesa_glu now).
-    This or the mesa attribute (which also contains GLU) are small (< 3 MB, mostly headers)
+    This or the mesa attribute (which also contains GLU) are small (~ 2.5 MB, mostly headers)
     and are designed to be the buildInput of other packages.
   - DRI and EGL drivers are compiled into $drivers output,
-    which is bigger (~27 MB) and depends on LLVM (~80 MB).
+    which is bigger (~13 MB) and depends on LLVM (~80 MB).
     These should be searched at runtime in /run/current-system/sw/lib/*
     and so are kind-of impure (given by NixOS).
     (I suppose on non-NixOS one would create the appropriate symlinks from there.)
 */
 
 let
-  version = "9.1.2";
-  extraFeatures = true; # probably doesn't work with false yet
+  version = "9.1.3";
   driverLink = "/run/opengl-driver" + stdenv.lib.optionalString stdenv.isi686 "-32";
 in
 stdenv.mkDerivation {
@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://ftp.freedesktop.org/pub/mesa/${version}/MesaLib-${version}.tar.bz2";
-    sha256="1ns366armqmp2bxj1l7fff95v22b5z9mnkyykbdj81lhg9gi3586"; # 9.1.2
+    sha256="0rnpaambxv5cd6kbfyvv4b8x2rw1xj13a67xbkzmndfh08iaqpcd";
   };
 
   prePatch = "patchShebangs .";
@@ -49,7 +49,6 @@ stdenv.mkDerivation {
   '';
 
   outputs = ["out" "drivers"];
-  preferLocalBuild = true; # see https://github.com/NixOS/nix/issues/118
 
   preConfigure = "./autogen.sh";
 
@@ -63,6 +62,7 @@ stdenv.mkDerivation {
     "--enable-shared-glapi" "--enable-shared-gallium"
     "--enable-driglx-direct" # seems enabled anyway
     "--enable-gallium-llvm" "--with-llvm-shared-libs"
+    "--enable-xa" # used in vmware driver
 
     "--with-dri-drivers=i965,r200,radeon"
     "--with-gallium-drivers=i915,nouveau,r300,r600,svga,swrast" # radeonsi complains about R600 missing in LLVM
@@ -70,12 +70,11 @@ stdenv.mkDerivation {
   ]
     ++ optional enableR600LlvmCompiler "--enable-r600-llvm-compiler" # complains about R600 missing in LLVM
     ++ optional enableTextureFloats "--enable-texture-float"
-    ++ optionals extraFeatures [
+    ++ optionals enableExtraFeatures [
       "--enable-gles1" "--enable-gles2"
-      "--enable-xa"
       "--enable-osmesa"
       "--enable-openvg" "--enable-gallium-egl" # not needed for EGL in Gallium, but OpenVG might be useful
-      #"--enable-xvmc" # tests segfault with 9.1.{1,2}
+      #"--enable-xvmc" # tests segfault with 9.1.{1,2,3}
       "--enable-vdpau"
       #"--enable-opencl" # ToDo: opencl seems to need libclc for clover
     ];
@@ -86,35 +85,43 @@ stdenv.mkDerivation {
     autoconf automake libtool intltool expat libxml2Python udev llvm
     libdrm libXxf86vm libXfixes libXdamage glproto dri2proto libX11 libXext libxcb libXt
     libffi wayland
-  ] ++ stdenv.lib.optionals extraFeatures [ /*libXvMC*/ libvdpau ];
+  ] ++ stdenv.lib.optionals enableExtraFeatures [ /*libXvMC*/ libvdpau ];
 
   enableParallelBuilding = true;
   doCheck = true;
 
   # move gallium-related stuff to $drivers, so $out doesn't depend on LLVM
   # ToDo: probably not all .la files are completely fixed, but it shouldn't matter
-  postInstall = ''
+  postInstall = with stdenv.lib; ''
     mv -t "$drivers/lib/" \
-      $out/lib/libdricore* \
-      $out/lib/libgallium.* \
-      $out/lib/gallium-pipe \
-      $out/lib/gbm \
-      $out/lib/libxatracker* \
+  '' + optionalString enableExtraFeatures ''
       `#$out/lib/libXvMC*` \
       $out/lib/vdpau \
-      $out/lib/libOSMesa*
+      $out/lib/libOSMesa* \
+      $out/lib/gbm $out/lib/libgbm* \
+      $out/lib/gallium-pipe \
+  '' + ''
+      $out/lib/libdricore* \
+      $out/lib/libgallium* \
+      $out/lib/libxatracker*
+
   '' + /* now fix references in .la files */ ''
     sed "/^libdir=/s,$out,$drivers," -i \
-      $drivers/lib/gallium-pipe/*.la \
-      $drivers/lib/libgallium.la \
-      $drivers/lib/libdricore*.la \
+  '' + optionalString enableExtraFeatures ''
       `#$drivers/lib/libXvMC*.la` \
       $drivers/lib/vdpau/*.la \
-      $drivers/lib/libOSMesa*.la
+      $drivers/lib/libOSMesa*.la \
+      $drivers/lib/gallium-pipe/*.la \
+  '' + ''
+      $drivers/lib/libgallium.la \
+      $drivers/lib/libdricore*.la
+
     sed "s,$out\(/lib/\(libdricore[0-9\.]*\|libgallium\).la\),$drivers\1,g" \
       -i $drivers/lib/*.la $drivers/lib/*/*.la
+
   '' + /* work around bug #529, but maybe $drivers should also be patchelf-ed */ ''
     find $drivers/ -type f -executable -print0 | xargs -0 strip -S || true
+
   '' + /* add RPATH so the drivers can find the moved libgallium and libdricore9 */ ''
     for lib in $drivers/lib/*.so* $drivers/lib/*/*.so*; do
       if [[ ! -L "$lib" ]]; then
