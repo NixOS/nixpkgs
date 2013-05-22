@@ -7207,6 +7207,8 @@ let
     inherit (pkgs.gnome) libart_lgpl libgnomeui;
   };
 
+  diffuse = callPackage ../applications/version-management/diffuse { };
+
   distrho = callPackage ../applications/audio/distrho {};
 
   djvulibre = callPackage ../applications/misc/djvulibre { };
