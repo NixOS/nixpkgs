@@ -707,14 +707,20 @@ fixupPhase() {
     fi
 
     if [ -z "$dontGzipMan" ]; then
+        echo "gzipping man pages"
         GLOBIGNORE=.:..:*.gz:*.bz2
-        for f in $out/share/man/*/* $out/share/man/*/*/*; do
-            if [ -f $f ]; then
-                if gzip -c $f > $f.gz; then
-                    rm $f
+        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+            if [ -f "$f" -a ! -L "$f" ]; then
+                if gzip -c "$f" > "$f".gz; then
+                    rm "$f"
                 else
-                    rm $f.gz
+                    rm "$f".gz
                 fi
+            fi
+        done
+        for f in "$out"/share/man/*/* "$out"/share/man/*/*/*; do
+            if [ -L "$f" -a -f `readlink -f "$f"`.gz ]; then
+              ln -sf `readlink "$f"`.gz "$f"
             fi
         done
         unset GLOBIGNORE
