@@ -21,5 +21,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = http://pamsshagentauth.sourceforge.net/;
     description = "PAM module for authentication through the SSH agent";
+    maintainers = [ stdenv.lib.maintainers.eelco ];
+    platforms = stdenv.lib.maintainers.linux;
   };
 }
