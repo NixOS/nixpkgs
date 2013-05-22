@@ -7933,6 +7933,8 @@ let
     fftw = fftwSinglePrec;
   };
 
+  photivo = callPackage ../applications/graphics/photivo { };
+
   wavesurfer = callPackage ../applications/misc/audio/wavesurfer { };
 
   wireshark = callPackage ../applications/networking/sniffers/wireshark { };
@@ -8095,6 +8097,7 @@ let
   };
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
+  graphicsmagick_q16 = callPackage ../applications/graphics/graphicsmagick { quantumdepth = 16; };
 
   graphicsmagick137 = callPackage ../applications/graphics/graphicsmagick/1.3.7.nix {
     libpng = libpng12;
