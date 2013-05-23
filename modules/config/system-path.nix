@@ -41,7 +41,6 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
-      pkgs.ntp
       pkgs.openssh
       pkgs.pciutils
       pkgs.perl
