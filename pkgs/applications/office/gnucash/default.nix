@@ -1,7 +1,6 @@
 { fetchurl, stdenv, pkgconfig, libxml2, gconf, glib, gtk, libgnomeui, libofx
 , libgtkhtml, gtkhtml, libgnomeprint, goffice, enchant, gettext, libbonoboui
-, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper, libglade
-, libgsf, libart_lgpl
+, intltool, perl, guile, slibGuile, swig, isocodes, bzip2, makeWrapper
 }:
 
 /* If you experience GConf errors when running GnuCash on NixOS, see
@@ -20,11 +19,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig libxml2 gconf glib gtk libgnomeui libgtkhtml gtkhtml
     libgnomeprint goffice enchant gettext intltool perl guile slibGuile
-    swig isocodes bzip2 makeWrapper libofx libglade libgsf libart_lgpl
+    swig isocodes bzip2 makeWrapper libofx
   ];
-
-  # fix a problem with new intltool versions, taken from Gentoo
-  patchPhase = "patch -p3 < ${./potfiles-skip.patch}";
 
   configureFlags = "CFLAGS=-O3 CXXFLAGS=-O3 --disable-dbi --enable-ofx";
 

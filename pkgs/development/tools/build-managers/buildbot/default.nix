@@ -49,7 +49,7 @@ buildPythonPackage (rec {
     cp docs/buildbot.1 "$out/share/man/man1"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://buildbot.net/;
 
     license = "GPLv2+";
@@ -80,7 +80,7 @@ buildPythonPackage (rec {
          in code.
       '';
 
-    maintainers = [ stdenv.lib.maintainers.ludo ];
-    platforms = stdenv.lib.platforms.all;
+    maintainers = with maintainers; [ ludo bjornfor ];
+    platforms = platforms.all;
   };
 })

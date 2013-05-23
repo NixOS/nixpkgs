@@ -26,10 +26,12 @@ stdenv.mkDerivation {
       substituteInPlace src/Makefile --replace /usr /
     '';
 
-  postInstall = stdenv.lib.optionalString withoutInitTools
+  postInstall = ''
+    mv $out/sbin/killall5 $out/bin
+    ln -sf killall5 $out/bin/pidof
+  ''
+    + stdenv.lib.optionalString withoutInitTools
     ''
-      mv $out/sbin/killall5 $out/bin
-      ln -sf killall5 $out/bin/pidof
       shopt -s extglob
       rm -rf $out/sbin/!(sulogin)
       rm -rf $out/include

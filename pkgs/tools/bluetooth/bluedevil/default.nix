@@ -1,15 +1,16 @@
-{ stdenv, fetchgit, cmake, automoc4, kdelibs, libbluedevil, shared_mime_info }:
+{ stdenv, fetchurl, cmake, automoc4, kdelibs, libbluedevil, shared_mime_info, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "bluedevil-20110303";
+  name = "${pname}-${version}";
+  pname = "bluedevil";
+  version = "1.3.1";
 
-  src = fetchgit {
-    url = git://anongit.kde.org/bluedevil.git;
-    sha256 = "1chx3cx43wic1sgzc651vxxiy9khbp9hcm7n40nmhnj9czfcg46q";
-    rev = "7e513008aa6430d3b8d0052b14201d1d813c80b9";
+  src = fetchurl {
+    url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.bz2";
+    sha256 = "0di3hwgqzhx51x172wnbccf9f84cg69mab83qkcif0v3gv3pzy4f";
   };
 
-  buildInputs = [ cmake kdelibs libbluedevil shared_mime_info automoc4 ];
+  buildInputs = [ cmake kdelibs libbluedevil shared_mime_info automoc4 gettext ];
 
   meta = with stdenv.lib; {
     description = "Bluetooth manager for KDE";

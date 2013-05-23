@@ -1,33 +1,29 @@
 { postscriptSupport ? true
 , pdfSupport ? true
 , pngSupport ? true
-, xcbSupport ? true # no longer experimental since 1.12
-, glSupport ? false
+, xcbSupport ? false
 , gobjectSupport ? true, glib
 , stdenv, fetchurl, pkgconfig, x11, fontconfig, freetype, xlibs
-, expat
-, zlib, libpng, pixman, libxcb ? null, xcbutil ? null, mesa ? null
+, zlib, libpng, pixman, libxcb ? null, xcbutil ? null
 , libiconvOrEmpty, libintlOrEmpty
 }:
 
 assert postscriptSupport -> zlib != null;
 assert pngSupport -> libpng != null;
 assert xcbSupport -> libxcb != null && xcbutil != null;
-assert glSupport -> mesa != null;
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.12.14";
+  name = "cairo-1.12.4";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha256 = "04xcykglff58ygs0dkrmmnqljmpjwp2qgwcz8sijqkdpz7ix3l4n";
+    sha1 = "f4158981ed01e73c94fb8072074b17feee61a68b";
   };
 
-  buildInputs = with xlibs;
-    [ pkgconfig x11 fontconfig expat ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) libXrender
+  buildInputs =
+    [ pkgconfig x11 fontconfig ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin) xlibs.libXrender
     ++ stdenv.lib.optionals xcbSupport [ libxcb xcbutil ]
-    ++ stdenv.lib.optionals glSupport [ mesa ]
     ++ libintlOrEmpty
     ++ libiconvOrEmpty;
 
@@ -40,12 +36,17 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-tee" ]
     ++ stdenv.lib.optional xcbSupport "--enable-xcb"
-    ++ stdenv.lib.optional glSupport "--enable-gl"
     ++ stdenv.lib.optional pdfSupport "--enable-pdf";
 
-  preConfigure =
+  preConfigure = ''
+    # Work around broken `Requires.private' that prevents Freetype
+    # `-I' flags to be propagated.
+    sed -i "src/cairo.pc.in" \
+        -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype}/include/freetype2 -I${freetype}/include|g'
+  ''
+
   # On FreeBSD, `-ldl' doesn't exist.
-    (stdenv.lib.optionalString stdenv.isFreeBSD
+  + (stdenv.lib.optionalString stdenv.isFreeBSD
        '' for i in "util/"*"/Makefile.in" boilerplate/Makefile.in
           do
             cat "$i" | sed -es/-ldl//g > t

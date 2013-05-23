@@ -35,7 +35,7 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   xfwm4           = callPackage ./core/xfwm4.nix { };
 
   xfce4_appfinder = callPackage ./core/xfce4-appfinder.nix { };
-  xfce4_dev_tools = callPackage ./core/xfce4-dev-tools.nix { }; # only if autotools are needed
+
 
   #### APPLICATIONS         from "mirror://xfce/src/apps/${p_name}/${ver_maj}/${name}.tar.bz2"
 

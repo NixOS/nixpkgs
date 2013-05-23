@@ -4,7 +4,9 @@ dontPatchELF=1 # must keep libXv, $out in RPATH
 
 
 unpackFile() {
-    sh $src -x
+    skip=$(sed 's/^skip=//; t; d' $src)
+    tail -n +$skip $src | xz -d | tar xvf -
+    sourceRoot=.
 }
 
 

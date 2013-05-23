@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     libxml2 mysql taglib taglib_extras loudmouth kdelibs automoc4 phonon strigi
     soprano qca2 libmtp liblastfm libgpod pkgconfig qjson ffmpeg libofa ];
 
+  cmakeFlags = "-DKDE4_BUILD_TESTS=OFF";
+
   postInstall = ''
     mkdir -p $out/nix-support
     echo ${qtscriptgenerator} > $out/nix-support/propagated-user-env-packages

@@ -1,9 +1,9 @@
 { pkgs
-, linuxKernel ? pkgs.linux
+, linuxKernel ? pkgs.linux_3_9
 , img ? "bzImage"
 , rootModules ?
     [ "cifs" "virtio_net" "virtio_pci" "virtio_blk" "virtio_balloon" "nls_utf8" "ext2" "ext3"
-      "ext4" "unix" "hmac" "md4" "ecb" "des_generic"
+      "ext4" "unix" "hmac" "md4" "ecb" "des_generic" "sha256"
     ]
 }:
 
@@ -123,14 +123,14 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
-    mount -t cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none
+    mount -t cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none,sec=ntlm
 
     mkdir -p /fs/tmp
     mount -t tmpfs -o "mode=755" none /fs/tmp
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t cifs //10.0.2.4/xchg /fs/tmp/xchg -o guest,sec=none
+    mount -t cifs //10.0.2.4/xchg /fs/tmp/xchg -o guest,sec=none,sec=ntlm
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
@@ -445,7 +445,7 @@ rec {
      etc. from the specified filesystem image, which typically is a
      filesystem containing a non-NixOS Linux distribution. */
 
-  runInLinuxImage = attrs: runInLinuxVM (attrs // {
+  runInLinuxImage = drv: runInLinuxVM (lib.overrideDerivation drv (attrs: {
     mountDisk = true;
 
     /* Mount `image' as the root FS, but use a temporary copy-on-write
@@ -470,7 +470,7 @@ rec {
 
     /* Don't run Nix-specific build steps like patchelf. */
     fixupPhase = "true";
-  });
+  }));
 
 
   /* Create a filesystem image of the specified size and fill it with
@@ -492,8 +492,6 @@ rec {
 
         chroot=$(type -tP chroot)
 
-        ${utillinux}/bin/mount -t proc none /mnt/proc
-
         # Make the Nix store available in /mnt, because that's where the RPMs live.
         mkdir -p /mnt/nix/store
         ${utillinux}/bin/mount -o bind /nix/store /mnt/nix/store
@@ -506,6 +504,7 @@ rec {
           ln -s /usr/sbin /mnt/sbin
           ln -s /usr/lib /mnt/lib
           ln -s /usr/lib64 /mnt/lib64
+          ${utillinux}/bin/mount -t proc none /mnt/proc
         ''}
 
         echo "unpacking RPMs..."
@@ -533,7 +532,7 @@ rec {
 
         rm /mnt/.debug
 
-        ${utillinux}/bin/umount /mnt/nix/store /mnt/tmp /mnt/proc
+        ${utillinux}/bin/umount /mnt/nix/store /mnt/tmp ${lib.optionalString unifiedSystemDir "/mnt/proc"}
         ${utillinux}/bin/umount /mnt
       '';
 

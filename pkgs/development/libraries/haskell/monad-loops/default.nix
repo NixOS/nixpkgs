@@ -1,18 +1,14 @@
-{ cabal, stm }:
+{ cabal }:
 
 cabal.mkDerivation (self: {
   pname = "monad-loops";
-  version = "0.3.3.0";
-  sha256 = "06v8wnkbjrpsy47shjy2bd8asbw6d5rgzy8z5q0jwdhira42h3v1";
-  buildDepends = [ stm ];
+  version = "0.4.2";
+  sha256 = "08sz08p4z1p78dv7rmsqvin59h19i6i07sp7jg3zwxwjxa76fds8";
   meta = {
     homepage = "https://github.com/mokus0/monad-loops";
     description = "Monadic loops";
-    license = self.stdenv.lib.licenses.bsd3;
+    license = self.stdenv.lib.licenses.publicDomain;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

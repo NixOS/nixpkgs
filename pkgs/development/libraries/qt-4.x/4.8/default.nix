@@ -20,7 +20,7 @@ let v = "4.8.4"; in
 #  * move some plugins (e.g., SQL plugins) to dedicated derivations to avoid
 #    false build-time dependencies
 
-stdenv.mkDerivation ( rec {
+stdenv.mkDerivation rec {
   name = "qt-${v}";
 
   src = fetchurl {
@@ -147,13 +147,3 @@ stdenv.mkDerivation ( rec {
     platforms = platforms.linux;
   };
 }
-  # ToDo: this attribute is optional *only* to prevent rebuild on hydra
-  // stdenv.lib.optionalAttrs developerBuild {
-    # fix underspecified dependency in a generated makefile
-    postConfigure = ''
-      substituteInPlace tools/designer/src/lib/Makefile --replace \
-        "moc_qtgradientviewdialog.cpp:" "moc_qtgradientviewdialog.cpp: .uic/release-shared/ui_qtgradientview.h"
-    '';
-  }
-)
-

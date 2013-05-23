@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dbus, glib, gtkmm, pkgconfig, expat }:
+{ stdenv, fetchurl, dbus, glib, gtkmm, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "dbus-cplusplus-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qafmy2i6dzx4n1dqp6pygyy6gjljnb7hwjcj2z11c1wgclsq4dw";
   };
 
-  buildInputs = [ dbus glib gtkmm pkgconfig expat ];
+  buildInputs = [ dbus glib gtkmm pkgconfig ];
 
   configureFlags = "--disable-ecore";
 

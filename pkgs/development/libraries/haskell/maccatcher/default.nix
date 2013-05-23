@@ -11,6 +11,5 @@ cabal.mkDerivation (self: {
     description = "Obtain the host MAC address on *NIX and Windows";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

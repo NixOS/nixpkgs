@@ -52,6 +52,8 @@ in stdenv.mkDerivation {
         patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux.so.2 $file || true
         patchelf --set-rpath ${rpath}:$out/lib $file || true
     done
+    substituteInPlace $out/share/applications/hipchat.desktop \
+      --replace /opt/HipChat/bin $out/bin
   '';
 
   meta = {

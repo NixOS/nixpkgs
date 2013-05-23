@@ -163,6 +163,7 @@ let
       AIC79XX_DEBUG_ENABLE n
       AIC7XXX_DEBUG_ENABLE n
       AIC94XX_DEBUG n
+      AUDIT_LOGINUID_IMMUTABLE y
       B43_PCMCIA y
       BLK_DEV_CMD640_ENHANCED y # CMD640 enhanced support
       BLK_DEV_IDEACPI y # IDE ACPI support
@@ -245,7 +246,7 @@ in
 import ./generic.nix (
 
   rec {
-    version = "3.4.44";
+    version = "3.4.45";
     testing = false;
 
     preConfigure = ''
@@ -254,7 +255,7 @@ import ./generic.nix (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v3.x/${if testing then "testing/" else ""}linux-${version}.tar.xz";
-      sha256 = "08nc81dmc00gp04br8fpxj9ixgg90qlc0pmlh589vva02srcxn0m";
+      sha256 = "13qli7s5i3zq76xsww05s89gm6mkvpf1fjxbka0fddzvmwzw9jav";
     };
 
     config = configWithPlatform stdenv.platform;

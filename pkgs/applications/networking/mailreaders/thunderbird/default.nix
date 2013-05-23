@@ -12,14 +12,14 @@
   enableOfficialBranding ? false
 }:
 
-let version = "17.0"; in
+let version = "17.0.6"; in
 
 stdenv.mkDerivation {
   name = "thunderbird-${version}";
 
   src = fetchurl {
     url = "ftp://ftp.mozilla.org/pub/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.bz2";
-    sha1 = "ccc5f2e155364948945abf6fd27bebeb4d797aa8";
+    sha1 = "cb5cb5dbfe77179b5853345c826eaa2bc634d48c";
   };
 
   enableParallelBuilding = false;
@@ -89,7 +89,7 @@ stdenv.mkDerivation {
       # Official branding implies thunderbird name and logo cannot be reuse,
       # see http://www.mozilla.org/foundation/licensing.html
       if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
-    maintainers = maintainers.pierron;
+    maintainers = [ maintainers.pierron maintainers.eelco ];
     platforms = platforms.linux;
   };
 }

@@ -16,6 +16,5 @@ cabal.mkDerivation (self: {
     description = "Client library for the XMPP protocol";
     license = self.stdenv.lib.licenses.gpl3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

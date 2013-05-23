@@ -10,9 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0swp4kk6x7hy1rvd1f9jba31lvfc6qvafkvbpg9h0r34fzrd8q4i";
   };
 
-  preConfigure = # still using stuff deprecated in new glib versions
-    "sed 's/-DG_DISABLE_DEPRECATED//g' -i configure activation-server/Makefile.in";
-
+  preConfigure = "export USER=`whoami`";
   nativeBuildInputs = [ flex bison pkgconfig intltool procps ];
   buildInputs = [ libxml2 ];
   propagatedBuildInputs = [ popt glib ORBit2 ];

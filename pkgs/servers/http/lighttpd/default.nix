@@ -16,9 +16,11 @@ stdenv.mkDerivation {
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Lightweight high-performance web server";
     homepage = http://www.lighttpd.net/;
     license = "BSD";
+    platforms = platforms.linux;
+    maintainers = [maintainers.bjornfor];
   };
 }

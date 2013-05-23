@@ -12,9 +12,6 @@ cabal.mkDerivation (self: {
     description = "Binding to the GLIB library for Gtk2Hs";
     license = self.stdenv.lib.licenses.lgpl21;
     platforms = self.ghc.meta.platforms;
-    maintainers = [
-      self.stdenv.lib.maintainers.andres
-      self.stdenv.lib.maintainers.simons
-    ];
+    maintainers = [ self.stdenv.lib.maintainers.andres ];
   };
 })

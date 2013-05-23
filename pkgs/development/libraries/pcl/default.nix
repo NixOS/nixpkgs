@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homeapge = http://pointclouds.org/;
+    homepage = http://pointclouds.org/;
     description = "Open project for 2D/3D image and point cloud processing";
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric];

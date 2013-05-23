@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.simons ];
+    maintainers = with stdenv.lib.maintainers; [ simons bjornfor ];
   };
 }

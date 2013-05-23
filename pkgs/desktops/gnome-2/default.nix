@@ -29,6 +29,8 @@
 
   libgtkhtml = callPackage ./platform/libgtkhtml { };
 
+  intltool = callPackage ./platform/intltool { };
+
   GConf = callPackage ./platform/GConf { };
 
   gconfmm = callPackage ./platform/gconfmm { };

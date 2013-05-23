@@ -10,6 +10,5 @@ cabal.mkDerivation (self: {
     description = "Rose trees with cached and accumulating monoidal annotations";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

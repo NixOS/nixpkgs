@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk, mesa, pango, pangox_compat, xlibs }:
+{ stdenv, fetchurl, pkgconfig, gtk, mesa, pango }:
 
 stdenv.mkDerivation rec {
   name = "gtkglext-1.2.0";
@@ -8,8 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lbz96jwz57hnn52b8rfj54inwpwcc9fkdq6ya043cgnfih77g8n";
   };
 
-  buildInputs = with xlibs;
-    [ pkgconfig glib gtk mesa pango pangox_compat libX11 libXmu ];
+  buildInputs = [ pkgconfig gtk mesa pango ];
 
   # The library uses `GTK_WIDGET_REALIZED', `GTK_WIDGET_TOPLEVEL', and
   # `GTK_WIDGET_NO_WINDOW', all of which appear to be deprecated nowadays.

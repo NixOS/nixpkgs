@@ -1,23 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, glib, gdk_pixbuf, pango, cairo
-, libxml2, libgsf, bzip2, libcroco
-, gtk2 ? null, gtk3 ? null
-, gobjectIntrospection ? null, enableIntrospection ? false }:
+{stdenv, fetchurl, pkgconfig, libxml2, libgsf, bzip2, glib, gtk, libcroco}:
 
-# no introspection by default, it's too big
-
-stdenv.mkDerivation rec {
-  name = "librsvg-2.36.4";
+stdenv.mkDerivation {
+  name = "librsvg-2.34.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/librsvg/2.36/${name}.tar.xz";
-    sha256 = "1hp6325gdkzx8yqn2d2r915ak3k6hfshjjh0sc54z3vr0i99688h";
+    url = mirror://gnome/sources/librsvg/2.34/librsvg-2.34.2.tar.xz;
+    sha256 = "0r24xr10chmz4l3ka2zy9c2245s7svzljbw9nrda3h44bcr03rsx";
   };
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango cairo ]
-    ++ stdenv.lib.optional enableIntrospection [ gobjectIntrospection ];
-  propagatedBuildInputs = [ glib gdk_pixbuf gtk2 gtk3 ];
+  buildInputs = [ libxml2 libgsf bzip2 libcroco ];
+  propagatedBuildInputs = [ glib gtk ];
   nativeBuildInputs = [ pkgconfig ];
-
-  configureFlags = ["--enable-introspection=auto"];
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the

@@ -1,26 +1,24 @@
-{ stdenv, fetchurl, gnome, librsvg, pkgconfig, pygtk, python, gtk }:
+{ stdenv, fetchurl, gnome, librsvg, pkgconfig, pygtk, python }:
 
 stdenv.mkDerivation rec {
-  ver_maj = "2.32";
-  ver_min = "0";
-  version = "${ver_maj}.${ver_min}";
+  version = "2.32";
   name = "python-rsvg-${version}";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-python-desktop/${ver_maj}/gnome-python-desktop-${version}.tar.bz2";
-    sha256 = "1s8f9rns9v7qlwjv9qh9lr8crp88dpzfm45hj47zc3ivpy0dbnq9";
+    url = "mirror://gnome/sources/gnome-python-desktop/${version}/gnome-python-desktop-${version}.0.tar.gz";
+    sha256 = "1xhh3h1qdnimydvv55pmqwyzjchhjwfvp951sjlq0180kskqrlj5";
   };
 
   configurePhase = ''
-    sed -e "s@{PYTHONDIR}/gtk-2.0@{PYTHONDIR}/@" -i rsvg/wscript
-    python waf configure --enable-modules=rsvg --prefix=$out
+    sed -e "s@{PYTHONDIR}/gtk-2.0@{PYTHONDIR}/@" -i rsvg/wscript 
+    python waf configure --enable-modules=rsvg --prefix=$out 
   '';
 
   buildPhase = "python waf build";
 
   installPhase = "python waf install";
 
-  buildInputs = [ gtk gnome.gnome_python librsvg pkgconfig pygtk python ];
+  buildInputs = [ gnome.gnome_python librsvg pkgconfig pygtk python ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.pygtk.org";

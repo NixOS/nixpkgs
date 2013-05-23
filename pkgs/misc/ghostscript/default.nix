@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl
-, lcms2, freetype, libpaper, jbig2dec, expat
+{ stdenv, fetchurl, libjpeg, libpng, libtiff, zlib, pkgconfig, fontconfig, openssl, lcms, freetype
 , x11Support, x11 ? null
 , cupsSupport ? false, cups ? null
 , gnuFork ? true
@@ -9,7 +8,7 @@ assert x11Support -> x11 != null;
 assert cupsSupport -> cups != null;
 
 let
-  meta_common = {
+  meta = {
     homepage = "http://www.gnu.org/software/ghostscript/";
     description = "GNU Ghostscript, a PostScript interpreter";
 
@@ -35,28 +34,25 @@ let
       sha256 = "0zqa6ggbkdqiszsywgrra4ij0sddlmrfa50bx2mh568qid4ga0a2";
     };
 
-    meta = meta_common;
+    inherit meta;
     patches = [ ./purity.patch ];
   };
 
-  mainlineSrc = rec {
-    name = "ghostscript-9.06";
+  mainlineSrc = {
+    name = "ghostscript-9.05";
     src = fetchurl {
-      url = "http://downloads.ghostscript.com/public/${name}.tar.bz2";
-      sha256 = "014f10rxn4ihvcr1frby4szd1jvkrwvmdhnbivpp55c9fssx3b05";
+      url = "http://downloads.ghostscript.com/public/ghostscript-9.05.tar.bz2";
+      sha256 = "1b6fi76x6pn9dmr9k9lh8kimn968dmh91k824fmm59d5ycm22h8g";
     };
-    meta = meta_common // {
+    meta = meta // {
       homepage = "http://www.ghostscript.com/";
       description = "GPL Ghostscript, a PostScript interpreter";
     };
 
     preConfigure = ''
-      rm -R libpng jpeg lcms{,2} tiff freetype jbig2dec expat jasper openjpeg
-
-      substituteInPlace base/unix-aux.mak --replace "INCLUDE=/usr/include" "INCLUDE=/no-such-path"
-      sed "s@if ( test -f \$(INCLUDE)[^ ]* )@if ( true )@" -i base/unix-aux.mak
+      rm -R libpng jpeg lcms tiff freetype
     '';
-    patches = [];
+    patches = [ ./purity-9.05.patch ];
   };
 
   variant = if gnuFork then gnuForkSrc else mainlineSrc;
@@ -68,8 +64,8 @@ stdenv.mkDerivation rec {
 
   fonts = [
     (fetchurl {
-      url = "mirror://sourceforge/gs-fonts/ghostscript-fonts-std-8.11.tar.gz";
-      sha256 = "00f4l10xd826kak51wsmaz69szzm2wp8a41jasr4jblz25bg7dhf";
+      url = "mirror://gnu/ghostscript/gnu-gs-fonts-std-6.0.tar.gz";
+      sha256 = "1lxr1y52r26qjif8kdqkfhsb5llakdcx3f5b9ppdyn59bb83ivsc";
     })
     (fetchurl {
       url = "mirror://gnu/ghostscript/gnu-gs-fonts-other-6.0.tar.gz";
@@ -78,13 +74,9 @@ stdenv.mkDerivation rec {
     # ... add other fonts here
   ];
 
-  buildInputs = [
-    libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms2
-    libpaper jbig2dec expat
-  ] ++ stdenv.lib.optionals x11Support [x11 freetype]
-    ++ stdenv.lib.optional cupsSupport cups
-    # [] # maybe sometimes jpeg2000 support
-    ;
+  buildInputs = [libjpeg libpng libtiff zlib pkgconfig fontconfig openssl lcms]
+    ++ stdenv.lib.optionals x11Support [x11 freetype]
+    ++ stdenv.lib.optional cupsSupport cups;
 
   CFLAGS = "-fPIC";
   NIX_LDFLAGS =
@@ -100,7 +92,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray=(CUPSSERVERBIN=$out/lib/cups CUPSSERVERROOT=$out/etc/cups CUPSDATA=$out/share/cups)
   '' + stdenv.lib.optionalString (variant ? preConfigure) variant.preConfigure;
 
-  configureFlags = [ "--with-system-libtiff" ] ++
+  configureFlags =
     (if x11Support then [ "--with-x" ] else [ "--without-x" ]) ++
     (if cupsSupport then [ "--enable-cups" "--with-install-cups" ] else [ "--disable-cups" ]);
 
@@ -108,7 +100,6 @@ stdenv.mkDerivation rec {
 
   installTargets="install soinstall";
 
-  # ToDo: web says the fonts should be already included
   postInstall = ''
     for i in $fonts; do
       (cd $out/share/ghostscript && tar xvfz $i)

@@ -315,8 +315,6 @@ rec {
       )
     ];
   mergeAttrsByFuncDefaults = foldl mergeAttrByFunc { inherit mergeAttrBy; };
-  mergeAttrsByFuncDefaultsClean = list: removeAttrs (mergeAttrsByFuncDefaults list) ["mergeAttrBy"];
-
   # merge attrs based on version key into mkDerivation args, see mergeAttrBy to learn about smart merge defaults
   #
   # This function is best explained by an example:
@@ -358,8 +356,7 @@ rec {
 
   # sane defaults (same name as attr name so that inherit can be used)
   mergeAttrBy = # { buildInputs = concatList; [...]; passthru = mergeAttr; [..]; }
-    listToAttrs (map (n : nameValuePair n lib.concat)
-      [ "nativeBuildInputs" "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" "patches" ])
+    listToAttrs (map (n : nameValuePair n lib.concat) [ "nativeBuildInputs" "buildInputs" "propagatedBuildInputs" "configureFlags" "prePhases" "postAll" ])
     // listToAttrs (map (n : nameValuePair n lib.mergeAttrs) [ "passthru" "meta" "cfg" "flags" ])
     // listToAttrs (map (n : nameValuePair n (a: b: "${a}\n${b}") ) [ "preConfigure" "postInstall" ])
   ;

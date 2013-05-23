@@ -4,8 +4,8 @@
 
 cabal.mkDerivation (self: {
   pname = "uuid";
-  version = "1.2.12";
-  sha256 = "023954gx1hqf1v4qlzwy3nlxwn9yll0642p16w3vayrahcm27ljb";
+  version = "1.2.13";
+  sha256 = "0y9r71iqvabmvyrglw42g37skgisyknkv3pkfih2qfrfkk75zw0s";
   buildDepends = [ binary cryptohash maccatcher random time ];
   testDepends = [
     criterion deepseq HUnit mersenneRandomPure64 QuickCheck random
@@ -16,6 +16,5 @@ cabal.mkDerivation (self: {
     description = "For creating, comparing, parsing and printing Universally Unique Identifiers";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

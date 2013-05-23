@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    rm "bin/"*.bat
+    rm bin/*.bat
+    rm lib/scalacheck.jar
     mv * $out
   '';
 

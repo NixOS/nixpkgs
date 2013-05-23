@@ -7,13 +7,12 @@ assert withMesa -> mesa != null;
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  version = "2.8.12.1";
-  name = "wxGTK-${version}";
+stdenv.mkDerivation {
+  name = "wxGTK-2.8.12";
 
   src = fetchurl {
-    url = "mirror://sourceforge/wxpython/wxPython-src-${version}.tar.bz2";
-    sha256 = "1l1w4i113csv3bd5r8ybyj0qpxdq83lj6jrc5p7cc10mkwyiagqz";
+    url = mirror://sourceforge/wxwindows/wxGTK-2.8.12.tar.gz;
+    sha256 = "1gjs9vfga60mk4j4ngiwsk9h6c7j22pw26m3asxr1jwvqbr8kkqk";
   };
 
   buildInputs = [ gtk libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer gst_plugins_base GConf ]
@@ -30,12 +29,11 @@ stdenv.mkDerivation rec {
     "--enable-mediactrl"
   ] ++ optional withMesa "--with-opengl";
 
-  # These variables are used by configure to find some dependencies.
+  # This variable is used by configure to find some dependencies.
   SEARCH_INCLUDE =
     "${libXinerama}/include ${libSM}/include ${libXxf86vm}/include";
-  SEARCH_LIB =
-    "${libXinerama}/lib ${libSM}/lib ${libXxf86vm}/lib "
-    + optionalString withMesa "${mesa}/lib ";
+
+  SEARCH_LIB = optionalString withMesa "${mesa}/lib";
 
   # Work around a bug in configure.
   NIX_CFLAGS_COMPILE = "-DHAVE_X11_XLIB_H=1";

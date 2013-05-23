@@ -20,6 +20,5 @@ cabal.mkDerivation (self: {
     description = "integration testing for WAI/Yesod Applications";
     license = self.stdenv.lib.licenses.mit;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

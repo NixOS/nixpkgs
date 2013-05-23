@@ -12,6 +12,5 @@ cabal.mkDerivation (self: {
     description = "Encode unicode strings to ascii forms according to RFC 3492";
     license = self.stdenv.lib.licenses.bsd3;
     platforms = self.ghc.meta.platforms;
-    maintainers = [ self.stdenv.lib.maintainers.simons ];
   };
 })

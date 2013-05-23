@@ -19,8 +19,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = "--enable-external-ortp --enable-external-mediastreamer";
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations"; # I'm lazy to fix these for them
-
   meta = {
     homepage = http://www.linphone.org/;
     description = "Open Source video SIP softphone";

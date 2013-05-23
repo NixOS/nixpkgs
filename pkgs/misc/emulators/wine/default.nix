@@ -1,6 +1,6 @@
 { stdenv, fetchurl, xlibs, flex, bison, mesa, alsaLib
 , ncurses, libpng, libjpeg, lcms, freetype, fontconfig, fontforge
-, libxml2, libxslt, openssl, gnutls, cups, libdrm
+, libxml2, libxslt, openssl, gnutls, cups
 }:
 
 assert stdenv.isLinux;
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # them to the RPATH so that the user doesn't have to set them in
   # LD_LIBRARY_PATH.
   NIX_LDFLAGS = map (path: "-rpath ${path}/lib ") [
-    freetype fontconfig stdenv.gcc.gcc mesa libdrm
+    freetype fontconfig stdenv.gcc.gcc mesa mesa.libdrm
     xlibs.libXinerama xlibs.libXrender xlibs.libXrandr
     xlibs.libXcursor xlibs.libXcomposite libpng libjpeg
     openssl gnutls cups

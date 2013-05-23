@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtk3, glibmm, cairomm, pangomm, atkmm }:
 
-stdenv.mkDerivation rec {
-  name = "gtkmm-3.7.12"; # gnome 3.8 release; stable 3.6 has problems with our new glibc
+stdenv.mkDerivation {
+  name = "gtkmm-3.2.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtkmm/3.7/${name}.tar.xz";
-    sha256 = "05nrilm34gid7kqlq09hcdd7942prn2vbr1qgqvdhgy4x8pvz9p9";
+    url = mirror://gnome/sources/gtkmm/3.2/gtkmm-3.2.0.tar.xz;
+    sha256 = "1wkljr2vjvjg5mggi4rvk9k4j2kzh8lc106k2yp8gqjlhk2xm5b1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
