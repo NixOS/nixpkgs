@@ -3554,6 +3554,8 @@ let
 
   bwidget = callPackage ../development/libraries/bwidget { };
 
+  c-ares = callPackage ../development/libraries/c-ares { };
+
   caelum = callPackage ../development/libraries/caelum { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
