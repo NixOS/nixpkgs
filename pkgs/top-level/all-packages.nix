@@ -5657,6 +5657,8 @@ let
 
   mongodb = callPackage ../servers/nosql/mongodb { };
 
+  riak = callPackage ../servers/nosql/riak/1.3.1.nix { };
+
   mysql4 = import ../servers/sql/mysql {
     inherit fetchurl stdenv ncurses zlib perl;
     ps = procps; /* !!! Linux only */
