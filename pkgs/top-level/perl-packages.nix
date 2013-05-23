@@ -697,7 +697,7 @@ rec {
   CatalystXRoleApplicator = buildPerlPackage rec {
     name = "CatalystX-RoleApplicator-0.005";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Catalyst/${name}.tar.gz";
+      url = "mirror://cpan/authors/id/H/HD/HDP/${name}.tar.gz";
       sha256 = "0vwaapxn8g5hs2xp63c4dwv9jmapmji4272fakssvgc9frklg3p2";
     };
     buildInputs = [ ];
