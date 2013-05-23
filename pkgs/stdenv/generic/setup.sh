@@ -289,6 +289,7 @@ stripDirs() {
 
     if [ -n "${dirs}" ]; then
         header "stripping (with flags $stripFlags) in $dirs"
+        chmod -R +r $dirs
         find $dirs -type f -print0 | xargs -0 ${xargsFlags:--r} strip $stripFlags || true
         stopNest
     fi
@@ -638,7 +639,7 @@ patchELF() {
         find "$prefix" \( \
             \( -type f -a -name "*.so*" \) -o \
             \( -type f -a -perm +0100 \) \
-            \) -print -exec patchelf --shrink-rpath {} \;
+            \) -print -exec patchelf --shrink-rpath '{}' \;
     fi
     stopNest
 }
