@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     sed -e 's@/usr/bin/@@g' -i configure
     sed -e '/gthread[.]h/d' -i src/npw-player.c
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lgthread-2.0"
     export configureFlags="$configureFlags --target-cpu=$(uname -m)"
   '';
 
