@@ -10,10 +10,20 @@ let
 
   chronyUser = "chrony";
 
+  cfg = config.services.chrony;
+
   configFile = pkgs.writeText "chrony.conf" ''
-    ${toString (map (server: "server " + server + "\n") config.services.chrony.servers)}
+    ${toString (map (server: "server " + server + "\n") cfg.servers)}
+
+    ${optionalString cfg.initstepslew.enabled ''
+      initstepslew ${toString cfg.initstepslew.threshold} ${toString (map (server: server + " ") cfg.initstepslew.servers)}
+    ''}
 
     driftfile ${stateDir}/chrony.drift
+
+    ${optionalString (!config.time.hardwareClockInLocalTime) "rtconutc"}
+
+    ${cfg.extraConfig}
   '';
 
   chronyFlags = "-m -f ${configFile} -u ${chronyUser}";
@@ -47,6 +57,26 @@ in
         '';
       };
 
+      initstepslew = mkOption {
+        default = {
+          enabled = true;
+          threshold = 1000; # by default, same threshold as 'ntpd -g' (1000s)
+          servers = cfg.servers;
+        };
+        description = ''
+          Allow chronyd to make a rapid measurement of the system clock error at
+          boot time, and to correct the system clock by stepping before normal
+          operation begins.
+        '';
+      };
+
+      extraConfig = mkOption {
+        default = "";
+        description = ''
+          Extra configuration directives that should be added to
+          <literal>chrony.conf</literal>
+        '';
+      };
     };
 
   };
