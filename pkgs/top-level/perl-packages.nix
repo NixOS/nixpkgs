@@ -3045,10 +3045,10 @@ rec {
   };
 
   LWP = buildPerlPackage {
-    name = "libwww-perl-6.04";
+    name = "libwww-perl-6.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-6.04.tar.gz;
-      sha256 = "0z92fpwk6lh2gghv050r0qb216jmjl2m0c6zby935q8lv0q5wwgr";
+      url = mirror://cpan/authors/id/G/GA/GAAS/libwww-perl-6.05.tar.gz;
+      sha256 = "08wgwyz7748pv5cyngxia0xl6nragfnhrp4p9s78xhgfyygpj9bv";
     };
     propagatedBuildInputs = [ EncodeLocale FileListing HTMLParser HTTPCookies HTTPDaemon HTTPDate HTTPNegotiate HTTPMessage LWPMediaTypes NetHTTP URI WWWRobotRules ];
     doCheck = false; # tries to start a daemon
@@ -3071,14 +3071,18 @@ rec {
   };
 
   LWPProtocolHttps = buildPerlPackage rec {
-    name = "LWP-Protocol-https-6.02";
+    name = "LWP-Protocol-https-6.04";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/LWP/${name}.tar.gz";
-      sha256 = "0y2an4v7g4jm8fsszk2489m179i28kx79ywwiywkwk1aw3yqh0y5";
+      url = mirror://cpan/authors/id/G/GA/GAAS/LWP-Protocol-https-6.04.tar.gz;
+      sha256 = "0agnga5dg94222h6rlzqxa0dri2sh3gayncvfb7jad9nxr87gxhy";
     };
     patches = [ ../development/perl-modules/lwp-protocol-https-cert-file.patch ];
     propagatedBuildInputs = [ LWP IOSocketSSL ];
     doCheck = false; # tries to connect to https://www.apache.org/.
+    meta = {
+      description = "Provide https support for LWP::UserAgent";
+      license = "perl5";
+    };
   };
 
   LWPUserAgent = buildPerlPackage {
