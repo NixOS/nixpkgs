@@ -7911,6 +7911,8 @@ let
 
   st = callPackage ../applications/misc/st { };
 
+  sxiv = callPackage ../applications/graphics/sxiv { };
+
   bittorrentSync = callPackage ../applications/networking/bittorrentsync { };
 
   dropbox = callPackage ../applications/networking/dropbox { };
