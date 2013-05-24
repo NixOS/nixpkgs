@@ -1,12 +1,12 @@
 { stdenv, fetchurl, openssl, python, zlib, v8, utillinux }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.23";
+  version = "0.10.7";
   name = "nodejs-${version}";
 
   src = fetchurl {
-    url = "http://nodejs.org/dist/v${version}/node-v${version}.tar.gz";
-    sha256 = "17gdvv0q95v5dn9mbwrm3pxcchfgmlwa7pamwsam9hpdi9ik491q";
+    url = http://nodejs.org/dist/v0.10.7/node-v0.10.7.tar.gz;
+    sha256 = "1q15siga6b3rxgrmy42310cdya1zcc2dpsrchidzl396yl8x5l92";
   };
 
   configureFlags = [
@@ -24,11 +24,7 @@ stdenv.mkDerivation rec {
   # Expose the host compiler on darwin, which is the only compiler capable of building it
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
     export OLDPATH=$PATH
-    export PATH=/usr/bin:$PATH
-  '';
-
-  prePatch = ''
-    sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i tools/{*.py,waf-light,node-waf} configure
+    export PATH=/usr/bin:/usr/sbin:$PATH
   '';
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
