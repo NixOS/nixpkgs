@@ -1513,8 +1513,8 @@ let
     name = "xf86-video-intel-2.21.7";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-intel-2.21.3.tar.bz2;
-      sha256 = "1nb3hc1h6scja89rwf2fvadj5z8ckcnm94lryf895i3r02jbpsps";
+      url = mirror://xorg/individual/driver/xf86-video-intel-2.21.7.tar.bz2;
+      sha256 = "0mpdd7am813gv7nxxvbllcph1xg7czy0bd1kn3q6bc489h53wzbp";
     };
     buildInputs = [pkgconfig dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ];
   })) // {inherit dri2proto fontsproto libdrm udev libpciaccess randrproto renderproto libX11 xcbutil libxcb libXext xextproto xf86driproto libXfixes xorgserver xproto libXrender libXvMC ;};
