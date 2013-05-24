@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux }:
+{ stdenv, fetchurl, openssl, python, zlib, utillinux }:
 
 stdenv.mkDerivation rec {
   version = "0.10.7";
@@ -12,14 +12,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--openssl-includes=${openssl}/include"
     "--openssl-libpath=${openssl}/lib"
-  ]
-  ++ (if !stdenv.isDarwin then [ # Shared V8 is broken on Mac OS X. Who can fix V8 on Darwin makes me very happy, but I gave up studying python-gyp.
-    "--shared-v8"
-    "--shared-v8-includes=${v8}/includes"
-    "--shared-v8-libpath=${v8}/lib"
-  ] else []);
-
-  #patches = stdenv.lib.optional stdenv.isDarwin ./no-arch-flag.patch;
+  ];
 
   # Expose the host compiler on darwin, which is the only compiler capable of building it
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -31,13 +24,11 @@ stdenv.mkDerivation rec {
     export PATH=$OLDPATH
   '' + ''
     sed -e 's|^#!/usr/bin/env node$|#!'$out'/bin/node|' -i $out/lib/node_modules/npm/bin/npm-cli.js
-  '' /*+ stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libv8.dylib ${v8}/lib/libv8.dylib $out/bin/node
-  ''*/;
+  '';
 
   buildInputs = [ python openssl zlib ]
-    ++ stdenv.lib.optional stdenv.isLinux utillinux
-    ++ stdenv.lib.optional (!stdenv.isDarwin) v8;
+    ++ stdenv.lib.optional stdenv.isLinux utillinux;
+
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
