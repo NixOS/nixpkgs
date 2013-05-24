@@ -1171,6 +1171,8 @@ let
 
   mdbtools_git = callPackage ../tools/misc/mdbtools/git.nix { };
 
+  megatools = callPackage ../tools/networking/megatools { };
+
   minecraft = callPackage ../games/minecraft { };
 
   minetest = callPackage ../games/minetest { };
