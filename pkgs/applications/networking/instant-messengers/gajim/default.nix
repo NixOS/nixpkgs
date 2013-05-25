@@ -1,54 +1,73 @@
-a :  
-let 
-  fetchurl = a.fetchurl;
+{ stdenv, fetchurl, python, intltool, pkgconfig, libX11, gtk
+, pyopenssl, pythonDBus, pythonPackages
 
-  version = a.lib.attrByPath ["version"] "0.15.3" a; 
-  buildInputs = with a; [
-    python pyGtkGlade gtk perl intltool dbus gettext
-    pkgconfig makeWrapper libglade pyopenssl libXScrnSaver
-    libXt xproto libXext xextproto libX11 gtkspell aspell
-    scrnsaverproto pycrypto pythonDBus pythonSexy 
-    docutils pyasn1 farstream gst_plugins_bad gstreamer
-    gst_ffmpeg gst_python
-  ];
-in
-rec {
+, enableJingle ? true, farstream ? null, gst_plugins_bad ? null
+,                      libnice ? null
+, enableE2E ? true
+, enableRST ? true
+, enableSpelling ? true, gtkspell ? null
+}:
+
+assert enableJingle -> farstream != null && gst_plugins_bad != null
+                    && libnice != null;
+assert enableE2E -> pythonPackages.pycrypto != null;
+assert enableRST -> pythonPackages.docutils != null;
+assert enableSpelling -> gtkspell != null;
+
+with stdenv.lib;
+
+stdenv.mkDerivation rec {
+  name = "gajim-${version}";
+  version = "0.15.3";
+
   src = fetchurl {
     url = "http://www.gajim.org/downloads/0.15/gajim-${version}.tar.gz";
     sha256 = "139yl7v1i6g9q66fdmzw0x7hhp7c4x44n4l8hl9g6m9zig5v3s28";
   };
 
-  inherit buildInputs;
-  configureFlags = [];
+  patches = singleton (fetchurl {
+    name = "gajim-icon-index.patch";
+    url = "http://hg.gajim.org/gajim/raw-rev/b9ec78663dfb";
+    sha256 = "0w54hr5dq9y36val55kmh8d6cid7h4fs2nghx09714jylz2nyxxv";
+  });
 
-  preConfigure = a.fullDepEntry (''
-    export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pyGtkGlade})/gtk-2.0"
-    export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$(toPythonPath ${a.pygobject})/gtk-2.0"
-    sed -e '/-L[$]x_libraries/d' -i configure
-    sed -e 's@tmpfd.close()@os.close(tmpfd)@' -i src/common/latex.py
-  '') ["addInputs" "doUnpack"];
+  postPatch = ''
+    sed -i -e '0,/^[^#]/ {
+      /^[^#]/i export \\\
+        PYTHONPATH="'"$PYTHONPATH\''${PYTHONPATH:+:}\$PYTHONPATH"'" \\\
+        GST_PLUGIN_PATH="'"\$GST_PLUGIN_PATH''${GST_PLUGIN_PATH:+:}${""
+        }$GST_PLUGIN_PATH"'"
+    }' scripts/gajim.in
 
-  fixScriptNames = a.fullDepEntry (''
-    mkdir "$out"/bin-wrapped
-    for i in "$out"/bin/.*-wrapped; do
-      name="$i"
-      name="''${name%-wrapped}"
-      name="''${name##*/.}"
-      mv "$i" "$out/bin-wrapped/$name"
-      sed -e 's^'"$i"'^'"$out/bin-wrapped/$name"'^' -i "$out/bin/$name"
-      sed -e "2aexport LD_LIBRARY_PATH=\"\$LD_LIBRARY_PATH\''${LD_LIBRARY_PATH:+:}${a.gtkspell}/lib:${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
-      sed -e "2aexport NIX_LDFLAGS=\"\$NIX_LDFLAGS -L${a.gtkspell}/lib -L${a.gtkspell}/lib64\"" -i "$out/bin/gajim"
-      sed -e "2aexport GST_PLUGIN_PATH=\"\$GST_PLUGIN_PATH''${GST_PLUGIN_PATH:+:}$(echo ${a.gst_plugins_bad}/lib/gstreamer-*):$(echo ${a.gst_ffmpeg}/lib/gstreamer-*):$(echo ${a.farstream}/lib/gstreamer-*)\"" -i "$out/bin/gajim"
-    done
-  '') ["wrapBinContentsPython"];
+    sed -i -e 's/return helpers.is_in_path('"'"'drill.*/return True/' \
+      src/features_window.py
+    sed -i -e "s|'drill'|'${ldns}/bin/drill'|" src/common/resolver.py
+  '' + optionalString enableSpelling ''
+    sed -i -e 's|=.*find_lib.*|= "${gtkspell}/lib/libgtkspell.so"|'   \
+      src/gtkspell.py
+  '';
 
-  /* doConfigure should be removed if not needed */
-  phaseNames = ["preConfigure" (a.doDump "1") "doConfigure" "doMakeInstall" 
-    "wrapBinContentsPython" "fixScriptNames"];
+  buildInputs = [
+    python intltool pkgconfig libX11
+    pythonPackages.pygobject pythonPackages.pyGtkGlade
+    pythonPackages.sqlite3 pythonPackages.pyasn1
+    pythonPackages.pyxdg
+    pyopenssl pythonDBus
+  ] ++ optionals enableJingle [ farstream gst_plugins_bad libnice ]
+    ++ optional enableE2E pythonPackages.pycrypto
+    ++ optional enableRST pythonPackages.docutils;
 
-  name = "gajim-" + version;
+  postInstall = ''
+    install -m 644 -t "$out/share/gajim/icons/hicolor" \
+                      "icons/hicolor/index.theme"
+  '';
+
+  enableParallelBuilding = true;
+
   meta = {
-    description = "Jabber client with meta-contacts";
-    maintainers = [a.lib.maintainers.raskin];
+    homepage = "http://gajim.org/";
+    description = "Jabber client written in PyGTK";
+    license = licenses.gpl3Plus;
+    maintainers = [ maintainers.raskin maintainers.aszlig ];
   };
 }
