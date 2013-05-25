@@ -36,6 +36,7 @@
   ./misc/nixpkgs.nix
   ./misc/passthru.nix
   ./misc/version.nix
+  ./programs/atop.nix
   ./programs/bash/bash.nix
   ./programs/bash/command-not-found.nix
   ./programs/blcr.nix
