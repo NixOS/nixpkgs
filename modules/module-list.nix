@@ -126,6 +126,7 @@
   ./services/networking/bind.nix
   ./services/networking/bitlbee.nix
   ./services/networking/cntlm.nix
+  ./services/networking/chrony.nix
   ./services/networking/ddclient.nix
   #./services/networking/dhclient.nix
   ./services/networking/dhcpcd.nix
