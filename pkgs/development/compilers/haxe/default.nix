@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   postBuild = ''
     find std/tools -name '*.n' -delete
-    rm std/tools/haxedoc/haxedoc std/tools/haxelib/haxelib
+    rm -f std/tools/haxedoc/haxedoc std/tools/haxelib/haxelib
   '';
 
   buildFlags = [ "all" "tools" ];
