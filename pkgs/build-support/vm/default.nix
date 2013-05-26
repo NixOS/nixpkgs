@@ -134,7 +134,7 @@ rec {
 
     echo "mounting Nix store..."
     mkdir -p /fs/nix/store
-    mount -t cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none,sec=ntlm
+    ${initrdUtils}/sbin/mount.cifs //10.0.2.4/store /fs/nix/store -o guest,sec=none
 
     mkdir -p /fs/tmp
     # tmpfs may be faster, but there's a tendency to run out of RAM on 32b systems
@@ -142,7 +142,7 @@ rec {
 
     echo "mounting host's temporary directory..."
     mkdir -p /fs/tmp/xchg
-    mount -t cifs //10.0.2.4/xchg /fs/tmp/xchg -o guest,sec=none,sec=ntlm
+    ${initrdUtils}/sbin/mount.cifs //10.0.2.4/xchg /fs/tmp/xchg -o guest,sec=none
 
     mkdir -p /fs/proc
     mount -t proc none /fs/proc
