@@ -7772,6 +7772,11 @@ let
 
   mutt = callPackage ../applications/networking/mailreaders/mutt { };
 
+  sup = callPackage ../applications/networking/mailreaders/sup {
+    rake = rubyLibs.rake_10_0_4;
+    ruby = ruby19;
+  };
+
   msmtp = callPackage ../applications/networking/msmtp { };
 
   imapfilter = callPackage ../applications/networking/mailreaders/imapfilter.nix {
