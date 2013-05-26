@@ -206,6 +206,7 @@ in stdenv.mkDerivation rec {
     for icon_file in chrome/app/theme/chromium/product_logo_*[0-9].png; do
       num_and_suffix="''${icon_file##*logo_}"
       icon_size="''${num_and_suffix%.*}"
+      expr "$icon_size" : "^[0-9][0-9]*$" || continue
       logo_output_prefix="$out/share/icons/hicolor"
       logo_output_path="$logo_output_prefix/''${icon_size}x''${icon_size}/apps"
       mkdir -vp "$logo_output_path"
