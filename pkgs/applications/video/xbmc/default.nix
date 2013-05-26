@@ -33,11 +33,11 @@ assert vdpauSupport -> libvdpau != null && ffmpeg.vdpauSupport;
 assert pulseSupport -> pulseaudio != null;
 
 stdenv.mkDerivation rec {
-    name = "xbmc-12.1";
+    name = "xbmc-12.2";
 
     src = fetchurl {
       url = "http://mirrors.xbmc.org/releases/source/${name}.tar.gz";
-      sha256 = "1hqyq1vl34sywcj8zgx7kdpf8ljzj969l5w6yy4314c431pg7qr9";
+      sha256 = "077apkq9sx6wlwkwmiz63w5dcqbbrbjbn6qk9fj2fgaizhs0ccxj";
     };
 
     buildInputs = [
