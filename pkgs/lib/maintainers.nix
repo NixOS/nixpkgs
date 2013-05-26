@@ -28,6 +28,7 @@
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   neznalek = "Vladimír Čunát <vcunat@gmail.com>";
+  offline = "Jaka Hudoklin <jakahudoklin@gmail.com>";
   orbitz = "Malcolm Matalka <mmatalka@gmail.com>";
   page = "Carles Pagès <page@cubata.homelinux.net>";
   phreedom = "Evgeny Egorochkin <phreedom@yandex.ru>";
