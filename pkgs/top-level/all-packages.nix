@@ -8971,6 +8971,8 @@ let
 
   ### SCIENCE / ELECTRONICS
 
+  eagle = callPackage_i686 ../applications/science/electronics/eagle { };
+
   caneda = callPackage ../applications/science/electronics/caneda { };
 
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
