@@ -18,11 +18,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "gajim-${version}";
-  version = "0.15.3";
+  version = "0.15.4";
 
   src = fetchurl {
     url = "http://www.gajim.org/downloads/0.15/gajim-${version}.tar.gz";
-    sha256 = "139yl7v1i6g9q66fdmzw0x7hhp7c4x44n4l8hl9g6m9zig5v3s28";
+    sha256 = "1g4m5j777vqqdwqvr2m6l09ljjx65ilag45d5kfc78z7frm0cz7g";
   };
 
   patches = singleton (fetchurl {
