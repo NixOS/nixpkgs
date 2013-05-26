@@ -363,9 +363,14 @@ in {
     inetutils.crossDrv = nativePlatforms;
     nixUnstable.crossDrv = nativePlatforms;
     patch.crossDrv = nativePlatforms;
-    zile.crossDrv = nativePlatforms;
-    prboom.crossDrv = nativePlatforms;
     vim.crossDrv = nativePlatforms;
+    tmux.crossDrv = nativePlatforms;
+    screen.crossDrv = nativePlatforms;
+    unrar.crossDrv = nativePlatforms;
+    unzip.crossDrv = nativePlatforms;
+    hdparm.crossDrv = nativePlatforms;
+    ddrescue.crossDrv = nativePlatforms;
+    git.crossDrv = nativePlatforms;
     lynx.crossDrv = nativePlatforms;
     patchelf.crossDrv = nativePlatforms;
     nix.crossDrv = nativePlatforms;
