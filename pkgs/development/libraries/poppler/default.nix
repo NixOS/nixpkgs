@@ -65,6 +65,7 @@ in rec {
   poppler_qt4 = poppler_drv "qt4" {
     propagatedBuildInputs = [ qt4 poppler_glib ];
     patches = qtcairo_patches;
+    NIX_LDFLAGS = "-lpoppler";
     postConfigure = "cd qt4";
   };
 }
