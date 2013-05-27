@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, which
+{ stdenv, fetchurl, makeWrapper, ninja, which
 
 # default dependencies
 , bzip2, flac, speex
@@ -165,28 +165,21 @@ in stdenv.mkDerivation rec {
     target_arch = "ia32";
   });
 
-  enableParallelBuilding = true;
-
   configurePhase = ''
-    python build/gyp_chromium --depth "$(pwd)" ${gypFlags}
+    GYP_GENERATORS=ninja python build/gyp_chromium --depth "$(pwd)" ${gypFlags}
   '';
 
-  makeFlags = let
+  buildPhase = let
     CC = "${gcc}/bin/gcc";
     CXX = "${gcc}/bin/g++";
-  in [
-    "CC=${CC}"
-    "CXX=${CXX}"
-    "CC.host=${CC}"
-    "CXX.host=${CXX}"
-    "LINK.host=${CXX}"
-  ];
-
-  buildFlags = [
-    "BUILDTYPE=${buildType}"
-    "library=shared_library"
-    "chrome"
-  ] ++ optional (!enableSELinux) "chrome_sandbox";
+  in ''
+    CC="${CC}" CC_host="${CC}"     \
+    CXX="${CXX}" CXX_host="${CXX}" \
+    LINK_host="${CXX}"             \
+      "${ninja}/bin/ninja" -C "out/${buildType}" \
+        -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES    \
+        chrome ${optionalString (!enableSELinux) "chrome_sandbox"}
+  '';
 
   installPhase = ''
     mkdir -vp "${libExecPath}"
