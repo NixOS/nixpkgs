@@ -46,7 +46,6 @@ stdenv.mkDerivation (rec {
         ln -svf lib''${lib}w.so.5 $out/lib/lib$lib.so.5
       fi
     done;
-    ln -svf . $out/include/ncursesw
   '' else "";
 
   meta = {
