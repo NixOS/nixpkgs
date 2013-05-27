@@ -12,11 +12,8 @@
 , utillinux, alsaLib
 , gcc, bison, gperf
 , glib, gtk, dbus_glib
-, libXScrnSaver, libXcursor, mesa
+, libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage
-
-# dependencies for >= v27
-, libXtst
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -81,11 +78,6 @@ let
     libusb1 libexif
   ];
 
-  pre27 = versionOlder sourceInfo.version "27.0.0.0";
-  pre28 = versionOlder sourceInfo.version "28.0.0.0";
-  post26 = !pre27;
-  post27 = !pre28;
-
   # build paths and release info
   packageName = "chromium";
   buildType = "Release";
@@ -112,23 +104,20 @@ in stdenv.mkDerivation rec {
     gcc bison gperf
     krb5
     glib gtk dbus_glib
-    libXScrnSaver libXcursor mesa
+    libXScrnSaver libXcursor libXtst mesa
     pciutils protobuf speechd libXdamage
   ] ++ optional gnomeKeyringSupport libgnome_keyring
     ++ optionals gnomeSupport [ gconf libgcrypt ]
     ++ optional enableSELinux libselinux
     ++ optional cupsSupport libgcrypt
-    ++ optional pulseSupport pulseaudio
-    ++ optional post26 libXtst;
+    ++ optional pulseSupport pulseaudio;
 
   opensslPatches = optional useOpenSSL openssl.patches;
 
   prePatch = "patchShebangs .";
 
   patches = [ ./sandbox_userns.patch ]
-         ++ optional cupsSupport ./cups_allow_deprecated.patch
-         ++ optional (pulseSupport && pre27) ./pulseaudio_array_bounds.patch
-         ++ optional pre27 ./glibc-2.16-use-siginfo_t.patch;
+         ++ optional cupsSupport ./cups_allow_deprecated.patch;
 
   postPatch = ''
     sed -i -r -e 's/-f(stack-protector)(-all)?/-fno-\1/' build/common.gypi
@@ -136,7 +125,7 @@ in stdenv.mkDerivation rec {
     cat $opensslPatches | patch -p1 -d third_party/openssl/openssl
   '' + ''
     sed -i -e 's|/usr/bin/gcc|gcc|' \
-      third_party/WebKit/Source/${if post27
+      third_party/WebKit/Source/${if !versionOlder sourceInfo.version "28.0.0.0"
                                   then "core/core.gypi"
                                   else "WebCore/WebCore.gyp/WebCore.gyp"}
   '';
