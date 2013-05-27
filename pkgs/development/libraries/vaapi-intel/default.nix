@@ -2,11 +2,11 @@
 , intelgen4asm }:
 
 stdenv.mkDerivation rec {
-  name = "libva-intel-driver-1.0.19";
+  name = "libva-intel-driver-1.0.20";
   
   src = fetchurl {
     url = "http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver/${name}.tar.bz2";
-    sha256 = "14m7krah3ajkwj190q431lqqa84hdljcdmrcrqkbgaffyjlqvdid";
+    sha256 = "1jfl8909j3a3in6m8b5bx3dn7pzr8a1sw3sk4vzm7h3j2dkgpzhj";
   };
 
   buildInputs = [ autoconf automake libtool mesa libva pkgconfig libdrm libX11 intelgen4asm ];
