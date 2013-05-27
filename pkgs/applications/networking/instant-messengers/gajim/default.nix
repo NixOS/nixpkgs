@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, intltool, pkgconfig, libX11, gtk
-, pyopenssl, pythonDBus, pythonPackages
+, ldns, pyopenssl, pythonDBus, pythonPackages
 
 , enableJingle ? true, farstream ? null, gst_plugins_bad ? null
 ,                      libnice ? null
@@ -25,11 +25,19 @@ stdenv.mkDerivation rec {
     sha256 = "1g4m5j777vqqdwqvr2m6l09ljjx65ilag45d5kfc78z7frm0cz7g";
   };
 
-  patches = singleton (fetchurl {
-    name = "gajim-icon-index.patch";
-    url = "http://hg.gajim.org/gajim/raw-rev/b9ec78663dfb";
-    sha256 = "0w54hr5dq9y36val55kmh8d6cid7h4fs2nghx09714jylz2nyxxv";
-  });
+  patches = [
+    (fetchurl {
+      name = "gajim-drill-srv.patch";
+      url = "https://projects.archlinux.org/svntogit/packages.git/"
+          + "plain/trunk/gajim-drill.patch?h=packages/gajim";
+      sha256 = "1k8zz3ns0l0kriffq41jgkv5ym6jvyd24171l7s98v9d81prdw1w";
+    })
+    (fetchurl {
+      name = "gajim-icon-index.patch";
+      url = "http://hg.gajim.org/gajim/raw-rev/b9ec78663dfb";
+      sha256 = "0w54hr5dq9y36val55kmh8d6cid7h4fs2nghx09714jylz2nyxxv";
+    })
+  ];
 
   postPatch = ''
     sed -i -e '0,/^[^#]/ {
