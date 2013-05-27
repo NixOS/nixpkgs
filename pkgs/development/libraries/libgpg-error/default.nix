@@ -1,11 +1,11 @@
 { stdenv, fetchurl, bash }:
 
 stdenv.mkDerivation (rec {
-  name = "libgpg-error-1.10";
+  name = "libgpg-error-1.11";
 
   src = fetchurl {
     url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "0cal3jdnzdailr13qcy74grfbplbghkgr3qwk6qjjp4bass2j1jj";
+    sha1 = "be209b013652add5c7e2c473ea114f58203cc6cd";
   };
 
   doCheck = true;
