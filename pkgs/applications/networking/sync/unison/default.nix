@@ -1,5 +1,6 @@
-{stdenv, fetchurl, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper, ncurses
-, enableX11 ? true}:
+{ stdenv, fetchurl, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper
+, ncurses, which
+, enableX11 ? true }:
 
 stdenv.mkDerivation (rec {
 
@@ -9,13 +10,19 @@ stdenv.mkDerivation (rec {
     sha256 = "17fd2bg5jxwbib87j6j2bjpwdm66whqm1fq46v70hfby79j00vkf";
   };
 
-  buildInputs = [ ocaml makeWrapper ncurses ];
+  buildInputs = [ ocaml makeWrapper ncurses which ];
+
+  # for some reason, we need xcodebuild to compile on darwin
+  preConfigure = ( if stdenv.isDarwin then ''
+    PATH="$PATH:/usr/bin"
+  '' else "" );
 
   preBuild = if enableX11 then ''
+    sed -i s/ETAGS=etags/ETAGS=ls/ Makefile # we don't care about etags, they're dumb
     sed -i "s|\(OCAMLOPT=.*\)$|\1 -I $(echo "${lablgtk}"/lib/ocaml/*/site-lib/lablgtk2)|" Makefile.OCaml
   '' else "";
 
-  makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else "")
+  makeFlags = "INSTALLDIR=$(out)/bin/" + (if enableX11 then " UISTYLE=gtk2" else " UISTYLE=text")
     + (if ! ocaml.nativeCompilers then " NATIVE=false" else "");
 
   preInstall = "mkdir -p $out/bin";
