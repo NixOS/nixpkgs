@@ -16,9 +16,11 @@ in stdenv.mkDerivation {
     sha256 = "00qhwhh5ygrcfm9is8hrk1spqdvfs6aa744h10jbr03zics5bvac";
   };
 
-  buildInputs = [ pkgconfig openssl
-                  (stdenv.lib.overrideDerivation libuuid
-                    (args: { configureFlags = args.configureFlags + " --enable-static"; })) ];
+  buildInputs = [ pkgconfig openssl ] ++
+                (if libuuid == null
+                 then []
+                 else [ (stdenv.lib.overrideDerivation libuuid
+                          (args: { configureFlags = args.configureFlags + " --enable-static"; })) ]);
 
   buildPhase = ''
     make ARCH=${arch} `pwd`/build/cgpt/cgpt
