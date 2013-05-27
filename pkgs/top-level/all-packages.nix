@@ -4339,6 +4339,8 @@ let
 
   libgcrypt = callPackage ../development/libraries/libgcrypt { };
 
+  libgcrypt_git = lowPrio (callPackage ../development/libraries/libgcrypt/git.nix { });
+
   libgdiplus = callPackage ../development/libraries/libgdiplus { };
 
   libgpgerror = callPackage ../development/libraries/libgpg-error { };
@@ -7292,6 +7294,10 @@ let
   };
 
   gnunet = callPackage ../applications/networking/p2p/gnunet { };
+
+  gnunet_svn = lowPrio (callPackage ../applications/networking/p2p/gnunet/svn.nix {
+    libgcrypt = libgcrypt_git;
+  });
 
   gocr = callPackage ../applications/graphics/gocr { };
 
