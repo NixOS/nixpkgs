@@ -1748,6 +1748,8 @@ let
 
   vde2 = callPackage ../tools/networking/vde2 { };
 
+  vboot_reference = callPackage ../tools/system/vboot_reference { };
+
   verilog = callPackage ../applications/science/electronics/verilog {};
 
   vfdecrypt = callPackage ../tools/misc/vfdecrypt { };
