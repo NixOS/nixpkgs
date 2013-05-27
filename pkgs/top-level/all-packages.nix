@@ -8095,7 +8095,7 @@ let
 
   vimHugeX = vim_configurable;
 
-  vim_configurable = import ../applications/editors/vim/configurable.nix {
+  vim_configurable = callPackage (import ../applications/editors/vim/configurable.nix) {
     inherit (pkgs) fetchurl stdenv ncurses pkgconfig gettext composableDerivation lib config;
     inherit (pkgs.xlibs) libX11 libXext libSM libXpm libXt libXaw libXau libXmu libICE;
     inherit (pkgs) glib gtk;
@@ -8108,6 +8108,8 @@ let
     # optional features by flags
     flags = [ "python" "X11" ]; # only flag "X11" by now
   };
+  vimLatest = vim_configurable.override { source = "latest"; };
+  vimNox = vim_configurable.override { source = "vim-nox"; };
 
   virtviewer = callPackage ../applications/virtualization/virt-viewer {};
   virtmanager = callPackage ../applications/virtualization/virt-manager {
@@ -9273,6 +9275,8 @@ let
   vice = callPackage ../misc/emulators/vice { };
 
   viewnior = callPackage ../applications/graphics/viewnior { };
+
+  vimPlugins = callPackage ../misc/vim-plugins { };
 
   vimprobable2 = callPackage ../applications/networking/browsers/vimprobable2 {
     inherit (gnome) libsoup;
