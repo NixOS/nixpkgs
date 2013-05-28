@@ -29,8 +29,12 @@ with pkgs.lib;
         network inet raw,
 
         ${pkgs.glibc}/lib/*.so mr,
-        /var/setuid-wrappers/ping.real mixr,
-        ${pkgs.iputils}/sbin/ping mixr,
+        ${pkgs.libcap}/lib/libcap.so* mr,
+        ${pkgs.attr}/lib/libattr.so* mr,
+
+        ${pkgs.iputils}/bin/ping mixr,
+        /var/setuid-wrappers/ping.real r,
+
         #/etc/modules.conf r,
 
         ## Site-specific additions and overrides. See local/README for details.
