@@ -1269,6 +1269,17 @@
     ];
   }
   {
+    baseName = "npm2nix";
+    version = "1.0.0";
+    fullName = "npm2nix-*";
+    hash = "c3fa4fd02e6184d60e780e31578a8a8ee190eea28b77d5b006f6ea920324ea54";
+    patchLatest = false;
+    topLevel = true;
+    dependencies = [
+      { name = "semver"; range = "1"; }
+    ];
+  }
+  {
     baseName = "npmlog";
     version = "0.0.2";
     fullName = "npmlog-0";

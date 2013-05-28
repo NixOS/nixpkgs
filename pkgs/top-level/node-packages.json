@@ -31,4 +31,5 @@
 , { "name": "browserchannel" }
 , { "name": "node-gyp" }
 , { "name": "semver" }
+, { "name": "npm2nix" }
 ]
