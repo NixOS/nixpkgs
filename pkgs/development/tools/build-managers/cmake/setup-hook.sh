@@ -56,3 +56,20 @@ if [ -n "$crossConfig" ]; then
 else
     envHooks+=(addCMakeParams)
 fi
+
+make_cmake_find_libs(){
+  for flag in $NIX_CFLAGS_COMPILE $NIX_LDFLAGS; do
+    case $flag in
+      -I*)
+        export CMAKE_INCLUDE_PATH="$CMAKE_INCLUDE_PATH${CMAKE_INCLUDE_PATH:+:}${flag:2}"
+        ;;
+      -L*)
+        export CMAKE_LIBRARY_PATH="$CMAKE_LIBRARY_PATH${CMAKE_LIBRARY_PATH:+:}${flag:2}"
+        ;;
+    esac
+  done
+}
+
+# not using setupHook, because it could be a setupHook adding additional
+# include flags to NIX_CFLAGS_COMPILE
+postHooks+=(make_cmake_find_libs)
