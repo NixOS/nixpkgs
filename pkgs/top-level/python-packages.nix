@@ -4700,11 +4700,11 @@ pythonPackages = python.modules // rec {
   };
 
   waitress = buildPythonPackage rec {
-    name = "waitress-0.8.1";
+    name = "waitress-0.8.5";
 
     src = fetchurl {
       url = "http://pypi.python.org/packages/source/w/waitress/${name}.tar.gz";
-      md5 = "aadfc692b780fc42eb05ac819102d336";
+      md5 = "7a3094d812c0dffb948d1334ef5fd56f";
     };
 
     meta = {
