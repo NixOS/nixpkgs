@@ -104,8 +104,10 @@ in
 
     systemd.services.transmission = {
       description = "Transmission BitTorrent Daemon";
-      after = [ "network.target" ];
+      after = [ "network.target" ] ++ optional (config.security.apparmor.enable && cfg.apparmor) "apparmor.service";
+      requires = mkIf (config.security.apparmor.enable && cfg.apparmor) [ "apparmor.service" ];
       wantedBy = [ "multi-user.target" ];
+
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
       serviceConfig.ExecStartPre =
