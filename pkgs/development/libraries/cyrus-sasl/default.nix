@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
                         )
   '';
 
+  installFlags = if stdenv.isDarwin then [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ] else null;
+
   meta = {
     homepage = "http://cyrusimap.web.cmu.edu/";
     description = "library for adding authentication support to connection-based protocols";
