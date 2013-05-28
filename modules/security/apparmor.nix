@@ -57,7 +57,7 @@ with pkgs.lib;
           ''${pkgs.apparmor}/sbin/apparmor_parser -rKv -I ${pkgs.apparmor}/etc/apparmor.d/ "${profile}" ; ''
         ) cfg.profiles;
         ExecStop = concatMapStrings (profile:
-          ''${pkgs.apparmor}/sbin/apparmor_parser -Rv "${profile}" ; ''
+          ''${pkgs.apparmor}/sbin/apparmor_parser -Rv -I ${pkgs.apparmor}/etc/apparmor.d/ "${profile}" ; ''
         ) cfg.profiles;
       };
 
