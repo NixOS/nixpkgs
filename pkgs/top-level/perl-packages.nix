@@ -1252,11 +1252,11 @@ rec {
     };
   };
 
-  CryptRandPasswd = buildPerlPackage rec {
-    name = "Crypt-RandPasswd-0.02";
+  CryptRandPasswd = buildPerlPackage {
+    name = "Crypt-RandPasswd-0.03";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JD/JDPORTER/${name}.tar.gz";
-      sha256 = "0r5w5i81s02x756alad9psxmpqmcxahzjpqxsb3kacsqj8s5br9b";
+      url = mirror://cpan/authors/id/N/NE/NEILB/Crypt-RandPasswd-0.03.tar.gz;
+      sha256 = "0sz2b4gj2mcwj0nqvxw3gs5m49jzfbi0vla51hj957dvfk00plhf";
     };
   };
 
