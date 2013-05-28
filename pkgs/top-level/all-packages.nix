@@ -6093,6 +6093,8 @@ let
 
     acpi_call = callPackage ../os-specific/linux/acpi-call {};
 
+    batman_adv = callPackage ../os-specific/linux/batman-adv {};
+
     bbswitch = callPackage ../os-specific/linux/bbswitch {};
 
     ati_drivers_x11 = callPackage ../os-specific/linux/ati-drivers { };
