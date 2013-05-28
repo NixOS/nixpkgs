@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gyp, utillinux ? null }:
+{ stdenv, fetchurl, gyp, utillinux }:
 
 let
   version = "2.1";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
 
   buildFlags = [ "BUILDTYPE=Release" ];
 
-  buildInputs = [ gyp utillinux ];
+  buildInputs = [ gyp ] ++ stdenv.lib.optional stdenv.isLinux utillinux;
 
   doCheck = true;
 

@@ -1887,14 +1887,16 @@ pythonPackages = python.modules // rec {
 
 
   gyp = buildPythonPackage rec {
-    rev = "1435";
+    rev = "1635";
     name = "gyp-r${rev}";
 
     src = fetchsvn {
       url = "http://gyp.googlecode.com/svn/trunk";
       inherit rev;
-      sha256 = "1wmd1svx5344alb8ff9vzdam1ccqdl0h7shp1xnsk843hqwc0fz0";
+      sha256 = "1hn5gxgj2z399f71kz11m61ifds7mx4zkymnd1c87k1wyp7bs5k5";
     };
+
+   patches = if pkgs.stdenv.isDarwin then [ ../development/python-modules/gyp/no-xcode.patch ../development/python-modules/gyp/no-darwin-cflags.patch ] else null;
 
     # error: invalid command 'test'
     doCheck = false;
