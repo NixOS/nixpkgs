@@ -1361,6 +1361,8 @@ let
 
   optipng = callPackage ../tools/graphics/optipng { };
 
+  oslrd = callPackage ../tools/networking/oslrd { };
+
   ossec = callPackage ../tools/security/ossec {};
 
   otpw = callPackage ../os-specific/linux/otpw { };
