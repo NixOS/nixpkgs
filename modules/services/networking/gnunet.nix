@@ -126,6 +126,10 @@ in
         createHome = true; 
       };
 
+    users.extraGroups = singleton
+      { name = "gnunet";
+      };
+
     # The user tools that talk to `gnunetd' should come from the same source,
     # so install them globally.
     environment.systemPackages = [ pkgs.gnunet ];
