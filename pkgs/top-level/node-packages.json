@@ -1,36 +1,36 @@
 [
-  { "name": "async" }
-, { "name": "assert" }
-, { "name": "mocha" }
-, { "name": "jayschema" }
-, { "name": "underscore" }
-, { "name": "extend" }
-, { "name": "express" }
-, { "name": "s3http" }
-, { "name": "aws-sdk" }
-, { "name": "nijs" }
-, { "name": "amdefine" }
-, { "name": "smartdc" }
-, { "name": "optparse" }
-, { "name": "jsontool" }
-, { "name": "swig" }
-, { "name": "coffee-script" }
-, { "name": "escape-html" }
-, { "name": "buffertools" }
-, { "name": "wu" }
-, { "name": "source-map" }
-, { "name": "knox" }
-, { "name": "node-expat" }
-, { "name": "optimist" }
-, { "name": "temp" }
-, { "name": "faye-websocket" }
-, { "name": "node-uuid" }
-, { "name": "rbytes" }
-, { "name": "sockjs" }
-, { "name": "backbone" }
-, { "name": "browserchannel" }
-, { "name": "node-gyp" }
-, { "name": "semver" }
-, { "name": "npm2nix" }
-, { "name": "ansi-remover" }
+  "async"
+, "assert"
+, "mocha"
+, "jayschema"
+, "underscore"
+, "extend"
+, "express"
+, "s3http"
+, "aws-sdk"
+, "nijs"
+, "amdefine"
+, "smartdc"
+, "optparse"
+, "jsontool"
+, "swig"
+, "coffee-script"
+, "escape-html"
+, "buffertools"
+, "wu"
+, "source-map"
+, "knox"
+, "node-expat"
+, "optimist"
+, "temp"
+, "faye-websocket"
+, "node-uuid"
+, "rbytes"
+, "sockjs"
+, "backbone"
+, "browserchannel"
+, "node-gyp"
+, "semver"
+, "npm2nix"
+, "ansi-remover"
 ]

@@ -1280,9 +1280,9 @@
   }
   {
     baseName = "npm2nix";
-    version = "1.0.0";
+    version = "1.1.0";
     fullName = "npm2nix-*";
-    hash = "c3fa4fd02e6184d60e780e31578a8a8ee190eea28b77d5b006f6ea920324ea54";
+    hash = "b592b5d94ea64b04ea21dd45902e3148f62f8234a75969604d37b35eb45abb21";
     patchLatest = false;
     topLevel = true;
     dependencies = [
