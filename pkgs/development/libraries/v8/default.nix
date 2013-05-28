@@ -48,4 +48,9 @@ stdenv.mkDerivation {
         "mv -v out/${arch}.release/lib.target/libv8.so $out/lib"}
       mv -v include $out/
     '';
+
+    postFixup = if stdenv.isDarwin then ''
+      install_name_tool -change /usr/local/lib/libv8.dylib $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.gcc.gcc}/lib/libgcc_s.1.dylib $out/bin/d8
+      install_name_tool -id $out/lib/libv8.dylib -change /usr/lib/libgcc_s.1.dylib ${stdenv.gcc.gcc}/lib/libgcc_s.1.dylib $out/lib/libv8.dylib
+    '' else null;
 }
