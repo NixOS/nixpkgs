@@ -1,6 +1,11 @@
-{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http_parser, c-ares }:
+{ stdenv, fetchurl, openssl, python, zlib, v8, utillinux, http_parser, c-ares, pkgconfig, runCommand }:
 
 let
+  dtrace = runCommand "dtrace-native" {} ''
+    mkdir -p $out/bin
+    ln -sv /usr/sbin/dtrace $out/bin
+  '';
+
   version = "0.10.8";
 
   # !!! Should we also do shared libuv?
@@ -16,7 +21,7 @@ let
     "--shared-${name}-libpath=${builtins.getAttr name deps}/lib"
   ];
 
-  inherit (stdenv.lib) concatMap optional maintainers licenses platforms;
+  inherit (stdenv.lib) concatMap optional optionals maintainers licenses platforms;
 in stdenv.mkDerivation {
   name = "nodejs-${version}";
 
@@ -31,8 +36,15 @@ in stdenv.mkDerivation {
     sed -e 's|^#!/usr/bin/env python$|#!${python}/bin/python|g' -i configure
   '';
 
+  patches = if stdenv.isDarwin then [ ./no-xcode.patch ] else null;
+
+  postPatch = if stdenv.isDarwin then ''
+    (cd tools/gyp; patch -Np1 -i ${../../python-modules/gyp/no-darwin-cflags.patch})
+  '' else null;
+
   buildInputs = [ python ]
-    ++ optional stdenv.isLinux utillinux;
+    ++ (optional stdenv.isLinux utillinux)
+    ++ optionals stdenv.isDarwin [ pkgconfig openssl dtrace ];
   setupHook = ./setup-hook.sh;
 
   meta = {
