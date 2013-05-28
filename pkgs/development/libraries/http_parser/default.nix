@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gyp, utillinux }:
+{ stdenv, fetchurl, gyp, utillinux, python }:
 
 let
   version = "2.1";
@@ -16,9 +16,9 @@ in stdenv.mkDerivation {
 
   buildFlags = [ "BUILDTYPE=Release" ];
 
-  buildInputs = [ gyp ] ++ stdenv.lib.optional stdenv.isLinux utillinux;
+  buildInputs = [ gyp ] ++ (stdenv.lib.optional stdenv.isLinux utillinux) ++ stdenv.lib.optional stdenv.isDarwin python;
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
     out/Release/test-nonstrict
@@ -26,12 +26,17 @@ in stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    mkdir -p $out
-    mv out/Release/lib.target $out/lib
+    mkdir -p $out/lib
+    mv out/Release/${if stdenv.isDarwin then "*.dylib" else "lib.target/*"} $out/lib
 
     mkdir -p $out/include
     mv http_parser.h $out/include
   '';
+
+  postFixup = if stdenv.isDarwin then ''
+    install_name_tool -id $out/lib/libhttp_parser.dylib $out/lib/libhttp_parser.dylib
+    install_name_tool -id $out/lib/libhttp_parser_strict.dylib $out/lib/libhttp_parser_strict.dylib
+  '' else null;
 
   meta = {
     description = "An HTTP message parser written in C";
