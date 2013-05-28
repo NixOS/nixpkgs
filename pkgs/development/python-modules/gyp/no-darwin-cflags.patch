@@ -22,7 +22,20 @@ Index: gyp/pylib/gyp/xcode_emulation.py
      self._Appendf(cflags, 'GCC_OPTIMIZATION_LEVEL', '-O%s', default='s')
  
      if self._Test('GCC_GENERATE_DEBUGGING_SYMBOLS', 'YES', default='YES'):
-@@ -334,7 +328,6 @@
+@@ -311,12 +305,6 @@
+     if self._Test('GCC_SYMBOLS_PRIVATE_EXTERN', 'YES', default='NO'):
+       cflags.append('-fvisibility=hidden')
+ 
+-    if self._Test('GCC_TREAT_WARNINGS_AS_ERRORS', 'YES', default='NO'):
+-      cflags.append('-Werror')
+-
+-    if self._Test('GCC_WARN_ABOUT_MISSING_NEWLINE', 'YES', default='NO'):
+-      cflags.append('-Wnewline-eof')
+-
+     self._AppendPlatformVersionMinFlags(cflags)
+ 
+     # TODO:
+@@ -334,7 +322,6 @@
        # TODO: Supporting fat binaries will be annoying.
        self._WarnUnimplemented('ARCHS')
        archs = ['i386']
@@ -30,7 +43,7 @@ Index: gyp/pylib/gyp/xcode_emulation.py
  
      if archs[0] in ('i386', 'x86_64'):
        if self._Test('GCC_ENABLE_SSE3_EXTENSIONS', 'YES', default='NO'):
-@@ -570,7 +563,6 @@
+@@ -570,7 +557,6 @@
        # TODO: Supporting fat binaries will be annoying.
        self._WarnUnimplemented('ARCHS')
        archs = ['i386']
