@@ -32,4 +32,5 @@
 , { "name": "node-gyp" }
 , { "name": "semver" }
 , { "name": "npm2nix" }
+, { "name": "ansi-remover" }
 ]
