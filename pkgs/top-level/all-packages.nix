@@ -3558,6 +3558,8 @@ let
 
   bwidget = callPackage ../development/libraries/bwidget { };
 
+  c-ares = callPackage ../development/libraries/c-ares { };
+
   caelum = callPackage ../development/libraries/caelum { };
 
   scmccid = callPackage ../development/libraries/scmccid { };
@@ -4080,6 +4082,8 @@ let
   hspellDicts = callPackage ../development/libraries/hspell/dicts.nix { };
 
   hsqldb = callPackage ../development/libraries/java/hsqldb { };
+
+  http_parser = callPackage ../development/libraries/http_parser { inherit (pythonPackages) gyp; };
 
   hunspell = callPackage ../development/libraries/hunspell { };
 
