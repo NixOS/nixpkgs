@@ -94,7 +94,7 @@ in {
       }
     ];
 
-    environment.systemPackages = cfg.packages;
+    environment.systemPackages = cfg.packages ++ [ networkmanager_openvpn ];
 
     users.extraGroups = singleton {
       name = "networkmanager";
