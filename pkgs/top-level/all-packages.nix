@@ -4867,6 +4867,8 @@ let
 
   pdf2xml = callPackage ../development/libraries/pdf2xml {} ;
 
+  pdf2htmlex = callPackage ../development/libraries/pdf2htmlex {} ;
+
   phonon = callPackage ../development/libraries/phonon { };
 
   phonon_backend_gstreamer = callPackage ../development/libraries/phonon-backend-gstreamer { };
