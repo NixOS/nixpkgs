@@ -5,8 +5,8 @@
 }:
 
 let
-  version = "0.22.3";
-  sha256 = "0ca4jci8xmbdz4fhahdcck0cqms6ax55yggi2ih3clgrpqf96sli";
+  version = "0.23.1";
+  sha256 = "1yh9zh17adqlcx2bvcyf1dj65m1hl39mmvraf8h0k3llg38b3g1a";
 
   qtcairo_patches =
     let qtcairo = fetchgit { # the version for poppler-0.22
@@ -23,7 +23,7 @@ let
     name = "poppler-${nameSuff}-${version}";
 
     src = fetchurl {
-      url = "${meta.homepage}/poppler-${version}.tar.gz";
+      url = "${meta.homepage}/poppler-${version}.tar.xz";
       inherit sha256;
     };
 
