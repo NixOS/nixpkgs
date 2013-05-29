@@ -27,12 +27,14 @@ rec {
   };
   
   simulate_kitchensink_iphone = import ./simulate-kitchensink {
+    inherit (pkgs_darwin_x86_64) stdenv;
     inherit (pkgs_darwin_x86_64.titaniumenv) xcodeenv;
     kitchensink = kitchensink_iphone;
     device = "iPhone";
   };
   
   simulate_kitchensink_ipad = import ./simulate-kitchensink {
+    inherit (pkgs_darwin_x86_64) stdenv;
     inherit (pkgs_darwin_x86_64.titaniumenv) xcodeenv;
     kitchensink = kitchensink_iphone;
     device = "iPad";
