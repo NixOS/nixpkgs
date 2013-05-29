@@ -1558,6 +1558,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   poolConduit = callPackage ../development/libraries/haskell/pool-conduit {};
 
+  pop3client = callPackage ../development/libraries/haskell/pop3-client {};
+
   postgresqlLibpq = callPackage ../development/libraries/haskell/postgresql-libpq {
     inherit (pkgs) postgresql;
   };
@@ -1726,6 +1728,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
   skein = callPackage ../development/libraries/haskell/skein {};
 
   smallcheck = callPackage ../development/libraries/haskell/smallcheck {};
+
+  smtpMail = callPackage ../development/libraries/haskell/smtp-mail {};
 
   snap = callPackage ../development/libraries/haskell/snap/snap.nix {};
 
