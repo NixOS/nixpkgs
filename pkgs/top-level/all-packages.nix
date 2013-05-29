@@ -479,6 +479,8 @@ let
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
+  babeld = callPackage ../tools/networking/babeld { };
+
   banner = callPackage ../games/banner {};
 
   barcode = callPackage ../tools/graphics/barcode {};
