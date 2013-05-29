@@ -75,6 +75,7 @@ in
     spamd = 56;
     nslcd = 58;
     nginx = 60;
+    chrony = 61;
 
     # When adding a uid, make sure it doesn't match an existing gid.
 

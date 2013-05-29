@@ -58,6 +58,9 @@ in
 
   config = mkIf config.services.ntp.enable {
 
+    # Make tools such as ntpq available in the system path
+    environment.systemPackages = [ pkgs.ntp ];
+
     users.extraUsers = singleton
       { name = ntpUser;
         uid = config.ids.uids.ntp;

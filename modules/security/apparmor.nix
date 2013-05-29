@@ -53,12 +53,12 @@ with pkgs.lib;
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = "yes";
-        ExecStart = concatMapStrings (profile: ''
-          ${pkgs.apparmor}/sbin/apparmor_parser -rKv -I ${pkgs.apparmor}/etc/apparmor.d/ "${profile}"
-        '') cfg.profiles;
-        ExecStop = concatMapStrings (profile: ''
-          ${pkgs.apparmor}/sbin/apparmor_parser -Rv "${profile}"
-        '') cfg.profiles;
+        ExecStart = concatMapStrings (profile:
+          ''${pkgs.apparmor}/sbin/apparmor_parser -rKv -I ${pkgs.apparmor}/etc/apparmor.d/ "${profile}" ; ''
+        ) cfg.profiles;
+        ExecStop = concatMapStrings (profile:
+          ''${pkgs.apparmor}/sbin/apparmor_parser -Rv -I ${pkgs.apparmor}/etc/apparmor.d/ "${profile}" ; ''
+        ) cfg.profiles;
       };
 
     };

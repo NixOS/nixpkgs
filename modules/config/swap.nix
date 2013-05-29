@@ -58,6 +58,17 @@ with utils;
             '';
           };
 
+          priority = mkOption {
+            default = null;
+            example = 2048;
+            type = types.nullOr types.int;
+            description = ''
+              Specify the priority of the swap device. Priority is a value between 0 and 32767.
+              Higher numbers indicate higher priority.
+              null lets the kernel choose a priority, which will show up as a negative value.
+            '';
+          };
+
         };
 
         config = {

@@ -15,7 +15,6 @@ let
 
       upScript = ''
         #! /bin/sh
-        exec > /var/log/openvpn-${name}-up 2>&1
         export PATH=${path}
 
         # For convenience in client scripts, extract the remote domain
@@ -34,13 +33,13 @@ let
 
       downScript = ''
         #! /bin/sh
-        exec > /var/log/openvpn-${name}-down 2>&1
         export PATH=${path}
         ${cfg.down}
       '';
 
       configFile = pkgs.writeText "openvpn-config-${name}"
         ''
+          errors-to-stderr
           ${optionalString (cfg.up != "" || cfg.down != "") "script-security 2"}
           ${cfg.config}
           ${optionalString (cfg.up != "") "up ${pkgs.writeScript "openvpn-${name}-up" upScript}"}
@@ -50,12 +49,13 @@ let
     in {
       description = "OpenVPN instance ‘${name}’";
 
-      startOn = mkDefault "started network-interfaces";
-      stopOn = mkDefault "stopping network-interfaces";
+      wantedBy = optional cfg.autoStart [ "multi-user.target" ];
+      after = [ "network-interfaces.target" ];
 
       path = [ pkgs.iptables pkgs.iproute pkgs.nettools ];
 
-      exec = "${openvpn}/sbin/openvpn --config ${configFile}";
+      serviceConfig.ExecStart = "@${openvpn}/sbin/openvpn openvpn --config ${configFile}";
+      serviceConfig.Restart = "always";
     };
 
 in
@@ -144,6 +144,12 @@ in
           '';
         };
 
+        autoStart = mkOption {
+          default = true;
+          type = types.bool;
+          description = "Whether this OpenVPN instance should be started automatically.";
+        };
+
       };
 
     };
@@ -155,7 +161,7 @@ in
 
   config = mkIf (cfg.servers != {}) {
 
-    jobs = listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers);
+    systemd.services = listToAttrs (mapAttrsFlatten (name: value: nameValuePair "openvpn-${name}" (makeOpenVPNJob value name)) cfg.servers);
 
     environment.systemPackages = [ openvpn ];
 
