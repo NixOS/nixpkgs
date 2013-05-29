@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, libX11 }:
+{ stdenv, fetchurl, pkgconfig, xlibs }:
 
 stdenv.mkDerivation rec {
-  name = "libvdpau-0.5";
-  
+  name = "libvdpau-0.6";
+
   src = fetchurl {
     url = "http://people.freedesktop.org/~aplattner/vdpau/${name}.tar.gz";
-    sha256 = "0k2ydz4yp7zynlkpd1llfwax30xndwbca36z83ah1i4ldjw2gfhx";
+    sha256 = "0x9dwxzw0ilsy88kqlih3170z1zfrrsx1dr9jbwbn0cbkpnbwmcv";
   };
 
-  buildInputs = [ pkgconfig libX11 ];
+  buildInputs = with xlibs; [ pkgconfig dri2proto libXext ];
 
-  propagatedBuildInputs = [ libX11 ];
+  propagatedBuildInputs = [ xlibs.libX11 ];
 
   meta = {
     homepage = http://people.freedesktop.org/~aplattner/vdpau/;

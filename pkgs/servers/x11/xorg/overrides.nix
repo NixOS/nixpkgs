@@ -7,6 +7,9 @@ let
     '';
 in
 {
+  encodings = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
+  };
 
   fontcursormisc = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
@@ -44,11 +47,6 @@ in
     # I only remove python from the original.
     buildInputs = [args.pkgconfig  /*xorg.python*/ ];
     nativeBuildInputs = [ args.python ];
-  };
-
-  pixman = attrs : attrs // {
-    buildInputs = [ args.pkgconfig ];
-    nativeBuildInputs = [ args.perl ];
   };
 
   libpciaccess = attrs : attrs // {
@@ -132,83 +130,28 @@ in
 
   xf86inputevdev = attrs: attrs // {
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.kbproto xorg.libxkbfile xorg.randrproto xorg.pixman];
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
-  xf86inputkeyboard = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman];
-  };
-
-  xf86inputmouse = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman];
+  xf86inputjoystick = attrs: attrs // {
+    installFlags = "sdkdir=\${out}/include/xorg";
   };
 
   xf86inputsynaptics = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [args.mtdev xorg.pixman];
+    buildInputs = attrs.buildInputs ++ [args.mtdev];
     installFlags = "sdkdir=\${out}/include/xorg configdir=\${out}/include/xorg";
   };
 
-  xf86inputvoid = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman];
-  };
-
-  xf86videointel = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
-  };
-
-  xf86videosis = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
-  };
-
-  xf86videoati = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa xorg.pixman];
-  };
-
-  xf86videocirrus = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman];
-  };
-
-  xf86videodummy = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman];
-  };
-
-  xf86videofbdev = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman];
-  };
-
-  xf86videoopenchrome = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman xorg.glproto args.mesa];
-  };
-
-  xf86videonv = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman];
-  };
-
-  xf86videovesa = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman];
-  };
-
-  xf86videovmware = attrs: attrs // {
-    NIX_CFLAGS_COMPILE = "-I${xorg.pixman}/include/pixman-1";
-    buildInputs = attrs.buildInputs ++ [xorg.pixman xorg.glproto args.mesa];
+  xf86inputvmmouse = attrs: attrs // {
+    configureFlags = [
+      "--sysconfdir=$(out)/etc"
+      "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d"
+      "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
+    ];
   };
 
   xdriinfo = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.glproto args.mesa];
+    buildInputs = attrs.buildInputs ++ [args.mesa];
   };
 
   xvinfo = attrs: attrs // {
@@ -219,44 +162,28 @@ in
     NIX_CFLAGS_COMPILE = "-DDFLT_XKB_CONFIG_ROOT=\".\"";
   };
 
-  xorgserver = attrs: attrs // {
-    configureFlags = "--enable-xcsecurity"; # enable SECURITY extension
-    patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch ./xorgserver12-CVE-1940.patch];
-    buildInputs = attrs.buildInputs ++
-      [ args.zlib args.udev args.mesa args.dbus.libs
-        xorg.xf86bigfontproto xorg.glproto xorg.xf86driproto
-        xorg.compositeproto xorg.scrnsaverproto xorg.resourceproto
-        xorg.xineramaproto xorg.xf86dgaproto
-        xorg.dmxproto xorg.libdmx xorg.xf86vidmodeproto
-        xorg.recordproto xorg.libXext xorg.pixman xorg.libXfont
-        xorg.damageproto xorg.xcmiscproto xorg.xtrans xorg.bigreqsproto
-      ];
-    propagatedBuildInputs =
-      [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto
-        xorg.dri2proto xorg.kbproto
-      ];
-    postInstall =
-      ''
-        rm -fr $out/share/X11/xkb/compiled
-        ln -s /var/tmp $out/share/X11/xkb/compiled
-      '';
+  xkeyboardconfig = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [args.intltool];
   };
 
-  xorgserver_1_13_0 = attrs: attrs // {
-    configureFlags = "--enable-xcsecurity"; # enable SECURITY extension
+  xorgserver = with xorg; attrs: attrs // {
+    configureFlags = [
+      "--enable-xcsecurity" # enable SECURITY extension
+      "--with-default-font-path= "  # there were only paths containing "${prefix}",
+                                    # and there are no fonts in this package anyway
+    ];
     patches = [./xorgserver-dri-path.patch ./xorgserver-xkbcomp-path.patch];
-    buildInputs = attrs.buildInputs ++
-      [ args.zlib args.udev args.mesa args.dbus.libs
-        xorg.xf86bigfontproto xorg.glproto xorg.xf86driproto
-        xorg.compositeproto xorg.scrnsaverproto xorg.resourceproto
-        xorg.xineramaproto xorg.xf86dgaproto
-        xorg.dmxproto xorg.libdmx xorg.xf86vidmodeproto
-        xorg.recordproto xorg.libXext xorg.pixman xorg.libXfont
-        xorg.damageproto xorg.xcmiscproto xorg.xtrans xorg.bigreqsproto
-      ];
+    buildInputs = attrs.buildInputs ++ [ xtrans ];
     propagatedBuildInputs =
-      [ xorg.libpciaccess xorg.inputproto xorg.xextproto xorg.randrproto
-        xorg.dri2proto xorg.kbproto
+      [ args.zlib args.udev args.mesa args.dbus.libs
+        xf86bigfontproto glproto xf86driproto
+        compositeproto scrnsaverproto resourceproto
+        xf86dgaproto
+        dmxproto /*libdmx not used*/ xf86vidmodeproto
+        recordproto libXext pixman libXfont
+        damageproto xcmiscproto  bigreqsproto
+        libpciaccess inputproto xextproto randrproto renderproto
+        dri2proto kbproto xineramaproto resourceproto scrnsaverproto videoproto
       ];
     postInstall =
       ''
@@ -281,6 +208,11 @@ in
 
   xbacklight = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [xorg.libXrender];
+  };
+
+  xcursorthemes = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [xorg.xcursorgen];
+    configureFlags = "--with-cursordir=$(out)/share/icons";
   };
 
   xinput = attrs: attrs // {
