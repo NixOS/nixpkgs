@@ -102,9 +102,9 @@
   }
   {
     baseName = "aws-sdk";
-    version = "1.1.0";
+    version = "1.2.0";
     fullName = "aws-sdk-*";
-    hash = "124577c90a78db03356b9e13e704f55b774ac165ba67d539a3d2170ae02fb32d";
+    hash = "e2d4b32fba387b8f099c4180579b67554f875895a69e4c1ddb0a28546db9ba4c";
     patchLatest = true;
     topLevel = true;
     dependencies = [
@@ -1280,9 +1280,9 @@
   }
   {
     baseName = "npm2nix";
-    version = "1.1.0";
+    version = "1.2.0";
     fullName = "npm2nix-*";
-    hash = "b592b5d94ea64b04ea21dd45902e3148f62f8234a75969604d37b35eb45abb21";
+    hash = "b79bd319e4030704bb41078dbbec0db9eebb984966c6bd3cad55ba4c76ec622c";
     patchLatest = false;
     topLevel = true;
     dependencies = [
