@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     cat > $out/bin/run-test-simulator << "EOF"
     #! ${stdenv.shell} -e
 
-    cd '${app}/${baseDir}/${name}.app'
+    cd '${app}/${baseDir}/*.app'
     "$(readlink "${xcodewrapper}/bin/iPhone Simulator")" -SimulateApplication './${name}' -SimulateDevice '${device}'
     EOF
     chmod +x $out/bin/run-test-simulator
