@@ -26,7 +26,7 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    ${nodejs}/bin/npm --registry http://www.example.com --nodedir=${sources} install ${src} ${npmFlags}
+    npm --registry http://www.example.com --nodedir=${sources} install ${src} ${npmFlags}
     runHook postBuild
   '';
 
@@ -47,4 +47,10 @@ stdenv.mkDerivation ({
   preFixup = ''
     find $out -type f -print0 | xargs -0 sed -i 's|${src}|${src.name}|g'
   '';
-} // args)
+} // args // {
+  # Run the node setup hook when this package is a build input
+  propagatedNativeBuildInputs = (args.propagatedNativeBuildInputs or []) ++ [ nodejs ];
+
+  # Make buildNodePackage useful with --run-env
+  nativeBuildInputs = (args.nativeBuildInputs or []) ++ deps;
+} )
