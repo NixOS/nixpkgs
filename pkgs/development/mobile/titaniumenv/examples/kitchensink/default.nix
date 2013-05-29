@@ -2,6 +2,7 @@
 
 titaniumenv.buildApp {
   name = "KitchenSink-${target}";
+  appName = "KitchenSink";
   appId = "com.appcelerator.kitchensink";
   src = fetchgit {
     url = https://github.com/appcelerator/KitchenSink.git;
