@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   # Make digikam find some FindXXXX.cmake
   KDEDIRS="${marble}:${qjson}";
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Photo Management Program";
     license = "GPL";
