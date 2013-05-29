@@ -4361,6 +4361,8 @@ let
 
   libgphoto2 = callPackage ../development/libraries/libgphoto2 { };
 
+  libgphoto2_4 = callPackage ../development/libraries/libgphoto2/2.4.nix { };
+
   libgpod = callPackage ../development/libraries/libgpod {
     inherit (pkgs.pythonPackages) mutagen;
   };
@@ -8679,12 +8681,14 @@ let
       boost = boost149;
       eigen = eigen2;
       libotr = libotr_3_2;
+      libgphoto2 = libgphoto2_4;
     }) ../desktops/kde-4.7;
 
   kde48 = kdePackagesFor (pkgs.kde48 // {
       boost = boost149;
       eigen = eigen2;
       libotr = libotr_3_2;
+      libgphoto2 = libgphoto2_4;
     }) ../desktops/kde-4.8;
 
   kde410 = kdePackagesFor (pkgs.kde410 // {
