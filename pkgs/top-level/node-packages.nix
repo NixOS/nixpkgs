@@ -1,13 +1,15 @@
 { pkgs, stdenv, nodejs, fetchurl, neededNatives }:
 
 let
-  generated = builtins.listToAttrs (pkgs.lib.fold (pkg: pairs:
+  inherit (self) buildNodePackage patchLatest;
+
+  importGeneratedPackages = generated: nativeDeps: self: builtins.listToAttrs (pkgs.lib.fold (pkg: pairs:
     (pkgs.lib.optional pkg.topLevel { name = pkg.baseName; value = builtins.getAttr pkg.fullName self; }) ++ [
       {
         name = pkg.fullName;
-        value = self.buildNodePackage rec {
+        value = buildNodePackage rec {
           name = "${pkg.baseName}-${pkg.version}";
-          src = (if pkg.patchLatest then self.patchLatest else fetchurl) {
+          src = (if pkg.patchLatest then patchLatest else fetchurl) {
             url = "http://registry.npmjs.org/${pkg.baseName}/-/${name}.tgz";
             sha256 = pkg.hash;
           };
@@ -16,14 +18,16 @@ let
         };
       }
     ] ++ pairs
-  ) [] (import ./node-packages-generated.nix));
-
-  nativeDeps = {
-    "node-expat-*" = [ pkgs.expat ];
-    "rbytes-0.0.2" = [ pkgs.openssl ];
-  };
+  ) [] generated);
 
   self = {
+    inherit importGeneratedPackages;
+
+    nativeDeps = {
+      "node-expat-*" = [ pkgs.expat ];
+      "rbytes-0.0.2" = [ pkgs.openssl ];
+    };
+
     buildNodePackage = import ../development/web/nodejs/build-node-package.nix {
       inherit stdenv nodejs neededNatives;
       inherit (pkgs) runCommand;
@@ -40,5 +44,5 @@ let
       '';
 
     /* Put manual packages below here (ideally eventually managed by npm2nix */
-  } // generated;
+  } // importGeneratedPackages (import ./node-packages-generated.nix) self.nativeDeps self;
 in self
